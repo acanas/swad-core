@@ -259,7 +259,7 @@ unsigned Mch_DB_GetMatchesInGame (MYSQL_RES **mysql_res,long GamCod)
 			  "ShowUsrResults"		// row[12]
 		    " FROM mch_matches"
 		   " WHERE GamCod=%ld%s"
-		   " ORDER BY MchCod",
+		" ORDER BY MchCod",
 		   GamCod,
 		   SubQuery);
 
@@ -292,7 +292,7 @@ unsigned Mch_DB_GetAvailableMatchesInGame (MYSQL_RES **mysql_res,long GamCod)
 				   "grp_users"
 			    " WHERE grp_users.UsrCod=%ld"
 			      " AND mch_groups.GrpCod=grp_users.GrpCod))"
-		   " ORDER BY MchCod",
+		" ORDER BY MchCod",
 		   GamCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
@@ -316,8 +316,8 @@ unsigned Mch_DB_GetMatchesBetweenDates (MYSQL_RES **mysql_res,
 		    " FROM mch_matches"
 		   " WHERE StartTime>='%s'"
                      " AND StartTime<='%s'"
-		   " ORDER BY GamCod,"
-		             "MchCod",
+		" ORDER BY GamCod,"
+		          "MchCod",
 		   From,
 		   To);
   }
@@ -560,8 +560,8 @@ unsigned Mch_DB_GetGrpNamesAssociatedToMatch (MYSQL_RES **mysql_res,long MchCod)
 		   " WHERE mch_groups.MchCod=%ld"
 		     " AND mch_groups.GrpCod=grp_groups.GrpCod"
 		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-		   " ORDER BY grp_types.GrpTypName,"
-			     "grp_groups.GrpName",
+		" ORDER BY grp_types.GrpTypName,"
+			  "grp_groups.GrpName",
 		   MchCod);
   }
 
@@ -640,7 +640,7 @@ unsigned Mch_DB_GetMatchQuestions (MYSQL_RES **mysql_res,long MchCod)
 		     " AND mch_matches.GamCod=gam_questions.GamCod"
 		     " AND mch_matches.MchCod=mch_indexes.MchCod"
 		     " AND gam_questions.QstInd=mch_indexes.QstInd"
-		   " ORDER BY gam_questions.QstInd",
+		" ORDER BY gam_questions.QstInd",
 		   MchCod);
   }
 
@@ -1097,9 +1097,9 @@ unsigned Mch_DB_GetUsrsWhoHavePlayedMch (MYSQL_RES **mysql_res,long MchCod)
 			     " AND gam_games.CrsCod=%ld) AS users,"	// Extra check
 			  "usr_data"
 		   " WHERE users.UsrCod=usr_data.UsrCod"
-		   " ORDER BY usr_data.Surname1,"
-			     "usr_data.Surname2,"
-			     "usr_data.FirstName",
+	        " ORDER BY usr_data.Surname1,"
+			  "usr_data.Surname2,"
+			  "usr_data.FirstName",
 		   MchCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
@@ -1124,9 +1124,9 @@ unsigned Mch_DB_GetUsrsWhoHavePlayedGam (MYSQL_RES **mysql_res,long GamCod)
 			     " AND gam_games.CrsCod=%ld) AS users,"		// Extra check
 			   "usr_data"
 		   " WHERE users.UsrCod=usr_data.UsrCod"
-		   " ORDER BY usr_data.Surname1,"
-			     "usr_data.Surname2,"
-			     "usr_data.FirstName",
+		" ORDER BY usr_data.Surname1,"
+			  "usr_data.Surname2,"
+			  "usr_data.FirstName",
 		   GamCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
@@ -1214,7 +1214,7 @@ unsigned Mch_DB_GetUsrMchResults (MYSQL_RES **mysql_res,
 		     " AND mch_matches.GamCod=gam_games.GamCod"
 		     "%s"	// Hidden games subquery
 		     " AND gam_games.CrsCod=%ld"	// Extra check
-		   " ORDER BY mch_matches.Title",
+		" ORDER BY mch_matches.Title",
 		   (MeOrOther == Usr_ME) ? Gbl.Usrs.Me.UsrDat.UsrCod :
 				           Gbl.Usrs.Other.UsrDat.UsrCod,
 		   MchSubQuery,

@@ -233,7 +233,7 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
 		      "SELECT SvyCod"
 		       " FROM svy_surveys"
 		      " WHERE %s%s%s%s%s%s"
-		      " ORDER BY %s",
+		   " ORDER BY %s",
 		      SubQuery[Hie_SYS],
 		      SubQuery[Hie_CTY],
 		      SubQuery[Hie_INS],
@@ -734,8 +734,8 @@ unsigned Svy_DB_GetGrpNamesAssociatedToSvy (MYSQL_RES **mysql_res,long SvyCod)
 		   " WHERE svy_groups.SvyCod=%ld"
 		     " AND svy_groups.GrpCod=grp_groups.GrpCod"
 		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-		   " ORDER BY grp_types.GrpTypName,"
-			     "grp_groups.GrpName",
+		" ORDER BY grp_types.GrpTypName,"
+			  "grp_groups.GrpName",
 		   SvyCod);
   }
 
@@ -911,7 +911,7 @@ unsigned Svy_DB_GetSurveyQstsCodes (MYSQL_RES **mysql_res,long SvyCod)
 		   "SELECT QstCod"
 		    " FROM svy_questions"
 		   " WHERE SvyCod=%ld"
-		   " ORDER BY QstCod",
+		" ORDER BY QstCod",
 		   SvyCod);
   }
 
@@ -928,9 +928,9 @@ unsigned Svy_DB_GetSurveyQsts (MYSQL_RES **mysql_res,long SvyCod)
 		          "AnsType,"		// row[2]
                           "CommentsAllowed,"	// row[3]
 		          "Stem"		// row[4]
-		   " FROM svy_questions"
+		    " FROM svy_questions"
 		   " WHERE SvyCod=%ld"
-		   " ORDER BY QstInd",
+	        " ORDER BY QstInd",
 		   SvyCod);
   }
 
@@ -1118,7 +1118,7 @@ unsigned Svy_DB_GetAnswersQst (MYSQL_RES **mysql_res,long QstCod)
 			  "Answer"	// row[2]
 		    " FROM svy_answers"
 		   " WHERE QstCod=%ld"
-		   " ORDER BY AnsInd",
+		" ORDER BY AnsInd",
 		   QstCod);
   }
 
@@ -1227,7 +1227,7 @@ unsigned Svy_DB_GetCommentsQst (MYSQL_RES **mysql_res,long QstCod)
 		   "SELECT Comments"	// row[0]
 		    " FROM svy_comments"
 		   " WHERE QstCod=%ld"
-		   " ORDER BY ComCod",
+		" ORDER BY ComCod",
 		   QstCod);
   }
 

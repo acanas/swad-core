@@ -57,6 +57,7 @@
 #include "swad_exam_session.h"
 #include "swad_exam_set.h"
 #include "swad_enrolment.h"
+#include "swad_FAQ.h"
 #include "swad_figure.h"
 #include "swad_follow.h"
 #include "swad_forum.h"
@@ -504,8 +505,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActUnhPrgRsc	] = {1922, 1,TabCrs,NULL			,PrgRsc_UnhideResource		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActUp_PrgRsc	] = {1923, 1,TabCrs,NULL			,PrgRsc_MoveUpResource		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActDwnPrgRsc	] = {1924, 1,TabCrs,NULL			,PrgRsc_MoveDownResource	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActFrmChgLnkPrgRsc	] = {1932, 1,TabCrs,NULL			,PrgRsc_EditProgramWithClipboard,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActChgLnkPrgRsc	] = {1933, 1,TabCrs,NULL			,PrgRsc_ChangeLink		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmChgPrgRsc	] = {1932, 1,TabCrs,NULL			,PrgRsc_EditProgramWithClipboard,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgPrgRsc	] = {1933, 1,TabCrs,NULL			,PrgRsc_ChangeLink		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Teaching guide
    [ActSeeTchGui	] = { 784, 2,TabCrs,NULL			,Inf_ShowInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
@@ -641,6 +642,19 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActConSeeTreNodFAQ	] = {2107, 5,TabCrs,NULL			,Inf_ContractNodeSeeing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActExpEdiTreNodFAQ	] = {2108, 5,TabCrs,NULL			,Inf_ExpandNodeEditing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActConEdiTreNodFAQ	] = {2109, 5,TabCrs,NULL			,Inf_ContractNodeEditing	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+
+   [ActFrmSeeFAQQaA	] = {2146, 5,TabCrs,NULL			,FAQ_ViewQaAsAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmEdiFAQQaA	] = {2147, 5,TabCrs,NULL			,FAQ_EditQaAs			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActNewFAQQaA	] = {2148, 5,TabCrs,NULL			,FAQ_CreateQaA			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRenFAQQaA	] = {2149, 5,TabCrs,NULL			,FAQ_RenameQaA			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqRemFAQQaA	] = {2150, 5,TabCrs,NULL			,FAQ_ReqRemQaA			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemFAQQaA	] = {2151, 5,TabCrs,NULL			,FAQ_RemoveQaA			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActHidFAQQaA	] = {2152, 5,TabCrs,NULL			,FAQ_HideQaA			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUnhFAQQaA	] = {2153, 5,TabCrs,NULL			,FAQ_UnhideQaA			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUp_FAQQaA	] = {2154, 5,TabCrs,NULL			,FAQ_MoveUpQaA			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActDwnFAQQaA	] = {2155, 5,TabCrs,NULL			,FAQ_MoveDownQaA		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmChgFAQQaA	] = {2156, 5,TabCrs,NULL			,FAQ_EditFAQWithFormToChangeQaA	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgFAQQaA	] = {2157, 5,TabCrs,NULL			,FAQ_ChangeQaA			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    [ActEdiPlaTxtFAQ	] = { 405, 5,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvPlaTxtFAQ	] = { 406, 5,TabCrs,NULL			,Inf_ReceivePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -3918,8 +3932,8 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActNewPrgRsc,		// #1929
 	ActReqLnkSeeDocCrs,	// #1930
 	ActReqLnkAdmDocCrs,	// #1931
-	ActFrmChgLnkPrgRsc,	// #1932
-	ActChgLnkPrgRsc,	// #1933
+	ActFrmChgPrgRsc,	// #1932
+	ActChgPrgRsc,	// #1933
 	ActReqLnkCfe,		// #1934
 	ActReqLnkGam,		// #1935
 	ActReqLnkExa,		// #1936
@@ -4132,4 +4146,17 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActConSeeTreNodAss,	// #2143
 	ActExpEdiTreNodAss,	// #2144
 	ActConEdiTreNodAss,	// #2145
+
+	ActFrmSeeFAQQaA,	// #2146
+	ActFrmEdiFAQQaA,	// #2147
+	ActNewFAQQaA,		// #2148
+	ActRenFAQQaA,		// #2149
+	ActReqRemFAQQaA,	// #2150
+	ActRemFAQQaA,		// #2151
+	ActHidFAQQaA,		// #2152
+	ActUnhFAQQaA,		// #2153
+	ActUp_FAQQaA,		// #2154
+	ActDwnFAQQaA,		// #2155
+	ActFrmChgFAQQaA,	// #2156
+	ActChgFAQQaA,		// #2157
   };

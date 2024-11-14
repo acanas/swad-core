@@ -70,6 +70,7 @@ typedef enum
    ParCod_Prn,		// Print code in assessment test
    ParCod_Pst,		// Post code in forum
    ParCod_Pub,		// Publication code in timeline
+   ParCod_QaA,		// Question&answer code in FAQ
    ParCod_Qst,		// Question code in assessment/survey
    ParCod_Roo,		// Room code
    ParCod_Rsc,		// Resource code in course program

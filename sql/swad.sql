@@ -626,6 +626,18 @@ CREATE TABLE IF NOT EXISTS exa_sets (
 	UNIQUE INDEX(SetCod),
 	UNIQUE INDEX(ExaCod,SetInd));
 --
+-- Table faq_questions: stores questions & answers in course FAQ
+--
+CREATE TABLE IF NOT EXISTS faq_questions (
+	QaACod INT NOT NULL AUTO_INCREMENT,
+	NodCod INT NOT NULL DEFAULT -1,
+	QaAInd INT NOT NULL DEFAULT 0,
+	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
+	Question VARCHAR(4095) NOT NULL,
+	Answer TEXT NOT NULL,
+	UNIQUE INDEX(QaACod),
+	UNIQUE INDEX(NodCod,QaAInd));
+--
 -- Table fig_figures: stores cached figures for quick retrieval of figures (i.e. number of students in the platform)
 --
 CREATE TABLE IF NOT EXISTS fig_figures (

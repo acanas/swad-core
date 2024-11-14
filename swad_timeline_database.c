@@ -673,7 +673,7 @@ unsigned Tml_DB_GetInitialComms (long NotCod,unsigned NumInitialCommsToGet,
 		   " WHERE tml_pubs.NotCod=%ld"
 		     " AND tml_pubs.PubType=%u"
 		     " AND tml_pubs.PubCod=tml_comments.PubCod"
-		   " ORDER BY tml_pubs.PubCod"
+		" ORDER BY tml_pubs.PubCod"
 		   " LIMIT %lu",
 		   NotCod,(unsigned) TmlPub_COMMENT_TO_NOTE,
 		   NumInitialCommsToGet);
@@ -700,9 +700,9 @@ unsigned Tml_DB_GetFinalComms (long NotCod,unsigned NumFinalCommsToGet,
 			   " WHERE tml_pubs.NotCod=%ld"
 			     " AND tml_pubs.PubType=%u"
 			     " AND tml_pubs.PubCod=tml_comments.PubCod"
-			   " ORDER BY tml_pubs.PubCod DESC"
+			" ORDER BY tml_pubs.PubCod DESC"
 			   " LIMIT %u) AS comments"
-		  " ORDER BY PubCod",
+	        " ORDER BY PubCod",
 		  NotCod,(unsigned) TmlPub_COMMENT_TO_NOTE,
 		  NumFinalCommsToGet);
   }
@@ -932,7 +932,7 @@ unsigned Tml_DB_SelectTheMostRecentPub (MYSQL_RES **mysql_res,
                    	 " tml_pubs.NotCod NOT IN"
 			 " (SELECT NotCod"
 			    " FROM tml_tmp_timeline)"
-		   " ORDER BY tml_pubs.PubCod DESC"
+		" ORDER BY tml_pubs.PubCod DESC"
 		   " LIMIT 1",
 		   SubQueries->Publishers.Table,
 		   SubQueries->Range.Bottom,
@@ -1175,7 +1175,7 @@ unsigned Tml_DB_GetFavers (TmlUsr_FavSha_t FavSha,
 		    " FROM %s"
 		   " WHERE %s=%ld"
 		     " AND UsrCod<>%ld"	// Extra check
-		   " ORDER BY FavCod"
+		" ORDER BY FavCod"
 		   " LIMIT %u",
 		   Tml_DB_TableFav[FavSha],
 		   Tml_DB_FieldFav[FavSha],Cod,
@@ -1319,7 +1319,7 @@ unsigned Tml_DB_GetSharers (long NotCod,long UsrCod,unsigned MaxUsrs,
 		   " WHERE NotCod=%ld"
 		     " AND PublisherCod<>%ld"
 		     " AND PubType=%u"
-		   " ORDER BY PubCod"
+		" ORDER BY PubCod"
 		   " LIMIT %u",
 		   NotCod,
 		   UsrCod,

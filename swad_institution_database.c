@@ -265,7 +265,7 @@ unsigned Ins_DB_GetInssInCtyOrderedByShrtName (MYSQL_RES **mysql_res,long HieCod
 			  "ShortName"	// row[1]
 		    " FROM ins_instits"
 		   " WHERE CtyCod=%ld"
-		   " ORDER BY ShortName",
+	        " ORDER BY ShortName",
 		   HieCod);
   }
 
@@ -287,7 +287,7 @@ unsigned Ins_DB_GetInssInCtyOrderedByFullName (MYSQL_RES **mysql_res,long HieCod
                   	  "0 AS NumUsrs"	// row[7] (not used)
 		    " FROM ins_instits"
 		   " WHERE CtyCod=%ld"
-		   " ORDER BY FullName",
+		" ORDER BY FullName",
 		   HieCod);
   }
 
@@ -336,7 +336,7 @@ unsigned Ins_DB_GetFullListOfInssInCty (MYSQL_RES **mysql_res,long HieCod)
 			  " (SELECT DISTINCT "
 			           "InsCod"
 			     " FROM usr_data))"
-			    " ORDER BY %s",
+			 " ORDER BY %s",
 		   HieCod,
 		   HieCod,
 		   OrderBySubQuery[Gbl.Hierarchy.List[Hie_CTY].SelectedOrder]);
@@ -632,8 +632,8 @@ unsigned Ins_DB_SearchInss (MYSQL_RES **mysql_res,
 		   " WHERE %s"
 		     " AND ins_instits.CtyCod=cty_countrs.CtyCod"
 		     "%s"
-		   " ORDER BY ins_instits.FullName,"
-			     "cty_countrs.Name_%s",
+		" ORDER BY ins_instits.FullName,"
+			  "cty_countrs.Name_%s",
 		   SearchQuery,
 		   RangeQuery,
 		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);

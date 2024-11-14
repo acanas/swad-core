@@ -1345,6 +1345,31 @@ mysql> DESCRIBE exa_sets;
 		   "UNIQUE INDEX(SetCod),"
 		   "UNIQUE INDEX(ExaCod,SetInd))");
 
+   /***** Table faq_questions *****/
+/*
+mysql> DESCRIBE faq_questions;
++----------+---------------+------+-----+---------+----------------+
+| Field    | Type          | Null | Key | Default | Extra          |
++----------+---------------+------+-----+---------+----------------+
+| QaACod   | int           | NO   | PRI | NULL    | auto_increment |
+| NodCod   | int           | NO   | MUL | -1      |                |
+| QaAInd   | int           | NO   |     | 0       |                |
+| Hidden   | enum('N','Y') | NO   |     | N       |                |
+| Question | varchar(4095) | NO   |     | NULL    |                |
+| Answer   | text          | NO   |     | NULL    |                |
++----------+---------------+------+-----+---------+----------------+
+6 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS faq_questions ("
+			"QaACod INT NOT NULL AUTO_INCREMENT,"
+			"NodCod INT NOT NULL DEFAULT -1,"
+			"QaAInd INT NOT NULL DEFAULT 0,"
+			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"Question VARCHAR(4095) NOT NULL,"	// FAQ_MAX_BYTES_QUESTION
+			"Answer TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
+		   "UNIQUE INDEX(QaACod),"
+		   "UNIQUE INDEX(NodCod,QaAInd))");
+
    /***** Table fig_figures *****/
    /*
 mysql> DESCRIBE fig_figures;

@@ -414,7 +414,7 @@ unsigned Deg_DB_GetDegsOfCurrentCtrBasic (MYSQL_RES **mysql_res)
 			  "ShortName"	// row[1]
 		    " FROM deg_degrees"
 		   " WHERE CtrCod=%ld"
-		   " ORDER BY ShortName",
+		" ORDER BY ShortName",
 		   Gbl.Hierarchy.Node[Hie_CTR].HieCod);
   }
 
@@ -436,7 +436,7 @@ unsigned Deg_DB_GetDegsOfCurrentCtrFull (MYSQL_RES **mysql_res)
 			  "WWW"			// row[7]
 		    " FROM deg_degrees"
 		   " WHERE CtrCod=%ld"
-		   " ORDER BY FullName",
+		" ORDER BY FullName",
 		   Gbl.Hierarchy.Node[Hie_CTR].HieCod);
   }
 
@@ -508,7 +508,7 @@ unsigned Deg_DB_GetDegsWithStds (MYSQL_RES **mysql_res)
 		   " WHERE deg_degrees.DegCod=crs_courses.DegCod"
 		     " AND crs_courses.CrsCod=crs_users.CrsCod"
 		     " AND crs_users.Role=%u"
-		   " ORDER BY deg_degrees.ShortName",
+		" ORDER BY deg_degrees.ShortName",
 		   (unsigned) Rol_STD);
   }
 
@@ -554,8 +554,8 @@ unsigned Deg_DB_SearchDegs (MYSQL_RES **mysql_res,
 		     " AND ctr_centers.InsCod=ins_instits.InsCod"
 		     " AND ins_instits.CtyCod=cty_countrs.CtyCod"
 		     "%s"
-		   " ORDER BY deg_degrees.FullName,"
-			     "ins_instits.FullName",
+		" ORDER BY deg_degrees.FullName,"
+			  "ins_instits.FullName",
 		   SearchQuery,
 		   RangeQuery);
   }

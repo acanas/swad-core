@@ -465,7 +465,13 @@ static void Not_GetNoticeDataFromRow (MYSQL_RES *mysql_res,
 
    /***** Get next row from result *****/
    row = mysql_fetch_row (mysql_res);
-
+   /*
+   NotCod				row[0]
+   UNIX_TIMESTAMP(CreatTime) AS F	row[1]
+   UsrCod				row[2]
+   Content				row[3]
+   Status				row[4]
+   */
    /***** Get notice code (row[0]) *****/
    if (sscanf (row[0],"%ld",&Notice->NotCod) != 1)
       Err_WrongNoticeExit ();

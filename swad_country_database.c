@@ -117,7 +117,7 @@ unsigned Cty_DB_GetCtysBasic (MYSQL_RES **mysql_res)
 		   "SELECT CtyCod,"	// row[0]
 			  "Name_%s"	// row[1]
 		    " FROM cty_countrs"
-		   " ORDER BY Name_%s",
+		" ORDER BY Name_%s",
 		   Lan_STR_LANG_ID[Gbl.Prefs.Language],
 		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
   }
@@ -480,7 +480,7 @@ unsigned Cty_DB_SearchCtys (MYSQL_RES **mysql_res,
 		    " FROM cty_countrs"
 		   " WHERE %s"
 		      "%s"
-		   " ORDER BY Name_%s",
+		" ORDER BY Name_%s",
 		   SearchQuery,
 		   RangeQuery,
 		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);

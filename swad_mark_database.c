@@ -130,7 +130,7 @@ unsigned Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res)
 		     " AND brw_files.Cod=%ld"
 		     " AND brw_files.Path='%s'"
 		     " AND brw_files.FilCod=mrk_marks.FilCod"
-		   " ORDER BY brw_files.FilCod DESC"
+		" ORDER BY brw_files.FilCod DESC"
 		   " LIMIT 1",	// On duplicate entries, get the more recent
 		   Mrk_DB_HeadOrFootStr[Brw_HEADER],
 		   Mrk_DB_HeadOrFootStr[Brw_FOOTER],

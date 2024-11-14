@@ -104,7 +104,7 @@ unsigned Cfe_DB_GetCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
 		    " FROM cfe_exams"
 		   " WHERE CrsCod=%ld"
 		     " AND %s"
-		   " ORDER BY ExamDate DESC",
+		" ORDER BY ExamDate DESC",
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   SubQueryStatus);
   }
@@ -125,7 +125,7 @@ unsigned Cfe_DB_GetVisibleCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
 		    " FROM cfe_exams"
 		   " WHERE CrsCod=%ld"
 		     " AND Status=%u"
-		   " ORDER BY ExamDate DESC",
+		" ORDER BY ExamDate DESC",
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   (unsigned) Cfe_VISIBLE_CALL_FOR_EXAM);
   }
@@ -148,7 +148,7 @@ unsigned Cfe_DB_GetFutureCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
 		   " WHERE CrsCod=%ld"
 		     " AND Status=%u"
 		     " AND ExamDate>=NOW()"
-		   " ORDER BY ExamDate",
+		" ORDER BY ExamDate",
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   (unsigned) Cfe_VISIBLE_CALL_FOR_EXAM);
   }

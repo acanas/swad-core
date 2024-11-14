@@ -34902,27 +34902,27 @@ const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES] =
 #endif
 	};
 
-const char *Txt_Resources_of_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Resources =
 #if   L==1	// ca
-	"Recursos de %s";
+	"Recursos";
 #elif L==2	// de
-	"%s-Ressourcen";
+	"Ressourcen";
 #elif L==3	// en
-	"Resources of %s";
+	"Resources";
 #elif L==4	// es
-	"Recursos de %s";
+	"Recursos";
 #elif L==5	// fr
-	"Ressources de %s";
+	"Ressources";
 #elif L==6	// gn
-	"%s recursos rehegua";
+	"Recursos";
 #elif L==7	// it
-	"Risorse di %s";
+	"Risorse";
 #elif L==8	// pl
-	"Zasoby %s";
+	"Zasoby";
 #elif L==9	// pt
-	"Recursos de %s";
+	"Recursos";
 #elif L==10	// tr
-	"%s kaynaklar&inodot;";
+	"Kaynaklar&inodot;";
 #endif
 
 const char *Txt_Result =

@@ -536,7 +536,7 @@ unsigned Qst_DB_GetTrivialQst (MYSQL_RES **mysql_res,
 			     " AND tst_tags.TagCod=tst_question_tags.TagCod)"
 		   " HAVING S>='%f'"
 		      " AND S<='%f'"
-		   " ORDER BY RAND()"
+		 " ORDER BY RAND()"
 		   " LIMIT 1",
 		   DegreesStr,
 		   DegreesStr,
@@ -1156,7 +1156,7 @@ unsigned Qst_DB_GetRecentQuestions (MYSQL_RES **mysql_res,
 		     " AND (tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
 			   " OR "
 			   "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld))"
-		   " ORDER BY QstCod",
+		" ORDER BY QstCod",
 		   CrsCod,
 		   CrsCod,
 		   CrsCod,
@@ -1198,8 +1198,8 @@ unsigned Qst_DB_GetRecentAnswers (MYSQL_RES **mysql_res,
 			    " AND (tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
 				 " OR "
 				  "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)))"
-		   " ORDER BY QstCod,"
-			     "AnsInd",
+		" ORDER BY QstCod,"
+			  "AnsInd",
 		   CrsCod,
 		   CrsCod,
 		   CrsCod,
@@ -1314,7 +1314,7 @@ unsigned Qst_DB_GetAnswersData (MYSQL_RES **mysql_res,long QstCod,bool Shuffle)
 				"Correct"	// row[4]
 			  " FROM tst_answers"
 			 " WHERE QstCod=%ld"
-			 " ORDER BY %s",
+		      " ORDER BY %s",
 			 QstCod,
 			 Shuffle ? "RAND()" :
 				   "AnsInd")))
@@ -1336,7 +1336,7 @@ unsigned Qst_DB_GetTextOfAnswers (MYSQL_RES **mysql_res,long QstCod)
 			 "SELECT Answer"		// row[0]
 			  " FROM tst_answers"
 			 " WHERE QstCod=%ld"
-		         " ORDER BY AnsInd",
+		      " ORDER BY AnsInd",
 			 QstCod)))
       Err_WrongAnswerExit ();
 
@@ -1354,7 +1354,7 @@ unsigned Qst_DB_GetQstAnswersCorr (MYSQL_RES **mysql_res,long QstCod)
 		   "SELECT Correct"		// row[0]
 		    " FROM tst_answers"
 		   " WHERE QstCod=%ld"
-		   " ORDER BY AnsInd",
+		" ORDER BY AnsInd",
 		   QstCod);
   }
 
@@ -1370,7 +1370,7 @@ unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
 		   "SELECT AnsInd"	// row[0]
 		    " FROM tst_answers"
 		   " WHERE QstCod=%ld"
-		   " ORDER BY %s",
+		" ORDER BY %s",
 		   Question->QstCod,
 		   Question->Answer.Shuffle ? "RAND()" :	// Use RAND() because is really random; RAND(NOW()) repeats order
 					      "AnsInd");

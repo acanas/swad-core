@@ -635,11 +635,17 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.34.2 (2024-11-12)"
+#define Log_PLATFORM_VERSION	"SWAD 24.35 (2024-11-14)"
 #define CSS_FILE		"swad24.20.4.css"
 #define JS_FILE			"swad23.89.js"
 /*
-	Version 24.34.2:  Nov 12, 2024  Fixed bugs in trees. (341800 lines)
+	Version 24.35:    Nov 14, 2024  New module swad_FAQ. Not finished. (343080 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS faq_questions (QaACod INT NOT NULL AUTO_INCREMENT,NodCod INT NOT NULL DEFAULT -1,QaAInd INT NOT NULL DEFAULT 0,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',Question VARCHAR(4095) NOT NULL,Answer TEXT NOT NULL,UNIQUE INDEX(QaACod),UNIQUE INDEX(NodCod,QaAInd));
+					If you want to use MyISAM:
+ALTER TABLE faq_questions ENGINE=MyISAM;
+
+	Version 24.34.2:  Nov 12, 2024  Fixed bugs in trees. (341828 lines)
 	Version 24.34.1:  Nov 12, 2024  Changes in form to create/change a tree node. (341800 lines)
 	Version 24.34:    Nov 12, 2024  Code refactoring in course info. (341801 lines)
 	Version 24.33.2:  Nov 11, 2024  Fixed issues in course info. (341755 lines)

@@ -343,7 +343,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 			 " WHERE UsrCod NOT IN"
 			       " (SELECT UsrCod"
 			          " FROM crs_users)"
-			 " ORDER BY Dif");
+		      " ORDER BY Dif");
       case Rol_STD:
       case Rol_NET:
       case Rol_TCH:
@@ -362,7 +362,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 			              "crs_users"
 			       " WHERE usr_connected.UsrCod=crs_users.UsrCod"
 			         " AND crs_users.Role=%u"
-			       " ORDER BY Dif",
+			    " ORDER BY Dif",
 			       (unsigned) Role);
 	    case Hie_CTY:		// Show connected users in the current country
 	       return (unsigned)
@@ -386,7 +386,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 			         " AND crs_courses.CrsCod=crs_users.CrsCod"
 			         " AND crs_users.Role=%u"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			       " ORDER BY Dif",
+			    " ORDER BY Dif",
 			       Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			       (unsigned) Role);
 	    case Hie_INS:		// Show connected users in the current institution
@@ -409,7 +409,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 			         " AND crs_courses.CrsCod=crs_users.CrsCod"
 			         " AND crs_users.Role=%u"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			       " ORDER BY Dif",
+			    " ORDER BY Dif",
 			       Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			       (unsigned) Role);
 	    case Hie_CTR:		// Show connected users in the current center
@@ -430,7 +430,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 			         " AND crs_courses.CrsCod=crs_users.CrsCod"
 			         " AND crs_users.Role=%u"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			       " ORDER BY Dif",
+			    " ORDER BY Dif",
 			       Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 			       (unsigned) Role);
 	    case Hie_DEG:		// Show connected users in the current degree
@@ -449,7 +449,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 			         " AND crs_courses.CrsCod=crs_users.CrsCod"
 			         " AND crs_users.Role=%u"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			       " ORDER BY Dif",
+			    " ORDER BY Dif",
 			       Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 			       (unsigned) Role);
 	    case Hie_CRS:		// Show connected users in the current course
@@ -465,7 +465,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 			       " WHERE crs_users.CrsCod=%ld"
 			         " AND crs_users.Role=%u"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			       " ORDER BY Dif",
+			    " ORDER BY Dif",
 			       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 			       (unsigned) Role);
 	    default:

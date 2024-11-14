@@ -347,7 +347,7 @@ unsigned For_DB_GetPostsOfAThread (MYSQL_RES **mysql_res,long ThrCod)
 			  "UNIX_TIMESTAMP(CreatTime)"	// row[1]
 		    " FROM for_posts"
 		   " WHERE ThrCod=%ld"
-		   " ORDER BY PstCod",
+		" ORDER BY PstCod",
 		   ThrCod);
   }
 
@@ -491,7 +491,7 @@ unsigned For_DB_GetForumThreads (MYSQL_RES **mysql_res,
 			 " WHERE for_threads.ForumType=%u"
 			   "%s"
 			   " AND for_threads.FirstPstCod=for_posts.PstCod"
-			 " ORDER BY for_posts.CreatTime DESC",
+		      " ORDER BY for_posts.CreatTime DESC",
 			 (unsigned) Forums->Forum.Type,
 			 SubQuery);
       case Dat_END_TIME:	// Last post time
@@ -503,7 +503,7 @@ unsigned For_DB_GetForumThreads (MYSQL_RES **mysql_res,
 			 " WHERE for_threads.ForumType=%u"
 			   "%s"
 			   " AND for_threads.LastPstCod=for_posts.PstCod"
-			 " ORDER BY for_posts.CreatTime DESC",
+		      " ORDER BY for_posts.CreatTime DESC",
 			 (unsigned) Forums->Forum.Type,
 			 SubQuery);
       default:	// Impossible
@@ -591,7 +591,7 @@ long For_DB_GetThrLastPst (long ThrCod)
 				    "SELECT PstCod"
 				     " FROM for_posts"
 				    " WHERE ThrCod=%ld"
-				    " ORDER BY CreatTime DESC"
+				 " ORDER BY CreatTime DESC"
 				    " LIMIT 1",
 				    ThrCod);
    if (LastPstCod <= 0)

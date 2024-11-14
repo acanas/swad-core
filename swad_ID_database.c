@@ -79,8 +79,8 @@ unsigned ID_DB_GetIDsFromUsrCod (MYSQL_RES **mysql_res,long UsrCod)
 			  "Confirmed"	// row[1]
 		    " FROM usr_ids"
 		   " WHERE UsrCod=%ld"
-		   " ORDER BY Confirmed DESC,"
-			     "UsrID",
+		" ORDER BY Confirmed DESC,"
+			  "UsrID",
 		   UsrCod);
   }
 

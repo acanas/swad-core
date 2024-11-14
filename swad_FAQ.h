@@ -1,5 +1,7 @@
-// swad_chat_database.c: chat operations with database
+// swad_FAQ.h: Frequently Asked Questions
 
+#ifndef _SWAD_FAQ
+#define _SWAD_FAQ
 /*
     SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
@@ -25,38 +27,39 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <mysql/mysql.h>	// To access MySQL databases
-
-#include "swad_chat.h"
-#include "swad_chat_database.h"
-#include "swad_database.h"
+#include "swad_FAQ_type.h"
+#include "swad_tree.h"
 
 /*****************************************************************************/
-/********************** Get list of chat rooms with users ********************/
+/***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-unsigned Cht_DB_GetListOfChatRoomsWithUsrs (MYSQL_RES **mysql_res)
-  {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get chat rooms with connected users",
-		   "SELECT RoomCode,"		// row[0]
-			  "NumUsrs"		// row[1]
-		    " FROM cht_rooms"
-		   " WHERE NumUsrs>0"
-		" ORDER BY NumUsrs DESC,"
-			  "RoomCode");
-  }
+void FAQ_ResetQaA (struct FAQ_QaA *QaA);
 
-/*****************************************************************************/
-/*************** Get number of users connected to a chat room ****************/
-/*****************************************************************************/
+void FAQ_ViewQaAsAfterEdit (void);
+void FAQ_EditQaAs (void);
 
-unsigned Cht_DB_GetNumUsrsInChatRoom (const char *RoomCode)
-  {
-   return DB_QuerySELECTUnsigned ("can not get number of users"
-				  " connected to a chat room",
-				  "SELECT NumUsrs"
-				   " FROM cht_rooms"
-				  " WHERE RoomCode='%s'",
-				  RoomCode);
-  }
+void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
+                       struct Tre_Node *Node,
+                       long SelectedNodCod,
+                       long SelectedQaACod);
+
+void FAQ_GetQaADataByCod (struct Tre_Node *Node);
+
+void FAQ_CreateQaA (void);
+
+void FAQ_RenameQaA (void);
+
+void FAQ_ReqRemQaA (void);
+void FAQ_RemoveQaA (void);
+
+void FAQ_HideQaA (void);
+void FAQ_UnhideQaA (void);
+
+void FAQ_MoveUpQaA (void);
+void FAQ_MoveDownQaA (void);
+
+void FAQ_EditFAQWithFormToChangeQaA (void);
+void FAQ_ChangeQaA (void);
+
+#endif

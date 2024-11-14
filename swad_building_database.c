@@ -79,7 +79,7 @@ unsigned Bld_DB_GetListBuildings (MYSQL_RES **mysql_res,
 			        "Location"		// row[3]
 			  " FROM bld_buildings"
 		         " WHERE CtrCod=%ld"
-		         " ORDER BY %s",
+		      " ORDER BY %s",
 		         Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 		         OrderBySubQuery[SelectedOrder]);
       case Bld_ONLY_SHRT_NAME:
@@ -90,7 +90,7 @@ unsigned Bld_DB_GetListBuildings (MYSQL_RES **mysql_res,
 			        "ShortName"		// row[1]
 			  " FROM bld_buildings"
 		         " WHERE CtrCod=%ld"
-		         " ORDER BY ShortName",
+		      " ORDER BY ShortName",
 		         Gbl.Hierarchy.Node[Hie_CTR].HieCod);
      }
   }

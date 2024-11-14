@@ -1,5 +1,7 @@
-// swad_chat_database.c: chat operations with database
+// swad_FAQ_database.h: Frequently Asked Questions, operations with database
 
+#ifndef _SWAD_FAQ_DB
+#define _SWAD_FAQ_DB
 /*
     SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
@@ -27,36 +29,28 @@
 
 #include <mysql/mysql.h>	// To access MySQL databases
 
-#include "swad_chat.h"
-#include "swad_chat_database.h"
-#include "swad_database.h"
+#include "swad_FAQ_type.h"
+#include "swad_hidden_visible.h"
+#include "swad_tree.h"
 
 /*****************************************************************************/
-/********************** Get list of chat rooms with users ********************/
+/***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-unsigned Cht_DB_GetListOfChatRoomsWithUsrs (MYSQL_RES **mysql_res)
-  {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get chat rooms with connected users",
-		   "SELECT RoomCode,"		// row[0]
-			  "NumUsrs"		// row[1]
-		    " FROM cht_rooms"
-		   " WHERE NumUsrs>0"
-		" ORDER BY NumUsrs DESC,"
-			  "RoomCode");
-  }
+long FAQ_DB_CreateQaA (const struct Tre_Node *Node);
+void FAQ_DB_UpdateQaAQuestion (long NodCod,long QaACod,
+                               const char NewQuestion[FAQ_MAX_BYTES_QUESTION + 1]);
+unsigned FAQ_DB_GetListQaAs (MYSQL_RES **mysql_res,long NodCod,
+                             bool ShowHiddenQaAs);
+unsigned FAQ_DB_GetQaADataByCod (MYSQL_RES **mysql_res,long QaACod);
+unsigned FAQ_DB_GetQaAIndBefore (const struct Tre_Node *Node);
+unsigned FAQ_DB_GetQaAIndAfter (const struct Tre_Node *Node);
+long FAQ_DB_GetQaACodFromQaAInd (long NodCod,unsigned QaAInd);
+void FAQ_DB_RemoveQaA (const struct Tre_Node *Node);
+void FAQ_DB_HideOrUnhideQaA (const struct Tre_Node *Node,
+			     HidVis_HiddenOrVisible_t HiddenOrVisible);
+void FAQ_DB_LockTableQaAs (void);
+void FAQ_DB_UpdateQaAInd (const struct Tre_Node *Node,long QaACod,int QaAInd);
+void FAQ_DB_UpdateQaA (const struct Tre_Node *Node);
 
-/*****************************************************************************/
-/*************** Get number of users connected to a chat room ****************/
-/*****************************************************************************/
-
-unsigned Cht_DB_GetNumUsrsInChatRoom (const char *RoomCode)
-  {
-   return DB_QuerySELECTUnsigned ("can not get number of users"
-				  " connected to a chat room",
-				  "SELECT NumUsrs"
-				   " FROM cht_rooms"
-				  " WHERE RoomCode='%s'",
-				  RoomCode);
-  }
+#endif

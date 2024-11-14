@@ -107,7 +107,7 @@ unsigned Asg_DB_GetListAssignmentsMyGrps (MYSQL_RES **mysql_res,
 			    " WHERE grp_users.UsrCod=%ld"
 			      " AND asg_groups.GrpCod=grp_users.GrpCod)"
 			  ")"
-		   " ORDER BY %s",
+		" ORDER BY %s",
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Asg_DB_HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -126,7 +126,7 @@ unsigned Asg_DB_GetListAssignmentsAllGrps (MYSQL_RES **mysql_res,
 		   "SELECT AsgCod"
 		    " FROM asg_assignments"
 		   " WHERE CrsCod=%ld%s"
-		   " ORDER BY %s",
+		" ORDER BY %s",
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Asg_DB_HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
 		   Asg_DB_OrderSubQuery[SelectedOrder]);
@@ -368,15 +368,15 @@ unsigned Asg_DB_GetGrps (MYSQL_RES **mysql_res,long AsgCod)
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get groups of an assignment",
 		   "SELECT grp_types.GrpTypName,"	// row[0]
-			  "grp_groups.GrpName"	// row[1]
+			  "grp_groups.GrpName"		// row[1]
 		    " FROM asg_groups,"
 			  "grp_groups,"
 			  "grp_types"
 		   " WHERE asg_groups.AsgCod=%ld"
 		     " AND asg_groups.GrpCod=grp_groups.GrpCod"
 		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-		   " ORDER BY grp_types.GrpTypName,"
-			     "grp_groups.GrpName",
+		" ORDER BY grp_types.GrpTypName,"
+			  "grp_groups.GrpName",
 		   AsgCod);
   }
 

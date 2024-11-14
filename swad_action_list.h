@@ -431,8 +431,8 @@ typedef enum
 	ActUnhPrgRsc,
 	ActUp_PrgRsc,
 	ActDwnPrgRsc,
-	ActFrmChgLnkPrgRsc,
-	ActChgLnkPrgRsc,
+	ActFrmChgPrgRsc,
+	ActChgPrgRsc,
 
    // Teaching guide ----------------------------------------------------------
 
@@ -564,6 +564,20 @@ typedef enum
 	ActConSeeTreNodFAQ,
 	ActExpEdiTreNodFAQ,
 	ActConEdiTreNodFAQ,
+
+	ActFrmSeeFAQQaA,
+	ActFrmEdiFAQQaA,
+	ActNewFAQQaA,
+	ActRenFAQQaA,
+	ActReqRemFAQQaA,
+	ActRemFAQQaA,
+	ActHidFAQQaA,
+	ActUnhFAQQaA,
+	ActUp_FAQQaA,
+	ActDwnFAQQaA,
+	ActFrmChgFAQQaA,
+	ActChgFAQQaA,
+
 	ActEdiPlaTxtFAQ,
 	ActRcvPlaTxtFAQ,
 	ActEdiRchTxtFAQ,
@@ -1965,7 +1979,7 @@ typedef enum
 
 #define ActLst_NUM_ACTIONS		((unsigned) ActChgNtfPrf + 1)
 
-#define ActLst_MAX_ACTION_COD		2145
+#define ActLst_MAX_ACTION_COD		2157
 
 #define ActLst_DEFAULT_ACTION_AFTER_LOGIN ActSeeGblTL
 

@@ -94,8 +94,8 @@ void Enr_DB_CreateTmpTableMyCourses (void)
 		       " WHERE crs_users.UsrCod=%ld"
 		         " AND crs_users.CrsCod=crs_courses.CrsCod"
 		         " AND crs_courses.DegCod=deg_degrees.DegCod"
-		       " ORDER BY deg_degrees.ShortName,"
-			         "crs_courses.ShortName",
+		    " ORDER BY deg_degrees.ShortName,"
+			      "crs_courses.ShortName",
 		      Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -113,7 +113,7 @@ unsigned Enr_DB_GetMyCrss (MYSQL_RES **mysql_res,long PrtCod)
 			     "DegCod"	// row[2]
 		       " FROM my_courses_tmp"
 		      " WHERE DegCod=%ld"
-		      " ORDER BY CrsInd",
+		   " ORDER BY CrsInd",
 		      PrtCod);
    else
       return (unsigned)
@@ -122,7 +122,7 @@ unsigned Enr_DB_GetMyCrss (MYSQL_RES **mysql_res,long PrtCod)
 			     "Role,"	// row[1]
 			     "DegCod"	// row[2]
 		      " FROM my_courses_tmp"
-		      " ORDER BY CrsInd");
+		  " ORDER BY CrsInd");
   }
 
 /*****************************************************************************/
@@ -150,7 +150,7 @@ unsigned Enr_DB_GetMyCoursesNames (MYSQL_RES **mysql_res)
 			  "crs_courses"
 		   " WHERE crs_users.UsrCod=%ld"
 		     " AND crs_users.CrsCod=crs_courses.CrsCod"
-		   " ORDER BY crs_courses.FullName",
+		" ORDER BY crs_courses.FullName",
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -258,7 +258,7 @@ long Enr_DB_GetRamdomStdFromCrs (long HieCod)
 			       " FROM crs_users"
 			      " WHERE CrsCod=%ld"
 			        " AND Role=%u"
-			      " ORDER BY RAND()"
+			   " ORDER BY RAND()"
 			      " LIMIT 1",
 			      HieCod,
 			      (unsigned) Rol_STD);
@@ -1074,7 +1074,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND crs_users.Role=%u"
 				 " AND crs_users.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
-			       " ORDER BY crs_requests.RequestTime DESC",
+			    " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       (unsigned) Rol_TCH,
 			       RolesSelected);
@@ -1095,7 +1095,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND usr_admins.Cod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
-			       " ORDER BY crs_requests.RequestTime DESC",
+			    " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,Hie_GetDBStrFromLevel (Hie_DEG),
 			       RolesSelected);
 	    case Rol_CTR_ADM:
@@ -1117,7 +1117,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
-			       " ORDER BY crs_requests.RequestTime DESC",
+			    " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,Hie_GetDBStrFromLevel (Hie_CTR),
 			       RolesSelected);
 	    case Rol_INS_ADM:
@@ -1141,7 +1141,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
-			       " ORDER BY crs_requests.RequestTime DESC",
+			    " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,Hie_GetDBStrFromLevel (Hie_INS),
 			       RolesSelected);
 	   case Rol_SYS_ADM:
@@ -1155,7 +1155,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				      "UNIX_TIMESTAMP(RequestTime)"	// row[4]
 				" FROM crs_requests"
 			       " WHERE ((1<<Role)&%u)<>0"
-			       " ORDER BY RequestTime DESC",
+			    " ORDER BY RequestTime DESC",
 			       RolesSelected);
 	    default:
 	       Err_NoPermissionExit ();
@@ -1189,7 +1189,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND ins_instits.CtyCod=%ld"
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
-			       " ORDER BY crs_requests.RequestTime DESC",
+			    " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       (unsigned) Rol_TCH,
 			       Gbl.Hierarchy.Node[Hie_CTY].HieCod,
@@ -1218,7 +1218,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
-			       " ORDER BY crs_requests.RequestTime DESC",
+			    " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       Hie_GetDBStrFromLevel (Hie_DEG),
 			       Gbl.Hierarchy.Node[Hie_CTY].HieCod,
@@ -1247,7 +1247,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
-			       " ORDER BY crs_requests.RequestTime DESC",
+			    " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       Hie_GetDBStrFromLevel (Hie_CTR),
 			       Gbl.Hierarchy.Node[Hie_CTY].HieCod,
@@ -1276,7 +1276,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
-			       " ORDER BY crs_requests.RequestTime DESC",
+			    " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       Hie_GetDBStrFromLevel (Hie_INS),
 			       Gbl.Hierarchy.Node[Hie_CTY].HieCod,
@@ -1301,7 +1301,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
-			       " ORDER BY crs_requests.RequestTime DESC",
+			    " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			       RolesSelected);
 	    default:
@@ -1334,7 +1334,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND ctr_centers.InsCod=%ld"
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
-			       " ORDER BY crs_requests.RequestTime DESC",
+			    " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       (unsigned) Rol_TCH,
 			       Gbl.Hierarchy.Node[Hie_INS].HieCod,
@@ -1361,7 +1361,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
-			       " ORDER BY crs_requests.RequestTime DESC",
+			    " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       Hie_GetDBStrFromLevel (Hie_DEG),
 			       Gbl.Hierarchy.Node[Hie_INS].HieCod,
@@ -1388,7 +1388,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
-			       " ORDER BY crs_requests.RequestTime DESC",
+			    " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,Hie_GetDBStrFromLevel (Hie_CTR),
 			       Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			       RolesSelected);
@@ -1411,7 +1411,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
-			       " ORDER BY crs_requests.RequestTime DESC",
+			    " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			       RolesSelected);
 	    default:
@@ -1442,7 +1442,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND deg_degrees.CtrCod=%ld"
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
-			       " ORDER BY crs_requests.RequestTime DESC",
+			    " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       (unsigned) Rol_TCH,
 			       Gbl.Hierarchy.Node[Hie_CTR].HieCod,
@@ -1467,7 +1467,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
-			       " ORDER BY crs_requests.RequestTime DESC",
+			    " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       Hie_GetDBStrFromLevel (Hie_DEG),
 			       Gbl.Hierarchy.Node[Hie_CTR].HieCod,
@@ -1490,7 +1490,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
-			       " ORDER BY crs_requests.RequestTime DESC",
+			    " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 			       RolesSelected);
 	    default:
@@ -1519,7 +1519,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND crs_courses.DegCod=%ld"
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
-			       " ORDER BY crs_requests.RequestTime DESC",
+			    " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       (unsigned) Rol_TCH,
 			       Gbl.Hierarchy.Node[Hie_DEG].HieCod,
@@ -1541,7 +1541,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 			       " WHERE crs_courses.DegCod=%ld"
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
-			       " ORDER BY crs_requests.RequestTime DESC",
+			    " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 			       RolesSelected);
 	    default:
@@ -1568,7 +1568,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				" FROM crs_requests"
 			       " WHERE CrsCod=%ld"
 				 " AND ((1<<Role)&%u)<>0"
-			       " ORDER BY RequestTime DESC",
+			    " ORDER BY RequestTime DESC",
 			       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 			       RolesSelected);
 	    default:

@@ -38,6 +38,7 @@
 #include "swad_contracted_expanded.h"
 #include "swad_database.h"
 #include "swad_error.h"
+#include "swad_FAQ.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -113,7 +114,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
                               unsigned NumNode,struct Tre_Node *Node,
                               ConExp_ContractedOrExpanded_t ContractedOrExpanded,
                               long SelectedNodCod,
-                              long SelectedRscCod);
+                              long Cod);	// Specific code (resource, question,...)
 static void Tre_PutIconToContractOrExpandNode (struct Tre_Node *Node,
                                                ConExp_ContractedOrExpanded_t ContractedOrExpanded,
                                                Vie_ViewType_t ViewType);
@@ -217,7 +218,8 @@ void Tre_EditTree (Inf_Type_t InfoType)
 
 void Tre_ShowAllNodes (Inf_Type_t InfoType,
 		       Tre_ListingType_t ListingType,
-                       long SelectedNodCod,long SelectedRscCod)
+                       long SelectedNodCod,
+                       long Cod)	// Specific code (resource, question,...)
   {
    long ParentNodCod = -1L;	// Initialized to avoid warning
    unsigned NumNode;
@@ -265,7 +267,7 @@ void Tre_ShowAllNodes (Inf_Type_t InfoType,
 	   {
 	    /* Write row with this node */
 	    Tre_WriteRowNode (ListingType,NumNode,&Node,ContractedOrExpanded,
-			      SelectedNodCod,SelectedRscCod);
+			      SelectedNodCod,Cod);
 	    The_ChangeRowColor ();
 
 	    /* Show form to create child node? */
@@ -340,7 +342,7 @@ void Tre_PutIconToViewTree (struct Tre_Node *Node)
       [Inf_SYLLABUS_PRA	] = ActSeeSyl,
       [Inf_BIBLIOGRAPHY	] = ActSeeBib,
       [Inf_FAQ		] = ActSeeFAQ,
-      [Inf_LINKS	] = ActSeeLnk,
+      [Inf_LINKS	] = ActSeeCrsLnk,
       [Inf_ASSESSMENT	] = ActSeeAss,
      };
 
@@ -380,7 +382,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
                               unsigned NumNode,struct Tre_Node *Node,
                               ConExp_ContractedOrExpanded_t ContractedOrExpanded,
                               long SelectedNodCod,
-                              long SelectedRscCod)
+                              long Cod)	// Specific code (resource, question,...)
   {
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_PrgClass[HidVis_NUM_HIDDEN_VISIBLE];
@@ -583,10 +585,14 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	      {
 	       case Inf_PROGRAM:
 		  /* List of resources of this tree node */
-		  PrgRsc_ListNodeResources (ListingType,Node,
-					    SelectedNodCod,SelectedRscCod);
+		  PrgRsc_ListNodeResources (ListingType,Node,SelectedNodCod,Cod);
+		  break;
+	       case Inf_FAQ:
+		  /* List of questions-answers of this tree node */
+		  FAQ_ListNodeQaAs (ListingType,Node,SelectedNodCod,Cod);
 		  break;
 	       default:
+		  Ale_ShowAlert (Ale_INFO,"Specific information will appear here.");
 		  break;
 	      }
 

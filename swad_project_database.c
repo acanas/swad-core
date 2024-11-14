@@ -748,9 +748,9 @@ unsigned Prj_DB_GetUsrsInPrj (MYSQL_RES **mysql_res,
 		   " WHERE prj_users.PrjCod=%ld"
 		     " AND prj_users.RoleInProject=%u"
 		     " AND prj_users.UsrCod=usr_data.UsrCod"
-		   " ORDER BY S1,"
-			     "S2,"
-			     "FN",
+		" ORDER BY S1,"
+			  "S2,"
+			  "FN",
 		   PrjCod,
 		   (unsigned) RoleInProject);
   }

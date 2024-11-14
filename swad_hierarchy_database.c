@@ -95,8 +95,8 @@ unsigned Hie_DB_GetInsCtrDegAdminBy (MYSQL_RES **mysql_res,long UsrCod)
 		    " WHERE usr_admins.UsrCod=%ld"
 		      " AND usr_admins.Scope='%s'"
 		      " AND usr_admins.Cod=deg_degrees.DegCod)"
-		    " ORDER BY S,"
-		              "FullName",
+		 " ORDER BY S,"
+		           "FullName",
 		   (unsigned) Hie_SYS,UsrCod,Hie_GetDBStrFromLevel (Hie_SYS),
 		   (unsigned) Hie_INS,UsrCod,Hie_GetDBStrFromLevel (Hie_INS),
 		   (unsigned) Hie_CTR,UsrCod,Hie_GetDBStrFromLevel (Hie_CTR),

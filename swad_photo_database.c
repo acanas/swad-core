@@ -157,9 +157,9 @@ unsigned Pho_DB_QueryDegrees (MYSQL_RES **mysql_res,
 		         " WHERE sta_degrees.Sex='all'"
 			   " AND sta_degrees.NumStds>0"
 			   " AND deg_degrees.DegCod=sta_degrees.DegCod"
-		         " ORDER BY sta_degrees.NumStds DESC,"
-				   "sta_degrees.NumStdsWithPhoto DESC,"
-				   "deg_degrees.ShortName");
+		      " ORDER BY sta_degrees.NumStds DESC,"
+				"sta_degrees.NumStdsWithPhoto DESC,"
+				"deg_degrees.ShortName");
       case Pho_NUMBER_OF_PHOTOS:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get degrees",
@@ -169,9 +169,9 @@ unsigned Pho_DB_QueryDegrees (MYSQL_RES **mysql_res,
 		         " WHERE sta_degrees.Sex='all'"
 			   " AND sta_degrees.NumStds>0"
 			   " AND deg_degrees.DegCod=sta_degrees.DegCod"
-		         " ORDER BY sta_degrees.NumStdsWithPhoto DESC,"
-				   "sta_degrees.NumStds DESC,"
-				   "deg_degrees.ShortName");
+		      " ORDER BY sta_degrees.NumStdsWithPhoto DESC,"
+				"sta_degrees.NumStds DESC,"
+				"deg_degrees.ShortName");
       case Pho_PERCENT:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get degrees",
@@ -181,9 +181,9 @@ unsigned Pho_DB_QueryDegrees (MYSQL_RES **mysql_res,
 		         " WHERE sta_degrees.Sex='all'"
 			   " AND sta_degrees.NumStds>0"
 			   " AND deg_degrees.DegCod=sta_degrees.DegCod"
-		         " ORDER BY sta_degrees.NumStdsWithPhoto/"
-				   "sta_degrees.NumStds DESC,"
-				   "deg_degrees.ShortName");
+		      " ORDER BY sta_degrees.NumStdsWithPhoto/"
+				"sta_degrees.NumStds DESC,"
+				"deg_degrees.ShortName");
       case Pho_DEGREE_NAME:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get degrees",
@@ -193,7 +193,7 @@ unsigned Pho_DB_QueryDegrees (MYSQL_RES **mysql_res,
 		         " WHERE sta_degrees.Sex='all'"
 			   " AND sta_degrees.NumStds>0"
 			   " AND deg_degrees.DegCod=sta_degrees.DegCod"
-		         " ORDER BY deg_degrees.ShortName");
+		      " ORDER BY deg_degrees.ShortName");
      }
 
    return 0;
@@ -236,7 +236,7 @@ long Pho_DB_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
 			        " AND sta_degrees.DegCod=crs_courses.DegCod"
 			        " AND crs_courses.CrsCod=crs_users.CrsCod"
 			        " AND crs_users.Role=%u"
-			      " ORDER BY sta_degrees.TimeAvgPhoto"
+			   " ORDER BY sta_degrees.TimeAvgPhoto"
 			      " LIMIT 1",
 			      Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO,
 			      (unsigned) Rol_STD);

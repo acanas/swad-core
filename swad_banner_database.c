@@ -45,7 +45,7 @@ unsigned Ban_DB_GetAllBanners (MYSQL_RES **mysql_res)
 			  "Img,"	// row[4]
 			  "WWW"		// row[5]
 		    " FROM ban_banners"
-		   " ORDER BY ShortName");
+		" ORDER BY ShortName");
   }
 
 /*****************************************************************************/
@@ -64,7 +64,7 @@ unsigned Ban_DB_GetVisibleBanners (MYSQL_RES **mysql_res)
 			  "WWW"		// row[5]
 		    " FROM ban_banners"
 		   " WHERE Hidden='N'"
-		   " ORDER BY ShortName");
+		" ORDER BY ShortName");
   }
 
 /*****************************************************************************/
@@ -84,7 +84,7 @@ unsigned Ban_DB_GetRandomBanners (MYSQL_RES **mysql_res)
 			  "WWW"		// row[5]
 		    " FROM ban_banners"
 		   " WHERE Hidden='N'"
-		   " ORDER BY RAND(%lu)"
+		" ORDER BY RAND(%lu)"
 		   " LIMIT %u",
 		   (unsigned long) (Dat_GetStartExecutionTimeUTC () /
 				    Cfg_TIME_TO_CHANGE_BANNER),

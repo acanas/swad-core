@@ -115,7 +115,7 @@ unsigned Rsc_DB_GetClipboard (MYSQL_RES **mysql_res)
 		    " FROM rsc_clipboards"
 		   " WHERE UsrCod=%ld"
 		     " AND CrsCod=%ld"
-		   " ORDER BY CopyTime",
+		" ORDER BY CopyTime",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
@@ -225,7 +225,7 @@ unsigned Rsc_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
 		     " AND prg_resources.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'"		// Extra check
-		   " ORDER BY prg_resources.RscInd",
+		" ORDER BY prg_resources.RscInd",
 		   NodCod,
 		   HiddenSubQuery[ShowHiddenResources],
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,

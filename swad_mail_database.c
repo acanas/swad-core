@@ -78,7 +78,7 @@ unsigned Mai_DB_GetMyEmails (MYSQL_RES **mysql_res,long UsrCod)
 		          "Confirmed"	// row[1]
 		    " FROM usr_emails"
 		   " WHERE UsrCod=%ld"
-		   " ORDER BY CreatTime DESC",
+		" ORDER BY CreatTime DESC",
 		   UsrCod);
   }
 
@@ -94,7 +94,7 @@ unsigned Mai_DB_GetEmailFromUsrCod (MYSQL_RES **mysql_res,long UsrCod)
 			  "Confirmed"	// row[1]
 		    " FROM usr_emails"
 		   " WHERE UsrCod=%ld"
-		   " ORDER BY CreatTime DESC"
+		" ORDER BY CreatTime DESC"
 		   " LIMIT 1",
 		   UsrCod);
   }
@@ -385,7 +385,7 @@ unsigned Mai_DB_GetMailDomains (MYSQL_RES **mysql_res,Mai_DomainsOrder_t Selecte
 		    " WHERE Domain NOT IN"
 			  " (SELECT Domain COLLATE 'latin1_bin'"
 			     " FROM T2))"
-		    " ORDER BY %s",	// COLLATE necessary to avoid error in comparisons
+		 " ORDER BY %s",	// COLLATE necessary to avoid error in comparisons
 		   OrderBySubQuery[SelectedOrder]);
   }
 

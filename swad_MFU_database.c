@@ -80,8 +80,8 @@ unsigned MFU_DB_GetMFUActionsOrderByScore (MYSQL_RES **mysql_res)
 		   "SELECT ActCod"
 		    " FROM act_frequent"
 		   " WHERE UsrCod=%ld"
-		   " ORDER BY Score DESC,"
-			     "LastClick DESC",
+		" ORDER BY Score DESC,"
+			  "LastClick DESC",
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -96,8 +96,8 @@ unsigned MFU_DB_GetMFUActionsOrderByLastClick (MYSQL_RES **mysql_res)
 		   "SELECT ActCod"
 		    " FROM act_frequent"
 		   " WHERE UsrCod=%ld"
-		   " ORDER BY LastClick DESC,"
-			     "Score DESC",
+		" ORDER BY LastClick DESC,"
+			  "Score DESC",
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 

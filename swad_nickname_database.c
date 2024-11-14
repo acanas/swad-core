@@ -71,7 +71,7 @@ void Nck_DB_GetNicknameFromUsrCod (long UsrCod,
 		         "SELECT Nickname"
 		          " FROM usr_nicknames"
 		         " WHERE UsrCod=%ld"
-		         " ORDER BY CreatTime DESC"
+		      " ORDER BY CreatTime DESC"
 		         " LIMIT 1",
 		         UsrCod);
   }
@@ -87,7 +87,7 @@ unsigned Nck_DB_GetUsrNicknames (MYSQL_RES **mysql_res,long UsrCod)
 		   "SELECT Nickname"	// row[0]
 		    " FROM usr_nicknames"
 		   " WHERE UsrCod=%ld"
-		   " ORDER BY CreatTime DESC",
+		" ORDER BY CreatTime DESC",
 		   UsrCod);
   }
 

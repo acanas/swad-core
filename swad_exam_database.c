@@ -657,7 +657,7 @@ unsigned Exa_DB_GetExamSets (MYSQL_RES **mysql_res,long ExaCod)
 			  "Title"		// row[4]
 		    " FROM exa_sets"
 		   " WHERE ExaCod=%ld"
-		   " ORDER BY SetInd",
+		" ORDER BY SetInd",
 		   ExaCod);
   }
 
@@ -923,7 +923,7 @@ unsigned Exa_DB_GetQstsFromSet (MYSQL_RES **mysql_res,long SetCod)
 		   "SELECT QstCod"	// row[0]
 		    " FROM exa_set_questions"
 		   " WHERE SetCod=%ld"
-		   " ORDER BY Stem",
+		" ORDER BY Stem",
 		   SetCod);
   }
 
@@ -941,7 +941,7 @@ unsigned Exa_DB_GetSomeQstsFromSetToPrint (MYSQL_RES **mysql_res,
 			  "Shuffle"	// row[2]
 		    " FROM exa_set_questions"
 		   " WHERE SetCod=%ld"
-		   " ORDER BY RAND()"	// Don't use RAND(NOW()) because the same ordering will be repeated across sets
+		" ORDER BY RAND()"	// Don't use RAND(NOW()) because the same ordering will be repeated across sets
 		   " LIMIT %u",
 		   SetCod,
 		   NumQstsToPrint);
@@ -1148,7 +1148,7 @@ unsigned Exa_DB_GetQstAnswersFromSet (MYSQL_RES **mysql_res,long QstCod,bool Shu
 			  "Correct"	// row[4]
 		    " FROM exa_set_answers"
 		   " WHERE QstCod=%ld"
-		   " ORDER BY %s",
+		" ORDER BY %s",
 		   QstCod,
 		   Shuffle ? "RAND()" :
 		             "AnsInd");
@@ -1184,7 +1184,7 @@ unsigned Exa_DB_GetQstAnswersCorrFromSet (MYSQL_RES **mysql_res,long QstCod)
 		   "SELECT Correct"		// row[0]
 		    " FROM exa_set_answers"
 		   " WHERE QstCod=%ld"
-		   " ORDER BY AnsInd",
+		" ORDER BY AnsInd",
 		   QstCod);
   }
 
@@ -1450,7 +1450,7 @@ unsigned Exa_DB_GetSessions (MYSQL_RES **mysql_res,long ExaCod)
 			  "ShowUsrResults"				// row[8]
 		    " FROM exa_sessions"
 		   " WHERE ExaCod=%ld%s%s"
-		   " ORDER BY SesCod",
+		" ORDER BY SesCod",
 		   ExaCod,
 		   HiddenSubQuery,
 		   GroupsSubQuery);
@@ -1659,8 +1659,8 @@ unsigned Exa_DB_GetGrpsAssociatedToSes (MYSQL_RES **mysql_res,long SesCod)
 		   " WHERE exa_groups.SesCod=%ld"
 		     " AND exa_groups.GrpCod=grp_groups.GrpCod"
 		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-		   " ORDER BY grp_types.GrpTypName,"
-			     "grp_groups.GrpName",
+		" ORDER BY grp_types.GrpTypName,"
+		          "grp_groups.GrpName",
 		   SesCod);
   }
 
@@ -1970,7 +1970,7 @@ unsigned Exa_DB_GetPrintQuestions (MYSQL_RES **mysql_res,long PrnCod)
 			  "Answers"	// row[4]
 		    " FROM exa_print_questions"
 		   " WHERE PrnCod=%ld"
-		   " ORDER BY QstInd",
+		" ORDER BY QstInd",
 		   PrnCod);
   }
 
@@ -2226,7 +2226,7 @@ unsigned Exa_DB_GetExamLog (MYSQL_RES **mysql_res,long PrnCod)
 		    " LEFT JOIN exa_log_user_agents"
 		      " ON exa_log.LogCod=exa_log_user_agents.LogCod"
 		   " WHERE exa_log.PrnCod=%ld"
-		   " ORDER BY exa_log.LogCod",
+		" ORDER BY exa_log.LogCod",
 		   PrnCod);
   }
 
@@ -2250,9 +2250,9 @@ unsigned Exa_DB_GetAllUsrsWhoHaveMadeExam (MYSQL_RES **mysql_res,long ExaCod)
 			     " AND exa_exams.CrsCod=%ld) AS users,"		// Extra check
 			  "usr_data"
 		   " WHERE users.UsrCod=usr_data.UsrCod"
-		   " ORDER BY usr_data.Surname1,"
-			     "usr_data.Surname2,"
-			     "usr_data.FirstName",
+		" ORDER BY usr_data.Surname1,"
+			  "usr_data.Surname2,"
+			  "usr_data.FirstName",
 		   ExaCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
@@ -2274,9 +2274,9 @@ unsigned Exa_DB_GetAllUsrsWhoHaveMadeSession (MYSQL_RES **mysql_res,long SesCod)
 			     " AND exa_exams.CrsCod=%ld) AS users,"	// Extra check
 			  "usr_data"
 		   " WHERE users.UsrCod=usr_data.UsrCod"
-		   " ORDER BY usr_data.Surname1,"
-			     "usr_data.Surname2,"
-			     "usr_data.FirstName",
+		" ORDER BY usr_data.Surname1,"
+			  "usr_data.Surname2,"
+			  "usr_data.FirstName",
 		   SesCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
@@ -2387,7 +2387,7 @@ unsigned Exa_DB_GetResults (MYSQL_RES **mysql_res,
 		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
 		      "%s"	// Hidden exams subquery
 		     " AND exa_exams.CrsCod=%ld"		// Extra check
-		   " ORDER BY exa_sessions.Title",
+		" ORDER BY exa_sessions.Title",
 		   UsrCod,
 		   SesSubQuery,
 		   HidSesSubQuery,

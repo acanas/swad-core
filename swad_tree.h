@@ -32,6 +32,7 @@
 
 #include "swad_database.h"
 #include "swad_date.h"
+#include "swad_FAQ_type.h"
 #include "swad_info.h"
 #include "swad_resource.h"
 
@@ -59,6 +60,7 @@ struct Tre_Node
    CloOpe_ClosedOrOpen_t ClosedOrOpen;
    char Title[Tre_MAX_BYTES_NODE_TITLE + 1];
    struct Rsc_Resource Resource;
+   struct FAQ_QaA QaA;
   };
 
 struct Tre_NodeRange
@@ -115,7 +117,8 @@ unsigned Tre_ShowTree (Inf_Type_t InfoType);
 void Tre_EditTree (Inf_Type_t InfoType);
 void Tre_ShowAllNodes (Inf_Type_t InfoType,
 		       Tre_ListingType_t ListingType,
-                       long SelectedItmCod,long SelectedRscCod);
+                       long SelectedItmCod,
+                       long Cod);	// Specific code (resource, question,...)
 
 Usr_Can_t Tre_CheckIfICanEditTree (void);
 void Tre_PutIconToEditTree (struct Tre_Node *Node);

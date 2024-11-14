@@ -78,6 +78,7 @@ const char *Par_CodeStr[Par_NUM_PAR_COD] =
    [ParCod_Prn      ] = "PrnCod",	// Print code in assessment test
    [ParCod_Pst      ] = "PstCod",	// Post code in forum
    [ParCod_Pub      ] = "PubCod",	// Publication code in timeline
+   [ParCod_QaA      ] = "QaACod",	// Question&answer code in FAQ
    [ParCod_Qst      ] = "QstCod",	// Question code in assessment/survey
    [ParCod_Roo      ] = "RooCod",	// Room code
    [ParCod_Rsc      ] = "RscCod",	// Resource code in course program

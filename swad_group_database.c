@@ -312,7 +312,7 @@ long Grp_DB_GetRamdomStdFromGrp (long GrpCod)
 			      " WHERE grp_users.GrpCod=%ld"
 			        " AND grp_users.UsrCod=crs_users.UsrCod"
 			        " AND crs_users.Role=%u"
-			      " ORDER BY RAND()"
+			   " ORDER BY RAND()"
 			      " LIMIT 1",
 			      GrpCod,
 			      (unsigned) Rol_STD);
@@ -552,8 +552,8 @@ unsigned Grp_DB_GetGrpsInCrs (MYSQL_RES **mysql_res,long CrsCod)
 			  "grp_groups"
 		   " WHERE grp_types.CrsCod=%d"
 		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
-		   " ORDER BY grp_types.GrpTypName,"
-			     "grp_groups.GrpName",
+		" ORDER BY grp_types.GrpTypName,"
+			  "grp_groups.GrpName",
 		   CrsCod);
   }
 
@@ -577,7 +577,7 @@ unsigned Grp_DB_GetGrpsOfType (MYSQL_RES **mysql_res,long GrpTypCod)
 		    " LEFT JOIN roo_rooms"
 		      " ON grp_groups.RooCod=roo_rooms.RooCod"
 		   " WHERE grp_groups.GrpTypCod=%ld"
-		   " ORDER BY grp_groups.GrpName",
+		" ORDER BY grp_groups.GrpName",
 		   GrpTypCod);
   }
 
@@ -607,8 +607,8 @@ unsigned Grp_DB_GetLstCodGrpsOfAnyTypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_
 		     "%s"
 		     " AND grp_groups.GrpCod=grp_users.GrpCod"
 		     " AND grp_users.UsrCod=%ld"
-		   " ORDER BY grp_types.GrpTypName,"
-			     "grp_groups.GrpName",
+		" ORDER BY grp_types.GrpTypName,"
+			  "grp_groups.GrpName",
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   ClosedOpenGroupsTxt[ClosedOpenGroups],
 		   UsrCod);
@@ -632,7 +632,7 @@ unsigned Grp_DB_GetLstCodGrpsOfATypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_re
 		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
 		     " AND grp_groups.GrpCod=grp_users.GrpCod"
 		     " AND grp_users.UsrCod=%ld"
-		   " ORDER BY grp_groups.GrpName",
+	        " ORDER BY grp_groups.GrpName",
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   GrpTypCod,
 		   UsrCod);
@@ -655,8 +655,8 @@ unsigned Grp_DB_GetLstCodGrpsWithFileZonesInCurrentCrsIBelong (MYSQL_RES **mysql
 		     " AND grp_groups.FileZones='Y'"
 		     " AND grp_groups.GrpCod=grp_users.GrpCod"
 		     " AND grp_users.UsrCod=%ld"
-		   " ORDER BY grp_types.GrpTypName,"
-			     "grp_groups.GrpName",
+		" ORDER BY grp_types.GrpTypName,"
+			  "grp_groups.GrpName",
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
@@ -676,7 +676,7 @@ unsigned Grp_DB_GetNamesGrpsUsrBelongsTo (MYSQL_RES **mysql_res,
 		   " WHERE grp_groups.GrpTypCod=%ld"
 		     " AND grp_groups.GrpCod=grp_users.GrpCod"
 		     " AND grp_users.UsrCod=%ld"
-		   " ORDER BY grp_groups.GrpName",
+		" ORDER BY grp_groups.GrpName",
 		   GrpTypCod,
 		   UsrCod);
   }

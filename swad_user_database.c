@@ -457,10 +457,10 @@ void Usr_DB_BuildQueryToGetUsrsLst (Hie_Level_t Level,Rol_Role_t Role,
 			  " AND crs_users.CrsCod=crs_courses.CrsCod"
 			  " AND crs_courses.DegCod=deg_degrees.DegCod"
 			  " AND deg_degrees.CtrCod=%ld"
-			" ORDER BY usr_data.Surname1,"
-			          "usr_data.Surname2,"
-			          "usr_data.FirstName,"
-			          "usr_data.UsrCod",
+		     " ORDER BY usr_data.Surname1,"
+			       "usr_data.Surname2,"
+			       "usr_data.FirstName,"
+			       "usr_data.UsrCod",
 			QueryFields,
 			(unsigned) Role,
 			Gbl.Hierarchy.Node[Hie_CTR].HieCod);
@@ -476,10 +476,10 @@ void Usr_DB_BuildQueryToGetUsrsLst (Hie_Level_t Level,Rol_Role_t Role,
 			  " AND crs_users.Role=%u"
 			  " AND crs_users.CrsCod=crs_courses.CrsCod"
 			  " AND crs_courses.DegCod=%ld"
-			" ORDER BY usr_data.Surname1,"
-			          "usr_data.Surname2,"
-			          "usr_data.FirstName,"
-			          "usr_data.UsrCod",
+		     " ORDER BY usr_data.Surname1,"
+			       "usr_data.Surname2,"
+			       "usr_data.FirstName,"
+			       "usr_data.UsrCod",
 			QueryFields,
 			(unsigned) Role,
 			Gbl.Hierarchy.Node[Hie_DEG].HieCod);

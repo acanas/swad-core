@@ -6617,7 +6617,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Move down resource"	// Çeviri lazim!
 #endif
 	,
-	[ActFrmChgLnkPrgRsc] =
+	[ActFrmChgPrgRsc] =
 #if   L==1	// ca
 	"Edit resource link"		// Necessita traducció
 #elif L==2	// de
@@ -6640,7 +6640,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Edit resource link"		// Çeviri lazim!
 #endif
 	,
-	[ActChgLnkPrgRsc] =
+	[ActChgPrgRsc] =
 #if   L==1	// ca
 	"Canviar enlla&ccedil; a recurs des del programa"
 #elif L==2	// de

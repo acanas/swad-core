@@ -77,7 +77,7 @@ unsigned Crs_DB_GetAllCrss (MYSQL_RES **mysql_res)
    DB_QuerySELECT (mysql_res,"can not get courses",
 		   "SELECT CrsCod"
 		    " FROM crs_courses"
-		   " ORDER BY CrsCod");
+		" ORDER BY CrsCod");
   }
 
 /*****************************************************************************/
@@ -106,7 +106,7 @@ unsigned Crs_DB_GetCrssInCurrentDegBasic (MYSQL_RES **mysql_res)
 			  "ShortName"	// row[1]
 		    " FROM crs_courses"
 		   " WHERE DegCod=%ld"
-		   " ORDER BY ShortName",
+		" ORDER BY ShortName",
 		   Gbl.Hierarchy.Node[Hie_DEG].HieCod);
   }
 
@@ -129,8 +129,8 @@ unsigned Crs_DB_GetCrssInCurrentDegFull (MYSQL_RES **mysql_res)
 		    " FROM crs_courses"
 		   " WHERE DegCod=%ld"
 		     " AND (Status & %u)=0"
-		   " ORDER BY Year,"
-			     "ShortName",
+		" ORDER BY Year,"
+			  "ShortName",
 		   Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 		   (unsigned) Hie_STATUS_BIT_REMOVED);	// All courses except those removed
   }
@@ -286,9 +286,9 @@ unsigned Crs_DB_GetCrssOfAUsr (MYSQL_RES **mysql_res,long UsrCod,Rol_Role_t Role
 		     " AND crs_users.CrsCod=crs_courses.CrsCod"
 		     " AND crs_courses.DegCod=deg_degrees.DegCod"
 		     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-		   " ORDER BY deg_degrees.FullName,"
-		             "crs_courses.Year,"
-		             "crs_courses.FullName",
+		" ORDER BY deg_degrees.FullName,"
+		          "crs_courses.Year,"
+		          "crs_courses.FullName",
 		   UsrCod,SubQuery);
 
    /***** Free allocated memory for subquery *****/
@@ -344,10 +344,10 @@ unsigned Crs_DB_SearchCrss (MYSQL_RES **mysql_res,
 		     " AND ctr_centers.InsCod=ins_instits.InsCod"
 		     " AND ins_instits.CtyCod=cty_countrs.CtyCod"
 		     "%s"
-		   " ORDER BY crs_courses.FullName,"
-			     "ins_instits.FullName,"
-			     "deg_degrees.FullName,"
-			     "crs_courses.Year",
+		" ORDER BY crs_courses.FullName,"
+			  "ins_instits.FullName,"
+			  "deg_degrees.FullName,"
+			  "crs_courses.Year",
 		   SearchQuery,
 		   RangeQuery);
   }
@@ -476,7 +476,7 @@ unsigned Crs_DB_GetCrssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long PrtCod)
 		      " WHERE crs_users.UsrCod=%ld"
 		        " AND crs_users.CrsCod=crs_courses.CrsCod"
 		        " AND crs_courses.DegCod=%ld"
-		      " ORDER BY crs_courses.ShortName",
+		   " ORDER BY crs_courses.ShortName",
 		      UsrCod,
 		      PrtCod);
    else			// All the courses
@@ -491,8 +491,8 @@ unsigned Crs_DB_GetCrssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long PrtCod)
 		      " WHERE crs_users.UsrCod=%ld"
 		        " AND crs_users.CrsCod=crs_courses.CrsCod"
 		        " AND crs_courses.DegCod=deg_degrees.DegCod"
-		      " ORDER BY deg_degrees.ShortName,"
-			        "crs_courses.ShortName",
+		   " ORDER BY deg_degrees.ShortName,"
+			     "crs_courses.ShortName",
 		      UsrCod);
   }
 

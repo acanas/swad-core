@@ -99,8 +99,8 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			         " AND crs_users.Role=%u"
 			         " AND crs_users.UsrCod=usr_data.UsrCod"
 			         " AND usr_data.DptCod=%ld"
-			       " ORDER BY deg_degrees.FullName,"
-					 "crs_courses.FullName",
+			    " ORDER BY deg_degrees.FullName,"
+				      "crs_courses.FullName",
 			       Indicators->DegTypCod,
 			       (unsigned) Rol_TCH,
 			       Indicators->DptCod);
@@ -121,8 +121,8 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			         " AND crs_users.Role=%u"
 			         " AND crs_users.UsrCod=usr_data.UsrCod"
 			         " AND usr_data.DptCod=%ld"
-			       " ORDER BY deg_degrees.FullName,"
-				 	 "crs_courses.FullName",
+			    " ORDER BY deg_degrees.FullName,"
+				      "crs_courses.FullName",
 			       (unsigned) Rol_TCH,
 			       Indicators->DptCod);
            }
@@ -139,8 +139,8 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			              "crs_courses"
 			       " WHERE deg_degrees.DegTypCod=%ld"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			       " ORDER BY deg_degrees.FullName,"
-					 "crs_courses.FullName",
+			    " ORDER BY deg_degrees.FullName,"
+				      "crs_courses.FullName",
 			       Indicators->DegTypCod);
             else
                return (unsigned)
@@ -152,8 +152,8 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			        " FROM deg_degrees,"
 			              "crs_courses"
 			       " WHERE deg_degrees.DegCod=crs_courses.DegCod"
-			       " ORDER BY deg_degrees.FullName,"
-					 "crs_courses.FullName");
+			    " ORDER BY deg_degrees.FullName,"
+        			      "crs_courses.FullName");
            }
       case Hie_CTY:
          if (Indicators->DptCod >= 0)	// 0 means another department

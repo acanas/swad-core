@@ -148,7 +148,7 @@ unsigned Rec_DB_GetAllFieldsInCrs (MYSQL_RES **mysql_res,long CrsCod)
 			  "Visibility"	// row[3]
 		    " FROM crs_record_fields"
 		   " WHERE CrsCod=%ld"
-		   " ORDER BY FieldName",
+		" ORDER BY FieldName",
 		   CrsCod);
   }
 

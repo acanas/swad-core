@@ -387,7 +387,7 @@ unsigned Ntf_DB_GetMyNotifications (MYSQL_RES **mysql_res,bool AllNotifications)
 		    " FROM ntf_notifications"
 		   " WHERE ToUsrCod=%ld"
 		       "%s"
-		   " ORDER BY TimeNotif DESC",
+		" ORDER BY TimeNotif DESC",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   SubQuery);
   }
@@ -414,7 +414,7 @@ unsigned Ntf_DB_GetMyRecentNotifications (MYSQL_RES **mysql_res,time_t BeginTime
 		    " FROM ntf_notifications"
 		   " WHERE ToUsrCod=%ld"
 		     " AND TimeNotif>=FROM_UNIXTIME(%ld)"
-		   " ORDER BY TimeNotif DESC",
+		" ORDER BY TimeNotif DESC",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (long) BeginTime);
   }
@@ -439,8 +439,8 @@ unsigned Ntf_DB_GetPendingNtfsToUsr (MYSQL_RES **mysql_res,long ToUsrCod)
 		     " AND (Status & %u)<>0"
 		     " AND (Status & %u)=0"
 		     " AND (Status & %u)=0"
-		   " ORDER BY TimeNotif,"
-			     "NotifyEvent",
+		" ORDER BY TimeNotif,"
+			  "NotifyEvent",
 		   ToUsrCod,
 		   (unsigned) Ntf_STATUS_BIT_EMAIL,
 		   (unsigned) Ntf_STATUS_BIT_SENT,

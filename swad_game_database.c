@@ -530,7 +530,7 @@ unsigned Gam_DB_GetGameQuestionsBasic (MYSQL_RES **mysql_res,long GamCod)
 			  "QstInd"	// row[1]
 		    " FROM gam_questions"
 		   " WHERE GamCod=%ld"
-		   " ORDER BY QstInd",
+		" ORDER BY QstInd",
 		   GamCod);
   }
 
@@ -550,7 +550,7 @@ unsigned Gam_DB_GetGameQuestionsFull (MYSQL_RES **mysql_res,long GamCod)
 		          "tst_questions"
 		   " WHERE gam_questions.GamCod=%ld"
 		     " AND gam_questions.QstCod=tst_questions.QstCod"
-		   " ORDER BY gam_questions.QstInd",
+		" ORDER BY gam_questions.QstInd",
 		   GamCod);
   }
 
@@ -765,7 +765,7 @@ unsigned Gam_DB_GetTstTagsPresentInAGame (MYSQL_RES **mysql_res,long GamCod)
 			     " AND gam_questions.QstCod=tst_question_tags.QstCod) AS TagsCods,"
 			  "tst_tags"
 		   " WHERE TagsCods.TagCod=tst_tags.TagCod"
-		   " ORDER BY tst_tags.TagTxt",
+		" ORDER BY tst_tags.TagTxt",
 		   GamCod);
   }
 

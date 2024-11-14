@@ -153,7 +153,7 @@ unsigned Plg_DB_GetListPlugins (MYSQL_RES **mysql_res)
 			  "URL,"		// row[5]
 			  "IP"			// row[6]
 		    " FROM plg_plugins"
-		   " ORDER BY Name");
+		" ORDER BY Name");
   }
 
 /*****************************************************************************/

@@ -175,7 +175,7 @@ unsigned Tag_DB_GetTagsQst (MYSQL_RES **mysql_res,long QstCod)
 		   " WHERE tst_question_tags.QstCod=%ld"
 		     " AND tst_question_tags.TagCod=tst_tags.TagCod"
 		     " AND tst_tags.CrsCod=%ld"
-		   " ORDER BY tst_question_tags.TagInd",
+		" ORDER BY tst_question_tags.TagInd",
 		   QstCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
@@ -194,7 +194,7 @@ unsigned Tag_DB_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res)
 					    "TagHidden"	// row[2]
 				      " FROM tst_tags"
 				     " WHERE CrsCod=%ld"
-				     " ORDER BY TagTxt",
+				  " ORDER BY TagTxt",
 				     Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
@@ -225,7 +225,7 @@ unsigned Tag_DB_GetEnabledTagsFromCrs (MYSQL_RES **mysql_res,
 				   " FROM tst_tags"
 				  " WHERE CrsCod=%ld"
 				    " AND TagHidden='N'"
-				  " ORDER BY TagTxt",
+			       " ORDER BY TagTxt",
 				  CrsCod);
   }
 
@@ -308,8 +308,8 @@ unsigned Tag_DB_GetRecentTags (MYSQL_RES **mysql_res,
 			     " AND (tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
 				  " OR "
 				   "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)))"
-		   " ORDER BY QstCod,"
-			     "TagInd",
+		" ORDER BY QstCod,"
+			  "TagInd",
 		   CrsCod,
 		   CrsCod,
 		   CrsCod,

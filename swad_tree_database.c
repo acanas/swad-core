@@ -169,7 +169,7 @@ void Tre_DB_MoveDownNodes (Inf_Type_t InfoType,unsigned Index)
 		   " WHERE CrsCod=%ld"
 		     " AND Type='%s'"
 		     " AND NodInd>=%u"
-		   " ORDER BY NodInd DESC",	// Necessary to not create duplicate key (CrsCod,NodInd)
+		" ORDER BY NodInd DESC",	// Necessary to not create duplicate key (CrsCod,NodInd)
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[InfoType],
 		   Index);
@@ -218,7 +218,7 @@ unsigned Tre_DB_GetListNodes (Inf_Type_t InfoType,MYSQL_RES **mysql_res)
 		    " FROM tre_nodes"
 		   " WHERE CrsCod=%ld"
 		     " AND Type='%s'"
-		   " ORDER BY NodInd",
+		" ORDER BY NodInd",
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[InfoType]);
   }

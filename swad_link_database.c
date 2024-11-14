@@ -86,7 +86,7 @@ unsigned Lnk_DB_GetLinks (MYSQL_RES **mysql_res)
 			  "FullName,"	// row[2]
 			  "WWW"		// row[3]
 		    " FROM lnk_links"
-		   " ORDER BY ShortName");
+		" ORDER BY ShortName");
   }
 
 /*****************************************************************************/

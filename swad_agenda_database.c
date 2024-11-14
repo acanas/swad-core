@@ -155,7 +155,7 @@ unsigned Agd_DB_GetListEvents (MYSQL_RES **mysql_res,
 		  "SELECT AgdCod"	// row[0]
 		   " FROM agd_agendas"
 		  " WHERE %s%s%s%s"
-		  " ORDER BY %s",
+	       " ORDER BY %s",
 		  UsrSubQuery,
 		  Past__FutureEventsSubQuery,
 		  PrivatPublicEventsSubQuery,

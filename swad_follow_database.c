@@ -168,7 +168,7 @@ unsigned Fol_DB_GetUsrsToFollow (unsigned MaxUsrsToShow,
 		   " (SELECT FollowedCod FROM usr_follow"
 		   " WHERE FollowerCod=%ld)"
 		   // Get only MaxUsrsToShow * 3 users
-		   " ORDER BY RAND() LIMIT %u"
+	        " ORDER BY RAND() LIMIT %u"
 		   ")"
 		   " UNION "
 		   "("
@@ -198,7 +198,7 @@ unsigned Fol_DB_GetUsrsToFollow (unsigned MaxUsrsToShow,
 		   ")"
 		   ") AS UsrsToFollow"
 		   // Get only MaxUsrsToShow users
-		   " ORDER BY RAND()"
+		" ORDER BY RAND()"
 		   " LIMIT %u",
 
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -287,7 +287,7 @@ unsigned Fol_DB_GetListFollowing (long UsrCod,MYSQL_RES **mysql_res)
 		   "SELECT FollowedCod"	// row[0]
 		    " FROM usr_follow"
 		   " WHERE FollowerCod=%ld"
-		   " ORDER BY FollowTime DESC",
+		" ORDER BY FollowTime DESC",
 		   UsrCod);
   }
 
@@ -307,7 +307,7 @@ unsigned Fol_DB_GetListFollowers (long UsrCod,MYSQL_RES **mysql_res)
 		   "SELECT FollowerCod"
 		    " FROM usr_follow"
 		   " WHERE FollowedCod=%ld"
-		   " ORDER BY FollowTime DESC",
+		" ORDER BY FollowTime DESC",
 		   UsrCod);
   }
 

@@ -162,7 +162,7 @@ unsigned Hld_DB_GetListHolidays (MYSQL_RES **mysql_res,Hld_Order_t SelectedOrder
 			           "PlcCod"
 			     " FROM plc_places"
 			    " WHERE InsCod=%ld))"
-		    " ORDER BY %s",
+		 " ORDER BY %s",
 		   Gbl.Hierarchy.Node[Hie_INS].HieCod,
 		   Gbl.Hierarchy.Node[Hie_INS].HieCod,
 		   Gbl.Hierarchy.Node[Hie_INS].HieCod,

@@ -375,7 +375,7 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
       [Rsc_SURVEY	] = ParCod_Svy,
      };
    Act_Action_t NextAction;
-   char Title[Cns_MAX_BYTES_SUBJECT + 1];
+   char Title[Rsc_MAX_BYTES_RESOURCE_TITLE + 1];
    char *Anchor;
 
    /***** Get resource title *****/

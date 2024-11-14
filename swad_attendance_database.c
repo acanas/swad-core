@@ -114,7 +114,7 @@ unsigned Att_DB_GetListEventsMyGrps (MYSQL_RES **mysql_res,
 				   "att_groups"
 			    " WHERE grp_users.UsrCod=%ld"
 			      " AND att_groups.GrpCod=grp_users.GrpCod))"
-		   " ORDER BY %s",
+		" ORDER BY %s",
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Att_DB_HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -134,7 +134,7 @@ unsigned Att_DB_GetListEventsAllGrps (MYSQL_RES **mysql_res,
 		   "SELECT AttCod"
 		    " FROM att_events"
 		   " WHERE CrsCod=%ld%s"
-		   " ORDER BY %s",
+		" ORDER BY %s",
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Att_DB_HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
 		   Att_DB_OrderBySubQuery[SelectedOrder][OrderNewestOldest]);
@@ -160,9 +160,9 @@ unsigned Att_DB_GetAllEventsData (MYSQL_RES **mysql_res,long CrsCod)
 			  "Txt"						// row[9]
 		    " FROM att_events"
 		   " WHERE CrsCod=%d"
-		   " ORDER BY ST DESC,"
-			     "ET DESC,"
-			     "Title DESC",
+		" ORDER BY ST DESC,"
+			  "ET DESC,"
+			  "Title DESC",
 		   CrsCod);
   }
 
@@ -362,8 +362,8 @@ unsigned Att_DB_GetGroupsAssociatedToEvent (MYSQL_RES **mysql_res,long AttCod)
 		   " WHERE att_groups.AttCod=%ld"
 		     " AND att_groups.GrpCod=grp_groups.GrpCod"
 		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-		   " ORDER BY grp_types.GrpTypName,"
-			     "grp_groups.GrpName",
+		" ORDER BY grp_types.GrpTypName,"
+			  "grp_groups.GrpName",
 		   AttCod);
   }
 
@@ -565,9 +565,9 @@ unsigned Att_DB_GetListUsrsInEvent (MYSQL_RES **mysql_res,
 			   " UNION %s) AS u,"
 			  "usr_data"
 		   " WHERE u.UsrCod=usr_data.UsrCod"
-		   " ORDER BY usr_data.Surname1,"
-			     "usr_data.Surname2,"
-			     "usr_data.FirstName",
+		" ORDER BY usr_data.Surname1,"
+			  "usr_data.Surname2,"
+			  "usr_data.FirstName",
 		   AttCod,
 		   SubQuery);
 

@@ -141,13 +141,13 @@ unsigned Tmt_DB_GetTimeTable (MYSQL_RES **mysql_res,
 				      "-1 AS CrsCod"					// row[6]
 			        " FROM tmt_tutoring"
 			       " WHERE UsrCod=%ld"
-			       " ORDER BY Weekday,"
-			                 "S,"
-			                 "ClassType,"
-			                 "GrpCod,"
-			                 "Info,"
-			                 "D DESC,"
-			                 "CrsCod",
+			    " ORDER BY Weekday,"
+			              "S,"
+			              "ClassType,"
+			              "GrpCod,"
+			              "Info,"
+			              "D DESC,"
+			              "CrsCod",
 			     UsrCod,
 			     UsrCod,
 			     UsrCod);
@@ -175,13 +175,13 @@ unsigned Tmt_DB_GetTimeTable (MYSQL_RES **mysql_res,
 				      "-1 AS CrsCod"					// row[6]
 			        " FROM tmt_tutoring"
 			       " WHERE UsrCod=%ld"
-			       " ORDER BY Weekday,"
-				         "S,"
-				         "ClassType,"
-				         "GrpCod,"
-				         "Info,"
-				         "D DESC,"
-				         "CrsCod",
+			    " ORDER BY Weekday,"
+				      "S,"
+				      "ClassType,"
+				      "GrpCod,"
+				      "Info,"
+				      "D DESC,"
+				      "CrsCod",
 			       UsrCod,
 			       UsrCod);
            }
@@ -200,12 +200,12 @@ unsigned Tmt_DB_GetTimeTable (MYSQL_RES **mysql_res,
 				   "GrpCod"				// row[5]
 			     " FROM tmt_courses"
 			    " WHERE CrsCod=%ld"
-			    " ORDER BY Weekday,"
-				      "S,"
-				      "ClassType,"
-				      "GrpCod,"
-				      "Info,"
-				      "D DESC",
+			 " ORDER BY Weekday,"
+				   "S,"
+				   "ClassType,"
+				   "GrpCod,"
+				   "Info,"
+				   "D DESC",
 			    Gbl.Hierarchy.Node[Hie_CRS].HieCod);
          else
             return (unsigned)
@@ -234,12 +234,12 @@ unsigned Tmt_DB_GetTimeTable (MYSQL_RES **mysql_res,
 			    " WHERE tmt_courses.CrsCod=%ld"
 			      " AND grp_users.UsrCod=%ld"
 			      " AND tmt_courses.GrpCod=grp_users.GrpCod"
-			    " ORDER BY Weekday,"
-				      "S,"
-				      "ClassType,"
-				      "GrpCod,"
-				      "Info,"
-				      "D DESC",
+			 " ORDER BY Weekday,"
+				   "S,"
+				   "ClassType,"
+				   "GrpCod,"
+				   "Info,"
+				   "D DESC",
 			    Gbl.Hierarchy.Node[Hie_CRS].HieCod,UsrCod,
 			    Gbl.Hierarchy.Node[Hie_CRS].HieCod,UsrCod);
       case Tmt_TUTORING_TIMETABLE:
@@ -251,10 +251,10 @@ unsigned Tmt_DB_GetTimeTable (MYSQL_RES **mysql_res,
 			        "Info"				// row[3]
 			  " FROM tmt_tutoring"
 		         " WHERE UsrCod=%ld"
-		         " ORDER BY Weekday,"
-				   "S,"
-				   "Info,"
-				   "D DESC",
+		      " ORDER BY Weekday,"
+				"S,"
+				"Info,"
+				"D DESC",
 		         UsrCod);
       default:
          return 0;	// Not reached

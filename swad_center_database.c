@@ -82,7 +82,7 @@ unsigned Ctr_DB_GetListOfCtrsInCurrentIns (MYSQL_RES **mysql_res)
 			  "ShortName"	// row[1]
 		    " FROM ctr_centers"
 		   " WHERE InsCod=%ld"
-		   " ORDER BY ShortName",
+		" ORDER BY ShortName",
 		   Gbl.Hierarchy.Node[Hie_INS].HieCod);
   }
 
@@ -104,7 +104,7 @@ unsigned Ctr_DB_GetListOfCtrsFull (MYSQL_RES **mysql_res,long InsCod)
 			  "WWW"			// row[7]
 		    " FROM ctr_centers"
 		   " WHERE InsCod=%ld"
-		   " ORDER BY FullName",
+		" ORDER BY FullName",
 		   InsCod);
   }
 

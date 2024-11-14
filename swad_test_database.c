@@ -261,7 +261,7 @@ unsigned Tst_DB_GetPrintsBetweenDates (MYSQL_RES **mysql_res,
 		    " FROM tst_exams"
 		   " WHERE StartTime>='%s'"
                      " AND StartTime<='%s'"
-		   " ORDER BY ExaCod",
+		" ORDER BY ExaCod",
 		   From,
 		   To);
   }
@@ -286,7 +286,7 @@ unsigned Tst_DB_GetUsrPrintsInCurrentCrs (MYSQL_RES **mysql_res,long UsrCod)
 		     " AND UsrCod=%ld"
 		     " AND EndTime>=FROM_UNIXTIME(%ld)"
 		     " AND StartTime<=FROM_UNIXTIME(%ld)"
-		   " ORDER BY ExaCod",
+		" ORDER BY ExaCod",
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   UsrCod,
 		   (long) Dat_GetRangeTimeUTC (Dat_STR_TIME),
@@ -393,7 +393,7 @@ unsigned Tst_DB_GetTagsPresentInAPrint (MYSQL_RES **mysql_res,long PrnCod)
 			     " AND tst_exam_questions.QstCod=tst_question_tags.QstCod) AS TagsCods,"
 			  "tst_tags"
 		   " WHERE TagsCods.TagCod=tst_tags.TagCod"
-		   " ORDER BY tst_tags.TagTxt",
+		" ORDER BY tst_tags.TagTxt",
 		   PrnCod);
   }
 
@@ -411,7 +411,7 @@ unsigned Tst_DB_GetPrintQuestions (MYSQL_RES **mysql_res,long PrnCod)
 			  "Answers"	// row[3]
 		    " FROM tst_exam_questions"
 		   " WHERE ExaCod=%ld"
-		   " ORDER BY QstInd",
+		" ORDER BY QstInd",
 		   PrnCod);
   }
 

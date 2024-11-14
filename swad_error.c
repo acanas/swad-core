@@ -180,11 +180,6 @@ void Err_WrongItemExit (void)
    Err_ShowErrorAndExit ("Wrong item.");
   }
 
-void Err_WrongResourceExit (void)
-  {
-   Err_ShowErrorAndExit ("Wrong resource.");
-  }
-
 /*****************************************************************************/
 /************** Write error message and exit when wrong syllabus *************/
 /*****************************************************************************/

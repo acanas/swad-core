@@ -101,7 +101,7 @@ unsigned Rub_DB_GetListRubrics (MYSQL_RES **mysql_res)
 		   "SELECT RubCod"		// row[0]
 		    " FROM rub_rubrics"
 		   " WHERE CrsCod=%ld"
-		   " ORDER BY Title",
+		" ORDER BY Title",
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
@@ -632,7 +632,7 @@ unsigned Rub_DB_GetCriteria (MYSQL_RES **mysql_res,long RubCod)
 			  "Title"	// row[8]
 		    " FROM rub_criteria"
 		   " WHERE RubCod=%ld"
-		   " ORDER BY CriInd",
+		" ORDER BY CriInd",
 		   RubCri_ValuesFields[RubCri_MIN],
 		   RubCri_ValuesFields[RubCri_MAX],
 		   RubCod);

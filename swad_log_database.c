@@ -173,7 +173,7 @@ unsigned Log_DB_GetLastClicks (MYSQL_RES **mysql_res)
 			  "CtrCod,"			// row[6]
 			  "DegCod"			// row[7]
 		    " FROM log_recent"
-		   " ORDER BY LogCod DESC"
+		" ORDER BY LogCod DESC"
 		   " LIMIT 20");
   }
 
@@ -317,7 +317,7 @@ unsigned Log_DB_GetMyHistoricCrss (MYSQL_RES **mysql_res,
 		     " AND CrsCod>0"
 	        " GROUP BY CrsCod"
 		  " HAVING N>%u"
-		   " ORDER BY N DESC",
+		" ORDER BY N DESC",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) Role,
 		   MinClicksCrs);

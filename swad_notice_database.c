@@ -157,7 +157,7 @@ unsigned Not_DB_GetAllNotices (MYSQL_RES **mysql_res)
 			  "Status"				// row[4]
 		    " FROM not_notices"
 		   " WHERE CrsCod=%ld"
-		   " ORDER BY CreatTime DESC",
+		" ORDER BY CreatTime DESC",
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
@@ -177,7 +177,7 @@ unsigned Not_DB_GetActiveNotices (MYSQL_RES **mysql_res,long CrsCod)
 		    " FROM not_notices"
 		   " WHERE CrsCod=%ld"
 		     " AND Status=%u"
-		   " ORDER BY CreatTime DESC",
+		" ORDER BY CreatTime DESC",
 		   CrsCod,
 		   (unsigned) Not_ACTIVE_NOTICE);
   }

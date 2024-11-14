@@ -263,7 +263,7 @@ unsigned Msg_DB_GetDistinctCrssInMyRcvMsgs (MYSQL_RES **mysql_res)
 		   " WHERE msg_rcv.UsrCod=%ld"
 		     " AND msg_rcv.MsgCod=msg_snt.MsgCod"
 		     " AND msg_snt.CrsCod=crs_courses.CrsCod"
-		   " ORDER BY crs_courses.ShortName",
+		" ORDER BY crs_courses.ShortName",
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -282,7 +282,7 @@ unsigned Msg_DB_GetDistinctCrssInMySntMsgs (MYSQL_RES **mysql_res)
 			  "crs_courses"
 		   " WHERE msg_snt.UsrCod=%ld"
 		     " AND msg_snt.CrsCod=crs_courses.CrsCod"
-		   " ORDER BY crs_courses.ShortName",
+		" ORDER BY crs_courses.ShortName",
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -603,7 +603,7 @@ unsigned Msg_DB_GetSntOrRcvMsgs (MYSQL_RES **mysql_res,
 			    " (SELECT MsgCod"
 			       " FROM (%s) AS M)"
 		        " AND MATCH (Subject,Content) AGAINST ('%s')"
-		      " ORDER BY MsgCod DESC",	// End the query ordering the result from most recent message to oldest
+		   " ORDER BY MsgCod DESC",	// End the query ordering the result from most recent message to oldest
 		      SubQuery,
 		      Messages->FilterContent);
    else
@@ -968,9 +968,9 @@ unsigned Msg_DB_GetKnownRecipients (MYSQL_RES **mysql_res,long MsgCod)
 			   "usr_data"
 		    " WHERE msg_rcv_deleted.MsgCod=%ld"
 		      " AND msg_rcv_deleted.UsrCod=usr_data.UsrCod)"
-		    " ORDER BY S1,"
-			      "S2,"
-			      "FN",
+		 " ORDER BY S1,"
+			   "S2,"
+			   "FN",
 		   MsgCod,
 		   MsgCod);
   }
@@ -1549,9 +1549,9 @@ unsigned Msg_DB_GetUsrsBannedBy (MYSQL_RES **mysql_res,long UsrCod)
 			  "usr_data"
 		   " WHERE msg_banned.ToUsrCod=%ld"
 		     " AND msg_banned.FromUsrCod=usr_data.UsrCod"
-		   " ORDER BY usr_data.Surname1,"
-			     "usr_data.Surname2,"
-			     "usr_data.FirstName",
+	        " ORDER BY usr_data.Surname1,"
+			  "usr_data.Surname2,"
+			  "usr_data.FirstName",
 		   UsrCod);
   }
 

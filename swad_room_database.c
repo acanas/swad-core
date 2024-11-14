@@ -241,7 +241,7 @@ unsigned Roo_DB_GetListRooms (MYSQL_RES **mysql_res,
 			  " LEFT JOIN bld_buildings"
 			    " ON roo_rooms.BldCod=bld_buildings.BldCod"
 		         " WHERE roo_rooms.CtrCod=%ld"
-		         " ORDER BY %s",
+		      " ORDER BY %s",
 		         CtrCod,
 		         OrderBySubQuery[SelectedOrder]);
       case Roo_ONLY_SHRT_NAME:
@@ -253,7 +253,7 @@ unsigned Roo_DB_GetListRooms (MYSQL_RES **mysql_res,
 			  " FROM roo_rooms LEFT JOIN bld_buildings"
 			    " ON roo_rooms.BldCod=bld_buildings.BldCod"
 		         " WHERE roo_rooms.CtrCod=%ld"
-		         " ORDER BY %s",
+		      " ORDER BY %s",
 		         CtrCod,
 		         OrderBySubQuery[Roo_ORDER_DEFAULT]);
      }
@@ -314,7 +314,7 @@ unsigned Roo_DB_GetMACAddresses (MYSQL_RES **mysql_res,long RooCod)
 		   "SELECT MAC"	// row[0]
 		    " FROM roo_macs"
 		   " WHERE RooCod=%ld"
-		   " ORDER BY MAC",
+		" ORDER BY MAC",
 		   RooCod);
   }
 
@@ -462,7 +462,7 @@ unsigned Roo_DB_GetUsrLastLocation (MYSQL_RES **mysql_res,long UsrCod)
 			 "(SELECT ChkCod"
 			   " FROM roo_check_in"
 			  " WHERE UsrCod=%ld"
-			  " ORDER BY ChkCod DESC"
+		       " ORDER BY ChkCod DESC"
 			  " LIMIT 1)"	// Faster than SELECT MAX
 		    " AND roo_check_in.RooCod=roo_rooms.RooCod"
 		    " AND roo_rooms.BldCod=bld_buildings.BldCod"
@@ -503,8 +503,8 @@ unsigned Roo_DB_GetLocationByMAC (MYSQL_RES **mysql_res,unsigned long long MACnu
 		     " AND roo_rooms.BldCod=bld_buildings.BldCod"
 		     " AND bld_buildings.CtrCod=ctr_centers.CtrCod"
 		     " AND ctr_centers.InsCod=ins_instits.InsCod"
-		   " ORDER BY roo_rooms.Capacity DESC,"	// Get the biggest room
-			     "roo_rooms.ShortName"
+		" ORDER BY roo_rooms.Capacity DESC,"	// Get the biggest room
+			  "roo_rooms.ShortName"
 		   " LIMIT 1",
 		   MACnum);
   }

@@ -46,7 +46,6 @@ void Err_WrongDateExit (void);
 void Err_WrongPluginExit (void);
 void Err_WrongItemsListExit (void);
 void Err_WrongItemExit (void);
-void Err_WrongResourceExit (void);
 void Err_WrongSyllabusExit (void);
 void Err_WrongFileBrowserExit (void);
 

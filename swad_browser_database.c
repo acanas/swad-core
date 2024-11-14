@@ -253,7 +253,7 @@ long Brw_DB_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
 			        " AND ZoneUsrCod=%ld"
 			        " AND Path='%s'"
 			        "%s"
-			      " ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
+			   " ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
 			      " LIMIT 1",		// Select the most recent entry.
 			      (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 			      Cod,
@@ -291,8 +291,8 @@ unsigned Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,const char *Path)
 		     " AND Cod=%ld"
 		     " AND ZoneUsrCod=%ld"
 		     " AND Path='%s'"
-		   " ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
-		   " LIMIT 1",			// Select the most recent entry.
+		" ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
+		   " LIMIT 1",		// Select the most recent entry.
 		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		   Cod,
 		   ZoneUsrCod,
@@ -1703,11 +1703,11 @@ unsigned Brw_DB_SearchPublicFiles (MYSQL_RES **mysql_res,
 			     "%s"
 			  ") AS selected_files"
 		   " WHERE PathFromRoot<>''"
-		   " ORDER BY InsShortName,"
-			     "CtrShortName,"
-			     "DegShortName,"
-			     "CrsShortName,"
-			     "PathFromRoot",
+		" ORDER BY InsShortName,"
+			  "CtrShortName,"
+			  "DegShortName,"
+			  "CrsShortName,"
+			  "PathFromRoot",
 		   SearchQuery,
 		   (unsigned) Brw_ADMI_DOC_INS,
 		   (unsigned) Brw_ADMI_SHR_INS,
@@ -1847,11 +1847,11 @@ unsigned Brw_DB_SearchFilesInMyCrss (MYSQL_RES **mysql_res,
 			     "%s"
 			  ") AS selected_files"
 		   " WHERE PathFromRoot<>''"
-		   " ORDER BY InsShortName,"
-			     "CtrShortName,"
-			     "DegShortName,"
-			     "CrsShortName,"
-			     "PathFromRoot",
+		" ORDER BY InsShortName,"
+			  "CtrShortName,"
+			  "DegShortName,"
+			  "CrsShortName,"
+			  "PathFromRoot",
 		   SearchQuery,
 		   (unsigned) Brw_ADMI_DOC_CRS,
 		   (unsigned) Brw_ADMI_TCH_CRS,
@@ -2052,11 +2052,11 @@ unsigned Brw_DB_SearchMyFiles (MYSQL_RES **mysql_res,
 			     " AND brw_files.FileBrowser=%u"
 			  ") AS selected_files"
 		   " WHERE PathFromRoot<>''"
-		   " ORDER BY InsShortName,"
-			     "CtrShortName,"
-			     "DegShortName,"
-			     "CrsShortName,"
-			     "PathFromRoot",
+		" ORDER BY InsShortName,"
+			  "CtrShortName,"
+			  "DegShortName,"
+			  "CrsShortName,"
+			  "PathFromRoot",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   SearchQuery,
 		   (unsigned) Brw_ADMI_DOC_INS,
@@ -2313,8 +2313,8 @@ HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenUsingPath (MYSQL_RES 
 		     " AND Cod=%ld"
 		     " AND ZoneUsrCod=%ld"
 		     " AND Path='%s'"
-		   " ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
-		   " LIMIT 1",			// Select the most recent entry.
+		" ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
+		   " LIMIT 1",		// Select the most recent entry.
 		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		   Cod,
 		   ZoneUsrCod,

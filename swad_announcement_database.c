@@ -51,7 +51,7 @@ unsigned Ann_DB_GetAllAnnouncements (MYSQL_RES **mysql_res)
 			  "Subject,"	// row[3]
 			  "Content"	// row[4]
 		    " FROM ann_announcements"
-		   " ORDER BY AnnCod DESC");
+		" ORDER BY AnnCod DESC");
   }
 
 /*****************************************************************************/
@@ -72,7 +72,7 @@ unsigned Ann_DB_GetAnnouncementsICanSee (MYSQL_RES **mysql_res)
 			  "Content"	// row[4]
 		    " FROM ann_announcements"
 		   " WHERE (Roles&%u)<>0 "	// All my roles in different courses
-		   " ORDER BY AnnCod DESC",
+		" ORDER BY AnnCod DESC",
 		   (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss);
   }
 
@@ -93,7 +93,7 @@ unsigned Ann_DB_GetAnnouncementsForUnknownUsers (MYSQL_RES **mysql_res)
 		    " FROM ann_announcements"
 		   " WHERE Status=%u"
 		     " AND (Roles&%u)<>0 "
-		   " ORDER BY AnnCod DESC",
+		" ORDER BY AnnCod DESC",
 		   (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
 		   (unsigned) (1 << Rol_UNK));
   }
@@ -119,7 +119,7 @@ unsigned Ann_DB_GetAnnouncementsNotSeen (MYSQL_RES **mysql_res)
 			 " (SELECT AnnCod"
 			    " FROM ann_seen"
 			   " WHERE UsrCod=%ld)"
-		   " ORDER BY AnnCod DESC",	// Newest first
+		" ORDER BY AnnCod DESC",	// Newest first
 		   (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
 		   (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
