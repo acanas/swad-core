@@ -1,7 +1,7 @@
-// swad_FAQ.h: Frequently Asked Questions
+// swad_tree_specific.h: list of specific items in tree nodes
 
-#ifndef _SWAD_FAQ
-#define _SWAD_FAQ
+#ifndef _SWAD_TRE_SPC
+#define _SWAD_TRE_SPC
 /*
     SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
@@ -27,35 +27,31 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_FAQ_type.h"
 #include "swad_tree.h"
+
+/*****************************************************************************/
+/************************** Public types and constants ***********************/
+/*****************************************************************************/
+
+#define TreSpc_LIST_ITEMS_SECTION_ID	"spc_section"
+
+#define TreSpc_NUM_MOVEMENTS_UP_DOWN 2
+typedef enum
+  {
+   TreSpc_MOVE_UP,
+   TreSpc_MOVE_DOWN,
+  } TreSpc_MoveUpDown_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void FAQ_ResetSpcFields (struct Tre_Node *Node);
-
-void FAQ_ViewQaAsAfterEdit (void);
-void FAQ_EditQaAs (void);
-
-void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
-                       struct Tre_Node *Node,
-                       long SelectedNodCod,
-                       long SelectedQaACod);
-
-void FAQ_GetQaADataByCod (struct Tre_Node *Node);
-
-void FAQ_CreateQaA (void);
-
-void FAQ_RenameQaA (const struct Tre_Node *Node);
-
-void FAQ_HideQaA (void);
-void FAQ_UnhideQaA (void);
-
-void FAQ_MoveUpQaA (void);
-void FAQ_MoveDownQaA (void);
-
-void FAQ_ChangeQaA (void);
+void TreSpc_ResetListItem (struct Tre_Node *Node);
+void TreSpc_EditTreeWithFormListItem (void);
+void TreSpc_RenameListItem (void);
+void TreSpc_ReqRemListItem (void);
+void TreSpc_RemoveListItem (void);
+void TreSpc_HideOrUnhideListItem (HidVis_HiddenOrVisible_t HiddenOrVisible);
+void TreSpc_MoveUpDownListItem (TreSpc_MoveUpDown_t UpDown);
 
 #endif

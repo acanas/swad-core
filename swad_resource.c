@@ -55,6 +55,7 @@
 #include "swad_tag_database.h"
 #include "swad_theme.h"
 #include "swad_timetable.h"
+#include "swad_tree.h"
 #include "swad_user_database.h"
 
 /*****************************************************************************/
@@ -96,25 +97,21 @@ const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES] =
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/***************************** Private prototypes ****************************/
+/*************************** Private prototypes ******************************/
 /*****************************************************************************/
 
 static void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
                                    HTM_Attributes_t Attributes);
 
 /*****************************************************************************/
-/******************************* Reset resource ******************************/
+/********************* Reset specific fields of resource *********************/
 /*****************************************************************************/
 
-void Rsc_ResetResource (struct Rsc_Resource *Resource)
+void Rsc_ResetSpcFields (struct Tre_Node *Node)
   {
-   Resource->Hierarchy.RscCod = -1L;
-   Resource->Hierarchy.RscInd = 0;
-   Resource->Hierarchy.HiddenOrVisible = HidVis_VISIBLE;
-   Resource->Link.Type = Rsc_NONE;
-   Resource->Link.Cod  = -1L;
-   Resource->Title[0] = '\0';
-   Resource->Title[0] = '\0';
+   Node->Resource.Link.Type = Rsc_NONE;
+   Node->Resource.Link.Cod  = -1L;
+   Node->Resource.Title[0] = '\0';
   }
 
 /*****************************************************************************/

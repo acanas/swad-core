@@ -157,7 +157,7 @@ unsigned FAQ_DB_GetQaAIndBefore (const struct Tre_Node *Node)
 			   " WHERE NodCod=%ld"
 			     " AND QaAInd<%u",
 			   Node->Hierarchy.NodCod,
-			   Node->QaA.Hierarchy.QaAInd);
+			   Node->ListItem.Ind);
   }
 
 unsigned FAQ_DB_GetQaAIndAfter (const struct Tre_Node *Node)
@@ -169,7 +169,7 @@ unsigned FAQ_DB_GetQaAIndAfter (const struct Tre_Node *Node)
 			   " WHERE NodCod=%ld"
 			     " AND QaAInd>%u",
 			   Node->Hierarchy.NodCod,
-			   Node->QaA.Hierarchy.QaAInd);
+			   Node->ListItem.Ind);
   }
 
 /*****************************************************************************/
@@ -208,7 +208,7 @@ void FAQ_DB_RemoveQaA (const struct Tre_Node *Node)
                      " AND faq_questions.NodCod=tre_nodes.NodCod"
                      " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   Node->QaA.Hierarchy.QaACod,
+		   Node->ListItem.Cod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Inf_FAQ]);
@@ -234,7 +234,7 @@ void FAQ_DB_HideOrUnhideQaA (const struct Tre_Node *Node,
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
 		   HidVis_YN[HiddenOrVisible],
-		   Node->QaA.Hierarchy.QaACod,
+		   Node->ListItem.Cod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Inf_FAQ]);
@@ -289,14 +289,14 @@ void FAQ_DB_UpdateQaA (const struct Tre_Node *Node)
 		          "tre_nodes"
 		     " SET faq_questions.Question='%s',"
 		          "faq_questions.Answer='%s'"
-		   " WHERE faq_questions.RscCod=%ld"
+		   " WHERE faq_questions.QaACod=%ld"
 		     " AND faq_questions.NodCod=%ld"
 		     " AND faq_questions.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
 		   Node->QaA.Question,
 		   Node->QaA.Answer,
-		   Node->QaA.Hierarchy.QaACod,
+		   Node->ListItem.Cod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Inf_FAQ]);

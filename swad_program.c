@@ -29,6 +29,7 @@
 #include "swad_figure.h"
 #include "swad_global.h"
 #include "swad_program.h"
+#include "swad_resource.h"
 #include "swad_tree.h"
 #include "swad_tree_database.h"
 

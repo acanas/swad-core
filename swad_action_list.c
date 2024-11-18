@@ -125,6 +125,7 @@
 #include "swad_timetable.h"
 #include "swad_timetable_resource.h"
 #include "swad_tree.h"
+#include "swad_tree_specific.h"
 #include "swad_user_clipboard.h"
 #include "swad_user_resource.h"
 #include "swad_zip.h"
@@ -498,14 +499,14 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActFrmSeePrgRsc	] = {1925, 1,TabCrs,NULL			,PrgRsc_ViewResourcesAfterEdit	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActFrmEdiPrgRsc	] = {1918, 1,TabCrs,NULL			,PrgRsc_EditResources		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActNewPrgRsc	] = {1929, 1,TabCrs,NULL			,PrgRsc_CreateResource		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRenPrgRsc	] = {1928, 1,TabCrs,NULL			,PrgRsc_RenameResource		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActReqRemPrgRsc	] = {1919, 1,TabCrs,NULL			,PrgRsc_ReqRemResource		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRemPrgRsc	] = {1920, 1,TabCrs,NULL			,PrgRsc_RemoveResource		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRenPrgRsc	] = {1928, 1,TabCrs,NULL			,TreSpc_RenameListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqRemPrgRsc	] = {1919, 1,TabCrs,NULL			,TreSpc_ReqRemListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemPrgRsc	] = {1920, 1,TabCrs,NULL			,TreSpc_RemoveListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActHidPrgRsc	] = {1921, 1,TabCrs,NULL			,PrgRsc_HideResource		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActUnhPrgRsc	] = {1922, 1,TabCrs,NULL			,PrgRsc_UnhideResource		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActUp_PrgRsc	] = {1923, 1,TabCrs,NULL			,PrgRsc_MoveUpResource		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActDwnPrgRsc	] = {1924, 1,TabCrs,NULL			,PrgRsc_MoveDownResource	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActFrmChgPrgRsc	] = {1932, 1,TabCrs,NULL			,PrgRsc_EditProgramWithClipboard,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmChgPrgRsc	] = {1932, 1,TabCrs,NULL			,TreSpc_EditTreeWithFormListItem,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgPrgRsc	] = {1933, 1,TabCrs,NULL			,PrgRsc_ChangeLink		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Teaching guide
@@ -646,14 +647,14 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActFrmSeeFAQQaA	] = {2146, 5,TabCrs,NULL			,FAQ_ViewQaAsAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActFrmEdiFAQQaA	] = {2147, 5,TabCrs,NULL			,FAQ_EditQaAs			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActNewFAQQaA	] = {2148, 5,TabCrs,NULL			,FAQ_CreateQaA			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRenFAQQaA	] = {2149, 5,TabCrs,NULL			,FAQ_RenameQaA			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActReqRemFAQQaA	] = {2150, 5,TabCrs,NULL			,FAQ_ReqRemQaA			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRemFAQQaA	] = {2151, 5,TabCrs,NULL			,FAQ_RemoveQaA			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRenFAQQaA	] = {2149, 5,TabCrs,NULL			,TreSpc_RenameListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqRemFAQQaA	] = {2150, 5,TabCrs,NULL			,TreSpc_ReqRemListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemFAQQaA	] = {2151, 5,TabCrs,NULL			,TreSpc_RemoveListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActHidFAQQaA	] = {2152, 5,TabCrs,NULL			,FAQ_HideQaA			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActUnhFAQQaA	] = {2153, 5,TabCrs,NULL			,FAQ_UnhideQaA			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActUp_FAQQaA	] = {2154, 5,TabCrs,NULL			,FAQ_MoveUpQaA			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActDwnFAQQaA	] = {2155, 5,TabCrs,NULL			,FAQ_MoveDownQaA		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActFrmChgFAQQaA	] = {2156, 5,TabCrs,NULL			,FAQ_EditFAQWithFormToChangeQaA	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmChgFAQQaA	] = {2156, 5,TabCrs,NULL			,TreSpc_EditTreeWithFormListItem	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgFAQQaA	] = {2157, 5,TabCrs,NULL			,FAQ_ChangeQaA			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    [ActEdiPlaTxtFAQ	] = { 405, 5,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},

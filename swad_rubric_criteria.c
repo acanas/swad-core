@@ -44,6 +44,7 @@
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
 #include "swad_project_database.h"
+#include "swad_resource.h"
 #include "swad_resource_database.h"
 #include "swad_rubric.h"
 #include "swad_rubric_criteria.h"

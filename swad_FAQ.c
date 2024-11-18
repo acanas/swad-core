@@ -38,9 +38,7 @@
 #include "swad_assignment_database.h"
 #include "swad_attendance_database.h"
 #include "swad_box.h"
-// #include "swad_browser_resource.h"
 #include "swad_button.h"
-// #include "swad_call_for_exam_resource.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_exam_database.h"
@@ -48,7 +46,6 @@
 #include "swad_FAQ_database.h"
 #include "swad_form.h"
 #include "swad_forum_database.h"
-// #include "swad_forum_resource.h"
 #include "swad_game_database.h"
 #include "swad_global.h"
 #include "swad_group_database.h"
@@ -64,6 +61,7 @@
 #include "swad_tag_database.h"
 #include "swad_theme.h"
 #include "swad_timetable.h"
+#include "swad_tree_specific.h"
 #include "swad_user_database.h"
 #include "swad_view.h"
 
@@ -72,23 +70,6 @@
 /****************************************************************************/
 
 extern struct Globals Gbl;
-
-/*****************************************************************************/
-/******************************* Private types *******************************/
-/*****************************************************************************/
-
-#define FAQ_NUM_MOVEMENTS_UP_DOWN 2
-typedef enum
-  {
-   FAQ_MOVE_UP,
-   FAQ_MOVE_DOWN,
-  } FAQ_MoveUpDown_t;
-
-/*****************************************************************************/
-/***************************** Private variables *****************************/
-/*****************************************************************************/
-
-static const char *FAQ_QaA_SECTION_ID = "qaa_section";
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -105,23 +86,15 @@ static void FAQ_WriteRowNewQaA (unsigned NumQaAs,struct Tre_Node *Node);
 static void FAQ_PutFormsToRemEditOneQaA (struct Tre_Node *Node,
                                          unsigned NumQaA,unsigned NumQaAs);
 static void FAQ_PutParQaACod (void *QaACod);
-static void FAQ_HideOrUnhideQaA (HidVis_HiddenOrVisible_t HiddenOrVisible);
-
-static void FAQ_MoveUpDownQaA (FAQ_MoveUpDown_t UpDown);
-static bool FAQ_ExchangeQaA (const struct Tre_Node *Node,
-                             const struct FAQ_QaAHierarchy *QaA2);
 
 /*****************************************************************************/
-/*************************** Reset Question&Answer ***************************/
+/***************** Reset specific fields of question&answer ******************/
 /*****************************************************************************/
 
-void FAQ_ResetQaA (struct FAQ_QaA *QaA)
+void FAQ_ResetSpcFields (struct Tre_Node *Node)
   {
-   QaA->Hierarchy.QaACod = -1L;
-   QaA->Hierarchy.QaAInd = 0;
-   QaA->Hierarchy.HiddenOrVisible = HidVis_VISIBLE;
-   QaA->Question[0] = '\0';
-   QaA->Answer[0] = '\0';
+   Node->QaA.Question[0] = '\0';
+   Node->QaA.Answer[0] = '\0';
   }
 
 /*****************************************************************************/
@@ -163,7 +136,7 @@ void FAQ_EditQaAs (void)
    Tre_GetPars (&Node);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Inf_FAQ,Tre_EDIT_PRG_RESOURCES,
+   Tre_ShowAllNodes (Inf_FAQ,Tre_EDIT_SPC_LIST_ITEMS,
 		     Node.Hierarchy.NodCod,-1L);
 
    /***** Free list of tree nodes *****/
@@ -196,7 +169,7 @@ void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
       [Tre_FORM_EDIT_NODE		] = Vie_EDIT,
       [Tre_END_EDIT_NODE		] = Vie_EDIT,
       [Tre_RECEIVE_NODE			] = Vie_EDIT,
-      [Tre_EDIT_PRG_RESOURCES		] = Vie_EDIT,
+      [Tre_EDIT_SPC_LIST_ITEMS		] = Vie_EDIT,
       [Tre_EDIT_PRG_RESOURCE_LINK	] = Vie_EDIT,
       [Tre_CHG_PRG_RESOURCE_LINK	] = Vie_EDIT,
       [Tre_END_EDIT_PRG_RESOURCES	] = Vie_EDIT,
@@ -211,7 +184,7 @@ void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
       [Tre_FORM_EDIT_NODE		] = Vie_VIEW,
       [Tre_END_EDIT_NODE		] = Vie_VIEW,
       [Tre_RECEIVE_NODE			] = Vie_VIEW,
-      [Tre_EDIT_PRG_RESOURCES		] = Vie_EDIT,
+      [Tre_EDIT_SPC_LIST_ITEMS		] = Vie_EDIT,
       [Tre_EDIT_PRG_RESOURCE_LINK	] = Vie_EDIT,
       [Tre_CHG_PRG_RESOURCE_LINK	] = Vie_EDIT,
       [Tre_END_EDIT_PRG_RESOURCES	] = Vie_VIEW,
@@ -237,16 +210,16 @@ void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
       if (Node->Hierarchy.NodCod == SelectedNodCod)
 	{
 	 /***** Begin section *****/
-	 HTM_SECTION_Begin (FAQ_QaA_SECTION_ID);
+	 HTM_SECTION_Begin (TreSpc_LIST_ITEMS_SECTION_ID);
 
 	    /***** Show possible alerts *****/
 	    if (Gbl.Action.Act == ActReqRemFAQQaA)
 	       /* Alert with button to remove question&answer */
-	       Ale_ShowLastAlertAndButton (ActRemFAQQaA,FAQ_QaA_SECTION_ID,NULL,
+	       Ale_ShowLastAlertAndButton (ActRemFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,NULL,
 					   FAQ_PutParQaACod,&SelectedQaACod,
 					   Btn_REMOVE_BUTTON,Txt_Remove);
 	    else
-	       Ale_ShowAlerts (FAQ_QaA_SECTION_ID);
+	       Ale_ShowAlerts (TreSpc_LIST_ITEMS_SECTION_ID);
 	}
 
       /***** Begin box *****/
@@ -297,7 +270,7 @@ void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
 	    /***** Form to create a new question&answer *****/
 	    if (ViewingOrEditingQaAOfThisNode == Vie_EDIT)
 	      {
-	       FAQ_ResetQaA (&(Node->QaA));
+	       TreSpc_ResetListItem (Node);
 	       FAQ_WriteRowNewQaA (NumQaAs,Node);
 	      }
 
@@ -325,7 +298,7 @@ static void FAQ_PutIconsViewRes (void *Node)
    if (Node)
       if (((struct Tre_Node *) Node)->Hierarchy.NodCod > 0)
 	 if (Tre_CheckIfICanEditTree () == Usr_CAN)
-	    Ico_PutContextualIconToView (ActFrmSeeFAQQaA,FAQ_QaA_SECTION_ID,
+	    Ico_PutContextualIconToView (ActFrmSeeFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
 					 Tre_PutPars,Node);
   }
 
@@ -334,7 +307,7 @@ static void FAQ_PutIconsEditRes (void *Node)
    if (Node)
       if (((struct Tre_Node *) Node)->Hierarchy.NodCod > 0)
 	 if (Tre_CheckIfICanEditTree () == Usr_CAN)
-	    Ico_PutContextualIconToEdit (ActFrmEdiFAQQaA,FAQ_QaA_SECTION_ID,
+	    Ico_PutContextualIconToEdit (ActFrmEdiFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
 					 Tre_PutPars,Node);
   }
 
@@ -346,10 +319,10 @@ void FAQ_GetQaADataByCod (struct Tre_Node *Node)
   {
    MYSQL_RES *mysql_res;
 
-   if (Node->QaA.Hierarchy.QaACod > 0)
+   if (Node->ListItem.Cod > 0)
      {
       /***** Get data of question&answer *****/
-      if (FAQ_DB_GetQaADataByCod (&mysql_res,Node->QaA.Hierarchy.QaACod))
+      if (FAQ_DB_GetQaADataByCod (&mysql_res,Node->ListItem.Cod))
          FAQ_GetQaADataFromRow (mysql_res,Node);
       else
 	 /* Clear all node data except type */
@@ -385,11 +358,11 @@ static void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
    Node->Hierarchy.NodCod = Str_ConvertStrCodToLongCod (row[0]);
 
    /***** Get code and index of the question&answer (row[1], row[2]) *****/
-   Node->QaA.Hierarchy.QaACod = Str_ConvertStrCodToLongCod (row[1]);
-   Node->QaA.Hierarchy.QaAInd = Str_ConvertStrToUnsigned (row[2]);
+   Node->ListItem.Cod = Str_ConvertStrCodToLongCod (row[1]);
+   Node->ListItem.Ind = Str_ConvertStrToUnsigned (row[2]);
 
    /***** Get whether the tree node is hidden (row(3)) *****/
-   Node->QaA.Hierarchy.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
+   Node->ListItem.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
 
    /***** Get the questionand the answer of the question&answer (row[4], row[5]) *****/
    Str_Copy (Node->QaA.Question,row[4],sizeof (Node->QaA.Question) - 1);
@@ -444,8 +417,8 @@ static void FAQ_WriteRowEditQaA (unsigned NumQaA,unsigned NumQaAs,
       HTM_TD_Begin ("class=\"PRG_MAIN LT PRG_RSC_%s\"",The_GetSuffix ());
 
          /* Question */
-	 Frm_BeginFormAnchor (ActRenFAQQaA,FAQ_QaA_SECTION_ID);
-	    ParCod_PutPar (ParCod_QaA,Node->QaA.Hierarchy.QaACod);
+	 Frm_BeginFormAnchor (ActRenFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID);
+	    ParCod_PutPar (ParCod_QaA,Node->ListItem.Cod);
 	    HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,Node->QaA.Question,
 			    HTM_SUBMIT_ON_CHANGE,
 			    "class=\"PRG_RSC_INPUT INPUT_%s\"",
@@ -489,7 +462,7 @@ static void FAQ_WriteRowNewQaA (unsigned NumQaAs,struct Tre_Node *Node)
       HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 (1));
 
          /* Question */
-	 Frm_BeginFormAnchor (ActNewFAQQaA,FAQ_QaA_SECTION_ID);
+	 Frm_BeginFormAnchor (ActNewFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID);
 	    ParCod_PutPar (ParCod_Nod,Node->Hierarchy.NodCod);
 	    HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,"",
 			    HTM_SUBMIT_ON_CHANGE,
@@ -525,39 +498,39 @@ static void FAQ_PutFormsToRemEditOneQaA (struct Tre_Node *Node,
       case Rol_SYS_ADM:
 	 /***** Icon to remove question&answer *****/
 	 if (NumQaA < NumQaAs)
-	    Ico_PutContextualIconToRemove (ActReqRemFAQQaA,FAQ_QaA_SECTION_ID,
-					   FAQ_PutParQaACod,&Node->QaA.Hierarchy.QaACod);
+	    Ico_PutContextualIconToRemove (ActReqRemFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
+					   FAQ_PutParQaACod,&Node->ListItem.Cod);
 	 else
 	    Ico_PutIconRemovalNotAllowed ();
 
 	 /***** Icon to hide/unhide question&answer *****/
 	 if (NumQaA < NumQaAs)
-	    Ico_PutContextualIconToHideUnhide (ActionHideUnhide,FAQ_QaA_SECTION_ID,
-					       FAQ_PutParQaACod,&Node->QaA.Hierarchy.QaACod,
-					       Node->QaA.Hierarchy.HiddenOrVisible);
+	    Ico_PutContextualIconToHideUnhide (ActionHideUnhide,TreSpc_LIST_ITEMS_SECTION_ID,
+					       FAQ_PutParQaACod,&Node->ListItem.Cod,
+					       Node->ListItem.HiddenOrVisible);
 	 else
 	    Ico_PutIconOff ("eye.svg",Ico_GREEN,Txt_Visible);
 
 	 /***** Put icon to edit the question&answer *****/
 	 if (NumQaA < NumQaAs)
-	    Ico_PutContextualIconToEdit (ActFrmChgFAQQaA,FAQ_QaA_SECTION_ID,
-					 FAQ_PutParQaACod,&Node->QaA.Hierarchy.QaACod);
+	    Ico_PutContextualIconToEdit (ActFrmChgFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
+					 FAQ_PutParQaACod,&Node->ListItem.Cod);
 	 else
-	    Ico_PutContextualIconToEdit (ActChgFAQQaA,FAQ_QaA_SECTION_ID,
+	    Ico_PutContextualIconToEdit (ActChgFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
 					 Tre_PutPars,&Node);
 
 	 /***** Icon to move up the question&answer *****/
 	 if (NumQaA > 0 && NumQaA < NumQaAs)
-	    Lay_PutContextualLinkOnlyIcon (ActUp_FAQQaA,FAQ_QaA_SECTION_ID,
-	                                   FAQ_PutParQaACod,&Node->QaA.Hierarchy.QaACod,
+	    Lay_PutContextualLinkOnlyIcon (ActUp_FAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
+	                                   FAQ_PutParQaACod,&Node->ListItem.Cod,
 	 			           "arrow-up.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
 
 	 /***** Put icon to move down the question&answer *****/
 	 if (NumQaA < NumQaAs - 1)
-	    Lay_PutContextualLinkOnlyIcon (ActDwnFAQQaA,FAQ_QaA_SECTION_ID,
-	                                   FAQ_PutParQaACod,&Node->QaA.Hierarchy.QaACod,
+	    Lay_PutContextualLinkOnlyIcon (ActDwnFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
+	                                   FAQ_PutParQaACod,&Node->ListItem.Cod,
 	                                   "arrow-down.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -600,148 +573,44 @@ void FAQ_CreateQaA (void)
    Par_GetParText ("Question",Node.QaA.Question,FAQ_MAX_BYTES_QUESTION);
 
    /***** Create question&answer *****/
-   Node.QaA.Hierarchy.QaACod = FAQ_DB_CreateQaA (&Node);
+   Node.ListItem.Cod = FAQ_DB_CreateQaA (&Node);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Inf_FAQ,Tre_EDIT_PRG_RESOURCES,
-		     Node.Hierarchy.NodCod,Node.QaA.Hierarchy.QaACod);
+   Tre_ShowAllNodes (Inf_FAQ,Tre_EDIT_SPC_LIST_ITEMS,
+		     Node.Hierarchy.NodCod,Node.ListItem.Cod);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
   }
 
 /*****************************************************************************/
-/*************************** Rename question&answer **************************/
+/******************** Rename question in a question&answer *******************/
 /*****************************************************************************/
 
-void FAQ_RenameQaA (void)
+void FAQ_RenameQaA (const struct Tre_Node *Node)
   {
-   struct Tre_Node Node;
    char NewQuestion[FAQ_MAX_BYTES_QUESTION + 1];
 
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Inf_FAQ);
-
-   /***** Get tree node and question&answer *****/
-   Node.InfoType = Inf_FAQ;
-   Tre_GetPars (&Node);
-   if (Node.Hierarchy.NodCod <= 0)
-      Err_WrongItemExit ();
-
-   /***** Rename question&answer *****/
-   /* Get the new question for the question&answer */
+   /***** Get the new question for the question&answer *****/
    Par_GetParText ("Question",NewQuestion,FAQ_MAX_BYTES_QUESTION);
 
-   /* Update database changing old title by new title */
-   FAQ_DB_UpdateQaAQuestion (Node.Hierarchy.NodCod,Node.QaA.Hierarchy.QaACod,NewQuestion);
-
-   /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Inf_FAQ,Tre_EDIT_PRG_RESOURCES,
-		     Node.Hierarchy.NodCod,Node.QaA.Hierarchy.QaACod);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
+   /***** Update database changing old title by new title *****/
+   FAQ_DB_UpdateQaAQuestion (Node->Hierarchy.NodCod,Node->ListItem.Cod,
+			     NewQuestion);
   }
 
 /*****************************************************************************/
-/*********** Ask for confirmation of removing a question&answer **************/
-/*****************************************************************************/
-
-void FAQ_ReqRemQaA (void)
-  {
-   extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
-   struct Tre_Node Node;
-
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Inf_FAQ);
-
-   /***** Get tree node and question&answer *****/
-   Node.InfoType = Inf_FAQ;
-   Tre_GetPars (&Node);
-   if (Node.Hierarchy.NodCod <= 0)
-      Err_WrongItemExit ();
-
-   /***** Create alert to remove the question&answer *****/
-   Ale_CreateAlert (Ale_QUESTION,FAQ_QaA_SECTION_ID,
-                    Txt_Do_you_really_want_to_remove_the_question_X,
-                    Node.QaA.Question);
-
-   /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Inf_FAQ,Tre_EDIT_PRG_RESOURCES,
-		     Node.Hierarchy.NodCod,Node.QaA.Hierarchy.QaACod);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
-  }
-
-/*****************************************************************************/
-/*************************** Remove a question&answer ************************/
-/*****************************************************************************/
-
-void FAQ_RemoveQaA (void)
-  {
-   extern const char *Txt_Question_removed;
-   struct Tre_Node Node;
-
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Inf_FAQ);
-
-   /***** Get data of the question&answer from database *****/
-   Node.InfoType = Inf_FAQ;
-   Tre_GetPars (&Node);
-   if (Node.Hierarchy.NodCod <= 0)
-      Err_WrongItemExit ();
-
-   /***** Remove question&answer *****/
-   FAQ_DB_RemoveQaA (&Node);
-
-   /***** Create success alert *****/
-   Ale_CreateAlert (Ale_SUCCESS,FAQ_QaA_SECTION_ID,Txt_Question_removed);
-
-   /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Inf_FAQ,Tre_EDIT_PRG_RESOURCES,
-		     Node.Hierarchy.NodCod,Node.QaA.Hierarchy.QaACod);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
-  }
-
-/*****************************************************************************/
-/***************************** Hide a tree node ***************************/
+/************************** Hide a question&answer ***************************/
 /*****************************************************************************/
 
 void FAQ_HideQaA (void)
   {
-   FAQ_HideOrUnhideQaA (HidVis_HIDDEN);
+   TreSpc_HideOrUnhideListItem (HidVis_HIDDEN);
   }
 
 void FAQ_UnhideQaA (void)
   {
-   FAQ_HideOrUnhideQaA (HidVis_VISIBLE);
-  }
-
-static void FAQ_HideOrUnhideQaA (HidVis_HiddenOrVisible_t HiddenOrVisible)
-  {
-   struct Tre_Node Node;
-
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Inf_FAQ);
-
-   /***** Get tree node and question&answer *****/
-   Node.InfoType = Inf_FAQ;
-   Tre_GetPars (&Node);
-   if (Node.Hierarchy.NodCod <= 0)
-      Err_WrongItemExit ();
-
-   /***** Hide/unhide question&answer *****/
-   FAQ_DB_HideOrUnhideQaA (&Node,HiddenOrVisible);
-
-   /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Inf_FAQ,Tre_EDIT_PRG_RESOURCES,
-		     Node.Hierarchy.NodCod,Node.QaA.Hierarchy.QaACod);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
+   TreSpc_HideOrUnhideListItem (HidVis_VISIBLE);
   }
 
 /*****************************************************************************/
@@ -750,127 +619,12 @@ static void FAQ_HideOrUnhideQaA (HidVis_HiddenOrVisible_t HiddenOrVisible)
 
 void FAQ_MoveUpQaA (void)
   {
-   FAQ_MoveUpDownQaA (FAQ_MOVE_UP);
+   TreSpc_MoveUpDownListItem (TreSpc_MOVE_UP);
   }
 
 void FAQ_MoveDownQaA (void)
   {
-   FAQ_MoveUpDownQaA (FAQ_MOVE_DOWN);
-  }
-
-static void FAQ_MoveUpDownQaA (FAQ_MoveUpDown_t UpDown)
-  {
-   extern const char *Txt_Movement_not_allowed;
-   struct Tre_Node Node;
-   struct FAQ_QaAHierarchy FAQ2;
-   bool Success = false;
-   static unsigned (*GetOtherRscInd[FAQ_NUM_MOVEMENTS_UP_DOWN])(const struct Tre_Node *Node) =
-     {
-      [FAQ_MOVE_UP  ] = FAQ_DB_GetQaAIndBefore,
-      [FAQ_MOVE_DOWN] = FAQ_DB_GetQaAIndAfter,
-     };
-
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Inf_FAQ);
-
-   /***** Get tree node and question&answer *****/
-   Node.InfoType = Inf_FAQ;
-   Tre_GetPars (&Node);
-   if (Node.Hierarchy.NodCod <= 0)
-      Err_WrongItemExit ();
-
-   /***** Move up/down question&answer *****/
-   if ((FAQ2.QaAInd = GetOtherRscInd[UpDown] (&Node)))	// 0 ==> movement not allowed
-     {
-      /* Get the other question&answer code */
-      FAQ2.QaACod = FAQ_DB_GetQaACodFromQaAInd (Node.Hierarchy.NodCod,FAQ2.QaAInd);
-
-      /* Exchange subtrees */
-      Success = FAQ_ExchangeQaA (&Node,&FAQ2);
-     }
-   if (!Success)
-      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
-
-   /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Inf_FAQ,Tre_EDIT_PRG_RESOURCES,
-		     Node.Hierarchy.NodCod,Node.QaA.Hierarchy.QaACod);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
-  }
-
-/*****************************************************************************/
-/********** Exchange the order of two consecutive questions&answers **********/
-/*****************************************************************************/
-// Return true if success
-
-static bool FAQ_ExchangeQaA (const struct Tre_Node *Node,
-                             const struct FAQ_QaAHierarchy *QaA2)
-  {
-   const struct FAQ_QaAHierarchy *QaA1 = &Node->QaA.Hierarchy;
-
-   if (QaA1->QaAInd > 0 &&	// Indexes should be in the range [1, 2,...]
-       QaA2->QaAInd > 0)
-     {
-      /***** Lock tables to make the move atomic *****/
-      FAQ_DB_LockTableQaAs ();
-
-      /***** Exchange indexes of items *****/
-      // This implementation works with non continuous indexes
-      /*
-      Example:
-      Rsc1->Index =  5
-      Rsc2->Index = 17
-                                Step 1            Step 2            Step 3  (Equivalent to)
-      +-------+-------+   +-------+-------+   +-------+-------+   +-------+-------+ +-------+-------+
-      | QaAInd| QaACod|   | QaAInd| QaACod|   | QaAInd| QaACod|   | QaAInd| QaACod| | QaAInd| QaACod|
-      +-------+-------+   +-------+-------+   +-------+-------+   +-------+-------+ +-------+-------+
-      |     5 |   218 |   |     5 |   218 |-->|--> 17 |   218 |   |    17 |   218 | |     5 |   240 |
-      |    17 |   240 |-->|-->-17 |   240 |   |   -17 |   240 |-->|-->  5 |   240 | |    17 |   218 |
-      +-------+-------+   +-------+-------+   +-------+-------+   +-------+-------+ +-------+-------+
-      */
-      /* Step 1: Change second index to negative,
-		 necessary to preserve unique index (NodCod,QaAInd) */
-      FAQ_DB_UpdateQaAInd (Node,QaA2->QaACod,-(int) QaA2->QaAInd);
-
-      /* Step 2: Change first index */
-      FAQ_DB_UpdateQaAInd (Node,QaA1->QaACod, (int) QaA2->QaAInd);
-
-      /* Step 3: Change second index */
-      FAQ_DB_UpdateQaAInd (Node,QaA2->QaACod, (int) QaA1->QaAInd);
-
-      /***** Unlock tables *****/
-      DB_UnlockTables ();
-
-      return true;	// Success
-     }
-
-   return false;	// No success
-  }
-
-/*****************************************************************************/
-/*************** Edit FAQ with form to change question&answer ****************/
-/*****************************************************************************/
-
-void FAQ_EditFAQWithFormToChangeQaA (void)
-  {
-   struct Tre_Node Node;
-
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Inf_FAQ);
-
-   /***** Get tree node and resource *****/
-   Node.InfoType = Inf_FAQ;
-   Tre_GetPars (&Node);
-   if (Node.Hierarchy.NodCod <= 0)
-      Err_WrongItemExit ();
-
-   /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Inf_FAQ,Tre_EDIT_PRG_RESOURCE_LINK,
-		     Node.Hierarchy.NodCod,Node.QaA.Hierarchy.QaACod);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
+   TreSpc_MoveUpDownListItem (TreSpc_MOVE_DOWN);
   }
 
 /*****************************************************************************/
@@ -900,7 +654,7 @@ void FAQ_ChangeQaA (void)
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (Inf_FAQ,Tre_EDIT_PRG_RESOURCE_LINK,
-		     Node.Hierarchy.NodCod,Node.QaA.Hierarchy.QaACod);
+		     Node.Hierarchy.NodCod,Node.ListItem.Cod);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -910,7 +664,7 @@ void FAQ_ChangeQaA (void)
 /***************************** Get link parameter ****************************/
 /*****************************************************************************/
 
-bool FAQ_GetParQuestion (struct Rsc_Link *Link)
+bool FAQ_GetParQuestion (struct Rsc_Link *Link)	// TODO: cHANGE!!!!!!!!!!!!!!!!
   {
    char TypeCod[3 + 1 + Cns_MAX_DIGITS_LONG + 1];
    char TypeStr[3 + 1];
@@ -921,8 +675,8 @@ bool FAQ_GetParQuestion (struct Rsc_Link *Link)
    if (sscanf (TypeCod,"%3s_%ld",TypeStr,&Cod) == 2)
      {
       /* Correct link found */
-      Link->Type = Rsc_GetTypeFromString (TypeStr);
-      Link->Cod  = Cod;
+      // Link->Type = Rsc_GetTypeFromString (TypeStr);
+      // Link->Cod  = Cod;
       return true;
      }
 

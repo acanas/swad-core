@@ -41,6 +41,7 @@
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
+#include "swad_resource.h"
 #include "swad_rubric.h"
 #include "swad_rubric_criteria.h"
 #include "swad_rubric_database.h"

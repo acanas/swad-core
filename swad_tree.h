@@ -34,7 +34,7 @@
 #include "swad_date.h"
 #include "swad_FAQ_type.h"
 #include "swad_info.h"
-#include "swad_resource.h"
+#include "swad_resource_type.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -51,6 +51,13 @@ struct Tre_NodeHierarchy
    HidVis_HiddenOrVisible_t HiddenOrVisible;
   };
 
+struct Tre_ListItem
+  {
+   long Cod;
+   unsigned Ind;	// 1, 2, 3...
+   HidVis_HiddenOrVisible_t HiddenOrVisible;
+  };
+
 struct Tre_Node
   {
    Inf_Type_t InfoType;
@@ -59,6 +66,7 @@ struct Tre_Node
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    CloOpe_ClosedOrOpen_t ClosedOrOpen;
    char Title[Tre_MAX_BYTES_NODE_TITLE + 1];
+   struct Tre_ListItem ListItem;
    struct Rsc_Resource Resource;
    struct FAQ_QaA QaA;
   };
@@ -103,7 +111,7 @@ typedef enum
    Tre_END_EDIT_NODE,		// List node after edition
    Tre_RECEIVE_NODE,		// Receive node data after create/edit
 
-   Tre_EDIT_PRG_RESOURCES,	// List resources of a selected node for edition
+   Tre_EDIT_SPC_LIST_ITEMS,	// List special list items of a selected node for edition
    Tre_EDIT_PRG_RESOURCE_LINK,	// Show clipboard in a resource to select a link
    Tre_CHG_PRG_RESOURCE_LINK,	// Change resource link
    Tre_END_EDIT_PRG_RESOURCES,	// List resources of a selected node after edition

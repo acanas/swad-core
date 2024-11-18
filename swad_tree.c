@@ -51,11 +51,13 @@
 #include "swad_photo.h"
 #include "swad_program.h"
 #include "swad_program_resource.h"
+#include "swad_resource.h"
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_string.h"
 #include "swad_tree.h"
 #include "swad_tree_database.h"
+#include "swad_tree_specific.h"
 #include "swad_view.h"
 
 /*****************************************************************************/
@@ -397,7 +399,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
       [Tre_FORM_EDIT_NODE		] = Vie_EDIT,
       [Tre_END_EDIT_NODE		] = Vie_EDIT,
       [Tre_RECEIVE_NODE			] = Vie_EDIT,
-      [Tre_EDIT_PRG_RESOURCES		] = Vie_EDIT,
+      [Tre_EDIT_SPC_LIST_ITEMS		] = Vie_EDIT,
       [Tre_EDIT_PRG_RESOURCE_LINK	] = Vie_EDIT,
       [Tre_CHG_PRG_RESOURCE_LINK	] = Vie_EDIT,
       [Tre_END_EDIT_PRG_RESOURCES	] = Vie_EDIT,
@@ -1287,14 +1289,14 @@ void Tre_GetPars (struct Tre_Node *Node)
      {
       case Inf_PROGRAM:
 	 /***** Try to get node resource *****/
-	 Node->Resource.Hierarchy.RscCod = ParCod_GetPar (ParCod_Rsc);
+	 Node->ListItem.Cod = ParCod_GetPar (ParCod_Rsc);
 
 	 /***** Get data of the tree node from database *****/
 	 PrgRsc_GetResourceDataByCod (Node);
 	 break;
       case Inf_FAQ:
 	 /***** Try to get node question&answer *****/
-	 Node->QaA.Hierarchy.QaACod = ParCod_GetPar (ParCod_QaA);
+	 Node->ListItem.Cod = ParCod_GetPar (ParCod_QaA);
 
 	 /***** Get data of the tree node from database *****/
 	 FAQ_GetQaADataByCod (Node);
@@ -1476,8 +1478,7 @@ void Tre_ResetNode (struct Tre_Node *Node)
    Node->TimeUTC[Dat_END_TIME] = (time_t) 0;
    Node->ClosedOrOpen = CloOpe_CLOSED;
    Node->Title[0] = '\0';
-   if (Node->InfoType == Inf_PROGRAM)
-      Rsc_ResetResource (&Node->Resource);
+   TreSpc_ResetListItem (Node);
   }
 
 /*****************************************************************************/

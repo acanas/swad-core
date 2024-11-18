@@ -45,10 +45,7 @@ void PrgRsc_GetResourceDataByCod (struct Tre_Node *Node);
 
 void PrgRsc_CreateResource (void);
 
-void PrgRsc_RenameResource (void);
-
-void PrgRsc_ReqRemResource (void);
-void PrgRsc_RemoveResource (void);
+void PrgRsc_RenameResource (const struct Tre_Node *Node);
 
 void PrgRsc_HideResource (void);
 void PrgRsc_UnhideResource (void);
@@ -58,8 +55,6 @@ void PrgRsc_MoveDownResource (void);
 
 void PrgRsc_ViewResourceClipboard (void);
 void PrgRsc_RemoveResourceClipboard (void);
-
-void PrgRsc_EditProgramWithClipboard (void);
 
 void PrgRsc_ChangeLink (void);
 
