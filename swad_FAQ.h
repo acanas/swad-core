@@ -36,9 +36,6 @@
 
 void FAQ_ResetSpcFields (struct Tre_Node *Node);
 
-void FAQ_ViewQaAsAfterEdit (void);
-void FAQ_EditQaAs (void);
-
 void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
                        struct Tre_Node *Node,
                        long SelectedNodCod,
@@ -49,12 +46,6 @@ void FAQ_GetQaADataByCod (struct Tre_Node *Node);
 void FAQ_CreateQaA (void);
 
 void FAQ_RenameQaA (const struct Tre_Node *Node);
-
-void FAQ_HideQaA (void);
-void FAQ_UnhideQaA (void);
-
-void FAQ_MoveUpQaA (void);
-void FAQ_MoveDownQaA (void);
 
 void FAQ_ChangeQaA (void);
 

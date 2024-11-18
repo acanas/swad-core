@@ -47,11 +47,19 @@ typedef enum
 /*****************************************************************************/
 
 void TreSpc_ResetListItem (struct Tre_Node *Node);
+void TreSpc_ViewListItemsAfterEdit (void);
+void TreSpc_EditListItems (void);
 void TreSpc_EditTreeWithFormListItem (void);
+
 void TreSpc_RenameListItem (void);
+
 void TreSpc_ReqRemListItem (void);
 void TreSpc_RemoveListItem (void);
-void TreSpc_HideOrUnhideListItem (HidVis_HiddenOrVisible_t HiddenOrVisible);
-void TreSpc_MoveUpDownListItem (TreSpc_MoveUpDown_t UpDown);
+
+void TreSpc_HideListItem (void);
+void TreSpc_UnhideListItem (void);
+
+void TreSpc_MoveUpListItem (void);
+void TreSpc_MoveDownListItem (void);
 
 #endif

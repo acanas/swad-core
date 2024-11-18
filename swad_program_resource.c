@@ -78,52 +78,6 @@ static void PrgRsc_ShowClipboard (void);
 static void PrgRsc_PutIconsClipboard (__attribute__((unused)) void *Args);
 
 /*****************************************************************************/
-/****************************** View resources *******************************/
-/*****************************************************************************/
-
-void PrgRsc_ViewResourcesAfterEdit (void)
-  {
-   struct Tre_Node Node;
-
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Inf_PROGRAM);
-
-   /***** Get tree node *****/
-   Node.InfoType = Inf_PROGRAM;
-   Tre_GetPars (&Node);
-
-   /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Inf_PROGRAM,Tre_END_EDIT_PRG_RESOURCES,
-		     Node.Hierarchy.NodCod,-1L);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
-  }
-
-/*****************************************************************************/
-/****************************** Edit resources *******************************/
-/*****************************************************************************/
-
-void PrgRsc_EditResources (void)
-  {
-   struct Tre_Node Node;
-
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Inf_PROGRAM);
-
-   /***** Get tree node *****/
-   Node.InfoType = Inf_PROGRAM;
-   Tre_GetPars (&Node);
-
-   /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Inf_PROGRAM,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,-1L);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
-  }
-
-/*****************************************************************************/
 /****************************** List resources *******************************/
 /*****************************************************************************/
 
@@ -622,34 +576,6 @@ void PrgRsc_RenameResource (const struct Tre_Node *Node)
    /***** Update database changing old title by new title *****/
    Rsc_DB_UpdateResourceTitle (Node->Hierarchy.NodCod,Node->ListItem.Cod,
 			       NewTitle);
-  }
-
-/*****************************************************************************/
-/***************************** Hide a tree node ***************************/
-/*****************************************************************************/
-
-void PrgRsc_HideResource (void)
-  {
-   TreSpc_HideOrUnhideListItem (HidVis_HIDDEN);
-  }
-
-void PrgRsc_UnhideResource (void)
-  {
-   TreSpc_HideOrUnhideListItem (HidVis_VISIBLE);
-  }
-
-/*****************************************************************************/
-/**************************** Move up/down resource **************************/
-/*****************************************************************************/
-
-void PrgRsc_MoveUpResource (void)
-  {
-   TreSpc_MoveUpDownListItem (TreSpc_MOVE_UP);
-  }
-
-void PrgRsc_MoveDownResource (void)
-  {
-   TreSpc_MoveUpDownListItem (TreSpc_MOVE_DOWN);
   }
 
 /*****************************************************************************/

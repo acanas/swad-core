@@ -98,52 +98,6 @@ void FAQ_ResetSpcFields (struct Tre_Node *Node)
   }
 
 /*****************************************************************************/
-/************************** View quetions&answers ****************************/
-/*****************************************************************************/
-
-void FAQ_ViewQaAsAfterEdit (void)
-  {
-   struct Tre_Node Node;
-
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Inf_FAQ);
-
-   /***** Get tree node *****/
-   Node.InfoType = Inf_FAQ;
-   Tre_GetPars (&Node);
-
-   /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Inf_FAQ,Tre_END_EDIT_PRG_RESOURCES,
-		     Node.Hierarchy.NodCod,-1L);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
-  }
-
-/*****************************************************************************/
-/************************** Edit questions&answers ***************************/
-/*****************************************************************************/
-
-void FAQ_EditQaAs (void)
-  {
-   struct Tre_Node Node;
-
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Inf_FAQ);
-
-   /***** Get tree node *****/
-   Node.InfoType = Inf_FAQ;
-   Tre_GetPars (&Node);
-
-   /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Inf_FAQ,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,-1L);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
-  }
-
-/*****************************************************************************/
 /****************************** List questions *******************************/
 /*****************************************************************************/
 
@@ -597,34 +551,6 @@ void FAQ_RenameQaA (const struct Tre_Node *Node)
    /***** Update database changing old title by new title *****/
    FAQ_DB_UpdateQaAQuestion (Node->Hierarchy.NodCod,Node->ListItem.Cod,
 			     NewQuestion);
-  }
-
-/*****************************************************************************/
-/************************** Hide a question&answer ***************************/
-/*****************************************************************************/
-
-void FAQ_HideQaA (void)
-  {
-   TreSpc_HideOrUnhideListItem (HidVis_HIDDEN);
-  }
-
-void FAQ_UnhideQaA (void)
-  {
-   TreSpc_HideOrUnhideListItem (HidVis_VISIBLE);
-  }
-
-/*****************************************************************************/
-/*********************** Move up/down question&answer ************************/
-/*****************************************************************************/
-
-void FAQ_MoveUpQaA (void)
-  {
-   TreSpc_MoveUpDownListItem (TreSpc_MOVE_UP);
-  }
-
-void FAQ_MoveDownQaA (void)
-  {
-   TreSpc_MoveUpDownListItem (TreSpc_MOVE_DOWN);
   }
 
 /*****************************************************************************/

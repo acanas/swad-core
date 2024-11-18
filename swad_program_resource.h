@@ -33,9 +33,6 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void PrgRsc_ViewResourcesAfterEdit (void);
-void PrgRsc_EditResources (void);
-
 void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
                                struct Tre_Node *Node,
                                long SelectedNodCod,
@@ -46,12 +43,6 @@ void PrgRsc_GetResourceDataByCod (struct Tre_Node *Node);
 void PrgRsc_CreateResource (void);
 
 void PrgRsc_RenameResource (const struct Tre_Node *Node);
-
-void PrgRsc_HideResource (void);
-void PrgRsc_UnhideResource (void);
-
-void PrgRsc_MoveUpResource (void);
-void PrgRsc_MoveDownResource (void);
 
 void PrgRsc_ViewResourceClipboard (void);
 void PrgRsc_RemoveResourceClipboard (void);

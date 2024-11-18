@@ -45,6 +45,9 @@
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void TreSpc_HideOrUnhideListItem (HidVis_HiddenOrVisible_t HiddenOrVisible);
+static void TreSpc_MoveUpDownListItem (TreSpc_MoveUpDown_t UpDown);
+
 static bool TreSpc_ExchangeListItem (const struct Tre_Node *Node,
 				     const struct Tre_ListItem *ListItem2);
 
@@ -68,6 +71,60 @@ void TreSpc_ResetListItem (struct Tre_Node *Node)
    /***** Reset specific fields of specific item *****/
    if (ResetSpcFields[Node->InfoType])
       ResetSpcFields[Node->InfoType] (Node);
+  }
+
+/*****************************************************************************/
+/*********************** View specific list of items *************************/
+/*****************************************************************************/
+
+void TreSpc_ViewListItemsAfterEdit (void)
+  {
+   Inf_Type_t InfoType;
+   struct Tre_Node Node;
+
+   /***** Set info type *****/
+   InfoType = Inf_AsignInfoType ();
+
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (InfoType);
+
+   /***** Get tree node *****/
+   Node.InfoType = InfoType;
+   Tre_GetPars (&Node);
+
+   /***** Show current tree nodes, if any *****/
+   Tre_ShowAllNodes (InfoType,Tre_END_EDIT_PRG_RESOURCES,
+		     Node.Hierarchy.NodCod,-1L);
+
+   /***** Free list of tree nodes *****/
+   Tre_FreeListNodes ();
+  }
+
+/*****************************************************************************/
+/************************ Edit specific list of items ************************/
+/*****************************************************************************/
+
+void TreSpc_EditListItems (void)
+  {
+   Inf_Type_t InfoType;
+   struct Tre_Node Node;
+
+   /***** Set info type *****/
+   InfoType = Inf_AsignInfoType ();
+
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (InfoType);
+
+   /***** Get tree node *****/
+   Node.InfoType = InfoType;
+   Tre_GetPars (&Node);
+
+   /***** Show current tree nodes, if any *****/
+   Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
+		     Node.Hierarchy.NodCod,-1L);
+
+   /***** Free list of tree nodes *****/
+   Tre_FreeListNodes ();
   }
 
 /*****************************************************************************/
@@ -237,10 +294,20 @@ void TreSpc_RemoveListItem (void)
   }
 
 /*****************************************************************************/
-/************************* Hide specific list item ***************************/
+/********************** Hide/unhide specific list item ***********************/
 /*****************************************************************************/
 
-void TreSpc_HideOrUnhideListItem (HidVis_HiddenOrVisible_t HiddenOrVisible)
+void TreSpc_HideListItem (void)
+  {
+   TreSpc_HideOrUnhideListItem (HidVis_HIDDEN);
+  }
+
+void TreSpc_UnhideListItem (void)
+  {
+   TreSpc_HideOrUnhideListItem (HidVis_VISIBLE);
+  }
+
+static void TreSpc_HideOrUnhideListItem (HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    Inf_Type_t InfoType;
    struct Tre_Node Node;
@@ -280,7 +347,17 @@ void TreSpc_HideOrUnhideListItem (HidVis_HiddenOrVisible_t HiddenOrVisible)
 /*********************** Move up/down specific list item *********************/
 /*****************************************************************************/
 
-void TreSpc_MoveUpDownListItem (TreSpc_MoveUpDown_t UpDown)
+void TreSpc_MoveUpListItem (void)
+  {
+   TreSpc_MoveUpDownListItem (TreSpc_MOVE_UP);
+  }
+
+void TreSpc_MoveDownListItem (void)
+  {
+   TreSpc_MoveUpDownListItem (TreSpc_MOVE_DOWN);
+  }
+
+static void TreSpc_MoveUpDownListItem (TreSpc_MoveUpDown_t UpDown)
   {
    extern const char *Txt_Movement_not_allowed;
    Inf_Type_t InfoType;
