@@ -43,9 +43,6 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Prg_BeforeTree (Tre_ListingType_t ListingType);
-static void Prg_AfterTree (void);
-
 static void Prg_PutIconsWhenViewing (__attribute__((unused)) void *Args);
 static void Prg_PutIconsWhenEditing (__attribute__((unused)) void *Args);
 
@@ -53,7 +50,7 @@ static void Prg_PutIconsWhenEditing (__attribute__((unused)) void *Args);
 /*************************** Before and after tree ***************************/
 /*****************************************************************************/
 
-static void Prg_BeforeTree (Tre_ListingType_t ListingType)
+void Prg_BeforeTree (Tre_ListingType_t ListingType)
   {
    extern const char *Hlp_COURSE_Program;
    extern const char *Txt_COURSE_program;
@@ -69,7 +66,7 @@ static void Prg_BeforeTree (Tre_ListingType_t ListingType)
                  Hlp_COURSE_Program,Box_NOT_CLOSABLE);
   }
 
-static void Prg_AfterTree (void)
+void Prg_AfterTree (void)
   {
    /***** End box *****/
    Box_BoxEnd ();

@@ -104,9 +104,9 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
       [Tre_END_EDIT_NODE		] = Vie_EDIT,
       [Tre_RECEIVE_NODE			] = Vie_EDIT,
       [Tre_EDIT_SPC_LIST_ITEMS		] = Vie_EDIT,
-      [Tre_EDIT_PRG_RESOURCE_LINK	] = Vie_EDIT,
-      [Tre_CHG_PRG_RESOURCE_LINK	] = Vie_EDIT,
-      [Tre_END_EDIT_PRG_RESOURCES	] = Vie_EDIT,
+      [Tre_EDIT_SPC_ITEM		] = Vie_EDIT,
+      [Tre_CHG_SPC_ITEM			] = Vie_EDIT,
+      [Tre_END_EDIT_SPC_LIST_ITEMS	] = Vie_EDIT,
      };
    static Vie_ViewType_t ViewingOrEditingRes[Tre_NUM_LISTING_TYPES] =
      {
@@ -119,9 +119,9 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
       [Tre_END_EDIT_NODE		] = Vie_VIEW,
       [Tre_RECEIVE_NODE			] = Vie_VIEW,
       [Tre_EDIT_SPC_LIST_ITEMS		] = Vie_EDIT,
-      [Tre_EDIT_PRG_RESOURCE_LINK	] = Vie_EDIT,
-      [Tre_CHG_PRG_RESOURCE_LINK	] = Vie_EDIT,
-      [Tre_END_EDIT_PRG_RESOURCES	] = Vie_VIEW,
+      [Tre_EDIT_SPC_ITEM		] = Vie_EDIT,
+      [Tre_CHG_SPC_ITEM			] = Vie_EDIT,
+      [Tre_END_EDIT_SPC_LIST_ITEMS	] = Vie_VIEW,
      };
    static void (*PrgRsc_PutIconsRes[Vie_NUM_VIEW_TYPES]) (void *Node) =
      {
@@ -194,9 +194,9 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
 		     break;
 		  case Vie_EDIT:
 		     PrgRsc_WriteRowEditResource (NumRsc,NumResources,Node,
-						  (ListingType == Tre_EDIT_PRG_RESOURCE_LINK &&
+						  (ListingType == Tre_EDIT_SPC_ITEM &&
 						   Node->ListItem.Cod == SelectedRscCod) ? Vie_EDIT :
-											  Vie_VIEW);
+											   Vie_VIEW);
 		     break;
 		  default:
 		     Err_WrongTypeExit ();
@@ -209,7 +209,7 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
 	      {
 	       TreSpc_ResetListItem (Node);
 	       PrgRsc_WriteRowNewResource (NumResources,Node,
-					   (ListingType == Tre_EDIT_PRG_RESOURCE_LINK &&
+					   (ListingType == Tre_EDIT_SPC_ITEM &&
 					    Node->ListItem.Cod == SelectedRscCod) ? Vie_EDIT :
 										   Vie_VIEW);
 	      }
@@ -375,7 +375,7 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
 
          HTM_BR ();
 
-	 /* Edit link showing clipboard / Show current link */
+	 /* Show current link / Show clipboard to change resource link */
          switch (LinkViewType)
            {
             case Vie_VIEW:
@@ -533,33 +533,16 @@ static void PrgRsc_PutParRscCod (void *RscCod)
   }
 
 /*****************************************************************************/
-/******************************** Rename resource ****************************/
+/**************************** Create new resource ****************************/
 /*****************************************************************************/
 
-void PrgRsc_CreateResource (void)
+void PrgRsc_CreateResource (struct Tre_Node *Node)
   {
-   struct Tre_Node Node;
-
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Inf_PROGRAM);
-
-   /***** Get parameters *****/
-   /* Get tree node */
-   Node.InfoType = Inf_PROGRAM;
-   Tre_GetPars (&Node);
-
-   /* Get the new title for the new resource */
-   Par_GetParText ("Title",Node.Resource.Title,Rsc_MAX_BYTES_RESOURCE_TITLE);
+   /***** Get the new title for the new resource *****/
+   Par_GetParText ("Title",Node->Resource.Title,Rsc_MAX_BYTES_RESOURCE_TITLE);
 
    /***** Create resource *****/
-   Node.ListItem.Cod = Rsc_DB_CreateResource (&Node);
-
-   /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Inf_PROGRAM,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,Node.ListItem.Cod);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
+   Node->ListItem.Cod = Rsc_DB_CreateResource (Node);
   }
 
 /*****************************************************************************/
@@ -576,6 +559,41 @@ void PrgRsc_RenameResource (const struct Tre_Node *Node)
    /***** Update database changing old title by new title *****/
    Rsc_DB_UpdateResourceTitle (Node->Hierarchy.NodCod,Node->ListItem.Cod,
 			       NewTitle);
+  }
+
+/*****************************************************************************/
+/*************************** Change resource link ****************************/
+/*****************************************************************************/
+
+void PrgRsc_ChangeLink (struct Tre_Node *Node)
+  {
+   /***** Get link type and code *****/
+   if (Rsc_GetParLink (&Node->Resource.Link))
+     {
+      /***** Is it an existing resource? *****/
+      if (Node->ListItem.Cod <= 0)
+	{
+	 /* No resource selected, so it's a new resource at the end of the node */
+	 /* Get the new title for the new resource from link title */
+	 Rsc_GetResourceTitleFromLink (&Node->Resource.Link,Node->Resource.Title);
+
+	 /***** Create resource *****/
+	 Node->ListItem.Cod = Rsc_DB_CreateResource (Node);
+	}
+
+      /***** Update resource link *****/
+      Rsc_DB_UpdateRscLink (Node);
+
+      /***** Remove link from clipboard *****/
+      Rsc_DB_RemoveLinkFromClipboard (&Node->Resource.Link);
+     }
+
+   /***** Show current tree nodes, if any *****/
+   Tre_ShowAllNodes (Inf_PROGRAM,Tre_EDIT_SPC_ITEM,
+		     Node->Hierarchy.NodCod,Node->ListItem.Cod);
+
+   /***** Free list of tree nodes *****/
+   Tre_FreeListNodes ();
   }
 
 /*****************************************************************************/
@@ -636,48 +654,26 @@ void PrgRsc_RemoveResourceClipboard (void)
   }
 
 /*****************************************************************************/
-/*************************** Change resource link ****************************/
+/********************* View resources after editing them *********************/
 /*****************************************************************************/
 
-void PrgRsc_ChangeLink (void)
+void PrgRsc_ViewResourcesAfterEdit (void)
   {
-   struct Tre_Node Node;
-
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Inf_PROGRAM);
-
-   /***** Get parameters *****/
-   /* Get tree node and resource */
-   Node.InfoType = Inf_PROGRAM;
-   Tre_GetPars (&Node);
-   if (Node.Hierarchy.NodCod <= 0)
-      Err_WrongItemExit ();
-
-   /* Get link type and code */
-   if (Rsc_GetParLink (&Node.Resource.Link))
-     {
-      /***** Is it an existing resource? *****/
-      if (Node.ListItem.Cod <= 0)
-	{
-	 /* No resource selected, so it's a new resource at the end of the node */
-	 /* Get the new title for the new resource from link title */
-	 Rsc_GetResourceTitleFromLink (&Node.Resource.Link,Node.Resource.Title);
-
-	 /***** Create resource *****/
-	 Node.ListItem.Cod = Rsc_DB_CreateResource (&Node);
-	}
-
-      /***** Update resource link *****/
-      Rsc_DB_UpdateRscLink (&Node);
-
-      /***** Remove link from clipboard *****/
-      Rsc_DB_RemoveLinkFromClipboard (&Node.Resource.Link);
-     }
-
-   /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Inf_PROGRAM,Tre_EDIT_PRG_RESOURCE_LINK,
-		     Node.Hierarchy.NodCod,Node.ListItem.Cod);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
+   Prg_BeforeTree (Tre_EDIT_NODES);
+      TreSpc_ViewListItemsAfterEdit (Inf_PROGRAM);
+   Prg_AfterTree ();
   }
+
+/* TODO: Add functions similar to PrgRsc_ViewResourcesAfterEdit () for:
+   [ActFrmEdiPrgRsc	] = {1918, 1,TabCrs,NULL			,TreSpc_EditListItems		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActNewPrgRsc	] = {1929, 1,TabCrs,NULL			,TreSpc_CreateListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRenPrgRsc	] = {1928, 1,TabCrs,NULL			,TreSpc_RenameListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqRemPrgRsc	] = {1919, 1,TabCrs,NULL			,TreSpc_ReqRemListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemPrgRsc	] = {1920, 1,TabCrs,NULL			,TreSpc_RemoveListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActHidPrgRsc	] = {1921, 1,TabCrs,NULL			,TreSpc_HideListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUnhPrgRsc	] = {1922, 1,TabCrs,NULL			,TreSpc_UnhideListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUp_PrgRsc	] = {1923, 1,TabCrs,NULL			,TreSpc_MoveUpListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActDwnPrgRsc	] = {1924, 1,TabCrs,NULL			,TreSpc_MoveDownListItem	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmChgPrgRsc	] = {1932, 1,TabCrs,NULL			,TreSpc_EditTreeWithFormListItem,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgPrgRsc	] = {1933, 1,TabCrs,NULL			,TreSpc_ChangeListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+ */

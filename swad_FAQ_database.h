@@ -51,6 +51,6 @@ void FAQ_DB_HideOrUnhideQaA (const struct Tre_Node *Node,
 			     HidVis_HiddenOrVisible_t HiddenOrVisible);
 void FAQ_DB_LockTableQaAs (void);
 void FAQ_DB_UpdateQaAInd (const struct Tre_Node *Node,long QaACod,int QaAInd);
-void FAQ_DB_UpdateQaA (const struct Tre_Node *Node);
+void FAQ_DB_UpdateAnswer (const struct Tre_Node *Node);
 
 #endif

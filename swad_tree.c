@@ -400,9 +400,9 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
       [Tre_END_EDIT_NODE		] = Vie_EDIT,
       [Tre_RECEIVE_NODE			] = Vie_EDIT,
       [Tre_EDIT_SPC_LIST_ITEMS		] = Vie_EDIT,
-      [Tre_EDIT_PRG_RESOURCE_LINK	] = Vie_EDIT,
-      [Tre_CHG_PRG_RESOURCE_LINK	] = Vie_EDIT,
-      [Tre_END_EDIT_PRG_RESOURCES	] = Vie_EDIT,
+      [Tre_EDIT_SPC_ITEM		] = Vie_EDIT,
+      [Tre_CHG_SPC_ITEM			] = Vie_EDIT,
+      [Tre_END_EDIT_SPC_LIST_ITEMS	] = Vie_EDIT,
      };
    static const char *RowSpan[ConExp_NUM_CONTRACTED_EXPANDED] =
      {

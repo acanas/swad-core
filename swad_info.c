@@ -50,6 +50,7 @@
 #include "swad_syllabus.h"
 #include "swad_tree.h"
 #include "swad_tree_database.h"
+#include "swad_tree_specific.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -571,6 +572,33 @@ void Inf_ContractNodeEditing (void)
       Tre_ExpandContractNode (Info.Type,Tre_CONTRACT,Tre_EDIT_NODES);
    Inf_AfterTree ();
   }
+
+/*****************************************************************************/
+/***************** View questions&answers after editing them *****************/
+/*****************************************************************************/
+
+void Inf_ViewListItemsAfterEdit (void)
+  {
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      TreSpc_ViewListItemsAfterEdit (Info.Type);
+   Inf_AfterTree ();
+  }
+
+/* TODO: Add functions similar to Inf_ViewListItemsAfterEdit () for:
+   [ActFrmEdiFAQQaA	] = {2147, 5,TabCrs,NULL			,TreSpc_EditListItems		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActNewFAQQaA	] = {2148, 5,TabCrs,NULL			,TreSpc_CreateListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRenFAQQaA	] = {2149, 5,TabCrs,NULL			,TreSpc_RenameListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqRemFAQQaA	] = {2150, 5,TabCrs,NULL			,TreSpc_ReqRemListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemFAQQaA	] = {2151, 5,TabCrs,NULL			,TreSpc_RemoveListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActHidFAQQaA	] = {2152, 5,TabCrs,NULL			,TreSpc_HideListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUnhFAQQaA	] = {2153, 5,TabCrs,NULL			,TreSpc_UnhideListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUp_FAQQaA	] = {2154, 5,TabCrs,NULL			,TreSpc_MoveUpListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActDwnFAQQaA	] = {2155, 5,TabCrs,NULL			,TreSpc_MoveDownListItem	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmChgFAQQaA	] = {2156, 5,TabCrs,NULL			,TreSpc_EditTreeWithFormListItem,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgFAQQaA	] = {2157, 5,TabCrs,NULL			,TreSpc_ChangeListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+ */
 
 /*****************************************************************************/
 /******************** Put icons to view/edit course info *********************/

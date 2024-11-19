@@ -59,8 +59,16 @@ void TreSpc_ResetListItem (struct Tre_Node *Node)
   {
    static void (*ResetSpcFields[Inf_NUM_TYPES]) (struct Tre_Node *Node) =
      {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
       [Inf_PROGRAM	] = Rsc_ResetSpcFields,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_ResetSpcFields,
+      [Inf_LINKS	] = NULL,
+      [Inf_ASSESSMENT	] = NULL,
      };
 
    /***** Reset common fields of specific item *****/
@@ -74,16 +82,12 @@ void TreSpc_ResetListItem (struct Tre_Node *Node)
   }
 
 /*****************************************************************************/
-/*********************** View specific list of items *************************/
+/************** View specific list of items after editing them ***************/
 /*****************************************************************************/
 
-void TreSpc_ViewListItemsAfterEdit (void)
+void TreSpc_ViewListItemsAfterEdit (Inf_Type_t InfoType)
   {
-   Inf_Type_t InfoType;
    struct Tre_Node Node;
-
-   /***** Set info type *****/
-   InfoType = Inf_AsignInfoType ();
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (InfoType);
@@ -93,7 +97,7 @@ void TreSpc_ViewListItemsAfterEdit (void)
    Tre_GetPars (&Node);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,Tre_END_EDIT_PRG_RESOURCES,
+   Tre_ShowAllNodes (InfoType,Tre_END_EDIT_SPC_LIST_ITEMS,
 		     Node.Hierarchy.NodCod,-1L);
 
    /***** Free list of tree nodes *****/
@@ -149,7 +153,53 @@ void TreSpc_EditTreeWithFormListItem (void)
       Err_WrongItemExit ();
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,Tre_EDIT_PRG_RESOURCE_LINK,
+   Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_ITEM,
+		     Node.Hierarchy.NodCod,Node.ListItem.Cod);
+
+   /***** Free list of tree nodes *****/
+   Tre_FreeListNodes ();
+  }
+
+/*****************************************************************************/
+/************************ Create new specific list item **********************/
+/*****************************************************************************/
+
+void TreSpc_CreateListItem (void)
+  {
+   Inf_Type_t InfoType;
+   struct Tre_Node Node;
+   static void (*CreateListItem[Inf_NUM_TYPES]) (struct Tre_Node *Node) =
+     {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
+      [Inf_PROGRAM	] = PrgRsc_CreateResource,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = NULL,
+      [Inf_FAQ		] = FAQ_CreateQaA,
+      [Inf_LINKS	] = NULL,
+      [Inf_ASSESSMENT	] = NULL,
+     };
+
+   /***** Set info type *****/
+   InfoType = Inf_AsignInfoType ();
+   if (!CreateListItem[InfoType])
+      Err_WrongTypeExit ();
+
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (InfoType);
+
+   /***** Get parameters *****/
+   /* Get tree node */
+   Node.InfoType = InfoType;
+   Tre_GetPars (&Node);
+
+   /***** Create specific list item *****/
+   CreateListItem[InfoType] (&Node);
+
+   /***** Show current tree nodes, if any *****/
+   Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
 		     Node.Hierarchy.NodCod,Node.ListItem.Cod);
 
    /***** Free list of tree nodes *****/
@@ -166,8 +216,16 @@ void TreSpc_RenameListItem (void)
    struct Tre_Node Node;
    static void (*RenameListItem[Inf_NUM_TYPES]) (const struct Tre_Node *Node) =
      {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
       [Inf_PROGRAM	] = PrgRsc_RenameResource,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_RenameQaA,
+      [Inf_LINKS	] = NULL,
+      [Inf_ASSESSMENT	] = NULL,
      };
 
    /***** Set info type *****/
@@ -178,7 +236,7 @@ void TreSpc_RenameListItem (void)
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (InfoType);
 
-   /***** Get tree node and question&answer *****/
+   /***** Get tree node *****/
    Node.InfoType = InfoType;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
@@ -189,6 +247,53 @@ void TreSpc_RenameListItem (void)
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
+		     Node.Hierarchy.NodCod,Node.ListItem.Cod);
+
+   /***** Free list of tree nodes *****/
+   Tre_FreeListNodes ();
+  }
+
+/*****************************************************************************/
+/************************ Change specific list item **************************/
+/*****************************************************************************/
+
+void TreSpc_ChangeListItem (void)
+  {
+   Inf_Type_t InfoType;
+   struct Tre_Node Node;
+   static void (*ChangeListItem[Inf_NUM_TYPES]) (struct Tre_Node *Node) =
+     {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
+      [Inf_PROGRAM	] = PrgRsc_ChangeLink,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = NULL,
+      [Inf_FAQ		] = FAQ_ChangeAnswer,
+      [Inf_LINKS	] = NULL,
+      [Inf_ASSESSMENT	] = NULL,
+     };
+
+   /***** Set info type *****/
+   InfoType = Inf_AsignInfoType ();
+   if (!ChangeListItem[InfoType])
+      Err_WrongTypeExit ();
+
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (InfoType);
+
+   /***** Get tree node *****/
+   Node.InfoType = InfoType;
+   Tre_GetPars (&Node);
+   if (Node.Hierarchy.NodCod <= 0)
+      Err_WrongItemExit ();
+
+   /***** Change specific list item *****/
+   ChangeListItem[InfoType] (&Node);
+
+   /***** Show current tree nodes, if any *****/
+   Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_ITEM,
 		     Node.Hierarchy.NodCod,Node.ListItem.Cod);
 
    /***** Free list of tree nodes *****/
@@ -255,13 +360,29 @@ void TreSpc_RemoveListItem (void)
    struct Tre_Node Node;
    static void (*RemoveListItem[Inf_NUM_TYPES]) (const struct Tre_Node *Node) =
      {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
       [Inf_PROGRAM	] = Rsc_DB_RemoveResource,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_DB_RemoveQaA,
+      [Inf_LINKS	] = NULL,
+      [Inf_ASSESSMENT	] = NULL,
      };
    static const char **Txt[Inf_NUM_TYPES] =
      {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
       [Inf_PROGRAM	] = &Txt_Resource_removed,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = &Txt_Question_removed,
+      [Inf_LINKS	] = NULL,
+      [Inf_ASSESSMENT	] = NULL,
      };
 
    /***** Set info type *****/
@@ -314,8 +435,16 @@ static void TreSpc_HideOrUnhideListItem (HidVis_HiddenOrVisible_t HiddenOrVisibl
    static void (*HideOrUnhideListItem[Inf_NUM_TYPES]) (const struct Tre_Node *Node,
 						       HidVis_HiddenOrVisible_t HiddenOrVisible) =
      {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
       [Inf_PROGRAM	] = Rsc_DB_HideOrUnhideResource,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_DB_HideOrUnhideQaA,
+      [Inf_LINKS	] = NULL,
+      [Inf_ASSESSMENT	] = NULL,
      };
 
    /***** Set info type *****/
@@ -366,15 +495,39 @@ static void TreSpc_MoveUpDownListItem (TreSpc_MoveUpDown_t UpDown)
    bool Success = false;
    static unsigned (*GetOtherInd[Inf_NUM_TYPES][TreSpc_NUM_MOVEMENTS_UP_DOWN])(const struct Tre_Node *Node) =
      {
+      [Inf_UNKNOWN_TYPE	][TreSpc_MOVE_UP  ] = NULL,
+      [Inf_UNKNOWN_TYPE	][TreSpc_MOVE_DOWN] = NULL,
+      [Inf_INFORMATION	][TreSpc_MOVE_UP  ] = NULL,
+      [Inf_INFORMATION	][TreSpc_MOVE_DOWN] = NULL,
       [Inf_PROGRAM	][TreSpc_MOVE_UP  ] = Rsc_DB_GetRscIndBefore,
       [Inf_PROGRAM	][TreSpc_MOVE_DOWN] = Rsc_DB_GetRscIndAfter,
+      [Inf_TEACH_GUIDE	][TreSpc_MOVE_UP  ] = NULL,
+      [Inf_TEACH_GUIDE	][TreSpc_MOVE_DOWN] = NULL,
+      [Inf_SYLLABUS_LEC	][TreSpc_MOVE_UP  ] = NULL,
+      [Inf_SYLLABUS_LEC	][TreSpc_MOVE_DOWN] = NULL,
+      [Inf_SYLLABUS_PRA	][TreSpc_MOVE_UP  ] = NULL,
+      [Inf_SYLLABUS_PRA	][TreSpc_MOVE_DOWN] = NULL,
+      [Inf_BIBLIOGRAPHY	][TreSpc_MOVE_UP  ] = NULL,
+      [Inf_BIBLIOGRAPHY	][TreSpc_MOVE_DOWN] = NULL,
       [Inf_FAQ		][TreSpc_MOVE_UP  ] = FAQ_DB_GetQaAIndBefore,
       [Inf_FAQ		][TreSpc_MOVE_DOWN] = FAQ_DB_GetQaAIndAfter,
+      [Inf_LINKS	][TreSpc_MOVE_UP  ] = NULL,
+      [Inf_LINKS	][TreSpc_MOVE_DOWN] = NULL,
+      [Inf_ASSESSMENT	][TreSpc_MOVE_UP  ] = NULL,
+      [Inf_ASSESSMENT	][TreSpc_MOVE_DOWN] = NULL,
      };
    static long (*GetCodFromInd[Inf_NUM_TYPES]) (long NodCod,unsigned Ind) =
      {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
       [Inf_PROGRAM	] = Rsc_DB_GetRscCodFromRscInd,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_DB_GetQaACodFromQaAInd,
+      [Inf_LINKS	] = NULL,
+      [Inf_ASSESSMENT	] = NULL,
      };
 
    /***** Set info type *****/
@@ -422,13 +575,29 @@ static bool TreSpc_ExchangeListItem (const struct Tre_Node *Node,
    const struct Tre_ListItem *ListItem1 = &Node->ListItem;
    static void (*LockTable[Inf_NUM_TYPES]) (void) =
      {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
       [Inf_PROGRAM	] = Rsc_DB_LockTableResources,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_DB_LockTableQaAs,
+      [Inf_LINKS	] = NULL,
+      [Inf_ASSESSMENT	] = NULL,
      };
    static void (*UpdateInd[Inf_NUM_TYPES]) (const struct Tre_Node *Node,long Cod,int Ind) =
      {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
       [Inf_PROGRAM	] = Rsc_DB_UpdateRscInd,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_DB_UpdateQaAInd,
+      [Inf_LINKS	] = NULL,
+      [Inf_ASSESSMENT	] = NULL,
      };
 
    if (!UpdateInd[Node->InfoType])

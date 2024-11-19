@@ -111,10 +111,10 @@ typedef enum
    Tre_END_EDIT_NODE,		// List node after edition
    Tre_RECEIVE_NODE,		// Receive node data after create/edit
 
-   Tre_EDIT_SPC_LIST_ITEMS,	// List special list items of a selected node for edition
-   Tre_EDIT_PRG_RESOURCE_LINK,	// Show clipboard in a resource to select a link
-   Tre_CHG_PRG_RESOURCE_LINK,	// Change resource link
-   Tre_END_EDIT_PRG_RESOURCES,	// List resources of a selected node after edition
+   Tre_EDIT_SPC_LIST_ITEMS,	// List specific list of items of a selected node for edition
+   Tre_EDIT_SPC_ITEM,		// Show editable details of a selected specific item
+   Tre_CHG_SPC_ITEM,		// Change details of a selected specific item
+   Tre_END_EDIT_SPC_LIST_ITEMS,	// List specific list of items of a selected node after edition
   } Tre_ListingType_t;
 
 /*****************************************************************************/

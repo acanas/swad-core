@@ -40,13 +40,13 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
 
 void PrgRsc_GetResourceDataByCod (struct Tre_Node *Node);
 
-void PrgRsc_CreateResource (void);
-
+void PrgRsc_CreateResource (struct Tre_Node *Node);
 void PrgRsc_RenameResource (const struct Tre_Node *Node);
+void PrgRsc_ChangeLink (struct Tre_Node *Node);
 
 void PrgRsc_ViewResourceClipboard (void);
 void PrgRsc_RemoveResourceClipboard (void);
 
-void PrgRsc_ChangeLink (void);
+void PrgRsc_ViewResourcesAfterEdit (void);
 
 #endif

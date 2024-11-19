@@ -97,6 +97,8 @@ void Inf_ContractNodeSeeing (void);
 void Inf_ExpandNodeEditing (void);
 void Inf_ContractNodeEditing (void);
 
+void Inf_ViewListItemsAfterEdit (void);
+
 //---------------------- Force students to read info? -------------------------
 void Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void);
 void Inf_WriteMsgYouMustReadInfo (void);

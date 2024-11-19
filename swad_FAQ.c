@@ -81,7 +81,8 @@ static void FAQ_PutIconsEditRes (void *Node);
 static void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node);
 static void FAQ_WriteRowViewQaA (unsigned NumQaA,const struct Tre_Node *Node);
 static void FAQ_WriteRowEditQaA (unsigned NumQaA,unsigned NumQaAs,
-                                 struct Tre_Node *Node);
+                                 struct Tre_Node *Node,
+                                 Vie_ViewType_t AnswerViewType);
 static void FAQ_WriteRowNewQaA (unsigned NumQaAs,struct Tre_Node *Node);
 static void FAQ_PutFormsToRemEditOneQaA (struct Tre_Node *Node,
                                          unsigned NumQaA,unsigned NumQaAs);
@@ -124,9 +125,9 @@ void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
       [Tre_END_EDIT_NODE		] = Vie_EDIT,
       [Tre_RECEIVE_NODE			] = Vie_EDIT,
       [Tre_EDIT_SPC_LIST_ITEMS		] = Vie_EDIT,
-      [Tre_EDIT_PRG_RESOURCE_LINK	] = Vie_EDIT,
-      [Tre_CHG_PRG_RESOURCE_LINK	] = Vie_EDIT,
-      [Tre_END_EDIT_PRG_RESOURCES	] = Vie_EDIT,
+      [Tre_EDIT_SPC_ITEM		] = Vie_EDIT,
+      [Tre_CHG_SPC_ITEM			] = Vie_EDIT,
+      [Tre_END_EDIT_SPC_LIST_ITEMS	] = Vie_EDIT,
      };
    static Vie_ViewType_t ViewingOrEditingQaA[Tre_NUM_LISTING_TYPES] =
      {
@@ -139,9 +140,9 @@ void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
       [Tre_END_EDIT_NODE		] = Vie_VIEW,
       [Tre_RECEIVE_NODE			] = Vie_VIEW,
       [Tre_EDIT_SPC_LIST_ITEMS		] = Vie_EDIT,
-      [Tre_EDIT_PRG_RESOURCE_LINK	] = Vie_EDIT,
-      [Tre_CHG_PRG_RESOURCE_LINK	] = Vie_EDIT,
-      [Tre_END_EDIT_PRG_RESOURCES	] = Vie_VIEW,
+      [Tre_EDIT_SPC_ITEM		] = Vie_EDIT,
+      [Tre_CHG_SPC_ITEM			] = Vie_EDIT,
+      [Tre_END_EDIT_SPC_LIST_ITEMS	] = Vie_VIEW,
      };
    static void (*FAQ_PutIconsRes[Vie_NUM_VIEW_TYPES]) (void *Node) =
      {
@@ -213,7 +214,10 @@ void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
 		     FAQ_WriteRowViewQaA (NumQaA,Node);
 		     break;
 		  case Vie_EDIT:
-		     FAQ_WriteRowEditQaA (NumQaA,NumQaAs,Node);
+		     FAQ_WriteRowEditQaA (NumQaA,NumQaAs,Node,
+					  (ListingType == Tre_EDIT_SPC_ITEM &&
+					   Node->ListItem.Cod == SelectedQaACod) ? Vie_EDIT :
+										   Vie_VIEW);
 		     break;
 		  default:
 		     Err_WrongTypeExit ();
@@ -341,6 +345,7 @@ static void FAQ_WriteRowViewQaA (unsigned NumQaA,const struct Tre_Node *Node)
       HTM_TD_Begin ("class=\"PRG_MAIN LT PRG_RSC_%s\"",The_GetSuffix ());
 	 HTM_Txt (Node->QaA.Question);
 	 HTM_BR ();
+	 HTM_Txt (Node->QaA.Answer);
       HTM_TD_End ();
 
    /***** End row *****/
@@ -352,7 +357,8 @@ static void FAQ_WriteRowViewQaA (unsigned NumQaA,const struct Tre_Node *Node)
 /*****************************************************************************/
 
 static void FAQ_WriteRowEditQaA (unsigned NumQaA,unsigned NumQaAs,
-                                 struct Tre_Node *Node)
+                                 struct Tre_Node *Node,
+                                 Vie_ViewType_t AnswerViewType)
   {
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -381,8 +387,30 @@ static void FAQ_WriteRowEditQaA (unsigned NumQaA,unsigned NumQaAs,
 
          HTM_BR ();
 
-         /* Answer */
-         // TODO: Answer
+	 /* Show current answer / Show textarea to change answer */
+         switch (AnswerViewType)
+           {
+            case Vie_VIEW:
+	       /* Show current answer */
+	       HTM_Txt (Node->QaA.Answer);
+               break;
+            case Vie_EDIT:
+	       /* Show textarea to change answer */
+	       Frm_BeginFormAnchor (ActChgFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID);
+		  ParCod_PutPar (ParCod_QaA,Node->ListItem.Cod);
+		  HTM_TEXTAREA_Begin (HTM_NO_ATTR,
+				      "name=\"Answer\" rows=\"4\""
+				      " class=\"PRG_RSC_INPUT INPUT_%s\""
+				      " onchange=\"this.form.submit();return false;\"",
+				      The_GetSuffix ());
+		     HTM_Txt (Node->QaA.Answer);
+		  HTM_TEXTAREA_End ();
+	       Frm_EndForm ();
+               break;
+	    default:
+	       Err_WrongTypeExit ();
+	       break;
+           }
 
       HTM_TD_End ();
 
@@ -511,30 +539,13 @@ static void FAQ_PutParQaACod (void *QaACod)
 /************************** Create question&answer ***************************/
 /*****************************************************************************/
 
-void FAQ_CreateQaA (void)
+void FAQ_CreateQaA (struct Tre_Node *Node)
   {
-   struct Tre_Node Node;
-
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Inf_FAQ);
-
-   /***** Get parameters *****/
-   /* Get tree node */
-   Node.InfoType = Inf_FAQ;
-   Tre_GetPars (&Node);
-
-   /* Get the new question for the new question&answer */
-   Par_GetParText ("Question",Node.QaA.Question,FAQ_MAX_BYTES_QUESTION);
+   /***** Get the new question for the new question&answer *****/
+   Par_GetParText ("Question",Node->QaA.Question,FAQ_MAX_BYTES_QUESTION);
 
    /***** Create question&answer *****/
-   Node.ListItem.Cod = FAQ_DB_CreateQaA (&Node);
-
-   /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Inf_FAQ,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,Node.ListItem.Cod);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
+   Node->ListItem.Cod = FAQ_DB_CreateQaA (Node);
   }
 
 /*****************************************************************************/
@@ -557,33 +568,13 @@ void FAQ_RenameQaA (const struct Tre_Node *Node)
 /*************************** Change question&answer **************************/
 /*****************************************************************************/
 
-void FAQ_ChangeQaA (void)
+void FAQ_ChangeAnswer (struct Tre_Node *Node)
   {
-   struct Tre_Node Node;
+   /***** Get the answer *****/
+   Par_GetParText ("Answer",Node->QaA.Answer,Cns_MAX_BYTES_TEXT);
 
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Inf_FAQ);
-
-   /***** Get parameters *****/
-   /* Get tree node */
-   Node.InfoType = Inf_FAQ;
-   Tre_GetPars (&Node);
-   if (Node.Hierarchy.NodCod <= 0)
-      Err_WrongItemExit ();
-
-   /* Get the question and the answer */
-   Par_GetParText ("Question",Node.QaA.Question,FAQ_MAX_BYTES_QUESTION);
-   Par_GetParText ("Answer",Node.QaA.Answer,Cns_MAX_BYTES_TEXT);
-
-   /***** Update question&answer *****/
-   FAQ_DB_UpdateQaA (&Node);
-
-   /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Inf_FAQ,Tre_EDIT_PRG_RESOURCE_LINK,
-		     Node.Hierarchy.NodCod,Node.ListItem.Cod);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
+   /***** Update answer *****/
+   FAQ_DB_UpdateAnswer (Node);
   }
 
 /*****************************************************************************/

@@ -496,9 +496,9 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActConEdiTreNodPrg	] = {1947, 1,TabCrs,NULL			,Prg_ContractNodeEditing	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActSeeRscCliPrg	] = {1970, 1,TabCrs,NULL			,PrgRsc_ViewResourceClipboard	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRemRscCliPrg	] = {1971, 1,TabCrs,NULL			,PrgRsc_RemoveResourceClipboard	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActFrmSeePrgRsc	] = {1925, 1,TabCrs,NULL			,TreSpc_ViewListItemsAfterEdit	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmSeePrgRsc	] = {1925, 1,TabCrs,NULL			,PrgRsc_ViewResourcesAfterEdit	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActFrmEdiPrgRsc	] = {1918, 1,TabCrs,NULL			,TreSpc_EditListItems		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActNewPrgRsc	] = {1929, 1,TabCrs,NULL			,PrgRsc_CreateResource		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActNewPrgRsc	] = {1929, 1,TabCrs,NULL			,TreSpc_CreateListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRenPrgRsc	] = {1928, 1,TabCrs,NULL			,TreSpc_RenameListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActReqRemPrgRsc	] = {1919, 1,TabCrs,NULL			,TreSpc_ReqRemListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRemPrgRsc	] = {1920, 1,TabCrs,NULL			,TreSpc_RemoveListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -507,7 +507,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActUp_PrgRsc	] = {1923, 1,TabCrs,NULL			,TreSpc_MoveUpListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActDwnPrgRsc	] = {1924, 1,TabCrs,NULL			,TreSpc_MoveDownListItem	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActFrmChgPrgRsc	] = {1932, 1,TabCrs,NULL			,TreSpc_EditTreeWithFormListItem,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActChgPrgRsc	] = {1933, 1,TabCrs,NULL			,PrgRsc_ChangeLink		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgPrgRsc	] = {1933, 1,TabCrs,NULL			,TreSpc_ChangeListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Teaching guide
    [ActSeeTchGui	] = { 784, 2,TabCrs,NULL			,Inf_ShowInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
@@ -644,9 +644,9 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActExpEdiTreNodFAQ	] = {2108, 5,TabCrs,NULL			,Inf_ExpandNodeEditing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActConEdiTreNodFAQ	] = {2109, 5,TabCrs,NULL			,Inf_ContractNodeEditing	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
-   [ActFrmSeeFAQQaA	] = {2146, 5,TabCrs,NULL			,TreSpc_ViewListItemsAfterEdit	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmSeeFAQQaA	] = {2146, 5,TabCrs,NULL			,Inf_ViewListItemsAfterEdit	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActFrmEdiFAQQaA	] = {2147, 5,TabCrs,NULL			,TreSpc_EditListItems		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActNewFAQQaA	] = {2148, 5,TabCrs,NULL			,FAQ_CreateQaA			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActNewFAQQaA	] = {2148, 5,TabCrs,NULL			,TreSpc_CreateListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRenFAQQaA	] = {2149, 5,TabCrs,NULL			,TreSpc_RenameListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActReqRemFAQQaA	] = {2150, 5,TabCrs,NULL			,TreSpc_ReqRemListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRemFAQQaA	] = {2151, 5,TabCrs,NULL			,TreSpc_RemoveListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -655,7 +655,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActUp_FAQQaA	] = {2154, 5,TabCrs,NULL			,TreSpc_MoveUpListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActDwnFAQQaA	] = {2155, 5,TabCrs,NULL			,TreSpc_MoveDownListItem	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActFrmChgFAQQaA	] = {2156, 5,TabCrs,NULL			,TreSpc_EditTreeWithFormListItem,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActChgFAQQaA	] = {2157, 5,TabCrs,NULL			,FAQ_ChangeQaA			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgFAQQaA	] = {2157, 5,TabCrs,NULL			,TreSpc_ChangeListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    [ActEdiPlaTxtFAQ	] = { 405, 5,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvPlaTxtFAQ	] = { 406, 5,TabCrs,NULL			,Inf_ReceivePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},

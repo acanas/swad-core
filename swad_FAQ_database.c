@@ -277,24 +277,22 @@ void FAQ_DB_UpdateQaAInd (const struct Tre_Node *Node,long QaACod,int QaAInd)
   }
 
 /*****************************************************************************/
-/** Update the question and the answer of a question&answer given its code ***/
+/************* Update the answer of a question&answer given its code *********/
 /*****************************************************************************/
 
-void FAQ_DB_UpdateQaA (const struct Tre_Node *Node)
+void FAQ_DB_UpdateAnswer (const struct Tre_Node *Node)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    DB_QueryUPDATE ("can not update link of resource",
 		   "UPDATE faq_questions,"
 		          "tre_nodes"
-		     " SET faq_questions.Question='%s',"
-		          "faq_questions.Answer='%s'"
+		     " SET faq_questions.Answer='%s'"
 		   " WHERE faq_questions.QaACod=%ld"
 		     " AND faq_questions.NodCod=%ld"
 		     " AND faq_questions.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   Node->QaA.Question,
 		   Node->QaA.Answer,
 		   Node->ListItem.Cod,
 		   Node->Hierarchy.NodCod,
