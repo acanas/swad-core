@@ -68,9 +68,9 @@ const char *HidVis_MsgClass[HidVis_NUM_HIDDEN_VISIBLE] =
    [HidVis_HIDDEN ] = "MSG_AUT_LIGHT",
    [HidVis_VISIBLE] = "MSG_AUT",
   };
-const char *HidVis_PrgClass[HidVis_NUM_HIDDEN_VISIBLE] =
+const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE] =
   {
-   [HidVis_HIDDEN ] = " PRG_HIDDEN",
+   [HidVis_HIDDEN ] = " TRE_HIDDEN",
    [HidVis_VISIBLE] = "",
   };
 const char *HidVis_ShownStyle[HidVis_NUM_HIDDEN_VISIBLE] =

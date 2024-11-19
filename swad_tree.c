@@ -387,7 +387,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
                               long Cod)	// Specific code (resource, question,...)
   {
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
-   extern const char *HidVis_PrgClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
    static unsigned UniqueId = 0;
    static Vie_ViewType_t ViewingOrEditingProgram[Tre_NUM_LISTING_TYPES] =
      {
@@ -478,10 +478,10 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	   }
 
 	 /* Node number */
-	 HTM_TD_Begin ("class=\"PRG_NUM %s\"%s",
+	 HTM_TD_Begin ("class=\"TRE_NUM %s\"%s",
 	               The_GetColorRows (),RowSpan[ContractedOrExpanded]);
-	    HTM_DIV_Begin ("class=\"RT %s%s\"",
-			   TitleClass,HidVis_PrgClass[HiddenOrVisible]);
+	    HTM_DIV_Begin ("class=\"%s%s\"",
+			   TitleClass,HidVis_TreeClass[HiddenOrVisible]);
 	       Tre_WriteNumNode (Node->Hierarchy.Level);
 	    HTM_DIV_End ();
 	 HTM_TD_End ();
@@ -503,7 +503,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	    if (HighlightNode)
 	       HTM_ARTICLE_Begin (Tre_NODE_SECTION_ID);
 	    HTM_DIV_Begin ("class=\"LT %s%s\"",
-			   TitleClass,HidVis_PrgClass[HiddenOrVisible]);
+			   TitleClass,HidVis_TreeClass[HiddenOrVisible]);
 	       HTM_Txt (Node->Title);
 	    HTM_DIV_End ();
 	    if (HighlightNode)
@@ -537,7 +537,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 		  HTM_DIV_Begin ("id=\"%s\" class=\"%s_%s%s\"",
 				 Id,
 				 CloOpe_Class[Node->ClosedOrOpen][HidVis_VISIBLE],The_GetSuffix (),
-				 HidVis_PrgClass[HiddenOrVisible]);
+				 HidVis_TreeClass[HiddenOrVisible]);
 		     Dat_WriteLocalDateHMSFromUTC (Id,Node->TimeUTC[StartEndTime],
 						   Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 						   Dat_WRITE_TODAY |
@@ -587,7 +587,8 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	      {
 	       case Inf_PROGRAM:
 		  /* List of resources of this tree node */
-		  PrgRsc_ListNodeResources (ListingType,Node,SelectedNodCod,Cod);
+		  PrgRsc_ListNodeResources (ListingType,Node,SelectedNodCod,Cod,
+					    HiddenOrVisible);
 		  break;
 	       case Inf_FAQ:
 		  /* List of questions-answers of this tree node */
@@ -683,7 +684,7 @@ static void Tre_PutIconToContractOrExpandNode (struct Tre_Node *Node,
 static void Tre_WriteNodeText (const struct Tre_Node *Node,
 			       HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   extern const char *HidVis_PrgClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /* Text */
@@ -692,7 +693,7 @@ static void Tre_WriteNodeText (const struct Tre_Node *Node,
 		     Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
    ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
    HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
-		  The_GetSuffix (),HidVis_PrgClass[HiddenOrVisible]);
+		  The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
       HTM_Txt (Txt);
    HTM_DIV_End ();
   }
@@ -732,8 +733,7 @@ static void Tre_WriteRowToCreateNode (Inf_Type_t InfoType,
 	}
 
       /***** Item number *****/
-      HTM_TD_Begin ("class=\"PRG_NUM %s RT %s\"",
-                    TitleClass,The_GetColorRows ());
+      HTM_TD_Begin ("class=\"TRE_NUM %s %s\"",TitleClass,The_GetColorRows ());
 	 Tre_WriteNumNewNode (FormLevel);
       HTM_TD_End ();
 

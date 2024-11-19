@@ -62,7 +62,8 @@ static void PrgRsc_PutIconsEditRes (void *Node);
 static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
                                            struct Tre_Node *Node);
 static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
-                                         const struct Tre_Node *Node);
+                                         const struct Tre_Node *Node,
+                                         HidVis_HiddenOrVisible_t HiddenOrVisible);
 static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
                                          struct Tre_Node *Node,
                                          Vie_ViewType_t LinkViewType);
@@ -84,7 +85,8 @@ static void PrgRsc_PutIconsClipboard (__attribute__((unused)) void *Args);
 void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
                                struct Tre_Node *Node,
                                long SelectedNodCod,
-                               long SelectedRscCod)
+                               long SelectedRscCod,
+                               HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char *Hlp_COURSE_Program_resources;
    extern const char *Txt_Remove;
@@ -190,7 +192,7 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
 	       switch (ViewingOrEditingResOfThisNode)
 		 {
 		  case Vie_VIEW:
-		     PrgRsc_WriteRowViewResource (NumRsc,Node);
+		     PrgRsc_WriteRowViewResource (NumRsc,Node,HiddenOrVisible);
 		     break;
 		  case Vie_EDIT:
 		     PrgRsc_WriteRowEditResource (NumRsc,NumResources,Node,
@@ -319,19 +321,25 @@ static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
 /*****************************************************************************/
 
 static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
-                                         const struct Tre_Node *Node)
+                                         const struct Tre_Node *Node,
+                                         HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
+   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
+
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
       /***** Resource number *****/
-      HTM_TD_Begin ("class=\"PRG_NUM PRG_RSC_%s RT\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"TRE_NUM PRG_RSC_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (NumRsc + 1);
       HTM_TD_End ();
 
       /***** Title *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN LT PRG_RSC_%s\"",The_GetSuffix ());
-	 HTM_Txt (Node->Resource.Title);
+      HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s\"",The_GetSuffix ());
+	 HTM_SPAN_Begin ("class=\"TRE_TIT PRG_TXT_%s%s\"",
+			 The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
+	    HTM_Txt (Node->Resource.Title);
+	 HTM_SPAN_End ();
 	 HTM_BR ();
 	 Rsc_WriteLinkName (&Node->Resource.Link,Frm_PUT_FORM);
       HTM_TD_End ();
@@ -357,12 +365,12 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
       HTM_TD_End ();
 
       /***** Resource number *****/
-      HTM_TD_Begin ("class=\"PRG_NUM LT PRG_RSC_%s RT\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"TRE_NUM PRG_RSC_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (NumRsc + 1);
       HTM_TD_End ();
 
       /***** Title and link/clipboard *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN LT PRG_RSC_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s\"",The_GetSuffix ());
 
          /* Title */
 	 Frm_BeginFormAnchor (ActRenPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID);
@@ -419,13 +427,13 @@ static void PrgRsc_WriteRowNewResource (unsigned NumResources,
       HTM_TD_End ();
 
       /***** Resource number *****/
-      HTM_TD_Begin ("class=\"PRG_NUM PRG_RSC_%s RT %s\"",
+      HTM_TD_Begin ("class=\"TRE_NUM PRG_RSC_%s %s\"",
                     The_GetSuffix (),The_GetColorRows1 (1));
 	 HTM_Unsigned (NumResources + 1);
       HTM_TD_End ();
 
       /***** Title and link/clipboard *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 (1));
+      HTM_TD_Begin ("class=\"PRG_MAIN %s\"",The_GetColorRows1 (1));
 
          /* Title */
 	 Frm_BeginFormAnchor (ActNewPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID);

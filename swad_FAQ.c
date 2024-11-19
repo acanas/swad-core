@@ -84,7 +84,12 @@ static void FAQ_WriteRowViewQaA (unsigned NumQaA,struct Tre_Node *Node,
 				 HidVis_HiddenOrVisible_t HiddenOrVisible);
 static void FAQ_WriteRowEditQaA (unsigned NumQaA,unsigned NumQaAs,
                                  struct Tre_Node *Node,
-                                 Vie_ViewType_t AnswerViewType);
+                                 Vie_ViewType_t AnswerViewType,
+				 HidVis_HiddenOrVisible_t HiddenOrVisible);
+static void FAQ_WriteQuestion (char Question[FAQ_MAX_BYTES_QUESTION + 1],
+			       HidVis_HiddenOrVisible_t HiddenOrVisible);
+static void FAQ_WriteAnswer (char Answer[Cns_MAX_BYTES_TEXT + 1],
+			     HidVis_HiddenOrVisible_t HiddenOrVisible);
 static void FAQ_WriteRowNewQaA (unsigned NumQaAs,struct Tre_Node *Node);
 static void FAQ_PutFormsToRemEditOneQaA (struct Tre_Node *Node,
                                          unsigned NumQaA,unsigned NumQaAs);
@@ -220,7 +225,8 @@ void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
 		     FAQ_WriteRowEditQaA (NumQaA,NumQaAs,Node,
 					  (ListingType == Tre_EDIT_SPC_ITEM &&
 					   Node->ListItem.Cod == SelectedQaACod) ? Vie_EDIT :
-										   Vie_VIEW);
+										   Vie_VIEW,
+					  HiddenOrVisible);
 		     break;
 		  default:
 		     Err_WrongTypeExit ();
@@ -337,32 +343,18 @@ static void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
 static void FAQ_WriteRowViewQaA (unsigned NumQaA,struct Tre_Node *Node,
 				 HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   extern const char *HidVis_PrgClass[HidVis_NUM_HIDDEN_VISIBLE];
-
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
       /***** Question&Answer number *****/
-      HTM_TD_Begin ("class=\"PRG_NUM PRG_RSC_%s RT\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"TRE_NUM PRG_RSC_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (NumQaA + 1);
       HTM_TD_End ();
 
       /***** Question&Answer *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN LT PRG_RSC_%s\"",The_GetSuffix ());
-	 /* Question */
-	 HTM_Txt (Node->QaA.Question);
-
-	 // HTM_BR ();
-
-	 /* Answer */
-	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			   Node->QaA.Answer,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
-	 ALn_InsertLinks (Node->QaA.Answer,Cns_MAX_BYTES_TEXT,60);	// Insert links
-	 HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
-			The_GetSuffix (),HidVis_PrgClass[HiddenOrVisible]);
-	    HTM_Txt (Node->QaA.Answer);
-	 HTM_DIV_End ();
-
+      HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s\"",The_GetSuffix ());
+	 FAQ_WriteQuestion (Node->QaA.Question,HiddenOrVisible);
+         FAQ_WriteAnswer (Node->QaA.Answer,HiddenOrVisible);
       HTM_TD_End ();
 
    /***** End row *****/
@@ -375,7 +367,8 @@ static void FAQ_WriteRowViewQaA (unsigned NumQaA,struct Tre_Node *Node,
 
 static void FAQ_WriteRowEditQaA (unsigned NumQaA,unsigned NumQaAs,
                                  struct Tre_Node *Node,
-                                 Vie_ViewType_t AnswerViewType)
+                                 Vie_ViewType_t AnswerViewType,
+				 HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -386,12 +379,12 @@ static void FAQ_WriteRowEditQaA (unsigned NumQaA,unsigned NumQaAs,
       HTM_TD_End ();
 
       /***** Question&answer number *****/
-      HTM_TD_Begin ("class=\"PRG_NUM LT PRG_RSC_%s RT\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"TRE_NUM PRG_RSC_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (NumQaA + 1);
       HTM_TD_End ();
 
       /***** Question and answer *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN LT PRG_RSC_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s\"",The_GetSuffix ());
 
          /* Question */
 	 Frm_BeginFormAnchor (ActRenFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID);
@@ -409,14 +402,14 @@ static void FAQ_WriteRowEditQaA (unsigned NumQaA,unsigned NumQaAs,
            {
             case Vie_VIEW:
 	       /* Show current answer */
-	       HTM_Txt (Node->QaA.Answer);
+               FAQ_WriteAnswer (Node->QaA.Answer,HiddenOrVisible);
                break;
             case Vie_EDIT:
 	       /* Show textarea to change answer */
 	       Frm_BeginFormAnchor (ActChgFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID);
 		  ParCod_PutPar (ParCod_QaA,Node->ListItem.Cod);
 		  HTM_TEXTAREA_Begin (HTM_NO_ATTR,
-				      "name=\"Answer\" rows=\"4\""
+				      "name=\"Answer\" rows=\"10\""
 				      " class=\"PRG_RSC_INPUT INPUT_%s\""
 				      " onchange=\"this.form.submit();return false;\"",
 				      The_GetSuffix ());
@@ -433,6 +426,32 @@ static void FAQ_WriteRowEditQaA (unsigned NumQaA,unsigned NumQaAs,
 
    /***** End row *****/
    HTM_TR_End ();
+  }
+
+static void FAQ_WriteQuestion (char Question[FAQ_MAX_BYTES_QUESTION + 1],
+			       HidVis_HiddenOrVisible_t HiddenOrVisible)
+  {
+   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
+
+   HTM_SPAN_Begin ("class=\"TRE_TIT PRG_TXT_%s%s\"",
+		   The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
+      HTM_Txt (Question);
+   HTM_SPAN_End ();
+  }
+
+static void FAQ_WriteAnswer (char Answer[Cns_MAX_BYTES_TEXT + 1],
+			     HidVis_HiddenOrVisible_t HiddenOrVisible)
+  {
+   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
+
+   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+		     Answer,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
+   ALn_InsertLinks (Answer,Cns_MAX_BYTES_TEXT,60);	// Insert links
+
+   HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
+		  The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
+      HTM_Txt (Answer);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -452,13 +471,13 @@ static void FAQ_WriteRowNewQaA (unsigned NumQaAs,struct Tre_Node *Node)
       HTM_TD_End ();
 
       /***** Question&answer number *****/
-      HTM_TD_Begin ("class=\"PRG_NUM PRG_RSC_%s RT %s\"",
+      HTM_TD_Begin ("class=\"TRE_NUM PRG_RSC_%s %s\"",
                     The_GetSuffix (),The_GetColorRows1 (1));
 	 HTM_Unsigned (NumQaAs + 1);
       HTM_TD_End ();
 
       /***** Question and answer *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 (1));
+      HTM_TD_Begin ("class=\"PRG_MAIN %s\"",The_GetColorRows1 (1));
 
          /* Question */
 	 Frm_BeginFormAnchor (ActNewFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID);

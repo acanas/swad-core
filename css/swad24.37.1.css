@@ -1760,15 +1760,15 @@ a:hover img.CENTER_PHOTO_SHOW
 	box-sizing: border-box;
 	width: 100%;
 	}
-.PRG_NUM
+.TRE_NUM
 	{
 	width: 44px;
-	text-align: left;
+	text-align: right;
 	vertical-align: top;
+	font-weight: bold;
 	}
 .PRG_MAIN
 	{
-	box-sizing: border-box;
 	text-align: left;
 	vertical-align: top;
 	}
@@ -1825,10 +1825,10 @@ a:hover img.CENTER_PHOTO_SHOW
 .PRG_TXT_PURPLE,
 .PRG_TXT_BLUE,
 .PRG_TXT_YELLOW,
-.PRG_TXT_PINK	{color: #202020; font-size: 12pt; line-height: 1.5;}
-.PRG_TXT_DARK	{color: #e0e0e0; font-size: 12pt; line-height: 1.5;}
+.PRG_TXT_PINK	{color: #202020; font-size: 12pt;}
+.PRG_TXT_DARK	{color: #e0e0e0; font-size: 12pt;}
 
-.PRG_HIDDEN
+.TRE_HIDDEN
 	{
 	opacity: 0.33;
 	}
@@ -1842,11 +1842,33 @@ a:hover img.CENTER_PHOTO_SHOW
 .PRG_RSC_WHITE, .PRG_RSC_GREY, .PRG_RSC_PURPLE, .PRG_RSC_BLUE, .PRG_RSC_YELLOW, .PRG_RSC_PINK	{color: #202020; font-size: 12pt;}
 .PRG_RSC_DARK											{color: #e0e0e0; font-size: 12pt;}
 
-.PRG_RSC_INPUT
-	{
-	box-sizing: border-box;
-	width: 360px;
+.TRE_TIT  {font-weight: bold;}
+
+@media only screen and (max-width: 480px)
+	{	/* For mobile-phones */
+	.PRG_RSC_INPUT
+		{
+		box-sizing: border-box;
+		width: 120px;
+		}
 	}
+@media only screen and (min-width: 480px) and (max-width: 1024px)
+	{	/* For desktop */
+	.PRG_RSC_INPUT
+		{
+		box-sizing: border-box;
+		width: 240px;
+		}
+	}
+@media only screen and (min-width: 1024px)
+	{	/* For desktop */
+	.PRG_RSC_INPUT
+		{
+		box-sizing: border-box;
+		width: 640px;
+		}
+	}
+
 
 .PRG_LNK_WHITE		{color: #4d88a1; font-size: 12pt;}
 .PRG_LNK_GREY		{color: #4d88a1; font-size: 12pt;}
@@ -2395,8 +2417,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 .PHOTOR60x80	{width: 60px; height: 80px; border-radius: 3px; vertical-align: middle;}
 .PHOTOR186x248	{width: 186px; height: 248px; border-radius: 4px;}
 
-.PHOTO_REC		{width: 100%; border-radius: 4px;
-			     max-width: 100%; height: auto;}
+.PHOTO_REC	{width: 100%; border-radius: 4px; max-width: 100%; height: auto;}
 
 .IMG_USR
 	{
@@ -4497,29 +4518,29 @@ legend {font-size: 12pt; font-weight: bold;}
 
 @media only screen and (max-width: 590px)
 	{	/* For mobile-phones (maximum width visible on Moto G4 vertical) */
-	.Tml_WIDTH				{width: 276px;}	/* 556-280 */
-	.Tml_RIGHT_WIDTH		{width: 220px;}	/* 500-280 */
+	.Tml_WIDTH		{width: 276px;}	/* 556-280 */
+	.Tml_RIGHT_WIDTH	{width: 220px;}	/* 500-280 */
 	.Tml_RIGHT_AUTHOR_WIDTH	{width: 60px;}	/* 340-280 */
-	.Tml_COM_WIDTH			{width: 180px;}	/* 460-280 */
+	.Tml_COM_WIDTH		{width: 180px;}	/* 460-280 */
 	.Tml_COM_AUTHOR_WIDTH	{width: 20px;}	/* 300-280 */
 	.Tml_MED_INPUT_WIDTH	{width: 120px;}	/* 400-280 */
-	.TmlNot_FOOT_WIDTH		{width: 220px;}	/* 500-280 */
+	.TmlNot_FOOT_WIDTH	{width: 220px;}	/* 500-280 */
 	.Tml_COMM_FOOT_WIDTH	{width: 180px;}	/* 460-280 */
-	.Tml_FAV_NOT_WIDTH		{width: 100px;}	/* (480-280)/2 */
-	.Tml_SHA_NOT_WIDTH		{width: 100px;}	/* (480-280)/2 */
-	.Tml_FAV_COM_WIDTH		{width: 160px;}	/* 440-280 */
+	.Tml_FAV_NOT_WIDTH	{width: 100px;}	/* (480-280)/2 */
+	.Tml_SHA_NOT_WIDTH	{width: 100px;}	/* (480-280)/2 */
+	.Tml_FAV_COM_WIDTH	{width: 160px;}	/* 440-280 */
 	}
 @media only screen and (min-width: 590px)
 	{	/* For tablets and desktop (maximum width visible on Moto G4 horizontal) */
-	.Tml_WIDTH				{width: 556px;}
-	.Tml_RIGHT_WIDTH		{width: 500px;}
+	.Tml_WIDTH		{width: 556px;}
+	.Tml_RIGHT_WIDTH	{width: 500px;}
 	.Tml_RIGHT_AUTHOR_WIDTH	{width: 340px;}
-	.Tml_COM_WIDTH			{width: 460px;}
+	.Tml_COM_WIDTH		{width: 460px;}
 	.Tml_COM_AUTHOR_WIDTH	{width: 300px;}
 	.Tml_MED_INPUT_WIDTH	{width: 400px;}
-	.Tml_FAV_NOT_WIDTH		{width: 240px;}
-	.Tml_SHA_NOT_WIDTH		{width: 240px;}
-	.Tml_FAV_COM_WIDTH		{width: 440px;}
+	.Tml_FAV_NOT_WIDTH	{width: 240px;}
+	.Tml_SHA_NOT_WIDTH	{width: 240px;}
+	.Tml_FAV_COM_WIDTH	{width: 440px;}
 	}
 
 .Tml_NEW_PUB_WHITE,
