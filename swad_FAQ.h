@@ -39,7 +39,8 @@ void FAQ_ResetSpcFields (struct Tre_Node *Node);
 void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
                        struct Tre_Node *Node,
                        long SelectedNodCod,
-                       long SelectedQaACod);
+                       long SelectedQaACod,
+                       HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 void FAQ_GetQaADataByCod (struct Tre_Node *Node);
 

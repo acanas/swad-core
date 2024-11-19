@@ -591,7 +591,8 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 		  break;
 	       case Inf_FAQ:
 		  /* List of questions-answers of this tree node */
-		  FAQ_ListNodeQaAs (ListingType,Node,SelectedNodCod,Cod);
+		  FAQ_ListNodeQaAs (ListingType,Node,SelectedNodCod,Cod,
+				    HiddenOrVisible);
 		  break;
 	       default:
 		  Ale_ShowAlert (Ale_INFO,"Specific information will appear here.");

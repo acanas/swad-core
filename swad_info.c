@@ -574,7 +574,7 @@ void Inf_ContractNodeEditing (void)
   }
 
 /*****************************************************************************/
-/***************** View questions&answers after editing them *****************/
+/************** View specific list of items after editing them ***************/
 /*****************************************************************************/
 
 void Inf_ViewListItemsAfterEdit (void)
@@ -586,19 +586,140 @@ void Inf_ViewListItemsAfterEdit (void)
    Inf_AfterTree ();
   }
 
-/* TODO: Add functions similar to Inf_ViewListItemsAfterEdit () for:
-   [ActFrmEdiFAQQaA	] = {2147, 5,TabCrs,NULL			,TreSpc_EditListItems		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActNewFAQQaA	] = {2148, 5,TabCrs,NULL			,TreSpc_CreateListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRenFAQQaA	] = {2149, 5,TabCrs,NULL			,TreSpc_RenameListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActReqRemFAQQaA	] = {2150, 5,TabCrs,NULL			,TreSpc_ReqRemListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRemFAQQaA	] = {2151, 5,TabCrs,NULL			,TreSpc_RemoveListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActHidFAQQaA	] = {2152, 5,TabCrs,NULL			,TreSpc_HideListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActUnhFAQQaA	] = {2153, 5,TabCrs,NULL			,TreSpc_UnhideListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActUp_FAQQaA	] = {2154, 5,TabCrs,NULL			,TreSpc_MoveUpListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActDwnFAQQaA	] = {2155, 5,TabCrs,NULL			,TreSpc_MoveDownListItem	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActFrmChgFAQQaA	] = {2156, 5,TabCrs,NULL			,TreSpc_EditTreeWithFormListItem,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActChgFAQQaA	] = {2157, 5,TabCrs,NULL			,TreSpc_ChangeListItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
- */
+/*****************************************************************************/
+/************************ Edit specific list of items ************************/
+/*****************************************************************************/
+
+void Inf_EditListItems (void)
+  {
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      TreSpc_EditListItems (Info.Type);
+   Inf_AfterTree ();
+  }
+
+/*****************************************************************************/
+/************************ Create new specific list item **********************/
+/*****************************************************************************/
+
+void Inf_CreateListItem (void)
+  {
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      TreSpc_CreateListItem (Info.Type);
+   Inf_AfterTree ();
+  }
+
+/*****************************************************************************/
+/************************* Rename specific list item *************************/
+/*****************************************************************************/
+
+void Inf_RenameListItem (void)
+  {
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      TreSpc_RenameListItem (Info.Type);
+   Inf_AfterTree ();
+  }
+
+/*****************************************************************************/
+/********** Ask for confirmation of removing an specific list item ***********/
+/*****************************************************************************/
+
+void Inf_ReqRemListItem (void)
+  {
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      TreSpc_ReqRemListItem (Info.Type);
+   Inf_AfterTree ();
+  }
+
+/*****************************************************************************/
+/*********************** Remove an specific list item ************************/
+/*****************************************************************************/
+
+void Inf_RemoveListItem (void)
+  {
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      TreSpc_RemoveListItem (Info.Type);
+   Inf_AfterTree ();
+  }
+
+/*****************************************************************************/
+/********************** Hide/unhide specific list item ***********************/
+/*****************************************************************************/
+
+void Inf_HideListItem (void)
+  {
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      TreSpc_HideOrUnhideListItem (Info.Type,HidVis_HIDDEN);
+   Inf_AfterTree ();
+  }
+
+void Inf_UnhideListItem (void)
+  {
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      TreSpc_HideOrUnhideListItem (Info.Type,HidVis_VISIBLE);
+   Inf_AfterTree ();
+  }
+
+/*****************************************************************************/
+/*********************** Move up/down specific list item *********************/
+/*****************************************************************************/
+
+void Inf_MoveUpListItem (void)
+  {
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      TreSpc_MoveUpDownListItem (Info.Type,TreSpc_MOVE_UP);
+   Inf_AfterTree ();
+  }
+
+void Inf_MoveDownListItem (void)
+  {
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      TreSpc_MoveUpDownListItem (Info.Type,TreSpc_MOVE_DOWN);
+   Inf_AfterTree ();
+  }
+
+/*****************************************************************************/
+/************* Edit tree with form to change specific list item **************/
+/*****************************************************************************/
+
+void Inf_EditTreeWithFormListItem (void)
+  {
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      TreSpc_EditTreeWithFormListItem (Info.Type);
+   Inf_AfterTree ();
+  }
+
+/*****************************************************************************/
+/************************ Change specific list item **************************/
+/*****************************************************************************/
+
+void Inf_ChangeListItem (void)
+  {
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      TreSpc_ChangeListItem (Info.Type);
+   Inf_AfterTree ();
+  }
 
 /*****************************************************************************/
 /******************** Put icons to view/edit course info *********************/

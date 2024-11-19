@@ -97,7 +97,19 @@ void Inf_ContractNodeSeeing (void);
 void Inf_ExpandNodeEditing (void);
 void Inf_ContractNodeEditing (void);
 
+//------------------------ Specific list of items -----------------------------
 void Inf_ViewListItemsAfterEdit (void);
+void Inf_EditListItems (void);
+void Inf_CreateListItem (void);
+void Inf_RenameListItem (void);
+void Inf_ReqRemListItem (void);
+void Inf_RemoveListItem (void);
+void Inf_HideListItem (void);
+void Inf_UnhideListItem (void);
+void Inf_MoveUpListItem (void);
+void Inf_MoveDownListItem (void);
+void Inf_EditTreeWithFormListItem (void);
+void Inf_ChangeListItem (void);
 
 //---------------------- Force students to read info? -------------------------
 void Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void);

@@ -40,13 +40,24 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
 
 void PrgRsc_GetResourceDataByCod (struct Tre_Node *Node);
 
-void PrgRsc_CreateResource (struct Tre_Node *Node);
-void PrgRsc_RenameResource (const struct Tre_Node *Node);
-void PrgRsc_ChangeLink (struct Tre_Node *Node);
-
 void PrgRsc_ViewResourceClipboard (void);
 void PrgRsc_RemoveResourceClipboard (void);
 
+//------------------------ Specific list of items -----------------------------
 void PrgRsc_ViewResourcesAfterEdit (void);
+void PrgRsc_EditListResources (void);
+void PrgRsc_CreateResource (void);
+void PrgRsc_CreateResourceInternal (struct Tre_Node *Node);
+void PrgRsc_RenameResource (void);
+void PrgRsc_RenameResourceInternal (const struct Tre_Node *Node);
+void PrgRsc_ReqRemResource (void);
+void PrgRsc_RemoveResource (void);
+void PrgRsc_HideResource (void);
+void PrgRsc_UnhideResource (void);
+void PrgRsc_MoveUpResource (void);
+void PrgRsc_MoveDownResource (void);
+void PrgRsc_EditTreeWithFormResource (void);
+void PrgRsc_ChangeResourceLink (void);
+void PrgRsc_ChangeResourceLinkInternal (struct Tre_Node *Node);
 
 #endif

@@ -37,6 +37,7 @@
 #include "swad_alert.h"
 #include "swad_assignment_database.h"
 #include "swad_attendance_database.h"
+#include "swad_autolink.h"
 #include "swad_box.h"
 #include "swad_button.h"
 #include "swad_database.h"
@@ -79,7 +80,8 @@ static void FAQ_PutIconsViewRes (void *Node);
 static void FAQ_PutIconsEditRes (void *Node);
 
 static void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node);
-static void FAQ_WriteRowViewQaA (unsigned NumQaA,const struct Tre_Node *Node);
+static void FAQ_WriteRowViewQaA (unsigned NumQaA,struct Tre_Node *Node,
+				 HidVis_HiddenOrVisible_t HiddenOrVisible);
 static void FAQ_WriteRowEditQaA (unsigned NumQaA,unsigned NumQaAs,
                                  struct Tre_Node *Node,
                                  Vie_ViewType_t AnswerViewType);
@@ -105,7 +107,8 @@ void FAQ_ResetSpcFields (struct Tre_Node *Node)
 void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
                        struct Tre_Node *Node,
                        long SelectedNodCod,
-                       long SelectedQaACod)
+                       long SelectedQaACod,
+                       HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char *Hlp_COURSE_FAQ;
    extern const char *Txt_Remove;
@@ -211,7 +214,7 @@ void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
 	       switch (ViewingOrEditingQaAOfThisNode)
 		 {
 		  case Vie_VIEW:
-		     FAQ_WriteRowViewQaA (NumQaA,Node);
+		     FAQ_WriteRowViewQaA (NumQaA,Node,HiddenOrVisible);
 		     break;
 		  case Vie_EDIT:
 		     FAQ_WriteRowEditQaA (NumQaA,NumQaAs,Node,
@@ -331,8 +334,11 @@ static void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
 /*********************** Show one Question&Answer ****************************/
 /*****************************************************************************/
 
-static void FAQ_WriteRowViewQaA (unsigned NumQaA,const struct Tre_Node *Node)
+static void FAQ_WriteRowViewQaA (unsigned NumQaA,struct Tre_Node *Node,
+				 HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
+   extern const char *HidVis_PrgClass[HidVis_NUM_HIDDEN_VISIBLE];
+
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
@@ -343,9 +349,20 @@ static void FAQ_WriteRowViewQaA (unsigned NumQaA,const struct Tre_Node *Node)
 
       /***** Question&Answer *****/
       HTM_TD_Begin ("class=\"PRG_MAIN LT PRG_RSC_%s\"",The_GetSuffix ());
+	 /* Question */
 	 HTM_Txt (Node->QaA.Question);
-	 HTM_BR ();
-	 HTM_Txt (Node->QaA.Answer);
+
+	 // HTM_BR ();
+
+	 /* Answer */
+	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			   Node->QaA.Answer,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
+	 ALn_InsertLinks (Node->QaA.Answer,Cns_MAX_BYTES_TEXT,60);	// Insert links
+	 HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
+			The_GetSuffix (),HidVis_PrgClass[HiddenOrVisible]);
+	    HTM_Txt (Node->QaA.Answer);
+	 HTM_DIV_End ();
+
       HTM_TD_End ();
 
    /***** End row *****/
@@ -570,8 +587,8 @@ void FAQ_RenameQaA (const struct Tre_Node *Node)
 
 void FAQ_ChangeAnswer (struct Tre_Node *Node)
   {
-   /***** Get the answer *****/
-   Par_GetParText ("Answer",Node->QaA.Answer,Cns_MAX_BYTES_TEXT);
+   /***** Get answer *****/
+   Par_GetParHTML ("Answer",Node->QaA.Answer,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Update answer *****/
    FAQ_DB_UpdateAnswer (Node);

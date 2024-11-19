@@ -36,17 +36,8 @@
 #include "swad_tree_specific.h"
 
 /*****************************************************************************/
-/************** External global variables from others modules ****************/
-/*****************************************************************************/
-
-// extern struct Globals Gbl;
-
-/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
-
-static void TreSpc_HideOrUnhideListItem (HidVis_HiddenOrVisible_t HiddenOrVisible);
-static void TreSpc_MoveUpDownListItem (TreSpc_MoveUpDown_t UpDown);
 
 static bool TreSpc_ExchangeListItem (const struct Tre_Node *Node,
 				     const struct Tre_ListItem *ListItem2);
@@ -108,13 +99,9 @@ void TreSpc_ViewListItemsAfterEdit (Inf_Type_t InfoType)
 /************************ Edit specific list of items ************************/
 /*****************************************************************************/
 
-void TreSpc_EditListItems (void)
+void TreSpc_EditListItems (Inf_Type_t InfoType)
   {
-   Inf_Type_t InfoType;
    struct Tre_Node Node;
-
-   /***** Set info type *****/
-   InfoType = Inf_AsignInfoType ();
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (InfoType);
@@ -135,13 +122,9 @@ void TreSpc_EditListItems (void)
 /************* Edit tree with form to change specific list item **************/
 /*****************************************************************************/
 
-void TreSpc_EditTreeWithFormListItem (void)
+void TreSpc_EditTreeWithFormListItem (Inf_Type_t InfoType)
   {
-   Inf_Type_t InfoType;
    struct Tre_Node Node;
-
-   /***** Set info type *****/
-   InfoType = Inf_AsignInfoType ();
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (InfoType);
@@ -164,15 +147,14 @@ void TreSpc_EditTreeWithFormListItem (void)
 /************************ Create new specific list item **********************/
 /*****************************************************************************/
 
-void TreSpc_CreateListItem (void)
+void TreSpc_CreateListItem (Inf_Type_t InfoType)
   {
-   Inf_Type_t InfoType;
    struct Tre_Node Node;
    static void (*CreateListItem[Inf_NUM_TYPES]) (struct Tre_Node *Node) =
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = PrgRsc_CreateResource,
+      [Inf_PROGRAM	] = PrgRsc_CreateResourceInternal,
       [Inf_TEACH_GUIDE	] = NULL,
       [Inf_SYLLABUS_LEC	] = NULL,
       [Inf_SYLLABUS_PRA	] = NULL,
@@ -182,8 +164,7 @@ void TreSpc_CreateListItem (void)
       [Inf_ASSESSMENT	] = NULL,
      };
 
-   /***** Set info type *****/
-   InfoType = Inf_AsignInfoType ();
+   /***** Check info type *****/
    if (!CreateListItem[InfoType])
       Err_WrongTypeExit ();
 
@@ -210,15 +191,14 @@ void TreSpc_CreateListItem (void)
 /************************* Rename specific list item *************************/
 /*****************************************************************************/
 
-void TreSpc_RenameListItem (void)
+void TreSpc_RenameListItem (Inf_Type_t InfoType)
   {
-   Inf_Type_t InfoType;
    struct Tre_Node Node;
    static void (*RenameListItem[Inf_NUM_TYPES]) (const struct Tre_Node *Node) =
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = PrgRsc_RenameResource,
+      [Inf_PROGRAM	] = PrgRsc_RenameResourceInternal,
       [Inf_TEACH_GUIDE	] = NULL,
       [Inf_SYLLABUS_LEC	] = NULL,
       [Inf_SYLLABUS_PRA	] = NULL,
@@ -228,8 +208,7 @@ void TreSpc_RenameListItem (void)
       [Inf_ASSESSMENT	] = NULL,
      };
 
-   /***** Set info type *****/
-   InfoType = Inf_AsignInfoType ();
+   /***** Check info type *****/
    if (!RenameListItem[InfoType])
       Err_WrongTypeExit ();
 
@@ -257,15 +236,14 @@ void TreSpc_RenameListItem (void)
 /************************ Change specific list item **************************/
 /*****************************************************************************/
 
-void TreSpc_ChangeListItem (void)
+void TreSpc_ChangeListItem (Inf_Type_t InfoType)
   {
-   Inf_Type_t InfoType;
    struct Tre_Node Node;
    static void (*ChangeListItem[Inf_NUM_TYPES]) (struct Tre_Node *Node) =
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = PrgRsc_ChangeLink,
+      [Inf_PROGRAM	] = PrgRsc_ChangeResourceLinkInternal,
       [Inf_TEACH_GUIDE	] = NULL,
       [Inf_SYLLABUS_LEC	] = NULL,
       [Inf_SYLLABUS_PRA	] = NULL,
@@ -275,8 +253,7 @@ void TreSpc_ChangeListItem (void)
       [Inf_ASSESSMENT	] = NULL,
      };
 
-   /***** Set info type *****/
-   InfoType = Inf_AsignInfoType ();
+   /***** Check info type *****/
    if (!ChangeListItem[InfoType])
       Err_WrongTypeExit ();
 
@@ -304,15 +281,11 @@ void TreSpc_ChangeListItem (void)
 /********** Ask for confirmation of removing an specific list item ***********/
 /*****************************************************************************/
 
-void TreSpc_ReqRemListItem (void)
+void TreSpc_ReqRemListItem (Inf_Type_t InfoType)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_resource_X;
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
-   Inf_Type_t InfoType;
    struct Tre_Node Node;
-
-   /***** Set info type *****/
-   InfoType = Inf_AsignInfoType ();
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (InfoType);
@@ -352,11 +325,10 @@ void TreSpc_ReqRemListItem (void)
 /*********************** Remove an specific list item ************************/
 /*****************************************************************************/
 
-void TreSpc_RemoveListItem (void)
+void TreSpc_RemoveListItem (Inf_Type_t InfoType)
   {
    extern const char *Txt_Resource_removed;
    extern const char *Txt_Question_removed;
-   Inf_Type_t InfoType;
    struct Tre_Node Node;
    static void (*RemoveListItem[Inf_NUM_TYPES]) (const struct Tre_Node *Node) =
      {
@@ -385,8 +357,7 @@ void TreSpc_RemoveListItem (void)
       [Inf_ASSESSMENT	] = NULL,
      };
 
-   /***** Set info type *****/
-   InfoType = Inf_AsignInfoType ();
+   /***** Check info type *****/
    if (!RemoveListItem[InfoType])
       Err_WrongTypeExit ();
 
@@ -418,19 +389,9 @@ void TreSpc_RemoveListItem (void)
 /********************** Hide/unhide specific list item ***********************/
 /*****************************************************************************/
 
-void TreSpc_HideListItem (void)
+void TreSpc_HideOrUnhideListItem (Inf_Type_t InfoType,
+				  HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   TreSpc_HideOrUnhideListItem (HidVis_HIDDEN);
-  }
-
-void TreSpc_UnhideListItem (void)
-  {
-   TreSpc_HideOrUnhideListItem (HidVis_VISIBLE);
-  }
-
-static void TreSpc_HideOrUnhideListItem (HidVis_HiddenOrVisible_t HiddenOrVisible)
-  {
-   Inf_Type_t InfoType;
    struct Tre_Node Node;
    static void (*HideOrUnhideListItem[Inf_NUM_TYPES]) (const struct Tre_Node *Node,
 						       HidVis_HiddenOrVisible_t HiddenOrVisible) =
@@ -447,8 +408,7 @@ static void TreSpc_HideOrUnhideListItem (HidVis_HiddenOrVisible_t HiddenOrVisibl
       [Inf_ASSESSMENT	] = NULL,
      };
 
-   /***** Set info type *****/
-   InfoType = Inf_AsignInfoType ();
+   /***** Check info type *****/
    if (!HideOrUnhideListItem[InfoType])
       Err_WrongTypeExit ();
 
@@ -476,20 +436,10 @@ static void TreSpc_HideOrUnhideListItem (HidVis_HiddenOrVisible_t HiddenOrVisibl
 /*********************** Move up/down specific list item *********************/
 /*****************************************************************************/
 
-void TreSpc_MoveUpListItem (void)
-  {
-   TreSpc_MoveUpDownListItem (TreSpc_MOVE_UP);
-  }
-
-void TreSpc_MoveDownListItem (void)
-  {
-   TreSpc_MoveUpDownListItem (TreSpc_MOVE_DOWN);
-  }
-
-static void TreSpc_MoveUpDownListItem (TreSpc_MoveUpDown_t UpDown)
+void TreSpc_MoveUpDownListItem (Inf_Type_t InfoType,
+				TreSpc_MoveUpDown_t UpDown)
   {
    extern const char *Txt_Movement_not_allowed;
-   Inf_Type_t InfoType;
    struct Tre_Node Node;
    struct Tre_ListItem SpcItem2;
    bool Success = false;
@@ -530,8 +480,7 @@ static void TreSpc_MoveUpDownListItem (TreSpc_MoveUpDown_t UpDown)
       [Inf_ASSESSMENT	] = NULL,
      };
 
-   /***** Set info type *****/
-   InfoType = Inf_AsignInfoType ();
+   /***** Check info type *****/
    if (!GetCodFromInd[InfoType])
       Err_WrongTypeExit ();
 
