@@ -1290,14 +1290,14 @@ void Tre_GetPars (struct Tre_Node *Node)
      {
       case Inf_PROGRAM:
 	 /***** Try to get node resource *****/
-	 Node->ListItem.Cod = ParCod_GetPar (ParCod_Rsc);
+	 Node->SpcItem.Cod = ParCod_GetPar (ParCod_Rsc);
 
 	 /***** Get data of the tree node from database *****/
 	 PrgRsc_GetResourceDataByCod (Node);
 	 break;
       case Inf_FAQ:
 	 /***** Try to get node question&answer *****/
-	 Node->ListItem.Cod = ParCod_GetPar (ParCod_QaA);
+	 Node->SpcItem.Cod = ParCod_GetPar (ParCod_QaA);
 
 	 /***** Get data of the tree node from database *****/
 	 FAQ_GetQaADataByCod (Node);
@@ -1479,7 +1479,7 @@ void Tre_ResetNode (struct Tre_Node *Node)
    Node->TimeUTC[Dat_END_TIME] = (time_t) 0;
    Node->ClosedOrOpen = CloOpe_CLOSED;
    Node->Title[0] = '\0';
-   TreSpc_ResetListItem (Node);
+   TreSpc_ResetItem (Node);
   }
 
 /*****************************************************************************/

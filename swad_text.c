@@ -2315,6 +2315,29 @@ const char *Txt_Answer_survey =
 	"Answer survey";	// Çeviri lazim!
 #endif
 
+const char *Txt_Answer =
+#if   L==1	// ca
+	"Resposta";
+#elif L==2	// de
+	"Antwort";
+#elif L==3	// en
+	"Answer";
+#elif L==4	// es
+	"Respuesta";
+#elif L==5	// fr
+	"R&eacute;ponse";
+#elif L==6	// gn
+	"Mbohov&aacute;i";
+#elif L==7	// it
+	"Risposta";
+#elif L==8	// pl
+	"Odpowied&zacute;";
+#elif L==9	// pt
+	"Resposta";
+#elif L==10	// tr
+	"Cevap";
+#endif
+
 const char *Txt_Answers =		// Answers of test
 #if   L==1	// ca
 	"Respostes";
@@ -24564,7 +24587,7 @@ const char *Txt_New_question =
 #elif L==5	// fr
 	"Nouvelle question";
 #elif L==6	// gn
-	"Nueva pregunta";	// Okoteve traducción
+	"Porandu pyahu";
 #elif L==7	// it
 	"Nuova domanda";
 #elif L==8	// pl

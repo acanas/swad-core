@@ -46,22 +46,22 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void TreSpc_ResetListItem (struct Tre_Node *Node);
+void TreSpc_ResetItem (struct Tre_Node *Node);
 void TreSpc_ViewListItemsAfterEdit (Inf_Type_t InfoType);
 void TreSpc_EditListItems (Inf_Type_t InfoType);
-void TreSpc_EditTreeWithFormListItem (Inf_Type_t InfoType);
+void TreSpc_EditTreeWithFormItem (Inf_Type_t InfoType);
 
-void TreSpc_CreateListItem (Inf_Type_t InfoType);
-void TreSpc_RenameListItem (Inf_Type_t InfoType);
-void TreSpc_ChangeListItem (Inf_Type_t InfoType);
+void TreSpc_CreateItem (Inf_Type_t InfoType);
+void TreSpc_RenameItem (Inf_Type_t InfoType);
+void TreSpc_ChangeItem (Inf_Type_t InfoType);
 
-void TreSpc_ReqRemListItem (Inf_Type_t InfoType);
-void TreSpc_RemoveListItem (Inf_Type_t InfoType);
+void TreSpc_ReqRemItem (Inf_Type_t InfoType);
+void TreSpc_RemoveItem (Inf_Type_t InfoType);
 
-void TreSpc_HideOrUnhideListItem (Inf_Type_t InfoType,
-				  HidVis_HiddenOrVisible_t HiddenOrVisible);
+void TreSpc_HideOrUnhideItem (Inf_Type_t InfoType,
+			      HidVis_HiddenOrVisible_t HiddenOrVisible);
 
-void TreSpc_MoveUpDownListItem (Inf_Type_t InfoType,
-				TreSpc_MoveUpDown_t UpDown);
+void TreSpc_MoveUpDownItem (Inf_Type_t InfoType,
+			    TreSpc_MoveUpDown_t UpDown);
 
 #endif

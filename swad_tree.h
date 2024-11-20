@@ -51,7 +51,7 @@ struct Tre_NodeHierarchy
    HidVis_HiddenOrVisible_t HiddenOrVisible;
   };
 
-struct Tre_ListItem
+struct Tre_SpcItem
   {
    long Cod;
    unsigned Ind;	// 1, 2, 3...
@@ -66,7 +66,7 @@ struct Tre_Node
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    CloOpe_ClosedOrOpen_t ClosedOrOpen;
    char Title[Tre_MAX_BYTES_NODE_TITLE + 1];
-   struct Tre_ListItem ListItem;
+   struct Tre_SpcItem SpcItem;
    struct Rsc_Resource Resource;
    struct FAQ_QaA QaA;
   };

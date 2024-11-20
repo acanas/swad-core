@@ -39,14 +39,14 @@
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static bool TreSpc_ExchangeListItem (const struct Tre_Node *Node,
-				     const struct Tre_ListItem *ListItem2);
+static bool TreSpc_ExchangeItems (const struct Tre_Node *Node,
+				  const struct Tre_SpcItem *Item2);
 
 /*****************************************************************************/
 /************************ Reset specific list item ***************************/
 /*****************************************************************************/
 
-void TreSpc_ResetListItem (struct Tre_Node *Node)
+void TreSpc_ResetItem (struct Tre_Node *Node)
   {
    static void (*ResetSpcFields[Inf_NUM_TYPES]) (struct Tre_Node *Node) =
      {
@@ -63,9 +63,9 @@ void TreSpc_ResetListItem (struct Tre_Node *Node)
      };
 
    /***** Reset common fields of specific item *****/
-   Node->ListItem.Cod = -1L;
-   Node->ListItem.Ind = 0;
-   Node->ListItem.HiddenOrVisible = HidVis_VISIBLE;
+   Node->SpcItem.Cod = -1L;
+   Node->SpcItem.Ind = 0;
+   Node->SpcItem.HiddenOrVisible = HidVis_VISIBLE;
 
    /***** Reset specific fields of specific item *****/
    if (ResetSpcFields[Node->InfoType])
@@ -122,7 +122,7 @@ void TreSpc_EditListItems (Inf_Type_t InfoType)
 /************* Edit tree with form to change specific list item **************/
 /*****************************************************************************/
 
-void TreSpc_EditTreeWithFormListItem (Inf_Type_t InfoType)
+void TreSpc_EditTreeWithFormItem (Inf_Type_t InfoType)
   {
    struct Tre_Node Node;
 
@@ -137,7 +137,7 @@ void TreSpc_EditTreeWithFormListItem (Inf_Type_t InfoType)
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_ITEM,
-		     Node.Hierarchy.NodCod,Node.ListItem.Cod);
+		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -147,10 +147,10 @@ void TreSpc_EditTreeWithFormListItem (Inf_Type_t InfoType)
 /************************ Create new specific list item **********************/
 /*****************************************************************************/
 
-void TreSpc_CreateListItem (Inf_Type_t InfoType)
+void TreSpc_CreateItem (Inf_Type_t InfoType)
   {
    struct Tre_Node Node;
-   static void (*CreateListItem[Inf_NUM_TYPES]) (struct Tre_Node *Node) =
+   static void (*CreateItem[Inf_NUM_TYPES]) (struct Tre_Node *Node) =
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = NULL,
@@ -165,7 +165,7 @@ void TreSpc_CreateListItem (Inf_Type_t InfoType)
      };
 
    /***** Check info type *****/
-   if (!CreateListItem[InfoType])
+   if (!CreateItem[InfoType])
       Err_WrongTypeExit ();
 
    /***** Get list of tree nodes *****/
@@ -177,11 +177,11 @@ void TreSpc_CreateListItem (Inf_Type_t InfoType)
    Tre_GetPars (&Node);
 
    /***** Create specific list item *****/
-   CreateListItem[InfoType] (&Node);
+   CreateItem[InfoType] (&Node);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,Node.ListItem.Cod);
+   Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_ITEM,
+		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -191,10 +191,10 @@ void TreSpc_CreateListItem (Inf_Type_t InfoType)
 /************************* Rename specific list item *************************/
 /*****************************************************************************/
 
-void TreSpc_RenameListItem (Inf_Type_t InfoType)
+void TreSpc_RenameItem (Inf_Type_t InfoType)
   {
    struct Tre_Node Node;
-   static void (*RenameListItem[Inf_NUM_TYPES]) (const struct Tre_Node *Node) =
+   static void (*RenameItem[Inf_NUM_TYPES]) (const struct Tre_Node *Node) =
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = NULL,
@@ -209,7 +209,7 @@ void TreSpc_RenameListItem (Inf_Type_t InfoType)
      };
 
    /***** Check info type *****/
-   if (!RenameListItem[InfoType])
+   if (!RenameItem[InfoType])
       Err_WrongTypeExit ();
 
    /***** Get list of tree nodes *****/
@@ -222,11 +222,11 @@ void TreSpc_RenameListItem (Inf_Type_t InfoType)
       Err_WrongItemExit ();
 
    /***** Rename specific list item *****/
-   RenameListItem[InfoType] (&Node);
+   RenameItem[InfoType] (&Node);
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,Node.ListItem.Cod);
+		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -236,10 +236,10 @@ void TreSpc_RenameListItem (Inf_Type_t InfoType)
 /************************ Change specific list item **************************/
 /*****************************************************************************/
 
-void TreSpc_ChangeListItem (Inf_Type_t InfoType)
+void TreSpc_ChangeItem (Inf_Type_t InfoType)
   {
    struct Tre_Node Node;
-   static void (*ChangeListItem[Inf_NUM_TYPES]) (struct Tre_Node *Node) =
+   static void (*ChangeItem[Inf_NUM_TYPES]) (struct Tre_Node *Node) =
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = NULL,
@@ -248,13 +248,13 @@ void TreSpc_ChangeListItem (Inf_Type_t InfoType)
       [Inf_SYLLABUS_LEC	] = NULL,
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = NULL,
-      [Inf_FAQ		] = FAQ_ChangeAnswer,
+      [Inf_FAQ		] = FAQ_ChangeQaA,
       [Inf_LINKS	] = NULL,
       [Inf_ASSESSMENT	] = NULL,
      };
 
    /***** Check info type *****/
-   if (!ChangeListItem[InfoType])
+   if (!ChangeItem[InfoType])
       Err_WrongTypeExit ();
 
    /***** Get list of tree nodes *****/
@@ -267,11 +267,11 @@ void TreSpc_ChangeListItem (Inf_Type_t InfoType)
       Err_WrongItemExit ();
 
    /***** Change specific list item *****/
-   ChangeListItem[InfoType] (&Node);
+   ChangeItem[InfoType] (&Node);
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,Node.ListItem.Cod);
+		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -281,7 +281,7 @@ void TreSpc_ChangeListItem (Inf_Type_t InfoType)
 /********** Ask for confirmation of removing an specific list item ***********/
 /*****************************************************************************/
 
-void TreSpc_ReqRemListItem (Inf_Type_t InfoType)
+void TreSpc_ReqRemItem (Inf_Type_t InfoType)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_resource_X;
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
@@ -315,7 +315,7 @@ void TreSpc_ReqRemListItem (Inf_Type_t InfoType)
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,Node.ListItem.Cod);
+		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -325,12 +325,12 @@ void TreSpc_ReqRemListItem (Inf_Type_t InfoType)
 /*********************** Remove an specific list item ************************/
 /*****************************************************************************/
 
-void TreSpc_RemoveListItem (Inf_Type_t InfoType)
+void TreSpc_RemoveItem (Inf_Type_t InfoType)
   {
    extern const char *Txt_Resource_removed;
    extern const char *Txt_Question_removed;
    struct Tre_Node Node;
-   static void (*RemoveListItem[Inf_NUM_TYPES]) (const struct Tre_Node *Node) =
+   static void (*RemoveItem[Inf_NUM_TYPES]) (const struct Tre_Node *Node) =
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = NULL,
@@ -358,7 +358,7 @@ void TreSpc_RemoveListItem (Inf_Type_t InfoType)
      };
 
    /***** Check info type *****/
-   if (!RemoveListItem[InfoType])
+   if (!RemoveItem[InfoType])
       Err_WrongTypeExit ();
 
    /***** Get list of tree nodes *****/
@@ -371,7 +371,7 @@ void TreSpc_RemoveListItem (Inf_Type_t InfoType)
       Err_WrongItemExit ();
 
    /***** Remove specific list item *****/
-   RemoveListItem[InfoType] (&Node);
+   RemoveItem[InfoType] (&Node);
 
    /***** Create success alert *****/
    if (Txt[InfoType])
@@ -379,7 +379,7 @@ void TreSpc_RemoveListItem (Inf_Type_t InfoType)
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,Node.ListItem.Cod);
+		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -389,12 +389,12 @@ void TreSpc_RemoveListItem (Inf_Type_t InfoType)
 /********************** Hide/unhide specific list item ***********************/
 /*****************************************************************************/
 
-void TreSpc_HideOrUnhideListItem (Inf_Type_t InfoType,
-				  HidVis_HiddenOrVisible_t HiddenOrVisible)
+void TreSpc_HideOrUnhideItem (Inf_Type_t InfoType,
+			      HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    struct Tre_Node Node;
-   static void (*HideOrUnhideListItem[Inf_NUM_TYPES]) (const struct Tre_Node *Node,
-						       HidVis_HiddenOrVisible_t HiddenOrVisible) =
+   static void (*HideOrUnhideItem[Inf_NUM_TYPES]) (const struct Tre_Node *Node,
+						   HidVis_HiddenOrVisible_t HiddenOrVisible) =
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = NULL,
@@ -409,7 +409,7 @@ void TreSpc_HideOrUnhideListItem (Inf_Type_t InfoType,
      };
 
    /***** Check info type *****/
-   if (!HideOrUnhideListItem[InfoType])
+   if (!HideOrUnhideItem[InfoType])
       Err_WrongTypeExit ();
 
    /***** Get list of tree nodes *****/
@@ -422,11 +422,11 @@ void TreSpc_HideOrUnhideListItem (Inf_Type_t InfoType,
       Err_WrongItemExit ();
 
    /***** Hide/unhide specific list item *****/
-   HideOrUnhideListItem[InfoType] (&Node,HiddenOrVisible);
+   HideOrUnhideItem[InfoType] (&Node,HiddenOrVisible);
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,Node.ListItem.Cod);
+		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -436,12 +436,12 @@ void TreSpc_HideOrUnhideListItem (Inf_Type_t InfoType,
 /*********************** Move up/down specific list item *********************/
 /*****************************************************************************/
 
-void TreSpc_MoveUpDownListItem (Inf_Type_t InfoType,
+void TreSpc_MoveUpDownItem (Inf_Type_t InfoType,
 				TreSpc_MoveUpDown_t UpDown)
   {
    extern const char *Txt_Movement_not_allowed;
    struct Tre_Node Node;
-   struct Tre_ListItem SpcItem2;
+   struct Tre_SpcItem Item2;
    bool Success = false;
    static unsigned (*GetOtherInd[Inf_NUM_TYPES][TreSpc_NUM_MOVEMENTS_UP_DOWN])(const struct Tre_Node *Node) =
      {
@@ -494,20 +494,20 @@ void TreSpc_MoveUpDownListItem (Inf_Type_t InfoType,
       Err_WrongItemExit ();
 
    /***** Move up/down list item *****/
-   if ((SpcItem2.Ind = GetOtherInd[InfoType][UpDown] (&Node)))	// 0 ==> movement not allowed
+   if ((Item2.Ind = GetOtherInd[InfoType][UpDown] (&Node)))	// 0 ==> movement not allowed
      {
       /* Get the other list item code */
-      SpcItem2.Cod = GetCodFromInd[InfoType] (Node.Hierarchy.NodCod,SpcItem2.Ind);
+      Item2.Cod = GetCodFromInd[InfoType] (Node.Hierarchy.NodCod,Item2.Ind);
 
-      /* Exchange list items */
-      Success = TreSpc_ExchangeListItem (&Node,&SpcItem2);
+      /* Exchange items */
+      Success = TreSpc_ExchangeItems (&Node,&Item2);
      }
    if (!Success)
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,Node.ListItem.Cod);
+		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -518,10 +518,10 @@ void TreSpc_MoveUpDownListItem (Inf_Type_t InfoType,
 /*****************************************************************************/
 // Return true if success
 
-static bool TreSpc_ExchangeListItem (const struct Tre_Node *Node,
-				     const struct Tre_ListItem *ListItem2)
+static bool TreSpc_ExchangeItems (const struct Tre_Node *Node,
+				  const struct Tre_SpcItem *Item2)
   {
-   const struct Tre_ListItem *ListItem1 = &Node->ListItem;
+   const struct Tre_SpcItem *Item1 = &Node->SpcItem;
    static void (*LockTable[Inf_NUM_TYPES]) (void) =
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
@@ -552,8 +552,8 @@ static bool TreSpc_ExchangeListItem (const struct Tre_Node *Node,
    if (!UpdateInd[Node->InfoType])
       Err_WrongTypeExit ();
 
-   if (ListItem1->Ind > 0 &&	// Indexes should be in the range [1, 2,...]
-       ListItem2->Ind > 0)
+   if (Item1->Ind > 0 &&	// Indexes should be in the range [1, 2,...]
+       Item2->Ind > 0)
      {
       /***** Lock tables to make the move atomic *****/
       LockTable[Node->InfoType] ();
@@ -562,8 +562,8 @@ static bool TreSpc_ExchangeListItem (const struct Tre_Node *Node,
       // This implementation works with non continuous indexes
       /*
       Example:
-      ListItem1->Ind =  5
-      ListItem2->Ind = 17
+      Item1->Ind =  5
+      Item2->Ind = 17
                                 Step 1            Step 2            Step 3  (Equivalent to)
       +-------+-------+   +-------+-------+   +-------+-------+   +-------+-------+ +-------+-------+
       |   Ind |   Cod |   |   Ind |   Cod |   |   Ind |   Cod |   |   Ind |   Cod | |   Ind |   Cod |
@@ -574,13 +574,13 @@ static bool TreSpc_ExchangeListItem (const struct Tre_Node *Node,
       */
       /* Step 1: Change second index to negative,
 		 necessary to preserve unique index (NodCod,QaAInd) */
-      UpdateInd[Node->InfoType] (Node,ListItem2->Cod,-(int) ListItem2->Ind);
+      UpdateInd[Node->InfoType] (Node,Item2->Cod,-(int) Item2->Ind);
 
       /* Step 2: Change first index */
-      UpdateInd[Node->InfoType] (Node,ListItem1->Cod, (int) ListItem2->Ind);
+      UpdateInd[Node->InfoType] (Node,Item1->Cod, (int) Item2->Ind);
 
       /* Step 3: Change second index */
-      UpdateInd[Node->InfoType] (Node,ListItem2->Cod, (int) ListItem1->Ind);
+      UpdateInd[Node->InfoType] (Node,Item2->Cod, (int) Item1->Ind);
 
       /***** Unlock tables *****/
       DB_UnlockTables ();

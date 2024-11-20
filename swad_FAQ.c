@@ -224,7 +224,7 @@ void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
 		  case Vie_EDIT:
 		     FAQ_WriteRowEditQaA (NumQaA,NumQaAs,Node,
 					  (ListingType == Tre_EDIT_SPC_ITEM &&
-					   Node->ListItem.Cod == SelectedQaACod) ? Vie_EDIT :
+					   Node->SpcItem.Cod == SelectedQaACod) ? Vie_EDIT :
 										   Vie_VIEW,
 					  HiddenOrVisible);
 		     break;
@@ -237,7 +237,7 @@ void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
 	    /***** Form to create a new question&answer *****/
 	    if (ViewingOrEditingQaAOfThisNode == Vie_EDIT)
 	      {
-	       TreSpc_ResetListItem (Node);
+	       TreSpc_ResetItem (Node);
 	       FAQ_WriteRowNewQaA (NumQaAs,Node);
 	      }
 
@@ -286,10 +286,10 @@ void FAQ_GetQaADataByCod (struct Tre_Node *Node)
   {
    MYSQL_RES *mysql_res;
 
-   if (Node->ListItem.Cod > 0)
+   if (Node->SpcItem.Cod > 0)
      {
       /***** Get data of question&answer *****/
-      if (FAQ_DB_GetQaADataByCod (&mysql_res,Node->ListItem.Cod))
+      if (FAQ_DB_GetQaADataByCod (&mysql_res,Node->SpcItem.Cod))
          FAQ_GetQaADataFromRow (mysql_res,Node);
       else
 	 /* Clear all node data except type */
@@ -325,11 +325,11 @@ static void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
    Node->Hierarchy.NodCod = Str_ConvertStrCodToLongCod (row[0]);
 
    /***** Get code and index of the question&answer (row[1], row[2]) *****/
-   Node->ListItem.Cod = Str_ConvertStrCodToLongCod (row[1]);
-   Node->ListItem.Ind = Str_ConvertStrToUnsigned (row[2]);
+   Node->SpcItem.Cod = Str_ConvertStrCodToLongCod (row[1]);
+   Node->SpcItem.Ind = Str_ConvertStrToUnsigned (row[2]);
 
    /***** Get whether the tree node is hidden (row(3)) *****/
-   Node->ListItem.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
+   Node->SpcItem.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
 
    /***** Get the questionand the answer of the question&answer (row[4], row[5]) *****/
    Str_Copy (Node->QaA.Question,row[4],sizeof (Node->QaA.Question) - 1);
@@ -370,6 +370,9 @@ static void FAQ_WriteRowEditQaA (unsigned NumQaA,unsigned NumQaAs,
                                  Vie_ViewType_t AnswerViewType,
 				 HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
+   extern const char *Txt_Answer;
+   extern const char *Txt_Save_changes;
+
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
@@ -386,35 +389,39 @@ static void FAQ_WriteRowEditQaA (unsigned NumQaA,unsigned NumQaAs,
       /***** Question and answer *****/
       HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s\"",The_GetSuffix ());
 
-         /* Question */
-	 Frm_BeginFormAnchor (ActRenFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID);
-	    ParCod_PutPar (ParCod_QaA,Node->ListItem.Cod);
-	    HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,Node->QaA.Question,
-			    HTM_SUBMIT_ON_CHANGE,
-			    "class=\"PRG_RSC_INPUT INPUT_%s\"",
-			    The_GetSuffix ());
-	 Frm_EndForm ();
-
-         HTM_BR ();
-
 	 /* Show current answer / Show textarea to change answer */
          switch (AnswerViewType)
            {
             case Vie_VIEW:
-	       /* Show current answer */
+	       /* Show current question&answer */
+	       FAQ_WriteQuestion (Node->QaA.Question,HiddenOrVisible);
                FAQ_WriteAnswer (Node->QaA.Answer,HiddenOrVisible);
                break;
             case Vie_EDIT:
 	       /* Show textarea to change answer */
 	       Frm_BeginFormAnchor (ActChgFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID);
-		  ParCod_PutPar (ParCod_QaA,Node->ListItem.Cod);
+		  ParCod_PutPar (ParCod_QaA,Node->SpcItem.Cod);
+
+		  /* Question */
+		  HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,Node->QaA.Question,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "class=\"PRG_RSC_INPUT INPUT_%s\"",
+				  The_GetSuffix ());
+
+		  /* Answer */
+		  HTM_BR ();
 		  HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				      "name=\"Answer\" rows=\"10\""
-				      " class=\"PRG_RSC_INPUT INPUT_%s\""
-				      " onchange=\"this.form.submit();return false;\"",
-				      The_GetSuffix ());
+				      " placeholder=\"%s\""
+				      " class=\"PRG_RSC_INPUT INPUT_%s\"",
+				      Txt_Answer,The_GetSuffix ());
 		     HTM_Txt (Node->QaA.Answer);
 		  HTM_TEXTAREA_End ();
+
+		  /* Button to save changes */
+		  HTM_BR ();
+		  Btn_PutConfirmButtonInline (Txt_Save_changes);
+
 	       Frm_EndForm ();
                break;
 	    default:
@@ -451,7 +458,7 @@ static void FAQ_WriteRowNewQaA (unsigned NumQaAs,struct Tre_Node *Node)
 	 HTM_Unsigned (NumQaAs + 1);
       HTM_TD_End ();
 
-      /***** Question and answer *****/
+      /***** Question *****/
       HTM_TD_Begin ("class=\"PRG_MAIN %s\"",The_GetColorRows1 (1));
 
 	 Frm_BeginFormAnchor (ActNewFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID);
@@ -459,20 +466,10 @@ static void FAQ_WriteRowNewQaA (unsigned NumQaAs,struct Tre_Node *Node)
 
             /* Question */
 	    HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,"",
-			    HTM_NO_ATTR,
+			    HTM_SUBMIT_ON_CHANGE,
 			    "placeholder=\"%s\""
 			    " class=\"PRG_RSC_INPUT INPUT_%s\"",
 			    Txt_New_question,The_GetSuffix ());
-
-	    /* Show textarea to change answer */
-	    HTM_TEXTAREA_Begin (HTM_NO_ATTR,
-				"name=\"Answer\" rows=\"10\""
-				" class=\"PRG_RSC_INPUT INPUT_%s\"",
-				The_GetSuffix ());
-	    HTM_TEXTAREA_End ();
-
-	    /* Button to save changes */
-	    Btn_PutConfirmButtonInline (Txt_Save_changes);
 
 	 Frm_EndForm ();
 
@@ -538,22 +535,22 @@ static void FAQ_PutFormsToRemEditOneQaA (struct Tre_Node *Node,
 	 /***** Icon to remove question&answer *****/
 	 if (NumQaA < NumQaAs)
 	    Ico_PutContextualIconToRemove (ActReqRemFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
-					   FAQ_PutParQaACod,&Node->ListItem.Cod);
+					   FAQ_PutParQaACod,&Node->SpcItem.Cod);
 	 else
 	    Ico_PutIconRemovalNotAllowed ();
 
 	 /***** Icon to hide/unhide question&answer *****/
 	 if (NumQaA < NumQaAs)
 	    Ico_PutContextualIconToHideUnhide (ActionHideUnhide,TreSpc_LIST_ITEMS_SECTION_ID,
-					       FAQ_PutParQaACod,&Node->ListItem.Cod,
-					       Node->ListItem.HiddenOrVisible);
+					       FAQ_PutParQaACod,&Node->SpcItem.Cod,
+					       Node->SpcItem.HiddenOrVisible);
 	 else
 	    Ico_PutIconOff ("eye.svg",Ico_GREEN,Txt_Visible);
 
 	 /***** Put icon to edit the question&answer *****/
 	 if (NumQaA < NumQaAs)
 	    Ico_PutContextualIconToEdit (ActFrmChgFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
-					 FAQ_PutParQaACod,&Node->ListItem.Cod);
+					 FAQ_PutParQaACod,&Node->SpcItem.Cod);
 	 else
 	    Ico_PutContextualIconToEdit (ActFrmChgFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
 					 Tre_PutPars,Node);
@@ -561,7 +558,7 @@ static void FAQ_PutFormsToRemEditOneQaA (struct Tre_Node *Node,
 	 /***** Icon to move up the question&answer *****/
 	 if (NumQaA > 0 && NumQaA < NumQaAs)
 	    Lay_PutContextualLinkOnlyIcon (ActUp_FAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
-	                                   FAQ_PutParQaACod,&Node->ListItem.Cod,
+	                                   FAQ_PutParQaACod,&Node->SpcItem.Cod,
 	 			           "arrow-up.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -569,7 +566,7 @@ static void FAQ_PutFormsToRemEditOneQaA (struct Tre_Node *Node,
 	 /***** Put icon to move down the question&answer *****/
 	 if (NumQaA < NumQaAs - 1)
 	    Lay_PutContextualLinkOnlyIcon (ActDwnFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
-	                                   FAQ_PutParQaACod,&Node->ListItem.Cod,
+	                                   FAQ_PutParQaACod,&Node->SpcItem.Cod,
 	                                   "arrow-down.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -602,7 +599,7 @@ void FAQ_CreateQaA (struct Tre_Node *Node)
    Par_GetParText ("Question",Node->QaA.Question,FAQ_MAX_BYTES_QUESTION);
 
    /***** Create question&answer *****/
-   Node->ListItem.Cod = FAQ_DB_CreateQaA (Node);
+   Node->SpcItem.Cod = FAQ_DB_CreateQaA (Node);
   }
 
 /*****************************************************************************/
@@ -617,7 +614,7 @@ void FAQ_RenameQaA (const struct Tre_Node *Node)
    Par_GetParText ("Question",NewQuestion,FAQ_MAX_BYTES_QUESTION);
 
    /***** Update database changing old title by new title *****/
-   FAQ_DB_UpdateQaAQuestion (Node->Hierarchy.NodCod,Node->ListItem.Cod,
+   FAQ_DB_UpdateQaAQuestion (Node->Hierarchy.NodCod,Node->SpcItem.Cod,
 			     NewQuestion);
   }
 
@@ -625,13 +622,14 @@ void FAQ_RenameQaA (const struct Tre_Node *Node)
 /*************************** Change question&answer **************************/
 /*****************************************************************************/
 
-void FAQ_ChangeAnswer (struct Tre_Node *Node)
+void FAQ_ChangeQaA (struct Tre_Node *Node)
   {
-   /***** Get answer *****/
+   /***** Get question and answer *****/
+   Par_GetParText ("Question",Node->QaA.Question,FAQ_MAX_BYTES_QUESTION);
    Par_GetParHTML ("Answer",Node->QaA.Answer,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Update answer *****/
-   FAQ_DB_UpdateAnswer (Node);
+   FAQ_DB_UpdateQaA (Node);
   }
 
 /*****************************************************************************/

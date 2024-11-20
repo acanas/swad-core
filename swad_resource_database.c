@@ -273,7 +273,7 @@ unsigned Rsc_DB_GetRscIndBefore (const struct Tre_Node *Node)
 			   " WHERE NodCod=%ld"
 			     " AND RscInd<%u",
 			   Node->Hierarchy.NodCod,
-			   Node->ListItem.Ind);
+			   Node->SpcItem.Ind);
   }
 
 unsigned Rsc_DB_GetRscIndAfter (const struct Tre_Node *Node)
@@ -285,7 +285,7 @@ unsigned Rsc_DB_GetRscIndAfter (const struct Tre_Node *Node)
 			   " WHERE NodCod=%ld"
 			     " AND RscInd>%u",
 			   Node->Hierarchy.NodCod,
-			   Node->ListItem.Ind);
+			   Node->SpcItem.Ind);
   }
 
 /*****************************************************************************/
@@ -324,7 +324,7 @@ void Rsc_DB_RemoveResource (const struct Tre_Node *Node)
                      " AND prg_resources.NodCod=tre_nodes.NodCod"
                      " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   Node->ListItem.Cod,
+		   Node->SpcItem.Cod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Inf_PROGRAM]);
@@ -350,7 +350,7 @@ void Rsc_DB_HideOrUnhideResource (const struct Tre_Node *Node,
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
 		   HidVis_YN[HiddenOrVisible],
-		   Node->ListItem.Cod,
+		   Node->SpcItem.Cod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Inf_PROGRAM]);
@@ -413,7 +413,7 @@ void Rsc_DB_UpdateRscLink (const struct Tre_Node *Node)
 		     " AND tre_nodes.Type='%s'",	// Extra check
 		   Rsc_DB_Types[Node->Resource.Link.Type],
 		   Node->Resource.Link.Cod,
-		   Node->ListItem.Cod,
+		   Node->SpcItem.Cod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Inf_PROGRAM]);

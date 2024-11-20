@@ -157,7 +157,7 @@ unsigned FAQ_DB_GetQaAIndBefore (const struct Tre_Node *Node)
 			   " WHERE NodCod=%ld"
 			     " AND QaAInd<%u",
 			   Node->Hierarchy.NodCod,
-			   Node->ListItem.Ind);
+			   Node->SpcItem.Ind);
   }
 
 unsigned FAQ_DB_GetQaAIndAfter (const struct Tre_Node *Node)
@@ -169,7 +169,7 @@ unsigned FAQ_DB_GetQaAIndAfter (const struct Tre_Node *Node)
 			   " WHERE NodCod=%ld"
 			     " AND QaAInd>%u",
 			   Node->Hierarchy.NodCod,
-			   Node->ListItem.Ind);
+			   Node->SpcItem.Ind);
   }
 
 /*****************************************************************************/
@@ -208,7 +208,7 @@ void FAQ_DB_RemoveQaA (const struct Tre_Node *Node)
                      " AND faq_questions.NodCod=tre_nodes.NodCod"
                      " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   Node->ListItem.Cod,
+		   Node->SpcItem.Cod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Inf_FAQ]);
@@ -234,7 +234,7 @@ void FAQ_DB_HideOrUnhideQaA (const struct Tre_Node *Node,
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
 		   HidVis_YN[HiddenOrVisible],
-		   Node->ListItem.Cod,
+		   Node->SpcItem.Cod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Inf_FAQ]);
@@ -277,24 +277,26 @@ void FAQ_DB_UpdateQaAInd (const struct Tre_Node *Node,long QaACod,int QaAInd)
   }
 
 /*****************************************************************************/
-/************* Update the answer of a question&answer given its code *********/
+/*** Update the quetion and the answer of a question&answer given its code ***/
 /*****************************************************************************/
 
-void FAQ_DB_UpdateAnswer (const struct Tre_Node *Node)
+void FAQ_DB_UpdateQaA (const struct Tre_Node *Node)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    DB_QueryUPDATE ("can not update link of resource",
 		   "UPDATE faq_questions,"
 		          "tre_nodes"
-		     " SET faq_questions.Answer='%s'"
+		     " SET faq_questions.Question='%s',"
+		          "faq_questions.Answer='%s'"
 		   " WHERE faq_questions.QaACod=%ld"
 		     " AND faq_questions.NodCod=%ld"
 		     " AND faq_questions.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
+		   Node->QaA.Question,
 		   Node->QaA.Answer,
-		   Node->ListItem.Cod,
+		   Node->SpcItem.Cod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Inf_FAQ]);

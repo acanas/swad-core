@@ -46,6 +46,6 @@ void FAQ_GetQaADataByCod (struct Tre_Node *Node);
 
 void FAQ_CreateQaA (struct Tre_Node *Node);
 void FAQ_RenameQaA (const struct Tre_Node *Node);
-void FAQ_ChangeAnswer (struct Tre_Node *Node);
+void FAQ_ChangeQaA (struct Tre_Node *Node);
 
 #endif

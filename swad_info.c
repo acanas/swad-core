@@ -603,12 +603,12 @@ void Inf_EditListItems (void)
 /************************ Create new specific list item **********************/
 /*****************************************************************************/
 
-void Inf_CreateListItem (void)
+void Inf_CreateItem (void)
   {
    struct Inf_Info Info;
 
    Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
-      TreSpc_CreateListItem (Info.Type);
+      TreSpc_CreateItem (Info.Type);
    Inf_AfterTree ();
   }
 
@@ -616,12 +616,12 @@ void Inf_CreateListItem (void)
 /************************* Rename specific list item *************************/
 /*****************************************************************************/
 
-void Inf_RenameListItem (void)
+void Inf_RenameItem (void)
   {
    struct Inf_Info Info;
 
    Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
-      TreSpc_RenameListItem (Info.Type);
+      TreSpc_RenameItem (Info.Type);
    Inf_AfterTree ();
   }
 
@@ -629,12 +629,12 @@ void Inf_RenameListItem (void)
 /********** Ask for confirmation of removing an specific list item ***********/
 /*****************************************************************************/
 
-void Inf_ReqRemListItem (void)
+void Inf_ReqRemItem (void)
   {
    struct Inf_Info Info;
 
    Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
-      TreSpc_ReqRemListItem (Info.Type);
+      TreSpc_ReqRemItem (Info.Type);
    Inf_AfterTree ();
   }
 
@@ -642,12 +642,12 @@ void Inf_ReqRemListItem (void)
 /*********************** Remove an specific list item ************************/
 /*****************************************************************************/
 
-void Inf_RemoveListItem (void)
+void Inf_RemoveItem (void)
   {
    struct Inf_Info Info;
 
    Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
-      TreSpc_RemoveListItem (Info.Type);
+      TreSpc_RemoveItem (Info.Type);
    Inf_AfterTree ();
   }
 
@@ -655,21 +655,21 @@ void Inf_RemoveListItem (void)
 /********************** Hide/unhide specific list item ***********************/
 /*****************************************************************************/
 
-void Inf_HideListItem (void)
+void Inf_HideItem (void)
   {
    struct Inf_Info Info;
 
    Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
-      TreSpc_HideOrUnhideListItem (Info.Type,HidVis_HIDDEN);
+      TreSpc_HideOrUnhideItem (Info.Type,HidVis_HIDDEN);
    Inf_AfterTree ();
   }
 
-void Inf_UnhideListItem (void)
+void Inf_UnhideItem (void)
   {
    struct Inf_Info Info;
 
    Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
-      TreSpc_HideOrUnhideListItem (Info.Type,HidVis_VISIBLE);
+      TreSpc_HideOrUnhideItem (Info.Type,HidVis_VISIBLE);
    Inf_AfterTree ();
   }
 
@@ -677,21 +677,21 @@ void Inf_UnhideListItem (void)
 /*********************** Move up/down specific list item *********************/
 /*****************************************************************************/
 
-void Inf_MoveUpListItem (void)
+void Inf_MoveUpItem (void)
   {
    struct Inf_Info Info;
 
    Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
-      TreSpc_MoveUpDownListItem (Info.Type,TreSpc_MOVE_UP);
+      TreSpc_MoveUpDownItem (Info.Type,TreSpc_MOVE_UP);
    Inf_AfterTree ();
   }
 
-void Inf_MoveDownListItem (void)
+void Inf_MoveDownItem (void)
   {
    struct Inf_Info Info;
 
    Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
-      TreSpc_MoveUpDownListItem (Info.Type,TreSpc_MOVE_DOWN);
+      TreSpc_MoveUpDownItem (Info.Type,TreSpc_MOVE_DOWN);
    Inf_AfterTree ();
   }
 
@@ -699,12 +699,12 @@ void Inf_MoveDownListItem (void)
 /************* Edit tree with form to change specific list item **************/
 /*****************************************************************************/
 
-void Inf_EditTreeWithFormListItem (void)
+void Inf_EditTreeWithFormItem (void)
   {
    struct Inf_Info Info;
 
    Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
-      TreSpc_EditTreeWithFormListItem (Info.Type);
+      TreSpc_EditTreeWithFormItem (Info.Type);
    Inf_AfterTree ();
   }
 
@@ -712,12 +712,12 @@ void Inf_EditTreeWithFormListItem (void)
 /************************ Change specific list item **************************/
 /*****************************************************************************/
 
-void Inf_ChangeListItem (void)
+void Inf_ChangeItem (void)
   {
    struct Inf_Info Info;
 
    Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
-      TreSpc_ChangeListItem (Info.Type);
+      TreSpc_ChangeItem (Info.Type);
    Inf_AfterTree ();
   }
 
