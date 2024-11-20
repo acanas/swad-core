@@ -9423,6 +9423,282 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Contract item in FAQ when editing"	// Çeviri lazim!
 #endif
 	,
+	[ActFrmSeeFAQQaA] =
+#if   L==1	// ca
+	"See FAQ questions & answers"		// Necessita traducció
+#elif L==2	// de
+	"See FAQ questions & answers"		// Need Übersetzung
+#elif L==3	// en
+	"See FAQ questions & answers"
+#elif L==4	// es
+	"Ver preguntas y respuestas FAQ"
+#elif L==5	// fr
+	"See FAQ questions & answers"		// Besoin de traduction
+#elif L==6	// gn
+	"Ver preguntas y respuestas FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"See FAQ questions & answers"		// Bisogno di traduzione
+#elif L==8	// pl
+	"See FAQ questions & answers"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See FAQ questions & answers"		// Precisa de tradução
+#elif L==10	// tr
+	"See FAQ questions & answers"		// Çeviri lazim!
+#endif
+	,
+	[ActFrmEdiFAQQaA] =
+#if   L==1	// ca
+	"Edit FAQ questions & answers"		// Necessita traducció
+#elif L==2	// de
+	"Edit FAQ questions & answers"		// Need Übersetzung
+#elif L==3	// en
+	"Edit FAQ questions & answers"
+#elif L==4	// es
+	"Editar preguntas y respuestas FAQ"
+#elif L==5	// fr
+	"Edit FAQ questions & answers"		// Besoin de traduction
+#elif L==6	// gn
+	"Editar preguntas y respuestas FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Edit FAQ questions & answers"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit FAQ questions & answers"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit FAQ questions & answers"		// Precisa de tradução
+#elif L==10	// tr
+	"Edit FAQ questions & answers"		// Çeviri lazim!
+#endif
+	,
+	[ActNewFAQQaA] =
+#if   L==1	// ca
+	"Create FAQ question & answer"		// Necessita traducció
+#elif L==2	// de
+	"Create FAQ question & answer"		// Need Übersetzung
+#elif L==3	// en
+	"Create FAQ question & answer"
+#elif L==4	// es
+	"Crear pregunta y respuesta FAQ"
+#elif L==5	// fr
+	"Create FAQ question & answer"		// Besoin de traduction
+#elif L==6	// gn
+	"Crear pregunta y respuesta FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Create FAQ question & answer"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Create FAQ question & answer"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create FAQ question & answer"		// Precisa de tradução
+#elif L==10	// tr
+	"Create FAQ question & answer"		// Çeviri lazim!
+#endif
+	,
+	[ActRenFAQQaA] =
+#if   L==1	// ca
+	"Rename FAQ question"		// Necessita traducció
+#elif L==2	// de
+	"Rename FAQ question"		// Need Übersetzung
+#elif L==3	// en
+	"Rename FAQ question"
+#elif L==4	// es
+	"Renombrar pregunta FAQ"
+#elif L==5	// fr
+	"Rename FAQ question"		// Besoin de traduction
+#elif L==6	// gn
+	"Renombrar pregunta FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Rename FAQ question"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Rename FAQ question"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Rename FAQ question"		// Precisa de tradução
+#elif L==10	// tr
+	"Rename FAQ question"		// Çeviri lazim!
+#endif
+	,
+	[ActReqRemFAQQaA] =
+#if   L==1	// ca
+	"Request removal of FAQ question & answer"			// Necessita traducció
+#elif L==2	// de
+	"Request removal of FAQ question & answer"			// Need Übersetzung
+#elif L==3	// en
+	"Request removal of FAQ question & answer"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de pregunta y respuesta FAQ"
+#elif L==5	// fr
+	"Request removal of FAQ question & answer"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar eliminaci&oacute;n de pregunta y respuesta FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Request removal of FAQ question & answer"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request removal of FAQ question & answer"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request removal of FAQ question & answer"			// Precisa de tradução
+#elif L==10	// tr
+	"Request removal of FAQ question & answer"			// Çeviri lazim!
+#endif
+	,
+	[ActRemFAQQaA] =
+#if   L==1	// ca
+	"Remove FAQ question & answer"		// Necessita traducció
+#elif L==2	// de
+	"Remove FAQ question & answer"		// Need Übersetzung
+#elif L==3	// en
+	"Remove FAQ question & answer"
+#elif L==4	// es
+	"Eliminar pregunta y respuesta FAQ"
+#elif L==5	// fr
+	"Remove FAQ question & answer"		// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar pregunta y respuesta FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Remove FAQ question & answer"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove FAQ question & answer"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove FAQ question & answer"		// Precisa de tradução
+#elif L==10	// tr
+	"Remove FAQ question & answer"		// Çeviri lazim!
+#endif
+	,
+	[ActHidFAQQaA] =
+#if   L==1	// ca
+	"Hide FAQ question & answer"		// Necessita traducció
+#elif L==2	// de
+	"Hide FAQ question & answer"		// Need Übersetzung
+#elif L==3	// en
+	"Hide FAQ question & answer"
+#elif L==4	// es
+	"Ocultar pregunta y respuesta FAQ"
+#elif L==5	// fr
+	"Hide FAQ question & answer"		// Besoin de traduction
+#elif L==6	// gn
+	"Ocultar pregunta y respuesta FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Hide FAQ question & answer"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Hide FAQ question & answer"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Hide FAQ question & answer"		// Precisa de tradução
+#elif L==10	// tr
+	"Hide FAQ question & answer"		// Çeviri lazim!
+#endif
+	,
+	[ActUnhFAQQaA] =
+#if   L==1	// ca
+	"Unhide FAQ question & answer"		// Necessita traducció
+#elif L==2	// de
+	"Unhide FAQ question & answer"		// Need Übersetzung
+#elif L==3	// en
+	"Unhide FAQ question & answer"
+#elif L==4	// es
+	"Mostrar pregunta y respuesta FAQ"
+#elif L==5	// fr
+	"Unhide FAQ question & answer"		// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar pregunta y respuesta FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Unhide FAQ question & answer"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Unhide FAQ question & answer"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Unhide FAQ question & answer"		// Precisa de tradução
+#elif L==10	// tr
+	"Unhide FAQ question & answer"		// Çeviri lazim!
+#endif
+	,
+	[ActUp_FAQQaA] =
+#if   L==1	// ca
+	"Move up FAQ question & answer"		// Necessita traducció
+#elif L==2	// de
+	"Move up FAQ question & answer"		// Need Übersetzung
+#elif L==3	// en
+	"Move up FAQ question & answer"
+#elif L==4	// es
+	"Subir pregunta y respuesta FAQ"
+#elif L==5	// fr
+	"Move up FAQ question & answer"		// Besoin de traduction
+#elif L==6	// gn
+	"Subir pregunta y respuesta FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Move up FAQ question & answer"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Move up FAQ question & answer"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move up FAQ question & answer"		// Precisa de tradução
+#elif L==10	// tr
+	"Move up FAQ question & answer"		// Çeviri lazim!
+#endif
+	,
+	[ActDwnFAQQaA] =
+#if   L==1	// ca
+	"Move down FAQ question & answer"	// Necessita traducció
+#elif L==2	// de
+	"Move down FAQ question & answer"	// Need Übersetzung
+#elif L==3	// en
+	"Move down FAQ question & answer"
+#elif L==4	// es
+	"Bajar pregunta y respuesta FAQ"
+#elif L==5	// fr
+	"Move down FAQ question & answer"	// Besoin de traduction
+#elif L==6	// gn
+	"Bajar pregunta y respuesta FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Move down FAQ question & answer"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Move down FAQ question & answer"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move down FAQ question & answer"	// Precisa de tradução
+#elif L==10	// tr
+	"Move down FAQ question & answer"	// Çeviri lazim!
+#endif
+	,
+	[ActFrmChgFAQQaA] =
+#if   L==1	// ca
+	"Edit FAQ question & answer"		// Necessita traducció
+#elif L==2	// de
+	"Edit FAQ question & answer"		// Need Übersetzung
+#elif L==3	// en
+	"Edit FAQ question & answer"
+#elif L==4	// es
+	"Editar pregunta y respuesta FAQ"
+#elif L==5	// fr
+	"Edit FAQ question & answer"		// Besoin de traduction
+#elif L==6	// gn
+	"Editar pregunta y respuesta FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Edit FAQ question & answer"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit FAQ question & answer"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit FAQ question & answer"		// Precisa de tradução
+#elif L==10	// tr
+	"Edit FAQ question & answer"		// Çeviri lazim!
+#endif
+	,
+	[ActChgFAQQaA] =
+#if   L==1	// ca
+	"Change FAQ question & answer"		// Necessita traducció
+#elif L==2	// de
+	"Change FAQ question & answer"		// Need Übersetzung
+#elif L==3	// en
+	"Change FAQ question & answer"
+#elif L==4	// es
+	"Cambiar pregunta y respuesta FAQ"
+#elif L==5	// fr
+	"Change FAQ question & answer"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar pregunta y respuesta FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Change FAQ question & answer"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change FAQ question & answer"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change FAQ question & answer"		// Precisa de tradução
+#elif L==10	// tr
+	"Change FAQ question & answer"		// Çeviri lazim!
+#endif
+	,
 	[ActEdiPlaTxtFAQ] =
 #if   L==1	// ca
 	"Plain text editor of the FAQ"		// Necessita traducció
