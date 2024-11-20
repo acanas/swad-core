@@ -428,32 +428,6 @@ static void FAQ_WriteRowEditQaA (unsigned NumQaA,unsigned NumQaAs,
    HTM_TR_End ();
   }
 
-static void FAQ_WriteQuestion (char Question[FAQ_MAX_BYTES_QUESTION + 1],
-			       HidVis_HiddenOrVisible_t HiddenOrVisible)
-  {
-   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
-
-   HTM_SPAN_Begin ("class=\"TRE_TIT PRG_TXT_%s%s\"",
-		   The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
-      HTM_Txt (Question);
-   HTM_SPAN_End ();
-  }
-
-static void FAQ_WriteAnswer (char Answer[Cns_MAX_BYTES_TEXT + 1],
-			     HidVis_HiddenOrVisible_t HiddenOrVisible)
-  {
-   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
-
-   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-		     Answer,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
-   ALn_InsertLinks (Answer,Cns_MAX_BYTES_TEXT,60);	// Insert links
-
-   HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
-		  The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
-      HTM_Txt (Answer);
-   HTM_DIV_End ();
-  }
-
 /*****************************************************************************/
 /************************ Edit a new question&answer *************************/
 /*****************************************************************************/
@@ -461,6 +435,7 @@ static void FAQ_WriteAnswer (char Answer[Cns_MAX_BYTES_TEXT + 1],
 static void FAQ_WriteRowNewQaA (unsigned NumQaAs,struct Tre_Node *Node)
   {
    extern const char *Txt_New_question;
+   extern const char *Txt_Save_changes;
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -479,20 +454,66 @@ static void FAQ_WriteRowNewQaA (unsigned NumQaAs,struct Tre_Node *Node)
       /***** Question and answer *****/
       HTM_TD_Begin ("class=\"PRG_MAIN %s\"",The_GetColorRows1 (1));
 
-         /* Question */
 	 Frm_BeginFormAnchor (ActNewFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID);
 	    ParCod_PutPar (ParCod_Nod,Node->Hierarchy.NodCod);
+
+            /* Question */
 	    HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,"",
-			    HTM_SUBMIT_ON_CHANGE,
+			    HTM_NO_ATTR,
 			    "placeholder=\"%s\""
 			    " class=\"PRG_RSC_INPUT INPUT_%s\"",
 			    Txt_New_question,The_GetSuffix ());
+
+	    /* Show textarea to change answer */
+	    HTM_TEXTAREA_Begin (HTM_NO_ATTR,
+				"name=\"Answer\" rows=\"10\""
+				" class=\"PRG_RSC_INPUT INPUT_%s\"",
+				The_GetSuffix ());
+	    HTM_TEXTAREA_End ();
+
+	    /* Button to save changes */
+	    Btn_PutConfirmButtonInline (Txt_Save_changes);
+
 	 Frm_EndForm ();
 
       HTM_TD_End ();
 
    /***** End row *****/
    HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/***************************** Write question ********************************/
+/*****************************************************************************/
+
+static void FAQ_WriteQuestion (char Question[FAQ_MAX_BYTES_QUESTION + 1],
+			       HidVis_HiddenOrVisible_t HiddenOrVisible)
+  {
+   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
+
+   HTM_SPAN_Begin ("class=\"TRE_TIT PRG_TXT_%s%s\"",
+		   The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
+      HTM_Txt (Question);
+   HTM_SPAN_End ();
+  }
+
+/*****************************************************************************/
+/****************************** Write answer *********************************/
+/*****************************************************************************/
+
+static void FAQ_WriteAnswer (char Answer[Cns_MAX_BYTES_TEXT + 1],
+			     HidVis_HiddenOrVisible_t HiddenOrVisible)
+  {
+   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
+
+   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+		     Answer,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
+   ALn_InsertLinks (Answer,Cns_MAX_BYTES_TEXT,60);	// Insert links
+
+   HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
+		  The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
+      HTM_Txt (Answer);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -534,8 +555,8 @@ static void FAQ_PutFormsToRemEditOneQaA (struct Tre_Node *Node,
 	    Ico_PutContextualIconToEdit (ActFrmChgFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
 					 FAQ_PutParQaACod,&Node->ListItem.Cod);
 	 else
-	    Ico_PutContextualIconToEdit (ActChgFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
-					 Tre_PutPars,&Node);
+	    Ico_PutContextualIconToEdit (ActFrmChgFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
+					 Tre_PutPars,Node);
 
 	 /***** Icon to move up the question&answer *****/
 	 if (NumQaA > 0 && NumQaA < NumQaAs)

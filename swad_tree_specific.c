@@ -270,7 +270,7 @@ void TreSpc_ChangeListItem (Inf_Type_t InfoType)
    ChangeListItem[InfoType] (&Node);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_ITEM,
+   Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
 		     Node.Hierarchy.NodCod,Node.ListItem.Cod);
 
    /***** Free list of tree nodes *****/

@@ -504,7 +504,7 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Tre_Node *Node,
 					 PrgRsc_PutParRscCod,&Node->ListItem.Cod);
 	 else
 	    Ico_PutContextualIconToEdit (ActFrmChgPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID,
-					 Tre_PutPars,&Node);
+					 Tre_PutPars,Node);
 
 	 /***** Icon to move up the resource *****/
 	 if (NumRsc > 0 && NumRsc < NumResources)
