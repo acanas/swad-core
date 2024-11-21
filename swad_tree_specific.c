@@ -28,12 +28,19 @@
 #include "swad_error.h"
 #include "swad_FAQ.h"
 #include "swad_FAQ_database.h"
+#include "swad_global.h"
 #include "swad_info.h"
 #include "swad_program_resource.h"
 #include "swad_resource.h"
 #include "swad_resource_database.h"
 #include "swad_tree.h"
 #include "swad_tree_specific.h"
+
+/*****************************************************************************/
+/************** External global variables from others modules ****************/
+/****************************************************************************/
+
+extern struct Globals Gbl;
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -70,6 +77,101 @@ void TreSpc_ResetItem (struct Tre_Node *Node)
    /***** Reset specific fields of specific item *****/
    if (ResetSpcFields[Node->InfoType])
       ResetSpcFields[Node->InfoType] (Node);
+  }
+
+/*****************************************************************************/
+/******************** Put forms to edit a specific item **********************/
+/*****************************************************************************/
+
+void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
+                                unsigned NumItem,unsigned NumItems)
+  {
+   static Act_Action_t ActionHideUnhide[Inf_NUM_TYPES][HidVis_NUM_HIDDEN_VISIBLE] =
+     {
+      [Inf_UNKNOWN_TYPE	][HidVis_HIDDEN ] = ActUnk,
+      [Inf_UNKNOWN_TYPE	][HidVis_VISIBLE] = ActUnk,
+      [Inf_INFORMATION	][HidVis_HIDDEN ] = ActUnk,
+      [Inf_INFORMATION	][HidVis_VISIBLE] = ActUnk,
+      [Inf_PROGRAM	][HidVis_HIDDEN ] = ActUnhPrgRsc,	// Hidden ==> action to unhide
+      [Inf_PROGRAM	][HidVis_VISIBLE] = ActHidPrgRsc,	// Visible ==> action to hide
+      [Inf_TEACH_GUIDE	][HidVis_HIDDEN ] = ActUnk,
+      [Inf_TEACH_GUIDE	][HidVis_VISIBLE] = ActUnk,
+      [Inf_SYLLABUS_LEC	][HidVis_HIDDEN ] = ActUnk,
+      [Inf_SYLLABUS_LEC	][HidVis_VISIBLE] = ActUnk,
+      [Inf_SYLLABUS_PRA	][HidVis_HIDDEN ] = ActUnk,
+      [Inf_SYLLABUS_PRA	][HidVis_VISIBLE] = ActUnk,
+      [Inf_BIBLIOGRAPHY	][HidVis_HIDDEN ] = ActUnk,
+      [Inf_BIBLIOGRAPHY	][HidVis_VISIBLE] = ActUnk,
+      [Inf_FAQ		][HidVis_HIDDEN ] = ActUnhFAQQaA,	// Hidden ==> action to unhide
+      [Inf_FAQ		][HidVis_VISIBLE] = ActHidFAQQaA,	// Visible ==> action to hide
+      [Inf_LINKS	][HidVis_HIDDEN ] = ActUnk,
+      [Inf_LINKS	][HidVis_VISIBLE] = ActUnk,
+      [Inf_ASSESSMENT	][HidVis_HIDDEN ] = ActUnk,
+      [Inf_ASSESSMENT	][HidVis_VISIBLE] = ActUnk,
+     };
+   extern const char *Txt_Movement_not_allowed;
+   extern const char *Txt_Visible;
+
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+	 /***** Icon to remove question&answer *****/
+	 if (NumItem < NumItems)
+	    Ico_PutContextualIconToRemove (ActReqRemFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
+					   TreSpc_PutParItmCod,&Node->SpcItem.Cod);
+	 else
+	    Ico_PutIconRemovalNotAllowed ();
+
+	 /***** Icon to hide/unhide question&answer *****/
+	 if (NumItem < NumItems)
+	    Ico_PutContextualIconToHideUnhide (ActionHideUnhide[Node->InfoType],
+					       TreSpc_LIST_ITEMS_SECTION_ID,
+					       TreSpc_PutParItmCod,&Node->SpcItem.Cod,
+					       Node->SpcItem.HiddenOrVisible);
+	 else
+	    Ico_PutIconOff ("eye.svg",Ico_GREEN,Txt_Visible);
+
+	 /***** Put icon to edit the question&answer *****/
+	 if (NumItem < NumItems)
+	    Ico_PutContextualIconToEdit (ActFrmChgFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
+					 TreSpc_PutParItmCod,&Node->SpcItem.Cod);
+	 else
+	    Ico_PutContextualIconToEdit (ActFrmChgFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
+					 Tre_PutPars,Node);
+
+	 /***** Icon to move up the question&answer *****/
+	 if (NumItem > 0 && NumItem < NumItems)
+	    Lay_PutContextualLinkOnlyIcon (ActUp_FAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
+	                                   TreSpc_PutParItmCod,&Node->SpcItem.Cod,
+	 			           "arrow-up.svg",Ico_BLACK);
+	 else
+	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
+
+	 /***** Put icon to move down the question&answer *****/
+	 if (NumItem < NumItems - 1)
+	    Lay_PutContextualLinkOnlyIcon (ActDwnFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
+	                                   TreSpc_PutParItmCod,&Node->SpcItem.Cod,
+	                                   "arrow-down.svg",Ico_BLACK);
+	 else
+	    Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,Txt_Movement_not_allowed);
+	 break;
+      case Rol_STD:
+      case Rol_NET:
+	 break;
+      default:
+         break;
+     }
+  }
+
+/*****************************************************************************/
+/******************* Param used to edit a specific item **********************/
+/*****************************************************************************/
+
+void TreSpc_PutParItmCod (void *ItmCod)
+  {
+   if (ItmCod)
+      ParCod_PutPar (ParCod_Itm,*((long *) ItmCod));
   }
 
 /*****************************************************************************/

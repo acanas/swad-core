@@ -1282,29 +1282,27 @@ void Tre_PutPars (void *Node)
 // Node type must be set before calling this function
 void Tre_GetPars (struct Tre_Node *Node)
   {
+   static void (*GetItemData[Inf_NUM_TYPES]) (struct Tre_Node *Node) =
+     {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
+      [Inf_PROGRAM	] = PrgRsc_GetResourceDataByCod,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = NULL,
+      [Inf_FAQ		] = FAQ_GetQaADataByCod,
+      [Inf_LINKS	] = NULL,
+      [Inf_ASSESSMENT	] = NULL,
+     };
+
    /***** Clear all node data except type *****/
    Tre_ResetNode (Node);
 
    /****** Parameters specific for each type of tree *****/
-   switch (Node->InfoType)
-     {
-      case Inf_PROGRAM:
-	 /***** Try to get node resource *****/
-	 Node->SpcItem.Cod = ParCod_GetPar (ParCod_Rsc);
-
-	 /***** Get data of the tree node from database *****/
-	 PrgRsc_GetResourceDataByCod (Node);
-	 break;
-      case Inf_FAQ:
-	 /***** Try to get node question&answer *****/
-	 Node->SpcItem.Cod = ParCod_GetPar (ParCod_QaA);
-
-	 /***** Get data of the tree node from database *****/
-	 FAQ_GetQaADataByCod (Node);
-	 break;
-      default:
-	 break;
-     }
+   Node->SpcItem.Cod = ParCod_GetPar (ParCod_Itm);
+   if (GetItemData[Node->InfoType])
+      GetItemData[Node->InfoType] (Node);
 
    if (Node->Hierarchy.NodCod <= 0)	// No node specified
       /***** Try to get data of the tree node *****/

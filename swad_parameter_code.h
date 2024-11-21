@@ -50,7 +50,8 @@ typedef enum
    ParCod_GrpTyp,	// Group type code
    ParCod_Hld,		// Holiday code
    ParCod_Ins,		// Institution code
-   ParCod_Nod,		// Item code in course program
+   ParCod_Nod,		// Node code in course tree
+   ParCod_Itm,		// Specific item code in course tree
    ParCod_Lnk,		// Link code
    ParCod_Mai,		// Domain mail code
    ParCod_Mch,		// Match code in game
@@ -70,10 +71,8 @@ typedef enum
    ParCod_Prn,		// Print code in assessment test
    ParCod_Pst,		// Post code in forum
    ParCod_Pub,		// Publication code in timeline
-   ParCod_QaA,		// Question&answer code in FAQ
    ParCod_Qst,		// Question code in assessment/survey
    ParCod_Roo,		// Room code
-   ParCod_Rsc,		// Resource code in course program
    ParCod_Rub,		// Rubric code
    ParCod_Ses,		// Session code in exam
    ParCod_Set,		// Set of questions code in exam

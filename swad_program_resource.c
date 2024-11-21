@@ -70,10 +70,6 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
 static void PrgRsc_WriteRowNewResource (unsigned NumResources,
                                         struct Tre_Node *Node,
                                         Vie_ViewType_t LinkViewType);
-static void PrgRsc_PutFormsToRemEditOneResource (struct Tre_Node *Node,
-                                                 unsigned NumRsc,
-                                                 unsigned NumResources);
-static void PrgRsc_PutParRscCod (void *RscCod);
 
 static void PrgRsc_ShowClipboard (void);
 static void PrgRsc_PutIconsClipboard (__attribute__((unused)) void *Args);
@@ -152,7 +148,7 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
 	    if (Gbl.Action.Act == ActReqRemPrgRsc)
 	       /* Alert with button to remove resource */
 	       Ale_ShowLastAlertAndButton (ActRemPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID,NULL,
-					   PrgRsc_PutParRscCod,&SelectedRscCod,
+					   TreSpc_PutParItmCod,&SelectedRscCod,
 					   Btn_REMOVE_BUTTON,Txt_Remove);
 	    else
 	       Ale_ShowAlerts (TreSpc_LIST_ITEMS_SECTION_ID);
@@ -361,7 +357,7 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
 
       /***** Forms to remove/edit this resource *****/
       HTM_TD_Begin ("class=\"PRG_RSC_COL1 LT\"");
-         PrgRsc_PutFormsToRemEditOneResource (Node,NumRsc,NumResources);
+         TreSpc_PutFormsToEditItem (Node,NumRsc,NumResources);
       HTM_TD_End ();
 
       /***** Resource number *****/
@@ -374,7 +370,7 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
 
          /* Title */
 	 Frm_BeginFormAnchor (ActRenPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID);
-	    ParCod_PutPar (ParCod_Rsc,Node->SpcItem.Cod);
+	    TreSpc_PutParItmCod (&Node->SpcItem.Cod);
 	    HTM_INPUT_TEXT ("Title",Rsc_MAX_CHARS_RESOURCE_TITLE,Node->Resource.Title,
 			    HTM_SUBMIT_ON_CHANGE,
 			    "class=\"PRG_RSC_INPUT INPUT_%s\"",
@@ -393,7 +389,7 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
             case Vie_EDIT:
 	       /* Show clipboard to change resource link */
 	       Frm_BeginFormAnchor (ActChgPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID);
-		  ParCod_PutPar (ParCod_Rsc,Node->SpcItem.Cod);
+	          TreSpc_PutParItmCod (&Node->SpcItem.Cod);
 		  Rsc_ShowClipboardToChangeLink (&Node->Resource.Link);
 	       Frm_EndForm ();
                break;
@@ -423,7 +419,7 @@ static void PrgRsc_WriteRowNewResource (unsigned NumResources,
 
       /***** Forms to remove/edit this resource *****/
       HTM_TD_Begin ("class=\"PRG_RSC_COL1 LT %s\"",The_GetColorRows1 (1));
-	 PrgRsc_PutFormsToRemEditOneResource (Node,NumResources,NumResources);
+	 TreSpc_PutFormsToEditItem (Node,NumResources,NumResources);
       HTM_TD_End ();
 
       /***** Resource number *****/
@@ -461,83 +457,6 @@ static void PrgRsc_WriteRowNewResource (unsigned NumResources,
 
    /***** End row *****/
    HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/**************** Put a link (form) to edit one tree node *****************/
-/*****************************************************************************/
-
-static void PrgRsc_PutFormsToRemEditOneResource (struct Tre_Node *Node,
-                                                 unsigned NumRsc,
-                                                 unsigned NumResources)
-  {
-   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
-     {
-      [HidVis_HIDDEN ] = ActUnhPrgRsc,	// Hidden ==> action to unhide
-      [HidVis_VISIBLE] = ActHidPrgRsc,	// Visible ==> action to hide
-     };
-   extern const char *Txt_Movement_not_allowed;
-   extern const char *Txt_Visible;
-
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-	 /***** Icon to remove resource *****/
-	 if (NumRsc < NumResources)
-	    Ico_PutContextualIconToRemove (ActReqRemPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID,
-					   PrgRsc_PutParRscCod,&Node->SpcItem.Cod);
-	 else
-	    Ico_PutIconRemovalNotAllowed ();
-
-	 /***** Icon to hide/unhide resource *****/
-	 if (NumRsc < NumResources)
-	    Ico_PutContextualIconToHideUnhide (ActionHideUnhide,TreSpc_LIST_ITEMS_SECTION_ID,
-					       PrgRsc_PutParRscCod,&Node->SpcItem.Cod,
-					       Node->SpcItem.HiddenOrVisible);
-	 else
-	    Ico_PutIconOff ("eye.svg",Ico_GREEN,Txt_Visible);
-
-	 /***** Put icon to edit the resource *****/
-	 if (NumRsc < NumResources)
-	    Ico_PutContextualIconToEdit (ActFrmChgPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID,
-					 PrgRsc_PutParRscCod,&Node->SpcItem.Cod);
-	 else
-	    Ico_PutContextualIconToEdit (ActFrmChgPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID,
-					 Tre_PutPars,Node);
-
-	 /***** Icon to move up the resource *****/
-	 if (NumRsc > 0 && NumRsc < NumResources)
-	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgRsc,TreSpc_LIST_ITEMS_SECTION_ID,
-	                                   PrgRsc_PutParRscCod,&Node->SpcItem.Cod,
-	 			           "arrow-up.svg",Ico_BLACK);
-	 else
-	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
-
-	 /***** Put icon to move down the resource *****/
-	 if (NumRsc < NumResources - 1)
-	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID,
-	                                   PrgRsc_PutParRscCod,&Node->SpcItem.Cod,
-	                                   "arrow-down.svg",Ico_BLACK);
-	 else
-	    Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,Txt_Movement_not_allowed);
-	 break;
-      case Rol_STD:
-      case Rol_NET:
-	 break;
-      default:
-         break;
-     }
-  }
-
-/*****************************************************************************/
-/********************** Param used to edit a recource ************************/
-/*****************************************************************************/
-
-static void PrgRsc_PutParRscCod (void *RscCod)
-  {
-   if (RscCod)
-      ParCod_PutPar (ParCod_Rsc,*((long *) RscCod));
   }
 
 /*****************************************************************************/

@@ -91,9 +91,6 @@ static void FAQ_WriteQuestion (char Question[FAQ_MAX_BYTES_QUESTION + 1],
 static void FAQ_WriteAnswer (char Answer[Cns_MAX_BYTES_TEXT + 1],
 			     HidVis_HiddenOrVisible_t HiddenOrVisible);
 static void FAQ_WriteRowNewQaA (unsigned NumQaAs,struct Tre_Node *Node);
-static void FAQ_PutFormsToRemEditOneQaA (struct Tre_Node *Node,
-                                         unsigned NumQaA,unsigned NumQaAs);
-static void FAQ_PutParQaACod (void *QaACod);
 
 /*****************************************************************************/
 /***************** Reset specific fields of question&answer ******************/
@@ -179,7 +176,7 @@ void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
 	    if (Gbl.Action.Act == ActReqRemFAQQaA)
 	       /* Alert with button to remove question&answer */
 	       Ale_ShowLastAlertAndButton (ActRemFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,NULL,
-					   FAQ_PutParQaACod,&SelectedQaACod,
+					   TreSpc_PutParItmCod,&SelectedQaACod,
 					   Btn_REMOVE_BUTTON,Txt_Remove);
 	    else
 	       Ale_ShowAlerts (TreSpc_LIST_ITEMS_SECTION_ID);
@@ -378,7 +375,7 @@ static void FAQ_WriteRowEditQaA (unsigned NumQaA,unsigned NumQaAs,
 
       /***** Forms to remove/edit this question&answer *****/
       HTM_TD_Begin ("class=\"PRG_RSC_COL1 LT\"");
-         FAQ_PutFormsToRemEditOneQaA (Node,NumQaA,NumQaAs);
+         TreSpc_PutFormsToEditItem (Node,NumQaA,NumQaAs);
       HTM_TD_End ();
 
       /***** Question&answer number *****/
@@ -400,7 +397,7 @@ static void FAQ_WriteRowEditQaA (unsigned NumQaA,unsigned NumQaAs,
             case Vie_EDIT:
 	       /* Show textarea to change answer */
 	       Frm_BeginFormAnchor (ActChgFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID);
-		  ParCod_PutPar (ParCod_QaA,Node->SpcItem.Cod);
+	          TreSpc_PutParItmCod (&Node->SpcItem.Cod);
 
 		  /* Question */
 		  HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,Node->QaA.Question,
@@ -449,7 +446,7 @@ static void FAQ_WriteRowNewQaA (unsigned NumQaAs,struct Tre_Node *Node)
 
       /***** Forms to remove/edit this question&answer *****/
       HTM_TD_Begin ("class=\"PRG_RSC_COL1 LT %s\"",The_GetColorRows1 (1));
-	 FAQ_PutFormsToRemEditOneQaA (Node,NumQaAs,NumQaAs);
+	 TreSpc_PutFormsToEditItem (Node,NumQaAs,NumQaAs);
       HTM_TD_End ();
 
       /***** Question&answer number *****/
@@ -514,82 +511,6 @@ static void FAQ_WriteAnswer (char Answer[Cns_MAX_BYTES_TEXT + 1],
   }
 
 /*****************************************************************************/
-/***************** Put a link (form) to edit one tree node *******************/
-/*****************************************************************************/
-
-static void FAQ_PutFormsToRemEditOneQaA (struct Tre_Node *Node,
-                                         unsigned NumQaA,unsigned NumQaAs)
-  {
-   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
-     {
-      [HidVis_HIDDEN ] = ActUnhFAQQaA,	// Hidden ==> action to unhide
-      [HidVis_VISIBLE] = ActHidFAQQaA,	// Visible ==> action to hide
-     };
-   extern const char *Txt_Movement_not_allowed;
-   extern const char *Txt_Visible;
-
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-	 /***** Icon to remove question&answer *****/
-	 if (NumQaA < NumQaAs)
-	    Ico_PutContextualIconToRemove (ActReqRemFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
-					   FAQ_PutParQaACod,&Node->SpcItem.Cod);
-	 else
-	    Ico_PutIconRemovalNotAllowed ();
-
-	 /***** Icon to hide/unhide question&answer *****/
-	 if (NumQaA < NumQaAs)
-	    Ico_PutContextualIconToHideUnhide (ActionHideUnhide,TreSpc_LIST_ITEMS_SECTION_ID,
-					       FAQ_PutParQaACod,&Node->SpcItem.Cod,
-					       Node->SpcItem.HiddenOrVisible);
-	 else
-	    Ico_PutIconOff ("eye.svg",Ico_GREEN,Txt_Visible);
-
-	 /***** Put icon to edit the question&answer *****/
-	 if (NumQaA < NumQaAs)
-	    Ico_PutContextualIconToEdit (ActFrmChgFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
-					 FAQ_PutParQaACod,&Node->SpcItem.Cod);
-	 else
-	    Ico_PutContextualIconToEdit (ActFrmChgFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
-					 Tre_PutPars,Node);
-
-	 /***** Icon to move up the question&answer *****/
-	 if (NumQaA > 0 && NumQaA < NumQaAs)
-	    Lay_PutContextualLinkOnlyIcon (ActUp_FAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
-	                                   FAQ_PutParQaACod,&Node->SpcItem.Cod,
-	 			           "arrow-up.svg",Ico_BLACK);
-	 else
-	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
-
-	 /***** Put icon to move down the question&answer *****/
-	 if (NumQaA < NumQaAs - 1)
-	    Lay_PutContextualLinkOnlyIcon (ActDwnFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
-	                                   FAQ_PutParQaACod,&Node->SpcItem.Cod,
-	                                   "arrow-down.svg",Ico_BLACK);
-	 else
-	    Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,Txt_Movement_not_allowed);
-	 break;
-      case Rol_STD:
-      case Rol_NET:
-	 break;
-      default:
-         break;
-     }
-  }
-
-/*****************************************************************************/
-/******************* Param used to edit a question&answer ********************/
-/*****************************************************************************/
-
-static void FAQ_PutParQaACod (void *QaACod)
-  {
-   if (QaACod)
-      ParCod_PutPar (ParCod_QaA,*((long *) QaACod));
-  }
-
-/*****************************************************************************/
 /************************** Create question&answer ***************************/
 /*****************************************************************************/
 
@@ -630,30 +551,4 @@ void FAQ_ChangeQaA (struct Tre_Node *Node)
 
    /***** Update answer *****/
    FAQ_DB_UpdateQaA (Node);
-  }
-
-/*****************************************************************************/
-/***************************** Get link parameter ****************************/
-/*****************************************************************************/
-
-bool FAQ_GetParQuestion (struct Rsc_Link *Link)	// TODO: cHANGE!!!!!!!!!!!!!!!!
-  {
-   char TypeCod[3 + 1 + Cns_MAX_DIGITS_LONG + 1];
-   char TypeStr[3 + 1];
-   long Cod;
-
-   /***** Get link type and code *****/
-   Par_GetParText ("Question",TypeCod,sizeof (TypeCod) - 1);
-   if (sscanf (TypeCod,"%3s_%ld",TypeStr,&Cod) == 2)
-     {
-      /* Correct link found */
-      // Link->Type = Rsc_GetTypeFromString (TypeStr);
-      // Link->Cod  = Cod;
-      return true;
-     }
-
-   /* No link found */
-   Link->Type = Rsc_NONE;
-   Link->Cod  = -1L;
-   return false;
   }
