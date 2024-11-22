@@ -47,6 +47,9 @@ typedef enum
 /*****************************************************************************/
 
 void TreSpc_ResetItem (struct Tre_Node *Node);
+void TreSpc_WriteRowViewItem (struct Tre_Node *Node,
+			      unsigned NumItem,
+			      HidVis_HiddenOrVisible_t HiddenOrVisible);
 void TreSpc_WriteRowEditItem (struct Tre_Node *Node,
 			      unsigned NumItem,unsigned NumItems,
 			      Vie_ViewType_t ViewType,

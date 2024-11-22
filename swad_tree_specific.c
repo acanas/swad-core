@@ -83,6 +83,50 @@ void TreSpc_ResetItem (struct Tre_Node *Node)
 /*************************** Edit a specific item ****************************/
 /*****************************************************************************/
 
+void TreSpc_WriteRowViewItem (struct Tre_Node *Node,
+			      unsigned NumItem,
+			      HidVis_HiddenOrVisible_t HiddenOrVisible)
+  {
+   static void (*WriteCell[Inf_NUM_TYPES]) (struct Tre_Node *Node,
+					    HidVis_HiddenOrVisible_t HiddenOrVisible) =
+     {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
+      [Inf_PROGRAM	] = PrgRsc_WriteCellViewResource,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = NULL,
+      [Inf_FAQ		] = FAQ_WriteCellViewQaA,
+      [Inf_LINKS	] = NULL,
+      [Inf_ASSESSMENT	] = NULL,
+     };
+
+   /***** Begin row *****/
+   HTM_TR_Begin (NULL);
+
+      /***** Question&Answer number *****/
+      HTM_TD_Begin ("class=\"TRE_NUM PRG_RSC_%s\"",The_GetSuffix ());
+	 HTM_Unsigned (NumItem + 1);
+      HTM_TD_End ();
+
+      /***** Question&Answer *****/
+      HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s\"",The_GetSuffix ());
+
+	 /* Wite cell contents */
+         if (WriteCell[Node->InfoType])
+	    WriteCell[Node->InfoType] (Node,HiddenOrVisible);
+
+      HTM_TD_End ();
+
+   /***** End row *****/
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/*************************** Edit a specific item ****************************/
+/*****************************************************************************/
+
 void TreSpc_WriteRowEditItem (struct Tre_Node *Node,
 			      unsigned NumItem,unsigned NumItems,
 			      Vie_ViewType_t ViewType,

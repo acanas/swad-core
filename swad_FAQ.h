@@ -44,6 +44,8 @@ void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
 
 void FAQ_GetQaADataByCod (struct Tre_Node *Node);
 
+void FAQ_WriteCellViewQaA (struct Tre_Node *Node,
+			   HidVis_HiddenOrVisible_t HiddenOrVisible);
 void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
                            Vie_ViewType_t ViewType,
 			   HidVis_HiddenOrVisible_t HiddenOrVisible);

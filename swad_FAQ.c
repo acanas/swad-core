@@ -80,9 +80,7 @@ static void FAQ_PutIconsViewRes (void *Node);
 static void FAQ_PutIconsEditRes (void *Node);
 
 static void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node);
-static void FAQ_WriteRowViewQaA (unsigned NumQaA,struct Tre_Node *Node,
-				 HidVis_HiddenOrVisible_t HiddenOrVisible);
-static void FAQ_WriteQuestion (char Question[FAQ_MAX_BYTES_QUESTION + 1],
+static void FAQ_WriteQuestion (const char Question[FAQ_MAX_BYTES_QUESTION + 1],
 			       HidVis_HiddenOrVisible_t HiddenOrVisible);
 static void FAQ_WriteAnswer (char Answer[Cns_MAX_BYTES_TEXT + 1],
 			     HidVis_HiddenOrVisible_t HiddenOrVisible);
@@ -212,7 +210,7 @@ void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
 	       switch (ViewingOrEditingQaAOfThisNode)
 		 {
 		  case Vie_VIEW:
-		     FAQ_WriteRowViewQaA (NumQaA,Node,HiddenOrVisible);
+		     TreSpc_WriteRowViewItem (Node,NumQaA,HiddenOrVisible);
 		     break;
 		  case Vie_EDIT:
 		     TreSpc_WriteRowEditItem (Node,NumQaA,NumQaAs,
@@ -333,25 +331,11 @@ static void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
 /********************** Show one question & answer ***************************/
 /*****************************************************************************/
 
-static void FAQ_WriteRowViewQaA (unsigned NumQaA,struct Tre_Node *Node,
-				 HidVis_HiddenOrVisible_t HiddenOrVisible)
+void FAQ_WriteCellViewQaA (struct Tre_Node *Node,
+			   HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   /***** Begin row *****/
-   HTM_TR_Begin (NULL);
-
-      /***** Question&Answer number *****/
-      HTM_TD_Begin ("class=\"TRE_NUM PRG_RSC_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (NumQaA + 1);
-      HTM_TD_End ();
-
-      /***** Question&Answer *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s\"",The_GetSuffix ());
-	 FAQ_WriteQuestion (Node->QaA.Question,HiddenOrVisible);
-         FAQ_WriteAnswer (Node->QaA.Answer,HiddenOrVisible);
-      HTM_TD_End ();
-
-   /***** End row *****/
-   HTM_TR_End ();
+   FAQ_WriteQuestion (Node->QaA.Question,HiddenOrVisible);
+   FAQ_WriteAnswer (Node->QaA.Answer,HiddenOrVisible);
   }
 
 /*****************************************************************************/
@@ -453,7 +437,7 @@ static void FAQ_WriteRowNewQaA (unsigned NumQaAs,struct Tre_Node *Node)
 /***************************** Write question ********************************/
 /*****************************************************************************/
 
-static void FAQ_WriteQuestion (char Question[FAQ_MAX_BYTES_QUESTION + 1],
+static void FAQ_WriteQuestion (const char Question[FAQ_MAX_BYTES_QUESTION + 1],
 			       HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];

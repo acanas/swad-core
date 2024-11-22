@@ -41,9 +41,11 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
 
 void PrgRsc_GetResourceDataByCod (struct Tre_Node *Node);
 
+void PrgRsc_WriteCellViewResource (struct Tre_Node *Node,
+                                   HidVis_HiddenOrVisible_t HiddenOrVisible);
 void PrgRsc_WriteCellEditResource (struct Tre_Node *Node,
 				   Vie_ViewType_t ViewType,
-				   HidVis_HiddenOrVisible_t HiddenOrVisible);
+				   __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 void PrgRsc_ViewResourceClipboard (void);
 void PrgRsc_RemoveResourceClipboard (void);
