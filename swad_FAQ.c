@@ -84,7 +84,6 @@ static void FAQ_WriteQuestion (const char Question[FAQ_MAX_BYTES_QUESTION + 1],
 			       HidVis_HiddenOrVisible_t HiddenOrVisible);
 static void FAQ_WriteAnswer (char Answer[Cns_MAX_BYTES_TEXT + 1],
 			     HidVis_HiddenOrVisible_t HiddenOrVisible);
-static void FAQ_WriteRowNewQaA (unsigned NumQaAs,struct Tre_Node *Node);
 
 /*****************************************************************************/
 /**************** Reset specific fields of question & answer *****************/
@@ -229,7 +228,7 @@ void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
 	    if (ViewingOrEditingQaAOfThisNode == Vie_EDIT)
 	      {
 	       TreSpc_ResetItem (Node);
-	       FAQ_WriteRowNewQaA (NumQaAs,Node);
+	       TreSpc_WriteRowNewItem (Node,NumQaAs);
 	      }
 
 	 /***** End table *****/
@@ -353,8 +352,7 @@ void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
      {
       case Vie_VIEW:
 	 /***** Show current question & answer *****/
-	 FAQ_WriteQuestion (Node->QaA.Question,HiddenOrVisible);
-	 FAQ_WriteAnswer (Node->QaA.Answer,HiddenOrVisible);
+	 FAQ_WriteCellViewQaA (Node,HiddenOrVisible);
 	 break;
       case Vie_EDIT:
 	 /***** Show form to change question & answer *****/
@@ -364,8 +362,7 @@ void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
 	    /* Question */
 	    HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,Node->QaA.Question,
 			    HTM_SUBMIT_ON_CHANGE,
-			    "class=\"PRG_RSC_INPUT INPUT_%s\"",
-			    The_GetSuffix ());
+			    "class=\"PRG_RSC_INPUT INPUT_%s\"",The_GetSuffix ());
 
 	    /* Answer */
 	    HTM_BR ();
@@ -393,44 +390,15 @@ void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
 /*********************** Edit a new question & answer ************************/
 /*****************************************************************************/
 
-static void FAQ_WriteRowNewQaA (unsigned NumQaAs,struct Tre_Node *Node)
+void FAQ_WriteCellNewQaA (void)
   {
    extern const char *Txt_New_question;
-   extern const char *Txt_Save_changes;
 
-   /***** Begin row *****/
-   HTM_TR_Begin (NULL);
-
-      /***** Forms to remove/edit this question & answer *****/
-      HTM_TD_Begin ("class=\"PRG_RSC_COL1 LT %s\"",The_GetColorRows1 (1));
-	 TreSpc_PutFormsToEditItem (Node,NumQaAs,NumQaAs);
-      HTM_TD_End ();
-
-      /***** Question & answer number *****/
-      HTM_TD_Begin ("class=\"TRE_NUM PRG_RSC_%s %s\"",
-                    The_GetSuffix (),The_GetColorRows1 (1));
-	 HTM_Unsigned (NumQaAs + 1);
-      HTM_TD_End ();
-
-      /***** Question *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN %s\"",The_GetColorRows1 (1));
-
-	 Frm_BeginFormAnchor (ActNewFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID);
-	    ParCod_PutPar (ParCod_Nod,Node->Hierarchy.NodCod);
-
-            /* Question */
-	    HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,"",
-			    HTM_SUBMIT_ON_CHANGE,
-			    "placeholder=\"%s\""
-			    " class=\"PRG_RSC_INPUT INPUT_%s\"",
-			    Txt_New_question,The_GetSuffix ());
-
-	 Frm_EndForm ();
-
-      HTM_TD_End ();
-
-   /***** End row *****/
-   HTM_TR_End ();
+   HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,"",
+		   HTM_SUBMIT_ON_CHANGE,
+		   "placeholder=\"%s\""
+		   " class=\"PRG_RSC_INPUT INPUT_%s\"",
+		   Txt_New_question,The_GetSuffix ());
   }
 
 /*****************************************************************************/

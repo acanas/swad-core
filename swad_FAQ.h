@@ -49,6 +49,7 @@ void FAQ_WriteCellViewQaA (struct Tre_Node *Node,
 void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
                            Vie_ViewType_t ViewType,
 			   HidVis_HiddenOrVisible_t HiddenOrVisible);
+void FAQ_WriteCellNewQaA (void);
 
 void FAQ_CreateQaA (struct Tre_Node *Node);
 void FAQ_RenameQaA (const struct Tre_Node *Node);

@@ -46,6 +46,7 @@ void PrgRsc_WriteCellViewResource (struct Tre_Node *Node,
 void PrgRsc_WriteCellEditResource (struct Tre_Node *Node,
 				   Vie_ViewType_t ViewType,
 				   __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible);
+void PrgRsc_WriteCellNewResource (void);
 
 void PrgRsc_ViewResourceClipboard (void);
 void PrgRsc_RemoveResourceClipboard (void);

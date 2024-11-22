@@ -61,9 +61,6 @@ static void PrgRsc_PutIconsEditRes (void *Node);
 
 static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
                                            struct Tre_Node *Node);
-static void PrgRsc_WriteRowNewResource (unsigned NumResources,
-                                        struct Tre_Node *Node,
-                                        Vie_ViewType_t LinkViewType);
 
 static void PrgRsc_ShowClipboard (void);
 static void PrgRsc_PutIconsClipboard (__attribute__((unused)) void *Args);
@@ -201,10 +198,7 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
 	    if (ViewingOrEditingResOfThisNode == Vie_EDIT)
 	      {
 	       TreSpc_ResetItem (Node);
-	       PrgRsc_WriteRowNewResource (NumResources,Node,
-					   (ListingType == Tre_EDIT_SPC_ITEM &&
-					    Node->SpcItem.Cod == SelectedRscCod) ? Vie_EDIT :
-										   Vie_VIEW);
+	       TreSpc_WriteRowNewItem (Node,NumResources);
 	      }
 
 	 /***** End table *****/
@@ -332,25 +326,25 @@ void PrgRsc_WriteCellEditResource (struct Tre_Node *Node,
 				   Vie_ViewType_t ViewType,
 				   __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   /***** Title *****/
-   Frm_BeginFormAnchor (ActRenPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID);
-      TreSpc_PutParItmCod (&Node->SpcItem.Cod);
-      HTM_INPUT_TEXT ("Title",Rsc_MAX_CHARS_RESOURCE_TITLE,Node->Resource.Title,
-		      HTM_SUBMIT_ON_CHANGE,
-		      "class=\"PRG_RSC_INPUT INPUT_%s\"",
-		      The_GetSuffix ());
-   Frm_EndForm ();
-
-   HTM_BR ();
-
    /***** Show current link / Show clipboard to change resource link *****/
    switch (ViewType)
      {
       case Vie_VIEW:
 	 /* Show current link */
-	 Rsc_WriteLinkName (&Node->Resource.Link,Frm_PUT_FORM);
+	 PrgRsc_WriteCellViewResource (Node,HiddenOrVisible);
 	 break;
       case Vie_EDIT:
+	 /* Title */
+	 Frm_BeginFormAnchor (ActRenPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID);
+	    TreSpc_PutParItmCod (&Node->SpcItem.Cod);
+	    HTM_INPUT_TEXT ("Title",Rsc_MAX_CHARS_RESOURCE_TITLE,Node->Resource.Title,
+			    HTM_SUBMIT_ON_CHANGE,
+			    "class=\"PRG_RSC_INPUT INPUT_%s\"",
+			    The_GetSuffix ());
+	 Frm_EndForm ();
+
+	 HTM_BR ();
+
 	 /* Show clipboard to change resource link */
 	 Frm_BeginFormAnchor (ActChgPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID);
 	    TreSpc_PutParItmCod (&Node->SpcItem.Cod);
@@ -363,59 +357,15 @@ void PrgRsc_WriteCellEditResource (struct Tre_Node *Node,
      }
   }
 
-/*****************************************************************************/
-/**************************** Edit a new resource ****************************/
-/*****************************************************************************/
-
-static void PrgRsc_WriteRowNewResource (unsigned NumResources,
-                                        struct Tre_Node *Node,
-                                        Vie_ViewType_t LinkViewType)
+void PrgRsc_WriteCellNewResource (void)
   {
    extern const char *Txt_New_resource;
 
-   /***** Begin row *****/
-   HTM_TR_Begin (NULL);
-
-      /***** Forms to remove/edit this resource *****/
-      HTM_TD_Begin ("class=\"PRG_RSC_COL1 LT %s\"",The_GetColorRows1 (1));
-	 TreSpc_PutFormsToEditItem (Node,NumResources,NumResources);
-      HTM_TD_End ();
-
-      /***** Resource number *****/
-      HTM_TD_Begin ("class=\"TRE_NUM PRG_RSC_%s %s\"",
-                    The_GetSuffix (),The_GetColorRows1 (1));
-	 HTM_Unsigned (NumResources + 1);
-      HTM_TD_End ();
-
-      /***** Title and link/clipboard *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN %s\"",The_GetColorRows1 (1));
-
-         /* Title */
-	 Frm_BeginFormAnchor (ActNewPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID);
-	    ParCod_PutPar (ParCod_Nod,Node->Hierarchy.NodCod);
-	    HTM_INPUT_TEXT ("Title",Rsc_MAX_CHARS_RESOURCE_TITLE,"",
-			    HTM_SUBMIT_ON_CHANGE,
-			    "placeholder=\"%s\""
-			    " class=\"PRG_RSC_INPUT INPUT_%s\"",
-			    Txt_New_resource,The_GetSuffix ());
-	 Frm_EndForm ();
-
-	 /* Edit link showing clipboard? */
-         if (LinkViewType == Vie_EDIT)
-	   {
-            HTM_BR ();
-
-	    /* Show clipboard to change resource link */
-            Frm_BeginFormAnchor (ActChgPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID);
-               ParCod_PutPar (ParCod_Nod,Node->Hierarchy.NodCod);
-               Rsc_ShowClipboardToChangeLink (&Node->Resource.Link);
-	    Frm_EndForm ();
-	   }
-
-      HTM_TD_End ();
-
-   /***** End row *****/
-   HTM_TR_End ();
+   HTM_INPUT_TEXT ("Title",Rsc_MAX_CHARS_RESOURCE_TITLE,"",
+		   HTM_SUBMIT_ON_CHANGE,
+		   "placeholder=\"%s\""
+		   " class=\"PRG_RSC_INPUT INPUT_%s\"",
+		   Txt_New_resource,The_GetSuffix ());
   }
 
 /*****************************************************************************/

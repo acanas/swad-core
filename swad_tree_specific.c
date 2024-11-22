@@ -164,9 +164,75 @@ void TreSpc_WriteRowEditItem (struct Tre_Node *Node,
       /***** Item content *****/
       HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s\"",The_GetSuffix ());
 
-	 /* Wite cell contents */
+	 /* Write cell contents */
          if (WriteCell[Node->InfoType])
 	    WriteCell[Node->InfoType] (Node,ViewType,HiddenOrVisible);
+
+      HTM_TD_End ();
+
+   /***** End row *****/
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/*************************** Edit a specific item ****************************/
+/*****************************************************************************/
+
+void TreSpc_WriteRowNewItem (struct Tre_Node *Node,unsigned NumItems)
+  {
+   static Act_Action_t ActionsNewItem[Inf_NUM_TYPES] =
+     {
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActNewPrgRsc,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActUnk,
+      [Inf_SYLLABUS_PRA	] = ActUnk,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActNewFAQQaA,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
+     };
+   static void (*WriteCell[Inf_NUM_TYPES]) (void) =
+     {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
+      [Inf_PROGRAM	] = PrgRsc_WriteCellNewResource,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = NULL,
+      [Inf_FAQ		] = FAQ_WriteCellNewQaA,
+      [Inf_LINKS	] = NULL,
+      [Inf_ASSESSMENT	] = NULL,
+     };
+
+   /***** Begin row *****/
+   HTM_TR_Begin (NULL);
+
+      /***** Forms to remove/edit this question & answer *****/
+      HTM_TD_Begin ("class=\"PRG_RSC_COL1 LT %s\"",The_GetColorRows1 (1));
+	 TreSpc_PutFormsToEditItem (Node,NumItems,NumItems);
+      HTM_TD_End ();
+
+      /***** Item number *****/
+      HTM_TD_Begin ("class=\"TRE_NUM PRG_RSC_%s %s\"",
+                    The_GetSuffix (),The_GetColorRows1 (1));
+	 HTM_Unsigned (NumItems + 1);
+      HTM_TD_End ();
+
+      /***** Item content *****/
+      HTM_TD_Begin ("class=\"PRG_MAIN %s\"",The_GetColorRows1 (1));
+
+	 Frm_BeginFormAnchor (ActionsNewItem[Node->InfoType],
+			      TreSpc_LIST_ITEMS_SECTION_ID);
+	    ParCod_PutPar (ParCod_Nod,Node->Hierarchy.NodCod);
+
+	    /* Write cell contents */
+	    if (WriteCell[Node->InfoType])
+	       WriteCell[Node->InfoType] ();
+
+	 Frm_EndForm ();
 
       HTM_TD_End ();
 
@@ -184,15 +250,15 @@ void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
    static Act_Action_t ActionsReqRem[Inf_NUM_TYPES] =
      {
       [Inf_UNKNOWN_TYPE	] = ActUnk,
-      [Inf_INFORMATION	] = ActReqRemTreNodInf,
-      [Inf_PROGRAM	] = ActReqRemTreNodPrg,
-      [Inf_TEACH_GUIDE	] = ActReqRemTreNodGui,
-      [Inf_SYLLABUS_LEC	] = ActReqRemTreNodSyl,
-      [Inf_SYLLABUS_PRA	] = ActReqRemTreNodSyl,
-      [Inf_BIBLIOGRAPHY	] = ActReqRemTreNodBib,
-      [Inf_FAQ		] = ActReqRemTreNodFAQ,
-      [Inf_LINKS	] = ActReqRemTreNodLnk,
-      [Inf_ASSESSMENT	] = ActReqRemTreNodAss,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActReqRemPrgRsc,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActUnk,
+      [Inf_SYLLABUS_PRA	] = ActUnk,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActReqRemFAQQaA,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
      };
    static Act_Action_t ActionHideUnhide[Inf_NUM_TYPES][HidVis_NUM_HIDDEN_VISIBLE] =
      {
