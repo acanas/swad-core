@@ -33,13 +33,8 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
-                               struct Tre_Node *Node,
-                               long SelectedNodCod,
-                               long SelectedRscCod,
-                               HidVis_HiddenOrVisible_t HiddenOrVisible);
-
 void PrgRsc_GetResourceDataByCod (struct Tre_Node *Node);
+void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node);
 
 void PrgRsc_WriteCellViewResource (struct Tre_Node *Node,
                                    HidVis_HiddenOrVisible_t HiddenOrVisible);

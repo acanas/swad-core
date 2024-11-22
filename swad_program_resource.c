@@ -36,207 +36,22 @@
 #include "swad_button.h"
 #include "swad_error.h"
 #include "swad_form.h"
-#include "swad_global.h"
 #include "swad_hidden_visible.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
 #include "swad_program.h"
+#include "swad_program_resource.h"
 #include "swad_resource.h"
 #include "swad_resource_database.h"
 #include "swad_tree_specific.h"
 #include "swad_view.h"
 
 /*****************************************************************************/
-/************** External global variables from others modules ****************/
-/****************************************************************************/
-
-extern struct Globals Gbl;
-
-/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void PrgRsc_PutIconsViewRes (void *Node);
-static void PrgRsc_PutIconsEditRes (void *Node);
-
-static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
-                                           struct Tre_Node *Node);
-
 static void PrgRsc_ShowClipboard (void);
 static void PrgRsc_PutIconsClipboard (__attribute__((unused)) void *Args);
-
-/*****************************************************************************/
-/****************************** List resources *******************************/
-/*****************************************************************************/
-
-void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
-                               struct Tre_Node *Node,
-                               long SelectedNodCod,
-                               long SelectedRscCod,
-                               HidVis_HiddenOrVisible_t HiddenOrVisible)
-  {
-   extern const char *Hlp_COURSE_Program_resources;
-   extern const char *Txt_Remove;
-   extern const char *Txt_Resources;
-   MYSQL_RES *mysql_res;
-   unsigned NumRsc;
-   unsigned NumResources;
-   Vie_ViewType_t ViewingOrEditingResOfThisNode;
-   static Vie_ViewType_t ViewingOrEditing[Tre_NUM_LISTING_TYPES] =
-     {
-      [Tre_PRINT			] = Vie_VIEW,
-      [Tre_VIEW				] = Vie_VIEW,
-      [Tre_EDIT_NODES			] = Vie_EDIT,
-      [Tre_FORM_NEW_END_NODE		] = Vie_EDIT,
-      [Tre_FORM_NEW_CHILD_NODE		] = Vie_EDIT,
-      [Tre_FORM_EDIT_NODE		] = Vie_EDIT,
-      [Tre_END_EDIT_NODE		] = Vie_EDIT,
-      [Tre_RECEIVE_NODE			] = Vie_EDIT,
-      [Tre_EDIT_SPC_LIST_ITEMS		] = Vie_EDIT,
-      [Tre_EDIT_SPC_ITEM		] = Vie_EDIT,
-      [Tre_CHG_SPC_ITEM			] = Vie_EDIT,
-      [Tre_END_EDIT_SPC_LIST_ITEMS	] = Vie_EDIT,
-     };
-   static Vie_ViewType_t ViewingOrEditingRes[Tre_NUM_LISTING_TYPES] =
-     {
-      [Tre_PRINT			] = Vie_VIEW,
-      [Tre_VIEW				] = Vie_VIEW,
-      [Tre_EDIT_NODES			] = Vie_VIEW,
-      [Tre_FORM_NEW_END_NODE		] = Vie_VIEW,
-      [Tre_FORM_NEW_CHILD_NODE		] = Vie_VIEW,
-      [Tre_FORM_EDIT_NODE		] = Vie_VIEW,
-      [Tre_END_EDIT_NODE		] = Vie_VIEW,
-      [Tre_RECEIVE_NODE			] = Vie_VIEW,
-      [Tre_EDIT_SPC_LIST_ITEMS		] = Vie_EDIT,
-      [Tre_EDIT_SPC_ITEM		] = Vie_EDIT,
-      [Tre_CHG_SPC_ITEM			] = Vie_EDIT,
-      [Tre_END_EDIT_SPC_LIST_ITEMS	] = Vie_VIEW,
-     };
-   static void (*PrgRsc_PutIconsRes[Vie_NUM_VIEW_TYPES]) (void *Node) =
-     {
-      [Vie_VIEW		] = PrgRsc_PutIconsEditRes,
-      [Vie_EDIT		] = PrgRsc_PutIconsViewRes,
-      [Vie_CONFIG	] = NULL,
-      [Vie_PRINT	] = NULL,
-     };
-
-   /***** Trivial check *****/
-   if (Node->Hierarchy.NodCod <= 0)
-      return;
-
-   /***** Get list of node resources from database *****/
-   NumResources = Rsc_DB_GetListResources (&mysql_res,Node->Hierarchy.NodCod,
-                                           ViewingOrEditingRes[ListingType] == Vie_EDIT);
-
-   if (NumResources || ViewingOrEditing[ListingType] == Vie_EDIT)
-     {
-      if (Node->Hierarchy.NodCod == SelectedNodCod)
-	{
-	 /***** Begin section *****/
-	 HTM_SECTION_Begin (TreSpc_LIST_ITEMS_SECTION_ID);
-
-	    /***** Show possible alerts *****/
-	    if (Gbl.Action.Act == ActReqRemPrgRsc)
-	       /* Alert with button to remove resource */
-	       Ale_ShowLastAlertAndButton (ActRemPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID,NULL,
-					   TreSpc_PutParItmCod,&SelectedRscCod,
-					   Btn_REMOVE_BUTTON,Txt_Remove);
-	    else
-	       Ale_ShowAlerts (TreSpc_LIST_ITEMS_SECTION_ID);
-	}
-
-      /***** Begin box *****/
-      ViewingOrEditingResOfThisNode = (ViewingOrEditingRes[ListingType] == Vie_EDIT &&
-				       Node->Hierarchy.NodCod == SelectedNodCod) ? Vie_EDIT :
-										   Vie_VIEW;
-      switch (ViewingOrEditing[ListingType])
-        {
-         case Vie_VIEW:
-	    Box_BoxBegin (NULL,NULL,NULL,NULL,Box_NOT_CLOSABLE);
-	    break;
-         case Vie_EDIT:
-	    Box_BoxBegin (Txt_Resources,
-			  PrgRsc_PutIconsRes[ViewingOrEditingResOfThisNode],Node,
-			  Hlp_COURSE_Program_resources,Box_NOT_CLOSABLE);
-	    break;
-         default:
-            Err_WrongTypeExit ();
-            break;
-        }
-
-	 /***** Table *****/
-	 HTM_TABLE_BeginWidePadding (2);
-
-	    /***** Write all resources of this node *****/
-	    for (NumRsc = 0;
-		 NumRsc < NumResources;
-		 NumRsc++)
-	      {
-	       /* Get data of this resource */
-	       PrgRsc_GetResourceDataFromRow (mysql_res,Node);
-
-	       /* Show resource */
-	       switch (ViewingOrEditingResOfThisNode)
-		 {
-		  case Vie_VIEW:
-		     TreSpc_WriteRowViewItem (Node,NumRsc,HiddenOrVisible);
-		     break;
-		  case Vie_EDIT:
-		     TreSpc_WriteRowEditItem (Node,NumRsc,NumResources,
-					      (ListingType == Tre_EDIT_SPC_ITEM &&
-					       Node->SpcItem.Cod == SelectedRscCod) ? Vie_EDIT :
-										      Vie_VIEW,
-					      HiddenOrVisible);
-		     break;
-		  default:
-		     Err_WrongTypeExit ();
-		     break;
-		 }
-	      }
-
-	    /***** Form to create a new resource *****/
-	    if (ViewingOrEditingResOfThisNode == Vie_EDIT)
-	      {
-	       TreSpc_ResetItem (Node);
-	       TreSpc_WriteRowNewItem (Node,NumResources);
-	      }
-
-	 /***** End table *****/
-	 HTM_TABLE_End ();
-
-      /***** End box *****/
-      Box_BoxEnd ();
-
-      /***** End section *****/
-      if (Node->Hierarchy.NodCod == SelectedNodCod)
-	 HTM_SECTION_End ();
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/************** Put contextual icons in list of node resources ***************/
-/*****************************************************************************/
-
-static void PrgRsc_PutIconsViewRes (void *Node)
-  {
-   if (Node)
-      if (((struct Tre_Node *) Node)->Hierarchy.NodCod > 0)
-	 if (Tre_CheckIfICanEditTree () == Usr_CAN)
-	    Ico_PutContextualIconToView (ActFrmSeePrgRsc,TreSpc_LIST_ITEMS_SECTION_ID,
-					 Tre_PutPars,Node);
-  }
-
-static void PrgRsc_PutIconsEditRes (void *Node)
-  {
-   if (Node)
-      if (((struct Tre_Node *) Node)->Hierarchy.NodCod > 0)
-	 if (Tre_CheckIfICanEditTree () == Usr_CAN)
-	    Ico_PutContextualIconToEdit (ActFrmEdiPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID,
-					 Tre_PutPars,Node);
-  }
 
 /*****************************************************************************/
 /****************** Get node resource data using its code ********************/
@@ -267,8 +82,7 @@ void PrgRsc_GetResourceDataByCod (struct Tre_Node *Node)
 /**************************** Get resource data ******************************/
 /*****************************************************************************/
 
-static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
-                                           struct Tre_Node *Node)
+void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
   {
    MYSQL_ROW row;
 

@@ -587,13 +587,13 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	      {
 	       case Inf_PROGRAM:
 		  /* List of resources of this tree node */
-		  PrgRsc_ListNodeResources (ListingType,Node,SelectedNodCod,Cod,
-					    HiddenOrVisible);
+		  TreSpc_ListNodeItems (ListingType,Node,SelectedNodCod,Cod,
+					HiddenOrVisible);
 		  break;
 	       case Inf_FAQ:
 		  /* List of questions-answers of this tree node */
-		  FAQ_ListNodeQaAs (ListingType,Node,SelectedNodCod,Cod,
-				    HiddenOrVisible);
+		  TreSpc_ListNodeItems (ListingType,Node,SelectedNodCod,Cod,
+				        HiddenOrVisible);
 		  break;
 	       default:
 		  Ale_ShowAlert (Ale_INFO,"Specific information will appear here.");

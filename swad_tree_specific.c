@@ -25,6 +25,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_box.h"
 #include "swad_error.h"
 #include "swad_FAQ.h"
 #include "swad_FAQ_database.h"
@@ -45,6 +46,9 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+static void TreSpc_PutIconsViewItem (void *Node);
+static void TreSpc_PutIconsEditItem (void *Node);
 
 static bool TreSpc_ExchangeItems (const struct Tre_Node *Node,
 				  const struct Tre_SpcItem *Item2);
@@ -77,6 +81,276 @@ void TreSpc_ResetItem (struct Tre_Node *Node)
    /***** Reset specific fields of specific item *****/
    if (ResetSpcFields[Node->InfoType])
       ResetSpcFields[Node->InfoType] (Node);
+  }
+
+/*****************************************************************************/
+/****************************** List questions *******************************/
+/*****************************************************************************/
+
+void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
+			   struct Tre_Node *Node,
+			   long SelectedNodCod,
+			   long SelectedItmCod,
+			   HidVis_HiddenOrVisible_t HiddenOrVisible)
+  {
+   extern const char *Hlp_COURSE_FAQ;
+   extern const char *Txt_Resources;
+   extern const char *Txt_Questions;
+   extern const char *Txt_Remove;
+   MYSQL_RES *mysql_res;
+   unsigned NumItem;
+   unsigned NumItems;
+   Vie_ViewType_t ViewingOrEditingListItemsOfThisNode;
+   static unsigned (*GetListItems[Inf_NUM_TYPES]) (MYSQL_RES **mysql_res,long NodCod,
+						   bool ShowHiddenItems) =
+     {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
+      [Inf_PROGRAM	] = Rsc_DB_GetListResources,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = NULL,
+      [Inf_FAQ		] = FAQ_DB_GetListQaAs,
+      [Inf_LINKS	] = NULL,
+      [Inf_ASSESSMENT	] = NULL,
+     };
+   static void (*GetItemDataFromRow[Inf_NUM_TYPES]) (MYSQL_RES *mysql_res,
+						     struct Tre_Node *Node) =
+     {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
+      [Inf_PROGRAM	] = PrgRsc_GetResourceDataFromRow,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = NULL,
+      [Inf_FAQ		] = FAQ_GetQaADataFromRow,
+      [Inf_LINKS	] = NULL,
+      [Inf_ASSESSMENT	] = NULL,
+     };
+   static Act_Action_t ActionsReqRemItem[Inf_NUM_TYPES] =
+     {
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActReqRemPrgRsc,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActUnk,
+      [Inf_SYLLABUS_PRA	] = ActUnk,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActReqRemFAQQaA,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
+     };
+   static Act_Action_t ActionsRemItem[Inf_NUM_TYPES] =
+     {
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActRemPrgRsc,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActUnk,
+      [Inf_SYLLABUS_PRA	] = ActUnk,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActRemFAQQaA,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
+     };
+   static const char **Title[Inf_NUM_TYPES] =
+     {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
+      [Inf_PROGRAM	] = &Txt_Resources,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = NULL,
+      [Inf_FAQ		] = &Txt_Questions,
+      [Inf_LINKS	] = NULL,
+      [Inf_ASSESSMENT	] = NULL,
+     };
+   static Vie_ViewType_t ViewingOrEditing[Tre_NUM_LISTING_TYPES] =
+     {
+      [Tre_PRINT			] = Vie_VIEW,
+      [Tre_VIEW				] = Vie_VIEW,
+      [Tre_EDIT_NODES			] = Vie_EDIT,
+      [Tre_FORM_NEW_END_NODE		] = Vie_EDIT,
+      [Tre_FORM_NEW_CHILD_NODE		] = Vie_EDIT,
+      [Tre_FORM_EDIT_NODE		] = Vie_EDIT,
+      [Tre_END_EDIT_NODE		] = Vie_EDIT,
+      [Tre_RECEIVE_NODE			] = Vie_EDIT,
+      [Tre_EDIT_SPC_LIST_ITEMS		] = Vie_EDIT,
+      [Tre_EDIT_SPC_ITEM		] = Vie_EDIT,
+      [Tre_CHG_SPC_ITEM			] = Vie_EDIT,
+      [Tre_END_EDIT_SPC_LIST_ITEMS	] = Vie_EDIT,
+     };
+   static Vie_ViewType_t ViewingOrEditingItem[Tre_NUM_LISTING_TYPES] =
+     {
+      [Tre_PRINT			] = Vie_VIEW,
+      [Tre_VIEW				] = Vie_VIEW,
+      [Tre_EDIT_NODES			] = Vie_VIEW,
+      [Tre_FORM_NEW_END_NODE		] = Vie_VIEW,
+      [Tre_FORM_NEW_CHILD_NODE		] = Vie_VIEW,
+      [Tre_FORM_EDIT_NODE		] = Vie_VIEW,
+      [Tre_END_EDIT_NODE		] = Vie_VIEW,
+      [Tre_RECEIVE_NODE			] = Vie_VIEW,
+      [Tre_EDIT_SPC_LIST_ITEMS		] = Vie_EDIT,
+      [Tre_EDIT_SPC_ITEM		] = Vie_EDIT,
+      [Tre_CHG_SPC_ITEM			] = Vie_EDIT,
+      [Tre_END_EDIT_SPC_LIST_ITEMS	] = Vie_VIEW,
+     };
+   static void (*PutIconsListItems[Vie_NUM_VIEW_TYPES]) (void *Node) =
+     {
+      [Vie_VIEW] = TreSpc_PutIconsEditItem,
+      [Vie_EDIT] = TreSpc_PutIconsViewItem,
+     };
+
+   /***** Trivial check *****/
+   if (Node->Hierarchy.NodCod <= 0)
+      return;
+
+   /***** Get list of node questions & answers from database *****/
+   NumItems = (*GetListItems[Node->InfoType]) (&mysql_res,Node->Hierarchy.NodCod,
+					       ViewingOrEditingItem[ListingType] == Vie_EDIT);
+
+   if (NumItems || ViewingOrEditing[ListingType] == Vie_EDIT)
+     {
+      if (Node->Hierarchy.NodCod == SelectedNodCod)
+	{
+	 /***** Begin section *****/
+	 HTM_SECTION_Begin (TreSpc_LIST_ITEMS_SECTION_ID);
+
+	    /***** Show possible alerts *****/
+	    if (Gbl.Action.Act == ActionsReqRemItem[Node->InfoType])
+	       /* Alert with button to remove question & answer */
+	       Ale_ShowLastAlertAndButton (ActionsRemItem[Node->InfoType],
+					   TreSpc_LIST_ITEMS_SECTION_ID,NULL,
+					   TreSpc_PutParItmCod,&SelectedItmCod,
+					   Btn_REMOVE_BUTTON,Txt_Remove);
+	    else
+	       Ale_ShowAlerts (TreSpc_LIST_ITEMS_SECTION_ID);
+	}
+
+      /***** Begin box *****/
+      ViewingOrEditingListItemsOfThisNode = (ViewingOrEditingItem[ListingType] == Vie_EDIT &&
+				            Node->Hierarchy.NodCod == SelectedNodCod) ? Vie_EDIT :
+										        Vie_VIEW;
+      switch (ViewingOrEditing[ListingType])
+        {
+         case Vie_VIEW:
+	    Box_BoxBegin (NULL,NULL,NULL,NULL,Box_NOT_CLOSABLE);
+	    break;
+         case Vie_EDIT:
+	    Box_BoxBegin (*Title[Node->InfoType],
+			  PutIconsListItems[ViewingOrEditingListItemsOfThisNode],Node,
+			  Hlp_COURSE_FAQ,Box_NOT_CLOSABLE);
+	    break;
+         default:
+            Err_WrongTypeExit ();
+            break;
+        }
+
+	 /***** Table *****/
+	 HTM_TABLE_BeginWidePadding (2);
+
+	    /***** Write all items of this node *****/
+	    for (NumItem = 0;
+		 NumItem < NumItems;
+		 NumItem++)
+	      {
+	       /* Get data of this item */
+	       GetItemDataFromRow[Node->InfoType] (mysql_res,Node);
+
+	       /* Show item */
+	       switch (ViewingOrEditingListItemsOfThisNode)
+		 {
+		  case Vie_VIEW:
+		     TreSpc_WriteRowViewItem (Node,NumItem,HiddenOrVisible);
+		     break;
+		  case Vie_EDIT:
+		     TreSpc_WriteRowEditItem (Node,NumItem,NumItems,
+					      (ListingType == Tre_EDIT_SPC_ITEM &&
+					       Node->SpcItem.Cod == SelectedItmCod) ? Vie_EDIT :
+										      Vie_VIEW,
+					      HiddenOrVisible);
+		     break;
+		  default:
+		     Err_WrongTypeExit ();
+		     break;
+		 }
+	      }
+
+	    /***** Form to create a new question & answer *****/
+	    if (ViewingOrEditingListItemsOfThisNode == Vie_EDIT)
+	      {
+	       TreSpc_ResetItem (Node);
+	       TreSpc_WriteRowNewItem (Node,NumItems);
+	      }
+
+	 /***** End table *****/
+	 HTM_TABLE_End ();
+
+      /***** End box *****/
+      Box_BoxEnd ();
+
+      /***** End section *****/
+      if (Node->Hierarchy.NodCod == SelectedNodCod)
+	 HTM_SECTION_End ();
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/************** Put contextual icons in list of node resources ***************/
+/*****************************************************************************/
+
+static void TreSpc_PutIconsViewItem (void *Node)
+  {
+   static Act_Action_t Actions[Inf_NUM_TYPES] =
+     {
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActFrmSeePrgRsc,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActUnk,
+      [Inf_SYLLABUS_PRA	] = ActUnk,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActFrmSeeFAQQaA,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
+     };
+
+   if (Node)
+      if (((struct Tre_Node *) Node)->Hierarchy.NodCod > 0)
+	 if (Tre_CheckIfICanEditTree () == Usr_CAN)
+	    Ico_PutContextualIconToView (Actions[((struct Tre_Node *) Node)->InfoType],
+					 TreSpc_LIST_ITEMS_SECTION_ID,
+					 Tre_PutPars,Node);
+  }
+
+static void TreSpc_PutIconsEditItem (void *Node)
+  {
+   static Act_Action_t Actions[Inf_NUM_TYPES] =
+     {
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActFrmEdiPrgRsc,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActUnk,
+      [Inf_SYLLABUS_PRA	] = ActUnk,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActFrmEdiFAQQaA,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
+     };
+
+   if (Node)
+      if (((struct Tre_Node *) Node)->Hierarchy.NodCod > 0)
+	 if (Tre_CheckIfICanEditTree () == Usr_CAN)
+	    Ico_PutContextualIconToEdit (Actions[((struct Tre_Node *) Node)->InfoType],
+					 TreSpc_LIST_ITEMS_SECTION_ID,
+					 Tre_PutPars,Node);
   }
 
 /*****************************************************************************/

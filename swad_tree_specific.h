@@ -48,6 +48,12 @@ typedef enum
 
 void TreSpc_ResetItem (struct Tre_Node *Node);
 
+void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
+			   struct Tre_Node *Node,
+			   long SelectedNodCod,
+			   long SelectedItmCod,
+			   HidVis_HiddenOrVisible_t HiddenOrVisible);
+
 void TreSpc_WriteRowViewItem (struct Tre_Node *Node,
 			      unsigned NumItem,
 			      HidVis_HiddenOrVisible_t HiddenOrVisible);

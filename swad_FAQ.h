@@ -36,13 +36,8 @@
 
 void FAQ_ResetSpcFields (struct Tre_Node *Node);
 
-void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
-                       struct Tre_Node *Node,
-                       long SelectedNodCod,
-                       long SelectedQaACod,
-                       HidVis_HiddenOrVisible_t HiddenOrVisible);
-
 void FAQ_GetQaADataByCod (struct Tre_Node *Node);
+void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node);
 
 void FAQ_WriteCellViewQaA (struct Tre_Node *Node,
 			   HidVis_HiddenOrVisible_t HiddenOrVisible);

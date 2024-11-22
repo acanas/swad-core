@@ -48,7 +48,6 @@
 #include "swad_form.h"
 #include "swad_forum_database.h"
 #include "swad_game_database.h"
-#include "swad_global.h"
 #include "swad_group_database.h"
 #include "swad_hidden_visible.h"
 #include "swad_HTML.h"
@@ -67,19 +66,9 @@
 #include "swad_view.h"
 
 /*****************************************************************************/
-/************** External global variables from others modules ****************/
-/*****************************************************************************/
-
-extern struct Globals Gbl;
-
-/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void FAQ_PutIconsViewRes (void *Node);
-static void FAQ_PutIconsEditRes (void *Node);
-
-static void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node);
 static void FAQ_WriteQuestion (const char Question[FAQ_MAX_BYTES_QUESTION + 1],
 			       HidVis_HiddenOrVisible_t HiddenOrVisible);
 static void FAQ_WriteAnswer (char Answer[Cns_MAX_BYTES_TEXT + 1],
@@ -93,179 +82,6 @@ void FAQ_ResetSpcFields (struct Tre_Node *Node)
   {
    Node->QaA.Question[0] = '\0';
    Node->QaA.Answer[0] = '\0';
-  }
-
-/*****************************************************************************/
-/****************************** List questions *******************************/
-/*****************************************************************************/
-
-void FAQ_ListNodeQaAs (Tre_ListingType_t ListingType,
-                       struct Tre_Node *Node,
-                       long SelectedNodCod,
-                       long SelectedQaACod,
-                       HidVis_HiddenOrVisible_t HiddenOrVisible)
-  {
-   extern const char *Hlp_COURSE_FAQ;
-   extern const char *Txt_Remove;
-   extern const char *Txt_Questions;
-   MYSQL_RES *mysql_res;
-   unsigned NumQaA;
-   unsigned NumQaAs;
-   Vie_ViewType_t ViewingOrEditingQaAOfThisNode;
-   static Vie_ViewType_t ViewingOrEditing[Tre_NUM_LISTING_TYPES] =
-     {
-      [Tre_PRINT			] = Vie_VIEW,
-      [Tre_VIEW				] = Vie_VIEW,
-      [Tre_EDIT_NODES			] = Vie_EDIT,
-      [Tre_FORM_NEW_END_NODE		] = Vie_EDIT,
-      [Tre_FORM_NEW_CHILD_NODE		] = Vie_EDIT,
-      [Tre_FORM_EDIT_NODE		] = Vie_EDIT,
-      [Tre_END_EDIT_NODE		] = Vie_EDIT,
-      [Tre_RECEIVE_NODE			] = Vie_EDIT,
-      [Tre_EDIT_SPC_LIST_ITEMS		] = Vie_EDIT,
-      [Tre_EDIT_SPC_ITEM		] = Vie_EDIT,
-      [Tre_CHG_SPC_ITEM			] = Vie_EDIT,
-      [Tre_END_EDIT_SPC_LIST_ITEMS	] = Vie_EDIT,
-     };
-   static Vie_ViewType_t ViewingOrEditingQaA[Tre_NUM_LISTING_TYPES] =
-     {
-      [Tre_PRINT			] = Vie_VIEW,
-      [Tre_VIEW				] = Vie_VIEW,
-      [Tre_EDIT_NODES			] = Vie_VIEW,
-      [Tre_FORM_NEW_END_NODE		] = Vie_VIEW,
-      [Tre_FORM_NEW_CHILD_NODE		] = Vie_VIEW,
-      [Tre_FORM_EDIT_NODE		] = Vie_VIEW,
-      [Tre_END_EDIT_NODE		] = Vie_VIEW,
-      [Tre_RECEIVE_NODE			] = Vie_VIEW,
-      [Tre_EDIT_SPC_LIST_ITEMS		] = Vie_EDIT,
-      [Tre_EDIT_SPC_ITEM		] = Vie_EDIT,
-      [Tre_CHG_SPC_ITEM			] = Vie_EDIT,
-      [Tre_END_EDIT_SPC_LIST_ITEMS	] = Vie_VIEW,
-     };
-   static void (*FAQ_PutIconsRes[Vie_NUM_VIEW_TYPES]) (void *Node) =
-     {
-      [Vie_VIEW		] = FAQ_PutIconsEditRes,
-      [Vie_EDIT		] = FAQ_PutIconsViewRes,
-      [Vie_CONFIG	] = NULL,
-      [Vie_PRINT	] = NULL,
-     };
-
-   /***** Trivial check *****/
-   if (Node->Hierarchy.NodCod <= 0)
-      return;
-
-   /***** Get list of node questions & answers from database *****/
-   NumQaAs = FAQ_DB_GetListQaAs (&mysql_res,Node->Hierarchy.NodCod,
-                                 ViewingOrEditingQaA[ListingType] == Vie_EDIT);
-
-   if (NumQaAs || ViewingOrEditing[ListingType] == Vie_EDIT)
-     {
-      if (Node->Hierarchy.NodCod == SelectedNodCod)
-	{
-	 /***** Begin section *****/
-	 HTM_SECTION_Begin (TreSpc_LIST_ITEMS_SECTION_ID);
-
-	    /***** Show possible alerts *****/
-	    if (Gbl.Action.Act == ActReqRemFAQQaA)
-	       /* Alert with button to remove question & answer */
-	       Ale_ShowLastAlertAndButton (ActRemFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,NULL,
-					   TreSpc_PutParItmCod,&SelectedQaACod,
-					   Btn_REMOVE_BUTTON,Txt_Remove);
-	    else
-	       Ale_ShowAlerts (TreSpc_LIST_ITEMS_SECTION_ID);
-	}
-
-      /***** Begin box *****/
-      ViewingOrEditingQaAOfThisNode = (ViewingOrEditingQaA[ListingType] == Vie_EDIT &&
-				       Node->Hierarchy.NodCod == SelectedNodCod) ? Vie_EDIT :
-										   Vie_VIEW;
-      switch (ViewingOrEditing[ListingType])
-        {
-         case Vie_VIEW:
-	    Box_BoxBegin (NULL,NULL,NULL,NULL,Box_NOT_CLOSABLE);
-	    break;
-         case Vie_EDIT:
-	    Box_BoxBegin (Txt_Questions,
-			  FAQ_PutIconsRes[ViewingOrEditingQaAOfThisNode],Node,
-			  Hlp_COURSE_FAQ,Box_NOT_CLOSABLE);
-	    break;
-         default:
-            Err_WrongTypeExit ();
-            break;
-        }
-
-	 /***** Table *****/
-	 HTM_TABLE_BeginWidePadding (2);
-
-	    /***** Write all questions of this node *****/
-	    for (NumQaA = 0;
-		 NumQaA < NumQaAs;
-		 NumQaA++)
-	      {
-	       /* Get data of this question & answer */
-	       FAQ_GetQaADataFromRow (mysql_res,Node);
-
-	       /* Show question & answer */
-	       switch (ViewingOrEditingQaAOfThisNode)
-		 {
-		  case Vie_VIEW:
-		     TreSpc_WriteRowViewItem (Node,NumQaA,HiddenOrVisible);
-		     break;
-		  case Vie_EDIT:
-		     TreSpc_WriteRowEditItem (Node,NumQaA,NumQaAs,
-					      (ListingType == Tre_EDIT_SPC_ITEM &&
-					       Node->SpcItem.Cod == SelectedQaACod) ? Vie_EDIT :
-										      Vie_VIEW,
-					      HiddenOrVisible);
-		     break;
-		  default:
-		     Err_WrongTypeExit ();
-		     break;
-		 }
-	      }
-
-	    /***** Form to create a new question & answer *****/
-	    if (ViewingOrEditingQaAOfThisNode == Vie_EDIT)
-	      {
-	       TreSpc_ResetItem (Node);
-	       TreSpc_WriteRowNewItem (Node,NumQaAs);
-	      }
-
-	 /***** End table *****/
-	 HTM_TABLE_End ();
-
-      /***** End box *****/
-      Box_BoxEnd ();
-
-      /***** End section *****/
-      if (Node->Hierarchy.NodCod == SelectedNodCod)
-	 HTM_SECTION_End ();
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/********* Put contextual icons in list of node questions & answers **********/
-/*****************************************************************************/
-
-static void FAQ_PutIconsViewRes (void *Node)
-  {
-   if (Node)
-      if (((struct Tre_Node *) Node)->Hierarchy.NodCod > 0)
-	 if (Tre_CheckIfICanEditTree () == Usr_CAN)
-	    Ico_PutContextualIconToView (ActFrmSeeFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
-					 Tre_PutPars,Node);
-  }
-
-static void FAQ_PutIconsEditRes (void *Node)
-  {
-   if (Node)
-      if (((struct Tre_Node *) Node)->Hierarchy.NodCod > 0)
-	 if (Tre_CheckIfICanEditTree () == Usr_CAN)
-	    Ico_PutContextualIconToEdit (ActFrmEdiFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
-					 Tre_PutPars,Node);
   }
 
 /*****************************************************************************/
@@ -297,7 +113,7 @@ void FAQ_GetQaADataByCod (struct Tre_Node *Node)
 /************************ Get Question&Answer data ***************************/
 /*****************************************************************************/
 
-static void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
+void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
   {
    MYSQL_ROW row;
 
