@@ -38,7 +38,7 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/*********************** Create a new question&answer ************************/
+/*********************** Create a new question & answer ************************/
 /*****************************************************************************/
 
 long FAQ_DB_CreateQaA (const struct Tre_Node *Node)
@@ -57,7 +57,7 @@ long FAQ_DB_CreateQaA (const struct Tre_Node *Node)
   }
 
 /*****************************************************************************/
-/*********************** Update question&answer question *********************/
+/*********************** Update question & answer question *********************/
 /*****************************************************************************/
 
 void FAQ_DB_UpdateQaAQuestion (long NodCod,long QaACod,
@@ -82,7 +82,7 @@ void FAQ_DB_UpdateQaAQuestion (long NodCod,long QaACod,
   }
 
 /*****************************************************************************/
-/************* Get list of node questions&answers from database **************/
+/************* Get list of node questions & answers from database **************/
 /*****************************************************************************/
 
 unsigned FAQ_DB_GetListQaAs (MYSQL_RES **mysql_res,long NodCod,
@@ -96,7 +96,7 @@ unsigned FAQ_DB_GetListQaAs (MYSQL_RES **mysql_res,long NodCod,
      };
 
    return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get node questions&answers",
+   DB_QuerySELECT (mysql_res,"can not get node questions & answers",
 		   "SELECT faq_questions.NodCod,"	// row[0]
 			  "faq_questions.QaACod,"	// row[1]
                           "faq_questions.QaAInd,"	// row[2]
@@ -118,7 +118,7 @@ unsigned FAQ_DB_GetListQaAs (MYSQL_RES **mysql_res,long NodCod,
   }
 
 /*****************************************************************************/
-/**************** Get question&answer data using its code ********************/
+/**************** Get question & answer data using its code ********************/
 /*****************************************************************************/
 
 unsigned FAQ_DB_GetQaADataByCod (MYSQL_RES **mysql_res,long QaACod)
@@ -126,7 +126,7 @@ unsigned FAQ_DB_GetQaADataByCod (MYSQL_RES **mysql_res,long QaACod)
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get node question&answer data",
+   DB_QuerySELECT (mysql_res,"can not get node question & answer data",
 		   "SELECT faq_questions.NodCod,"	// row[0]
 			  "faq_questions.QaACod,"	// row[1]
                           "faq_questions.QaAInd,"	// row[2]
@@ -145,7 +145,7 @@ unsigned FAQ_DB_GetQaADataByCod (MYSQL_RES **mysql_res,long QaACod)
   }
 
 /*****************************************************************************/
-/********* Get the question&answer index before/after a given one ************/
+/********* Get the question & answer index before/after a given one ************/
 /*****************************************************************************/
 
 unsigned FAQ_DB_GetQaAIndBefore (const struct Tre_Node *Node)
@@ -173,17 +173,17 @@ unsigned FAQ_DB_GetQaAIndAfter (const struct Tre_Node *Node)
   }
 
 /*****************************************************************************/
-/**** Get question&answer code given node code and question&answer index *****/
+/**** Get question & answer code given node code and question & answer index *****/
 /*****************************************************************************/
 
 long FAQ_DB_GetQaACodFromQaAInd (long NodCod,unsigned QaAInd)
   {
-   /***** Trivial check: question&answer index should be > 0 *****/
+   /***** Trivial check: question & answer index should be > 0 *****/
    if (QaAInd == 0)
       return -1L;
 
-   /***** Get question&answer code given node code and question&answer index *****/
-   return DB_QuerySELECTCode ("can not get question&answer code",
+   /***** Get question & answer code given node code and question & answer index *****/
+   return DB_QuerySELECTCode ("can not get question & answer code",
 			      "SELECT QaACod"
 			       " FROM faq_questions"
 			      " WHERE NodCod=%ld"
@@ -192,7 +192,7 @@ long FAQ_DB_GetQaACodFromQaAInd (long NodCod,unsigned QaAInd)
   }
 
 /*****************************************************************************/
-/*********************** Remove a node question&answer ***********************/
+/*********************** Remove a node question & answer ***********************/
 /*****************************************************************************/
 
 void FAQ_DB_RemoveQaA (const struct Tre_Node *Node)
@@ -215,7 +215,7 @@ void FAQ_DB_RemoveQaA (const struct Tre_Node *Node)
   }
 
 /*****************************************************************************/
-/********************* Hide/unhide a node question&answer ********************/
+/********************* Hide/unhide a node question & answer ********************/
 /*****************************************************************************/
 
 void FAQ_DB_HideOrUnhideQaA (const struct Tre_Node *Node,
@@ -241,7 +241,7 @@ void FAQ_DB_HideOrUnhideQaA (const struct Tre_Node *Node,
   }
 
 /*****************************************************************************/
-/******* Lock table to make the exchange of questions&answers atomic *********/
+/******* Lock table to make the exchange of questions & answers atomic *********/
 /*****************************************************************************/
 
 void FAQ_DB_LockTableQaAs (void)
@@ -253,7 +253,7 @@ void FAQ_DB_LockTableQaAs (void)
   }
 
 /*****************************************************************************/
-/********* Update the index of a question&answer given its code **************/
+/********* Update the index of a question & answer given its code **************/
 /*****************************************************************************/
 
 void FAQ_DB_UpdateQaAInd (const struct Tre_Node *Node,long QaACod,int QaAInd)
@@ -277,7 +277,7 @@ void FAQ_DB_UpdateQaAInd (const struct Tre_Node *Node,long QaACod,int QaAInd)
   }
 
 /*****************************************************************************/
-/*** Update the quetion and the answer of a question&answer given its code ***/
+/*** Update the quetion and the answer of a question & answer given its code ***/
 /*****************************************************************************/
 
 void FAQ_DB_UpdateQaA (const struct Tre_Node *Node)

@@ -682,7 +682,7 @@ void Inf_MoveUpItem (void)
    struct Inf_Info Info;
 
    Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
-      TreSpc_MoveUpDownItem (Info.Type,TreSpc_MOVE_UP);
+      TreSpc_MoveUpDownItem (Info.Type,TreSpc_UP);
    Inf_AfterTree ();
   }
 
@@ -691,7 +691,7 @@ void Inf_MoveDownItem (void)
    struct Inf_Info Info;
 
    Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
-      TreSpc_MoveUpDownItem (Info.Type,TreSpc_MOVE_DOWN);
+      TreSpc_MoveUpDownItem (Info.Type,TreSpc_DOWN);
    Inf_AfterTree ();
   }
 

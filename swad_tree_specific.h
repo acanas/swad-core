@@ -35,18 +35,22 @@
 
 #define TreSpc_LIST_ITEMS_SECTION_ID	"spc_section"
 
-#define TreSpc_NUM_MOVEMENTS_UP_DOWN 2
+#define TreSpc_NUM_UP_DOWN 2
 typedef enum
   {
-   TreSpc_MOVE_UP,
-   TreSpc_MOVE_DOWN,
-  } TreSpc_MoveUpDown_t;
+   TreSpc_UP,
+   TreSpc_DOWN,
+  } TreSpc_UpDown_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 void TreSpc_ResetItem (struct Tre_Node *Node);
+void TreSpc_WriteRowEditItem (struct Tre_Node *Node,
+			      unsigned NumItem,unsigned NumItems,
+			      Vie_ViewType_t ViewType,
+			      HidVis_HiddenOrVisible_t HiddenOrVisible);
 void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
                                 unsigned NumItem,unsigned NumItems);
 void TreSpc_PutParItmCod (void *ItmCod);
@@ -64,7 +68,6 @@ void TreSpc_RemoveItem (Inf_Type_t InfoType);
 void TreSpc_HideOrUnhideItem (Inf_Type_t InfoType,
 			      HidVis_HiddenOrVisible_t HiddenOrVisible);
 
-void TreSpc_MoveUpDownItem (Inf_Type_t InfoType,
-			    TreSpc_MoveUpDown_t UpDown);
+void TreSpc_MoveUpDownItem (Inf_Type_t InfoType,TreSpc_UpDown_t UpDown);
 
 #endif

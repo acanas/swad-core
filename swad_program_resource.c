@@ -64,9 +64,9 @@ static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
 static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
                                          const struct Tre_Node *Node,
                                          HidVis_HiddenOrVisible_t HiddenOrVisible);
-static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
-                                         struct Tre_Node *Node,
-                                         Vie_ViewType_t LinkViewType);
+void PrgRsc_WriteCellEditResource (struct Tre_Node *Node,
+				   Vie_ViewType_t ViewType,
+				   __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible);
 static void PrgRsc_WriteRowNewResource (unsigned NumResources,
                                         struct Tre_Node *Node,
                                         Vie_ViewType_t LinkViewType);
@@ -191,10 +191,11 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
 		     PrgRsc_WriteRowViewResource (NumRsc,Node,HiddenOrVisible);
 		     break;
 		  case Vie_EDIT:
-		     PrgRsc_WriteRowEditResource (NumRsc,NumResources,Node,
-						  (ListingType == Tre_EDIT_SPC_ITEM &&
-						   Node->SpcItem.Cod == SelectedRscCod) ? Vie_EDIT :
-											   Vie_VIEW);
+		     TreSpc_WriteRowEditItem (Node,NumRsc,NumResources,
+					      (ListingType == Tre_EDIT_SPC_ITEM &&
+					       Node->SpcItem.Cod == SelectedRscCod) ? Vie_EDIT :
+										      Vie_VIEW,
+					      HiddenOrVisible);
 		     break;
 		  default:
 		     Err_WrongTypeExit ();
@@ -348,60 +349,39 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
 /***************************** Edit one resource *****************************/
 /*****************************************************************************/
 
-static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
-                                         struct Tre_Node *Node,
-                                         Vie_ViewType_t LinkViewType)
+void PrgRsc_WriteCellEditResource (struct Tre_Node *Node,
+				   Vie_ViewType_t ViewType,
+				   __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   /***** Begin row *****/
-   HTM_TR_Begin (NULL);
+   /***** Title *****/
+   Frm_BeginFormAnchor (ActRenPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID);
+      TreSpc_PutParItmCod (&Node->SpcItem.Cod);
+      HTM_INPUT_TEXT ("Title",Rsc_MAX_CHARS_RESOURCE_TITLE,Node->Resource.Title,
+		      HTM_SUBMIT_ON_CHANGE,
+		      "class=\"PRG_RSC_INPUT INPUT_%s\"",
+		      The_GetSuffix ());
+   Frm_EndForm ();
 
-      /***** Forms to remove/edit this resource *****/
-      HTM_TD_Begin ("class=\"PRG_RSC_COL1 LT\"");
-         TreSpc_PutFormsToEditItem (Node,NumRsc,NumResources);
-      HTM_TD_End ();
+   HTM_BR ();
 
-      /***** Resource number *****/
-      HTM_TD_Begin ("class=\"TRE_NUM PRG_RSC_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (NumRsc + 1);
-      HTM_TD_End ();
-
-      /***** Title and link/clipboard *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s\"",The_GetSuffix ());
-
-         /* Title */
-	 Frm_BeginFormAnchor (ActRenPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID);
+   /***** Show current link / Show clipboard to change resource link *****/
+   switch (ViewType)
+     {
+      case Vie_VIEW:
+	 /* Show current link */
+	 Rsc_WriteLinkName (&Node->Resource.Link,Frm_PUT_FORM);
+	 break;
+      case Vie_EDIT:
+	 /* Show clipboard to change resource link */
+	 Frm_BeginFormAnchor (ActChgPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID);
 	    TreSpc_PutParItmCod (&Node->SpcItem.Cod);
-	    HTM_INPUT_TEXT ("Title",Rsc_MAX_CHARS_RESOURCE_TITLE,Node->Resource.Title,
-			    HTM_SUBMIT_ON_CHANGE,
-			    "class=\"PRG_RSC_INPUT INPUT_%s\"",
-			    The_GetSuffix ());
+	    Rsc_ShowClipboardToChangeLink (&Node->Resource.Link);
 	 Frm_EndForm ();
-
-         HTM_BR ();
-
-	 /* Show current link / Show clipboard to change resource link */
-         switch (LinkViewType)
-           {
-            case Vie_VIEW:
-	       /* Show current link */
-	       Rsc_WriteLinkName (&Node->Resource.Link,Frm_PUT_FORM);
-               break;
-            case Vie_EDIT:
-	       /* Show clipboard to change resource link */
-	       Frm_BeginFormAnchor (ActChgPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID);
-	          TreSpc_PutParItmCod (&Node->SpcItem.Cod);
-		  Rsc_ShowClipboardToChangeLink (&Node->Resource.Link);
-	       Frm_EndForm ();
-               break;
-	    default:
-	       Err_WrongTypeExit ();
-	       break;
-           }
-
-      HTM_TD_End ();
-
-   /***** End row *****/
-   HTM_TR_End ();
+	 break;
+      default:
+	 Err_WrongTypeExit ();
+	 break;
+     }
   }
 
 /*****************************************************************************/
@@ -628,14 +608,14 @@ void PrgRsc_UnhideResource (void)
 void PrgRsc_MoveUpResource (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      TreSpc_MoveUpDownItem (Inf_PROGRAM,TreSpc_MOVE_UP);
+      TreSpc_MoveUpDownItem (Inf_PROGRAM,TreSpc_UP);
    Prg_AfterTree ();
   }
 
 void PrgRsc_MoveDownResource (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      TreSpc_MoveUpDownItem (Inf_PROGRAM,TreSpc_MOVE_DOWN);
+      TreSpc_MoveUpDownItem (Inf_PROGRAM,TreSpc_DOWN);
    Prg_AfterTree ();
   }
 

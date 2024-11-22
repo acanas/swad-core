@@ -80,12 +80,76 @@ void TreSpc_ResetItem (struct Tre_Node *Node)
   }
 
 /*****************************************************************************/
+/*************************** Edit a specific item ****************************/
+/*****************************************************************************/
+
+void TreSpc_WriteRowEditItem (struct Tre_Node *Node,
+			      unsigned NumItem,unsigned NumItems,
+			      Vie_ViewType_t ViewType,
+			      HidVis_HiddenOrVisible_t HiddenOrVisible)
+  {
+   static void (*WriteCell[Inf_NUM_TYPES]) (struct Tre_Node *Node,
+					    Vie_ViewType_t ViewType,
+					    HidVis_HiddenOrVisible_t HiddenOrVisible) =
+     {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
+      [Inf_PROGRAM	] = PrgRsc_WriteCellEditResource,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = NULL,
+      [Inf_FAQ		] = FAQ_WriteCellEditQaA,
+      [Inf_LINKS	] = NULL,
+      [Inf_ASSESSMENT	] = NULL,
+     };
+
+   /***** Begin row *****/
+   HTM_TR_Begin (NULL);
+
+      /***** Forms to remove/edit this item *****/
+      HTM_TD_Begin ("class=\"PRG_RSC_COL1 LT\"");
+         TreSpc_PutFormsToEditItem (Node,NumItem,NumItems);
+      HTM_TD_End ();
+
+      /***** Item number *****/
+      HTM_TD_Begin ("class=\"TRE_NUM PRG_RSC_%s\"",The_GetSuffix ());
+	 HTM_Unsigned (NumItem + 1);
+      HTM_TD_End ();
+
+      /***** Item content *****/
+      HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s\"",The_GetSuffix ());
+
+	 /* Wite cell contents */
+         if (WriteCell[Node->InfoType])
+	    WriteCell[Node->InfoType] (Node,ViewType,HiddenOrVisible);
+
+      HTM_TD_End ();
+
+   /***** End row *****/
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
 /******************** Put forms to edit a specific item **********************/
 /*****************************************************************************/
 
 void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
                                 unsigned NumItem,unsigned NumItems)
   {
+   static Act_Action_t ActionsReqRem[Inf_NUM_TYPES] =
+     {
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActReqRemTreNodInf,
+      [Inf_PROGRAM	] = ActReqRemTreNodPrg,
+      [Inf_TEACH_GUIDE	] = ActReqRemTreNodGui,
+      [Inf_SYLLABUS_LEC	] = ActReqRemTreNodSyl,
+      [Inf_SYLLABUS_PRA	] = ActReqRemTreNodSyl,
+      [Inf_BIBLIOGRAPHY	] = ActReqRemTreNodBib,
+      [Inf_FAQ		] = ActReqRemTreNodFAQ,
+      [Inf_LINKS	] = ActReqRemTreNodLnk,
+      [Inf_ASSESSMENT	] = ActReqRemTreNodAss,
+     };
    static Act_Action_t ActionHideUnhide[Inf_NUM_TYPES][HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [Inf_UNKNOWN_TYPE	][HidVis_HIDDEN ] = ActUnk,
@@ -109,6 +173,43 @@ void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
       [Inf_ASSESSMENT	][HidVis_HIDDEN ] = ActUnk,
       [Inf_ASSESSMENT	][HidVis_VISIBLE] = ActUnk,
      };
+   static Act_Action_t ActionsFrmChg[Inf_NUM_TYPES] =
+     {
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActFrmChgPrgRsc,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActUnk,
+      [Inf_SYLLABUS_PRA	] = ActUnk,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActFrmChgFAQQaA,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
+     };
+   static Act_Action_t ActionUpDown[Inf_NUM_TYPES][HidVis_NUM_HIDDEN_VISIBLE] =
+     {
+      [Inf_UNKNOWN_TYPE	][TreSpc_UP  ] = ActUnk,
+      [Inf_UNKNOWN_TYPE	][TreSpc_DOWN] = ActUnk,
+      [Inf_INFORMATION	][TreSpc_UP  ] = ActUnk,
+      [Inf_INFORMATION	][TreSpc_DOWN] = ActUnk,
+      [Inf_PROGRAM	][TreSpc_UP  ] = ActUp_PrgRsc,
+      [Inf_PROGRAM	][TreSpc_DOWN] = ActDwnPrgRsc,
+      [Inf_TEACH_GUIDE	][TreSpc_UP  ] = ActUnk,
+      [Inf_TEACH_GUIDE	][TreSpc_DOWN] = ActUnk,
+      [Inf_SYLLABUS_LEC	][TreSpc_UP  ] = ActUnk,
+      [Inf_SYLLABUS_LEC	][TreSpc_DOWN] = ActUnk,
+      [Inf_SYLLABUS_PRA	][TreSpc_UP  ] = ActUnk,
+      [Inf_SYLLABUS_PRA	][TreSpc_DOWN] = ActUnk,
+      [Inf_BIBLIOGRAPHY	][TreSpc_UP  ] = ActUnk,
+      [Inf_BIBLIOGRAPHY	][TreSpc_DOWN] = ActUnk,
+      [Inf_FAQ		][TreSpc_UP  ] = ActUp_FAQQaA,
+      [Inf_FAQ		][TreSpc_DOWN] = ActDwnFAQQaA,
+      [Inf_LINKS	][TreSpc_UP  ] = ActUnk,
+      [Inf_LINKS	][TreSpc_DOWN] = ActUnk,
+      [Inf_ASSESSMENT	][TreSpc_UP  ] = ActUnk,
+      [Inf_ASSESSMENT	][TreSpc_DOWN] = ActUnk,
+     };
+
    extern const char *Txt_Movement_not_allowed;
    extern const char *Txt_Visible;
 
@@ -116,14 +217,14 @@ void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
      {
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 /***** Icon to remove question&answer *****/
+	 /***** Icon to remove question & answer *****/
 	 if (NumItem < NumItems)
-	    Ico_PutContextualIconToRemove (ActReqRemFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
+	    Ico_PutContextualIconToRemove (ActionsReqRem[Node->InfoType],TreSpc_LIST_ITEMS_SECTION_ID,
 					   TreSpc_PutParItmCod,&Node->SpcItem.Cod);
 	 else
 	    Ico_PutIconRemovalNotAllowed ();
 
-	 /***** Icon to hide/unhide question&answer *****/
+	 /***** Icon to hide/unhide question & answer *****/
 	 if (NumItem < NumItems)
 	    Ico_PutContextualIconToHideUnhide (ActionHideUnhide[Node->InfoType],
 					       TreSpc_LIST_ITEMS_SECTION_ID,
@@ -132,25 +233,29 @@ void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
 	 else
 	    Ico_PutIconOff ("eye.svg",Ico_GREEN,Txt_Visible);
 
-	 /***** Put icon to edit the question&answer *****/
+	 /***** Put icon to edit the question & answer *****/
 	 if (NumItem < NumItems)
-	    Ico_PutContextualIconToEdit (ActFrmChgFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
+	    Ico_PutContextualIconToEdit (ActionsFrmChg[Node->InfoType],
+					 TreSpc_LIST_ITEMS_SECTION_ID,
 					 TreSpc_PutParItmCod,&Node->SpcItem.Cod);
 	 else
-	    Ico_PutContextualIconToEdit (ActFrmChgFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
+	    Ico_PutContextualIconToEdit (ActionsFrmChg[Node->InfoType],
+					 TreSpc_LIST_ITEMS_SECTION_ID,
 					 Tre_PutPars,Node);
 
-	 /***** Icon to move up the question&answer *****/
+	 /***** Icon to move up the question & answer *****/
 	 if (NumItem > 0 && NumItem < NumItems)
-	    Lay_PutContextualLinkOnlyIcon (ActUp_FAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
+	    Lay_PutContextualLinkOnlyIcon (ActionUpDown[Node->InfoType][TreSpc_UP],
+					   TreSpc_LIST_ITEMS_SECTION_ID,
 	                                   TreSpc_PutParItmCod,&Node->SpcItem.Cod,
 	 			           "arrow-up.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
 
-	 /***** Put icon to move down the question&answer *****/
+	 /***** Put icon to move down the question & answer *****/
 	 if (NumItem < NumItems - 1)
-	    Lay_PutContextualLinkOnlyIcon (ActDwnFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID,
+	    Lay_PutContextualLinkOnlyIcon (ActionUpDown[Node->InfoType][TreSpc_UP],
+					   TreSpc_LIST_ITEMS_SECTION_ID,
 	                                   TreSpc_PutParItmCod,&Node->SpcItem.Cod,
 	                                   "arrow-down.svg",Ico_BLACK);
 	 else
@@ -517,7 +622,7 @@ void TreSpc_HideOrUnhideItem (Inf_Type_t InfoType,
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (InfoType);
 
-   /***** Get tree node and question&answer *****/
+   /***** Get tree node and question & answer *****/
    Node.InfoType = InfoType;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
@@ -538,35 +643,34 @@ void TreSpc_HideOrUnhideItem (Inf_Type_t InfoType,
 /*********************** Move up/down specific list item *********************/
 /*****************************************************************************/
 
-void TreSpc_MoveUpDownItem (Inf_Type_t InfoType,
-				TreSpc_MoveUpDown_t UpDown)
+void TreSpc_MoveUpDownItem (Inf_Type_t InfoType,TreSpc_UpDown_t UpDown)
   {
    extern const char *Txt_Movement_not_allowed;
    struct Tre_Node Node;
    struct Tre_SpcItem Item2;
    bool Success = false;
-   static unsigned (*GetOtherInd[Inf_NUM_TYPES][TreSpc_NUM_MOVEMENTS_UP_DOWN])(const struct Tre_Node *Node) =
+   static unsigned (*GetOtherInd[Inf_NUM_TYPES][TreSpc_NUM_UP_DOWN])(const struct Tre_Node *Node) =
      {
-      [Inf_UNKNOWN_TYPE	][TreSpc_MOVE_UP  ] = NULL,
-      [Inf_UNKNOWN_TYPE	][TreSpc_MOVE_DOWN] = NULL,
-      [Inf_INFORMATION	][TreSpc_MOVE_UP  ] = NULL,
-      [Inf_INFORMATION	][TreSpc_MOVE_DOWN] = NULL,
-      [Inf_PROGRAM	][TreSpc_MOVE_UP  ] = Rsc_DB_GetRscIndBefore,
-      [Inf_PROGRAM	][TreSpc_MOVE_DOWN] = Rsc_DB_GetRscIndAfter,
-      [Inf_TEACH_GUIDE	][TreSpc_MOVE_UP  ] = NULL,
-      [Inf_TEACH_GUIDE	][TreSpc_MOVE_DOWN] = NULL,
-      [Inf_SYLLABUS_LEC	][TreSpc_MOVE_UP  ] = NULL,
-      [Inf_SYLLABUS_LEC	][TreSpc_MOVE_DOWN] = NULL,
-      [Inf_SYLLABUS_PRA	][TreSpc_MOVE_UP  ] = NULL,
-      [Inf_SYLLABUS_PRA	][TreSpc_MOVE_DOWN] = NULL,
-      [Inf_BIBLIOGRAPHY	][TreSpc_MOVE_UP  ] = NULL,
-      [Inf_BIBLIOGRAPHY	][TreSpc_MOVE_DOWN] = NULL,
-      [Inf_FAQ		][TreSpc_MOVE_UP  ] = FAQ_DB_GetQaAIndBefore,
-      [Inf_FAQ		][TreSpc_MOVE_DOWN] = FAQ_DB_GetQaAIndAfter,
-      [Inf_LINKS	][TreSpc_MOVE_UP  ] = NULL,
-      [Inf_LINKS	][TreSpc_MOVE_DOWN] = NULL,
-      [Inf_ASSESSMENT	][TreSpc_MOVE_UP  ] = NULL,
-      [Inf_ASSESSMENT	][TreSpc_MOVE_DOWN] = NULL,
+      [Inf_UNKNOWN_TYPE	][TreSpc_UP  ] = NULL,
+      [Inf_UNKNOWN_TYPE	][TreSpc_DOWN] = NULL,
+      [Inf_INFORMATION	][TreSpc_UP  ] = NULL,
+      [Inf_INFORMATION	][TreSpc_DOWN] = NULL,
+      [Inf_PROGRAM	][TreSpc_UP  ] = Rsc_DB_GetRscIndBefore,
+      [Inf_PROGRAM	][TreSpc_DOWN] = Rsc_DB_GetRscIndAfter,
+      [Inf_TEACH_GUIDE	][TreSpc_UP  ] = NULL,
+      [Inf_TEACH_GUIDE	][TreSpc_DOWN] = NULL,
+      [Inf_SYLLABUS_LEC	][TreSpc_UP  ] = NULL,
+      [Inf_SYLLABUS_LEC	][TreSpc_DOWN] = NULL,
+      [Inf_SYLLABUS_PRA	][TreSpc_UP  ] = NULL,
+      [Inf_SYLLABUS_PRA	][TreSpc_DOWN] = NULL,
+      [Inf_BIBLIOGRAPHY	][TreSpc_UP  ] = NULL,
+      [Inf_BIBLIOGRAPHY	][TreSpc_DOWN] = NULL,
+      [Inf_FAQ		][TreSpc_UP  ] = FAQ_DB_GetQaAIndBefore,
+      [Inf_FAQ		][TreSpc_DOWN] = FAQ_DB_GetQaAIndAfter,
+      [Inf_LINKS	][TreSpc_UP  ] = NULL,
+      [Inf_LINKS	][TreSpc_DOWN] = NULL,
+      [Inf_ASSESSMENT	][TreSpc_UP  ] = NULL,
+      [Inf_ASSESSMENT	][TreSpc_DOWN] = NULL,
      };
    static long (*GetCodFromInd[Inf_NUM_TYPES]) (long NodCod,unsigned Ind) =
      {
@@ -616,7 +720,7 @@ void TreSpc_MoveUpDownItem (Inf_Type_t InfoType,
   }
 
 /*****************************************************************************/
-/********** Exchange the order of two consecutive questions&answers **********/
+/********** Exchange the order of two consecutive questions & answers **********/
 /*****************************************************************************/
 // Return true if success
 
