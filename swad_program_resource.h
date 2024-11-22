@@ -33,7 +33,6 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void PrgRsc_GetResourceDataByCod (struct Tre_Node *Node);
 void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node);
 
 void PrgRsc_WriteCellViewResource (struct Tre_Node *Node,

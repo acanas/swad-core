@@ -36,7 +36,6 @@
 
 void FAQ_ResetSpcFields (struct Tre_Node *Node);
 
-void FAQ_GetQaADataByCod (struct Tre_Node *Node);
 void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node);
 
 void FAQ_WriteCellViewQaA (struct Tre_Node *Node,

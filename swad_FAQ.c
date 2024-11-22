@@ -85,31 +85,6 @@ void FAQ_ResetSpcFields (struct Tre_Node *Node)
   }
 
 /*****************************************************************************/
-/************* Get node question & answer data using its code ****************/
-/*****************************************************************************/
-
-void FAQ_GetQaADataByCod (struct Tre_Node *Node)
-  {
-   MYSQL_RES *mysql_res;
-
-   if (Node->SpcItem.Cod > 0)
-     {
-      /***** Get data of question & answer *****/
-      if (FAQ_DB_GetQaADataByCod (&mysql_res,Node->SpcItem.Cod))
-         FAQ_GetQaADataFromRow (mysql_res,Node);
-      else
-	 /* Clear all node data except type */
-         Tre_ResetNode (Node);
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-   else
-      /***** Clear all node data except type *****/
-      Tre_ResetNode (Node);
-  }
-
-/*****************************************************************************/
 /************************ Get Question&Answer data ***************************/
 /*****************************************************************************/
 
@@ -210,10 +185,8 @@ void FAQ_WriteCellNewQaA (void)
   {
    extern const char *Txt_New_question;
 
-   HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,"",
-		   HTM_SUBMIT_ON_CHANGE,
-		   "placeholder=\"%s\""
-		   " class=\"PRG_RSC_INPUT INPUT_%s\"",
+   HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,"",HTM_SUBMIT_ON_CHANGE,
+		   "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
 		   Txt_New_question,The_GetSuffix ());
   }
 

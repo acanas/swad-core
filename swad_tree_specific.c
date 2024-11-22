@@ -44,11 +44,42 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+static void (*TreSpc_GetItemDataFromRow[Inf_NUM_TYPES]) (MYSQL_RES *mysql_res,
+							 struct Tre_Node *Node) =
+  {
+   [Inf_UNKNOWN_TYPE	] = NULL,
+   [Inf_INFORMATION	] = NULL,
+   [Inf_PROGRAM		] = PrgRsc_GetResourceDataFromRow,
+   [Inf_TEACH_GUIDE	] = NULL,
+   [Inf_SYLLABUS_LEC	] = NULL,
+   [Inf_SYLLABUS_PRA	] = NULL,
+   [Inf_BIBLIOGRAPHY	] = NULL,
+   [Inf_FAQ		] = FAQ_GetQaADataFromRow,
+   [Inf_LINKS		] = NULL,
+   [Inf_ASSESSMENT	] = NULL,
+  };
+
+/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
 static void TreSpc_PutIconsViewItem (void *Node);
 static void TreSpc_PutIconsEditItem (void *Node);
+
+static void TreSpc_WriteRowViewItem (struct Tre_Node *Node,
+				     unsigned NumItem,
+				     HidVis_HiddenOrVisible_t HiddenOrVisible);
+static void TreSpc_WriteRowEditItem (struct Tre_Node *Node,
+				     unsigned NumItem,unsigned NumItems,
+				     Vie_ViewType_t ViewType,
+				     HidVis_HiddenOrVisible_t HiddenOrVisible);
+static void TreSpc_WriteRowNewItem (struct Tre_Node *Node,unsigned NumItems);
+
+static void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
+				       unsigned NumItem,unsigned NumItems);
 
 static bool TreSpc_ExchangeItems (const struct Tre_Node *Node,
 				  const struct Tre_SpcItem *Item2);
@@ -84,6 +115,44 @@ void TreSpc_ResetItem (struct Tre_Node *Node)
   }
 
 /*****************************************************************************/
+/************************ Get item data using its code ***********************/
+/*****************************************************************************/
+
+void TreSpc_GetItemDataByCod (struct Tre_Node *Node)
+  {
+   static unsigned (*GetItemDataByCod[Inf_NUM_TYPES]) (MYSQL_RES **mysql_res,long ItmCod) =
+     {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
+      [Inf_PROGRAM	] = Rsc_DB_GetResourceDataByCod,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = NULL,
+      [Inf_FAQ		] = FAQ_DB_GetQaADataByCod,
+      [Inf_LINKS	] = NULL,
+      [Inf_ASSESSMENT	] = NULL,
+     };
+   MYSQL_RES *mysql_res;
+
+   if (Node->SpcItem.Cod > 0)
+     {
+      /***** Get data of resource *****/
+      if (GetItemDataByCod[Node->InfoType] (&mysql_res,Node->SpcItem.Cod))
+         TreSpc_GetItemDataFromRow[Node->InfoType] (mysql_res,Node);
+      else
+	 /* Clear all node data except type */
+         Tre_ResetNode (Node);
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
+   else
+      /***** Clear all node data except type *****/
+      Tre_ResetNode (Node);
+  }
+
+/*****************************************************************************/
 /****************************** List questions *******************************/
 /*****************************************************************************/
 
@@ -112,20 +181,6 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_DB_GetListQaAs,
-      [Inf_LINKS	] = NULL,
-      [Inf_ASSESSMENT	] = NULL,
-     };
-   static void (*GetItemDataFromRow[Inf_NUM_TYPES]) (MYSQL_RES *mysql_res,
-						     struct Tre_Node *Node) =
-     {
-      [Inf_UNKNOWN_TYPE	] = NULL,
-      [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = PrgRsc_GetResourceDataFromRow,
-      [Inf_TEACH_GUIDE	] = NULL,
-      [Inf_SYLLABUS_LEC	] = NULL,
-      [Inf_SYLLABUS_PRA	] = NULL,
-      [Inf_BIBLIOGRAPHY	] = NULL,
-      [Inf_FAQ		] = FAQ_GetQaADataFromRow,
       [Inf_LINKS	] = NULL,
       [Inf_ASSESSMENT	] = NULL,
      };
@@ -258,7 +313,7 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
 		 NumItem++)
 	      {
 	       /* Get data of this item */
-	       GetItemDataFromRow[Node->InfoType] (mysql_res,Node);
+	       TreSpc_GetItemDataFromRow[Node->InfoType] (mysql_res,Node);
 
 	       /* Show item */
 	       switch (ViewingOrEditingListItemsOfThisNode)
@@ -354,12 +409,12 @@ static void TreSpc_PutIconsEditItem (void *Node)
   }
 
 /*****************************************************************************/
-/*************************** Edit a specific item ****************************/
+/*************************** Write row to view item **************************/
 /*****************************************************************************/
 
-void TreSpc_WriteRowViewItem (struct Tre_Node *Node,
-			      unsigned NumItem,
-			      HidVis_HiddenOrVisible_t HiddenOrVisible)
+static void TreSpc_WriteRowViewItem (struct Tre_Node *Node,
+			             unsigned NumItem,
+			             HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    static void (*WriteCell[Inf_NUM_TYPES]) (struct Tre_Node *Node,
 					    HidVis_HiddenOrVisible_t HiddenOrVisible) =
@@ -398,13 +453,13 @@ void TreSpc_WriteRowViewItem (struct Tre_Node *Node,
   }
 
 /*****************************************************************************/
-/*************************** Edit a specific item ****************************/
+/*************************** Write row to edit item **************************/
 /*****************************************************************************/
 
-void TreSpc_WriteRowEditItem (struct Tre_Node *Node,
-			      unsigned NumItem,unsigned NumItems,
-			      Vie_ViewType_t ViewType,
-			      HidVis_HiddenOrVisible_t HiddenOrVisible)
+static void TreSpc_WriteRowEditItem (struct Tre_Node *Node,
+				     unsigned NumItem,unsigned NumItems,
+				     Vie_ViewType_t ViewType,
+				     HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    static void (*WriteCell[Inf_NUM_TYPES]) (struct Tre_Node *Node,
 					    Vie_ViewType_t ViewType,
@@ -449,10 +504,10 @@ void TreSpc_WriteRowEditItem (struct Tre_Node *Node,
   }
 
 /*****************************************************************************/
-/*************************** Edit a specific item ****************************/
+/*************************** Write row for new item **************************/
 /*****************************************************************************/
 
-void TreSpc_WriteRowNewItem (struct Tre_Node *Node,unsigned NumItems)
+static void TreSpc_WriteRowNewItem (struct Tre_Node *Node,unsigned NumItems)
   {
    static Act_Action_t ActionsNewItem[Inf_NUM_TYPES] =
      {
@@ -518,8 +573,8 @@ void TreSpc_WriteRowNewItem (struct Tre_Node *Node,unsigned NumItems)
 /******************** Put forms to edit a specific item **********************/
 /*****************************************************************************/
 
-void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
-                                unsigned NumItem,unsigned NumItems)
+static void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
+				       unsigned NumItem,unsigned NumItems)
   {
    static Act_Action_t ActionsReqRem[Inf_NUM_TYPES] =
      {

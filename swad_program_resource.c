@@ -54,31 +54,6 @@ static void PrgRsc_ShowClipboard (void);
 static void PrgRsc_PutIconsClipboard (__attribute__((unused)) void *Args);
 
 /*****************************************************************************/
-/****************** Get node resource data using its code ********************/
-/*****************************************************************************/
-
-void PrgRsc_GetResourceDataByCod (struct Tre_Node *Node)
-  {
-   MYSQL_RES *mysql_res;
-
-   if (Node->SpcItem.Cod > 0)
-     {
-      /***** Get data of resource *****/
-      if (Rsc_DB_GetResourceDataByCod (&mysql_res,Node->SpcItem.Cod))
-         PrgRsc_GetResourceDataFromRow (mysql_res,Node);
-      else
-	 /* Clear all node data except type */
-         Tre_ResetNode (Node);
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-   else
-      /***** Clear all node data except type *****/
-      Tre_ResetNode (Node);
-  }
-
-/*****************************************************************************/
 /**************************** Get resource data ******************************/
 /*****************************************************************************/
 
