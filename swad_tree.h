@@ -125,8 +125,8 @@ unsigned Tre_ShowTree (Inf_Type_t InfoType);
 void Tre_EditTree (Inf_Type_t InfoType);
 void Tre_ShowAllNodes (Inf_Type_t InfoType,
 		       Tre_ListingType_t ListingType,
-                       long SelectedItmCod,
-                       long Cod);	// Specific code (resource, question,...)
+                       long SelectedNodCod,
+                       long SelectedItmCod);	// Specific code (resource, question,...)
 
 Usr_Can_t Tre_CheckIfICanEditTree (void);
 void Tre_PutIconToEditTree (struct Tre_Node *Node);

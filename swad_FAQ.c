@@ -136,6 +136,7 @@ void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
                            Vie_ViewType_t ViewType,
 			   HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
+   extern const char *Txt_Question;
    extern const char *Txt_Answer;
    extern const char *Txt_Save_changes;
 
@@ -146,14 +147,16 @@ void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
 	 FAQ_WriteCellViewQaA (Node,HiddenOrVisible);
 	 break;
       case Vie_EDIT:
+
 	 /***** Show form to change question & answer *****/
 	 Frm_BeginFormAnchor (ActChgFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID);
 	    TreSpc_PutParItmCod (&Node->SpcItem.Cod);
 
 	    /* Question */
 	    HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,Node->QaA.Question,
-			    HTM_SUBMIT_ON_CHANGE,
-			    "class=\"PRG_RSC_INPUT INPUT_%s\"",The_GetSuffix ());
+			    HTM_NO_ATTR,
+			    "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+			    Txt_Question,The_GetSuffix ());
 
 	    /* Answer */
 	    HTM_BR ();
@@ -184,10 +187,33 @@ void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
 void FAQ_WriteCellNewQaA (void)
   {
    extern const char *Txt_New_question;
+   extern const char *Txt_Answer;
+   extern const char *Txt_Save_changes;
 
+   /*
    HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,"",HTM_SUBMIT_ON_CHANGE,
 		   "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
 		   Txt_New_question,The_GetSuffix ());
+   */
+
+   /* Question */
+   HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,"",
+		   HTM_NO_ATTR,
+		   "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+		   Txt_New_question,The_GetSuffix ());
+
+   /* Answer */
+   HTM_BR ();
+   HTM_TEXTAREA_Begin (HTM_NO_ATTR,
+		       "name=\"Answer\" rows=\"10\""
+		       " placeholder=\"%s\""
+		       " class=\"PRG_RSC_INPUT INPUT_%s\"",
+		       Txt_Answer,The_GetSuffix ());
+   HTM_TEXTAREA_End ();
+
+   /* Button to save changes */
+   HTM_BR ();
+   Btn_PutConfirmButtonInline (Txt_Save_changes);
   }
 
 /*****************************************************************************/
@@ -232,6 +258,7 @@ void FAQ_CreateQaA (struct Tre_Node *Node)
   {
    /***** Get the new question for the new question & answer *****/
    Par_GetParText ("Question",Node->QaA.Question,FAQ_MAX_BYTES_QUESTION);
+   Par_GetParHTML ("Answer",Node->QaA.Answer,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Create question & answer *****/
    Node->SpcItem.Cod = FAQ_DB_CreateQaA (Node);

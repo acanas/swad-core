@@ -9492,29 +9492,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Create FAQ question & answer"		// Çeviri lazim!
 #endif
 	,
-	[ActRenFAQQaA] =
-#if   L==1	// ca
-	"Rename FAQ question"		// Necessita traducció
-#elif L==2	// de
-	"Rename FAQ question"		// Need Übersetzung
-#elif L==3	// en
-	"Rename FAQ question"
-#elif L==4	// es
-	"Renombrar pregunta FAQ"
-#elif L==5	// fr
-	"Rename FAQ question"		// Besoin de traduction
-#elif L==6	// gn
-	"Renombrar pregunta FAQ"	// Okoteve traducción
-#elif L==7	// it
-	"Rename FAQ question"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Rename FAQ question"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Rename FAQ question"		// Precisa de tradução
-#elif L==10	// tr
-	"Rename FAQ question"		// Çeviri lazim!
-#endif
-	,
 	[ActReqRemFAQQaA] =
 #if   L==1	// ca
 	"Request removal of FAQ question & answer"			// Necessita traducció

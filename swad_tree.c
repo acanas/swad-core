@@ -116,7 +116,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
                               unsigned NumNode,struct Tre_Node *Node,
                               ConExp_ContractedOrExpanded_t ContractedOrExpanded,
                               long SelectedNodCod,
-                              long Cod);	// Specific code (resource, question,...)
+                              long SelectedItmCod);	// Specific code (resource, question,...)
 static void Tre_PutIconToContractOrExpandNode (struct Tre_Node *Node,
                                                ConExp_ContractedOrExpanded_t ContractedOrExpanded,
                                                Vie_ViewType_t ViewType);
@@ -221,7 +221,7 @@ void Tre_EditTree (Inf_Type_t InfoType)
 void Tre_ShowAllNodes (Inf_Type_t InfoType,
 		       Tre_ListingType_t ListingType,
                        long SelectedNodCod,
-                       long Cod)	// Specific code (resource, question,...)
+                       long SelectedItmCod)	// Specific code (resource, question,...)
   {
    long ParentNodCod = -1L;	// Initialized to avoid warning
    unsigned NumNode;
@@ -269,7 +269,7 @@ void Tre_ShowAllNodes (Inf_Type_t InfoType,
 	   {
 	    /* Write row with this node */
 	    Tre_WriteRowNode (ListingType,NumNode,&Node,ContractedOrExpanded,
-			      SelectedNodCod,Cod);
+			      SelectedNodCod,SelectedItmCod);
 	    The_ChangeRowColor ();
 
 	    /* Show form to create child node? */
@@ -384,7 +384,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
                               unsigned NumNode,struct Tre_Node *Node,
                               ConExp_ContractedOrExpanded_t ContractedOrExpanded,
                               long SelectedNodCod,
-                              long Cod)	// Specific code (resource, question,...)
+                              long SelectedItmCod)	// Specific code (resource, question,...)
   {
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
@@ -586,14 +586,10 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	    switch (Node->InfoType)
 	      {
 	       case Inf_PROGRAM:
-		  /* List of resources of this tree node */
-		  TreSpc_ListNodeItems (ListingType,Node,SelectedNodCod,Cod,
-					HiddenOrVisible);
-		  break;
 	       case Inf_FAQ:
-		  /* List of questions-answers of this tree node */
-		  TreSpc_ListNodeItems (ListingType,Node,SelectedNodCod,Cod,
-				        HiddenOrVisible);
+		  /* List of items of this tree node */
+		  TreSpc_ListNodeItems (ListingType,Node,SelectedNodCod,SelectedItmCod,
+					HiddenOrVisible);
 		  break;
 	       default:
 		  Ale_ShowAlert (Ale_INFO,"Specific information will appear here.");

@@ -613,19 +613,6 @@ void Inf_CreateItem (void)
   }
 
 /*****************************************************************************/
-/************************* Rename specific list item *************************/
-/*****************************************************************************/
-
-void Inf_RenameItem (void)
-  {
-   struct Inf_Info Info;
-
-   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
-      TreSpc_RenameItem (Info.Type);
-   Inf_AfterTree ();
-  }
-
-/*****************************************************************************/
 /********** Ask for confirmation of removing an specific list item ***********/
 /*****************************************************************************/
 

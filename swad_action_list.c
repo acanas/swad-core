@@ -648,7 +648,6 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActFrmSeeFAQQaA	] = {2146, 5,TabCrs,NULL			,Inf_ViewListItemsAfterEdit	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActFrmEdiFAQQaA	] = {2147, 5,TabCrs,NULL			,Inf_EditListItems		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActNewFAQQaA	] = {2148, 5,TabCrs,NULL			,Inf_CreateItem			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRenFAQQaA	] = {2149, 5,TabCrs,NULL			,Inf_RenameItem			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActReqRemFAQQaA	] = {2150, 5,TabCrs,NULL			,Inf_ReqRemItem			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRemFAQQaA	] = {2151, 5,TabCrs,NULL			,Inf_RemoveItem			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActHidFAQQaA	] = {2152, 5,TabCrs,NULL			,Inf_HideItem			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -3935,7 +3934,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActReqLnkSeeDocCrs,	// #1930
 	ActReqLnkAdmDocCrs,	// #1931
 	ActFrmChgPrgRsc,	// #1932
-	ActChgPrgRsc,	// #1933
+	ActChgPrgRsc,		// #1933
 	ActReqLnkCfe,		// #1934
 	ActReqLnkGam,		// #1935
 	ActReqLnkExa,		// #1936
@@ -4152,7 +4151,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActFrmSeeFAQQaA,	// #2146
 	ActFrmEdiFAQQaA,	// #2147
 	ActNewFAQQaA,		// #2148
-	ActRenFAQQaA,		// #2149
+	ActUnk,			// #2149 (obsolete action)
 	ActReqRemFAQQaA,	// #2150
 	ActRemFAQQaA,		// #2151
 	ActHidFAQQaA,		// #2152

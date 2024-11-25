@@ -101,7 +101,6 @@ void Inf_ContractNodeEditing (void);
 void Inf_ViewListItemsAfterEdit (void);
 void Inf_EditListItems (void);
 void Inf_CreateItem (void);
-void Inf_RenameItem (void);
 void Inf_ReqRemItem (void);
 void Inf_RemoveItem (void);
 void Inf_HideItem (void);

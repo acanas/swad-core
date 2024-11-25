@@ -568,7 +568,6 @@ typedef enum
 	ActFrmSeeFAQQaA,
 	ActFrmEdiFAQQaA,
 	ActNewFAQQaA,
-	ActRenFAQQaA,
 	ActReqRemFAQQaA,
 	ActRemFAQQaA,
 	ActHidFAQQaA,
