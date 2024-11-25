@@ -1,7 +1,7 @@
-// swad_link_database.h: institutional links, operations with database
+// swad_system_link_database.h: system links, operations with database
 
-#ifndef _SWAD_LNK_DB
-#define _SWAD_LNK_DB
+#ifndef _SWAD_SYS_LNK_DB
+#define _SWAD_SYS_LNK_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -29,22 +29,22 @@
 
 #include <mysql/mysql.h>	// To access MySQL databases
 
-#include "swad_link.h"
+#include "swad_system_link.h"
 
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Lnk_DB_CreateLink (const struct Lnk_Link *Lnk);
-void Lnk_DB_UpdateLnkName (long LnkCod,const char *FldName,const char *NewLnkName);
-void Lnk_DB_UpdateLnkWWW (long LnkCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1]);
+void SysLnk_DB_CreateLink (const struct SysLnk_Link *Lnk);
+void SysLnk_DB_UpdateLnkName (long LnkCod,const char *FldName,const char *NewLnkName);
+void SysLnk_DB_UpdateLnkWWW (long LnkCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1]);
 
-unsigned Lnk_DB_GetLinks (MYSQL_RES **mysql_res);
-unsigned Lnk_DB_GetLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod);
-bool Lnk_DB_CheckIfLinkNameExists (const char *FldName,const char *Name,long Cod,
-				   __attribute__((unused)) long PrtCod,
-				   __attribute__((unused)) unsigned Year);
+unsigned SysLnk_DB_GetLinks (MYSQL_RES **mysql_res);
+unsigned SysLnk_DB_GetLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod);
+bool SysLnk_DB_CheckIfLinkNameExists (const char *FldName,const char *Name,long Cod,
+				      __attribute__((unused)) long PrtCod,
+				      __attribute__((unused)) unsigned Year);
 
-void Lnk_DB_RemoveLink (long LnkCod);
+void SysLnk_DB_RemoveLink (long LnkCod);
 
 #endif

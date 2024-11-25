@@ -64,8 +64,8 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_action_list.o \
        swad_indicator_database.o swad_info.o swad_info_database.o \
        swad_info_resource.o swad_institution.o swad_institution_config.o \
        swad_institution_database.o \
-       swad_language.o swad_layout.o swad_link.o swad_link_database.o \
-       swad_log.o swad_log_database.o swad_logo.o \
+       swad_language.o swad_layout.o swad_log.o swad_log_database.o \
+       swad_logo.o \
        swad_MAC.o swad_mail.o swad_mail_database.o swad_main.o \
        swad_maintenance.o swad_map.o swad_mark.o swad_mark_database.o \
        swad_match.o swad_match_database.o swad_match_print.o \
@@ -93,7 +93,7 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_action_list.o \
        swad_setting.o swad_setting_database.o swad_statistic.o \
        swad_statistic_database.o swad_string.o swad_survey.o \
        swad_survey_database.o swad_survey_resource.o swad_syllabus.o \
-       swad_system_config.o \
+       swad_system_config.o swad_system_link.o swad_system_link_database.o \
        swad_tab.o swad_tag.o swad_tag_database.o swad_tag_resource.o \
        swad_test.o swad_test_database.o swad_test_config.o swad_test_print.o \
        swad_test_resource.o swad_test_visibility.o swad_theme.o \

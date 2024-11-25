@@ -47,7 +47,6 @@
 #include "swad_hierarchy.h"
 #include "swad_hierarchy_type.h"
 #include "swad_icon.h"
-#include "swad_link.h"
 #include "swad_parameter.h"
 #include "swad_plugin.h"
 #include "swad_process.h"
@@ -58,6 +57,7 @@
 #include "swad_session_database.h"
 #include "swad_setting.h"
 #include "swad_statistic.h"
+#include "swad_system_link.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/

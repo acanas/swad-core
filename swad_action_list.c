@@ -74,7 +74,6 @@
 #include "swad_info_resource.h"
 #include "swad_institution_config.h"
 #include "swad_language.h"
-#include "swad_link.h"
 #include "swad_log.h"
 #include "swad_mail.h"
 #include "swad_maintenance.h"
@@ -113,6 +112,7 @@
 #include "swad_survey_resource.h"
 #include "swad_syllabus.h"
 #include "swad_system_config.h"
+#include "swad_system_link.h"
 #include "swad_tab.h"
 #include "swad_tag.h"
 #include "swad_tag_resource.h"
@@ -241,13 +241,13 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActSeePen		] = {1060, 2,TabSys,NULL			,Hie_SeePending			,{{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
 
    // Links
-   [ActSeeLnk 		] = { 748, 3,TabSys,NULL			,Lnk_SeeLinks			,{{    0,    0},{0x3C7,0x3C7},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActEdiLnk		] = { 749, 3,TabSys,NULL			,Lnk_EditLinks			,{{    0,    0},{0x200,0x200},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActNewLnk		] = { 750, 3,TabSys,Lnk_ReceiveNewLink		,Lnk_ContEditAfterChgLnk	,{{    0,    0},{0x200,0x200},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActRemLnk		] = { 897, 3,TabSys,Lnk_RemoveLink		,Lnk_ContEditAfterChgLnk	,{{    0,    0},{0x200,0x200},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActRenLnkSho	] = { 753, 3,TabSys,Lnk_RenameLinkShort		,Lnk_ContEditAfterChgLnk	,{{    0,    0},{0x200,0x200},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActRenLnkFul	] = { 751, 3,TabSys,Lnk_RenameLinkFull		,Lnk_ContEditAfterChgLnk	,{{    0,    0},{0x200,0x200},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActChgLnkWWW	] = { 752, 3,TabSys,Lnk_ChangeLinkWWW		,Lnk_ContEditAfterChgLnk	,{{    0,    0},{0x200,0x200},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActSeeLnk 		] = { 748, 3,TabSys,NULL			,SysLnk_SeeLinks			,{{    0,    0},{0x3C7,0x3C7},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActEdiLnk		] = { 749, 3,TabSys,NULL			,SysLnk_EditLinks			,{{    0,    0},{0x200,0x200},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActNewLnk		] = { 750, 3,TabSys,SysLnk_ReceiveNewLink		,SysLnk_ContEditAfterChgLnk	,{{    0,    0},{0x200,0x200},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActRemLnk		] = { 897, 3,TabSys,SysLnk_RemoveLink		,SysLnk_ContEditAfterChgLnk	,{{    0,    0},{0x200,0x200},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActRenLnkSho	] = { 753, 3,TabSys,SysLnk_RenameLinkShort		,SysLnk_ContEditAfterChgLnk	,{{    0,    0},{0x200,0x200},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActRenLnkFul	] = { 751, 3,TabSys,SysLnk_RenameLinkFull		,SysLnk_ContEditAfterChgLnk	,{{    0,    0},{0x200,0x200},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActChgLnkWWW	] = { 752, 3,TabSys,SysLnk_ChangeLinkWWW		,SysLnk_ContEditAfterChgLnk	,{{    0,    0},{0x200,0x200},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActSeeBan		] = {1137, 3,TabSys,NULL			,Ban_ShowAllBanners		,{{    0,    0},{0x3FF,0x3FF},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActEdiBan		] = {1138, 3,TabSys,NULL			,Ban_EditBanners		,{{    0,    0},{0x200,0x200},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActNewBan		] = {1139, 3,TabSys,Ban_ReceiveNewBanner	,Ban_ContEditAfterChgBan	,{{    0,    0},{0x200,0x200},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},

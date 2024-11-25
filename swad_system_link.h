@@ -1,7 +1,7 @@
-// swad_link.h: institutional links
+// swad_system_link.h: system links
 
-#ifndef _SWAD_LNK
-#define _SWAD_LNK
+#ifndef _SWAD_SYS_LNK
+#define _SWAD_SYS_LNK
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,7 +27,7 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-struct Lnk_Link
+struct SysLnk_Link
   {
    long LnkCod;
    char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1];
@@ -39,19 +39,19 @@ struct Lnk_Link
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Lnk_SeeLinks (void);
-void Lnk_WriteMenuWithInstitutionalLinks (void);
+void SysLnk_SeeLinks (void);
+void SysLnk_WriteMenuWithSystemLinks (void);
 
-void Lnk_EditLinks (void);
+void SysLnk_EditLinks (void);
 
-void Lnk_PutIconToViewLinks (void);
+void SysLnk_PutIconToViewLinks (void);
 
-void Lnk_GetLinkDataByCod (struct Lnk_Link *Lnk);
-void Lnk_RemoveLink (void);
-void Lnk_RenameLinkShort (void);
-void Lnk_RenameLinkFull (void);
-void Lnk_ChangeLinkWWW (void);
-void Lnk_ContEditAfterChgLnk (void);
-void Lnk_ReceiveNewLink (void);
+void SysLnk_GetLinkDataByCod (struct SysLnk_Link *Lnk);
+void SysLnk_RemoveLink (void);
+void SysLnk_RenameLinkShort (void);
+void SysLnk_RenameLinkFull (void);
+void SysLnk_ChangeLinkWWW (void);
+void SysLnk_ContEditAfterChgLnk (void);
+void SysLnk_ReceiveNewLink (void);
 
 #endif

@@ -1971,94 +1971,94 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemLnk] =
 #if   L==1	// ca
-	"Request removal of institutional link"				// Necessita traducció
+	"Request removal of system link"			// Necessita traducció
 #elif L==2	// de
-	"Request removal of institutional link"				// Need Übersetzung
+	"Request removal of system link"			// Need Übersetzung
 #elif L==3	// en
-	"Request removal of institutional link"
+	"Request removal of system link"
 #elif L==4	// es
-	"Solicitar eliminaci&oacute;n de un enlace institucional"
+	"Solicitar eliminaci&oacute;n de un enlace del sistema"
 #elif L==5	// fr
-	"Request removal of institutional link"				// Besoin de traduction
+	"Request removal of system link"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de un enlace institucional"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de un enlace del sistema"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of institutional link"				// Bisogno di traduzione
+	"Request removal of system link"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of institutional link"				// Potrzebujesz tlumaczenie
+	"Request removal of system link"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of institutional link"				// Precisa de tradução
+	"Request removal of system link"			// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of institutional link"				// Çeviri lazim!
+	"Request removal of system link"			// Çeviri lazim!
 #endif
 	,
 	[ActRenLnkSho] =
 #if   L==1	// ca
-	"Request change of the short name of institutional link"		// Necessita traducció
+	"Request change of the short name of system link"		// Necessita traducció
 #elif L==2	// de
-	"Request change of the short name of institutional link"		// Need Übersetzung
+	"Request change of the short name of system link"		// Need Übersetzung
 #elif L==3	// en
-	"Request change of the short name of institutional link"
+	"Request change of the short name of system link"
 #elif L==4	// es
-	"Solicitar el cambio del nombre breve de un enlace institucional"
+	"Solicitar el cambio del nombre breve de un enlace del sistema"
 #elif L==5	// fr
-	"Request change of the short name of institutional link"		// Besoin de traduction
+	"Request change of the short name of system link"		// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar el cambio del nombre breve de un enlace institucional"	// Okoteve traducción
+	"Solicitar el cambio del nombre breve de un enlace del sistema"	// Okoteve traducción
 #elif L==7	// it
-	"Request change of the short name of institutional link"		// Bisogno di traduzione
+	"Request change of the short name of system link"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Request change of the short name of institutional link"		// Potrzebujesz tlumaczenie
+	"Request change of the short name of system link"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request change of the short name of institutional link"		// Precisa de tradução
+	"Request change of the short name of system link"		// Precisa de tradução
 #elif L==10	// tr
-	"Request change of the short name of institutional link"		// Çeviri lazim!
+	"Request change of the short name of system link"		// Çeviri lazim!
 #endif
 	,
 	[ActRenLnkFul] =
 #if   L==1	// ca
-	"Request change of the full name of institutional link"			// Necessita traducció
+	"Request change of the full name of system link"			// Necessita traducció
 #elif L==2	// de
-	"Request change of the full name of institutional link"			// Need Übersetzung
+	"Request change of the full name of system link"			// Need Übersetzung
 #elif L==3	// en
-	"Request change of the full name of institutional link"
+	"Request change of the full name of system link"
 #elif L==4	// es
-	"Solicitar el cambio del nombre completo de un enlace institucional"
+	"Solicitar el cambio del nombre completo de un enlace del sistema"
 #elif L==5	// fr
-	"Request change of the full name of institutional link"			// Besoin de traduction
+	"Request change of the full name of system link"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar el cambio del nombre completo de un enlace institucional"	// Okoteve traducción
+	"Solicitar el cambio del nombre completo de un enlace del sistema"	// Okoteve traducción
 #elif L==7	// it
-	"Request change of the full name of institutional link"			// Bisogno di traduzione
+	"Request change of the full name of system link"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request change of the full name of institutional link"			// Potrzebujesz tlumaczenie
+	"Request change of the full name of system link"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request change of the full name of institutional link"			// Precisa de tradução
+	"Request change of the full name of system link"			// Precisa de tradução
 #elif L==10	// tr
-	"Request change of the full name of institutional link"			// Çeviri lazim!
+	"Request change of the full name of system link"			// Çeviri lazim!
 #endif
 	,
 	[ActChgLnkWWW] =
 #if   L==1	// ca
-	"Request change of the web of institutional link"		// Necessita traducció
+	"Request change of the web of system link"			// Necessita traducció
 #elif L==2	// de
-	"Request change of the web of institutional link"		// Need Übersetzung
+	"Request change of the web of system link"			// Need Übersetzung
 #elif L==3	// en
-	"Request change of the web of institutional link"
+	"Request change of the web of system link"
 #elif L==4	// es
-	"Solicitar el cambio de la web de un enlace institucional"
+	"Solicitar el cambio de la web de un enlace del sistema"
 #elif L==5	// fr
-	"Request change of the web of institutional link"		// Besoin de traduction
+	"Request change of the web of system link"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar el cambio de la web de un enlace institucional"	// Okoteve traducción
+	"Solicitar el cambio de la web de un enlace del sistema"	// Okoteve traducción
 #elif L==7	// it
-	"Request change of the web of institutional link"		// Bisogno di traduzione
+	"Request change of the web of system link"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request change of the web of institutional link"		// Potrzebujesz tlumaczenie
+	"Request change of the web of system link"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request change of the web of institutional link"		// Precisa de tradução
+	"Request change of the web of system link"			// Precisa de tradução
 #elif L==10	// tr
-	"Request change of the web of institutional link"		// Çeviri lazim!
+	"Request change of the web of system link"			// Çeviri lazim!
 #endif
 	,
 	[ActSeeBan] =

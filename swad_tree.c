@@ -585,14 +585,25 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	    /* Specific content depending on the tree type */
 	    switch (Node->InfoType)
 	      {
+	       case Inf_INFORMATION:
+	       case Inf_TEACH_GUIDE:
+	       case Inf_SYLLABUS_LEC:
+	       case Inf_SYLLABUS_PRA:
+	       case Inf_ASSESSMENT:
+		  break;
 	       case Inf_PROGRAM:
 	       case Inf_FAQ:
 		  /* List of items of this tree node */
 		  TreSpc_ListNodeItems (ListingType,Node,SelectedNodCod,SelectedItmCod,
 					HiddenOrVisible);
 		  break;
-	       default:
+	       case Inf_BIBLIOGRAPHY:
+	       case Inf_LINKS:
 		  Ale_ShowAlert (Ale_INFO,"Specific information will appear here.");
+		  break;
+	       case Inf_UNKNOWN_TYPE:
+	       default:
+		  Err_WrongTypeExit ();
 		  break;
 	      }
 

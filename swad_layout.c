@@ -55,7 +55,7 @@
 #include "swad_holiday.h"
 #include "swad_HTML.h"
 #include "swad_language.h"
-#include "swad_link.h"
+#include "swad_system_link.h"
 #include "swad_log.h"
 #include "swad_log_database.h"
 #include "swad_logo.h"
@@ -1131,7 +1131,7 @@ static void Lay_ShowLeftColumn (void)
      }
    else
       /***** Institutional links *****/
-      Lnk_WriteMenuWithInstitutionalLinks ();
+      SysLnk_WriteMenuWithSystemLinks ();
 
    /***** Month *****/
    Cal_DrawCurrentMonth ();

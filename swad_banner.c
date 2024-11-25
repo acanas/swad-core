@@ -42,10 +42,10 @@
 #include "swad_hidden_visible.h"
 #include "swad_HTML.h"
 #include "swad_language.h"
-#include "swad_link.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
 #include "swad_photo.h"
+#include "swad_system_link.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -196,7 +196,7 @@ static void Ban_PutIconsListingBanners (__attribute__((unused)) void *Args)
       Ban_PutIconToEditBanners ();
 
    /***** Put icon to view links *****/
-   Lnk_PutIconToViewLinks ();
+   SysLnk_PutIconToViewLinks ();
   }
 
 /*****************************************************************************/
@@ -359,7 +359,7 @@ static void Ban_PutIconsEditingBanners (__attribute__((unused)) void *Args)
    Ico_PutContextualIconToView (ActSeeBan,NULL,NULL,NULL);
 
    /***** Put icon to view links *****/
-   Lnk_PutIconToViewLinks ();
+   SysLnk_PutIconToViewLinks ();
   }
 
 /*****************************************************************************/

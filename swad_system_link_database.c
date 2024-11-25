@@ -1,4 +1,4 @@
-// swad_link_database.c: institutional links, operations with database
+// swad_system_link_database.c: system links, operations with database
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -26,15 +26,15 @@
 /*****************************************************************************/
 
 #include "swad_database.h"
-#include "swad_link_database.h"
+#include "swad_system_link_database.h"
 
 /*****************************************************************************/
 /**************************** Create a new link ******************************/
 /*****************************************************************************/
 
-void Lnk_DB_CreateLink (const struct Lnk_Link *Lnk)
+void SysLnk_DB_CreateLink (const struct SysLnk_Link *Lnk)
   {
-   DB_QueryINSERT ("can not create institutional link",
+   DB_QueryINSERT ("can not create system link",
 		   "INSERT INTO lnk_links"
 		   " (ShortName,FullName,WWW)"
 		   " VALUES"
@@ -48,9 +48,9 @@ void Lnk_DB_CreateLink (const struct Lnk_Link *Lnk)
 /************ Update link name in table of institutional links ***************/
 /*****************************************************************************/
 
-void Lnk_DB_UpdateLnkName (long LnkCod,const char *FldName,const char *NewLnkName)
+void SysLnk_DB_UpdateLnkName (long LnkCod,const char *FldName,const char *NewLnkName)
   {
-   DB_QueryUPDATE ("can not update the name of an institutional link",
+   DB_QueryUPDATE ("can not update the name of a system link",
 		   "UPDATE lnk_links"
 		     " SET %s='%s'"
 		   " WHERE LnkCod=%ld",
@@ -58,14 +58,13 @@ void Lnk_DB_UpdateLnkName (long LnkCod,const char *FldName,const char *NewLnkNam
 	           LnkCod);
   }
 
-
 /*****************************************************************************/
 /****************** Update link changing old WWW by new WWW ******************/
 /*****************************************************************************/
 
-void Lnk_DB_UpdateLnkWWW (long LnkCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1])
+void SysLnk_DB_UpdateLnkWWW (long LnkCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1])
   {
-   DB_QueryUPDATE ("can not update the web of an institutional link",
+   DB_QueryUPDATE ("can not update the web of a system link",
 		   "UPDATE lnk_links"
 		     " SET WWW='%s'"
 		   " WHERE LnkCod=%ld",
@@ -77,7 +76,7 @@ void Lnk_DB_UpdateLnkWWW (long LnkCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1])
 /************************** Get institutional links **************************/
 /*****************************************************************************/
 
-unsigned Lnk_DB_GetLinks (MYSQL_RES **mysql_res)
+unsigned SysLnk_DB_GetLinks (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get institutional links",
@@ -93,10 +92,10 @@ unsigned Lnk_DB_GetLinks (MYSQL_RES **mysql_res)
 /**************************** Get link full name *****************************/
 /*****************************************************************************/
 
-unsigned Lnk_DB_GetLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod)
+unsigned SysLnk_DB_GetLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod)
   {
    return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get data of an institutional link",
+   DB_QuerySELECT (mysql_res,"can not get data of a system link",
 		   "SELECT LnkCod,"	// row[0]
 		          "ShortName,"	// row[1]
 			  "FullName,"	// row[2]
@@ -110,12 +109,12 @@ unsigned Lnk_DB_GetLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod)
 /********************** Check if the name of link exists *********************/
 /*****************************************************************************/
 
-bool Lnk_DB_CheckIfLinkNameExists (const char *FldName,const char *Name,long Cod,
-				   __attribute__((unused)) long PrtCod,
-				   __attribute__((unused)) unsigned Year)
+bool SysLnk_DB_CheckIfLinkNameExists (const char *FldName,const char *Name,long Cod,
+				      __attribute__((unused)) long PrtCod,
+				      __attribute__((unused)) unsigned Year)
   {
    return
-   DB_QueryEXISTS ("can not check if the name of an institutional link already existed",
+   DB_QueryEXISTS ("can not check if the name of a system link already existed",
 		   "SELECT EXISTS"
 		   "(SELECT *"
 		     " FROM lnk_links"
@@ -129,9 +128,9 @@ bool Lnk_DB_CheckIfLinkNameExists (const char *FldName,const char *Name,long Cod
 /******************************* Remove a link *******************************/
 /*****************************************************************************/
 
-void Lnk_DB_RemoveLink (long LnkCod)
+void SysLnk_DB_RemoveLink (long LnkCod)
   {
-   DB_QueryDELETE ("can not remove an institutional link",
+   DB_QueryDELETE ("can not remove a system link",
 		   "DELETE FROM lnk_links"
 		   " WHERE LnkCod=%ld",
 		   LnkCod);
