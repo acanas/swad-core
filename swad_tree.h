@@ -34,6 +34,7 @@
 #include "swad_date.h"
 #include "swad_FAQ_type.h"
 #include "swad_info.h"
+#include "swad_link_type.h"
 #include "swad_resource_type.h"
 
 /*****************************************************************************/
@@ -69,6 +70,7 @@ struct Tre_Node
    struct Tre_SpcItem SpcItem;
    struct Rsc_Resource Resource;
    struct FAQ_QaA QaA;
+   struct Lnk_Link Lnk;
   };
 
 struct Tre_NodeRange

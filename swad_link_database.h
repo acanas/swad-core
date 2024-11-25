@@ -1,7 +1,7 @@
-// swad_FAQ_database.h: Frequently Asked Questions, operations with database
+// swad_link_database.h: course links, operations with database
 
-#ifndef _SWAD_FAQ_DB
-#define _SWAD_FAQ_DB
+#ifndef _SWAD_LNK_DB
+#define _SWAD_LNK_DB
 /*
     SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
@@ -29,7 +29,7 @@
 
 #include <mysql/mysql.h>	// To access MySQL databases
 
-#include "swad_FAQ_type.h"
+#include "swad_link_type.h"
 #include "swad_hidden_visible.h"
 #include "swad_tree.h"
 
@@ -37,18 +37,18 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-long FAQ_DB_CreateQaA (const struct Tre_Node *Node);
-unsigned FAQ_DB_GetListQaAs (MYSQL_RES **mysql_res,long NodCod,
-                             bool ShowHiddenQaAs);
-unsigned FAQ_DB_GetQaADataByCod (MYSQL_RES **mysql_res,long QaACod);
-unsigned FAQ_DB_GetQaAIndBefore (const struct Tre_Node *Node);
-unsigned FAQ_DB_GetQaAIndAfter (const struct Tre_Node *Node);
-long FAQ_DB_GetQaACodFromQaAInd (long NodCod,unsigned QaAInd);
-void FAQ_DB_RemoveQaA (const struct Tre_Node *Node);
-void FAQ_DB_HideOrUnhideQaA (const struct Tre_Node *Node,
-			     HidVis_HiddenOrVisible_t HiddenOrVisible);
-void FAQ_DB_LockTableQaAs (void);
-void FAQ_DB_UpdateQaAInd (const struct Tre_Node *Node,long QaACod,int QaAInd);
-void FAQ_DB_UpdateQaA (const struct Tre_Node *Node);
+long Lnk_DB_CreateCrsLink (const struct Tre_Node *Node);
+unsigned Lnk_DB_GetListCrsLinks (MYSQL_RES **mysql_res,long NodCod,
+                                 bool ShowHiddenCrsLinks);
+unsigned Lnk_DB_GetCrsLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod);
+unsigned Lnk_DB_GetLnkIndBefore (const struct Tre_Node *Node);
+unsigned Lnk_DB_GetLnkIndAfter (const struct Tre_Node *Node);
+long Lnk_DB_GetLnkCodFromLnkInd (long NodCod,unsigned LnkInd);
+void Lnk_DB_RemoveCrsLink (const struct Tre_Node *Node);
+void Lnk_DB_HideOrUnhideCrsLink (const struct Tre_Node *Node,
+			         HidVis_HiddenOrVisible_t HiddenOrVisible);
+void Lnk_DB_LockTableCrsLinks (void);
+void Lnk_DB_UpdateLnkInd (const struct Tre_Node *Node,long LnkCod,int LnkInd);
+void Lnk_DB_UpdateCrsLink (const struct Tre_Node *Node);
 
 #endif

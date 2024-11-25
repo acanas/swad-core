@@ -476,7 +476,7 @@ static void SysLnk_PutParLnkCod (void *LnkCod)
 
 void SysLnk_RemoveLink (void)
   {
-   extern const char *Txt_Link_X_removed;
+   extern const char *Txt_Link_removed;
 
    /***** Link constructor *****/
    SysLnk_EditingLinkConstructor ();
@@ -484,16 +484,11 @@ void SysLnk_RemoveLink (void)
    /***** Get link code *****/
    SysLnk_EditingLnk->LnkCod = ParCod_GetAndCheckPar (ParCod_Lnk);
 
-   /***** Get data of the link from database *****/
-   SysLnk_GetLinkDataByCod (SysLnk_EditingLnk);
-
    /***** Remove link *****/
    SysLnk_DB_RemoveLink (SysLnk_EditingLnk->LnkCod);
 
    /***** Write message to show the change made *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_Link_X_removed,
-                    SysLnk_EditingLnk->ShrtName);
+   Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Link_removed);
   }
 
 /*****************************************************************************/

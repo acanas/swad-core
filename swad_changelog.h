@@ -635,10 +635,17 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.38 (2024-11-25)"
+#define Log_PLATFORM_VERSION	"SWAD 24.39 (2024-11-26)"
 #define CSS_FILE		"swad24.37.1.css"
 #define JS_FILE			"swad23.89.js"
 /*
+	Version 24.39:    Nov 26, 2024  New module swad_link, for course links. (? lines)
+					2 changes necessary in database:
+ALTER TABLE faq_questions CHANGE COLUMN Question Question VARCHAR(2047) NOT NULL;
+CREATE TABLE IF NOT EXISTS crs_links (LnkCod INT NOT NULL AUTO_INCREMENT,NodCod INT NOT NULL DEFAULT -1,LnkInd INT NOT NULL DEFAULT 0,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',Title VARCHAR(2047) NOT NULL,Description VARCHAR(2047) NOT NULL,WWW VARCHAR(255) NOT NULL,UNIQUE INDEX(LnkCod),UNIQUE INDEX(NodCod,LnkInd));
+					If you want to use MyISAM:
+ALTER TABLE crs_links ENGINE=MyISAM;
+
 	Version 24.38:    Nov 25, 2024  Module swad_link renamed as swad_system_link. (343639 lines)
 	Version 24.37.11: Nov 25, 2024  Changes in edition of specific list of items. (343627 lines)
 	Version 24.37.10: Nov 23, 2024  Code refactoring in specific list of items. (343643 lines)

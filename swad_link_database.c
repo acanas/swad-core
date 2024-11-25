@@ -1,4 +1,4 @@
-// swad_FAQ_database.c: Frequently Asked Questions, operations with database
+// swad_link_database.c: course links, operations with database
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -28,8 +28,8 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_global.h"
-#include "swad_FAQ.h"
-#include "swad_FAQ_database.h"
+#include "swad_link.h"
+#include "swad_link_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -38,241 +38,246 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/*********************** Create a new question & answer ************************/
+/************************* Create a new course link **************************/
 /*****************************************************************************/
 
-long FAQ_DB_CreateQaA (const struct Tre_Node *Node)
+long Lnk_DB_CreateCrsLink (const struct Tre_Node *Node)
   {
    return
-   DB_QueryINSERTandReturnCode ("can not create new question-answer",
-				"INSERT INTO faq_questions"
-				" (NodCod,QaAInd,Hidden,Question,Answer)"
-				" SELECT %ld,COALESCE(MAX(t2.QaAInd),0)+1,'N','%s','%s'"
-				  " FROM faq_questions AS t2"
+   DB_QueryINSERTandReturnCode ("can not create new course link",
+				"INSERT INTO crs_links"
+				" (NodCod,LnkInd,Hidden,Title,Description,WWW)"
+				" SELECT %ld,COALESCE(MAX(t2.LnkInd),0)+1,'N','%s','%s','%s'"
+				  " FROM crs_links AS t2"
 				 " WHERE t2.NodCod=%ld",
 				Node->Hierarchy.NodCod,
-				Node->QaA.Question,
-				Node->QaA.Answer,
+				Node->Lnk.Title,
+				Node->Lnk.Description,
+				Node->Lnk.WWW,
 				Node->Hierarchy.NodCod);
   }
 
 /*****************************************************************************/
-/************* Get list of node questions & answers from database **************/
+/*************** Get list of node course links from database *****************/
 /*****************************************************************************/
 
-unsigned FAQ_DB_GetListQaAs (MYSQL_RES **mysql_res,long NodCod,
-                             bool ShowHiddenQaAs)
+unsigned Lnk_DB_GetListCrsLinks (MYSQL_RES **mysql_res,long NodCod,
+                                 bool ShowHiddenCrsLinks)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
    static const char *HiddenSubQuery[2] =
      {
-      [false] = " AND faq_questions.Hidden='N'",
+      [false] = " AND crs_links.Hidden='N'",
       [true ] = "",
      };
 
    return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get node questions & answers",
-		   "SELECT faq_questions.NodCod,"	// row[0]
-			  "faq_questions.QaACod,"	// row[1]
-                          "faq_questions.QaAInd,"	// row[2]
-			  "faq_questions.Hidden,"	// row[3]
-			  "faq_questions.Question,"	// row[4]
-			  "faq_questions.Answer"	// row[5]
-		    " FROM faq_questions,"
+   DB_QuerySELECT (mysql_res,"can not get node course links",
+		   "SELECT crs_links.NodCod,"		// row[0]
+			  "crs_links.LnkCod,"		// row[1]
+                          "crs_links.LnkInd,"		// row[2]
+			  "crs_links.Hidden,"		// row[3]
+			  "crs_links.Title,"		// row[4]
+			  "crs_links.Description,"	// row[5]
+			  "crs_links.WWW"		// row[6]
+		    " FROM crs_links,"
 		          "tre_nodes"
-		   " WHERE faq_questions.NodCod=%ld"
+		   " WHERE crs_links.NodCod=%ld"
 		       "%s"
-		     " AND faq_questions.NodCod=tre_nodes.NodCod"
+		     " AND crs_links.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'"		// Extra check
-		" ORDER BY faq_questions.QaAInd",
+		" ORDER BY crs_links.LnkInd",
 		   NodCod,
-		   HiddenSubQuery[ShowHiddenQaAs],
+		   HiddenSubQuery[ShowHiddenCrsLinks],
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_FAQ]);
+		   Tre_DB_Types[Inf_LINKS]);
   }
 
 /*****************************************************************************/
-/**************** Get question & answer data using its code ********************/
+/******************* Get course link data using its code *********************/
 /*****************************************************************************/
 
-unsigned FAQ_DB_GetQaADataByCod (MYSQL_RES **mysql_res,long QaACod)
+unsigned Lnk_DB_GetCrsLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get node question & answer data",
-		   "SELECT faq_questions.NodCod,"	// row[0]
-			  "faq_questions.QaACod,"	// row[1]
-                          "faq_questions.QaAInd,"	// row[2]
-			  "faq_questions.Hidden,"	// row[3]
-			  "faq_questions.Question,"	// row[4]
-			  "faq_questions.Answer"	// row[5]
-		    " FROM faq_questions,"
+   DB_QuerySELECT (mysql_res,"can not get node course link data",
+		   "SELECT crs_links.NodCod,"		// row[0]
+			  "crs_links.LnkCod,"		// row[1]
+                          "crs_links.LnkInd,"		// row[2]
+			  "crs_links.Hidden,"		// row[3]
+			  "crs_links.Title,"		// row[4]
+			  "crs_links.Description,"	// row[5]
+			  "crs_links.WWW"		// row[6]
+		    " FROM crs_links,"
 		          "tre_nodes"
-		   " WHERE faq_questions.QaACod=%ld"
-		     " AND faq_questions.NodCod=tre_nodes.NodCod"
+		   " WHERE crs_links.LnkCod=%ld"
+		     " AND crs_links.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   QaACod,
+		   LnkCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_FAQ]);
+		   Tre_DB_Types[Inf_LINKS]);
   }
 
 /*****************************************************************************/
-/********* Get the question & answer index before/after a given one ************/
+/*********** Get the course link index before/after a given one **************/
 /*****************************************************************************/
 
-unsigned FAQ_DB_GetQaAIndBefore (const struct Tre_Node *Node)
+unsigned Lnk_DB_GetLnkIndBefore (const struct Tre_Node *Node)
   {
    return
-   DB_QuerySELECTUnsigned ("can not get the question-answer before",
-			   "SELECT COALESCE(MAX(QaAInd),0)"
-			    " FROM faq_questions"
+   DB_QuerySELECTUnsigned ("can not get the course link before",
+			   "SELECT COALESCE(MAX(LnkInd),0)"
+			    " FROM crs_links"
 			   " WHERE NodCod=%ld"
-			     " AND QaAInd<%u",
+			     " AND LnkInd<%u",
 			   Node->Hierarchy.NodCod,
 			   Node->SpcItem.Ind);
   }
 
-unsigned FAQ_DB_GetQaAIndAfter (const struct Tre_Node *Node)
+unsigned Lnk_DB_GetLnkIndAfter (const struct Tre_Node *Node)
   {
    return
-   DB_QuerySELECTUnsigned ("can not get the question-answer after",
-			   "SELECT COALESCE(MIN(QaAInd),0)"
-			    " FROM faq_questions"
+   DB_QuerySELECTUnsigned ("can not get the course link after",
+			   "SELECT COALESCE(MIN(LnkInd),0)"
+			    " FROM crs_links"
 			   " WHERE NodCod=%ld"
-			     " AND QaAInd>%u",
+			     " AND LnkInd>%u",
 			   Node->Hierarchy.NodCod,
 			   Node->SpcItem.Ind);
   }
 
 /*****************************************************************************/
-/**** Get question & answer code given node code and question & answer index *****/
+/******** Get course link code given node code and course link index *********/
 /*****************************************************************************/
 
-long FAQ_DB_GetQaACodFromQaAInd (long NodCod,unsigned QaAInd)
+long Lnk_DB_GetLnkCodFromLnkInd (long NodCod,unsigned LnkInd)
   {
-   /***** Trivial check: question & answer index should be > 0 *****/
-   if (QaAInd == 0)
+   /***** Trivial check: course link index should be > 0 *****/
+   if (LnkInd == 0)
       return -1L;
 
-   /***** Get question & answer code given node code and question & answer index *****/
-   return DB_QuerySELECTCode ("can not get question & answer code",
-			      "SELECT QaACod"
-			       " FROM faq_questions"
+   /***** Get course link code given node code and course link index *****/
+   return DB_QuerySELECTCode ("can not get course link code",
+			      "SELECT LnkCod"
+			       " FROM crs_links"
 			      " WHERE NodCod=%ld"
-				" AND QaAInd=%u",
-			      NodCod,QaAInd);
+				" AND LnkInd=%u",
+			      NodCod,LnkInd);
   }
 
 /*****************************************************************************/
-/*********************** Remove a node question & answer ***********************/
+/*************************** Remove a course link ****************************/
 /*****************************************************************************/
 
-void FAQ_DB_RemoveQaA (const struct Tre_Node *Node)
+void Lnk_DB_RemoveCrsLink (const struct Tre_Node *Node)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
-   DB_QueryDELETE ("can not remove node question-answer",
-		   "DELETE FROM faq_questions"
-		   " USING faq_questions,"
+   DB_QueryDELETE ("can not remove course link",
+		   "DELETE FROM crs_links"
+		   " USING crs_links,"
 		          "tre_nodes"
-		   " WHERE faq_questions.QaACod=%ld"
-		     " AND faq_questions.NodCod=%ld"
-                     " AND faq_questions.NodCod=tre_nodes.NodCod"
+		   " WHERE crs_links.LnkCod=%ld"
+		     " AND crs_links.NodCod=%ld"
+                     " AND crs_links.NodCod=tre_nodes.NodCod"
                      " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
 		   Node->SpcItem.Cod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_FAQ]);
+		   Tre_DB_Types[Inf_LINKS]);
   }
 
 /*****************************************************************************/
-/********************* Hide/unhide a node question & answer ********************/
+/*********************** Hide/unhide a node course link **********************/
 /*****************************************************************************/
 
-void FAQ_DB_HideOrUnhideQaA (const struct Tre_Node *Node,
-			     HidVis_HiddenOrVisible_t HiddenOrVisible)
+void Lnk_DB_HideOrUnhideCrsLink (const struct Tre_Node *Node,
+			         HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
-   DB_QueryUPDATE ("can not hide/unhide node question-answer",
-		   "UPDATE faq_questions,"
+   DB_QueryUPDATE ("can not hide/unhide node course link",
+		   "UPDATE crs_links,"
 		          "tre_nodes"
-		     " SET faq_questions.Hidden='%c'"
-		   " WHERE faq_questions.QaACod=%ld"
-		     " AND faq_questions.NodCod=%ld"
-		     " AND faq_questions.NodCod=tre_nodes.NodCod"
+		     " SET crs_links.Hidden='%c'"
+		   " WHERE crs_links.LnkCod=%ld"
+		     " AND crs_links.NodCod=%ld"
+		     " AND crs_links.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
 		   HidVis_YN[HiddenOrVisible],
 		   Node->SpcItem.Cod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_FAQ]);
+		   Tre_DB_Types[Inf_LINKS]);
   }
 
 /*****************************************************************************/
-/******* Lock table to make the exchange of questions & answers atomic *********/
+/********** Lock table to make the exchange of course link atomic ************/
 /*****************************************************************************/
 
-void FAQ_DB_LockTableQaAs (void)
+void Lnk_DB_LockTableCrsLinks (void)
   {
    DB_Query ("can not lock tables",
-	     "LOCK TABLES faq_questions WRITE,"
+	     "LOCK TABLES crs_links WRITE,"
 			 "tre_nodes READ");
    DB_SetThereAreLockedTables ();
   }
 
 /*****************************************************************************/
-/********* Update the index of a question & answer given its code **************/
+/*********** Update the index of a course link given its code ****************/
 /*****************************************************************************/
 
-void FAQ_DB_UpdateQaAInd (const struct Tre_Node *Node,long QaACod,int QaAInd)
+void Lnk_DB_UpdateLnkInd (const struct Tre_Node *Node,long LnkCod,int LnkInd)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
-   DB_QueryUPDATE ("can not update index of question-answer",
-		   "UPDATE faq_questions,"
+   DB_QueryUPDATE ("can not update index of course link",
+		   "UPDATE crs_links,"
 		          "tre_nodes"
-		     " SET faq_questions.QaAInd=%d"
-		   " WHERE faq_questions.QaACod=%ld"
-		     " AND faq_questions.NodCod=%ld"
-		     " AND faq_questions.NodCod=tre_nodes.NodCod"
+		     " SET crs_links.LnkInd=%d"
+		   " WHERE crs_links.LnkCod=%ld"
+		     " AND crs_links.NodCod=%ld"
+		     " AND crs_links.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   QaAInd,
-		   QaACod,
+		   LnkInd,
+		   LnkCod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_FAQ]);
+		   Tre_DB_Types[Inf_LINKS]);
   }
 
 /*****************************************************************************/
-/* Update the question and the answer of a question & answer given its code **/
+/********************* Update course link given its code *********************/
 /*****************************************************************************/
 
-void FAQ_DB_UpdateQaA (const struct Tre_Node *Node)
+void Lnk_DB_UpdateCrsLink (const struct Tre_Node *Node)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
-   DB_QueryUPDATE ("can not update question-answer",
-		   "UPDATE faq_questions,"
+   DB_QueryUPDATE ("can not update course link",
+		   "UPDATE crs_links,"
 		          "tre_nodes"
-		     " SET faq_questions.Question='%s',"
-		          "faq_questions.Answer='%s'"
-		   " WHERE faq_questions.QaACod=%ld"
-		     " AND faq_questions.NodCod=%ld"
-		     " AND faq_questions.NodCod=tre_nodes.NodCod"
+		     " SET crs_links.Title='%s',"
+		          "crs_links.Description='%s',"
+		          "crs_links.WWW='%s'"
+		   " WHERE crs_links.LnkCod=%ld"
+		     " AND crs_links.NodCod=%ld"
+		     " AND crs_links.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   Node->QaA.Question,
-		   Node->QaA.Answer,
+		   Node->Lnk.Title,
+		   Node->Lnk.Description,
+		   Node->Lnk.WWW,
 		   Node->SpcItem.Cod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_FAQ]);
+		   Tre_DB_Types[Inf_LINKS]);
   }

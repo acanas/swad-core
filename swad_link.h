@@ -1,7 +1,7 @@
-// swad_FAQ_database.h: Frequently Asked Questions, operations with database
+// swad_link.h: course links
 
-#ifndef _SWAD_FAQ_DB
-#define _SWAD_FAQ_DB
+#ifndef _SWAD_LNK
+#define _SWAD_LNK
 /*
     SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
@@ -27,28 +27,25 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <mysql/mysql.h>	// To access MySQL databases
-
-#include "swad_FAQ_type.h"
-#include "swad_hidden_visible.h"
+#include "swad_link_type.h"
 #include "swad_tree.h"
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-long FAQ_DB_CreateQaA (const struct Tre_Node *Node);
-unsigned FAQ_DB_GetListQaAs (MYSQL_RES **mysql_res,long NodCod,
-                             bool ShowHiddenQaAs);
-unsigned FAQ_DB_GetQaADataByCod (MYSQL_RES **mysql_res,long QaACod);
-unsigned FAQ_DB_GetQaAIndBefore (const struct Tre_Node *Node);
-unsigned FAQ_DB_GetQaAIndAfter (const struct Tre_Node *Node);
-long FAQ_DB_GetQaACodFromQaAInd (long NodCod,unsigned QaAInd);
-void FAQ_DB_RemoveQaA (const struct Tre_Node *Node);
-void FAQ_DB_HideOrUnhideQaA (const struct Tre_Node *Node,
-			     HidVis_HiddenOrVisible_t HiddenOrVisible);
-void FAQ_DB_LockTableQaAs (void);
-void FAQ_DB_UpdateQaAInd (const struct Tre_Node *Node,long QaACod,int QaAInd);
-void FAQ_DB_UpdateQaA (const struct Tre_Node *Node);
+void Lnk_ResetSpcFields (struct Tre_Node *Node);
+
+void Lnk_GetCrsLinkDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node);
+
+void Lnk_WriteCellViewCrsLink (struct Tre_Node *Node,
+			       HidVis_HiddenOrVisible_t HiddenOrVisible);
+void Lnk_WriteCellEditCrsLink (struct Tre_Node *Node,
+                               Vie_ViewType_t ViewType,
+			       HidVis_HiddenOrVisible_t HiddenOrVisible);
+void Lnk_WriteCellNewCrsLink (void);
+
+void Lnk_CreateCrsLink (struct Tre_Node *Node);
+void Lnk_ChangeCrsLink (struct Tre_Node *Node);
 
 #endif

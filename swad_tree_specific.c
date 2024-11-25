@@ -31,6 +31,8 @@
 #include "swad_FAQ_database.h"
 #include "swad_global.h"
 #include "swad_info.h"
+#include "swad_link.h"
+#include "swad_link_database.h"
 #include "swad_program_resource.h"
 #include "swad_resource.h"
 #include "swad_resource_database.h"
@@ -58,7 +60,7 @@ static void (*TreSpc_GetItemDataFromRow[Inf_NUM_TYPES]) (MYSQL_RES *mysql_res,
    [Inf_SYLLABUS_PRA	] = NULL,
    [Inf_BIBLIOGRAPHY	] = NULL,
    [Inf_FAQ		] = FAQ_GetQaADataFromRow,
-   [Inf_LINKS		] = NULL,
+   [Inf_LINKS		] = Lnk_GetCrsLinkDataFromRow,
    [Inf_ASSESSMENT	] = NULL,
   };
 
@@ -100,7 +102,7 @@ void TreSpc_ResetItem (struct Tre_Node *Node)
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_ResetSpcFields,
-      [Inf_LINKS	] = NULL,
+      [Inf_LINKS	] = Lnk_ResetSpcFields,
       [Inf_ASSESSMENT	] = NULL,
      };
 
@@ -130,7 +132,7 @@ void TreSpc_GetItemDataByCod (struct Tre_Node *Node)
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_DB_GetQaADataByCod,
-      [Inf_LINKS	] = NULL,
+      [Inf_LINKS	] = Lnk_DB_GetCrsLinkDataByCod,
       [Inf_ASSESSMENT	] = NULL,
      };
    MYSQL_RES *mysql_res;
@@ -165,6 +167,7 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
    extern const char *Hlp_COURSE_FAQ;
    extern const char *Txt_Resources;
    extern const char *Txt_Questions;
+   extern const char *Txt_Links;
    extern const char *Txt_Remove;
    MYSQL_RES *mysql_res;
    unsigned NumItem;
@@ -181,7 +184,7 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_DB_GetListQaAs,
-      [Inf_LINKS	] = NULL,
+      [Inf_LINKS	] = Lnk_DB_GetListCrsLinks,
       [Inf_ASSESSMENT	] = NULL,
      };
    static Act_Action_t ActionsReqRemItem[Inf_NUM_TYPES] =
@@ -194,7 +197,7 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
       [Inf_SYLLABUS_PRA	] = ActUnk,
       [Inf_BIBLIOGRAPHY	] = ActUnk,
       [Inf_FAQ		] = ActReqRemFAQQaA,
-      [Inf_LINKS	] = ActUnk,
+      [Inf_LINKS	] = ActReqRemCrsLnk,
       [Inf_ASSESSMENT	] = ActUnk,
      };
    static Act_Action_t ActionsRemItem[Inf_NUM_TYPES] =
@@ -207,7 +210,7 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
       [Inf_SYLLABUS_PRA	] = ActUnk,
       [Inf_BIBLIOGRAPHY	] = ActUnk,
       [Inf_FAQ		] = ActRemFAQQaA,
-      [Inf_LINKS	] = ActUnk,
+      [Inf_LINKS	] = ActRemCrsLnk,
       [Inf_ASSESSMENT	] = ActUnk,
      };
    static const char **Title[Inf_NUM_TYPES] =
@@ -220,7 +223,7 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = &Txt_Questions,
-      [Inf_LINKS	] = NULL,
+      [Inf_LINKS	] = &Txt_Links,
       [Inf_ASSESSMENT	] = NULL,
      };
    static Vie_ViewType_t ViewingOrEditing[Tre_NUM_LISTING_TYPES] =
@@ -372,7 +375,7 @@ static void TreSpc_PutIconsViewItem (void *Node)
       [Inf_SYLLABUS_PRA	] = ActUnk,
       [Inf_BIBLIOGRAPHY	] = ActUnk,
       [Inf_FAQ		] = ActFrmSeeFAQQaA,
-      [Inf_LINKS	] = ActUnk,
+      [Inf_LINKS	] = ActFrmSeeCrsLnk,
       [Inf_ASSESSMENT	] = ActUnk,
      };
 
@@ -396,7 +399,7 @@ static void TreSpc_PutIconsEditItem (void *Node)
       [Inf_SYLLABUS_PRA	] = ActUnk,
       [Inf_BIBLIOGRAPHY	] = ActUnk,
       [Inf_FAQ		] = ActFrmEdiFAQQaA,
-      [Inf_LINKS	] = ActUnk,
+      [Inf_LINKS	] = ActFrmEdiCrsLnk,
       [Inf_ASSESSMENT	] = ActUnk,
      };
 
@@ -427,7 +430,7 @@ static void TreSpc_WriteRowViewItem (struct Tre_Node *Node,
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_WriteCellViewQaA,
-      [Inf_LINKS	] = NULL,
+      [Inf_LINKS	] = Lnk_WriteCellViewCrsLink,
       [Inf_ASSESSMENT	] = NULL,
      };
 
@@ -473,7 +476,7 @@ static void TreSpc_WriteRowEditItem (struct Tre_Node *Node,
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_WriteCellEditQaA,
-      [Inf_LINKS	] = NULL,
+      [Inf_LINKS	] = Lnk_WriteCellEditCrsLink,
       [Inf_ASSESSMENT	] = NULL,
      };
 
@@ -519,7 +522,7 @@ static void TreSpc_WriteRowNewItem (struct Tre_Node *Node,unsigned NumItems)
       [Inf_SYLLABUS_PRA	] = ActUnk,
       [Inf_BIBLIOGRAPHY	] = ActUnk,
       [Inf_FAQ		] = ActNewFAQQaA,
-      [Inf_LINKS	] = ActUnk,
+      [Inf_LINKS	] = ActNewCrsLnk,
       [Inf_ASSESSMENT	] = ActUnk,
      };
    static void (*WriteCell[Inf_NUM_TYPES]) (void) =
@@ -532,7 +535,7 @@ static void TreSpc_WriteRowNewItem (struct Tre_Node *Node,unsigned NumItems)
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_WriteCellNewQaA,
-      [Inf_LINKS	] = NULL,
+      [Inf_LINKS	] = Lnk_WriteCellNewCrsLink,
       [Inf_ASSESSMENT	] = NULL,
      };
 
@@ -586,7 +589,7 @@ static void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
       [Inf_SYLLABUS_PRA	] = ActUnk,
       [Inf_BIBLIOGRAPHY	] = ActUnk,
       [Inf_FAQ		] = ActReqRemFAQQaA,
-      [Inf_LINKS	] = ActUnk,
+      [Inf_LINKS	] = ActReqRemCrsLnk,
       [Inf_ASSESSMENT	] = ActUnk,
      };
    static Act_Action_t ActionHideUnhide[Inf_NUM_TYPES][HidVis_NUM_HIDDEN_VISIBLE] =
@@ -607,8 +610,8 @@ static void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
       [Inf_BIBLIOGRAPHY	][HidVis_VISIBLE] = ActUnk,
       [Inf_FAQ		][HidVis_HIDDEN ] = ActUnhFAQQaA,	// Hidden ==> action to unhide
       [Inf_FAQ		][HidVis_VISIBLE] = ActHidFAQQaA,	// Visible ==> action to hide
-      [Inf_LINKS	][HidVis_HIDDEN ] = ActUnk,
-      [Inf_LINKS	][HidVis_VISIBLE] = ActUnk,
+      [Inf_LINKS	][HidVis_HIDDEN ] = ActUnhCrsLnk,	// Hidden ==> action to unhide
+      [Inf_LINKS	][HidVis_VISIBLE] = ActHidCrsLnk,	// Visible ==> action to hide
       [Inf_ASSESSMENT	][HidVis_HIDDEN ] = ActUnk,
       [Inf_ASSESSMENT	][HidVis_VISIBLE] = ActUnk,
      };
@@ -622,7 +625,7 @@ static void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
       [Inf_SYLLABUS_PRA	] = ActUnk,
       [Inf_BIBLIOGRAPHY	] = ActUnk,
       [Inf_FAQ		] = ActFrmChgFAQQaA,
-      [Inf_LINKS	] = ActUnk,
+      [Inf_LINKS	] = ActFrmChgCrsLnk,
       [Inf_ASSESSMENT	] = ActUnk,
      };
    static Act_Action_t ActionUpDown[Inf_NUM_TYPES][HidVis_NUM_HIDDEN_VISIBLE] =
@@ -643,8 +646,8 @@ static void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
       [Inf_BIBLIOGRAPHY	][TreSpc_DOWN] = ActUnk,
       [Inf_FAQ		][TreSpc_UP  ] = ActUp_FAQQaA,
       [Inf_FAQ		][TreSpc_DOWN] = ActDwnFAQQaA,
-      [Inf_LINKS	][TreSpc_UP  ] = ActUnk,
-      [Inf_LINKS	][TreSpc_DOWN] = ActUnk,
+      [Inf_LINKS	][TreSpc_UP  ] = ActUp_CrsLnk,
+      [Inf_LINKS	][TreSpc_DOWN] = ActDwnCrsLnk,
       [Inf_ASSESSMENT	][TreSpc_UP  ] = ActUnk,
       [Inf_ASSESSMENT	][TreSpc_DOWN] = ActUnk,
      };
@@ -806,7 +809,7 @@ void TreSpc_CreateItem (Inf_Type_t InfoType)
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_CreateQaA,
-      [Inf_LINKS	] = NULL,
+      [Inf_LINKS	] = Lnk_CreateCrsLink,
       [Inf_ASSESSMENT	] = NULL,
      };
 
@@ -826,7 +829,9 @@ void TreSpc_CreateItem (Inf_Type_t InfoType)
    CreateItem[InfoType] (&Node);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_ITEM,
+   // Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_ITEM,
+   //		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
+   Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
 		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
 
    /***** Free list of tree nodes *****/
@@ -849,7 +854,7 @@ void TreSpc_RenameItem (Inf_Type_t InfoType)
       [Inf_SYLLABUS_LEC	] = NULL,
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = NULL,
-      [Inf_FAQ		] = FAQ_RenameQaA,
+      [Inf_FAQ		] = NULL,
       [Inf_LINKS	] = NULL,
       [Inf_ASSESSMENT	] = NULL,
      };
@@ -895,7 +900,7 @@ void TreSpc_ChangeItem (Inf_Type_t InfoType)
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_ChangeQaA,
-      [Inf_LINKS	] = NULL,
+      [Inf_LINKS	] = Lnk_ChangeCrsLink,
       [Inf_ASSESSMENT	] = NULL,
      };
 
@@ -931,6 +936,7 @@ void TreSpc_ReqRemItem (Inf_Type_t InfoType)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_resource_X;
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
+   extern const char *Txt_Do_you_really_want_to_remove_the_link_X;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
@@ -955,6 +961,11 @@ void TreSpc_ReqRemItem (Inf_Type_t InfoType)
 			  Txt_Do_you_really_want_to_remove_the_question_X,
 			  Node.QaA.Question);
 	 break;
+      case Inf_LINKS:
+	 Ale_CreateAlert (Ale_QUESTION,TreSpc_LIST_ITEMS_SECTION_ID,
+			  Txt_Do_you_really_want_to_remove_the_link_X,
+			  Node.Lnk.Title);
+	 break;
       default:
 	 break;
      }
@@ -975,6 +986,7 @@ void TreSpc_RemoveItem (Inf_Type_t InfoType)
   {
    extern const char *Txt_Resource_removed;
    extern const char *Txt_Question_removed;
+   extern const char *Txt_Link_removed;
    struct Tre_Node Node;
    static void (*RemoveItem[Inf_NUM_TYPES]) (const struct Tre_Node *Node) =
      {
@@ -986,7 +998,7 @@ void TreSpc_RemoveItem (Inf_Type_t InfoType)
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_DB_RemoveQaA,
-      [Inf_LINKS	] = NULL,
+      [Inf_LINKS	] = Lnk_DB_RemoveCrsLink,
       [Inf_ASSESSMENT	] = NULL,
      };
    static const char **Txt[Inf_NUM_TYPES] =
@@ -999,7 +1011,7 @@ void TreSpc_RemoveItem (Inf_Type_t InfoType)
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = &Txt_Question_removed,
-      [Inf_LINKS	] = NULL,
+      [Inf_LINKS	] = &Txt_Link_removed,
       [Inf_ASSESSMENT	] = NULL,
      };
 
@@ -1050,7 +1062,7 @@ void TreSpc_HideOrUnhideItem (Inf_Type_t InfoType,
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_DB_HideOrUnhideQaA,
-      [Inf_LINKS	] = NULL,
+      [Inf_LINKS	] = Lnk_DB_HideOrUnhideCrsLink,
       [Inf_ASSESSMENT	] = NULL,
      };
 
@@ -1106,8 +1118,8 @@ void TreSpc_MoveUpDownItem (Inf_Type_t InfoType,TreSpc_UpDown_t UpDown)
       [Inf_BIBLIOGRAPHY	][TreSpc_DOWN] = NULL,
       [Inf_FAQ		][TreSpc_UP  ] = FAQ_DB_GetQaAIndBefore,
       [Inf_FAQ		][TreSpc_DOWN] = FAQ_DB_GetQaAIndAfter,
-      [Inf_LINKS	][TreSpc_UP  ] = NULL,
-      [Inf_LINKS	][TreSpc_DOWN] = NULL,
+      [Inf_LINKS	][TreSpc_UP  ] = Lnk_DB_GetLnkIndBefore,
+      [Inf_LINKS	][TreSpc_DOWN] = Lnk_DB_GetLnkIndAfter,
       [Inf_ASSESSMENT	][TreSpc_UP  ] = NULL,
       [Inf_ASSESSMENT	][TreSpc_DOWN] = NULL,
      };
@@ -1121,7 +1133,7 @@ void TreSpc_MoveUpDownItem (Inf_Type_t InfoType,TreSpc_UpDown_t UpDown)
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_DB_GetQaACodFromQaAInd,
-      [Inf_LINKS	] = NULL,
+      [Inf_LINKS	] = Lnk_DB_GetLnkCodFromLnkInd,
       [Inf_ASSESSMENT	] = NULL,
      };
 
@@ -1177,7 +1189,7 @@ static bool TreSpc_ExchangeItems (const struct Tre_Node *Node,
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_DB_LockTableQaAs,
-      [Inf_LINKS	] = NULL,
+      [Inf_LINKS	] = Lnk_DB_LockTableCrsLinks,
       [Inf_ASSESSMENT	] = NULL,
      };
    static void (*UpdateInd[Inf_NUM_TYPES]) (const struct Tre_Node *Node,long Cod,int Ind) =
@@ -1190,7 +1202,7 @@ static bool TreSpc_ExchangeItems (const struct Tre_Node *Node,
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = NULL,
       [Inf_FAQ		] = FAQ_DB_UpdateQaAInd,
-      [Inf_LINKS	] = NULL,
+      [Inf_LINKS	] = Lnk_DB_UpdateLnkInd,
       [Inf_ASSESSMENT	] = NULL,
      };
 

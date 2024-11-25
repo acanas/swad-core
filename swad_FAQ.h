@@ -46,7 +46,6 @@ void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
 void FAQ_WriteCellNewQaA (void);
 
 void FAQ_CreateQaA (struct Tre_Node *Node);
-void FAQ_RenameQaA (const struct Tre_Node *Node);
 void FAQ_ChangeQaA (struct Tre_Node *Node);
 
 #endif

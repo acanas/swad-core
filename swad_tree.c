@@ -593,12 +593,12 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 		  break;
 	       case Inf_PROGRAM:
 	       case Inf_FAQ:
+	       case Inf_LINKS:
 		  /* List of items of this tree node */
 		  TreSpc_ListNodeItems (ListingType,Node,SelectedNodCod,SelectedItmCod,
 					HiddenOrVisible);
 		  break;
 	       case Inf_BIBLIOGRAPHY:
-	       case Inf_LINKS:
 		  Ale_ShowAlert (Ale_INFO,"Specific information will appear here.");
 		  break;
 	       case Inf_UNKNOWN_TYPE:

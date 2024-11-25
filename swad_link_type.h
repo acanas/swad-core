@@ -1,7 +1,7 @@
-// swad_FAQ_database.h: Frequently Asked Questions, operations with database
+// swad_link_type.h: definition of types for course links
 
-#ifndef _SWAD_FAQ_DB
-#define _SWAD_FAQ_DB
+#ifndef _SWAD_LNK_TYP
+#define _SWAD_LNK_TYP
 /*
     SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
@@ -27,28 +27,21 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <mysql/mysql.h>	// To access MySQL databases
-
-#include "swad_FAQ_type.h"
+#include "swad_constant.h"
 #include "swad_hidden_visible.h"
-#include "swad_tree.h"
 
 /*****************************************************************************/
-/***************************** Public prototypes *****************************/
+/************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-long FAQ_DB_CreateQaA (const struct Tre_Node *Node);
-unsigned FAQ_DB_GetListQaAs (MYSQL_RES **mysql_res,long NodCod,
-                             bool ShowHiddenQaAs);
-unsigned FAQ_DB_GetQaADataByCod (MYSQL_RES **mysql_res,long QaACod);
-unsigned FAQ_DB_GetQaAIndBefore (const struct Tre_Node *Node);
-unsigned FAQ_DB_GetQaAIndAfter (const struct Tre_Node *Node);
-long FAQ_DB_GetQaACodFromQaAInd (long NodCod,unsigned QaAInd);
-void FAQ_DB_RemoveQaA (const struct Tre_Node *Node);
-void FAQ_DB_HideOrUnhideQaA (const struct Tre_Node *Node,
-			     HidVis_HiddenOrVisible_t HiddenOrVisible);
-void FAQ_DB_LockTableQaAs (void);
-void FAQ_DB_UpdateQaAInd (const struct Tre_Node *Node,long QaACod,int QaAInd);
-void FAQ_DB_UpdateQaA (const struct Tre_Node *Node);
+#define Lnk_MAX_CHARS_TITLE	(128 - 1)	// 127
+#define Lnk_MAX_BYTES_TITLE	((Lnk_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+
+struct Lnk_Link
+  {
+   char Title[Lnk_MAX_BYTES_TITLE + 1];
+   char Description[Lnk_MAX_BYTES_TITLE + 1];
+   char WWW[WWW_MAX_BYTES_WWW + 1];
+  };
 
 #endif

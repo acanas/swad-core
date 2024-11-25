@@ -9888,6 +9888,29 @@ const char *Txt_Do_you_really_want_to_remove_the_item_X =	// Warning: it is very
 	"<strong>%s</strong> &ouml;&gbreve;esini ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
 #endif
 
+const char *Txt_Do_you_really_want_to_remove_the_link_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"De veres voleu eliminar el enlla&ccedil; <strong>%s</strong>?";
+#elif L==2	// de
+	"Wollen Sie die Link <strong>%s</strong> wirklich entfernen?";
+#elif L==3	// en
+	"Do you really want to remove the link <strong>%s</strong>?";
+#elif L==4	// es
+	"&iquest;Realmente desea eliminar el enlace <strong>%s</strong>?";
+#elif L==5	// fr
+	"Voulez-vous vraiment supprimer le lien <strong>%s</strong>?";
+#elif L==6	// gn
+	"&iquest;Realmente desea eliminar el enlace <strong>%s</strong>?";	// Okoteve traducción
+#elif L==7	// it
+	"Vuoi realmente rimuovere il link <strong>%s</strong>?";
+#elif L==8	// pl
+	"Czy na pewno chcesz usun&aogon;&cacute; link <strong>%s</strong>?";
+#elif L==9	// pt
+	"Voc&ecirc; realmente deseja remover a liga&ccedil;&atilde;o <strong>%s</strong>?";
+#elif L==10	// tr
+	"<strong>%s</strong> ba&gbreve;lant&inodot; ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
+#endif
+
 const char *Txt_Do_you_really_want_to_remove_the_match_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"De veres voleu eliminar la partida <strong>%s</strong>?";
@@ -19650,32 +19673,32 @@ const char *Txt_link =
 #elif L==8	// pl
 	"link";
 #elif L==9	// pt
-	"liga&ccedil;&atilde;o.";
+	"liga&ccedil;&atilde;o";
 #elif L==10	// tr
 	"ba&gbreve;lant&inodot;";
 #endif
 
-const char *Txt_Link_X_removed =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Link_removed =
 #if   L==1	// ca
-	"Enlla&ccedil; <strong>%s</strong> eliminat.";
+	"Enlla&ccedil; eliminat.";
 #elif L==2	// de
-	"Link <strong>%s</strong> entfernt.";
+	"Link entfernt.";
 #elif L==3	// en
-	"Link <strong>%s</strong> removed.";
+	"Link removed.";
 #elif L==4	// es
-	"Enlace <strong>%s</strong> eliminado.";
+	"Enlace eliminado.";
 #elif L==5	// fr
-	"Lien <strong>%s</strong> supprim&eacute;.";
+	"Lien supprim&eacute;.";
 #elif L==6	// gn
-	"Enlace <strong>%s</strong> eliminado.";	// Okoteve traducción
+	"Ojepe'a enlace.";
 #elif L==7	// it
-	"Link <strong>%s</strong> rimosso.";
+	"Link rimosso.";
 #elif L==8	// pl
-	"Link <strong>%s</strong> usuniety.";
+	"Link usuniety.";
 #elif L==9	// pt
-	"Liga&ccedil;&atilde;o <strong>%s</strong> removida.";
+	"Liga&ccedil;&atilde;o removida.";
 #elif L==10	// tr
-	"Link <strong>%s</strong> removed.";		// Çeviri lazim!
+	"Ba&gbreve;lant&inodot; kald&inodot;r&inodot;ld&inodot;.";
 #endif
 
 const char *Txt_Link_to_call_for_exam =

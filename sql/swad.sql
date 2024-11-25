@@ -333,6 +333,19 @@ CREATE TABLE IF NOT EXISTS crs_last (
 	UNIQUE INDEX(CrsCod),
 	INDEX(LastTime));
 --
+-- Table crs_links: stores course links
+--
+CREATE TABLE IF NOT EXISTS crs_links (
+	LnkCod INT NOT NULL AUTO_INCREMENT,
+	NodCod INT NOT NULL DEFAULT -1,
+	LnkInd INT NOT NULL DEFAULT 0,
+	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
+	Title VARCHAR(2047) NOT NULL,
+	Description VARCHAR(2047) NOT NULL,
+	WWW VARCHAR(255) NOT NULL,
+	UNIQUE INDEX(LnkCod),
+	UNIQUE INDEX(NodCod,LnkInd));
+--
 -- Table crs_record_fields: stores the fields in the course records
 --
 CREATE TABLE IF NOT EXISTS crs_record_fields (
@@ -633,7 +646,7 @@ CREATE TABLE IF NOT EXISTS faq_questions (
 	NodCod INT NOT NULL DEFAULT -1,
 	QaAInd INT NOT NULL DEFAULT 0,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
-	Question VARCHAR(4095) NOT NULL,
+	Question VARCHAR(2047) NOT NULL,
 	Answer TEXT NOT NULL,
 	UNIQUE INDEX(QaACod),
 	UNIQUE INDEX(NodCod,QaAInd));

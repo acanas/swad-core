@@ -748,6 +748,33 @@ mysql> DESCRIBE crs_last;
 		   "UNIQUE INDEX(CrsCod),"
 		   "INDEX(LastTime))");
 
+   /***** Table crs_links *****/
+/*
+mysql> DESCRIBE crs_links;
++-------------+---------------+------+-----+---------+----------------+
+| Field       | Type          | Null | Key | Default | Extra          |
++-------------+---------------+------+-----+---------+----------------+
+| LnkCod      | int           | NO   | PRI | NULL    | auto_increment |
+| NodCod      | int           | NO   | MUL | -1      |                |
+| LnkInd      | int           | NO   |     | 0       |                |
+| Hidden      | enum('N','Y') | NO   |     | N       |                |
+| Title       | varchar(2047) | NO   |     | NULL    |                |
+| Description | varchar(2047) | NO   |     | NULL    |                |
+| WWW         | varchar(255)  | NO   |     | NULL    |                |
++-------------+---------------+------+-----+---------+----------------+
+7 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_links ("
+			"LnkCod INT NOT NULL AUTO_INCREMENT,"
+			"NodCod INT NOT NULL DEFAULT -1,"
+			"LnkInd INT NOT NULL DEFAULT 0,"
+			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"Title VARCHAR(2047) NOT NULL,"		// Lnk_MAX_BYTES_TITLE
+			"Description VARCHAR(2047) NOT NULL,"	// Lnk_MAX_BYTES_TITLE
+			"WWW VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+		   "UNIQUE INDEX(LnkCod),"
+		   "UNIQUE INDEX(NodCod,LnkInd))");
+
    /***** Table crs_record_fields *****/
 /*
 mysql> DESCRIBE crs_record_fields;
@@ -1355,7 +1382,7 @@ mysql> DESCRIBE faq_questions;
 | NodCod   | int           | NO   | MUL | -1      |                |
 | QaAInd   | int           | NO   |     | 0       |                |
 | Hidden   | enum('N','Y') | NO   |     | N       |                |
-| Question | varchar(4095) | NO   |     | NULL    |                |
+| Question | varchar(2047) | NO   |     | NULL    |                |
 | Answer   | text          | NO   |     | NULL    |                |
 +----------+---------------+------+-----+---------+----------------+
 6 rows in set (0,00 sec)
@@ -1365,7 +1392,7 @@ mysql> DESCRIBE faq_questions;
 			"NodCod INT NOT NULL DEFAULT -1,"
 			"QaAInd INT NOT NULL DEFAULT 0,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
-			"Question VARCHAR(4095) NOT NULL,"	// FAQ_MAX_BYTES_QUESTION
+			"Question VARCHAR(2047) NOT NULL,"	// FAQ_MAX_BYTES_QUESTION
 			"Answer TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(QaACod),"
 		   "UNIQUE INDEX(NodCod,QaAInd))");

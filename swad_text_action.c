@@ -10412,6 +10412,259 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Contract item in course links when editing"			// Çeviri lazim!
 #endif
 	,
+	[ActFrmSeeCrsLnk] =
+#if   L==1	// ca
+	"See course links"		// Necessita traducció
+#elif L==2	// de
+	"See course links"		// Need Übersetzung
+#elif L==3	// en
+	"See course links"
+#elif L==4	// es
+	"Ver enlaces de asignatura"
+#elif L==5	// fr
+	"See course links"		// Besoin de traduction
+#elif L==6	// gn
+	"Ver enlaces de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"See course links"		// Bisogno di traduzione
+#elif L==8	// pl
+	"See course links"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See course links"		// Precisa de tradução
+#elif L==10	// tr
+	"See course links"		// Çeviri lazim!
+#endif
+	,
+	[ActFrmEdiCrsLnk] =
+#if   L==1	// ca
+	"Edit course links"		// Necessita traducció
+#elif L==2	// de
+	"Edit course links"		// Need Übersetzung
+#elif L==3	// en
+	"Edit course links"
+#elif L==4	// es
+	"Editar enlaces de asignatura"
+#elif L==5	// fr
+	"Edit course links"		// Besoin de traduction
+#elif L==6	// gn
+	"Editar enlaces de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Edit course links"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit course links"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit course links"		// Precisa de tradução
+#elif L==10	// tr
+	"Edit course links"		// Çeviri lazim!
+#endif
+	,
+	[ActNewCrsLnk] =
+#if   L==1	// ca
+	"Create course link"		// Necessita traducció
+#elif L==2	// de
+	"Create course link"		// Need Übersetzung
+#elif L==3	// en
+	"Create course link"
+#elif L==4	// es
+	"Crear enlace de asignatura"
+#elif L==5	// fr
+	"Create course link"		// Besoin de traduction
+#elif L==6	// gn
+	"Crear enlace de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Create course link"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Create course link"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create course link"		// Precisa de tradução
+#elif L==10	// tr
+	"Create course link"		// Çeviri lazim!
+#endif
+	,
+	[ActReqRemCrsLnk] =
+#if   L==1	// ca
+	"Request removal of course link"	// Necessita traducció
+#elif L==2	// de
+	"Request removal of course link"	// Need Übersetzung
+#elif L==3	// en
+	"Request removal of course link"
+#elif L==4	// es
+	"Solicitar enlace de asignatura"
+#elif L==5	// fr
+	"Request removal of course link"	// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar enlace de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Request removal of course link"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Request removal of course link"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request removal of course link"	// Precisa de tradução
+#elif L==10	// tr
+	"Request removal of course link"	// Çeviri lazim!
+#endif
+	,
+	[ActRemCrsLnk] =
+#if   L==1	// ca
+	"Remove course link"		// Necessita traducció
+#elif L==2	// de
+	"Remove course link"		// Need Übersetzung
+#elif L==3	// en
+	"Remove course link"
+#elif L==4	// es
+	"Eliminar enlace de asignatura"
+#elif L==5	// fr
+	"Remove course link"		// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar enlace de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Remove course link"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove course link"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove course link"		// Precisa de tradução
+#elif L==10	// tr
+	"Remove course link"		// Çeviri lazim!
+#endif
+	,
+	[ActHidCrsLnk] =
+#if   L==1	// ca
+	"Hide course link"		// Necessita traducció
+#elif L==2	// de
+	"Hide course link"		// Need Übersetzung
+#elif L==3	// en
+	"Hide course link"
+#elif L==4	// es
+	"Ocultar enlace de asignatura"
+#elif L==5	// fr
+	"Hide course link"		// Besoin de traduction
+#elif L==6	// gn
+	"Ocultar enlace de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Hide course link"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Hide course link"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Hide course link"		// Precisa de tradução
+#elif L==10	// tr
+	"Hide course link"		// Çeviri lazim!
+#endif
+	,
+	[ActUnhCrsLnk] =
+#if   L==1	// ca
+	"Unhide course link"		// Necessita traducció
+#elif L==2	// de
+	"Unhide course link"		// Need Übersetzung
+#elif L==3	// en
+	"Unhide course link"
+#elif L==4	// es
+	"Mostrar enlace de asignatura"
+#elif L==5	// fr
+	"Unhide course link"		// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar enlace de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Unhide course link"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Unhide course link"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Unhide course link"		// Precisa de tradução
+#elif L==10	// tr
+	"Unhide course link"		// Çeviri lazim!
+#endif
+	,
+	[ActUp_CrsLnk] =
+#if   L==1	// ca
+	"Move up course link"		// Necessita traducció
+#elif L==2	// de
+	"Move up course link"		// Need Übersetzung
+#elif L==3	// en
+	"Move up course link"
+#elif L==4	// es
+	"Subir enlace de asignatura"
+#elif L==5	// fr
+	"Move up course link"		// Besoin de traduction
+#elif L==6	// gn
+	"Subir enlace de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Move up course link"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Move up course link"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move up course link"		// Precisa de tradução
+#elif L==10	// tr
+	"Move up course link"		// Çeviri lazim!
+#endif
+	,
+	[ActDwnCrsLnk] =
+#if   L==1	// ca
+	"Move down course link"		// Necessita traducció
+#elif L==2	// de
+	"Move down course link"		// Need Übersetzung
+#elif L==3	// en
+	"Move down course link"
+#elif L==4	// es
+	"Bajar enlace de asignatura"
+#elif L==5	// fr
+	"Move down course link"		// Besoin de traduction
+#elif L==6	// gn
+	"Bajar enlace de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Move down course link"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Move down course link"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move down course link"		// Precisa de tradução
+#elif L==10	// tr
+	"Move down course link"		// Çeviri lazim!
+#endif
+	,
+	[ActFrmChgCrsLnk] =
+#if   L==1	// ca
+	"Edit course link"		// Necessita traducció
+#elif L==2	// de
+	"Edit course link"		// Need Übersetzung
+#elif L==3	// en
+	"Edit course link"
+#elif L==4	// es
+	"Editar enlace de asignatura"
+#elif L==5	// fr
+	"Edit course link"		// Besoin de traduction
+#elif L==6	// gn
+	"Editar enlace de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Edit course link"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit course link"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit course link"		// Precisa de tradução
+#elif L==10	// tr
+	"Edit course link"		// Çeviri lazim!
+#endif
+	,
+	[ActChgCrsLnk] =
+#if   L==1	// ca
+	"Change course link"		// Necessita traducció
+#elif L==2	// de
+	"Change course link"		// Need Übersetzung
+#elif L==3	// en
+	"Change course link"
+#elif L==4	// es
+	"Cambiar enlace de asignatura"
+#elif L==5	// fr
+	"Change course link"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar enlace de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Change course link"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change course link"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change course link"		// Precisa de tradução
+#elif L==10	// tr
+	"Change course link"		// Çeviri lazim!
+#endif
+	,
 	[ActEdiPlaTxtCrsLnk] =
 #if   L==1	// ca
 	"Plain text editor of course links"			// Necessita traducció

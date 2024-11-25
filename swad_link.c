@@ -1,4 +1,4 @@
-// swad_FAQ.c: course FAQ
+// swad_link.c: course links
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -43,14 +43,14 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_exam_database.h"
-#include "swad_FAQ.h"
-#include "swad_FAQ_database.h"
 #include "swad_form.h"
 #include "swad_forum_database.h"
 #include "swad_game_database.h"
 #include "swad_group_database.h"
 #include "swad_hidden_visible.h"
 #include "swad_HTML.h"
+#include "swad_link.h"
+#include "swad_link_database.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
 #include "swad_project_database.h"
@@ -69,26 +69,29 @@
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void FAQ_WriteQuestion (const char Question[FAQ_MAX_BYTES_QUESTION + 1],
-			       HidVis_HiddenOrVisible_t HiddenOrVisible);
-static void FAQ_WriteAnswer (char Answer[Cns_MAX_BYTES_TEXT + 1],
-			     HidVis_HiddenOrVisible_t HiddenOrVisible);
+static void Lnk_WriteTitle (const char Title[Lnk_MAX_BYTES_TITLE + 1],
+			    HidVis_HiddenOrVisible_t HiddenOrVisible);
+static void Lnk_WriteDescription (const char Description[Lnk_MAX_BYTES_TITLE + 1],
+			          HidVis_HiddenOrVisible_t HiddenOrVisible);
+static void Lnk_WriteWWW (const struct Tre_Node *Node,
+			  HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 /*****************************************************************************/
-/**************** Reset specific fields of question & answer *****************/
+/******************* Reset specific fields of course link ********************/
 /*****************************************************************************/
 
-void FAQ_ResetSpcFields (struct Tre_Node *Node)
+void Lnk_ResetSpcFields (struct Tre_Node *Node)
   {
-   Node->QaA.Question[0] = '\0';
-   Node->QaA.Answer[0] = '\0';
+   Node->Lnk.Title[0] = '\0';
+   Node->Lnk.Description[0] = '\0';
+   Node->Lnk.WWW[0] = '\0';
   }
 
 /*****************************************************************************/
-/********************** Get question & answer data ***************************/
+/************************** Get course link data *****************************/
 /*****************************************************************************/
 
-void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
+void Lnk_GetCrsLinkDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
   {
    MYSQL_ROW row;
 
@@ -96,76 +99,87 @@ void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
    row = mysql_fetch_row (mysql_res);
    /*
    NodCod	row[0]
-   QaACod	row[1]
-   QaAInd	row[2]
+   LnkCod	row[1]
+   LnkInd	row[2]
    Hidden	row[3]
-   Question	row[4]
-   Answer	row[5]
+   Title	row[4]
+   Description	row[5]
+   WWW		row[6]
    */
    /***** Get code of the tree node (row[0]) *****/
    Node->Hierarchy.NodCod = Str_ConvertStrCodToLongCod (row[0]);
 
-   /***** Get code and index of the question & answer (row[1], row[2]) *****/
+   /***** Get code and index of the course link (row[1], row[2]) *****/
    Node->SpcItem.Cod = Str_ConvertStrCodToLongCod (row[1]);
    Node->SpcItem.Ind = Str_ConvertStrToUnsigned (row[2]);
 
    /***** Get whether the tree node is hidden (row(3)) *****/
    Node->SpcItem.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
 
-   /***** Get the questionand the answer of the question & answer (row[4], row[5]) *****/
-   Str_Copy (Node->QaA.Question,row[4],sizeof (Node->QaA.Question) - 1);
-   Str_Copy (Node->QaA.Answer  ,row[5],sizeof (Node->QaA.Answer  ) - 1);
+   /***** Get title, description and URL
+          of the course link (row[4], row[5], row[6]) *****/
+   Str_Copy (Node->Lnk.Title      ,row[4],sizeof (Node->Lnk.Title      ) - 1);
+   Str_Copy (Node->Lnk.Description,row[5],sizeof (Node->Lnk.Description) - 1);
+   Str_Copy (Node->Lnk.WWW        ,row[6],sizeof (Node->Lnk.WWW        ) - 1);
   }
 
 /*****************************************************************************/
-/********************** Show one question & answer ***************************/
+/************************* Show one course link ******************************/
 /*****************************************************************************/
 
-void FAQ_WriteCellViewQaA (struct Tre_Node *Node,
-			   HidVis_HiddenOrVisible_t HiddenOrVisible)
+void Lnk_WriteCellViewCrsLink (struct Tre_Node *Node,
+			       HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   FAQ_WriteQuestion (Node->QaA.Question,HiddenOrVisible);
-   FAQ_WriteAnswer (Node->QaA.Answer,HiddenOrVisible);
+   Lnk_WriteTitle (Node->Lnk.Title,HiddenOrVisible);
+   HTM_BR ();
+   Lnk_WriteDescription (Node->Lnk.Description,HiddenOrVisible);
+   HTM_BR ();
+   Lnk_WriteWWW (Node,HiddenOrVisible);
   }
 
 /*****************************************************************************/
-/************************ Edit one question & answer *************************/
+/************************ Edit one course link *************************/
 /*****************************************************************************/
 
-void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
-                           Vie_ViewType_t ViewType,
-			   HidVis_HiddenOrVisible_t HiddenOrVisible)
+void Lnk_WriteCellEditCrsLink (struct Tre_Node *Node,
+                               Vie_ViewType_t ViewType,
+			       HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   extern const char *Txt_Question;
-   extern const char *Txt_Answer;
+   extern const char *Txt_Title;
+   extern const char *Txt_Description;
+   extern const char *Txt_URL;
    extern const char *Txt_Save_changes;
 
    switch (ViewType)
      {
       case Vie_VIEW:
-	 /***** Show current question & answer *****/
-	 FAQ_WriteCellViewQaA (Node,HiddenOrVisible);
+	 /***** Show current course link *****/
+	 Lnk_WriteCellViewCrsLink (Node,HiddenOrVisible);
 	 break;
       case Vie_EDIT:
-	 /***** Show form to change question & answer *****/
-	 Frm_BeginFormAnchor (ActChgFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID);
+	 /***** Show form to change course link *****/
+	 Frm_BeginFormAnchor (ActChgCrsLnk,TreSpc_LIST_ITEMS_SECTION_ID);
 	    TreSpc_PutParItmCod (&Node->SpcItem.Cod);
 
-	    /* Question */
-	    HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,Node->QaA.Question,
+	    /* Title */
+	    HTM_INPUT_TEXT ("Title",Lnk_MAX_CHARS_TITLE,Node->Lnk.Title,
 			    HTM_NO_ATTR,
 			    "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-			    Txt_Question,The_GetSuffix ());
+			    Txt_Title,The_GetSuffix ());
 
-	    /* Answer */
+	    /* Description */
 	    HTM_BR ();
-	    HTM_TEXTAREA_Begin (HTM_NO_ATTR,
-				"name=\"Answer\" rows=\"10\""
-				" placeholder=\"%s\""
-				" class=\"PRG_RSC_INPUT INPUT_%s\"",
-				Txt_Answer,The_GetSuffix ());
-	       HTM_Txt (Node->QaA.Answer);
-	    HTM_TEXTAREA_End ();
+	    HTM_INPUT_TEXT ("Description",Lnk_MAX_CHARS_TITLE,Node->Lnk.Description,
+			    HTM_NO_ATTR,
+			    "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+			    Txt_Description,The_GetSuffix ());
+
+	    /* URL */
+	    HTM_BR ();
+	    HTM_INPUT_URL ("WWW",Node->Lnk.WWW,
+			   HTM_REQUIRED,
+			   " placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+			   Txt_URL,The_GetSuffix ());
 
 	    /* Button to save changes */
 	    HTM_BR ();
@@ -180,29 +194,35 @@ void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
   }
 
 /*****************************************************************************/
-/*********************** Edit a new question & answer ************************/
+/************************** Edit a new course link ***************************/
 /*****************************************************************************/
 
-void FAQ_WriteCellNewQaA (void)
+void Lnk_WriteCellNewCrsLink (void)
   {
-   extern const char *Txt_New_question;
-   extern const char *Txt_Answer;
+   extern const char *Txt_Title;
+   extern const char *Txt_Description;
+   extern const char *Txt_URL;
    extern const char *Txt_Save_changes;
 
-   /***** Question *****/
-   HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,"",
+   /***** Title *****/
+   HTM_INPUT_TEXT ("Title",Lnk_MAX_CHARS_TITLE,"",
 		   HTM_NO_ATTR,
 		   "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-		   Txt_New_question,The_GetSuffix ());
+		   Txt_Title,The_GetSuffix ());
 
-   /***** Answer *****/
+   /***** Description *****/
    HTM_BR ();
-   HTM_TEXTAREA_Begin (HTM_NO_ATTR,
-		       "name=\"Answer\" rows=\"10\""
-		       " placeholder=\"%s\""
-		       " class=\"PRG_RSC_INPUT INPUT_%s\"",
-		       Txt_Answer,The_GetSuffix ());
-   HTM_TEXTAREA_End ();
+   HTM_INPUT_TEXT ("Description",Lnk_MAX_CHARS_TITLE,"",
+		   HTM_NO_ATTR,
+		   "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+		   Txt_Description,The_GetSuffix ());
+
+   /***** URL *****/
+   HTM_BR ();
+   HTM_INPUT_URL ("WWW","",
+		  HTM_REQUIRED,
+		  " placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+		  Txt_URL,The_GetSuffix ());
 
    /***** Button to save changes *****/
    HTM_BR ();
@@ -210,63 +230,70 @@ void FAQ_WriteCellNewQaA (void)
   }
 
 /*****************************************************************************/
-/***************************** Write question ********************************/
+/******************* Write title, description and URL ************************/
 /*****************************************************************************/
 
-static void FAQ_WriteQuestion (const char Question[FAQ_MAX_BYTES_QUESTION + 1],
-			       HidVis_HiddenOrVisible_t HiddenOrVisible)
+static void Lnk_WriteTitle (const char Title[Lnk_MAX_BYTES_TITLE + 1],
+			    HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
 
    HTM_SPAN_Begin ("class=\"TRE_TIT PRG_TXT_%s%s\"",
 		   The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
-      HTM_Txt (Question);
+      HTM_Txt (Title);
    HTM_SPAN_End ();
   }
 
-/*****************************************************************************/
-/****************************** Write answer *********************************/
-/*****************************************************************************/
-
-static void FAQ_WriteAnswer (char Answer[Cns_MAX_BYTES_TEXT + 1],
-			     HidVis_HiddenOrVisible_t HiddenOrVisible)
+static void Lnk_WriteDescription (const char Description[Lnk_MAX_BYTES_TITLE + 1],
+			          HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
 
-   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-		     Answer,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
-   ALn_InsertLinks (Answer,Cns_MAX_BYTES_TEXT,60);	// Insert links
+   HTM_SPAN_Begin ("class=\"PRG_TXT_%s%s\"",
+		   The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
+      HTM_Txt (Description);
+   HTM_SPAN_End ();
+  }
 
-   HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
-		  The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
-      HTM_Txt (Answer);
-   HTM_DIV_End ();
+static void Lnk_WriteWWW (const struct Tre_Node *Node,
+			  HidVis_HiddenOrVisible_t HiddenOrVisible)
+  {
+   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
+
+   HTM_A_Begin ("href=\"%s\" title=\"%s\" target=\"_blank\""
+	        " class=\"PAR PRG_TXT_%s%s\"",
+		Node->Lnk.WWW,Node->Lnk.Title,
+		The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
+      HTM_Txt (Node->Lnk.WWW);
+   HTM_A_End ();
   }
 
 /*****************************************************************************/
-/************************* Create question & answer **************************/
+/*************************** Create course link ******************************/
 /*****************************************************************************/
 
-void FAQ_CreateQaA (struct Tre_Node *Node)
+void Lnk_CreateCrsLink (struct Tre_Node *Node)
   {
-   /***** Get the new question for the new question & answer *****/
-   Par_GetParText ("Question",Node->QaA.Question,FAQ_MAX_BYTES_QUESTION);
-   Par_GetParHTML ("Answer",Node->QaA.Answer,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   /***** Get title, description and URL for the new course link *****/
+   Par_GetParText ("Title"      ,Node->Lnk.Title      ,Lnk_MAX_BYTES_TITLE);
+   Par_GetParText ("Description",Node->Lnk.Description,Lnk_MAX_BYTES_TITLE);
+   Par_GetParText ("WWW"        ,Node->Lnk.WWW        ,WWW_MAX_BYTES_WWW);
 
-   /***** Create question & answer *****/
-   Node->SpcItem.Cod = FAQ_DB_CreateQaA (Node);
+   /***** Create course link *****/
+   Node->SpcItem.Cod = Lnk_DB_CreateCrsLink (Node);
   }
 
 /*****************************************************************************/
-/************************** Change question & answer *************************/
+/***************************** Change course link ****************************/
 /*****************************************************************************/
 
-void FAQ_ChangeQaA (struct Tre_Node *Node)
+void Lnk_ChangeCrsLink (struct Tre_Node *Node)
   {
-   /***** Get question and answer *****/
-   Par_GetParText ("Question",Node->QaA.Question,FAQ_MAX_BYTES_QUESTION);
-   Par_GetParHTML ("Answer",Node->QaA.Answer,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   /***** Get title, description and URL *****/
+   Par_GetParText ("Title"      ,Node->Lnk.Title      ,Lnk_MAX_BYTES_TITLE);
+   Par_GetParText ("Description",Node->Lnk.Description,Lnk_MAX_BYTES_TITLE);
+   Par_GetParText ("WWW"        ,Node->Lnk.WWW        ,WWW_MAX_BYTES_WWW);
 
    /***** Update answer *****/
-   FAQ_DB_UpdateQaA (Node);
+   Lnk_DB_UpdateCrsLink (Node);
   }
