@@ -247,6 +247,19 @@ CREATE TABLE IF NOT EXISTS cht_rooms (
 	NumUsrs INT NOT NULL,
 	UNIQUE INDEX(RoomCode));
 --
+-- Table crs_bibliography: stores the course bibliography
+--
+CREATE TABLE IF NOT EXISTS crs_bibliography (
+	BibCod INT NOT NULL AUTO_INCREMENT,
+	NodCod INT NOT NULL DEFAULT -1,
+	BibInd INT NOT NULL DEFAULT 0,
+	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
+	Title VARCHAR(2047) NOT NULL,
+	Description VARCHAR(2047) NOT NULL,
+	WWW VARCHAR(255) NOT NULL,
+	UNIQUE INDEX(BibCod),
+	UNIQUE INDEX(NodCod,BibInd));
+--
 -- Table crs_courses: stores the courses/subjects
 --
 CREATE TABLE IF NOT EXISTS crs_courses (
@@ -262,42 +275,6 @@ CREATE TABLE IF NOT EXISTS crs_courses (
 	UNIQUE INDEX(CrsCod),
 	INDEX(DegCod,Year),
 	INDEX(Status));
---
--- Table grp_groups: stores the groups in courses
---
-CREATE TABLE IF NOT EXISTS grp_groups (
-	GrpCod INT NOT NULL AUTO_INCREMENT,
-	GrpTypCod INT NOT NULL,
-	GrpName VARCHAR(2047) NOT NULL,
-	RooCod INT NOT NULL DEFAULT -1,
-	MaxStudents INT NOT NULL,
-	Open ENUM('N','Y') NOT NULL DEFAULT 'N',
-	FileZones ENUM('N','Y') NOT NULL DEFAULT 'N',
-	UNIQUE INDEX(GrpCod),
-	INDEX(GrpTypCod),
-	INDEX(RooCod));
---
--- Table grp_types: stores the types of groups in courses
---
-CREATE TABLE IF NOT EXISTS grp_types (
-	GrpTypCod INT NOT NULL AUTO_INCREMENT,
-	CrsCod INT NOT NULL DEFAULT -1,
-	GrpTypName VARCHAR(2047) NOT NULL,
-	Mandatory ENUM('N','Y') NOT NULL,
-	Multiple ENUM('N','Y') NOT NULL,
-	MustBeOpened ENUM('N','Y') NOT NULL DEFAULT 'N',
-	OpenTime DATETIME NOT NULL,
-	UNIQUE INDEX(GrpTypCod),
-	INDEX(CrsCod));
---
--- Table grp_users: stores the users beloging to each group
---
-CREATE TABLE IF NOT EXISTS grp_users (
-	GrpCod INT NOT NULL,
-	UsrCod INT NOT NULL,
-	UNIQUE INDEX(GrpCod,UsrCod),
-	INDEX(GrpCod),
-	INDEX(UsrCod));
 --
 -- Table crs_info_read: stores the users who have read the information with mandatory reading
 --
@@ -762,6 +739,42 @@ CREATE TABLE IF NOT EXISTS gam_questions (
 	QstCod INT NOT NULL,
 	UNIQUE INDEX(GamCod,QstInd),
 	UNIQUE INDEX(GamCod,QstCod));
+--
+-- Table grp_groups: stores the groups in courses
+--
+CREATE TABLE IF NOT EXISTS grp_groups (
+	GrpCod INT NOT NULL AUTO_INCREMENT,
+	GrpTypCod INT NOT NULL,
+	GrpName VARCHAR(2047) NOT NULL,
+	RooCod INT NOT NULL DEFAULT -1,
+	MaxStudents INT NOT NULL,
+	Open ENUM('N','Y') NOT NULL DEFAULT 'N',
+	FileZones ENUM('N','Y') NOT NULL DEFAULT 'N',
+	UNIQUE INDEX(GrpCod),
+	INDEX(GrpTypCod),
+	INDEX(RooCod));
+--
+-- Table grp_types: stores the types of groups in courses
+--
+CREATE TABLE IF NOT EXISTS grp_types (
+	GrpTypCod INT NOT NULL AUTO_INCREMENT,
+	CrsCod INT NOT NULL DEFAULT -1,
+	GrpTypName VARCHAR(2047) NOT NULL,
+	Mandatory ENUM('N','Y') NOT NULL,
+	Multiple ENUM('N','Y') NOT NULL,
+	MustBeOpened ENUM('N','Y') NOT NULL DEFAULT 'N',
+	OpenTime DATETIME NOT NULL,
+	UNIQUE INDEX(GrpTypCod),
+	INDEX(CrsCod));
+--
+-- Table grp_users: stores the users beloging to each group
+--
+CREATE TABLE IF NOT EXISTS grp_users (
+	GrpCod INT NOT NULL,
+	UsrCod INT NOT NULL,
+	UNIQUE INDEX(GrpCod,UsrCod),
+	INDEX(GrpCod),
+	INDEX(UsrCod));
 --
 -- Table hld_holidays: stores the holidays in each institution
 --

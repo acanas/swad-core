@@ -353,7 +353,7 @@ mysql> DESCRIBE ban_banners;
 			"ShortName VARCHAR(511) NOT NULL,"	// Nam_MAX_BYTES_SHRT_NAME
 			"FullName VARCHAR(2047) NOT NULL,"	// Nam_MAX_BYTES_FULL_NAME
 			"Img VARCHAR(255) NOT NULL,"		// Ban_MAX_BYTES_IMAGE
-			"WWW VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+			"WWW VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
 		   "UNIQUE INDEX(BanCod),"
 		   "INDEX(Hidden))");
 
@@ -612,10 +612,37 @@ mysql> DESCRIBE cht_rooms;
 +----------+-------------+------+-----+---------+-------+
 2 rows in set (0,00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS cht_rooms ("\
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS cht_rooms ("
 			"RoomCode VARCHAR(16) NOT NULL,"	// Cht_MAX_BYTES_ROOM_CODE
 			"NumUsrs INT NOT NULL,"
 		   "UNIQUE INDEX(RoomCode))");
+
+   /***** Table crs_bibliography *****/
+/*
+mysql> DESCRIBE crs_bibliography;
++-------------+---------------+------+-----+---------+----------------+
+| Field       | Type          | Null | Key | Default | Extra          |
++-------------+---------------+------+-----+---------+----------------+
+| BibCod      | int           | NO   | PRI | NULL    | auto_increment |
+| NodCod      | int           | NO   | MUL | -1      |                |
+| BibInd      | int           | NO   |     | 0       |                |
+| Hidden      | enum('N','Y') | NO   |     | N       |                |
+| Title       | varchar(2047) | NO   |     | NULL    |                |
+| Description | varchar(2047) | NO   |     | NULL    |                |
+| WWW         | varchar(255)  | NO   |     | NULL    |                |
++-------------+---------------+------+-----+---------+----------------+
+7 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_bibliography ("
+			"BibCod INT NOT NULL AUTO_INCREMENT,"
+			"NodCod INT NOT NULL DEFAULT -1,"
+			"BibInd INT NOT NULL DEFAULT 0,"
+			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"Title VARCHAR(2047) NOT NULL,"		// Bib_MAX_BYTES_TITLE
+			"Description VARCHAR(2047) NOT NULL,"	// Bib_MAX_BYTES_TITLE
+			"WWW VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
+		   "UNIQUE INDEX(BibCod),"
+		   "UNIQUE INDEX(NodCod,BibInd))");
 
    /***** Table crs_courses *****/
 /*
@@ -771,7 +798,7 @@ mysql> DESCRIBE crs_links;
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Title VARCHAR(2047) NOT NULL,"		// Lnk_MAX_BYTES_TITLE
 			"Description VARCHAR(2047) NOT NULL,"	// Lnk_MAX_BYTES_TITLE
-			"WWW VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+			"WWW VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
 		   "UNIQUE INDEX(LnkCod),"
 		   "UNIQUE INDEX(NodCod,LnkInd))");
 
@@ -933,7 +960,7 @@ mysql> DESCRIBE ctr_centers;
 			"Altitude DOUBLE PRECISION NOT NULL DEFAULT 0,"
 			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Nam_MAX_BYTES_SHRT_NAME
 			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Nam_MAX_BYTES_FULL_NAME
-			"WWW VARCHAR(255) NOT NULL,"					// Cns_MAX_BYTES_WWW
+			"WWW VARCHAR(255) NOT NULL,"					// WWW_MAX_BYTES_WWW
 			"PhotoAttribution TEXT NOT NULL,"				// Med_MAX_BYTES_ATTRIBUTION
 		   "UNIQUE INDEX(CtrCod),"
 		   "INDEX(InsCod),"
@@ -986,16 +1013,16 @@ mysql> DESCRIBE cty_countrs;
 			"Name_pl VARCHAR(767) NOT NULL,"	// Cty_MAX_BYTES_NAME
 			"Name_pt VARCHAR(767) NOT NULL,"	// Cty_MAX_BYTES_NAME
 			"Name_tr VARCHAR(767) NOT NULL,"	// Cty_MAX_BYTES_NAME
-			"WWW_ca VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
-			"WWW_de VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
-			"WWW_en VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
-			"WWW_es VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
-			"WWW_fr VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
-			"WWW_gn VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
-			"WWW_it VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
-			"WWW_pl VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
-			"WWW_pt VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
-			"WWW_tr VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+			"WWW_ca VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
+			"WWW_de VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
+			"WWW_en VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
+			"WWW_es VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
+			"WWW_fr VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
+			"WWW_gn VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
+			"WWW_it VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
+			"WWW_pl VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
+			"WWW_pt VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
+			"WWW_tr VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
 		   "UNIQUE INDEX(CtyCod),UNIQUE INDEX(Alpha2),"
 		   "INDEX(Name_ca),"
 		   "INDEX(Name_de),"
@@ -1049,7 +1076,7 @@ mysql> DESCRIBE deg_degrees;
 			"RequesterUsrCod INT NOT NULL DEFAULT -1,"
 			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Nam_MAX_BYTES_SHRT_NAME
 			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Nam_MAX_BYTES_FULL_NAME
-			"WWW VARCHAR(255) NOT NULL,"					// Cns_MAX_BYTES_WWW
+			"WWW VARCHAR(255) NOT NULL,"					// WWW_MAX_BYTES_WWW
 		   "UNIQUE INDEX(DegCod),"
 		   "INDEX(CtrCod),"
 		   "INDEX(DegTypCod),"
@@ -1090,7 +1117,7 @@ mysql> DESCRIBE dpt_departments;
 			"InsCod INT NOT NULL,"
 			"ShortName VARCHAR(511) NOT NULL,"	// Nam_MAX_BYTES_SHRT_NAME
 			"FullName VARCHAR(2047) NOT NULL,"	// Nam_MAX_BYTES_FULL_NAME
-			"WWW VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+			"WWW VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
 		   "UNIQUE INDEX(DptCod),"
 		   "INDEX(InsCod))");
 
@@ -1749,7 +1776,7 @@ mysql> DESCRIBE ins_instits;
 			"RequesterUsrCod INT NOT NULL DEFAULT -1,"
 			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Nam_MAX_BYTES_SHRT_NAME
 			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Nam_MAX_BYTES_FULL_NAME
-			"WWW VARCHAR(255) NOT NULL,"					// Cns_MAX_BYTES_WWW
+			"WWW VARCHAR(255) NOT NULL,"					// WWW_MAX_BYTES_WWW
 		   "UNIQUE INDEX(InsCod),"
 		   "INDEX(CtyCod),"
 		   "INDEX(Status))");
@@ -1771,7 +1798,7 @@ mysql> DESCRIBE lnk_links;
 			"LnkCod INT NOT NULL AUTO_INCREMENT,"
 			"ShortName VARCHAR(511) NOT NULL,"	// Nam_MAX_BYTES_SHRT_NAME
 			"FullName VARCHAR(2047) NOT NULL,"	// Nam_MAX_BYTES_FULL_NAME
-			"WWW VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+			"WWW VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
 		   "UNIQUE INDEX(LnkCod))");
 
    /***** Table log *****/
@@ -2190,7 +2217,7 @@ mysql> DESCRIBE med_media;
 			"'youtube',"
 			"'embed') NOT NULL DEFAULT 'none',"
 			"Name VARCHAR(43) NOT NULL DEFAULT '',"		// Med_BYTES_NAME
-			"URL VARCHAR(255) NOT NULL DEFAULT '',"		// Cns_MAX_BYTES_WWW
+			"URL VARCHAR(255) NOT NULL DEFAULT '',"		// WWW_MAX_BYTES_WWW
 			"Title VARCHAR(2047) NOT NULL DEFAULT '',"	// Med_MAX_BYTES_TITLE
 		   "UNIQUE INDEX(MedCod),"
 		   "INDEX(Type))");
@@ -2529,7 +2556,7 @@ mysql> DESCRIBE plg_plugins;
 			"Description VARCHAR(2047) NOT NULL,"	// Plg_MAX_BYTES_PLUGIN_DESCRIPTION
 			"Logo VARCHAR(31) NOT NULL,"		// Plg_MAX_BYTES_PLUGIN_LOGO
 			"AppKey VARCHAR(31) NOT NULL,"		// Plg_MAX_BYTES_PLUGIN_APP_KEY
-			"URL VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+			"URL VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
 			"IP CHAR(15) NOT NULL,"			// Cns_MAX_BYTES_IP
 		   "UNIQUE INDEX(PlgCod))");
 
@@ -2620,7 +2647,7 @@ mysql> DESCRIBE prj_projects;
 			"Description TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 			"Knowledge TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 			"Materials TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
-			"URL VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_WWW
+			"URL VARCHAR(255) NOT NULL,"	// WWW_MAX_BYTES_WWW
 			"ReviewStatus ENUM('unreviewed','unapproved','approved') NOT NULL DEFAULT 'unreviewed',"
 			"ReviewTime DATETIME NOT NULL DEFAULT '1970-01-01 01:00:00',"
 			"ReviewTxt TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
@@ -4028,7 +4055,7 @@ mysql> DESCRIBE usr_reports;
 			"UniqueDirL CHAR(2) NOT NULL,"	//  2  leftmost chars from a unique 43 chars base64url codified from a unique SHA-256 string
 			"UniqueDirR CHAR(41) NOT NULL,"	// 41 rightmost chars from a unique 43 chars base64url codified from a unique SHA-256 string
 			"Filename VARCHAR(255) NOT NULL,"	// Report filename, NAME_MAX
-			"Permalink VARCHAR(255) NOT NULL,"	// Full URL (permalink), Cns_MAX_BYTES_WWW
+			"Permalink VARCHAR(255) NOT NULL,"	// Full URL (permalink), WWW_MAX_BYTES_WWW
 		   "UNIQUE INDEX(RepCod),"
 		   "INDEX(UsrCod))");
 
@@ -4062,7 +4089,7 @@ mysql> DESCRIBE usr_webs;
 			"'tumblr','twitch','twitter',"
 			"'wikipedia',"
 			"'youtube') NOT NULL,"
-			"URL VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_WWW
+			"URL VARCHAR(255) NOT NULL,"	// WWW_MAX_BYTES_WWW
 		   "UNIQUE INDEX(UsrCod,Web))");
 
    /***** Show success message *****/

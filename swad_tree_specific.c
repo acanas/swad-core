@@ -815,6 +815,19 @@ void TreSpc_CreateItem (Inf_Type_t InfoType)
       [Inf_LINKS	] = Lnk_CreateCrsLink,
       [Inf_ASSESSMENT	] = NULL,
      };
+   static Tre_ListingType_t ListingType[Inf_NUM_TYPES] =
+     {
+      [Inf_UNKNOWN_TYPE	] = Tre_EDIT_SPC_LIST_ITEMS,
+      [Inf_INFORMATION	] = Tre_EDIT_SPC_LIST_ITEMS,
+      [Inf_PROGRAM	] = Tre_EDIT_SPC_ITEM,
+      [Inf_TEACH_GUIDE	] = Tre_EDIT_SPC_LIST_ITEMS,
+      [Inf_SYLLABUS_LEC	] = Tre_EDIT_SPC_LIST_ITEMS,
+      [Inf_SYLLABUS_PRA	] = Tre_EDIT_SPC_LIST_ITEMS,
+      [Inf_BIBLIOGRAPHY	] = Tre_EDIT_SPC_LIST_ITEMS,
+      [Inf_FAQ		] = Tre_EDIT_SPC_LIST_ITEMS,
+      [Inf_LINKS	] = Tre_EDIT_SPC_LIST_ITEMS,
+      [Inf_ASSESSMENT	] = Tre_EDIT_SPC_LIST_ITEMS,
+     };
 
    /***** Check info type *****/
    if (!CreateItem[InfoType])
@@ -832,9 +845,7 @@ void TreSpc_CreateItem (Inf_Type_t InfoType)
    CreateItem[InfoType] (&Node);
 
    /***** Show current tree nodes, if any *****/
-   // Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_ITEM,
-   //		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
-   Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
+   Tre_ShowAllNodes (InfoType,ListingType[InfoType],
 		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
 
    /***** Free list of tree nodes *****/
