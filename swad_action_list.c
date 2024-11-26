@@ -609,6 +609,18 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActExpEdiTreNodBib	] = {2090, 4,TabCrs,NULL			,Inf_ExpandNodeEditing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActConEdiTreNodBib	] = {2091, 4,TabCrs,NULL			,Inf_ContractNodeEditing	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
+   [ActFrmSeeBibRef	] = {2169, 4,TabCrs,NULL			,Inf_ViewListItemsAfterEdit	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmEdiBibRef	] = {2170, 4,TabCrs,NULL			,Inf_EditListItems		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActNewBibRef	] = {2171, 4,TabCrs,NULL			,Inf_CreateItem			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqRemBibRef	] = {2172, 4,TabCrs,NULL			,Inf_ReqRemItem			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemBibRef	] = {2173, 4,TabCrs,NULL			,Inf_RemoveItem			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActHidBibRef	] = {2174, 4,TabCrs,NULL			,Inf_HideItem			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUnhBibRef	] = {2175, 4,TabCrs,NULL			,Inf_UnhideItem			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUp_BibRef	] = {2176, 4,TabCrs,NULL			,Inf_MoveUpItem			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActDwnBibRef	] = {2177, 4,TabCrs,NULL			,Inf_MoveDownItem		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmChgBibRef	] = {2178, 4,TabCrs,NULL			,Inf_EditTreeWithFormItem	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgBibRef	] = {2179, 4,TabCrs,NULL			,Inf_ChangeItem			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+
    [ActEdiPlaTxtBib	] = { 377, 4,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvPlaTxtBib	] = { 398, 4,TabCrs,NULL			,Inf_ReceivePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiRchTxtBib	] = {1097, 4,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -4184,4 +4196,16 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActDwnCrsLnk,		// #2166
 	ActFrmChgCrsLnk,	// #2167
 	ActChgCrsLnk,		// #2168
+
+	ActFrmSeeBibRef,	// #2169
+	ActFrmEdiBibRef,	// #2170
+	ActNewBibRef,		// #2171
+	ActReqRemBibRef,	// #2172
+	ActRemBibRef,		// #2173
+	ActHidBibRef,		// #2174
+	ActUnhBibRef,		// #2175
+	ActUp_BibRef,		// #2176
+	ActDwnBibRef,		// #2177
+	ActFrmChgBibRef,	// #2178
+	ActChgBibRef,		// #2179
   };

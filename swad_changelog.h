@@ -635,11 +635,17 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.39 (2024-11-26)"
+#define Log_PLATFORM_VERSION	"SWAD 24.40 (2024-11-26)"
 #define CSS_FILE		"swad24.37.1.css"
 #define JS_FILE			"swad23.89.js"
 /*
-	Version 24.39:    Nov 26, 2024  New module swad_link, for course links. (? lines)
+	Version 24.40:    Nov 26, 2024  New module swad_bibliography, for course bibliography. (345541 lines)
+					2 changes necessary in database:
+CREATE TABLE IF NOT EXISTS crs_bibliography (BibCod INT NOT NULL AUTO_INCREMENT,NodCod INT NOT NULL DEFAULT -1,BibInd INT NOT NULL DEFAULT 0,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',Title VARCHAR(2047) NOT NULL,Description VARCHAR(2047) NOT NULL,WWW VARCHAR(255) NOT NULL,UNIQUE INDEX(BibCod),UNIQUE INDEX(NodCod,BibInd));
+					If you want to use MyISAM:
+ALTER TABLE crs_bibliography ENGINE=MyISAM;
+
+	Version 24.39:    Nov 26, 2024  New module swad_link, for course links. (344580 lines)
 					2 changes necessary in database:
 ALTER TABLE faq_questions CHANGE COLUMN Question Question VARCHAR(2047) NOT NULL;
 CREATE TABLE IF NOT EXISTS crs_links (LnkCod INT NOT NULL AUTO_INCREMENT,NodCod INT NOT NULL DEFAULT -1,LnkInd INT NOT NULL DEFAULT 0,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',Title VARCHAR(2047) NOT NULL,Description VARCHAR(2047) NOT NULL,WWW VARCHAR(255) NOT NULL,UNIQUE INDEX(LnkCod),UNIQUE INDEX(NodCod,LnkInd));

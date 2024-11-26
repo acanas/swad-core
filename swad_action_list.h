@@ -529,6 +529,19 @@ typedef enum
 	ActConSeeTreNodBib,
 	ActExpEdiTreNodBib,
 	ActConEdiTreNodBib,
+
+	ActFrmSeeBibRef,
+	ActFrmEdiBibRef,
+	ActNewBibRef,
+	ActReqRemBibRef,
+	ActRemBibRef,
+	ActHidBibRef,
+	ActUnhBibRef,
+	ActUp_BibRef,
+	ActDwnBibRef,
+	ActFrmChgBibRef,
+	ActChgBibRef,
+
 	ActEdiPlaTxtBib,
 	ActRcvPlaTxtBib,
 	ActEdiRchTxtBib,
@@ -1991,7 +2004,7 @@ typedef enum
 
 #define ActLst_NUM_ACTIONS		((unsigned) ActChgNtfPrf + 1)
 
-#define ActLst_MAX_ACTION_COD		2168
+#define ActLst_MAX_ACTION_COD		2179
 
 #define ActLst_DEFAULT_ACTION_AFTER_LOGIN ActSeeGblTL
 

@@ -3676,6 +3676,52 @@ const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_add
 	" you must fill in your email address.";		// Çeviri lazim!
 #endif
 
+const char *Txt_Bibliographic_reference_removed =
+#if   L==1	// ca
+	"Refer&egrave;ncia bibliogr&agrave;fica eliminada";
+#elif L==2	// de
+	"Bibliografische Referenz entfernt";
+#elif L==3	// en
+	"Bibliographic reference removed";
+#elif L==4	// es
+	"Referencia bibliogr&aacute;fica eliminada";
+#elif L==5	// fr
+	"R&eacute;f&eacute;rence bibliographique supprim&eacute;e";
+#elif L==6	// gn
+	"Referencia bibliogr&aacute;fica eliminada";	// Okoteve traducción
+#elif L==7	// it
+	"Riferimento bibliografico rimosso";
+#elif L==8	// pl
+	"Usuni&eogon;to odniesienie bibliograficzne";
+#elif L==9	// pt
+	"Refer&ecirc;ncia bibliogr&aacute;fica removida";
+#elif L==10	// tr
+	"Bibliyografik referans kald&inodot;r&inodot;ld&inodot;";
+#endif
+
+const char *Txt_Bibliographic_references =
+#if   L==1	// ca
+	"Refer&egrave;ncies bibliogr&agrave;fiques";
+#elif L==2	// de
+	"Bibliographische Referenzen";
+#elif L==3	// en
+	"Bibliographic references";
+#elif L==4	// es
+	"Referencias bibliogr&aacute;ficas";
+#elif L==5	// fr
+	"R&eacute;f&eacute;rences bibliographiques";
+#elif L==6	// gn
+	"Referencias bibliogr&aacute;ficas";	// Okoteve traducción
+#elif L==7	// it
+	"Riferimenti bibliografici";
+#elif L==8	// pl
+	"Odno&sacute;niki bibliograficzne";
+#elif L==9	// pt
+	"Refer&ecirc;ncias bibliogr&aacute;ficas";
+#elif L==10	// tr
+	"Bibliyografik referanslar";
+#endif
+
 const char *Txt_Briefcase_of_THE_USER_X_has_been_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"S'ha eliminat el malet&iacute; de <strong>%s</strong>.";

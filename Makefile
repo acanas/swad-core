@@ -32,7 +32,8 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_action_list.o \
        swad_API.o swad_API_database.o swad_assignment.o \
        swad_assignment_database.o swad_assignment_resource.o swad_attendance.o \
        swad_attendance_database.o swad_attendance_resource.o swad_autolink.o \
-       swad_banner.o swad_banner_database.o swad_box.o swad_browser.o \
+       swad_banner.o swad_banner_database.o swad_bibliography.o \
+       swad_bibliography_database.o swad_box.o swad_browser.o \
        swad_browser_database.o swad_browser_resource.o swad_browser_size.o \
        swad_building.o swad_building_database.o swad_button.o \
        swad_calendar.o swad_call_for_exam.o swad_call_for_exam_resource.o \

@@ -8687,6 +8687,259 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Contract item in bibliography when editing"		// Çeviri lazim!
 #endif
 	,
+	[ActFrmSeeBibRef] =
+#if   L==1	// ca
+	"See bibliographic references"		// Necessita traducció
+#elif L==2	// de
+	"See bibliographic references"		// Need Übersetzung
+#elif L==3	// en
+	"See bibliographic references"
+#elif L==4	// es
+	"Ver referencias bibliogr&aacute;ficas"
+#elif L==5	// fr
+	"See bibliographic references"		// Besoin de traduction
+#elif L==6	// gn
+	"Ver referencias bibliogr&aacute;ficas"	// Okoteve traducción
+#elif L==7	// it
+	"See bibliographic references"		// Bisogno di traduzione
+#elif L==8	// pl
+	"See bibliographic references"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See bibliographic references"		// Precisa de tradução
+#elif L==10	// tr
+	"See bibliographic references"		// Çeviri lazim!
+#endif
+	,
+	[ActFrmEdiBibRef] =
+#if   L==1	// ca
+	"Edit bibliographic references"			// Necessita traducció
+#elif L==2	// de
+	"Edit bibliographic references"			// Need Übersetzung
+#elif L==3	// en
+	"Edit bibliographic references"
+#elif L==4	// es
+	"Editar referencias bibliogr&aacute;ficas"
+#elif L==5	// fr
+	"Edit bibliographic references"			// Besoin de traduction
+#elif L==6	// gn
+	"Editar referencias bibliogr&aacute;ficas"	// Okoteve traducción
+#elif L==7	// it
+	"Edit bibliographic references"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit bibliographic references"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit bibliographic references"			// Precisa de tradução
+#elif L==10	// tr
+	"Edit bibliographic references"			// Çeviri lazim!
+#endif
+	,
+	[ActNewBibRef] =
+#if   L==1	// ca
+	"Create bibliographic reference"		// Necessita traducció
+#elif L==2	// de
+	"Create bibliographic reference"		// Need Übersetzung
+#elif L==3	// en
+	"Create bibliographic reference"
+#elif L==4	// es
+	"Crear referencia bibliogr&aacute;fica"
+#elif L==5	// fr
+	"Create bibliographic reference"		// Besoin de traduction
+#elif L==6	// gn
+	"Crear referencia bibliogr&aacute;fica"		// Okoteve traducción
+#elif L==7	// it
+	"Create bibliographic reference"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Create bibliographic reference"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create bibliographic reference"		// Precisa de tradução
+#elif L==10	// tr
+	"Create bibliographic reference"		// Çeviri lazim!
+#endif
+	,
+	[ActReqRemBibRef] =
+#if   L==1	// ca
+	"Request removal of bibliographic reference"				// Necessita traducció
+#elif L==2	// de
+	"Request removal of bibliographic reference"				// Need Übersetzung
+#elif L==3	// en
+	"Request removal of bibliographic reference"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de referencia bibliogr&aacute;fica"
+#elif L==5	// fr
+	"Request removal of bibliographic reference"				// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar eliminaci&oacute;n de referencia bibliogr&aacute;fica"	// Okoteve traducción
+#elif L==7	// it
+	"Request removal of bibliographic reference"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Request removal of bibliographic reference"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request removal of bibliographic reference"				// Precisa de tradução
+#elif L==10	// tr
+	"Request removal of bibliographic reference"				// Çeviri lazim!
+#endif
+	,
+	[ActRemBibRef] =
+#if   L==1	// ca
+	"Remove bibliographic reference"		// Necessita traducció
+#elif L==2	// de
+	"Remove bibliographic reference"		// Need Übersetzung
+#elif L==3	// en
+	"Remove bibliographic reference"
+#elif L==4	// es
+	"Eliminar referencia bibliogr&aacute;fica"
+#elif L==5	// fr
+	"Remove bibliographic reference"		// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar referencia bibliogr&aacute;fica"	// Okoteve traducción
+#elif L==7	// it
+	"Remove bibliographic reference"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove bibliographic reference"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove bibliographic reference"		// Precisa de tradução
+#elif L==10	// tr
+	"Remove bibliographic reference"		// Çeviri lazim!
+#endif
+	,
+	[ActHidBibRef] =
+#if   L==1	// ca
+	"Hide bibliographic reference"			// Necessita traducció
+#elif L==2	// de
+	"Hide bibliographic reference"			// Need Übersetzung
+#elif L==3	// en
+	"Hide bibliographic reference"
+#elif L==4	// es
+	"Ocultar referencia bibliogr&aacute;fica"
+#elif L==5	// fr
+	"Hide bibliographic reference"			// Besoin de traduction
+#elif L==6	// gn
+	"Ocultar referencia bibliogr&aacute;fica"	// Okoteve traducción
+#elif L==7	// it
+	"Hide bibliographic reference"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Hide bibliographic reference"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Hide bibliographic reference"			// Precisa de tradução
+#elif L==10	// tr
+	"Hide bibliographic reference"			// Çeviri lazim!
+#endif
+	,
+	[ActUnhBibRef] =
+#if   L==1	// ca
+	"Unhide bibliographic reference"		// Necessita traducció
+#elif L==2	// de
+	"Unhide bibliographic reference"		// Need Übersetzung
+#elif L==3	// en
+	"Unhide bibliographic reference"
+#elif L==4	// es
+	"Mostrar referencia bibliogr&aacute;fica"
+#elif L==5	// fr
+	"Unhide bibliographic reference"		// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar referencia bibliogr&aacute;fica"	// Okoteve traducción
+#elif L==7	// it
+	"Unhide bibliographic reference"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Unhide bibliographic reference"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Unhide bibliographic reference"		// Precisa de tradução
+#elif L==10	// tr
+	"Unhide bibliographic reference"		// Çeviri lazim!
+#endif
+	,
+	[ActUp_BibRef] =
+#if   L==1	// ca
+	"Move up bibliographic reference"		// Necessita traducció
+#elif L==2	// de
+	"Move up bibliographic reference"		// Need Übersetzung
+#elif L==3	// en
+	"Move up bibliographic reference"
+#elif L==4	// es
+	"Subir referencia bibliogr&aacute;fica"
+#elif L==5	// fr
+	"Move up bibliographic reference"		// Besoin de traduction
+#elif L==6	// gn
+	"Subir referencia bibliogr&aacute;fica"		// Okoteve traducción
+#elif L==7	// it
+	"Move up bibliographic reference"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Move up bibliographic reference"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move up bibliographic reference"		// Precisa de tradução
+#elif L==10	// tr
+	"Move up bibliographic reference"		// Çeviri lazim!
+#endif
+	,
+	[ActDwnBibRef] =
+#if   L==1	// ca
+	"Move down bibliographic reference"		// Necessita traducció
+#elif L==2	// de
+	"Move down bibliographic reference"		// Need Übersetzung
+#elif L==3	// en
+	"Move down bibliographic reference"
+#elif L==4	// es
+	"Bajar referencia bibliogr&aacute;ficaa"
+#elif L==5	// fr
+	"Move down bibliographic reference"		// Besoin de traduction
+#elif L==6	// gn
+	"Bajar referencia bibliogr&aacute;fica"		// Okoteve traducción
+#elif L==7	// it
+	"Move down bibliographic reference"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Move down bibliographic reference"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move down bibliographic reference"		// Precisa de tradução
+#elif L==10	// tr
+	"Move down bibliographic reference"		// Çeviri lazim!
+#endif
+	,
+	[ActFrmChgBibRef] =
+#if   L==1	// ca
+	"Edit bibliographic reference"			// Necessita traducció
+#elif L==2	// de
+	"Edit bibliographic reference"			// Need Übersetzung
+#elif L==3	// en
+	"Edit bibliographic reference"
+#elif L==4	// es
+	"Editar referencia bibliogr&aacute;fica"
+#elif L==5	// fr
+	"Edit bibliographic reference"			// Besoin de traduction
+#elif L==6	// gn
+	"Editar referencia bibliogr&aacute;fica"	// Okoteve traducción
+#elif L==7	// it
+	"Edit bibliographic reference"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit bibliographic reference"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit bibliographic reference"			// Precisa de tradução
+#elif L==10	// tr
+	"Edit bibliographic reference"			// Çeviri lazim!
+#endif
+	,
+	[ActChgBibRef] =
+#if   L==1	// ca
+	"Change bibliographic reference"		// Necessita traducció
+#elif L==2	// de
+	"Change bibliographic reference"		// Need Übersetzung
+#elif L==3	// en
+	"Change bibliographic reference"
+#elif L==4	// es
+	"Cambiar referencia bibliogr&aacute;fica"
+#elif L==5	// fr
+	"Change bibliographic reference"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar referencia bibliogr&aacute;fica"	// Okoteve traducción
+#elif L==7	// it
+	"Change bibliographic reference"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change bibliographic reference"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change bibliographic reference"		// Precisa de tradução
+#elif L==10	// tr
+	"Change bibliographic reference"		// Çeviri lazim!
+#endif
+	,
 	[ActEdiPlaTxtBib] =
 #if   L==1	// ca
 	"Plain text editor of the bibliography"			// Necessita traducció
@@ -10483,25 +10736,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActReqRemCrsLnk] =
 #if   L==1	// ca
-	"Request removal of course link"	// Necessita traducció
+	"Request removal of course link"			// Necessita traducció
 #elif L==2	// de
-	"Request removal of course link"	// Need Übersetzung
+	"Request removal of course link"			// Need Übersetzung
 #elif L==3	// en
 	"Request removal of course link"
 #elif L==4	// es
-	"Solicitar enlace de asignatura"
+	"Solicitar eliminaci&oacute;n de enlace de asignatura"
 #elif L==5	// fr
-	"Request removal of course link"	// Besoin de traduction
+	"Request removal of course link"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar enlace de asignatura"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de enlace de asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of course link"	// Bisogno di traduzione
+	"Request removal of course link"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of course link"	// Potrzebujesz tlumaczenie
+	"Request removal of course link"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of course link"	// Precisa de tradução
+	"Request removal of course link"			// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of course link"	// Çeviri lazim!
+	"Request removal of course link"			// Çeviri lazim!
 #endif
 	,
 	[ActRemCrsLnk] =

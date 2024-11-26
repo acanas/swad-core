@@ -30,6 +30,7 @@
 #include <stdbool.h>		// For boolean type
 #include <time.h>		// For time
 
+#include "swad_bibliography_type.h"
 #include "swad_database.h"
 #include "swad_date.h"
 #include "swad_FAQ_type.h"
@@ -69,6 +70,7 @@ struct Tre_Node
    char Title[Tre_MAX_BYTES_NODE_TITLE + 1];
    struct Tre_SpcItem SpcItem;
    struct Rsc_Resource Resource;
+   struct Bib_BibliographicReference Bib;
    struct FAQ_QaA QaA;
    struct Lnk_Link Lnk;
   };
