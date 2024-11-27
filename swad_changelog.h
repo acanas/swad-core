@@ -635,10 +635,17 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.40.1 (2024-11-26)"
+#define Log_PLATFORM_VERSION	"SWAD 24.41 (2024-11-27)"
 #define CSS_FILE		"swad24.37.1.css"
 #define JS_FILE			"swad23.89.js"
 /*
+	Version 24.41:    Nov 27, 2024  Added fields in bibliography. (345869 lines)
+					2 changes necessary in database:
+DROP TABLE IF EXISTS crs_bibliography;
+CREATE TABLE IF NOT EXISTS crs_bibliography (BibCod INT NOT NULL AUTO_INCREMENT,NodCod INT NOT NULL DEFAULT -1,BibInd INT NOT NULL DEFAULT 0,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',Authors VARCHAR(2047) NOT NULL,Title VARCHAR(2047) NOT NULL,Source VARCHAR(2047) NOT NULL,Publisher VARCHAR(2047) NOT NULL,Date VARCHAR(2047) NOT NULL,Id VARCHAR(2047) NOT NULL,URL VARCHAR(255) NOT NULL,UNIQUE INDEX(BibCod),UNIQUE INDEX(NodCod,BibInd));
+					If you want to use MyISAM:
+ALTER TABLE crs_bibliography ENGINE=MyISAM;
+
 	Version 24.40.1:  Nov 26, 2024  Database table for bibliography. (345592 lines)
 	Version 24.40:    Nov 26, 2024  New module swad_bibliography, for course bibliography. Not finished. (345541 lines)
 					2 changes necessary in database:

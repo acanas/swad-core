@@ -37,8 +37,7 @@ void Bib_ResetSpcFields (struct Tre_Node *Node);
 
 void Bib_GetBibRefDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node);
 
-void Bib_WriteCellViewBibRef (struct Tre_Node *Node,
-			      HidVis_HiddenOrVisible_t HiddenOrVisible);
+void Bib_WriteCellViewBibRef (struct Tre_Node *Node);
 void Bib_WriteCellEditBibRef (struct Tre_Node *Node,
                               Vie_ViewType_t ViewType,
 			      HidVis_HiddenOrVisible_t HiddenOrVisible);

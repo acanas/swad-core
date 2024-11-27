@@ -73,9 +73,7 @@ static void (*TreSpc_GetItemDataFromRow[Inf_NUM_TYPES]) (MYSQL_RES *mysql_res,
 static void TreSpc_PutIconsViewItem (void *Node);
 static void TreSpc_PutIconsEditItem (void *Node);
 
-static void TreSpc_WriteRowViewItem (struct Tre_Node *Node,
-				     unsigned NumItem,
-				     HidVis_HiddenOrVisible_t HiddenOrVisible);
+static void TreSpc_WriteRowViewItem (struct Tre_Node *Node,unsigned NumItem);
 static void TreSpc_WriteRowEditItem (struct Tre_Node *Node,
 				     unsigned NumItem,unsigned NumItems,
 				     Vie_ViewType_t ViewType,
@@ -325,7 +323,7 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
 	       switch (ViewingOrEditingListItemsOfThisNode)
 		 {
 		  case Vie_VIEW:
-		     TreSpc_WriteRowViewItem (Node,NumItem,HiddenOrVisible);
+		     TreSpc_WriteRowViewItem (Node,NumItem);
 		     break;
 		  case Vie_EDIT:
 		     TreSpc_WriteRowEditItem (Node,NumItem,NumItems,
@@ -418,12 +416,9 @@ static void TreSpc_PutIconsEditItem (void *Node)
 /*************************** Write row to view item **************************/
 /*****************************************************************************/
 
-static void TreSpc_WriteRowViewItem (struct Tre_Node *Node,
-			             unsigned NumItem,
-			             HidVis_HiddenOrVisible_t HiddenOrVisible)
+static void TreSpc_WriteRowViewItem (struct Tre_Node *Node,unsigned NumItem)
   {
-   static void (*WriteCell[Inf_NUM_TYPES]) (struct Tre_Node *Node,
-					    HidVis_HiddenOrVisible_t HiddenOrVisible) =
+   static void (*WriteCell[Inf_NUM_TYPES]) (struct Tre_Node *Node) =
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = NULL,
@@ -450,7 +445,7 @@ static void TreSpc_WriteRowViewItem (struct Tre_Node *Node,
 
 	 /* Wite cell contents */
          if (WriteCell[Node->InfoType])
-	    WriteCell[Node->InfoType] (Node,HiddenOrVisible);
+	    WriteCell[Node->InfoType] (Node);
 
       HTM_TD_End ();
 

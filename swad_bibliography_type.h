@@ -34,14 +34,21 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
+#define Bib_MAX_CHARS_AUTHORS	(128 - 1)	// 127
+#define Bib_MAX_BYTES_AUTHORS	((Bib_MAX_CHARS_AUTHORS + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+
 #define Bib_MAX_CHARS_TITLE	(128 - 1)	// 127
 #define Bib_MAX_BYTES_TITLE	((Bib_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 struct Bib_BibliographicReference
   {
-   char Title[Bib_MAX_BYTES_TITLE + 1];
-   char Description[Bib_MAX_BYTES_TITLE + 1];
-   char WWW[WWW_MAX_BYTES_WWW + 1];
+   char Authors[Bib_MAX_BYTES_AUTHORS + 1];	// List of authors
+   char Title[Bib_MAX_BYTES_TITLE + 1];		// Title
+   char Source[Bib_MAX_BYTES_TITLE + 1];	// Collection, book, volume, pages
+   char Publisher[Bib_MAX_BYTES_TITLE + 1];	// Including place of publication
+   char Date[Bib_MAX_BYTES_TITLE + 1];		// Usually year
+   char Id[Bib_MAX_BYTES_TITLE + 1];		// Identifier (ISBN, ISSN, DOI...)
+   char URL[WWW_MAX_BYTES_WWW + 1];		// URL
   };
 
 #endif

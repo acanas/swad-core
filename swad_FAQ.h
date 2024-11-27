@@ -38,8 +38,7 @@ void FAQ_ResetSpcFields (struct Tre_Node *Node);
 
 void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node);
 
-void FAQ_WriteCellViewQaA (struct Tre_Node *Node,
-			   HidVis_HiddenOrVisible_t HiddenOrVisible);
+void FAQ_WriteCellViewQaA (struct Tre_Node *Node);
 void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
                            Vie_ViewType_t ViewType,
 			   HidVis_HiddenOrVisible_t HiddenOrVisible);

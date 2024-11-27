@@ -35,8 +35,7 @@
 
 void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node);
 
-void PrgRsc_WriteCellViewResource (struct Tre_Node *Node,
-                                   HidVis_HiddenOrVisible_t HiddenOrVisible);
+void PrgRsc_WriteCellViewResource (struct Tre_Node *Node);
 void PrgRsc_WriteCellEditResource (struct Tre_Node *Node,
 				   Vie_ViewType_t ViewType,
 				   __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible);

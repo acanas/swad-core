@@ -69,10 +69,8 @@
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void FAQ_WriteQuestion (const char Question[FAQ_MAX_BYTES_QUESTION + 1],
-			       HidVis_HiddenOrVisible_t HiddenOrVisible);
-static void FAQ_WriteAnswer (char Answer[Cns_MAX_BYTES_TEXT + 1],
-			     HidVis_HiddenOrVisible_t HiddenOrVisible);
+static void FAQ_WriteQuestion (const char Question[FAQ_MAX_BYTES_QUESTION + 1]);
+static void FAQ_WriteAnswer (char Answer[Cns_MAX_BYTES_TEXT + 1]);
 
 /*****************************************************************************/
 /**************** Reset specific fields of question & answer *****************/
@@ -121,11 +119,10 @@ void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
 /********************** Show one question & answer ***************************/
 /*****************************************************************************/
 
-void FAQ_WriteCellViewQaA (struct Tre_Node *Node,
-			   HidVis_HiddenOrVisible_t HiddenOrVisible)
+void FAQ_WriteCellViewQaA (struct Tre_Node *Node)
   {
-   FAQ_WriteQuestion (Node->QaA.Question,HiddenOrVisible);
-   FAQ_WriteAnswer (Node->QaA.Answer,HiddenOrVisible);
+   FAQ_WriteQuestion (Node->QaA.Question);
+   FAQ_WriteAnswer (Node->QaA.Answer);
   }
 
 /*****************************************************************************/
@@ -136,6 +133,7 @@ void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
                            Vie_ViewType_t ViewType,
 			   HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
+   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Txt_Question;
    extern const char *Txt_Answer;
    extern const char *Txt_Save_changes;
@@ -144,7 +142,10 @@ void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
      {
       case Vie_VIEW:
 	 /***** Show current question & answer *****/
-	 FAQ_WriteCellViewQaA (Node,HiddenOrVisible);
+	 HTM_DIV_Begin ("class=\"PRG_TXT_%s%s\"",
+		        The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
+	    FAQ_WriteCellViewQaA (Node);
+	 HTM_DIV_End ();
 	 break;
       case Vie_EDIT:
 	 /***** Show form to change question & answer *****/
@@ -213,13 +214,9 @@ void FAQ_WriteCellNewQaA (void)
 /***************************** Write question ********************************/
 /*****************************************************************************/
 
-static void FAQ_WriteQuestion (const char Question[FAQ_MAX_BYTES_QUESTION + 1],
-			       HidVis_HiddenOrVisible_t HiddenOrVisible)
+static void FAQ_WriteQuestion (const char Question[FAQ_MAX_BYTES_QUESTION + 1])
   {
-   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
-
-   HTM_SPAN_Begin ("class=\"TRE_TIT PRG_TXT_%s%s\"",
-		   The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
+   HTM_SPAN_Begin ("class=\"TRE_TIT\"");
       HTM_Txt (Question);
    HTM_SPAN_End ();
   }
@@ -228,17 +225,13 @@ static void FAQ_WriteQuestion (const char Question[FAQ_MAX_BYTES_QUESTION + 1],
 /****************************** Write answer *********************************/
 /*****************************************************************************/
 
-static void FAQ_WriteAnswer (char Answer[Cns_MAX_BYTES_TEXT + 1],
-			     HidVis_HiddenOrVisible_t HiddenOrVisible)
+static void FAQ_WriteAnswer (char Answer[Cns_MAX_BYTES_TEXT + 1])
   {
-   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
-
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 		     Answer,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
    ALn_InsertLinks (Answer,Cns_MAX_BYTES_TEXT,60);	// Insert links
 
-   HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
-		  The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
+   HTM_DIV_Begin ("class=\"PAR\"");
       HTM_Txt (Answer);
    HTM_DIV_End ();
   }

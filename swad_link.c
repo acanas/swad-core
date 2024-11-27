@@ -69,12 +69,9 @@
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Lnk_WriteTitle (const char Title[Lnk_MAX_BYTES_TITLE + 1],
-			    HidVis_HiddenOrVisible_t HiddenOrVisible);
-static void Lnk_WriteDescription (const char Description[Lnk_MAX_BYTES_TITLE + 1],
-			          HidVis_HiddenOrVisible_t HiddenOrVisible);
-static void Lnk_WriteWWW (const struct Tre_Node *Node,
-			  HidVis_HiddenOrVisible_t HiddenOrVisible);
+static void Lnk_WriteTitle (const char Title[Lnk_MAX_BYTES_TITLE + 1]);
+static void Lnk_WriteDescription (const char Description[Lnk_MAX_BYTES_TITLE + 1]);
+static void Lnk_WriteWWW (const struct Tre_Node *Node);
 
 /*****************************************************************************/
 /******************* Reset specific fields of course link ********************/
@@ -127,14 +124,13 @@ void Lnk_GetCrsLinkDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
 /************************* Show one course link ******************************/
 /*****************************************************************************/
 
-void Lnk_WriteCellViewCrsLink (struct Tre_Node *Node,
-			       HidVis_HiddenOrVisible_t HiddenOrVisible)
+void Lnk_WriteCellViewCrsLink (struct Tre_Node *Node)
   {
-   Lnk_WriteTitle (Node->Lnk.Title,HiddenOrVisible);
+   Lnk_WriteTitle (Node->Lnk.Title);
    HTM_BR ();
-   Lnk_WriteDescription (Node->Lnk.Description,HiddenOrVisible);
+   Lnk_WriteDescription (Node->Lnk.Description);
    HTM_BR ();
-   Lnk_WriteWWW (Node,HiddenOrVisible);
+   Lnk_WriteWWW (Node);
   }
 
 /*****************************************************************************/
@@ -145,6 +141,7 @@ void Lnk_WriteCellEditCrsLink (struct Tre_Node *Node,
                                Vie_ViewType_t ViewType,
 			       HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
+   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Txt_Title;
    extern const char *Txt_Description;
    extern const char *Txt_URL;
@@ -154,7 +151,10 @@ void Lnk_WriteCellEditCrsLink (struct Tre_Node *Node,
      {
       case Vie_VIEW:
 	 /***** Show current course link *****/
-	 Lnk_WriteCellViewCrsLink (Node,HiddenOrVisible);
+	 HTM_DIV_Begin ("class=\"PRG_TXT_%s%s\"",
+		        The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
+	    Lnk_WriteCellViewCrsLink (Node);
+	 HTM_DIV_End ();
 	 break;
       case Vie_EDIT:
 	 /***** Show form to change course link *****/
@@ -233,37 +233,23 @@ void Lnk_WriteCellNewCrsLink (void)
 /******************* Write title, description and URL ************************/
 /*****************************************************************************/
 
-static void Lnk_WriteTitle (const char Title[Lnk_MAX_BYTES_TITLE + 1],
-			    HidVis_HiddenOrVisible_t HiddenOrVisible)
+static void Lnk_WriteTitle (const char Title[Lnk_MAX_BYTES_TITLE + 1])
   {
-   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
-
-   HTM_SPAN_Begin ("class=\"TRE_TIT PRG_TXT_%s%s\"",
-		   The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
+   HTM_SPAN_Begin ("class=\"TRE_TIT\"");
       HTM_Txt (Title);
    HTM_SPAN_End ();
   }
 
-static void Lnk_WriteDescription (const char Description[Lnk_MAX_BYTES_TITLE + 1],
-			          HidVis_HiddenOrVisible_t HiddenOrVisible)
+static void Lnk_WriteDescription (const char Description[Lnk_MAX_BYTES_TITLE + 1])
   {
-   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
-
-   HTM_SPAN_Begin ("class=\"PRG_TXT_%s%s\"",
-		   The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
-      HTM_Txt (Description);
-   HTM_SPAN_End ();
+   HTM_Txt (Description);
   }
 
-static void Lnk_WriteWWW (const struct Tre_Node *Node,
-			  HidVis_HiddenOrVisible_t HiddenOrVisible)
+static void Lnk_WriteWWW (const struct Tre_Node *Node)
   {
-   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
-
    HTM_A_Begin ("href=\"%s\" title=\"%s\" target=\"_blank\""
-	        " class=\"PAR PRG_TXT_%s%s\"",
-		Node->Lnk.WWW,Node->Lnk.Title,
-		The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
+	        " class=\"PAR\"",
+		Node->Lnk.WWW,Node->Lnk.Title);
       HTM_Txt (Node->Lnk.WWW);
    HTM_A_End ();
   }

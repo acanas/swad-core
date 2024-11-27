@@ -70,12 +70,7 @@
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Bib_WriteTitle (const char Title[Bib_MAX_BYTES_TITLE + 1],
-			    HidVis_HiddenOrVisible_t HiddenOrVisible);
-static void Bib_WriteDescription (const char Description[Bib_MAX_BYTES_TITLE + 1],
-			          HidVis_HiddenOrVisible_t HiddenOrVisible);
-static void Bib_WriteWWW (const struct Tre_Node *Node,
-			  HidVis_HiddenOrVisible_t HiddenOrVisible);
+static void Bib_WriteField (const char *Field,const char *Class);
 
 /*****************************************************************************/
 /************* Reset specific fields of bibliographic reference **************/
@@ -83,9 +78,13 @@ static void Bib_WriteWWW (const struct Tre_Node *Node,
 
 void Bib_ResetSpcFields (struct Tre_Node *Node)
   {
-   Node->Bib.Title[0] = '\0';
-   Node->Bib.Description[0] = '\0';
-   Node->Bib.WWW[0] = '\0';
+   Node->Bib.Authors[0]   = '\0';
+   Node->Bib.Title[0]     = '\0';
+   Node->Bib.Source[0]    = '\0';
+   Node->Bib.Publisher[0] = '\0';
+   Node->Bib.Date[0]      = '\0';
+   Node->Bib.Id[0]        = '\0';
+   Node->Bib.URL[0]       = '\0';
   }
 
 /*****************************************************************************/
@@ -99,13 +98,17 @@ void Bib_GetBibRefDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
    /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
    /*
-   NodCod	row[0]
-   BibCod	row[1]
-   BibInd	row[2]
-   Hidden	row[3]
-   Title	row[4]
-   Description	row[5]
-   WWW		row[6]
+   NodCod	row[ 0]
+   BibCod	row[ 1]
+   BibInd	row[ 2]
+   Hidden	row[ 3]
+   Authors	row[ 4]
+   Title	row[ 5]
+   Source	row[ 6]
+   Publisher	row[ 7]
+   Date		row[ 8]
+   Id		row[ 9]
+   URL		row[10]
    */
    /***** Get code of the tree node (row[0]) *****/
    Node->Hierarchy.NodCod = Str_ConvertStrCodToLongCod (row[0]);
@@ -117,25 +120,78 @@ void Bib_GetBibRefDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
    /***** Get whether the tree node is hidden (row(3)) *****/
    Node->SpcItem.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
 
-   /***** Get title, description and URL
-          of the bibliographic reference (row[4], row[5], row[6]) *****/
-   Str_Copy (Node->Bib.Title      ,row[4],sizeof (Node->Bib.Title      ) - 1);
-   Str_Copy (Node->Bib.Description,row[5],sizeof (Node->Bib.Description) - 1);
-   Str_Copy (Node->Bib.WWW        ,row[6],sizeof (Node->Bib.WWW        ) - 1);
+   /***** Get authors, title, source, publisher, date, id and URL
+          of the bibliographic reference (row[4]...row[10]) *****/
+   Str_Copy (Node->Bib.Authors  ,row[ 4],sizeof (Node->Bib.Authors  ) - 1);
+   Str_Copy (Node->Bib.Title    ,row[ 5],sizeof (Node->Bib.Title    ) - 1);
+   Str_Copy (Node->Bib.Source   ,row[ 6],sizeof (Node->Bib.Source   ) - 1);
+   Str_Copy (Node->Bib.Publisher,row[ 7],sizeof (Node->Bib.Publisher) - 1);
+   Str_Copy (Node->Bib.Date     ,row[ 8],sizeof (Node->Bib.Date     ) - 1);
+   Str_Copy (Node->Bib.Id       ,row[ 9],sizeof (Node->Bib.Id       ) - 1);
+   Str_Copy (Node->Bib.URL      ,row[10],sizeof (Node->Bib.URL      ) - 1);
   }
 
 /*****************************************************************************/
 /******************* Show one bibliographic reference ************************/
 /*****************************************************************************/
 
-void Bib_WriteCellViewBibRef (struct Tre_Node *Node,
-			      HidVis_HiddenOrVisible_t HiddenOrVisible)
+void Bib_WriteCellViewBibRef (struct Tre_Node *Node)
   {
-   Bib_WriteTitle (Node->Bib.Title,HiddenOrVisible);
-   HTM_BR ();
-   Bib_WriteDescription (Node->Bib.Description,HiddenOrVisible);
-   HTM_BR ();
-   Bib_WriteWWW (Node,HiddenOrVisible);
+   char *Fields[] =
+     {
+      Node->Bib.Authors,
+      Node->Bib.Title,
+      Node->Bib.Source,
+      Node->Bib.Publisher,
+      Node->Bib.Date,
+      Node->Bib.Id,
+     };
+#define NUM_FIELDS (sizeof (Fields) / sizeof (Fields[0]))
+   static const char *Class[] =
+     {
+      "",
+      "TRE_TIT",
+      "",
+      "",
+      "",
+      "",
+     };
+   unsigned NumField;
+   char EndingCh = '\0';
+   char *Field;
+   size_t Length;
+
+   /***** Write fields *****/
+   for (NumField = 0;
+	NumField < NUM_FIELDS;
+	NumField++)
+     {
+      Field = Fields[NumField];
+      Length = strlen (Field);
+      if (Length)
+	{
+	 if (EndingCh != '\0')
+	   {
+	    if (EndingCh != '.')
+	       HTM_Txt (".");
+	    HTM_Txt (" ");
+	   }
+	 Bib_WriteField (Field,Class[NumField]);
+	 EndingCh = Field[Length - 1];
+	}
+     }
+   if (EndingCh != '\0')
+      if (EndingCh != '.')
+	 HTM_Txt (".");
+
+   /***** Write URL *****/
+   if (Node->Bib.URL[0])
+     {
+      HTM_BR ();
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Node->Bib.URL);
+         HTM_Txt (Node->Bib.URL);
+      HTM_A_End ();
+     }
   }
 
 /*****************************************************************************/
@@ -146,41 +202,77 @@ void Bib_WriteCellEditBibRef (struct Tre_Node *Node,
                               Vie_ViewType_t ViewType,
 			      HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   extern const char *Txt_Title;
-   extern const char *Txt_Description;
-   extern const char *Txt_URL;
+   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *Txt_BIBLIOGRAPHY_Authors;
+   extern const char *Txt_BIBLIOGRAPHY_Title;
+   extern const char *Txt_BIBLIOGRAPHY_Source;
+   extern const char *Txt_BIBLIOGRAPHY_Publisher;
+   extern const char *Txt_BIBLIOGRAPHY_Date;
+   extern const char *Txt_BIBLIOGRAPHY_Id;
+   extern const char *Txt_BIBLIOGRAPHY_URL;
    extern const char *Txt_Save_changes;
 
    switch (ViewType)
      {
       case Vie_VIEW:
 	 /***** Show current bibliographic reference *****/
-	 Bib_WriteCellViewBibRef (Node,HiddenOrVisible);
+	 HTM_DIV_Begin ("class=\"PRG_TXT_%s%s\"",
+		        The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
+	    Bib_WriteCellViewBibRef (Node);
+	 HTM_DIV_End ();
 	 break;
       case Vie_EDIT:
 	 /***** Show form to change bibliographic reference *****/
 	 Frm_BeginFormAnchor (ActChgBibRef,TreSpc_LIST_ITEMS_SECTION_ID);
 	    TreSpc_PutParItmCod (&Node->SpcItem.Cod);
 
-	    /* Title */
-	    HTM_INPUT_TEXT ("Title",Bib_MAX_CHARS_TITLE,Node->Bib.Title,
+	    /* Authors */
+	    HTM_INPUT_TEXT ("Authors",Bib_MAX_CHARS_TITLE,Node->Bib.Authors,
 			    HTM_NO_ATTR,
 			    "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-			    Txt_Title,The_GetSuffix ());
+			    Txt_BIBLIOGRAPHY_Authors,The_GetSuffix ());
 
-	    /* Description */
+	    /* Title */
 	    HTM_BR ();
-	    HTM_INPUT_TEXT ("Description",Bib_MAX_CHARS_TITLE,Node->Bib.Description,
+	    HTM_INPUT_TEXT ("Title",Bib_MAX_CHARS_TITLE,Node->Bib.Title,
+			    HTM_REQUIRED,
+			    "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+			    Txt_BIBLIOGRAPHY_Title,The_GetSuffix ());
+
+	    /* Source */
+	    HTM_BR ();
+	    HTM_INPUT_TEXT ("Source",Bib_MAX_CHARS_TITLE,Node->Bib.Source,
 			    HTM_NO_ATTR,
 			    "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-			    Txt_Description,The_GetSuffix ());
+			    Txt_BIBLIOGRAPHY_Source,The_GetSuffix ());
+
+	    /* Publisher */
+	    HTM_BR ();
+	    HTM_INPUT_TEXT ("Publisher",Bib_MAX_CHARS_TITLE,Node->Bib.Publisher,
+			    HTM_NO_ATTR,
+			    "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+			    Txt_BIBLIOGRAPHY_Publisher,The_GetSuffix ());
+
+	    /* Date */
+	    HTM_BR ();
+	    HTM_INPUT_TEXT ("Date",Bib_MAX_CHARS_TITLE,Node->Bib.Date,
+			    HTM_NO_ATTR,
+			    "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+			    Txt_BIBLIOGRAPHY_Date,The_GetSuffix ());
+
+	    /* Id */
+	    HTM_BR ();
+	    HTM_INPUT_TEXT ("Id",Bib_MAX_CHARS_TITLE,Node->Bib.Id,
+			    HTM_NO_ATTR,
+			    "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+			    Txt_BIBLIOGRAPHY_Id,The_GetSuffix ());
 
 	    /* URL */
 	    HTM_BR ();
-	    HTM_INPUT_URL ("WWW",Node->Bib.WWW,
-			   HTM_REQUIRED,
+	    HTM_INPUT_URL ("URL",Node->Bib.URL,
+			   HTM_NO_ATTR,
 			   " placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-			   Txt_URL,The_GetSuffix ());
+			   Txt_BIBLIOGRAPHY_URL,The_GetSuffix ());
 
 	    /* Button to save changes */
 	    HTM_BR ();
@@ -200,30 +292,62 @@ void Bib_WriteCellEditBibRef (struct Tre_Node *Node,
 
 void Bib_WriteCellNewBibRef (void)
   {
-   extern const char *Txt_Title;
-   extern const char *Txt_Description;
-   extern const char *Txt_URL;
+   extern const char *Txt_BIBLIOGRAPHY_Authors;
+   extern const char *Txt_BIBLIOGRAPHY_Title;
+   extern const char *Txt_BIBLIOGRAPHY_Source;
+   extern const char *Txt_BIBLIOGRAPHY_Publisher;
+   extern const char *Txt_BIBLIOGRAPHY_Date;
+   extern const char *Txt_BIBLIOGRAPHY_Id;
+   extern const char *Txt_BIBLIOGRAPHY_URL;
    extern const char *Txt_Save_changes;
 
-   /***** Title *****/
-   HTM_INPUT_TEXT ("Title",Bib_MAX_CHARS_TITLE,"",
+   /***** Authors *****/
+   HTM_INPUT_TEXT ("Authors",Bib_MAX_CHARS_TITLE,"",
 		   HTM_NO_ATTR,
 		   "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-		   Txt_Title,The_GetSuffix ());
+		   Txt_BIBLIOGRAPHY_Authors,The_GetSuffix ());
 
-   /***** Description *****/
+   /***** Title *****/
    HTM_BR ();
-   HTM_INPUT_TEXT ("Description",Bib_MAX_CHARS_TITLE,"",
+   HTM_INPUT_TEXT ("Title",Bib_MAX_CHARS_TITLE,"",
+		   HTM_REQUIRED,
+		   "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+		   Txt_BIBLIOGRAPHY_Title,The_GetSuffix ());
+
+   /***** Source *****/
+   HTM_BR ();
+   HTM_INPUT_TEXT ("Source",Bib_MAX_CHARS_TITLE,"",
 		   HTM_NO_ATTR,
 		   "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-		   Txt_Description,The_GetSuffix ());
+		   Txt_BIBLIOGRAPHY_Source,The_GetSuffix ());
+
+   /***** Publisher *****/
+   HTM_BR ();
+   HTM_INPUT_TEXT ("Publisher",Bib_MAX_CHARS_TITLE,"",
+		   HTM_NO_ATTR,
+		   "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+		   Txt_BIBLIOGRAPHY_Publisher,The_GetSuffix ());
+
+   /***** Date *****/
+   HTM_BR ();
+   HTM_INPUT_TEXT ("Date",Bib_MAX_CHARS_TITLE,"",
+		   HTM_NO_ATTR,
+		   "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+		   Txt_BIBLIOGRAPHY_Date,The_GetSuffix ());
+
+   /***** Id *****/
+   HTM_BR ();
+   HTM_INPUT_TEXT ("Id",Bib_MAX_CHARS_TITLE,"",
+		   HTM_NO_ATTR,
+		   "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+		   Txt_BIBLIOGRAPHY_Id,The_GetSuffix ());
 
    /***** URL *****/
    HTM_BR ();
-   HTM_INPUT_URL ("WWW","",
-		  HTM_REQUIRED,
+   HTM_INPUT_URL ("URL","",
+		  HTM_NO_ATTR,
 		  " placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-		  Txt_URL,The_GetSuffix ());
+		  Txt_BIBLIOGRAPHY_URL,The_GetSuffix ());
 
    /***** Button to save changes *****/
    HTM_BR ();
@@ -231,42 +355,16 @@ void Bib_WriteCellNewBibRef (void)
   }
 
 /*****************************************************************************/
-/******************* Write title, description and URL ************************/
+/************************* Write authors, title,... **************************/
 /*****************************************************************************/
 
-static void Bib_WriteTitle (const char Title[Bib_MAX_BYTES_TITLE + 1],
-			    HidVis_HiddenOrVisible_t HiddenOrVisible)
+static void Bib_WriteField (const char *Field,const char *Class)
   {
-   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
-
-   HTM_SPAN_Begin ("class=\"TRE_TIT PRG_TXT_%s%s\"",
-		   The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
-      HTM_Txt (Title);
-   HTM_SPAN_End ();
-  }
-
-static void Bib_WriteDescription (const char Description[Bib_MAX_BYTES_TITLE + 1],
-			          HidVis_HiddenOrVisible_t HiddenOrVisible)
-  {
-   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
-
-   HTM_SPAN_Begin ("class=\"PRG_TXT_%s%s\"",
-		   The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
-      HTM_Txt (Description);
-   HTM_SPAN_End ();
-  }
-
-static void Bib_WriteWWW (const struct Tre_Node *Node,
-			  HidVis_HiddenOrVisible_t HiddenOrVisible)
-  {
-   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
-
-   HTM_A_Begin ("href=\"%s\" title=\"%s\" target=\"_blank\""
-	        " class=\"PAR PRG_TXT_%s%s\"",
-		Node->Bib.WWW,Node->Bib.Title,
-		The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
-      HTM_Txt (Node->Bib.WWW);
-   HTM_A_End ();
+   if (Class)
+      HTM_SPAN_Begin ("class=\"%s\"",Class);
+   HTM_Txt (Field);
+   if (Class)
+      HTM_SPAN_End ();
   }
 
 /*****************************************************************************/
@@ -275,10 +373,14 @@ static void Bib_WriteWWW (const struct Tre_Node *Node,
 
 void Bib_CreateBibRef (struct Tre_Node *Node)
   {
-   /***** Get title, description and URL for the new bibliographic reference *****/
+   /***** Get fields for the new bibliographic reference *****/
+   Par_GetParText ("Authors"    ,Node->Bib.Authors    ,Bib_MAX_BYTES_TITLE);
    Par_GetParText ("Title"      ,Node->Bib.Title      ,Bib_MAX_BYTES_TITLE);
-   Par_GetParText ("Description",Node->Bib.Description,Bib_MAX_BYTES_TITLE);
-   Par_GetParText ("WWW"        ,Node->Bib.WWW        ,WWW_MAX_BYTES_WWW);
+   Par_GetParText ("Source"     ,Node->Bib.Source     ,Bib_MAX_BYTES_TITLE);
+   Par_GetParText ("Publisher"  ,Node->Bib.Publisher  ,Bib_MAX_BYTES_TITLE);
+   Par_GetParText ("Date"       ,Node->Bib.Date       ,Bib_MAX_BYTES_TITLE);
+   Par_GetParText ("Id"         ,Node->Bib.Id         ,Bib_MAX_BYTES_TITLE);
+   Par_GetParText ("URL"        ,Node->Bib.URL        ,WWW_MAX_BYTES_WWW);
 
    /***** Create bibliographic reference *****/
    Node->SpcItem.Cod = Bib_DB_CreateBibRef (Node);
@@ -290,10 +392,14 @@ void Bib_CreateBibRef (struct Tre_Node *Node)
 
 void Bib_ChangeBibRef (struct Tre_Node *Node)
   {
-   /***** Get title, description and URL *****/
+   /***** Get fields for the bibliographic reference *****/
+   Par_GetParText ("Authors"    ,Node->Bib.Authors    ,Bib_MAX_BYTES_TITLE);
    Par_GetParText ("Title"      ,Node->Bib.Title      ,Bib_MAX_BYTES_TITLE);
-   Par_GetParText ("Description",Node->Bib.Description,Bib_MAX_BYTES_TITLE);
-   Par_GetParText ("WWW"        ,Node->Bib.WWW        ,WWW_MAX_BYTES_WWW);
+   Par_GetParText ("Source"     ,Node->Bib.Source     ,Bib_MAX_BYTES_TITLE);
+   Par_GetParText ("Publisher"  ,Node->Bib.Publisher  ,Bib_MAX_BYTES_TITLE);
+   Par_GetParText ("Date"       ,Node->Bib.Date       ,Bib_MAX_BYTES_TITLE);
+   Par_GetParText ("Id"         ,Node->Bib.Id         ,Bib_MAX_BYTES_TITLE);
+   Par_GetParText ("URL"        ,Node->Bib.URL        ,WWW_MAX_BYTES_WWW);
 
    /***** Update answer *****/
    Bib_DB_UpdateBibRef (Node);

@@ -46,14 +46,20 @@ long Bib_DB_CreateBibRef (const struct Tre_Node *Node)
    return
    DB_QueryINSERTandReturnCode ("can not create new bibliographic reference",
 				"INSERT INTO crs_bibliography"
-				" (NodCod,BibInd,Hidden,Title,Description,WWW)"
-				" SELECT %ld,COALESCE(MAX(t2.BibInd),0)+1,'N','%s','%s','%s'"
+				" (NodCod,BibInd,Hidden,"
+				  "Authors,Title,Source,Publisher,Date,Id,URL)"
+				" SELECT %ld,COALESCE(MAX(t2.BibInd),0)+1,'N',"
+				        "'%s','%s','%s','%s','%s','%s','%s'"
 				  " FROM crs_bibliography AS t2"
 				 " WHERE t2.NodCod=%ld",
 				Node->Hierarchy.NodCod,
-				Node->Lnk.Title,
-				Node->Lnk.Description,
-				Node->Lnk.WWW,
+				Node->Bib.Authors,
+				Node->Bib.Title,
+				Node->Bib.Source,
+				Node->Bib.Publisher,
+				Node->Bib.Date,
+				Node->Bib.Id,
+				Node->Bib.URL,
 				Node->Hierarchy.NodCod);
   }
 
@@ -73,13 +79,17 @@ unsigned Bib_DB_GetListBibRefs (MYSQL_RES **mysql_res,long NodCod,
 
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get node bibliographic references",
-		   "SELECT crs_bibliography.NodCod,"		// row[0]
-			  "crs_bibliography.BibCod,"		// row[1]
-                          "crs_bibliography.BibInd,"		// row[2]
-			  "crs_bibliography.Hidden,"		// row[3]
-			  "crs_bibliography.Title,"		// row[4]
-			  "crs_bibliography.Description,"	// row[5]
-			  "crs_bibliography.WWW"		// row[6]
+		   "SELECT crs_bibliography.NodCod,"	// row[ 0]
+			  "crs_bibliography.BibCod,"	// row[ 1]
+                          "crs_bibliography.BibInd,"	// row[ 2]
+			  "crs_bibliography.Hidden,"	// row[ 3]
+			  "crs_bibliography.Authors,"	// row[ 4]
+			  "crs_bibliography.Title,"	// row[ 5]
+			  "crs_bibliography.Source,"	// row[ 6]
+			  "crs_bibliography.Publisher,"	// row[ 7]
+			  "crs_bibliography.Date,"	// row[ 8]
+			  "crs_bibliography.Id,"	// row[ 9]
+			  "crs_bibliography.URL"	// row[10]
 		    " FROM crs_bibliography,"
 		          "tre_nodes"
 		   " WHERE crs_bibliography.NodCod=%ld"
@@ -91,7 +101,7 @@ unsigned Bib_DB_GetListBibRefs (MYSQL_RES **mysql_res,long NodCod,
 		   NodCod,
 		   HiddenSubQuery[ShowHiddenBibRefs],
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_LINKS]);
+		   Tre_DB_Types[Inf_BIBLIOGRAPHY]);
   }
 
 /*****************************************************************************/
@@ -104,13 +114,17 @@ unsigned Bib_DB_GetBibRefDataByCod (MYSQL_RES **mysql_res,long BibCod)
 
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get node bibliographic reference data",
-		   "SELECT crs_bibliography.NodCod,"		// row[0]
-			  "crs_bibliography.BibCod,"		// row[1]
-                          "crs_bibliography.BibInd,"		// row[2]
-			  "crs_bibliography.Hidden,"		// row[3]
-			  "crs_bibliography.Title,"		// row[4]
-			  "crs_bibliography.Description,"	// row[5]
-			  "crs_bibliography.WWW"		// row[6]
+		   "SELECT crs_bibliography.NodCod,"	// row[ 0]
+			  "crs_bibliography.BibCod,"	// row[ 1]
+                          "crs_bibliography.BibInd,"	// row[ 2]
+			  "crs_bibliography.Hidden,"	// row[ 3]
+			  "crs_bibliography.Authors,"	// row[ 4]
+			  "crs_bibliography.Title,"	// row[ 5]
+			  "crs_bibliography.Source,"	// row[ 6]
+			  "crs_bibliography.Publisher,"	// row[ 7]
+			  "crs_bibliography.Date,"	// row[ 8]
+			  "crs_bibliography.Id,"	// row[ 9]
+			  "crs_bibliography.URL"	// row[10]
 		    " FROM crs_bibliography,"
 		          "tre_nodes"
 		   " WHERE crs_bibliography.BibCod=%ld"
@@ -119,7 +133,7 @@ unsigned Bib_DB_GetBibRefDataByCod (MYSQL_RES **mysql_res,long BibCod)
 		     " AND tre_nodes.Type='%s'",	// Extra check
 		   BibCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_LINKS]);
+		   Tre_DB_Types[Inf_BIBLIOGRAPHY]);
   }
 
 /*****************************************************************************/
@@ -191,7 +205,7 @@ void Bib_DB_RemoveBibRef (const struct Tre_Node *Node)
 		   Node->SpcItem.Cod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_LINKS]);
+		   Tre_DB_Types[Inf_BIBLIOGRAPHY]);
   }
 
 /*****************************************************************************/
@@ -217,7 +231,7 @@ void Bib_DB_HideOrUnhideBibRef (const struct Tre_Node *Node,
 		   Node->SpcItem.Cod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_LINKS]);
+		   Tre_DB_Types[Inf_BIBLIOGRAPHY]);
   }
 
 /*****************************************************************************/
@@ -253,7 +267,7 @@ void Bib_DB_UpdateBibInd (const struct Tre_Node *Node,long BibCod,int BibInd)
 		   BibCod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_LINKS]);
+		   Tre_DB_Types[Inf_BIBLIOGRAPHY]);
   }
 
 /*****************************************************************************/
@@ -267,19 +281,27 @@ void Bib_DB_UpdateBibRef (const struct Tre_Node *Node)
    DB_QueryUPDATE ("can not update bibliographic reference",
 		   "UPDATE crs_bibliography,"
 		          "tre_nodes"
-		     " SET crs_bibliography.Title='%s',"
-		          "crs_bibliography.Description='%s',"
-		          "crs_bibliography.WWW='%s'"
+		     " SET crs_bibliography.Authors='%s',"
+			  "crs_bibliography.Title='%s',"
+			  "crs_bibliography.Source='%s',"
+			  "crs_bibliography.Publisher='%s',"
+			  "crs_bibliography.Date='%s',"
+			  "crs_bibliography.Id='%s',"
+			  "crs_bibliography.URL='%s'"
 		   " WHERE crs_bibliography.BibCod=%ld"
 		     " AND crs_bibliography.NodCod=%ld"
 		     " AND crs_bibliography.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   Node->Lnk.Title,
-		   Node->Lnk.Description,
-		   Node->Lnk.WWW,
+		   Node->Bib.Authors,
+		   Node->Bib.Title,
+		   Node->Bib.Source,
+		   Node->Bib.Publisher,
+		   Node->Bib.Date,
+		   Node->Bib.Id,
+		   Node->Bib.URL,
 		   Node->SpcItem.Cod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_LINKS]);
+		   Tre_DB_Types[Inf_BIBLIOGRAPHY]);
   }

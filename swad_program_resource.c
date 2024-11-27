@@ -94,13 +94,9 @@ void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
 /***************************** Show one resource *****************************/
 /*****************************************************************************/
 
-void PrgRsc_WriteCellViewResource (struct Tre_Node *Node,
-                                   HidVis_HiddenOrVisible_t HiddenOrVisible)
+void PrgRsc_WriteCellViewResource (struct Tre_Node *Node)
   {
-   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
-
-   HTM_SPAN_Begin ("class=\"TRE_TIT PRG_TXT_%s%s\"",
-		   The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
+   HTM_SPAN_Begin ("class=\"TRE_TIT\"");
       HTM_Txt (Node->Resource.Title);
    HTM_SPAN_End ();
    HTM_BR ();
@@ -115,12 +111,17 @@ void PrgRsc_WriteCellEditResource (struct Tre_Node *Node,
 				   Vie_ViewType_t ViewType,
 				   __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
+   extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
+
    /***** Show current link / Show clipboard to change resource link *****/
    switch (ViewType)
      {
       case Vie_VIEW:
 	 /* Show current link */
-	 PrgRsc_WriteCellViewResource (Node,HiddenOrVisible);
+	 HTM_DIV_Begin ("class=\"PRG_TXT_%s%s\"",
+		        The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
+	    PrgRsc_WriteCellViewResource (Node);
+	 HTM_DIV_End ();
 	 break;
       case Vie_EDIT:
 	 /* Title */

@@ -620,27 +620,35 @@ mysql> DESCRIBE cht_rooms;
    /***** Table crs_bibliography *****/
 /*
 mysql> DESCRIBE crs_bibliography;
-+-------------+---------------+------+-----+---------+----------------+
-| Field       | Type          | Null | Key | Default | Extra          |
-+-------------+---------------+------+-----+---------+----------------+
-| BibCod      | int           | NO   | PRI | NULL    | auto_increment |
-| NodCod      | int           | NO   | MUL | -1      |                |
-| BibInd      | int           | NO   |     | 0       |                |
-| Hidden      | enum('N','Y') | NO   |     | N       |                |
-| Title       | varchar(2047) | NO   |     | NULL    |                |
-| Description | varchar(2047) | NO   |     | NULL    |                |
-| WWW         | varchar(255)  | NO   |     | NULL    |                |
-+-------------+---------------+------+-----+---------+----------------+
-7 rows in set (0,00 sec)
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| BibCod    | int           | NO   | PRI | NULL    | auto_increment |
+| NodCod    | int           | NO   | MUL | -1      |                |
+| BibInd    | int           | NO   |     | 0       |                |
+| Hidden    | enum('N','Y') | NO   |     | N       |                |
+| Authors   | varchar(2047) | NO   |     | NULL    |                |
+| Title     | varchar(2047) | NO   |     | NULL    |                |
+| Source    | varchar(2047) | NO   |     | NULL    |                |
+| Publisher | varchar(2047) | NO   |     | NULL    |                |
+| Date      | varchar(2047) | NO   |     | NULL    |                |
+| Id        | varchar(2047) | NO   |     | NULL    |                |
+| URL       | varchar(255)  | NO   |     | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+11 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_bibliography ("
 			"BibCod INT NOT NULL AUTO_INCREMENT,"
 			"NodCod INT NOT NULL DEFAULT -1,"
 			"BibInd INT NOT NULL DEFAULT 0,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"Authors VARCHAR(2047) NOT NULL,"	// Bib_MAX_BYTES_TITLE
 			"Title VARCHAR(2047) NOT NULL,"		// Bib_MAX_BYTES_TITLE
-			"Description VARCHAR(2047) NOT NULL,"	// Bib_MAX_BYTES_TITLE
-			"WWW VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
+			"Source VARCHAR(2047) NOT NULL,"	// Bib_MAX_BYTES_TITLE
+			"Publisher VARCHAR(2047) NOT NULL,"	// Bib_MAX_BYTES_TITLE
+			"Date VARCHAR(2047) NOT NULL,"		// Bib_MAX_BYTES_TITLE
+			"Id VARCHAR(2047) NOT NULL,"		// Bib_MAX_BYTES_TITLE
+			"URL VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
 		   "UNIQUE INDEX(BibCod),"
 		   "UNIQUE INDEX(NodCod,BibInd))");
 

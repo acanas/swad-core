@@ -3722,6 +3722,167 @@ const char *Txt_Bibliographic_references =
 	"Bibliyografik referanslar";
 #endif
 
+const char *Txt_BIBLIOGRAPHY_Authors =
+#if   L==1	// ca
+	"Autors";
+#elif L==2	// de
+	"Autoren/rinnen";
+#elif L==3	// en
+	"Authors";
+#elif L==4	// es
+	"Autores/as";
+#elif L==5	// fr
+	"Auteurs/es";
+#elif L==6	// gn
+	"Haih&aacute;ra";
+#elif L==7	// it
+	"Autori/trici";
+#elif L==8	// pl
+	"Autorski";
+#elif L==9	// pt
+	"Autores/as";
+#elif L==10	// tr
+	"Yazarlar";
+#endif
+
+const char *Txt_BIBLIOGRAPHY_Date =
+#if   L==1	// ca
+	"Data (normalment any)";
+#elif L==2	// de
+	"Datum (normalerweise Jahr)";
+#elif L==3	// en
+	"Date (usually year)";
+#elif L==4	// es
+	"Fecha (normalmente a&ntilde;o)";
+#elif L==5	// fr
+	"Date (g&eacute;n&eacute;ralement l'ann&eacute;e)";
+#elif L==6	// gn
+	"&Aacute;ra (jepivegua ary)";
+#elif L==7	// it
+	"Data (solitamente anno)";
+#elif L==8	// pl
+	"Data (zwykle rok)";
+#elif L==9	// pt
+	"Data (geralmente ano)";
+#elif L==10	// tr
+	"Tarih (genellikle y&iacute;l)";
+#endif
+
+const char *Txt_BIBLIOGRAPHY_Id =
+#if   L==1	// ca
+	"Identificador (ISBN, ISSN, DOI...)";
+#elif L==2	// de
+	"Kennung (ISBN, ISSN, DOI...)";
+#elif L==3	// en
+	"Identifier (ISBN, ISSN, DOI...)";
+#elif L==4	// es
+	"Identificador (ISBN, ISSN, DOI...)";
+#elif L==5	// fr
+	"Identifiant (ISBN, ISSN, DOI...)";
+#elif L==6	// gn
+	"Identificador (ISBN, ISSN, DOI...) ";
+#elif L==7	// it
+	"Identificatore (ISBN, ISSN, DOI...)";
+#elif L==8	// pl
+	"Identyfikator (ISBN, ISSN, DOI...)";
+#elif L==9	// pt
+	"Identificador (ISBN, ISSN, DOI...)";
+#elif L==10	// tr
+	"Tan&inodot;mlay&inodot;c&inodot; (ISBN, ISSN, DOI...)";
+#endif
+
+const char *Txt_BIBLIOGRAPHY_Publisher =
+#if   L==1	// ca
+	"Editorial (empresa, organisme, lloc...)";
+#elif L==2	// de
+	"Herausgeber (Firma, Organisation, Ort...)";
+#elif L==3	// en
+	"Publisher (company, organization, place...)";
+#elif L==4	// es
+	"Editorial (empresa, organismo, lugar...)";
+#elif L==5	// fr
+	"Editeur (entreprise, organisme, lieu...)";
+#elif L==6	// gn
+	"Editor (empresa, organizaci&oacute;n, tenda...)";
+#elif L==7	// it
+	"Editore (azienda, organizzazione, luogo...)";
+#elif L==8	// pl
+	"Wydawca (firma, organizacja, miejsce...)";
+#elif L==9	// pt
+	"Editora (empresa, organiza&ccedil;&atilde;o, local...)";
+#elif L==10	// tr
+	"Yay&inodot;mc&inodot; (yay&inodot;nevi, yer...)";
+#endif
+
+const char *Txt_BIBLIOGRAPHY_Source =
+#if   L==1	// ca
+	"Font (col·lecci&oacute;, llibre, volum, p&agrave;gines...)";
+#elif L==2	// de
+	"Quelle (Sammlung, Buch, Band, Seiten...)";
+#elif L==3	// en
+	"Source (collection, book, volume, pages...)";
+#elif L==4	// es
+	"Fuente (colecci&oacute;n, libro, volumen, p&aacute;ginas...)";
+#elif L==5	// fr
+	"Source (collection, livre, volume, pages...)";
+#elif L==6	// gn
+	"Fuente (colecci&oacute;n, aranduka, volumen, p&aacute;ginas...)";
+#elif L==7	// it
+	"Fonte (raccolta, libro, volume, pagine...)";
+#elif L==8	// pl
+	"&Zdot;r&oacute;d&lstrok;o (zbi&oacute;r, ksi&aogon;&zdot;ka, tom, strony...)";
+#elif L==9	// pt
+	"Fonte (colec&ccedil;&atilde;o, livro, volume, p&aacute;ginas...)";
+#elif L==10	// tr
+	"Kaynak (koleksiyon, kitap, cilt, sayfa say&inodot;s&inodot;...)";
+#endif
+
+const char *Txt_BIBLIOGRAPHY_Title =
+#if   L==1	// ca
+	"T&iacute;tol";
+#elif L==2	// de
+	"Titel";
+#elif L==3	// en
+	"Title";
+#elif L==4	// es
+	"T&iacute;tulo";
+#elif L==5	// fr
+	"Titre";
+#elif L==6	// gn
+	"Moak&atilde;ha";
+#elif L==7	// it
+	"Titolo";
+#elif L==8	// pl
+	"Tytu&lstrok;";
+#elif L==9	// pt
+	"T&iacute;tulo";
+#elif L==10	// tr
+	"Ba&scedil;l&inodot;k";
+#endif
+
+const char *Txt_BIBLIOGRAPHY_URL =
+#if   L==1	// ca
+	"URL";
+#elif L==2	// de
+	"URL";
+#elif L==3	// en
+	"URL";
+#elif L==4	// es
+	"URL";
+#elif L==5	// fr
+	"URL";
+#elif L==6	// gn
+	"URL";
+#elif L==7	// it
+	"URL";
+#elif L==8	// pl
+	"URL";
+#elif L==9	// pt
+	"URL";
+#elif L==10	// tr
+	"URL";
+#endif
+
 const char *Txt_Briefcase_of_THE_USER_X_has_been_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"S'ha eliminat el malet&iacute; de <strong>%s</strong>.";
@@ -7628,7 +7789,7 @@ const char *Txt_Date =
 #elif L==9	// pt
 	"Data";
 #elif L==10	// tr
-	"Date";	// Çeviri lazim!
+	"Tarih";
 #endif
 
 const char *Txt_Date_and_time =
@@ -55947,7 +56108,7 @@ const char *Txt_URL =		// Uniform Resource Locator
 #elif L==5	// fr
 	"URL";
 #elif L==6	// gn
-	"URL";	// Okoteve traducción
+	"URL";
 #elif L==7	// it
 	"URL";
 #elif L==8	// pl
@@ -55955,7 +56116,7 @@ const char *Txt_URL =		// Uniform Resource Locator
 #elif L==9	// pt
 	"URL";
 #elif L==10	// tr
-	"URL";	// Çeviri lazim!
+	"URL";
 #endif
 
 const char *Txt_Use_this_email =
