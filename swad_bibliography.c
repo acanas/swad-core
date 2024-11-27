@@ -67,6 +67,37 @@
 #include "swad_view.h"
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+extern const char *Txt_BIBLIOGRAPHY_Authors;
+extern const char *Txt_BIBLIOGRAPHY_Title;
+extern const char *Txt_BIBLIOGRAPHY_Source;
+extern const char *Txt_BIBLIOGRAPHY_Publisher;
+extern const char *Txt_BIBLIOGRAPHY_Date;
+extern const char *Txt_BIBLIOGRAPHY_Id;
+
+static const char *Bib_FormNames[Bib_NUM_FIELDS] =
+  {
+   [Bib_AUTHORS		] = "Authors",
+   [Bib_TITLE		] = "Title",
+   [Bib_SOURCE		] = "Source",
+   [Bib_PUBLISHER	] = "Publisher",
+   [Bib_DATE		] = "Date",
+   [Bib_ID		] = "Id",
+  };
+
+static const char **Bib_Placeholders[Bib_NUM_FIELDS] =
+  {
+   [Bib_AUTHORS		] = &Txt_BIBLIOGRAPHY_Authors,
+   [Bib_TITLE		] = &Txt_BIBLIOGRAPHY_Title,
+   [Bib_SOURCE		] = &Txt_BIBLIOGRAPHY_Source,
+   [Bib_PUBLISHER	] = &Txt_BIBLIOGRAPHY_Publisher,
+   [Bib_DATE		] = &Txt_BIBLIOGRAPHY_Date,
+   [Bib_ID		] = &Txt_BIBLIOGRAPHY_Id,
+  };
+
+/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
@@ -78,13 +109,13 @@ static void Bib_WriteField (const char *Field,const char *Class);
 
 void Bib_ResetSpcFields (struct Tre_Node *Node)
   {
-   Node->Bib.Authors[0]   = '\0';
-   Node->Bib.Title[0]     = '\0';
-   Node->Bib.Source[0]    = '\0';
-   Node->Bib.Publisher[0] = '\0';
-   Node->Bib.Date[0]      = '\0';
-   Node->Bib.Id[0]        = '\0';
-   Node->Bib.URL[0]       = '\0';
+   unsigned NumField;
+
+   for (NumField = 0;
+	NumField < Bib_NUM_FIELDS;
+	NumField++)
+      Node->Bib.Fields[NumField][0] = '\0';
+   Node->Bib.URL[0] = '\0';
   }
 
 /*****************************************************************************/
@@ -94,6 +125,7 @@ void Bib_ResetSpcFields (struct Tre_Node *Node)
 void Bib_GetBibRefDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
   {
    MYSQL_ROW row;
+   unsigned NumField;
 
    /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
@@ -122,13 +154,11 @@ void Bib_GetBibRefDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
 
    /***** Get authors, title, source, publisher, date, id and URL
           of the bibliographic reference (row[4]...row[10]) *****/
-   Str_Copy (Node->Bib.Authors  ,row[ 4],sizeof (Node->Bib.Authors  ) - 1);
-   Str_Copy (Node->Bib.Title    ,row[ 5],sizeof (Node->Bib.Title    ) - 1);
-   Str_Copy (Node->Bib.Source   ,row[ 6],sizeof (Node->Bib.Source   ) - 1);
-   Str_Copy (Node->Bib.Publisher,row[ 7],sizeof (Node->Bib.Publisher) - 1);
-   Str_Copy (Node->Bib.Date     ,row[ 8],sizeof (Node->Bib.Date     ) - 1);
-   Str_Copy (Node->Bib.Id       ,row[ 9],sizeof (Node->Bib.Id       ) - 1);
-   Str_Copy (Node->Bib.URL      ,row[10],sizeof (Node->Bib.URL      ) - 1);
+   for (NumField = 0;
+	NumField < Bib_NUM_FIELDS;
+	NumField++)
+      Str_Copy (Node->Bib.Fields[NumField],row[4 + NumField],Bib_MAX_BYTES_FIELD);
+   Str_Copy (Node->Bib.URL,row[4 + Bib_NUM_FIELDS],sizeof (Node->Bib.URL) - 1);
   }
 
 /*****************************************************************************/
@@ -137,52 +167,35 @@ void Bib_GetBibRefDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
 
 void Bib_WriteCellViewBibRef (struct Tre_Node *Node)
   {
-   char *Fields[] =
+   static const char *Class[Bib_NUM_FIELDS] =
      {
-      Node->Bib.Authors,
-      Node->Bib.Title,
-      Node->Bib.Source,
-      Node->Bib.Publisher,
-      Node->Bib.Date,
-      Node->Bib.Id,
-     };
-#define NUM_FIELDS (sizeof (Fields) / sizeof (Fields[0]))
-   static const char *Class[] =
-     {
-      "",
-      "TRE_TIT",
-      "",
-      "",
-      "",
-      "",
+      [Bib_TITLE] = "TRE_TIT",
      };
    unsigned NumField;
-   char EndingCh = '\0';
-   char *Field;
+   char EndingCh;
    size_t Length;
 
    /***** Write fields *****/
-   for (NumField = 0;
-	NumField < NUM_FIELDS;
+   for (NumField = 0, EndingCh = '\0';
+	NumField < Bib_NUM_FIELDS;
 	NumField++)
-     {
-      Field = Fields[NumField];
-      Length = strlen (Field);
-      if (Length)
+      if ((Length = strlen (Node->Bib.Fields[NumField])) != 0)
 	{
+         /* Put dot before field? */
 	 if (EndingCh != '\0')
 	   {
 	    if (EndingCh != '.')
-	       HTM_Txt (".");
-	    HTM_Txt (" ");
+	       HTM_Dot ();
+	    HTM_SP ();
 	   }
-	 Bib_WriteField (Field,Class[NumField]);
-	 EndingCh = Field[Length - 1];
+
+	 Bib_WriteField (Node->Bib.Fields[NumField],Class[NumField]);
+	 EndingCh = Node->Bib.Fields[NumField][Length - 1];
 	}
-     }
-   if (EndingCh != '\0')
-      if (EndingCh != '.')
-	 HTM_Txt (".");
+
+   /* Put dot after last field? */
+   if (EndingCh != '\0' && EndingCh != '.')
+      HTM_Dot ();
 
    /***** Write URL *****/
    if (Node->Bib.URL[0])
@@ -203,14 +216,9 @@ void Bib_WriteCellEditBibRef (struct Tre_Node *Node,
 			      HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
-   extern const char *Txt_BIBLIOGRAPHY_Authors;
-   extern const char *Txt_BIBLIOGRAPHY_Title;
-   extern const char *Txt_BIBLIOGRAPHY_Source;
-   extern const char *Txt_BIBLIOGRAPHY_Publisher;
-   extern const char *Txt_BIBLIOGRAPHY_Date;
-   extern const char *Txt_BIBLIOGRAPHY_Id;
    extern const char *Txt_BIBLIOGRAPHY_URL;
    extern const char *Txt_Save_changes;
+   unsigned NumField;
 
    switch (ViewType)
      {
@@ -226,46 +234,17 @@ void Bib_WriteCellEditBibRef (struct Tre_Node *Node,
 	 Frm_BeginFormAnchor (ActChgBibRef,TreSpc_LIST_ITEMS_SECTION_ID);
 	    TreSpc_PutParItmCod (&Node->SpcItem.Cod);
 
-	    /* Authors */
-	    HTM_INPUT_TEXT ("Authors",Bib_MAX_CHARS_TITLE,Node->Bib.Authors,
-			    HTM_NO_ATTR,
-			    "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-			    Txt_BIBLIOGRAPHY_Authors,The_GetSuffix ());
-
-	    /* Title */
-	    HTM_BR ();
-	    HTM_INPUT_TEXT ("Title",Bib_MAX_CHARS_TITLE,Node->Bib.Title,
-			    HTM_REQUIRED,
-			    "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-			    Txt_BIBLIOGRAPHY_Title,The_GetSuffix ());
-
-	    /* Source */
-	    HTM_BR ();
-	    HTM_INPUT_TEXT ("Source",Bib_MAX_CHARS_TITLE,Node->Bib.Source,
-			    HTM_NO_ATTR,
-			    "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-			    Txt_BIBLIOGRAPHY_Source,The_GetSuffix ());
-
-	    /* Publisher */
-	    HTM_BR ();
-	    HTM_INPUT_TEXT ("Publisher",Bib_MAX_CHARS_TITLE,Node->Bib.Publisher,
-			    HTM_NO_ATTR,
-			    "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-			    Txt_BIBLIOGRAPHY_Publisher,The_GetSuffix ());
-
-	    /* Date */
-	    HTM_BR ();
-	    HTM_INPUT_TEXT ("Date",Bib_MAX_CHARS_TITLE,Node->Bib.Date,
-			    HTM_NO_ATTR,
-			    "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-			    Txt_BIBLIOGRAPHY_Date,The_GetSuffix ());
-
-	    /* Id */
-	    HTM_BR ();
-	    HTM_INPUT_TEXT ("Id",Bib_MAX_CHARS_TITLE,Node->Bib.Id,
-			    HTM_NO_ATTR,
-			    "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-			    Txt_BIBLIOGRAPHY_Id,The_GetSuffix ());
+	    for (NumField = 0;
+		 NumField < Bib_NUM_FIELDS;
+		 NumField++)
+	      {
+	       if (NumField)
+	          HTM_BR ();
+	       HTM_INPUT_TEXT (Bib_FormNames[NumField],Bib_MAX_BYTES_FIELD,Node->Bib.Fields[NumField],
+			       HTM_NO_ATTR,
+			       "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+			       *Bib_Placeholders[NumField],The_GetSuffix ());
+	      }
 
 	    /* URL */
 	    HTM_BR ();
@@ -292,55 +271,22 @@ void Bib_WriteCellEditBibRef (struct Tre_Node *Node,
 
 void Bib_WriteCellNewBibRef (void)
   {
-   extern const char *Txt_BIBLIOGRAPHY_Authors;
-   extern const char *Txt_BIBLIOGRAPHY_Title;
-   extern const char *Txt_BIBLIOGRAPHY_Source;
-   extern const char *Txt_BIBLIOGRAPHY_Publisher;
-   extern const char *Txt_BIBLIOGRAPHY_Date;
-   extern const char *Txt_BIBLIOGRAPHY_Id;
    extern const char *Txt_BIBLIOGRAPHY_URL;
    extern const char *Txt_Save_changes;
+   unsigned NumField;
 
-   /***** Authors *****/
-   HTM_INPUT_TEXT ("Authors",Bib_MAX_CHARS_TITLE,"",
-		   HTM_NO_ATTR,
-		   "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-		   Txt_BIBLIOGRAPHY_Authors,The_GetSuffix ());
-
-   /***** Title *****/
-   HTM_BR ();
-   HTM_INPUT_TEXT ("Title",Bib_MAX_CHARS_TITLE,"",
-		   HTM_REQUIRED,
-		   "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-		   Txt_BIBLIOGRAPHY_Title,The_GetSuffix ());
-
-   /***** Source *****/
-   HTM_BR ();
-   HTM_INPUT_TEXT ("Source",Bib_MAX_CHARS_TITLE,"",
-		   HTM_NO_ATTR,
-		   "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-		   Txt_BIBLIOGRAPHY_Source,The_GetSuffix ());
-
-   /***** Publisher *****/
-   HTM_BR ();
-   HTM_INPUT_TEXT ("Publisher",Bib_MAX_CHARS_TITLE,"",
-		   HTM_NO_ATTR,
-		   "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-		   Txt_BIBLIOGRAPHY_Publisher,The_GetSuffix ());
-
-   /***** Date *****/
-   HTM_BR ();
-   HTM_INPUT_TEXT ("Date",Bib_MAX_CHARS_TITLE,"",
-		   HTM_NO_ATTR,
-		   "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-		   Txt_BIBLIOGRAPHY_Date,The_GetSuffix ());
-
-   /***** Id *****/
-   HTM_BR ();
-   HTM_INPUT_TEXT ("Id",Bib_MAX_CHARS_TITLE,"",
-		   HTM_NO_ATTR,
-		   "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-		   Txt_BIBLIOGRAPHY_Id,The_GetSuffix ());
+   /***** Fields *****/
+   for (NumField = 0;
+	NumField < Bib_NUM_FIELDS;
+	NumField++)
+     {
+      if (NumField)
+	 HTM_BR ();
+      HTM_INPUT_TEXT (Bib_FormNames[NumField],Bib_MAX_BYTES_FIELD,"",
+		      HTM_NO_ATTR,
+		      "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+		      *Bib_Placeholders[NumField],The_GetSuffix ());
+     }
 
    /***** URL *****/
    HTM_BR ();
@@ -373,14 +319,14 @@ static void Bib_WriteField (const char *Field,const char *Class)
 
 void Bib_CreateBibRef (struct Tre_Node *Node)
   {
+   unsigned NumField;
+
    /***** Get fields for the new bibliographic reference *****/
-   Par_GetParText ("Authors"    ,Node->Bib.Authors    ,Bib_MAX_BYTES_TITLE);
-   Par_GetParText ("Title"      ,Node->Bib.Title      ,Bib_MAX_BYTES_TITLE);
-   Par_GetParText ("Source"     ,Node->Bib.Source     ,Bib_MAX_BYTES_TITLE);
-   Par_GetParText ("Publisher"  ,Node->Bib.Publisher  ,Bib_MAX_BYTES_TITLE);
-   Par_GetParText ("Date"       ,Node->Bib.Date       ,Bib_MAX_BYTES_TITLE);
-   Par_GetParText ("Id"         ,Node->Bib.Id         ,Bib_MAX_BYTES_TITLE);
-   Par_GetParText ("URL"        ,Node->Bib.URL        ,WWW_MAX_BYTES_WWW);
+   for (NumField = 0;
+	NumField < Bib_NUM_FIELDS;
+	NumField++)
+      Par_GetParText (Bib_FormNames[NumField],Node->Bib.Fields[NumField],Bib_MAX_BYTES_FIELD);
+   Par_GetParText ("URL",Node->Bib.URL,WWW_MAX_BYTES_WWW);
 
    /***** Create bibliographic reference *****/
    Node->SpcItem.Cod = Bib_DB_CreateBibRef (Node);
@@ -392,14 +338,14 @@ void Bib_CreateBibRef (struct Tre_Node *Node)
 
 void Bib_ChangeBibRef (struct Tre_Node *Node)
   {
-   /***** Get fields for the bibliographic reference *****/
-   Par_GetParText ("Authors"    ,Node->Bib.Authors    ,Bib_MAX_BYTES_TITLE);
-   Par_GetParText ("Title"      ,Node->Bib.Title      ,Bib_MAX_BYTES_TITLE);
-   Par_GetParText ("Source"     ,Node->Bib.Source     ,Bib_MAX_BYTES_TITLE);
-   Par_GetParText ("Publisher"  ,Node->Bib.Publisher  ,Bib_MAX_BYTES_TITLE);
-   Par_GetParText ("Date"       ,Node->Bib.Date       ,Bib_MAX_BYTES_TITLE);
-   Par_GetParText ("Id"         ,Node->Bib.Id         ,Bib_MAX_BYTES_TITLE);
-   Par_GetParText ("URL"        ,Node->Bib.URL        ,WWW_MAX_BYTES_WWW);
+   unsigned NumField;
+
+   /***** Get fields for the new bibliographic reference *****/
+   for (NumField = 0;
+	NumField < Bib_NUM_FIELDS;
+	NumField++)
+      Par_GetParText (Bib_FormNames[NumField],Node->Bib.Fields[NumField],Bib_MAX_BYTES_FIELD);
+   Par_GetParText ("URL",Node->Bib.URL,WWW_MAX_BYTES_WWW);
 
    /***** Update answer *****/
    Bib_DB_UpdateBibRef (Node);

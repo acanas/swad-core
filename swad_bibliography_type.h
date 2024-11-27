@@ -34,20 +34,23 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Bib_MAX_CHARS_AUTHORS	(128 - 1)	// 127
-#define Bib_MAX_BYTES_AUTHORS	((Bib_MAX_CHARS_AUTHORS + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Bib_NUM_FIELDS 6
+typedef enum
+  {
+   Bib_AUTHORS		= 0,
+   Bib_TITLE		= 1,
+   Bib_SOURCE		= 2,
+   Bib_PUBLISHER	= 3,
+   Bib_DATE		= 4,
+   Bib_ID		= 5,
+  } Bib_Field_t;
 
-#define Bib_MAX_CHARS_TITLE	(128 - 1)	// 127
-#define Bib_MAX_BYTES_TITLE	((Bib_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Bib_MAX_CHARS_FIELD	(128 - 1)	// 127
+#define Bib_MAX_BYTES_FIELD	((Bib_MAX_CHARS_FIELD + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 struct Bib_BibliographicReference
   {
-   char Authors[Bib_MAX_BYTES_AUTHORS + 1];	// List of authors
-   char Title[Bib_MAX_BYTES_TITLE + 1];		// Title
-   char Source[Bib_MAX_BYTES_TITLE + 1];	// Collection, book, volume, pages
-   char Publisher[Bib_MAX_BYTES_TITLE + 1];	// Including place of publication
-   char Date[Bib_MAX_BYTES_TITLE + 1];		// Usually year
-   char Id[Bib_MAX_BYTES_TITLE + 1];		// Identifier (ISBN, ISSN, DOI...)
+   char Fields[Bib_NUM_FIELDS][Bib_MAX_BYTES_FIELD + 1];
    char URL[WWW_MAX_BYTES_WWW + 1];		// URL
   };
 

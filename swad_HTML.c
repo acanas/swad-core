@@ -1866,6 +1866,11 @@ void HTM_Semicolon (void)
    HTM_Txt (";");
   }
 
+void HTM_Dot (void)
+  {
+   HTM_Txt (".");
+  }
+
 void HTM_Comma (void)
   {
    HTM_Txt (",");

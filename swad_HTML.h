@@ -212,6 +212,7 @@ void HTM_NBSPTxt (const char *Txt);
 void HTM_NBSP (void);
 void HTM_Colon (void);
 void HTM_Semicolon (void);
+void HTM_Dot (void);
 void HTM_Comma (void);
 void HTM_Hyphen (void);
 void HTM_Asterisk (void);
