@@ -112,6 +112,7 @@ void PrgRsc_WriteCellEditResource (struct Tre_Node *Node,
 				   __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *Txt_Save_changes;
 
    /***** Show current link / Show clipboard to change resource link *****/
    switch (ViewType)
@@ -124,21 +125,22 @@ void PrgRsc_WriteCellEditResource (struct Tre_Node *Node,
 	 HTM_DIV_End ();
 	 break;
       case Vie_EDIT:
-	 /* Title */
-	 Frm_BeginFormAnchor (ActRenPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID);
-	    TreSpc_PutParItmCod (&Node->SpcItem.Cod);
-	    HTM_INPUT_TEXT ("Title",Rsc_MAX_CHARS_RESOURCE_TITLE,Node->Resource.Title,
-			    HTM_SUBMIT_ON_CHANGE,
-			    "class=\"PRG_RSC_INPUT INPUT_%s\"",
-			    The_GetSuffix ());
-	 Frm_EndForm ();
-
-	 HTM_BR ();
-
-	 /* Show clipboard to change resource link */
 	 Frm_BeginFormAnchor (ActChgPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID);
 	    TreSpc_PutParItmCod (&Node->SpcItem.Cod);
+
+	    /* Title */
+	    HTM_INPUT_TEXT ("Title",Rsc_MAX_CHARS_RESOURCE_TITLE,Node->Resource.Title,
+			    HTM_REQUIRED,
+			    "class=\"PRG_RSC_INPUT INPUT_%s\"",
+			    The_GetSuffix ());
+
+	    /* Clipboard with resource links */
+	    HTM_BR ();
 	    Rsc_ShowClipboardToChangeLink (&Node->Resource.Link);
+
+	    /* Button to save changes */
+	    Btn_PutConfirmButtonInline (Txt_Save_changes);
+
 	 Frm_EndForm ();
 	 break;
       default:
@@ -150,12 +152,21 @@ void PrgRsc_WriteCellEditResource (struct Tre_Node *Node,
 void PrgRsc_WriteCellNewResource (void)
   {
    extern const char *Txt_New_resource;
+   extern const char *Txt_Save_changes;
 
+   /***** Title *****/
    HTM_INPUT_TEXT ("Title",Rsc_MAX_CHARS_RESOURCE_TITLE,"",
-		   HTM_SUBMIT_ON_CHANGE,
+		   HTM_REQUIRED,
 		   "placeholder=\"%s\""
 		   " class=\"PRG_RSC_INPUT INPUT_%s\"",
 		   Txt_New_resource,The_GetSuffix ());
+
+   /***** Clipboard with resource links *****/
+   HTM_BR ();
+   Rsc_ShowClipboardToChangeLink (NULL);
+
+   /***** Button to save changes *****/
+   Btn_PutConfirmButtonInline (Txt_Save_changes);
   }
 
 /*****************************************************************************/
@@ -258,29 +269,6 @@ void PrgRsc_CreateResourceInternal (struct Tre_Node *Node)
   }
 
 /*****************************************************************************/
-/************************** Rename resource in list **************************/
-/*****************************************************************************/
-
-void PrgRsc_RenameResource (void)
-  {
-   Prg_BeforeTree (Tre_EDIT_NODES);
-      TreSpc_RenameItem (Inf_PROGRAM);
-   Prg_AfterTree ();
-  }
-
-void PrgRsc_RenameResourceInternal (const struct Tre_Node *Node)
-  {
-   char NewTitle[Rsc_MAX_BYTES_RESOURCE_TITLE + 1];
-
-   /***** Get the new title for the resource *****/
-   Par_GetParText ("Title",NewTitle,Rsc_MAX_BYTES_RESOURCE_TITLE);
-
-   /***** Update database changing old title by new title *****/
-   Rsc_DB_UpdateResourceTitle (Node->Hierarchy.NodCod,Node->SpcItem.Cod,
-			       NewTitle);
-  }
-
-/*****************************************************************************/
 /********** Ask for confirmation of removing a resource from list ************/
 /*****************************************************************************/
 
@@ -362,24 +350,19 @@ void PrgRsc_ChangeResourceLink (void)
 
 void PrgRsc_ChangeResourceLinkInternal (struct Tre_Node *Node)
   {
+   /***** Get the new title for the resource *****/
+   Par_GetParText ("Title",Node->Resource.Title,Rsc_MAX_BYTES_RESOURCE_TITLE);
+
    /***** Get link type and code *****/
    if (Rsc_GetParLink (&Node->Resource.Link))
-     {
-      /***** Is it an existing resource? *****/
-      if (Node->SpcItem.Cod <= 0)
-	{
-	 /* No resource selected, so it's a new resource at the end of the node */
-	 /* Get the new title for the new resource from link title */
-	 Rsc_GetResourceTitleFromLink (&Node->Resource.Link,Node->Resource.Title);
-
-	 /***** Create resource *****/
-	 Node->SpcItem.Cod = Rsc_DB_CreateResource (Node);
-	}
-
-      /***** Update resource link *****/
-      Rsc_DB_UpdateRscLink (Node);
-
-      /***** Remove link from clipboard *****/
+      /* Remove link from clipboard */
       Rsc_DB_RemoveLinkFromClipboard (&Node->Resource.Link);
-     }
+
+   /***** Is it an existing resource? *****/
+   if (Node->SpcItem.Cod >  0)
+      /* Update resource */
+      Rsc_DB_UpdateResource (Node);
+   else
+      /* Create resource */
+      Node->SpcItem.Cod = Rsc_DB_CreateResource (Node);
   }

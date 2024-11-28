@@ -801,7 +801,8 @@ void TreSpc_CreateItem (Inf_Type_t InfoType)
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = PrgRsc_CreateResourceInternal,
+      [Inf_PROGRAM	] = // PrgRsc_CreateResourceInternal,
+			    PrgRsc_ChangeResourceLinkInternal,
       [Inf_TEACH_GUIDE	] = NULL,
       [Inf_SYLLABUS_LEC	] = NULL,
       [Inf_SYLLABUS_PRA	] = NULL,
@@ -810,6 +811,7 @@ void TreSpc_CreateItem (Inf_Type_t InfoType)
       [Inf_LINKS	] = Lnk_CreateCrsLink,
       [Inf_ASSESSMENT	] = NULL,
      };
+   /*
    static Tre_ListingType_t ListingType[Inf_NUM_TYPES] =
      {
       [Inf_UNKNOWN_TYPE	] = Tre_EDIT_SPC_LIST_ITEMS,
@@ -823,6 +825,7 @@ void TreSpc_CreateItem (Inf_Type_t InfoType)
       [Inf_LINKS	] = Tre_EDIT_SPC_LIST_ITEMS,
       [Inf_ASSESSMENT	] = Tre_EDIT_SPC_LIST_ITEMS,
      };
+   */
 
    /***** Check info type *****/
    if (!CreateItem[InfoType])
@@ -840,51 +843,8 @@ void TreSpc_CreateItem (Inf_Type_t InfoType)
    CreateItem[InfoType] (&Node);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,ListingType[InfoType],
-		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
-  }
-
-/*****************************************************************************/
-/************************* Rename specific list item *************************/
-/*****************************************************************************/
-
-void TreSpc_RenameItem (Inf_Type_t InfoType)
-  {
-   struct Tre_Node Node;
-   static void (*RenameItem[Inf_NUM_TYPES]) (const struct Tre_Node *Node) =
-     {
-      [Inf_UNKNOWN_TYPE	] = NULL,
-      [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = PrgRsc_RenameResourceInternal,
-      [Inf_TEACH_GUIDE	] = NULL,
-      [Inf_SYLLABUS_LEC	] = NULL,
-      [Inf_SYLLABUS_PRA	] = NULL,
-      [Inf_BIBLIOGRAPHY	] = NULL,
-      [Inf_FAQ		] = NULL,
-      [Inf_LINKS	] = NULL,
-      [Inf_ASSESSMENT	] = NULL,
-     };
-
-   /***** Check info type *****/
-   if (!RenameItem[InfoType])
-      Err_WrongTypeExit ();
-
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (InfoType);
-
-   /***** Get tree node *****/
-   Node.InfoType = InfoType;
-   Tre_GetPars (&Node);
-   if (Node.Hierarchy.NodCod <= 0)
-      Err_WrongItemExit ();
-
-   /***** Rename specific list item *****/
-   RenameItem[InfoType] (&Node);
-
-   /***** Show current tree nodes, if any *****/
+   // Tre_ShowAllNodes (InfoType,ListingType[InfoType],
+   // 		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
    Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
 		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
 

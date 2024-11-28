@@ -45,9 +45,6 @@ void Rsc_DB_RemoveLinkFromClipboard (struct Rsc_Link *Link);
 //------------------------ Resources in program -------------------------------
 long Rsc_DB_CreateResource (const struct Tre_Node *Node);
 
-void Rsc_DB_UpdateResourceTitle (long NodCod,long RscCod,
-                                 const char NewTitle[Rsc_MAX_BYTES_RESOURCE_TITLE + 1]);
-
 unsigned Rsc_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
                                   bool ShowHiddenResources);
 unsigned Rsc_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long RscCod);
@@ -63,6 +60,7 @@ void Rsc_DB_HideOrUnhideResource (const struct Tre_Node *Node,
 
 void Rsc_DB_LockTableResources (void);
 void Rsc_DB_UpdateRscInd (const struct Tre_Node *Node,long RscCod,int RscInd);
-void Rsc_DB_UpdateRscLink (const struct Tre_Node *Node);
+
+void Rsc_DB_UpdateResource (const struct Tre_Node *Node);
 
 #endif

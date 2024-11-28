@@ -6456,29 +6456,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Create resource"	// Çeviri lazim!
 #endif
 	,
-	[ActRenPrgRsc] =
-#if   L==1	// ca
-	"Rename resource"	// Necessita traducció
-#elif L==2	// de
-	"Rename resource"	// Need Übersetzung
-#elif L==3	// en
-	"Rename resource"
-#elif L==4	// es
-	"Renombrar recurso"
-#elif L==5	// fr
-	"Rename resource"	// Besoin de traduction
-#elif L==6	// gn
-	"Renombrar recurso"	// Okoteve traducción
-#elif L==7	// it
-	"Rename resource"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Rename resource"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Rename resource"	// Precisa de tradução
-#elif L==10	// tr
-	"Rename resource"	// Çeviri lazim!
-#endif
-	,
 	[ActReqRemPrgRsc] =
 #if   L==1	// ca
 	"Request removal of resource"			// Necessita traducció

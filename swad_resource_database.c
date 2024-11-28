@@ -161,38 +161,15 @@ long Rsc_DB_CreateResource (const struct Tre_Node *Node)
    return
    DB_QueryINSERTandReturnCode ("can not create new resource",
 				"INSERT INTO prg_resources"
-				" (NodCod,RscInd,Hidden,Title)"
-				" SELECT %ld,COALESCE(MAX(t2.RscInd),0)+1,'N','%s'"
+				" (NodCod,RscInd,Hidden,Type,Cod,Title)"
+				" SELECT %ld,COALESCE(MAX(t2.RscInd),0)+1,'N','%s',%ld,'%s'"
 				  " FROM prg_resources AS t2"
 				 " WHERE t2.NodCod=%ld",
 				Node->Hierarchy.NodCod,
+			        Rsc_DB_Types[Node->Resource.Link.Type],
+			        Node->Resource.Link.Cod,
 				Node->Resource.Title,
 				Node->Hierarchy.NodCod);
-  }
-
-/*****************************************************************************/
-/**************************** Update resource title **************************/
-/*****************************************************************************/
-
-void Rsc_DB_UpdateResourceTitle (long NodCod,long RscCod,
-                                 const char NewTitle[Rsc_MAX_BYTES_RESOURCE_TITLE + 1])
-  {
-   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
-
-   DB_QueryUPDATE ("can not update the title of a resource",
-		   "UPDATE prg_resources,"
-		          "tre_nodes"
-		     " SET prg_resources.Title='%s'"
-		   " WHERE prg_resources.RscCod=%ld"
-		     " AND prg_resources.NodCod=%ld"
-		     " AND prg_resources.NodCod=tre_nodes.NodCod"
-		     " AND tre_nodes.CrsCod=%ld"	// Extra check
-		     " AND tre_nodes.Type='%s'",	// Extra check
-	           NewTitle,
-	           RscCod,
-	           NodCod,
-	           Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-	           Tre_DB_Types[Inf_PROGRAM]);
   }
 
 /*****************************************************************************/
@@ -393,19 +370,20 @@ void Rsc_DB_UpdateRscInd (const struct Tre_Node *Node,long RscCod,int RscInd)
   }
 
 /*****************************************************************************/
-/************* Update the link of a resource given its code *****************/
+/************************ Update resource given its code *********************/
 /*****************************************************************************/
 
-void Rsc_DB_UpdateRscLink (const struct Tre_Node *Node)
+void Rsc_DB_UpdateResource (const struct Tre_Node *Node)
   {
    extern const char *Rsc_DB_Types[Rsc_NUM_TYPES];
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
-   DB_QueryUPDATE ("can not update link of resource",
+   DB_QueryUPDATE ("can not update resource",
 		   "UPDATE prg_resources,"
 		          "tre_nodes"
 		     " SET prg_resources.Type='%s',"
-		          "prg_resources.Cod=%ld"
+		          "prg_resources.Cod=%ld,"
+			  "prg_resources.Title='%s'"
 		   " WHERE prg_resources.RscCod=%ld"
 		     " AND prg_resources.NodCod=%ld"
 		     " AND prg_resources.NodCod=tre_nodes.NodCod"
@@ -413,6 +391,7 @@ void Rsc_DB_UpdateRscLink (const struct Tre_Node *Node)
 		     " AND tre_nodes.Type='%s'",	// Extra check
 		   Rsc_DB_Types[Node->Resource.Link.Type],
 		   Node->Resource.Link.Cod,
+		   Node->Resource.Title,
 		   Node->SpcItem.Cod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,

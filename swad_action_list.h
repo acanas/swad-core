@@ -424,7 +424,6 @@ typedef enum
 	ActFrmSeePrgRsc,
 	ActFrmEdiPrgRsc,
 	ActNewPrgRsc,
-	ActRenPrgRsc,
 	ActReqRemPrgRsc,
 	ActRemPrgRsc,
 	ActHidPrgRsc,

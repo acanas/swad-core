@@ -62,7 +62,6 @@ void TreSpc_EditListItems (Inf_Type_t InfoType);
 void TreSpc_EditTreeWithFormItem (Inf_Type_t InfoType);
 
 void TreSpc_CreateItem (Inf_Type_t InfoType);
-void TreSpc_RenameItem (Inf_Type_t InfoType);
 void TreSpc_ChangeItem (Inf_Type_t InfoType);
 
 void TreSpc_ReqRemItem (Inf_Type_t InfoType);

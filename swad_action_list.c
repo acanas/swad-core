@@ -500,7 +500,6 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActFrmSeePrgRsc	] = {1925, 1,TabCrs,NULL			,PrgRsc_ViewResourcesAfterEdit	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActFrmEdiPrgRsc	] = {1918, 1,TabCrs,NULL			,PrgRsc_EditListResources	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActNewPrgRsc	] = {1929, 1,TabCrs,NULL			,PrgRsc_CreateResource		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRenPrgRsc	] = {1928, 1,TabCrs,NULL			,PrgRsc_RenameResource		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActReqRemPrgRsc	] = {1919, 1,TabCrs,NULL			,PrgRsc_ReqRemResource		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRemPrgRsc	] = {1920, 1,TabCrs,NULL			,PrgRsc_RemoveResource		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActHidPrgRsc	] = {1921, 1,TabCrs,NULL			,PrgRsc_HideResource		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -3953,7 +3952,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActFrmSeePrgRsc,	// #1925
 	ActEdiTrePrg,		// #1926
 	ActSeeTreNodPrg,	// #1927
-	ActRenPrgRsc,		// #1928
+	ActUnk,			// #1928 (obsolete action)
 	ActNewPrgRsc,		// #1929
 	ActReqLnkSeeDocCrs,	// #1930
 	ActReqLnkAdmDocCrs,	// #1931

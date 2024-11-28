@@ -103,6 +103,8 @@ extern struct Globals Gbl;
 static void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
                                    HTM_Attributes_t Attributes);
 
+static void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
+                                          char Title[Rsc_MAX_BYTES_RESOURCE_TITLE + 1]);
 /*****************************************************************************/
 /********************* Reset specific fields of resource *********************/
 /*****************************************************************************/
@@ -197,7 +199,8 @@ void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink)
 
 	 /***** Row with empty link to remove the current link *****/
 	 if (CurrentLink->Type != Rsc_NONE)
-	    Rsc_WriteRowClipboard (&EmptyLink,HTM_SUBMIT_ON_CLICK);
+	    // Rsc_WriteRowClipboard (&EmptyLink,HTM_SUBMIT_ON_CLICK);
+	    Rsc_WriteRowClipboard (&EmptyLink,HTM_NO_ATTR);
 	}
       else		// Inside form to create a new element
 	 /***** Row with empty link *****/
@@ -210,9 +213,9 @@ void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink)
 	   NumLink++)
 	{
 	 Rsc_GetLinkDataFromRow (mysql_res,&Link);
-	 Rsc_WriteRowClipboard (&Link,
-				CurrentLink ? HTM_SUBMIT_ON_CLICK :
-					      HTM_NO_ATTR);
+	 Rsc_WriteRowClipboard (&Link,HTM_NO_ATTR);
+				// CurrentLink ? HTM_SUBMIT_ON_CLICK :
+				//	      HTM_NO_ATTR);
 	}
       DB_FreeMySQLResult (&mysql_res);
 
@@ -444,8 +447,8 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
 /************* Get the title for a new resource from link title **************/
 /*****************************************************************************/
 
-void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
-                                   char Title[Rsc_MAX_BYTES_RESOURCE_TITLE + 1])
+static void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
+                                          char Title[Rsc_MAX_BYTES_RESOURCE_TITLE + 1])
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Txt_TIMETABLE_TYPES[Tmt_NUM_TIMETABLE_TYPES];

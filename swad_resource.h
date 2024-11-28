@@ -47,9 +47,6 @@ void Rsc_ShowClipboard (void);
 void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink);
 void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo);
 
-void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
-                                   char Title[Rsc_MAX_BYTES_RESOURCE_TITLE + 1]);
-
 void Rsc_GetLinkDataFromRow (MYSQL_RES *mysql_res,struct Rsc_Link *Link);
 Rsc_Type_t Rsc_GetTypeFromString (const char *Str);
 

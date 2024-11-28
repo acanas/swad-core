@@ -49,8 +49,6 @@ void PrgRsc_ViewResourcesAfterEdit (void);
 void PrgRsc_EditListResources (void);
 void PrgRsc_CreateResource (void);
 void PrgRsc_CreateResourceInternal (struct Tre_Node *Node);
-void PrgRsc_RenameResource (void);
-void PrgRsc_RenameResourceInternal (const struct Tre_Node *Node);
 void PrgRsc_ReqRemResource (void);
 void PrgRsc_RemoveResource (void);
 void PrgRsc_HideResource (void);
