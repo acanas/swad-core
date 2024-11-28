@@ -179,7 +179,7 @@ void Bib_WriteCellViewBibRef (struct Tre_Node *Node)
    for (NumField = 0, EndingCh = '\0';
 	NumField < Bib_NUM_FIELDS;
 	NumField++)
-      if ((Length = strlen (Node->Bib.Fields[NumField])) != 0)
+      if (Node->Bib.Fields[NumField][0])
 	{
          /* Put dot before field? */
 	 if (EndingCh != '\0')
@@ -190,6 +190,7 @@ void Bib_WriteCellViewBibRef (struct Tre_Node *Node)
 	   }
 
 	 Bib_WriteField (Node->Bib.Fields[NumField],Class[NumField]);
+	 Length = strlen (Node->Bib.Fields[NumField]);
 	 EndingCh = Node->Bib.Fields[NumField][Length - 1];
 	}
 
@@ -218,6 +219,15 @@ void Bib_WriteCellEditBibRef (struct Tre_Node *Node,
    extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Txt_BIBLIOGRAPHY_URL;
    extern const char *Txt_Save_changes;
+   static HTM_Attributes_t Attributes[Bib_NUM_FIELDS] =
+     {
+      [Bib_AUTHORS	] = HTM_NO_ATTR,
+      [Bib_TITLE	] = HTM_REQUIRED,
+      [Bib_SOURCE	] = HTM_NO_ATTR,
+      [Bib_PUBLISHER	] = HTM_NO_ATTR,
+      [Bib_DATE		] = HTM_NO_ATTR,
+      [Bib_ID		] = HTM_NO_ATTR,
+     };
    unsigned NumField;
 
    switch (ViewType)
@@ -238,12 +248,11 @@ void Bib_WriteCellEditBibRef (struct Tre_Node *Node,
 		 NumField < Bib_NUM_FIELDS;
 		 NumField++)
 	      {
-	       if (NumField)
-	          HTM_BR ();
-	       HTM_INPUT_TEXT (Bib_FormNames[NumField],Bib_MAX_BYTES_FIELD,Node->Bib.Fields[NumField],
-			       HTM_NO_ATTR,
+	       HTM_INPUT_TEXT (Bib_FormNames[NumField],Bib_MAX_CHARS_FIELD,Node->Bib.Fields[NumField],
+			       Attributes[NumField],
 			       "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
 			       *Bib_Placeholders[NumField],The_GetSuffix ());
+	       HTM_BR ();
 	      }
 
 	    /* URL */
@@ -280,24 +289,22 @@ void Bib_WriteCellNewBibRef (void)
 	NumField < Bib_NUM_FIELDS;
 	NumField++)
      {
-      if (NumField)
-	 HTM_BR ();
-      HTM_INPUT_TEXT (Bib_FormNames[NumField],Bib_MAX_BYTES_FIELD,"",
+      HTM_INPUT_TEXT (Bib_FormNames[NumField],Bib_MAX_CHARS_FIELD,"",
 		      HTM_NO_ATTR,
 		      "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
 		      *Bib_Placeholders[NumField],The_GetSuffix ());
+      HTM_BR ();
      }
 
    /***** URL *****/
-   HTM_BR ();
    HTM_INPUT_URL ("URL","",
 		  HTM_NO_ATTR,
 		  " placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
 		  Txt_BIBLIOGRAPHY_URL,The_GetSuffix ());
+   HTM_BR ();
 
    /***** Button to save changes *****/
-   HTM_BR ();
-   Btn_PutConfirmButtonInline (Txt_Save_changes);
+   Btn_PutCreateButtonInline (Txt_Save_changes);
   }
 
 /*****************************************************************************/

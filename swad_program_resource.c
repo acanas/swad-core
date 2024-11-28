@@ -166,7 +166,7 @@ void PrgRsc_WriteCellNewResource (void)
    Rsc_ShowClipboardToChangeLink (NULL);
 
    /***** Button to save changes *****/
-   Btn_PutConfirmButtonInline (Txt_Save_changes);
+   Btn_PutCreateButtonInline (Txt_Save_changes);
   }
 
 /*****************************************************************************/

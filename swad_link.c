@@ -66,12 +66,29 @@
 #include "swad_view.h"
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+extern const char *Txt_Title;
+extern const char *Txt_Description;
+
+static const char *Lnk_FormNames[Lnk_NUM_FIELDS] =
+  {
+   [Lnk_TITLE		] = "Title",
+   [Lnk_DESCRIPTION	] = "Description",
+  };
+
+static const char **Lnk_Placeholders[Lnk_NUM_FIELDS] =
+  {
+   [Lnk_TITLE		] = &Txt_Title,
+   [Lnk_DESCRIPTION	] = &Txt_Description,
+  };
+
+/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Lnk_WriteTitle (const char Title[Lnk_MAX_BYTES_TITLE + 1]);
-static void Lnk_WriteDescription (const char Description[Lnk_MAX_BYTES_TITLE + 1]);
-static void Lnk_WriteWWW (const struct Tre_Node *Node);
+static void Lnk_WriteField (const char *Field,const char *Class);
 
 /*****************************************************************************/
 /******************* Reset specific fields of course link ********************/
@@ -79,8 +96,12 @@ static void Lnk_WriteWWW (const struct Tre_Node *Node);
 
 void Lnk_ResetSpcFields (struct Tre_Node *Node)
   {
-   Node->Lnk.Title[0] = '\0';
-   Node->Lnk.Description[0] = '\0';
+   unsigned NumField;
+
+   for (NumField = 0;
+	NumField < Lnk_NUM_FIELDS;
+	NumField++)
+      Node->Lnk.Fields[NumField][0] = '\0';
    Node->Lnk.WWW[0] = '\0';
   }
 
@@ -91,6 +112,7 @@ void Lnk_ResetSpcFields (struct Tre_Node *Node)
 void Lnk_GetCrsLinkDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
   {
    MYSQL_ROW row;
+   unsigned NumField;
 
    /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
@@ -115,9 +137,11 @@ void Lnk_GetCrsLinkDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
 
    /***** Get title, description and URL
           of the course link (row[4], row[5], row[6]) *****/
-   Str_Copy (Node->Lnk.Title      ,row[4],sizeof (Node->Lnk.Title      ) - 1);
-   Str_Copy (Node->Lnk.Description,row[5],sizeof (Node->Lnk.Description) - 1);
-   Str_Copy (Node->Lnk.WWW        ,row[6],sizeof (Node->Lnk.WWW        ) - 1);
+   for (NumField = 0;
+	NumField < Lnk_NUM_FIELDS;
+	NumField++)
+      Str_Copy (Node->Lnk.Fields[NumField],row[4 + NumField],Lnk_MAX_BYTES_FIELD);
+   Str_Copy (Node->Lnk.WWW,row[4 + Lnk_NUM_FIELDS],sizeof (Node->Lnk.WWW) - 1);
   }
 
 /*****************************************************************************/
@@ -126,11 +150,26 @@ void Lnk_GetCrsLinkDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
 
 void Lnk_WriteCellViewCrsLink (struct Tre_Node *Node)
   {
-   Lnk_WriteTitle (Node->Lnk.Title);
-   HTM_BR ();
-   Lnk_WriteDescription (Node->Lnk.Description);
-   HTM_BR ();
-   Lnk_WriteWWW (Node);
+   static const char *Class[Lnk_NUM_FIELDS] =
+     {
+      [Lnk_TITLE] = "TRE_TIT",
+     };
+   unsigned NumField;
+
+   for (NumField = 0;
+	NumField < Lnk_NUM_FIELDS;
+	NumField++)
+      if (Node->Lnk.Fields[NumField][0])
+	{
+	 Lnk_WriteField (Node->Lnk.Fields[NumField],Class[NumField]);
+	 HTM_BR ();
+	}
+   if (Node->Lnk.WWW[0])
+     {
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Node->Lnk.WWW);
+	 HTM_Txt (Node->Lnk.WWW);
+      HTM_A_End ();
+     }
   }
 
 /*****************************************************************************/
@@ -146,6 +185,12 @@ void Lnk_WriteCellEditCrsLink (struct Tre_Node *Node,
    extern const char *Txt_Description;
    extern const char *Txt_URL;
    extern const char *Txt_Save_changes;
+   static HTM_Attributes_t Attributes[Lnk_NUM_FIELDS] =
+     {
+      [Lnk_TITLE	] = HTM_REQUIRED,
+      [Lnk_DESCRIPTION	] = HTM_NO_ATTR,
+     };
+   unsigned NumField;
 
    switch (ViewType)
      {
@@ -161,28 +206,26 @@ void Lnk_WriteCellEditCrsLink (struct Tre_Node *Node,
 	 Frm_BeginFormAnchor (ActChgCrsLnk,TreSpc_LIST_ITEMS_SECTION_ID);
 	    TreSpc_PutParItmCod (&Node->SpcItem.Cod);
 
-	    /* Title */
-	    HTM_INPUT_TEXT ("Title",Lnk_MAX_CHARS_TITLE,Node->Lnk.Title,
-			    HTM_NO_ATTR,
-			    "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-			    Txt_Title,The_GetSuffix ());
-
-	    /* Description */
-	    HTM_BR ();
-	    HTM_INPUT_TEXT ("Description",Lnk_MAX_CHARS_TITLE,Node->Lnk.Description,
-			    HTM_NO_ATTR,
-			    "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-			    Txt_Description,The_GetSuffix ());
+	    /* Fields */
+	    for (NumField = 0;
+		 NumField < Lnk_NUM_FIELDS;
+		 NumField++)
+	      {
+	       HTM_INPUT_TEXT (Lnk_FormNames[NumField],Lnk_MAX_CHARS_FIELD,Node->Lnk.Fields[NumField],
+			       Attributes[NumField],
+			       "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+			       *Lnk_Placeholders[NumField],The_GetSuffix ());
+	       HTM_BR ();
+	      }
 
 	    /* URL */
-	    HTM_BR ();
 	    HTM_INPUT_URL ("WWW",Node->Lnk.WWW,
 			   HTM_REQUIRED,
 			   " placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
 			   Txt_URL,The_GetSuffix ());
+	    HTM_BR ();
 
 	    /* Button to save changes */
-	    HTM_BR ();
 	    Btn_PutConfirmButtonInline (Txt_Save_changes);
 
 	 Frm_EndForm ();
@@ -203,55 +246,42 @@ void Lnk_WriteCellNewCrsLink (void)
    extern const char *Txt_Description;
    extern const char *Txt_URL;
    extern const char *Txt_Save_changes;
+   unsigned NumField;
 
-   /***** Title *****/
-   HTM_INPUT_TEXT ("Title",Lnk_MAX_CHARS_TITLE,"",
-		   HTM_NO_ATTR,
-		   "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-		   Txt_Title,The_GetSuffix ());
-
-   /***** Description *****/
-   HTM_BR ();
-   HTM_INPUT_TEXT ("Description",Lnk_MAX_CHARS_TITLE,"",
-		   HTM_NO_ATTR,
-		   "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
-		   Txt_Description,The_GetSuffix ());
+   /***** Fields *****/
+   for (NumField = 0;
+	NumField < Lnk_NUM_FIELDS;
+	NumField++)
+     {
+      HTM_INPUT_TEXT (Lnk_FormNames[NumField],Lnk_MAX_BYTES_FIELD,"",
+		      HTM_NO_ATTR,
+		      "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+		      *Lnk_Placeholders[NumField],The_GetSuffix ());
+      HTM_BR ();
+     }
 
    /***** URL *****/
-   HTM_BR ();
    HTM_INPUT_URL ("WWW","",
 		  HTM_REQUIRED,
 		  " placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
 		  Txt_URL,The_GetSuffix ());
+   HTM_BR ();
 
    /***** Button to save changes *****/
-   HTM_BR ();
-   Btn_PutConfirmButtonInline (Txt_Save_changes);
+   Btn_PutCreateButtonInline (Txt_Save_changes);
   }
 
 /*****************************************************************************/
 /******************* Write title, description and URL ************************/
 /*****************************************************************************/
 
-static void Lnk_WriteTitle (const char Title[Lnk_MAX_BYTES_TITLE + 1])
+static void Lnk_WriteField (const char *Field,const char *Class)
   {
-   HTM_SPAN_Begin ("class=\"TRE_TIT\"");
-      HTM_Txt (Title);
-   HTM_SPAN_End ();
-  }
-
-static void Lnk_WriteDescription (const char Description[Lnk_MAX_BYTES_TITLE + 1])
-  {
-   HTM_Txt (Description);
-  }
-
-static void Lnk_WriteWWW (const struct Tre_Node *Node)
-  {
-   HTM_A_Begin ("href=\"%s\" title=\"%s\" target=\"_blank\""
-	        " class=\"PAR\"",
-		Node->Lnk.WWW,Node->Lnk.Title);
-      HTM_Txt (Node->Lnk.WWW);
-   HTM_A_End ();
+   if (Class)
+      HTM_SPAN_Begin ("class=\"%s\"",Class);
+   HTM_Txt (Field);
+   if (Class)
+      HTM_SPAN_End ();
   }
 
 /*****************************************************************************/
@@ -260,10 +290,14 @@ static void Lnk_WriteWWW (const struct Tre_Node *Node)
 
 void Lnk_CreateCrsLink (struct Tre_Node *Node)
   {
-   /***** Get title, description and URL for the new course link *****/
-   Par_GetParText ("Title"      ,Node->Lnk.Title      ,Lnk_MAX_BYTES_TITLE);
-   Par_GetParText ("Description",Node->Lnk.Description,Lnk_MAX_BYTES_TITLE);
-   Par_GetParText ("WWW"        ,Node->Lnk.WWW        ,WWW_MAX_BYTES_WWW);
+   unsigned NumField;
+
+   /***** Get fields for the new course link *****/
+   for (NumField = 0;
+	NumField < Lnk_NUM_FIELDS;
+	NumField++)
+      Par_GetParText (Lnk_FormNames[NumField],Node->Lnk.Fields[NumField],Lnk_MAX_BYTES_FIELD);
+   Par_GetParText ("WWW",Node->Lnk.WWW,WWW_MAX_BYTES_WWW);
 
    /***** Create course link *****/
    Node->SpcItem.Cod = Lnk_DB_CreateCrsLink (Node);
@@ -275,10 +309,14 @@ void Lnk_CreateCrsLink (struct Tre_Node *Node)
 
 void Lnk_ChangeCrsLink (struct Tre_Node *Node)
   {
-   /***** Get title, description and URL *****/
-   Par_GetParText ("Title"      ,Node->Lnk.Title      ,Lnk_MAX_BYTES_TITLE);
-   Par_GetParText ("Description",Node->Lnk.Description,Lnk_MAX_BYTES_TITLE);
-   Par_GetParText ("WWW"        ,Node->Lnk.WWW        ,WWW_MAX_BYTES_WWW);
+   unsigned NumField;
+
+   /***** Get fields for the course link *****/
+   for (NumField = 0;
+	NumField < Lnk_NUM_FIELDS;
+	NumField++)
+      Par_GetParText (Lnk_FormNames[NumField],Node->Lnk.Fields[NumField],Lnk_MAX_BYTES_FIELD);
+   Par_GetParText ("WWW",Node->Lnk.WWW,WWW_MAX_BYTES_WWW);
 
    /***** Update answer *****/
    Lnk_DB_UpdateCrsLink (Node);

@@ -66,13 +66,6 @@
 #include "swad_view.h"
 
 /*****************************************************************************/
-/***************************** Private prototypes ****************************/
-/*****************************************************************************/
-
-static void FAQ_WriteQuestion (const char Question[FAQ_MAX_BYTES_QUESTION + 1]);
-static void FAQ_WriteAnswer (char Answer[Cns_MAX_BYTES_TEXT + 1]);
-
-/*****************************************************************************/
 /**************** Reset specific fields of question & answer *****************/
 /*****************************************************************************/
 
@@ -121,8 +114,19 @@ void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
 
 void FAQ_WriteCellViewQaA (struct Tre_Node *Node)
   {
-   FAQ_WriteQuestion (Node->QaA.Question);
-   FAQ_WriteAnswer (Node->QaA.Answer);
+   /***** Question *****/
+   HTM_SPAN_Begin ("class=\"TRE_TIT\"");
+      HTM_Txt (Node->QaA.Question);
+   HTM_SPAN_End ();
+
+   /***** Answer *****/
+   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+		     Node->QaA.Answer,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
+   ALn_InsertLinks (Node->QaA.Answer,Cns_MAX_BYTES_TEXT,60);	// Insert links
+
+   HTM_DIV_Begin ("class=\"PAR\"");
+      HTM_Txt (Node->QaA.Answer);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -207,33 +211,7 @@ void FAQ_WriteCellNewQaA (void)
 
    /***** Button to save changes *****/
    HTM_BR ();
-   Btn_PutConfirmButtonInline (Txt_Save_changes);
-  }
-
-/*****************************************************************************/
-/***************************** Write question ********************************/
-/*****************************************************************************/
-
-static void FAQ_WriteQuestion (const char Question[FAQ_MAX_BYTES_QUESTION + 1])
-  {
-   HTM_SPAN_Begin ("class=\"TRE_TIT\"");
-      HTM_Txt (Question);
-   HTM_SPAN_End ();
-  }
-
-/*****************************************************************************/
-/****************************** Write answer *********************************/
-/*****************************************************************************/
-
-static void FAQ_WriteAnswer (char Answer[Cns_MAX_BYTES_TEXT + 1])
-  {
-   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-		     Answer,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
-   ALn_InsertLinks (Answer,Cns_MAX_BYTES_TEXT,60);	// Insert links
-
-   HTM_DIV_Begin ("class=\"PAR\"");
-      HTM_Txt (Answer);
-   HTM_DIV_End ();
+   Btn_PutCreateButtonInline (Txt_Save_changes);
   }
 
 /*****************************************************************************/

@@ -34,13 +34,19 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Lnk_MAX_CHARS_TITLE	(128 - 1)	// 127
-#define Lnk_MAX_BYTES_TITLE	((Lnk_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Lnk_NUM_FIELDS 2
+typedef enum
+  {
+   Lnk_TITLE		= 0,
+   Lnk_DESCRIPTION	= 1,
+  } Lnk_Field_t;
+
+#define Lnk_MAX_CHARS_FIELD	(128 - 1)	// 127
+#define Lnk_MAX_BYTES_FIELD	((Lnk_MAX_CHARS_FIELD + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 struct Lnk_Link
   {
-   char Title[Lnk_MAX_BYTES_TITLE + 1];
-   char Description[Lnk_MAX_BYTES_TITLE + 1];
+   char Fields[Lnk_NUM_FIELDS][Lnk_MAX_BYTES_FIELD + 1];
    char WWW[WWW_MAX_BYTES_WWW + 1];
   };
 
