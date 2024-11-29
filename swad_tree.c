@@ -487,7 +487,21 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	 HTM_TD_End ();
 
 	 /* Title */
-	 ColSpan = (Tre_GetMaxNodeLevel () + 2) - Node->Hierarchy.Level;
+	 /*___________________________________________________________
+	  |   |   |                                                   |
+	  | v | 1 | Lesson 1                 (colspan = 3+1-1 = 3)    |
+	  |___|___|___________________________________________________|
+          |   |   |   |                                               |
+	  |   | v | 1 | Lesson 1.1           (colspan = 3+1-2 = 2)    |
+	  |___|___|___|_______________________________________________|
+          |   |   |   |   |                                           |
+	  |   |   | v | 1 | Lesson 1.1.1     (colspan = 3+1-3 = 1)    |
+	  |___|___|___|___|___________________________________________|
+          |   |   |   |                                               |
+	  |   | v | 2 | Lesson 1.2           (colspan = 3+1-2 = 2)    |
+	  |___|___|___|_______________________________________________|
+	  */
+	 ColSpan = Tre_GetMaxNodeLevel () + 1 - Node->Hierarchy.Level;
 	 switch (ListingType)
 	   {
 	    case Tre_PRINT:
@@ -513,46 +527,42 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	 /* Free title CSS class */
 	 Tre_FreeTitleClass (TitleClass);
 
-	 /* Start/end date/time */
-	 switch (ListingType)
+	 if (Node->InfoType == Inf_PROGRAM)
 	   {
-	    case Tre_PRINT:
-	       HTM_TD_Begin ("class=\"PRG_DATE RT\"");
-	       break;
-	    default:
-	       HTM_TD_Begin ("class=\"PRG_DATE RT %s\"",The_GetColorRows ());
-	       break;
-	   }
+	    /* Start/end date/time */
+	    switch (ListingType)
+	      {
+	       case Tre_PRINT:
+		  HTM_TD_Begin ("class=\"PRG_DATE RT\"");
+		  break;
+	       default:
+		  HTM_TD_Begin ("class=\"PRG_DATE RT %s\"",The_GetColorRows ());
+		  break;
+	      }
 
-	 switch (Node->InfoType)
-	   {
-	    case Inf_PROGRAM:
-	       UniqueId++;
-	       for (StartEndTime  = (Dat_StartEndTime_t) 0;
-		    StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
-		    StartEndTime++)
-		 {
-		  if (asprintf (&Id,"prg_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
-		     Err_NotEnoughMemoryExit ();
-		  HTM_DIV_Begin ("id=\"%s\" class=\"%s_%s%s\"",
-				 Id,
-				 CloOpe_Class[Node->ClosedOrOpen][HidVis_VISIBLE],The_GetSuffix (),
-				 HidVis_TreeClass[HiddenOrVisible]);
-		     Dat_WriteLocalDateHMSFromUTC (Id,Node->TimeUTC[StartEndTime],
-						   Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-						   Dat_WRITE_TODAY |
-						   Dat_WRITE_DATE_ON_SAME_DAY |
-						   Dat_WRITE_HOUR |
-						   Dat_WRITE_MINUTE);
-		  HTM_DIV_End ();
-		  free (Id);
-		 }
-	       break;
-	    default:
-	       break;
-	   }
+	    UniqueId++;
+	    for (StartEndTime  = (Dat_StartEndTime_t) 0;
+		 StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+		 StartEndTime++)
+	      {
+	       if (asprintf (&Id,"prg_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       HTM_DIV_Begin ("id=\"%s\" class=\"%s_%s%s\"",
+			      Id,
+			      CloOpe_Class[Node->ClosedOrOpen][HidVis_VISIBLE],The_GetSuffix (),
+			      HidVis_TreeClass[HiddenOrVisible]);
+		  Dat_WriteLocalDateHMSFromUTC (Id,Node->TimeUTC[StartEndTime],
+						Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+						Dat_WRITE_TODAY |
+						Dat_WRITE_DATE_ON_SAME_DAY |
+						Dat_WRITE_HOUR |
+						Dat_WRITE_MINUTE);
+	       HTM_DIV_End ();
+	       free (Id);
+	      }
 
-	 HTM_TD_End ();
+	    HTM_TD_End ();
+	   }
 
       HTM_TR_End ();
 
@@ -562,7 +572,8 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	 HTM_TR_Begin (NULL);
 
 	    /* Begin text and specific content */
-	    ColSpan++;
+	    if (Node->InfoType == Inf_PROGRAM)
+	       ColSpan++;
 	    switch (ListingType)
 	      {
 	       case Tre_PRINT:
@@ -582,28 +593,9 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	       /* Text */
 	       Tre_WriteNodeText (Node,HiddenOrVisible);
 
-	    /* Specific content depending on the tree type */
-	    switch (Node->InfoType)
-	      {
-	       case Inf_INFORMATION:
-	       case Inf_TEACH_GUIDE:
-	       case Inf_SYLLABUS_LEC:
-	       case Inf_SYLLABUS_PRA:
-	       case Inf_ASSESSMENT:
-		  break;
-	       case Inf_PROGRAM:
-	       case Inf_BIBLIOGRAPHY:
-	       case Inf_FAQ:
-	       case Inf_LINKS:
-		  /* List of items of this tree node */
-		  TreSpc_ListNodeItems (ListingType,Node,SelectedNodCod,SelectedItmCod,
-					HiddenOrVisible);
-		  break;
-	       case Inf_UNKNOWN_TYPE:
-	       default:
-		  Err_WrongTypeExit ();
-		  break;
-	      }
+	    /* List of items of this tree node (specific content depending on the tree type) */
+	    TreSpc_ListNodeItems (ListingType,Node,SelectedNodCod,SelectedItmCod,
+				  HiddenOrVisible);
 
 	    /* End text and specific content */
 	    HTM_TD_End ();

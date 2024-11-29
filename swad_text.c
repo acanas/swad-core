@@ -10095,29 +10095,6 @@ const char *Txt_Do_you_really_want_to_remove_the_item_X =	// Warning: it is very
 	"<strong>%s</strong> &ouml;&gbreve;esini ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
 #endif
 
-const char *Txt_Do_you_really_want_to_remove_the_link_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"De veres voleu eliminar el enlla&ccedil; <strong>%s</strong>?";
-#elif L==2	// de
-	"Wollen Sie die Link <strong>%s</strong> wirklich entfernen?";
-#elif L==3	// en
-	"Do you really want to remove the link <strong>%s</strong>?";
-#elif L==4	// es
-	"&iquest;Realmente desea eliminar el enlace <strong>%s</strong>?";
-#elif L==5	// fr
-	"Voulez-vous vraiment supprimer le lien <strong>%s</strong>?";
-#elif L==6	// gn
-	"&iquest;Realmente desea eliminar el enlace <strong>%s</strong>?";	// Okoteve traducción
-#elif L==7	// it
-	"Vuoi realmente rimuovere il link <strong>%s</strong>?";
-#elif L==8	// pl
-	"Czy na pewno chcesz usun&aogon;&cacute; link <strong>%s</strong>?";
-#elif L==9	// pt
-	"Voc&ecirc; realmente deseja remover a liga&ccedil;&atilde;o <strong>%s</strong>?";
-#elif L==10	// tr
-	"<strong>%s</strong> ba&gbreve;lant&inodot; ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
-#endif
-
 const char *Txt_Do_you_really_want_to_remove_the_match_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"De veres voleu eliminar la partida <strong>%s</strong>?";
@@ -10208,29 +10185,6 @@ const char *Txt_Do_you_really_want_to_remove_the_question_X =	// Warning: it is 
 	"Voc&ecirc; realmente deseja remover a pergunta <strong>%s</strong>?";
 #elif L==10	// tr
 	"<strong>%s</strong> sorusunu ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
-#endif
-
-const char *Txt_Do_you_really_want_to_remove_the_resource_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"De veres voleu eliminar el recurs <strong>%s</strong>?";
-#elif L==2	// de
-	"Wollen Sie die Ressource <strong>%s</strong> wirklich entfernen?";
-#elif L==3	// en
-	"Do you really want to remove the resource <strong>%s</strong>?";
-#elif L==4	// es
-	"&iquest;Realmente desea eliminar el recurso <strong>%s</strong>?";
-#elif L==5	// fr
-	"Voulez-vous vraiment supprimer la ressource <strong>%s</strong>?";
-#elif L==6	// gn
-	"&iquest;Realmente desea eliminar el recurso <strong>%s</strong>?";	// Okoteve traducción
-#elif L==7	// it
-	"Vuoi realmente rimuovere la risorsa <strong>%s</strong>?";
-#elif L==8	// pl
-	"Czy na pewno chcesz usun&aogon;&cacute; zas&oacute;b <strong>%s</strong>?";
-#elif L==9	// pt
-	"Voc&ecirc; realmente deseja remover o recurso <strong>%s</strong>?";
-#elif L==10	// tr
-	"<strong>%s</strong> kayna&gbreve;&inodot;n&inodot; ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_rubric_X =	// Warning: it is very important to include %s in the following sentences

@@ -263,8 +263,12 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
       [Vie_EDIT] = TreSpc_PutIconsViewItem,
      };
 
-   /***** Trivial check *****/
+   /***** Trivial check: node should be valid *****/
    if (Node->Hierarchy.NodCod <= 0)
+      return;
+
+   /***** Trivial check: if this info type has no items ==> nothing to do *****/
+   if (!GetListItems[Node->InfoType])
       return;
 
    /***** Get list of node questions & answers from database *****/
@@ -903,10 +907,9 @@ void TreSpc_ChangeItem (Inf_Type_t InfoType)
 
 void TreSpc_ReqRemItem (Inf_Type_t InfoType)
   {
-   extern const char *Txt_Do_you_really_want_to_remove_the_resource_X;
-   extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
-   extern const char *Txt_Do_you_really_want_to_remove_the_link_X;
+   extern const char *Txt_Do_you_really_want_to_remove_the_item_X;
    struct Tre_Node Node;
+   const char *ItemTitle;
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (InfoType);
@@ -921,23 +924,25 @@ void TreSpc_ReqRemItem (Inf_Type_t InfoType)
    switch (InfoType)
      {
       case Inf_PROGRAM:
-	 Ale_CreateAlert (Ale_QUESTION,TreSpc_LIST_ITEMS_SECTION_ID,
-			  Txt_Do_you_really_want_to_remove_the_resource_X,
-			  Node.Resource.Title);
+	 ItemTitle = Node.Resource.Title;
+	 break;
+      case Inf_BIBLIOGRAPHY:
+	 ItemTitle = Node.Bib.Fields[Bib_TITLE];
 	 break;
       case Inf_FAQ:
-	 Ale_CreateAlert (Ale_QUESTION,TreSpc_LIST_ITEMS_SECTION_ID,
-			  Txt_Do_you_really_want_to_remove_the_question_X,
-			  Node.QaA.Question);
+	 ItemTitle = Node.QaA.Question;
 	 break;
       case Inf_LINKS:
-	 Ale_CreateAlert (Ale_QUESTION,TreSpc_LIST_ITEMS_SECTION_ID,
-			  Txt_Do_you_really_want_to_remove_the_link_X,
-			  Node.Lnk.Title);
+	 ItemTitle = Node.Lnk.Fields[Lnk_TITLE];
 	 break;
       default:
+	 ItemTitle = NULL;
+         Err_WrongTypeExit ();
 	 break;
      }
+   Ale_CreateAlert (Ale_QUESTION,TreSpc_LIST_ITEMS_SECTION_ID,
+		    Txt_Do_you_really_want_to_remove_the_item_X,
+		    ItemTitle);
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
