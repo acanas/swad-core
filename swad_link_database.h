@@ -41,14 +41,12 @@ long Lnk_DB_CreateCrsLink (const struct Tre_Node *Node);
 unsigned Lnk_DB_GetListCrsLinks (MYSQL_RES **mysql_res,long NodCod,
                                  bool ShowHiddenCrsLinks);
 unsigned Lnk_DB_GetCrsLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod);
-unsigned Lnk_DB_GetLnkIndBefore (const struct Tre_Node *Node);
-unsigned Lnk_DB_GetLnkIndAfter (const struct Tre_Node *Node);
-long Lnk_DB_GetLnkCodFromLnkInd (long NodCod,unsigned LnkInd);
+long Lnk_DB_GetLnkCodFromLnkInd (long NodCod,unsigned ItmInd);
 void Lnk_DB_RemoveCrsLink (const struct Tre_Node *Node);
 void Lnk_DB_HideOrUnhideCrsLink (const struct Tre_Node *Node,
 			         HidVis_HiddenOrVisible_t HiddenOrVisible);
 void Lnk_DB_LockTableCrsLinks (void);
-void Lnk_DB_UpdateLnkInd (const struct Tre_Node *Node,long LnkCod,int LnkInd);
+void Lnk_DB_UpdateLnkInd (const struct Tre_Node *Node,long LnkCod,int ItmInd);
 void Lnk_DB_UpdateCrsLink (const struct Tre_Node *Node);
 
 #endif

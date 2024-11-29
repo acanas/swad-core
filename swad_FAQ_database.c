@@ -46,8 +46,8 @@ long FAQ_DB_CreateQaA (const struct Tre_Node *Node)
    return
    DB_QueryINSERTandReturnCode ("can not create new question-answer",
 				"INSERT INTO faq_questions"
-				" (NodCod,QaAInd,Hidden,Question,Answer)"
-				" SELECT %ld,COALESCE(MAX(t2.QaAInd),0)+1,'N','%s','%s'"
+				" (NodCod,ItmInd,Hidden,Question,Answer)"
+				" SELECT %ld,COALESCE(MAX(t2.ItmInd),0)+1,'N','%s','%s'"
 				  " FROM faq_questions AS t2"
 				 " WHERE t2.NodCod=%ld",
 				Node->Hierarchy.NodCod,
@@ -74,7 +74,7 @@ unsigned FAQ_DB_GetListQaAs (MYSQL_RES **mysql_res,long NodCod,
    DB_QuerySELECT (mysql_res,"can not get node questions & answers",
 		   "SELECT faq_questions.NodCod,"	// row[0]
 			  "faq_questions.QaACod,"	// row[1]
-                          "faq_questions.QaAInd,"	// row[2]
+                          "faq_questions.ItmInd,"	// row[2]
 			  "faq_questions.Hidden,"	// row[3]
 			  "faq_questions.Question,"	// row[4]
 			  "faq_questions.Answer"	// row[5]
@@ -85,7 +85,7 @@ unsigned FAQ_DB_GetListQaAs (MYSQL_RES **mysql_res,long NodCod,
 		     " AND faq_questions.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'"		// Extra check
-		" ORDER BY faq_questions.QaAInd",
+		" ORDER BY faq_questions.ItmInd",
 		   NodCod,
 		   HiddenSubQuery[ShowHiddenQaAs],
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
@@ -104,7 +104,7 @@ unsigned FAQ_DB_GetQaADataByCod (MYSQL_RES **mysql_res,long QaACod)
    DB_QuerySELECT (mysql_res,"can not get node question & answer data",
 		   "SELECT faq_questions.NodCod,"	// row[0]
 			  "faq_questions.QaACod,"	// row[1]
-                          "faq_questions.QaAInd,"	// row[2]
+                          "faq_questions.ItmInd,"	// row[2]
 			  "faq_questions.Hidden,"	// row[3]
 			  "faq_questions.Question,"	// row[4]
 			  "faq_questions.Answer"	// row[5]
@@ -120,41 +120,13 @@ unsigned FAQ_DB_GetQaADataByCod (MYSQL_RES **mysql_res,long QaACod)
   }
 
 /*****************************************************************************/
-/********* Get the question & answer index before/after a given one ************/
-/*****************************************************************************/
-
-unsigned FAQ_DB_GetQaAIndBefore (const struct Tre_Node *Node)
-  {
-   return
-   DB_QuerySELECTUnsigned ("can not get the question-answer before",
-			   "SELECT COALESCE(MAX(QaAInd),0)"
-			    " FROM faq_questions"
-			   " WHERE NodCod=%ld"
-			     " AND QaAInd<%u",
-			   Node->Hierarchy.NodCod,
-			   Node->SpcItem.Ind);
-  }
-
-unsigned FAQ_DB_GetQaAIndAfter (const struct Tre_Node *Node)
-  {
-   return
-   DB_QuerySELECTUnsigned ("can not get the question-answer after",
-			   "SELECT COALESCE(MIN(QaAInd),0)"
-			    " FROM faq_questions"
-			   " WHERE NodCod=%ld"
-			     " AND QaAInd>%u",
-			   Node->Hierarchy.NodCod,
-			   Node->SpcItem.Ind);
-  }
-
-/*****************************************************************************/
 /**** Get question & answer code given node code and question & answer index *****/
 /*****************************************************************************/
 
-long FAQ_DB_GetQaACodFromQaAInd (long NodCod,unsigned QaAInd)
+long FAQ_DB_GetQaACodFromQaAInd (long NodCod,unsigned ItmInd)
   {
    /***** Trivial check: question & answer index should be > 0 *****/
-   if (QaAInd == 0)
+   if (ItmInd == 0)
       return -1L;
 
    /***** Get question & answer code given node code and question & answer index *****/
@@ -162,8 +134,8 @@ long FAQ_DB_GetQaACodFromQaAInd (long NodCod,unsigned QaAInd)
 			      "SELECT QaACod"
 			       " FROM faq_questions"
 			      " WHERE NodCod=%ld"
-				" AND QaAInd=%u",
-			      NodCod,QaAInd);
+				" AND ItmInd=%u",
+			      NodCod,ItmInd);
   }
 
 /*****************************************************************************/
@@ -231,20 +203,20 @@ void FAQ_DB_LockTableQaAs (void)
 /********* Update the index of a question & answer given its code **************/
 /*****************************************************************************/
 
-void FAQ_DB_UpdateQaAInd (const struct Tre_Node *Node,long QaACod,int QaAInd)
+void FAQ_DB_UpdateQaAInd (const struct Tre_Node *Node,long QaACod,int ItmInd)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    DB_QueryUPDATE ("can not update index of question-answer",
 		   "UPDATE faq_questions,"
 		          "tre_nodes"
-		     " SET faq_questions.QaAInd=%d"
+		     " SET faq_questions.ItmInd=%d"
 		   " WHERE faq_questions.QaACod=%ld"
 		     " AND faq_questions.NodCod=%ld"
 		     " AND faq_questions.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   QaAInd,
+		   ItmInd,
 		   QaACod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,

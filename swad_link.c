@@ -119,7 +119,7 @@ void Lnk_GetCrsLinkDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
    /*
    NodCod	row[0]
    LnkCod	row[1]
-   LnkInd	row[2]
+   ItmInd	row[2]
    Hidden	row[3]
    Title	row[4]
    Description	row[5]

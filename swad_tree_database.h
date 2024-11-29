@@ -65,4 +65,8 @@ void Tre_DB_InsertNodeInExpandedNodes (long NodCod);
 ConExp_ContractedOrExpanded_t Tre_DB_GetIfContractedOrExpandedNode (long NodCod);
 void Tre_DB_RemoveNodeFromExpandedNodes (long NodCod);
 
+//----------------------------- Specific items --------------------------------
+unsigned Tre_DB_GetItmIndBefore (const struct Tre_Node *Node);
+unsigned Tre_DB_GetItmIndAfter (const struct Tre_Node *Node);
+
 #endif

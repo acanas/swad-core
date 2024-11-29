@@ -161,8 +161,8 @@ long Rsc_DB_CreateResource (const struct Tre_Node *Node)
    return
    DB_QueryINSERTandReturnCode ("can not create new resource",
 				"INSERT INTO prg_resources"
-				" (NodCod,RscInd,Hidden,Type,Cod,Title)"
-				" SELECT %ld,COALESCE(MAX(t2.RscInd),0)+1,'N','%s',%ld,'%s'"
+				" (NodCod,ItmInd,Hidden,Type,Cod,Title)"
+				" SELECT %ld,COALESCE(MAX(t2.ItmInd),0)+1,'N','%s',%ld,'%s'"
 				  " FROM prg_resources AS t2"
 				 " WHERE t2.NodCod=%ld",
 				Node->Hierarchy.NodCod,
@@ -190,7 +190,7 @@ unsigned Rsc_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
    DB_QuerySELECT (mysql_res,"can not get node resources",
 		   "SELECT prg_resources.NodCod,"	// row[0]
 			  "prg_resources.RscCod,"	// row[1]
-                          "prg_resources.RscInd,"	// row[2]
+                          "prg_resources.ItmInd,"	// row[2]
 			  "prg_resources.Hidden,"	// row[3]
 			  "prg_resources.Type,"		// row[4]
 			  "prg_resources.Cod,"		// row[5]
@@ -202,7 +202,7 @@ unsigned Rsc_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
 		     " AND prg_resources.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'"		// Extra check
-		" ORDER BY prg_resources.RscInd",
+		" ORDER BY prg_resources.ItmInd",
 		   NodCod,
 		   HiddenSubQuery[ShowHiddenResources],
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
@@ -221,7 +221,7 @@ unsigned Rsc_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long RscCod)
    DB_QuerySELECT (mysql_res,"can not get node resource data",
 		   "SELECT prg_resources.NodCod,"	// row[0]
 			  "prg_resources.RscCod,"	// row[1]
-                          "prg_resources.RscInd,"	// row[2]
+                          "prg_resources.ItmInd,"	// row[2]
 			  "prg_resources.Hidden,"	// row[3]
 			  "prg_resources.Type,"		// row[4]
 			  "prg_resources.Cod,"		// row[5]
@@ -238,41 +238,13 @@ unsigned Rsc_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long RscCod)
   }
 
 /*****************************************************************************/
-/************* Get the resource index before/after a given one ***************/
-/*****************************************************************************/
-
-unsigned Rsc_DB_GetRscIndBefore (const struct Tre_Node *Node)
-  {
-   return
-   DB_QuerySELECTUnsigned ("can not get the resource before",
-			   "SELECT COALESCE(MAX(RscInd),0)"
-			    " FROM prg_resources"
-			   " WHERE NodCod=%ld"
-			     " AND RscInd<%u",
-			   Node->Hierarchy.NodCod,
-			   Node->SpcItem.Ind);
-  }
-
-unsigned Rsc_DB_GetRscIndAfter (const struct Tre_Node *Node)
-  {
-   return
-   DB_QuerySELECTUnsigned ("can not get the resource after",
-			   "SELECT COALESCE(MIN(RscInd),0)"
-			    " FROM prg_resources"
-			   " WHERE NodCod=%ld"
-			     " AND RscInd>%u",
-			   Node->Hierarchy.NodCod,
-			   Node->SpcItem.Ind);
-  }
-
-/*****************************************************************************/
 /*********** Get resource code given node code and resource index ************/
 /*****************************************************************************/
 
-long Rsc_DB_GetRscCodFromRscInd (long NodCod,unsigned RscInd)
+long Rsc_DB_GetRscCodFromRscInd (long NodCod,unsigned ItmInd)
   {
    /***** Trivial check: resource index should be > 0 *****/
-   if (RscInd == 0)
+   if (ItmInd == 0)
       return -1L;
 
    /***** Get resource code given node code and resource index *****/
@@ -280,8 +252,8 @@ long Rsc_DB_GetRscCodFromRscInd (long NodCod,unsigned RscInd)
 			      "SELECT RscCod"
 			       " FROM prg_resources"
 			      " WHERE NodCod=%ld"
-				" AND RscInd=%u",
-			      NodCod,RscInd);
+				" AND ItmInd=%u",
+			      NodCod,ItmInd);
   }
 
 /*****************************************************************************/
@@ -349,20 +321,20 @@ void Rsc_DB_LockTableResources (void)
 /************* Update the index of a resource given its code *****************/
 /*****************************************************************************/
 
-void Rsc_DB_UpdateRscInd (const struct Tre_Node *Node,long RscCod,int RscInd)
+void Rsc_DB_UpdateRscInd (const struct Tre_Node *Node,long RscCod,int ItmInd)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    DB_QueryUPDATE ("can not update index of resource",
 		   "UPDATE prg_resources,"
 		          "tre_nodes"
-		     " SET prg_resources.RscInd=%d"
+		     " SET prg_resources.ItmInd=%d"
 		   " WHERE prg_resources.RscCod=%ld"
 		     " AND prg_resources.NodCod=%ld"
 		     " AND prg_resources.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   RscInd,
+		   ItmInd,
 		   RscCod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,

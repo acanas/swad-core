@@ -55,6 +55,24 @@ const char *Tre_DB_Types[Inf_NUM_TYPES] =
   };
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+static const char *Tre_DB_TablesItems[Inf_NUM_TYPES] =
+  {
+   [Inf_UNKNOWN_TYPE	] = NULL,
+   [Inf_INFORMATION	] = NULL,
+   [Inf_PROGRAM		] = "prg_resources",
+   [Inf_TEACH_GUIDE	] = NULL,
+   [Inf_SYLLABUS_LEC	] = NULL,
+   [Inf_SYLLABUS_PRA	] = NULL,
+   [Inf_BIBLIOGRAPHY	] = "crs_bibliography",
+   [Inf_FAQ		] = "faq_questions",
+   [Inf_LINKS		] = "crs_links",
+   [Inf_ASSESSMENT	] = NULL,
+  };
+
+/*****************************************************************************/
 /******************* Create a new tree node into database ********************/
 /*****************************************************************************/
 
@@ -520,4 +538,34 @@ void Tre_DB_RemoveNodeFromExpandedNodes (long NodCod)
 		     " AND NodCod=%ld",
 	           Gbl.Usrs.Me.UsrDat.UsrCod,
 		   NodCod);
+  }
+
+/*****************************************************************************/
+/*********** Get the course link index before/after a given one **************/
+/*****************************************************************************/
+
+unsigned Tre_DB_GetItmIndBefore (const struct Tre_Node *Node)
+  {
+   return
+   DB_QuerySELECTUnsigned ("can not get the index before",
+			   "SELECT COALESCE(MAX(ItmInd),0)"
+			    " FROM %s"
+			   " WHERE NodCod=%ld"
+			     " AND ItmInd<%u",
+			   Tre_DB_TablesItems[Node->InfoType],
+			   Node->Hierarchy.NodCod,
+			   Node->SpcItem.Ind);
+  }
+
+unsigned Tre_DB_GetItmIndAfter (const struct Tre_Node *Node)
+  {
+   return
+   DB_QuerySELECTUnsigned ("can not get the index after",
+			   "SELECT COALESCE(MIN(ItmInd),0)"
+			    " FROM %s"
+			   " WHERE NodCod=%ld"
+			     " AND ItmInd>%u",
+			   Tre_DB_TablesItems[Node->InfoType],
+			   Node->Hierarchy.NodCod,
+			   Node->SpcItem.Ind);
   }

@@ -635,11 +635,18 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.42.2 (2024-11-29)"
+#define Log_PLATFORM_VERSION	"SWAD 24.43 (2024-11-29)"
 #define CSS_FILE		"swad24.37.1.css"
 #define JS_FILE			"swad23.89.js"
 /*
-	Version 24.42.2:  Nov 29, 2024  Changes in layout of trees. (345717 lines)
+	Version 24.43:    Nov 29, 2024  Code refactoring in trees. (345637 lines)
+					4 changes necessary in database:
+ALTER TABLE prg_resources CHANGE COLUMN RscInd ItmInd INT NOT NULL DEFAULT 0;
+ALTER TABLE crs_bibliography CHANGE COLUMN BibInd ItmInd INT NOT NULL DEFAULT 0;
+ALTER TABLE faq_questions CHANGE COLUMN QaAInd ItmInd INT NOT NULL DEFAULT 0;
+ALTER TABLE crs_links CHANGE COLUMN LnkInd ItmInd INT NOT NULL DEFAULT 0;
+
+	Version 24.42.2:  Nov 29, 2024  Changes in layout of trees. (345715 lines)
 	Version 24.42.1:  Nov 29, 2024  Code refactoring in course links. (345762 lines)
 	Version 24.42:    Nov 28, 2024  Changes in edition of program resources. (345732 lines)
 	Version 24.41.1:  Nov 28, 2024  Code refactoring in bibliography. (345825 lines)

@@ -132,7 +132,7 @@ void Bib_GetBibRefDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
    /*
    NodCod	row[ 0]
    BibCod	row[ 1]
-   BibInd	row[ 2]
+   ItmInd	row[ 2]
    Hidden	row[ 3]
    Authors	row[ 4]
    Title	row[ 5]

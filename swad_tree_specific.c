@@ -39,6 +39,7 @@
 #include "swad_resource.h"
 #include "swad_resource_database.h"
 #include "swad_tree.h"
+#include "swad_tree_database.h"
 #include "swad_tree_specific.h"
 
 /*****************************************************************************/
@@ -908,8 +909,20 @@ void TreSpc_ChangeItem (Inf_Type_t InfoType)
 void TreSpc_ReqRemItem (Inf_Type_t InfoType)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_item_X;
-   struct Tre_Node Node;
-   const char *ItemTitle;
+   static struct Tre_Node Node;
+   static const char *ItemTitles[Inf_NUM_TYPES] =
+     {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
+      [Inf_PROGRAM	] = Node.Resource.Title,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = Node.Bib.Fields[Bib_TITLE],
+      [Inf_FAQ		] = Node.QaA.Question,
+      [Inf_LINKS	] = Node.Lnk.Fields[Lnk_TITLE],
+      [Inf_ASSESSMENT	] = NULL,
+     };
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (InfoType);
@@ -921,28 +934,11 @@ void TreSpc_ReqRemItem (Inf_Type_t InfoType)
       Err_WrongItemExit ();
 
    /***** Create alert to remove the specific list item *****/
-   switch (InfoType)
-     {
-      case Inf_PROGRAM:
-	 ItemTitle = Node.Resource.Title;
-	 break;
-      case Inf_BIBLIOGRAPHY:
-	 ItemTitle = Node.Bib.Fields[Bib_TITLE];
-	 break;
-      case Inf_FAQ:
-	 ItemTitle = Node.QaA.Question;
-	 break;
-      case Inf_LINKS:
-	 ItemTitle = Node.Lnk.Fields[Lnk_TITLE];
-	 break;
-      default:
-	 ItemTitle = NULL;
-         Err_WrongTypeExit ();
-	 break;
-     }
+   if (ItemTitles[InfoType] == NULL)
+      Err_WrongTypeExit ();
    Ale_CreateAlert (Ale_QUESTION,TreSpc_LIST_ITEMS_SECTION_ID,
 		    Txt_Do_you_really_want_to_remove_the_item_X,
-		    ItemTitle);
+		    ItemTitles[InfoType]);
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
@@ -1075,28 +1071,10 @@ void TreSpc_MoveUpDownItem (Inf_Type_t InfoType,TreSpc_UpDown_t UpDown)
    struct Tre_Node Node;
    struct Tre_SpcItem Item2;
    bool Success = false;
-   static unsigned (*GetOtherInd[Inf_NUM_TYPES][TreSpc_NUM_UP_DOWN])(const struct Tre_Node *Node) =
+   static unsigned (*GetOtherInd[TreSpc_NUM_UP_DOWN])(const struct Tre_Node *Node) =
      {
-      [Inf_UNKNOWN_TYPE	][TreSpc_UP  ] = NULL,
-      [Inf_UNKNOWN_TYPE	][TreSpc_DOWN] = NULL,
-      [Inf_INFORMATION	][TreSpc_UP  ] = NULL,
-      [Inf_INFORMATION	][TreSpc_DOWN] = NULL,
-      [Inf_PROGRAM	][TreSpc_UP  ] = Rsc_DB_GetRscIndBefore,
-      [Inf_PROGRAM	][TreSpc_DOWN] = Rsc_DB_GetRscIndAfter,
-      [Inf_TEACH_GUIDE	][TreSpc_UP  ] = NULL,
-      [Inf_TEACH_GUIDE	][TreSpc_DOWN] = NULL,
-      [Inf_SYLLABUS_LEC	][TreSpc_UP  ] = NULL,
-      [Inf_SYLLABUS_LEC	][TreSpc_DOWN] = NULL,
-      [Inf_SYLLABUS_PRA	][TreSpc_UP  ] = NULL,
-      [Inf_SYLLABUS_PRA	][TreSpc_DOWN] = NULL,
-      [Inf_BIBLIOGRAPHY	][TreSpc_UP  ] = Bib_DB_GetBibIndBefore,
-      [Inf_BIBLIOGRAPHY	][TreSpc_DOWN] = Bib_DB_GetBibIndAfter,
-      [Inf_FAQ		][TreSpc_UP  ] = FAQ_DB_GetQaAIndBefore,
-      [Inf_FAQ		][TreSpc_DOWN] = FAQ_DB_GetQaAIndAfter,
-      [Inf_LINKS	][TreSpc_UP  ] = Lnk_DB_GetLnkIndBefore,
-      [Inf_LINKS	][TreSpc_DOWN] = Lnk_DB_GetLnkIndAfter,
-      [Inf_ASSESSMENT	][TreSpc_UP  ] = NULL,
-      [Inf_ASSESSMENT	][TreSpc_DOWN] = NULL,
+      [TreSpc_UP  ] = Tre_DB_GetItmIndBefore,
+      [TreSpc_DOWN] = Tre_DB_GetItmIndAfter,
      };
    static long (*GetCodFromInd[Inf_NUM_TYPES]) (long NodCod,unsigned Ind) =
      {
@@ -1126,7 +1104,7 @@ void TreSpc_MoveUpDownItem (Inf_Type_t InfoType,TreSpc_UpDown_t UpDown)
       Err_WrongItemExit ();
 
    /***** Move up/down list item *****/
-   if ((Item2.Ind = GetOtherInd[InfoType][UpDown] (&Node)))	// 0 ==> movement not allowed
+   if ((Item2.Ind = GetOtherInd[UpDown] (&Node)))	// 0 ==> movement not allowed
      {
       /* Get the other list item code */
       Item2.Cod = GetCodFromInd[InfoType] (Node.Hierarchy.NodCod,Item2.Ind);
@@ -1205,7 +1183,7 @@ static bool TreSpc_ExchangeItems (const struct Tre_Node *Node,
       +-------+-------+   +-------+-------+   +-------+-------+   +-------+-------+ +-------+-------+
       */
       /* Step 1: Change second index to negative,
-		 necessary to preserve unique index (NodCod,QaAInd) */
+		 necessary to preserve unique index (NodCod,ItmInd) */
       UpdateInd[Node->InfoType] (Node,Item2->Cod,-(int) Item2->Ind);
 
       /* Step 2: Change first index */

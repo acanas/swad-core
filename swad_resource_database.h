@@ -49,9 +49,7 @@ unsigned Rsc_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
                                   bool ShowHiddenResources);
 unsigned Rsc_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long RscCod);
 
-unsigned Rsc_DB_GetRscIndBefore (const struct Tre_Node *Node);
-unsigned Rsc_DB_GetRscIndAfter (const struct Tre_Node *Node);
-long Rsc_DB_GetRscCodFromRscInd (long NodCod,unsigned RscInd);
+long Rsc_DB_GetRscCodFromRscInd (long NodCod,unsigned ItmInd);
 
 void Rsc_DB_RemoveResource (const struct Tre_Node *Node);
 
@@ -59,7 +57,7 @@ void Rsc_DB_HideOrUnhideResource (const struct Tre_Node *Node,
 				  HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 void Rsc_DB_LockTableResources (void);
-void Rsc_DB_UpdateRscInd (const struct Tre_Node *Node,long RscCod,int RscInd);
+void Rsc_DB_UpdateRscInd (const struct Tre_Node *Node,long RscCod,int ItmInd);
 
 void Rsc_DB_UpdateResource (const struct Tre_Node *Node);
 

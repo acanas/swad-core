@@ -46,13 +46,13 @@ long Lnk_DB_CreateCrsLink (const struct Tre_Node *Node)
    return
    DB_QueryINSERTandReturnCode ("can not create new course link",
 				"INSERT INTO crs_links"
-				" (NodCod,LnkInd,Hidden,Title,Description,WWW)"
-				" SELECT %ld,COALESCE(MAX(t2.LnkInd),0)+1,'N','%s','%s','%s'"
+				" (NodCod,ItmInd,Hidden,Title,Description,WWW)"
+				" SELECT %ld,COALESCE(MAX(t2.ItmInd),0)+1,'N','%s','%s','%s'"
 				  " FROM crs_links AS t2"
 				 " WHERE t2.NodCod=%ld",
 				Node->Hierarchy.NodCod,
-				Node->Lnk.Title,
-				Node->Lnk.Description,
+				Node->Lnk.Fields[Lnk_TITLE	],
+				Node->Lnk.Fields[Lnk_DESCRIPTION],
 				Node->Lnk.WWW,
 				Node->Hierarchy.NodCod);
   }
@@ -75,7 +75,7 @@ unsigned Lnk_DB_GetListCrsLinks (MYSQL_RES **mysql_res,long NodCod,
    DB_QuerySELECT (mysql_res,"can not get node course links",
 		   "SELECT crs_links.NodCod,"		// row[0]
 			  "crs_links.LnkCod,"		// row[1]
-                          "crs_links.LnkInd,"		// row[2]
+                          "crs_links.ItmInd,"		// row[2]
 			  "crs_links.Hidden,"		// row[3]
 			  "crs_links.Title,"		// row[4]
 			  "crs_links.Description,"	// row[5]
@@ -87,7 +87,7 @@ unsigned Lnk_DB_GetListCrsLinks (MYSQL_RES **mysql_res,long NodCod,
 		     " AND crs_links.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'"		// Extra check
-		" ORDER BY crs_links.LnkInd",
+		" ORDER BY crs_links.ItmInd",
 		   NodCod,
 		   HiddenSubQuery[ShowHiddenCrsLinks],
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
@@ -106,7 +106,7 @@ unsigned Lnk_DB_GetCrsLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod)
    DB_QuerySELECT (mysql_res,"can not get node course link data",
 		   "SELECT crs_links.NodCod,"		// row[0]
 			  "crs_links.LnkCod,"		// row[1]
-                          "crs_links.LnkInd,"		// row[2]
+                          "crs_links.ItmInd,"		// row[2]
 			  "crs_links.Hidden,"		// row[3]
 			  "crs_links.Title,"		// row[4]
 			  "crs_links.Description,"	// row[5]
@@ -123,41 +123,13 @@ unsigned Lnk_DB_GetCrsLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod)
   }
 
 /*****************************************************************************/
-/*********** Get the course link index before/after a given one **************/
-/*****************************************************************************/
-
-unsigned Lnk_DB_GetLnkIndBefore (const struct Tre_Node *Node)
-  {
-   return
-   DB_QuerySELECTUnsigned ("can not get the course link before",
-			   "SELECT COALESCE(MAX(LnkInd),0)"
-			    " FROM crs_links"
-			   " WHERE NodCod=%ld"
-			     " AND LnkInd<%u",
-			   Node->Hierarchy.NodCod,
-			   Node->SpcItem.Ind);
-  }
-
-unsigned Lnk_DB_GetLnkIndAfter (const struct Tre_Node *Node)
-  {
-   return
-   DB_QuerySELECTUnsigned ("can not get the course link after",
-			   "SELECT COALESCE(MIN(LnkInd),0)"
-			    " FROM crs_links"
-			   " WHERE NodCod=%ld"
-			     " AND LnkInd>%u",
-			   Node->Hierarchy.NodCod,
-			   Node->SpcItem.Ind);
-  }
-
-/*****************************************************************************/
 /******** Get course link code given node code and course link index *********/
 /*****************************************************************************/
 
-long Lnk_DB_GetLnkCodFromLnkInd (long NodCod,unsigned LnkInd)
+long Lnk_DB_GetLnkCodFromLnkInd (long NodCod,unsigned ItmInd)
   {
    /***** Trivial check: course link index should be > 0 *****/
-   if (LnkInd == 0)
+   if (ItmInd == 0)
       return -1L;
 
    /***** Get course link code given node code and course link index *****/
@@ -165,8 +137,8 @@ long Lnk_DB_GetLnkCodFromLnkInd (long NodCod,unsigned LnkInd)
 			      "SELECT LnkCod"
 			       " FROM crs_links"
 			      " WHERE NodCod=%ld"
-				" AND LnkInd=%u",
-			      NodCod,LnkInd);
+				" AND ItmInd=%u",
+			      NodCod,ItmInd);
   }
 
 /*****************************************************************************/
@@ -234,20 +206,20 @@ void Lnk_DB_LockTableCrsLinks (void)
 /*********** Update the index of a course link given its code ****************/
 /*****************************************************************************/
 
-void Lnk_DB_UpdateLnkInd (const struct Tre_Node *Node,long LnkCod,int LnkInd)
+void Lnk_DB_UpdateLnkInd (const struct Tre_Node *Node,long LnkCod,int ItmInd)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    DB_QueryUPDATE ("can not update index of course link",
 		   "UPDATE crs_links,"
 		          "tre_nodes"
-		     " SET crs_links.LnkInd=%d"
+		     " SET crs_links.ItmInd=%d"
 		   " WHERE crs_links.LnkCod=%ld"
 		     " AND crs_links.NodCod=%ld"
 		     " AND crs_links.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   LnkInd,
+		   ItmInd,
 		   LnkCod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
@@ -273,8 +245,8 @@ void Lnk_DB_UpdateCrsLink (const struct Tre_Node *Node)
 		     " AND crs_links.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   Node->Lnk.Title,
-		   Node->Lnk.Description,
+		   Node->Lnk.Fields[Lnk_TITLE		],
+		   Node->Lnk.Fields[Lnk_DESCRIPTION	],
 		   Node->Lnk.WWW,
 		   Node->SpcItem.Cod,
 		   Node->Hierarchy.NodCod,

@@ -41,8 +41,6 @@ long Bib_DB_CreateBibRef (const struct Tre_Node *Node);
 unsigned Bib_DB_GetListBibRefs (MYSQL_RES **mysql_res,long NodCod,
                                 bool ShowHiddenBibRefs);
 unsigned Bib_DB_GetBibRefDataByCod (MYSQL_RES **mysql_res,long BibCod);
-unsigned Bib_DB_GetBibIndBefore (const struct Tre_Node *Node);
-unsigned Bib_DB_GetBibIndAfter (const struct Tre_Node *Node);
 long Bib_DB_GetBibCodFromBibInd (long NodCod,unsigned BibInd);
 void Bib_DB_RemoveBibRef (const struct Tre_Node *Node);
 void Bib_DB_HideOrUnhideBibRef (const struct Tre_Node *Node,

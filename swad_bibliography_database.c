@@ -46,9 +46,9 @@ long Bib_DB_CreateBibRef (const struct Tre_Node *Node)
    return
    DB_QueryINSERTandReturnCode ("can not create new bibliographic reference",
 				"INSERT INTO crs_bibliography"
-				" (NodCod,BibInd,Hidden,"
+				" (NodCod,ItmInd,Hidden,"
 				  "Authors,Title,Source,Publisher,Date,Id,URL)"
-				" SELECT %ld,COALESCE(MAX(t2.BibInd),0)+1,'N',"
+				" SELECT %ld,COALESCE(MAX(t2.ItmInd),0)+1,'N',"
 				        "'%s','%s','%s','%s','%s','%s','%s'"
 				  " FROM crs_bibliography AS t2"
 				 " WHERE t2.NodCod=%ld",
@@ -81,7 +81,7 @@ unsigned Bib_DB_GetListBibRefs (MYSQL_RES **mysql_res,long NodCod,
    DB_QuerySELECT (mysql_res,"can not get node bibliographic references",
 		   "SELECT crs_bibliography.NodCod,"	// row[ 0]
 			  "crs_bibliography.BibCod,"	// row[ 1]
-                          "crs_bibliography.BibInd,"	// row[ 2]
+                          "crs_bibliography.ItmInd,"	// row[ 2]
 			  "crs_bibliography.Hidden,"	// row[ 3]
 			  "crs_bibliography.Authors,"	// row[ 4]
 			  "crs_bibliography.Title,"	// row[ 5]
@@ -97,7 +97,7 @@ unsigned Bib_DB_GetListBibRefs (MYSQL_RES **mysql_res,long NodCod,
 		     " AND crs_bibliography.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'"		// Extra check
-		" ORDER BY crs_bibliography.BibInd",
+		" ORDER BY crs_bibliography.ItmInd",
 		   NodCod,
 		   HiddenSubQuery[ShowHiddenBibRefs],
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
@@ -116,7 +116,7 @@ unsigned Bib_DB_GetBibRefDataByCod (MYSQL_RES **mysql_res,long BibCod)
    DB_QuerySELECT (mysql_res,"can not get node bibliographic reference data",
 		   "SELECT crs_bibliography.NodCod,"	// row[ 0]
 			  "crs_bibliography.BibCod,"	// row[ 1]
-                          "crs_bibliography.BibInd,"	// row[ 2]
+                          "crs_bibliography.ItmInd,"	// row[ 2]
 			  "crs_bibliography.Hidden,"	// row[ 3]
 			  "crs_bibliography.Authors,"	// row[ 4]
 			  "crs_bibliography.Title,"	// row[ 5]
@@ -137,42 +137,14 @@ unsigned Bib_DB_GetBibRefDataByCod (MYSQL_RES **mysql_res,long BibCod)
   }
 
 /*****************************************************************************/
-/****** Get the bibliographic reference index before/after a given one *******/
-/*****************************************************************************/
-
-unsigned Bib_DB_GetBibIndBefore (const struct Tre_Node *Node)
-  {
-   return
-   DB_QuerySELECTUnsigned ("can not get the bibliographic reference before",
-			   "SELECT COALESCE(MAX(BibInd),0)"
-			    " FROM crs_bibliography"
-			   " WHERE NodCod=%ld"
-			     " AND BibInd<%u",
-			   Node->Hierarchy.NodCod,
-			   Node->SpcItem.Ind);
-  }
-
-unsigned Bib_DB_GetBibIndAfter (const struct Tre_Node *Node)
-  {
-   return
-   DB_QuerySELECTUnsigned ("can not get the bibliographic reference after",
-			   "SELECT COALESCE(MIN(BibInd),0)"
-			    " FROM crs_bibliography"
-			   " WHERE NodCod=%ld"
-			     " AND BibInd>%u",
-			   Node->Hierarchy.NodCod,
-			   Node->SpcItem.Ind);
-  }
-
-/*****************************************************************************/
 /************ Get bibliographic reference code                  **************/
 /************ given node code and bibliographic reference index **************/
 /*****************************************************************************/
 
-long Bib_DB_GetBibCodFromBibInd (long NodCod,unsigned BibInd)
+long Bib_DB_GetBibCodFromBibInd (long NodCod,unsigned ItmInd)
   {
    /***** Trivial check: bibliographic reference index should be > 0 *****/
-   if (BibInd == 0)
+   if (ItmInd == 0)
       return -1L;
 
    /***** Get bibliographic reference code
@@ -181,8 +153,8 @@ long Bib_DB_GetBibCodFromBibInd (long NodCod,unsigned BibInd)
 			      "SELECT BibCod"
 			       " FROM crs_bibliography"
 			      " WHERE NodCod=%ld"
-				" AND BibInd=%u",
-			      NodCod,BibInd);
+				" AND ItmInd=%u",
+			      NodCod,ItmInd);
   }
 
 /*****************************************************************************/
@@ -250,20 +222,20 @@ void Bib_DB_LockTableBibRefs (void)
 /******** Update the index of a bibliographic reference given its code *******/
 /*****************************************************************************/
 
-void Bib_DB_UpdateBibInd (const struct Tre_Node *Node,long BibCod,int BibInd)
+void Bib_DB_UpdateBibInd (const struct Tre_Node *Node,long BibCod,int ItmInd)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    DB_QueryUPDATE ("can not update index of bibliographic reference",
 		   "UPDATE crs_bibliography,"
 		          "tre_nodes"
-		     " SET crs_bibliography.BibInd=%d"
+		     " SET crs_bibliography.ItmInd=%d"
 		   " WHERE crs_bibliography.BibCod=%ld"
 		     " AND crs_bibliography.NodCod=%ld"
 		     " AND crs_bibliography.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   BibInd,
+		   ItmInd,
 		   BibCod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,

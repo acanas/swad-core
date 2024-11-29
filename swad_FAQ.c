@@ -88,7 +88,7 @@ void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
    /*
    NodCod	row[0]
    QaACod	row[1]
-   QaAInd	row[2]
+   ItmInd	row[2]
    Hidden	row[3]
    Question	row[4]
    Answer	row[5]
