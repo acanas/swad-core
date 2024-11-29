@@ -306,18 +306,6 @@ void Rsc_DB_HideOrUnhideResource (const struct Tre_Node *Node,
   }
 
 /*****************************************************************************/
-/********** Lock table to make the exchange of resources atomic **************/
-/*****************************************************************************/
-
-void Rsc_DB_LockTableResources (void)
-  {
-   DB_Query ("can not lock tables",
-	     "LOCK TABLES prg_resources WRITE,"
-			 "tre_nodes READ");
-   DB_SetThereAreLockedTables ();
-  }
-
-/*****************************************************************************/
 /************* Update the index of a resource given its code *****************/
 /*****************************************************************************/
 

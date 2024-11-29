@@ -45,7 +45,7 @@ long Bib_DB_GetBibCodFromBibInd (long NodCod,unsigned BibInd);
 void Bib_DB_RemoveBibRef (const struct Tre_Node *Node);
 void Bib_DB_HideOrUnhideBibRef (const struct Tre_Node *Node,
 			        HidVis_HiddenOrVisible_t HiddenOrVisible);
-void Bib_DB_LockTableBibRefs (void);
+
 void Bib_DB_UpdateBibInd (const struct Tre_Node *Node,long BibCod,int BibInd);
 void Bib_DB_UpdateBibRef (const struct Tre_Node *Node);
 

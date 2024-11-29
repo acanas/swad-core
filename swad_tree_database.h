@@ -68,5 +68,6 @@ void Tre_DB_RemoveNodeFromExpandedNodes (long NodCod);
 //----------------------------- Specific items --------------------------------
 unsigned Tre_DB_GetItmIndBefore (const struct Tre_Node *Node);
 unsigned Tre_DB_GetItmIndAfter (const struct Tre_Node *Node);
+void Tre_DB_LockTables (Inf_Type_t InfoType);
 
 #endif

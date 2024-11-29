@@ -56,7 +56,6 @@ void Rsc_DB_RemoveResource (const struct Tre_Node *Node);
 void Rsc_DB_HideOrUnhideResource (const struct Tre_Node *Node,
 				  HidVis_HiddenOrVisible_t HiddenOrVisible);
 
-void Rsc_DB_LockTableResources (void);
 void Rsc_DB_UpdateRscInd (const struct Tre_Node *Node,long RscCod,int ItmInd);
 
 void Rsc_DB_UpdateResource (const struct Tre_Node *Node);

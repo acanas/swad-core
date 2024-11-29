@@ -207,18 +207,6 @@ void Bib_DB_HideOrUnhideBibRef (const struct Tre_Node *Node,
   }
 
 /*****************************************************************************/
-/**** Lock table to make the exchange of bibliographic reference atomic ******/
-/*****************************************************************************/
-
-void Bib_DB_LockTableBibRefs (void)
-  {
-   DB_Query ("can not lock tables",
-	     "LOCK TABLES crs_bibliography WRITE,"
-			 "tre_nodes READ");
-   DB_SetThereAreLockedTables ();
-  }
-
-/*****************************************************************************/
 /******** Update the index of a bibliographic reference given its code *******/
 /*****************************************************************************/
 

@@ -188,18 +188,6 @@ void FAQ_DB_HideOrUnhideQaA (const struct Tre_Node *Node,
   }
 
 /*****************************************************************************/
-/******* Lock table to make the exchange of questions & answers atomic *********/
-/*****************************************************************************/
-
-void FAQ_DB_LockTableQaAs (void)
-  {
-   DB_Query ("can not lock tables",
-	     "LOCK TABLES faq_questions WRITE,"
-			 "tre_nodes READ");
-   DB_SetThereAreLockedTables ();
-  }
-
-/*****************************************************************************/
 /********* Update the index of a question & answer given its code **************/
 /*****************************************************************************/
 

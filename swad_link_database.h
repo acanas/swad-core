@@ -45,7 +45,7 @@ long Lnk_DB_GetLnkCodFromLnkInd (long NodCod,unsigned ItmInd);
 void Lnk_DB_RemoveCrsLink (const struct Tre_Node *Node);
 void Lnk_DB_HideOrUnhideCrsLink (const struct Tre_Node *Node,
 			         HidVis_HiddenOrVisible_t HiddenOrVisible);
-void Lnk_DB_LockTableCrsLinks (void);
+
 void Lnk_DB_UpdateLnkInd (const struct Tre_Node *Node,long LnkCod,int ItmInd);
 void Lnk_DB_UpdateCrsLink (const struct Tre_Node *Node);
 

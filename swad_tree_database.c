@@ -569,3 +569,16 @@ unsigned Tre_DB_GetItmIndAfter (const struct Tre_Node *Node)
 			   Node->Hierarchy.NodCod,
 			   Node->SpcItem.Ind);
   }
+
+/*****************************************************************************/
+/**** Lock table to make the exchange of bibliographic reference atomic ******/
+/*****************************************************************************/
+
+void Tre_DB_LockTables (Inf_Type_t InfoType)
+  {
+   DB_Query ("can not lock tables",
+	     "LOCK TABLES %s WRITE,"
+			 "tre_nodes READ",
+	     Tre_DB_TablesItems[InfoType]);
+   DB_SetThereAreLockedTables ();
+  }

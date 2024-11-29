@@ -191,18 +191,6 @@ void Lnk_DB_HideOrUnhideCrsLink (const struct Tre_Node *Node,
   }
 
 /*****************************************************************************/
-/********** Lock table to make the exchange of course link atomic ************/
-/*****************************************************************************/
-
-void Lnk_DB_LockTableCrsLinks (void)
-  {
-   DB_Query ("can not lock tables",
-	     "LOCK TABLES crs_links WRITE,"
-			 "tre_nodes READ");
-   DB_SetThereAreLockedTables ();
-  }
-
-/*****************************************************************************/
 /*********** Update the index of a course link given its code ****************/
 /*****************************************************************************/
 

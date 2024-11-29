@@ -1132,19 +1132,6 @@ static bool TreSpc_ExchangeItems (const struct Tre_Node *Node,
 				  const struct Tre_SpcItem *Item2)
   {
    const struct Tre_SpcItem *Item1 = &Node->SpcItem;
-   static void (*LockTable[Inf_NUM_TYPES]) (void) =
-     {
-      [Inf_UNKNOWN_TYPE	] = NULL,
-      [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = Rsc_DB_LockTableResources,
-      [Inf_TEACH_GUIDE	] = NULL,
-      [Inf_SYLLABUS_LEC	] = NULL,
-      [Inf_SYLLABUS_PRA	] = NULL,
-      [Inf_BIBLIOGRAPHY	] = Bib_DB_LockTableBibRefs,
-      [Inf_FAQ		] = FAQ_DB_LockTableQaAs,
-      [Inf_LINKS	] = Lnk_DB_LockTableCrsLinks,
-      [Inf_ASSESSMENT	] = NULL,
-     };
    static void (*UpdateInd[Inf_NUM_TYPES]) (const struct Tre_Node *Node,long Cod,int Ind) =
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
@@ -1166,7 +1153,7 @@ static bool TreSpc_ExchangeItems (const struct Tre_Node *Node,
        Item2->Ind > 0)
      {
       /***** Lock tables to make the move atomic *****/
-      LockTable[Node->InfoType] ();
+      Tre_DB_LockTables (Node->InfoType);
 
       /***** Exchange indexes of list items *****/
       // This implementation works with non continuous indexes
