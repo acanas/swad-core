@@ -65,7 +65,7 @@ void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
    row = mysql_fetch_row (mysql_res);
    /*
    NodCod	row[0]
-   RscCod	row[1]
+   ItmCod	row[1]
    ItmInd	row[2]
    Hidden	row[3]
    Type		row[4]

@@ -34,7 +34,7 @@
 /*****************************************************************************/
 
 //----------------------------- Clipboard -------------------------------------
-void Rsc_DB_CopyToClipboard (Rsc_Type_t Type,long RscCod);
+void Rsc_DB_CopyToClipboard (Rsc_Type_t Type,long ItmCod);
 
 unsigned Rsc_DB_GetNumResourcesInClipboard (void);
 unsigned Rsc_DB_GetClipboard (MYSQL_RES **mysql_res);
@@ -47,16 +47,7 @@ long Rsc_DB_CreateResource (const struct Tre_Node *Node);
 
 unsigned Rsc_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
                                   bool ShowHiddenResources);
-unsigned Rsc_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long RscCod);
-
-long Rsc_DB_GetRscCodFromRscInd (long NodCod,unsigned ItmInd);
-
-void Rsc_DB_RemoveResource (const struct Tre_Node *Node);
-
-void Rsc_DB_HideOrUnhideResource (const struct Tre_Node *Node,
-				  HidVis_HiddenOrVisible_t HiddenOrVisible);
-
-void Rsc_DB_UpdateRscInd (const struct Tre_Node *Node,long RscCod,int ItmInd);
+unsigned Rsc_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long ItmCod);
 
 void Rsc_DB_UpdateResource (const struct Tre_Node *Node);
 

@@ -623,7 +623,7 @@ mysql> DESCRIBE crs_bibliography;
 +-----------+---------------+------+-----+---------+----------------+
 | Field     | Type          | Null | Key | Default | Extra          |
 +-----------+---------------+------+-----+---------+----------------+
-| BibCod    | int           | NO   | PRI | NULL    | auto_increment |
+| ItmCod    | int           | NO   | PRI | NULL    | auto_increment |
 | NodCod    | int           | NO   | MUL | -1      |                |
 | ItmInd    | int           | NO   |     | 0       |                |
 | Hidden    | enum('N','Y') | NO   |     | N       |                |
@@ -638,7 +638,7 @@ mysql> DESCRIBE crs_bibliography;
 11 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_bibliography ("
-			"BibCod INT NOT NULL AUTO_INCREMENT,"
+			"ItmCod INT NOT NULL AUTO_INCREMENT,"
 			"NodCod INT NOT NULL DEFAULT -1,"
 			"ItmInd INT NOT NULL DEFAULT 0,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
@@ -649,7 +649,7 @@ mysql> DESCRIBE crs_bibliography;
 			"Date VARCHAR(2047) NOT NULL,"		// Bib_MAX_BYTES_TITLE
 			"Id VARCHAR(2047) NOT NULL,"		// Bib_MAX_BYTES_TITLE
 			"URL VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
-		   "UNIQUE INDEX(BibCod),"
+		   "UNIQUE INDEX(ItmCod),"
 		   "UNIQUE INDEX(NodCod,ItmInd))");
 
    /***** Table crs_courses *****/
@@ -789,7 +789,7 @@ mysql> DESCRIBE crs_links;
 +-------------+---------------+------+-----+---------+----------------+
 | Field       | Type          | Null | Key | Default | Extra          |
 +-------------+---------------+------+-----+---------+----------------+
-| LnkCod      | int           | NO   | PRI | NULL    | auto_increment |
+| ItmCod      | int           | NO   | PRI | NULL    | auto_increment |
 | NodCod      | int           | NO   | MUL | -1      |                |
 | ItmInd      | int           | NO   |     | 0       |                |
 | Hidden      | enum('N','Y') | NO   |     | N       |                |
@@ -800,14 +800,14 @@ mysql> DESCRIBE crs_links;
 7 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_links ("
-			"LnkCod INT NOT NULL AUTO_INCREMENT,"
+			"ItmCod INT NOT NULL AUTO_INCREMENT,"
 			"NodCod INT NOT NULL DEFAULT -1,"
 			"ItmInd INT NOT NULL DEFAULT 0,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Title VARCHAR(2047) NOT NULL,"		// Lnk_MAX_BYTES_TITLE
 			"Description VARCHAR(2047) NOT NULL,"	// Lnk_MAX_BYTES_TITLE
 			"WWW VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
-		   "UNIQUE INDEX(LnkCod),"
+		   "UNIQUE INDEX(ItmCod),"
 		   "UNIQUE INDEX(NodCod,ItmInd))");
 
    /***** Table crs_record_fields *****/
@@ -1413,7 +1413,7 @@ mysql> DESCRIBE faq_questions;
 +----------+---------------+------+-----+---------+----------------+
 | Field    | Type          | Null | Key | Default | Extra          |
 +----------+---------------+------+-----+---------+----------------+
-| QaACod   | int           | NO   | PRI | NULL    | auto_increment |
+| ItmCod   | int           | NO   | PRI | NULL    | auto_increment |
 | NodCod   | int           | NO   | MUL | -1      |                |
 | ItmInd   | int           | NO   |     | 0       |                |
 | Hidden   | enum('N','Y') | NO   |     | N       |                |
@@ -1423,13 +1423,13 @@ mysql> DESCRIBE faq_questions;
 6 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS faq_questions ("
-			"QaACod INT NOT NULL AUTO_INCREMENT,"
+			"ItmCod INT NOT NULL AUTO_INCREMENT,"
 			"NodCod INT NOT NULL DEFAULT -1,"
 			"ItmInd INT NOT NULL DEFAULT 0,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Question VARCHAR(2047) NOT NULL,"	// FAQ_MAX_BYTES_QUESTION
 			"Answer TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
-		   "UNIQUE INDEX(QaACod),"
+		   "UNIQUE INDEX(ItmCod),"
 		   "UNIQUE INDEX(NodCod,ItmInd))");
 
    /***** Table fig_figures *****/
@@ -2574,7 +2574,7 @@ mysql> DESCRIBE prg_resources;
 +--------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
 | Field  | Type                                                                                                                                                  | Null | Key | Default | Extra          |
 +--------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
-| RscCod | int                                                                                                                                                   | NO   | PRI | NULL    | auto_increment |
+| ItmCod | int                                                                                                                                                   | NO   | PRI | NULL    | auto_increment |
 | NodCod | int                                                                                                                                                   | NO   | MUL | -1      |                |
 | ItmInd | int                                                                                                                                                   | NO   |     | 0       |                |
 | Hidden | enum('N','Y')                                                                                                                                         | NO   |     | N       |                |
@@ -2585,7 +2585,7 @@ mysql> DESCRIBE prg_resources;
 7 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS prg_resources ("
-			"RscCod INT NOT NULL AUTO_INCREMENT,"
+			"ItmCod INT NOT NULL AUTO_INCREMENT,"
 			"NodCod INT NOT NULL DEFAULT -1,"
 			"ItmInd INT NOT NULL DEFAULT 0,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
@@ -2594,7 +2594,7 @@ mysql> DESCRIBE prg_resources;
 				  "'exa','gam','rub','doc','mrk','grp','tch',"
 				  "'att','for','svy') NOT NULL DEFAULT 'non',"
 			"Title VARCHAR(2047) NOT NULL,"		// Rsc_MAX_BYTES_RESOURCE_TITLE
-		   "UNIQUE INDEX(RscCod),"
+		   "UNIQUE INDEX(ItmCod),"
 		   "UNIQUE INDEX(NodCod,ItmInd))");
 
    /***** Table prj_config *****/

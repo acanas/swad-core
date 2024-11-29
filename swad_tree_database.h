@@ -66,8 +66,13 @@ ConExp_ContractedOrExpanded_t Tre_DB_GetIfContractedOrExpandedNode (long NodCod)
 void Tre_DB_RemoveNodeFromExpandedNodes (long NodCod);
 
 //----------------------------- Specific items --------------------------------
+long Tre_DB_GetItmCodFromItmInd (const struct Tre_Node *Node,unsigned ItmInd);
 unsigned Tre_DB_GetItmIndBefore (const struct Tre_Node *Node);
 unsigned Tre_DB_GetItmIndAfter (const struct Tre_Node *Node);
 void Tre_DB_LockTables (Inf_Type_t InfoType);
+void Tre_DB_UpdateItmInd (const struct Tre_Node *Node,long ItmCod,int ItmInd);
+void Tre_DB_HideOrUnhideItem (const struct Tre_Node *Node,
+			      HidVis_HiddenOrVisible_t HiddenOrVisible);
+void Tre_DB_RemoveItem (const struct Tre_Node *Node);
 
 #endif

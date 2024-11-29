@@ -959,19 +959,6 @@ void TreSpc_RemoveItem (Inf_Type_t InfoType)
    extern const char *Txt_Question_removed;
    extern const char *Txt_Link_removed;
    struct Tre_Node Node;
-   static void (*RemoveItem[Inf_NUM_TYPES]) (const struct Tre_Node *Node) =
-     {
-      [Inf_UNKNOWN_TYPE	] = NULL,
-      [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = Rsc_DB_RemoveResource,
-      [Inf_TEACH_GUIDE	] = NULL,
-      [Inf_SYLLABUS_LEC	] = NULL,
-      [Inf_SYLLABUS_PRA	] = NULL,
-      [Inf_BIBLIOGRAPHY	] = Bib_DB_RemoveBibRef,
-      [Inf_FAQ		] = FAQ_DB_RemoveQaA,
-      [Inf_LINKS	] = Lnk_DB_RemoveCrsLink,
-      [Inf_ASSESSMENT	] = NULL,
-     };
    static const char **Txt[Inf_NUM_TYPES] =
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
@@ -986,10 +973,6 @@ void TreSpc_RemoveItem (Inf_Type_t InfoType)
       [Inf_ASSESSMENT	] = NULL,
      };
 
-   /***** Check info type *****/
-   if (!RemoveItem[InfoType])
-      Err_WrongTypeExit ();
-
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (InfoType);
 
@@ -1000,7 +983,7 @@ void TreSpc_RemoveItem (Inf_Type_t InfoType)
       Err_WrongItemExit ();
 
    /***** Remove specific list item *****/
-   RemoveItem[InfoType] (&Node);
+   Tre_DB_RemoveItem (&Node);
 
    /***** Create success alert *****/
    if (Txt[InfoType])
@@ -1022,24 +1005,6 @@ void TreSpc_HideOrUnhideItem (Inf_Type_t InfoType,
 			      HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    struct Tre_Node Node;
-   static void (*HideOrUnhideItem[Inf_NUM_TYPES]) (const struct Tre_Node *Node,
-						   HidVis_HiddenOrVisible_t HiddenOrVisible) =
-     {
-      [Inf_UNKNOWN_TYPE	] = NULL,
-      [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = Rsc_DB_HideOrUnhideResource,
-      [Inf_TEACH_GUIDE	] = NULL,
-      [Inf_SYLLABUS_LEC	] = NULL,
-      [Inf_SYLLABUS_PRA	] = NULL,
-      [Inf_BIBLIOGRAPHY	] = Bib_DB_HideOrUnhideBibRef,
-      [Inf_FAQ		] = FAQ_DB_HideOrUnhideQaA,
-      [Inf_LINKS	] = Lnk_DB_HideOrUnhideCrsLink,
-      [Inf_ASSESSMENT	] = NULL,
-     };
-
-   /***** Check info type *****/
-   if (!HideOrUnhideItem[InfoType])
-      Err_WrongTypeExit ();
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (InfoType);
@@ -1051,7 +1016,7 @@ void TreSpc_HideOrUnhideItem (Inf_Type_t InfoType,
       Err_WrongItemExit ();
 
    /***** Hide/unhide specific list item *****/
-   HideOrUnhideItem[InfoType] (&Node,HiddenOrVisible);
+   Tre_DB_HideOrUnhideItem (&Node,HiddenOrVisible);
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
@@ -1076,23 +1041,6 @@ void TreSpc_MoveUpDownItem (Inf_Type_t InfoType,TreSpc_UpDown_t UpDown)
       [TreSpc_UP  ] = Tre_DB_GetItmIndBefore,
       [TreSpc_DOWN] = Tre_DB_GetItmIndAfter,
      };
-   static long (*GetCodFromInd[Inf_NUM_TYPES]) (long NodCod,unsigned Ind) =
-     {
-      [Inf_UNKNOWN_TYPE	] = NULL,
-      [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = Rsc_DB_GetRscCodFromRscInd,
-      [Inf_TEACH_GUIDE	] = NULL,
-      [Inf_SYLLABUS_LEC	] = NULL,
-      [Inf_SYLLABUS_PRA	] = NULL,
-      [Inf_BIBLIOGRAPHY	] = Bib_DB_GetBibCodFromBibInd,
-      [Inf_FAQ		] = FAQ_DB_GetQaACodFromQaAInd,
-      [Inf_LINKS	] = Lnk_DB_GetLnkCodFromLnkInd,
-      [Inf_ASSESSMENT	] = NULL,
-     };
-
-   /***** Check info type *****/
-   if (!GetCodFromInd[InfoType])
-      Err_WrongTypeExit ();
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (InfoType);
@@ -1107,7 +1055,7 @@ void TreSpc_MoveUpDownItem (Inf_Type_t InfoType,TreSpc_UpDown_t UpDown)
    if ((Item2.Ind = GetOtherInd[UpDown] (&Node)))	// 0 ==> movement not allowed
      {
       /* Get the other list item code */
-      Item2.Cod = GetCodFromInd[InfoType] (Node.Hierarchy.NodCod,Item2.Ind);
+      Item2.Cod = Tre_DB_GetItmCodFromItmInd (&Node,Item2.Ind);
 
       /* Exchange items */
       Success = TreSpc_ExchangeItems (&Node,&Item2);
@@ -1132,22 +1080,6 @@ static bool TreSpc_ExchangeItems (const struct Tre_Node *Node,
 				  const struct Tre_SpcItem *Item2)
   {
    const struct Tre_SpcItem *Item1 = &Node->SpcItem;
-   static void (*UpdateInd[Inf_NUM_TYPES]) (const struct Tre_Node *Node,long Cod,int Ind) =
-     {
-      [Inf_UNKNOWN_TYPE	] = NULL,
-      [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = Rsc_DB_UpdateRscInd,
-      [Inf_TEACH_GUIDE	] = NULL,
-      [Inf_SYLLABUS_LEC	] = NULL,
-      [Inf_SYLLABUS_PRA	] = NULL,
-      [Inf_BIBLIOGRAPHY	] = Bib_DB_UpdateBibInd,
-      [Inf_FAQ		] = FAQ_DB_UpdateQaAInd,
-      [Inf_LINKS	] = Lnk_DB_UpdateLnkInd,
-      [Inf_ASSESSMENT	] = NULL,
-     };
-
-   if (!UpdateInd[Node->InfoType])
-      Err_WrongTypeExit ();
 
    if (Item1->Ind > 0 &&	// Indexes should be in the range [1, 2,...]
        Item2->Ind > 0)
@@ -1171,13 +1103,13 @@ static bool TreSpc_ExchangeItems (const struct Tre_Node *Node,
       */
       /* Step 1: Change second index to negative,
 		 necessary to preserve unique index (NodCod,ItmInd) */
-      UpdateInd[Node->InfoType] (Node,Item2->Cod,-(int) Item2->Ind);
+      Tre_DB_UpdateItmInd (Node,Item2->Cod,-(int) Item2->Ind);
 
       /* Step 2: Change first index */
-      UpdateInd[Node->InfoType] (Node,Item1->Cod, (int) Item2->Ind);
+      Tre_DB_UpdateItmInd (Node,Item1->Cod, (int) Item2->Ind);
 
       /* Step 3: Change second index */
-      UpdateInd[Node->InfoType] (Node,Item2->Cod, (int) Item1->Ind);
+      Tre_DB_UpdateItmInd (Node,Item2->Cod, (int) Item1->Ind);
 
       /***** Unlock tables *****/
       DB_UnlockTables ();

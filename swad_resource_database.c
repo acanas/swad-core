@@ -189,7 +189,7 @@ unsigned Rsc_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get node resources",
 		   "SELECT prg_resources.NodCod,"	// row[0]
-			  "prg_resources.RscCod,"	// row[1]
+			  "prg_resources.ItmCod,"	// row[1]
                           "prg_resources.ItmInd,"	// row[2]
 			  "prg_resources.Hidden,"	// row[3]
 			  "prg_resources.Type,"		// row[4]
@@ -213,14 +213,14 @@ unsigned Rsc_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
 /******************** Get resource data using its code ***********************/
 /*****************************************************************************/
 
-unsigned Rsc_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long RscCod)
+unsigned Rsc_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long ItmCod)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get node resource data",
 		   "SELECT prg_resources.NodCod,"	// row[0]
-			  "prg_resources.RscCod,"	// row[1]
+			  "prg_resources.ItmCod,"	// row[1]
                           "prg_resources.ItmInd,"	// row[2]
 			  "prg_resources.Hidden,"	// row[3]
 			  "prg_resources.Type,"		// row[4]
@@ -228,103 +228,11 @@ unsigned Rsc_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long RscCod)
 			  "prg_resources.Title"		// row[6]
 		    " FROM prg_resources,"
 		          "tre_nodes"
-		   " WHERE prg_resources.RscCod=%ld"
+		   " WHERE prg_resources.ItmCod=%ld"
 		     " AND prg_resources.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   RscCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_PROGRAM]);
-  }
-
-/*****************************************************************************/
-/*********** Get resource code given node code and resource index ************/
-/*****************************************************************************/
-
-long Rsc_DB_GetRscCodFromRscInd (long NodCod,unsigned ItmInd)
-  {
-   /***** Trivial check: resource index should be > 0 *****/
-   if (ItmInd == 0)
-      return -1L;
-
-   /***** Get resource code given node code and resource index *****/
-   return DB_QuerySELECTCode ("can not get resource code",
-			      "SELECT RscCod"
-			       " FROM prg_resources"
-			      " WHERE NodCod=%ld"
-				" AND ItmInd=%u",
-			      NodCod,ItmInd);
-  }
-
-/*****************************************************************************/
-/************************** Remove a note resource ***************************/
-/*****************************************************************************/
-
-void Rsc_DB_RemoveResource (const struct Tre_Node *Node)
-  {
-   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
-
-   DB_QueryDELETE ("can not remove node resource",
-		   "DELETE FROM prg_resources"
-		   " USING prg_resources,"
-		          "tre_nodes"
-		   " WHERE prg_resources.RscCod=%ld"
-		     " AND prg_resources.NodCod=%ld"
-                     " AND prg_resources.NodCod=tre_nodes.NodCod"
-                     " AND tre_nodes.CrsCod=%ld"	// Extra check
-		     " AND tre_nodes.Type='%s'",	// Extra check
-		   Node->SpcItem.Cod,
-		   Node->Hierarchy.NodCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_PROGRAM]);
-  }
-
-/*****************************************************************************/
-/************************ Hide/unhide a node resource ************************/
-/*****************************************************************************/
-
-void Rsc_DB_HideOrUnhideResource (const struct Tre_Node *Node,
-				  HidVis_HiddenOrVisible_t HiddenOrVisible)
-  {
-   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
-   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
-
-   DB_QueryUPDATE ("can not hide/unhide node resource",
-		   "UPDATE prg_resources,"
-		          "tre_nodes"
-		     " SET prg_resources.Hidden='%c'"
-		   " WHERE prg_resources.RscCod=%ld"
-		     " AND prg_resources.NodCod=%ld"
-		     " AND prg_resources.NodCod=tre_nodes.NodCod"
-		     " AND tre_nodes.CrsCod=%ld"	// Extra check
-		     " AND tre_nodes.Type='%s'",	// Extra check
-		   HidVis_YN[HiddenOrVisible],
-		   Node->SpcItem.Cod,
-		   Node->Hierarchy.NodCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_PROGRAM]);
-  }
-
-/*****************************************************************************/
-/************* Update the index of a resource given its code *****************/
-/*****************************************************************************/
-
-void Rsc_DB_UpdateRscInd (const struct Tre_Node *Node,long RscCod,int ItmInd)
-  {
-   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
-
-   DB_QueryUPDATE ("can not update index of resource",
-		   "UPDATE prg_resources,"
-		          "tre_nodes"
-		     " SET prg_resources.ItmInd=%d"
-		   " WHERE prg_resources.RscCod=%ld"
-		     " AND prg_resources.NodCod=%ld"
-		     " AND prg_resources.NodCod=tre_nodes.NodCod"
-		     " AND tre_nodes.CrsCod=%ld"	// Extra check
-		     " AND tre_nodes.Type='%s'",	// Extra check
-		   ItmInd,
-		   RscCod,
-		   Node->Hierarchy.NodCod,
+		   ItmCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Inf_PROGRAM]);
   }
@@ -344,7 +252,7 @@ void Rsc_DB_UpdateResource (const struct Tre_Node *Node)
 		     " SET prg_resources.Type='%s',"
 		          "prg_resources.Cod=%ld,"
 			  "prg_resources.Title='%s'"
-		   " WHERE prg_resources.RscCod=%ld"
+		   " WHERE prg_resources.ItmCod=%ld"
 		     " AND prg_resources.NodCod=%ld"
 		     " AND prg_resources.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check

@@ -74,7 +74,7 @@ unsigned Lnk_DB_GetListCrsLinks (MYSQL_RES **mysql_res,long NodCod,
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get node course links",
 		   "SELECT crs_links.NodCod,"		// row[0]
-			  "crs_links.LnkCod,"		// row[1]
+			  "crs_links.ItmCod,"		// row[1]
                           "crs_links.ItmInd,"		// row[2]
 			  "crs_links.Hidden,"		// row[3]
 			  "crs_links.Title,"		// row[4]
@@ -98,14 +98,14 @@ unsigned Lnk_DB_GetListCrsLinks (MYSQL_RES **mysql_res,long NodCod,
 /******************* Get course link data using its code *********************/
 /*****************************************************************************/
 
-unsigned Lnk_DB_GetCrsLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod)
+unsigned Lnk_DB_GetCrsLinkDataByCod (MYSQL_RES **mysql_res,long ItmCod)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get node course link data",
 		   "SELECT crs_links.NodCod,"		// row[0]
-			  "crs_links.LnkCod,"		// row[1]
+			  "crs_links.ItmCod,"		// row[1]
                           "crs_links.ItmInd,"		// row[2]
 			  "crs_links.Hidden,"		// row[3]
 			  "crs_links.Title,"		// row[4]
@@ -113,103 +113,11 @@ unsigned Lnk_DB_GetCrsLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod)
 			  "crs_links.WWW"		// row[6]
 		    " FROM crs_links,"
 		          "tre_nodes"
-		   " WHERE crs_links.LnkCod=%ld"
+		   " WHERE crs_links.ItmCod=%ld"
 		     " AND crs_links.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   LnkCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_LINKS]);
-  }
-
-/*****************************************************************************/
-/******** Get course link code given node code and course link index *********/
-/*****************************************************************************/
-
-long Lnk_DB_GetLnkCodFromLnkInd (long NodCod,unsigned ItmInd)
-  {
-   /***** Trivial check: course link index should be > 0 *****/
-   if (ItmInd == 0)
-      return -1L;
-
-   /***** Get course link code given node code and course link index *****/
-   return DB_QuerySELECTCode ("can not get course link code",
-			      "SELECT LnkCod"
-			       " FROM crs_links"
-			      " WHERE NodCod=%ld"
-				" AND ItmInd=%u",
-			      NodCod,ItmInd);
-  }
-
-/*****************************************************************************/
-/*************************** Remove a course link ****************************/
-/*****************************************************************************/
-
-void Lnk_DB_RemoveCrsLink (const struct Tre_Node *Node)
-  {
-   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
-
-   DB_QueryDELETE ("can not remove course link",
-		   "DELETE FROM crs_links"
-		   " USING crs_links,"
-		          "tre_nodes"
-		   " WHERE crs_links.LnkCod=%ld"
-		     " AND crs_links.NodCod=%ld"
-                     " AND crs_links.NodCod=tre_nodes.NodCod"
-                     " AND tre_nodes.CrsCod=%ld"	// Extra check
-		     " AND tre_nodes.Type='%s'",	// Extra check
-		   Node->SpcItem.Cod,
-		   Node->Hierarchy.NodCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_LINKS]);
-  }
-
-/*****************************************************************************/
-/*********************** Hide/unhide a node course link **********************/
-/*****************************************************************************/
-
-void Lnk_DB_HideOrUnhideCrsLink (const struct Tre_Node *Node,
-			         HidVis_HiddenOrVisible_t HiddenOrVisible)
-  {
-   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
-   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
-
-   DB_QueryUPDATE ("can not hide/unhide node course link",
-		   "UPDATE crs_links,"
-		          "tre_nodes"
-		     " SET crs_links.Hidden='%c'"
-		   " WHERE crs_links.LnkCod=%ld"
-		     " AND crs_links.NodCod=%ld"
-		     " AND crs_links.NodCod=tre_nodes.NodCod"
-		     " AND tre_nodes.CrsCod=%ld"	// Extra check
-		     " AND tre_nodes.Type='%s'",	// Extra check
-		   HidVis_YN[HiddenOrVisible],
-		   Node->SpcItem.Cod,
-		   Node->Hierarchy.NodCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_LINKS]);
-  }
-
-/*****************************************************************************/
-/*********** Update the index of a course link given its code ****************/
-/*****************************************************************************/
-
-void Lnk_DB_UpdateLnkInd (const struct Tre_Node *Node,long LnkCod,int ItmInd)
-  {
-   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
-
-   DB_QueryUPDATE ("can not update index of course link",
-		   "UPDATE crs_links,"
-		          "tre_nodes"
-		     " SET crs_links.ItmInd=%d"
-		   " WHERE crs_links.LnkCod=%ld"
-		     " AND crs_links.NodCod=%ld"
-		     " AND crs_links.NodCod=tre_nodes.NodCod"
-		     " AND tre_nodes.CrsCod=%ld"	// Extra check
-		     " AND tre_nodes.Type='%s'",	// Extra check
-		   ItmInd,
-		   LnkCod,
-		   Node->Hierarchy.NodCod,
+		   ItmCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Inf_LINKS]);
   }
@@ -228,7 +136,7 @@ void Lnk_DB_UpdateCrsLink (const struct Tre_Node *Node)
 		     " SET crs_links.Title='%s',"
 		          "crs_links.Description='%s',"
 		          "crs_links.WWW='%s'"
-		   " WHERE crs_links.LnkCod=%ld"
+		   " WHERE crs_links.ItmCod=%ld"
 		     " AND crs_links.NodCod=%ld"
 		     " AND crs_links.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check

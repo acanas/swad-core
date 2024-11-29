@@ -250,7 +250,7 @@ CREATE TABLE IF NOT EXISTS cht_rooms (
 -- Table crs_bibliography: stores the course bibliography
 --
 CREATE TABLE IF NOT EXISTS crs_bibliography (
-	BibCod INT NOT NULL AUTO_INCREMENT,
+	ItmCod INT NOT NULL AUTO_INCREMENT,
 	NodCod INT NOT NULL DEFAULT -1,
 	ItmInd INT NOT NULL DEFAULT 0,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
@@ -261,7 +261,7 @@ CREATE TABLE IF NOT EXISTS crs_bibliography (
 	Date VARCHAR(2047) NOT NULL,
 	Id VARCHAR(2047) NOT NULL,
 	URL VARCHAR(255) NOT NULL,
-	UNIQUE INDEX(BibCod),
+	UNIQUE INDEX(ItmCod),
 	UNIQUE INDEX(NodCod,ItmInd));
 --
 -- Table crs_courses: stores the courses/subjects
@@ -317,14 +317,14 @@ CREATE TABLE IF NOT EXISTS crs_last (
 -- Table crs_links: stores course links
 --
 CREATE TABLE IF NOT EXISTS crs_links (
-	LnkCod INT NOT NULL AUTO_INCREMENT,
+	ItmCod INT NOT NULL AUTO_INCREMENT,
 	NodCod INT NOT NULL DEFAULT -1,
 	ItmInd INT NOT NULL DEFAULT 0,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
 	Title VARCHAR(2047) NOT NULL,
 	Description VARCHAR(2047) NOT NULL,
 	WWW VARCHAR(255) NOT NULL,
-	UNIQUE INDEX(LnkCod),
+	UNIQUE INDEX(ItmCod),
 	UNIQUE INDEX(NodCod,ItmInd));
 --
 -- Table crs_record_fields: stores the fields in the course records
@@ -623,13 +623,13 @@ CREATE TABLE IF NOT EXISTS exa_sets (
 -- Table faq_questions: stores questions & answers in course FAQ
 --
 CREATE TABLE IF NOT EXISTS faq_questions (
-	QaACod INT NOT NULL AUTO_INCREMENT,
+	ItmCod INT NOT NULL AUTO_INCREMENT,
 	NodCod INT NOT NULL DEFAULT -1,
 	ItmInd INT NOT NULL DEFAULT 0,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
 	Question VARCHAR(2047) NOT NULL,
 	Answer TEXT NOT NULL,
-	UNIQUE INDEX(QaACod),
+	UNIQUE INDEX(ItmCod),
 	UNIQUE INDEX(NodCod,ItmInd));
 --
 -- Table fig_figures: stores cached figures for quick retrieval of figures (i.e. number of students in the platform)
@@ -1209,13 +1209,13 @@ CREATE TABLE IF NOT EXISTS plg_plugins (
 -- Table prg_resources: stores the resources of the course program
 --
 CREATE TABLE IF NOT EXISTS prg_resources (
-	RscCod INT NOT NULL AUTO_INCREMENT,
+	ItmCod INT NOT NULL AUTO_INCREMENT,
 	NodCod INT NOT NULL DEFAULT -1,
 	ItmInd INT NOT NULL DEFAULT 0,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
 	Type ENUM('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','tch','att','for','svy') NOT NULL DEFAULT 'non',
 	Title VARCHAR(2047) NOT NULL,
-	UNIQUE INDEX(RscCod),
+	UNIQUE INDEX(ItmCod),
 	UNIQUE INDEX(NodCod,ItmInd));
 --
 -- Table prj_config: stores the configuration of projects for each course

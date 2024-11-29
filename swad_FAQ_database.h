@@ -40,13 +40,8 @@
 long FAQ_DB_CreateQaA (const struct Tre_Node *Node);
 unsigned FAQ_DB_GetListQaAs (MYSQL_RES **mysql_res,long NodCod,
                              bool ShowHiddenQaAs);
-unsigned FAQ_DB_GetQaADataByCod (MYSQL_RES **mysql_res,long QaACod);
-long FAQ_DB_GetQaACodFromQaAInd (long NodCod,unsigned ItmInd);
-void FAQ_DB_RemoveQaA (const struct Tre_Node *Node);
-void FAQ_DB_HideOrUnhideQaA (const struct Tre_Node *Node,
-			     HidVis_HiddenOrVisible_t HiddenOrVisible);
+unsigned FAQ_DB_GetQaADataByCod (MYSQL_RES **mysql_res,long ItmCod);
 
-void FAQ_DB_UpdateQaAInd (const struct Tre_Node *Node,long QaACod,int ItmInd);
 void FAQ_DB_UpdateQaA (const struct Tre_Node *Node);
 
 #endif

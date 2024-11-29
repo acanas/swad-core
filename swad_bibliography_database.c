@@ -80,7 +80,7 @@ unsigned Bib_DB_GetListBibRefs (MYSQL_RES **mysql_res,long NodCod,
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get node bibliographic references",
 		   "SELECT crs_bibliography.NodCod,"	// row[ 0]
-			  "crs_bibliography.BibCod,"	// row[ 1]
+			  "crs_bibliography.ItmCod,"	// row[ 1]
                           "crs_bibliography.ItmInd,"	// row[ 2]
 			  "crs_bibliography.Hidden,"	// row[ 3]
 			  "crs_bibliography.Authors,"	// row[ 4]
@@ -108,14 +108,14 @@ unsigned Bib_DB_GetListBibRefs (MYSQL_RES **mysql_res,long NodCod,
 /************* Get bibliographic reference data using its code ***************/
 /*****************************************************************************/
 
-unsigned Bib_DB_GetBibRefDataByCod (MYSQL_RES **mysql_res,long BibCod)
+unsigned Bib_DB_GetBibRefDataByCod (MYSQL_RES **mysql_res,long ItmCod)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get node bibliographic reference data",
 		   "SELECT crs_bibliography.NodCod,"	// row[ 0]
-			  "crs_bibliography.BibCod,"	// row[ 1]
+			  "crs_bibliography.ItmCod,"	// row[ 1]
                           "crs_bibliography.ItmInd,"	// row[ 2]
 			  "crs_bibliography.Hidden,"	// row[ 3]
 			  "crs_bibliography.Authors,"	// row[ 4]
@@ -127,105 +127,11 @@ unsigned Bib_DB_GetBibRefDataByCod (MYSQL_RES **mysql_res,long BibCod)
 			  "crs_bibliography.URL"	// row[10]
 		    " FROM crs_bibliography,"
 		          "tre_nodes"
-		   " WHERE crs_bibliography.BibCod=%ld"
+		   " WHERE crs_bibliography.ItmCod=%ld"
 		     " AND crs_bibliography.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   BibCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_BIBLIOGRAPHY]);
-  }
-
-/*****************************************************************************/
-/************ Get bibliographic reference code                  **************/
-/************ given node code and bibliographic reference index **************/
-/*****************************************************************************/
-
-long Bib_DB_GetBibCodFromBibInd (long NodCod,unsigned ItmInd)
-  {
-   /***** Trivial check: bibliographic reference index should be > 0 *****/
-   if (ItmInd == 0)
-      return -1L;
-
-   /***** Get bibliographic reference code
-          given node code and bibliographic reference index *****/
-   return DB_QuerySELECTCode ("can not get bibliographic reference code",
-			      "SELECT BibCod"
-			       " FROM crs_bibliography"
-			      " WHERE NodCod=%ld"
-				" AND ItmInd=%u",
-			      NodCod,ItmInd);
-  }
-
-/*****************************************************************************/
-/********************* Remove a bibliographic reference **********************/
-/*****************************************************************************/
-
-void Bib_DB_RemoveBibRef (const struct Tre_Node *Node)
-  {
-   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
-
-   DB_QueryDELETE ("can not remove bibliographic reference",
-		   "DELETE FROM crs_bibliography"
-		   " USING crs_bibliography,"
-		          "tre_nodes"
-		   " WHERE crs_bibliography.BibCod=%ld"
-		     " AND crs_bibliography.NodCod=%ld"
-                     " AND crs_bibliography.NodCod=tre_nodes.NodCod"
-                     " AND tre_nodes.CrsCod=%ld"	// Extra check
-		     " AND tre_nodes.Type='%s'",	// Extra check
-		   Node->SpcItem.Cod,
-		   Node->Hierarchy.NodCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_BIBLIOGRAPHY]);
-  }
-
-/*****************************************************************************/
-/***************** Hide/unhide a node bibliographic reference ****************/
-/*****************************************************************************/
-
-void Bib_DB_HideOrUnhideBibRef (const struct Tre_Node *Node,
-			         HidVis_HiddenOrVisible_t HiddenOrVisible)
-  {
-   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
-   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
-
-   DB_QueryUPDATE ("can not hide/unhide node bibliographic reference",
-		   "UPDATE crs_bibliography,"
-		          "tre_nodes"
-		     " SET crs_bibliography.Hidden='%c'"
-		   " WHERE crs_bibliography.BibCod=%ld"
-		     " AND crs_bibliography.NodCod=%ld"
-		     " AND crs_bibliography.NodCod=tre_nodes.NodCod"
-		     " AND tre_nodes.CrsCod=%ld"	// Extra check
-		     " AND tre_nodes.Type='%s'",	// Extra check
-		   HidVis_YN[HiddenOrVisible],
-		   Node->SpcItem.Cod,
-		   Node->Hierarchy.NodCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_BIBLIOGRAPHY]);
-  }
-
-/*****************************************************************************/
-/******** Update the index of a bibliographic reference given its code *******/
-/*****************************************************************************/
-
-void Bib_DB_UpdateBibInd (const struct Tre_Node *Node,long BibCod,int ItmInd)
-  {
-   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
-
-   DB_QueryUPDATE ("can not update index of bibliographic reference",
-		   "UPDATE crs_bibliography,"
-		          "tre_nodes"
-		     " SET crs_bibliography.ItmInd=%d"
-		   " WHERE crs_bibliography.BibCod=%ld"
-		     " AND crs_bibliography.NodCod=%ld"
-		     " AND crs_bibliography.NodCod=tre_nodes.NodCod"
-		     " AND tre_nodes.CrsCod=%ld"	// Extra check
-		     " AND tre_nodes.Type='%s'",	// Extra check
-		   ItmInd,
-		   BibCod,
-		   Node->Hierarchy.NodCod,
+		   ItmCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Inf_BIBLIOGRAPHY]);
   }
@@ -248,7 +154,7 @@ void Bib_DB_UpdateBibRef (const struct Tre_Node *Node)
 			  "crs_bibliography.Date='%s',"
 			  "crs_bibliography.Id='%s',"
 			  "crs_bibliography.URL='%s'"
-		   " WHERE crs_bibliography.BibCod=%ld"
+		   " WHERE crs_bibliography.ItmCod=%ld"
 		     " AND crs_bibliography.NodCod=%ld"
 		     " AND crs_bibliography.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check

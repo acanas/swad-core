@@ -541,6 +541,26 @@ void Tre_DB_RemoveNodeFromExpandedNodes (long NodCod)
   }
 
 /*****************************************************************************/
+/**************** Get item code given node code and item index ***************/
+/*****************************************************************************/
+
+long Tre_DB_GetItmCodFromItmInd (const struct Tre_Node *Node,unsigned ItmInd)
+  {
+   /***** Trivial check: item index should be > 0 *****/
+   if (ItmInd == 0)
+      return -1L;
+
+   /***** Get item code given node code and item index *****/
+   return DB_QuerySELECTCode ("can not get item code",
+			      "SELECT ItmCod"
+			       " FROM %s"
+			      " WHERE NodCod=%ld"
+				" AND ItmInd=%u",
+			      Tre_DB_TablesItems[Node->InfoType],
+			      Node->Hierarchy.NodCod,ItmInd);
+  }
+
+/*****************************************************************************/
 /*********** Get the course link index before/after a given one **************/
 /*****************************************************************************/
 
@@ -581,4 +601,82 @@ void Tre_DB_LockTables (Inf_Type_t InfoType)
 			 "tre_nodes READ",
 	     Tre_DB_TablesItems[InfoType]);
    DB_SetThereAreLockedTables ();
+  }
+
+/*****************************************************************************/
+/*************** Update the index of an item given its code ******************/
+/*****************************************************************************/
+
+void Tre_DB_UpdateItmInd (const struct Tre_Node *Node,long ItmCod,int ItmInd)
+  {
+   DB_QueryUPDATE ("can not update index of item",
+		   "UPDATE %s,"
+		          "tre_nodes"
+		     " SET %s.ItmInd=%d"
+		   " WHERE %s.ItmCod=%ld"
+		     " AND %s.NodCod=%ld"
+		     " AND %s.NodCod=tre_nodes.NodCod"
+		     " AND tre_nodes.CrsCod=%ld"	// Extra check
+		     " AND tre_nodes.Type='%s'",	// Extra check
+		   Tre_DB_TablesItems[Node->InfoType],
+		   Tre_DB_TablesItems[Node->InfoType],ItmInd,
+		   Tre_DB_TablesItems[Node->InfoType],ItmCod,
+		   Tre_DB_TablesItems[Node->InfoType],Node->Hierarchy.NodCod,
+		   Tre_DB_TablesItems[Node->InfoType],
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Tre_DB_Types[Node->InfoType]);
+  }
+
+/*****************************************************************************/
+/**************************** Hide/unhide an item ****************************/
+/*****************************************************************************/
+
+void Tre_DB_HideOrUnhideItem (const struct Tre_Node *Node,
+			      HidVis_HiddenOrVisible_t HiddenOrVisible)
+  {
+   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
+
+   DB_QueryUPDATE ("can not hide/unhide item",
+		   "UPDATE %s,"
+		          "tre_nodes"
+		     " SET %s.Hidden='%c'"
+		   " WHERE %s.ItmCod=%ld"
+		     " AND %s.NodCod=%ld"
+		     " AND %s.NodCod=tre_nodes.NodCod"
+		     " AND tre_nodes.CrsCod=%ld"	// Extra check
+		     " AND tre_nodes.Type='%s'",	// Extra check
+		   Tre_DB_TablesItems[Node->InfoType],
+		   Tre_DB_TablesItems[Node->InfoType],HidVis_YN[HiddenOrVisible],
+		   Tre_DB_TablesItems[Node->InfoType],Node->SpcItem.Cod,
+		   Tre_DB_TablesItems[Node->InfoType],Node->Hierarchy.NodCod,
+		   Tre_DB_TablesItems[Node->InfoType],
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Tre_DB_Types[Node->InfoType]);
+  }
+
+/*****************************************************************************/
+/*********************** Remove a node question & answer ***********************/
+/*****************************************************************************/
+
+void Tre_DB_RemoveItem (const struct Tre_Node *Node)
+  {
+   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
+
+   DB_QueryDELETE ("can not remove item",
+		   "DELETE FROM %s"
+		   " USING %s,"
+		          "tre_nodes"
+		   " WHERE %s.ItmCod=%ld"
+		     " AND %s.NodCod=%ld"
+                     " AND %s.NodCod=tre_nodes.NodCod"
+                     " AND tre_nodes.CrsCod=%ld"	// Extra check
+		     " AND tre_nodes.Type='%s'",	// Extra check
+		   Tre_DB_TablesItems[Node->InfoType],
+		   Tre_DB_TablesItems[Node->InfoType],
+		   Tre_DB_TablesItems[Node->InfoType],Node->SpcItem.Cod,
+		   Tre_DB_TablesItems[Node->InfoType],Node->Hierarchy.NodCod,
+		   Tre_DB_TablesItems[Node->InfoType],
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Tre_DB_Types[Inf_FAQ]);
   }
