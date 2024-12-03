@@ -18353,25 +18353,25 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES] =
 	NULL,
 	[Inf_EDITOR] =
 #if   L==1	// ca
-	"Editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas."	// Necessita traducció
+	"Editor integrado."	// Necessita traducció
 #elif L==2	// de
-	"Interner Editor, nur f&uuml;r Studienplan (Vorlesung und &Uuml;bungen)."
+	"Interner Editor."
 #elif L==3	// en
-	"Internal editor, only for syllabus (lectures and practicals)."
+	"Internal editor."
 #elif L==4	// es
-	"Editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas."
+	"Editor integrado."
 #elif L==5	// fr
-	"&Eacute;diteur interne, que pour les plans (th&eacute;orie et pratique)."
+	"&Eacute;diteur interne."
 #elif L==6	// gn
-	"Editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas."	// Okoteve traducción
+	"Editor integrado."	// Okoteve traducción
 #elif L==7	// it
-	"Editor interno, solo per programmi di teoria e di pratica."
+	"Editor interno."
 #elif L==8	// pl
-	"Wewnetrzny edytor, tylko program (wyklady i practicals)."
+	"Wewnetrzny edytor."
 #elif L==9	// pt
-	"Interno editor, apenas para programas de teoria y pr&aacute;tica."
+	"Interno editora."
 #elif L==10	// tr
-	"Internal editor, only for syllabus (lectures and practicals)."			// Çeviri lazim!
+	"Internal editor."	// Çeviri lazim!
 #endif
 	,
 	[Inf_PLAIN_TEXT] =

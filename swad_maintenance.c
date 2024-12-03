@@ -48,7 +48,7 @@ void Mtn_Maintenance (void)
    Mnu_ContextMenuBegin ();
       Mtn_PutLinkToSetUp ();				// Set up
       Crs_PutLinkToRemoveOldCrss ();			// Remove old courses
-      Syl_PutLinkToConvertSyllabus ();
+      // Syl_PutLinkToConvertSyllabus ();		// Already converted. Don't do again!
    Mnu_ContextMenuEnd ();
   }
 

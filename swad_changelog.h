@@ -635,10 +635,18 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.44 (2024-11-30)"
+#define Log_PLATFORM_VERSION	"SWAD 24.44.2 (2024-12-03)"
 #define CSS_FILE		"swad24.37.1.css"
 #define JS_FILE			"swad23.89.js"
 /*
+	Version 24.44.2:  Dec 03, 2024  Fixed bugs in database. (345281 lines)
+					4 changes necessary in database:
+ALTER TABLE prg_resources CHANGE COLUMN ItmCod ItmCod INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE crs_bibliography CHANGE COLUMN ItmCod ItmCod INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE faq_questions CHANGE COLUMN ItmCod ItmCod INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE crs_links CHANGE COLUMN ItmCod ItmCod INT NOT NULL AUTO_INCREMENT;
+
+	Version 24.44.1:  Dec 03, 2024  Fixed issue converting syllabus. (? lines)
 	Version 24.44:    Nov 30, 2024  Code refactoring in trees. (345286 lines)
 					4 changes necessary in database:
 ALTER TABLE prg_resources CHANGE COLUMN RscCod ItmCod INT NOT NULL DEFAULT 0;
@@ -771,6 +779,7 @@ ALTER TABLE tre_nodes CHANGE COLUMN ItmInd NodInd INT NOT NULL DEFAULT 0;
 ALTER TABLE tre_nodes ADD UNIQUE INDEX(NodCod);
 ALTER TABLE tre_nodes ADD UNIQUE INDEX(CrsCod,NodInd);
 ALTER TABLE tre_nodes DROP INDEX ItmCod;
+ALTER TABLE tre_nodes DROP INDEX PrgIteCod;
 
 ALTER TABLE prg_resources DROP INDEX ItmCod;
 ALTER TABLE prg_resources CHANGE COLUMN ItmCod NodCod INT NOT NULL DEFAULT -1;

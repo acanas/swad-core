@@ -177,6 +177,11 @@ void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
 	 return;
      }
 
+   /***** If the course directory does not exist, create it *****/
+   snprintf (Syllabus->PathDir,sizeof (Syllabus->PathDir),"%s/%ld",
+	     Cfg_PATH_CRS_PRIVATE,CrsCod);
+   Fil_CreateDirIfNotExists (Syllabus->PathDir);
+
    /***** Path of the private directory for the XML file with the syllabus *****/
    snprintf (Syllabus->PathDir,sizeof (Syllabus->PathDir),"%s/%ld/%s",
 	     Cfg_PATH_CRS_PRIVATE,CrsCod,Folder);
