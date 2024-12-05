@@ -256,7 +256,6 @@ void Bib_WriteCellEditBibRef (struct Tre_Node *Node,
 	      }
 
 	    /* URL */
-	    HTM_BR ();
 	    HTM_INPUT_URL ("URL",Node->Bib.URL,
 			   HTM_NO_ATTR,
 			   " placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",

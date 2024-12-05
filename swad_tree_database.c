@@ -678,5 +678,5 @@ void Tre_DB_RemoveItem (const struct Tre_Node *Node)
 		   Tre_DB_TablesItems[Node->InfoType],Node->Hierarchy.NodCod,
 		   Tre_DB_TablesItems[Node->InfoType],
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_FAQ]);
+		   Tre_DB_Types[Node->InfoType]);
   }

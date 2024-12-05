@@ -489,19 +489,22 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	 /* Title */
 	 /*___________________________________________________________
 	  |   |   |                                                   |
-	  | v | 1 | Lesson 1                 (colspan = 3+1-1 = 3)    |
+	  | v | 1 | Lesson 1                 (colspan = 3+2-1 = 4)    |
 	  |___|___|___________________________________________________|
           |   |   |   |                                               |
-	  |   | v | 1 | Lesson 1.1           (colspan = 3+1-2 = 2)    |
+	  |   | v | 1 | Lesson 1.1           (colspan = 3+2-2 = 3)    |
 	  |___|___|___|_______________________________________________|
           |   |   |   |   |                                           |
-	  |   |   | v | 1 | Lesson 1.1.1     (colspan = 3+1-3 = 1)    |
+	  |   |   | v | 1 | Lesson 1.1.1     (colspan = 3+2-3 = 2)    |
 	  |___|___|___|___|___________________________________________|
+          |   |   |   |   |   |                                       |
+	  |   |   |   |   | 1 |  New node    (colspan = 3+2-4 = 1)    |
+	  |___|___|___|___|___|_______________________________________|
           |   |   |   |                                               |
-	  |   | v | 2 | Lesson 1.2           (colspan = 3+1-2 = 2)    |
+	  |   | v | 2 | Lesson 1.2           (colspan = 3+2-2 = 3)    |
 	  |___|___|___|_______________________________________________|
 	  */
-	 ColSpan = Tre_GetMaxNodeLevel () + 1 - Node->Hierarchy.Level;
+	 ColSpan = Tre_GetMaxNodeLevel () + 2 - Node->Hierarchy.Level;
 	 switch (ListingType)
 	   {
 	    case Tre_PRINT:
@@ -735,7 +738,9 @@ static void Tre_WriteRowToCreateNode (Inf_Type_t InfoType,
       HTM_TD_End ();
 
       /***** Show form to create new node as child *****/
-      ColSpan = (Tre_GetMaxNodeLevel () + 4) - FormLevel;
+      ColSpan = Tre_GetMaxNodeLevel () + 2 - FormLevel;
+      if (InfoType == Inf_PROGRAM)
+	 ColSpan++;
       HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",
 		    ColSpan,The_GetColorRows ());
          /* Form for node data */
