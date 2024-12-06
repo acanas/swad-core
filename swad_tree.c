@@ -170,7 +170,6 @@ static unsigned Tre_GetLastChild (int NumNode);
 
 static void Tre_ShowFormToCreateNode (Inf_Type_t InfoType,long ParentNodCod);
 static void Tre_ShowFormToChangeNode (struct Tre_Node *Node);
-static void Tre_ParsFormNode (void *NodCod);
 static void Tre_ShowFormNode (const struct Tre_Node *Node,
 			      const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME],
 			      const char *Txt);
@@ -2079,8 +2078,7 @@ static void Tre_ShowFormToCreateNode (Inf_Type_t InfoType,long ParentNodCod)
 
    /***** Begin form to create *****/
    Frm_BeginFormTable (Actions[InfoType],NULL,
-                       Tre_ParsFormNode,&ParentNode.Hierarchy.NodCod,
-                       "TBL_WIDE");
+                       Tre_PutPars,&ParentNode,"TBL_WIDE");
 
       /***** Show form *****/
       Tre_ShowFormNode (&Node,SetHMS,NULL);
@@ -2117,18 +2115,13 @@ static void Tre_ShowFormToChangeNode (struct Tre_Node *Node)
 
    /***** Begin form to change *****/
    Frm_BeginFormTable (Actions[Node->InfoType],Tre_NODE_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
-                       Tre_ParsFormNode,&Node->Hierarchy.NodCod,"TBL_WIDE");
+                       Tre_PutPars,Node,"TBL_WIDE");
 
       /***** Show form *****/
       Tre_ShowFormNode (Node,SetHMS,Txt);
 
    /***** End form to change *****/
    Frm_EndFormTable (Btn_CONFIRM_BUTTON);
-  }
-
-static void Tre_ParsFormNode (void *NodCod)
-  {
-   ParCod_PutPar (ParCod_Nod,*(long *) NodCod);
   }
 
 /*****************************************************************************/
