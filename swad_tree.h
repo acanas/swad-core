@@ -141,6 +141,7 @@ void Tre_PutPars (void *Node);
 void Tre_GetPars (struct Tre_Node *Node);
 
 void Tre_GetListNodes (Inf_Type_t InfoType);
+unsigned Tre_GetNumNodes (void);
 void Tre_FreeListNodes (void);
 
 void Tre_ResetNode (struct Tre_Node *Node);
@@ -164,5 +165,7 @@ void Tre_MoveLeftRightNode (Inf_Type_t InfoType,Tre_MoveLeftRight_t LeftRight);
 void Tre_ExpandContractNode (Inf_Type_t InfoType,
 			     Tre_ExpandContract_t ExpandContract,
 			     Tre_ListingType_t ListingType);
+
+void Tre_WriteTreeIntoHTMLTmpFile (Inf_Type_t InfoType,FILE *FileHTMLTmp);
 
 #endif

@@ -112,6 +112,8 @@ static const char *Tre_NODE_SECTION_ID = "node_section";
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static int Tre_WriteTreeIntoHTMLBuffer (Inf_Type_t InfoType);
+
 static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
                               unsigned NumNode,struct Tre_Node *Node,
                               ConExp_ContractedOrExpanded_t ContractedOrExpanded,
@@ -135,8 +137,6 @@ static void Tre_CreateLevels (void);
 static void Tre_FreeLevels (void);
 static void Tre_IncreaseNumberInLevel (unsigned Level);
 static unsigned Tre_GetCurrentNumberInLevel (unsigned Level);
-static void Tre_WriteNumNode (unsigned Level);
-static void Tre_WriteNumNewNode (unsigned Level);
 
 static void Tre_SetExpandedLevel (unsigned Level,ConExp_ContractedOrExpanded_t ContractedOrExpanded);
 static void Tre_SetHiddenLevel (unsigned Level,HidVis_HiddenOrVisible_t HiddenOrVisible);
@@ -182,11 +182,51 @@ static void Tre_InsertNode (Inf_Type_t InfoType,
 /*****************************************************************************/
 /**************************** List all tree nodes ****************************/
 /*****************************************************************************/
+
+static int Tre_WriteTreeIntoHTMLBuffer (Inf_Type_t InfoType)
+  {
+   char FileNameHTMLTmp[PATH_MAX + 1];
+   FILE *FileHTMLTmp;
+
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (InfoType);
+   if (Tre_GetNumNodes ())
+     {
+      /***** Create a unique name for the file *****/
+      snprintf (FileNameHTMLTmp,sizeof (FileNameHTMLTmp),"%s/%s_tree.html",
+	        Cfg_PATH_OUT_PRIVATE,Cry_GetUniqueNameEncrypted ());
+
+      /***** Create a new temporary file for writing and reading *****/
+      if ((FileHTMLTmp = fopen (FileNameHTMLTmp,"w+b")) == NULL)
+	{
+	 Tre_FreeListNodes ();
+         return -1;
+	}
+
+      /***** Write syllabus in HTML into a temporary file *****/
+      Tre_WriteTreeIntoHTMLTmpFile (InfoType,FileHTMLTmp);
+
+      /***** Close and remove temporary file *****/
+      fclose (FileHTMLTmp);
+      // unlink (FileNameHTMLTmp);
+     }
+
+   /***** Free list of tree nodes *****/
+   Tre_FreeListNodes ();
+
+   return 0;
+  }
+
+/*****************************************************************************/
+/**************************** List all tree nodes ****************************/
+/*****************************************************************************/
 // Return number of ndes in tree
 
 unsigned Tre_ShowTree (Inf_Type_t InfoType)
   {
    unsigned NumNodes;
+
+   // Tre_WriteTreeIntoHTMLBuffer (InfoType);	// Only for debug, remove!
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (InfoType);
@@ -233,7 +273,7 @@ void Tre_ShowAllNodes (Inf_Type_t InfoType,
        InfoType > (Inf_Type_t) (Inf_NUM_TYPES - 1))
       Err_WrongTypeExit ();
 
-   /***** Create numbers and hidden levels *****/
+   /***** Create levels *****/
    Tre_SetMaxNodeLevel (Tre_CalculateMaxNodeLevel ());
    Tre_CreateLevels ();
 
@@ -285,10 +325,10 @@ void Tre_ShowAllNodes (Inf_Type_t InfoType,
       if (ListingType == Tre_FORM_NEW_END_NODE)
 	 Tre_WriteRowToCreateNode (InfoType,-1L,1);
 
-      /***** End table *****/
+   /***** End table *****/
    HTM_TABLE_End ();
 
-   /***** Free hidden levels and numbers *****/
+   /***** Free levels *****/
    Tre_FreeLevels ();
   }
 
@@ -481,7 +521,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	               The_GetColorRows (),RowSpan[ContractedOrExpanded]);
 	    HTM_DIV_Begin ("class=\"%s%s\"",
 			   TitleClass,HidVis_TreeClass[HiddenOrVisible]);
-	       Tre_WriteNumNode (Node->Hierarchy.Level);
+	       HTM_Unsigned (Tre_GetCurrentNumberInLevel (Node->Hierarchy.Level));
 	    HTM_DIV_End ();
 	 HTM_TD_End ();
 
@@ -731,9 +771,9 @@ static void Tre_WriteRowToCreateNode (Inf_Type_t InfoType,
 	 HTM_TD_End ();
 	}
 
-      /***** Item number *****/
+      /***** Node number *****/
       HTM_TD_Begin ("class=\"TRE_NUM %s %s\"",TitleClass,The_GetColorRows ());
-	 Tre_WriteNumNewNode (FormLevel);
+	 HTM_Unsigned (Tre_GetCurrentNumberInLevel (FormLevel) + 1);
       HTM_TD_End ();
 
       /***** Show form to create new node as child *****/
@@ -888,20 +928,6 @@ static unsigned Tre_GetCurrentNumberInLevel (unsigned Level)
       return Tre_Gbl.Levels[Level].Number;
 
    return 0;
-  }
-
-/*****************************************************************************/
-/******************** Write number of node in legal style ********************/
-/*****************************************************************************/
-
-static void Tre_WriteNumNode (unsigned Level)
-  {
-   HTM_Unsigned (Tre_GetCurrentNumberInLevel (Level));
-  }
-
-static void Tre_WriteNumNewNode (unsigned Level)
-  {
-   HTM_Unsigned (Tre_GetCurrentNumberInLevel (Level) + 1);
   }
 
 /*****************************************************************************/
@@ -1348,7 +1374,16 @@ void Tre_GetListNodes (Inf_Type_t InfoType)
   }
 
 /*****************************************************************************/
-/****************** Get tree node data using its code *********************/
+/************************ Get number of nodes in tree ************************/
+/*****************************************************************************/
+
+unsigned Tre_GetNumNodes (void)
+  {
+   return Tre_Gbl.List.NumNodes;
+  }
+
+/*****************************************************************************/
+/******************** Get tree node data using its code **********************/
 /*****************************************************************************/
 // Node type must be set before calling this function
 
@@ -1371,7 +1406,7 @@ static void Tre_GetNodeDataByCod (struct Tre_Node *Node)
   }
 
 /*****************************************************************************/
-/************************* Get tree node data *****************************/
+/*************************** Get tree node data ******************************/
 /*****************************************************************************/
 // Node type must be set before calling this function
 
@@ -1515,6 +1550,393 @@ inline unsigned Tre_GetNodIndFromNumNode (unsigned NumNode)
 inline unsigned Tre_GetLevelFromNumNode (unsigned NumNode)
   {
    return Tre_Gbl.List.Nodes[NumNode].Level;
+  }
+
+/*****************************************************************************/
+/********* List tree nodes when click on view a node after edition ***********/
+/*****************************************************************************/
+
+void Tre_ViewNodeAfterEdit (Inf_Type_t InfoType)
+  {
+   struct Tre_Node Node;
+
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (InfoType);
+
+   /***** Get tree node *****/
+   Node.InfoType = InfoType;
+   Tre_GetPars (&Node);
+
+   /***** Show current tree nodes, if any *****/
+   Tre_ShowAllNodes (InfoType,Tre_END_EDIT_NODE,Node.Hierarchy.NodCod,-1L);
+
+   /***** Free list of tree nodes *****/
+   Tre_FreeListNodes ();
+  }
+
+/*****************************************************************************/
+/************ List tree nodes with a form to change a given node *************/
+/*****************************************************************************/
+
+void Tre_ReqChangeNode (Inf_Type_t InfoType)
+  {
+   struct Tre_Node Node;
+
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (InfoType);
+
+   /***** Get tree node *****/
+   Node.InfoType = InfoType;
+   Tre_GetPars (&Node);
+
+   /***** If node is contracted ==> expand it *****/
+   if (Tre_DB_GetIfContractedOrExpandedNode (Node.Hierarchy.NodCod) == ConExp_CONTRACTED)	// If contracted...
+      Tre_DB_InsertNodeInExpandedNodes (Node.Hierarchy.NodCod);					// ...expand it
+
+   /***** Show current tree nodes, if any *****/
+   Tre_ShowAllNodes (InfoType,Tre_FORM_EDIT_NODE,Node.Hierarchy.NodCod,-1L);
+
+   /***** Free list of tree nodes *****/
+   Tre_FreeListNodes ();
+  }
+
+/*****************************************************************************/
+/************* List tree nodes with a form to create a new node **************/
+/*****************************************************************************/
+
+void Tre_ReqCreateNode (Inf_Type_t InfoType)
+  {
+   struct Tre_Node Node;
+
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (InfoType);
+
+   /***** Get tree node *****/
+   Node.InfoType = InfoType;
+   Tre_GetPars (&Node);
+
+   /***** Add node to table of expanded nodes
+          to ensure that child items are displayed *****/
+   Tre_DB_InsertNodeInExpandedNodes (Node.Hierarchy.NodCod);
+
+   /***** Show current tree nodes, if any *****/
+   Tre_ShowAllNodes (InfoType,
+		     Node.Hierarchy.NodCod > 0 ? Tre_FORM_NEW_CHILD_NODE :
+	                                         Tre_FORM_NEW_END_NODE,
+	             Node.Hierarchy.NodCod,-1L);
+
+   /***** Free list of tree nodes *****/
+   Tre_FreeListNodes ();
+  }
+
+/*****************************************************************************/
+/***************** Put a form to create a new tree node *******************/
+/*****************************************************************************/
+
+static void Tre_ShowFormToCreateNode (Inf_Type_t InfoType,long ParentNodCod)
+  {
+   struct Tre_Node ParentNode;	// Parent node
+   struct Tre_Node Node;
+   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+     {
+      [Dat_STR_TIME] = Dat_HMS_TO_000000,
+      [Dat_END_TIME] = Dat_HMS_TO_235959
+     };
+   static Act_Action_t Actions[Inf_NUM_TYPES] =
+     {
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActNewTreNodInf,
+      [Inf_PROGRAM	] = ActNewTreNodPrg,
+      [Inf_TEACH_GUIDE	] = ActNewTreNodGui,
+      [Inf_SYLLABUS_LEC	] = ActNewTreNodSyl,
+      [Inf_SYLLABUS_PRA	] = ActNewTreNodSyl,
+      [Inf_BIBLIOGRAPHY	] = ActNewTreNodBib,
+      [Inf_FAQ		] = ActNewTreNodFAQ,
+      [Inf_LINKS	] = ActNewTreNodLnk,
+      [Inf_ASSESSMENT	] = ActNewTreNodAss,
+     };
+
+   /***** Get data of the parent tree node from database *****/
+   ParentNode.InfoType = InfoType;
+   ParentNode.Hierarchy.NodCod = ParentNodCod;
+   Tre_GetNodeDataByCod (&ParentNode);
+
+   /***** Initialize to empty node *****/
+   Node.InfoType = ParentNode.InfoType;
+   Tre_ResetNode (&Node);	// Clear all node data except type
+   Node.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
+   Node.TimeUTC[Dat_END_TIME] = Node.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
+   Node.ClosedOrOpen = CloOpe_OPEN;
+
+   /***** Show pending alerts */
+   Ale_ShowAlerts (NULL);
+
+   /***** Begin form to create *****/
+   Frm_BeginFormTable (Actions[InfoType],NULL,
+                       Tre_PutPars,&ParentNode,"TBL_WIDE");
+
+      /***** Show form *****/
+      Tre_ShowFormNode (&Node,SetHMS,NULL);
+
+   /***** End form to create *****/
+   Frm_EndFormTable (Btn_CREATE_BUTTON);
+  }
+
+static void Tre_ShowFormToChangeNode (struct Tre_Node *Node)
+  {
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
+   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+     {
+      [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
+      [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
+     };
+   static Act_Action_t Actions[Inf_NUM_TYPES] =
+     {
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActChgTreNodInf,
+      [Inf_PROGRAM	] = ActChgTreNodPrg,
+      [Inf_TEACH_GUIDE	] = ActChgTreNodGui,
+      [Inf_SYLLABUS_LEC	] = ActChgTreNodSyl,
+      [Inf_SYLLABUS_PRA	] = ActChgTreNodSyl,
+      [Inf_BIBLIOGRAPHY	] = ActChgTreNodBib,
+      [Inf_FAQ		] = ActChgTreNodFAQ,
+      [Inf_LINKS	] = ActChgTreNodLnk,
+      [Inf_ASSESSMENT	] = ActChgTreNodAss,
+     };
+
+   /***** Get data of the tree node from database *****/
+   Tre_GetNodeDataByCod (Node);
+   Tre_DB_GetNodeTxt (Node,Txt);
+
+   /***** Begin form to change *****/
+   Frm_BeginFormTable (Actions[Node->InfoType],Tre_NODE_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
+                       Tre_PutPars,Node,"TBL_WIDE");
+
+      /***** Show form *****/
+      Tre_ShowFormNode (Node,SetHMS,Txt);
+
+   /***** End form to change *****/
+   Frm_EndFormTable (Btn_CONFIRM_BUTTON);
+  }
+
+/*****************************************************************************/
+/***************** Put a form to create a new tree node *******************/
+/*****************************************************************************/
+
+static void Tre_ShowFormNode (const struct Tre_Node *Node,
+			      const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME],
+		              const char *Txt)
+  {
+   extern const char *Txt_Title;
+   extern const char *Txt_Description;
+
+   /***** Node title *****/
+   HTM_TR_Begin (NULL);
+
+      /* Label */
+      Frm_LabelColumn ("RM","Title",Txt_Title);
+
+      /* Data */
+      HTM_TD_Begin ("class=\"LM\"");
+	 HTM_INPUT_TEXT ("Title",Tre_MAX_CHARS_NODE_TITLE,Node->Title,
+			 HTM_REQUIRED,
+			 "id=\"Title\""
+			 " class=\"PRG_TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+			 The_GetSuffix ());
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   /***** Node start and end dates *****/
+   if (Node->InfoType == Inf_PROGRAM)
+      Dat_PutFormStartEndClientLocalDateTimes (Node->TimeUTC,
+					       Dat_FORM_SECONDS_ON,
+					       SetHMS);
+
+   /***** Node text *****/
+   HTM_TR_Begin (NULL);
+
+      /* Label */
+      Frm_LabelColumn ("RT","Txt",Txt_Description);
+
+      /* Data */
+      HTM_TD_Begin ("class=\"LT\"");
+	 HTM_TEXTAREA_Begin (HTM_NO_ATTR,
+			     "id=\"Txt\" name=\"Txt\" rows=\"10\""
+			     " class=\"PRG_TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+			     The_GetSuffix ());
+	    if (Txt)
+	       if (Txt[0])
+		  HTM_Txt (Txt);
+	 HTM_TEXTAREA_End ();
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/*************** Receive form to change an existing tree node ****************/
+/*****************************************************************************/
+
+void Tre_ReceiveChgNode (Inf_Type_t InfoType)
+  {
+   struct Tre_Node Node;
+   char Description[Cns_MAX_BYTES_TEXT + 1];
+
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (InfoType);
+
+   /***** Get tree node *****/
+   Node.InfoType = InfoType;
+   Tre_GetPars (&Node);
+   if (Node.Hierarchy.NodCod <= 0)
+      Err_WrongItemExit ();
+
+   /***** Get node data from form *****/
+   Tre_GetNodeDataFromForm (&Node,Description);
+
+   /***** Update existing node *****/
+   Tre_DB_UpdateNode (&Node,Description);
+
+   /***** Show items highlighting the node just changed *****/
+   Tre_ShowAllNodes (InfoType,Tre_RECEIVE_NODE,Node.Hierarchy.NodCod,-1L);
+
+   /***** Free list of tree nodes *****/
+   Tre_FreeListNodes ();
+  }
+
+/*****************************************************************************/
+/******************* Receive form to create a new tree node ******************/
+/*****************************************************************************/
+
+void Tre_ReceiveNewNode (Inf_Type_t InfoType)
+  {
+   struct Tre_Node Node;		// Parent node
+   struct Tre_Node NewNode;		// Node data received from form
+   char Description[Cns_MAX_BYTES_TEXT + 1];
+
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (InfoType);
+
+   /***** Get tree node *****/
+   Node.InfoType = InfoType;
+   Tre_GetPars (&Node);
+   // If node code <= 0 ==> this is the first node in the program
+
+   /***** Set new node code *****/
+   NewNode.Hierarchy.NodCod = -1L;
+   NewNode.Hierarchy.Level = Node.Hierarchy.Level + 1;	// Create as child
+
+   /***** Get node data from form *****/
+   Tre_GetNodeDataFromForm (&NewNode,Description);
+
+   /***** Create a new tree node *****/
+   Tre_InsertNode (InfoType,&Node,&NewNode,Description);
+
+   /***** Update list of tree nodes *****/
+   Tre_FreeListNodes ();
+   Tre_GetListNodes (InfoType);
+
+   /***** Show items highlighting the node just created *****/
+   Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,NewNode.Hierarchy.NodCod,-1L);
+
+   /***** Free list of tree nodes *****/
+   Tre_FreeListNodes ();
+  }
+
+/*****************************************************************************/
+/**************************** Get node data from form ************************/
+/*****************************************************************************/
+
+static void Tre_GetNodeDataFromForm (struct Tre_Node *Node,
+				     char Description[Cns_MAX_BYTES_TEXT + 1])
+  {
+   /***** Get start/end date-times *****/
+   if (Node->InfoType == Inf_PROGRAM)
+     {
+      Node->TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
+      Node->TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm (Dat_END_TIME);
+
+      /* Adjust dates */
+      if (Node->TimeUTC[Dat_STR_TIME] == 0)
+	 Node->TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
+      if (Node->TimeUTC[Dat_END_TIME] == 0)
+	 Node->TimeUTC[Dat_END_TIME] = Node->TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours
+     }
+   else
+      Node->TimeUTC[Dat_STR_TIME] =
+      Node->TimeUTC[Dat_END_TIME] = (time_t) 0;
+
+   /***** Get node title *****/
+   Par_GetParText ("Title",Node->Title,Tre_MAX_BYTES_NODE_TITLE);
+
+   /***** Get node text *****/
+   Par_GetParHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+  }
+
+/*****************************************************************************/
+/*************** Insert a new node as a child of a parent node ***************/
+/*****************************************************************************/
+
+static void Tre_InsertNode (Inf_Type_t InfoType,
+			    const struct Tre_Node *ParentNode,
+		            struct Tre_Node *Node,const char *Txt)
+  {
+   unsigned NumNodeLastChild;
+
+   /***** Lock table to create tree node *****/
+   Tre_DB_LockTableNodes ();
+
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (InfoType);
+   if (Tre_Gbl.List.NumNodes)	// There are nodes
+     {
+      if (ParentNode->Hierarchy.NodCod > 0)	// Parent specified
+	{
+	 /***** Calculate where to insert *****/
+	 NumNodeLastChild = Tre_GetLastChild (Tre_GetNumNodeFromNodCod (ParentNode->Hierarchy.NodCod));
+	 if (NumNodeLastChild < Tre_Gbl.List.NumNodes - 1)
+	   {
+	    /***** New node will be inserted after last child of parent *****/
+	    Node->Hierarchy.NodInd = Tre_GetNodIndFromNumNode (NumNodeLastChild + 1);
+
+	    /***** Move down all indexes of after last child of parent *****/
+	    Tre_DB_MoveDownNodes (InfoType,Node->Hierarchy.NodInd);
+	   }
+	 else
+	    /***** New node will be inserted at the end *****/
+	    Node->Hierarchy.NodInd = Tre_GetNodIndFromNumNode (Tre_Gbl.List.NumNodes - 1) + 1;
+
+	 /***** Child ==> parent level + 1 *****/
+         Node->Hierarchy.Level = ParentNode->Hierarchy.Level + 1;
+	}
+      else	// No parent specified
+	{
+	 /***** New tree node will be inserted at the end *****/
+	 Node->Hierarchy.NodInd = Tre_GetNodIndFromNumNode (Tre_Gbl.List.NumNodes - 1) + 1;
+
+	 /***** First level *****/
+         Node->Hierarchy.Level = 1;
+	}
+     }
+   else		// There are no nodes
+     {
+      /***** New tree node will be inserted as the first one *****/
+      Node->Hierarchy.NodInd = 1;
+
+      /***** First level *****/
+      Node->Hierarchy.Level = 1;
+     }
+
+   /***** Insert new tree node *****/
+   Node->InfoType = InfoType;
+   Node->Hierarchy.NodCod = Tre_DB_InsertNode (Node,Txt);
+
+   /***** Unlock table *****/
+   DB_UnlockTables ();
+
+   /***** Free list items *****/
+   Tre_FreeListNodes ();
   }
 
 /*****************************************************************************/
@@ -1958,388 +2380,63 @@ static unsigned Tre_GetLastChild (int NumNode)
   }
 
 /*****************************************************************************/
-/********* List tree nodes when click on view a node after edition ***********/
+/***************** Write a tree into a temporary HTML file *******************/
 /*****************************************************************************/
 
-void Tre_ViewNodeAfterEdit (Inf_Type_t InfoType)
+void Tre_WriteTreeIntoHTMLTmpFile (Inf_Type_t InfoType,FILE *FileHTMLTmp)
   {
+   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
+   unsigned NumNode;
    struct Tre_Node Node;
 
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (InfoType);
+   /***** Create levels *****/
+   Tre_SetMaxNodeLevel (Tre_CalculateMaxNodeLevel ());
+   Tre_CreateLevels ();
 
-   /***** Get tree node *****/
-   Node.InfoType = InfoType;
-   Tre_GetPars (&Node);
+   /***** Write start of HTML code *****/
+   Lay_BeginHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[InfoType]);
+   fprintf (FileHTMLTmp,"<body>\n"
+                        "<table>\n");
 
-   /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,Tre_END_EDIT_NODE,Node.Hierarchy.NodCod,-1L);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
-  }
-
-/*****************************************************************************/
-/************ List tree nodes with a form to change a given node *************/
-/*****************************************************************************/
-
-void Tre_ReqChangeNode (Inf_Type_t InfoType)
-  {
-   struct Tre_Node Node;
-
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (InfoType);
-
-   /***** Get tree node *****/
-   Node.InfoType = InfoType;
-   Tre_GetPars (&Node);
-
-   /***** If node is contracted ==> expand it *****/
-   if (Tre_DB_GetIfContractedOrExpandedNode (Node.Hierarchy.NodCod) == ConExp_CONTRACTED)	// If contracted...
-      Tre_DB_InsertNodeInExpandedNodes (Node.Hierarchy.NodCod);					// ...expand it
-
-   /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,Tre_FORM_EDIT_NODE,Node.Hierarchy.NodCod,-1L);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
-  }
-
-/*****************************************************************************/
-/************* List tree nodes with a form to create a new node **************/
-/*****************************************************************************/
-
-void Tre_ReqCreateNode (Inf_Type_t InfoType)
-  {
-   struct Tre_Node Node;
-
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (InfoType);
-
-   /***** Get tree node *****/
-   Node.InfoType = InfoType;
-   Tre_GetPars (&Node);
-
-   /***** Add node to table of expanded nodes
-          to ensure that child items are displayed *****/
-   Tre_DB_InsertNodeInExpandedNodes (Node.Hierarchy.NodCod);
-
-   /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,
-		     Node.Hierarchy.NodCod > 0 ? Tre_FORM_NEW_CHILD_NODE :
-	                                         Tre_FORM_NEW_END_NODE,
-	             Node.Hierarchy.NodCod,-1L);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
-  }
-
-/*****************************************************************************/
-/***************** Put a form to create a new tree node *******************/
-/*****************************************************************************/
-
-static void Tre_ShowFormToCreateNode (Inf_Type_t InfoType,long ParentNodCod)
-  {
-   struct Tre_Node ParentNode;	// Parent node
-   struct Tre_Node Node;
-   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+   /***** Write all items of the current syllabus into text buffer *****/
+   for (NumNode = 0;
+	NumNode < Tre_Gbl.List.NumNodes;
+	NumNode++)
      {
-      [Dat_STR_TIME] = Dat_HMS_TO_000000,
-      [Dat_END_TIME] = Dat_HMS_TO_235959
-     };
-   static Act_Action_t Actions[Inf_NUM_TYPES] =
-     {
-      [Inf_UNKNOWN_TYPE	] = ActUnk,
-      [Inf_INFORMATION	] = ActNewTreNodInf,
-      [Inf_PROGRAM	] = ActNewTreNodPrg,
-      [Inf_TEACH_GUIDE	] = ActNewTreNodGui,
-      [Inf_SYLLABUS_LEC	] = ActNewTreNodSyl,
-      [Inf_SYLLABUS_PRA	] = ActNewTreNodSyl,
-      [Inf_BIBLIOGRAPHY	] = ActNewTreNodBib,
-      [Inf_FAQ		] = ActNewTreNodFAQ,
-      [Inf_LINKS	] = ActNewTreNodLnk,
-      [Inf_ASSESSMENT	] = ActNewTreNodAss,
-     };
+      Node.InfoType = InfoType;
+      Node.Hierarchy.NodCod = Tre_GetNodCodFromNumNode (NumNode);
+      Tre_GetNodeDataByCod (&Node);
 
-   /***** Get data of the parent tree node from database *****/
-   ParentNode.InfoType = InfoType;
-   ParentNode.Hierarchy.NodCod = ParentNodCod;
-   Tre_GetNodeDataByCod (&ParentNode);
+      /***** Begin the row *****/
+      fprintf (FileHTMLTmp,"<tr>");
 
-   /***** Initialize to empty node *****/
-   Node.InfoType = ParentNode.InfoType;
-   Tre_ResetNode (&Node);	// Clear all node data except type
-   Node.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
-   Node.TimeUTC[Dat_END_TIME] = Node.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
-   Node.ClosedOrOpen = CloOpe_OPEN;
+      /***** Indent depending on the level *****/
+      if (Tre_Gbl.List.Nodes[NumNode].Level > 1)
+       	 fprintf (FileHTMLTmp,"<td colspan=\"%u\">"
+      		              "</td>",
+      		  Tre_Gbl.List.Nodes[NumNode].Level - 1);
 
-   /***** Show pending alerts */
-   Ale_ShowAlerts (NULL);
+      /***** Code of the node *****/
+      fprintf (FileHTMLTmp,"<td class=\"RT\">");
+      Tre_IncreaseNumberInLevel (Tre_Gbl.List.Nodes[NumNode].Level);
+      fprintf (FileHTMLTmp,"%u",Tre_GetCurrentNumberInLevel (Tre_Gbl.List.Nodes[NumNode].Level));
+      fprintf (FileHTMLTmp,"</td>");
 
-   /***** Begin form to create *****/
-   Frm_BeginFormTable (Actions[InfoType],NULL,
-                       Tre_PutPars,&ParentNode,"TBL_WIDE");
+      /***** Text of the item *****/
+      fprintf (FileHTMLTmp,"<td colspan=\"%u\" class=\"LT\">"
+      			   "%s"
+      			   "</td>",
+      	       Tre_Gbl.MaxLevel - Tre_Gbl.List.Nodes[NumNode].Level + 1,
+      	       Node.Title);
 
-      /***** Show form *****/
-      Tre_ShowFormNode (&Node,SetHMS,NULL);
-
-   /***** End form to create *****/
-   Frm_EndFormTable (Btn_CREATE_BUTTON);
-  }
-
-static void Tre_ShowFormToChangeNode (struct Tre_Node *Node)
-  {
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
-   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
-     {
-      [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
-      [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
-     };
-   static Act_Action_t Actions[Inf_NUM_TYPES] =
-     {
-      [Inf_UNKNOWN_TYPE	] = ActUnk,
-      [Inf_INFORMATION	] = ActChgTreNodInf,
-      [Inf_PROGRAM	] = ActChgTreNodPrg,
-      [Inf_TEACH_GUIDE	] = ActChgTreNodGui,
-      [Inf_SYLLABUS_LEC	] = ActChgTreNodSyl,
-      [Inf_SYLLABUS_PRA	] = ActChgTreNodSyl,
-      [Inf_BIBLIOGRAPHY	] = ActChgTreNodBib,
-      [Inf_FAQ		] = ActChgTreNodFAQ,
-      [Inf_LINKS	] = ActChgTreNodLnk,
-      [Inf_ASSESSMENT	] = ActChgTreNodAss,
-     };
-
-   /***** Get data of the tree node from database *****/
-   Tre_GetNodeDataByCod (Node);
-   Tre_DB_GetNodeTxt (Node,Txt);
-
-   /***** Begin form to change *****/
-   Frm_BeginFormTable (Actions[Node->InfoType],Tre_NODE_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
-                       Tre_PutPars,Node,"TBL_WIDE");
-
-      /***** Show form *****/
-      Tre_ShowFormNode (Node,SetHMS,Txt);
-
-   /***** End form to change *****/
-   Frm_EndFormTable (Btn_CONFIRM_BUTTON);
-  }
-
-/*****************************************************************************/
-/***************** Put a form to create a new tree node *******************/
-/*****************************************************************************/
-
-static void Tre_ShowFormNode (const struct Tre_Node *Node,
-			      const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME],
-		              const char *Txt)
-  {
-   extern const char *Txt_Title;
-   extern const char *Txt_Description;
-
-   /***** Node title *****/
-   HTM_TR_Begin (NULL);
-
-      /* Label */
-      Frm_LabelColumn ("RM","Title",Txt_Title);
-
-      /* Data */
-      HTM_TD_Begin ("class=\"LM\"");
-	 HTM_INPUT_TEXT ("Title",Tre_MAX_CHARS_NODE_TITLE,Node->Title,
-			 HTM_REQUIRED,
-			 "id=\"Title\""
-			 " class=\"PRG_TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
-			 The_GetSuffix ());
-      HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Node start and end dates *****/
-   if (Node->InfoType == Inf_PROGRAM)
-      Dat_PutFormStartEndClientLocalDateTimes (Node->TimeUTC,
-					       Dat_FORM_SECONDS_ON,
-					       SetHMS);
-
-   /***** Node text *****/
-   HTM_TR_Begin (NULL);
-
-      /* Label */
-      Frm_LabelColumn ("RT","Txt",Txt_Description);
-
-      /* Data */
-      HTM_TD_Begin ("class=\"LT\"");
-	 HTM_TEXTAREA_Begin (HTM_NO_ATTR,
-			     "id=\"Txt\" name=\"Txt\" rows=\"10\""
-			     " class=\"PRG_TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
-			     The_GetSuffix ());
-	    if (Txt)
-	       if (Txt[0])
-		  HTM_Txt (Txt);
-	 HTM_TEXTAREA_End ();
-      HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/*************** Receive form to change an existing tree node ****************/
-/*****************************************************************************/
-
-void Tre_ReceiveChgNode (Inf_Type_t InfoType)
-  {
-   struct Tre_Node Node;
-   char Description[Cns_MAX_BYTES_TEXT + 1];
-
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (InfoType);
-
-   /***** Get tree node *****/
-   Node.InfoType = InfoType;
-   Tre_GetPars (&Node);
-   if (Node.Hierarchy.NodCod <= 0)
-      Err_WrongItemExit ();
-
-   /***** Get node data from form *****/
-   Tre_GetNodeDataFromForm (&Node,Description);
-
-   /***** Update existing node *****/
-   Tre_DB_UpdateNode (&Node,Description);
-
-   /***** Show items highlighting the node just changed *****/
-   Tre_ShowAllNodes (InfoType,Tre_RECEIVE_NODE,Node.Hierarchy.NodCod,-1L);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
-  }
-
-/*****************************************************************************/
-/******************* Receive form to create a new tree node ******************/
-/*****************************************************************************/
-
-void Tre_ReceiveNewNode (Inf_Type_t InfoType)
-  {
-   struct Tre_Node Node;		// Parent node
-   struct Tre_Node NewNode;		// Node data received from form
-   char Description[Cns_MAX_BYTES_TEXT + 1];
-
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (InfoType);
-
-   /***** Get tree node *****/
-   Node.InfoType = InfoType;
-   Tre_GetPars (&Node);
-   // If node code <= 0 ==> this is the first node in the program
-
-   /***** Set new node code *****/
-   NewNode.Hierarchy.NodCod = -1L;
-   NewNode.Hierarchy.Level = Node.Hierarchy.Level + 1;	// Create as child
-
-   /***** Get node data from form *****/
-   Tre_GetNodeDataFromForm (&NewNode,Description);
-
-   /***** Create a new tree node *****/
-   Tre_InsertNode (InfoType,&Node,&NewNode,Description);
-
-   /***** Update list of tree nodes *****/
-   Tre_FreeListNodes ();
-   Tre_GetListNodes (InfoType);
-
-   /***** Show items highlighting the node just created *****/
-   Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,NewNode.Hierarchy.NodCod,-1L);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
-  }
-
-/*****************************************************************************/
-/**************************** Get node data from form ************************/
-/*****************************************************************************/
-
-static void Tre_GetNodeDataFromForm (struct Tre_Node *Node,
-				     char Description[Cns_MAX_BYTES_TEXT + 1])
-  {
-   /***** Get start/end date-times *****/
-   if (Node->InfoType == Inf_PROGRAM)
-     {
-      Node->TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
-      Node->TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm (Dat_END_TIME);
-
-      /* Adjust dates */
-      if (Node->TimeUTC[Dat_STR_TIME] == 0)
-	 Node->TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
-      if (Node->TimeUTC[Dat_END_TIME] == 0)
-	 Node->TimeUTC[Dat_END_TIME] = Node->TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours
-     }
-   else
-      Node->TimeUTC[Dat_STR_TIME] =
-      Node->TimeUTC[Dat_END_TIME] = (time_t) 0;
-
-   /***** Get node title *****/
-   Par_GetParText ("Title",Node->Title,Tre_MAX_BYTES_NODE_TITLE);
-
-   /***** Get node text *****/
-   Par_GetParHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
-  }
-
-/*****************************************************************************/
-/*************** Insert a new node as a child of a parent node ***************/
-/*****************************************************************************/
-
-static void Tre_InsertNode (Inf_Type_t InfoType,
-			    const struct Tre_Node *ParentNode,
-		            struct Tre_Node *Node,const char *Txt)
-  {
-   unsigned NumNodeLastChild;
-
-   /***** Lock table to create tree node *****/
-   Tre_DB_LockTableNodes ();
-
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (InfoType);
-   if (Tre_Gbl.List.NumNodes)	// There are nodes
-     {
-      if (ParentNode->Hierarchy.NodCod > 0)	// Parent specified
-	{
-	 /***** Calculate where to insert *****/
-	 NumNodeLastChild = Tre_GetLastChild (Tre_GetNumNodeFromNodCod (ParentNode->Hierarchy.NodCod));
-	 if (NumNodeLastChild < Tre_Gbl.List.NumNodes - 1)
-	   {
-	    /***** New node will be inserted after last child of parent *****/
-	    Node->Hierarchy.NodInd = Tre_GetNodIndFromNumNode (NumNodeLastChild + 1);
-
-	    /***** Move down all indexes of after last child of parent *****/
-	    Tre_DB_MoveDownNodes (InfoType,Node->Hierarchy.NodInd);
-	   }
-	 else
-	    /***** New node will be inserted at the end *****/
-	    Node->Hierarchy.NodInd = Tre_GetNodIndFromNumNode (Tre_Gbl.List.NumNodes - 1) + 1;
-
-	 /***** Child ==> parent level + 1 *****/
-         Node->Hierarchy.Level = ParentNode->Hierarchy.Level + 1;
-	}
-      else	// No parent specified
-	{
-	 /***** New tree node will be inserted at the end *****/
-	 Node->Hierarchy.NodInd = Tre_GetNodIndFromNumNode (Tre_Gbl.List.NumNodes - 1) + 1;
-
-	 /***** First level *****/
-         Node->Hierarchy.Level = 1;
-	}
-     }
-   else		// There are no nodes
-     {
-      /***** New tree node will be inserted as the first one *****/
-      Node->Hierarchy.NodInd = 1;
-
-      /***** First level *****/
-      Node->Hierarchy.Level = 1;
+      /***** End of the row *****/
+      fprintf (FileHTMLTmp,"</tr>\n");
      }
 
-   /***** Insert new tree node *****/
-   Node->InfoType = InfoType;
-   Node->Hierarchy.NodCod = Tre_DB_InsertNode (Node,Txt);
+   fprintf (FileHTMLTmp,"</table>\n"
+			"</html>\n"
+			"</body>\n");
 
-   /***** Unlock table *****/
-   DB_UnlockTables ();
-
-   /***** Free list items *****/
-   Tre_FreeListNodes ();
+   /***** Free levels *****/
+   Tre_FreeLevels ();
   }
