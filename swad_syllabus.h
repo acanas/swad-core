@@ -103,10 +103,6 @@ void Syl_FreeListItemsSyllabus (struct Syl_Syllabus *Syllabus);
 
 int Syl_ReadLevelItemSyllabus (FILE *XML);
 
-void Syl_WriteSyllabusIntoHTMLTmpFile (struct Syl_Syllabus *Syllabus,
-				       Inf_Type_t InfoType,
-				       FILE *FileHTMLTmp);
-
 void Syl_BuildPathFileSyllabus (const struct Syl_Syllabus *Syllabus,
                                 char PathFile[PATH_MAX + 1]);
 void Syl_WriteStartFileSyllabus (FILE *FileSyllabus);

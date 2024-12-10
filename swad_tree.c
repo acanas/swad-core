@@ -112,8 +112,6 @@ static const char *Tre_NODE_SECTION_ID = "node_section";
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static int Tre_WriteTreeIntoHTMLBuffer (Inf_Type_t InfoType);
-
 static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
                               unsigned NumNode,struct Tre_Node *Node,
                               ConExp_ContractedOrExpanded_t ContractedOrExpanded,
@@ -183,7 +181,7 @@ static void Tre_InsertNode (Inf_Type_t InfoType,
 /**************************** List all tree nodes ****************************/
 /*****************************************************************************/
 
-static int Tre_WriteTreeIntoHTMLBuffer (Inf_Type_t InfoType)
+int Tre_WriteTreeIntoHTMLBuffer (Inf_Type_t InfoType)
   {
    char FileNameHTMLTmp[PATH_MAX + 1];
    FILE *FileHTMLTmp;

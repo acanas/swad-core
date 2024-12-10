@@ -1322,7 +1322,6 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
 					    Inf_Type_t InfoType,
 					    char **HTMLBuffer)
   {
-   // struct Syl_Syllabus Syllabus;
    char FileNameHTMLTmp[PATH_MAX + 1];
    FILE *FileHTMLTmp;
    size_t Length;
@@ -1349,7 +1348,6 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
 
       /***** Write syllabus in HTML into a temporary file *****/
       Tre_WriteTreeIntoHTMLTmpFile (InfoType,FileHTMLTmp);
-      // Syl_WriteSyllabusIntoHTMLTmpFile (&Syllabus,InfoType,FileHTMLTmp);
 
       /***** Write syllabus from list of items in memory to text buffer *****/
       /* Compute length of file */

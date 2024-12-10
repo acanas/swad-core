@@ -55,12 +55,6 @@
 #include "swad_xml.h"
 
 /*****************************************************************************/
-/************** External global variables from others modules ****************/
-/*****************************************************************************/
-
-extern struct Globals Gbl;
-
-/*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
@@ -331,74 +325,6 @@ int Syl_ReadLevelItemSyllabus (FILE *XML)
    else if (Level > Syl_MAX_LEVELS_SYLLABUS)
       Level = Syl_MAX_LEVELS_SYLLABUS;
    return Level;
-  }
-
-/*****************************************************************************/
-/************** Write the syllabus into a temporary HTML file ****************/
-/*****************************************************************************/
-
-void Syl_WriteSyllabusIntoHTMLTmpFile (struct Syl_Syllabus *Syllabus,
-				       Inf_Type_t InfoType,
-				       FILE *FileHTMLTmp)
-  {
-   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
-   unsigned NumItem;
-   int i;
-
-   /***** Write start of HTML code *****/
-   Lay_BeginHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[InfoType]);
-   fprintf (FileHTMLTmp,"<body>\n"
-                        "<table>\n");
-
-   /***** Set width of columns of the table *****/
-   fprintf (FileHTMLTmp,"<colgroup>\n");
-   for (i  = 1;
-	i <= Syllabus->LstItems.NumLevels;
-	i++)
-      fprintf (FileHTMLTmp,"<col width=\"%d\" />\n",
-	       i * Syl_WIDTH_NUM_SYLLABUS);
-   fprintf (FileHTMLTmp,"<col width=\"*\" />\n"
-			"</colgroup>\n");
-
-   /***** Write all items of the current syllabus into text buffer *****/
-   for (NumItem = 0;
-	NumItem < Syllabus->LstItems.NumItems;
-	NumItem++)
-     {
-      /***** Begin the row *****/
-      fprintf (FileHTMLTmp,"<tr>");
-
-      /***** Indent depending on the level *****/
-      if (Syllabus->LstItems.Lst[NumItem].Level > 1)
-	 fprintf (FileHTMLTmp,"<td colspan=\"%d\">"
-		              "</td>",
-		  Syllabus->LstItems.Lst[NumItem].Level - 1);
-
-      /***** Code of the item *****/
-      fprintf (FileHTMLTmp,"<td class=\"RT\" style=\"width:%dpx;\">",
-	       Syllabus->LstItems.Lst[NumItem].Level * Syl_WIDTH_NUM_SYLLABUS);
-      if (Syllabus->LstItems.Lst[NumItem].Level == 1)
-	 fprintf (FileHTMLTmp,"&nbsp;");
-      Syl_WriteNumItem (NULL,FileHTMLTmp,
-			Syllabus->LstItems.Lst[NumItem].Level,
-			Syllabus->LstItems.Lst[NumItem].CodItem);
-      fprintf (FileHTMLTmp,"&nbsp;"
-	                   "</td>");
-
-      /***** Text of the item *****/
-      fprintf (FileHTMLTmp,"<td colspan=\"%d\" class=\"LT\">"
-			   "%s"
-			   "</td>",
-	       Syllabus->LstItems.NumLevels - Syllabus->LstItems.Lst[NumItem].Level + 1,
-	       Syllabus->LstItems.Lst[NumItem].Text);
-
-      /***** End of the row *****/
-      fprintf (FileHTMLTmp,"</tr>\n");
-     }
-
-   fprintf (FileHTMLTmp,"</table>\n"
-			"</html>\n"
-			"</body>\n");
   }
 
 /*****************************************************************************/
