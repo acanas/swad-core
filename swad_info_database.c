@@ -44,7 +44,7 @@ static const char *Inf_DB_NamesForInfoType[Inf_NUM_TYPES] =
   {
    [Inf_UNKNOWN_TYPE	] = "unk",
    [Inf_INFORMATION	] = "intro",		// TODO: Change this to "inf"
-   [Inf_PROGRAM		] = "prg",		// Not used yet
+   [Inf_PROGRAM		] = "prg",		// Not used
    [Inf_TEACH_GUIDE	] = "description",	// TODO: Change this to "gui"
    [Inf_SYLLABUS_LEC	] = "theory",		// TODO: Change this to "lec"
    [Inf_SYLLABUS_PRA	] = "practices",	// TODO: Change this to "pra"

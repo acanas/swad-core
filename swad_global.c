@@ -279,7 +279,6 @@ void Gbl_Cleanup (void)
 
    Usr_FreeListOtherRecipients ();
    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
-   // Syl_FreeListItemsSyllabus (Syllabus);
    Par_FreePars ();
    Ale_ResetAllAlerts ();
   }

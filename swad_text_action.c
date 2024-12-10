@@ -8112,29 +8112,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Copy link to the syllabus"	// Çeviri lazim!
 #endif
 	,
-	[ActCvtSyl] =
-#if   L==1	// ca
-	"Convert syllabus"		// Necessita traducció
-#elif L==2	// de
-	"Convert syllabus"		// Need Übersetzung
-#elif L==3	// en
-	"Convert syllabus"
-#elif L==4	// es
-	"Convertir temarios"
-#elif L==5	// fr
-	"Convert syllabus"		// Besoin de traduction
-#elif L==6	// gn
-	"Convertir temarios"		// Okoteve traducción
-#elif L==7	// it
-	"Convert syllabus"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Convert syllabus"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Convert syllabus"		// Precisa de tradução
-#elif L==10	// tr
-	"Convert syllabus"		// Çeviri lazim!
-#endif
-	,
 	[ActSeeBib] =
 #if   L==1	// ca
 	"See the bibliography"		// Necessita traducció

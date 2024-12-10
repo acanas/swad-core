@@ -138,10 +138,10 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_search.h"
 #include "swad_session_database.h"
 #include "swad_setting_database.h"
-#include "swad_syllabus.h"
 #include "swad_tag_database.h"
 #include "swad_test_config.h"
 #include "swad_test_visibility.h"
+#include "swad_tree.h"
 #include "swad_user.h"
 #include "swad_user_database.h"
 #include "swad_www.h"
@@ -1200,7 +1200,7 @@ int swad__getCourseInfo (struct soap *soap,
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = "introduction",
-      [Inf_PROGRAM	] = "program",	// Not used yet
+      [Inf_PROGRAM	] = "program",	// Not used
       [Inf_TEACH_GUIDE	] = "guide",
       [Inf_SYLLABUS_LEC	] = "lectures",
       [Inf_SYLLABUS_PRA	] = "practicals",

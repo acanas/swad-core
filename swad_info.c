@@ -47,7 +47,6 @@
 #include "swad_info_database.h"
 #include "swad_parameter.h"
 #include "swad_string.h"
-#include "swad_syllabus.h"
 #include "swad_tree.h"
 #include "swad_tree_database.h"
 #include "swad_tree_specific.h"
@@ -60,7 +59,7 @@ Inf_Type_t Inf_Types[Inf_NUM_TYPES] =
   {
    [Inf_UNKNOWN_TYPE	] = Inf_UNKNOWN_TYPE,
    [Inf_INFORMATION	] = Inf_INFORMATION,
-   [Inf_PROGRAM		] = Inf_PROGRAM,	// Not used yet
+   [Inf_PROGRAM		] = Inf_PROGRAM,
    [Inf_TEACH_GUIDE	] = Inf_TEACH_GUIDE,
    [Inf_SYLLABUS_LEC	] = Inf_SYLLABUS_LEC,
    [Inf_SYLLABUS_PRA	] = Inf_SYLLABUS_PRA,
@@ -84,7 +83,7 @@ static const char *Inf_FileNamesForInfoType[Inf_NUM_TYPES] =
   {
    [Inf_UNKNOWN_TYPE	] = NULL,
    [Inf_INFORMATION	] = Cfg_CRS_INFO_INFORMATION,
-   [Inf_PROGRAM		] = NULL,	// Not used yet
+   [Inf_PROGRAM		] = NULL,	// Not used
    [Inf_TEACH_GUIDE	] = Cfg_CRS_INFO_TEACHING_GUIDE,
    [Inf_SYLLABUS_LEC	] = Cfg_CRS_INFO_LECTURES,
    [Inf_SYLLABUS_PRA	] = Cfg_CRS_INFO_PRACTICALS,
@@ -120,7 +119,7 @@ static Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
 
    [Inf_PLAIN_TEXT	][Inf_UNKNOWN_TYPE	] = ActUnk,
    [Inf_PLAIN_TEXT	][Inf_INFORMATION	] = ActEdiPlaTxtCrsInf,
-   [Inf_PLAIN_TEXT	][Inf_PROGRAM		] = ActUnk,	// Not used yet
+   [Inf_PLAIN_TEXT	][Inf_PROGRAM		] = ActUnk,	// Not used
    [Inf_PLAIN_TEXT	][Inf_TEACH_GUIDE	] = ActEdiPlaTxtTchGui,
    [Inf_PLAIN_TEXT	][Inf_SYLLABUS_LEC	] = ActEdiPlaTxtSyl,
    [Inf_PLAIN_TEXT	][Inf_SYLLABUS_PRA	] = ActEdiPlaTxtSyl,
@@ -131,7 +130,7 @@ static Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
 
    [Inf_RICH_TEXT	][Inf_UNKNOWN_TYPE	] = ActUnk,
    [Inf_RICH_TEXT	][Inf_INFORMATION	] = ActEdiRchTxtCrsInf,
-   [Inf_RICH_TEXT	][Inf_PROGRAM		] = ActUnk,	// Not used yet
+   [Inf_RICH_TEXT	][Inf_PROGRAM		] = ActUnk,	// Not used
    [Inf_RICH_TEXT	][Inf_TEACH_GUIDE	] = ActEdiRchTxtTchGui,
    [Inf_RICH_TEXT	][Inf_SYLLABUS_LEC	] = ActEdiRchTxtSyl,
    [Inf_RICH_TEXT	][Inf_SYLLABUS_PRA	] = ActEdiRchTxtSyl,
@@ -142,7 +141,7 @@ static Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
 
    [Inf_PAGE		][Inf_UNKNOWN_TYPE	] = ActUnk,
    [Inf_PAGE		][Inf_INFORMATION	] = ActEdiPagCrsInf,
-   [Inf_PAGE		][Inf_PROGRAM		] = ActUnk,	// Not used yet
+   [Inf_PAGE		][Inf_PROGRAM		] = ActUnk,	// Not used
    [Inf_PAGE		][Inf_TEACH_GUIDE	] = ActEdiPagTchGui,
    [Inf_PAGE		][Inf_SYLLABUS_LEC	] = ActEdiPagSyl,
    [Inf_PAGE		][Inf_SYLLABUS_PRA	] = ActEdiPagSyl,
@@ -153,7 +152,7 @@ static Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
 
    [Inf_URL		][Inf_UNKNOWN_TYPE	] = ActUnk,
    [Inf_URL		][Inf_INFORMATION	] = ActEdiURLCrsInf,
-   [Inf_URL		][Inf_PROGRAM		] = ActUnk,	// Not used yet
+   [Inf_URL		][Inf_PROGRAM		] = ActUnk,	// Not used
    [Inf_URL		][Inf_TEACH_GUIDE	] = ActEdiURLTchGui,
    [Inf_URL		][Inf_SYLLABUS_LEC	] = ActEdiURLSyl,
    [Inf_URL		][Inf_SYLLABUS_PRA	] = ActEdiURLSyl,
@@ -167,7 +166,7 @@ static Act_Action_t Inf_ActionsCfg[Inf_NUM_TYPES] =
   {
    [Inf_UNKNOWN_TYPE	] = ActUnk,
    [Inf_INFORMATION	] = ActCfgCrsInf,
-   [Inf_PROGRAM		] = ActUnk,	// Not used yet
+   [Inf_PROGRAM		] = ActUnk,	// Not used
    [Inf_TEACH_GUIDE	] = ActCfgTchGui,
    [Inf_SYLLABUS_LEC	] = ActCfgSyl,
    [Inf_SYLLABUS_PRA	] = ActCfgSyl,
@@ -181,7 +180,7 @@ static Act_Action_t Inf_ActionsReqLnk[Inf_NUM_TYPES] =
   {
    [Inf_UNKNOWN_TYPE	] = ActUnk,
    [Inf_INFORMATION	] = ActReqLnkCrsInf,
-   [Inf_PROGRAM		] = ActUnk,	// Not used yet
+   [Inf_PROGRAM		] = ActUnk,	// Not used
    [Inf_TEACH_GUIDE	] = ActReqLnkTchGui,
    [Inf_SYLLABUS_LEC	] = ActReqLnkSyl,
    [Inf_SYLLABUS_PRA	] = ActReqLnkSyl,
@@ -207,6 +206,8 @@ static struct
 
 static void Inf_BeforeTree (struct Inf_Info *Info,Vie_ViewType_t ViewType,Inf_Src_t InfoSrc);
 static void Inf_AfterTree (void);
+
+static void Inf_PutFormWhichSyllabus (Inf_Type_t InfoType,Vie_ViewType_t ViewType);
 
 static void Inf_PutIconsWhenViewing (void *Info);
 static void Inf_PutIconsWhenEditing (void *Info);
@@ -299,7 +300,7 @@ static void Inf_BeforeTree (struct Inf_Info *Info,Vie_ViewType_t ViewType,Inf_Sr
 		 *Help[Info->Type],Box_NOT_CLOSABLE);
 
       /***** Form to select syllabus *****/
-      Syl_PutFormWhichSyllabus (Info->Type,ViewType);
+      Inf_PutFormWhichSyllabus (Info->Type,ViewType);
 
       /***** Only for students: Have I read this information? ******/
       if (Info->FromDB.MustBeRead && Gbl.Usrs.Me.Role.Logged == Rol_STD)
@@ -312,6 +313,57 @@ static void Inf_AfterTree (void)
   {
    /***** End box *****/
    Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/************************ Write form to select syllabus **********************/
+/*****************************************************************************/
+
+static void Inf_PutFormWhichSyllabus (Inf_Type_t InfoType,Vie_ViewType_t ViewType)
+  {
+   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
+   static Act_Action_t Actions[Vie_NUM_VIEW_TYPES] =
+     {
+      [Vie_VIEW		] = ActSeeSyl,
+      [Vie_EDIT		] = ActEdiTreSyl,
+      [Vie_CONFIG	] = ActCfgSyl,
+      [Vie_PRINT	] = ActUnk,
+     };
+   Inf_Type_t Type;
+
+   /***** If no syllabus ==> nothing to do *****/
+   switch (InfoType)
+     {
+      case Inf_SYLLABUS_LEC:
+      case Inf_SYLLABUS_PRA:
+	 break;
+      default:	// Nothing to do
+	 return;
+     }
+
+   /***** Form to select which syllabus I want to see (lectures/practicals) *****/
+   Frm_BeginForm (Actions[ViewType]);
+      HTM_DIV_Begin ("class=\"SEL_BELOW_TITLE DAT_%s\"",The_GetSuffix ());
+	 HTM_UL_Begin (NULL);
+
+	    for (Type  = Inf_SYLLABUS_LEC;
+		 Type <= Inf_SYLLABUS_PRA;
+		 Type++)
+	      {
+	       HTM_LI_Begin (NULL);
+		  HTM_LABEL_Begin (NULL);
+		     HTM_INPUT_RADIO ("WhichSyllabus",
+				      ((Type == InfoType) ? HTM_CHECKED :
+							    HTM_NO_ATTR) | HTM_SUBMIT_ON_CLICK,
+				      "value=\"%u\"",(unsigned) Type);
+		     HTM_Txt (Txt_INFO_TITLE[Type]);
+		  HTM_LABEL_End ();
+	       HTM_LI_End ();
+	      }
+
+	 HTM_UL_End ();
+      HTM_DIV_End ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1074,7 +1126,7 @@ static void Inf_PutCheckboxForceStdsToReadInfo (const struct Inf_Info *Info,
      {
       [Inf_UNKNOWN_TYPE	] = {ActUnk		,NULL,NULL},
       [Inf_INFORMATION	] = {ActChgFrcReaCrsInf	,NULL,NULL},
-      [Inf_PROGRAM	] = {ActUnk		,NULL,NULL},	// Not used yet
+      [Inf_PROGRAM	] = {ActUnk		,NULL,NULL},	// Not used
       [Inf_TEACH_GUIDE	] = {ActChgFrcReaTchGui	,NULL,NULL},
       [Inf_SYLLABUS_LEC	] = {ActChgFrcReaSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC]},
       [Inf_SYLLABUS_PRA	] = {ActChgFrcReaSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_PRA]},
@@ -1107,7 +1159,7 @@ static void Inf_PutCheckboxConfirmIHaveReadInfo (Inf_Type_t InfoType)
      {
       [Inf_UNKNOWN_TYPE	] = {ActUnk		,NULL,NULL},
       [Inf_INFORMATION	] = {ActChgHavReaCrsInf	,NULL,NULL},
-      [Inf_PROGRAM	] = {ActUnk		,NULL,NULL},	// Not used yet
+      [Inf_PROGRAM	] = {ActUnk		,NULL,NULL},	// Not used
       [Inf_TEACH_GUIDE	] = {ActChgHavReaTchGui	,NULL,NULL},
       [Inf_SYLLABUS_LEC	] = {ActChgHavReaSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC]},
       [Inf_SYLLABUS_PRA	] = {ActChgHavReaSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_PRA]},
@@ -1182,7 +1234,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
      {
       [Inf_UNKNOWN_TYPE	] = {ActUnk		,NULL,NULL},
       [Inf_INFORMATION	] = {ActSeeCrsInf	,NULL,NULL},
-      [Inf_PROGRAM	] = {ActUnk		,NULL,NULL},	// Not used yet
+      [Inf_PROGRAM	] = {ActUnk		,NULL,NULL},	// Not used
       [Inf_TEACH_GUIDE	] = {ActSeeTchGui	,NULL,NULL},
       [Inf_SYLLABUS_LEC	] = {ActSeeSyl		,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC]},
       [Inf_SYLLABUS_PRA	] = {ActSeeSyl		,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_PRA]},
@@ -1322,7 +1374,7 @@ static void Inf_ConfigInfoSource (struct Inf_Info *Info)
      {
       [Inf_UNKNOWN_TYPE	] = ActUnk,
       [Inf_INFORMATION	] = ActSelInfSrcCrsInf,
-      [Inf_PROGRAM	] = ActUnk,	// Not used yet
+      [Inf_PROGRAM	] = ActUnk,	// Not used
       [Inf_TEACH_GUIDE	] = ActSelInfSrcTchGui,
       [Inf_SYLLABUS_LEC	] = ActSelInfSrcSyl,
       [Inf_SYLLABUS_PRA	] = ActSelInfSrcSyl,
@@ -1899,7 +1951,7 @@ void Inf_EditPlainTxtInfo (void)
      {
       [Inf_UNKNOWN_TYPE	] = {ActUnk		,NULL,NULL},
       [Inf_INFORMATION	] = {ActRcvPlaTxtCrsInf	,NULL,NULL},
-      [Inf_PROGRAM	] = {ActUnk		,NULL,NULL},	// Not used yet
+      [Inf_PROGRAM	] = {ActUnk		,NULL,NULL},	// Not used
       [Inf_TEACH_GUIDE	] = {ActRcvPlaTxtTchGui	,NULL,NULL},
       [Inf_SYLLABUS_LEC	] = {ActRcvPlaTxtSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC]},
       [Inf_SYLLABUS_PRA	] = {ActRcvPlaTxtSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_PRA]},
@@ -1912,7 +1964,7 @@ void Inf_EditPlainTxtInfo (void)
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = &Hlp_COURSE_Information_edit,
-      [Inf_PROGRAM	] = &Hlp_COURSE_Program_edit,	// Not used yet
+      [Inf_PROGRAM	] = &Hlp_COURSE_Program_edit,	// Not used
       [Inf_TEACH_GUIDE	] = &Hlp_COURSE_Guide_edit,
       [Inf_SYLLABUS_LEC	] = &Hlp_COURSE_Syllabus_edit,
       [Inf_SYLLABUS_PRA	] = &Hlp_COURSE_Syllabus_edit,
@@ -1983,7 +2035,7 @@ void Inf_EditRichTxtInfo (void)
      {
       [Inf_UNKNOWN_TYPE	] = {ActUnk		,NULL,NULL},
       [Inf_INFORMATION	] = {ActRcvRchTxtCrsInf	,NULL,NULL},
-      [Inf_PROGRAM	] = {ActUnk		,NULL,NULL},	// Not used yet
+      [Inf_PROGRAM	] = {ActUnk		,NULL,NULL},	// Not used
       [Inf_TEACH_GUIDE	] = {ActRcvRchTxtTchGui	,NULL,NULL},
       [Inf_SYLLABUS_LEC	] = {ActRcvRchTxtSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC]},
       [Inf_SYLLABUS_PRA	] = {ActRcvRchTxtSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_PRA]},
@@ -1996,7 +2048,7 @@ void Inf_EditRichTxtInfo (void)
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = &Hlp_COURSE_Information_edit,
-      [Inf_PROGRAM	] = &Hlp_COURSE_Program_edit,	// Not used yet
+      [Inf_PROGRAM	] = &Hlp_COURSE_Program_edit,	// Not used
       [Inf_TEACH_GUIDE	] = &Hlp_COURSE_Guide_edit,
       [Inf_SYLLABUS_LEC	] = &Hlp_COURSE_Syllabus_edit,
       [Inf_SYLLABUS_PRA	] = &Hlp_COURSE_Syllabus_edit,
@@ -2132,7 +2184,7 @@ void Inf_EditPagInfo (void)
      {
       [Inf_UNKNOWN_TYPE	] = ActUnk,
       [Inf_INFORMATION	] = ActRcvPagCrsInf,
-      [Inf_PROGRAM	] = ActUnk,	// Not used yet
+      [Inf_PROGRAM	] = ActUnk,	// Not used
       [Inf_TEACH_GUIDE	] = ActRcvPagTchGui,
       [Inf_SYLLABUS_LEC	] = ActRcvPagSyl,
       [Inf_SYLLABUS_PRA	] = ActRcvPagSyl,
@@ -2318,7 +2370,7 @@ void Inf_EditURLInfo (void)
      {
       [Inf_UNKNOWN_TYPE	] = ActUnk,
       [Inf_INFORMATION	] = ActRcvURLCrsInf,
-      [Inf_PROGRAM	] = ActUnk,	// Not used yet
+      [Inf_PROGRAM	] = ActUnk,	// Not used
       [Inf_TEACH_GUIDE	] = ActRcvURLTchGui,
       [Inf_SYLLABUS_LEC	] = ActRcvURLSyl,
       [Inf_SYLLABUS_PRA	] = ActRcvURLSyl,

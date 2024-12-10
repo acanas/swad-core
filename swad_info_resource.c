@@ -51,7 +51,7 @@ void InfRsc_GetLinkToInfo (void)
      {
       [Inf_UNKNOWN_TYPE	] = Rsc_NONE,
       [Inf_INFORMATION	] = Rsc_INFORMATION,
-      [Inf_PROGRAM	] = Rsc_NONE,		// Not used yet
+      [Inf_PROGRAM	] = Rsc_NONE,		// Not used
       [Inf_TEACH_GUIDE	] = Rsc_TEACH_GUIDE,
       [Inf_SYLLABUS_LEC	] = Rsc_LECTURES,
       [Inf_SYLLABUS_PRA	] = Rsc_PRACTICALS,
@@ -64,7 +64,7 @@ void InfRsc_GetLinkToInfo (void)
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = Crs_ShowIntroduction,
-      [Inf_PROGRAM	] = Inf_ShowInfo,	// Not used yet
+      [Inf_PROGRAM	] = Inf_ShowInfo,	// Not used
       [Inf_TEACH_GUIDE	] = Inf_ShowInfo,
       [Inf_SYLLABUS_LEC	] = Inf_ShowInfo,
       [Inf_SYLLABUS_PRA	] = Inf_ShowInfo,

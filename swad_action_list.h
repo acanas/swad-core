@@ -184,7 +184,6 @@ typedef enum
 	ActSetUp,
 	ActReqRemOldCrs,
 	ActRemOldCrs,
-	ActCvtSyl,
 
    /****************************** Country tab *******************************/
 

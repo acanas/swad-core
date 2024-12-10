@@ -94,7 +94,6 @@
 #include "swad_setting.h"
 #include "swad_statistic.h"
 #include "swad_survey.h"
-#include "swad_syllabus.h"
 #include "swad_tab.h"
 #include "swad_test.h"
 #include "swad_test_visibility.h"
