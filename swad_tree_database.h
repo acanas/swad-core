@@ -50,6 +50,7 @@ void Tre_DB_MoveLeftRightNodeRange (Inf_Type_t InfoType,
 
 unsigned Tre_DB_GetListNodes (Inf_Type_t InfoType,MYSQL_RES **mysql_res);
 unsigned Tre_DB_GetNodeDataByCod (const struct Tre_Node *Node,MYSQL_RES **mysql_res);
+bool Tre_DB_CheckIfNodeHasTxt (const struct Tre_Node *Node);
 void Tre_DB_GetNodeTxt (const struct Tre_Node *Node,
 			char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
@@ -66,6 +67,7 @@ ConExp_ContractedOrExpanded_t Tre_DB_GetIfContractedOrExpandedNode (long NodCod)
 void Tre_DB_RemoveNodeFromExpandedNodes (long NodCod);
 
 //----------------------------- Specific items --------------------------------
+bool Tre_DB_CheckListItems (const struct Tre_Node *Node,bool ShowHiddenResources);
 long Tre_DB_GetItmCodFromItmInd (const struct Tre_Node *Node,unsigned ItmInd);
 unsigned Tre_DB_GetItmIndBefore (const struct Tre_Node *Node);
 unsigned Tre_DB_GetItmIndAfter (const struct Tre_Node *Node);

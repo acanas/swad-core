@@ -37,6 +37,24 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/************************* Private global constants **************************/
+/*****************************************************************************/
+
+static const char *Tre_DB_TablesItems[Inf_NUM_TYPES] =
+  {
+   [Inf_UNKNOWN_TYPE	] = NULL,
+   [Inf_INFORMATION	] = NULL,
+   [Inf_PROGRAM		] = "prg_resources",
+   [Inf_TEACH_GUIDE	] = NULL,
+   [Inf_SYLLABUS_LEC	] = NULL,
+   [Inf_SYLLABUS_PRA	] = NULL,
+   [Inf_BIBLIOGRAPHY	] = "crs_bibliography",
+   [Inf_FAQ		] = "faq_questions",
+   [Inf_LINKS		] = "crs_links",
+   [Inf_ASSESSMENT	] = NULL,
+  };
+
+/*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
@@ -52,24 +70,6 @@ const char *Tre_DB_Types[Inf_NUM_TYPES] =
    [Inf_FAQ		] = "faq",
    [Inf_LINKS		] = "lnk",
    [Inf_ASSESSMENT	] = "ass",
-  };
-
-/*****************************************************************************/
-/************************* Private global variables **************************/
-/*****************************************************************************/
-
-static const char *Tre_DB_TablesItems[Inf_NUM_TYPES] =
-  {
-   [Inf_UNKNOWN_TYPE	] = NULL,
-   [Inf_INFORMATION	] = NULL,
-   [Inf_PROGRAM		] = "prg_resources",
-   [Inf_TEACH_GUIDE	] = NULL,
-   [Inf_SYLLABUS_LEC	] = NULL,
-   [Inf_SYLLABUS_PRA	] = NULL,
-   [Inf_BIBLIOGRAPHY	] = "crs_bibliography",
-   [Inf_FAQ		] = "faq_questions",
-   [Inf_LINKS		] = "crs_links",
-   [Inf_ASSESSMENT	] = NULL,
   };
 
 /*****************************************************************************/
@@ -262,6 +262,26 @@ unsigned Tre_DB_GetNodeDataByCod (const struct Tre_Node *Node,MYSQL_RES **mysql_
 		   " WHERE NodCod=%ld"
 		     " AND CrsCod=%ld"	// Extra check
 		     " AND Type='%s'",	// Extra check
+		   Node->Hierarchy.NodCod,
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Tre_DB_Types[Node->InfoType]);
+  }
+
+/*****************************************************************************/
+/************************* Check if a node has text **************************/
+/*****************************************************************************/
+
+bool Tre_DB_CheckIfNodeHasTxt (const struct Tre_Node *Node)
+  {
+   return
+   DB_QueryEXISTS ("can not check if a tree node has text",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM tre_nodes"
+		    " WHERE NodCod=%ld"
+		      " AND CrsCod=%ld"	// Extra check
+		      " AND Type='%s'"	// Extra check
+		      " AND Txt<>'')",
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Node->InfoType]);
@@ -541,11 +561,64 @@ void Tre_DB_RemoveNodeFromExpandedNodes (long NodCod)
   }
 
 /*****************************************************************************/
+/**************** Check list of node resources from database *****************/
+/*****************************************************************************/
+
+bool Tre_DB_CheckListItems (const struct Tre_Node *Node,bool ShowHiddenResources)
+  {
+   const char *Table = Tre_DB_TablesItems[Node->InfoType];
+   char *HiddenSubQuery;
+   bool Exists;
+
+   /***** Trivial check: are there items for this info type? *****/
+   if (!Table)
+      return false;
+
+   /***** Create subquery *****/
+   if (ShowHiddenResources)
+     {
+      if (asprintf (&HiddenSubQuery,"%s","") < 0)
+	 Err_NotEnoughMemoryExit ();
+     }
+   else
+     {
+      if (asprintf (&HiddenSubQuery," AND %s.Hidden='N'",Table) < 0)
+	 Err_NotEnoughMemoryExit ();
+     }
+
+   /***** Query database *****/
+   Exists =
+   DB_QueryEXISTS ("can not check if a tree node has items",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM %s,"
+		           "tre_nodes"
+		    " WHERE %s.NodCod=%ld"
+		        "%s"
+		      " AND %s.NodCod=tre_nodes.NodCod"
+		      " AND tre_nodes.CrsCod=%ld"	// Extra check
+		      " AND tre_nodes.Type='%s')",	// Extra check
+		   Table,
+		   Table,Node->Hierarchy.NodCod,
+		   HiddenSubQuery,
+		   Table,
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Tre_DB_Types[Node->InfoType]);
+
+   /***** Free subquery *****/
+   free (HiddenSubQuery);
+
+   return Exists;
+  }
+
+/*****************************************************************************/
 /**************** Get item code given node code and item index ***************/
 /*****************************************************************************/
 
 long Tre_DB_GetItmCodFromItmInd (const struct Tre_Node *Node,unsigned ItmInd)
   {
+   const char *Table = Tre_DB_TablesItems[Node->InfoType];
+
    /***** Trivial check: item index should be > 0 *****/
    if (ItmInd == 0)
       return -1L;
@@ -556,7 +629,7 @@ long Tre_DB_GetItmCodFromItmInd (const struct Tre_Node *Node,unsigned ItmInd)
 			       " FROM %s"
 			      " WHERE NodCod=%ld"
 				" AND ItmInd=%u",
-			      Tre_DB_TablesItems[Node->InfoType],
+			      Table,
 			      Node->Hierarchy.NodCod,ItmInd);
   }
 
@@ -566,26 +639,30 @@ long Tre_DB_GetItmCodFromItmInd (const struct Tre_Node *Node,unsigned ItmInd)
 
 unsigned Tre_DB_GetItmIndBefore (const struct Tre_Node *Node)
   {
+   const char *Table = Tre_DB_TablesItems[Node->InfoType];
+
    return
    DB_QuerySELECTUnsigned ("can not get the index before",
 			   "SELECT COALESCE(MAX(ItmInd),0)"
 			    " FROM %s"
 			   " WHERE NodCod=%ld"
 			     " AND ItmInd<%u",
-			   Tre_DB_TablesItems[Node->InfoType],
+			   Table,
 			   Node->Hierarchy.NodCod,
 			   Node->SpcItem.Ind);
   }
 
 unsigned Tre_DB_GetItmIndAfter (const struct Tre_Node *Node)
   {
+   const char *Table = Tre_DB_TablesItems[Node->InfoType];
+
    return
    DB_QuerySELECTUnsigned ("can not get the index after",
 			   "SELECT COALESCE(MIN(ItmInd),0)"
 			    " FROM %s"
 			   " WHERE NodCod=%ld"
 			     " AND ItmInd>%u",
-			   Tre_DB_TablesItems[Node->InfoType],
+			   Table,
 			   Node->Hierarchy.NodCod,
 			   Node->SpcItem.Ind);
   }
@@ -596,10 +673,12 @@ unsigned Tre_DB_GetItmIndAfter (const struct Tre_Node *Node)
 
 void Tre_DB_LockTables (Inf_Type_t InfoType)
   {
+   const char *Table = Tre_DB_TablesItems[InfoType];
+
    DB_Query ("can not lock tables",
 	     "LOCK TABLES %s WRITE,"
 			 "tre_nodes READ",
-	     Tre_DB_TablesItems[InfoType]);
+	     Table);
    DB_SetThereAreLockedTables ();
   }
 
@@ -609,6 +688,8 @@ void Tre_DB_LockTables (Inf_Type_t InfoType)
 
 void Tre_DB_UpdateItmInd (const struct Tre_Node *Node,long ItmCod,int ItmInd)
   {
+   const char *Table = Tre_DB_TablesItems[Node->InfoType];
+
    DB_QueryUPDATE ("can not update index of item",
 		   "UPDATE %s,"
 		          "tre_nodes"
@@ -618,11 +699,11 @@ void Tre_DB_UpdateItmInd (const struct Tre_Node *Node,long ItmCod,int ItmInd)
 		     " AND %s.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   Tre_DB_TablesItems[Node->InfoType],
-		   Tre_DB_TablesItems[Node->InfoType],ItmInd,
-		   Tre_DB_TablesItems[Node->InfoType],ItmCod,
-		   Tre_DB_TablesItems[Node->InfoType],Node->Hierarchy.NodCod,
-		   Tre_DB_TablesItems[Node->InfoType],
+		   Table,
+		   Table,ItmInd,
+		   Table,ItmCod,
+		   Table,Node->Hierarchy.NodCod,
+		   Table,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Node->InfoType]);
   }
@@ -635,7 +716,7 @@ void Tre_DB_HideOrUnhideItem (const struct Tre_Node *Node,
 			      HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
-   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
+   const char *Table = Tre_DB_TablesItems[Node->InfoType];
 
    DB_QueryUPDATE ("can not hide/unhide item",
 		   "UPDATE %s,"
@@ -646,11 +727,11 @@ void Tre_DB_HideOrUnhideItem (const struct Tre_Node *Node,
 		     " AND %s.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   Tre_DB_TablesItems[Node->InfoType],
-		   Tre_DB_TablesItems[Node->InfoType],HidVis_YN[HiddenOrVisible],
-		   Tre_DB_TablesItems[Node->InfoType],Node->SpcItem.Cod,
-		   Tre_DB_TablesItems[Node->InfoType],Node->Hierarchy.NodCod,
-		   Tre_DB_TablesItems[Node->InfoType],
+		   Table,
+		   Table,HidVis_YN[HiddenOrVisible],
+		   Table,Node->SpcItem.Cod,
+		   Table,Node->Hierarchy.NodCod,
+		   Table,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Node->InfoType]);
   }
@@ -661,7 +742,7 @@ void Tre_DB_HideOrUnhideItem (const struct Tre_Node *Node,
 
 void Tre_DB_RemoveItem (const struct Tre_Node *Node)
   {
-   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
+   const char *Table = Tre_DB_TablesItems[Node->InfoType];
 
    DB_QueryDELETE ("can not remove item",
 		   "DELETE FROM %s"
@@ -672,11 +753,11 @@ void Tre_DB_RemoveItem (const struct Tre_Node *Node)
                      " AND %s.NodCod=tre_nodes.NodCod"
                      " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   Tre_DB_TablesItems[Node->InfoType],
-		   Tre_DB_TablesItems[Node->InfoType],
-		   Tre_DB_TablesItems[Node->InfoType],Node->SpcItem.Cod,
-		   Tre_DB_TablesItems[Node->InfoType],Node->Hierarchy.NodCod,
-		   Tre_DB_TablesItems[Node->InfoType],
+		   Table,
+		   Table,
+		   Table,Node->SpcItem.Cod,
+		   Table,Node->Hierarchy.NodCod,
+		   Table,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Node->InfoType]);
   }

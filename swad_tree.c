@@ -130,7 +130,7 @@ static void Tre_FreeTitleClass (char *TitleClass);
 static void Tre_SetMaxNodeLevel (unsigned Level);
 static unsigned Tre_GetMaxNodeLevel (void);
 static unsigned Tre_CalculateMaxNodeLevel (void);
-// static bool Tre_GetIfNodeHasChildren (unsigned NumNode);
+static bool Tre_GetIfNodeHasChildren (unsigned NumNode);
 static void Tre_CreateLevels (void);
 static void Tre_FreeLevels (void);
 static void Tre_IncreaseNumberInLevel (unsigned Level);
@@ -446,6 +446,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
       [ConExp_CONTRACTED] = "",			// Not expanded
       [ConExp_EXPANDED  ] = " rowspan=\"2\"",	// Expanded
      };
+   bool PutIconExpandContract;
    HidVis_HiddenOrVisible_t HiddenOrVisible;
    char *Id;
    unsigned ColSpan;
@@ -453,6 +454,12 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
    char *TitleClass;
    Dat_StartEndTime_t StartEndTime;
    bool HighlightNode;
+
+   /***** Check if icon expand/contract is necessary *****/
+   if (!(PutIconExpandContract = Tre_GetIfNodeHasChildren (NumNode)))
+      if (!(PutIconExpandContract = Tre_DB_CheckIfNodeHasTxt (Node)))
+	 PutIconExpandContract = Tre_DB_CheckListItems (Node,
+							ViewingOrEditingProgram[ListingType] == Vie_EDIT);
 
    /***** Check if this node should be shown as hidden *****/
    Tre_SetHiddenLevel (Node->Hierarchy.Level,Node->Hierarchy.HiddenOrVisible);
@@ -500,7 +507,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	 /* Expand/contract this tree node */
 	 HTM_TD_Begin ("class=\"RT %s\"%s",
 	               The_GetColorRows (),RowSpan[ContractedOrExpanded]);
-	    // if (Tre_GetIfNodeHasChildren (NumNode))
+	    if (PutIconExpandContract)
 	       Tre_PutIconToContractOrExpandNode (Node,ContractedOrExpanded,
 						  ViewingOrEditingProgram[ListingType]);
 	 HTM_TD_End ();
@@ -848,15 +855,15 @@ static unsigned Tre_CalculateMaxNodeLevel (void)
 /************************* Get if a node has children ************************/
 /*****************************************************************************/
 
-//static bool Tre_GetIfNodeHasChildren (unsigned NumNode)
-//  {
-//   /***** Check 1. If node is the last in list ==> node has no children *****/
-//   if (NumNode == Tre_Gbl.List.NumNodes - 1)
-//      return false;
-//
-//   /***** Check 2. If next node is in next level ==> node has children *****/
-//   return (Tre_GetLevelFromNumNode (NumNode + 1) > Tre_GetLevelFromNumNode (NumNode));
-//  }
+static bool Tre_GetIfNodeHasChildren (unsigned NumNode)
+  {
+   /***** Check 1. If node is the last in list ==> node has no children *****/
+   if (NumNode == Tre_Gbl.List.NumNodes - 1)
+      return false;
+
+   /***** Check 2. If next node is in next level ==> node has children *****/
+   return (Tre_GetLevelFromNumNode (NumNode + 1) > Tre_GetLevelFromNumNode (NumNode));
+  }
 
 /*****************************************************************************/
 /********************* Allocate memory for node numbers **********************/
