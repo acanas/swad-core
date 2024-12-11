@@ -441,11 +441,6 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
       [Tre_CHG_SPC_ITEM			] = Vie_EDIT,
       [Tre_END_EDIT_SPC_LIST_ITEMS	] = Vie_EDIT,
      };
-   static const char *RowSpan[ConExp_NUM_CONTRACTED_EXPANDED] =
-     {
-      [ConExp_CONTRACTED] = "",			// Not expanded
-      [ConExp_EXPANDED  ] = " rowspan=\"2\"",	// Expanded
-     };
    bool PutIconExpandContract;
    HidVis_HiddenOrVisible_t HiddenOrVisible;
    char *Id;
@@ -499,14 +494,12 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	      NumCol < Node->Hierarchy.Level;
 	      NumCol++)
 	   {
-	    HTM_TD_Begin ("class=\"%s\"%s",
-	                  The_GetColorRows (),RowSpan[ContractedOrExpanded]);
+	    HTM_TD_Begin ("class=\"%s\" rowspan=\"2\"",The_GetColorRows ());
 	    HTM_TD_End ();
 	   }
 
 	 /* Expand/contract this tree node */
-	 HTM_TD_Begin ("class=\"RT %s\"%s",
-	               The_GetColorRows (),RowSpan[ContractedOrExpanded]);
+	 HTM_TD_Begin ("class=\"RT %s\" rowspan=\"2\"",The_GetColorRows ());
 	    if (PutIconExpandContract)
 	       Tre_PutIconToContractOrExpandNode (Node,ContractedOrExpanded,
 						  ViewingOrEditingProgram[ListingType]);
@@ -515,15 +508,13 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	 /* Forms to remove/edit this tree node */
 	 if (ViewingOrEditingProgram[ListingType] == Vie_EDIT)
 	   {
-	    HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"%s",
-			  The_GetColorRows (),RowSpan[ContractedOrExpanded]);
+	    HTM_TD_Begin ("class=\"PRG_COL1 LT %s\" rowspan=\"2\"",The_GetColorRows ());
 	       Tre_PutFormsToRemEditOneNode (ListingType,NumNode,Node,HighlightNode);
 	    HTM_TD_End ();
 	   }
 
 	 /* Node number */
-	 HTM_TD_Begin ("class=\"TRE_NUM %s\"%s",
-	               The_GetColorRows (),RowSpan[ContractedOrExpanded]);
+	 HTM_TD_Begin ("class=\"TRE_NUM %s\" rowspan=\"2\"",The_GetColorRows ());
 	    HTM_DIV_Begin ("class=\"%s%s\"",
 			   TitleClass,HidVis_TreeClass[HiddenOrVisible]);
 	       HTM_Unsigned (Tre_GetCurrentNumberInLevel (Node->Hierarchy.Level));
@@ -614,24 +605,24 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
       HTM_TR_End ();
 
       /***** Second row (text and specific content) *****/
-      if (ContractedOrExpanded == ConExp_EXPANDED)
-	{
-	 HTM_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-	    /* Begin text and specific content */
-	    if (Node->InfoType == Inf_PROGRAM)
-	       ColSpan++;
-	    switch (ListingType)
-	      {
-	       case Tre_PRINT:
-		  HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN\"",ColSpan);
-		  break;
-	       default:
-		  HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",
-				ColSpan,The_GetColorRows ());
-		  break;
-	      }
+	 /* Begin text and specific content */
+	 if (Node->InfoType == Inf_PROGRAM)
+	    ColSpan++;
+	 switch (ListingType)
+	   {
+	    case Tre_PRINT:
+	       HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN\"",ColSpan);
+	       break;
+	    default:
+	       HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",
+			     ColSpan,The_GetColorRows ());
+	       break;
+	   }
 
+	 if (ContractedOrExpanded == ConExp_EXPANDED)
+	   {
 	    /* Item text / form */
 	    if (ListingType == Tre_FORM_EDIT_NODE && HighlightNode)
 	       /* Form to change node title, dates and text */
@@ -643,12 +634,12 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	    /* List of items of this tree node (specific content depending on the tree type) */
 	    TreSpc_ListNodeItems (ListingType,Node,SelectedNodCod,SelectedItmCod,
 				  HiddenOrVisible);
+	   }
 
-	    /* End text and specific content */
-	    HTM_TD_End ();
+	 /* End text and specific content */
+	 HTM_TD_End ();
 
-	 HTM_TR_End ();
-	}
+      HTM_TR_End ();
      }
   }
 
@@ -735,11 +726,14 @@ static void Tre_WriteNodeText (const struct Tre_Node *Node,
    Tre_DB_GetNodeTxt (Node,Txt);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 		     Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
-   ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
-		  The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
-      HTM_Txt (Txt);
-   HTM_DIV_End ();
+   if (Txt[0])
+     {
+      ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+      HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
+		     The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
+	 HTM_Txt (Txt);
+      HTM_DIV_End ();
+     }
   }
 
 /*****************************************************************************/
