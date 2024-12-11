@@ -649,7 +649,7 @@ unsigned Tre_DB_GetItmIndBefore (const struct Tre_Node *Node)
 			     " AND ItmInd<%u",
 			   Table,
 			   Node->Hierarchy.NodCod,
-			   Node->SpcItem.Ind);
+			   Node->Item.Ind);
   }
 
 unsigned Tre_DB_GetItmIndAfter (const struct Tre_Node *Node)
@@ -664,7 +664,7 @@ unsigned Tre_DB_GetItmIndAfter (const struct Tre_Node *Node)
 			     " AND ItmInd>%u",
 			   Table,
 			   Node->Hierarchy.NodCod,
-			   Node->SpcItem.Ind);
+			   Node->Item.Ind);
   }
 
 /*****************************************************************************/
@@ -729,7 +729,7 @@ void Tre_DB_HideOrUnhideItem (const struct Tre_Node *Node,
 		     " AND tre_nodes.Type='%s'",	// Extra check
 		   Table,
 		   Table,HidVis_YN[HiddenOrVisible],
-		   Table,Node->SpcItem.Cod,
+		   Table,Node->Item.Cod,
 		   Table,Node->Hierarchy.NodCod,
 		   Table,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
@@ -755,7 +755,7 @@ void Tre_DB_RemoveItem (const struct Tre_Node *Node)
 		     " AND tre_nodes.Type='%s'",	// Extra check
 		   Table,
 		   Table,
-		   Table,Node->SpcItem.Cod,
+		   Table,Node->Item.Cod,
 		   Table,Node->Hierarchy.NodCod,
 		   Table,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,

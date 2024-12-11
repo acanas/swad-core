@@ -57,7 +57,7 @@ static void PrgRsc_PutIconsClipboard (__attribute__((unused)) void *Args);
 /**************************** Get resource data ******************************/
 /*****************************************************************************/
 
-void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
+void PrgRsc_GetRscDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
   {
    MYSQL_ROW row;
 
@@ -76,38 +76,38 @@ void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
    Node->Hierarchy.NodCod = Str_ConvertStrCodToLongCod (row[0]);
 
    /***** Get code and index of the resource (row[1], row[2]) *****/
-   Node->SpcItem.Cod = Str_ConvertStrCodToLongCod (row[1]);
-   Node->SpcItem.Ind = Str_ConvertStrToUnsigned (row[2]);
+   Node->Item.Cod = Str_ConvertStrCodToLongCod (row[1]);
+   Node->Item.Ind = Str_ConvertStrToUnsigned (row[2]);
 
    /***** Get whether the tree node is hidden (row(3)) *****/
-   Node->SpcItem.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
+   Node->Item.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
 
    /***** Get link type and code (row[4], row[5]) *****/
-   Node->Resource.Link.Type = Rsc_GetTypeFromString (row[4]);
-   Node->Resource.Link.Cod  = Str_ConvertStrCodToLongCod (row[5]);
+   Node->Item.Rsc.Link.Type = Rsc_GetTypeFromString (row[4]);
+   Node->Item.Rsc.Link.Cod  = Str_ConvertStrCodToLongCod (row[5]);
 
    /***** Get the title of the resource (row[6]) *****/
-   Str_Copy (Node->Resource.Title,row[6],sizeof (Node->Resource.Title) - 1);
+   Str_Copy (Node->Item.Rsc.Title,row[6],sizeof (Node->Item.Rsc.Title) - 1);
   }
 
 /*****************************************************************************/
 /***************************** Show one resource *****************************/
 /*****************************************************************************/
 
-void PrgRsc_WriteCellViewResource (struct Tre_Node *Node)
+void PrgRsc_WriteCellViewRsc (struct Tre_Node *Node)
   {
    HTM_SPAN_Begin ("class=\"TRE_TIT\"");
-      HTM_Txt (Node->Resource.Title);
+      HTM_Txt (Node->Item.Rsc.Title);
    HTM_SPAN_End ();
    HTM_BR ();
-   Rsc_WriteLinkName (&Node->Resource.Link,Frm_PUT_FORM);
+   Rsc_WriteLinkName (&Node->Item.Rsc.Link,Frm_PUT_FORM);
   }
 
 /*****************************************************************************/
 /***************************** Edit one resource *****************************/
 /*****************************************************************************/
 
-void PrgRsc_WriteCellEditResource (struct Tre_Node *Node,
+void PrgRsc_WriteCellEditRsc (struct Tre_Node *Node,
 				   Vie_ViewType_t ViewType,
 				   __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
@@ -121,22 +121,22 @@ void PrgRsc_WriteCellEditResource (struct Tre_Node *Node,
 	 /* Show current link */
 	 HTM_DIV_Begin ("class=\"PRG_TXT_%s%s\"",
 		        The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
-	    PrgRsc_WriteCellViewResource (Node);
+	    PrgRsc_WriteCellViewRsc (Node);
 	 HTM_DIV_End ();
 	 break;
       case Vie_EDIT:
 	 Frm_BeginFormAnchor (ActChgPrgRsc,TreSpc_LIST_ITEMS_SECTION_ID);
-	    TreSpc_PutParItmCod (&Node->SpcItem.Cod);
+	    TreSpc_PutParItmCod (&Node->Item.Cod);
 
 	    /* Title */
-	    HTM_INPUT_TEXT ("Title",Rsc_MAX_CHARS_RESOURCE_TITLE,Node->Resource.Title,
+	    HTM_INPUT_TEXT ("Title",Rsc_MAX_CHARS_RESOURCE_TITLE,Node->Item.Rsc.Title,
 			    HTM_REQUIRED,
 			    "class=\"PRG_RSC_INPUT INPUT_%s\"",
 			    The_GetSuffix ());
 
 	    /* Clipboard with resource links */
 	    HTM_BR ();
-	    Rsc_ShowClipboardToChangeLink (&Node->Resource.Link);
+	    Rsc_ShowClipboardToChangeLink (&Node->Item.Rsc.Link);
 
 	    /* Button to save changes */
 	    Btn_PutConfirmButtonInline (Txt_Save_changes);
@@ -149,7 +149,7 @@ void PrgRsc_WriteCellEditResource (struct Tre_Node *Node,
      }
   }
 
-void PrgRsc_WriteCellNewResource (void)
+void PrgRsc_WriteCellNewRsc (void)
   {
    extern const char *Txt_New_resource;
    extern const char *Txt_Save_changes;
@@ -345,8 +345,8 @@ void PrgRsc_ChangeResourceLink (void)
 
 void PrgRsc_GetParsRsc (struct Tre_Node *Node)
   {
-   Par_GetParText ("Title",Node->Resource.Title,Rsc_MAX_BYTES_RESOURCE_TITLE);
-   if (Rsc_GetParLink (&Node->Resource.Link))
+   Par_GetParText ("Title",Node->Item.Rsc.Title,Rsc_MAX_BYTES_RESOURCE_TITLE);
+   if (Rsc_GetParLink (&Node->Item.Rsc.Link))
       /* Remove link from clipboard */
-      Rsc_DB_RemoveLinkFromClipboard (&Node->Resource.Link);
+      Rsc_DB_RemoveLinkFromClipboard (&Node->Item.Rsc.Link);
   }

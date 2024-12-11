@@ -33,13 +33,13 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node);
+void PrgRsc_GetRscDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node);
 
-void PrgRsc_WriteCellViewResource (struct Tre_Node *Node);
-void PrgRsc_WriteCellEditResource (struct Tre_Node *Node,
+void PrgRsc_WriteCellViewRsc (struct Tre_Node *Node);
+void PrgRsc_WriteCellEditRsc (struct Tre_Node *Node,
 				   Vie_ViewType_t ViewType,
 				   __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible);
-void PrgRsc_WriteCellNewResource (void);
+void PrgRsc_WriteCellNewRsc (void);
 
 void PrgRsc_ViewResourceClipboard (void);
 void PrgRsc_RemoveResourceClipboard (void);

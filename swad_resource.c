@@ -111,9 +111,9 @@ static void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
 
 void Rsc_ResetSpcFields (struct Tre_Node *Node)
   {
-   Node->Resource.Link.Type = Rsc_NONE;
-   Node->Resource.Link.Cod  = -1L;
-   Node->Resource.Title[0] = '\0';
+   Node->Item.Rsc.Link.Type = Rsc_NONE;
+   Node->Item.Rsc.Link.Cod  = -1L;
+   Node->Item.Rsc.Title[0] = '\0';
   }
 
 /*****************************************************************************/

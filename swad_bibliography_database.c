@@ -53,13 +53,13 @@ long Bib_DB_CreateRef (const struct Tre_Node *Node)
 				  " FROM crs_bibliography AS t2"
 				 " WHERE t2.NodCod=%ld",
 				Node->Hierarchy.NodCod,
-				Node->Bib.Fields[Bib_AUTHORS	],
-				Node->Bib.Fields[Bib_TITLE	],
-				Node->Bib.Fields[Bib_SOURCE	],
-				Node->Bib.Fields[Bib_PUBLISHER	],
-				Node->Bib.Fields[Bib_DATE	],
-				Node->Bib.Fields[Bib_ID		],
-				Node->Bib.URL,
+				Node->Item.Bib.Fields[Bib_AUTHORS	],
+				Node->Item.Bib.Fields[Bib_TITLE		],
+				Node->Item.Bib.Fields[Bib_SOURCE	],
+				Node->Item.Bib.Fields[Bib_PUBLISHER	],
+				Node->Item.Bib.Fields[Bib_DATE		],
+				Node->Item.Bib.Fields[Bib_ID		],
+				Node->Item.Bib.URL,
 				Node->Hierarchy.NodCod);
   }
 
@@ -159,14 +159,14 @@ void Bib_DB_UpdateRef (const struct Tre_Node *Node)
 		     " AND crs_bibliography.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   Node->Bib.Fields[Bib_AUTHORS		],
-		   Node->Bib.Fields[Bib_TITLE		],
-		   Node->Bib.Fields[Bib_SOURCE		],
-		   Node->Bib.Fields[Bib_PUBLISHER	],
-		   Node->Bib.Fields[Bib_DATE		],
-		   Node->Bib.Fields[Bib_ID		],
-		   Node->Bib.URL,
-		   Node->SpcItem.Cod,
+		   Node->Item.Bib.Fields[Bib_AUTHORS	],
+		   Node->Item.Bib.Fields[Bib_TITLE	],
+		   Node->Item.Bib.Fields[Bib_SOURCE	],
+		   Node->Item.Bib.Fields[Bib_PUBLISHER	],
+		   Node->Item.Bib.Fields[Bib_DATE	],
+		   Node->Item.Bib.Fields[Bib_ID		],
+		   Node->Item.Bib.URL,
+		   Node->Item.Cod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Inf_BIBLIOGRAPHY]);

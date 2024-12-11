@@ -58,6 +58,13 @@ struct Tre_SpcItem
    long Cod;
    unsigned Ind;	// 1, 2, 3...
    HidVis_HiddenOrVisible_t HiddenOrVisible;
+   union
+     {
+      struct Rsc_Resource Rsc;
+      struct Bib_BibliographicReference Bib;
+      struct FAQ_QaA QaA;
+      struct Lnk_Link Lnk;
+     };
   };
 
 struct Tre_Node
@@ -68,11 +75,7 @@ struct Tre_Node
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    CloOpe_ClosedOrOpen_t ClosedOrOpen;
    char Title[Tre_MAX_BYTES_NODE_TITLE + 1];
-   struct Tre_SpcItem SpcItem;
-   struct Rsc_Resource Resource;
-   struct Bib_BibliographicReference Bib;
-   struct FAQ_QaA QaA;
-   struct Lnk_Link Lnk;
+   struct Tre_SpcItem Item;
   };
 
 struct Tre_NodeRange

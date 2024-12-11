@@ -51,9 +51,9 @@ long Lnk_DB_CreateLnk (const struct Tre_Node *Node)
 				  " FROM crs_links AS t2"
 				 " WHERE t2.NodCod=%ld",
 				Node->Hierarchy.NodCod,
-				Node->Lnk.Fields[Lnk_TITLE	],
-				Node->Lnk.Fields[Lnk_DESCRIPTION],
-				Node->Lnk.WWW,
+				Node->Item.Lnk.Fields[Lnk_TITLE	],
+				Node->Item.Lnk.Fields[Lnk_DESCRIPTION],
+				Node->Item.Lnk.WWW,
 				Node->Hierarchy.NodCod);
   }
 
@@ -61,7 +61,7 @@ long Lnk_DB_CreateLnk (const struct Tre_Node *Node)
 /*************** Get list of node course links from database *****************/
 /*****************************************************************************/
 
-unsigned Lnk_DB_GetListCrsLinks (MYSQL_RES **mysql_res,long NodCod,
+unsigned Lnk_DB_GetListLnks (MYSQL_RES **mysql_res,long NodCod,
                                  bool ShowHiddenCrsLinks)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
@@ -98,7 +98,7 @@ unsigned Lnk_DB_GetListCrsLinks (MYSQL_RES **mysql_res,long NodCod,
 /******************* Get course link data using its code *********************/
 /*****************************************************************************/
 
-unsigned Lnk_DB_GetCrsLinkDataByCod (MYSQL_RES **mysql_res,long ItmCod)
+unsigned Lnk_DB_GetLnkDataByCod (MYSQL_RES **mysql_res,long ItmCod)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
@@ -141,10 +141,10 @@ void Lnk_DB_UpdateLnk (const struct Tre_Node *Node)
 		     " AND crs_links.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   Node->Lnk.Fields[Lnk_TITLE		],
-		   Node->Lnk.Fields[Lnk_DESCRIPTION	],
-		   Node->Lnk.WWW,
-		   Node->SpcItem.Cod,
+		   Node->Item.Lnk.Fields[Lnk_TITLE	],
+		   Node->Item.Lnk.Fields[Lnk_DESCRIPTION],
+		   Node->Item.Lnk.WWW,
+		   Node->Item.Cod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Inf_LINKS]);

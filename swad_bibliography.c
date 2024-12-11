@@ -112,15 +112,15 @@ void Bib_ResetSpcFields (struct Tre_Node *Node)
    for (NumField = 0;
 	NumField < Bib_NUM_FIELDS;
 	NumField++)
-      Node->Bib.Fields[NumField][0] = '\0';
-   Node->Bib.URL[0] = '\0';
+      Node->Item.Bib.Fields[NumField][0] = '\0';
+   Node->Item.Bib.URL[0] = '\0';
   }
 
 /*****************************************************************************/
 /******************** Get bibliographic reference data ***********************/
 /*****************************************************************************/
 
-void Bib_GetBibRefDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
+void Bib_GetRefDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
   {
    MYSQL_ROW row;
    unsigned NumField;
@@ -144,26 +144,26 @@ void Bib_GetBibRefDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
    Node->Hierarchy.NodCod = Str_ConvertStrCodToLongCod (row[0]);
 
    /***** Get code and index of the bibliographic reference (row[1], row[2]) *****/
-   Node->SpcItem.Cod = Str_ConvertStrCodToLongCod (row[1]);
-   Node->SpcItem.Ind = Str_ConvertStrToUnsigned (row[2]);
+   Node->Item.Cod = Str_ConvertStrCodToLongCod (row[1]);
+   Node->Item.Ind = Str_ConvertStrToUnsigned (row[2]);
 
    /***** Get whether the tree node is hidden (row(3)) *****/
-   Node->SpcItem.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
+   Node->Item.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
 
    /***** Get authors, title, source, publisher, date, id and URL
           of the bibliographic reference (row[4]...row[10]) *****/
    for (NumField = 0;
 	NumField < Bib_NUM_FIELDS;
 	NumField++)
-      Str_Copy (Node->Bib.Fields[NumField],row[4 + NumField],Bib_MAX_BYTES_FIELD);
-   Str_Copy (Node->Bib.URL,row[4 + Bib_NUM_FIELDS],sizeof (Node->Bib.URL) - 1);
+      Str_Copy (Node->Item.Bib.Fields[NumField],row[4 + NumField],Bib_MAX_BYTES_FIELD);
+   Str_Copy (Node->Item.Bib.URL,row[4 + Bib_NUM_FIELDS],sizeof (Node->Item.Bib.URL) - 1);
   }
 
 /*****************************************************************************/
 /******************* Show one bibliographic reference ************************/
 /*****************************************************************************/
 
-void Bib_WriteCellViewBibRef (struct Tre_Node *Node)
+void Bib_WriteCellViewRef (struct Tre_Node *Node)
   {
    static const char *Class[Bib_NUM_FIELDS] =
      {
@@ -177,7 +177,7 @@ void Bib_WriteCellViewBibRef (struct Tre_Node *Node)
    for (NumField = 0, EndingCh = '\0';
 	NumField < Bib_NUM_FIELDS;
 	NumField++)
-      if (Node->Bib.Fields[NumField][0])
+      if (Node->Item.Bib.Fields[NumField][0])
 	{
          /* Put dot before field? */
 	 if (EndingCh != '\0')
@@ -187,9 +187,9 @@ void Bib_WriteCellViewBibRef (struct Tre_Node *Node)
 	    HTM_SP ();
 	   }
 
-	 Bib_WriteField (Node->Bib.Fields[NumField],Class[NumField]);
-	 Length = strlen (Node->Bib.Fields[NumField]);
-	 EndingCh = Node->Bib.Fields[NumField][Length - 1];
+	 Bib_WriteField (Node->Item.Bib.Fields[NumField],Class[NumField]);
+	 Length = strlen (Node->Item.Bib.Fields[NumField]);
+	 EndingCh = Node->Item.Bib.Fields[NumField][Length - 1];
 	}
 
    /* Put dot after last field? */
@@ -197,11 +197,11 @@ void Bib_WriteCellViewBibRef (struct Tre_Node *Node)
       HTM_Dot ();
 
    /***** Write URL *****/
-   if (Node->Bib.URL[0])
+   if (Node->Item.Bib.URL[0])
      {
       HTM_BR ();
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Node->Bib.URL);
-         HTM_Txt (Node->Bib.URL);
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Node->Item.Bib.URL);
+         HTM_Txt (Node->Item.Bib.URL);
       HTM_A_End ();
      }
   }
@@ -210,7 +210,7 @@ void Bib_WriteCellViewBibRef (struct Tre_Node *Node)
 /******************** Edit one bibliographic reference ***********************/
 /*****************************************************************************/
 
-void Bib_WriteCellEditBibRef (struct Tre_Node *Node,
+void Bib_WriteCellEditRef (struct Tre_Node *Node,
                               Vie_ViewType_t ViewType,
 			      HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
@@ -234,19 +234,19 @@ void Bib_WriteCellEditBibRef (struct Tre_Node *Node,
 	 /***** Show current bibliographic reference *****/
 	 HTM_DIV_Begin ("class=\"PRG_TXT_%s%s\"",
 		        The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
-	    Bib_WriteCellViewBibRef (Node);
+	    Bib_WriteCellViewRef (Node);
 	 HTM_DIV_End ();
 	 break;
       case Vie_EDIT:
 	 /***** Show form to change bibliographic reference *****/
 	 Frm_BeginFormAnchor (ActChgBibRef,TreSpc_LIST_ITEMS_SECTION_ID);
-	    TreSpc_PutParItmCod (&Node->SpcItem.Cod);
+	    TreSpc_PutParItmCod (&Node->Item.Cod);
 
 	    for (NumField = 0;
 		 NumField < Bib_NUM_FIELDS;
 		 NumField++)
 	      {
-	       HTM_INPUT_TEXT (Bib_FormNames[NumField],Bib_MAX_CHARS_FIELD,Node->Bib.Fields[NumField],
+	       HTM_INPUT_TEXT (Bib_FormNames[NumField],Bib_MAX_CHARS_FIELD,Node->Item.Bib.Fields[NumField],
 			       Attributes[NumField],
 			       "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
 			       *Bib_Placeholders[NumField],The_GetSuffix ());
@@ -254,7 +254,7 @@ void Bib_WriteCellEditBibRef (struct Tre_Node *Node,
 	      }
 
 	    /* URL */
-	    HTM_INPUT_URL ("URL",Node->Bib.URL,
+	    HTM_INPUT_URL ("URL",Node->Item.Bib.URL,
 			   HTM_NO_ATTR,
 			   " placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
 			   Txt_BIBLIOGRAPHY_URL,The_GetSuffix ());
@@ -275,7 +275,7 @@ void Bib_WriteCellEditBibRef (struct Tre_Node *Node,
 /********************* Edit a new bibliographic reference ********************/
 /*****************************************************************************/
 
-void Bib_WriteCellNewBibRef (void)
+void Bib_WriteCellNewRef (void)
   {
    extern const char *Txt_BIBLIOGRAPHY_URL;
    extern const char *Txt_Save_changes;
@@ -328,6 +328,6 @@ void Bib_GetParsRef (struct Tre_Node *Node)
    for (NumField = 0;
 	NumField < Bib_NUM_FIELDS;
 	NumField++)
-      Par_GetParText (Bib_FormNames[NumField],Node->Bib.Fields[NumField],Bib_MAX_BYTES_FIELD);
-   Par_GetParText ("URL",Node->Bib.URL,WWW_MAX_BYTES_WWW);
+      Par_GetParText (Bib_FormNames[NumField],Node->Item.Bib.Fields[NumField],Bib_MAX_BYTES_FIELD);
+   Par_GetParText ("URL",Node->Item.Bib.URL,WWW_MAX_BYTES_WWW);
   }

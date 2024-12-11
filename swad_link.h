@@ -36,7 +36,7 @@
 
 void Lnk_ResetSpcFields (struct Tre_Node *Node);
 
-void Lnk_GetCrsLinkDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node);
+void Lnk_GetLnkDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node);
 
 void Lnk_WriteCellViewLnk (struct Tre_Node *Node);
 void Lnk_WriteCellEditLnk (struct Tre_Node *Node,

@@ -166,9 +166,9 @@ long Rsc_DB_CreateRsc (const struct Tre_Node *Node)
 				  " FROM prg_resources AS t2"
 				 " WHERE t2.NodCod=%ld",
 				Node->Hierarchy.NodCod,
-			        Rsc_DB_Types[Node->Resource.Link.Type],
-			        Node->Resource.Link.Cod,
-				Node->Resource.Title,
+			        Rsc_DB_Types[Node->Item.Rsc.Link.Type],
+			        Node->Item.Rsc.Link.Cod,
+				Node->Item.Rsc.Title,
 				Node->Hierarchy.NodCod);
   }
 
@@ -176,7 +176,7 @@ long Rsc_DB_CreateRsc (const struct Tre_Node *Node)
 /****************** Get list of node resources from database *****************/
 /*****************************************************************************/
 
-unsigned Rsc_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
+unsigned Rsc_DB_GetListRscs (MYSQL_RES **mysql_res,long NodCod,
                                   bool ShowHiddenResources)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
@@ -213,7 +213,7 @@ unsigned Rsc_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
 /******************** Get resource data using its code ***********************/
 /*****************************************************************************/
 
-unsigned Rsc_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long ItmCod)
+unsigned Rsc_DB_GetRscDataByCod (MYSQL_RES **mysql_res,long ItmCod)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
@@ -257,10 +257,10 @@ void Rsc_DB_UpdateRsc (const struct Tre_Node *Node)
 		     " AND prg_resources.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   Rsc_DB_Types[Node->Resource.Link.Type],
-		   Node->Resource.Link.Cod,
-		   Node->Resource.Title,
-		   Node->SpcItem.Cod,
+		   Rsc_DB_Types[Node->Item.Rsc.Link.Type],
+		   Node->Item.Rsc.Link.Cod,
+		   Node->Item.Rsc.Title,
+		   Node->Item.Cod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Inf_PROGRAM]);

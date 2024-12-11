@@ -57,13 +57,13 @@ static void (*TreSpc_GetItemDataFromRow[Inf_NUM_TYPES]) (MYSQL_RES *mysql_res,
   {
    [Inf_UNKNOWN_TYPE	] = NULL,
    [Inf_INFORMATION	] = NULL,
-   [Inf_PROGRAM		] = PrgRsc_GetResourceDataFromRow,
+   [Inf_PROGRAM		] = PrgRsc_GetRscDataFromRow,
    [Inf_TEACH_GUIDE	] = NULL,
    [Inf_SYLLABUS_LEC	] = NULL,
    [Inf_SYLLABUS_PRA	] = NULL,
-   [Inf_BIBLIOGRAPHY	] = Bib_GetBibRefDataFromRow,
+   [Inf_BIBLIOGRAPHY	] = Bib_GetRefDataFromRow,
    [Inf_FAQ		] = FAQ_GetQaADataFromRow,
-   [Inf_LINKS		] = Lnk_GetCrsLinkDataFromRow,
+   [Inf_LINKS		] = Lnk_GetLnkDataFromRow,
    [Inf_ASSESSMENT	] = NULL,
   };
 
@@ -108,9 +108,9 @@ void TreSpc_ResetItem (struct Tre_Node *Node)
      };
 
    /***** Reset common fields of specific item *****/
-   Node->SpcItem.Cod = -1L;
-   Node->SpcItem.Ind = 0;
-   Node->SpcItem.HiddenOrVisible = HidVis_VISIBLE;
+   Node->Item.Cod = -1L;
+   Node->Item.Ind = 0;
+   Node->Item.HiddenOrVisible = HidVis_VISIBLE;
 
    /***** Reset specific fields of specific item *****/
    if (ResetSpcFields[Node->InfoType])
@@ -127,21 +127,21 @@ void TreSpc_GetItemDataByCod (struct Tre_Node *Node)
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = Rsc_DB_GetResourceDataByCod,
+      [Inf_PROGRAM	] = Rsc_DB_GetRscDataByCod,
       [Inf_TEACH_GUIDE	] = NULL,
       [Inf_SYLLABUS_LEC	] = NULL,
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = Bib_DB_GetRefDataByCod,
       [Inf_FAQ		] = FAQ_DB_GetQaADataByCod,
-      [Inf_LINKS	] = Lnk_DB_GetCrsLinkDataByCod,
+      [Inf_LINKS	] = Lnk_DB_GetLnkDataByCod,
       [Inf_ASSESSMENT	] = NULL,
      };
    MYSQL_RES *mysql_res;
 
-   if (Node->SpcItem.Cod > 0)
+   if (Node->Item.Cod > 0)
      {
       /***** Get data of resource *****/
-      if (GetItemDataByCod[Node->InfoType] (&mysql_res,Node->SpcItem.Cod))
+      if (GetItemDataByCod[Node->InfoType] (&mysql_res,Node->Item.Cod))
          TreSpc_GetItemDataFromRow[Node->InfoType] (mysql_res,Node);
       else
 	 /* Clear all node data except type */
@@ -180,13 +180,13 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = Rsc_DB_GetListResources,
+      [Inf_PROGRAM	] = Rsc_DB_GetListRscs,
       [Inf_TEACH_GUIDE	] = NULL,
       [Inf_SYLLABUS_LEC	] = NULL,
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = Bib_DB_GetListRefs,
       [Inf_FAQ		] = FAQ_DB_GetListQaAs,
-      [Inf_LINKS	] = Lnk_DB_GetListCrsLinks,
+      [Inf_LINKS	] = Lnk_DB_GetListLnks,
       [Inf_ASSESSMENT	] = NULL,
      };
    static Act_Action_t ActionsReqRemItem[Inf_NUM_TYPES] =
@@ -333,7 +333,7 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
 		  case Vie_EDIT:
 		     TreSpc_WriteRowEditItem (Node,NumItem,NumItems,
 					      (ListingType == Tre_EDIT_SPC_ITEM &&
-					       Node->SpcItem.Cod == SelectedItmCod) ? Vie_EDIT :
+					       Node->Item.Cod == SelectedItmCod) ? Vie_EDIT :
 										      Vie_VIEW,
 					      HiddenOrVisible);
 		     break;
@@ -427,11 +427,11 @@ static void TreSpc_WriteRowViewItem (struct Tre_Node *Node,unsigned NumItem)
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = PrgRsc_WriteCellViewResource,
+      [Inf_PROGRAM	] = PrgRsc_WriteCellViewRsc,
       [Inf_TEACH_GUIDE	] = NULL,
       [Inf_SYLLABUS_LEC	] = NULL,
       [Inf_SYLLABUS_PRA	] = NULL,
-      [Inf_BIBLIOGRAPHY	] = Bib_WriteCellViewBibRef,
+      [Inf_BIBLIOGRAPHY	] = Bib_WriteCellViewRef,
       [Inf_FAQ		] = FAQ_WriteCellViewQaA,
       [Inf_LINKS	] = Lnk_WriteCellViewLnk,
       [Inf_ASSESSMENT	] = NULL,
@@ -473,11 +473,11 @@ static void TreSpc_WriteRowEditItem (struct Tre_Node *Node,
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = PrgRsc_WriteCellEditResource,
+      [Inf_PROGRAM	] = PrgRsc_WriteCellEditRsc,
       [Inf_TEACH_GUIDE	] = NULL,
       [Inf_SYLLABUS_LEC	] = NULL,
       [Inf_SYLLABUS_PRA	] = NULL,
-      [Inf_BIBLIOGRAPHY	] = Bib_WriteCellEditBibRef,
+      [Inf_BIBLIOGRAPHY	] = Bib_WriteCellEditRef,
       [Inf_FAQ		] = FAQ_WriteCellEditQaA,
       [Inf_LINKS	] = Lnk_WriteCellEditLnk,
       [Inf_ASSESSMENT	] = NULL,
@@ -532,11 +532,11 @@ static void TreSpc_WriteRowNewItem (struct Tre_Node *Node,unsigned NumItems)
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = PrgRsc_WriteCellNewResource,
+      [Inf_PROGRAM	] = PrgRsc_WriteCellNewRsc,
       [Inf_TEACH_GUIDE	] = NULL,
       [Inf_SYLLABUS_LEC	] = NULL,
       [Inf_SYLLABUS_PRA	] = NULL,
-      [Inf_BIBLIOGRAPHY	] = Bib_WriteCellNewBibRef,
+      [Inf_BIBLIOGRAPHY	] = Bib_WriteCellNewRef,
       [Inf_FAQ		] = FAQ_WriteCellNewQaA,
       [Inf_LINKS	] = Lnk_WriteCellNewLnk,
       [Inf_ASSESSMENT	] = NULL,
@@ -665,7 +665,7 @@ static void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
 	 /***** Icon to remove question & answer *****/
 	 if (NumItem < NumItems)
 	    Ico_PutContextualIconToRemove (ActionsReqRem[Node->InfoType],TreSpc_LIST_ITEMS_SECTION_ID,
-					   TreSpc_PutParItmCod,&Node->SpcItem.Cod);
+					   TreSpc_PutParItmCod,&Node->Item.Cod);
 	 else
 	    Ico_PutIconRemovalNotAllowed ();
 
@@ -673,8 +673,8 @@ static void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
 	 if (NumItem < NumItems)
 	    Ico_PutContextualIconToHideUnhide (ActionHideUnhide[Node->InfoType],
 					       TreSpc_LIST_ITEMS_SECTION_ID,
-					       TreSpc_PutParItmCod,&Node->SpcItem.Cod,
-					       Node->SpcItem.HiddenOrVisible);
+					       TreSpc_PutParItmCod,&Node->Item.Cod,
+					       Node->Item.HiddenOrVisible);
 	 else
 	    Ico_PutIconOff ("eye.svg",Ico_GREEN,Txt_Visible);
 
@@ -682,7 +682,7 @@ static void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
 	 if (NumItem < NumItems)
 	    Ico_PutContextualIconToEdit (ActionsFrmChg[Node->InfoType],
 					 TreSpc_LIST_ITEMS_SECTION_ID,
-					 TreSpc_PutParItmCod,&Node->SpcItem.Cod);
+					 TreSpc_PutParItmCod,&Node->Item.Cod);
 	 else
 	    Ico_PutContextualIconToEdit (ActionsFrmChg[Node->InfoType],
 					 TreSpc_LIST_ITEMS_SECTION_ID,
@@ -692,7 +692,7 @@ static void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
 	 if (NumItem > 0 && NumItem < NumItems)
 	    Lay_PutContextualLinkOnlyIcon (ActionUpDown[Node->InfoType][TreSpc_UP],
 					   TreSpc_LIST_ITEMS_SECTION_ID,
-	                                   TreSpc_PutParItmCod,&Node->SpcItem.Cod,
+	                                   TreSpc_PutParItmCod,&Node->Item.Cod,
 	 			           "arrow-up.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -701,7 +701,7 @@ static void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
 	 if (NumItem < NumItems - 1)
 	    Lay_PutContextualLinkOnlyIcon (ActionUpDown[Node->InfoType][TreSpc_DOWN],
 					   TreSpc_LIST_ITEMS_SECTION_ID,
-	                                   TreSpc_PutParItmCod,&Node->SpcItem.Cod,
+	                                   TreSpc_PutParItmCod,&Node->Item.Cod,
 	                                   "arrow-down.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -789,7 +789,7 @@ void TreSpc_EditTreeWithFormItem (Inf_Type_t InfoType)
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_ITEM,
-		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
+		     Node.Hierarchy.NodCod,Node.Item.Cod);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -839,14 +839,14 @@ void TreSpc_ChangeItem (Inf_Type_t InfoType)
    Functions[InfoType].GetPars (&Node);
 
    /***** Is it an existing item? *****/
-   if (Node.SpcItem.Cod > 0)
+   if (Node.Item.Cod > 0)
       Functions[InfoType].UpdItem (&Node);	// Update item
    else
       Functions[InfoType].CreItem (&Node);	// Create item
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
+		     Node.Hierarchy.NodCod,Node.Item.Cod);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -864,13 +864,13 @@ void TreSpc_ReqRemItem (Inf_Type_t InfoType)
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = Node.Resource.Title,
+      [Inf_PROGRAM	] = Node.Item.Rsc.Title,
       [Inf_TEACH_GUIDE	] = NULL,
       [Inf_SYLLABUS_LEC	] = NULL,
       [Inf_SYLLABUS_PRA	] = NULL,
-      [Inf_BIBLIOGRAPHY	] = Node.Bib.Fields[Bib_TITLE],
-      [Inf_FAQ		] = Node.QaA.Question,
-      [Inf_LINKS	] = Node.Lnk.Fields[Lnk_TITLE],
+      [Inf_BIBLIOGRAPHY	] = Node.Item.Bib.Fields[Bib_TITLE],
+      [Inf_FAQ		] = Node.Item.QaA.Question,
+      [Inf_LINKS	] = Node.Item.Lnk.Fields[Lnk_TITLE],
       [Inf_ASSESSMENT	] = NULL,
      };
 
@@ -892,7 +892,7 @@ void TreSpc_ReqRemItem (Inf_Type_t InfoType)
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
+		     Node.Hierarchy.NodCod,Node.Item.Cod);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -941,7 +941,7 @@ void TreSpc_RemoveItem (Inf_Type_t InfoType)
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
+		     Node.Hierarchy.NodCod,Node.Item.Cod);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -959,7 +959,7 @@ void TreSpc_HideOrUnhideItem (Inf_Type_t InfoType,
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (InfoType);
 
-   /***** Get tree node and question & answer *****/
+   /***** Get tree node and item *****/
    Node.InfoType = InfoType;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
@@ -970,7 +970,7 @@ void TreSpc_HideOrUnhideItem (Inf_Type_t InfoType,
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
+		     Node.Hierarchy.NodCod,Node.Item.Cod);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -1015,7 +1015,7 @@ void TreSpc_MoveUpDownItem (Inf_Type_t InfoType,TreSpc_UpDown_t UpDown)
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
+		     Node.Hierarchy.NodCod,Node.Item.Cod);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -1029,7 +1029,7 @@ void TreSpc_MoveUpDownItem (Inf_Type_t InfoType,TreSpc_UpDown_t UpDown)
 static bool TreSpc_ExchangeItems (const struct Tre_Node *Node,
 				  const struct Tre_SpcItem *Item2)
   {
-   const struct Tre_SpcItem *Item1 = &Node->SpcItem;
+   const struct Tre_SpcItem *Item1 = &Node->Item;
 
    if (Item1->Ind > 0 &&	// Indexes should be in the range [1, 2,...]
        Item2->Ind > 0)

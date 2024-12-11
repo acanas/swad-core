@@ -101,15 +101,15 @@ void Lnk_ResetSpcFields (struct Tre_Node *Node)
    for (NumField = 0;
 	NumField < Lnk_NUM_FIELDS;
 	NumField++)
-      Node->Lnk.Fields[NumField][0] = '\0';
-   Node->Lnk.WWW[0] = '\0';
+      Node->Item.Lnk.Fields[NumField][0] = '\0';
+   Node->Item.Lnk.WWW[0] = '\0';
   }
 
 /*****************************************************************************/
 /************************** Get course link data *****************************/
 /*****************************************************************************/
 
-void Lnk_GetCrsLinkDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
+void Lnk_GetLnkDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
   {
    MYSQL_ROW row;
    unsigned NumField;
@@ -129,19 +129,19 @@ void Lnk_GetCrsLinkDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
    Node->Hierarchy.NodCod = Str_ConvertStrCodToLongCod (row[0]);
 
    /***** Get code and index of the course link (row[1], row[2]) *****/
-   Node->SpcItem.Cod = Str_ConvertStrCodToLongCod (row[1]);
-   Node->SpcItem.Ind = Str_ConvertStrToUnsigned (row[2]);
+   Node->Item.Cod = Str_ConvertStrCodToLongCod (row[1]);
+   Node->Item.Ind = Str_ConvertStrToUnsigned (row[2]);
 
    /***** Get whether the tree node is hidden (row(3)) *****/
-   Node->SpcItem.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
+   Node->Item.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
 
    /***** Get title, description and URL
           of the course link (row[4], row[5], row[6]) *****/
    for (NumField = 0;
 	NumField < Lnk_NUM_FIELDS;
 	NumField++)
-      Str_Copy (Node->Lnk.Fields[NumField],row[4 + NumField],Lnk_MAX_BYTES_FIELD);
-   Str_Copy (Node->Lnk.WWW,row[4 + Lnk_NUM_FIELDS],sizeof (Node->Lnk.WWW) - 1);
+      Str_Copy (Node->Item.Lnk.Fields[NumField],row[4 + NumField],Lnk_MAX_BYTES_FIELD);
+   Str_Copy (Node->Item.Lnk.WWW,row[4 + Lnk_NUM_FIELDS],sizeof (Node->Item.Lnk.WWW) - 1);
   }
 
 /*****************************************************************************/
@@ -159,15 +159,15 @@ void Lnk_WriteCellViewLnk (struct Tre_Node *Node)
    for (NumField = 0;
 	NumField < Lnk_NUM_FIELDS;
 	NumField++)
-      if (Node->Lnk.Fields[NumField][0])
+      if (Node->Item.Lnk.Fields[NumField][0])
 	{
-	 Lnk_WriteField (Node->Lnk.Fields[NumField],Class[NumField]);
+	 Lnk_WriteField (Node->Item.Lnk.Fields[NumField],Class[NumField]);
 	 HTM_BR ();
 	}
-   if (Node->Lnk.WWW[0])
+   if (Node->Item.Lnk.WWW[0])
      {
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Node->Lnk.WWW);
-	 HTM_Txt (Node->Lnk.WWW);
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Node->Item.Lnk.WWW);
+	 HTM_Txt (Node->Item.Lnk.WWW);
       HTM_A_End ();
      }
   }
@@ -204,14 +204,14 @@ void Lnk_WriteCellEditLnk (struct Tre_Node *Node,
       case Vie_EDIT:
 	 /***** Show form to change course link *****/
 	 Frm_BeginFormAnchor (ActChgCrsLnk,TreSpc_LIST_ITEMS_SECTION_ID);
-	    TreSpc_PutParItmCod (&Node->SpcItem.Cod);
+	    TreSpc_PutParItmCod (&Node->Item.Cod);
 
 	    /* Fields */
 	    for (NumField = 0;
 		 NumField < Lnk_NUM_FIELDS;
 		 NumField++)
 	      {
-	       HTM_INPUT_TEXT (Lnk_FormNames[NumField],Lnk_MAX_CHARS_FIELD,Node->Lnk.Fields[NumField],
+	       HTM_INPUT_TEXT (Lnk_FormNames[NumField],Lnk_MAX_CHARS_FIELD,Node->Item.Lnk.Fields[NumField],
 			       Attributes[NumField],
 			       "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
 			       *Lnk_Placeholders[NumField],The_GetSuffix ());
@@ -219,7 +219,7 @@ void Lnk_WriteCellEditLnk (struct Tre_Node *Node,
 	      }
 
 	    /* URL */
-	    HTM_INPUT_URL ("WWW",Node->Lnk.WWW,
+	    HTM_INPUT_URL ("WWW",Node->Item.Lnk.WWW,
 			   HTM_REQUIRED,
 			   " placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
 			   Txt_URL,The_GetSuffix ());
@@ -295,6 +295,6 @@ void Lnk_GetParsLnk (struct Tre_Node *Node)
    for (NumField = 0;
 	NumField < Lnk_NUM_FIELDS;
 	NumField++)
-      Par_GetParText (Lnk_FormNames[NumField],Node->Lnk.Fields[NumField],Lnk_MAX_BYTES_FIELD);
-   Par_GetParText ("WWW",Node->Lnk.WWW,WWW_MAX_BYTES_WWW);
+      Par_GetParText (Lnk_FormNames[NumField],Node->Item.Lnk.Fields[NumField],Lnk_MAX_BYTES_FIELD);
+   Par_GetParText ("WWW",Node->Item.Lnk.WWW,WWW_MAX_BYTES_WWW);
   }

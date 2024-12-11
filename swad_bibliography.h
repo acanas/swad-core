@@ -35,13 +35,13 @@
 
 void Bib_ResetSpcFields (struct Tre_Node *Node);
 
-void Bib_GetBibRefDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node);
+void Bib_GetRefDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node);
 
-void Bib_WriteCellViewBibRef (struct Tre_Node *Node);
-void Bib_WriteCellEditBibRef (struct Tre_Node *Node,
+void Bib_WriteCellViewRef (struct Tre_Node *Node);
+void Bib_WriteCellEditRef (struct Tre_Node *Node,
                               Vie_ViewType_t ViewType,
 			      HidVis_HiddenOrVisible_t HiddenOrVisible);
-void Bib_WriteCellNewBibRef (void);
+void Bib_WriteCellNewRef (void);
 
 void Bib_GetParsRef (struct Tre_Node *Node);
 

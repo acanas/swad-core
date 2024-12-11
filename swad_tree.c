@@ -136,8 +136,10 @@ static void Tre_FreeLevels (void);
 static void Tre_IncreaseNumberInLevel (unsigned Level);
 static unsigned Tre_GetCurrentNumberInLevel (unsigned Level);
 
-static void Tre_SetExpandedLevel (unsigned Level,ConExp_ContractedOrExpanded_t ContractedOrExpanded);
-static void Tre_SetHiddenLevel (unsigned Level,HidVis_HiddenOrVisible_t HiddenOrVisible);
+static void Tre_SetExpandedLevel (unsigned Level,
+				  ConExp_ContractedOrExpanded_t ContractedOrExpanded);
+static void Tre_SetHiddenLevel (unsigned Level,
+				HidVis_HiddenOrVisible_t HiddenOrVisible);
 static ConExp_ContractedOrExpanded_t Tre_GetExpandedLevel (unsigned Level);
 static HidVis_HiddenOrVisible_t Tre_GetHiddenLevel (unsigned Level);
 
@@ -476,11 +478,6 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
       Tre_IncreaseNumberInLevel (Node->Hierarchy.Level);
 
       /***** Is this the node selected? *****/
-      /*
-      HighlightNode = Node->Hierarchy.NodCod == SelectedNodCod &&
-		      (ListingType == Prg_FORM_EDIT_ITEM ||
-		       ListingType == Prg_END_EDIT_ITEM);
-      */
       HighlightNode = (Node->Hierarchy.NodCod == SelectedNodCod);
 
       /***** First row (title and dates) *****/
@@ -616,8 +613,8 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	       HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN\"",ColSpan);
 	       break;
 	    default:
-	       HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",
-			     ColSpan,The_GetColorRows ());
+	       HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",ColSpan,
+			     The_GetColorRows ());
 	       break;
 	   }
 
@@ -707,7 +704,6 @@ static void Tre_PutIconToContractOrExpandNode (struct Tre_Node *Node,
 
    /***** Icon to hide/unhide tree node *****/
    PutContextualIcon[ContractedOrExpanded] (Actions[Node->InfoType][ContractedOrExpanded][ViewType],
-					    // Prg_HIGHLIGHTED_SECTION_ID,
 					    Tre_NODE_SECTION_ID,
 					    Tre_PutPars,Node);
   }
@@ -722,7 +718,6 @@ static void Tre_WriteNodeText (const struct Tre_Node *Node,
    extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
-   /* Text */
    Tre_DB_GetNodeTxt (Node,Txt);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 		     Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
@@ -933,13 +928,15 @@ static unsigned Tre_GetCurrentNumberInLevel (unsigned Level)
 /********************** Set / Get if a level is hidden ***********************/
 /*****************************************************************************/
 
-static void Tre_SetExpandedLevel (unsigned Level,ConExp_ContractedOrExpanded_t ContractedOrExpanded)
+static void Tre_SetExpandedLevel (unsigned Level,
+				  ConExp_ContractedOrExpanded_t ContractedOrExpanded)
   {
    if (Tre_Gbl.Levels)
       Tre_Gbl.Levels[Level].ContractedOrExpanded = ContractedOrExpanded;
   }
 
-static void Tre_SetHiddenLevel (unsigned Level,HidVis_HiddenOrVisible_t HiddenOrVisible)
+static void Tre_SetHiddenLevel (unsigned Level,
+				HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    if (Tre_Gbl.Levels)
       Tre_Gbl.Levels[Level].HiddenOrVisible = HiddenOrVisible;
@@ -1150,7 +1147,7 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
 	                                Tre_PutPars,Node);
 
 	 /***** Icon to hide/unhide tree node *****/
-	 Ico_PutContextualIconToHideUnhide (ActionsHideUnhide[Node->InfoType],Tre_NODE_SECTION_ID /*Prg_HIGHLIGHTED_SECTION_ID */,
+	 Ico_PutContextualIconToHideUnhide (ActionsHideUnhide[Node->InfoType],Tre_NODE_SECTION_ID,
 					    Tre_PutPars,Node,
 					    Node->Hierarchy.HiddenOrVisible);
 
@@ -1170,7 +1167,7 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
 
 	 /***** Icon to move up the node *****/
 	 if (Tre_CheckIfMoveUpIsAllowed (NumNode))
-	    Lay_PutContextualLinkOnlyIcon (ActionsUp_[Node->InfoType],Tre_NODE_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
+	    Lay_PutContextualLinkOnlyIcon (ActionsUp_[Node->InfoType],Tre_NODE_SECTION_ID,
 	                                   Tre_PutPars,Node,
 					   "arrow-up.svg",Ico_BLACK);
 	 else
@@ -1178,7 +1175,7 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
 
 	 /***** Icon to move down the node *****/
 	 if (Tre_CheckIfMoveDownIsAllowed (NumNode))
-	    Lay_PutContextualLinkOnlyIcon (ActionsDwn[Node->InfoType],Tre_NODE_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
+	    Lay_PutContextualLinkOnlyIcon (ActionsDwn[Node->InfoType],Tre_NODE_SECTION_ID,
 	                                   Tre_PutPars,Node,
 					   "arrow-down.svg",Ico_BLACK);
 	 else
@@ -1186,7 +1183,7 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
 
 	 /***** Icon to move left node (increase level) *****/
 	 if (Tre_CheckIfMoveLeftIsAllowed (NumNode))
-	    Lay_PutContextualLinkOnlyIcon (ActionsLft[Node->InfoType],Tre_NODE_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
+	    Lay_PutContextualLinkOnlyIcon (ActionsLft[Node->InfoType],Tre_NODE_SECTION_ID,
 	                                   Tre_PutPars,Node,
 					   "arrow-left.svg",Ico_BLACK);
 	 else
@@ -1194,7 +1191,7 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
 
 	 /***** Icon to move right node (indent, decrease level) *****/
 	 if (Tre_CheckIfMoveRightIsAllowed (NumNode))
-	    Lay_PutContextualLinkOnlyIcon (ActionsRgt[Node->InfoType],Tre_NODE_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
+	    Lay_PutContextualLinkOnlyIcon (ActionsRgt[Node->InfoType],Tre_NODE_SECTION_ID,
 	                                   Tre_PutPars,Node,
 					   "arrow-right.svg",Ico_BLACK);
 	 else
@@ -1312,7 +1309,7 @@ void Tre_GetPars (struct Tre_Node *Node)
    Tre_ResetNode (Node);
 
    /****** Parameters specific for each type of tree *****/
-   Node->SpcItem.Cod = ParCod_GetPar (ParCod_Itm);
+   Node->Item.Cod = ParCod_GetPar (ParCod_Itm);
    TreSpc_GetItemDataByCod (Node);
 
    if (Node->Hierarchy.NodCod <= 0)	// No node specified
@@ -1708,7 +1705,7 @@ static void Tre_ShowFormToChangeNode (struct Tre_Node *Node)
    Tre_DB_GetNodeTxt (Node,Txt);
 
    /***** Begin form to change *****/
-   Frm_BeginFormTable (Actions[Node->InfoType],Tre_NODE_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
+   Frm_BeginFormTable (Actions[Node->InfoType],Tre_NODE_SECTION_ID,
                        Tre_PutPars,Node,"TBL_WIDE");
 
       /***** Show form *****/

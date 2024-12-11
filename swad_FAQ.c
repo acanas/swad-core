@@ -71,8 +71,8 @@
 
 void FAQ_ResetSpcFields (struct Tre_Node *Node)
   {
-   Node->QaA.Question[0] = '\0';
-   Node->QaA.Answer[0] = '\0';
+   Node->Item.QaA.Question[0] = '\0';
+   Node->Item.QaA.Answer[0] = '\0';
   }
 
 /*****************************************************************************/
@@ -97,15 +97,15 @@ void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
    Node->Hierarchy.NodCod = Str_ConvertStrCodToLongCod (row[0]);
 
    /***** Get code and index of the question & answer (row[1], row[2]) *****/
-   Node->SpcItem.Cod = Str_ConvertStrCodToLongCod (row[1]);
-   Node->SpcItem.Ind = Str_ConvertStrToUnsigned (row[2]);
+   Node->Item.Cod = Str_ConvertStrCodToLongCod (row[1]);
+   Node->Item.Ind = Str_ConvertStrToUnsigned (row[2]);
 
    /***** Get whether the tree node is hidden (row(3)) *****/
-   Node->SpcItem.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
+   Node->Item.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
 
    /***** Get the questionand the answer of the question & answer (row[4], row[5]) *****/
-   Str_Copy (Node->QaA.Question,row[4],sizeof (Node->QaA.Question) - 1);
-   Str_Copy (Node->QaA.Answer  ,row[5],sizeof (Node->QaA.Answer  ) - 1);
+   Str_Copy (Node->Item.QaA.Question,row[4],sizeof (Node->Item.QaA.Question) - 1);
+   Str_Copy (Node->Item.QaA.Answer  ,row[5],sizeof (Node->Item.QaA.Answer  ) - 1);
   }
 
 /*****************************************************************************/
@@ -116,16 +116,16 @@ void FAQ_WriteCellViewQaA (struct Tre_Node *Node)
   {
    /***** Question *****/
    HTM_SPAN_Begin ("class=\"TRE_TIT\"");
-      HTM_Txt (Node->QaA.Question);
+      HTM_Txt (Node->Item.QaA.Question);
    HTM_SPAN_End ();
 
    /***** Answer *****/
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-		     Node->QaA.Answer,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
-   ALn_InsertLinks (Node->QaA.Answer,Cns_MAX_BYTES_TEXT,60);	// Insert links
+		     Node->Item.QaA.Answer,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
+   ALn_InsertLinks (Node->Item.QaA.Answer,Cns_MAX_BYTES_TEXT,60);	// Insert links
 
    HTM_DIV_Begin ("class=\"PAR\"");
-      HTM_Txt (Node->QaA.Answer);
+      HTM_Txt (Node->Item.QaA.Answer);
    HTM_DIV_End ();
   }
 
@@ -154,10 +154,10 @@ void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
       case Vie_EDIT:
 	 /***** Show form to change question & answer *****/
 	 Frm_BeginFormAnchor (ActChgFAQQaA,TreSpc_LIST_ITEMS_SECTION_ID);
-	    TreSpc_PutParItmCod (&Node->SpcItem.Cod);
+	    TreSpc_PutParItmCod (&Node->Item.Cod);
 
 	    /* Question */
-	    HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,Node->QaA.Question,
+	    HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,Node->Item.QaA.Question,
 			    HTM_NO_ATTR,
 			    "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
 			    Txt_Question,The_GetSuffix ());
@@ -169,7 +169,7 @@ void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
 				" placeholder=\"%s\""
 				" class=\"PRG_RSC_INPUT INPUT_%s\"",
 				Txt_Answer,The_GetSuffix ());
-	       HTM_Txt (Node->QaA.Answer);
+	       HTM_Txt (Node->Item.QaA.Answer);
 	    HTM_TEXTAREA_End ();
 
 	    /* Button to save changes */
@@ -220,6 +220,6 @@ void FAQ_WriteCellNewQaA (void)
 
 void FAQ_GetParsQaA (struct Tre_Node *Node)
   {
-   Par_GetParText ("Question",Node->QaA.Question,FAQ_MAX_BYTES_QUESTION);
-   Par_GetParHTML ("Answer",Node->QaA.Answer,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   Par_GetParText ("Question",Node->Item.QaA.Question,FAQ_MAX_BYTES_QUESTION);
+   Par_GetParHTML ("Answer",Node->Item.QaA.Answer,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
   }

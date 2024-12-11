@@ -51,8 +51,8 @@ long FAQ_DB_CreateQaA (const struct Tre_Node *Node)
 				  " FROM faq_questions AS t2"
 				 " WHERE t2.NodCod=%ld",
 				Node->Hierarchy.NodCod,
-				Node->QaA.Question,
-				Node->QaA.Answer,
+				Node->Item.QaA.Question,
+				Node->Item.QaA.Answer,
 				Node->Hierarchy.NodCod);
   }
 
@@ -137,9 +137,9 @@ void FAQ_DB_UpdateQaA (const struct Tre_Node *Node)
 		     " AND faq_questions.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
-		   Node->QaA.Question,
-		   Node->QaA.Answer,
-		   Node->SpcItem.Cod,
+		   Node->Item.QaA.Question,
+		   Node->Item.QaA.Answer,
+		   Node->Item.Cod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Inf_FAQ]);
