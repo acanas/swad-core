@@ -806,14 +806,13 @@ void TreSpc_CreateItem (Inf_Type_t InfoType)
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = // PrgRsc_CreateResourceInternal,
-			    PrgRsc_ChangeResourceLinkInternal,
+      [Inf_PROGRAM	] = PrgRsc_ChangeResourceLinkInternal,
       [Inf_TEACH_GUIDE	] = NULL,
       [Inf_SYLLABUS_LEC	] = NULL,
       [Inf_SYLLABUS_PRA	] = NULL,
-      [Inf_BIBLIOGRAPHY	] = Bib_CreateBibRef,
-      [Inf_FAQ		] = FAQ_CreateQaA,
-      [Inf_LINKS	] = Lnk_CreateCrsLink,
+      [Inf_BIBLIOGRAPHY	] = Bib_ChangeBibRef,
+      [Inf_FAQ		] = FAQ_ChangeQaA,
+      [Inf_LINKS	] = Lnk_ChangeCrsLink,
       [Inf_ASSESSMENT	] = NULL,
      };
 

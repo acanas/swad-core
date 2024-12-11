@@ -44,7 +44,6 @@ void Lnk_WriteCellEditCrsLink (struct Tre_Node *Node,
 			       HidVis_HiddenOrVisible_t HiddenOrVisible);
 void Lnk_WriteCellNewCrsLink (void);
 
-void Lnk_CreateCrsLink (struct Tre_Node *Node);
 void Lnk_ChangeCrsLink (struct Tre_Node *Node);
 
 #endif

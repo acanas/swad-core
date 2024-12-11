@@ -318,25 +318,6 @@ static void Bib_WriteField (const char *Field,const char *Class)
   }
 
 /*****************************************************************************/
-/********************* Create bibliographic reference ************************/
-/*****************************************************************************/
-
-void Bib_CreateBibRef (struct Tre_Node *Node)
-  {
-   unsigned NumField;
-
-   /***** Get fields for the new bibliographic reference *****/
-   for (NumField = 0;
-	NumField < Bib_NUM_FIELDS;
-	NumField++)
-      Par_GetParText (Bib_FormNames[NumField],Node->Bib.Fields[NumField],Bib_MAX_BYTES_FIELD);
-   Par_GetParText ("URL",Node->Bib.URL,WWW_MAX_BYTES_WWW);
-
-   /***** Create bibliographic reference *****/
-   Node->SpcItem.Cod = Bib_DB_CreateBibRef (Node);
-  }
-
-/*****************************************************************************/
 /*********************** Change bibliographic reference ***********************/
 /*****************************************************************************/
 
@@ -351,6 +332,11 @@ void Bib_ChangeBibRef (struct Tre_Node *Node)
       Par_GetParText (Bib_FormNames[NumField],Node->Bib.Fields[NumField],Bib_MAX_BYTES_FIELD);
    Par_GetParText ("URL",Node->Bib.URL,WWW_MAX_BYTES_WWW);
 
-   /***** Update answer *****/
-   Bib_DB_UpdateBibRef (Node);
+   /***** Is it an existing item? *****/
+   if (Node->SpcItem.Cod >  0)
+      /* Update item */
+      Bib_DB_UpdateBibRef (Node);
+   else
+      /* Create item */
+      Node->SpcItem.Cod = Bib_DB_CreateBibRef (Node);
   }

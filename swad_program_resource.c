@@ -259,15 +259,6 @@ void PrgRsc_CreateResource (void)
    Prg_AfterTree ();
   }
 
-void PrgRsc_CreateResourceInternal (struct Tre_Node *Node)
-  {
-   /***** Get the new title for the new resource *****/
-   Par_GetParText ("Title",Node->Resource.Title,Rsc_MAX_BYTES_RESOURCE_TITLE);
-
-   /***** Create resource *****/
-   Node->SpcItem.Cod = Rsc_DB_CreateResource (Node);
-  }
-
 /*****************************************************************************/
 /********** Ask for confirmation of removing a resource from list ************/
 /*****************************************************************************/
@@ -358,11 +349,11 @@ void PrgRsc_ChangeResourceLinkInternal (struct Tre_Node *Node)
       /* Remove link from clipboard */
       Rsc_DB_RemoveLinkFromClipboard (&Node->Resource.Link);
 
-   /***** Is it an existing resource? *****/
+   /***** Is it an existing item? *****/
    if (Node->SpcItem.Cod >  0)
-      /* Update resource */
+      /* Update item */
       Rsc_DB_UpdateResource (Node);
    else
-      /* Create resource */
+      /* Create item */
       Node->SpcItem.Cod = Rsc_DB_CreateResource (Node);
   }
