@@ -255,7 +255,7 @@ void PrgRsc_EditListResources (void)
 void PrgRsc_CreateResource (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      TreSpc_CreateItem (Inf_PROGRAM);
+      TreSpc_ChangeItem (Inf_PROGRAM);
    Prg_AfterTree ();
   }
 
@@ -339,21 +339,14 @@ void PrgRsc_ChangeResourceLink (void)
    Prg_AfterTree ();
   }
 
-void PrgRsc_ChangeResourceLinkInternal (struct Tre_Node *Node)
-  {
-   /***** Get the new title for the resource *****/
-   Par_GetParText ("Title",Node->Resource.Title,Rsc_MAX_BYTES_RESOURCE_TITLE);
+/*****************************************************************************/
+/***************** Get parameters to create/update resource ******************/
+/*****************************************************************************/
 
-   /***** Get link type and code *****/
+void PrgRsc_GetParsRsc (struct Tre_Node *Node)
+  {
+   Par_GetParText ("Title",Node->Resource.Title,Rsc_MAX_BYTES_RESOURCE_TITLE);
    if (Rsc_GetParLink (&Node->Resource.Link))
       /* Remove link from clipboard */
       Rsc_DB_RemoveLinkFromClipboard (&Node->Resource.Link);
-
-   /***** Is it an existing item? *****/
-   if (Node->SpcItem.Cod >  0)
-      /* Update item */
-      Rsc_DB_UpdateResource (Node);
-   else
-      /* Create item */
-      Node->SpcItem.Cod = Rsc_DB_CreateResource (Node);
   }

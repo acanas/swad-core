@@ -660,7 +660,7 @@ void Inf_CreateItem (void)
    struct Inf_Info Info;
 
    Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
-      TreSpc_CreateItem (Info.Type);
+      TreSpc_ChangeItem (Info.Type);
    Inf_AfterTree ();
   }
 

@@ -56,6 +56,6 @@ void PrgRsc_MoveUpResource (void);
 void PrgRsc_MoveDownResource (void);
 void PrgRsc_EditTreeWithFormResource (void);
 void PrgRsc_ChangeResourceLink (void);
-void PrgRsc_ChangeResourceLinkInternal (struct Tre_Node *Node);
+void PrgRsc_GetParsRsc (struct Tre_Node *Node);
 
 #endif

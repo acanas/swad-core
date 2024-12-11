@@ -215,20 +215,11 @@ void FAQ_WriteCellNewQaA (void)
   }
 
 /*****************************************************************************/
-/************************** Change question & answer *************************/
+/************* Get parameters to create/update question & answer *************/
 /*****************************************************************************/
 
-void FAQ_ChangeQaA (struct Tre_Node *Node)
+void FAQ_GetParsQaA (struct Tre_Node *Node)
   {
-   /***** Get question and answer *****/
    Par_GetParText ("Question",Node->QaA.Question,FAQ_MAX_BYTES_QUESTION);
    Par_GetParHTML ("Answer",Node->QaA.Answer,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
-
-   /***** Is it an existing item? *****/
-   if (Node->SpcItem.Cod >  0)
-      /* Update item */
-      FAQ_DB_UpdateQaA (Node);
-   else
-      /* Create item */
-      Node->SpcItem.Cod = FAQ_DB_CreateQaA (Node);
   }

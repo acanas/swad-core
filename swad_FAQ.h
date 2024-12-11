@@ -44,6 +44,6 @@ void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
 			   HidVis_HiddenOrVisible_t HiddenOrVisible);
 void FAQ_WriteCellNewQaA (void);
 
-void FAQ_ChangeQaA (struct Tre_Node *Node);
+void FAQ_GetParsQaA (struct Tre_Node *Node);
 
 #endif

@@ -796,23 +796,49 @@ void TreSpc_EditTreeWithFormItem (Inf_Type_t InfoType)
   }
 
 /*****************************************************************************/
-/************************ Create new specific list item **********************/
+/********************** Create/update specific list item *********************/
 /*****************************************************************************/
 
-void TreSpc_CreateItem (Inf_Type_t InfoType)
+void TreSpc_ChangeItem (Inf_Type_t InfoType)
   {
    struct Tre_Node Node;
+   static void (*GetParams[Inf_NUM_TYPES]) (struct Tre_Node *Node) =
+     {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
+      [Inf_PROGRAM	] = PrgRsc_GetParsRsc,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = Bib_GetParsBibRef,
+      [Inf_FAQ		] = FAQ_GetParsQaA,
+      [Inf_LINKS	] = Lnk_GetParsCrsLink,
+      [Inf_ASSESSMENT	] = NULL,
+     };
    static void (*CreateItem[Inf_NUM_TYPES]) (struct Tre_Node *Node) =
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = PrgRsc_ChangeResourceLinkInternal,
+      [Inf_PROGRAM	] = Rsc_DB_CreateResource,
       [Inf_TEACH_GUIDE	] = NULL,
       [Inf_SYLLABUS_LEC	] = NULL,
       [Inf_SYLLABUS_PRA	] = NULL,
-      [Inf_BIBLIOGRAPHY	] = Bib_ChangeBibRef,
-      [Inf_FAQ		] = FAQ_ChangeQaA,
-      [Inf_LINKS	] = Lnk_ChangeCrsLink,
+      [Inf_BIBLIOGRAPHY	] = Bib_DB_CreateBibRef,
+      [Inf_FAQ		] = FAQ_DB_CreateQaA,
+      [Inf_LINKS	] = Lnk_DB_CreateCrsLink,
+      [Inf_ASSESSMENT	] = NULL,
+     };
+   static void (*UpdateItem[Inf_NUM_TYPES]) (struct Tre_Node *Node) =
+     {
+      [Inf_UNKNOWN_TYPE	] = NULL,
+      [Inf_INFORMATION	] = NULL,
+      [Inf_PROGRAM	] = Rsc_DB_UpdateResource,
+      [Inf_TEACH_GUIDE	] = NULL,
+      [Inf_SYLLABUS_LEC	] = NULL,
+      [Inf_SYLLABUS_PRA	] = NULL,
+      [Inf_BIBLIOGRAPHY	] = Bib_DB_UpdateBibRef,
+      [Inf_FAQ		] = FAQ_DB_UpdateQaA,
+      [Inf_LINKS	] = Lnk_DB_UpdateCrsLink,
       [Inf_ASSESSMENT	] = NULL,
      };
 
@@ -829,52 +855,15 @@ void TreSpc_CreateItem (Inf_Type_t InfoType)
    Tre_GetPars (&Node);
 
    /***** Create specific list item *****/
-   CreateItem[InfoType] (&Node);
+   GetParams[InfoType] (&Node);
 
-   /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,Node.SpcItem.Cod);
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
-  }
-
-/*****************************************************************************/
-/************************ Change specific list item **************************/
-/*****************************************************************************/
-
-void TreSpc_ChangeItem (Inf_Type_t InfoType)
-  {
-   struct Tre_Node Node;
-   static void (*ChangeItem[Inf_NUM_TYPES]) (struct Tre_Node *Node) =
-     {
-      [Inf_UNKNOWN_TYPE	] = NULL,
-      [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = PrgRsc_ChangeResourceLinkInternal,
-      [Inf_TEACH_GUIDE	] = NULL,
-      [Inf_SYLLABUS_LEC	] = NULL,
-      [Inf_SYLLABUS_PRA	] = NULL,
-      [Inf_BIBLIOGRAPHY	] = Bib_ChangeBibRef,
-      [Inf_FAQ		] = FAQ_ChangeQaA,
-      [Inf_LINKS	] = Lnk_ChangeCrsLink,
-      [Inf_ASSESSMENT	] = NULL,
-     };
-
-   /***** Check info type *****/
-   if (!ChangeItem[InfoType])
-      Err_WrongTypeExit ();
-
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (InfoType);
-
-   /***** Get tree node *****/
-   Node.InfoType = InfoType;
-   Tre_GetPars (&Node);
-   if (Node.Hierarchy.NodCod <= 0)
-      Err_WrongItemExit ();
-
-   /***** Change specific list item *****/
-   ChangeItem[InfoType] (&Node);
+   /***** Is it an existing item? *****/
+   if (Node->SpcItem.Cod >  0)
+      /* Update item */
+      UpdateItem[InfoType] (&Node);
+   else
+      /* Create item */
+      CreateItem[InfoType] (&Node);
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,

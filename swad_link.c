@@ -285,25 +285,16 @@ static void Lnk_WriteField (const char *Field,const char *Class)
   }
 
 /*****************************************************************************/
-/***************************** Change course link ****************************/
+/*************** Get parameters to create/update course link *****************/
 /*****************************************************************************/
 
-void Lnk_ChangeCrsLink (struct Tre_Node *Node)
+void Lnk_GetParsCrsLink (struct Tre_Node *Node)
   {
    unsigned NumField;
 
-   /***** Get fields for the course link *****/
    for (NumField = 0;
 	NumField < Lnk_NUM_FIELDS;
 	NumField++)
       Par_GetParText (Lnk_FormNames[NumField],Node->Lnk.Fields[NumField],Lnk_MAX_BYTES_FIELD);
    Par_GetParText ("WWW",Node->Lnk.WWW,WWW_MAX_BYTES_WWW);
-
-   /***** Is it an existing item? *****/
-   if (Node->SpcItem.Cod >  0)
-      /* Update item */
-      Lnk_DB_UpdateCrsLink (Node);
-   else
-      /* Create item */
-      Node->SpcItem.Cod = Lnk_DB_CreateCrsLink (Node);
   }

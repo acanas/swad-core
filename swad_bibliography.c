@@ -318,25 +318,16 @@ static void Bib_WriteField (const char *Field,const char *Class)
   }
 
 /*****************************************************************************/
-/*********************** Change bibliographic reference ***********************/
+/********** Get parameters to create/update bibliographic reference **********/
 /*****************************************************************************/
 
-void Bib_ChangeBibRef (struct Tre_Node *Node)
+void Bib_GetParsBibRef (struct Tre_Node *Node)
   {
    unsigned NumField;
 
-   /***** Get fields for the new bibliographic reference *****/
    for (NumField = 0;
 	NumField < Bib_NUM_FIELDS;
 	NumField++)
       Par_GetParText (Bib_FormNames[NumField],Node->Bib.Fields[NumField],Bib_MAX_BYTES_FIELD);
    Par_GetParText ("URL",Node->Bib.URL,WWW_MAX_BYTES_WWW);
-
-   /***** Is it an existing item? *****/
-   if (Node->SpcItem.Cod >  0)
-      /* Update item */
-      Bib_DB_UpdateBibRef (Node);
-   else
-      /* Create item */
-      Node->SpcItem.Cod = Bib_DB_CreateBibRef (Node);
   }
