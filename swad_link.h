@@ -38,12 +38,12 @@ void Lnk_ResetSpcFields (struct Tre_Node *Node);
 
 void Lnk_GetCrsLinkDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node);
 
-void Lnk_WriteCellViewCrsLink (struct Tre_Node *Node);
-void Lnk_WriteCellEditCrsLink (struct Tre_Node *Node,
-                               Vie_ViewType_t ViewType,
-			       HidVis_HiddenOrVisible_t HiddenOrVisible);
-void Lnk_WriteCellNewCrsLink (void);
+void Lnk_WriteCellViewLnk (struct Tre_Node *Node);
+void Lnk_WriteCellEditLnk (struct Tre_Node *Node,
+                           Vie_ViewType_t ViewType,
+			   HidVis_HiddenOrVisible_t HiddenOrVisible);
+void Lnk_WriteCellNewLnk (void);
 
-void Lnk_GetParsCrsLink (struct Tre_Node *Node);
+void Lnk_GetParsLnk (struct Tre_Node *Node);
 
 #endif

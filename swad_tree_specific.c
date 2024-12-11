@@ -131,7 +131,7 @@ void TreSpc_GetItemDataByCod (struct Tre_Node *Node)
       [Inf_TEACH_GUIDE	] = NULL,
       [Inf_SYLLABUS_LEC	] = NULL,
       [Inf_SYLLABUS_PRA	] = NULL,
-      [Inf_BIBLIOGRAPHY	] = Bib_DB_GetBibRefDataByCod,
+      [Inf_BIBLIOGRAPHY	] = Bib_DB_GetRefDataByCod,
       [Inf_FAQ		] = FAQ_DB_GetQaADataByCod,
       [Inf_LINKS	] = Lnk_DB_GetCrsLinkDataByCod,
       [Inf_ASSESSMENT	] = NULL,
@@ -184,7 +184,7 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
       [Inf_TEACH_GUIDE	] = NULL,
       [Inf_SYLLABUS_LEC	] = NULL,
       [Inf_SYLLABUS_PRA	] = NULL,
-      [Inf_BIBLIOGRAPHY	] = Bib_DB_GetListBibRefs,
+      [Inf_BIBLIOGRAPHY	] = Bib_DB_GetListRefs,
       [Inf_FAQ		] = FAQ_DB_GetListQaAs,
       [Inf_LINKS	] = Lnk_DB_GetListCrsLinks,
       [Inf_ASSESSMENT	] = NULL,
@@ -433,7 +433,7 @@ static void TreSpc_WriteRowViewItem (struct Tre_Node *Node,unsigned NumItem)
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = Bib_WriteCellViewBibRef,
       [Inf_FAQ		] = FAQ_WriteCellViewQaA,
-      [Inf_LINKS	] = Lnk_WriteCellViewCrsLink,
+      [Inf_LINKS	] = Lnk_WriteCellViewLnk,
       [Inf_ASSESSMENT	] = NULL,
      };
 
@@ -479,7 +479,7 @@ static void TreSpc_WriteRowEditItem (struct Tre_Node *Node,
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = Bib_WriteCellEditBibRef,
       [Inf_FAQ		] = FAQ_WriteCellEditQaA,
-      [Inf_LINKS	] = Lnk_WriteCellEditCrsLink,
+      [Inf_LINKS	] = Lnk_WriteCellEditLnk,
       [Inf_ASSESSMENT	] = NULL,
      };
 
@@ -538,7 +538,7 @@ static void TreSpc_WriteRowNewItem (struct Tre_Node *Node,unsigned NumItems)
       [Inf_SYLLABUS_PRA	] = NULL,
       [Inf_BIBLIOGRAPHY	] = Bib_WriteCellNewBibRef,
       [Inf_FAQ		] = FAQ_WriteCellNewQaA,
-      [Inf_LINKS	] = Lnk_WriteCellNewCrsLink,
+      [Inf_LINKS	] = Lnk_WriteCellNewLnk,
       [Inf_ASSESSMENT	] = NULL,
      };
 
@@ -802,48 +802,29 @@ void TreSpc_EditTreeWithFormItem (Inf_Type_t InfoType)
 void TreSpc_ChangeItem (Inf_Type_t InfoType)
   {
    struct Tre_Node Node;
-   static void (*GetParams[Inf_NUM_TYPES]) (struct Tre_Node *Node) =
+   static struct
      {
-      [Inf_UNKNOWN_TYPE	] = NULL,
-      [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = PrgRsc_GetParsRsc,
-      [Inf_TEACH_GUIDE	] = NULL,
-      [Inf_SYLLABUS_LEC	] = NULL,
-      [Inf_SYLLABUS_PRA	] = NULL,
-      [Inf_BIBLIOGRAPHY	] = Bib_GetParsBibRef,
-      [Inf_FAQ		] = FAQ_GetParsQaA,
-      [Inf_LINKS	] = Lnk_GetParsCrsLink,
-      [Inf_ASSESSMENT	] = NULL,
-     };
-   static void (*CreateItem[Inf_NUM_TYPES]) (struct Tre_Node *Node) =
+      void (*GetPars) (struct Tre_Node *Node);
+      long (*CreItem) (const struct Tre_Node *Node);
+      void (*UpdItem) (const struct Tre_Node *Node);
+     } Functions[Inf_NUM_TYPES] =
      {
-      [Inf_UNKNOWN_TYPE	] = NULL,
-      [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = Rsc_DB_CreateResource,
-      [Inf_TEACH_GUIDE	] = NULL,
-      [Inf_SYLLABUS_LEC	] = NULL,
-      [Inf_SYLLABUS_PRA	] = NULL,
-      [Inf_BIBLIOGRAPHY	] = Bib_DB_CreateBibRef,
-      [Inf_FAQ		] = FAQ_DB_CreateQaA,
-      [Inf_LINKS	] = Lnk_DB_CreateCrsLink,
-      [Inf_ASSESSMENT	] = NULL,
-     };
-   static void (*UpdateItem[Inf_NUM_TYPES]) (struct Tre_Node *Node) =
-     {
-      [Inf_UNKNOWN_TYPE	] = NULL,
-      [Inf_INFORMATION	] = NULL,
-      [Inf_PROGRAM	] = Rsc_DB_UpdateResource,
-      [Inf_TEACH_GUIDE	] = NULL,
-      [Inf_SYLLABUS_LEC	] = NULL,
-      [Inf_SYLLABUS_PRA	] = NULL,
-      [Inf_BIBLIOGRAPHY	] = Bib_DB_UpdateBibRef,
-      [Inf_FAQ		] = FAQ_DB_UpdateQaA,
-      [Inf_LINKS	] = Lnk_DB_UpdateCrsLink,
-      [Inf_ASSESSMENT	] = NULL,
+      [Inf_UNKNOWN_TYPE	] = {NULL		,NULL			,NULL			},
+      [Inf_INFORMATION	] = {NULL		,NULL			,NULL			},
+      [Inf_PROGRAM	] = {PrgRsc_GetParsRsc	,Rsc_DB_CreateRsc	,Rsc_DB_UpdateRsc	},
+      [Inf_TEACH_GUIDE	] = {NULL		,NULL			,NULL			},
+      [Inf_SYLLABUS_LEC	] = {NULL		,NULL			,NULL			},
+      [Inf_SYLLABUS_PRA	] = {NULL		,NULL			,NULL			},
+      [Inf_BIBLIOGRAPHY	] = {Bib_GetParsRef	,Bib_DB_CreateRef	,Bib_DB_UpdateRef	},
+      [Inf_FAQ		] = {FAQ_GetParsQaA	,FAQ_DB_CreateQaA	,FAQ_DB_UpdateQaA	},
+      [Inf_LINKS	] = {Lnk_GetParsLnk	,Lnk_DB_CreateLnk	,Lnk_DB_UpdateLnk	},
+      [Inf_ASSESSMENT	] = {NULL		,NULL			,NULL			}
      };
 
    /***** Check info type *****/
-   if (!CreateItem[InfoType])
+   if (!Functions[InfoType].GetPars ||
+       !Functions[InfoType].CreItem ||
+       !Functions[InfoType].UpdItem)
       Err_WrongTypeExit ();
 
    /***** Get list of tree nodes *****/
@@ -854,16 +835,14 @@ void TreSpc_ChangeItem (Inf_Type_t InfoType)
    Node.InfoType = InfoType;
    Tre_GetPars (&Node);
 
-   /***** Create specific list item *****/
-   GetParams[InfoType] (&Node);
+   /* Get parameters for specific list item */
+   Functions[InfoType].GetPars (&Node);
 
    /***** Is it an existing item? *****/
-   if (Node->SpcItem.Cod >  0)
-      /* Update item */
-      UpdateItem[InfoType] (&Node);
+   if (Node.SpcItem.Cod > 0)
+      Functions[InfoType].UpdItem (&Node);	// Update item
    else
-      /* Create item */
-      CreateItem[InfoType] (&Node);
+      Functions[InfoType].CreItem (&Node);	// Create item
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,

@@ -43,13 +43,13 @@ void Rsc_DB_RemoveClipboard (void);
 void Rsc_DB_RemoveLinkFromClipboard (struct Rsc_Link *Link);
 
 //------------------------ Resources in program -------------------------------
-long Rsc_DB_CreateResource (const struct Tre_Node *Node);
+long Rsc_DB_CreateRsc (const struct Tre_Node *Node);
 
 bool Rsc_DB_CheckListResources (long NodCod,bool ShowHiddenResources);
 unsigned Rsc_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
                                   bool ShowHiddenResources);
 unsigned Rsc_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long ItmCod);
 
-void Rsc_DB_UpdateResource (const struct Tre_Node *Node);
+void Rsc_DB_UpdateRsc (const struct Tre_Node *Node);
 
 #endif

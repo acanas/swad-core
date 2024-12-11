@@ -41,7 +41,7 @@ extern struct Globals Gbl;
 /************************* Create a new course link **************************/
 /*****************************************************************************/
 
-long Lnk_DB_CreateCrsLink (const struct Tre_Node *Node)
+long Lnk_DB_CreateLnk (const struct Tre_Node *Node)
   {
    return
    DB_QueryINSERTandReturnCode ("can not create new course link",
@@ -126,7 +126,7 @@ unsigned Lnk_DB_GetCrsLinkDataByCod (MYSQL_RES **mysql_res,long ItmCod)
 /********************* Update course link given its code *********************/
 /*****************************************************************************/
 
-void Lnk_DB_UpdateCrsLink (const struct Tre_Node *Node)
+void Lnk_DB_UpdateLnk (const struct Tre_Node *Node)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 

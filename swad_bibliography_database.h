@@ -37,11 +37,11 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-long Bib_DB_CreateBibRef (const struct Tre_Node *Node);
-unsigned Bib_DB_GetListBibRefs (MYSQL_RES **mysql_res,long NodCod,
-                                bool ShowHiddenBibRefs);
-unsigned Bib_DB_GetBibRefDataByCod (MYSQL_RES **mysql_res,long ItmCod);
+long Bib_DB_CreateRef (const struct Tre_Node *Node);
+unsigned Bib_DB_GetListRefs (MYSQL_RES **mysql_res,long NodCod,
+                             bool ShowHiddenBibRefs);
+unsigned Bib_DB_GetRefDataByCod (MYSQL_RES **mysql_res,long ItmCod);
 
-void Bib_DB_UpdateBibRef (const struct Tre_Node *Node);
+void Bib_DB_UpdateRef (const struct Tre_Node *Node);
 
 #endif

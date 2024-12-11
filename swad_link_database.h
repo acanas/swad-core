@@ -37,11 +37,11 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-long Lnk_DB_CreateCrsLink (const struct Tre_Node *Node);
+long Lnk_DB_CreateLnk (const struct Tre_Node *Node);
 unsigned Lnk_DB_GetListCrsLinks (MYSQL_RES **mysql_res,long NodCod,
                                  bool ShowHiddenCrsLinks);
 unsigned Lnk_DB_GetCrsLinkDataByCod (MYSQL_RES **mysql_res,long ItmCod);
 
-void Lnk_DB_UpdateCrsLink (const struct Tre_Node *Node);
+void Lnk_DB_UpdateLnk (const struct Tre_Node *Node);
 
 #endif

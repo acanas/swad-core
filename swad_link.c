@@ -148,7 +148,7 @@ void Lnk_GetCrsLinkDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
 /************************* Show one course link ******************************/
 /*****************************************************************************/
 
-void Lnk_WriteCellViewCrsLink (struct Tre_Node *Node)
+void Lnk_WriteCellViewLnk (struct Tre_Node *Node)
   {
    static const char *Class[Lnk_NUM_FIELDS] =
      {
@@ -173,12 +173,12 @@ void Lnk_WriteCellViewCrsLink (struct Tre_Node *Node)
   }
 
 /*****************************************************************************/
-/************************ Edit one course link *************************/
+/*************************** Edit one course link ****************************/
 /*****************************************************************************/
 
-void Lnk_WriteCellEditCrsLink (struct Tre_Node *Node,
-                               Vie_ViewType_t ViewType,
-			       HidVis_HiddenOrVisible_t HiddenOrVisible)
+void Lnk_WriteCellEditLnk (struct Tre_Node *Node,
+                           Vie_ViewType_t ViewType,
+			   HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Txt_Title;
@@ -198,7 +198,7 @@ void Lnk_WriteCellEditCrsLink (struct Tre_Node *Node,
 	 /***** Show current course link *****/
 	 HTM_DIV_Begin ("class=\"PRG_TXT_%s%s\"",
 		        The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
-	    Lnk_WriteCellViewCrsLink (Node);
+	    Lnk_WriteCellViewLnk (Node);
 	 HTM_DIV_End ();
 	 break;
       case Vie_EDIT:
@@ -240,7 +240,7 @@ void Lnk_WriteCellEditCrsLink (struct Tre_Node *Node,
 /************************** Edit a new course link ***************************/
 /*****************************************************************************/
 
-void Lnk_WriteCellNewCrsLink (void)
+void Lnk_WriteCellNewLnk (void)
   {
    extern const char *Txt_Title;
    extern const char *Txt_Description;
@@ -288,7 +288,7 @@ static void Lnk_WriteField (const char *Field,const char *Class)
 /*************** Get parameters to create/update course link *****************/
 /*****************************************************************************/
 
-void Lnk_GetParsCrsLink (struct Tre_Node *Node)
+void Lnk_GetParsLnk (struct Tre_Node *Node)
   {
    unsigned NumField;
 

@@ -156,7 +156,7 @@ void Rsc_DB_RemoveLinkFromClipboard (struct Rsc_Link *Link)
 /************************** Create a new resource ****************************/
 /*****************************************************************************/
 
-long Rsc_DB_CreateResource (const struct Tre_Node *Node)
+long Rsc_DB_CreateRsc (const struct Tre_Node *Node)
   {
    return
    DB_QueryINSERTandReturnCode ("can not create new resource",
@@ -241,7 +241,7 @@ unsigned Rsc_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long ItmCod)
 /************************ Update resource given its code *********************/
 /*****************************************************************************/
 
-void Rsc_DB_UpdateResource (const struct Tre_Node *Node)
+void Rsc_DB_UpdateRsc (const struct Tre_Node *Node)
   {
    extern const char *Rsc_DB_Types[Rsc_NUM_TYPES];
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];

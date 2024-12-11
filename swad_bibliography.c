@@ -321,7 +321,7 @@ static void Bib_WriteField (const char *Field,const char *Class)
 /********** Get parameters to create/update bibliographic reference **********/
 /*****************************************************************************/
 
-void Bib_GetParsBibRef (struct Tre_Node *Node)
+void Bib_GetParsRef (struct Tre_Node *Node)
   {
    unsigned NumField;
 

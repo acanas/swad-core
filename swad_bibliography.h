@@ -43,6 +43,6 @@ void Bib_WriteCellEditBibRef (struct Tre_Node *Node,
 			      HidVis_HiddenOrVisible_t HiddenOrVisible);
 void Bib_WriteCellNewBibRef (void);
 
-void Bib_GetParsBibRef (struct Tre_Node *Node);
+void Bib_GetParsRef (struct Tre_Node *Node);
 
 #endif

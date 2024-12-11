@@ -41,7 +41,7 @@ extern struct Globals Gbl;
 /******************* Create a new bibliographic reference ********************/
 /*****************************************************************************/
 
-long Bib_DB_CreateBibRef (const struct Tre_Node *Node)
+long Bib_DB_CreateRef (const struct Tre_Node *Node)
   {
    return
    DB_QueryINSERTandReturnCode ("can not create new bibliographic reference",
@@ -67,8 +67,8 @@ long Bib_DB_CreateBibRef (const struct Tre_Node *Node)
 /******** Get list of node bibliographic references from database ************/
 /*****************************************************************************/
 
-unsigned Bib_DB_GetListBibRefs (MYSQL_RES **mysql_res,long NodCod,
-                                bool ShowHiddenBibRefs)
+unsigned Bib_DB_GetListRefs (MYSQL_RES **mysql_res,long NodCod,
+                             bool ShowHiddenBibRefs)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
    static const char *HiddenSubQuery[2] =
@@ -108,7 +108,7 @@ unsigned Bib_DB_GetListBibRefs (MYSQL_RES **mysql_res,long NodCod,
 /************* Get bibliographic reference data using its code ***************/
 /*****************************************************************************/
 
-unsigned Bib_DB_GetBibRefDataByCod (MYSQL_RES **mysql_res,long ItmCod)
+unsigned Bib_DB_GetRefDataByCod (MYSQL_RES **mysql_res,long ItmCod)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
@@ -140,7 +140,7 @@ unsigned Bib_DB_GetBibRefDataByCod (MYSQL_RES **mysql_res,long ItmCod)
 /*************** Update bibliographic reference given its code ***************/
 /*****************************************************************************/
 
-void Bib_DB_UpdateBibRef (const struct Tre_Node *Node)
+void Bib_DB_UpdateRef (const struct Tre_Node *Node)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
