@@ -1749,13 +1749,13 @@ a:hover img.CENTER_PHOTO_SHOW
 	cursor: pointer;
 	}
 
-/****************************** Course program *******************************/
-.PRG_COL1
+/************************ Trees (program, course info) ***********************/
+.TRE_COL1
 	{
 	box-sizing: border-box;
 	width: 44px;
 	}
-.PRG_TITLE_DESCRIPTION_WIDTH
+.TRE_TITLE_DESCRIPTION_WIDTH
 	{
 	box-sizing: border-box;
 	width: 100%;
@@ -1767,12 +1767,12 @@ a:hover img.CENTER_PHOTO_SHOW
 	vertical-align: top;
 	font-weight: bold;
 	}
-.PRG_MAIN
+.TRE_MAIN
 	{
 	text-align: left;
 	vertical-align: top;
 	}
-.PRG_DATE
+.TRE_DATE
 	{
 	box-sizing: border-box;
 	min-width: 120px;
@@ -1780,73 +1780,72 @@ a:hover img.CENTER_PHOTO_SHOW
 	text-overflow: ellipsis;
 	}
 
-.PRG_TIT_1_WHITE,
-.PRG_TIT_1_GREY,
-.PRG_TIT_1_PURPLE,
-.PRG_TIT_1_BLUE,
-.PRG_TIT_1_YELLOW,
-.PRG_TIT_1_PINK		{color: black; font-size: 20pt; font-weight: bold;}
-.PRG_TIT_1_DARK		{color: white; font-size: 20pt; font-weight: bold;}
+.TRE_TIT_1_WHITE,
+.TRE_TIT_1_GREY,
+.TRE_TIT_1_PURPLE,
+.TRE_TIT_1_BLUE,
+.TRE_TIT_1_YELLOW,
+.TRE_TIT_1_PINK		{color: black; font-size: 20pt; font-weight: bold;}
+.TRE_TIT_1_DARK		{color: white; font-size: 20pt; font-weight: bold;}
 
-.PRG_TIT_2_WHITE,
-.PRG_TIT_2_GREY,
-.PRG_TIT_2_PURPLE,
-.PRG_TIT_2_BLUE,
-.PRG_TIT_2_YELLOW,
-.PRG_TIT_2_PINK		{color: black; font-size: 18pt; font-weight: bold;}
-.PRG_TIT_2_DARK		{color: white; font-size: 18pt; font-weight: bold;}
+.TRE_TIT_2_WHITE,
+.TRE_TIT_2_GREY,
+.TRE_TIT_2_PURPLE,
+.TRE_TIT_2_BLUE,
+.TRE_TIT_2_YELLOW,
+.TRE_TIT_2_PINK		{color: black; font-size: 14pt; font-weight: bold;}
+.TRE_TIT_2_DARK		{color: white; font-size: 14pt; font-weight: bold;}
 
-.PRG_TIT_3_WHITE,
-.PRG_TIT_3_GREY,
-.PRG_TIT_3_PURPLE,
-.PRG_TIT_3_BLUE,
-.PRG_TIT_3_YELLOW,
-.PRG_TIT_3_PINK		{color: black; font-size: 16pt; font-weight: bold;}
-.PRG_TIT_3_DARK		{color: white; font-size: 16pt; font-weight: bold;}
+.TRE_TIT_3_WHITE,
+.TRE_TIT_3_GREY,
+.TRE_TIT_3_PURPLE,
+.TRE_TIT_3_BLUE,
+.TRE_TIT_3_YELLOW,
+.TRE_TIT_3_PINK		{color: black; font-size: 13pt; font-weight: bold;}
+.TRE_TIT_3_DARK		{color: white; font-size: 13pt; font-weight: bold;}
 
-.PRG_TIT_4_WHITE,
-.PRG_TIT_4_GREY,
-.PRG_TIT_4_PURPLE,
-.PRG_TIT_4_BLUE,
-.PRG_TIT_4_YELLOW,
-.PRG_TIT_4_PINK		{color: black; font-size: 14pt; font-weight: bold;}
-.PRG_TIT_4_DARK		{color: white; font-size: 14pt; font-weight: bold;}
+.TRE_TIT_4_WHITE,
+.TRE_TIT_4_GREY,
+.TRE_TIT_4_PURPLE,
+.TRE_TIT_4_BLUE,
+.TRE_TIT_4_YELLOW,
+.TRE_TIT_4_PINK		{color: black; font-size: 12pt; font-weight: bold;}
+.TRE_TIT_4_DARK		{color: white; font-size: 12pt; font-weight: bold;}
 
-.PRG_TIT_5_WHITE,
-.PRG_TIT_5_GREY,
-.PRG_TIT_5_PURPLE,
-.PRG_TIT_5_BLUE,
-.PRG_TIT_5_YELLOW,
-.PRG_TIT_5_PINK		{color: black; font-size: 12pt; font-weight: bold;}
-.PRG_TIT_5_DARK		{color: white; font-size: 12pt; font-weight: bold;}
+.TRE_TIT_5_WHITE,
+.TRE_TIT_5_GREY,
+.TRE_TIT_5_PURPLE,
+.TRE_TIT_5_BLUE,
+.TRE_TIT_5_YELLOW,
+.TRE_TIT_5_PINK		{color: black; font-size: 12pt; font-weight: bold;}
+.TRE_TIT_5_DARK		{color: white; font-size: 12pt; font-weight: bold;}
 
-.PRG_TXT_WHITE,
-.PRG_TXT_GREY,
-.PRG_TXT_PURPLE,
-.PRG_TXT_BLUE,
-.PRG_TXT_YELLOW,
-.PRG_TXT_PINK	{color: #202020; font-size: 12pt;}
-.PRG_TXT_DARK	{color: #e0e0e0; font-size: 12pt;}
+.TRE_TXT_WHITE,
+.TRE_TXT_GREY,
+.TRE_TXT_PURPLE,
+.TRE_TXT_BLUE,
+.TRE_TXT_YELLOW,
+.TRE_TXT_PINK		{color: #202020; font-size: 12pt;}
+.TRE_TXT_DARK		{color: #e0e0e0; font-size: 12pt;}
 
-.TRE_HIDDEN
-	{
-	opacity: 0.33;
-	}
-	
-.PRG_RSC_COL1
+.TRE_HIDDEN		{opacity: 0.33;}
+
+/******************************** Tree items *********************************/
+
+.ITM_COL1
 	{
 	box-sizing: border-box;
 	width: 66px;
 	}
 
-.PRG_RSC_WHITE, .PRG_RSC_GREY, .PRG_RSC_PURPLE, .PRG_RSC_BLUE, .PRG_RSC_YELLOW, .PRG_RSC_PINK	{color: #202020; font-size: 12pt;}
-.PRG_RSC_DARK											{color: #e0e0e0; font-size: 12pt;}
+.ITM_WHITE, .ITM_GREY, .ITM_PURPLE, .ITM_BLUE, .ITM_YELLOW, .ITM_PINK	{color: #202020; font-size: 12pt;}
+.ITM_DARK								{color: #e0e0e0; font-size: 12pt;}
 
-.TRE_TIT  {font-weight: bold;}
+.ITM_TIT  {font-weight: bold;}
 
 @media only screen and (max-width: 480px)
 	{	/* For mobile-phones */
-	.PRG_RSC_INPUT
+	.ITM_INPUT
 		{
 		box-sizing: border-box;
 		width: 120px;
@@ -1854,7 +1853,7 @@ a:hover img.CENTER_PHOTO_SHOW
 	}
 @media only screen and (min-width: 480px) and (max-width: 1024px)
 	{	/* For desktop */
-	.PRG_RSC_INPUT
+	.ITM_INPUT
 		{
 		box-sizing: border-box;
 		width: 240px;
@@ -1862,21 +1861,20 @@ a:hover img.CENTER_PHOTO_SHOW
 	}
 @media only screen and (min-width: 1024px)
 	{	/* For desktop */
-	.PRG_RSC_INPUT
+	.ITM_INPUT
 		{
 		box-sizing: border-box;
 		width: 640px;
 		}
 	}
 
-
-.PRG_LNK_WHITE		{color: #4d88a1; font-size: 12pt;}
-.PRG_LNK_GREY		{color: #4d88a1; font-size: 12pt;}
-.PRG_LNK_PURPLE		{color: #4d88a1; font-size: 12pt;}
-.PRG_LNK_BLUE		{color: #4d88a1; font-size: 12pt;}
-.PRG_LNK_YELLOW		{color: #7c4d2a; font-size: 12pt;}
-.PRG_LNK_PINK		{color: #4d88a1; font-size: 12pt;}
-.PRG_LNK_DARK		{color: #afc4cc; font-size: 12pt;}
+.RSC_LNK_WHITE		{color: #4d88a1; font-size: 12pt;}
+.RSC_LNK_GREY		{color: #4d88a1; font-size: 12pt;}
+.RSC_LNK_PURPLE		{color: #4d88a1; font-size: 12pt;}
+.RSC_LNK_BLUE		{color: #4d88a1; font-size: 12pt;}
+.RSC_LNK_YELLOW		{color: #7c4d2a; font-size: 12pt;}
+.RSC_LNK_PINK		{color: #4d88a1; font-size: 12pt;}
+.RSC_LNK_DARK		{color: #afc4cc; font-size: 12pt;}
 
 /***************************** Resource clipboard ****************************/
 .RSC_CLIPBOARD

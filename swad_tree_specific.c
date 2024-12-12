@@ -441,12 +441,12 @@ static void TreSpc_WriteRowViewItem (struct Tre_Node *Node,unsigned NumItem)
    HTM_TR_Begin (NULL);
 
       /***** Question&Answer number *****/
-      HTM_TD_Begin ("class=\"TRE_NUM PRG_RSC_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"TRE_NUM ITM_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (NumItem + 1);
       HTM_TD_End ();
 
       /***** Question&Answer *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"TRE_MAIN ITM_%s\"",The_GetSuffix ());
 
 	 /* Wite cell contents */
          if (WriteCell[Node->InfoType])
@@ -487,17 +487,17 @@ static void TreSpc_WriteRowEditItem (struct Tre_Node *Node,
    HTM_TR_Begin (NULL);
 
       /***** Forms to remove/edit this item *****/
-      HTM_TD_Begin ("class=\"PRG_RSC_COL1 LT\"");
+      HTM_TD_Begin ("class=\"ITM_COL1 LT\"");
          TreSpc_PutFormsToEditItem (Node,NumItem,NumItems);
       HTM_TD_End ();
 
       /***** Item number *****/
-      HTM_TD_Begin ("class=\"TRE_NUM PRG_RSC_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"TRE_NUM ITM_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (NumItem + 1);
       HTM_TD_End ();
 
       /***** Item content *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"TRE_MAIN ITM_%s\"",The_GetSuffix ());
 
 	 /* Write cell contents */
          if (WriteCell[Node->InfoType])
@@ -546,18 +546,18 @@ static void TreSpc_WriteRowNewItem (struct Tre_Node *Node,unsigned NumItems)
    HTM_TR_Begin (NULL);
 
       /***** Forms to remove/edit this question & answer *****/
-      HTM_TD_Begin ("class=\"PRG_RSC_COL1 LT %s\"",The_GetColorRows1 (1));
+      HTM_TD_Begin ("class=\"ITM_COL1 LT %s\"",The_GetColorRows1 (1));
 	 TreSpc_PutFormsToEditItem (Node,NumItems,NumItems);
       HTM_TD_End ();
 
       /***** Item number *****/
-      HTM_TD_Begin ("class=\"TRE_NUM PRG_RSC_%s %s\"",
+      HTM_TD_Begin ("class=\"TRE_NUM ITM_%s %s\"",
                     The_GetSuffix (),The_GetColorRows1 (1));
 	 HTM_Unsigned (NumItems + 1);
       HTM_TD_End ();
 
       /***** Item content *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN %s\"",The_GetColorRows1 (1));
+      HTM_TD_Begin ("class=\"TRE_MAIN %s\"",The_GetColorRows1 (1));
 
 	 Frm_BeginFormAnchor (ActionsNewItem[Node->InfoType],
 			      TreSpc_LIST_ITEMS_SECTION_ID);

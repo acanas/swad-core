@@ -115,7 +115,7 @@ void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
 void FAQ_WriteCellViewQaA (struct Tre_Node *Node)
   {
    /***** Question *****/
-   HTM_SPAN_Begin ("class=\"TRE_TIT\"");
+   HTM_SPAN_Begin ("class=\"ITM_TIT\"");
       HTM_Txt (Node->Item.QaA.Question);
    HTM_SPAN_End ();
 
@@ -146,7 +146,7 @@ void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
      {
       case Vie_VIEW:
 	 /***** Show current question & answer *****/
-	 HTM_DIV_Begin ("class=\"PRG_TXT_%s%s\"",
+	 HTM_DIV_Begin ("class=\"TRE_TXT_%s%s\"",
 		        The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
 	    FAQ_WriteCellViewQaA (Node);
 	 HTM_DIV_End ();
@@ -159,7 +159,7 @@ void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
 	    /* Question */
 	    HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,Node->Item.QaA.Question,
 			    HTM_NO_ATTR,
-			    "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+			    "placeholder=\"%s\" class=\"ITM_INPUT INPUT_%s\"",
 			    Txt_Question,The_GetSuffix ());
 
 	    /* Answer */
@@ -167,7 +167,7 @@ void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
 	    HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				"name=\"Answer\" rows=\"10\""
 				" placeholder=\"%s\""
-				" class=\"PRG_RSC_INPUT INPUT_%s\"",
+				" class=\"ITM_INPUT INPUT_%s\"",
 				Txt_Answer,The_GetSuffix ());
 	       HTM_Txt (Node->Item.QaA.Answer);
 	    HTM_TEXTAREA_End ();
@@ -197,7 +197,7 @@ void FAQ_WriteCellNewQaA (void)
    /***** Question *****/
    HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,"",
 		   HTM_NO_ATTR,
-		   "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+		   "placeholder=\"%s\" class=\"ITM_INPUT INPUT_%s\"",
 		   Txt_New_question,The_GetSuffix ());
 
    /***** Answer *****/
@@ -205,7 +205,7 @@ void FAQ_WriteCellNewQaA (void)
    HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 		       "name=\"Answer\" rows=\"10\""
 		       " placeholder=\"%s\""
-		       " class=\"PRG_RSC_INPUT INPUT_%s\"",
+		       " class=\"ITM_INPUT INPUT_%s\"",
 		       Txt_Answer,The_GetSuffix ());
    HTM_TEXTAREA_End ();
 

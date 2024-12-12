@@ -96,7 +96,7 @@ void PrgRsc_GetRscDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
 
 void PrgRsc_WriteCellViewRsc (struct Tre_Node *Node)
   {
-   HTM_SPAN_Begin ("class=\"TRE_TIT\"");
+   HTM_SPAN_Begin ("class=\"ITM_TIT\"");
       HTM_Txt (Node->Item.Rsc.Title);
    HTM_SPAN_End ();
    HTM_BR ();
@@ -119,7 +119,7 @@ void PrgRsc_WriteCellEditRsc (struct Tre_Node *Node,
      {
       case Vie_VIEW:
 	 /* Show current link */
-	 HTM_DIV_Begin ("class=\"PRG_TXT_%s%s\"",
+	 HTM_DIV_Begin ("class=\"TRE_TXT_%s%s\"",
 		        The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
 	    PrgRsc_WriteCellViewRsc (Node);
 	 HTM_DIV_End ();
@@ -131,7 +131,7 @@ void PrgRsc_WriteCellEditRsc (struct Tre_Node *Node,
 	    /* Title */
 	    HTM_INPUT_TEXT ("Title",Rsc_MAX_CHARS_RESOURCE_TITLE,Node->Item.Rsc.Title,
 			    HTM_REQUIRED,
-			    "class=\"PRG_RSC_INPUT INPUT_%s\"",
+			    "class=\"ITM_INPUT INPUT_%s\"",
 			    The_GetSuffix ());
 
 	    /* Clipboard with resource links */
@@ -158,7 +158,7 @@ void PrgRsc_WriteCellNewRsc (void)
    HTM_INPUT_TEXT ("Title",Rsc_MAX_CHARS_RESOURCE_TITLE,"",
 		   HTM_REQUIRED,
 		   "placeholder=\"%s\""
-		   " class=\"PRG_RSC_INPUT INPUT_%s\"",
+		   " class=\"ITM_INPUT INPUT_%s\"",
 		   Txt_New_resource,The_GetSuffix ());
 
    /***** Clipboard with resource links *****/

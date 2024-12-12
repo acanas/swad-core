@@ -287,7 +287,7 @@ void Tre_ShowAllNodes (Inf_Type_t InfoType,
      }
 
    /***** Table *****/
-   HTM_TABLE_Begin ("TBL_SCROLL");
+   HTM_TABLE_Begin ("TBL_SCROLL CELLS_PAD_2");
 
       /***** Write all tree nodes *****/
       for (NumNode = 0, The_ResetRowColor ();
@@ -491,12 +491,12 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	      NumCol < Node->Hierarchy.Level;
 	      NumCol++)
 	   {
-	    HTM_TD_Begin ("class=\"%s\" rowspan=\"2\"",The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"TRE_COL1 %s\" rowspan=\"2\"",The_GetColorRows ());
 	    HTM_TD_End ();
 	   }
 
 	 /* Expand/contract this tree node */
-	 HTM_TD_Begin ("class=\"RT %s\" rowspan=\"2\"",The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"TRE_COL1 RT %s\" rowspan=\"2\"",The_GetColorRows ());
 	    if (PutIconExpandContract)
 	       Tre_PutIconToContractOrExpandNode (Node,ContractedOrExpanded,
 						  ViewingOrEditingProgram[ListingType]);
@@ -505,7 +505,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	 /* Forms to remove/edit this tree node */
 	 if (ViewingOrEditingProgram[ListingType] == Vie_EDIT)
 	   {
-	    HTM_TD_Begin ("class=\"PRG_COL1 LT %s\" rowspan=\"2\"",The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"TRE_COL1 LT %s\" rowspan=\"2\"",The_GetColorRows ());
 	       Tre_PutFormsToRemEditOneNode (ListingType,NumNode,Node,HighlightNode);
 	    HTM_TD_End ();
 	   }
@@ -540,10 +540,10 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	 switch (ListingType)
 	   {
 	    case Tre_PRINT:
-	       HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN\"",ColSpan);
+	       HTM_TD_Begin ("colspan=\"%u\" class=\"TRE_MAIN\"",ColSpan);
 	       break;
 	    default:
-	       HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",ColSpan,
+	       HTM_TD_Begin ("colspan=\"%u\" class=\"TRE_MAIN %s\"",ColSpan,
 			     The_GetColorRows ());
 
 	       break;
@@ -568,10 +568,10 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	    switch (ListingType)
 	      {
 	       case Tre_PRINT:
-		  HTM_TD_Begin ("class=\"PRG_DATE RT\"");
+		  HTM_TD_Begin ("class=\"TRE_DATE RT\"");
 		  break;
 	       default:
-		  HTM_TD_Begin ("class=\"PRG_DATE RT %s\"",The_GetColorRows ());
+		  HTM_TD_Begin ("class=\"TRE_DATE RT %s\"",The_GetColorRows ());
 		  break;
 	      }
 
@@ -610,10 +610,10 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	 switch (ListingType)
 	   {
 	    case Tre_PRINT:
-	       HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN\"",ColSpan);
+	       HTM_TD_Begin ("colspan=\"%u\" class=\"TRE_MAIN\"",ColSpan);
 	       break;
 	    default:
-	       HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",ColSpan,
+	       HTM_TD_Begin ("colspan=\"%u\" class=\"TRE_MAIN %s\"",ColSpan,
 			     The_GetColorRows ());
 	       break;
 	   }
@@ -724,7 +724,7 @@ static void Tre_WriteNodeText (const struct Tre_Node *Node,
    if (Txt[0])
      {
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-      HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
+      HTM_DIV_Begin ("class=\"PAR TRE_TXT_%s%s\"",
 		     The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
@@ -749,11 +749,11 @@ static void Tre_WriteRowToCreateNode (Inf_Type_t InfoType,
    HTM_TR_Begin (NULL);
 
       /***** Column under expand/contract icon *****/
-      HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"TRE_COL1 LT %s\"",The_GetColorRows ());
       HTM_TD_End ();
 
       /***** Column under icons *****/
-      HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"TRE_COL1 LT %s\"",The_GetColorRows ());
       HTM_TD_End ();
 
       /***** Indent depending on the level *****/
@@ -761,7 +761,7 @@ static void Tre_WriteRowToCreateNode (Inf_Type_t InfoType,
 	   NumCol < FormLevel;
 	   NumCol++)
 	{
-	 HTM_TD_Begin ("class=\"%s\"",The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"TRE_COL1 %s\"",The_GetColorRows ());
 	 HTM_TD_End ();
 	}
 
@@ -774,7 +774,7 @@ static void Tre_WriteRowToCreateNode (Inf_Type_t InfoType,
       ColSpan = Tre_GetMaxNodeLevel () + 2 - FormLevel;
       if (InfoType == Inf_PROGRAM)
 	 ColSpan++;
-      HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",
+      HTM_TD_Begin ("colspan=\"%u\" class=\"TRE_MAIN %s\"",
 		    ColSpan,The_GetColorRows ());
          /* Form for node data */
 	 HTM_ARTICLE_Begin (Tre_NODE_SECTION_ID);
@@ -795,7 +795,7 @@ static void Tre_WriteRowToCreateNode (Inf_Type_t InfoType,
 
 static void Tre_SetTitleClass (char **TitleClass,unsigned Level)
   {
-   if (asprintf (TitleClass,"PRG_TIT_%u_%s",
+   if (asprintf (TitleClass,"TRE_TIT_%u_%s",
 		 Level < 5 ? Level :
 			     5,
 		 The_GetSuffix ()) < 0)
@@ -1737,7 +1737,7 @@ static void Tre_ShowFormNode (const struct Tre_Node *Node,
 	 HTM_INPUT_TEXT ("Title",Tre_MAX_CHARS_NODE_TITLE,Node->Title,
 			 HTM_REQUIRED,
 			 "id=\"Title\""
-			 " class=\"PRG_TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+			 " class=\"TRE_TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
 			 The_GetSuffix ());
       HTM_TD_End ();
 
@@ -1759,7 +1759,7 @@ static void Tre_ShowFormNode (const struct Tre_Node *Node,
       HTM_TD_Begin ("class=\"LT\"");
 	 HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 			     "id=\"Txt\" name=\"Txt\" rows=\"10\""
-			     " class=\"PRG_TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+			     " class=\"TRE_TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
 			     The_GetSuffix ());
 	    if (Txt)
 	       if (Txt[0])

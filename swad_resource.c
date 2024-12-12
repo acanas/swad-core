@@ -163,7 +163,7 @@ void Rsc_ShowClipboard (void)
 	   NumLink++)
 	{
 	 Rsc_GetLinkDataFromRow (mysql_res,&Link);
-	 HTM_LI_Begin ("class=\"PRG_RSC_%s\"",The_GetSuffix ());
+	 HTM_LI_Begin ("class=\"ITM_%s\"",The_GetSuffix ());
 	    Rsc_WriteLinkName (&Link,Frm_PUT_FORM);
 	 HTM_LI_End ();
 	}
@@ -233,7 +233,7 @@ static void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
    extern const char *Rsc_DB_Types[Rsc_NUM_TYPES];
 
    /***** Begin list row *****/
-   HTM_LI_Begin ("class=\"PRG_RSC_%s\"",The_GetSuffix ());
+   HTM_LI_Begin ("class=\"ITM_%s\"",The_GetSuffix ());
       HTM_LABEL_Begin (NULL);
 
          /***** Radio selector *****/
@@ -427,7 +427,7 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
 
 	 /* Begin link */
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
-				  "class=\"LM BT_LINK PRG_LNK_%s\"",
+				  "class=\"LM BT_LINK RSC_LNK_%s\"",
 				  The_GetSuffix ());
 
 	    /* Icon and title of resource */

@@ -1,7 +1,7 @@
 // swad_program_resource.h: course program (resources)
 
-#ifndef _SWAD_PRG_RSC
-#define _SWAD_PRG_RSC
+#ifndef _SWAD_ITM
+#define _SWAD_ITM
 /*
     SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),

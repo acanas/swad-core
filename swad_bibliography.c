@@ -167,7 +167,7 @@ void Bib_WriteCellViewRef (struct Tre_Node *Node)
   {
    static const char *Class[Bib_NUM_FIELDS] =
      {
-      [Bib_TITLE] = "TRE_TIT",
+      [Bib_TITLE] = "ITM_TIT",
      };
    unsigned NumField;
    char EndingCh;
@@ -232,7 +232,7 @@ void Bib_WriteCellEditRef (struct Tre_Node *Node,
      {
       case Vie_VIEW:
 	 /***** Show current bibliographic reference *****/
-	 HTM_DIV_Begin ("class=\"PRG_TXT_%s%s\"",
+	 HTM_DIV_Begin ("class=\"TRE_TXT_%s%s\"",
 		        The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
 	    Bib_WriteCellViewRef (Node);
 	 HTM_DIV_End ();
@@ -248,7 +248,7 @@ void Bib_WriteCellEditRef (struct Tre_Node *Node,
 	      {
 	       HTM_INPUT_TEXT (Bib_FormNames[NumField],Bib_MAX_CHARS_FIELD,Node->Item.Bib.Fields[NumField],
 			       Attributes[NumField],
-			       "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+			       "placeholder=\"%s\" class=\"ITM_INPUT INPUT_%s\"",
 			       *Bib_Placeholders[NumField],The_GetSuffix ());
 	       HTM_BR ();
 	      }
@@ -256,7 +256,7 @@ void Bib_WriteCellEditRef (struct Tre_Node *Node,
 	    /* URL */
 	    HTM_INPUT_URL ("URL",Node->Item.Bib.URL,
 			   HTM_NO_ATTR,
-			   " placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+			   " placeholder=\"%s\" class=\"ITM_INPUT INPUT_%s\"",
 			   Txt_BIBLIOGRAPHY_URL,The_GetSuffix ());
 
 	    /* Button to save changes */
@@ -288,7 +288,7 @@ void Bib_WriteCellNewRef (void)
      {
       HTM_INPUT_TEXT (Bib_FormNames[NumField],Bib_MAX_CHARS_FIELD,"",
 		      HTM_NO_ATTR,
-		      "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+		      "placeholder=\"%s\" class=\"ITM_INPUT INPUT_%s\"",
 		      *Bib_Placeholders[NumField],The_GetSuffix ());
       HTM_BR ();
      }
@@ -296,7 +296,7 @@ void Bib_WriteCellNewRef (void)
    /***** URL *****/
    HTM_INPUT_URL ("URL","",
 		  HTM_NO_ATTR,
-		  " placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+		  " placeholder=\"%s\" class=\"ITM_INPUT INPUT_%s\"",
 		  Txt_BIBLIOGRAPHY_URL,The_GetSuffix ());
    HTM_BR ();
 

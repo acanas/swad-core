@@ -152,7 +152,7 @@ void Lnk_WriteCellViewLnk (struct Tre_Node *Node)
   {
    static const char *Class[Lnk_NUM_FIELDS] =
      {
-      [Lnk_TITLE] = "TRE_TIT",
+      [Lnk_TITLE] = "ITM_TIT",
      };
    unsigned NumField;
 
@@ -196,7 +196,7 @@ void Lnk_WriteCellEditLnk (struct Tre_Node *Node,
      {
       case Vie_VIEW:
 	 /***** Show current course link *****/
-	 HTM_DIV_Begin ("class=\"PRG_TXT_%s%s\"",
+	 HTM_DIV_Begin ("class=\"TRE_TXT_%s%s\"",
 		        The_GetSuffix (),HidVis_TreeClass[HiddenOrVisible]);
 	    Lnk_WriteCellViewLnk (Node);
 	 HTM_DIV_End ();
@@ -213,7 +213,7 @@ void Lnk_WriteCellEditLnk (struct Tre_Node *Node,
 	      {
 	       HTM_INPUT_TEXT (Lnk_FormNames[NumField],Lnk_MAX_CHARS_FIELD,Node->Item.Lnk.Fields[NumField],
 			       Attributes[NumField],
-			       "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+			       "placeholder=\"%s\" class=\"ITM_INPUT INPUT_%s\"",
 			       *Lnk_Placeholders[NumField],The_GetSuffix ());
 	       HTM_BR ();
 	      }
@@ -221,7 +221,7 @@ void Lnk_WriteCellEditLnk (struct Tre_Node *Node,
 	    /* URL */
 	    HTM_INPUT_URL ("WWW",Node->Item.Lnk.WWW,
 			   HTM_REQUIRED,
-			   " placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+			   " placeholder=\"%s\" class=\"ITM_INPUT INPUT_%s\"",
 			   Txt_URL,The_GetSuffix ());
 	    HTM_BR ();
 
@@ -255,7 +255,7 @@ void Lnk_WriteCellNewLnk (void)
      {
       HTM_INPUT_TEXT (Lnk_FormNames[NumField],Lnk_MAX_BYTES_FIELD,"",
 		      HTM_NO_ATTR,
-		      "placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+		      "placeholder=\"%s\" class=\"ITM_INPUT INPUT_%s\"",
 		      *Lnk_Placeholders[NumField],The_GetSuffix ());
       HTM_BR ();
      }
@@ -263,7 +263,7 @@ void Lnk_WriteCellNewLnk (void)
    /***** URL *****/
    HTM_INPUT_URL ("WWW","",
 		  HTM_REQUIRED,
-		  " placeholder=\"%s\" class=\"PRG_RSC_INPUT INPUT_%s\"",
+		  " placeholder=\"%s\" class=\"ITM_INPUT INPUT_%s\"",
 		  Txt_URL,The_GetSuffix ());
    HTM_BR ();
 
