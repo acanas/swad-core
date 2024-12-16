@@ -328,6 +328,61 @@ void Asg_DB_RemoveAssignment (long AsgCod)
   }
 
 /*****************************************************************************/
+/****************** Get assignment rubric from database **********************/
+/*****************************************************************************/
+
+long Asg_DB_GetAssignmentRubCod (long AsgCod)
+  {
+   return DB_QuerySELECTCode ("can not get assignment rubric",
+			      "SELECT asg_rubrics.RubCod"
+			       " FROM asg_rubrics,"
+			             "rub_rubrics"
+			      " WHERE asg_rubrics.AsgCod=%ld"
+				" AND asg_rubrics.RubCod=rub_rubrics.RubCod"
+			        " AND rub_rubrics.CrsCod=%ld",	// Extra check
+			      AsgCod,
+			      Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+  }
+
+/*****************************************************************************/
+/************** Update the rubric associated to an assignment ****************/
+/*****************************************************************************/
+
+void Asg_DB_UpdateRubCod (long AsgCod,long RubCod)
+  {
+   /***** Trivial check *****/
+   if (AsgCod <= 0)
+      return;
+
+   /***** Update the rubric of the assignment *****/
+   if (RubCod > 0)
+     {
+      /* Check that rubric belongs to this course */
+      if (DB_QueryEXISTS ("can not check rubric",
+			  "SELECT EXISTS"
+			  "(SELECT *"
+			    " FROM rub_rubrics"
+			   " WHERE RubCod=%ld"
+			     " AND CrsCod=%ld)",
+			  RubCod,
+			  Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+         /* Update the rubric of the assignment */
+	 DB_QueryREPLACE ("can not update assignment rubric",
+			  "REPLACE INTO asg_rubrics"
+			  " (AsgCod,RubCod)"
+			  " VALUES"
+			  " (%ld,%ld)",
+			  AsgCod,RubCod);
+     }
+   else
+      /* Remove the rubric from the assignment */
+      DB_QueryDELETE ("can not remove assignment",
+		      "DELETE FROM asg_rubrics"
+		      " WHERE AsgCod=%ld",
+		      AsgCod);
+  }
+
+/*****************************************************************************/
 /********************* Check if I can do an assignment ***********************/
 /*****************************************************************************/
 

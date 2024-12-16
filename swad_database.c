@@ -262,6 +262,22 @@ mysql> DESCRIBE asg_groups;
 			"GrpCod INT NOT NULL,"
 		   "UNIQUE INDEX(AsgCod,GrpCod))");
 
+   /***** Table asg_rubrics *****/
+/*
+mysql> DESCRIBE asg_rubrics;
++--------+------+------+-----+---------+-------+
+| Field  | Type | Null | Key | Default | Extra |
++--------+------+------+-----+---------+-------+
+| AsgCod | int  | NO   | PRI | NULL    |       |
+| RubCod | int  | NO   |     | NULL    |       |
++--------+------+------+-----+---------+-------+
+2 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS asg_rubrics ("
+			"AsgCod INT NOT NULL,"
+			"RubCod INT NOT NULL,"
+		   "UNIQUE INDEX(AsgCod))");
+
    /***** Table att_events *****/
 /*
 mysql> DESCRIBE att_events;

@@ -77,6 +77,13 @@ CREATE TABLE IF NOT EXISTS asg_groups (
 	GrpCod INT NOT NULL,
 	UNIQUE INDEX(AsgCod,GrpCod));
 --
+-- Table asg_rubrics: stores the rubrics associated to assigments
+--
+CREATE TABLE IF NOT EXISTS asg_rubrics (
+	AsgCod INT NOT NULL,
+	RubCod INT NOT NULL,
+	UNIQUE INDEX(AsgCod));
+--
 -- Table att_events: stores events used to control attendance
 --
 CREATE TABLE IF NOT EXISTS att_events (

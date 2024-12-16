@@ -54,10 +54,15 @@ bool Asg_DB_CheckIfSimilarAssignmentExists (const char *Field,const char *Value,
 
 long Asg_DB_CreateAssignment (const struct Asg_Assignment *Asg,const char *Txt);
 void Asg_DB_UpdateAssignment (const struct Asg_Assignment *Asg,const char *Txt);
+
 void Asg_DB_HideOrUnhideAssignment (long AsgCod,
 				    HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 void Asg_DB_RemoveAssignment (long AsgCod);
+
+// -------------------- Rubric associated to assignment -----------------------
+long Asg_DB_GetAssignmentRubCod (long AsgCod);
+void Asg_DB_UpdateRubCod (long AsgCod,long RubCod);
 
 Usr_Can_t Asg_DB_CheckIfICanDoAsgBasedOnGroups (long AsgCod);
 

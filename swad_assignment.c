@@ -52,6 +52,8 @@
 #include "swad_parameter_code.h"
 #include "swad_photo.h"
 #include "swad_role.h"
+#include "swad_rubric_database.h"
+#include "swad_rubric_type.h"
 #include "swad_setting.h"
 #include "swad_string.h"
 
@@ -100,7 +102,10 @@ static void Asg_GetAssignmentDataFromRow (MYSQL_RES **mysql_res,
 static void Asg_ResetAssignment (struct Asg_Assignment *Asg);
 static void Asg_FreeListAssignments (struct Asg_Assignments *Assignments);
 static void Asg_HideUnhideAssignment (HidVis_HiddenOrVisible_t HiddenOrVisible);
+
+static void Asg_EditRubrics (long AsgRubCod);
 static void Asg_ShowLstGrpsToEditAssignment (long AsgCod);
+
 static void Asg_CreateAssignment (struct Asg_Assignment *Asg,const char *Txt);
 static void Asg_UpdateAssignment (struct Asg_Assignment *Asg,const char *Txt);
 static void Asg_CreateGroups (long AsgCod);
@@ -961,6 +966,7 @@ static void Asg_ResetAssignment (struct Asg_Assignment *Asg)
    Asg->Title[0]	      = '\0';
    Asg->SendWork	      = Asg_DONT_SEND_WORK;
    Asg->Folder[0]	      = '\0';
+   Asg->RubCod		      = -1L;
    Asg->ICanDo		      = Usr_CAN_NOT;
   }
 
@@ -1184,6 +1190,7 @@ void Asg_ReqCreatOrEditAsg (void)
       Assignments.Asg.Title[0]		    = '\0';
       Assignments.Asg.SendWork		    = Asg_DONT_SEND_WORK;
       Assignments.Asg.Folder[0]		    = '\0';
+      Assignments.Asg.RubCod		    = -1L;
       Assignments.Asg.ICanDo		    = Usr_CAN_NOT;
      }
    else
@@ -1193,6 +1200,9 @@ void Asg_ReqCreatOrEditAsg (void)
 
       /* Get text of the assignment from database */
       Asg_DB_GetAssignmentTxt (Assignments.Asg.AsgCod,Txt);
+
+      /* Get rubric associated to the assignment from database */
+      Assignments.Asg.RubCod = Asg_DB_GetAssignmentRubCod (Assignments.Asg.AsgCod);
      }
 
    /***** Begin form *****/
@@ -1273,6 +1283,10 @@ void Asg_ReqCreatOrEditAsg (void)
 
 	 HTM_TR_End ();
 
+	 /***** Rubrics *****/
+	 if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// TODO: Remove when finished
+	    Asg_EditRubrics (Assignments.Asg.RubCod);
+
 	 /***** Groups *****/
 	 Asg_ShowLstGrpsToEditAssignment (Assignments.Asg.AsgCod);
 
@@ -1288,6 +1302,68 @@ void Asg_ReqCreatOrEditAsg (void)
    /***** Show current assignments, if any *****/
    HTM_BR ();
    Asg_ShowAllAssignments (&Assignments);
+  }
+
+/*****************************************************************************/
+/***************** Edit rubrics associated to an assignment ******************/
+/*****************************************************************************/
+
+static void Asg_EditRubrics (long AsgRubCod)
+  {
+   extern const char *Par_CodeStr[Par_NUM_PAR_COD];
+   extern const char *Txt_Rubric;
+   extern const char *Txt_no_rubric;
+   MYSQL_RES *mysql_res;
+   unsigned NumRubrics;
+   unsigned NumRub;
+   long RubCod;
+   char Title[Rub_MAX_BYTES_TITLE + 1];
+
+   /***** Begin row *****/
+   HTM_TR_Begin (NULL);
+
+      /* Label */
+      Frm_LabelColumn ("Frm_C1 RT","",Txt_Rubric);
+
+      /* Rubrics */
+      HTM_TD_Begin ("class=\"Frm_C2 LT\"");
+
+	 /* Get rubrics for current course from database */
+	 NumRubrics = Rub_DB_GetListRubrics (&mysql_res);
+
+	 HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
+			   "name=\"%s\" class=\"PrjCfg_RUBRIC_SEL\"",
+			   Par_CodeStr[ParCod_Rub]);
+
+	    /* First option to indicate that no rubric is selected */
+	    HTM_OPTION (HTM_Type_STRING,"-1",
+			HTM_NO_ATTR,
+			"[%s]",Txt_no_rubric);
+
+	    /* One selector for each rubric */
+	    for (NumRub = 0;
+		 NumRub < NumRubrics;
+		 NumRub++)
+	      {
+	       RubCod = DB_GetNextCode (mysql_res);
+
+	       /* One option for each rubric in this course */
+	       Rub_DB_GetRubricTitle (RubCod,Title,Rub_MAX_BYTES_TITLE);
+	       HTM_OPTION (HTM_Type_LONG,&RubCod,
+			   (RubCod == AsgRubCod) ? HTM_SELECTED :
+						   HTM_NO_ATTR,
+			   "%s",Title);
+	      }
+
+	 HTM_SELECT_End ();
+
+	 /* Free structure that stores the query result */
+	 DB_FreeMySQLResult (&mysql_res);
+
+      HTM_TD_End ();
+
+   /***** End row *****/
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -1352,6 +1428,7 @@ void Asg_ReceiveAssignment (void)
    bool NewAssignmentIsCorrect = true;
    unsigned NumUsrsToBeNotifiedByEMail;
    char Description[Cns_MAX_BYTES_TEXT + 1];
+   long NewRubCod;
 
    /***** Reset assignments *****/
    Asg_ResetAssignments (&Assignments);
@@ -1451,6 +1528,12 @@ void Asg_ReceiveAssignment (void)
    /***** Create a new assignment or update an existing one *****/
    if (NewAssignmentIsCorrect)
      {
+      /* Check if current rubric code must be changed */
+      OldAsg.RubCod = Asg_DB_GetAssignmentRubCod (OldAsg.AsgCod);
+      NewRubCod = ParCod_GetPar (ParCod_Rub);
+      if (NewRubCod != Assignments.Asg.RubCod)
+         Asg_DB_UpdateRubCod (OldAsg.AsgCod,NewRubCod);
+
       /* Get groups for this assignments */
       Grp_GetParCodsSeveralGrps ();
 

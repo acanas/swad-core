@@ -56,6 +56,7 @@ struct Asg_Assignment
    char Title[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1];
    Asg_SendWork_t SendWork;
    char Folder[Brw_MAX_BYTES_FOLDER + 1];
+   long RubCod;
    Usr_Can_t ICanDo;	// I can do this assignment
 			// (it is associated to no groups
 			// or, if associated to groups,
