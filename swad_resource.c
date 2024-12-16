@@ -177,7 +177,8 @@ void Rsc_ShowClipboard (void)
 /***************** Show clipboard to change resource link ********************/
 /*****************************************************************************/
 
-void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink)
+void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink,
+				    HTM_Attributes_t Attributes)
   {
    MYSQL_RES *mysql_res;
    unsigned NumLink;
@@ -199,8 +200,7 @@ void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink)
 
 	 /***** Row with empty link to remove the current link *****/
 	 if (CurrentLink->Type != Rsc_NONE)
-	    // Rsc_WriteRowClipboard (&EmptyLink,HTM_SUBMIT_ON_CLICK);
-	    Rsc_WriteRowClipboard (&EmptyLink,HTM_NO_ATTR);
+	    Rsc_WriteRowClipboard (&EmptyLink,Attributes);
 	}
       else		// Inside form to create a new element
 	 /***** Row with empty link *****/
@@ -213,9 +213,7 @@ void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink)
 	   NumLink++)
 	{
 	 Rsc_GetLinkDataFromRow (mysql_res,&Link);
-	 Rsc_WriteRowClipboard (&Link,HTM_NO_ATTR);
-				// CurrentLink ? HTM_SUBMIT_ON_CLICK :
-				//	      HTM_NO_ATTR);
+	 Rsc_WriteRowClipboard (&Link,Attributes);
 	}
       DB_FreeMySQLResult (&mysql_res);
 

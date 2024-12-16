@@ -44,7 +44,8 @@ void Rsc_ResetSpcFields (struct Tre_Node *Node);
 
 void Rsc_PutIconToViewClipboard (void);
 void Rsc_ShowClipboard (void);
-void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink);
+void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink,
+				    HTM_Attributes_t Attributes);
 void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo);
 
 void Rsc_GetLinkDataFromRow (MYSQL_RES *mysql_res,struct Rsc_Link *Link);

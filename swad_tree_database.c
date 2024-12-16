@@ -25,6 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
+#include <stdlib.h>		// For free
+
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_program.h"

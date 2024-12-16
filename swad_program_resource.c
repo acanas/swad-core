@@ -136,7 +136,7 @@ void PrgRsc_WriteCellEditRsc (struct Tre_Node *Node,
 
 	    /* Clipboard with resource links */
 	    HTM_BR ();
-	    Rsc_ShowClipboardToChangeLink (&Node->Item.Rsc.Link);
+	    Rsc_ShowClipboardToChangeLink (&Node->Item.Rsc.Link,HTM_NO_ATTR);
 
 	    /* Button to save changes */
 	    Btn_PutConfirmButtonInline (Txt_Save_changes);
@@ -163,7 +163,7 @@ void PrgRsc_WriteCellNewRsc (void)
 
    /***** Clipboard with resource links *****/
    HTM_BR ();
-   Rsc_ShowClipboardToChangeLink (NULL);
+   Rsc_ShowClipboardToChangeLink (NULL,HTM_NO_ATTR);
 
    /***** Button to save changes *****/
    Btn_PutCreateButtonInline (Txt_Save_changes);

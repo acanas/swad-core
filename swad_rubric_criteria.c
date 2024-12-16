@@ -66,7 +66,7 @@ static const char *RubCri_ParValues[RubCri_NUM_VALUES] =
    [RubCri_MIN] = "MinVal",
    [RubCri_MAX] = "MaxVal",
   };
-#define RubCri_SCORE_STEP	0.1
+#define RubCri_SCORE_STEP	0.01
 
 #define RubCri_WEIGHT_MIN	0.0
 #define RubCri_WEIGHT_MAX	1.0
@@ -187,7 +187,7 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 
 	 /***** Index *****/
 	 HTM_TD_Begin ("class=\"RT\"");
-	    Lay_WriteIndex (MaxCriInd + 1,"BIG_INDEX");
+	    Lay_WriteIndex (MaxCriInd + 1,"DAT");
 	 HTM_TD_End ();
 
 	 /***** Title *****/
@@ -200,7 +200,7 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 
 	 /***** Link *****/
 	 HTM_TD_Begin ("class=\"LT\"");
-	    Rsc_ShowClipboardToChangeLink (NULL);
+	    Rsc_ShowClipboardToChangeLink (NULL,HTM_NO_ATTR);
 	 HTM_TD_End ();
 
 	 /***** Minimum and maximum values of the criterion *****/
@@ -210,7 +210,7 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 	   {
 	    HTM_TD_Begin ("class=\"RT\"");
 	       HTM_INPUT_FLOAT (RubCri_ParValues[ValueRange],
-				0.0,DBL_MAX,RubCri_SCORE_STEP,
+				-DBL_MAX,DBL_MAX,RubCri_SCORE_STEP,
 				Rubrics->Criterion.Values[ValueRange],
 				HTM_REQUIRED,
 				" class=\"INPUT_FLOAT INPUT_%s\"",The_GetSuffix ());
@@ -599,7 +599,7 @@ static void RubCri_ListOneOrMoreCriteriaForSeeing (unsigned NumCriteria,
    double SumOfWeights = 0.0;
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWideMarginPadding (5);
+   HTM_TABLE_BeginWideMarginPadding (2);
 
       /***** Write the heading *****/
       RubCri_PutTableHeadingForSeeing ();
@@ -730,7 +730,8 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 	       Frm_BeginFormAnchor (ActChgLnkRubCri,Anchor);
 		  RubCri_PutParsOneCriterion (Rubrics);
-		  Rsc_ShowClipboardToChangeLink (&Rubrics->Criterion.Link);
+		  Rsc_ShowClipboardToChangeLink (&Rubrics->Criterion.Link,
+					         HTM_SUBMIT_ON_CLICK);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -743,7 +744,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 		  Frm_BeginFormAnchor (RubCri_ActionsValues[ValueRange],Anchor);
 		     RubCri_PutParsOneCriterion (Rubrics);
 		     HTM_INPUT_FLOAT (RubCri_ParValues[ValueRange],
-		                      0.0,DBL_MAX,RubCri_SCORE_STEP,
+		                      -DBL_MAX,DBL_MAX,RubCri_SCORE_STEP,
 				      Rubrics->Criterion.Values[ValueRange],
 				      HTM_REQUIRED | HTM_SUBMIT_ON_CHANGE,
 				      " class=\"INPUT_FLOAT INPUT_%s\"",
@@ -929,7 +930,7 @@ static void RubCri_WriteIndex (const struct RubCri_Criterion *Criterion,
    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
       if (Anchor)
          HTM_ARTICLE_Begin (Anchor);
-      Lay_WriteIndex (Criterion->CriInd,"BIG_INDEX");
+      Lay_WriteIndex (Criterion->CriInd,"DAT");
       if (Anchor)
          HTM_ARTICLE_End ();
    HTM_TD_End ();
