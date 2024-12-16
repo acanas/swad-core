@@ -82,9 +82,9 @@ void Rub_DB_RemoveRubricCriteria (long RubCod);
 void Rub_DB_RemoveCrsRubricCriteria (long CrsCod);
 
 //----------------------------- Rubric scores ---------------------------------
-void Rub_DB_UpdateScore (Rsc_Type_t Type,long Cod,long UsrCod,long CriCod,
+void Rub_DB_UpdateScore (Rsc_Type_t RscType,long RscCod,long UsrCod,long CriCod,
                          double Score);
 
-double Rub_DB_GetScore (Rsc_Type_t Type,long Cod,long UsrCod,long CriCod);
+double Rub_DB_GetScore (Rsc_Type_t RscType,long RscCod,long UsrCod,long CriCod);
 
 #endif

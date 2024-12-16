@@ -1093,6 +1093,57 @@ static bool Rub_CheckIfRecursiveTree (long RubCod,struct Rub_Node **TOS)
   }
 
 /*****************************************************************************/
+/************************* Show one rubric to fill it ************************/
+/*****************************************************************************/
+
+void Rub_ShowRubricsToFill (Rsc_Type_t RscType,long RscCod,Usr_Can_t ICanFill,
+			    Act_Action_t NextAction,
+                            void (*FuncPars) (void *Args),void *Args,
+			    unsigned NumRubrics,MYSQL_RES *mysql_res)
+  {
+   unsigned NumRub;
+   struct Rub_Rubric Rubric;
+
+   /***** Show each rubric *****/
+   for (NumRub = 0;
+	NumRub < NumRubrics;
+	NumRub++)
+     {
+      /***** Get rubric data *****/
+      Rub_RubricConstructor (&Rubric);
+      Rubric.RubCod = DB_GetNextCode (mysql_res);
+      Rub_GetRubricDataByCod (&Rubric);
+
+      /***** Show rubric ready to fill them *****/
+      /* First row for rubric title */
+      HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("colspan=\"8\" class=\"LT ASG_TITLE_%s\"",The_GetSuffix ());
+	    HTM_Txt (Rubric.Title);
+	 HTM_TD_End ();
+      HTM_TR_End ();
+
+      /* 2nd row for rubric text */
+      HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("colspan=\"8\" class=\"LT PAR DAT_%s\"",The_GetSuffix ());
+	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			      Rubric.Txt,Cns_MAX_BYTES_TEXT,
+			      Str_DONT_REMOVE_SPACES);
+	    ALn_InsertLinks (Rubric.Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+	    HTM_Txt (Rubric.Txt);
+	 HTM_TD_End ();
+      HTM_TR_End ();
+
+      /* Write criteria of this rubric */
+      RubCri_ListCriteriaToFill (RscType,RscCod,ICanFill,
+	                         NextAction,FuncPars,Args,
+	                         Rubric.RubCod);
+
+      /***** Free memory used for rubric *****/
+      Rub_RubricDestructor (&Rubric);
+     }
+  }
+
+/*****************************************************************************/
 /************************** Show stats about rubrics *************************/
 /*****************************************************************************/
 

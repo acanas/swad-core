@@ -94,11 +94,11 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 					            unsigned MaxCriInd,
 					            unsigned NumCriteria,
                                                     MYSQL_RES *mysql_res);
-static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects,
-                                                   struct Rub_Node **TOS,
-                                                   bool ICanFill,
-					           unsigned NumCriteria,
-                                                   MYSQL_RES *mysql_res);
+static void RubCri_ListOneOrMoreCriteriaToFill (Rsc_Type_t RscType,long RscCod,bool ICanFill,
+                                                Act_Action_t NextAction,
+                                                void (*FuncPars) (void *Args),void *Args,
+                                                struct Rub_Node **TOS,
+					        unsigned NumCriteria,MYSQL_RES *mysql_res);
 static void RubCri_WriteIndex (const struct RubCri_Criterion *Criterion,
                                const char *Anchor);
 static void RubCri_WriteTitle (const struct RubCri_Criterion *Criterion);
@@ -110,7 +110,7 @@ static void RubCri_WriteTotalLabel (unsigned ColSpan);
 static void RubCri_WriteTotalEmpty (void);
 static void RubCri_WriteTotalValue (double Total);
 
-static bool RubCri_ComputeRubricScore (Rsc_Type_t Type,long Cod,long UsrCod,
+static bool RubCri_ComputeRubricScore (Rsc_Type_t RscType,long RscCod,long UsrCod,
                                        struct Rub_Node **TOS,long RubCod,
                                        double *RubricScore);
 
@@ -558,8 +558,10 @@ void RubCri_ListCriteriaForEdition (struct Rub_Rubrics *Rubrics)
 /**************** List the criteria of a rubric in a project *****************/
 /*****************************************************************************/
 
-void RubCri_ListCriteriaInProject (struct Prj_Projects *Projects,long RubCod,
-				   Usr_Can_t ICanFill)
+void RubCri_ListCriteriaToFill (Rsc_Type_t RscType,long RscCod,Usr_Can_t ICanFill,
+				Act_Action_t NextAction,
+                                void (*FuncPars) (void *Args),void *Args,
+                                long RubCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumCriteria;
@@ -575,8 +577,10 @@ void RubCri_ListCriteriaInProject (struct Prj_Projects *Projects,long RubCod,
       Rub_PushRubCod (&TOS,RubCod);
 
       /* List rubric criteria */
-      RubCri_ListOneOrMoreCriteriaInProject (Projects,&TOS,ICanFill,
-                                             NumCriteria,mysql_res);
+      RubCri_ListOneOrMoreCriteriaToFill (RscType,RscCod,ICanFill,
+                                          NextAction,FuncPars,Args,
+					  &TOS,
+                                          NumCriteria,mysql_res);
 
       /* Pop rubric code from stack */
       Rub_PopRubCod (&TOS);
@@ -786,14 +790,14 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
   }
 
 /*****************************************************************************/
-/********************* List rubric criteria in a project *********************/
+/********************* List rubric criteria to fill them *********************/
 /*****************************************************************************/
 
-static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects,
-                                                   struct Rub_Node **TOS,
-                                                   bool ICanFill,
-					           unsigned NumCriteria,
-                                                   MYSQL_RES *mysql_res)
+static void RubCri_ListOneOrMoreCriteriaToFill (Rsc_Type_t RscType,long RscCod,bool ICanFill,
+                                                Act_Action_t NextAction,
+                                                void (*FuncPars) (void *Args),void *Args,
+                                                struct Rub_Node **TOS,
+					        unsigned NumCriteria,MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Criteria;
    struct RubCri_Criterion Criterion;
@@ -840,11 +844,12 @@ static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects
 	    switch (Criterion.Link.Type)
 	      {
 	       case Rsc_NONE:
-		  CriterionScore = Rub_DB_GetScore (Rsc_PROJECT,Projects->Prj.PrjCod,-1L,Criterion.CriCod);
+		  CriterionScore = Rub_DB_GetScore (RscType,RscCod,-1L,Criterion.CriCod);
 		  if (ICanFill)
 		    {
-		     Frm_BeginFormAnchor (ActChgPrjSco,Anchor);
-			Prj_PutCurrentPars (Projects);
+		     Frm_BeginFormAnchor (NextAction,Anchor);
+		        if (FuncPars)
+			   FuncPars (Args);
 			ParCod_PutPar (ParCod_Cri,Criterion.CriCod);
 			HTM_INPUT_FLOAT ("Score",
 					 Criterion.Values[RubCri_MIN],
@@ -864,7 +869,7 @@ static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects
 		    }
 		  break;
 	       case Rsc_RUBRIC:
-		  if (RubCri_ComputeRubricScore (Rsc_PROJECT,Projects->Prj.PrjCod,-1L,
+		  if (RubCri_ComputeRubricScore (RscType,RscCod,-1L,
 						 TOS,Criterion.Link.Cod,
 						 &CriterionScore))
 		     Err_RecursiveRubric ();
@@ -1030,7 +1035,7 @@ static void RubCri_WriteTotalValue (double Total)
 /*****************************************************************************/
 // Return true if rubric tree is recursive
 
-static bool RubCri_ComputeRubricScore (Rsc_Type_t Type,long Cod,long UsrCod,
+static bool RubCri_ComputeRubricScore (Rsc_Type_t RscType,long RscCod,long UsrCod,
                                        struct Rub_Node **TOS,long RubCod,
                                        double *RubricScore)
   {
@@ -1066,10 +1071,10 @@ static bool RubCri_ComputeRubricScore (Rsc_Type_t Type,long Cod,long UsrCod,
 	 switch (Criterion.Link.Type)
 	   {
 	    case Rsc_NONE:
-	       CriterionScore = Rub_DB_GetScore (Rsc_PROJECT,Cod,UsrCod,Criterion.CriCod);
+	       CriterionScore = Rub_DB_GetScore (RscType,RscCod,UsrCod,Criterion.CriCod);
 	       break;
 	    case Rsc_RUBRIC:
-	       if (RubCri_ComputeRubricScore (Type,Cod,UsrCod,
+	       if (RubCri_ComputeRubricScore (RscType,RscCod,UsrCod,
 					      TOS,Criterion.Link.Cod,
 					      &CriterionScore))
 		  RecursiveTree = true;

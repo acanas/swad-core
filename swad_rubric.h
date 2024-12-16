@@ -79,6 +79,11 @@ void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
 
 void Rub_ReceiveRubric (void);
 
+void Rub_ShowRubricsToFill (Rsc_Type_t RscType,long RscCod,Usr_Can_t ICanFill,
+			    Act_Action_t NextAction,
+                            void (*FuncPars) (void *Args),void *Args,
+			    unsigned NumRubrics,MYSQL_RES *mysql_res);
+
 //-------------------------------- Figures ------------------------------------
 void Rub_GetAndShowRubricsStats (void);
 

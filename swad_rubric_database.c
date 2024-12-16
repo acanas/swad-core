@@ -830,7 +830,7 @@ void Rub_DB_RemoveCrsRubricCriteria (long CrsCod)
 /** Update score of a criterion given an assignment/project code and a user **/
 /*****************************************************************************/
 
-void Rub_DB_UpdateScore (Rsc_Type_t Type,long Cod,long UsrCod,long CriCod,
+void Rub_DB_UpdateScore (Rsc_Type_t RscType,long RscCod,long UsrCod,long CriCod,
                          double Score)
   {
    extern const char *Rsc_DB_Types[Rsc_NUM_TYPES];
@@ -841,7 +841,7 @@ void Rub_DB_UpdateScore (Rsc_Type_t Type,long Cod,long UsrCod,long CriCod,
                     " (Type,Cod,UsrCod,CriCod,EvlCod,Score)"
                     " VALUES"
                     " ('%s',%ld,%ld,%ld,%ld,%.15lg)",
-                    Rsc_DB_Types[Type],Cod,UsrCod,CriCod,
+                    Rsc_DB_Types[RscType],RscCod,UsrCod,CriCod,
                     Gbl.Usrs.Me.UsrDat.UsrCod,Score);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
@@ -850,7 +850,7 @@ void Rub_DB_UpdateScore (Rsc_Type_t Type,long Cod,long UsrCod,long CriCod,
 /**** Get score of a criterion given an assignment/project code and a user ***/
 /*****************************************************************************/
 
-double Rub_DB_GetScore (Rsc_Type_t Type,long Cod,long UsrCod,long CriCod)
+double Rub_DB_GetScore (Rsc_Type_t RscType,long RscCod,long UsrCod,long CriCod)
   {
    extern const char *Rsc_DB_Types[Rsc_NUM_TYPES];
 
@@ -861,8 +861,8 @@ double Rub_DB_GetScore (Rsc_Type_t Type,long Cod,long UsrCod,long CriCod)
 				  " AND Cod=%ld"
                                   " AND UsrCod=%ld"
 				  " AND CriCod=%ld",
-				Rsc_DB_Types[Type],
-				Cod,
+				Rsc_DB_Types[RscType],
+				RscCod,
 				UsrCod,
 				CriCod);
   }
