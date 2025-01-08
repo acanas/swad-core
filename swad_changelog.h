@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2024 Antonio Cañas Vargas
+    Copyright (C) 1999-2025 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -635,10 +635,11 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.50 (2024-12-17)"
+#define Log_PLATFORM_VERSION	"SWAD 24.50.1 (2025-01-08)"
 #define CSS_FILE		"swad24.48.1.css"
 #define JS_FILE			"swad23.89.js"
 /*
+	Version 24.50.1:  Jan 08, 2024  Changes in form to edit assignment. (344885 lines)
 	Version 24.50:    Dec 17, 2024  Rubrics associated to assignments. (344868 lines)
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS asg_rubrics (AsgCod INT NOT NULL,RubCod INT NOT NULL,UNIQUE INDEX(AsgCod));

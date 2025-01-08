@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2024 Antonio Cañas Vargas
+    Copyright (C) 1999-2025 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -103,11 +103,14 @@ static void Asg_ResetAssignment (struct Asg_Assignment *Asg);
 static void Asg_FreeListAssignments (struct Asg_Assignments *Assignments);
 static void Asg_HideUnhideAssignment (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
+static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Assignments,
+				       const char *Description);
+
 static void Asg_EditRubrics (long AsgRubCod);
 static void Asg_ShowLstGrpsToEditAssignment (long AsgCod);
 
-static void Asg_CreateAssignment (struct Asg_Assignment *Asg,const char *Txt);
-static void Asg_UpdateAssignment (struct Asg_Assignment *Asg,const char *Txt);
+static void Asg_CreateAssignment (struct Asg_Assignment *Asg,const char *Description);
+static void Asg_UpdateAssignment (struct Asg_Assignment *Asg,const char *Description);
 static void Asg_CreateGroups (long AsgCod);
 static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *Asg);
 static Usr_Can_t Asg_CheckIfICanDoAsgBasedOnGroups (long AsgCod);
@@ -1142,31 +1145,14 @@ static void Asg_HideUnhideAssignment (HidVis_HiddenOrVisible_t HiddenOrVisible)
   }
 
 /*****************************************************************************/
-/****************** Put a form to create a new assignment ********************/
+/****** Get assignment code and put a form to create/edit an assignment ******/
 /*****************************************************************************/
 
 void Asg_ReqCreatOrEditAsg (void)
   {
-   extern const char *Hlp_ASSESSMENT_Assignments_edit_assignment;
-   extern const char *Txt_Assignment;
-   extern const char *Txt_Title;
-   extern const char *Folder_to_upload_files;
-   extern const char *Txt_Description;
-   extern const char *Txt_Create;
-   extern const char *Txt_Save_changes;
    struct Asg_Assignments Assignments;
-   bool ItsANewAssignment;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
-   static const Dat_SetHMS SetHMSDontSet[Dat_NUM_START_END_TIME] =
-     {
-      [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
-      [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
-     };
-   static const Dat_SetHMS SetHMSAllDay[Dat_NUM_START_END_TIME] =
-     {
-      [Dat_STR_TIME] = Dat_HMS_TO_000000,
-      [Dat_END_TIME] = Dat_HMS_TO_235959
-     };
+   bool ItsANewAsg;
+   char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Reset assignments *****/
    Asg_ResetAssignments (&Assignments);
@@ -1177,10 +1163,10 @@ void Asg_ReqCreatOrEditAsg (void)
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
-   ItsANewAssignment = ((Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) <= 0);
+   ItsANewAsg = ((Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) <= 0);
 
    /***** Get from the database the data of the assignment *****/
-   if (ItsANewAssignment)
+   if (ItsANewAsg)
      {
       /* Initialize to empty assignment */
       Assignments.Asg.AsgCod		    = -1L;
@@ -1199,28 +1185,53 @@ void Asg_ReqCreatOrEditAsg (void)
       Asg_GetAssignmentDataByCod (&Assignments.Asg);
 
       /* Get text of the assignment from database */
-      Asg_DB_GetAssignmentTxt (Assignments.Asg.AsgCod,Txt);
+      Asg_DB_GetAssignmentTxt (Assignments.Asg.AsgCod,Description);
 
       /* Get rubric associated to the assignment from database */
       Assignments.Asg.RubCod = Asg_DB_GetAssignmentRubCod (Assignments.Asg.AsgCod);
      }
 
+   Asg_PutFormCreatOrEditAsg (&Assignments,Description);
+
+   /***** Show current assignments, if any *****/
+   HTM_BR ();
+   Asg_ShowAllAssignments (&Assignments);
+  }
+
+/*****************************************************************************/
+/**************** Put a form to create/edit an assignment ********************/
+/*****************************************************************************/
+
+static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Assignments,
+				       const char *Description)
+  {
+   extern const char *Hlp_ASSESSMENT_Assignments_edit_assignment;
+   extern const char *Txt_Assignment;
+   extern const char *Txt_Title;
+   extern const char *Folder_to_upload_files;
+   extern const char *Txt_Description;
+   extern const char *Txt_Create;
+   extern const char *Txt_Save_changes;
+   static const Dat_SetHMS SetHMSDontSet[Dat_NUM_START_END_TIME] =
+     {
+      [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
+      [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
+     };
+   static const Dat_SetHMS SetHMSAllDay[Dat_NUM_START_END_TIME] =
+     {
+      [Dat_STR_TIME] = Dat_HMS_TO_000000,
+      [Dat_END_TIME] = Dat_HMS_TO_235959
+     };
+   bool ItsANewAsg = (Assignments->Asg.AsgCod <= 0);
+
    /***** Begin form *****/
-   if (ItsANewAssignment)
-     {
-      Frm_BeginForm (ActNewAsg);
-      Assignments.Asg.AsgCod = -1L;
-     }
-   else
-     {
-      Frm_BeginForm (ActChgAsg);
-      // Assignments.Asg.AsgCod = Asg.AsgCod;
-     }
-   Asg_PutPars (&Assignments);
+   Frm_BeginForm (ItsANewAsg ? ActNewAsg :
+			       ActChgAsg);
+   Asg_PutPars (Assignments);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (Assignments.Asg.Title[0] ? Assignments.Asg.Title :
-						    Txt_Assignment,
+      Box_BoxTableBegin (Assignments->Asg.Title[0] ? Assignments->Asg.Title :
+						     Txt_Assignment,
 			 NULL,NULL,
 			 Hlp_ASSESSMENT_Assignments_edit_assignment,Box_NOT_CLOSABLE,2);
 
@@ -1232,7 +1243,7 @@ void Asg_ReqCreatOrEditAsg (void)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LM\"");
-	       HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Assignments.Asg.Title,
+	       HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Assignments->Asg.Title,
 			       HTM_REQUIRED,
 			       "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\"",
 			       The_GetSuffix ());
@@ -1241,7 +1252,7 @@ void Asg_ReqCreatOrEditAsg (void)
 	 HTM_TR_End ();
 
 	 /***** Assignment start and end dates *****/
-	 Dat_PutFormStartEndClientLocalDateTimes (Assignments.Asg.TimeUTC,
+	 Dat_PutFormStartEndClientLocalDateTimes (Assignments->Asg.TimeUTC,
 						  Dat_FORM_SECONDS_ON,
 						  Gbl.Action.Act == ActFrmNewAsg ? SetHMSAllDay :
 										   SetHMSDontSet);
@@ -1255,7 +1266,7 @@ void Asg_ReqCreatOrEditAsg (void)
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	       HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-		  HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Assignments.Asg.Folder,
+		  HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Assignments->Asg.Folder,
 				  HTM_NO_ATTR,
 				  "id=\"Folder\" class=\"Frm_C2_INPUT INPUT_%s\"",
 				  The_GetSuffix ());
@@ -1276,8 +1287,8 @@ void Asg_ReqCreatOrEditAsg (void)
 				   "id=\"Txt\" name=\"Txt\" rows=\"10\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
-		  if (!ItsANewAssignment)
-		     HTM_Txt (Txt);
+		  if (!ItsANewAsg)
+		     HTM_Txt (Description);
 	       HTM_TEXTAREA_End ();
 	    HTM_TD_End ();
 
@@ -1285,23 +1296,19 @@ void Asg_ReqCreatOrEditAsg (void)
 
 	 /***** Rubrics *****/
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// TODO: Remove when finished
-	    Asg_EditRubrics (Assignments.Asg.RubCod);
+	    Asg_EditRubrics (Assignments->Asg.RubCod);
 
 	 /***** Groups *****/
-	 Asg_ShowLstGrpsToEditAssignment (Assignments.Asg.AsgCod);
+	 Asg_ShowLstGrpsToEditAssignment (Assignments->Asg.AsgCod);
 
       /***** End table, send button and end box *****/
-      if (ItsANewAssignment)
-	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create);
-      else
-	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      Box_BoxTableWithButtonEnd (ItsANewAsg ? Btn_CREATE_BUTTON :
+						     Btn_CONFIRM_BUTTON,
+				 ItsANewAsg ? Txt_Create :
+						     Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();
-
-   /***** Show current assignments, if any *****/
-   HTM_BR ();
-   Asg_ShowAllAssignments (&Assignments);
   }
 
 /*****************************************************************************/
@@ -1412,7 +1419,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
   }
 
 /*****************************************************************************/
-/****************** Receive form to create a new assignment ******************/
+/***************** Receive form to create/update assignment ******************/
 /*****************************************************************************/
 
 void Asg_ReceiveAssignment (void)
@@ -1424,50 +1431,56 @@ void Asg_ReceiveAssignment (void)
    extern const char *Txt_You_can_not_disable_file_uploading_once_folders_have_been_created;
    struct Asg_Assignments Assignments;
    struct Asg_Assignment OldAsg;	// Current assigment data in database
-   bool ItsANewAssignment;
-   bool NewAssignmentIsCorrect = true;
+   bool ItsANewAsg;
+   bool AsgIsCorrect = true;
+   Dat_StartEndTime_t StartEndTime;
    unsigned NumUsrsToBeNotifiedByEMail;
    char Description[Cns_MAX_BYTES_TEXT + 1];
-   long NewRubCod;
 
    /***** Reset assignments *****/
    Asg_ResetAssignments (&Assignments);
 
-   /***** Get parameters *****/
+   /***** Get parameters from form *****/
+   /* Get hidden parameters */
    Assignments.SelectedOrder = Asg_GetParAsgOrder ();
    Grp_GetParMyAllGrps ();
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
-   /***** Get the code of the assignment *****/
-   ItsANewAssignment = ((Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) <= 0);
+   /* Get the code of the assignment */
+   ItsANewAsg = ((Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) <= 0);
 
-   if (ItsANewAssignment)
+   if (ItsANewAsg)
      {
-      /***** Reset old (current, not existing) assignment data *****/
+      /* Reset old (current, not existing) assignment data */
       OldAsg.AsgCod = -1L;
       Asg_ResetAssignment (&OldAsg);
      }
    else
      {
-      /***** Get data of the old (current) assignment from database *****/
+      /* Get data of the old (current) assignment from database */
       OldAsg.AsgCod = Assignments.Asg.AsgCod;
       Asg_GetAssignmentDataByCod (&OldAsg);
      }
 
-   /***** Get start/end date-times *****/
-   Assignments.Asg.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
-   Assignments.Asg.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm (Dat_END_TIME);
+   /* Get start/end date-times */
+   for (StartEndTime  = Dat_STR_TIME;
+	StartEndTime <= Dat_END_TIME;
+	StartEndTime++)
+      Assignments.Asg.TimeUTC[StartEndTime] = Dat_GetTimeUTCFromForm (StartEndTime);
 
-   /***** Get assignment title *****/
+   /* Get assignment title */
    Par_GetParText ("Title",Assignments.Asg.Title,Asg_MAX_BYTES_ASSIGNMENT_TITLE);
 
-   /***** Get folder name where to send works of the assignment *****/
+   /* Get folder name where to send works of the assignment */
    Par_GetParText ("Folder",Assignments.Asg.Folder,Brw_MAX_BYTES_FOLDER);
    Assignments.Asg.SendWork = Assignments.Asg.Folder[0] ? Asg_SEND_WORK :
 							  Asg_DONT_SEND_WORK;
 
-   /***** Get assignment text *****/
+   /* Get assignment text */
    Par_GetParHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+
+   /* Get rubric code */
+   Assignments.Asg.RubCod = ParCod_GetPar (ParCod_Rub);
 
    /***** Adjust dates *****/
    if (Assignments.Asg.TimeUTC[Dat_STR_TIME] == 0)
@@ -1479,65 +1492,70 @@ void Asg_ReceiveAssignment (void)
    if (Assignments.Asg.Title[0])	// If there's an assignment title
      {
       /* If title of assignment was in database... */
-      if (Asg_DB_CheckIfSimilarAssignmentExists ("Title",Assignments.Asg.Title,Assignments.Asg.AsgCod))
+      if (Asg_DB_CheckIfSimilarAssignmentExists ("Title",
+						 Assignments.Asg.Title,
+						 Assignments.Asg.AsgCod))
         {
-         NewAssignmentIsCorrect = false;
+         AsgIsCorrect = false;
 
-	 Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_an_assignment_with_the_title_X,
-                        Assignments.Asg.Title);
+	 Ale_CreateAlert (Ale_WARNING,NULL,
+			  Txt_Already_existed_an_assignment_with_the_title_X,
+                          Assignments.Asg.Title);
         }
       else	// Title is correct
         {
-         if (Assignments.Asg.SendWork == Asg_SEND_WORK)
+         switch (Assignments.Asg.SendWork)
            {
-            if (Str_ConvertFilFolLnkNameToValid (Assignments.Asg.Folder))	// If folder name is valid...
-              {
-               if (Asg_DB_CheckIfSimilarAssignmentExists ("Folder",Assignments.Asg.Folder,Assignments.Asg.AsgCod))	// If folder of assignment was in database...
-                 {
-                  NewAssignmentIsCorrect = false;
-
-		  Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_an_assignment_with_the_folder_X,
-                                 Assignments.Asg.Folder);
-                 }
-              }
-            else	// Folder name not valid
-              {
-               NewAssignmentIsCorrect = false;
-               Ale_ShowAlerts (NULL);
-              }
-           }
-         else	// NewAsg.SendWork == Asg_DO_NOT_SEND_WORK
-           {
-            if (OldAsg.SendWork == Asg_SEND_WORK)
-              {
-               if (Brw_CheckIfExistsFolderAssigmentForAnyUsr (OldAsg.Folder))
-                 {
-                  NewAssignmentIsCorrect = false;
-                  Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_disable_file_uploading_once_folders_have_been_created);
-                 }
-              }
+	    case Asg_SEND_WORK:
+	       if (Str_ConvertFilFolLnkNameToValid (Assignments.Asg.Folder))	// If folder name is valid...
+		 {
+		  if (Asg_DB_CheckIfSimilarAssignmentExists ("Folder",
+							     Assignments.Asg.Folder,
+							     Assignments.Asg.AsgCod))	// If folder of assignment was in database...
+		    {
+		     AsgIsCorrect = false;
+		     Ale_CreateAlert (Ale_WARNING,NULL,
+			              Txt_Already_existed_an_assignment_with_the_folder_X,
+				      Assignments.Asg.Folder);
+		    }
+		 }
+	       else	// Folder name not valid
+		  AsgIsCorrect = false;
+	       break;
+	    case Asg_DONT_SEND_WORK:
+	    default:
+	       if (OldAsg.SendWork == Asg_SEND_WORK)
+		  if (Brw_CheckIfExistsFolderAssigmentForAnyUsr (OldAsg.Folder))
+		    {
+		     AsgIsCorrect = false;
+		     Ale_CreateAlert (Ale_WARNING,NULL,
+			              Txt_You_can_not_disable_file_uploading_once_folders_have_been_created);
+		    }
+	       break;
            }
         }
      }
    else	// If there is not an assignment title
      {
-      NewAssignmentIsCorrect = false;
+      AsgIsCorrect = false;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
-   /***** Create a new assignment or update an existing one *****/
-   if (NewAssignmentIsCorrect)
+   /***** Show pending alerts *****/
+   Ale_ShowAlerts (NULL);
+
+   /***** Create/update assignment *****/
+   if (AsgIsCorrect)
      {
       /* Check if current rubric code must be changed */
       OldAsg.RubCod = Asg_DB_GetAssignmentRubCod (OldAsg.AsgCod);
-      NewRubCod = ParCod_GetPar (ParCod_Rub);
-      if (NewRubCod != Assignments.Asg.RubCod)
-         Asg_DB_UpdateRubCod (OldAsg.AsgCod,NewRubCod);
+      if (Assignments.Asg.RubCod != OldAsg.RubCod)
+         Asg_DB_UpdateRubCod (OldAsg.AsgCod,Assignments.Asg.RubCod);
 
       /* Get groups for this assignments */
       Grp_GetParCodsSeveralGrps ();
 
-      if (ItsANewAssignment)
+      if (ItsANewAsg)
 	{
          Asg_CreateAssignment (&Assignments.Asg,Description);	// Add new assignment to database
 
@@ -1549,9 +1567,9 @@ void Asg_ReceiveAssignment (void)
         {
          if (OldAsg.Folder[0] && Assignments.Asg.Folder[0])
             if (strcmp (OldAsg.Folder,Assignments.Asg.Folder))	// Folder name has changed
-               NewAssignmentIsCorrect = Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (OldAsg.Folder,
-                                                                                      Assignments.Asg.Folder);
-         if (NewAssignmentIsCorrect)
+               AsgIsCorrect = Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (OldAsg.Folder,
+                                                                            Assignments.Asg.Folder);
+         if (AsgIsCorrect)
            {
             Asg_UpdateAssignment (&Assignments.Asg,Description);
 
@@ -1567,23 +1585,26 @@ void Asg_ReceiveAssignment (void)
       if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ASSIGNMENT,Assignments.Asg.AsgCod)))
 	 Asg_DB_UpdateNumUsrsNotifiedByEMailAboutAssignment (Assignments.Asg.AsgCod,
 	                                                     NumUsrsToBeNotifiedByEMail);
-
-      /***** Show all assignments again *****/
-      Asg_ShowAllAssignments (&Assignments);
      }
-   else
-      // TODO: The form should be filled with partial data, now is always empty
-      Asg_ReqCreatOrEditAsg ();
+   else	// Assignment is not correct
+     {
+      /***** Put the form again *****/
+      Asg_PutFormCreatOrEditAsg (&Assignments,Description);
+      HTM_BR ();
+     }
+
+   /***** Show all assignments again *****/
+   Asg_ShowAllAssignments (&Assignments);
   }
 
 /*****************************************************************************/
 /************************ Create a new assignment ****************************/
 /*****************************************************************************/
 
-static void Asg_CreateAssignment (struct Asg_Assignment *Asg,const char *Txt)
+static void Asg_CreateAssignment (struct Asg_Assignment *Asg,const char *Description)
   {
    /***** Create a new assignment *****/
-   Asg->AsgCod = Asg_DB_CreateAssignment (Asg,Txt);
+   Asg->AsgCod = Asg_DB_CreateAssignment (Asg,Description);
 
    /***** Create groups *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
@@ -1594,10 +1615,10 @@ static void Asg_CreateAssignment (struct Asg_Assignment *Asg,const char *Txt)
 /********************* Update an existing assignment *************************/
 /*****************************************************************************/
 
-static void Asg_UpdateAssignment (struct Asg_Assignment *Asg,const char *Txt)
+static void Asg_UpdateAssignment (struct Asg_Assignment *Asg,const char *Description)
   {
    /***** Update the data of the assignment *****/
-   Asg_DB_UpdateAssignment (Asg,Txt);
+   Asg_DB_UpdateAssignment (Asg,Description);
 
    /***** Update groups *****/
    /* Remove old groups */
