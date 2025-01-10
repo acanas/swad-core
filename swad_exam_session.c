@@ -930,7 +930,7 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session)
       [OldNew_OLD] = {ActChgExaSes,Btn_CONFIRM},
       [OldNew_NEW] = {ActNewExaSes,Btn_CREATE }
      };
-   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+   static Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
       [Dat_END_TIME] = Dat_HMS_DO_NOT_SET

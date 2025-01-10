@@ -82,7 +82,7 @@ extern struct Globals Gbl;
 
 /***** User roles are shown in this order *****/
 #define Prj_NUM_ROLES_TO_SHOW 3
-static const Prj_RoleInProject_t Prj_RolesToShow[Prj_NUM_ROLES_TO_SHOW] =
+static Prj_RoleInProject_t Prj_RolesToShow[Prj_NUM_ROLES_TO_SHOW] =
   {
    Prj_ROLE_STD,	// Student
    Prj_ROLE_TUT,	// Tutor
@@ -121,7 +121,7 @@ static struct
   };
 
 /***** Locked/unlocked project edition *****/
-static const struct
+static struct
   {
    const char *Icon;
    Ico_Color_t Color;
@@ -795,7 +795,7 @@ static void Prj_ShowFormToFilterByVisibility (const struct Prj_Projects *Project
    extern const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis_NUM_HIDDEN_VISIBLE];
    struct Prj_Filter Filter;
    HidVis_HiddenOrVisible_t HidVis;
-   static const struct
+   static struct
      {
       const char *Icon;
       Ico_Color_t Color;

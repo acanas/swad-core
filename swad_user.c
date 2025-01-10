@@ -3697,7 +3697,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
   {
    extern const char *Txt_Users;
    unsigned NumTotalUsrs;
-   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+   static Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
       [Dat_END_TIME] = Dat_HMS_DO_NOT_SET

@@ -304,10 +304,9 @@ static bool RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Crit
                                                         const char NewTitle[RubCri_MAX_BYTES_TITLE + 1])
   {
    extern const char *Txt_Already_existed_a_criterion_in_this_rubric_with_the_title_X;
-   bool NewTitleIsCorrect;
+   bool TitleIsCorrect = true;
 
    /***** Check if title is correct *****/
-   NewTitleIsCorrect = true;
    if (NewTitle[0])	// If there's an criterion title
      {
       /***** Check if old and new titles are the same
@@ -317,7 +316,7 @@ static bool RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Crit
 	 /* If title of criterion was in database... */
 	 if (Rub_DB_CheckIfSimilarCriterionExists (Criterion,NewTitle))
 	   {
-	    NewTitleIsCorrect = false;
+	    TitleIsCorrect = false;
 	    Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_a_criterion_in_this_rubric_with_the_title_X,
 			   Criterion->Title);
 	   }
@@ -325,11 +324,11 @@ static bool RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Crit
      }
    else	// If there is not a criterion title
      {
-      NewTitleIsCorrect = false;
+      TitleIsCorrect = false;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
-   return NewTitleIsCorrect;
+   return TitleIsCorrect;
   }
 
 /*****************************************************************************/

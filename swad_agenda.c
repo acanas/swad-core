@@ -269,7 +269,7 @@ static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda
   {
    extern const char *Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[2];
    Agd_PrivatPublicEvents_t PrvPub;
-   static const struct
+   static struct
      {
       const char *Icon;
       Ico_Color_t Color;
@@ -512,7 +512,7 @@ static void Agd_ShowEvents (struct Agd_Agenda *Agenda,
    extern const char *Txt_No_events;
    struct Pag_Pagination Pagination;
    unsigned NumEvent;
-   static const Pag_WhatPaginate_t WhatPaginate[Agd_NUM_AGENDA_TYPES] =
+   static Pag_WhatPaginate_t WhatPaginate[Agd_NUM_AGENDA_TYPES] =
      {
       [Agd_MY_AGENDA_TODAY     ] = Pag_MY_AGENDA,	// not used
       [Agd_MY_AGENDA           ] = Pag_MY_AGENDA,
@@ -962,7 +962,7 @@ void Agd_PutParsMyAgenda (unsigned Past__FutureEvents,
 static void Agd_GetPars (struct Agd_Agenda *Agenda,
                            Agd_AgendaType_t AgendaType)
   {
-   static const Pag_WhatPaginate_t WhatPaginate[Agd_NUM_AGENDA_TYPES] =
+   static Pag_WhatPaginate_t WhatPaginate[Agd_NUM_AGENDA_TYPES] =
      {
       [Agd_MY_AGENDA_TODAY     ] = Pag_MY_AGENDA,	// not used
       [Agd_MY_AGENDA           ] = Pag_MY_AGENDA,
@@ -1333,7 +1333,7 @@ void Agd_ReqCreatOrEditEvent (void)
    struct Agd_Event AgdEvent;
    OldNew_OldNew_t OldNewEvent;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
-   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+   static Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
       [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
@@ -1476,7 +1476,7 @@ void Agd_ReceiveEvent (void)
    struct Agd_Agenda Agenda;
    struct Agd_Event AgdEvent;
    OldNew_OldNew_t OldNewEvent;
-   bool NewEventIsCorrect = true;
+   bool EventIsCorrect = true;
    char EventTxt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Reset agenda context *****/
@@ -1514,19 +1514,19 @@ void Agd_ReceiveEvent (void)
    /***** Check if event is correct *****/
    if (!AgdEvent.Location[0])	// If there is no event
      {
-      NewEventIsCorrect = false;
+      EventIsCorrect = false;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
    /***** Check if event is correct *****/
    if (!AgdEvent.Title[0])	// If there is no event
      {
-      NewEventIsCorrect = false;
+      EventIsCorrect = false;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
    /***** Create a new event or update an existing one *****/
-   if (NewEventIsCorrect)
+   if (EventIsCorrect)
      {
       switch (OldNewEvent)
 	{

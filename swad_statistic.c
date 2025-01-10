@@ -472,7 +472,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
    extern const char *Txt_distributed_by;
    extern const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY];
    extern const char *Txt_Show_hits;
-   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+   static Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_TO_000000,
       [Dat_END_TIME] = Dat_HMS_TO_235959

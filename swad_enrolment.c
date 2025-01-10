@@ -336,7 +336,7 @@ void Enr_EnrolUsrInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole,
 static void Enr_NotifyAfterEnrolment (const struct Usr_Data *UsrDat,
                                       Rol_Role_t NewRole)
   {
-   static const Ntf_NotifyEvent_t NotifyEvent[Rol_NUM_ROLES] =
+   static Ntf_NotifyEvent_t NotifyEvent[Rol_NUM_ROLES] =
      {
       [Rol_STD] = Ntf_EVENT_ENROLMENT_STD,
       [Rol_NET] = Ntf_EVENT_ENROLMENT_NET,
@@ -415,7 +415,7 @@ void Enr_ReqAcceptEnrolmentInCrs (void)
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Confirm_my_enrolment;
    extern const char *Txt_Remove_me_from_this_course;
-   static const struct
+   static struct
      {
       struct
         {
@@ -578,7 +578,7 @@ static void Enr_ShowFormEnrRemSeveralUsrs (Rol_Role_t Role)
    extern const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_;
    extern const char *Txt_Step_4_Confirm_the_enrolment_removing;
    extern const char *Txt_Confirm;
-   static const struct
+   static struct
      {
       Act_Action_t NextAction;
       const char **Title;
@@ -2648,7 +2648,7 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
    extern const char *Txt_Administer_multiple_students;
    extern const char *Txt_Administer_multiple_non_editing_teachers;
    extern const char *Txt_Administer_multiple_teachers;
-   static const struct
+   static struct
      {
       Act_Action_t NextAction;
       const char **Title;
@@ -2810,7 +2810,7 @@ static void Enr_AskIfEnrRemUsr (struct Usr_ListUsrCods *ListUsrCods,Rol_Role_t R
    extern const char *Txt_The_user_is_new_not_yet_in_X;
    extern const char *Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID;
    unsigned NumUsr;
-   bool NewUsrIDValid;
+   bool UsrIDValid;
 
    if (ListUsrCods->NumUsrs)	// User(s) found with the ID
      {
@@ -2842,11 +2842,11 @@ static void Enr_AskIfEnrRemUsr (struct Usr_ListUsrCods *ListUsrCods,Rol_Role_t R
       /***** If UsrCod is not present in parameters from form,
 	     use user's ID to identify the user to be enroled *****/
       if (Gbl.Usrs.Other.UsrDat.IDs.List)
-         NewUsrIDValid = ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);	// Check the first element of the list
+         UsrIDValid = ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);	// Check the first element of the list
       else
-	 NewUsrIDValid = false;
+	 UsrIDValid = false;
 
-      if (NewUsrIDValid)
+      if (UsrIDValid)
 	{
 	 /***** Show form to enter the data of a new user *****/
 	 Ale_ShowAlert (Ale_INFO,Txt_The_user_is_new_not_yet_in_X,
@@ -3755,7 +3755,7 @@ unsigned Enr_GetCachedNumUsrsNotBelongingToAnyCrs (void)
 
 double Enr_GetCachedAverageNumUsrsPerCrs (Hie_Level_t Level,long Cod,Rol_Role_t Role)
   {
-   static const FigCch_FigureCached_t FigureNumUsrsPerCrs[Rol_NUM_ROLES] =
+   static FigCch_FigureCached_t FigureNumUsrsPerCrs[Rol_NUM_ROLES] =
      {
       [Rol_UNK] = FigCch_NUM_USRS_PER_CRS,	// Number of users per course
       [Rol_STD] = FigCch_NUM_STDS_PER_CRS,	// Number of students per course
@@ -3783,7 +3783,7 @@ double Enr_GetCachedAverageNumUsrsPerCrs (Hie_Level_t Level,long Cod,Rol_Role_t 
 
 double Enr_GetCachedAverageNumCrssPerUsr (Hie_Level_t Level,long Cod,Rol_Role_t Role)
   {
-   static const FigCch_FigureCached_t FigureNumCrssPerUsr[Rol_NUM_ROLES] =
+   static FigCch_FigureCached_t FigureNumCrssPerUsr[Rol_NUM_ROLES] =
      {
       [Rol_UNK] = FigCch_NUM_CRSS_PER_USR,	// Number of courses per user
       [Rol_STD] = FigCch_NUM_CRSS_PER_STD,	// Number of courses per student

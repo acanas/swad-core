@@ -1667,7 +1667,7 @@ static void Grp_ListGrpsOfATypeToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp
 						      long Cod,	// Assignment, attendance event, survey, exam event or match
 						      struct GroupType *GrpTyp)
   {
-   static const struct
+   static struct
      {
       const char *Table;
       const char *Field;

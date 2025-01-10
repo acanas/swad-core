@@ -3402,7 +3402,7 @@ static void For_ShowStatOfAForumType (For_ForumType_t ForumType,
    extern const char *Txt_only_teachers;
    static const char *PlatformShortName = Cfg_PLATFORM_SHORT_NAME;
    static const char *EmptyName = "";
-   static const struct
+   static struct
      {
       const char *Icon;
       const char **ForumName1;

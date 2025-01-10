@@ -2181,16 +2181,27 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
    extern const char *Txt_Comments_allowed;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Create;
+   static struct
+     {
+      Act_Action_t Action;
+      Btn_Button_t Button;
+      const char **Txt;
+     } Forms[OldNew_NUM_OLD_NEW] =
+     {
+      [OldNew_OLD] = {ActChgSvyQst,Btn_CONFIRM,&Txt_Save_changes},
+      [OldNew_NEW] = {ActNewSvyQst,Btn_CREATE ,&Txt_Create      }
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumAns;
    unsigned NumAnswers = 0;
    char *Title;
    Svy_AnswerType_t AnsType;
-   bool NewQuestion = (SvyQst->QstCod <= 0);
+   OldNew_OldNew_t OldNewQst = (SvyQst->QstCod > 0) ? OldNew_OLD :
+						      OldNew_NEW;
 
    if (Gbl.Action.Act == ActEdiOneSvyQst) // If no receiving the question, but editing a new or existing question
-      if (!NewQuestion)
+      if (OldNewQst == OldNew_OLD)
         {
          /***** Get question data from database *****/
          if (Svy_DB_GetQstDataByCod (&mysql_res,SvyQst->QstCod,Surveys->Svy.SvyCod))
@@ -2222,24 +2233,27 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
         }
 
    /***** Begin box *****/
-   if (NewQuestion)
-      Box_BoxBegin (Txt_Question,NULL,NULL,
-                    Hlp_ANALYTICS_Surveys_questions,Box_NOT_CLOSABLE);
-   else
+   switch (OldNewQst)
      {
-      /* Parameters for contextual icon */
-      Surveys->QstCod = SvyQst->QstCod;
+      case OldNew_OLD:
+	 /* Parameters for contextual icon */
+	 Surveys->QstCod = SvyQst->QstCod;
 
-      if (asprintf (&Title,"%s %u",Txt_Question,SvyQst->QstInd + 1) < 0)	// Question index may be 0, 1, 2, 3,...
-	 Err_NotEnoughMemoryExit ();
-      Box_BoxBegin (Title,Svy_PutIconToRemoveOneQst,Surveys,
-                    NULL,Box_NOT_CLOSABLE);
-      free (Title);
+	 if (asprintf (&Title,"%s %u",Txt_Question,SvyQst->QstInd + 1) < 0)	// Question index may be 0, 1, 2, 3,...
+	    Err_NotEnoughMemoryExit ();
+	 Box_BoxBegin (Title,Svy_PutIconToRemoveOneQst,Surveys,
+		       NULL,Box_NOT_CLOSABLE);
+	 free (Title);
+	 break;
+      case OldNew_NEW:
+      default:
+	 Box_BoxBegin (Txt_Question,NULL,NULL,
+		       Hlp_ANALYTICS_Surveys_questions,Box_NOT_CLOSABLE);
+	 break;
      }
 
    /***** Begin form *****/
-   Frm_BeginForm (NewQuestion ? ActNewSvyQst :
-				ActChgSvyQst);
+   Frm_BeginForm (Forms[OldNewQst].Action);
       ParCod_PutPar (ParCod_Svy,Surveys->Svy.SvyCod);
       ParCod_PutPar (ParCod_Qst,SvyQst->QstCod);
 
@@ -2341,10 +2355,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
       HTM_TABLE_End ();
 
       /***** Send button *****/
-      if (NewQuestion)	// If the question already has assigned a code
-	 Btn_PutButton (Btn_CREATE,Txt_Create);
-      else
-	 Btn_PutButton (Btn_CONFIRM,Txt_Save_changes);
+      Btn_PutButton (Forms[OldNewQst].Button,*Forms[OldNewQst].Txt);
 
    /***** End form *****/
    Frm_EndForm ();

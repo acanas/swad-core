@@ -184,7 +184,7 @@ void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink,
    unsigned NumLink;
    unsigned NumLinks;
    struct Rsc_Link Link;
-   static const struct Rsc_Link EmptyLink =
+   static struct Rsc_Link EmptyLink =
      {
       .Type = Rsc_NONE,
       .Cod  = -1L,

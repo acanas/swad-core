@@ -1473,7 +1473,7 @@ static void Deg_ShowAlertAndButtonToGoToDeg (void)
 
 unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role)
   {
-   static const FigCch_FigureCached_t FigureDegs[Rol_NUM_ROLES] =
+   static FigCch_FigureCached_t FigureDegs[Rol_NUM_ROLES] =
      {
       [Rol_STD] = FigCch_NUM_DEGS_WITH_STDS,	// Students
       [Rol_NET] = FigCch_NUM_DEGS_WITH_NETS,	// Non-editing teachers

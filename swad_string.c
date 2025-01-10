@@ -69,8 +69,8 @@ const char Str_BIN_TO_BASE64URL[64 + 1] =
    '0','1','2','3','4','5','6','7','8','9','-','_',
    '\0'};	// NULL-terminated string
 
-static const char Str_LF[2] = {10,0};
-static const char Str_CR[2] = {13,0};
+static char Str_LF[2] = {10,0};
+static char Str_CR[2] = {13,0};
 
 /*****************************************************************************/
 /*********** Check if a character is in set { a-z, A-Z, 0-9, _ } *************/
@@ -2588,7 +2588,7 @@ void Str_ConvertToValidFileName (char *Str)
 
 void Str_CreateRandomAlphanumStr (char *Str,size_t Length)
   {
-   static const char CharTable[NUM_ALPHANUM_CHARS] =
+   static char CharTable[NUM_ALPHANUM_CHARS] =
      {'0','1','2','3','4','5','6','7','8','9',
       'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
       'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'

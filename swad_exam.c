@@ -1480,17 +1480,16 @@ static void Exa_ReceiveExamFieldsFromForm (struct Exa_Exam *Exam,
 static bool Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam)
   {
    extern const char *Txt_Already_existed_an_exam_with_the_title_X;
-   bool NewExamIsCorrect;
+   bool ExamIsCorrect = true;
 
    /***** Check if title is correct *****/
-   NewExamIsCorrect = true;
    if (Exam->Title[0])	// If there's an exam title
      {
       /* If title of exam was in database... */
       if (Exa_DB_CheckIfSimilarExamExists (Gbl.Hierarchy.Node[Hie_CRS].HieCod,
                                            Exam->ExaCod,Exam->Title))
 	{
-	 NewExamIsCorrect = false;
+	 ExamIsCorrect = false;
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 			  Txt_Already_existed_an_exam_with_the_title_X,
 			  Exam->Title);
@@ -1498,11 +1497,11 @@ static bool Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam)
      }
    else	// If there is not an exam title
      {
-      NewExamIsCorrect = false;
+      ExamIsCorrect = false;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
-   return NewExamIsCorrect;
+   return ExamIsCorrect;
   }
 
 /*****************************************************************************/

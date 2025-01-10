@@ -944,16 +944,15 @@ static void Rub_ReceiveRubricFieldsFromForm (struct Rub_Rubric *Rubric)
 static bool Rub_CheckRubricFieldsReceivedFromForm (const struct Rub_Rubric *Rubric)
   {
    extern const char *Txt_Already_existed_a_game_with_the_title_X;
-   bool NewRubricIsCorrect;
+   bool RubricIsCorrect = true;
 
    /***** Check if title is correct *****/
-   NewRubricIsCorrect = true;
    if (Rubric->Title[0])	// If there's a rubric title
      {
       /* If title of rubric was in database... */
       if (Rub_DB_CheckIfSimilarRubricExists (Rubric))
 	{
-	 NewRubricIsCorrect = false;
+	 RubricIsCorrect = false;
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 			  Txt_Already_existed_a_game_with_the_title_X,
 			   Rubric->Title);
@@ -961,11 +960,11 @@ static bool Rub_CheckRubricFieldsReceivedFromForm (const struct Rub_Rubric *Rubr
      }
    else	// If there is not a rubric title
      {
-      NewRubricIsCorrect = false;
+      RubricIsCorrect = false;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
-   return NewRubricIsCorrect;
+   return RubricIsCorrect;
   }
 
 /*****************************************************************************/

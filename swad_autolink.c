@@ -112,7 +112,7 @@ static void ALn_CopySubstring (const struct ALn_Substring *PtrSrc,char **PtrDst)
 
 #define ALn_URL_ANCHOR_TOTAL_LENGTH	(ALn_URL_ANCHOR_0_LENGTH + ALn_URL_ANCHOR_1_LENGTH + ALn_URL_ANCHOR_2_LENGTH)
 
-static const struct ALn_Substring URLAnchor[3] =
+static struct ALn_Substring URLAnchor[3] =
   {
    [0] = {
 	  .Str = ALn_URL_ANCHOR_0,

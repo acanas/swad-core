@@ -60,7 +60,7 @@ extern struct Globals Gbl;
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
-static const TmlNot_Type_t TmlNot_NoteType[Brw_NUM_TYPES_FILE_BROWSER] =
+static TmlNot_Type_t TmlNot_NoteType[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_ADMI_DOC_INS] = TmlNot_INS_DOC_PUB_FILE,
    [Brw_ADMI_SHR_INS] = TmlNot_INS_SHA_PUB_FILE,
@@ -132,7 +132,7 @@ void TmlNot_ShowHighlightedNote (struct Tml_Timeline *Timeline,
   {
    struct Usr_Data PublisherDat;
    Ntf_NotifyEvent_t NotifyEvent;
-   static const Tml_TopMessage_t TopMessages[Ntf_NUM_NOTIFY_EVENTS] =
+   static Tml_TopMessage_t TopMessages[Ntf_NUM_NOTIFY_EVENTS] =
      {
       [Ntf_EVENT_TML_COMMENT] = Tml_TOP_MESSAGE_COMMENTED,
       [Ntf_EVENT_TML_FAV    ] = Tml_TOP_MESSAGE_FAVED,

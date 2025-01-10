@@ -121,7 +121,7 @@ static void TmlUsr_GetAndShowSharersOrFavers (TmlUsr_FavSha_t FavSha,
                                               long Cod,long UsrCod,unsigned NumUsrs,
 				              TmlUsr_HowManyUsrs_t HowManyUsrs)
   {
-   static const TmlFrm_Action_t Action[TmlUsr_NUM_FAV_SHA] =
+   static TmlFrm_Action_t Action[TmlUsr_NUM_FAV_SHA] =
      {
       [TmlUsr_FAV_UNF_NOTE] = TmlFrm_ALL_FAV_NOTE,
       [TmlUsr_FAV_UNF_COMM] = TmlFrm_ALL_FAV_COMM,
@@ -316,7 +316,7 @@ static void TmlUsr_PutDisabledIconFavSha (TmlUsr_FavSha_t FavSha,
    extern const char *Txt_TIMELINE_Not_favourited_by_anyone;
    extern const char *Txt_TIMELINE_Shared_by_X_USERS;
    extern const char *Txt_TIMELINE_Not_shared_by_anyone;
-   static const struct
+   static struct
      {
       const char *Icon;
       struct

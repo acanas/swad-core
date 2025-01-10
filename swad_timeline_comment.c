@@ -464,7 +464,7 @@ static void TmlCom_LinkToShowComms (TmlCom_ContractExpand_t ConExp,
   {
    extern const char *Txt_See_only_the_latest_X_COMMENTS;
    extern const char *Txt_See_the_previous_X_COMMENTS;
-   static const struct
+   static struct
      {
       const char *Id;
       const char *Icon;

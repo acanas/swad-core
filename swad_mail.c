@@ -1105,7 +1105,7 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
    unsigned NumEmail;
    bool Confirmed;
    char *Icon;
-   static const struct
+   static struct
      {
       Act_Action_t Remove;
       Act_Action_t Change;

@@ -438,7 +438,7 @@ void TmlPub_ShowOldPubsInTimeline (struct Tml_Timeline *Timeline)
 
 Tml_TopMessage_t TmlPub_GetTopMessage (TmlPub_Type_t PubType)
   {
-   static const Tml_TopMessage_t TopMessages[TmlPub_NUM_PUB_TYPES] =
+   static Tml_TopMessage_t TopMessages[TmlPub_NUM_PUB_TYPES] =
      {
       [TmlPub_SHARED_NOTE    ] = Tml_TOP_MESSAGE_SHARED,
       [TmlPub_COMMENT_TO_NOTE] = Tml_TOP_MESSAGE_COMMENTED,

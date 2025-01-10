@@ -82,7 +82,7 @@ const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER
 // Browsers types for database "brw_last" table
 // Assignments and works are stored as one in brw_last...
 // ...because a user views them at the same time
-static const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_file_browser_last[Brw_NUM_TYPES_FILE_BROWSER] =
+static Brw_FileBrowser_t Brw_DB_FileBrowserForDB_file_browser_last[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = Brw_UNKNOWN,
    [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,
@@ -116,7 +116,7 @@ static const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_file_browser_last[Brw_NUM
   };
 
 // Browsers types for database "expanded_folders" table
-static const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_expanded_folders[Brw_NUM_TYPES_FILE_BROWSER] =
+static Brw_FileBrowser_t Brw_DB_FileBrowserForDB_expanded_folders[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = Brw_UNKNOWN,
    [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,

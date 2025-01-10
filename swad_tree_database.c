@@ -205,7 +205,7 @@ void Tre_DB_MoveLeftRightNodeRange (Inf_Type_t InfoType,
 				    const struct Tre_NodeRange *ToMove,
                                     Tre_MoveLeftRight_t LeftRight)
   {
-   static const char IncDec[Tre_NUM_MOVEMENTS_LEFT_RIGHT] =
+   static char IncDec[Tre_NUM_MOVEMENTS_LEFT_RIGHT] =
      {
       [Tre_MOVE_LEFT ] = '-',
       [Tre_MOVE_RIGHT] = '+',

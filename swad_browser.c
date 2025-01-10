@@ -235,7 +235,7 @@ static const char *Brw_FileTypeParName[Brw_NUM_FILE_TYPES] =
   };
 
 // Browsers viewable shown in search for documents
-static const Brw_FileBrowser_t Brw_FileBrowserForFoundDocs[Brw_NUM_TYPES_FILE_BROWSER] =
+static Brw_FileBrowser_t Brw_FileBrowserForFoundDocs[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = Brw_UNKNOWN,
    [Brw_SHOW_DOC_CRS] = Brw_SHOW_DOC_CRS,
@@ -269,7 +269,7 @@ static const Brw_FileBrowser_t Brw_FileBrowserForFoundDocs[Brw_NUM_TYPES_FILE_BR
   };
 
 // Browsers types for database "clipboard" table
-static const Brw_FileBrowser_t Brw_FileBrowserForDB_clipboard[Brw_NUM_TYPES_FILE_BROWSER] =
+static Brw_FileBrowser_t Brw_FileBrowserForDB_clipboard[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = Brw_UNKNOWN,
    [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,
@@ -9769,7 +9769,7 @@ void Brw_GetAndShowFileBrowsersStats (void)
    extern const char *Hlp_ANALYTICS_Figures_folders_and_files;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES];
-   static const Brw_FileBrowser_t StatCrsFileZone[Fig_NUM_STAT_CRS_FILE_ZONES] =
+   static Brw_FileBrowser_t StatCrsFileZone[Fig_NUM_STAT_CRS_FILE_ZONES] =
      {
       Brw_ADMI_DOC_CRS,
       Brw_ADMI_DOC_GRP,

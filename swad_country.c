@@ -1574,7 +1574,7 @@ void Cty_ReceiveNewCountry (void)
 
 unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role)
   {
-   static const FigCch_FigureCached_t FigureCtys[Rol_NUM_ROLES] =
+   static FigCch_FigureCached_t FigureCtys[Rol_NUM_ROLES] =
      {
       [Rol_STD] = FigCch_NUM_CTYS_WITH_STDS,	// Students
       [Rol_NET] = FigCch_NUM_CTYS_WITH_NETS,	// Non-editing teachers

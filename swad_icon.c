@@ -545,7 +545,7 @@ void Ico_GetAndShowNumUsrsPerIconSet (void)
    extern const char *Txt_Icons;
    extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
-   static const Ico_Color_t Color[Ico_NUM_ICON_SETS] =
+   static Ico_Color_t Color[Ico_NUM_ICON_SETS] =
      {
       [Ico_ICON_SET_AWESOME] = Ico_BLACK,
       [Ico_ICON_SET_NUVOLA ] = Ico_UNCHANGED,

@@ -1633,7 +1633,7 @@ static void Tre_ShowFormToCreateNode (Inf_Type_t InfoType,long ParentNodCod)
   {
    struct Tre_Node ParentNode;	// Parent node
    struct Tre_Node Node;
-   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+   static Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_TO_000000,
       [Dat_END_TIME] = Dat_HMS_TO_235959
@@ -1681,7 +1681,7 @@ static void Tre_ShowFormToCreateNode (Inf_Type_t InfoType,long ParentNodCod)
 static void Tre_ShowFormToChangeNode (struct Tre_Node *Node)
   {
    char Txt[Cns_MAX_BYTES_TEXT + 1];
-   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+   static Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
       [Dat_END_TIME] = Dat_HMS_DO_NOT_SET

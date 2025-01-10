@@ -311,7 +311,7 @@ static void MFU_PutIconAndText (Act_Action_t Action,
                                 const char MenuStr[MFU_MAX_BYTES_MENU + 1])
   {
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
-   static const Ico_Color_t Color[Ico_NUM_ICON_SETS] =
+   static Ico_Color_t Color[Ico_NUM_ICON_SETS] =
      {
       [Ico_ICON_SET_AWESOME] = Ico_BLACK,
       [Ico_ICON_SET_NUVOLA ] = Ico_UNCHANGED,

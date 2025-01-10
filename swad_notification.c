@@ -1039,7 +1039,7 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 void Ntf_MarkNotifOneFileAsRemoved (const char *Path)
   {
    extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-   static const Ntf_NotifyEvent_t NotifyEvent[Brw_NUM_TYPES_FILE_BROWSER] =
+   static Ntf_NotifyEvent_t NotifyEvent[Brw_NUM_TYPES_FILE_BROWSER] =
      {
       [Brw_ADMI_DOC_CRS] = Ntf_EVENT_DOCUMENT_FILE,
       [Brw_ADMI_DOC_GRP] = Ntf_EVENT_DOCUMENT_FILE,
@@ -1070,7 +1070,7 @@ void Ntf_MarkNotifOneFileAsRemoved (const char *Path)
 void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
   {
    extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-   static const Ntf_NotifyEvent_t NotifyEvent[Brw_NUM_TYPES_FILE_BROWSER] =
+   static Ntf_NotifyEvent_t NotifyEvent[Brw_NUM_TYPES_FILE_BROWSER] =
      {
       [Brw_ADMI_DOC_CRS] = Ntf_EVENT_DOCUMENT_FILE,
       [Brw_ADMI_DOC_GRP] = Ntf_EVENT_DOCUMENT_FILE,

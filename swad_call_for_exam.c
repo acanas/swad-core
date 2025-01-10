@@ -309,9 +309,14 @@ void Cfe_ReceiveCallForExam1 (void)
   {
    extern const char *Txt_Created_new_call_for_exam;
    extern const char *Txt_The_call_for_exam_has_been_successfully_updated;
+   static const char **Txt[OldNew_NUM_OLD_NEW] =
+     {
+      [OldNew_OLD] = &Txt_The_call_for_exam_has_been_successfully_updated,
+      [OldNew_NEW] = &Txt_Created_new_call_for_exam
+     };
    struct Cfe_CallsForExams *CallsForExams = Cfe_GetGlobalCallsForExams ();
    long ExaCod;
-   bool NewCallForExam;
+   OldNew_OldNew_t OldNewCFE;
    char *Anchor = NULL;
 
    /***** Reset calls for exams context *****/
@@ -322,22 +327,27 @@ void Cfe_ReceiveCallForExam1 (void)
 
    /***** Get parameters of the call for exam *****/
    ExaCod = Cfe_GetParsCallsForExams (CallsForExams);
-   NewCallForExam = (ExaCod < 0);
+   OldNewCFE = (ExaCod > 0) ? OldNew_OLD :
+			      OldNew_NEW;
 
    /***** Add the call for exam to the database and read it again from the database *****/
-   if (NewCallForExam)
-      CallsForExams->NewExaCod = ExaCod = Cfe_DB_CreateCallForExam (&CallsForExams->CallForExam);
-   else
-      Cfe_DB_ModifyCallForExam (&CallsForExams->CallForExam,ExaCod);
+   switch (OldNewCFE)
+     {
+      case OldNew_OLD:
+	 Cfe_DB_ModifyCallForExam (&CallsForExams->CallForExam,ExaCod);
+	 break;
+      case OldNew_NEW:
+      default:
+	 CallsForExams->NewExaCod = ExaCod = Cfe_DB_CreateCallForExam (&CallsForExams->CallForExam);
+	 break;
+     }
 
    /***** Free memory of the call for exam *****/
    Cfe_FreeMemCallForExam (CallsForExams);
 
    /***** Create alert to show the change made *****/
    Frm_SetAnchorStr (ExaCod,&Anchor);
-   Ale_CreateAlert (Ale_SUCCESS,Anchor,
-                    NewCallForExam ? Txt_Created_new_call_for_exam :
-                                     Txt_The_call_for_exam_has_been_successfully_updated);
+   Ale_CreateAlert (Ale_SUCCESS,Anchor,*Txt[OldNewCFE]);
    Frm_FreeAnchorStr (&Anchor);
 
    /***** Set exam to be highlighted *****/

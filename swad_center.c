@@ -1546,7 +1546,7 @@ unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod)
 
 unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role)
   {
-   static const FigCch_FigureCached_t FigureCtrs[Rol_NUM_ROLES] =
+   static FigCch_FigureCached_t FigureCtrs[Rol_NUM_ROLES] =
      {
       [Rol_STD] = FigCch_NUM_CTRS_WITH_STDS,	// Students
       [Rol_NET] = FigCch_NUM_CTRS_WITH_NETS,	// Non-editing teachers

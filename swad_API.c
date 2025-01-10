@@ -220,7 +220,7 @@ static const Rol_Role_t API_SvcRole_to_RolRole[API_NUM_ROLES] =
   };
 
 /* Translation from swad-core-role to service-web-role */
-static const API_Role_t API_RolRole_to_SvcRole[Rol_NUM_ROLES] =
+static API_Role_t API_RolRole_to_SvcRole[Rol_NUM_ROLES] =
   {
    [Rol_GST] = API_ROLE__GUEST_,
    [Rol_STD] = API_ROLE_STUDENT,

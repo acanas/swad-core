@@ -278,10 +278,9 @@ static bool ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
                                                   const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1])
   {
    extern const char *Txt_Already_existed_a_set_of_questions_in_this_exam_with_the_title_X;
-   bool NewTitleIsCorrect;
+   bool TitleIsCorrect = true;
 
    /***** Check if title is correct *****/
-   NewTitleIsCorrect = true;
    if (NewTitle[0])	// If there's an set title
      {
       /***** Check if old and new titles are the same
@@ -291,7 +290,7 @@ static bool ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
 	 /* If title of set was in database... */
 	 if (Exa_DB_CheckIfSimilarSetExists (Set,NewTitle))
 	   {
-	    NewTitleIsCorrect = false;
+	    TitleIsCorrect = false;
 	    Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_a_set_of_questions_in_this_exam_with_the_title_X,
 			   Set->Title);
 	   }
@@ -299,11 +298,11 @@ static bool ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
      }
    else	// If there is not a set title
      {
-      NewTitleIsCorrect = false;
+      TitleIsCorrect = false;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
-   return NewTitleIsCorrect;
+   return TitleIsCorrect;
   }
 
 /*****************************************************************************/
@@ -800,7 +799,7 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
    unsigned QstInd;
    struct Qst_Question Question;
    char *Anchor;
-   static const struct
+   static struct
      {
       Act_Action_t NextAction;
       const char *Icon;

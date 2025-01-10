@@ -1719,7 +1719,7 @@ void TstPrn_SelDatesToSeeMyPrints (void)
    extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *Txt_Results;
    extern const char *Txt_View_results;
-   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+   static Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
       [Dat_END_TIME] = Dat_HMS_DO_NOT_SET

@@ -515,7 +515,7 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
    extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    unsigned NumID;
    char *Title;
-   static const struct
+   static struct
      {
       Act_Action_t Remove;
       Act_Action_t Change;

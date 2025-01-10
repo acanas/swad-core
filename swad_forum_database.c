@@ -128,7 +128,7 @@ unsigned For_DB_GetNumPstsOfUsrInForum (const struct For_Forum *Forum,
 
 void For_DB_RemoveForums (Hie_Level_t Level,long HieCod)
   {
-   static const struct
+   static struct
      {
       For_ForumType_t Usrs;
       For_ForumType_t Tchs;

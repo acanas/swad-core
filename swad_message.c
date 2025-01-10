@@ -85,7 +85,7 @@ extern struct Globals Gbl;
 #define Msg_IMAGE_SAVED_MAX_HEIGHT	768
 #define Msg_IMAGE_SAVED_QUALITY		 90	// 1 to 100
 
-static const Pag_WhatPaginate_t Msg_WhatPaginate[Msg_NUM_TYPES_OF_MSGS] =
+static Pag_WhatPaginate_t Msg_WhatPaginate[Msg_NUM_TYPES_OF_MSGS] =
   {
    [Msg_WRITING ] = Pag_NONE,
    [Msg_RECEIVED] = Pag_MESSAGES_RECEIVED,

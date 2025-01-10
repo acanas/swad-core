@@ -837,7 +837,7 @@ static Hie_StatusTxt_t Hie_GetStatusTxtFromStatusBits (Hie_Status_t Status)
 
 static Hie_Status_t Hie_GetStatusBitsFromStatusTxt (Hie_StatusTxt_t StatusTxt)
   {
-   static const Hie_Status_t StatusBits[Hie_NUM_STATUS_TXT] =
+   static Hie_Status_t StatusBits[Hie_NUM_STATUS_TXT] =
      {
       [Hie_STATUS_UNKNOWN] = (Hie_Status_t) 0,
       [Hie_STATUS_ACTIVE ] = (Hie_Status_t) 0,

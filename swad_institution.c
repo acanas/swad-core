@@ -1489,7 +1489,7 @@ static void Ins_ReceiveRequestOrCreateIns (Hie_Status_t Status)
 
 unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role)
   {
-   static const FigCch_FigureCached_t FigureInss[Rol_NUM_ROLES] =
+   static FigCch_FigureCached_t FigureInss[Rol_NUM_ROLES] =
      {
       [Rol_STD] = FigCch_NUM_INSS_WITH_STDS,	// Students
       [Rol_NET] = FigCch_NUM_INSS_WITH_NETS,	// Non-editing teachers

@@ -144,7 +144,7 @@ void Crs_ShowIntroduction (void)
 
 unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role)
   {
-   static const FigCch_FigureCached_t FigureCrss[Rol_NUM_ROLES] =
+   static FigCch_FigureCached_t FigureCrss[Rol_NUM_ROLES] =
      {
       [Rol_STD] = FigCch_NUM_CRSS_WITH_STDS,	// Students
       [Rol_NET] = FigCch_NUM_CRSS_WITH_NETS,	// Non-editing teachers

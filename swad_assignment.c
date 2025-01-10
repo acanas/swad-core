@@ -1210,17 +1210,17 @@ static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Assignments,
    extern const char *Txt_Title;
    extern const char *Folder_to_upload_files;
    extern const char *Txt_Description;
-   static const Act_Action_t Actions[OldNew_NUM_OLD_NEW] =
+   static Act_Action_t Actions[OldNew_NUM_OLD_NEW] =
      {
       [OldNew_OLD] = ActChgAsg,
       [OldNew_NEW] = ActNewAsg
      };
-   static const Dat_SetHMS SetHMSDontSet[Dat_NUM_START_END_TIME] =
+   static Dat_SetHMS SetHMSDontSet[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
       [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
      };
-   static const Dat_SetHMS SetHMSAllDay[Dat_NUM_START_END_TIME] =
+   static Dat_SetHMS SetHMSAllDay[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_TO_000000,
       [Dat_END_TIME] = Dat_HMS_TO_235959

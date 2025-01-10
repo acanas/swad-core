@@ -162,7 +162,7 @@ void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions)
    extern const char *Txt_Question_bank;
    extern const char *Txt_Show_questions;
    MYSQL_RES *mysql_res;
-   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+   static Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
       [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
@@ -332,7 +332,7 @@ void Qst_ShowFormRequestSelectQstsForExamSet (struct Exa_Exams *Exams,
    extern const char *Txt_Select_questions;
    extern const char *Txt_Show_questions;
    MYSQL_RES *mysql_res;
-   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+   static Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
       [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
@@ -390,7 +390,7 @@ void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
    extern const char *Txt_Select_questions;
    extern const char *Txt_Show_questions;
    MYSQL_RES *mysql_res;
-   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+   static Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
       [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
@@ -1816,6 +1816,16 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
    extern const char *Txt_Contract;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Create;
+   static struct
+     {
+      Act_Action_t Action;
+      Btn_Button_t Button;
+      const char **Txt;
+     } Forms[OldNew_NUM_OLD_NEW] =
+     {
+      [OldNew_OLD] = {ActChgTstQst,Btn_CONFIRM,&Txt_Save_changes},
+      [OldNew_NEW] = {ActNewTstQst,Btn_CREATE ,&Txt_Create      }
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumTags;
@@ -1831,28 +1841,32 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
    char StrInteger[Cns_MAX_DIGITS_UINT + 1];
    char *Title;
    char *FuncOnChange;
-   bool NewQuestion = (Question->QstCod > 0);
+   OldNew_OldNew_t OldNewQst = (Question->QstCod > 0) ? OldNew_OLD :
+						        OldNew_NEW;
    HTM_Attributes_t Checked;
    HTM_Attributes_t RadioDisabled;
    HTM_Attributes_t CheckboxDisabled;
    HTM_Attributes_t ChoiceDisabled;
 
    /***** Begin box *****/
-   if (NewQuestion)	// The question already has assigned a code
+   switch (OldNewQst)
      {
-      if (asprintf (&Title,Txt_Question_code_X,Question->QstCod) < 0)
-	 Err_NotEnoughMemoryExit ();
-      Box_BoxBegin (Title,Qst_PutIconToRemoveOneQst,&Question->QstCod,
-                    Hlp_ASSESSMENT_Questions_writing_a_question,Box_NOT_CLOSABLE);
-      free (Title);
+      case OldNew_OLD:
+	 Box_BoxBegin (Txt_Question,NULL,NULL,
+		       Hlp_ASSESSMENT_Questions_writing_a_question,Box_NOT_CLOSABLE);
+	 break;
+      case OldNew_NEW:
+      default:
+	 if (asprintf (&Title,Txt_Question_code_X,Question->QstCod) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 Box_BoxBegin (Title,Qst_PutIconToRemoveOneQst,&Question->QstCod,
+		       Hlp_ASSESSMENT_Questions_writing_a_question,Box_NOT_CLOSABLE);
+	 free (Title);
+	 break;
      }
-   else
-      Box_BoxBegin (Txt_Question,NULL,NULL,
-                    Hlp_ASSESSMENT_Questions_writing_a_question,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
-   Frm_BeginForm (NewQuestion ? ActNewTstQst :
-				ActChgTstQst);
+   Frm_BeginForm (Forms[OldNewQst].Action);
       ParCod_PutPar (ParCod_Qst,Question->QstCod);
 
       /***** Begin table *****/
@@ -2202,10 +2216,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
       HTM_TABLE_End ();	// Table for this question
 
       /***** Send button *****/
-      if (Question->QstCod > 0)	// The question already has assigned a code
-	 Btn_PutButton (Btn_CONFIRM,Txt_Save_changes);
-      else
-	 Btn_PutButton (Btn_CREATE,Txt_Create);
+      Btn_PutButton (Forms[OldNewQst].Button,*Forms[OldNewQst].Txt);
 
    /***** End form *****/
    Frm_EndForm ();
