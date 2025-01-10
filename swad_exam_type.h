@@ -62,13 +62,6 @@ typedef enum
    Exa_CHECK_EXA_COD,
   } Exa_CheckExaCod_t;
 
-#define Exa_NUM_EXISTING_NEW_EXAM 2
-typedef enum
-  {
-   Exa_EXISTING_EXAM,
-   Exa_NEW_EXAM,
-  } Exa_ExistingNewExam_t;
-
 struct Exa_ExamSelected
   {
    long ExaCod;		// Exam code

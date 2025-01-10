@@ -75,7 +75,7 @@ void Rub_RemoveCrsRubrics (long CrsCod);
 
 void Rub_ReqCreatOrEditRubric (void);
 void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
-			    Rub_ExistingNewRubric_t ExistingNewRubric);
+			    OldNew_OldNew_t OldNewRubric);
 
 void Rub_ReceiveRubric (void);
 

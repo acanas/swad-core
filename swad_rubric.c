@@ -72,7 +72,7 @@ static void Rub_WriteAuthor (const struct Rub_Rubric *Rubric);
 static void Rub_RemoveRubricFromAllTables (long RubCod);
 
 static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
-			              Rub_ExistingNewRubric_t ExistingNewRubric);
+			              OldNew_OldNew_t OldNewRubric);
 static void Rub_ReceiveRubricFieldsFromForm (struct Rub_Rubric *Rubric);
 static bool Rub_CheckRubricFieldsReceivedFromForm (const struct Rub_Rubric *Rubric);
 
@@ -720,7 +720,7 @@ void Rub_RemoveCrsRubrics (long CrsCod)
 void Rub_ReqCreatOrEditRubric (void)
   {
    struct Rub_Rubrics Rubrics;
-   Rub_ExistingNewRubric_t ExistingNewRubric;
+   OldNew_OldNew_t OldNewRubric;
 
    /***** Check if I can edit rubrics *****/
    if (Rub_CheckIfICanEditRubrics () == Usr_CAN_NOT)
@@ -734,22 +734,15 @@ void Rub_ReqCreatOrEditRubric (void)
    /***** Get parameters *****/
    Rub_GetPars (&Rubrics,Rub_DONT_CHECK_RUB_COD);
    Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
-   ExistingNewRubric = (Rubrics.Rubric.RubCod > 0) ? Rub_EXISTING_RUBRIC :
-						     Rub_NEW_RUBRIC;
+   OldNewRubric = (Rubrics.Rubric.RubCod > 0) ? OldNew_OLD :
+						OldNew_NEW;
 
-   /***** Get rubric data *****/
-   switch (ExistingNewRubric)
-     {
-      case Rub_EXISTING_RUBRIC:
-         /* Get rubric data from database */
-         Rub_GetRubricDataByCod (&Rubrics.Rubric);
-         break;
-      case Rub_NEW_RUBRIC:
-         break;
-     }
+   /***** Get rubric data from database *****/
+   if (OldNewRubric == OldNew_OLD)
+      Rub_GetRubricDataByCod (&Rubrics.Rubric);
 
    /***** Put form to create/edit a rubric and show criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,ExistingNewRubric);
+   Rub_PutFormsOneRubric (&Rubrics,OldNewRubric);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -760,45 +753,45 @@ void Rub_ReqCreatOrEditRubric (void)
 /*****************************************************************************/
 
 void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
-			    Rub_ExistingNewRubric_t ExistingNewRubric)
+			    OldNew_OldNew_t OldNewRubric)
   {
    extern const char *Hlp_ASSESSMENT_Rubrics_new_rubric;
    extern const char *Hlp_ASSESSMENT_Rubrics_edit_rubric;
    extern const char *Txt_Rubric;
-   static void (*FunctionToDrawContextualIcons[Rub_NUM_EXISTING_NEW_RUBRIC]) (void *Args) =
+   static void (*FunctionToDrawContextualIcons[OldNew_NUM_OLD_NEW]) (void *Args) =
      {
-      [Rub_EXISTING_RUBRIC] = Rub_PutIconsEditingOneRubric,
-      [Rub_NEW_RUBRIC     ] = NULL,
+      [OldNew_OLD] = Rub_PutIconsEditingOneRubric,
+      [OldNew_NEW] = NULL,
      };
-   static const char **HelpLink[Rub_NUM_EXISTING_NEW_RUBRIC] =
+   static const char **HelpLink[OldNew_NUM_OLD_NEW] =
      {
-      [Rub_EXISTING_RUBRIC] = &Hlp_ASSESSMENT_Rubrics_edit_rubric,
-      [Rub_NEW_RUBRIC     ] = &Hlp_ASSESSMENT_Rubrics_new_rubric,
+      [OldNew_OLD] = &Hlp_ASSESSMENT_Rubrics_edit_rubric,
+      [OldNew_NEW] = &Hlp_ASSESSMENT_Rubrics_new_rubric,
      };
    struct Rub_Node *TOS = NULL;
 
    /***** Begin box *****/
    Box_BoxBegin (Rubrics->Rubric.Title[0] ? Rubrics->Rubric.Title :
 					    Txt_Rubric,
-		 FunctionToDrawContextualIcons[ExistingNewRubric],Rubrics,
-		 *HelpLink[ExistingNewRubric],Box_NOT_CLOSABLE);
+		 FunctionToDrawContextualIcons[OldNewRubric],Rubrics,
+		 *HelpLink[OldNewRubric],Box_NOT_CLOSABLE);
 
       /***** Put form to create/edit a rubric *****/
-      Rub_PutFormEditionRubric (Rubrics,ExistingNewRubric);
+      Rub_PutFormEditionRubric (Rubrics,OldNewRubric);
 
       /***** Check if rubric tree is correct *****/
       if (Rub_CheckIfRecursiveTree (Rubrics->Rubric.RubCod,&TOS))
 	 Err_RecursiveRubric ();
 
       /***** Show list of criteria inside box *****/
-      if (ExistingNewRubric == Rub_EXISTING_RUBRIC)
+      if (OldNewRubric == OldNew_OLD)
 	 RubCri_ListCriteriaForEdition (Rubrics);
 
    /***** End box ****/
    Box_BoxEnd ();
 
    /***** Show rubrics again outside box *****/
-   if (ExistingNewRubric == Rub_NEW_RUBRIC)
+   if (OldNewRubric == OldNew_NEW)
      {
       HTM_BR ();
       Rub_ListAllRubrics (Rubrics);
@@ -810,30 +803,30 @@ void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
 /*****************************************************************************/
 
 static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
-			              Rub_ExistingNewRubric_t ExistingNewRubric)
+			              OldNew_OldNew_t OldNewRubric)
   {
    extern const char *Txt_Title;
    extern const char *Txt_Description;
    extern const char *Txt_Create;
    extern const char *Txt_Save_changes;
-   static Act_Action_t NextAction[Rub_NUM_EXISTING_NEW_RUBRIC] =
+   static Act_Action_t NextAction[OldNew_NUM_OLD_NEW] =
      {
-      [Rub_EXISTING_RUBRIC] = ActChgRub,
-      [Rub_NEW_RUBRIC     ] = ActNewRub,
+      [OldNew_OLD] = ActChgRub,
+      [OldNew_NEW] = ActNewRub,
      };
-   static Btn_Button_t Button[Rub_NUM_EXISTING_NEW_RUBRIC] =
+   static Btn_Button_t Button[OldNew_NUM_OLD_NEW] =
      {
-      [Rub_EXISTING_RUBRIC] = Btn_CONFIRM_BUTTON,
-      [Rub_NEW_RUBRIC     ] = Btn_CREATE_BUTTON,
+      [OldNew_OLD] = Btn_CONFIRM_BUTTON,
+      [OldNew_NEW] = Btn_CREATE_BUTTON,
      };
-   const char *TxtButton[Rub_NUM_EXISTING_NEW_RUBRIC] =
+   const char *TxtButton[OldNew_NUM_OLD_NEW] =
      {
-      [Rub_EXISTING_RUBRIC] = Txt_Save_changes,
-      [Rub_NEW_RUBRIC     ] = Txt_Create,
+      [OldNew_OLD] = Txt_Save_changes,
+      [OldNew_NEW] = Txt_Create,
      };
 
    /***** Begin form *****/
-   Frm_BeginForm (NextAction[ExistingNewRubric]);
+   Frm_BeginForm (NextAction[OldNewRubric]);
       Rub_PutPars (Rubrics);
 
       /***** Begin table *****/
@@ -877,8 +870,7 @@ static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
       HTM_TABLE_End ();
 
       /***** Send button *****/
-      Btn_PutButton (Button[ExistingNewRubric],
-		     TxtButton[ExistingNewRubric]);
+      Btn_PutButton (Button[OldNewRubric],TxtButton[OldNewRubric]);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -891,7 +883,7 @@ static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
 void Rub_ReceiveRubric (void)
   {
    struct Rub_Rubrics Rubrics;
-   Rub_ExistingNewRubric_t ExistingNewRubric;
+   OldNew_OldNew_t OldNewRubric;
 
    /***** Check if I can edit rubrics *****/
    if (Rub_CheckIfICanEditRubrics () == Usr_CAN_NOT)
@@ -905,33 +897,28 @@ void Rub_ReceiveRubric (void)
    /***** Get parameters *****/
    Rub_GetPars (&Rubrics,Rub_DONT_CHECK_RUB_COD);
    Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
-   ExistingNewRubric = (Rubrics.Rubric.RubCod > 0) ? Rub_EXISTING_RUBRIC :
-						     Rub_NEW_RUBRIC;
+   OldNewRubric = (Rubrics.Rubric.RubCod > 0) ? OldNew_OLD :
+						OldNew_NEW;
 
    /***** Get all current rubric data from database *****/
    // Some data, not received from form,
    // are necessary to show rubric and criteria again
-   switch (ExistingNewRubric)
-     {
-      case Rub_EXISTING_RUBRIC:
-         Rub_GetRubricDataByCod (&Rubrics.Rubric);
-         break;
-      case Rub_NEW_RUBRIC:
-         break;
-     }
+   if (OldNewRubric == OldNew_OLD)
+      Rub_GetRubricDataByCod (&Rubrics.Rubric);
 
    /***** Overwrite some rubric data with the data received from form *****/
    Rub_ReceiveRubricFieldsFromForm (&Rubrics.Rubric);
    if (Rub_CheckRubricFieldsReceivedFromForm (&Rubrics.Rubric))
       /***** Create a new rubric or update an existing one *****/
-      switch (ExistingNewRubric)
+      switch (OldNewRubric)
 	{
-	 case Rub_EXISTING_RUBRIC:
+	 case OldNew_OLD:
 	    Rub_UpdateRubric (&Rubrics.Rubric);	// Update rubric data in database
 	    break;
-	 case Rub_NEW_RUBRIC:
+	 case OldNew_NEW:
+	 default:
 	    Rub_CreateRubric (&Rubrics.Rubric);	// Add new rubric to database
-	    ExistingNewRubric = Rub_EXISTING_RUBRIC;
+	    OldNewRubric = OldNew_OLD;
 	    break;
 	}
 
@@ -939,7 +926,7 @@ void Rub_ReceiveRubric (void)
    Ale_ShowAlerts (NULL);
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,ExistingNewRubric);
+   Rub_PutFormsOneRubric (&Rubrics,OldNewRubric);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);

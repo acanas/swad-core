@@ -82,13 +82,6 @@ struct Rub_Rubrics
    struct RubCri_Criterion Criterion;	// Selected/current criterion
   };
 
-#define Rub_NUM_EXISTING_NEW_RUBRIC 2
-typedef enum
-  {
-   Rub_EXISTING_RUBRIC,
-   Rub_NEW_RUBRIC,
-  } Rub_ExistingNewRubric_t;
-
 /* Stack node to check is a rubric is recursive */
 struct Rub_Node
   {

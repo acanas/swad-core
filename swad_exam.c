@@ -140,7 +140,7 @@ static void Exa_HideUnhideExam (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 				    char Txt[Cns_MAX_BYTES_TEXT + 1],
-				    Exa_ExistingNewExam_t ExistingNewExam);
+				    OldNew_OldNew_t OldNewExam);
 static void Exa_ReceiveExamFieldsFromForm (struct Exa_Exam *Exam,
 				           char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static bool Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam);
@@ -1212,7 +1212,7 @@ static void Exa_HideUnhideExam (HidVis_HiddenOrVisible_t HiddenOrVisible)
 void Exa_ReqCreatOrEditExam (void)
   {
    struct Exa_Exams Exams;
-   Exa_ExistingNewExam_t ExistingNewExam;
+   OldNew_OldNew_t OldNewExam;
 
    /***** Check if I can edit exams *****/
    if (Exa_CheckIfICanEditExams () == Usr_CAN_NOT)
@@ -1224,53 +1224,46 @@ void Exa_ReqCreatOrEditExam (void)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_DONT_CHECK_EXA_COD);
-   ExistingNewExam = (Exams.Exam.ExaCod > 0) ? Exa_EXISTING_EXAM :
-					       Exa_NEW_EXAM;
+   OldNewExam = (Exams.Exam.ExaCod > 0) ? OldNew_OLD :
+					  OldNew_NEW;
 
-   /***** Get exam data *****/
-   switch (ExistingNewExam)
-     {
-      case Exa_EXISTING_EXAM:
-	 /* Get exam data from database */
-	 Exa_GetExamDataByCod (&Exams.Exam);
-	 break;
-      case Exa_NEW_EXAM:
-	 break;
-     }
+   /***** Get exam data from database *****/
+   if (OldNewExam == OldNew_OLD)
+      Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Put form to create/edit an exam and show sets *****/
-   Exa_PutFormsOneExam (&Exams,ExistingNewExam);
+   Exa_PutFormsOneExam (&Exams,OldNewExam);
   }
 
 /*****************************************************************************/
 /******************** Put forms to create/edit an exam ***********************/
 /*****************************************************************************/
 
-void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
-			  Exa_ExistingNewExam_t ExistingNewExam)
+void Exa_PutFormsOneExam (struct Exa_Exams *Exams,OldNew_OldNew_t OldNewExam)
   {
    extern const char *Hlp_ASSESSMENT_Exams_edit_exam;
    extern const char *Hlp_ASSESSMENT_Exams_new_exam;
    extern const char *Txt_Exam;
-   static void (*FunctionToDrawContextualIcons[Exa_NUM_EXISTING_NEW_EXAM]) (void *Args) =
+   static void (*FunctionToDrawContextualIcons[OldNew_NUM_OLD_NEW]) (void *Args) =
      {
-      [Exa_EXISTING_EXAM] = Exa_PutIconsEditingOneExam,
-      [Exa_NEW_EXAM     ] = NULL,
+      [OldNew_OLD] = Exa_PutIconsEditingOneExam,
+      [OldNew_NEW] = NULL,
      };
-   static const char **HelpLink[Exa_NUM_EXISTING_NEW_EXAM] =
+   static const char **HelpLink[OldNew_NUM_OLD_NEW] =
      {
-      [Exa_EXISTING_EXAM] = &Hlp_ASSESSMENT_Exams_edit_exam,
-      [Exa_NEW_EXAM     ] = &Hlp_ASSESSMENT_Exams_new_exam,
+      [OldNew_OLD] = &Hlp_ASSESSMENT_Exams_edit_exam,
+      [OldNew_NEW] = &Hlp_ASSESSMENT_Exams_new_exam,
      };
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Initialize text / get text from database *****/
-   switch (ExistingNewExam)
+   switch (OldNewExam)
      {
-      case Exa_EXISTING_EXAM:
+      case OldNew_OLD:
          Exa_DB_GetExamTxt (Exams->Exam.ExaCod,Txt);
 	 break;
-      case Exa_NEW_EXAM:
+      case OldNew_NEW:
+      default:
          Txt[0] = '\0';
 	 break;
      }
@@ -1278,14 +1271,14 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
    /***** Begin box *****/
    Box_BoxBegin (Exams->Exam.Title[0] ? Exams->Exam.Title :
 					Txt_Exam,
-		 FunctionToDrawContextualIcons[ExistingNewExam],Exams,
-		 *HelpLink[ExistingNewExam],Box_NOT_CLOSABLE);
+		 FunctionToDrawContextualIcons[OldNewExam],Exams,
+		 *HelpLink[OldNewExam],Box_NOT_CLOSABLE);
 
       /***** Put form to create/edit an exam *****/
-      Exa_PutFormEditionExam (Exams,Txt,ExistingNewExam);
+      Exa_PutFormEditionExam (Exams,Txt,OldNewExam);
 
       /***** Show list of sets inside box *****/
-      if (ExistingNewExam == Exa_EXISTING_EXAM)
+      if (OldNewExam == OldNew_OLD)
         {
 	 HTM_BR ();
 	 ExaSet_ListExamSets (Exams);
@@ -1295,7 +1288,7 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
    Box_BoxEnd ();
 
    /***** Show exams again outside box *****/
-   if (ExistingNewExam == Exa_NEW_EXAM)
+   if (OldNewExam == OldNew_NEW)
      {
       HTM_BR ();
       Exa_ListAllExams (Exams);
@@ -1308,7 +1301,7 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
 
 static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 				    char Txt[Cns_MAX_BYTES_TEXT + 1],
-				    Exa_ExistingNewExam_t ExistingNewExam)
+				    OldNew_OldNew_t OldNewExam)
   {
    extern const char *Txt_Title;
    extern const char *Txt_Maximum_grade;
@@ -1316,24 +1309,24 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
    extern const char *Txt_Description;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Create;
-   static Act_Action_t NextAction[Exa_NUM_EXISTING_NEW_EXAM] =
+   static Act_Action_t NextAction[OldNew_NUM_OLD_NEW] =
      {
-      [Exa_EXISTING_EXAM] = ActChgExa,
-      [Exa_NEW_EXAM     ] = ActNewExa,
+      [OldNew_OLD] = ActChgExa,
+      [OldNew_NEW] = ActNewExa,
      };
-   static Btn_Button_t Button[Exa_NUM_EXISTING_NEW_EXAM] =
+   static Btn_Button_t Button[OldNew_NUM_OLD_NEW] =
      {
-      [Exa_EXISTING_EXAM] = Btn_CONFIRM_BUTTON,
-      [Exa_NEW_EXAM     ] = Btn_CREATE_BUTTON,
+      [OldNew_OLD] = Btn_CONFIRM_BUTTON,
+      [OldNew_NEW] = Btn_CREATE_BUTTON,
      };
-   const char *TxtButton[Exa_NUM_EXISTING_NEW_EXAM] =
+   const char *TxtButton[OldNew_NUM_OLD_NEW] =
      {
-      [Exa_EXISTING_EXAM] = Txt_Save_changes,
-      [Exa_NEW_EXAM     ] = Txt_Create,
+      [OldNew_OLD] = Txt_Save_changes,
+      [OldNew_NEW] = Txt_Create,
      };
 
    /***** Begin form *****/
-   Frm_BeginForm (NextAction[ExistingNewExam]);
+   Frm_BeginForm (NextAction[OldNewExam]);
       Exa_PutPars (Exams);
 
       /***** Begin table *****/
@@ -1405,8 +1398,7 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
       HTM_TABLE_End ();
 
       /***** Send button *****/
-      Btn_PutButton (Button[ExistingNewExam],
-		     TxtButton[ExistingNewExam]);
+      Btn_PutButton (Button[OldNewExam],TxtButton[OldNewExam]);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1419,7 +1411,7 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 void Exa_ReceiveExam (void)
   {
    struct Exa_Exams Exams;
-   Exa_ExistingNewExam_t ExistingNewExam;
+   OldNew_OldNew_t OldNewExam;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Check if I can edit exams *****/
@@ -1432,33 +1424,28 @@ void Exa_ReceiveExam (void)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_DONT_CHECK_EXA_COD);
-   ExistingNewExam = (Exams.Exam.ExaCod > 0) ? Exa_EXISTING_EXAM :
-					       Exa_NEW_EXAM;
+   OldNewExam = (Exams.Exam.ExaCod > 0) ? OldNew_OLD :
+					  OldNew_NEW;
 
    /***** Get all current exam data from database *****/
    // Some data, not received from form,
    // are necessary to show exam and sets of questions again
-   switch (ExistingNewExam)
-     {
-      case Exa_EXISTING_EXAM:
-         Exa_GetExamDataByCod (&Exams.Exam);
-         break;
-      case Exa_NEW_EXAM:
-         break;
-     }
+   if (OldNewExam == OldNew_OLD)
+      Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Overwrite some exam data with the data received from form *****/
    Exa_ReceiveExamFieldsFromForm (&Exams.Exam,Txt);
    if (Exa_CheckExamFieldsReceivedFromForm (&Exams.Exam))
       /***** Create a new exam or update an existing one *****/
-      switch (ExistingNewExam)
+      switch (OldNewExam)
 	{
-	 case Exa_EXISTING_EXAM:
+	 case OldNew_OLD:
 	    Exa_UpdateExam (&Exams.Exam,Txt);	// Update exam data in database
 	    break;
-	 case Exa_NEW_EXAM:
+	 case OldNew_NEW:
+	 default:
 	    Exa_CreateExam (&Exams.Exam,Txt);	// Add new exam to database
-	    ExistingNewExam = Exa_EXISTING_EXAM;
+	    OldNewExam = OldNew_OLD;
 	    break;
 	}
 
@@ -1466,7 +1453,7 @@ void Exa_ReceiveExam (void)
    Ale_ShowAlerts (NULL);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,ExistingNewExam);
+   Exa_PutFormsOneExam (&Exams,OldNewExam);
   }
 
 static void Exa_ReceiveExamFieldsFromForm (struct Exa_Exam *Exam,

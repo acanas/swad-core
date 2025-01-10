@@ -28,6 +28,7 @@
 /*****************************************************************************/
 
 #include "swad_exam_type.h"
+#include "swad_old_new.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -66,8 +67,7 @@ void Exa_HideExam (void);
 void Exa_UnhideExam (void);
 
 void Exa_ReqCreatOrEditExam (void);
-void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
-			  Exa_ExistingNewExam_t ExistingNewExam);
+void Exa_PutFormsOneExam (struct Exa_Exams *Exams,OldNew_OldNew_t OldNewExam);
 
 void Exa_ReceiveExam (void);
 

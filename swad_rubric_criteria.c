@@ -266,7 +266,7 @@ void RubCri_ReceiveCriterion (void)
       RubCri_CreateCriterion (&Rubrics.Criterion);	// Add new criterion to database
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,Rub_EXISTING_RUBRIC);
+   Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -365,7 +365,7 @@ void RubCri_ChangeTitle (void)
      }
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,Rub_EXISTING_RUBRIC);
+   Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -416,7 +416,7 @@ static void RubCri_ChangeValueCriterion (RubCri_ValueRange_t ValueRange)
    Rub_DB_UpdateCriterionValue (&Rubrics.Criterion,ValueRange);
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,Rub_EXISTING_RUBRIC);
+   Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -457,7 +457,7 @@ void RubCri_ChangeWeight (void)
    Rub_DB_UpdateCriterionWeight (&Rubrics.Criterion);
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,Rub_EXISTING_RUBRIC);
+   Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -1355,7 +1355,7 @@ void RubCri_ReqRemCriterion (void)
 			Rubrics.Criterion.Title);
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,Rub_EXISTING_RUBRIC);
+   Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -1396,7 +1396,7 @@ void RubCri_RemoveCriterion (void)
    Ale_ShowAlert (Ale_SUCCESS,Txt_Criterion_removed);
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,Rub_EXISTING_RUBRIC);
+   Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -1443,7 +1443,7 @@ void RubCri_MoveUpCriterion (void)
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,Rub_EXISTING_RUBRIC);
+   Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -1494,7 +1494,7 @@ void RubCri_MoveDownCriterion (void)
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,Rub_EXISTING_RUBRIC);
+   Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -1597,7 +1597,7 @@ void RubCri_ChangeLink (void)
      }
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,Rub_EXISTING_RUBRIC);
+   Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
