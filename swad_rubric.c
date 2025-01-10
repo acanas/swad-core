@@ -809,24 +809,19 @@ static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
    extern const char *Txt_Description;
    extern const char *Txt_Create;
    extern const char *Txt_Save_changes;
-   static Act_Action_t NextAction[OldNew_NUM_OLD_NEW] =
+   static struct
      {
-      [OldNew_OLD] = ActChgRub,
-      [OldNew_NEW] = ActNewRub,
-     };
-   static Btn_Button_t Button[OldNew_NUM_OLD_NEW] =
+      Act_Action_t Action;
+      Btn_Button_t Button;
+      const char **Txt;
+     } Forms[OldNew_NUM_OLD_NEW] =
      {
-      [OldNew_OLD] = Btn_CONFIRM,
-      [OldNew_NEW] = Btn_CREATE,
-     };
-   const char *TxtButton[OldNew_NUM_OLD_NEW] =
-     {
-      [OldNew_OLD] = Txt_Save_changes,
-      [OldNew_NEW] = Txt_Create,
+      [OldNew_OLD] = {ActChgRub,Btn_CONFIRM,&Txt_Save_changes},
+      [OldNew_NEW] = {ActNewRub,Btn_CREATE ,&Txt_Create      }
      };
 
    /***** Begin form *****/
-   Frm_BeginForm (NextAction[OldNewRubric]);
+   Frm_BeginForm (Forms[OldNewRubric].Action);
       Rub_PutPars (Rubrics);
 
       /***** Begin table *****/
@@ -870,7 +865,7 @@ static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
       HTM_TABLE_End ();
 
       /***** Send button *****/
-      Btn_PutButton (Button[OldNewRubric],TxtButton[OldNewRubric]);
+      Btn_PutButton (Forms[OldNewRubric].Button,*Forms[OldNewRubric].Txt);
 
    /***** End form *****/
    Frm_EndForm ();

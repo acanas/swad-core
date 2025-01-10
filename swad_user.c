@@ -5584,11 +5584,11 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
 static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
   {
    extern const char *Txt_View_records;
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Txt_Add_to_clipboard;
    extern const char *Txt_Overwrite_clipboard;
    extern const char *Txt_View_homework;
    extern const char *Txt_View_attendance;
-   extern const char *Txt_Send_message;
    extern const char *Txt_Create_email_message;
    extern const char *Txt_Follow;
    extern const char *Txt_Unfollow;
@@ -5601,7 +5601,7 @@ static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_US
       [Usr_OPTION_OVERWRITE_CLIPBOARD	] = &Txt_Overwrite_clipboard,
       [Usr_OPTION_HOMEWORK		] = &Txt_View_homework,
       [Usr_OPTION_ATTENDANCE		] = &Txt_View_attendance,
-      [Usr_OPTION_MESSAGE		] = &Txt_Send_message,
+      [Usr_OPTION_MESSAGE		] = &Txt_Actions[ActReqMsgUsr],
       [Usr_OPTION_EMAIL			] = &Txt_Create_email_message,
       [Usr_OPTION_FOLLOW		] = &Txt_Follow,
       [Usr_OPTION_UNFOLLOW		] = &Txt_Unfollow,
@@ -6336,7 +6336,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
             Role == Rol_TCH &&				// No teachers found
             Gbl.Hierarchy.Level == Hie_CRS &&		// Course selected
             Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)	// I am an administrator
-      /***** Show alert and button to enrol students *****/
+      /***** Show alert and button to enrol teachers *****/
       Ale_ShowAlertAndButton (ActReqID_MdfTch,NULL,NULL,
                               NULL,NULL,
                               Btn_CREATE,Txt_Actions[ActReqMdfTch],

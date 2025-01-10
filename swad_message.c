@@ -234,7 +234,7 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
    extern const char *Hlp_COMMUNICATION_Messages_write;
    extern const char *Txt_Message;
    extern const char *Txt_MSG_To;
-   extern const char *Txt_Send_message;
+   extern const char *Txt_Send;
    unsigned NumUsrsInCrs = 0;	// Initialized to avoid warning
    bool ShowUsrsInCrs = false;
    bool GetUsrsInCrs;
@@ -389,7 +389,7 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
 	 free (ClassInput);
 
 	 /***** Send button *****/
-	 Btn_PutButton (Btn_CREATE,Txt_Send_message);
+	 Btn_PutButton (Btn_CREATE,Txt_Send);
 
       /***** End form *****/
       Frm_EndForm ();

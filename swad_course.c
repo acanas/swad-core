@@ -1596,18 +1596,14 @@ static void Crs_PutButtonToGoToCrs (void)
 
 static void Crs_PutButtonToRegisterInCrs (void)
   {
-   extern const char *Txt_Enrol_me_in_X;
-   char *TxtButton;
+   extern const char *Txt_Enrol_me;
 
    Frm_BeginForm (ActReqSignUp);
       // If the course being edited is different to the current one...
       if (Crs_EditingCrs->HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
 	 ParCod_PutPar (ParCod_Crs,Crs_EditingCrs->HieCod);
 
-      if (asprintf (&TxtButton,Txt_Enrol_me_in_X,Crs_EditingCrs->ShrtName) < 0)
-	 Err_NotEnoughMemoryExit ();
-      Btn_PutButton (Btn_CREATE,TxtButton);
-      free (TxtButton);
+      Btn_PutButton (Btn_CREATE,Txt_Enrol_me);
 
    Frm_EndForm ();
   }

@@ -2291,30 +2291,30 @@ const char *Txt_Announcement_removed =
 	"Announcement removed.";	// Çeviri lazim!
 #endif
 
-const char *Txt_Answer_survey =
+const char *Txt_Answer_VERB =	// As a verb
 #if   L==1	// ca
-	"Respondre enquesta";
+	"Respondre";
 #elif L==2	// de
-	"Beantwortung Umfrage";
+	"Beantwortung";
 #elif L==3	// en
-	"Answer survey";
+	"Answer";
 #elif L==4	// es
-	"Responder encuesta";
+	"Responder ";
 #elif L==5	// fr
-	"R&eacute;pondre sondage";
+	"R&eacute;pondre";
 #elif L==6	// gn
-	"Responder encuesta";	// Okoteve traducción
+	"Responder";	// Okoteve traducción
 #elif L==7	// it
-	"Rispondere sondaggio";
+	"Rispondere";
 #elif L==8	// pl
-	"Badanie odpowiedzi";
+	"Badanie";
 #elif L==9	// pt
-	"Responder inqu&eacute;rito";
+	"Responder";
 #elif L==10	// tr
-	"Answer survey";	// Çeviri lazim!
+	"Answer";	// Çeviri lazim!
 #endif
 
-const char *Txt_Answer =
+const char *Txt_Answer =	// As a noun
 #if   L==1	// ca
 	"Resposta";
 #elif L==2	// de
@@ -5087,50 +5087,27 @@ const char *Txt_Centers_with_pending_degrees =
 	"Centers with pending degrees";				// Çeviri lazim!
 #endif
 
-const char *Txt_Change_email =
+const char *Txt_Change =
 #if   L==1	// ca
-	"Canviar correu";
+	"Canviar";
 #elif L==2	// de
-	"E-Mail &auml;ndern";
+	"&Auml;ndern";
 #elif L==3	// en
-	"Change email";
+	"Change";
 #elif L==4	// es
-	"Cambiar correo";
+	"Cambiar";
 #elif L==5	// fr
-	"Changer courrier";
+	"Changer";
 #elif L==6	// gn
-	"Cambiar correo";	// Okoteve traducción
+	"Cambiar";	// Okoteve traducción
 #elif L==7	// it
-	"Cambiare email";
+	"Cambiare";
 #elif L==8	// pl
-	"Zmie&nacute; email";
+	"Zmie&nacute;";
 #elif L==9	// pt
-	"Alterar email";
+	"Alterar";
 #elif L==10	// tr
-	"Change email";		// Çeviri lazim!
-#endif
-
-const char *Txt_Change_IDs =
-#if   L==1	// ca
-	"Canviar IDs";
-#elif L==2	// de
-	"Ausweis-Nr. &auml;ndern";
-#elif L==3	// en
-	"Change IDs";
-#elif L==4	// es
-	"Cambiar ID";
-#elif L==5	// fr
-	"Changer IDs";
-#elif L==6	// gn
-	"Cambiar ID";	// Okoteve traducción
-#elif L==7	// it
-	"Cambiare ID";
-#elif L==8	// pl
-	"Zmie&nacute; ID";
-#elif L==9	// pt
-	"Alterar n&ordm;s. identif.";
-#elif L==10	// tr
-	"Change IDs";	// Çeviri lazim!
+	"Change";	// Çeviri lazim!
 #endif
 
 const char *Txt_Change_image_video =
@@ -5177,52 +5154,6 @@ const char *Txt_Change_my_groups =
 	"Alterar meus grupos";
 #elif L==10	// tr
 	"Change my groups";	// Çeviri lazim!
-#endif
-
-const char *Txt_Change_nickname =
-#if   L==1	// ca
-	"Canviar sobrenom";
-#elif L==2	// de
-	"Benutzername &auml;ndern";
-#elif L==3	// en
-	"Change nickname";
-#elif L==4	// es
-	"Cambiar apodo";
-#elif L==5	// fr
-	"Changer le surnom";
-#elif L==6	// gn
-	"Cambiar apodo";	// Okoteve traducción
-#elif L==7	// it
-	"Cambiare nome utente";
-#elif L==8	// pl
-	"Zmie&nacute; nick";
-#elif L==9	// pt
-	"Alterar alcunha";
-#elif L==10	// tr
-	"Change nickname";	// Çeviri lazim!
-#endif
-
-const char *Txt_Change_password =
-#if   L==1	// ca
-	"Canviar contrasenya";
-#elif L==2	// de
-	"Passwort &auml;ndern";
-#elif L==3	// en
-	"Change password";
-#elif L==4	// es
-	"Cambiar contrase&ntilde;a";
-#elif L==5	// fr
-	"Changer mot de passe";
-#elif L==6	// gn
-	"Cambiar contrase&ntilde;a";	// Okoteve traducción
-#elif L==7	// it
-	"Cambiare password";
-#elif L==8	// pl
-	"Zmie&nacute; has&lstrok;o";
-#elif L==9	// pt
-	"Alterar senha";
-#elif L==10	// tr
-	"&Scedil;ifre de&gbreve;i&scedil;tir";
 #endif
 
 const char *Txt_CHAT_Room =
@@ -10935,27 +10866,27 @@ const char *Txt_Duplicate_USERS =
 	"Duplicates";	// Çeviri lazim!
 #endif
 
-const char *Txt_Edit_plain_text =
+const char *Txt_Edit =
 #if   L==1	// ca
-	"Editar text sense format";
+	"Editar";
 #elif L==2	// de
-	"Plain Text bearbeiten";
+	"Bearbeiten";
 #elif L==3	// en
-	"Edit plain text";
+	"Edit";
 #elif L==4	// es
-	"Editar texto sin formato";
+	"Editar";
 #elif L==5	// fr
-	"&Eacute;diter texte simple";
+	"&Eacute;diter";
 #elif L==6	// gn
-	"Editar texto sin formato";	// Okoteve traducción
+	"Editar";	// Okoteve traducción
 #elif L==7	// it
-	"Editare testo normale";
+	"Editare";
 #elif L==8	// pl
-	"Edycja tekstu zwyk&lstrok;y";
+	"Edycja";
 #elif L==9	// pt
-	"Editar texto simples";
+	"Editar";
 #elif L==10	// tr
-	"Edit plain text";		// Çeviri lazim!
+	"Edit";		// Çeviri lazim!
 #endif
 
 const char *Txt_Edit_record_fields =
@@ -10979,29 +10910,6 @@ const char *Txt_Edit_record_fields =
 	"Editar campos cart&otilde;es";
 #elif L==10	// tr
 	"Edit record fields";		// Çeviri lazim!
-#endif
-
-const char *Txt_Edit_rich_text =
-#if   L==1	// ca
-	"Editar text enriquit";
-#elif L==2	// de
-	"Rich Text bearbeiten";
-#elif L==3	// en
-	"Edit rich text";
-#elif L==4	// es
-	"Editar texto enriquecido";
-#elif L==5	// fr
-	"&Eacute;diter texte enrichi";
-#elif L==6	// gn
-	"Editar texto enriquecido";	// Okoteve traducción
-#elif L==7	// it
-	"Editare testo formattato";
-#elif L==8	// pl
-	"Edycja tekstu sformatowany";
-#elif L==9	// pt
-	"Editar texto rico";
-#elif L==10	// tr
-	"Edit rich text";		// Çeviri lazim!
 #endif
 
 const char *Txt_eg_A_B =
@@ -11782,27 +11690,27 @@ const char *Txt_Enrol_in_groups =
 	"Enrol in groups";		// Çeviri lazim!
 #endif
 
-const char *Txt_Enrol_students_in_COURSE_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Enrol_students =
 #if   L==1	// ca
-	"Inscriure estudiants en <strong>%s</strong>";
+	"Inscriure estudiants";
 #elif L==2	// de
-	"Anmeldung Studenten im <strong>%s</strong>";
+	"Anmeldung Studenten";
 #elif L==3	// en
-	"Enrol students in <strong>%s</strong>";
+	"Enrol students";
 #elif L==4	// es
-	"Inscribir estudiantes en <strong>%s</strong>";
+	"Inscribir estudiantes";
 #elif L==5	// fr
-	"Inscrire &eacute;tudiants dans <strong>%s</strong>";
+	"Inscrire &eacute;tudiants";
 #elif L==6	// gn
-	"Inscribir estudiantes en <strong>%s</strong>";	// Okoteve traducción
+	"Inscribir estudiantes";	// Okoteve traducción
 #elif L==7	// it
-	"Registrare studenti in <strong>%s</strong>";
+	"Registrare studenti";
 #elif L==8	// pl
-	"Rejestracja student&oacute;w w <strong>%s</strong>";
+	"Rejestracja student&oacute;w";
 #elif L==9	// pt
-	"Registrar estudantes em <strong>%s</strong>";
+	"Registrar estudantes";
 #elif L==10	// tr
-	"Register students in <strong>%s</strong>";	// Çeviri lazim!
+	"Register students";		// Çeviri lazim!
 #endif
 
 const char *Txt_Enrol_the_users_indicated_in_step_1 =
@@ -11861,73 +11769,50 @@ const char *Txt_Enrol_the_users_indicated_in_step_1_and_remove_the_users_not_ind
 	" and remove the users <strong>not</strong> indicated)";	// Çeviri lazim!
 #endif
 
-const char *Txt_Enrol_user_IN_A_COURSE_OR_DEGREE =
+const char *Txt_Enrol_me =
 #if   L==1	// ca
-	"Inscriure usuari/a";
+	"Inscriureme";
 #elif L==2	// de
-	"Anmeldung Benutzer";
+	"Anmeldung Sie mir";
 #elif L==3	// en
-	"Enrol user";
+	"Enrol me";
 #elif L==4	// es
-	"Inscribir usuario/a";
+	"Inscribirme";
 #elif L==5	// fr
-	"Inscrire utilisateur/se";
+	"Inscrire-moi";
 #elif L==6	// gn
-	"Inscribir usuario/a";	// Okoteve traducción
+	"Inscribirme";	// Okoteve traducción
 #elif L==7	// it
-	"Registrare utente";
+	"Registrami";
 #elif L==8	// pl
-	"Rejestracja u&zdot;ytkownika";
+	"Rejestracja mnie";
 #elif L==9	// pt
-	"Registrar utilizador/a";
+	"Registrar me";
 #elif L==10	// tr
-	"Register user";	// Çeviri lazim!
+	"Register me";	// Çeviri lazim!
 #endif
 
-const char *Txt_Enrol_me_in_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Enrol_USER =
 #if   L==1	// ca
-	"Inscriureme en <strong>%s</strong>";
+	"Inscriure";
 #elif L==2	// de
-	"Anmeldung Sie mir im <strong>%s</strong>";
+	"Anmeldung";
 #elif L==3	// en
-	"Enrol me in <strong>%s</strong>";
+	"Enrol";
 #elif L==4	// es
-	"Inscribirme en <strong>%s</strong>";
+	"Inscribir";
 #elif L==5	// fr
-	"Inscrire-moi dans <strong>%s</strong>";
+	"Inscrire";
 #elif L==6	// gn
-	"Inscribirme en <strong>%s</strong>";	// Okoteve traducción
+	"Inscribir";	// Okoteve traducción
 #elif L==7	// it
-	"Registrami in <strong>%s</strong>";
+	"Registrare";
 #elif L==8	// pl
-	"Rejestracja mnie w <strong>%s</strong>";
+	"Rejestracja";
 #elif L==9	// pt
-	"Registrar me em <strong>%s</strong>";
+	"Registrar";
 #elif L==10	// tr
-	"Register me in <strong>%s</strong>";	// Çeviri lazim!
-#endif
-
-const char *Txt_Enrol_USER_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Inscriure en l'assignatura <strong>%s</strong>";
-#elif L==2	// de
-	"Anmeldung im Kurs <strong>%s</strong>";
-#elif L==3	// en
-	"Enrol in the course <strong>%s</strong>";
-#elif L==4	// es
-	"Inscribir en la asignatura <strong>%s</strong>";
-#elif L==5	// fr
-	"Inscrire dans la mati&egrave;re <strong>%s</strong>";
-#elif L==6	// gn
-	"Inscribir en la asignatura <strong>%s</strong>";	// Okoteve traducción
-#elif L==7	// it
-	"Registrare nel corso <strong>%s</strong>";
-#elif L==8	// pl
-	"Rejestracja w kurs <strong>%s</strong>";
-#elif L==9	// pt
-	"Registrar na disciplina <strong>%s</strong>";
-#elif L==10	// tr
-	"Register in the course <strong>%s</strong>";		// Çeviri lazim!
+	"Register";	// Çeviri lazim!
 #endif
 
 const char *Txt_Enrol_USER_as_an_administrator_of_the_center_X =	// Warning: it is very important to include %s in the following sentences
@@ -23327,50 +23212,50 @@ const char *Txt_minutes =
 	"minutes";	// Çeviri lazim!
 #endif
 
-const char *Txt_Modify_me_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Modify_me =
 #if   L==1	// ca
-	"Modificarme en l'assignatura <strong>%s</strong>";
+	"Modificarme";
 #elif L==2	// de
-	"&Auml;ndern Sie mir im Kurs <strong>%s</strong>";
+	"&Auml;ndern Sie mir";
 #elif L==3	// en
-	"Modify me in the course <strong>%s</strong>";
+	"Modify me";
 #elif L==4	// es
-	"Modificarme en la asignatura <strong>%s</strong>";
+	"Modificarme";
 #elif L==5	// fr
-	"Modifier-moi dans la mati&egrave;re <strong>%s</strong>";
+	"Modifier-moi";
 #elif L==6	// gn
-	"Modificarme en la asignatura <strong>%s</strong>";	// Okoteve traducción
+	"Modificarme";	// Okoteve traducción
 #elif L==7	// it
-	"Modificami utente nel corso <strong>%s</strong>";
+	"Modificami";
 #elif L==8	// pl
-	"Modyfikacja mnie w kurs <strong>%s</strong>";
+	"Modyfikacja";
 #elif L==9	// pt
-	"Modificar me na disciplina <strong>%s</strong>";
+	"Modificar me";
 #elif L==10	// tr
-	"Modify me in the course <strong>%s</strong>";		// Çeviri lazim!
+	"Modify me";		// Çeviri lazim!
 #endif
 
-const char *Txt_Modify_user_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Modify_user =
 #if   L==1	// ca
-	"Modificar usuari en l'assignatura <strong>%s</strong>";
+	"Modificar usuari";
 #elif L==2	// de
-	"&Auml;ndern Benutzer im Kurs <strong>%s</strong>";
+	"&Auml;ndern Benutzer";
 #elif L==3	// en
-	"Modify user in the course <strong>%s</strong>";
+	"Modify user";
 #elif L==4	// es
-	"Modificar usuario en la asignatura <strong>%s</strong>";
+	"Modificar usuario";
 #elif L==5	// fr
-	"Modifier utilisateur dans la mati&egrave;re <strong>%s</strong>";
+	"Modifier utilisateur";
 #elif L==6	// gn
-	"Modificar usuario en la asignatura <strong>%s</strong>";	// Okoteve traducción
+	"Modificar usuario";	// Okoteve traducción
 #elif L==7	// it
-	"Modifica utente nel corso <strong>%s</strong>";
+	"Modifica utente";
 #elif L==8	// pl
-	"Modyfikacja u&zdot;ytkownika w kurs <strong>%s</strong>";
+	"Modyfikacja u&zdot;ytkownika";
 #elif L==9	// pt
-	"Modificar utilizador na disciplina <strong>%s</strong>";
+	"Modificar utilizador";
 #elif L==10	// tr
-	"Modify user in the course <strong>%s</strong>";		// Çeviri lazim!
+	"Modify user";		// Çeviri lazim!
 #endif
 
 const char *Txt_Month =
@@ -41902,75 +41787,6 @@ const char *Txt_Send =
 	"Send";	// Çeviri lazim!
 #endif
 
-const char *Txt_Send_message =
-#if   L==1	// ca
-	"Enviar missatge";
-#elif L==2	// de
-	"Senden Nachricht";
-#elif L==3	// en
-	"Send message";
-#elif L==4	// es
-	"Enviar mensaje";
-#elif L==5	// fr
-	"Envoyer message";
-#elif L==6	// gn
-	"Emondo marandu";
-#elif L==7	// it
-	"Invia messaggio";
-#elif L==8	// pl
-	"Wy&sacute;lij wiadomo&sacute;&cacute;";
-#elif L==9	// pt
-	"Enviar mensagem";
-#elif L==10	// tr
-	"Mesaj g&ouml;nder";
-#endif
-
-const char *Txt_Send_survey =
-#if   L==1	// ca
-	"Enviar enquesta";
-#elif L==2	// de
-	"Senden Umfrage";
-#elif L==3	// en
-	"Send survey";
-#elif L==4	// es
-	"Enviar encuesta";
-#elif L==5	// fr
-	"Envoyer sondage";
-#elif L==6	// gn
-	"Enviar encuesta";	// Okoteve traducción
-#elif L==7	// it
-	"Invia sondaggio";
-#elif L==8	// pl
-	"Send survey";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Enviar inqu&eacute;rito";
-#elif L==10	// tr
-	"Send survey";		// Çeviri lazim!
-#endif
-
-const char *Txt_Send_URL =
-#if   L==1	// ca
-	"Enviar URL";
-#elif L==2	// de
-	"Senden URL";
-#elif L==3	// en
-	"Send URL";
-#elif L==4	// es
-	"Enviar URL";
-#elif L==5	// fr
-	"Envoyer URL";
-#elif L==6	// gn
-	"Enviar URL";	// Okoteve traducción
-#elif L==7	// it
-	"Invia URL";
-#elif L==8	// pl
-	"Wy&sacute;lij URL";
-#elif L==9	// pt
-	"Enviar URL";
-#elif L==10	// tr
-	"Send URL";	// Çeviri lazim!
-#endif
-
 const char *Txt_Session =
 #if   L==1	// ca
 	"Sessi&oacute;";
@@ -43013,29 +42829,6 @@ const char *Txt_Show_questions =
 	"Mostrar perguntas";
 #elif L==10	// tr
 	"Show questions";	// Çeviri lazim!
-#endif
-
-const char *Txt_Show_statistic =
-#if   L==1	// ca
-	"Mostrar estad&iacute;stica";
-#elif L==2	// de
-	"Zeige Statistik";
-#elif L==3	// en
-	"Show statistic";
-#elif L==4	// es
-	"Mostrar estad&iacute;stica";
-#elif L==5	// fr
-	"Voir statistique";
-#elif L==6	// gn
-	"Mostrar estad&iacute;stica";	// Okoteve traducción
-#elif L==7	// it
-	"Visualizza statistica";
-#elif L==8	// pl
-	"Poka&zdot; statystyk&eogon;";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Mostrar estat&iacute;stica";
-#elif L==10	// tr
-	"Show statistic";		// Çeviri lazim!
 #endif
 
 const char *Txt_Show_tutoring_hours =
@@ -55888,50 +55681,27 @@ const char *Txt_UPLOAD_FILE_X_invalid_name =	// Warning: it is very important to
 	"<strong>%s</strong>: invalid name.";			// Çeviri lazim!
 #endif
 
-const char *Txt_Upload_file =
+const char *Txt_Upload =
 #if   L==1	// ca
-	"Enviar arxiu";
+	"Enviar";
 #elif L==2	// de
-	"Upload Datei";
+	"Upload";
 #elif L==3	// en
-	"Upload file";
+	"Upload";
 #elif L==4	// es
-	"Enviar archivo";
+	"Enviar";
 #elif L==5	// fr
-	"T&eacute;l&eacute;charger fichier";
+	"T&eacute;l&eacute;charger";
 #elif L==6	// gn
-	"Enviar archivo";	// Okoteve traducción
+	"Enviar";	// Okoteve traducción
 #elif L==7	// it
-	"Caricare file";
+	"Caricare";
 #elif L==8	// pl
-	"Przesy&lstrok;anie pliku";
+	"Przesy&lstrok;anie";
 #elif L==9	// pt
-	"Fazer upload de arquivo";
+	"Fazer upload";
 #elif L==10	// tr
-	"Upload file";		// Çeviri lazim!
-#endif
-
-const char *Txt_Upload_files =
-#if   L==1	// ca
-	"Enviar arxius";
-#elif L==2	// de
-	"Upload Dateien";
-#elif L==3	// en
-	"Upload files";
-#elif L==4	// es
-	"Subir archivos";
-#elif L==5	// fr
-	"T&eacute;l&eacute;charger fichiers";
-#elif L==6	// gn
-	"Subir archivos";	// Okoteve traducción
-#elif L==7	// it
-	"Caricare file";
-#elif L==8	// pl
-	"Prze&sacute;lij pliki";
-#elif L==9	// pt
-	"Fazer upload de arquivos";
-#elif L==10	// tr
-	"Upload files";		// Çeviri lazim!
+	"Upload";		// Çeviri lazim!
 #endif
 
 const char *Txt_Upload_my_picture =

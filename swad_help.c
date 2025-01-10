@@ -67,11 +67,11 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
    extern const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrolment_in_them;
    extern const char *Txt_If_you_can_not_find_your_institution_your_center_your_degree_or_your_courses_you_can_create_them;
    extern const char *Txt_What_would_you_like_to_do;
-   extern const char *Txt_Enrol_students_in_COURSE_X;
+   extern const char *Txt_Enrol_students;
    extern const char *Txt_Go_to_one_of_my_courses;
    extern const char *Txt_Remove_me_from_THE_COURSE_X;
    extern const char *Txt_Remove;
-   extern const char *Txt_Enrol_me_in_X;
+   extern const char *Txt_Enrol_me;
    extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Select_or_create_one_course_in_X;
    extern const char *Txt_Select_or_create_one_degree_in_X;
@@ -147,13 +147,9 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	          case Usr_DONT_BELONG:	// I do not belong to this course
 	          default:
 		     /***** Request my registration in this course *****/
-		     if (asprintf (&Description,Txt_Enrol_me_in_X,
-				   Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
-			Err_NotEnoughMemoryExit ();
-		     Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
+		     Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Enrol_me,
 							  ActReqSignUp,
 							  Btn_CREATE,Txt_Actions[ActSignUp]);
-		     free (Description);
 		     break;
 	         }
 	      }
@@ -164,16 +160,10 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		   Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs == Rol_TCH)	// I am a teacher in current course
 		  if (!Enr_GetCachedNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 						   1 << Rol_STD))		// Current course probably has no students
-		    {
 		     /***** Request students enrolment *****/
-		     if (asprintf (&Description,Txt_Enrol_students_in_COURSE_X,
-				   Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
-			Err_NotEnoughMemoryExit ();
-		     Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
+		     Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Enrol_students,
 							  ActReqEnrSevStd,
 							  Btn_CREATE,Txt_Actions[ActRcvFrmEnrSevStd]);
-		     free (Description);
-		    }
 
 	       if (Gbl.Action.Act != ActMyCrs)	// I am not seeing the action to list my courses
 		  /***** Request list my courses *****/

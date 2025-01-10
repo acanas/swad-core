@@ -278,7 +278,7 @@ void Bib_WriteCellEditRef (struct Tre_Node *Node,
 void Bib_WriteCellNewRef (void)
   {
    extern const char *Txt_BIBLIOGRAPHY_URL;
-   extern const char *Txt_Save_changes;
+   extern const char *Txt_Create;
    unsigned NumField;
 
    /***** Fields *****/
@@ -301,7 +301,7 @@ void Bib_WriteCellNewRef (void)
    HTM_BR ();
 
    /***** Button to save changes *****/
-   Btn_PutButtonInline (Btn_CREATE,Txt_Save_changes);
+   Btn_PutButtonInline (Btn_CREATE,Txt_Create);
   }
 
 /*****************************************************************************/

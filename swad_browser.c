@@ -6295,7 +6295,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 
 static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
   {
-   extern const char *Txt_Upload_files;
+   extern const char *Txt_Upload;
    extern const char *Txt_or_you_can_upload_new_files_to_the_folder_X;
    extern const char *Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
@@ -6303,7 +6303,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 
    /***** Begin box *****/
    HTM_DIV_Begin ("id=\"dropzone-upload\"");
-      Box_BoxBegin (Txt_Upload_files,NULL,NULL,NULL,Box_NOT_CLOSABLE);
+      Box_BoxBegin (Txt_Upload,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
 	 /***** Help message *****/
 	 Ale_ShowAlert (Ale_INFO,Txt_or_you_can_upload_new_files_to_the_folder_X,
@@ -6356,12 +6356,12 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 
 static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
   {
-   extern const char *Txt_Upload_file;
+   extern const char *Txt_Upload;
    extern const char *Txt_or_you_can_upload_a_new_file_to_the_folder_X;
 
    /***** Begin box *****/
    HTM_DIV_Begin ("id=\"classic-upload\" style=\"display:none;\"");
-      Box_BoxBegin (Txt_Upload_file,NULL,NULL,NULL,Box_NOT_CLOSABLE);
+      Box_BoxBegin (Txt_Upload,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
 	 /***** Help message *****/
 	 Ale_ShowAlert (Ale_INFO,Txt_or_you_can_upload_a_new_file_to_the_folder_X,
@@ -6373,11 +6373,8 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
 
 	    /* File */
 	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"*",
-			    HTM_NO_ATTR,
+			    HTM_SUBMIT_ON_CHANGE,
 			    NULL);
-
-	    /* Button to send */
-	    Btn_PutButton (Btn_CREATE,Txt_Upload_file);
 
 	 Frm_EndForm ();
 

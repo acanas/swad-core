@@ -31045,25 +31045,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewAdmIns] =
 #if   L==1	// ca
-	"Register an administrador in an institution"		// Necessita traducció
+	"Register an institution administrator"			// Necessita traducció
 #elif L==2	// de
-	"Register an administrador in an institution"		// Need Übersetzung
+	"Register an institution administrator"			// Need Übersetzung
 #elif L==3	// en
-	"Register an administrador in an institution"
+	"Register an institution administrator"
 #elif L==4	// es
-	"Inscribir un administrador en una instituci&oacute;n"
+	"Inscribir un administrador de instituci&oacute;n"
 #elif L==5	// fr
-	"Register an administrador in an institution"		// Besoin de traduction
+	"Register an institution administrator"			// Besoin de traduction
 #elif L==6	// gn
-	"Inscribir un administrador en una instituci&oacute;n"	// Okoteve traducción
+	"Inscribir un administrador de instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Register an administrador in an institution"		// Bisogno di traduzione
+	"Register an institution administrator"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Register an administrador in an institution"		// Potrzebujesz tlumaczenie
+	"Register an institution administrator"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Register an administrador in an institution"		// Precisa de tradução
+	"Register an institution administrator"			// Precisa de tradução
 #elif L==10	// tr
-	"Register an administrador in an institution"		// Çeviri lazim!
+	"Register an institution administrator"			// Çeviri lazim!
 #endif
 	,
 	[ActRemAdmIns] =
@@ -31091,25 +31091,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewAdmCtr] =
 #if   L==1	// ca
-	"Register an administrador in a center"		// Necessita traducció
+	"Register a center administrator"	// Necessita traducció
 #elif L==2	// de
-	"Register an administrador in a center"		// Need Übersetzung
+	"Register a center administrator"	// Need Übersetzung
 #elif L==3	// en
-	"Register an administrador in a center"
+	"Register a center administrator"
 #elif L==4	// es
-	"Inscribir un administrador en un centro"
+	"Inscribir un administrador de centro"
 #elif L==5	// fr
-	"Register an administrador in a center"		// Besoin de traduction
+	"Register a center administrator"	// Besoin de traduction
 #elif L==6	// gn
-	"Inscribir un administrador en un centro"	// Okoteve traducción
+	"Inscribir un administrador de centro"	// Okoteve traducción
 #elif L==7	// it
-	"Register an administrador in a center"		// Bisogno di traduzione
+	"Register a center administrator"	// Bisogno di traduzione
 #elif L==8	// pl
-	"Register an administrador in a center"		// Potrzebujesz tlumaczenie
+	"Register a center administrator"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Register an administrador in a center"		// Precisa de tradução
+	"Register a center administrator"	// Precisa de tradução
 #elif L==10	// tr
-	"Register an administrador in a center"		// Çeviri lazim!
+	"Register a center administrator"	// Çeviri lazim!
 #endif
 	,
 	[ActRemAdmCtr] =
@@ -31137,25 +31137,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewAdmDeg] =
 #if   L==1	// ca
-	"Register an administrador in a degree"			// Necessita traducció
+	"Register a degree administrator"			// Necessita traducció
 #elif L==2	// de
-	"Register an administrador in a degree"			// Need Übersetzung
+	"Register a degree administrator"			// Need Übersetzung
 #elif L==3	// en
-	"Register an administrador in a degree"
+	"Register a degree administrator"
 #elif L==4	// es
-	"Inscribir un administrador en una titulaci&oacute;n"
+	"Inscribir un administrador de titulaci&oacute;n"
 #elif L==5	// fr
-	"Register an administrador in a degree"			// Besoin de traduction
+	"Register a degree administrator"			// Besoin de traduction
 #elif L==6	// gn
-	"Inscribir un administrador en una titulaci&oacute;n"	// Okoteve traducción
+	"Inscribir un administrador de titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Register an administrador in a degree"			// Bisogno di traduzione
+	"Register a degree administrator"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Register an administrador in a degree"			// Potrzebujesz tlumaczenie
+	"Register a degree administrator"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Register an administrador in a degree"			// Precisa de tradução
+	"Register a degree administrator"			// Precisa de tradução
 #elif L==10	// tr
-	"Register an administrador in a degree"			// Çeviri lazim!
+	"Register a degree administrator"			// Çeviri lazim!
 #endif
 	,
 	[ActRemAdmDeg] =

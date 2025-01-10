@@ -1096,7 +1096,7 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
    extern const char *Txt_Use_this_email;
    extern const char *Txt_New_email;
    extern const char *Txt_Email;
-   extern const char *Txt_Change_email;
+   extern const char *Txt_Change;
    extern const char *Txt_Save_changes;
    extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    MYSQL_RES *mysql_res;
@@ -1243,8 +1243,8 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
 				" class=\"Frm_C2_INPUT INPUT_%s\" size=\"16\"",
 				The_GetSuffix ());
 	       HTM_BR ();
-	       Btn_PutButtonInline (Btn_CREATE,NumEmails ? Txt_Change_email :	// User already has an email address
-						      Txt_Save_changes);	// User has no email address yet
+	       Btn_PutButtonInline (Btn_CREATE,NumEmails ? Txt_Change :		// User already has an email address
+						           Txt_Save_changes);	// User has no email address yet
 	    Frm_EndForm ();
 	 HTM_TD_End ();
 

@@ -1803,7 +1803,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 	   {
 	       if (ICanChangeMyGrps == Usr_CAN)
 		  Btn_PutButton (Btn_CONFIRM,NumGrpsIBelong ? Txt_Change_my_groups :
-							 Txt_Enrol_in_groups);
+							      Txt_Enrol_in_groups);
 	    Frm_EndForm ();
 	   }
 	}

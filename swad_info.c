@@ -236,11 +236,8 @@ static void Inf_ConfigInfoSource (struct Inf_Info *Info);
 
 static bool Inf_CheckIfInfoAvailable (Inf_Type_t InfoType,Inf_Src_t InfoSrc);
 
-static void Inf_FormToEnterIntegratedEditor (Inf_Type_t InfoType,Inf_Src_t InfoSrc);
-static void Inf_FormToEnterPlainTextEditor (Inf_Type_t InfoType,Inf_Src_t InfoSrc);
-static void Inf_FormToEnterRichTextEditor (Inf_Type_t InfoType,Inf_Src_t InfoSrc);
-static void Inf_FormToEnterSendingPage (Inf_Type_t InfoType,Inf_Src_t InfoSrc);
-static void Inf_FormToEnterSendingURL (Inf_Type_t InfoType,Inf_Src_t InfoSrc);
+static void Inf_FormToEnterEditor (Inf_Type_t InfoType,Inf_Src_t InfoSrc);
+static void Inf_FormToEnterPageUploader (Inf_Type_t InfoType,Inf_Src_t InfoSrc);
 
 static bool Inf_CheckPlainTxt (Inf_Type_t InfoType);
 static bool Inf_CheckAndShowPlainTxt (Inf_Type_t InfoType);
@@ -1387,11 +1384,11 @@ static void Inf_ConfigInfoSource (struct Inf_Info *Info)
    static void (*Inf_FormsForEditionTypes[Inf_NUM_SOURCES])(Inf_Type_t InfoType,Inf_Src_t InfoSrc) =
      {
       [Inf_SRC_NONE	] = NULL,
-      [Inf_EDITOR	] = Inf_FormToEnterIntegratedEditor,
-      [Inf_PLAIN_TEXT	] = Inf_FormToEnterPlainTextEditor,
-      [Inf_RICH_TEXT	] = Inf_FormToEnterRichTextEditor,
-      [Inf_PAGE		] = Inf_FormToEnterSendingPage,
-      [Inf_URL		] = Inf_FormToEnterSendingURL,
+      [Inf_EDITOR	] = Inf_FormToEnterEditor,
+      [Inf_PLAIN_TEXT	] = Inf_FormToEnterEditor,
+      [Inf_RICH_TEXT	] = Inf_FormToEnterEditor,
+      [Inf_PAGE		] = Inf_FormToEnterPageUploader,
+      [Inf_URL		] = Inf_FormToEnterEditor,
      };
 
    /***** Check if info available *****/
@@ -1493,42 +1490,16 @@ static bool Inf_CheckIfInfoAvailable (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
   }
 
 /*****************************************************************************/
-/****************** Form to enter in integrated editor ***********************/
-/*****************************************************************************/
-
-static void Inf_FormToEnterIntegratedEditor (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
-  {
-   Frm_BeginForm (Inf_ActionsInfo[InfoSrc][InfoType]);
-      Inf_PutParInfoType (&InfoType);
-      Btn_PutButton (Btn_CONFIRM,Act_GetActionText (Inf_ActionsInfo[InfoSrc][InfoType]));
-   Frm_EndForm ();
-  }
-
-/*****************************************************************************/
 /****************** Form to enter in plain text editor ***********************/
 /*****************************************************************************/
 
-static void Inf_FormToEnterPlainTextEditor (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
+static void Inf_FormToEnterEditor (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
   {
-   extern const char *Txt_Edit_plain_text;
+   extern const char *Txt_Edit;
 
    Frm_BeginForm (Inf_ActionsInfo[InfoSrc][InfoType]);
       Inf_PutParInfoType (&InfoType);
-      Btn_PutButton (Btn_CONFIRM,Txt_Edit_plain_text);
-   Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/******************* Form to enter in rich text editor ***********************/
-/*****************************************************************************/
-
-static void Inf_FormToEnterRichTextEditor (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
-  {
-   extern const char *Txt_Edit_rich_text;
-
-   Frm_BeginForm (Inf_ActionsInfo[InfoSrc][InfoType]);
-      Inf_PutParInfoType (&InfoType);
-      Btn_PutButton (Btn_CONFIRM,Txt_Edit_rich_text);
+      Btn_PutButtonInline (Btn_CONFIRM,Txt_Edit);
    Frm_EndForm ();
   }
 
@@ -1536,27 +1507,13 @@ static void Inf_FormToEnterRichTextEditor (Inf_Type_t InfoType,Inf_Src_t InfoSrc
 /******************* Form to upload a file with a page ***********************/
 /*****************************************************************************/
 
-static void Inf_FormToEnterSendingPage (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
+static void Inf_FormToEnterPageUploader (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
   {
-   extern const char *Txt_Upload_file;
+   extern const char *Txt_Upload;
 
    Frm_BeginForm (Inf_ActionsInfo[InfoSrc][InfoType]);
       Inf_PutParInfoType (&InfoType);
-      Btn_PutButton (Btn_CONFIRM,Txt_Upload_file);
-   Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/********************* Form to send a link to a web page *********************/
-/*****************************************************************************/
-
-static void Inf_FormToEnterSendingURL (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
-  {
-   extern const char *Txt_Send_URL;
-
-   Frm_BeginForm (Inf_ActionsInfo[InfoSrc][InfoType]);
-      Inf_PutParInfoType (&InfoType);
-      Btn_PutButton (Btn_CONFIRM,Txt_Send_URL);
+      Btn_PutButtonInline (Btn_CONFIRM,Txt_Upload);
    Frm_EndForm ();
   }
 
@@ -2179,7 +2136,6 @@ void Inf_EditPagInfo (void)
   {
    extern const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES];
    extern const char *Txt_File;
-   extern const char *Txt_Upload_file;
    static Act_Action_t Actions[Inf_NUM_TYPES] =
      {
       [Inf_UNKNOWN_TYPE	] = ActUnk,
@@ -2210,13 +2166,10 @@ void Inf_EditPagInfo (void)
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtColonNBSP (Txt_File);
 	       HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,".htm,.html,.pdf,.zip",
-			       HTM_NO_ATTR,
+			       HTM_SUBMIT_ON_CHANGE,
 			       NULL);
 	    HTM_LABEL_End ();
 	 HTM_DIV_End ();
-
-	 /***** Send button *****/
-	 Btn_PutButton (Btn_CREATE,Txt_Upload_file);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -2362,7 +2315,7 @@ void Inf_ReceivePagInfo (void)
 void Inf_EditURLInfo (void)
   {
    extern const char *Txt_URL;
-   extern const char *Txt_Send_URL;
+   extern const char *Txt_Save_changes;
    char URL[WWW_MAX_BYTES_WWW + 1];
    char PathFile[PATH_MAX + 1];
    FILE *FileURL;
@@ -2413,7 +2366,7 @@ void Inf_EditURLInfo (void)
 	 HTM_DIV_End ();
 
 	 /***** Send button *****/
-	 Btn_PutButton (Btn_CREATE,Txt_Send_URL);
+	 Btn_PutButton (Btn_CREATE,Txt_Save_changes);
 
       /***** End form *****/
       Frm_EndForm ();

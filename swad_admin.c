@@ -79,8 +79,8 @@ void Adm_ReqAddAdm (Hie_Level_t Level)
   {
    extern const char *Txt_THE_USER_X_is_already_an_administrator_of_Y;
    extern const char *Txt_Do_you_really_want_to_enrol_the_following_user_as_an_administrator_of_X;
-   extern const char *Txt_Enrol_user_IN_A_COURSE_OR_DEGREE;
-   static Act_Action_t Enr_ActNewAdm[Hie_NUM_LEVELS] =
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
+   static Act_Action_t Actions[Hie_NUM_LEVELS] =
      {
       [Hie_UNK] = ActUnk,
       [Hie_SYS] = ActUnk,
@@ -123,9 +123,9 @@ void Adm_ReqAddAdm (Hie_Level_t Level)
 		  Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
 		  /* End alert */
-		  Ale_ShowAlertAndButtonEnd (Enr_ActNewAdm[Level],NULL,NULL,
-					   Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-					   Btn_CREATE,Txt_Enrol_user_IN_A_COURSE_OR_DEGREE);
+		  Ale_ShowAlertAndButtonEnd (Actions[Level],NULL,NULL,
+					     Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+					     Btn_CREATE,Txt_Actions[Actions[Level]]);
 		 }
                break;
             case Usr_CAN_NOT:

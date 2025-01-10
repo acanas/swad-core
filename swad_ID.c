@@ -572,7 +572,7 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 	       Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_ID_identity_number);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"Frm_C2 LT DAT_STRONG_%s\"",The_GetSuffix ());
+	       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	   }
 	 else	// NumID >= 1
 	    HTM_BR ();

@@ -892,6 +892,16 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
    char *Anchor = NULL;
    void (*FunctionToDrawContextualIcons) (void *Args);
    const char *HelpLink;
+   static struct
+     {
+      const char **Help;
+      Btn_Button_t Button;
+      const char **Txt;
+     } Forms[OldNew_NUM_OLD_NEW] =
+     {
+      [OldNew_OLD] = {&Hlp_ASSESSMENT_Calls_for_exams_edit_call,Btn_CONFIRM,&Txt_Save_changes},
+      [OldNew_NEW] = {&Hlp_ASSESSMENT_Calls_for_exams_new_call ,Btn_CREATE ,&Txt_Create      }
+     };
    static const char *ClassCallForExam[Vie_NUM_VIEW_TYPES][Cfe_NUM_STATUS] =
      {
       [Vie_VIEW		][Cfe_VISIBLE_CALL_FOR_EXAM] = "CALL_FOR_EXAM_VISIBLE",
@@ -910,6 +920,8 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
       [Vie_PRINT	][Cfe_HIDDEN_CALL_FOR_EXAM ] = "CALL_FOR_EXAM_VISIBLE",
       [Vie_PRINT	][Cfe_DELETED_CALL_FOR_EXAM] = NULL,	// Not applicable here
      };
+   OldNew_OldNew_t OldNewCFE = (ExaCod > 0) ? OldNew_OLD :
+					      OldNew_NEW;
 
    /***** Build anchor string *****/
    Frm_SetAnchorStr (ExaCod,&Anchor);
@@ -923,9 +935,8 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
    CallsForExams->ExaCod = ExaCod;	// Used to put contextual icons
    FunctionToDrawContextualIcons = ViewType == Vie_VIEW ? Cfe_PutIconsCallForExam :
 							  NULL;
-   HelpLink = ViewType == Vie_EDIT ? ((ExaCod > 0) ? Hlp_ASSESSMENT_Calls_for_exams_edit_call :
-						     Hlp_ASSESSMENT_Calls_for_exams_new_call) :
-				     NULL;
+   HelpLink = (ViewType == Vie_EDIT) ? *Forms[OldNewCFE].Help :
+				       NULL;
    if (HighLight)
      {
       /* Show pending alerts */
@@ -1435,10 +1446,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
       /***** End table, send button and end box *****/
       if (ViewType == Vie_EDIT)
-	 Box_BoxTableWithButtonEnd (ExaCod > 0 ? Btn_CONFIRM :
-						 Btn_CREATE,
-				    ExaCod > 0 ? Txt_Save_changes :
-						 Txt_Create);
+	 Box_BoxTableWithButtonEnd (Forms[OldNewCFE].Button,*Forms[OldNewCFE].Txt);
       else
 	 Box_BoxTableEnd ();
 

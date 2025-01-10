@@ -1852,16 +1852,16 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
    switch (OldNewQst)
      {
       case OldNew_OLD:
-	 Box_BoxBegin (Txt_Question,NULL,NULL,
-		       Hlp_ASSESSMENT_Questions_writing_a_question,Box_NOT_CLOSABLE);
-	 break;
-      case OldNew_NEW:
-      default:
 	 if (asprintf (&Title,Txt_Question_code_X,Question->QstCod) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 Box_BoxBegin (Title,Qst_PutIconToRemoveOneQst,&Question->QstCod,
 		       Hlp_ASSESSMENT_Questions_writing_a_question,Box_NOT_CLOSABLE);
 	 free (Title);
+	 break;
+      case OldNew_NEW:
+      default:
+	 Box_BoxBegin (Txt_Question,NULL,NULL,
+		       Hlp_ASSESSMENT_Questions_writing_a_question,Box_NOT_CLOSABLE);
 	 break;
      }
 

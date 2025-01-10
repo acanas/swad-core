@@ -579,7 +579,7 @@ void Pwd_ShowFormChgMyPwd (void)
    extern const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_;
    extern const char *Txt_Password;
    extern const char *Txt_Current_password;
-   extern const char *Txt_Change_password;
+   extern const char *Txt_Change;
    extern const char *Txt_Set_password;
    bool IHaveAPasswordInDB = (bool) Gbl.Usrs.Me.UsrDat.Password[0];
 
@@ -641,7 +641,7 @@ void Pwd_ShowFormChgMyPwd (void)
 
 	 /***** End table, send button and end box *****/
 	 Box_BoxTableWithButtonEnd (Btn_CONFIRM,
-				    IHaveAPasswordInDB ? Txt_Change_password :
+				    IHaveAPasswordInDB ? Txt_Change :
 							 Txt_Set_password);
 
       /***** End form *****/
@@ -728,7 +728,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
 void Pwd_ShowFormChgOtherUsrPwd (void)
   {
    extern const char *Txt_Password;
-   extern const char *Txt_Change_password;
+   extern const char *Txt_Change;
    static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_UNK	  ] = ActChgPwdOth,
@@ -762,7 +762,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 	       Pwd_PutFormToGetNewPasswordTwice ();
 	    HTM_TABLE_End ();
 
-	    Btn_PutButton (Btn_CONFIRM,Txt_Change_password);
+	    Btn_PutButton (Btn_CONFIRM,Txt_Change);
 
 	 /* End form */
 	 Frm_EndForm ();

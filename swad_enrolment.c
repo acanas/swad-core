@@ -1679,21 +1679,20 @@ static void Enr_PutActionModifyOneUsr (HTM_Attributes_t *Attributes,
                                        Usr_Belong_t UsrBelongsToCrs,
                                        Usr_MeOrOther_t MeOrOther)
   {
-   extern const char *Txt_Enrol_me_in_X;
-   extern const char *Txt_Enrol_USER_in_the_course_X;
-   extern const char *Txt_Modify_me_in_the_course_X;
-   extern const char *Txt_Modify_user_in_the_course_X;
+   extern const char *Txt_Enrol_me;
+   extern const char *Txt_Enrol_USER;
+   extern const char *Txt_Modify_me;
+   extern const char *Txt_Modify_user;
    const char *Txt[Usr_NUM_BELONG][Usr_NUM_ME_OR_OTHER] =
      {
-      [Usr_DONT_BELONG][Usr_ME   ] = Txt_Enrol_me_in_X,
-      [Usr_DONT_BELONG][Usr_OTHER] = Txt_Enrol_USER_in_the_course_X,
-      [Usr_BELONG     ][Usr_ME   ] = Txt_Modify_me_in_the_course_X,
-      [Usr_BELONG     ][Usr_OTHER] = Txt_Modify_user_in_the_course_X,
+      [Usr_DONT_BELONG][Usr_ME   ] = Txt_Enrol_me,
+      [Usr_DONT_BELONG][Usr_OTHER] = Txt_Enrol_USER,
+      [Usr_BELONG     ][Usr_ME   ] = Txt_Modify_me,
+      [Usr_BELONG     ][Usr_OTHER] = Txt_Modify_user,
      };
 
    Enr_EnrRemOneUsrActionBegin (Enr_ENROL_MODIFY_ONE_USR_IN_CRS,Attributes);
-      HTM_TxtF (Txt[UsrBelongsToCrs][MeOrOther],
-		Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+      HTM_TxtF (Txt[UsrBelongsToCrs][MeOrOther]);
    Enr_EnrRemOneUsrActionEnd ();
   }
 

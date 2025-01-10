@@ -1309,24 +1309,19 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
    extern const char *Txt_Description;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Create;
-   static Act_Action_t NextAction[OldNew_NUM_OLD_NEW] =
+   static struct
      {
-      [OldNew_OLD] = ActChgExa,
-      [OldNew_NEW] = ActNewExa,
-     };
-   static Btn_Button_t Button[OldNew_NUM_OLD_NEW] =
+      Act_Action_t Action;
+      Btn_Button_t Button;
+      const char **Txt;
+     } Forms[OldNew_NUM_OLD_NEW] =
      {
-      [OldNew_OLD] = Btn_CONFIRM,
-      [OldNew_NEW] = Btn_CREATE,
-     };
-   const char *TxtButton[OldNew_NUM_OLD_NEW] =
-     {
-      [OldNew_OLD] = Txt_Save_changes,
-      [OldNew_NEW] = Txt_Create,
+      [OldNew_OLD] = {ActChgExa,Btn_CONFIRM,&Txt_Save_changes},
+      [OldNew_NEW] = {ActNewExa,Btn_CREATE ,&Txt_Create      }
      };
 
    /***** Begin form *****/
-   Frm_BeginForm (NextAction[OldNewExam]);
+   Frm_BeginForm (Forms[OldNewExam].Action);
       Exa_PutPars (Exams);
 
       /***** Begin table *****/
@@ -1398,7 +1393,7 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
       HTM_TABLE_End ();
 
       /***** Send button *****/
-      Btn_PutButton (Button[OldNewExam],TxtButton[OldNewExam]);
+      Btn_PutButton (Forms[OldNewExam].Button,*Forms[OldNewExam].Txt);
 
    /***** End form *****/
    Frm_EndForm ();
