@@ -48,6 +48,7 @@
 #include "swad_HTML.h"
 #include "swad_notification.h"
 #include "swad_notification_database.h"
+#include "swad_old_new.h"
 #include "swad_pagination.h"
 #include "swad_parameter_code.h"
 #include "swad_photo.h"
@@ -1151,7 +1152,7 @@ static void Asg_HideUnhideAssignment (HidVis_HiddenOrVisible_t HiddenOrVisible)
 void Asg_ReqCreatOrEditAsg (void)
   {
    struct Asg_Assignments Assignments;
-   bool ItsANewAsg;
+   OldNew_OldNew_t OldNewAsg;
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Reset assignments *****/
@@ -1163,32 +1164,31 @@ void Asg_ReqCreatOrEditAsg (void)
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
-   ItsANewAsg = ((Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) <= 0);
+   OldNewAsg = ((Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) > 0) ? OldNew_OLD :
+									     OldNew_NEW;
 
    /***** Get from the database the data of the assignment *****/
-   if (ItsANewAsg)
+   switch (OldNewAsg)
      {
-      /* Initialize to empty assignment */
-      Assignments.Asg.AsgCod		    = -1L;
-      Assignments.Asg.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
-      Assignments.Asg.TimeUTC[Dat_END_TIME] = Assignments.Asg.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
-      Assignments.Asg.ClosedOrOpen	    = CloOpe_OPEN;
-      Assignments.Asg.Title[0]		    = '\0';
-      Assignments.Asg.SendWork		    = Asg_DONT_SEND_WORK;
-      Assignments.Asg.Folder[0]		    = '\0';
-      Assignments.Asg.RubCod		    = -1L;
-      Assignments.Asg.ICanDo		    = Usr_CAN_NOT;
-     }
-   else
-     {
-      /* Get data of the assignment from database */
-      Asg_GetAssignmentDataByCod (&Assignments.Asg);
+      case OldNew_OLD:
+	 /* Get data of the assignment from database */
+	 Asg_GetAssignmentDataByCod (&Assignments.Asg);
 
-      /* Get text of the assignment from database */
-      Asg_DB_GetAssignmentTxt (Assignments.Asg.AsgCod,Description);
+	 /* Get text of the assignment from database */
+	 Asg_DB_GetAssignmentTxt (Assignments.Asg.AsgCod,Description);
 
-      /* Get rubric associated to the assignment from database */
-      Assignments.Asg.RubCod = Asg_DB_GetAssignmentRubCod (Assignments.Asg.AsgCod);
+	 /* Get rubric associated to the assignment from database */
+	 Assignments.Asg.RubCod = Asg_DB_GetAssignmentRubCod (Assignments.Asg.AsgCod);
+	 break;
+      case OldNew_NEW:
+      default:
+	 /* Initialize to empty assignment */
+	 Asg_ResetAssignment (&Assignments.Asg);
+	 Assignments.Asg.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
+	 Assignments.Asg.TimeUTC[Dat_END_TIME] = Assignments.Asg.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
+	 Assignments.Asg.ClosedOrOpen	       = CloOpe_OPEN;
+	 Description[0] = '\0';
+	 break;
      }
 
    Asg_PutFormCreatOrEditAsg (&Assignments,Description);
@@ -1212,6 +1212,11 @@ static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Assignments,
    extern const char *Txt_Description;
    extern const char *Txt_Create;
    extern const char *Txt_Save_changes;
+   static const Act_Action_t Actions[OldNew_NUM_OLD_NEW] =
+     {
+      [OldNew_OLD] = ActChgAsg,
+      [OldNew_NEW] = ActNewAsg
+     };
    static const Dat_SetHMS SetHMSDontSet[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
@@ -1222,11 +1227,11 @@ static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Assignments,
       [Dat_STR_TIME] = Dat_HMS_TO_000000,
       [Dat_END_TIME] = Dat_HMS_TO_235959
      };
-   bool ItsANewAsg = (Assignments->Asg.AsgCod <= 0);
+   OldNew_OldNew_t OldNewAsg = (Assignments->Asg.AsgCod > 0) ? OldNew_OLD :
+							       OldNew_NEW;
 
    /***** Begin form *****/
-   Frm_BeginForm (ItsANewAsg ? ActNewAsg :
-			       ActChgAsg);
+   Frm_BeginForm (Actions[OldNewAsg]);
    Asg_PutPars (Assignments);
 
       /***** Begin box and table *****/
@@ -1287,8 +1292,7 @@ static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Assignments,
 				   "id=\"Txt\" name=\"Txt\" rows=\"10\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
-		  if (!ItsANewAsg)
-		     HTM_Txt (Description);
+		  HTM_Txt (Description);
 	       HTM_TEXTAREA_End ();
 	    HTM_TD_End ();
 
@@ -1302,10 +1306,7 @@ static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Assignments,
 	 Asg_ShowLstGrpsToEditAssignment (Assignments->Asg.AsgCod);
 
       /***** End table, send button and end box *****/
-      Box_BoxTableWithButtonEnd (ItsANewAsg ? Btn_CREATE_BUTTON :
-						     Btn_CONFIRM_BUTTON,
-				 ItsANewAsg ? Txt_Create :
-						     Txt_Save_changes);
+      Box_BoxTableWithButtonSaveCreateEnd (OldNewAsg);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1431,7 +1432,7 @@ void Asg_ReceiveAssignment (void)
    extern const char *Txt_You_can_not_disable_file_uploading_once_folders_have_been_created;
    struct Asg_Assignments Assignments;
    struct Asg_Assignment OldAsg;	// Current assigment data in database
-   bool ItsANewAsg;
+   OldNew_OldNew_t OldNewAsg;
    bool AsgIsCorrect = true;
    Dat_StartEndTime_t StartEndTime;
    unsigned NumUsrsToBeNotifiedByEMail;
@@ -1447,19 +1448,22 @@ void Asg_ReceiveAssignment (void)
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /* Get the code of the assignment */
-   ItsANewAsg = ((Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) <= 0);
+   OldNewAsg = ((Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) > 0) ? OldNew_OLD :
+									     OldNew_NEW;
 
-   if (ItsANewAsg)
+   switch (OldNewAsg)
      {
-      /* Reset old (current, not existing) assignment data */
-      OldAsg.AsgCod = -1L;
-      Asg_ResetAssignment (&OldAsg);
-     }
-   else
-     {
-      /* Get data of the old (current) assignment from database */
-      OldAsg.AsgCod = Assignments.Asg.AsgCod;
-      Asg_GetAssignmentDataByCod (&OldAsg);
+      case OldNew_OLD:
+	 /* Reset old (current, not existing) assignment data */
+	 OldAsg.AsgCod = -1L;
+	 Asg_ResetAssignment (&OldAsg);
+	 break;
+      case OldNew_NEW:
+      default:
+	 /* Get data of the old (current) assignment from database */
+	 OldAsg.AsgCod = Assignments.Asg.AsgCod;
+	 Asg_GetAssignmentDataByCod (&OldAsg);
+	 break;
      }
 
    /* Get start/end date-times */
@@ -1555,28 +1559,30 @@ void Asg_ReceiveAssignment (void)
       /* Get groups for this assignments */
       Grp_GetParCodsSeveralGrps ();
 
-      if (ItsANewAsg)
+      switch (OldNewAsg)
 	{
-         Asg_CreateAssignment (&Assignments.Asg,Description);	// Add new assignment to database
+	 case OldNew_OLD:
+	    if (OldAsg.Folder[0] && Assignments.Asg.Folder[0])
+	       if (strcmp (OldAsg.Folder,Assignments.Asg.Folder))	// Folder name has changed
+		  AsgIsCorrect = Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (OldAsg.Folder,
+									       Assignments.Asg.Folder);
+	    if (AsgIsCorrect)
+	      {
+	       Asg_UpdateAssignment (&Assignments.Asg,Description);
 
-	 /***** Write success message *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_assignment_X,
-		        Assignments.Asg.Title);
-	}
-      else
-        {
-         if (OldAsg.Folder[0] && Assignments.Asg.Folder[0])
-            if (strcmp (OldAsg.Folder,Assignments.Asg.Folder))	// Folder name has changed
-               AsgIsCorrect = Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (OldAsg.Folder,
-                                                                            Assignments.Asg.Folder);
-         if (AsgIsCorrect)
-           {
-            Asg_UpdateAssignment (&Assignments.Asg,Description);
+	       /***** Write success message *****/
+	       Ale_ShowAlert (Ale_SUCCESS,Txt_The_assignment_has_been_modified);
+	      }
+	    break;
+	 case OldNew_NEW:
+	 default:
+	    Asg_CreateAssignment (&Assignments.Asg,Description);	// Add new assignment to database
 
 	    /***** Write success message *****/
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_assignment_has_been_modified);
-           }
-        }
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_assignment_X,
+			   Assignments.Asg.Title);
+	    break;
+	}
 
       /* Free memory for list of selected groups */
       Grp_FreeListCodSelectedGrps ();

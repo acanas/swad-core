@@ -129,6 +129,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_notice_database.h"
 #include "swad_notification.h"
 #include "swad_notification_database.h"
+#include "swad_old_new.h"
 #include "swad_password.h"
 #include "swad_plugin_database.h"
 #include "swad_question_database.h"
@@ -2430,7 +2431,12 @@ int swad__sendAttendanceEvent (struct soap *soap,
   {
    int ReturnCode;
    struct Att_Event Event;
-   bool ItsANewAttEvent;
+   OldNew_OldNew_t OldNewEvent;
+   static void (*CreateUpdate[OldNew_NUM_OLD_NEW]) (struct Att_Event *Event,const char *Description) =
+     {
+      [OldNew_OLD] = Att_UpdateEvent,
+      [OldNew_NEW] = Att_CreateEvent,
+     };
 
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
@@ -2470,19 +2476,21 @@ int swad__sendAttendanceEvent (struct soap *soap,
    Event.AttCod = (long) attendanceEventCode;
 
    /* Course code */
-   if (Event.AttCod > 0)	// The event already exists
+   OldNewEvent = (Event.AttCod > 0) ? OldNew_OLD :	// The event already exists
+				      OldNew_NEW;
+   switch (OldNewEvent)
      {
-      Att_GetEventDataByCod (&Event);
-      if (Event.CrsCod != (long) courseCode)
-	 return soap_receiver_fault (soap,
-				     "Request forbidden",
-				     "Attendance event does not belong to course");
-      ItsANewAttEvent = false;
-     }
-   else
-     {
-      ItsANewAttEvent = true;
-      Event.CrsCod = (long) courseCode;
+      case OldNew_OLD:
+	 Att_GetEventDataByCod (&Event);
+	 if (Event.CrsCod != (long) courseCode)
+	    return soap_receiver_fault (soap,
+					"Request forbidden",
+					"Attendance event does not belong to course");
+	 break;
+      case OldNew_NEW:
+      default:
+	 Event.CrsCod = (long) courseCode;
+	 break;
      }
 
    /* Is event hidden? */
@@ -2511,10 +2519,7 @@ int swad__sendAttendanceEvent (struct soap *soap,
    API_GetLstGrpsSel (groups);
 
    /***** Create or update attendance event *****/
-   if (ItsANewAttEvent)
-      Att_CreateEvent (&Event,text);	// Add new attendance event to database
-   else
-      Att_UpdateEvent (&Event,text);	// Modify existing attendance event
+   CreateUpdate[OldNewEvent] (&Event,text);
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();

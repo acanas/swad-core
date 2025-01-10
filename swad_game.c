@@ -140,7 +140,7 @@ static void Gam_HideUnhideGame (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 static void Gam_PutFormEditionGame (struct Gam_Games *Games,
 				    char Txt[Cns_MAX_BYTES_TEXT + 1],
-			            Gam_ExistingNewGame_t ExistingNewGame);
+			            OldNew_OldNew_t OldNewGame);
 static void Gam_ReceiveGameFieldsFromForm (struct Gam_Game *Game,
 				           char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static bool Gam_CheckGameFieldsReceivedFromForm (const struct Gam_Game *Game);
@@ -1212,7 +1212,7 @@ void Gam_ListGame (void)
 void Gam_ReqCreatOrEditGame (void)
   {
    struct Gam_Games Games;
-   Gam_ExistingNewGame_t ExistingNewGame;
+   OldNew_OldNew_t OldNewGame;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Reset games context *****/
@@ -1227,24 +1227,25 @@ void Gam_ReqCreatOrEditGame (void)
 
    /***** Get parameters *****/
    Games.Game.GamCod = Gam_GetPars (&Games);
-   ExistingNewGame = (Games.Game.GamCod > 0) ? Gam_EXISTING_GAME :
-					       Gam_NEW_GAME;
+   OldNewGame = (Games.Game.GamCod > 0) ? OldNew_OLD :
+					  OldNew_NEW;
 
    /***** Get game data *****/
-   switch (ExistingNewGame)
+   switch (OldNewGame)
      {
-      case Gam_EXISTING_GAME:
+      case OldNew_OLD:
 	 /* Get game data from database */
 	 Gam_GetGameDataByCod (&Games.Game);
 	 Gam_DB_GetGameTxt (Games.Game.GamCod,Txt);
 	 break;
-      case Gam_NEW_GAME:
+      case OldNew_NEW:
+      default:
 	 Txt[0] = '\0';
 	 break;
      }
 
    /***** Put form to create/edit a game and show questions *****/
-   Gam_PutFormsOneGame (&Games,ExistingNewGame);
+   Gam_PutFormsOneGame (&Games,OldNewGame);
   }
 
 /*****************************************************************************/
@@ -1252,30 +1253,31 @@ void Gam_ReqCreatOrEditGame (void)
 /*****************************************************************************/
 
 void Gam_PutFormsOneGame (struct Gam_Games *Games,
-			  Gam_ExistingNewGame_t ExistingNewGame)
+			  OldNew_OldNew_t OldNewGame)
   {
    extern const char *Hlp_ASSESSMENT_Games_edit_game;
    extern const char *Hlp_ASSESSMENT_Games_new_game;
    extern const char *Txt_Game;
-   static void (*FunctionToDrawContextualIcons[Gam_NUM_EXISTING_NEW_GAME]) (void *Args) =
+   static void (*FunctionToDrawContextualIcons[OldNew_NUM_OLD_NEW]) (void *Args) =
      {
-      [Gam_EXISTING_GAME] = Gam_PutIconsEditingOneGame,
-      [Gam_NEW_GAME     ] = NULL,
+      [OldNew_OLD] = Gam_PutIconsEditingOneGame,
+      [OldNew_NEW] = NULL,
      };
-   static const char **HelpLink[Gam_NUM_EXISTING_NEW_GAME] =
+   static const char **HelpLink[OldNew_NUM_OLD_NEW] =
      {
-      [Gam_EXISTING_GAME] = &Hlp_ASSESSMENT_Games_edit_game,
-      [Gam_NEW_GAME     ] = &Hlp_ASSESSMENT_Games_new_game,
+      [OldNew_OLD] = &Hlp_ASSESSMENT_Games_edit_game,
+      [OldNew_NEW] = &Hlp_ASSESSMENT_Games_new_game,
      };
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Initialize text / get text from database *****/
-   switch (ExistingNewGame)
+   switch (OldNewGame)
      {
-      case Gam_EXISTING_GAME:
+      case OldNew_OLD:
 	 Gam_DB_GetGameTxt (Games->Game.GamCod,Txt);
 	 break;
-      case Gam_NEW_GAME:
+      case OldNew_NEW:
+      default:
          Txt[0] = '\0';
 	 break;
      }
@@ -1283,14 +1285,14 @@ void Gam_PutFormsOneGame (struct Gam_Games *Games,
    /***** Begin box *****/
    Box_BoxBegin (Games->Game.Title[0] ? Games->Game.Title :
 					Txt_Game,
-		 FunctionToDrawContextualIcons[ExistingNewGame],Games,
-		 *HelpLink[ExistingNewGame],Box_NOT_CLOSABLE);
+		 FunctionToDrawContextualIcons[OldNewGame],Games,
+		 *HelpLink[OldNewGame],Box_NOT_CLOSABLE);
 
       /***** Put form to create/edit a game *****/
-      Gam_PutFormEditionGame (Games,Txt,ExistingNewGame);
+      Gam_PutFormEditionGame (Games,Txt,OldNewGame);
 
       /***** Show list of questions inside box *****/
-      if (ExistingNewGame == Gam_EXISTING_GAME)
+      if (OldNewGame == OldNew_OLD)
         {
 	 HTM_BR ();
 	 Gam_ListGameQuestions (Games);
@@ -1300,7 +1302,7 @@ void Gam_PutFormsOneGame (struct Gam_Games *Games,
    Box_BoxEnd ();
 
    /***** Show games again outside box *****/
-   if (ExistingNewGame == Gam_NEW_GAME)
+   if (OldNewGame == OldNew_NEW)
      {
       HTM_BR ();
       Gam_ListAllGames (Games);
@@ -1313,7 +1315,7 @@ void Gam_PutFormsOneGame (struct Gam_Games *Games,
 
 static void Gam_PutFormEditionGame (struct Gam_Games *Games,
 				    char Txt[Cns_MAX_BYTES_TEXT + 1],
-			            Gam_ExistingNewGame_t ExistingNewGame)
+			            OldNew_OldNew_t OldNewGame)
   {
    extern const char *Hlp_ASSESSMENT_Games_edit_game;
    extern const char *Hlp_ASSESSMENT_Games_new_game;
@@ -1323,24 +1325,19 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
    extern const char *Txt_Description;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Create;
-   static Act_Action_t NextAction[Gam_NUM_EXISTING_NEW_GAME] =
+   static struct
      {
-      [Gam_EXISTING_GAME] = ActChgGam,
-      [Gam_NEW_GAME     ] = ActNewGam,
-     };
-   static Btn_Button_t Button[Gam_NUM_EXISTING_NEW_GAME] =
+      Act_Action_t Action;
+      Btn_Button_t Button;
+      const char **Txt;
+     } Forms[OldNew_NUM_OLD_NEW] =
      {
-      [Gam_EXISTING_GAME] = Btn_CONFIRM_BUTTON,
-      [Gam_NEW_GAME     ] = Btn_CREATE_BUTTON,
-     };
-   const char *TxtButton[Gam_NUM_EXISTING_NEW_GAME] =
-     {
-      [Gam_EXISTING_GAME] = Txt_Save_changes,
-      [Gam_NEW_GAME     ] = Txt_Create,
+      [OldNew_OLD] = {ActChgGam,Btn_CONFIRM_BUTTON,&Txt_Save_changes},
+      [OldNew_NEW] = {ActNewGam,Btn_CREATE_BUTTON ,&Txt_Create      }
      };
 
    /***** Begin form *****/
-   Frm_BeginForm (NextAction[ExistingNewGame]);
+   Frm_BeginForm (Forms[OldNewGame].Action);
       Gam_PutPars (Games);
 
       /***** Begin table *****/
@@ -1412,8 +1409,7 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
       HTM_TABLE_End ();
 
       /***** Send button *****/
-      Btn_PutButton (Button[ExistingNewGame],
-		     TxtButton[ExistingNewGame]);
+      Btn_PutButton (Forms[OldNewGame].Button,*Forms[OldNewGame].Txt);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1426,7 +1422,7 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
 void Gam_ReceiveGame (void)
   {
    struct Gam_Games Games;
-   Gam_ExistingNewGame_t ExistingNewGame;
+   OldNew_OldNew_t OldNewGame;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Reset games context *****/
@@ -1441,21 +1437,22 @@ void Gam_ReceiveGame (void)
 
    /***** Get parameters *****/
    Games.Game.GamCod = Gam_GetPars (&Games);
-   ExistingNewGame = (Games.Game.GamCod > 0) ? Gam_EXISTING_GAME :
-					       Gam_NEW_GAME;
+   OldNewGame = (Games.Game.GamCod > 0) ? OldNew_OLD :
+					  OldNew_NEW;
 
    /***** Receive game from form *****/
    Gam_ReceiveGameFieldsFromForm (&Games.Game,Txt);
    if (Gam_CheckGameFieldsReceivedFromForm (&Games.Game))
       /***** Create a new game or update an existing one *****/
-      switch (ExistingNewGame)
+      switch (OldNewGame)
 	{
-	 case Gam_EXISTING_GAME:
+	 case OldNew_OLD:
 	    Gam_UpdateGame (&Games.Game,Txt);	// Update game data in database
 	    break;
-	 case Gam_NEW_GAME:
+	 case OldNew_NEW:
+	 default:
 	    Gam_CreateGame (&Games.Game,Txt);	// Add new game to database
-	    ExistingNewGame = Gam_EXISTING_GAME;
+	    OldNewGame = OldNew_OLD;
 	    break;
 	}
 
@@ -1463,7 +1460,7 @@ void Gam_ReceiveGame (void)
    Ale_ShowAlerts (NULL);
 
    /***** Show current game and its questions *****/
-   Gam_PutFormsOneGame (&Games,ExistingNewGame);
+   Gam_PutFormsOneGame (&Games,OldNew_OLD);
   }
 
 static void Gam_ReceiveGameFieldsFromForm (struct Gam_Game *Game,

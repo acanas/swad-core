@@ -914,10 +914,8 @@ void Att_ReqCreatOrEditEvent (void)
    extern const char *Txt_Hidden_MALE_PLURAL;
    extern const char *Txt_Visible_MALE_PLURAL;
    extern const char *Txt_Description;
-   extern const char *Txt_Create;
-   extern const char *Txt_Save_changes;
    struct Att_Events Events;
-   bool ItsANewAttEvent;
+   OldNew_OldNew_t OldNewEvent;
    Grp_MyAllGrps_t MyAllGrps;
    char Description[Cns_MAX_BYTES_TEXT + 1];
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
@@ -935,39 +933,48 @@ void Att_ReqCreatOrEditEvent (void)
    Events.CurrentPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get the code of the attendance event *****/
-   ItsANewAttEvent = ((Events.Event.AttCod = ParCod_GetPar (ParCod_Att)) <= 0);
+   OldNewEvent = ((Events.Event.AttCod = ParCod_GetPar (ParCod_Att)) > 0) ? OldNew_OLD :
+									    OldNew_NEW;
 
    /***** Get from the database the data of the attendance event *****/
-   if (ItsANewAttEvent)
+   switch (OldNewEvent)
      {
-      /* Reset attendance event data */
-      Events.Event.AttCod = -1L;
-      Att_ResetEvent (&Events.Event);
+      case OldNew_OLD:
+	 /* Get data of the attendance event from database */
+	 Att_GetEventDataByCodAndCheckCrs (&Events.Event);
 
-      /* Initialize some fields */
-      Events.Event.CrsCod = Gbl.Hierarchy.Node[Hie_CRS].HieCod;
-      Events.Event.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      Events.Event.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
-      Events.Event.TimeUTC[Dat_END_TIME] = Events.Event.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
-      Events.Event.ClosedOrOpen = CloOpe_OPEN;
-     }
-   else
-     {
-      /* Get data of the attendance event from database */
-      Att_GetEventDataByCodAndCheckCrs (&Events.Event);
+	 /* Get text of the attendance event from database */
+	 Att_DB_GetEventDescription (Events.Event.AttCod,Description);
+	 break;
+      case OldNew_NEW:
+      default:
+	 /* Reset attendance event data */
+	 Events.Event.AttCod = -1L;
+	 Att_ResetEvent (&Events.Event);
 
-      /* Get text of the attendance event from database */
-      Att_DB_GetEventDescription (Events.Event.AttCod,Description);
+	 /* Initialize some fields */
+	 Events.Event.CrsCod = Gbl.Hierarchy.Node[Hie_CRS].HieCod;
+	 Events.Event.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+	 Events.Event.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
+	 Events.Event.TimeUTC[Dat_END_TIME] = Events.Event.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
+	 Events.Event.ClosedOrOpen = CloOpe_OPEN;
+	 Description[0] = '\0';
+	 break;
      }
 
    /***** Begin form *****/
-   if (ItsANewAttEvent)
-      Frm_BeginForm (ActNewAtt);
-   else
+   switch (OldNewEvent)
      {
-      Frm_BeginForm (ActChgAtt);
-	 ParCod_PutPar (ParCod_Att,Events.Event.AttCod);
+      case OldNew_OLD:
+	 Frm_BeginForm (ActChgAtt);
+	    ParCod_PutPar (ParCod_Att,Events.Event.AttCod);
+	 break;
+      case OldNew_NEW:
+      default:
+	 Frm_BeginForm (ActNewAtt);
+	 break;
      }
+
       Par_PutParOrder ((unsigned) Events.SelectedOrder);
       MyAllGrps = Grp_GetParMyAllGrps ();
       Grp_PutParMyAllGrps (&MyAllGrps);
@@ -1037,8 +1044,7 @@ void Att_ReqCreatOrEditEvent (void)
 				   "id=\"Txt\" name=\"Txt\" rows=\"5\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
-		  if (!ItsANewAttEvent)
-		     HTM_Txt (Description);
+		  HTM_Txt (Description);
 	       HTM_TEXTAREA_End ();
 	    HTM_TD_End ();
 
@@ -1048,10 +1054,7 @@ void Att_ReqCreatOrEditEvent (void)
 	 Att_ShowLstGrpsToEditEvent (Events.Event.AttCod);
 
       /***** End table, send button and end box *****/
-      if (ItsANewAttEvent)
-	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create);
-      else
-	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      Box_BoxTableWithButtonSaveCreateEnd (OldNewEvent);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1117,14 +1120,15 @@ void Att_ReceiveEvent (void)
    extern const char *Txt_The_event_has_been_modified;
    struct Att_Event OldAtt;
    struct Att_Event ReceivedAtt;
-   bool ItsANewAttEvent;
+   OldNew_OldNew_t OldNewEvent;
    bool ReceivedAttEventIsCorrect = true;
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the code of the attendance event *****/
-   ItsANewAttEvent = ((ReceivedAtt.AttCod = ParCod_GetPar (ParCod_Att)) <= 0);
+   OldNewEvent = ((ReceivedAtt.AttCod = ParCod_GetPar (ParCod_Att)) > 0) ? OldNew_OLD :
+									   OldNew_NEW;
 
-   if (!ItsANewAttEvent)
+   if (OldNewEvent == OldNew_OLD)
      {
       /* Get data of the old (current) attendance event from database */
       OldAtt.AttCod = ReceivedAtt.AttCod;
@@ -1175,21 +1179,23 @@ void Att_ReceiveEvent (void)
       /* Get groups for this attendance events */
       Grp_GetParCodsSeveralGrps ();
 
-      if (ItsANewAttEvent)
+      switch (OldNewEvent)
 	{
-	 ReceivedAtt.HiddenOrVisible = HidVis_VISIBLE;	// New attendance events are visible by default
-         Att_CreateEvent (&ReceivedAtt,Description);	// Add new attendance event to database
+	 case OldNew_OLD:
+	    Att_UpdateEvent (&ReceivedAtt,Description);
 
-         /***** Write success message *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_event_X,
-		        ReceivedAtt.Title);
-	}
-      else
-	{
-         Att_UpdateEvent (&ReceivedAtt,Description);
+	    /***** Write success message *****/
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
+	    break;
+	 case OldNew_NEW:
+	 default:
+	    ReceivedAtt.HiddenOrVisible = HidVis_VISIBLE;	// New attendance events are visible by default
+	    Att_CreateEvent (&ReceivedAtt,Description);		// Add new attendance event to database
 
-	 /***** Write success message *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
+	    /***** Write success message *****/
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_event_X,
+			   ReceivedAtt.Title);
+	    break;
 	}
 
       /* Free memory for list of selected groups */

@@ -215,6 +215,23 @@ void Box_BoxTableEnd (void)
    Box_BoxEnd ();
   }
 
+void Box_BoxTableWithButtonSaveCreateEnd (OldNew_OldNew_t OldNew)
+  {
+   extern const char *Txt_Save_changes;
+   extern const char *Txt_Create;
+   static struct
+     {
+      Btn_Button_t Button;
+      const char **TxtButton;
+     } Buttons[OldNew_NUM_OLD_NEW] =
+     {
+      [OldNew_OLD] = {Btn_CONFIRM_BUTTON,&Txt_Save_changes},
+      [OldNew_NEW] = {Btn_CREATE_BUTTON ,&Txt_Create      },
+     };
+
+   Box_BoxTableWithButtonEnd (Buttons[OldNew].Button,*Buttons[OldNew].TxtButton);
+  }
+
 void Box_BoxTableWithButtonEnd (Btn_Button_t Button,const char *TxtButton)
   {
       HTM_TABLE_End ();

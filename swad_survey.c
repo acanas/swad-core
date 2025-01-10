@@ -1562,16 +1562,19 @@ void Svy_ReqCreatOrEditSvy (void)
    extern const char *Txt_Title;
    extern const char *Txt_Description;
    extern const char *Txt_Users;
-   extern const char *Txt_Create;
-   extern const char *Txt_Save_changes;
-   struct Svy_Surveys Surveys;
-   bool ItsANewSurvey;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
-   static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
+   static Act_Action_t Actions[OldNew_NUM_OLD_NEW] =
+     {
+      [OldNew_OLD] = ActChgSvy,
+      [OldNew_NEW] = ActNewSvy,
+     };
+   static Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_TO_000000,
       [Dat_END_TIME] = Dat_HMS_TO_235959
      };
+   struct Svy_Surveys Surveys;
+   OldNew_OldNew_t OldNewSvy;
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Reset surveys *****/
    Svy_ResetSurveys (&Surveys);
@@ -1582,48 +1585,51 @@ void Svy_ReqCreatOrEditSvy (void)
    Surveys.CurrentPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get the code of the survey *****/
-   ItsANewSurvey = ((Surveys.Svy.SvyCod = ParCod_GetPar (ParCod_Svy)) <= 0);
+   OldNewSvy = ((Surveys.Svy.SvyCod = ParCod_GetPar (ParCod_Svy)) > 0) ? OldNew_OLD :
+									 OldNew_NEW;
 
    /***** Get from the database the data of the survey *****/
-   if (ItsANewSurvey)
+   switch (OldNewSvy)
      {
-      /***** Put link (form) to create new survey *****/
-      if (Svy_CheckIfICanCreateSvy () == Usr_CAN_NOT)
-         Err_NoPermissionExit ();
+      case OldNew_OLD:
+	 /* Get data of the survey from database */
+	 Svy_GetSurveyDataByCod (&Surveys.Svy);
+	 if (Surveys.Svy.Status.ICanEdit == Usr_CAN_NOT)
+	    Err_NoPermissionExit ();
 
-      /* Initialize to empty survey */
-      Surveys.Svy.SvyCod = -1L;
-      Surveys.Svy.Level  = Hie_UNK;
-      Surveys.Svy.Roles  = (1 << Rol_STD);
-      Surveys.Svy.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      Surveys.Svy.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
-      Surveys.Svy.TimeUTC[Dat_END_TIME] = Surveys.Svy.TimeUTC[Dat_STR_TIME] + (24 * 60 * 60);	// +24 hours
-      Surveys.Svy.Title[0] = '\0';
-      Surveys.Svy.NumQsts = 0;
-      Surveys.Svy.NumUsrs = 0;
-      Surveys.Svy.Status.HiddenOrVisible  = HidVis_VISIBLE;
-      Surveys.Svy.Status.ClosedOrOpen	  = CloOpe_OPEN;
-      Surveys.Svy.Status.IAmLoggedWithAValidRoleToAnswer = false;
-      Surveys.Svy.Status.IBelongToScope   = Usr_DONT_BELONG;
-      Surveys.Svy.Status.IHaveAnswered    = false;
-      Surveys.Svy.Status.ICanAnswer	  = Usr_CAN_NOT;
-      Surveys.Svy.Status.ICanViewResults  = Usr_CAN_NOT;
-      Surveys.Svy.Status.ICanViewComments = Usr_CAN_NOT;
-     }
-   else
-     {
-      /* Get data of the survey from database */
-      Svy_GetSurveyDataByCod (&Surveys.Svy);
-      if (Surveys.Svy.Status.ICanEdit == Usr_CAN_NOT)
-         Err_NoPermissionExit ();
+	 /* Get text of the survey from database */
+	 Svy_DB_GetSurveyTxt (Surveys.Svy.SvyCod,Txt);
+	 break;
+      case OldNew_NEW:
+      default:
+	 /***** Put link (form) to create new survey *****/
+	 if (Svy_CheckIfICanCreateSvy () == Usr_CAN_NOT)
+	    Err_NoPermissionExit ();
 
-      /* Get text of the survey from database */
-      Svy_DB_GetSurveyTxt (Surveys.Svy.SvyCod,Txt);
+	 /* Initialize to empty survey */
+	 Surveys.Svy.SvyCod = -1L;
+	 Surveys.Svy.Level  = Hie_UNK;
+	 Surveys.Svy.Roles  = (1 << Rol_STD);
+	 Surveys.Svy.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+	 Surveys.Svy.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
+	 Surveys.Svy.TimeUTC[Dat_END_TIME] = Surveys.Svy.TimeUTC[Dat_STR_TIME] + (24 * 60 * 60);	// +24 hours
+	 Surveys.Svy.Title[0] = '\0';
+	 Surveys.Svy.NumQsts = 0;
+	 Surveys.Svy.NumUsrs = 0;
+	 Surveys.Svy.Status.HiddenOrVisible  = HidVis_VISIBLE;
+	 Surveys.Svy.Status.ClosedOrOpen	  = CloOpe_OPEN;
+	 Surveys.Svy.Status.IAmLoggedWithAValidRoleToAnswer = false;
+	 Surveys.Svy.Status.IBelongToScope   = Usr_DONT_BELONG;
+	 Surveys.Svy.Status.IHaveAnswered    = false;
+	 Surveys.Svy.Status.ICanAnswer	  = Usr_CAN_NOT;
+	 Surveys.Svy.Status.ICanViewResults  = Usr_CAN_NOT;
+	 Surveys.Svy.Status.ICanViewComments = Usr_CAN_NOT;
+	 Txt[0] = '\0';
+	 break;
      }
 
    /***** Begin form *****/
-   Frm_BeginForm (ItsANewSurvey ? ActNewSvy :
-	                          ActChgSvy);
+   Frm_BeginForm (Actions[OldNewSvy]);
       Svy_PutPars (&Surveys);
 
       /***** Begin box and table *****/
@@ -1680,8 +1686,7 @@ void Svy_ReqCreatOrEditSvy (void)
 				   "id=\"Txt\" name=\"Txt\" rows=\"5\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
-		  if (!ItsANewSurvey)
-		     HTM_Txt (Txt);
+		  HTM_Txt (Txt);
 	       HTM_TEXTAREA_End ();
 	    HTM_TD_End ();
 
@@ -1707,16 +1712,13 @@ void Svy_ReqCreatOrEditSvy (void)
 	 Svy_ShowLstGrpsToEditSurvey (Surveys.Svy.SvyCod);
 
       /***** End table, send button and end box *****/
-      if (ItsANewSurvey)
-	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create);
-      else
-	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      Box_BoxTableWithButtonSaveCreateEnd (OldNewSvy);
 
    /***** End form *****/
    Frm_EndForm ();
 
    /***** Show questions of the survey ready to be edited *****/
-   if (!ItsANewSurvey)
+   if (OldNewSvy == OldNew_OLD)
      {
       HTM_BR ();
       Svy_ListSvyQuestions (&Surveys);
@@ -1852,11 +1854,16 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 void Svy_ReceiveSurvey (void)
   {
    extern const char *Txt_Already_existed_a_survey_with_the_title_X;
+   static void (*CreateUpdate[OldNew_NUM_OLD_NEW]) (struct Svy_Survey *Svy,const char *Txt) =
+     {
+      [OldNew_OLD] = Svy_UpdateSurvey,
+      [OldNew_NEW] = Svy_CreateSurvey,
+     };
    struct Svy_Surveys Surveys;
    struct Svy_Survey OldSvy;
    struct Svy_Survey NewSvy;
-   bool ItsANewSurvey;
-   bool NewSurveyIsCorrect = true;
+   OldNew_OldNew_t OldNewSvy;
+   bool SvyIsCorrect = true;
    unsigned NumUsrsToBeNotifiedByEMail;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
@@ -1869,18 +1876,23 @@ void Svy_ReceiveSurvey (void)
    Surveys.CurrentPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get the code of the survey *****/
-   ItsANewSurvey = ((NewSvy.SvyCod = ParCod_GetPar (ParCod_Svy)) <= 0);
+   OldNewSvy = ((NewSvy.SvyCod = ParCod_GetPar (ParCod_Svy)) > 0) ? OldNew_OLD :
+								    OldNew_NEW;
 
-   if (ItsANewSurvey)
-      NewSvy.Level = Hie_UNK;
-   else
+   switch (OldNewSvy)
      {
-      /* Get data of the old (current) survey from database */
-      OldSvy.SvyCod = NewSvy.SvyCod;
-      Svy_GetSurveyDataByCod (&OldSvy);
-      if (OldSvy.Status.ICanEdit == Usr_CAN_NOT)
-         Err_NoPermissionExit ();
-      NewSvy.Level = OldSvy.Level;
+      case OldNew_OLD:
+	 /* Get data of the old (current) survey from database */
+	 OldSvy.SvyCod = NewSvy.SvyCod;
+	 Svy_GetSurveyDataByCod (&OldSvy);
+	 if (OldSvy.Status.ICanEdit == Usr_CAN_NOT)
+	    Err_NoPermissionExit ();
+	 NewSvy.Level = OldSvy.Level;
+	 break;
+      case OldNew_NEW:
+      default:
+	 NewSvy.Level = Hie_UNK;
+	 break;
      }
 
    /***** Get scope *****/
@@ -1939,27 +1951,25 @@ void Svy_ReceiveSurvey (void)
       /* If title of survey was in database... */
       if (Svy_DB_CheckIfSimilarSurveyExists (&NewSvy))
         {
-         NewSurveyIsCorrect = false;
+         SvyIsCorrect = false;
          Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_a_survey_with_the_title_X,
                         NewSvy.Title);
         }
      }
    else	// If there is not a survey title
      {
-      NewSurveyIsCorrect = false;
+      SvyIsCorrect = false;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
    /***** Create a new survey or update an existing one *****/
-   if (NewSurveyIsCorrect)
+   if (SvyIsCorrect)
      {
       /* Get groups for this surveys */
       Grp_GetParCodsSeveralGrps ();
 
-      if (ItsANewSurvey)
-         Svy_CreateSurvey (&NewSvy,Txt);	// Add new survey to database
-      else
-         Svy_UpdateSurvey (&NewSvy,Txt);
+      /* Create or update survey */
+      CreateUpdate[OldNewSvy] (&NewSvy,Txt);
 
       /* Free memory for list of selected groups */
       Grp_FreeListCodSelectedGrps ();

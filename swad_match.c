@@ -1189,14 +1189,23 @@ static void Mch_PutFormMatch (struct Mch_Match *Match)
   {
    extern const char *Hlp_ASSESSMENT_Games_matches;
    extern const char *Txt_Title;
-   bool ItsANewMatch = (Match->MchCod <= 0);
+   static struct
+     {
+      Act_Action_t Action;
+      Btn_Button_t Button;
+     } Forms[OldNew_NUM_OLD_NEW] =
+     {
+      [OldNew_OLD] = {ActChgMch,Btn_CONFIRM_BUTTON},
+      [OldNew_NEW] = {ActNewMch,Btn_CREATE_BUTTON }
+     };
+   OldNew_OldNew_t OldNewMatch = (Match->MchCod > 0) ? OldNew_OLD :
+						       OldNew_NEW;;
 
    /***** Begin section for match *****/
    HTM_SECTION_Begin (Mch_NEW_MATCH_SECTION_ID);
 
       /***** Begin form to create/edit *****/
-      Frm_BeginFormTable (ItsANewMatch ? ActNewMch :
-				         ActChgMch,
+      Frm_BeginFormTable (Forms[OldNewMatch].Action,
 			  Mch_NEW_MATCH_SECTION_ID,
 			  Mch_ParsFormMatch,Match,"TBL_WIDE");
 
@@ -1220,10 +1229,9 @@ static void Mch_PutFormMatch (struct Mch_Match *Match)
 	 Mch_ShowLstGrpsToEditMatch (Match->MchCod);
 
       /***** End form to create *****/
-      Frm_EndFormTable (ItsANewMatch ? Btn_CREATE_BUTTON :
-				       Btn_CONFIRM_BUTTON);
+      Frm_EndFormTable (Forms[OldNewMatch].Button);
 
-   /***** End section for exam session *****/
+   /***** End section for match *****/
    HTM_SECTION_End ();
   }
 

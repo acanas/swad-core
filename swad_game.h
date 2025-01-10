@@ -28,6 +28,7 @@
 /*****************************************************************************/
 
 #include "swad_date.h"
+#include "swad_old_new.h"
 #include "swad_scope.h"
 
 /*****************************************************************************/
@@ -55,13 +56,6 @@ typedef enum
    Gam_ANS_MULTIPLE_CHOICE = 1,
   } Gam_AnswerType_t;
 #define Gam_ANSWER_TYPE_DEFAULT Gam_ANS_UNIQUE_CHOICE
-
-#define Gam_NUM_EXISTING_NEW_GAME 2
-typedef enum
-  {
-   Gam_EXISTING_GAME,
-   Gam_NEW_GAME,
-  } Gam_ExistingNewGame_t;
 
 struct Gam_GameSelected
   {
@@ -139,8 +133,7 @@ void Gam_UnhideGame (void);
 void Gam_ListGame (void);
 
 void Gam_ReqCreatOrEditGame (void);
-void Gam_PutFormsOneGame (struct Gam_Games *Games,
-			  Gam_ExistingNewGame_t ExistingNewGame);
+void Gam_PutFormsOneGame (struct Gam_Games *Games,OldNew_OldNew_t OldNewGame);
 void Gam_ReceiveGame (void);
 
 void Gam_ReqSelectQstsToAddToGame (void);

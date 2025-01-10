@@ -322,7 +322,8 @@ static void Prj_ResetProject (struct Prj_Project *Prj);
 static void Prj_HideUnhideProject (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 static void Prj_ReqCreatOrEditPrj (struct Prj_Projects *Projects);
-static void Prj_PutFormProject (struct Prj_Projects *Projects,bool ItsANewProject);
+static void Prj_PutFormProject (struct Prj_Projects *Projects,
+				OldNew_OldNew_t OldNewPrj);
 static void Prj_EditOneProjectTxtArea (const char *Id,
                                        const char *Label,char *TxtField,
                                        unsigned NumRows,
@@ -3814,26 +3815,31 @@ void Prj_ReqEditPrj (void)
 
 static void Prj_ReqCreatOrEditPrj (struct Prj_Projects *Projects)
   {
-   bool ItsANewProject = (Projects->Prj.PrjCod < 0);
+   OldNew_OldNew_t OldNewPrj = (Projects->Prj.PrjCod > 0) ? OldNew_OLD :
+							    OldNew_NEW;
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Projects->Prj);
 
    /***** Get from the database the data of the project *****/
-   if (ItsANewProject)
+   switch (OldNewPrj)
      {
-      /* Initialize to empty project */
-      Prj_ResetProject (&Projects->Prj);
-      Projects->Prj.CreatTime =
-      Projects->Prj.ModifTime = Dat_GetStartExecutionTimeUTC ();
-      Projects->Prj.DptCod = Gbl.Usrs.Me.UsrDat.Tch.DptCod;	// Default: my department
+      case OldNew_OLD:
+	 /* Get data of the project from database */
+	 Prj_GetProjectDataByCod (&Projects->Prj);
+	 break;
+      case OldNew_NEW:
+      default:
+	 /* Initialize to empty project */
+	 Prj_ResetProject (&Projects->Prj);
+	 Projects->Prj.CreatTime =
+	 Projects->Prj.ModifTime = Dat_GetStartExecutionTimeUTC ();
+	 Projects->Prj.DptCod = Gbl.Usrs.Me.UsrDat.Tch.DptCod;	// Default: my department
+	 break;
      }
-   else
-      /* Get data of the project from database */
-      Prj_GetProjectDataByCod (&Projects->Prj);
 
    /***** Put form to edit project *****/
-   Prj_PutFormProject (Projects,ItsANewProject);
+   Prj_PutFormProject (Projects,OldNewPrj);
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Projects->Prj);
@@ -3844,7 +3850,7 @@ static void Prj_ReqCreatOrEditPrj (struct Prj_Projects *Projects)
   }
 
 static void Prj_PutFormProject (struct Prj_Projects *Projects,
-                                bool ItsANewProject)
+                                OldNew_OldNew_t OldNewPrj)
   {
    extern const char *Hlp_ASSESSMENT_Projects_edit_project;
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
@@ -3864,13 +3870,22 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
    extern const char *Txt_Create;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Members;
+   static struct
+     {
+      Act_Action_t Action;
+      Btn_Button_t Button;
+      const char **Txt;
+     } Forms[OldNew_NUM_OLD_NEW] =
+     {
+      [OldNew_OLD] = {ActChgPrj,Btn_CONFIRM_BUTTON,&Txt_Save_changes},
+      [OldNew_NEW] = {ActNewPrj,Btn_CREATE_BUTTON ,&Txt_Create      }
+     };
    Prj_Assigned_t Assign;
    Prj_Proposal_t Proposal;
    unsigned ProposalUnsigned;
    unsigned NumRoleToShow;
    char *SelectClass;
-   Act_Action_t NextAction = ItsANewProject ? ActNewPrj :
-					      ActChgPrj;
+   Act_Action_t NextAction = Forms[OldNewPrj].Action;
 
    /***** Begin project box *****/
    Box_BoxBegin (Projects->Prj.Title[0] ? Projects->Prj.Title :
@@ -3879,7 +3894,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 		 Hlp_ASSESSMENT_Projects_edit_project,Box_NOT_CLOSABLE);
 
       /***** 1. Project members *****/
-      if (!ItsANewProject)	// Existing project
+      if (OldNewPrj == OldNew_OLD)	// Existing project
 	{
 	 HTM_FIELDSET_Begin (NULL);
 	    HTM_LEGEND (Txt_Members);
@@ -4047,10 +4062,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	    HTM_TABLE_End ();
 
 	    /* Send button */
-	    if (ItsANewProject)
-	       Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
-	    else
-	       Btn_PutButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+	    Btn_PutButton (Forms[OldNewPrj].Button,*Forms[OldNewPrj].Txt);
 
 	 /* End data form */
 	 Frm_EndForm ();
@@ -4145,9 +4157,9 @@ void Prj_ReceiveProject (void)
    extern const char *Txt_Created_new_project_X;
    extern const char *Txt_The_project_has_been_modified;
    struct Prj_Projects Projects;
-   bool ItsANewProject;
+   OldNew_OldNew_t OldNewPrj;
    Usr_Can_t ICanEditProject;
-   bool NewProjectIsCorrect = true;
+   bool PrjIsCorrect = true;
 
    /***** Reset projects *****/
    Prj_ResetPrjsAndReadConfig (&Projects);
@@ -4157,21 +4169,23 @@ void Prj_ReceiveProject (void)
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
-   ItsANewProject = ((Projects.Prj.PrjCod = ParCod_GetPar (ParCod_Prj)) <= 0);
-
-   if (ItsANewProject)
+   OldNewPrj = ((Projects.Prj.PrjCod = ParCod_GetPar (ParCod_Prj)) > 0) ? OldNew_OLD :
+									  OldNew_NEW;
+   switch (OldNewPrj)
      {
-      /* Reset project data */
-      Prj_ResetProject (&Projects.Prj);
+      case OldNew_OLD:
+	 /* Get data of the project from database */
+	 Prj_GetProjectDataByCod (&Projects.Prj);
 
-      ICanEditProject = Prj_CheckIfICanCreateProjects (&Projects);
-     }
-   else
-     {
-      /* Get data of the project from database */
-      Prj_GetProjectDataByCod (&Projects.Prj);
+	 ICanEditProject = Prj_CheckIfICanEditProject (&Projects.Prj);
+	 break;
+      case OldNew_NEW:
+      default:
+	 /* Reset project data */
+	 Prj_ResetProject (&Projects.Prj);
 
-      ICanEditProject = Prj_CheckIfICanEditProject (&Projects.Prj);
+	 ICanEditProject = Prj_CheckIfICanCreateProjects (&Projects);
+	 break;
      }
 
    /* Check if I can create/edit project */
@@ -4213,33 +4227,36 @@ void Prj_ReceiveProject (void)
    /***** Check if title is correct *****/
    if (!Projects.Prj.Title[0])	// If there is not a project title
      {
-      NewProjectIsCorrect = false;
+      PrjIsCorrect = false;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
    /***** Create a new project or update an existing one *****/
-   if (NewProjectIsCorrect)
-     {
-      if (ItsANewProject)
+   if (PrjIsCorrect)
+      switch (OldNewPrj)
 	{
-	 /* Create project */
-	 Prj_CreateProject (&Projects.Prj);	// Add new project to database
+	 case OldNew_OLD:
+	    if (PrjIsCorrect)
+	      {
+	       /* Update project */
+	       Prj_UpdateProject (&Projects.Prj);
 
-	 /* Write success message */
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_project_X,
-			Projects.Prj.Title);
-	}
-      else if (NewProjectIsCorrect)
-	{
-	 /* Update project */
-	 Prj_UpdateProject (&Projects.Prj);
+	       /* Write success message */
+	       Ale_ShowAlert (Ale_SUCCESS,Txt_The_project_has_been_modified);
+	      }
+	    break;
+	 case OldNew_NEW:
+	 default:
+	    /* Create project */
+	    Prj_CreateProject (&Projects.Prj);	// Add new project to database
 
-	 /* Write success message */
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_project_has_been_modified);
+	    /* Write success message */
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_project_X,
+			   Projects.Prj.Title);
+	    break;
 	}
-     }
    else
-      Prj_PutFormProject (&Projects,ItsANewProject);
+      Prj_PutFormProject (&Projects,OldNewPrj);
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Projects.Prj);

@@ -921,19 +921,28 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
 static void ExaSes_PutFormSession (struct ExaSes_Session *Session)
   {
    extern const char *Txt_Title;
+   static struct
+     {
+      Act_Action_t Action;
+      Btn_Button_t Button;
+     } Forms[OldNew_NUM_OLD_NEW] =
+     {
+      [OldNew_OLD] = {ActChgExaSes,Btn_CONFIRM_BUTTON},
+      [OldNew_NEW] = {ActNewExaSes,Btn_CREATE_BUTTON }
+     };
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
       [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
      };
-   bool ItsANewSession = (Session->SesCod <= 0);
+   OldNew_OldNew_t OldNewSession = (Session->SesCod > 0) ? OldNew_OLD :
+							   OldNew_NEW;
 
    /***** Begin section for exam session *****/
    HTM_SECTION_Begin (ExaSes_NEW_SESSION_SECTION_ID);
 
       /***** Begin form to create/edit *****/
-      Frm_BeginFormTable (ItsANewSession ? ActNewExaSes :
-				           ActChgExaSes,
+      Frm_BeginFormTable (Forms[OldNewSession].Action,
 			  ExaSes_NEW_SESSION_SECTION_ID,
 			  ExaSes_ParsFormSession,Session,
 			  "TBL_WIDE");
@@ -963,8 +972,7 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session)
 	 ExaSes_ShowLstGrpsToCreateSession (Session->SesCod);
 
       /***** End form to create *****/
-      Frm_EndFormTable (ItsANewSession ? Btn_CREATE_BUTTON :
-					 Btn_CONFIRM_BUTTON);
+      Frm_EndFormTable (Forms[OldNewSession].Button);
 
    /***** End section for exam session *****/
    HTM_SECTION_End ();
@@ -1029,7 +1037,7 @@ void ExaSes_ReqCreatOrEditSes (void)
   {
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;
-   bool ItsANewSession;
+   OldNew_OldNew_t OldNewSession;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -1040,7 +1048,8 @@ void ExaSes_ReqCreatOrEditSes (void)
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
    Grp_GetParMyAllGrps ();
    Session.SesCod = ParCod_GetPar (ParCod_Ses);
-   ItsANewSession = (Session.SesCod <= 0);
+   OldNewSession = (Session.SesCod > 0) ? OldNew_OLD :
+					  OldNew_NEW;
 
    /***** Get exam data from database *****/
    Exa_GetExamDataByCod (&Exams.Exam);
@@ -1048,17 +1057,22 @@ void ExaSes_ReqCreatOrEditSes (void)
       Err_WrongExamExit ();
 
    /***** Get session data *****/
-   if (ItsANewSession)
-      /* Initialize to empty session */
-      ExaSes_ResetSession (&Session);
-   else
+   switch (OldNewSession)
      {
-      /* Get session data from database */
-      ExaSes_GetSessionDataByCod (&Session);
-      if (Exams.Exam.ExaCod != Session.ExaCod)
-	 Err_WrongExamExit ();
-      Exams.SesCod = Session.SesCod;
+      case OldNew_OLD:
+	 /* Get session data from database */
+	 ExaSes_GetSessionDataByCod (&Session);
+	 if (Exams.Exam.ExaCod != Session.ExaCod)
+	    Err_WrongExamExit ();
+	 break;
+      case OldNew_NEW:
+      default:
+	 /* Initialize to empty session */
+	 ExaSes_ResetSession (&Session);
+	 Session.ExaCod = Exams.Exam.ExaCod;
+	 break;
      }
+   Exams.SesCod = Session.SesCod;
 
    /***** Show exam *****/
    Exa_ShowOnlyOneExam (&Exams,Frm_PUT_FORM);	// Put form for session
@@ -1074,7 +1088,7 @@ void ExaSes_ReceiveSession (void)
    extern const char *Txt_The_session_has_been_modified;
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;
-   bool ItsANewSession;
+   OldNew_OldNew_t OldNewSession;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -1085,7 +1099,8 @@ void ExaSes_ReceiveSession (void)
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
    Grp_GetParMyAllGrps ();
    Session.SesCod = ParCod_GetPar (ParCod_Ses);
-   ItsANewSession = (Session.SesCod <= 0);
+   OldNewSession = (Session.SesCod > 0) ? OldNew_OLD :
+					  OldNew_NEW;
 
    /***** Get exam data from database *****/
    Exa_GetExamDataByCod (&Exams.Exam);
@@ -1093,20 +1108,22 @@ void ExaSes_ReceiveSession (void)
       Err_WrongExamExit ();
 
    /***** Get session data from database *****/
-   if (ItsANewSession)
+   switch (OldNewSession)
      {
-      /* Initialize to empty session */
-      ExaSes_ResetSession (&Session);
-      Session.ExaCod = Exams.Exam.ExaCod;
+      case OldNew_OLD:
+	 /* Get session data from database */
+	 ExaSes_GetSessionDataByCod (&Session);
+	 if (Session.ExaCod != Exams.Exam.ExaCod)
+	    Err_WrongExamExit ();
+	 break;
+      case OldNew_NEW:
+      default:
+	 /* Initialize to empty session */
+	 ExaSes_ResetSession (&Session);
+	 Session.ExaCod = Exams.Exam.ExaCod;
+	 break;
      }
-   else
-     {
-      /* Get session data from database */
-      ExaSes_GetSessionDataByCod (&Session);
-      if (Session.ExaCod != Exams.Exam.ExaCod)
-	 Err_WrongExamExit ();
-      Exams.SesCod = Session.SesCod;
-     }
+   Exams.SesCod = Session.SesCod;
 
    /***** Get parameters from form *****/
    /* Get session title */
@@ -1120,24 +1137,23 @@ void ExaSes_ReceiveSession (void)
    Grp_GetParCodsSeveralGrps ();
 
    /***** Create/update session *****/
-   if (ItsANewSession)
-      ExaSes_CreateSession (&Session);
-   else
+   switch (OldNewSession)
      {
-      if (Session.TimeUTC[Dat_END_TIME] >= Dat_GetStartExecutionTimeUTC ())	// End of time is in the future
-         Session.ShowUsrResults = false;	// Force results to be hidden
-      ExaSes_UpdateSession (&Session);
+      case OldNew_OLD:
+	 if (Session.TimeUTC[Dat_END_TIME] >= Dat_GetStartExecutionTimeUTC ())	// End of time is in the future
+	    Session.ShowUsrResults = false;	// Force results to be hidden
+	 ExaSes_UpdateSession (&Session);
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_session_has_been_modified);
+	 break;
+      case OldNew_NEW:
+      default:
+	 ExaSes_CreateSession (&Session);
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_session_X,Session.Title);
+	 break;
      }
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
-
-   /***** Write success message *****/
-   if (ItsANewSession)
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_session_X,
-		     Session.Title);
-   else
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_session_has_been_modified);
 
    /***** Get exam data again to update it after changes in session *****/
    Exa_GetExamDataByCod (&Exams.Exam);

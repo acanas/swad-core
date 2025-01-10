@@ -1329,11 +1329,9 @@ void Agd_ReqCreatOrEditEvent (void)
    extern const char *Txt_Event;
    extern const char *Txt_Location;
    extern const char *Txt_Description;
-   extern const char *Txt_Create;
-   extern const char *Txt_Save_changes;
    struct Agd_Agenda Agenda;
    struct Agd_Event AgdEvent;
-   bool ItsANewEvent;
+   OldNew_OldNew_t OldNewEvent;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
@@ -1348,39 +1346,45 @@ void Agd_ReqCreatOrEditEvent (void)
    Agd_GetPars (&Agenda,Agd_MY_AGENDA);
 
    /***** Get the code of the event *****/
-   ItsANewEvent = ((AgdEvent.AgdCod = ParCod_GetPar (ParCod_Agd)) <= 0);
+   OldNewEvent = ((AgdEvent.AgdCod = ParCod_GetPar (ParCod_Agd)) > 0) ? OldNew_OLD :
+									OldNew_NEW;
 
    /***** Get from the database the data of the event *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   if (ItsANewEvent)
+   switch (OldNewEvent)
      {
-      /* Initialize to empty event */
-      AgdEvent.AgdCod = -1L;
-      AgdEvent.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
-      AgdEvent.TimeUTC[Dat_END_TIME] = AgdEvent.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
-      AgdEvent.TimeStatus = Dat_FUTURE;
-      AgdEvent.Title[0]    = '\0';
-      AgdEvent.Location[0] = '\0';
-     }
-   else
-     {
-      /* Get data of the event from database */
-      Agd_GetventDataByCod (&AgdEvent);
+      case OldNew_OLD:
+	 /* Get data of the event from database */
+	 Agd_GetventDataByCod (&AgdEvent);
 
-      /* Get text of the event from database */
-      Agd_DB_GetEventTxt (&AgdEvent,Txt);
+	 /* Get text of the event from database */
+	 Agd_DB_GetEventTxt (&AgdEvent,Txt);
+	 break;
+      case OldNew_NEW:
+      default:
+	 /* Initialize to empty event */
+	 AgdEvent.AgdCod = -1L;
+	 AgdEvent.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
+	 AgdEvent.TimeUTC[Dat_END_TIME] = AgdEvent.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
+	 AgdEvent.TimeStatus = Dat_FUTURE;
+	 AgdEvent.Title[0]    = '\0';
+	 AgdEvent.Location[0] = '\0';
+	 Txt[0] = '\0';
+	 break;
      }
 
    /***** Begin form *****/
-   if (ItsANewEvent)
+   switch (OldNewEvent)
      {
-      Frm_BeginForm (ActNewEvtMyAgd);
-      Agenda.AgdCodToEdit = -1L;
-     }
-   else
-     {
-      Frm_BeginForm (ActChgEvtMyAgd);
-      Agenda.AgdCodToEdit = AgdEvent.AgdCod;
+      case OldNew_OLD:
+	 Frm_BeginForm (ActChgEvtMyAgd);
+	 Agenda.AgdCodToEdit = AgdEvent.AgdCod;
+	 break;
+      case OldNew_NEW:
+      default:
+	 Frm_BeginForm (ActNewEvtMyAgd);
+	 Agenda.AgdCodToEdit = -1L;
+	 break;
      }
    Agd_PutCurrentParsMyAgenda (&Agenda);
 
@@ -1444,8 +1448,7 @@ void Agd_ReqCreatOrEditEvent (void)
 				   "id=\"Txt\" name=\"Txt\" rows=\"5\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
-		  if (!ItsANewEvent)
-		     HTM_Txt (Txt);
+		  HTM_Txt (Txt);
 	       HTM_TEXTAREA_End ();
 	    HTM_TD_End ();
 
@@ -1453,10 +1456,7 @@ void Agd_ReqCreatOrEditEvent (void)
 	 HTM_TR_End ();
 
       /***** End table, send button and end box *****/
-      if (ItsANewEvent)
-	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create);
-      else
-	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      Box_BoxTableWithButtonSaveCreateEnd (OldNewEvent);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1475,7 +1475,7 @@ void Agd_ReceiveEvent (void)
    extern const char *Txt_The_event_has_been_modified;
    struct Agd_Agenda Agenda;
    struct Agd_Event AgdEvent;
-   bool ItsANewEvent;
+   OldNew_OldNew_t OldNewEvent;
    bool NewEventIsCorrect = true;
    char EventTxt[Cns_MAX_BYTES_TEXT + 1];
 
@@ -1489,7 +1489,8 @@ void Agd_ReceiveEvent (void)
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 
    /***** Get the code of the event *****/
-   ItsANewEvent = ((AgdEvent.AgdCod = ParCod_GetPar (ParCod_Agd)) <= 0);
+   OldNewEvent = ((AgdEvent.AgdCod = ParCod_GetPar (ParCod_Agd)) > 0) ? OldNew_OLD :
+									OldNew_NEW;
 
    /***** Get start/end date-times *****/
    AgdEvent.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
@@ -1527,21 +1528,23 @@ void Agd_ReceiveEvent (void)
    /***** Create a new event or update an existing one *****/
    if (NewEventIsCorrect)
      {
-      if (ItsANewEvent)
+      switch (OldNewEvent)
 	{
-         AgdEvent.AgdCod = Agd_DB_CreateEvent (&AgdEvent,EventTxt);	// Add new event to database
+	 case OldNew_OLD:
+	    Agd_DB_UpdateEvent (&AgdEvent,EventTxt);
 
-	 /***** Write success message *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_event_X,
-		        AgdEvent.Title);
+	    /***** Write success message *****/
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
+	    break;
+	 case OldNew_NEW:
+	 default:
+	    AgdEvent.AgdCod = Agd_DB_CreateEvent (&AgdEvent,EventTxt);	// Add new event to database
+
+	    /***** Write success message *****/
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_event_X,
+			   AgdEvent.Title);
+	    break;
 	}
-      else
-        {
-	 Agd_DB_UpdateEvent (&AgdEvent,EventTxt);
-
-	 /***** Write success message *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
-        }
 
       /* Free memory for list of selected groups */
       Grp_FreeListCodSelectedGrps ();
