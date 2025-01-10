@@ -479,7 +479,6 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -558,7 +557,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeOneAsg);
 	    Asg_PutPars (Assignments);
-	    HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeOneAsg],
+	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneAsg),
 	                             "class=\"LT BT_LINK %s_%s\"",
 				     HidVis_TitleClass[Assignments->Asg.HiddenOrVisible],
 				     The_GetSuffix ());

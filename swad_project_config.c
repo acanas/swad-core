@@ -101,7 +101,6 @@ void PrjCfg_ShowFormConfig (void)
   {
    extern const char *Hlp_ASSESSMENT_Projects;
    extern const char *Txt_Configure_projects;
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Txt_Rubrics;
    struct Prj_Projects Projects;
 
@@ -115,7 +114,7 @@ void PrjCfg_ShowFormConfig (void)
       /***** Projects are editable by non-editing teachers? *****/
       Frm_BeginForm (ActChgNETCanCrePrj);
 	 HTM_FIELDSET_Begin (NULL);
-	    HTM_LEGEND (Txt_Actions[ActChgPrj]);
+	    HTM_LEGEND (Act_GetActionText (ActChgPrj));
 	    PrjCfg_ShowFormNETCanCreate (&Projects.Config);
 	 HTM_FIELDSET_End ();
       Frm_EndForm ();

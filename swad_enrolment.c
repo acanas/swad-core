@@ -214,7 +214,6 @@ void Enr_PutButtonInlineToEnrolStds (long CrsCod,
 				     Lay_Highlight_t Highlight)
   {
    extern const char *Lay_HighlightClass[Lay_NUM_HIGHLIGHT];
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
 
    if (Rol_GetMyRoleInCrs (CrsCod) == Rol_TCH)	// I am a teacher in the given course
       if (!Enr_GetNumUsrsInCrss (Hie_CRS,CrsCod,
@@ -225,7 +224,7 @@ void Enr_PutButtonInlineToEnrolStds (long CrsCod,
 					Lay_NO_HORIZONTAL_LINE_AT_RIGHT);
 	    Frm_BeginForm (ActReqEnrSevStd);
 	       ParCod_PutPar (ParCod_Crs,CrsCod);
-	       Btn_PutButtonInline (Btn_CREATE,Txt_Actions[ActRcvFrmEnrSevStd]);
+	       Btn_PutButtonInline (Btn_CREATE,Act_GetActionText (ActRcvFrmEnrSevStd));
 	    Frm_EndForm ();
 	 HTM_LI_End ();
 	}

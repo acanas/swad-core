@@ -79,7 +79,6 @@ void Adm_ReqAddAdm (Hie_Level_t Level)
   {
    extern const char *Txt_THE_USER_X_is_already_an_administrator_of_Y;
    extern const char *Txt_Do_you_really_want_to_enrol_the_following_user_as_an_administrator_of_X;
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    static Act_Action_t Actions[Hie_NUM_LEVELS] =
      {
       [Hie_UNK] = ActUnk,
@@ -125,7 +124,7 @@ void Adm_ReqAddAdm (Hie_Level_t Level)
 		  /* End alert */
 		  Ale_ShowAlertAndButtonEnd (Actions[Level],NULL,NULL,
 					     Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-					     Btn_CREATE,Txt_Actions[Actions[Level]]);
+					     Btn_CREATE,Act_GetActionText (Actions[Level]));
 		 }
                break;
             case Usr_CAN_NOT:

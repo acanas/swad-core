@@ -1632,7 +1632,6 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Projects,
   {
    extern const char *HidVis_DateBlueClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    static Act_Action_t NextActions[Usr_NUM_CAN] =
      {
       [Usr_CAN_NOT] = ActSeeOnePrj,
@@ -1748,7 +1747,7 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Projects,
 	       NextAction = NextActions[Prj_CheckIfICanViewProjectFiles (Projects->Prj.PrjCod)];
 	       Frm_BeginForm (NextAction);
 		  Prj_PutCurrentPars (Projects);
-		  HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
+		  HTM_BUTTON_Submit_Begin (Act_GetActionText (NextAction),
 					   "class=\"LT BT_LINK %s_%s\"",
 					   HidVis_TitleClass[Projects->Prj.Hidden],
 					   The_GetSuffix ());
@@ -3855,7 +3854,6 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
    extern const char *Hlp_ASSESSMENT_Projects_edit_project;
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_Project;
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Txt_Title;
    extern const char *Txt_Department;
    extern const char *Txt_Another_department;
@@ -3910,7 +3908,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
       /***** 2. Project data *****/
       HTM_FIELDSET_Begin (NULL);
-	 HTM_LEGEND (Txt_Actions[NextAction]);
+	 HTM_LEGEND (Act_GetActionText (NextAction));
 
 	 /* Begin data form */
 	 Frm_BeginForm (NextAction);

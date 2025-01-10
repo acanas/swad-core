@@ -81,7 +81,6 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
    extern const char *Txt_Upload_my_picture;
    extern const char *Txt_Log_in;
    extern const char *Txt_New_on_PLATFORM_Sign_up;
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    static Act_Action_t ActionsRemoveMe[Rol_NUM_ROLES] =
      {
       [Rol_UNK    ] = ActUnk,
@@ -149,7 +148,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		     /***** Request my registration in this course *****/
 		     Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Enrol_me,
 							  ActReqSignUp,
-							  Btn_CREATE,Txt_Actions[ActSignUp]);
+							  Btn_CREATE,Act_GetActionText (ActSignUp));
 		     break;
 	         }
 	      }
@@ -163,13 +162,13 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		     /***** Request students enrolment *****/
 		     Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Enrol_students,
 							  ActReqEnrSevStd,
-							  Btn_CREATE,Txt_Actions[ActRcvFrmEnrSevStd]);
+							  Btn_CREATE,Act_GetActionText (ActRcvFrmEnrSevStd));
 
 	       if (Gbl.Action.Act != ActMyCrs)	// I am not seeing the action to list my courses
 		  /***** Request list my courses *****/
 		  Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Go_to_one_of_my_courses,
 						       ActMyCrs,
-						       Btn_CONFIRM,Txt_Actions[ActMyCrs]);
+						       Btn_CONFIRM,Act_GetActionText (ActMyCrs));
 	      }
 
 	    /***** Go to list of hierarchy subnodes
@@ -191,14 +190,14 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	       /***** Upload my photo *****/
 	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Upload_my_picture,
 						    ActReqMyPho,
-						    Btn_CREATE,Txt_Actions[ActUpdMyPho]);
+						    Btn_CREATE,Act_GetActionText (ActUpdMyPho));
 	   }
 	 else					// I am not logged
 	   {
 	    /***** Log in *****/
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Log_in,
 						 ActFrmLogIn,
-						 Btn_CONFIRM,Txt_Actions[ActLogIn]);
+						 Btn_CONFIRM,Act_GetActionText (ActLogIn));
 
 	    /***** Sign up *****/
 	    if (asprintf (&Description,Txt_New_on_PLATFORM_Sign_up,
@@ -206,7 +205,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	       Err_NotEnoughMemoryExit ();
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
 						 ActFrmMyAcc,
-						 Btn_CREATE,Txt_Actions[ActCreUsrAcc]);
+						 Btn_CREATE,Act_GetActionText (ActCreUsrAcc));
 	    free (Description);
 	   }
 

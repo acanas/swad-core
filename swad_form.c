@@ -236,11 +236,9 @@ void Frm_BeginFormTable (Act_Action_t NextAction,const char *Anchor,
                          void (*FuncPars) (void *Args),void *Args,
                          const char *ClassTable)
   {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-
    /***** Begin fieldset *****/
    HTM_FIELDSET_Begin (NULL);
-      HTM_LEGEND (Txt_Actions[NextAction]);
+      HTM_LEGEND (Act_GetActionText (NextAction));
 
       /***** Begin form *****/
       Frm_BeginFormAnchor (NextAction,Anchor);

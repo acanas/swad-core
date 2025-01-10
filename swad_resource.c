@@ -257,7 +257,6 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
   {
    extern Inf_Type_t Inf_Types[Inf_NUM_TYPES];
    extern const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES];
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
    static struct
      {
@@ -424,7 +423,7 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
 	   }
 
 	 /* Begin link */
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (NextAction),
 				  "class=\"LM BT_LINK RSC_LNK_%s\"",
 				  The_GetSuffix ());
 

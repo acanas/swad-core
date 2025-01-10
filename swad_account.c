@@ -110,12 +110,10 @@ static void Acc_RemoveUsrBriefcase (struct Usr_Data *UsrDat);
 
 void Acc_PutLinkToCreateAccount (void)
   {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-
    Lay_PutContextualLinkIconText (ActFrmMyAcc,NULL,
 				  NULL,NULL,
 				  "at.svg",Ico_BLACK,
-				  Txt_Actions[ActCreUsrAcc],NULL);
+				  Act_GetActionText (ActCreUsrAcc),NULL);
   }
 
 /*****************************************************************************/
@@ -362,14 +360,13 @@ static void Acc_ShowFormRequestNewAccountWithPars (const char *NewNickWithoutArr
                                                    const char *NewEmail)
   {
    extern const char *Hlp_PROFILE_SignUp;
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Txt_Create;
 
    /***** Begin form to enter some data of the new user *****/
    Frm_BeginForm (ActCreUsrAcc);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (Txt_Actions[ActCreUsrAcc],NULL,NULL,
+      Box_BoxTableBegin (Act_GetActionText (ActCreUsrAcc),NULL,NULL,
 			 Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE,2);
 
 	 /***** Nickname *****/
@@ -396,7 +393,6 @@ void Acc_ShowFormGoToRequestNewAccount (void)
   {
    extern const char *Hlp_PROFILE_SignUp;
    extern const char *Txt_New_on_PLATFORM_Sign_up;
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    char *Title;
 
    /***** Begin box *****/
@@ -407,7 +403,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
 
       /***** Button to go to request the creation of a new account *****/
       Frm_BeginForm (ActFrmMyAcc);
-	 Btn_PutButton (Btn_CREATE,Txt_Actions[ActCreUsrAcc]);
+	 Btn_PutButton (Btn_CREATE,Act_GetActionText (ActCreUsrAcc));
       Frm_EndForm ();
 
    /***** End box *****/
@@ -873,8 +869,8 @@ void Acc_AskIfRemoveMyAccount (void)
 
    /* End alert */
    Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
-                            NULL,NULL,
-                            Btn_NO_BUTTON,NULL);
+                              NULL,NULL,
+                              Btn_NO_BUTTON,NULL);
 
    /***** Show forms to change my account *****/
    Acc_ShowFormChgMyAccount ();

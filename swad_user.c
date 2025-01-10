@@ -6321,7 +6321,6 @@ void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1])
 void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
   {
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
 
    if (Gbl.Crs.Grps.AllGrps &&			// All groups selected
        Role == Rol_STD &&			// No students found
@@ -6329,7 +6328,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
       /***** Show alert and button to enrol students *****/
       Ale_ShowAlertAndButton (ActReqEnrSevStd,NULL,NULL,
                               NULL,NULL,
-                              Btn_CREATE,Txt_Actions[ActRcvFrmEnrSevStd],
+                              Btn_CREATE,Act_GetActionText (ActRcvFrmEnrSevStd),
 			      Ale_WARNING,Txt_No_users_found[Rol_STD]);
 
    else if (Gbl.Crs.Grps.AllGrps &&			// All groups selected
@@ -6339,7 +6338,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
       /***** Show alert and button to enrol teachers *****/
       Ale_ShowAlertAndButton (ActReqID_MdfTch,NULL,NULL,
                               NULL,NULL,
-                              Btn_CREATE,Txt_Actions[ActReqMdfTch],
+                              Btn_CREATE,Act_GetActionText (ActReqMdfTch),
 			      Ale_WARNING,Txt_No_users_found[Rol_TCH]);
    else
       /***** Show alert *****/
