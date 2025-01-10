@@ -2055,7 +2055,6 @@ a:hover img.CENTER_PHOTO_SHOW
 	background-position: 8px 8px;
 	background-size: 20px 20px;
 	background-repeat: no-repeat;
-	font-size: 12pt;
 	text-align: left;
 	overflow: hidden;
 	}
@@ -2064,15 +2063,15 @@ a:hover img.CENTER_PHOTO_SHOW
 .ALERT_TXT_PURPLE,
 .ALERT_TXT_BLUE,
 .ALERT_TXT_YELLOW,
-.ALERT_TXT_PINK		{color: #632921;}
-.ALERT_TXT_DARK		{color: white;}
+.ALERT_TXT_PINK		{font-size: 12pt; color: #632921;}
+.ALERT_TXT_DARK		{font-size: 12pt; color: white;}
 
 /*********************************** Icons ***********************************/
-.ICO		{width: 100%;				 vertical-align: middle;}
-.ICOx16		{				height: 16px; vertical-align: middle;}
+.ICO		{width: 100%; vertical-align: middle;}
+.ICOx16		{height: 16px; vertical-align: middle;}
 .ICO16x16	{width: 16px;	height: 16px; vertical-align: middle;}
 .ICO20x20	{width: 20px;	height: 20px; vertical-align: middle;}
-.ICOx20		{				height: 20px; vertical-align: middle; margin: 0 auto;}
+.ICOx20		{height: 20px; vertical-align: middle; margin: 0 auto;}
 .ICO25x25	{width: 25px;	height: 25px; vertical-align: middle;}
 .ICO40x40	{width: 40px;	height: 40px; vertical-align: middle;}
 .ICO64x64	{width: 64px;	height: 64px; vertical-align: middle;}
@@ -2085,7 +2084,7 @@ a:hover img.CENTER_PHOTO_SHOW
 
 .ICO160x160	{width: 160px;	height: 160px; vertical-align: middle;}
 
-.BANNER			{width: 150px;	height: 50px;}
+.BANNER		{width: 150px;	height: 50px;}
 .BANNER_SMALL	{width: 75px;	height: 25px;}
 
 .ICO_DARKRED	{color: #660000;}

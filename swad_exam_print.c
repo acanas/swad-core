@@ -665,7 +665,7 @@ static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
    /***** Form to end/close this exam print *****/
    Frm_BeginForm (ActEndExaPrn);
       ExaSes_PutParsEdit (Exams);
-      Btn_PutCreateButton (Txt_I_have_finished);
+      Btn_PutButton (Btn_CREATE,Txt_I_have_finished);
    Frm_EndForm ();
   }
 
@@ -1031,7 +1031,7 @@ void ExaPrn_ReceivePrintAnswer (void)
 	 /***** Form to end/close this exam print *****/
 	 Frm_BeginForm (ActEndExaPrn);
 	    ExaSes_PutParsEdit (&Exams);
-	    Btn_PutCreateButton (Txt_Continue);
+	    Btn_PutButton (Btn_CREATE,Txt_Continue);
 	 Frm_EndForm ();
 	 break;
      }

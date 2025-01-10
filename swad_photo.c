@@ -459,7 +459,7 @@ void Pho_ReqRemMyPhoto (void)
       /* End alert */
       Ale_ShowAlertAndButtonEnd (ActRemMyPho,NULL,NULL,
                                NULL,NULL,
-                               Btn_REMOVE_BUTTON,Txt_Remove);
+                               Btn_REMOVE,Txt_Remove);
      }
    else
       Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
@@ -547,7 +547,7 @@ void Pho_ReqRemUsrPhoto (void)
 	       /* End alert */
 	       Ale_ShowAlertAndButtonEnd (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,NULL,
 					Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-					Btn_REMOVE_BUTTON,Txt_Remove);
+					Btn_REMOVE,Txt_Remove);
 	      }
 	    else
 	       Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);

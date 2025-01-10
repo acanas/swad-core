@@ -204,7 +204,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Test;
-   extern const char *Txt_Continue;
+   extern const char *Txt_I_have_finished;
    extern const char *Txt_Send;
    unsigned QstInd;
    struct Qst_Question Question;
@@ -256,14 +256,14 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
 	   {
 	    case TstPrn_REQUEST:
 	       /* Send button */
-	       Btn_PutConfirmButton (Txt_Continue);
+	       Btn_PutButton (Btn_CONFIRM,Txt_I_have_finished);
 	       break;
 	    case TstPrn_CONFIRM:
 	       /* Will the test be visible by teachers? */
 	       TstPrn_PutCheckBoxAllowTeachers (true);
 
 	       /* Send button */
-	       Btn_PutCreateButton (Txt_Send);
+	       Btn_PutButton (Btn_CREATE,Txt_Send);
 	       break;
 	   }
 
@@ -1735,7 +1735,7 @@ void TstPrn_SelDatesToSeeMyPrints (void)
 	 Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
       /***** End table, send button and end box *****/
-      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_View_results);
+      Box_BoxTableWithButtonEnd (Btn_VIEW_RESULTS,Txt_View_results);
 
    /***** End form *****/
    Frm_EndForm ();

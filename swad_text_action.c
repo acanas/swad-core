@@ -28904,50 +28904,50 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See records of several selected students ready to print"		// Çeviri lazim!
 #endif
 	,
-	[ActReqMdfOneStd] =
+	[ActReqID_MdfStd] =
 #if   L==1	// ca
-	"Request a student's ID for enrolment/removal"					// Necessita traducció
+	"Request student administration"		// Necessita traducció
 #elif L==2	// de
-	"Request a student's ID for enrolment/removal"					// Need Übersetzung
+	"Request student administration"		// Need Übersetzung
 #elif L==3	// en
-	"Request a student's ID for enrolment/removal"
+	"Request student administration"
 #elif L==4	// es
-	"Solicitar el ID de estudiante para inscripci&oacute;n/eliminaci&oacute;n"
+	"Solicitar administraci&oacute;n de estudiante"
 #elif L==5	// fr
-	"Request a student's ID for enrolment/removal"					// Besoin de traduction
+	"Request student administration"		// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar el ID de estudiante para inscripci&oacute;n/eliminaci&oacute;n"	// Okoteve traducción
+	"Solicitar administraci&oacute;n de estudiante"	// Okoteve traducción
 #elif L==7	// it
-	"Request a student's ID for enrolment/removal"					// Bisogno di traduzione
+	"Request student administration"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Request a student's ID for enrolment/removal"					// Potrzebujesz tlumaczenie
+	"Request student administration"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request a student's ID for enrolment/removal"					// Precisa de tradução
+	"Request student administration"		// Precisa de tradução
 #elif L==10	// tr
-	"Request a student's ID for enrolment/removal"					// Çeviri lazim!
+	"Request student administration"		// Çeviri lazim!
 #endif
 	,
 	[ActReqMdfStd] =
 #if   L==1	// ca
-	"Request enrolment/removal of a student"			// Necessita traducció
+	"Administer student"		// Necessita traducció
 #elif L==2	// de
-	"Request enrolment/removal of a student"			// Need Übersetzung
+	"Administer student"		// Need Übersetzung
 #elif L==3	// en
-	"Request enrolment/removal of a student"
+	"Administer student"
 #elif L==4	// es
-	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de estudiante"
+	"Administrar estudiante"
 #elif L==5	// fr
-	"Request enrolment/removal of a student"			// Besoin de traduction
+	"Administer student"		// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de estudiante"	// Okoteve traducción
+	"Administrar estudiante"	// Okoteve traducción
 #elif L==7	// it
-	"Request enrolment/removal of a student"			// Bisogno di traduzione
+	"Administer student"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Request enrolment/removal of a student"			// Potrzebujesz tlumaczenie
+	"Administer student"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request enrolment/removal of a student"			// Precisa de tradução
+	"Administer student"		// Precisa de tradução
 #elif L==10	// tr
-	"Request enrolment/removal of a student"			// Çeviri lazim!
+	"Administer student"		// Çeviri lazim!
 #endif
 	,
 	[ActReqStdPho] =
@@ -29573,71 +29573,71 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActReqEnrSevStd] =
 #if   L==1	// ca
-	"Request enrolment/removing of several students to/from a course"				// Necessita traducció
+	"Request enrolment/removing of students"				// Necessita traducció
 #elif L==2	// de
-	"Request enrolment/removing of several students to/from a course"				// Need Übersetzung
+	"Request enrolment/removing of students"				// Need Übersetzung
 #elif L==3	// en
-	"Request enrolment/removing of several students to/from a course"
+	"Request enrolment/removing of students"
 #elif L==4	// es
-	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de varios estudiantes a/de un asignatura"
+	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de estudiantes"
 #elif L==5	// fr
-	"Request enrolment/removing of several students to/from a course"				// Besoin de traduction
+	"Request enrolment/removing of studentse"				// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de varios estudiantes a/de un asignatura"	// Okoteve traducción
+	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de estudiantes"	// Okoteve traducción
 #elif L==7	// it
-	"Request enrolment/removing of several students to/from a course"				// Bisogno di traduzione
+	"Request enrolment/removing of students"				// Bisogno di traduzione
 #elif L==8	// pl
-	"Request enrolment/removing of several students to/from a course"				// Potrzebujesz tlumaczenie
+	"Request enrolment/removing of students"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request enrolment/removing of several students to/from a course"				// Precisa de tradução
+	"Request enrolment/removing of students"				// Precisa de tradução
 #elif L==10	// tr
-	"Request enrolment/removing of several students to/from a course"				// Çeviri lazim!
+	"Request enrolment/removing of students"				// Çeviri lazim!
 #endif
 	,
 	[ActRcvFrmEnrSevStd] =
 #if   L==1	// ca
-	"Register/remove several students in/from a course"		// Necessita traducció
+	"Register/remove students"		// Necessita traducció
 #elif L==2	// de
-	"Register/remove several students in/from a course"		// Need Übersetzung
+	"Register/remove students"		// Need Übersetzung
 #elif L==3	// en
-	"Register/remove several students in/from a course"
+	"Register/remove students"
 #elif L==4	// es
-	"Inscribir/eliminar varios estudiantes en/de asignatura"
+	"Inscribir/eliminar estudiantes"
 #elif L==5	// fr
-	"Register/remove several students in/from a course"		// Besoin de traduction
+	"Register/remove students"		// Besoin de traduction
 #elif L==6	// gn
-	"Inscribir/eliminar varios estudiantes en/de asignatura"	// Okoteve traducción
+	"Inscribir/eliminar estudiantes"	// Okoteve traducción
 #elif L==7	// it
-	"Register/remove several students in/from a course"		// Bisogno di traduzione
+	"Register/remove students"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Register/remove several students in/from a course"		// Potrzebujesz tlumaczenie
+	"Register/remove students"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Register/remove several students in/from a course"		// Precisa de tradução
+	"Register/remove students"		// Precisa de tradução
 #elif L==10	// tr
-	"Register/remove several students in/from a course"		// Çeviri lazim!
+	"Register/remove students"		// Çeviri lazim!
 #endif
 	,
 	[ActRcvRecOthUsr] =
 #if   L==1	// ca
-	"Update record fields of student in course"			// Necessita traducció
+	"Update record fields of student"			// Necessita traducció
 #elif L==2	// de
-	"Update record fields of student in course"			// Need Übersetzung
+	"Update record fields of student"			// Need Übersetzung
 #elif L==3	// en
-	"Update record fields of student in course"
+	"Update record fields of student"
 #elif L==4	// es
-	"Actualizar los campos de la ficha de estudiante en asignatura"
+	"Actualizar los campos de la ficha de estudiante"
 #elif L==5	// fr
-	"Update record fields of student in course"			// Besoin de traduction
+	"Update record fields of student"			// Besoin de traduction
 #elif L==6	// gn
-	"Actualizar los campos de la ficha de estudiante en asignatura"	// Okoteve traducción
+	"Actualizar los campos de la ficha de estudiante"	// Okoteve traducción
 #elif L==7	// it
-	"Update record fields of student in course"			// Bisogno di traduzione
+	"Update record fields of student"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Update record fields of student in course"			// Potrzebujesz tlumaczenie
+	"Update record fields of student"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Update record fields of student in course"			// Precisa de tradução
+	"Update record fields of student"			// Precisa de tradução
 #elif L==10	// tr
-	"Update record fields of student in course"			// Çeviri lazim!
+	"Update record fields of student"			// Çeviri lazim!
 #endif
 	,
 	[ActEdiRecFie] =
@@ -30054,73 +30054,73 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See records of several selected teachers ready to print"		// Çeviri lazim!
 #endif
 	,
-	[ActReqMdfOneTch] =
+	[ActReqID_MdfTch] =
 #if   L==1	// ca
-	"Request a teacher's ID for enrolment/removal"					// Necessita traducció
+	"Request teacher administration"		// Necessita traducció
 #elif L==2	// de
-	"Request a teacher's ID for enrolment/removal"					// Need Übersetzung
+	"Request teacher administration"		// Need Übersetzung
 #elif L==3	// en
-	"Request a teacher's ID for enrolment/removal"
+	"Request teacher administration"
 #elif L==4	// es
-	"Solicitar el ID de profesor para inscripci&oacute;n/eliminaci&oacute;n"
+	"Solicitar administraci&oacute;n de profesor"
 #elif L==5	// fr
-	"Request a teacher's ID for enrolment/removal"					// Besoin de traduction
+	"Request teacher administration"		// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar el ID de profesor para inscripci&oacute;n/eliminaci&oacute;n"	// Okoteve traducción
+	"Solicitar administraci&oacute;n de profesor"	// Okoteve traducción
 #elif L==7	// it
-	"Request a teacher's ID for enrolment/removal"					// Bisogno di traduzione
+	"Request teacher administration"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Request a teacher's ID for enrolment/removal"					// Potrzebujesz tlumaczenie
+	"Request teacher administration"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request a teacher's ID for enrolment/removal"					// Precisa de tradução
+	"Request teacher administration"		// Precisa de tradução
 #elif L==10	// tr
-	"Request a teacher's ID for enrolment/removal"					// Çeviri lazim!
+	"Request teacher administration"		// Çeviri lazim!
 #endif
 	,
 	[ActReqMdfNET] =
 #if   L==1	// ca
-	"Request enrolment/removal of a non-editing teacher"			// Necessita traducció
+	"Administer non-editing teacher"	// Necessita traducció
 #elif L==2	// de
-	"Request enrolment/removal of a non-editing teacher"			// Need Übersetzung
+	"Administer non-editing teacher"	// Need Übersetzung
 #elif L==3	// en
-	"Request enrolment/removal of a non-editing teacher"
+	"Administer non-editing teacher"
 #elif L==4	// es
-	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de profesor no editor"
+	"Administrar profesor no editor"
 #elif L==5	// fr
-	"Request enrolment/removal of a non-editing teacher"			// Besoin de traduction
+	"Administer non-editing teacher"	// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de profesor no editor"	// Okoteve traducción
+	"Administrar profesor no editor"	// Okoteve traducción
 #elif L==7	// it
-	"Request enrolment/removal of a non-editing teacher"			// Bisogno di traduzione
+	"Administer non-editing teacher"	// Bisogno di traduzione
 #elif L==8	// pl
-	"Request enrolment/removal of a non-editing teacher"			// Potrzebujesz tlumaczenie
+	"Administer non-editing teacher"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request enrolment/removal of a non-editing teacher"			// Precisa de tradução
+	"Administer non-editing teacher"	// Precisa de tradução
 #elif L==10	// tr
-	"Request enrolment/removal of a non-editing teacher"			// Çeviri lazim!
+	"Administer non-editing teacher"	// Çeviri lazim!
 #endif
 	,
 	[ActReqMdfTch] =
 #if   L==1	// ca
-	"Request enrolment/removal of a teacher"			// Necessita traducció
+	"Administer teacher"	// Necessita traducció
 #elif L==2	// de
-	"Request enrolment/removal of a teacher"			// Need Übersetzung
+	"Administer teacher"	// Need Übersetzung
 #elif L==3	// en
-	"Request enrolment/removal of a teacher"
+	"Administer teacher"
 #elif L==4	// es
-	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de profesor"
+	"Administrar profesor"
 #elif L==5	// fr
-	"Request enrolment/removal of a teacher"			// Besoin de traduction
+	"Administer teacher"	// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de profesor"	// Okoteve traducción
+	"Administrar profesor"	// Okoteve traducción
 #elif L==7	// it
-	"Request enrolment/removal of a teacher"			// Bisogno di traduzione
+	"Administer teacher"	// Bisogno di traduzione
 #elif L==8	// pl
-	"Request enrolment/removal of a teacher"			// Potrzebujesz tlumaczenie
+	"Administer teacher"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request enrolment/removal of a teacher"			// Precisa de tradução
+	"Administer teacher"	// Precisa de tradução
 #elif L==10	// tr
-	"Request enrolment/removal of a teacher"			// Çeviri lazim!
+	"Administer teacher"	// Çeviri lazim!
 #endif
 	,
 	[ActReqTchPho] =
@@ -31411,50 +31411,50 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See records of several selected guests ready to print"			// Çeviri lazim!
 #endif
 	,
-	[ActReqMdfOneOth] =
+	[ActReqID_MdfOth] =
 #if   L==1	// ca
-	"Request a user's ID for enrolment/removal"				// Necessita traducció
+	"Request user administration"			// Necessita traducció
 #elif L==2	// de
-	"Request a user's ID for enrolment/removal"				// Need Übersetzung
+	"Request user administration"			// Need Übersetzung
 #elif L==3	// en
-	"Request a user's ID for enrolment/removal"
+	"Request user administration"
 #elif L==4	// es
-	"Solicitar el ID de usuario para inscripci&oacute;n/eliminaci&oacute;n"
+	"Solicitar administraci&oacute;n de usuario"
 #elif L==5	// fr
-	"Request a user's ID for enrolment/removal"				// Besoin de traduction
+	"Request user administration"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar el ID de usuario para inscripci&oacute;n/eliminaci&oacute;n"	// Okoteve traducción
+	"Solicitar administraci&oacute;n de usuario"	// Okoteve traducción
 #elif L==7	// it
-	"Request a user's ID for enrolment/removal"				// Bisogno di traduzione
+	"Request user administration"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request a user's ID for enrolment/removal"				// Potrzebujesz tlumaczenie
+	"Request user administration"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request a user's ID for enrolment/removal"				// Precisa de tradução
+	"Request user administration"			// Precisa de tradução
 #elif L==10	// tr
-	"Request a user's ID for enrolment/removal"				// Çeviri lazim!
+	"Request user administration"			// Çeviri lazim!
 #endif
 	,
 	[ActReqMdfOth] =
 #if   L==1	// ca
-	"Request enrolment/removal of a user"			// Necessita traducció
+	"Administer user"	// Necessita traducció
 #elif L==2	// de
-	"Request enrolment/removal of a user"			// Need Übersetzung
+	"Administer user"	// Need Übersetzung
 #elif L==3	// en
-	"Request enrolment/removal of a user"
+	"Administer user"
 #elif L==4	// es
-	"Solicitar inscripcion/eliminaci&oacute;n de usuario"
+	"Administrar usuario"
 #elif L==5	// fr
-	"Request enrolment/removal of a user"			// Besoin de traduction
+	"Administer user"	// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar inscripcion/eliminaci&oacute;n de usuario"	// Okoteve traducción
+	"Administrar usuario"	// Okoteve traducción
 #elif L==7	// it
-	"Request enrolment/removal of a user"			// Bisogno di traduzione
+	"Administer user"	// Bisogno di traduzione
 #elif L==8	// pl
-	"Request enrolment/removal of a user"			// Potrzebujesz tlumaczenie
+	"Administer user"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request enrolment/removal of a user"			// Precisa de tradução
+	"Administer user"	// Precisa de tradução
 #elif L==10	// tr
-	"Request enrolment/removal of a user"			// Çeviri lazim!
+	"Administer user"	// Çeviri lazim!
 #endif
 	,
 	[ActReqOthPho] =

@@ -139,7 +139,7 @@ void PrgRsc_WriteCellEditRsc (struct Tre_Node *Node,
 	    Rsc_ShowClipboardToChangeLink (&Node->Item.Rsc.Link,HTM_NO_ATTR);
 
 	    /* Button to save changes */
-	    Btn_PutConfirmButtonInline (Txt_Save_changes);
+	    Btn_PutButtonInline (Btn_CONFIRM,Txt_Save_changes);
 
 	 Frm_EndForm ();
 	 break;
@@ -166,7 +166,7 @@ void PrgRsc_WriteCellNewRsc (void)
    Rsc_ShowClipboardToChangeLink (NULL,HTM_NO_ATTR);
 
    /***** Button to save changes *****/
-   Btn_PutCreateButtonInline (Txt_Save_changes);
+   Btn_PutButtonInline (Btn_CREATE,Txt_Save_changes);
   }
 
 /*****************************************************************************/

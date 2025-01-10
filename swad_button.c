@@ -35,74 +35,40 @@
 
 void Btn_PutButton (Btn_Button_t Button,const char *TxtButton)
   {
-   static void (*Function[Btn_NUM_BUTTON_TYPES]) (const char *TxtButton) =
+   static const char *Class[Btn_NUM_BUTTON_TYPES] =
      {
-      [Btn_CREATE_BUTTON ] = Btn_PutCreateButton,
-      [Btn_CONFIRM_BUTTON] = Btn_PutConfirmButton,
-      [Btn_REMOVE_BUTTON ] = Btn_PutRemoveButton,
+      [Btn_CREATE      ] = "BT_CREATE",
+      [Btn_CONFIRM     ] = "BT_CONFIRM",
+      [Btn_VIEW_RESULTS] = "BT_CONFIRM",
+      [Btn_GO          ] = "BT_CONFIRM",
+      [Btn_REMOVE      ] = "BT_REMOVE",
      };
 
    if (Button != Btn_NO_BUTTON && TxtButton)
-      Function[Button] (TxtButton);
+     {
+      HTM_DIV_Begin ("class=\"CM\"");
+	 HTM_BUTTON_Submit_Begin (NULL,"class=\"BT_SUBMIT %s\"",Class[Button]);
+	    HTM_Txt (TxtButton);
+	 HTM_BUTTON_End ();
+      HTM_DIV_End ();
+     }
   }
 
 void Btn_PutButtonInline (Btn_Button_t Button,const char *TxtButton)
   {
-   static void (*Function[Btn_NUM_BUTTON_TYPES]) (const char *TxtButton) =
+   static const char *Class[Btn_NUM_BUTTON_TYPES] =
      {
-      [Btn_CREATE_BUTTON ] = Btn_PutCreateButtonInline,
-      [Btn_CONFIRM_BUTTON] = Btn_PutConfirmButtonInline,
-      [Btn_REMOVE_BUTTON ] = Btn_PutRemoveButtonInline,
+      [Btn_CREATE      ] = "BT_CREATE",
+      [Btn_CONFIRM     ] = "BT_CONFIRM",
+      [Btn_VIEW_RESULTS] = "BT_CONFIRM",
+      [Btn_GO          ] = "BT_CONFIRM",
+      [Btn_REMOVE      ] = "BT_REMOVE",
      };
 
    if (Button != Btn_NO_BUTTON && TxtButton)
-      Function[Button] (TxtButton);
-  }
-
-void Btn_PutCreateButton (const char *TxtButton)
-  {
-   HTM_DIV_Begin ("class=\"CM\"");
-      HTM_BUTTON_Submit_Begin (NULL,"class=\"BT_SUBMIT BT_CREATE\"");
+     {
+      HTM_BUTTON_Submit_Begin (NULL,"class=\"BT_SUBMIT_INLINE %s\"",Class[Button]);
 	 HTM_Txt (TxtButton);
       HTM_BUTTON_End ();
-   HTM_DIV_End ();
-  }
-
-void Btn_PutCreateButtonInline (const char *TxtButton)
-  {
-   HTM_BUTTON_Submit_Begin (NULL,"class=\"BT_SUBMIT_INLINE BT_CREATE\"");
-      HTM_Txt (TxtButton);
-   HTM_BUTTON_End ();
-  }
-
-void Btn_PutConfirmButton (const char *TxtButton)
-  {
-   HTM_DIV_Begin ("class=\"CM\"");
-      HTM_BUTTON_Submit_Begin (NULL,"class=\"BT_SUBMIT BT_CONFIRM\"");
-	 HTM_Txt (TxtButton);
-      HTM_BUTTON_End ();
-   HTM_DIV_End ();
-  }
-
-void Btn_PutConfirmButtonInline (const char *TxtButton)
-  {
-   HTM_BUTTON_Submit_Begin (NULL,"class=\"BT_SUBMIT_INLINE BT_CONFIRM\"");
-      HTM_Txt (TxtButton);
-   HTM_BUTTON_End ();
-  }
-
-void Btn_PutRemoveButton (const char *TxtButton)
-  {
-   HTM_DIV_Begin ("class=\"CM\"");
-      HTM_BUTTON_Submit_Begin (NULL,"class=\"BT_SUBMIT BT_REMOVE\"");
-	 HTM_Txt (TxtButton);
-      HTM_BUTTON_End ();
-   HTM_DIV_End ();
-  }
-
-void Btn_PutRemoveButtonInline (const char *TxtButton)
-  {
-   HTM_BUTTON_Submit_Begin (NULL,"class=\"BT_SUBMIT_INLINE BT_REMOVE\"");
-      HTM_Txt (TxtButton);
-   HTM_BUTTON_End ();
+     }
   }

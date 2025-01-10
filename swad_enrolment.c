@@ -214,7 +214,7 @@ void Enr_PutButtonInlineToEnrolStds (long CrsCod,
 				     Lay_Highlight_t Highlight)
   {
    extern const char *Lay_HighlightClass[Lay_NUM_HIGHLIGHT];
-   extern const char *Txt_Enrol_students;
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
 
    if (Rol_GetMyRoleInCrs (CrsCod) == Rol_TCH)	// I am a teacher in the given course
       if (!Enr_GetNumUsrsInCrss (Hie_CRS,CrsCod,
@@ -225,7 +225,7 @@ void Enr_PutButtonInlineToEnrolStds (long CrsCod,
 					Lay_NO_HORIZONTAL_LINE_AT_RIGHT);
 	    Frm_BeginForm (ActReqEnrSevStd);
 	       ParCod_PutPar (ParCod_Crs,CrsCod);
-	       Btn_PutCreateButtonInline (Txt_Enrol_students);
+	       Btn_PutButtonInline (Btn_CREATE,Txt_Actions[ActRcvFrmEnrSevStd]);
 	    Frm_EndForm ();
 	 HTM_LI_End ();
 	}
@@ -398,7 +398,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncPars) (v
 		      " class=\"INPUT_%s\"",The_GetSuffix ());
 
       /***** Send button*****/
-      Btn_PutConfirmButton (Txt_Continue);
+      Btn_PutButton (Btn_CONFIRM,Txt_Continue);
 
    Frm_EndForm ();
   }
@@ -443,14 +443,14 @@ void Enr_ReqAcceptEnrolmentInCrs (void)
       if (!WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Accept)
 	 Err_WrongRoleExit ();
       Frm_BeginForm (WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Accept);
-	 Btn_PutCreateButtonInline (Txt_Confirm_my_enrolment);
+	 Btn_PutButtonInline (Btn_CREATE,Txt_Confirm_my_enrolment);
       Frm_EndForm ();
 
       /***** Send button to refuse enrolment in the current course *****/
       if (!WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Refuse)
 	 Err_WrongRoleExit ();
       Frm_BeginForm (WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Refuse);
-	 Btn_PutRemoveButtonInline (Txt_Remove_me_from_this_course);
+	 Btn_PutButtonInline (Btn_REMOVE,Txt_Remove_me_from_this_course);
       Frm_EndForm ();
 
    /***** End box *****/
@@ -598,7 +598,7 @@ static void Enr_ShowFormEnrRemSeveralUsrs (Rol_Role_t Role)
 	   {
 	    case Rol_STD:
 	       /* Put link to go to admin student */
-	       Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
+	       Enr_PutLinkToAdminOneUsr (ActReqID_MdfStd);
 
 	       /* Put link to remove all students in the current course */
 	       if (Enr_GetNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
@@ -607,11 +607,11 @@ static void Enr_ShowFormEnrRemSeveralUsrs (Rol_Role_t Role)
 	       break;
 	    case Rol_NET:
 	       /* Put link to go to admin teacher */
-	       Enr_PutLinkToAdminOneUsr (ActReqMdfOneTch);
+	       Enr_PutLinkToAdminOneUsr (ActReqID_MdfTch);
 	       break;
 	    case Rol_TCH:
 	       /* Put link to go to admin teacher */
-	       Enr_PutLinkToAdminOneUsr (ActReqMdfOneTch);
+	       Enr_PutLinkToAdminOneUsr (ActReqID_MdfTch);
 	       break;
 	    default:
 	       Err_WrongRoleExit ();
@@ -670,7 +670,7 @@ static void Enr_ShowFormEnrRemSeveralUsrs (Rol_Role_t Role)
 	 HTM_FIELDSET_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Confirm);
+      Box_BoxWithButtonEnd (Btn_CONFIRM,Txt_Confirm);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -729,7 +729,7 @@ void Enr_AskRemoveOldUsrs (void)
 	 HTM_LABEL_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_REMOVE_BUTTON,Txt_Eliminate);
+      Box_BoxWithButtonEnd (Btn_REMOVE,Txt_Eliminate);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1996,7 +1996,7 @@ void Enr_AskRemAllStdsThisCrs (void)
 	 Frm_BeginForm (ActRemAllStdCrs);
 	    Grp_PutParAllGroups ();
 	    Pwd_AskForConfirmationOnDangerousAction ();
-	    Btn_PutRemoveButton (Txt_Remove_all_students);
+	    Btn_PutButton (Btn_REMOVE,Txt_Remove_all_students);
 	 Frm_EndForm ();
 
 	 /* End alert */
@@ -2253,7 +2253,7 @@ void Enr_AskIfRejectSignUp (void)
 	       /* End alert */
 	       Ale_ShowAlertAndButtonEnd (ActRejSignUp,NULL,NULL,
 					Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-					Btn_REMOVE_BUTTON,Txt_Reject);
+					Btn_REMOVE,Txt_Reject);
 	      }
 	    else
 	       Err_WrongRoleExit ();
@@ -2561,7 +2561,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			Frm_BeginForm (NextAction[DesiredRole]);
 			   ParCod_PutPar (ParCod_Crs,Crs.HieCod);
 			   Usr_PutParUsrCodEncrypted (UsrDat.EnUsrCod);
-			   Btn_PutCreateButtonInline (Txt_Enrol);
+			   Btn_PutButtonInline (Btn_CREATE,Txt_Enrol);
 			Frm_EndForm ();
 		     HTM_TD_End ();
 
@@ -2570,7 +2570,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			Frm_BeginForm (ActReqRejSignUp);
 			   ParCod_PutPar (ParCod_Crs,Crs.HieCod);
 			   Usr_PutParUsrCodEncrypted (UsrDat.EnUsrCod);
-			   Btn_PutRemoveButtonInline (Txt_Reject);
+			   Btn_PutButtonInline (Btn_REMOVE,Txt_Reject);
 			Frm_EndForm ();
 		     HTM_TD_End ();
 
@@ -3411,7 +3411,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat)
 	 Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
 	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	    Pwd_AskForConfirmationOnDangerousAction ();
-	    Btn_PutRemoveButton (TxtButton[MeOrOther]);
+	    Btn_PutButton (Btn_REMOVE,TxtButton[MeOrOther]);
 	 Frm_EndForm ();
 
 	 /* End alert */

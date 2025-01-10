@@ -1195,8 +1195,8 @@ static void Mch_PutFormMatch (struct Mch_Match *Match)
       Btn_Button_t Button;
      } Forms[OldNew_NUM_OLD_NEW] =
      {
-      [OldNew_OLD] = {ActChgMch,Btn_CONFIRM_BUTTON},
-      [OldNew_NEW] = {ActNewMch,Btn_CREATE_BUTTON }
+      [OldNew_OLD] = {ActChgMch,Btn_CONFIRM},
+      [OldNew_NEW] = {ActNewMch,Btn_CREATE }
      };
    OldNew_OldNew_t OldNewMatch = (Match->MchCod > 0) ? OldNew_OLD :
 						       OldNew_NEW;;

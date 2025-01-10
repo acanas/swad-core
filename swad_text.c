@@ -11782,29 +11782,6 @@ const char *Txt_Enrol_in_groups =
 	"Enrol in groups";		// Çeviri lazim!
 #endif
 
-const char *Txt_Enrol_students =
-#if   L==1	// ca
-	"Inscriure estudiants";
-#elif L==2	// de
-	"Anmeldung Studenten";
-#elif L==3	// en
-	"Enrol students";
-#elif L==4	// es
-	"Inscribir estudiantes";
-#elif L==5	// fr
-	"Inscrire &eacute;tudiants";
-#elif L==6	// gn
-	"Inscribir estudiantes";	// Okoteve traducción
-#elif L==7	// it
-	"Registrare studenti";
-#elif L==8	// pl
-	"Rejestracja student&oacute;w";
-#elif L==9	// pt
-	"Registrar estudantes";
-#elif L==10	// tr
-	"Register students";		// Çeviri lazim!
-#endif
-
 const char *Txt_Enrol_students_in_COURSE_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Inscriure estudiants en <strong>%s</strong>";
@@ -11882,29 +11859,6 @@ const char *Txt_Enrol_the_users_indicated_in_step_1_and_remove_the_users_not_ind
 #elif L==10	// tr
 	"Update (enrol the users indicated in step 1"
 	" and remove the users <strong>not</strong> indicated)";	// Çeviri lazim!
-#endif
-
-const char *Txt_Enrol_teacher =
-#if   L==1	// ca
-	"Inscriure professor/a";
-#elif L==2	// de
-	"Anmeldung Lehrkraft";
-#elif L==3	// en
-	"Enrol teacher";
-#elif L==4	// es
-	"Inscribir profesor/a";
-#elif L==5	// fr
-	"Inscrire enseignant/e";
-#elif L==6	// gn
-	"Inscribir profesor/a";	// Okoteve traducción
-#elif L==7	// it
-	"Registrare professore/ssa";
-#elif L==8	// pl
-	"Rejestracja nauczyciel";
-#elif L==9	// pt
-	"Registrar professor/a";
-#elif L==10	// tr
-	"Register teacher";	// Çeviri lazim!
 #endif
 
 const char *Txt_Enrol_user_IN_A_COURSE_OR_DEGREE =
@@ -15562,6 +15516,29 @@ const char *Txt_Global_visits =
 	"Global visits";	// Çeviri lazim!
 #endif
 
+const char *Txt_Go =
+#if   L==1	// ca
+	"Anar";
+#elif L==2	// de
+	"Gehe";
+#elif L==3	// en
+	"Go";
+#elif L==4	// es
+	"Ir";
+#elif L==5	// fr
+	"Aller";
+#elif L==6	// gn
+	"Ho";
+#elif L==7	// it
+	"Vai";
+#elif L==8	// pl
+	"Przejdz";
+#elif L==9	// pt
+	"Ir";
+#elif L==10	// tr
+	"Gitmek";
+#endif
+
 const char *Txt_Go_back =
 #if   L==1	// ca
 	"Tornar enrere";
@@ -15610,9 +15587,9 @@ const char *Txt_Go_forward =
 
 const char *Txt_Go_to_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Ir a %s";	// Necessita traducció
+	"Anar a %s";
 #elif L==2	// de
-	"Gehe zum %s";
+	"Gehe nach %s";
 #elif L==3	// en
 	"Go to %s";
 #elif L==4	// es
@@ -15620,15 +15597,38 @@ const char *Txt_Go_to_X =	// Warning: it is very important to include %s in the 
 #elif L==5	// fr
 	"Aller &agrave; %s";
 #elif L==6	// gn
-	"Ir a %s";	// Okoteve traducción
+	"Tereho %s-pe";
 #elif L==7	// it
-	"Vai a %s";
+	"Andare a %s";
 #elif L==8	// pl
-	"Przejdz do %s";
+	"Jed&zacute; do %s";
 #elif L==9	// pt
 	"Ir para %s";
 #elif L==10	// tr
-	"Go to %s";	// Çeviri lazim!
+	"%s'ya git";
+#endif
+
+const char *Txt_Go_to_X_QUESTION =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Anar a %s?";
+#elif L==2	// de
+	"Nach %s gehen?";
+#elif L==3	// en
+	"Go to %s?";
+#elif L==4	// es
+	"&iquest;Ir a %s?";
+#elif L==5	// fr
+	"Aller &agrave; %s?";
+#elif L==6	// gn
+	"&iquest;Reho %s-pe?";
+#elif L==7	// it
+	"Andare a %s?";
+#elif L==8	// pl
+	"Jecha&cacute; do %s?";
+#elif L==9	// pt
+	"Ir a %s?";
+#elif L==10	// tr
+	"%s'ya m&inodot; gidelim?";
 #endif
 
 const char *Txt_Go_to_one_of_my_courses =
@@ -32890,29 +32890,6 @@ const char *Txt_Public_views =
 	"Public views";			// Çeviri lazim!
 #endif
 
-const char *Txt_Publish_call_FOR_EXAM =
-#if   L==1	// ca
-	"Publicar convocat&ograve;ria";
-#elif L==2	// de
-	"Ver&ouml;ffentlichen Aufruf";
-#elif L==3	// en
-	"Publish call";
-#elif L==4	// es
-	"Publicar convocatoria";
-#elif L==5	// fr
-	"Publier convocation";
-#elif L==6	// gn
-	"Publicar convocatoria";	// Okoteve traducción
-#elif L==7	// it
-	"Pubblicare sessione";
-#elif L==8	// pl
-	"Publikuje zaproszenie";
-#elif L==9	// pt
-	"Publicar chamada";
-#elif L==10	// tr
-	"Publish call";			// Çeviri lazim!
-#endif
-
 const char *Txt_QR_code =
 #if   L==1	// ca
 	"Codi QR";
@@ -41348,29 +41325,6 @@ const char *Txt_Save_changes =
 	"Salvar altera&ccedil;&otilde;es";
 #elif L==10	// tr
 	"De&gbreve;i&scedil;iklikleri kaydet";
-#endif
-
-const char *Txt_Save_file_properties =
-#if   L==1	// ca
-	"Guardar les propietats del fitxer";
-#elif L==2	// de
-	"Speichern Dateieigenschaften";
-#elif L==3	// en
-	"Save file properties";
-#elif L==4	// es
-	"Guardar propiedades del archivo";
-#elif L==5	// fr
-	"Enregistrer les propri&eacute;t&eacute;s du fichier";
-#elif L==6	// gn
-	"Guardar propiedades del archivo";	// Okoteve traducción
-#elif L==7	// it
-	"Salva le propriet&agrave; dei file";
-#elif L==8	// pl
-	"Zapisz w&lstrok;a&sacute;ciwo&sacute;ci pliku";
-#elif L==9	// pt
-	"Salvar as propriedades do arquivo";
-#elif L==10	// tr
-	"Save file properties";			// Çeviri lazim!
 #endif
 
 const char *Txt_Scope =

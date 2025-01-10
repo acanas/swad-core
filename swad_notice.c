@@ -120,7 +120,7 @@ void Not_ShowFormNotice (void)
 	 HTM_TEXTAREA_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create);
+      Box_BoxWithButtonEnd (Btn_CREATE,Txt_Create);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -265,7 +265,7 @@ void Not_ReqRemNotice (void)
    /* End alert */
    Ale_ShowAlertAndButtonEnd (ActRemNot,NULL,NULL,
                               Not_PutParNotCod,&NotCod,
-			      Btn_REMOVE_BUTTON,Act_GetActionText (ActRemNot));
+			      Btn_REMOVE,Act_GetActionText (ActRemNot));
 
    /***** Show all notices *****/
    Not_ShowNotices (Not_LIST_FULL_NOTICES,

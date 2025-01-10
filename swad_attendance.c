@@ -1517,7 +1517,7 @@ static void Att_ListEventOnlyMeAsStudent (struct Att_Event *Event)
       /* Send button and end form */
       if (ICanMakeAnyChange == Usr_CAN)
 	{
-	    Btn_PutConfirmButton (Txt_Save_changes);
+	    Btn_PutButton (Btn_CONFIRM,Txt_Save_changes);
 	 Frm_EndForm ();
 	}
 
@@ -1621,7 +1621,7 @@ static void Att_ListEventStudents (struct Att_Events *Events)
             /* Send button and end form */
 	    if (ICanMakeAnyChange)
 	      {
-		  Btn_PutConfirmButton (Txt_Save_changes);
+		  Btn_PutButton (Btn_CONFIRM,Txt_Save_changes);
 	       Frm_EndForm ();
 	      }
 
@@ -2610,7 +2610,7 @@ static void Att_PutButtonToShowDetails (const struct Att_Events *Events)
 	    Par_PutParString (NULL,"AttCods",Events->StrAttCodsSelected);
 
       /* Button */
-      Btn_PutConfirmButton (Txt_Show_more_details);
+      Btn_PutButton (Btn_CONFIRM,Txt_Show_more_details);
 
    /* End form */
    Frm_EndForm ();

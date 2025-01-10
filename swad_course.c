@@ -876,7 +876,7 @@ static void Crs_PutFormToCreateCourse (void)
       HTM_TR_End ();
 
    /***** End form to create *****/
-   Frm_EndFormTable (Btn_CREATE_BUTTON);
+   Frm_EndFormTable (Btn_CREATE);
   }
 
 /*****************************************************************************/
@@ -1523,48 +1523,45 @@ void Crs_ContEditAfterChgCrs (void)
   {
    bool PutButtonToRequestRegistration;
 
-   if (Ale_GetTypeOfLastAlert () == Ale_SUCCESS)
+   /***** Begin alert *****/
+   Ale_ShowLastAlertAndButtonBegin ();
+
+   /***** Put button to go to course changed *****/
+   Crs_PutButtonToGoToCrs ();
+
+   /***** Put button to request my registration in course *****/
+   PutButtonToRequestRegistration = false;
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
-      /***** Begin alert *****/
-      Ale_ShowLastAlertAndButtonBegin ();
-
-      /***** Put button to go to course changed *****/
-      Crs_PutButtonToGoToCrs ();
-
-      /***** Put button to request my registration in course *****/
-      PutButtonToRequestRegistration = false;
-      switch (Gbl.Usrs.Me.Role.Logged)
-        {
-	 case Rol_GST:	// I do not belong to any course
-	    PutButtonToRequestRegistration = true;
-	    break;
-	 case Rol_USR:
+      case Rol_GST:	// I do not belong to any course
+	 PutButtonToRequestRegistration = true;
+	 break;
+      case Rol_USR:
+	 PutButtonToRequestRegistration = (Hie_CheckIfUsrBelongsTo (Hie_CRS,
+								    Gbl.Usrs.Me.UsrDat.UsrCod,
+								    Crs_EditingCrs->HieCod,
+								    false) == Usr_DONT_BELONG);
+	 break;
+      case Rol_STD:
+      case Rol_NET:
+      case Rol_TCH:
+	 if (Crs_EditingCrs->HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
 	    PutButtonToRequestRegistration = (Hie_CheckIfUsrBelongsTo (Hie_CRS,
 								       Gbl.Usrs.Me.UsrDat.UsrCod,
-					                               Crs_EditingCrs->HieCod,
-					                               false) == Usr_DONT_BELONG);
-            break;
-	 case Rol_STD:
-	 case Rol_NET:
-	 case Rol_TCH:
-	    if (Crs_EditingCrs->HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
-	       PutButtonToRequestRegistration = (Hie_CheckIfUsrBelongsTo (Hie_CRS,
-									  Gbl.Usrs.Me.UsrDat.UsrCod,
-									  Crs_EditingCrs->HieCod,
-									  false) == Usr_DONT_BELONG);
-	    break;
-	 default:
-	    break;
+								       Crs_EditingCrs->HieCod,
+								       false) == Usr_DONT_BELONG);
+	 break;
+      default:
+	 break;
 
-        }
-      if (PutButtonToRequestRegistration)
-	 Crs_PutButtonToRegisterInCrs ();
-
-      /***** End alert *****/
-      Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
-                               NULL,NULL,
-                               Btn_NO_BUTTON,NULL);
      }
+   if (PutButtonToRequestRegistration)
+      Crs_PutButtonToRegisterInCrs ();
+
+   /***** End alert *****/
+   Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
+			      NULL,NULL,
+			      Btn_NO_BUTTON,NULL);
 
    /***** Show possible delayed alerts *****/
    Ale_ShowAlerts (NULL);
@@ -1587,7 +1584,7 @@ static void Crs_PutButtonToGoToCrs (void)
      {
       Frm_BeginForm (ActSeeCrsInf);
 	 ParCod_PutPar (ParCod_Crs,Crs_EditingCrs->HieCod);
-	 Btn_PutConfirmButton (Str_BuildGoToTitle (Crs_EditingCrs->ShrtName));
+	 Btn_PutButton (Btn_GO,Str_BuildGoToTitle (Crs_EditingCrs->ShrtName));
 	 Str_FreeGoToTitle ();
       Frm_EndForm ();
      }
@@ -1609,7 +1606,7 @@ static void Crs_PutButtonToRegisterInCrs (void)
 
       if (asprintf (&TxtButton,Txt_Enrol_me_in_X,Crs_EditingCrs->ShrtName) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Btn_PutCreateButton (TxtButton);
+      Btn_PutButton (Btn_CREATE,TxtButton);
       free (TxtButton);
 
    Frm_EndForm ();
@@ -1946,7 +1943,7 @@ void Crs_AskRemoveOldCrss (void)
       HTM_LABEL_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_REMOVE_BUTTON,Txt_Eliminate);
+      Box_BoxWithButtonEnd (Btn_REMOVE,Txt_Eliminate);
 
    /***** End form *****/
    Frm_EndForm ();

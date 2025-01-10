@@ -1193,14 +1193,10 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
   {
    // If the center being edited is different to the current one...
    if (Ctr_EditingCtr->HieCod != Gbl.Hierarchy.Node[Hie_CTR].HieCod)
-     {
       /***** Alert with button to go to center *****/
-      Ale_ShowLastAlertAndButton (ActSeeDeg,NULL,NULL,
-                                  Ctr_PutParCtrCod,&Ctr_EditingCtr->HieCod,
-                                  Btn_CONFIRM_BUTTON,
-                                  Str_BuildGoToTitle (Ctr_EditingCtr->ShrtName));
-      Str_FreeGoToTitle ();
-     }
+      Ale_ShowLastAlertAndButtonGo (ActSeeDeg,
+                                    Ctr_PutParCtrCod,&Ctr_EditingCtr->HieCod,
+                                    Ctr_EditingCtr->ShrtName);
    else
       /***** Alert *****/
       Ale_ShowAlerts (NULL);
@@ -1302,7 +1298,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
       HTM_TR_End ();
 
    /***** End form to create *****/
-   Frm_EndFormTable (Btn_CREATE_BUTTON);
+   Frm_EndFormTable (Btn_CREATE);
   }
 
 /*****************************************************************************/

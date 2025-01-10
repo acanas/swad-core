@@ -585,7 +585,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
       HTM_TR_End ();
 
    /***** End form to create *****/
-   Frm_EndFormTable (Btn_CREATE_BUTTON);
+   Frm_EndFormTable (Btn_CREATE);
   }
 
 /*****************************************************************************/
@@ -1458,14 +1458,10 @@ static void Deg_ShowAlertAndButtonToGoToDeg (void)
   {
    // If the degree being edited is different to the current one...
    if (Deg_EditingDeg->HieCod != Gbl.Hierarchy.Node[Hie_DEG].HieCod)
-     {
       /***** Alert with button to go to degree *****/
-      Ale_ShowLastAlertAndButton (ActSeeCrs,NULL,NULL,
-                                  Deg_PutParDegCod,&Deg_EditingDeg->HieCod,
-                                  Btn_CONFIRM_BUTTON,
-				  Str_BuildGoToTitle (Deg_EditingDeg->ShrtName));
-      Str_FreeGoToTitle ();
-     }
+      Ale_ShowLastAlertAndButtonGo (ActSeeCrs,
+                                    Deg_PutParDegCod,&Deg_EditingDeg->HieCod,
+				    Deg_EditingDeg->ShrtName);
    else
       /***** Alert *****/
       Ale_ShowAlerts (NULL);

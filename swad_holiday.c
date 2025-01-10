@@ -971,7 +971,7 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
       HTM_TR_End ();
 
    /***** End form to create *****/
-   Frm_EndFormTable (Btn_CREATE_BUTTON);
+   Frm_EndFormTable (Btn_CREATE);
   }
 
 /*****************************************************************************/

@@ -422,7 +422,7 @@ void Cfe_ReqRemCallForExam (void)
    /* End alert */
    Ale_ShowAlertAndButtonEnd (ActRemCfe,NULL,NULL,
                             Cfe_PutParExaCod,&CallsForExams.ExaCod,
-			    Btn_REMOVE_BUTTON,Act_GetActionText (ActRemCfe));
+			    Btn_REMOVE,Act_GetActionText (ActRemCfe));
   }
 
 /*****************************************************************************/
@@ -872,7 +872,8 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
    extern const char *Txt_hours;
    extern const char *Txt_minute;
    extern const char *Txt_minutes;
-   extern const char *Txt_Publish_call_FOR_EXAM;
+   extern const char *Txt_Save_changes;
+   extern const char *Txt_Create;
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];
    unsigned CurrentYear = Dat_GetCurrentYear ();
    unsigned Year;
@@ -1424,9 +1425,10 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
       /***** End table, send button and end box *****/
       if (ViewType == Vie_EDIT)
-	 Box_BoxTableWithButtonEnd (ExaCod > 0 ? Btn_CONFIRM_BUTTON :
-						 Btn_CREATE_BUTTON,
-				    Txt_Publish_call_FOR_EXAM);
+	 Box_BoxTableWithButtonEnd (ExaCod > 0 ? Btn_CONFIRM :
+						 Btn_CREATE,
+				    ExaCod > 0 ? Txt_Save_changes :
+						 Txt_Create);
       else
 	 Box_BoxTableEnd ();
 

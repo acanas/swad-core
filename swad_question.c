@@ -193,7 +193,7 @@ void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions)
 	    HTM_TABLE_End ();
 
 	    /***** Send button *****/
-	    Btn_PutConfirmButton (Txt_Show_questions);
+	    Btn_PutButton (Btn_CONFIRM,Txt_Show_questions);
 
 	 Frm_EndForm ();
 	}
@@ -363,7 +363,7 @@ void Qst_ShowFormRequestSelectQstsForExamSet (struct Exa_Exams *Exams,
 	    HTM_TABLE_End ();
 
 	    /***** Send button *****/
-	    Btn_PutConfirmButton (Txt_Show_questions);
+	    Btn_PutButton (Btn_CONFIRM,Txt_Show_questions);
 
 	 Frm_EndForm ();
 	}
@@ -418,7 +418,7 @@ void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
 	    HTM_TABLE_End ();
 
 	    /***** Send button *****/
-	    Btn_PutConfirmButton (Txt_Show_questions);
+	    Btn_PutButton (Btn_CONFIRM,Txt_Show_questions);
 
 	 Frm_EndForm ();
 	}
@@ -1109,7 +1109,7 @@ void Qst_ListOneOrMoreQstsForSelectionForExamSet (struct Exa_Exams *Exams,
 	 HTM_TABLE_End ();
 
 	 /***** Button to add questions *****/
-	 Btn_PutCreateButton (Txt_Add_questions);
+	 Btn_PutButton (Btn_CREATE,Txt_Add_questions);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -1190,7 +1190,7 @@ void Qst_ListOneOrMoreQstsForSelectionForGame (struct Gam_Games *Games,
 	 HTM_TABLE_End ();
 
 	 /***** Button to add questions *****/
-	 Btn_PutCreateButton (Txt_Add_questions);
+	 Btn_PutButton (Btn_CREATE,Txt_Add_questions);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -2203,9 +2203,9 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
       /***** Send button *****/
       if (Question->QstCod > 0)	// The question already has assigned a code
-	 Btn_PutConfirmButton (Txt_Save_changes);
+	 Btn_PutButton (Btn_CONFIRM,Txt_Save_changes);
       else
-	 Btn_PutCreateButton (Txt_Create);
+	 Btn_PutButton (Btn_CREATE,Txt_Create);
 
    /***** End form *****/
    Frm_EndForm ();

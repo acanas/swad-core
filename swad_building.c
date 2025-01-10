@@ -684,7 +684,7 @@ static void Bld_PutFormToCreateBuilding (void)
       HTM_TR_End ();
 
    /***** End form to create *****/
-   Frm_EndFormTable (Btn_CREATE_BUTTON);
+   Frm_EndFormTable (Btn_CREATE);
   }
 
 /*****************************************************************************/

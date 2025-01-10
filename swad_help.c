@@ -68,12 +68,9 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
    extern const char *Txt_If_you_can_not_find_your_institution_your_center_your_degree_or_your_courses_you_can_create_them;
    extern const char *Txt_What_would_you_like_to_do;
    extern const char *Txt_Enrol_students_in_COURSE_X;
-   extern const char *Txt_Enrol_students;
    extern const char *Txt_Go_to_one_of_my_courses;
-   extern const char *Txt_My_courses;
-   extern const char *Txt_Sign_up;
    extern const char *Txt_Remove_me_from_THE_COURSE_X;
-   extern const char *Txt_Remove_me;
+   extern const char *Txt_Remove;
    extern const char *Txt_Enrol_me_in_X;
    extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Select_or_create_one_course_in_X;
@@ -82,7 +79,6 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
    extern const char *Txt_Select_or_create_one_institution_in_X;
    extern const char *Txt_Select_one_country_in_X;
    extern const char *Txt_Upload_my_picture;
-   extern const char *Txt_Upload_photo;
    extern const char *Txt_Log_in;
    extern const char *Txt_New_on_PLATFORM_Sign_up;
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
@@ -144,7 +140,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 			      Err_NotEnoughMemoryExit ();
 			   Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
 								ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs],
-								Btn_REMOVE_BUTTON,Txt_Remove_me);
+								Btn_REMOVE,Txt_Remove);
 			   free (Description);
 			  }
 	             break;
@@ -156,7 +152,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 			Err_NotEnoughMemoryExit ();
 		     Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
 							  ActReqSignUp,
-							  Btn_CREATE_BUTTON,Txt_Sign_up);
+							  Btn_CREATE,Txt_Actions[ActSignUp]);
 		     free (Description);
 		     break;
 	         }
@@ -175,7 +171,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 			Err_NotEnoughMemoryExit ();
 		     Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
 							  ActReqEnrSevStd,
-							  Btn_CREATE_BUTTON,Txt_Enrol_students);
+							  Btn_CREATE,Txt_Actions[ActRcvFrmEnrSevStd]);
 		     free (Description);
 		    }
 
@@ -183,7 +179,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		  /***** Request list my courses *****/
 		  Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Go_to_one_of_my_courses,
 						       ActMyCrs,
-						       Btn_CONFIRM_BUTTON,Txt_My_courses);
+						       Btn_CONFIRM,Txt_Actions[ActMyCrs]);
 	      }
 
 	    /***** Go to list of hierarchy subnodes
@@ -196,7 +192,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		  Err_NotEnoughMemoryExit ();
 	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
 						    SelectOrCreate[Gbl.Hierarchy.Level].Action,
-						    Btn_CONFIRM_BUTTON,
+						    Btn_CONFIRM,
 						    Txt_HIERARCHY_PLURAL_Abc[Gbl.Hierarchy.Level + 1]);
 	       free (Description);
 	      }
@@ -205,14 +201,14 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	       /***** Upload my photo *****/
 	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Upload_my_picture,
 						    ActReqMyPho,
-						    Btn_CREATE_BUTTON,Txt_Upload_photo);
+						    Btn_CREATE,Txt_Actions[ActUpdMyPho]);
 	   }
 	 else					// I am not logged
 	   {
 	    /***** Log in *****/
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Log_in,
 						 ActFrmLogIn,
-						 Btn_CONFIRM_BUTTON,Txt_Log_in);
+						 Btn_CONFIRM,Txt_Actions[ActLogIn]);
 
 	    /***** Sign up *****/
 	    if (asprintf (&Description,Txt_New_on_PLATFORM_Sign_up,
@@ -220,7 +216,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	       Err_NotEnoughMemoryExit ();
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
 						 ActFrmMyAcc,
-						 Btn_CREATE_BUTTON,Txt_Actions[ActCreUsrAcc]);
+						 Btn_CREATE,Txt_Actions[ActCreUsrAcc]);
 	    free (Description);
 	   }
 

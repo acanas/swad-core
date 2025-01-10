@@ -226,7 +226,7 @@ void Lnk_WriteCellEditLnk (struct Tre_Node *Node,
 	    HTM_BR ();
 
 	    /* Button to save changes */
-	    Btn_PutConfirmButtonInline (Txt_Save_changes);
+	    Btn_PutButtonInline (Btn_CONFIRM,Txt_Save_changes);
 
 	 Frm_EndForm ();
 	 break;
@@ -268,7 +268,7 @@ void Lnk_WriteCellNewLnk (void)
    HTM_BR ();
 
    /***** Button to save changes *****/
-   Btn_PutCreateButtonInline (Txt_Save_changes);
+   Btn_PutButtonInline (Btn_CREATE,Txt_Save_changes);
   }
 
 /*****************************************************************************/

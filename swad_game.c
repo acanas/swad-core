@@ -1332,8 +1332,8 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
       const char **Txt;
      } Forms[OldNew_NUM_OLD_NEW] =
      {
-      [OldNew_OLD] = {ActChgGam,Btn_CONFIRM_BUTTON,&Txt_Save_changes},
-      [OldNew_NEW] = {ActNewGam,Btn_CREATE_BUTTON ,&Txt_Create      }
+      [OldNew_OLD] = {ActChgGam,Btn_CONFIRM,&Txt_Save_changes},
+      [OldNew_NEW] = {ActNewGam,Btn_CREATE ,&Txt_Create      }
      };
 
    /***** Begin form *****/

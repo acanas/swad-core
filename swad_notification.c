@@ -1677,7 +1677,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 	    HTM_TABLE_End ();
 
 	    /***** Button to save changes *****/
-	    Btn_PutConfirmButton (Txt_Save_changes);
+	    Btn_PutButton (Btn_CONFIRM,Txt_Save_changes);
 
 	 /***** End form *****/
 	 Frm_EndForm ();

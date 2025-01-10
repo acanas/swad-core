@@ -1675,7 +1675,7 @@ static void Tre_ShowFormToCreateNode (Inf_Type_t InfoType,long ParentNodCod)
       Tre_ShowFormNode (&Node,SetHMS,NULL);
 
    /***** End form to create *****/
-   Frm_EndFormTable (Btn_CREATE_BUTTON);
+   Frm_EndFormTable (Btn_CREATE);
   }
 
 static void Tre_ShowFormToChangeNode (struct Tre_Node *Node)
@@ -1712,7 +1712,7 @@ static void Tre_ShowFormToChangeNode (struct Tre_Node *Node)
       Tre_ShowFormNode (Node,SetHMS,Txt);
 
    /***** End form to change *****/
-   Frm_EndFormTable (Btn_CONFIRM_BUTTON);
+   Frm_EndFormTable (Btn_CONFIRM);
   }
 
 /*****************************************************************************/

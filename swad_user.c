@@ -292,7 +292,7 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
       else if (Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST)
          Ale_ShowAlertAndButton (ActReqMyPho,NULL,NULL,
                                  NULL,NULL,
-                                 Btn_CONFIRM_BUTTON,Txt_Upload_photo,
+                                 Btn_CONFIRM,Txt_Upload_photo,
 				 Ale_WARNING,Txt_You_can_only_perform_X_further_actions_,
                                  Pho_MAX_CLICKS_WITHOUT_PHOTO - Gbl.Usrs.Me.NumAccWithoutPhoto);
      }
@@ -1200,7 +1200,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncPars) (void))
 	    HTM_DIV_End ();
 
 	 /***** End table, send button and end box *****/
-	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Log_in);
+	 Box_BoxTableWithButtonEnd (Btn_CONFIRM,Txt_Log_in);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -1267,7 +1267,7 @@ void Usr_WelcomeUsr (void)
 		!Gbl.Usrs.Me.UsrDat.EmailConfirmed)	// Email needs to be confirmed
 	       Ale_ShowAlertAndButton (ActFrmMyAcc,NULL,NULL,
 	                               NULL,NULL,
-				       Btn_CONFIRM_BUTTON,Txt_Check,
+				       Btn_CONFIRM,Txt_Check,
 				       Ale_WARNING,Txt_Please_check_your_email_address);
            }
 
@@ -3029,7 +3029,7 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
    Usr_FuncParsBigList = FuncPars;	// Used to pass pointer to function
    Ale_ShowAlertAndButton (NextAction,Usr_USER_LIST_SECTION_ID,OnSubmit,
                            Usr_PutParsConfirmIWantToSeeBigList,Args,
-                           Btn_CONFIRM_BUTTON,Txt_Show_anyway,
+                           Btn_CONFIRM,Txt_Show_anyway,
 			   Ale_WARNING,Txt_The_list_of_X_users_is_too_large_to_be_displayed,
                            NumUsrs);
   }
@@ -3776,7 +3776,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 		  HTM_TABLE_End ();
 
 		  /***** Send button *****/
-		  Btn_PutConfirmButton (TxtButton);
+		  Btn_PutButton (Btn_CONFIRM,TxtButton);
 
 	       /***** End form *****/
 	       Frm_EndForm ();
@@ -4901,7 +4901,7 @@ void Usr_ListDataAdms (void)
 	       Usr_PutLinkToSeeGuests ();		// List guests
 	       Dup_PutLinkToListDupUsrs ();		// List possible duplicate users
 	      }
-	    Enr_PutLinkToAdminOneUsr (ActReqMdfOneOth);	// Admin one user
+	    Enr_PutLinkToAdminOneUsr (ActReqID_MdfOth);	// Admin one user
 	    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	       Enr_PutLinkToRemOldUsrs ();		// Remove old users
 	 Mnu_ContextMenuEnd ();
@@ -5056,7 +5056,7 @@ void Usr_SeeGuests (void)
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
       Usr_PutLinkToSeeAdmins ();			// List admins
-      Enr_PutLinkToAdminOneUsr (ActReqMdfOneOth);	// Admin one user
+      Enr_PutLinkToAdminOneUsr (ActReqID_MdfOth);	// Admin one user
       if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	 Enr_PutLinkToRemOldUsrs ();			// Remove old users
    Mnu_ContextMenuEnd ();
@@ -5183,7 +5183,7 @@ void Usr_SeeStudents (void)
       case Rol_SYS_ADM:
 	 /***** Contextual menu *****/
          Mnu_ContextMenuBegin ();
-	    Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);	// Admin one student
+	    Enr_PutLinkToAdminOneUsr (ActReqID_MdfStd);	// Admin one student
 	    if (Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
 		Gbl.Usrs.Me.Role.Logged != Rol_STD)	// Teacher or admin
 	      {
@@ -5341,7 +5341,7 @@ void Usr_SeeTeachers (void)
       case Rol_SYS_ADM:
 	 /***** Contextual menu *****/
 	 Mnu_ContextMenuBegin ();
-	    Enr_PutLinkToAdminOneUsr (ActReqMdfOneTch);	// Admin one teacher
+	    Enr_PutLinkToAdminOneUsr (ActReqID_MdfTch);	// Admin one teacher
 	    if (Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
 		Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)	// I am logged as admin
 	      {
@@ -5626,7 +5626,7 @@ static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_US
    HTM_UL_End ();
 
    /***** Put button to confirm *****/
-   Btn_PutConfirmButton (Txt_Continue);
+   Btn_PutButton (Btn_CONFIRM,Txt_Continue);
   }
 
 /*****************************************************************************/
@@ -6321,8 +6321,7 @@ void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1])
 void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
   {
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
-   extern const char *Txt_Enrol_students;
-   extern const char *Txt_Enrol_teacher;
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
 
    if (Gbl.Crs.Grps.AllGrps &&			// All groups selected
        Role == Rol_STD &&			// No students found
@@ -6330,17 +6329,17 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
       /***** Show alert and button to enrol students *****/
       Ale_ShowAlertAndButton (ActReqEnrSevStd,NULL,NULL,
                               NULL,NULL,
-                              Btn_CREATE_BUTTON,Txt_Enrol_students,
+                              Btn_CREATE,Txt_Actions[ActRcvFrmEnrSevStd],
 			      Ale_WARNING,Txt_No_users_found[Rol_STD]);
 
-   else if (Gbl.Crs.Grps.AllGrps &&		// All groups selected
-            Role == Rol_TCH &&			// No teachers found
-            Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
+   else if (Gbl.Crs.Grps.AllGrps &&			// All groups selected
+            Role == Rol_TCH &&				// No teachers found
+            Gbl.Hierarchy.Level == Hie_CRS &&		// Course selected
             Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)	// I am an administrator
       /***** Show alert and button to enrol students *****/
-      Ale_ShowAlertAndButton (ActReqMdfOneTch,NULL,NULL,
+      Ale_ShowAlertAndButton (ActReqID_MdfTch,NULL,NULL,
                               NULL,NULL,
-                              Btn_CREATE_BUTTON,Txt_Enrol_teacher,
+                              Btn_CREATE,Txt_Actions[ActReqMdfTch],
 			      Ale_WARNING,Txt_No_users_found[Rol_TCH]);
    else
       /***** Show alert *****/

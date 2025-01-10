@@ -1500,7 +1500,7 @@ static void Inf_FormToEnterIntegratedEditor (Inf_Type_t InfoType,Inf_Src_t InfoS
   {
    Frm_BeginForm (Inf_ActionsInfo[InfoSrc][InfoType]);
       Inf_PutParInfoType (&InfoType);
-      Btn_PutConfirmButton (Act_GetActionText (Inf_ActionsInfo[InfoSrc][InfoType]));
+      Btn_PutButton (Btn_CONFIRM,Act_GetActionText (Inf_ActionsInfo[InfoSrc][InfoType]));
    Frm_EndForm ();
   }
 
@@ -1514,7 +1514,7 @@ static void Inf_FormToEnterPlainTextEditor (Inf_Type_t InfoType,Inf_Src_t InfoSr
 
    Frm_BeginForm (Inf_ActionsInfo[InfoSrc][InfoType]);
       Inf_PutParInfoType (&InfoType);
-      Btn_PutConfirmButton (Txt_Edit_plain_text);
+      Btn_PutButton (Btn_CONFIRM,Txt_Edit_plain_text);
    Frm_EndForm ();
   }
 
@@ -1528,7 +1528,7 @@ static void Inf_FormToEnterRichTextEditor (Inf_Type_t InfoType,Inf_Src_t InfoSrc
 
    Frm_BeginForm (Inf_ActionsInfo[InfoSrc][InfoType]);
       Inf_PutParInfoType (&InfoType);
-      Btn_PutConfirmButton (Txt_Edit_rich_text);
+      Btn_PutButton (Btn_CONFIRM,Txt_Edit_rich_text);
    Frm_EndForm ();
   }
 
@@ -1542,7 +1542,7 @@ static void Inf_FormToEnterSendingPage (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
 
    Frm_BeginForm (Inf_ActionsInfo[InfoSrc][InfoType]);
       Inf_PutParInfoType (&InfoType);
-      Btn_PutConfirmButton (Txt_Upload_file);
+      Btn_PutButton (Btn_CONFIRM,Txt_Upload_file);
    Frm_EndForm ();
   }
 
@@ -1556,7 +1556,7 @@ static void Inf_FormToEnterSendingURL (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
 
    Frm_BeginForm (Inf_ActionsInfo[InfoSrc][InfoType]);
       Inf_PutParInfoType (&InfoType);
-      Btn_PutConfirmButton (Txt_Send_URL);
+      Btn_PutButton (Btn_CONFIRM,Txt_Send_URL);
    Frm_EndForm ();
   }
 
@@ -2011,7 +2011,7 @@ void Inf_EditPlainTxtInfo (void)
 	 HTM_DIV_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      Box_BoxWithButtonEnd (Btn_CONFIRM,Txt_Save_changes);
    Frm_EndForm ();
   }
 
@@ -2095,7 +2095,7 @@ void Inf_EditRichTxtInfo (void)
       HTM_DIV_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      Box_BoxWithButtonEnd (Btn_CONFIRM,Txt_Save_changes);
    Frm_EndForm ();
   }
 
@@ -2216,7 +2216,7 @@ void Inf_EditPagInfo (void)
 	 HTM_DIV_End ();
 
 	 /***** Send button *****/
-	 Btn_PutCreateButton (Txt_Upload_file);
+	 Btn_PutButton (Btn_CREATE,Txt_Upload_file);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -2413,7 +2413,7 @@ void Inf_EditURLInfo (void)
 	 HTM_DIV_End ();
 
 	 /***** Send button *****/
-	 Btn_PutCreateButton (Txt_Send_URL);
+	 Btn_PutButton (Btn_CREATE,Txt_Send_URL);
 
       /***** End form *****/
       Frm_EndForm ();

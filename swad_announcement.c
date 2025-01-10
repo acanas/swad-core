@@ -361,7 +361,7 @@ void Ann_ShowFormAnnouncement (void)
 	 HTM_TR_End ();
 
       /***** End table, send button and end box *****/
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create);
+      Box_BoxTableWithButtonEnd (Btn_CREATE,Txt_Create);
 
    /***** End form *****/
    Frm_EndForm ();

@@ -1291,14 +1291,10 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
   {
    // If the institution being edited is different to the current one...
    if (Ins_EditingIns->HieCod != Gbl.Hierarchy.Node[Hie_INS].HieCod)
-     {
       /***** Alert with button to go to institution *****/
-      Ale_ShowLastAlertAndButton (ActSeeCtr,NULL,NULL,
-                                  Ins_PutParInsCod,&Ins_EditingIns->HieCod,
-                                  Btn_CONFIRM_BUTTON,
-				  Str_BuildGoToTitle (Ins_EditingIns->ShrtName));
-      Str_FreeGoToTitle ();
-     }
+      Ale_ShowLastAlertAndButtonGo (ActSeeCtr,
+                                    Ins_PutParInsCod,&Ins_EditingIns->HieCod,
+				    Ins_EditingIns->ShrtName);
    else
       /***** Alert *****/
       Ale_ShowAlerts (NULL);
@@ -1377,7 +1373,7 @@ static void Ins_PutFormToCreateInstitution (void)
       HTM_TR_End ();
 
    /***** End form to create *****/
-   Frm_EndFormTable (Btn_CREATE_BUTTON);
+   Frm_EndFormTable (Btn_CREATE);
   }
 
 /*****************************************************************************/

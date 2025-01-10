@@ -6283,7 +6283,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 	 HTM_LABEL_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create);
+      Box_BoxWithButtonEnd (Btn_CREATE,Txt_Create);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -6340,7 +6340,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 				    -1L);		// Not used
 
 	    /***** Button to send *****/
-	    Btn_PutConfirmButton (Txt_Done);
+	    Btn_PutButton (Btn_CONFIRM,Txt_Done);
 
 	 /***** End form *****/
 	 Frm_EndForm ();
@@ -6377,7 +6377,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
 			    NULL);
 
 	    /* Button to send */
-	    Btn_PutCreateButton (Txt_Upload_file);
+	    Btn_PutButton (Btn_CREATE,Txt_Upload_file);
 
 	 Frm_EndForm ();
 
@@ -6407,7 +6407,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
 			FileNameToShow);
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Paste);
+      Box_BoxWithButtonEnd (Btn_CREATE,Txt_Paste);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -6477,7 +6477,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
       HTM_TABLE_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create);
+      Box_BoxWithButtonEnd (Btn_CREATE,Txt_Create);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -7284,7 +7284,7 @@ void Brw_ShowFileMetadata (void)
    extern const char *Txt_Public_views;
    extern const char *Txt_user[Usr_NUM_SEXS];
    extern const char *Txt_users[Usr_NUM_SEXS];
-   extern const char *Txt_Save_file_properties;
+   extern const char *Txt_Save_changes;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC15x20",
@@ -7621,7 +7621,7 @@ void Brw_ShowFileMetadata (void)
 	    /***** End form *****/
 	    if (ICanEdit == Usr_CAN)	// I can edit file properties
 	      {
-		  Btn_PutButton (Btn_CONFIRM_BUTTON,Txt_Save_file_properties);
+		  Btn_PutButton (Btn_CONFIRM,Txt_Save_changes);
 	       Frm_EndForm ();
 	      }
 
@@ -9519,7 +9519,7 @@ void Brw_AskRemoveOldFilesBriefcase (void)
 	 HTM_LABEL_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_REMOVE_BUTTON,Act_GetActionText (ActRemOldBrf));
+      Box_BoxWithButtonEnd (Btn_REMOVE,Act_GetActionText (ActRemOldBrf));
 
    /***** End form *****/
    Frm_EndForm ();

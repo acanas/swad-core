@@ -389,7 +389,7 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
 	 free (ClassInput);
 
 	 /***** Send button *****/
-	 Btn_PutCreateButton (Txt_Send_message);
+	 Btn_PutButton (Btn_CREATE,Txt_Send_message);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -985,7 +985,7 @@ void Msg_ReqDelAllRecMsgs (void)
    /* End alert */
    Ale_ShowAlertAndButtonEnd (ActDelAllRcvMsg,NULL,NULL,
                               Msg_PutParsMsgsFilters,&Messages,
-                              Btn_REMOVE_BUTTON,Txt_Delete_messages_received);
+                              Btn_REMOVE,Txt_Delete_messages_received);
   }
 
 /*****************************************************************************/
@@ -1028,7 +1028,7 @@ void Msg_ReqDelAllSntMsgs (void)
    /* End alert */
    Ale_ShowAlertAndButtonEnd (ActDelAllSntMsg,NULL,NULL,
                             Msg_PutParsMsgsFilters,&Messages,
-                            Btn_REMOVE_BUTTON,Txt_Delete_messages_sent);
+                            Btn_REMOVE,Txt_Delete_messages_sent);
   }
 
 /*****************************************************************************/

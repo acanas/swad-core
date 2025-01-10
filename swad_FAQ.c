@@ -174,7 +174,7 @@ void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
 
 	    /* Button to save changes */
 	    HTM_BR ();
-	    Btn_PutConfirmButtonInline (Txt_Save_changes);
+	    Btn_PutButtonInline (Btn_CONFIRM,Txt_Save_changes);
 
 	 Frm_EndForm ();
 	 break;
@@ -211,7 +211,7 @@ void FAQ_WriteCellNewQaA (void)
 
    /***** Button to save changes *****/
    HTM_BR ();
-   Btn_PutCreateButtonInline (Txt_Save_changes);
+   Btn_PutButtonInline (Btn_CREATE,Txt_Save_changes);
   }
 
 /*****************************************************************************/

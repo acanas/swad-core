@@ -1313,14 +1313,10 @@ static void Cty_ShowAlertAndButtonToGoToCty (void)
   {
    // If the country being edited is different to the current one...
    if (Cty_EditingCty->HieCod != Gbl.Hierarchy.Node[Hie_CTY].HieCod)
-     {
       /***** Alert with button to go to couuntry *****/
-      Ale_ShowLastAlertAndButton (ActSeeIns,NULL,NULL,
-                                  Cty_PutParGoToCty,&Cty_EditingCty->HieCod,
-                                  Btn_CONFIRM_BUTTON,
-				  Str_BuildGoToTitle (Cty_EditingCty->FullName));
-      Str_FreeGoToTitle ();
-     }
+      Ale_ShowLastAlertAndButtonGo (ActSeeIns,
+                                    Cty_PutParGoToCty,&Cty_EditingCty->HieCod,
+				    Cty_EditingCty->FullName);
    else
       /***** Alert *****/
       Ale_ShowAlerts (NULL);
@@ -1423,7 +1419,7 @@ static void Cty_PutFormToCreateCountry (void)
 	}
 
    /***** End form to create *****/
-   Frm_EndFormTable (Btn_CREATE_BUTTON);
+   Frm_EndFormTable (Btn_CREATE);
   }
 
 /*****************************************************************************/

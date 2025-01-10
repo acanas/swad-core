@@ -546,7 +546,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 		     MyAllGrps = Grp_GetParMyAllGrps ();
 		     Grp_PutParMyAllGrps (&MyAllGrps);
 		     Pag_PutParPagNum (Pag_SURVEYS,Surveys->CurrentPage);
-			Btn_PutCreateButtonInline (Txt_Answer_survey);
+			Btn_PutButtonInline (Btn_CREATE,Txt_Answer_survey);
 		  Frm_EndForm ();
 
 	       HTM_DIV_End ();
@@ -564,7 +564,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 			MyAllGrps = Grp_GetParMyAllGrps ();
 			Grp_PutParMyAllGrps (&MyAllGrps);
 			Pag_PutParPagNum (Pag_SURVEYS,Surveys->CurrentPage);
-			Btn_PutConfirmButtonInline (Txt_View_results);
+			Btn_PutButtonInline (Btn_VIEW_RESULTS,Txt_View_results);
 		     Frm_EndForm ();
 
 		  HTM_DIV_End ();
@@ -1460,7 +1460,7 @@ void Svy_AskResetSurvey (void)
    /***** Show question and button to reset survey *****/
    Ale_ShowAlertAndButton (ActRstSvy,NULL,NULL,
                            Svy_PutPars,&Surveys,
-			   Btn_REMOVE_BUTTON,Txt_Reset_survey,
+			   Btn_REMOVE,Txt_Reset_survey,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_reset_the_survey_X,
 			   Surveys.Svy.Title);
 
@@ -2342,9 +2342,9 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 
       /***** Send button *****/
       if (NewQuestion)	// If the question already has assigned a code
-	 Btn_PutCreateButton (Txt_Create);
+	 Btn_PutButton (Btn_CREATE,Txt_Create);
       else
-	 Btn_PutConfirmButton (Txt_Save_changes);
+	 Btn_PutButton (Btn_CONFIRM,Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -2694,7 +2694,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
 	 if (PutFormAnswerSurvey == Frm_PUT_FORM)
 	   {
 	    /***** Button to create/modify survey *****/
-	    Btn_PutConfirmButton (Txt_Done);
+	    Btn_PutButton (Btn_CONFIRM,Txt_Done);
 
 	    /***** End form *****/
 	    Frm_EndForm ();

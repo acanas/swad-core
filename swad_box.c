@@ -217,19 +217,26 @@ void Box_BoxTableEnd (void)
 
 void Box_BoxTableWithButtonSaveCreateEnd (OldNew_OldNew_t OldNew)
   {
-   extern const char *Txt_Save_changes;
    extern const char *Txt_Create;
-   static struct
+   extern const char *Txt_Save_changes;
+   extern const char *Txt_View_results;
+   extern const char *Txt_Go;
+   extern const char *Txt_Remove;
+   static const char **TxtButton[Btn_NUM_BUTTON_TYPES] =
      {
-      Btn_Button_t Button;
-      const char **TxtButton;
-     } Buttons[OldNew_NUM_OLD_NEW] =
+      [Btn_CREATE      ] = &Txt_Create,
+      [Btn_CONFIRM     ] = &Txt_Save_changes,
+      [Btn_VIEW_RESULTS] = &Txt_View_results,
+      [Btn_GO          ] = &Txt_Go,
+      [Btn_REMOVE      ] = &Txt_Remove,
+     };
+   static Btn_Button_t Buttons[OldNew_NUM_OLD_NEW] =
      {
-      [OldNew_OLD] = {Btn_CONFIRM_BUTTON,&Txt_Save_changes},
-      [OldNew_NEW] = {Btn_CREATE_BUTTON ,&Txt_Create      },
+      [OldNew_OLD] = Btn_CONFIRM,
+      [OldNew_NEW] = Btn_CREATE ,
      };
 
-   Box_BoxTableWithButtonEnd (Buttons[OldNew].Button,*Buttons[OldNew].TxtButton);
+   Box_BoxTableWithButtonEnd (Buttons[OldNew],*TxtButton[Buttons[OldNew]]);
   }
 
 void Box_BoxTableWithButtonEnd (Btn_Button_t Button,const char *TxtButton)

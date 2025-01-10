@@ -170,12 +170,12 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 			    "size=\"16\" placeholder=\"%s\" class=\"INPUT_%s\"",
 			    Txt_ID_identity_number,The_GetSuffix ());
 	 HTM_LABEL_End ();
-	 Btn_PutCreateButtonInline (Txt_Check);
+	 Btn_PutButtonInline (Btn_CREATE,Txt_Check);
       Frm_EndForm ();
 
       /***** Form to skip this step *****/
       Frm_BeginForm (ActCreMyAcc);
-	 Btn_PutConfirmButton (Txt_Skip_this_step);
+	 Btn_PutButton (Btn_CONFIRM,Txt_Skip_this_step);
       Frm_EndForm ();
 
    /***** End box *****/
@@ -315,7 +315,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct Usr_
       HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 	 Frm_BeginForm (ActLogInNew);
 	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
-	    Btn_PutCreateButtonInline (Txt_Its_me);
+	    Btn_PutButtonInline (Btn_CREATE,Txt_Its_me);
 	 Frm_EndForm ();
       HTM_TD_End ();
 
@@ -382,7 +382,7 @@ static void Acc_ShowFormRequestNewAccountWithPars (const char *NewNickWithoutArr
 	 Pwd_PutFormToGetNewPasswordOnce ();
 
       /***** End table, send button and end box *****/
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create);
+      Box_BoxTableWithButtonEnd (Btn_CREATE,Txt_Create);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -407,7 +407,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
 
       /***** Button to go to request the creation of a new account *****/
       Frm_BeginForm (ActFrmMyAcc);
-	 Btn_PutCreateButton (Txt_Actions[ActCreUsrAcc]);
+	 Btn_PutButton (Btn_CREATE,Txt_Actions[ActCreUsrAcc]);
       Frm_EndForm ();
 
    /***** End box *****/
@@ -868,7 +868,7 @@ void Acc_AskIfRemoveMyAccount (void)
    /* Show form to request confirmation */
    Frm_BeginForm (ActRemMyAcc);
       Pwd_AskForConfirmationOnDangerousAction ();
-      Btn_PutRemoveButton (Txt_Eliminate_my_user_account);
+      Btn_PutButton (Btn_REMOVE,Txt_Eliminate_my_user_account);
    Frm_EndForm ();
 
    /* End alert */
@@ -898,7 +898,7 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
       Frm_BeginForm (ActRemUsrGbl);
 	 Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	 Pwd_AskForConfirmationOnDangerousAction ();
-	 Btn_PutRemoveButton (Txt_Eliminate_user_account);
+	 Btn_PutButton (Btn_REMOVE,Txt_Eliminate_user_account);
       Frm_EndForm ();
 
       /* End alert */

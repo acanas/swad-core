@@ -27,13 +27,15 @@
 /********************************* Public types ******************************/
 /*****************************************************************************/
 
-#define Btn_NUM_BUTTON_TYPES 4
+#define Btn_NUM_BUTTON_TYPES 6
 typedef enum
   {
    Btn_NO_BUTTON,
-   Btn_CREATE_BUTTON,
-   Btn_CONFIRM_BUTTON,
-   Btn_REMOVE_BUTTON,
+   Btn_CREATE,
+   Btn_CONFIRM,
+   Btn_VIEW_RESULTS,
+   Btn_GO,
+   Btn_REMOVE,
   } Btn_Button_t;
 
 /*****************************************************************************/
@@ -42,11 +44,5 @@ typedef enum
 
 void Btn_PutButton (Btn_Button_t Button,const char *TxtButton);
 void Btn_PutButtonInline (Btn_Button_t Button,const char *TxtButton);
-void Btn_PutCreateButton (const char *TxtButton);
-void Btn_PutCreateButtonInline (const char *TxtButton);
-void Btn_PutConfirmButton (const char *TxtButton);
-void Btn_PutConfirmButtonInline (const char *TxtButton);
-void Btn_PutRemoveButton (const char *TxtButton);
-void Btn_PutRemoveButtonInline (const char *TxtButton);
 
 #endif

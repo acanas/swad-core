@@ -2876,7 +2876,7 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 	 free (ClassInput);
 
 	 /***** Send button *****/
-	 Btn_PutCreateButton (Txt_Send);
+	 Btn_PutButton (Btn_CREATE,Txt_Send);
 
       /***** End form *****/
       Frm_EndForm ();

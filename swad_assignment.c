@@ -1210,8 +1210,6 @@ static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Assignments,
    extern const char *Txt_Title;
    extern const char *Folder_to_upload_files;
    extern const char *Txt_Description;
-   extern const char *Txt_Create;
-   extern const char *Txt_Save_changes;
    static const Act_Action_t Actions[OldNew_NUM_OLD_NEW] =
      {
       [OldNew_OLD] = ActChgAsg,

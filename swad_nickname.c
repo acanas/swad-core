@@ -310,7 +310,7 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
 			Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 		     snprintf (NickWithArr,sizeof (NickWithArr),"@%s",row[0]);
 		     Par_PutParString (NULL,"NewNick",NickWithArr);	// Nickname
-			Btn_PutConfirmButtonInline (Txt_Use_this_nickname);
+			Btn_PutButtonInline (Btn_CONFIRM,Txt_Use_this_nickname);
 		  Frm_EndForm ();
 		 }
 
@@ -346,7 +346,7 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
 				     " class=\"Frm_C2_INPUT INPUT_%s\""
 				     " size=\"16\"",The_GetSuffix ());
 		     HTM_BR ();
-		     Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
+		     Btn_PutButtonInline (Btn_CREATE,NumNicks ? Txt_Change_nickname :	// I already have a nickname
 							   Txt_Save_changes);	// I have no nickname yet);
 		  Frm_EndForm ();
 	       HTM_TD_End ();

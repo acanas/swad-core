@@ -705,7 +705,7 @@ static void Mai_PutFormToCreateMailDomain (void)
       HTM_TR_End ();
 
    /***** End form to create *****/
-   Frm_EndFormTable (Btn_CREATE_BUTTON);
+   Frm_EndFormTable (Btn_CREATE);
   }
 
 /*****************************************************************************/
@@ -1209,7 +1209,7 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
                if (MeOrOther == Usr_OTHER)
 	          Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	       Par_PutParString (NULL,"NewEmail",row[0]);
-	       Btn_PutConfirmButtonInline ((MeOrOther == Usr_ME && NumEmail == 1) ? Txt_Confirm_email :
+	       Btn_PutButtonInline (Btn_CONFIRM,(MeOrOther == Usr_ME && NumEmail == 1) ? Txt_Confirm_email :
 								                    Txt_Use_this_email);
 	    Frm_EndForm ();
 	   }
@@ -1243,7 +1243,7 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
 				" class=\"Frm_C2_INPUT INPUT_%s\" size=\"16\"",
 				The_GetSuffix ());
 	       HTM_BR ();
-	       Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
+	       Btn_PutButtonInline (Btn_CREATE,NumEmails ? Txt_Change_email :	// User already has an email address
 						      Txt_Save_changes);	// User has no email address yet
 	    Frm_EndForm ();
 	 HTM_TD_End ();

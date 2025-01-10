@@ -225,7 +225,7 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
       HTM_TR_End ();
 
    /***** End form to create *****/
-   Frm_EndFormTable (Btn_CREATE_BUTTON);
+   Frm_EndFormTable (Btn_CREATE);
   }
 
 /*****************************************************************************/

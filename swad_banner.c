@@ -813,7 +813,7 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
       HTM_TR_End ();
 
    /***** End form to create *****/
-   Frm_EndFormTable (Btn_CREATE_BUTTON);
+   Frm_EndFormTable (Btn_CREATE);
   }
 
 /*****************************************************************************/

@@ -125,7 +125,7 @@ void Adm_ReqAddAdm (Hie_Level_t Level)
 		  /* End alert */
 		  Ale_ShowAlertAndButtonEnd (Enr_ActNewAdm[Level],NULL,NULL,
 					   Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-					   Btn_CREATE_BUTTON,Txt_Enrol_user_IN_A_COURSE_OR_DEGREE);
+					   Btn_CREATE,Txt_Enrol_user_IN_A_COURSE_OR_DEGREE);
 		 }
                break;
             case Usr_CAN_NOT:
@@ -398,7 +398,7 @@ static void Adm_AskIfRemAdm (Usr_MeOrOther_t MeOrOther,Hie_Level_t Level)
       /* End alert */
       Ale_ShowAlertAndButtonEnd (ActRemAdm[Level],NULL,NULL,
                                Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-                               Btn_REMOVE_BUTTON,TxtButton[MeOrOther]);
+                               Btn_REMOVE,TxtButton[MeOrOther]);
      }
    else
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();

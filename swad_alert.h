@@ -69,9 +69,9 @@ void Ale_ResetAllAlerts (void);
 void Ale_ShowAlertsAndExit ();
 void Ale_ShowAlerts (const char *Section);
 void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *fmt,...);
-void Ale_ShowLastAlertAndButton (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
-                                 void (*FuncPars) (void *Args),void *Args,
-				 Btn_Button_t Button,const char *TxtButton);
+void Ale_ShowLastAlertAndButtonGo (Act_Action_t NextAction,
+                                   void (*FuncPars) (void *Args),void *Args,
+				   const char *Where);
 void Ale_ShowLastAlertAndButtonBegin (void);
 void Ale_ShowAlertRemove (Act_Action_t NextAction,const char *Anchor,
                           void (*FuncPars) (void *Args),void *Args,

@@ -227,7 +227,7 @@ void Ind_ReqIndicatorsCourses (void)
 	    ParCod_PutPar (ParCod_Dpt      ,Indicators.DptCod   );
 	    if (Indicators.StrChecked[0])
 	       Par_PutParString (NULL,"Indicators",Indicators.StrChecked);
-	    Btn_PutConfirmButton (Txt_Show_more_details);
+	    Btn_PutButton (Btn_CONFIRM,Txt_Show_more_details);
 	 Frm_EndForm ();
 	}
 
@@ -378,7 +378,7 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (struct Ind_Indicators *Indi
    /***** Show alert and button to confirm that I want to see the big list *****/
    Ale_ShowAlertAndButton (Gbl.Action.Act,NULL,NULL,
                            Ind_PutParsConfirmIWantToSeeBigList,Indicators,
-                           Btn_CONFIRM_BUTTON,Txt_Show_anyway,
+                           Btn_CONFIRM,Txt_Show_anyway,
 			   Ale_WARNING,Txt_The_list_of_X_courses_is_too_large_to_be_displayed,
                            NumCrss);
   }

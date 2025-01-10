@@ -1243,7 +1243,7 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
       HTM_TR_End ();
 
    /***** End form to create *****/
-   Frm_EndFormTable (Btn_CREATE_BUTTON);
+   Frm_EndFormTable (Btn_CREATE);
   }
 
 /*****************************************************************************/

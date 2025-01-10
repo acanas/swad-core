@@ -1802,7 +1802,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 	 if (PutFormToChangeGrps)
 	   {
 	       if (ICanChangeMyGrps == Usr_CAN)
-		  Btn_PutConfirmButton (NumGrpsIBelong ? Txt_Change_my_groups :
+		  Btn_PutButton (Btn_CONFIRM,NumGrpsIBelong ? Txt_Change_my_groups :
 							 Txt_Enrol_in_groups);
 	    Frm_EndForm ();
 	   }
@@ -2678,7 +2678,7 @@ static void Grp_PutFormToCreateGroupType (void)
 	 HTM_TR_End ();
 
       /***** End form to create *****/
-      Frm_EndFormTable (Btn_CREATE_BUTTON);
+      Frm_EndFormTable (Btn_CREATE);
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -2817,7 +2817,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 	 HTM_TR_End ();
 
       /***** End form to create *****/
-      Frm_EndFormTable (Btn_CREATE_BUTTON);
+      Frm_EndFormTable (Btn_CREATE);
 
    /***** End section *****/
    HTM_SECTION_End ();

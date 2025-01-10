@@ -425,7 +425,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 		  Dat_PutParBrowserTZDiff ();
 
 		  /***** Send button *****/
-		  Btn_PutConfirmButton (Txt_Show_hits);
+		  Btn_PutButton (Btn_CONFIRM,Txt_Show_hits);
 
 	       /***** End form *****/
 	       Frm_EndForm ();
@@ -551,7 +551,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 	 Dat_PutParBrowserTZDiff ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Show_hits);
+      Box_BoxWithButtonEnd (Btn_CONFIRM,Txt_Show_hits);
 
    /***** End form *****/
    Frm_EndForm ();

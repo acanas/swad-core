@@ -285,11 +285,14 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
 
 	    /***** Show possible alerts *****/
 	    if (Gbl.Action.Act == ActionsReqRemItem[Node->InfoType])
+	      {
 	       /* Alert with button to remove question & answer */
-	       Ale_ShowLastAlertAndButton (ActionsRemItem[Node->InfoType],
-					   TreSpc_LIST_ITEMS_SECTION_ID,NULL,
-					   TreSpc_PutParItmCod,&SelectedItmCod,
-					   Btn_REMOVE_BUTTON,Txt_Remove);
+	       Ale_ShowLastAlertAndButtonBegin ();
+	       Ale_ShowAlertAndButtonEnd (ActionsRemItem[Node->InfoType],
+					  TreSpc_LIST_ITEMS_SECTION_ID,NULL,
+					  TreSpc_PutParItmCod,&SelectedItmCod,
+					  Btn_REMOVE,Txt_Remove);
+	      }
 	    else
 	       Ale_ShowAlerts (TreSpc_LIST_ITEMS_SECTION_ID);
 	}

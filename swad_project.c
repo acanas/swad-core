@@ -1953,7 +1953,7 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
 		  Initially hidden, is shown when clicking on selector or text */
 	       HTM_DIV_Begin ("id=\"prj_rev_%ld\" style=\"display:none;\"",
 			      Projects->Prj.PrjCod);
-		  Btn_PutConfirmButtonInline (Txt_Save_changes);
+		  Btn_PutButtonInline (Btn_CONFIRM,Txt_Save_changes);
 	       HTM_DIV_End ();
 
 	    /* End form */
@@ -3209,7 +3209,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
 		  if (asprintf (&TxtButton,Txt_Remove_USER_from_this_project,
 				Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex]) < 0)
 		     Err_NotEnoughMemoryExit ();
-		  Btn_PutRemoveButton (TxtButton);
+		  Btn_PutButton (Btn_REMOVE,TxtButton);
 		  free (TxtButton);
 	       Frm_EndForm ();
 
@@ -3877,8 +3877,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
       const char **Txt;
      } Forms[OldNew_NUM_OLD_NEW] =
      {
-      [OldNew_OLD] = {ActChgPrj,Btn_CONFIRM_BUTTON,&Txt_Save_changes},
-      [OldNew_NEW] = {ActNewPrj,Btn_CREATE_BUTTON ,&Txt_Create      }
+      [OldNew_OLD] = {ActChgPrj,Btn_CONFIRM,&Txt_Save_changes},
+      [OldNew_NEW] = {ActNewPrj,Btn_CREATE ,&Txt_Create      }
      };
    Prj_Assigned_t Assign;
    Prj_Proposal_t Proposal;
@@ -4344,7 +4344,7 @@ void Prj_ReqLockSelectedPrjsEdition (void)
    if (Projects.Num)
       Ale_ShowAlertAndButton (ActLckAllPrj,NULL,NULL,
 			      Prj_PutCurrentPars,&Projects,
-			      Btn_REMOVE_BUTTON,Txt_Lock_editing,
+			      Btn_REMOVE,Txt_Lock_editing,
 			      Ale_QUESTION,Txt_Do_you_want_to_lock_the_editing_of_the_X_selected_projects,
 			      Projects.Num);
    else	// No projects found
@@ -4382,7 +4382,7 @@ void Prj_ReqUnloSelectedPrjsEdition (void)
    if (Projects.Num)
       Ale_ShowAlertAndButton (ActUnlAllPrj,NULL,NULL,
 			      Prj_PutCurrentPars,&Projects,
-			      Btn_CREATE_BUTTON,Txt_Unlock_editing,
+			      Btn_CREATE,Txt_Unlock_editing,
 			      Ale_QUESTION,Txt_Do_you_want_to_unlock_the_editing_of_the_X_selected_projects,
 			      Projects.Num);
    else	// No projects found

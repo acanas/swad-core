@@ -293,17 +293,29 @@ static void Ale_ShowFixAlert (Ale_AlertType_t AlertType,const char *Txt)
 /**************** Show the more recent alert with a button *******************/
 /*****************************************************************************/
 
-void Ale_ShowLastAlertAndButton (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
-                                 void (*FuncPars) (void *Args),void *Args,
-				 Btn_Button_t Button,const char *TxtButton)
+void Ale_ShowLastAlertAndButtonGo (Act_Action_t NextAction,
+                                   void (*FuncPars) (void *Args),void *Args,
+				   const char *Where)
   {
+   extern const char *Txt_Go_to_X_QUESTION;
+   extern const char *Txt_Go;
+   char *Title;
+
    /***** Show last alert and then reset it *****/
    Ale_ShowLastAlertAndButtonBegin ();
 
+   /***** Show question "Go to ... ?" *****/
+   HTM_DIV_Begin ("class=\"CM ALERT_TXT_%s\"",The_GetSuffix ());
+      if (asprintf (&Title,Txt_Go_to_X_QUESTION,Where) < 0)
+	 Err_NotEnoughMemoryExit ();
+      HTM_Txt (Title);
+      free (Title);
+   HTM_DIV_End ();
+
    /***** Show button *****/
-   Ale_ShowAlertAndButtonEnd (NextAction,Anchor,OnSubmit,
+   Ale_ShowAlertAndButtonEnd (NextAction,NULL,NULL,
                               FuncPars,Args,
-                              Button,TxtButton);
+                              Btn_GO,Txt_Go);
   }
 
 /*****************************************************************************/
@@ -332,7 +344,7 @@ void Ale_ShowAlertRemove (Act_Action_t NextAction,const char *Anchor,
 
    Ale_ShowAlertAndButton (NextAction,Anchor,NULL,
                            FuncPars,Args,
-			   Btn_REMOVE_BUTTON,Txt_Remove,
+			   Btn_REMOVE,Txt_Remove,
 			   Ale_QUESTION,Txt,
 			   Title);
   }

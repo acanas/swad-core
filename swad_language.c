@@ -160,7 +160,7 @@ void Lan_AskChangeLanguage (void)
    /***** Request confirmation *****/
    Ale_ShowAlertAndButton (ActChgLan,NULL,NULL,
                            Lan_PutParLanguage,&Gbl.Prefs.Language,
-                           Btn_CONFIRM_BUTTON,
+                           Btn_CONFIRM,
                            Txt_Switch_to_LANGUAGE[Gbl.Prefs.Language],
                            Ale_QUESTION,Gbl.Usrs.Me.Logged ? Txt_Do_you_want_to_change_your_language_to_LANGUAGE[Gbl.Prefs.Language] :
 	                                                     Txt_Do_you_want_to_change_the_language_to_LANGUAGE[Gbl.Prefs.Language]);

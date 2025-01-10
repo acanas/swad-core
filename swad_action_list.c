@@ -1535,7 +1535,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemClpStd	] = {1982, 1,TabUsr,NULL			,UsrClp_RemoveClipboardStds	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
    [ActSeeRecSevStd	] = {  89, 1,TabUsr,NULL			,Rec_ListRecordsStdsShow	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActPrnRecSevStd	] = { 111, 1,TabUsr,NULL			,Rec_ListRecordsStdsPrint	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_NEW},
-   [ActReqMdfOneStd	] = {1415, 1,TabUsr,NULL			,Enr_ReqEnrRemStd		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActReqID_MdfStd	] = {1415, 1,TabUsr,NULL			,Enr_ReqEnrRemStd		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActReqMdfStd	] = {1419, 1,TabUsr,NULL			,Enr_AskIfEnrRemAnotherStd	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActReqStdPho	] = {1433, 1,TabUsr,NULL			,Pho_ReqPhotoUsr		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3E0}},Act_NORM,Act_1ST},
    [ActDetStdPho	] = {1436, 1,TabUsr,NULL			,Pho_RecOtherUsrPhotoDetFaces	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3E0}},Act_DATA,Act_1ST},
@@ -1587,7 +1587,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemClpTch	] = {1983, 2,TabUsr,NULL			,UsrClp_RemoveClipboardTchs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
    [ActSeeRecSevTch	] = {  22, 2,TabUsr,NULL			,Rec_ListRecordsTchsShow	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
    [ActPrnRecSevTch	] = { 127, 2,TabUsr,NULL			,Rec_ListRecordsTchsPrint	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F8}},Act_NORM,Act_NEW},
-   [ActReqMdfOneTch	] = {1416, 2,TabUsr,NULL			,Enr_ReqEnrRemTch		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActReqID_MdfTch	] = {1416, 2,TabUsr,NULL			,Enr_ReqEnrRemTch		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActReqMdfNET	] = {1644, 2,TabUsr,NULL			,Enr_AskIfEnrRemAnotherTch	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActReqMdfTch	] = {1420, 2,TabUsr,NULL			,Enr_AskIfEnrRemAnotherTch	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActReqTchPho	] = {1434, 2,TabUsr,NULL			,Pho_ReqPhotoUsr		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3E0}},Act_NORM,Act_1ST},
@@ -1648,7 +1648,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemClpGst	] = {1981, 3,TabUsr,NULL			,UsrClp_RemoveClipboardGsts	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},
    [ActSeeRecSevGst	] = {1187, 3,TabUsr,NULL			,Rec_ListRecordsGstsShow	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},
    [ActPrnRecSevGst	] = {1188, 3,TabUsr,NULL			,Rec_ListRecordsGstsPrint	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_NEW},
-   [ActReqMdfOneOth	] = {1414, 3,TabUsr,NULL			,Enr_ReqEnrRemOth		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActReqID_MdfOth	] = {1414, 3,TabUsr,NULL			,Enr_ReqEnrRemOth		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActReqMdfOth	] = {1418, 3,TabUsr,NULL			,Enr_AskIfEnrRemAnotherOth	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActReqOthPho	] = {1432, 3,TabUsr,NULL			,Pho_ReqPhotoUsr		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3E0}},Act_NORM,Act_1ST},
    [ActDetOthPho	] = {1435, 3,TabUsr,NULL			,Pho_RecOtherUsrPhotoDetFaces	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3E0}},Act_DATA,Act_1ST},
@@ -3436,9 +3436,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActUnfUsr,		// #1411
 	ActSeeFlg,		// #1412
 	ActSeeFlr,		// #1413
-	ActReqMdfOneOth,	// #1414
-	ActReqMdfOneStd,	// #1415
-	ActReqMdfOneTch,	// #1416
+	ActReqID_MdfOth,	// #1414
+	ActReqID_MdfStd,	// #1415
+	ActReqID_MdfTch,	// #1416
 	ActUnk,			// #1417 (obsolete action)
 	ActReqMdfOth,		// #1418
 	ActReqMdfStd,		// #1419

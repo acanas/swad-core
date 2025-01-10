@@ -166,7 +166,7 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
 	       HTM_TABLE_End ();
 
 	       /***** Send button *****/
-	       Btn_PutConfirmButton (Txt_Generate_test);
+	       Btn_PutButton (Btn_CONFIRM,Txt_Generate_test);
 
 	    Frm_EndForm ();
 	   }

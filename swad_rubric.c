@@ -816,8 +816,8 @@ static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
      };
    static Btn_Button_t Button[OldNew_NUM_OLD_NEW] =
      {
-      [OldNew_OLD] = Btn_CONFIRM_BUTTON,
-      [OldNew_NEW] = Btn_CREATE_BUTTON,
+      [OldNew_OLD] = Btn_CONFIRM,
+      [OldNew_NEW] = Btn_CREATE,
      };
    const char *TxtButton[OldNew_NUM_OLD_NEW] =
      {
