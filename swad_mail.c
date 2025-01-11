@@ -1091,8 +1091,6 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
    extern const char *Txt_Current_email;
    extern const char *Txt_Other_emails;
    extern const char *Txt_Email_X_confirmed;
-   extern const char *Txt_Confirm_email;
-   extern const char *Txt_Use_this_email;
    extern const char *Txt_New_email;
    extern const char *Txt_Email;
    extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
@@ -1206,8 +1204,9 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
                if (MeOrOther == Usr_OTHER)
 	          Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	       Par_PutParString (NULL,"NewEmail",row[0]);
-	       Btn_PutButtonTxtInline (Btn_CONFIRM,(MeOrOther == Usr_ME && NumEmail == 1) ? Txt_Confirm_email :
-								                            Txt_Use_this_email);
+	       Btn_PutButtonInline ((MeOrOther == Usr_ME &&
+				     NumEmail == 1) ? Btn_CONFIRM :
+						      Btn_USE_THIS);
 	    Frm_EndForm ();
 	   }
 

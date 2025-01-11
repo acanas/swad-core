@@ -160,7 +160,6 @@ void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions)
    extern const char *Hlp_ASSESSMENT_Questions;
    extern const char *Txt_No_questions;
    extern const char *Txt_Question_bank;
-   extern const char *Txt_Show_questions;
    MYSQL_RES *mysql_res;
    static Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
@@ -193,7 +192,7 @@ void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions)
 	    HTM_TABLE_End ();
 
 	    /***** Send button *****/
-	    Btn_PutButtonTxt (Btn_CONFIRM,Txt_Show_questions);
+	    Btn_PutButton (Btn_SHOW_QUESTIONS);
 
 	 Frm_EndForm ();
 	}
@@ -330,7 +329,6 @@ void Qst_ShowFormRequestSelectQstsForExamSet (struct Exa_Exams *Exams,
    extern const char *Hlp_ASSESSMENT_Exams_questions;
    extern const char *Txt_No_questions;
    extern const char *Txt_Select_questions;
-   extern const char *Txt_Show_questions;
    MYSQL_RES *mysql_res;
    static Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
@@ -363,7 +361,7 @@ void Qst_ShowFormRequestSelectQstsForExamSet (struct Exa_Exams *Exams,
 	    HTM_TABLE_End ();
 
 	    /***** Send button *****/
-	    Btn_PutButtonTxt (Btn_CONFIRM,Txt_Show_questions);
+	    Btn_PutButton (Btn_SHOW_QUESTIONS);
 
 	 Frm_EndForm ();
 	}
@@ -388,7 +386,6 @@ void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
    extern const char *Hlp_ASSESSMENT_Games_questions;
    extern const char *Txt_No_questions;
    extern const char *Txt_Select_questions;
-   extern const char *Txt_Show_questions;
    MYSQL_RES *mysql_res;
    static Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
@@ -418,7 +415,7 @@ void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
 	    HTM_TABLE_End ();
 
 	    /***** Send button *****/
-	    Btn_PutButtonTxt (Btn_CONFIRM,Txt_Show_questions);
+	    Btn_PutButton (Btn_SHOW_QUESTIONS);
 
 	 Frm_EndForm ();
 	}
@@ -1054,7 +1051,6 @@ void Qst_ListOneOrMoreQstsForSelectionForExamSet (struct Exa_Exams *Exams,
    extern const char *Txt_Type;
    extern const char *Txt_Shuffle;
    extern const char *Txt_Question;
-   extern const char *Txt_Add_questions;
    unsigned QstInd;
    struct Qst_Question Question;
    MYSQL_ROW row;
@@ -1109,7 +1105,7 @@ void Qst_ListOneOrMoreQstsForSelectionForExamSet (struct Exa_Exams *Exams,
 	 HTM_TABLE_End ();
 
 	 /***** Button to add questions *****/
-	 Btn_PutButtonTxt (Btn_CREATE,Txt_Add_questions);
+	 Btn_PutButton (Btn_ADD_QUESTIONS);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -1135,7 +1131,6 @@ void Qst_ListOneOrMoreQstsForSelectionForGame (struct Gam_Games *Games,
    extern const char *Txt_Type;
    extern const char *Txt_Shuffle;
    extern const char *Txt_Question;
-   extern const char *Txt_Add_questions;
    unsigned QstInd;
    struct Qst_Question Question;
    MYSQL_ROW row;
@@ -1190,7 +1185,7 @@ void Qst_ListOneOrMoreQstsForSelectionForGame (struct Gam_Games *Games,
 	 HTM_TABLE_End ();
 
 	 /***** Button to add questions *****/
-	 Btn_PutButtonTxt (Btn_CREATE,Txt_Add_questions);
+	 Btn_PutButton (Btn_ADD_QUESTIONS);
 
       /***** End form *****/
       Frm_EndForm ();

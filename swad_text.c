@@ -1134,29 +1134,6 @@ const char *Txt_add_rubric =
 	"de&gbreve;erlendirme listesi ekle";
 #endif
 
-const char *Txt_Add_this_ID =
-#if   L==1	// ca
-	"Afegir aquest ID";
-#elif L==2	// de
-	"F&uuml;gen Sie diese Ausweis-Nr.";
-#elif L==3	// en
-	"Add this ID";
-#elif L==4	// es
-	"A&ntilde;adir este ID";
-#elif L==5	// fr
-	"Ajouter ce num&eacute;ro d'identit&eacute;";
-#elif L==6	// gn
-	"A&ntilde;adir este ID";	// Okoteve traducción
-#elif L==7	// it
-	"Aggiungere questa carta d'identit&agrave;";
-#elif L==8	// pl
-	"Dodaj ten ID";
-#elif L==9	// pt
-	"Adicionar este n&ordm; identif.";
-#elif L==10	// tr
-	"Bu kimli&gbreve;i ekle";
-#endif
-
 const char *Txt_Add_to_clipboard =
 #if   L==1	// ca
 	"Afegeix al porta-retalls";
@@ -5708,52 +5685,6 @@ const char *Txt_Confirm =
 	"Confirmar";
 #elif L==10	// tr
 	"Confirm";	// Çeviri lazim!
-#endif
-
-const char *Txt_Confirm_email =
-#if   L==1	// ca
-	"Confirmar correu";
-#elif L==2	// de
-	"E-Mail best&auml;tigen";
-#elif L==3	// en
-	"Confirm email";
-#elif L==4	// es
-	"Confirmar correo";
-#elif L==5	// fr
-	"Confirmer courrier";
-#elif L==6	// gn
-	"Confirmar correo";	// Okoteve traducción
-#elif L==7	// it
-	"Confermare email";
-#elif L==8	// pl
-	"Potwierdzenie email";
-#elif L==9	// pt
-	"Confirmar email";
-#elif L==10	// tr
-	"Confirm email";	// Çeviri lazim!
-#endif
-
-const char *Txt_Confirm_ID =
-#if   L==1	// ca
-	"Confirmar ID";
-#elif L==2	// de
-	"ID best&auml;tigen";
-#elif L==3	// en
-	"Confirm ID";
-#elif L==4	// es
-	"Confirmar ID";
-#elif L==5	// fr
-	"Confirmer ID";
-#elif L==6	// gn
-	"Confirmar ID";	// Okoteve traducción
-#elif L==7	// it
-	"Confermare ID";
-#elif L==8	// pl
-	"Potwierdzenie ID";
-#elif L==9	// pt
-	"Confirmar ID";
-#elif L==10	// tr
-	"Confirm ID";	// Çeviri lazim!
 #endif
 
 const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_request_you_ =	// Warning: it is very important to include two %s in the following sentences
@@ -55361,29 +55292,6 @@ const char *Txt_Upload_my_picture =
 	"Upload my picture";		// Çeviri lazim!
 #endif
 
-const char *Txt_Upload_photo =
-#if   L==1	// ca
-	"Enviar foto";
-#elif L==2	// de
-	"Upload Foto";
-#elif L==3	// en
-	"Upload photo";
-#elif L==4	// es
-	"Subir foto";
-#elif L==5	// fr
-	"T&eacute;l&eacute;charger photo";
-#elif L==6	// gn
-	"Subir foto";	// Okoteve traducción
-#elif L==7	// it
-	"Caricare foto";
-#elif L==8	// pl
-	"Prze&sacute;lij zdj&eogon;cie";
-#elif L==9	// pt
-	"Upload foto";
-#elif L==10	// tr
-	"Upload photo";	// Çeviri lazim!
-#endif
-
 const char *Txt_Uploaded_by =
 #if   L==1	// ca
 	"Penjat per";
@@ -55430,27 +55338,27 @@ const char *Txt_URL =		// Uniform Resource Locator
 	"URL";
 #endif
 
-const char *Txt_Use_this_email =
+const char *Txt_Use_this =
 #if   L==1	// ca
-	"Utilitzar aquest correu";
+	"Usar aquest";
 #elif L==2	// de
-	"Verwenden Sie diese E-Mail";
+	"Verwenden Sie diese";
 #elif L==3	// en
-	"Use this email";
+	"Use this";
 #elif L==4	// es
-	"Usar este correo";
+	"Usar este";
 #elif L==5	// fr
-	"Utiliser ce courrier";
+	"Utiliser ceci";
 #elif L==6	// gn
-	"Usar este correo";	// Okoteve traducción
+	"Eipuru k&oacute;va";
 #elif L==7	// it
-	"Utilizzare questa email";
+	"Usa questo";
 #elif L==8	// pl
-	"U&zdot;yj tej email";
+	"U&zdot;yj tego";
 #elif L==9	// pt
-	"Utilizar este email";
+	"Utilizar isto";
 #elif L==10	// tr
-	"Use this email";	// Çeviri lazim!
+	"Bunu kullan";
 #endif
 
 const char *Txt_Use_this_nickname =
@@ -58513,10 +58421,10 @@ const char *Txt_You_can_only_perform_X_further_actions_ =	// Warning: it is very
 	" wenn Sie Ihr Foto nicht senden.";
 #elif L==3	// en
 	"You can only perform %u further actions"
-	" if you don't send your photo.";
+	" if you don't upload your photo.";
 #elif L==4	// es
 	"Solo podr&aacute; realizar %u acciones m&aacute;s"
-	" si no env&iacute;a su fotograf&iacute;a.";
+	" si no sube su fotograf&iacute;a.";
 #elif L==5	// fr
 	"Vous ne pouvez effectuer que %u actions suppl&eacute;mentaires"
 	" si vous n'envoyez pas votre photo.";
@@ -58534,7 +58442,7 @@ const char *Txt_You_can_only_perform_X_further_actions_ =	// Warning: it is very
 	" se n&atilde;o enviar sua foto.";
 #elif L==10	// tr
 	"You can only perform %u further actions"
-	" if you don't send your photo.";		// Çeviri lazim!
+	" if you don't upload your photo.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_only_receive_email_notifications_if_ =	// Warning: it is very important to include five %s in the following sentences

@@ -27,10 +27,12 @@
 /********************************* Public types ******************************/
 /*****************************************************************************/
 
-#define Btn_NUM_BUTTON_TYPES 27
+#define Btn_NUM_BUTTON_TYPES 35
 typedef enum
   {
    Btn_NO_BUTTON,
+   Btn_ADD_QUESTIONS,
+   Btn_ANSWER,
    Btn_CHANGE,
    Btn_CHECK,
    Btn_CONFIRM,
@@ -43,7 +45,9 @@ typedef enum
    Btn_ELIMINATE,
    Btn_FOLLOW,
    Btn_GO,
+   Btn_ITS_ME,
    Btn_LOCK_EDITING,
+   Btn_NOT_DUPLICATED,
    Btn_PASTE,
    Btn_REJECT,
    Btn_REMOVE,
@@ -53,9 +57,13 @@ typedef enum
    Btn_SEND,
    Btn_SHOW,
    Btn_SHOW_MORE_DETAILS,
+   Btn_SHOW_QUESTIONS,
+   Btn_SIMILAR_USERS,
+   Btn_SKIP_THIS_STEP,
    Btn_UNFOLLOW,
    Btn_UNLOCK_EDITING,
-   Btn_UPLOAD_PHOTO,
+   Btn_UPLOAD,
+   Btn_USE_THIS,
    Btn_VIEW_RESULTS,
   } Btn_Button_t;
 
@@ -64,9 +72,6 @@ typedef enum
 /*****************************************************************************/
 
 void Btn_PutButton (Btn_Button_t Button);
-void Btn_PutButtonTxt (Btn_Button_t Button,const char *TxtButton);
-
 void Btn_PutButtonInline (Btn_Button_t Button);
-void Btn_PutButtonTxtInline (Btn_Button_t Button,const char *TxtButton);
 
 #endif

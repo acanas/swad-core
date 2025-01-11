@@ -150,7 +150,6 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    extern const char *Txt_If_you_think_you_may_have_been_registered_;
    extern const char *Txt_ID;
    extern const char *Txt_ID_identity_number;
-   extern const char *Txt_Skip_this_step;
 
    /***** Begin box *****/
    Box_BoxBegin (Title,NULL,NULL,Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE);
@@ -172,7 +171,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 
       /***** Form to skip this step *****/
       Frm_BeginForm (ActCreMyAcc);
-	 Btn_PutButtonTxt (Btn_CONFIRM,Txt_Skip_this_step);
+	 Btn_PutButton (Btn_SKIP_THIS_STEP);
       Frm_EndForm ();
 
    /***** End box *****/
@@ -276,7 +275,6 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct Usr_
    extern const char *Txt_ID;
    extern const char *Txt_Name;
    extern const char *Txt_yet_unnamed;
-   extern const char *Txt_Its_me;
 
    /***** Begin 1st table row *****/
    HTM_TR_Begin (NULL);
@@ -312,7 +310,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct Usr_
       HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 	 Frm_BeginForm (ActLogInNew);
 	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
-	    Btn_PutButtonTxtInline (Btn_CREATE,Txt_Its_me);
+	    Btn_PutButtonInline (Btn_ITS_ME);
 	 Frm_EndForm ();
       HTM_TD_End ();
 

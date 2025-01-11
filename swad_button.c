@@ -33,6 +33,8 @@
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
+extern const char *Txt_Add_questions;
+extern const char *Txt_Answer_VERB;
 extern const char *Txt_Change;
 extern const char *Txt_Check;
 extern const char *Txt_Confirm;
@@ -45,7 +47,9 @@ extern const char *Txt_Enrol;
 extern const char *Txt_Eliminate;
 extern const char *Txt_Follow;
 extern const char *Txt_Go;
+extern const char *Txt_Its_me;
 extern const char *Txt_Lock_editing;
+extern const char *Txt_Not_duplicated;
 extern const char *Txt_Paste;
 extern const char *Txt_Reject;
 extern const char *Txt_Remove;
@@ -55,9 +59,13 @@ extern const char *Txt_Search;
 extern const char *Txt_Send;
 extern const char *Txt_Show;
 extern const char *Txt_Show_more_details;
+extern const char *Txt_Show_questions;
+extern const char *Txt_Similar_users;
+extern const char *Txt_Skip_this_step;
 extern const char *Txt_Unfollow;
 extern const char *Txt_Unlock_editing;
-extern const char *Txt_Upload_photo;
+extern const char *Txt_Upload;
+extern const char *Txt_Use_this;
 extern const char *Txt_View_results;
 
 static struct
@@ -66,6 +74,8 @@ static struct
    const char **Txt;
   } But_Buttons[Btn_NUM_BUTTON_TYPES] =
   {
+   [Btn_ADD_QUESTIONS		] = {"BT_CREATE"	,&Txt_Add_questions	},
+   [Btn_ANSWER			] = {"BT_CREATE"	,&Txt_Answer_VERB	},
    [Btn_CHANGE			] = {"BT_CREATE"	,&Txt_Change		},
    [Btn_CHECK			] = {"BT_CONFIRM"	,&Txt_Check		},
    [Btn_CONFIRM			] = {"BT_CONFIRM"	,&Txt_Confirm		},
@@ -78,7 +88,9 @@ static struct
    [Btn_ELIMINATE		] = {"BT_REMOVE"	,&Txt_Eliminate		},
    [Btn_FOLLOW			] = {"BT_CREATE"	,&Txt_Follow		},
    [Btn_GO			] = {"BT_CONFIRM"	,&Txt_Go		},
+   [Btn_ITS_ME			] = {"BT_CREATE"	,&Txt_Its_me		},
    [Btn_LOCK_EDITING		] = {"BT_REMOVE"	,&Txt_Lock_editing	},
+   [Btn_NOT_DUPLICATED		] = {"BT_CONFIRM"	,&Txt_Not_duplicated	},
    [Btn_PASTE			] = {"BT_CONFIRM"	,&Txt_Paste		},
    [Btn_REJECT			] = {"BT_REMOVE"	,&Txt_Reject		},
    [Btn_REMOVE			] = {"BT_REMOVE"	,&Txt_Remove		},
@@ -88,9 +100,13 @@ static struct
    [Btn_SEND			] = {"BT_CREATE"	,&Txt_Send		},
    [Btn_SHOW			] = {"BT_CONFIRM"	,&Txt_Show		},
    [Btn_SHOW_MORE_DETAILS	] = {"BT_CONFIRM"	,&Txt_Show_more_details	},
+   [Btn_SHOW_QUESTIONS		] = {"BT_CONFIRM"	,&Txt_Show_questions	},
+   [Btn_SIMILAR_USERS		] = {"BT_CONFIRM"	,&Txt_Similar_users	},
+   [Btn_SKIP_THIS_STEP		] = {"BT_CONFIRM"	,&Txt_Skip_this_step	},
    [Btn_UNFOLLOW		] = {"BT_REMOVE"	,&Txt_Unfollow		},
    [Btn_UNLOCK_EDITING		] = {"BT_CREATE"	,&Txt_Unlock_editing	},
-   [Btn_UPLOAD_PHOTO		] = {"BT_CREATE"	,&Txt_Upload_photo	},
+   [Btn_UPLOAD			] = {"BT_CREATE"	,&Txt_Upload		},
+   [Btn_USE_THIS		] = {"BT_CONFIRM"	,&Txt_Use_this		},
    [Btn_VIEW_RESULTS		] = {"BT_CONFIRM"	,&Txt_View_results	},
   };
 
@@ -111,19 +127,6 @@ void Btn_PutButton (Btn_Button_t Button)
      }
   }
 
-void Btn_PutButtonTxt (Btn_Button_t Button,const char *TxtButton)
-  {
-   if (Button != Btn_NO_BUTTON && TxtButton)
-     {
-      HTM_DIV_Begin ("class=\"CM\"");
-	 HTM_BUTTON_Submit_Begin (NULL,"class=\"BT_SUBMIT %s\"",
-				  But_Buttons[Button].Class);
-	    HTM_Txt (TxtButton);
-	 HTM_BUTTON_End ();
-      HTM_DIV_End ();
-     }
-  }
-
 void Btn_PutButtonInline (Btn_Button_t Button)
   {
    if (Button != Btn_NO_BUTTON)
@@ -131,17 +134,6 @@ void Btn_PutButtonInline (Btn_Button_t Button)
       HTM_BUTTON_Submit_Begin (NULL,"class=\"BT_SUBMIT_INLINE %s\"",
 			       But_Buttons[Button].Class);
 	 HTM_Txt (*But_Buttons[Button].Txt);
-      HTM_BUTTON_End ();
-     }
-  }
-
-void Btn_PutButtonTxtInline (Btn_Button_t Button,const char *TxtButton)
-  {
-   if (Button != Btn_NO_BUTTON && TxtButton)
-     {
-      HTM_BUTTON_Submit_Begin (NULL,"class=\"BT_SUBMIT_INLINE %s\"",
-			       But_Buttons[Button].Class);
-	 HTM_Txt (TxtButton);
       HTM_BUTTON_End ();
      }
   }

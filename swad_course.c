@@ -112,7 +112,8 @@ static void Crs_GetCourseDataFromRow (MYSQL_RES *mysql_res,
 
 static void Crs_EmptyCourseCompletely (long HieCod);
 
-static void Crs_PutButtonToGoToCrs (void);
+static void Crs_PutParCrsCod (void *CrsCod);
+// static void Crs_PutButtonToGoToCrs (void);
 static void Crs_PutButtonToRegisterInCrs (void);
 
 static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnAccepted);
@@ -1521,13 +1522,12 @@ void Crs_ChangeCrsStatus (void)
 
 void Crs_ContEditAfterChgCrs (void)
   {
+   extern const char *Txt_Go_to_X_QUESTION;
    bool PutButtonToRequestRegistration;
+   char *Title;
 
    /***** Begin alert *****/
    Ale_ShowLastAlertAndButtonBegin ();
-
-   /***** Put button to go to course changed *****/
-   Crs_PutButtonToGoToCrs ();
 
    /***** Put button to request my registration in course *****/
    PutButtonToRequestRegistration = false;
@@ -1558,8 +1558,18 @@ void Crs_ContEditAfterChgCrs (void)
    if (PutButtonToRequestRegistration)
       Crs_PutButtonToRegisterInCrs ();
 
+   /***** Show question "Go to ... ?" *****/
+   HTM_DIV_Begin ("class=\"CM ALERT_TXT_%s\"",The_GetSuffix ());
+      if (asprintf (&Title,Txt_Go_to_X_QUESTION,Crs_EditingCrs->ShrtName) < 0)
+	 Err_NotEnoughMemoryExit ();
+      HTM_Txt (Title);
+      free (Title);
+   HTM_DIV_End ();
+
    /***** End alert *****/
-   Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
+   Ale_ShowAlertAndButtonEnd (ActSeeCrsInf,NULL,NULL,
+			      Crs_PutParCrsCod,&Crs_EditingCrs->HieCod,
+			      Btn_GO);
 
    /***** Show possible delayed alerts *****/
    Ale_ShowAlerts (NULL);
@@ -1572,20 +1582,13 @@ void Crs_ContEditAfterChgCrs (void)
   }
 
 /*****************************************************************************/
-/************************ Put button to go to course *************************/
+/******************** Write parameter with code of degree ********************/
 /*****************************************************************************/
 
-static void Crs_PutButtonToGoToCrs (void)
+static void Crs_PutParCrsCod (void *CrsCod)
   {
-   // If the course being edited is different to the current one...
-   if (Crs_EditingCrs->HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
-     {
-      Frm_BeginForm (ActSeeCrsInf);
-	 ParCod_PutPar (ParCod_Crs,Crs_EditingCrs->HieCod);
-	 Btn_PutButtonTxt (Btn_GO,Str_BuildGoToTitle (Crs_EditingCrs->ShrtName));
-	 Str_FreeGoToTitle ();
-      Frm_EndForm ();
-     }
+   if (CrsCod)
+      ParCod_PutPar (ParCod_Crs,*((long *) CrsCod));
   }
 
 /*****************************************************************************/
@@ -1595,6 +1598,7 @@ static void Crs_PutButtonToGoToCrs (void)
 static void Crs_PutButtonToRegisterInCrs (void)
   {
    Frm_BeginForm (ActReqSignUp);
+
       // If the course being edited is different to the current one...
       if (Crs_EditingCrs->HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
 	 ParCod_PutPar (ParCod_Crs,Crs_EditingCrs->HieCod);

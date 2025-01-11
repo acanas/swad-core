@@ -399,7 +399,6 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    extern const char *Txt_Number_of_users;
    extern const char *Txt_Scope;
    extern const char *Txt_Users;
-   extern const char *Txt_Answer_VERB;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
@@ -545,7 +544,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 		     MyAllGrps = Grp_GetParMyAllGrps ();
 		     Grp_PutParMyAllGrps (&MyAllGrps);
 		     Pag_PutParPagNum (Pag_SURVEYS,Surveys->CurrentPage);
-		     Btn_PutButtonTxtInline (Btn_CREATE,Txt_Answer_VERB);
+		     Btn_PutButtonInline (Btn_ANSWER);
 		  Frm_EndForm ();
 
 	       HTM_DIV_End ();

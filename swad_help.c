@@ -186,7 +186,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	       /***** Upload my photo *****/
 	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Upload_my_picture,
 						    ActReqMyPho,
-						    Btn_UPLOAD_PHOTO);
+						    Btn_UPLOAD);
 	   }
 	 else					// I am not logged
 	   {

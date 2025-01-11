@@ -291,7 +291,7 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
       else if (Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST)
          Ale_ShowAlertAndButton (ActReqMyPho,NULL,NULL,
                                  NULL,NULL,
-                                 Btn_UPLOAD_PHOTO,
+                                 Btn_UPLOAD,
 				 Ale_WARNING,Txt_You_can_only_perform_X_further_actions_,
                                  Pho_MAX_CLICKS_WITHOUT_PHOTO - Gbl.Usrs.Me.NumAccWithoutPhoto);
      }

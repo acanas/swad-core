@@ -400,7 +400,7 @@ Usr_Can_t ID_ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat)
 static void ID_PutLinkToConfirmID (struct Usr_Data *UsrDat,unsigned NumID,
                                    const char *Anchor)
   {
-   extern const char *Txt_Confirm_ID;
+   extern const char *Txt_Confirm;
    static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_UNK	  ] = ActCnfID_Oth,
@@ -435,10 +435,10 @@ static void ID_PutLinkToConfirmID (struct Usr_Data *UsrDat,unsigned NumID,
       Par_PutParString (NULL,"UsrID",UsrDat->IDs.List[NumID].ID);
 
       /***** Put link *****/
-      HTM_BUTTON_Submit_Begin (Txt_Confirm_ID,
+      HTM_BUTTON_Submit_Begin (Txt_Confirm,
                                "class=\"BT_LINK FORM_OUT_%s BOLD\"",
                                The_GetSuffix ());
-	 Ico_PutIconTextLink ("check.svg",Ico_BLACK,Txt_Confirm_ID);
+	 Ico_PutIconTextLink ("check.svg",Ico_BLACK,Txt_Confirm);
       HTM_BUTTON_End ();
 
    /***** End form *****/
@@ -510,7 +510,6 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
    extern const char *Txt_ID_X_not_confirmed;
    extern const char *Txt_ID_identity_number;
    extern const char *Txt_Another_ID;
-   extern const char *Txt_Add_this_ID;
    extern const char *Txt_The_ID_is_used_in_order_to_facilitate_;
    extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    unsigned NumID;
@@ -642,7 +641,7 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 				  "id=\"NewID\" class=\"Frm_C2_INPUT INPUT_%s\""
 				  " size=\"16\"",The_GetSuffix ());
 		  HTM_BR ();
-		  Btn_PutButtonTxtInline (Btn_CREATE,Txt_Add_this_ID);
+		  Btn_PutButtonInline (Btn_CREATE);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 

@@ -1495,7 +1495,6 @@ static bool Inf_CheckIfInfoAvailable (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
 
 static void Inf_FormToEnterEditor (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
   {
-
    Frm_BeginForm (Inf_ActionsInfo[InfoSrc][InfoType]);
       Inf_PutParInfoType (&InfoType);
       Btn_PutButtonInline (Btn_EDIT);
@@ -1508,11 +1507,9 @@ static void Inf_FormToEnterEditor (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
 
 static void Inf_FormToEnterPageUploader (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
   {
-   extern const char *Txt_Upload;
-
    Frm_BeginForm (Inf_ActionsInfo[InfoSrc][InfoType]);
       Inf_PutParInfoType (&InfoType);
-      Btn_PutButtonTxtInline (Btn_CONFIRM,Txt_Upload);
+      Btn_PutButtonInline (Btn_UPLOAD);
    Frm_EndForm ();
   }
 

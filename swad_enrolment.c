@@ -224,7 +224,7 @@ void Enr_PutButtonInlineToEnrolStds (long CrsCod,
 					Lay_NO_HORIZONTAL_LINE_AT_RIGHT);
 	    Frm_BeginForm (ActReqEnrSevStd);
 	       ParCod_PutPar (ParCod_Crs,CrsCod);
-	       Btn_PutButtonTxtInline (Btn_ENROL,Act_GetActionText (ActRcvFrmEnrSevStd));
+	       Btn_PutButtonInline (Btn_ENROL);
 	    Frm_EndForm ();
 	 HTM_LI_End ();
 	}
@@ -1989,7 +1989,7 @@ void Enr_AskRemAllStdsThisCrs (void)
 	 Frm_BeginForm (ActRemAllStdCrs);
 	    Grp_PutParAllGroups ();
 	    Pwd_AskForConfirmationOnDangerousAction ();
-	    Btn_PutButtonTxt (Btn_REMOVE,Txt_Remove_all_students);
+	    Btn_PutButton (Btn_REMOVE);
 	 Frm_EndForm ();
 
 	 /* End alert */

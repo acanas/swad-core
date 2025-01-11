@@ -38106,48 +38106,48 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActReqMyPho] =
 #if   L==1	// ca
-	"Request sending of my photo"		// Necessita traducció
+	"Request upload of my photo"		// Necessita traducció
 #elif L==2	// de
-	"Request sending of my photo"		// Need Übersetzung
+	"Request upload of my photo"		// Need Übersetzung
 #elif L==3	// en
-	"Request sending of my photo"
+	"Request upload of my photo"
 #elif L==4	// es
-	"Solicitar el env&iacute;o de mi foto"
+	"Solicitar subida de mi foto"
 #elif L==5	// fr
-	"Request sending of my photo"		// Besoin de traduction
+	"Request upload of my photo"		// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar el env&iacute;o de mi foto"	// Okoteve traducción
+	"Solicitar subida de mi foto"	// Okoteve traducción
 #elif L==7	// it
-	"Request sending of my photo"		// Bisogno di traduzione
+	"Request upload of my photo"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Request sending of my photo"		// Potrzebujesz tlumaczenie
+	"Request upload of my photo"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request sending of my photo"		// Precisa de tradução
+	"Request upload of my photo"		// Precisa de tradução
 #elif L==10	// tr
-	"Request sending of my photo"		// Çeviri lazim!
+	"Request upload of my photo"		// Çeviri lazim!
 #endif
 	,
 	[ActDetMyPho] =
 #if   L==1	// ca
-	"Send my photo and detect faces on it"		// Necessita traducció
+	"Upload my photo and detect faces on it"	// Necessita traducció
 #elif L==2	// de
-	"Send my photo and detect faces on it"		// Need Übersetzung
+	"Upload my photo and detect faces on it"	// Need Übersetzung
 #elif L==3	// en
-	"Send my photo and detect faces on it"
+	"Upload my photo and detect faces on it"
 #elif L==4	// es
-	"Enviar mi foto y detectar rostros en ella"
+	"Subir mi foto y detectar rostros en ella"
 #elif L==5	// fr
-	"Send my photo and detect faces on it"		// Besoin de traduction
+	"Upload my photo and detect faces on it"	// Besoin de traduction
 #elif L==6	// gn
-	"Enviar mi foto y detectar rostros en ella"	// Okoteve traducción
+	"Subir mi foto y detectar rostros en ella"	// Okoteve traducción
 #elif L==7	// it
-	"Send my photo and detect faces on it"		// Bisogno di traduzione
+	"Upload my photo and detect faces on it"	// Bisogno di traduzione
 #elif L==8	// pl
-	"Send my photo and detect faces on it"		// Potrzebujesz tlumaczenie
+	"Upload my photo and detect faces on it"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Send my photo and detect faces on it"		// Precisa de tradução
+	"Upload my photo and detect faces on it"	// Precisa de tradução
 #elif L==10	// tr
-	"Send my photo and detect faces on it"		// Çeviri lazim!
+	"Upload my photo and detect faces on it"	// Çeviri lazim!
 #endif
 	,
 	[ActUpdMyPho] =

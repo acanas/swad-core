@@ -190,7 +190,6 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
    extern const char *Txt_Current_nickname;
    extern const char *Txt_Other_nicknames;
-   extern const char *Txt_Use_this_nickname;
    extern const char *Txt_New_nickname;
    extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    static struct
@@ -308,7 +307,7 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
 			Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 		     snprintf (NickWithArr,sizeof (NickWithArr),"@%s",row[0]);
 		     Par_PutParString (NULL,"NewNick",NickWithArr);	// Nickname
-			Btn_PutButtonTxtInline (Btn_CONFIRM,Txt_Use_this_nickname);
+			Btn_PutButtonInline (Btn_USE_THIS);
 		  Frm_EndForm ();
 		 }
 
