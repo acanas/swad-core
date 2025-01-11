@@ -2798,7 +2798,6 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
    extern const char *Txt_Thread;
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Content;
-   extern const char *Txt_Send;
    char *ClassInput;
 
    /***** Begin box *****/
@@ -2876,7 +2875,7 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 	 free (ClassInput);
 
 	 /***** Send button *****/
-	 Btn_PutButton (Btn_CREATE,Txt_Send);
+	 Btn_PutButton (Btn_SEND);
 
       /***** End form *****/
       Frm_EndForm ();

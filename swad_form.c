@@ -251,26 +251,11 @@ void Frm_BeginFormTable (Act_Action_t NextAction,const char *Anchor,
 
 void Frm_EndFormTable (Btn_Button_t Button)
   {
-   extern const char *Txt_Create;
-   extern const char *Txt_Save_changes;
-   extern const char *Txt_View_results;
-   extern const char *Txt_Go;
-   extern const char *Txt_Remove;
-   static const char **TxtButton[Btn_NUM_BUTTON_TYPES] =
-     {
-      [Btn_CREATE      ] = &Txt_Create,
-      [Btn_CONFIRM     ] = &Txt_Save_changes,
-      [Btn_VIEW_RESULTS] = &Txt_View_results,
-      [Btn_GO          ] = &Txt_Go,
-      [Btn_REMOVE      ] = &Txt_Remove,
-     };
-
          /***** End table *****/
 	 HTM_TABLE_End ();
 
 	 /***** Send button *****/
-         if (Button != Btn_NO_BUTTON)
-            Btn_PutButton (Button,*TxtButton[Button]);
+         Btn_PutButton (Button);
 
       /***** End form *****/
       Frm_EndForm ();

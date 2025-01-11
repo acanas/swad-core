@@ -234,7 +234,6 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
    extern const char *Hlp_COMMUNICATION_Messages_write;
    extern const char *Txt_Message;
    extern const char *Txt_MSG_To;
-   extern const char *Txt_Send;
    unsigned NumUsrsInCrs = 0;	// Initialized to avoid warning
    bool ShowUsrsInCrs = false;
    bool GetUsrsInCrs;
@@ -389,7 +388,7 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
 	 free (ClassInput);
 
 	 /***** Send button *****/
-	 Btn_PutButton (Btn_CREATE,Txt_Send);
+	 Btn_PutButton (Btn_SEND);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -937,7 +936,6 @@ void Msg_ReqDelAllRecMsgs (void)
    extern const char *Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z;
    extern const char *Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y;
    extern const char *Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y;
-   extern const char *Txt_Delete_messages_received;
    struct Msg_Messages Messages;
 
    /***** Reset messages context *****/
@@ -985,7 +983,7 @@ void Msg_ReqDelAllRecMsgs (void)
    /* End alert */
    Ale_ShowAlertAndButtonEnd (ActDelAllRcvMsg,NULL,NULL,
                               Msg_PutParsMsgsFilters,&Messages,
-                              Btn_REMOVE,Txt_Delete_messages_received);
+                              Btn_REMOVE);
   }
 
 /*****************************************************************************/
@@ -997,7 +995,6 @@ void Msg_ReqDelAllSntMsgs (void)
    extern const char *Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y_related_to_CONTENT_Z;
    extern const char *Txt_any_user;
    extern const char *Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y;
-   extern const char *Txt_Delete_messages_sent;
    struct Msg_Messages Messages;
 
    /***** Reset messages context *****/
@@ -1012,14 +1009,14 @@ void Msg_ReqDelAllSntMsgs (void)
    /* Begin alert */
    if (Messages.FilterContent[0])
       Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
-			       Messages.FilterFromTo[0] ? Messages.FilterFromTo :
-							  Txt_any_user,
-			       Messages.FilterCrsShrtName,Messages.FilterContent);
+			           Messages.FilterFromTo[0] ? Messages.FilterFromTo :
+							      Txt_any_user,
+			           Messages.FilterCrsShrtName,Messages.FilterContent);
    else
       Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y,
-			       Messages.FilterFromTo[0] ? Messages.FilterFromTo :
-							  Txt_any_user,
-			       Messages.FilterCrsShrtName);
+			           Messages.FilterFromTo[0] ? Messages.FilterFromTo :
+							      Txt_any_user,
+			           Messages.FilterCrsShrtName);
 
    /* Show sent messages again */
    Messages.TypeOfMessages = Msg_SENT;
@@ -1027,8 +1024,8 @@ void Msg_ReqDelAllSntMsgs (void)
 
    /* End alert */
    Ale_ShowAlertAndButtonEnd (ActDelAllSntMsg,NULL,NULL,
-                            Msg_PutParsMsgsFilters,&Messages,
-                            Btn_REMOVE,Txt_Delete_messages_sent);
+                              Msg_PutParsMsgsFilters,&Messages,
+                              Btn_REMOVE);
   }
 
 /*****************************************************************************/

@@ -27,22 +27,46 @@
 /********************************* Public types ******************************/
 /*****************************************************************************/
 
-#define Btn_NUM_BUTTON_TYPES 6
+#define Btn_NUM_BUTTON_TYPES 27
 typedef enum
   {
    Btn_NO_BUTTON,
-   Btn_CREATE,
+   Btn_CHANGE,
+   Btn_CHECK,
    Btn_CONFIRM,
-   Btn_VIEW_RESULTS,
+   Btn_CONTINUE,
+   Btn_CREATE,
+   Btn_CREATE_ACCOUNT,
+   Btn_DONE,
+   Btn_EDIT,
+   Btn_ENROL,
+   Btn_ELIMINATE,
+   Btn_FOLLOW,
    Btn_GO,
+   Btn_LOCK_EDITING,
+   Btn_PASTE,
+   Btn_REJECT,
    Btn_REMOVE,
+   Btn_RESET,
+   Btn_SAVE_CHANGES,
+   Btn_SEARCH,
+   Btn_SEND,
+   Btn_SHOW,
+   Btn_SHOW_MORE_DETAILS,
+   Btn_UNFOLLOW,
+   Btn_UNLOCK_EDITING,
+   Btn_UPLOAD_PHOTO,
+   Btn_VIEW_RESULTS,
   } Btn_Button_t;
 
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Btn_PutButton (Btn_Button_t Button,const char *TxtButton);
-void Btn_PutButtonInline (Btn_Button_t Button,const char *TxtButton);
+void Btn_PutButton (Btn_Button_t Button);
+void Btn_PutButtonTxt (Btn_Button_t Button,const char *TxtButton);
+
+void Btn_PutButtonInline (Btn_Button_t Button);
+void Btn_PutButtonTxtInline (Btn_Button_t Button,const char *TxtButton);
 
 #endif

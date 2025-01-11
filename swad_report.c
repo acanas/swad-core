@@ -127,7 +127,6 @@ void Rep_ReqMyUsageReport (void)
   {
    extern const char *Hlp_ANALYTICS_Report;
    extern const char *Txt_Report_of_use_of_PLATFORM;
-   extern const char *Txt_Generate_report;
    char *Title;
 
    /***** Form to show my usage report *****/
@@ -143,7 +142,7 @@ void Rep_ReqMyUsageReport (void)
 	 Rep_TitleReport (NULL);	// NULL means do not write date
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CONFIRM,Txt_Generate_report);
+      Box_BoxWithButtonEnd (Btn_CREATE);
 
    /***** End form *****/
    Frm_EndForm ();

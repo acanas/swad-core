@@ -205,7 +205,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t DefaultScop
 	    Sch_PutMagnifyingGlassButton (Ico_BLACK);
 
 	    /***** Send button *****/
-	    Btn_PutButton (Btn_CONFIRM,Txt_Search);
+	    Btn_PutButton (Btn_SEARCH);
 
 	 /***** End form *****/
 	 Frm_EndForm ();

@@ -1567,7 +1567,6 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
   {
    extern const char *Hlp_USERS_Students_course_record_card;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
-   extern const char *Txt_Save_changes;
    const char *Rec_RecordHelp[Rec_COURSE_NUM_VIEW_TYPES] =
      {
       [Rec_CRS_MY_RECORD_AS_STUDENT_FORM ] = Hlp_USERS_Students_course_record_card,
@@ -1773,7 +1772,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
      {
       case Usr_CAN:
 	 /* End table, send button and end box */
-	 Box_BoxTableWithButtonEnd (Btn_CONFIRM,Txt_Save_changes);
+	 Box_BoxTableWithButtonEnd (Btn_SAVE_CHANGES);
 
 	 /* End form */
 	 Frm_EndForm ();
@@ -2010,10 +2009,6 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    extern const char *Hlp_USERS_Guests;
    extern const char *Hlp_USERS_Students_shared_record_card;
    extern const char *Hlp_USERS_Teachers_shared_record_card;
-   extern const char *Txt_Sign_up;
-   extern const char *Txt_Save_changes;
-   extern const char *Txt_Enrol;
-   extern const char *Txt_Confirm;
    const char *Rec_RecordHelp[Rec_SHARED_NUM_VIEW_TYPES] =
      {
       [Rec_SHA_SIGN_UP_IN_CRS_FORM] = Hlp_USERS_SignUp,
@@ -2236,17 +2231,17 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	       switch (TypeOfView)
 		 {
 		  case Rec_SHA_SIGN_UP_IN_CRS_FORM:
-		     Btn_PutButton (Btn_CONFIRM,Txt_Sign_up);
+		     Btn_PutButton (Btn_ENROL);
 		     Frm_EndForm ();
 		     break;
 		  case Rec_SHA_MY_RECORD_FORM:
-		     Btn_PutButton (Btn_CONFIRM,Txt_Save_changes);
+		     Btn_PutButton (Btn_SAVE_CHANGES);
 		     Frm_EndForm ();
 		     break;
 		  case Rec_SHA_OTHER_NEW_USR_FORM:
 		     if (Gbl.Crs.Grps.NumGrps) // This course has groups?
 			Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
-		     Btn_PutButton (Btn_CONFIRM,Txt_Enrol);
+		     Btn_PutButton (Btn_ENROL);
 		     Frm_EndForm ();
 		     break;
 		  case Rec_SHA_OTHER_EXISTING_USR_FORM:
@@ -2266,7 +2261,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
 		     /***** Which action, register or removing? *****/
 		     if (Enr_PutActionsEnrRemOneUsr (MeOrOther))
-			Btn_PutButton (Btn_CONFIRM,Txt_Confirm);
+			Btn_PutButton (Btn_CONFIRM);
 
 		     Frm_EndForm ();
 		     break;

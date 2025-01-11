@@ -218,7 +218,6 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
    extern const char *Txt_distributed_by;
    extern const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY];
    extern const char *Txt_results_per_page;
-   extern const char *Txt_Show_hits;
    extern const char *Txt_No_teachers_or_students_found;
 #define NUM_OPTIONS_ROWS_PER_PAGE 12
    static unsigned RowsPerPage[NUM_OPTIONS_ROWS_PER_PAGE] =
@@ -425,7 +424,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 		  Dat_PutParBrowserTZDiff ();
 
 		  /***** Send button *****/
-		  Btn_PutButton (Btn_CONFIRM,Txt_Show_hits);
+		  Btn_PutButton (Btn_SHOW);
 
 	       /***** End form *****/
 	       Frm_EndForm ();
@@ -471,7 +470,6 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
    extern const char *Txt_Show;
    extern const char *Txt_distributed_by;
    extern const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY];
-   extern const char *Txt_Show_hits;
    static Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_TO_000000,
@@ -551,7 +549,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 	 Dat_PutParBrowserTZDiff ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CONFIRM,Txt_Show_hits);
+      Box_BoxWithButtonEnd (Btn_SHOW);
 
    /***** End form *****/
    Frm_EndForm ();

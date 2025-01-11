@@ -2709,7 +2709,6 @@ static void Brw_AskEditWorksCrsInternal (__attribute__((unused)) void *Args)
   {
    extern const char *Hlp_FILES_Homework_for_teachers;
    extern const char *Txt_Assignments_and_other_works;
-   extern const char *Txt_View_homework;
 
    /***** List users to select some of them *****/
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
@@ -2717,7 +2716,7 @@ static void Brw_AskEditWorksCrsInternal (__attribute__((unused)) void *Args)
 				     NULL,NULL,
 				     Txt_Assignments_and_other_works,
 				     Hlp_FILES_Homework_for_teachers,
-				     Txt_View_homework,
+				     Btn_CONTINUE,
 				     Frm_DONT_PUT_FORM);	// Do not put form with date range
   }
 
@@ -6261,7 +6260,6 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
    extern const char *Txt_Create_folder;
    extern const char *Txt_You_can_create_a_new_folder_inside_the_folder_X;
    extern const char *Txt_Folder;
-   extern const char *Txt_Create;
 
    /***** Begin form *****/
    Frm_BeginForm (Brw_ActCreateFolder[Gbl.FileBrowser.Type]);
@@ -6283,7 +6281,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 	 HTM_LABEL_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CREATE,Txt_Create);
+      Box_BoxWithButtonEnd (Btn_CREATE);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -6299,7 +6297,6 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    extern const char *Txt_or_you_can_upload_new_files_to_the_folder_X;
    extern const char *Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   extern const char *Txt_Done;
 
    /***** Begin box *****/
    HTM_DIV_Begin ("id=\"dropzone-upload\"");
@@ -6339,8 +6336,8 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 				    Brw_IS_UNKNOWN,	// Not used
 				    -1L);		// Not used
 
-	    /***** Button to send *****/
-	    Btn_PutButton (Btn_CONFIRM,Txt_Done);
+	    /***** Button to finish *****/
+	    Btn_PutButton (Btn_DONE);
 
 	 /***** End form *****/
 	 Frm_EndForm ();
@@ -6404,7 +6401,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
 			FileNameToShow);
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CREATE,Txt_Paste);
+      Box_BoxWithButtonEnd (Btn_PASTE);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -6421,7 +6418,6 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    extern const char *Txt_URL;
    extern const char *Txt_Save_as;
    extern const char *Txt_optional;
-   extern const char *Txt_Create;
    char *Label;
 
    /***** Begin form *****/
@@ -6474,7 +6470,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
       HTM_TABLE_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CREATE,Txt_Create);
+      Box_BoxWithButtonEnd (Btn_CREATE);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -7281,7 +7277,6 @@ void Brw_ShowFileMetadata (void)
    extern const char *Txt_Public_views;
    extern const char *Txt_user[Usr_NUM_SEXS];
    extern const char *Txt_users[Usr_NUM_SEXS];
-   extern const char *Txt_Save_changes;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC15x20",
@@ -7618,7 +7613,7 @@ void Brw_ShowFileMetadata (void)
 	    /***** End form *****/
 	    if (ICanEdit == Usr_CAN)	// I can edit file properties
 	      {
-		  Btn_PutButton (Btn_CONFIRM,Txt_Save_changes);
+		  Btn_PutButton (Btn_SAVE_CHANGES);
 	       Frm_EndForm ();
 	      }
 
@@ -9516,7 +9511,7 @@ void Brw_AskRemoveOldFilesBriefcase (void)
 	 HTM_LABEL_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_REMOVE,Act_GetActionText (ActRemOldBrf));
+      Box_BoxWithButtonEnd (Btn_REMOVE);
 
    /***** End form *****/
    Frm_EndForm ();

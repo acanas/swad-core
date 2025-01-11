@@ -68,8 +68,8 @@ void Box_BoxTableShadowBegin (const char *Title,
                               unsigned CellPadding);
 void Box_BoxTableEnd (void);
 void Box_BoxTableWithButtonSaveCreateEnd (OldNew_OldNew_t OldNew);
-void Box_BoxTableWithButtonEnd (Btn_Button_t Button,const char *TxtButton);
-void Box_BoxWithButtonEnd (Btn_Button_t Button,const char *TxtButton);
+void Box_BoxTableWithButtonEnd (Btn_Button_t Button);
+void Box_BoxWithButtonEnd (Btn_Button_t Button);
 void Box_BoxEnd (void);
 
 #endif

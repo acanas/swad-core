@@ -1827,7 +1827,8 @@ static void Med_AlertThirdPartyCookies (void)
 
    /***** Alert to inform about third party cookies *****/
    /* Begin alert */
-   Ale_ShowAlertAndButtonBegin (Ale_INFO,Txt_To_watch_multimedia_content_from_another_website_you_have_to_accept_third_party_cookies_in_your_personal_settings);
+   Ale_ShowAlertAndButtonBegin (Ale_INFO,
+				Txt_To_watch_multimedia_content_from_another_website_you_have_to_accept_third_party_cookies_in_your_personal_settings);
 
    /* Put form to change cookies preferences */
    if (!Frm_CheckIfInside ())
@@ -1837,9 +1838,7 @@ static void Med_AlertThirdPartyCookies (void)
 				     Txt_Settings,NULL);
 
    /* End alert */
-   Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
-                            NULL,NULL,
-                            Btn_NO_BUTTON,NULL);
+   Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
   }
 
 /*****************************************************************************/

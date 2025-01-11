@@ -420,7 +420,8 @@ void Cfe_ReqRemCallForExam (void)
 
    /***** Show question and button to remove call for exam *****/
    /* Begin alert */
-   Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_call_for_exam);
+   Ale_ShowAlertAndButtonBegin (Ale_QUESTION,
+				Txt_Do_you_really_want_to_remove_the_following_call_for_exam);
 
       /* Show call for exam */
       Cfe_AllocMemCallForExam (&CallsForExams);
@@ -431,8 +432,8 @@ void Cfe_ReqRemCallForExam (void)
 
    /* End alert */
    Ale_ShowAlertAndButtonEnd (ActRemCfe,NULL,NULL,
-                            Cfe_PutParExaCod,&CallsForExams.ExaCod,
-			    Btn_REMOVE,Act_GetActionText (ActRemCfe));
+                              Cfe_PutParExaCod,&CallsForExams.ExaCod,
+			      Btn_REMOVE);
   }
 
 /*****************************************************************************/
@@ -882,8 +883,6 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
    extern const char *Txt_hours;
    extern const char *Txt_minute;
    extern const char *Txt_minutes;
-   extern const char *Txt_Save_changes;
-   extern const char *Txt_Create;
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];
    unsigned CurrentYear = Dat_GetCurrentYear ();
    unsigned Year;
@@ -896,11 +895,10 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
      {
       const char **Help;
       Btn_Button_t Button;
-      const char **Txt;
      } Forms[OldNew_NUM_OLD_NEW] =
      {
-      [OldNew_OLD] = {&Hlp_ASSESSMENT_Calls_for_exams_edit_call,Btn_CONFIRM,&Txt_Save_changes},
-      [OldNew_NEW] = {&Hlp_ASSESSMENT_Calls_for_exams_new_call ,Btn_CREATE ,&Txt_Create      }
+      [OldNew_OLD] = {&Hlp_ASSESSMENT_Calls_for_exams_edit_call,Btn_SAVE_CHANGES},
+      [OldNew_NEW] = {&Hlp_ASSESSMENT_Calls_for_exams_new_call ,Btn_CREATE      }
      };
    static const char *ClassCallForExam[Vie_NUM_VIEW_TYPES][Cfe_NUM_STATUS] =
      {
@@ -1446,7 +1444,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
       /***** End table, send button and end box *****/
       if (ViewType == Vie_EDIT)
-	 Box_BoxTableWithButtonEnd (Forms[OldNewCFE].Button,*Forms[OldNewCFE].Txt);
+	 Box_BoxTableWithButtonEnd (Forms[OldNewCFE].Button);
       else
 	 Box_BoxTableEnd ();
 

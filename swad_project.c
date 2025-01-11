@@ -418,7 +418,6 @@ static void Prj_ReqUsrsToSelect (void *Projects)
   {
    extern const char *Hlp_ASSESSMENT_Projects;
    extern const char *Txt_Projects;
-   extern const char *Txt_View_projects;
 
    /***** List users to select some of them *****/
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
@@ -426,7 +425,7 @@ static void Prj_ReqUsrsToSelect (void *Projects)
 				     Prj_PutCurrentPars,Projects,
 				     Txt_Projects,
 				     Hlp_ASSESSMENT_Projects,
-				     Txt_View_projects,
+				     Btn_CONTINUE,
 				     Frm_DONT_PUT_FORM);	// Do not put form with date range
   }
 
@@ -1820,7 +1819,6 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
    extern const char *Txt_Review;
    extern const char *Txt_PROJECT_REVIEW_SINGUL[Prj_NUM_REVIEW_STATUS];
    extern const char *Txt_Comments;
-   extern const char *Txt_Save_changes;
    Frm_PutForm_t PutForm;
    static unsigned UniqueId = 0;
    char *Id;
@@ -1952,7 +1950,7 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
 		  Initially hidden, is shown when clicking on selector or text */
 	       HTM_DIV_Begin ("id=\"prj_rev_%ld\" style=\"display:none;\"",
 			      Projects->Prj.PrjCod);
-		  Btn_PutButtonInline (Btn_CONFIRM,Txt_Save_changes);
+		  Btn_PutButtonInline (Btn_SAVE_CHANGES);
 	       HTM_DIV_End ();
 
 	    /* End form */
@@ -3005,7 +3003,7 @@ static void Prj_FormToSelectUsrs (struct Prj_Projects *Projects,
 				     Prj_PutCurrentPars,Projects,
 				     TxtButton,
                                      Hlp_ASSESSMENT_Projects_add_user,
-                                     TxtButton,
+                                     Btn_CONTINUE,
 				     Frm_DONT_PUT_FORM);	// Do not put form with date range
    free (TxtButton);
 
@@ -3163,7 +3161,6 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
    extern const char *Txt_Do_you_really_want_to_be_removed_as_a_X_from_the_project_Y;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_project_Y;
    extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS];
-   extern const char *Txt_Remove_USER_from_this_project;
    static Act_Action_t ActionRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
       [Prj_ROLE_UNK] = ActUnk,		// Unknown
@@ -3176,7 +3173,6 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
       [Usr_ME   ] = Txt_Do_you_really_want_to_be_removed_as_a_X_from_the_project_Y,
       [Usr_OTHER] = Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_project_Y
      };
-   char *TxtButton;
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Projects->Prj);
@@ -3195,7 +3191,8 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
 	 case Usr_CAN:
 	    /***** Show question and button to remove user as a role from project *****/
 	    /* Begin alert */
-	    Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Question[Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod)],
+	    Ale_ShowAlertAndButtonBegin (Ale_QUESTION,
+					 Question[Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod)],
 				         Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex],
 				         Projects->Prj.Title);
 
@@ -3205,15 +3202,11 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
 	       /* Show form to request confirmation */
 	       Frm_BeginForm (ActionRemUsr[RoleInPrj]);
 		  Prj_PutCurrentPars (Projects);
-		  if (asprintf (&TxtButton,Txt_Remove_USER_from_this_project,
-				Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex]) < 0)
-		     Err_NotEnoughMemoryExit ();
-		  Btn_PutButton (Btn_REMOVE,TxtButton);
-		  free (TxtButton);
+		  Btn_PutButton (Btn_REMOVE);
 	       Frm_EndForm ();
 
 	    /* End alert */
-	    Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+	    Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
 	    break;
 	 case Usr_CAN_NOT:
 	 default:
@@ -3865,8 +3858,6 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
    extern const char *Txt_URL;
-   extern const char *Txt_Create;
-   extern const char *Txt_Save_changes;
    extern const char *Txt_Members;
    static struct
      {
@@ -3875,8 +3866,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
       const char **Txt;
      } Forms[OldNew_NUM_OLD_NEW] =
      {
-      [OldNew_OLD] = {ActChgPrj,Btn_CONFIRM,&Txt_Save_changes},
-      [OldNew_NEW] = {ActNewPrj,Btn_CREATE ,&Txt_Create      }
+      [OldNew_OLD] = {ActChgPrj,Btn_SAVE_CHANGES},
+      [OldNew_NEW] = {ActNewPrj,Btn_CREATE      }
      };
    Prj_Assigned_t Assign;
    Prj_Proposal_t Proposal;
@@ -4060,7 +4051,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	    HTM_TABLE_End ();
 
 	    /* Send button */
-	    Btn_PutButton (Forms[OldNewPrj].Button,*Forms[OldNewPrj].Txt);
+	    Btn_PutButton (Forms[OldNewPrj].Button);
 
 	 /* End data form */
 	 Frm_EndForm ();
@@ -4319,7 +4310,6 @@ static void Prj_PutIconsToLockUnlockAllProjects (struct Prj_Projects *Projects)
 
 void Prj_ReqLockSelectedPrjsEdition (void)
   {
-   extern const char *Txt_Lock_editing;
    extern const char *Txt_Do_you_want_to_lock_the_editing_of_the_X_selected_projects;
    extern const char *Txt_No_projects;
    struct Prj_Projects Projects;
@@ -4342,7 +4332,7 @@ void Prj_ReqLockSelectedPrjsEdition (void)
    if (Projects.Num)
       Ale_ShowAlertAndButton (ActLckAllPrj,NULL,NULL,
 			      Prj_PutCurrentPars,&Projects,
-			      Btn_REMOVE,Txt_Lock_editing,
+			      Btn_LOCK_EDITING,
 			      Ale_QUESTION,Txt_Do_you_want_to_lock_the_editing_of_the_X_selected_projects,
 			      Projects.Num);
    else	// No projects found
@@ -4357,7 +4347,6 @@ void Prj_ReqLockSelectedPrjsEdition (void)
 
 void Prj_ReqUnloSelectedPrjsEdition (void)
   {
-   extern const char *Txt_Unlock_editing;
    extern const char *Txt_Do_you_want_to_unlock_the_editing_of_the_X_selected_projects;
    extern const char *Txt_No_projects;
    struct Prj_Projects Projects;
@@ -4380,7 +4369,7 @@ void Prj_ReqUnloSelectedPrjsEdition (void)
    if (Projects.Num)
       Ale_ShowAlertAndButton (ActUnlAllPrj,NULL,NULL,
 			      Prj_PutCurrentPars,&Projects,
-			      Btn_CREATE,Txt_Unlock_editing,
+			      Btn_UNLOCK_EDITING,
 			      Ale_QUESTION,Txt_Do_you_want_to_unlock_the_editing_of_the_X_selected_projects,
 			      Projects.Num);
    else	// No projects found

@@ -100,7 +100,6 @@ void Not_ShowFormNotice (void)
    extern const char *Hlp_COMMUNICATION_Notices;
    extern const char *Txt_The_notice_will_appear_as_a_yellow_note_;
    extern const char *Txt_Notice;
-   extern const char *Txt_Create;
 
    /***** Help message *****/
    Ale_ShowAlert (Ale_INFO,Txt_The_notice_will_appear_as_a_yellow_note_,
@@ -120,7 +119,7 @@ void Not_ShowFormNotice (void)
 	 HTM_TEXTAREA_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CREATE,Txt_Create);
+      Box_BoxWithButtonEnd (Btn_CREATE);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -257,7 +256,8 @@ void Not_ReqRemNotice (void)
 
    /***** Show question and button to remove this notice *****/
    /* Begin alert */
-   Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_notice);
+   Ale_ShowAlertAndButtonBegin (Ale_QUESTION,
+				Txt_Do_you_really_want_to_remove_the_following_notice);
 
       /* Show notice */
       Not_GetDataAndShowNotice (NotCod);
@@ -265,7 +265,7 @@ void Not_ReqRemNotice (void)
    /* End alert */
    Ale_ShowAlertAndButtonEnd (ActRemNot,NULL,NULL,
                               Not_PutParNotCod,&NotCod,
-			      Btn_REMOVE,Act_GetActionText (ActRemNot));
+			      Btn_REMOVE);
 
    /***** Show all notices *****/
    Not_ShowNotices (Not_LIST_FULL_NOTICES,

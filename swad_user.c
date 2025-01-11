@@ -283,7 +283,6 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
   {
    extern const char *Txt_You_must_send_your_photo_because_;
    extern const char *Txt_You_can_only_perform_X_further_actions_;
-   extern const char *Txt_Upload_photo;
 
    if (Gbl.Usrs.Me.NumAccWithoutPhoto)
      {
@@ -292,7 +291,7 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
       else if (Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST)
          Ale_ShowAlertAndButton (ActReqMyPho,NULL,NULL,
                                  NULL,NULL,
-                                 Btn_CONFIRM,Txt_Upload_photo,
+                                 Btn_UPLOAD_PHOTO,
 				 Ale_WARNING,Txt_You_can_only_perform_X_further_actions_,
                                  Pho_MAX_CLICKS_WITHOUT_PHOTO - Gbl.Usrs.Me.NumAccWithoutPhoto);
      }
@@ -1200,7 +1199,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncPars) (void))
 	    HTM_DIV_End ();
 
 	 /***** End table, send button and end box *****/
-	 Box_BoxTableWithButtonEnd (Btn_CONFIRM,Txt_Log_in);
+	 Box_BoxTableWithButtonEnd (Btn_CONTINUE);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -1219,7 +1218,6 @@ void Usr_WelcomeUsr (void)
    extern const char *Txt_NEW_YEAR_GREETING;
    extern const char *Txt_Happy_birthday_X;
    extern const char *Txt_Please_check_your_email_address;
-   extern const char *Txt_Check;
    extern const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
    char URLIconSet[PATH_MAX + 1];
    unsigned CurrentDay   = Dat_GetCurrentDay ();
@@ -1248,7 +1246,7 @@ void Usr_WelcomeUsr (void)
 
 		  /* Begin alert */
 		  Ale_ShowAlertAndButtonBegin (Ale_INFO,Txt_Happy_birthday_X,
-			                   Gbl.Usrs.Me.UsrDat.FrstName);
+			                       Gbl.Usrs.Me.UsrDat.FrstName);
 
 		  /* Show cake icon */
 		  snprintf (URLIconSet,sizeof (URLIconSet),"%s/%s",
@@ -1257,9 +1255,7 @@ void Usr_WelcomeUsr (void)
 			   "class=\"ICO160x160\"");
 
 		  /* End alert */
-		  Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
-		                           NULL,NULL,
-		                           Btn_NO_BUTTON,NULL);
+		  Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
                  }
 
 	    /***** Alert with button to check email address *****/
@@ -1267,7 +1263,7 @@ void Usr_WelcomeUsr (void)
 		!Gbl.Usrs.Me.UsrDat.EmailConfirmed)	// Email needs to be confirmed
 	       Ale_ShowAlertAndButton (ActFrmMyAcc,NULL,NULL,
 	                               NULL,NULL,
-				       Btn_CONFIRM,Txt_Check,
+				       Btn_CHECK,
 				       Ale_WARNING,Txt_Please_check_your_email_address);
            }
 
@@ -3023,13 +3019,12 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
                                                      const char *OnSubmit)
   {
    extern const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed;
-   extern const char *Txt_Show_anyway;
 
    /***** Show alert and button to confirm that I want to see the big list *****/
    Usr_FuncParsBigList = FuncPars;	// Used to pass pointer to function
    Ale_ShowAlertAndButton (NextAction,Usr_USER_LIST_SECTION_ID,OnSubmit,
                            Usr_PutParsConfirmIWantToSeeBigList,Args,
-                           Btn_CONFIRM,Txt_Show_anyway,
+                           Btn_SHOW,
 			   Ale_WARNING,Txt_The_list_of_X_users_is_too_large_to_be_displayed,
                            NumUsrs);
   }
@@ -3692,7 +3687,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 				       void (*FuncPars) (void *Args),void *Args,
 				       const char *Title,
                                        const char *HelpLink,
-                                       const char *TxtButton,
+                                       Btn_Button_t Button,
 				       Frm_PutForm_t PutFormDateRange)
   {
    extern const char *Txt_Users;
@@ -3776,7 +3771,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 		  HTM_TABLE_End ();
 
 		  /***** Send button *****/
-		  Btn_PutButton (Btn_CONFIRM,TxtButton);
+		  Btn_PutButton (Button);
 
 	       /***** End form *****/
 	       Frm_EndForm ();
@@ -5592,7 +5587,6 @@ static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_US
    extern const char *Txt_Create_email_message;
    extern const char *Txt_Follow;
    extern const char *Txt_Unfollow;
-   extern const char *Txt_Continue;
    static const char **Label[Usr_LIST_USRS_NUM_OPTIONS] =
      {
       [Usr_OPTION_UNKNOWN		] = NULL,
@@ -5626,7 +5620,7 @@ static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_US
    HTM_UL_End ();
 
    /***** Put button to confirm *****/
-   Btn_PutButton (Btn_CONFIRM,Txt_Continue);
+   Btn_PutButton (Btn_CONTINUE);
   }
 
 /*****************************************************************************/
@@ -6328,7 +6322,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
       /***** Show alert and button to enrol students *****/
       Ale_ShowAlertAndButton (ActReqEnrSevStd,NULL,NULL,
                               NULL,NULL,
-                              Btn_CREATE,Act_GetActionText (ActRcvFrmEnrSevStd),
+                              Btn_ENROL,
 			      Ale_WARNING,Txt_No_users_found[Rol_STD]);
 
    else if (Gbl.Crs.Grps.AllGrps &&			// All groups selected
@@ -6338,7 +6332,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
       /***** Show alert and button to enrol teachers *****/
       Ale_ShowAlertAndButton (ActReqID_MdfTch,NULL,NULL,
                               NULL,NULL,
-                              Btn_CREATE,Act_GetActionText (ActReqMdfTch),
+                              Btn_ENROL,
 			      Ale_WARNING,Txt_No_users_found[Rol_TCH]);
    else
       /***** Show alert *****/

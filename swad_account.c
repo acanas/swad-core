@@ -150,7 +150,6 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    extern const char *Txt_If_you_think_you_may_have_been_registered_;
    extern const char *Txt_ID;
    extern const char *Txt_ID_identity_number;
-   extern const char *Txt_Check;
    extern const char *Txt_Skip_this_step;
 
    /***** Begin box *****/
@@ -168,12 +167,12 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 			    "size=\"16\" placeholder=\"%s\" class=\"INPUT_%s\"",
 			    Txt_ID_identity_number,The_GetSuffix ());
 	 HTM_LABEL_End ();
-	 Btn_PutButtonInline (Btn_CREATE,Txt_Check);
+	 Btn_PutButtonInline (Btn_CHECK);
       Frm_EndForm ();
 
       /***** Form to skip this step *****/
       Frm_BeginForm (ActCreMyAcc);
-	 Btn_PutButton (Btn_CONFIRM,Txt_Skip_this_step);
+	 Btn_PutButtonTxt (Btn_CONFIRM,Txt_Skip_this_step);
       Frm_EndForm ();
 
    /***** End box *****/
@@ -313,7 +312,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct Usr_
       HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 	 Frm_BeginForm (ActLogInNew);
 	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
-	    Btn_PutButtonInline (Btn_CREATE,Txt_Its_me);
+	    Btn_PutButtonTxtInline (Btn_CREATE,Txt_Its_me);
 	 Frm_EndForm ();
       HTM_TD_End ();
 
@@ -360,7 +359,6 @@ static void Acc_ShowFormRequestNewAccountWithPars (const char *NewNickWithoutArr
                                                    const char *NewEmail)
   {
    extern const char *Hlp_PROFILE_SignUp;
-   extern const char *Txt_Create;
 
    /***** Begin form to enter some data of the new user *****/
    Frm_BeginForm (ActCreUsrAcc);
@@ -379,7 +377,7 @@ static void Acc_ShowFormRequestNewAccountWithPars (const char *NewNickWithoutArr
 	 Pwd_PutFormToGetNewPasswordOnce ();
 
       /***** End table, send button and end box *****/
-      Box_BoxTableWithButtonEnd (Btn_CREATE,Txt_Create);
+      Box_BoxTableWithButtonEnd (Btn_CREATE);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -403,7 +401,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
 
       /***** Button to go to request the creation of a new account *****/
       Frm_BeginForm (ActFrmMyAcc);
-	 Btn_PutButton (Btn_CREATE,Act_GetActionText (ActCreUsrAcc));
+	 Btn_PutButton (Btn_CREATE_ACCOUNT);
       Frm_EndForm ();
 
    /***** End box *****/
@@ -852,11 +850,11 @@ static void Acc_AskIfRemoveUsrAccount (Usr_MeOrOther_t MeOrOther)
 void Acc_AskIfRemoveMyAccount (void)
   {
    extern const char *Txt_Do_you_really_want_to_completely_eliminate_your_user_account;
-   extern const char *Txt_Eliminate_my_user_account;
 
    /***** Show question and button to remove my user account *****/
    /* Begin alert */
-   Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_completely_eliminate_your_user_account);
+   Ale_ShowAlertAndButtonBegin (Ale_QUESTION,
+				Txt_Do_you_really_want_to_completely_eliminate_your_user_account);
 
    /* Show my record */
    Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Me.UsrDat);
@@ -864,13 +862,11 @@ void Acc_AskIfRemoveMyAccount (void)
    /* Show form to request confirmation */
    Frm_BeginForm (ActRemMyAcc);
       Pwd_AskForConfirmationOnDangerousAction ();
-      Btn_PutButton (Btn_REMOVE,Txt_Eliminate_my_user_account);
+      Btn_PutButton (Btn_ELIMINATE);
    Frm_EndForm ();
 
    /* End alert */
-   Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
-                              NULL,NULL,
-                              Btn_NO_BUTTON,NULL);
+   Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
 
    /***** Show forms to change my account *****/
    Acc_ShowFormChgMyAccount ();
@@ -879,13 +875,13 @@ void Acc_AskIfRemoveMyAccount (void)
 static void Acc_AskIfRemoveOtherUsrAccount (void)
   {
    extern const char *Txt_Do_you_really_want_to_completely_eliminate_the_following_user;
-   extern const char *Txt_Eliminate_user_account;
 
    if (Usr_DB_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
       /***** Show question and button to remove user account *****/
       /* Begin alert */
-      Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_completely_eliminate_the_following_user);
+      Ale_ShowAlertAndButtonBegin (Ale_QUESTION,
+				   Txt_Do_you_really_want_to_completely_eliminate_the_following_user);
 
       /* Show user's record */
       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
@@ -894,13 +890,11 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
       Frm_BeginForm (ActRemUsrGbl);
 	 Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	 Pwd_AskForConfirmationOnDangerousAction ();
-	 Btn_PutButton (Btn_REMOVE,Txt_Eliminate_user_account);
+	 Btn_PutButton (Btn_ELIMINATE);
       Frm_EndForm ();
 
       /* End alert */
-      Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
-                               NULL,NULL,
-                               Btn_NO_BUTTON,NULL);
+      Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
      }
    else
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();

@@ -192,8 +192,6 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
    extern const char *Txt_Other_nicknames;
    extern const char *Txt_Use_this_nickname;
    extern const char *Txt_New_nickname;
-   extern const char *Txt_Change;
-   extern const char *Txt_Save_changes;
    extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    static struct
      {
@@ -310,7 +308,7 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
 			Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 		     snprintf (NickWithArr,sizeof (NickWithArr),"@%s",row[0]);
 		     Par_PutParString (NULL,"NewNick",NickWithArr);	// Nickname
-			Btn_PutButtonInline (Btn_CONFIRM,Txt_Use_this_nickname);
+			Btn_PutButtonTxtInline (Btn_CONFIRM,Txt_Use_this_nickname);
 		  Frm_EndForm ();
 		 }
 
@@ -346,8 +344,8 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
 				     " class=\"Frm_C2_INPUT INPUT_%s\""
 				     " size=\"16\"",The_GetSuffix ());
 		     HTM_BR ();
-		     Btn_PutButtonInline (Btn_CREATE,NumNicks ? Txt_Change :		// I already have a nickname
-							        Txt_Save_changes);	// I have no nickname yet);
+		     Btn_PutButtonInline (NumNicks ? Btn_CREATE :	// I already have a nickname
+						     Btn_SAVE_CHANGES);	// I have no nickname yet);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 

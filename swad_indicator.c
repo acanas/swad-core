@@ -108,7 +108,6 @@ void Ind_ReqIndicatorsCourses (void)
    extern const char *Txt_Any_department;
    extern const char *Txt_Number_of_indicators;
    extern const char *Txt_Indicators_of_courses;
-   extern const char *Txt_Show_more_details;
    struct Ind_Indicators Indicators;
    char *SelectClass;
    MYSQL_RES *mysql_res;
@@ -227,7 +226,7 @@ void Ind_ReqIndicatorsCourses (void)
 	    ParCod_PutPar (ParCod_Dpt      ,Indicators.DptCod   );
 	    if (Indicators.StrChecked[0])
 	       Par_PutParString (NULL,"Indicators",Indicators.StrChecked);
-	    Btn_PutButton (Btn_CONFIRM,Txt_Show_more_details);
+	    Btn_PutButton (Btn_SHOW_MORE_DETAILS);
 	 Frm_EndForm ();
 	}
 
@@ -373,12 +372,11 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (struct Ind_Indicators *Indi
                                                      unsigned NumCrss)
   {
    extern const char *Txt_The_list_of_X_courses_is_too_large_to_be_displayed;
-   extern const char *Txt_Show_anyway;
 
    /***** Show alert and button to confirm that I want to see the big list *****/
    Ale_ShowAlertAndButton (Gbl.Action.Act,NULL,NULL,
                            Ind_PutParsConfirmIWantToSeeBigList,Indicators,
-                           Btn_CONFIRM,Txt_Show_anyway,
+                           Btn_SHOW,
 			   Ale_WARNING,Txt_The_list_of_X_courses_is_too_large_to_be_displayed,
                            NumCrss);
   }

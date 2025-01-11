@@ -283,9 +283,7 @@ static void Ale_ShowFixAlert (Ale_AlertType_t AlertType,const char *Txt)
      {
       /****** Print fix alert and button ******/
       Ale_ShowFixAlertAndButtonBegin (AlertType,Txt);
-      Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
-			         NULL,NULL,
-			         Btn_NO_BUTTON,NULL);
+      Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
      }
   }
 
@@ -298,7 +296,6 @@ void Ale_ShowLastAlertAndButtonGo (Act_Action_t NextAction,
 				   const char *Where)
   {
    extern const char *Txt_Go_to_X_QUESTION;
-   extern const char *Txt_Go;
    char *Title;
 
    /***** Show last alert and then reset it *****/
@@ -313,9 +310,7 @@ void Ale_ShowLastAlertAndButtonGo (Act_Action_t NextAction,
    HTM_DIV_End ();
 
    /***** Show button *****/
-   Ale_ShowAlertAndButtonEnd (NextAction,NULL,NULL,
-                              FuncPars,Args,
-                              Btn_GO,Txt_Go);
+   Ale_ShowAlertAndButtonEnd (NextAction,NULL,NULL,FuncPars,Args,Btn_GO);
   }
 
 /*****************************************************************************/
@@ -340,13 +335,10 @@ void Ale_ShowAlertRemove (Act_Action_t NextAction,const char *Anchor,
                           void (*FuncPars) (void *Args),void *Args,
 			  const char *Txt,const char *Title)
   {
-   extern const char *Txt_Remove;
-
    Ale_ShowAlertAndButton (NextAction,Anchor,NULL,
                            FuncPars,Args,
-			   Btn_REMOVE,Txt_Remove,
-			   Ale_QUESTION,Txt,
-			   Title);
+			   Btn_REMOVE,
+			   Ale_QUESTION,Txt,Title);
   }
 
 /*****************************************************************************/
@@ -355,7 +347,7 @@ void Ale_ShowAlertRemove (Act_Action_t NextAction,const char *Anchor,
 
 void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
                              void (*FuncPars) (void *Args),void *Args,
-                             Btn_Button_t Button,const char *TxtButton,
+                             Btn_Button_t Button,
 			     Ale_AlertType_t AlertType,const char *fmt,...)
   {
    va_list ap;
@@ -375,9 +367,7 @@ void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,const ch
 
    /****** Print fix alert and button ******/
    Ale_ShowFixAlertAndButtonBegin (AlertType,Txt);
-   Ale_ShowAlertAndButtonEnd (NextAction,Anchor,OnSubmit,
-			      FuncPars,Args,
-			      Button,TxtButton);
+   Ale_ShowAlertAndButtonEnd (NextAction,Anchor,OnSubmit,FuncPars,Args,Button);
 
    /***** Free text *****/
    if (Txt)
@@ -500,25 +490,22 @@ static void Ale_ShowFixAlertAndButtonBegin (Ale_AlertType_t AlertType,const char
 
 void Ale_ShowAlertAndButtonEnd (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
                                 void (*FuncPars) (void *Args),void *Args,
-                                Btn_Button_t Button,const char *TxtButton)
+                                Btn_Button_t Button)
   {
       /***** Optional button *****/
-      if (NextAction != ActUnk &&
-	  Button != Btn_NO_BUTTON &&
-	  TxtButton)
-	 if (TxtButton[0])
-	   {
-	    /* Begin form */
-	    Frm_BeginFormAnchorOnSubmit (NextAction,Anchor,OnSubmit);
-	       if (FuncPars)
-		  FuncPars (Args);
+      if (NextAction != ActUnk && Button != Btn_NO_BUTTON)
+	{
+	 /* Begin form */
+	 Frm_BeginFormAnchorOnSubmit (NextAction,Anchor,OnSubmit);
+	    if (FuncPars)
+	       FuncPars (Args);
 
-	       /* Put button */
-	       Btn_PutButton (Button,TxtButton);
+	    /* Put button */
+	    Btn_PutButton (Button);
 
-	    /* End form */
-	    Frm_EndForm ();
-	   }
+	 /* End form */
+	 Frm_EndForm ();
+	}
 
       /***** End box *****/
       HTM_DIV_End ();

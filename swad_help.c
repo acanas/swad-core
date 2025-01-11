@@ -54,8 +54,7 @@ extern struct Globals Gbl;
 
 static void Hlp_ShowRowHelpWhatWouldYouLikeToDo (const char *Description,
                                                  Act_Action_t Action,
-                                                 Btn_Button_t Button,
-                                                 const char *TxtButton);
+                                                 Btn_Button_t Button);
 
 /*****************************************************************************/
 /*************************** Show contextual help ****************************/
@@ -70,9 +69,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
    extern const char *Txt_Enrol_students;
    extern const char *Txt_Go_to_one_of_my_courses;
    extern const char *Txt_Remove_me_from_THE_COURSE_X;
-   extern const char *Txt_Remove;
    extern const char *Txt_Enrol_me;
-   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Select_or_create_one_course_in_X;
    extern const char *Txt_Select_or_create_one_degree_in_X;
    extern const char *Txt_Select_or_create_one_center_in_X;
@@ -139,7 +136,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 			      Err_NotEnoughMemoryExit ();
 			   Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
 								ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs],
-								Btn_REMOVE,Txt_Remove);
+								Btn_REMOVE);
 			   free (Description);
 			  }
 	             break;
@@ -148,7 +145,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		     /***** Request my registration in this course *****/
 		     Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Enrol_me,
 							  ActReqSignUp,
-							  Btn_CREATE,Act_GetActionText (ActSignUp));
+							  Btn_ENROL);
 		     break;
 	         }
 	      }
@@ -162,13 +159,13 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		     /***** Request students enrolment *****/
 		     Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Enrol_students,
 							  ActReqEnrSevStd,
-							  Btn_CREATE,Act_GetActionText (ActRcvFrmEnrSevStd));
+							  Btn_ENROL);
 
 	       if (Gbl.Action.Act != ActMyCrs)	// I am not seeing the action to list my courses
 		  /***** Request list my courses *****/
 		  Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Go_to_one_of_my_courses,
 						       ActMyCrs,
-						       Btn_CONFIRM,Act_GetActionText (ActMyCrs));
+						       Btn_GO);
 	      }
 
 	    /***** Go to list of hierarchy subnodes
@@ -181,8 +178,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		  Err_NotEnoughMemoryExit ();
 	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
 						    SelectOrCreate[Gbl.Hierarchy.Level].Action,
-						    Btn_CONFIRM,
-						    Txt_HIERARCHY_PLURAL_Abc[Gbl.Hierarchy.Level + 1]);
+						    Btn_GO);
 	       free (Description);
 	      }
 
@@ -190,14 +186,14 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	       /***** Upload my photo *****/
 	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Upload_my_picture,
 						    ActReqMyPho,
-						    Btn_CREATE,Act_GetActionText (ActUpdMyPho));
+						    Btn_UPLOAD_PHOTO);
 	   }
 	 else					// I am not logged
 	   {
 	    /***** Log in *****/
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Log_in,
 						 ActFrmLogIn,
-						 Btn_CONFIRM,Act_GetActionText (ActLogIn));
+						 Btn_GO);
 
 	    /***** Sign up *****/
 	    if (asprintf (&Description,Txt_New_on_PLATFORM_Sign_up,
@@ -205,7 +201,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	       Err_NotEnoughMemoryExit ();
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
 						 ActFrmMyAcc,
-						 Btn_CREATE,Act_GetActionText (ActCreUsrAcc));
+						 Btn_CREATE_ACCOUNT);
 	    free (Description);
 	   }
 
@@ -220,8 +216,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
 static void Hlp_ShowRowHelpWhatWouldYouLikeToDo (const char *Description,
                                                  Act_Action_t Action,
-                                                 Btn_Button_t Button,
-                                                 const char *TxtButton)
+                                                 Btn_Button_t Button)
   {
    HTM_TR_Begin (NULL);
 
@@ -233,7 +228,7 @@ static void Hlp_ShowRowHelpWhatWouldYouLikeToDo (const char *Description,
       /***** Button *****/
       HTM_TD_Begin ("class=\"LM\"");
 	 Frm_BeginForm (Action);
-	    Btn_PutButtonInline (Button,TxtButton);
+	    Btn_PutButtonInline (Button);
 	 Frm_EndForm ();
       HTM_TD_End ();
 

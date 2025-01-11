@@ -116,7 +116,7 @@ void Adm_ReqAddAdm (Hie_Level_t Level)
 		  /***** Show question and button to register user as administrator *****/
 		  /* Begin alert */
 		  Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_enrol_the_following_user_as_an_administrator_of_X,
-					   Gbl.Hierarchy.Node[Level].FullName);
+					       Gbl.Hierarchy.Node[Level].FullName);
 
 		  /* Show user's record */
 		  Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
@@ -124,7 +124,7 @@ void Adm_ReqAddAdm (Hie_Level_t Level)
 		  /* End alert */
 		  Ale_ShowAlertAndButtonEnd (Actions[Level],NULL,NULL,
 					     Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-					     Btn_CREATE,Act_GetActionText (Actions[Level]));
+					     Btn_ENROL);
 		 }
                break;
             case Usr_CAN_NOT:
@@ -361,8 +361,6 @@ static void Adm_AskIfRemAdm (Usr_MeOrOther_t MeOrOther,Hie_Level_t Level)
   {
    extern const char *Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_X;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X;
-   extern const char *Txt_Remove_me_as_an_administrator;
-   extern const char *Txt_Remove_USER_as_an_administrator;
    static Act_Action_t ActRemAdm[Hie_NUM_LEVELS] =
      {
       [Hie_UNK] = ActUnk,
@@ -378,26 +376,21 @@ static void Adm_AskIfRemAdm (Usr_MeOrOther_t MeOrOther,Hie_Level_t Level)
       [Usr_ME   ] = Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_X,
       [Usr_OTHER] = Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X,
      };
-   const char *TxtButton[Usr_NUM_ME_OR_OTHER] =
-     {
-      [Usr_ME   ] = Txt_Remove_me_as_an_administrator,
-      [Usr_OTHER] = Txt_Remove_USER_as_an_administrator,
-     };
 
    if (Usr_DB_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
       /***** Show question and button to remove user as administrator *****/
       /* Begin alert */
       Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Question[MeOrOther],
-			       Gbl.Hierarchy.Node[Level].FullName);
+			           Gbl.Hierarchy.Node[Level].FullName);
 
       /* Show user's record */
       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
       /* End alert */
       Ale_ShowAlertAndButtonEnd (ActRemAdm[Level],NULL,NULL,
-                               Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-                               Btn_REMOVE,TxtButton[MeOrOther]);
+                                 Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+                                 Btn_REMOVE);
      }
    else
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();

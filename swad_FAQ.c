@@ -140,7 +140,6 @@ void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
    extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Txt_Question;
    extern const char *Txt_Answer;
-   extern const char *Txt_Save_changes;
 
    switch (ViewType)
      {
@@ -174,7 +173,7 @@ void FAQ_WriteCellEditQaA (struct Tre_Node *Node,
 
 	    /* Button to save changes */
 	    HTM_BR ();
-	    Btn_PutButtonInline (Btn_CONFIRM,Txt_Save_changes);
+	    Btn_PutButtonInline (Btn_SAVE_CHANGES);
 
 	 Frm_EndForm ();
 	 break;
@@ -192,7 +191,6 @@ void FAQ_WriteCellNewQaA (void)
   {
    extern const char *Txt_New_question;
    extern const char *Txt_Answer;
-   extern const char *Txt_Create;
 
    /***** Question *****/
    HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,"",
@@ -211,7 +209,7 @@ void FAQ_WriteCellNewQaA (void)
 
    /***** Button to save changes *****/
    HTM_BR ();
-   Btn_PutButtonInline (Btn_CREATE,Txt_Create);
+   Btn_PutButtonInline (Btn_CREATE);
   }
 
 /*****************************************************************************/

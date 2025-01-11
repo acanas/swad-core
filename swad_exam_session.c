@@ -927,8 +927,8 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session)
       Btn_Button_t Button;
      } Forms[OldNew_NUM_OLD_NEW] =
      {
-      [OldNew_OLD] = {ActChgExaSes,Btn_CONFIRM},
-      [OldNew_NEW] = {ActNewExaSes,Btn_CREATE }
+      [OldNew_OLD] = {ActChgExaSes,Btn_SAVE_CHANGES},
+      [OldNew_NEW] = {ActNewExaSes,Btn_CREATE      }
      };
    static Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {

@@ -184,7 +184,6 @@ void Lnk_WriteCellEditLnk (struct Tre_Node *Node,
    extern const char *Txt_Title;
    extern const char *Txt_Description;
    extern const char *Txt_URL;
-   extern const char *Txt_Save_changes;
    static HTM_Attributes_t Attributes[Lnk_NUM_FIELDS] =
      {
       [Lnk_TITLE	] = HTM_REQUIRED,
@@ -226,7 +225,7 @@ void Lnk_WriteCellEditLnk (struct Tre_Node *Node,
 	    HTM_BR ();
 
 	    /* Button to save changes */
-	    Btn_PutButtonInline (Btn_CONFIRM,Txt_Save_changes);
+	    Btn_PutButtonInline (Btn_SAVE_CHANGES);
 
 	 Frm_EndForm ();
 	 break;
@@ -245,7 +244,6 @@ void Lnk_WriteCellNewLnk (void)
    extern const char *Txt_Title;
    extern const char *Txt_Description;
    extern const char *Txt_URL;
-   extern const char *Txt_Save_changes;
    unsigned NumField;
 
    /***** Fields *****/
@@ -268,7 +266,7 @@ void Lnk_WriteCellNewLnk (void)
    HTM_BR ();
 
    /***** Button to save changes *****/
-   Btn_PutButtonInline (Btn_CREATE,Txt_Save_changes);
+   Btn_PutButtonInline (Btn_CREATE);
   }
 
 /*****************************************************************************/

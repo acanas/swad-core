@@ -120,7 +120,6 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Test;
-   extern const char *Txt_Generate_test;
    extern const char *Txt_No_questions;
    MYSQL_RES *mysql_res;
    char TagTxt[Tag_MAX_BYTES_TAG + 1];
@@ -166,7 +165,7 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
 	       HTM_TABLE_End ();
 
 	       /***** Send button *****/
-	       Btn_PutButton (Btn_CONFIRM,Txt_Generate_test);
+	       Btn_PutButton (Btn_CONTINUE);
 
 	    Frm_EndForm ();
 	   }

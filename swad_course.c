@@ -1559,9 +1559,7 @@ void Crs_ContEditAfterChgCrs (void)
       Crs_PutButtonToRegisterInCrs ();
 
    /***** End alert *****/
-   Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
-			      NULL,NULL,
-			      Btn_NO_BUTTON,NULL);
+   Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
 
    /***** Show possible delayed alerts *****/
    Ale_ShowAlerts (NULL);
@@ -1584,7 +1582,7 @@ static void Crs_PutButtonToGoToCrs (void)
      {
       Frm_BeginForm (ActSeeCrsInf);
 	 ParCod_PutPar (ParCod_Crs,Crs_EditingCrs->HieCod);
-	 Btn_PutButton (Btn_GO,Str_BuildGoToTitle (Crs_EditingCrs->ShrtName));
+	 Btn_PutButtonTxt (Btn_GO,Str_BuildGoToTitle (Crs_EditingCrs->ShrtName));
 	 Str_FreeGoToTitle ();
       Frm_EndForm ();
      }
@@ -1596,14 +1594,12 @@ static void Crs_PutButtonToGoToCrs (void)
 
 static void Crs_PutButtonToRegisterInCrs (void)
   {
-   extern const char *Txt_Enrol_me;
-
    Frm_BeginForm (ActReqSignUp);
       // If the course being edited is different to the current one...
       if (Crs_EditingCrs->HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
 	 ParCod_PutPar (ParCod_Crs,Crs_EditingCrs->HieCod);
 
-      Btn_PutButton (Btn_CREATE,Txt_Enrol_me);
+      Btn_PutButton (Btn_ENROL);
 
    Frm_EndForm ();
   }
@@ -1908,7 +1904,6 @@ void Crs_AskRemoveOldCrss (void)
    extern const char *Txt_Eliminate_old_courses;
    extern const char *Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2;
    extern const char *Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2;
-   extern const char *Txt_Eliminate;
    unsigned MonthsWithoutAccess = Crs_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
    unsigned i;
 
@@ -1939,7 +1934,7 @@ void Crs_AskRemoveOldCrss (void)
       HTM_LABEL_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_REMOVE,Txt_Eliminate);
+      Box_BoxWithButtonEnd (Btn_ELIMINATE);
 
    /***** End form *****/
    Frm_EndForm ();

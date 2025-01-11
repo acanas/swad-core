@@ -1495,11 +1495,10 @@ static bool Inf_CheckIfInfoAvailable (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
 
 static void Inf_FormToEnterEditor (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
   {
-   extern const char *Txt_Edit;
 
    Frm_BeginForm (Inf_ActionsInfo[InfoSrc][InfoType]);
       Inf_PutParInfoType (&InfoType);
-      Btn_PutButtonInline (Btn_CONFIRM,Txt_Edit);
+      Btn_PutButtonInline (Btn_EDIT);
    Frm_EndForm ();
   }
 
@@ -1513,7 +1512,7 @@ static void Inf_FormToEnterPageUploader (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
 
    Frm_BeginForm (Inf_ActionsInfo[InfoSrc][InfoType]);
       Inf_PutParInfoType (&InfoType);
-      Btn_PutButtonInline (Btn_CONFIRM,Txt_Upload);
+      Btn_PutButtonTxtInline (Btn_CONFIRM,Txt_Upload);
    Frm_EndForm ();
   }
 
@@ -1903,7 +1902,6 @@ void Inf_EditPlainTxtInfo (void)
    extern const char *Hlp_COURSE_Links_edit;
    extern const char *Hlp_COURSE_Assessment_edit;
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
-   extern const char *Txt_Save_changes;
    static struct Act_ActionFunc Actions[Inf_NUM_TYPES] =
      {
       [Inf_UNKNOWN_TYPE	] = {ActUnk		,NULL,NULL},
@@ -1968,7 +1966,7 @@ void Inf_EditPlainTxtInfo (void)
 	 HTM_DIV_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CONFIRM,Txt_Save_changes);
+      Box_BoxWithButtonEnd (Btn_SAVE_CHANGES);
    Frm_EndForm ();
   }
 
@@ -1987,7 +1985,6 @@ void Inf_EditRichTxtInfo (void)
    extern const char *Hlp_COURSE_Links_edit;
    extern const char *Hlp_COURSE_Assessment_edit;
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
-   extern const char *Txt_Save_changes;
    static struct Act_ActionFunc Actions[Inf_NUM_TYPES] =
      {
       [Inf_UNKNOWN_TYPE	] = {ActUnk		,NULL,NULL},
@@ -2052,7 +2049,7 @@ void Inf_EditRichTxtInfo (void)
       HTM_DIV_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CONFIRM,Txt_Save_changes);
+      Box_BoxWithButtonEnd (Btn_SAVE_CHANGES);
    Frm_EndForm ();
   }
 
@@ -2315,7 +2312,6 @@ void Inf_ReceivePagInfo (void)
 void Inf_EditURLInfo (void)
   {
    extern const char *Txt_URL;
-   extern const char *Txt_Save_changes;
    char URL[WWW_MAX_BYTES_WWW + 1];
    char PathFile[PATH_MAX + 1];
    FILE *FileURL;
@@ -2366,7 +2362,7 @@ void Inf_EditURLInfo (void)
 	 HTM_DIV_End ();
 
 	 /***** Send button *****/
-	 Btn_PutButton (Btn_CREATE,Txt_Save_changes);
+	 Btn_PutButton (Btn_SAVE_CHANGES);
 
       /***** End form *****/
       Frm_EndForm ();

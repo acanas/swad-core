@@ -178,7 +178,6 @@ void Prf_ReqUserProfile (void)
    extern const char *Hlp_START_Profiles_view_public_profile;
    extern const char *Txt_Another_user_s_profile;
    extern const char *Txt_Nickname;
-   extern const char *Txt_Continue;
    char NickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
 
    if (Gbl.Usrs.Me.Logged)
@@ -211,7 +210,7 @@ void Prf_ReqUserProfile (void)
 	 HTM_LABEL_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CONFIRM,Txt_Continue);
+      Box_BoxWithButtonEnd (Btn_CONTINUE);
 
    /***** End form *****/
    Frm_EndForm ();

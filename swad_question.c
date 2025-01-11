@@ -193,7 +193,7 @@ void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions)
 	    HTM_TABLE_End ();
 
 	    /***** Send button *****/
-	    Btn_PutButton (Btn_CONFIRM,Txt_Show_questions);
+	    Btn_PutButtonTxt (Btn_CONFIRM,Txt_Show_questions);
 
 	 Frm_EndForm ();
 	}
@@ -363,7 +363,7 @@ void Qst_ShowFormRequestSelectQstsForExamSet (struct Exa_Exams *Exams,
 	    HTM_TABLE_End ();
 
 	    /***** Send button *****/
-	    Btn_PutButton (Btn_CONFIRM,Txt_Show_questions);
+	    Btn_PutButtonTxt (Btn_CONFIRM,Txt_Show_questions);
 
 	 Frm_EndForm ();
 	}
@@ -418,7 +418,7 @@ void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
 	    HTM_TABLE_End ();
 
 	    /***** Send button *****/
-	    Btn_PutButton (Btn_CONFIRM,Txt_Show_questions);
+	    Btn_PutButtonTxt (Btn_CONFIRM,Txt_Show_questions);
 
 	 Frm_EndForm ();
 	}
@@ -1109,7 +1109,7 @@ void Qst_ListOneOrMoreQstsForSelectionForExamSet (struct Exa_Exams *Exams,
 	 HTM_TABLE_End ();
 
 	 /***** Button to add questions *****/
-	 Btn_PutButton (Btn_CREATE,Txt_Add_questions);
+	 Btn_PutButtonTxt (Btn_CREATE,Txt_Add_questions);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -1190,7 +1190,7 @@ void Qst_ListOneOrMoreQstsForSelectionForGame (struct Gam_Games *Games,
 	 HTM_TABLE_End ();
 
 	 /***** Button to add questions *****/
-	 Btn_PutButton (Btn_CREATE,Txt_Add_questions);
+	 Btn_PutButtonTxt (Btn_CREATE,Txt_Add_questions);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -1814,8 +1814,6 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
    extern const char *Txt_Shuffle;
    extern const char *Txt_Expand;
    extern const char *Txt_Contract;
-   extern const char *Txt_Save_changes;
-   extern const char *Txt_Create;
    static struct
      {
       Act_Action_t Action;
@@ -1823,8 +1821,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
       const char **Txt;
      } Forms[OldNew_NUM_OLD_NEW] =
      {
-      [OldNew_OLD] = {ActChgTstQst,Btn_CONFIRM,&Txt_Save_changes},
-      [OldNew_NEW] = {ActNewTstQst,Btn_CREATE ,&Txt_Create      }
+      [OldNew_OLD] = {ActChgTstQst,Btn_SAVE_CHANGES},
+      [OldNew_NEW] = {ActNewTstQst,Btn_CREATE      }
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2216,7 +2214,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
       HTM_TABLE_End ();	// Table for this question
 
       /***** Send button *****/
-      Btn_PutButton (Forms[OldNewQst].Button,*Forms[OldNewQst].Txt);
+      Btn_PutButton (Forms[OldNewQst].Button);
 
    /***** End form *****/
    Frm_EndForm ();

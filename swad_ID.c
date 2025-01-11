@@ -642,7 +642,7 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 				  "id=\"NewID\" class=\"Frm_C2_INPUT INPUT_%s\""
 				  " size=\"16\"",The_GetSuffix ());
 		  HTM_BR ();
-		  Btn_PutButtonInline (Btn_CREATE,Txt_Add_this_ID);
+		  Btn_PutButtonTxtInline (Btn_CREATE,Txt_Add_this_ID);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 

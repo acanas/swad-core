@@ -1461,7 +1461,6 @@ static void Att_ListEventOnlyMeAsStudent (struct Att_Event *Event)
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Save_changes;
    static Usr_Can_t ICanMakeAnyChange;
 
    /***** Set who can edit *****/
@@ -1517,7 +1516,7 @@ static void Att_ListEventOnlyMeAsStudent (struct Att_Event *Event)
       /* Send button and end form */
       if (ICanMakeAnyChange == Usr_CAN)
 	{
-	    Btn_PutButton (Btn_CONFIRM,Txt_Save_changes);
+	    Btn_PutButton (Btn_SAVE_CHANGES);
 	 Frm_EndForm ();
 	}
 
@@ -1537,7 +1536,6 @@ static void Att_ListEventStudents (struct Att_Events *Events)
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Save_changes;
    unsigned NumUsr;
    struct Usr_Data UsrDat;
    static Usr_Can_t ICanMakeAnyChange;
@@ -1621,7 +1619,7 @@ static void Att_ListEventStudents (struct Att_Events *Events)
             /* Send button and end form */
 	    if (ICanMakeAnyChange)
 	      {
-		  Btn_PutButton (Btn_CONFIRM,Txt_Save_changes);
+		  Btn_PutButton (Btn_SAVE_CHANGES);
 	       Frm_EndForm ();
 	      }
 
@@ -2187,7 +2185,6 @@ static void Att_ReqListOrPrintUsrsAttendanceCrs (__attribute__((unused)) void *A
   {
    extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *Txt_Attendance_list;
-   extern const char *Txt_View_attendance;
    struct Att_Events Events;
 
    /***** Reset attendance events *****/
@@ -2202,7 +2199,7 @@ static void Att_ReqListOrPrintUsrsAttendanceCrs (__attribute__((unused)) void *A
 				     NULL,NULL,
 				     Txt_Attendance_list,
 				     Hlp_USERS_Attendance_attendance_list,
-				     Txt_View_attendance,
+				     Btn_CONTINUE,
 				     Frm_DONT_PUT_FORM);	// Do not put form with date range
 
    /***** Free list of attendance events *****/
@@ -2597,8 +2594,6 @@ static void Att_PutParsToPrintStdsList (void *Events)
 
 static void Att_PutButtonToShowDetails (const struct Att_Events *Events)
   {
-   extern const char *Txt_Show_more_details;
-
    /***** Button to show more details *****/
    /* Begin form */
    Frm_BeginFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_DETAILS_ID);
@@ -2610,7 +2605,7 @@ static void Att_PutButtonToShowDetails (const struct Att_Events *Events)
 	    Par_PutParString (NULL,"AttCods",Events->StrAttCodsSelected);
 
       /* Button */
-      Btn_PutButton (Btn_CONFIRM,Txt_Show_more_details);
+      Btn_PutButton (Btn_SHOW_MORE_DETAILS);
 
    /* End form */
    Frm_EndForm ();

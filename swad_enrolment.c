@@ -224,7 +224,7 @@ void Enr_PutButtonInlineToEnrolStds (long CrsCod,
 					Lay_NO_HORIZONTAL_LINE_AT_RIGHT);
 	    Frm_BeginForm (ActReqEnrSevStd);
 	       ParCod_PutPar (ParCod_Crs,CrsCod);
-	       Btn_PutButtonInline (Btn_CREATE,Act_GetActionText (ActRcvFrmEnrSevStd));
+	       Btn_PutButtonTxtInline (Btn_ENROL,Act_GetActionText (ActRcvFrmEnrSevStd));
 	    Frm_EndForm ();
 	 HTM_LI_End ();
 	}
@@ -377,7 +377,6 @@ static void Enr_NotifyAfterEnrolment (const struct Usr_Data *UsrDat,
 void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncPars) (void))
   {
    extern const char *Txt_nick_email_or_ID;
-   extern const char *Txt_Continue;
 
    /***** Form to request user's ID, @nickname or email address *****/
    Frm_BeginForm (NextAction);
@@ -397,7 +396,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncPars) (v
 		      " class=\"INPUT_%s\"",The_GetSuffix ());
 
       /***** Send button*****/
-      Btn_PutButton (Btn_CONFIRM,Txt_Continue);
+      Btn_PutButton (Btn_CONTINUE);
 
    Frm_EndForm ();
   }
@@ -412,8 +411,6 @@ void Enr_ReqAcceptEnrolmentInCrs (void)
    extern const char *Txt_Enrolment;
    extern const char *Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_Y;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Confirm_my_enrolment;
-   extern const char *Txt_Remove_me_from_this_course;
    static struct
      {
       struct
@@ -442,14 +439,14 @@ void Enr_ReqAcceptEnrolmentInCrs (void)
       if (!WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Accept)
 	 Err_WrongRoleExit ();
       Frm_BeginForm (WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Accept);
-	 Btn_PutButtonInline (Btn_CREATE,Txt_Confirm_my_enrolment);
+	 Btn_PutButtonInline (Btn_CONFIRM);
       Frm_EndForm ();
 
       /***** Send button to refuse enrolment in the current course *****/
       if (!WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Refuse)
 	 Err_WrongRoleExit ();
       Frm_BeginForm (WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Refuse);
-	 Btn_PutButtonInline (Btn_REMOVE,Txt_Remove_me_from_this_course);
+	 Btn_PutButtonInline (Btn_REMOVE);
       Frm_EndForm ();
 
    /***** End box *****/
@@ -576,7 +573,6 @@ static void Enr_ShowFormEnrRemSeveralUsrs (Rol_Role_t Role)
    extern const char *Txt_Select_the_groups_in_from_which_you_want_to_enrol_remove_users_;
    extern const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_;
    extern const char *Txt_Step_4_Confirm_the_enrolment_removing;
-   extern const char *Txt_Confirm;
    static struct
      {
       Act_Action_t NextAction;
@@ -669,7 +665,7 @@ static void Enr_ShowFormEnrRemSeveralUsrs (Rol_Role_t Role)
 	 HTM_FIELDSET_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CONFIRM,Txt_Confirm);
+      Box_BoxWithButtonEnd (Btn_CONFIRM);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -699,7 +695,6 @@ void Enr_AskRemoveOldUsrs (void)
    extern const char *Txt_Eliminate_old_users;
    extern const char *Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2;
    extern const char *Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_2_OF_2;
-   extern const char *Txt_Eliminate;
    unsigned Months;
 
    /***** Begin form *****/
@@ -728,7 +723,7 @@ void Enr_AskRemoveOldUsrs (void)
 	 HTM_LABEL_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_REMOVE,Txt_Eliminate);
+      Box_BoxWithButtonEnd (Btn_ELIMINATE);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1986,21 +1981,19 @@ void Enr_AskRemAllStdsThisCrs (void)
 	{
 	 /***** Show question and button to remove students *****/
 	 /* Begin alert */
-	 Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_,
-				  NumStds,
-				  Gbl.Hierarchy.Node[Hie_CRS].FullName);
+	 Ale_ShowAlertAndButtonBegin (Ale_QUESTION,
+				      Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_,
+				      NumStds,Gbl.Hierarchy.Node[Hie_CRS].FullName);
 
 	 /* Show form to request confirmation */
 	 Frm_BeginForm (ActRemAllStdCrs);
 	    Grp_PutParAllGroups ();
 	    Pwd_AskForConfirmationOnDangerousAction ();
-	    Btn_PutButton (Btn_REMOVE,Txt_Remove_all_students);
+	    Btn_PutButtonTxt (Btn_REMOVE,Txt_Remove_all_students);
 	 Frm_EndForm ();
 
 	 /* End alert */
-	 Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
-				  NULL,NULL,
-				  Btn_NO_BUTTON,NULL);
+	 Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
 	}
       else	// Gbl.Hierarchy.Node[Hie_CRS].NumUsrs[Rol_STD] == 0
 	 /***** Show warning indicating no students found *****/
@@ -2206,7 +2199,6 @@ void Enr_AskIfRejectSignUp (void)
    extern const char *Txt_THE_USER_X_is_already_enroled_in_the_course_Y;
    extern const char *Txt_Do_you_really_want_to_reject_the_enrolment_request_;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Reject;
 
    Rol_Role_t Role;
 
@@ -2241,17 +2233,17 @@ void Enr_AskIfRejectSignUp (void)
 	       /***** Show question and button to reject user's enrolment request *****/
 	       /* Begin alert */
 	       Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_reject_the_enrolment_request_,
-					Gbl.Usrs.Other.UsrDat.FullName,
-					Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Other.UsrDat.Sex],
-					Gbl.Hierarchy.Node[Hie_CRS].FullName);
+					    Gbl.Usrs.Other.UsrDat.FullName,
+					    Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Other.UsrDat.Sex],
+					    Gbl.Hierarchy.Node[Hie_CRS].FullName);
 
 	       /* Show user's record */
 	       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
 	       /* End alert */
 	       Ale_ShowAlertAndButtonEnd (ActRejSignUp,NULL,NULL,
-					Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-					Btn_REMOVE,Txt_Reject);
+					  Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+					  Btn_REJECT);
 	      }
 	    else
 	       Err_WrongRoleExit ();
@@ -2361,8 +2353,6 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    extern const char *Txt_Role;
    extern const char *Txt_Date;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Enrol;
-   extern const char *Txt_Reject;
    extern const char *Txt_No_enrolment_requests;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -2559,7 +2549,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			Frm_BeginForm (NextAction[DesiredRole]);
 			   ParCod_PutPar (ParCod_Crs,Crs.HieCod);
 			   Usr_PutParUsrCodEncrypted (UsrDat.EnUsrCod);
-			   Btn_PutButtonInline (Btn_CREATE,Txt_Enrol);
+			   Btn_PutButtonInline (Btn_ENROL);
 			Frm_EndForm ();
 		     HTM_TD_End ();
 
@@ -2568,7 +2558,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			Frm_BeginForm (ActReqRejSignUp);
 			   ParCod_PutPar (ParCod_Crs,Crs.HieCod);
 			   Usr_PutParUsrCodEncrypted (UsrDat.EnUsrCod);
-			   Btn_PutButtonInline (Btn_REMOVE,Txt_Reject);
+			   Btn_PutButtonInline (Btn_REJECT);
 			Frm_EndForm ();
 		     HTM_TD_End ();
 
@@ -3370,8 +3360,6 @@ static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat)
   {
    extern const char *Txt_Do_you_really_want_to_be_removed_from_the_course_X;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_X;
-   extern const char *Txt_Remove_me_from_this_course;
-   extern const char *Txt_Remove_user_from_this_course;
    Usr_MeOrOther_t MeOrOther;
    static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
@@ -3384,11 +3372,6 @@ static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat)
       [Usr_ME   ] = Txt_Do_you_really_want_to_be_removed_from_the_course_X,
       [Usr_OTHER] = Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_X
      };
-   const char *TxtButton[Usr_NUM_ME_OR_OTHER] =
-     {
-      [Usr_ME   ] = Txt_Remove_me_from_this_course,
-      [Usr_OTHER] = Txt_Remove_user_from_this_course
-     };
 
    switch (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
      {
@@ -3398,7 +3381,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat)
 	 /***** Show question and button to remove user as administrator *****/
 	 /* Begin alert */
 	 Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Question[MeOrOther],
-				  Gbl.Hierarchy.Node[Hie_CRS].FullName);
+				      Gbl.Hierarchy.Node[Hie_CRS].FullName);
 
 	 /* Show user's record */
 	 Rec_ShowSharedRecordUnmodifiable (UsrDat);
@@ -3409,13 +3392,11 @@ static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat)
 	 Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
 	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	    Pwd_AskForConfirmationOnDangerousAction ();
-	    Btn_PutButton (Btn_REMOVE,TxtButton[MeOrOther]);
+	    Btn_PutButton (Btn_REMOVE);
 	 Frm_EndForm ();
 
 	 /* End alert */
-	 Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
-				    NULL,NULL,
-				    Btn_NO_BUTTON,NULL);
+	 Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
 	 break;
       case Usr_DONT_BELONG:	// User does not belong to current course
       default:

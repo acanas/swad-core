@@ -170,7 +170,6 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
    extern const char *Txt_Bibliographic_references;
    extern const char *Txt_Questions;
    extern const char *Txt_Links;
-   extern const char *Txt_Remove;
    MYSQL_RES *mysql_res;
    unsigned NumItem;
    unsigned NumItems;
@@ -291,7 +290,7 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
 	       Ale_ShowAlertAndButtonEnd (ActionsRemItem[Node->InfoType],
 					  TreSpc_LIST_ITEMS_SECTION_ID,NULL,
 					  TreSpc_PutParItmCod,&SelectedItmCod,
-					  Btn_REMOVE,Txt_Remove);
+					  Btn_REMOVE);
 	      }
 	    else
 	       Ale_ShowAlerts (TreSpc_LIST_ITEMS_SECTION_ID);

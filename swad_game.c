@@ -1323,8 +1323,6 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
    extern const char *Txt_Maximum_grade;
    extern const char *Txt_Result_visibility;
    extern const char *Txt_Description;
-   extern const char *Txt_Save_changes;
-   extern const char *Txt_Create;
    static struct
      {
       Act_Action_t Action;
@@ -1332,8 +1330,8 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
       const char **Txt;
      } Forms[OldNew_NUM_OLD_NEW] =
      {
-      [OldNew_OLD] = {ActChgGam,Btn_CONFIRM,&Txt_Save_changes},
-      [OldNew_NEW] = {ActNewGam,Btn_CREATE ,&Txt_Create      }
+      [OldNew_OLD] = {ActChgGam,Btn_SAVE_CHANGES},
+      [OldNew_NEW] = {ActNewGam,Btn_CREATE      }
      };
 
    /***** Begin form *****/
@@ -1409,7 +1407,7 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
       HTM_TABLE_End ();
 
       /***** Send button *****/
-      Btn_PutButton (Forms[OldNewGame].Button,*Forms[OldNewGame].Txt);
+      Btn_PutButton (Forms[OldNewGame].Button);
 
    /***** End form *****/
    Frm_EndForm ();

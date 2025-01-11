@@ -328,14 +328,13 @@ static void MchRes_PutFormToSelUsrsToViewMchResults (__attribute__((unused)) voi
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Results;
-   extern const char *Txt_View_results;
 
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
 				     ActSeeUsrMchResCrs,
 				     NULL,NULL,
 				     Txt_Results,
 				     Hlp_ASSESSMENT_Games_results,
-				     Txt_View_results,
+				     Btn_VIEW_RESULTS,
 				     Frm_DONT_PUT_FORM);	// Do not put form with date range
   }
 

@@ -781,7 +781,6 @@ static void Mai_PutFormToSelectUsrsToListEmails (__attribute__((unused)) void *A
   {
    extern const char *Hlp_COMMUNICATION_Email;
    extern const char *Txt_Email;
-   extern const char *Txt_View_email_addresses;
 
    /***** List users to select some of them *****/
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
@@ -789,7 +788,7 @@ static void Mai_PutFormToSelectUsrsToListEmails (__attribute__((unused)) void *A
 				     NULL,NULL,
 				     Txt_Email,
 				     Hlp_COMMUNICATION_Email,
-				     Txt_View_email_addresses,
+				     Btn_CONTINUE,
 				     Frm_DONT_PUT_FORM);	// Do not put form with date range
   }
 
@@ -1096,8 +1095,6 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
    extern const char *Txt_Use_this_email;
    extern const char *Txt_New_email;
    extern const char *Txt_Email;
-   extern const char *Txt_Change;
-   extern const char *Txt_Save_changes;
    extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1209,8 +1206,8 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
                if (MeOrOther == Usr_OTHER)
 	          Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	       Par_PutParString (NULL,"NewEmail",row[0]);
-	       Btn_PutButtonInline (Btn_CONFIRM,(MeOrOther == Usr_ME && NumEmail == 1) ? Txt_Confirm_email :
-								                    Txt_Use_this_email);
+	       Btn_PutButtonTxtInline (Btn_CONFIRM,(MeOrOther == Usr_ME && NumEmail == 1) ? Txt_Confirm_email :
+								                            Txt_Use_this_email);
 	    Frm_EndForm ();
 	   }
 
@@ -1243,8 +1240,8 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
 				" class=\"Frm_C2_INPUT INPUT_%s\" size=\"16\"",
 				The_GetSuffix ());
 	       HTM_BR ();
-	       Btn_PutButtonInline (Btn_CREATE,NumEmails ? Txt_Change :		// User already has an email address
-						           Txt_Save_changes);	// User has no email address yet
+	       Btn_PutButtonInline (NumEmails ? Btn_CHANGE :		// User already has an email address
+						Btn_SAVE_CHANGES);	// User has no email address yet
 	    Frm_EndForm ();
 	 HTM_TD_End ();
 

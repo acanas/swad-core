@@ -633,7 +633,6 @@ static void ExaPrn_GetAndWriteDescription (long ExaCod)
 static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
 					    const struct ExaPrn_Print *Print)
   {
-   extern const char *Txt_I_have_finished;
    unsigned QstInd;
    struct Qst_Question Question;
 
@@ -665,7 +664,7 @@ static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
    /***** Form to end/close this exam print *****/
    Frm_BeginForm (ActEndExaPrn);
       ExaSes_PutParsEdit (Exams);
-      Btn_PutButton (Btn_CREATE,Txt_I_have_finished);
+      Btn_PutButton (Btn_DONE);
    Frm_EndForm ();
   }
 
@@ -952,7 +951,6 @@ static void ExaPrn_WriteJSToUpdateExamPrint (const struct ExaPrn_Print *Print,
 void ExaPrn_ReceivePrintAnswer (void)
   {
    extern const char *Txt_You_dont_have_access_to_the_exam;
-   extern const char *Txt_Continue;
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;
    struct ExaPrn_Print Print;
@@ -1031,7 +1029,7 @@ void ExaPrn_ReceivePrintAnswer (void)
 	 /***** Form to end/close this exam print *****/
 	 Frm_BeginForm (ActEndExaPrn);
 	    ExaSes_PutParsEdit (&Exams);
-	    Btn_PutButton (Btn_CREATE,Txt_Continue);
+	    Btn_PutButton (Btn_CONTINUE);
 	 Frm_EndForm ();
 	 break;
      }

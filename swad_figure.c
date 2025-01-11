@@ -84,7 +84,6 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
    extern const char *Txt_Scope;
    extern const char *Txt_Statistic;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
-   extern const char *Txt_Show;
    Fig_FigureType_t FigType;
    unsigned FigureTypeUnsigned;
 
@@ -151,7 +150,7 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
       HTM_TABLE_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CONFIRM,Txt_Show);
+      Box_BoxWithButtonEnd (Btn_SHOW);
 
    /***** End form *****/
    Frm_EndForm ();

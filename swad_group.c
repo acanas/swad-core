@@ -121,8 +121,7 @@ static void Grp_PutIconsMyGroups (__attribute__((unused)) void *Args);
 
 static void Grp_ShowWarningToStdsToChangeGrps (void);
 static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTyp,
-						   long SelectedGrpTypCod,
-                                                   unsigned *NumGrpsThisTypeIBelong);
+						   long SelectedGrpTypCod);
 static void Grp_ListGrpsToAddOrRemUsrs (const struct GroupType *GrpTyp,long UsrCod);
 
 static void Grp_ListGrpsForMultipleSelection (const struct GroupType *GrpTyp);
@@ -1748,13 +1747,9 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
   {
    extern const char *Hlp_USERS_Groups;
    extern const char *Txt_My_groups;
-   extern const char *Txt_Change_my_groups;
-   extern const char *Txt_Enrol_in_groups;
    extern const char *Txt_No_groups_have_been_created_in_the_course_X;
    unsigned NumGrpTyp;
    struct GroupType *GrpTyp;
-   unsigned NumGrpsThisTypeIBelong;
-   unsigned NumGrpsIBelong = 0;
    Frm_PutForm_t PutFormToChangeGrps = Frm_CheckIfInside () ? Frm_DONT_PUT_FORM :	// Inside another form (record card)?
 							      Frm_PUT_FORM;
    Usr_Can_t ICanChangeMyGrps = Usr_CAN_NOT;
@@ -1791,10 +1786,8 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 
 	    if (GrpTyp->NumGrps)	 // If there are groups of this type
 	      {
-	       if (Grp_ListGrpsForChangeMySelection (GrpTyp,SelectedGrpTypCod,
-						     &NumGrpsThisTypeIBelong) == Usr_CAN)
+	       if (Grp_ListGrpsForChangeMySelection (GrpTyp,SelectedGrpTypCod) == Usr_CAN)
 		  ICanChangeMyGrps = Usr_CAN;
-	       NumGrpsIBelong += NumGrpsThisTypeIBelong;
 	      }
 	   }
 
@@ -1802,8 +1795,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 	 if (PutFormToChangeGrps)
 	   {
 	       if (ICanChangeMyGrps == Usr_CAN)
-		  Btn_PutButton (Btn_CONFIRM,NumGrpsIBelong ? Txt_Change_my_groups :
-							      Txt_Enrol_in_groups);
+		  Btn_PutButton (Btn_SAVE_CHANGES);
 	    Frm_EndForm ();
 	   }
 	}
@@ -1896,8 +1888,7 @@ static void Grp_ShowWarningToStdsToChangeGrps (void)
 // Returns true if I can change my selection
 
 static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTyp,
-						   long SelectedGrpTypCod,
-                                                   unsigned *NumGrpsThisTypeIBelong)
+						   long SelectedGrpTypCod)
   {
    struct ListCodGrps LstGrpsIBelong;
    unsigned NumGrpThisType;
@@ -1947,7 +1938,6 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 	 Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,GrpTyp->GrpTypCod,
 				      &LstGrpsIBelong,
 				      Grp_CLOSED_AND_OPEN_GROUPS);
-	 *NumGrpsThisTypeIBelong = LstGrpsIBelong.NumGrps;
 
 	 /***** Check if I can change my selection *****/
 	 switch (Gbl.Usrs.Me.Role.Logged)
@@ -2450,7 +2440,7 @@ static void Grp_WriteGrpTypOpening (const struct GroupType *GrpTyp)
       free (Id);
 
    /***** End alert *****/
-   Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+   Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
   }
 
 /*****************************************************************************/

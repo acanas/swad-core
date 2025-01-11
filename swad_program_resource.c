@@ -112,7 +112,6 @@ void PrgRsc_WriteCellEditRsc (struct Tre_Node *Node,
 				   __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
-   extern const char *Txt_Save_changes;
 
    /***** Show current link / Show clipboard to change resource link *****/
    switch (ViewType)
@@ -139,7 +138,7 @@ void PrgRsc_WriteCellEditRsc (struct Tre_Node *Node,
 	    Rsc_ShowClipboardToChangeLink (&Node->Item.Rsc.Link,HTM_NO_ATTR);
 
 	    /* Button to save changes */
-	    Btn_PutButtonInline (Btn_CONFIRM,Txt_Save_changes);
+	    Btn_PutButtonInline (Btn_SAVE_CHANGES);
 
 	 Frm_EndForm ();
 	 break;
@@ -152,7 +151,6 @@ void PrgRsc_WriteCellEditRsc (struct Tre_Node *Node,
 void PrgRsc_WriteCellNewRsc (void)
   {
    extern const char *Txt_New_resource;
-   extern const char *Txt_Save_changes;
 
    /***** Title *****/
    HTM_INPUT_TEXT ("Title",Rsc_MAX_CHARS_RESOURCE_TITLE,"",
@@ -166,7 +164,7 @@ void PrgRsc_WriteCellNewRsc (void)
    Rsc_ShowClipboardToChangeLink (NULL,HTM_NO_ATTR);
 
    /***** Button to save changes *****/
-   Btn_PutButtonInline (Btn_CREATE,Txt_Save_changes);
+   Btn_PutButtonInline (Btn_SAVE_CHANGES);
   }
 
 /*****************************************************************************/

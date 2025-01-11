@@ -1613,7 +1613,6 @@ void Ntf_MarkAllNotifAsSeen (void)
 void Ntf_PutFormChangeNotifSentByEMail (void)
   {
    extern const char *Hlp_PROFILE_Settings_notifications;
-   extern const char *Txt_Save_changes;
    extern const char *Txt_Notifications;
    extern const char *Txt_Create_BR_notification;
    extern const char *Txt_Notify_me_BR_by_email;
@@ -1677,7 +1676,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 	    HTM_TABLE_End ();
 
 	    /***** Button to save changes *****/
-	    Btn_PutButton (Btn_CONFIRM,Txt_Save_changes);
+	    Btn_PutButton (Btn_SAVE_CHANGES);
 
 	 /***** End form *****/
 	 Frm_EndForm ();

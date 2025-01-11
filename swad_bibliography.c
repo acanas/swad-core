@@ -216,7 +216,6 @@ void Bib_WriteCellEditRef (struct Tre_Node *Node,
   {
    extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Txt_BIBLIOGRAPHY_URL;
-   extern const char *Txt_Save_changes;
    static HTM_Attributes_t Attributes[Bib_NUM_FIELDS] =
      {
       [Bib_AUTHORS	] = HTM_NO_ATTR,
@@ -261,7 +260,7 @@ void Bib_WriteCellEditRef (struct Tre_Node *Node,
 
 	    /* Button to save changes */
 	    HTM_BR ();
-	    Btn_PutButtonInline (Btn_CONFIRM,Txt_Save_changes);
+	    Btn_PutButtonInline (Btn_SAVE_CHANGES);
 
 	 Frm_EndForm ();
 	 break;
@@ -278,7 +277,6 @@ void Bib_WriteCellEditRef (struct Tre_Node *Node,
 void Bib_WriteCellNewRef (void)
   {
    extern const char *Txt_BIBLIOGRAPHY_URL;
-   extern const char *Txt_Create;
    unsigned NumField;
 
    /***** Fields *****/
@@ -301,7 +299,7 @@ void Bib_WriteCellNewRef (void)
    HTM_BR ();
 
    /***** Button to save changes *****/
-   Btn_PutButtonInline (Btn_CREATE,Txt_Create);
+   Btn_PutButtonInline (Btn_CREATE);
   }
 
 /*****************************************************************************/

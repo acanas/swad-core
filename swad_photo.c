@@ -435,7 +435,6 @@ void Pho_RecOtherUsrPhotoDetFaces (void)
 void Pho_ReqRemMyPhoto (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_your_photo;
-   extern const char *Txt_Remove;
    extern const char *Txt_The_photo_no_longer_exists;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -450,7 +449,8 @@ void Pho_ReqRemMyPhoto (void)
      {
       /***** Show question and button to remove my photo *****/
       /* Begin alert */
-      Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_remove_your_photo);
+      Ale_ShowAlertAndButtonBegin (Ale_QUESTION,
+				   Txt_Do_you_really_want_to_remove_your_photo);
 
       /* Show current photo */
       Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL,
@@ -458,8 +458,8 @@ void Pho_ReqRemMyPhoto (void)
 
       /* End alert */
       Ale_ShowAlertAndButtonEnd (ActRemMyPho,NULL,NULL,
-                               NULL,NULL,
-                               Btn_REMOVE,Txt_Remove);
+                                 NULL,NULL,
+                                 Btn_REMOVE);
      }
    else
       Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
@@ -498,7 +498,6 @@ void Pho_ReqRemUsrPhoto (void)
   {
    extern const char *Txt_Photo;
    extern const char *Txt_Do_you_really_want_to_remove_the_photo_of_X;
-   extern const char *Txt_Remove;
    extern const char *Txt_The_photo_no_longer_exists;
    static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
@@ -537,8 +536,9 @@ void Pho_ReqRemUsrPhoto (void)
 	      {
 	       /***** Show question and button to remove user's photo *****/
 	       /* Begin alert */
-	       Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_photo_of_X,
-					Gbl.Usrs.Other.UsrDat.FullName);
+	       Ale_ShowAlertAndButtonBegin (Ale_QUESTION,
+					    Txt_Do_you_really_want_to_remove_the_photo_of_X,
+					    Gbl.Usrs.Other.UsrDat.FullName);
 
 	       /* Show current photo */
 	       Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,
@@ -546,8 +546,8 @@ void Pho_ReqRemUsrPhoto (void)
 
 	       /* End alert */
 	       Ale_ShowAlertAndButtonEnd (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,NULL,
-					Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-					Btn_REMOVE,Txt_Remove);
+					  Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+					  Btn_REMOVE);
 	      }
 	    else
 	       Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
@@ -752,30 +752,35 @@ static bool Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
 
    /***** Begin alert to the user about the number of faces detected in the image *****/
    if (NumFaces.Total == 0)
-      Ale_ShowAlertAndButtonBegin (Ale_WARNING,Txt_Could_not_detect_any_face_in_front_position_);
+      Ale_ShowAlertAndButtonBegin (Ale_WARNING,
+				   Txt_Could_not_detect_any_face_in_front_position_);
    else if (NumFaces.Total == 1)
      {
       if (NumFaces.Green == 1)
-         Ale_ShowAlertAndButtonBegin (Ale_SUCCESS,Txt_A_face_marked_in_green_has_been_detected_);
+         Ale_ShowAlertAndButtonBegin (Ale_SUCCESS,
+				      Txt_A_face_marked_in_green_has_been_detected_);
       else
-         Ale_ShowAlertAndButtonBegin (Ale_WARNING,Txt_A_face_marked_in_red_has_been_detected_);
+         Ale_ShowAlertAndButtonBegin (Ale_WARNING,
+				      Txt_A_face_marked_in_red_has_been_detected_);
      }
    else        // NumFacesTotal > 1
      {
       if (NumFaces.Red == 0)
          Ale_ShowAlertAndButtonBegin (Ale_SUCCESS,Txt_X_faces_marked_in_green_have_been_detected_,
-                                  NumFaces.Green);
+                                      NumFaces.Green);
       else if (NumFaces.Green == 0)
          Ale_ShowAlertAndButtonBegin (Ale_WARNING,Txt_X_faces_marked_in_red_have_been_detected_,
-                                  NumFaces.Red);
+                                      NumFaces.Red);
       else        // NumFaces.Green > 0
         {
          if (NumFaces.Green == 1)
-            Ale_ShowAlertAndButtonBegin (Ale_SUCCESS,Txt_X_faces_have_been_detected_in_front_position_1_Z_,
-                                     NumFaces.Total,NumFaces.Red);
+            Ale_ShowAlertAndButtonBegin (Ale_SUCCESS,
+        				 Txt_X_faces_have_been_detected_in_front_position_1_Z_,
+                                         NumFaces.Total,NumFaces.Red);
          else
-            Ale_ShowAlertAndButtonBegin (Ale_SUCCESS,Txt_X_faces_have_been_detected_in_front_position_Y_Z_,
-                                     NumFaces.Total,NumFaces.Green,NumFaces.Red);
+            Ale_ShowAlertAndButtonBegin (Ale_SUCCESS,
+        				 Txt_X_faces_have_been_detected_in_front_position_Y_Z_,
+                                         NumFaces.Total,NumFaces.Green,NumFaces.Red);
         }
      }
 
@@ -816,9 +821,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
    HTM_DIV_End ();
 
    /***** End alert *****/
-   Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
-                            NULL,NULL,
-                            Btn_NO_BUTTON,NULL);
+   Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
 
    /***** Button to send another photo *****/
    return (NumFaces.Green != 0);
@@ -935,9 +938,7 @@ static void Pho_ChangePhoto2 (void)
    HTM_TABLE_End ();
 
    /***** End alert *****/
-   Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
-                            NULL,NULL,
-                            Btn_NO_BUTTON,NULL);
+   Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
   }
 
 /*****************************************************************************/

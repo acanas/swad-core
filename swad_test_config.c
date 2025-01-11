@@ -152,7 +152,6 @@ static void TstCfg_ShowFormConfig (void)
    extern const char *Txt_maximum;
    extern const char *Txt_Minimum_time_seconds_per_question_between_two_tests;
    extern const char *Txt_Result_visibility;
-   extern const char *Txt_Save_changes;
    TstCfg_Pluggable_t Pluggable;
    char StrMinTimeNxtTstPerQst[Cns_MAX_DIGITS_ULONG + 1];
 
@@ -233,7 +232,7 @@ static void TstCfg_ShowFormConfig (void)
 	 HTM_TABLE_End ();
 
 	 /***** Send button *****/
-	 Btn_PutButton (Btn_CONFIRM,Txt_Save_changes);
+	 Btn_PutButton (Btn_SAVE_CHANGES);
 
       /***** End form *****/
       Frm_EndForm ();

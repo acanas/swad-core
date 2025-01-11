@@ -260,7 +260,6 @@ void Pwd_ShowFormSendNewPwd (void)
    extern const char *Txt_If_you_have_forgotten_your_password_;
    extern const char *Txt_Forgotten_password;
    extern const char *Txt_nick_email_or_ID;
-   extern const char *Txt_Get_a_new_password;
 
    /***** Begin form *****/
    Frm_BeginForm (ActSndNewPwd);
@@ -281,7 +280,7 @@ void Pwd_ShowFormSendNewPwd (void)
 	 HTM_LABEL_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CONFIRM,Txt_Get_a_new_password);
+      Box_BoxWithButtonEnd (Btn_CONTINUE);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -579,8 +578,6 @@ void Pwd_ShowFormChgMyPwd (void)
    extern const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_;
    extern const char *Txt_Password;
    extern const char *Txt_Current_password;
-   extern const char *Txt_Change;
-   extern const char *Txt_Set_password;
    bool IHaveAPasswordInDB = (bool) Gbl.Usrs.Me.UsrDat.Password[0];
 
    /***** Begin section *****/
@@ -640,9 +637,8 @@ void Pwd_ShowFormChgMyPwd (void)
 	    Pwd_PutFormToGetNewPasswordTwice ();
 
 	 /***** End table, send button and end box *****/
-	 Box_BoxTableWithButtonEnd (Btn_CONFIRM,
-				    IHaveAPasswordInDB ? Txt_Change :
-							 Txt_Set_password);
+	 Box_BoxTableWithButtonEnd (IHaveAPasswordInDB ? Btn_SAVE_CHANGES :
+							 Btn_CREATE);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -728,7 +724,6 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
 void Pwd_ShowFormChgOtherUsrPwd (void)
   {
    extern const char *Txt_Password;
-   extern const char *Txt_Change;
    static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_UNK	  ] = ActChgPwdOth,
@@ -762,7 +757,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 	       Pwd_PutFormToGetNewPasswordTwice ();
 	    HTM_TABLE_End ();
 
-	    Btn_PutButton (Btn_CONFIRM,Txt_Change);
+	    Btn_PutButton (Btn_CHANGE);
 
 	 /* End form */
 	 Frm_EndForm ();

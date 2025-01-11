@@ -817,7 +817,6 @@ void Fol_ReqFollowTchs (void)
 
 static void Fol_RequestFollowUsrs (Act_Action_t NextAction)
   {
-   extern const char *Txt_Follow;
    extern const char *Txt_Do_you_want_to_follow_the_selected_user_whom_you_do_not_follow_yet;
    extern const char *Txt_Do_you_want_to_follow_the_X_selected_users_whom_you_do_not_follow_yet;
    unsigned NumFollowed;
@@ -835,12 +834,12 @@ static void Fol_RequestFollowUsrs (Act_Action_t NextAction)
       if (NumNotFollowed == 1)
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
 				 Fol_PutParSelectedUsrsCods,&Gbl.Usrs.Selected,
-				 Btn_CREATE,Txt_Follow,
+				 Btn_FOLLOW,
 				 Ale_QUESTION,Txt_Do_you_want_to_follow_the_selected_user_whom_you_do_not_follow_yet);
       else
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
 				 Fol_PutParSelectedUsrsCods,&Gbl.Usrs.Selected,
-				 Btn_CREATE,Txt_Follow,
+				 Btn_FOLLOW,
 				 Ale_QUESTION,Txt_Do_you_want_to_follow_the_X_selected_users_whom_you_do_not_follow_yet,
 				 NumNotFollowed);
      }
@@ -863,7 +862,6 @@ static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction)
   {
    extern const char *Txt_Do_you_want_to_stop_following_the_selected_user_whom_you_follow;
    extern const char *Txt_Do_you_want_to_stop_following_the_X_selected_users_whom_you_follow;
-   extern const char *Txt_Unfollow;
    unsigned NumFollowed;
    unsigned NumNotFollowed;
 
@@ -879,12 +877,12 @@ static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction)
       if (NumFollowed == 1)
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
 				 Fol_PutParSelectedUsrsCods,&Gbl.Usrs.Selected,
-				 Btn_CREATE,Txt_Unfollow,
+				 Btn_UNFOLLOW,
 				 Ale_QUESTION,Txt_Do_you_want_to_stop_following_the_selected_user_whom_you_follow);
       else
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
 				 Fol_PutParSelectedUsrsCods,&Gbl.Usrs.Selected,
-				 Btn_CREATE,Txt_Unfollow,
+				 Btn_UNFOLLOW,
 				 Ale_QUESTION,Txt_Do_you_want_to_stop_following_the_X_selected_users_whom_you_follow,
 				 NumFollowed);
      }

@@ -194,7 +194,6 @@ void Net_ShowFormMyWebsAndSocialNets (void)
   {
    extern const char *Hlp_PROFILE_Webs;
    extern const char *Txt_Webs_social_networks;
-   extern const char *Txt_Save_changes;
    Net_WebsAndSocialNetworks_t NumURL;
    char URL[WWW_MAX_BYTES_WWW + 1];
    char StrName[32];
@@ -251,7 +250,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	       HTM_TABLE_End ();
 
 	       /***** Confirm button *****/
-	       Btn_PutButton (Btn_CONFIRM,Txt_Save_changes);
+	       Btn_PutButton (Btn_SAVE_CHANGES);
 
 	    /***** End form *****/
 	    Frm_EndForm ();

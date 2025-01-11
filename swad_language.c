@@ -151,7 +151,6 @@ void Lan_AskChangeLanguage (void)
   {
    extern const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Do_you_want_to_change_the_language_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
-   extern const char *Txt_Switch_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
    Lan_Language_t CurrentLanguage = Gbl.Prefs.Language;
 
    /***** Get param language *****/
@@ -160,8 +159,7 @@ void Lan_AskChangeLanguage (void)
    /***** Request confirmation *****/
    Ale_ShowAlertAndButton (ActChgLan,NULL,NULL,
                            Lan_PutParLanguage,&Gbl.Prefs.Language,
-                           Btn_CONFIRM,
-                           Txt_Switch_to_LANGUAGE[Gbl.Prefs.Language],
+                           Btn_CHANGE,
                            Ale_QUESTION,Gbl.Usrs.Me.Logged ? Txt_Do_you_want_to_change_your_language_to_LANGUAGE[Gbl.Prefs.Language] :
 	                                                     Txt_Do_you_want_to_change_the_language_to_LANGUAGE[Gbl.Prefs.Language]);
 

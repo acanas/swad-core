@@ -165,6 +165,7 @@ const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[1 + Lan_NUM_LANG
 	[Lan_LANGUAGE_PT     ] = "Voc&ecirc; quer mudar suo idioma para portugu&ecirc;s?",
 	[Lan_LANGUAGE_TR     ] = "Dilinizi T&uuml;rk&ccedil;e olarak de&gbreve;i&scedil;tirmek ister misiniz?",
 	};
+/*
 const char *Txt_Switch_to_LANGUAGE[1 + Lan_NUM_LANGUAGES] =
 	{
 	[Lan_LANGUAGE_UNKNOWN] = "",
@@ -179,6 +180,7 @@ const char *Txt_Switch_to_LANGUAGE[1 + Lan_NUM_LANGUAGES] =
 	[Lan_LANGUAGE_PT     ] = "Mudar para portugu&ecirc;s",
 	[Lan_LANGUAGE_TR     ] = "T&uuml;rk&ccedil;e'ye ge&ccedil;",
 	};
+*/
 const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES] =
 	{
 	[Lan_LANGUAGE_UNKNOWN] = "",
@@ -5133,29 +5135,6 @@ const char *Txt_Change_image_video =
 	"Change image / video";	// Çeviri lazim!
 #endif
 
-const char *Txt_Change_my_groups =
-#if   L==1	// ca
-	"Canviar de grups";
-#elif L==2	// de
-	"Gruppen &auml;ndern";
-#elif L==3	// en
-	"Change my groups";
-#elif L==4	// es
-	"Cambiar de grupos";
-#elif L==5	// fr
-	"Modifier mes groupes";
-#elif L==6	// gn
-	"Cambiar de grupos";	// Okoteve traducción
-#elif L==7	// it
-	"Cambia i miei gruppi";
-#elif L==8	// pl
-	"Zmie&nacute;moje grupy";
-#elif L==9	// pt
-	"Alterar meus grupos";
-#elif L==10	// tr
-	"Change my groups";	// Çeviri lazim!
-#endif
-
 const char *Txt_CHAT_Room =
 #if   L==1	// ca
 	"Sala";
@@ -5775,29 +5754,6 @@ const char *Txt_Confirm_ID =
 	"Confirmar ID";
 #elif L==10	// tr
 	"Confirm ID";	// Çeviri lazim!
-#endif
-
-const char *Txt_Confirm_my_enrolment =
-#if   L==1	// ca
-	"Confirmar la meva inscripci&oacute;";
-#elif L==2	// de
-	"Best&auml;tigen Sie meine Registrierung";
-#elif L==3	// en
-	"Confirm my enrolment";
-#elif L==4	// es
-	"Confirmar mi inscripci&oacute;n";
-#elif L==5	// fr
-	"Confirmer mon inscription";
-#elif L==6	// gn
-	"Confirmar mi inscripci&oacute;n";	// Okoteve traducción
-#elif L==7	// it
-	"Confermare la mia iscrizione";
-#elif L==8	// pl
-	"Potwierdzenie mojej rejestracji";
-#elif L==9	// pt
-	"Confirmar o meu registo";
-#elif L==10	// tr
-	"Confirm my enrolment";			// Çeviri lazim!
 #endif
 
 const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_request_you_ =	// Warning: it is very important to include two %s in the following sentences
@@ -6685,6 +6641,29 @@ const char *Txt_Create =
 	"Criar";
 #elif L==10	// tr
 	"Yaratmak";
+#endif
+
+const char *Txt_Create_account =
+#if   L==1	// ca
+	"Crea compte";
+#elif L==2	// de
+	"Benutzerkonto anlegen";
+#elif L==3	// en
+	"Create account";
+#elif L==4	// es
+	"Crear cuenta";
+#elif L==5	// fr
+	"Cr&eacute;er compte";
+#elif L==6	// gn
+	"Ojapo cuenta";
+#elif L==7	// it
+	"Creare un account";
+#elif L==8	// pl
+	"Za&lstrok;&oacute;&zdot; konto";
+#elif L==9	// pt
+	"Criar conta";
+#elif L==10	// tr
+	"Hesab&inodot; olu&scedil;tur";
 #endif
 
 const char *Txt_Create_email_message =
@@ -8549,52 +8528,6 @@ const char *Txt_Degrees_with_pending_courses =
 	"Graus com disciplinas pendentes";
 #elif L==10	// tr
 	"Degrees with pending courses";	// Çeviri lazim!
-#endif
-
-const char *Txt_Delete_messages_received =
-#if   L==1	// ca
-	"Eliminar missatges rebuts";
-#elif L==2	// de
-	"Entfernen empfangene Nachrichten";
-#elif L==3	// en
-	"Delete messages received";
-#elif L==4	// es
-	"Eliminar mensajes recibidos";
-#elif L==5	// fr
-	"&Eacute;liminer messages re&ccedil;us";
-#elif L==6	// gn
-	"Eliminar mensajes recibidos";	// Okoteve traducción
-#elif L==7	// it
-	"Rimuovere messaggi ricevuti";
-#elif L==8	// pl
-	"Usu&nacute; wiadomo&sacute;ci otrzymane";
-#elif L==9	// pt
-	"Eliminar mensagens recebidas";
-#elif L==10	// tr
-	"Delete messages received";	// Çeviri lazim!
-#endif
-
-const char *Txt_Delete_messages_sent =
-#if   L==1	// ca
-	"Eliminar missatges enviats";
-#elif L==2	// de
-	"Entfernen gesendete Nachrichten";
-#elif L==3	// en
-	"Delete messages sent";
-#elif L==4	// es
-	"Eliminar mensajes enviados";
-#elif L==5	// fr
-	"&Eacute;liminer messages envoy&eacute;s";
-#elif L==6	// gn
-	"Eliminar mensajes enviados";	// Okoteve traducción
-#elif L==7	// it
-	"Rimuovere messaggi inviati";
-#elif L==8	// pl
-	"Usu&nacute; wiadomo&sacute;ci wyslanych";
-#elif L==9	// pt
-	"Eliminar mensagens enviadas";
-#elif L==10	// tr
-	"Delete messages sent";		// Çeviri lazim!
 #endif
 
 const char *Txt_Delete_my_answer =
@@ -11665,29 +11598,6 @@ const char *Txt_Enrol =
 	"Registrar";
 #elif L==10	// tr
 	"Register";	// Çeviri lazim!
-#endif
-
-const char *Txt_Enrol_in_groups =
-#if   L==1	// ca
-	"Inscriure en grups";
-#elif L==2	// de
-	"Anmeldung mich in Gruppen";
-#elif L==3	// en
-	"Enrol in groups";
-#elif L==4	// es
-	"Inscribirme en grupos";
-#elif L==5	// fr
-	"Inscriver moi dans groupes";
-#elif L==6	// gn
-	"Inscribirme en grupos";	// Okoteve traducción
-#elif L==7	// it
-	"Iscriver mi in gruppi";
-#elif L==8	// pl
-	"Zarejestruj mnie w grupach";
-#elif L==9	// pt
-	"Inscreva-me em grupos ";
-#elif L==10	// tr
-	"Enrol in groups";		// Çeviri lazim!
 #endif
 
 const char *Txt_Enrol_students =
@@ -15309,75 +15219,6 @@ const char *Txt_general_topics =
 	"general topics";	// Çeviri lazim!
 #endif
 
-const char *Txt_Generate_report =
-#if   L==1	// ca
-	"Generar informe";
-#elif L==2	// de
-	"Generieren Nutzungsbericht";
-#elif L==3	// en
-	"Generate report";
-#elif L==4	// es
-	"Generar informe";
-#elif L==5	// fr
-	"G&eacute;n&eacute;rer le rapport";
-#elif L==6	// gn
-	"Generar informe";	// Okoteve traducción
-#elif L==7	// it
-	"Crea rapporto";
-#elif L==8	// pl
-	"Wygeneruj raport";
-#elif L==9	// pt
-	"Gerar relat&oacute;rio";
-#elif L==10	// tr
-	"Generate report";	// Çeviri lazim!
-#endif
-
-const char *Txt_Generate_test =
-#if   L==1	// ca
-	"Generar test";
-#elif L==2	// de
-	"Generieren Test";
-#elif L==3	// en
-	"Generate test";
-#elif L==4	// es
-	"Generar test";
-#elif L==5	// fr
-	"G&eacute;n&eacute;rer test";
-#elif L==6	// gn
-	"Generar test";		// Okoteve traducción
-#elif L==7	// it
-	"Crea test";
-#elif L==8	// pl
-	"Wygeneruj test";
-#elif L==9	// pt
-	"Gerar teste";
-#elif L==10	// tr
-	"Generate test";	// Çeviri lazim!
-#endif
-
-const char *Txt_Get_a_new_password =
-#if   L==1	// ca
-	"Rebre una nova contrasenya";
-#elif L==2	// de
-	"Neues Passwort beantragen";
-#elif L==3	// en
-	"Get a new password";
-#elif L==4	// es
-	"Recibir una nueva contrase&ntilde;a";
-#elif L==5	// fr
-	"Recevoir un nouveau mot de passe";
-#elif L==6	// gn
-	"Recibir una nueva contrase&ntilde;a";	// Okoteve traducción
-#elif L==7	// it
-	"Ottenere una nuova password";
-#elif L==8	// pl
-	"Uzyskaj nowe has&lstrok;o";
-#elif L==9	// pt
-	"Obter uma nova senha";
-#elif L==10	// tr
-	"Yeni bir &scedil;ifre al&inodot;n";
-#endif
-
 const char *Txt_Global_visits =
 #if   L==1	// ca
 	"Accessos globals";
@@ -17169,29 +17010,6 @@ const char *Txt_I_understand_that_this_action_can_not_be_undone =
 	"Eu entendo que esta a&ccedil;&atilde;o n&atilde;o pode ser desfeita.";
 #elif L==10	// tr
 	"I understand that this action can not be undone.";		// Çeviri lazim!
-#endif
-
-const char *Txt_I_have_finished =
-#if   L==1	// ca
-	"He acabat";
-#elif L==2	// de
-	"Ich bin fertig";
-#elif L==3	// en
-	"I have finished";
-#elif L==4	// es
-	"He terminado";
-#elif L==5	// fr
-	"J'ai fini";
-#elif L==6	// gn
-	"He terminado";		// Okoteve traducción
-#elif L==7	// it
-	"Ho finito";
-#elif L==8	// pl
-	"Sko&nacute;czy&lstrok;em";
-#elif L==9	// pt
-	"Acabei";
-#elif L==10	// tr
-	"I have finished";	// Çeviri lazim!
 #endif
 
 const char *Txt_Icons =
@@ -33780,29 +33598,6 @@ const char *Txt_Remove_me =
 	"Remove me";	// Çeviri lazim!
 #endif
 
-const char *Txt_Remove_me_as_an_administrator =
-#if   L==1	// ca
-	"Eliminarme com a administrador/a";
-#elif L==2	// de
-	"Entfernen Sie mir als Administrator";
-#elif L==3	// en
-	"Remove me as an administrator";
-#elif L==4	// es
-	"Eliminarme como administrador/a";
-#elif L==5	// fr
-	"Enlever-moi en tant qu'administrateur";
-#elif L==6	// gn
-	"Eliminarme como administrador/a";	// Okoteve traducción
-#elif L==7	// it
-	"Rimuovimi come amministratore";
-#elif L==8	// pl
-	"Usu&nacute; mnie jako administrator";
-#elif L==9	// pt
-	"Tirar me como administrador";
-#elif L==10	// tr
-	"Remove me as an administrator";	// Çeviri lazim!
-#endif
-
 const char *Txt_Remove_me_as_an_administrator_of_the_center_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Eliminarme com a administrador/a"
@@ -33902,29 +33697,6 @@ const char *Txt_Remove_me_as_an_administrator_of_the_institution_X =	// Warning:
 	" of the institution <strong>%s</strong>";		// Çeviri lazim!
 #endif
 
-const char *Txt_Remove_me_from_this_course =
-#if   L==1	// ca
-	"Eliminarme d'aquesta assignatura";
-#elif L==2	// de
-	"Entfernen Sie diesen Kurs";
-#elif L==3	// en
-	"Remove me from this course";
-#elif L==4	// es
-	"Eliminarme de esta asignatura";
-#elif L==5	// fr
-	"Enlever-moi de cette mati&egrave;re";
-#elif L==6	// gn
-	"Eliminarme de esta asignatura";	// Okoteve traducción
-#elif L==7	// it
-	"Rimuovimi da questo corso";
-#elif L==8	// pl
-	"Usu&ntilde; z kursu";
-#elif L==9	// pt
-	"Tirar me desta disciplina";
-#elif L==10	// tr
-	"Remove me from this course";		// Çeviri lazim!
-#endif
-
 const char *Txt_Remove_me_from_THE_COURSE_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Eliminarme de <strong>%s</strong>";
@@ -34015,75 +33787,6 @@ const char *Txt_Remove_the_users_indicated_in_step_1 =
 	"Tirar os utilizadores que est&atilde;o na lista";
 #elif L==10	// tr
 	"Remove the users indicated in step 1";		// Çeviri lazim!
-#endif
-
-const char *Txt_Remove_user_from_this_course =
-#if   L==1	// ca
-	"Eliminar usuari d'aquesta assignatura";
-#elif L==2	// de
-	"Entfernen Benutzer Sie diesen Kurs";
-#elif L==3	// en
-	"Remove user from this course";
-#elif L==4	// es
-	"Eliminar usuario de esta asignatura";
-#elif L==5	// fr
-	"Enlever utilisateur de cette mati&egrave;re";
-#elif L==6	// gn
-	"Eliminar usuario de esta asignatura";	// Okoteve traducción
-#elif L==7	// it
-	"Rimuovi utente da questo corso";
-#elif L==8	// pl
-	"Usu&ntilde; u&zdot;ytkownika z kursu";
-#elif L==9	// pt
-	"Tirar utilizador desta disciplina";
-#elif L==10	// tr
-	"Remove user from this course";		// Çeviri lazim!
-#endif
-
-const char *Txt_Remove_USER_from_this_project =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Eliminar %s d'aquest projecte";
-#elif L==2	// de
-	"Entfernen %s Sie diesen Projekt";
-#elif L==3	// en
-	"Remove %s from this project";
-#elif L==4	// es
-	"Eliminar %s de este proyecto";
-#elif L==5	// fr
-	"Enlever %s de ce projet";
-#elif L==6	// gn
-	"Eliminar %s de este proyecto";	// Okoteve traducción
-#elif L==7	// it
-	"Rimuovi %s da questo progetto";
-#elif L==8	// pl
-	"Usu&ntilde; %s z projekt";
-#elif L==9	// pt
-	"Tirar %s deste projeto";
-#elif L==10	// tr
-	"Remove %s from this project";	// Çeviri lazim!
-#endif
-
-const char *Txt_Remove_USER_as_an_administrator =
-#if   L==1	// ca
-	"Eliminar com a administrador/a";
-#elif L==2	// de
-	"Entfernen als Administrator";
-#elif L==3	// en
-	"Remove as an administrator";
-#elif L==4	// es
-	"Eliminar como administrador/a";
-#elif L==5	// fr
-	"Enlever en tant qu'administrateur";
-#elif L==6	// gn
-	"Eliminar como administrador/a";	// Okoteve traducción
-#elif L==7	// it
-	"Rimuovi come amministratore";
-#elif L==8	// pl
-	"Usu&nacute; jako administrator";
-#elif L==9	// pt
-	"Tirar como administrador";
-#elif L==10	// tr
-	"Remove as an administrator";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_USER_as_an_administrator_of_the_center_X =	// Warning: it is very important to include %s in the following sentences
@@ -34369,7 +34072,7 @@ const char *Txt_Required_reading =
 	"Required reading";	// Çeviri lazim!
 #endif
 
-const char *Txt_Reset_survey =
+const char *Txt_Reset =
 #if   L==1	// ca
 	"Posar a zero";
 #elif L==2	// de
@@ -41948,29 +41651,6 @@ const char *Txt_Set_of_questions_removed =
 	"Set of questions removed.";		// Çeviri lazim!
 #endif
 
-const char *Txt_Set_password =
-#if   L==1	// ca
-	"Establir contrasenya";
-#elif L==2	// de
-	"Passwort festlegen";
-#elif L==3	// en
-	"Set password";
-#elif L==4	// es
-	"Establecer contrase&ntilde;a";
-#elif L==5	// fr
-	"D&eacute;finir mot de passe";
-#elif L==6	// gn
-	"Establecer contrase&ntilde;a";	// Okoteve traducción
-#elif L==7	// it
-	"Impostare password";
-#elif L==8	// pl
-	"Ustaw has&lstrok;o";
-#elif L==9	// pt
-	"Definir senha";
-#elif L==10	// tr
-	"&Scedil;ifreyi belirle";
-#endif
-
 const char *Txt_Set_up =
 #if   L==1	// ca
 	"Instal&centerdot;lar";
@@ -42647,29 +42327,6 @@ const char *Txt_Show_agenda =
 	"Show agenda";	// Çeviri lazim!
 #endif
 
-const char *Txt_Show_anyway =
-#if   L==1	// ca
-	"Mostrar de totes maneres";
-#elif L==2	// de
-	"Zeigesowieso";
-#elif L==3	// en
-	"Show anyway";
-#elif L==4	// es
-	"Mostrar de todos modos";
-#elif L==5	// fr
-	"Voir de toute façon";
-#elif L==6	// gn
-	"Mostrar de todos modos";	// Okoteve traducción
-#elif L==7	// it
-	"Visualizza comunque";
-#elif L==8	// pl
-	"Show anyway";			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Mostrar de qualquer maneira";
-#elif L==10	// tr
-	"Show anyway";			// Çeviri lazim!
-#endif
-
 const char *Txt_Show_calendar =
 #if   L==1	// ca
 	"Mostrar calendari";
@@ -42691,29 +42348,6 @@ const char *Txt_Show_calendar =
 	"Mostrar calend&aacute;rio";
 #elif L==10	// tr
 	"Show calendar";	// Çeviri lazim!
-#endif
-
-const char *Txt_Show_hits =	// hits = visits, clicks, page views...
-#if   L==1	// ca
-	"Veure accessos";
-#elif L==2	// de
-	"Zeige Anmeldungen";
-#elif L==3	// en
-	"Show hits";
-#elif L==4	// es
-	"Ver accesos";
-#elif L==5	// fr
-	"Voir visites";
-#elif L==6	// gn
-	"Ver accesos";		// Okoteve traducción
-#elif L==7	// it
-	"Visualizza visite";
-#elif L==8	// pl
-	"Show hits";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Mostrar visitas";
-#elif L==10	// tr
-	"Show hits";		// Çeviri lazim!
 #endif
 
 const char *Txt_Show_more_details =
@@ -56771,29 +56405,6 @@ const char *Txt_View_attendance =
 	"Kat&inodot;l&inodot;m&inodot; g&ouml;r&uuml;nt&uuml;le";
 #endif
 
-const char *Txt_View_email_addresses =
-#if   L==1	// ca
-	"Veure adreces de correu";
-#elif L==2	// de
-	"E-Mail-Adressen anzeigen";
-#elif L==3	// en
-	"View email addresses";
-#elif L==4	// es
-	"Ver direcciones de correo";
-#elif L==5	// fr
-	"Voir les adresses email";
-#elif L==6	// gn
-	"Ver asistencia";	// Okoteve traducción
-#elif L==7	// it
-	"Vedi gli indirizzi email";
-#elif L==8	// pl
-	"Zobacz adresy e-mail";
-#elif L==9	// pt
-	"Ver endere&ccedil;os de email";
-#elif L==10	// tr
-	"View email addresses";	// Çeviri lazim!
-#endif
-
 const char *Txt_View_event =
 #if   L==1	// ca
 	"Veure esdeveniment";
@@ -56907,29 +56518,6 @@ const char *Txt_View_my_answer =
 	"Ver minha resposta";
 #elif L==10	// tr
 	"View my answer";	// Çeviri lazim!
-#endif
-
-const char *Txt_View_projects =
-#if   L==1	// ca
-	"Veure projectes";
-#elif L==2	// de
-	"Anzeigen Projekte";
-#elif L==3	// en
-	"View projects";
-#elif L==4	// es
-	"Ver proyectos";
-#elif L==5	// fr
-	"Voir projets";
-#elif L==6	// gn
-	"Ver proyectos";	// Okoteve traducción
-#elif L==7	// it
-	"Vedi progetti";
-#elif L==8	// pl
-	"Zobacz projekty";
-#elif L==9	// pt
-	"Ver projetos";
-#elif L==10	// tr
-	"View projects";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_record_for_this_course =

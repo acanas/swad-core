@@ -204,8 +204,6 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Test;
-   extern const char *Txt_I_have_finished;
-   extern const char *Txt_Send;
    unsigned QstInd;
    struct Qst_Question Question;
    static Act_Action_t Action[Tst_NUM_REQUEST_OR_CONFIRM] =
@@ -256,14 +254,14 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
 	   {
 	    case TstPrn_REQUEST:
 	       /* Send button */
-	       Btn_PutButton (Btn_CONFIRM,Txt_I_have_finished);
+	       Btn_PutButton (Btn_DONE);
 	       break;
 	    case TstPrn_CONFIRM:
 	       /* Will the test be visible by teachers? */
 	       TstPrn_PutCheckBoxAllowTeachers (true);
 
 	       /* Send button */
-	       Btn_PutButton (Btn_CREATE,Txt_Send);
+	       Btn_PutButton (Btn_SEND);
 	       break;
 	   }
 
@@ -1699,14 +1697,13 @@ void TstPrn_SelUsrsToViewUsrsPrints (void)
 static void TstPrn_PutFormToSelectUsrsToViewUsrsPrints (__attribute__((unused)) void *Args)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
-   extern const char *Txt_View_results;
 
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
 				     ActSeeUsrTstResCrs,
 				     NULL,NULL,
 				     Act_GetActionText (ActSeeUsrTstResCrs),
 				     Hlp_ASSESSMENT_Tests_results,
-				     Txt_View_results,
+				     Btn_VIEW_RESULTS,
 				     Frm_PUT_FORM);	// Put form with date range
   }
 
@@ -1718,7 +1715,6 @@ void TstPrn_SelDatesToSeeMyPrints (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *Txt_Results;
-   extern const char *Txt_View_results;
    static Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
@@ -1735,7 +1731,7 @@ void TstPrn_SelDatesToSeeMyPrints (void)
 	 Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
       /***** End table, send button and end box *****/
-      Box_BoxTableWithButtonEnd (Btn_VIEW_RESULTS,Txt_View_results);
+      Box_BoxTableWithButtonEnd (Btn_VIEW_RESULTS);
 
    /***** End form *****/
    Frm_EndForm ();

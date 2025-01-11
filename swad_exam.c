@@ -1307,17 +1307,14 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
    extern const char *Txt_Maximum_grade;
    extern const char *Txt_Result_visibility;
    extern const char *Txt_Description;
-   extern const char *Txt_Save_changes;
-   extern const char *Txt_Create;
    static struct
      {
       Act_Action_t Action;
       Btn_Button_t Button;
-      const char **Txt;
      } Forms[OldNew_NUM_OLD_NEW] =
      {
-      [OldNew_OLD] = {ActChgExa,Btn_CONFIRM,&Txt_Save_changes},
-      [OldNew_NEW] = {ActNewExa,Btn_CREATE ,&Txt_Create      }
+      [OldNew_OLD] = {ActChgExa,Btn_SAVE_CHANGES},
+      [OldNew_NEW] = {ActNewExa,Btn_CREATE      }
      };
 
    /***** Begin form *****/
@@ -1393,7 +1390,7 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
       HTM_TABLE_End ();
 
       /***** Send button *****/
-      Btn_PutButton (Forms[OldNewExam].Button,*Forms[OldNewExam].Txt);
+      Btn_PutButton (Forms[OldNewExam].Button);
 
    /***** End form *****/
    Frm_EndForm ();

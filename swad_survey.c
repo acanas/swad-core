@@ -400,7 +400,6 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    extern const char *Txt_Scope;
    extern const char *Txt_Users;
    extern const char *Txt_Answer_VERB;
-   extern const char *Txt_View_results;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
@@ -546,7 +545,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 		     MyAllGrps = Grp_GetParMyAllGrps ();
 		     Grp_PutParMyAllGrps (&MyAllGrps);
 		     Pag_PutParPagNum (Pag_SURVEYS,Surveys->CurrentPage);
-			Btn_PutButtonInline (Btn_CREATE,Txt_Answer_VERB);
+		     Btn_PutButtonTxtInline (Btn_CREATE,Txt_Answer_VERB);
 		  Frm_EndForm ();
 
 	       HTM_DIV_End ();
@@ -564,7 +563,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 			MyAllGrps = Grp_GetParMyAllGrps ();
 			Grp_PutParMyAllGrps (&MyAllGrps);
 			Pag_PutParPagNum (Pag_SURVEYS,Surveys->CurrentPage);
-			Btn_PutButtonInline (Btn_VIEW_RESULTS,Txt_View_results);
+			Btn_PutButtonInline (Btn_VIEW_RESULTS);
 		     Frm_EndForm ();
 
 		  HTM_DIV_End ();
@@ -1438,7 +1437,6 @@ void Svy_RemoveSurvey (void)
 void Svy_AskResetSurvey (void)
   {
    extern const char *Txt_Do_you_really_want_to_reset_the_survey_X;
-   extern const char *Txt_Reset_survey;
    struct Svy_Surveys Surveys;
 
    /***** Reset surveys *****/
@@ -1460,7 +1458,7 @@ void Svy_AskResetSurvey (void)
    /***** Show question and button to reset survey *****/
    Ale_ShowAlertAndButton (ActRstSvy,NULL,NULL,
                            Svy_PutPars,&Surveys,
-			   Btn_REMOVE,Txt_Reset_survey,
+			   Btn_RESET,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_reset_the_survey_X,
 			   Surveys.Svy.Title);
 
@@ -2179,8 +2177,6 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
    extern const char *Txt_Options;
    extern const char *Txt_Comments;
    extern const char *Txt_Comments_allowed;
-   extern const char *Txt_Save_changes;
-   extern const char *Txt_Create;
    static struct
      {
       Act_Action_t Action;
@@ -2188,8 +2184,8 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
       const char **Txt;
      } Forms[OldNew_NUM_OLD_NEW] =
      {
-      [OldNew_OLD] = {ActChgSvyQst,Btn_CONFIRM,&Txt_Save_changes},
-      [OldNew_NEW] = {ActNewSvyQst,Btn_CREATE ,&Txt_Create      }
+      [OldNew_OLD] = {ActChgSvyQst,Btn_SAVE_CHANGES},
+      [OldNew_NEW] = {ActNewSvyQst,Btn_CREATE      }
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2355,7 +2351,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
       HTM_TABLE_End ();
 
       /***** Send button *****/
-      Btn_PutButton (Forms[OldNewQst].Button,*Forms[OldNewQst].Txt);
+      Btn_PutButton (Forms[OldNewQst].Button);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -2596,7 +2592,6 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
    extern const char *Txt_Question;
    extern const char *Txt_SURVEY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES];
    extern const char *Txt_This_survey_has_no_questions;
-   extern const char *Txt_Done;
    MYSQL_RES *mysql_res;
    unsigned NumQsts;
    unsigned NumQst;
@@ -2705,7 +2700,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
 	 if (PutFormAnswerSurvey == Frm_PUT_FORM)
 	   {
 	    /***** Button to create/modify survey *****/
-	    Btn_PutButton (Btn_CONFIRM,Txt_Done);
+	    Btn_PutButton (Btn_DONE);
 
 	    /***** End form *****/
 	    Frm_EndForm ();
