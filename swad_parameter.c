@@ -1123,6 +1123,7 @@ void Par_PutParListOfCodes (const char *ParName,const long *ListCods,unsigned Nu
    /***** Allocate memory *****/
    if ((ListTxt = malloc (ListSize)) == NULL)
       Err_NotEnoughMemoryExit ();
+   ListTxt[0] = '\0';
 
    /***** Loop over the list in numerical format creating the list in text format *****/
    for (NumCod = 0;
