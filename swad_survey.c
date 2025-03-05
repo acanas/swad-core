@@ -2180,7 +2180,6 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
      {
       Act_Action_t Action;
       Btn_Button_t Button;
-      const char **Txt;
      } Forms[OldNew_NUM_OLD_NEW] =
      {
       [OldNew_OLD] = {ActChgSvyQst,Btn_SAVE_CHANGES},

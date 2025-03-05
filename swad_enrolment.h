@@ -98,7 +98,7 @@ void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 void Enr_UpdateUsrData (struct Usr_Data *UsrDat);
 
 void Enr_ReqAdminStds (void);
-void Enr_ReqAdminNonEditingTchs (void);
+void Enr_ReqAdminNETs (void);
 void Enr_ReqAdminTchs (void);
 
 void Enr_PutLinkToRemOldUsrs (void);
@@ -106,7 +106,7 @@ void Enr_AskRemoveOldUsrs (void);
 void Enr_RemoveOldUsrs (void);
 
 void Enr_ReceiveAdminStds (void);
-void Enr_ReceiveAdminNonEditTchs (void);
+void Enr_ReceiveAdminNETs (void);
 void Enr_ReceiveAdminTchs (void);
 
 bool Enr_PutActionsEnrRemOneUsr (Usr_MeOrOther_t MeOrOther);

@@ -5337,11 +5337,12 @@ void Usr_SeeTeachers (void)
 	 /***** Contextual menu *****/
 	 Mnu_ContextMenuBegin ();
 	    Enr_PutLinkToAdminOneUsr (ActReqID_MdfTch);	// Admin one teacher
-	    if (Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
-		Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)	// I am logged as admin
+	    if (Gbl.Hierarchy.Level == Hie_CRS)		// Course selected
 	      {
-	       Enr_PutLinkToAdminSeveralUsrs (Rol_NET);	// Admin several non-editing teachers
-	       Enr_PutLinkToAdminSeveralUsrs (Rol_TCH);	// Admin several teachers
+	       if (Gbl.Usrs.Me.Role.Logged >= Rol_TCH)		// I am logged as teacher
+	          Enr_PutLinkToAdminSeveralUsrs (Rol_NET);	// Admin several non-editing teachers
+	       if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)	// I am logged as admin
+	          Enr_PutLinkToAdminSeveralUsrs (Rol_TCH);	// Admin several teachers
 	      }
 	 Mnu_ContextMenuEnd ();
          break;

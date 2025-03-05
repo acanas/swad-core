@@ -517,7 +517,7 @@ void Enr_ReqAdminStds (void)
    Enr_ReqAdminUsrs (Rol_STD);
   }
 
-void Enr_ReqAdminNonEditingTchs (void)
+void Enr_ReqAdminNETs (void)
   {
    Enr_ReqAdminUsrs (Rol_NET);
   }
@@ -537,8 +537,10 @@ static void Enr_ReqAdminUsrs (Rol_Role_t Role)
 	 Enr_AskIfEnrRemMe (Role);
 	 break;
       case Rol_TCH:
-	 if (Gbl.Hierarchy.Level == Hie_CRS && Role == Rol_STD)
-	    Enr_ShowFormEnrRemSeveralUsrs (Rol_STD);
+	 if (Gbl.Hierarchy.Level == Hie_CRS &&
+	     (Role == Rol_STD ||	// As a teacher, I can admin students...
+	      Role == Rol_NET))		// ...or non-editing teachers
+	    Enr_ShowFormEnrRemSeveralUsrs (Role);
 	 else
 	    Enr_AskIfEnrRemMe (Rol_TCH);
 	 break;
@@ -935,7 +937,7 @@ void Enr_ReceiveAdminStds (void)
    Enr_ReceiveUsrsCrs (Rol_STD);
   }
 
-void Enr_ReceiveAdminNonEditTchs (void)
+void Enr_ReceiveAdminNETs (void)
   {
    Enr_ReceiveUsrsCrs (Rol_NET);
   }
@@ -967,11 +969,11 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
    switch (Role)
      {
       case Rol_STD:
+      case Rol_NET:
 	 if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)		// Can I enrol/remove students?
 	    // No, I can not
 	    Err_NoPermissionExit ();
 	 break;
-      case Rol_NET:
       case Rol_TCH:
 	 if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)	// Can I enrol/remove teachers?
 	    // No, I can not
@@ -1900,9 +1902,10 @@ static void Enr_EnrolUsr (struct Usr_Data *UsrDat,Rol_Role_t Role,
                           struct ListCodGrps *LstGrps,unsigned *NumUsrsEnroled)
   {
    /***** Check if I can enrol this user *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_TCH &&
-       Role != Rol_STD)
-      Err_ShowErrorAndExit ("A teacher only can enrol several users as students.");
+   if (Gbl.Usrs.Me.Role.Logged == Rol_TCH &&	// A teacher only can enrol several users...
+       !(Role == Rol_STD ||			// ...as students...
+	 Role == Rol_NET))			// ...or non-editing teachers
+      Err_NoPermissionExit ();
 
    /***** Check if the record of the user exists and get the type of user *****/
    if (UsrDat->UsrCod > 0)	// User exists in database
@@ -1940,7 +1943,7 @@ static void Enr_EnrolUsr (struct Usr_Data *UsrDat,Rol_Role_t Role,
 
       /***** Enrol user in the selected groups *****/
       if (Gbl.Crs.Grps.NumGrps)	// If there are groups in the course
-	 Grp_EnrolUsrIntoGroups (UsrDat,LstGrps);
+	 Grp_EnrolUsrIntoGroups (UsrDat,Role,LstGrps);
      }
 
    (*NumUsrsEnroled)++;

@@ -1021,7 +1021,8 @@ static void Grp_DestructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **Alr
 /********************* Enrol user in the groups of a list ********************/
 /*****************************************************************************/
 
-void Grp_EnrolUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstGrps)
+void Grp_EnrolUsrIntoGroups (struct Usr_Data *UsrDat,Rol_Role_t Role,
+			     struct ListCodGrps *LstGrps)
   {
    extern const char *Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it_belonged;
    extern const char *Txt_THE_USER_X_has_been_enroled_in_the_group_of_type_Y_Z;
@@ -1033,7 +1034,6 @@ void Grp_EnrolUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstGrps
    struct GroupType *GrpTyp;
    struct Group *Grp;
    long GrpCodSel;
-   long GrpCodBelong;
    Grp_SingleMultiple_t SingleMultiple;
    bool AlreadyEnroledInGrp;
 
@@ -1066,29 +1066,37 @@ void Grp_EnrolUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstGrps
            {
             Grp = &GrpTyp->LstGrps[NumGrpThisType];
 
-            if (GrpCodSel == Grp->GrpCod)
-              {	// The selected group is of this type
+            if (GrpCodSel == Grp->GrpCod)	// The selected group is of this type
+              {
+               /* Search if user is already enroled in this group */
                AlreadyEnroledInGrp = false;
-
-               /* For each group of this type to which the user belongs... */
-               for (NumGrpBelong = 0;
-        	    NumGrpBelong < LstGrpsBelong.NumGrps;
-        	    NumGrpBelong++)
+               if (SingleMultiple == Grp_SINGLE &&	// If the type of group is of single enrolment ==>
+        	   Role == Rol_STD)			// ==> a student can only belong to one group
                  {
-        	  GrpCodBelong = LstGrpsBelong.GrpCods[NumGrpBelong];
-
-                  if (GrpCodSel == GrpCodBelong)
-                     AlreadyEnroledInGrp = true;
-                  else if (SingleMultiple == Grp_SINGLE)	// If the type of group is of single enrolment
-                    {
-                     /* If the enrolment is single
-                        and the group to which the user belongs is different from the selected ==>
-                        remove user from the group to which he belongs */
-                     Grp_RemoveUsrFromGroup (UsrDat->UsrCod,GrpCodBelong);
-                     Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it_belonged,
-			            UsrDat->FullName,GrpTyp->GrpTypName);
-                    }
+		  for (NumGrpBelong = 0;
+		       NumGrpBelong < LstGrpsBelong.NumGrps;
+		       NumGrpBelong++)
+		     if (GrpCodSel == LstGrpsBelong.GrpCods[NumGrpBelong])
+			AlreadyEnroledInGrp = true;
+		     else
+		       {
+			/* If the enrolment is single
+			   and the group to which the user belongs is different from the selected ==>
+			   remove user from the group to which he/she belongs */
+			Grp_RemoveUsrFromGroup (UsrDat->UsrCod,LstGrpsBelong.GrpCods[NumGrpBelong]);
+			Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it_belonged,
+				       UsrDat->FullName,GrpTyp->GrpTypName);
+		       }
                  }
+	       else
+		  for (NumGrpBelong = 0;
+		       NumGrpBelong < LstGrpsBelong.NumGrps;
+		       NumGrpBelong++)
+		     if (GrpCodSel == LstGrpsBelong.GrpCods[NumGrpBelong])
+		       {
+			AlreadyEnroledInGrp = true;
+			break;
+		       }
 
                if (!AlreadyEnroledInGrp)	// If the user does not belong to the selected group
                  {

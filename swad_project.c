@@ -3863,7 +3863,6 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
      {
       Act_Action_t Action;
       Btn_Button_t Button;
-      const char **Txt;
      } Forms[OldNew_NUM_OLD_NEW] =
      {
       [OldNew_OLD] = {ActChgPrj,Btn_SAVE_CHANGES},
