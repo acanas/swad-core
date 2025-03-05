@@ -45,7 +45,7 @@ struct Mrk_Properties
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Mrk_GetAndWriteNumRowsHeaderAndFooter (void);
+void Mrk_GetAndWriteNumRowsHeaderAndFooter (long GrpCod);
 void Mrk_ChangeNumRowsHeader (void);
 void Mrk_ChangeNumRowsFooter (void);
 

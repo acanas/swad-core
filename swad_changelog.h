@@ -635,15 +635,14 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.56 (2025-03-05)"
+#define Log_PLATFORM_VERSION	"SWAD 24.57 (2025-03-06)"
 #define CSS_FILE		"swad24.52.css"
 #define JS_FILE			"swad23.89.js"
 /*
  *
  * NO SE ELIMINA NOTIFICACIÓN DE CONVOCATORIA DE EXAMEN AL VERLA
- *
- * Al editar el nombre de un grupo, debe aparece en "Crear grupo" el tipo de grupo y la sala del grupo editado.
- *
+
+	Version 24.57:    Mar 06, 2024  Fixed issues and code refactoring in groups. (344043 lines)
 	Version 24.56:    Mar 05, 2024  Fixed issues registering teachers in groups. (344054 lines)
 	Version 24.55.1:  Jan 12, 2024  Fixed bug in questions. (344038 lines)
 	Version 24.55:    Jan 11, 2024  Changes in buttons. (344041 lines)

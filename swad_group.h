@@ -71,6 +71,20 @@ typedef enum
    Grp_CLOSED_AND_OPEN_GROUPS,
   } Grp_ClosedOpenGrps_t;
 
+#define Grp_NUM_MUST_BE_OPENED 2
+typedef enum
+  {
+   Grp_MUST_NOT_BE_OPENED,
+   Grp_MUST_BE_OPENED,
+  } Grp_MustBeOpened_t;
+
+#define Grp_NUM_FILEZONES 2
+typedef enum
+  {
+   Grp_HAS_NOT_FILEZONES,
+   Grp_HAS_FILEZONES,
+  } Grp_FileZones_t;
+
 #define Grp_NUM_OPTIONAL_MANDATORY 2
 typedef enum
   {
@@ -85,55 +99,42 @@ typedef enum
    Grp_MULTIPLE,
   } Grp_SingleMultiple_t;
 
-// Related with groups
-struct GroupData
-  {
-   long GrpCod;					// Group code
-   long GrpTypCod;				// Group type code
-   long CrsCod;					// Course code
-   char GrpTypName[Grp_MAX_BYTES_GROUP_TYPE_NAME + 1];
-   char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];
-   struct
-     {
-      long RooCod;					// Room code
-      char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1];	// Room short name
-     } Room;
-   unsigned MaxStudents;
-   int  Vacant;
-   CloOpe_ClosedOrOpen_t ClosedOrOpen;		// Group is closed or open?
-   bool FileZones;				// Group has file zones?
-   Grp_SingleMultiple_t SingleMultiple;
-  };
-
 struct Group
   {
    long GrpCod;					// Code of group
-   char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];	// Name of group
+   char Name[Grp_MAX_BYTES_GROUP_NAME + 1];	// Name of group
    struct
      {
       long RooCod;					// Room code
       char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1];	// Room short name
      } Room;
    unsigned NumUsrs[Rol_NUM_ROLES];		// Number of users in the group
-   unsigned MaxStudents;			// Maximum number of students in the group
+   unsigned MaxStds;				// Maximum number of students in the group
    CloOpe_ClosedOrOpen_t ClosedOrOpen;		// Group is closed or open?
-   bool FileZones;				// Group has file zones?
-   bool ShowFileZone;				// Show file zone of this group?
+   Grp_FileZones_t FileZones;			// Group has file zones?
   };
 
 struct GroupType
   {
    long GrpTypCod;					// Code of type of group
-   char GrpTypName[Grp_MAX_BYTES_GROUP_TYPE_NAME + 1];	// Name of type of group
+   char Name[Grp_MAX_BYTES_GROUP_TYPE_NAME + 1];	// Name of type of group
    struct
      {
       Grp_OptionalMandatory_t OptionalMandatory;	// Enrolment is optional or mandatory?
       Grp_SingleMultiple_t SingleMultiple;		// Enrolment is single or multiple?
      } Enrolment;
-   bool MustBeOpened;					// Groups must be opened?
+   Grp_MustBeOpened_t MustBeOpened;			// Groups must be opened?
    time_t OpenTimeUTC;					// Open groups automatically in this date-time. If == 0, don't open.
    unsigned NumGrps;					// Number of groups of this type
    struct Group *LstGrps;				// List of groups of this type
+  };
+
+// Related with groups
+struct GroupData
+  {
+   long CrsCod;			// Course code
+   struct GroupType GrpTyp;	// Group type
+   struct Group Grp;		// Group
   };
 
 struct GroupTypes
@@ -171,14 +172,8 @@ struct Grp_Groups
   {
    unsigned NumGrps;
    struct GroupTypes GrpTypes;
-   struct GroupType GrpTyp;
-   long GrpCod;		// Group to be edited, removed...
-   char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];
-   long RooCod;
-   unsigned MaxStudents;
-   CloOpe_ClosedOrOpen_t ClosedOrOpen;
-   bool FileZones;
-   bool AllGrps;	// All groups selected?
+   struct GroupData GrpDat;
+   bool AllGrps;		// All groups selected?
    struct ListCodGrps LstGrpsSel;
    Grp_MyAllGrps_t MyAllGrps;	// Show my groups or all groups
   };

@@ -84,7 +84,7 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct Usr_Data *UsrDat,
 /********* Write number of header and footer rows of a file of marks *********/
 /*****************************************************************************/
 
-void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
+void Mrk_GetAndWriteNumRowsHeaderAndFooter (long GrpCod)
   {
    extern const char *Txt_TABLE_Header;
    extern const char *Txt_TABLE_Footer;
@@ -101,8 +101,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
       /***** Write the number of rows of header *****/
       HTM_TD_Begin ("class=\"RT FORM_IN_%s NOWRAP %s\"",
 		    The_GetSuffix (),The_GetColorRows ());
-	 Frm_BeginForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowHeaGrp :	// Group zone
-						  ActChgNumRowHeaCrs);	// Course zone
+	 Frm_BeginForm (GrpCod > 0 ? ActChgNumRowHeaGrp :	// Group zone
+				     ActChgNumRowHeaCrs);	// Course zone
 	    Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 	    HTM_LABEL_Begin (NULL);
 	       // HTM_TxtF ("&nbsp;%s: ",Txt_TABLE_Header);
@@ -119,8 +119,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
       /***** Write the number of rows of footer *****/
       HTM_TD_Begin ("class=\"RT FORM_IN_%s NOWRAP %s\"",
 		    The_GetSuffix (),The_GetColorRows ());
-	 Frm_BeginForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowFooGrp :	// Group zone
-						  ActChgNumRowFooCrs);	// Course zone
+	 Frm_BeginForm (GrpCod > 0 ? ActChgNumRowFooGrp :	// Group zone
+				     ActChgNumRowFooCrs);	// Course zone
 	    Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 	    HTM_LABEL_Begin (NULL);
 	       // HTM_TxtF ("&nbsp;%s: ",Txt_TABLE_Footer);
@@ -554,11 +554,11 @@ void Mrk_ShowMyMarks (void)
    else						// If I am logged as non-editing teacher, teacher or admin
      {
       /* Select a random student from the course */
-      if (Gbl.Crs.Grps.GrpCod > 0)	// Group zone
+      if (Gbl.Crs.Grps.GrpDat.Grp.GrpCod > 0)	// Group zone
         {
-         if (Grp_DB_CountNumUsrsInGrp (Rol_STD,Gbl.Crs.Grps.GrpCod))	// If there are students in this group
+         if (Grp_DB_CountNumUsrsInGrp (Rol_STD,Gbl.Crs.Grps.GrpDat.Grp.GrpCod))	// If there are students in this group
            {
-            Gbl.Usrs.Other.UsrDat.UsrCod = Grp_DB_GetRamdomStdFromGrp (Gbl.Crs.Grps.GrpCod);
+            Gbl.Usrs.Other.UsrDat.UsrCod = Grp_DB_GetRamdomStdFromGrp (Gbl.Crs.Grps.GrpDat.Grp.GrpCod);
             UsrDat = &Gbl.Usrs.Other.UsrDat;
            }
          else

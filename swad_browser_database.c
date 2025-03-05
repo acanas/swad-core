@@ -2808,7 +2808,7 @@ void Brw_DB_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
 			 " WHERE FileBrowser=%u"
 			   " AND Cod=%ld",
                          (unsigned) FileBrowser,
-                         Gbl.Crs.Grps.GrpCod);
+                         Gbl.Crs.Grps.GrpDat.Grp.GrpCod);
          break;
       case Brw_ADMI_ASG_USR:
       case Brw_ADMI_WRK_USR:

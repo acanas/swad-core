@@ -73,13 +73,13 @@ long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp)
 				" (%ld,'%s',"
 				  "'%c','%c','%c',FROM_UNIXTIME(%ld))",
 				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-				GrpTyp->GrpTypName,
-				(GrpTyp->Enrolment.OptionalMandatory == Grp_MANDATORY) ? 'Y' :
-											 'N',
-				(GrpTyp->Enrolment.SingleMultiple == Grp_MULTIPLE) ? 'Y' :
-										     'N',
-				GrpTyp->MustBeOpened ? 'Y' :
-						       'N',
+				GrpTyp->Name,
+				GrpTyp->Enrolment.OptionalMandatory == Grp_MANDATORY ? 'Y' :
+										       'N',
+				GrpTyp->Enrolment.SingleMultiple == Grp_MULTIPLE ? 'Y' :
+										   'N',
+				GrpTyp->MustBeOpened == Grp_MUST_BE_OPENED ? 'Y' :
+						                             'N',
 				(long) GrpTyp->OpenTimeUTC);
   }
 
@@ -87,7 +87,7 @@ long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp)
 /***************************** Create a new group ****************************/
 /*****************************************************************************/
 
-void Grp_DB_CreateGroup (const struct Grp_Groups *Grps)
+void Grp_DB_CreateGroup (const struct GroupData *GrpDat)
   {
    /***** Create a new group *****/
    DB_QueryINSERT ("can not create group",
@@ -95,10 +95,10 @@ void Grp_DB_CreateGroup (const struct Grp_Groups *Grps)
 		   " (GrpTypCod,GrpName,RooCod,MaxStudents,Open,FileZones)"
 		   " VALUES"
 		   " (%ld,'%s',%ld,%u,'N','N')",
-	           Grps->GrpTyp.GrpTypCod,
-	           Grps->GrpName,
-	           Grps->RooCod,
-	           Grps->MaxStudents);
+	           GrpDat->GrpTyp.GrpTypCod,
+	           GrpDat->Grp.Name,
+	           GrpDat->Grp.Room.RooCod,
+	           GrpDat->Grp.MaxStds);
   }
 
 /*****************************************************************************/
@@ -330,7 +330,7 @@ unsigned Grp_DB_GetUsrsFromCurrentGrpExceptMe (MYSQL_RES **mysql_res)
 		    " FROM grp_users"
 		   " WHERE GrpCod=%ld"
 		     " AND UsrCod<>%ld",
-		   Gbl.Crs.Grps.GrpCod,
+		   Gbl.Crs.Grps.GrpDat.Grp.GrpCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -353,7 +353,7 @@ unsigned Grp_DB_GetTchsFromCurrentGrpExceptMe (MYSQL_RES **mysql_res)
 		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
 		     " AND grp_types.CrsCod=crs_users.CrsCod"
 		     " AND crs_users.Role=%u",	// Teachers only
-		   Gbl.Crs.Grps.GrpCod,
+		   Gbl.Crs.Grps.GrpDat.Grp.GrpCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) Rol_TCH);
   }
@@ -786,15 +786,15 @@ void Grp_DB_ChangeSingleMultiple (long GrpTypCod,
 /*****************************************************************************/
 
 void Grp_DB_ChangeOpeningTime (long GrpTypCod,
-                               bool MustBeOpened,time_t OpenTimeUTC)
+                               Grp_MustBeOpened_t MustBeOpened,time_t OpenTimeUTC)
   {
    DB_QueryUPDATE ("can not update enrolment type of a type of group",
 		   "UPDATE grp_types"
 		     " SET MustBeOpened='%c',"
 		          "OpenTime=FROM_UNIXTIME(%ld)"
 		   " WHERE GrpTypCod=%ld",
-                   MustBeOpened ? 'Y' :
-        	                  'N',
+                   MustBeOpened == Grp_MUST_BE_OPENED ? 'Y' :
+                				        'N',
                    (long) OpenTimeUTC,
                    GrpTypCod);
   }

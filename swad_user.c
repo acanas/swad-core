@@ -4523,7 +4523,7 @@ void Usr_ListAllDataStds (void)
 		     if (GrpTyp->NumGrps)         // If current course tiene groups of este type
 		       {
 			HTM_TH_Span_Begin (HTM_HEAD_LEFT,1,1,"BG_HIGHLIGHT");
-			   HTM_TxtF ("%s %s",Txt_Group,GrpTyp->GrpTypName);
+			   HTM_TxtF ("%s %s",Txt_Group,GrpTyp->Name);
 			HTM_TH_End ();
 		       }
 		    }

@@ -1465,16 +1465,16 @@ static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
       /***** Group *****/
       if (GrpCod > 0 && Timetable->Type != Tmt_TUTORING_TIMETABLE)
 	{
-	 GrpDat.GrpCod = GrpCod;
+	 GrpDat.Grp.GrpCod = GrpCod;
          Grp_GetGroupDataByCod (&GrpDat);
 	 HTM_BR ();
-	 HTM_Txt (GrpDat.GrpTypName);
+	 HTM_Txt (GrpDat.GrpTyp.Name);
 	 HTM_BR ();
-	 HTM_Txt (GrpDat.GrpName);
-	 if (GrpDat.Room.RooCod > 0)
+	 HTM_Txt (GrpDat.Grp.Name);
+	 if (GrpDat.Grp.Room.RooCod > 0)
 	   {
 	    HTM_BR ();
-	    HTM_TxtF ("(%s)",GrpDat.Room.ShrtName);
+	    HTM_TxtF ("(%s)",GrpDat.Grp.Room.ShrtName);
 	   }
 	}
 
@@ -1641,7 +1641,7 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 				 (GrpCod == Grp->GrpCod) ? HTM_SELECTED :
 	                				   HTM_NO_ATTR,
 				 "%s %s%s",
-				 GrpTyp->GrpTypName,Grp->GrpName,Room);
+				 GrpTyp->Name,Grp->Name,Room);
 		     free (Room);
 		    }
 		 }

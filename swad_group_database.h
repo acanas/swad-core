@@ -37,7 +37,7 @@
 void Grp_DB_LockTables (void);
 
 long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp);
-void Grp_DB_CreateGroup (const struct Grp_Groups *Grps);
+void Grp_DB_CreateGroup (const struct GroupData *GrpDat);
 
 void Grp_DB_GetGrpTypTitle (long GrpTypCod,char *Title,size_t TitleSize);
 unsigned Grp_DB_GetGroupTypeData (MYSQL_RES **mysql_res,long GrpTypCod);
@@ -90,7 +90,7 @@ void Grp_DB_ChangeOptionalMandatory (long GrpTypCod,
 void Grp_DB_ChangeSingleMultiple (long GrpTypCod,
                                   Grp_SingleMultiple_t NewSingleMultiple);
 void Grp_DB_ChangeOpeningTime (long GrpTypCod,
-                               bool MustBeOpened,time_t OpenTimeUTC);
+                               Grp_MustBeOpened_t MustBeOpened,time_t OpenTimeUTC);
 void Grp_DB_ClearMustBeOpened (long GrpTypCod);
 void Grp_DB_OpenGrpsOfType (long GrpTypCod);
 
