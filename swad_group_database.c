@@ -151,6 +151,20 @@ unsigned Grp_DB_GetSingleMultiple (MYSQL_RES **mysql_res,long GrpTypCod)
   }
 
 /*****************************************************************************/
+/******************** Check if a group has file zones ************************/
+/*****************************************************************************/
+
+unsigned Grp_DB_GetFileZones (MYSQL_RES **mysql_res,long GrpCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get if group has file zones",
+		   "SELECT FileZones"	// row[0]
+		    " FROM grp_groups"
+		   " WHERE GrpCod=%ld",
+		   GrpCod);
+  }
+
+/*****************************************************************************/
 /********************** Get data of a group from its code ********************/
 /*****************************************************************************/
 

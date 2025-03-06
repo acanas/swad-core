@@ -1105,7 +1105,6 @@ Usr_Can_t Brw_ICanEditFileOrFolder;	// Can I modify (remove, rename, create insi
 /*****************************************************************************/
 
 static long Brw_GetGrpSettings (void);
-static void Brw_GetDataGrp (struct GroupData *GrpDat);
 
 static void Brw_GetParsPathInTreeAndFileName (void);
 static void Brw_SetPathFileBrowser (void);
@@ -1284,8 +1283,7 @@ static void Brw_GetNumberOfOERs (Brw_License_t License,
 void Brw_GetParAndInitFileBrowser (void)
   {
    /***** If a group is selected, get its data *****/
-   if ((Gbl.Crs.Grps.GrpDat.Grp.GrpCod = Brw_GetGrpSettings ()) > 0)
-      Brw_GetDataGrp (&Gbl.Crs.Grps.GrpDat);
+   Gbl.Crs.Grps.GrpDat.Grp.GrpCod = Brw_GetGrpSettings ();
 
    /***** Get type of file browser *****/
    switch (Gbl.Action.Act)
@@ -2028,11 +2026,13 @@ void Brw_GetParAndInitFileBrowser (void)
 
 static long Brw_GetGrpSettings (void)
   {
-   long GrpCod;
+   long GrpCod = ParCod_GetPar (ParCod_Grp);
+   Grp_FileZones_t FileZones;			// Group has file zones?
 
-   if ((GrpCod = ParCod_GetPar (ParCod_Grp)) > 0)
-      return GrpCod;
-   else
+   /***** Try to get parameter with group code *****/
+   GrpCod = ParCod_GetPar (ParCod_Grp);
+
+   if (GrpCod <= 0)
       /***** Try to get group code from database *****/
       switch (Gbl.Action.Act)
 	{
@@ -2041,28 +2041,27 @@ static long Brw_GetGrpSettings (void)
 	 case ActAdmDocGrp:
 	 case ActAdmTchCrsGrp:		// Access to a documents zone from menu
 	 case ActAdmTchGrp:
-	    return Brw_GetGrpLastAccZone ("LastDowGrpCod");
+	    GrpCod = Brw_GetGrpLastAccZone ("LastDowGrpCod");
+	    break;
 	 case ActAdmShaCrsGrp:		// Access to a shared documents zone from menu
 	 case ActAdmShaGrp:
-	    return Brw_GetGrpLastAccZone ("LastComGrpCod");
+	    GrpCod = Brw_GetGrpLastAccZone ("LastComGrpCod");
+	    break;
 	 case ActSeeAdmMrk:		// Access to a marks zone from menu
 	 case ActSeeMrkGrp:
 	 case ActAdmMrkGrp:
-	    return Brw_GetGrpLastAccZone ("LastAssGrpCod");
+	    GrpCod = Brw_GetGrpLastAccZone ("LastAssGrpCod");
+	    break;
 	 default:
-	    return -1L;
+	    GrpCod = -1L;
+	    break;
 	}
-  }
 
-/*****************************************************************************/
-/******************* If a group is selected, get its data ********************/
-/*****************************************************************************/
-
-static void Brw_GetDataGrp (struct GroupData *GrpDat)
-  {
-   if (GrpDat->Grp.GrpCod > 0)
+   /***** If group selected ==> check if group file zones are enabled,
+		                and check if I belongs to the selected group *****/
+   if (GrpCod > 0)
      {
-      Grp_GetGroupDataByCod (GrpDat);
+      FileZones = Grp_GetFileZones (GrpCod);
 
       switch (Gbl.Action.Act)
 	{
@@ -2088,27 +2087,23 @@ static void Brw_GetDataGrp (struct GroupData *GrpDat)
 
 	 case ActChgToAdmMrk:		// Access to admin a marks zone
 	 case ActAdmMrkGrp:		// Access to admin a marks zone
-	    /***** For security, check if group file zones are enabled,
-		   and check if I belongs to the selected group *****/
-	    switch (GrpDat->Grp.FileZones)
+	    switch (FileZones)
 	      {
 	       case Grp_HAS_FILEZONES:
-		  if (Grp_GetIfIBelongToGrp (GrpDat->Grp.GrpCod) == Usr_DONT_BELONG)
-		     GrpDat->Grp.GrpCod = -1L;	// Go to course zone
+		  if (Grp_GetIfIBelongToGrp (GrpCod) == Usr_DONT_BELONG)
+		     GrpCod = -1L;	// Go to course zone
 		  break;
 	       case Grp_HAS_NOT_FILEZONES:
 	       default:
-	          GrpDat->Grp.GrpCod = -1L;	// Go to course zone
+	          GrpCod = -1L;	// Go to course zone
 	          break;
 	      }
 	    break;
 	 default:
-	    /***** For security, check if group file zones are enabled,
-		   and check if I belongs to the selected group *****/
-	    switch (GrpDat->Grp.FileZones)
+	    switch (FileZones)
 	      {
 	       case Grp_HAS_FILEZONES:
-		  if (Grp_GetIfIBelongToGrp (GrpDat->Grp.GrpCod) == Usr_DONT_BELONG)
+		  if (Grp_GetIfIBelongToGrp (GrpCod) == Usr_DONT_BELONG)
 	             Err_ShowErrorAndExit ("You don't have access to the group.");
 		  break;
 	       case Grp_HAS_NOT_FILEZONES:
@@ -2119,6 +2114,8 @@ static void Brw_GetDataGrp (struct GroupData *GrpDat)
 	    break;
 	}
      }
+
+   return GrpCod;
   }
 
 /*****************************************************************************/

@@ -3123,6 +3123,31 @@ static Grp_SingleMultiple_t Grp_GetSingleMultiple (long GrpTypCod)
   }
 
 /*****************************************************************************/
+/****************** Check if a group type has file zones *********************/
+/*****************************************************************************/
+
+Grp_FileZones_t Grp_GetFileZones (long GrpCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   Grp_FileZones_t FileZones;
+
+   /***** Get data of a group from database *****/
+   if (Grp_DB_GetFileZones (&mysql_res,GrpCod) != 1)
+      Err_ShowErrorAndExit ("Error when getting file zones.");
+
+   /***** Get file zones *****/
+   row = mysql_fetch_row (mysql_res);
+   FileZones = (row[0][0] == 'Y') ? Grp_HAS_FILEZONES :
+				    Grp_HAS_NOT_FILEZONES;
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return FileZones;
+  }
+
+/*****************************************************************************/
 /********************** Get data of a group from its code ********************/
 /*****************************************************************************/
 
