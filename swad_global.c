@@ -166,7 +166,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Crs.Grps.GrpTypes.LstGrpTypes = NULL;
    Gbl.Crs.Grps.GrpTypes.NumGrpTypes = 0;
    Gbl.Crs.Grps.GrpTypes.NestedCalls = 0;
-   Gbl.Crs.Grps.GrpDat.GrpTyp.Name[0] = '\0';
+   Grp_SetGrpTypName ("");
    Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.OptionalMandatory = Grp_MANDATORY;
    Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.SingleMultiple    = Grp_SINGLE;
    Gbl.Crs.Grps.GrpDat.GrpTyp.MustBeOpened = Grp_MUST_NOT_BE_OPENED;

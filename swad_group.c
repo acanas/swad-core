@@ -163,6 +163,18 @@ long Grp_GetGrpTypCod (void)
    return Gbl.Crs.Grps.GrpDat.GrpTyp.GrpTypCod;
   }
 
+void Grp_SetGrpTypName (const char *NewGrpTypName)
+
+  {
+   Str_Copy (Gbl.Crs.Grps.GrpDat.GrpTyp.Name,NewGrpTypName,
+	     sizeof (Gbl.Crs.Grps.GrpDat.GrpTyp.Name) - 1);
+  }
+
+const char *Grp_GetGrpTypName (void)
+  {
+   return Gbl.Crs.Grps.GrpDat.GrpTyp.Name;
+  }
+
 /*****************************************************************************/
 /***************************** Set/get group code ****************************/
 /*****************************************************************************/
@@ -3482,13 +3494,14 @@ void Grp_ReceiveNewGrpTyp (void)
    extern const char *Txt_The_type_of_group_X_already_exists;
    extern const char *Txt_Created_new_type_of_group_X;
    extern const char *Txt_You_must_specify_the_name;
+   char NewGrpTypName[Grp_MAX_BYTES_GROUP_TYPE_NAME + 1];
    Ale_AlertType_t AlertType;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_TYPE_NAME];
 
    /***** Get parameters from form *****/
    /* Get the name of group type */
-   Par_GetParText ("GrpTypName",Gbl.Crs.Grps.GrpDat.GrpTyp.Name,
-                   Grp_MAX_BYTES_GROUP_TYPE_NAME);
+   Par_GetParText ("GrpTypName",NewGrpTypName,Grp_MAX_BYTES_GROUP_TYPE_NAME);
+   Grp_SetGrpTypName (NewGrpTypName);
 
    /* Get whether it is mandatory to enrol in any group of this type
       and whether it is possible to enrol in multiple groups of this type */
@@ -3502,15 +3515,14 @@ void Grp_ReceiveNewGrpTyp (void)
    Gbl.Crs.Grps.GrpDat.GrpTyp.MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (Gbl.Crs.Grps.GrpDat.GrpTyp.OpenTimeUTC) ? Grp_MUST_BE_OPENED :
 														       Grp_MUST_NOT_BE_OPENED;
 
-   if (Gbl.Crs.Grps.GrpDat.GrpTyp.Name[0])	// If there's a group type name
+   if (NewGrpTypName[0])	// If there's a group type name
      {
       /***** If name of group type was in database... *****/
-      if (Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (Gbl.Crs.Grps.GrpDat.GrpTyp.Name,-1L))
+      if (Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (NewGrpTypName,-1L))
         {
          AlertType = Ale_WARNING;
          snprintf (AlertTxt,sizeof (AlertTxt),
-                   Txt_The_type_of_group_X_already_exists,
-                   Gbl.Crs.Grps.GrpDat.GrpTyp.Name);
+                   Txt_The_type_of_group_X_already_exists,NewGrpTypName);
         }
       else	// Add new group type to database
 	{
@@ -3518,8 +3530,7 @@ void Grp_ReceiveNewGrpTyp (void)
 
          AlertType = Ale_SUCCESS;
 	 snprintf (AlertTxt,sizeof (AlertTxt),
-	           Txt_Created_new_type_of_group_X,
-		   Gbl.Crs.Grps.GrpDat.GrpTyp.Name);
+	           Txt_Created_new_type_of_group_X,NewGrpTypName);
 	}
      }
    else	// If there is not a group type name
@@ -3662,7 +3673,7 @@ static void Grp_AskConfirmRemGrpTypWithGrps (void)
    Ale_ShowAlertRemove (ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,
 			Grp_PutParGrpTypCod,&GrpTypCod,
 			Txt_Do_you_really_want_to_remove_the_type_of_group_X,
-			Gbl.Crs.Grps.GrpDat.GrpTyp.Name);
+			Grp_GetGrpTypName ());
 
    /***** Show the form to edit group types and groups again *****/
    Grp_ReqEditGroupsInternal1 (Ale_INFO,NULL);
@@ -3713,8 +3724,8 @@ void Grp_RemoveGroupType (void)
    Grp_RemoveGroupTypeCompletely (Grp_GetGrpTypCod ());
 
    /***** Create message to show the change made *****/
-   snprintf (AlertTxt,sizeof (AlertTxt),Txt_Type_of_group_X_removed,
-             Gbl.Crs.Grps.GrpDat.GrpTyp.Name);
+   snprintf (AlertTxt,sizeof (AlertTxt),
+	     Txt_Type_of_group_X_removed,Grp_GetGrpTypName ());
 
    /***** Show the form again *****/
    Grp_ReqEditGroupsInternal (Ale_SUCCESS,AlertTxt,Ale_INFO,NULL);
@@ -4036,7 +4047,7 @@ void Grp_ChangeMandatGrpTyp (void)
       AlertType = Ale_INFO;
       snprintf (AlertTxt,sizeof (AlertTxt),
 	        Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed,
-                Gbl.Crs.Grps.GrpDat.GrpTyp.Name);
+                Grp_GetGrpTypName ());
      }
    else
      {
@@ -4049,7 +4060,7 @@ void Grp_ChangeMandatGrpTyp (void)
       snprintf (AlertTxt,sizeof (AlertTxt),
 	        (NewOptionalMandatory == Grp_MANDATORY) ? Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_mandatory :
 							  Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_optional,
-                Gbl.Crs.Grps.GrpDat.GrpTyp.Name);
+                Grp_GetGrpTypName ());
      }
 
    /***** Show the form again *****/
@@ -4088,7 +4099,7 @@ void Grp_ChangeMultiGrpTyp (void)
       AlertType = Ale_INFO;
       snprintf (AlertTxt,sizeof (AlertTxt),
 	        Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed,
-                Gbl.Crs.Grps.GrpDat.GrpTyp.Name);
+                Grp_GetGrpTypName ());
      }
    else
      {
@@ -4100,7 +4111,7 @@ void Grp_ChangeMultiGrpTyp (void)
       snprintf (AlertTxt,sizeof (AlertTxt),
 	        (NewSingleMultiple == Grp_MULTIPLE) ? Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X :
 						      Txt_Now_each_student_can_only_belong_to_a_group_of_type_X,
-                Gbl.Crs.Grps.GrpDat.GrpTyp.Name);
+                Grp_GetGrpTypName ());
      }
 
    /***** Show the form again *****/
@@ -4234,7 +4245,8 @@ void Grp_RenameGroupType (void)
    extern const char *Txt_The_type_of_group_X_already_exists;
    extern const char *Txt_The_type_of_group_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   char NewNameGrpTyp[Grp_MAX_BYTES_GROUP_TYPE_NAME + 1];
+   char NewGrpTypName[Grp_MAX_BYTES_GROUP_TYPE_NAME + 1];
+   const char *GrpTypName = Grp_GetGrpTypName ();
    Ale_AlertType_t AlertType;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_TYPE_NAME];
 
@@ -4243,43 +4255,43 @@ void Grp_RenameGroupType (void)
    Grp_SetGrpTypCod (ParCod_GetAndCheckPar (ParCod_GrpTyp));
 
    /* Get the new name for the group type */
-   Par_GetParText ("GrpTypName",NewNameGrpTyp,Grp_MAX_BYTES_GROUP_TYPE_NAME);
+   Par_GetParText ("GrpTypName",NewGrpTypName,Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
    /***** Get from the database the old name of the group type *****/
    Grp_GetGroupTypeDataByCod (&Gbl.Crs.Grps.GrpDat.GrpTyp);
 
    /***** Check if new name is empty *****/
-   if (NewNameGrpTyp[0])
+   if (NewGrpTypName[0])
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (Gbl.Crs.Grps.GrpDat.GrpTyp.Name,NewNameGrpTyp))	// Different names
+      if (strcmp (GrpTypName,NewGrpTypName))	// Different names
         {
          /***** If group type was in database... *****/
-         if (Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (NewNameGrpTyp,
+         if (Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (NewGrpTypName,
 							 Grp_GetGrpTypCod ()))
            {
 	    AlertType = Ale_WARNING;
             snprintf (AlertTxt,sizeof (AlertTxt),
-	              Txt_The_type_of_group_X_already_exists,NewNameGrpTyp);
+	              Txt_The_type_of_group_X_already_exists,NewGrpTypName);
            }
          else
            {
             /***** Update the table changing old name by new name *****/
-            Grp_DB_RenameGrpTyp (Grp_GetGrpTypCod (),NewNameGrpTyp);
+            Grp_DB_RenameGrpTyp (Grp_GetGrpTypCod (),NewGrpTypName);
 
             /***** Write message to show the change made *****/
 	    AlertType = Ale_SUCCESS;
             snprintf (AlertTxt,sizeof (AlertTxt),
 	              Txt_The_type_of_group_X_has_been_renamed_as_Y,
-                      Gbl.Crs.Grps.GrpDat.GrpTyp.Name,NewNameGrpTyp);
+                      GrpTypName,NewGrpTypName);
            }
         }
       else	// The same name
         {
 	 AlertType = Ale_INFO;
          snprintf (AlertTxt,sizeof (AlertTxt),
-	           Txt_The_name_X_has_not_changed,NewNameGrpTyp);
+	           Txt_The_name_X_has_not_changed,NewGrpTypName);
         }
      }
    else
@@ -4290,8 +4302,7 @@ void Grp_RenameGroupType (void)
      }
 
    /***** Show the form again *****/
-   Str_Copy (Gbl.Crs.Grps.GrpDat.GrpTyp.Name,NewNameGrpTyp,
-             sizeof (Gbl.Crs.Grps.GrpDat.GrpTyp.Name) - 1);
+   Grp_SetGrpTypName (NewGrpTypName);
    Grp_ReqEditGroupsInternal (AlertType,AlertTxt,Ale_INFO,NULL);
   }
 

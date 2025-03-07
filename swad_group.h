@@ -184,6 +184,8 @@ struct Grp_Groups
 
 void Grp_SetGrpTypCod (long GrpTypCod);
 long Grp_GetGrpTypCod (void);
+void Grp_SetGrpTypName (const char *NewGrpTypName);
+const char *Grp_GetGrpTypName (void);
 
 void Grp_SetGrpCod (long GrpCod);
 long Grp_GetGrpCod (void);
