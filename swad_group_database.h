@@ -36,7 +36,7 @@
 
 void Grp_DB_LockTables (void);
 
-long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp);
+long Grp_DB_CreateGroupType (void);
 void Grp_DB_CreateGroup (const struct GroupData *GrpDat);
 
 void Grp_DB_GetGrpTypTitle (long GrpTypCod,char *Title,size_t TitleSize);

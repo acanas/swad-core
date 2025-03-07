@@ -61,7 +61,7 @@ void Grp_DB_LockTables (void)
 /************************** Create a new group type **************************/
 /*****************************************************************************/
 
-long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp)
+long Grp_DB_CreateGroupType (void)
   {
    /***** Create a new group type *****/
    return
@@ -73,14 +73,14 @@ long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp)
 				" (%ld,'%s',"
 				  "'%c','%c','%c',FROM_UNIXTIME(%ld))",
 				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-				GrpTyp->Name,
-				GrpTyp->Enrolment.OptionalMandatory == Grp_MANDATORY ? 'Y' :
-										       'N',
-				GrpTyp->Enrolment.SingleMultiple == Grp_MULTIPLE ? 'Y' :
-										   'N',
-				GrpTyp->MustBeOpened == Grp_MUST_BE_OPENED ? 'Y' :
-						                             'N',
-				(long) GrpTyp->OpenTimeUTC);
+				Grp_GetGrpTypName (),
+				Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.OptionalMandatory == Grp_MANDATORY ? 'Y' :
+										                          'N',
+				Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.SingleMultiple == Grp_MULTIPLE ? 'Y' :
+										                      'N',
+				Gbl.Crs.Grps.GrpDat.GrpTyp.MustBeOpened == Grp_MUST_BE_OPENED ? 'Y' :
+						                                                'N',
+				(long) Gbl.Crs.Grps.GrpDat.GrpTyp.OpenTimeUTC);
   }
 
 /*****************************************************************************/

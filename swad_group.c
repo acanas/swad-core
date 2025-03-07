@@ -130,7 +130,7 @@ static HTM_Attributes_t Grp_Checked (long GrpCod);
 static void Grp_WriteGrpTypOpening (const struct GroupType *GrpTyp);
 static void Grp_WriteGrpHead (void);
 static void Grp_WriteRowGrp (const struct Group *Grp,Lay_Highlight_t Highlight);
-static void Grp_PutFormToCreateGroupType (const struct GroupType *GrpTyp);
+static void Grp_PutFormToCreateGroupType (void);
 static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms);
 static void Grp_GetGroupTypeDataByCod (struct GroupType *GrpTyp);
 static Grp_SingleMultiple_t Grp_GetSingleMultiple (long GrpTypCod);
@@ -360,7 +360,7 @@ static void Grp_EditGroupTypes (void)
                  Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
       /***** Put a form to create a new group type *****/
-      Grp_PutFormToCreateGroupType (&Gbl.Crs.Grps.GrpDat.GrpTyp);
+      Grp_PutFormToCreateGroupType ();
 
       /***** Forms to edit current group types *****/
       if (Gbl.Crs.Grps.GrpTypes.NumGrpTypes)	// Group types found...
@@ -2621,7 +2621,7 @@ static void Grp_WriteRowGrp (const struct Group *Grp,Lay_Highlight_t Highlight)
 /********************* Put a form to create a new group type *****************/
 /*****************************************************************************/
 
-static void Grp_PutFormToCreateGroupType (const struct GroupType *GrpTyp)
+static void Grp_PutFormToCreateGroupType (void)
   {
    extern const char *Txt_Type_of_group;
    extern const char *Txt_It_is_optional_to_choose_a_group;
@@ -2651,7 +2651,7 @@ static void Grp_PutFormToCreateGroupType (const struct GroupType *GrpTyp)
 	    /***** Name of group type *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
-			       GrpTyp->Name,
+			       Grp_GetGrpTypName (),
 			       HTM_REQUIRED,
 			       "size=\"12\" class=\"INPUT_%s\"",The_GetSuffix ());
 	    HTM_TD_End ();
@@ -2663,12 +2663,12 @@ static void Grp_PutFormToCreateGroupType (const struct GroupType *GrpTyp)
 				 " class=\"INPUT_%s\" style=\"width:150px;\"",
 				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"N",
-			      (GrpTyp->Enrolment.OptionalMandatory == Grp_OPTIONAL ) ? HTM_SELECTED :
-										       HTM_NO_ATTR,
+			      (Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.OptionalMandatory == Grp_OPTIONAL ) ? HTM_SELECTED :
+										                          HTM_NO_ATTR,
 			      "%s",Txt_It_is_optional_to_choose_a_group);
 		  HTM_OPTION (HTM_Type_STRING,"Y",
-			      (GrpTyp->Enrolment.OptionalMandatory == Grp_MANDATORY) ? HTM_SELECTED :
-										       HTM_NO_ATTR,
+			      (Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.OptionalMandatory == Grp_MANDATORY) ? HTM_SELECTED :
+										                          HTM_NO_ATTR,
 			      "%s",Txt_It_is_mandatory_to_choose_a_group);
 	       HTM_SELECT_End ();
 	    HTM_TD_End ();
@@ -2680,12 +2680,12 @@ static void Grp_PutFormToCreateGroupType (const struct GroupType *GrpTyp)
 				 " class=\"INPUT_%s\" style=\"width:150px;\"",
 				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"N",
-			      (GrpTyp->Enrolment.SingleMultiple == Grp_SINGLE  ) ? HTM_SELECTED :
-										   HTM_NO_ATTR,
+			      (Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.SingleMultiple == Grp_SINGLE  ) ? HTM_SELECTED :
+										                      HTM_NO_ATTR,
 			      "%s",Txt_A_student_can_only_belong_to_one_group);
 		  HTM_OPTION (HTM_Type_STRING,"Y",
-			      (GrpTyp->Enrolment.SingleMultiple == Grp_MULTIPLE) ? HTM_SELECTED :
-										   HTM_NO_ATTR,
+			      (Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.SingleMultiple == Grp_MULTIPLE) ? HTM_SELECTED :
+										                      HTM_NO_ATTR,
 			      "%s",Txt_A_student_can_belong_to_several_groups);
 	       HTM_SELECT_End ();
 	    HTM_TD_End ();
@@ -2696,7 +2696,7 @@ static void Grp_PutFormToCreateGroupType (const struct GroupType *GrpTyp)
 		  HTM_TR_Begin (NULL);
 
 		     HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
-			switch (GrpTyp->MustBeOpened)
+			switch (Gbl.Crs.Grps.GrpDat.GrpTyp.MustBeOpened)
 			  {
 			   case Grp_MUST_BE_OPENED:
 			      Ico_PutIconOn ("clock.svg",Ico_BLACK,
@@ -2713,7 +2713,7 @@ static void Grp_PutFormToCreateGroupType (const struct GroupType *GrpTyp)
 		     HTM_TD_Begin ("class=\"LM\"");
 			Dat_WriteFormClientLocalDateTimeFromTimeUTC ("open_time",
 								     Dat_STR_TIME,
-								     GrpTyp->OpenTimeUTC,
+								     Gbl.Crs.Grps.GrpDat.GrpTyp.OpenTimeUTC,
 								     CurrentYear,
 								     CurrentYear + 1,
 								     Dat_FORM_SECONDS_ON,
@@ -3526,7 +3526,7 @@ void Grp_ReceiveNewGrpTyp (void)
         }
       else	// Add new group type to database
 	{
-         Grp_SetGrpTypCod (Grp_DB_CreateGroupType (&Gbl.Crs.Grps.GrpDat.GrpTyp));
+         Grp_SetGrpTypCod (Grp_DB_CreateGroupType ());
 
          AlertType = Ale_SUCCESS;
 	 snprintf (AlertTxt,sizeof (AlertTxt),
@@ -3661,21 +3661,27 @@ void Grp_ReqRemGroup (void)
 static void Grp_AskConfirmRemGrpTypWithGrps (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_type_of_group_X;
-   long GrpTypCod = Grp_GetGrpTypCod ();
+   struct GroupType GrpTyp;
 
    /***** Get data of the group type from database *****/
-   Grp_GetGroupTypeDataByCod (&Gbl.Crs.Grps.GrpDat.GrpTyp);
+   GrpTyp.GrpTypCod = Grp_GetGrpTypCod ();
+   Grp_GetGroupTypeDataByCod (&GrpTyp);
 
    /***** Begin section to edit group types *****/
    Grp_ReqEditGroupsInternal0 ();
 
    /***** Show question and button to remove type of group *****/
    Ale_ShowAlertRemove (ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,
-			Grp_PutParGrpTypCod,&GrpTypCod,
+			Grp_PutParGrpTypCod,&GrpTyp.GrpTypCod,
 			Txt_Do_you_really_want_to_remove_the_type_of_group_X,
-			Grp_GetGrpTypName ());
+			GrpTyp.Name);
 
    /***** Show the form to edit group types and groups again *****/
+   Grp_SetGrpTypName (GrpTyp.Name);
+   Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.OptionalMandatory = GrpTyp.Enrolment.OptionalMandatory;
+   Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.SingleMultiple    = GrpTyp.Enrolment.SingleMultiple;
+   Gbl.Crs.Grps.GrpDat.GrpTyp.MustBeOpened = GrpTyp.MustBeOpened;
+   Gbl.Crs.Grps.GrpDat.GrpTyp.OpenTimeUTC  = GrpTyp.OpenTimeUTC;
    Grp_ReqEditGroupsInternal1 (Ale_INFO,NULL);
    Grp_ReqEditGroupsInternal2 (Ale_INFO,NULL);
   }
@@ -3712,22 +3718,28 @@ static void Grp_AskConfirmRemGrp (const char *GrpName)
 void Grp_RemoveGroupType (void)
   {
    extern const char *Txt_Type_of_group_X_removed;
+   struct GroupType GrpTyp;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_TYPE_NAME];
 
    /***** Get param with code of group type *****/
-   Grp_SetGrpTypCod (ParCod_GetAndCheckPar (ParCod_GrpTyp));
+   GrpTyp.GrpTypCod = ParCod_GetAndCheckPar (ParCod_GrpTyp);
 
-   /***** Get name and type of the group from database *****/
-   Grp_GetGroupTypeDataByCod (&Gbl.Crs.Grps.GrpDat.GrpTyp);
+   /***** Get data of type of group from database *****/
+   Grp_GetGroupTypeDataByCod (&GrpTyp);
 
    /***** Remove group type and its groups *****/
-   Grp_RemoveGroupTypeCompletely (Grp_GetGrpTypCod ());
+   Grp_RemoveGroupTypeCompletely (GrpTyp.GrpTypCod);
 
    /***** Create message to show the change made *****/
-   snprintf (AlertTxt,sizeof (AlertTxt),
-	     Txt_Type_of_group_X_removed,Grp_GetGrpTypName ());
+   snprintf (AlertTxt,sizeof (AlertTxt),Txt_Type_of_group_X_removed,GrpTyp.Name);
 
    /***** Show the form again *****/
+   Grp_SetGrpTypCod (GrpTyp.GrpTypCod);
+   Grp_SetGrpTypName (GrpTyp.Name);
+   Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.OptionalMandatory = GrpTyp.Enrolment.OptionalMandatory;
+   Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.SingleMultiple    = GrpTyp.Enrolment.SingleMultiple;
+   Gbl.Crs.Grps.GrpDat.GrpTyp.MustBeOpened = GrpTyp.MustBeOpened;
+   Gbl.Crs.Grps.GrpDat.GrpTyp.OpenTimeUTC  = GrpTyp.OpenTimeUTC;
    Grp_ReqEditGroupsInternal (Ale_SUCCESS,AlertTxt,Ale_INFO,NULL);
   }
 
@@ -4025,20 +4037,21 @@ void Grp_ChangeMandatGrpTyp (void)
    extern const char *Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed;
    extern const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_mandatory;
    extern const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_optional;
+   struct GroupType GrpTyp;
    Grp_OptionalMandatory_t NewOptionalMandatory;
    Ale_AlertType_t AlertType;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_TYPE_NAME];
 
    /***** Get parameters of the form *****/
-   /* Get the código of type of group */
-   Grp_SetGrpTypCod (ParCod_GetAndCheckPar (ParCod_GrpTyp));
+   /* Get the code of type of group */
+   GrpTyp.GrpTypCod = ParCod_GetAndCheckPar (ParCod_GrpTyp);
 
-   /* Get the new type of enrolment (mandatory or voluntaria) of this type of group */
+   /* Get the new type of enrolment (mandatory or optional) of this type of group */
    NewOptionalMandatory = Par_GetParBool ("OptionalMandatory") ? Grp_MANDATORY :
 								 Grp_OPTIONAL;
 
    /* Get from the database the name of the type and the old type of enrolment */
-   Grp_GetGroupTypeDataByCod (&Gbl.Crs.Grps.GrpDat.GrpTyp);
+   Grp_GetGroupTypeDataByCod (&GrpTyp);
 
    /***** Check if the old type of enrolment match the new
           (this happens when return is pressed without changes) *****/
@@ -4047,7 +4060,7 @@ void Grp_ChangeMandatGrpTyp (void)
       AlertType = Ale_INFO;
       snprintf (AlertTxt,sizeof (AlertTxt),
 	        Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed,
-                Grp_GetGrpTypName ());
+                GrpTyp.Name);
      }
    else
      {
@@ -4060,11 +4073,16 @@ void Grp_ChangeMandatGrpTyp (void)
       snprintf (AlertTxt,sizeof (AlertTxt),
 	        (NewOptionalMandatory == Grp_MANDATORY) ? Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_mandatory :
 							  Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_optional,
-                Grp_GetGrpTypName ());
+                GrpTyp.Name);
      }
 
    /***** Show the form again *****/
+   Grp_SetGrpTypCod (GrpTyp.GrpTypCod);
+   Grp_SetGrpTypName (GrpTyp.Name);
    Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.OptionalMandatory = NewOptionalMandatory;
+   Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.SingleMultiple    = GrpTyp.Enrolment.SingleMultiple;
+   Gbl.Crs.Grps.GrpDat.GrpTyp.MustBeOpened = GrpTyp.MustBeOpened;
+   Gbl.Crs.Grps.GrpDat.GrpTyp.OpenTimeUTC  = GrpTyp.OpenTimeUTC;
    Grp_ReqEditGroupsInternal (AlertType,AlertTxt,Ale_INFO,NULL);
   }
 
@@ -4077,13 +4095,14 @@ void Grp_ChangeMultiGrpTyp (void)
    extern const char *Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed;
    extern const char *Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X;
    extern const char *Txt_Now_each_student_can_only_belong_to_a_group_of_type_X;
+   struct GroupType GrpTyp;
    Grp_SingleMultiple_t NewSingleMultiple;
    Ale_AlertType_t AlertType;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_TYPE_NAME];
 
    /***** Get parameters from the form *****/
    /* Get the code of type of group */
-   Grp_SetGrpTypCod (ParCod_GetAndCheckPar (ParCod_GrpTyp));
+   GrpTyp.GrpTypCod = ParCod_GetAndCheckPar (ParCod_GrpTyp);
 
    /* Get the new type of enrolment (single or multiple) of this type of group */
    NewSingleMultiple = Par_GetParBool ("SingleMultiple") ? Grp_MULTIPLE :
@@ -4099,7 +4118,7 @@ void Grp_ChangeMultiGrpTyp (void)
       AlertType = Ale_INFO;
       snprintf (AlertTxt,sizeof (AlertTxt),
 	        Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed,
-                Grp_GetGrpTypName ());
+                GrpTyp.Name);
      }
    else
      {
@@ -4111,11 +4130,16 @@ void Grp_ChangeMultiGrpTyp (void)
       snprintf (AlertTxt,sizeof (AlertTxt),
 	        (NewSingleMultiple == Grp_MULTIPLE) ? Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X :
 						      Txt_Now_each_student_can_only_belong_to_a_group_of_type_X,
-                Grp_GetGrpTypName ());
+                GrpTyp.Name);
      }
 
    /***** Show the form again *****/
-   Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.SingleMultiple = NewSingleMultiple;
+   Grp_SetGrpTypCod (GrpTyp.GrpTypCod);
+   Grp_SetGrpTypName (GrpTyp.Name);
+   Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.OptionalMandatory = GrpTyp.Enrolment.OptionalMandatory;
+   Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.SingleMultiple    = NewSingleMultiple;
+   Gbl.Crs.Grps.GrpDat.GrpTyp.MustBeOpened = GrpTyp.MustBeOpened;
+   Gbl.Crs.Grps.GrpDat.GrpTyp.OpenTimeUTC  = GrpTyp.OpenTimeUTC;
    Grp_ReqEditGroupsInternal (AlertType,AlertTxt,Ale_INFO,NULL);
   }
 
@@ -4126,28 +4150,33 @@ void Grp_ChangeMultiGrpTyp (void)
 void Grp_ChangeOpenTimeGrpTyp (void)
   {
    extern const char *Txt_The_date_time_of_opening_of_groups_has_changed;
+   struct GroupType GrpTyp;
 
    /***** Get the code of type of group *****/
-   Grp_SetGrpTypCod (ParCod_GetAndCheckPar (ParCod_GrpTyp));
+   GrpTyp.GrpTypCod = ParCod_GetAndCheckPar (ParCod_GrpTyp);
 
    /***** Get from the database the data of this type of group *****/
    Grp_GetGroupTypeDataByCod (&Gbl.Crs.Grps.GrpDat.GrpTyp);
 
    /***** Get open time *****/
-   Gbl.Crs.Grps.GrpDat.GrpTyp.OpenTimeUTC = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
-   Gbl.Crs.Grps.GrpDat.GrpTyp.MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (Gbl.Crs.Grps.GrpDat.GrpTyp.OpenTimeUTC) ? Grp_MUST_BE_OPENED :
-														       Grp_MUST_NOT_BE_OPENED;
+   GrpTyp.OpenTimeUTC = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
+   GrpTyp.MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (GrpTyp.OpenTimeUTC) ? Grp_MUST_BE_OPENED :
+									       Grp_MUST_NOT_BE_OPENED;
 
    /***** Update the table of types of group
           changing the old opening time of enrolment by the new *****/
-   Grp_DB_ChangeOpeningTime (Grp_GetGrpTypCod (),
-                             Gbl.Crs.Grps.GrpDat.GrpTyp.MustBeOpened,
-                             Gbl.Crs.Grps.GrpDat.GrpTyp.OpenTimeUTC);
+   Grp_DB_ChangeOpeningTime (GrpTyp.GrpTypCod,GrpTyp.MustBeOpened,GrpTyp.OpenTimeUTC);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_date_time_of_opening_of_groups_has_changed);
 
    /***** Show the form again *****/
+   Grp_SetGrpTypCod (GrpTyp.GrpTypCod);
+   Grp_SetGrpTypName (GrpTyp.Name);
+   Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.OptionalMandatory = GrpTyp.Enrolment.OptionalMandatory;
+   Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.SingleMultiple    = GrpTyp.Enrolment.SingleMultiple;
+   Gbl.Crs.Grps.GrpDat.GrpTyp.MustBeOpened = GrpTyp.MustBeOpened;
+   Gbl.Crs.Grps.GrpDat.GrpTyp.OpenTimeUTC  = GrpTyp.OpenTimeUTC;
    Grp_ReqEditGroupsInternal (Ale_SUCCESS,NULL,Ale_INFO,NULL);
   }
 
@@ -4245,27 +4274,27 @@ void Grp_RenameGroupType (void)
    extern const char *Txt_The_type_of_group_X_already_exists;
    extern const char *Txt_The_type_of_group_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
+   struct GroupType GrpTyp;
    char NewGrpTypName[Grp_MAX_BYTES_GROUP_TYPE_NAME + 1];
-   const char *GrpTypName = Grp_GetGrpTypName ();
    Ale_AlertType_t AlertType;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_TYPE_NAME];
 
    /***** Get parameters from form *****/
    /* Get the code of the group type */
-   Grp_SetGrpTypCod (ParCod_GetAndCheckPar (ParCod_GrpTyp));
+   GrpTyp.GrpTypCod = ParCod_GetAndCheckPar (ParCod_GrpTyp);
 
    /* Get the new name for the group type */
    Par_GetParText ("GrpTypName",NewGrpTypName,Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
    /***** Get from the database the old name of the group type *****/
-   Grp_GetGroupTypeDataByCod (&Gbl.Crs.Grps.GrpDat.GrpTyp);
+   Grp_GetGroupTypeDataByCod (&GrpTyp);
 
    /***** Check if new name is empty *****/
    if (NewGrpTypName[0])
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (GrpTypName,NewGrpTypName))	// Different names
+      if (strcmp (GrpTyp.Name,NewGrpTypName))	// Different names
         {
          /***** If group type was in database... *****/
          if (Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (NewGrpTypName,
@@ -4284,7 +4313,7 @@ void Grp_RenameGroupType (void)
 	    AlertType = Ale_SUCCESS;
             snprintf (AlertTxt,sizeof (AlertTxt),
 	              Txt_The_type_of_group_X_has_been_renamed_as_Y,
-                      GrpTypName,NewGrpTypName);
+                      GrpTyp.Name,NewGrpTypName);
            }
         }
       else	// The same name
@@ -4302,7 +4331,12 @@ void Grp_RenameGroupType (void)
      }
 
    /***** Show the form again *****/
+   Grp_SetGrpTypCod (GrpTyp.GrpTypCod);
    Grp_SetGrpTypName (NewGrpTypName);
+   Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.OptionalMandatory = GrpTyp.Enrolment.OptionalMandatory;
+   Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.SingleMultiple    = GrpTyp.Enrolment.SingleMultiple;
+   Gbl.Crs.Grps.GrpDat.GrpTyp.MustBeOpened = GrpTyp.MustBeOpened;
+   Gbl.Crs.Grps.GrpDat.GrpTyp.OpenTimeUTC  = GrpTyp.OpenTimeUTC;
    Grp_ReqEditGroupsInternal (AlertType,AlertTxt,Ale_INFO,NULL);
   }
 
