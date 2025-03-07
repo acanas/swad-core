@@ -529,6 +529,7 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct Usr_Data *UsrDat,
 void Mrk_ShowMyMarks (void)
   {
    struct Mrk_Properties Marks;
+   long CurrentGrpCod;
    char FileNameUsrMarks[PATH_MAX + 1];
    FILE *FileUsrMarks;
    char PathPrivate[PATH_MAX + 1 +
@@ -554,17 +555,17 @@ void Mrk_ShowMyMarks (void)
    else						// If I am logged as non-editing teacher, teacher or admin
      {
       /* Select a random student from the course */
-      if (Gbl.Crs.Grps.GrpDat.Grp.GrpCod > 0)	// Group zone
+      if ((CurrentGrpCod = Grp_GetGrpCod ()) > 0)	// Group zone
         {
-         if (Grp_DB_CountNumUsrsInGrp (Rol_STD,Gbl.Crs.Grps.GrpDat.Grp.GrpCod))	// If there are students in this group
+         if (Grp_DB_CountNumUsrsInGrp (Rol_STD,CurrentGrpCod))	// If there are students in this group
            {
-            Gbl.Usrs.Other.UsrDat.UsrCod = Grp_DB_GetRamdomStdFromGrp (Gbl.Crs.Grps.GrpDat.Grp.GrpCod);
+            Gbl.Usrs.Other.UsrDat.UsrCod = Grp_DB_GetRamdomStdFromGrp (CurrentGrpCod);
             UsrDat = &Gbl.Usrs.Other.UsrDat;
            }
          else
             UsrIsOK = false;
         }
-      else				// Course zone
+      else						// Course zone
         {
 	 if (Enr_GetNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 				   1 << Rol_STD))	// If there are students in this course

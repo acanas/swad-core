@@ -171,7 +171,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.SingleMultiple    = Grp_SINGLE;
    Gbl.Crs.Grps.GrpDat.GrpTyp.MustBeOpened = Grp_MUST_NOT_BE_OPENED;
    Gbl.Crs.Grps.GrpDat.GrpTyp.OpenTimeUTC = (time_t) 0;
-   Gbl.Crs.Grps.GrpDat.Grp.GrpCod = -1L;	// -1L stands for the whole course
+   Grp_SetGrpCod (-1L);				// -1L stands for the whole course
    Gbl.Crs.Grps.GrpDat.Grp.Name[0] = '\0';
    Gbl.Crs.Grps.GrpDat.Grp.Room.RooCod = -1L;	// -1L stands for no room assigned
    Gbl.Crs.Grps.GrpDat.Grp.MaxStds = Grp_NUM_STUDENTS_NOT_LIMITED;

@@ -4592,7 +4592,7 @@ int swad__getDirectoryTree (struct soap *soap,
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getDirectoryTree;
    Gbl.Hierarchy.Node[Hie_CRS].HieCod = (long) courseCode;
-   Gbl.Crs.Grps.GrpDat.Grp.GrpCod = (long) groupCode;
+   Grp_SetGrpCod ((long) groupCode);
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
@@ -4612,7 +4612,7 @@ int swad__getDirectoryTree (struct soap *soap,
    /***** Check course and group codes *****/
    if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
 						   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-						   Gbl.Crs.Grps.GrpDat.Grp.GrpCod)) != SOAP_OK)
+						   Grp_GetGrpCod ())) != SOAP_OK)
       return ReturnCode;
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
@@ -4624,8 +4624,8 @@ int swad__getDirectoryTree (struct soap *soap,
 	                          "Requester must belong to course");
 
    /***** Check if I belong to course/group *****/
-   if (Gbl.Crs.Grps.GrpDat.Grp.GrpCod > 0)
-      if (Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpDat.Grp.GrpCod) == Usr_DONT_BELONG)
+   if (Grp_GetGrpCod () > 0)
+      if (Grp_GetIfIBelongToGrp (Grp_GetGrpCod ()) == Usr_DONT_BELONG)
 	 return soap_receiver_fault (soap,
 				     "Request forbidden",
 				     "Requester must belong to group");
@@ -4675,8 +4675,8 @@ int swad__getDirectoryTree (struct soap *soap,
    /* Initialize path to private directory */
    Gbl.Hierarchy.Node[Hie_CRS].HieCod = (courseCode > 0) ? (long) courseCode :
 	                                                   -1L;
-   Gbl.Crs.Grps.GrpDat.Grp.GrpCod = (groupCode > 0) ? (long) groupCode :
-	                                               -1L;
+   Grp_SetGrpCod ((groupCode > 0) ? (long) groupCode :
+	                            -1L);
 
    snprintf (Gbl.Crs.Path.AbsPriv,sizeof (Gbl.Crs.Path.AbsPriv),"%s/%ld",
              Cfg_PATH_CRS_PRIVATE,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
@@ -4889,6 +4889,7 @@ int swad__getFile (struct soap *soap,
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
    int ReturnCode;
    struct Brw_FileMetadata FileMetadata;
+   long GrpCod;
    char URL[WWW_MAX_BYTES_WWW + 1];
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
 
@@ -4939,7 +4940,8 @@ int swad__getFile (struct soap *soap,
                                   &Gbl.Hierarchy.Node[Hie_CTR].HieCod,
                                   &Gbl.Hierarchy.Node[Hie_DEG].HieCod,
                                   &Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-                                  &Gbl.Crs.Grps.GrpDat.Grp.GrpCod);
+                                  &GrpCod);
+   Grp_SetGrpCod (GrpCod);
    Hie_InitHierarchy ();
 
    /***** Get some of my data *****/
@@ -4953,7 +4955,7 @@ int swad__getFile (struct soap *soap,
    /***** Check course and group codes *****/
    if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
 						   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-						   Gbl.Crs.Grps.GrpDat.Grp.GrpCod)) != SOAP_OK)
+						   Grp_GetGrpCod ())) != SOAP_OK)
       return ReturnCode;
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
@@ -4965,8 +4967,8 @@ int swad__getFile (struct soap *soap,
 	                          "Requester must belong to course");
 
    /***** Check if I belong to group *****/
-   if (Gbl.Crs.Grps.GrpDat.Grp.GrpCod > 0)
-      if (Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpDat.Grp.GrpCod) == Usr_DONT_BELONG)
+   if (Grp_GetGrpCod () > 0)
+      if (Grp_GetIfIBelongToGrp (Grp_GetGrpCod ()) == Usr_DONT_BELONG)
 	 return soap_receiver_fault (soap,
 				     "Request forbidden",
 				     "Requester must belong to group");
@@ -5052,6 +5054,7 @@ int swad__getMarks (struct soap *soap,
   {
    int ReturnCode;
    struct Brw_FileMetadata FileMetadata;
+   long GrpCod;
    char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];	// Not used
    char *ContentStr;
    size_t Length;
@@ -5087,12 +5090,13 @@ int swad__getMarks (struct soap *soap,
                                   &Gbl.Hierarchy.Node[Hie_CTR].HieCod,
                                   &Gbl.Hierarchy.Node[Hie_DEG].HieCod,
                                   &Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-                                  &Gbl.Crs.Grps.GrpDat.Grp.GrpCod);
+                                  &GrpCod);
+   Grp_SetGrpCod (GrpCod);
 
    /***** Check course and group codes *****/
    if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
 						   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-						   Gbl.Crs.Grps.GrpDat.Grp.GrpCod)) != SOAP_OK)
+						   Grp_GetGrpCod ())) != SOAP_OK)
       return ReturnCode;
 
    /***** Get some of my data *****/
@@ -5112,8 +5116,8 @@ int swad__getMarks (struct soap *soap,
 	                          "Requester must belong to course");
 
    /***** Check if I belong to group *****/
-   if (Gbl.Crs.Grps.GrpDat.Grp.GrpCod > 0)
-      if (Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpDat.Grp.GrpCod) == Usr_DONT_BELONG)
+   if (Grp_GetGrpCod () > 0)
+      if (Grp_GetIfIBelongToGrp (Grp_GetGrpCod ()) == Usr_DONT_BELONG)
 	 return soap_receiver_fault (soap,
 				     "Request forbidden",
 				     "Requester must belong to group");

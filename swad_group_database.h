@@ -67,7 +67,6 @@ unsigned Grp_DB_GetAllGrpTypesInCrs (MYSQL_RES **mysql_res,long CrsCod);
 unsigned Grp_DB_GetGrpTypesInCurrentCrsToBeOpened (MYSQL_RES **mysql_res);
 
 unsigned Grp_DB_CountNumGrpsInCurrentCrs (void);
-unsigned Grp_DB_CountNumGrpsInThisCrsOfType (long GrpTypCod);
 unsigned Grp_DB_GetGrpsInCrs (MYSQL_RES **mysql_res,long CrsCod);
 unsigned Grp_DB_GetGrpsOfType (MYSQL_RES **mysql_res,long GrpTypCod);
 

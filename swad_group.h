@@ -182,6 +182,12 @@ struct Grp_Groups
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+void Grp_SetGrpTypCod (long GrpTypCod);
+long Grp_GetGrpTypCod (void);
+
+void Grp_SetGrpCod (long GrpCod);
+long Grp_GetGrpCod (void);
+
 void Grp_WriteNamesOfSelectedGrps (void);
 void Grp_ReqEditGroups (void);
 

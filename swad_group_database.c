@@ -344,7 +344,7 @@ unsigned Grp_DB_GetUsrsFromCurrentGrpExceptMe (MYSQL_RES **mysql_res)
 		    " FROM grp_users"
 		   " WHERE GrpCod=%ld"
 		     " AND UsrCod<>%ld",
-		   Gbl.Crs.Grps.GrpDat.Grp.GrpCod,
+		   Grp_GetGrpCod (),
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -367,7 +367,7 @@ unsigned Grp_DB_GetTchsFromCurrentGrpExceptMe (MYSQL_RES **mysql_res)
 		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
 		     " AND grp_types.CrsCod=crs_users.CrsCod"
 		     " AND crs_users.Role=%u",	// Teachers only
-		   Gbl.Crs.Grps.GrpDat.Grp.GrpCod,
+		   Grp_GetGrpCod (),
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) Rol_TCH);
   }
@@ -530,21 +530,6 @@ unsigned Grp_DB_CountNumGrpsInCurrentCrs (void)
 		  " WHERE grp_types.CrsCod=%ld"
 		    " AND grp_types.GrpTypCod=grp_groups.GrpTypCod",
 		  Gbl.Hierarchy.Node[Hie_CRS].HieCod);
-  }
-
-/*****************************************************************************/
-/****************** Count number of groups in a group type *******************/
-/*****************************************************************************/
-
-unsigned Grp_DB_CountNumGrpsInThisCrsOfType (long GrpTypCod)
-  {
-   /***** Get number of groups of a type from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of groups of a type",
-		  "SELECT COUNT(*)"
-		   " FROM grp_groups"
-		  " WHERE GrpTypCod=%ld",
-		  GrpTypCod);
   }
 
 /*****************************************************************************/
