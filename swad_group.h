@@ -187,6 +187,8 @@ long Grp_GetGrpTypCod (void);
 
 void Grp_SetGrpCod (long GrpCod);
 long Grp_GetGrpCod (void);
+void Grp_SetGrpName (const char *NewGrpName);
+const char *Grp_GetGrpName (void);
 
 void Grp_WriteNamesOfSelectedGrps (void);
 void Grp_ReqEditGroups (void);

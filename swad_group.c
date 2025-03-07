@@ -141,7 +141,7 @@ static bool Grp_CheckIfGrpIsInList (long GrpCod,struct ListCodGrps *LstGrps);
 static bool Grp_CheckIfOpenTimeInTheFuture (time_t OpenTimeUTC);
 
 static void Grp_AskConfirmRemGrpTypWithGrps (void);
-static void Grp_AskConfirmRemGrp (void);
+static void Grp_AskConfirmRemGrp (const char *GrpName);
 static void Grp_RemoveGroupTypeCompletely (long GrpTypCod);
 static void Grp_RemoveGroupCompletely (long GrpCod);
 
@@ -175,6 +175,18 @@ void Grp_SetGrpCod (long GrpCod)
 long Grp_GetGrpCod (void)
   {
    return Gbl.Crs.Grps.GrpDat.Grp.GrpCod;
+  }
+
+void Grp_SetGrpName (const char *NewGrpName)
+
+  {
+   Str_Copy (Gbl.Crs.Grps.GrpDat.Grp.Name,NewGrpName,
+	     sizeof (Gbl.Crs.Grps.GrpDat.Grp.Name) - 1);
+  }
+
+const char *Grp_GetGrpName (void)
+  {
+   return Gbl.Crs.Grps.GrpDat.Grp.Name;
   }
 
 /*****************************************************************************/
@@ -2738,8 +2750,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
    HTM_SECTION_Begin (Grp_NEW_GROUP_SECTION_ID);
 
       /***** Begin form to create *****/
-      Frm_BeginFormTable (ActNewGrp,Grp_GROUPS_SECTION_ID,NULL,NULL,
-			  "TBL_SCROLL");
+      Frm_BeginFormTable (ActNewGrp,Grp_GROUPS_SECTION_ID,NULL,NULL,"TBL_SCROLL");
 
 	 /***** Write heading *****/
 	 Grp_WriteHeadingGroups ();
@@ -2787,7 +2798,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 
 	    /***** Group name *****/
 	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Gbl.Crs.Grps.GrpDat.Grp.Name,
+	       HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Grp_GetGrpName (),
 			       HTM_REQUIRED,
 			       "size=\"20\" class=\"INPUT_%s\"",The_GetSuffix ());
 	    HTM_TD_End ();
@@ -3545,6 +3556,7 @@ void Grp_ReceiveNewGrp (void)
    extern const char *Txt_Created_new_group_X;
    extern const char *Txt_You_must_specify_the_name;
    long GrpTypCod;
+   char NewGrpName[Grp_MAX_BYTES_GROUP_NAME + 1];
    Ale_AlertType_t AlertType;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
@@ -3554,7 +3566,8 @@ void Grp_ReceiveNewGrp (void)
       Grp_SetGrpTypCod (GrpTypCod);
 
       /* Get group name */
-      Par_GetParText ("GrpName",Gbl.Crs.Grps.GrpDat.Grp.Name,Grp_MAX_BYTES_GROUP_NAME);
+      Par_GetParText ("GrpName",NewGrpName,Grp_MAX_BYTES_GROUP_NAME);
+      Grp_SetGrpName (NewGrpName);
 
       /* Get room */
       Gbl.Crs.Grps.GrpDat.Grp.Room.RooCod = ParCod_GetPar (ParCod_Roo);
@@ -3566,15 +3579,15 @@ void Grp_ReceiveNewGrp (void)
 				 Grp_MAX_STUDENTS_IN_A_GROUP,
 				 Grp_NUM_STUDENTS_NOT_LIMITED);
 
-      if (Gbl.Crs.Grps.GrpDat.Grp.Name[0])	// If there's a group name
+      if (NewGrpName[0])	// If there's a group name
         {
          /***** If name of group was in database... *****/
          if (Grp_DB_CheckIfGrpNameExistsForGrpTyp (Grp_GetGrpTypCod (),
-						   Gbl.Crs.Grps.GrpDat.Grp.Name,-1L))
+						   NewGrpName,-1L))
            {
             AlertType = Ale_WARNING;
             snprintf (AlertTxt,sizeof (AlertTxt),
-	              Txt_The_group_X_already_exists,Gbl.Crs.Grps.GrpDat.Grp.Name);
+	              Txt_The_group_X_already_exists,NewGrpName);
            }
          else	// Add new group to database
            {
@@ -3583,7 +3596,7 @@ void Grp_ReceiveNewGrp (void)
 	    /* Write success message */
             AlertType = Ale_SUCCESS;
 	    snprintf (AlertTxt,sizeof (AlertTxt),
-	              Txt_Created_new_group_X,Gbl.Crs.Grps.GrpDat.Grp.Name);
+	              Txt_Created_new_group_X,NewGrpName);
            }
         }
       else	// If there is not a group name
@@ -3627,7 +3640,7 @@ void Grp_ReqRemGroup (void)
    Grp_SetGrpCod (ParCod_GetAndCheckPar (ParCod_Grp));
 
    /***** Confirm removing *****/
-   Grp_AskConfirmRemGrp ();
+   Grp_AskConfirmRemGrp (Grp_GetGrpName ());
   }
 
 /*****************************************************************************/
@@ -3660,7 +3673,7 @@ static void Grp_AskConfirmRemGrpTypWithGrps (void)
 /******************* Ask for confirmation to remove a group ******************/
 /*****************************************************************************/
 
-static void Grp_AskConfirmRemGrp (void)
+static void Grp_AskConfirmRemGrp (const char *GrpName)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_group_X;
    long GrpCod = Grp_GetGrpCod ();
@@ -3675,8 +3688,7 @@ static void Grp_AskConfirmRemGrp (void)
    /***** Show question and button to remove group *****/
    Ale_ShowAlertRemove (ActRemGrp,Grp_GROUPS_SECTION_ID,
 			Grp_PutParGrpCod,&GrpCod,
-			Txt_Do_you_really_want_to_remove_the_group_X,
-			Gbl.Crs.Grps.GrpDat.Grp.Name);
+			Txt_Do_you_really_want_to_remove_the_group_X,GrpName);
 
    /***** Show the form to edit groups again *****/
    Grp_ReqEditGroupsInternal2 (Ale_INFO,NULL);
@@ -3727,8 +3739,7 @@ void Grp_RemoveGroup (void)
    Grp_RemoveGroupCompletely (Grp_GetGrpCod ());
 
    /***** Create message to show the change made *****/
-   snprintf (AlertTxt,sizeof (AlertTxt),Txt_Group_X_removed,
-	     Gbl.Crs.Grps.GrpDat.Grp.Name);
+   snprintf (AlertTxt,sizeof (AlertTxt),Txt_Group_X_removed,Grp_GetGrpName ());
 
    /***** Show the form again *****/
    Grp_ReqEditGroupsInternal (Ale_INFO,NULL,Ale_SUCCESS,AlertTxt);
@@ -3824,8 +3835,8 @@ void Grp_OpenGroup (void)
    Grp_DB_OpenGrp (Grp_GetGrpCod ());
 
    /***** Create message to show the change made *****/
-   snprintf (AlertTxt,sizeof (AlertTxt),Txt_The_group_X_is_now_open,
-	     Gbl.Crs.Grps.GrpDat.Grp.Name);
+   snprintf (AlertTxt,sizeof (AlertTxt),
+	     Txt_The_group_X_is_now_open,Grp_GetGrpName ());
 
    /***** Show the form again *****/
    Gbl.Crs.Grps.GrpDat.Grp.ClosedOrOpen = CloOpe_OPEN;
@@ -3851,8 +3862,8 @@ void Grp_CloseGroup (void)
    Grp_DB_CloseGrp (Grp_GetGrpCod ());
 
    /***** Create message to show the change made *****/
-   snprintf (AlertTxt,sizeof (AlertTxt),Txt_The_group_X_is_now_closed,
-	     Gbl.Crs.Grps.GrpDat.Grp.Name);
+   snprintf (AlertTxt,sizeof (AlertTxt),
+	     Txt_The_group_X_is_now_closed,Grp_GetGrpName ());
 
    /***** Show the form again *****/
    Gbl.Crs.Grps.GrpDat.Grp.ClosedOrOpen = CloOpe_CLOSED;
@@ -3879,8 +3890,7 @@ void Grp_EnableFileZonesGrp (void)
 
    /***** Create message to show the change made *****/
    snprintf (AlertTxt,sizeof (AlertTxt),
-             Txt_File_zones_of_the_group_X_are_now_enabled,
-             Gbl.Crs.Grps.GrpDat.Grp.Name);
+             Txt_File_zones_of_the_group_X_are_now_enabled,Grp_GetGrpName ());
 
    /***** Show the form again *****/
    Gbl.Crs.Grps.GrpDat.Grp.FileZones = Grp_HAS_FILEZONES;
@@ -3907,8 +3917,7 @@ void Grp_DisableFileZonesGrp (void)
 
    /***** Create message to show the change made *****/
    snprintf (AlertTxt,sizeof (AlertTxt),
-	     Txt_File_zones_of_the_group_X_are_now_disabled,
-             Gbl.Crs.Grps.GrpDat.Grp.Name);
+	     Txt_File_zones_of_the_group_X_are_now_disabled,Grp_GetGrpName ());
 
    /***** Show the form again *****/
    Gbl.Crs.Grps.GrpDat.Grp.FileZones = Grp_HAS_NOT_FILEZONES;
@@ -3924,6 +3933,7 @@ void Grp_ChangeGroupType (void)
    extern const char *Txt_The_group_X_already_exists;
    extern const char *Txt_The_type_of_group_of_the_group_X_has_changed;
    long NewGrpTypCod;
+   const char *GrpName = Grp_GetGrpName ();	// Copy pointer
    Ale_AlertType_t AlertType;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
@@ -3938,12 +3948,12 @@ void Grp_ChangeGroupType (void)
    Grp_GetGroupDataByCod (&Gbl.Crs.Grps.GrpDat);
 
    /***** If group was in database... *****/
-   if (Grp_DB_CheckIfGrpNameExistsForGrpTyp (NewGrpTypCod,Gbl.Crs.Grps.GrpDat.Grp.Name,-1L))
+   if (Grp_DB_CheckIfGrpNameExistsForGrpTyp (NewGrpTypCod,GrpName,-1L))
      {
       /* Create warning message */
       AlertType = Ale_WARNING;
-      snprintf (AlertTxt,sizeof (AlertTxt),Txt_The_group_X_already_exists,
-		Gbl.Crs.Grps.GrpDat.Grp.Name);
+      snprintf (AlertTxt,sizeof (AlertTxt),
+	        Txt_The_group_X_already_exists,GrpName);
      }
    else	// Group is not in database
      {
@@ -3953,8 +3963,7 @@ void Grp_ChangeGroupType (void)
       /* Create message to show the change made */
       AlertType = Ale_SUCCESS;
       snprintf (AlertTxt,sizeof (AlertTxt),
-	        Txt_The_type_of_group_of_the_group_X_has_changed,
-                Gbl.Crs.Grps.GrpDat.Grp.Name);
+	        Txt_The_type_of_group_of_the_group_X_has_changed,GrpName);
      }
 
    /***** Show the form again *****/
@@ -3989,8 +3998,7 @@ void Grp_ChangeGroupRoom (void)
    /* Create message to show the change made */
    AlertType = Ale_SUCCESS;
    snprintf (AlertTxt,sizeof (AlertTxt),
-	     Txt_The_room_assigned_to_the_group_X_has_changed,
-	     Gbl.Crs.Grps.GrpDat.Grp.Name);
+	     Txt_The_room_assigned_to_the_group_X_has_changed,Grp_GetGrpName ());
 
    /***** Show the form again *****/
    Gbl.Crs.Grps.GrpDat.Grp.Room.RooCod = NewRooCod;
@@ -4142,6 +4150,7 @@ void Grp_ChangeMaxStdsGrp (void)
    extern const char *Txt_The_group_X_does_not_have_a_student_limit_now;
    extern const char *Txt_The_maximum_number_of_students_in_group_X_is_now_Y;
    unsigned NewMaxStds;
+   const char *GrpName = Grp_GetGrpName ();	// Copy pointer
    Ale_AlertType_t AlertType;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
@@ -4165,8 +4174,7 @@ void Grp_ChangeMaxStdsGrp (void)
      {
       AlertType = Ale_INFO;
       snprintf (AlertTxt,sizeof (AlertTxt),
-		Txt_The_maximum_number_of_students_in_group_X_has_not_changed,
-		Gbl.Crs.Grps.GrpDat.Grp.Name);
+		Txt_The_maximum_number_of_students_in_group_X_has_not_changed,GrpName);
      }
    else
      {
@@ -4177,12 +4185,11 @@ void Grp_ChangeMaxStdsGrp (void)
       AlertType = Ale_SUCCESS;
       if (NewMaxStds > Grp_MAX_STUDENTS_IN_A_GROUP)
          snprintf (AlertTxt,sizeof (AlertTxt),
-	           Txt_The_group_X_does_not_have_a_student_limit_now,
-                   Gbl.Crs.Grps.GrpDat.Grp.Name);
+	           Txt_The_group_X_does_not_have_a_student_limit_now,GrpName);
       else
          snprintf (AlertTxt,sizeof (AlertTxt),
 	           Txt_The_maximum_number_of_students_in_group_X_is_now_Y,
-                   Gbl.Crs.Grps.GrpDat.Grp.Name,NewMaxStds);
+	           GrpName,NewMaxStds);
      }
 
    /***** Show the form again *****/
@@ -4298,7 +4305,8 @@ void Grp_RenameGroup (void)
    extern const char *Txt_The_group_X_already_exists;
    extern const char *Txt_The_group_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   char NewNameGrp[Grp_MAX_BYTES_GROUP_NAME + 1];
+   char NewGrpName[Grp_MAX_BYTES_GROUP_NAME + 1];
+   const char *GrpName = Grp_GetGrpName ();	// Copy pointer
    Ale_AlertType_t AlertType;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
@@ -4307,13 +4315,13 @@ void Grp_RenameGroup (void)
    Grp_SetGrpCod (ParCod_GetAndCheckPar (ParCod_Grp));
 
    /* Get the new name for the group */
-   Par_GetParText ("GrpName",NewNameGrp,Grp_MAX_BYTES_GROUP_NAME);
+   Par_GetParText ("GrpName",NewGrpName,Grp_MAX_BYTES_GROUP_NAME);
 
    /***** Get from the database the type and the old name of the group *****/
    Grp_GetGroupDataByCod (&Gbl.Crs.Grps.GrpDat);
 
    /***** Check if new name is empty *****/
-   if (!NewNameGrp[0])
+   if (!NewGrpName[0])
      {
       AlertType = Ale_WARNING;
       Str_Copy (AlertTxt,Txt_You_can_not_leave_the_field_empty,
@@ -4323,39 +4331,37 @@ void Grp_RenameGroup (void)
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (Gbl.Crs.Grps.GrpDat.Grp.Name,NewNameGrp))	// Different names
+      if (strcmp (GrpName,NewGrpName))	// Different names
         {
          /***** If group was in database... *****/
-         if (Grp_DB_CheckIfGrpNameExistsForGrpTyp (Grp_GetGrpTypCod (),NewNameGrp,
+         if (Grp_DB_CheckIfGrpNameExistsForGrpTyp (Grp_GetGrpTypCod (),NewGrpName,
 						   Grp_GetGrpCod ()))
            {
 	    AlertType = Ale_WARNING;
             snprintf (AlertTxt,sizeof (AlertTxt),
-	              Txt_The_group_X_already_exists,NewNameGrp);
+	              Txt_The_group_X_already_exists,NewGrpName);
            }
          else
            {
             /***** Update the table changing old name by new name *****/
-            Grp_DB_RenameGrp (Grp_GetGrpCod (),NewNameGrp);
+            Grp_DB_RenameGrp (Grp_GetGrpCod (),NewGrpName);
 
             /***** Write message to show the change made *****/
 	    AlertType = Ale_SUCCESS;
             snprintf (AlertTxt,sizeof (AlertTxt),
-	              Txt_The_group_X_has_been_renamed_as_Y,
-                      Gbl.Crs.Grps.GrpDat.Grp.Name,NewNameGrp);
+	              Txt_The_group_X_has_been_renamed_as_Y,GrpName,NewGrpName);
            }
         }
       else	// The same name
         {
 	 AlertType = Ale_INFO;
          snprintf (AlertTxt,sizeof (AlertTxt),
-	           Txt_The_name_X_has_not_changed,NewNameGrp);
+	           Txt_The_name_X_has_not_changed,NewGrpName);
         }
      }
 
    /***** Show the form again *****/
-   Str_Copy (Gbl.Crs.Grps.GrpDat.Grp.Name,NewNameGrp,
-	     sizeof (Gbl.Crs.Grps.GrpDat.Grp.Name) - 1);
+   Grp_SetGrpName (NewGrpName);
    Grp_ReqEditGroupsInternal (Ale_INFO,NULL,AlertType,AlertTxt);
   }
 
