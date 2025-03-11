@@ -1086,7 +1086,7 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
    if (NotifyEvent[FileBrowser])
       /***** Set notification as removed *****/
       Ntf_DB_MarkNotifChildrenOfFolderAsRemoved (NotifyEvent[FileBrowser],FileBrowser,
-						 Brw_GetCodForFileBrowser (),
+						 Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
 						 Path);
   }
 
@@ -1098,28 +1098,11 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
 
 unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
   {
-   static unsigned (*GetUsrsBrowser[Brw_NUM_TYPES_FILE_BROWSER]) (MYSQL_RES **mysql_res) =
+   extern bool Brw_TypeIsGrpBrw[Brw_NUM_TYPES_FILE_BROWSER];
+   static unsigned (*GetUsrsForum[For_NUM_TYPES_FORUM]) (MYSQL_RES **mysql_res,long CrsGrpCod) =
      {
-      // Notify all users in course except me
-      [Brw_ADMI_DOC_CRS] = Enr_DB_GetUsrsFromCurrentCrsExceptMe,
-      [Brw_ADMI_SHR_CRS] = Enr_DB_GetUsrsFromCurrentCrsExceptMe,
-      [Brw_ADMI_MRK_CRS] = Enr_DB_GetUsrsFromCurrentCrsExceptMe,
-
-      // Notify all teachers in course except me
-      [Brw_ADMI_TCH_CRS] = Enr_DB_GetTchsFromCurrentCrsExceptMe,
-
-      // Notify all users in group except me
-      [Brw_ADMI_DOC_GRP] = Grp_DB_GetUsrsFromCurrentGrpExceptMe,
-      [Brw_ADMI_SHR_GRP] = Grp_DB_GetUsrsFromCurrentGrpExceptMe,
-      [Brw_ADMI_MRK_GRP] = Grp_DB_GetUsrsFromCurrentGrpExceptMe,
-
-      // Notify all teachers in group except me
-      [Brw_ADMI_TCH_GRP] = Grp_DB_GetTchsFromCurrentGrpExceptMe,
-     };
-   static unsigned (*GetUsrsForum[For_NUM_TYPES_FORUM]) (MYSQL_RES **mysql_res) =
-     {
-      [For_FORUM_COURSE_USRS] = Enr_DB_GetUsrsFromCurrentCrsExceptMe,
-      [For_FORUM_COURSE_TCHS] = Enr_DB_GetTchsFromCurrentCrsExceptMe,
+      [For_FORUM_COURSE_USRS] = Enr_DB_GetUsrsFromCrsExceptMe,
+      [For_FORUM_COURSE_TCHS] = Enr_DB_GetTchsFromCrsExceptMe,
      };
    MYSQL_RES *mysql_res;
    unsigned NumUsrs = 0;	// Initialized to avoid warning
@@ -1139,30 +1122,30 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_UNKNOWN:	// This function should not be called in this case
          return 0;
       case Ntf_EVENT_DOCUMENT_FILE:
-      case Ntf_EVENT_TEACHERS_FILE:
       case Ntf_EVENT_SHARED_FILE:
       case Ntf_EVENT_MARKS_FILE:
-	 if (GetUsrsBrowser[Gbl.FileBrowser.Type])
-            NumUsrs = GetUsrsBrowser[Gbl.FileBrowser.Type] (&mysql_res);
-	 else
-	    return 0;
-         break;
+	 NumUsrs = Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type] ? Grp_DB_GetUsrsFromGrpExceptMe (&mysql_res,Brw_GetGrpCod ()) :
+							    Enr_DB_GetUsrsFromCrsExceptMe (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+	 break;
+      case Ntf_EVENT_TEACHERS_FILE:
+	 NumUsrs = Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type] ? Grp_DB_GetTchsFromGrpExceptMe (&mysql_res,Brw_GetGrpCod ()) :
+							    Enr_DB_GetTchsFromCrsExceptMe (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+	 break;
       case Ntf_EVENT_ASSIGNMENT:
          NumUsrs = Asg_DB_GetUsrsFromAssignmentExceptMe (&mysql_res,Cod);
          break;
       case Ntf_EVENT_CALL_FOR_EXAM:
       case Ntf_EVENT_NOTICE:
-         NumUsrs = Enr_DB_GetUsrsFromCurrentCrsExceptMe (&mysql_res);
+         NumUsrs = Enr_DB_GetUsrsFromCrsExceptMe (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
          break;
       case Ntf_EVENT_ENROLMENT_STD:	// This function should not be called in this case
       case Ntf_EVENT_ENROLMENT_NET:	// This function should not be called in this case
       case Ntf_EVENT_ENROLMENT_TCH:	// This function should not be called in this case
          return 0;
       case Ntf_EVENT_ENROLMENT_REQUEST:
-	 if (Enr_GetNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-				   1 << Rol_TCH))
+	 if (Enr_GetNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,1 << Rol_TCH))
 	    // If this course has teachers ==> send notification to teachers
-            NumUsrs = Enr_DB_GetTchsFromCurrentCrsExceptMe (&mysql_res);
+            NumUsrs = Enr_DB_GetTchsFromCrsExceptMe (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 	 else	// Course without teachers
 	    // If this course has no teachers
 	    // and I want to be a teacher (checked before calling this function
@@ -1184,7 +1167,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	 // Check if forum is for users or for all users in the course
 	 For_GetThreadForumTypeAndHieCodOfAPost (Cod,&ForumSelected);
 	 if (GetUsrsForum[ForumSelected.Type])
-            NumUsrs = GetUsrsForum[ForumSelected.Type] (&mysql_res);
+            NumUsrs = GetUsrsForum[ForumSelected.Type] (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 	 else
 	    return 0;
          break;

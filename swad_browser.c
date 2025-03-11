@@ -1276,14 +1276,33 @@ static void Brw_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 static void Brw_GetNumberOfOERs (Brw_License_t License,
                                  unsigned long NumFiles[2]);
 
+
+/*****************************************************************************/
+/***************************** Set/get group code ****************************/
+/*****************************************************************************/
+
+static long Brw_GrpCod = -1L;
+
+void Brw_SetGrpCod (long GrpCod)
+  {
+   Brw_GrpCod = GrpCod;
+  }
+
+long Brw_GetGrpCod (void)
+  {
+   return Brw_GrpCod;
+  }
+
 /*****************************************************************************/
 /***************** Get parameters related to file browser ********************/
 /*****************************************************************************/
 
 void Brw_GetParAndInitFileBrowser (void)
   {
+   long GrpCod;
+
    /***** If a group is selected, get its data *****/
-   Grp_SetGrpCod (Brw_GetGrpSettings ());
+   GrpCod = Brw_GetGrpSettings ();
 
    /***** Get type of file browser *****/
    switch (Gbl.Action.Act)
@@ -1469,8 +1488,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActSeeAdmDocCrsGrp:	// Access to a documents zone from menu
       case ActChgToSeeDocCrs:	// Access to see a documents zone
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (Grp_GetGrpCod () > 0) ? Brw_SHOW_DOC_GRP :
-                                                         Brw_SHOW_DOC_CRS;
+         Gbl.FileBrowser.Type = (GrpCod > 0) ? Brw_SHOW_DOC_GRP :
+                                               Brw_SHOW_DOC_CRS;
          break;
       case ActSeeDocCrs:
       case ActExpSeeDocCrs:
@@ -1491,8 +1510,8 @@ void Brw_GetParAndInitFileBrowser (void)
          break;
       case ActChgToAdmDocCrs:	// Access to admin a documents zone
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (Grp_GetGrpCod () > 0) ? Brw_ADMI_DOC_GRP :
-                                                         Brw_ADMI_DOC_CRS;
+         Gbl.FileBrowser.Type = (GrpCod > 0) ? Brw_ADMI_DOC_GRP :
+                                               Brw_ADMI_DOC_CRS;
          break;
       case ActAdmDocCrs:
       case ActReqRemFilDocCrs:
@@ -1546,8 +1565,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActAdmTchCrsGrp:
       case ActChgToAdmTch:	// Access to a teachers zone from menu
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (Grp_GetGrpCod () > 0) ? Brw_ADMI_TCH_GRP :
-                                                         Brw_ADMI_TCH_CRS;
+         Gbl.FileBrowser.Type = (GrpCod > 0) ? Brw_ADMI_TCH_GRP :
+                                               Brw_ADMI_TCH_CRS;
          break;
       case ActAdmTchCrs:
       case ActReqRemFilTchCrs:
@@ -1596,8 +1615,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActAdmShaCrsGrp:
       case ActChgToAdmSha:	// Access to a shared zone from menu
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (Grp_GetGrpCod () > 0) ? Brw_ADMI_SHR_GRP :
-                                                         Brw_ADMI_SHR_CRS;
+         Gbl.FileBrowser.Type = (GrpCod > 0) ? Brw_ADMI_SHR_GRP :
+                                               Brw_ADMI_SHR_CRS;
          break;
       case ActAdmShaCrs:
       case ActReqRemFilShaCrs:
@@ -1787,13 +1806,13 @@ void Brw_GetParAndInitFileBrowser (void)
 	   {
 	    case Rol_STD:
 	    case Rol_NET:
-	       Gbl.FileBrowser.Type = (Grp_GetGrpCod () > 0) ? Brw_SHOW_MRK_GRP :
-							       Brw_SHOW_MRK_CRS;
+	       Gbl.FileBrowser.Type = (GrpCod > 0) ? Brw_SHOW_MRK_GRP :
+						     Brw_SHOW_MRK_CRS;
 	       break;
 	    case Rol_TCH:
 	    case Rol_SYS_ADM:
-	       Gbl.FileBrowser.Type = (Grp_GetGrpCod () > 0) ? Brw_ADMI_MRK_GRP :
-							       Brw_ADMI_MRK_CRS;
+	       Gbl.FileBrowser.Type = (GrpCod > 0) ? Brw_ADMI_MRK_GRP :
+						     Brw_ADMI_MRK_CRS;
 	       break;
 	    default:
 	       Err_WrongRoleExit ();
@@ -1802,8 +1821,8 @@ void Brw_GetParAndInitFileBrowser (void)
          break;
       case ActChgToSeeMrk:	// Access to see a marks zone
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (Grp_GetGrpCod () > 0) ? Brw_SHOW_MRK_GRP :
-                                                         Brw_SHOW_MRK_CRS;
+         Gbl.FileBrowser.Type = (GrpCod > 0) ? Brw_SHOW_MRK_GRP :
+                                               Brw_SHOW_MRK_CRS;
          break;
       case ActSeeMrkCrs:
       case ActExpSeeMrkCrs:
@@ -1822,8 +1841,8 @@ void Brw_GetParAndInitFileBrowser (void)
          break;
       case ActChgToAdmMrk:	// Access to admin a marks zone
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (Grp_GetGrpCod () > 0) ? Brw_ADMI_MRK_GRP :
-                                                         Brw_ADMI_MRK_CRS;
+         Gbl.FileBrowser.Type = (GrpCod > 0) ? Brw_ADMI_MRK_GRP :
+                                               Brw_ADMI_MRK_CRS;
          break;
       case ActAdmMrkCrs:
       case ActReqRemFilMrkCrs:
@@ -2017,16 +2036,18 @@ void Brw_GetParAndInitFileBrowser (void)
 	                                                            Brw_GetFullTreeFromForm ();
 
    /***** Initialize file browser *****/
+   Brw_SetGrpCod (GrpCod);
    Brw_InitializeFileBrowser ();
   }
 
 /*****************************************************************************/
 /******* Get group code from last access to current zone or from form ********/
 /*****************************************************************************/
+// Return group code (if <= 0 ==> course)
 
 static long Brw_GetGrpSettings (void)
   {
-   long GrpCod = ParCod_GetPar (ParCod_Grp);
+   long GrpCod;
    Grp_FileZones_t FileZones;			// Group has file zones?
 
    /***** Try to get parameter with group code *****/
@@ -2136,7 +2157,7 @@ void Brw_PutParsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
   {
    if (Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type])		// This file browser needs specify a group
       /***** Group code *****/
-      ParCod_PutPar (ParCod_Grp,Grp_GetGrpCod ());
+      ParCod_PutPar (ParCod_Grp,Brw_GetGrpCod ());
    else if (Brw_TypeIsAdmPrj[Gbl.FileBrowser.Type])	// This file browser needs specify a project
       /***** Project code *****/
       ParCod_PutPar (ParCod_Prj,Prj_GetPrjCod ());
@@ -2340,8 +2361,7 @@ static void Brw_SetPathFileBrowser (void)
 
          /* Create path to this group */
          snprintf (Path,sizeof (Path),"%s/%s/%ld",
-                   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_GRP,
-                   Grp_GetGrpCod ());
+                   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_GRP,Brw_GetGrpCod ());
          Str_Copy (Gbl.FileBrowser.Path.AboveRootFolder,Path,
                    sizeof (Gbl.FileBrowser.Path.AboveRootFolder) - 1);
 	 break;
@@ -2875,10 +2895,10 @@ void Brw_PutLegalNotice (void)
 static void Brw_FormToChangeCrsGrpZone (void)
   {
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
+   long CurrentGrpCod;
    struct ListCodGrps LstMyGrps;
    unsigned NumGrp;
    struct GroupData GrpDat;
-   long CurrentGrpCod;
 
    /***** Get list of groups to show *****/
    if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
@@ -2908,14 +2928,15 @@ static void Brw_FormToChangeCrsGrpZone (void)
 	 /***** List my groups for unique selection *****/
 	 if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
 	   {
-	    CurrentGrpCod = Grp_GetGrpCod ();
+	    CurrentGrpCod = Brw_GetGrpCod ();
 	    for (NumGrp = 0;
 		 NumGrp < LstMyGrps.NumGrps;
 		 NumGrp++)
 	      {
 	       /* Get next group */
 	       GrpDat.Grp.GrpCod = LstMyGrps.GrpCods[NumGrp];
-	       Grp_GetGroupDataByCod (&GrpDat);
+	       Grp_GetGroupDataByCod (&GrpDat.CrsCod,&GrpDat.GrpTyp.GrpTypCod,&GrpDat.Grp);
+	       Grp_GetGroupTypeDataByCod (&GrpDat.GrpTyp);
 
 	       /* Select this group */
 	       HTM_LI_Begin ("class=\"%s\"",
@@ -2957,7 +2978,8 @@ static void Brw_GetSelectedGroupData (struct GroupData *GrpDat,bool AbortOnError
    if (GrpDat->Grp.GrpCod > 0)
      {
       /***** Get the data of the selected group *****/
-      Grp_GetGroupDataByCod (GrpDat);
+      Grp_GetGroupDataByCod (&GrpDat->CrsCod,&GrpDat->GrpTyp.GrpTypCod,&GrpDat->Grp);
+      Grp_GetGroupTypeDataByCod (&GrpDat->GrpTyp);
 
       /***** For security, check if group file zones are enabled,
              and check if I belongs to the selected group *****/
@@ -3439,7 +3461,7 @@ static void Brw_UpdateLastAccess (void)
          if (Gbl.Action.Act == ActChgToSeeDocCrs ||
              Gbl.Action.Act == ActChgToAdmDocCrs ||
              Gbl.Action.Act == ActChgToAdmTch)	// Update group of last access to a documents/teachers zone only when user changes zone
-            Set_DB_UpdateGrpMyLastAccZone ("LastDowGrpCod",Grp_GetGrpCod ());
+            Set_DB_UpdateGrpMyLastAccZone ("LastDowGrpCod",Brw_GetGrpCod ());
          break;
       case Brw_ADMI_SHR_CRS:
          if (Gbl.Action.Act == ActChgToAdmSha) 	// Update group of last access to a shared files zone only when user changes zone
@@ -3447,7 +3469,7 @@ static void Brw_UpdateLastAccess (void)
 	 break;
       case Brw_ADMI_SHR_GRP:
          if (Gbl.Action.Act == ActChgToAdmSha) 	// Update group of last access to a shared files zone only when user changes zone
-            Set_DB_UpdateGrpMyLastAccZone ("LastComGrpCod",Grp_GetGrpCod ());
+            Set_DB_UpdateGrpMyLastAccZone ("LastComGrpCod",Brw_GetGrpCod ());
 	 break;
       case Brw_SHOW_MRK_CRS:
       case Brw_ADMI_MRK_CRS:
@@ -3459,7 +3481,7 @@ static void Brw_UpdateLastAccess (void)
       case Brw_ADMI_MRK_GRP:
          if (Gbl.Action.Act == ActChgToSeeMrk ||
              Gbl.Action.Act == ActChgToAdmMrk)	// Update group of last access to a marks zone only when user changes zone
-            Set_DB_UpdateGrpMyLastAccZone ("LastAssGrpCod",Grp_GetGrpCod ());
+            Set_DB_UpdateGrpMyLastAccZone ("LastAssGrpCod",Brw_GetGrpCod ());
 	 break;
       default:
 	 break;
@@ -3601,7 +3623,7 @@ static void Brw_PutCheckboxFullTree (void)
 static void Brw_PutParsFullTree (__attribute__((unused)) void *Args)
   {
    if (Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type])
-      ParCod_PutPar (ParCod_Grp,Grp_GetGrpCod ());
+      ParCod_PutPar (ParCod_Grp,Brw_GetGrpCod ());
    else if (Brw_TypeIsAdmPrj[Gbl.FileBrowser.Type])	// This file browser needs specify a project
       ParCod_PutPar (ParCod_Prj,Prj_GetPrjCod ());
    else if (Brw_TypeIsAdmCrsAsgWrk[Gbl.FileBrowser.Type])
@@ -4080,7 +4102,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 
    if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
       /***** Header and footer rows *****/
-      Mrk_GetAndWriteNumRowsHeaderAndFooter (Grp_GetGrpCod ());
+      Mrk_GetAndWriteNumRowsHeaderAndFooter ();
    else if (Brw_TypeIsAdmAsg[Gbl.FileBrowser.Type] && Level == 1)
       /***** Start and end dates of assignment *****/
       Asg_WriteDatesAssignment (&Gbl.FileBrowser.Asg);
@@ -4483,9 +4505,9 @@ static void Brw_PutIconFolder (unsigned Level,
                                const char *FileBrowserId,const char *RowId,
                                Brw_IconTree_t IconSubtree)
   {
-   static void (*Brw_PutIconFolder[Usr_NUM_CAN]) (const char *FileBrowserId,const char *RowId,
-			                            CloOpe_ClosedOrOpen_t ClosedOrOpen,
-			                            HidVis_HiddenOrVisible_t HiddenOrVisible) =
+   static void (*PutIcon[Usr_NUM_CAN]) (const char *FileBrowserId,const char *RowId,
+			                CloOpe_ClosedOrOpen_t ClosedOrOpen,
+			                HidVis_HiddenOrVisible_t HiddenOrVisible) =
      {
       [Usr_CAN_NOT] = Brw_PutIconFolderWithoutPlus,
       [Usr_CAN    ] = Brw_PutIconFolderWithPlus,
@@ -4510,8 +4532,8 @@ static void Brw_PutIconFolder (unsigned Level,
       for (ClosedOrOpen  = CloOpe_CLOSED;
 	   ClosedOrOpen <= CloOpe_OPEN;
 	   ClosedOrOpen++)
-	 Brw_PutIconFolder[ICanCreateIntoFolder] (FileBrowserId,RowId,ClosedOrOpen,
-						  HiddenOrVisible[IconSubtree][ClosedOrOpen]);
+	 PutIcon[ICanCreateIntoFolder] (FileBrowserId,RowId,ClosedOrOpen,
+					HiddenOrVisible[IconSubtree][ClosedOrOpen]);
 
    /***** End cell *****/
    HTM_TD_End ();
@@ -5287,7 +5309,8 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_DOC_GRP:
          GrpDat.Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
-         Grp_GetGroupDataByCod (&GrpDat);
+         Grp_GetGroupDataByCod (&GrpDat.CrsCod,&GrpDat.GrpTyp.GrpTypCod,&GrpDat.Grp);
+	 Grp_GetGroupTypeDataByCod (&GrpDat.GrpTyp);
          Hie[Hie_CRS].HieCod = GrpDat.CrsCod;
 	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
@@ -5306,7 +5329,8 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_TCH_GRP:
          GrpDat.Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
-         Grp_GetGroupDataByCod (&GrpDat);
+         Grp_GetGroupDataByCod (&GrpDat.CrsCod,&GrpDat.GrpTyp.GrpTypCod,&GrpDat.Grp);
+	 Grp_GetGroupTypeDataByCod (&GrpDat.GrpTyp);
          Hie[Hie_CRS].HieCod = GrpDat.CrsCod;
 	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
@@ -5325,7 +5349,8 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_SHR_GRP:
          GrpDat.Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
-         Grp_GetGroupDataByCod (&GrpDat);
+         Grp_GetGroupDataByCod (&GrpDat.CrsCod,&GrpDat.GrpTyp.GrpTypCod,&GrpDat.Grp);
+	 Grp_GetGroupTypeDataByCod (&GrpDat.GrpTyp);
          Hie[Hie_CRS].HieCod = GrpDat.CrsCod;
 	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
@@ -5407,7 +5432,8 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_MRK_GRP:
          GrpDat.Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
-         Grp_GetGroupDataByCod (&GrpDat);
+         Grp_GetGroupDataByCod (&GrpDat.CrsCod,&GrpDat.GrpTyp.GrpTypCod,&GrpDat.Grp);
+	 Grp_GetGroupTypeDataByCod (&GrpDat.GrpTyp);
          Hie[Hie_CRS].HieCod = GrpDat.CrsCod;
 	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
@@ -5559,7 +5585,7 @@ static bool Brw_CheckIfClipboardIsInThisTree (void)
 	 case Brw_ADMI_TCH_GRP:
 	 case Brw_ADMI_SHR_GRP:
 	 case Brw_ADMI_MRK_GRP:
-            if (Gbl.FileBrowser.Clipboard.HieCod == Grp_GetGrpCod ())
+            if (Gbl.FileBrowser.Clipboard.HieCod == Brw_GetGrpCod ())
                return true;		// I am in the group of the clipboard
             break;
 	 case Brw_ADMI_DOC_PRJ:
@@ -5580,9 +5606,9 @@ static bool Brw_CheckIfClipboardIsInThisTree (void)
 /* Get code of institution, degree, course, group depending on file browser **/
 /*****************************************************************************/
 
-long Brw_GetCodForFileBrowser (void)
+long Brw_GetCodForFileBrowser (Brw_FileBrowser_t FileBrowser)
   {
-   switch (Gbl.FileBrowser.Type)
+   switch (FileBrowser)
      {
       case Brw_SHOW_DOC_INS:
       case Brw_ADMI_DOC_INS:
@@ -5613,12 +5639,11 @@ long Brw_GetCodForFileBrowser (void)
       case Brw_ADMI_SHR_GRP:
       case Brw_SHOW_MRK_GRP:
       case Brw_ADMI_MRK_GRP:
-	 return Grp_GetGrpCod ();
+	 return Brw_GetGrpCod ();
       case Brw_ADMI_DOC_PRJ:
       case Brw_ADMI_ASS_PRJ:
 	 return Prj_GetPrjCod ();
       case Brw_ADMI_BRF_USR:
-	 return -1L;
       default:
 	 return -1L;
      }
@@ -5840,7 +5865,8 @@ static void Brw_PasteClipboard (struct BrwSiz_BrowserSize *Size)
 	    case Brw_ADMI_SHR_GRP:
 	    case Brw_ADMI_MRK_GRP:
 	       GrpDat.Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
-	       Grp_GetGroupDataByCod (&GrpDat);
+	       Grp_GetGroupDataByCod (&GrpDat.CrsCod,&GrpDat.GrpTyp.GrpTypCod,&GrpDat.Grp);
+	       Grp_GetGroupTypeDataByCod (&GrpDat.GrpTyp);
 	       Hie[Hie_CRS].HieCod = GrpDat.CrsCod;
 	       if (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
 		  snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%ld/%s",
@@ -8612,7 +8638,8 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
       case Brw_ADMI_MRK_GRP:
 	 /* Cod stores the group code */
 	 *GrpCod = GrpDat.Grp.GrpCod = Cod;
-	 Grp_GetGroupDataByCod (&GrpDat);
+	 Grp_GetGroupDataByCod (&GrpDat.CrsCod,&GrpDat.GrpTyp.GrpTypCod,&GrpDat.Grp);
+	 Grp_GetGroupTypeDataByCod (&GrpDat.GrpTyp);
 	 *CrsCod = Crs.HieCod = GrpDat.CrsCod;
 	 Hie_GetDataByCod[Hie_CRS] (&Crs);
 	 *DegCod = Deg.HieCod = Crs.PrtCod;
@@ -8710,8 +8737,8 @@ static Usr_Can_t Brw_CheckIfICanEditFileOrFolder (unsigned Level)
       case Brw_ADMI_DOC_GRP:
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// A teacher...
 							// ...can edit only if he/she belongs to group
-	    return (Grp_GetIfIBelongToGrp (Grp_GetGrpCod ()) == Usr_BELONG) ? Usr_CAN :
-									      Usr_CAN_NOT;
+	    return (Grp_GetIfIBelongToGrp (Brw_GetGrpCod ()) == Usr_BELONG) ? Usr_CAN :
+								              Usr_CAN_NOT;
 	 // An administrator can edit
          return (Gbl.Usrs.Me.Role.Logged > Rol_TCH) ? Usr_CAN :
 						      Usr_CAN_NOT;
@@ -8768,7 +8795,7 @@ static Usr_Can_t Brw_CheckIfICanCreateIntoFolder (unsigned Level)
       case Brw_ADMI_DOC_GRP:
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// A teacher
 							// ...can create/paste only if he/she belongs to group
-	    return (Grp_GetIfIBelongToGrp (Grp_GetGrpCod ()) == Usr_BELONG) ? Usr_CAN :
+	    return (Grp_GetIfIBelongToGrp (Brw_GetGrpCod ()) == Usr_BELONG) ? Usr_CAN :
 									      Usr_CAN_NOT;
 	 // An administrator can create/paste
          return (Gbl.Usrs.Me.Role.Logged > Rol_TCH) ? Usr_CAN :
@@ -8780,7 +8807,7 @@ static Usr_Can_t Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_NET ||	// A non-editing teacher...
 	     Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// ...or a teacher
 							// ...can create/paste only if he/she belongs to group
-	    return (Grp_GetIfIBelongToGrp (Grp_GetGrpCod ()) == Usr_BELONG) ? Usr_CAN :
+	    return (Grp_GetIfIBelongToGrp (Brw_GetGrpCod ()) == Usr_BELONG) ? Usr_CAN :
 									      Usr_CAN_NOT;
 	 // An administrator can create/paste
          return (Gbl.Usrs.Me.Role.Logged > Rol_TCH) ? Usr_CAN :
@@ -8792,7 +8819,7 @@ static Usr_Can_t Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 	 if (Gbl.Usrs.Me.Role.Logged >= Rol_STD &&	// A student, non-editing teacher...
 	     Gbl.Usrs.Me.Role.Logged <= Rol_TCH)	// ...or a teacher
 							// ...can create/paste only if he/she belongs to group
-	    return (Grp_GetIfIBelongToGrp (Grp_GetGrpCod ()) == Usr_BELONG) ? Usr_CAN :
+	    return (Grp_GetIfIBelongToGrp (Brw_GetGrpCod ()) == Usr_BELONG) ? Usr_CAN :
 									      Usr_CAN_NOT;
 	 // An administrator can create/paste
          return (Gbl.Usrs.Me.Role.Logged >= Rol_STD) ? Usr_CAN :

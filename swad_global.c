@@ -161,30 +161,20 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Crs.Notices.HighlightNotCod = -1L;	// No notice highlighted
 
-   Gbl.Crs.Grps.NumGrps = 0;
+   Gbl.Crs.Grps.NumGrps   = 0;
    Gbl.Crs.Grps.MyAllGrps = Grp_MY_ALL_GROUPS_DEFAULT;
    Gbl.Crs.Grps.GrpTypes.LstGrpTypes = NULL;
    Gbl.Crs.Grps.GrpTypes.NumGrpTypes = 0;
    Gbl.Crs.Grps.GrpTypes.NestedCalls = 0;
-   Grp_SetGrpTypName ("");
-   Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.OptionalMandatory = Grp_MANDATORY;
-   Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.SingleMultiple    = Grp_SINGLE;
-   Gbl.Crs.Grps.GrpDat.GrpTyp.MustBeOpened = Grp_MUST_NOT_BE_OPENED;
-   Gbl.Crs.Grps.GrpDat.GrpTyp.OpenTimeUTC = (time_t) 0;
-   Grp_SetGrpCod (-1L);				// -1L stands for the whole course
-   Grp_SetGrpName ("");
-   Gbl.Crs.Grps.GrpDat.Grp.Room.RooCod = -1L;	// -1L stands for no room assigned
-   Gbl.Crs.Grps.GrpDat.Grp.MaxStds = Grp_NUM_STUDENTS_NOT_LIMITED;
-   Gbl.Crs.Grps.GrpDat.Grp.ClosedOrOpen = CloOpe_CLOSED;
-   Gbl.Crs.Grps.LstGrpsSel.GrpCods  = NULL;
-   Gbl.Crs.Grps.LstGrpsSel.NumGrps = 0;
+   Gbl.Crs.Grps.LstGrpsSel.GrpCods     = NULL;
+   Gbl.Crs.Grps.LstGrpsSel.NumGrps     = 0;
    Gbl.Crs.Grps.LstGrpsSel.NestedCalls = 0;
 
-   Gbl.Crs.Records.Field.Name[0] = '\0';
-   Gbl.Crs.Records.Field.NumLines = Rec_MIN_LINES_IN_EDITION_FIELD;
+   Gbl.Crs.Records.Field.Name[0]    = '\0';
+   Gbl.Crs.Records.Field.NumLines   = Rec_MIN_LINES_IN_EDITION_FIELD;
    Gbl.Crs.Records.Field.Visibility = Rec_HIDDEN_FIELD;
-   Gbl.Crs.Records.LstFields.Lst = NULL;
-   Gbl.Crs.Records.LstFields.Num = 0;
+   Gbl.Crs.Records.LstFields.Lst         = NULL;
+   Gbl.Crs.Records.LstFields.Num         = 0;
    Gbl.Crs.Records.LstFields.NestedCalls = 0;
 
    Gbl.Usrs.Listing.RecsUsrs   = Rec_RECORD_USERS_UNKNOWN;

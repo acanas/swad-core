@@ -84,10 +84,11 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct Usr_Data *UsrDat,
 /********* Write number of header and footer rows of a file of marks *********/
 /*****************************************************************************/
 
-void Mrk_GetAndWriteNumRowsHeaderAndFooter (long GrpCod)
+void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
   {
    extern const char *Txt_TABLE_Header;
    extern const char *Txt_TABLE_Footer;
+   long CurrentGrpCod;
    struct Mrk_Properties Marks;
    char StrHeadOrFoot[Cns_MAX_DIGITS_UINT + 1];
 
@@ -95,14 +96,16 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (long GrpCod)
       HTM_TD_ColouredEmpty (2);
    else	// File or link
      {
+      CurrentGrpCod = Brw_GetGrpCod ();
+
       /***** Get number of rows in header or footer *****/
       Mrk_GetNumRowsHeaderAndFooter (&Marks);
 
       /***** Write the number of rows of header *****/
       HTM_TD_Begin ("class=\"RT FORM_IN_%s NOWRAP %s\"",
 		    The_GetSuffix (),The_GetColorRows ());
-	 Frm_BeginForm (GrpCod > 0 ? ActChgNumRowHeaGrp :	// Group zone
-				     ActChgNumRowHeaCrs);	// Course zone
+	 Frm_BeginForm (CurrentGrpCod > 0 ? ActChgNumRowHeaGrp :	// Group zone
+					    ActChgNumRowHeaCrs);	// Course zone
 	    Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 	    HTM_LABEL_Begin (NULL);
 	       // HTM_TxtF ("&nbsp;%s: ",Txt_TABLE_Header);
@@ -119,8 +122,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (long GrpCod)
       /***** Write the number of rows of footer *****/
       HTM_TD_Begin ("class=\"RT FORM_IN_%s NOWRAP %s\"",
 		    The_GetSuffix (),The_GetColorRows ());
-	 Frm_BeginForm (GrpCod > 0 ? ActChgNumRowFooGrp :	// Group zone
-				     ActChgNumRowFooCrs);	// Course zone
+	 Frm_BeginForm (CurrentGrpCod > 0 ? ActChgNumRowFooGrp :	// Group zone
+				            ActChgNumRowFooCrs);	// Course zone
 	    Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 	    HTM_LABEL_Begin (NULL);
 	       // HTM_TxtF ("&nbsp;%s: ",Txt_TABLE_Footer);
@@ -529,11 +532,11 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct Usr_Data *UsrDat,
 void Mrk_ShowMyMarks (void)
   {
    struct Mrk_Properties Marks;
-   long CurrentGrpCod;
    char FileNameUsrMarks[PATH_MAX + 1];
    FILE *FileUsrMarks;
    char PathPrivate[PATH_MAX + 1 +
 		    PATH_MAX + 1];
+   long CurrentGrpCod;
    struct Usr_Data *UsrDat;
    bool UsrIsOK = true;
 
@@ -554,8 +557,10 @@ void Mrk_ShowMyMarks (void)
       UsrDat = &Gbl.Usrs.Me.UsrDat;		// ...use my list of IDs
    else						// If I am logged as non-editing teacher, teacher or admin
      {
+      CurrentGrpCod = Brw_GetGrpCod ();
+
       /* Select a random student from the course */
-      if ((CurrentGrpCod = Grp_GetGrpCod ()) > 0)	// Group zone
+      if (CurrentGrpCod > 0)	// Group zone
         {
          if (Grp_DB_CountNumUsrsInGrp (Rol_STD,CurrentGrpCod))	// If there are students in this group
            {
@@ -565,7 +570,7 @@ void Mrk_ShowMyMarks (void)
          else
             UsrIsOK = false;
         }
-      else						// Course zone
+      else		// Course zone
         {
 	 if (Enr_GetNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 				   1 << Rol_STD))	// If there are students in this course

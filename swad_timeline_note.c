@@ -956,7 +956,7 @@ void TmlNot_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
 
    if (TmlNot_NoteType[FileBrowser])
       Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (TmlNot_NoteType[FileBrowser],FileBrowser,
-						     Brw_GetCodForFileBrowser (),
+						     Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
 						     Path);
   }
 

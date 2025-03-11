@@ -282,7 +282,7 @@ unsigned Enr_DB_GetUsrsFromCurrentCrs (MYSQL_RES **mysql_res)
 /******* Get all user codes belonging to the current course, except me *******/
 /*****************************************************************************/
 
-unsigned Enr_DB_GetUsrsFromCurrentCrsExceptMe (MYSQL_RES **mysql_res)
+unsigned Enr_DB_GetUsrsFromCrsExceptMe (MYSQL_RES **mysql_res,long CrsCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get users from current course",
@@ -290,7 +290,7 @@ unsigned Enr_DB_GetUsrsFromCurrentCrsExceptMe (MYSQL_RES **mysql_res)
 		    " FROM crs_users"
 		   " WHERE CrsCod=%ld"
 		     " AND UsrCod<>%ld",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   CrsCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -298,7 +298,7 @@ unsigned Enr_DB_GetUsrsFromCurrentCrsExceptMe (MYSQL_RES **mysql_res)
 /***** Get all teachers codes belonging to the current course, except me *****/
 /*****************************************************************************/
 
-unsigned Enr_DB_GetTchsFromCurrentCrsExceptMe (MYSQL_RES **mysql_res)
+unsigned Enr_DB_GetTchsFromCrsExceptMe (MYSQL_RES **mysql_res,long CrsCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get teachers from current course",
@@ -307,7 +307,7 @@ unsigned Enr_DB_GetTchsFromCurrentCrsExceptMe (MYSQL_RES **mysql_res)
 		   " WHERE CrsCod=%ld"
 		     " AND UsrCod<>%ld"
 		     " AND Role=%u",	// Teachers only
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   CrsCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) Rol_TCH);
   }

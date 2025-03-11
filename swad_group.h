@@ -172,7 +172,6 @@ struct Grp_Groups
   {
    unsigned NumGrps;
    struct GroupTypes GrpTypes;
-   struct GroupData GrpDat;
    bool AllGrps;		// All groups selected?
    struct ListCodGrps LstGrpsSel;
    Grp_MyAllGrps_t MyAllGrps;	// Show my groups or all groups
@@ -182,15 +181,11 @@ struct Grp_Groups
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Grp_SetGrpTypCod (long GrpTypCod);
-long Grp_GetGrpTypCod (void);
-void Grp_SetGrpTypName (const char *NewGrpTypName);
-const char *Grp_GetGrpTypName (void);
+void Grp_ResetGroupType (struct GroupType *GrpTyp);
+void Grp_ResetGroup (struct Group *Grp);
 
-void Grp_SetGrpCod (long GrpCod);
-long Grp_GetGrpCod (void);
-void Grp_SetGrpName (const char *NewGrpName);
-const char *Grp_GetGrpName (void);
+void Brw_SetGrpCod (long GrpCod);
+long Brw_GetGrpCod (void);
 
 void Grp_WriteNamesOfSelectedGrps (void);
 void Grp_ReqEditGroups (void);
@@ -223,10 +218,13 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod);
 
 void Grp_GetListGrpTypesInCurrentCrs (Grp_WhichGrpTypes_t WhichGrpTypes);
 void Grp_FreeListGrpTypesAndGrps (void);
+
+void Grp_GetGroupTypeDataByCod (struct GroupType *GrpTyp);
+
 void Grp_OpenGroupsAutomatically (void);
 void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGrpTypes_t WhichGrpTypes);
 Grp_FileZones_t Grp_GetFileZones (long GrpCod);
-void Grp_GetGroupDataByCod (struct GroupData *GrpDat);
+void Grp_GetGroupDataByCod (long *CrsCod,long *GrpTypCod,struct Group *Grp);
 
 void Grp_FlushCacheIBelongToGrp (void);
 Usr_Belong_t Grp_GetIfIBelongToGrp (long GrpCod);

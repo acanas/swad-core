@@ -1438,7 +1438,9 @@ static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
    extern const char *Txt_unknown_removed_course;
    extern const char *Txt_TIMETABLE_CLASS_TYPES[Tmt_NUM_CLASS_TYPES];
    struct Hie_Node Crs;
-   struct GroupData GrpDat;
+   long GrpCrsCod;
+   struct GroupType GrpTyp;
+   struct Group Grp;
 
    /***** Begin cell *****/
    HTM_DIV_Begin ("class=\"Tmt_TXT\"");
@@ -1465,16 +1467,17 @@ static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
       /***** Group *****/
       if (GrpCod > 0 && Timetable->Type != Tmt_TUTORING_TIMETABLE)
 	{
-	 GrpDat.Grp.GrpCod = GrpCod;
-         Grp_GetGroupDataByCod (&GrpDat);
+	 Grp.GrpCod = GrpCod;
+	 Grp_GetGroupDataByCod (&GrpCrsCod,&GrpTyp.GrpTypCod,&Grp);
+	 Grp_GetGroupTypeDataByCod (&GrpTyp);
 	 HTM_BR ();
-	 HTM_Txt (GrpDat.GrpTyp.Name);
+	 HTM_Txt (GrpTyp.Name);
 	 HTM_BR ();
-	 HTM_Txt (GrpDat.Grp.Name);
-	 if (GrpDat.Grp.Room.RooCod > 0)
+	 HTM_Txt (Grp.Name);
+	 if (Grp.Room.RooCod > 0)
 	   {
 	    HTM_BR ();
-	    HTM_TxtF ("(%s)",GrpDat.Grp.Room.ShrtName);
+	    HTM_TxtF ("(%s)",Grp.Room.ShrtName);
 	   }
 	}
 

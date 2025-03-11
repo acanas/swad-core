@@ -61,7 +61,7 @@ void Grp_DB_LockTables (void)
 /************************** Create a new group type **************************/
 /*****************************************************************************/
 
-long Grp_DB_CreateGroupType (void)
+long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp)
   {
    /***** Create a new group type *****/
    return
@@ -73,21 +73,21 @@ long Grp_DB_CreateGroupType (void)
 				" (%ld,'%s',"
 				  "'%c','%c','%c',FROM_UNIXTIME(%ld))",
 				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-				Grp_GetGrpTypName (),
-				Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.OptionalMandatory == Grp_MANDATORY ? 'Y' :
-										                          'N',
-				Gbl.Crs.Grps.GrpDat.GrpTyp.Enrolment.SingleMultiple == Grp_MULTIPLE ? 'Y' :
-										                      'N',
-				Gbl.Crs.Grps.GrpDat.GrpTyp.MustBeOpened == Grp_MUST_BE_OPENED ? 'Y' :
-						                                                'N',
-				(long) Gbl.Crs.Grps.GrpDat.GrpTyp.OpenTimeUTC);
+				GrpTyp->Name,
+				GrpTyp->Enrolment.OptionalMandatory == Grp_MANDATORY ? 'Y' :
+										       'N',
+				GrpTyp->Enrolment.SingleMultiple == Grp_MULTIPLE ? 'Y' :
+										   'N',
+				GrpTyp->MustBeOpened == Grp_MUST_BE_OPENED ? 'Y' :
+						                             'N',
+				(long) GrpTyp->OpenTimeUTC);
   }
 
 /*****************************************************************************/
 /***************************** Create a new group ****************************/
 /*****************************************************************************/
 
-void Grp_DB_CreateGroup (const struct GroupData *GrpDat)
+void Grp_DB_CreateGroup (long GrpTypCod,const struct Group *Grp)
   {
    /***** Create a new group *****/
    DB_QueryINSERT ("can not create group",
@@ -95,10 +95,10 @@ void Grp_DB_CreateGroup (const struct GroupData *GrpDat)
 		   " (GrpTypCod,GrpName,RooCod,MaxStudents,Open,FileZones)"
 		   " VALUES"
 		   " (%ld,'%s',%ld,%u,'N','N')",
-	           GrpDat->GrpTyp.GrpTypCod,
-	           GrpDat->Grp.Name,
-	           GrpDat->Grp.Room.RooCod,
-	           GrpDat->Grp.MaxStds);
+	           GrpTypCod,
+	           Grp->Name,
+	           Grp->Room.RooCod,
+	           Grp->MaxStds);
   }
 
 /*****************************************************************************/
@@ -174,14 +174,12 @@ unsigned Grp_DB_GetGroupDataByCod (MYSQL_RES **mysql_res,long GrpCod)
    DB_QuerySELECT (mysql_res,"can not get data of a group",
 		   "SELECT grp_groups.GrpTypCod,"	// row[0]
 			  "grp_types.CrsCod,"		// row[1]
-			  "grp_types.GrpTypName,"	// row[2]
-			  "grp_types.Multiple,"		// row[3]
-			  "grp_groups.GrpName,"		// row[4]
-			  "grp_groups.RooCod,"		// row[5]
-			  "roo_rooms.ShortName,"	// row[6]
-			  "grp_groups.MaxStudents,"	// row[7]
-			  "grp_groups.Open,"		// row[8]
-			  "grp_groups.FileZones"	// row[9]
+			  "grp_groups.GrpName,"		// row[2]
+			  "grp_groups.RooCod,"		// row[3]
+			  "grp_groups.MaxStudents,"	// row[4]
+			  "grp_groups.Open,"		// row[5]
+			  "grp_groups.FileZones,"	// row[6]
+			  "roo_rooms.ShortName"		// row[7]
 		    " FROM (grp_groups,"
 			   "grp_types)"
 		    " LEFT JOIN roo_rooms"
@@ -336,7 +334,7 @@ long Grp_DB_GetRamdomStdFromGrp (long GrpCod)
 /******** Get all user codes belonging to the current group, except me *******/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetUsrsFromCurrentGrpExceptMe (MYSQL_RES **mysql_res)
+unsigned Grp_DB_GetUsrsFromGrpExceptMe (MYSQL_RES **mysql_res,long GrpCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get users from current group",
@@ -344,7 +342,7 @@ unsigned Grp_DB_GetUsrsFromCurrentGrpExceptMe (MYSQL_RES **mysql_res)
 		    " FROM grp_users"
 		   " WHERE GrpCod=%ld"
 		     " AND UsrCod<>%ld",
-		   Grp_GetGrpCod (),
+		   GrpCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -352,7 +350,7 @@ unsigned Grp_DB_GetUsrsFromCurrentGrpExceptMe (MYSQL_RES **mysql_res)
 /****** Get all teacher codes belonging to the current group, except me ******/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetTchsFromCurrentGrpExceptMe (MYSQL_RES **mysql_res)
+unsigned Grp_DB_GetTchsFromGrpExceptMe (MYSQL_RES **mysql_res,long GrpCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get teachers from current group",
@@ -367,7 +365,7 @@ unsigned Grp_DB_GetTchsFromCurrentGrpExceptMe (MYSQL_RES **mysql_res)
 		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
 		     " AND grp_types.CrsCod=crs_users.CrsCod"
 		     " AND crs_users.Role=%u",	// Teachers only
-		   Grp_GetGrpCod (),
+		   GrpCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) Rol_TCH);
   }
@@ -752,50 +750,47 @@ bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Co
 /************ Change the mandatory enrolment of a type of group **************/
 /*****************************************************************************/
 
-void Grp_DB_ChangeOptionalMandatory (long GrpTypCod,
-				     Grp_OptionalMandatory_t NewOptionalMandatory)
+void Grp_DB_ChangeOptionalMandatory (const struct GroupType *GrpTyp)
   {
    DB_QueryUPDATE ("can not update enrolment type of a type of group",
 		   "UPDATE grp_types"
 		     " SET Mandatory='%c'"
 		   " WHERE GrpTypCod=%ld",
-		   (NewOptionalMandatory == Grp_MANDATORY) ? 'Y' :
-							     'N',
-		   GrpTypCod);
+		   (GrpTyp->Enrolment.OptionalMandatory == Grp_MANDATORY) ? 'Y' :
+									    'N',
+		   GrpTyp->GrpTypCod);
   }
 
 /*****************************************************************************/
 /************* Change the multiple enrolment of a type of group **************/
 /*****************************************************************************/
 
-void Grp_DB_ChangeSingleMultiple (long GrpTypCod,
-                                  Grp_SingleMultiple_t NewSingleMultiple)
+void Grp_DB_ChangeSingleMultiple (const struct GroupType *GrpTyp)
   {
    DB_QueryUPDATE ("can not update enrolment type of a type of group",
 		   "UPDATE grp_types"
 		     " SET Multiple='%c'"
 		   " WHERE GrpTypCod=%ld",
-		   (NewSingleMultiple == Grp_MULTIPLE) ? 'Y' :
-							 'N',
-		   GrpTypCod);
+		   (GrpTyp->Enrolment.SingleMultiple == Grp_MULTIPLE) ? 'Y' :
+									'N',
+		   GrpTyp->GrpTypCod);
   }
 
 /*****************************************************************************/
 /*************** Change the opening time of a type of group ******************/
 /*****************************************************************************/
 
-void Grp_DB_ChangeOpeningTime (long GrpTypCod,
-                               Grp_MustBeOpened_t MustBeOpened,time_t OpenTimeUTC)
+void Grp_DB_ChangeOpeningTime (const struct GroupType *GrpTyp)
   {
    DB_QueryUPDATE ("can not update enrolment type of a type of group",
 		   "UPDATE grp_types"
 		     " SET MustBeOpened='%c',"
 		          "OpenTime=FROM_UNIXTIME(%ld)"
 		   " WHERE GrpTypCod=%ld",
-                   MustBeOpened == Grp_MUST_BE_OPENED ? 'Y' :
-                				        'N',
-                   (long) OpenTimeUTC,
-                   GrpTypCod);
+                   GrpTyp->MustBeOpened == Grp_MUST_BE_OPENED ? 'Y' :
+                						'N',
+                   (long) GrpTyp->OpenTimeUTC,
+                   GrpTyp->GrpTypCod);
   }
 
 /*****************************************************************************/
@@ -1038,15 +1033,14 @@ bool Grp_DB_CheckIfAvailableGrpTyp (long GrpTypCod)
 /*************************** Rename a group type *****************************/
 /*****************************************************************************/
 
-void Grp_DB_RenameGrpTyp (long GrpTypCod,
-                          const char NewNameGrpTyp[Grp_MAX_BYTES_GROUP_TYPE_NAME + 1])
+void Grp_DB_RenameGrpTyp (const struct GroupType *GrpTyp)
   {
-   DB_QueryUPDATE ("can not update the type of a group",
+   DB_QueryUPDATE ("can not update the name of a type of group",
 		   "UPDATE grp_types"
 		     " SET GrpTypName='%s'"
 		   " WHERE GrpTypCod=%ld",
-		   NewNameGrpTyp,
-		   GrpTypCod);
+		   GrpTyp->Name,
+		   GrpTyp->GrpTypCod);
   }
 
 /*****************************************************************************/

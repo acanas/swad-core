@@ -82,7 +82,7 @@ void Mrk_DB_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter,unsigne
 		     " AND brw_files.FilCod=mrk_marks.FilCod",
 		   Mrk_DB_HeadOrFootStr[HeaderOrFooter],NumRows,
 		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-		   Brw_GetCodForFileBrowser (),
+		   Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
 		   Gbl.FileBrowser.FilFolLnk.Full);
   }
 
@@ -135,6 +135,6 @@ unsigned Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res)
 		   Mrk_DB_HeadOrFootStr[Brw_HEADER],
 		   Mrk_DB_HeadOrFootStr[Brw_FOOTER],
 		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-		   Brw_GetCodForFileBrowser (),
+		   Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
 		   Gbl.FileBrowser.FilFolLnk.Full);
   }

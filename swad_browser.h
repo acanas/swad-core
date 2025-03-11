@@ -175,6 +175,9 @@ struct Brw_FileMetadata
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Brw_SetGrpCod (long GrpCod);
+long Brw_GetGrpCod (void);
+
 void Brw_GetParAndInitFileBrowser (void);
 void Brw_InitializeFileBrowser (void);
 bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName);
@@ -236,7 +239,7 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
 
 bool Brw_CheckIfFileBrowserIsEditable (Brw_FileBrowser_t FileBrowser);
 
-long Brw_GetCodForFileBrowser (void);
+long Brw_GetCodForFileBrowser (Brw_FileBrowser_t FileBrowser);
 long Brw_GetZoneUsrCodForFileBrowser (void);
 
 void Brw_DB_RemoveExpiredExpandedFolders (void);

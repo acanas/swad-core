@@ -1173,7 +1173,8 @@ static void ExaSes_CreateSession (struct ExaSes_Session *Session)
 
    /***** Create groups associated to the exam session *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      ExaSes_CreateGrpsAssociatedToExamSession (Session->SesCod,&Gbl.Crs.Grps.LstGrpsSel);
+      ExaSes_CreateGrpsAssociatedToExamSession (Session->SesCod,
+						&Gbl.Crs.Grps.LstGrpsSel);
   }
 
 /*****************************************************************************/
@@ -1188,7 +1189,8 @@ static void ExaSes_UpdateSession (struct ExaSes_Session *Session)
    /***** Update groups associated to the exam session *****/
    Exa_DB_RemoveAllGrpsFromSes (Session->SesCod);	// Remove all groups associated to this session
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      ExaSes_CreateGrpsAssociatedToExamSession (Session->SesCod,&Gbl.Crs.Grps.LstGrpsSel);	// Associate new groups
+      ExaSes_CreateGrpsAssociatedToExamSession (Session->SesCod,
+						&Gbl.Crs.Grps.LstGrpsSel);	// Associate new groups
   }
 
 /*****************************************************************************/

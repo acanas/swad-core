@@ -1999,8 +1999,7 @@ static void Svy_CreateSurvey (struct Svy_Survey *Svy,const char *Txt)
       Svy_CreateGrps (Svy->SvyCod);
 
    /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_survey_X,
-                  Svy->Title);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_survey_X,Svy->Title);
   }
 
 /*****************************************************************************/

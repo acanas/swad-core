@@ -635,30 +635,33 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.57.5 (2025-03-07)"
+#define Log_PLATFORM_VERSION	"SWAD 24.58 (2025-03-12)"
 #define CSS_FILE		"swad24.52.css"
 #define JS_FILE			"swad23.89.js"
 /*
  *
- * NO SE ELIMINA NOTIFICACIÓN DE CONVOCATORIA DE EXAMEN AL VERLA
+ * NO SE ELIMINA NOTIFICACIÓN DE CONVOCATORIA DE EXAMEN AL VERLA. Reported by Francisco Javier Fernández Baldomero.
+ *
+ * Fixed bug in program. Reported by Eva Martínez Ortigosa.
 
-	Version 24.57.5:  Mar 07, 2024  Code refactoring in groups. (344132 lines)
-	Version 24.57.4:  Mar 07, 2024  Code refactoring in groups. (344097 lines)
-	Version 24.57.3:  Mar 07, 2024  Code refactoring in groups. (344085 lines)
-	Version 24.57.2:  Mar 07, 2024  Code refactoring in groups. (344080 lines)
-	Version 24.57.1:  Mar 06, 2024  Code refactoring in groups. (344073 lines)
-	Version 24.57:    Mar 06, 2024  Fixed issues and code refactoring in groups. (344043 lines)
-	Version 24.56:    Mar 05, 2024  Fixed issues registering teachers in groups. (344054 lines)
-	Version 24.55.1:  Jan 12, 2024  Fixed bug in questions. (344038 lines)
-	Version 24.55:    Jan 11, 2024  Changes in buttons. (344041 lines)
-	Version 24.54:    Jan 11, 2024  Changes in buttons. (344140 lines)
-	Version 24.53.1:  Jan 10, 2024  Changes in buttons. (344629 lines)
-	Version 24.53:    Jan 10, 2024  Changes in buttons. (344641 lines)
-	Version 24.52.1:  Jan 10, 2024  Converting old types to old (existing) / new. (344917 lines)
-	Version 24.52:    Jan 10, 2024  Changes in buttons. (344889 lines)
-	Version 24.51.1:  Jan 10, 2024  Converting old types to old (existing) / new. (344965 lines)
-	Version 24.51:    Jan 10, 2024  New type old (existing) / new. (345002 lines)
-	Version 24.50.1:  Jan 08, 2024  Changes in form to edit assignment. (344885 lines)
+	Version 24.58:    Mar 12, 2025  Code refactoring in groups. (344093 lines)
+	Version 24.57.5:  Mar 07, 2025  Code refactoring in groups. (344132 lines)
+	Version 24.57.4:  Mar 07, 2025  Code refactoring in groups. (344097 lines)
+	Version 24.57.3:  Mar 07, 2025  Code refactoring in groups. (344085 lines)
+	Version 24.57.2:  Mar 07, 2025  Code refactoring in groups. (344080 lines)
+	Version 24.57.1:  Mar 06, 2025  Code refactoring in groups. (344073 lines)
+	Version 24.57:    Mar 06, 2025  Fixed issues and code refactoring in groups. (344043 lines)
+	Version 24.56:    Mar 05, 2025  Fixed issues registering teachers in groups. (344054 lines)
+	Version 24.55.1:  Jan 12, 2025  Fixed bug in questions. (344038 lines)
+	Version 24.55:    Jan 11, 2025  Changes in buttons. (344041 lines)
+	Version 24.54:    Jan 11, 2025  Changes in buttons. (344140 lines)
+	Version 24.53.1:  Jan 10, 2025  Changes in buttons. (344629 lines)
+	Version 24.53:    Jan 10, 2025  Changes in buttons. (344641 lines)
+	Version 24.52.1:  Jan 10, 2025  Converting old types to old (existing) / new. (344917 lines)
+	Version 24.52:    Jan 10, 2025  Changes in buttons. (344889 lines)
+	Version 24.51.1:  Jan 10, 2025  Converting old types to old (existing) / new. (344965 lines)
+	Version 24.51:    Jan 10, 2025  New type old (existing) / new. (345002 lines)
+	Version 24.50.1:  Jan 08, 2025  Changes in form to edit assignment. (344885 lines)
 	Version 24.50:    Dec 17, 2024  Rubrics associated to assignments. (344868 lines)
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS asg_rubrics (AsgCod INT NOT NULL,RubCod INT NOT NULL,UNIQUE INDEX(AsgCod));

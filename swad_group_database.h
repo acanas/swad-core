@@ -36,8 +36,8 @@
 
 void Grp_DB_LockTables (void);
 
-long Grp_DB_CreateGroupType (void);
-void Grp_DB_CreateGroup (const struct GroupData *GrpDat);
+long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp);
+void Grp_DB_CreateGroup (long GrpTypCod,const struct Group *Grp);
 
 void Grp_DB_GetGrpTypTitle (long GrpTypCod,char *Title,size_t TitleSize);
 unsigned Grp_DB_GetGroupTypeData (MYSQL_RES **mysql_res,long GrpTypCod);
@@ -54,8 +54,8 @@ bool Grp_DB_CheckIfGrpNameExistsForGrpTyp (long GrpTypCod,const char *GrpName,lo
 unsigned Grp_DB_CountNumUsrsInGrp (Rol_Role_t Role,long GrpCod);
 unsigned Grp_DB_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod);
 long Grp_DB_GetRamdomStdFromGrp (long GrpCod);
-unsigned Grp_DB_GetUsrsFromCurrentGrpExceptMe (MYSQL_RES **mysql_res);
-unsigned Grp_DB_GetTchsFromCurrentGrpExceptMe (MYSQL_RES **mysql_res);
+unsigned Grp_DB_GetUsrsFromGrpExceptMe (MYSQL_RES **mysql_res,long GrpCod);
+unsigned Grp_DB_GetTchsFromGrpExceptMe (MYSQL_RES **mysql_res,long GrpCod);
 
 Usr_Belong_t Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod);
 Usr_Belong_t Grp_DB_CheckIfIBelongToGrp (long GrpCod);
@@ -85,12 +85,9 @@ bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
                                     long Cod,long GrpCod);
 bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod);
 
-void Grp_DB_ChangeOptionalMandatory (long GrpTypCod,
-				     Grp_OptionalMandatory_t NewOptionalMandatory);
-void Grp_DB_ChangeSingleMultiple (long GrpTypCod,
-                                  Grp_SingleMultiple_t NewSingleMultiple);
-void Grp_DB_ChangeOpeningTime (long GrpTypCod,
-                               Grp_MustBeOpened_t MustBeOpened,time_t OpenTimeUTC);
+void Grp_DB_ChangeOptionalMandatory (const struct GroupType *GrpTyp);
+void Grp_DB_ChangeSingleMultiple (const struct GroupType *GrpTyp);
+void Grp_DB_ChangeOpeningTime (const struct GroupType *GrpTyp);
 void Grp_DB_ClearMustBeOpened (long GrpTypCod);
 void Grp_DB_OpenGrpsOfType (long GrpTypCod);
 
@@ -105,8 +102,7 @@ void Grp_DB_ChangeMaxStdsOfGrp (long GrpCod,unsigned NewMaxStds);
 
 bool Grp_DB_CheckIfAvailableGrpTyp (long GrpTypCod);
 
-void Grp_DB_RenameGrpTyp (long GrpTypCod,
-                          const char NewNameGrpTyp[Grp_MAX_BYTES_GROUP_TYPE_NAME + 1]);
+void Grp_DB_RenameGrpTyp (const struct GroupType *GrpTyp);
 void Grp_DB_RenameGrp (long GrpCod,
                        const char NewNameGrp[Grp_MAX_BYTES_GROUP_NAME + 1]);
 
