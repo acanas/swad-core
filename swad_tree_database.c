@@ -523,13 +523,14 @@ void Tre_DB_RemoveCrsNodes (long CrsCod)
 
 void Tre_DB_InsertNodeInExpandedNodes (long NodCod)
   {
-   DB_QueryREPLACE ("can not expand tree node",
-		   "REPLACE INTO tre_expanded"
-		   " (UsrCod,NodCod,ClickTime)"
-		   " VALUES"
-		   " (%ld,%ld,NOW())",
-	           Gbl.Usrs.Me.UsrDat.UsrCod,
-	           NodCod);
+   if (NodCod > 0)
+      DB_QueryREPLACE ("can not expand tree node",
+		       "REPLACE INTO tre_expanded"
+		       " (UsrCod,NodCod,ClickTime)"
+		       " VALUES"
+		       " (%ld,%ld,NOW())",
+		       Gbl.Usrs.Me.UsrDat.UsrCod,
+		       NodCod);
   }
 
 /*****************************************************************************/
@@ -538,6 +539,9 @@ void Tre_DB_InsertNodeInExpandedNodes (long NodCod)
 
 ConExp_ContractedOrExpanded_t Tre_DB_GetIfContractedOrExpandedNode (long NodCod)
   {
+   if (NodCod <= 0)	// No nodes in tree
+      return ConExp_EXPANDED;
+
    return
    DB_QueryEXISTS ("can not check if a tree node is expanded",
 		   "SELECT EXISTS"

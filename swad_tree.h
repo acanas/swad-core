@@ -132,10 +132,8 @@ int Tre_WriteTreeIntoHTMLBuffer (Inf_Type_t InfoType);
 
 unsigned Tre_ShowTree (Inf_Type_t InfoType);
 void Tre_EditTree (Inf_Type_t InfoType);
-void Tre_ShowAllNodes (Inf_Type_t InfoType,
-		       Tre_ListingType_t ListingType,
-                       long SelectedNodCod,
-                       long SelectedItmCod);	// Specific code (resource, question,...)
+void Tre_ShowAllNodes (Tre_ListingType_t ListingType,
+		       const struct Tre_Node *SelectedNode);
 
 Usr_Can_t Tre_CheckIfICanEditTree (void);
 void Tre_PutIconToEditTree (struct Tre_Node *Node);

@@ -175,9 +175,8 @@ static void Tre_ShowFormNode (const struct Tre_Node *Node,
 			      const char *Txt);
 static void Tre_GetNodeDataFromForm (struct Tre_Node *Node,
 				     char Description[Cns_MAX_BYTES_TEXT + 1]);
-static void Tre_InsertNode (Inf_Type_t InfoType,
-			    const struct Tre_Node *ParentNode,
-		            struct Tre_Node *Node,const char *Txt);
+static void Tre_InsertNode (const struct Tre_Node *ParentNode,
+		            struct Tre_Node *NewNode,const char *Txt);
 
 /*****************************************************************************/
 /**************************** List all tree nodes ****************************/
@@ -225,15 +224,17 @@ int Tre_WriteTreeIntoHTMLBuffer (Inf_Type_t InfoType)
 unsigned Tre_ShowTree (Inf_Type_t InfoType)
   {
    unsigned NumNodes;
-
-   // Tre_WriteTreeIntoHTMLBuffer (InfoType);	// Only for debug, remove!
+   struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (InfoType);
    NumNodes = Tre_Gbl.List.NumNodes;
 
    /***** Show course program without highlighting any node *****/
-   Tre_ShowAllNodes (InfoType,Tre_VIEW,-1L,-1L);
+   Node.InfoType = InfoType;
+   Node.Hierarchy.NodCod = -1L;
+   Node.Item.Cod = -1L;
+   Tre_ShowAllNodes (Tre_VIEW,&Node);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -243,11 +244,16 @@ unsigned Tre_ShowTree (Inf_Type_t InfoType)
 
 void Tre_EditTree (Inf_Type_t InfoType)
   {
+   struct Tre_Node Node;
+
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (InfoType);
 
    /***** Show course program without highlighting any node *****/
-   Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,-1L,-1L);
+   Node.InfoType = InfoType;
+   Node.Hierarchy.NodCod = -1L;
+   Node.Item.Cod = -1L;
+   Tre_ShowAllNodes (Tre_EDIT_NODES,&Node);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -257,16 +263,17 @@ void Tre_EditTree (Inf_Type_t InfoType)
 /*************************** Show all tree nodes *****************************/
 /*****************************************************************************/
 
-void Tre_ShowAllNodes (Inf_Type_t InfoType,
-		       Tre_ListingType_t ListingType,
-                       long SelectedNodCod,
-                       long SelectedItmCod)	// Specific code (resource, question,...)
+void Tre_ShowAllNodes (Tre_ListingType_t ListingType,
+		       const struct Tre_Node *SelectedNode)
   {
    long ParentNodCod = -1L;	// Initialized to avoid warning
    unsigned NumNode;
    unsigned FormLevel = 0;	// Initialized to avoid warning
    struct Tre_Node Node;
    ConExp_ContractedOrExpanded_t ContractedOrExpanded;
+   Inf_Type_t InfoType = SelectedNode->InfoType;
+   long SelectedNodCod = SelectedNode->Hierarchy.NodCod;
+   long SelectedItmCod = SelectedNode->Item.Cod;	// Specific code (resource, question,...)
 
    /***** Trivial check: tree type must be valid *****/
    if (InfoType < (Inf_Type_t) 1 ||
@@ -1564,7 +1571,8 @@ void Tre_ViewNodeAfterEdit (Inf_Type_t InfoType)
    Tre_GetPars (&Node);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,Tre_END_EDIT_NODE,Node.Hierarchy.NodCod,-1L);
+   Node.Item.Cod = -1L;
+   Tre_ShowAllNodes (Tre_END_EDIT_NODE,&Node);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -1590,7 +1598,8 @@ void Tre_ReqChangeNode (Inf_Type_t InfoType)
       Tre_DB_InsertNodeInExpandedNodes (Node.Hierarchy.NodCod);					// ...expand it
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,Tre_FORM_EDIT_NODE,Node.Hierarchy.NodCod,-1L);
+   Node.Item.Cod = -1L;
+   Tre_ShowAllNodes (Tre_FORM_EDIT_NODE,&Node);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -1613,13 +1622,14 @@ void Tre_ReqCreateNode (Inf_Type_t InfoType)
 
    /***** Add node to table of expanded nodes
           to ensure that child items are displayed *****/
-   Tre_DB_InsertNodeInExpandedNodes (Node.Hierarchy.NodCod);
+   if (Tre_DB_GetIfContractedOrExpandedNode (Node.Hierarchy.NodCod) == ConExp_CONTRACTED)	// If contracted...
+      Tre_DB_InsertNodeInExpandedNodes (Node.Hierarchy.NodCod);					// ...expand it
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,
-		     Node.Hierarchy.NodCod > 0 ? Tre_FORM_NEW_CHILD_NODE :
+   Node.Item.Cod = -1L;
+   Tre_ShowAllNodes (Node.Hierarchy.NodCod > 0 ? Tre_FORM_NEW_CHILD_NODE :
 	                                         Tre_FORM_NEW_END_NODE,
-	             Node.Hierarchy.NodCod,-1L);
+	             &Node);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -1795,7 +1805,8 @@ void Tre_ReceiveChgNode (Inf_Type_t InfoType)
    Tre_DB_UpdateNode (&Node,Description);
 
    /***** Show items highlighting the node just changed *****/
-   Tre_ShowAllNodes (InfoType,Tre_RECEIVE_NODE,Node.Hierarchy.NodCod,-1L);
+   Node.Item.Cod = -1L;
+   Tre_ShowAllNodes (Tre_RECEIVE_NODE,&Node);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -1807,35 +1818,35 @@ void Tre_ReceiveChgNode (Inf_Type_t InfoType)
 
 void Tre_ReceiveNewNode (Inf_Type_t InfoType)
   {
-   struct Tre_Node Node;		// Parent node
+   struct Tre_Node ParentNode;		// Parent node
    struct Tre_Node NewNode;		// Node data received from form
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (InfoType);
-
    /***** Get tree node *****/
-   Node.InfoType = InfoType;
-   Tre_GetPars (&Node);
+   ParentNode.InfoType = InfoType;
+   Tre_GetPars (&ParentNode);
    // If node code <= 0 ==> this is the first node in the program
 
    /***** Set new node code *****/
-   NewNode.InfoType         = Node.InfoType;
+   NewNode.InfoType         = ParentNode.InfoType;
    NewNode.Hierarchy.NodCod = -1L;
-   NewNode.Hierarchy.Level  = Node.Hierarchy.Level + 1;	// Create as child
+   NewNode.Hierarchy.Level  = ParentNode.Hierarchy.Level + 1;	// Create as child
 
    /***** Get node data from form *****/
    Tre_GetNodeDataFromForm (&NewNode,Description);
 
    /***** Create a new tree node *****/
-   Tre_InsertNode (InfoType,&Node,&NewNode,Description);
+   Tre_InsertNode (&ParentNode,&NewNode,Description);
+
+   /***** Add node to table of expanded nodes *****/
+   Tre_DB_InsertNodeInExpandedNodes (NewNode.Hierarchy.NodCod);
 
    /***** Update list of tree nodes *****/
-   Tre_FreeListNodes ();
    Tre_GetListNodes (InfoType);
 
    /***** Show items highlighting the node just created *****/
-   Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,NewNode.Hierarchy.NodCod,-1L);
+   NewNode.Item.Cod = -1L;
+   Tre_ShowAllNodes (Tre_EDIT_NODES,&NewNode);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -1875,9 +1886,8 @@ static void Tre_GetNodeDataFromForm (struct Tre_Node *Node,
 /*************** Insert a new node as a child of a parent node ***************/
 /*****************************************************************************/
 
-static void Tre_InsertNode (Inf_Type_t InfoType,
-			    const struct Tre_Node *ParentNode,
-		            struct Tre_Node *Node,const char *Txt)
+static void Tre_InsertNode (const struct Tre_Node *ParentNode,
+		            struct Tre_Node *NewNode,const char *Txt)
   {
    unsigned NumNodeLastChild;
 
@@ -1885,7 +1895,7 @@ static void Tre_InsertNode (Inf_Type_t InfoType,
    Tre_DB_LockTableNodes ();
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (InfoType);
+   Tre_GetListNodes (ParentNode->InfoType);
    if (Tre_Gbl.List.NumNodes)	// There are nodes
      {
       if (ParentNode->Hierarchy.NodCod > 0)	// Parent specified
@@ -1895,39 +1905,38 @@ static void Tre_InsertNode (Inf_Type_t InfoType,
 	 if (NumNodeLastChild < Tre_Gbl.List.NumNodes - 1)
 	   {
 	    /***** New node will be inserted after last child of parent *****/
-	    Node->Hierarchy.NodInd = Tre_GetNodIndFromNumNode (NumNodeLastChild + 1);
+	    NewNode->Hierarchy.NodInd = Tre_GetNodIndFromNumNode (NumNodeLastChild + 1);
 
 	    /***** Move down all indexes of after last child of parent *****/
-	    Tre_DB_MoveDownNodes (InfoType,Node->Hierarchy.NodInd);
+	    Tre_DB_MoveDownNodes (ParentNode->InfoType,NewNode->Hierarchy.NodInd);
 	   }
 	 else
 	    /***** New node will be inserted at the end *****/
-	    Node->Hierarchy.NodInd = Tre_GetNodIndFromNumNode (Tre_Gbl.List.NumNodes - 1) + 1;
+	    NewNode->Hierarchy.NodInd = Tre_GetNodIndFromNumNode (Tre_Gbl.List.NumNodes - 1) + 1;
 
 	 /***** Child ==> parent level + 1 *****/
-         Node->Hierarchy.Level = ParentNode->Hierarchy.Level + 1;
+         NewNode->Hierarchy.Level = ParentNode->Hierarchy.Level + 1;
 	}
       else	// No parent specified
 	{
 	 /***** New tree node will be inserted at the end *****/
-	 Node->Hierarchy.NodInd = Tre_GetNodIndFromNumNode (Tre_Gbl.List.NumNodes - 1) + 1;
+	 NewNode->Hierarchy.NodInd = Tre_GetNodIndFromNumNode (Tre_Gbl.List.NumNodes - 1) + 1;
 
 	 /***** First level *****/
-         Node->Hierarchy.Level = 1;
+         NewNode->Hierarchy.Level = 1;
 	}
      }
    else		// There are no nodes
      {
       /***** New tree node will be inserted as the first one *****/
-      Node->Hierarchy.NodInd = 1;
+      NewNode->Hierarchy.NodInd = 1;
 
       /***** First level *****/
-      Node->Hierarchy.Level = 1;
+      NewNode->Hierarchy.Level = 1;
      }
 
    /***** Insert new tree node *****/
-   Node->InfoType = InfoType;
-   Node->Hierarchy.NodCod = Tre_DB_InsertNode (Node,Txt);
+   NewNode->Hierarchy.NodCod = Tre_DB_InsertNode (NewNode,Txt);
 
    /***** Unlock table *****/
    DB_UnlockTables ();
@@ -1974,7 +1983,8 @@ void Tre_ReqRemNode (Inf_Type_t InfoType)
                         Node.Title);
 
    /***** Show item highlighting subtree *****/
-   Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,Node.Hierarchy.NodCod,-1L);
+   Node.Item.Cod = -1L;
+   Tre_ShowAllNodes (Tre_EDIT_NODES,&Node);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -2014,7 +2024,9 @@ void Tre_RemoveNode (Inf_Type_t InfoType)
    Tre_GetListNodes (InfoType);
 
    /***** Show course program without highlighting any node *****/
-   Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,-1L,-1L);
+   Node.Hierarchy.NodCod = -1L;
+   Node.Item.Cod = -1L;
+   Tre_ShowAllNodes (Tre_EDIT_NODES,&Node);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -2042,7 +2054,8 @@ void Tre_HideOrUnhideNode (Inf_Type_t InfoType,
    Tre_DB_HideOrUnhideNode (&Node,HiddenOrVisible);
 
    /***** Show items highlighting subtree *****/
-   Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,Node.Hierarchy.NodCod,-1L);
+   Node.Item.Cod = -1L;
+   Tre_ShowAllNodes (Tre_EDIT_NODES,&Node);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -2093,16 +2106,14 @@ void Tre_MoveUpDownNode (Inf_Type_t InfoType,Tre_MoveUpDown_t UpDown)
       /* Update list of tree nodes */
       Tre_FreeListNodes ();
       Tre_GetListNodes (InfoType);
-
-      /* Show items highlighting subtree */
-      Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,Node.Hierarchy.NodCod,-1L);
      }
    else
      {
-      /* Show course program without highlighting any node */
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
-      Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,-1L,-1L);
+      Node.Hierarchy.NodCod = -1L;
      }
+   Node.Item.Cod = -1L;
+   Tre_ShowAllNodes (Tre_EDIT_NODES,&Node);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -2282,16 +2293,15 @@ void Tre_MoveLeftRightNode (Inf_Type_t InfoType,Tre_MoveLeftRight_t LeftRight)
       /* Update list of tree nodes */
       Tre_FreeListNodes ();
       Tre_GetListNodes (InfoType);
-
-      /* Show items highlighting subtree */
-      Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,Node.Hierarchy.NodCod,-1L);
      }
    else
      {
       /* Show course program without highlighting any node */
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
-      Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,-1L,-1L);
+      Node.Hierarchy.NodCod = -1L;
      }
+   Node.Item.Cod = -1L;
+   Tre_ShowAllNodes (Tre_EDIT_NODES,&Node);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -2328,7 +2338,8 @@ void Tre_ExpandContractNode (Inf_Type_t InfoType,
      }
 
    /***** Show items highlighting subtree *****/
-   Tre_ShowAllNodes (InfoType,ListingType,Node.Hierarchy.NodCod,-1L);
+   Node.Item.Cod = -1L;
+   Tre_ShowAllNodes (ListingType,&Node);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();

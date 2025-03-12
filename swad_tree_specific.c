@@ -742,8 +742,8 @@ void TreSpc_ViewListItemsAfterEdit (Inf_Type_t InfoType)
    Tre_GetPars (&Node);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,Tre_END_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,-1L);
+   Node.Item.Cod = -1L;
+   Tre_ShowAllNodes (Tre_END_EDIT_SPC_LIST_ITEMS,&Node);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -765,8 +765,8 @@ void TreSpc_EditListItems (Inf_Type_t InfoType)
    Tre_GetPars (&Node);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,-1L);
+   Node.Item.Cod = -1L;
+   Tre_ShowAllNodes (Tre_EDIT_SPC_LIST_ITEMS,&Node);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -790,8 +790,7 @@ void TreSpc_EditTreeWithFormItem (Inf_Type_t InfoType)
       Err_WrongItemExit ();
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_ITEM,
-		     Node.Hierarchy.NodCod,Node.Item.Cod);
+   Tre_ShowAllNodes (Tre_EDIT_SPC_ITEM,&Node);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -847,8 +846,7 @@ void TreSpc_ChangeItem (Inf_Type_t InfoType)
       Functions[InfoType].CreItem (&Node);	// Create item
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,Node.Item.Cod);
+   Tre_ShowAllNodes (Tre_EDIT_SPC_LIST_ITEMS,&Node);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -893,8 +891,7 @@ void TreSpc_ReqRemItem (Inf_Type_t InfoType)
 		    ItemTitles[InfoType]);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,Node.Item.Cod);
+   Tre_ShowAllNodes (Tre_EDIT_SPC_LIST_ITEMS,&Node);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -942,8 +939,7 @@ void TreSpc_RemoveItem (Inf_Type_t InfoType)
       Ale_CreateAlert (Ale_SUCCESS,TreSpc_LIST_ITEMS_SECTION_ID,*Txt[InfoType]);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,Node.Item.Cod);
+   Tre_ShowAllNodes (Tre_EDIT_SPC_LIST_ITEMS,&Node);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -971,8 +967,7 @@ void TreSpc_HideOrUnhideItem (Inf_Type_t InfoType,
    Tre_DB_HideOrUnhideItem (&Node,HiddenOrVisible);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,Node.Item.Cod);
+   Tre_ShowAllNodes (Tre_EDIT_SPC_LIST_ITEMS,&Node);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -1016,8 +1011,7 @@ void TreSpc_MoveUpDownItem (Inf_Type_t InfoType,TreSpc_UpDown_t UpDown)
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (InfoType,Tre_EDIT_SPC_LIST_ITEMS,
-		     Node.Hierarchy.NodCod,Node.Item.Cod);
+   Tre_ShowAllNodes (Tre_EDIT_SPC_LIST_ITEMS,&Node);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
