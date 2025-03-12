@@ -1820,8 +1820,9 @@ void Tre_ReceiveNewNode (Inf_Type_t InfoType)
    // If node code <= 0 ==> this is the first node in the program
 
    /***** Set new node code *****/
+   NewNode.InfoType         = Node.InfoType;
    NewNode.Hierarchy.NodCod = -1L;
-   NewNode.Hierarchy.Level = Node.Hierarchy.Level + 1;	// Create as child
+   NewNode.Hierarchy.Level  = Node.Hierarchy.Level + 1;	// Create as child
 
    /***** Get node data from form *****/
    Tre_GetNodeDataFromForm (&NewNode,Description);
