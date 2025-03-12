@@ -65,13 +65,6 @@ typedef enum
   } Qst_QuestionsOrder_t;
 #define Qst_DEFAULT_ORDER Qst_ORDER_STEM
 
-#define Qst_NUM_VALIDITIES 2
-typedef enum
-  {
-   Qst_INVALID_QUESTION,
-   Qst_VALID_QUESTION,
-  } Qst_Validity_t;
-
 struct Qst_Question
   {
    long QstCod;
@@ -99,7 +92,7 @@ struct Qst_Question
    unsigned long NumHits;
    unsigned long NumHitsNotBlank;
    double Score;
-   Qst_Validity_t Validity;	// If a question in an exam has been marked as invalid
+   ExaSet_Validity_t Validity;	// If a question in an exam has been marked as invalid
   };
 
 struct Qst_Questions

@@ -38,6 +38,16 @@
 #include "swad_parameter.h"
 
 /*****************************************************************************/
+/**************************** Private constants ******************************/
+/*****************************************************************************/
+
+const char Exa_DB_InvalidQuestionYN[ExaSet_NUM_VALIDITIES] =
+  {
+   [ExaSet_INVALID_QUESTION] = 'Y',
+   [ExaSet_VALID_QUESTION  ] = 'N',
+  };
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -842,11 +852,6 @@ void Exa_DB_RemoveAllSetsFromCrs (long CrsCod)
 long Exa_DB_AddQuestionToSet (long SetCod,const struct Qst_Question *Question,long MedCod)
   {
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
-   static char CharInvalid[Qst_NUM_VALIDITIES] =
-     {
-      [Qst_INVALID_QUESTION] = 'Y',
-      [Qst_VALID_QUESTION  ] = 'N'
-     };
 
    return
    DB_QueryINSERTandReturnCode ("can not add question to set",
@@ -857,7 +862,7 @@ long Exa_DB_AddQuestionToSet (long SetCod,const struct Qst_Question *Question,lo
 				" (%ld,'%c','%s','%c',"
 				 "'%s','%s',%ld)",
 				SetCod,
-				CharInvalid[Question->Validity],
+				Exa_DB_InvalidQuestionYN[Question->Validity],
 				Qst_DB_StrAnswerTypes[Question->Answer.Type],
 				Question->Answer.Shuffle ? 'Y' :
 							   'N',
@@ -871,14 +876,8 @@ long Exa_DB_AddQuestionToSet (long SetCod,const struct Qst_Question *Question,lo
 /*****************************************************************************/
 
 void Exa_DB_ChangeValidityQst (long QstCod,long SetCod,long ExaCod,long CrsCod,
-                               Qst_Validity_t Validity)
+                               ExaSet_Validity_t Validity)
   {
-   static char CharInvalid[Qst_NUM_VALIDITIES] =
-     {
-      [Qst_INVALID_QUESTION] = 'Y',
-      [Qst_VALID_QUESTION  ] = 'N'
-     };
-
    DB_QueryUPDATE ("can not validate question",
 		   "UPDATE exa_set_questions,"
 		          "exa_sets,"
@@ -890,7 +889,7 @@ void Exa_DB_ChangeValidityQst (long QstCod,long SetCod,long ExaCod,long CrsCod,
 		     " AND exa_sets.ExaCod=%ld"			// Extra check
 		     " AND exa_sets.ExaCod=exa_exams.ExaCod"
 		     " AND exa_exams.CrsCod=%ld",		// Extra check
-		   CharInvalid[Validity],
+		   Exa_DB_InvalidQuestionYN[Validity],
 		   QstCod,
 		   SetCod,
 		   ExaCod,

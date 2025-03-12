@@ -119,6 +119,8 @@ void Att_PutParsCodGrps (long AttCod);
 void Att_RegisterMeAsStdInEvent (void);
 void Att_RegisterStudentsInEvent (void);
 
+Att_Present_t Att_GetAbsentOrPresentFromYN (char Ch);
+
 void Att_ReqListUsrsAttendanceCrs (void);
 void Att_ListMyAttendanceCrs (void);
 void Att_PrintMyAttendanceCrs (void);

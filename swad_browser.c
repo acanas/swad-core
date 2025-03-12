@@ -1115,7 +1115,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void);
 static void Brw_ShowFileBrowsersAsgWrkUsr (void);
 
 static void Brw_FormToChangeCrsGrpZone (void);
-static void Brw_GetSelectedGroupData (struct GroupData *GrpDat,bool AbortOnError);
+static void Brw_CheckGroup (long GrpCod);
 static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat);
 static void Brw_ShowFileBrowserOrWorksInternal (__attribute__((unused)) void *Args);
 static void Brw_ShowFileBrowser (void);
@@ -2048,7 +2048,7 @@ void Brw_GetParAndInitFileBrowser (void)
 static long Brw_GetGrpSettings (void)
   {
    long GrpCod;
-   Grp_FileZones_t FileZones;			// Group has file zones?
+   // Grp_FileZones_t FileZones;			// Group has file zones?
 
    /***** Try to get parameter with group code *****/
    GrpCod = ParCod_GetPar (ParCod_Grp);
@@ -2082,6 +2082,8 @@ static long Brw_GetGrpSettings (void)
 		                and check if I belongs to the selected group *****/
    if (GrpCod > 0)
      {
+      Brw_CheckGroup (GrpCod);
+      /*
       FileZones = Grp_GetFileZones (GrpCod);
 
       switch (Gbl.Action.Act)
@@ -2134,6 +2136,7 @@ static long Brw_GetGrpSettings (void)
 	      }
 	    break;
 	}
+      */
      }
 
    return GrpCod;
@@ -2898,7 +2901,9 @@ static void Brw_FormToChangeCrsGrpZone (void)
    long CurrentGrpCod;
    struct ListCodGrps LstMyGrps;
    unsigned NumGrp;
-   struct GroupData GrpDat;
+   long CrsCod;
+   struct GroupType GrpTyp;
+   struct Group Grp;
 
    /***** Get list of groups to show *****/
    if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
@@ -2934,15 +2939,15 @@ static void Brw_FormToChangeCrsGrpZone (void)
 		 NumGrp++)
 	      {
 	       /* Get next group */
-	       GrpDat.Grp.GrpCod = LstMyGrps.GrpCods[NumGrp];
-	       Grp_GetGroupDataByCod (&GrpDat.CrsCod,&GrpDat.GrpTyp.GrpTypCod,&GrpDat.Grp);
-	       Grp_GetGroupTypeDataByCod (&GrpDat.GrpTyp);
+	       Grp.GrpCod = LstMyGrps.GrpCods[NumGrp];
+	       Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+	       Grp_GetGroupTypeDataByCod (&GrpTyp);
 
 	       /* Select this group */
 	       HTM_LI_Begin ("class=\"%s\"",
 			     (Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type] &&
-			      GrpDat.Grp.GrpCod == CurrentGrpCod) ? "BROWSER_TITLE" :
-								    "BROWSER_TITLE_LIGHT");
+			      Grp.GrpCod == CurrentGrpCod) ? "BROWSER_TITLE" :
+							     "BROWSER_TITLE_LIGHT");
 		  HTM_IMG (Cfg_URL_ICON_PUBLIC,
 			   NumGrp < LstMyGrps.NumGrps - 1 ? "submid20x20.gif" :
 							    "subend20x20.gif",
@@ -2951,11 +2956,10 @@ static void Brw_FormToChangeCrsGrpZone (void)
 		  HTM_LABEL_Begin (NULL);
 		     HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],
 				      ((Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type] &&
-				        GrpDat.Grp.GrpCod == CurrentGrpCod) ? HTM_CHECKED :
-									      HTM_NO_ATTR) | HTM_SUBMIT_ON_CLICK,
-				      "value=\"%ld\"",GrpDat.Grp.GrpCod);
-		     HTM_TxtF ("%s&nbsp;%s",
-			       GrpDat.GrpTyp.Name,GrpDat.Grp.Name);
+				        Grp.GrpCod == CurrentGrpCod) ? HTM_CHECKED :
+								       HTM_NO_ATTR) | HTM_SUBMIT_ON_CLICK,
+				      "value=\"%ld\"",Grp.GrpCod);
+		     HTM_TxtF ("%s&nbsp;%s",GrpTyp.Name,Grp.Name);
 		  HTM_LABEL_End ();
 	       HTM_LI_End ();
 	      }
@@ -2970,37 +2974,29 @@ static void Brw_FormToChangeCrsGrpZone (void)
   }
 
 /*****************************************************************************/
-/*** Get the data of the selected group in order to enter its common zone ****/
+/*********** Check if group has file zones and I belong to group *************/
 /*****************************************************************************/
 
-static void Brw_GetSelectedGroupData (struct GroupData *GrpDat,bool AbortOnError)
+static void Brw_CheckGroup (long GrpCod)
   {
-   if (GrpDat->Grp.GrpCod > 0)
+   if (GrpCod > 0)
      {
-      /***** Get the data of the selected group *****/
-      Grp_GetGroupDataByCod (&GrpDat->CrsCod,&GrpDat->GrpTyp.GrpTypCod,&GrpDat->Grp);
-      Grp_GetGroupTypeDataByCod (&GrpDat->GrpTyp);
-
       /***** For security, check if group file zones are enabled,
              and check if I belongs to the selected group *****/
-      switch (GrpDat->Grp.FileZones)
+      switch (Grp_GetFileZones (GrpCod))
 	{
 	 case Grp_HAS_FILEZONES:
-            if (Grp_GetIfIBelongToGrp (GrpDat->Grp.GrpCod) == Usr_DONT_BELONG)
-	      {
-	       if (AbortOnError)
-		  Err_NoPermissionExit ();
-	       GrpDat->Grp.GrpCod = -1L;
-	      }
+            if (Grp_GetIfIBelongToGrp (GrpCod) == Usr_DONT_BELONG)
+               Err_NoPermissionExit ();
 	    break;
 	 case Grp_HAS_NOT_FILEZONES:
 	 default:
-	    if (AbortOnError)
-	       Err_ShowErrorAndExit ("The file browser is disabled.");
-	    GrpDat->Grp.GrpCod = -1L;
+            Err_NoPermissionExit ();
 	    break;
 	}
      }
+   else
+      Err_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -5231,7 +5227,9 @@ static void Brw_WriteCurrentClipboard (void)
    extern const char *Txt_link;
    extern const char *Txt_all_files_inside_the_root_folder;
    struct Hie_Node Hie[Hie_NUM_LEVELS];
-   struct GroupData GrpDat;
+   long CrsCod;
+   struct GroupType GrpTyp;
+   struct Group Grp;
    struct Prj_Project Prj;
    struct Usr_Data UsrDat;
    char TxtClipboardZone[1024 +
@@ -5308,16 +5306,16 @@ static void Brw_WriteCurrentClipboard (void)
                    Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName);
          break;
       case Brw_ADMI_DOC_GRP:
-         GrpDat.Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
-         Grp_GetGroupDataByCod (&GrpDat.CrsCod,&GrpDat.GrpTyp.GrpTypCod,&GrpDat.Grp);
-	 Grp_GetGroupTypeDataByCod (&GrpDat.GrpTyp);
-         Hie[Hie_CRS].HieCod = GrpDat.CrsCod;
+         Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
+         Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+	 Grp_GetGroupTypeDataByCod (&GrpTyp);
+         Hie[Hie_CRS].HieCod = CrsCod;
 	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                    Txt_documents_management_area,
                    Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName,
-                   Txt_group,GrpDat.GrpTyp.Name,GrpDat.Grp.Name);
+                   Txt_group,GrpTyp.Name,Grp.Name);
          break;
       case Brw_ADMI_TCH_CRS:
 	 Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
@@ -5328,16 +5326,16 @@ static void Brw_WriteCurrentClipboard (void)
                    Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName);
          break;
       case Brw_ADMI_TCH_GRP:
-         GrpDat.Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
-         Grp_GetGroupDataByCod (&GrpDat.CrsCod,&GrpDat.GrpTyp.GrpTypCod,&GrpDat.Grp);
-	 Grp_GetGroupTypeDataByCod (&GrpDat.GrpTyp);
-         Hie[Hie_CRS].HieCod = GrpDat.CrsCod;
+         Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
+         Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+	 Grp_GetGroupTypeDataByCod (&GrpTyp);
+         Hie[Hie_CRS].HieCod = CrsCod;
 	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                    Txt_teachers_files_area,
                    Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName,
-                   Txt_group,GrpDat.GrpTyp.Name,GrpDat.Grp.Name);
+                   Txt_group,GrpTyp.Name,Grp.Name);
          break;
       case Brw_ADMI_SHR_CRS:
 	 Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
@@ -5348,16 +5346,16 @@ static void Brw_WriteCurrentClipboard (void)
                    Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName);
          break;
       case Brw_ADMI_SHR_GRP:
-         GrpDat.Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
-         Grp_GetGroupDataByCod (&GrpDat.CrsCod,&GrpDat.GrpTyp.GrpTypCod,&GrpDat.Grp);
-	 Grp_GetGroupTypeDataByCod (&GrpDat.GrpTyp);
-         Hie[Hie_CRS].HieCod = GrpDat.CrsCod;
+         Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
+         Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+	 Grp_GetGroupTypeDataByCod (&GrpTyp);
+         Hie[Hie_CRS].HieCod = CrsCod;
 	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                    Txt_shared_files_area,
                    Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName,
-                   Txt_group,GrpDat.GrpTyp.Name,GrpDat.Grp.Name);
+                   Txt_group,GrpTyp.Name,Grp.Name);
          break;
       case Brw_ADMI_ASG_USR:
 	 Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
@@ -5431,16 +5429,16 @@ static void Brw_WriteCurrentClipboard (void)
                    Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName);
          break;
       case Brw_ADMI_MRK_GRP:
-         GrpDat.Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
-         Grp_GetGroupDataByCod (&GrpDat.CrsCod,&GrpDat.GrpTyp.GrpTypCod,&GrpDat.Grp);
-	 Grp_GetGroupTypeDataByCod (&GrpDat.GrpTyp);
-         Hie[Hie_CRS].HieCod = GrpDat.CrsCod;
+         Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
+         Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+	 Grp_GetGroupTypeDataByCod (&GrpTyp);
+         Hie[Hie_CRS].HieCod = CrsCod;
 	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                    Txt_marks_management_area,
                    Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName,
-                   Txt_group,GrpDat.GrpTyp.Name,GrpDat.Grp.Name);
+                   Txt_group,GrpTyp.Name,Grp.Name);
          break;
       case Brw_ADMI_BRF_USR:
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
@@ -5488,7 +5486,7 @@ static bool Brw_GetMyClipboard (void)
 
    /***** Clear clipboard data *****/
    Gbl.FileBrowser.Clipboard.FileBrowser       = Brw_UNKNOWN;
-   Gbl.FileBrowser.Clipboard.HieCod               = -1L;
+   Gbl.FileBrowser.Clipboard.HieCod            = -1L;
    Gbl.FileBrowser.Clipboard.WorksUsrCod       = -1L;
    Gbl.FileBrowser.Clipboard.FilFolLnk.Type    = Brw_IS_UNKNOWN;
    Gbl.FileBrowser.Clipboard.FilFolLnk.Full[0] = '\0';
@@ -5726,7 +5724,6 @@ static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (const char P
 void Brw_Paste (void)
   {
    extern const char *Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_;
-   struct GroupData GrpDat;
    struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
 
    /***** Get parameters related to file browser *****/
@@ -5734,18 +5731,11 @@ void Brw_Paste (void)
 
    if (Brw_GetMyClipboard ())
      {
-      switch (Gbl.FileBrowser.Clipboard.FileBrowser)
-        {
-         case Brw_ADMI_DOC_GRP:
-         case Brw_ADMI_TCH_GRP:
-         case Brw_ADMI_SHR_GRP:
-         case Brw_ADMI_MRK_GRP:	// Clipboard in a group zone
-	    GrpDat.Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
-	    Brw_GetSelectedGroupData (&GrpDat,true);
-	    break;
-         default:
-            break;
-        }
+      /***** I source is in a group zone,
+             check if group file zones are enabled,
+             and check if I belongs to the group *****/
+      if (Brw_TypeIsGrpBrw[Gbl.FileBrowser.Clipboard.FileBrowser])	// If copying from group zone
+	 Brw_CheckGroup (Gbl.FileBrowser.Clipboard.HieCod);		// Group code of source zone
 
       /***** Copy files recursively *****/
       Brw_PasteClipboard (Size);
@@ -5793,7 +5783,8 @@ static void Brw_PasteClipboard (struct BrwSiz_BrowserSize *Size)
    extern const char *Txt_Folders_copied;
    extern const char *Txt_You_can_not_paste_file_or_folder_here;
    struct Hie_Node Hie[Hie_NUM_LEVELS];
-   struct GroupData GrpDat;
+   struct GroupType GrpTyp;
+   struct Group Grp;
    struct Usr_Data UsrDat;
    long PrjCod;
    char PathOrg[PATH_MAX + NAME_MAX + PATH_MAX + 128];
@@ -5864,14 +5855,12 @@ static void Brw_PasteClipboard (struct BrwSiz_BrowserSize *Size)
 	    case Brw_ADMI_TCH_GRP:
 	    case Brw_ADMI_SHR_GRP:
 	    case Brw_ADMI_MRK_GRP:
-	       GrpDat.Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
-	       Grp_GetGroupDataByCod (&GrpDat.CrsCod,&GrpDat.GrpTyp.GrpTypCod,&GrpDat.Grp);
-	       Grp_GetGroupTypeDataByCod (&GrpDat.GrpTyp);
-	       Hie[Hie_CRS].HieCod = GrpDat.CrsCod;
+	       Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
+	       Grp_GetGroupDataByCod (&Hie[Hie_CRS].HieCod,&GrpTyp.GrpTypCod,&Grp);
 	       if (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
 		  snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%ld/%s",
 			    Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_GRP,
-			    GrpDat.Grp.GrpCod,
+			    Grp.GrpCod,
 			    Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
 	       else
 		  Err_WrongCopySrcExit ();
@@ -8582,7 +8571,8 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
    struct Hie_Node Ctr;
    struct Hie_Node Deg;
    struct Hie_Node Crs;
-   struct GroupData GrpDat;
+   struct GroupType GrpTyp;
+   struct Group Grp;
 
    switch (FileBrowser)
      {
@@ -8637,10 +8627,9 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
       case Brw_ADMI_SHR_GRP:
       case Brw_ADMI_MRK_GRP:
 	 /* Cod stores the group code */
-	 *GrpCod = GrpDat.Grp.GrpCod = Cod;
-	 Grp_GetGroupDataByCod (&GrpDat.CrsCod,&GrpDat.GrpTyp.GrpTypCod,&GrpDat.Grp);
-	 Grp_GetGroupTypeDataByCod (&GrpDat.GrpTyp);
-	 *CrsCod = Crs.HieCod = GrpDat.CrsCod;
+	 *GrpCod = Grp.GrpCod = Cod;
+	 Grp_GetGroupDataByCod (&Crs.HieCod,&GrpTyp.GrpTypCod,&Grp);
+	 *CrsCod = Crs.HieCod;
 	 Hie_GetDataByCod[Hie_CRS] (&Crs);
 	 *DegCod = Deg.HieCod = Crs.PrtCod;
 	 Hie_GetDataByCod[Hie_DEG] (&Deg);

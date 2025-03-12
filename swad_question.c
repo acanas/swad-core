@@ -2312,7 +2312,7 @@ void Qst_QstConstructor (struct Qst_Question *Question)
    Question->Score = 0.0;
 
    /***** Mark question as valid *****/
-   Question->Validity = Qst_VALID_QUESTION;
+   Question->Validity = ExaSet_VALID_QUESTION;
   }
 
 /*****************************************************************************/

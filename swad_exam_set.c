@@ -111,7 +111,7 @@ static Usr_Can_t ExaSet_CheckIfICanEditExamSets (const struct Exa_Exam *Exam);
 static void ExaSet_RemoveMediaFromStemOfQst (long QstCod,long SetCod);
 static void ExaSet_RemoveMediaFromAllAnsOfQst (long QstCod,long SetCod);
 
-static void ExaSet_ChangeValidityQst (Qst_Validity_t Valid);
+static void ExaSet_ChangeValidityQst (ExaSet_Validity_t Valid);
 
 static void ExaSet_GetAndCheckPars (struct Exa_Exams *Exams,
                                     struct ExaSet_Set *Set);
@@ -804,10 +804,10 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
       Act_Action_t NextAction;
       const char *Icon;
       Ico_Color_t Color;
-     } ValInv[Qst_NUM_VALIDITIES] =
+     } ValInv[ExaSet_NUM_VALIDITIES] =
      {
-      [Qst_INVALID_QUESTION] = {ActValSetQst,"times.svg",Ico_RED  },	// Validate question (set it as valid question)
-      [Qst_VALID_QUESTION  ] = {ActInvSetQst,"check.svg",Ico_GREEN},	// Invalidated question (set it as canceled question)
+      [ExaSet_INVALID_QUESTION] = {ActValSetQst,"times.svg",Ico_RED  },	// Validate question (set it as valid question)
+      [ExaSet_VALID_QUESTION  ] = {ActInvSetQst,"check.svg",Ico_GREEN},	// Invalidated question (set it as canceled question)
      };
 
    /***** Begin table *****/
@@ -921,10 +921,17 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
    if ((QuestionExists = (Exa_DB_GetQstDataByCod (&mysql_res,Question->QstCod) != 0)))
      {
       row = mysql_fetch_row (mysql_res);
+      /*
+      row[0]: Invalid
+      row[1]: AnsType
+      row[2]: Shuffle
+      row[3]: Stem
+      row[4]: Feedback
+      row[5]: MedCod
+      */
 
       /* Get whether the question is invalid (row[0]) */
-      Question->Validity = (row[0][0] == 'Y') ? Qst_INVALID_QUESTION :
-	                                        Qst_VALID_QUESTION;
+      Question->Validity = ExaSet_GetInvalidOrValidFromYN (row[0][0]);
 
       /* Get the type of answer (row[1]) */
       Question->Answer.Type = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
@@ -936,7 +943,7 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
       Question->Stem[0] = '\0';
       if (row[3])
 	 if (row[3][0])
-	    Str_Copy (Question->Stem    ,row[3],Cns_MAX_BYTES_TEXT);
+	    Str_Copy (Question->Stem,row[3],Cns_MAX_BYTES_TEXT);
 
       /* Get the feedback (row[4]) */
       Question->Feedback[0] = '\0';
@@ -1028,6 +1035,17 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
       Err_WrongQuestionExit ();
   }
 
+
+/*****************************************************************************/
+/********* Get if invalid or valid question from a 'Y'/'N' character *********/
+/*****************************************************************************/
+
+ExaSet_Validity_t ExaSet_GetInvalidOrValidFromYN (char Ch)
+  {
+   return (Ch == 'Y') ? ExaSet_INVALID_QUESTION :
+			ExaSet_VALID_QUESTION;
+  }
+
 /*****************************************************************************/
 /********************* List question in set for edition **********************/
 /*****************************************************************************/
@@ -1035,25 +1053,25 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
 static void ExaSet_ListQuestionForEdition (struct Qst_Question *Question,
                                            unsigned QstInd,const char *Anchor)
   {
-   static const char *ClassNumQst[Qst_NUM_VALIDITIES] =
+   static const char *ClassNumQst[ExaSet_NUM_VALIDITIES] =
      {
-      [Qst_INVALID_QUESTION] = "BIG_INDEX_RED",
-      [Qst_VALID_QUESTION  ] = "BIG_INDEX",
+      [ExaSet_INVALID_QUESTION] = "BIG_INDEX_RED",
+      [ExaSet_VALID_QUESTION  ] = "BIG_INDEX",
      };
-   const char *ClassAnswerType[Qst_NUM_VALIDITIES] =
+   const char *ClassAnswerType[ExaSet_NUM_VALIDITIES] =
      {
-      [Qst_INVALID_QUESTION] = "DAT_SMALL_RED",
-      [Qst_VALID_QUESTION  ] = "DAT_SMALL",
+      [ExaSet_INVALID_QUESTION] = "DAT_SMALL_RED",
+      [ExaSet_VALID_QUESTION  ] = "DAT_SMALL",
      };
-   static const char *ClassTxt[Qst_NUM_VALIDITIES] =
+   static const char *ClassTxt[ExaSet_NUM_VALIDITIES] =
      {
-      [Qst_INVALID_QUESTION] = "Qst_TXT_RED",
-      [Qst_VALID_QUESTION  ] = "Qst_TXT",
+      [ExaSet_INVALID_QUESTION] = "Qst_TXT_RED",
+      [ExaSet_VALID_QUESTION  ] = "Qst_TXT",
      };
-   static const char *ClassFeedback[Qst_NUM_VALIDITIES] =
+   static const char *ClassFeedback[ExaSet_NUM_VALIDITIES] =
      {
-      [Qst_INVALID_QUESTION] = "Qst_TXT_LIGHT_RED",
-      [Qst_VALID_QUESTION  ] = "Qst_TXT_LIGHT",
+      [ExaSet_INVALID_QUESTION] = "Qst_TXT_LIGHT_RED",
+      [ExaSet_VALID_QUESTION  ] = "Qst_TXT_LIGHT",
      };
 
    /***** Number of question and answer type (row[1]) *****/
@@ -1543,15 +1561,15 @@ static void ExaSet_RemoveMediaFromAllAnsOfQst (long QstCod,long SetCod)
 
 void ExaSet_ValidateQst (void)
   {
-   ExaSet_ChangeValidityQst (Qst_VALID_QUESTION);
+   ExaSet_ChangeValidityQst (ExaSet_VALID_QUESTION);
   }
 
 void ExaSet_InvalidateQst (void)
   {
-   ExaSet_ChangeValidityQst (Qst_INVALID_QUESTION);
+   ExaSet_ChangeValidityQst (ExaSet_INVALID_QUESTION);
   }
 
-static void ExaSet_ChangeValidityQst (Qst_Validity_t Validity)
+static void ExaSet_ChangeValidityQst (ExaSet_Validity_t Validity)
   {
    struct Exa_Exams Exams;
    struct ExaSet_Set Set;

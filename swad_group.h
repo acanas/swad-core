@@ -129,14 +129,6 @@ struct GroupType
    struct Group *LstGrps;				// List of groups of this type
   };
 
-// Related with groups
-struct GroupData
-  {
-   long CrsCod;			// Course code
-   struct GroupType GrpTyp;	// Group type
-   struct Group Grp;		// Group
-  };
-
 struct GroupTypes
   {
    struct GroupType *LstGrpTypes;		// List of types of group

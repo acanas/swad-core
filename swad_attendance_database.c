@@ -449,7 +449,7 @@ unsigned Att_DB_GetNumStdsFromListWhoAreInEvent (long AttCod,const char *SubQuer
 // Return if user is in table
 
 bool Att_DB_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,
-				       Att_Present_t *Presente)
+				       Att_Present_t *Present)
   {
    char StrPresent[1 + 1];
 
@@ -464,11 +464,10 @@ bool Att_DB_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,
 		         UsrCod);
    if (StrPresent[0])
      {
-      *Presente = (StrPresent[0] == 'Y') ? Att_PRESENT :
-					   Att_ABSENT;
+      *Present = Att_GetAbsentOrPresentFromYN (StrPresent[0]);
       return true;	// User is in table
      }
-   *Presente = Att_ABSENT;
+   *Present = Att_ABSENT;
    return false;	// User is not in table
   }
 

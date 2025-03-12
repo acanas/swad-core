@@ -1878,11 +1878,11 @@ int swad__getGroupTypes (struct soap *soap,
 
          /* Get whether enrolment is mandatory ('Y') or voluntary ('N') (row[2]) */
          getGroupTypesOut->groupTypesArray.__ptr[NumGrpTyp].mandatory = (row[2][0] == 'Y') ? 1 :
-                                                                                          0;
+                                                                                             0;
 
          /* Get whether user can enrol in multiple groups ('Y') or only in one group ('N') (row[3]) */
          getGroupTypesOut->groupTypesArray.__ptr[NumGrpTyp].multiple = (row[3][0] == 'Y') ? 1 :
-                                                                                         0;
+                                                                                            0;
 
          // Whether groups of this type must be opened (row[4]) ignored here
 

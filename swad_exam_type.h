@@ -123,6 +123,13 @@ struct Exa_Exams
    +----------------+                       +--------------+   +--------------+
            ...                                              ...              */
 
+#define ExaSet_NUM_VALIDITIES 2
+typedef enum
+  {
+   ExaSet_INVALID_QUESTION,
+   ExaSet_VALID_QUESTION,
+  } ExaSet_Validity_t;
+
 struct ExaSet_Set
   {
    long ExaCod;			// Exam code

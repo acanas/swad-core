@@ -1491,8 +1491,7 @@ static void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get whether the question is invalid (row[0]) */
-	 Question.Validity = (row[0][0] == 'Y') ? Qst_INVALID_QUESTION :
-						  Qst_VALID_QUESTION;
+	 Question.Validity = ExaSet_GetInvalidOrValidFromYN (row[0][0]);
 
 	 /* Get the type of answer (row[1]) */
 	 Question.Answer.Type = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
@@ -1503,7 +1502,7 @@ static void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
 
       /***** Compute answer score *****/
       if (QuestionExists)
-	 if (Question.Validity == Qst_VALID_QUESTION)
+	 if (Question.Validity == ExaSet_VALID_QUESTION)
 	   {
 	    ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[QstInd],&Question);
 	    switch (Print->PrintedQuestions[QstInd].AnswerIsCorrect)
@@ -1871,25 +1870,25 @@ static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
    extern const char *Txt_Score;
    extern const char *Txt_Invalid_question;
    Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY];
-   static const char *ClassNumQst[Qst_NUM_VALIDITIES] =
+   static const char *ClassNumQst[ExaSet_NUM_VALIDITIES] =
      {
-      [Qst_INVALID_QUESTION] = "BIG_INDEX_RED",
-      [Qst_VALID_QUESTION  ] = "BIG_INDEX",
+      [ExaSet_INVALID_QUESTION] = "BIG_INDEX_RED",
+      [ExaSet_VALID_QUESTION  ] = "BIG_INDEX",
      };
-   static const char *ClassAnswerType[Qst_NUM_VALIDITIES] =
+   static const char *ClassAnswerType[ExaSet_NUM_VALIDITIES] =
      {
-      [Qst_INVALID_QUESTION] = "DAT_SMALL_RED",
-      [Qst_VALID_QUESTION  ] = "DAT_SMALL",
+      [ExaSet_INVALID_QUESTION] = "DAT_SMALL_RED",
+      [ExaSet_VALID_QUESTION  ] = "DAT_SMALL",
      };
-   static const char *ClassTxt[Qst_NUM_VALIDITIES] =
+   static const char *ClassTxt[ExaSet_NUM_VALIDITIES] =
      {
-      [Qst_INVALID_QUESTION] = "Qst_TXT_RED",
-      [Qst_VALID_QUESTION  ] = "Qst_TXT",
+      [ExaSet_INVALID_QUESTION] = "Qst_TXT_RED",
+      [ExaSet_VALID_QUESTION  ] = "Qst_TXT",
      };
-   static const char *ClassFeedback[Qst_NUM_VALIDITIES] =
+   static const char *ClassFeedback[ExaSet_NUM_VALIDITIES] =
      {
-      [Qst_INVALID_QUESTION] = "Qst_TXT_LIGHT_RED",
-      [Qst_VALID_QUESTION  ] = "Qst_TXT_LIGHT",
+      [ExaSet_INVALID_QUESTION] = "Qst_TXT_LIGHT_RED",
+      [ExaSet_VALID_QUESTION  ] = "Qst_TXT_LIGHT",
      };
 
    /***** Check if I can view each part of the question *****/
@@ -1967,7 +1966,7 @@ static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 									    "Qst_ANS_0",	// Blank answer
 			       The_GetSuffix ());
 		  HTM_Double2Decimals (Print->PrintedQuestions[QstInd].Score);
-		  if (Question->Validity == Qst_INVALID_QUESTION)
+		  if (Question->Validity == ExaSet_INVALID_QUESTION)
 		     HTM_TxtF (" (%s)",Txt_Invalid_question);
 	       HTM_SPAN_End ();
 	    HTM_DIV_End ();

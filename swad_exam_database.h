@@ -80,7 +80,7 @@ void Exa_DB_RemoveAllSetsFromCrs (long CrsCod);
 //------------------------------ Set questions --------------------------------
 long Exa_DB_AddQuestionToSet (long SetCod,const struct Qst_Question *Question,long MedCod);
 void Exa_DB_ChangeValidityQst (long QstCod,long SetCod,long ExaCod,long CrsCod,
-                               Qst_Validity_t Validity);
+                               ExaSet_Validity_t Validity);
 unsigned Exa_DB_GetNumQstsInSet (long SetCod);
 unsigned Exa_DB_GetQstsFromSet (MYSQL_RES **mysql_res,long SetCod);
 unsigned Exa_DB_GetSomeQstsFromSetToPrint (MYSQL_RES **mysql_res,

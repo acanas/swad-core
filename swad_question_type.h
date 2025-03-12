@@ -47,7 +47,6 @@ typedef enum
    Qst_ANS_UNKNOWN         = 6,	// Unknown/all/any type of answer
   } Qst_AnswerType_t;
 
-
 #define Qst_MAX_BYTES_ANSWER_TYPE	32
 
 #define Qst_MAX_BYTES_FLOAT_ANSWER	30	// Maximum length of the strings that store an floating point answer

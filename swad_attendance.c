@@ -2152,8 +2152,7 @@ static Att_Present_t Att_CheckIfUsrIsPresentInEventAndGetComments (long AttCod,l
       row = mysql_fetch_row (mysql_res);
 
       /* Get if present (row[0]) */
-      Present = (row[0][0] == 'Y') ? Att_PRESENT :
-				     Att_ABSENT;
+      Present = Att_GetAbsentOrPresentFromYN (row[0][0]);
 
       /* Get student's (row[1]) and teacher's (row[2]) comment */
       Str_Copy (CommentStd,row[1],Cns_MAX_BYTES_TEXT);
@@ -2170,6 +2169,16 @@ static Att_Present_t Att_CheckIfUsrIsPresentInEventAndGetComments (long AttCod,l
    DB_FreeMySQLResult (&mysql_res);
 
    return Present;
+  }
+
+/*****************************************************************************/
+/************ Get if absent or present from a 'Y'/'N' character **************/
+/*****************************************************************************/
+
+Att_Present_t Att_GetAbsentOrPresentFromYN (char Ch)
+  {
+   return (Ch == 'Y') ? Att_PRESENT :
+			Att_ABSENT;
   }
 
 /*****************************************************************************/

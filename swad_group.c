@@ -143,7 +143,14 @@ static void Grp_PutFormToCreateGroupType (const struct GroupType *GrpTyp);
 static void Grp_PutFormToCreateGroup (const struct GroupType *CurrentGrpTyp,
 				      const struct Group *Grp,
 				      const struct Roo_Rooms *Rooms);
+
 static Grp_SingleMultiple_t Grp_GetSingleMultiple (long GrpTypCod);
+
+static Grp_OptionalMandatory_t Grp_GetOptionalOrMandatoryFromYN (char Ch);
+static Grp_SingleMultiple_t Grp_SingleOrMultipleFromYN (char Ch);
+static Grp_MustBeOpened_t Grp_MustBeOpenedFromYN (char Ch);
+static Grp_FileZones_t Grp_GetFileZonesFromYN (char Ch);
+
 static void Grp_GetLstCodGrpsUsrBelongs (long UsrCod,long GrpTypCod,
                                          struct ListCodGrps *LstGrps,
                                          Grp_ClosedOpenGrps_t ClosedOpenGroups);
@@ -228,27 +235,29 @@ void Grp_WriteNamesOfSelectedGrps (void)
    extern const char *Txt_and;
    long GrpCod;
    unsigned NumGrpSel;
-   struct GroupData GrpDat;
+   long CrsCod;
+   struct GroupType GrpTyp;
+   struct Group Grp;
 
    /***** Show the selected groups *****/
-   HTM_TxtColonNBSP ((Gbl.Crs.Grps.LstGrpsSel.NumGrps == 1) ? Txt_Group  :
-                                                              Txt_Groups);
+   HTM_TxtColonNBSP (Gbl.Crs.Grps.LstGrpsSel.NumGrps == 1 ? Txt_Group  :
+                                                            Txt_Groups);
    for (NumGrpSel = 0;
 	NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
 	NumGrpSel++)
      {
       if ((GrpCod = Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]) >= 0)
         {
-         GrpDat.Grp.GrpCod = GrpCod;
-         Grp_GetGroupDataByCod (&GrpDat.CrsCod,&GrpDat.GrpTyp.GrpTypCod,&GrpDat.Grp);
-	 Grp_GetGroupTypeDataByCod (&GrpDat.GrpTyp);
-         HTM_TxtF ("%s %s",GrpDat.GrpTyp.Name,GrpDat.Grp.Name);
+         Grp.GrpCod = GrpCod;
+         Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+	 Grp_GetGroupTypeDataByCod (&GrpTyp);
+         HTM_TxtF ("%s %s",GrpTyp.Name,Grp.Name);
         }
       else	// GrpCod < 0 ==> students not belonging to any group of type (-GrpCod)
         {
-         GrpDat.GrpTyp.GrpTypCod = -GrpCod;
-         Grp_GetGroupTypeDataByCod (&GrpDat.GrpTyp);
-         HTM_TxtF ("%s&nbsp;(%s)",GrpDat.GrpTyp.Name,Txt_users_with_no_group);
+         GrpTyp.GrpTypCod = -GrpCod;
+         Grp_GetGroupTypeDataByCod (&GrpTyp);
+         HTM_TxtF ("%s&nbsp;(%s)",GrpTyp.Name,Txt_users_with_no_group);
         }
 
       if (Gbl.Crs.Grps.LstGrpsSel.NumGrps >= 2)
@@ -2929,6 +2938,15 @@ void Grp_GetListGrpTypesInCurrentCrs (Grp_WhichGrpTypes_t WhichGrpTypes)
 
          /* Get next group type */
          row = mysql_fetch_row (mysql_res);
+         /*
+	 row[0]: grp_types.GrpTypCod
+	 row[1]: grp_types.GrpTypName
+	 row[2]: grp_types.Mandatory
+	 row[3]: grp_types.Multiple
+	 row[4]: grp_types.MustBeOpened
+	 row[5]: UNIX_TIMESTAMP(grp_types.OpenTime)
+	 row[6]: COUNT(grp_groups.GrpCod
+	*/
 
          /* Get group type code (row[0]) */
          if ((GrpTyp->GrpTypCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
@@ -2938,16 +2956,13 @@ void Grp_GetListGrpTypesInCurrentCrs (Grp_WhichGrpTypes_t WhichGrpTypes)
          Str_Copy (GrpTyp->Name,row[1],sizeof (GrpTyp->Name) - 1);
 
          /* Is it mandatory to enrol in any groups of this type? (row[2]) */
-         GrpTyp->Enrolment.OptionalMandatory = (row[2][0] == 'Y') ? Grp_MANDATORY :
-								    Grp_OPTIONAL;
+         GrpTyp->Enrolment.OptionalMandatory = Grp_GetOptionalOrMandatoryFromYN (row[2][0]);
 
          /* Is it possible to enrol in multiple groups of this type? (row[3]) */
-         GrpTyp->Enrolment.SingleMultiple    = (row[3][0] == 'Y') ? Grp_MULTIPLE :
-								    Grp_SINGLE;
+         GrpTyp->Enrolment.SingleMultiple = Grp_SingleOrMultipleFromYN (row[3][0]);
 
          /* Groups of this type must be opened? (row[4]) */
-         GrpTyp->MustBeOpened = (row[4][0] == 'Y') ? Grp_MUST_BE_OPENED :
-						     Grp_MUST_NOT_BE_OPENED;
+         GrpTyp->MustBeOpened = Grp_MustBeOpenedFromYN (row[4][0]);
 
          /* Get open time (row[5] holds the open time UTC) */
          GrpTyp->OpenTimeUTC = Dat_GetUNIXTimeFromStr (row[5]);
@@ -3078,8 +3093,7 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGrpTypes_t WhichGrpTypes)
                /* Get whether group is open ('Y') or closed ('N') (row[5]),
                   and whether group have file zones ('Y') or not ('N') (row[6]) */
                Grp->ClosedOrOpen = CloOpe_GetClosedOrOpenFromYN (row[5][0]);
-               Grp->FileZones = (row[6][0] == 'Y') ? Grp_HAS_FILEZONES :
-        					     Grp_HAS_NOT_FILEZONES;
+               Grp->FileZones = Grp_GetFileZonesFromYN (row[6][0]);
               }
            }
 
@@ -3143,14 +3157,18 @@ void Grp_GetGroupTypeDataByCod (struct GroupType *GrpTyp)
 
       /***** Get some data of group type *****/
       row = mysql_fetch_row (mysql_res);
+      /*
+      row[0]: GrpTypName
+      row[1]: Mandatory
+      row[2]: Multiple
+      row[3]: MustBeOpened
+      row[4]: UNIX_TIMESTAMP(OpenTime)
+      */
       Str_Copy (GrpTyp->Name,row[0],sizeof (GrpTyp->Name) - 1);
-      GrpTyp->Enrolment.OptionalMandatory = (row[1][0] == 'Y') ? Grp_MANDATORY :
-								 Grp_OPTIONAL;
-      GrpTyp->Enrolment.SingleMultiple    = (row[2][0] == 'Y') ? Grp_MULTIPLE :
-								 Grp_SINGLE;
-      GrpTyp->MustBeOpened = (row[3][0] == 'Y') ? Grp_MUST_BE_OPENED :
-						  Grp_MUST_NOT_BE_OPENED;
-      GrpTyp->OpenTimeUTC  = Dat_GetUNIXTimeFromStr (row[4]);
+      GrpTyp->Enrolment.OptionalMandatory = Grp_GetOptionalOrMandatoryFromYN (row[1][0]);
+      GrpTyp->Enrolment.SingleMultiple = Grp_SingleOrMultipleFromYN (row[2][0]);
+      GrpTyp->MustBeOpened = Grp_MustBeOpenedFromYN (row[3][0]);
+      GrpTyp->OpenTimeUTC = Dat_GetUNIXTimeFromStr (row[4]);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -3175,8 +3193,7 @@ static Grp_SingleMultiple_t Grp_GetSingleMultiple (long GrpTypCod)
 
    /***** Get multiple enrolment *****/
    row = mysql_fetch_row (mysql_res);
-   SingleMultiple = (row[0][0] == 'Y') ? Grp_MULTIPLE :
-					 Grp_SINGLE;
+   SingleMultiple = Grp_SingleOrMultipleFromYN (row[0][0]);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3200,8 +3217,7 @@ Grp_FileZones_t Grp_GetFileZones (long GrpCod)
 
    /***** Get file zones *****/
    row = mysql_fetch_row (mysql_res);
-   FileZones = (row[0][0] == 'Y') ? Grp_HAS_FILEZONES :
-				    Grp_HAS_NOT_FILEZONES;
+   FileZones = Grp_GetFileZonesFromYN (row[0][0]);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3264,8 +3280,7 @@ void Grp_GetGroupDataByCod (long *CrsCod,long *GrpTypCod,struct Group *Grp)
 	 /* Get whether group is open or closed (row[5]),
 	    and whether group has file zones (row[6]) */
 	 Grp->ClosedOrOpen = CloOpe_GetClosedOrOpenFromYN (row[5][0]);
-	 Grp->FileZones = (row[6][0] == 'Y') ? Grp_HAS_FILEZONES :
-        				       Grp_HAS_NOT_FILEZONES;
+	 Grp->FileZones = Grp_GetFileZonesFromYN (row[6][0]);
 
 	 /* Get the name of the room (row[7]) */
 	 if (row[7])	// May be NULL because of LEFT JOIN
@@ -3278,6 +3293,46 @@ void Grp_GetGroupDataByCod (long *CrsCod,long *GrpTypCod,struct Group *Grp)
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
+  }
+
+/*****************************************************************************/
+/********** Get if optional or mandatory from a 'Y'/'N' character ************/
+/*****************************************************************************/
+
+static Grp_OptionalMandatory_t Grp_GetOptionalOrMandatoryFromYN (char Ch)
+  {
+   return (Ch == 'Y') ? Grp_MANDATORY :
+		        Grp_OPTIONAL;
+  }
+
+/*****************************************************************************/
+/************ Get if single or multiple from a 'Y'/'N' character *************/
+/*****************************************************************************/
+
+static Grp_SingleMultiple_t Grp_SingleOrMultipleFromYN (char Ch)
+  {
+   return (Ch == 'Y') ? Grp_MULTIPLE :
+		        Grp_SINGLE;
+  }
+
+/*****************************************************************************/
+/************** Get if must be opened from a 'Y'/'N' character ***************/
+/*****************************************************************************/
+
+static Grp_MustBeOpened_t Grp_MustBeOpenedFromYN (char Ch)
+  {
+   return (Ch == 'Y') ? Grp_MUST_BE_OPENED :
+		        Grp_MUST_NOT_BE_OPENED;
+  }
+
+/*****************************************************************************/
+/***************** Get if file zones from a 'Y'/'N' character ****************/
+/*****************************************************************************/
+
+static Grp_FileZones_t Grp_GetFileZonesFromYN (char Ch)
+  {
+   return (Ch == 'Y') ? Grp_HAS_FILEZONES :
+		        Grp_HAS_NOT_FILEZONES;
   }
 
 /*****************************************************************************/
@@ -3594,10 +3649,10 @@ void Grp_ReceiveNewGrp (void)
 
       /* Get maximum number of students */
       Grp.MaxStds = (unsigned)
-	 Par_GetParUnsignedLong ("MaxStudents",
-				 0,
-				 Grp_MAX_STUDENTS_IN_A_GROUP,
-				 Grp_NUM_STUDENTS_NOT_LIMITED);
+		    Par_GetParUnsignedLong ("MaxStudents",
+					    0,
+					    Grp_MAX_STUDENTS_IN_A_GROUP,
+					    Grp_NUM_STUDENTS_NOT_LIMITED);
 
       if (Grp.Name[0])	// If there's a group name
         {
