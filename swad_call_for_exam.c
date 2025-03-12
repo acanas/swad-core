@@ -570,6 +570,10 @@ void Cfe_ListCallsForExamsCod (void)
 
    /***** List all calls for exams *****/
    Cfe_ListCallsForExams (&CallsForExams,Vie_VIEW);
+
+   /***** Mark possible notification as seen *****/
+   Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_CALL_FOR_EXAM,
+				   CallsForExams.HighlightExaCod);
   }
 
 /*****************************************************************************/
@@ -588,6 +592,11 @@ void Cfe_ListCallsForExamsDay (void)
 
    /***** List all calls for exams *****/
    Cfe_ListCallsForExams (&CallsForExams,Vie_VIEW);
+
+   /***** Mark possible notifications as seen *****/
+   // Really all notifications in course are marked as seen
+   // instead of those of one day
+   Ntf_DB_MarkNotifsInCrsAsSeen (Ntf_EVENT_CALL_FOR_EXAM);
   }
 
 /*****************************************************************************/
