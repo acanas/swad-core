@@ -32,10 +32,17 @@
 /*****************************************************************************/
 
 /* Hidden in database fields */
-const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE] =
+const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE] =
   {
    [HidVis_HIDDEN ] = 'Y',
    [HidVis_VISIBLE] = 'N',
+  };
+
+/* Visible in database fields */
+const char HidVis_Visible_YN[HidVis_NUM_HIDDEN_VISIBLE] =
+  {
+   [HidVis_HIDDEN ] = 'N',
+   [HidVis_VISIBLE] = 'Y',
   };
 
 const char *HidVis_DateBlueClass[HidVis_NUM_HIDDEN_VISIBLE] =

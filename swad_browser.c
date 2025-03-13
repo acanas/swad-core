@@ -107,14 +107,6 @@ struct Brw_NumObjects
    unsigned NumLinks;
   };
 
-/* Private/public files */
-#define Brw_NUM_PRIVATE_PUBLIC 2
-typedef enum
-  {
-   Brw_PRIVATE,
-   Brw_PUBLIC,
-  } Brw_PrivatePublic_t;
-
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
@@ -1180,7 +1172,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (const struct Brw_FileMetadata
 
 static void Brw_PutButtonToDownloadZIPOfAFolder (void);
 
-static void Brw_WriteFileName (unsigned Level,bool IsPublic,
+static void Brw_WriteFileName (unsigned Level,Brw_PrivatePublic_t PrivatePublic,
 			       const char *TxtStyle,const char *InputStyle);
 static void Brw_GetFileNameToShowDependingOnLevel (Brw_FileBrowser_t FileBrowser,
                                                    unsigned Level,
@@ -1231,7 +1223,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 	                                      struct Brw_FileMetadata *FileMetadata,
                                               const char *FileNameToShow);
-static bool Brw_GetParPublicFile (void);
+static Brw_PrivatePublic_t Brw_GetParPublicFile (void);
 static Brw_License_t Brw_GetParLicense (void);
 
 static void Brw_ResetFileMetadata (struct Brw_FileMetadata *FileMetadata);
@@ -3953,7 +3945,8 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
       /* Add entry to the table of files/folders */
       FileMetadata.FilCod = Brw_DB_AddPath (-1L,FileMetadata.FilFolLnk.Type,
-                                             Gbl.FileBrowser.FilFolLnk.Full,false,Brw_LICENSE_DEFAULT);
+                                            Gbl.FileBrowser.FilFolLnk.Full,
+                                            Brw_PRIVATE,Brw_LICENSE_DEFAULT);
 
    /***** Is this row public or private? *****/
    if (Brw_TypeIsSeeDoc[Gbl.FileBrowser.Type] ||
@@ -3961,7 +3954,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
        Brw_TypeIsAdmSha[Gbl.FileBrowser.Type])
      {
       RowSetAsPublic = (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER) ? Brw_DB_GetIfFolderHasPublicFiles (Gbl.FileBrowser.FilFolLnk.Full) :
-	                                                                   FileMetadata.IsPublic;
+	                                                                   (FileMetadata.PrivatePublic == Brw_PUBLIC);
       if (Gbl.FileBrowser.ShowOnlyPublicFiles && !RowSetAsPublic)
          return false;
      }
@@ -4097,7 +4090,8 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 	       Brw_PutIconNewFileOrFolder ();
 
 	    /* File or folder name */
-	    Brw_WriteFileName (Level,FileMetadata.IsPublic,TxtStyle,InputStyle);
+	    Brw_WriteFileName (Level,FileMetadata.PrivatePublic,
+			       TxtStyle,InputStyle);
 
 	 HTM_TR_End ();
       HTM_TABLE_End ();
@@ -4714,7 +4708,7 @@ static void Brw_PutButtonToDownloadZIPOfAFolder (void)
 /********** Write central part with the name of a file or folder *************/
 /*****************************************************************************/
 
-static void Brw_WriteFileName (unsigned Level,bool IsPublic,
+static void Brw_WriteFileName (unsigned Level,Brw_PrivatePublic_t PrivatePublic,
 			       const char *TxtStyle,const char *InputStyle)
   {
    extern const char *Txt_Check_marks_in_the_file;
@@ -4798,8 +4792,8 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
 
 	    Frm_EndForm ();
 
-	    /* Put icon to make public/private file */
-	    if (IsPublic)
+	    /* Put icon to indicate public file */
+	    if (PrivatePublic == Brw_PUBLIC)
 	       Ico_PutIconOff ("unlock.svg",Ico_GREEN,
 			       Txt_Public_open_educational_resource_OER_for_everyone);
 
@@ -6135,7 +6129,8 @@ static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
 
 		  /***** Add entry to the table of files/folders *****/
 		  FilCod = Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,FileType,
-					   PathDstInTreeWithFile,false,Brw_LICENSE_DEFAULT);
+					   PathDstInTreeWithFile,
+					   Brw_PRIVATE,Brw_LICENSE_DEFAULT);
 		  if (*FirstFilCod <= 0)
 		     *FirstFilCod = FilCod;
 
@@ -6177,7 +6172,8 @@ static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
 
 		  /* Add entry to the table of files/folders */
 		  Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,FileType,
-				  PathDstInTreeWithFile,false,Brw_LICENSE_DEFAULT);
+				  PathDstInTreeWithFile,
+				  Brw_PRIVATE,Brw_LICENSE_DEFAULT);
 		 }
 	      }
 
@@ -6562,7 +6558,8 @@ void Brw_CreateFolder (void)
 			    Gbl.FileBrowser.FilFolLnk.Full,
 			    Gbl.FileBrowser.NewFilFolLnkName);
 		  Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_FOLDER,
-				   PathCompleteInTreeIncludingFolder,false,Brw_LICENSE_DEFAULT);
+				  PathCompleteInTreeIncludingFolder,
+				  Brw_PRIVATE,Brw_LICENSE_DEFAULT);
 
 		  /* The folder has been created sucessfully */
 		  Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
@@ -6887,7 +6884,8 @@ static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
 					Gbl.FileBrowser.FilFolLnk.Full,
 					Gbl.FileBrowser.NewFilFolLnkName);
 			      FilCod = Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_FILE,
-							PathCompleteInTreeIncludingFile,false,Brw_LICENSE_DEFAULT);
+						       PathCompleteInTreeIncludingFile,
+						       Brw_PRIVATE,Brw_LICENSE_DEFAULT);
 
 			      /* Show message of confirmation */
 			      if (UploadType == Brw_CLASSIC_UPLOAD)
@@ -7075,7 +7073,8 @@ void Brw_CreateLink (void)
 				  "%s/%s.url",
 				  Gbl.FileBrowser.FilFolLnk.Full,FileName);
 			FilCod = Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_LINK,
-						  PathCompleteInTreeIncludingFile,false,Brw_LICENSE_DEFAULT);
+						 PathCompleteInTreeIncludingFile,
+						 Brw_PRIVATE,Brw_LICENSE_DEFAULT);
 
 			/* Show message of confirmation */
 			Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
@@ -7259,7 +7258,8 @@ HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHiddenOrVisible (Brw_FileType_
      {
       case HidVis_VISIBLE:
 	 Brw_DB_AddPath (-1L,FileType,
-			  Gbl.FileBrowser.FilFolLnk.Full,false,Brw_LICENSE_DEFAULT);
+			 Gbl.FileBrowser.FilFolLnk.Full,
+			 Brw_PRIVATE,Brw_LICENSE_DEFAULT);
 	 HiddenOrVisible = HidVis_VISIBLE;
 	 break;
       case HidVis_HIDDEN:
@@ -7284,6 +7284,8 @@ HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHiddenOrVisible (Brw_FileType_
 
 void Brw_ShowFileMetadata (void)
   {
+   extern const char *Txt_Private_available_to_certain_users_identified;
+   extern const char *Txt_Public_open_educational_resource_OER_for_everyone;
    extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    extern const char *Txt_Filename;
    extern const char *Txt_File_size;
@@ -7291,8 +7293,6 @@ void Brw_ShowFileMetadata (void)
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Date_of_creation;
    extern const char *Txt_Availability;
-   extern const char *Txt_Private_available_to_certain_users_identified;
-   extern const char *Txt_Public_open_educational_resource_OER_for_everyone;
    extern const char *Txt_License;
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
    extern const char *Txt_My_views;
@@ -7300,6 +7300,16 @@ void Brw_ShowFileMetadata (void)
    extern const char *Txt_Public_views;
    extern const char *Txt_user[Usr_NUM_SEXS];
    extern const char *Txt_users[Usr_NUM_SEXS];
+   static const char **PrivatePublicLabel[Brw_NUM_PRIVATE_PUBLIC] =
+     {
+      [Brw_PRIVATE] = &Txt_Private_available_to_certain_users_identified,
+      [Brw_PUBLIC ] = &Txt_Public_open_educational_resource_OER_for_everyone
+     };
+   static const char *Public_YN[Brw_NUM_PRIVATE_PUBLIC] =
+     {
+      [Brw_PRIVATE] = "N",
+      [Brw_PUBLIC ] = "Y",
+     };
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC15x20",
@@ -7317,6 +7327,7 @@ void Brw_ShowFileMetadata (void)
    bool IAmTheOwner;
    Usr_Can_t ICanEdit;
    Usr_Can_t ICanChangePublic = Usr_CAN_NOT;
+   Brw_PrivatePublic_t PrivatePublic;
    bool FileHasPublisher;
    Brw_License_t License;
    unsigned LicenseUnsigned;
@@ -7334,8 +7345,8 @@ void Brw_ShowFileMetadata (void)
       if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
 	 /* Add entry to the table of files/folders */
 	 FileMetadata.FilCod = Brw_DB_AddPath (-1L,FileMetadata.FilFolLnk.Type,
-	                                        FileMetadata.FilFolLnk.Full,
-	                                        false,Brw_LICENSE_DEFAULT);
+	                                       FileMetadata.FilFolLnk.Full,
+	                                       Brw_PRIVATE,Brw_LICENSE_DEFAULT);
 
       /***** Check if I can view this file.
 	     It could be marked as hidden or in a hidden folder *****/
@@ -7540,19 +7551,17 @@ void Brw_ShowFileMetadata (void)
 			HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 					  "id=\"PublicFile\" name=\"PublicFile\""
 					  " class=\"PUBLIC_FILE\"");
-			   HTM_OPTION (HTM_Type_STRING,"N",
-				       FileMetadata.IsPublic ? HTM_NO_ATTR :
-							       HTM_SELECTED,
-				       "%s",Txt_Private_available_to_certain_users_identified);
-			   HTM_OPTION (HTM_Type_STRING,"Y",
-				       FileMetadata.IsPublic ? HTM_SELECTED :
-							       HTM_NO_ATTR,
-				       "%s",Txt_Public_open_educational_resource_OER_for_everyone);
+			   for (PrivatePublic  = (Brw_PrivatePublic_t) 0;
+				PrivatePublic <= (Brw_PrivatePublic_t) (Brw_NUM_PRIVATE_PUBLIC - 1);
+				PrivatePublic++)
+			      HTM_OPTION (HTM_Type_STRING,Public_YN[PrivatePublic],
+					  FileMetadata.PrivatePublic == PrivatePublic ? HTM_SELECTED :
+										        HTM_NO_ATTR,
+					  "%s",*PrivatePublicLabel[PrivatePublic]);
 			HTM_SELECT_End ();
 		       }
 		     else		// I can not edit file properties
-			HTM_Txt (FileMetadata.IsPublic ? Txt_Public_open_educational_resource_OER_for_everyone :
-							 Txt_Private_available_to_certain_users_identified);
+			HTM_Txt (*PrivatePublicLabel[FileMetadata.PrivatePublic]);
 		  HTM_TD_End ();
 
 	       HTM_TR_End ();
@@ -7801,8 +7810,8 @@ void Brw_DownloadFile (void)
       if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
 	 /* Add entry to the table of files/folders */
 	 FileMetadata.FilCod = Brw_DB_AddPath (-1L,FileMetadata.FilFolLnk.Type,
-	                                        Gbl.FileBrowser.FilFolLnk.Full,
-	                                        false,Brw_LICENSE_DEFAULT);
+	                                       Gbl.FileBrowser.FilFolLnk.Full,
+	                                       Brw_PRIVATE,Brw_LICENSE_DEFAULT);
 
       /***** Check if I can view this file.
 	     It could be marked as hidden or in a hidden folder *****/
@@ -8120,8 +8129,8 @@ void Brw_ChgFileMetadata (void)
    struct Brw_FileMetadata FileMetadata;
    bool Found;
    bool IAmTheOwner;
-   bool PublicFileBeforeEdition;
-   bool PublicFileAfterEdition;
+   Brw_PrivatePublic_t PrivatePublicFileBeforeEdition;
+   Brw_PrivatePublic_t PrivatePublicFileAfterEdition;
    Brw_License_t License;
 
    /***** Get parameters related to file browser *****/
@@ -8140,7 +8149,7 @@ void Brw_ChgFileMetadata (void)
 	 Err_NoPermissionExit ();
 
       /***** Check if the file was public before the edition *****/
-      PublicFileBeforeEdition = FileMetadata.IsPublic;
+      PrivatePublicFileBeforeEdition = FileMetadata.PrivatePublic;
 
       /***** Get the new file privacy and license from form *****/
       switch (Gbl.FileBrowser.Type)
@@ -8153,7 +8162,7 @@ void Brw_ChgFileMetadata (void)
 	 case Brw_ADMI_SHR_DEG:
 	 case Brw_ADMI_DOC_CRS:
 	 case Brw_ADMI_SHR_CRS:
-	    PublicFileAfterEdition = Brw_GetParPublicFile ();
+	    PrivatePublicFileAfterEdition = Brw_GetParPublicFile ();
 	    License = Brw_GetParLicense ();
 	    break;
 	 case Brw_ADMI_DOC_GRP:
@@ -8167,17 +8176,18 @@ void Brw_ChgFileMetadata (void)
 	 case Brw_ADMI_DOC_PRJ:
 	 case Brw_ADMI_ASS_PRJ:
 	 case Brw_ADMI_BRF_USR:
-	    PublicFileAfterEdition = false;	// Files in these zones can not be public
+	    PrivatePublicFileAfterEdition = Brw_PRIVATE;	// Files in these zones can not be public
 	    License = Brw_GetParLicense ();
 	    break;
 	 default:
-	    PublicFileAfterEdition = false;	// Files in other zones can not be public
+	    PrivatePublicFileAfterEdition = Brw_PRIVATE;	// Files in other zones can not be public
 	    License = Brw_LICENSE_DEFAULT;
 	    break;
 	}
 
       /***** Change file metadata *****/
-      Brw_DB_ChangeFilePublic (&FileMetadata,PublicFileAfterEdition,License);
+      Brw_DB_ChangeFilePublic (&FileMetadata,
+			       PrivatePublicFileAfterEdition,License);
 
       /***** Remove the affected clipboards *****/
       Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
@@ -8185,8 +8195,8 @@ void Brw_ChgFileMetadata (void)
 				       Gbl.Usrs.Other.UsrDat.UsrCod);
 
       /***** Insert file into public social activity *****/
-      if (!PublicFileBeforeEdition &&
-	   PublicFileAfterEdition)	// Only if file has changed from private to public
+      if (PrivatePublicFileBeforeEdition == Brw_PRIVATE &&	// Only if file has changed from private...
+	  PrivatePublicFileAfterEdition  == Brw_PUBLIC)		// ...to public
 	 switch (Gbl.FileBrowser.Type)
 	   {
 	    case Brw_ADMI_DOC_INS:
@@ -8230,9 +8240,10 @@ void Brw_ChgFileMetadata (void)
 /*********** Get parameter with public / private file from form *************/
 /*****************************************************************************/
 
-static bool Brw_GetParPublicFile (void)
+static Brw_PrivatePublic_t Brw_GetParPublicFile (void)
   {
-   return Par_GetParBool ("PublicFile");
+   return Par_GetParBool ("PublicFile") ? Brw_PUBLIC :
+					  Brw_PRIVATE;
   }
 
 /*****************************************************************************/
@@ -8307,8 +8318,8 @@ static void Brw_ResetFileMetadata (struct Brw_FileMetadata *FileMetadata)
    FileMetadata->FilFolLnk.Full[0] = '\0';
    FileMetadata->FilFolLnk.Path[0] = '\0';
    FileMetadata->FilFolLnk.Name[0] = '\0';
-   FileMetadata->IsHidden          = false;
-   FileMetadata->IsPublic          = false;
+   FileMetadata->HiddenVisible     = HidVis_HIDDEN;
+   FileMetadata->PrivatePublic     = Brw_PRIVATE;
    FileMetadata->License           = Brw_LICENSE_DEFAULT;
    FileMetadata->Size              = (off_t) 0;
    FileMetadata->Time              = (time_t) 0;
@@ -8373,10 +8384,10 @@ static void Brw_GetFileMetadataFromRow (MYSQL_RES *mysql_res,
       case Brw_ADMI_DOC_DEG:
       case Brw_SHOW_DOC_CRS:
       case Brw_ADMI_DOC_CRS:
-	 FileMetadata->IsHidden = (row[7][0] == 'Y');
+	 FileMetadata->HiddenVisible = HidVis_GetHiddenOrVisibleFromYN (row[7][0]);
 	 break;
       default:
-	 FileMetadata->IsHidden = false;
+	 FileMetadata->HiddenVisible = HidVis_HIDDEN;
 	 break;
      }
 
@@ -8395,10 +8406,10 @@ static void Brw_GetFileMetadataFromRow (MYSQL_RES *mysql_res,
       case Brw_SHOW_DOC_CRS:
       case Brw_ADMI_DOC_CRS:
       case Brw_ADMI_SHR_CRS:
-	 FileMetadata->IsPublic = (row[8][0] == 'Y');
+	 FileMetadata->PrivatePublic = Brw_GetPrivateOrPublicFromYN (row[8][0]);
 	 break;
       default:
-	 FileMetadata->IsPublic = false;
+	 FileMetadata->PrivatePublic = Brw_PRIVATE;
 	 break;
      }
 

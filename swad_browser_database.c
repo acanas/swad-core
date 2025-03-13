@@ -45,6 +45,13 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+/* Public in database fields */
+const char Brw_Public_YN[Brw_NUM_PRIVATE_PUBLIC] =
+  {
+   [Brw_PRIVATE] = 'N',
+   [Brw_PUBLIC ] = 'Y',
+  };
+
 // Browsers types for database "files" and "brw_sizes" tables
 const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -162,7 +169,8 @@ static Brw_FileBrowser_t Brw_DB_FileBrowserForDB_expanded_folders[Brw_NUM_TYPES_
 /*****************************************************************************/
 
 long Brw_DB_AddPath (long PublisherUsrCod,Brw_FileType_t FileType,
-                     const char *FullPathInTree,bool IsPublic,Brw_License_t License)
+                     const char *FullPathInTree,
+                     Brw_PrivatePublic_t PrivatePublic,Brw_License_t License)
   {
    /***** Add path to the database *****/
    return
@@ -179,8 +187,7 @@ long Brw_DB_AddPath (long PublisherUsrCod,Brw_FileType_t FileType,
 				PublisherUsrCod,
 				(unsigned) FileType,
 				FullPathInTree,
-				IsPublic ? 'Y' :
-					   'N',
+				Brw_Public_YN[PrivatePublic],
 				(unsigned) License);
   }
 
@@ -1388,7 +1395,7 @@ void Brw_DB_RemoveUsrFiles (long UsrCod)
 /*****************************************************************************/
 
 void Brw_DB_ChangeFilePublic (const struct Brw_FileMetadata *FileMetadata,
-                              bool IsPublic,Brw_License_t License)
+                              Brw_PrivatePublic_t PrivatePublic,Brw_License_t License)
   {
    /***** Trivial check *****/
    if (FileMetadata->FilCod <= 0)
@@ -1404,8 +1411,7 @@ void Brw_DB_ChangeFilePublic (const struct Brw_FileMetadata *FileMetadata,
 		     " AND ZoneUsrCod=%ld"
 		     " AND FilCod=%ld"
 		     " AND Path='%s'",
-	           IsPublic ? 'Y' :
-			      'N',
+	           Brw_Public_YN[PrivatePublic],
 	           (unsigned) License,
 	           (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 	           Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
@@ -2257,7 +2263,7 @@ unsigned Brw_DB_GetNumFileViewsUsr (long UsrCod)
 void Brw_DB_HideOrUnhideFileOrFolder (const char Path[PATH_MAX + 1],
 				      HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE];
 
    /***** Mark file as hidden/unhidden in database *****/
    DB_QueryUPDATE ("can not hide/unhide file/folder",
@@ -2267,7 +2273,7 @@ void Brw_DB_HideOrUnhideFileOrFolder (const char Path[PATH_MAX + 1],
 		     " AND Cod=%ld"
 		     " AND ZoneUsrCod=%ld"
 		     " AND Path='%s'",
-		   HidVis_YN[HiddenOrVisible],
+		   HidVis_Hidden_YN[HiddenOrVisible],
 	           (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 	           Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
 	           Brw_GetZoneUsrCodForFileBrowser (),

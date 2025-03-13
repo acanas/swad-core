@@ -40,7 +40,8 @@
 
 //---------------------------------- Files ------------------------------------
 long Brw_DB_AddPath (long PublisherUsrCod,Brw_FileType_t FileType,
-                     const char *FullPathInTree,bool IsPublic,Brw_License_t License);
+                     const char *FullPathInTree,
+                     Brw_PrivatePublic_t PrivatePublic,Brw_License_t License);
 void Brw_DB_RenameOneFolder (const char OldPath[PATH_MAX + 1],
                              const char NewPath[PATH_MAX + 1]);
 void Brw_DB_RenameChildrenFilesOrFolders (const char OldPath[PATH_MAX + 1],
@@ -69,7 +70,7 @@ void Brw_DB_RemoveUsrFiles (long UsrCod);
 
 //------------------------------ Public files ---------------------------------
 void Brw_DB_ChangeFilePublic (const struct Brw_FileMetadata *FileMetadata,
-                              bool IsPublic,Brw_License_t License);
+                              Brw_PrivatePublic_t PrivatePublic,Brw_License_t License);
 bool Brw_DB_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1]);
 unsigned Brw_DB_GetNumPublicFilesUsr (long UsrCod);
 unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,Brw_License_t License);

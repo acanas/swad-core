@@ -104,7 +104,7 @@ void Prj_DB_UnlockProjectEdition (long PrjCod)
 
 long Prj_DB_CreateProject (const struct Prj_Project *Prj)
   {
-   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE];
 
    return
    DB_QueryINSERTandReturnCode ("can not create new project",
@@ -120,7 +120,7 @@ long Prj_DB_CreateProject (const struct Prj_Project *Prj)
 				  "'%s',FROM_UNIXTIME(%ld),'%s')",
 				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 				Prj->DptCod,
-				HidVis_YN[Prj->Hidden],
+				HidVis_Hidden_YN[Prj->Hidden],
 				Prj->Assigned == Prj_ASSIGNED ? 'Y' :
 								'N',
 				Prj->NumStds,
@@ -143,7 +143,7 @@ long Prj_DB_CreateProject (const struct Prj_Project *Prj)
 
 void Prj_DB_UpdateProject (const struct Prj_Project *Prj)
   {
-   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE];
 
    DB_QueryUPDATE ("can not update project",
 		   "UPDATE prj_projects"
@@ -161,7 +161,7 @@ void Prj_DB_UpdateProject (const struct Prj_Project *Prj)
 		   " WHERE PrjCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
 	           Prj->DptCod,
-	           HidVis_YN[Prj->Hidden],
+	           HidVis_Hidden_YN[Prj->Hidden],
 	           Prj->Assigned == Prj_ASSIGNED ? 'Y' :
 						   'N',
 	           Prj->NumStds,
@@ -199,14 +199,14 @@ void Prj_DB_AddUsrToPrj (long PrjCod,Prj_RoleInProject_t RoleInProject,long UsrC
 void Prj_DB_HideOrUnhideProject (long PrjCod,
 				 HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE];
 
    DB_QueryUPDATE ("can not hide/unhide project",
 		   "UPDATE prj_projects"
 		     " SET Hidden='%c'"
 		   " WHERE PrjCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
-		   HidVis_YN[HiddenOrVisible],
+		   HidVis_Hidden_YN[HiddenOrVisible],
 		   PrjCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }

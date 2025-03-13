@@ -243,7 +243,8 @@ bool Att_DB_CheckIfSimilarEventExists (const char *Field,const char *Value,long 
 
 long Att_DB_CreateEvent (const struct Att_Event *Event,const char *Description)
   {
-   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char HidVis_Visible_YN[HidVis_NUM_HIDDEN_VISIBLE];
 
    return
    DB_QueryINSERTandReturnCode ("can not create new attendance event",
@@ -256,12 +257,11 @@ long Att_DB_CreateEvent (const struct Att_Event *Event,const char *Description)
 				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				  "'%c','%s','%s')",
 				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-				HidVis_YN[Event->HiddenOrVisible],
+				HidVis_Hidden_YN[Event->HiddenOrVisible],
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Event->TimeUTC[Dat_STR_TIME],
 				Event->TimeUTC[Dat_END_TIME],
-				Event->CommentTchVisible ? 'Y' :
-							   'N',
+				HidVis_Visible_YN[Event->CommentTchVisible],
 				Event->Title,
 				Description);
   }
@@ -272,7 +272,8 @@ long Att_DB_CreateEvent (const struct Att_Event *Event,const char *Description)
 
 void Att_DB_UpdateEvent (const struct Att_Event *Event,const char *Description)
   {
-   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char HidVis_Visible_YN[HidVis_NUM_HIDDEN_VISIBLE];
 
    DB_QueryUPDATE ("can not update attendance event",
 		   "UPDATE att_events"
@@ -284,11 +285,10 @@ void Att_DB_UpdateEvent (const struct Att_Event *Event,const char *Description)
 		          "Txt='%s'"
 		   " WHERE AttCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
-		   HidVis_YN[Event->HiddenOrVisible],
+		   HidVis_Hidden_YN[Event->HiddenOrVisible],
                    Event->TimeUTC[Dat_STR_TIME],
                    Event->TimeUTC[Dat_END_TIME],
-                   Event->CommentTchVisible ? 'Y' :
-        	                              'N',
+		   HidVis_Visible_YN[Event->CommentTchVisible],
                    Event->Title,
                    Description,
                    Event->AttCod,
@@ -302,14 +302,14 @@ void Att_DB_UpdateEvent (const struct Att_Event *Event,const char *Description)
 void Att_DB_HideOrUnhideEvent (long AttCod,
 			       HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE];
 
    DB_QueryUPDATE ("can not hide/unhide assignment",
 		   "UPDATE att_events"
 		     " SET Hidden='%c'"
 		   " WHERE AttCod=%ld"
 		     " AND CrsCod=%ld",
-		   HidVis_YN[HiddenOrVisible],
+		   HidVis_Hidden_YN[HiddenOrVisible],
                    AttCod,
                    Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
@@ -584,18 +584,19 @@ void Att_DB_RegUsrInEventChangingComments (long AttCod,long UsrCod,
                                            const char *CommentStd,
                                            const char *CommentTch)
   {
+   static const char YN[Att_NUM_PRESENT] =
+     {
+      [Att_ABSENT ] = 'N',
+      [Att_PRESENT] = 'Y',
+     };
+
    /***** Register user as assistant to an event in database *****/
    DB_QueryREPLACE ("can not register user in an event",
 		    "REPLACE INTO att_users"
 		    " (AttCod,UsrCod,Present,CommentStd,CommentTch)"
 		    " VALUES"
 		    " (%ld,%ld,'%c','%s','%s')",
-                    AttCod,
-                    UsrCod,
-                    (Present == Att_PRESENT) ? 'Y' :
-        				       'N',
-                    CommentStd,
-                    CommentTch);
+                    AttCod,UsrCod,YN[Present],CommentStd,CommentTch);
   }
 
 /*****************************************************************************/

@@ -744,7 +744,7 @@ static void Att_ResetEvent (struct Att_Event *Event)
    Event->TimeUTC[Dat_STR_TIME] =
    Event->TimeUTC[Dat_END_TIME] = (time_t) 0;
    Event->ClosedOrOpen = CloOpe_CLOSED;
-   Event->CommentTchVisible = false;
+   Event->CommentTchVisible = HidVis_HIDDEN;
    Event->Title[0] = '\0';
   }
 
@@ -772,7 +772,8 @@ void Att_GetEventDataFromRow (MYSQL_ROW row,struct Att_Event *Event)
    Event->ClosedOrOpen = CloOpe_GetClosedOrOpenFrom01 (row[6][0]);
 
    /***** Get whether the attendance event is visible or not (row[7]) *****/
-   Event->CommentTchVisible = (row[7][0] == 'Y');
+   Event->CommentTchVisible = (row[7][0] == 'Y') ? HidVis_VISIBLE :
+						   HidVis_HIDDEN;
 
    /***** Get the title of the attendance event (row[8]) *****/
    Str_Copy (Event->Title,row[8],sizeof (Event->Title) - 1);
@@ -1020,12 +1021,12 @@ void Att_ReqCreatOrEditEvent (void)
 				 " class=\"Frm_C2_INPUT INPUT_%s\"",
 				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"N",
-			      Events.Event.CommentTchVisible ? HTM_NO_ATTR :
-							       HTM_SELECTED,
+			      Events.Event.CommentTchVisible == HidVis_VISIBLE ? HTM_NO_ATTR :
+										 HTM_SELECTED,
 			      "%s",Txt_Hidden_MALE_PLURAL);
 		  HTM_OPTION (HTM_Type_STRING,"Y",
-			      Events.Event.CommentTchVisible ? HTM_SELECTED :
-							       HTM_NO_ATTR,
+			      Events.Event.CommentTchVisible == HidVis_VISIBLE ? HTM_SELECTED :
+										 HTM_NO_ATTR,
 			      "%s",Txt_Visible_MALE_PLURAL);
 	       HTM_SELECT_End ();
 	    HTM_TD_End ();
@@ -1141,7 +1142,8 @@ void Att_ReceiveEvent (void)
    ReceivedAtt.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm (Dat_END_TIME);
 
    /***** Get boolean parameter that indicates if teacher's comments are visible by students *****/
-   ReceivedAtt.CommentTchVisible = Par_GetParBool ("ComTchVisible");
+   ReceivedAtt.CommentTchVisible = Par_GetParBool ("ComTchVisible") ? HidVis_VISIBLE :
+								      HidVis_HIDDEN;
 
    /***** Get attendance event title *****/
    Par_GetParText ("Title",ReceivedAtt.Title,Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE);
@@ -1806,7 +1808,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	       break;
 	    case Usr_CAN_NOT:			// Show without form
 	    default:
-	       if (Event->CommentTchVisible)
+	       if (Event->CommentTchVisible == HidVis_VISIBLE)
 		 {
 		  Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 				    CommentTch,Cns_MAX_BYTES_TEXT,
@@ -3153,7 +3155,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
          ShowCommentStd = CommentStd[0];
 	 ShowCommentTch = CommentTch[0] &&
 	                  (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-	                   Events->Event.CommentTchVisible);
+	                   Events->Event.CommentTchVisible == HidVis_VISIBLE);
 
 	 /***** Write a row for this event *****/
 	 HTM_TR_Begin (NULL);

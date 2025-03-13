@@ -111,13 +111,13 @@ void Svy_DB_UpdateSurvey (const struct Svy_Survey *Svy,const char *Txt)
 void Svy_DB_HideOrUnhideSurvey (long SvyCod,
 				HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE];
 
    DB_QueryUPDATE ("can not hide/unhide survey",
 		   "UPDATE svy_surveys"
 		     " SET Hidden='%c'"
 		   " WHERE SvyCod=%ld",
-		   HidVis_YN[HiddenOrVisible],
+		   HidVis_Hidden_YN[HiddenOrVisible],
 		   SvyCod);
   }
 

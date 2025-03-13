@@ -2493,7 +2493,7 @@ int swad__sendAttendanceEvent (struct soap *soap,
 	 break;
      }
 
-   /* Is event hidden? */
+   /* Is event hidden or visible? */
    Event.HiddenOrVisible = (hidden ? HidVis_HIDDEN :
 	                             HidVis_VISIBLE);
 
@@ -2504,9 +2504,9 @@ int swad__sendAttendanceEvent (struct soap *soap,
    Event.TimeUTC[Dat_STR_TIME] = (time_t) startTime;
    Event.TimeUTC[Dat_END_TIME] = (time_t) endTime;
 
-   /* Are teacher's comments visible? */
-   Event.CommentTchVisible = (commentsTeachersVisible ? true :
-	                                                false);
+   /* Are teacher's comments hidden or visible? */
+   Event.CommentTchVisible = (commentsTeachersVisible ? HidVis_VISIBLE :
+	                                                HidVis_HIDDEN);
 
    /* Title */
    if (!title[0])
@@ -4836,7 +4836,8 @@ static bool API_WriteRowFileBrowser (FILE *XML,unsigned Level,
       if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
 	 /* Add entry to the table of files/folders */
 	 FileMetadata.FilCod = Brw_DB_AddPath (-1L,FileMetadata.FilFolLnk.Type,
-	                                        Gbl.FileBrowser.FilFolLnk.Full,false,Brw_LICENSE_DEFAULT);
+	                                        Gbl.FileBrowser.FilFolLnk.Full,
+	                                        Brw_PRIVATE,Brw_LICENSE_DEFAULT);
 
       Gbl.Usrs.Other.UsrDat.UsrCod = FileMetadata.PublisherUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
@@ -5076,7 +5077,7 @@ int swad__getMarks (struct soap *soap,
    Brw_GetFileMetadataByCod (&FileMetadata);
 
    if (FileMetadata.FilFolLnk.Type != Brw_IS_FILE ||
-       FileMetadata.IsHidden ||
+       FileMetadata.HiddenVisible == HidVis_HIDDEN ||
        (FileMetadata.FileBrowser != Brw_ADMI_MRK_CRS &&
 	FileMetadata.FileBrowser != Brw_ADMI_MRK_GRP))
       return soap_receiver_fault (soap,

@@ -134,7 +134,7 @@ void Tre_DB_UpdateNode (const struct Tre_Node *Node,const char *Txt)
 void Tre_DB_HideOrUnhideNode (const struct Tre_Node *Node,
 			      HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE];
 
    DB_QueryUPDATE ("can not hide/unhide tree node",
 		   "UPDATE tre_nodes"
@@ -142,7 +142,7 @@ void Tre_DB_HideOrUnhideNode (const struct Tre_Node *Node,
 		   " WHERE NodCod=%ld"
 		     " AND CrsCod=%ld"	// Extra check
 		     " AND Type='%s'",	// Extra check
-		   HidVis_YN[HiddenOrVisible],
+		   HidVis_Hidden_YN[HiddenOrVisible],
 		   Node->Hierarchy.NodCod,
                    Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Node->InfoType]);
@@ -723,7 +723,7 @@ void Tre_DB_UpdateItmInd (const struct Tre_Node *Node,long ItmCod,int ItmInd)
 void Tre_DB_HideOrUnhideItem (const struct Tre_Node *Node,
 			      HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE];
    const char *Table = Tre_DB_TablesItems[Node->InfoType];
 
    DB_QueryUPDATE ("can not hide/unhide item",
@@ -736,7 +736,7 @@ void Tre_DB_HideOrUnhideItem (const struct Tre_Node *Node,
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
 		     " AND tre_nodes.Type='%s'",	// Extra check
 		   Table,
-		   Table,HidVis_YN[HiddenOrVisible],
+		   Table,HidVis_Hidden_YN[HiddenOrVisible],
 		   Table,Node->Item.Cod,
 		   Table,Node->Hierarchy.NodCod,
 		   Table,

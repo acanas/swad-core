@@ -55,7 +55,7 @@ struct Att_Event
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    CloOpe_ClosedOrOpen_t ClosedOrOpen;
-   bool CommentTchVisible;
+   HidVis_HiddenOrVisible_t CommentTchVisible;
    char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
 
    /* Field computed, not associated to the event in database */
