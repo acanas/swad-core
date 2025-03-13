@@ -1100,7 +1100,7 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
       Svy->HieCod = Str_ConvertStrCodToLongCod (row[2]);
 
       /* Get whether the survey is hidden (row[3]) */
-      Svy->Status.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
+      Svy->Status.HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[3][0]);
 
       /* Get roles (row[4]) */
       if (sscanf (row[4],"%u",&Svy->Roles) != 1)

@@ -107,6 +107,14 @@ struct Brw_NumObjects
    unsigned NumLinks;
   };
 
+/* Private/public files */
+#define Brw_NUM_PRIVATE_PUBLIC 2
+typedef enum
+  {
+   Brw_PRIVATE,
+   Brw_PUBLIC,
+  } Brw_PrivatePublic_t;
+
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
@@ -1274,8 +1282,9 @@ static void Brw_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
                                             struct BrwSiz_SizeOfFileZone *SizeOfFileZone);
 
 static void Brw_GetNumberOfOERs (Brw_License_t License,
-                                 unsigned long NumFiles[2]);
+                                 unsigned long NumFiles[Brw_NUM_PRIVATE_PUBLIC]);
 
+static Brw_PrivatePublic_t Brw_GetPrivateOrPublicFromYN (char Ch);
 
 /*****************************************************************************/
 /***************************** Set/get group code ****************************/
@@ -7259,7 +7268,7 @@ HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHiddenOrVisible (Brw_FileType_
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* File is hidden? (row[0]) */
-	 HiddenOrVisible = HidVid_GetHiddenOrVisible (row[0][0]);
+	 HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[0][0]);
 	 break;
      }
 
@@ -10120,13 +10129,19 @@ static void Brw_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 void Brw_GetAndShowOERsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_open_educational_resources_oer;
-   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
-   extern const char *Txt_License;
    extern const char *Txt_Number_of_private_files;
    extern const char *Txt_Number_of_public_files;
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_License;
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
+   static const char **Label[Brw_NUM_PRIVATE_PUBLIC] =
+     {
+      [Brw_PRIVATE] = &Txt_Number_of_private_files,
+      [Brw_PUBLIC ] = &Txt_Number_of_public_files
+     };
    Brw_License_t License;
-   unsigned long NumFiles[2];
+   unsigned long NumFiles[Brw_NUM_PRIVATE_PUBLIC];
+   Brw_PrivatePublic_t PrivatePublic;
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_OER],NULL,NULL,
@@ -10134,9 +10149,11 @@ void Brw_GetAndShowOERsStats (void)
 
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (Txt_License                ,HTM_HEAD_LEFT);
-	 HTM_TH (Txt_Number_of_private_files,HTM_HEAD_RIGHT);
-	 HTM_TH (Txt_Number_of_public_files ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_License,HTM_HEAD_LEFT);
+	 for (PrivatePublic  = (Brw_PrivatePublic_t) 0;
+	      PrivatePublic <= (Brw_PrivatePublic_t) (Brw_NUM_PRIVATE_PUBLIC - 1);
+	      PrivatePublic++)
+	    HTM_TH (*Label[PrivatePublic],HTM_HEAD_RIGHT);
       HTM_TR_End ();
 
       for (License  = (Brw_License_t) 0;
@@ -10147,8 +10164,10 @@ void Brw_GetAndShowOERsStats (void)
 
 	 HTM_TR_Begin (NULL);
 	    HTM_TD_Txt_Left (Txt_LICENSES[License]);
-	    HTM_TD_UnsignedLong (NumFiles[0]);
-	    HTM_TD_UnsignedLong (NumFiles[1]);
+	    for (PrivatePublic  = (Brw_PrivatePublic_t) 0;
+	         PrivatePublic <= (Brw_PrivatePublic_t) (Brw_NUM_PRIVATE_PUBLIC - 1);
+	         PrivatePublic++)
+	       HTM_TD_UnsignedLong (NumFiles[PrivatePublic]);
 	 HTM_TR_End ();
 	}
 
@@ -10161,20 +10180,23 @@ void Brw_GetAndShowOERsStats (void)
 /*****************************************************************************/
 
 static void Brw_GetNumberOfOERs (Brw_License_t License,
-                                 unsigned long NumFiles[2])
+                                 unsigned long NumFiles[Brw_NUM_PRIVATE_PUBLIC])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows = 0;	// Initialized to avoid warning
    unsigned NumRow;
-   unsigned Public;
+   Brw_PrivatePublic_t PrivatePublic;
 
    /***** Get the size of a file browser *****/
    /* Query database */
    NumRows = Brw_DB_GetNumberOfPublicFiles (&mysql_res,License);
 
    /* Reset values to zero */
-   NumFiles[0] = NumFiles[1] = 0L;
+   for (PrivatePublic  = (Brw_PrivatePublic_t) 0;
+	PrivatePublic <= (Brw_PrivatePublic_t) (Brw_NUM_PRIVATE_PUBLIC - 1);
+	PrivatePublic++)
+      NumFiles[PrivatePublic] = 0L;
 
    for (NumRow = 0;
 	NumRow < NumRows;
@@ -10184,14 +10206,23 @@ static void Brw_GetNumberOfOERs (Brw_License_t License,
       row = mysql_fetch_row (mysql_res);
 
       /* Get if public (row[0]) */
-      Public = (row[0][0] == 'Y') ? 1 :
-	                            0;
+      PrivatePublic = Brw_GetPrivateOrPublicFromYN (row[0][0]);
 
       /* Get number of files (row[1]) */
-      if (sscanf (row[1],"%lu",&NumFiles[Public]) != 1)
+      if (sscanf (row[1],"%lu",&NumFiles[PrivatePublic]) != 1)
          Err_ShowErrorAndExit ("Error when getting number of files.");
      }
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/************* Get if private or public from a 'Y'/'N' character *************/
+/*****************************************************************************/
+
+static Brw_PrivatePublic_t Brw_GetPrivateOrPublicFromYN (char Ch)
+  {
+   return (Ch == 'Y') ? Brw_PUBLIC :
+			Brw_PRIVATE;
   }

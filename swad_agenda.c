@@ -1096,7 +1096,7 @@ static void Agd_GetventDataByCod (struct Agd_Event *AgdEvent)
       /* Get whether the event is public or not (row[1])
          and whether it is hidden or not (row[2])  */
       AgdEvent->Public = (row[1][0] == 'Y');
-      AgdEvent->HiddenOrVisible = HidVid_GetHiddenOrVisible (row[2][0]);
+      AgdEvent->HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[2][0]);
 
       /* Get start date (row[3]) and end date (row[4]) in UTC time */
       AgdEvent->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[3]);

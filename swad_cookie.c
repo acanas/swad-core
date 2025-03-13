@@ -57,6 +57,16 @@ extern struct Globals Gbl;
 static void Coo_PutIconsCookies (__attribute__((unused)) void *Args);
 
 /*****************************************************************************/
+/********** Get if optional or mandatory from a 'Y'/'N' character ************/
+/*****************************************************************************/
+
+Coo_RefuseAccept_t Grp_GetRefuseOrAcceptFromYN (char Ch)
+  {
+   return (Ch == 'Y') ? Coo_ACCEPT :
+		        Coo_REFUSE;
+  }
+
+/*****************************************************************************/
 /********************* Edit my preferences on cookies ************************/
 /*****************************************************************************/
 

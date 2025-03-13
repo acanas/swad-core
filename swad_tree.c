@@ -1366,7 +1366,7 @@ void Tre_GetListNodes (Inf_Type_t InfoType)
          Tre_Gbl.List.Nodes[NumItem].Level  = Str_ConvertStrToUnsigned (row[2]);
 
 	 /* Get whether the tree node is hidden or not (row[3]) */
-	 Tre_Gbl.List.Nodes[NumItem].HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
+	 Tre_Gbl.List.Nodes[NumItem].HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[3][0]);
         }
      }
 
@@ -1445,7 +1445,7 @@ static void Tre_GetNodeDataFromRow (MYSQL_RES **mysql_res,
       Node->Hierarchy.Level = Str_ConvertStrToUnsigned (row[2]);
 
       /* Get whether the tree node is hidden or not (row[3]) */
-      Node->Hierarchy.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
+      Node->Hierarchy.HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[3][0]);
 
       /* Get author of the tree node (row[4]) */
       Node->UsrCod = Str_ConvertStrCodToLongCod (row[4]);

@@ -101,7 +101,7 @@ void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
    Node->Item.Ind = Str_ConvertStrToUnsigned (row[2]);
 
    /***** Get whether the tree node is hidden (row(3)) *****/
-   Node->Item.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
+   Node->Item.HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[3][0]);
 
    /***** Get the questionand the answer of the question & answer (row[4], row[5]) *****/
    Str_Copy (Node->Item.QaA.Question,row[4],sizeof (Node->Item.QaA.Question) - 1);

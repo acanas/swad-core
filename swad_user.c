@@ -579,8 +579,7 @@ void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
 	 UsrDat->Prefs.Menu           = Mnu_GetMenuFromStr (row[28]);
 	 UsrDat->Prefs.SideCols       = Set_GetSideColsFromStr (row[29]);
 	 UsrDat->Prefs.PhotoShape     = PhoSha_GetShapeFromStr (row[30]);
-	 UsrDat->Prefs.RefuseAcceptCookies = (row[31][0] == 'Y') ? Coo_ACCEPT :
-								   Coo_REFUSE;
+	 UsrDat->Prefs.RefuseAcceptCookies = Grp_GetRefuseOrAcceptFromYN (row[31][0]);
 	}
      }
    else

@@ -317,6 +317,9 @@ static Usr_Can_t Prj_CheckIfICanEditProject (const struct Prj_Project *Prj);
 
 static void Prj_GetListProjects (struct Prj_Projects *Projects);
 
+static Prj_Locked_t Prj_GetLockedFromYN (char Ch);
+static Prj_Assigned_t Prj_GetAssignedFromYN (char Ch);
+
 static void Prj_ResetProject (struct Prj_Project *Prj);
 
 static void Prj_HideUnhideProject (HidVis_HiddenOrVisible_t HiddenOrVisible);
@@ -3524,11 +3527,9 @@ void Prj_GetProjectDataByCod (struct Prj_Project *Prj)
 	 /* Get whether the project is locked or not (row[3]),
 	        whether the project is hidden or not (row[4])
 	    and whether the project is assigned or not (row[5]) */
-	 Prj->Locked   = (row[3][0] == 'Y') ? Prj_LOCKED :
-					      Prj_UNLOCKED;
-	 Prj->Hidden   = HidVid_GetHiddenOrVisible (row[4][0]);
-	 Prj->Assigned = (row[5][0] == 'Y') ? Prj_ASSIGNED :
-					      Prj_NONASSIG;
+	 Prj->Locked   = Prj_GetLockedFromYN (row[3][0]);
+	 Prj->Hidden   = HidVis_GetHiddenOrVisibleFromYN (row[4][0]);
+	 Prj->Assigned = Prj_GetAssignedFromYN (row[5][0]);
 
 	 /* Get number of students (row[6]) */
 	 Prj->NumStds = Str_ConvertStrToUnsigned (row[6]);
@@ -3581,6 +3582,26 @@ void Prj_GetProjectDataByCod (struct Prj_Project *Prj)
       Prj->PrjCod = -1L;
       Prj_ResetProject (Prj);
      }
+  }
+
+/*****************************************************************************/
+/****************** Get if locked from a 'Y'/'N' character *******************/
+/*****************************************************************************/
+
+static Prj_Locked_t Prj_GetLockedFromYN (char Ch)
+  {
+   return (Ch == 'Y') ? Prj_LOCKED :
+			Prj_UNLOCKED;
+  }
+
+/*****************************************************************************/
+/***************** Get if assigned from a 'Y'/'N' character ******************/
+/*****************************************************************************/
+
+static Prj_Assigned_t Prj_GetAssignedFromYN (char Ch)
+  {
+   return (Ch == 'Y') ? Prj_ASSIGNED :
+			Prj_NONASSIG;
   }
 
 /*****************************************************************************/

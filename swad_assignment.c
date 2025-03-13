@@ -928,7 +928,7 @@ static void Asg_GetAssignmentDataFromRow (MYSQL_RES **mysql_res,
       Asg->AsgCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get whether the assignment is hidden or not (row[1]) */
-      Asg->HiddenOrVisible = HidVid_GetHiddenOrVisible (row[1][0]);
+      Asg->HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[1][0]);
 
       /* Get author of the assignment (row[2]) */
       Asg->UsrCod = Str_ConvertStrCodToLongCod (row[2]);

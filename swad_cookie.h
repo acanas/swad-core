@@ -30,7 +30,6 @@
 #define Coo_COOKIES_ID	"cookies"
 
 #define Coo_NUM_REFUSE_ACCEPT 2
-
 typedef enum
   {
    Coo_REFUSE,
@@ -40,6 +39,8 @@ typedef enum
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
+
+Coo_RefuseAccept_t Grp_GetRefuseOrAcceptFromYN (char Ch);
 
 void Coo_EditMyPrefsOnCookies (void);
 void Coo_ChangeMyPrefsCookies (void);

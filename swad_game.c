@@ -960,7 +960,7 @@ void Gam_GetGameDataByCod (struct Gam_Game *Game)
       Game->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
       /* Get whether the game is hidden (row[2]) */
-      Game->HiddenOrVisible = HidVid_GetHiddenOrVisible (row[2][0]);
+      Game->HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[2][0]);
 
       /* Get author of the game (row[3]) */
       Game->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
