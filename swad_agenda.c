@@ -878,8 +878,13 @@ static void Agd_PutFormsToRemEditOneEvent (struct Agd_Agenda *Agenda,
   {
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = ActUnhEvtMyAgd,	// Hidden ==> action to unhide
+      [HidVis_HIDDEN ] = ActUnhEvtMyAgd,	// Hidden  ==> action to unhide
       [HidVis_VISIBLE] = ActHidEvtMyAgd,	// Visible ==> action to hide
+     };
+   static Act_Action_t ActionPrivatePublic[PriPub_NUM_PRIVATE_PUBLIC] =
+     {
+      [PriPub_PRIVATE] = ActPubEvtMyAgd,	// Private ==> action to make public
+      [PriPub_PUBLIC ] = ActPrvEvtMyAgd,	// Public  ==> action to make private
      };
 
    Agenda->AgdCodToEdit = AgdEvent->AgdCod;	// Used as parameter in contextual links
@@ -898,14 +903,9 @@ static void Agd_PutFormsToRemEditOneEvent (struct Agd_Agenda *Agenda,
                                 Agd_PutCurrentParsMyAgenda,Agenda);
 
    /***** Icon to make event public/private *****/
-   if (AgdEvent->Public)
-      Lay_PutContextualLinkOnlyIcon (ActPrvEvtMyAgd,NULL,
-				     Agd_PutCurrentParsMyAgenda,Agenda,
-			             "unlock.svg",Ico_GREEN);
-   else
-      Lay_PutContextualLinkOnlyIcon (ActPubEvtMyAgd,NULL,
-	                             Agd_PutCurrentParsMyAgenda,Agenda,
-			             "lock.svg",Ico_RED);
+   Ico_PutContextualIconToPrivatePublic (ActionPrivatePublic,Anchor,
+				         Agd_PutCurrentParsMyAgenda,Agenda,
+				         AgdEvent->PrivateOrPublic);
   }
 
 /*****************************************************************************/
@@ -1095,7 +1095,7 @@ static void Agd_GetventDataByCod (struct Agd_Event *AgdEvent)
 
       /* Get whether the event is public or not (row[1])
          and whether it is hidden or not (row[2])  */
-      AgdEvent->Public = (row[1][0] == 'Y');
+      AgdEvent->PrivateOrPublic = PriPub_GetPrivateOrPublicFromYN (row[1][0]);
       AgdEvent->HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[2][0]);
 
       /* Get start date (row[3]) and end date (row[4]) in UTC time */
@@ -1115,7 +1115,7 @@ static void Agd_GetventDataByCod (struct Agd_Event *AgdEvent)
      {
       /***** Clear all event data *****/
       AgdEvent->AgdCod                = -1L;
-      AgdEvent->Public                = false;
+      AgdEvent->PrivateOrPublic       = PriPub_PRIVATE;
       AgdEvent->HiddenOrVisible       = HidVis_VISIBLE;
       AgdEvent->TimeUTC[Dat_STR_TIME] =
       AgdEvent->TimeUTC[Dat_END_TIME] = (time_t) 0;

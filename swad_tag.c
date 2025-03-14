@@ -56,8 +56,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Tag_PutIconEnable (long TagCod);
-static void Tag_PutIconDisable (long TagCod);
+static void Tag_PutIconEnableDisable (long TagCod,HidVis_HiddenOrVisible_t TagHiddenOrVisible);
 
 /*****************************************************************************/
 /********************************* Reset tags ********************************/
@@ -253,21 +252,23 @@ void Tag_InsertTagsIntoDB (long QstCod,const struct Tag_Tags *Tags)
 void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,MYSQL_RES *mysql_res,
                           Tag_ShowAllOrVisibleTags_t ShowAllOrVisibleTags)
   {
+   extern struct Ico_IconColor Ico_HiddenVisible[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Txt_Tags;
    extern const char *Txt_All_tags;
    extern const char *Txt_Tag_not_allowed;
    extern const char *Txt_Tag_allowed;
+   static const char **Title[HidVis_NUM_HIDDEN_VISIBLE] =
+     {
+      [HidVis_HIDDEN ] = &Txt_Tag_not_allowed,
+      [HidVis_VISIBLE] = &Txt_Tag_allowed
+     };
    unsigned NumTag;
    unsigned NumSelTag;
    MYSQL_ROW row;
-   bool TagHidden = false;
+   HidVis_HiddenOrVisible_t TagHiddenOrVisible = HidVis_HIDDEN;
    HTM_Attributes_t Attributes;
    long TagCodThisRow;
-   /*
-   row[0] TagCod
-   row[1] TagTxt
-   row[2] TagHidden
-   */
+
    HTM_TR_Begin (NULL);
 
       /***** Label *****/
@@ -306,26 +307,29 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,MYSQL_RES *mysql_res,
 		 NumTag++)
 	      {
 	       row = mysql_fetch_row (mysql_res);
+	       /*
+	       row[0] TagCod
+	       row[1] TagTxt
+	       row[2] TagHidden
+	       */
+	       /* Tag code (row[0]) */
 	       if (sscanf (row[0],"%ld",&TagCodThisRow) != 1)
 		  Err_WrongTagExit ();
 
 	       HTM_TR_Begin (NULL);
 
-		  /* Hidden/visible icon */
+		  /* Hidden/visible icon (row[2]) */
 		  if (ShowAllOrVisibleTags == Tag_SHOW_ALL_TAGS)
 		    {
-		     TagHidden = (row[2][0] == 'Y');
+		     TagHiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[2][0]);
 		     HTM_TD_Begin ("class=\"LT\"");
-			Ico_PutIconOff (TagHidden ? "eye-slash.svg" :
-						    "eye.svg",
-					TagHidden ? Ico_RED :
-						    Ico_GREEN,
-					TagHidden ? Txt_Tag_not_allowed :
-						    Txt_Tag_allowed);
+			Ico_PutIconOff (Ico_HiddenVisible[TagHiddenOrVisible].Icon,
+					Ico_HiddenVisible[TagHiddenOrVisible].Color,
+					*Title[TagHiddenOrVisible]);
 		     HTM_TD_End ();
 		    }
 
-		  /* Checkbox and title */
+		  /* Checkbox and text (row[1]) */
 		  if (Tags->PreselectedTagCod > 0)	// Only one preselected tag
 				// User can not select between several tags
 		     Attributes = HTM_CHECKED | HTM_DISABLED;
@@ -409,10 +413,8 @@ void Tag_ShowFormEditTags (void)
 	       HTM_TD_End ();
 
 	       /* Form to enable / disable this tag */
-	       if (row[2][0] == 'Y')	// Tag disabled
-		  Tag_PutIconEnable (TagCod);
-	       else
-		  Tag_PutIconDisable (TagCod);
+	       Tag_PutIconEnableDisable (TagCod,
+					 HidVis_GetHiddenOrVisibleFromYN (row[2][0]));
 
 	       /* Form to rename this tag */
 	       HTM_TD_Begin ("class=\"LM\"");
@@ -452,26 +454,21 @@ void Tag_PutPars (void *TagCod)
 /******************* Put a link and an icon to enable a tag ******************/
 /*****************************************************************************/
 
-static void Tag_PutIconEnable (long TagCod)
+static void Tag_PutIconEnableDisable (long TagCod,HidVis_HiddenOrVisible_t TagHiddenOrVisible)
   {
-   HTM_TD_Begin ("class=\"BM\"");
-      Frm_BeginForm (ActEnaTag);
-	 ParCod_PutPar (ParCod_Tag,TagCod);
-	 Ico_PutIconLink ("eye-slash.svg",Ico_RED,ActEnaTag);
-      Frm_EndForm ();
-   HTM_TD_End ();
-  }
+   extern struct Ico_IconColor Ico_HiddenVisible[HidVis_NUM_HIDDEN_VISIBLE];
+   static Act_Action_t NextAction[HidVis_NUM_HIDDEN_VISIBLE] =
+     {
+      [HidVis_HIDDEN ] = ActEnaTag,	// Disabled ==> click to enable
+      [HidVis_VISIBLE] = ActDisTag	// Enabled  ==> click to disable
+     };
 
-/*****************************************************************************/
-/****************** Put a link and an icon to disable a tag ******************/
-/*****************************************************************************/
-
-static void Tag_PutIconDisable (long TagCod)
-  {
    HTM_TD_Begin ("class=\"BM\"");
-      Frm_BeginForm (ActDisTag);
+      Frm_BeginForm (NextAction[TagHiddenOrVisible]);
 	 ParCod_PutPar (ParCod_Tag,TagCod);
-	 Ico_PutIconLink ("eye.svg",Ico_GREEN,ActDisTag);
+	 Ico_PutIconLink (Ico_HiddenVisible[TagHiddenOrVisible].Icon,
+	                  Ico_HiddenVisible[TagHiddenOrVisible].Color,
+	                  NextAction[TagHiddenOrVisible]);
       Frm_EndForm ();
    HTM_TD_End ();
   }

@@ -772,8 +772,7 @@ void Att_GetEventDataFromRow (MYSQL_ROW row,struct Att_Event *Event)
    Event->ClosedOrOpen = CloOpe_GetClosedOrOpenFrom01 (row[6][0]);
 
    /***** Get whether the attendance event is visible or not (row[7]) *****/
-   Event->CommentTchVisible = (row[7][0] == 'Y') ? HidVis_VISIBLE :
-						   HidVis_HIDDEN;
+   Event->CommentTchVisible = HidVis_GetHiddenOrVisibleFromYN (row[7][0]);
 
    /***** Get the title of the attendance event (row[8]) *****/
    Str_Copy (Event->Title,row[8],sizeof (Event->Title) - 1);

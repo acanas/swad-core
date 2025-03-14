@@ -28,6 +28,7 @@
 /*****************************************************************************/
 
 #include "swad_date.h"
+#include "swad_private_public.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -44,7 +45,7 @@ struct Agd_Event
   {
    long AgdCod;
    long UsrCod;
-   bool Public;
+   PriPub_PrivateOrPublic_t PrivateOrPublic;
    HidVis_HiddenOrVisible_t HiddenOrVisible;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    Dat_TimeStatus_t TimeStatus;

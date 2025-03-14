@@ -34,6 +34,7 @@
 #include "swad_form.h"
 #include "swad_group.h"
 #include "swad_notification.h"
+#include "swad_private_public.h"
 
 /*****************************************************************************/
 /************************ Public types and constants *************************/
@@ -95,14 +96,6 @@ typedef enum
    Brw_CLASSIC_UPLOAD,
   } Brw_UploadType_t;
 
-/* Private/public files */
-#define Brw_NUM_PRIVATE_PUBLIC 2
-typedef enum
-  {
-   Brw_PRIVATE,
-   Brw_PUBLIC,
-  } Brw_PrivatePublic_t;
-
 #define Brw_NUM_LICENSES 8
 typedef enum	// Don't change these values! They are stored in database as numbers
   {
@@ -139,8 +132,8 @@ struct Brw_FileMetadata
    long ZoneUsrCod;
    long PublisherUsrCod;
    struct Brw_FilFolLnk FilFolLnk;
-   HidVis_HiddenOrVisible_t HiddenVisible;
-   Brw_PrivatePublic_t PrivatePublic;
+   HidVis_HiddenOrVisible_t HiddenOrVisible;
+   PriPub_PrivateOrPublic_t PrivateOrPublic;
    Brw_License_t License;
    off_t Size;
    time_t Time;

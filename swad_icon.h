@@ -29,6 +29,7 @@
 
 #include "swad_closed_open.h"
 #include "swad_hidden_visible.h"
+#include "swad_private_public.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -98,6 +99,10 @@ void Ico_PutContextualIconToHideUnhide (Act_Action_t NextAction[HidVis_NUM_HIDDE
                                         const char *Anchor,
                                         void (*FuncPars) (void *Args),void *Args,
                                         HidVis_HiddenOrVisible_t HiddenOrVisible);
+void Ico_PutContextualIconToPrivatePublic (Act_Action_t NextAction[PriPub_NUM_PRIVATE_PUBLIC],
+                                           const char *Anchor,
+                                           void (*FuncPars) (void *Args),void *Args,
+                                           PriPub_PrivateOrPublic_t PrivateOrPublic);
 void Ico_PutContextualIconToExpand (Act_Action_t NextAction,const char *Anchor,
                                     void (*FuncPars) (void *Args),void *Args);
 void Ico_PutContextualIconToContract (Act_Action_t NextAction,const char *Anchor,

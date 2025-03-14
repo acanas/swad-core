@@ -33,6 +33,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_global.h"
+#include "swad_private_public.h"
 #include "swad_project.h"
 
 /*****************************************************************************/
@@ -44,13 +45,6 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
-
-/* Public in database fields */
-const char Brw_Public_YN[Brw_NUM_PRIVATE_PUBLIC] =
-  {
-   [Brw_PRIVATE] = 'N',
-   [Brw_PUBLIC ] = 'Y',
-  };
 
 // Browsers types for database "files" and "brw_sizes" tables
 const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER] =
@@ -170,8 +164,10 @@ static Brw_FileBrowser_t Brw_DB_FileBrowserForDB_expanded_folders[Brw_NUM_TYPES_
 
 long Brw_DB_AddPath (long PublisherUsrCod,Brw_FileType_t FileType,
                      const char *FullPathInTree,
-                     Brw_PrivatePublic_t PrivatePublic,Brw_License_t License)
+                     PriPub_PrivateOrPublic_t PrivateOrPublic,Brw_License_t License)
   {
+   extern const char PriPub_Public_YN[PriPub_NUM_PRIVATE_PUBLIC];
+
    /***** Add path to the database *****/
    return
    DB_QueryINSERTandReturnCode ("can not add path to database",
@@ -187,7 +183,7 @@ long Brw_DB_AddPath (long PublisherUsrCod,Brw_FileType_t FileType,
 				PublisherUsrCod,
 				(unsigned) FileType,
 				FullPathInTree,
-				Brw_Public_YN[PrivatePublic],
+				PriPub_Public_YN[PrivateOrPublic],
 				(unsigned) License);
   }
 
@@ -1395,8 +1391,10 @@ void Brw_DB_RemoveUsrFiles (long UsrCod)
 /*****************************************************************************/
 
 void Brw_DB_ChangeFilePublic (const struct Brw_FileMetadata *FileMetadata,
-                              Brw_PrivatePublic_t PrivatePublic,Brw_License_t License)
+                              PriPub_PrivateOrPublic_t PrivateOrPublic,Brw_License_t License)
   {
+   extern const char PriPub_Public_YN[PriPub_NUM_PRIVATE_PUBLIC];
+
    /***** Trivial check *****/
    if (FileMetadata->FilCod <= 0)
       return;
@@ -1411,7 +1409,7 @@ void Brw_DB_ChangeFilePublic (const struct Brw_FileMetadata *FileMetadata,
 		     " AND ZoneUsrCod=%ld"
 		     " AND FilCod=%ld"
 		     " AND Path='%s'",
-	           Brw_Public_YN[PrivatePublic],
+	           PriPub_Public_YN[PrivateOrPublic],
 	           (unsigned) License,
 	           (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 	           Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
@@ -2284,8 +2282,8 @@ void Brw_DB_HideOrUnhideFileOrFolder (const char Path[PATH_MAX + 1],
 /************** Check if a file / folder from is set as hidden ***************/
 /*****************************************************************************/
 
-HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenUsingPath (MYSQL_RES **mysql_res,
-								      const char *Path)
+HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (MYSQL_RES **mysql_res,
+								               const char *Path)
   {
    return
    DB_QuerySELECT (mysql_res,"can not check if a file is hidden",

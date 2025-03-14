@@ -794,18 +794,10 @@ static void Prj_ShowFormToFilterByAssignation (const struct Prj_Projects *Projec
 
 static void Prj_ShowFormToFilterByVisibility (const struct Prj_Projects *Projects)
   {
+   extern struct Ico_IconColor Ico_HiddenVisible[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis_NUM_HIDDEN_VISIBLE];
    struct Prj_Filter Filter;
    HidVis_HiddenOrVisible_t HidVis;
-   static struct
-     {
-      const char *Icon;
-      Ico_Color_t Color;
-     } HiddenVisiblIcon[HidVis_NUM_HIDDEN_VISIBLE] =
-     {
-      [HidVis_HIDDEN ] = {"eye-slash.svg",Ico_RED  },
-      [HidVis_VISIBLE] = {"eye.svg"      ,Ico_GREEN},
-     };
 
    for (HidVis  = (HidVis_HiddenOrVisible_t) 0;
 	HidVis <= (HidVis_HiddenOrVisible_t) (HidVis_NUM_HIDDEN_VISIBLE - 1);
@@ -825,8 +817,8 @@ static void Prj_ShowFormToFilterByVisibility (const struct Prj_Projects *Project
 			 Projects->CurrentPage,
 			 -1L,
 			 Usr_USE_LIST_SELECTED_USERS);
-	    Ico_PutSettingIconLink (HiddenVisiblIcon[HidVis].Icon,
-				    HiddenVisiblIcon[HidVis].Color,
+	    Ico_PutSettingIconLink (Ico_HiddenVisible[HidVis].Icon,
+				    Ico_HiddenVisible[HidVis].Color,
 				    Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis]);
 	 Frm_EndForm ();
       Set_EndPref ();

@@ -86,6 +86,20 @@ struct Ico_IconColor Ico_HiddenVisible[HidVis_NUM_HIDDEN_VISIBLE] =
      }
   };
 
+struct Ico_IconColor Ico_PrivatePublic[PriPub_NUM_PRIVATE_PUBLIC] =
+  {
+   [PriPub_PRIVATE] =
+     {
+      .Icon  = "lock.svg",
+      .Color = Ico_RED
+     },
+   [PriPub_PUBLIC ] =
+     {
+      .Icon = "unlock.svg",
+      .Color = Ico_GREEN
+     }
+  };
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -313,6 +327,17 @@ void Ico_PutContextualIconToHideUnhide (Act_Action_t NextAction[HidVis_NUM_HIDDE
                                   FuncPars,Args,
 				  Ico_HiddenVisible[HiddenOrVisible].Icon,
 				  Ico_HiddenVisible[HiddenOrVisible].Color);
+  }
+
+void Ico_PutContextualIconToPrivatePublic (Act_Action_t NextAction[PriPub_NUM_PRIVATE_PUBLIC],
+                                           const char *Anchor,
+                                           void (*FuncPars) (void *Args),void *Args,
+                                           PriPub_PrivateOrPublic_t PrivateOrPublic)
+  {
+   Lay_PutContextualLinkOnlyIcon (NextAction[PrivateOrPublic],Anchor,
+                                  FuncPars,Args,
+				  Ico_PrivatePublic[PrivateOrPublic].Icon,
+				  Ico_PrivatePublic[PrivateOrPublic].Color);
   }
 
 void Ico_PutContextualIconToExpand (Act_Action_t NextAction,const char *Anchor,

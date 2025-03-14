@@ -4837,7 +4837,7 @@ static bool API_WriteRowFileBrowser (FILE *XML,unsigned Level,
 	 /* Add entry to the table of files/folders */
 	 FileMetadata.FilCod = Brw_DB_AddPath (-1L,FileMetadata.FilFolLnk.Type,
 	                                        Gbl.FileBrowser.FilFolLnk.Full,
-	                                        Brw_PRIVATE,Brw_LICENSE_DEFAULT);
+	                                        PriPub_PRIVATE,Brw_LICENSE_DEFAULT);
 
       Gbl.Usrs.Other.UsrDat.UsrCod = FileMetadata.PublisherUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
@@ -5077,7 +5077,7 @@ int swad__getMarks (struct soap *soap,
    Brw_GetFileMetadataByCod (&FileMetadata);
 
    if (FileMetadata.FilFolLnk.Type != Brw_IS_FILE ||
-       FileMetadata.HiddenVisible == HidVis_HIDDEN ||
+       FileMetadata.HiddenOrVisible == HidVis_HIDDEN ||
        (FileMetadata.FileBrowser != Brw_ADMI_MRK_CRS &&
 	FileMetadata.FileBrowser != Brw_ADMI_MRK_GRP))
       return soap_receiver_fault (soap,

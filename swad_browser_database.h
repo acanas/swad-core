@@ -41,7 +41,7 @@
 //---------------------------------- Files ------------------------------------
 long Brw_DB_AddPath (long PublisherUsrCod,Brw_FileType_t FileType,
                      const char *FullPathInTree,
-                     Brw_PrivatePublic_t PrivatePublic,Brw_License_t License);
+                     PriPub_PrivateOrPublic_t PrivateOrPublic,Brw_License_t License);
 void Brw_DB_RenameOneFolder (const char OldPath[PATH_MAX + 1],
                              const char NewPath[PATH_MAX + 1]);
 void Brw_DB_RenameChildrenFilesOrFolders (const char OldPath[PATH_MAX + 1],
@@ -70,7 +70,7 @@ void Brw_DB_RemoveUsrFiles (long UsrCod);
 
 //------------------------------ Public files ---------------------------------
 void Brw_DB_ChangeFilePublic (const struct Brw_FileMetadata *FileMetadata,
-                              Brw_PrivatePublic_t PrivatePublic,Brw_License_t License);
+                              PriPub_PrivateOrPublic_t PrivateOrPublic,Brw_License_t License);
 bool Brw_DB_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1]);
 unsigned Brw_DB_GetNumPublicFilesUsr (long UsrCod);
 unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,Brw_License_t License);
@@ -102,8 +102,8 @@ unsigned Brw_DB_GetNumFileViewsUsr (long UsrCod);
 //------------------------------- Hidden files --------------------------------
 void Brw_DB_HideOrUnhideFileOrFolder (const char Path[PATH_MAX + 1],
 				      HidVis_HiddenOrVisible_t HiddenOrVisible);
-HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenUsingPath (MYSQL_RES **mysql_res,
-								      const char *Path);
+HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (MYSQL_RES **mysql_res,
+								               const char *Path);
 HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (const struct Brw_FileMetadata *FileMetadata);
 
 //---------------------------- Expanded folders -------------------------------
