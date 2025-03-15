@@ -1083,8 +1083,7 @@ void Ctr_RenameCenter (struct Hie_Node *Ctr,Nam_ShrtOrFullName_t ShrtOrFull)
                              CurrentName[ShrtOrFull],NewName);
 
 	    /* Change current center name in order to display it properly */
-	    Str_Copy (CurrentName[ShrtOrFull],NewName,
-		      Nam_MaxBytes[ShrtOrFull]);
+	    Str_Copy (CurrentName[ShrtOrFull],NewName,Nam_MaxBytes[ShrtOrFull]);
            }
         }
       else	// The same name

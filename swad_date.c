@@ -267,16 +267,16 @@ void Dat_WriteTime (char Str[Dat_MAX_BYTES_TIME],long TimeInMicroseconds)
 
 void Dat_ResetDate (struct Dat_Date *Date)
   {
-   Date->Day = 0;
+   Date->Day   = 0;
    Date->Month = 0;
-   Date->Year = 0;
-   Date->Week = 0;
+   Date->Year  = 0;
+   Date->Week  = 0;
    Date->YYYYMMDD[0] = '\0';
   }
 
 void Dat_ResetHour (struct Dat_Hour *Hour)
   {
-   Hour->Hour = 0;
+   Hour->Hour   = 0;
    Hour->Minute = 0;
   }
 

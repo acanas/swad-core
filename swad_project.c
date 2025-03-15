@@ -3562,7 +3562,7 @@ void Prj_GetProjectDataByCod (struct Prj_Project *Prj)
 	       break;
 	      }
 	 Prj->Review.Time = Dat_GetUNIXTimeFromStr (row[16]);
-	 Str_Copy (Prj->Review.Txt  ,row[17],Cns_MAX_BYTES_TEXT);
+	 Str_Copy (Prj->Review.Txt,row[17],Cns_MAX_BYTES_TEXT);
 	}
 
       /***** Free structure that stores the query result *****/

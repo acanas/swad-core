@@ -1041,7 +1041,8 @@ void TstPrn_ComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 	   NumOpt++)
         {
          /* Filter this correct answer */
-         Str_Copy (TextAnsOK,Question->Answer.Options[NumOpt].Text,sizeof (TextAnsOK) - 1);
+         Str_Copy (TextAnsOK,Question->Answer.Options[NumOpt].Text,
+                   sizeof (TextAnsOK) - 1);
          Str_ConvertToComparable (TextAnsOK);
 
          /* Check is user answer is correct */
@@ -1575,7 +1576,8 @@ static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
 	 if (PrintedQuestion->StrAnswers[0])	// If user has answered the question
 	   {
 	    /* Filter the user answer */
-	    Str_Copy (TextAnsUsr,PrintedQuestion->StrAnswers,sizeof (TextAnsUsr) - 1);
+	    Str_Copy (TextAnsUsr,PrintedQuestion->StrAnswers,
+		      sizeof (TextAnsUsr) - 1);
 
 	    /* In order to compare student answer to stored answer,
 	       the text answers are stored avoiding two or more consecurive spaces */
@@ -1588,7 +1590,8 @@ static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
 		 NumOpt++)
 	      {
 	       /* Filter this correct answer */
-	       Str_Copy (TextAnsOK,Question->Answer.Options[NumOpt].Text,sizeof (TextAnsOK) - 1);
+	       Str_Copy (TextAnsOK,Question->Answer.Options[NumOpt].Text,
+		         sizeof (TextAnsOK) - 1);
 	       Str_ConvertToComparable (TextAnsOK);
 
 	       /* Check is user answer is correct */

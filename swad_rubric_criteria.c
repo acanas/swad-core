@@ -359,7 +359,8 @@ void RubCri_ChangeTitle (void)
    if (RubCri_CheckCriterionTitleReceivedFromForm (&Rubrics.Criterion,NewTitle))
      {
       /* Update title and database table */
-      Str_Copy (Rubrics.Criterion.Title,NewTitle,sizeof (Rubrics.Criterion.Title) - 1);
+      Str_Copy (Rubrics.Criterion.Title,NewTitle,
+	        sizeof (Rubrics.Criterion.Title) - 1);
       Rub_DB_UpdateCriterionTitle (&Rubrics.Criterion);
      }
 

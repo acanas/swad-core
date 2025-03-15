@@ -907,7 +907,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                case 0x0A:  /* \n */
         	  if (ChangeTo == Str_TO_RIGOROUS_HTML)
                      Str_Copy (StrSpecialChar,"<br />",
-                               sizeof (StrSpecialChar) - 1);
+                	       sizeof (StrSpecialChar) - 1);
         	  else
                     {
                      StrSpecialChar[0] = Str_LF[0];
@@ -2611,11 +2611,33 @@ void Str_CreateRandomAlphanumStr (char *Str,size_t Length)
 
 void Str_Copy (char *Dst,const char *Src,size_t DstSize)
   {
+   size_t SrcLength;
    char ErrorTxt[128];
-   size_t SrcLength = strlen (Src);
+
+   /***** Trivial check: destination pointer should be not null *****/
+   if (Dst == NULL)
+      Err_ShowErrorAndExit ("Destination of copy is null.");
+
+   /***** Trivial check: destination size should be >= 1 *****/
+   if (DstSize == 0)
+      Err_ShowErrorAndExit ("Destination size is 0.");
+
+   /***** Trivial check: if source is null ==> clear destination *****/
+   if (Src == NULL)
+     {
+      Dst[0] = '\0';
+      return;
+     }
+
+   /***** Trivial check: if source is an empty string ==> clear destination *****/
+   if (Src[0] == '\0')
+     {
+      Dst[0] = '\0';
+      return;
+     }
 
    /***** Check if buffer has enough space for source *****/
-   if (SrcLength > DstSize)
+   if ((SrcLength = strlen (Src)) > DstSize)
      {
       snprintf (ErrorTxt,sizeof (ErrorTxt),
 	        "Trying to copy %zu chars into a %zu-chars buffer.",

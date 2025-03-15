@@ -578,7 +578,6 @@ void Qst_WriteQstStem (const char *Stem,const char *ClassStem,
 	    if ((StemRigorousHTML = malloc (StemLength + 1)) == NULL)
 	       Err_NotEnoughMemoryExit ();
 	    Str_Copy (StemRigorousHTML,Stem,StemLength);
-
 	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			      StemRigorousHTML,StemLength,
 			      Str_DONT_REMOVE_SPACES);
@@ -2455,14 +2454,8 @@ bool Qst_GetQstDataByCod (struct Qst_Question *Question)
       Question->Answer.Shuffle = (row[2][0] == 'Y');
 
       /* Get the stem (row[3]) and the feedback (row[4]) */
-      Question->Stem    [0] = '\0';
-      Question->Feedback[0] = '\0';
-      if (row[3])
-	 if (row[3][0])
-	    Str_Copy (Question->Stem    ,row[3],Cns_MAX_BYTES_TEXT);
-      if (row[4])
-	 if (row[4][0])
-	    Str_Copy (Question->Feedback,row[4],Cns_MAX_BYTES_TEXT);
+      Str_Copy (Question->Stem    ,row[3],Cns_MAX_BYTES_TEXT);
+      Str_Copy (Question->Feedback,row[4],Cns_MAX_BYTES_TEXT);
 
       /* Get media (row[5]) */
       Question->Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
@@ -2545,16 +2538,10 @@ bool Qst_GetQstDataByCod (struct Qst_Question *Question)
 		  Ale_ShowAlertsAndExit ();
 
 	       /* Get text (row[1]) and feedback (row[2])*/
-	       Question->Answer.Options[NumOpt].Text   [0] = '\0';
-	       if (row[1])
-		  if (row[1][0])
-		     Str_Copy (Question->Answer.Options[NumOpt].Text    ,row[1],
-			       Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-	       Question->Answer.Options[NumOpt].Feedback[0] = '\0';
-	       if (row[2])
-		  if (row[2][0])
-		     Str_Copy (Question->Answer.Options[NumOpt].Feedback,row[2],
-			       Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+	       Str_Copy (Question->Answer.Options[NumOpt].Text    ,row[1],
+			 Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+	       Str_Copy (Question->Answer.Options[NumOpt].Feedback,row[2],
+			 Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 	       /* Get media (row[3]) */
 	       Question->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);

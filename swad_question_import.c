@@ -561,7 +561,8 @@ static void QstImp_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 			   if (StemElem->Content)
 			     {
 			      /* Convert stem from text to HTML (in database stem is stored in HTML) */
-			      Str_Copy (Question.Stem,StemElem->Content,Cns_MAX_BYTES_TEXT);
+			      Str_Copy (Question.Stem,StemElem->Content,
+				        Cns_MAX_BYTES_TEXT);
 			      Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
 						Question.Stem,Cns_MAX_BYTES_TEXT,
 						Str_REMOVE_SPACES);
@@ -578,7 +579,8 @@ static void QstImp_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 			   if (FeedbackElem->Content)
 			     {
 			      /* Convert feedback from text to HTML (in database feedback is stored in HTML) */
-			      Str_Copy (Question.Feedback,FeedbackElem->Content,Cns_MAX_BYTES_TEXT);
+			      Str_Copy (Question.Feedback,FeedbackElem->Content,
+				        Cns_MAX_BYTES_TEXT);
 			      Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
 						Question.Feedback,Cns_MAX_BYTES_TEXT,
 						Str_REMOVE_SPACES);

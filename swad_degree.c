@@ -1311,8 +1311,7 @@ void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFull)
                              CurrentName[ShrtOrFull],NewName);
 
 	    /* Change current degree name in order to display it properly */
-	    Str_Copy (CurrentName[ShrtOrFull],NewName,
-		      Nam_MaxBytes[ShrtOrFull]);
+	    Str_Copy (CurrentName[ShrtOrFull],NewName,Nam_MaxBytes[ShrtOrFull]);
            }
         }
       else	// The same name

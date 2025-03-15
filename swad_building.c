@@ -580,8 +580,7 @@ static void Bld_RenameBuilding (Nam_ShrtOrFullName_t ShrtOrFull)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update building name *****/
-   Str_Copy (CurrentName[ShrtOrFull],NewName,
-	     Nam_MaxBytes[ShrtOrFull]);
+   Str_Copy (CurrentName[ShrtOrFull],NewName,Nam_MaxBytes[ShrtOrFull]);
   }
 
 /*****************************************************************************/

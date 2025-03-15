@@ -938,10 +938,7 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
       Match->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[3 + StartEndTime]);
 
    /* Get the title of the match (row[5]) */
-   if (row[5])
-      Str_Copy (Match->Title,row[5],sizeof (Match->Title) - 1);
-   else
-      Match->Title[0] = '\0';
+   Str_Copy (Match->Title,row[5],sizeof (Match->Title) - 1);
 
    /***** Get current match status *****/
    /*

@@ -579,8 +579,7 @@ static void SysLnk_RenameLink (Nam_ShrtOrFullName_t ShrtOrFull)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update name *****/
-   Str_Copy (CurrentName[ShrtOrFull],NewName,
-	     Nam_MaxBytes[ShrtOrFull]);
+   Str_Copy (CurrentName[ShrtOrFull],NewName,Nam_MaxBytes[ShrtOrFull]);
   }
 
 /*****************************************************************************/

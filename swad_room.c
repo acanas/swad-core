@@ -1089,8 +1089,7 @@ static void Roo_RenameRoom (Nam_ShrtOrFullName_t ShrtOrFull)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update room name *****/
-   Str_Copy (CurrentName[ShrtOrFull],NewName,
-	     Nam_MaxBytes[ShrtOrFull]);
+   Str_Copy (CurrentName[ShrtOrFull],NewName,Nam_MaxBytes[ShrtOrFull]);
   }
 
 /*****************************************************************************/

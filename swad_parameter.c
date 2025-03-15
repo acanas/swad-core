@@ -1260,10 +1260,7 @@ The IP address of the remote host making the request.
 */
 void Par_SetIP (void)
   {
-   if (getenv ("REMOTE_ADDR"))
-      Str_Copy (Par_Pars.IP,getenv ("REMOTE_ADDR"),sizeof (Par_Pars.IP) - 1);
-   else
-      Par_Pars.IP[0] = '\0';
+   Str_Copy (Par_Pars.IP,getenv ("REMOTE_ADDR"),sizeof (Par_Pars.IP) - 1);
   }
 
 const char *Par_GetIP (void)

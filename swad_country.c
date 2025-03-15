@@ -1662,7 +1662,7 @@ static void Cty_EditingCountryConstructor (void)
       Err_NotEnoughMemoryExit ();
 
    /***** Reset country *****/
-   Cty_EditingCty->HieCod         = -1L;
+   Cty_EditingCty->HieCod      = -1L;
    Cty_EditingCty->ShrtName[0] = '\0';
    Cty_EditingCty->FullName[0] = '\0';
    Cty_EditingCty->WWW[0]      = '\0';

@@ -3075,11 +3075,8 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGrpTypes_t WhichGrpTypes)
                Grp->Room.RooCod = Str_ConvertStrCodToLongCod (row[2]);
 
                /* Get room short name (row[3]) */
-               if (row[3])	// May be NULL because of LEFT JOIN
-		  Str_Copy (Grp->Room.ShrtName,row[3],
-			    sizeof (Grp->Room.ShrtName) - 1);
-               else		// NULL
-        	  Grp->Room.ShrtName[0] = '\0';
+	       Str_Copy (Grp->Room.ShrtName,row[3],
+		         sizeof (Grp->Room.ShrtName) - 1);
 
                /* Get number of current users in group */
 	       for (Role  = Rol_TCH;
@@ -3283,11 +3280,7 @@ void Grp_GetGroupDataByCod (long *CrsCod,long *GrpTypCod,struct Group *Grp)
 	 Grp->FileZones = Grp_GetFileZonesFromYN (row[6][0]);
 
 	 /* Get the name of the room (row[7]) */
-	 if (row[7])	// May be NULL because of LEFT JOIN
-	    Str_Copy (Grp->Room.ShrtName,row[7],
-	              sizeof (Grp->Room.ShrtName) - 1);
-	 else		// NULL
-	    Grp->Room.ShrtName[0] = '\0';
+         Str_Copy (Grp->Room.ShrtName,row[7],sizeof (Grp->Room.ShrtName) - 1);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -3677,8 +3670,7 @@ void Grp_ReceiveNewGrp (void)
       else	// If there is not a group name
         {
          AlertType = Ale_ERROR;
-	 Str_Copy (AlertTxt,Txt_You_must_specify_the_name,
-		   sizeof (AlertTxt) - 1);
+	 Str_Copy (AlertTxt,Txt_You_must_specify_the_name,sizeof (AlertTxt) - 1);
         }
      }
    else	// Invalid group type

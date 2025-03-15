@@ -637,8 +637,7 @@ void Plg_ChangePlgLogo (void)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update logo *****/
-   Str_Copy (Plg_EditingPlg->Logo,NewLogo,
-             sizeof (Plg_EditingPlg->Logo) - 1);
+   Str_Copy (Plg_EditingPlg->Logo,NewLogo,sizeof (Plg_EditingPlg->Logo) - 1);
   }
 
 /*****************************************************************************/
@@ -678,8 +677,7 @@ void Plg_ChangePlgAppKey (void)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update app key *****/
-   Str_Copy (Plg_EditingPlg->AppKey,NewAppKey,
-             sizeof (Plg_EditingPlg->AppKey) - 1);
+   Str_Copy (Plg_EditingPlg->AppKey,NewAppKey,sizeof (Plg_EditingPlg->AppKey) - 1);
   }
 
 /*****************************************************************************/
@@ -719,8 +717,7 @@ void Plg_ChangePlgURL (void)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update URL *****/
-   Str_Copy (Plg_EditingPlg->URL,NewURL,
-             sizeof (Plg_EditingPlg->URL) - 1);
+   Str_Copy (Plg_EditingPlg->URL,NewURL,sizeof (Plg_EditingPlg->URL) - 1);
   }
 
 /*****************************************************************************/

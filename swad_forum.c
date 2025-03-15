@@ -1133,14 +1133,9 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1
       if (GetContent == Ntf_GET_CONTENT)
 	{
 	 Length = strlen (row[1]);
-
 	 if ((*ContentStr = malloc (Length + 1)) == NULL)
             Err_NotEnoughMemoryExit ();
-
-	 if (Length)
-	    Str_Copy (*ContentStr,row[1],Length);
-	 else
-	    **ContentStr = '\0';
+	 Str_Copy (*ContentStr,row[1],Length);
 	}
      }
 

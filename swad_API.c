@@ -5017,13 +5017,9 @@ int swad__getFile (struct soap *soap,
 
    /***** Copy data into output structure *****/
    Str_Copy (getFileOut->fileName,FileMetadata.FilFolLnk.Name,NAME_MAX);
-
    Str_Copy (getFileOut->URL,URL,WWW_MAX_BYTES_WWW);
-
    getFileOut->size = (int) FileMetadata.Size;
-
    getFileOut->time = (int) FileMetadata.Time;
-
    Str_Copy (getFileOut->license,Txt_LICENSES[FileMetadata.License],
              Brw_MAX_BYTES_LICENSE);
 

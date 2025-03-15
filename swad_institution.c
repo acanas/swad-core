@@ -1165,8 +1165,7 @@ void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFull
                              CurrentName[ShrtOrFull],NewName);
 
 	    /* Change current institution name in order to display it properly */
-	    Str_Copy (CurrentName[ShrtOrFull],NewName,
-		      Nam_MaxBytes[ShrtOrFull]);
+	    Str_Copy (CurrentName[ShrtOrFull],NewName,Nam_MaxBytes[ShrtOrFull]);
            }
         }
       else	// The same name

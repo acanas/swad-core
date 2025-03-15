@@ -755,10 +755,7 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
    Session->ClosedOrOpen = CloOpe_GetClosedOrOpenFrom01 (row[6][0]);
 
    /* Get the title of the session (row[7]) */
-   if (row[7])
-      Str_Copy (Session->Title,row[7],sizeof (Session->Title) - 1);
-   else
-      Session->Title[0] = '\0';
+   Str_Copy (Session->Title,row[7],sizeof (Session->Title) - 1);
 
    /* Get whether to show user results or not (row(8)) */
    Session->ShowUsrResults = (row[8][0] == 'Y');

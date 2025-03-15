@@ -4365,8 +4365,6 @@ void DB_QuerySELECTString (char *Str,size_t StrSize,const char *MsgError,
    va_list ap;
    int NumBytesPrinted;
    char *Query;
-   // bool TooBig = false;
-   // char ErrorTxt[256];
 
    /***** Create query string *****/
    va_start (ap,fmt);
@@ -4380,10 +4378,7 @@ void DB_QuerySELECTString (char *Str,size_t StrSize,const char *MsgError,
    if (DB_QuerySELECTusingQueryStr (Query,&mysql_res,MsgError) == 1)	// Row found
      {
       row = mysql_fetch_row (mysql_res);
-
-      // TooBig = (strlen (row[0]) > StrSize);
-      // if (!TooBig)
-         Str_Copy (Str,row[0],StrSize);
+      Str_Copy (Str,row[0],StrSize);
      }
 
    /***** Free structure that stores the query result *****/

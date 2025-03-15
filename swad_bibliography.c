@@ -155,8 +155,10 @@ void Bib_GetRefDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
    for (NumField = 0;
 	NumField < Bib_NUM_FIELDS;
 	NumField++)
-      Str_Copy (Node->Item.Bib.Fields[NumField],row[4 + NumField],Bib_MAX_BYTES_FIELD);
-   Str_Copy (Node->Item.Bib.URL,row[4 + Bib_NUM_FIELDS],sizeof (Node->Item.Bib.URL) - 1);
+      Str_Copy (Node->Item.Bib.Fields[NumField],row[4 + NumField],
+	        Bib_MAX_BYTES_FIELD);
+   Str_Copy (Node->Item.Bib.URL,row[4 + Bib_NUM_FIELDS],
+	     sizeof (Node->Item.Bib.URL) - 1);
   }
 
 /*****************************************************************************/
