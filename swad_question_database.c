@@ -227,6 +227,7 @@ void Qst_DB_CreateTF_Answer (const struct Qst_Question *Question)
 
 void Qst_DB_CreateChoAnswer (struct Qst_Question *Question)
   {
+   extern const char WroCor_Correct_YN[WroCor_NUM_WRONG_CORRECT];
    unsigned NumOpt;
 
    for (NumOpt = 0;
@@ -245,8 +246,7 @@ void Qst_DB_CreateChoAnswer (struct Qst_Question *Question)
 			 Question->Answer.Options[NumOpt].Feedback ? Question->Answer.Options[NumOpt].Feedback :
 								     "",
 			 Question->Answer.Options[NumOpt].Media.MedCod,
-			 Question->Answer.Options[NumOpt].Correct ? 'Y' :
-								    'N');
+			 WroCor_Correct_YN[Question->Answer.Options[NumOpt].WrongOrCorrect]);
 
 	 /* Update image status */
 	 if (Question->Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)

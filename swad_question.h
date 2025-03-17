@@ -36,6 +36,7 @@
 #include "swad_media.h"
 #include "swad_string.h"
 #include "swad_tag.h"
+#include "swad_wrong_correct.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -81,7 +82,7 @@ struct Qst_Question
       char TF;
       struct
 	{
-	 bool Correct;
+	 WroCor_WrongOrCorrect_t WrongOrCorrect;
 	 char *Text;
 	 char *Feedback;
 	 struct Med_Media Media;

@@ -919,6 +919,7 @@ void TstPrn_ComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
    unsigned NumOpt;
+   WroCor_WrongOrCorrect_t OptionWrongOrCorrect;
    unsigned NumOptTotInQst = 0;
    unsigned NumOptCorrInQst = 0;
    unsigned NumAnsGood = 0;
@@ -938,17 +939,21 @@ void TstPrn_ComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 	NumOpt < Question->Answer.NumOptions;
 	NumOpt++)
      {
+      OptionWrongOrCorrect = Question->Answer.Options[Indexes[NumOpt]].WrongOrCorrect;
       NumOptTotInQst++;
-      if (Question->Answer.Options[Indexes[NumOpt]].Correct)
+      if (OptionWrongOrCorrect == WroCor_CORRECT)
          NumOptCorrInQst++;
-
       if (UsrAnswers[Indexes[NumOpt]] == HTM_CHECKED)	// This answer has been selected by the user
-        {
-         if (Question->Answer.Options[Indexes[NumOpt]].Correct)
-            NumAnsGood++;
-         else
-            NumAnsBad++;
-        }
+         switch (OptionWrongOrCorrect)
+           {
+            case WroCor_CORRECT:
+               NumAnsGood++;
+               break;
+            case WroCor_WRONG:
+            default:
+               NumAnsBad++;
+               break;
+           }
      }
 
    /* The answer is not blank? */
@@ -1404,14 +1409,23 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
   {
    extern const char *Txt_TST_Answer_given_by_the_user;
    extern const char *Txt_TST_Answer_given_by_the_teachers;
-   unsigned NumOpt;
-   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
-   struct
+   struct Answer
      {
       char *Class;
       char *Str;
-     } Ans;
+     };
+   static struct Answer AnsWrongOrCorrect[WroCor_NUM_WRONG_CORRECT] =
+     {
+      [WroCor_WRONG  ] = {.Class = "Qst_ANS_BAD",.Str = "&cross;"},
+      [WroCor_CORRECT] = {.Class = "Qst_ANS_OK" ,.Str = "&check;"}
+     };
+   static struct Answer AnsNotVisible =
+                         {.Class = "Qst_ANS_0"  ,.Str = "&bull;" };
+   unsigned NumOpt;
+   WroCor_WrongOrCorrect_t OptionWrongOrCorrect;
+   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
+   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   const struct Answer *Ans;
 
    /***** Change format of answers text *****/
    Qst_ChangeFormatAnswersText (Question);
@@ -1439,6 +1453,8 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
 	   NumOpt < Question->Answer.NumOptions;
 	   NumOpt++)
 	{
+	 OptionWrongOrCorrect = Question->Answer.Options[Indexes[NumOpt]].WrongOrCorrect;
+
 	 HTM_TR_Begin (NULL);
 
 	    /* Draw icon depending on user's answer */
@@ -1447,27 +1463,17 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
 	       switch (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
 		 {
 		  case Usr_CAN:
-		     if (Question->Answer.Options[Indexes[NumOpt]].Correct)
-		       {
-			Ans.Class = "Qst_ANS_OK";	// Correct
-			Ans.Str   = "&check;";
-		       }
-		     else
-		       {
-			Ans.Class = "Qst_ANS_BAD";	// Wrong
-			Ans.Str   = "&cross;";
-		       }
+		     Ans = &AnsWrongOrCorrect[OptionWrongOrCorrect];
 		     break;
 		  case Usr_CAN_NOT:
 		  default:
-		     Ans.Class = "Qst_ANS_0";		// Blank answer
-		     Ans.Str   = "&bull;";
+		     Ans = &AnsNotVisible;
 		     break;
 		 }
 	       HTM_TD_Begin ("class=\"CT %s_%s\" title=\"%s\"",
-			     Ans.Class,The_GetSuffix (),
+			     Ans->Class,The_GetSuffix (),
 			     Txt_TST_Answer_given_by_the_user);
-		  HTM_Txt (Ans.Str);
+		  HTM_Txt (Ans->Str);
 	       HTM_TD_End ();
 	      }
 	    else	// This answer has NOT been selected by the user
@@ -1477,16 +1483,20 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
 	    switch (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
 	      {
 	       case Usr_CAN:
-		  if (Question->Answer.Options[Indexes[NumOpt]].Correct)
+		  switch (OptionWrongOrCorrect)
 		    {
-		     HTM_TD_Begin ("class=\"CT Qst_ANS_0_%s\" title=\"%s\"",
-				   The_GetSuffix (),
-				   Txt_TST_Answer_given_by_the_teachers);
-			HTM_Txt ("&bull;");
-		     HTM_TD_End ();
+		     case WroCor_CORRECT:
+			HTM_TD_Begin ("class=\"CT Qst_ANS_0_%s\" title=\"%s\"",
+				      The_GetSuffix (),
+				      Txt_TST_Answer_given_by_the_teachers);
+			   HTM_Txt ("&bull;");
+			HTM_TD_End ();
+			break;
+		     case WroCor_WRONG:
+		     default:
+		        HTM_TD_Empty (1);
+		        break;
 		    }
-		  else
-		     HTM_TD_Empty (1);
 		  break;
 	       case Usr_CAN_NOT:
 	       default:
@@ -1550,10 +1560,15 @@ static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
 				     __attribute__((unused)) const char *ClassTxt,
 				     __attribute__((unused)) const char *ClassFeedback)
   {
+   static const char *Class[HidVis_NUM_HIDDEN_VISIBLE] =
+     {
+      [WroCor_WRONG  ] = "Qst_ANS_BAD",
+      [WroCor_CORRECT] = "Qst_ANS_OK",
+     };
    unsigned NumOpt;
    char TextAnsUsr[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
    char TextAnsOK[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
-   bool Correct = false;
+   WroCor_WrongOrCorrect_t WrongOrCorrect = WroCor_WRONG;
 
    /***** Change format of answers text *****/
    Qst_ChangeFormatAnswersText (Question);
@@ -1597,14 +1612,14 @@ static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
 	       /* Check is user answer is correct */
 	       if (!strcoll (TextAnsUsr,TextAnsOK))
 		 {
-		  Correct = true;
+		  WrongOrCorrect = WroCor_CORRECT;
 		  break;
 		 }
 	      }
+
 	    HTM_TD_Begin ("class=\"CT %s_%s\"",
-			  ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_CAN ? (Correct ? "Qst_ANS_OK" :	// Correct
-											    "Qst_ANS_BAD") :	// Wrong
-											    "Qst_ANS_0",	// Blank answer
+			  ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_CAN ? Class[WrongOrCorrect] :
+									       "Qst_ANS_0",	// Blank answer
 			  The_GetSuffix ());
 	       HTM_Txt (PrintedQuestion->StrAnswers);
 	    HTM_TD_End ();

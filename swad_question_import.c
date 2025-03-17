@@ -306,6 +306,11 @@ static void QstImp_WriteAnswersOfAQstXML (const struct Qst_Question *Question,
                                           FILE *FileXML)
   {
    extern const char *Txt_NEW_LINE;
+   static const char *Correct_YesNo[WroCor_NUM_WRONG_CORRECT] =
+     {
+      [WroCor_WRONG  ] = "No",
+      [WroCor_CORRECT] = "Yes",
+     };
    unsigned NumOpt;
 
    /***** Write answers *****/
@@ -341,8 +346,7 @@ static void QstImp_WriteAnswersOfAQstXML (const struct Qst_Question *Question,
             /* Write whether the answer is correct or not */
             if (Question->Answer.Type != Qst_ANS_TEXT)
                fprintf (FileXML," correct=\"%s\"",
-                        Question->Answer.Options[NumOpt].Correct ? "yes" :
-                                                                   "no");
+                        Correct_YesNo[Question->Answer.Options[NumOpt].WrongOrCorrect]);
 
             fprintf (FileXML,">%s",Txt_NEW_LINE);
 
@@ -801,7 +805,7 @@ static void QstImp_GetAnswerFromXML (struct XMLElement *AnswerElem,
 		    }
 
 	       if (Question->Answer.Type == Qst_ANS_TEXT)
-		  Question->Answer.Options[NumOpt].Correct = true;
+		  Question->Answer.Options[NumOpt].WrongOrCorrect = WroCor_CORRECT;
 	       else
 		  /* Check if option is correct or wrong */
 		  for (Attribute  = OptionElem->FirstAttribute;
@@ -809,7 +813,8 @@ static void QstImp_GetAnswerFromXML (struct XMLElement *AnswerElem,
 		       Attribute  = Attribute->Next)
 		     if (!strcmp (Attribute->AttributeName,"correct"))
 		       {
-			Question->Answer.Options[NumOpt].Correct = XML_GetAttributteYesNoFromXMLTree (Attribute);
+			Question->Answer.Options[NumOpt].WrongOrCorrect = XML_GetAttributteYesNoFromXMLTree (Attribute) ? WroCor_CORRECT :
+														          WroCor_WRONG;
 			break;	// Only first attribute "correct"
 		       }
                }
@@ -1013,7 +1018,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 
 			/* Put an icon that indicates whether the answer is correct or wrong */
 			HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
-			   if (Question->Answer.Options[NumOpt].Correct)
+			   if (Question->Answer.Options[NumOpt].WrongOrCorrect == WroCor_CORRECT)
 			      Ico_PutIcon ("check.svg",Ico_BLACK,
 			                   Txt_TST_Answer_given_by_the_teachers,
 					   QuestionExists ? "ICO_HIDDEN CONTEXT_ICO16x16" :

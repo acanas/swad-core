@@ -32,6 +32,7 @@
 #include "swad_exam_session.h"
 #include "swad_exam_set.h"
 #include "swad_question_type.h"
+#include "swad_wrong_correct.h"
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -99,7 +100,7 @@ void Exa_DB_RemoveAllSetQuestionsFromCrs (long CrsCod);
 //--------------------------- Set question answers ----------------------------
 void Exa_DB_AddAnsToQstInSet (long QstCod,unsigned AnsInd,
                               const char *Answer,const char *Feedback,
-                              long MedCod,bool Correct);
+                              long MedCod,WroCor_WrongOrCorrect_t WrongOrCorrect);
 unsigned Exa_DB_GetQstAnswersFromSet (MYSQL_RES **mysql_res,long QstCod,bool Shuffle);
 unsigned Exa_DB_GetQstAnswersTextFromSet (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetQstAnswersCorrFromSet (MYSQL_RES **mysql_res,long QstCod);

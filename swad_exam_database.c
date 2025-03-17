@@ -1113,8 +1113,10 @@ void Exa_DB_RemoveAllSetQuestionsFromCrs (long CrsCod)
 
 void Exa_DB_AddAnsToQstInSet (long QstCod,unsigned AnsInd,
                               const char *Answer,const char *Feedback,
-                              long MedCod,bool Correct)
+                              long MedCod,WroCor_WrongOrCorrect_t WrongOrCorrect)
   {
+   extern const char WroCor_Correct_YN[WroCor_NUM_WRONG_CORRECT];
+
    DB_QueryINSERT ("can not add answer to set",
 		   "INSERT INTO exa_set_answers"
 		   " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
@@ -1125,8 +1127,7 @@ void Exa_DB_AddAnsToQstInSet (long QstCod,unsigned AnsInd,
 		   Answer,	// Copy of text
 		   Feedback,	// Copy of feedback
 		   MedCod,	// Media code of the new cloned media
-		   Correct ? 'Y' :
-			     'N');	// Copy of correct
+		   WroCor_Correct_YN[WrongOrCorrect]);	// Copy of correct
   }
 
 /*****************************************************************************/
