@@ -189,8 +189,8 @@ static void TstPrn_ResetPrintExceptPrnCod (struct TstPrn_Print *Print)
    Print->TimeUTC[Dat_END_TIME] = (time_t) 0;
    Print->NumQsts.All      =
    Print->NumQsts.NotBlank = 0;
-   Print->Sent             = false;	// After creating an exam, it's not sent
-   Print->AllowTeachers    = false;	// Teachers can't seen the exam if student don't allow it
+   Print->Sent             = false;		// After creating an exam, it's not sent
+   Print->VisibleByTchs    = HidVis_HIDDEN;	// Teachers can't see the exam if student don't allow it
    Print->Score            = 0.0;
   }
 
@@ -939,7 +939,7 @@ void TstPrn_ComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 	NumOpt < Question->Answer.NumOptions;
 	NumOpt++)
      {
-      OptionWrongOrCorrect = Question->Answer.Options[Indexes[NumOpt]].WrongOrCorrect;
+      OptionWrongOrCorrect = Question->Answer.Options[Indexes[NumOpt]].Correct;
       NumOptTotInQst++;
       if (OptionWrongOrCorrect == WroCor_CORRECT)
          NumOptCorrInQst++;
@@ -1453,7 +1453,7 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
 	   NumOpt < Question->Answer.NumOptions;
 	   NumOpt++)
 	{
-	 OptionWrongOrCorrect = Question->Answer.Options[Indexes[NumOpt]].WrongOrCorrect;
+	 OptionWrongOrCorrect = Question->Answer.Options[Indexes[NumOpt]].Correct;
 
 	 HTM_TR_Begin (NULL);
 
@@ -1904,7 +1904,11 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
    double TotalScore;
    unsigned NumPrintsVisibleByTchs = 0;
    struct TstRes_ICanView ICanView;
-   const char *ClassDat;
+   static const char *ClassDat[HidVis_NUM_HIDDEN_VISIBLE] =
+     {
+      [HidVis_HIDDEN ] = "DAT_LIGHT",
+      [HidVis_VISIBLE] = "DAT"
+     };
 
    /***** Reset total number of questions and total score *****/
    NumTotalQsts.All      =
@@ -1932,8 +1936,6 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 
 	    /* Get print data */
 	    TstPrn_GetPrintDataByPrnCod (&Print);
-	    ClassDat = Print.AllowTeachers ? "DAT" :
-					     "DAT_LIGHT";
 
 	    /* Get if I can see print result and score */
 	    TstRes_CheckIfICanSeePrintResult (&Print,UsrDat->UsrCod,&ICanView);
@@ -1950,7 +1952,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	       if (asprintf (&Id,"tst_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-			     Id,ClassDat,The_GetSuffix (),The_GetColorRows ());
+			     Id,ClassDat[Print.VisibleByTchs],The_GetSuffix (),The_GetColorRows ());
 		  Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
 						Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 						Dat_WRITE_TODAY |
@@ -1972,7 +1974,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 
 	    /* Write number of questions */
 	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
-	                  ClassDat,The_GetSuffix (),The_GetColorRows ());
+	                  ClassDat[Print.VisibleByTchs],The_GetSuffix (),The_GetColorRows ());
 	       switch (ICanView.Result)
 		 {
 		  case Usr_CAN:
@@ -1987,7 +1989,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 
 	    /* Write number of non-blank answers */
 	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
-	                  ClassDat,The_GetSuffix (),The_GetColorRows ());
+	                  ClassDat[Print.VisibleByTchs],The_GetSuffix (),The_GetColorRows ());
 	       switch (ICanView.Result)
 		 {
 		  case Usr_CAN:
@@ -2005,7 +2007,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 
 	    /* Write number of blank answers */
 	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-	                  ClassDat,The_GetSuffix (),The_GetColorRows ());
+	                  ClassDat[Print.VisibleByTchs],The_GetSuffix (),The_GetColorRows ());
 	       switch (ICanView.Result)
 		 {
 		  case Usr_CAN:
@@ -2024,7 +2026,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 
 	    /* Write score */
 	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
-	                  ClassDat,The_GetSuffix (),The_GetColorRows ());
+	                  ClassDat[Print.VisibleByTchs],The_GetSuffix (),The_GetColorRows ());
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
@@ -2041,7 +2043,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 
 	    /* Write average score per question */
 	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-	                  ClassDat,The_GetSuffix (),The_GetColorRows ());
+	                  ClassDat[Print.VisibleByTchs],The_GetSuffix (),The_GetColorRows ());
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
@@ -2058,7 +2060,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 
 	    /* Write grade */
 	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
-	                  ClassDat,The_GetSuffix (),The_GetColorRows ());
+	                  ClassDat[Print.VisibleByTchs],The_GetSuffix (),The_GetColorRows ());
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
@@ -2094,7 +2096,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 
 	    HTM_TR_End ();
 
-	    if (Print.AllowTeachers)
+	    if (Print.VisibleByTchs == HidVis_VISIBLE)
 	       NumPrintsVisibleByTchs++;
 	   }
 
@@ -2524,8 +2526,9 @@ static void TstRes_CheckIfICanSeePrintResult (const struct TstPrn_Print *Print,
 	 // if teachers are not allowed ==> I can not view results (except if the print is mine)
 	 ICanView->Result =
 	 ICanView->Score  = Print->Sent &&
-	                    (Print->AllowTeachers || Usr_ItsMe (UsrCod) == Usr_ME) ? Usr_CAN :
-										     Usr_CAN_NOT;
+	                    (Print->VisibleByTchs == HidVis_VISIBLE ||
+	                     Usr_ItsMe (UsrCod) == Usr_ME) ? Usr_CAN :
+							     Usr_CAN_NOT;
 	 break;
       case Rol_SYS_ADM:
 	 ICanView->Result =
@@ -2623,7 +2626,7 @@ void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print)
       /* Get if print has been sent (row[5])
          and if teachers are allowed to see this test print (row[6]) */
       Print->Sent          = (row[5][0] == 'Y');
-      Print->AllowTeachers = (row[6][0] == 'Y');
+      Print->VisibleByTchs = HidVis_GetVisibleFromYN (row[6][0]);
 
       /* Get score (row[7]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot

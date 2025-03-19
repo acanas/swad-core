@@ -144,12 +144,12 @@ static void Grp_PutFormToCreateGroup (const struct GroupType *CurrentGrpTyp,
 				      const struct Group *Grp,
 				      const struct Roo_Rooms *Rooms);
 
-static Grp_SingleMultiple_t Grp_GetSingleMultiple (long GrpTypCod);
+static Grp_SingleOrMultiple_t Grp_GetSingleMultiple (long GrpTypCod);
 
-static Grp_OptionalMandatory_t Grp_GetOptionalOrMandatoryFromYN (char Ch);
-static Grp_SingleMultiple_t Grp_SingleOrMultipleFromYN (char Ch);
+static Grp_OptionalOrMandatory_t Grp_GetMandatoryFromYN (char Ch);
+static Grp_SingleOrMultiple_t Grp_MultipleFromYN (char Ch);
 static Grp_MustBeOpened_t Grp_MustBeOpenedFromYN (char Ch);
-static Grp_FileZones_t Grp_GetFileZonesFromYN (char Ch);
+static Grp_HasFileZones_t Grp_GetHasFileZonesFromYN (char Ch);
 
 static void Grp_GetLstCodGrpsUsrBelongs (long UsrCod,long GrpTypCod,
                                          struct ListCodGrps *LstGrps,
@@ -196,8 +196,8 @@ void Grp_ResetGroup (struct Group *Grp)
 	Role++)
       Grp->NumUsrs[Role] = 0;
    Grp->MaxStds = Grp_NUM_STUDENTS_NOT_LIMITED;
-   Grp->ClosedOrOpen = CloOpe_CLOSED;
-   Grp->FileZones = Grp_HAS_NOT_FILEZONES;
+   Grp->Open = CloOpe_CLOSED;
+   Grp->HasFileZones = Grp_HAS_NOT_FILEZONES;
   }
 
 /*****************************************************************************/
@@ -232,7 +232,6 @@ void Grp_WriteNamesOfSelectedGrps (void)
    extern const char *Txt_Group;
    extern const char *Txt_Groups;
    extern const char *Txt_users_with_no_group;
-   extern const char *Txt_and;
    long GrpCod;
    unsigned NumGrpSel;
    long CrsCod;
@@ -260,14 +259,8 @@ void Grp_WriteNamesOfSelectedGrps (void)
          HTM_TxtF ("%s&nbsp;(%s)",GrpTyp.Name,Txt_users_with_no_group);
         }
 
-      if (Gbl.Crs.Grps.LstGrpsSel.NumGrps >= 2)
-        {
-         if (NumGrpSel == Gbl.Crs.Grps.LstGrpsSel.NumGrps - 2)
-            HTM_TxtF (" %s ",Txt_and);
-         if (Gbl.Crs.Grps.LstGrpsSel.NumGrps >= 3)
-            if (NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps - 2)
-               HTM_Txt (", ");
-        }
+      /* Write separator */
+      HTM_ListSeparator (NumGrpSel,Gbl.Crs.Grps.LstGrpsSel.NumGrps);
      }
   }
 
@@ -869,7 +862,7 @@ static bool Grp_CheckIfNotClosedOrFull (struct ListCodGrps *LstGrpsWant,
 	       if (GrpCodWant == Grp->GrpCod)
 		 {
 		  /* Check if the group is closed */
-		  if (Grp->ClosedOrOpen == CloOpe_CLOSED)
+		  if (Grp->Open == CloOpe_CLOSED)
 		     return false;	// Selection is not valid
 
 		  /* Check if the group is full */
@@ -932,7 +925,7 @@ static void Grp_RemoveUsrFromGrps (Usr_MeOrOther_t MeOrOther,
 	      {
 	       Grp = &GrpTyp->LstGrps[NumGrpThisType];
 
-	       if (GrpCodBelong == Grp->GrpCod && Grp->ClosedOrOpen == CloOpe_CLOSED)
+	       if (GrpCodBelong == Grp->GrpCod && Grp->Open == CloOpe_CLOSED)
 		  RemoveUsrFromThisGrp = false;
 	      }
 	   }
@@ -1098,7 +1091,7 @@ void Grp_EnrolUsrIntoGroups (struct Usr_Data *UsrDat,Rol_Role_t Role,
    struct GroupType *GrpTyp;
    struct Group *Grp;
    long GrpCodSel;
-   Grp_SingleMultiple_t SingleMultiple;
+   Grp_SingleOrMultiple_t SingleMultiple;
    bool AlreadyEnroledInGrp;
 
    /***** For each existing type of group in the course... *****/
@@ -1534,23 +1527,23 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 
 	       /***** Icon to open/close group *****/
 	       HTM_TD_Begin ("class=\"BM\"");
-		  Frm_BeginFormAnchor (ClosedOpen[Grp->ClosedOrOpen].NextAction,
+		  Frm_BeginFormAnchor (ClosedOpen[Grp->Open].NextAction,
 				       Grp_GROUPS_SECTION_ID);
 		     ParCod_PutPar (ParCod_Grp,Grp->GrpCod);
-		     Ico_PutIconLink (ClosedOpen[Grp->ClosedOrOpen].Icon,
-			              ClosedOpen[Grp->ClosedOrOpen].Color,
-			              ClosedOpen[Grp->ClosedOrOpen].NextAction);
+		     Ico_PutIconLink (ClosedOpen[Grp->Open].Icon,
+			              ClosedOpen[Grp->Open].Color,
+			              ClosedOpen[Grp->Open].NextAction);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
 	       /***** Icon to activate file zones for this group *****/
 	       HTM_TD_Begin ("class=\"BM\"");
-		  Frm_BeginFormAnchor (FileZones[Grp->FileZones].NextAction,
+		  Frm_BeginFormAnchor (FileZones[Grp->HasFileZones].NextAction,
 				       Grp_GROUPS_SECTION_ID);
 		     ParCod_PutPar (ParCod_Grp,Grp->GrpCod);
-		     Ico_PutIconLink (FileZones[Grp->FileZones].Icon,
-			              FileZones[Grp->FileZones].Color,
-			              FileZones[Grp->FileZones].NextAction);
+		     Ico_PutIconLink (FileZones[Grp->HasFileZones].Icon,
+			              FileZones[Grp->HasFileZones].Color,
+			              FileZones[Grp->HasFileZones].NextAction);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
@@ -2025,7 +2018,7 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 			  NumGrpThisType++)
 		       {
 			Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
-			if (Grp->ClosedOrOpen == CloOpe_OPEN)	// If group is open
+			if (Grp->Open == CloOpe_OPEN)	// If group is open
 			  {
 			   IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong) ? Usr_BELONG :
 												       Usr_DONT_BELONG;
@@ -2051,7 +2044,7 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 			  NumGrpThisType++)
 		       {
 			Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
-			if (Grp->ClosedOrOpen == CloOpe_CLOSED)	// If group is closed
+			if (Grp->Open == CloOpe_CLOSED)	// If group is closed
 			  {
 			   IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong) ? Usr_BELONG :
 												       Usr_DONT_BELONG;
@@ -2076,7 +2069,7 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 				      NumGrpThisType++)
 				   {
 				    Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
-				    if (Grp->ClosedOrOpen == CloOpe_OPEN &&		// If group is open...
+				    if (Grp->Open == CloOpe_OPEN &&		// If group is open...
 					Grp->NumUsrs[Rol_STD] < Grp->MaxStds)	// ...and not full
 				      {
 				       IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong) ? Usr_BELONG :
@@ -2120,7 +2113,7 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 	       case Usr_CAN:
 		  ICanChangeMySelectionForThisGrp = Usr_CAN;
 		  if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
-		     switch (Grp->ClosedOrOpen)
+		     switch (Grp->Open)
 		       {
 			case CloOpe_OPEN:		// If group is open
 			   if (IBelongToThisGroup == Usr_DONT_BELONG &&
@@ -2581,9 +2574,9 @@ static void Grp_WriteRowGrp (const struct Group *Grp,Lay_Highlight_t Highlight)
 
    /***** Write icon to show if group is open or closed *****/
    HTM_TD_Begin ("class=\"BM%s\"",HighlightClass[Highlight]);
-      if (asprintf (&Title,*TitleFormat[Grp->ClosedOrOpen],Grp->Name) < 0)
+      if (asprintf (&Title,*TitleFormat[Grp->Open],Grp->Name) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Ico_PutIconOff (Icon[Grp->ClosedOrOpen],Color[Grp->ClosedOrOpen],Title);
+      Ico_PutIconOff (Icon[Grp->Open],Color[Grp->Open],Title);
       free (Title);
    HTM_TD_End ();
 
@@ -2956,10 +2949,10 @@ void Grp_GetListGrpTypesInCurrentCrs (Grp_WhichGrpTypes_t WhichGrpTypes)
          Str_Copy (GrpTyp->Name,row[1],sizeof (GrpTyp->Name) - 1);
 
          /* Is it mandatory to enrol in any groups of this type? (row[2]) */
-         GrpTyp->Enrolment.OptionalMandatory = Grp_GetOptionalOrMandatoryFromYN (row[2][0]);
+         GrpTyp->Enrolment.OptionalMandatory = Grp_GetMandatoryFromYN (row[2][0]);
 
          /* Is it possible to enrol in multiple groups of this type? (row[3]) */
-         GrpTyp->Enrolment.SingleMultiple = Grp_SingleOrMultipleFromYN (row[3][0]);
+         GrpTyp->Enrolment.SingleMultiple = Grp_MultipleFromYN (row[3][0]);
 
          /* Groups of this type must be opened? (row[4]) */
          GrpTyp->MustBeOpened = Grp_MustBeOpenedFromYN (row[4][0]);
@@ -3089,8 +3082,8 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGrpTypes_t WhichGrpTypes)
 
                /* Get whether group is open ('Y') or closed ('N') (row[5]),
                   and whether group have file zones ('Y') or not ('N') (row[6]) */
-               Grp->ClosedOrOpen = CloOpe_GetClosedOrOpenFromYN (row[5][0]);
-               Grp->FileZones = Grp_GetFileZonesFromYN (row[6][0]);
+               Grp->Open = CloOpe_GetOpenFromYN (row[5][0]);
+               Grp->HasFileZones = Grp_GetHasFileZonesFromYN (row[6][0]);
               }
            }
 
@@ -3162,8 +3155,8 @@ void Grp_GetGroupTypeDataByCod (struct GroupType *GrpTyp)
       row[4]: UNIX_TIMESTAMP(OpenTime)
       */
       Str_Copy (GrpTyp->Name,row[0],sizeof (GrpTyp->Name) - 1);
-      GrpTyp->Enrolment.OptionalMandatory = Grp_GetOptionalOrMandatoryFromYN (row[1][0]);
-      GrpTyp->Enrolment.SingleMultiple = Grp_SingleOrMultipleFromYN (row[2][0]);
+      GrpTyp->Enrolment.OptionalMandatory = Grp_GetMandatoryFromYN (row[1][0]);
+      GrpTyp->Enrolment.SingleMultiple = Grp_MultipleFromYN (row[2][0]);
       GrpTyp->MustBeOpened = Grp_MustBeOpenedFromYN (row[3][0]);
       GrpTyp->OpenTimeUTC = Dat_GetUNIXTimeFromStr (row[4]);
 
@@ -3178,11 +3171,11 @@ void Grp_GetGroupTypeDataByCod (struct GroupType *GrpTyp)
 /************* Check if a group type has multiple enrolment *****************/
 /*****************************************************************************/
 
-static Grp_SingleMultiple_t Grp_GetSingleMultiple (long GrpTypCod)
+static Grp_SingleOrMultiple_t Grp_GetSingleMultiple (long GrpTypCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   Grp_SingleMultiple_t SingleMultiple;
+   Grp_SingleOrMultiple_t SingleMultiple;
 
    /***** Get data of a type of group from database *****/
    if (Grp_DB_GetSingleMultiple (&mysql_res,GrpTypCod) != 1)
@@ -3190,7 +3183,7 @@ static Grp_SingleMultiple_t Grp_GetSingleMultiple (long GrpTypCod)
 
    /***** Get multiple enrolment *****/
    row = mysql_fetch_row (mysql_res);
-   SingleMultiple = Grp_SingleOrMultipleFromYN (row[0][0]);
+   SingleMultiple = Grp_MultipleFromYN (row[0][0]);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3202,11 +3195,11 @@ static Grp_SingleMultiple_t Grp_GetSingleMultiple (long GrpTypCod)
 /****************** Check if a group type has file zones *********************/
 /*****************************************************************************/
 
-Grp_FileZones_t Grp_GetFileZones (long GrpCod)
+Grp_HasFileZones_t Grp_GetFileZones (long GrpCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   Grp_FileZones_t FileZones;
+   Grp_HasFileZones_t HasFileZones;
 
    /***** Get data of a group from database *****/
    if (Grp_DB_GetFileZones (&mysql_res,GrpCod) != 1)
@@ -3214,12 +3207,12 @@ Grp_FileZones_t Grp_GetFileZones (long GrpCod)
 
    /***** Get file zones *****/
    row = mysql_fetch_row (mysql_res);
-   FileZones = Grp_GetFileZonesFromYN (row[0][0]);
+   HasFileZones = Grp_GetHasFileZonesFromYN (row[0][0]);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return FileZones;
+   return HasFileZones;
   }
 
 /*****************************************************************************/
@@ -3238,8 +3231,8 @@ void Grp_GetGroupDataByCod (long *CrsCod,long *GrpTypCod,struct Group *Grp)
    Grp->Room.RooCod      = -1L;
    Grp->Room.ShrtName[0] = '\0';
    Grp->MaxStds          = 0;
-   Grp->ClosedOrOpen     = CloOpe_CLOSED;
-   Grp->FileZones        = Grp_HAS_NOT_FILEZONES;
+   Grp->Open     = CloOpe_CLOSED;
+   Grp->HasFileZones        = Grp_HAS_NOT_FILEZONES;
 
    if (Grp->GrpCod > 0)
      {
@@ -3276,8 +3269,8 @@ void Grp_GetGroupDataByCod (long *CrsCod,long *GrpTypCod,struct Group *Grp)
 
 	 /* Get whether group is open or closed (row[5]),
 	    and whether group has file zones (row[6]) */
-	 Grp->ClosedOrOpen = CloOpe_GetClosedOrOpenFromYN (row[5][0]);
-	 Grp->FileZones = Grp_GetFileZonesFromYN (row[6][0]);
+	 Grp->Open = CloOpe_GetOpenFromYN (row[5][0]);
+	 Grp->HasFileZones = Grp_GetHasFileZonesFromYN (row[6][0]);
 
 	 /* Get the name of the room (row[7]) */
          Str_Copy (Grp->Room.ShrtName,row[7],sizeof (Grp->Room.ShrtName) - 1);
@@ -3292,7 +3285,7 @@ void Grp_GetGroupDataByCod (long *CrsCod,long *GrpTypCod,struct Group *Grp)
 /********** Get if optional or mandatory from a 'Y'/'N' character ************/
 /*****************************************************************************/
 
-static Grp_OptionalMandatory_t Grp_GetOptionalOrMandatoryFromYN (char Ch)
+static Grp_OptionalOrMandatory_t Grp_GetMandatoryFromYN (char Ch)
   {
    return (Ch == 'Y') ? Grp_MANDATORY :
 		        Grp_OPTIONAL;
@@ -3302,7 +3295,7 @@ static Grp_OptionalMandatory_t Grp_GetOptionalOrMandatoryFromYN (char Ch)
 /************ Get if single or multiple from a 'Y'/'N' character *************/
 /*****************************************************************************/
 
-static Grp_SingleMultiple_t Grp_SingleOrMultipleFromYN (char Ch)
+static Grp_SingleOrMultiple_t Grp_MultipleFromYN (char Ch)
   {
    return (Ch == 'Y') ? Grp_MULTIPLE :
 		        Grp_SINGLE;
@@ -3322,7 +3315,7 @@ static Grp_MustBeOpened_t Grp_MustBeOpenedFromYN (char Ch)
 /***************** Get if file zones from a 'Y'/'N' character ****************/
 /*****************************************************************************/
 
-static Grp_FileZones_t Grp_GetFileZonesFromYN (char Ch)
+static Grp_HasFileZones_t Grp_GetHasFileZonesFromYN (char Ch)
   {
    return (Ch == 'Y') ? Grp_HAS_FILEZONES :
 		        Grp_HAS_NOT_FILEZONES;
@@ -3913,7 +3906,7 @@ void Grp_OpenGroup (void)
    snprintf (AlertTxt,sizeof (AlertTxt),Txt_The_group_X_is_now_open,Grp.Name);
 
    /***** Show the form again *****/
-   Grp.ClosedOrOpen = CloOpe_OPEN;
+   Grp.Open = CloOpe_OPEN;
    Grp_ReqEditGroupsInternal (&GrpTyp,&Grp,Ale_INFO,NULL,Ale_SUCCESS,AlertTxt);
   }
 
@@ -3943,7 +3936,7 @@ void Grp_CloseGroup (void)
    snprintf (AlertTxt,sizeof (AlertTxt),Txt_The_group_X_is_now_closed,Grp.Name);
 
    /***** Show the form again *****/
-   Grp.ClosedOrOpen = CloOpe_CLOSED;
+   Grp.Open = CloOpe_CLOSED;
    Grp_ReqEditGroupsInternal (&GrpTyp,&Grp,Ale_INFO,NULL,Ale_SUCCESS,AlertTxt);
   }
 
@@ -3974,7 +3967,7 @@ void Grp_EnableFileZonesGrp (void)
              Txt_File_zones_of_the_group_X_are_now_enabled,Grp.Name);
 
    /***** Show the form again *****/
-   Grp.FileZones = Grp_HAS_FILEZONES;
+   Grp.HasFileZones = Grp_HAS_FILEZONES;
    Grp_ReqEditGroupsInternal (&GrpTyp,&Grp,Ale_INFO,NULL,Ale_SUCCESS,AlertTxt);
   }
 
@@ -4005,7 +3998,7 @@ void Grp_DisableFileZonesGrp (void)
 	     Txt_File_zones_of_the_group_X_are_now_disabled,Grp.Name);
 
    /***** Show the form again *****/
-   Grp.FileZones = Grp_HAS_NOT_FILEZONES;
+   Grp.HasFileZones = Grp_HAS_NOT_FILEZONES;
    Grp_ReqEditGroupsInternal (&GrpTyp,&Grp,Ale_INFO,NULL,Ale_SUCCESS,AlertTxt);
   }
 
@@ -4108,7 +4101,7 @@ void Grp_ChangeMandatGrpTyp (void)
    extern const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_optional;
    struct GroupType GrpTyp;
    struct Group Grp;
-   Grp_OptionalMandatory_t NewOptionalMandatory;
+   Grp_OptionalOrMandatory_t NewOptionalMandatory;
    Ale_AlertType_t AlertType;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_TYPE_NAME];
 
@@ -4163,7 +4156,7 @@ void Grp_ChangeMultiGrpTyp (void)
    extern const char *Txt_Now_each_student_can_only_belong_to_a_group_of_type_X;
    struct GroupType GrpTyp;
    struct Group Grp;
-   Grp_SingleMultiple_t NewSingleMultiple;
+   Grp_SingleOrMultiple_t NewSingleMultiple;
    Ale_AlertType_t AlertType;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_TYPE_NAME];
 

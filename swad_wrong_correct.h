@@ -44,6 +44,6 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-WroCor_WrongOrCorrect_t WroCor_GetWrongOrCorrectFromYN (char Ch);
+WroCor_WrongOrCorrect_t WroCor_GetCorrectFromYN (char Ch);
 
 #endif

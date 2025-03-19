@@ -1,6 +1,4 @@
-// swad_cookie_database.c: user's preferences about cookies (operations with database)
-
-// swad_cookies.c: user's preferences about cookies
+// swad_deny_allow.c: types and constants related to deny/allow
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -11,7 +9,7 @@
     Copyright (C) 1999-2025 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
+    it under the terms of the GNU Affero General 3 License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
@@ -24,31 +22,28 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/********************************* Headers ***********************************/
+/*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#include "swad_cookie.h"
-#include "swad_cookie_database.h"
-#include "swad_database.h"
-#include "swad_global.h"
+#include "swad_deny_allow.h"
 
 /*****************************************************************************/
-/************** External global variables from others modules ****************/
+/****************************** Public constants *****************************/
 /*****************************************************************************/
 
-extern struct Globals Gbl;
-
-/*****************************************************************************/
-/************** Update my settings about third party cookies *****************/
-/*****************************************************************************/
-
-void Coo_DB_UpdateMyPrefsCookies (void)
+/* Correct in database fields */
+const char DenAll_Allow_YN[DenAll_NUM_DENY_ALLOW] =
   {
-   DB_QueryUPDATE ("can not update your preference about cookies",
-		   "UPDATE usr_data"
-		     " SET ThirdPartyCookies='%c'"
-		   " WHERE UsrCod=%ld",
-		   Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies == Coo_ACCEPT ? 'Y' :
-							                        'N',
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+   [DenAll_DENY ] = 'N',
+   [DenAll_ALLOW] = 'Y',
+  };
+
+/*****************************************************************************/
+/************** Get if deny or allow from a 'Y'/'N' character ****************/
+/*****************************************************************************/
+
+DenAll_DenyOrAllow_t DenAll_GetAllowFromYN (char Ch)
+  {
+   return (Ch == 'Y') ? DenAll_DENY :
+		        DenAll_ALLOW;
   }

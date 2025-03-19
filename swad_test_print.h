@@ -68,10 +68,10 @@ struct TstPrn_Print
    long PrnCod;			// Test print code
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    struct TstPrn_NumQuestions NumQsts;	// Number of questions
-   bool Sent;			// This test print has been sent or not?
-				// "Sent" means that user has clicked "Send" button after finishing
-   bool AllowTeachers;		// Are teachers allowed to see this test result?
-   double Score;		// Total score of the test print
+   bool Sent;				// This test print has been sent or not?
+					// "Sent" means that user has clicked "Send" button after finishing
+   HidVis_HiddenOrVisible_t VisibleByTchs;	// Are teachers allowed to see this test result?
+   double Score;			// Total score of the test print
    struct TstPrn_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST];
   };
 

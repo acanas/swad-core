@@ -60,7 +60,7 @@ CloOpe_ClosedOrOpen_t CloOpe_GetClosedOrOpenFrom01 (char Ch)
 /************** Get if closed or open from a 'Y'/'N' character ***************/
 /*****************************************************************************/
 
-CloOpe_ClosedOrOpen_t CloOpe_GetClosedOrOpenFromYN (char Ch)
+CloOpe_ClosedOrOpen_t CloOpe_GetOpenFromYN (char Ch)
   {
    return (Ch == 'Y') ? CloOpe_OPEN :
 		        CloOpe_CLOSED;

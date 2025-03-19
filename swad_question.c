@@ -1457,7 +1457,7 @@ static void Qst_WriteChoAns (struct Qst_Question *Question,
 
 	    /* Put an icon that indicates whether the answer is correct or wrong */
 	    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
-	       if (Question->Answer.Options[NumOpt].WrongOrCorrect == WroCor_CORRECT)
+	       if (Question->Answer.Options[NumOpt].Correct == WroCor_CORRECT)
 		  Ico_PutIcon ("check.svg",Ico_BLACK,
 		               Txt_TST_Answer_given_by_the_teachers,"CONTEXT_ICO16x16");
 	    HTM_TD_End ();
@@ -1585,7 +1585,7 @@ void Qst_GetCorrectChoAnswerFromDB (struct Qst_Question *Question)
       row = mysql_fetch_row (mysql_res);
 
       /* Assign correctness (row[0]) of this answer (this option) */
-      Question->Answer.Options[NumOpt].WrongOrCorrect = WroCor_GetWrongOrCorrectFromYN (row[0][0]);
+      Question->Answer.Options[NumOpt].Correct = WroCor_GetCorrectFromYN (row[0][0]);
      }
 
    /* Free structure that stores the query result */
@@ -2112,7 +2112,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		     HTM_TD_Begin ("class=\"Qst_ANS_LEFT_COL %s\"",
 		                   The_GetColorRows ());
 
-			Checked = AttributesChecked[Question->Answer.Options[NumOpt].WrongOrCorrect];
+			Checked = AttributesChecked[Question->Answer.Options[NumOpt].Correct];
 
 			/* Radio selector for unique choice answers */
 			HTM_INPUT_RADIO ("AnsUni",
@@ -2299,7 +2299,7 @@ void Qst_QstConstructor (struct Qst_Question *Question)
 	NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
      {
-      Question->Answer.Options[NumOpt].WrongOrCorrect = WroCor_WRONG;
+      Question->Answer.Options[NumOpt].Correct = WroCor_WRONG;
       Question->Answer.Options[NumOpt].Text     =
       Question->Answer.Options[NumOpt].Feedback = NULL;
 
@@ -2553,7 +2553,7 @@ bool Qst_GetQstDataByCod (struct Qst_Question *Question)
 	       Med_GetMediaDataByCod (&Question->Answer.Options[NumOpt].Media);
 
 	       /* Get if this option is correct (row[4]) */
-	       Question->Answer.Options[NumOpt].WrongOrCorrect = WroCor_GetWrongOrCorrectFromYN (row[4][0]);
+	       Question->Answer.Options[NumOpt].Correct = WroCor_GetCorrectFromYN (row[4][0]);
 	       break;
 	    default:
 	       break;
@@ -2799,7 +2799,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
 	                                                       0,
 	                                                       Qst_MAX_OPTIONS_PER_QUESTION - 1,
 	                                                       0);
-            Question->Answer.Options[NumCorrectAns].WrongOrCorrect = WroCor_CORRECT;
+            Question->Answer.Options[NumCorrectAns].Correct = WroCor_CORRECT;
            }
       	 else if (Question->Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
            {
@@ -2814,7 +2814,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
 	          Err_WrongAnswerExit ();
                if (NumCorrectAns >= Qst_MAX_OPTIONS_PER_QUESTION)
 	          Err_WrongAnswerExit ();
-               Question->Answer.Options[NumCorrectAns].WrongOrCorrect = WroCor_CORRECT;
+               Question->Answer.Options[NumCorrectAns].Correct = WroCor_CORRECT;
               }
            }
          else // Tst_ANS_TEXT
@@ -2822,7 +2822,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
         	 NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
         	 NumOpt++)
                if (Question->Answer.Options[NumOpt].Text[0])
-                  Question->Answer.Options[NumOpt].WrongOrCorrect = WroCor_CORRECT;	// All the answers are correct
+                  Question->Answer.Options[NumOpt].Correct = WroCor_CORRECT;	// All the answers are correct
 	 break;
       default:
          break;
@@ -2972,7 +2972,7 @@ bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Quest
          for (NumOpt  = 0;
               NumOpt <= NumLastOpt;
               NumOpt++)
-            if (Question->Answer.Options[NumOpt].WrongOrCorrect == WroCor_CORRECT)
+            if (Question->Answer.Options[NumOpt].Correct == WroCor_CORRECT)
                break;
          if (NumOpt > NumLastOpt)
            {

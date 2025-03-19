@@ -3520,7 +3520,7 @@ void Prj_GetProjectDataByCod (struct Prj_Project *Prj)
 	        whether the project is hidden or not (row[4])
 	    and whether the project is assigned or not (row[5]) */
 	 Prj->Locked   = Prj_GetLockedFromYN (row[3][0]);
-	 Prj->Hidden   = HidVis_GetHiddenOrVisibleFromYN (row[4][0]);
+	 Prj->Hidden   = HidVis_GetHiddenFromYN (row[4][0]);
 	 Prj->Assigned = Prj_GetAssignedFromYN (row[5][0]);
 
 	 /* Get number of students (row[6]) */

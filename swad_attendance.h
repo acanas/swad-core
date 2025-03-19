@@ -51,7 +51,7 @@ struct Att_Event
    /* Fields stored in database */
    long AttCod;
    long CrsCod;
-   HidVis_HiddenOrVisible_t HiddenOrVisible;
+   HidVis_HiddenOrVisible_t Hidden;
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    CloOpe_ClosedOrOpen_t ClosedOrOpen;
@@ -84,7 +84,7 @@ typedef enum
   {
    Att_ABSENT,
    Att_PRESENT,
-  } Att_Present_t;
+  } Att_AbsentOrPresent_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -119,7 +119,7 @@ void Att_PutParsCodGrps (long AttCod);
 void Att_RegisterMeAsStdInEvent (void);
 void Att_RegisterStudentsInEvent (void);
 
-Att_Present_t Att_GetAbsentOrPresentFromYN (char Ch);
+Att_AbsentOrPresent_t Att_GetPresentFromYN (char Ch);
 
 void Att_ReqListUsrsAttendanceCrs (void);
 void Att_ListMyAttendanceCrs (void);

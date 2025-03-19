@@ -42,7 +42,7 @@ const char WroCor_Correct_YN[WroCor_NUM_WRONG_CORRECT] =
 /************ Get if wrong or correct from a 'Y'/'N' character ***************/
 /*****************************************************************************/
 
-WroCor_WrongOrCorrect_t WroCor_GetWrongOrCorrectFromYN (char Ch)
+WroCor_WrongOrCorrect_t WroCor_GetCorrectFromYN (char Ch)
   {
    return (Ch == 'Y') ? WroCor_CORRECT :
 		        WroCor_WRONG;

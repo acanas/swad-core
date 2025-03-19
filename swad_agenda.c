@@ -797,7 +797,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
 	    Err_NotEnoughMemoryExit ();
 	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 		       Id,
-		       Dat_TimeStatusClass[AgdEvent.TimeStatus][AgdEvent.HiddenOrVisible],
+		       Dat_TimeStatusClass[AgdEvent.TimeStatus][AgdEvent.Hidden],
 		       The_GetSuffix (),
 		       The_GetColorRows ());
 	    Dat_WriteLocalDateHMSFromUTC (Id,AgdEvent.TimeUTC[StartEndTime],
@@ -815,7 +815,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
       HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 	 HTM_ARTICLE_Begin (Anchor);
 	    HTM_SPAN_Begin ("class=\"%s_%s\"",
-			    HidVis_TitleClass[AgdEvent.HiddenOrVisible],
+			    HidVis_TitleClass[AgdEvent.Hidden],
 			    The_GetSuffix ());
 	       HTM_Txt (AgdEvent.Title);
 	    HTM_SPAN_End ();
@@ -825,7 +825,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
       /* Location */
       HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 	 HTM_SPAN_Begin ("class=\"%s_%s\"",
-			 HidVis_TitleClass[AgdEvent.HiddenOrVisible],
+			 HidVis_TitleClass[AgdEvent.Hidden],
 		         The_GetSuffix ());
 	    HTM_Txt (AgdEvent.Location);
 	 HTM_SPAN_End ();
@@ -852,7 +852,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
       /* Text of the event */
       HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
 	 HTM_DIV_Begin ("class=\"PAR %s_%s\"",
-	                HidVis_DataClass[AgdEvent.HiddenOrVisible],
+	                HidVis_DataClass[AgdEvent.Hidden],
 	                The_GetSuffix ());
 	    Agd_DB_GetEventTxt (&AgdEvent,Txt);
 	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -896,7 +896,7 @@ static void Agd_PutFormsToRemEditOneEvent (struct Agd_Agenda *Agenda,
    /***** Icon to hide/unhide event *****/
    Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
 				      Agd_PutCurrentParsMyAgenda,Agenda,
-				      AgdEvent->HiddenOrVisible);
+				      AgdEvent->Hidden);
 
    /***** Icon to edit event *****/
    Ico_PutContextualIconToEdit (ActEdiOneEvtMyAgd,NULL,
@@ -905,7 +905,7 @@ static void Agd_PutFormsToRemEditOneEvent (struct Agd_Agenda *Agenda,
    /***** Icon to make event public/private *****/
    Ico_PutContextualIconToPrivatePublic (ActionPrivatePublic,Anchor,
 				         Agd_PutCurrentParsMyAgenda,Agenda,
-				         AgdEvent->PrivateOrPublic);
+				         AgdEvent->Public);
   }
 
 /*****************************************************************************/
@@ -1095,8 +1095,8 @@ static void Agd_GetventDataByCod (struct Agd_Event *AgdEvent)
 
       /* Get whether the event is public or not (row[1])
          and whether it is hidden or not (row[2])  */
-      AgdEvent->PrivateOrPublic = PriPub_GetPrivateOrPublicFromYN (row[1][0]);
-      AgdEvent->HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[2][0]);
+      AgdEvent->Public = PriPub_GetPublicFromYN (row[1][0]);
+      AgdEvent->Hidden = HidVis_GetHiddenFromYN (row[2][0]);
 
       /* Get start date (row[3]) and end date (row[4]) in UTC time */
       AgdEvent->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
@@ -1115,8 +1115,8 @@ static void Agd_GetventDataByCod (struct Agd_Event *AgdEvent)
      {
       /***** Clear all event data *****/
       AgdEvent->AgdCod                = -1L;
-      AgdEvent->PrivateOrPublic       = PriPub_PRIVATE;
-      AgdEvent->HiddenOrVisible       = HidVis_VISIBLE;
+      AgdEvent->Public		      = PriPub_PRIVATE;
+      AgdEvent->Hidden		      = HidVis_VISIBLE;
       AgdEvent->TimeUTC[Dat_STR_TIME] =
       AgdEvent->TimeUTC[Dat_END_TIME] = (time_t) 0;
       AgdEvent->TimeStatus            = Dat_FUTURE;

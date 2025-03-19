@@ -580,7 +580,7 @@ static void Mch_ListOneOrMoreMatchesAuthor (const struct Gam_Games *Games,
   {
    /***** Match author (teacher) *****/
    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
-      Usr_WriteAuthor1Line (Match->UsrCod,Games->Game.HiddenOrVisible);
+      Usr_WriteAuthor1Line (Match->UsrCod,Games->Game.Hidden);
    HTM_TD_End ();
   }
 
@@ -612,7 +612,7 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Gam_Games *Games,
 	 Err_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 		    Id,
-		    Dat_TimeStatusClass[TimeStatus[Match->Status.Showing]][Games->Game.HiddenOrVisible],
+		    Dat_TimeStatusClass[TimeStatus[Match->Status.Showing]][Games->Game.Hidden],
 		    The_GetSuffix (),The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Match->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
@@ -650,7 +650,7 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Gam_Games *Games,
 	    HTM_BUTTON_Submit_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 									  Txt_Resume,
 				     "class=\"LT BT_LINK %s_%s\"",
-				     HidVis_TitleClass[Games->Game.HiddenOrVisible],
+				     HidVis_TitleClass[Games->Game.Hidden],
 				     The_GetSuffix ());
 	       HTM_Txt (Match->Title);
 	    HTM_BUTTON_End ();
@@ -675,7 +675,6 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Gam_Games 
    extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Txt_Group;
    extern const char *Txt_Groups;
-   extern const char *Txt_and;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGrps;
@@ -685,7 +684,7 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Gam_Games 
    NumGrps = Mch_DB_GetGrpNamesAssociatedToMatch (&mysql_res,Match->MchCod);
 
    HTM_DIV_Begin ("class=\"%s_%s\"",
-		  HidVis_GroupClass[Games->Game.HiddenOrVisible],
+		  HidVis_GroupClass[Games->Game.Hidden],
 		  The_GetSuffix ());
 
       /***** Write heading *****/
@@ -706,14 +705,8 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Gam_Games 
 	    /* Write group type name and group name */
 	    HTM_TxtF ("%s %s",row[0],row[1]);
 
-	    if (NumGrps >= 2)
-	      {
-	       if (NumGrp == NumGrps - 2)
-		  HTM_TxtF (" %s ",Txt_and);
-	       if (NumGrps >= 3)
-		 if (NumGrp < NumGrps - 2)
-		     HTM_Txt (", ");
-	      }
+	    /* Write separator */
+	    HTM_ListSeparator (NumGrp,NumGrps);
 	   }
 	}
       else
@@ -736,7 +729,7 @@ static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Gam_Games *Games,
 
    /***** Number of players who have answered any question in the match ******/
    HTM_TD_Begin ("rowspan=\"2\" class=\"RT %s_%s %s\"",
-                 HidVis_DataClass[Games->Game.HiddenOrVisible],The_GetSuffix (),
+                 HidVis_DataClass[Games->Game.Hidden],The_GetSuffix (),
                  The_GetColorRows ());
       HTM_Unsigned (Mch_DB_GetNumUsrsWhoHavePlayedMch (Match->MchCod));
    HTM_TD_End ();
@@ -759,7 +752,7 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Gam_Games *Games,
 	{
 	 /* Current question index / total of questions */
 	 HTM_DIV_Begin ("class=\"%s_%s\"",
-			HidVis_DataClass[Games->Game.HiddenOrVisible],
+			HidVis_DataClass[Games->Game.Hidden],
 			The_GetSuffix ());
 	    HTM_TxtF ("%u/%u",Match->Status.QstInd,NumQsts);
 	 HTM_DIV_End ();
@@ -2868,7 +2861,7 @@ static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
 
 		  /* Draw proportional bar for this answer */
 		  Mch_DrawBarNumUsrs (NumRespondersAns,NumRespondersQst,
-				      Question->Answer.Options[Indexes[NumOpt]].WrongOrCorrect);
+				      Question->Answer.Options[Indexes[NumOpt]].Correct);
 		 }
 	       else
 		  /* Draw empty bar for this answer

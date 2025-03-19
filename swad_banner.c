@@ -292,7 +292,7 @@ void Ban_GetBannerDataByCod (struct Ban_Banner *Ban)
    MYSQL_RES *mysql_res;
 
    /***** Clear data *****/
-   Ban->HiddenOrVisible = HidVis_VISIBLE;
+   Ban->Hidden = HidVis_VISIBLE;
    Ban->ShrtName[0] = Ban->FullName[0] = Ban->Img[0] = Ban->WWW[0] = '\0';
 
    /***** Check if banner code is correct *****/
@@ -339,7 +339,7 @@ static void Ban_GetBannerDataFromRow (MYSQL_RES *mysql_res,
       Err_WrongBannerExit ();
 
    /***** Get if the banner is hidden (row[1]) *****/
-   Ban->HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[1][0]);
+   Ban->Hidden = HidVis_GetHiddenFromYN (row[1][0]);
 
    /***** Get short name (row[2]), full name (row[3]),
           image (row[4]) and URL (row[5]) of the banner *****/
@@ -425,12 +425,12 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
 						  Ban_PutParBanCod,
 						  &Banners->BanCodToEdit,
-						  Ban->HiddenOrVisible);
+						  Ban->Hidden);
 	    HTM_TD_End ();
 
 	    /* Banner code */
 	    HTM_TD_Begin ("class=\"CODE %s_%s\"",
-			  HidVis_DataClass[Ban->HiddenOrVisible],
+			  HidVis_DataClass[Ban->Hidden],
 			  The_GetSuffix ());
 	       HTM_ARTICLE_Begin (Anchor);
 		  HTM_Long (Ban->BanCod);
@@ -558,7 +558,7 @@ static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,
    Ban_GetBannerDataByCod (Ban);
 
    /***** Mark file as hidden/visible in database *****/
-   if (Ban->HiddenOrVisible != HiddenOrVisible)
+   if (Ban->Hidden != HiddenOrVisible)
       Ban_DB_HideOrUnhideBanner (Ban->BanCod,HiddenOrVisible);
   }
 
@@ -999,7 +999,7 @@ static void Ban_ResetBanner (struct Ban_Banner *Ban)
   {
    /***** Reset banner *****/
    Ban->BanCod      = -1L;
-   Ban->HiddenOrVisible = HidVis_HIDDEN;
+   Ban->Hidden = HidVis_HIDDEN;
    Ban->ShrtName[0] = '\0';
    Ban->FullName[0] = '\0';
    Ban->Img[0]      = '\0';

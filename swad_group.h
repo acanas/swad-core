@@ -83,21 +83,21 @@ typedef enum
   {
    Grp_HAS_NOT_FILEZONES,
    Grp_HAS_FILEZONES,
-  } Grp_FileZones_t;
+  } Grp_HasFileZones_t;
 
 #define Grp_NUM_OPTIONAL_MANDATORY 2
 typedef enum
   {
    Grp_OPTIONAL,
    Grp_MANDATORY,
-  } Grp_OptionalMandatory_t;
+  } Grp_OptionalOrMandatory_t;
 
 #define Grp_NUM_SINGLE_MULTIPLE 2
 typedef enum
   {
    Grp_SINGLE,
    Grp_MULTIPLE,
-  } Grp_SingleMultiple_t;
+  } Grp_SingleOrMultiple_t;
 
 struct Group
   {
@@ -110,8 +110,8 @@ struct Group
      } Room;
    unsigned NumUsrs[Rol_NUM_ROLES];		// Number of users in the group
    unsigned MaxStds;				// Maximum number of students in the group
-   CloOpe_ClosedOrOpen_t ClosedOrOpen;		// Group is closed or open?
-   Grp_FileZones_t FileZones;			// Group has file zones?
+   CloOpe_ClosedOrOpen_t Open;		// Group is closed or open?
+   Grp_HasFileZones_t HasFileZones;			// Group has file zones?
   };
 
 struct GroupType
@@ -120,8 +120,8 @@ struct GroupType
    char Name[Grp_MAX_BYTES_GROUP_TYPE_NAME + 1];	// Name of type of group
    struct
      {
-      Grp_OptionalMandatory_t OptionalMandatory;	// Enrolment is optional or mandatory?
-      Grp_SingleMultiple_t SingleMultiple;		// Enrolment is single or multiple?
+      Grp_OptionalOrMandatory_t OptionalMandatory;	// Enrolment is optional or mandatory?
+      Grp_SingleOrMultiple_t SingleMultiple;		// Enrolment is single or multiple?
      } Enrolment;
    Grp_MustBeOpened_t MustBeOpened;			// Groups must be opened?
    time_t OpenTimeUTC;					// Open groups automatically in this date-time. If == 0, don't open.
@@ -215,7 +215,7 @@ void Grp_GetGroupTypeDataByCod (struct GroupType *GrpTyp);
 
 void Grp_OpenGroupsAutomatically (void);
 void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGrpTypes_t WhichGrpTypes);
-Grp_FileZones_t Grp_GetFileZones (long GrpCod);
+Grp_HasFileZones_t Grp_GetFileZones (long GrpCod);
 void Grp_GetGroupDataByCod (long *CrsCod,long *GrpTypCod,struct Group *Grp);
 
 void Grp_FlushCacheIBelongToGrp (void);

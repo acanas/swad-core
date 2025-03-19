@@ -834,6 +834,8 @@ long Svy_DB_CreateQuestion (long SvyCod,
                             const struct Svy_Question *SvyQst,
                             const char Stem[Cns_MAX_BYTES_TEXT + 1])
   {
+   extern const char DenAll_Allow_YN[DenAll_NUM_DENY_ALLOW];
+
    return
    DB_QueryINSERTandReturnCode ("can not create question",
 				"INSERT INTO svy_questions"
@@ -843,8 +845,7 @@ long Svy_DB_CreateQuestion (long SvyCod,
 				SvyCod,
 				SvyQst->QstInd,
 				Svy_DB_StrAnswerTypes[SvyQst->AnswerType],
-				SvyQst->CommentsAllowed ? 'Y' :
-					                  'N',
+				DenAll_Allow_YN[SvyQst->AllowCommentsByStds],
 				Stem);
   }
 
@@ -856,6 +857,8 @@ void Svy_DB_UpdateQuestion (long SvyCod,
                             const struct Svy_Question *SvyQst,
                             const char Stem[Cns_MAX_BYTES_TEXT + 1])
   {
+   extern const char DenAll_Allow_YN[DenAll_NUM_DENY_ALLOW];
+
    DB_QueryUPDATE ("can not update question",
 		   "UPDATE svy_questions"
 		     " SET Stem='%s',"
@@ -865,8 +868,7 @@ void Svy_DB_UpdateQuestion (long SvyCod,
 		     " AND SvyCod=%ld",	// Extra check
 		   Stem,
 		   Svy_DB_StrAnswerTypes[SvyQst->AnswerType],
-		   SvyQst->CommentsAllowed ? 'Y' :
-					     'N',
+		   DenAll_Allow_YN[SvyQst->AllowCommentsByStds],
 		   SvyQst->QstCod,
 		   SvyCod);
   }

@@ -40,6 +40,7 @@ typedef enum
    HTM_Type_UNSIGNED,
    HTM_Type_LONG,
    HTM_Type_STRING,
+   HTM_Type_CHAR,
   } HTM_Type_t;
 
 typedef unsigned HTM_Attributes_t;
@@ -202,13 +203,15 @@ void HTM_U_End (void);
 void HTM_BR (void);
 
 void HTM_TxtF (const char *fmt,...);
-void HTM_SPTxt (const char *Txt);
-void HTM_SP (void);
 void HTM_Txt (const char *Txt);
+void HTM_Char (char Ch);
 void HTM_TxtColon (const char *Txt);
 void HTM_TxtSemicolon (const char *Txt);
 void HTM_TxtColonNBSP (const char *Txt);
+void HTM_SPTxt (const char *Txt);
 void HTM_NBSPTxt (const char *Txt);
+void HTM_ListSeparator (unsigned i,unsigned n);
+void HTM_SP (void);
 void HTM_NBSP (void);
 void HTM_Colon (void);
 void HTM_Semicolon (void);

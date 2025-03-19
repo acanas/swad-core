@@ -117,7 +117,7 @@ struct Usr_Data
       Mnu_Menu_t Menu;
       unsigned SideCols;
       PhoSha_Shape_t PhotoShape;
-      Coo_RefuseAccept_t RefuseAcceptCookies;	// User has accepted third party cookies
+      Coo_RefuseAccept_t AcceptCookies;	// User has accepted third party cookies
      } Prefs;
   };
 

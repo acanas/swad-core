@@ -79,7 +79,7 @@ struct Exa_Exam
    unsigned Visibility;		// Visibility of results
    char Title[Exa_MAX_BYTES_TITLE + 1];
    time_t TimeUTC[Dat_NUM_START_END_TIME];
-   HidVis_HiddenOrVisible_t HiddenOrVisible;	// Exam is hidden or visible?
+   HidVis_HiddenOrVisible_t Hidden;	// Exam is hidden or visible?
    unsigned NumSets;		// Number of sets in the exam
    unsigned NumQsts;		// Number of questions in the exam
    unsigned NumSess;		// Number of sessions in the exam
@@ -147,7 +147,7 @@ struct ExaSes_Session
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    char Title[ExaSes_MAX_BYTES_TITLE + 1];
-   HidVis_HiddenOrVisible_t HiddenOrVisible;
+   HidVis_HiddenOrVisible_t Hidden;
    CloOpe_ClosedOrOpen_t ClosedOrOpen;	// If now is between start and end dates
    bool ShowUsrResults;			// Show exam with results of all questions for the student
   };

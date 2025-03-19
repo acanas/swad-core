@@ -257,7 +257,7 @@ long Att_DB_CreateEvent (const struct Att_Event *Event,const char *Description)
 				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				  "'%c','%s','%s')",
 				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-				HidVis_Hidden_YN[Event->HiddenOrVisible],
+				HidVis_Hidden_YN[Event->Hidden],
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Event->TimeUTC[Dat_STR_TIME],
 				Event->TimeUTC[Dat_END_TIME],
@@ -285,7 +285,7 @@ void Att_DB_UpdateEvent (const struct Att_Event *Event,const char *Description)
 		          "Txt='%s'"
 		   " WHERE AttCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
-		   HidVis_Hidden_YN[Event->HiddenOrVisible],
+		   HidVis_Hidden_YN[Event->Hidden],
                    Event->TimeUTC[Dat_STR_TIME],
                    Event->TimeUTC[Dat_END_TIME],
 		   HidVis_Visible_YN[Event->CommentTchVisible],
@@ -449,7 +449,7 @@ unsigned Att_DB_GetNumStdsFromListWhoAreInEvent (long AttCod,const char *SubQuer
 // Return if user is in table
 
 bool Att_DB_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,
-				       Att_Present_t *Present)
+				       Att_AbsentOrPresent_t *Present)
   {
    char StrPresent[1 + 1];
 
@@ -464,7 +464,7 @@ bool Att_DB_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,
 		         UsrCod);
    if (StrPresent[0])
      {
-      *Present = Att_GetAbsentOrPresentFromYN (StrPresent[0]);
+      *Present = Att_GetPresentFromYN (StrPresent[0]);
       return true;	// User is in table
      }
    *Present = Att_ABSENT;
@@ -580,7 +580,7 @@ unsigned Att_DB_GetListUsrsInEvent (MYSQL_RES **mysql_res,
 /*****************************************************************************/
 
 void Att_DB_RegUsrInEventChangingComments (long AttCod,long UsrCod,
-                                           Att_Present_t Present,
+                                           Att_AbsentOrPresent_t Present,
                                            const char *CommentStd,
                                            const char *CommentTch)
   {
@@ -626,7 +626,7 @@ void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,bool SetOthersAsA
    unsigned NumCodsInList;
    char *SubQueryAllUsrs = NULL;
    char SubQueryOneUsr[1 + Cns_MAX_DIGITS_LONG + 1];
-   Att_Present_t Present;
+   Att_AbsentOrPresent_t Present;
    size_t Length = 0;	// Initialized to avoid warning
    unsigned NumUsrsPresent = 0;
 

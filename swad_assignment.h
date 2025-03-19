@@ -49,7 +49,7 @@ typedef enum
 struct Asg_Assignment
   {
    long AsgCod;
-   HidVis_HiddenOrVisible_t HiddenOrVisible;
+   HidVis_HiddenOrVisible_t Hidden;
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    CloOpe_ClosedOrOpen_t ClosedOrOpen;

@@ -87,11 +87,21 @@ const char *HidVis_ShownStyle[HidVis_NUM_HIDDEN_VISIBLE] =
   };
 
 /*****************************************************************************/
-/************ Get if hidden or visible from a 'Y'/'N' character **************/
+/****************** Get if hidden from a 'Y'/'N' character *******************/
 /*****************************************************************************/
 
-HidVis_HiddenOrVisible_t HidVis_GetHiddenOrVisibleFromYN (char Ch)
+HidVis_HiddenOrVisible_t HidVis_GetHiddenFromYN (char Ch)
   {
    return (Ch == 'Y') ? HidVis_HIDDEN :
 		        HidVis_VISIBLE;
+  }
+
+/*****************************************************************************/
+/****************** Get if visible from a 'Y'/'N' character ******************/
+/*****************************************************************************/
+
+HidVis_HiddenOrVisible_t HidVis_GetVisibleFromYN (char Ch)
+  {
+   return (Ch == 'Y') ? HidVis_VISIBLE :
+			HidVis_HIDDEN;
   }

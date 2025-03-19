@@ -42,7 +42,7 @@ const char PriPub_Public_YN[PriPub_NUM_PRIVATE_PUBLIC] =
 /************* Get if private or public from a 'Y'/'N' character *************/
 /*****************************************************************************/
 
-PriPub_PrivateOrPublic_t PriPub_GetPrivateOrPublicFromYN (char Ch)
+PriPub_PrivateOrPublic_t PriPub_GetPublicFromYN (char Ch)
   {
    return (Ch == 'Y') ? PriPub_PUBLIC :
 			PriPub_PRIVATE;

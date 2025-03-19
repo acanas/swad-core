@@ -1605,6 +1605,9 @@ void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,
       case HTM_Type_STRING:
 	 HTM_Txt ((char *) ValuePtr);
 	 break;
+      case HTM_Type_CHAR:
+	 HTM_Char (*((char *) ValuePtr));
+	 break;
      }
    HTM_Txt ("\"");
    HTM_PutAttributes (Attributes,NULL);
@@ -1808,22 +1811,17 @@ void HTM_TxtF (const char *fmt,...)
 	}
   }
 
-void HTM_SPTxt (const char *Txt)
-  {
-   HTM_SP ();
-   HTM_Txt (Txt);
-  }
-
-void HTM_SP (void)
-  {
-   HTM_Txt (" ");
-  }
-
 void HTM_Txt (const char *Txt)
   {
    if (Txt)
       if (Txt[0])
          fputs (Txt,Fil_GetOutputFile ());
+  }
+
+void HTM_Char (char Ch)
+  {
+   if (Ch)
+      fputc ((int) Ch,Fil_GetOutputFile ());
   }
 
 void HTM_TxtColon (const char *Txt)
@@ -1845,10 +1843,46 @@ void HTM_TxtColonNBSP (const char *Txt)
    HTM_NBSP ();
   }
 
+void HTM_SPTxt (const char *Txt)
+  {
+   HTM_SP ();
+   HTM_Txt (Txt);
+  }
+
 void HTM_NBSPTxt (const char *Txt)
   {
    HTM_NBSP ();
    HTM_Txt (Txt);
+  }
+
+/*****************************************************************************/
+/*************** In a loop from 0 to n-1 elements,            ****************/
+/*************** prints a separator between element i and i+1 ****************/
+/*****************************************************************************/
+// Example: Group 1, Group 2, Group 3, Group 4 and Group 5
+//                 ^^       ^^       ^^       ^^^^^
+
+void HTM_ListSeparator (unsigned i,unsigned n)
+  {
+   extern const char *Txt_and;
+
+   if (n >= 2)
+      if (i <= n - 2)
+        {
+	 if (i == n - 2)	// Just before the last element
+	   {
+	    HTM_SP ();
+	    HTM_Txt (Txt_and);
+	   }
+	 else			// Before the penultimate element
+	    HTM_Comma ();
+	 HTM_SP ();
+        }
+  }
+
+void HTM_SP (void)
+  {
+   HTM_Char (' ');
   }
 
 void HTM_NBSP (void)
@@ -1858,32 +1892,32 @@ void HTM_NBSP (void)
 
 void HTM_Colon (void)
   {
-   HTM_Txt (":");
+   HTM_Char (':');
   }
 
 void HTM_Semicolon (void)
   {
-   HTM_Txt (";");
+   HTM_Char (';');
   }
 
 void HTM_Dot (void)
   {
-   HTM_Txt (".");
+   HTM_Char ('.');
   }
 
 void HTM_Comma (void)
   {
-   HTM_Txt (",");
+   HTM_Char (',');
   }
 
 void HTM_Hyphen (void)
   {
-   HTM_Txt ("-");
+   HTM_Char ('-');
   }
 
 void HTM_Asterisk (void)
   {
-   HTM_Txt ("*");
+   HTM_Char ('*');
   }
 
 void HTM_Unsigned (unsigned Num)
@@ -1899,7 +1933,7 @@ void HTM_UnsignedColon (unsigned Num)
 void HTM_Light0 (void)
   {
    HTM_SPAN_Begin ("class=\"VERY_LIGHT\"");
-      HTM_Txt ("0");
+      HTM_Char ('0');
    HTM_SPAN_End ();
   }
 

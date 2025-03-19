@@ -2607,6 +2607,7 @@ void Str_CreateRandomAlphanumStr (char *Str,size_t Length)
 /*****************************************************************************/
 /****************************** Safe string copy *****************************/
 /*****************************************************************************/
+// If Dst is not null, it should have at least DstSize + 1 bytes
 // DstSize does not include the ending byte '\0'
 
 void Str_Copy (char *Dst,const char *Src,size_t DstSize)
@@ -2618,11 +2619,7 @@ void Str_Copy (char *Dst,const char *Src,size_t DstSize)
    if (Dst == NULL)
       Err_ShowErrorAndExit ("Destination of copy is null.");
 
-   /***** Trivial check: destination size should be >= 1 *****/
-   if (DstSize == 0)
-      Err_ShowErrorAndExit ("Destination size is 0.");
-
-   /***** Trivial check: if source is null ==> clear destination *****/
+   /***** Trivial check: if source is null >= clear destination *****/
    if (Src == NULL)
      {
       Dst[0] = '\0';

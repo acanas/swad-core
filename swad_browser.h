@@ -132,8 +132,8 @@ struct Brw_FileMetadata
    long ZoneUsrCod;
    long PublisherUsrCod;
    struct Brw_FilFolLnk FilFolLnk;
-   HidVis_HiddenOrVisible_t HiddenOrVisible;
-   PriPub_PrivateOrPublic_t PrivateOrPublic;
+   HidVis_HiddenOrVisible_t Hidden;
+   PriPub_PrivateOrPublic_t Public;
    Brw_License_t License;
    off_t Size;
    time_t Time;
@@ -217,8 +217,8 @@ void Brw_RcvFileClassic (void);
 void Brw_CreateLink (void);
 void Brw_SetDocumentAsVisible (void);
 void Brw_SetDocumentAsHidden (void);
-HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHiddenOrVisible (Brw_FileType_t FileType,
-                                                                   const char *Path);
+HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHidden (Brw_FileType_t FileType,
+                                                          const char *Path);
 void Brw_ShowFileMetadata (void);
 
 void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char *URL);

@@ -1262,7 +1262,7 @@ static void ExaPrn_GetCorrectChoAnswerFromDB (struct Qst_Question *Question)
       row = mysql_fetch_row (mysql_res);
 
       /* Assign correctness (row[0]) of this answer (this option) */
-      Question->Answer.Options[NumOpt].WrongOrCorrect = WroCor_GetWrongOrCorrectFromYN (row[0][0]);
+      Question->Answer.Options[NumOpt].Correct = WroCor_GetCorrectFromYN (row[0][0]);
      }
 
    /* Free structure that stores the query result */

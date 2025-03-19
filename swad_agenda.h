@@ -45,8 +45,8 @@ struct Agd_Event
   {
    long AgdCod;
    long UsrCod;
-   PriPub_PrivateOrPublic_t PrivateOrPublic;
-   HidVis_HiddenOrVisible_t HiddenOrVisible;
+   PriPub_PrivateOrPublic_t Public;
+   HidVis_HiddenOrVisible_t Hidden;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    Dat_TimeStatus_t TimeStatus;
    char Title[Agd_MAX_BYTES_EVENT + 1];

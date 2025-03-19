@@ -514,14 +514,14 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 	    case Vie_VIEW:
 	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 			     Id,
-			     CloOpe_Class[Assignments->Asg.ClosedOrOpen][Assignments->Asg.HiddenOrVisible],
+			     CloOpe_Class[Assignments->Asg.ClosedOrOpen][Assignments->Asg.Hidden],
 			     The_GetSuffix (),
 			     The_GetColorRows ());
 	       break;
 	    case Vie_PRINT:
 	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 			     Id,
-			     CloOpe_Class[Assignments->Asg.ClosedOrOpen][Assignments->Asg.HiddenOrVisible],
+			     CloOpe_Class[Assignments->Asg.ClosedOrOpen][Assignments->Asg.Hidden],
 			     The_GetSuffix ());
 	       break;
 	    default:
@@ -559,7 +559,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 	    Asg_PutPars (Assignments);
 	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneAsg),
 	                             "class=\"LT BT_LINK %s_%s\"",
-				     HidVis_TitleClass[Assignments->Asg.HiddenOrVisible],
+				     HidVis_TitleClass[Assignments->Asg.Hidden],
 				     The_GetSuffix ());
 	       HTM_Txt (Assignments->Asg.Title);
 	    HTM_BUTTON_End ();
@@ -630,7 +630,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 	 Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Assignments->Asg);
 
       HTM_DIV_Begin ("class=\"PAR %s_%s\"",
-                     HidVis_DataClass[Assignments->Asg.HiddenOrVisible],
+                     HidVis_DataClass[Assignments->Asg.Hidden],
 		     The_GetSuffix ());
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
@@ -652,7 +652,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 
 static void Asg_WriteAsgAuthor (struct Asg_Assignment *Asg)
   {
-   Usr_WriteAuthor1Line (Asg->UsrCod,Asg->HiddenOrVisible);
+   Usr_WriteAuthor1Line (Asg->UsrCod,Asg->Hidden);
   }
 
 /*****************************************************************************/
@@ -664,7 +664,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
   {
    extern const char *Txt_Folder;
    Act_Action_t NextAction;
-   bool ICanSendFiles = Asg->HiddenOrVisible == HidVis_VISIBLE &&	// It's visible (not hidden)
+   bool ICanSendFiles = Asg->Hidden == HidVis_VISIBLE &&	// It's visible (not hidden)
                         Asg->ClosedOrOpen == CloOpe_OPEN &&		// It's open (inside dates)
                         Asg->ICanDo == Usr_CAN;			// I can do (I belong to course/group)
 
@@ -768,7 +768,7 @@ static void Asg_PutIconsToRemEditOneAsg (struct Asg_Assignments *Assignments,
 	 /***** Icon to hide/unhide assignment *****/
 	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
 					    Asg_PutPars,Assignments,
-					    Assignments->Asg.HiddenOrVisible);
+					    Assignments->Asg.Hidden);
 
 	 /***** Icon to edit assignment *****/
 	 Ico_PutContextualIconToEdit (ActEdiOneAsg,NULL,
@@ -928,7 +928,7 @@ static void Asg_GetAssignmentDataFromRow (MYSQL_RES **mysql_res,
       Asg->AsgCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get whether the assignment is hidden or not (row[1]) */
-      Asg->HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[1][0]);
+      Asg->Hidden = HidVis_GetHiddenFromYN (row[1][0]);
 
       /* Get author of the assignment (row[2]) */
       Asg->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
@@ -961,7 +961,7 @@ static void Asg_ResetAssignment (struct Asg_Assignment *Asg)
   {
    if (Asg->AsgCod <= 0)	// If > 0 ==> keep value
       Asg->AsgCod = -1L;
-   Asg->HiddenOrVisible	      = HidVis_VISIBLE;
+   Asg->Hidden	      = HidVis_VISIBLE;
    Asg->UsrCod		      = -1L;
    Asg->TimeUTC[Dat_STR_TIME] =
    Asg->TimeUTC[Dat_END_TIME] = (time_t) 0;
@@ -1655,7 +1655,6 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
   {
    extern const char *Txt_Group;
    extern const char *Txt_Groups;
-   extern const char *Txt_and;
    extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1667,7 +1666,7 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
 
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s_%s\"",
-                  HidVis_GroupClass[Asg->HiddenOrVisible],The_GetSuffix ());
+                  HidVis_GroupClass[Asg->Hidden],The_GetSuffix ());
 
       HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
 				       Txt_Groups);
@@ -1685,14 +1684,8 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
 	    /* Write group type name and group name */
 	    HTM_TxtF ("%s %s",row[0],row[1]);
 
-	    if (NumGrps >= 2)
-	      {
-	       if (NumGrp == NumGrps - 2)
-		  HTM_TxtF (" %s ",Txt_and);
-	       if (NumGrps >= 3)
-		 if (NumGrp < NumGrps - 2)
-		     HTM_Txt (", ");
-	      }
+	    /* Write separator */
+	    HTM_ListSeparator (NumGrp,NumGrps);
 	   }
       else
 	 Grp_WriteTheWholeCourse ();
@@ -1816,7 +1809,7 @@ Usr_Can_t Asg_CheckIfICanCreateIntoAssigment (const struct Asg_Assignment *Asg)
       return Usr_CAN_NOT;
 
    /***** Check 2: Do not create anything in hidden assigments *****/
-   if (Asg->HiddenOrVisible == HidVis_HIDDEN)
+   if (Asg->Hidden == HidVis_HIDDEN)
       return Usr_CAN_NOT;
 
    /***** Check 3: If I do not belong to course / groups of this assignment,

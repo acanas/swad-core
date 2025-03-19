@@ -466,8 +466,8 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 							ViewingOrEditingProgram[ListingType] == Vie_EDIT);
 
    /***** Check if this node should be shown as hidden *****/
-   Tre_SetHiddenLevel (Node->Hierarchy.Level,Node->Hierarchy.HiddenOrVisible);
-   switch (Node->Hierarchy.HiddenOrVisible)
+   Tre_SetHiddenLevel (Node->Hierarchy.Level,Node->Hierarchy.Hidden);
+   switch (Node->Hierarchy.Hidden)
      {
       case HidVis_VISIBLE:	// this node is not marked as hidden
          HiddenOrVisible = Tre_CheckIfAnyHigherLevelIsHidden (Node->Hierarchy.Level);
@@ -1156,7 +1156,7 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
 	 /***** Icon to hide/unhide tree node *****/
 	 Ico_PutContextualIconToHideUnhide (ActionsHideUnhide[Node->InfoType],Tre_NODE_SECTION_ID,
 					    Tre_PutPars,Node,
-					    Node->Hierarchy.HiddenOrVisible);
+					    Node->Hierarchy.Hidden);
 
 	 /***** Icon to edit tree node *****/
 	 if (ListingType == Tre_FORM_EDIT_NODE && HighlightNode)
@@ -1366,7 +1366,7 @@ void Tre_GetListNodes (Inf_Type_t InfoType)
          Tre_Gbl.List.Nodes[NumItem].Level  = Str_ConvertStrToUnsigned (row[2]);
 
 	 /* Get whether the tree node is hidden or not (row[3]) */
-	 Tre_Gbl.List.Nodes[NumItem].HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[3][0]);
+	 Tre_Gbl.List.Nodes[NumItem].Hidden = HidVis_GetHiddenFromYN (row[3][0]);
         }
      }
 
@@ -1445,7 +1445,7 @@ static void Tre_GetNodeDataFromRow (MYSQL_RES **mysql_res,
       Node->Hierarchy.Level = Str_ConvertStrToUnsigned (row[2]);
 
       /* Get whether the tree node is hidden or not (row[3]) */
-      Node->Hierarchy.HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[3][0]);
+      Node->Hierarchy.Hidden = HidVis_GetHiddenFromYN (row[3][0]);
 
       /* Get author of the tree node (row[4]) */
       Node->UsrCod = Str_ConvertStrCodToLongCod (row[4]);
@@ -1495,7 +1495,7 @@ void Tre_ResetNode (struct Tre_Node *Node)
    Node->Hierarchy.NodCod = -1L;
    Node->Hierarchy.NodInd = 0;
    Node->Hierarchy.Level  = 0;
-   Node->Hierarchy.HiddenOrVisible = HidVis_VISIBLE;
+   Node->Hierarchy.Hidden = HidVis_VISIBLE;
    Node->UsrCod = -1L;
    Node->TimeUTC[Dat_STR_TIME] =
    Node->TimeUTC[Dat_END_TIME] = (time_t) 0;

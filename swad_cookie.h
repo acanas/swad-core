@@ -40,7 +40,7 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-Coo_RefuseAccept_t Grp_GetRefuseOrAcceptFromYN (char Ch);
+Coo_RefuseAccept_t Coo_GetAcceptFromYN (char Ch);
 
 void Coo_EditMyPrefsOnCookies (void);
 void Coo_ChangeMyPrefsCookies (void);

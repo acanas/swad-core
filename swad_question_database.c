@@ -246,7 +246,7 @@ void Qst_DB_CreateChoAnswer (struct Qst_Question *Question)
 			 Question->Answer.Options[NumOpt].Feedback ? Question->Answer.Options[NumOpt].Feedback :
 								     "",
 			 Question->Answer.Options[NumOpt].Media.MedCod,
-			 WroCor_Correct_YN[Question->Answer.Options[NumOpt].WrongOrCorrect]);
+			 WroCor_Correct_YN[Question->Answer.Options[NumOpt].Correct]);
 
 	 /* Update image status */
 	 if (Question->Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)

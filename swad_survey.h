@@ -28,6 +28,7 @@
 /*****************************************************************************/
 
 #include "swad_date.h"
+#include "swad_deny_allow.h"
 #include "swad_hierarchy_type.h"
 #include "swad_notification.h"
 
@@ -53,7 +54,7 @@ struct Svy_Survey
    unsigned NumUsrs;	// Number of distinct users who have already answered the survey
    struct
      {
-      HidVis_HiddenOrVisible_t HiddenOrVisible;	// Survey is hidden or visible?
+      HidVis_HiddenOrVisible_t Hidden;	// Survey is hidden or visible?
       CloOpe_ClosedOrOpen_t ClosedOrOpen;	// Start date <= now <= end date
       bool IAmLoggedWithAValidRoleToAnswer;	// I am logged with a valid role to answer this survey
       Usr_Belong_t IBelongToScope;		// I belong to the scope of this survey
@@ -94,7 +95,7 @@ struct Svy_Question	// Must be initialized to 0 before using it
      {
       char *Text;
      } AnsChoice[Svy_MAX_ANSWERS_PER_QUESTION];
-   bool CommentsAllowed;
+   DenAll_DenyOrAllow_t AllowCommentsByStds;
   };
 
 /*****************************************************************************/

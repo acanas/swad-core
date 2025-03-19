@@ -3911,7 +3911,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
        Brw_TypeIsAdmDoc[Gbl.FileBrowser.Type] ||
        Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
      {
-      HiddenOrVisible = Brw_CheckIfFileOrFolderIsHiddenOrVisible (Gbl.FileBrowser.FilFolLnk.Type,
+      HiddenOrVisible = Brw_CheckIfFileOrFolderIsHidden (Gbl.FileBrowser.FilFolLnk.Type,
                                                                   Gbl.FileBrowser.FilFolLnk.Full);
       if (HiddenOrVisible == HidVis_HIDDEN &&
 	  (Brw_TypeIsSeeDoc[Gbl.FileBrowser.Type] ||
@@ -3952,7 +3952,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
        Brw_TypeIsAdmSha[Gbl.FileBrowser.Type])
      {
       RowSetAsPublic = (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER) ? Brw_DB_GetIfFolderHasPublicFiles (Gbl.FileBrowser.FilFolLnk.Full) :
-	                                                                   (FileMetadata.PrivateOrPublic == PriPub_PUBLIC);
+	                                                                   (FileMetadata.Public == PriPub_PUBLIC);
       if (Gbl.FileBrowser.ShowOnlyPublicFiles && !RowSetAsPublic)
          return false;
      }
@@ -4088,7 +4088,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 	       Brw_PutIconNewFileOrFolder ();
 
 	    /* File or folder name */
-	    Brw_WriteFileName (Level,FileMetadata.PrivateOrPublic,
+	    Brw_WriteFileName (Level,FileMetadata.Public,
 			       TxtStyle,InputStyle);
 
 	 HTM_TR_End ();
@@ -7203,7 +7203,7 @@ void Brw_SetDocumentAsVisible (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Change file to visible *****/
-   if (Brw_CheckIfFileOrFolderIsHiddenOrVisible (Gbl.FileBrowser.FilFolLnk.Type,
+   if (Brw_CheckIfFileOrFolderIsHidden (Gbl.FileBrowser.FilFolLnk.Type,
                                                  Gbl.FileBrowser.FilFolLnk.Full) == HidVis_HIDDEN)
       Brw_DB_HideOrUnhideFileOrFolder (Gbl.FileBrowser.FilFolLnk.Full,HidVis_VISIBLE);
 
@@ -7227,7 +7227,7 @@ void Brw_SetDocumentAsHidden (void)
 
    /***** If the file or folder is not already set as hidden in database,
           set it as hidden *****/
-   if (Brw_CheckIfFileOrFolderIsHiddenOrVisible (Gbl.FileBrowser.FilFolLnk.Type,
+   if (Brw_CheckIfFileOrFolderIsHidden (Gbl.FileBrowser.FilFolLnk.Type,
                                                  Gbl.FileBrowser.FilFolLnk.Full) == HidVis_VISIBLE)
       Brw_DB_HideOrUnhideFileOrFolder (Gbl.FileBrowser.FilFolLnk.Full,HidVis_HIDDEN);
 
@@ -7244,12 +7244,12 @@ void Brw_SetDocumentAsHidden (void)
 /** Check if a file / folder from the documents zone is set as hidden in DB **/
 /*****************************************************************************/
 
-HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHiddenOrVisible (Brw_FileType_t FileType,
-                                                                   const char *Path)
+HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHidden (Brw_FileType_t FileType,
+                                                          const char *Path)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   HidVis_HiddenOrVisible_t HiddenOrVisible;
+   HidVis_HiddenOrVisible_t Hidden;
 
    /***** Get if a file or folder is hidden from database *****/
    switch (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (&mysql_res,Path))
@@ -7258,7 +7258,7 @@ HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHiddenOrVisible (Brw_FileType_
 	 Brw_DB_AddPath (-1L,FileType,
 			 Gbl.FileBrowser.FilFolLnk.Full,
 			 PriPub_PRIVATE,Brw_LICENSE_DEFAULT);
-	 HiddenOrVisible = HidVis_VISIBLE;
+	 Hidden = HidVis_VISIBLE;
 	 break;
       case HidVis_HIDDEN:
       default:
@@ -7266,14 +7266,14 @@ HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHiddenOrVisible (Brw_FileType_
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* File is hidden? (row[0]) */
-	 HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[0][0]);
+	 Hidden = HidVis_GetHiddenFromYN (row[0][0]);
 	 break;
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return HiddenOrVisible;
+   return Hidden;
   }
 
 /*****************************************************************************/
@@ -7553,13 +7553,13 @@ void Brw_ShowFileMetadata (void)
 				PrivateOrPublic <= (PriPub_PrivateOrPublic_t) (PriPub_NUM_PRIVATE_PUBLIC - 1);
 				PrivateOrPublic++)
 			      HTM_OPTION (HTM_Type_STRING,Public_YN[PrivateOrPublic],
-					  FileMetadata.PrivateOrPublic == PrivateOrPublic ? HTM_SELECTED :
+					  FileMetadata.Public == PrivateOrPublic ? HTM_SELECTED :
 										        HTM_NO_ATTR,
 					  "%s",*PrivatePublicLabel[PrivateOrPublic]);
 			HTM_SELECT_End ();
 		       }
 		     else		// I can not edit file properties
-			HTM_Txt (*PrivatePublicLabel[FileMetadata.PrivateOrPublic]);
+			HTM_Txt (*PrivatePublicLabel[FileMetadata.Public]);
 		  HTM_TD_End ();
 
 	       HTM_TR_End ();
@@ -8147,7 +8147,7 @@ void Brw_ChgFileMetadata (void)
 	 Err_NoPermissionExit ();
 
       /***** Check if the file was public before the edition *****/
-      PrivateOrPublicFileBeforeEdition = FileMetadata.PrivateOrPublic;
+      PrivateOrPublicFileBeforeEdition = FileMetadata.Public;
 
       /***** Get the new file privacy and license from form *****/
       switch (Gbl.FileBrowser.Type)
@@ -8316,8 +8316,8 @@ static void Brw_ResetFileMetadata (struct Brw_FileMetadata *FileMetadata)
    FileMetadata->FilFolLnk.Full[0] = '\0';
    FileMetadata->FilFolLnk.Path[0] = '\0';
    FileMetadata->FilFolLnk.Name[0] = '\0';
-   FileMetadata->HiddenOrVisible     = HidVis_HIDDEN;
-   FileMetadata->PrivateOrPublic     = PriPub_PRIVATE;
+   FileMetadata->Hidden     = HidVis_HIDDEN;
+   FileMetadata->Public     = PriPub_PRIVATE;
    FileMetadata->License           = Brw_LICENSE_DEFAULT;
    FileMetadata->Size              = (off_t) 0;
    FileMetadata->Time              = (time_t) 0;
@@ -8382,10 +8382,10 @@ static void Brw_GetFileMetadataFromRow (MYSQL_RES *mysql_res,
       case Brw_ADMI_DOC_DEG:
       case Brw_SHOW_DOC_CRS:
       case Brw_ADMI_DOC_CRS:
-	 FileMetadata->HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[7][0]);
+	 FileMetadata->Hidden = HidVis_GetHiddenFromYN (row[7][0]);
 	 break;
       default:
-	 FileMetadata->HiddenOrVisible = HidVis_HIDDEN;
+	 FileMetadata->Hidden = HidVis_HIDDEN;
 	 break;
      }
 
@@ -8404,10 +8404,10 @@ static void Brw_GetFileMetadataFromRow (MYSQL_RES *mysql_res,
       case Brw_SHOW_DOC_CRS:
       case Brw_ADMI_DOC_CRS:
       case Brw_ADMI_SHR_CRS:
-	 FileMetadata->PrivateOrPublic = PriPub_GetPrivateOrPublicFromYN (row[8][0]);
+	 FileMetadata->Public = PriPub_GetPublicFromYN (row[8][0]);
 	 break;
       default:
-	 FileMetadata->PrivateOrPublic = PriPub_PRIVATE;
+	 FileMetadata->Public = PriPub_PRIVATE;
 	 break;
      }
 
@@ -10195,17 +10195,17 @@ static void Brw_GetNumberOfOERs (Brw_License_t License,
    MYSQL_ROW row;
    unsigned NumRows = 0;	// Initialized to avoid warning
    unsigned NumRow;
-   PriPub_PrivateOrPublic_t PrivateOrPublic;
+   PriPub_PrivateOrPublic_t Public;
 
    /***** Get the size of a file browser *****/
    /* Query database */
    NumRows = Brw_DB_GetNumberOfPublicFiles (&mysql_res,License);
 
    /* Reset values to zero */
-   for (PrivateOrPublic  = (PriPub_PrivateOrPublic_t) 0;
-	PrivateOrPublic <= (PriPub_PrivateOrPublic_t) (PriPub_NUM_PRIVATE_PUBLIC - 1);
-	PrivateOrPublic++)
-      NumFiles[PrivateOrPublic] = 0L;
+   for (Public  = (PriPub_PrivateOrPublic_t) 0;
+	Public <= (PriPub_PrivateOrPublic_t) (PriPub_NUM_PRIVATE_PUBLIC - 1);
+	Public++)
+      NumFiles[Public] = 0L;
 
    for (NumRow = 0;
 	NumRow < NumRows;
@@ -10215,10 +10215,10 @@ static void Brw_GetNumberOfOERs (Brw_License_t License,
       row = mysql_fetch_row (mysql_res);
 
       /* Get if public (row[0]) */
-      PrivateOrPublic = PriPub_GetPrivateOrPublicFromYN (row[0][0]);
+      Public = PriPub_GetPublicFromYN (row[0][0]);
 
       /* Get number of files (row[1]) */
-      if (sscanf (row[1],"%lu",&NumFiles[PrivateOrPublic]) != 1)
+      if (sscanf (row[1],"%lu",&NumFiles[Public]) != 1)
          Err_ShowErrorAndExit ("Error when getting number of files.");
      }
 

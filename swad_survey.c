@@ -446,12 +446,12 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       if (ShowOnlyThisSvyComplete)
 	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 		       Id,
-		       CloOpe_Class[Surveys->Svy.Status.ClosedOrOpen][Surveys->Svy.Status.HiddenOrVisible],
+		       CloOpe_Class[Surveys->Svy.Status.ClosedOrOpen][Surveys->Svy.Status.Hidden],
 		       The_GetSuffix ());
       else
 	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 		       Id,
-		       CloOpe_Class[Surveys->Svy.Status.ClosedOrOpen][Surveys->Svy.Status.HiddenOrVisible],
+		       CloOpe_Class[Surveys->Svy.Status.ClosedOrOpen][Surveys->Svy.Status.Hidden],
 		       The_GetSuffix (),The_GetColorRows ());
       Dat_WriteLocalDateHMSFromUTC (Id,Surveys->Svy.TimeUTC[Dat_STR_TIME],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
@@ -470,12 +470,12 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       if (ShowOnlyThisSvyComplete)
 	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 		       Id,
-		       CloOpe_Class[Surveys->Svy.Status.ClosedOrOpen][Surveys->Svy.Status.HiddenOrVisible],
+		       CloOpe_Class[Surveys->Svy.Status.ClosedOrOpen][Surveys->Svy.Status.Hidden],
 		       The_GetSuffix ());
       else
 	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 		       Id,
-		       CloOpe_Class[Surveys->Svy.Status.ClosedOrOpen][Surveys->Svy.Status.HiddenOrVisible],
+		       CloOpe_Class[Surveys->Svy.Status.ClosedOrOpen][Surveys->Svy.Status.Hidden],
 		       The_GetSuffix (),
 		       The_GetColorRows ());
       Dat_WriteLocalDateHMSFromUTC (Id,Surveys->Svy.TimeUTC[Dat_END_TIME],
@@ -502,7 +502,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	    Grp_PutParMyAllGrps (&MyAllGrps);
 	    Pag_PutParPagNum (Pag_SURVEYS,Surveys->CurrentPage);
 	    HTM_BUTTON_Submit_Begin (Txt_View_survey,"class=\"LT BT_LINK %s_%s\"",
-				     HidVis_TitleClass[Surveys->Svy.Status.HiddenOrVisible],
+				     HidVis_TitleClass[Surveys->Svy.Status.Hidden],
 				     The_GetSuffix ());
 	       HTM_Txt (Surveys->Svy.Title);
 	    HTM_BUTTON_End ();
@@ -511,7 +511,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 
       /* Number of questions and number of distinct users who have already answered this survey */
       HTM_DIV_Begin ("class=\"%s_%s\"",
-		     HidVis_GroupClass[Surveys->Svy.Status.HiddenOrVisible],
+		     HidVis_GroupClass[Surveys->Svy.Status.Hidden],
 		     The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Number_of_questions);
 	 HTM_Unsigned (Surveys->Svy.NumQsts);
@@ -594,7 +594,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 
       /* Scope of the survey */
       HTM_DIV_Begin ("class=\"%s_%s\"",
-		     HidVis_GroupClass[Surveys->Svy.Status.HiddenOrVisible],
+		     HidVis_GroupClass[Surveys->Svy.Status.Hidden],
 		     The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Scope);
 	 HTM_TxtF ("%s %s",
@@ -604,7 +604,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 
       /* Users' roles who can answer the survey */
       HTM_DIV_Begin ("class=\"%s_%s\"",
-		     HidVis_GroupClass[Surveys->Svy.Status.HiddenOrVisible],
+		     HidVis_GroupClass[Surveys->Svy.Status.Hidden],
 		     The_GetSuffix ());
 	 HTM_TxtColon (Txt_Users);
 	 HTM_BR ();
@@ -626,7 +626,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 			Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       HTM_DIV_Begin ("class=\"PAR %s_%s\"",
-                     HidVis_DataClass[Surveys->Svy.Status.HiddenOrVisible],
+                     HidVis_DataClass[Surveys->Svy.Status.Hidden],
 		     The_GetSuffix ());
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
@@ -690,7 +690,7 @@ static void Svy_PutIconsOneSvy (void *Surveys)
 
 static void Svy_WriteAuthor (struct Svy_Survey *Svy)
   {
-   Usr_WriteAuthor1Line (Svy->UsrCod,Svy->Status.HiddenOrVisible);
+   Usr_WriteAuthor1Line (Svy->UsrCod,Svy->Status.Hidden);
   }
 
 /*****************************************************************************/
@@ -752,35 +752,35 @@ static void Svy_WriteStatus (struct Svy_Survey *Svy)
 
       /* Write whether survey is visible or hidden */
       HTM_LI_Begin ("class=\"%s_%s\"",
-		    HiddenOrVisibleClass[Svy->Status.HiddenOrVisible],
+		    HiddenOrVisibleClass[Svy->Status.Hidden],
 		    The_GetSuffix ());
-         HTM_Txt (*HiddenOrVisibleTxt[Svy->Status.HiddenOrVisible]);
+         HTM_Txt (*HiddenOrVisibleTxt[Svy->Status.Hidden]);
       HTM_LI_End ();
 
       /* Write whether survey is open or closed */
       HTM_LI_Begin ("class=\"%s_%s\"",
-		    CloOpe_Class[Svy->Status.ClosedOrOpen][Svy->Status.HiddenOrVisible],
+		    CloOpe_Class[Svy->Status.ClosedOrOpen][Svy->Status.Hidden],
 		    The_GetSuffix ());
 	 HTM_Txt (*ClosedOrOpenTxt[Svy->Status.ClosedOrOpen]);
       HTM_LI_End ();
 
       /* Write whether survey can be answered by me or not depending on my role */
       HTM_LI_Begin ("class=\"%s_%s\"",
-		    CloOpe_Class[ClosedOrOpenDependingOnMyRole][Svy->Status.HiddenOrVisible],
+		    CloOpe_Class[ClosedOrOpenDependingOnMyRole][Svy->Status.Hidden],
 		    The_GetSuffix ());
 	 HTM_Txt (*ClosedOrOpenDependingOnMyRoleTxt[ClosedOrOpenDependingOnMyRole]);
       HTM_LI_End ();
 
       /* Write whether survey can be answered by me or not depending on groups */
       HTM_LI_Begin ("class=\"%s_%s\"",
-		    CloOpe_Class[ClosedOrOpenDependingOnScope][Svy->Status.HiddenOrVisible],
+		    CloOpe_Class[ClosedOrOpenDependingOnScope][Svy->Status.Hidden],
 		    The_GetSuffix ());
 	 HTM_Txt (*ClosedOrOpenDependingOnScopeTxt[ClosedOrOpenDependingOnScope]);
       HTM_LI_End ();
 
       /* Write whether survey has been already answered by me or not */
       HTM_LI_Begin ("class=\"%s_%s\"",
-		    CloOpe_Class[ClosedOrOpenDependingOnAlreadyAnswered][Svy->Status.HiddenOrVisible],
+		    CloOpe_Class[ClosedOrOpenDependingOnAlreadyAnswered][Svy->Status.Hidden],
 		    The_GetSuffix ());
 	 HTM_Txt (*ClosedOrOpenDependingOnAlreadyAnsweredTxt[ClosedOrOpenDependingOnAlreadyAnswered]);
       HTM_LI_End ();
@@ -835,7 +835,7 @@ static void Svy_PutFormsToRemEditOneSvy (struct Svy_Surveys *Surveys,
       /***** Icon to hide/unhide survey *****/
       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
 					 Svy_PutPars,Surveys,
-					 Surveys->Svy.Status.HiddenOrVisible);
+					 Surveys->Svy.Status.Hidden);
 
       /***** Icon to edit survey *****/
       Ico_PutContextualIconToEdit (ActEdiOneSvy,NULL,Svy_PutPars,Surveys);
@@ -1100,7 +1100,7 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
       Svy->HieCod = Str_ConvertStrCodToLongCod (row[2]);
 
       /* Get whether the survey is hidden (row[3]) */
-      Svy->Status.HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[3][0]);
+      Svy->Status.Hidden = HidVis_GetHiddenFromYN (row[3][0]);
 
       /* Get roles (row[4]) */
       if (sscanf (row[4],"%u",&Svy->Roles) != 1)
@@ -1155,7 +1155,7 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
 
       /* Can I answer survey? */
       Svy->Status.ICanAnswer = ( Svy->NumQsts &&
-                                 Svy->Status.HiddenOrVisible == HidVis_VISIBLE &&
+                                 Svy->Status.Hidden == HidVis_VISIBLE &&
                                  Svy->Status.ClosedOrOpen == CloOpe_OPEN &&
                                  Svy->Status.IAmLoggedWithAValidRoleToAnswer &&
                                  Svy->Status.IBelongToScope == Usr_BELONG &&
@@ -1174,7 +1174,7 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
         	                             Svy->Level == Hie_CTY ||
         	                             Svy->Level == Hie_SYS) &&
         	                             Svy->NumQsts &&
-                                             Svy->Status.HiddenOrVisible == HidVis_VISIBLE &&
+                                             Svy->Status.Hidden == HidVis_VISIBLE &&
                                              Svy->Status.ClosedOrOpen == CloOpe_OPEN &&
                                              Svy->Status.IAmLoggedWithAValidRoleToAnswer &&
                                              Svy->Status.IBelongToScope == Usr_BELONG &&
@@ -1274,7 +1274,7 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
       Svy->Title[0]              = '\0';
       Svy->NumQsts               = 0;
       Svy->NumUsrs               = 0;
-      Svy->Status.HiddenOrVisible                 = HidVis_VISIBLE;
+      Svy->Status.Hidden                 = HidVis_VISIBLE;
       Svy->Status.ClosedOrOpen                    = CloOpe_CLOSED;
       Svy->Status.IAmLoggedWithAValidRoleToAnswer = false;
       Svy->Status.IBelongToScope                  = Usr_DONT_BELONG;
@@ -1613,7 +1613,7 @@ void Svy_ReqCreatOrEditSvy (void)
 	 Surveys.Svy.Title[0] = '\0';
 	 Surveys.Svy.NumQsts = 0;
 	 Surveys.Svy.NumUsrs = 0;
-	 Surveys.Svy.Status.HiddenOrVisible  = HidVis_VISIBLE;
+	 Surveys.Svy.Status.Hidden  = HidVis_VISIBLE;
 	 Surveys.Svy.Status.ClosedOrOpen	  = CloOpe_OPEN;
 	 Surveys.Svy.Status.IAmLoggedWithAValidRoleToAnswer = false;
 	 Surveys.Svy.Status.IBelongToScope   = Usr_DONT_BELONG;
@@ -2049,7 +2049,6 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
    extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Txt_Group;
    extern const char *Txt_Groups;
-   extern const char *Txt_and;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGrps;
@@ -2060,7 +2059,7 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
 
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s_%s\"",
-		  HidVis_GroupClass[Svy->Status.HiddenOrVisible],
+		  HidVis_GroupClass[Svy->Status.Hidden],
 		  The_GetSuffix ());
       HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
 				       Txt_Groups);
@@ -2079,14 +2078,8 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
 	    /* Write group type name and group name */
 	    HTM_TxtF ("%s %s",row[0],row[1]);
 
-	    if (NumGrps >= 2)
-	      {
-	       if (NumGrp == NumGrps - 2)
-		  HTM_TxtF (" %s ",Txt_and);
-	       if (NumGrps >= 3)
-		 if (NumGrp < NumGrps - 2)
-		     HTM_Txt (", ");
-	      }
+	    /* Write separator */
+	    HTM_ListSeparator (NumGrp,NumGrps);
 	   }
 	}
       else
@@ -2183,6 +2176,11 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
      {
       [OldNew_OLD] = {ActChgSvyQst,Btn_SAVE_CHANGES},
       [OldNew_NEW] = {ActNewSvyQst,Btn_CREATE      }
+     };
+   static HTM_Attributes_t Attributes[DenAll_NUM_DENY_ALLOW] =
+     {
+      [DenAll_DENY ] = HTM_NO_ATTR,
+      [DenAll_ALLOW] = HTM_CHECKED,
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2336,8 +2334,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 	    HTM_TD_Begin ("class=\"LT FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_LABEL_Begin (NULL);
 		  HTM_INPUT_CHECKBOX ("Comment",
-				      SvyQst->CommentsAllowed ? HTM_CHECKED :
-								HTM_NO_ATTR,
+				      Attributes[SvyQst->AllowCommentsByStds],
 				      "value=\"Y\"");
 		  HTM_Txt (Txt_Comments_allowed);
 	       HTM_LABEL_End ();
@@ -2375,7 +2372,7 @@ static void Svy_InitQst (struct Svy_Question *SvyQst)
 	NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
 	NumAns++)
       SvyQst->AnsChoice[NumAns].Text = NULL;
-   SvyQst->CommentsAllowed = false;
+   SvyQst->AllowCommentsByStds = DenAll_DENY;
   }
 
 /*****************************************************************************/
@@ -2476,7 +2473,8 @@ void Svy_ReceiveQst (void)
      }
 
    /* Get if comments are allowed */
-   SvyQst.CommentsAllowed = Par_GetParBool ("Comment");
+   SvyQst.AllowCommentsByStds = Par_GetParBool ("Comment") ? DenAll_ALLOW :
+							     DenAll_DENY;
 
    /***** Make sure that stem is not empty *****/
    if (Stem[0])
@@ -2683,7 +2681,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
 		     Svy_WriteQstStem (Stem);
 		     Svy_WriteAnswersOfAQst (&Surveys->Svy,&SvyQst,
 					     PutFormAnswerSurvey);
-		     if (SvyQst.CommentsAllowed)
+		     if (SvyQst.AllowCommentsByStds == DenAll_ALLOW)
 			Svy_WriteCommentsOfAQst (&Surveys->Svy,&SvyQst,
 						 PutFormAnswerSurvey);
 
@@ -2737,7 +2735,7 @@ static void Svy_GetQstDataFromRow (MYSQL_RES *mysql_res,
    SvyQst->AnswerType = Svy_DB_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
 
    /***** Get whether the comments are allowed (row[3]) *****/
-   SvyQst->CommentsAllowed = (row[3][0] == 'Y');
+   SvyQst->AllowCommentsByStds = DenAll_GetAllowFromYN (row[3][0]);
 
    /***** Get the stem of the question from the database (row[4]) *****/
    Str_Copy (Stem,row[4],Cns_MAX_BYTES_TEXT);

@@ -44,6 +44,6 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-PriPub_PrivateOrPublic_t PriPub_GetPrivateOrPublicFromYN (char Ch);
+PriPub_PrivateOrPublic_t PriPub_GetPublicFromYN (char Ch);
 
 #endif

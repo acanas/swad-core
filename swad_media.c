@@ -1733,7 +1733,7 @@ static void Med_ShowYoutube (const struct Med_Media *Media,const char *ClassMedi
   {
    /***** Check if YouTube code exists *****/
    if (Media->Name[0])	// YouTube code
-      switch (Gbl.Usrs.Me.UsrDat.Prefs.RefuseAcceptCookies)
+      switch (Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies)
         {
 	 case Coo_REFUSE:
 	    /***** Alert to inform about third party cookies *****/
@@ -1779,7 +1779,7 @@ static void Med_ShowEmbed (const struct Med_Media *Media,const char *ClassMedia)
   {
    /***** Check if embed URL exists *****/
    if (Media->URL[0])	// Embed URL
-      switch (Gbl.Usrs.Me.UsrDat.Prefs.RefuseAcceptCookies)
+      switch (Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies)
         {
 	 case Coo_REFUSE:
 	    /***** Alert to inform about third party cookies *****/

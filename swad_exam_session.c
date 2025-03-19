@@ -126,7 +126,7 @@ void ExaSes_ResetSession (struct ExaSes_Session *Session)
 	StartEndTime++)
       Session->TimeUTC[StartEndTime] = (time_t) 0;
    Session->Title[0]                 = '\0';
-   Session->HiddenOrVisible	     = HidVis_VISIBLE;
+   Session->Hidden	     = HidVis_VISIBLE;
    Session->ClosedOrOpen             = CloOpe_CLOSED;
    Session->ShowUsrResults           = false;
   };
@@ -429,7 +429,7 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
 	 /***** Icon to hide/unhide the exam session *****/
 	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
 					    ExaSes_PutParsEdit,Exams,
-					    Session->HiddenOrVisible);
+					    Session->Hidden);
 
 	 /***** Icon to edit the exam session *****/
 	 Ico_PutContextualIconToEdit (ActReqChgExaSes,Anchor,
@@ -448,7 +448,7 @@ static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Ses
   {
    /***** Session author (teacher) *****/
    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
-      Usr_WriteAuthor1Line (Session->UsrCod,Session->HiddenOrVisible);
+      Usr_WriteAuthor1Line (Session->UsrCod,Session->Hidden);
    HTM_TD_End ();
   }
 
@@ -471,7 +471,7 @@ static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Sess
 	 Err_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 		    Id,
-		    CloOpe_Class[Session->ClosedOrOpen][Session->HiddenOrVisible],
+		    CloOpe_Class[Session->ClosedOrOpen][Session->Hidden],
 		    The_GetSuffix (),The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Session->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
@@ -510,7 +510,7 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
 		  HTM_BUTTON_Submit_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 										Txt_Resume,
 					   "class=\"LT BT_LINK %s_%s\"",
-					   HidVis_TitleClass[Session->HiddenOrVisible],
+					   HidVis_TitleClass[Session->Hidden],
 					   The_GetSuffix ());
 		     HTM_Txt (Session->Title);
 		  HTM_BUTTON_End ();
@@ -519,7 +519,7 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
 	    case Usr_CAN_NOT:
 	    default:
 	       HTM_SPAN_Begin ("class=\"%s_%s\"",
-			       HidVis_TitleClass[Session->HiddenOrVisible],
+			       HidVis_TitleClass[Session->Hidden],
 			       The_GetSuffix ());
 		  HTM_Txt (Session->Title);
 	       HTM_SPAN_End ();
@@ -542,7 +542,6 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
   {
    extern const char *Txt_Group;
    extern const char *Txt_Groups;
-   extern const char *Txt_and;
    extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -554,7 +553,7 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
 
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s_%s\"",
-                  HidVis_GroupClass[Session->HiddenOrVisible],The_GetSuffix ());
+                  HidVis_GroupClass[Session->Hidden],The_GetSuffix ());
 
       HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
 				       Txt_Groups);
@@ -573,14 +572,8 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
 	    /* Write group type name (row[0]) and group name (row[1]) */
 	    HTM_TxtF ("%s %s",row[0],row[1]);
 
-	    if (NumGrps >= 2)
-	      {
-	       if (NumGrp == NumGrps - 2)
-		  HTM_TxtF (" %s ",Txt_and);
-	       if (NumGrps >= 3)
-		 if (NumGrp < NumGrps - 2)
-		     HTM_Txt (", ");
-	      }
+	    /* Write separator */
+	    HTM_ListSeparator (NumGrp,NumGrps);
 	   }
 	}
       else
@@ -740,7 +733,7 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
       Err_WrongExamExit ();
 
    /* Get whether the session is hidden (row[2]) */
-   Session->HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[2][0]);
+   Session->Hidden = HidVis_GetHiddenFromYN (row[2][0]);
 
    /* Get session teacher (row[3]) */
    Session->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
@@ -1216,8 +1209,8 @@ Usr_Can_t ExaSes_CheckIfICanAnswerThisSession (const struct Exa_Exam *Exam,
   {
    /***** 1. Sessions in hidden exams are not accesible
           2. Hidden or closed sessions are not accesible *****/
-   if (Exam->HiddenOrVisible == HidVis_HIDDEN ||
-       Session->HiddenOrVisible == HidVis_HIDDEN ||
+   if (Exam->Hidden == HidVis_HIDDEN ||
+       Session->Hidden == HidVis_HIDDEN ||
        Session->ClosedOrOpen == CloOpe_CLOSED)
       return Usr_CAN_NOT;
 

@@ -931,7 +931,7 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
       */
 
       /* Get whether the question is invalid (row[0]) */
-      Question->Validity = ExaSet_GetInvalidOrValidFromYN (row[0][0]);
+      Question->Validity = ExaSet_GetInvalidFromYN (row[0][0]);
 
       /* Get the type of answer (row[1]) */
       Question->Answer.Type = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
@@ -1004,7 +1004,7 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
 	       Med_GetMediaDataByCod (&Question->Answer.Options[NumOpt].Media);
 
 	       /* Get if this option is correct (row[4]) */
-	       Question->Answer.Options[NumOpt].WrongOrCorrect = WroCor_GetWrongOrCorrectFromYN (row[4][0]);
+	       Question->Answer.Options[NumOpt].Correct = WroCor_GetCorrectFromYN (row[4][0]);
 	       break;
 	    default:
 	       break;
@@ -1024,7 +1024,7 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
 /********* Get if invalid or valid question from a 'Y'/'N' character *********/
 /*****************************************************************************/
 
-ExaSet_Validity_t ExaSet_GetInvalidOrValidFromYN (char Ch)
+ExaSet_Validity_t ExaSet_GetInvalidFromYN (char Ch)
   {
    return (Ch == 'Y') ? ExaSet_INVALID_QUESTION :
 			ExaSet_VALID_QUESTION;
@@ -1231,7 +1231,7 @@ static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long Q
 				  row[1],		// Copy of text
 				  row[2],		// Copy of feedback
 				  CloneMedCod,		// Media code of the new cloned media
-				  WroCor_GetWrongOrCorrectFromYN (row[4][0]));	// Copy of correct
+				  WroCor_GetCorrectFromYN (row[4][0]));	// Copy of correct
 	}
 
       /* Free structure that stores the query result */

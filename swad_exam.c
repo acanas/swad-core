@@ -183,7 +183,7 @@ void Exa_ResetExam (struct Exa_Exam *Exam)
    Exam->TimeUTC[Dat_STR_TIME] = (time_t) 0;
    Exam->TimeUTC[Dat_END_TIME] = (time_t) 0;
    Exam->Title[0]                = '\0';
-   Exam->HiddenOrVisible         = HidVis_VISIBLE;
+   Exam->Hidden         = HidVis_VISIBLE;
    Exam->NumSets                 = 0;
    Exam->NumQsts                 = 0;
    Exam->NumSess                 = 0;
@@ -491,12 +491,12 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 	 if (ShowOnlyThisExam)
 	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 			  Id,
-			  CloOpe_Class[ClosedOrOpen][Exams->Exam.HiddenOrVisible],
+			  CloOpe_Class[ClosedOrOpen][Exams->Exam.Hidden],
 			  The_GetSuffix ());
 	 else
 	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 			  Id,
-			  CloOpe_Class[ClosedOrOpen][Exams->Exam.HiddenOrVisible],
+			  CloOpe_Class[ClosedOrOpen][Exams->Exam.Hidden],
 			  The_GetSuffix (),The_GetColorRows ());
 	 if (Exams->Exam.TimeUTC[Dat_STR_TIME])
 	    Dat_WriteLocalDateHMSFromUTC (Id,Exams->Exam.TimeUTC[StartEndTime],
@@ -521,7 +521,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 	 Frm_BeginForm (ActSeeOneExa);
 	    Exa_PutPars (Exams);
 	    HTM_BUTTON_Submit_Begin (Txt_View_exam,"class=\"LT BT_LINK %s_%s\"",
-				     HidVis_TitleClass[Exams->Exam.HiddenOrVisible],
+				     HidVis_TitleClass[Exams->Exam.Hidden],
 				     The_GetSuffix ());
 	       HTM_Txt (Exams->Exam.Title);
 	    HTM_BUTTON_End ();
@@ -530,7 +530,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 
       /* Number of questions, maximum grade, visibility of results */
       HTM_DIV_Begin ("class=\"%s_%s\"",
-                     HidVis_GroupClass[Exams->Exam.HiddenOrVisible],
+                     HidVis_GroupClass[Exams->Exam.Hidden],
 		     The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Sets_of_questions);
 	 HTM_Unsigned (Exams->Exam.NumSets);
@@ -540,7 +540,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Result_visibility);
 	 TstVis_ShowVisibilityIcons (Exams->Exam.Visibility,
-	                             Exams->Exam.HiddenOrVisible);
+	                             Exams->Exam.Hidden);
       HTM_DIV_End ();
 
       /***** Number of sessions in exam *****/
@@ -552,7 +552,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
       Frm_BeginForm (ActSeeOneExa);
 	 Exa_PutPars (Exams);
 	 HTM_BUTTON_Submit_Begin (Txt_Sessions,"class=\"LT BT_LINK %s_%s\"",
-				  HidVis_TitleClass[Exams->Exam.HiddenOrVisible],
+				  HidVis_TitleClass[Exams->Exam.Hidden],
 				  The_GetSuffix ());
 	    if (ShowOnlyThisExam)
 	       HTM_TxtColonNBSP (Txt_Sessions);
@@ -588,7 +588,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 			Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       HTM_DIV_Begin ("class=\"PAR %s_%s\"",
-                     HidVis_DataClass[Exams->Exam.HiddenOrVisible],
+                     HidVis_DataClass[Exams->Exam.Hidden],
 		     The_GetSuffix ());
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
@@ -641,7 +641,7 @@ static void Exa_PutIconsEditingOneExam (void *Exams)
 
 static void Exa_WriteAuthor (struct Exa_Exam *Exam)
   {
-   Usr_WriteAuthor1Line (Exam->UsrCod,Exam->HiddenOrVisible);
+   Usr_WriteAuthor1Line (Exam->UsrCod,Exam->Hidden);
   }
 
 /*****************************************************************************/
@@ -682,7 +682,7 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
       /***** Icon to hide/unhide exam *****/
       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
 					 Exa_PutPars,Exams,
-					 Exams->Exam.HiddenOrVisible);
+					 Exams->Exam.Hidden);
 
       /***** Icon to edit exam *****/
       Ico_PutContextualIconToEdit (ActEdiOneExa,NULL,Exa_PutPars,Exams);
@@ -890,7 +890,7 @@ void Exa_GetExamDataByCod (struct Exa_Exam *Exam)
       Exam->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
       /* Get whether the exam is hidden (row[2]) */
-      Exam->HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[2][0]);
+      Exam->Hidden = HidVis_GetHiddenFromYN (row[2][0]);
 
       /* Get author of the exam (row[3]) */
       Exam->UsrCod = Str_ConvertStrCodToLongCod (row[3]);

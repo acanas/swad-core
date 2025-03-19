@@ -366,7 +366,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct Usr_Data *UsrDat)
    UsrDat->Prefs.Menu		= Mnu_MENU_DEFAULT;
    UsrDat->Prefs.SideCols	= Cfg_DEFAULT_COLUMNS;
    UsrDat->Prefs.PhotoShape	= PhoSha_SHAPE_DEFAULT;
-   UsrDat->Prefs.RefuseAcceptCookies = Coo_REFUSE;	// By default, don't accept third party cookies
+   UsrDat->Prefs.AcceptCookies = Coo_REFUSE;	// By default, don't accept third party cookies
    UsrDat->NtfEvents.SendEmail	= 0;       		// By default, don't notify anything
   }
 
@@ -579,7 +579,7 @@ void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
 	 UsrDat->Prefs.Menu           = Mnu_GetMenuFromStr (row[28]);
 	 UsrDat->Prefs.SideCols       = Set_GetSideColsFromStr (row[29]);
 	 UsrDat->Prefs.PhotoShape     = PhoSha_GetShapeFromStr (row[30]);
-	 UsrDat->Prefs.RefuseAcceptCookies = Grp_GetRefuseOrAcceptFromYN (row[31][0]);
+	 UsrDat->Prefs.AcceptCookies  = Coo_GetAcceptFromYN (row[31][0]);
 	}
      }
    else

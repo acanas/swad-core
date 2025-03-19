@@ -218,6 +218,8 @@ long Tst_DB_CreatePrint (unsigned NumQsts)
 
 void Tst_DB_UpdatePrint (const struct TstPrn_Print *Print)
   {
+   extern const char HidVis_Visible_YN[HidVis_NUM_HIDDEN_VISIBLE];
+
    Str_SetDecimalPointToUS ();		// To print the floating point as a dot
    DB_QueryUPDATE ("can not update test",
 		   "UPDATE tst_exams"
@@ -232,8 +234,7 @@ void Tst_DB_UpdatePrint (const struct TstPrn_Print *Print)
 		   Print->NumQsts.NotBlank,
 		   Print->Sent ? 'Y' :
 			         'N',
-		   Print->AllowTeachers ? 'Y' :
-			                  'N',
+		   HidVis_Visible_YN[Print->VisibleByTchs],
 		   Print->Score,
 		   Print->PrnCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,

@@ -50,14 +50,14 @@ struct Tre_NodeHierarchy
    long NodCod;
    unsigned NodInd;	// 1, 2, 3...
    unsigned Level;
-   HidVis_HiddenOrVisible_t HiddenOrVisible;
+   HidVis_HiddenOrVisible_t Hidden;
   };
 
 struct Tre_SpcItem
   {
    long Cod;
    unsigned Ind;	// 1, 2, 3...
-   HidVis_HiddenOrVisible_t HiddenOrVisible;
+   HidVis_HiddenOrVisible_t Hidden;
    union
      {
       struct Rsc_Resource Rsc;

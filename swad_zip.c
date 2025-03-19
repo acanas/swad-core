@@ -476,7 +476,7 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 									 Brw_IS_FILE;	// It's a file
 
 	    HiddenOrVisible = (Brw_TypeIsSeeDoc[Gbl.FileBrowser.Type] ||
-		               Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type]) ? Brw_CheckIfFileOrFolderIsHiddenOrVisible (FileType,
+		               Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type]) ? Brw_CheckIfFileOrFolderIsHidden (FileType,
 		                                                         PathFileInTree) :
 					   HidVis_VISIBLE;
 

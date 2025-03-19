@@ -82,7 +82,7 @@ struct Qst_Question
       char TF;
       struct
 	{
-	 WroCor_WrongOrCorrect_t WrongOrCorrect;
+	 WroCor_WrongOrCorrect_t Correct;
 	 char *Text;
 	 char *Feedback;
 	 struct Med_Media Media;

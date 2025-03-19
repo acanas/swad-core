@@ -1,9 +1,9 @@
-// swad_cookie_database.c: user's preferences about cookies (operations with database)
+// swad_deny_allow.h: types and constants related to deny/allow
 
-// swad_cookies.c: user's preferences about cookies
-
+#ifndef _SWAD_DEN_ALL
+#define _SWAD_DEN_ALL
 /*
-    SWAD (Shared Workspace At a Distance),
+    SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
     and used to support university teaching.
 
@@ -23,32 +23,27 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*****************************************************************************/
-/********************************* Headers ***********************************/
-/*****************************************************************************/
-
-#include "swad_cookie.h"
-#include "swad_cookie_database.h"
-#include "swad_database.h"
-#include "swad_global.h"
 
 /*****************************************************************************/
-/************** External global variables from others modules ****************/
+/***************************** Public constants ******************************/
 /*****************************************************************************/
 
-extern struct Globals Gbl;
+#define DenAll_NUM_DENY_ALLOW 2
 
 /*****************************************************************************/
-/************** Update my settings about third party cookies *****************/
+/******************************* Public types ********************************/
 /*****************************************************************************/
 
-void Coo_DB_UpdateMyPrefsCookies (void)
+typedef enum
   {
-   DB_QueryUPDATE ("can not update your preference about cookies",
-		   "UPDATE usr_data"
-		     " SET ThirdPartyCookies='%c'"
-		   " WHERE UsrCod=%ld",
-		   Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies == Coo_ACCEPT ? 'Y' :
-							                        'N',
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
-  }
+   DenAll_DENY  = 0,
+   DenAll_ALLOW = 1,
+  } DenAll_DenyOrAllow_t;
+
+/*****************************************************************************/
+/****************************** Public prototypes ****************************/
+/*****************************************************************************/
+
+DenAll_DenyOrAllow_t DenAll_GetAllowFromYN (char Ch);
+
+#endif

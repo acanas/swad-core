@@ -321,7 +321,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,MYSQL_RES *mysql_res,
 		  /* Hidden/visible icon (row[2]) */
 		  if (ShowAllOrVisibleTags == Tag_SHOW_ALL_TAGS)
 		    {
-		     TagHiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[2][0]);
+		     TagHiddenOrVisible = HidVis_GetHiddenFromYN (row[2][0]);
 		     HTM_TD_Begin ("class=\"LT\"");
 			Ico_PutIconOff (Ico_HiddenVisible[TagHiddenOrVisible].Icon,
 					Ico_HiddenVisible[TagHiddenOrVisible].Color,
@@ -414,7 +414,7 @@ void Tag_ShowFormEditTags (void)
 
 	       /* Form to enable / disable this tag */
 	       Tag_PutIconEnableDisable (TagCod,
-					 HidVis_GetHiddenOrVisibleFromYN (row[2][0]));
+					 HidVis_GetHiddenFromYN (row[2][0]));
 
 	       /* Form to rename this tag */
 	       HTM_TD_Begin ("class=\"LM\"");

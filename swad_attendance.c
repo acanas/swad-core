@@ -129,8 +129,8 @@ static void Att_PutLinkEvent (struct Att_Event *Event,
 static unsigned Att_GetNumUsrsFromAListWhoAreInEvent (long AttCod,
 						      long *LstSelectedUsrCods,
 						      unsigned NumUsrsInList);
-static Att_Present_t Att_CheckIfUsrIsPresentInEvent (long AttCod,long UsrCod);
-static Att_Present_t Att_CheckIfUsrIsPresentInEventAndGetComments (long AttCod,long UsrCod,
+static Att_AbsentOrPresent_t Att_CheckIfUsrIsPresentInEvent (long AttCod,long UsrCod);
+static Att_AbsentOrPresent_t Att_CheckIfUsrIsPresentInEventAndGetComments (long AttCod,long UsrCod,
 								   char CommentStd[Cns_MAX_BYTES_TEXT + 1],
 								   char CommentTch[Cns_MAX_BYTES_TEXT + 1]);
 
@@ -158,7 +158,7 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
 static void Att_WriteTableHeadSeveralAttEvents (struct Att_Events *Events);
 static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
                                              unsigned NumUsr,struct Usr_Data *UsrDat);
-static void Att_PutCheckOrCross (Att_Present_t Present);
+static void Att_PutCheckOrCross (Att_AbsentOrPresent_t Present);
 static void Att_ListStdsWithAttEventsDetails (struct Att_Events *Events,
                                               unsigned NumUsrsInList,
                                               long *LstSelectedUsrCods);
@@ -463,12 +463,12 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
 	 if (ShowOnlyThisAttEventComplete)
 	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 			  Id,
-			  CloOpe_Class[Events->Event.ClosedOrOpen][Events->Event.HiddenOrVisible],
+			  CloOpe_Class[Events->Event.ClosedOrOpen][Events->Event.Hidden],
 			  The_GetSuffix ());
 	 else
 	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 			  Id,
-			  CloOpe_Class[Events->Event.ClosedOrOpen][Events->Event.HiddenOrVisible],
+			  CloOpe_Class[Events->Event.ClosedOrOpen][Events->Event.Hidden],
 			  The_GetSuffix (),The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Events->Event.TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
@@ -498,7 +498,7 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
       else
 	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
       HTM_SPAN_Begin ("class=\"%s_%s\"",
-		       HidVis_TitleClass[Events->Event.HiddenOrVisible],
+		       HidVis_TitleClass[Events->Event.Hidden],
 		       The_GetSuffix ());
          HTM_Unsigned (Events->Event.NumStdsTotal);
       HTM_SPAN_End ();
@@ -530,7 +530,7 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
 	 Att_GetAndWriteNamesOfGrpsAssociatedToEvent (&Events->Event);
 
       HTM_DIV_Begin ("class=\"%s_%s\"",
-                     HidVis_DataClass[Events->Event.HiddenOrVisible],
+                     HidVis_DataClass[Events->Event.Hidden],
 		     The_GetSuffix ());
 	 HTM_Txt (Description);
       HTM_DIV_End ();
@@ -549,7 +549,7 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
 
 static void Att_WriteEventAuthor (struct Att_Event *Event)
   {
-   Usr_WriteAuthor1Line (Event->UsrCod,Event->HiddenOrVisible);
+   Usr_WriteAuthor1Line (Event->UsrCod,Event->Hidden);
   }
 
 /*****************************************************************************/
@@ -587,7 +587,7 @@ static void Att_PutFormsToRemEditOneEvent (struct Att_Events *Events,
       /***** Icon to hide/unhide attendance event *****/
       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
 					 Att_PutPars,Events,
-					 Events->Event.HiddenOrVisible);
+					 Events->Event.Hidden);
 
       /***** Icon to edit attendance event *****/
       Ico_PutContextualIconToEdit (ActEdiOneAtt,NULL,Att_PutPars,Events);
@@ -739,7 +739,7 @@ static void Att_ResetEvent (struct Att_Event *Event)
       Event->NumStdsTotal = 0;
      }
    Event->CrsCod = -1L;
-   Event->HiddenOrVisible = HidVis_VISIBLE;
+   Event->Hidden = HidVis_VISIBLE;
    Event->UsrCod = -1L;
    Event->TimeUTC[Dat_STR_TIME] =
    Event->TimeUTC[Dat_END_TIME] = (time_t) 0;
@@ -759,7 +759,7 @@ void Att_GetEventDataFromRow (MYSQL_ROW row,struct Att_Event *Event)
    Event->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
    /***** Get whether the attendance event is hidden or not (row[2]) *****/
-   Event->HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[2][0]);
+   Event->Hidden = HidVis_GetHiddenFromYN (row[2][0]);
 
    /***** Get author of the attendance event (row[3]) *****/
    Event->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
@@ -772,7 +772,7 @@ void Att_GetEventDataFromRow (MYSQL_ROW row,struct Att_Event *Event)
    Event->ClosedOrOpen = CloOpe_GetClosedOrOpenFrom01 (row[6][0]);
 
    /***** Get whether the attendance event is visible or not (row[7]) *****/
-   Event->CommentTchVisible = HidVis_GetHiddenOrVisibleFromYN (row[7][0]);
+   Event->CommentTchVisible = HidVis_GetVisibleFromYN (row[7][0]);
 
    /***** Get the title of the attendance event (row[8]) *****/
    Str_Copy (Event->Title,row[8],sizeof (Event->Title) - 1);
@@ -907,22 +907,29 @@ static void Att_HideUnhideEvent (HidVis_HiddenOrVisible_t HiddenOrVisible)
 
 void Att_ReqCreatOrEditEvent (void)
   {
+   extern const char HidVis_Visible_YN[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Hlp_USERS_Attendance_edit_event;
+   extern const char *Txt_Hidden_MALE_PLURAL;
+   extern const char *Txt_Visible_MALE_PLURAL;
    extern const char *Txt_Event;
    extern const char *Txt_Teachers_comment;
    extern const char *Txt_Title;
-   extern const char *Txt_Hidden_MALE_PLURAL;
-   extern const char *Txt_Visible_MALE_PLURAL;
    extern const char *Txt_Description;
-   struct Att_Events Events;
-   OldNew_OldNew_t OldNewEvent;
-   Grp_MyAllGrps_t MyAllGrps;
-   char Description[Cns_MAX_BYTES_TEXT + 1];
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
       [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
      };
+   static const char **CommentTchVisibleTxt[HidVis_NUM_HIDDEN_VISIBLE] =
+     {
+      [HidVis_HIDDEN ] = &Txt_Hidden_MALE_PLURAL,
+      [HidVis_VISIBLE] = &Txt_Visible_MALE_PLURAL
+     };
+   struct Att_Events Events;
+   OldNew_OldNew_t OldNewEvent;
+   Grp_MyAllGrps_t MyAllGrps;
+   HidVis_HiddenOrVisible_t HiddenOrVisible;
+   char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Reset attendance events *****/
    Att_ResetEvents (&Events);
@@ -1019,14 +1026,13 @@ void Att_ReqCreatOrEditEvent (void)
 				 "id=\"ComTchVisible\" name=\"ComTchVisible\""
 				 " class=\"Frm_C2_INPUT INPUT_%s\"",
 				 The_GetSuffix ());
-		  HTM_OPTION (HTM_Type_STRING,"N",
-			      Events.Event.CommentTchVisible == HidVis_VISIBLE ? HTM_NO_ATTR :
-										 HTM_SELECTED,
-			      "%s",Txt_Hidden_MALE_PLURAL);
-		  HTM_OPTION (HTM_Type_STRING,"Y",
-			      Events.Event.CommentTchVisible == HidVis_VISIBLE ? HTM_SELECTED :
-										 HTM_NO_ATTR,
-			      "%s",Txt_Visible_MALE_PLURAL);
+	          for (HiddenOrVisible  = (HidVis_HiddenOrVisible_t) 0;
+	               HiddenOrVisible <= (HidVis_HiddenOrVisible_t) (HidVis_NUM_HIDDEN_VISIBLE - 1);
+	               HiddenOrVisible++)
+		     HTM_OPTION (HTM_Type_CHAR,&HidVis_Visible_YN[HiddenOrVisible],
+				 Events.Event.CommentTchVisible == HiddenOrVisible ? HTM_SELECTED :
+										     HTM_NO_ATTR,
+				 "%s",*CommentTchVisibleTxt[HiddenOrVisible]);
 	       HTM_SELECT_End ();
 	    HTM_TD_End ();
 
@@ -1133,7 +1139,7 @@ void Att_ReceiveEvent (void)
       /* Get data of the old (current) attendance event from database */
       OldAtt.AttCod = ReceivedAtt.AttCod;
       Att_GetEventDataByCodAndCheckCrs (&OldAtt);
-      ReceivedAtt.HiddenOrVisible = OldAtt.HiddenOrVisible;
+      ReceivedAtt.Hidden = OldAtt.Hidden;
      }
 
    /***** Get start/end date-times *****/
@@ -1190,7 +1196,7 @@ void Att_ReceiveEvent (void)
 	    break;
 	 case OldNew_NEW:
 	 default:
-	    ReceivedAtt.HiddenOrVisible = HidVis_VISIBLE;	// New attendance events are visible by default
+	    ReceivedAtt.Hidden = HidVis_VISIBLE;	// New attendance events are visible by default
 	    Att_CreateEvent (&ReceivedAtt,Description);		// Add new attendance event to database
 
 	    /***** Write success message *****/
@@ -1264,7 +1270,6 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToEvent (struct Att_Event *Event
   {
    extern const char *Txt_Group;
    extern const char *Txt_Groups;
-   extern const char *Txt_and;
    extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1276,7 +1281,7 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToEvent (struct Att_Event *Event
 
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"%s_%s\"",
-                  HidVis_GroupClass[Event->HiddenOrVisible],The_GetSuffix ());
+                  HidVis_GroupClass[Event->Hidden],The_GetSuffix ());
 
       /***** Write heading *****/
       HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
@@ -1302,14 +1307,7 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToEvent (struct Att_Event *Event
 		  HTM_TxtF ("&nbsp;(%s)",row[2]);
 
 	    /* Write separator */
-	    if (NumGrps >= 2)
-	      {
-	       if (NumGrp == NumGrps - 2)
-		  HTM_TxtF (" %s ",Txt_and);
-	       if (NumGrps >= 3)
-		 if (NumGrp < NumGrps - 2)
-		     HTM_Txt (", ");
-	      }
+	    HTM_ListSeparator (NumGrp,NumGrps);
 	   }
 	}
       else
@@ -1669,7 +1667,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO45x60",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
-   Att_Present_t Present;
+   Att_AbsentOrPresent_t Present;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
    Usr_Can_t ICanChangeStdAttendance;
@@ -1840,7 +1838,7 @@ static void Att_PutLinkEvent (struct Att_Event *Event,
 
       /***** Link to view attendance event *****/
       HTM_BUTTON_Submit_Begin (Title,"class=\"LT BT_LINK %s_%s\"",
-			       HidVis_TitleClass[Event->HiddenOrVisible],
+			       HidVis_TitleClass[Event->Hidden],
 			       The_GetSuffix ());
 	 HTM_Txt (Txt);
       HTM_BUTTON_End ();
@@ -1912,7 +1910,7 @@ void Att_RegisterMeAsStdInEvent (void)
   {
    extern const char *Txt_Your_comment_has_been_updated;
    struct Att_Events Events;
-   Att_Present_t Present;
+   Att_AbsentOrPresent_t Present;
    char *ParName;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
@@ -1972,7 +1970,7 @@ void Att_RegisterStudentsInEvent (void)
    struct Att_Events Events;
    unsigned NumUsr;
    const char *Ptr;
-   Att_Present_t Present;
+   Att_AbsentOrPresent_t Present;
    char *ParName;
    unsigned NumStds[Att_NUM_PRESENT];
    struct Usr_Data UsrData;
@@ -2125,9 +2123,9 @@ static unsigned Att_GetNumUsrsFromAListWhoAreInEvent (long AttCod,
 /***************** Check if a student attended to an event *******************/
 /*****************************************************************************/
 
-static Att_Present_t Att_CheckIfUsrIsPresentInEvent (long AttCod,long UsrCod)
+static Att_AbsentOrPresent_t Att_CheckIfUsrIsPresentInEvent (long AttCod,long UsrCod)
   {
-   Att_Present_t Present;
+   Att_AbsentOrPresent_t Present;
 
    Att_DB_CheckIfUsrIsInTableAttUsr (AttCod,UsrCod,&Present);
 
@@ -2138,13 +2136,13 @@ static Att_Present_t Att_CheckIfUsrIsPresentInEvent (long AttCod,long UsrCod)
 /***************** Check if a student attended to an event *******************/
 /*****************************************************************************/
 
-static Att_Present_t Att_CheckIfUsrIsPresentInEventAndGetComments (long AttCod,long UsrCod,
+static Att_AbsentOrPresent_t Att_CheckIfUsrIsPresentInEventAndGetComments (long AttCod,long UsrCod,
 								   char CommentStd[Cns_MAX_BYTES_TEXT + 1],
 								   char CommentTch[Cns_MAX_BYTES_TEXT + 1])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   Att_Present_t Present;
+   Att_AbsentOrPresent_t Present;
 
    /***** Check if a students is registered in an event in database *****/
    if (Att_DB_GetPresentAndComments (&mysql_res,AttCod,UsrCod))
@@ -2153,7 +2151,7 @@ static Att_Present_t Att_CheckIfUsrIsPresentInEventAndGetComments (long AttCod,l
       row = mysql_fetch_row (mysql_res);
 
       /* Get if present (row[0]) */
-      Present = Att_GetAbsentOrPresentFromYN (row[0][0]);
+      Present = Att_GetPresentFromYN (row[0][0]);
 
       /* Get student's (row[1]) and teacher's (row[2]) comment */
       Str_Copy (CommentStd,row[1],Cns_MAX_BYTES_TEXT);
@@ -2176,7 +2174,7 @@ static Att_Present_t Att_CheckIfUsrIsPresentInEventAndGetComments (long AttCod,l
 /************ Get if absent or present from a 'Y'/'N' character **************/
 /*****************************************************************************/
 
-Att_Present_t Att_GetAbsentOrPresentFromYN (char Ch)
+Att_AbsentOrPresent_t Att_GetPresentFromYN (char Ch)
   {
    return (Ch == 'Y') ? Att_PRESENT :
 			Att_ABSENT;
@@ -2901,7 +2899,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    unsigned NumAttEvent;
-   Att_Present_t Present;
+   Att_AbsentOrPresent_t Present;
    unsigned NumTimesPresent;
 
    /***** Write number of user in the list *****/
@@ -2977,7 +2975,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
 /*********************** Put check or cross character ************************/
 /*****************************************************************************/
 
-static void Att_PutCheckOrCross (Att_Present_t Present)
+static void Att_PutCheckOrCross (Att_AbsentOrPresent_t Present)
   {
    extern const char *Txt_Present;
    extern const char *Txt_Absent;
@@ -3082,7 +3080,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
    unsigned NumAttEvent;
    unsigned UniqueId;
    char *Id;
-   Att_Present_t Present;
+   Att_AbsentOrPresent_t Present;
    bool ShowCommentStd;
    bool ShowCommentTch;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];

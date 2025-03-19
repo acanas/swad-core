@@ -80,7 +80,7 @@ void PrgRsc_GetRscDataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
    Node->Item.Ind = Str_ConvertStrToUnsigned (row[2]);
 
    /***** Get whether the tree node is hidden (row(3)) *****/
-   Node->Item.HiddenOrVisible = HidVis_GetHiddenOrVisibleFromYN (row[3][0]);
+   Node->Item.Hidden = HidVis_GetHiddenFromYN (row[3][0]);
 
    /***** Get link type and code (row[4], row[5]) *****/
    Node->Item.Rsc.Link.Type = Rsc_GetTypeFromString (row[4]);

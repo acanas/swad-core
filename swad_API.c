@@ -2311,7 +2311,7 @@ int swad__getAttendanceEvents (struct soap *soap,
 	 Att_GetEventDataFromRow (row,&Event);
 
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].attendanceEventCode = (int) Event.AttCod;
-         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].hidden = (Event.HiddenOrVisible == HidVis_HIDDEN) ? 1 :
+         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].hidden = (Event.Hidden == HidVis_HIDDEN) ? 1 :
 										                                    0;
          Gbl.Usrs.Other.UsrDat.UsrCod = Event.UsrCod;
          if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))	// Get some user's data from database
@@ -2494,7 +2494,7 @@ int swad__sendAttendanceEvent (struct soap *soap,
      }
 
    /* Is event hidden or visible? */
-   Event.HiddenOrVisible = (hidden ? HidVis_HIDDEN :
+   Event.Hidden = (hidden ? HidVis_HIDDEN :
 	                             HidVis_VISIBLE);
 
    /* User's code (really not used) */
@@ -4701,7 +4701,7 @@ int swad__getDirectoryTree (struct soap *soap,
 
    /* Get directory tree into XML file */
    XML_WriteStartFile (XML,"tree",false);
-   if (Brw_CheckIfFileOrFolderIsHiddenOrVisible (Brw_IS_FOLDER,
+   if (Brw_CheckIfFileOrFolderIsHidden (Brw_IS_FOLDER,
                                                  Gbl.FileBrowser.FilFolLnk.Full) == HidVis_VISIBLE)
       API_ListDir (XML,1,
                    Gbl.FileBrowser.Path.RootFolder,
@@ -4815,7 +4815,7 @@ static bool API_WriteRowFileBrowser (FILE *XML,unsigned Level,
    /***** Is this row hidden or visible? *****/
    if (Gbl.FileBrowser.Type == Brw_SHOW_DOC_CRS ||
        Gbl.FileBrowser.Type == Brw_SHOW_DOC_GRP)
-      if (Brw_CheckIfFileOrFolderIsHiddenOrVisible (FileType,
+      if (Brw_CheckIfFileOrFolderIsHidden (FileType,
                                                     Gbl.FileBrowser.FilFolLnk.Full) == HidVis_HIDDEN)
 	 return false;
 
@@ -5073,7 +5073,7 @@ int swad__getMarks (struct soap *soap,
    Brw_GetFileMetadataByCod (&FileMetadata);
 
    if (FileMetadata.FilFolLnk.Type != Brw_IS_FILE ||
-       FileMetadata.HiddenOrVisible == HidVis_HIDDEN ||
+       FileMetadata.Hidden == HidVis_HIDDEN ||
        (FileMetadata.FileBrowser != Brw_ADMI_MRK_CRS &&
 	FileMetadata.FileBrowser != Brw_ADMI_MRK_GRP))
       return soap_receiver_fault (soap,

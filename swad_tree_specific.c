@@ -110,7 +110,7 @@ void TreSpc_ResetItem (struct Tre_Node *Node)
    /***** Reset common fields of specific item *****/
    Node->Item.Cod = -1L;
    Node->Item.Ind = 0;
-   Node->Item.HiddenOrVisible = HidVis_VISIBLE;
+   Node->Item.Hidden = HidVis_VISIBLE;
 
    /***** Reset specific fields of specific item *****/
    if (ResetSpcFields[Node->InfoType])
@@ -676,7 +676,7 @@ static void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
 	    Ico_PutContextualIconToHideUnhide (ActionHideUnhide[Node->InfoType],
 					       TreSpc_LIST_ITEMS_SECTION_ID,
 					       TreSpc_PutParItmCod,&Node->Item.Cod,
-					       Node->Item.HiddenOrVisible);
+					       Node->Item.Hidden);
 	 else
 	    Ico_PutIconOff ("eye.svg",Ico_GREEN,Txt_Visible);
 

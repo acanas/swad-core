@@ -60,7 +60,7 @@ static void Coo_PutIconsCookies (__attribute__((unused)) void *Args);
 /********** Get if optional or mandatory from a 'Y'/'N' character ************/
 /*****************************************************************************/
 
-Coo_RefuseAccept_t Grp_GetRefuseOrAcceptFromYN (char Ch)
+Coo_RefuseAccept_t Coo_GetAcceptFromYN (char Ch)
   {
    return (Ch == 'Y') ? Coo_ACCEPT :
 		        Coo_REFUSE;
@@ -88,7 +88,7 @@ void Coo_EditMyPrefsOnCookies (void)
 	 Frm_BeginFormAnchor (ActChgCooPrf,Coo_COOKIES_ID);
 
 	    /* Begin container */
-	    switch (Gbl.Usrs.Me.UsrDat.Prefs.RefuseAcceptCookies)
+	    switch (Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies)
 	      {
 	       case Coo_REFUSE:
 		  HTM_DIV_Begin ("class=\"DAT_%s\"",
@@ -103,7 +103,7 @@ void Coo_EditMyPrefsOnCookies (void)
 	    /* Check box */
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_CHECKBOX ("cookies",
-				   ((Gbl.Usrs.Me.UsrDat.Prefs.RefuseAcceptCookies == Coo_ACCEPT) ? HTM_CHECKED :
+				   ((Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies == Coo_ACCEPT) ? HTM_CHECKED :
 											           HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
 				   "value=\"Y\"");
 	       HTM_Txt (Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites);
@@ -139,7 +139,7 @@ static void Coo_PutIconsCookies (__attribute__((unused)) void *Args)
 void Coo_ChangeMyPrefsCookies (void)
   {
    /***** Get param with preference about third party cookies *****/
-   Gbl.Usrs.Me.UsrDat.Prefs.RefuseAcceptCookies = Par_GetParBool ("cookies") ? Coo_ACCEPT :
+   Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies = Par_GetParBool ("cookies") ? Coo_ACCEPT :
 									       Coo_REFUSE;
 
    /***** Store preference in database *****/
