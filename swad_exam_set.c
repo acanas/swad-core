@@ -1004,7 +1004,7 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
 	       Med_GetMediaDataByCod (&Question->Answer.Options[NumOpt].Media);
 
 	       /* Get if this option is correct (row[4]) */
-	       Question->Answer.Options[NumOpt].Correct = WroCor_GetCorrectFromYN (row[4][0]);
+	       Question->Answer.Options[NumOpt].Correct = Qst_GetCorrectFromYN (row[4][0]);
 	       break;
 	    default:
 	       break;
@@ -1231,7 +1231,7 @@ static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long Q
 				  row[1],		// Copy of text
 				  row[2],		// Copy of feedback
 				  CloneMedCod,		// Media code of the new cloned media
-				  WroCor_GetCorrectFromYN (row[4][0]));	// Copy of correct
+				  Qst_GetCorrectFromYN (row[4][0]));	// Copy of correct
 	}
 
       /* Free structure that stores the query result */

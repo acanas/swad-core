@@ -919,7 +919,7 @@ void TstPrn_ComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
    unsigned NumOpt;
-   WroCor_WrongOrCorrect_t OptionWrongOrCorrect;
+   Qst_WrongOrCorrect_t OptionWrongOrCorrect;
    unsigned NumOptTotInQst = 0;
    unsigned NumOptCorrInQst = 0;
    unsigned NumAnsGood = 0;
@@ -941,15 +941,15 @@ void TstPrn_ComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
      {
       OptionWrongOrCorrect = Question->Answer.Options[Indexes[NumOpt]].Correct;
       NumOptTotInQst++;
-      if (OptionWrongOrCorrect == WroCor_CORRECT)
+      if (OptionWrongOrCorrect == Qst_CORRECT)
          NumOptCorrInQst++;
       if (UsrAnswers[Indexes[NumOpt]] == HTM_CHECKED)	// This answer has been selected by the user
          switch (OptionWrongOrCorrect)
            {
-            case WroCor_CORRECT:
+            case Qst_CORRECT:
                NumAnsGood++;
                break;
-            case WroCor_WRONG:
+            case Qst_WRONG:
             default:
                NumAnsBad++;
                break;
@@ -1399,15 +1399,15 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
       char *Class;
       char *Str;
      };
-   static struct Answer AnsWrongOrCorrect[WroCor_NUM_WRONG_CORRECT] =
+   static struct Answer AnsWrongOrCorrect[Qst_NUM_WRONG_CORRECT] =
      {
-      [WroCor_WRONG  ] = {.Class = "Qst_ANS_BAD",.Str = "&cross;"},
-      [WroCor_CORRECT] = {.Class = "Qst_ANS_OK" ,.Str = "&check;"}
+      [Qst_WRONG  ] = {.Class = "Qst_ANS_BAD",.Str = "&cross;"},
+      [Qst_CORRECT] = {.Class = "Qst_ANS_OK" ,.Str = "&check;"}
      };
    static struct Answer AnsNotVisible =
                          {.Class = "Qst_ANS_0"  ,.Str = "&bull;" };
    unsigned NumOpt;
-   WroCor_WrongOrCorrect_t OptionWrongOrCorrect;
+   Qst_WrongOrCorrect_t OptionWrongOrCorrect;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
    const struct Answer *Ans;
@@ -1470,14 +1470,14 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
 	       case Usr_CAN:
 		  switch (OptionWrongOrCorrect)
 		    {
-		     case WroCor_CORRECT:
+		     case Qst_CORRECT:
 			HTM_TD_Begin ("class=\"CT Qst_ANS_0_%s\" title=\"%s\"",
 				      The_GetSuffix (),
 				      Txt_TST_Answer_given_by_the_teachers);
 			   HTM_Txt ("&bull;");
 			HTM_TD_End ();
 			break;
-		     case WroCor_WRONG:
+		     case Qst_WRONG:
 		     default:
 		        HTM_TD_Empty (1);
 		        break;
@@ -1547,13 +1547,13 @@ static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
   {
    static const char *Class[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [WroCor_WRONG  ] = "Qst_ANS_BAD",
-      [WroCor_CORRECT] = "Qst_ANS_OK",
+      [Qst_WRONG  ] = "Qst_ANS_BAD",
+      [Qst_CORRECT] = "Qst_ANS_OK",
      };
    unsigned NumOpt;
    char TextAnsUsr[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
    char TextAnsOK[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
-   WroCor_WrongOrCorrect_t WrongOrCorrect = WroCor_WRONG;
+   Qst_WrongOrCorrect_t WrongOrCorrect = Qst_WRONG;
 
    /***** Change format of answers text *****/
    Qst_ChangeFormatAnswersText (Question);
@@ -1597,7 +1597,7 @@ static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
 	       /* Check is user answer is correct */
 	       if (!strcoll (TextAnsUsr,TextAnsOK))
 		 {
-		  WrongOrCorrect = WroCor_CORRECT;
+		  WrongOrCorrect = Qst_CORRECT;
 		  break;
 		 }
 	      }

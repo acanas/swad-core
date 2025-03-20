@@ -108,7 +108,6 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_action_list.o \
        swad_tree_specific.o \
        swad_user.o swad_user_clipboard.o swad_user_database.o \
        swad_user_resource.o \
-       swad_wrong_correct.o \
        swad_xml.o \
        swad_zip.o
 SOAPOBJS = soap/soapC.o soap/soapServer.o

@@ -31,7 +31,6 @@
 #include "swad_match_print.h"
 #include "swad_scope.h"
 #include "swad_test.h"
-#include "swad_wrong_correct.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -149,6 +148,6 @@ void Mch_StoreQuestionAnswer (const struct Mch_Match *Match,unsigned QstInd,
 void Mch_GetMatchQuestionsFromDB (struct MchPrn_Print *Print);
 
 void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,
-			 WroCor_WrongOrCorrect_t WrongOrCorrect);
+			 Qst_WrongOrCorrect_t WrongOrCorrect);
 
 #endif

@@ -310,10 +310,10 @@ static void QstImp_WriteAnswersOfAQstXML (const struct Qst_Question *Question,
                                           FILE *FileXML)
   {
    extern const char *Txt_NEW_LINE;
-   static const char *Correct_YesNo[WroCor_NUM_WRONG_CORRECT] =
+   static const char *Correct_YesNo[Qst_NUM_WRONG_CORRECT] =
      {
-      [WroCor_WRONG  ] = "No",
-      [WroCor_CORRECT] = "Yes",
+      [Qst_WRONG  ] = "No",
+      [Qst_CORRECT] = "Yes",
      };
    unsigned NumOpt;
 
@@ -810,7 +810,7 @@ static void QstImp_GetAnswerFromXML (struct XMLElement *AnswerElem,
 		    }
 
 	       if (Question->Answer.Type == Qst_ANS_TEXT)
-		  Question->Answer.Options[NumOpt].Correct = WroCor_CORRECT;
+		  Question->Answer.Options[NumOpt].Correct = Qst_CORRECT;
 	       else
 		  /* Check if option is correct or wrong */
 		  for (Attribute  = OptionElem->FirstAttribute;
@@ -818,8 +818,8 @@ static void QstImp_GetAnswerFromXML (struct XMLElement *AnswerElem,
 		       Attribute  = Attribute->Next)
 		     if (!strcmp (Attribute->AttributeName,"correct"))
 		       {
-			Question->Answer.Options[NumOpt].Correct = XML_GetAttributteYesNoFromXMLTree (Attribute) ? WroCor_CORRECT :
-														          WroCor_WRONG;
+			Question->Answer.Options[NumOpt].Correct = XML_GetAttributteYesNoFromXMLTree (Attribute) ? Qst_CORRECT :
+														          Qst_WRONG;
 			break;	// Only first attribute "correct"
 		       }
                }
@@ -1024,7 +1024,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 
 			/* Put an icon that indicates whether the answer is correct or wrong */
 			HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
-			   if (Question->Answer.Options[NumOpt].Correct == WroCor_CORRECT)
+			   if (Question->Answer.Options[NumOpt].Correct == Qst_CORRECT)
 			      Ico_PutIcon ("check.svg",Ico_BLACK,
 			                   Txt_TST_Answer_given_by_the_teachers,
 					   QuestionExists ? "ICO_HIDDEN CONTEXT_ICO16x16" :

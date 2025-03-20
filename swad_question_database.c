@@ -49,19 +49,6 @@ const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES] =
    [Qst_ANS_TEXT           ] = "text",
   };
 
-/* Shuffle in database fields */
-const char Qst_Shuffle_YN[Qst_NUM_SHUFFLE] =
-  {
-   [Qst_DONT_SHUFFLE] = 'N',
-   [Qst_SHUFFLE     ] = 'Y',
-  };
-
-const char *Qst_OrderByShuffle[Qst_NUM_SHUFFLE] =
-  {
-   [Qst_DONT_SHUFFLE] = "AnsInd",
-   [Qst_SHUFFLE     ] = "RAND()",	// Use RAND() because is really random; RAND(NOW()) repeats order
-  };
-
 /*****************************************************************************/
 /**************************** Private constants ******************************/
 /*****************************************************************************/
@@ -80,6 +67,8 @@ extern struct Globals Gbl;
 
 long Qst_DB_CreateQst (const struct Qst_Question *Question)
   {
+   extern const char Qst_Shuffle_YN[Qst_NUM_SHUFFLE];
+
    return
    DB_QueryINSERTandReturnCode ("can not create question",
 				"INSERT INTO tst_questions"
@@ -117,6 +106,8 @@ long Qst_DB_CreateQst (const struct Qst_Question *Question)
 
 void Qst_DB_UpdateQst (const struct Qst_Question *Question)
   {
+   extern const char Qst_Shuffle_YN[Qst_NUM_SHUFFLE];
+
    DB_QueryUPDATE ("can not update question",
 		   "UPDATE tst_questions"
 		     " SET EditTime=NOW(),"
@@ -168,6 +159,8 @@ void Qst_DB_UpdateQstScore (long QstCod,bool AnswerIsNotBlank,double Score)
 
 void Qst_DB_UpdateQstShuffle (long QstCod,Qst_Shuffle_t Shuffle)
   {
+   extern const char Qst_Shuffle_YN[Qst_NUM_SHUFFLE];
+
    DB_QueryUPDATE ("can not update the shuffle type of a question",
 		   "UPDATE tst_questions"
 		     " SET Shuffle='%c'"
@@ -237,7 +230,7 @@ void Qst_DB_CreateTF_Answer (const struct Qst_Question *Question)
 
 void Qst_DB_CreateChoAnswer (struct Qst_Question *Question)
   {
-   extern const char WroCor_Correct_YN[WroCor_NUM_WRONG_CORRECT];
+   extern const char Qst_Correct_YN[Qst_NUM_WRONG_CORRECT];
    unsigned NumOpt;
 
    for (NumOpt = 0;
@@ -256,7 +249,7 @@ void Qst_DB_CreateChoAnswer (struct Qst_Question *Question)
 			 Question->Answer.Options[NumOpt].Feedback ? Question->Answer.Options[NumOpt].Feedback :
 								     "",
 			 Question->Answer.Options[NumOpt].Media.MedCod,
-			 WroCor_Correct_YN[Question->Answer.Options[NumOpt].Correct]);
+			 Qst_Correct_YN[Question->Answer.Options[NumOpt].Correct]);
 
 	 /* Update image status */
 	 if (Question->Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)
@@ -1314,6 +1307,7 @@ unsigned Qst_DB_GetNumAnswersQst (long QstCod)
 unsigned Qst_DB_GetAnswersData (MYSQL_RES **mysql_res,long QstCod,
 			        Qst_Shuffle_t Shuffle)
   {
+   extern const char *Qst_OrderByShuffle[Qst_NUM_SHUFFLE];
    unsigned NumOptions;
 
    if (!(NumOptions = (unsigned)
@@ -1375,6 +1369,8 @@ unsigned Qst_DB_GetQstAnswersCorr (MYSQL_RES **mysql_res,long QstCod)
 unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
                                            const struct Qst_Question *Question)
   {
+   extern const char *Qst_OrderByShuffle[Qst_NUM_SHUFFLE];
+
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get questions of a game",
 		   "SELECT AnsInd"	// row[0]

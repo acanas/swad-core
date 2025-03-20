@@ -2867,7 +2867,7 @@ static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
 		  /* Draw empty bar for this answer
 		     in order to show the same layout that the one shown with results */
 		  Mch_DrawBarNumUsrs (0,0,
-				      WroCor_WRONG);	// Not used when length of bar is 0
+				      Qst_WRONG);	// Not used when length of bar is 0
 
 	    HTM_TD_End ();
 
@@ -3647,12 +3647,12 @@ void Mch_GetMatchQuestionsFromDB (struct MchPrn_Print *Print)
 #define Mch_MAX_BAR_WIDTH 100
 
 void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,
-			 WroCor_WrongOrCorrect_t WrongOrCorrect)
+			 Qst_WrongOrCorrect_t WrongOrCorrect)
   {
-   static const char *WroCor_Class[WroCor_NUM_WRONG_CORRECT] =
+   static const char *WroCor_Class[Qst_NUM_WRONG_CORRECT] =
      {
-      [WroCor_WRONG  ] = "MCH_RES_WRONG",
-      [WroCor_CORRECT] = "MCH_RES_CORRECT",
+      [Qst_WRONG  ] = "MCH_RES_WRONG",
+      [Qst_CORRECT] = "MCH_RES_CORRECT",
      };
    extern const char *Txt_of_PART_OF_A_TOTAL;
    unsigned i;

@@ -1113,9 +1113,9 @@ void Exa_DB_RemoveAllSetQuestionsFromCrs (long CrsCod)
 
 void Exa_DB_AddAnsToQstInSet (long QstCod,unsigned AnsInd,
                               const char *Answer,const char *Feedback,
-                              long MedCod,WroCor_WrongOrCorrect_t WrongOrCorrect)
+                              long MedCod,Qst_WrongOrCorrect_t WrongOrCorrect)
   {
-   extern const char WroCor_Correct_YN[WroCor_NUM_WRONG_CORRECT];
+   extern const char Qst_Correct_YN[Qst_NUM_WRONG_CORRECT];
 
    DB_QueryINSERT ("can not add answer to set",
 		   "INSERT INTO exa_set_answers"
@@ -1127,7 +1127,7 @@ void Exa_DB_AddAnsToQstInSet (long QstCod,unsigned AnsInd,
 		   Answer,	// Copy of text
 		   Feedback,	// Copy of feedback
 		   MedCod,	// Media code of the new cloned media
-		   WroCor_Correct_YN[WrongOrCorrect]);	// Copy of correct
+		   Qst_Correct_YN[WrongOrCorrect]);	// Copy of correct
   }
 
 /*****************************************************************************/
@@ -2170,8 +2170,7 @@ void Exa_DB_LogAccess (long LogCod,long PrnCod,ExaLog_Action_t Action)
 		   (unsigned) Action,
 		   ExaLog_GetQstInd (),
 		   YN[ExaLog_GetIfCanAnswer ()],
-		   // NOW()   	  	   Redundant, for speed
-		   Par_GetIP ());	// Redundant, for speed
+		   Par_GetIP ());
   }
 
 /*****************************************************************************/

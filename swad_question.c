@@ -62,9 +62,25 @@ const char *Qst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES] =
    [Qst_ANS_TEXT           ] = "text",
   };
 
-/*****************************************************************************/
-/**************************** Private constants ******************************/
-/*****************************************************************************/
+/* Shuffle in database fields */
+const char Qst_Shuffle_YN[Qst_NUM_SHUFFLE] =
+  {
+   [Qst_DONT_SHUFFLE] = 'N',
+   [Qst_SHUFFLE     ] = 'Y',
+  };
+
+const char *Qst_OrderByShuffle[Qst_NUM_SHUFFLE] =
+  {
+   [Qst_DONT_SHUFFLE] = "AnsInd",
+   [Qst_SHUFFLE     ] = "RAND()",	// Use RAND() because is really random; RAND(NOW()) repeats order
+  };
+
+/* Correct in database fields */
+const char Qst_Correct_YN[Qst_NUM_WRONG_CORRECT] =
+  {
+   [Qst_WRONG  ] = 'N',
+   [Qst_CORRECT] = 'Y',
+  };
 
 // Test images will be saved with:
 // - maximum width of Tst_IMAGE_SAVED_MAX_HEIGHT
@@ -1466,7 +1482,7 @@ static void Qst_WriteChoAns (struct Qst_Question *Question,
 
 	    /* Put an icon that indicates whether the answer is correct or wrong */
 	    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
-	       if (Question->Answer.Options[NumOpt].Correct == WroCor_CORRECT)
+	       if (Question->Answer.Options[NumOpt].Correct == Qst_CORRECT)
 		  Ico_PutIcon ("check.svg",Ico_BLACK,
 		               Txt_TST_Answer_given_by_the_teachers,"CONTEXT_ICO16x16");
 	    HTM_TD_End ();
@@ -1594,7 +1610,7 @@ void Qst_GetCorrectChoAnswerFromDB (struct Qst_Question *Question)
       row = mysql_fetch_row (mysql_res);
 
       /* Assign correctness (row[0]) of this answer (this option) */
-      Question->Answer.Options[NumOpt].Correct = WroCor_GetCorrectFromYN (row[0][0]);
+      Question->Answer.Options[NumOpt].Correct = Qst_GetCorrectFromYN (row[0][0]);
      }
 
    /* Free structure that stores the query result */
@@ -1826,10 +1842,10 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
       [OldNew_OLD] = {ActChgTstQst,Btn_SAVE_CHANGES},
       [OldNew_NEW] = {ActNewTstQst,Btn_CREATE      }
      };
-   static HTM_Attributes_t AttributesCorrectChecked[WroCor_NUM_WRONG_CORRECT] =
+   static HTM_Attributes_t AttributesCorrectChecked[Qst_NUM_WRONG_CORRECT] =
      {
-      [WroCor_WRONG  ] = HTM_NO_ATTR,
-      [WroCor_CORRECT] = HTM_CHECKED
+      [Qst_WRONG  ] = HTM_NO_ATTR,
+      [Qst_CORRECT] = HTM_CHECKED
      };
    static HTM_Attributes_t AttributesShuffleChecked[Qst_NUM_SHUFFLE] =
      {
@@ -2312,7 +2328,7 @@ void Qst_QstConstructor (struct Qst_Question *Question)
 	NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
      {
-      Question->Answer.Options[NumOpt].Correct = WroCor_WRONG;
+      Question->Answer.Options[NumOpt].Correct = Qst_WRONG;
       Question->Answer.Options[NumOpt].Text     =
       Question->Answer.Options[NumOpt].Feedback = NULL;
 
@@ -2566,7 +2582,7 @@ bool Qst_GetQstDataByCod (struct Qst_Question *Question)
 	       Med_GetMediaDataByCod (&Question->Answer.Options[NumOpt].Media);
 
 	       /* Get if this option is correct (row[4]) */
-	       Question->Answer.Options[NumOpt].Correct = WroCor_GetCorrectFromYN (row[4][0]);
+	       Question->Answer.Options[NumOpt].Correct = Qst_GetCorrectFromYN (row[4][0]);
 	       break;
 	    default:
 	       break;
@@ -2598,6 +2614,16 @@ static Qst_Shuffle_t Qst_GetParShuffle (void)
   {
    return Par_GetParBool ("Shuffle") ? Qst_SHUFFLE :
 				       Qst_DONT_SHUFFLE;
+  }
+
+/*****************************************************************************/
+/************ Get if wrong or correct from a 'Y'/'N' character ***************/
+/*****************************************************************************/
+
+Qst_WrongOrCorrect_t Qst_GetCorrectFromYN (char Ch)
+  {
+   return (Ch == 'Y') ? Qst_CORRECT :
+		        Qst_WRONG;
   }
 
 /*****************************************************************************/
@@ -2832,7 +2858,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
 	                                                       0,
 	                                                       Qst_MAX_OPTIONS_PER_QUESTION - 1,
 	                                                       0);
-            Question->Answer.Options[NumCorrectAns].Correct = WroCor_CORRECT;
+            Question->Answer.Options[NumCorrectAns].Correct = Qst_CORRECT;
            }
       	 else if (Question->Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
            {
@@ -2847,7 +2873,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
 	          Err_WrongAnswerExit ();
                if (NumCorrectAns >= Qst_MAX_OPTIONS_PER_QUESTION)
 	          Err_WrongAnswerExit ();
-               Question->Answer.Options[NumCorrectAns].Correct = WroCor_CORRECT;
+               Question->Answer.Options[NumCorrectAns].Correct = Qst_CORRECT;
               }
            }
          else // Tst_ANS_TEXT
@@ -2855,7 +2881,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
         	 NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
         	 NumOpt++)
                if (Question->Answer.Options[NumOpt].Text[0])
-                  Question->Answer.Options[NumOpt].Correct = WroCor_CORRECT;	// All the answers are correct
+                  Question->Answer.Options[NumOpt].Correct = Qst_CORRECT;	// All the answers are correct
 	 break;
       default:
          break;
@@ -3005,7 +3031,7 @@ bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Quest
          for (NumOpt  = 0;
               NumOpt <= NumLastOpt;
               NumOpt++)
-            if (Question->Answer.Options[NumOpt].Correct == WroCor_CORRECT)
+            if (Question->Answer.Options[NumOpt].Correct == Qst_CORRECT)
                break;
          if (NumOpt > NumLastOpt)
            {

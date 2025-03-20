@@ -36,7 +36,6 @@
 #include "swad_media.h"
 #include "swad_string.h"
 #include "swad_tag.h"
-#include "swad_wrong_correct.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -73,6 +72,13 @@ typedef enum
    Qst_SHUFFLE      = 1,
   } Qst_Shuffle_t;
 
+#define Qst_NUM_WRONG_CORRECT 2
+typedef enum
+  {
+   Qst_WRONG   = 0,
+   Qst_CORRECT = 1,
+  } Qst_WrongOrCorrect_t;
+
 struct Qst_Question
   {
    long QstCod;
@@ -89,7 +95,7 @@ struct Qst_Question
       char TF;
       struct
 	{
-	 WroCor_WrongOrCorrect_t Correct;
+	 Qst_WrongOrCorrect_t Correct;
 	 char *Text;
 	 char *Feedback;
 	 struct Med_Media Media;
@@ -222,6 +228,7 @@ void Qst_FreeMediaOfQuestion (struct Qst_Question *Question);
 
 bool Qst_GetQstDataByCod (struct Qst_Question *Question);
 Qst_Shuffle_t Qst_GetShuffleFromYN (char Ch);
+Qst_WrongOrCorrect_t Qst_GetCorrectFromYN (char Ch);
 long Qst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt);
 void Qst_GetMediaFromDB (long CrsCod,long QstCod,int NumOpt,
                          struct Med_Media *Media);
