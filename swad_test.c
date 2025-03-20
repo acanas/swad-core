@@ -86,7 +86,7 @@ static bool Tst_CheckIfNextTstAllowed (void);
 static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
                                               struct TstPrn_Print *Print);
 static void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				       bool Shuffle);
+				       Qst_Shuffle_t ShuffleOrNot);
 
 static unsigned Tst_GetParNumTst (void);
 static unsigned Tst_GetParNumQsts (void);
@@ -520,7 +520,7 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Qst_AnswerType_t AnswerType;
-   bool Shuffle;
+   Qst_Shuffle_t ShuffleOrNot;
    unsigned QstInd;
 
    /***** Trivial check: number of questions *****/
@@ -552,7 +552,7 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
       AnswerType = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 
       /* Get shuffle (row[2]) */
-      Shuffle = (row[2][0] == 'Y');
+      ShuffleOrNot = Qst_GetShuffleFromYN (row[2][0]);
 
       /* Set indexes of answers */
       switch (AnswerType)
@@ -567,7 +567,8 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
 	 case Qst_ANS_MULTIPLE_CHOICE:
             /* If answer type is unique or multiple option,
                generate indexes of answers depending on shuffle */
-	    Tst_GenerateChoiceIndexes (&Print->PrintedQuestions[QstInd],Shuffle);
+	    Tst_GenerateChoiceIndexes (&Print->PrintedQuestions[QstInd],
+				       ShuffleOrNot);
 	    break;
 	 default:
 	    break;
@@ -590,7 +591,7 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
 /*****************************************************************************/
 
 static void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				       bool Shuffle)
+				       Qst_Shuffle_t ShuffleOrNot)
   {
    struct Qst_Question Question;
    unsigned NumOpt;
@@ -605,7 +606,8 @@ static void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQue
    Question.QstCod = PrintedQuestion->QstCod;
 
    /***** Get answers of question from database *****/
-   Question.Answer.NumOptions = Qst_DB_GetAnswersData (&mysql_res,Question.QstCod,Shuffle);
+   Question.Answer.NumOptions = Qst_DB_GetAnswersData (&mysql_res,Question.QstCod,
+						       ShuffleOrNot);
    /*
    row[0] AnsInd
    row[1] Answer

@@ -66,6 +66,13 @@ typedef enum
   } Qst_QuestionsOrder_t;
 #define Qst_DEFAULT_ORDER Qst_ORDER_STEM
 
+#define Qst_NUM_SHUFFLE 2
+typedef enum
+  {
+   Qst_DONT_SHUFFLE = 0,
+   Qst_SHUFFLE      = 1,
+  } Qst_Shuffle_t;
+
 struct Qst_Question
   {
    long QstCod;
@@ -78,7 +85,7 @@ struct Qst_Question
      {
       Qst_AnswerType_t Type;
       unsigned NumOptions;
-      bool Shuffle;
+      Qst_Shuffle_t ShuffleOrNot;
       char TF;
       struct
 	{
@@ -214,6 +221,7 @@ void Qst_ResetMediaOfQuestion (struct Qst_Question *Question);
 void Qst_FreeMediaOfQuestion (struct Qst_Question *Question);
 
 bool Qst_GetQstDataByCod (struct Qst_Question *Question);
+Qst_Shuffle_t Qst_GetShuffleFromYN (char Ch);
 long Qst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt);
 void Qst_GetMediaFromDB (long CrsCod,long QstCod,int NumOpt,
                          struct Med_Media *Media);

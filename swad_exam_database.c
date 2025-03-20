@@ -852,6 +852,7 @@ void Exa_DB_RemoveAllSetsFromCrs (long CrsCod)
 long Exa_DB_AddQuestionToSet (long SetCod,const struct Qst_Question *Question,long MedCod)
   {
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
+   extern const char Qst_Shuffle_YN[Qst_NUM_SHUFFLE];
 
    return
    DB_QueryINSERTandReturnCode ("can not add question to set",
@@ -864,8 +865,7 @@ long Exa_DB_AddQuestionToSet (long SetCod,const struct Qst_Question *Question,lo
 				SetCod,
 				Exa_DB_InvalidQuestionYN[Question->Validity],
 				Qst_DB_StrAnswerTypes[Question->Answer.Type],
-				Question->Answer.Shuffle ? 'Y' :
-							   'N',
+				Qst_Shuffle_YN[Question->Answer.ShuffleOrNot],
 				Question->Stem,
 				Question->Feedback,
 				MedCod);
@@ -1134,8 +1134,10 @@ void Exa_DB_AddAnsToQstInSet (long QstCod,unsigned AnsInd,
 /*************** Get answers of a test question from database ****************/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetQstAnswersFromSet (MYSQL_RES **mysql_res,long QstCod,bool Shuffle)
+unsigned Exa_DB_GetQstAnswersFromSet (MYSQL_RES **mysql_res,long QstCod,
+				      Qst_Shuffle_t ShuffleOrNot)
   {
+   extern const char *Qst_OrderByShuffle[Qst_NUM_SHUFFLE];
    unsigned NumOptions;
 
    /***** Get answers of a question from database *****/
@@ -1150,8 +1152,7 @@ unsigned Exa_DB_GetQstAnswersFromSet (MYSQL_RES **mysql_res,long QstCod,bool Shu
 		   " WHERE QstCod=%ld"
 		" ORDER BY %s",
 		   QstCod,
-		   Shuffle ? "RAND()" :
-		             "AnsInd");
+		   Qst_OrderByShuffle[ShuffleOrNot]);
 
    if (!NumOptions)
       Err_WrongAnswerExit ();

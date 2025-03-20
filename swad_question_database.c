@@ -49,6 +49,19 @@ const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES] =
    [Qst_ANS_TEXT           ] = "text",
   };
 
+/* Shuffle in database fields */
+const char Qst_Shuffle_YN[Qst_NUM_SHUFFLE] =
+  {
+   [Qst_DONT_SHUFFLE] = 'N',
+   [Qst_SHUFFLE     ] = 'Y',
+  };
+
+const char *Qst_OrderByShuffle[Qst_NUM_SHUFFLE] =
+  {
+   [Qst_DONT_SHUFFLE] = "AnsInd",
+   [Qst_SHUFFLE     ] = "RAND()",	// Use RAND() because is really random; RAND(NOW()) repeats order
+  };
+
 /*****************************************************************************/
 /**************************** Private constants ******************************/
 /*****************************************************************************/
@@ -91,8 +104,7 @@ long Qst_DB_CreateQst (const struct Qst_Question *Question)
 					     "0)",	// Score
 				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 				Qst_DB_StrAnswerTypes[Question->Answer.Type],
-				Question->Answer.Shuffle ? 'Y' :
-							   'N',
+				Qst_Shuffle_YN[Question->Answer.ShuffleOrNot],
 				Question->Stem,
 				Question->Feedback ? Question->Feedback :
 						     "",
@@ -116,8 +128,7 @@ void Qst_DB_UpdateQst (const struct Qst_Question *Question)
 		   " WHERE QstCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
 		   Qst_DB_StrAnswerTypes[Question->Answer.Type],
-		   Question->Answer.Shuffle ? 'Y' :
-					      'N',
+		   Qst_Shuffle_YN[Question->Answer.ShuffleOrNot],
 		   Question->Stem,
 		   Question->Feedback ? Question->Feedback :
 					"",
@@ -155,15 +166,14 @@ void Qst_DB_UpdateQstScore (long QstCod,bool AnswerIsNotBlank,double Score)
 /*********************** Change the shuffle of a question ********************/
 /*****************************************************************************/
 
-void Qst_DB_UpdateQstShuffle (long QstCod,bool Shuffle)
+void Qst_DB_UpdateQstShuffle (long QstCod,Qst_Shuffle_t ShuffleOrNot)
   {
    DB_QueryUPDATE ("can not update the shuffle type of a question",
 		   "UPDATE tst_questions"
 		     " SET Shuffle='%c'"
                    " WHERE QstCod=%ld"
                      " AND CrsCod=%ld",	// Extra check
-		   Shuffle ? 'Y' :
-			     'N',
+		   Qst_Shuffle_YN[ShuffleOrNot],
 		   QstCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
@@ -1301,7 +1311,8 @@ unsigned Qst_DB_GetNumAnswersQst (long QstCod)
 /***************** Get answers of a question from database *******************/
 /*****************************************************************************/
 
-unsigned Qst_DB_GetAnswersData (MYSQL_RES **mysql_res,long QstCod,bool Shuffle)
+unsigned Qst_DB_GetAnswersData (MYSQL_RES **mysql_res,long QstCod,
+			        Qst_Shuffle_t ShuffleOrNot)
   {
    unsigned NumOptions;
 
@@ -1316,8 +1327,7 @@ unsigned Qst_DB_GetAnswersData (MYSQL_RES **mysql_res,long QstCod,bool Shuffle)
 			 " WHERE QstCod=%ld"
 		      " ORDER BY %s",
 			 QstCod,
-			 Shuffle ? "RAND()" :
-				   "AnsInd")))
+			 Qst_OrderByShuffle[ShuffleOrNot])))
       Err_WrongAnswerExit ();
 
    return NumOptions;
@@ -1372,8 +1382,7 @@ unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
 		   " WHERE QstCod=%ld"
 		" ORDER BY %s",
 		   Question->QstCod,
-		   Question->Answer.Shuffle ? "RAND()" :	// Use RAND() because is really random; RAND(NOW()) repeats order
-					      "AnsInd");
+		   Qst_OrderByShuffle[Question->Answer.ShuffleOrNot]);
   }
 
 /*****************************************************************************/

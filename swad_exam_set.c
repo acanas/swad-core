@@ -937,7 +937,7 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
       Question->Answer.Type = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 
       /* Get shuffle (row[2]) */
-      Question->Answer.Shuffle = (row[2][0] == 'Y');
+      Question->Answer.ShuffleOrNot = Qst_GetShuffleFromYN (row[2][0]);
 
       /* Get the stem (row[3]) and feedback (row[4]) */
       Str_Copy (Question->Stem    ,row[3],Cns_MAX_BYTES_TEXT);
@@ -953,7 +953,7 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
       /***** Get the answers from the database *****/
       Question->Answer.NumOptions = Exa_DB_GetQstAnswersFromSet (&mysql_res,
 			                                         Question->QstCod,
-			                                         false);	// Don't shuffle
+			                                         Qst_DONT_SHUFFLE);
       /*
       row[0] AnsInd
       row[1] Answer
@@ -1204,7 +1204,7 @@ static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long Q
 
       /***** Get the answers from the database *****/
       Question.Answer.NumOptions = Qst_DB_GetAnswersData (&mysql_res,Question.QstCod,
-			                                  false);	// Don't shuffle
+			                                  Qst_DONT_SHUFFLE);
       /*
       row[0] AnsInd
       row[1] Answer

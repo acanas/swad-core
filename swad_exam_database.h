@@ -101,7 +101,8 @@ void Exa_DB_RemoveAllSetQuestionsFromCrs (long CrsCod);
 void Exa_DB_AddAnsToQstInSet (long QstCod,unsigned AnsInd,
                               const char *Answer,const char *Feedback,
                               long MedCod,WroCor_WrongOrCorrect_t WrongOrCorrect);
-unsigned Exa_DB_GetQstAnswersFromSet (MYSQL_RES **mysql_res,long QstCod,bool Shuffle);
+unsigned Exa_DB_GetQstAnswersFromSet (MYSQL_RES **mysql_res,long QstCod,
+				      Qst_Shuffle_t ShuffleOrNot);
 unsigned Exa_DB_GetQstAnswersTextFromSet (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetQstAnswersCorrFromSet (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetMediaFromAllAnsOfQst (MYSQL_RES **mysql_res,long QstCod,long SetCod);

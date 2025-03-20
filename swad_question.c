@@ -100,6 +100,8 @@ static void Qst_WriteChoAns (struct Qst_Question *Question,
                              const char *ClassTxt,
                              const char *ClassFeedback);
 
+static Qst_Shuffle_t Qst_GetParShuffle (void);
+
 /*****************************************************************************/
 /***************************** Test constructor ******************************/
 /*****************************************************************************/
@@ -910,6 +912,11 @@ void Qst_WriteHeadingRowQuestionsForEdition (struct Qst_Questions *Questions)
 
 void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
   {
+   static HTM_Attributes_t AttributesShuffleChecked[Qst_NUM_SHUFFLE] =
+     {
+      [Qst_DONT_SHUFFLE] = HTM_NO_ATTR,
+      [Qst_SHUFFLE     ] = HTM_CHECKED
+     };
    static unsigned UniqueId = 0;
    char *Id;
 
@@ -974,8 +981,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 		  Qst_PutParsEditQst (Questions);
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Questions->SelectedOrder);
 		  HTM_INPUT_CHECKBOX ("Shuffle",
-				      (Questions->Question.Answer.Shuffle ? HTM_CHECKED :
-									    HTM_NO_ATTR) |
+				      AttributesShuffleChecked[Questions->Question.Answer.ShuffleOrNot] |
 				      HTM_SUBMIT_ON_CHANGE,
 				      "value=\"Y\"");
 	       Frm_EndForm ();
@@ -1218,6 +1224,11 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
                                        struct Qst_Question *Question)
   {
    extern const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES];
+   static HTM_Attributes_t AttributesShuffleChecked[Qst_NUM_SHUFFLE] =
+     {
+      [Qst_DONT_SHUFFLE] = HTM_NO_ATTR,
+      [Qst_SHUFFLE     ] = HTM_CHECKED
+     };
    static unsigned UniqueId = 0;
    char *Id;
 
@@ -1278,8 +1289,7 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
 	    HTM_INPUT_CHECKBOX ("Shuffle",
-				(Question->Answer.Shuffle ? HTM_CHECKED :
-						            HTM_NO_ATTR) |
+				AttributesShuffleChecked[Question->Answer.ShuffleOrNot] |
 				HTM_DISABLED,
 				"value=\"Y\"");
 	 HTM_TD_End ();
@@ -1816,10 +1826,15 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
       [OldNew_OLD] = {ActChgTstQst,Btn_SAVE_CHANGES},
       [OldNew_NEW] = {ActNewTstQst,Btn_CREATE      }
      };
-   static HTM_Attributes_t AttributesChecked[WroCor_NUM_WRONG_CORRECT] =
+   static HTM_Attributes_t AttributesCorrectChecked[WroCor_NUM_WRONG_CORRECT] =
      {
       [WroCor_WRONG  ] = HTM_NO_ATTR,
       [WroCor_CORRECT] = HTM_CHECKED
+     };
+   static HTM_Attributes_t AttributesShuffleChecked[Qst_NUM_SHUFFLE] =
+     {
+      [Qst_DONT_SHUFFLE] = HTM_NO_ATTR,
+      [Qst_SHUFFLE     ] = HTM_CHECKED
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2068,8 +2083,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 		  HTM_INPUT_CHECKBOX ("Shuffle",
-				      (Question->Answer.Shuffle ? HTM_CHECKED :
-	        				                  HTM_NO_ATTR) |
+				      AttributesShuffleChecked[Question->Answer.ShuffleOrNot] |
 	        		      ((Question->Answer.Type != Qst_ANS_UNIQUE_CHOICE &&
 			                Question->Answer.Type != Qst_ANS_MULTIPLE_CHOICE) ? HTM_DISABLED :
 										            HTM_NO_ATTR),
@@ -2111,7 +2125,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		     HTM_TD_Begin ("class=\"Qst_ANS_LEFT_COL %s\"",
 		                   The_GetColorRows ());
 
-			Checked = AttributesChecked[Question->Answer.Options[NumOpt].Correct];
+			Checked = AttributesCorrectChecked[Question->Answer.Options[NumOpt].Correct];
 
 			/* Radio selector for unique choice answers */
 			HTM_INPUT_RADIO ("AnsUni",
@@ -2285,10 +2299,10 @@ void Qst_QstConstructor (struct Qst_Question *Question)
    Question->Feedback[0] = '\0';
 
    /***** Initialize answers *****/
-   Question->Answer.Type       = Qst_ANS_UNIQUE_CHOICE;
-   Question->Answer.NumOptions = 0;
-   Question->Answer.Shuffle    = false;
-   Question->Answer.TF         = ' ';
+   Question->Answer.Type         = Qst_ANS_UNIQUE_CHOICE;
+   Question->Answer.NumOptions   = 0;
+   Question->Answer.ShuffleOrNot = Qst_DONT_SHUFFLE;
+   Question->Answer.TF           = ' ';
 
    /* Initialize image attached to stem */
    Med_MediaConstructor (&Question->Media);
@@ -2455,7 +2469,7 @@ bool Qst_GetQstDataByCod (struct Qst_Question *Question)
       Question->Answer.Type = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 
       /* Get shuffle (row[2]) */
-      Question->Answer.Shuffle = (row[2][0] == 'Y');
+      Question->Answer.ShuffleOrNot = Qst_GetShuffleFromYN (row[2][0]);
 
       /* Get the stem (row[3]) and the feedback (row[4]) */
       Str_Copy (Question->Stem    ,row[3],Cns_MAX_BYTES_TEXT);
@@ -2501,7 +2515,7 @@ bool Qst_GetQstDataByCod (struct Qst_Question *Question)
 
       /***** Get the answers from the database *****/
       Question->Answer.NumOptions = Qst_DB_GetAnswersData (&mysql_res,Question->QstCod,
-			                                   false);	// Don't shuffle
+			                                   Qst_DONT_SHUFFLE);
       /*
       row[0] AnsInd
       row[1] Answer
@@ -2564,6 +2578,26 @@ bool Qst_GetQstDataByCod (struct Qst_Question *Question)
    DB_FreeMySQLResult (&mysql_res);
 
    return QuestionExists;
+  }
+
+/*****************************************************************************/
+/************** Get if shuffle or not from a 'Y'/'N' character ***************/
+/*****************************************************************************/
+
+Qst_Shuffle_t Qst_GetShuffleFromYN (char Ch)
+  {
+   return (Ch == 'Y') ? Qst_SHUFFLE :
+		        Qst_DONT_SHUFFLE;
+  }
+
+/*****************************************************************************/
+/*********** Get parameter with public / private file from form *************/
+/*****************************************************************************/
+
+static Qst_Shuffle_t Qst_GetParShuffle (void)
+  {
+   return Par_GetParBool ("Shuffle") ? Qst_SHUFFLE :
+				       Qst_DONT_SHUFFLE;
   }
 
 /*****************************************************************************/
@@ -2715,7 +2749,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
    Ale_ShowAlerts (NULL);
 
    /***** Get answers *****/
-   Question->Answer.Shuffle = false;
+   Question->Answer.ShuffleOrNot = Qst_DONT_SHUFFLE;
    switch (Question->Answer.Type)
      {
       case Qst_ANS_INT:
@@ -2748,7 +2782,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
       case Qst_ANS_UNIQUE_CHOICE:
       case Qst_ANS_MULTIPLE_CHOICE:
          /* Get shuffle */
-         Question->Answer.Shuffle = Par_GetParBool ("Shuffle");
+         Question->Answer.ShuffleOrNot = Qst_GetParShuffle ();
 	 /* falls through */
 	 /* no break */
       case Qst_ANS_TEXT:
@@ -3367,11 +3401,16 @@ void Qst_RemoveOneQstFromDB (long CrsCod,long QstCod)
 
 void Qst_ChangeShuffleQst (void)
   {
-   extern const char *Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled;
    extern const char *Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuffling;
+   extern const char *Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled;
+   static const char **AlertMsg[Qst_NUM_SHUFFLE] =
+     {
+      [Qst_DONT_SHUFFLE] = &Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuffling,
+      [Qst_SHUFFLE     ] = &Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled
+     };
    struct Qst_Questions Questions;
    bool EditingOnlyThisQst;
-   bool Shuffle;
+   Qst_Shuffle_t ShuffleOrNot;
 
    /***** Create test *****/
    Qst_Constructor (&Questions);
@@ -3383,15 +3422,13 @@ void Qst_ChangeShuffleQst (void)
    EditingOnlyThisQst = Par_GetParBool ("OnlyThisQst");
 
    /***** Get a parameter that indicates whether it's possible to shuffle the answers of this question ******/
-   Shuffle = Par_GetParBool ("Shuffle");
+   ShuffleOrNot = Qst_GetParShuffle ();
 
    /***** Update the question changing the current shuffle *****/
-   Qst_DB_UpdateQstShuffle (Questions.Question.QstCod,Shuffle);
+   Qst_DB_UpdateQstShuffle (Questions.Question.QstCod,ShuffleOrNot);
 
    /***** Write message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Shuffle ? Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled :
-                                        Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuffling,
-                  Questions.Question.QstCod);
+   Ale_ShowAlert (Ale_SUCCESS,*AlertMsg[ShuffleOrNot],Questions.Question.QstCod);
 
    /***** Continue editing questions *****/
    if (EditingOnlyThisQst)

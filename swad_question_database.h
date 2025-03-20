@@ -30,7 +30,7 @@
 long Qst_DB_CreateQst (const struct Qst_Question *Question);
 void Qst_DB_UpdateQst (const struct Qst_Question *Question);
 void Qst_DB_UpdateQstScore (long QstCod,bool AnswerIsNotBlank,double Score);
-void Qst_DB_UpdateQstShuffle (long QstCod,bool Shuffle);
+void Qst_DB_UpdateQstShuffle (long QstCod,Qst_Shuffle_t ShuffleOrNot);
 //-----------------------------------------------------------------------------
 void Qst_DB_CreateIntAnswer (struct Qst_Question *Question);
 void Qst_DB_CreateFltAnswer (struct Qst_Question *Question);
@@ -65,7 +65,8 @@ unsigned Qst_DB_GetQstCodFromTypeAnsStem (MYSQL_RES **mysql_res,
                                           const struct Qst_Question *Question);
 
 unsigned Qst_DB_GetNumAnswersQst (long QstCod);
-unsigned Qst_DB_GetAnswersData (MYSQL_RES **mysql_res,long QstCod,bool Shuffle);
+unsigned Qst_DB_GetAnswersData (MYSQL_RES **mysql_res,long QstCod,
+			        Qst_Shuffle_t ShuffleOrNot);
 unsigned Qst_DB_GetTextOfAnswers (MYSQL_RES **mysql_res,long QstCod);
 unsigned Qst_DB_GetQstAnswersCorr (MYSQL_RES **mysql_res,long QstCod);
 unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,

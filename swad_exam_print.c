@@ -71,7 +71,7 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
                                                   struct ExaSet_Set *Set,
                                                   unsigned *NumQstsInPrint);
 static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
-					  bool Shuffle);
+					  Qst_Shuffle_t ShuffleOrNot);
 static void ExaPrn_CreatePrint (struct ExaPrn_Print *Print);
 
 static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
@@ -373,7 +373,7 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
    unsigned NumQstsInSet;
    unsigned NumQstInSet;
    Qst_AnswerType_t AnswerType;
-   bool Shuffle;
+   Qst_Shuffle_t ShuffleOrNot;
 
    /***** Get questions from database *****/
    NumQstsInSet = Exa_DB_GetSomeQstsFromSetToPrint (&mysql_res,
@@ -403,7 +403,7 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
       AnswerType = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 
       /* Get shuffle (row[2]) */
-      Shuffle = (row[2][0] == 'Y');
+      ShuffleOrNot = Qst_GetShuffleFromYN (row[2][0]);
 
       /* Set indexes of answers */
       switch (AnswerType)
@@ -418,7 +418,8 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
 	 case Qst_ANS_MULTIPLE_CHOICE:
             /* If answer type is unique or multiple option,
                generate indexes of answers depending on shuffle */
-	    ExaPrn_GenerateChoiceIndexes (&Print->PrintedQuestions[*NumQstsInPrint],Shuffle);
+	    ExaPrn_GenerateChoiceIndexes (&Print->PrintedQuestions[*NumQstsInPrint],
+					  ShuffleOrNot);
 	    break;
 	 default:
 	    break;
@@ -442,7 +443,7 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
 /*****************************************************************************/
 
 static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
-					  bool Shuffle)
+					  Qst_Shuffle_t ShuffleOrNot)
   {
    struct Qst_Question Question;
    unsigned NumOpt;
@@ -459,7 +460,7 @@ static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *Printed
    /***** Get answers of question from database *****/
    Question.Answer.NumOptions = Exa_DB_GetQstAnswersFromSet (&mysql_res,
                                                              Question.QstCod,
-                                                             Shuffle);
+                                                             ShuffleOrNot);
    /*
    row[0] AnsInd
    row[1] Answer

@@ -2177,7 +2177,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
       [OldNew_OLD] = {ActChgSvyQst,Btn_SAVE_CHANGES},
       [OldNew_NEW] = {ActNewSvyQst,Btn_CREATE      }
      };
-   static HTM_Attributes_t Attributes[DenAll_NUM_DENY_ALLOW] =
+   static HTM_Attributes_t AttributesAllowChecked[DenAll_NUM_DENY_ALLOW] =
      {
       [DenAll_DENY ] = HTM_NO_ATTR,
       [DenAll_ALLOW] = HTM_CHECKED,
@@ -2334,7 +2334,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 	    HTM_TD_Begin ("class=\"LT FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_LABEL_Begin (NULL);
 		  HTM_INPUT_CHECKBOX ("Comment",
-				      Attributes[SvyQst->AllowCommentsByStds],
+				      AttributesAllowChecked[SvyQst->AllowCommentsByStds],
 				      "value=\"Y\"");
 		  HTM_Txt (Txt_Comments_allowed);
 	       HTM_LABEL_End ();
