@@ -206,19 +206,28 @@ void HTM_TxtF (const char *fmt,...);
 void HTM_Txt (const char *Txt);
 void HTM_Char (char Ch);
 void HTM_TxtColon (const char *Txt);
-void HTM_TxtSemicolon (const char *Txt);
 void HTM_TxtColonNBSP (const char *Txt);
+void HTM_TxtSP (const char *Txt);
 void HTM_SPTxt (const char *Txt);
 void HTM_NBSPTxt (const char *Txt);
 void HTM_ListSeparator (unsigned i,unsigned n);
+void HTM_CommaSP (void);
+void HTM_SemicolonSP (void);
 void HTM_SP (void);
 void HTM_NBSP (void);
+void HTM_NBSP_GT_NBSP (void);
+void HTM_EllipsisDots (void);
 void HTM_Colon (void);
-void HTM_Semicolon (void);
 void HTM_Dot (void);
 void HTM_Comma (void);
 void HTM_Hyphen (void);
 void HTM_Asterisk (void);
+void HTM_Slash (void);
+void HTM_Question (void);
+void HTM_OpenParenthesis (void);
+void HTM_CloseParenthesis (void);
+void HTM_OpenBracket (void);
+void HTM_CloseBracket (void);
 void HTM_Unsigned (unsigned Num);
 void HTM_UnsignedColon (unsigned Num);
 void HTM_Light0 (void);
@@ -228,6 +237,9 @@ void HTM_Long (long Num);
 void HTM_Double (double Num);
 void HTM_DoubleFewDigits (double Num);
 void HTM_Double2Decimals (double Num);
+void HTM_DoublePartOfUnsigned (double Part,unsigned Whole);
+void HTM_DoublePartOfDouble (double Part,double Whole);
+void HTM_DoubleRange (double Min,double Max);
 void HTM_Percentage (double Percentage);
 
 void HTM_TD_Txt_Left (const char *Txt);
@@ -244,5 +256,7 @@ void HTM_TD_Ratio (unsigned Num,unsigned NumTotal);
 void HTM_TD_LINE_TOP_Ratio (unsigned Num,unsigned NumTotal);
 void HTM_TD_Double2Decimals (double Num);
 void HTM_TD_LINE_TOP_Double2Decimals (double Num);
+
+void HTM_ElementEnd (void);
 
 #endif

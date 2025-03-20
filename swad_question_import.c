@@ -958,23 +958,24 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 	   {
 	    case Qst_ANS_INT:
 	       HTM_SPAN_Begin ("class=\"%s\"",ClassStem);
-		  HTM_TxtF ("(%ld)",Question->Answer.Integer);
+	          HTM_OpenParenthesis ();
+		     HTM_UnsignedLong (Question->Answer.Integer);
+		  HTM_CloseParenthesis ();
 	       HTM_SPAN_End ();
 	       break;
 	    case Qst_ANS_FLOAT:
 	       HTM_SPAN_Begin ("class=\"%s\"",ClassStem);
-		  HTM_Txt ("([");
-		  HTM_Double (Question->Answer.FloatingPoint[0]);
-		  HTM_Txt ("; ");
-		  HTM_Double (Question->Answer.FloatingPoint[1]);
-		  HTM_Txt ("])");
+	          HTM_OpenParenthesis ();
+	             HTM_DoubleRange (Question->Answer.FloatingPoint[0],
+	        	              Question->Answer.FloatingPoint[1]);
+		  HTM_CloseParenthesis ();
 	       HTM_SPAN_End ();
 	       break;
 	    case Qst_ANS_TRUE_FALSE:
 	       HTM_SPAN_Begin ("class=\"%s\"",ClassStem);
-		  HTM_Txt ("(");
-		  Qst_WriteAnsTF (Question->Answer.TF);
-		  HTM_Txt (")");
+		  HTM_OpenParenthesis ();
+		     Qst_WriteAnsTF (Question->Answer.TF);
+		  HTM_CloseParenthesis ();
 	       HTM_SPAN_End ();
 	       break;
 	    case Qst_ANS_UNIQUE_CHOICE:

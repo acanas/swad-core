@@ -443,7 +443,7 @@ static bool Tst_CheckIfNextTstAllowed (void)
    if (NumSecondsFromNowToNextAccTst > 0)
      {
       /***** Write warning *****/
-      Ale_ShowAlert (Ale_WARNING,"%s:<br />"
+      Ale_ShowAlert (Ale_WARNING,"%s:<br>"
 	                         "<span id=\"date_next_test\"></span>."
 				 "<script type=\"text/javascript\">"
 				 "writeLocalDateHMSFromUTC('date_next_test',%ld,"

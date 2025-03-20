@@ -2734,7 +2734,7 @@ static void Grp_PutFormToCreateGroupType (const struct GroupType *GrpTyp)
 
 	    /***** Number of groups of this type *****/
 	    HTM_TD_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (0);	// It's a new group type ==> 0 groups
+	       HTM_Char ('0');	// It's a new group type ==> 0 groups
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -2865,7 +2865,7 @@ static void Grp_PutFormToCreateGroup (const struct GroupType *CurrentGrpTyp,
 		 Role--)
 	      {
 	       HTM_TD_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
-		  HTM_Unsigned (0);
+		  HTM_Char ('0');
 	       HTM_TD_End ();
 	      }
 

@@ -1266,38 +1266,6 @@ void Usr_WelcomeUsr (void)
 				       Ale_WARNING,Txt_Please_check_your_email_address);
            }
 
-         /***** Games tool *****/
-         /*
-         Ale_ShowAlert (Ale_INFO,
-			"Herramienta <a href=\"https://github.com/acanas/swad-core/wiki/ASSESSMENT.Games.es\" target=\"_blank\">"
-			"Evaluaci&oacute;n &gt; Juegos</a><br />"
-			"<br />"
-			"Imagen de la izquierda: pantalla proyectada en el aula por el profesor.<br />"
-			"Imagen de la derecha: pantalla del estudiante en su m&oacute;vil."
-			"<br />"
-			"<br />"
-	                "<img src=\"/img/juego.png\" alt=\"Juegos\" style=\"width:100%%\">");
-	 */
-
-         /***** Institutional video *****/
-         /*
-         Ale_ShowAlert (Ale_INFO,
-			"<a href=\"https://abierta.ugr.es/creative_commons/\" target=\"_blank\">"
-			"Curso MOOC LICENCIAS CREATIVE COMMONS Y OER</a><br />"
-			"Reconocimiento de 1 cr&eacute;dito por actividades universitarias<br />"
-			"&iexcl;&Uacute;ltimos d&iacute;as!<br />"
-			"<br />"
-			"<video style=\"width:480px; height:270px;\""
-			" poster=\"/img/abierta-ugr-creative-commons1280x720.jpg\""
-			" controls>"
-			"<source src=\"https://abierta.ugr.es/creative_commons/promo_cc.mp4\""
-			" type=\"video/mp4\">"
-	                "<img src=\"/img/abierta-ugr-creative-commons1280x720.jpg\""
-	                " class=\"img-responsive\""
-	                " alt=\"Responsive image\">"
-	                "</video>");
-	 */
-
          /***** Show the global announcements I have not seen *****/
          Ann_ShowMyAnnouncementsNotMarkedAsSeen ();
         }

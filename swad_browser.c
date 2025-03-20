@@ -2654,8 +2654,8 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,
         }
 
       /***** Summary message *****/
-      Ale_ShowAlert (Ale_INFO,"%s: %u<br />"
-                              "%s: %u<br />"
+      Ale_ShowAlert (Ale_INFO,"%s: %u<br>"
+                              "%s: %u<br>"
                               "%s: %u.",
                      Txt_Users,NumUsrs,
                      Txt_Folders_renamed,NumUsrsSuccess,
@@ -5934,9 +5934,9 @@ static void Brw_PasteClipboard (struct BrwSiz_BrowserSize *Size)
 				      &FirstFilCod))
 	   {
 	    /***** Write message of success *****/
-	    Ale_ShowAlert (Ale_SUCCESS,"%s<br />"
-				       "%s: %u<br />"
-				       "%s: %u<br />"
+	    Ale_ShowAlert (Ale_SUCCESS,"%s<br>"
+				       "%s: %u<br>"
+				       "%s: %u<br>"
 				       "%s: %u",
 			   Txt_The_copy_has_been_successful,
 			   Txt_Files_copied  ,Pasted.NumFiles,
@@ -9132,8 +9132,8 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 /* Unknown publisher */
 	 FileHasPublisher = false;
 
-      if (asprintf (ContentStr,"%s: %s<br />"	// File name
-			       "%s: %s<br />"	// File path
+      if (asprintf (ContentStr,"%s: %s<br>"	// File name
+			       "%s: %s<br>"	// File path
 			       "%s: %s",	// Publisher
 		    Txt_Filename,FileMetadata.FilFolLnk.Name,
 		    Txt_Folder,FileMetadata.FilFolLnk.Path,	// TODO: Fix bug: do not write internal name (for example "comun")
@@ -9206,12 +9206,12 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 
 	    /* Number of documents not hidden found */
 	    HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,7,NULL);
-	       HTM_Txt ("(");
-	       NumDocsHidden = NumDocs - NumDocsNotHidden;
-	       HTM_TxtF ("%u %s",
-			 NumDocsHidden,NumDocsHidden == 1 ? Txt_hidden_document :
-							    Txt_hidden_documents);
-	       HTM_Txt (")");
+	       HTM_OpenParenthesis ();
+		  NumDocsHidden = NumDocs - NumDocsNotHidden;
+		  HTM_TxtF ("%u %s",
+			    NumDocsHidden,NumDocsHidden == 1 ? Txt_hidden_document :
+							       Txt_hidden_documents);
+	       HTM_CloseParenthesis ();
 	    HTM_TH_End ();
 
 	 HTM_TR_End ();
@@ -9581,8 +9581,8 @@ void Brw_RemoveOldFilesBriefcase (void)
       Brw_RemoveOldFilesInBrowser (Months,&Removed);
 
       /***** Success message *****/
-      Ale_ShowAlert (Ale_SUCCESS,"%s: %u<br />"
-		                 "%s: %u<br />"
+      Ale_ShowAlert (Ale_SUCCESS,"%s: %u<br>"
+		                 "%s: %u<br>"
 		                 "%s: %u",
 	             Txt_Files_removed  ,Removed.NumFiles,
 	             Txt_Links_removed  ,Removed.NumLinks,

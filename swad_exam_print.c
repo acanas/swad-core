@@ -770,7 +770,7 @@ static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
 	     " size=\"11\" maxlength=\"11\" value=\"%s\"",
 	     Id,Print->PrintedQuestions[QstInd].StrAnswers);
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
-   HTM_Txt (" />");
+   HTM_ElementEnd ();
   }
 
 /*****************************************************************************/
@@ -790,7 +790,7 @@ static void ExaPrn_WriteFltAnsToFill (const struct ExaPrn_Print *Print,
 	     Id,Qst_MAX_BYTES_FLOAT_ANSWER,
 	     Print->PrintedQuestions[QstInd].StrAnswers);
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
-   HTM_Txt (" />");
+   HTM_ElementEnd ();
   }
 
 /*****************************************************************************/
@@ -811,7 +811,7 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
    snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
    HTM_TxtF ("<select id=\"%s\" name=\"Ans\"",Id);
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
-   HTM_Txt (" />");
+   HTM_ElementEnd ();
       HTM_OPTION (HTM_Type_STRING,"" ,
                   (Print->PrintedQuestions[QstInd].StrAnswers[0] == '\0') ? HTM_SELECTED :
                 							    HTM_NO_ATTR,
@@ -873,7 +873,7 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
 	       if ((UsrAnswers[Indexes[NumOpt]] & HTM_CHECKED))
 		  HTM_Txt (" checked");
 	       ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,(int) NumOpt);
-	       HTM_Txt (" />");
+	       HTM_ElementEnd ();
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LT\"");
@@ -918,7 +918,7 @@ static void ExaPrn_WriteTxtAnsToFill (const struct ExaPrn_Print *Print,
 	     Id,Qst_MAX_CHARS_ANSWERS_ONE_QST,
 	     Print->PrintedQuestions[QstInd].StrAnswers);
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
-   HTM_Txt (" />");
+   HTM_ElementEnd ();
   }
 
 /*****************************************************************************/

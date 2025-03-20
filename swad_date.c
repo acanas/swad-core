@@ -635,7 +635,6 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (const Dat_SetHMS
 
 	 /* "Yesterday" and "Today" buttons */
 	 HTM_DIV_Begin ("class=\"DATE_FORM_TODAY\"");
-	    // HTM_SP ();
 	    HTM_INPUT_BUTTON ("Yesterday",Txt_Yesterday,
 			      "onclick=\"setDateToYesterday('Start','End');\"");
 	    HTM_INPUT_BUTTON ("Today",Txt_Today,
@@ -1751,7 +1750,7 @@ void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,
      {
       [Dat_SEPARATOR_NONE ] = "",
       [Dat_SEPARATOR_COMMA] = ", ",
-      [Dat_SEPARATOR_BREAK] = "<br />",
+      [Dat_SEPARATOR_BREAK] = "<br>",
      };
 
    HTM_SCRIPT_Begin (NULL,NULL);

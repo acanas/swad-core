@@ -2350,13 +2350,13 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
             Frm_BeginFormGoTo (ActSeeCrsInf);
 	       ParCod_PutPar (ParCod_Crs,Crs.HieCod);
 	       HTM_DIV_Begin ("class=\"MSG_AUT_%s\"",The_GetSuffix ());
-		  HTM_Txt ("(");
-		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs.FullName),
-					   "class=\"BT_LINK\"");
-		  Str_FreeGoToTitle ();
-		     HTM_Txt (Crs.ShrtName);
-		  HTM_BUTTON_End ();
-		  HTM_Txt (")");
+		  HTM_OpenParenthesis ();
+		     HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs.FullName),
+					      "class=\"BT_LINK\"");
+		     Str_FreeGoToTitle ();
+			HTM_Txt (Crs.ShrtName);
+		     HTM_BUTTON_End ();
+		  HTM_CloseParenthesis ();
 	       HTM_DIV_End ();
             Frm_EndForm ();
            }

@@ -417,7 +417,11 @@ void XML_PrintTree (struct XMLElement *ParentElem)
       for (i = 1;
 	   i < Level;
 	   i++)
-         HTM_Txt ("   ");
+        {
+         HTM_SP ();
+         HTM_SP ();
+         HTM_SP ();
+        }
       HTM_TxtF ("&lt;%s",ParentElem->TagName ? ParentElem->TagName :
         	                               "");
 
@@ -437,7 +441,11 @@ void XML_PrintTree (struct XMLElement *ParentElem)
          for (i = 1;
               i < Level;
               i++)
-            HTM_Txt ("   ");
+	   {
+	    HTM_SP ();
+	    HTM_SP ();
+	    HTM_SP ();
+	   }
          HTM_TxtF ("%s\n",ParentElem->Content);
         }
      }
@@ -457,7 +465,11 @@ void XML_PrintTree (struct XMLElement *ParentElem)
       for (i = 1;
 	   i < Level;
 	   i++)
-         HTM_Txt ("   ");
+        {
+         HTM_SP ();
+         HTM_SP ();
+         HTM_SP ();
+        }
       HTM_TxtF ("&lt;/%s&gt;\n",ParentElem->TagName ? ParentElem->TagName :
         	                                      "");
      }

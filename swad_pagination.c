@@ -418,7 +418,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          if (Pagination->LeftPage > 2)
            {
             HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
-	       HTM_Txt ("&hellip;");
+	       HTM_EllipsisDots ();
             HTM_SPAN_End ();
            }
         }
@@ -539,7 +539,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          if (Pagination->LeftPage < Pagination->StartPage - 1)
            {
             HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
-	       HTM_Txt ("&hellip;");
+	       HTM_EllipsisDots ();
             HTM_SPAN_End ();
            }
         }
@@ -677,7 +677,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          if (Pagination->RightPage > Pagination->EndPage + 1)
            {
             HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
-	       HTM_Txt ("&hellip;");
+	       HTM_EllipsisDots ();
             HTM_SPAN_End ();
            }
          switch (WhatPaginate)
@@ -798,7 +798,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          if (Pagination->NumPags > Pagination->RightPage + 1)
            {
             HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
-	       HTM_Txt ("&hellip;");
+	       HTM_EllipsisDots ();
             HTM_SPAN_End ();
            }
          switch (WhatPaginate)

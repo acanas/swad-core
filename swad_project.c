@@ -2840,8 +2840,8 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *
 		     HTM_Txt (Gbl.Usrs.Other.UsrDat.Surname1);
 		     if (Gbl.Usrs.Other.UsrDat.Surname2[0])
 			HTM_SPTxt (Gbl.Usrs.Other.UsrDat.Surname2);
-		     HTM_Comma ();
-		     HTM_SPTxt (Gbl.Usrs.Other.UsrDat.FrstName);
+		     HTM_CommaSP ();
+		     HTM_Txt (Gbl.Usrs.Other.UsrDat.FrstName);
 		  HTM_LI_End ();
 		 }
 	      }

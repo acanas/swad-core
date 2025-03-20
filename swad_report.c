@@ -764,7 +764,7 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
 	}
       else
 	 fprintf (Rep_File,"?");
-      fprintf (Rep_File,"<br />");
+      fprintf (Rep_File,"<br>");
      }
 
    /***** Draw bar for the rest of the clicks *****/
@@ -773,7 +773,7 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
       fprintf (Rep_File,"%ld&nbsp;%s",
                Report->UsrFigures.NumClicks - NumClicks,
                Txt_Other_actions);
-      fprintf (Rep_File,"<br />");
+      fprintf (Rep_File,"<br>");
      }
 
    /***** Free structure that stores the query result *****/
@@ -1076,7 +1076,7 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
       fprintf (Rep_File,"(%s)",Txt_no_course_selected);
 
    /***** Write hits per year for this course *****/
-   fprintf (Rep_File,"<br />");
+   fprintf (Rep_File,"<br>");
    Rep_ShowMyHitsPerYear (false,CrsCod,Role,Report);
 
    fprintf (Rep_File,"</li>");
@@ -1145,7 +1145,7 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
          Rep_DrawBarNumHits (Year == ReadYear ? Report->Hits.Num :
                         	                0,
                              Report->Hits.Max,Rep_MAX_BAR_WIDTH);
-         fprintf (Rep_File,"<br />");
+         fprintf (Rep_File,"<br>");
         }
       LastYear = Year;
      }
@@ -1163,7 +1163,7 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
 
       /* Draw bar proportional to number of hits */
       Rep_DrawBarNumHits (0,Report->Hits.Max,Rep_MAX_BAR_WIDTH);
-      fprintf (Rep_File,"<br />");
+      fprintf (Rep_File,"<br>");
      }
   }
 

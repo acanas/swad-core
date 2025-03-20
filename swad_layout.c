@@ -179,8 +179,8 @@ void Lay_WriteStartOfPage (void)
              Gbl.Prefs.Theme == The_THEME_DARK ? "dark" :
         	                                 "light");
    HTM_Txt ("<head>\n"
-            "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=windows-1252\" />\n"
-            "<meta name=\"description\" content=\"A free-software, educational, online tool for managing courses and students.\" />\n"
+            "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=windows-1252\">\n"
+            "<meta name=\"description\" content=\"A free-software, educational, online tool for managing courses and students.\">\n"
             "<meta name=\"keywords\" content=\"");
    HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
    HTM_Txt (","
@@ -192,7 +192,7 @@ void Lay_WriteStartOfPage (void)
             "campus virtual,"
             "SWADroid,"
             "LMS,"
-            "Learning Management System\" />\n");
+            "Learning Management System\">\n");
 
    /* Viewport (used for responsive design) */
    HTM_Txt ("<meta name=\"viewport\""
@@ -202,26 +202,26 @@ void Lay_WriteStartOfPage (void)
    Lay_WritePageTitle ();
 
    /* Canonical URL */
-   HTM_TxtF ("<link rel=\"canonical\" href=\"%s\" />\n",Cfg_URL_SWAD_CGI);
+   HTM_TxtF ("<link rel=\"canonical\" href=\"%s\">\n",Cfg_URL_SWAD_CGI);
 
    /* Favicon */
-   HTM_TxtF ("<link type=\"image/x-icon\" href=\"%s/favicon.ico\" rel=\"icon\" />\n",
+   HTM_TxtF ("<link type=\"image/x-icon\" href=\"%s/favicon.ico\" rel=\"icon\">\n",
 	     Cfg_URL_ICON_PUBLIC);
-   HTM_TxtF ("<link type=\"image/x-icon\" href=\"%s/favicon.ico\" rel=\"shortcut icon\" />\n",
+   HTM_TxtF ("<link type=\"image/x-icon\" href=\"%s/favicon.ico\" rel=\"shortcut icon\">\n",
 	     Cfg_URL_ICON_PUBLIC);
 
    /* Style sheet for SWAD */
-   HTM_TxtF ("<link rel=\"stylesheet\" href=\"%s/%s\" type=\"text/css\" />\n",
+   HTM_TxtF ("<link rel=\"stylesheet\" href=\"%s/%s\" type=\"text/css\">\n",
              Cfg_URL_SWAD_PUBLIC,CSS_FILE);
 
    /* Style sheets for Font Awesome */
    HTM_TxtF ("<link rel=\"stylesheet\""
 	     " href=\"%s/fontawesome/css/fontawesome.css\""
-	     " type=\"text/css\" />\n",
+	     " type=\"text/css\">\n",
              Cfg_URL_SWAD_PUBLIC);
    HTM_TxtF ("<link rel=\"stylesheet\""
 	     " href=\"%s/fontawesome/css/solid.css\""
-	     " type=\"text/css\" />\n",
+	     " type=\"text/css\">\n",
              Cfg_URL_SWAD_PUBLIC);
 
    /* Style sheet for Dropzone.js (http://www.dropzonejs.com/) */
@@ -255,7 +255,7 @@ void Lay_WriteStartOfPage (void)
       case ActFrmCreBrf:	// Brw_ADMI_BRF_USR
 	 HTM_TxtF ("<link rel=\"stylesheet\""
 		   " href=\"%s/dropzone/css/dropzone.css\""
-		   " type=\"text/css\" />\n",
+		   " type=\"text/css\">\n",
 		   Cfg_URL_SWAD_PUBLIC);
 	 break;
       default:
@@ -1417,18 +1417,18 @@ void Lay_RefreshNotifsAndConnected (void)
    HTM_TxtF ("%lu|",Gbl.Usrs.Connected.TimeToRefreshInMs);
    if (Gbl.Usrs.Me.Logged)
       Ntf_WriteNumberOfNewNtfs ();
-   HTM_Txt ("|");
+   HTM_Char ('|');
    Con_ShowGlobalConnectedUsrs ();
-   HTM_Txt ("|");
+   HTM_Char ('|');
    if (ShowConnected)
      {
       Gbl.Scope.Current = Hie_CRS;
       Con_ShowConnectedUsrsBelongingToCurrentCrs ();
      }
-   HTM_Txt ("|");
+   HTM_Char ('|');
    if (ShowConnected)
       HTM_Unsigned (Gbl.Usrs.Connected.NumUsrsToList);
-   HTM_Txt ("|");
+   HTM_Char ('|');
    if (ShowConnected)
       for (NumUsr = 0;
 	   NumUsr < Gbl.Usrs.Connected.NumUsrsToList;
@@ -1691,7 +1691,7 @@ void Lay_BeginHTMLFile (FILE *File,const char *Title)
 		 "<html lang=\"%s\">\n"
 		    "<head>\n"
 		       "<meta http-equiv=\"Content-Type\""
-		       " content=\"text/html;charset=windows-1252\" />\n"
+		       " content=\"text/html;charset=windows-1252\">\n"
 		       "<title>"
 			  "%s"
 		       "</title>\n"

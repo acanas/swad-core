@@ -1020,7 +1020,7 @@ void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,
 
    HTM_PutAttributes (Attributes,NULL);
 
-   HTM_Txt (" />");
+   HTM_ElementEnd ();
   }
 
 void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,
@@ -1050,7 +1050,7 @@ void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,
 	}
      }
 
-   HTM_Txt (" />");
+   HTM_ElementEnd ();
   }
 
 void HTM_INPUT_TEL (const char *Name,const char *Value,
@@ -1082,7 +1082,7 @@ void HTM_INPUT_TEL (const char *Name,const char *Value,
 
    HTM_PutAttributes (Attributes,NULL);
 
-   HTM_Txt (" />");
+   HTM_ElementEnd ();
   }
 
 void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
@@ -1114,7 +1114,7 @@ void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
 
    HTM_PutAttributes (Attributes,NULL);
 
-   HTM_Txt (" />");
+   HTM_ElementEnd ();
   }
 
 void HTM_INPUT_URL (const char *Name,const char *Value,
@@ -1146,7 +1146,7 @@ void HTM_INPUT_URL (const char *Name,const char *Value,
 
    HTM_PutAttributes (Attributes,NULL);
 
-   HTM_Txt (" />");
+   HTM_ElementEnd ();
   }
 
 void HTM_INPUT_FILE (const char *Name,const char *Accept,
@@ -1178,12 +1178,12 @@ void HTM_INPUT_FILE (const char *Name,const char *Accept,
 
    HTM_PutAttributes (Attributes,NULL);
 
-   HTM_Txt (" />");
+   HTM_ElementEnd ();
   }
 
 void HTM_INPUT_BUTTON (const char *Name,const char *Value,const char *Attr)
   {
-   HTM_TxtF ("<input type=\"button\" name=\"%s\" value=\"%s\" class=\"INPUT_%s\"%s />",
+   HTM_TxtF ("<input type=\"button\" name=\"%s\" value=\"%s\" class=\"INPUT_%s\"%s>",
 	     Name,Value,The_GetSuffix (),Attr);
   }
 
@@ -1220,7 +1220,7 @@ void HTM_INPUT_IMAGE (const char *URL,const char *Icon,const char *Title,
 	}
      }
 
-   HTM_Txt (" />");
+   HTM_ElementEnd ();
   }
 
 void HTM_INPUT_PASSWORD (const char *Name,
@@ -1259,7 +1259,7 @@ void HTM_INPUT_PASSWORD (const char *Name,
 
    HTM_PutAttributes (Attributes,NULL);
 
-   HTM_Txt (" />");
+   HTM_ElementEnd ();
   }
 
 void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
@@ -1292,7 +1292,7 @@ void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
 
    HTM_PutAttributes (Attributes,NULL);
 
-   HTM_Txt (" />");
+   HTM_ElementEnd ();
   }
 
 void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
@@ -1334,7 +1334,7 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
 
    HTM_PutAttributes (Attributes,NULL);
 
-   HTM_Txt (" />");
+   HTM_ElementEnd ();
   }
 
 void HTM_INPUT_RADIO (const char *Name,
@@ -1365,7 +1365,7 @@ void HTM_INPUT_RADIO (const char *Name,
 
    HTM_PutAttributes (Attributes,NULL);
 
-   HTM_Txt (" />");
+   HTM_ElementEnd ();
   }
 
 void HTM_INPUT_CHECKBOX (const char *Name,
@@ -1396,7 +1396,7 @@ void HTM_INPUT_CHECKBOX (const char *Name,
 
    HTM_PutAttributes (Attributes,NULL);
 
-   HTM_Txt (" />");
+   HTM_ElementEnd ();
   }
 
 /*****************************************************************************/
@@ -1710,7 +1710,7 @@ void HTM_IMG (const char *URL,const char *Icon,const char *Title,
 	}
      }
 
-   HTM_Txt (" />");
+   HTM_ElementEnd ();
   }
 
 /*****************************************************************************/
@@ -1782,7 +1782,7 @@ void HTM_U_End (void)
 
 void HTM_BR (void)
   {
-   HTM_Txt ("<br />");
+   HTM_Txt ("<br>");
   }
 
 /*****************************************************************************/
@@ -1830,17 +1830,17 @@ void HTM_TxtColon (const char *Txt)
    HTM_Colon ();
   }
 
-void HTM_TxtSemicolon (const char *Txt)
-  {
-   HTM_Txt (Txt);
-   HTM_Semicolon ();
-  }
-
 void HTM_TxtColonNBSP (const char *Txt)
   {
    HTM_Txt (Txt);
    HTM_Colon ();
    HTM_NBSP ();
+  }
+
+void HTM_TxtSP (const char *Txt)
+  {
+   HTM_Txt (Txt);
+   HTM_SP ();
   }
 
 void HTM_SPTxt (const char *Txt)
@@ -1870,14 +1870,23 @@ void HTM_ListSeparator (unsigned i,unsigned n)
       if (i <= n - 2)
         {
 	 if (i == n - 2)	// Just before the last element
-	   {
-	    HTM_SP ();
-	    HTM_Txt (Txt_and);
-	   }
+	    HTM_SPTxt (Txt_and);
 	 else			// Before the penultimate element
 	    HTM_Comma ();
 	 HTM_SP ();
         }
+  }
+
+void HTM_CommaSP (void)
+  {
+   HTM_Comma ();
+   HTM_SP ();
+  }
+
+void HTM_SemicolonSP (void)
+  {
+   HTM_Char (';');
+   HTM_SP ();
   }
 
 void HTM_SP (void)
@@ -1890,14 +1899,19 @@ void HTM_NBSP (void)
    HTM_Txt ("&nbsp;");
   }
 
+void HTM_NBSP_GT_NBSP (void)
+  {
+   HTM_Txt ("&nbsp;&gt;&nbsp;");
+  }
+
+void HTM_EllipsisDots (void)
+  {
+   HTM_Txt ("&hellip;");
+  }
+
 void HTM_Colon (void)
   {
    HTM_Char (':');
-  }
-
-void HTM_Semicolon (void)
-  {
-   HTM_Char (';');
   }
 
 void HTM_Dot (void)
@@ -1918,6 +1932,36 @@ void HTM_Hyphen (void)
 void HTM_Asterisk (void)
   {
    HTM_Char ('*');
+  }
+
+void HTM_Slash (void)
+  {
+   HTM_Char ('/');
+  }
+
+void HTM_Question (void)
+  {
+   HTM_Char ('?');
+  }
+
+void HTM_OpenParenthesis (void)
+  {
+   HTM_Char ('(');
+  }
+
+void HTM_CloseParenthesis (void)
+  {
+   HTM_Char ('(');
+  }
+
+void HTM_OpenBracket (void)
+  {
+   HTM_Char ('[');
+  }
+
+void HTM_CloseBracket (void)
+  {
+   HTM_Char (']');
   }
 
 void HTM_Unsigned (unsigned Num)
@@ -1983,6 +2027,29 @@ void HTM_DoubleFewDigits (double Num)
 void HTM_Double2Decimals (double Num)
   {
    HTM_TxtF ("%.2lf",Num);
+  }
+
+void HTM_DoublePartOfUnsigned (double Part,unsigned Whole)
+  {
+   HTM_Double2Decimals (Part);	// Part...
+   HTM_Slash ();		// ...of a...
+   HTM_Unsigned (Whole);	// ...whole (total, max...)
+  }
+
+void HTM_DoublePartOfDouble (double Part,double Whole)
+  {
+   HTM_Double2Decimals (Part);	// Part...
+   HTM_Slash ();		// ...of a...
+   HTM_Double2Decimals (Whole);	// ...whole (total, max...)
+  }
+
+void HTM_DoubleRange (double Min,double Max)
+  {
+   HTM_OpenBracket ();
+      HTM_Double (Min);
+      HTM_SemicolonSP ();
+      HTM_Double (Max);
+   HTM_CloseBracket ();
   }
 
 void HTM_Percentage (double Percentage)
@@ -2090,4 +2157,9 @@ void HTM_TD_LINE_TOP_Double2Decimals (double Num)
    HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",The_GetSuffix ());
       HTM_Double2Decimals (Num);
    HTM_TD_End ();
+  }
+
+void HTM_ElementEnd (void)
+  {
+   HTM_Char (">");
   }

@@ -196,12 +196,12 @@ void Frm_SetParsForm (char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1],
    if (NextAction != ActUnk)
      {
       snprintf (ParAction,sizeof (ParAction),
-	        "<input type=\"hidden\" name=\"act\" value=\"%ld\" />",
+	        "<input type=\"hidden\" name=\"act\" value=\"%ld\">",
 	        Act_GetActCod (NextAction));
 
       if (Gbl.Session.Id[0])
 	 snprintf (ParSession,sizeof (ParSession),
-		   "<input type=\"hidden\" name=\"ses\" value=\"%s\" />",
+		   "<input type=\"hidden\" name=\"ses\" value=\"%s\">",
 		   Gbl.Session.Id);
       else if (PutParLocationIfNoSession &&
 	       Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].HieCod > 0)
@@ -210,7 +210,7 @@ void Frm_SetParsForm (char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1],
 	    but if there is not an open session, and next action is known,
 	    it is necessary to send a parameter with course/degree/... code */
 	 snprintf (ParLocation,sizeof (ParLocation),
-		   "<input type=\"hidden\" name=\"%s\" value=\"%ld\" />",
+		   "<input type=\"hidden\" name=\"%s\" value=\"%ld\">",
 		   ParName[Gbl.Hierarchy.Level],
 		   Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].HieCod);
      }

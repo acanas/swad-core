@@ -1628,20 +1628,20 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
    Dat_ConvDateToDateStr (&CallsForExams->CallForExam.ExamDate,StrExamDate);
 
    /***** Fill content string *****/
-   if (asprintf (ContentStr,"%s: %s<br />"
-                            "%s: %s<br />"
-                            "%s: %s<br />"
-                            "%s: %s<br />"
-                            "%s: %s<br />"
-                            "%s: %s<br />"
-                            "%s: %2u:%02u %s<br />"
-                            "%s: %2u:%02u %s<br />"
-                            "%s: %s<br />"
-                            "%s: %s<br />"
-                            "%s: %s<br />"
-                            "%s: %s<br />"
-                            "%s: %s<br />"
-                            "%s: %s<br />"
+   if (asprintf (ContentStr,"%s: %s<br>"
+                            "%s: %s<br>"
+                            "%s: %s<br>"
+                            "%s: %s<br>"
+                            "%s: %s<br>"
+                            "%s: %s<br>"
+                            "%s: %2u:%02u %s<br>"
+                            "%s: %2u:%02u %s<br>"
+                            "%s: %s<br>"
+                            "%s: %s<br>"
+                            "%s: %s<br>"
+                            "%s: %s<br>"
+                            "%s: %s<br>"
+                            "%s: %s<br>"
                             "%s: %s",
                  Txt_HIERARCHY_SINGUL_Abc[Hie_INS],Hie[Hie_INS].FullName,
                  Txt_HIERARCHY_SINGUL_Abc[Hie_DEG],Hie[Hie_DEG].FullName,

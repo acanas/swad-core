@@ -50,7 +50,7 @@ void Map_LeafletCSS (void)
    HTM_Txt ("<link rel=\"stylesheet\""
 	    " href=\"https://unpkg.com/leaflet@1.6.0/dist/leaflet.css\""
 	    " integrity=\"sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==\""
-	    " crossorigin=\"\" />");
+	    " crossorigin=\"\">");
   }
 
 /*****************************************************************************/
@@ -139,7 +139,7 @@ void Map_AddPopup (const char *Title,const char *Subtitle,
       and the openPopup method (for markers only)
       immediately opens the attached popup. */
    HTM_TxtF ("\t"
-	     "marker.bindPopup(\"<strong>%s</strong><br />%s\")",
+	     "marker.bindPopup(\"<strong>%s</strong><br>%s\")",
 	     Title,Subtitle);
    if (ClosedOrOpen == CloOpe_OPEN)
       HTM_Txt (".openPopup()");

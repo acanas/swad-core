@@ -1407,11 +1407,10 @@ static void Qst_WriteFltAns (struct Qst_Question *Question,
                              __attribute__((unused)) const char *ClassFeedback)
   {
    HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
-      HTM_Txt ("([");
-      HTM_Double (Question->Answer.FloatingPoint[0]);
-      HTM_Txt ("; ");
-      HTM_Double (Question->Answer.FloatingPoint[1]);
-      HTM_Txt ("])");
+      HTM_OpenParenthesis ();
+         HTM_DoubleRange (Question->Answer.FloatingPoint[0],
+                          Question->Answer.FloatingPoint[1]);
+      HTM_CloseParenthesis ();
    HTM_SPAN_End ();
   }
 
@@ -1425,9 +1424,9 @@ static void Qst_WriteTF_Ans (struct Qst_Question *Question,
   {
    /***** Write answer *****/
    HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
-      HTM_Txt ("(");
-      Qst_WriteAnsTF (Question->Answer.TF);
-      HTM_Txt (")");
+      HTM_OpenParenthesis ();
+	 Qst_WriteAnsTF (Question->Answer.TF);
+      HTM_CloseParenthesis ();
    HTM_SPAN_End ();
   }
 

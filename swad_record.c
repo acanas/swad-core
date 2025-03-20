@@ -1401,18 +1401,19 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
    HTM_BUTTON_End ();
 
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-      HTM_Txt ("(");
-      HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
-			"name=\"RecsPerPag\"");
-	 for (i  = Rec_MIN_RECORDS_PER_PAGE;
-	      i <= Rec_MAX_RECORDS_PER_PAGE;
-	      i++)
-	    HTM_OPTION (HTM_Type_UNSIGNED,&i,
-			(i == Gbl.Usrs.Listing.RecsPerPag) ? HTM_SELECTED :
-							     HTM_NO_ATTR,
-			"%u",i);
-      HTM_SELECT_End ();
-      HTM_TxtF (" %s)",Txt_record_cards_per_page);
+      HTM_OpenParenthesis ();
+	 HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
+			   "name=\"RecsPerPag\"");
+	    for (i  = Rec_MIN_RECORDS_PER_PAGE;
+		 i <= Rec_MAX_RECORDS_PER_PAGE;
+		 i++)
+	       HTM_OPTION (HTM_Type_UNSIGNED,&i,
+			   (i == Gbl.Usrs.Listing.RecsPerPag) ? HTM_SELECTED :
+								HTM_NO_ATTR,
+			   "%u",i);
+	 HTM_SELECT_End ();
+	 HTM_SPTxt (Txt_record_cards_per_page);
+      HTM_CloseParenthesis ();
    HTM_LABEL_End ();
   }
 

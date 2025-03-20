@@ -80,7 +80,7 @@ void RSS_UpdateRSSFileForACrs (struct Hie_Node *Crs)
    fprintf (FileRSS,"<atom:link href=\"");
    RSS_BuildRSSLink (RSSLink,Crs->HieCod);
    fprintf (FileRSS,"%s",RSSLink);
-   fprintf (FileRSS,"\" rel=\"self\" type=\"application/rss+xml\" />\n");
+   fprintf (FileRSS,"\" rel=\"self\" type=\"application/rss+xml\">\n");
 
    fprintf (FileRSS,"<title>%s: %s</title>\n",
             Cfg_PLATFORM_SHORT_NAME,Crs->ShrtName);

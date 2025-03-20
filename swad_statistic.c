@@ -398,20 +398,21 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			   /* Number of rows per page */
 			   // To use getElementById in Firefox, it's necessary to have the id attribute
 			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-			      HTM_TxtF ("(%s: ",Txt_results_per_page);
-			      HTM_SELECT_Begin ((Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? HTM_NO_ATTR :
-													   HTM_DISABLED,
-						NULL,
-						"id=\"RowsPage\" name=\"RowsPage\"");
-				 for (i = 0;
-				      i < NUM_OPTIONS_ROWS_PER_PAGE;
-				      i++)
-				    HTM_OPTION (HTM_Type_UNSIGNED,&RowsPerPage[i],
-						(RowsPerPage[i] == Stats->RowsPerPage) ? HTM_SELECTED :
-										         HTM_NO_ATTR,
-						"%u",RowsPerPage[i]);
-			      HTM_SELECT_End ();
-			      HTM_Txt (")");
+			      HTM_CloseParenthesis ();
+				 HTM_TxtColonNBSP (Txt_results_per_page);
+				 HTM_SELECT_Begin ((Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? HTM_NO_ATTR :
+													      HTM_DISABLED,
+						   NULL,
+						   "id=\"RowsPage\" name=\"RowsPage\"");
+				    for (i = 0;
+					 i < NUM_OPTIONS_ROWS_PER_PAGE;
+					 i++)
+				       HTM_OPTION (HTM_Type_UNSIGNED,&RowsPerPage[i],
+						   (RowsPerPage[i] == Stats->RowsPerPage) ? HTM_SELECTED :
+											    HTM_NO_ATTR,
+						   "%u",RowsPerPage[i]);
+				 HTM_SELECT_End ();
+			      HTM_CloseParenthesis ();
 			   HTM_LABEL_End ();
 
 			HTM_TD_End ();
@@ -1902,7 +1903,7 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,double HitsMax)
 		       (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
 		       The_GetSuffix (),
 		       (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
-	    HTM_Unsigned (0);
+	    HTM_Char ('0');
 	 HTM_TD_End ();
 
 	 for (Interval  = 1;
@@ -2446,7 +2447,7 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
 	{
 	 HTM_Txt ("0%");
 	 HTM_BR ();
-	 HTM_Unsigned (0);
+	 HTM_Char ('0');
 	}
 
       /* Write the hour */
@@ -2723,9 +2724,10 @@ static void Sta_ShowNumHitsPerAction (Sta_CountType_t CountType,
 
 	 HTM_TD_Begin ("class=\"RT LOG_%s\"",The_GetSuffix ());
 	    if (ActCod >= 0)
-	       HTM_TxtF ("%s&nbsp;",Act_GetActionText (Act_GetActionFromActCod (ActCod)));
+	       HTM_Txt (Act_GetActionText (Act_GetActionFromActCod (ActCod)));
 	    else
-	       HTM_Txt ("?&nbsp;");
+	       HTM_Question ();
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Draw bar proportional to number of hits */
@@ -2778,7 +2780,7 @@ static void Sta_ShowNumHitsPerPlugin (Sta_CountType_t CountType,
 	    if (Plg_GetPluginDataByCod (&Plg))
 	       HTM_Txt (Plg.Name);
 	    else
-	       HTM_Txt ("?");
+	       HTM_Question ();
 	    HTM_NBSP ();
 	 HTM_TD_End ();
 

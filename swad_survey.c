@@ -515,7 +515,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 		     The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Number_of_questions);
 	 HTM_Unsigned (Surveys->Svy.NumQsts);
-	 HTM_Txt ("; ");
+	 HTM_SemicolonSP ();
 	 HTM_TxtColonNBSP (Txt_Number_of_users);
 	 HTM_Unsigned (Surveys->Svy.NumUsrs);
       HTM_DIV_End ();

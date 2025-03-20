@@ -993,9 +993,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
-		     HTM_Double2Decimals (Print.Score.Valid);
-		     HTM_Txt ("/");
-		     HTM_Unsigned (Print.NumQsts.Valid.Total);
+		     HTM_DoublePartOfUnsigned (Print.Score.Valid,
+					       Print.NumQsts.Valid.Total);
 		     break;
 		  case Usr_CAN_NOT:
 		  default:
@@ -1027,8 +1026,10 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
-		     Grade = TstPrn_ComputeGrade (Print.NumQsts.Valid.Total,Print.Score.Valid,Exam.MaxGrade);
-		     TstPrn_ShowGrade (Grade,Exam.MaxGrade);
+		     Grade = TstPrn_ComputeGrade (Print.NumQsts.Valid.Total,
+						  Print.Score.Valid,
+						  Exam.MaxGrade);
+		     HTM_DoublePartOfDouble (Grade,Exam.MaxGrade);
 		     TotalGrade += Grade;
 		     break;
 		  case Usr_CAN_NOT:
@@ -1207,9 +1208,7 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
    /***** Write total valid score *****/
    HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
                  The_GetSuffix (),The_GetColorRows ());
-      HTM_Double2Decimals (TotalScore->Valid);
-      HTM_Txt ("/");
-      HTM_Unsigned (NumTotalQsts->Valid.Total);
+      HTM_DoublePartOfUnsigned (TotalScore->Valid,NumTotalQsts->Valid.Total);
    HTM_TD_End ();
 
    /***** Write average valid score per valid question *****/
@@ -1560,8 +1559,8 @@ void ExaRes_ShowExamResultUser (struct Usr_Data *UsrDat)
 	    HTM_SPTxt (UsrDat->Surname2);
 	 if (UsrDat->FrstName[0])
 	   {
-	    HTM_Comma ();
-	    HTM_SPTxt (UsrDat->FrstName);
+	    HTM_CommaSP ();
+	    HTM_Txt (UsrDat->FrstName);
 	   }
 	 HTM_BR ();
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
@@ -1641,23 +1640,25 @@ static void ExaRes_ShowExamResultNumQsts (struct ExaPrn_Print *Print,
 	       HTM_TxtF ("%u",Print->NumQsts.All);
 	       if (Print->NumQsts.All != Print->NumQsts.Valid.Total)
 		 {
-		  HTM_Txt (" (");
+		  HTM_SP ();
+		  HTM_OpenParenthesis ();
 
-		  /* Valid questions */
-		  HTM_SPAN_Begin ("class=\"DAT_GREEN_%s\"",The_GetSuffix ());
-		     HTM_TxtColonNBSP (Txt_QUESTIONS_valid);
-		     HTM_Unsigned (Print->NumQsts.Valid.Total);
-		  HTM_SPAN_End ();
+		     /* Valid questions */
+		     HTM_SPAN_Begin ("class=\"DAT_GREEN_%s\"",The_GetSuffix ());
+			HTM_TxtColonNBSP (Txt_QUESTIONS_valid);
+			HTM_Unsigned (Print->NumQsts.Valid.Total);
+		     HTM_SPAN_End ();
 
-		  HTM_TxtF ("; ");
+		     HTM_Colon ();
+		     HTM_SP ();
 
-		  /* Invalid questions */
-		  HTM_SPAN_Begin ("class=\"DAT_RED_%s\"",The_GetSuffix ());
-		     HTM_TxtColonNBSP (Txt_QUESTIONS_invalid);
-		     HTM_Unsigned (Print->NumQsts.All - Print->NumQsts.Valid.Total);
-		  HTM_SPAN_End ();
+		     /* Invalid questions */
+		     HTM_SPAN_Begin ("class=\"DAT_RED_%s\"",The_GetSuffix ());
+			HTM_TxtColonNBSP (Txt_QUESTIONS_invalid);
+			HTM_Unsigned (Print->NumQsts.All - Print->NumQsts.Valid.Total);
+		     HTM_SPAN_End ();
 
-		  HTM_Txt (")");
+		  HTM_CloseParenthesis ();
 		 }
 	       break;
 	    case Usr_CAN_NOT:
@@ -1744,21 +1745,18 @@ static void ExaRes_ShowExamResultScore (struct ExaPrn_Print *Print,
 	       /* Score counting all questions */
 	       if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
 		  HTM_STRONG_Begin ();
-	       HTM_Double2Decimals (Print->Score.All);
-	       HTM_Txt ("/");
-	       HTM_Unsigned (Print->NumQsts.All);
+	       HTM_DoublePartOfUnsigned (Print->Score.All,Print->NumQsts.All);
 	       if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
 		  HTM_STRONG_End ();
 
 	       /* Scoure counting only valid questions */
 	       if (Print->NumQsts.All != Print->NumQsts.Valid.Total)
 		 {
-		  HTM_Txt ("; ");
+		  HTM_SemicolonSP ();
 		  HTM_TxtColonNBSP (Txt_valid_score);
 		  HTM_STRONG_Begin ();
-		     HTM_Double2Decimals (Print->Score.Valid);
-		     HTM_Txt ("/");
-		     HTM_Unsigned (Print->NumQsts.Valid.Total);
+		     HTM_DoublePartOfUnsigned (Print->Score.Valid,
+					       Print->NumQsts.Valid.Total);
 		  HTM_STRONG_End ();
 		 }
 	       break;
@@ -1807,7 +1805,7 @@ static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
 	       /* Grade counting only valid questions */
 	       if (Print->NumQsts.All != Print->NumQsts.Valid.Total)
 		 {
-		  HTM_Txt ("; ");
+		  HTM_SemicolonSP ();
 		  HTM_TxtColonNBSP (Txt_valid_grade);
 		  HTM_STRONG_Begin ();
 		     TstPrn_ComputeAndShowGrade (Print->NumQsts.Valid.Total,

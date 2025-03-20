@@ -815,7 +815,7 @@ void CtrCfg_ReqPhoto (void)
       Box_BoxBegin (Txt_Photo,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
 	 /***** Write help message *****/
-	 Ale_ShowAlert (Ale_INFO,"%s: %s<br />"
+	 Ale_ShowAlert (Ale_INFO,"%s: %s<br>"
 				 "%s: %u&times;%u %s",
 			Txt_Recommended_aspect_ratio,
 			Ctr_RECOMMENDED_ASPECT_RATIO,
@@ -940,7 +940,7 @@ void CtrCfg_ReceivePhoto (void)
    if (ReturnCode)
      {
       snprintf (ErrorMsg,sizeof (ErrorMsg),
-	        "Image could not be processed successfully.<br />"
+	        "Image could not be processed successfully.<br>"
 		"Error code returned by the program of processing: %d",
 	        ReturnCode);
       Err_ShowErrorAndExit (ErrorMsg);

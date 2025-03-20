@@ -201,43 +201,43 @@ const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES] =
 const char *Txt_A_face_marked_in_green_has_been_detected_ =
 #if   L==1	// ca
 	"S'ha detectat un rostre (senyalat en verd) en posici&oacute; frontal"
-	" i amb el fons prou clar.<br />"
+	" i amb el fons prou clar.<br>"
 	"Premeu sobre ell per confirmar la actualizaci&oacute; de la fotografia.";
 #elif L==2	// de
 	"Ein Gesicht (gr&uuml;n markiert) wurde vor Position erfasst"
-	" und der Hintergrund ist genug hell.<br />"
+	" und der Hintergrund ist genug hell.<br>"
 	"Klicken Sie darauf, um das Update des Bildes zu best&auml;tigen.";
 #elif L==3	// en
 	"A face (marked in green) has been detected in front position"
-	" and the background is light enough.<br />"
+	" and the background is light enough.<br>"
 	"Click on it to confirm the update of the picture.";
 #elif L==4	// es
 	"Se ha detectado un rostro (se&ntilde;alado en verde) en posici&oacute;n frontal"
-	" y con el fondo suficientemente claro.<br />"
+	" y con el fondo suficientemente claro.<br>"
 	"Pulse sobre &eacute;l para confirmar la actualizaci&oacute;n de la fotograf&iacute;a.";
 #elif L==5	// fr
 	"Un visage (marqu&eacute; en vert) a &eacute;t&eacute; d&eacute;tect&eacute; en position avant"
-	" et l'arri&egrave;re-plan est assez clair.<br />"
+	" et l'arri&egrave;re-plan est assez clair.<br>"
 	"Cliquez sur pour confirmer la mise &agrave; jour de l'image.";
 #elif L==6	// gn
 	"Se ha detectado un rostro (se&ntilde;alado en verde) en posici&oacute;n frontal"
-	" y con el fondo suficientemente claro.<br />"
+	" y con el fondo suficientemente claro.<br>"
 	"Pulse sobre &eacute;l para confirmar la actualizaci&oacute;n de la fotograf&iacute;a.";	// Okoteve traducción
 #elif L==7	// it
 	"Un viso (segnato in verde) &egrave; stato individuato nella posizione centrale"
-	" e lo sfondo &egrave; abbastanza chiaro.<br />"
+	" e lo sfondo &egrave; abbastanza chiaro.<br>"
 	"Clicca su di esso per confermare l'aggiornamento dell'immagine.";
 #elif L==8	// pl
 	"Twarz (zaznaczone na zielono) zosta&lstrok; wykryty w przednim po&lstrok;o&zdot;eniu,"
-	" a t&lstrok;o jest wystarczaj&aogon;co du&zdot;o &sacute;wiat&lstrok;a.<br />"
+	" a t&lstrok;o jest wystarczaj&aogon;co du&zdot;o &sacute;wiat&lstrok;a.<br>"
 	"Kliknij go, aby potwierdzi&cacute; aktualizacj&eogon; obrazu.";
 #elif L==9	// pt
 	"Um rosto (marcado em verde) foi detectado em posi&ccedil;&atilde;o frontal"
-	" eo fundo &eacute; claro o suficiente.<br />"
+	" eo fundo &eacute; claro o suficiente.<br>"
 	"Clique nele para confirmar a atualiza&ccedil;&atilde;o da imagem.";
 #elif L==10	// tr
 	"A face (marked in green) has been detected in front position"
-	" and the background is light enough.<br />"
+	" and the background is light enough.<br>"
 	"Click on it to confirm the update of the picture.";						// Çeviri lazim!
 #endif
 
@@ -1651,25 +1651,25 @@ const char *Txt_Allow_teachers_to_consult_this_test =
 
 const char *Txt_Alphabetic_BR_code_BR_ISO_3166_1 =
 #if   L==1	// ca
-	"Codi<br />alfab&egrave;tic<br />ISO 3166-1";
+	"Codi<br>alfab&egrave;tic<br>ISO 3166-1";
 #elif L==2	// de
-	"Alphabetischer<br />Code<br />ISO 3166-1";
+	"Alphabetischer<br>Code<br>ISO 3166-1";
 #elif L==3	// en
-	"Alphabetic<br />code<br />ISO 3166-1";
+	"Alphabetic<br>code<br>ISO 3166-1";
 #elif L==4	// es
-	"C&oacute;d.<br />alfab&eacute;tico<br />ISO 3166-1";
+	"C&oacute;d.<br>alfab&eacute;tico<br>ISO 3166-1";
 #elif L==5	// fr
-	"Code<br />alphab&eacute;tique<br />ISO 3166-1";
+	"Code<br>alphab&eacute;tique<br>ISO 3166-1";
 #elif L==6	// gn
-	"C&oacute;d.<br />alfab&eacute;tico<br />ISO 3166-1";	// Okoteve traducción
+	"C&oacute;d.<br>alfab&eacute;tico<br>ISO 3166-1";	// Okoteve traducción
 #elif L==7	// it
-	"Codice<br />alfabetico<br />ISO 3166-1";
+	"Codice<br>alfabetico<br>ISO 3166-1";
 #elif L==8	// pl
-	"Alfabetycznego<br />kodu<br />ISO 3166-1";
+	"Alfabetycznego<br>kodu<br>ISO 3166-1";
 #elif L==9	// pt
-	"C&oacute;d.<br />alfab&eacute;tico<br />ISO 3166-1";
+	"C&oacute;d.<br>alfab&eacute;tico<br>ISO 3166-1";
 #elif L==10	// tr
-	"Alphabetic<br />code<br />ISO 3166-1";			// Çeviri lazim!
+	"Alphabetic<br>code<br>ISO 3166-1";			// Çeviri lazim!
 #endif
 
 const char *Txt_Already_existed_a_criterion_in_this_rubric_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
@@ -2991,25 +2991,25 @@ const char *Txt_average =
 
 const char *Txt_Average_number_BR_of_ASSIG_BR_per_course =
 #if   L==1	// ca
-	"Nombre mitj&agrave;<br />d'activitats<br />per assignatura";
+	"Nombre mitj&agrave;<br>d'activitats<br>per assignatura";
 #elif L==2	// de
-	"Durchschnittliche Anzahl<br />von Aufgaben<br />pro Kurs";
+	"Durchschnittliche Anzahl<br>von Aufgaben<br>pro Kurs";
 #elif L==3	// en
-	"Average number<br />of assignments<br />per course";
+	"Average number<br>of assignments<br>per course";
 #elif L==4	// es
-	"N.&ordm; medio<br />de actividades<br />por asignatura";
+	"N.&ordm; medio<br>de actividades<br>por asignatura";
 #elif L==5	// fr
-	"Nombre moyen<br />d'activit&eacute;s<br />par mati&egrave;re";
+	"Nombre moyen<br>d'activit&eacute;s<br>par mati&egrave;re";
 #elif L==6	// gn
-	"N.&ordm; medio<br />de actividades<br />por asignatura";	// Okoteve traducción
+	"N.&ordm; medio<br>de actividades<br>por asignatura";	// Okoteve traducción
 #elif L==7	// it
-	"Numero medio<br />di attivit&agrave;<br />per corso";
+	"Numero medio<br>di attivit&agrave;<br>per corso";
 #elif L==8	// pl
-	"&Sacute;rednia liczba<br />zadania<br />na kurs";
+	"&Sacute;rednia liczba<br>zadania<br>na kurs";
 #elif L==9	// pt
-	"N.&ordm; medio<br />de atividades<br />por disciplina";
+	"N.&ordm; medio<br>de atividades<br>por disciplina";
 #elif L==10	// tr
-	"Average number<br />of assignments<br />per course";		// Çeviri lazim!
+	"Average number<br>of assignments<br>per course";		// Çeviri lazim!
 #endif
 
 const char *Txt_Average_number_of_courses_to_which_a_user_belongs =
@@ -3037,255 +3037,255 @@ const char *Txt_Average_number_of_courses_to_which_a_user_belongs =
 
 const char *Txt_Average_number_BR_of_criteria_BR_per_rubric =
 #if   L==1	// ca
-	"Nombre mitj&agrave;<br />de criteris<br />per r&uacute;brica";
+	"Nombre mitj&agrave;<br>de criteris<br>per r&uacute;brica";
 #elif L==2	// de
-	"Durchschnittliche Anzahl<br />von Kriterien<br />pro Rubrik";
+	"Durchschnittliche Anzahl<br>von Kriterien<br>pro Rubrik";
 #elif L==3	// en
-	"Average number<br />of criteria<br />per rubric";
+	"Average number<br>of criteria<br>per rubric";
 #elif L==4	// es
-	"N.&ordm; medio<br />de criterios<br />por r&uacute;brica";
+	"N.&ordm; medio<br>de criterios<br>por r&uacute;brica";
 #elif L==5	// fr
-	"Nombre moyen<br />de crit&egrave;res<br />par rubrique";
+	"Nombre moyen<br>de crit&egrave;res<br>par rubrique";
 #elif L==6	// gn
-	"N.&ordm; medio<br />de criterios<br />por r&uacute;brica";	// Okoteve traducción
+	"N.&ordm; medio<br>de criterios<br>por r&uacute;brica";	// Okoteve traducción
 #elif L==7	// it
-	"Numero medio<br />di criteri<br />per rubrica";
+	"Numero medio<br>di criteri<br>per rubrica";
 #elif L==8	// pl
-	"&Sacute;rednia liczba<br />kryteri&oacute;w<br />na rubryk&eogon;";
+	"&Sacute;rednia liczba<br>kryteri&oacute;w<br>na rubryk&eogon;";
 #elif L==9	// pt
-	"N.&ordm; medio<br />de crit&eacute;rios<br />por rubrica";
+	"N.&ordm; medio<br>de crit&eacute;rios<br>por rubrica";
 #elif L==10	// tr
-	"Dereceli puanlama<br />anahtar&inodot; ba&scedil;&inodot;na<br />ortalama &ouml;l&ccedil;&uuml;t say&inodot;s&inodot;";
+	"Dereceli puanlama<br>anahtar&inodot; ba&scedil;&inodot;na<br>ortalama &ouml;l&ccedil;&uuml;t say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Average_number_BR_of_exams_BR_per_course =
 #if   L==1	// ca
-	"Nombre mitj&agrave;<br />d'ex&agrave;mens<br />per assignatura";
+	"Nombre mitj&agrave;<br>d'ex&agrave;mens<br>per assignatura";
 #elif L==2	// de
-	"Durchschnittliche Anzahl<br />von Pr&uuml;fung<br />pro Kurs";
+	"Durchschnittliche Anzahl<br>von Pr&uuml;fung<br>pro Kurs";
 #elif L==3	// en
-	"Average number<br />of exams<br />per course";
+	"Average number<br>of exams<br>per course";
 #elif L==4	// es
-	"N.&ordm; medio<br />de ex&aacute;menes<br />por asignatura";
+	"N.&ordm; medio<br>de ex&aacute;menes<br>por asignatura";
 #elif L==5	// fr
-	"Nombre moyen<br />d'examens<br />par mati&egrave;re";
+	"Nombre moyen<br>d'examens<br>par mati&egrave;re";
 #elif L==6	// gn
-	"N.&ordm; medio<br />de ex&aacute;menes<br />por asignatura";	// Okoteve traducción
+	"N.&ordm; medio<br>de ex&aacute;menes<br>por asignatura";	// Okoteve traducción
 #elif L==7	// it
-	"Numero medio<br />d'esame<br />per corso";
+	"Numero medio<br>d'esame<br>per corso";
 #elif L==8	// pl
-	"&Sacute;rednia liczba<br />egzamin&oacute;w<br />na kurs";
+	"&Sacute;rednia liczba<br>egzamin&oacute;w<br>na kurs";
 #elif L==9	// pt
-	"N.&ordm; medio<br />de exames<br />por disciplina";
+	"N.&ordm; medio<br>de exames<br>por disciplina";
 #elif L==10	// tr
-	"Average number<br />of exams<br />per course";			// Çeviri lazim!
+	"Average number<br>of exams<br>per course";			// Çeviri lazim!
 #endif
 
 const char *Txt_Average_number_BR_of_games_BR_per_course =
 #if   L==1	// ca
-	"Nombre mitj&agrave;<br />de jocs<br />per assignatura";
+	"Nombre mitj&agrave;<br>de jocs<br>per assignatura";
 #elif L==2	// de
-	"Durchschnittliche Anzahl<br />von Spiele<br />pro Kurs";
+	"Durchschnittliche Anzahl<br>von Spiele<br>pro Kurs";
 #elif L==3	// en
-	"Average number<br />of games<br />per course";
+	"Average number<br>of games<br>per course";
 #elif L==4	// es
-	"N.&ordm; medio<br />de juegos<br />por asignatura";
+	"N.&ordm; medio<br>de juegos<br>por asignatura";
 #elif L==5	// fr
-	"Nombre moyen<br />de jeux<br />par mati&egrave;re";
+	"Nombre moyen<br>de jeux<br>par mati&egrave;re";
 #elif L==6	// gn
-	"N.&ordm; medio<br />de juegos<br />por asignatura";	// Okoteve traducción
+	"N.&ordm; medio<br>de juegos<br>por asignatura";	// Okoteve traducción
 #elif L==7	// it
-	"Numero medio<br />di giochi<br />per corso";
+	"Numero medio<br>di giochi<br>per corso";
 #elif L==8	// pl
-	"&Sacute;rednia liczba<br />gry<br />na kurs";
+	"&Sacute;rednia liczba<br>gry<br>na kurs";
 #elif L==9	// pt
-	"N.&ordm; medio<br />de jogos<br />por disciplina";
+	"N.&ordm; medio<br>de jogos<br>por disciplina";
 #elif L==10	// tr
-	"Average number<br />of games<br />per course";		// Çeviri lazim!
+	"Average number<br>of games<br>per course";		// Çeviri lazim!
 #endif
 
 const char *Txt_Average_number_BR_of_items_BR_per_course =
 #if   L==1	// ca
-	"Nombre mitj&agrave;<br />d'items<br />per assignatura";
+	"Nombre mitj&agrave;<br>d'items<br>per assignatura";
 #elif L==2	// de
-	"Durchschnittliche Anzahl<br />von Programmelemente<br />pro Kurs";
+	"Durchschnittliche Anzahl<br>von Programmelemente<br>pro Kurs";
 #elif L==3	// en
-	"Average number<br />of items<br />per course";
+	"Average number<br>of items<br>per course";
 #elif L==4	// es
-	"N.&ordm; medio<br />de items<br />por asignatura";
+	"N.&ordm; medio<br>de items<br>por asignatura";
 #elif L==5	// fr
-	"Nombre moyen<br />d'&eacute;l&eacute;ments<br />par mati&egrave;re";
+	"Nombre moyen<br>d'&eacute;l&eacute;ments<br>par mati&egrave;re";
 #elif L==6	// gn
-	"N.&ordm; medio<br />de items<br />por asignatura";	// Okoteve traducción
+	"N.&ordm; medio<br>de items<br>por asignatura";	// Okoteve traducción
 #elif L==7	// it
-	"Numero medio<br />di elementi<br />per corso";
+	"Numero medio<br>di elementi<br>per corso";
 #elif L==8	// pl
-	"&Sacute;rednia liczba<br />pozycji<br />na kurs";
+	"&Sacute;rednia liczba<br>pozycji<br>na kurs";
 #elif L==9	// pt
-	"N.&ordm; medio<br />de itens<br />por disciplina";
+	"N.&ordm; medio<br>de itens<br>por disciplina";
 #elif L==10	// tr
-	"Average number<br />of items<br />per course";		// Çeviri lazim!
+	"Average number<br>of items<br>per course";		// Çeviri lazim!
 #endif
 
 const char *Txt_Average_number_BR_of_projects_BR_per_course =
 #if   L==1	// ca
-	"Nombre mitj&agrave;<br />de projectes<br />per assignatura";
+	"Nombre mitj&agrave;<br>de projectes<br>per assignatura";
 #elif L==2	// de
-	"Durchschnittliche Anzahl<br />von Projekte<br />pro Kurs";
+	"Durchschnittliche Anzahl<br>von Projekte<br>pro Kurs";
 #elif L==3	// en
-	"Average number<br />of projects<br />per course";
+	"Average number<br>of projects<br>per course";
 #elif L==4	// es
-	"N.&ordm; medio<br />de proyectos<br />por asignatura";
+	"N.&ordm; medio<br>de proyectos<br>por asignatura";
 #elif L==5	// fr
-	"Nombre moyen<br />de projets<br />par mati&egrave;re";
+	"Nombre moyen<br>de projets<br>par mati&egrave;re";
 #elif L==6	// gn
-	"N.&ordm; medio<br />de proyectos<br />por asignatura";	// Okoteve traducción
+	"N.&ordm; medio<br>de proyectos<br>por asignatura";	// Okoteve traducción
 #elif L==7	// it
-	"Numero medio<br />di progetti<br />per corso";
+	"Numero medio<br>di progetti<br>per corso";
 #elif L==8	// pl
-	"&Sacute;rednia liczba<br />projekty<br />na kurs";
+	"&Sacute;rednia liczba<br>projekty<br>na kurs";
 #elif L==9	// pt
-	"N.&ordm; medio<br />de projetos<br />por disciplina";
+	"N.&ordm; medio<br>de projetos<br>por disciplina";
 #elif L==10	// tr
-	"Average number<br />of projects<br />per course";	// Çeviri lazim!
+	"Average number<br>of projects<br>per course";	// Çeviri lazim!
 #endif
 
 const char *Txt_Average_number_BR_of_questions_BR_per_survey =
 #if   L==1	// ca
-	"Nombre mitj&agrave;<br />de preguntes<br />per enquesta";
+	"Nombre mitj&agrave;<br>de preguntes<br>per enquesta";
 #elif L==2	// de
-	"Durchschnittliche Anzahl<br />von Fragen<br />pro Umfrage";
+	"Durchschnittliche Anzahl<br>von Fragen<br>pro Umfrage";
 #elif L==3	// en
-	"Average number<br />of questions<br />per survey";
+	"Average number<br>of questions<br>per survey";
 #elif L==4	// es
-	"N.&ordm; medio<br />de preguntas<br />por encuesta";
+	"N.&ordm; medio<br>de preguntas<br>por encuesta";
 #elif L==5	// fr
-	"Nombre moyen<br />de questions<br />par sondage";
+	"Nombre moyen<br>de questions<br>par sondage";
 #elif L==6	// gn
-	"N.&ordm; medio<br />de preguntas<br />por encuesta";	// Okoteve traducción
+	"N.&ordm; medio<br>de preguntas<br>por encuesta";	// Okoteve traducción
 #elif L==7	// it
-	"Numero medio<br />di domande<br />per sondaggio";
+	"Numero medio<br>di domande<br>per sondaggio";
 #elif L==8	// pl
-	"&Sacute;rednia liczba<br />pyta&nacute;<br />na ankiety";
+	"&Sacute;rednia liczba<br>pyta&nacute;<br>na ankiety";
 #elif L==9	// pt
-	"N.&ordm; medio<br />de perguntas<br />por inqu&eacute;rito";
+	"N.&ordm; medio<br>de perguntas<br>por inqu&eacute;rito";
 #elif L==10	// tr
-	"Average number<br />of questions<br />per survey";	// Çeviri lazim!
+	"Average number<br>of questions<br>per survey";	// Çeviri lazim!
 #endif
 
 const char *Txt_Average_number_BR_of_rubrics_BR_per_course =
 #if   L==1	// ca
-	"Nombre mitj&agrave;<br />de r&uacute;briques<br />per assignatura";
+	"Nombre mitj&agrave;<br>de r&uacute;briques<br>per assignatura";
 #elif L==2	// de
-	"Durchschnittliche Anzahl<br />von Rubriken<br />pro Kurs";
+	"Durchschnittliche Anzahl<br>von Rubriken<br>pro Kurs";
 #elif L==3	// en
-	"Average number<br />of rubrics<br />per course";
+	"Average number<br>of rubrics<br>per course";
 #elif L==4	// es
-	"N.&ordm; medio<br />de r&uacute;bricas<br />por asignatura";
+	"N.&ordm; medio<br>de r&uacute;bricas<br>por asignatura";
 #elif L==5	// fr
-	"Nombre moyen<br />de rubriques<br />par mati&egrave;re";
+	"Nombre moyen<br>de rubriques<br>par mati&egrave;re";
 #elif L==6	// gn
-	"N.&ordm; medio<br />de r&uacute;bricas<br />por asignatura";	// Okoteve traducción
+	"N.&ordm; medio<br>de r&uacute;bricas<br>por asignatura";	// Okoteve traducción
 #elif L==7	// it
-	"Numero medio<br />di rubriche<br />per corso";
+	"Numero medio<br>di rubriche<br>per corso";
 #elif L==8	// pl
-	"&Sacute;rednia liczba<br />badania<br />na kurs";
+	"&Sacute;rednia liczba<br>badania<br>na kurs";
 #elif L==9	// pt
-	"N.&ordm; medio<br />de rubricas<br />por disciplina";
+	"N.&ordm; medio<br>de rubricas<br>por disciplina";
 #elif L==10	// tr
-	"Kurs ba&scedil;&inodot;na<br />ortalama de&gbreve;erlendirme listesi<br />say&inodot;s&inodot;";
+	"Kurs ba&scedil;&inodot;na<br>ortalama de&gbreve;erlendirme listesi<br>say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Average_number_BR_of_surveys_BR_per_course =
 #if   L==1	// ca
-	"Nombre mitj&agrave;<br />d'enquestes<br />per assignatura";
+	"Nombre mitj&agrave;<br>d'enquestes<br>per assignatura";
 #elif L==2	// de
-	"Durchschnittliche Anzahl<br />von Umfragen<br />pro Kurs";
+	"Durchschnittliche Anzahl<br>von Umfragen<br>pro Kurs";
 #elif L==3	// en
-	"Average number<br />of surveys<br />per course";
+	"Average number<br>of surveys<br>per course";
 #elif L==4	// es
-	"N.&ordm; medio<br />de encuestas<br />por asignatura";
+	"N.&ordm; medio<br>de encuestas<br>por asignatura";
 #elif L==5	// fr
-	"Nombre moyen<br />de sondages<br />par mati&egrave;re";
+	"Nombre moyen<br>de sondages<br>par mati&egrave;re";
 #elif L==6	// gn
-	"N.&ordm; medio<br />de encuestas<br />por asignatura";	// Okoteve traducción
+	"N.&ordm; medio<br>de encuestas<br>por asignatura";	// Okoteve traducción
 #elif L==7	// it
-	"Numero medio<br />di sondaggi<br />per corso";
+	"Numero medio<br>di sondaggi<br>per corso";
 #elif L==8	// pl
-	"&Sacute;rednia liczba<br />badania<br />na kurs";
+	"&Sacute;rednia liczba<br>badania<br>na kurs";
 #elif L==9	// pt
-	"N.&ordm; medio<br />de inqu&eacute;ritos<br />por disciplina";
+	"N.&ordm; medio<br>de inqu&eacute;ritos<br>por disciplina";
 #elif L==10	// tr
-	"Kurs ba&scedil;&inodot;na<br />ortalama anket<br />say&inodot;s&inodot;";
+	"Kurs ba&scedil;&inodot;na<br>ortalama anket<br>say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course =
 #if   L==1	// ca
-	"Nombre mitj&agrave;<br />de preguntes<br />de test per<br />assignatura";
+	"Nombre mitj&agrave;<br>de preguntes<br>de test per<br>assignatura";
 #elif L==2	// de
-	"Durchschnittliche Anzahl<br />von Testfragen<br />pro Kurs";
+	"Durchschnittliche Anzahl<br>von Testfragen<br>pro Kurs";
 #elif L==3	// en
-	"Average<br />number<br />of test<br />questions<br />per course";
+	"Average<br>number<br>of test<br>questions<br>per course";
 #elif L==4	// es
-	"N.&ordm; medio<br />de preguntas<br />de test por<br />asignatura";
+	"N.&ordm; medio<br>de preguntas<br>de test por<br>asignatura";
 #elif L==5	// fr
-	"Nombre moyen<br />de questions<br />de test par<br />mati&egrave;re";
+	"Nombre moyen<br>de questions<br>de test par<br>mati&egrave;re";
 #elif L==6	// gn
-	"N.&ordm; medio<br />de preguntas<br />de test por<br />asignatura";	// Okoteve traducción
+	"N.&ordm; medio<br>de preguntas<br>de test por<br>asignatura";	// Okoteve traducción
 #elif L==7	// it
-	"Numero medio<br />di domande<br />di test<br />per corso";
+	"Numero medio<br>di domande<br>di test<br>per corso";
 #elif L==8	// pl
-	"&Sacute;rednia liczba<br />pyta&nacute;<br />testowych<br />na kurs";
+	"&Sacute;rednia liczba<br>pyta&nacute;<br>testowych<br>na kurs";
 #elif L==9	// pt
-	"N.&ordm; medio<br />de perguntas<br />de test por<br />disciplina";
+	"N.&ordm; medio<br>de perguntas<br>de test por<br>disciplina";
 #elif L==10	// tr
-	"Average<br />number<br />of test<br />questions<br />per course";	// Çeviri lazim!
+	"Average<br>number<br>of test<br>questions<br>per course";	// Çeviri lazim!
 #endif
 
 const char *Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded =
 #if   L==1	// ca
-	"Mitj&agrave; de<br />vegades<br />que s'ha<br />respost<br />cada pregunta";
+	"Mitj&agrave; de<br>vegades<br>que s'ha<br>respost<br>cada pregunta";
 #elif L==2	// de
-	"Durchschnittliche<br />H&auml;ufigkeit,<br />mit der<br />eine Frage<br />beantwortet wurde";
+	"Durchschnittliche<br>H&auml;ufigkeit,<br>mit der<br>eine Frage<br>beantwortet wurde";
 #elif L==3	// en
-	"Average<br />number of<br />times that<br />a question<br />has been<br />responded";
+	"Average<br>number of<br>times that<br>a question<br>has been<br>responded";
 #elif L==4	// es
-	"N.&ordm; medio<br />de veces<br />que se ha<br />respondido<br />cada pregunta";
+	"N.&ordm; medio<br>de veces<br>que se ha<br>respondido<br>cada pregunta";
 #elif L==5	// fr
-	"Nombre moyen<br />de fois<br />qu'une question<br />a re&ccedil;u<br />une r&eacute;ponse";
+	"Nombre moyen<br>de fois<br>qu'une question<br>a re&ccedil;u<br>une r&eacute;ponse";
 #elif L==6	// gn
-	"N.&ordm; medio<br />de veces<br />que se ha<br />respondido<br />cada pregunta";	// Okoteve traducción
+	"N.&ordm; medio<br>de veces<br>que se ha<br>respondido<br>cada pregunta";	// Okoteve traducción
 #elif L==7	// it
-	"Numero medio<br />di volte<br />in cui<br />una domanda<br />ha ricevuto<br />risposta";
+	"Numero medio<br>di volte<br>in cui<br>una domanda<br>ha ricevuto<br>risposta";
 #elif L==8	// pl
-	"&Sacute;rednia<br />liczba<br />odpowiedzi<br />na pytanie";
+	"&Sacute;rednia<br>liczba<br>odpowiedzi<br>na pytanie";
 #elif L==9	// pt
-	"N.&ordm; m&eacute;dio<br />de vezes<br />que uma<br />pergunta<br />foi respondida";
+	"N.&ordm; m&eacute;dio<br>de vezes<br>que uma<br>pergunta<br>foi respondida";
 #elif L==10	// tr
-	"Average<br />number of<br />times that<br />a question<br />has been<br />responded";	// Çeviri lazim!
+	"Average<br>number of<br>times that<br>a question<br>has been<br>responded";	// Çeviri lazim!
 #endif
 
 const char *Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course =
 #if   L==1	// ca
-	"Mitj&agrave; de<br />vegades<br />que s'ha<br />respost<br />per assignatura";
+	"Mitj&agrave; de<br>vegades<br>que s'ha<br>respost<br>per assignatura";
 #elif L==2	// de
-	"Durchschnittliche<br />H&auml;ufigkeit,<br />mit der<br />eine Frage<br />pro Kurs<br />beantwortet wurde";
+	"Durchschnittliche<br>H&auml;ufigkeit,<br>mit der<br>eine Frage<br>pro Kurs<br>beantwortet wurde";
 #elif L==3	// en
-	"Average<br />number of<br />times that<br />questions<br />have been<br />responded<br />per course";
+	"Average<br>number of<br>times that<br>questions<br>have been<br>responded<br>per course";
 #elif L==4	// es
-	"N.&ordm; medio<br />de veces<br />que se ha<br />respondido<br />por asignatura";
+	"N.&ordm; medio<br>de veces<br>que se ha<br>respondido<br>por asignatura";
 #elif L==5	// fr
-	"Nombre moyen<br />de fois<br />qu'une question<br />a re&ccedil;u<br />une r&eacute;ponse<br />par mati&egrave;re";
+	"Nombre moyen<br>de fois<br>qu'une question<br>a re&ccedil;u<br>une r&eacute;ponse<br>par mati&egrave;re";
 #elif L==6	// gn
-	"N.&ordm; medio<br />de veces<br />que se ha<br />respondido<br />por asignatura";			// Okoteve traducción
+	"N.&ordm; medio<br>de veces<br>que se ha<br>respondido<br>por asignatura";			// Okoteve traducción
 #elif L==7	// it
-	"Numero medio<br />di volte<br />in cui<br />una domanda<br />ha ricevuto<br />risposta<br />per corso";
+	"Numero medio<br>di volte<br>in cui<br>una domanda<br>ha ricevuto<br>risposta<br>per corso";
 #elif L==8	// pl
-	"&Sacute;rednia<br />liczba<br />odpowiedzi<br />na pytanie<br />na kurs";
+	"&Sacute;rednia<br>liczba<br>odpowiedzi<br>na pytanie<br>na kurs";
 #elif L==9	// pt
-	"N.&ordm; m&eacute;dio<br />de vezes<br />que uma<br />pergunta<br />foi respondida<br />por disciplina";
+	"N.&ordm; m&eacute;dio<br>de vezes<br>que uma<br>pergunta<br>foi respondida<br>por disciplina";
 #elif L==10	// tr
-	"Average<br />number of<br />times that<br />questions<br />have been<br />responded<br />per course";	// Çeviri lazim!
+	"Average<br>number of<br>times that<br>questions<br>have been<br>responded<br>per course";	// Çeviri lazim!
 #endif
 
 const char *Txt_Average_number_of_users_belonging_to_a_course =
@@ -3362,25 +3362,25 @@ const char *Txt_AVERAGE_PHOTO_TYPES[Pho_NUM_AVERAGE_PHOTO_TYPES] =
 
 const char *Txt_Average_BR_score_BR_per_question =
 #if   L==1	// ca
-	"Puntuaci&oacute;<br />mitjana<br />per pregunta";
+	"Puntuaci&oacute;<br>mitjana<br>per pregunta";
 #elif L==2	// de
-	"Durchschnittliche<br />Punktzahl<br />pro Frage";
+	"Durchschnittliche<br>Punktzahl<br>pro Frage";
 #elif L==3	// en
-	"Average<br />score<br />per question";
+	"Average<br>score<br>per question";
 #elif L==4	// es
-	"Puntuaci&oacute;n<br />media<br />por pregunta";
+	"Puntuaci&oacute;n<br>media<br>por pregunta";
 #elif L==5	// fr
-	"Score<br />moyen<br />par question";
+	"Score<br>moyen<br>par question";
 #elif L==6	// gn
-	"Puntuaci&oacute;n<br />media<br />por pregunta";	// Okoteve traducción
+	"Puntuaci&oacute;n<br>media<br>por pregunta";	// Okoteve traducción
 #elif L==7	// it
-	"Punteggio<br />medio<br />per domanda";
+	"Punteggio<br>medio<br>per domanda";
 #elif L==8	// pl
-	"&Sacute;rednia<br />ocena<br />za pytanie";
+	"&Sacute;rednia<br>ocena<br>za pytanie";
 #elif L==9	// pt
-	"Pontua&ccedil;&atilde;o<br />m&eacute;dia por<br />pergunta";
+	"Pontua&ccedil;&atilde;o<br>m&eacute;dia por<br>pergunta";
 #elif L==10	// tr
-	"Average<br />score<br />per question";	// Çeviri lazim!
+	"Average<br>score<br>per question";	// Çeviri lazim!
 #endif
 
 const char *Txt_Average_type =
@@ -4329,25 +4329,25 @@ const char *Txt_CALL_FOR_EXAM_Material_required =
 
 const char *Txt_CALL_FOR_EXAM_Mode =
 #if   L==1	// ca
-	"Modalitat<br />(escrit, oral,&hellip;)";
+	"Modalitat<br>(escrit, oral,&hellip;)";
 #elif L==2	// de
-	"Pr&uuml;fungsart<br />(schriftlich, m&uuml;ndlich,&hellip;)";
+	"Pr&uuml;fungsart<br>(schriftlich, m&uuml;ndlich,&hellip;)";
 #elif L==3	// en
-	"Mode<br />(written, oral,&hellip;)";
+	"Mode<br>(written, oral,&hellip;)";
 #elif L==4	// es
-	"Modalidad<br />(escrito, oral,&hellip;)";
+	"Modalidad<br>(escrito, oral,&hellip;)";
 #elif L==5	// fr
-	"Mode<br />(&eacute;crit, oral,&hellip;)";
+	"Mode<br>(&eacute;crit, oral,&hellip;)";
 #elif L==6	// gn
-	"Modalidad<br />(escrito, oral,&hellip;)";	// Okoteve traducción
+	"Modalidad<br>(escrito, oral,&hellip;)";	// Okoteve traducción
 #elif L==7	// it
-	"Modalit&agrave;<br />(scritto, orale,&hellip;)";
+	"Modalit&agrave;<br>(scritto, orale,&hellip;)";
 #elif L==8	// pl
-	"Tryb<br />(pisemnej, ustnej,&hellip;)";
+	"Tryb<br>(pisemnej, ustnej,&hellip;)";
 #elif L==9	// pt
-	"Modalidade<br />(escrita, oral,&hellip;)";
+	"Modalidade<br>(escrita, oral,&hellip;)";
 #elif L==10	// tr
-	"Mode<br />(written, oral,&hellip;)";		// Çeviri lazim!
+	"Mode<br>(written, oral,&hellip;)";		// Çeviri lazim!
 #endif
 
 const char *Txt_CALL_FOR_EXAM_Other_information =
@@ -4398,25 +4398,25 @@ const char *Txt_CALL_FOR_EXAM_Place_of_exam =
 
 const char *Txt_CALL_FOR_EXAM_Session =
 #if   L==1	// ca
-	"Convocat&ograve;ria<br />(juny, setembre,&hellip;)";
+	"Convocat&ograve;ria<br>(juny, setembre,&hellip;)";
 #elif L==2	// de
-	"Einberufung<br />(Juni, September,&hellip;)";
+	"Einberufung<br>(Juni, September,&hellip;)";
 #elif L==3	// en
-	"Session<br />(june, september,&hellip;)";
+	"Session<br>(june, september,&hellip;)";
 #elif L==4	// es
-	"Convocatoria<br />(junio, septiembre,&hellip;)";
+	"Convocatoria<br>(junio, septiembre,&hellip;)";
 #elif L==5	// fr
-	"P&eacute;riode<br />(juin, septembre,&hellip;)";
+	"P&eacute;riode<br>(juin, septembre,&hellip;)";
 #elif L==6	// gn
-	"Convocatoria<br />(junio, septiembre,&hellip;)";	// Okoteve traducción
+	"Convocatoria<br>(junio, septiembre,&hellip;)";	// Okoteve traducción
 #elif L==7	// it
-	"Sessione<br />(giugno, settembre,&hellip;)";
+	"Sessione<br>(giugno, settembre,&hellip;)";
 #elif L==8	// pl
-	"Sesja<br />(czerwiec, wrzesien,&hellip;)";
+	"Sesja<br>(czerwiec, wrzesien,&hellip;)";
 #elif L==9	// pt
-	"Per&iacute;odo<br />(junho, setembro,&hellip;)";
+	"Per&iacute;odo<br>(junho, setembro,&hellip;)";
 #elif L==10	// tr
-	"Session<br />(june, september,&hellip;)";		// Çeviri lazim!
+	"Session<br>(june, september,&hellip;)";		// Çeviri lazim!
 #endif
 
 const char *Txt_CALL_FOR_EXAM_Start_time =
@@ -6668,25 +6668,25 @@ const char *Txt_Create_link =
 
 const char *Txt_Create_BR_notification =
 #if   L==1	// ca
-	"Crear<br />notificaci&oacute;";
+	"Crear<br>notificaci&oacute;";
 #elif L==2	// de
-	"Anmeldung<br />eingeben";
+	"Anmeldung<br>eingeben";
 #elif L==3	// en
-	"Create<br />notification";
+	"Create<br>notification";
 #elif L==4	// es
-	"Crear<br />notificaci&oacute;n";
+	"Crear<br>notificaci&oacute;n";
 #elif L==5	// fr
-	"Cr&eacute;er<br />notification";
+	"Cr&eacute;er<br>notification";
 #elif L==6	// gn
-	"Crear<br />notificaci&oacute;n";	// Okoteve traducción
+	"Crear<br>notificaci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
-	"Crea<br />notifica";
+	"Crea<br>notifica";
 #elif L==8	// pl
-	"Utw&oacute;rz<br />powiadomienie";
+	"Utw&oacute;rz<br>powiadomienie";
 #elif L==9	// pt
-	"Criar<br />notifica&ccedil;&atilde;o";
+	"Criar<br>notifica&ccedil;&atilde;o";
 #elif L==10	// tr
-	"Create<br />notification";		// Çeviri lazim!
+	"Create<br>notification";		// Çeviri lazim!
 #endif
 
 const char *Txt_Create_ZIP_file =
@@ -9354,70 +9354,70 @@ const char *Txt_Do_you_really_want_to_reject_the_enrolment_request_ =	// Warning
 
 const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_ =	// Warning: it is very important to include %u and %s in the following sentences
 #if   L==1	// ca
-	"Realment voleu eliminar els %u estudiants de l'assignatura <strong>%s</strong>?<br />"
+	"Realment voleu eliminar els %u estudiants de l'assignatura <strong>%s</strong>?<br>"
 	"Encara que no s'eliminen les dades dels estudiants en altres assignatures,"
 	" ja no apareixeran inscrits en aquesta assignatura,"
 	" i a m&eacute;s <strong>s'eliminaran tots els treballs enviats per ells en aquesta assignatura,"
 	" les seves fitxes personalitzades per aquesta assignatura,"
 	" i les seves inscripcions en grups d'aquesta assignatura.</strong>";
 #elif L==2	// de
-	"Wollen Sie die %u Studenten wirklich aus dem Kurs <strong>%s</strong> entfernen?<br />"
+	"Wollen Sie die %u Studenten wirklich aus dem Kurs <strong>%s</strong> entfernen?<br>"
 	"Die Daten der Studierenden in anderen Studieng&auml;ngen werden zwar nicht gel&ouml;scht,"
 	" aber sie werden in diesem Studiengang nicht mehr eingeschrieben,"
 	" und auch <strong>alle von ihnen in diesem Studiengang eingereichten Arbeiten,"
 	" ihre Karteikarten f&uuml;r diesen Studiengang"
 	" und ihre Einschreibung in Gruppen dieses Studiengangs werden gel&ouml;scht.</strong>";
 #elif L==3	// en
-	"Do you really want to remove the %u students from the course <strong>%s</strong>?<br />"
+	"Do you really want to remove the %u students from the course <strong>%s</strong>?<br>"
 	"Although students' data will not be removed in other courses,"
 	" they will no longer enroled in this course,"
 	" and also <strong>all works submitted by them in this course,"
 	" their record cards for this course,"
 	" and their enrolment in groups of this course will be removed.</strong>";
 #elif L==4	// es
-	"&iquest;Realmente desea eliminar los %u estudiantes de la asignatura <strong>%s</strong>?<br />"
+	"&iquest;Realmente desea eliminar los %u estudiantes de la asignatura <strong>%s</strong>?<br>"
 	"Aunque no se eliminar&aacute;n los datos de los estudiantes en otras asignaturas,"
 	" ya no aparecer&aacute;n inscritos en esta asignatura,"
 	" y adem&aacute;s <strong>se eliminar&aacute;n todos los trabajos enviados por ellos en esta asignatura,"
 	" sus fichas personalizadas para esta asignatura,"
 	" y sus inscripciones en grupos de esta asignatura.</strong>";
 #elif L==5	// fr
-	"Voulez-vous vraiment supprimer les %u &eacute;tudiants de la mati&eacute;re <strong>%s</strong>?<br />"
+	"Voulez-vous vraiment supprimer les %u &eacute;tudiants de la mati&eacute;re <strong>%s</strong>?<br>"
 	"Bien que les donn&eacute;es des &eacute;tudiants ne soient pas supprim&eacute;es dans d'autres cours,"
 	" ils ne seront plus inscrits &agrave; cette mati&egrave;re,"
 	" ainsi que <strong>tous les travaux soumis par eux dans cette mati&egrave;re,"
 	" leurs fiches pour cette mati&egrave;re"
 	" et leur inscription &agrave; des groupes de cette mati&egrave;re seront supprim&eacute;s.</strong>";
 #elif L==6	// gn
-	"&iquest;Realmente desea eliminar los %u estudiantes de la asignatura <strong>%s</strong>?<br />"
+	"&iquest;Realmente desea eliminar los %u estudiantes de la asignatura <strong>%s</strong>?<br>"
 	"Aunque no se eliminar&aacute;n los datos de los estudiantes en otras asignaturas,"
 	" ya no aparecer&aacute;n inscritos en esta asignatura,"
 	" y adem&aacute;s <strong>se eliminar&aacute;n todos los trabajos enviados por ellos en esta asignatura,"
 	" sus fichas personalizadas para esta asignatura,"
 	" y su inscripci&oacute;n en grupos de esta asignatura.</strong>";		// Okoteve traducción
 #elif L==7	// it
-	"Vuoi realmente rimuovere gli %u studenti dal corso <strong>%s</strong>?<br />"
+	"Vuoi realmente rimuovere gli %u studenti dal corso <strong>%s</strong>?<br>"
 	"Sebbene i dati degli studenti non saranno rimossi in altri corsi,"
 	" essi non saranno pi&ugrave; registrati in questo corso,"
 	" e così <strong>tutti i lavori presentati da loro in questo corso,"
 	" le loro schede per questo corso,"
 	" e la loro registrazione nei gruppi di questo corso saranno rimossi.</strong>";
 #elif L==8	// pl
-	"Czy na pewno chcesz usun&aogon;&cacute; %u student&oacute;w z kursu <strong>%s</strong>?<br />"
+	"Czy na pewno chcesz usun&aogon;&cacute; %u student&oacute;w z kursu <strong>%s</strong>?<br>"
 	"Although students' data will not be removed in other courses,"
 	" nie beda juz zarejestrowane w tym kurs"
 	" a takze <strong>wszystkie prace zlozone przez nich w tym kursie,"
 	" swoich kart zapisu na ten kurs,"
 	" i ich rejestracja w grupach zajec zostana usuniete.</strong>";
 #elif L==9	// pt
-	"Voc&ecirc; realmente deseja remover os %u estudantes do curso <strong>%s</strong>?<br />"
+	"Voc&ecirc; realmente deseja remover os %u estudantes do curso <strong>%s</strong>?<br>"
 	"Embora os dados dos estudantes n&atilde;o sejam removidos em outras disciplinas,"
 	" eles n&atilde;o ser&atilde;o mais inscritos nesta disciplina,"
 	" e tamb&eacute;m <strong>ser&atilde;o removidos todos os trabalhos enviados por eles nesta disciplina,"
 	" suos cart&otilde;es para esta disciplina,"
 	" e sua inscri&ccedil;&atilde;o em grupos desta disciplina.</strong>";
 #elif L==10	// tr
-	"Do you really want to remove the %u students from the course <strong>%s</strong>?<br />"
+	"Do you really want to remove the %u students from the course <strong>%s</strong>?<br>"
 	"Although students' data will not be removed in other courses,"
 	" they will no longer enroled in this course,"
 	" and also <strong>all works submitted by them in this course,"
@@ -9835,34 +9835,34 @@ const char *Txt_Do_you_really_want_to_remove_the_game_X =	// Warning: it is very
 
 const char *Txt_Do_you_really_want_to_remove_the_group_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Realment voleu suprimir el grup <strong>%s</strong>?<br />"
+	"Realment voleu suprimir el grup <strong>%s</strong>?<br>"
 	"Si ho fa, els usuaris inscrits al grup deixaran de pert&agrave;nyer-hi.";
 #elif L==2	// de
-	"M&ouml;chten Sie Gruppe <strong>%s</strong> wirklich entfernen?<br />"
+	"M&ouml;chten Sie Gruppe <strong>%s</strong> wirklich entfernen?<br>"
 	"Wenn Sie dies tun, geh&ouml;ren die in der Gruppe registrierten Benutzer nicht mehr dazu.";
 #elif L==3	// en
-	"Do you really want to remove group <strong>%s</strong>?<br />"
+	"Do you really want to remove group <strong>%s</strong>?<br>"
 	"If you do, users enrolled in the group will no longer belong to it.";
 #elif L==4	// es
-	"&iquest;Realmente desea eliminar el grupo <strong>%s</strong>?<br />"
+	"&iquest;Realmente desea eliminar el grupo <strong>%s</strong>?<br>"
 	"Si lo hace, los usuarios inscritos en el grupo dejar&aacute;n de pertenecer a &eacute;l.";
 #elif L==5	// fr
-	"Voulez-vous vraiment supprimer le groupe <strong>%s</strong>?<br />"
+	"Voulez-vous vraiment supprimer le groupe <strong>%s</strong>?<br>"
 	"Si vous le faites, les utilisateurs inscrits au groupe n'en feront plus partie.";
 #elif L==6	// gn
-	"&iquest;¿A&ntilde;eteh&aacute;pe piko reipe'ase pe grupo <strong>%s</strong>?<br />"
+	"&iquest;¿A&ntilde;eteh&aacute;pe piko reipe'ase pe grupo <strong>%s</strong>?<br>"
 	"Rejap&oacute;ramo up&eacute;icha, umi puruh&aacute;ra o&ntilde;einskriv&iacute;va pe aty'&iacute;pe ndaha'emo'&atilde;v&eacute;ima ipypegua.";
 #elif L==7	// it
-	"Vuoi realmente rimuovere il gruppo <strong>%s</strong>?<br />"
+	"Vuoi realmente rimuovere il gruppo <strong>%s</strong>?<br>"
 	"Se lo fai, gli utenti iscritti al gruppo non ne faranno pi&ugrave; parte.";
 #elif L==8	// pl
-	"Czy na pewno chcesz usun&aogon;&cacute; grup&eogon; <strong>%s</strong>?<br />"
+	"Czy na pewno chcesz usun&aogon;&cacute; grup&eogon; <strong>%s</strong>?<br>"
 	"Je&sacute;li to zrobisz, u&zdot;ytkownicy zarejestrowani w grupie przestan&aogon; do niej nale&zdot;e&cacute;.";
 #elif L==9	// pt
-	"Voc&ecirc; realmente deseja remover o grupo <strong>%s</strong>?<br />"
+	"Voc&ecirc; realmente deseja remover o grupo <strong>%s</strong>?<br>"
 	"Se o fizer, os usu&aacute;rios inscritos no grupo n&atilde;o far&atilde;o mais parte dele.";
 #elif L==10	// tr
-	"<strong>%s</strong> grubunu ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?<br />"
+	"<strong>%s</strong> grubunu ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?<br>"
 	"Bunu yaparsan&inodot;z, gruba kay&inodot;tl&inodot; kullan&inodot;c&inodot;lar art&inodot;k gruba ait olmaz.";
 #endif
 
@@ -10098,34 +10098,34 @@ const char *Txt_Do_you_really_want_to_remove_the_survey_X =	// Warning: it is ve
 
 const char *Txt_Do_you_really_want_to_remove_the_type_of_group_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Realment voleu eliminar el tipus de grup <strong>%s</strong>?<br />"
+	"Realment voleu eliminar el tipus de grup <strong>%s</strong>?<br>"
 	"En fer-ho, tamb&eacute; s'eliminaran els grups d'aquest tipus.";
 #elif L==2	// de
-	"M&ouml;chten Sie den Typ der Gruppe <strong>%s</strong> wirklich entfernen?<br />"
+	"M&ouml;chten Sie den Typ der Gruppe <strong>%s</strong> wirklich entfernen?<br>"
 	"Dadurch werden auch die Gruppen dieses Typs entfernt.";
 #elif L==3	// en
-	"Do you really want to remove the type of group <strong>%s</strong>?<br />"
+	"Do you really want to remove the type of group <strong>%s</strong>?<br>"
 	"Doing so will also remove the groups of that type.";
 #elif L==4	// es
-	"&iquest;Realmente desea eliminar el tipo de grupo <strong>%s</strong>?<br />"
+	"&iquest;Realmente desea eliminar el tipo de grupo <strong>%s</strong>?<br>"
 	"Si lo hace, eliminar&aacute; tambi&eacute;n los grupos de ese tipo.";
 #elif L==5	// fr
-	"Voulez-vous vraiment supprimer le type de groupe <strong>%s</strong>?<br />"
+	"Voulez-vous vraiment supprimer le type de groupe <strong>%s</strong>?<br>"
 	"Cela supprimera &eacute;galement les groupes de ce type.";
 #elif L==6	// gn
-	"&iquest;A&ntilde;eteh&aacute;pe piko reipe'ase pe tipo de grupo <strong>%s</strong>?<br />"
+	"&iquest;A&ntilde;eteh&aacute;pe piko reipe'ase pe tipo de grupo <strong>%s</strong>?<br>"
 	"P&eacute;icha jajap&oacute;ramo ojeipe'&aacute;ta avei umi aty upeichagua.";
 #elif L==7	// it
-	"Vuoi realmente rimuovere il tipo di gruppo <strong>%s</strong>?<br />"
+	"Vuoi realmente rimuovere il tipo di gruppo <strong>%s</strong>?<br>"
 	"Facendo così rimuoverai anche i gruppi di questo tipo.";
 #elif L==8	// pl
-	"Czy na pewno chcesz usun&aogon;&cacute; typ grupy <strong>%s</strong>?<br />"
+	"Czy na pewno chcesz usun&aogon;&cacute; typ grupy <strong>%s</strong>?<br>"
 	"Spowoduje to r&oacute;wnie&zdot; usuni&eogon;cie grup tego typu.";
 #elif L==9	// pt
-	"Voc&ecirc; realmente quer remover o tipo de grupo <strong>%s</strong>?<br />"
+	"Voc&ecirc; realmente quer remover o tipo de grupo <strong>%s</strong>?<br>"
 	"Isso tamb&eacute;m remover&aacute; os grupos desse tipo.";
 #elif L==10	// tr
-	"<strong>%s</strong> grubunun t&uuml;r&uuml;n&uuml; ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?<br />"
+	"<strong>%s</strong> grubunun t&uuml;r&uuml;n&uuml; ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?<br>"
 	"Bunu yapmak, o t&uuml;rdeki gruplar&inodot; da kald&inodot;racakt&inodot;r.";
 #endif
 
@@ -12558,150 +12558,150 @@ const char *Txt_Extended_public_profile =
 
 const char *Txt_X_faces_have_been_detected_in_front_position_1_Z_ =	// Warning: it is very important to include two %u in the following sentences
 #if   L==1	// ca
-	"S'han detectat %u cares en posici&oacute; frontal:<br />"
-	"1 amb prou llum de fons (marcat en verd),<br />"
-	"%u amb el fons massa fosc (marcat en vermell).<br />"
+	"S'han detectat %u cares en posici&oacute; frontal:<br>"
+	"1 amb prou llum de fons (marcat en verd),<br>"
+	"%u amb el fons massa fosc (marcat en vermell).<br>"
 	"Si vols triar la cara marcada en verd, fes-hi clic.";
 #elif L==2	// de
-	"%u Gesichter wurden in vorderer Position erkannt:<br />"
-	"1 mit ausreichend hellem Hintergrund (gr&uuml;n markiert),<br />"
-	"%u mit zu dunklem Hintergrund (rot markiert).<br />"
+	"%u Gesichter wurden in vorderer Position erkannt:<br>"
+	"1 mit ausreichend hellem Hintergrund (gr&uuml;n markiert),<br>"
+	"%u mit zu dunklem Hintergrund (rot markiert).<br>"
 	"Wenn Sie das gr&uuml;n markierte Gesicht ausw&auml;hlen m&ouml;chten, klicken Sie darauf.";
 #elif L==3	// en
-	"%u faces have been detected in front position:<br />"
-	"1 with the background light enough (marked in green).<br />"
-	"%u with the background too dark (marked in red).<br />"
+	"%u faces have been detected in front position:<br>"
+	"1 with the background light enough (marked in green).<br>"
+	"%u with the background too dark (marked in red).<br>"
 	"If you want to choose the face marked in green, click on it.";
 #elif L==4	// es
-	"Se han detectado %u rostros en posici&oacute;n frontal:<br />"
-	"1 con el fondo suficientemente claro (en color verde),<br />"
-	"%u con el fondo demasiado oscuro (en color rojo).<br />"
+	"Se han detectado %u rostros en posici&oacute;n frontal:<br>"
+	"1 con el fondo suficientemente claro (en color verde),<br>"
+	"%u con el fondo demasiado oscuro (en color rojo).<br>"
 	"Si desea elegir el rostro se&ntilde;alado en verde, pulse sobre &eacute;l.";
 #elif L==5	// fr
-	"%u visages ont &eacute;t&eacute; d&eacute;tect&eacute;s en position de face:<br />"
-	"1 avec le fond assez clair (marqu&eacute; en vert),<br />"
-	"%u avec le fond trop sombre (marqu&eacute; en rouge).<br />"
+	"%u visages ont &eacute;t&eacute; d&eacute;tect&eacute;s en position de face:<br>"
+	"1 avec le fond assez clair (marqu&eacute; en vert),<br>"
+	"%u avec le fond trop sombre (marqu&eacute; en rouge).<br>"
 	"Si vous voulez choisir le visage marqu&eacute; en vert, cliquez dessus.";
 #elif L==6	// gn
-	"Se han detectado %u rostros en posici&oacute;n frontal:<br />"
-	"1 con el fondo suficientemente claro (en color verde),<br />"
-	"%u con el fondo demasiado oscuro (en color rojo).<br />"
+	"Se han detectado %u rostros en posici&oacute;n frontal:<br>"
+	"1 con el fondo suficientemente claro (en color verde),<br>"
+	"%u con el fondo demasiado oscuro (en color rojo).<br>"
 	"Si desea elegir el rostro se&ntilde;alado en verde, pulse sobre &eacute;l.";	// Okoteve traducción
 #elif L==7	// it
-	"%u visi sono stati individuati in posizione centrale:<br />"
-	"1 con lo sfondo abbastanza chiaro (segnato in verde),<br />"
-	"%u con lo sfondo troppo scuro (segnato in rosso).<br />"
+	"%u visi sono stati individuati in posizione centrale:<br>"
+	"1 con lo sfondo abbastanza chiaro (segnato in verde),<br>"
+	"%u con lo sfondo troppo scuro (segnato in rosso).<br>"
 	"Se vuoi scegliere il viso segnato in verde, clicca su di esso.";
 #elif L==8	// pl
-	"%u twarze zostaly wykryte w przednim:<br />"
-	"1 z dosc jasnym tle (zaznaczone na zielono),<br />"
-	"%u z tlem zbyt ciemny (zaznaczone na czerwono).<br />"
+	"%u twarze zostaly wykryte w przednim:<br>"
+	"1 z dosc jasnym tle (zaznaczone na zielono),<br>"
+	"%u z tlem zbyt ciemny (zaznaczone na czerwono).<br>"
 	"Jesli chcesz wybrac twarz zaznaczone na zielono, kliknij na niego.";
 #elif L==9	// pt
-	"%u faces foram detectadas na posi&ccedil;&atilde;o frontal:<br />"
-	"1 com o fundo claro o suficiente (marcado em verde),<br />"
-	"%u com o fundo muito escuro (marcado em vermelho).<br />"
+	"%u faces foram detectadas na posi&ccedil;&atilde;o frontal:<br>"
+	"1 com o fundo claro o suficiente (marcado em verde),<br>"
+	"%u com o fundo muito escuro (marcado em vermelho).<br>"
 	"Se voc&ecirc; quiser escolher o rosto marcado em verde, clique nele.";
 #elif L==10	// tr
-	"%u faces have been detected in front position:<br />"
-	"1 with the background light enough (marked in green).<br />"
-	"%u with the background too dark (marked in red).<br />"
+	"%u faces have been detected in front position:<br>"
+	"1 with the background light enough (marked in green).<br>"
+	"%u with the background too dark (marked in red).<br>"
 	"If you want to choose the face marked in green, click on it.";			// Çeviri lazim!
 #endif
 
 const char *Txt_X_faces_have_been_detected_in_front_position_Y_Z_ =	// Warning: it is very important to include three %u in the following sentences
 #if   L==1	// ca
-	"S'han detectat %u cares en posici&oacute; frontal:<br />"
-	"%u amb prou llum de fons (marcat en verd),<br />"
-	"%u amb el fons massa fosc (marcat en vermell).<br />"
+	"S'han detectat %u cares en posici&oacute; frontal:<br>"
+	"%u amb prou llum de fons (marcat en verd),<br>"
+	"%u amb el fons massa fosc (marcat en vermell).<br>"
 	"Si vols triar una de les cares marcades en verd, fes-hi clic.";
 #elif L==2	// de
-	"%u Gesichter wurden in vorderer Position erkannt:<br />"
-	"%u mit ausreichend hellem Hintergrund (gr&uuml;n markiert),<br />"
-	"%u mit zu dunklem Hintergrund (rot markiert).<br />"
+	"%u Gesichter wurden in vorderer Position erkannt:<br>"
+	"%u mit ausreichend hellem Hintergrund (gr&uuml;n markiert),<br>"
+	"%u mit zu dunklem Hintergrund (rot markiert).<br>"
 	"Wenn Sie eines der gr&uuml;n markierten Gesichter ausw&auml;hlen m&ouml;chten, klicken Sie darauf.";
 #elif L==3	// en
-	"%u faces have been detected in front position:<br />"
-	"%u with the background light enough (marked in green),<br />"
-	"%u with the background too dark (marked in red).<br />"
+	"%u faces have been detected in front position:<br>"
+	"%u with the background light enough (marked in green),<br>"
+	"%u with the background too dark (marked in red).<br>"
 	"If you want to choose one of the faces marked in green, click on it.";
 #elif L==4	// es
-	"Se han detectado %u rostros en posici&oacute;n frontal:<br />"
-	"%u con el fondo suficientemente claro (en color verde),<br />"
-	"%u con el fondo demasiado oscuro (en color rojo).<br />"
+	"Se han detectado %u rostros en posici&oacute;n frontal:<br>"
+	"%u con el fondo suficientemente claro (en color verde),<br>"
+	"%u con el fondo demasiado oscuro (en color rojo).<br>"
 	"Si desea elegir uno de los rostros se&ntilde;alados en verde, pulse sobre &eacute;l.";
 #elif L==5	// fr
-	"%u visages ont &eacute;t&eacute; d&eacute;tect&eacute;s en position de face:<br />"
-	"%u avec un fond suffisamment clair (marqu&eacute; en vert),<br />"
-	"%u avec un arri&egrave;re-plan trop sombre (marqu&eacute; en rouge).<br />"
+	"%u visages ont &eacute;t&eacute; d&eacute;tect&eacute;s en position de face:<br>"
+	"%u avec un fond suffisamment clair (marqu&eacute; en vert),<br>"
+	"%u avec un arri&egrave;re-plan trop sombre (marqu&eacute; en rouge).<br>"
 	"Si vous voulez choisir l'une des faces marqu&eacute;es en vert, cliquez dessus.";
 #elif L==6	// gn
-	"Se han detectado %u rostros en posici&oacute;n frontal:<br />"
-	"%u con el fondo suficientemente claro (en color verde),<br />"
-	"%u con el fondo demasiado oscuro (en color rojo).<br />"
+	"Se han detectado %u rostros en posici&oacute;n frontal:<br>"
+	"%u con el fondo suficientemente claro (en color verde),<br>"
+	"%u con el fondo demasiado oscuro (en color rojo).<br>"
 	"Si desea elegir uno de los rostros se&ntilde;alados en verde, pulse sobre &eacute;l.";	// Okoteve traducción
 #elif L==7	// it
-	"%u visi sono stati individuati in posizione centrale:<br />"
-	"%u con lo sfondo abbastanza chiaro (segnato il verde),<br />"
-	"%u con lo sfondo troppo scuro (segnato in rosso).<br />"
+	"%u visi sono stati individuati in posizione centrale:<br>"
+	"%u con lo sfondo abbastanza chiaro (segnato il verde),<br>"
+	"%u con lo sfondo troppo scuro (segnato in rosso).<br>"
 	"Se vuoi scegliere uno dei visi segnati in verde, clicca su di esso.";
 #elif L==8	// pl
-	"%u twarze zostaly wykryte w przednim:<br />"
-	"%u z dosc jasnym tlem (zaznaczone na zielono),<br />"
-	"%u z tlem zbyt ciemnym (zaznaczone na czerwono).<br />"
+	"%u twarze zostaly wykryte w przednim:<br>"
+	"%u z dosc jasnym tlem (zaznaczone na zielono),<br>"
+	"%u z tlem zbyt ciemnym (zaznaczone na czerwono).<br>"
 	"Jesli chcesz wybrac jedna z twarzy zaznaczone na zielono, kliknij na niego.";
 #elif L==9	// pt
-	"%u faces foram detectadas na posi&ccedil;&atilde;o frontal:<br />"
-	"%u com o fundo claro o suficiente (marcado em verde),<br />"
-	"%u com o fundo muito escuro (marcado em vermelho).<br />"
+	"%u faces foram detectadas na posi&ccedil;&atilde;o frontal:<br>"
+	"%u com o fundo claro o suficiente (marcado em verde),<br>"
+	"%u com o fundo muito escuro (marcado em vermelho).<br>"
 	"Se voc&ecirc; quiser escolher um dos rostos marcados em verde, clique nele.";
 #elif L==10	// tr
-	"%u faces have been detected in front position:<br />"
-	"%u with the background light enough (marked in green),<br />"
-	"%u with the background too dark (marked in red).<br />"
+	"%u faces have been detected in front position:<br>"
+	"%u with the background light enough (marked in green),<br>"
+	"%u with the background too dark (marked in red).<br>"
 	"If you want to choose one of the faces marked in green, click on it.";			// Çeviri lazim!
 #endif
 
 const char *Txt_X_faces_marked_in_green_have_been_detected_ =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
 	"S'han detectat %u cares (assenyalats en verd) en posici&oacute; frontal"
-	" i amb el fons prou clar.<br />"
+	" i amb el fons prou clar.<br>"
 	"Si voleu triar un d'aquests rostres, premi sobre ell.";
 #elif L==2	// de
 	"%u Fl&auml;chen (gr&uuml;n markiert) wurden vor Position erfasst,"
-	" und der Hintergrund ist leicht genug.<br />"
+	" und der Hintergrund ist leicht genug.<br>"
 	"Wenn Sie eine dieser Fl&auml;chen zu w&auml;hlen, klicken Sie darauf.";
 #elif L==3	// en
 	"%u faces (marked in green) have been detected in front position,"
-	" and the background is light enough.<br />"
+	" and the background is light enough.<br>"
 	"If you want to choose one of those faces, click on it.";
 #elif L==4	// es
 	"Se han detectado %u rostros (se&ntilde;alados en verde) en posici&oacute;n frontal"
-	" y con el fondo suficientemente claro.<br />"
+	" y con el fondo suficientemente claro.<br>"
 	"Si desea elegir uno de esos rostros, pulse sobre &eacute;l.";
 #elif L==5	// fr
 	"%u visages ont &eacute;t&eacute; d&eacute;tect&eacute;s (indiqu&eacute;s en vert) dans la position avant"
-	" et avec un fond suffisamment claire.<br />"
+	" et avec un fond suffisamment claire.<br>"
 	"Si vous voulez choisir un de ces visages, cliquez dessus.";
 #elif L==6	// gn
 	"Se han detectado %u rostros (se&ntilde;alados en verde) en posici&oacute;n frontal"
-	" y con el fondo suficientemente claro.<br />"
+	" y con el fondo suficientemente claro.<br>"
 	"Si desea elegir uno de esos rostros, pulse sobre &eacute;l.";	// Okoteve traducción
 #elif L==7	// it
 	"%u visi (segnati in verde) sono stati individuati in posizione frontale,"
-	" e lo sfondo &egrave; abbastanza chiaro.<br />"
+	" e lo sfondo &egrave; abbastanza chiaro.<br>"
 	"Se vuoi scegliere uno di questi visi, clicca su di esso.";
 #elif L==8	// pl
 	"%u powierzchnie zosta&lstrok;y wykryte (oznaczony na zielono) w po&lstrok;o&zdot;eniu przednim,"
-	" o dostatecznie jasne t&lstrok;o.<br />"
+	" o dostatecznie jasne t&lstrok;o.<br>"
 	"Je&zdot;eli chcesz wybra&cacute; jedn&aogon; z tych twarzy, kliknij na ni&aogon;.";
 #elif L==9	// pt
 	"%u faces foram detectados (indicado em verde) na posi&ccedil;&atilde;o frontal"
-	" e com fundo suficientemente claro.<br />"
+	" e com fundo suficientemente claro.<br>"
 	"Se voc&ecirc; quer escolher um daqueles rostos, clique sobre ele.";
 #elif L==10	// tr
 	"%u faces (marked in green) have been detected in front position,"
-	" and the background is light enough.<br />"
+	" and the background is light enough.<br>"
 	"If you want to choose one of those faces, click on it.";	// Çeviri lazim!
 #endif
 
@@ -12832,25 +12832,25 @@ const char *Txt_Feedback =
 
 const char *Txt_Field_BR_name =
 #if   L==1	// ca
-	"Nom<br />del camp";
+	"Nom<br>del camp";
 #elif L==2	// de
-	"Name<br />des Feldes";
+	"Name<br>des Feldes";
 #elif L==3	// en
-	"Field<br />name";
+	"Field<br>name";
 #elif L==4	// es
-	"Nombre<br />del campo";
+	"Nombre<br>del campo";
 #elif L==5	// fr
-	"Nom<br />du champ";
+	"Nom<br>du champ";
 #elif L==6	// gn
-	"Nombre<br />del campo";	// Okoteve traducción
+	"Nombre<br>del campo";	// Okoteve traducción
 #elif L==7	// it
-	"Nome<br />del campo";
+	"Nome<br>del campo";
 #elif L==8	// pl
-	"Nazwa<br />pola";
+	"Nazwa<br>pola";
 #elif L==9	// pt
-	"Nome<br />do campo";
+	"Nome<br>do campo";
 #elif L==10	// tr
-	"Field<br />name";		// Çeviri lazim!
+	"Field<br>name";		// Çeviri lazim!
 #endif
 
 const char *Txt_Figures =
@@ -13363,96 +13363,96 @@ const char *Txt_Files_of_marks_must_contain_a_table_in_HTML_format_ =
 #if   L==1	// ca
 	"Los archivos de calificaciones deben contener una tabla en <strong>formato HTML</strong> sin im&aacute;genes."
 	" Cada archivo HTML se puede generar, por ejemplo, desde una hoja de c&aacute;lculo,"
-	" seleccionando la parte deseada de la tabla y guard&aacute;ndola como p&aacute;gina web.<br />"
+	" seleccionando la parte deseada de la tabla y guard&aacute;ndola como p&aacute;gina web.<br>"
 	" Una tabla puede tener <strong>varias filas de cabecera y varias filas de pie</strong>."
 	" Entre ellas debe haber <strong>una &uacute;nica fila para cada estudiante</strong>,"
-	" con cualquier n&uacute;mero de columnas, conteniendo <strong>la primera columna el ID (DNI/c&eacute;dula) del estudiante</strong>.<br />"
+	" con cualquier n&uacute;mero de columnas, conteniendo <strong>la primera columna el ID (DNI/c&eacute;dula) del estudiante</strong>.<br>"
 	" Un estudiante ver&aacute; una tabla con las filas de cabecera,"
 	" seguidas por la fila con sus calificaciones,"
 	" y por las filas de pie.";			// Necessita traducció
 #elif L==2	// de
 	"Bewertungsdateien müssen eine Tabelle im <strong>HTML-Format</strong> ohne Bilder enthalten."
 	" Die HTML-Dateien k&ouml;nnen z.B. aus einer Kalkulationstabelle erstellt werden,"
-	" indem der gewünschte Bereich aus der Tabelle ausgew&auml;hlt und als HTML gespeichert wird.<br />"
+	" indem der gewünschte Bereich aus der Tabelle ausgew&auml;hlt und als HTML gespeichert wird.<br>"
 	" Eine Tabelle kann <strong>mehrere Kopf- und Fußzeilen enthalten</strong>."
 	" Zwischen solchen Zeilen muss eine <strong>einzige Zeile f&uuml; jeden Studenten bestehen</strong>,"
-	" mit einer beliebigen Anzahl von Spalten, <strong>wovon die erste die Ausweis-Nr. enthalten muss</strong>.<br />"
+	" mit einer beliebigen Anzahl von Spalten, <strong>wovon die erste die Ausweis-Nr. enthalten muss</strong>.<br>"
 	" Ruft ein Student die Tabelle auf, sieht er nur die f&uuml;r ihn bestimmte Zeile.";
 #elif L==3	// en
 	"Files of marks must contain a table in <strong>HTML format</strong> without pictures."
 	" Each HTML file may be generated, for example, from a spreadsheet,"
-	" by selecting the desired portion of the table and saving it as web page.<br />"
+	" by selecting the desired portion of the table and saving it as web page.<br>"
 	" A table can have <strong>multiple header and footer rows</strong>."
 	" Between them it should be <strong>a single row for each student</strong>,"
-	" with any number of columns, <strong>the first column containing the student's ID</strong>.<br />"
+	" with any number of columns, <strong>the first column containing the student's ID</strong>.<br>"
 	" A student will see a table with header rows,"
 	" followed by the row with his/her marks,"
 	" and footer rows.";
 #elif L==4	// es
 	"Los archivos de calificaciones deben contener una tabla en <strong>formato HTML</strong> sin im&aacute;genes."
 	" Cada archivo HTML se puede generar, por ejemplo, desde una hoja de c&aacute;lculo,"
-	" seleccionando la parte deseada de la tabla y guard&aacute;ndola como p&aacute;gina web.<br />"
+	" seleccionando la parte deseada de la tabla y guard&aacute;ndola como p&aacute;gina web.<br>"
 	" Una tabla puede tener <strong>varias filas de cabecera y varias filas de pie</strong>."
 	" Entre ellas debe haber <strong>una &uacute;nica fila para cada estudiante</strong>,"
-	" con cualquier n&uacute;mero de columnas, conteniendo <strong>la primera columna el ID (DNI/c&eacute;dula) del estudiante</strong>.<br />"
+	" con cualquier n&uacute;mero de columnas, conteniendo <strong>la primera columna el ID (DNI/c&eacute;dula) del estudiante</strong>.<br>"
 	" Un estudiante ver&aacute; una tabla con las filas de cabecera,"
 	" seguidas por la fila con sus calificaciones,"
 	" y por las filas de pie.";
 #elif L==5	// fr
 	"Files of marks must contain a table in <strong>HTML format</strong> without pictures."
 	" Each HTML file may be generated, for example, from a spreadsheet,"
-	" by selecting the desired portion of the table and saving it as web page.<br />"
+	" by selecting the desired portion of the table and saving it as web page.<br>"
 	" A table can have <strong>multiple header and footer rows</strong>."
 	" Between them it should be <strong>a single row for each student</strong>,"
-	" with any number of columns, <strong>the first column containing the student's ID</strong>.<br />"
+	" with any number of columns, <strong>the first column containing the student's ID</strong>.<br>"
 	" A student will see a table with header rows,"
 	" followed by the row with his/her marks,"
 	" and footer rows.";				// Besoin de traduction
 #elif L==6	// gn
 	"Los archivos de calificaciones deben contener una tabla en <strong>formato HTML</strong> sin im&aacute;genes."
 	" Cada archivo HTML se puede generar, por ejemplo, desde una hoja de c&aacute;lculo,"
-	" seleccionando la parte deseada de la tabla y guard&aacute;ndola como p&aacute;gina web.<br />"
+	" seleccionando la parte deseada de la tabla y guard&aacute;ndola como p&aacute;gina web.<br>"
 	" Una tabla puede tener <strong>varias filas de cabecera y varias filas de pie</strong>."
 	" Entre ellas debe haber <strong>una &uacute;nica fila para cada estudiante</strong>,"
-	" con cualquier n&uacute;mero de columnas, conteniendo <strong>la primera columna el ID (DNI/c&eacute;dula) del estudiante</strong>.<br />"
+	" con cualquier n&uacute;mero de columnas, conteniendo <strong>la primera columna el ID (DNI/c&eacute;dula) del estudiante</strong>.<br>"
 	" Un estudiante ver&aacute; una tabla con las filas de cabecera,"
 	" seguidas por la fila con sus calificaciones,"
 	" y por las filas de pie.";			// Okoteve traducción
 #elif L==7	// it
 	"I file dei risultati devono apparire in una tabella in <strong>formato HTML</strong> senza immagini."
 	" Ogni file HTML pu&ograve; essere generato, per esempio, da un foglio di calcolo elettronico,"
-	" selezionando la desiderata porzione di tabella e salvandolo come una pagina web.<br />"
+	" selezionando la desiderata porzione di tabella e salvandolo come una pagina web.<br>"
 	" Una tabella pu&ograve; avere <strong>intestazioni multiple e righe a pi&egrave; di pagina</strong>."
 	" Tra di loro dovrebbe esserci <strong>una singola riga per ogni studente</strong>,"
-	" con alcuni numeri di colonne, <strong>la prima colonna contiene l'ID dello studente</strong>.<br />"
+	" con alcuni numeri di colonne, <strong>la prima colonna contiene l'ID dello studente</strong>.<br>"
 	" Uno studente vedr&agrave; una tabella con righe intestate,"
 	" seguite da una riga con i loro risultati,"
 	" e righe a pi&egrave; di pagina.";
 #elif L==8	// pl
 	"Pliki znak&oacute;w musza zawierac tabele <strong>w formacie HTML</strong> bez zdjecia."
 	" Kazdy plik HTML moze zostac wygenerowany, na przyklad z arkusza kalkulacyjnego,"
-	" wybierajac odpowiednia czesc tabeli i zapisanie go jako strone sieci Web.<br />"
+	" wybierajac odpowiednia czesc tabeli i zapisanie go jako strone sieci Web.<br>"
 	" Tabela moze miec <strong>wielu wiersze nagl&oacute;wka i stopki</strong>."
 	" Pomiedzy nimi nalezy <strong>jednym wierszu dla kazdego ucznia</strong>,"
-	" z dowolna iloscia kolumn, <strong>pierwszej kolumnie zawierajacej studenta ID</strong>.<br />"
+	" z dowolna iloscia kolumn, <strong>pierwszej kolumnie zawierajacej studenta ID</strong>.<br>"
 	" Student zobaczy tabele z wierszy nagl&oacute;wka, a nastepnie przez rzad z ich znak&oacute;w towarowych i stopki.";
 #elif L==9	// pt
 	"Os arquivos de notas devem conter uma tabela no <strong>formato HTML</strong> sem imagens."
 	" Cada arquivo HTML pode ser gerado, por exemplo, a partir de uma planilha eletr&ocirc;nica,"
-	" selecionando a parte desejada da tabela e salvando-a como p&aacute;gina web.<br />"
+	" selecionando a parte desejada da tabela e salvando-a como p&aacute;gina web.<br>"
 	" Uma tabela pode ter <strong>v&aacute;rias linhas de cabe&ccedil;alho e rodap&eacute;</strong>."
 	" Entre eles deve haver <strong>uma &uacute;nica linha para cada estudante</strong>,"
-	" com qualquer n&uacute;mero de colunas, <strong>a primeira coluna contendo o ID do estudante</strong>.<br />"
+	" com qualquer n&uacute;mero de colunas, <strong>a primeira coluna contendo o ID do estudante</strong>.<br>"
 	" Um estudante ver&aacute; uma tabela com linhas de cabe&ccedil;alho,"
 	" seguida pela linha com suas notas,"
 	" e linhas de rodap&eacute;.";
 #elif L==10	// tr
 	"Files of marks must contain a table in <strong>HTML format</strong> without pictures."
 	" Each HTML file may be generated, for example, from a spreadsheet,"
-	" by selecting the desired portion of the table and saving it as web page.<br />"
+	" by selecting the desired portion of the table and saving it as web page.<br>"
 	" A table can have <strong>multiple header and footer rows</strong>."
 	" Between them it should be <strong>a single row for each student</strong>,"
-	" with any number of columns, <strong>the first column containing the student's ID</strong>.<br />"
+	" with any number of columns, <strong>the first column containing the student's ID</strong>.<br>"
 	" A student will see a table with header rows,"
 	" followed by the row with his/her marks,"
 	" and footer rows.";				// Çeviri lazim!
@@ -18454,25 +18454,25 @@ const char *Txt_Institutional_code =
 
 const char *Txt_Institutional_BR_code =
 #if   L==1	// ca
-	"Codi<br />instituc.";
+	"Codi<br>instituc.";
 #elif L==2	// de
-	"Institutionelle<br />Code";
+	"Institutionelle<br>Code";
 #elif L==3	// en
-	"Institut.<br />code";
+	"Institut.<br>code";
 #elif L==4	// es
-	"C&oacute;digo<br />instituc.";
+	"C&oacute;digo<br>instituc.";
 #elif L==5	// fr
-	"Code<br />institut.";
+	"Code<br>institut.";
 #elif L==6	// gn
-	"C&oacute;digo<br />instituc.";	// Okoteve traducción
+	"C&oacute;digo<br>instituc.";	// Okoteve traducción
 #elif L==7	// it
-	"Codice<br />istituz.";
+	"Codice<br>istituz.";
 #elif L==8	// pl
-	"Kod<br />instytuc.";
+	"Kod<br>instytuc.";
 #elif L==9	// pt
-	"C&oacute;digo<br />instituc.";
+	"C&oacute;digo<br>instituc.";
 #elif L==10	// tr
-	"Institut.<br />code";		// Çeviri lazim!
+	"Institut.<br>code";		// Çeviri lazim!
 #endif
 
 const char *Txt_Institutions_ABBREVIATION =
@@ -20354,25 +20354,25 @@ const char *Txt_Max_levels =
 
 const char *Txt_Max_BR_students =
 #if   L==1	// ca
-	"M&agrave;xim<br />d'est.";
+	"M&agrave;xim<br>d'est.";
 #elif L==2	// de
-	"Max.<br />Stud.";
+	"Max.<br>Stud.";
 #elif L==3	// en
-	"Max.<br />stud.";
+	"Max.<br>stud.";
 #elif L==4	// es
-	"M&aacute;x.<br />estu.";
+	"M&aacute;x.<br>estu.";
 #elif L==5	// fr
-	"Max.<br />&eacute;tud.";
+	"Max.<br>&eacute;tud.";
 #elif L==6	// gn
-	"M&aacute;x.<br />estu.";	// Okoteve traducción
+	"M&aacute;x.<br>estu.";	// Okoteve traducción
 #elif L==7	// it
-	"Max.<br />stud.";
+	"Max.<br>stud.";
 #elif L==8	// pl
-	"Max.<br />stud.";
+	"Max.<br>stud.";
 #elif L==9	// pt
-	"M&aacute;x.<br />estu.";
+	"M&aacute;x.<br>estu.";
 #elif L==10	// tr
-	"Max.<br />stud.";		// Çeviri lazim!
+	"Max.<br>stud.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Maximum =
@@ -22894,25 +22894,25 @@ const char *Txt_minimum =
 
 const char *Txt_Minimum_time_seconds_per_question_between_two_tests =
 #if   L==1	// ca
-	"Temps m&iacute;nim (segons)<br />per pregunta<br />entre dues tests";
+	"Temps m&iacute;nim (segons)<br>per pregunta<br>entre dues tests";
 #elif L==2	// de
-	"Minimale Zeit (Sekunden)<br />pro Frage<br />zwischen zwei Tests";
+	"Minimale Zeit (Sekunden)<br>pro Frage<br>zwischen zwei Tests";
 #elif L==3	// en
-	"Minimum time (seconds)<br />per question<br />between two tests";
+	"Minimum time (seconds)<br>per question<br>between two tests";
 #elif L==4	// es
-	"Tiempo m&iacute;nimo (segundos)<br />por pregunta<br />entre dos test";
+	"Tiempo m&iacute;nimo (segundos)<br>por pregunta<br>entre dos test";
 #elif L==5	// fr
-	"Minimum de temps (en secondes)<br />par question<br />entre deux tests";
+	"Minimum de temps (en secondes)<br>par question<br>entre deux tests";
 #elif L==6	// gn
-	"Tiempo m&iacute;nimo (segundos)<br />por pregunta<br />entre dos test";	// Okoteve traducción
+	"Tiempo m&iacute;nimo (segundos)<br>por pregunta<br>entre dos test";	// Okoteve traducción
 #elif L==7	// it
-	"Minimo tempo (in secondi)<br />per domanda<br />tra due test";
+	"Minimo tempo (in secondi)<br>per domanda<br>tra due test";
 #elif L==8	// pl
-	"Minimalny czas (w sekundach)<br />na pytanie miedzy<br />dwoma badaniami";
+	"Minimalny czas (w sekundach)<br>na pytanie miedzy<br>dwoma badaniami";
 #elif L==9	// pt
-	"Tempo m&iacute;nimo (segundos)<br />por pergunta<br />entre dois testes";
+	"Tempo m&iacute;nimo (segundos)<br>por pergunta<br>entre dois testes";
 #elif L==10	// tr
-	"Minimum time (seconds)<br />per question<br />between two tests";		// Çeviri lazim!
+	"Minimum time (seconds)<br>per question<br>between two tests";		// Çeviri lazim!
 #endif
 
 const char *Txt_minute =
@@ -26080,71 +26080,71 @@ const char *Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_ =
 
 const char *Txt_NOTICE_Active_BR_notices =
 #if   L==1	// ca
-	"Avisos<br />actius";
+	"Avisos<br>actius";
 #elif L==2	// de
-	"Aktive<br />Ank&uuml;ndigungen";
+	"Aktive<br>Ank&uuml;ndigungen";
 #elif L==3	// en
-	"Active<br />notices";
+	"Active<br>notices";
 #elif L==4	// es
-	"Avisos<br />activos";
+	"Avisos<br>activos";
 #elif L==5	// fr
-	"Avis<br />actives";
+	"Avis<br>actives";
 #elif L==6	// gn
-	"Avisos<br />activos";	// Okoteve traducción
+	"Avisos<br>activos";	// Okoteve traducción
 #elif L==7	// it
-	"Avvisi<br />attivi";
+	"Avvisi<br>attivi";
 #elif L==8	// pl
-	"Active<br />Ogloszenia";
+	"Active<br>Ogloszenia";
 #elif L==9	// pt
-	"Avisos<br />ativos";
+	"Avisos<br>ativos";
 #elif L==10	// tr
-	"Active<br />notices";	// Çeviri lazim!
+	"Active<br>notices";	// Çeviri lazim!
 #endif
 
 const char *Txt_NOTICE_Deleted_BR_notices =
 #if   L==1	// ca
-	"Avisos<br />eliminats";
+	"Avisos<br>eliminats";
 #elif L==2	// de
-	"Gel&ouml;scht<br />Ank&uuml;ndigungen";
+	"Gel&ouml;scht<br>Ank&uuml;ndigungen";
 #elif L==3	// en
-	"Deleted<br />notices";
+	"Deleted<br>notices";
 #elif L==4	// es
-	"Avisos<br />eliminados";
+	"Avisos<br>eliminados";
 #elif L==5	// fr
-	"Avis<br />supprim&eacute;s";
+	"Avis<br>supprim&eacute;s";
 #elif L==6	// gn
-	"Avisos<br />eliminados";	// Okoteve traducción
+	"Avisos<br>eliminados";	// Okoteve traducción
 #elif L==7	// it
-	"Avvisi<br />rimossi";
+	"Avvisi<br>rimossi";
 #elif L==8	// pl
-	"Usuniete<br />notices";
+	"Usuniete<br>notices";
 #elif L==9	// pt
-	"Avisos<br />suprimidos";
+	"Avisos<br>suprimidos";
 #elif L==10	// tr
-	"Deleted<br />notices";		// Çeviri lazim!
+	"Deleted<br>notices";		// Çeviri lazim!
 #endif
 
 const char *Txt_NOTICE_Obsolete_BR_notices =
 #if   L==1	// ca
-	"Avisos<br />obsolets";
+	"Avisos<br>obsolets";
 #elif L==2	// de
-	"Veraltet<br />Ank&uuml;ndigungen";
+	"Veraltet<br>Ank&uuml;ndigungen";
 #elif L==3	// en
-	"Obsolete<br />notices";
+	"Obsolete<br>notices";
 #elif L==4	// es
-	"Avisos<br />obsoletos";
+	"Avisos<br>obsoletos";
 #elif L==5	// fr
-	"Avis<br />obsol&egrave;tes";
+	"Avis<br>obsol&egrave;tes";
 #elif L==6	// gn
-	"Avisos<br />obsoletos";	// Okoteve traducción
+	"Avisos<br>obsoletos";	// Okoteve traducción
 #elif L==7	// it
-	"Avvisi<br />obsoleti";
+	"Avvisi<br>obsoleti";
 #elif L==8	// pl
-	"Przestarzaly<br />Ogloszenia";
+	"Przestarzaly<br>Ogloszenia";
 #elif L==9	// pt
-	"Avisos<br />obsoletos";
+	"Avisos<br>obsoletos";
 #elif L==10	// tr
-	"Obsolete<br />notices";	// Çeviri lazim!
+	"Obsolete<br>notices";	// Çeviri lazim!
 #endif
 
 const char *Txt_Notice =
@@ -27423,25 +27423,25 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 
 const char *Txt_Notify_me_BR_by_email =
 #if   L==1	// ca
-	"Avisar-me<br />per correu";
+	"Avisar-me<br>per correu";
 #elif L==2	// de
-	"Benachrichtigt mich<br />per E-Mail";
+	"Benachrichtigt mich<br>per E-Mail";
 #elif L==3	// en
-	"Notify me<br />by email";
+	"Notify me<br>by email";
 #elif L==4	// es
-	"Avisarme<br />por correo";
+	"Avisarme<br>por correo";
 #elif L==5	// fr
-	"Avertissez-moi<br />par email";
+	"Avertissez-moi<br>par email";
 #elif L==6	// gn
-	"Avisarme<br />por correo";	// Okoteve traducción
+	"Avisarme<br>por correo";	// Okoteve traducción
 #elif L==7	// it
-	"Notificatami<br />via email";
+	"Notificatami<br>via email";
 #elif L==8	// pl
-	"Informuj<br />mnie emailem";
+	"Informuj<br>mnie emailem";
 #elif L==9	// pt
-	"Notifique-me<br />por email";
+	"Notifique-me<br>por email";
 #elif L==10	// tr
-	"Notify me<br />by email";	// Çeviri lazim!
+	"Notify me<br>by email";	// Çeviri lazim!
 #endif
 
 const char *Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X =	// Warning: it is very important to include %s in the following sentences
@@ -27607,25 +27607,25 @@ const char *Txt_Number_of_forums =
 
 const char *Txt_Number_of_BR_groups =
 #if   L==1	// ca
-	"Nombre de<br />grups";
+	"Nombre de<br>grups";
 #elif L==2	// de
-	"Anzahl der<br />Gruppen";
+	"Anzahl der<br>Gruppen";
 #elif L==3	// en
-	"Number of<br />groups";
+	"Number of<br>groups";
 #elif L==4	// es
-	"N.&ordm; de<br />grupos";
+	"N.&ordm; de<br>grupos";
 #elif L==5	// fr
-	"Nombre de<br />groupes";
+	"Nombre de<br>groupes";
 #elif L==6	// gn
-	"N.&ordm; de<br />grupos";	// Okoteve traducción
+	"N.&ordm; de<br>grupos";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />gruppi";
+	"Numero di<br>gruppi";
 #elif L==8	// pl
-	"Liczba z<br />grupy";
+	"Liczba z<br>grupy";
 #elif L==9	// pt
-	"N.&ordm; de<br />grupos";
+	"N.&ordm; de<br>grupos";
 #elif L==10	// tr
-	"Number of<br />groups";	// Çeviri lazim!
+	"Number of<br>groups";	// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_indicators =
@@ -27653,48 +27653,48 @@ const char *Txt_Number_of_indicators =
 
 const char *Txt_Number_of_BR_lines =
 #if   L==1	// ca
-	"Nombre de<br />l&iacute;nies";
+	"Nombre de<br>l&iacute;nies";
 #elif L==2	// de
-	"Anzahl der<br />Zeilen";
+	"Anzahl der<br>Zeilen";
 #elif L==3	// en
-	"Number of<br />lines";
+	"Number of<br>lines";
 #elif L==4	// es
-	"N.&ordm; de<br />l&iacute;neas";
+	"N.&ordm; de<br>l&iacute;neas";
 #elif L==5	// fr
-	"Nombre de<br />lignes";
+	"Nombre de<br>lignes";
 #elif L==6	// gn
-	"N.&ordm; de<br />l&iacute;neas";	// Okoteve traducción
+	"N.&ordm; de<br>l&iacute;neas";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />linee";
+	"Numero di<br>linee";
 #elif L==8	// pl
-	"Liczba z<br />linie";
+	"Liczba z<br>linie";
 #elif L==9	// pt
-	"N.&ordm; de<br />linhas";
+	"N.&ordm; de<br>linhas";
 #elif L==10	// tr
-	"Number of<br />lines";			// Çeviri lazim!
+	"Number of<br>lines";			// Çeviri lazim!
 #endif
 
 const char *Txt_Number_BR_msgs =
 #if   L==1	// ca
-	"Nombre<br />missat.";
+	"Nombre<br>missat.";
 #elif L==2	// de
-	"Anzahl<br />Nachr.";
+	"Anzahl<br>Nachr.";
 #elif L==3	// en
-	"Number<br />msgs.";
+	"Number<br>msgs.";
 #elif L==4	// es
-	"N.&ordm;<br />mens.";
+	"N.&ordm;<br>mens.";
 #elif L==5	// fr
-	"Nombre<br />msgs.";
+	"Nombre<br>msgs.";
 #elif L==6	// gn
-	"N.&ordm;<br />mens.";	// Okoteve traducción
+	"N.&ordm;<br>mens.";	// Okoteve traducción
 #elif L==7	// it
-	"Num.<br />msg.";
+	"Num.<br>msg.";
 #elif L==8	// pl
-	"Numer<br />msgs.";
+	"Numer<br>msgs.";
 #elif L==9	// pt
-	"N.&ordm;<br />mens.";
+	"N.&ordm;<br>mens.";
 #elif L==10	// tr
-	"Number<br />msgs.";	// Çeviri lazim!
+	"Number<br>msgs.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_posts =
@@ -27722,71 +27722,71 @@ const char *Txt_Number_of_posts =
 
 const char *Txt_Number_of_posts_BR_per_forum =
 #if   L==1	// ca
-	"Nombre de comentaris<br />per f&ograve;rum";
+	"Nombre de comentaris<br>per f&ograve;rum";
 #elif L==2	// de
-	"Anzahl der Nachrichten<br />pro Forum";
+	"Anzahl der Nachrichten<br>pro Forum";
 #elif L==3	// en
-	"Number of posts<br />per forum";
+	"Number of posts<br>per forum";
 #elif L==4	// es
-	"N.&ordm; de comentarios<br />por foro";
+	"N.&ordm; de comentarios<br>por foro";
 #elif L==5	// fr
-	"Nombre de posts<br />par forum";
+	"Nombre de posts<br>par forum";
 #elif L==6	// gn
-	"N.&ordm; de comentarios<br />por foro";	// Okoteve traducción
+	"N.&ordm; de comentarios<br>por foro";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di post<br />per forum";
+	"Numero di post<br>per forum";
 #elif L==8	// pl
-	"Liczba wiadomosci<br />per forum";
+	"Liczba wiadomosci<br>per forum";
 #elif L==9	// pt
-	"N.&ordm; de posts<br />por f&oacute;rum";
+	"N.&ordm; de posts<br>por f&oacute;rum";
 #elif L==10	// tr
-	"Number of posts<br />per forum";		// Çeviri lazim!
+	"Number of posts<br>per forum";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_posts_BR_per_thread =
 #if   L==1	// ca
-	"Nombre de comentaris<br />per discussi&oacute;";
+	"Nombre de comentaris<br>per discussi&oacute;";
 #elif L==2	// de
-	"Anzahl der Nachrichten<br />pro Thread";
+	"Anzahl der Nachrichten<br>pro Thread";
 #elif L==3	// en
-	"Number of posts<br />per thread";
+	"Number of posts<br>per thread";
 #elif L==4	// es
-	"N.&ordm; de comentarios<br />por usuario";
+	"N.&ordm; de comentarios<br>por usuario";
 #elif L==5	// fr
-	"Nombre de posts<br />par fil";
+	"Nombre de posts<br>par fil";
 #elif L==6	// gn
-	"N.&ordm; de comentarios<br />por discusi&oacute;n";	// Okoteve traducción
+	"N.&ordm; de comentarios<br>por discusi&oacute;n";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di post<br />per discussione";
+	"Numero di post<br>per discussione";
 #elif L==8	// pl
-	"Liczba wiadomosci<br />per watku";
+	"Liczba wiadomosci<br>per watku";
 #elif L==9	// pt
-	"N.&ordm; de posts<br />por discuss&atilde;o";
+	"N.&ordm; de posts<br>por discuss&atilde;o";
 #elif L==10	// tr
-	"Number of posts<br />per thread";			// Çeviri lazim!
+	"Number of posts<br>per thread";			// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_posts_BR_per_user =
 #if   L==1	// ca
-	"Nombre de comentaris<br />per usuari";
+	"Nombre de comentaris<br>per usuari";
 #elif L==2	// de
-	"Anzahl der Nachrichten<br />pro Benutzer";
+	"Anzahl der Nachrichten<br>pro Benutzer";
 #elif L==3	// en
-	"Number of posts<br />per user";
+	"Number of posts<br>per user";
 #elif L==4	// es
-	"N.&ordm; de comentarios<br />por usuario";
+	"N.&ordm; de comentarios<br>por usuario";
 #elif L==5	// fr
-	"Nombre de posts<br />par utilisateur";
+	"Nombre de posts<br>par utilisateur";
 #elif L==6	// gn
-	"N.&ordm; de comentarios<br />por puruh&aacute;ra";	// Okoteve traducción
+	"N.&ordm; de comentarios<br>por puruh&aacute;ra";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di post<br />per utente";
+	"Numero di post<br>per utente";
 #elif L==8	// pl
-	"Liczba wiadomosci<br />per u&zdot;ytkownik";
+	"Liczba wiadomosci<br>per u&zdot;ytkownik";
 #elif L==9	// pt
-	"N.&ordm; de posts<br />por utilizador";
+	"N.&ordm; de posts<br>por utilizador";
 #elif L==10	// tr
-	"Number of posts<br />per user";			// Çeviri lazim!
+	"Number of posts<br>per user";			// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_private_files =
@@ -27814,25 +27814,25 @@ const char *Txt_Number_of_private_files =
 
 const char *Txt_Number_of_BR_program_items =
 #if   L==1	// ca
-	"Nombre d'elements<br />de programes";
+	"Nombre d'elements<br>de programes";
 #elif L==2	// de
 	"Anzahl der Programmelemente";
 #elif L==3	// en
-	"Number of<br />tree nodes";
+	"Number of<br>tree nodes";
 #elif L==4	// es
-	"N.&ordm; de<br />items en programas";
+	"N.&ordm; de<br>items en programas";
 #elif L==5	// fr
-	"Nombre d'&eacute;l&eacute;ments<br />de programme";
+	"Nombre d'&eacute;l&eacute;ments<br>de programme";
 #elif L==6	// gn
-	"N.&ordm; de<br />items en programas";	// Okoteve traducción
+	"N.&ordm; de<br>items en programas";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di elementi<br />di programmi";
+	"Numero di elementi<br>di programmi";
 #elif L==8	// pl
-	"Liczba<br />pozycji programu";
+	"Liczba<br>pozycji programu";
 #elif L==9	// pt
-	"N.&ordm; de<br />itens de programas";
+	"N.&ordm; de<br>itens de programas";
 #elif L==10	// tr
-	"Number of<br />tree nodes";		// Çeviri lazim!
+	"Number of<br>tree nodes";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_public_files =
@@ -27906,25 +27906,25 @@ const char *Txt_Number_of_questions_to_show =
 
 const char *Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded =
 #if   L==1	// ca
-	"Nombre de<br />vegades<br />que s'ha<br />respost";
+	"Nombre de<br>vegades<br>que s'ha<br>respost";
 #elif L==2	// de
-	"Anzahl der<br />beantworteten<br />Fragen";
+	"Anzahl der<br>beantworteten<br>Fragen";
 #elif L==3	// en
-	"Number of<br />times that<br />questions<br />have been<br />responded";
+	"Number of<br>times that<br>questions<br>have been<br>responded";
 #elif L==4	// es
-	"N.&ordm; de<br />veces<br />que se ha<br />respondido";
+	"N.&ordm; de<br>veces<br>que se ha<br>respondido";
 #elif L==5	// fr
-	"Nombre de<br />fois o&ugrave;<br />les questions<br />ont &eacute;t&eacute;<br />r&eacute;pondues";
+	"Nombre de<br>fois o&ugrave;<br>les questions<br>ont &eacute;t&eacute;<br>r&eacute;pondues";
 #elif L==6	// gn
-	"N.&ordm; de<br />veces<br />que se ha<br />respondido";			// Okoteve traducción
+	"N.&ordm; de<br>veces<br>que se ha<br>respondido";			// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />volte in cui<br />&egrave; stata<br />data risposta<br />alle domande";
+	"Numero di<br>volte in cui<br>&egrave; stata<br>data risposta<br>alle domande";
 #elif L==8	// pl
-	"Ile razy<br />udzielono<br />odpowiedzi<br />na pytania";
+	"Ile razy<br>udzielono<br>odpowiedzi<br>na pytania";
 #elif L==9	// pt
-	"N.&ordm; de<br />vezes que<br />as perguntas<br />foram<br />respondidas";
+	"N.&ordm; de<br>vezes que<br>as perguntas<br>foram<br>respondidas";
 #elif L==10	// tr
-	"Number of<br />times that<br />questions<br />have been<br />responded";	// Çeviri lazim!
+	"Number of<br>times that<br>questions<br>have been<br>responded";	// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_threads =
@@ -27952,255 +27952,255 @@ const char *Txt_Number_of_threads =
 
 const char *Txt_Number_of_threads_BR_per_forum =
 #if   L==1	// ca
-	"Nombre de discussions<br />per f&ograve;rum";
+	"Nombre de discussions<br>per f&ograve;rum";
 #elif L==2	// de
-	"Anzahl der Threads<br />pro Forum";
+	"Anzahl der Threads<br>pro Forum";
 #elif L==3	// en
-	"Number of threads<br />per forum";
+	"Number of threads<br>per forum";
 #elif L==4	// es
-	"N.&ordm; de discusiones<br />por foro";
+	"N.&ordm; de discusiones<br>por foro";
 #elif L==5	// fr
-	"Nombre de fils<br />par forum";
+	"Nombre de fils<br>par forum";
 #elif L==6	// gn
-	"N.&ordm; de discusiones<br />por foro";	// Okoteve traducción
+	"N.&ordm; de discusiones<br>por foro";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di discussioni<br />per forum";
+	"Numero di discussioni<br>per forum";
 #elif L==8	// pl
-	"Liczba watk&oacute;w<br />per forum";
+	"Liczba watk&oacute;w<br>per forum";
 #elif L==9	// pt
-	"N.&ordm; de discuss&otilde;es<br />por f&oacute;rum";
+	"N.&ordm; de discuss&otilde;es<br>por f&oacute;rum";
 #elif L==10	// tr
-	"Number of threads<br />per forum";		// Çeviri lazim!
+	"Number of threads<br>per forum";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_assignments =
 #if   L==1	// ca
-	"Nombre<br />d'activitats";
+	"Nombre<br>d'activitats";
 #elif L==2	// de
-	"Anzahl der<br />Aufgaben";
+	"Anzahl der<br>Aufgaben";
 #elif L==3	// en
-	"Number of<br />assignments";
+	"Number of<br>assignments";
 #elif L==4	// es
-	"N.&ordm; de<br />actividades";
+	"N.&ordm; de<br>actividades";
 #elif L==5	// fr
-	"Nombre<br />d'activit&eacute;s";
+	"Nombre<br>d'activit&eacute;s";
 #elif L==6	// gn
-	"N.&ordm; de<br />actividades";	// Okoteve traducción
+	"N.&ordm; de<br>actividades";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />attivit&agrave;";
+	"Numero di<br>attivit&agrave;";
 #elif L==8	// pl
-	"Number of<br />assignments";	// Potrzebujesz tlumaczenie
+	"Number of<br>assignments";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"N.&ordm; de<br />atividades";
+	"N.&ordm; de<br>atividades";
 #elif L==10	// tr
-	"&Ouml;dev<br />say&inodot;s&inodot;";
+	"&Ouml;dev<br>say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_assignments =
 #if   L==1	// ca
-	"Nombre<br />d'assignatures<br />amb activitats";
+	"Nombre<br>d'assignatures<br>amb activitats";
 #elif L==2	// de
-	"Anzahl der<br />Kursen<br />mit Aufgaben";
+	"Anzahl der<br>Kursen<br>mit Aufgaben";
 #elif L==3	// en
-	"Number of<br />courses with<br />assignments";
+	"Number of<br>courses with<br>assignments";
 #elif L==4	// es
-	"N.&ordm; de<br />asignaturas<br />con actividades";
+	"N.&ordm; de<br>asignaturas<br>con actividades";
 #elif L==5	// fr
-	"Nombre de<br />mati&egrave;res<br />avec activit&eacute;s";
+	"Nombre de<br>mati&egrave;res<br>avec activit&eacute;s";
 #elif L==6	// gn
-	"N.&ordm; de<br />asignaturas<br />con actividades";	// Okoteve traducción
+	"N.&ordm; de<br>asignaturas<br>con actividades";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />corsi con<br />attivit&agrave;";
+	"Numero di<br>corsi con<br>attivit&agrave;";
 #elif L==8	// pl
-	"Liczba<br />kurs&oacute;w z<br />zadania";
+	"Liczba<br>kurs&oacute;w z<br>zadania";
 #elif L==9	// pt
-	"N.&ordm; de<br />disciplinas<br />com atividades";
+	"N.&ordm; de<br>disciplinas<br>com atividades";
 #elif L==10	// tr
-	"&Ouml;dev verilen<br />ders<br />say&inodot;s&inodot;";
+	"&Ouml;dev verilen<br>ders<br>say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_exams =
 #if   L==1	// ca
-	"Nombre<br />d'assignatures<br />amb ex&agrave;mens";
+	"Nombre<br>d'assignatures<br>amb ex&agrave;mens";
 #elif L==2	// de
-	"Anzahl der<br />Kursen<br />mit Pr&uuml;fung";
+	"Anzahl der<br>Kursen<br>mit Pr&uuml;fung";
 #elif L==3	// en
-	"Number of<br />courses with<br />exams";
+	"Number of<br>courses with<br>exams";
 #elif L==4	// es
-	"N.&ordm; de<br />asignaturas<br />con ex&aacute;menes";
+	"N.&ordm; de<br>asignaturas<br>con ex&aacute;menes";
 #elif L==5	// fr
-	"Nombre de<br />mati&egrave;res<br />avec examens";
+	"Nombre de<br>mati&egrave;res<br>avec examens";
 #elif L==6	// gn
-	"N.&ordm; de<br />asignaturas<br />con ex&aacute;menes";	// Okoteve traducción
+	"N.&ordm; de<br>asignaturas<br>con ex&aacute;menes";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />corsi con<br />esame";
+	"Numero di<br>corsi con<br>esame";
 #elif L==8	// pl
-	"Liczba<br />kurs&oacute;w z<br />egzamin&oacute;w";
+	"Liczba<br>kurs&oacute;w z<br>egzamin&oacute;w";
 #elif L==9	// pt
-	"N.&ordm; de<br />disciplinas<br />com exames";
+	"N.&ordm; de<br>disciplinas<br>com exames";
 #elif L==10	// tr
-	"S&inodot;navl&inodot;<br />ders<br />say&inodot;s&inodot;";
+	"S&inodot;navl&inodot;<br>ders<br>say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions =
 #if   L==1	// ca
-	"Nombre<br />d'assignatures<br />amb preguntes<br />de test<br />exportables";
+	"Nombre<br>d'assignatures<br>amb preguntes<br>de test<br>exportables";
 #elif L==2	// de
-	"Anzahl der<br />Kursen<br />mit exportierbar<br />Testfragen";
+	"Anzahl der<br>Kursen<br>mit exportierbar<br>Testfragen";
 #elif L==3	// en
-	"Number of<br />courses with<br />exportable<br />test<br />questions";
+	"Number of<br>courses with<br>exportable<br>test<br>questions";
 #elif L==4	// es
-	"N.&ordm; de<br />asignaturas<br />con preguntas<br />de test<br />exportables";
+	"N.&ordm; de<br>asignaturas<br>con preguntas<br>de test<br>exportables";
 #elif L==5	// fr
-	"Nombre de<br />mati&egrave;res<br />avec questions<br />de test<br />exportables";
+	"Nombre de<br>mati&egrave;res<br>avec questions<br>de test<br>exportables";
 #elif L==6	// gn
-	"N.&ordm; de<br />asignaturas<br />con preguntas<br />de test<br />exportables";	// Okoteve traducción
+	"N.&ordm; de<br>asignaturas<br>con preguntas<br>de test<br>exportables";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />corsi con<br />domande<br />de test<br />esportabili";
+	"Numero di<br>corsi con<br>domande<br>de test<br>esportabili";
 #elif L==8	// pl
-	"Liczba<br />kurs&oacute;w<br />z eksportowane<br />pyta&nacute;<br />testowych";
+	"Liczba<br>kurs&oacute;w<br>z eksportowane<br>pyta&nacute;<br>testowych";
 #elif L==9	// pt
-	"N.&ordm; de<br />disciplinas<br />com<br />perguntas<br />de test<br />export&aacute;veis";
+	"N.&ordm; de<br>disciplinas<br>com<br>perguntas<br>de test<br>export&aacute;veis";
 #elif L==10	// tr
-	"D&inodot;&scedil;a<br />aktar&inodot;labilir<br />test<br />sorular&inodot;na<br />sahip<br />kurs";
+	"D&inodot;&scedil;a<br>aktar&inodot;labilir<br>test<br>sorular&inodot;na<br>sahip<br>kurs";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_games =
 #if   L==1	// ca
-	"Nombre<br />d'assignatures<br />amb jocs";
+	"Nombre<br>d'assignatures<br>amb jocs";
 #elif L==2	// de
-	"Anzahl der<br />Kursen<br />mit Spiele";
+	"Anzahl der<br>Kursen<br>mit Spiele";
 #elif L==3	// en
-	"Number of<br />courses with<br />games";
+	"Number of<br>courses with<br>games";
 #elif L==4	// es
-	"N.&ordm; de<br />asignaturas<br />con juegos";
+	"N.&ordm; de<br>asignaturas<br>con juegos";
 #elif L==5	// fr
-	"Nombre de<br />mati&egrave;res<br />avec jeux";
+	"Nombre de<br>mati&egrave;res<br>avec jeux";
 #elif L==6	// gn
-	"N.&ordm; de<br />asignaturas<br />con juegos";	// Okoteve traducción
+	"N.&ordm; de<br>asignaturas<br>con juegos";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />corsi con<br />giochi";
+	"Numero di<br>corsi con<br>giochi";
 #elif L==8	// pl
-	"Liczba<br />kurs&oacute;w z<br />gry";
+	"Liczba<br>kurs&oacute;w z<br>gry";
 #elif L==9	// pt
-	"N.&ordm; de<br />disciplinas<br />com jogos";
+	"N.&ordm; de<br>disciplinas<br>com jogos";
 #elif L==10	// tr
-	"Oyunlu<br />ders<br />say&inodot;s&inodot;";
+	"Oyunlu<br>ders<br>say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_program_items =
 #if   L==1	// ca
-	"Nombre<br />d'assignatures amb<br />elements de programes";
+	"Nombre<br>d'assignatures amb<br>elements de programes";
 #elif L==2	// de
-	"Anzahl der<br />Kursen mit<br />Programmelemente";
+	"Anzahl der<br>Kursen mit<br>Programmelemente";
 #elif L==3	// en
-	"Number of<br />courses with<br />tree nodes";
+	"Number of<br>courses with<br>tree nodes";
 #elif L==4	// es
-	"N.&ordm; de<br />asignaturas con<br />items de programas";
+	"N.&ordm; de<br>asignaturas con<br>items de programas";
 #elif L==5	// fr
-	"Nombre de<br />mati&egrave;res avec<br />d'&eacute;l&eacute;ments de programme";
+	"Nombre de<br>mati&egrave;res avec<br>d'&eacute;l&eacute;ments de programme";
 #elif L==6	// gn
-	"N.&ordm; de<br />asignaturas con<br />items de programas";	// Okoteve traducción
+	"N.&ordm; de<br>asignaturas con<br>items de programas";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />corsi con<br />elementi di programmi";
+	"Numero di<br>corsi con<br>elementi di programmi";
 #elif L==8	// pl
-	"Liczba<br />kurs&oacute;w z<br />pozycji programu";
+	"Liczba<br>kurs&oacute;w z<br>pozycji programu";
 #elif L==9	// pt
-	"N.&ordm; de<br />disciplinas com<br />itens de programas";
+	"N.&ordm; de<br>disciplinas com<br>itens de programas";
 #elif L==10	// tr
-	"Program &ouml;&gbreve;elerini i&ccedil;eren<br />ders<br />say&inodot;s&inodot;";
+	"Program &ouml;&gbreve;elerini i&ccedil;eren<br>ders<br>say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_projects =
 #if   L==1	// ca
-	"Nombre<br />d'assignatures<br />amb projectes";
+	"Nombre<br>d'assignatures<br>amb projectes";
 #elif L==2	// de
-	"Anzahl der<br />Kursen<br />mit Projekte";
+	"Anzahl der<br>Kursen<br>mit Projekte";
 #elif L==3	// en
-	"Number of<br />courses with<br />projects";
+	"Number of<br>courses with<br>projects";
 #elif L==4	// es
-	"N.&ordm; de<br />asignaturas<br />con proyectos";
+	"N.&ordm; de<br>asignaturas<br>con proyectos";
 #elif L==5	// fr
-	"Nombre de<br />mati&egrave;res<br />avec projets";
+	"Nombre de<br>mati&egrave;res<br>avec projets";
 #elif L==6	// gn
-	"N.&ordm; de<br />asignaturas<br />con proyectos";	// Okoteve traducción
+	"N.&ordm; de<br>asignaturas<br>con proyectos";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />corsi con<br />progetti";
+	"Numero di<br>corsi con<br>progetti";
 #elif L==8	// pl
-	"Liczba<br />kurs&oacute;w z<br />projekty";
+	"Liczba<br>kurs&oacute;w z<br>projekty";
 #elif L==9	// pt
-	"N.&ordm; de<br />disciplinas<br />com projetos";
+	"N.&ordm; de<br>disciplinas<br>com projetos";
 #elif L==10	// tr
-	"Projeli<br />ders<br />say&inodot;s&inodot;";
+	"Projeli<br>ders<br>say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions =
 #if   L==1	// ca
-	"Nombre<br />d'assignatures<br />amb preguntes<br />de test";
+	"Nombre<br>d'assignatures<br>amb preguntes<br>de test";
 #elif L==2	// de
-	"Anzahl der<br />Kursen<br />mit Testfragen";
+	"Anzahl der<br>Kursen<br>mit Testfragen";
 #elif L==3	// en
-	"Number of<br />courses<br />with test<br />questions";
+	"Number of<br>courses<br>with test<br>questions";
 #elif L==4	// es
-	"N.&ordm; de<br />asignaturas<br />con preguntas<br />de test";
+	"N.&ordm; de<br>asignaturas<br>con preguntas<br>de test";
 #elif L==5	// fr
-	"Nombre de<br />mati&egrave;res<br />avec questions<br />de test";
+	"Nombre de<br>mati&egrave;res<br>avec questions<br>de test";
 #elif L==6	// gn
-	"N.&ordm; de<br />asignaturas<br />con preguntas<br />de test";	// Okoteve traducción
+	"N.&ordm; de<br>asignaturas<br>con preguntas<br>de test";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />corsi con<br />domande<br />de test";
+	"Numero di<br>corsi con<br>domande<br>de test";
 #elif L==8	// pl
-	"Liczba<br />kurs&oacute;w<br />z pyta&nacute;<br />testowych";
+	"Liczba<br>kurs&oacute;w<br>z pyta&nacute;<br>testowych";
 #elif L==9	// pt
-	"N.&ordm; de<br />disciplinas<br />com<br />perguntas<br />de test";
+	"N.&ordm; de<br>disciplinas<br>com<br>perguntas<br>de test";
 #elif L==10	// tr
-	"Sorulu<br />ders<br />say&inodot;s&inodot;";
+	"Sorulu<br>ders<br>say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_rubrics =
 #if   L==1	// ca
-	"Nombre<br />d'assignatures<br />amb r&uacute;briques";
+	"Nombre<br>d'assignatures<br>amb r&uacute;briques";
 #elif L==2	// de
-	"Anzahl der<br />Kursen<br />mit Rubriken";
+	"Anzahl der<br>Kursen<br>mit Rubriken";
 #elif L==3	// en
-	"Number of<br />courses with<br />rubrics";
+	"Number of<br>courses with<br>rubrics";
 #elif L==4	// es
-	"N.&ordm; de<br />asignaturas<br />con r&uacute;bricas";
+	"N.&ordm; de<br>asignaturas<br>con r&uacute;bricas";
 #elif L==5	// fr
-	"Nombre de<br />mati&egrave;res<br />avec rubriques";
+	"Nombre de<br>mati&egrave;res<br>avec rubriques";
 #elif L==6	// gn
-	"N.&ordm; de<br />asignaturas<br />con r&uacute;bricas";	// Okoteve traducción
+	"N.&ordm; de<br>asignaturas<br>con r&uacute;bricas";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />corsi con<br />rubriche";
+	"Numero di<br>corsi con<br>rubriche";
 #elif L==8	// pl
-	"Liczba<br />kurs&oacute;w z<br />rubryk";
+	"Liczba<br>kurs&oacute;w z<br>rubryk";
 #elif L==9	// pt
-	"N.&ordm; de<br />disciplinas<br />com rubricas";
+	"N.&ordm; de<br>disciplinas<br>com rubricas";
 #elif L==10	// tr
-	"Rubrikli<br />ders<br />say&inodot;s&inodot;";
+	"Rubrikli<br>ders<br>say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_surveys =
 #if   L==1	// ca
-	"Nombre<br />d'assignatures<br />amb enquestes";
+	"Nombre<br>d'assignatures<br>amb enquestes";
 #elif L==2	// de
-	"Anzahl der<br />Kursen<br />mit Umfragen";
+	"Anzahl der<br>Kursen<br>mit Umfragen";
 #elif L==3	// en
-	"Number of<br />courses with<br />surveys";
+	"Number of<br>courses with<br>surveys";
 #elif L==4	// es
-	"N.&ordm; de<br />asignaturas<br />con encuestas";
+	"N.&ordm; de<br>asignaturas<br>con encuestas";
 #elif L==5	// fr
-	"Nombre de<br />mati&egrave;res<br />avec sondages";
+	"Nombre de<br>mati&egrave;res<br>avec sondages";
 #elif L==6	// gn
-	"N.&ordm; de<br />asignaturas<br />con encuestas";	// Okoteve traducción
+	"N.&ordm; de<br>asignaturas<br>con encuestas";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />corsi con<br />sondaggi";
+	"Numero di<br>corsi con<br>sondaggi";
 #elif L==8	// pl
-	"Liczba<br />kurs&oacute;w z<br />badania";
+	"Liczba<br>kurs&oacute;w z<br>badania";
 #elif L==9	// pt
-	"N.&ordm; de<br />disciplinas<br />com inqu&eacute;ritos";
+	"N.&ordm; de<br>disciplinas<br>com inqu&eacute;ritos";
 #elif L==10	// tr
-	"Anketli<br />ders<br />say&inodot;s&inodot;";
+	"Anketli<br>ders<br>say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_of_events =
@@ -28274,117 +28274,117 @@ const char *Txt_Number_of_emails =
 
 const char *Txt_Number_of_BR_exams =
 #if   L==1	// ca
-	"Nombre<br />d'ex&agrave;mens";
+	"Nombre<br>d'ex&agrave;mens";
 #elif L==2	// de
-	"Anzahl der<br />Pr&uuml;fung";
+	"Anzahl der<br>Pr&uuml;fung";
 #elif L==3	// en
-	"Number of<br />exams";
+	"Number of<br>exams";
 #elif L==4	// es
-	"N.&ordm; de<br />ex&aacute;menes";
+	"N.&ordm; de<br>ex&aacute;menes";
 #elif L==5	// fr
-	"Nombre<br />d'examens";
+	"Nombre<br>d'examens";
 #elif L==6	// gn
-	"N.&ordm; de<br />ex&aacute;menes";	// Okoteve traducción
+	"N.&ordm; de<br>ex&aacute;menes";	// Okoteve traducción
 #elif L==7	// it
-	"Numero<br />d'esame";
+	"Numero<br>d'esame";
 #elif L==8	// pl
-	"Liczba<br />egzamin&oacute;w";
+	"Liczba<br>egzamin&oacute;w";
 #elif L==9	// pt
-	"N&uacute;mero de<br />exames";
+	"N&uacute;mero de<br>exames";
 #elif L==10	// tr
-	"Number of<br />exams";			// Çeviri lazim!
+	"Number of<br>exams";			// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_games =
 #if   L==1	// ca
-	"Nombre<br />de jocs";
+	"Nombre<br>de jocs";
 #elif L==2	// de
-	"Anzahl der<br />Spiele";
+	"Anzahl der<br>Spiele";
 #elif L==3	// en
-	"Number of<br />games";
+	"Number of<br>games";
 #elif L==4	// es
-	"N.&ordm; de<br />juegos";
+	"N.&ordm; de<br>juegos";
 #elif L==5	// fr
-	"Nombre<br />de jeux";
+	"Nombre<br>de jeux";
 #elif L==6	// gn
-	"N.&ordm; de<br />juegos";	// Okoteve traducción
+	"N.&ordm; de<br>juegos";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />giochi";
+	"Numero di<br>giochi";
 #elif L==8	// pl
-	"Liczba<br />gier";
+	"Liczba<br>gier";
 #elif L==9	// pt
-	"N&uacute;mero de<br />jogos";
+	"N&uacute;mero de<br>jogos";
 #elif L==10	// tr
-	"Number of<br />games";		// Çeviri lazim!
+	"Number of<br>games";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_notifications =
 #if   L==1	// ca
-	"Nombre de<br />notificacions";
+	"Nombre de<br>notificacions";
 #elif L==2	// de
-	"Anzahl der<br />Anmeldungen";
+	"Anzahl der<br>Anmeldungen";
 #elif L==3	// en
-	"Number of<br />notifications";
+	"Number of<br>notifications";
 #elif L==4	// es
-	"N.&ordm; de<br />notificaciones";
+	"N.&ordm; de<br>notificaciones";
 #elif L==5	// fr
-	"Nombre de<br />notifications";
+	"Nombre de<br>notifications";
 #elif L==6	// gn
-	"N.&ordm; de<br />notificaciones";	// Okoteve traducción
+	"N.&ordm; de<br>notificaciones";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />notifiche";
+	"Numero di<br>notifiche";
 #elif L==8	// pl
-	"Liczba<br />zgloszen";
+	"Liczba<br>zgloszen";
 #elif L==9	// pt
-	"N&uacute;mero de<br />notifica&ccedil;&otilde;es";
+	"N&uacute;mero de<br>notifica&ccedil;&otilde;es";
 #elif L==10	// tr
-	"Number of<br />notifications";		// Çeviri lazim!
+	"Number of<br>notifications";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_projects =
 #if   L==1	// ca
-	"Nombre<br />de projectes.";
+	"Nombre<br>de projectes.";
 #elif L==2	// de
-	"Anzahl der<br />Projekte";
+	"Anzahl der<br>Projekte";
 #elif L==3	// en
-	"Number of<br />projects";
+	"Number of<br>projects";
 #elif L==4	// es
-	"N.&ordm; de<br />proyectos";
+	"N.&ordm; de<br>proyectos";
 #elif L==5	// fr
-	"Nombre<br />de projets";
+	"Nombre<br>de projets";
 #elif L==6	// gn
-	"N.&ordm; de<br />proyectos";	// Okoteve traducción
+	"N.&ordm; de<br>proyectos";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />progetti";
+	"Numero di<br>progetti";
 #elif L==8	// pl
-	"Liczba<br />projekt&oacute;w.";
+	"Liczba<br>projekt&oacute;w.";
 #elif L==9	// pt
-	"N&uacute;mero de<br />projetos";
+	"N&uacute;mero de<br>projetos";
 #elif L==10	// tr
-	"Number of<br />projects";	// Çeviri lazim!
+	"Number of<br>projects";	// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_rubrics =
 #if   L==1	// ca
-	"Nombre de<br />r&uacute;briques";
+	"Nombre de<br>r&uacute;briques";
 #elif L==2	// de
-	"Anzahl der<br />Rubriken";
+	"Anzahl der<br>Rubriken";
 #elif L==3	// en
-	"Number of<br />rubrics";
+	"Number of<br>rubrics";
 #elif L==4	// es
-	"N.&ordm; de<br />r&uacute;bricas";
+	"N.&ordm; de<br>r&uacute;bricas";
 #elif L==5	// fr
-	"Nombre de<br />rubriques";
+	"Nombre de<br>rubriques";
 #elif L==6	// gn
-	"N.&ordm; de<br />r&uacute;bricas";	// Okoteve traducción
+	"N.&ordm; de<br>r&uacute;bricas";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />rubriche";
+	"Numero di<br>rubriche";
 #elif L==8	// pl
-	"Liczba<br />rubryk";
+	"Liczba<br>rubryk";
 #elif L==9	// pt
-	"N.&ordm; de<br />rubricas";
+	"N.&ordm; de<br>rubricas";
 #elif L==10	// tr
-	"De&gbreve;erlendirme listesi<br />say&inodot;s&inodot;";
+	"De&gbreve;erlendirme listesi<br>say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_of_students =
@@ -28412,48 +28412,48 @@ const char *Txt_Number_of_students =
 
 const char *Txt_Number_of_BR_surveys =
 #if   L==1	// ca
-	"Nombre<br />d'enquestes";
+	"Nombre<br>d'enquestes";
 #elif L==2	// de
-	"Anzahl der<br />Umfragen";
+	"Anzahl der<br>Umfragen";
 #elif L==3	// en
-	"Number of<br />surveys";
+	"Number of<br>surveys";
 #elif L==4	// es
-	"N.&ordm; de<br />encuestas";
+	"N.&ordm; de<br>encuestas";
 #elif L==5	// fr
-	"Nombre de<br />sondages";
+	"Nombre de<br>sondages";
 #elif L==6	// gn
-	"N.&ordm; de<br />encuestas";	// Okoteve traducción
+	"N.&ordm; de<br>encuestas";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />sondaggi";
+	"Numero di<br>sondaggi";
 #elif L==8	// pl
-	"Liczba<br />badania";
+	"Liczba<br>badania";
 #elif L==9	// pt
-	"N.&ordm; de<br />inqu&eacute;ritos";
+	"N.&ordm; de<br>inqu&eacute;ritos";
 #elif L==10	// tr
-	"Anket<br />say&inodot;s&inodot;";
+	"Anket<br>say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_BR_of_test_BR_questions =
 #if   L==1	// ca
-	"Nombre de<br />preguntes<br />de test";
+	"Nombre de<br>preguntes<br>de test";
 #elif L==2	// de
-	"Anzahl der<br />Testfragen";
+	"Anzahl der<br>Testfragen";
 #elif L==3	// en
-	"Number<br />of test<br />questions";
+	"Number<br>of test<br>questions";
 #elif L==4	// es
-	"N.&ordm; de<br />preguntas<br />de test";
+	"N.&ordm; de<br>preguntas<br>de test";
 #elif L==5	// fr
-	"Nombre de<br />questions<br />de test";
+	"Nombre de<br>questions<br>de test";
 #elif L==6	// gn
-	"N.&ordm; de<br />preguntas<br />de test";	// Okoteve traducción
+	"N.&ordm; de<br>preguntas<br>de test";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />domande<br />de test";
+	"Numero di<br>domande<br>de test";
 #elif L==8	// pl
-	"Liczba<br />pyta&nacute;<br />testowych";
+	"Liczba<br>pyta&nacute;<br>testowych";
 #elif L==9	// pt
-	"N.&ordm; de<br />perguntas<br />de test";
+	"N.&ordm; de<br>perguntas<br>de test";
 #elif L==10	// tr
-	"Number<br />of test<br />questions";		// Çeviri lazim!
+	"Number<br>of test<br>questions";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_users =
@@ -28481,25 +28481,25 @@ const char *Txt_Number_of_users =
 
 const char *Txt_Numeric_BR_code_BR_ISO_3166_1 =
 #if   L==1	// ca
-	"Codi<br />num&egrave;ric<br />ISO 3166-1";
+	"Codi<br>num&egrave;ric<br>ISO 3166-1";
 #elif L==2	// de
-	"Numerischen<br />Code<br />ISO 3166-1";
+	"Numerischen<br>Code<br>ISO 3166-1";
 #elif L==3	// en
-	"Numeric<br />code<br />ISO 3166-1";
+	"Numeric<br>code<br>ISO 3166-1";
 #elif L==4	// es
-	"C&oacute;d.<br />num&eacute;rico<br />ISO 3166-1";
+	"C&oacute;d.<br>num&eacute;rico<br>ISO 3166-1";
 #elif L==5	// fr
-	"Code<br />num&eacute;rique<br />ISO 3166-1";
+	"Code<br>num&eacute;rique<br>ISO 3166-1";
 #elif L==6	// gn
-	"C&oacute;d.<br />num&eacute;rico<br />ISO 3166-1";	// Okoteve traducción
+	"C&oacute;d.<br>num&eacute;rico<br>ISO 3166-1";	// Okoteve traducción
 #elif L==7	// it
-	"Codice<br />numerico<br />ISO 3166-1";
+	"Codice<br>numerico<br>ISO 3166-1";
 #elif L==8	// pl
-	"Nnumerycznych<br />kod<br />ISO 3166-1";
+	"Nnumerycznych<br>kod<br>ISO 3166-1";
 #elif L==9	// pt
-	"C&oacute;d.<br />num&eacute;rico<br />ISO 3166-1";
+	"C&oacute;d.<br>num&eacute;rico<br>ISO 3166-1";
 #elif L==10	// tr
-	"Numeric<br />code<br />ISO 3166-1";	// Çeviri lazim!
+	"Numeric<br>code<br>ISO 3166-1";	// Çeviri lazim!
 #endif
 
 const char *Txt_of_PART_OF_A_TOTAL =	// Example: transferred 2 of 3 files
@@ -32848,25 +32848,25 @@ const char *Txt_Quota_exceeded =
 
 const char *Txt_ReaBRders =
 #if   L==1	// ca
-	"Lec-<br />tores";	// Necessita traducció
+	"Lec-<br>tores";	// Necessita traducció
 #elif L==2	// de
 	"Leser";
 #elif L==3	// en
-	"Rea-<br />ders";
+	"Rea-<br>ders";
 #elif L==4	// es
-	"Lec-<br />tores";
+	"Lec-<br>tores";
 #elif L==5	// fr
-	"Lec-<br />teurs";
+	"Lec-<br>teurs";
 #elif L==6	// gn
-	"Lec-<br />tores";	// Okoteve traducción
+	"Lec-<br>tores";	// Okoteve traducción
 #elif L==7	// it
-	"Le-<br />ttori";
+	"Le-<br>ttori";
 #elif L==8	// pl
-	"Czytel-<br />nik&oacute;w";
+	"Czytel-<br>nik&oacute;w";
 #elif L==9	// pt
-	"Lei-<br />tores";
+	"Lei-<br>tores";
 #elif L==10	// tr
-	"Rea-<br />ders";	// Çeviri lazim!
+	"Rea-<br>ders";	// Çeviri lazim!
 #endif
 
 const char *Txt_Real_number_between_A_and_B_1 =
@@ -41239,34 +41239,34 @@ const char *Txt_Select_or_create_one_institution_in_X =	// Warning: it is very i
 
 const char *Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here =
 #if   L==1	// ca
-	"Seleccioneu un o m&eacute;s arxius del seu ordinador<br />"
+	"Seleccioneu un o m&eacute;s arxius del seu ordinador<br>"
 	"o arrossegueu i deixeu-los anar aqu&iacute;";
 #elif L==2	// de
-	"W&auml;hlen Sie eine oder mehrere Dateien von Ihrem Computer<br />"
+	"W&auml;hlen Sie eine oder mehrere Dateien von Ihrem Computer<br>"
 	"oder per Drag & Drop hier";
 #elif L==3	// en
-	"Select one or more files from your computer<br />"
+	"Select one or more files from your computer<br>"
 	"or drag and drop here";
 #elif L==4	// es
-	"Seleccione uno o m&aacute;s archivos de su ordenador<br />"
+	"Seleccione uno o m&aacute;s archivos de su ordenador<br>"
 	"o arr&aacute;strelos y su&eacute;ltelos aqu&iacute;";
 #elif L==5	// fr
-	"S&eacute;lectionnez un ou plusieurs fichiers &agrave; partir de votre ordinateur<br />"
+	"S&eacute;lectionnez un ou plusieurs fichiers &agrave; partir de votre ordinateur<br>"
 	"ou glisser-d&eacute;poser ici";
 #elif L==6	// gn
-	"Seleccione uno o m&aacute;s archivos de su ordenador<br />"
+	"Seleccione uno o m&aacute;s archivos de su ordenador<br>"
 	"o arr&aacute;strelos y su&eacute;ltelos aqu&iacute;";	// Okoteve traducción
 #elif L==7	// it
-	"Selezionare uno o pi&ugrave; file dal tuo computer<br />"
+	"Selezionare uno o pi&ugrave; file dal tuo computer<br>"
 	"o trascinare e rilasciare qui";
 #elif L==8	// pl
-	"Wybierz jeden lub wi&eogon;cej plik&oacute;w z komputera<br />"
+	"Wybierz jeden lub wi&eogon;cej plik&oacute;w z komputera<br>"
 	"lub przeci&aogon;gnij i upu&sacute;&cacute; tutaj";
 #elif L==9	// pt
-	"Selecione um ou mais arquivos de seu computador<br />"
+	"Selecione um ou mais arquivos de seu computador<br>"
 	"ou arrastar e soltar aqui";
 #elif L==10	// tr
-	"Select one or more files from your computer<br />"
+	"Select one or more files from your computer<br>"
 	"or drag and drop here";				// Çeviri lazim!
 #endif
 
@@ -41295,106 +41295,106 @@ const char *Txt_Select_questions =
 
 const char *Txt_Select_the_groups_in_from_which_you_want_to_enrol_remove_users_ =
 #if   L==1	// ca
-	"Seleccioneu els grups en/des dels quals voleu registrar/eliminar usuaris.<br />"
-	"Si seleccioneu algun grup, els usuaris s'inscriuran a l'assignatura i als grups seleccionats, o s'eliminaran dels grups seleccionats per&ograve; no de l'assignatura.<br />"
+	"Seleccioneu els grups en/des dels quals voleu registrar/eliminar usuaris.<br>"
+	"Si seleccioneu algun grup, els usuaris s'inscriuran a l'assignatura i als grups seleccionats, o s'eliminaran dels grups seleccionats per&ograve; no de l'assignatura.<br>"
 	"Si no seleccioneu cap grup, els usuaris seran inscrits a l'assignatura per&ograve; no a grups específics,"
 	" o s'eliminaran de l'assignatura i de tots els grups.";
 #elif L==2	// de
-	"W&auml;hlen Sie die Gruppen aus, in/aus denen Sie Benutzer registrieren/entfernen m&ouml;chten.<br />"
+	"W&auml;hlen Sie die Gruppen aus, in/aus denen Sie Benutzer registrieren/entfernen m&ouml;chten.<br>"
 	"Wenn Sie Gruppen ausw&auml;hlen, werden Benutzer in den Kurs und die ausgew&auml;hlten Gruppen eingeschrieben oder aus den ausgew&auml;hlten Gruppen,"
-	" aber nicht aus dem Kurs entfernt.<br />"
+	" aber nicht aus dem Kurs entfernt.<br>"
 	"Wenn Sie keine Gruppen ausw&auml;hlen, werden Benutzer in den Kurs eingeschrieben, aber nicht in bestimmte Gruppen,"
 	" oder aus dem Kurs und aus allen Gruppen entfernt.";
 #elif L==3	// en
-	"Select the groups in/from which you want to enrol/remove users.<br />"
+	"Select the groups in/from which you want to enrol/remove users.<br>"
 	"If you select any groups, users will be enroled in the course and the selected groups,"
-	" or removed from the selected groups but not from the course.<br />"
+	" or removed from the selected groups but not from the course.<br>"
 	"If you do not select any groups, users will be enroled in the course but not in specific groups,"
 	" or removed from the course and from all groups.";
 #elif L==4	// es
-	"Seleccione los grupos en/de los que quiere inscribir/eliminar usuarios.<br />"
+	"Seleccione los grupos en/de los que quiere inscribir/eliminar usuarios.<br>"
 	"Si selecciona grupos, los usuarios ser&aacute;n inscritos en la asignatura y en los grupos seleccionados,"
-	" o bien eliminados de los grupos seleccionados pero no de la asignatura.<br />"
+	" o bien eliminados de los grupos seleccionados pero no de la asignatura.<br>"
 	"Si no selecciona ning&uacute;n grupo, los usuarios ser&aacute;n inscritos en la asignatura pero no en grupos concretos,"
 	" o bien eliminados de la asignatura y de todos los grupos.";
 #elif L==5	// fr
-	"S&eacute;lectionnez les groupes dans/dont vous souhaitez enregistrer/supprimer des utilisateurs.<br />"
+	"S&eacute;lectionnez les groupes dans/dont vous souhaitez enregistrer/supprimer des utilisateurs.<br>"
 	"Si vous s&eacute;lectionnez des groupes, les utilisateurs seront inscrits a la mati&egrave;re et aux groupes s&eacute;lectionn&eacute;s,"
-	" ou supprim&eacute;s des groupes s&eacute;lectionn&eacute;s mais pas de la mati&egrave;re.<br />"
+	" ou supprim&eacute;s des groupes s&eacute;lectionn&eacute;s mais pas de la mati&egrave;re.<br>"
 	"Si vous ne s&eacute;lectionnez aucun groupe, les utilisateurs seront inscrits au cours mais pas &agrave; des groupes sp&eacute;cifiques,"
 	" ou seront supprim&eacute;s de la mati&egrave;re et de tous les groupes.";
 #elif L==6	// gn
-	"Seleccione los grupos en/de los que quiere inscribir/eliminar usuarios.<br />"
+	"Seleccione los grupos en/de los que quiere inscribir/eliminar usuarios.<br>"
 	"Si selecciona grupos, los usuarios ser&aacute;n inscritos en la asignatura y en los grupos seleccionados,"
-	" o bien eliminados de los grupos seleccionados pero no de la asignatura.<br />"
+	" o bien eliminados de los grupos seleccionados pero no de la asignatura.<br>"
 	"Si no selecciona ning&uacute;n grupo, los usuarios ser&aacute;n inscritos en la asignatura pero no en grupos concretos,"
 	" o bien eliminados de la asignatura y de todos los grupos.";	// Okoteve traducción
 #elif L==7	// it
-	"Seleziona i gruppi nel/dal quale vuoi registrare/rimuovere utenti.<br />"
+	"Seleziona i gruppi nel/dal quale vuoi registrare/rimuovere utenti.<br>"
 	"Se selezioni qualche gruppo, gli utenti saranno registrati nel corso e nel gruppo selezionato,"
-	" o rimossi dai gruppi selezionati ma non dal corso.<br />"
+	" o rimossi dai gruppi selezionati ma non dal corso.<br>"
 	"Se non selezioni alcun gruppo, gli utenti saranno registrati nel corso ma non in gruppi specifici,"
 	" o rimossi dal corso e da tutti i gruppi.";
 #elif L==8	// pl
-	"Wybierz grupy, w kt&oacute;rych/z kt&oacute;rych chcesz zarejestrowa&cacute;/usun&aogon;&cacute; u&zdot;ytkownik&oacute;w.<br />"
+	"Wybierz grupy, w kt&oacute;rych/z kt&oacute;rych chcesz zarejestrowa&cacute;/usun&aogon;&cacute; u&zdot;ytkownik&oacute;w.<br>"
 	"Je&sacute;li wybierzesz jak&aogon;kolwiek grup&eogon;, u&zdot;ytkownicy zostan&aogon; zapisani do kursu i wybranych grup"
-	" lub zostan&aogon; usuni&eogon;ci z wybranych grup, ale nie z kursu.<br />"
+	" lub zostan&aogon; usuni&eogon;ci z wybranych grup, ale nie z kursu.<br>"
 	"Je&sacute;li nie wybierzesz &zdot;adnej grupy, u&zdot;ytkownicy zostan&aogon; zapisani do kursu, ale nie do okre&sacute;lonych grup,"
 	" lub usuni&eogon;ci z kursu i ze wszystkich grup.";
 #elif L==9	// pt
-	"Selecione os grupos em/dos quais voc&ecirc; deseja registrar/remover usu&aacute;rios.<br />"
+	"Selecione os grupos em/dos quais voc&ecirc; deseja registrar/remover usu&aacute;rios.<br>"
 	"Se voc&ecirc; selecionar grupos, os usu&aacute;rios ser&atilde;o inscritos na disciplina e nos grupos selecionados"
-	" ou removidos dos grupos selecionados, mas n&atilde;o da disciplina.<br />"
+	" ou removidos dos grupos selecionados, mas n&atilde;o da disciplina.<br>"
 	"Se voc&ecirc; n&atilde;o selecionar nenhum grupo, os usu&aacute;rios ser&atilde;o inscritos na disciplina, mas n&atilde;o em grupos espec&iacute;ficos,"
 	" ou ser&atilde;o removidos da disciplina e de todos os grupos.";
 #elif L==10	// tr
-	"Select the groups in/from which you want to enrol/remove users.<br />"
+	"Select the groups in/from which you want to enrol/remove users.<br>"
 	"If you select any groups, users will be enroled in the course and the selected groups,"
-	" or removed from the selected groups but not from the course.<br />"
+	" or removed from the selected groups but not from the course.<br>"
 	"If you do not select any groups, users will be enroled in the course but not in specific groups,"
 	" or removed from the course and from all groups.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Selected_users_X_Followed_Y_Not_followed_Z =	// Warning: it is very important to include three %u in the following sentences
 #if   L==1	// ca
-	"Usuaris seleccionats: %u<br />"
-	"&bull; Seguits: %u<br />"
+	"Usuaris seleccionats: %u<br>"
+	"&bull; Seguits: %u<br>"
 	"&bull; No seguits: %u";
 #elif L==2	// de
-	"Ausgew&auml;hlte Benutzer: %u<br />"
-	"&bull; Gefolgt: %u<br />"
+	"Ausgew&auml;hlte Benutzer: %u<br>"
+	"&bull; Gefolgt: %u<br>"
 	"&bull; Nicht gefolgt: %u";
 #elif L==3	// en
-	"Selected users: %u<br />"
-	"&bull; Followed: %u<br />"
+	"Selected users: %u<br>"
+	"&bull; Followed: %u<br>"
 	"&bull; Not followed: %u";
 #elif L==4	// es
-	"Usuarios seleccionados: %u<br />"
-	"&bull; Seguidos: %u<br />"
+	"Usuarios seleccionados: %u<br>"
+	"&bull; Seguidos: %u<br>"
 	"&bull; No seguidos: %u";
 #elif L==5	// fr
-	"Utilisateurs s&eacute;lectionn&eacute;s: %u<br />"
-	"&bull; Suivis: %u<br />"
+	"Utilisateurs s&eacute;lectionn&eacute;s: %u<br>"
+	"&bull; Suivis: %u<br>"
 	"&bull; Non suivis: %u";
 #elif L==6	// gn
-	"Usuarios seleccionados: %u<br />"
-	"&bull; Seguidos: %u<br />"
+	"Usuarios seleccionados: %u<br>"
+	"&bull; Seguidos: %u<br>"
 	"&bull; No seguidos: %u";	// Okoteve traducción
 #elif L==7	// it
-	"Utenti selezionati: %u<br />"
-	"&bull; Seguiti: %u<br />"
+	"Utenti selezionati: %u<br>"
+	"&bull; Seguiti: %u<br>"
 	"&bull; Non seguiti: %u";
 #elif L==8	// pl
-	"Wybrani u&zdot;ytkownicy: %u<br />"
-	"&bull; Nast&eogon;pnie: %u<br />"
+	"Wybrani u&zdot;ytkownicy: %u<br>"
+	"&bull; Nast&eogon;pnie: %u<br>"
 	"&bull; Nie przestrzegano: %u";
 #elif L==9	// pt
-	"Usu&aacute;rios selecionados: %u<br />"
-	"&bull; Seguidos: %u<br />"
+	"Usu&aacute;rios selecionados: %u<br>"
+	"&bull; Seguidos: %u<br>"
 	"&bull; N&atilde;o seguidos: %u";
 #elif L==10	// tr
-	"Selected users: %u<br />"
-	"&bull; Followed: %u<br />"
+	"Selected users: %u<br>"
+	"&bull; Followed: %u<br>"
 	"&bull; Not followed: %u";	// Çeviri lazim!
 #endif
 
@@ -45932,25 +45932,25 @@ const char *Txt_TAGLINE =
 
 const char *Txt_TAGLINE_BR =
 #if   L==1
-	"plataforma<br />educativa";
+	"plataforma<br>educativa";
 #elif L==2
-	"Bildungs-<br />plattform";
+	"Bildungs-<br>plattform";
 #elif L==3
-	"social learning<br />platform";
+	"social learning<br>platform";
 #elif L==4
-	"plataforma<br />educativa";
+	"plataforma<br>educativa";
 #elif L==5
-	"plate-forme<br />&eacute;ducative";
+	"plate-forme<br>&eacute;ducative";
 #elif L==6
-	"plataforma<br />educativa";	// Okoteve traducción
+	"plataforma<br>educativa";	// Okoteve traducción
 #elif L==7
-	"piattaforma<br />educativa";
+	"piattaforma<br>educativa";
 #elif L==8
-	"platforma<br />edukacyjna";
+	"platforma<br>edukacyjna";
 #elif L==9
-	"plataforma<br />educacional";
+	"plataforma<br>educacional";
 #elif L==10	// tr
-	"e&gbreve;itim<br />platformu";
+	"e&gbreve;itim<br>platformu";
 #endif
 
 #elif defined OPENSWAD_ORG		// openswad.org ***********************
@@ -45980,25 +45980,25 @@ const char *Txt_TAGLINE =
 
 const char *Txt_TAGLINE_BR =
 #if   L==1
-	"plataforma<br />educativa";
+	"plataforma<br>educativa";
 #elif L==2
-	"Bildungs-<br />plattform";
+	"Bildungs-<br>plattform";
 #elif L==3
-	"social learning<br />platform";
+	"social learning<br>platform";
 #elif L==4
-	"plataforma<br />educativa";
+	"plataforma<br>educativa";
 #elif L==5
-	"plate-forme<br />&eacute;ducative";
+	"plate-forme<br>&eacute;ducative";
 #elif L==6
-	"plataforma<br />educativa";		// Okoteve traducción
+	"plataforma<br>educativa";		// Okoteve traducción
 #elif L==7
-	"piattaforma<br />educativa";
+	"piattaforma<br>educativa";
 #elif L==8
-	"platforma<br />edukacyjna";
+	"platforma<br>edukacyjna";
 #elif L==9
-	"plataforma<br />educacional";
+	"plataforma<br>educacional";
 #elif L==10	// tr
-	"social learning<br />platform";	// Çeviri lazim!
+	"social learning<br>platform";	// Çeviri lazim!
 #endif
 
 #elif defined SWAD_UGR_ES		// swad.ugr.es ************************
@@ -46028,25 +46028,25 @@ const char *Txt_TAGLINE =
 
 const char *Txt_TAGLINE_BR =
 #if   L==1
-	"/ UGR / plataforma de<br />suport a la doc&egrave;ncia";
+	"/ UGR / plataforma de<br>suport a la doc&egrave;ncia";
 #elif L==2
-	"/ UGR / Plattform zur<br />Unterst&uuml;tzung der Lehre";
+	"/ UGR / Plattform zur<br>Unterst&uuml;tzung der Lehre";
 #elif L==3
-	"/ UGR / platform to<br />support teaching";
+	"/ UGR / platform to<br>support teaching";
 #elif L==4
-	"/ UGR / plataforma de<br />apoyo a la docencia";
+	"/ UGR / plataforma de<br>apoyo a la docencia";
 #elif L==5
-	"/ UGR / plate-forme pour<br />appuyer l'enseignement";
+	"/ UGR / plate-forme pour<br>appuyer l'enseignement";
 #elif L==6
-	"/ UGR / plataforma de<br />apoyo a la docencia";	// Okoteve traducción
+	"/ UGR / plataforma de<br>apoyo a la docencia";	// Okoteve traducción
 #elif L==7
-	"/ UGR / piattaforma per<br />sostenere l'insegnamento";
+	"/ UGR / piattaforma per<br>sostenere l'insegnamento";
 #elif L==8
-	"/ UGR / platforma do<br />wspierania nauczania";
+	"/ UGR / platforma do<br>wspierania nauczania";
 #elif L==9
-	"/ UGR / plataforma<br />de apoio ao ensino";
+	"/ UGR / plataforma<br>de apoio ao ensino";
 #elif L==10	// tr
-	"/ UGR / platform to<br />support teaching";		// Çeviri lazim!
+	"/ UGR / platform to<br>support teaching";		// Çeviri lazim!
 #endif
 
 #elif defined SWADBERRY_UGR_ES		// swadberry.ugr.es *******************
@@ -46076,25 +46076,25 @@ const char *Txt_TAGLINE =
 
 const char *Txt_TAGLINE_BR =
 #if   L==1
-	"plataforma de suport a la<br />doc&egrave;ncia (Raspberry Pi)";
+	"plataforma de suport a la<br>doc&egrave;ncia (Raspberry Pi)";
 #elif L==2
-	"Plattform zur Unterst&uuml;tzung<br />der Lehre (Raspberry Pi)";
+	"Plattform zur Unterst&uuml;tzung<br>der Lehre (Raspberry Pi)";
 #elif L==3
-	"platform to support<br />teaching (Raspberry Pi)";
+	"platform to support<br>teaching (Raspberry Pi)";
 #elif L==4
-	"plataforma de apoyo a la<br />docencia (Raspberry Pi)";
+	"plataforma de apoyo a la<br>docencia (Raspberry Pi)";
 #elif L==5
-	"plate-forme pour appuyer<br />l'enseignement (Raspberry Pi)";
+	"plate-forme pour appuyer<br>l'enseignement (Raspberry Pi)";
 #elif L==6
-	"plataforma de apoyo a la<br />docencia (Raspberry Pi)";	// Okoteve traducción
+	"plataforma de apoyo a la<br>docencia (Raspberry Pi)";	// Okoteve traducción
 #elif L==7
-	"piattaforma per sostenere<br />l'insegnamento (Raspberry Pi)";
+	"piattaforma per sostenere<br>l'insegnamento (Raspberry Pi)";
 #elif L==8
-	"platforma do wspierania<br />nauczania (Raspberry Pi)";
+	"platforma do wspierania<br>nauczania (Raspberry Pi)";
 #elif L==9
-	"plataforma de apoio<br />ao ensino (Raspberry Pi)";
+	"plataforma de apoio<br>ao ensino (Raspberry Pi)";
 #elif L==10	// tr
-	"platform to support<br />teaching (Raspberry Pi)";		// Çeviri lazim!
+	"platform to support<br>teaching (Raspberry Pi)";		// Çeviri lazim!
 #endif
 
 #endif
@@ -48987,49 +48987,49 @@ const char *Txt_The_nickname_has_been_registered_successfully =
 
 const char *Txt_The_nickname_is_not_valid_ =
 #if   L==1	// ca
-	"El sobrenom no &eacute;s v&agrave;lid.<br />"
-	"El vostre &agrave;lies ha de tenir una longitud d'entre %u i %u car&agrave;cters (sense incloure la @ inicial).<br />"
+	"El sobrenom no &eacute;s v&agrave;lid.<br>"
+	"El vostre &agrave;lies ha de tenir una longitud d'entre %u i %u car&agrave;cters (sense incloure la @ inicial).<br>"
 	"Cada car&agrave;cter despr&eacute;s de la inicial @ pot ser una lletra (a-z, A-Z),"
 	" un dígit (0-9) o &quot;_&quot;.";
 #elif L==2	// de
-	"Der Spitzname ist ung&uuml;ltig.<br />"
-	"Ihr Spitzname muss zwischen %u und %u Zeichen lang sein (ohne den Anfangsbuchstaben @).<br />"
+	"Der Spitzname ist ung&uuml;ltig.<br>"
+	"Ihr Spitzname muss zwischen %u und %u Zeichen lang sein (ohne den Anfangsbuchstaben @).<br>"
 	"Jedes Zeichen nach dem Anfangsbuchstaben @ kann ein Buchstabe (a-z, A-Z), eine Ziffer (0-9) oder &quot;_&quot; sein.";
 #elif L==3	// en
-	"The nickname is not valid.<br />"
-	"Your nickname must have a length between %u and %u characters (not including the initial @).<br />"
+	"The nickname is not valid.<br>"
+	"Your nickname must have a length between %u and %u characters (not including the initial @).<br>"
 	"Each character after initial @ can be a letter (a-z, A-Z),"
 	" a digit (0-9) or &quot;_&quot;.";
 #elif L==4	// es
-	"El apodo no es v&aacute;lido.<br />"
-	"El apodo debe tener una longitud entre %u y %u caracteres (sin contar la @ inicial).<br />"
+	"El apodo no es v&aacute;lido.<br>"
+	"El apodo debe tener una longitud entre %u y %u caracteres (sin contar la @ inicial).<br>"
 	"Cada car&aacute;cter posterior a la @ inicial puede ser una letra (a-z, A-Z),"
 	" un d&iacute;gito (0-9) o &quot;_&quot;.";
 #elif L==5	// fr
-	"Le surnom n'est pas valide.<br />"
-	"Votre pseudo doit avoir une longueur comprise entre %u et %u caract&egrave;res (n'incluant pas l'initiale @).<br />"
+	"Le surnom n'est pas valide.<br>"
+	"Votre pseudo doit avoir une longueur comprise entre %u et %u caract&egrave;res (n'incluant pas l'initiale @).<br>"
 	"Chaque caract&egrave;re apr&egrave;s l'initiale @ peut &ecirc;tre une lettre (a-z, A-Z), un chiffre (0-9) ou &quot;_&quot;.";
 #elif L==6	// gn
-	"El apodo no es v&aacute;lido.<br />"
-	"El apodo debe tener una longitud entre %u y %u caracteres (sin contar la @ inicial).<br />"
+	"El apodo no es v&aacute;lido.<br>"
+	"El apodo debe tener una longitud entre %u y %u caracteres (sin contar la @ inicial).<br>"
 	"Cada car&aacute;cter posterior a la @ inicial puede ser una letra (a-z, A-Z),"
 	" un d&iacute;gito (0-9) o &quot;_&quot;.";	// Okoteve traducción
 #elif L==7	// it
-	"Il soprannome non &egrave; valido.<br />"
-	"Il tuo nickname deve avere una lunghezza compresa tra %u e %u caratteri (esclusa l'iniziale @).<br />"
+	"Il soprannome non &egrave; valido.<br>"
+	"Il tuo nickname deve avere una lunghezza compresa tra %u e %u caratteri (esclusa l'iniziale @).<br>"
 	"Ciascun carattere dopo l'iniziale @ pu&ograve; essere una lettera (a-z, A-Z), una cifra (0-9) o &quot;_&quot;.";
 #elif L==8	// pl
-	"Pseudonim jest nieprawid&lstrok;owy.<br />"
-	"Tw&oacute;j pseudonim musi mie&cacute; d&lstrok;ugo&sacute;&cacute; od %u do %u znak&oacute;w (nie licz&aogon;c pocz&aogon;tkowego @).<br />"
+	"Pseudonim jest nieprawid&lstrok;owy.<br>"
+	"Tw&oacute;j pseudonim musi mie&cacute; d&lstrok;ugo&sacute;&cacute; od %u do %u znak&oacute;w (nie licz&aogon;c pocz&aogon;tkowego @).<br>"
 	"Ka&zdot;dy znak po pocz&aogon;tkowym @ mo&zdot;e by&cacute; liter&aogon; (a-z, A-Z), cyfr&aogon; (0-9) lub &quot;_&quot;.";
 #elif L==9	// pt
-	"A alcunha n&atilde;o &eacute; v&aacute;lido.<br />"
-	"Sua alcunha deve ter um tamanho entre %u e %u caracteres (sem incluir o inicial @).<br />"
+	"A alcunha n&atilde;o &eacute; v&aacute;lido.<br>"
+	"Sua alcunha deve ter um tamanho entre %u e %u caracteres (sem incluir o inicial @).<br>"
 	"Cada caractere ap&oacute;s inicial @ pode ser uma letra (a-z, A-Z),"
 	" um dígito (0-9) ou &quot;_&quot;.";
 #elif L==10	// tr
-	"The nickname is not valid.<br />"
-	"Your nickname must have a length between %u and %u characters (not including the initial @).<br />"
+	"The nickname is not valid.<br>"
+	"Your nickname must have a length between %u and %u characters (not including the initial @).<br>"
 	"Each character after initial @ can be a letter (a-z, A-Z),"
 	" a digit (0-9) or &quot;_&quot;.";		// Çeviri lazim!
 #endif
@@ -49039,7 +49039,7 @@ const char *Txt_The_notice_will_appear_as_a_yellow_note_ =
 	"L'av&iacute;s apareixer&agrave; en forma de nota groga"
 	" a l'esquerra de la p&agrave;gina"
 	" i ser&agrave; <strong>visible per tot el m&oacute;n</strong>"
-	" (no nom&eacute;s pels usuaris de l'assignatura).<br />"
+	" (no nom&eacute;s pels usuaris de l'assignatura).<br>"
 	"<strong>El missatge ha de ser breu.</strong>"
 	" Per crear un av&iacute;s extens"
 	" o d'acc&eacute;s exclusiu per a estudiants,"
@@ -49050,7 +49050,7 @@ const char *Txt_The_notice_will_appear_as_a_yellow_note_ =
 	"Die Ank&uuml;ndigung wird als ein gelber Hinweis"
 	" auf der linken Seite der Seite erscheinen"
 	" und wird <strong>weltweit</strong>"
-	" (nicht nur von den Benutzern des Kurses) sichtbar sein.<br />"
+	" (nicht nur von den Benutzern des Kurses) sichtbar sein.<br>"
 	"<strong>Die Nachricht sollte kurz sein</strong>."
 	" Wenn Sie eine lange Ank&uuml;ndigung"
 	" oder einen Hinweis mit exklusivem Zugang f&uuml;r Studenten erstellen m&ouml;chten,"
@@ -49061,7 +49061,7 @@ const char *Txt_The_notice_will_appear_as_a_yellow_note_ =
 	"The notice will appear as a yellow note"
 	" in the left of the page"
 	" and will be <strong>visible worldwide</strong>"
-	" (not just by users of the course).<br />"
+	" (not just by users of the course).<br>"
 	"<strong>The message should be short</strong>."
 	" If you want to create a long notice"
 	" or a notice with exclusive access for students,"
@@ -49072,7 +49072,7 @@ const char *Txt_The_notice_will_appear_as_a_yellow_note_ =
 	"El aviso aparecer&aacute; en forma de nota amarilla"
 	" a la izquierda de la p&aacute;gina"
 	" y ser&aacute; <strong>visible por todo el mundo</strong>"
-	" (no solo por los usuarios de la asignatura).<br />"
+	" (no solo por los usuarios de la asignatura).<br>"
 	"<strong>El mensaje debe ser breve</strong>."
 	" Si desea crear un aviso extenso"
 	" o de acceso exclusivo para estudiantes,"
@@ -49083,7 +49083,7 @@ const char *Txt_The_notice_will_appear_as_a_yellow_note_ =
 	"L'avis appara&icirc;tra comme une note jaune"
 	" &agrave; gauche de la page"
 	" et sera <strong>visible dans le monde entier</strong>"
-	" (pas seulement par les utilisateurs du cours).<br />"
+	" (pas seulement par les utilisateurs du cours).<br>"
 	"<strong>Le message doit &ecirc;tre court</strong>."
 	" Si vous souhaitez cr&eacute;er un avis long"
 	" ou un avis avec un acc&egrave;s exclusif pour les &eacute;tudiants,"
@@ -49094,7 +49094,7 @@ const char *Txt_The_notice_will_appear_as_a_yellow_note_ =
 	"El aviso aparecer&aacute; en forma de nota amarilla"
 	" a la izquierda de la p&aacute;gina"
 	" y ser&aacute; <strong>visible por todo el mundo</strong>"
-	" (no solo por los usuarios de la asignatura).<br />"
+	" (no solo por los usuarios de la asignatura).<br>"
 	"<strong>El mensaje debe ser breve</strong>."
 	" Si desea crear un aviso extenso"
 	" o de acceso exclusivo para estudiantes,"
@@ -49105,7 +49105,7 @@ const char *Txt_The_notice_will_appear_as_a_yellow_note_ =
 	"L'avviso verr&agrave; visualizzato come una nota di colore giallo"
 	" nella parte sinistra della pagina"
 	" e sar&agrave; <strong>visibile in tutto il mondo</strong>"
-	" (non solo dagli utenti del corso).<br />"
+	" (non solo dagli utenti del corso).<br>"
 	"<strong>Il messaggio deve essere breve</strong>."
 	" Se si desidera creare un lungo avviso"
 	" o una comunicazione con accesso esclusivo per gli studenti,"
@@ -49116,7 +49116,7 @@ const char *Txt_The_notice_will_appear_as_a_yellow_note_ =
 	"Og&lstrok;oszenie pojawi si&eogon; jako &zdot;&oacute;&lstrok;ty notatki"
 	" w lewej strony"
 	" i b&eogon;dzie <strong>widoczny na ca&lstrok;ym &sacute;wiecie</strong>"
-	" (nie tylko przez u&zdot;ytkownik&oacute;w oczywi&sacute;cie).<br />"
+	" (nie tylko przez u&zdot;ytkownik&oacute;w oczywi&sacute;cie).<br>"
 	"<strong>Wiadomo&sacute;&cacute; powinna by&cacute; kr&oacute;tka</strong>."
 	" Je&sacute;li chcesz stworzy&cacute; d&lstrok;ug&aogon; zawiadomienie"
 	" lub zawiadomienie z wy&lstrok;&aogon;cznego dost&eogon;pu dla student&oacute;w,"
@@ -49127,7 +49127,7 @@ const char *Txt_The_notice_will_appear_as_a_yellow_note_ =
 	"O aviso aparecer&aacute; como uma nota amarela"
 	" &agrave; esquerda da p&aacute;gina"
 	" e ser&aacute; <strong>vis&iacute;vel em todo o mundo</strong>"
-	" (n&atilde;o apenas pelos usu&aacute;rios do curso).<br />"
+	" (n&atilde;o apenas pelos usu&aacute;rios do curso).<br>"
 	"<strong>A mensagem deve ser curta</strong>."
 	" Se voc&ecirc; quiser criar um aviso longo"
 	" ou um aviso com acesso exclusivo para os estudantes,"
@@ -49138,7 +49138,7 @@ const char *Txt_The_notice_will_appear_as_a_yellow_note_ =
 	"The notice will appear as a yellow note"
 	" in the left of the page"
 	" and will be <strong>visible worldwide</strong>"
-	" (not just by users of the course).<br />"
+	" (not just by users of the course).<br>"
 	"<strong>The message should be short</strong>."
 	" If you want to create a long notice"
 	" or a notice with exclusive access for students,"
@@ -54224,94 +54224,94 @@ const char *Txt_TST_STR_ORDER_SHORT[Qst_NUM_TYPES_ORDER_QST] =
 	,
 	[Qst_ORDER_NUM_HITS] =
 #if   L==1	// ca
-	"N.&ordm;<br />resp."		// Necessita traducció
+	"N.&ordm;<br>resp."		// Necessita traducció
 #elif L==2	// de
-	"Anzahl<br />Antw."
+	"Anzahl<br>Antw."
 #elif L==3	// en
-	"No.<br />ans."
+	"No.<br>ans."
 #elif L==4	// es
-	"N.&ordm;<br />resp."
+	"N.&ordm;<br>resp."
 #elif L==5	// fr
-	"Nombre<br />r&eacute;p."
+	"Nombre<br>r&eacute;p."
 #elif L==6	// gn
-	"N.&ordm;<br />resp."		// Okoteve traducción
+	"N.&ordm;<br>resp."		// Okoteve traducción
 #elif L==7	// it
-	"Num.<br />risp."
+	"Num.<br>risp."
 #elif L==8	// pl
-	"No.<br />ans."			// Potrzebujesz tlumaczenie
+	"No.<br>ans."			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"N.&ordm;<br />resp."
+	"N.&ordm;<br>resp."
 #elif L==10	// tr
-	"No.<br />ans."			// Çeviri lazim!
+	"No.<br>ans."			// Çeviri lazim!
 #endif
 	,
 	[Qst_ORDER_AVERAGE_SCORE] =
 #if   L==1	// ca
-	"Puntuaci&oacute;<br />mitjana"
+	"Puntuaci&oacute;<br>mitjana"
 #elif L==2	// de
 	"Durchschnitt"
 #elif L==3	// en
-	"Average<br />score"
+	"Average<br>score"
 #elif L==4	// es
-	"Puntuaci&oacute;n<br />media"
+	"Puntuaci&oacute;n<br>media"
 #elif L==5	// fr
-	"Note<br />moyenne"
+	"Note<br>moyenne"
 #elif L==6	// gn
-	"Puntuaci&oacute;n<br />media"	// Okoteve traducción
+	"Puntuaci&oacute;n<br>media"	// Okoteve traducción
 #elif L==7	// it
-	"Punteggio<br />medio"
+	"Punteggio<br>medio"
 #elif L==8	// pl
-	"Average<br />score"		// Potrzebujesz tlumaczenie
+	"Average<br>score"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Pontua&ccedil;&atilde;o<br />m&eacute;dia"
+	"Pontua&ccedil;&atilde;o<br>m&eacute;dia"
 #elif L==10	// tr
-	"Average<br />score"		// Çeviri lazim!
+	"Average<br>score"		// Çeviri lazim!
 #endif
 	,
 	[Qst_ORDER_NUM_HITS_NOT_BLANK] =
 #if   L==1	// ca
-	"N.&ordm;<br />resp.<br />no en<br />blanco"	// Necessita traducció
+	"N.&ordm;<br>resp.<br>no en<br>blanco"	// Necessita traducció
 #elif L==2	// de
-	"Anzahl<br />Antw.<br />nicht<br />leer"
+	"Anzahl<br>Antw.<br>nicht<br>leer"
 #elif L==3	// en
-	"No.<br />ans.<br />not<br />blank"
+	"No.<br>ans.<br>not<br>blank"
 #elif L==4	// es
-	"N.&ordm;<br />resp.<br />no en<br />blanco"
+	"N.&ordm;<br>resp.<br>no en<br>blanco"
 #elif L==5	// fr
-	"Nombre<br />r&eacute;p.<br />non<br />vide"
+	"Nombre<br>r&eacute;p.<br>non<br>vide"
 #elif L==6	// gn
-	"N.&ordm;<br />resp.<br />no en<br />blanco"	// Okoteve traducción
+	"N.&ordm;<br>resp.<br>no en<br>blanco"	// Okoteve traducción
 #elif L==7	// it
-	"Num.<br />risp.<br />non<br />vuoto"
+	"Num.<br>risp.<br>non<br>vuoto"
 #elif L==8	// pl
-	"No.<br />ans.<br />not<br />blank"		// Potrzebujesz tlumaczenie
+	"No.<br>ans.<br>not<br>blank"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"N.&ordm;<br />resp.<br />n&atilde;o em<br />branco"
+	"N.&ordm;<br>resp.<br>n&atilde;o em<br>branco"
 #elif L==10	// tr
-	"No.<br />ans.<br />not<br />blank"		// Çeviri lazim!
+	"No.<br>ans.<br>not<br>blank"		// Çeviri lazim!
 #endif
 	,
 	[Qst_ORDER_AVERAGE_SCORE_NOT_BLANK] =
 #if   L==1	// ca
-	"Puntuaci&oacute;n<br />media<br />no en<br />blanco"	// Necessita traducció
+	"Puntuaci&oacute;n<br>media<br>no en<br>blanco"	// Necessita traducció
 #elif L==2	// de
-	"Durchschnitt<br />nicht<br />leer"
+	"Durchschnitt<br>nicht<br>leer"
 #elif L==3	// en
-	"Average<br />score<br />not<br />blank"
+	"Average<br>score<br>not<br>blank"
 #elif L==4	// es
-	"Puntuaci&oacute;n<br />media<br />no en<br />blanco"
+	"Puntuaci&oacute;n<br>media<br>no en<br>blanco"
 #elif L==5	// fr
-	"Note<br />moyenne<br />non<br />vide"
+	"Note<br>moyenne<br>non<br>vide"
 #elif L==6	// gn
-	"Puntuaci&oacute;n<br />media<br />no en<br />blanco"	// Okoteve traducción
+	"Puntuaci&oacute;n<br>media<br>no en<br>blanco"	// Okoteve traducción
 #elif L==7	// it
-	"Punteggio<br />medio<br />non<br />vuoto"
+	"Punteggio<br>medio<br>non<br>vuoto"
 #elif L==8	// pl
-	"Average<br />score<br />not<br />blank"		// Potrzebujesz tlumaczenie
+	"Average<br>score<br>not<br>blank"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Pontua&ccedil;&atilde;o<br />m&eacute;dia<br />n&atilde;o em<br />branco"
+	"Pontua&ccedil;&atilde;o<br>m&eacute;dia<br>n&atilde;o em<br>branco"
 #elif L==10	// tr
-	"Average<br />score<br />not<br />blank"		// Çeviri lazim!
+	"Average<br>score<br>not<br>blank"		// Çeviri lazim!
 #endif
 	};
 
@@ -54505,25 +54505,25 @@ const char *Txt_Type =
 
 const char *Txt_Type_of_BR_answers =		// Answers of a test
 #if   L==1	// ca
-	"Tipus de<br />resposte";
+	"Tipus de<br>resposte";
 #elif L==2	// de
 	"Antworttype";
 #elif L==3	// en
-	"Type of<br />answers";
+	"Type of<br>answers";
 #elif L==4	// es
-	"Tipo de<br />respuestas";
+	"Tipo de<br>respuestas";
 #elif L==5	// fr
-	"Type de<br />r&eacute;ponses";
+	"Type de<br>r&eacute;ponses";
 #elif L==6	// gn
-	"Tipo de<br />respuestas";	// Okoteve traducción
+	"Tipo de<br>respuestas";	// Okoteve traducción
 #elif L==7	// it
-	"Tipo di<br />risposte";
+	"Tipo di<br>risposte";
 #elif L==8	// pl
-	"Typu<br />odpowiedzi";
+	"Typu<br>odpowiedzi";
 #elif L==9	// pt
-	"Tipo de<br />respostas";
+	"Tipo de<br>respostas";
 #elif L==10	// tr
-	"Type of<br />answers";		// Çeviri lazim!
+	"Type of<br>answers";		// Çeviri lazim!
 #endif
 
 const char *Txt_Type_of_degree =
@@ -54597,25 +54597,25 @@ const char *Txt_Type_of_group =
 
 const char *Txt_Type_BR_of_group =
 #if   L==1	// ca
-	"Tipus<br />de grup";
+	"Tipus<br>de grup";
 #elif L==2	// de
-	"Art<br />der Gruppe";
+	"Art<br>der Gruppe";
 #elif L==3	// en
-	"Type<br />of group";
+	"Type<br>of group";
 #elif L==4	// es
-	"Tipo<br />de grupo";
+	"Tipo<br>de grupo";
 #elif L==5	// fr
-	"Type<br />de groupe";
+	"Type<br>de groupe";
 #elif L==6	// gn
-	"Tipo<br />de grupo";	// Okoteve traducción
+	"Tipo<br>de grupo";	// Okoteve traducción
 #elif L==7	// it
-	"Tipo<br />di gruppo";
+	"Tipo<br>di gruppo";
 #elif L==8	// pl
-	"Type<br />of group";	// Potrzebujesz tlumaczenie
+	"Type<br>of group";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Tipo<br />de grupo";
+	"Tipo<br>de grupo";
 #elif L==10	// tr
-	"Type<br />of group";	// Çeviri lazim!
+	"Type<br>of group";	// Çeviri lazim!
 #endif
 
 const char *Txt_Type_of_group_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -55041,25 +55041,25 @@ const char *Txt_unread_MESSAGES =
 
 const char *Txt_Unread_BR_msgs =
 #if   L==1	// ca
-	"No<br />le&iacute;dos";	// Necessita traducció
+	"No<br>le&iacute;dos";	// Necessita traducció
 #elif L==2	// de
-	"Ungel.<br />Nachr.";
+	"Ungel.<br>Nachr.";
 #elif L==3	// en
-	"Unread<br />msgs.";
+	"Unread<br>msgs.";
 #elif L==4	// es
-	"No<br />le&iacute;dos";
+	"No<br>le&iacute;dos";
 #elif L==5	// fr
-	"Non<br />lus";
+	"Non<br>lus";
 #elif L==6	// gn
-	"No<br />le&iacute;dos";	// Okoteve traducción
+	"No<br>le&iacute;dos";	// Okoteve traducción
 #elif L==7	// it
-	"Non<br />letti";
+	"Non<br>letti";
 #elif L==8	// pl
-	"Unread<br />msgs.";		// Potrzebujesz tlumaczenie
+	"Unread<br>msgs.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"N&atilde;o<br />lidas";
+	"N&atilde;o<br>lidas";
 #elif L==10	// tr
-	"Unread<br />msgs.";		// Çeviri lazim!
+	"Unread<br>msgs.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Update =
@@ -56614,25 +56614,25 @@ const char *Txt_Visible =
 
 const char *Txt_Visible_by_BR_the_student =
 #if   L==1	// ca
-	"&iquest;Visible por<br />el estudiante?";	// Necessita traducció
+	"&iquest;Visible por<br>el estudiante?";	// Necessita traducció
 #elif L==2	// de
-	"Sichtbare durch<br />die Student?";
+	"Sichtbare durch<br>die Student?";
 #elif L==3	// en
-	"Visible by<br />the student?";
+	"Visible by<br>the student?";
 #elif L==4	// es
-	"&iquest;Visible por<br />el estudiante?";
+	"&iquest;Visible por<br>el estudiante?";
 #elif L==5	// fr
-	"Visible par<br />l'&eacute;tudiant/e?";
+	"Visible par<br>l'&eacute;tudiant/e?";
 #elif L==6	// gn
-	"&iquest;Visible por<br />el estudiante?";	// Okoteve traducción
+	"&iquest;Visible por<br>el estudiante?";	// Okoteve traducción
 #elif L==7	// it
-	"Visibili dallo<br />studente?";
+	"Visibili dallo<br>studente?";
 #elif L==8	// pl
-	"Visible by<br />the student?";			// Potrzebujesz tlumaczenie
+	"Visible by<br>the student?";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Vis&iacute;vel pelo<br />estudante?";
+	"Vis&iacute;vel pelo<br>estudante?";
 #elif L==10	// tr
-	"Visible by<br />the student?";			// Çeviri lazim!
+	"Visible by<br>the student?";			// Çeviri lazim!
 #endif
 
 const char *Txt_Visible_results =
@@ -57264,25 +57264,25 @@ const char *Txt_works_area =
 
 const char *Txt_WriBRters =
 #if   L==1	// ca
-	"Escri-<br />tores";	// Necessita traducció
+	"Escri-<br>tores";	// Necessita traducció
 #elif L==2	// de
-	"Schrift-<br />steller";
+	"Schrift-<br>steller";
 #elif L==3	// en
-	"Wri-<br />ters";
+	"Wri-<br>ters";
 #elif L==4	// es
-	"Escri-<br />tores";
+	"Escri-<br>tores";
 #elif L==5	// fr
-	"&Eacute;cri-<br />vains";
+	"&Eacute;cri-<br>vains";
 #elif L==6	// gn
-	"Escri-<br />tores";	// Okoteve traducción
+	"Escri-<br>tores";	// Okoteve traducción
 #elif L==7	// it
-	"Scri-<br />ttori";
+	"Scri-<br>ttori";
 #elif L==8	// pl
-	"Wri-<br />ters";	// Potrzebujesz tlumaczenie
+	"Wri-<br>ters";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Escri-<br />tores";
+	"Escri-<br>tores";
 #elif L==10	// tr
-	"Wri-<br />ters";	// Çeviri lazim!
+	"Wri-<br>ters";	// Çeviri lazim!
 #endif
 
 const char *Txt_Write_a_message =
@@ -58612,43 +58612,43 @@ const char *Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_back
 
 const char *Txt_You_can_send_a_file_with_an_image_in_JPEG_format_ =
 #if   L==1	// ca
-	"Podeu enviar un arxiu amb una imatge en format <em>JPEG</em>.<br />"
+	"Podeu enviar un arxiu amb una imatge en format <em>JPEG</em>.<br>"
 	"La imatge ha de contenir almenys un rostre en posici&oacute; vertical i frontal,"
 	" i amb el fons blanc o molt clar.";
 #elif L==2	// de
-	"Sie k&ouml;nnen eine Datei mit einem Bild im <em>JPEG</em>-Format senden.<br />"
+	"Sie k&ouml;nnen eine Datei mit einem Bild im <em>JPEG</em>-Format senden.<br>"
 	"Das Bild muss mindestens eine Fl&auml;che in vertikaler und frontaler Position enthalten,"
 	" und der Hintergrund muss wei&szlig; oder sehr hell sein.";
 #elif L==3	// en
-	"You can send a file with an image in <em>JPEG</em> format.<br />"
+	"You can send a file with an image in <em>JPEG</em> format.<br>"
 	"The image must contain at least one face in vertical and frontal position,"
 	" and the background must be white or very light.";
 #elif L==4	// es
-	"Puede enviar un archivo con una imagen en formato <em>JPEG</em>.<br />"
+	"Puede enviar un archivo con una imagen en formato <em>JPEG</em>.<br>"
 	"La imagen debe contener al menos un rostro en posici&oacute;n vertical y frontal,"
 	" y con el fondo blanco o muy claro.";
 #elif L==5	// fr
-	"Vous pouvez envoyer un fichier avec une image au format JPEG.<br />"
+	"Vous pouvez envoyer un fichier avec une image au format JPEG.<br>"
 	"L'image doit contenir au moins un visage en position verticale et frontale,"
 	" et le fond doit &ecirc;tre blanc ou tr&egrave;s clair.";
 #elif L==6	// gn
-	"Puede enviar un archivo con una imagen en formato <em>JPEG</em>.<br />"
+	"Puede enviar un archivo con una imagen en formato <em>JPEG</em>.<br>"
 	"La imagen debe contener al menos un rostro en posici&oacute;n vertical y frontal,"
 	" y con el fondo blanco o muy claro.";			// Okoteve traducción
 #elif L==7	// it
-	"&Egrave; possibile inviare un file in un'immagine con formato <em>JPEG</em>.<br />"
+	"&Egrave; possibile inviare un file in un'immagine con formato <em>JPEG</em>.<br>"
 	"L'immagine deve contenere almeno una faccia in posizione verticale e frontale,"
 	" e lo sfondo deve essere bianco o molto chiaro.";
 #elif L==8	// pl
-	"Mo&zdot;esz wys&lstrok;a&cacute; plik obrazu w formacie <em>JPEG</em>.<br />"
+	"Mo&zdot;esz wys&lstrok;a&cacute; plik obrazu w formacie <em>JPEG</em>.<br>"
 	"Obraz musi zawiera&cacute; co najmniej jedn&aogon; twarz w pozycji pionowej jak i czo&lstrok;owego,"
 	" a t&lstrok;o musi by&cacute; bia&lstrok;y lub bardzo jasnym.";
 #elif L==9	// pt
-	"Voc&ecirc; pode enviar um arquivo em uma imagem com formato <em>JPEG</em>.<br />"
+	"Voc&ecirc; pode enviar um arquivo em uma imagem com formato <em>JPEG</em>.<br>"
 	"A imagem deve conter pelo menos um rosto na posi&ccedil;&atilde;o vertical e frontal,"
 	" eo fundo deve ser branco ou muito claro.";
 #elif L==10	// tr
-	"You can send a file with an image in <em>JPEG</em> format.<br />"
+	"You can send a file with an image in <em>JPEG</em> format.<br>"
 	"The image must contain at least one face in vertical and frontal position,"
 	" and the background must be white or very light.";	// Çeviri lazim!
 #endif

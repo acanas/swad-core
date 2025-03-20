@@ -742,7 +742,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
          break;
       default:        // Error
          snprintf (ErrorTxt,sizeof (ErrorTxt),
-	           "Photo could not be processed successfully.<br />"
+	           "Photo could not be processed successfully.<br>"
                    "Error code returned by the program of processing: %d",
                    ReturnCode);
          Err_ShowErrorAndExit (ErrorTxt);
@@ -1104,7 +1104,7 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
      {
       /* First name and surnames */
       if (asprintf (&Caption.Name,"<div class=\"ZOOM_TXT DAT_STRONG_%s BOLD\">"	// Limited width
-				     "%s<br />"
+				     "%s<br>"
 				     "%s%s%s"
 				  "</div>",
 		    The_GetSuffix (),
@@ -1165,7 +1165,7 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
 	{
 	 if (asprintf (&Caption.MainDeg,"<div class=\"ZOOM_TXT DAT_SMALL_%s\">"
 					    "<img src=\"%s/%s\" alt=\"\""
-					    " class=\"ICO16x16 ICO_BLACK_%s\" />"
+					    " class=\"ICO16x16 ICO_BLACK_%s\">"
 					    " %s"
 					 "</div>",
 		       The_GetSuffix (),Cfg_URL_ICON_PUBLIC,Rol_Icons[MaxRole],
@@ -1237,8 +1237,7 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
 	{
 	 if (asprintf (ImgStr,"<img src=\"%s\" alt=\"\" title=\"%s\" class=\"%s\""
 			      " onmouseover=\"zoom(this,'%s','%s');\""
-			      " onmouseout=\"noZoom();\""
-			      " />",
+			      " onmouseout=\"noZoom();\">",
 		       PhotoURL,UsrDat->FullName,ClassPhoto,
 		       PhotoURL,IdCaption) < 0)
 	    Err_NotEnoughMemoryExit ();
@@ -1247,8 +1246,7 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
 	{
 	 if (asprintf (ImgStr,"<img src=\"%s/usr_bl.jpg\" alt=\"\" title=\"%s\" class=\"%s\""
 			      " onmouseover=\"zoom(this,'%s/usr_bl.jpg','%s');\""
-			      " onmouseout=\"noZoom();\""
-			      " />",
+			      " onmouseout=\"noZoom();\">",
 		       Cfg_URL_ICON_PUBLIC,UsrDat->FullName,ClassPhoto,
 		       Cfg_URL_ICON_PUBLIC,IdCaption) < 0)
 	    Err_NotEnoughMemoryExit ();
@@ -1258,13 +1256,13 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
      {
       if (PhotoExists)
 	{
-	 if (asprintf (ImgStr,"<img src=\"%s\" alt=\"\" title=\"%s\" class=\"%s\" />",
+	 if (asprintf (ImgStr,"<img src=\"%s\" alt=\"\" title=\"%s\" class=\"%s\">",
 		       PhotoURL,UsrDat->FullName,ClassPhoto) < 0)
 	    Err_NotEnoughMemoryExit ();
 	}
       else
 	{
-	 if (asprintf (ImgStr,"<img src=\"%s/usr_bl.jpg\" alt=\"\" title=\"%s\" class=\"%s\" />",
+	 if (asprintf (ImgStr,"<img src=\"%s/usr_bl.jpg\" alt=\"\" title=\"%s\" class=\"%s\">",
 		       Cfg_URL_ICON_PUBLIC,UsrDat->FullName,ClassPhoto) < 0)
 	    Err_NotEnoughMemoryExit ();
 	}
@@ -2414,8 +2412,8 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
            {
             /***** Hidden div to pass user's name to Javascript *****/
 	    snprintf (PhotoCaption,sizeof (PhotoCaption),
-		      "%s<br />"
-		      "%d&nbsp;%s&nbsp;(%s)<br />"
+		      "%s<br>"
+		      "%d&nbsp;%s&nbsp;(%s)<br>"
 		      "%d&nbsp;%s&nbsp;(%d%%)",
 		      Deg->ShrtName,
 		      NumStds,Txt_students_ABBREVIATION,Txt_SEX_PLURAL_abc[Sex],
@@ -2445,7 +2443,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
 		  PhotoURL,IdCaption);
       else
          HTM_IMG (PhotoURL,NULL,Deg->ShrtName,
-                  " style=\"width:%upx;height:%upx;\" />",
+                  " style=\"width:%upx;height:%upx;\">",
 	          PhotoWidth,PhotoHeight);
      }
    else

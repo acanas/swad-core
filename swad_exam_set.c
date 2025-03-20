@@ -210,7 +210,7 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 
 	 /***** Current number of questions in set *****/
 	 HTM_TD_Begin ("class=\"RM\"");
-	    HTM_Unsigned (0);	// New set ==> no questions yet
+	    HTM_Char ('0');	// New set ==> no questions yet
 	 HTM_TD_End ();
 
 	 /***** Number of questions to appear in the exam *****/

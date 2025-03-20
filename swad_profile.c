@@ -472,28 +472,29 @@ static void Prf_ShowTimeSinceFirstClick (const struct Usr_Data *UsrDat,
       HTM_SPAN_End ();
       if (UsrFigures->NumDays > 0)
         {
-	 HTM_TxtF ("&nbsp;%s","(");
-	 NumYears = UsrFigures->NumDays / 365;
-	 if (NumYears)
-	    HTM_TxtF ("%d&nbsp;%s",
-		      NumYears,
-		      (NumYears == 1) ? Txt_year :
-				        Txt_years);
-	 else		// Less than one year
-	   {
-	    NumMonths = UsrFigures->NumDays / 30;
-	    if (NumMonths)
+	 HTM_NBSP ();
+	 HTM_OpenParenthesis ();
+	    NumYears = UsrFigures->NumDays / 365;
+	    if (NumYears)
 	       HTM_TxtF ("%d&nbsp;%s",
-			 NumMonths,
-			 (NumMonths == 1) ? Txt_month :
-					    Txt_months);
-	    else	// Less than one month
-	       HTM_TxtF ("%d&nbsp;%s",
-			 UsrFigures->NumDays,
-			 (UsrFigures->NumDays == 1) ? Txt_day :
-						      Txt_days);
-	   }
-	 HTM_Txt (")");
+			 NumYears,
+			 (NumYears == 1) ? Txt_year :
+					   Txt_years);
+	    else		// Less than one year
+	      {
+	       NumMonths = UsrFigures->NumDays / 30;
+	       if (NumMonths)
+		  HTM_TxtF ("%d&nbsp;%s",
+			    NumMonths,
+			    (NumMonths == 1) ? Txt_month :
+					       Txt_months);
+	       else	// Less than one month
+		  HTM_TxtF ("%d&nbsp;%s",
+			    UsrFigures->NumDays,
+			    (UsrFigures->NumDays == 1) ? Txt_day :
+							 Txt_days);
+	      }
+	 HTM_CloseParenthesis ();
         }
       Dat_WriteLocalDateHMSFromUTC (IdFirstClickTime,UsrFigures->FirstClickTimeUTC,
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
@@ -567,9 +568,9 @@ static void Prf_ShowNumFilesCurrentlyPublished (const struct Usr_Data *UsrDat)
       HTM_TxtF ("%u&nbsp;%s",NumFiles,(NumFiles == 1) ? Txt_file :
 						        Txt_files);
       HTM_NBSP ();
-      HTM_Txt ("(");
-      HTM_TxtF ("%u&nbsp;%s",NumPublicFiles,Txt_public_FILES);
-      HTM_Txt (")");
+      HTM_OpenParenthesis ();
+	 HTM_TxtF ("%u&nbsp;%s",NumPublicFiles,Txt_public_FILES);
+      HTM_CloseParenthesis ();
 
    Prf_EndListItem ();
   }
@@ -596,13 +597,14 @@ static void Prf_ShowNumClicks (const struct Usr_Data *UsrDat,
 			  Prf_DB_GetNumUsrsWithFigure ("NumClicks"));
 	 if (UsrFigures->NumDays > 0)
 	   {
-	    HTM_TxtF ("&nbsp;%s","(");
-	    HTM_DoubleFewDigits ((double) UsrFigures->NumClicks /
-				 (double) UsrFigures->NumDays);
-	    HTM_TxtF ("/%s&nbsp;",Txt_day);
-	    Prf_ShowRanking (Prf_DB_GetRankingNumClicksPerDay (UsrDat->UsrCod),
-			     Prf_DB_GetNumUsrsWithNumClicksPerDay ());
-	    HTM_Txt (")");
+	    HTM_NBSP ();
+	    HTM_OpenParenthesis ();
+	       HTM_DoubleFewDigits ((double) UsrFigures->NumClicks /
+				    (double) UsrFigures->NumDays);
+	       HTM_TxtF ("/%s&nbsp;",Txt_day);
+	       Prf_ShowRanking (Prf_DB_GetRankingNumClicksPerDay (UsrDat->UsrCod),
+				Prf_DB_GetNumUsrsWithNumClicksPerDay ());
+	   HTM_CloseParenthesis ();
 	   }
 	}
       else	// Number of clicks is unknown

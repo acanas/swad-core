@@ -841,9 +841,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	    switch (ICanView.Score)
 	      {
 	       case Usr_CAN:
-		  HTM_Double2Decimals (Print.Score);
-		  HTM_Txt ("/");
-		  HTM_Unsigned (Print.NumQsts.All);
+		  HTM_DoublePartOfUnsigned (Print.Score,Print.NumQsts.All);
 		  break;
 	       case Usr_CAN_NOT:
 	       default:
@@ -877,7 +875,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	       case Usr_CAN:
 		  Grade = TstPrn_ComputeGrade (Print.NumQsts.All,Print.Score,
 					       Games->Game.MaxGrade);
-		  TstPrn_ShowGrade (Grade,Games->Game.MaxGrade);
+		  HTM_DoublePartOfDouble (Grade,Games->Game.MaxGrade);
 		  TotalGrade += Grade;
 		  break;
 	       case Usr_CAN_NOT:
@@ -1013,9 +1011,7 @@ static void MchRes_ShowMchResultsSummaryRow (unsigned NumResults,
       /***** Write total score *****/
       HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
                     The_GetSuffix (),The_GetColorRows ());
-	 HTM_Double2Decimals (TotalScore);
-	 HTM_Txt ("/");
-	 HTM_Unsigned (NumTotalQsts->All);
+	 HTM_DoublePartOfUnsigned (TotalScore,NumTotalQsts->All);
       HTM_TD_End ();
 
       /***** Write average score per question *****/
@@ -1140,8 +1136,8 @@ void MchRes_ShowOneMchResult (void)
 		  HTM_SPTxt (UsrDat->Surname2);
 	       if (UsrDat->FrstName[0])
 	         {
-		  HTM_Comma ();
-		  HTM_SPTxt (UsrDat->FrstName);
+		  HTM_CommaSP ();
+		  HTM_Txt (UsrDat->FrstName);
 	         }
 	       HTM_BR ();
 	       Pho_ShowUsrPhotoIfAllowed (UsrDat,
@@ -1216,9 +1212,7 @@ void MchRes_ShowOneMchResult (void)
 		 {
 		  case Usr_CAN:
 		     HTM_STRONG_Begin ();
-			HTM_Double2Decimals (Print.Score);
-			HTM_Txt ("/");
-			HTM_Unsigned (Print.NumQsts.All);
+			HTM_DoublePartOfUnsigned (Print.Score,Print.NumQsts.All);
 		     HTM_STRONG_End ();
 		     break;
 		  case Usr_CAN_NOT:

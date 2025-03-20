@@ -233,7 +233,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 HTM_NBSP_GT_NBSP ();
 
 	 /***** Form to go to see institutions of this country *****/
 	 Frm_BeginFormGoTo (ActSeeIns);
@@ -251,7 +251,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 HTM_NBSP_GT_NBSP ();
 
 	 /***** Form to go to select countries *****/
 	 Frm_BeginFormGoTo (ActSeeCty);
@@ -268,7 +268,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 HTM_NBSP_GT_NBSP ();
 
 	 /***** Form to see centers of this institution *****/
 	 Frm_BeginFormGoTo (ActSeeCtr);
@@ -286,7 +286,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 HTM_NBSP_GT_NBSP ();
 
 	 /***** Form to go to select institutions *****/
 	 Frm_BeginFormGoTo (ActSeeIns);
@@ -302,7 +302,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_OFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 HTM_NBSP_GT_NBSP ();
 
 	 /***** Hidden institution *****/
 	 HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_INS]);
@@ -315,7 +315,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 HTM_NBSP_GT_NBSP ();
 
 	 /***** Form to see degrees of this center *****/
 	 Frm_BeginFormGoTo (ActSeeDeg);
@@ -333,7 +333,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 HTM_NBSP_GT_NBSP ();
 
 	 /***** Form to go to select centers *****/
 	 Frm_BeginFormGoTo (ActSeeCtr);
@@ -349,7 +349,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_OFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 HTM_NBSP_GT_NBSP ();
 
 	 /***** Hidden center *****/
 	 HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]);
@@ -362,7 +362,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 HTM_NBSP_GT_NBSP ();
 
 	 /***** Form to go to see courses of this degree *****/
 	 Frm_BeginFormGoTo (ActSeeCrs);
@@ -380,7 +380,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 HTM_NBSP_GT_NBSP ();
 
 	 /***** Form to go to select degrees *****/
 	 Frm_BeginFormGoTo (ActSeeDeg);
@@ -396,7 +396,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_OFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 HTM_NBSP_GT_NBSP ();
 
 	 /***** Hidden degree *****/
 	 HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]);
@@ -411,7 +411,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 		  The_GetSuffix ());
 
       /***** Separator *****/
-      HTM_Txt ("&nbsp;&gt;&nbsp;");
+      HTM_NBSP_GT_NBSP ();
 
    HTM_DIV_End ();
   }

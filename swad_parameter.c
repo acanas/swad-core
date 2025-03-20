@@ -1175,7 +1175,7 @@ void Par_PutParUnsigned (const char *Id,const char *ParName,unsigned ParValue)
    if (Id)
       if (Id[0])
          HTM_TxtF (" id=\"%s\"",Id);
-   HTM_TxtF (" name=\"%s\" value=\"%u\" />",ParName,ParValue);
+   HTM_TxtF (" name=\"%s\" value=\"%u\">",ParName,ParValue);
   }
 
 void Par_PutParUnsignedDisabled (const char *Id,const char *ParName,unsigned ParValue)
@@ -1184,7 +1184,7 @@ void Par_PutParUnsignedDisabled (const char *Id,const char *ParName,unsigned Par
    if (Id)
       if (Id[0])
          HTM_TxtF (" id=\"%s\"",Id);
-   HTM_TxtF (" name=\"%s\" value=\"%u\" disabled=\"disabled\" />",
+   HTM_TxtF (" name=\"%s\" value=\"%u\" disabled=\"disabled\">",
 	     ParName,ParValue);
   }
 
@@ -1213,7 +1213,7 @@ void Par_PutParLong (const char *Id,const char *ParName,long ParValue)
    if (Id)
       if (Id[0])
          HTM_TxtF (" id=\"%s\"",Id);
-   HTM_TxtF (" name=\"%s\" value=\"%ld\" />",ParName,ParValue);
+   HTM_TxtF (" name=\"%s\" value=\"%ld\">",ParName,ParValue);
   }
 
 /*****************************************************************************/
@@ -1222,7 +1222,7 @@ void Par_PutParLong (const char *Id,const char *ParName,long ParValue)
 
 void Par_PutParChar (const char *ParName,char ParValue)
   {
-   HTM_TxtF ("<input type=\"hidden\" name=\"%s\" value=\"%c\" />",
+   HTM_TxtF ("<input type=\"hidden\" name=\"%s\" value=\"%c\">",
              ParName,ParValue);
   }
 
@@ -1236,7 +1236,7 @@ void Par_PutParString (const char *Id,const char *ParName,const char *ParValue)
    if (Id)
       if (Id[0])
          HTM_TxtF (" id=\"%s\"",Id);
-   HTM_TxtF (" name=\"%s\" value=\"%s\" />",
+   HTM_TxtF (" name=\"%s\" value=\"%s\">",
              ParName,ParValue ? ParValue :
 	                        "");
   }

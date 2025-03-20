@@ -126,7 +126,6 @@ void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS
 
 void TstPrn_ComputeAndShowGrade (unsigned NumQsts,double Score,double MaxGrade);
 double TstPrn_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade);
-void TstPrn_ShowGrade (double Grade,double MaxGrade);
 
 void TstPrn_WriteAnswersExam (struct Usr_Data *UsrDat,
                               const struct TstPrn_PrintedQuestion *PrintedQuestion,

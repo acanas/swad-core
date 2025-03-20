@@ -906,7 +906,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                   break;
                case 0x0A:  /* \n */
         	  if (ChangeTo == Str_TO_RIGOROUS_HTML)
-                     Str_Copy (StrSpecialChar,"<br />",
+                     Str_Copy (StrSpecialChar,"<br>",
                 	       sizeof (StrSpecialChar) - 1);
         	  else
                     {

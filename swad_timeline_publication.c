@@ -468,11 +468,12 @@ void TmlPub_PutLinkToViewNewPubs (void)
 		   The_GetSuffix ());
 
          /* Text */
-	 HTM_TxtF ("%s (",Txt_See_new_activity);
-	 HTM_SPAN_Begin ("id=\"view_new_count\"");
-	    HTM_Unsigned (0);
-	 HTM_SPAN_End ();
-	 HTM_Txt (")");
+	 HTM_TxtSP (Txt_See_new_activity);
+	 HTM_OpenParenthesis ();
+	    HTM_SPAN_Begin ("id=\"view_new_count\"");
+	       HTM_Char ('0');
+	    HTM_SPAN_End ();
+	 HTM_CloseParenthesis ();
 
       /* End anchor */
       HTM_A_End ();

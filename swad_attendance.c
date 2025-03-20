@@ -2074,7 +2074,7 @@ void Att_RegisterStudentsInEvent (void)
       Usr_FreeUsrsList (Rol_STD);
 
       /***** Write final message *****/
-      Ale_ShowAlert (Ale_INFO,"%s: %u<br />"
+      Ale_ShowAlert (Ale_INFO,"%s: %u<br>"
 		              "%s: %u",
 		     Txt_Presents,NumStds[Att_PRESENT],
 		     Txt_Absents ,NumStds[Att_ABSENT ]);

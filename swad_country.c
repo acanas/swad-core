@@ -1382,7 +1382,7 @@ static void Cty_PutFormToCreateCountry (void)
 	 /***** Number of institutions *****/
 	 HTM_TD_Begin ("rowspan=\"%u\" class=\"RT DAT_%s\"",
 		       1 + Lan_NUM_LANGUAGES,The_GetSuffix ());
-	    HTM_Unsigned (0);
+	    HTM_Char ('0');
 	 HTM_TD_End ();
 
       HTM_TR_End ();

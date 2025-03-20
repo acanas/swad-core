@@ -79,7 +79,7 @@ int main (void)
 		      "Status: 503 Service Temporarily Unavailable\r\n\r\n"
 		      "<html lang=\"es\">"
 		      "<head><title>%s</title></head>"
-		      "<body><br /><br /><br /><br />"
+		      "<body><br><br><br><br>"
 		      "<h1 class=\"CM\">"
 		      "%s est&aacute; parado un momento por mantenimiento."
 		      "</h1>"

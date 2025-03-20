@@ -857,8 +857,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
 		 {
 		  if (NumAcceptedUsrsWithEmail > 0)
 		    {
-		     HTM_Comma ();
-		     HTM_SP ();
+		     HTM_CommaSP ();
 		     LengthStrAddr ++;
 		     if (LengthStrAddr > Mai_MAX_BYTES_STR_ADDR)
 			Err_ShowErrorAndExit ("The space allocated to store email addresses is full.");

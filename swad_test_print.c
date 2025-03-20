@@ -1134,7 +1134,7 @@ void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS
 
 void TstPrn_ComputeAndShowGrade (unsigned NumQsts,double Score,double MaxGrade)
   {
-   TstPrn_ShowGrade (TstPrn_ComputeGrade (NumQsts,Score,MaxGrade),MaxGrade);
+   HTM_DoublePartOfDouble (TstPrn_ComputeGrade (NumQsts,Score,MaxGrade),MaxGrade);
   }
 
 /*****************************************************************************/
@@ -1156,18 +1156,6 @@ double TstPrn_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade)
       Grade = 0.0;
 
    return Grade;
-  }
-
-/*****************************************************************************/
-/****************** Show total grade out of maximum grade ********************/
-/*****************************************************************************/
-
-void TstPrn_ShowGrade (double Grade,double MaxGrade)
-  {
-   /***** Write grade over maximum grade *****/
-   HTM_Double2Decimals (Grade);
-   HTM_Txt ("/");
-   HTM_Double2Decimals (MaxGrade);
   }
 
 /*****************************************************************************/
@@ -1244,7 +1232,7 @@ static void TstPrn_WriteIntAnsPrint (struct Usr_Data *UsrDat,
 	    else
 	      {
 	       HTM_TD_Begin ("class=\"CM Qst_ANS_0_%s\"",The_GetSuffix ());
-		  HTM_Txt ("?");
+		  HTM_Question ();
 	       HTM_TD_End ();
 	      }
 	   }
@@ -1320,11 +1308,8 @@ static void TstPrn_WriteFltAnsPrint (struct Usr_Data *UsrDat,
 	    switch (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
 	      {
 	       case Usr_CAN:
-		  HTM_Txt ("[");
-		  HTM_Double (Question->Answer.FloatingPoint[0]);
-		  HTM_Txt ("; ");
-		  HTM_Double (Question->Answer.FloatingPoint[1]);
-		  HTM_Txt ("]");
+		  HTM_DoubleRange (Question->Answer.FloatingPoint[0],
+				   Question->Answer.FloatingPoint[1]);
 		  break;
 	       case Usr_CAN_NOT:
 	       default:
@@ -2030,9 +2015,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
-		     HTM_Double2Decimals (Print.Score);
-		     HTM_Txt ("/");
-		     HTM_Unsigned (Print.NumQsts.All);
+		     HTM_DoublePartOfUnsigned (Print.Score,Print.NumQsts.All);
 		     break;
 		  case Usr_CAN_NOT:
 		  default:
@@ -2223,11 +2206,7 @@ static void TstPrn_ShowPrintsSummaryRow (Usr_MeOrOther_t MeOrOther,
                     The_GetSuffix (),
                     The_GetColorRows ());
 	 if (ICanViewTotalScore == Usr_CAN)
-	   {
-	    HTM_Double2Decimals (TotalScore);
-	    HTM_Txt ("/");
-	    HTM_Unsigned (NumTotalQsts->All);
-	   }
+	    HTM_DoublePartOfUnsigned (TotalScore,NumTotalQsts->All);
       HTM_TD_End ();
 
       /***** Write average score per question *****/
@@ -2417,9 +2396,7 @@ void TstPrn_ShowOnePrint (void)
 		 {
 		  case Usr_CAN:
 		     HTM_STRONG_Begin ();
-			HTM_Double2Decimals (Print.Score);
-			HTM_Txt ("/");
-			HTM_Unsigned (Print.NumQsts.All);
+			HTM_DoublePartOfUnsigned (Print.Score,Print.NumQsts.All);
 		     HTM_STRONG_End ();
 		     break;
 		  case Usr_CAN_NOT:
