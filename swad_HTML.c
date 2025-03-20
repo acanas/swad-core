@@ -1977,8 +1977,13 @@ void HTM_UnsignedColon (unsigned Num)
 void HTM_Light0 (void)
   {
    HTM_SPAN_Begin ("class=\"VERY_LIGHT\"");
-      HTM_Char ('0');
+      HTM_0 ();
    HTM_SPAN_End ();
+  }
+
+void HTM_0 (void)
+  {
+   HTM_Char ('0');
   }
 
 void HTM_Int (int Num)
@@ -2161,5 +2166,5 @@ void HTM_TD_LINE_TOP_Double2Decimals (double Num)
 
 void HTM_ElementEnd (void)
   {
-   HTM_Char (">");
+   HTM_Char ('>');
   }

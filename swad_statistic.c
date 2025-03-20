@@ -1903,7 +1903,7 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,double HitsMax)
 		       (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
 		       The_GetSuffix (),
 		       (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
-	    HTM_Char ('0');
+	    HTM_0 ();
 	 HTM_TD_End ();
 
 	 for (Interval  = 1;
@@ -2447,7 +2447,7 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
 	{
 	 HTM_Txt ("0%");
 	 HTM_BR ();
-	 HTM_Char ('0');
+	 HTM_0 ();
 	}
 
       /* Write the hour */

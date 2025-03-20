@@ -231,6 +231,7 @@ void HTM_CloseBracket (void);
 void HTM_Unsigned (unsigned Num);
 void HTM_UnsignedColon (unsigned Num);
 void HTM_Light0 (void);
+void HTM_0 (void);
 void HTM_Int (int Num);
 void HTM_UnsignedLong (unsigned long Num);
 void HTM_Long (long Num);
