@@ -865,7 +865,7 @@ long Exa_DB_AddQuestionToSet (long SetCod,const struct Qst_Question *Question,lo
 				SetCod,
 				Exa_DB_InvalidQuestionYN[Question->Validity],
 				Qst_DB_StrAnswerTypes[Question->Answer.Type],
-				Qst_Shuffle_YN[Question->Answer.ShuffleOrNot],
+				Qst_Shuffle_YN[Question->Answer.Shuffle],
 				Question->Stem,
 				Question->Feedback,
 				MedCod);
@@ -1135,7 +1135,7 @@ void Exa_DB_AddAnsToQstInSet (long QstCod,unsigned AnsInd,
 /*****************************************************************************/
 
 unsigned Exa_DB_GetQstAnswersFromSet (MYSQL_RES **mysql_res,long QstCod,
-				      Qst_Shuffle_t ShuffleOrNot)
+				      Qst_Shuffle_t Shuffle)
   {
    extern const char *Qst_OrderByShuffle[Qst_NUM_SHUFFLE];
    unsigned NumOptions;
@@ -1152,7 +1152,7 @@ unsigned Exa_DB_GetQstAnswersFromSet (MYSQL_RES **mysql_res,long QstCod,
 		   " WHERE QstCod=%ld"
 		" ORDER BY %s",
 		   QstCod,
-		   Qst_OrderByShuffle[ShuffleOrNot]);
+		   Qst_OrderByShuffle[Shuffle]);
 
    if (!NumOptions)
       Err_WrongAnswerExit ();

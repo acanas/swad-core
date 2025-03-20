@@ -86,7 +86,7 @@ static bool Tst_CheckIfNextTstAllowed (void);
 static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
                                               struct TstPrn_Print *Print);
 static void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				       Qst_Shuffle_t ShuffleOrNot);
+				       Qst_Shuffle_t Shuffle);
 
 static unsigned Tst_GetParNumTst (void);
 static unsigned Tst_GetParNumQsts (void);
@@ -520,7 +520,7 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Qst_AnswerType_t AnswerType;
-   Qst_Shuffle_t ShuffleOrNot;
+   Qst_Shuffle_t Shuffle;
    unsigned QstInd;
 
    /***** Trivial check: number of questions *****/
@@ -552,7 +552,7 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
       AnswerType = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 
       /* Get shuffle (row[2]) */
-      ShuffleOrNot = Qst_GetShuffleFromYN (row[2][0]);
+      Shuffle = Qst_GetShuffleFromYN (row[2][0]);
 
       /* Set indexes of answers */
       switch (AnswerType)
@@ -567,17 +567,18 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
 	 case Qst_ANS_MULTIPLE_CHOICE:
             /* If answer type is unique or multiple option,
                generate indexes of answers depending on shuffle */
-	    Tst_GenerateChoiceIndexes (&Print->PrintedQuestions[QstInd],
-				       ShuffleOrNot);
+	    Tst_GenerateChoiceIndexes (&Print->PrintedQuestions[QstInd],Shuffle);
 	    break;
 	 default:
 	    break;
 	}
 
       /* Reset user's answers.
-         Initially user has not answered the question ==> initially all answers will be blank.
-         If the user does not confirm the submission of their exam ==>
-         ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
+         · Initially user has not answered the question ==>
+         ==> initially all answers will be blank.
+         · If the user does not confirm the submission of their exam ==>
+         ==> the exam may be half filled ==>
+         ==> the answers displayed will be those selected by the user. */
       Print->PrintedQuestions[QstInd].StrAnswers[0] = '\0';
      }
 
@@ -591,7 +592,7 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
 /*****************************************************************************/
 
 static void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				       Qst_Shuffle_t ShuffleOrNot)
+				       Qst_Shuffle_t Shuffle)
   {
    struct Qst_Question Question;
    unsigned NumOpt;
@@ -607,7 +608,7 @@ static void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQue
 
    /***** Get answers of question from database *****/
    Question.Answer.NumOptions = Qst_DB_GetAnswersData (&mysql_res,Question.QstCod,
-						       ShuffleOrNot);
+						       Shuffle);
    /*
    row[0] AnsInd
    row[1] Answer
@@ -704,7 +705,8 @@ bool Tst_GetParsTst (struct Qst_Questions *Questions,
 	 Questions->AnswerTypes.All = Par_GetParBool ("AllAnsTypes");
 
 	 /* Get types of answer */
-	 Par_GetParMultiToText ("AnswerType",Questions->AnswerTypes.List,Qst_MAX_BYTES_LIST_ANSWER_TYPES);
+	 Par_GetParMultiToText ("AnswerType",Questions->AnswerTypes.List,
+				Qst_MAX_BYTES_LIST_ANSWER_TYPES);
 
 	 /* Check number of types of answer */
 	 if (Qst_CountNumAnswerTypesInList (&Questions->AnswerTypes) == 0)	// If no types of answer selected...
@@ -744,8 +746,8 @@ bool Tst_GetParsTst (struct Qst_Questions *Questions,
 	 Par_GetParMultiToText ("Order",UnsignedStr,Cns_MAX_DIGITS_UINT);
 	 if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
 	    Questions->SelectedOrder = (Qst_QuestionsOrder_t)
-				       ((UnsignedNum < Qst_NUM_TYPES_ORDER_QST) ? UnsignedNum :
-										  0);
+				       (UnsignedNum < Qst_NUM_TYPES_ORDER_QST ? UnsignedNum :
+										0);
 	 else
 	    Questions->SelectedOrder = (Qst_QuestionsOrder_t) 0;
 	 break;

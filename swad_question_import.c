@@ -232,6 +232,11 @@ static void QstImp_ExportQuestion (struct Qst_Question *Question,FILE *FileXML)
   {
    extern const char *Qst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
    extern const char *Txt_NEW_LINE;
+   static const char *ShuffleYesNo[Qst_NUM_SHUFFLE] =
+     {
+      [Qst_DONT_SHUFFLE] = "no",
+      [Qst_SHUFFLE     ] = "yes"
+     };
 
    if (Qst_GetQstDataByCod (Question))
      {
@@ -259,8 +264,7 @@ static void QstImp_ExportQuestion (struct Qst_Question *Question,FILE *FileXML)
       if (Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE ||
           Question->Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
          fprintf (FileXML," shuffle=\"%s\"",
-                  Question->Answer.Shuffle ? "yes" :
-                	                     "no");
+                  ShuffleYesNo[Question->Answer.Shuffle]);
       fprintf (FileXML,">");
       QstImp_WriteAnswersOfAQstXML (Question,FileXML);
       fprintf (FileXML,"</answer>%s",Txt_NEW_LINE);
@@ -593,7 +597,7 @@ static void QstImp_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 			  }
 
 		     /* Get shuffle. By default, shuffle is false. */
-		     Question.Answer.Shuffle = false;
+		     Question.Answer.Shuffle = Qst_DONT_SHUFFLE;
 		     for (AnswerElem  = QuestionElem->FirstChild;
 			  AnswerElem != NULL;
 			  AnswerElem  = AnswerElem->NextBrother)
@@ -607,7 +611,8 @@ static void QstImp_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 				   Attribute  = Attribute->Next)
 				 if (!strcmp (Attribute->AttributeName,"shuffle"))
 				   {
-				    Question.Answer.Shuffle = XML_GetAttributteYesNoFromXMLTree (Attribute);
+				    Question.Answer.Shuffle = XML_GetAttributteYesNoFromXMLTree (Attribute) ? Qst_SHUFFLE :
+													           Qst_DONT_SHUFFLE;
 				    break;	// Only first attribute "shuffle"
 				   }
 			   break;	// Only first element "answer"
@@ -943,7 +948,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 	 if (Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE ||
 	     Question->Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
 	    /* Put an icon that indicates whether shuffle is enabled or not */
-	    if (Question->Answer.Shuffle)
+	    if (Question->Answer.Shuffle == Qst_SHUFFLE)
 	       Ico_PutIcon ("check.svg",Ico_BLACK,
 	                    Txt_TST_Answer_given_by_the_teachers,
 			    QuestionExists ? "ICO_HIDDEN ICO16x16" :

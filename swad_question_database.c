@@ -104,7 +104,7 @@ long Qst_DB_CreateQst (const struct Qst_Question *Question)
 					     "0)",	// Score
 				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 				Qst_DB_StrAnswerTypes[Question->Answer.Type],
-				Qst_Shuffle_YN[Question->Answer.ShuffleOrNot],
+				Qst_Shuffle_YN[Question->Answer.Shuffle],
 				Question->Stem,
 				Question->Feedback ? Question->Feedback :
 						     "",
@@ -128,7 +128,7 @@ void Qst_DB_UpdateQst (const struct Qst_Question *Question)
 		   " WHERE QstCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
 		   Qst_DB_StrAnswerTypes[Question->Answer.Type],
-		   Qst_Shuffle_YN[Question->Answer.ShuffleOrNot],
+		   Qst_Shuffle_YN[Question->Answer.Shuffle],
 		   Question->Stem,
 		   Question->Feedback ? Question->Feedback :
 					"",
@@ -166,14 +166,14 @@ void Qst_DB_UpdateQstScore (long QstCod,bool AnswerIsNotBlank,double Score)
 /*********************** Change the shuffle of a question ********************/
 /*****************************************************************************/
 
-void Qst_DB_UpdateQstShuffle (long QstCod,Qst_Shuffle_t ShuffleOrNot)
+void Qst_DB_UpdateQstShuffle (long QstCod,Qst_Shuffle_t Shuffle)
   {
    DB_QueryUPDATE ("can not update the shuffle type of a question",
 		   "UPDATE tst_questions"
 		     " SET Shuffle='%c'"
                    " WHERE QstCod=%ld"
                      " AND CrsCod=%ld",	// Extra check
-		   Qst_Shuffle_YN[ShuffleOrNot],
+		   Qst_Shuffle_YN[Shuffle],
 		   QstCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
@@ -1312,7 +1312,7 @@ unsigned Qst_DB_GetNumAnswersQst (long QstCod)
 /*****************************************************************************/
 
 unsigned Qst_DB_GetAnswersData (MYSQL_RES **mysql_res,long QstCod,
-			        Qst_Shuffle_t ShuffleOrNot)
+			        Qst_Shuffle_t Shuffle)
   {
    unsigned NumOptions;
 
@@ -1327,7 +1327,7 @@ unsigned Qst_DB_GetAnswersData (MYSQL_RES **mysql_res,long QstCod,
 			 " WHERE QstCod=%ld"
 		      " ORDER BY %s",
 			 QstCod,
-			 Qst_OrderByShuffle[ShuffleOrNot])))
+			 Qst_OrderByShuffle[Shuffle])))
       Err_WrongAnswerExit ();
 
    return NumOptions;
@@ -1382,7 +1382,7 @@ unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
 		   " WHERE QstCod=%ld"
 		" ORDER BY %s",
 		   Question->QstCod,
-		   Qst_OrderByShuffle[Question->Answer.ShuffleOrNot]);
+		   Qst_OrderByShuffle[Question->Answer.Shuffle]);
   }
 
 /*****************************************************************************/

@@ -1460,7 +1460,7 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
 	 Err_WrongAnswerExit ();
 
       /* Get shuffle (row[3]) */
-      Question.Answer.Shuffle = (row[3][0] == 'Y');
+      Question.Answer.Shuffle = Qst_GetShuffleFromYN (row[3][0]);
 
       /***** Reorder answer *****/
       Mch_ReorderAnswer (MchCod,QstInd,&Question);

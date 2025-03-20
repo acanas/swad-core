@@ -937,7 +937,7 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
       Question->Answer.Type = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 
       /* Get shuffle (row[2]) */
-      Question->Answer.ShuffleOrNot = Qst_GetShuffleFromYN (row[2][0]);
+      Question->Answer.Shuffle = Qst_GetShuffleFromYN (row[2][0]);
 
       /* Get the stem (row[3]) and feedback (row[4]) */
       Str_Copy (Question->Stem    ,row[3],Cns_MAX_BYTES_TEXT);

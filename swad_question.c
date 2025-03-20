@@ -981,7 +981,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 		  Qst_PutParsEditQst (Questions);
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Questions->SelectedOrder);
 		  HTM_INPUT_CHECKBOX ("Shuffle",
-				      AttributesShuffleChecked[Questions->Question.Answer.ShuffleOrNot] |
+				      AttributesShuffleChecked[Questions->Question.Answer.Shuffle] |
 				      HTM_SUBMIT_ON_CHANGE,
 				      "value=\"Y\"");
 	       Frm_EndForm ();
@@ -1289,7 +1289,7 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
 	    HTM_INPUT_CHECKBOX ("Shuffle",
-				AttributesShuffleChecked[Question->Answer.ShuffleOrNot] |
+				AttributesShuffleChecked[Question->Answer.Shuffle] |
 				HTM_DISABLED,
 				"value=\"Y\"");
 	 HTM_TD_End ();
@@ -2083,7 +2083,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 		  HTM_INPUT_CHECKBOX ("Shuffle",
-				      AttributesShuffleChecked[Question->Answer.ShuffleOrNot] |
+				      AttributesShuffleChecked[Question->Answer.Shuffle] |
 	        		      ((Question->Answer.Type != Qst_ANS_UNIQUE_CHOICE &&
 			                Question->Answer.Type != Qst_ANS_MULTIPLE_CHOICE) ? HTM_DISABLED :
 										            HTM_NO_ATTR),
@@ -2301,7 +2301,7 @@ void Qst_QstConstructor (struct Qst_Question *Question)
    /***** Initialize answers *****/
    Question->Answer.Type         = Qst_ANS_UNIQUE_CHOICE;
    Question->Answer.NumOptions   = 0;
-   Question->Answer.ShuffleOrNot = Qst_DONT_SHUFFLE;
+   Question->Answer.Shuffle = Qst_DONT_SHUFFLE;
    Question->Answer.TF           = ' ';
 
    /* Initialize image attached to stem */
@@ -2469,7 +2469,7 @@ bool Qst_GetQstDataByCod (struct Qst_Question *Question)
       Question->Answer.Type = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 
       /* Get shuffle (row[2]) */
-      Question->Answer.ShuffleOrNot = Qst_GetShuffleFromYN (row[2][0]);
+      Question->Answer.Shuffle = Qst_GetShuffleFromYN (row[2][0]);
 
       /* Get the stem (row[3]) and the feedback (row[4]) */
       Str_Copy (Question->Stem    ,row[3],Cns_MAX_BYTES_TEXT);
@@ -2749,7 +2749,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
    Ale_ShowAlerts (NULL);
 
    /***** Get answers *****/
-   Question->Answer.ShuffleOrNot = Qst_DONT_SHUFFLE;
+   Question->Answer.Shuffle = Qst_DONT_SHUFFLE;
    switch (Question->Answer.Type)
      {
       case Qst_ANS_INT:
@@ -2782,7 +2782,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
       case Qst_ANS_UNIQUE_CHOICE:
       case Qst_ANS_MULTIPLE_CHOICE:
          /* Get shuffle */
-         Question->Answer.ShuffleOrNot = Qst_GetParShuffle ();
+         Question->Answer.Shuffle = Qst_GetParShuffle ();
 	 /* falls through */
 	 /* no break */
       case Qst_ANS_TEXT:
@@ -3410,7 +3410,7 @@ void Qst_ChangeShuffleQst (void)
      };
    struct Qst_Questions Questions;
    bool EditingOnlyThisQst;
-   Qst_Shuffle_t ShuffleOrNot;
+   Qst_Shuffle_t Shuffle;
 
    /***** Create test *****/
    Qst_Constructor (&Questions);
@@ -3422,13 +3422,13 @@ void Qst_ChangeShuffleQst (void)
    EditingOnlyThisQst = Par_GetParBool ("OnlyThisQst");
 
    /***** Get a parameter that indicates whether it's possible to shuffle the answers of this question ******/
-   ShuffleOrNot = Qst_GetParShuffle ();
+   Shuffle = Qst_GetParShuffle ();
 
    /***** Update the question changing the current shuffle *****/
-   Qst_DB_UpdateQstShuffle (Questions.Question.QstCod,ShuffleOrNot);
+   Qst_DB_UpdateQstShuffle (Questions.Question.QstCod,Shuffle);
 
    /***** Write message *****/
-   Ale_ShowAlert (Ale_SUCCESS,*AlertMsg[ShuffleOrNot],Questions.Question.QstCod);
+   Ale_ShowAlert (Ale_SUCCESS,*AlertMsg[Shuffle],Questions.Question.QstCod);
 
    /***** Continue editing questions *****/
    if (EditingOnlyThisQst)

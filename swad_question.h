@@ -85,7 +85,7 @@ struct Qst_Question
      {
       Qst_AnswerType_t Type;
       unsigned NumOptions;
-      Qst_Shuffle_t ShuffleOrNot;
+      Qst_Shuffle_t Shuffle;
       char TF;
       struct
 	{
