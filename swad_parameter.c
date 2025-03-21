@@ -796,7 +796,7 @@ void Par_GetMainPars (void)
      {
       /***** Get user's code, password, current degree and current course from stored session *****/
       if (Ses_GetSessionData ())
-	 Gbl.Session.IsOpen = true;
+	 Gbl.Session.ClosedOpen = CloOpe_OPEN;
       else
 	{
 	 Gbl.Session.HasBeenDisconnected = true;
@@ -811,7 +811,7 @@ void Par_GetMainPars (void)
 	{
 	 /***** Get user's code, password, current degree and current course from stored session *****/
 	 if (Ses_GetSessionData ())
-	    Gbl.Session.IsOpen = true;
+	    Gbl.Session.ClosedOpen = CloOpe_OPEN;
 	 else
 	   {
 	    Gbl.Session.HasBeenDisconnected = true;

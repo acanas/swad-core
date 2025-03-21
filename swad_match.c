@@ -3397,7 +3397,7 @@ void Mch_RefreshMatchTch (void)
    struct Mch_Match Match;
    enum {REFRESH_LEFT,REFRESH_ALL} WhatToRefresh;
 
-   if (!Gbl.Session.IsOpen)	// If session has been closed, do not write anything
+   if (Gbl.Session.ClosedOpen == CloOpe_CLOSED)	// If session has been closed, do not write anything
       return;
 
    /***** Reset match *****/
@@ -3457,7 +3457,7 @@ void Mch_RefreshMatchStd (void)
   {
    struct Mch_Match Match;
 
-   if (!Gbl.Session.IsOpen)	// If session has been closed, do not write anything
+   if (Gbl.Session.ClosedOpen == CloOpe_CLOSED)	// If session has been closed, do not write anything
       return;
 
    /***** Reset match *****/

@@ -110,7 +110,7 @@ void Ses_CloseSession (void)
 
       /***** Remove session from database *****/
       Ses_RemoveSessionFromDB ();
-      Gbl.Session.IsOpen = false;
+      Gbl.Session.ClosedOpen = CloOpe_CLOSED;
       // Gbl.Session.HasBeenDisconnected = true;
       Gbl.Session.Id[0] = '\0';
 

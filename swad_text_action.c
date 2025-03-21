@@ -14692,25 +14692,48 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActImpTstQst] =
 #if   L==1	// ca
-	"Import test questions from XML file"		// Necessita traducció
+	"Importar preguntes de test d'un fitxer XML"
 #elif L==2	// de
-	"Import test questions from XML file"		// Need Übersetzung
+	"Testfragen aus einer XML-Datei importieren"
 #elif L==3	// en
-	"Import test questions from XML file"
+	"Import test questions from an XML file"
 #elif L==4	// es
-	"Importar preguntas de test de archivo XML"
+	"Importar preguntas de test de un archivo XML"
 #elif L==5	// fr
-	"Import test questions from XML file"		// Besoin de traduction
+	"Importer des questions de test &agrave; partir d'un fichier XML"
 #elif L==6	// gn
-	"Importar preguntas de test de archivo XML"	// Okoteve traducción
+	"Egueru porandu prueba rehegua archivo XML-gui"
 #elif L==7	// it
-	"Import test questions from XML file"		// Bisogno di traduzione
+	"Importare domande de test da un file XML"
 #elif L==8	// pl
-	"Import test questions from XML file"		// Potrzebujesz tlumaczenie
+	"Importuj pytania testowe z pliku XML"
 #elif L==9	// pt
-	"Import test questions from XML file"		// Precisa de tradução
+	"Importar perguntas de teste de um ficheiro XML"
 #elif L==10	// tr
-	"Import test questions from XML file"		// Çeviri lazim!
+	"Test sorular&inodot;n&inodot; bir XML dosyas&inodot;ndan i&ccedil;e aktar&inodot;n"
+#endif
+	,
+	[ActExpTstQst] =
+#if   L==1	// ca
+	"Exportar preguntes de test a un fitxer XML"
+#elif L==2	// de
+	"Testfragen in eine XML-Datei exportieren"
+#elif L==3	// en
+	"Export test questions to an XML file"
+#elif L==4	// es
+	"Exportar preguntas de test a un archivo XML"
+#elif L==5	// fr
+	"Exporter les questions de test vers un fichier XML"
+#elif L==6	// gn
+	"Eguerahauka porandu prueba rehegua pete&itilde; archivo XML-pe"
+#elif L==7	// it
+	"Esportare le domande de test in un file XML"
+#elif L==8	// pl
+	"Eksportuj pytania testowe do pliku XML"
+#elif L==9	// pt
+	"Exportar as perguntas de teste para um ficheiro XML"
+#elif L==10	// tr
+	"Test sorular&inodot;n&inodot; bir XML dosyas&inodot;na aktar&inodot;n"
 #endif
 	,
 	[ActLstTstQst] =

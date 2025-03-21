@@ -646,7 +646,7 @@ void Fil_WriteFileSizeFull (double SizeInBytes,
 void Fil_AddPublicDirToCache (const char *FullPathPriv,
                               const char TmpPubDir[PATH_MAX + 1])
   {
-   if (Gbl.Session.IsOpen)
+   if (Gbl.Session.ClosedOpen == CloOpe_OPEN)
      {
       /* Delete possible old entry */
       Fil_DB_RemovePublicDirFromCache (FullPathPriv);
@@ -669,7 +669,7 @@ bool Fil_GetPublicDirFromCache (const char *FullPathPriv,
    /***** Reset temporary directory *****/
    TmpPubDir[0] = '\0';
 
-   if (Gbl.Session.IsOpen)
+   if (Gbl.Session.ClosedOpen == CloOpe_OPEN)
      {
       /***** Get temporary directory from cache *****/
       Fil_DB_GetPublicDirFromCache (FullPathPriv,TmpPubDir);

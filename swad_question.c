@@ -476,6 +476,7 @@ void Qst_PutIconsEditBankQsts (void *Questions)
    /***** Put form to remove selected test questions *****/
    switch (Gbl.Action.Act)
      {
+      case ActExpTstQst:	// Export questions
       case ActLstTstQst:	// List selected test questions for edition
       case ActReqRemSevTstQst:	// Request removal of selected questions
       case ActReqRemOneTstQst:	// Request removal of a question

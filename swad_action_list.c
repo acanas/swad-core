@@ -878,6 +878,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActEdiOneTstQst	] = { 105, 3,TabAss,NULL			,Qst_ShowFormEditOneQst		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActReqImpTstQst	] = {1007, 3,TabAss,NULL			,QstImp_ShowFormImpQstsFromXML	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActImpTstQst	] = {1008, 3,TabAss,NULL			,QstImp_ImpQstsFromXML		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
+   [ActExpTstQst	] = {2180, 3,TabAss,NULL			,Qst_ListQuestionsToEdit	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActLstTstQst	] = { 132, 3,TabAss,NULL			,Qst_ListQuestionsToEdit	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActNewTstQst	] = { 126, 3,TabAss,NULL			,Qst_ReceiveQst			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
    [ActChgTstQst	] = {1975, 3,TabAss,NULL			,Qst_ReceiveQst			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
@@ -4205,4 +4206,6 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActDwnBibRef,		// #2177
 	ActFrmChgBibRef,	// #2178
 	ActChgBibRef,		// #2179
+
+	ActExpTstQst,		// #2180
   };

@@ -78,7 +78,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 
 void QstImp_PutIconToExportQuestions (struct Qst_Questions *Questions)
   {
-   Lay_PutContextualLinkOnlyIcon (ActLstTstQst,NULL,
+   Lay_PutContextualLinkOnlyIcon (ActExpTstQst,NULL,
                                   QstImp_PutParsExportQsts,Questions,
 				  "file-import.svg",Ico_BLACK);
   }

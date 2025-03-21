@@ -304,8 +304,8 @@ void Tml_RefreshNewTimelineGbl (void)
    struct Tml_Timeline Timeline;
 
    /***** Trivial check: session should be open *****/
-   if (!Gbl.Session.IsOpen)	// If session has been closed...
-      return;			// ...do not write anything
+   if (Gbl.Session.ClosedOpen == CloOpe_CLOSED)	// If session has been closed...
+      return;					// ...do not write anything
 
    /***** Reset timeline context *****/
    Tml_ResetTimeline (&Timeline);

@@ -1621,73 +1621,76 @@ void Usr_ChkUsrAndGetUsrData (void)
 	   }
 	}
       else	// Gbl.Action.Act != ActCreUsrAcc
-	{
 	 /***** Check user and get user's data *****/
-	 if (Gbl.Session.IsOpen)
+	 switch (Gbl.Session.ClosedOpen)
 	   {
-	    if (Usr_ChkUsrAndGetUsrDataFromSession ())	// User logged in
-	      {
-	       Gbl.Usrs.Me.Logged = true;
+	    case CloOpe_OPEN:
+	       if (Usr_ChkUsrAndGetUsrDataFromSession ())	// User logged in
+		 {
+		  Gbl.Usrs.Me.Logged = true;
 
-	       Usr_SetMyPrefsAndRoles ();
+		  Usr_SetMyPrefsAndRoles ();
 
-	       if (Gbl.Action.IsAJAXAutoRefresh)	// If refreshing ==> don't refresh LastTime in session
-		  Ses_DB_UpdateSessionLastRefresh ();
+		  if (Gbl.Action.IsAJAXAutoRefresh)	// If refreshing ==> don't refresh LastTime in session
+		     Ses_DB_UpdateSessionLastRefresh ();
+		  else
+		    {
+		     Act_AdjustCurrentAction ();
+		     Ses_DB_UpdateSession ();
+		     Con_DB_UpdateMeInConnectedList ();
+		    }
+		 }
 	       else
+		  FormLogin.PutForm = Frm_PUT_FORM;
+	       break;
+	    case CloOpe_CLOSED:
+	    default:
+	       if (Gbl.Action.Act == ActLogIn ||
+		   Gbl.Action.Act == ActLogInUsrAgd)	// Login using @nickname, email or ID from form
 		 {
-		  Act_AdjustCurrentAction ();
-		  Ses_DB_UpdateSession ();
-		  Con_DB_UpdateMeInConnectedList ();
+		  if (Usr_ChkUsrAndGetUsrDataFromDirectLogin ())	// User logged in
+		    {
+		     Gbl.Usrs.Me.Logged = true;
+		     Usr_SetMyPrefsAndRoles ();
+
+		     Act_AdjustCurrentAction ();
+		     Ses_CreateSession ();
+
+		     Set_SetSettingsFromIP ();	// Set settings from current IP
+		    }
+		  else
+		    {
+		     FormLogin.PutForm = Frm_PUT_FORM;
+		     if (Gbl.Action.Act == ActLogInUsrAgd)
+		       {
+			FormLogin.Action = ActLogInUsrAgd;
+			FormLogin.FuncPars = Agd_PutParAgd;
+		       }
+		    }
 		 }
-	      }
-	    else
-	       FormLogin.PutForm = Frm_PUT_FORM;
-	   }
-	 else if (Gbl.Action.Act == ActLogIn ||
-	          Gbl.Action.Act == ActLogInUsrAgd)	// Login using @nickname, email or ID from form
-	   {
-	    if (Usr_ChkUsrAndGetUsrDataFromDirectLogin ())	// User logged in
-	      {
-	       Gbl.Usrs.Me.Logged = true;
-	       Usr_SetMyPrefsAndRoles ();
-
-	       Act_AdjustCurrentAction ();
-	       Ses_CreateSession ();
-
-	       Set_SetSettingsFromIP ();	// Set settings from current IP
-	      }
-	    else
-	      {
-	       FormLogin.PutForm = Frm_PUT_FORM;
-	       if (Gbl.Action.Act == ActLogInUsrAgd)
+	       else if (Gbl.Action.Act == ActLogInNew)	// Empty account without password, login using encrypted user's code
 		 {
-	          FormLogin.Action = ActLogInUsrAgd;
-	          FormLogin.FuncPars = Agd_PutParAgd;
+		  /***** Get user's data *****/
+		  Usr_GetParOtherUsrCodEncrypted (&Gbl.Usrs.Me.UsrDat);
+		  Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Me.UsrDat);
+		  if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+							       Usr_GET_PREFS,
+							       Usr_GET_ROLE_IN_CRS))
+		    {
+		     // User logged in
+		     Gbl.Usrs.Me.Logged = true;
+		     Usr_SetMyPrefsAndRoles ();
+
+		     Act_AdjustCurrentAction ();
+		     Ses_CreateSession ();
+
+		     Set_SetSettingsFromIP ();	// Set settings from current IP
+		    }
+		  else
+		     FormLogin.PutForm = Frm_PUT_FORM;
 		 }
-	      }
+	       break;
 	   }
-	 else if (Gbl.Action.Act == ActLogInNew)	// Empty account without password, login using encrypted user's code
-	   {
-	    /***** Get user's data *****/
-	    Usr_GetParOtherUsrCodEncrypted (&Gbl.Usrs.Me.UsrDat);
-            Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Me.UsrDat);
-            if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
-                                                         Usr_GET_PREFS,
-                                                         Usr_GET_ROLE_IN_CRS))
-	      {
-               // User logged in
-	       Gbl.Usrs.Me.Logged = true;
-	       Usr_SetMyPrefsAndRoles ();
-
-	       Act_AdjustCurrentAction ();
-	       Ses_CreateSession ();
-
-	       Set_SetSettingsFromIP ();	// Set settings from current IP
-	      }
-	    else
-	       FormLogin.PutForm = Frm_PUT_FORM;
-	   }
-	}
      }
 
    /***** If session disconnected or error in login, show form to login *****/
@@ -3041,10 +3044,16 @@ void Usr_PutParSelectedUsrsCods (const struct Usr_SelectedUsrs *SelectedUsrs)
    Usr_BuildParName (&ParName,Usr_ParUsrCod[Rol_UNK],SelectedUsrs->ParSuffix);
 
    /* Put the parameter */
-   if (Gbl.Session.IsOpen)
-      Ses_InsertParInDB (ParName,SelectedUsrs->List[Rol_UNK]);
-   else
-      Par_PutParString (NULL,ParName,SelectedUsrs->List[Rol_UNK]);
+   switch (Gbl.Session.ClosedOpen)
+     {
+      case CloOpe_OPEN:
+	 Ses_InsertParInDB (ParName,SelectedUsrs->List[Rol_UNK]);
+	 break;
+      case CloOpe_CLOSED:
+      default:
+         Par_PutParString (NULL,ParName,SelectedUsrs->List[Rol_UNK]);
+         break;
+     }
 
    /***** Free allocated memory for parameter name *****/
    free (ParName);
@@ -3072,7 +3081,7 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsr
       Usr_AllocateListSelectedEncryptedUsrCods (SelectedUsrs,Rol_UNK);
       if (!Par_GetParMultiToText (ParName,SelectedUsrs->List[Rol_UNK],
 				  Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS))
-	 if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
+	 if (Gbl.Session.ClosedOpen == CloOpe_OPEN)	// If the session is open, get parameter from DB
 	   {
 	    Ses_DB_GetPar (ParName,SelectedUsrs->List[Rol_UNK],
 			   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
@@ -3080,19 +3089,7 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsr
 			      Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,
 			      Str_REMOVE_SPACES);
 	   }
-/*
-      if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
-	{
-	 Ses_DB_GetPar (ParName,SelectedUsrs->List[Rol_UNK],
-			Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
-	 Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,SelectedUsrs->List[Rol_UNK],
-			   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,
-			   Str_REMOVE_SPACES);
-	}
-      else
-	 Par_GetParMultiToText (ParName,SelectedUsrs->List[Rol_UNK],
-				Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
-*/
+
       /***** Free allocated memory for parameter name *****/
       free (ParName);
 

@@ -72,7 +72,7 @@ struct Globals
    struct
      {
       unsigned NumSessions;
-      bool IsOpen;
+      CloOpe_ClosedOrOpen_t ClosedOpen;
       bool HasBeenDisconnected;
       char Id[Cns_BYTES_SESSION_ID + 1];
       long UsrCod;
