@@ -239,6 +239,7 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
    bool GetUsrsInCrs;
    bool OtherRecipientsBefore = false;
    char *ClassInput;
+   bool WithPhotos;
 
    Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs =
    Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs =
@@ -266,7 +267,7 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
       /***** Get and update type of list,
 	     number of columns in class photo
 	     and preference about view photos *****/
-      Set_GetAndUpdatePrefsAboutUsrList ();
+      Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
 
       /***** Get groups to show ******/
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -303,7 +304,8 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
 		 {
 		  /***** Form to select type of list used for select several users *****/
 		  Usr_ShowFormsToSelectUsrListType (NextAction,Msg_PutParsWriteMsg,Messages,
-						    "CopyMessageToHiddenFields();");
+						    "CopyMessageToHiddenFields();",
+						    WithPhotos);
 
 		  /***** Put link to register students *****/
 		  Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs ();
@@ -359,7 +361,7 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
 		       {
 			/***** Show potential recipients *****/
 			HTM_TABLE_Begin ("TBL_SCROLL_C2");
-			   Usr_ListUsersToSelect (&Gbl.Usrs.Selected);
+			   Usr_ListUsersToSelect (&Gbl.Usrs.Selected,WithPhotos);
 			   OtherRecipientsBefore = true;
 			HTM_TABLE_End ();
 		       }

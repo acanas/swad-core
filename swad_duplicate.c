@@ -136,8 +136,8 @@ void Dup_ListDuplicateUsrs (void)
 	 HTM_TABLE_BeginCenterPadding (2);
 
 	    /***** Heading row with column names *****/
-	    Gbl.Usrs.Listing.WithPhotos = true;
-	    Usr_WriteHeaderFieldsUsrDat (false);	// Columns for the data
+	    Usr_WriteHeaderFieldsUsrDat (false,	// Columns for the data
+					 true);	// Show photos
 
 	    /***** List users *****/
 	    for (NumUsr = 0, The_ResetRowColor ();
@@ -160,7 +160,8 @@ void Dup_ListDuplicateUsrs (void)
 
 		  /* Write data of this user */
 		  Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK,
-					   &Gbl.Usrs.Selected);
+					   &Gbl.Usrs.Selected,
+					   true);	// Show photo
 
 		  HTM_TR_Begin (NULL);
 
@@ -255,8 +256,8 @@ static void Dup_ListSimilarUsrs (void)
       HTM_TABLE_BeginCenterPadding (5);
 
 	 /***** Heading row with column names *****/
-	 Gbl.Usrs.Listing.WithPhotos = true;
-	 Usr_WriteHeaderFieldsUsrDat (false);	// Columns for the data
+	 Usr_WriteHeaderFieldsUsrDat (false,	// Columns for the data
+				      true);	// Show photos
 
 	 /***** List users *****/
 	 for (NumUsr = 0, The_ResetRowColor ();
@@ -277,7 +278,8 @@ static void Dup_ListSimilarUsrs (void)
 
 	       /***** Write data of this user *****/
 	       Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK,
-					&Gbl.Usrs.Selected);
+					&Gbl.Usrs.Selected,
+					true);	// Show photo
 
 	       /***** Write user's profile and user's courses *****/
 	       HTM_TR_Begin (NULL);

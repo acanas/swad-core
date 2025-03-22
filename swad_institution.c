@@ -104,13 +104,13 @@ static void Ins_EditingInstitutionDestructor ();
 
 static void Ins_FormToGoToMap (struct Hie_Node *Ins);
 
-static void Ins_GetAndShowInssOrderedByNumCtrs (void);
-static void Ins_GetAndShowInssOrderedByNumDegs (void);
-static void Ins_GetAndShowInssOrderedByNumCrss (void);
-static void Ins_GetAndShowInssOrderedByNumUsrsInCrss (void);
-static void Ins_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void);
+static void Ins_GetAndShowInssOrderedByNumCtrs (bool WithPhotos);
+static void Ins_GetAndShowInssOrderedByNumDegs (bool WithPhotos);
+static void Ins_GetAndShowInssOrderedByNumCrss (bool WithPhotos);
+static void Ins_GetAndShowInssOrderedByNumUsrsInCrss (bool WithPhotos);
+static void Ins_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (bool WithPhotos);
 static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
-		          const char *TxtFigure);
+		          const char *TxtFigure,bool WithPhotos);
 static unsigned Ins_GetInsAndStat (struct Hie_Node *Ins,MYSQL_RES *mysql_res);
 
 /*****************************************************************************/
@@ -1626,6 +1626,7 @@ void Ins_GetAndShowInstitutionsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_institutions;
    extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
+   bool WithPhotos;
    struct Fig_Figures Figures;
 
    /***** Begin box *****/
@@ -1633,29 +1634,30 @@ void Ins_GetAndShowInstitutionsStats (void)
                  Hlp_ANALYTICS_Figures_institutions,Box_NOT_CLOSABLE);
 
       /***** Form to select type of list used to display degree photos *****/
-      Set_GetAndUpdatePrefsAboutUsrList ();
+      Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
       Figures.Level      = Gbl.Scope.Current;
       Figures.FigureType = Fig_INSTITS;
-      Usr_ShowFormsToSelectUsrListType (ActSeeUseGbl,Fig_PutParsFigures,&Figures,NULL);
+      Usr_ShowFormsToSelectUsrListType (ActSeeUseGbl,Fig_PutParsFigures,&Figures,
+				        NULL,WithPhotos);
 
       /***** Institutions ordered by number of centers *****/
-      Ins_GetAndShowInssOrderedByNumCtrs ();
+      Ins_GetAndShowInssOrderedByNumCtrs (WithPhotos);
 
       /***** Institutions ordered by number of degrees *****/
       HTM_BR ();
-      Ins_GetAndShowInssOrderedByNumDegs ();
+      Ins_GetAndShowInssOrderedByNumDegs (WithPhotos);
 
       /***** Institutions ordered by number of courses *****/
       HTM_BR ();
-      Ins_GetAndShowInssOrderedByNumCrss ();
+      Ins_GetAndShowInssOrderedByNumCrss (WithPhotos);
 
       /***** Institutions ordered by number of users in courses *****/
       HTM_BR ();
-      Ins_GetAndShowInssOrderedByNumUsrsInCrss ();
+      Ins_GetAndShowInssOrderedByNumUsrsInCrss (WithPhotos);
 
       /***** Institutions ordered by number of users who claim to belong to them *****/
       HTM_BR ();
-      Ins_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem ();
+      Ins_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (WithPhotos);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -1665,7 +1667,7 @@ void Ins_GetAndShowInstitutionsStats (void)
 /**** Get and show stats about institutions ordered by number of centers *****/
 /*****************************************************************************/
 
-static void Ins_GetAndShowInssOrderedByNumCtrs (void)
+static void Ins_GetAndShowInssOrderedByNumCtrs (bool WithPhotos)
   {
    extern const char *Txt_Institutions_by_number_of_centers;
    extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
@@ -1680,7 +1682,7 @@ static void Ins_GetAndShowInssOrderedByNumCtrs (void)
 	 NumInss = Ins_DB_GetInssOrderedByNumCtrs (&mysql_res);
 
 	 /***** Show institutions *****/
-	 Ins_ShowInss (&mysql_res,NumInss,Txt_HIERARCHY_PLURAL_Abc[Hie_CTR]);
+	 Ins_ShowInss (&mysql_res,NumInss,Txt_HIERARCHY_PLURAL_Abc[Hie_CTR],WithPhotos);
 
 	 /***** Free structure that stores the query result *****/
 	 DB_FreeMySQLResult (&mysql_res);
@@ -1693,7 +1695,7 @@ static void Ins_GetAndShowInssOrderedByNumCtrs (void)
 /**** Get and show stats about institutions ordered by number of degrees *****/
 /*****************************************************************************/
 
-static void Ins_GetAndShowInssOrderedByNumDegs (void)
+static void Ins_GetAndShowInssOrderedByNumDegs (bool WithPhotos)
   {
    extern const char *Txt_Institutions_by_number_of_degrees;
    extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
@@ -1708,7 +1710,7 @@ static void Ins_GetAndShowInssOrderedByNumDegs (void)
 	 NumInss = Ins_DB_GetInssOrderedByNumDegs (&mysql_res);
 
 	 /***** Show institutions *****/
-	 Ins_ShowInss (&mysql_res,NumInss,Txt_HIERARCHY_PLURAL_Abc[Hie_DEG]);
+	 Ins_ShowInss (&mysql_res,NumInss,Txt_HIERARCHY_PLURAL_Abc[Hie_DEG],WithPhotos);
 
 	 /***** Free structure that stores the query result *****/
 	 DB_FreeMySQLResult (&mysql_res);
@@ -1721,7 +1723,7 @@ static void Ins_GetAndShowInssOrderedByNumDegs (void)
 /**** Get and show stats about institutions ordered by number of courses *****/
 /*****************************************************************************/
 
-static void Ins_GetAndShowInssOrderedByNumCrss (void)
+static void Ins_GetAndShowInssOrderedByNumCrss (bool WithPhotos)
   {
    extern const char *Txt_Institutions_by_number_of_courses;
    extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
@@ -1736,7 +1738,7 @@ static void Ins_GetAndShowInssOrderedByNumCrss (void)
 	 NumInss = Ins_DB_GetInssOrderedByNumCrss (&mysql_res);
 
 	 /***** Show institutions *****/
-	 Ins_ShowInss (&mysql_res,NumInss,Txt_HIERARCHY_PLURAL_Abc[Hie_CRS]);
+	 Ins_ShowInss (&mysql_res,NumInss,Txt_HIERARCHY_PLURAL_Abc[Hie_CRS],WithPhotos);
 
 	 /***** Free structure that stores the query result *****/
 	 DB_FreeMySQLResult (&mysql_res);
@@ -1749,7 +1751,7 @@ static void Ins_GetAndShowInssOrderedByNumCrss (void)
 /***** Get and show stats about institutions ordered by users in courses *****/
 /*****************************************************************************/
 
-static void Ins_GetAndShowInssOrderedByNumUsrsInCrss (void)
+static void Ins_GetAndShowInssOrderedByNumUsrsInCrss (bool WithPhotos)
   {
    extern const char *Txt_Institutions_by_number_of_users_in_courses;
    extern const char *Txt_Users;
@@ -1764,7 +1766,7 @@ static void Ins_GetAndShowInssOrderedByNumUsrsInCrss (void)
 	 NumInss = Ins_DB_GetInssOrderedByNumUsrsInCrss (&mysql_res);
 
 	 /***** Show institutions *****/
-	 Ins_ShowInss (&mysql_res,NumInss,Txt_Users);
+	 Ins_ShowInss (&mysql_res,NumInss,Txt_Users,WithPhotos);
 
 	 /***** Free structure that stores the query result *****/
 	 DB_FreeMySQLResult (&mysql_res);
@@ -1778,7 +1780,7 @@ static void Ins_GetAndShowInssOrderedByNumUsrsInCrss (void)
 /************* number of users who claim to belong to them      **************/
 /*****************************************************************************/
 
-static void Ins_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
+static void Ins_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (bool WithPhotos)
   {
    extern const char *Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them;
    extern const char *Txt_Users;
@@ -1794,7 +1796,7 @@ static void Ins_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
 	 NumInss = Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (&mysql_res);
 
 	 /***** Show institutions *****/
-	 Ins_ShowInss (&mysql_res,NumInss,Txt_Users);
+	 Ins_ShowInss (&mysql_res,NumInss,Txt_Users,WithPhotos);
 
 	 /***** Free structure that stores the query result *****/
 	 DB_FreeMySQLResult (&mysql_res);
@@ -1808,7 +1810,7 @@ static void Ins_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
 /*****************************************************************************/
 
 static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
-		          const char *TxtFigure)
+		          const char *TxtFigure,bool WithPhotos)
   {
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    unsigned NumIns;
@@ -1885,7 +1887,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 			ParCod_PutPar (ParCod_Ins,Ins.HieCod);
 			HTM_BUTTON_Submit_Begin (Ins.ShrtName,
 			                         "class=\"LM BT_LINK\"");
-			   if (Gbl.Usrs.Listing.WithPhotos)
+			   if (WithPhotos)
 			     {
 			      Lgo_DrawLogo (Hie_INS,&Ins,"ICO40x40");
 			      HTM_NBSP ();

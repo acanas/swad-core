@@ -235,6 +235,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
       Sta_MIN_ROWS_PER_PAGE * 5000,
       Sta_MAX_ROWS_PER_PAGE,
      };
+   bool WithPhotos;
    unsigned NumTotalUsrs;
    char *Title;
    Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME];
@@ -251,7 +252,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Set_GetAndUpdatePrefsAboutUsrList ();
+   Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
 
    /***** Get groups to show ******/
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -284,7 +285,8 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 				      ActReqAccCrs,NULL,NULL,NULL))
 	      {
 	       /***** Form to select type of list used for select several users *****/
-	       Usr_ShowFormsToSelectUsrListType (ActReqAccCrs,NULL,NULL,NULL);
+	       Usr_ShowFormsToSelectUsrListType (ActReqAccCrs,NULL,NULL,NULL,
+						 WithPhotos);
 
 	       /***** Put link to register students *****/
 	       Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs ();
@@ -307,7 +309,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			/* Data */
 			HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 		           HTM_TABLE_Begin ("TBL_SCROLL_C2");
-			      Usr_ListUsersToSelect (&Gbl.Usrs.Selected);
+			      Usr_ListUsersToSelect (&Gbl.Usrs.Selected,WithPhotos);
 			   HTM_TABLE_End ();
 			HTM_TD_End ();
 		     HTM_TR_End ();

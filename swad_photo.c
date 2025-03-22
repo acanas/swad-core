@@ -121,11 +121,13 @@ static void Pho_PutLinkToPrintViewOfDegreeStatsPars (void *DegPhotos);
 static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPhotos);
 static void Pho_GetMaxStdsPerDegree (struct Pho_DegPhotos *DegPhotos);
 static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
-                                              Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
+                                              Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
+                                              bool WithPhotos);
 static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,
                                     int *NumStds,int *NumStdsWithPhoto);
 static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
-                                        Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
+                                        Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
+                                        bool WithPhotos);
 
 static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto);
 static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
@@ -1698,12 +1700,14 @@ static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    extern const char *Hlp_ANALYTICS_Degrees;
    extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    static void (*ShowOrPrintDegrees[Set_NUM_USR_LIST_TYPES]) (struct Pho_DegPhotos *DegPhotos,
-                                                              Pho_AvgPhotoSeeOrPrint_t SeeOrPrint) =
+                                                              Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
+                                                              bool WithPhotos) =
      {
       [Set_USR_LIST_AS_CLASS_PHOTO] = Pho_ShowOrPrintClassPhotoDegrees,
       [Set_USR_LIST_AS_LISTING	  ] = Pho_ShowOrPrintListDegrees,
      };
    struct Pho_DegPhotos DegPhotos;
+   bool WithPhotos;
 
    /***** Get parameters from form *****/
    DegPhotos.TypeOfAverage       = Pho_GetPhotoAvgTypeFromForm ();
@@ -1713,7 +1717,7 @@ static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Set_GetAndUpdatePrefsAboutUsrList ();
+   Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
 
    switch (SeeOrPrint)
      {
@@ -1753,7 +1757,7 @@ static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
    /***** Draw the classphoto/list *****/
    if (ShowOrPrintDegrees[Gbl.Usrs.Me.ListType])
-      ShowOrPrintDegrees[Gbl.Usrs.Me.ListType] (&DegPhotos,SeeOrPrint);
+      ShowOrPrintDegrees[Gbl.Usrs.Me.ListType] (&DegPhotos,SeeOrPrint,WithPhotos);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -2119,7 +2123,8 @@ static void Pho_GetMaxStdsPerDegree (struct Pho_DegPhotos *DegPhotos)
 /*****************************************************************************/
 
 static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
-                                              Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
+                                              Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
+                                              bool WithPhotos)
   {
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    MYSQL_RES *mysql_res;
@@ -2137,7 +2142,8 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
      {
       /***** Form to select type of list used to display degree photos *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
-	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg,Pho_PutParsDegPhoto,DegPhotos,NULL);
+	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg,Pho_PutParsDegPhoto,DegPhotos,
+					   NULL,WithPhotos);
 
       HTM_TABLE_BeginCenter ();
 
@@ -2198,7 +2204,8 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 /*****************************************************************************/
 
 static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
-                                        Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
+                                        Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
+                                        bool WithPhotos)
   {
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_No_INDEX;
@@ -2220,7 +2227,8 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
       /***** Class photo start *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
 	 /***** Form to select type of list used to display degree photos *****/
-	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg,Pho_PutParsDegPhoto,DegPhotos,NULL);
+	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg,Pho_PutParsDegPhoto,DegPhotos,
+					   NULL,WithPhotos);
 
       /***** Write heading *****/
       HTM_TABLE_BeginCenterPadding (2);
@@ -2276,7 +2284,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 		  Pho_GetNumStdsInDegree (Deg.HieCod,Sex,&NumStds,&NumStdsWithPhoto);
 		  HTM_TD_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s RM %s\"",
 		                The_GetSuffix (),The_GetColorRows ());
-		     if (Gbl.Usrs.Listing.WithPhotos)
+		     if (WithPhotos)
 			Pho_ShowDegreeAvgPhotoAndStat (&Deg,DegPhotos,
 						       SeeOrPrint,Sex,
 						       NumStds,NumStdsWithPhoto);

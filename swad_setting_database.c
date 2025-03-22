@@ -317,7 +317,7 @@ void Set_DB_UpdateMyColsClassPhoto (unsigned Cols)
 /**** Save my preference about photos in users' list for current course ******/
 /*****************************************************************************/
 
-void Set_DB_UpdateMyPrefAboutListWithPhotosPhoto (void)
+void Set_DB_UpdateMyPrefAboutListWithPhotosPhoto (bool WithPhotos)
   {
    if (Gbl.Usrs.Me.Logged &&
        Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
@@ -327,8 +327,8 @@ void Set_DB_UpdateMyPrefAboutListWithPhotosPhoto (void)
 		        " SET ListWithPhotos='%c'"
                       " WHERE UsrCod=%ld"
                         " AND CrsCod=%ld",
-		      Gbl.Usrs.Listing.WithPhotos ? 'Y' :
-						    'N',
+		      WithPhotos ? 'Y' :
+				   'N',
 		      Gbl.Usrs.Me.UsrDat.UsrCod,
 		      Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }

@@ -151,7 +151,6 @@ struct Globals
       struct
 	{
 	 Rec_UsrsType_t RecsUsrs;	// Students' records or teachers' records
-	 bool WithPhotos;
 	} Listing;
       struct
         {

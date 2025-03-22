@@ -254,7 +254,8 @@ void Usr_InsertMyLastCrsTabAndTime (void);
 
 void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
                               bool PutCheckBoxToSelectUsr,Rol_Role_t Role,
-			      struct Usr_SelectedUsrs *SelectedUsrs);
+			      struct Usr_SelectedUsrs *SelectedUsrs,
+			      bool ShowPhoto);
 
 void Usr_GetListUsrs (Hie_Level_t Level,Rol_Role_t Role);
 
@@ -299,10 +300,11 @@ void Usr_FreeListOtherRecipients (void);
 
 void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,
 				       void (*FuncPars) (void *Args),void *Args,
-				       const char *OnSubmit);
-unsigned Usr_GetColumnsForSelectUsrs (void);
+				       const char *OnSubmit,
+				       bool WithPhotos);
+unsigned Usr_GetColumnsForSelectUsrs (bool WithPhotos);
 void Usr_SetUsrDatMainFieldNames (void);
-void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr);
+void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr,bool WithPhotos);
 
 void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 				       Act_Action_t NextAction,
@@ -314,7 +316,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 void Usr_GetSelectedUsrsAndGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 				    void (*FuncWhenUsrsSelected) (void *ArgsSelected),void *ArgsSelected,
                                     void (*FuncWhenNoUsrsSelected) (void *ArgsNoSelected),void *ArgsNoSelected);
-void Usr_ListUsersToSelect (struct Usr_SelectedUsrs *SelectedUsrs);
+void Usr_ListUsersToSelect (struct Usr_SelectedUsrs *SelectedUsrs,bool WithPhotos);
 void Usr_WriteNumUsrsInList (Rol_Role_t Role);
 
 void Usr_ListAllDataGsts (void);

@@ -49,7 +49,7 @@ void Set_DB_InsertUsrInCrsSettings (long UsrCod,long HieCod);
 void Set_DB_UpdateGrpMyLastAccZone (const char *FieldNameDB,long GrpCod);
 void Set_DB_UpdateMyUsrListType (void);
 void Set_DB_UpdateMyColsClassPhoto (unsigned Cols);
-void Set_DB_UpdateMyPrefAboutListWithPhotosPhoto (void);
+void Set_DB_UpdateMyPrefAboutListWithPhotosPhoto (bool WithPhotos);
 
 unsigned Set_DB_GetMyUsrListType (MYSQL_RES **mysql_res);
 unsigned Set_DB_GetMyColsClassPhoto (MYSQL_RES **mysql_res);
