@@ -1951,7 +1951,7 @@ void HTM_OpenParenthesis (void)
 
 void HTM_CloseParenthesis (void)
   {
-   HTM_Char ('(');
+   HTM_Char (')');
   }
 
 void HTM_OpenBracket (void)

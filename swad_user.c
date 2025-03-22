@@ -3027,9 +3027,6 @@ void Usr_PutParSelectedUsrsCods (const struct Usr_SelectedUsrs *SelectedUsrs)
   {
    char *ParName;
 
-   /***** Put a parameter indicating that a list of several users is present *****/
-   // Par_PutParChar ("MultiUsrs",'Y');
-
    /***** Put a parameter with the encrypted user codes of several users *****/
    /* Build name of the parameter.
       Sometimes a unique action needs several distinct lists of users,
@@ -3037,15 +3034,10 @@ void Usr_PutParSelectedUsrsCods (const struct Usr_SelectedUsrs *SelectedUsrs)
    Usr_BuildParName (&ParName,Usr_ParUsrCod[Rol_UNK],SelectedUsrs->ParSuffix);
 
    /* Put the parameter */
-   switch (Gbl.Session.Status)
-     {
-      case CloOpe_OPEN:
-	 Ses_InsertParInDB (ParName,SelectedUsrs->List[Rol_UNK]);
-	 break;
-      default:
-         Par_PutParString (NULL,ParName,SelectedUsrs->List[Rol_UNK]);
-         break;
-     }
+   if (Gbl.Session.Status == Ses_OPEN)
+      Ses_InsertParInDB (ParName,SelectedUsrs->List[Rol_UNK]);
+   else
+      Par_PutParString (NULL,ParName,SelectedUsrs->List[Rol_UNK]);
 
    /***** Free allocated memory for parameter name *****/
    free (ParName);

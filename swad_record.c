@@ -119,7 +119,8 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView);
 
 static void Rec_ShowLinkToPrintPreviewOfRecords (void);
-static void Rec_GetParRecordsPerPage (void);
+static void Rec_ShowSelectorRecsPerPag (unsigned RecsPerPag);
+static unsigned Rec_GetParRecordsPerPage (void);
 static void Rec_WriteFormShowOfficeHoursOneTch (bool ShowOfficeHours);
 static void Rec_WriteFormShowOfficeHoursSeveralTchs (bool ShowOfficeHours);
 static void Rec_PutParsShowOfficeHoursOneTch (__attribute__((unused)) void *Args);
@@ -864,6 +865,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
    const char *Ptr;
    struct Usr_Data UsrDat;
    char RecordSectionId[32];
+   unsigned RecsPerPag = Rec_DEF_RECORDS_PER_PAGE;
 
    /***** Get list of selected users if not already got *****/
    Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
@@ -873,7 +875,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 
    /***** Get parameter with number of user records per page (only for printing) *****/
    if (TypeOfView == Rec_SHA_RECORD_PRINT)
-      Rec_GetParRecordsPerPage ();
+      RecsPerPag = Rec_GetParRecordsPerPage ();
 
    if (TypeOfView == Rec_SHA_RECORD_LIST)	// Listing several records
      {
@@ -884,6 +886,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 	 Frm_BeginForm (ActPrnRecSevGst);
 	    Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	    Rec_ShowLinkToPrintPreviewOfRecords ();
+	    Rec_ShowSelectorRecsPerPag (RecsPerPag);
 	 Frm_EndForm ();
 
       Mnu_ContextMenuEnd ();
@@ -913,7 +916,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 
 	    if (Gbl.Action.Act == ActPrnRecSevGst &&
 		NumUsr &&
-		(NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
+		(NumUsr % RecsPerPag) == 0)
 	       HTM_DIV_Begin ("class=\"REC_USR\" style=\"page-break-before:always;\"");
 	    else
 	       HTM_DIV_Begin ("class=\"REC_USR\"");
@@ -1061,6 +1064,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
    const char *Ptr;
    struct Usr_Data UsrDat;
    char RecordSectionId[32];
+   unsigned RecsPerPag = Rec_DEF_RECORDS_PER_PAGE;
 
    /***** Get list of selected users if not already got *****/
    Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
@@ -1070,7 +1074,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
    /***** Get parameter with number of user records per page (only for printing) *****/
    if (ShaTypeOfView == Rec_SHA_RECORD_PRINT)
-      Rec_GetParRecordsPerPage ();
+      RecsPerPag = Rec_GetParRecordsPerPage ();
 
    /***** Get list of fields of records in current course *****/
    Rec_GetListRecordFieldsInCurrentCrs ();
@@ -1088,6 +1092,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 	 Frm_BeginForm (ActPrnRecSevStd);
 	    Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	    Rec_ShowLinkToPrintPreviewOfRecords ();
+	    Rec_ShowSelectorRecsPerPag (RecsPerPag);
 	 Frm_EndForm ();
 
       Mnu_ContextMenuEnd ();
@@ -1119,7 +1124,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
 	       if (Gbl.Action.Act == ActPrnRecSevStd &&
 		   NumUsr &&
-		   (NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
+		   (NumUsr % RecsPerPag) == 0)
 		  HTM_DIV_Begin ("class=\"REC_USR\" style=\"page-break-before:always;\"");
 	       else
 		  HTM_DIV_Begin ("class=\"REC_USR\"");
@@ -1222,7 +1227,7 @@ void Rec_ShowRecordOneTchCrs (void)
 	 Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 	 Par_PutParChar ("ParamOfficeHours",'Y');
 	 Par_PutParChar ("ShowOfficeHours",ShowOfficeHours ? 'Y' :
-								     'N');
+							     'N');
 	 Rec_ShowLinkToPrintPreviewOfRecords ();
       Frm_EndForm ();
 
@@ -1279,6 +1284,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    struct Usr_Data UsrDat;
    char RecordSectionId[32];
    bool ShowOfficeHours;
+   unsigned RecsPerPag = Rec_DEF_RECORDS_PER_PAGE;
 
    /***** Get list of selected users if not already got *****/
    Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
@@ -1291,7 +1297,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 
    /***** Get parameter with number of user records per page (only for printing) *****/
    if (Gbl.Action.Act == ActPrnRecSevTch)
-      Rec_GetParRecordsPerPage ();
+      RecsPerPag = Rec_GetParRecordsPerPage ();
 
    if (Gbl.Action.Act == ActSeeRecSevTch)
      {
@@ -1308,6 +1314,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 	    Par_PutParChar ("ShowOfficeHours",ShowOfficeHours ? 'Y' :
 						                'N');
 	    Rec_ShowLinkToPrintPreviewOfRecords ();
+	    Rec_ShowSelectorRecsPerPag (RecsPerPag);
 	 Frm_EndForm ();
 
       Mnu_ContextMenuEnd ();
@@ -1339,7 +1346,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 
 	       if (Gbl.Action.Act == ActPrnRecSevTch &&
 		   NumUsr &&
-		   (NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
+		   (NumUsr % RecsPerPag) == 0)
 		  HTM_DIV_Begin ("class=\"REC_USR\" style=\"page-break-before:always;\"");
 	       else
 		  HTM_DIV_Begin ("class=\"REC_USR\"");
@@ -1391,14 +1398,22 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 static void Rec_ShowLinkToPrintPreviewOfRecords (void)
   {
    extern const char *Txt_Print;
-   extern const char *Txt_record_cards_per_page;
-   unsigned i;
 
    HTM_BUTTON_Submit_Begin (Txt_Print,
                             "class=\"BT_LINK FORM_OUT_%s BOLD\"",
                             The_GetSuffix ());
       Ico_PutIconTextLink ("print.svg",Ico_BLACK,Txt_Print);
    HTM_BUTTON_End ();
+  }
+
+/*****************************************************************************/
+/**************** Show selector of number of records per page ****************/
+/*****************************************************************************/
+
+static void Rec_ShowSelectorRecsPerPag (unsigned RecsPerPag)
+  {
+   extern const char *Txt_record_cards_per_page;
+   unsigned i;
 
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_OpenParenthesis ();
@@ -1408,8 +1423,8 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
 		 i <= Rec_MAX_RECORDS_PER_PAGE;
 		 i++)
 	       HTM_OPTION (HTM_Type_UNSIGNED,&i,
-			   (i == Gbl.Usrs.Listing.RecsPerPag) ? HTM_SELECTED :
-								HTM_NO_ATTR,
+			   (i == RecsPerPag) ? HTM_SELECTED :
+					       HTM_NO_ATTR,
 			   "%u",i);
 	 HTM_SELECT_End ();
 	 HTM_SPTxt (Txt_record_cards_per_page);
@@ -1421,13 +1436,12 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
 /** Get parameter with number of user records per page (only for printing) ***/
 /*****************************************************************************/
 
-static void Rec_GetParRecordsPerPage (void)
+static unsigned Rec_GetParRecordsPerPage (void)
   {
-   Gbl.Usrs.Listing.RecsPerPag = (unsigned)
-	                         Par_GetParUnsignedLong ("RecsPerPag",
-                                                         Rec_MIN_RECORDS_PER_PAGE,
-                                                         Rec_MAX_RECORDS_PER_PAGE,
-                                                         Rec_DEF_RECORDS_PER_PAGE);
+   return (unsigned) Par_GetParUnsignedLong ("RecsPerPag",
+					     Rec_MIN_RECORDS_PER_PAGE,
+					     Rec_MAX_RECORDS_PER_PAGE,
+					     Rec_DEF_RECORDS_PER_PAGE);
   }
 
 /*****************************************************************************/

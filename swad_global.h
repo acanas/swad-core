@@ -151,7 +151,6 @@ struct Globals
       struct
 	{
 	 Rec_UsrsType_t RecsUsrs;	// Students' records or teachers' records
-	 unsigned RecsPerPag;		// Number of rows of records in a row (only for printing)
 	 bool WithPhotos;
 	} Listing;
       struct
