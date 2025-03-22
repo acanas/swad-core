@@ -155,10 +155,6 @@ struct Globals
 	 bool WithPhotos;
 	} Listing;
       struct
-	{
-	 unsigned Cols;
-	} ClassPhoto;
-      struct
         {
          unsigned long TimeToRefreshInMs;
          unsigned NumUsr;

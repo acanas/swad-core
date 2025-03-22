@@ -334,7 +334,6 @@ void Usr_DoActionOnUsrs2 (void);
 void Usr_SeeGstClassPhotoPrn (void);
 void Usr_SeeStdClassPhotoPrn (void);
 void Usr_SeeTchClassPhotoPrn (void);
-void Usr_PutSelectorNumColsClassPhoto (void);
 
 void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1]);
 

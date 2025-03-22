@@ -1816,6 +1816,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
    unsigned NumberLastRow;
    unsigned NumberThisRow;
    struct Hie_Node Ins;
+   unsigned Cols = Set_GetColsClassPhoto ();
    bool TRIsOpen = false;
 
    /***** Query database *****/
@@ -1829,7 +1830,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	    for (NumIns = 0;
 		 NumIns < NumInss;)
 	      {
-	       if ((NumIns % Gbl.Usrs.ClassPhoto.Cols) == 0)
+	       if ((NumIns % Cols) == 0)
 		 {
 		  HTM_TR_Begin (NULL);
 		  TRIsOpen = true;
@@ -1845,7 +1846,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		  HTM_Unsigned (NumberThisRow);
                HTM_TD_End ();
 
-	       if ((++NumIns % Gbl.Usrs.ClassPhoto.Cols) == 0)
+	       if ((++NumIns % Cols) == 0)
 		 {
 		  HTM_TR_End ();
 		  TRIsOpen = false;

@@ -60,9 +60,7 @@ unsigned Set_GetSideColsFromStr (const char *Str);
 void Set_PutParsPrefsAboutUsrList (void);
 void Set_GetAndUpdatePrefsAboutUsrList (void);
 void Set_PutParUsrListType (Set_ShowUsrsType_t ListType);
-void Set_GetAndUpdateColsClassPhoto (void);
-void Set_GetMyColsClassPhotoFromDB (void);
-void Set_PutParColsClassPhoto (void);
+unsigned Set_GetColsClassPhoto (void);
 void Set_PutParListWithPhotos (void);
 void Set_GetMyPrefAboutListWithPhotosFromDB (void);
 

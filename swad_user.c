@@ -270,6 +270,7 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
                                 Rol_Role_t Role,
 				Usr_ClassPhotoType_t ClassPhotoType,
 				bool PutCheckBoxToSelectUsr);
+static void Usr_PutSelectorNumColsClassPhoto (void);
 
 static void Usr_GetAndShowNumUsrsInCrss (Rol_Role_t Role);
 static void Usr_GetAndShowNumUsrsNotBelongingToAnyCrs (void);
@@ -3942,7 +3943,7 @@ static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role)
 
 unsigned Usr_GetColumnsForSelectUsrs (void)
   {
-   return (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO) ? Gbl.Usrs.ClassPhoto.Cols :
+   return (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO) ? Set_GetColsClassPhoto () :
                                                                  (Gbl.Usrs.Listing.WithPhotos ? 1 + Usr_NUM_MAIN_FIELDS_DATA_USR :
                                                                                                 Usr_NUM_MAIN_FIELDS_DATA_USR);
   }
@@ -6111,6 +6112,7 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
       [Usr_CLASS_PHOTO_PRN    ][PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
    unsigned NumUsr;
+   unsigned Cols = Set_GetColsClassPhoto ();
    bool TRIsOpen = false;
    bool UsrIsTheMsgSender;
    struct Usr_Data UsrDat;
@@ -6128,7 +6130,7 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
       for (NumUsr = 0;
 	   NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs; )
 	{
-	 if ((NumUsr % Gbl.Usrs.ClassPhoto.Cols) == 0)
+	 if ((NumUsr % Cols) == 0)
 	   {
 	    HTM_TR_Begin (NULL);
 	    TRIsOpen = true;
@@ -6189,7 +6191,7 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
 	 /***** End user's cell *****/
 	 HTM_TD_End ();
 
-	 if ((++NumUsr % Gbl.Usrs.ClassPhoto.Cols) == 0)
+	 if ((++NumUsr % Cols) == 0)
 	   {
 	    HTM_TR_End ();
 	    TRIsOpen = false;
@@ -6207,10 +6209,11 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
 /***************** Write selector of columns in class photo ******************/
 /*****************************************************************************/
 
-void Usr_PutSelectorNumColsClassPhoto (void)
+static void Usr_PutSelectorNumColsClassPhoto (void)
   {
    extern const char *Txt_columns;
-   unsigned Cols;
+   unsigned Cols = Set_GetColsClassPhoto ();
+   unsigned NumCols;
 
    /***** Begin label *****/
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
@@ -6221,13 +6224,13 @@ void Usr_PutSelectorNumColsClassPhoto (void)
 			The_GetSuffix ());
 
 	 /***** Put a row in selector for every number of columns *****/
-	 for (Cols  = 1;
-	      Cols <= Usr_CLASS_PHOTO_COLS_MAX;
-	      Cols++)
-	    HTM_OPTION (HTM_Type_UNSIGNED,&Cols,
-			(Cols == Gbl.Usrs.ClassPhoto.Cols) ? HTM_SELECTED :
-	                				     HTM_NO_ATTR,
-			"%u",Cols);
+	 for (NumCols  = 1;
+	      NumCols <= Usr_CLASS_PHOTO_COLS_MAX;
+	      NumCols++)
+	    HTM_OPTION (HTM_Type_UNSIGNED,&NumCols,
+			(NumCols == Cols) ? HTM_SELECTED :
+	                		    HTM_NO_ATTR,
+			"%u",NumCols);
 
       /***** End selector *****/
       HTM_SELECT_End ();

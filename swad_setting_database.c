@@ -298,7 +298,7 @@ void Set_DB_UpdateMyUsrListType (void)
 /** Save my prefs. about number of colums in class photo for current course **/
 /*****************************************************************************/
 
-void Set_DB_UpdateMyColsClassPhoto (void)
+void Set_DB_UpdateMyColsClassPhoto (unsigned Cols)
   {
    if (Gbl.Usrs.Me.Logged &&
        Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
@@ -308,7 +308,7 @@ void Set_DB_UpdateMyColsClassPhoto (void)
 		        " SET ColsClassPhoto=%u"
                       " WHERE UsrCod=%ld"
                         " AND CrsCod=%ld",
-		      Gbl.Usrs.ClassPhoto.Cols,
+		      Cols,
 		      Gbl.Usrs.Me.UsrDat.UsrCod,
 		      Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }

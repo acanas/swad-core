@@ -2129,6 +2129,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
    unsigned NumDegsNotEmpty;
    int NumStds;
    int NumStdsWithPhoto;
+   unsigned Cols = Set_GetColsClassPhoto ();
    bool TRIsOpen = false;
 
    /***** Get degrees from database *****/
@@ -2157,7 +2158,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 
 	    if (NumStds > 0)
 	      {
-	       if ((NumDegsNotEmpty % Gbl.Usrs.ClassPhoto.Cols) == 0)
+	       if ((NumDegsNotEmpty % Cols) == 0)
 		 {
 		  HTM_TR_Begin (NULL);
 		  TRIsOpen = true;
@@ -2172,7 +2173,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 						 NumStds,NumStdsWithPhoto);
 	       HTM_TD_End ();
 
-	       if ((++NumDegsNotEmpty % Gbl.Usrs.ClassPhoto.Cols) == 0)
+	       if ((++NumDegsNotEmpty % Cols) == 0)
 		 {
 		  HTM_TR_End ();
 		  TRIsOpen = false;

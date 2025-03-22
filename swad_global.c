@@ -181,7 +181,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Listing.WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
 
    Gbl.Crs.Grps.AllGrps = true;
-   Gbl.Usrs.ClassPhoto.Cols = Usr_CLASS_PHOTO_COLS_DEF;
 
    Gbl.Scope.Current = Hie_CRS;
 
