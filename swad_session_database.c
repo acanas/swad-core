@@ -301,16 +301,14 @@ bool Ses_DB_CheckIfParIsAlreadyStored (const char *ParName)
 
 void Ses_DB_GetPar (const char *ParName,char *ParValue,size_t StrSize)
   {
-   ParValue[0] = '\0';
-   if (Gbl.Session.ClosedOpen == CloOpe_OPEN)	// If the session is open, get parameter from DB
-      /***** Get a session parameter from database *****/
-      DB_QuerySELECTString (ParValue,StrSize,"can not get a session parameter",
-			    "SELECT ParamValue"	// row[0]
-			     " FROM ses_params"
-			    " WHERE SessionId='%s'"
-			      " AND ParamName='%s'",
-			    Gbl.Session.Id,
-			    ParName);
+   /***** Get a session parameter from database *****/
+   DB_QuerySELECTString (ParValue,StrSize,"can not get a session parameter",
+			 "SELECT ParamValue"	// row[0]
+			  " FROM ses_params"
+			 " WHERE SessionId='%s'"
+			   " AND ParamName='%s'",
+			 Gbl.Session.Id,
+			 ParName);
   }
 
 /*****************************************************************************/
@@ -319,9 +317,12 @@ void Ses_DB_GetPar (const char *ParName,char *ParValue,size_t StrSize)
 
 void Ses_DB_RemovePar (void)
   {
-   if (Gbl.Session.ClosedOpen == CloOpe_OPEN &&	// There is an open session
-       !Gbl.Session.ParsInsertedIntoDB)		// No params just inserted
-      /***** Remove session parameters of this session *****/
+   /***** Trivial check: if no current session, don't do anything *****/
+   if (Gbl.Session.Status != Ses_OPEN)
+      return;
+
+   /***** Remove session parameters of this session *****/
+   if (!Gbl.Session.ParsInsertedIntoDB)		// No params just inserted
       DB_QueryDELETE ("can not remove session parameters of current session",
 		      "DELETE FROM ses_params"
 		      " WHERE SessionId='%s'",

@@ -73,7 +73,6 @@
 #include "swad_language.h"
 #include "swad_mail_database.h"
 #include "swad_message.h"
-#include "swad_MFU.h"
 #include "swad_nickname.h"
 #include "swad_nickname_database.h"
 #include "swad_notification.h"
@@ -1572,7 +1571,7 @@ bool Usr_GetParOtherUsrCodEncryptedAndGetUsrData (void)
 /** Check and get user data from session, from internal or external login... */
 /*****************************************************************************/
 
-void Usr_ChkUsrAndGetUsrData (void)
+void Usr_ChkUsrGetUsrDataAndAdjustAction (void)
   {
    extern const char *Txt_The_session_has_expired;
    struct
@@ -1582,13 +1581,12 @@ void Usr_ChkUsrAndGetUsrData (void)
       void (*FuncPars) (void);
      } FormLogin =
      {
-      Frm_DONT_PUT_FORM,
-      ActLogIn,
-      NULL
+      .PutForm  = Frm_DONT_PUT_FORM,
+      .Action   = ActLogIn,
+      .FuncPars = NULL
      };
-   Act_Action_t Action;
 
-   if (Gbl.Session.HasBeenDisconnected)
+   if (Gbl.Session.Status == Ses_EXPIRED)
      {
       if (!Gbl.Action.UsesAJAX)
 	{
@@ -1598,7 +1596,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	 FormLogin.PutForm = Frm_PUT_FORM;
 	}
      }
-   else	// !Gbl.Session.HasBeenDisconnected
+   else	// Gbl.Session.Status != Ses_EXPIRED
      {
       /***** Check user and get user's data *****/
       if (Gbl.Action.Act == ActCreUsrAcc)
@@ -1621,33 +1619,34 @@ void Usr_ChkUsrAndGetUsrData (void)
 	   }
 	}
       else	// Gbl.Action.Act != ActCreUsrAcc
+        {
 	 /***** Check user and get user's data *****/
-	 switch (Gbl.Session.ClosedOpen)
+	 if (Gbl.Session.Status == Ses_OPEN)
 	   {
-	    case CloOpe_OPEN:
-	       if (Usr_ChkUsrAndGetUsrDataFromSession ())	// User logged in
-		 {
-		  Gbl.Usrs.Me.Logged = true;
+	    if (Usr_ChkUsrAndGetUsrDataFromSession ())	// User logged in
+	      {
+	       Gbl.Usrs.Me.Logged = true;
 
-		  Usr_SetMyPrefsAndRoles ();
+	       Usr_SetMyPrefsAndRoles ();
 
-		  if (Gbl.Action.IsAJAXAutoRefresh)	// If refreshing ==> don't refresh LastTime in session
-		     Ses_DB_UpdateSessionLastRefresh ();
-		  else
-		    {
-		     Act_AdjustCurrentAction ();
-		     Ses_DB_UpdateSession ();
-		     Con_DB_UpdateMeInConnectedList ();
-		    }
-		 }
+	       if (Gbl.Action.IsAJAXAutoRefresh)	// If refreshing ==> don't refresh LastTime in session
+		  Ses_DB_UpdateSessionLastRefresh ();
 	       else
-		  FormLogin.PutForm = Frm_PUT_FORM;
-	       break;
-	    case CloOpe_CLOSED:
-	    default:
-	       if (Gbl.Action.Act == ActLogIn ||
-		   Gbl.Action.Act == ActLogInUsrAgd)	// Login using @nickname, email or ID from form
 		 {
+		  Act_AdjustCurrentAction ();
+		  Ses_DB_UpdateSession ();
+		  Con_DB_UpdateMeInConnectedList ();
+		 }
+	      }
+	    else
+	       FormLogin.PutForm = Frm_PUT_FORM;
+	   }
+	 else	// Session is not open
+	    switch (Gbl.Action.Act)
+	      {
+	       case ActLogIn:
+	       case ActLogInUsrAgd:
+		  // Login using @nickname, email or ID from form
 		  if (Usr_ChkUsrAndGetUsrDataFromDirectLogin ())	// User logged in
 		    {
 		     Gbl.Usrs.Me.Logged = true;
@@ -1667,9 +1666,9 @@ void Usr_ChkUsrAndGetUsrData (void)
 			FormLogin.FuncPars = Agd_PutParAgd;
 		       }
 		    }
-		 }
-	       else if (Gbl.Action.Act == ActLogInNew)	// Empty account without password, login using encrypted user's code
-		 {
+		  break;
+	       case ActLogInNew:
+		  // Empty account without password, login using encrypted user's code
 		  /***** Get user's data *****/
 		  Usr_GetParOtherUsrCodEncrypted (&Gbl.Usrs.Me.UsrDat);
 		  Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Me.UsrDat);
@@ -1688,9 +1687,11 @@ void Usr_ChkUsrAndGetUsrData (void)
 		    }
 		  else
 		     FormLogin.PutForm = Frm_PUT_FORM;
-		 }
-	       break;
-	   }
+		  break;
+	       default:
+		  break;
+	      }
+        }
      }
 
    /***** If session disconnected or error in login, show form to login *****/
@@ -1700,30 +1701,21 @@ void Usr_ChkUsrAndGetUsrData (void)
       Err_ShowErrorAndExit (NULL);
      }
 
-   /***** Adjust tab and action *****/
-   if (!Gbl.Action.UsesAJAX)
+   /***** Adjust action and tab *****/
+   switch (Gbl.Action.Act)
      {
-      if (!Gbl.Usrs.Me.Logged &&	// No user logged...
-	  Gbl.Action.Act == ActUnk)	// ...and unknown action
-	 Act_AdjustActionWhenNoUsrLogged ();
-
-      /***** When I change to another tab, go to:
-             - my last action in that tab if it is known, or
-             - the first option allowed *****/
-      if (Gbl.Action.Act == ActMnu)
-	{
-	 /* Get my last action in current tab */
-	 Action = (Gbl.Usrs.Me.Logged) ? MFU_GetMyLastActionInCurrentTab () :
-	                                 ActUnk;
-	 if (Action == ActUnk)
-	    /* Get the first option allowed */
-	    Action = Mnu_GetFirstActionAvailableInCurrentTab ();
-
-	 Gbl.Action.Act = (Action == ActUnk) ? ((Gbl.Usrs.Me.Logged) ? ActSeeGblTL :	// Default action if logged
-								       ActFrmLogIn) :	// Default action if not logged
-					       Action;
-	 Tab_SetCurrentTab ();
-	}
+      case ActUnk:
+	 /* Adjust current action when no user's logged */
+	 if (!Gbl.Usrs.Me.Logged)
+	    Act_AdjustActionWhenNoUsrLogged ();
+	 break;
+      case ActMnu:
+	 /* Adjust current action when I click on menu
+	    (when I change to another tab) */
+	 Act_AdjustActionWhenClickOnMenu ();
+	 break;
+      default:
+	 break;
      }
   }
 
@@ -3044,12 +3036,11 @@ void Usr_PutParSelectedUsrsCods (const struct Usr_SelectedUsrs *SelectedUsrs)
    Usr_BuildParName (&ParName,Usr_ParUsrCod[Rol_UNK],SelectedUsrs->ParSuffix);
 
    /* Put the parameter */
-   switch (Gbl.Session.ClosedOpen)
+   switch (Gbl.Session.Status)
      {
       case CloOpe_OPEN:
 	 Ses_InsertParInDB (ParName,SelectedUsrs->List[Rol_UNK]);
 	 break;
-      case CloOpe_CLOSED:
       default:
          Par_PutParString (NULL,ParName,SelectedUsrs->List[Rol_UNK]);
          break;
@@ -3081,7 +3072,7 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsr
       Usr_AllocateListSelectedEncryptedUsrCods (SelectedUsrs,Rol_UNK);
       if (!Par_GetParMultiToText (ParName,SelectedUsrs->List[Rol_UNK],
 				  Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS))
-	 if (Gbl.Session.ClosedOpen == CloOpe_OPEN)	// If the session is open, get parameter from DB
+	 if (Gbl.Session.Status == Ses_OPEN)	// If the session is open, get parameter from DB
 	   {
 	    Ses_DB_GetPar (ParName,SelectedUsrs->List[Rol_UNK],
 			   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);

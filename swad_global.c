@@ -109,8 +109,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Prefs.IconSet        = Ico_ICON_SET_DEFAULT;		// Default icon set
 
    Gbl.Session.NumSessions = 0;
-   Gbl.Session.ClosedOpen = CloOpe_CLOSED;
-   Gbl.Session.HasBeenDisconnected = false;
+   Gbl.Session.Status = Ses_NOT_OPEN;
    Gbl.Session.Id[0] = '\0';
    Gbl.Session.ParsInsertedIntoDB = false;
 

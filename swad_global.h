@@ -44,6 +44,7 @@
 #include "swad_hierarchy.h"
 #include "swad_mail.h"
 #include "swad_record.h"
+#include "swad_session.h"
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -72,8 +73,7 @@ struct Globals
    struct
      {
       unsigned NumSessions;
-      CloOpe_ClosedOrOpen_t ClosedOpen;
-      bool HasBeenDisconnected;
+      Ses_Status_t Status;
       char Id[Cns_BYTES_SESSION_ID + 1];
       long UsrCod;
       bool ParsInsertedIntoDB;	// If parameters are inserted in the database in this session

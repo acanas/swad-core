@@ -752,9 +752,9 @@ void Msg_DB_GetStatusOfRcvMsg (long MsgCod,CloOpe_ClosedOrOpen_t *Open,
    /***** Get if message has been read by me (row[0]),
               if message has been replied (row[1]), and
               if message is expanded (row[2]) *****/
-   *Open = CloOpe_GetOpenFromYN (row[0][0]);
-   *Replied      = (row[1][0] == 'Y');
-   *Expanded     = (row[2][0] == 'Y');
+   *Open     = CloOpe_GetOpenFromYN (row[0][0]);
+   *Replied  = (row[1][0] == 'Y');
+   *Expanded = (row[2][0] == 'Y');
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

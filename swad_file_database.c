@@ -74,13 +74,12 @@ void Fil_DB_GetPublicDirFromCache (const char *FullPathPriv,
 
 void Fil_DB_RemovePublicDirFromCache (const char *FullPathPriv)
   {
-   if (Gbl.Session.ClosedOpen == CloOpe_OPEN)
-      DB_QueryDELETE ("can not remove cached file",
-		      "DELETE FROM brw_caches"
-		      " WHERE SessionId='%s'"
-		        " AND PrivPath='%s'",
-		      Gbl.Session.Id,
-		      FullPathPriv);
+   DB_QueryDELETE ("can not remove cached file",
+		   "DELETE FROM brw_caches"
+		   " WHERE SessionId='%s'"
+		     " AND PrivPath='%s'",
+		   Gbl.Session.Id,
+		   FullPathPriv);
   }
 
 /*****************************************************************************/
@@ -89,11 +88,10 @@ void Fil_DB_RemovePublicDirFromCache (const char *FullPathPriv)
 
 void Fil_DB_RemovePublicDirsCache (void)
   {
-   if (Gbl.Session.ClosedOpen == CloOpe_OPEN)
-      DB_QueryDELETE ("can not cache file",
-		      "DELETE FROM brw_caches"
-		      " WHERE SessionId='%s'",
-		      Gbl.Session.Id);
+   DB_QueryDELETE ("can not cache file",
+		   "DELETE FROM brw_caches"
+		   " WHERE SessionId='%s'",
+		   Gbl.Session.Id);
   }
 
 /*****************************************************************************/

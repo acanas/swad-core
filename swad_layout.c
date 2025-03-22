@@ -1442,14 +1442,15 @@ void Lay_RefreshNotifsAndConnected (void)
 
 void Lay_RefreshLastClicks (void)
   {
-   if (Gbl.Session.ClosedOpen == CloOpe_OPEN)	// If session has been closed, do not write anything
-     {
-      /***** Send, before the HTML, the refresh time *****/
-      HTM_TxtF ("%lu|",Cfg_TIME_TO_REFRESH_LAST_CLICKS);
+   /***** Trivial check: if no current session, don't do anything *****/
+   if (Gbl.Session.Status != Ses_OPEN)
+      return;
 
-      /***** Get and show last clicks *****/
-      Log_GetAndShowLastClicks ();
-     }
+   /***** Send, before the HTML, the refresh time *****/
+   HTM_TxtF ("%lu|",Cfg_TIME_TO_REFRESH_LAST_CLICKS);
+
+   /***** Get and show last clicks *****/
+   Log_GetAndShowLastClicks ();
   }
 
 /*****************************************************************************/

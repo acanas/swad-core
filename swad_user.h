@@ -242,7 +242,7 @@ void Usr_GetParOtherUsrCodEncrypted (struct Usr_Data *UsrDat);
 void Usr_GetParOtherUsrCodEncryptedAndGetListIDs (void);
 bool Usr_GetParOtherUsrCodEncryptedAndGetUsrData (void);
 
-void Usr_ChkUsrAndGetUsrData (void);
+void Usr_ChkUsrGetUsrDataAndAdjustAction (void);
 
 void Usr_ShowFormsLogoutAndRole (void);
 

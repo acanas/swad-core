@@ -646,14 +646,15 @@ void Fil_WriteFileSizeFull (double SizeInBytes,
 void Fil_AddPublicDirToCache (const char *FullPathPriv,
                               const char TmpPubDir[PATH_MAX + 1])
   {
-   if (Gbl.Session.ClosedOpen == CloOpe_OPEN)
-     {
-      /* Delete possible old entry */
-      Fil_DB_RemovePublicDirFromCache (FullPathPriv);
+   /***** Trivial check: if no current session, don't do anything *****/
+   if (Gbl.Session.Status != Ses_OPEN)
+      return;
 
-      /* Insert new entry */
-      Fil_DB_AddPublicDirToCache (FullPathPriv,TmpPubDir);
-     }
+   /***** Delete possible old entry *****/
+   Fil_DB_RemovePublicDirFromCache (FullPathPriv);
+
+   /***** Insert new entry *****/
+   Fil_DB_AddPublicDirToCache (FullPathPriv,TmpPubDir);
   }
 
 /*****************************************************************************/
@@ -669,22 +670,23 @@ bool Fil_GetPublicDirFromCache (const char *FullPathPriv,
    /***** Reset temporary directory *****/
    TmpPubDir[0] = '\0';
 
-   if (Gbl.Session.ClosedOpen == CloOpe_OPEN)
-     {
-      /***** Get temporary directory from cache *****/
-      Fil_DB_GetPublicDirFromCache (FullPathPriv,TmpPubDir);
-      Cached = (TmpPubDir[0] != '\0');
+   /***** Trivial check: if no current session, don't do anything *****/
+   if (Gbl.Session.Status != Ses_OPEN)
+      return false;
 
-      /***** Check if temporary public directory exists *****/
-      if (Cached)
-	{
-	 /* If not exists (it could be deleted if its lifetime has expired)
-	    ==> remove from cache */
-         TmpPubDirExists = Fil_CheckIfPathExists (TmpPubDir);
-         if (!TmpPubDirExists)
-            Fil_DB_RemovePublicDirFromCache (FullPathPriv);
-         return TmpPubDirExists;
-	}
+   /***** Get temporary directory from cache *****/
+   Fil_DB_GetPublicDirFromCache (FullPathPriv,TmpPubDir);
+   Cached = (TmpPubDir[0] != '\0');
+
+   /***** Check if temporary public directory exists *****/
+   if (Cached)
+     {
+      /* If not exists (it could be deleted if its lifetime has expired)
+	 ==> remove from cache */
+      TmpPubDirExists = Fil_CheckIfPathExists (TmpPubDir);
+      if (!TmpPubDirExists)
+	 Fil_DB_RemovePublicDirFromCache (FullPathPriv);
+      return TmpPubDirExists;
      }
 
    return false;

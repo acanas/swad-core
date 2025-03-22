@@ -103,35 +103,29 @@ void Ses_CreateSession (void)
 
 void Ses_CloseSession (void)
   {
-   if (Gbl.Usrs.Me.Logged)
-     {
-      /***** Remove links to private files from cache *****/
-      Fil_DB_RemovePublicDirsCache ();
+   /***** Remove links to private files from cache *****/
+   Fil_DB_RemovePublicDirsCache ();
 
-      /***** Remove session from database *****/
-      Ses_RemoveSessionFromDB ();
-      Gbl.Session.ClosedOpen = CloOpe_CLOSED;
-      // Gbl.Session.HasBeenDisconnected = true;
-      Gbl.Session.Id[0] = '\0';
+   /***** Remove session from database *****/
+   Ses_RemoveSessionFromDB ();
+   Gbl.Session.Status = Ses_CLOSED;
+   Gbl.Session.Id[0] = '\0';
 
-      /***** If there are no more sessions for current user ==> remove user from connected list *****/
-      Con_DB_RemoveOldConnected ();
+   /***** If there are no more sessions for current user ==> remove user from connected list *****/
+   Con_DB_RemoveOldConnected ();
 
-      /***** Remove unused data associated to expired sessions *****/
-      Ses_DB_RemoveParsFromExpiredSessions ();
-      Fil_DB_RemovePublicDirsFromExpiredSessions ();
+   /***** Remove unused data associated to expired sessions *****/
+   Ses_DB_RemoveParsFromExpiredSessions ();
+   Fil_DB_RemovePublicDirsFromExpiredSessions ();
 
-      /***** Now, user is not logged in *****/
-      Gbl.Usrs.Me.Role.LoggedBeforeCloseSession = Gbl.Usrs.Me.Role.Logged;
-      Gbl.Usrs.Me.Logged = false;
-      Gbl.Usrs.Me.Role.Logged = Rol_UNK;	// TODO: Keep user's role in order to log the access?
-      Hie_FreeMyHierarchy ();
-      // Gbl.Usrs.Me.Hierarchy[Hie_CRS].Filled = false;
-      // Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num = 0;
+   /***** Now, user is not logged in *****/
+   Gbl.Usrs.Me.Role.LoggedBeforeCloseSession = Gbl.Usrs.Me.Role.Logged;
+   Gbl.Usrs.Me.Logged = false;
+   Gbl.Usrs.Me.Role.Logged = Rol_UNK;	// TODO: Keep user's role in order to log the access?
+   Hie_FreeMyHierarchy ();
 
-      /***** Update number of open sessions in order to show them properly *****/
-      Ses_GetNumSessions ();
-     }
+   /***** Update number of open sessions in order to show them properly *****/
+   Ses_GetNumSessions ();
   }
 
 /*****************************************************************************/

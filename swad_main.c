@@ -136,7 +136,7 @@ int main (void)
 	   }
 
 	 /***** Check user and get user's data *****/
-	 Usr_ChkUsrAndGetUsrData ();
+	 Usr_ChkUsrGetUsrDataAndAdjustAction ();
 	}
 
       /***** Mitigate automatized attacks from the same IP-user *****/

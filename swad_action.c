@@ -28,6 +28,7 @@
 #include "swad_action_list.h"
 #include "swad_global.h"
 #include "swad_group_database.h"
+#include "swad_MFU.h"
 #include "swad_photo.h"
 #include "swad_role.h"
 #include "swad_test_config.h"
@@ -220,7 +221,7 @@ void Act_AdjustActionWhenNoUsrLogged (void)
   {
    static Act_Action_t Actions[Hie_NUM_LEVELS] =
      {
-      [Hie_UNK] = ActUnk, 		// Unknown
+      [Hie_UNK] = ActUnk, 	// Unknown
       [Hie_SYS] = ActFrmLogIn,	// System
       [Hie_CTY] = ActSeeCtyInf,	// Country
       [Hie_INS] = ActSeeInsInf,	// Institution
@@ -233,6 +234,31 @@ void Act_AdjustActionWhenNoUsrLogged (void)
       Gbl.Hierarchy.Level = Hie_UNK;
 
    Gbl.Action.Act = Actions[Gbl.Hierarchy.Level];
+   Tab_SetCurrentTab ();
+  }
+
+/*****************************************************************************/
+/************ Adjust current action when I change ro another tab *************/
+/*****************************************************************************/
+
+void Act_AdjustActionWhenClickOnMenu (void)
+  {
+   Act_Action_t Action;
+
+   /***** When I change to another tab, go to:
+	  - my last action in that tab if it is known, or
+	  - the first option allowed *****/
+
+   /* Get my last action in current tab */
+   Action = (Gbl.Usrs.Me.Logged) ? MFU_GetMyLastActionInCurrentTab () :
+				   ActUnk;
+   if (Action == ActUnk)
+      /* Get the first option allowed */
+      Action = Mnu_GetFirstActionAvailableInCurrentTab ();
+
+   Gbl.Action.Act = (Action == ActUnk) ? (Gbl.Usrs.Me.Logged ? ActSeeGblTL :	// Default action if logged
+							       ActFrmLogIn) :	// Default action if not logged
+					 Action;
    Tab_SetCurrentTab ();
   }
 

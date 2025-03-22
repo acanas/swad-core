@@ -108,6 +108,7 @@ const char *Act_GetTitleAction (Act_Action_t Action);
 const char *Act_GetActionText (Act_Action_t Action);
 
 void Act_AdjustActionWhenNoUsrLogged (void);
+void Act_AdjustActionWhenClickOnMenu (void);
 void Act_AdjustCurrentAction (void);
 
 #endif

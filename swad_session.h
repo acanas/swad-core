@@ -31,6 +31,18 @@
 #include "swad_pagination.h"
 
 /*****************************************************************************/
+/******************************* Public types ********************************/
+/*****************************************************************************/
+
+typedef enum
+  {
+   Ses_NOT_OPEN,	// When no user logged or session is not yet open
+   Ses_OPEN,		// When user is logged and session is open and not expired
+   Ses_EXPIRED,		// When session has expired
+   Ses_CLOSED,		// When user has closed session
+  } Ses_Status_t;
+
+/*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 

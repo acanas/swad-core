@@ -796,27 +796,11 @@ void Par_GetMainPars (void)
      {
       /***** Get user's code, password, current degree and current course from stored session *****/
       if (Ses_GetSessionData ())
-	 Gbl.Session.ClosedOpen = CloOpe_OPEN;
+	 Gbl.Session.Status = Ses_OPEN;
       else
 	{
-	 Gbl.Session.HasBeenDisconnected = true;
+	 Gbl.Session.Status = Ses_EXPIRED;
 	 Gbl.Session.Id[0] = '\0';
-	}
-     }
-   else
-     {
-      // Try old parameter "IdSes" (allowed for compatibility, to be removed soon)
-      Par_GetParText ("IdSes",Gbl.Session.Id,Cns_BYTES_SESSION_ID);
-      if (Gbl.Session.Id[0])
-	{
-	 /***** Get user's code, password, current degree and current course from stored session *****/
-	 if (Ses_GetSessionData ())
-	    Gbl.Session.ClosedOpen = CloOpe_OPEN;
-	 else
-	   {
-	    Gbl.Session.HasBeenDisconnected = true;
-	    Gbl.Session.Id[0] = '\0';
-	   }
 	}
      }
 
