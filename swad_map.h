@@ -35,6 +35,9 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
+// Sites where search coordinates:
+// https://www.mapcoordinates.net/
+
 struct Map_Coordinates
   {
    double Latitude;

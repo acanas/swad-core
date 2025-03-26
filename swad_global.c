@@ -176,8 +176,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Crs.Records.LstFields.Num         = 0;
    Gbl.Crs.Records.LstFields.NestedCalls = 0;
 
-   Gbl.Usrs.Listing.RecsUsrs   = Rec_RECORD_USERS_UNKNOWN;
-
    Gbl.Crs.Grps.AllGrps = true;
 
    Gbl.Scope.Current = Hie_CRS;

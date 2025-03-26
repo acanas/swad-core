@@ -149,10 +149,6 @@ struct Globals
       struct Usr_SelectedUsrs Selected;
       char *ListOtherRecipients;	// List of ID or nicks of users written explicitely on a form
       struct
-	{
-	 Rec_UsrsType_t RecsUsrs;	// Students' records or teachers' records
-	} Listing;
-      struct
         {
          unsigned long TimeToRefreshInMs;
          unsigned NumUsr;

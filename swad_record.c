@@ -870,9 +870,6 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
    /***** Get list of selected users if not already got *****/
    Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
-   /***** Assign users listing type depending on current action *****/
-   Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_GUESTS;
-
    /***** Get parameter with number of user records per page (only for printing) *****/
    if (TypeOfView == Rec_SHA_RECORD_PRINT)
       RecsPerPag = Rec_GetParRecordsPerPage ();
@@ -971,9 +968,6 @@ static void Rec_ShowRecordOneStdCrs (void)
    /***** Get if student has accepted enrolment in current course *****/
    Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
-   /***** Assign users listing type depending on current action *****/
-   Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_STUDENTS;
-
    /***** Get list of fields of records in current course *****/
    Rec_GetListRecordFieldsInCurrentCrs ();
 
@@ -1068,9 +1062,6 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
    /***** Get list of selected users if not already got *****/
    Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
-
-   /***** Assign users listing type depending on current action *****/
-   Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_STUDENTS;
 
    /***** Get parameter with number of user records per page (only for printing) *****/
    if (ShaTypeOfView == Rec_SHA_RECORD_PRINT)
@@ -1208,9 +1199,6 @@ void Rec_ShowRecordOneTchCrs (void)
    /***** Get if teacher has accepted enrolment in current course *****/
    Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
-   /***** Assign users listing type depending on current action *****/
-   Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_TEACHERS;
-
    /***** Get if I want to see teachers' office hours in teachers' records *****/
    ShowOfficeHours = Rec_GetParShowOfficeHours ();
 
@@ -1288,9 +1276,6 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 
    /***** Get list of selected users if not already got *****/
    Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
-
-   /***** Assign users listing type depending on current action *****/
-   Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_TEACHERS;
 
    /***** Get if I want to see teachers' office hours in teachers' records *****/
    ShowOfficeHours = Rec_GetParShowOfficeHours ();
