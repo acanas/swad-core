@@ -77,13 +77,6 @@ typedef enum
    Rec_CRS_PRINT_SEVERAL_RECORDS,
   } Rec_CourseRecordViewType_t;
 
-typedef enum {
-   Rec_RECORD_USERS_UNKNOWN,
-   Rec_RECORD_USERS_GUESTS,
-   Rec_RECORD_USERS_STUDENTS,
-   Rec_RECORD_USERS_TEACHERS,
-  } Rec_UsrsType_t;
-
 // Related with user's index card
 #define Rec_NUM_TYPES_VISIBILITY 3
 typedef enum

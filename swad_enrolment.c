@@ -101,6 +101,12 @@ typedef enum
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+static Enr_EnrRemOneUsrAction_t Enr_EnrRemAction;
+
+/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
@@ -183,6 +189,9 @@ static void Enr_AskIfEnrRemUsr (struct Usr_ListUsrCods *ListUsrCods,Rol_Role_t R
 static void Enr_ShowFormToEditOtherUsr (void);
 
 static Usr_Can_t Enr_CheckIfICanRemUsrFromCrs (void);
+
+static void Enr_SetEnrRemAction (Enr_EnrRemOneUsrAction_t EnrRemAction);
+static Enr_EnrRemOneUsrAction_t Enr_GetEnrRemAction (void);
 
 static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat);
 static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
@@ -3132,14 +3141,21 @@ void Enr_CreateNewUsr2 (void)
 /****** Modify other user's data and enrol her/him in course and groups ******/
 /*****************************************************************************/
 
+static void Enr_SetEnrRemAction (Enr_EnrRemOneUsrAction_t EnrRemAction)
+  {
+   Enr_EnrRemAction = EnrRemAction;
+  }
+
+static Enr_EnrRemOneUsrAction_t Enr_GetEnrRemAction (void)
+  {
+   return Enr_EnrRemAction;
+  }
+
 void Enr_ModifyUsr1 (void)
   {
    extern const char *Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_THE_USER_X_has_been_enroled_in_the_course_Y;
-   Usr_MeOrOther_t MeOrOther;
-   Rol_Role_t OldRole;
-   Rol_Role_t NewRole;
    static Act_Action_t Action[Rol_NUM_ROLES] =
      {
       [Rol_GST] = ActUpdOth,
@@ -3147,6 +3163,10 @@ void Enr_ModifyUsr1 (void)
       [Rol_NET] = ActUpdNET,
       [Rol_TCH] = ActUpdTch,
      };
+   Usr_MeOrOther_t MeOrOther;
+   Enr_EnrRemOneUsrAction_t EnrRemAction;
+   Rol_Role_t OldRole;
+   Rol_Role_t NewRole;
 
    /***** Get user from form *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
@@ -3154,12 +3174,13 @@ void Enr_ModifyUsr1 (void)
       MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
       /***** Get the action to do *****/
-      Gbl.Usrs.EnrRemAction = (Enr_EnrRemOneUsrAction_t)
-	                      Par_GetParUnsignedLong ("EnrRemAction",
-                                                      0,
-                                                      Enr_ENR_REM_ONE_USR_NUM_ACTIONS - 1,
-                                                      (unsigned long) Enr_ENR_REM_ONE_USR_UNKNOWN_ACTION);
-      switch (Gbl.Usrs.EnrRemAction)
+      EnrRemAction = (Enr_EnrRemOneUsrAction_t)
+		     Par_GetParUnsignedLong ("EnrRemAction",
+					     0,
+					     Enr_ENR_REM_ONE_USR_NUM_ACTIONS - 1,
+					     (unsigned long) Enr_ENR_REM_ONE_USR_UNKNOWN_ACTION);
+      Enr_SetEnrRemAction (EnrRemAction);
+      switch (EnrRemAction)
 	{
 	 case Enr_ENROL_MODIFY_ONE_USR_IN_CRS:
 	    if (MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
@@ -3296,7 +3317,7 @@ void Enr_ModifyUsr2 (void)
       Enr_ShowFormToEditOtherUsr ();
      }
    else // No error
-      switch (Gbl.Usrs.EnrRemAction)
+      switch (Enr_GetEnrRemAction ())
 	{
 	 case Enr_ENROL_MODIFY_ONE_USR_IN_CRS:
             /***** Show possible alerts *****/

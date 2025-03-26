@@ -85,6 +85,13 @@ static const char *Pho_StrAvgPhotoPrograms[Pho_NUM_AVERAGE_PHOTO_TYPES] =
   };
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+static char Pho_FileNamePhoto[NAME_MAX + 1];	// File name (with no path and no .jpg)
+						// of the temporary file with the selected face
+
+/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
@@ -97,6 +104,8 @@ static void Pho_ReqPhoto (const struct Usr_Data *UsrDat);
 static bool Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
                                             const struct Usr_Data *UsrDat);
 
+static void Pho_SetFileNamePhoto (const char FileNamePhoto[NAME_MAX + 1]);
+static const char *Pho_GetFileNamePhoto (void);
 static void Pho_ChangePhoto1 (struct Usr_Data *UsrDat);
 static void Pho_ChangePhoto2 (void);
 
@@ -874,18 +883,32 @@ void Pho_ChangeUsrPhoto2 (void)
 /*************** Change a user's photo with a selected face ******************/
 /*****************************************************************************/
 
+static void Pho_SetFileNamePhoto (const char FileNamePhoto[NAME_MAX + 1])
+  {
+   Str_Copy (Pho_FileNamePhoto,FileNamePhoto,sizeof (Pho_FileNamePhoto) - 1);
+  }
+
+static const char *Pho_GetFileNamePhoto (void)
+  {
+   return Pho_FileNamePhoto;
+  }
+
 static void Pho_ChangePhoto1 (struct Usr_Data *UsrDat)
   {
    extern const char *Txt_Photo_has_been_updated;
-   char PathPhotoTmp[PATH_MAX + 1];	// Full name (including path and .jpg) of the temporary file with the selected face
+   char FileNamePhoto[NAME_MAX + 1];	// File name (with no path and no .jpg)
+					// of the temporary file with the selected face
+   char PathPhotoTmp[PATH_MAX + 1];	// Full name (including path and .jpg)
+					// of the temporary file with the selected face
    char PathRelPhoto[PATH_MAX + 1];
 
    /***** Get the name of the file with the selected face *****/
-   Par_GetParText ("FileName",Gbl.Usrs.FileNamePhoto,NAME_MAX);        // Example of FileNamePhoto: "4924a838630e_016"
+   Par_GetParText ("FileName",FileNamePhoto,NAME_MAX);        // Example of FileNamePhoto: "4924a838630e_016"
+   Pho_SetFileNamePhoto (FileNamePhoto);
 
    /***** Convert the temporary photo resulting of the processing to the current photo of the user *****/
    snprintf (PathPhotoTmp,sizeof (PathPhotoTmp),"%s/%s_paso3.jpg",
-             Cfg_PATH_PHOTO_TMP_PUBLIC,Gbl.Usrs.FileNamePhoto);
+             Cfg_PATH_PHOTO_TMP_PUBLIC,FileNamePhoto);
    if (Fil_CheckIfPathExists (PathPhotoTmp))        // The file with the selected photo exists
      {
       /* Copy the temporary file of the third (last) step resulting of the processing to the directory of private photos */
@@ -900,12 +923,10 @@ static void Pho_ChangePhoto1 (struct Usr_Data *UsrDat)
       /* Remove the user from the list of users without photo */
       Pho_DB_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
 
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-		       Txt_Photo_has_been_updated);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Photo_has_been_updated);
      }
    else
-      Ale_CreateAlert (Ale_ERROR,NULL,
-	               "Error updating photo.");
+      Ale_CreateAlert (Ale_ERROR,NULL,"Error updating photo.");
   }
 
 static void Pho_ChangePhoto2 (void)
@@ -926,7 +947,8 @@ static void Pho_ChangePhoto2 (void)
 	   {
 	    HTM_TD_Begin ("class=\"CT DAT_%s\" style=\"width:33%%;\"",
 	                  The_GetSuffix ());
-	       if (asprintf (&Img,"%s_paso%u.jpg",Gbl.Usrs.FileNamePhoto,NumPhoto + 1) < 0)
+	       if (asprintf (&Img,"%s_paso%u.jpg",
+			     Pho_GetFileNamePhoto (),NumPhoto + 1) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       HTM_IMG (Cfg_URL_PHOTO_TMP_PUBLIC,Img,Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
 			"style=\"width:%upx;height:%upx;\"",

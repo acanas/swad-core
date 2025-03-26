@@ -59,6 +59,7 @@ struct Globals
       bool DivsEndWritten;	// Used to avoid writing more than once the HTML end
       bool HTMLEndWritten;	// Used to avoid writing more than once the HTML end
      } Layout;
+
    struct
      {
       Lan_Language_t Language;
@@ -70,6 +71,7 @@ struct Globals
       unsigned SideCols;
       PhoSha_Shape_t PhotoShape;
      } Prefs;
+
    struct
      {
       unsigned NumSessions;
@@ -78,6 +80,7 @@ struct Globals
       long UsrCod;
       bool ParsInsertedIntoDB;	// If parameters are inserted in the database in this session
      } Session;
+
    struct
      {
       Tab_Tab_t Tab;		// Current navigation tab
@@ -86,23 +89,27 @@ struct Globals
       bool UsesAJAX;		// Do not generate full HTML page, only the content of a div
       bool IsAJAXAutoRefresh;	// It's an automatic refresh drom time to time
      } Action;
+
    struct
      {
       Hie_Level_t Level;	// Current level in the hierarchy: system, country, institution, center, degree or course
       struct Hie_List List[Hie_NUM_LEVELS];	// List of child nodes of current node
       struct Hie_Node Node[Hie_NUM_LEVELS];	// Current node
      } Hierarchy;
+
    struct
      {
       Hie_Level_t Current;
       unsigned Allowed;
      } Scope;
+
    struct
      {
       bool IsWebService;	// Must generate HTML output (IsWebService==false) or SOAP-XML output (IsWebService==true)?
       long PlgCod;
       API_Function_t Function;
      } WebService;
+
    struct
      {
       struct
@@ -162,9 +169,8 @@ struct Globals
             time_t TimeDiff;
            } Lst[Cfg_MAX_CONNECTED_SHOWN];
         } Connected;
-      char FileNamePhoto[NAME_MAX + 1];	// File name (with no path and no .jpg) of the temporary file with the selected face
-      Enr_EnrRemOneUsrAction_t EnrRemAction;	// Enrolment action
      } Usrs;
+
    struct
      {
       struct
@@ -184,6 +190,7 @@ struct Globals
 	 long HighlightNotCod;	// Notice code of a notice to be highlighted
 	} Notices;
      } Crs;
+
    struct
      {
       unsigned Id;		// Each file browser in the page has a unique identifier
