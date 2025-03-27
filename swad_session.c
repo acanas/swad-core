@@ -61,12 +61,7 @@ void Ses_GetNumSessions (void)
   {
    Gbl.Session.NumSessions = (unsigned) DB_GetNumRowsTable ("ses_sessions");
 
-   Gbl.Usrs.Connected.TimeToRefreshInMs = (unsigned long) (Gbl.Session.NumSessions/
-	                                                   Cfg_TIMES_PER_SECOND_REFRESH_CONNECTED) * 1000UL;
-   if (Gbl.Usrs.Connected.TimeToRefreshInMs < Con_MIN_TIME_TO_REFRESH_CONNECTED_IN_MS)
-      Gbl.Usrs.Connected.TimeToRefreshInMs = Con_MIN_TIME_TO_REFRESH_CONNECTED_IN_MS;
-   else if (Gbl.Usrs.Connected.TimeToRefreshInMs > Con_MAX_TIME_TO_REFRESH_CONNECTED_IN_MS)
-      Gbl.Usrs.Connected.TimeToRefreshInMs = Con_MAX_TIME_TO_REFRESH_CONNECTED_IN_MS;
+   Con_SetTimeToRefresh (Gbl.Session.NumSessions);
   }
 
 /*****************************************************************************/

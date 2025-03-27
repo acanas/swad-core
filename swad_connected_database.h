@@ -34,8 +34,10 @@
 /*****************************************************************************/
 
 unsigned Con_DB_GetConnectedUsrsTotal (Rol_Role_t Role);
-unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_t Role);
-unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_t Role);
+unsigned Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
+				 Hie_Level_t HieLvl,Rol_Role_t Role);
+unsigned Con_DB_GetConnectedFromScope (MYSQL_RES **mysql_res,
+				       Hie_Level_t HieLvl,Rol_Role_t Role);
 
 void Con_DB_UpdateMeInConnectedList (void);
 

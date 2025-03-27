@@ -214,7 +214,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Test,NULL,NULL,Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
-   Lay_WriteHeaderClassPhoto (Vie_VIEW);
+   Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
 
    if (Print->NumQsts.All)
      {
@@ -2284,7 +2284,7 @@ void TstPrn_ShowOnePrint (void)
    /***** Begin box *****/
    Box_BoxBegin (Txt_Result,NULL,NULL,
 	         Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE);
-      Lay_WriteHeaderClassPhoto (Vie_VIEW);
+      Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
 
       /***** Begin table *****/
       HTM_TABLE_BeginWideMarginPadding (10);

@@ -553,7 +553,7 @@ void Tml_WriteDateTime (time_t TimeUTC)
 /******************* Get and show number of timeline notes *******************/
 /*****************************************************************************/
 
-void Tml_GetAndShowTimelineActivityStats (void)
+void Tml_GetAndShowTimelineActivityStats (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_timeline;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -584,7 +584,7 @@ void Tml_GetAndShowTimelineActivityStats (void)
       HTM_TR_End ();
 
       /***** Get total number of users *****/
-      NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
+      NumUsrsTotal = Usr_GetTotalNumberOfUsers (HieLvl);
 
       /***** Get total number of timeline notes and users for each note type *****/
       for (NoteType  = (TmlNot_Type_t) 0;
@@ -592,7 +592,7 @@ void Tml_GetAndShowTimelineActivityStats (void)
 	   NoteType++)
 	{
 	 /***** Get number of timeline notes and users for this type *****/
-	 if (Tml_DB_GetNumNotesAndUsrsByType (&mysql_res,NoteType))
+	 if (Tml_DB_GetNumNotesAndUsrsByType (&mysql_res,HieLvl,NoteType))
 	    Tml_GetNumNotesAndUsrsFromRow (mysql_res,&NumNotes,&NumUsrs);
 	 else
 	    NumNotes = NumUsrs = 0;
@@ -611,7 +611,7 @@ void Tml_GetAndShowTimelineActivityStats (void)
 	}
 
       /***** Get and write totals *****/
-      if (Tml_DB_GetNumNotesAndUsrsTotal (&mysql_res))
+      if (Tml_DB_GetNumNotesAndUsrsTotal (&mysql_res,HieLvl))
 	 Tml_GetNumNotesAndUsrsFromRow (mysql_res,&NumNotes,&NumUsrs);
       else
 	 NumNotes = NumUsrs = 0;

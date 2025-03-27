@@ -862,9 +862,9 @@ unsigned Att_DB_GetNumEventsInCrs (long HieCod)
 // Returns the number of courses with attendance events
 // in this location (all the platform, the current degree or the current course)
 
-unsigned Att_DB_GetNumCoursesWithEvents (Hie_Level_t Level)
+unsigned Att_DB_GetNumCoursesWithEvents (Hie_Level_t HieLvl)
   {
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
          return DB_QueryCOUNT ("can not get number of courses with attendance events",
@@ -917,9 +917,9 @@ unsigned Att_DB_GetNumCoursesWithEvents (Hie_Level_t Level)
 /********************* Get number of attendance events ***********************/
 /*****************************************************************************/
 
-unsigned Att_DB_GetNumEvents (MYSQL_RES **mysql_res,Hie_Level_t Level)
+unsigned Att_DB_GetNumEvents (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
   {
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
          return (unsigned)

@@ -65,10 +65,9 @@ unsigned Ctr_DB_GetNumCtrsInPlc (long PlcCod);
 unsigned Ctr_DB_GetNumCtrsWithMap (void);
 unsigned Ctr_DB_GetNumCtrsWithMapInCty (long HieCod);
 unsigned Ctr_DB_GetNumCtrsWithMapInIns (long HieCod);
-unsigned Ctr_DB_GetNumCtrsWithDegs (Hie_Level_t Level,long Cod);
-unsigned Ctr_DB_GetNumCtrsWithCrss (Hie_Level_t Level,long Cod);
-unsigned Ctr_DB_GetNumCtrsWithUsrs (Rol_Role_t Role,
-                                    Hie_Level_t Level,long Cod);
+unsigned Ctr_DB_GetNumCtrsWithDegs (Hie_Level_t HieLvl,long HieCod);
+unsigned Ctr_DB_GetNumCtrsWithCrss (Hie_Level_t HieLvl,long HieCod);
+unsigned Ctr_DB_GetNumCtrsWithUsrs (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Role);
 
 void Ctr_DB_UpdateCtrIns (long HieCod,long NewInsCod);
 void Ctr_DB_UpdateCtrPlc (long HieCod,long NewPlcCod);

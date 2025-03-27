@@ -377,7 +377,7 @@ static void BrwSiz_CalcSizeOfDirRecursive (struct BrwSiz_BrowserSize *Size,
 /**************** Get the size of a file zone from database ******************/
 /*****************************************************************************/
 
-void BrwSiz_GetSizeOfFileZone (Brw_FileBrowser_t FileBrowser,
+void BrwSiz_GetSizeOfFileZone (Hie_Level_t HieLvl,Brw_FileBrowser_t FileBrowser,
                                struct BrwSiz_SizeOfFileZone *SizeOfFileZone)
   {
    MYSQL_RES *mysql_res;
@@ -385,7 +385,7 @@ void BrwSiz_GetSizeOfFileZone (Brw_FileBrowser_t FileBrowser,
 
    /***** Get the size of a file browser *****/
    /* Query database */
-   Brw_DB_GetSizeOfFileBrowser (&mysql_res,FileBrowser);
+   Brw_DB_GetSizeOfFileBrowser (&mysql_res,HieLvl,FileBrowser);
 
    /* Get row */
    row = mysql_fetch_row (mysql_res);

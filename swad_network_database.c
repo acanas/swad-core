@@ -117,10 +117,11 @@ void Net_DB_GetURL (long UsrCod,Net_WebsAndSocialNetworks_t NumURL,
 /*************** Get stats about users' webs / social networks ***************/
 /*****************************************************************************/
 
-unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res)
+unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res,
+					      Hie_Level_t HieLvl)
   {
    /***** Get number of users with a web / social network *****/
-   switch (Gbl.Scope.Current)
+   switch (HieLvl)
      {
       case Hie_SYS:
          return (unsigned)

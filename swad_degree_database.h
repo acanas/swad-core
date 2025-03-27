@@ -40,9 +40,9 @@
 void Deg_DB_CreateDegreeType (const char DegTypName[DegTyp_MAX_BYTES_DEGREE_TYPE_NAME + 1]);
 void Deg_DB_CreateDegree (struct Hie_Node *Deg,Hie_Status_t Status);
 
-unsigned Deg_DB_GetNumDegreeTypes (Hie_Level_t Level);
+unsigned Deg_DB_GetNumDegreeTypes (Hie_Level_t HieLvl);
 unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
-                                Hie_Level_t Level,DegTyp_Order_t Order);
+                                Hie_Level_t HieLvl,DegTyp_Order_t Order);
 void Deg_DB_GetDegTypeNameByCod (struct DegTyp_DegType *DegTyp);
 unsigned Deg_DB_GetDegreeDataByCod (MYSQL_RES **mysql_res,long HieCod);
 long Deg_DB_GetInsCodOfDegreeByCod (long HieCod);
@@ -63,9 +63,8 @@ unsigned Deg_DB_SearchDegs (MYSQL_RES **mysql_res,
                             const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
                             const char *RangeQuery);
 
-unsigned Deg_DB_GetNumDegsWithCrss (Hie_Level_t Level,long Cod);
-unsigned Deg_DB_GetNumDegsWithUsrs (Rol_Role_t Role,
-                                    Hie_Level_t Level,long Cod);
+unsigned Deg_DB_GetNumDegsWithCrss (Hie_Level_t HieLvl,long HieCod);
+unsigned Deg_DB_GetNumDegsWithUsrs (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Role);
 
 unsigned Deg_DB_GetNumDegsInSys (__attribute__((unused)) long SysCod);
 unsigned Deg_DB_GetNumDegsInCty (long HieCod);

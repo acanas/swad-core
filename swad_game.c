@@ -2226,7 +2226,7 @@ void Gam_GetScoreRange (long GamCod,double *MinScore,double *MaxScore)
 /*************************** Show stats about games **************************/
 /*****************************************************************************/
 
-void Gam_GetAndShowGamesStats (void)
+void Gam_GetAndShowGamesStats (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_games;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -2237,8 +2237,8 @@ void Gam_GetAndShowGamesStats (void)
    unsigned NumCoursesWithGames;
 
    /***** Get the number of games from this location *****/
-   if ((NumGames = Gam_DB_GetNumGames (Gbl.Scope.Current)))
-      NumCoursesWithGames = Gam_DB_GetNumCoursesWithGames (Gbl.Scope.Current);
+   if ((NumGames = Gam_DB_GetNumGames (HieLvl)))
+      NumCoursesWithGames = Gam_DB_GetNumCoursesWithGames (HieLvl);
    else
       NumCoursesWithGames = 0;
 

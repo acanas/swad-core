@@ -211,7 +211,7 @@ void Cty_ListCountries2 (void)
    extern const char *Txt_Other_countries;
    extern const char *Txt_Country_unspecified;
    unsigned NumCty;
-   Hie_Level_t Level;
+   Hie_Level_t HieLvl;
 
    /***** Write menu to select country *****/
    Hie_WriteMenuHierarchy ();
@@ -258,10 +258,10 @@ void Cty_ListCountries2 (void)
 	    HTM_TD_Unsigned (Cty_GetCachedNumUsrsWhoClaimToBelongToAnotherCty ());
 
 	    /* Number of institutions/centers/degrees/courses in other countries */
-	    for (Level  = Hie_INS;
-		 Level <= Hie_CRS;
-		 Level++)
-	       HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Level,		// Number of institutions/centers/degrees/courses...
+	    for (HieLvl  = Hie_INS;
+		 HieLvl <= Hie_CRS;
+		 HieLvl++)
+	       HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl,		// Number of institutions/centers/degrees/courses...
 							       Hie_CTY,0));	// ...in other countries
 
 	    /* Number of users in courses of other countries */
@@ -282,10 +282,10 @@ void Cty_ListCountries2 (void)
 	    HTM_TD_Unsigned (Cty_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty ());
 
 	    /* Number of institutions/centers/degrees/courses with unknown country */
-	    for (Level  = Hie_INS;
-		 Level <= Hie_CRS;
-		 Level++)
-	       HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Level,		// Number of institutions/centers/degrees/courses...
+	    for (HieLvl  = Hie_INS;
+		 HieLvl <= Hie_CRS;
+		 HieLvl++)
+	       HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl,		// Number of institutions/centers/degrees/courses...
 							       Hie_CTY,-1L));	// ...with unknown country
 
 	    HTM_TD_Unsigned (0);
@@ -367,10 +367,10 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 static void Cty_ListOneCountryForSeeing (struct Hie_Node *Cty,unsigned NumCty)
   {
    const char *BgColor;
-   Hie_Level_t Level;
+   Hie_Level_t HieLvl;
 
    BgColor = (Cty->HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod) ? "BG_HIGHLIGHT" :
-							        The_GetColorRows ();
+							           The_GetColorRows ();
 
    HTM_TR_Begin (NULL);
 
@@ -392,12 +392,12 @@ static void Cty_ListOneCountryForSeeing (struct Hie_Node *Cty,unsigned NumCty)
       HTM_TD_End ();
 
       /***** Number of institutions/centers/degrees/courses *****/
-      for (Level  = Hie_INS;
-	   Level <= Hie_CRS;
-	   Level++)
+      for (HieLvl  = Hie_INS;
+	   HieLvl <= Hie_CRS;
+	   HieLvl++)
         {
 	 HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
-	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Level,		// Number of institutions/centers/degrees/courses...
+	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl,		// Number of institutions/centers/degrees/courses...
 							 Hie_CTY,	// ...in country
 							 Cty->HieCod));
 	 HTM_TD_End ();
@@ -1118,7 +1118,7 @@ void Cty_RemoveCountry (void)
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_You_can_not_remove_a_country_with_institutions_or_users;
    extern const char *Txt_Country_X_removed;
-   Hie_Level_t Level;
+   Hie_Level_t HieLvl;
 
    /***** Country constructor *****/
    Cty_EditingCountryConstructor ();
@@ -1154,10 +1154,10 @@ void Cty_RemoveCountry (void)
 
       /***** Flush cache *****/
       Cty_FlushCacheCountryName ();
-      for (Level  = Hie_INS;
-	   Level <= Hie_CRS;
-	   Level++)
-         Hie_FlushCachedNumNodesInHieLvl (Level,Hie_CTY);	// Number of institutions/centers/degrees/courses in country
+      for (HieLvl  = Hie_INS;
+	   HieLvl <= Hie_CRS;
+	   HieLvl++)
+         Hie_FlushCachedNumNodesInHieLvl (HieLvl,Hie_CTY);	// Number of institutions/centers/degrees/courses in country
       Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_CTY);
 
       /***** Write message to show the change made *****/
@@ -1572,7 +1572,7 @@ void Cty_ReceiveNewCountry (void)
 /******************* Get number of countries with users **********************/
 /*****************************************************************************/
 
-unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role)
+unsigned Cty_GetCachedNumCtysWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role)
   {
    static FigCch_FigureCached_t FigureCtys[Rol_NUM_ROLES] =
      {
@@ -1581,15 +1581,15 @@ unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role)
       [Rol_TCH] = FigCch_NUM_CTYS_WITH_TCHS,	// Teachers
      };
    unsigned NumCtysWithUsrs;
-   long Cod = Hie_GetCurrentCod ();
+   long HieCod = Hie_GetHieCod (HieLvl);
 
    /***** Get number of countries with users from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureCtys[Role],Gbl.Scope.Current,Cod,
+   if (!FigCch_GetFigureFromCache (FigureCtys[Role],HieLvl,HieCod,
 				   FigCch_UNSIGNED,&NumCtysWithUsrs))
      {
       /***** Get current number of countries with users from database and update cache *****/
-      NumCtysWithUsrs = Cty_DB_GetNumCtysWithUsrs (Role,Gbl.Scope.Current,Cod);
-      FigCch_UpdateFigureIntoCache (FigureCtys[Role],Gbl.Scope.Current,Cod,
+      NumCtysWithUsrs = Cty_DB_GetNumCtysWithUsrs (HieLvl,HieCod,Role);
+      FigCch_UpdateFigureIntoCache (FigureCtys[Role],HieLvl,HieCod,
 				    FigCch_UNSIGNED,&NumCtysWithUsrs);
      }
 

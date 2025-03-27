@@ -295,7 +295,7 @@ static void Prg_PutIconsWhenEditing (__attribute__((unused)) void *Args)
 /********************** Show stats about schedule items **********************/
 /*****************************************************************************/
 
-void Prg_GetAndShowCourseProgramStats (void)
+void Prg_GetAndShowCourseProgramStats (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_course_programs;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -306,8 +306,8 @@ void Prg_GetAndShowCourseProgramStats (void)
    unsigned NumCoursesWithNodes;
 
    /***** Get the number of tree nodes from this location *****/
-   if ((NumNodes = Tre_DB_GetNumNodes (Inf_PROGRAM,Gbl.Scope.Current)))
-      NumCoursesWithNodes = Tre_DB_GetNumCoursesWithNodes (Inf_PROGRAM,Gbl.Scope.Current);
+   if ((NumNodes = Tre_DB_GetNumNodes (Inf_PROGRAM,HieLvl)))
+      NumCoursesWithNodes = Tre_DB_GetNumCoursesWithNodes (Inf_PROGRAM,HieLvl);
    else
       NumCoursesWithNodes = 0;
 

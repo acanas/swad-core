@@ -53,6 +53,6 @@ void Cal_PrintCalendar (void);
 void Cal_PutIconToSeeCalendar (void);
 
 //-------------------------------- Figures ------------------------------------
-void Cal_GetAndShowNumUsrsPerFirstDayOfWeek (void);
+void Cal_GetAndShowNumUsrsPerFirstDayOfWeek (Hie_Level_t HieLvl);
 
 #endif

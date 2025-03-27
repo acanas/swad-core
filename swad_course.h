@@ -51,7 +51,7 @@
 
 void Crs_ShowIntroduction (void);
 
-unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role);
+unsigned Crs_GetCachedNumCrssWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role);
 
 void Crs_WriteSelectorOfCourse (void);
 void Crs_ShowCrssOfCurrentDeg (void);

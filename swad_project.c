@@ -1522,7 +1522,7 @@ void Prj_PrintOneProject (void)
    Prj_GetProjectDataByCod (&Projects.Prj);
 
    /***** Write header *****/
-   Lay_WriteHeaderClassPhoto (Vie_PRINT);
+   Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_PRINT);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (2);
@@ -4847,7 +4847,7 @@ void Prj_RemoveUsrFromProjects (long UsrCod)
 /************************ Show figures about projects ************************/
 /*****************************************************************************/
 
-void Prj_GetAndShowProjectsStats (void)
+void Prj_GetAndShowProjectsStats (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_projects;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -4858,8 +4858,8 @@ void Prj_GetAndShowProjectsStats (void)
    unsigned NumCoursesWithProjects;
 
    /***** Get the number of projects from this location *****/
-   if ((NumProjects = Prj_DB_GetNumProjects (Gbl.Scope.Current)))
-      NumCoursesWithProjects = Prj_DB_GetNumCoursesWithProjects (Gbl.Scope.Current);
+   if ((NumProjects = Prj_DB_GetNumProjects (HieLvl)))
+      NumCoursesWithProjects = Prj_DB_GetNumCoursesWithProjects (HieLvl);
    else
       NumCoursesWithProjects = 0;
 

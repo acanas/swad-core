@@ -268,7 +268,7 @@ void The_ChangeRowColor1 (unsigned Level)
 /********** Get and show number of users who have chosen a theme *************/
 /*****************************************************************************/
 
-void The_GetAndShowNumUsrsPerTheme (void)
+void The_GetAndShowNumUsrsPerTheme (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_theme;
    extern const char *The_ThemeId[The_NUM_THEMES];
@@ -303,7 +303,7 @@ void The_GetAndShowNumUsrsPerTheme (void)
 	 if (asprintf (&SubQuery,"usr_data.Theme='%s'",
 		       The_ThemeId[Theme]) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 NumUsrs[Theme] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 NumUsrs[Theme] = Usr_DB_GetNumUsrsWhoChoseAnOption (HieLvl,SubQuery);
 	 free (SubQuery);
 
 	 /* Update total number of users */

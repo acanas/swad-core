@@ -41,7 +41,7 @@ extern struct Globals Gbl;
 /** Insert/replace user as administrator of an institution, center or degree */
 /*****************************************************************************/
 
-void Adm_DB_InsertAdmin (long UsrCod,Hie_Level_t Level)
+void Adm_DB_InsertAdmin (long UsrCod,Hie_Level_t HieLvl)
   {
    DB_QueryREPLACE ("can not create administrator",
 		    "REPLACE INTO usr_admins"
@@ -49,8 +49,8 @@ void Adm_DB_InsertAdmin (long UsrCod,Hie_Level_t Level)
 		    " VALUES"
 		    " (%ld,'%s',%ld)",
 		    UsrCod,
-		    Hie_GetDBStrFromLevel (Level),
-		    Gbl.Hierarchy.Node[Level].HieCod);
+		    Hie_GetDBStrFromLevel (HieLvl),
+		    Gbl.Hierarchy.Node[HieLvl].HieCod);
   }
 
 /*****************************************************************************/
@@ -79,7 +79,7 @@ unsigned Adm_DB_GetAdmsCurrentScopeExceptMe (MYSQL_RES **mysql_res)
 /***** Check if a user is an administrator of a degree/center/institution ****/
 /*****************************************************************************/
 
-bool Adm_DB_CheckIfUsrIsAdm (long UsrCod,Hie_Level_t Level)
+bool Adm_DB_CheckIfUsrIsAdm (long UsrCod,Hie_Level_t HieLvl)
   {
    return
    DB_QueryEXISTS ("can not check if a user is administrator",
@@ -90,8 +90,8 @@ bool Adm_DB_CheckIfUsrIsAdm (long UsrCod,Hie_Level_t Level)
 		      " AND Scope='%s'"
 		      " AND Cod=%ld)",
 		   UsrCod,
-		   Hie_GetDBStrFromLevel (Level),
-		   Gbl.Hierarchy.Node[Level].HieCod);
+		   Hie_GetDBStrFromLevel (HieLvl),
+		   Gbl.Hierarchy.Node[HieLvl].HieCod);
   }
 
 /*****************************************************************************/
@@ -115,7 +115,7 @@ bool Adm_DB_CheckIfUsrIsSuperuser (long UsrCod)
 /***** Remove user as administrator of an institution, center or degree ******/
 /*****************************************************************************/
 
-void Adm_DB_RemAdmin (long UsrCod,Hie_Level_t Level)
+void Adm_DB_RemAdmin (long UsrCod,Hie_Level_t HieLvl)
   {
    DB_QueryDELETE ("can not remove an administrator",
 		   "DELETE FROM usr_admins"
@@ -123,8 +123,8 @@ void Adm_DB_RemAdmin (long UsrCod,Hie_Level_t Level)
 		     " AND Scope='%s'"
 		     " AND Cod=%ld",
 		   UsrCod,
-		   Hie_GetDBStrFromLevel (Level),
-		   Gbl.Hierarchy.Node[Level].HieCod);
+		   Hie_GetDBStrFromLevel (HieLvl),
+		   Gbl.Hierarchy.Node[HieLvl].HieCod);
   }
 
 /*****************************************************************************/
@@ -143,12 +143,12 @@ void Adm_DB_RemUsrAsAdmin (long UsrCod)
 /********* Remove administrators of an institution, center or degree *********/
 /*****************************************************************************/
 
-void Adm_DB_RemAdmins (Hie_Level_t Level,long Cod)
+void Adm_DB_RemAdmins (Hie_Level_t HieLvl,long HieCod)
   {
    DB_QueryDELETE ("can not remove administrators",
 		   "DELETE FROM usr_admins"
 		   " WHERE Scope='%s'"
 		     " AND Cod=%ld",
-                   Hie_GetDBStrFromLevel (Level),
-                   Cod);
+                   Hie_GetDBStrFromLevel (HieLvl),
+                   HieCod);
   }

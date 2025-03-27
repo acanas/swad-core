@@ -795,10 +795,10 @@ long Prj_DB_GetCrsOfPrj (long PrjCod)
 // Returns the number of courses with projects
 // in this location (all the platform, current degree or current course)
 
-unsigned Prj_DB_GetNumCoursesWithProjects (Hie_Level_t Level)
+unsigned Prj_DB_GetNumCoursesWithProjects (Hie_Level_t HieLvl)
   {
    /***** Get number of courses with projects from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return (unsigned)
@@ -872,10 +872,10 @@ unsigned Prj_DB_GetNumCoursesWithProjects (Hie_Level_t Level)
 /*****************************************************************************/
 // Returns the number of projects in this location
 
-unsigned Prj_DB_GetNumProjects (Hie_Level_t Level)
+unsigned Prj_DB_GetNumProjects (Hie_Level_t HieLvl)
   {
    /***** Get number of projects from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
          return (unsigned)

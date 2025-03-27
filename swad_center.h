@@ -70,7 +70,7 @@ unsigned Ctr_GetCachedNumCtrsWithMapInSys (void);
 unsigned Ctr_GetCachedNumCtrsWithMapInCty (long CtyCod);
 unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod);
 
-unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role);
+unsigned Ctr_GetCachedNumCtrsWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role);
 
 void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs);
 

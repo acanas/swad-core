@@ -445,7 +445,7 @@ static void Fol_ListFollowingUsr (struct Usr_Data *UsrDat)
    if (Prf_ShowUsrProfile (UsrDat))
      {
       /***** Get list of following *****/
-      NumUsrs = Fol_DB_GetListFollowing (UsrDat->UsrCod,&mysql_res);
+      NumUsrs = Fol_DB_GetListFollowing (&mysql_res,UsrDat->UsrCod);
 
       if (NumUsrs)
 	{
@@ -517,7 +517,7 @@ static void Fol_ListFollowersUsr (struct Usr_Data *UsrDat)
    if (Prf_ShowUsrProfile (UsrDat))
      {
       /***** Get list of followers *****/
-      if ((NumUsrs = Fol_DB_GetListFollowers (UsrDat->UsrCod,&mysql_res)))
+      if ((NumUsrs = Fol_DB_GetListFollowers (&mysql_res,UsrDat->UsrCod)))
 	{
 	 /***** Initialize structure with user's data *****/
 	 Usr_UsrDataConstructor (&FollowerUsrDat);
@@ -1109,13 +1109,13 @@ static void Fol_UnfollowUsr (const struct Usr_Data *UsrDat)
 /****** Get and show ranking of users attending to number of followers *******/
 /*****************************************************************************/
 
-void Fol_GetAndShowRankingFollowers (void)
+void Fol_GetAndShowRankingFollowers (Hie_Level_t HieLvl)
   {
    MYSQL_RES *mysql_res;
    unsigned NumUsrs;
 
    /***** Get ranking from database *****/
-   NumUsrs = Fol_DB_GetRankingFollowers (&mysql_res);
+   NumUsrs = Fol_DB_GetRankingFollowers (&mysql_res,HieLvl);
 
    /***** Show ranking *****/
    Prf_ShowRankingFigure (&mysql_res,NumUsrs);
@@ -1151,7 +1151,7 @@ void Fol_RemoveUsrFromUsrFollow (long UsrCod)
 /************** Get and show number of following and followers ***************/
 /*****************************************************************************/
 
-void Fol_GetAndShowFollowStats (void)
+void Fol_GetAndShowFollowStats (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_followed_followers;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -1178,14 +1178,14 @@ void Fol_GetAndShowFollowStats (void)
       HTM_TR_End ();
 
       /***** Get total number of users *****/
-      NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
+      NumUsrsTotal = Usr_GetTotalNumberOfUsers (HieLvl);
 
       /***** Get total number of following/followers from database *****/
       for (Fol = 0;
 	   Fol < 2;
 	   Fol++)
 	{
-	 NumUsrs = Fol_DB_GetNumFollowinFollowers (Fol);
+	 NumUsrs = Fol_DB_GetNumFollowinFollowers (HieLvl,Fol);
 
 	 /***** Write number of followed / followers *****/
 	 HTM_TR_Begin (NULL);
@@ -1201,7 +1201,7 @@ void Fol_GetAndShowFollowStats (void)
 	   Fol < 2;
 	   Fol++)
 	{
-	 Average = Fol_DB_GetNumFollowedPerFollower (Fol);
+	 Average = Fol_DB_GetNumFollowedPerFollower (HieLvl,Fol);
 
 	 /***** Write number of followed per follower *****/
 	 HTM_TR_Begin (NULL);

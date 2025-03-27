@@ -135,6 +135,6 @@ void Agd_ReceiveEvent (void);
 void Agd_PrintAgdQRCode (void);
 
 //-------------------------------- Figures ------------------------------------
-void Agd_GetAndShowAgendasStats (void);
+void Agd_GetAndShowAgendasStats (Hie_Level_t HieLvl);
 
 #endif

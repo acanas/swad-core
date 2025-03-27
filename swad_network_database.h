@@ -38,7 +38,8 @@ void Net_DB_UpdateMyWeb (Net_WebsAndSocialNetworks_t NumURL,
 
 void Net_DB_GetURL (long UsrCod,Net_WebsAndSocialNetworks_t NumURL,
                     char URL[WWW_MAX_BYTES_WWW + 1]);
-unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res);
+unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res,
+					      Hie_Level_t HieLvl);
 
 void Net_DB_RemoveMyWeb (Net_WebsAndSocialNetworks_t NumURL);
 void Net_DB_RemoveUsrWebs (long UsrCod);

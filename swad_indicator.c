@@ -74,7 +74,8 @@ typedef enum
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Ind_GetParsIndicators (struct Ind_Indicators *Indicators);
+static void Ind_GetParsIndicators (struct Ind_Indicators *Indicators,
+				   unsigned AllowedLvls);
 static void Ind_GetParNumIndicators (struct Ind_Indicators *Indicators);
 static bool Ind_GetIfShowBigList (struct Ind_Indicators *Indicators,
                                   unsigned NumCrss);
@@ -109,6 +110,7 @@ void Ind_ReqIndicatorsCourses (void)
    extern const char *Txt_Number_of_indicators;
    extern const char *Txt_Indicators_of_courses;
    struct Ind_Indicators Indicators;
+   unsigned AllowedLvls;
    char *SelectClass;
    MYSQL_RES *mysql_res;
    unsigned NumCrss;
@@ -117,7 +119,13 @@ void Ind_ReqIndicatorsCourses (void)
    unsigned Ind;
 
    /***** Get parameters *****/
-   Ind_GetParsIndicators (&Indicators);
+   AllowedLvls = 1 << Hie_SYS |
+		 1 << Hie_CTY |
+		 1 << Hie_INS |
+		 1 << Hie_CTR |
+		 1 << Hie_DEG |
+		 1 << Hie_CRS;
+   Ind_GetParsIndicators (&Indicators,AllowedLvls);
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Indicators_of_courses,NULL,NULL,
@@ -136,7 +144,8 @@ void Ind_ReqIndicatorsCourses (void)
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-		  Sco_PutSelectorScope ("ScopeInd",HTM_SUBMIT_ON_CHANGE);
+		  Sco_PutSelectorScope ("ScopeInd",HTM_SUBMIT_ON_CHANGE,
+					Indicators.HieLvl,AllowedLvls);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -222,7 +231,7 @@ void Ind_ReqIndicatorsCourses (void)
 
 	 /* Button to show more details */
 	 Frm_BeginForm (ActSeeAllStaCrs);
-	    Sco_PutParScope ("ScopeInd",Gbl.Scope.Current);
+	    Sco_PutParScope ("ScopeInd",Indicators.HieLvl);
 	    ParCod_PutPar (ParCod_OthDegTyp,Indicators.DegTypCod);
 	    ParCod_PutPar (ParCod_Dpt      ,Indicators.DptCod   );
 	    if (Indicators.StrChecked[0])
@@ -242,19 +251,14 @@ void Ind_ReqIndicatorsCourses (void)
 /************* Get parameters related to indicators of courses ***************/
 /*****************************************************************************/
 
-static void Ind_GetParsIndicators (struct Ind_Indicators *Indicators)
+static void Ind_GetParsIndicators (struct Ind_Indicators *Indicators,
+				   unsigned AllowedLvls)
   {
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << Hie_SYS |
-	               1 << Hie_CTY |
-		       1 << Hie_INS |
-		       1 << Hie_CTR |
-		       1 << Hie_DEG |
-		       1 << Hie_CRS;
-   Sco_GetScope ("ScopeInd",Hie_CRS);
+   Indicators->HieLvl = Sco_GetScope ("ScopeInd",Hie_CRS,AllowedLvls);
 
    /***** Get degree type code *****/
-   Indicators->DegTypCod = (Gbl.Scope.Current == Hie_SYS) ?
+   Indicators->DegTypCod = (Indicators->HieLvl == Hie_SYS) ?
 	                   ParCod_GetPar (ParCod_OthDegTyp) :	// -1L (any degree type) is allowed here
                            -1L;
 
@@ -272,12 +276,19 @@ static void Ind_GetParsIndicators (struct Ind_Indicators *Indicators)
 void Ind_ShowIndicatorsCourses (void)
   {
    struct Ind_Indicators Indicators;
+   unsigned AllowedLvls;
    MYSQL_RES *mysql_res;
    unsigned NumCrss;
    unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS];
 
    /***** Get parameters *****/
-   Ind_GetParsIndicators (&Indicators);
+   AllowedLvls = 1 << Hie_SYS |
+		 1 << Hie_CTY |
+		 1 << Hie_INS |
+		 1 << Hie_CTR |
+		 1 << Hie_DEG |
+		 1 << Hie_CRS;
+   Ind_GetParsIndicators (&Indicators,AllowedLvls);
 
    /***** Get courses from database *****/
    NumCrss = Ind_DB_GetTableOfCourses (&mysql_res,&Indicators);
@@ -386,7 +397,7 @@ static void Ind_PutParsConfirmIWantToSeeBigList (void *Indicators)
   {
    if (Indicators)
      {
-      Sco_PutParScope ("ScopeInd",Gbl.Scope.Current);
+      Sco_PutParScope ("ScopeInd",((struct Ind_Indicators *) Indicators)->HieLvl);
       ParCod_PutPar (ParCod_OthDegTyp,((struct Ind_Indicators *) Indicators)->DegTypCod);
       ParCod_PutPar (ParCod_Dpt      ,((struct Ind_Indicators *) Indicators)->DptCod   );
       if (((struct Ind_Indicators *) Indicators)->StrChecked[0])

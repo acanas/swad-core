@@ -546,7 +546,7 @@ static void Enr_ReqAdminUsrs (Rol_Role_t Role)
 	 Enr_AskIfEnrRemMe (Role);
 	 break;
       case Rol_TCH:
-	 if (Gbl.Hierarchy.Level == Hie_CRS &&
+	 if (Gbl.Hierarchy.HieLvl == Hie_CRS &&
 	     (Role == Rol_STD ||	// As a teacher, I can admin students...
 	      Role == Rol_NET))		// ...or non-editing teachers
 	    Enr_ShowFormEnrRemSeveralUsrs (Role);
@@ -557,7 +557,7 @@ static void Enr_ReqAdminUsrs (Rol_Role_t Role)
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-	 if (Gbl.Hierarchy.Level == Hie_CRS)
+	 if (Gbl.Hierarchy.HieLvl == Hie_CRS)
 	    Enr_ShowFormEnrRemSeveralUsrs (Role);
 	 else
 	    Enr_ReqAnotherUsrIDToEnrolRemove (Role);
@@ -596,7 +596,7 @@ static void Enr_ShowFormEnrRemSeveralUsrs (Rol_Role_t Role)
      };
 
    /***** Contextual menu *****/
-   if (Gbl.Hierarchy.Level == Hie_CRS)	 	// Course selected
+   if (Gbl.Hierarchy.HieLvl == Hie_CRS)	 	// Course selected
      {
       Mnu_ContextMenuBegin ();
 
@@ -655,7 +655,7 @@ static void Enr_ShowFormEnrRemSeveralUsrs (Rol_Role_t Role)
 	 /***** Step 3: Select groups in which enrol/remove users *****/
 	 HTM_FIELDSET_Begin (NULL);
 	    HTM_LEGEND (Txt_Step_3_Optionally_select_groups);
-	    if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+	    if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
 	      {
 	       if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
 		 {
@@ -876,7 +876,7 @@ static void Enr_PutActionsEnrRemSeveralUsrs (void)
    HTM_UL_Begin ("class=\"LIST_LEFT FORM_IN_%s\"",The_GetSuffix ());
 
       /***** Enrol / remove users listed or not listed *****/
-      if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+      if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
 	{
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
@@ -1536,7 +1536,7 @@ bool Enr_PutActionsEnrRemOneUsr (Usr_MeOrOther_t MeOrOther)
    HTM_Attributes_t Attributes = HTM_NO_ATTR;
 
    /***** Check if the other user belongs to the current course *****/
-   if (Gbl.Hierarchy.Level == Hie_CRS)
+   if (Gbl.Hierarchy.HieLvl == Hie_CRS)
       UsrBelongsToCrs = Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
    if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
@@ -1562,7 +1562,7 @@ bool Enr_PutActionsEnrRemOneUsr (Usr_MeOrOther_t MeOrOther)
    HTM_UL_Begin ("class=\"LIST_LEFT FORM_IN_%s\"",The_GetSuffix ());
 
       /***** Enrol user in course / Modify user's data *****/
-      if (Gbl.Hierarchy.Level == Hie_CRS && Gbl.Usrs.Me.Role.Logged >= Rol_STD)
+      if (Gbl.Hierarchy.HieLvl == Hie_CRS && Gbl.Usrs.Me.Role.Logged >= Rol_STD)
 	{
 	 Enr_PutActionModifyOneUsr (&Attributes,UsrBelongsToCrs,MeOrOther);
 	 OptionsShown = true;
@@ -1933,7 +1933,7 @@ static void Enr_EnrolUsr (struct Usr_Data *UsrDat,Rol_Role_t Role,
      }
 
    /***** Enrol user in current course in database *****/
-   if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+   if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
      {
       switch (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
 	{
@@ -2375,6 +2375,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   unsigned AllowedLvls;
+   Hie_Level_t HieLvl;
    unsigned NumReqs;
    unsigned NumReq;
    long ReqCod;
@@ -2395,13 +2397,13 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    Enr_DB_RemoveExpiredEnrolmentRequests ();
 
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << Hie_SYS |
-	               1 << Hie_CTY |
-                       1 << Hie_INS |
-                       1 << Hie_CTR |
-                       1 << Hie_DEG |
-                       1 << Hie_CRS;
-   Sco_GetScope ("ScopeEnr",Hie_CRS);
+   AllowedLvls = 1 << Hie_SYS |
+		 1 << Hie_CTY |
+		 1 << Hie_INS |
+		 1 << Hie_CTR |
+		 1 << Hie_DEG |
+		 1 << Hie_CRS;
+   HieLvl = Sco_GetScope ("ScopeEnr",Hie_CRS,AllowedLvls);
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Enrolment_requests,NULL,NULL,
@@ -2420,7 +2422,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"LM\"");
-		  Sco_PutSelectorScope ("ScopeEnr",HTM_SUBMIT_ON_CHANGE);
+		  Sco_PutSelectorScope ("ScopeEnr",HTM_SUBMIT_ON_CHANGE,
+					HieLvl,AllowedLvls);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -2445,7 +2448,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
       Frm_EndForm ();
 
       /***** List requests *****/
-      if ((NumReqs = Enr_DB_GetEnrolmentRequests (&mysql_res,RolesSelected)))
+      if ((NumReqs = Enr_DB_GetEnrolmentRequests (&mysql_res,HieLvl,RolesSelected)))
 	 {
 	 /* Initialize structure with user's data */
 	 Usr_UsrDataConstructor (&UsrDat);
@@ -2878,7 +2881,7 @@ static void Enr_ShowFormToEditOtherUsr (void)
    if (Usr_DB_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
       /***** Show form to edit user *****/
-      if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+      if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
 	 /* Check if this user belongs to the current course */
 	 switch (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
 	   {
@@ -3071,7 +3074,7 @@ void Enr_CreateNewUsr1 (void)
       Acc_CreateNewUsr (&Gbl.Usrs.Other.UsrDat,Usr_OTHER);
 
       /***** Enrol user in current course in database *****/
-      if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+      if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
 	{
 	 switch (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
 	   {
@@ -3192,7 +3195,7 @@ void Enr_ModifyUsr1 (void)
 	       /***** Update user's data in database *****/
 	       Enr_UpdateUsrData (&Gbl.Usrs.Other.UsrDat);
 
-	       if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+	       if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
 		 {
 		  /***** Get new role from record form *****/
 		  NewRole = Rec_GetRoleFromRecordForm ();
@@ -3663,7 +3666,7 @@ bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat)
 
 #define Enr_DB_MAX_BYTES_SUBQUERY_ROLES (Rol_NUM_ROLES * (10 + 1) - 1)
 
-unsigned Enr_GetNumUsrsInCrss (Hie_Level_t Level,long Cod,unsigned Roles)
+unsigned Enr_GetNumUsrsInCrss (Hie_Level_t HieLvl,long HieCod,unsigned Roles)
   {
    bool AnyUserInCourses;
    unsigned NumUsrs;
@@ -3688,22 +3691,22 @@ unsigned Enr_GetNumUsrsInCrss (Hie_Level_t Level,long Cod,unsigned Roles)
 	                         (1 << Rol_TCH)));
 
    /***** Get number of users from database *****/
-   NumUsrs = Enr_DB_GetNumUsrsInCrss (Level,Cod,Roles,AnyUserInCourses);
+   NumUsrs = Enr_DB_GetNumUsrsInCrss (HieLvl,HieCod,Roles,AnyUserInCourses);
 
-   FigCch_UpdateFigureIntoCache (Enr_GetFigureNumUsrsInCrss (Roles),Level,Cod,
+   FigCch_UpdateFigureIntoCache (Enr_GetFigureNumUsrsInCrss (Roles),HieLvl,HieCod,
 				 FigCch_UNSIGNED,&NumUsrs);
    return NumUsrs;
   }
 
-unsigned Enr_GetCachedNumUsrsInCrss (Hie_Level_t Level,long Cod,unsigned Roles)
+unsigned Enr_GetCachedNumUsrsInCrss (Hie_Level_t HieLvl,long HieCod,unsigned Roles)
   {
    unsigned NumUsrsInCrss;
 
    /***** Get number of users in courses from cache *****/
-   if (!FigCch_GetFigureFromCache (Enr_GetFigureNumUsrsInCrss (Roles),Level,Cod,
+   if (!FigCch_GetFigureFromCache (Enr_GetFigureNumUsrsInCrss (Roles),HieLvl,HieCod,
                                    FigCch_UNSIGNED,&NumUsrsInCrss))
       /***** Get current number of users in courses from database and update cache *****/
-      NumUsrsInCrss = Enr_GetNumUsrsInCrss (Level,Cod,Roles);
+      NumUsrsInCrss = Enr_GetNumUsrsInCrss (HieLvl,HieCod,Roles);
 
    return NumUsrsInCrss;
   }
@@ -3756,7 +3759,7 @@ unsigned Enr_GetCachedNumUsrsNotBelongingToAnyCrs (void)
 /************ Get average number of courses with users of a type *************/
 /*****************************************************************************/
 
-double Enr_GetCachedAverageNumUsrsPerCrs (Hie_Level_t Level,long Cod,Rol_Role_t Role)
+double Enr_GetCachedAverageNumUsrsPerCrs (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Role)
   {
    static FigCch_FigureCached_t FigureNumUsrsPerCrs[Rol_NUM_ROLES] =
      {
@@ -3768,12 +3771,12 @@ double Enr_GetCachedAverageNumUsrsPerCrs (Hie_Level_t Level,long Cod,Rol_Role_t 
    double AverageNumUsrsPerCrs;
 
    /***** Get number of users per course from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureNumUsrsPerCrs[Role],Level,Cod,
+   if (!FigCch_GetFigureFromCache (FigureNumUsrsPerCrs[Role],HieLvl,HieCod,
                                    FigCch_DOUBLE,&AverageNumUsrsPerCrs))
      {
       /***** Get current number of users per course from database and update cache *****/
-      AverageNumUsrsPerCrs = Enr_DB_GetAverageNumUsrsPerCrs (Level,Cod,Role);
-      FigCch_UpdateFigureIntoCache (FigureNumUsrsPerCrs[Role],Level,Cod,
+      AverageNumUsrsPerCrs = Enr_DB_GetAverageNumUsrsPerCrs (HieLvl,HieCod,Role);
+      FigCch_UpdateFigureIntoCache (FigureNumUsrsPerCrs[Role],HieLvl,HieCod,
                                     FigCch_DOUBLE,&AverageNumUsrsPerCrs);
      }
 
@@ -3784,7 +3787,7 @@ double Enr_GetCachedAverageNumUsrsPerCrs (Hie_Level_t Level,long Cod,Rol_Role_t 
 /************ Get average number of courses with users of a role *************/
 /*****************************************************************************/
 
-double Enr_GetCachedAverageNumCrssPerUsr (Hie_Level_t Level,long Cod,Rol_Role_t Role)
+double Enr_GetCachedAverageNumCrssPerUsr (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Role)
   {
    static FigCch_FigureCached_t FigureNumCrssPerUsr[Rol_NUM_ROLES] =
      {
@@ -3796,12 +3799,12 @@ double Enr_GetCachedAverageNumCrssPerUsr (Hie_Level_t Level,long Cod,Rol_Role_t 
    double AverageNumCrssPerUsr;
 
    /***** Get number of courses per user from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureNumCrssPerUsr[Role],Level,Cod,
+   if (!FigCch_GetFigureFromCache (FigureNumCrssPerUsr[Role],HieLvl,HieCod,
                                    FigCch_DOUBLE,&AverageNumCrssPerUsr))
      {
       /***** Get current number of courses per user from database and update cache *****/
-      AverageNumCrssPerUsr = Enr_DB_GetAverageNumCrssPerUsr (Level,Cod,Role);
-      FigCch_UpdateFigureIntoCache (FigureNumCrssPerUsr[Role],Level,Cod,
+      AverageNumCrssPerUsr = Enr_DB_GetAverageNumCrssPerUsr (HieLvl,HieCod,Role);
+      FigCch_UpdateFigureIntoCache (FigureNumCrssPerUsr[Role],HieLvl,HieCod,
                                     FigCch_DOUBLE,&AverageNumCrssPerUsr);
      }
 

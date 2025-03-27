@@ -66,6 +66,6 @@ void Mnu_ContextMenuBegin (void);
 void Mnu_ContextMenuEnd (void);
 
 //-------------------------------- Figures ------------------------------------
-void Mnu_GetAndShowNumUsrsPerMenu (void);
+void Mnu_GetAndShowNumUsrsPerMenu (Hie_Level_t HieLvl);
 
 #endif

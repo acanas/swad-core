@@ -1273,7 +1273,7 @@ static void Brw_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
                                             struct BrwSiz_SizeOfFileZone *SizeOfFileZone);
 
-static void Brw_GetNumberOfOERs (Brw_License_t License,
+static void Brw_GetNumberOfOERs (Hie_Level_t HieLvl,Brw_License_t License,
                                  unsigned long NumFiles[PriPub_NUM_PRIVATE_PUBLIC]);
 
 /*****************************************************************************/
@@ -2224,22 +2224,22 @@ static void Brw_GetParsPathInTreeAndFileName (void)
 
    /***** Set level of this file or folder inside file browser *****/
    if (!strcmp (Gbl.FileBrowser.FilFolLnk.Name,"."))
-      Gbl.FileBrowser.Level = 0;
+      Gbl.FileBrowser.Lvl = 0;
    else
      {
       // Level == number-of-slashes-in-path-except-file-or-folder + 1
-      Gbl.FileBrowser.Level = 1;
+      Gbl.FileBrowser.Lvl = 1;
       for (Ptr = Gbl.FileBrowser.FilFolLnk.Path;
 	   *Ptr;
 	   Ptr++)
          if (*Ptr == '/')
-            Gbl.FileBrowser.Level++;
+            Gbl.FileBrowser.Lvl++;
      }
 
    /***** Get data of assignment *****/
-   if (Gbl.FileBrowser.Level && Brw_TypeIsAdmAsg[Gbl.FileBrowser.Type])
+   if (Gbl.FileBrowser.Lvl && Brw_TypeIsAdmAsg[Gbl.FileBrowser.Type])
      {
-      Asg_SetFolder (&Gbl.FileBrowser.Asg,Gbl.FileBrowser.Level);
+      Asg_SetFolder (&Gbl.FileBrowser.Asg,Gbl.FileBrowser.Lvl);
       Asg_GetAssignmentDataByFolder (&Gbl.FileBrowser.Asg);
      }
   }
@@ -4953,12 +4953,12 @@ void Brw_ReqRemFile (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Button of confirmation of removing *****/
-   switch (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I remove this file?
+   switch (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Lvl))	// Can I remove this file?
      {
       case Usr_CAN:
 	 /***** Show question and button to remove file/link *****/
 	 Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
-						Gbl.FileBrowser.Level,
+						Gbl.FileBrowser.Lvl,
 						Gbl.FileBrowser.FilFolLnk.Type,
 						Gbl.FileBrowser.FilFolLnk.Name,
 						FileNameToShow);
@@ -4992,7 +4992,7 @@ void Brw_RemFile (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
-   switch (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I remove this file?
+   switch (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Lvl))	// Can I remove this file?
      {
       case Usr_CAN:
 	 snprintf (Path,sizeof (Path),"%s/%s",
@@ -5049,7 +5049,7 @@ void Brw_RemFolder (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
-   switch (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I remove this folder?
+   switch (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Lvl))	// Can I remove this folder?
      {
       case Usr_CAN:
 	 snprintf (Path,sizeof (Path),"%s/%s",
@@ -5119,7 +5119,7 @@ void Brw_RemSubtree (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
-   if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level) == Usr_CAN)	// Can I remove this subtree?
+   if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Lvl) == Usr_CAN)	// Can I remove this subtree?
      {
       snprintf (Path,sizeof (Path),"%s/%s",
 	        Gbl.FileBrowser.Path.AboveRootFolder,
@@ -5798,7 +5798,7 @@ static void Brw_PasteClipboard (struct BrwSiz_BrowserSize *Size)
    Pasted.NumFolds = 0;
 
    Gbl.FileBrowser.Clipboard.IsThisTree = Brw_CheckIfClipboardIsInThisTree ();
-   switch (Brw_CheckIfCanPasteIn (Gbl.FileBrowser.Level))
+   switch (Brw_CheckIfCanPasteIn (Gbl.FileBrowser.Lvl))
      {
       case Usr_CAN:
 	 /***** Construct the relative path of the origin file or folder *****/
@@ -6225,12 +6225,12 @@ void Brw_ShowFormFileBrowser (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Check if creating a new folder or file is allowed *****/
-   switch (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level))
+   switch (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Lvl))
      {
       case Usr_CAN:
 	 /***** Name of the folder to be shown ****/
 	 Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
-						Gbl.FileBrowser.Level,
+						Gbl.FileBrowser.Lvl,
 						Gbl.FileBrowser.FilFolLnk.Type,
 						Gbl.FileBrowser.FilFolLnk.Name,
 						FileNameToShow);
@@ -6249,7 +6249,7 @@ void Brw_ShowFormFileBrowser (void)
 	   {
 	    /***** Check if we can paste in this folder *****/
 	    Gbl.FileBrowser.Clipboard.IsThisTree = Brw_CheckIfClipboardIsInThisTree ();
-	    if (Brw_CheckIfCanPasteIn (Gbl.FileBrowser.Level) == Usr_CAN)
+	    if (Brw_CheckIfCanPasteIn (Gbl.FileBrowser.Lvl) == Usr_CAN)
 	       Brw_PutFormToPasteAFileOrFolder (FileNameToShow);
 	   }
 
@@ -6512,7 +6512,7 @@ void Brw_CreateFolder (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Check if creating a new folder is allowed *****/
-   switch (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level))
+   switch (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Lvl))
      {
       case Usr_CAN:
 	 if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
@@ -6561,7 +6561,7 @@ void Brw_CreateFolder (void)
 
 		  /* The folder has been created sucessfully */
 		  Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
-							 Gbl.FileBrowser.Level,
+							 Gbl.FileBrowser.Lvl,
 							 Brw_IS_FOLDER,
 							 Gbl.FileBrowser.FilFolLnk.Name,
 							 FileNameToShow);
@@ -6618,7 +6618,7 @@ void Brw_RenFolder (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
-   switch (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I rename this folder?
+   switch (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Lvl))	// Can I rename this folder?
      {
       case Usr_CAN:
 	 if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
@@ -6796,7 +6796,7 @@ static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
    Brw_GetParAndInitFileBrowser ();
 
    /***** Check if creating a new file is allowed *****/
-   switch (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level))
+   switch (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Lvl))
      {
       case Usr_CAN:
 	 /***** First, we save in disk the file received *****/
@@ -6889,7 +6889,7 @@ static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
 			      if (UploadType == Brw_CLASSIC_UPLOAD)
 				{
 				 Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
-									Gbl.FileBrowser.Level,
+									Gbl.FileBrowser.Lvl,
 									Brw_IS_FOLDER,
 									Gbl.FileBrowser.FilFolLnk.Name,
 									FileNameToShow);	// Folder name
@@ -6982,7 +6982,7 @@ void Brw_CreateLink (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Check if creating a new link is allowed *****/
-   switch (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level))
+   switch (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Lvl))
      {
       case Usr_CAN:
 	 /***** Create a new file to store URL ****/
@@ -7076,7 +7076,7 @@ void Brw_CreateLink (void)
 
 			/* Show message of confirmation */
 			Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
-							       Gbl.FileBrowser.Level,
+							       Gbl.FileBrowser.Lvl,
 							       Brw_IS_FOLDER,
 							       Gbl.FileBrowser.FilFolLnk.Name,
 							       FileNameToShow);	// Folder name
@@ -9162,7 +9162,7 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
    extern const char *Txt_hidden_documents;
    MYSQL_ROW row;
    char *Title;
-   Hie_Level_t Level;
+   Hie_Level_t HieLvl;
    unsigned NumDoc;
    unsigned NumDocsNotHidden = 0;
    unsigned NumDocsHidden;
@@ -9181,10 +9181,10 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
 	    HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"BT");
-	    for (Level  = Hie_INS;
-		 Level >= Hie_CRS;
-		 Level++)
-               HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Level],HTM_HEAD_LEFT);
+	    for (HieLvl  = Hie_INS;
+		 HieLvl >= Hie_CRS;
+		 HieLvl++)
+               HTM_TH (Txt_HIERARCHY_SINGUL_Abc[HieLvl],HTM_HEAD_LEFT);
             HTM_TH (Txt_File_zone,HTM_HEAD_LEFT);
             HTM_TH (Txt_Document ,HTM_HEAD_LEFT);
 	 HTM_TR_End ();
@@ -9209,8 +9209,9 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 	       HTM_OpenParenthesis ();
 		  NumDocsHidden = NumDocs - NumDocsNotHidden;
 		  HTM_TxtF ("%u %s",
-			    NumDocsHidden,NumDocsHidden == 1 ? Txt_hidden_document :
-							       Txt_hidden_documents);
+			    NumDocsHidden,
+			    NumDocsHidden == 1 ? Txt_hidden_document :
+						 Txt_hidden_documents);
 	       HTM_CloseParenthesis ();
 	    HTM_TH_End ();
 
@@ -9789,7 +9790,7 @@ Act_Action_t Brw_GetActionContract (void)
 /*****************************************************************************/
 // TODO: add links to statistic
 
-void Brw_GetAndShowFileBrowsersStats (void)
+void Brw_GetAndShowFileBrowsersStats (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_folders_and_files;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -9816,7 +9817,8 @@ void Brw_GetAndShowFileBrowsersStats (void)
    for (NumStat = 0;
 	NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
 	NumStat++)
-      BrwSiz_GetSizeOfFileZone (StatCrsFileZone[NumStat],
+      BrwSiz_GetSizeOfFileZone (HieLvl,
+				StatCrsFileZone[NumStat],
 				&SizeOfFileZone[NumStat]);
 
    /***** Begin box *****/
@@ -10135,7 +10137,7 @@ static void Brw_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 /************ Show stats about Open Educational Resources (OERs) *************/
 /*****************************************************************************/
 
-void Brw_GetAndShowOERsStats (void)
+void Brw_GetAndShowOERsStats (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_open_educational_resources_oer;
    extern const char *Txt_Number_of_private_files;
@@ -10169,7 +10171,7 @@ void Brw_GetAndShowOERsStats (void)
 	   License <= (Brw_License_t) (Brw_NUM_LICENSES - 1);
 	   License++)
 	{
-	 Brw_GetNumberOfOERs (License,NumFiles);
+	 Brw_GetNumberOfOERs (HieLvl,License,NumFiles);
 
 	 HTM_TR_Begin (NULL);
 	    HTM_TD_Txt_Left (Txt_LICENSES[License]);
@@ -10188,7 +10190,7 @@ void Brw_GetAndShowOERsStats (void)
 /**************** Get the size of a file zone from database ******************/
 /*****************************************************************************/
 
-static void Brw_GetNumberOfOERs (Brw_License_t License,
+static void Brw_GetNumberOfOERs (Hie_Level_t HieLvl,Brw_License_t License,
                                  unsigned long NumFiles[PriPub_NUM_PRIVATE_PUBLIC])
   {
    MYSQL_RES *mysql_res;
@@ -10199,7 +10201,7 @@ static void Brw_GetNumberOfOERs (Brw_License_t License,
 
    /***** Get the size of a file browser *****/
    /* Query database */
-   NumRows = Brw_DB_GetNumberOfPublicFiles (&mysql_res,License);
+   NumRows = Brw_DB_GetNumberOfPublicFiles (&mysql_res,HieLvl,License);
 
    /* Reset values to zero */
    for (Public  = (PriPub_PrivateOrPublic_t) 0;

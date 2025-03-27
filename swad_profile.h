@@ -70,12 +70,12 @@ bool Prf_GetAndStoreAllUsrFigures (long UsrCod,struct Prf_UsrFigures *UsrFigures
 
 void Prf_CreateNewUsrFigures (long UsrCod,Usr_MeOrOther_t MeOrOther);
 
-void Prf_GetAndShowRankingClicks (void);
-void Prf_GetAndShowRankingTimelinePubs (void);
-void Prf_GetAndShowRankingFileViews (void);
-void Prf_GetAndShowRankingForPsts (void);
-void Prf_GetAndShowRankingMsgsSnt (void);
+void Prf_GetAndShowRankingClicks (Hie_Level_t HieLvl);
+void Prf_GetAndShowRankingTimelinePubs (Hie_Level_t HieLvl);
+void Prf_GetAndShowRankingFileViews (Hie_Level_t HieLvl);
+void Prf_GetAndShowRankingForPsts (Hie_Level_t HieLvl);
+void Prf_GetAndShowRankingMsgsSnt (Hie_Level_t HieLvl);
 void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs);
-void Prf_GetAndShowRankingClicksPerDay (void);
+void Prf_GetAndShowRankingClicksPerDay (Hie_Level_t HieLvl);
 
 #endif

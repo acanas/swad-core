@@ -177,10 +177,10 @@ bool Rub_DB_CheckIfSimilarRubricExists (const struct Rub_Rubric *Rubric)
 /*****************************************************************************/
 // Returns the number of courses with rubrics in this location
 
-unsigned Rub_DB_GetNumCoursesWithRubrics (Hie_Level_t Level)
+unsigned Rub_DB_GetNumCoursesWithRubrics (Hie_Level_t HieLvl)
   {
    /***** Get number of courses with rubrics from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
          return (unsigned)
@@ -252,10 +252,10 @@ unsigned Rub_DB_GetNumCoursesWithRubrics (Hie_Level_t Level)
 /*****************************************************************************/
 // Returns the number of rubrics in a given location
 
-unsigned Rub_DB_GetNumRubrics (Hie_Level_t Level)
+unsigned Rub_DB_GetNumRubrics (Hie_Level_t HieLvl)
   {
    /***** Get number of rubrics from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
          return (unsigned)
@@ -690,10 +690,10 @@ bool Rub_DB_CheckIfSimilarCriterionExists (const struct RubCri_Criterion *Criter
 /**************** Get average number of criteria per rubric ******************/
 /*****************************************************************************/
 
-double Rub_DB_GetNumCriteriaPerRubric (Hie_Level_t Level)
+double Rub_DB_GetNumCriteriaPerRubric (Hie_Level_t HieLvl)
   {
    /***** Get number of criteria per rubric from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
          return

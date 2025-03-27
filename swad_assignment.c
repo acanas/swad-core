@@ -401,7 +401,7 @@ void Asg_PrintOneAssignment (void)
    Asg_GetAssignmentDataByCod (&Assignments.Asg);
 
    /***** Write header *****/
-   Lay_WriteHeaderClassPhoto (Vie_PRINT);
+   Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_PRINT);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (2);
@@ -1866,7 +1866,7 @@ void Asg_SetFolder (struct Asg_Assignment *Asg,unsigned Level)
 // Returns the number of assignments
 // in this location (all the platform, the current degree or the current course)
 
-unsigned Asg_GetNumAssignments (Hie_Level_t Level,unsigned *NumNotif)
+unsigned Asg_GetNumAssignments (Hie_Level_t HieLvl,unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1877,7 +1877,7 @@ unsigned Asg_GetNumAssignments (Hie_Level_t Level,unsigned *NumNotif)
    *NumNotif = 0;
 
    /***** Get number of assignments from database *****/
-   if (Asg_DB_GetNumAssignments (&mysql_res,Level))
+   if (Asg_DB_GetNumAssignments (&mysql_res,HieLvl))
      {
       /***** Get number of assignments *****/
       row = mysql_fetch_row (mysql_res);
@@ -1900,7 +1900,7 @@ unsigned Asg_GetNumAssignments (Hie_Level_t Level,unsigned *NumNotif)
 /************************ Show stats about assignments ***********************/
 /*****************************************************************************/
 
-void Asg_GetAndShowAssignmentsStats (void)
+void Asg_GetAndShowAssignmentsStats (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_assignments;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -1913,8 +1913,8 @@ void Asg_GetAndShowAssignmentsStats (void)
    unsigned NumCoursesWithAssignments;
 
    /***** Get the number of assignments from this location *****/
-   if ((NumAssignments = Asg_GetNumAssignments (Gbl.Scope.Current,&NumNotif)))
-      NumCoursesWithAssignments = Asg_DB_GetNumCoursesWithAssignments (Gbl.Scope.Current);
+   if ((NumAssignments = Asg_GetNumAssignments (HieLvl,&NumNotif)))
+      NumCoursesWithAssignments = Asg_DB_GetNumCoursesWithAssignments (HieLvl);
    else
       NumCoursesWithAssignments = 0;
 

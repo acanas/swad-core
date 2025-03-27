@@ -372,7 +372,7 @@ static void Set_SetColsClassPhoto (void)
       /* Save the number of columns into the database */
       Set_DB_UpdateMyColsClassPhoto (Cols);
    else if (Gbl.Usrs.Me.Logged &&		// If user logged...
-	    Gbl.Hierarchy.Level == Hie_CRS)	// ...and course selected,
+	    Gbl.Hierarchy.HieLvl == Hie_CRS)	// ...and course selected,
       Cols = Set_GetMyColsClassPhotoFromDB ();	// ==> get my preference from database
    else
       Cols = Usr_CLASS_PHOTO_COLS_DEF;

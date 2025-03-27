@@ -589,9 +589,9 @@ unsigned Qst_DB_GetNumQstsInCrs (long CrsCod)
 // in this location (all the platform, current degree or current course)
 
 unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
-                            Hie_Level_t Level,Qst_AnswerType_t AnsType)
+                            Hie_Level_t HieLvl,Qst_AnswerType_t AnsType)
   {
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
@@ -767,13 +767,12 @@ unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
 // Returns the number of courses with test questions
 // in this location (all the platform, current degree or current course)
 
-unsigned Qst_DB_GetNumCrssWithQsts (Hie_Level_t Level,
-                                    Qst_AnswerType_t AnsType)
+unsigned Qst_DB_GetNumCrssWithQsts (Hie_Level_t HieLvl,Qst_AnswerType_t AnsType)
   {
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
 
    /***** Get number of courses with test questions from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
@@ -925,14 +924,14 @@ unsigned Qst_DB_GetNumCrssWithQsts (Hie_Level_t Level,
 // Returns the number of courses with pluggable test questions
 // in this location (all the platform, current degree or current course)
 
-unsigned Qst_DB_GetNumCrssWithPluggableQsts (Hie_Level_t Level,
+unsigned Qst_DB_GetNumCrssWithPluggableQsts (Hie_Level_t HieLvl,
                                              Qst_AnswerType_t AnsType)
   {
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
    extern const char *Tst_DB_Pluggable[TstCfg_NUM_OPTIONS_PLUGGABLE];
 
    /***** Get number of courses with test questions from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type

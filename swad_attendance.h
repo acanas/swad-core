@@ -110,7 +110,7 @@ void Att_UpdateEvent (struct Att_Event *Event,const char *Description);
 
 void Att_RemoveCrsEvents (long HieCod);
 
-unsigned Att_GetNumEvents (Hie_Level_t Level,unsigned *NumNotif);
+unsigned Att_GetNumEvents (Hie_Level_t HieLvl,unsigned *NumNotif);
 
 void Att_SeeOneEvent (void);
 

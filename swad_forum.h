@@ -172,6 +172,6 @@ void For_CutThread (void);
 void For_PasteThread (void);
 
 //-------------------------------- Figures ------------------------------------
-void For_GetAndShowForumStats (void);
+void For_GetAndShowForumStats (Hie_Level_t HieLvl);
 
 #endif

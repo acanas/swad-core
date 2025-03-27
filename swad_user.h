@@ -126,7 +126,7 @@ struct Usr_Last
    Sch_WhatToSearch_t WhatToSearch;	// Search courses, teachers, documents...?
    struct
      {
-      Hie_Level_t Level;	// Course, degree, center, etc.
+      Hie_Level_t HieLvl;	// Course, degree, center, etc.
       long HieCod;		// Course code, degree code, center code, etc.
      } LastHie;
    Act_Action_t LastAct;
@@ -257,13 +257,13 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
 			      struct Usr_SelectedUsrs *SelectedUsrs,
 			      bool ShowPhoto);
 
-void Usr_GetListUsrs (Hie_Level_t Level,Rol_Role_t Role);
+void Usr_GetListUsrs (Hie_Level_t HieLvl,Rol_Role_t Role);
 
-void Usr_SearchListUsrs (Rol_Role_t Role);
+void Usr_SearchListUsrs (Hie_Level_t HieLvl,Rol_Role_t Role);
 
 void Usr_GetUnorderedStdsCodesInDeg (long DegCod);
 
-void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Level_t Level);
+void Usr_GetListUsrsFromQuery (char *Query,Hie_Level_t HieLvl,Rol_Role_t Role);
 
 void Usr_CopyBasicUsrDataFromList (struct Usr_Data *UsrDat,
                                    const struct Usr_InList *UsrInList);
@@ -322,7 +322,7 @@ void Usr_WriteNumUsrsInList (Rol_Role_t Role);
 void Usr_ListAllDataGsts (void);
 void Usr_ListAllDataStds (void);
 void Usr_ListAllDataTchs (void);
-unsigned Usr_ListUsrsFound (Rol_Role_t Role,
+unsigned Usr_ListUsrsFound (Hie_Level_t HieLvl,Rol_Role_t Role,
                             const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1]);
 void Usr_ListDataAdms (void);
 
@@ -341,7 +341,7 @@ void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1]);
 
 void Usr_ShowWarningNoUsersFound (Rol_Role_t Role);
 
-unsigned Usr_GetTotalNumberOfUsers (void);
+unsigned Usr_GetTotalNumberOfUsers (Hie_Level_t HieLvl);
 
 void Usr_WriteAuthor (struct Usr_Data *UsrDat,For_Disabled_t Disabled);
 void Usr_WriteAuthor1Line (long UsrCod,HidVis_HiddenOrVisible_t HiddenOrVisible);
@@ -353,7 +353,7 @@ void Usr_PutParWho (Usr_Who_t Who);
 Usr_Who_t Usr_GetParWho (void);
 
 //-------------------------------- Figures ------------------------------------
-void Usr_GetAndShowUsersStats (void);
-void Usr_GetAndShowUsersRanking (void);
+void Usr_GetAndShowUsersStats (Hie_Level_t HieLvl);
+void Usr_GetAndShowUsersRanking (Hie_Level_t HieLvl);
 
 #endif

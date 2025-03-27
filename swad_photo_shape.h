@@ -48,6 +48,6 @@ void PhoSha_ChangePhotoShape (void);
 PhoSha_Shape_t PhoSha_GetParPhotoShape (void);
 PhoSha_Shape_t PhoSha_GetShapeFromStr (const char *Str);
 
-void PhoSha_GetAndShowNumUsrsPerPhotoShape (void);
+void PhoSha_GetAndShowNumUsrsPerPhotoShape (Hie_Level_t HieLvl);
 
 #endif

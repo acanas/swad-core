@@ -59,11 +59,13 @@ unsigned Ins_DB_GetInssInCtyOrderedByShrtName (MYSQL_RES **mysql_res,long HieCod
 unsigned Ins_DB_GetInssInCtyOrderedByFullName (MYSQL_RES **mysql_res,long HieCod);
 unsigned Ins_DB_GetFullListOfInssInCty (MYSQL_RES **mysql_res,long HieCod);
 
-unsigned Ins_DB_GetInssOrderedByNumCtrs (MYSQL_RES **mysql_res);
-unsigned Ins_DB_GetInssOrderedByNumDegs (MYSQL_RES **mysql_res);
-unsigned Ins_DB_GetInssOrderedByNumCrss (MYSQL_RES **mysql_res);
-unsigned Ins_DB_GetInssOrderedByNumUsrsInCrss (MYSQL_RES **mysql_res);
-unsigned Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (MYSQL_RES **mysql_res);
+unsigned Ins_DB_GetInssOrderedByNumCtrs (MYSQL_RES **mysql_res,Hie_Level_t HieLvl);
+unsigned Ins_DB_GetInssOrderedByNumDegs (MYSQL_RES **mysql_res,Hie_Level_t HieLvl);
+unsigned Ins_DB_GetInssOrderedByNumCrss (MYSQL_RES **mysql_res,Hie_Level_t HieLvl);
+unsigned Ins_DB_GetInssOrderedByNumUsrsInCrss (MYSQL_RES **mysql_res,
+					       Hie_Level_t HieLvl);
+unsigned Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (MYSQL_RES **mysql_res,
+							       Hie_Level_t HieLvl);
 
 unsigned Ins_DB_SearchInss (MYSQL_RES **mysql_res,
                             const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
@@ -72,11 +74,10 @@ unsigned Ins_DB_SearchInss (MYSQL_RES **mysql_res,
 unsigned Ins_DB_GetNumInssInSys (__attribute__((unused)) long HieCod);
 unsigned Ins_DB_GetNumInssInCty (long CtyCod);
 
-unsigned Ins_DB_GetNumInssWithCtrs (Hie_Level_t Level,long HieCod);
-unsigned Ins_DB_GetNumInssWithDegs (Hie_Level_t Level,long HieCod);
-unsigned Ins_DB_GetNumInssWithCrss (Hie_Level_t Level,long HieCod);
-unsigned Ins_DB_GetNumInnsWithUsrs (Rol_Role_t Role,
-                                    Hie_Level_t Level,long HieCod);
+unsigned Ins_DB_GetNumInssWithCtrs (Hie_Level_t HieLvl,long HieCod);
+unsigned Ins_DB_GetNumInssWithDegs (Hie_Level_t HieLvl,long HieCod);
+unsigned Ins_DB_GetNumInssWithCrss (Hie_Level_t HieLvl,long HieCod);
+unsigned Ins_DB_GetNumInnsWithUsrs (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Role);
 
 unsigned Ins_DB_GetMyInss (MYSQL_RES **mysql_res,long HieCod);
 Usr_Belong_t Ins_DB_CheckIfUsrBelongsToIns (long UsrCod,long HieCod,

@@ -509,9 +509,10 @@ unsigned Ntf_DB_GetUsrsWhoMustBeNotified (MYSQL_RES **mysql_res)
 /****************** Get number of notifications by email *********************/
 /*****************************************************************************/
 
-unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,Ntf_NotifyEvent_t NotifyEvent)
+unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,
+			      Hie_Level_t HieLvl,Ntf_NotifyEvent_t NotifyEvent)
   {
-   switch (Gbl.Scope.Current)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return (unsigned)

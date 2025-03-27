@@ -123,9 +123,10 @@ static Hie_StatusTxt_t Hie_GetStatusTxtFromStatusBits (Hie_Status_t Status);
 static Hie_Status_t Hie_GetStatusBitsFromStatusTxt (Hie_StatusTxt_t StatusTxt);
 
 static void Hie_WriteHeadHierarchy (void);
-static void Hie_GetAndShowHierarchyWithNodes (Hie_Level_t HavingNodesOfLevel);
-static void Hie_GetAndShowHierarchyWithUsrs (Rol_Role_t Role);
-static void Hie_GetAndShowHierarchyTotal (void);
+static void Hie_GetAndShowHierarchyWithNodes (Hie_Level_t HieLvl,
+					      Hie_Level_t HavingNodesOfLevel);
+static void Hie_GetAndShowHierarchyWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role);
+static void Hie_GetAndShowHierarchyTotal (Hie_Level_t HieLvl);
 static void Hie_ShowHierarchyRow (const char *Text1,const char *Text2,
 				  const char *ClassTxt,
 				  int NumNodes[Hie_NUM_LEVELS]);
@@ -136,8 +137,8 @@ static void Hie_WriteListMyHierarchyToSelectNode (void);
 static void Hie_PutIconToSearchCourses (__attribute__((unused)) void *Args);
 static void Hie_WriteMyHierarchyNodes (struct Hie_Node Hie[Hie_NUM_LEVELS],
 			               Lay_LastItem_t IsLastItemInLevel[1 + 6],
-			               Hie_Level_t Level);
-static void Hie_WriteRowMyHierarchy (Hie_Level_t Level,
+			               Hie_Level_t HieLvl);
+static void Hie_WriteRowMyHierarchy (Hie_Level_t HieLvl,
 				     const struct Hie_Node Hie[Hie_NUM_LEVELS],
 				     Lay_Highlight_t Highlight,
 				     Lay_LastItem_t IsLastItemInLevel[1 + 6]);
@@ -177,26 +178,26 @@ void Hie_WriteMenuHierarchy (void)
       [Hie_DEG] = Deg_WriteSelectorOfDegree,
       [Hie_CRS] = Crs_WriteSelectorOfCourse,
      };
-   Hie_Level_t Level;
-   Hie_Level_t LastLevel = Gbl.Hierarchy.Level + 1;
+   Hie_Level_t HieLvl;
+   Hie_Level_t LastHieLvl = Gbl.Hierarchy.HieLvl + 1;
 
    /***** Begin table *****/
    HTM_TABLE_BeginCenterPadding (2);
 
-      for (Level  = Hie_CTY;
-	   Level <= LastLevel;
-	   Level++)
+      for (HieLvl  = Hie_CTY;
+	   HieLvl <= LastHieLvl;
+	   HieLvl++)
         {
 	 /***** Write selector of nodes *****/
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT",Par_CodeStr[Hie_ParCod[Level]],
-			     Txt_HIERARCHY_SINGUL_Abc[Level]);
+	    Frm_LabelColumn ("RT",Par_CodeStr[Hie_ParCod[HieLvl]],
+			     Txt_HIERARCHY_SINGUL_Abc[HieLvl]);
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
-	       FunctionWriteSelector[Level] ();
+	       FunctionWriteSelector[HieLvl] ();
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -405,7 +406,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
 
    HTM_DIV_Begin ("class=\"BC%s BC_%s\"",
-		   (Gbl.Hierarchy.Level == Hie_CRS) ? "" :
+		   (Gbl.Hierarchy.HieLvl == Hie_CRS) ? "" :
 		  ((Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0) ? " BC_SEMIOFF" :
 							      " BC_OFF"),
 		  The_GetSuffix ());
@@ -440,18 +441,18 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
       HTM_DIV_Begin ("id=\"big_name_container\"");
 
 	 Frm_BeginForm (ActMnu);
-	    Par_PutParUnsigned (NULL,"NxtTab",(unsigned) NextTab[Gbl.Hierarchy.Level]);
-	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].ShrtName,
+	    Par_PutParUnsigned (NULL,"NxtTab",(unsigned) NextTab[Gbl.Hierarchy.HieLvl]);
+	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Node[Gbl.Hierarchy.HieLvl].ShrtName,
 				     "class=\"BT_LINK ICO_HIGHLIGHT\"");
 
 	       HTM_DIV_Begin ("id=\"big_full_name\"");	// Full name
 		     Hie_DrawLogo ();
-		     HTM_Txt (Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].FullName);
+		     HTM_Txt (Gbl.Hierarchy.Node[Gbl.Hierarchy.HieLvl].FullName);
 	       HTM_DIV_End ();
 
 	       HTM_DIV_Begin ("id=\"big_short_name\"");	// Short name
 		     Hie_DrawLogo ();
-		     HTM_Txt (Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].ShrtName);
+		     HTM_Txt (Gbl.Hierarchy.Node[Gbl.Hierarchy.HieLvl].ShrtName);
 	       HTM_DIV_End ();
 
 	    HTM_BUTTON_End ();
@@ -469,7 +470,7 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
 static void Hie_DrawLogo (void)
   {
    /***** Logo *****/
-   Lgo_DrawLogo (Gbl.Hierarchy.Level,&Gbl.Hierarchy.Node[Gbl.Hierarchy.Level],
+   Lgo_DrawLogo (Gbl.Hierarchy.HieLvl,&Gbl.Hierarchy.Node[Gbl.Hierarchy.HieLvl],
 		 "TOP_LOGO ICO40x40");
   }
 
@@ -483,7 +484,7 @@ void Hie_SetHierarchyFromUsrLastHierarchy (void)
    Hie_ResetHierarchy ();
 
    /***** Copy last hierarchy code to current hierarchy *****/
-   Gbl.Hierarchy.Node[Gbl.Usrs.Me.UsrLast.LastHie.Level].HieCod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
+   Gbl.Hierarchy.Node[Gbl.Usrs.Me.UsrLast.LastHie.HieLvl].HieCod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
 
    /****** Initialize again current course, degree, center... ******/
    Hie_InitHierarchy ();
@@ -495,7 +496,7 @@ void Hie_SetHierarchyFromUsrLastHierarchy (void)
 
 void Hie_InitHierarchy (void)
   {
-   Hie_Level_t Level;
+   Hie_Level_t HieLvl;
 
    /***** If course code is available, get course data *****/
    if (Gbl.Hierarchy.Node[Hie_CRS].HieCod > 0)
@@ -550,18 +551,18 @@ void Hie_InitHierarchy (void)
 	     sizeof (Gbl.Hierarchy.Node[Hie_SYS].WWW     ) - 1);
 
    /***** Set current hierarchy level *****/
-   Gbl.Hierarchy.Level = Hie_SYS;
-   for (Level  = Hie_CRS;
-	Level >= Hie_CTY;
-	Level--)
-      if (Gbl.Hierarchy.Node[Level].HieCod > 0)
+   Gbl.Hierarchy.HieLvl = Hie_SYS;
+   for (HieLvl  = Hie_CRS;
+	HieLvl >= Hie_CTY;
+	HieLvl--)
+      if (Gbl.Hierarchy.Node[HieLvl].HieCod > 0)
         {
-	 Gbl.Hierarchy.Level = Level;
+	 Gbl.Hierarchy.HieLvl = HieLvl;
          break;
         }
 
    /***** Initialize paths *****/
-   if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+   if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
      {
       /***** Paths of course directories *****/
       snprintf (Gbl.Crs.Path.AbsPriv,sizeof (Gbl.Crs.Path.AbsPriv),"%s/%ld",
@@ -589,23 +590,23 @@ void Hie_InitHierarchy (void)
 
 void Hie_ResetHierarchy (void)
   {
-   Hie_Level_t Level;
+   Hie_Level_t HieLvl;
 
-   Gbl.Hierarchy.Level = Hie_UNK;
+   Gbl.Hierarchy.HieLvl = Hie_UNK;
 
-   for (Level  = (Hie_Level_t) 0;
-	Level <= (Hie_Level_t) Hie_NUM_LEVELS - 1;
-	Level++)
+   for (HieLvl  = (Hie_Level_t) 0;
+	HieLvl <= (Hie_Level_t) Hie_NUM_LEVELS - 1;
+	HieLvl++)
      {
-      Gbl.Hierarchy.List[Level].Num = 0;
-      Gbl.Hierarchy.List[Level].Lst = NULL;
-      Gbl.Hierarchy.List[Level].SelectedOrder = Hie_ORDER_DEFAULT;
-      Gbl.Hierarchy.Node[Level].HieCod = -1L;
-      Gbl.Hierarchy.Node[Level].PrtCod = -1L;
-      Gbl.Hierarchy.Node[Level].ShrtName[0] =
-      Gbl.Hierarchy.Node[Level].FullName[0] = '\0';
-      Gbl.Hierarchy.Node[Level].WWW[0]      = '\0';
-      Gbl.Usrs.Me.IBelongToCurrent[Level] = Usr_DONT_BELONG;
+      Gbl.Hierarchy.List[HieLvl].Num = 0;
+      Gbl.Hierarchy.List[HieLvl].Lst = NULL;
+      Gbl.Hierarchy.List[HieLvl].SelectedOrder = Hie_ORDER_DEFAULT;
+      Gbl.Hierarchy.Node[HieLvl].HieCod = -1L;
+      Gbl.Hierarchy.Node[HieLvl].PrtCod = -1L;
+      Gbl.Hierarchy.Node[HieLvl].ShrtName[0] =
+      Gbl.Hierarchy.Node[HieLvl].FullName[0] = '\0';
+      Gbl.Hierarchy.Node[HieLvl].WWW[0]      = '\0';
+      Gbl.Usrs.Me.IBelongToCurrent[HieLvl] = Usr_DONT_BELONG;
      }
    Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod = -1L;
    Gbl.Hierarchy.Node[Hie_DEG].Specific.TypCod = -1L;
@@ -874,14 +875,14 @@ Hie_Order_t Hie_GetParHieOrder (void)
 /***************** Free list of courses/degrees/centers... *******************/
 /*****************************************************************************/
 
-void Hie_FreeList (Hie_Level_t Level)
+void Hie_FreeList (Hie_Level_t HieLvl)
   {
-   if (Gbl.Hierarchy.List[Level].Lst)
+   if (Gbl.Hierarchy.List[HieLvl].Lst)
      {
       /***** Free memory used by the list of child nodes *****/
-      free (Gbl.Hierarchy.List[Level].Lst);
-      Gbl.Hierarchy.List[Level].Lst = NULL;
-      Gbl.Hierarchy.List[Level].Num = 0;
+      free (Gbl.Hierarchy.List[HieLvl].Lst);
+      Gbl.Hierarchy.List[HieLvl].Lst = NULL;
+      Gbl.Hierarchy.List[HieLvl].Num = 0;
      }
   }
 
@@ -891,16 +892,16 @@ void Hie_FreeList (Hie_Level_t Level)
 
 void Hie_ResetMyHierarchy (void)
   {
-   Hie_Level_t Level;
+   Hie_Level_t HieLvl;
 
-   for (Level  = Hie_CTY;
-	Level <= Hie_CRS;
-	Level++)
+   for (HieLvl  = Hie_CTY;
+	HieLvl <= Hie_CRS;
+	HieLvl++)
      {
-      Gbl.Usrs.Me.Hierarchy[Level].Nodes = NULL;
-      Gbl.Usrs.Me.Hierarchy[Level].Num = 0;
-      Gbl.Usrs.Me.Hierarchy[Level].Filled = false;
-      Gbl.Usrs.Me.IBelongToCurrent[Level] = Usr_DONT_BELONG;
+      Gbl.Usrs.Me.Hierarchy[HieLvl].Nodes = NULL;
+      Gbl.Usrs.Me.Hierarchy[HieLvl].Num = 0;
+      Gbl.Usrs.Me.Hierarchy[HieLvl].Filled = false;
+      Gbl.Usrs.Me.IBelongToCurrent[HieLvl] = Usr_DONT_BELONG;
      }
   }
 
@@ -910,7 +911,7 @@ void Hie_ResetMyHierarchy (void)
 
 void Hie_FreeMyHierarchy (void)
   {
-   Hie_Level_t Level;
+   Hie_Level_t HieLvl;
 
    /***** Remove temporary table with my courses *****/
    if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Filled)
@@ -918,13 +919,13 @@ void Hie_FreeMyHierarchy (void)
 
    /***** Free allocated memory
           for my courses/degrees/centers/institutions/countries *****/
-   for (Level  = Hie_CTY;
-	Level <= Hie_CRS;
-	Level++)
-      if (Gbl.Usrs.Me.Hierarchy[Level].Filled &&
-	  Gbl.Usrs.Me.Hierarchy[Level].Num &&
-	  Gbl.Usrs.Me.Hierarchy[Level].Nodes)
-         free (Gbl.Usrs.Me.Hierarchy[Level].Nodes);
+   for (HieLvl  = Hie_CTY;
+	HieLvl <= Hie_CRS;
+	HieLvl++)
+      if (Gbl.Usrs.Me.Hierarchy[HieLvl].Filled &&
+	  Gbl.Usrs.Me.Hierarchy[HieLvl].Num &&
+	  Gbl.Usrs.Me.Hierarchy[HieLvl].Nodes)
+         free (Gbl.Usrs.Me.Hierarchy[HieLvl].Nodes);
 
    Hie_ResetMyHierarchy ();
   }
@@ -934,7 +935,7 @@ void Hie_FreeMyHierarchy (void)
 /********* and store them in a list                                  *********/
 /*****************************************************************************/
 
-void Hie_GetMyHierarchy (Hie_Level_t Level)
+void Hie_GetMyHierarchy (Hie_Level_t HieLvl)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -943,7 +944,7 @@ void Hie_GetMyHierarchy (Hie_Level_t Level)
    long HieCod;
 
    /***** Trivial check 1: if list of nodes is already filled, there's nothing to do *****/
-   if (Gbl.Usrs.Me.Hierarchy[Level].Filled)
+   if (Gbl.Usrs.Me.Hierarchy[HieLvl].Filled)
       return;
 
    /***** Trivial check 2: if user's code is not set, don't query database *****/
@@ -951,21 +952,21 @@ void Hie_GetMyHierarchy (Hie_Level_t Level)
       return;
 
    /***** If retrieving my list of courses, create a temporary table with them *****/
-   if (Level == Hie_CRS)
+   if (HieLvl == Hie_CRS)
      {
       Enr_DB_DropTmpTableMyCourses ();
       Enr_DB_CreateTmpTableMyCourses ();
      }
 
    /***** Set default values *****/
-   Gbl.Usrs.Me.Hierarchy[Level].Num   = 0;
-   Gbl.Usrs.Me.Hierarchy[Level].Nodes = NULL;
+   Gbl.Usrs.Me.Hierarchy[HieLvl].Num   = 0;
+   Gbl.Usrs.Me.Hierarchy[HieLvl].Nodes = NULL;
 
    /***** Get my courses/degrees/centers/institutions/countries from database *****/
-   if ((NumNodes = Hie_GetMyNodesFromDB[Level] (&mysql_res,-1L)))
+   if ((NumNodes = Hie_GetMyNodesFromDB[HieLvl] (&mysql_res,-1L)))
      {
-      if ((Gbl.Usrs.Me.Hierarchy[Level].Nodes = malloc (NumNodes *
-							sizeof (*Gbl.Usrs.Me.Hierarchy[Level].Nodes))) == NULL)
+      if ((Gbl.Usrs.Me.Hierarchy[HieLvl].Nodes = malloc (NumNodes *
+							sizeof (*Gbl.Usrs.Me.Hierarchy[HieLvl].Nodes))) == NULL)
 	 Err_NotEnoughMemoryExit ();
       for (NumNode = 0;
 	   NumNode < NumNodes;
@@ -977,16 +978,16 @@ void Hie_GetMyHierarchy (Hie_Level_t Level)
 	 /* Get hierarchy code (row[0]) */
 	 if ((HieCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	   {
-	    Gbl.Usrs.Me.Hierarchy[Level].Nodes[Gbl.Usrs.Me.Hierarchy[Level].Num].HieCod  = HieCod;
+	    Gbl.Usrs.Me.Hierarchy[HieLvl].Nodes[Gbl.Usrs.Me.Hierarchy[HieLvl].Num].HieCod  = HieCod;
 
 	    /* Get role or maximum role (row[1]) in this node */
-	    Gbl.Usrs.Me.Hierarchy[Level].Nodes[Gbl.Usrs.Me.Hierarchy[Level].Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+	    Gbl.Usrs.Me.Hierarchy[HieLvl].Nodes[Gbl.Usrs.Me.Hierarchy[HieLvl].Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
 
 	    /* Get parent hierarchy code */
-	    if (Level == Hie_CRS)
-	       Gbl.Usrs.Me.Hierarchy[Level].Nodes[Gbl.Usrs.Me.Hierarchy[Level].Num].PrtCod = Str_ConvertStrCodToLongCod (row[2]);
+	    if (HieLvl == Hie_CRS)
+	       Gbl.Usrs.Me.Hierarchy[HieLvl].Nodes[Gbl.Usrs.Me.Hierarchy[HieLvl].Num].PrtCod = Str_ConvertStrCodToLongCod (row[2]);
 
-	    Gbl.Usrs.Me.Hierarchy[Level].Num++;
+	    Gbl.Usrs.Me.Hierarchy[HieLvl].Num++;
 	   }
 	}
      }
@@ -995,25 +996,25 @@ void Hie_GetMyHierarchy (Hie_Level_t Level)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Set boolean that indicates that my institutions are yet filled *****/
-   Gbl.Usrs.Me.Hierarchy[Level].Filled = true;
+   Gbl.Usrs.Me.Hierarchy[HieLvl].Filled = true;
   }
 
 /*****************************************************************************/
 /****** Check if I belong to a course/degree/center/institution/country ******/
 /*****************************************************************************/
 
-Usr_Belong_t Hie_CheckIfIBelongTo (Hie_Level_t Level,long HieCod)
+Usr_Belong_t Hie_CheckIfIBelongTo (Hie_Level_t HieLvl,long HieCod)
   {
    unsigned NumMyNode;
 
    /***** Fill the list with the nodes I belong to *****/
-   Hie_GetMyHierarchy (Level);
+   Hie_GetMyHierarchy (HieLvl);
 
    /***** Check if the node passed as parameter is any of my nodes *****/
    for (NumMyNode = 0;
-        NumMyNode < Gbl.Usrs.Me.Hierarchy[Level].Num;
+        NumMyNode < Gbl.Usrs.Me.Hierarchy[HieLvl].Num;
         NumMyNode++)
-      if (Gbl.Usrs.Me.Hierarchy[Level].Nodes[NumMyNode].HieCod == HieCod)
+      if (Gbl.Usrs.Me.Hierarchy[HieLvl].Nodes[NumMyNode].HieCod == HieCod)
          return Usr_BELONG;
    return Usr_DONT_BELONG;
   }
@@ -1022,16 +1023,16 @@ Usr_Belong_t Hie_CheckIfIBelongTo (Hie_Level_t Level,long HieCod)
 /*** Flush cache that stores if a user belongs to a node of the hierarchy ****/
 /*****************************************************************************/
 
-void Hie_FlushCacheUsrBelongsTo (Hie_Level_t Level)
+void Hie_FlushCacheUsrBelongsTo (Hie_Level_t HieLvl)
   {
-   Gbl.Cache.UsrBelongsTo[Level].Valid = false;
+   Gbl.Cache.UsrBelongsTo[HieLvl].Valid = false;
   }
 
 /*****************************************************************************/
 /******************** Check if a user belongs to a course ********************/
 /*****************************************************************************/
 
-Usr_Belong_t Hie_CheckIfUsrBelongsTo (Hie_Level_t Level,long UsrCod,long HieCod,
+Usr_Belong_t Hie_CheckIfUsrBelongsTo (Hie_Level_t HieLvl,long UsrCod,long HieCod,
 				      bool CountOnlyAcceptedCourses)
   {
    static Usr_Belong_t (*FunctionToGetIfUsrBelongsToFromDB[Hie_NUM_LEVELS]) (long UsrCod,long HieCod,
@@ -1044,7 +1045,7 @@ Usr_Belong_t Hie_CheckIfUsrBelongsTo (Hie_Level_t Level,long UsrCod,long HieCod,
      };
 
    /***** Check if level is correct *****/
-   if (!FunctionToGetIfUsrBelongsToFromDB[Level])
+   if (!FunctionToGetIfUsrBelongsToFromDB[HieLvl])
       Err_WrongHierarchyLevelExit ();
 
    /***** 1. Fast check: Trivial cases *****/
@@ -1053,20 +1054,20 @@ Usr_Belong_t Hie_CheckIfUsrBelongsTo (Hie_Level_t Level,long UsrCod,long HieCod,
       return Usr_DONT_BELONG;
 
    /***** 2. Fast check: If cached... *****/
-   if (Gbl.Cache.UsrBelongsTo[Level].Valid &&
-       UsrCod == Gbl.Cache.UsrBelongsTo[Level].UsrCod &&
-       HieCod == Gbl.Cache.UsrBelongsTo[Level].HieCod &&
-       CountOnlyAcceptedCourses == Gbl.Cache.UsrBelongsTo[Level].CountOnlyAcceptedCourses)
-      return Gbl.Cache.UsrBelongsTo[Level].Belongs;
+   if (Gbl.Cache.UsrBelongsTo[HieLvl].Valid &&
+       UsrCod == Gbl.Cache.UsrBelongsTo[HieLvl].UsrCod &&
+       HieCod == Gbl.Cache.UsrBelongsTo[HieLvl].HieCod &&
+       CountOnlyAcceptedCourses == Gbl.Cache.UsrBelongsTo[HieLvl].CountOnlyAcceptedCourses)
+      return Gbl.Cache.UsrBelongsTo[HieLvl].Belongs;
 
    /***** 3. Slow check: Get if user belongs to hierarchy node from database *****/
-   Gbl.Cache.UsrBelongsTo[Level].UsrCod = UsrCod;
-   Gbl.Cache.UsrBelongsTo[Level].HieCod = HieCod;
-   Gbl.Cache.UsrBelongsTo[Level].CountOnlyAcceptedCourses = CountOnlyAcceptedCourses;
-   Gbl.Cache.UsrBelongsTo[Level].Belongs = FunctionToGetIfUsrBelongsToFromDB[Level] (UsrCod,HieCod,
+   Gbl.Cache.UsrBelongsTo[HieLvl].UsrCod = UsrCod;
+   Gbl.Cache.UsrBelongsTo[HieLvl].HieCod = HieCod;
+   Gbl.Cache.UsrBelongsTo[HieLvl].CountOnlyAcceptedCourses = CountOnlyAcceptedCourses;
+   Gbl.Cache.UsrBelongsTo[HieLvl].Belongs = FunctionToGetIfUsrBelongsToFromDB[HieLvl] (UsrCod,HieCod,
 										     CountOnlyAcceptedCourses);
-   Gbl.Cache.UsrBelongsTo[Level].Valid = true;
-   return Gbl.Cache.UsrBelongsTo[Level].Belongs;
+   Gbl.Cache.UsrBelongsTo[HieLvl].Valid = true;
+   return Gbl.Cache.UsrBelongsTo[HieLvl].Belongs;
   }
 
 /*****************************************************************************/
@@ -1074,7 +1075,7 @@ Usr_Belong_t Hie_CheckIfUsrBelongsTo (Hie_Level_t Level,long UsrCod,long HieCod,
 /********* (countries, institutions, centers, degrees and courses) ***********/
 /*****************************************************************************/
 
-void Hie_GetAndShowHierarchyStats (void)
+void Hie_GetAndShowHierarchyStats (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_hierarchy;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -1092,16 +1093,16 @@ void Hie_GetAndShowHierarchyStats (void)
       for (HavingNodesOfLevel  = Hie_INS;
 	   HavingNodesOfLevel <= Hie_CRS;
 	   HavingNodesOfLevel++)
-         Hie_GetAndShowHierarchyWithNodes (HavingNodesOfLevel);
+         Hie_GetAndShowHierarchyWithNodes (HieLvl,HavingNodesOfLevel);
 
       /* Rows with number of nodes having users of each role */
       for (Role  = Rol_TCH;
 	   Role >= Rol_STD;
 	   Role--)
-	 Hie_GetAndShowHierarchyWithUsrs (Role);
+	 Hie_GetAndShowHierarchyWithUsrs (HieLvl,Role);
 
       /* Row with total nodes */
-      Hie_GetAndShowHierarchyTotal ();
+      Hie_GetAndShowHierarchyTotal (HieLvl);
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -1114,21 +1115,21 @@ void Hie_GetAndShowHierarchyStats (void)
 static void Hie_WriteHeadHierarchy (void)
   {
    extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
-   Hie_Level_t Level;
+   Hie_Level_t HieLvl;
 
    HTM_TR_Begin (NULL);
 
       HTM_TH_Empty (1);
 
-      for (Level  = Hie_CTY;
-	   Level <= Hie_CRS;
-	   Level++)
+      for (HieLvl  = Hie_CTY;
+	   HieLvl <= Hie_CRS;
+	   HieLvl++)
 	{
 	 HTM_TH_Begin (HTM_HEAD_RIGHT);
-	    Ico_PutIcon (Hie_Icons[Level],Ico_BLACK,
-			 Txt_HIERARCHY_PLURAL_Abc[Level],"ICOx16");
+	    Ico_PutIcon (Hie_Icons[HieLvl],Ico_BLACK,
+			 Txt_HIERARCHY_PLURAL_Abc[HieLvl],"ICOx16");
 	    HTM_BR ();
-	    HTM_Txt (Txt_HIERARCHY_PLURAL_Abc[Level]);
+	    HTM_Txt (Txt_HIERARCHY_PLURAL_Abc[HieLvl]);
 	 HTM_TH_End ();
 	}
 
@@ -1139,27 +1140,28 @@ static void Hie_WriteHeadHierarchy (void)
 /********* Get and show number of elements in hierarchy with nodes ***********/
 /*****************************************************************************/
 
-static void Hie_GetAndShowHierarchyWithNodes (Hie_Level_t HavingNodesOfLevel)
+static void Hie_GetAndShowHierarchyWithNodes (Hie_Level_t HieLvl,
+					      Hie_Level_t HavingNodesOfLevel)
   {
    extern const char *Txt_With_;
    extern const char *Txt_HIERARCHY_PLURAL_abc[Hie_NUM_LEVELS];
    int NumNodes[Hie_NUM_LEVELS];
-   Hie_Level_t LevelChildren;
+   Hie_Level_t HieLvlChild;
 
    /***** Get number of elements with courses *****/
    // For each level country, institution, center, degree and course...
-   for (LevelChildren  = Hie_CTY;
-        LevelChildren <= Hie_CRS;
-        LevelChildren++)
-      if (LevelChildren >= HavingNodesOfLevel)		// Example: don't show number of centers with institutions
-	 NumNodes[LevelChildren] = -1;
-      else if (HavingNodesOfLevel <= Gbl.Scope.Current)	// Example: if scope is center (4)
-	                                     		//          number of nodes with instit./countries/centers
-	 NumNodes[LevelChildren] = 1;			//          in current center is 1
+   for (HieLvlChild  = Hie_CTY;
+        HieLvlChild <= Hie_CRS;
+        HieLvlChild++)
+      if (HieLvlChild >= HavingNodesOfLevel)	// Example: don't show number of centers with institutions
+	 NumNodes[HieLvlChild] = -1;
+      else if (HavingNodesOfLevel <= HieLvl)	// Example: if scope is center (4)
+	                                     	//          number of nodes with instit./countries/centers
+	 NumNodes[HieLvlChild] = 1;		//          in current center is 1
       else
-         NumNodes[LevelChildren] = (int) Hie_GetCachedNumNodesInHieLvlWith (LevelChildren,	// Child
-        							            Gbl.Scope.Current,	// Parent
-        							            HavingNodesOfLevel);// Grand child
+         NumNodes[HieLvlChild] = (int) Hie_GetCachedNumNodesInHieLvlWith (HieLvlChild,		// Child
+        							          HieLvl,		// Parent
+        							          HavingNodesOfLevel);	// Grand child
 
    /***** Write number of elements with courses *****/
    Hie_ShowHierarchyRow (Txt_With_,Txt_HIERARCHY_PLURAL_abc[HavingNodesOfLevel],
@@ -1170,11 +1172,11 @@ static void Hie_GetAndShowHierarchyWithNodes (Hie_Level_t HavingNodesOfLevel)
 /********** Get and show number of elements in hierarchy with users **********/
 /*****************************************************************************/
 
-static void Hie_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
+static void Hie_GetAndShowHierarchyWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role)
   {
    extern const char *Txt_With_;
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   static unsigned (*FunctionGetCachedNumNodesWithusrs[Hie_NUM_LEVELS]) (Rol_Role_t Role) =
+   static unsigned (*FunctionGetCachedNumNodesWithusrs[Hie_NUM_LEVELS]) (Hie_Level_t HieLvl,Rol_Role_t Role) =
      {
       [Hie_CTY] = Cty_GetCachedNumCtysWithUsrs,
       [Hie_INS] = Ins_GetCachedNumInssWithUsrs,
@@ -1183,13 +1185,13 @@ static void Hie_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
       [Hie_CRS] = Crs_GetCachedNumCrssWithUsrs,
      };
    int NumNodes[Hie_NUM_LEVELS];
-   Hie_Level_t Level;
+   Hie_Level_t L;
 
    /***** Get number of nodes with users *****/
-   for (Level  = Hie_CTY;
-        Level <= Hie_CRS;
-        Level++)
-      NumNodes[Level] = FunctionGetCachedNumNodesWithusrs[Level] (Role);
+   for (L  = Hie_CTY;
+        L <= Hie_CRS;
+        L++)
+      NumNodes[L] = FunctionGetCachedNumNodesWithusrs[L] (HieLvl,Role);
 
    /***** Write number of elements with users *****/
    Hie_ShowHierarchyRow (Txt_With_,Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN],
@@ -1200,21 +1202,21 @@ static void Hie_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
 /************ Get and show total number of elements in hierarchy *************/
 /*****************************************************************************/
 
-static void Hie_GetAndShowHierarchyTotal (void)
+static void Hie_GetAndShowHierarchyTotal (Hie_Level_t HieLvl)
   {
    extern const char *Txt_Total;
-   Hie_Level_t Level;
+   Hie_Level_t L;
    int NumNodes[Hie_NUM_LEVELS];
 
    /***** Get total number of nodes of each level in current scope *****/
-   for (Level  = Hie_CTY;
-	Level <= Hie_CRS;
-	Level++)
-      if (Level > Gbl.Scope.Current)
-	 NumNodes[Level] = (int) Hie_GetCachedNumNodesInHieLvl (Level,Gbl.Scope.Current,
-							        Gbl.Hierarchy.Node[Gbl.Scope.Current].HieCod);
+   for (L  = Hie_CTY;
+	L <= Hie_CRS;
+	L++)
+      if (L > HieLvl)
+	 NumNodes[L] = (int) Hie_GetCachedNumNodesInHieLvl (L,HieLvl,
+							    Gbl.Hierarchy.Node[HieLvl].HieCod);
       else
-	 NumNodes[Level] = 1;
+	 NumNodes[L] = 1;
 
    /***** Write total number of elements *****/
    Hie_ShowHierarchyRow ("",Txt_Total,"LINE_TOP DAT_STRONG",NumNodes);
@@ -1224,28 +1226,28 @@ static void Hie_GetAndShowHierarchyTotal (void)
 /**** Get total number of courses/degrees/centers/institutions in country ****/
 /*****************************************************************************/
 
-void Hie_FlushCachedNumNodesInHieLvl (Hie_Level_t LevelChildren,
-		      		      Hie_Level_t LevelParent)
+void Hie_FlushCachedNumNodesInHieLvl (Hie_Level_t HieLvlChild,
+		      		      Hie_Level_t HieLvlParent)
   {
-   Gbl.Cache.NumNodesInHieLvl[LevelChildren][LevelParent].Valid = false;
+   Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].Valid = false;
   }
 
-unsigned Hie_GetCachedNumNodesInHieLvl (Hie_Level_t LevelChildren,
-		      		        Hie_Level_t LevelParent,long HieCod)
+unsigned Hie_GetCachedNumNodesInHieLvl (Hie_Level_t HieLvlChild,
+		      		        Hie_Level_t HieLvlParent,long HieCod)
   {
    unsigned NumNodes;
 
    /***** Get number of nodes from cache *****/
-   if (!FigCch_GetFigureFromCache (Hie_FiguresCached[LevelChildren],LevelParent,HieCod,
+   if (!FigCch_GetFigureFromCache (Hie_FiguresCached[HieLvlChild],HieLvlParent,HieCod,
 				   FigCch_UNSIGNED,&NumNodes))
       /***** Get current number of nodes from database and update cache *****/
-      NumNodes = Hie_GetNumNodesInHieLvl (LevelChildren,LevelParent,HieCod);
+      NumNodes = Hie_GetNumNodesInHieLvl (HieLvlChild,HieLvlParent,HieCod);
 
    return NumNodes;
   }
 
-unsigned Hie_GetNumNodesInHieLvl (Hie_Level_t LevelChildren,
-		      	          Hie_Level_t LevelParent,long HieCod)
+unsigned Hie_GetNumNodesInHieLvl (Hie_Level_t HieLvlChild,
+		      	          Hie_Level_t HieLvlParent,long HieCod)
   {
    static unsigned (*FunctionGetFigure[Hie_NUM_LEVELS][Hie_NUM_LEVELS]) (long HieCod) =
      {
@@ -1272,26 +1274,26 @@ unsigned Hie_GetNumNodesInHieLvl (Hie_Level_t LevelChildren,
      };
 
    /***** 1. Fast check: If cached... *****/
-   if (Gbl.Cache.NumNodesInHieLvl[LevelChildren][LevelParent].Valid &&
-       HieCod == Gbl.Cache.NumNodesInHieLvl[LevelChildren][LevelParent].HieCod)
-      return Gbl.Cache.NumNodesInHieLvl[LevelChildren][LevelParent].Num;
+   if (Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].Valid &&
+       HieCod == Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].HieCod)
+      return Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].Num;
 
    /***** 2. Slow: number of institutions in a country from database *****/
-   Gbl.Cache.NumNodesInHieLvl[LevelChildren][LevelParent].HieCod = HieCod;
-   Gbl.Cache.NumNodesInHieLvl[LevelChildren][LevelParent].Num    = FunctionGetFigure[LevelChildren][LevelParent] (HieCod);
-   Gbl.Cache.NumNodesInHieLvl[LevelChildren][LevelParent].Valid  = true;
-   FigCch_UpdateFigureIntoCache (Hie_FiguresCached[LevelChildren],LevelParent,
-				 Gbl.Cache.NumNodesInHieLvl[LevelChildren][LevelParent].HieCod,
-				 FigCch_UNSIGNED,&Gbl.Cache.NumNodesInHieLvl[LevelChildren][LevelParent].Num);
-   return Gbl.Cache.NumNodesInHieLvl[LevelChildren][LevelParent].Num;
+   Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].HieCod = HieCod;
+   Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].Num    = FunctionGetFigure[HieLvlChild][HieLvlParent] (HieCod);
+   Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].Valid  = true;
+   FigCch_UpdateFigureIntoCache (Hie_FiguresCached[HieLvlChild],HieLvlParent,
+				 Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].HieCod,
+				 FigCch_UNSIGNED,&Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].Num);
+   return Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].Num;
   }
 
 /*****************************************************************************/
 /**** Get number of children nodes in parent node having nodes of a level ****/
 /*****************************************************************************/
 
-unsigned Hie_GetCachedNumNodesInHieLvlWith (Hie_Level_t LevelChildren,
-					    Hie_Level_t LevelParent,
+unsigned Hie_GetCachedNumNodesInHieLvlWith (Hie_Level_t HieLvlChild,
+					    Hie_Level_t HieLvlParent,
 					    Hie_Level_t HavingNodesOfLevel)
   {
    // Example: number of centers with courses in current institution
@@ -1315,7 +1317,8 @@ unsigned Hie_GetCachedNumNodesInHieLvlWith (Hie_Level_t LevelChildren,
 
       [Hie_DEG][Hie_CRS] = FigCch_NUM_DEGS_WITH_CRSS,
      };
-   static unsigned (*FunctionGetFigure[Hie_NUM_LEVELS][Hie_NUM_LEVELS]) (Hie_Level_t Level,long HieCod) =
+   static unsigned (*FunctionGetFigure[Hie_NUM_LEVELS][Hie_NUM_LEVELS]) (Hie_Level_t HieLvl,
+									 long HieCod) =
      {
      // Child / Grandchild
       [Hie_CTY][Hie_INS] = Cty_DB_GetNumCtysWithInss,
@@ -1335,14 +1338,15 @@ unsigned Hie_GetCachedNumNodesInHieLvlWith (Hie_Level_t LevelChildren,
    unsigned NumNodes;
 
    /***** Get number of centers with degrees from cache *****/
-   if (!FigCch_GetFigureFromCache (Figure[LevelChildren][HavingNodesOfLevel],
-				   LevelParent,Gbl.Hierarchy.Node[LevelParent].HieCod,
+   if (!FigCch_GetFigureFromCache (Figure[HieLvlChild][HavingNodesOfLevel],
+				   HieLvlParent,Gbl.Hierarchy.Node[HieLvlParent].HieCod,
 				   FigCch_UNSIGNED,&NumNodes))
      {
       /***** Get current number of nodes with degrees from database and update cache *****/
-      NumNodes = FunctionGetFigure[LevelChildren][HavingNodesOfLevel] (LevelParent,Gbl.Hierarchy.Node[LevelParent].HieCod);
-      FigCch_UpdateFigureIntoCache (Figure[LevelChildren][HavingNodesOfLevel],
-				    LevelParent,Gbl.Hierarchy.Node[LevelParent].HieCod,
+      NumNodes = FunctionGetFigure[HieLvlChild][HavingNodesOfLevel] (HieLvlParent,
+								       Gbl.Hierarchy.Node[HieLvlParent].HieCod);
+      FigCch_UpdateFigureIntoCache (Figure[HieLvlChild][HavingNodesOfLevel],
+				    HieLvlParent,Gbl.Hierarchy.Node[HieLvlParent].HieCod,
 				    FigCch_UNSIGNED,&NumNodes);
      }
 
@@ -1353,12 +1357,12 @@ unsigned Hie_GetCachedNumNodesInHieLvlWith (Hie_Level_t LevelChildren,
 /******** Get number of users who claim to belong to a hierarchy node ********/
 /*****************************************************************************/
 
-void Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_Level_t Level)
+void Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_Level_t HieLvl)
   {
-   Gbl.Cache.NumUsrsWhoClaimToBelongTo[Level].Valid = false;
+   Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].Valid = false;
   }
 
-unsigned Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_Level_t Level,
+unsigned Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_Level_t HieLvl,
 						 struct Hie_Node *Node)
   {
    static FigCch_FigureCached_t Figure[Hie_NUM_LEVELS] =
@@ -1370,16 +1374,16 @@ unsigned Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_Level_t Level,
    unsigned NumUsrs;
 
    /***** Get number of users who claim to belong to hierarchy node from cache *****/
-   if (!FigCch_GetFigureFromCache (Figure[Level],Level,Node->HieCod,
+   if (!FigCch_GetFigureFromCache (Figure[HieLvl],HieLvl,Node->HieCod,
                                    FigCch_UNSIGNED,&NumUsrs))
       /***** Get current number of users who claim to belong to hierarchy node
              from database and update cache *****/
-      NumUsrs = Hie_GetNumUsrsWhoClaimToBelongTo (Level,Node);
+      NumUsrs = Hie_GetNumUsrsWhoClaimToBelongTo (HieLvl,Node);
 
    return NumUsrs;
   }
 
-unsigned Hie_GetNumUsrsWhoClaimToBelongTo (Hie_Level_t Level,
+unsigned Hie_GetNumUsrsWhoClaimToBelongTo (Hie_Level_t HieLvl,
 					   struct Hie_Node *Node)
   {
    static FigCch_FigureCached_t Figure[Hie_NUM_LEVELS] =
@@ -1404,23 +1408,23 @@ unsigned Hie_GetNumUsrsWhoClaimToBelongTo (Hie_Level_t Level,
       return Node->NumUsrsWhoClaimToBelong.NumUsrs;
 
    /***** 3. Fast check: If cached... *****/
-   if (Gbl.Cache.NumUsrsWhoClaimToBelongTo[Level].Valid &&
-       Node->HieCod == Gbl.Cache.NumUsrsWhoClaimToBelongTo[Level].HieCod)
+   if (Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].Valid &&
+       Node->HieCod == Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].HieCod)
      {
-      Node->NumUsrsWhoClaimToBelong.NumUsrs = Gbl.Cache.NumUsrsWhoClaimToBelongTo[Level].NumUsrs;
+      Node->NumUsrsWhoClaimToBelong.NumUsrs = Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].NumUsrs;
       Node->NumUsrsWhoClaimToBelong.Valid = true;
       return Node->NumUsrsWhoClaimToBelong.NumUsrs;
      }
 
    /***** 4. Slow: number of users who claim to belong to a hierarchy node
                    from database *****/
-   Gbl.Cache.NumUsrsWhoClaimToBelongTo[Level].HieCod  = Node->HieCod;
-   Gbl.Cache.NumUsrsWhoClaimToBelongTo[Level].NumUsrs =
-   Node->NumUsrsWhoClaimToBelong.NumUsrs = FunctionToGetNumUsrsWhoClaimToBelongToFromDB[Level] (Node->HieCod);
-   Gbl.Cache.NumUsrsWhoClaimToBelongTo[Level].Valid =
+   Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].HieCod  = Node->HieCod;
+   Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].NumUsrs =
+   Node->NumUsrsWhoClaimToBelong.NumUsrs = FunctionToGetNumUsrsWhoClaimToBelongToFromDB[HieLvl] (Node->HieCod);
+   Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].Valid =
    Node->NumUsrsWhoClaimToBelong.Valid = true;
-   FigCch_UpdateFigureIntoCache (Figure[Level],Level,Gbl.Cache.NumUsrsWhoClaimToBelongTo[Level].HieCod,
-				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongTo[Level].NumUsrs);
+   FigCch_UpdateFigureIntoCache (Figure[HieLvl],HieLvl,Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].HieCod,
+				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].NumUsrs);
    return Node->NumUsrsWhoClaimToBelong.NumUsrs;
   }
 
@@ -1432,7 +1436,7 @@ static void Hie_ShowHierarchyRow (const char *Text1,const char *Text2,
 				  const char *ClassTxt,
 				  int NumNodes[Hie_NUM_LEVELS])
   {
-   Hie_Level_t Level;
+   Hie_Level_t HieLvl;
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -1444,10 +1448,10 @@ static void Hie_ShowHierarchyRow (const char *Text1,const char *Text2,
       HTM_TD_End ();
 
       /***** Write number of countries *****/
-      for (Level  = Hie_CTY;
-	   Level <= Hie_CRS;
-	   Level++)
-         Hie_ShowHierarchyCell (ClassTxt,NumNodes[Level]);
+      for (HieLvl  = Hie_CTY;
+	   HieLvl <= Hie_CRS;
+	   HieLvl++)
+         Hie_ShowHierarchyCell (ClassTxt,NumNodes[HieLvl]);
 
    /***** End row *****/
    HTM_TR_End ();
@@ -1562,7 +1566,7 @@ static void Hie_PutIconToSearchCourses (__attribute__((unused)) void *Args)
 
 static void Hie_WriteMyHierarchyNodes (struct Hie_Node Hie[Hie_NUM_LEVELS],
 			               Lay_LastItem_t IsLastItemInLevel[1 + 6],
-			               Hie_Level_t Level)
+			               Hie_Level_t HieLvl)
   {
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    Lay_Highlight_t Highlight;	// Highlight because degree, course, etc. is selected
@@ -1571,8 +1575,8 @@ static void Hie_WriteMyHierarchyNodes (struct Hie_Node Hie[Hie_NUM_LEVELS],
    unsigned NumNode;
    unsigned NumNodes;
 
-   if (Level > Hie_SYS)
-      NumNodes = Hie_GetMyNodesFromDB[Level] (&mysql_res,Hie[Level - 1].HieCod);
+   if (HieLvl > Hie_SYS)
+      NumNodes = Hie_GetMyNodesFromDB[HieLvl] (&mysql_res,Hie[HieLvl - 1].HieCod);
    else
       NumNodes = 1;
 
@@ -1580,42 +1584,42 @@ static void Hie_WriteMyHierarchyNodes (struct Hie_Node Hie[Hie_NUM_LEVELS],
 	NumNode < NumNodes;
 	NumNode++)
      {
-      if (Level > Hie_SYS)
+      if (HieLvl > Hie_SYS)
         {
          /***** Get next node *****/
          row = mysql_fetch_row (mysql_res);
-         Hie[Level].HieCod = Str_ConvertStrCodToLongCod (row[0]);
+         Hie[HieLvl].HieCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	 /***** Get data of this node *****/
-	 if (!Hie_GetDataByCod[Level] (&Hie[Level]))
+	 if (!Hie_GetDataByCod[HieLvl] (&Hie[HieLvl]))
 	    Err_WrongCountrExit ();
         }
       else
         {
-	 Hie[Level].HieCod = -1L;
-	 Str_Copy (Hie[Level].ShrtName,Txt_HIERARCHY_SINGUL_Abc[Level],
-		   sizeof (Hie[Level].ShrtName) - 1);
+	 Hie[HieLvl].HieCod = -1L;
+	 Str_Copy (Hie[HieLvl].ShrtName,Txt_HIERARCHY_SINGUL_Abc[HieLvl],
+		   sizeof (Hie[HieLvl].ShrtName) - 1);
         }
 
       /***** Write link to node *****/
-      if (Level < Hie_CRS)
-	 Highlight = (Gbl.Hierarchy.Node[Level + 1].HieCod <= 0 &&
-		      Gbl.Hierarchy.Node[Level].HieCod == Hie[Level].HieCod) ? Lay_HIGHLIGHT :
-									       Lay_NO_HIGHLIGHT;
+      if (HieLvl < Hie_CRS)
+	 Highlight = (Gbl.Hierarchy.Node[HieLvl + 1].HieCod <= 0 &&
+		      Gbl.Hierarchy.Node[HieLvl].HieCod == Hie[HieLvl].HieCod) ? Lay_HIGHLIGHT :
+									         Lay_NO_HIGHLIGHT;
       else
-	 Highlight = (Gbl.Hierarchy.Node[Level].HieCod == Hie[Level].HieCod) ? Lay_HIGHLIGHT :
-									       Lay_NO_HIGHLIGHT;
+	 Highlight = (Gbl.Hierarchy.Node[HieLvl].HieCod == Hie[HieLvl].HieCod) ? Lay_HIGHLIGHT :
+									         Lay_NO_HIGHLIGHT;
 
-      IsLastItemInLevel[Level] = (NumNode == NumNodes - 1) ? Lay_LAST_ITEM :
-							     Lay_NO_LAST_ITEM;
-      Hie_WriteRowMyHierarchy (Level,Hie,Highlight,IsLastItemInLevel);
+      IsLastItemInLevel[HieLvl] = (NumNode == NumNodes - 1) ? Lay_LAST_ITEM :
+							      Lay_NO_LAST_ITEM;
+      Hie_WriteRowMyHierarchy (HieLvl,Hie,Highlight,IsLastItemInLevel);
 
       /***** Write subnodes recursively ******/
-      if (Level < Hie_CRS)
-	 Hie_WriteMyHierarchyNodes (Hie,IsLastItemInLevel,Level + 1);
+      if (HieLvl < Hie_CRS)
+	 Hie_WriteMyHierarchyNodes (Hie,IsLastItemInLevel,HieLvl + 1);
      }
 
-   if (Level > Hie_SYS)
+   if (HieLvl > Hie_SYS)
       /* Free structure that stores the query result */
       DB_FreeMySQLResult (&mysql_res);
   }
@@ -1624,7 +1628,7 @@ static void Hie_WriteMyHierarchyNodes (struct Hie_Node Hie[Hie_NUM_LEVELS],
 /************************ Write a row in my hierarchy ************************/
 /*****************************************************************************/
 
-static void Hie_WriteRowMyHierarchy (Hie_Level_t Level,
+static void Hie_WriteRowMyHierarchy (Hie_Level_t HieLvl,
 				     const struct Hie_Node Hie[Hie_NUM_LEVELS],
 				     Lay_Highlight_t Highlight,
 				     Lay_LastItem_t IsLastItemInLevel[1 + 6])
@@ -1641,20 +1645,20 @@ static void Hie_WriteRowMyHierarchy (Hie_Level_t Level,
      };
 
    HTM_LI_Begin (Lay_HighlightClass[Highlight]);
-      Lay_IndentDependingOnLevel (Level,IsLastItemInLevel,
+      Lay_IndentDependingOnLevel (HieLvl,IsLastItemInLevel,
 				  Lay_HORIZONTAL_LINE_AT_RIGHT);
       Frm_BeginForm (ActMyCrs);
-	 ParCod_PutPar (Hie_ParCod[Level],Hie[Level].HieCod);
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (Actions[Level]),
+	 ParCod_PutPar (Hie_ParCod[HieLvl],Hie[HieLvl].HieCod);
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (Actions[HieLvl]),
 				  "class=\"BT_LINK FORM_IN_%s\"",
 				  The_GetSuffix ());
 
 	    /* Node logo */
-	    Lgo_DrawLogo (Level,&Hie[Level],"ICO16x16");
+	    Lgo_DrawLogo (HieLvl,&Hie[HieLvl],"ICO16x16");
 
 	    /* Node name */
 	    HTM_DIV_Begin ("class=\"MY_CRS_TXT\"");
-	       HTM_NBSPTxt (Hie[Level].ShrtName);
+	       HTM_NBSPTxt (Hie[HieLvl].ShrtName);
 	    HTM_DIV_End ();
 
 	 HTM_BUTTON_End ();

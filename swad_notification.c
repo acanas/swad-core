@@ -485,7 +485,7 @@ static void Ntf_GetNotif (MYSQL_RES *mysql_res,
   {
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    MYSQL_ROW row;
-   Hie_Level_t Level;
+   Hie_Level_t HieLvl;
    unsigned Col;
 
    /***** Get next notification *****/
@@ -502,12 +502,12 @@ static void Ntf_GetNotif (MYSQL_RES *mysql_res,
 
    /***** Get institution code, center code, degree code and course code
           (row[2], row[3], row[4] and row[5]) *****/
-   for (Level  = Hie_INS, Col = 2;
-	Level <= Hie_CRS;
-	Level++, Col++)
+   for (HieLvl  = Hie_INS, Col = 2;
+	HieLvl <= Hie_CRS;
+	HieLvl++, Col++)
      {
-      Hie[Level].HieCod = Str_ConvertStrCodToLongCod (row[Col]);
-      Hie_GetDataByCod[Level] (&Hie[Level]);
+      Hie[HieLvl].HieCod = Str_ConvertStrCodToLongCod (row[Col]);
+      Hie_GetDataByCod[HieLvl] (&Hie[HieLvl]);
      }
 
    /***** Get message/post/... code (row[6]) *****/
@@ -548,7 +548,7 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
      } Class;
    Frm_PutForm_t PutForm;
    Act_Action_t Action = ActUnk;
-   Hie_Level_t Level;
+   Hie_Level_t HieLvl;
    Ntf_StatusTxt_t StatusTxt;
    struct For_Forums Forums;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
@@ -696,17 +696,17 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 		  break;
 	      }
 
-	    for (Level  = Hie_CRS;
-		 Level >= Hie_INS;
-		 Level--)
-	       if (Hie[Level].HieCod > 0)
+	    for (HieLvl  = Hie_CRS;
+		 HieLvl >= Hie_INS;
+		 HieLvl--)
+	       if (Hie[HieLvl].HieCod > 0)
 		 {
 		  HTM_TxtF ("%s: %s",
-			    Txt_HIERARCHY_SINGUL_Abc[Level],
-			    Hie[Level].ShrtName);
+			    Txt_HIERARCHY_SINGUL_Abc[HieLvl],
+			    Hie[HieLvl].ShrtName);
 		  break;
 		 }
-	    if (Level < Hie_INS)
+	    if (HieLvl < Hie_INS)
 	       HTM_Hyphen ();
 
 	    switch (PutForm)
@@ -1337,7 +1337,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
    struct Usr_Data FromUsrDat;
    Ntf_NotifyEvent_t NotifyEvent = (Ntf_NotifyEvent_t) 0;	// Initialized to avoid warning
    struct Hie_Node Hie[Hie_NUM_LEVELS];
-   Hie_Level_t Level;
+   Hie_Level_t HieLvl;
    unsigned Col;
    long Cod;
    struct For_Forum ForumSelected;
@@ -1403,12 +1403,12 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
 
 	    /* Get data of institution, center, degree and course
 	       (row[2], row[3], row[4], row[5]) */
-	    for (Level  = Hie_INS, Col = 2;
-		 Level <= Hie_CRS;
-		 Level++, Col++)
+	    for (HieLvl  = Hie_INS, Col = 2;
+		 HieLvl <= Hie_CRS;
+		 HieLvl++, Col++)
 	       {
-	        Hie[Level].HieCod = Str_ConvertStrCodToLongCod (row[Col]);
-		Hie_GetDataByCod[Level] (&Hie[Level]);
+	        Hie[HieLvl].HieCod = Str_ConvertStrCodToLongCod (row[Col]);
+		Hie_GetDataByCod[HieLvl] (&Hie[HieLvl]);
 	       }
 
 	    /* Get message/post/... code (row[6]) */
@@ -1772,7 +1772,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
 /****** Get and show number of users who want to be notified by email ********/
 /*****************************************************************************/
 
-void Ntf_GetAndShowNumUsrsPerNotifyEvent (void)
+void Ntf_GetAndShowNumUsrsPerNotifyEvent (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_notifications;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -1809,12 +1809,12 @@ void Ntf_GetAndShowNumUsrsPerNotifyEvent (void)
       HTM_TR_End ();
 
       /***** Get total number of users *****/
-      NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
+      NumUsrsTotal = Usr_GetTotalNumberOfUsers (HieLvl);
 
       /***** Get total number of users who want to be
 	     notified by email on some event, from database *****/
       NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent =
-      Usr_DB_GetNumUsrsWhoChoseAnOption ("usr_data.EmailNtfEvents<>0");
+      Usr_DB_GetNumUsrsWhoChoseAnOption (HieLvl,"usr_data.EmailNtfEvents<>0");
 
       /***** For each notify event... *****/
       for (NotifyEvent  = (Ntf_NotifyEvent_t) 1;
@@ -1825,11 +1825,11 @@ void Ntf_GetAndShowNumUsrsPerNotifyEvent (void)
 	 if (asprintf (&SubQuery,"((usr_data.EmailNtfEvents & %u)<>0)",
 		       (1 << NotifyEvent)) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 NumUsrs[NotifyEvent] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 NumUsrs[NotifyEvent] = Usr_DB_GetNumUsrsWhoChoseAnOption (HieLvl,SubQuery);
 	 free (SubQuery);
 
 	 /* Get number of notifications by email from database */
-	 if (Ntf_DB_GetNumNotifs (&mysql_res,NotifyEvent))
+	 if (Ntf_DB_GetNumNotifs (&mysql_res,HieLvl,NotifyEvent))
 	   {
 	    row = mysql_fetch_row (mysql_res);
 

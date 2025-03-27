@@ -67,7 +67,6 @@ typedef enum
 void DegTyp_WriteSelectorDegTypes (long SelectedDegTypCod);
 
 void DegTyp_SeeDegTypesInDegTab (void);
-void DegTyp_SeeDegTypesInStaTab (void);
 void DegTyp_GetAndEditDegTypes (void);
 void DegTyp_EditDegTypes (const struct DegTyp_DegTypes *DegTypes);
 
@@ -76,7 +75,7 @@ void DegTyp_PutIconToViewDegTypes (void);
 Usr_Can_t DegTyp_CheckIfICanCreateDegTypes (void);
 
 void DegTyp_GetListDegTypes (struct DegTyp_DegTypes *DegTypes,
-                             Hie_Level_t Level,DegTyp_Order_t Order);
+                             Hie_Level_t HieLvl,DegTyp_Order_t Order);
 void DegTyp_FreeListDegTypes (struct DegTyp_DegTypes *DegTypes);
 
 void DegTyp_ReceiveNewDegTyp (void);
@@ -89,6 +88,6 @@ void DegTyp_RenameDegTyp (void);
 void DegTyp_ContEditAfterChgDegTyp (void);
 
 //-------------------------------- Figures ------------------------------------
-void DegTyp_GetAndShowDegTypesStats (void);
+void DegTyp_GetAndShowDegTypesStats (Hie_Level_t HieLvl);
 
 #endif

@@ -138,25 +138,25 @@ static Usr_Can_t Tab_CheckIfICanViewTab (Tab_Tab_t Tab)
       case TabUnk:
 	 return Usr_CAN_NOT;
       case TabSys:
-	 return (Gbl.Hierarchy.Level == Hie_SYS) ? Usr_CAN :	// Institution selected
+	 return (Gbl.Hierarchy.HieLvl == Hie_SYS) ? Usr_CAN :	// Institution selected
 						   Usr_CAN_NOT;
       case TabCty:
-	 return (Gbl.Hierarchy.Level == Hie_CTY) ? Usr_CAN :	// Institution selected
+	 return (Gbl.Hierarchy.HieLvl == Hie_CTY) ? Usr_CAN :	// Institution selected
 						   Usr_CAN_NOT;
       case TabIns:
-	 return (Gbl.Hierarchy.Level == Hie_INS) ? Usr_CAN :	// Institution selected
+	 return (Gbl.Hierarchy.HieLvl == Hie_INS) ? Usr_CAN :	// Institution selected
 						   Usr_CAN_NOT;
       case TabCtr:
-	 return (Gbl.Hierarchy.Level == Hie_CTR) ? Usr_CAN :	// Center selected
+	 return (Gbl.Hierarchy.HieLvl == Hie_CTR) ? Usr_CAN :	// Center selected
 						   Usr_CAN_NOT;
       case TabDeg:
-	 return (Gbl.Hierarchy.Level == Hie_DEG) ? Usr_CAN :	// Degree selected
+	 return (Gbl.Hierarchy.HieLvl == Hie_DEG) ? Usr_CAN :	// Degree selected
 						   Usr_CAN_NOT;
       case TabCrs:
-	 return (Gbl.Hierarchy.Level == Hie_CRS) ? Usr_CAN :	// Course selected
+	 return (Gbl.Hierarchy.HieLvl == Hie_CRS) ? Usr_CAN :	// Course selected
 						   Usr_CAN_NOT;
       case TabAss:
-	 return (Gbl.Hierarchy.Level == Hie_CRS &&		// Course selected
+	 return (Gbl.Hierarchy.HieLvl == Hie_CRS &&		// Course selected
 	         Gbl.Usrs.Me.Role.Logged >= Rol_STD) ? Usr_CAN :	// I belong to course or I am an admin
 						       Usr_CAN_NOT;
       case TabFil:

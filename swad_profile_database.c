@@ -264,9 +264,10 @@ unsigned Prf_DB_GetUsrRankingFigure (long UsrCod,const char *FldName)
 /************************** Get ranking of a figure **************************/
 /*****************************************************************************/
 
-unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FldName)
+unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,
+				  Hie_Level_t HieLvl,const char *FldName)
   {
-   switch (Gbl.Scope.Current)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return (unsigned)
@@ -419,9 +420,9 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FldName)
 /********* Get ranking of users attending to number of clicks per day ********/
 /*****************************************************************************/
 
-unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
+unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
   {
-   switch (Gbl.Scope.Current)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return (unsigned)

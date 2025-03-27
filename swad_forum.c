@@ -2510,7 +2510,7 @@ void For_ShowThreadPosts (void)
 
 void For_GetParsForums (struct For_Forums *Forums)
   {
-   static Hie_Level_t Level[For_NUM_TYPES_FORUM] =
+   static Hie_Level_t HieLvl[For_NUM_TYPES_FORUM] =
      {
       [For_FORUM_COURSE_USRS] = Hie_CRS,
       [For_FORUM_COURSE_TCHS] = Hie_CRS,
@@ -2531,13 +2531,13 @@ void For_GetParsForums (struct For_Forums *Forums)
    For_SetForumType (Forums);
 
    /***** Get parameter with code of institution, center, degree or course *****/
-   if (Level[Forums->Forum.Type] == Hie_SYS)
+   if (HieLvl[Forums->Forum.Type] == Hie_SYS)
       Forums->Forum.HieCod = -1L;
    else
      {
       if ((Forums->Forum.HieCod = ParCod_GetPar (ParCod_OthHie)) <= 0)
 	 // If no institution specified ==> go to current institution forum
-	 Forums->Forum.HieCod = Gbl.Hierarchy.Node[Level[Forums->Forum.Type]].HieCod;
+	 Forums->Forum.HieCod = Gbl.Hierarchy.Node[HieLvl[Forums->Forum.Type]].HieCod;
      }
 
    /***** Get which forums I want to see *****/
@@ -3290,7 +3290,7 @@ static void For_InsertThrInClipboard (long ThrCod)
 /************************** Show figures about forums ************************/
 /*****************************************************************************/
 
-void For_GetAndShowForumStats (void)
+void For_GetAndShowForumStats (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_forums;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -3315,7 +3315,7 @@ void For_GetAndShowForumStats (void)
       [Hie_CRS] = -1L,
      };
 
-   HieCod[Gbl.Scope.Current] = Gbl.Hierarchy.Node[Gbl.Scope.Current].HieCod;
+   HieCod[HieLvl] = Gbl.Hierarchy.Node[HieLvl].HieCod;
 
    /***** Reset total stats *****/
    FiguresForum.NumForums  = 0;
@@ -3343,7 +3343,7 @@ void For_GetAndShowForumStats (void)
       HTM_TR_End ();
 
       /***** Write a row for each type of forum *****/
-      switch (Gbl.Scope.Current)
+      switch (HieLvl)
 	{
 	 case Hie_SYS:
 	    For_ShowStatOfAForumType (For_FORUM_GLOBAL_USRS,HieCod,&FiguresForum);

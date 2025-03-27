@@ -24,6 +24,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
+/********************************* Headers ***********************************/
+/*****************************************************************************/
+
+#include "swad_hierarchy_type.h"
+
+/*****************************************************************************/
 /************************* Public types and constants ************************/
 /*****************************************************************************/
 
@@ -46,6 +52,6 @@ void Coo_EditMyPrefsOnCookies (void);
 void Coo_ChangeMyPrefsCookies (void);
 
 //-------------------------------- Figures ------------------------------------
-void Coo_GetAndShowNumUsrsPerCookies (void);
+void Coo_GetAndShowNumUsrsPerCookies (Hie_Level_t HieLvl);
 
 #endif

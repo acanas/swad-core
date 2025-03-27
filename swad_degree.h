@@ -80,7 +80,7 @@ void Deg_ChangeDegWWW (void);
 void Deg_ChangeDegStatus (void);
 void Deg_ContEditAfterChgDeg (void);
 
-unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role);
+unsigned Deg_GetCachedNumDegsWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role);
 
 void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumCrss);
 

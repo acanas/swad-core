@@ -49,10 +49,10 @@ extern struct Globals Gbl;
 /************************ Show title in configuration ************************/
 /*****************************************************************************/
 
-void HieCfg_Title (Hie_PutLink_t PutLink,Hie_Level_t Level)
+void HieCfg_Title (Hie_PutLink_t PutLink,Hie_Level_t HieLvl)
   {
-   Hie_Level_t LevelLogo = (Level == Hie_CRS) ? Hie_DEG :
-						Level;
+   Hie_Level_t HieLvlLogo = (HieLvl == Hie_CRS) ? Hie_DEG :
+						  HieLvl;
 
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG FRAME_TITLE_%s\"",
@@ -62,14 +62,14 @@ void HieCfg_Title (Hie_PutLink_t PutLink,Hie_Level_t Level)
       if (PutLink == Hie_PUT_LINK)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\""
 		      " class=\"FRAME_TITLE_BIG FRAME_TITLE_%s\"",
-		      Gbl.Hierarchy.Node[LevelLogo].WWW,
-		      Gbl.Hierarchy.Node[LevelLogo].FullName,
+		      Gbl.Hierarchy.Node[HieLvlLogo].WWW,
+		      Gbl.Hierarchy.Node[HieLvlLogo].FullName,
 		      The_GetSuffix ());
 
       /* Logo and name */
-      Lgo_DrawLogo (LevelLogo,&Gbl.Hierarchy.Node[LevelLogo],"ICO64x64");
+      Lgo_DrawLogo (HieLvlLogo,&Gbl.Hierarchy.Node[HieLvlLogo],"ICO64x64");
       HTM_BR ();
-      HTM_Txt (Gbl.Hierarchy.Node[Level].FullName);
+      HTM_Txt (Gbl.Hierarchy.Node[HieLvl].FullName);
 
       /* End link */
       if (PutLink == Hie_PUT_LINK)
@@ -83,7 +83,7 @@ void HieCfg_Title (Hie_PutLink_t PutLink,Hie_Level_t Level)
 /******************* Show short/full name in configuration *******************/
 /*****************************************************************************/
 
-void HieCfg_Name (Frm_PutForm_t PutForm,Hie_Level_t Level,
+void HieCfg_Name (Frm_PutForm_t PutForm,Hie_Level_t HieLvl,
 		  Nam_ShrtOrFullName_t ShrtOrFull)
   {
    extern const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES];
@@ -108,8 +108,8 @@ void HieCfg_Name (Frm_PutForm_t PutForm,Hie_Level_t Level,
      };
    const char *Name[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Level].ShrtName,
-      [Nam_FULL_NAME] = Gbl.Hierarchy.Node[Level].FullName,
+      [Nam_SHRT_NAME] = Gbl.Hierarchy.Node[HieLvl].ShrtName,
+      [Nam_FULL_NAME] = Gbl.Hierarchy.Node[HieLvl].FullName,
      };
 
    /***** Full name *****/
@@ -118,7 +118,7 @@ void HieCfg_Name (Frm_PutForm_t PutForm,Hie_Level_t Level,
       /* Label */
       Frm_LabelColumn ("Frm_C1 RT",Id[PutForm],
 		       ShrtOrFull == Nam_SHRT_NAME ? Txt_Short_name :
-						     Txt_HIERARCHY_SINGUL_Abc[Level]);
+						     Txt_HIERARCHY_SINGUL_Abc[HieLvl]);
 
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
@@ -129,7 +129,7 @@ void HieCfg_Name (Frm_PutForm_t PutForm,Hie_Level_t Level,
                break;
             case Frm_PUT_FORM:
 	       /* Form to change full name */
-	       Frm_BeginForm (Action[Level][ShrtOrFull]);
+	       Frm_BeginForm (Action[HieLvl][ShrtOrFull]);
 		  HTM_INPUT_TEXT (Nam_Params[ShrtOrFull],
 				  Nam_MaxChars[ShrtOrFull],
 				  Name[ShrtOrFull],
@@ -324,7 +324,7 @@ void HieCfg_QR (ParCod_Param_t ParCode,long HieCod)
 /************************ Number of users in courses *************************/
 /*****************************************************************************/
 
-void HieCfg_NumUsrsInCrss (Hie_Level_t Level,long Cod,Rol_Role_t Role)
+void HieCfg_NumUsrsInCrss (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Role)
   {
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -339,7 +339,7 @@ void HieCfg_NumUsrsInCrss (Hie_Level_t Level,long Cod,Rol_Role_t Role)
 
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Level,Cod,
+	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl,HieCod,
 						   Role == Rol_UNK ? (1 << Rol_STD) |
 								     (1 << Rol_NET) |
 								     (1 << Rol_TCH) :	// Any user

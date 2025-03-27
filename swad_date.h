@@ -32,6 +32,7 @@
 #include <time.h>
 
 #include "swad_constant.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 
 /*****************************************************************************/
@@ -237,6 +238,6 @@ void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,
 				   Dat_WhatToWrite_t Write);
 
 //-------------------------------- Figures ------------------------------------
-void Dat_GetAndShowNumUsrsPerDateFormat (void);
+void Dat_GetAndShowNumUsrsPerDateFormat (Hie_Level_t HieLvl);
 
 #endif

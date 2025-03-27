@@ -74,9 +74,9 @@ void Gbl_InitializeGlobals (void)
   {
    extern unsigned Txt_Current_CGI_SWAD_Language;
    Rol_Role_t Role;
-   Hie_Level_t Level;
-   Hie_Level_t LevelParent;
-   Hie_Level_t LevelChildren;
+   Hie_Level_t HieLvl;
+   Hie_Level_t HieLvlParent;
+   Hie_Level_t HieLvlChild;
 
    Gbl.Layout.WritingHTMLStart =
    Gbl.Layout.HTMLStartWritten =
@@ -178,10 +178,6 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Crs.Grps.AllGrps = true;
 
-   Gbl.Scope.Current = Hie_CRS;
-
-   Gbl.Usrs.Connected.TimeToRefreshInMs = Con_MAX_TIME_TO_REFRESH_CONNECTED_IN_MS;
-
    /* User nickname */
    Gbl.Usrs.Me.UsrDat.Nickname[0] = '\0';
 
@@ -199,25 +195,25 @@ void Gbl_InitializeGlobals (void)
 
    Dpt_FlushCacheNumDptsInIns ();	// Number of departments in institution
 
-   for (LevelParent  = Hie_CTY;
-	LevelParent <= Hie_DEG;
-	LevelParent++)
-      for (LevelChildren  = LevelParent + 1;
-	   LevelChildren <= Hie_CRS;
-	   LevelChildren++)
-	 Hie_FlushCachedNumNodesInHieLvl (LevelChildren,LevelParent);	// Number of children nodes in parent node
+   for (HieLvlParent  = Hie_CTY;
+	HieLvlParent <= Hie_DEG;
+	HieLvlParent++)
+      for (HieLvlChild  = HieLvlParent + 1;
+	   HieLvlChild <= Hie_CRS;
+	   HieLvlChild++)
+	 Hie_FlushCachedNumNodesInHieLvl (HieLvlChild,HieLvlParent);	// Number of children nodes in parent node
 
    Cty_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty ();
    Cty_FlushCacheNumUsrsWhoClaimToBelongToAnotherCty ();
-   for (Level  = Hie_CTY;
-	Level <= Hie_CTR;
-	Level++)
-      Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_CTY);
+   for (HieLvl  = Hie_CTY;
+	HieLvl <= Hie_CTR;
+	HieLvl++)
+      Hie_FlushCacheNumUsrsWhoClaimToBelongTo (HieLvl);
    Usr_FlushCacheUsrIsSuperuser ();
-   for (Level  = Hie_INS;
-	Level <= Hie_CRS;
-	Level++)
-      Hie_FlushCacheUsrBelongsTo (Level);
+   for (HieLvl  = Hie_INS;
+	HieLvl <= Hie_CRS;
+	HieLvl++)
+      Hie_FlushCacheUsrBelongsTo (HieLvl);
 
    Enr_FlushCacheUsrBelongsToCurrentCrs ();
    Enr_FlushCacheUsrHasAcceptedInCurrentCrs ();

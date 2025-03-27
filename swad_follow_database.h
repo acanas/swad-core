@@ -42,16 +42,16 @@ bool Fol_DB_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod);
 unsigned Fol_DB_GetNumFollowing (long UsrCod);
 unsigned Fol_DB_GetNumFollowers (long UsrCod);
 
-unsigned Fol_DB_GetListFollowing (long UsrCod,MYSQL_RES **mysql_res);
-unsigned Fol_DB_GetListFollowers (long UsrCod,MYSQL_RES **mysql_res);
+unsigned Fol_DB_GetListFollowing (MYSQL_RES **mysql_res,long UsrCod);
+unsigned Fol_DB_GetListFollowers (MYSQL_RES **mysql_res,long UsrCod);
 
-unsigned Fol_DB_GetNumFollowinFollowers (unsigned Fol);
-double Fol_DB_GetNumFollowedPerFollower (unsigned Fol);
+unsigned Fol_DB_GetNumFollowinFollowers (Hie_Level_t HieLvl,unsigned Fol);
+double Fol_DB_GetNumFollowedPerFollower (Hie_Level_t HieLvl,unsigned Fol);
 
 void Fol_DB_FollowUsr (long UsrCod);
 void Fol_DB_UnfollowUsr (long UsrCod);
 
-unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res);
+unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res,Hie_Level_t HieLvl);
 
 void Fol_DB_RemoveUsrFromUsrFollow (long UsrCod);
 

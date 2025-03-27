@@ -980,7 +980,7 @@ unsigned Msg_DB_GetKnownRecipients (MYSQL_RES **mysql_res,long MsgCod)
 /******** (all the platform, current degree or current course)      **********/
 /*****************************************************************************/
 
-unsigned Msg_DB_GetNumSntMsgs (Hie_Level_t Level,Msg_Status_t MsgStatus)
+unsigned Msg_DB_GetNumSntMsgs (Hie_Level_t HieLvl,Msg_Status_t MsgStatus)
   {
    static const char *Table[Msg_NUM_STATUS] =
      {
@@ -991,7 +991,7 @@ unsigned Msg_DB_GetNumSntMsgs (Hie_Level_t Level,Msg_Status_t MsgStatus)
 
    /***** Get the number of messages sent from this location
           (all the platform, current degree or current course) from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return (unsigned) DB_GetNumRowsTable (Table[MsgStatus]);
@@ -1069,7 +1069,7 @@ unsigned Msg_DB_GetNumSntMsgs (Hie_Level_t Level,Msg_Status_t MsgStatus)
 /****** (all the platform, current degree or current course)          ********/
 /*****************************************************************************/
 
-unsigned Msg_DB_GetNumRcvMsgs (Hie_Level_t Level,Msg_Status_t MsgStatus)
+unsigned Msg_DB_GetNumRcvMsgs (Hie_Level_t HieLvl,Msg_Status_t MsgStatus)
   {
    static const char *Table[Msg_NUM_STATUS] =
      {
@@ -1084,7 +1084,7 @@ unsigned Msg_DB_GetNumRcvMsgs (Hie_Level_t Level,Msg_Status_t MsgStatus)
      {
       case Msg_STATUS_ALL:
       case Msg_STATUS_DELETED:
-         switch (Level)
+         switch (HieLvl)
            {
             case Hie_SYS:
                return (unsigned) DB_GetNumRowsTable (Table[MsgStatus]);
@@ -1169,7 +1169,7 @@ unsigned Msg_DB_GetNumRcvMsgs (Hie_Level_t Level,Msg_Status_t MsgStatus)
            }
          return 0;
       case Msg_STATUS_NOTIFIED:
-         switch (Level)
+         switch (HieLvl)
            {
             case Hie_SYS:
                return (unsigned)

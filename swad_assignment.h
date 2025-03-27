@@ -110,9 +110,9 @@ void Asg_WriteDatesAssignment (const struct Asg_Assignment *Asg);
 Usr_Can_t Asg_CheckIfICanCreateIntoAssigment (const struct Asg_Assignment *Asg);
 void Asg_SetFolder (struct Asg_Assignment *Asg,unsigned Level);
 
-unsigned Asg_GetNumAssignments (Hie_Level_t Level,unsigned *NumNotif);
+unsigned Asg_GetNumAssignments (Hie_Level_t HieLvl,unsigned *NumNotif);
 
 //-------------------------------- Figures ------------------------------------
-void Asg_GetAndShowAssignmentsStats (void);
+void Asg_GetAndShowAssignmentsStats (Hie_Level_t HieLvl);
 
 #endif

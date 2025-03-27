@@ -1105,7 +1105,7 @@ void MchRes_ShowOneMchResult (void)
    /***** Begin box *****/
    Box_BoxBegin (Match.Title,NULL,NULL,
 		 Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
-      Lay_WriteHeaderClassPhoto (Vie_VIEW);
+      Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
 
       /***** Begin table *****/
       HTM_TABLE_BeginWideMarginPadding (10);

@@ -275,7 +275,7 @@ unsigned Fol_DB_GetNumFollowers (long UsrCod)
 /************************** Get list of following ****************************/
 /*****************************************************************************/
 
-unsigned Fol_DB_GetListFollowing (long UsrCod,MYSQL_RES **mysql_res)
+unsigned Fol_DB_GetListFollowing (MYSQL_RES **mysql_res,long UsrCod)
   {
    /***** Trivial check: user code should be > 0 *****/
    if (UsrCod <= 0)
@@ -295,7 +295,7 @@ unsigned Fol_DB_GetListFollowing (long UsrCod,MYSQL_RES **mysql_res)
 /************************** Get list of followers ****************************/
 /*****************************************************************************/
 
-unsigned Fol_DB_GetListFollowers (long UsrCod,MYSQL_RES **mysql_res)
+unsigned Fol_DB_GetListFollowers (MYSQL_RES **mysql_res,long UsrCod)
   {
    /***** Trivial check: user code should be > 0 *****/
    if (UsrCod <= 0)
@@ -315,9 +315,9 @@ unsigned Fol_DB_GetListFollowers (long UsrCod,MYSQL_RES **mysql_res)
 /************** Get and show number of following and followers ***************/
 /*****************************************************************************/
 
-unsigned Fol_DB_GetNumFollowinFollowers (unsigned Fol)
+unsigned Fol_DB_GetNumFollowinFollowers (Hie_Level_t HieLvl,unsigned Fol)
   {
-   switch (Gbl.Scope.Current)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return (unsigned)
@@ -410,9 +410,9 @@ unsigned Fol_DB_GetNumFollowinFollowers (unsigned Fol)
 /************** Get and show number of following and followers ***************/
 /*****************************************************************************/
 
-double Fol_DB_GetNumFollowedPerFollower (unsigned Fol)
+double Fol_DB_GetNumFollowedPerFollower (Hie_Level_t HieLvl,unsigned Fol)
   {
-   switch (Gbl.Scope.Current)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return DB_QuerySELECTDouble ("can not get number of followed per follower",
@@ -556,10 +556,10 @@ void Fol_DB_UnfollowUsr (long UsrCod)
 /*********** Get ranking of users attending to number of followers ***********/
 /*****************************************************************************/
 
-unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
+unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
   {
    /***** Get ranking from database *****/
-   switch (Gbl.Scope.Current)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return (unsigned)

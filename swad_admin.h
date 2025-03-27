@@ -37,13 +37,13 @@
 
 Usr_Can_t Adm_CheckIfICanAdminOtherUsrs (void);
 
-void Adm_ReqAddAdm (Hie_Level_t Level);
+void Adm_ReqAddAdm (Hie_Level_t HieLvl);
 
 void Adm_AddAdmToIns (void);
 void Adm_AddAdmToCtr (void);
 void Adm_AddAdmToDeg (void);
 
-void Adm_GetAdmsLst (Hie_Level_t Level);
+void Adm_GetAdmsLst (Hie_Level_t HieLvl);
 
 void Adm_ReqRemAdmOfIns (void);
 void Adm_ReqRemAdmOfCtr (void);

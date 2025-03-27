@@ -2892,7 +2892,7 @@ void Msg_ListBannedUsrs (void)
 /************************ Show figures about messages ************************/
 /*****************************************************************************/
 
-void Msg_GetAndShowMsgsStats (void)
+void Msg_GetAndShowMsgsStats (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_messages;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -2908,12 +2908,12 @@ void Msg_GetAndShowMsgsStats (void)
    unsigned NumMsgsReceivedAndNotified;
 
    /***** Get the number of unique messages sent from this location *****/
-   NumMsgsSentNotDeleted      = Msg_DB_GetNumSntMsgs     (Gbl.Scope.Current,Msg_STATUS_ALL     );
-   NumMsgsSentDeleted         = Msg_DB_GetNumSntMsgs     (Gbl.Scope.Current,Msg_STATUS_DELETED );
+   NumMsgsSentNotDeleted      = Msg_DB_GetNumSntMsgs (HieLvl,Msg_STATUS_ALL     );
+   NumMsgsSentDeleted         = Msg_DB_GetNumSntMsgs (HieLvl,Msg_STATUS_DELETED );
 
-   NumMsgsReceivedNotDeleted  = Msg_DB_GetNumRcvMsgs (Gbl.Scope.Current,Msg_STATUS_ALL     );
-   NumMsgsReceivedAndDeleted  = Msg_DB_GetNumRcvMsgs (Gbl.Scope.Current,Msg_STATUS_DELETED );
-   NumMsgsReceivedAndNotified = Msg_DB_GetNumRcvMsgs (Gbl.Scope.Current,Msg_STATUS_NOTIFIED);
+   NumMsgsReceivedNotDeleted  = Msg_DB_GetNumRcvMsgs (HieLvl,Msg_STATUS_ALL     );
+   NumMsgsReceivedAndDeleted  = Msg_DB_GetNumRcvMsgs (HieLvl,Msg_STATUS_DELETED );
+   NumMsgsReceivedAndNotified = Msg_DB_GetNumRcvMsgs (HieLvl,Msg_STATUS_NOTIFIED);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_MESSAGES],NULL,NULL,

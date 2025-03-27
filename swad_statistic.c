@@ -119,9 +119,9 @@ static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
                                    unsigned NumHits,
                                    MYSQL_RES *mysql_res);
 static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
+						Hie_Level_t HieLvl,
                                                 unsigned NumHits,
                                                 MYSQL_RES *mysql_res);
-static void Sta_PutParScopeSta (void);
 static Sta_ColorType_t Sta_GetStatColorType (void);
 static void Sta_DrawBarColors (Sta_ColorType_t ColorType,double HitsMax);
 static void Sta_DrawAccessesPerHourForADay (Sta_ColorType_t ColorType,double HitsNum[24],double HitsMax);
@@ -566,7 +566,7 @@ void Sta_PutLinkToCourseHits (void)
   {
    extern const char *Txt_Visits_to_course;
 
-   if (Gbl.Hierarchy.Level == Hie_CRS)		// Course selected
+   if (Gbl.Hierarchy.HieLvl == Hie_CRS)		// Course selected
       switch (Gbl.Usrs.Me.Role.Logged)
         {
 	 case Rol_NET:
@@ -695,6 +695,8 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
 static void Sta_WriteSelectorScope (void)
   {
    extern const char *Txt_Scope;
+   unsigned AllowedLvls;
+   Hie_Level_t HieLvl;
 
    HTM_TR_Begin (NULL);
 
@@ -703,14 +705,14 @@ static void Sta_WriteSelectorScope (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	 Gbl.Scope.Allowed = 1 << Hie_SYS |
-			     1 << Hie_CTY |
-			     1 << Hie_INS |
-			     1 << Hie_CTR |
-			     1 << Hie_DEG |
-			     1 << Hie_CRS;
-	 Sco_GetScope ("ScopeSta",Hie_SYS);
-	 Sco_PutSelectorScope ("ScopeSta",HTM_NO_ATTR);
+	 AllowedLvls = 1 << Hie_SYS |
+		       1 << Hie_CTY |
+		       1 << Hie_INS |
+		       1 << Hie_CTR |
+		       1 << Hie_DEG |
+		       1 << Hie_CRS;
+	 HieLvl = Sco_GetScope ("ScopeSta",Hie_SYS,AllowedLvls);
+	 Sco_PutSelectorScope ("ScopeSta",HTM_NO_ATTR,HieLvl,AllowedLvls);
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -774,6 +776,8 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_Time_zone_used_in_the_calculation_of_these_statistics;
    struct Sta_Stats Stats;
+   unsigned AllowedLvls;
+   Hie_Level_t HieLvl;
    MYSQL_RES *mysql_res;
    unsigned NumHits;
    const char *LogTable;
@@ -835,41 +839,8 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 
    switch (Stats.GlobalOrCourse)
      {
-      case Sta_SHOW_GLOBAL_ACCESSES:
-	 /***** Get the type of user of clicks *****/
-	 Stats.Role = (Sta_Role_t)
-		      Par_GetParUnsignedLong ("Role",
-					      0,
-					      Sta_NUM_ROLES_STAT - 1,
-					      (unsigned long) Sta_ROLE_DEFAULT);
-
-	 /***** Get users range for access statistics *****/
-	 Gbl.Scope.Allowed = 1 << Hie_SYS |
-			     1 << Hie_CTY |
-			     1 << Hie_INS |
-			     1 << Hie_CTR |
-			     1 << Hie_DEG |
-			     1 << Hie_CRS;
-	 Sco_GetScope ("ScopeSta",Hie_SYS);
-
-	 /***** Show form again *****/
-	 Sta_PutFormGblHits (&Stats);
-
-	 /***** Begin results section *****/
-	 HTM_SECTION_Begin (Sta_STAT_RESULTS_SECTION_ID);
-
-	 /***** Check selection *****/
-	 if ((Stats.Role == Sta_ROLE_ALL_USRS ||
-	      Stats.Role == Sta_ROLE_UNKNOWN_USRS) &&
-	     (Stats.CountType == Sta_DISTINCT_USRS ||
-	      Stats.CountType == Sta_CLICKS_PER_USR))	// These types of query will never give a valid result
-	   {
-	    /* Write warning message and abort */
-	    Ale_ShowAlert (Ale_WARNING,Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed);
-	    return;
-	   }
-	 break;
       case Sta_SHOW_COURSE_ACCESSES:
+	 HieLvl = Hie_CRS;
 	 if (Stats.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
 	   {
 	    /****** Get the number of the first row to show ******/
@@ -916,22 +887,57 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	    return;
 	   }
 	 break;
+      case Sta_SHOW_GLOBAL_ACCESSES:
+      default:
+	 /***** Get the type of user of clicks *****/
+	 Stats.Role = (Sta_Role_t)
+		      Par_GetParUnsignedLong ("Role",
+					      0,
+					      Sta_NUM_ROLES_STAT - 1,
+					      (unsigned long) Sta_ROLE_DEFAULT);
+
+	 /***** Get users range for access statistics *****/
+	 AllowedLvls = 1 << Hie_SYS |
+		       1 << Hie_CTY |
+		       1 << Hie_INS |
+		       1 << Hie_CTR |
+		       1 << Hie_DEG |
+		       1 << Hie_CRS;
+	 HieLvl = Sco_GetScope ("ScopeSta",Hie_SYS,AllowedLvls);
+
+	 /***** Show form again *****/
+	 Sta_PutFormGblHits (&Stats);
+
+	 /***** Begin results section *****/
+	 HTM_SECTION_Begin (Sta_STAT_RESULTS_SECTION_ID);
+
+	 /***** Check selection *****/
+	 if ((Stats.Role == Sta_ROLE_ALL_USRS ||
+	      Stats.Role == Sta_ROLE_UNKNOWN_USRS) &&
+	     (Stats.CountType == Sta_DISTINCT_USRS ||
+	      Stats.CountType == Sta_CLICKS_PER_USR))	// These types of query will never give a valid result
+	   {
+	    /* Write warning message and abort */
+	    Ale_ShowAlert (Ale_WARNING,Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed);
+	    return;
+	   }
+	 break;
      }
 
    /***** Check if range of dates is forbidden for me *****/
    NumDays = Dat_GetNumDaysBetweenDates (Dat_GetRangeDate (Dat_STR_TIME),
                                          Dat_GetRangeDate (Dat_END_TIME));
    ICanQueryWholeRange = ((Gbl.Usrs.Me.Role.Logged >= Rol_TCH && Stats.GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES) ||
-			  (Gbl.Usrs.Me.Role.Logged == Rol_TCH     &&  Gbl.Scope.Current == Hie_CRS)  ||
-			  (Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM && (Gbl.Scope.Current == Hie_DEG   ||
-			                                              Gbl.Scope.Current == Hie_CRS)) ||
-			  (Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM && (Gbl.Scope.Current == Hie_CTR   ||
-			                                              Gbl.Scope.Current == Hie_DEG   ||
-			                                              Gbl.Scope.Current == Hie_CRS)) ||
-			  (Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM && (Gbl.Scope.Current == Hie_INS   ||
-			                                              Gbl.Scope.Current == Hie_CTR   ||
-			                                              Gbl.Scope.Current == Hie_DEG   ||
-			                                              Gbl.Scope.Current == Hie_CRS)) ||
+			  (Gbl.Usrs.Me.Role.Logged == Rol_TCH     &&  HieLvl == Hie_CRS)  ||
+			  (Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM && (HieLvl == Hie_DEG   ||
+			                                              HieLvl == Hie_CRS)) ||
+			  (Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM && (HieLvl == Hie_CTR   ||
+			                                              HieLvl == Hie_DEG   ||
+			                                              HieLvl == Hie_CRS)) ||
+			  (Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM && (HieLvl == Hie_INS   ||
+			                                              HieLvl == Hie_CTR   ||
+			                                              HieLvl == Hie_DEG   ||
+			                                              HieLvl == Hie_CRS)) ||
 			   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
 								     Usr_CAN_NOT;
    if (ICanQueryWholeRange == Usr_CAN_NOT &&
@@ -944,7 +950,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
      }
 
    /***** Make the query *****/
-   if ((NumHits = Sta_DB_GetHits (&mysql_res,&Stats,LogTable,BrowserTimeZone,
+   if ((NumHits = Sta_DB_GetHits (&mysql_res,HieLvl,&Stats,LogTable,BrowserTimeZone,
                                   NumUsrsInList,LstSelectedUsrCods)))
      {
       /***** Put the table with the clicks *****/
@@ -968,7 +974,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 		  break;
 	       case Sta_CLICKS_CRS_PER_DAY_AND_HOUR:
 	       case Sta_CLICKS_GBL_PER_DAY_AND_HOUR:
-		  Sta_ShowDistrAccessesPerDayAndHour (&Stats,NumHits,mysql_res);
+		  Sta_ShowDistrAccessesPerDayAndHour (&Stats,HieLvl,NumHits,mysql_res);
 		  break;
 	       case Sta_CLICKS_CRS_PER_WEEK:
 	       case Sta_CLICKS_GBL_PER_WEEK:
@@ -1592,6 +1598,7 @@ static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
 #define GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH (GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH * 24)
 
 static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
+						Hie_Level_t HieLvl,
                                                 unsigned NumHits,
                                                 MYSQL_RES *mysql_res)
   {
@@ -1638,7 +1645,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 	    else // Gbl.Action.Act == ActSeeAccGbl
 	      {
 	       Par_PutParUnsigned (NULL,"Role",(unsigned) Stats->Role);
-	       Sta_PutParScopeSta ();
+	       Sco_PutParScope ("ScopeSta",HieLvl);
 	      }
 
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
@@ -1861,15 +1868,6 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
       /* Decrease day */
       Dat_GetDateBefore (&Date,&Date);
      }
-  }
-
-/*****************************************************************************/
-/********* Put hidden parameter for the type of figure (statistic) ***********/
-/*****************************************************************************/
-
-static void Sta_PutParScopeSta (void)
-  {
-   Sco_PutParScope ("ScopeSta",Gbl.Scope.Current);
   }
 
 /*****************************************************************************/

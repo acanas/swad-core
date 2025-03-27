@@ -120,7 +120,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
 	 if (Gbl.Usrs.Me.Logged)		// I am logged
 	   {
-	    if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+	    if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
 	      {
 	       switch (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
 	         {
@@ -152,7 +152,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
 	    if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)	// I am enroled in some courses
 	      {
-	       if (Gbl.Hierarchy.Level == Hie_CRS &&				// Course selected
+	       if (Gbl.Hierarchy.HieLvl == Hie_CRS &&				// Course selected
 		   Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs == Rol_TCH)	// I am a teacher in current course
 		  if (!Enr_GetCachedNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 						   1 << Rol_STD))		// Current course probably has no students
@@ -170,14 +170,14 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
 	    /***** Go to list of hierarchy subnodes
 		   to select or create a new one *****/
-	    if (Gbl.Hierarchy.Level >= Hie_SYS &&
-		Gbl.Hierarchy.Level <= Hie_DEG)
+	    if (Gbl.Hierarchy.HieLvl >= Hie_SYS &&
+		Gbl.Hierarchy.HieLvl <= Hie_DEG)
 	      {
-	       if (asprintf (&Description,*(SelectOrCreate[Gbl.Hierarchy.Level].Description),
-			     Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].ShrtName) < 0)
+	       if (asprintf (&Description,*(SelectOrCreate[Gbl.Hierarchy.HieLvl].Description),
+			     Gbl.Hierarchy.Node[Gbl.Hierarchy.HieLvl].ShrtName) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
-						    SelectOrCreate[Gbl.Hierarchy.Level].Action,
+						    SelectOrCreate[Gbl.Hierarchy.HieLvl].Action,
 						    Btn_GO);
 	       free (Description);
 	      }

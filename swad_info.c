@@ -1726,7 +1726,7 @@ static bool Inf_CheckAndShowPlainTxt (Inf_Type_t InfoType)
 	{
 	 case Inf_INFORMATION:
 	 case Inf_TEACH_GUIDE:
-	    Lay_WriteHeaderClassPhoto (Vie_VIEW);
+	    Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
 	    break;
 	 default:
 	    break;
@@ -1797,7 +1797,7 @@ static bool Inf_CheckAndShowRichTxt (Inf_Type_t InfoType)
 	{
 	 case Inf_INFORMATION:
 	 case Inf_TEACH_GUIDE:
-	    Lay_WriteHeaderClassPhoto (Vie_VIEW);
+	    Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
 	    break;
 	 default:
 	    break;
@@ -1942,7 +1942,7 @@ void Inf_EditPlainTxtInfo (void)
 	   {
 	    case Inf_INFORMATION:
 	    case Inf_TEACH_GUIDE:
-	       Lay_WriteHeaderClassPhoto (Vie_VIEW);
+	       Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
 	       break;
 	    default:
 	       break;
@@ -2025,7 +2025,7 @@ void Inf_EditRichTxtInfo (void)
 	{
 	 case Inf_INFORMATION:
 	 case Inf_TEACH_GUIDE:
-	    Lay_WriteHeaderClassPhoto (Vie_VIEW);
+	    Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
 	    break;
 	 default:
 	    break;

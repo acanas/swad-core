@@ -48,8 +48,9 @@ void Prf_DB_IncrementNumForPstUsr (long UsrCod);
 void Prf_DB_IncrementNumMsgSntUsr (long UsrCod);
 
 unsigned Prf_DB_GetUsrRankingFigure (long UsrCod,const char *FldName);
-unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FldName);
-unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res);
+unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,
+				  Hie_Level_t HieLvl,const char *FldName);
+unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res,Hie_Level_t HieLvl);
 unsigned Prf_DB_GetNumUsrsWithFigure (const char *FldName);
 unsigned Prf_DB_GetRankingNumClicksPerDay (long UsrCod);
 unsigned Prf_DB_GetNumUsrsWithNumClicksPerDay (void);

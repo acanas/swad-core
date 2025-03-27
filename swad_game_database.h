@@ -48,8 +48,8 @@ unsigned Gam_DB_GetGameDataByCod (MYSQL_RES **mysql_res,long GamCod);
 void Gam_DB_GetGameTitle (long GamCod,char *Title,size_t TitleSize);
 void Gam_DB_GetGameTxt (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 bool Gam_DB_CheckIfSimilarGameExists (const struct Gam_Game *Game);
-unsigned Gam_DB_GetNumCoursesWithGames (Hie_Level_t Level);
-unsigned Gam_DB_GetNumGames (Hie_Level_t Level);
+unsigned Gam_DB_GetNumCoursesWithGames (Hie_Level_t HieLvl);
+unsigned Gam_DB_GetNumGames (Hie_Level_t HieLvl);
 
 void Gam_DB_RemoveGame (long GamCod);
 void Gam_DB_RemoveCrsGames (long CrsCod);
@@ -68,7 +68,7 @@ unsigned Gam_DB_GetQstIndFromQstCod (long GamCod,long QstCod);
 unsigned Gam_DB_GetMaxQuestionIndexInGame (long GamCod);
 unsigned Gam_DB_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd);
 unsigned Gam_DB_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd);
-double Gam_DB_GetNumQstsPerGame (Hie_Level_t Level);
+double Gam_DB_GetNumQstsPerGame (Hie_Level_t HieLvl);
 unsigned Gam_DB_GetTstTagsPresentInAGame (MYSQL_RES **mysql_res,long GamCod);
 unsigned Gam_DB_GetNumAnswersOfQstsInGame (MYSQL_RES **mysql_res,long GamCod);
 

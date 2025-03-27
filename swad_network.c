@@ -318,7 +318,7 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
 /************** Show stats about users' webs / social networks ***************/
 /*****************************************************************************/
 
-void Net_ShowWebAndSocialNetworksStats (void)
+void Net_ShowWebAndSocialNetworksStats (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_webs_social_networks;
    extern const char *Net_DB_WebsAndSocialNetworks[Net_NUM_WEBS_AND_SOCIAL_NETWORKS];
@@ -336,10 +336,10 @@ void Net_ShowWebAndSocialNetworksStats (void)
    unsigned NumUsrs;
 
    /***** Get total number of users in current scope *****/
-   NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
+   NumUsrsTotal = Usr_GetTotalNumberOfUsers (HieLvl);
 
    /***** Get number of users with a web / social network *****/
-   NumNetworks = Net_DB_GetWebAndSocialNetworksStats (&mysql_res);
+   NumNetworks = Net_DB_GetWebAndSocialNetworksStats (&mysql_res,HieLvl);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_SOCIAL_NETWORKS],NULL,NULL,

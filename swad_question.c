@@ -3668,7 +3668,7 @@ void Qst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod)
 // Returns the number of test questions
 // in this location (all the platform, current degree or current course)
 
-unsigned Qst_GetNumQuestions (Hie_Level_t Level,Qst_AnswerType_t AnsType,
+unsigned Qst_GetNumQuestions (Hie_Level_t HieLvl,Qst_AnswerType_t AnsType,
                               struct Qst_Stats *Stats)
   {
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
@@ -3681,7 +3681,7 @@ unsigned Qst_GetNumQuestions (Hie_Level_t Level,Qst_AnswerType_t AnsType,
    Stats->TotalScore = 0.0;
 
    /***** Get number of questions from database *****/
-   if (Qst_DB_GetNumQsts (&mysql_res,Level,AnsType))
+   if (Qst_DB_GetNumQsts (&mysql_res,HieLvl,AnsType))
      {
       /***** Get number of questions *****/
       row = mysql_fetch_row (mysql_res);
@@ -3710,7 +3710,7 @@ unsigned Qst_GetNumQuestions (Hie_Level_t Level,Qst_AnswerType_t AnsType,
 /*********************** Get stats about test questions **********************/
 /*****************************************************************************/
 
-void Qst_GetTestStats (Qst_AnswerType_t AnsType,struct Qst_Stats *Stats)
+void Qst_GetTestStats (Hie_Level_t HieLvl,Qst_AnswerType_t AnsType,struct Qst_Stats *Stats)
   {
    Stats->NumQsts = 0;
    Stats->NumCoursesWithQuestions = Stats->NumCoursesWithPluggableQuestions = 0;
@@ -3721,11 +3721,11 @@ void Qst_GetTestStats (Qst_AnswerType_t AnsType,struct Qst_Stats *Stats)
    Stats->TotalScore = 0.0;
    Stats->AvgScorePerQuestion = 0.0;
 
-   if (Qst_GetNumQuestions (Gbl.Scope.Current,AnsType,Stats))
+   if (Qst_GetNumQuestions (HieLvl,AnsType,Stats))
      {
-      if ((Stats->NumCoursesWithQuestions = Qst_DB_GetNumCrssWithQsts (Gbl.Scope.Current,AnsType)))
+      if ((Stats->NumCoursesWithQuestions = Qst_DB_GetNumCrssWithQsts (HieLvl,AnsType)))
         {
-         Stats->NumCoursesWithPluggableQuestions = Qst_DB_GetNumCrssWithPluggableQsts (Gbl.Scope.Current,AnsType);
+         Stats->NumCoursesWithPluggableQuestions = Qst_DB_GetNumCrssWithPluggableQsts (HieLvl,AnsType);
          Stats->AvgQstsPerCourse = (double) Stats->NumQsts / (double) Stats->NumCoursesWithQuestions;
          Stats->AvgHitsPerCourse = (double) Stats->NumHits / (double) Stats->NumCoursesWithQuestions;
         }

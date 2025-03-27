@@ -427,7 +427,7 @@ void Mnu_ContextMenuEnd (void)
 /*********** Get and show number of users who have chosen a menu *************/
 /*****************************************************************************/
 
-void Mnu_GetAndShowNumUsrsPerMenu (void)
+void Mnu_GetAndShowNumUsrsPerMenu (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_menu;
    extern const char *Mnu_MenuIcons[Mnu_NUM_MENUS];
@@ -461,7 +461,7 @@ void Mnu_GetAndShowNumUsrsPerMenu (void)
 	 if (asprintf (&SubQuery,"usr_data.Menu=%u",
 		       (unsigned) Menu) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 NumUsrs[Menu] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 NumUsrs[Menu] = Usr_DB_GetNumUsrsWhoChoseAnOption (HieLvl,SubQuery);
 	 free (SubQuery);
 
 	 /* Update total number of users */

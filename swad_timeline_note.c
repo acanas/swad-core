@@ -897,7 +897,7 @@ void TmlNot_StoreAndPublishNote (TmlNot_Type_t NoteType,long Cod)
 void TmlNot_StoreAndPublishNoteInternal (TmlNot_Type_t NoteType,long Cod,
                                          struct TmlPub_Publication *Pub)
   {
-   static Hie_Level_t Level[Tml_NOT_NUM_NOTE_TYPES] =
+   static Hie_Level_t HieLvl[Tml_NOT_NUM_NOTE_TYPES] =
      {
       [TmlNot_INS_DOC_PUB_FILE] = Hie_INS,
       [TmlNot_INS_SHA_PUB_FILE] = Hie_INS,
@@ -915,8 +915,8 @@ void TmlNot_StoreAndPublishNoteInternal (TmlNot_Type_t NoteType,long Cod,
      };
    long HieCod;	// Hierarchy code (institution/center/degree/course)
 
-   if (Level[NoteType])
-      HieCod = Gbl.Hierarchy.Node[Level[NoteType]].HieCod;
+   if (HieLvl[NoteType])
+      HieCod = Gbl.Hierarchy.Node[HieLvl[NoteType]].HieCod;
    else
       HieCod = -1L;
 

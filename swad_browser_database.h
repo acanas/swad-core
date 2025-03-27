@@ -73,7 +73,8 @@ void Brw_DB_ChangeFilePublic (const struct Brw_FileMetadata *FileMetadata,
                               PriPub_PrivateOrPublic_t PrivateOrPublic,Brw_License_t License);
 bool Brw_DB_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1]);
 unsigned Brw_DB_GetNumPublicFilesUsr (long UsrCod);
-unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,Brw_License_t License);
+unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,
+				        Hie_Level_t HieLvl,Brw_License_t License);
 unsigned Brw_DB_SearchPublicFiles (MYSQL_RES **mysql_res,
                                    const char *RangeQuery,
                                    const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1]);
@@ -127,6 +128,7 @@ void Brw_DB_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
 //-------------------------- Size of file zones -------------------------------
 void Brw_DB_StoreSizeOfFileBrowser (const struct BrwSiz_BrowserSize *Size);
 void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
-			          Brw_FileBrowser_t FileBrowser);
+				  Hie_Level_t HieLvl,
+                                  Brw_FileBrowser_t FileBrowser);
 
 #endif

@@ -362,7 +362,7 @@ bool Usr_DB_FindStrInUsrsNames (const char *Str)
 // - Rol_NET	Non-editing teacher
 // - Rol_TCH	Teacher
 
-void Usr_DB_BuildQueryToGetUsrsLst (Hie_Level_t Level,Rol_Role_t Role,
+void Usr_DB_BuildQueryToGetUsrsLst (Hie_Level_t HieLvl,Rol_Role_t Role,
 				    char **Query)
   {
    const char *QueryFields =
@@ -385,7 +385,7 @@ void Usr_DB_BuildQueryToGetUsrsLst (Hie_Level_t Level,Rol_Role_t Role,
 		"usr_data.UsrCod";
 
    /***** Build query *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 /* Get users in courses from the whole platform */
@@ -695,7 +695,7 @@ void Usr_DB_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
 /************ Build query to get list with data of administrators ************/
 /*****************************************************************************/
 
-void Usr_DB_BuildQueryToGetAdmsLst (Hie_Level_t Level,char **Query)
+void Usr_DB_BuildQueryToGetAdmsLst (Hie_Level_t HieLvl,char **Query)
   {
    static const char *QueryFields =
       "UsrCod,"			// row[ 0]
@@ -720,7 +720,7 @@ void Usr_DB_BuildQueryToGetAdmsLst (Hie_Level_t Level,char **Query)
    // SELECT... WHERE UsrCod IN (SELECT...) OR UsrCod IN (SELECT...) <-- fast
    // instead of using or with different joins:
    // SELECT... WHERE (...) OR (...) <-- very slow
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:	// All admins
 	 DB_BuildQuery (Query,
@@ -895,7 +895,7 @@ void Usr_DB_BuildQueryToGetAdmsLst (Hie_Level_t Level,char **Query)
 /************************ Get list with data of guests ***********************/
 /*****************************************************************************/
 
-void Usr_DB_BuildQueryToGetGstsLst (Hie_Level_t Level,char **Query)
+void Usr_DB_BuildQueryToGetGstsLst (Hie_Level_t HieLvl,char **Query)
   {
    static const char *QueryFields =
       "UsrCod,"			// row[ 0]
@@ -916,7 +916,7 @@ void Usr_DB_BuildQueryToGetGstsLst (Hie_Level_t Level,char **Query)
 		"UsrCod";
 
    /***** Build query *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 DB_BuildQuery (Query,
@@ -981,7 +981,8 @@ void Usr_DB_BuildQueryToGetGstsLst (Hie_Level_t Level,char **Query)
 /*********** Search for users with a given role in current scope *************/
 /*****************************************************************************/
 
-void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
+void Usr_DB_BuildQueryToSearchListUsrs (Hie_Level_t HieLvl,Rol_Role_t Role,
+					char **Query)
   {
    char SubQueryRole[64];
    static const char *QueryFields =
@@ -1005,13 +1006,13 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 		"usr_data.UsrCod";
 
    /***** Build query *****/
-   // if Gbl.Scope.Current is course ==> 3 columns are retrieved: UsrCod, Sex, Accepted
-   //                           else ==> 2 columns are retrieved: UsrCod, Sex
+   // if Scope is course ==> 3 columns are retrieved: UsrCod, Sex, Accepted
+   //               else ==> 2 columns are retrieved: UsrCod, Sex
    // Search is faster (aproximately x2) using a temporary table to store users found in the whole platform
    switch (Role)
      {
       case Rol_UNK:	// Here Rol_UNK means any rol (role does not matter)
-	 switch (Gbl.Scope.Current)
+	 switch (HieLvl)
 	   {
 	    case Hie_SYS:
 	       /* Search users from the whole platform */
@@ -1156,7 +1157,7 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 	       SubQueryRole[0] = '\0';
 	       break;
 	   }
-	 switch (Gbl.Scope.Current)
+	 switch (HieLvl)
 	   {
 	    case Hie_SYS:
 	       /* Search users in courses from the whole platform */
@@ -1322,9 +1323,9 @@ void Usr_DB_BuildQueryToGetUnorderedStdsCodesInDeg (long DegCod,char **Query)
 /************** Get number of users who have chosen an option ****************/
 /*****************************************************************************/
 
-unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
+unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (Hie_Level_t HieLvl,const char *SubQuery)
   {
-   switch (Gbl.Scope.Current)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return (unsigned)
@@ -1493,8 +1494,8 @@ void Usr_DB_InsertMyLastData (void)
                      "'%s',%ld,%ld,%u,NOW(),FROM_UNIXTIME(%ld))",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) Sch_SEARCH_ALL,
-		   Hie_GetDBStrFromLevel (Gbl.Hierarchy.Level),
-		   Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].HieCod,
+		   Hie_GetDBStrFromLevel (Gbl.Hierarchy.HieLvl),
+		   Gbl.Hierarchy.Node[Gbl.Hierarchy.HieLvl].HieCod,
 		   Act_GetActCod (Gbl.Action.Act),
 		   (unsigned) Gbl.Usrs.Me.Role.Logged,
 		   (long) (time_t) 0);	// The user never accessed to notifications
@@ -1515,8 +1516,8 @@ void Usr_DB_UpdateMyLastData (void)
 			  "LastRole=%u,"
 			  "LastTime=NOW()"
 		   " WHERE UsrCod=%ld",
-		   Hie_GetDBStrFromLevel (Gbl.Hierarchy.Level),
-		   Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].HieCod,
+		   Hie_GetDBStrFromLevel (Gbl.Hierarchy.HieLvl),
+		   Gbl.Hierarchy.Node[Gbl.Hierarchy.HieLvl].HieCod,
 		   Act_GetActCod (Gbl.Action.Act),
 		   (unsigned) Gbl.Usrs.Me.Role.Logged,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);

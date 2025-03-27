@@ -62,35 +62,35 @@ void Hie_PutParOtherHieCod (void *HieCod);
 
 Hie_Order_t Hie_GetParHieOrder (void);
 
-void Hie_FreeList (Hie_Level_t Level);
+void Hie_FreeList (Hie_Level_t HieLvl);
 
 void Hie_ResetMyHierarchy (void);
 void Hie_FreeMyHierarchy (void);
-void Hie_GetMyHierarchy (Hie_Level_t Level);
-Usr_Belong_t Hie_CheckIfIBelongTo (Hie_Level_t Level,long HieCod);
+void Hie_GetMyHierarchy (Hie_Level_t HieLvl);
+Usr_Belong_t Hie_CheckIfIBelongTo (Hie_Level_t HieLvl,long HieCod);
 
-void Hie_FlushCacheUsrBelongsTo (Hie_Level_t Level);
-Usr_Belong_t Hie_CheckIfUsrBelongsTo (Hie_Level_t Level,long UsrCod,long HieCod,
+void Hie_FlushCacheUsrBelongsTo (Hie_Level_t HieLvl);
+Usr_Belong_t Hie_CheckIfUsrBelongsTo (Hie_Level_t HieLvl,long UsrCod,long HieCod,
 				      bool CountOnlyAcceptedCourses);
 
 //-------------------------------- Figures ------------------------------------
-void Hie_GetAndShowHierarchyStats (void);
+void Hie_GetAndShowHierarchyStats (Hie_Level_t HieLvl);
 
-void Hie_FlushCachedNumNodesInHieLvl (Hie_Level_t LevelChildren,
-		      		      Hie_Level_t LevelParent);
-unsigned Hie_GetCachedNumNodesInHieLvl (Hie_Level_t LevelChildren,
-		      		        Hie_Level_t LevelParent,long HieCod);
-unsigned Hie_GetNumNodesInHieLvl (Hie_Level_t LevelChildren,
-		      	          Hie_Level_t LevelParent,long HieCod);
+void Hie_FlushCachedNumNodesInHieLvl (Hie_Level_t HieLvlChild,
+		      		      Hie_Level_t HieLvlParent);
+unsigned Hie_GetCachedNumNodesInHieLvl (Hie_Level_t HieLvlChild,
+		      		        Hie_Level_t HieLvlParent,long HieCod);
+unsigned Hie_GetNumNodesInHieLvl (Hie_Level_t HieLvlChild,
+		      	          Hie_Level_t HieLvlParent,long HieCod);
 
-unsigned Hie_GetCachedNumNodesInHieLvlWith (Hie_Level_t LevelChildren,
-					    Hie_Level_t LevelParent,
+unsigned Hie_GetCachedNumNodesInHieLvlWith (Hie_Level_t HieLvlChild,
+					    Hie_Level_t HieLvlParent,
 					    Hie_Level_t HavingNodesOfLevel);
 
-void Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_Level_t Level);
-unsigned Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_Level_t Level,
+void Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_Level_t HieLvl);
+unsigned Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_Level_t HieLvl,
 						 struct Hie_Node *Node);
-unsigned Hie_GetNumUsrsWhoClaimToBelongTo (Hie_Level_t Level,
+unsigned Hie_GetNumUsrsWhoClaimToBelongTo (Hie_Level_t HieLvl,
 					   struct Hie_Node *Node);
 
 //--------------------------- My hierarchy ------------------------------------

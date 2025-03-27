@@ -125,7 +125,7 @@ void Rol_SetMyRoles (void)
      }
 
    /***** Check if I belong to current course *****/
-   if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+   if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
      {
       Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] = Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Me.UsrDat);
       switch (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
@@ -192,7 +192,7 @@ void Rol_SetMyRoles (void)
       Gbl.Usrs.Me.IBelongToCurrent[Hie_INS] = Usr_DONT_BELONG;
 
    /***** Build my list of available roles for current course *****/
-   if (Gbl.Hierarchy.Level == Hie_CRS)
+   if (Gbl.Hierarchy.HieLvl == Hie_CRS)
       switch (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
 	{
 	 case Usr_BELONG:
@@ -276,7 +276,7 @@ Rol_Role_t Rol_GetMaxRoleInCrss (unsigned Roles)
 /***** Get my maximum role in a course/degree/center/institution/country *****/
 /*****************************************************************************/
 
-Rol_Role_t Rol_GetMyMaxRoleIn (Hie_Level_t Level,long HieCod)
+Rol_Role_t Rol_GetMyMaxRoleIn (Hie_Level_t HieLvl,long HieCod)
   {
    unsigned NumMyNode;
 
@@ -285,14 +285,14 @@ Rol_Role_t Rol_GetMyMaxRoleIn (Hie_Level_t Level,long HieCod)
       return Rol_UNK;
 
    /***** Fill the list with the nodes I belong to (if not already filled) *****/
-   Hie_GetMyHierarchy (Level);
+   Hie_GetMyHierarchy (HieLvl);
 
    /***** Check if the node passed as parameter is any of my nodes *****/
    for (NumMyNode = 0;
-	NumMyNode < Gbl.Usrs.Me.Hierarchy[Level].Num;
+	NumMyNode < Gbl.Usrs.Me.Hierarchy[HieLvl].Num;
 	NumMyNode++)
-      if (Gbl.Usrs.Me.Hierarchy[Level].Nodes[NumMyNode].HieCod == HieCod)
-	 return Gbl.Usrs.Me.Hierarchy[Level].Nodes[NumMyNode].MaxRole;
+      if (Gbl.Usrs.Me.Hierarchy[HieLvl].Nodes[NumMyNode].HieCod == HieCod)
+	 return Gbl.Usrs.Me.Hierarchy[HieLvl].Nodes[NumMyNode].MaxRole;
 
    return Rol_GST;
   }

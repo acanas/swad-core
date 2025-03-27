@@ -82,7 +82,8 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
                                    Pri_Visibility_t CurrentVisibilityInDB,
                                    unsigned MaskAllowedVisibility);
 
-static void Pri_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
+static void Pri_GetAndShowNumUsrsPerPrivacyForAnObject (Hie_Level_t HieLvl,
+							const char *TxtObject,
                                                         const char *FldName,
                                                         unsigned MaskAllowedVisibility);
 
@@ -287,7 +288,7 @@ Usr_Can_t Pri_CheckIfICanView (Pri_Visibility_t Visibility,
 /********** Get and show number of users who have chosen a privacy ***********/
 /*****************************************************************************/
 
-void Pri_GetAndShowNumUsrsPerPrivacy (void)
+void Pri_GetAndShowNumUsrsPerPrivacy (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_privacy;
    extern const char *Txt_Photo;
@@ -300,15 +301,18 @@ void Pri_GetAndShowNumUsrsPerPrivacy (void)
                       Hlp_ANALYTICS_Figures_privacy,Box_NOT_CLOSABLE,2);
 
       /***** Privacy for photo *****/
-      Pri_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Photo,
+      Pri_GetAndShowNumUsrsPerPrivacyForAnObject (HieLvl,
+						  Txt_Photo,
 						  "PhotoVisibility",
 						  Pri_PHOTO_ALLOWED_VIS);
 
       /***** Privacy for public profile *****/
-      Pri_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Basic_public_profile,
+      Pri_GetAndShowNumUsrsPerPrivacyForAnObject (HieLvl,
+						  Txt_Basic_public_profile,
 						  "BaPrfVisibility",
 						  Pri_BASIC_PROFILE_ALLOWED_VIS);
-      Pri_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Extended_public_profile,
+      Pri_GetAndShowNumUsrsPerPrivacyForAnObject (HieLvl,
+						  Txt_Extended_public_profile,
 						  "ExPrfVisibility",
 						  Pri_EXTENDED_PROFILE_ALLOWED_VIS);
 
@@ -320,7 +324,8 @@ void Pri_GetAndShowNumUsrsPerPrivacy (void)
 /********** Get and show number of users who have chosen a privacy ***********/
 /*****************************************************************************/
 
-static void Pri_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
+static void Pri_GetAndShowNumUsrsPerPrivacyForAnObject (Hie_Level_t HieLvl,
+							const char *TxtObject,
                                                         const char *FldName,
                                                         unsigned MaskAllowedVisibility)
   {
@@ -350,7 +355,7 @@ static void Pri_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 	 if (asprintf (&SubQuery,"usr_data.%s='%s'",
 		       FldName,Pri_VisibilityDB[Visibility]) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 NumUsrs[Visibility] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 NumUsrs[Visibility] = Usr_DB_GetNumUsrsWhoChoseAnOption (HieLvl,SubQuery);
 	 free (SubQuery);
 
 	 /* Update total number of users */

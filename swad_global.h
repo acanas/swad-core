@@ -92,16 +92,10 @@ struct Globals
 
    struct
      {
-      Hie_Level_t Level;	// Current level in the hierarchy: system, country, institution, center, degree or course
+      Hie_Level_t HieLvl;		// Current level in the hierarchy: system, country, institution, center, degree or course
       struct Hie_List List[Hie_NUM_LEVELS];	// List of child nodes of current node
       struct Hie_Node Node[Hie_NUM_LEVELS];	// Current node
      } Hierarchy;
-
-   struct
-     {
-      Hie_Level_t Current;
-      unsigned Allowed;
-     } Scope;
 
    struct
      {
@@ -155,20 +149,6 @@ struct Globals
       struct Usr_ListUsrs LstUsrs[Rol_NUM_ROLES];
       struct Usr_SelectedUsrs Selected;
       char *ListOtherRecipients;	// List of ID or nicks of users written explicitely on a form
-      struct
-        {
-         unsigned long TimeToRefreshInMs;
-         unsigned NumUsr;
-         unsigned NumUsrs;
-         unsigned NumUsrsToList;
-         struct Con_ConnectedUsrs Usrs[Rol_NUM_ROLES];
-         struct
-           {
-            long UsrCod;
-            bool ThisCrs;
-            time_t TimeDiff;
-           } Lst[Cfg_MAX_CONNECTED_SHOWN];
-        } Connected;
      } Usrs;
 
    struct
@@ -205,7 +185,7 @@ struct Globals
 	} Path;
       char NewFilFolLnkName[NAME_MAX + 1];
       struct Brw_FilFolLnk FilFolLnk;
-      unsigned Level;
+      unsigned Lvl;
       struct
         {
          Brw_FileBrowser_t FileBrowser;	// Type of the file browser

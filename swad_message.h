@@ -130,6 +130,6 @@ void Msg_UnbanSenderWhenListingUsrs (void);
 void Msg_ListBannedUsrs (void);
 
 //-------------------------------- Figures ------------------------------------
-void Msg_GetAndShowMsgsStats (void);
+void Msg_GetAndShowMsgsStats (Hie_Level_t HieLvl);
 
 #endif

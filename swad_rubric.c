@@ -1125,7 +1125,7 @@ void Rub_ShowRubricsToFill (Rsc_Type_t RscType,long RscCod,Usr_Can_t ICanFill,
 /************************** Show stats about rubrics *************************/
 /*****************************************************************************/
 
-void Rub_GetAndShowRubricsStats (void)
+void Rub_GetAndShowRubricsStats (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_rubrics;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -1138,10 +1138,10 @@ void Rub_GetAndShowRubricsStats (void)
    double NumCriteriaPerRubric;
 
    /***** Get the number of rubrics from this location *****/
-   if ((NumRubrics = Rub_DB_GetNumRubrics (Gbl.Scope.Current)))
+   if ((NumRubrics = Rub_DB_GetNumRubrics (HieLvl)))
      {
-      NumCoursesWithRubrics = Rub_DB_GetNumCoursesWithRubrics (Gbl.Scope.Current);
-      NumCriteriaPerRubric = Rub_DB_GetNumCriteriaPerRubric (Gbl.Scope.Current);
+      NumCoursesWithRubrics = Rub_DB_GetNumCoursesWithRubrics (HieLvl);
+      NumCriteriaPerRubric = Rub_DB_GetNumCriteriaPerRubric (HieLvl);
      }
    else
      {

@@ -1462,9 +1462,10 @@ unsigned Brw_DB_GetNumPublicFilesUsr (long UsrCod)
 /***************** Get number of OERs depending on license *******************/
 /*****************************************************************************/
 
-unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,Brw_License_t License)
+unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,
+				        Hie_Level_t HieLvl,Brw_License_t License)
   {
-   switch (Gbl.Scope.Current)
+   switch (HieLvl)
      {
       case Hie_SYS:
          return (unsigned)
@@ -2815,9 +2816,10 @@ void Brw_DB_StoreSizeOfFileBrowser (const struct BrwSiz_BrowserSize *Size)
 /*****************************************************************************/
 
 void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
+				  Hie_Level_t HieLvl,
                                   Brw_FileBrowser_t FileBrowser)
   {
-   switch (Gbl.Scope.Current)
+   switch (HieLvl)
      {
       /* Scope = the whole platform */
       case Hie_SYS:

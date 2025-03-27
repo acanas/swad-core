@@ -44,13 +44,13 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Adm_AddAdm (Hie_Level_t Level);
-static void Adm_RegisterAdmin (struct Usr_Data *UsrDat,Hie_Level_t Level);
+static void Adm_AddAdm (Hie_Level_t HieLvl);
+static void Adm_RegisterAdmin (struct Usr_Data *UsrDat,Hie_Level_t HieLvl);
 
 static void Adm_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,
-                                Hie_Level_t Level);
-static void Adm_AskIfRemAdm (Usr_MeOrOther_t MeOrOther,Hie_Level_t Level);
-static void Adm_EffectivelyRemAdm (struct Usr_Data *UsrDat,Hie_Level_t Level);
+                                Hie_Level_t HieLvl);
+static void Adm_AskIfRemAdm (Usr_MeOrOther_t MeOrOther,Hie_Level_t HieLvl);
+static void Adm_EffectivelyRemAdm (struct Usr_Data *UsrDat,Hie_Level_t HieLvl);
 
 /*****************************************************************************/
 /**************** Check if I can admin another user's account ****************/
@@ -75,7 +75,7 @@ Usr_Can_t Adm_CheckIfICanAdminOtherUsrs (void)
 /**** Ask if really wanted to add an administrator to current institution ****/
 /*****************************************************************************/
 
-void Adm_ReqAddAdm (Hie_Level_t Level)
+void Adm_ReqAddAdm (Hie_Level_t HieLvl)
   {
    extern const char *Txt_THE_USER_X_is_already_an_administrator_of_Y;
    extern const char *Txt_Do_you_really_want_to_enrol_the_following_user_as_an_administrator_of_X;
@@ -91,24 +91,24 @@ void Adm_ReqAddAdm (Hie_Level_t Level)
      };
    Usr_Can_t ICanRegister;
 
-   if (Gbl.Hierarchy.Node[Level].HieCod > 0)
+   if (Gbl.Hierarchy.Node[HieLvl].HieCod > 0)
      {
       /***** Get user's identificator of the user to register as admin *****/
       if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
         {
          /* Check if I am allowed to register user as administrator in institution/center/degree */
-	 ICanRegister = ((Level == Hie_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
-                         (Level == Hie_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
-                         (Level == Hie_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
+	 ICanRegister = ((HieLvl == Hie_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
+                         (HieLvl == Hie_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
+                         (HieLvl == Hie_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
 											 Usr_CAN_NOT;
          switch (ICanRegister)
            {
             case Usr_CAN:
-	       if (Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,Level))        // User is already an administrator of current institution/center/degree
+	       if (Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,HieLvl))        // User is already an administrator of current institution/center/degree
 		 {
 		  Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_already_an_administrator_of_Y,
 				 Gbl.Usrs.Other.UsrDat.FullName,
-				 Gbl.Hierarchy.Node[Level].FullName);
+				 Gbl.Hierarchy.Node[HieLvl].FullName);
 		  Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 		 }
 	       else
@@ -116,13 +116,13 @@ void Adm_ReqAddAdm (Hie_Level_t Level)
 		  /***** Show question and button to register user as administrator *****/
 		  /* Begin alert */
 		  Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_enrol_the_following_user_as_an_administrator_of_X,
-					       Gbl.Hierarchy.Node[Level].FullName);
+					       Gbl.Hierarchy.Node[HieLvl].FullName);
 
 		  /* Show user's record */
 		  Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
 		  /* End alert */
-		  Ale_ShowAlertAndButtonEnd (Actions[Level],NULL,NULL,
+		  Ale_ShowAlertAndButtonEnd (Actions[HieLvl],NULL,NULL,
 					     Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 					     Btn_ENROL);
 		 }
@@ -169,15 +169,15 @@ void Adm_AddAdmToDeg (void)
 /******************** Get list with data of administrators *******************/
 /*****************************************************************************/
 
-void Adm_GetAdmsLst (Hie_Level_t Level)
+void Adm_GetAdmsLst (Hie_Level_t HieLvl)
   {
    char *Query = NULL;
 
    /***** Build query *****/
-   Usr_DB_BuildQueryToGetAdmsLst (Level,&Query);
+   Usr_DB_BuildQueryToGetAdmsLst (HieLvl,&Query);
 
    /***** Get list of administrators from database *****/
-   Usr_GetListUsrsFromQuery (Query,Rol_DEG_ADM,Level);
+   Usr_GetListUsrsFromQuery (Query,HieLvl,Rol_DEG_ADM);
 
    /***** Free query string *****/
    free (Query);
@@ -187,25 +187,25 @@ void Adm_GetAdmsLst (Hie_Level_t Level)
 /******************* Add an administrator in a given level *******************/
 /*****************************************************************************/
 
-static void Adm_AddAdm (Hie_Level_t Level)
+static void Adm_AddAdm (Hie_Level_t HieLvl)
   {
    Usr_Can_t ICanRegister;
 
-   if (Gbl.Hierarchy.Node[Level].HieCod > 0)
+   if (Gbl.Hierarchy.Node[HieLvl].HieCod > 0)
      {
       /***** Get plain user's ID of the user to add/modify *****/
       if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
         {
          /* Check if I am allowed to register user as administrator in institution/center/degree */
-	 ICanRegister = ((Level == Hie_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
-                         (Level == Hie_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
-                         (Level == Hie_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
+	 ICanRegister = ((HieLvl == Hie_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
+                         (HieLvl == Hie_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
+                         (HieLvl == Hie_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
 											 Usr_CAN_NOT;
          switch (ICanRegister)
            {
 	    case Usr_CAN:
 	       /***** Register administrator in current institution/center/degree in database *****/
-	       Adm_RegisterAdmin (&Gbl.Usrs.Other.UsrDat,Level);
+	       Adm_RegisterAdmin (&Gbl.Usrs.Other.UsrDat,HieLvl);
 
 	       /***** Show user's record *****/
 	       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
@@ -225,22 +225,22 @@ static void Adm_AddAdm (Hie_Level_t Level)
 /**************** Register administrator in current institution **************/
 /*****************************************************************************/
 
-static void Adm_RegisterAdmin (struct Usr_Data *UsrDat,Hie_Level_t Level)
+static void Adm_RegisterAdmin (struct Usr_Data *UsrDat,Hie_Level_t HieLvl)
   {
    extern const char *Txt_THE_USER_X_is_already_an_administrator_of_Y;
    extern const char *Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y;
 
    /***** Check if user was and administrator of current institution/center/degree *****/
-   if (Adm_DB_CheckIfUsrIsAdm (UsrDat->UsrCod,Level))
+   if (Adm_DB_CheckIfUsrIsAdm (UsrDat->UsrCod,HieLvl))
       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_is_already_an_administrator_of_Y,
-                     UsrDat->FullName,Gbl.Hierarchy.Node[Level].FullName);
+                     UsrDat->FullName,Gbl.Hierarchy.Node[HieLvl].FullName);
    else        // User was not administrator of current institution/center/degree
      {
       /***** Insert or replace administrator in current institution/center/degree *****/
-      Adm_DB_InsertAdmin (UsrDat->UsrCod,Level);
+      Adm_DB_InsertAdmin (UsrDat->UsrCod,HieLvl);
 
       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y,
-                     UsrDat->FullName,Gbl.Hierarchy.Node[Level].FullName);
+                     UsrDat->FullName,Gbl.Hierarchy.Node[HieLvl].FullName);
      }
   }
 
@@ -303,13 +303,13 @@ void Adm_RemAdmDeg (void)
 /*****************************************************************************/
 
 static void Adm_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,
-                                Hie_Level_t Level)
+                                Hie_Level_t HieLvl)
   {
    extern const char *Txt_THE_USER_X_is_not_an_administrator_of_Y;
    Usr_MeOrOther_t MeOrOther;
    Usr_Can_t ICanRemove;
 
-   if (Gbl.Hierarchy.Node[Level].HieCod > 0)
+   if (Gbl.Hierarchy.Node[HieLvl].HieCod > 0)
      {
       /***** Get user to be removed *****/
       if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
@@ -317,30 +317,30 @@ static void Adm_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,
          /* Check if it's forbidden to remove an administrator */
          MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
          ICanRemove = (MeOrOther == Usr_ME ||
-                       (Level == Hie_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
-                       (Level == Hie_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
-                       (Level == Hie_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
+                       (HieLvl == Hie_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
+                       (HieLvl == Hie_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
+                       (HieLvl == Hie_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
 										       Usr_CAN_NOT;
          switch (ICanRemove)
            {
             case Usr_CAN:
 	       /* Check if the other user is an admin of the current institution/center/degree */
-	       if (Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,Level))
+	       if (Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,HieLvl))
 		 {                // The other user is an administrator of current institution/center/degree ==> ask for removing or remove her/him
 		  switch (ReqDelOrDelUsr)
 		    {
 		     case Enr_REQUEST_REMOVE_USR:     // Ask if remove administrator from current institution
-			Adm_AskIfRemAdm (MeOrOther,Level);
+			Adm_AskIfRemAdm (MeOrOther,HieLvl);
 			break;
 		     case Enr_REMOVE_USR:             // Remove administrator from current institution
-			Adm_EffectivelyRemAdm (&Gbl.Usrs.Other.UsrDat,Level);
+			Adm_EffectivelyRemAdm (&Gbl.Usrs.Other.UsrDat,HieLvl);
 			break;
 		    }
 		 }
 	       else        // The other user is not an administrator of current institution
 		  Ale_ShowAlert (Ale_WARNING,Txt_THE_USER_X_is_not_an_administrator_of_Y,
 				 Gbl.Usrs.Other.UsrDat.FullName,
-				 Gbl.Hierarchy.Node[Level].FullName);
+				 Gbl.Hierarchy.Node[HieLvl].FullName);
 	       break;
             case Usr_CAN_NOT:
             default:
@@ -357,7 +357,7 @@ static void Adm_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,
 /** Ask if really wanted to remove an administrator from current institution */
 /*****************************************************************************/
 
-static void Adm_AskIfRemAdm (Usr_MeOrOther_t MeOrOther,Hie_Level_t Level)
+static void Adm_AskIfRemAdm (Usr_MeOrOther_t MeOrOther,Hie_Level_t HieLvl)
   {
    extern const char *Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_X;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X;
@@ -382,13 +382,13 @@ static void Adm_AskIfRemAdm (Usr_MeOrOther_t MeOrOther,Hie_Level_t Level)
       /***** Show question and button to remove user as administrator *****/
       /* Begin alert */
       Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Question[MeOrOther],
-			           Gbl.Hierarchy.Node[Level].FullName);
+			           Gbl.Hierarchy.Node[HieLvl].FullName);
 
       /* Show user's record */
       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
       /* End alert */
-      Ale_ShowAlertAndButtonEnd (ActRemAdm[Level],NULL,NULL,
+      Ale_ShowAlertAndButtonEnd (ActRemAdm[HieLvl],NULL,NULL,
                                  Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
                                  Btn_REMOVE);
      }
@@ -400,20 +400,20 @@ static void Adm_AskIfRemAdm (Usr_MeOrOther_t MeOrOther,Hie_Level_t Level)
 /**** Remove an administrator from current institution, center or degree *****/
 /*****************************************************************************/
 
-static void Adm_EffectivelyRemAdm (struct Usr_Data *UsrDat,Hie_Level_t Level)
+static void Adm_EffectivelyRemAdm (struct Usr_Data *UsrDat,Hie_Level_t HieLvl)
   {
    extern const char *Txt_THE_USER_X_has_been_removed_as_administrator_of_Y;
    extern const char *Txt_THE_USER_X_is_not_an_administrator_of_Y;
 
-   if (Adm_DB_CheckIfUsrIsAdm (UsrDat->UsrCod,Level))        // User is administrator of current institution/center/degree
+   if (Adm_DB_CheckIfUsrIsAdm (UsrDat->UsrCod,HieLvl))        // User is administrator of current institution/center/degree
      {
       /***** Remove user as administrator of institution, center or degree *****/
-      Adm_DB_RemAdmin (UsrDat->UsrCod,Level);
+      Adm_DB_RemAdmin (UsrDat->UsrCod,HieLvl);
 
       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_administrator_of_Y,
-                     UsrDat->FullName,Gbl.Hierarchy.Node[Level].FullName);
+                     UsrDat->FullName,Gbl.Hierarchy.Node[HieLvl].FullName);
      }
    else        // User is not an administrator of the current institution/center/degree
       Ale_ShowAlert (Ale_ERROR,Txt_THE_USER_X_is_not_an_administrator_of_Y,
-                     UsrDat->FullName,Gbl.Hierarchy.Node[Level].FullName);
+                     UsrDat->FullName,Gbl.Hierarchy.Node[HieLvl].FullName);
   }

@@ -1470,7 +1470,7 @@ static void Deg_ShowAlertAndButtonToGoToDeg (void)
 /********************* Get number of degrees with users **********************/
 /*****************************************************************************/
 
-unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role)
+unsigned Deg_GetCachedNumDegsWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role)
   {
    static FigCch_FigureCached_t FigureDegs[Rol_NUM_ROLES] =
      {
@@ -1479,15 +1479,15 @@ unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role)
       [Rol_TCH] = FigCch_NUM_DEGS_WITH_TCHS,	// Teachers
      };
    unsigned NumNodesWithUsrs;
-   long HieCod = Hie_GetCurrentCod ();
+   long HieCod = Hie_GetHieCod (HieLvl);
 
    /***** Get number of degrees with users from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureDegs[Role],Gbl.Scope.Current,HieCod,
+   if (!FigCch_GetFigureFromCache (FigureDegs[Role],HieLvl,HieCod,
 				   FigCch_UNSIGNED,&NumNodesWithUsrs))
      {
       /***** Get current number of degrees with users from database and update cache *****/
-      NumNodesWithUsrs = Deg_DB_GetNumDegsWithUsrs (Role,Gbl.Scope.Current,HieCod);
-      FigCch_UpdateFigureIntoCache (FigureDegs[Role],Gbl.Scope.Current,HieCod,
+      NumNodesWithUsrs = Deg_DB_GetNumDegsWithUsrs (HieLvl,HieCod,Role);
+      FigCch_UpdateFigureIntoCache (FigureDegs[Role],HieLvl,HieCod,
 				    FigCch_UNSIGNED,&NumNodesWithUsrs);
      }
 

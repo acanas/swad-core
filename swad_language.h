@@ -24,6 +24,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
+/********************************* Headers ***********************************/
+/*****************************************************************************/
+
+#include "swad_hierarchy_type.h"
+
+/*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
@@ -65,6 +71,6 @@ Lan_Language_t Lan_GetParLanguage (void);
 Lan_Language_t Lan_GetLanguageFromStr (const char *Str);
 
 //-------------------------------- Figures ------------------------------------
-void Lan_GetAndShowNumUsrsPerLanguage (void);
+void Lan_GetAndShowNumUsrsPerLanguage (Hie_Level_t HieLvl);
 
 #endif

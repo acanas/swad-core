@@ -1764,7 +1764,7 @@ void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,
 /******** Get and show number of users who have chosen a date format *********/
 /*****************************************************************************/
 
-void Dat_GetAndShowNumUsrsPerDateFormat (void)
+void Dat_GetAndShowNumUsrsPerDateFormat (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_dates;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -1796,7 +1796,7 @@ void Dat_GetAndShowNumUsrsPerDateFormat (void)
 	 if (asprintf (&SubQuery,"usr_data.DateFormat=%u",
 		       (unsigned) Format) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 NumUsrs[Format] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 NumUsrs[Format] = Usr_DB_GetNumUsrsWhoChoseAnOption (HieLvl,SubQuery);
 	 free (SubQuery);
 
 	 /* Update total number of users */

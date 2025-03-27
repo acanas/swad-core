@@ -70,6 +70,6 @@ bool Tst_GetParsTst (struct Qst_Questions *Questions,
                      Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions);
 
 //-------------------------------- Figures ------------------------------------
-void Tst_GetAndShowTestsStats (void);
+void Tst_GetAndShowTestsStats (Hie_Level_t HieLvl);
 
 #endif

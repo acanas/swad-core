@@ -85,6 +85,6 @@ void Rub_ShowRubricsToFill (Rsc_Type_t RscType,long RscCod,Usr_Can_t ICanFill,
 			    unsigned NumRubrics,MYSQL_RES *mysql_res);
 
 //-------------------------------- Figures ------------------------------------
-void Rub_GetAndShowRubricsStats (void);
+void Rub_GetAndShowRubricsStats (Hie_Level_t HieLvl);
 
 #endif

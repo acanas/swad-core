@@ -58,11 +58,11 @@ unsigned Enr_DB_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role);
 unsigned Enr_DB_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role);
 unsigned Enr_DB_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
                                         unsigned OthersRoles);
-unsigned Enr_DB_GetNumUsrsInCrss (Hie_Level_t Level,long Cod,unsigned Roles,
+unsigned Enr_DB_GetNumUsrsInCrss (Hie_Level_t HieLvl,long HieCod,unsigned Roles,
                                   bool AnyUserInCourses);
 unsigned Enr_DB_GetNumUsrsNotBelongingToAnyCrs (void);
-double Enr_DB_GetAverageNumUsrsPerCrs (Hie_Level_t Level,long Cod,Rol_Role_t Role);
-double Enr_DB_GetAverageNumCrssPerUsr (Hie_Level_t Level,long Cod,Rol_Role_t Role);
+double Enr_DB_GetAverageNumUsrsPerCrs (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Role);
+double Enr_DB_GetAverageNumCrssPerUsr (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Role);
 
 void Enr_DB_RemUsrFromCrs (long UsrCod,long HieCod);
 void Enr_DB_RemUsrFromAllCrss (long UsrCod);
@@ -72,7 +72,8 @@ void Enr_DB_RemAllUsrsFromCrs (long HieCod);
 long Enr_DB_CreateMyEnrolmentRequestInCurrentCrs (Rol_Role_t NewRole);
 void Enr_DB_UpdateMyEnrolmentRequestInCurrentCrs (long ReqCod,Rol_Role_t NewRole);
 
-unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelected);
+unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,
+				      Hie_Level_t HieLvl,unsigned RolesSelected);
 unsigned Enr_DB_GetEnrolmentRequestByCod (MYSQL_RES **mysql_res,long ReqCod);
 long Enr_DB_GetUsrEnrolmentRequestInCrs (long UsrCod,long HieCod);
 

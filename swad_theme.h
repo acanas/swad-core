@@ -66,6 +66,6 @@ void The_ChangeRowColor (void);
 void The_ChangeRowColor1 (unsigned Level);
 
 //-------------------------------- Figures ------------------------------------
-void The_GetAndShowNumUsrsPerTheme (void);
+void The_GetAndShowNumUsrsPerTheme (Hie_Level_t HieLvl);
 
 #endif

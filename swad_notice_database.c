@@ -187,9 +187,9 @@ unsigned Not_DB_GetActiveNotices (MYSQL_RES **mysql_res,long CrsCod)
 /*****************************************************************************/
 
 unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
-                               Hie_Level_t Level,Not_Status_t Status)
+			       Hie_Level_t HieLvl,Not_Status_t Status)
   {
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return (unsigned)
@@ -279,10 +279,9 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 /********************** Get number of deleted notices ************************/
 /*****************************************************************************/
 
-unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,
-                                      Hie_Level_t Level)
+unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
   {
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return (unsigned)

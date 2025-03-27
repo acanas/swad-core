@@ -48,9 +48,9 @@ unsigned Exa_DB_GetExamStartEnd (MYSQL_RES **mysql_res,long ExaCod);
 void Exa_DB_GetExamTitle (long ExaCod,char *Title,size_t TitleSize);
 void Exa_DB_GetExamTxt (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 bool Exa_DB_CheckIfSimilarExamExists (long CrsCod,long ExaCod,const char *Title);
-unsigned Exa_DB_GetNumCoursesWithExams (Hie_Level_t Level);
-unsigned Exa_DB_GetNumExams (Hie_Level_t Level);
-double Exa_DB_GetNumQstsPerCrsExam (Hie_Level_t Level);
+unsigned Exa_DB_GetNumCoursesWithExams (Hie_Level_t HieLvl);
+unsigned Exa_DB_GetNumExams (Hie_Level_t HieLvl);
+double Exa_DB_GetNumQstsPerCrsExam (Hie_Level_t HieLvl);
 void Exa_DB_RemoveExam (long ExaCod);
 void Exa_DB_RemoveAllExamsFromCrs (long CrsCod);
 

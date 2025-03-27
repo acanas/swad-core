@@ -36,19 +36,21 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Sco_PutSelectorScope (const char *ParName,HTM_Attributes_t Attributes);
-void Sco_PutParCurrentScope (void *Level);
-void Sco_PutParScope (const char *ParName,Hie_Level_t Level);
-void Sco_GetScope (const char *ParName,Hie_Level_t DefaultScope);
-void Sco_AdjustScope (Hie_Level_t DefaultScope);
+void Sco_PutSelectorScope (const char *ParName,HTM_Attributes_t Attributes,
+			   Hie_Level_t HieLvl,unsigned AllowedLvls);
+void Sco_PutParCurrentScope (void *HieLvl);
+void Sco_PutParScope (const char *ParName,Hie_Level_t HieLvl);
+Hie_Level_t Sco_GetScope (const char *ParName,
+			  Hie_Level_t DefaultHieLvl,unsigned AllowedLvls);
+void Sco_AdjustScope (Hie_Level_t *HieLvl,unsigned AllowedLvls,Hie_Level_t DefaultHieLvl);
 
-void Sco_SetAllowedScopesForListingGuests (void);
-void Sco_SetAllowedScopesForListingStudents (void);
+unsigned Sco_GetAllowedScopesForListingGuests (void);
+unsigned Sco_GetAllowedScopesForListingStudents (void);
 
 Hie_Level_t Sco_GetScopeFromUnsignedStr (const char *UnsignedStr);
-Hie_Level_t Hie_GetLevelFromDBStr (const char *LevelDBStr);
-const char *Hie_GetDBStrFromLevel (Hie_Level_t Level);
+Hie_Level_t Hie_GetLevelFromDBStr (const char *HieLvlDBStr);
+const char *Hie_GetDBStrFromLevel (Hie_Level_t HieLvl);
 
-long Hie_GetCurrentCod (void);
+long Hie_GetHieCod (Hie_Level_t HieLvl);
 
 #endif

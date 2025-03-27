@@ -279,10 +279,10 @@ bool Exa_DB_CheckIfSimilarExamExists (long CrsCod,long ExaCod,const char *Title)
 /*****************************************************************************/
 // Returns the number of courses with exams in a given location
 
-unsigned Exa_DB_GetNumCoursesWithExams (Hie_Level_t Level)
+unsigned Exa_DB_GetNumCoursesWithExams (Hie_Level_t HieLvl)
   {
    /***** Get number of courses with exams from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
          return DB_QueryCOUNT ("can not get number of courses with exams",
@@ -349,10 +349,10 @@ unsigned Exa_DB_GetNumCoursesWithExams (Hie_Level_t Level)
 /*****************************************************************************/
 // Returns the number of exams in a given location
 
-unsigned Exa_DB_GetNumExams (Hie_Level_t Level)
+unsigned Exa_DB_GetNumExams (Hie_Level_t HieLvl)
   {
    /***** Get number of exams from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
          return DB_QueryCOUNT ("can not get number of exams",
@@ -418,10 +418,10 @@ unsigned Exa_DB_GetNumExams (Hie_Level_t Level)
 /************* Get average number of questions per course exam ***************/
 /*****************************************************************************/
 
-double Exa_DB_GetNumQstsPerCrsExam (Hie_Level_t Level)
+double Exa_DB_GetNumQstsPerCrsExam (Hie_Level_t HieLvl)
   {
    /***** Get number of questions per exam from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
          return DB_QuerySELECTDouble ("can not get number of questions per exam",

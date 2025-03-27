@@ -108,7 +108,7 @@ static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod);
 
 static void Prf_ResetUsrFigures (struct Prf_UsrFigures *UsrFigures);
 
-static void Prf_GetAndShowRankingFigure (const char *FldName);
+static void Prf_GetAndShowRankingFigure (Hie_Level_t HieLvl,const char *FldName);
 static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,
                                   Usr_MeOrOther_t MeOrOther);
 
@@ -299,7 +299,7 @@ bool Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
 
       /***** Shared record card *****/
       if (MeOrOther == Usr_OTHER &&		// If not me...
-	  Gbl.Hierarchy.Level == Hie_CRS)	// ...and a course is selected
+	  Gbl.Hierarchy.HieLvl == Hie_CRS)	// ...and a course is selected
 	{
 	 /* Get user's role in current course */
 	 UsrDat->Roles.InCurrentCrs = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
@@ -1143,38 +1143,38 @@ static void Prf_ResetUsrFigures (struct Prf_UsrFigures *UsrFigures)
 /******** Get and show ranking of users attending to number of clicks ********/
 /*****************************************************************************/
 
-void Prf_GetAndShowRankingClicks (void)
+void Prf_GetAndShowRankingClicks (Hie_Level_t HieLvl)
   {
-   Prf_GetAndShowRankingFigure ("NumClicks");
+   Prf_GetAndShowRankingFigure (HieLvl,"NumClicks");
   }
 
-void Prf_GetAndShowRankingTimelinePubs (void)
+void Prf_GetAndShowRankingTimelinePubs (Hie_Level_t HieLvl)
   {
-   Prf_GetAndShowRankingFigure ("NumSocPub");
+   Prf_GetAndShowRankingFigure (HieLvl,"NumSocPub");
   }
 
-void Prf_GetAndShowRankingFileViews (void)
+void Prf_GetAndShowRankingFileViews (Hie_Level_t HieLvl)
   {
-   Prf_GetAndShowRankingFigure ("NumFileViews");
+   Prf_GetAndShowRankingFigure (HieLvl,"NumFileViews");
   }
 
-void Prf_GetAndShowRankingForPsts (void)
+void Prf_GetAndShowRankingForPsts (Hie_Level_t HieLvl)
   {
-   Prf_GetAndShowRankingFigure ("NumForPst");
+   Prf_GetAndShowRankingFigure (HieLvl,"NumForPst");
   }
 
-void Prf_GetAndShowRankingMsgsSnt (void)
+void Prf_GetAndShowRankingMsgsSnt (Hie_Level_t HieLvl)
   {
-   Prf_GetAndShowRankingFigure ("NumMsgSnt");
+   Prf_GetAndShowRankingFigure (HieLvl,"NumMsgSnt");
   }
 
-static void Prf_GetAndShowRankingFigure (const char *FldName)
+static void Prf_GetAndShowRankingFigure (Hie_Level_t HieLvl,const char *FldName)
   {
    MYSQL_RES *mysql_res;
    unsigned NumUsrs;
 
    /***** Get ranking from database *****/
-   NumUsrs = Prf_DB_GetRankingFigure (&mysql_res,FldName);
+   NumUsrs = Prf_DB_GetRankingFigure (&mysql_res,HieLvl,FldName);
 
    Prf_ShowRankingFigure (&mysql_res,NumUsrs);
   }
@@ -1249,7 +1249,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 /**** Get and show ranking of users attending to number of clicks per day ****/
 /*****************************************************************************/
 
-void Prf_GetAndShowRankingClicksPerDay (void)
+void Prf_GetAndShowRankingClicksPerDay (Hie_Level_t HieLvl)
   {
    static const char *Class[Usr_NUM_ME_OR_OTHER] =
      {
@@ -1267,7 +1267,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
    double NumClicksPerDay;
 
    /***** Get ranking from database *****/
-   if ((NumUsrs = Prf_DB_GetRankingClicksPerDay (&mysql_res)))
+   if ((NumUsrs = Prf_DB_GetRankingClicksPerDay (&mysql_res,HieLvl)))
      {
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);

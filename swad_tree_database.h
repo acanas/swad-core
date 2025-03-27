@@ -54,8 +54,8 @@ bool Tre_DB_CheckIfNodeHasTxt (const struct Tre_Node *Node);
 void Tre_DB_GetNodeTxt (const struct Tre_Node *Node,
 			char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
-unsigned Tre_DB_GetNumCoursesWithNodes (Inf_Type_t InfoType,Hie_Level_t Level);
-unsigned Tre_DB_GetNumNodes (Inf_Type_t InfoType,Hie_Level_t Level);
+unsigned Tre_DB_GetNumCoursesWithNodes (Inf_Type_t InfoType,Hie_Level_t HieLvl);
+unsigned Tre_DB_GetNumNodes (Inf_Type_t InfoType,Hie_Level_t HieLvl);
 
 void Tre_DB_RemoveNodeRange (Inf_Type_t InfoType,
 			     const struct Tre_NodeRange *ToRemove);

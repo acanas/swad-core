@@ -247,7 +247,7 @@ Lan_Language_t Lan_GetLanguageFromStr (const char *Str)
 /********* Get and show number of users who have chosen a language ***********/
 /*****************************************************************************/
 
-void Lan_GetAndShowNumUsrsPerLanguage (void)
+void Lan_GetAndShowNumUsrsPerLanguage (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_language;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -281,7 +281,7 @@ void Lan_GetAndShowNumUsrsPerLanguage (void)
 	 if (asprintf (&SubQuery,"usr_data.Language='%s'",
 		       Lan_STR_LANG_ID[Lan]) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 NumUsrs[Lan] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 NumUsrs[Lan] = Usr_DB_GetNumUsrsWhoChoseAnOption (HieLvl,SubQuery);
 	 free (SubQuery);
 
 	 /* Update total number of users */

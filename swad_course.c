@@ -143,7 +143,7 @@ void Crs_ShowIntroduction (void)
 /********************* Get number of courses with users **********************/
 /*****************************************************************************/
 
-unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role)
+unsigned Crs_GetCachedNumCrssWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role)
   {
    static FigCch_FigureCached_t FigureCrss[Rol_NUM_ROLES] =
      {
@@ -152,15 +152,15 @@ unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role)
       [Rol_TCH] = FigCch_NUM_CRSS_WITH_TCHS,	// Teachers
      };
    unsigned NumNodesWithUsrs;
-   long HieCod = Hie_GetCurrentCod ();
+   long HieCod = Hie_GetHieCod (HieLvl);
 
    /***** Get number of courses with users from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureCrss[Role],Gbl.Scope.Current,HieCod,
+   if (!FigCch_GetFigureFromCache (FigureCrss[Role],HieLvl,HieCod,
 				   FigCch_UNSIGNED,&NumNodesWithUsrs))
      {
       /***** Get current number of courses with users from database and update cache *****/
-      NumNodesWithUsrs = Crs_DB_GetNumCrssWithUsrs (Role,Gbl.Scope.Current,HieCod);
-      FigCch_UpdateFigureIntoCache (FigureCrss[Role],Gbl.Scope.Current,HieCod,
+      NumNodesWithUsrs = Crs_DB_GetNumCrssWithUsrs (HieLvl,HieCod,Role);
+      FigCch_UpdateFigureIntoCache (FigureCrss[Role],HieLvl,HieCod,
 				    FigCch_UNSIGNED,&NumNodesWithUsrs);
      }
 
@@ -213,7 +213,7 @@ void Crs_WriteSelectorOfCourse (void)
 
 	       /* Write option */
 	       HTM_OPTION (HTM_Type_LONG,&CrsCod,
-			   Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
+			   Gbl.Hierarchy.HieLvl == Hie_CRS &&	// Course selected
 			   (CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? HTM_SELECTED :
 									    HTM_NO_ATTR,
 			   "%s",row[1]);	// Short name (row[1])
@@ -350,7 +350,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 
 	 /***** Write an option with the current course
 		when I don't belong to it *****/
-	 if (Gbl.Hierarchy.Level == Hie_CRS &&				// Course selected
+	 if (Gbl.Hierarchy.HieLvl == Hie_CRS &&				// Course selected
 	     Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_DONT_BELONG)	// I do not belong to it
 	    HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 	                HTM_SELECTED | HTM_DISABLED,
@@ -1876,7 +1876,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 
 void Crs_UpdateCrsLast (void)
   {
-   if (Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
+   if (Gbl.Hierarchy.HieLvl == Hie_CRS &&	// Course selected
        Gbl.Usrs.Me.Role.Logged >= Rol_STD)
       /***** Update last access to current course *****/
       Crs_DB_UpdateCrsLastClick ();

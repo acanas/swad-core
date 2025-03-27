@@ -87,10 +87,10 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 
 void Lay_WriteAboutZone (void);
 
-void Lay_RefreshNotifsAndConnected (void);
+void Lay_RefreshRightColumn (void);
 void Lay_RefreshLastClicks (void);
 
-void Lay_WriteHeaderClassPhoto (Vie_ViewType_t ViewType);
+void Lay_WriteHeaderClassPhoto (Hie_Level_t HieLvl,Vie_ViewType_t ViewType);
 
 void Lay_AdvertisementMobile (void);
 
@@ -107,6 +107,6 @@ void Lay_WriteIndex (unsigned Index,const char *Class);
 void Lay_WriteLinkToUpdate (const char *Txt,const char *OnSubmit);
 
 //-------------------------------- Figures ------------------------------------
-void Lay_GetAndShowNumUsrsPerSideColumns (void);
+void Lay_GetAndShowNumUsrsPerSideColumns (Hie_Level_t HieLvl);
 
 #endif

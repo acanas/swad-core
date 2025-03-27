@@ -456,7 +456,7 @@ static void Lay_WritePageTitle (void)
 	{
 	 HTM_TxtF ("%s &gt; %s",
 	           Cfg_PLATFORM_SHORT_NAME,Gbl.Hierarchy.Node[Hie_DEG].ShrtName);
-	 if (Gbl.Hierarchy.Level == Hie_CRS)
+	 if (Gbl.Hierarchy.HieLvl == Hie_CRS)
 	    HTM_TxtF (" &gt; %s",Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 	}
       else
@@ -836,12 +836,8 @@ static void Lay_WriteScriptInit (void)
 
       HTM_TxtF ("\tactionAJAX = \"%s\";\n",Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 
-      if (RefreshConnected)	// Refresh connected users via AJAX
-	{
+      if (RefreshConnected)		// Refresh connected users via AJAX
 	 Con_WriteScriptClockConnected ();
-	 HTM_TxtF ("\tsetTimeout('refreshConnected()',%lu);\n",
-		   Gbl.Usrs.Connected.TimeToRefreshInMs);
-	}
 
       if (RefreshLastClicks)		// Refresh last clicks via AJAX
 	 HTM_TxtF ("\tsetTimeout('refreshLastClicks()',%lu);\n",
@@ -1137,7 +1133,7 @@ static void Lay_ShowLeftColumn (void)
    Cal_DrawCurrentMonth ();
 
    /***** Notices (yellow notes) *****/
-   if (Gbl.Hierarchy.Level == Hie_CRS)
+   if (Gbl.Hierarchy.HieLvl == Hie_CRS)
       Not_ShowNotices (Not_LIST_BRIEF_NOTICES,
 		       -1L);	// No notice highlighted
   }
@@ -1168,12 +1164,11 @@ static void Lay_ShowRightColumn (void)
      }
 
    /***** Number of connected users in the current course *****/
-   if (Gbl.Hierarchy.Level == Hie_CRS)	// There is a course selected
+   if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// There is a course selected
      {
       HTM_FIELDSET_Begin ("class=\"CON CON_%s\"",The_GetSuffix ());
 	 HTM_LEGEND (Txt_Connected_PLURAL);
 	 HTM_DIV_Begin ("id=\"courseconnected\"");	// Used for AJAX based refresh
-	    Gbl.Scope.Current = Hie_CRS;
 	    Con_ShowConnectedUsrsBelongingToCurrentCrs ();
 	 HTM_DIV_End ();				// Used for AJAX based refresh
       HTM_FIELDSET_End ();
@@ -1368,11 +1363,8 @@ void Lay_WriteAboutZone (void)
 /*********** Refresh notifications and connected users via AJAX **************/
 /*****************************************************************************/
 
-void Lay_RefreshNotifsAndConnected (void)
+void Lay_RefreshRightColumn (void)
   {
-   unsigned NumUsr;
-   bool ShowConnected = (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&
-                        Gbl.Hierarchy.Level == Hie_CRS;	// Right column visible && There is a course selected
    pid_t PID = Prc_GetPID ();
 
    /***** Sometimes, someone must do this work,
@@ -1413,27 +1405,7 @@ void Lay_RefreshNotifsAndConnected (void)
       Fil_RemoveOldTmpFiles (Cfg_PATH_TEST_PRIVATE,
                              Cfg_TIME_TO_DELETE_TEST_TMP_FILES	 ,false);
 
-   /***** Send, before the HTML, the refresh time *****/
-   HTM_TxtF ("%lu|",Gbl.Usrs.Connected.TimeToRefreshInMs);
-   if (Gbl.Usrs.Me.Logged)
-      Ntf_WriteNumberOfNewNtfs ();
-   HTM_Char ('|');
-   Con_ShowGlobalConnectedUsrs ();
-   HTM_Char ('|');
-   if (ShowConnected)
-     {
-      Gbl.Scope.Current = Hie_CRS;
-      Con_ShowConnectedUsrsBelongingToCurrentCrs ();
-     }
-   HTM_Char ('|');
-   if (ShowConnected)
-      HTM_Unsigned (Gbl.Usrs.Connected.NumUsrsToList);
-   HTM_Char ('|');
-   if (ShowConnected)
-      for (NumUsr = 0;
-	   NumUsr < Gbl.Usrs.Connected.NumUsrsToList;
-	   NumUsr++)
-         HTM_TxtF ("%ld|",Gbl.Usrs.Connected.Lst[NumUsr].TimeDiff);
+   Con_RefreshConnected ();
   }
 
 /*****************************************************************************/
@@ -1478,18 +1450,18 @@ static void Lay_WriteFootFromHTMLFile (void)
 /****** Write header and footer of the class photo or academic calendar ******/
 /*****************************************************************************/
 
-void Lay_WriteHeaderClassPhoto (Vie_ViewType_t ViewType)
+void Lay_WriteHeaderClassPhoto (Hie_Level_t HieLvl,Vie_ViewType_t ViewType)
   {
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Hie[Hie_NUM_LEVELS];
 
    /***** Initialize institution, degree and course to show in header *****/
-   Hie[Hie_INS].HieCod = (Gbl.Scope.Current >= Hie_INS) ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
-							  -1L;
-   Hie[Hie_DEG].HieCod = (Gbl.Scope.Current >= Hie_DEG) ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
-							  -1L;
-   Hie[Hie_CRS].HieCod = (Gbl.Scope.Current == Hie_CRS) ? Gbl.Hierarchy.Node[Hie_CRS].HieCod :
-							  -1L;
+   Hie[Hie_INS].HieCod = (HieLvl >= Hie_INS) ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
+					       -1L;
+   Hie[Hie_DEG].HieCod = (HieLvl >= Hie_DEG) ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
+					       -1L;
+   Hie[Hie_CRS].HieCod = (HieLvl == Hie_CRS) ? Gbl.Hierarchy.Node[Hie_CRS].HieCod :
+					       -1L;
 
    /***** Get data of institution, degree and course *****/
    Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]);
@@ -1737,7 +1709,7 @@ void Lay_WriteLinkToUpdate (const char *Txt,const char *OnSubmit)
 /***** Get and show number of users who have chosen a layout of columns ******/
 /*****************************************************************************/
 
-void Lay_GetAndShowNumUsrsPerSideColumns (void)
+void Lay_GetAndShowNumUsrsPerSideColumns (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_columns;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -1771,7 +1743,7 @@ void Lay_GetAndShowNumUsrsPerSideColumns (void)
 	 if (asprintf (&SubQuery,"usr_data.SideCols=%u",
 		       SideCols) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 NumUsrs[SideCols] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 NumUsrs[SideCols] = Usr_DB_GetNumUsrsWhoChoseAnOption (HieLvl,SubQuery);
 	 free (SubQuery);
 
 	 /* Update total number of users */

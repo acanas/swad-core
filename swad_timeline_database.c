@@ -206,9 +206,10 @@ void Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (TmlNot_Type_t NoteType,
 /*****************************************************************************/
 
 unsigned Tml_DB_GetNumNotesAndUsrsByType (MYSQL_RES **mysql_res,
+					  Hie_Level_t HieLvl,
                                           TmlNot_Type_t NoteType)
   {
-   switch (Gbl.Scope.Current)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return (unsigned)
@@ -308,9 +309,9 @@ unsigned Tml_DB_GetNumNotesAndUsrsByType (MYSQL_RES **mysql_res,
 /******************** Get total number of notes and users ********************/
 /*****************************************************************************/
 
-unsigned Tml_DB_GetNumNotesAndUsrsTotal (MYSQL_RES **mysql_res)
+unsigned Tml_DB_GetNumNotesAndUsrsTotal (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
   {
-   switch (Gbl.Scope.Current)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return (unsigned)

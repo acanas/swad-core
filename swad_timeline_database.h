@@ -54,8 +54,9 @@ void Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (TmlNot_Type_t NoteType,
                                                     long Cod,const char *Path);
 
 unsigned Tml_DB_GetNumNotesAndUsrsByType (MYSQL_RES **mysql_res,
+					  Hie_Level_t HieLvl,
                                           TmlNot_Type_t NoteType);
-unsigned Tml_DB_GetNumNotesAndUsrsTotal (MYSQL_RES **mysql_res);
+unsigned Tml_DB_GetNumNotesAndUsrsTotal (MYSQL_RES **mysql_res,Hie_Level_t HieLvl);
 
 void Tml_DB_CreateTmpTableTimeline (Tml_WhatToGet_t WhatToGet);
 void Tml_DB_InsertNoteInTimeline (long NotCod);

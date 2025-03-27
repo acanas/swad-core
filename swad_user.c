@@ -131,6 +131,16 @@ static const char *Usr_IconsClassPhotoOrList[Set_NUM_USR_LIST_TYPES] =
 const char *Usr_UsrDatMainFieldNames[Usr_NUM_MAIN_FIELDS_DATA_USR];
 
 /*****************************************************************************/
+/******************************* Private types *******************************/
+/*****************************************************************************/
+
+struct Usr_ListingPars
+  {
+   Hie_Level_t HieLvl;
+   bool WithPhotos;
+  };
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -191,7 +201,7 @@ static void Usr_PutLinkToLogOut (__attribute__((unused)) void *Args);
 
 static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,bool ShowPhoto);
 static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
-				    bool ShowPhoto);
+				    bool ShowPhoto,Hie_Level_t HieLvl);
 static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,bool ShowPhoto);
 static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat,
 				 bool ShowPhoto);
@@ -202,7 +212,7 @@ static void Usr_WriteUsrData (const char *BgColor,
                               const char *Data,const char *Link,
                               bool NonBreak,bool Accepted);
 
-static void Usr_GetGstsLst (Hie_Level_t Level);
+static void Usr_GetGstsLst (Hie_Level_t HieLvl);
 static void Usr_AllocateUsrsList (Rol_Role_t Role);
 
 static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
@@ -248,7 +258,7 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
 static void Usr_PutLinkToSeeAdmins (void);
 static void Usr_PutLinkToSeeGuests (void);
 
-static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
+static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Hie_Level_t HieLvl,Rol_Role_t UsrsRole,
                                                     Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
 static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
 static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
@@ -257,17 +267,17 @@ static Usr_ListUsrsOption_t Usr_GetListUsrsOption (Usr_ListUsrsOption_t DefaultA
 
 static void Usr_PutIconsListGsts (void *WithPhotos);
 static void Usr_PutIconsListStds (void *WithPhotos);
-static void Usr_PutIconsListTchs (void *WithPhotos);
+static void Usr_PutIconsListTchs (void *ListingPars);
 
 static void Usr_PutIconToPrintGsts (bool WithPhotos);
 static void Usr_PutIconToPrintStds (bool WithPhotos);
-static void Usr_PutIconToPrintTchs (bool WithPhotos);
+static void Usr_PutIconToPrintTchs (struct Usr_ListingPars *ListingPars);
 static void Usr_PutIconToShowGstsAllData (bool WithPhotos);
 static void Usr_PutIconToShowStdsAllData (bool WithPhotos);
 static void Usr_PutIconToShowTchsAllData (bool WithPhotos);
 static void Usr_ShowGstsAllDataPars (void *WithPhotos);
 static void Usr_ShowStdsAllDataPars (void *WithPhotos);
-static void Usr_ShowTchsAllDataPars (void *WithPhotos);
+static void Usr_ShowTchsAllDataPars (void *ListingPars);
 
 static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
                                 Rol_Role_t Role,
@@ -276,7 +286,7 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
 				bool WithPhotos);
 static void Usr_PutSelectorNumColsClassPhoto (void);
 
-static void Usr_GetAndShowNumUsrsInCrss (Rol_Role_t Role);
+static void Usr_GetAndShowNumUsrsInCrss (Hie_Level_t HieLvl,Rol_Role_t Role);
 static void Usr_GetAndShowNumUsrsNotBelongingToAnyCrs (void);
 
 /*****************************************************************************/
@@ -381,7 +391,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct Usr_Data *UsrDat)
 void Usr_ResetMyLastData (void)
   {
    Gbl.Usrs.Me.UsrLast.WhatToSearch  = Sch_WHAT_TO_SEARCH_DEFAULT;
-   Gbl.Usrs.Me.UsrLast.LastHie.Level = Hie_UNK;
+   Gbl.Usrs.Me.UsrLast.LastHie.HieLvl = Hie_UNK;
    Gbl.Usrs.Me.UsrLast.LastHie.HieCod   = -1L;
    Gbl.Usrs.Me.UsrLast.LastAct       = ActUnk;
    Gbl.Usrs.Me.UsrLast.LastRole      = Rol_UNK;
@@ -634,8 +644,8 @@ static void Usr_GetMyLastData (void)
 	 Gbl.Usrs.Me.UsrLast.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
 
       /* Get last hierarchy: scope (row[1]) and code (row[2]) */
-      Gbl.Usrs.Me.UsrLast.LastHie.Level = Hie_GetLevelFromDBStr (row[1]);
-      switch (Gbl.Usrs.Me.UsrLast.LastHie.Level)
+      Gbl.Usrs.Me.UsrLast.LastHie.HieLvl = Hie_GetLevelFromDBStr (row[1]);
+      switch (Gbl.Usrs.Me.UsrLast.LastHie.HieLvl)
         {
          case Hie_SYS:	// System
             Gbl.Usrs.Me.UsrLast.LastHie.HieCod = -1L;
@@ -648,12 +658,12 @@ static void Usr_GetMyLastData (void)
             Gbl.Usrs.Me.UsrLast.LastHie.HieCod = Str_ConvertStrCodToLongCod (row[2]);
             if (Gbl.Usrs.Me.UsrLast.LastHie.HieCod <= 0)
               {
-               Gbl.Usrs.Me.UsrLast.LastHie.Level = Hie_UNK;
+               Gbl.Usrs.Me.UsrLast.LastHie.HieLvl = Hie_UNK;
                Gbl.Usrs.Me.UsrLast.LastHie.HieCod = -1L;
               }
             break;
          default:
-            Gbl.Usrs.Me.UsrLast.LastHie.Level = Hie_UNK;
+            Gbl.Usrs.Me.UsrLast.LastHie.HieLvl = Hie_UNK;
             Gbl.Usrs.Me.UsrLast.LastHie.HieCod = -1L;
             break;
         }
@@ -744,12 +754,12 @@ void Usr_WriteFirstNameBRSurnames (const struct Usr_Data *UsrDat)
 
 void Usr_FlushCachesUsr (void)
   {
-   Hie_Level_t Level;
+   Hie_Level_t HieLvl;
 
-   for (Level  = Hie_INS;
-	Level <= Hie_CRS;
-	Level++)
-      Hie_FlushCacheUsrBelongsTo (Level);
+   for (HieLvl  = Hie_INS;
+	HieLvl <= Hie_CRS;
+	HieLvl++)
+      Hie_FlushCacheUsrBelongsTo (HieLvl);
 
    Enr_FlushCacheUsrBelongsToCurrentCrs ();
    Enr_FlushCacheUsrHasAcceptedInCurrentCrs ();
@@ -1965,13 +1975,13 @@ static void Usr_SetMyPrefsAndRoles (void)
 
       /***** Location in hierarchy and role are stored in session,
              but in login the are got from user's last data *****/
-      if (Gbl.Hierarchy.Level == Hie_SYS)	// No country selected
+      if (Gbl.Hierarchy.HieLvl == Hie_SYS)	// No country selected
         {
 	 /***** Copy last hierarchy to current hierarchy *****/
 	 Hie_SetHierarchyFromUsrLastHierarchy ();
 
 	 /* Course may have changed ==> get my role in current course again */
-	 if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+	 if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
 	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
 	 // role and action will be got from last data
@@ -1981,8 +1991,8 @@ static void Usr_SetMyPrefsAndRoles (void)
 	 // Role and action will be got from last data
 	 // only if I am in the same hierarchy location that the stored one
 	 GetRoleAndActionFromLastData =
-	    (Gbl.Hierarchy.Level == Gbl.Usrs.Me.UsrLast.LastHie.Level &&	// The same scope...
-	     Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].HieCod ==
+	    (Gbl.Hierarchy.HieLvl == Gbl.Usrs.Me.UsrLast.LastHie.HieLvl &&	// The same scope...
+	     Gbl.Hierarchy.Node[Gbl.Hierarchy.HieLvl].HieCod ==
 	     Gbl.Usrs.Me.UsrLast.LastHie.HieCod);				// ...and code in hierarchy
 
       /***** Get role and action from last data *****/
@@ -2310,7 +2320,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,bool ShowPhoto)
 /*****************************************************************************/
 
 static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
-				    bool ShowPhoto)
+				    bool ShowPhoto,Hie_Level_t HieLvl)
   {
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -2377,7 +2387,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
 						 NULL,
 			NULL,true,UsrDat->Accepted);
 
-      if (Gbl.Scope.Current == Hie_CRS)
+      if (HieLvl == Hie_CRS)
 	{
 	 /***** Write the groups a the que pertenece the student *****/
 	 for (NumGrpTyp = 0;
@@ -2658,15 +2668,15 @@ static void Usr_WriteUsrData (const char *BgColor,
 // - Rol_NET	Non-editing teacher
 // - Rol_TCH	Teacher
 
-void Usr_GetListUsrs (Hie_Level_t Level,Rol_Role_t Role)
+void Usr_GetListUsrs (Hie_Level_t HieLvl,Rol_Role_t Role)
   {
    char *Query = NULL;
 
    /***** Build query *****/
-   Usr_DB_BuildQueryToGetUsrsLst (Level,Role,&Query);
+   Usr_DB_BuildQueryToGetUsrsLst (HieLvl,Role,&Query);
 
    /***** Get list of users from database given a query *****/
-   Usr_GetListUsrsFromQuery (Query,Role,Level);
+   Usr_GetListUsrsFromQuery (Query,HieLvl,Role);
 
    /***** Free query string *****/
    free (Query);
@@ -2676,15 +2686,15 @@ void Usr_GetListUsrs (Hie_Level_t Level,Rol_Role_t Role)
 /*********** Search for users with a given role in current scope *************/
 /*****************************************************************************/
 
-void Usr_SearchListUsrs (Rol_Role_t Role)
+void Usr_SearchListUsrs (Hie_Level_t HieLvl,Rol_Role_t Role)
   {
    char *Query = NULL;
 
    /***** Build query *****/
-   Usr_DB_BuildQueryToSearchListUsrs (Role,&Query);
+   Usr_DB_BuildQueryToSearchListUsrs (HieLvl,Role,&Query);
 
    /***** Get list of users from database given a query *****/
-   Usr_GetListUsrsFromQuery (Query,Role,Gbl.Scope.Current);
+   Usr_GetListUsrsFromQuery (Query,HieLvl,Role);
 
    /***** Free query string *****/
    free (Query);
@@ -2694,15 +2704,15 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 /************************ Get list with data of guests ***********************/
 /*****************************************************************************/
 
-static void Usr_GetGstsLst (Hie_Level_t Level)
+static void Usr_GetGstsLst (Hie_Level_t HieLvl)
   {
    char *Query = NULL;
 
    /***** Build query *****/
-   Usr_DB_BuildQueryToGetGstsLst (Level,&Query);
+   Usr_DB_BuildQueryToGetGstsLst (HieLvl,&Query);
 
    /***** Get list of students from database *****/
-   Usr_GetListUsrsFromQuery (Query,Rol_GST,Level);
+   Usr_GetListUsrsFromQuery (Query,HieLvl,Rol_GST);
 
    /***** Free query string *****/
    free (Query);
@@ -2720,7 +2730,7 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
    Usr_DB_BuildQueryToGetUnorderedStdsCodesInDeg (DegCod,&Query);
 
    /***** Get list of students *****/
-   Usr_GetListUsrsFromQuery (Query,Rol_STD,Hie_DEG);
+   Usr_GetListUsrsFromQuery (Query,Hie_DEG,Rol_STD);
 
    /***** Free query string *****/
    free (Query);
@@ -2730,7 +2740,7 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
 /********************** Get list of users from database **********************/
 /*****************************************************************************/
 
-void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Level_t Level)
+void Usr_GetListUsrsFromQuery (char *Query,Hie_Level_t HieLvl,Rol_Role_t Role)
   {
    extern const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed;
    MYSQL_RES *mysql_res;
@@ -2822,7 +2832,7 @@ void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Level_t Level)
             switch (Role)
               {
                case Rol_UNK:	// Here Rol_UNK means any user
-		  switch (Level)
+		  switch (HieLvl)
 		    {
 		     case Hie_UNK:	// Unknown
 			Err_WrongHierarchyLevelExit ();
@@ -2860,7 +2870,7 @@ void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Level_t Level)
                case Rol_STD:
                case Rol_NET:
                case Rol_TCH:
-		  switch (Level)
+		  switch (HieLvl)
 		    {
 		     case Hie_UNK:	// Unknown
 			Err_WrongHierarchyLevelExit ();
@@ -4271,6 +4281,8 @@ void Usr_ListAllDataGsts (void)
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
    extern const char *Txt_Date_of_birth;
+   unsigned AllowedLvls;
+   Hie_Level_t HieLvl;
    bool WithPhotos;
    unsigned NumColumnsCommonCard;
    unsigned NumCol;
@@ -4300,11 +4312,11 @@ void Usr_ListAllDataGsts (void)
    Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
 
    /***** Get scope *****/
-   Sco_SetAllowedScopesForListingGuests ();
-   Sco_GetScope ("ScopeUsr",Hie_SYS);
+   AllowedLvls = Sco_GetAllowedScopesForListingGuests ();
+   HieLvl = Sco_GetScope ("ScopeUsr",Hie_SYS,AllowedLvls);
 
    /****** Get list of guests ******/
-   Usr_GetGstsLst (Gbl.Scope.Current);
+   Usr_GetGstsLst (HieLvl);
 
    if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
      {
@@ -4383,6 +4395,8 @@ void Usr_ListAllDataStds (void)
    extern const char *Txt_Date_of_birth;
    extern const char *Txt_Group;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
+   unsigned AllowedLvls;
+   Hie_Level_t HieLvl;
    bool WithPhotos;
    unsigned NumColsCommonRecord;
    unsigned NumColsRecordAndGroups;
@@ -4417,11 +4431,11 @@ void Usr_ListAllDataStds (void)
    Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
 
    /***** Get scope *****/
-   Sco_SetAllowedScopesForListingStudents ();
-   Sco_GetScope ("ScopeUsr",Hie_CRS);
+   AllowedLvls = Sco_GetAllowedScopesForListingStudents ();
+   HieLvl = Sco_GetScope ("ScopeUsr",Hie_CRS,AllowedLvls);
 
    /***** If the scope is the current course... *****/
-   if (Gbl.Scope.Current == Hie_CRS)
+   if (HieLvl == Hie_CRS)
      {
       /* Get list of groups types and groups in current course
          This is necessary to show columns with group selection */
@@ -4432,17 +4446,17 @@ void Usr_ListAllDataStds (void)
      }
 
    /****** Get list of students in current course ******/
-   Usr_GetListUsrs (Gbl.Scope.Current,Rol_STD);
+   Usr_GetListUsrs (HieLvl,Rol_STD);
 
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
-      if (Gbl.Scope.Current == Hie_CRS)
+      if (HieLvl == Hie_CRS)
          /***** Get list of record fields in current course *****/
          Rec_GetListRecordFieldsInCurrentCrs ();
 
       /***** Set number of columns *****/
       NumColsCommonRecord = Usr_NUM_ALL_FIELDS_DATA_STD;
-      if (Gbl.Scope.Current == Hie_CRS)
+      if (HieLvl == Hie_CRS)
         {
          NumColsRecordAndGroups = NumColsCommonRecord + Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
          NumColsTotal = NumColsRecordAndGroups + Gbl.Crs.Records.LstFields.Num;
@@ -4451,7 +4465,7 @@ void Usr_ListAllDataStds (void)
          NumColsTotal = NumColsRecordAndGroups = NumColsCommonRecord;
 
       /***** Allocate memory for the string with the list of group names where student belongs to *****/
-      if (Gbl.Scope.Current == Hie_CRS)
+      if (HieLvl == Hie_CRS)
 	{
 	 Length = (size_t) (Grp_MAX_BYTES_GROUP_NAME + 2) *
 		  (size_t) Gbl.Crs.Grps.GrpTypes.NumGrpsTotal;
@@ -4483,7 +4497,7 @@ void Usr_ListAllDataStds (void)
 	       HTM_TH_Span (FieldNames[NumCol],HTM_HEAD_LEFT,1,1,"BG_HIGHLIGHT");
 
 	    /* 2. Columns for the groups */
-	    if (Gbl.Scope.Current == Hie_CRS)
+	    if (HieLvl == Hie_CRS)
 	      {
 	       if (Gbl.Crs.Grps.GrpTypes.NumGrpTypes)
 		  for (NumGrpTyp = 0;
@@ -4553,7 +4567,7 @@ void Usr_ListAllDataStds (void)
 							// his/her role from database.
 	       UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].Accepted;
 	       NumUsr++;
-	       Usr_WriteRowStdAllData (&UsrDat,GroupNames,WithPhotos);
+	       Usr_WriteRowStdAllData (&UsrDat,GroupNames,WithPhotos,HieLvl);
 
 	       The_ChangeRowColor ();
 	      }
@@ -4566,7 +4580,7 @@ void Usr_ListAllDataStds (void)
       HTM_TABLE_End ();
 
       /***** Free memory used by the string with the list of group names where student belongs to *****/
-      if (Gbl.Scope.Current == Hie_CRS)
+      if (HieLvl == Hie_CRS)
          free (GroupNames);
      }
    else        // Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
@@ -4599,6 +4613,8 @@ void Usr_ListAllDataTchs (void)
    extern const char *Txt_Department;
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
+   unsigned AllowedLvls;
+   Hie_Level_t HieLvl;
    bool WithPhotos;
    unsigned NumUsrs;
    unsigned NumColumns;
@@ -4623,28 +4639,28 @@ void Usr_ListAllDataTchs (void)
    Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
 
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << Hie_SYS |
-	               1 << Hie_CTY |
-                       1 << Hie_INS |
-                       1 << Hie_CTR |
-                       1 << Hie_DEG |
-                       1 << Hie_CRS;
-   Sco_GetScope ("ScopeUsr",Hie_CRS);
+   AllowedLvls = 1 << Hie_SYS |
+		 1 << Hie_CTY |
+		 1 << Hie_INS |
+		 1 << Hie_CTR |
+		 1 << Hie_DEG |
+		 1 << Hie_CRS;
+   HieLvl = Sco_GetScope ("ScopeUsr",Hie_CRS,AllowedLvls);
 
    /***** Get list of teachers *****/
-   Usr_GetListUsrs (Gbl.Scope.Current,Rol_NET);	// Non-editing teachers
-   Usr_GetListUsrs (Gbl.Scope.Current,Rol_TCH);	// Teachers
-   if (Gbl.Scope.Current == Hie_CRS)
+   Usr_GetListUsrs (HieLvl,Rol_NET);	// Non-editing teachers
+   Usr_GetListUsrs (HieLvl,Rol_TCH);	// Teachers
+   if (HieLvl == Hie_CRS)
       NumUsrs = Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
-      NumUsrs = Enr_GetNumUsrsInCrss (Gbl.Scope.Current,
-				     (Gbl.Scope.Current == Hie_CTY ? Gbl.Hierarchy.Node[Hie_CTY].HieCod :
-				     (Gbl.Scope.Current == Hie_INS ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
-				     (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Node[Hie_CTR].HieCod :
-				     (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
-				     (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Node[Hie_CRS].HieCod :
-								     -1L))))),
+      NumUsrs = Enr_GetNumUsrsInCrss (HieLvl,
+				     (HieLvl == Hie_CTY ? Gbl.Hierarchy.Node[Hie_CTY].HieCod :
+				     (HieLvl == Hie_INS ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
+				     (HieLvl == Hie_CTR ? Gbl.Hierarchy.Node[Hie_CTR].HieCod :
+				     (HieLvl == Hie_DEG ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
+				     (HieLvl == Hie_CRS ? Gbl.Hierarchy.Node[Hie_CRS].HieCod :
+							 -1L))))),
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
 
@@ -4727,7 +4743,7 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
 /*****************************************************************************/
 // Returns number of users found
 
-unsigned Usr_ListUsrsFound (Rol_Role_t Role,
+unsigned Usr_ListUsrsFound (Hie_Level_t HieLvl,Rol_Role_t Role,
                             const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1])
   {
    extern const char *Txt_user[Usr_NUM_SEXS];
@@ -4749,7 +4765,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
    Usr_DB_CreateTmpTableAndSearchCandidateUsrs (SearchQuery);
 
    /***** Search for users *****/
-   Usr_SearchListUsrs (Role);
+   Usr_SearchListUsrs (HieLvl,Role);
    if ((NumUsrs = Gbl.Usrs.LstUsrs[Role].NumUsrs))
      {
       /***** Begin box with number of users found *****/
@@ -4850,6 +4866,8 @@ void Usr_ListDataAdms (void)
    extern const char *Txt_First_name;
    extern const char *Txt_Email;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
+   unsigned AllowedLvls;
+   Hie_Level_t HieLvl;
    bool WithPhotos;
    unsigned NumCol;
    unsigned NumUsr;
@@ -4895,15 +4913,15 @@ void Usr_ListDataAdms (void)
    Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
 
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << Hie_SYS |
-	               1 << Hie_CTY |
-                       1 << Hie_INS |
-                       1 << Hie_CTR |
-                       1 << Hie_DEG;
-   Sco_GetScope ("ScopeUsr",Hie_DEG);
+   AllowedLvls = 1 << Hie_SYS |
+		 1 << Hie_CTY |
+		 1 << Hie_INS |
+		 1 << Hie_CTR |
+		 1 << Hie_DEG;
+   HieLvl = Sco_GetScope ("ScopeUsr",Hie_DEG,AllowedLvls);
 
    /***** Get list of administrators *****/
-   Adm_GetAdmsLst (Gbl.Scope.Current);
+   Adm_GetAdmsLst (HieLvl);
 
    /***** Begin box with list of administrators *****/
    Box_BoxBegin (Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],NULL,NULL,
@@ -4915,7 +4933,8 @@ void Usr_ListDataAdms (void)
 	    Set_PutParListWithPhotos (WithPhotos);
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtColonNBSP (Txt_Scope);
-	       Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
+	       Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE,
+				     HieLvl,AllowedLvls);
 	    HTM_LABEL_End ();
 	 Frm_EndForm ();
       HTM_DIV_End ();
@@ -4926,7 +4945,7 @@ void Usr_ListDataAdms (void)
 	 HTM_DIV_Begin ("class=\"PREF_CONT\"");
 	    HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	       Frm_BeginForm (ActLstOth);
-		  Sco_PutParCurrentScope (&Gbl.Scope.Current);
+		  Sco_PutParCurrentScope (&HieLvl);
 		  Usr_PutCheckboxListWithPhotos (WithPhotos);
 	       Frm_EndForm ();
 	    HTM_DIV_End ();
@@ -5020,7 +5039,8 @@ void Usr_SeeGuests (void)
    extern const char *Hlp_USERS_Guests;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
-   bool WithPhotos;
+   unsigned AllowedLvls;
+   struct Usr_ListingPars ListingPars;
    Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
    Frm_PutForm_t PutForm;
 
@@ -5035,18 +5055,18 @@ void Usr_SeeGuests (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
+   Set_GetAndUpdatePrefsAboutUsrList (&ListingPars.WithPhotos);
 
    /***** Get scope *****/
-   Sco_SetAllowedScopesForListingGuests ();
-   Sco_GetScope ("ScopeUsr",Hie_SYS);
+   AllowedLvls = Sco_GetAllowedScopesForListingGuests ();
+   ListingPars.HieLvl = Sco_GetScope ("ScopeUsr",Hie_SYS,AllowedLvls);
 
    /***** Get list of guests in current scope *****/
-   Usr_GetGstsLst (Gbl.Scope.Current);
+   Usr_GetGstsLst (ListingPars.HieLvl);
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],
-                 Usr_PutIconsListGsts,&WithPhotos,
+                 Usr_PutIconsListGsts,&ListingPars.WithPhotos,
 		 Hlp_USERS_Guests,Box_NOT_CLOSABLE);
 
       /***** Form to select scope *****/
@@ -5057,7 +5077,8 @@ void Usr_SeeGuests (void)
 	       Set_PutParsPrefsAboutUsrList ();
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 		  HTM_TxtColonNBSP (Txt_Scope);
-		  Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
+		  Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE,
+					ListingPars.HieLvl,AllowedLvls);
 	       HTM_LABEL_End ();
 	    Frm_EndForm ();
 	 HTM_DIV_End ();
@@ -5069,20 +5090,21 @@ void Usr_SeeGuests (void)
 	 if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
 	   {
 	    if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs,
-				      ActLstGst,Sco_PutParCurrentScope,&Gbl.Scope.Current,
+				      ActLstGst,Sco_PutParCurrentScope,&ListingPars.HieLvl,
 				      NULL))
 	      {
 	       /***** Form to select type of list of users *****/
-	       Usr_ShowFormsToSelectUsrListType (ActLstGst,Sco_PutParCurrentScope,&Gbl.Scope.Current,
-						 NULL,WithPhotos);
+	       Usr_ShowFormsToSelectUsrListType (ActLstGst,Sco_PutParCurrentScope,&ListingPars.HieLvl,
+						 NULL,ListingPars.WithPhotos);
 
 	       /***** Draw a class photo with guests *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
-		  Lay_WriteHeaderClassPhoto (Vie_VIEW);
+		  Lay_WriteHeaderClassPhoto (ListingPars.HieLvl,Vie_VIEW);
 
 	       /* Set options allowed */
-	       PutForm = Usr_SetOptionsListUsrsAllowed (Rol_GST,ICanChooseOption) ? Frm_PUT_FORM :
-										    Frm_DONT_PUT_FORM;
+	       PutForm = Usr_SetOptionsListUsrsAllowed (ListingPars.HieLvl,Rol_GST,
+							ICanChooseOption) ? Frm_PUT_FORM :
+									    Frm_DONT_PUT_FORM;
 
 	       /* Begin form */
 	       if (PutForm == Frm_PUT_FORM)
@@ -5098,11 +5120,11 @@ void Usr_SeeGuests (void)
 			Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_GST,
 					    Usr_CLASS_PHOTO_SEL_SEE,
 					    PutForm,	// Put checkbox to select user?
-					    WithPhotos);
+					    ListingPars.WithPhotos);
 			break;
 		     case Set_USR_LIST_AS_LISTING:
 			Usr_ListMainDataGsts (PutForm,	// Put checkbox to select user?
-					      WithPhotos);
+					      ListingPars.WithPhotos);
 			break;
 		     default:
 			break;
@@ -5142,7 +5164,8 @@ void Usr_SeeStudents (void)
    extern const char *Hlp_USERS_Students;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
-   bool WithPhotos;
+   unsigned AllowedLvls;
+   struct Usr_ListingPars ListingPars;
    Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
    Frm_PutForm_t PutForm;
 
@@ -5158,7 +5181,7 @@ void Usr_SeeStudents (void)
 	 /***** Contextual menu *****/
          Mnu_ContextMenuBegin ();
 	    Enr_PutLinkToAdminOneUsr (ActReqID_MdfStd);	// Admin one student
-	    if (Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
+	    if (Gbl.Hierarchy.HieLvl == Hie_CRS &&	// Course selected
 		Gbl.Usrs.Me.Role.Logged != Rol_STD)	// Teacher or admin
 	      {
 	       Enr_PutLinkToAdminSeveralUsrs (Rol_STD);	// Admin several students
@@ -5173,22 +5196,22 @@ void Usr_SeeStudents (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
+   Set_GetAndUpdatePrefsAboutUsrList (&ListingPars.WithPhotos);
 
    /***** Get scope *****/
-   Sco_SetAllowedScopesForListingStudents ();
-   Sco_GetScope ("ScopeUsr",Hie_CRS);
+   AllowedLvls = Sco_GetAllowedScopesForListingStudents ();
+   ListingPars.HieLvl = Sco_GetScope ("ScopeUsr",Hie_CRS,AllowedLvls);
 
    /***** Get groups to show ******/
-   if (Gbl.Scope.Current == Hie_CRS)
+   if (ListingPars.HieLvl == Hie_CRS)
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get list of students *****/
-   Usr_GetListUsrs (Gbl.Scope.Current,Rol_STD);
+   Usr_GetListUsrs (ListingPars.HieLvl,Rol_STD);
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
-                 Usr_PutIconsListStds,&WithPhotos,
+                 Usr_PutIconsListStds,&ListingPars.WithPhotos,
 		 Hlp_USERS_Students,Box_NOT_CLOSABLE);
 
       /***** Form to select scope *****/
@@ -5203,7 +5226,8 @@ void Usr_SeeStudents (void)
 		  Set_PutParsPrefsAboutUsrList ();
 		  HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 		     HTM_TxtColonNBSP (Txt_Scope);
-		     Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
+		     Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE,
+					   ListingPars.HieLvl,AllowedLvls);
 		  HTM_LABEL_End ();
 	       Frm_EndForm ();
 	    HTM_DIV_End ();
@@ -5213,9 +5237,9 @@ void Usr_SeeStudents (void)
 	}
 
       /***** Form to select groups *****/
-      if (Gbl.Scope.Current == Hie_CRS)
+      if (ListingPars.HieLvl == Hie_CRS)
 	 Grp_ShowFormToSelectSeveralGroups (ActLstStd,Sco_PutParCurrentScope,
-					    &Gbl.Scope.Current,NULL);
+					    &ListingPars.HieLvl,NULL);
 
       /***** Begin section with user list *****/
       HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
@@ -5223,20 +5247,21 @@ void Usr_SeeStudents (void)
 	 if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
 	   {
 	    if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,
-				      ActLstStd,Sco_PutParCurrentScope,&Gbl.Scope.Current,
+				      ActLstStd,Sco_PutParCurrentScope,&ListingPars.HieLvl,
 				      NULL))
 	      {
 	       /***** Form to select type of list of users *****/
-	       Usr_ShowFormsToSelectUsrListType (ActLstStd,Sco_PutParCurrentScope,&Gbl.Scope.Current,
-						 NULL,WithPhotos);
+	       Usr_ShowFormsToSelectUsrListType (ActLstStd,Sco_PutParCurrentScope,&ListingPars.HieLvl,
+						 NULL,ListingPars.WithPhotos);
 
 	       /***** Draw a class photo with students of the course *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
-		  Lay_WriteHeaderClassPhoto (Vie_VIEW);
+		  Lay_WriteHeaderClassPhoto (ListingPars.HieLvl,Vie_VIEW);
 
 	       /* Set options allowed */
-	       PutForm = Usr_SetOptionsListUsrsAllowed (Rol_STD,ICanChooseOption) ? Frm_PUT_FORM :
-										    Frm_DONT_PUT_FORM;
+	       PutForm = Usr_SetOptionsListUsrsAllowed (ListingPars.HieLvl,Rol_STD,
+						        ICanChooseOption) ? Frm_PUT_FORM :
+									    Frm_DONT_PUT_FORM;
 
 	       /* Begin form */
 	       if (PutForm == Frm_PUT_FORM)
@@ -5255,11 +5280,11 @@ void Usr_SeeStudents (void)
 			Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_STD,
 					    Usr_CLASS_PHOTO_SEL_SEE,
 					    PutForm,	// Put checkbox to select user?
-					    WithPhotos);
+					    ListingPars.WithPhotos);
 			break;
 		     case Set_USR_LIST_AS_LISTING:
 			Usr_ListMainDataStds (PutForm,	// Put checkbox to select user?
-					      WithPhotos);
+					      ListingPars.WithPhotos);
 			break;
 		     default:
 			break;
@@ -5302,7 +5327,8 @@ void Usr_SeeTeachers (void)
    extern const char *Hlp_USERS_Teachers;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
-   bool WithPhotos;
+   unsigned AllowedLvls;
+   struct Usr_ListingPars ListingPars;
    unsigned NumUsrs;
    Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
    Frm_PutForm_t PutForm;
@@ -5319,7 +5345,7 @@ void Usr_SeeTeachers (void)
 	 /***** Contextual menu *****/
 	 Mnu_ContextMenuBegin ();
 	    Enr_PutLinkToAdminOneUsr (ActReqID_MdfTch);	// Admin one teacher
-	    if (Gbl.Hierarchy.Level == Hie_CRS)		// Course selected
+	    if (Gbl.Hierarchy.HieLvl == Hie_CRS)		// Course selected
 	      {
 	       if (Gbl.Usrs.Me.Role.Logged >= Rol_TCH)		// I am logged as teacher
 	          Enr_PutLinkToAdminSeveralUsrs (Rol_NET);	// Admin several non-editing teachers
@@ -5335,41 +5361,41 @@ void Usr_SeeTeachers (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
+   Set_GetAndUpdatePrefsAboutUsrList (&ListingPars.WithPhotos);
 
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << Hie_SYS |
-	               1 << Hie_CTY |
-                       1 << Hie_INS |
-                       1 << Hie_CTR |
-                       1 << Hie_DEG |
-                       1 << Hie_CRS;
-   Sco_GetScope ("ScopeUsr",Hie_CRS);
+   AllowedLvls = 1 << Hie_SYS |
+		 1 << Hie_CTY |
+		 1 << Hie_INS |
+		 1 << Hie_CTR |
+		 1 << Hie_DEG |
+		 1 << Hie_CRS;
+   ListingPars.HieLvl = Sco_GetScope ("ScopeUsr",Hie_CRS,AllowedLvls);
 
    /***** Get groups to show ******/
-   if (Gbl.Scope.Current == Hie_CRS)
+   if (ListingPars.HieLvl == Hie_CRS)
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get lists of teachers *****/
-   Usr_GetListUsrs (Gbl.Scope.Current,Rol_NET);	// Non-editing teachers
-   Usr_GetListUsrs (Gbl.Scope.Current,Rol_TCH);	// Teachers
-   if (Gbl.Scope.Current == Hie_CRS)
+   Usr_GetListUsrs (ListingPars.HieLvl,Rol_NET);	// Non-editing teachers
+   Usr_GetListUsrs (ListingPars.HieLvl,Rol_TCH);	// Teachers
+   if (ListingPars.HieLvl == Hie_CRS)
       NumUsrs = Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
-      NumUsrs = Enr_GetNumUsrsInCrss (Gbl.Scope.Current,
-				     (Gbl.Scope.Current == Hie_CTY ? Gbl.Hierarchy.Node[Hie_CTY].HieCod :
-				     (Gbl.Scope.Current == Hie_INS ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
-				     (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Node[Hie_CTR].HieCod :
-				     (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
-				     (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Node[Hie_CRS].HieCod :
+      NumUsrs = Enr_GetNumUsrsInCrss (ListingPars.HieLvl,
+				     (ListingPars.HieLvl == Hie_CTY ? Gbl.Hierarchy.Node[Hie_CTY].HieCod :
+				     (ListingPars.HieLvl == Hie_INS ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
+				     (ListingPars.HieLvl == Hie_CTR ? Gbl.Hierarchy.Node[Hie_CTR].HieCod :
+				     (ListingPars.HieLvl == Hie_DEG ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
+				     (ListingPars.HieLvl == Hie_CRS ? Gbl.Hierarchy.Node[Hie_CRS].HieCod :
 								     -1L))))),
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
-                 Usr_PutIconsListTchs,&WithPhotos,
+                 Usr_PutIconsListTchs,&ListingPars,
 		 Hlp_USERS_Teachers,Box_NOT_CLOSABLE);
 
       /***** Form to select scope *****/
@@ -5378,15 +5404,17 @@ void Usr_SeeTeachers (void)
 	    Set_PutParsPrefsAboutUsrList ();
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtColonNBSP (Txt_Scope);
-	       Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
+	       Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE,
+				     ListingPars.HieLvl,AllowedLvls);
 	    HTM_LABEL_End ();
 	 Frm_EndForm ();
       HTM_DIV_End ();
 
       /***** Form to select groups *****/
-      if (Gbl.Scope.Current == Hie_CRS)
-	 Grp_ShowFormToSelectSeveralGroups (ActLstTch,Sco_PutParCurrentScope,
-					    &Gbl.Scope.Current,NULL);
+      if (ListingPars.HieLvl == Hie_CRS)
+	 Grp_ShowFormToSelectSeveralGroups (ActLstTch,
+					    Sco_PutParCurrentScope,&ListingPars.HieLvl,
+					    NULL);
 
       /***** Begin section with user list *****/
       HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
@@ -5394,20 +5422,21 @@ void Usr_SeeTeachers (void)
 	 if (NumUsrs)
 	   {
 	    if (Usr_GetIfShowBigList (NumUsrs,
-				      ActLstTch,Sco_PutParCurrentScope,&Gbl.Scope.Current,
+				      ActLstTch,Sco_PutParCurrentScope,&ListingPars.HieLvl,
 				      NULL))
 	      {
 	       /***** Form to select type of list of users *****/
-	       Usr_ShowFormsToSelectUsrListType (ActLstTch,Sco_PutParCurrentScope,&Gbl.Scope.Current,
-						 NULL,WithPhotos);
+	       Usr_ShowFormsToSelectUsrListType (ActLstTch,Sco_PutParCurrentScope,&ListingPars.HieLvl,
+						 NULL,ListingPars.WithPhotos);
 
 	       /***** Draw a class photo with teachers of the course *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
-		  Lay_WriteHeaderClassPhoto (Vie_VIEW);
+		  Lay_WriteHeaderClassPhoto (ListingPars.HieLvl,Vie_VIEW);
 
 	       /* Set options allowed */
-	       PutForm = Usr_SetOptionsListUsrsAllowed (Rol_TCH,ICanChooseOption) ? Frm_PUT_FORM :
-										    Frm_DONT_PUT_FORM;
+	       PutForm = Usr_SetOptionsListUsrsAllowed (ListingPars.HieLvl,Rol_TCH,
+							ICanChooseOption) ? Frm_PUT_FORM :
+									    Frm_DONT_PUT_FORM;
 
 	       /* Begin form */
 	       if (PutForm == Frm_PUT_FORM)
@@ -5427,11 +5456,11 @@ void Usr_SeeTeachers (void)
 			Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_TCH,
 					    Usr_CLASS_PHOTO_SEL_SEE,
 					    PutForm,	// Put checkbox to select user?
-					    WithPhotos);
+					    ListingPars.WithPhotos);
 			Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_NET,
 					    Usr_CLASS_PHOTO_SEL_SEE,
 					    PutForm,	// Put checkbox to select user?
-					    WithPhotos);
+					    ListingPars.WithPhotos);
 			break;
 		     case Set_USR_LIST_AS_LISTING:
 			/* Initialize field names */
@@ -5440,10 +5469,10 @@ void Usr_SeeTeachers (void)
 			/* List teachers and non-editing teachers */
 			Usr_ListMainDataTchs (Rol_TCH,
 					      PutForm,	// Put checkbox to select user?
-					      WithPhotos);
+					      ListingPars.WithPhotos);
 			Usr_ListMainDataTchs (Rol_NET,
 					      PutForm,	// Put checkbox to select user?
-					      WithPhotos);
+					      ListingPars.WithPhotos);
 			break;
 		     default:
 			break;
@@ -5483,7 +5512,7 @@ void Usr_SeeTeachers (void)
 /*****************************************************************************/
 // Returns true if any option is allowed
 
-static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
+static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Hie_Level_t HieLvl,Rol_Role_t UsrsRole,
                                                     Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
   {
    Usr_ListUsrsOption_t Opt;
@@ -5510,7 +5539,7 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
 	 ICanChooseOption[Usr_OPTION_OVERWRITE_CLIPBOARD] =
 	 ICanChooseOption[Usr_OPTION_MESSAGE		] =
 	 ICanChooseOption[Usr_OPTION_FOLLOW 		] =
-	 ICanChooseOption[Usr_OPTION_UNFOLLOW		] = (Gbl.Scope.Current == Hie_CRS &&
+	 ICanChooseOption[Usr_OPTION_UNFOLLOW		] = (HieLvl == Hie_CRS &&
 							     (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
 							      Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 							      Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
@@ -5519,7 +5548,7 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
 
          ICanChooseOption[Usr_OPTION_HOMEWORK		] =
          ICanChooseOption[Usr_OPTION_ATTENDANCE		] =
-         ICanChooseOption[Usr_OPTION_EMAIL		] = (Gbl.Scope.Current == Hie_CRS &&
+         ICanChooseOption[Usr_OPTION_EMAIL		] = (HieLvl == Hie_CRS &&
 							     (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 							      Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 							      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
@@ -5532,13 +5561,13 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
 	 ICanChooseOption[Usr_OPTION_MESSAGE		] =
 	 ICanChooseOption[Usr_OPTION_EMAIL		] =
 	 ICanChooseOption[Usr_OPTION_FOLLOW	]	 =
-	 ICanChooseOption[Usr_OPTION_UNFOLLOW		] = (Gbl.Scope.Current == Hie_CRS &&
+	 ICanChooseOption[Usr_OPTION_UNFOLLOW		] = (HieLvl == Hie_CRS &&
 							     (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
 							      Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 							      Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 							      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
 													 Usr_CAN_NOT;
-         ICanChooseOption[Usr_OPTION_HOMEWORK		] = (Gbl.Scope.Current == Hie_CRS &&
+         ICanChooseOption[Usr_OPTION_HOMEWORK		] = (HieLvl == Hie_CRS &&
 							     (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 							      Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 							      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
@@ -5881,18 +5910,18 @@ static void Usr_PutIconsListStds (void *WithPhotos)
 /**************** Put contextual icons in list of teachers *******************/
 /*****************************************************************************/
 
-static void Usr_PutIconsListTchs (void *WithPhotos)
+static void Usr_PutIconsListTchs (void *ListingPars)
   {
    switch (Gbl.Usrs.Me.ListType)
      {
       case Set_USR_LIST_AS_CLASS_PHOTO:
 	 if (Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs)
 	    /***** Put icon to print teachers *****/
-	    Usr_PutIconToPrintTchs (*(bool *) WithPhotos);
+	    Usr_PutIconToPrintTchs ((struct Usr_ListingPars *) ListingPars);
 	 break;
       case Set_USR_LIST_AS_LISTING:
 	 /***** Put icon to show all data of teachers *****/
-	 Usr_PutIconToShowTchsAllData (*(bool *) WithPhotos);
+	 Usr_PutIconToShowTchsAllData (((struct Usr_ListingPars *) ListingPars)->WithPhotos);
 	 break;
       default:
 	 break;
@@ -5922,9 +5951,9 @@ static void Usr_PutIconToPrintStds (bool WithPhotos)
    Ico_PutContextualIconToPrint (ActPrnStdPho,Usr_ShowStdsAllDataPars,&WithPhotos);
   }
 
-static void Usr_PutIconToPrintTchs (bool WithPhotos)
+static void Usr_PutIconToPrintTchs (struct Usr_ListingPars *ListingPars)
   {
-   Ico_PutContextualIconToPrint (ActPrnTchPho,Usr_ShowTchsAllDataPars,&WithPhotos);
+   Ico_PutContextualIconToPrint (ActPrnTchPho,Usr_ShowTchsAllDataPars,ListingPars);
   }
 
 /*****************************************************************************/
@@ -5963,10 +5992,10 @@ static void Usr_ShowStdsAllDataPars (void *WithPhotos)
    Set_PutParListWithPhotos (*(bool *) WithPhotos);
   }
 
-static void Usr_ShowTchsAllDataPars (void *WithPhotos)
+static void Usr_ShowTchsAllDataPars (void *ListingPars)
   {
-   Sco_PutParCurrentScope (&Gbl.Scope.Current);
-   Set_PutParListWithPhotos (*(bool *) WithPhotos);
+   Sco_PutParCurrentScope (&((struct Usr_ListingPars *) ListingPars)->HieLvl);
+   Set_PutParListWithPhotos (((struct Usr_ListingPars *) ListingPars)->WithPhotos);
   }
 
 /*****************************************************************************/
@@ -5975,29 +6004,30 @@ static void Usr_ShowTchsAllDataPars (void *WithPhotos)
 
 void Usr_SeeGstClassPhotoPrn (void)
   {
-   bool WithPhotos;
+   unsigned AllowedLvls;
+   struct Usr_ListingPars ListingPars;
 
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
+   Set_GetAndUpdatePrefsAboutUsrList (&ListingPars.WithPhotos);
 
    /***** Get scope *****/
-   // Sco_SetScopesForListingGuests ();
-   Sco_GetScope ("ScopeUsr",Hie_SYS);
+   AllowedLvls = Sco_GetAllowedScopesForListingGuests ();
+   ListingPars.HieLvl = Sco_GetScope ("ScopeUsr",Hie_SYS,AllowedLvls);
 
    /***** Get list of guests *****/
-   Usr_GetGstsLst (Gbl.Scope.Current);
+   Usr_GetGstsLst (ListingPars.HieLvl);
 
    if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
      {
       /***** Draw the guests' class photo *****/
-      Lay_WriteHeaderClassPhoto (Vie_PRINT);
+      Lay_WriteHeaderClassPhoto (ListingPars.HieLvl,Vie_PRINT);
       HTM_TABLE_BeginWide ();
 	 Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_GST,
 			     Usr_CLASS_PHOTO_PRN,
 			     false,	// Don't put checkbox to select user
-			     WithPhotos);
+			     ListingPars.WithPhotos);
       HTM_TABLE_End ();
      }
    else	// Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs
@@ -6014,32 +6044,33 @@ void Usr_SeeGstClassPhotoPrn (void)
 
 void Usr_SeeStdClassPhotoPrn (void)
   {
-   bool WithPhotos;
+   unsigned AllowedLvls;
+   struct Usr_ListingPars ListingPars;
 
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
+   Set_GetAndUpdatePrefsAboutUsrList (&ListingPars.WithPhotos);
 
    /***** Get scope *****/
-   Sco_SetAllowedScopesForListingStudents ();
-   Sco_GetScope ("ScopeUsr",Hie_CRS);
+   AllowedLvls = Sco_GetAllowedScopesForListingStudents ();
+   ListingPars.HieLvl = Sco_GetScope ("ScopeUsr",Hie_CRS,AllowedLvls);
 
    /****** Get groups to show ******/
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get list of students *****/
-   Usr_GetListUsrs (Gbl.Scope.Current,Rol_STD);
+   Usr_GetListUsrs (ListingPars.HieLvl,Rol_STD);
 
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
       /***** Draw the students' class photo *****/
-      Lay_WriteHeaderClassPhoto (Vie_PRINT);
+      Lay_WriteHeaderClassPhoto (ListingPars.HieLvl,Vie_PRINT);
       HTM_TABLE_BeginWide ();
 	 Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_STD,
 			     Usr_CLASS_PHOTO_PRN,
 			     false,	// Don't put checkbox to select user
-			     WithPhotos);
+			     ListingPars.WithPhotos);
       HTM_TABLE_End ();
      }
    else	// Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
@@ -6059,39 +6090,40 @@ void Usr_SeeStdClassPhotoPrn (void)
 
 void Usr_SeeTchClassPhotoPrn (void)
   {
-   bool WithPhotos;
+   unsigned AllowedLvls;
+   struct Usr_ListingPars ListingPars;
    unsigned NumUsrs;
 
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
+   Set_GetAndUpdatePrefsAboutUsrList (&ListingPars.WithPhotos);
 
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << Hie_SYS |
-	               1 << Hie_CTY |
-                       1 << Hie_INS |
-                       1 << Hie_CTR |
-                       1 << Hie_DEG |
-                       1 << Hie_CRS;
-   Sco_GetScope ("ScopeUsr",Hie_CRS);
+   AllowedLvls = 1 << Hie_SYS |
+		 1 << Hie_CTY |
+		 1 << Hie_INS |
+		 1 << Hie_CTR |
+		 1 << Hie_DEG |
+		 1 << Hie_CRS;
+   ListingPars.HieLvl = Sco_GetScope ("ScopeUsr",Hie_CRS,AllowedLvls);
 
    /****** Get groups to show ******/
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get list of teachers *****/
-   Usr_GetListUsrs (Gbl.Scope.Current,Rol_NET);	// Non-editing teachers
-   Usr_GetListUsrs (Gbl.Scope.Current,Rol_TCH);	// Teachers
-   if (Gbl.Scope.Current == Hie_CRS)
+   Usr_GetListUsrs (ListingPars.HieLvl,Rol_NET);	// Non-editing teachers
+   Usr_GetListUsrs (ListingPars.HieLvl,Rol_TCH);	// Teachers
+   if (ListingPars.HieLvl == Hie_CRS)
       NumUsrs = Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
-      NumUsrs = Enr_GetNumUsrsInCrss (Gbl.Scope.Current,
-				     (Gbl.Scope.Current == Hie_CTY ? Gbl.Hierarchy.Node[Hie_CTY].HieCod :
-				     (Gbl.Scope.Current == Hie_INS ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
-				     (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Node[Hie_CTR].HieCod :
-				     (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
-				     (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Node[Hie_CRS].HieCod :
+      NumUsrs = Enr_GetNumUsrsInCrss (ListingPars.HieLvl,
+				     (ListingPars.HieLvl == Hie_CTY ? Gbl.Hierarchy.Node[Hie_CTY].HieCod :
+				     (ListingPars.HieLvl == Hie_INS ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
+				     (ListingPars.HieLvl == Hie_CTR ? Gbl.Hierarchy.Node[Hie_CTR].HieCod :
+				     (ListingPars.HieLvl == Hie_DEG ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
+				     (ListingPars.HieLvl == Hie_CRS ? Gbl.Hierarchy.Node[Hie_CRS].HieCod :
 								     -1L))))),
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
@@ -6099,18 +6131,18 @@ void Usr_SeeTchClassPhotoPrn (void)
    if (NumUsrs)
      {
       /***** Draw the teachers' class photo *****/
-      Lay_WriteHeaderClassPhoto (Vie_PRINT);
+      Lay_WriteHeaderClassPhoto (ListingPars.HieLvl,Vie_PRINT);
       HTM_TABLE_BeginWide ();
 
 	 /* List teachers and non-editing teachers */
 	 Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_TCH,
 			     Usr_CLASS_PHOTO_PRN,
 			     false,	// Don't put checkbox to select user
-			     WithPhotos);
+			     ListingPars.WithPhotos);
 	 Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_NET,
 			     Usr_CLASS_PHOTO_PRN,
 			     false,	// Don't put checkbox to select user
-			     WithPhotos);
+			     ListingPars.WithPhotos);
 
       HTM_TABLE_End ();
      }
@@ -6326,7 +6358,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
 
    else if (Gbl.Crs.Grps.AllGrps &&			// All groups selected
             Role == Rol_TCH &&				// No teachers found
-            Gbl.Hierarchy.Level == Hie_CRS &&		// Course selected
+            Gbl.Hierarchy.HieLvl == Hie_CRS &&		// Course selected
             Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)	// I am an administrator
       /***** Show alert and button to enrol teachers *****/
       Ale_ShowAlertAndButton (ActReqID_MdfTch,NULL,NULL,
@@ -6342,13 +6374,13 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
 /****************** Get total number of users in platform ********************/
 /*****************************************************************************/
 
-unsigned Usr_GetTotalNumberOfUsers (void)
+unsigned Usr_GetTotalNumberOfUsers (Hie_Level_t HieLvl)
   {
    long Cod;
    unsigned Roles;
 
    /***** Get number of users with events from database *****/
-   switch (Gbl.Scope.Current)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return (unsigned) DB_GetNumRowsTable ("usr_data");			// All users in platform
@@ -6357,15 +6389,15 @@ unsigned Usr_GetTotalNumberOfUsers (void)
       case Hie_CTR:
       case Hie_DEG:
       case Hie_CRS:
-         Cod = (Gbl.Scope.Current == Hie_CTY ? Gbl.Hierarchy.Node[Hie_CTY].HieCod :
-	       (Gbl.Scope.Current == Hie_INS ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
-	       (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Node[Hie_CTR].HieCod :
-	       (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
-	                                       Gbl.Hierarchy.Node[Hie_CRS].HieCod))));
+         Cod = (HieLvl == Hie_CTY ? Gbl.Hierarchy.Node[Hie_CTY].HieCod :
+	       (HieLvl == Hie_INS ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
+	       (HieLvl == Hie_CTR ? Gbl.Hierarchy.Node[Hie_CTR].HieCod :
+	       (HieLvl == Hie_DEG ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
+	                           Gbl.Hierarchy.Node[Hie_CRS].HieCod))));
          Roles = (1 << Rol_STD) |
 	         (1 << Rol_NET) |
 	         (1 << Rol_TCH);
-         return Enr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,Cod,Roles);	// All users in courses
+         return Enr_GetCachedNumUsrsInCrss (HieLvl,Cod,Roles);	// All users in courses
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -6613,7 +6645,7 @@ Usr_Who_t Usr_GetParWho (void)
 /********************** Show stats about number of users *********************/
 /*****************************************************************************/
 
-void Usr_GetAndShowUsersStats (void)
+void Usr_GetAndShowUsersStats (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_users;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -6635,10 +6667,10 @@ void Usr_GetAndShowUsersStats (void)
       HTM_TR_End ();
 
       /***** Figures *****/
-      Usr_GetAndShowNumUsrsInCrss (Rol_STD);		// Students
-      Usr_GetAndShowNumUsrsInCrss (Rol_NET);		// Non-editing teachers
-      Usr_GetAndShowNumUsrsInCrss (Rol_TCH);		// Teachers
-      Usr_GetAndShowNumUsrsInCrss (Rol_UNK);		// Any user in courses
+      Usr_GetAndShowNumUsrsInCrss (HieLvl,Rol_STD);	// Students
+      Usr_GetAndShowNumUsrsInCrss (HieLvl,Rol_NET);	// Non-editing teachers
+      Usr_GetAndShowNumUsrsInCrss (HieLvl,Rol_TCH);	// Teachers
+      Usr_GetAndShowNumUsrsInCrss (HieLvl,Rol_UNK);	// Any user in courses
 
       /***** Separator *****/
       HTM_TR_Begin (NULL);
@@ -6656,11 +6688,11 @@ void Usr_GetAndShowUsersStats (void)
 /*****************************************************************************/
 // Rol_UNK means any role in courses
 
-static void Usr_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
+static void Usr_GetAndShowNumUsrsInCrss (Hie_Level_t HieLvl,Rol_Role_t Role)
   {
    extern const char *Txt_Total;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   long Cod = Hie_GetCurrentCod ();
+   long HieCod = Hie_GetHieCod (HieLvl);
    const char *Class;
    unsigned Roles;
 
@@ -6688,15 +6720,15 @@ static void Usr_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
 
       /* Number of users in courses */
       HTM_TD_Begin ("class=\"%s_%s\"",Class,The_GetSuffix ());
-	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,Cod,Roles));
+	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl,HieCod,Roles));
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"%s_%s\"",Class,The_GetSuffix ());
-	 HTM_Double2Decimals (Enr_GetCachedAverageNumCrssPerUsr (Gbl.Scope.Current,Cod,Role));
+	 HTM_Double2Decimals (Enr_GetCachedAverageNumCrssPerUsr (HieLvl,HieCod,Role));
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"%s_%s\"",Class,The_GetSuffix ());
-	 HTM_Double2Decimals (Enr_GetCachedAverageNumUsrsPerCrs (Gbl.Scope.Current,Cod,Role));
+	 HTM_Double2Decimals (Enr_GetCachedAverageNumUsrsPerCrs (HieLvl,HieCod,Role));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -6742,7 +6774,7 @@ static void Usr_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
 /****************************** Show users' ranking **************************/
 /*****************************************************************************/
 
-void Usr_GetAndShowUsersRanking (void)
+void Usr_GetAndShowUsersRanking (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_ranking;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -6773,31 +6805,31 @@ void Usr_GetAndShowUsersRanking (void)
       HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"LT\"");
-	    Prf_GetAndShowRankingClicks ();
+	    Prf_GetAndShowRankingClicks (HieLvl);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"LT\"");
-	    Prf_GetAndShowRankingClicksPerDay ();
+	    Prf_GetAndShowRankingClicksPerDay (HieLvl);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"LT\"");
-	    Prf_GetAndShowRankingTimelinePubs ();
+	    Prf_GetAndShowRankingTimelinePubs (HieLvl);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"LT\"");
-	    Fol_GetAndShowRankingFollowers ();
+	    Fol_GetAndShowRankingFollowers (HieLvl);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"LT\"");
-	    Prf_GetAndShowRankingFileViews ();
+	    Prf_GetAndShowRankingFileViews (HieLvl);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"LT\"");
-	    Prf_GetAndShowRankingForPsts ();
+	    Prf_GetAndShowRankingForPsts (HieLvl);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"LT\"");
-	    Prf_GetAndShowRankingMsgsSnt ();
+	    Prf_GetAndShowRankingMsgsSnt (HieLvl);
 	 HTM_TD_End ();
 
       HTM_TR_End ();

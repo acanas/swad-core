@@ -33,14 +33,14 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Adm_DB_InsertAdmin (long UsrCod,Hie_Level_t Level);
+void Adm_DB_InsertAdmin (long UsrCod,Hie_Level_t HieLvl);
 
 unsigned Adm_DB_GetAdmsCurrentScopeExceptMe (MYSQL_RES **mysql_res);
-bool Adm_DB_CheckIfUsrIsAdm (long UsrCod,Hie_Level_t Level);
+bool Adm_DB_CheckIfUsrIsAdm (long UsrCod,Hie_Level_t HieLvl);
 bool Adm_DB_CheckIfUsrIsSuperuser (long UsrCod);
 
-void Adm_DB_RemAdmin (long UsrCod,Hie_Level_t Level);
+void Adm_DB_RemAdmin (long UsrCod,Hie_Level_t HieLvl);
 void Adm_DB_RemUsrAsAdmin (long UsrCod);
-void Adm_DB_RemAdmins (Hie_Level_t Level,long Cod);
+void Adm_DB_RemAdmins (Hie_Level_t HieLvl,long HieCod);
 
 #endif

@@ -74,7 +74,7 @@ static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem);
 /***************** Draw institution, center or degree logo *******************/
 /*****************************************************************************/
 
-void Lgo_DrawLogo (Hie_Level_t Level,const struct Hie_Node *Node,
+void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
                    const char *IconClass)
   {
    extern const char *Hie_Icons[Hie_NUM_LEVELS];
@@ -89,7 +89,7 @@ void Lgo_DrawLogo (Hie_Level_t Level,const struct Hie_Node *Node,
    char *URL;
    char *Icon;
 
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 Ico_PutIcon (Hie_Icons[Hie_SYS],Ico_BLACK,Node->ShrtName,IconClass);
@@ -112,10 +112,10 @@ void Lgo_DrawLogo (Hie_Level_t Level,const struct Hie_Node *Node,
 	    /* Course */
 
 	    /* Degree */
-	    if (!LogoFound && Level >= Hie_DEG)
+	    if (!LogoFound && HieLvl >= Hie_DEG)
 	      {
 	       Folder = Cfg_FOLDER_DEG;
-	       if (Level >= Hie_CRS)
+	       if (HieLvl >= Hie_CRS)
 		  DegCod = Crs_DB_GetDegCodOfCourseByCod (CrsCod);
 	       snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
 			 Cfg_PATH_DEG_PUBLIC,
@@ -128,10 +128,10 @@ void Lgo_DrawLogo (Hie_Level_t Level,const struct Hie_Node *Node,
 	      }
 
 	    /* Center */
-	    if (!LogoFound && Level >= Hie_CTR)
+	    if (!LogoFound && HieLvl >= Hie_CTR)
 	      {
 	       Folder = Cfg_FOLDER_CTR;
-	       if (Level >= Hie_DEG)
+	       if (HieLvl >= Hie_DEG)
 		  CtrCod = Deg_DB_GetCtrCodOfDegreeByCod (DegCod);
 	       else
 		  CtrCod = HieCod;
@@ -149,7 +149,7 @@ void Lgo_DrawLogo (Hie_Level_t Level,const struct Hie_Node *Node,
 	    if (!LogoFound)
 	      {
 	       Folder = Cfg_FOLDER_INS;
-	       if (Level >= Hie_CTR)
+	       if (HieLvl >= Hie_CTR)
 		  InsCod = Ctr_DB_GetInsCodOfCenterByCod (CtrCod);
 	       snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
 			 Cfg_PATH_INS_PUBLIC,
@@ -178,7 +178,7 @@ void Lgo_DrawLogo (Hie_Level_t Level,const struct Hie_Node *Node,
 	       free (URL);
 	      }
 	    else
-	       HTM_IMG (Cfg_URL_ICON_PUBLIC,Hie_Icons[Level],Node->ShrtName,
+	       HTM_IMG (Cfg_URL_ICON_PUBLIC,Hie_Icons[HieLvl],Node->ShrtName,
 			"class=\"%s ICO_%s_%s\"",
 			IconClass,
 			Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
@@ -194,7 +194,7 @@ void Lgo_DrawLogo (Hie_Level_t Level,const struct Hie_Node *Node,
 /************* the logo of institution, center or degree       ***************/
 /*****************************************************************************/
 
-void Lgo_PutIconToChangeLogo (Hie_Level_t Level)
+void Lgo_PutIconToChangeLogo (Hie_Level_t HieLvl)
   {
    static Act_Action_t Action[Hie_NUM_LEVELS] =
      {
@@ -207,7 +207,7 @@ void Lgo_PutIconToChangeLogo (Hie_Level_t Level)
       [Hie_CRS] = ActUnk,
      };
 
-   Lay_PutContextualLinkOnlyIcon (Action[Level],NULL,
+   Lay_PutContextualLinkOnlyIcon (Action[HieLvl],NULL,
                                   NULL,NULL,
 				  "shield-alt.svg",Ico_BLACK);
   }
@@ -216,7 +216,7 @@ void Lgo_PutIconToChangeLogo (Hie_Level_t Level)
 /**** Show a form for sending a logo of the institution, center or degree ****/
 /*****************************************************************************/
 
-void Lgo_RequestLogo (Hie_Level_t Level)
+void Lgo_RequestLogo (Hie_Level_t HieLvl)
   {
    extern const char *Txt_Logo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y;
@@ -233,24 +233,24 @@ void Lgo_RequestLogo (Hie_Level_t Level)
       [Hie_CTR] = Lgo_PutIconToRemoveLogoCtr,
       [Hie_DEG] = Lgo_PutIconToRemoveLogoDeg,
      };
-   long Cod = Gbl.Hierarchy.Node[Level].HieCod;
+   long HieCod = Gbl.Hierarchy.Node[HieLvl].HieCod;
    char PathLogo[PATH_MAX + 1];
 
    /***** Check if logo exists *****/
    snprintf (PathLogo,sizeof (PathLogo),"%s/%s/%02u/%u/logo/%u.png",
-	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[Level],
-	     (unsigned) (Cod % 100),
-	     (unsigned)  Cod,
-	     (unsigned)  Cod);
+	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl],
+	     (unsigned) (HieCod % 100),
+	     (unsigned)  HieCod,
+	     (unsigned)  HieCod);
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Logo,
-	         Fil_CheckIfPathExists (PathLogo) ? FunctionToDrawContextualIcons[Level] :
+	         Fil_CheckIfPathExists (PathLogo) ? FunctionToDrawContextualIcons[HieLvl] :
 						    NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
       /***** Begin form to upload logo *****/
-      Frm_BeginForm (ActionRec[Level]);
+      Frm_BeginForm (ActionRec[HieLvl]);
 
 	 /***** Write help message *****/
 	 Ale_ShowAlert (Ale_INFO,Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y,
@@ -301,10 +301,10 @@ static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem)
 /******* Receive the logo of the current institution, center or degree *******/
 /*****************************************************************************/
 
-void Lgo_ReceiveLogo (Hie_Level_t Level)
+void Lgo_ReceiveLogo (Hie_Level_t HieLvl)
   {
    extern const char *Txt_The_file_is_not_X;
-   long Cod = Gbl.Hierarchy.Node[Level].HieCod;
+   long HieCod = Gbl.Hierarchy.Node[HieLvl].HieCod;
    char Path[PATH_MAX + 1];
    struct Par_Param *Par;
    char FileNameLogoSrc[PATH_MAX + 1];
@@ -314,21 +314,21 @@ void Lgo_ReceiveLogo (Hie_Level_t Level)
 
    /***** Creates directories if not exist *****/
    snprintf (Path,sizeof (Path),"%s/%s",
-	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[Level]);
+	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl]);
    Fil_CreateDirIfNotExists (Path);
    snprintf (Path,sizeof (Path),"%s/%s/%02u",
-	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[Level],
-	     (unsigned) (Cod % 100));
+	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl],
+	     (unsigned) (HieCod % 100));
    Fil_CreateDirIfNotExists (Path);
    snprintf (Path,sizeof (Path),"%s/%s/%02u/%u",
-	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[Level],
-	     (unsigned) (Cod % 100),
-	     (unsigned)  Cod);
+	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl],
+	     (unsigned) (HieCod % 100),
+	     (unsigned)  HieCod);
    Fil_CreateDirIfNotExists (Path);
    snprintf (Path,sizeof (Path),"%s/%s/%02u/%u/logo",
-	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[Level],
-	     (unsigned) (Cod % 100),
-	     (unsigned)  Cod);
+	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl],
+	     (unsigned) (HieCod % 100),
+	     (unsigned)  HieCod);
    Fil_CreateDirIfNotExists (Path);
 
    /***** Copy in disk the file received *****/
@@ -349,10 +349,10 @@ void Lgo_ReceiveLogo (Hie_Level_t Level)
      {
       /* End the reception of logo in a temporary file */
       snprintf (FileNameLogo,sizeof (FileNameLogo),"%s/%s/%02u/%u/logo/%u.png",
-	        Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[Level],
-	        (unsigned) (Cod % 100),
-	        (unsigned)  Cod,
-	        (unsigned)  Cod);
+	        Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl],
+	        (unsigned) (HieCod % 100),
+	        (unsigned)  HieCod,
+	        (unsigned)  HieCod);
       if (!Fil_EndReceptionOfFile (FileNameLogo,Par))
 	 Ale_ShowAlert (Ale_ERROR,"Error copying file.");
      }
@@ -362,16 +362,16 @@ void Lgo_ReceiveLogo (Hie_Level_t Level)
 /******* Remove the logo of the current institution, center or degree ********/
 /*****************************************************************************/
 
-void Lgo_RemoveLogo (Hie_Level_t Level)
+void Lgo_RemoveLogo (Hie_Level_t HieLvl)
   {
-   long Cod = Gbl.Hierarchy.Node[Level].HieCod;
+   long HieCod = Gbl.Hierarchy.Node[HieLvl].HieCod;
    char FileNameLogo[PATH_MAX + 1];	// Full name (including path and .png) of the destination file
 
    /***** Remove logo *****/
    snprintf (FileNameLogo,sizeof (FileNameLogo),"%s/%s/%02u/%u/logo/%u.png",
-	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[Level],
-	     (unsigned) (Cod % 100),
-	     (unsigned)  Cod,
-	     (unsigned)  Cod);
+	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl],
+	     (unsigned) (HieCod % 100),
+	     (unsigned)  HieCod,
+	     (unsigned)  HieCod);
    Fil_RemoveTree (FileNameLogo);
   }

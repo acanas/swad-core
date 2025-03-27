@@ -154,7 +154,7 @@ void Coo_ChangeMyPrefsCookies (void)
 /** Get and show number of users who have chosen a preference about cookies **/
 /*****************************************************************************/
 
-void Coo_GetAndShowNumUsrsPerCookies (void)
+void Coo_GetAndShowNumUsrsPerCookies (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_cookies;
    extern const char *Txt_Do_not_accept_third_party_cookies;
@@ -211,7 +211,7 @@ void Coo_GetAndShowNumUsrsPerCookies (void)
 	 if (asprintf (&SubQuery,"usr_data.ThirdPartyCookies='%c'",
 		       Accepted[RefAcc].InDB) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 NumUsrs[RefAcc] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 NumUsrs[RefAcc] = Usr_DB_GetNumUsrsWhoChoseAnOption (HieLvl,SubQuery);
 	 free (SubQuery);
 
 	 /* Update total number of users */

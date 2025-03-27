@@ -145,6 +145,6 @@ void Ico_PutIconPaste (Act_Action_t NextAction);
 void Ico_PutIconNotVisible (void);
 
 //-------------------------------- Figures ------------------------------------
-void Ico_GetAndShowNumUsrsPerIconSet (void);
+void Ico_GetAndShowNumUsrsPerIconSet (Hie_Level_t HieLvl);
 
 #endif

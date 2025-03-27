@@ -201,7 +201,7 @@ void Log_GetAndShowLastClicks (void)
    const char *ClassRow;
    time_t TimeDiff;
    struct Hie_Node Hie[Hie_NUM_LEVELS];
-   Hie_Level_t Level;
+   Hie_Level_t HieLvl;
 
    /***** Get last clicks from database *****/
    NumClicks = Log_DB_GetLastClicks (&mysql_res);
@@ -214,10 +214,10 @@ void Log_GetAndShowLastClicks (void)
 	 HTM_TH_Span (Txt_Click				,HTM_HEAD_RIGHT,1,1,"LC_CLK");	// Click
 	 HTM_TH_Span (Txt_ELAPSED_TIME			,HTM_HEAD_RIGHT,1,1,"LC_TIM");	// Elapsed time
 	 HTM_TH_Span (Txt_Role				,HTM_HEAD_LEFT ,1,1,"LC_ROL");	// Role
-	 for (Level  = Hie_CTY;
-	      Level <= Hie_DEG;
-	      Level++)
-	    HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[Level],HTM_HEAD_LEFT ,1,1,"LC_HIE");	// Country, Institution, Center, Degree
+	 for (HieLvl  = Hie_CTY;
+	      HieLvl <= Hie_DEG;
+	      HieLvl++)
+	    HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[HieLvl],HTM_HEAD_LEFT ,1,1,"LC_HIE");	// Country, Institution, Center, Degree
 	 HTM_TH_Span (Txt_Action			,HTM_HEAD_LEFT ,1,1,"LC_ACT");	// Action
       HTM_TR_End ();
 
@@ -277,12 +277,12 @@ void Log_GetAndShowLastClicks (void)
 	       HTM_Txt (Hie[Hie_CTY].FullName);				// Country
 	    HTM_TD_End ();
 
-	    for (Level  = Hie_INS;
-		 Level <= Hie_DEG;
-		 Level++)
+	    for (HieLvl  = Hie_INS;
+		 HieLvl <= Hie_DEG;
+		 HieLvl++)
 	      {
 	       HTM_TD_Begin ("class=\"LC_HIE %s_%s\"",ClassRow,The_GetSuffix ());
-		  HTM_Txt (Hie[Level].ShrtName);			// Institution, Center, Degree
+		  HTM_Txt (Hie[HieLvl].ShrtName);			// Institution, Center, Degree
 	       HTM_TD_End ();
 	      }
 

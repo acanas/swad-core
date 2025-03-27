@@ -44,10 +44,11 @@ extern struct Globals Gbl;
 /** Put a selector to choice between ranges when getting users for listing ***/
 /*****************************************************************************/
 
-void Sco_PutSelectorScope (const char *ParName,HTM_Attributes_t Attributes)
+void Sco_PutSelectorScope (const char *ParName,HTM_Attributes_t Attributes,
+			   Hie_Level_t HieLvl,unsigned AllowedLvls)
   {
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
-   Hie_Level_t Level;
+   Hie_Level_t L;
    unsigned ScopeUnsigned;
    bool WriteScope;
 
@@ -56,14 +57,14 @@ void Sco_PutSelectorScope (const char *ParName,HTM_Attributes_t Attributes)
 		     " class=\"Frm_C2_INPUT INPUT_%s\"",
 		     ParName,ParName,The_GetSuffix ());
 
-      for (Level  = (Hie_Level_t) 1;
-	   Level <= (Hie_Level_t) (Hie_NUM_LEVELS - 1);
-	   Level++)
-	 if ((Gbl.Scope.Allowed & (1 << Level)))
+      for (L  = Hie_SYS;
+	   L <= Hie_CRS;
+	   L++)
+	 if ((AllowedLvls & (1 << L)))
 	   {
 	    /* Don't put forbidden options in selectable list */
 	    WriteScope = false;
-	    switch (Level)
+	    switch (L)
 	      {
 	       case Hie_SYS:
 		  WriteScope = true;
@@ -73,7 +74,7 @@ void Sco_PutSelectorScope (const char *ParName,HTM_Attributes_t Attributes)
 	       case Hie_CTR:
 	       case Hie_DEG:
 	       case Hie_CRS:
-		  if (Gbl.Hierarchy.Node[Level].HieCod > 0)
+		  if (Gbl.Hierarchy.Node[L].HieCod > 0)
 		     WriteScope = true;
 		  break;
 	       default:
@@ -83,13 +84,13 @@ void Sco_PutSelectorScope (const char *ParName,HTM_Attributes_t Attributes)
 	    if (WriteScope)
 	      {
 	       /***** Write allowed option *****/
-	       ScopeUnsigned = (unsigned) Level;
+	       ScopeUnsigned = (unsigned) L;
 	       HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-			   (Level == Gbl.Scope.Current) ? HTM_SELECTED :
-							  HTM_NO_ATTR,
+			   (L == HieLvl) ? HTM_SELECTED :
+					      HTM_NO_ATTR,
 			   "%s: %s",
-			   Txt_HIERARCHY_SINGUL_Abc[Level],
-			   Gbl.Hierarchy.Node[Level].ShrtName);
+			   Txt_HIERARCHY_SINGUL_Abc[L],
+			   Gbl.Hierarchy.Node[L].ShrtName);
 	      }
 	   }
 
@@ -100,114 +101,110 @@ void Sco_PutSelectorScope (const char *ParName,HTM_Attributes_t Attributes)
 /********************** Put hidden parameter scope ***************************/
 /*****************************************************************************/
 
-void Sco_PutParCurrentScope (void *Level)
+void Sco_PutParCurrentScope (void *HieLvl)
   {
-   if (Level)
-      Sco_PutParScope ("ScopeUsr",*((Hie_Level_t *) Level));
+   if (HieLvl)
+      Sco_PutParScope ("ScopeUsr",*((Hie_Level_t *) HieLvl));
   }
 
-void Sco_PutParScope (const char *ParName,Hie_Level_t Level)
+void Sco_PutParScope (const char *ParName,Hie_Level_t HieLvl)
   {
-   Par_PutParUnsigned (NULL,ParName,(unsigned) Level);
+   Par_PutParUnsigned (NULL,ParName,(unsigned) HieLvl);
   }
 
 /*****************************************************************************/
 /*************************** Get parameter scope *****************************/
 /*****************************************************************************/
 
-void Sco_GetScope (const char *ParName,Hie_Level_t DefaultScope)
+Hie_Level_t Sco_GetScope (const char *ParName,
+			  Hie_Level_t DefaultHieLvl,unsigned AllowedLvls)
   {
+   Hie_Level_t HieLvl;
+
    /***** Get parameter with scope *****/
-   Gbl.Scope.Current = (Hie_Level_t)
-	               Par_GetParUnsignedLong (ParName,
-                                               0,
-                                               Hie_NUM_LEVELS - 1,
-                                               (unsigned long) Hie_UNK);
+   HieLvl = (Hie_Level_t) Par_GetParUnsignedLong (ParName,
+                                                  0,
+                                                  Hie_NUM_LEVELS - 1,
+                                                  (unsigned long) Hie_UNK);
 
    /***** Adjust scope avoiding impossible or forbidden scopes *****/
-   Sco_AdjustScope (DefaultScope);
+   Sco_AdjustScope (&HieLvl,AllowedLvls,DefaultHieLvl);
+
+   return HieLvl;
   }
 
 /*****************************************************************************/
 /*********** Adjust scope avoiding impossible or forbidden scopes ************/
 /*****************************************************************************/
 
-void Sco_AdjustScope (Hie_Level_t DefaultScope)
+void Sco_AdjustScope (Hie_Level_t *HieLvl,unsigned AllowedLvls,Hie_Level_t DefaultHieLvl)
   {
-   Hie_Level_t Level;
+   Hie_Level_t L;
 
    /***** Is scope is unknow, use default scope *****/
-   if (Gbl.Scope.Current == Hie_UNK)
-      Gbl.Scope.Current = DefaultScope;
+   if (*HieLvl == Hie_UNK)
+      *HieLvl = DefaultHieLvl;
 
    /***** Avoid impossible scopes *****/
-   for (Level  = Hie_CRS;
-	Level >= Hie_CTY;
-	Level--)
-      if (Gbl.Scope.Current == Level && Gbl.Hierarchy.Node[Level].HieCod <= 0)
-	 Gbl.Scope.Current = Level - 1;	// Go up to parent level
+   for (L  = Hie_CRS;
+	L >= Hie_CTY;
+	L--)
+      if (*HieLvl == L && Gbl.Hierarchy.Node[L].HieCod <= 0)
+	 *HieLvl = L - 1;	// Go up to parent level
 
    /***** Avoid forbidden scopes *****/
-   if ((Gbl.Scope.Allowed & (1 << Gbl.Scope.Current)) == 0)
-      Gbl.Scope.Current = Hie_UNK;
+   if ((AllowedLvls & (1 << *HieLvl)) == 0)
+      *HieLvl = Hie_UNK;
   }
 
 /*****************************************************************************/
-/****************** Set allowed scopes when listing guests *******************/
+/******************** Allowed scopes when listing guests *********************/
 /*****************************************************************************/
 
-void Sco_SetAllowedScopesForListingGuests (void)
+unsigned Sco_GetAllowedScopesForListingGuests (void)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_SYS_ADM:
-	 Gbl.Scope.Allowed = 1 << Hie_SYS;
-	 break;
+	 return 1 << Hie_SYS;
       default:
-      	 Gbl.Scope.Allowed = 0;
-	 break;
+      	 return 0;
      }
   }
 
 /*****************************************************************************/
-/**************** Set allowed scopes when listing students *******************/
+/****************** Allowed scopes when listing students *********************/
 /*****************************************************************************/
 
-void Sco_SetAllowedScopesForListingStudents (void)
+unsigned Sco_GetAllowedScopesForListingStudents (void)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
       case Rol_TCH:
-	 Gbl.Scope.Allowed = 1 << Hie_CRS;
-	 break;
+	 return 1 << Hie_CRS;
       case Rol_DEG_ADM:
-	 Gbl.Scope.Allowed = 1 << Hie_DEG |
-		             1 << Hie_CRS;
-	 break;
+	 return 1 << Hie_DEG |
+		1 << Hie_CRS;
       case Rol_CTR_ADM:
-	 Gbl.Scope.Allowed = 1 << Hie_CTR |
-		             1 << Hie_DEG |
-		             1 << Hie_CRS;
-	 break;
+	 return 1 << Hie_CTR |
+		1 << Hie_DEG |
+		1 << Hie_CRS;
       case Rol_INS_ADM:
-	 Gbl.Scope.Allowed = 1 << Hie_INS |
-		             1 << Hie_CTR |
-		             1 << Hie_DEG |
-		             1 << Hie_CRS;
-	 break;
+	 return 1 << Hie_INS |
+		1 << Hie_CTR |
+		1 << Hie_DEG |
+		1 << Hie_CRS;
       case Rol_SYS_ADM:
-	 Gbl.Scope.Allowed = 1 << Hie_SYS |
-	                     1 << Hie_CTY |
-		             1 << Hie_INS |
-		             1 << Hie_CTR |
-		             1 << Hie_DEG |
-		             1 << Hie_CRS;
-	 break;
+	 return 1 << Hie_SYS |
+	        1 << Hie_CTY |
+		1 << Hie_INS |
+		1 << Hie_CTR |
+		1 << Hie_DEG |
+		1 << Hie_CRS;
       default:
-      	 Gbl.Scope.Allowed = 0;
-	 break;
+      	 return 0;
      }
   }
 
@@ -230,15 +227,15 @@ Hie_Level_t Sco_GetScopeFromUnsignedStr (const char *UnsignedStr)
 /***************** Get hierarchy level from database string ******************/
 /*****************************************************************************/
 
-Hie_Level_t Hie_GetLevelFromDBStr (const char *LevelDBStr)
+Hie_Level_t Hie_GetLevelFromDBStr (const char *HieLvlDBStr)
   {
-   Hie_Level_t Level;
+   Hie_Level_t HieLvl;
 
-   for (Level  = (Hie_Level_t) 0;
-	Level <= (Hie_Level_t) (Hie_NUM_LEVELS - 1);
-	Level++)
-      if (!strcmp (Hie_GetDBStrFromLevel (Level),LevelDBStr))
-	 return Level;
+   for (HieLvl  = (Hie_Level_t) 0;
+	HieLvl <= (Hie_Level_t) (Hie_NUM_LEVELS - 1);
+	HieLvl++)
+      if (!strcmp (Hie_GetDBStrFromLevel (HieLvl),HieLvlDBStr))
+	 return HieLvl;
 
    return Hie_UNK;
   }
@@ -247,7 +244,7 @@ Hie_Level_t Hie_GetLevelFromDBStr (const char *LevelDBStr)
 /****************** Get database string from hierarchy level *****************/
 /*****************************************************************************/
 
-const char *Hie_GetDBStrFromLevel (Hie_Level_t Level)
+const char *Hie_GetDBStrFromLevel (Hie_Level_t HieLvl)
   {
    static const char *Sco_ScopeDB[Hie_NUM_LEVELS] =
      {
@@ -260,19 +257,19 @@ const char *Hie_GetDBStrFromLevel (Hie_Level_t Level)
       [Hie_CRS] = "Crs",
      };
 
-   if (Level >= Hie_NUM_LEVELS)
-      Level = Hie_UNK;
+   if (HieLvl >= Hie_NUM_LEVELS)
+      HieLvl = Hie_UNK;
 
-   return Sco_ScopeDB[Level];
+   return Sco_ScopeDB[HieLvl];
   }
 
 /*****************************************************************************/
 /************************** Get current hierarchy code ***********************/
 /*****************************************************************************/
 
-long Hie_GetCurrentCod (void)
+long Hie_GetHieCod (Hie_Level_t HieLvl)
   {
-   switch (Gbl.Scope.Current)
+   switch (HieLvl)
      {
       case Hie_SYS:
       case Hie_CTY:
@@ -280,7 +277,7 @@ long Hie_GetCurrentCod (void)
       case Hie_CTR:
       case Hie_DEG:
       case Hie_CRS:
-	 return Gbl.Hierarchy.Node[Gbl.Scope.Current].HieCod;
+	 return Gbl.Hierarchy.Node[HieLvl].HieCod;
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return -1L;	// Not reached

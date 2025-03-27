@@ -347,10 +347,10 @@ unsigned Agd_DB_GetNumEventsFromUsr (long UsrCod)
 /*****************************************************************************/
 // Returns the number of users with events in a given hierarchy level
 
-unsigned Agd_DB_GetNumUsrsWithEvents (Hie_Level_t Level)
+unsigned Agd_DB_GetNumUsrsWithEvents (Hie_Level_t HieLvl)
   {
    /***** Get number of users with events from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
          return (unsigned)
@@ -434,10 +434,10 @@ unsigned Agd_DB_GetNumUsrsWithEvents (Hie_Level_t Level)
 /*****************************************************************************/
 // Returns the number of events in a given hierarchy level
 
-unsigned Agd_DB_GetNumEvents (Hie_Level_t Level)
+unsigned Agd_DB_GetNumEvents (Hie_Level_t HieLvl)
   {
    /***** Get number of events from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
          return (unsigned)

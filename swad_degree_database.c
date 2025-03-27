@@ -77,10 +77,10 @@ void Deg_DB_CreateDegree (struct Hie_Node *Deg,Hie_Status_t Status)
 /************************* Get number of degree types ************************/
 /*****************************************************************************/
 
-unsigned Deg_DB_GetNumDegreeTypes (Hie_Level_t Level)
+unsigned Deg_DB_GetNumDegreeTypes (Hie_Level_t HieLvl)
   {
    /***** Get number of types of degree from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return (unsigned)
@@ -150,17 +150,17 @@ unsigned Deg_DB_GetNumDegreeTypes (Hie_Level_t Level)
 /*****************************************************************************/
 
 unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
-                                Hie_Level_t Level,DegTyp_Order_t Order)
+                                Hie_Level_t HieLvl,DegTyp_Order_t Order)
   {
    static const char *OrderBySubQuery[DegTyp_NUM_ORDERS] =
      {
       [DegTyp_ORDER_BY_DEG_TYPE] = "DegTypName",
       [DegTyp_ORDER_BY_NUM_DEGS] = "NumDegs DESC,"
-	                              "DegTypName",
+	                           "DegTypName",
      };
 
    /***** Get types of degree from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 /* Get
@@ -564,11 +564,11 @@ unsigned Deg_DB_SearchDegs (MYSQL_RES **mysql_res,
 /***************** Get current number of degrees with courses ****************/
 /*****************************************************************************/
 
-unsigned Deg_DB_GetNumDegsWithCrss (Hie_Level_t Level,long Cod)
+unsigned Deg_DB_GetNumDegsWithCrss (Hie_Level_t HieLvl,long HieCod)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Level,Cod);
+   Hie_DB_BuildSubquery (SubQuery,HieLvl,HieCod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of degrees with courses",
@@ -588,12 +588,11 @@ unsigned Deg_DB_GetNumDegsWithCrss (Hie_Level_t Level,long Cod)
 /**************** Get current number of degrees with users *******************/
 /*****************************************************************************/
 
-unsigned Deg_DB_GetNumDegsWithUsrs (Rol_Role_t Role,
-                                    Hie_Level_t Level,long Cod)
+unsigned Deg_DB_GetNumDegsWithUsrs (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Role)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Level,Cod);
+   Hie_DB_BuildSubquery (SubQuery,HieLvl,HieCod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of degrees with users",

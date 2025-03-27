@@ -274,12 +274,12 @@ bool Gam_DB_CheckIfSimilarGameExists (const struct Gam_Game *Game)
 /*****************************************************************************/
 /********************* Get number of courses with games **********************/
 /*****************************************************************************/
-// Returns the number of courses with games in this location
+// Returns the number of courses with games in a given hierarchy scope
 
-unsigned Gam_DB_GetNumCoursesWithGames (Hie_Level_t Level)
+unsigned Gam_DB_GetNumCoursesWithGames (Hie_Level_t HieLvl)
   {
    /***** Get number of courses with games from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
          return (unsigned)
@@ -349,12 +349,11 @@ unsigned Gam_DB_GetNumCoursesWithGames (Hie_Level_t Level)
 /*****************************************************************************/
 /**************************** Get number of games ****************************/
 /*****************************************************************************/
-// Returns the number of games in this location
+// Returns the number of games in a given hierarchy level
 
-unsigned Gam_DB_GetNumGames (Hie_Level_t Level)
+unsigned Gam_DB_GetNumGames (Hie_Level_t HieLvl)
   {
-   /***** Get number of games from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
          return (unsigned)
@@ -654,10 +653,9 @@ unsigned Gam_DB_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
 /***************** Get average number of questions per game ******************/
 /*****************************************************************************/
 
-double Gam_DB_GetNumQstsPerGame (Hie_Level_t Level)
+double Gam_DB_GetNumQstsPerGame (Hie_Level_t HieLvl)
   {
-   /***** Get number of questions per game from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
          return

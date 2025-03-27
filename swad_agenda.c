@@ -1583,7 +1583,7 @@ void Agd_PrintAgdQRCode (void)
 /********* Get and show number of users who have chosen a language ***********/
 /*****************************************************************************/
 
-void Agd_GetAndShowAgendasStats (void)
+void Agd_GetAndShowAgendasStats (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_agendas;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -1608,13 +1608,13 @@ void Agd_GetAndShowAgendasStats (void)
       HTM_TR_End ();
 
       /***** Number of agenda events *****/
-      NumEvents = Agd_DB_GetNumEvents (Gbl.Scope.Current);
+      NumEvents = Agd_DB_GetNumEvents (HieLvl);
 
       /***** Number of users with agenda events *****/
-      NumUsrs = Agd_DB_GetNumUsrsWithEvents (Gbl.Scope.Current);
+      NumUsrs = Agd_DB_GetNumUsrsWithEvents (HieLvl);
 
       /***** Get total number of users in current scope *****/
-      NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
+      NumUsrsTotal = Usr_GetTotalNumberOfUsers (HieLvl);
 
       /***** Write number of users who have chosen each language *****/
       HTM_TR_Begin (NULL);

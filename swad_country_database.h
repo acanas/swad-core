@@ -52,12 +52,11 @@ void Cty_DB_GetCountryName (long CtyCod,Lan_Language_t Language,
 
 unsigned Cty_DB_GetNumCtysInSys (__attribute__((unused)) long SysCod);
 
-unsigned Cty_DB_GetNumCtysWithInss (Hie_Level_t Level,long HieCod);
-unsigned Cty_DB_GetNumCtysWithCtrs (Hie_Level_t Level,long HieCod);
-unsigned Cty_DB_GetNumCtysWithDegs (Hie_Level_t Level,long HieCod);
-unsigned Cty_DB_GetNumCtysWithCrss (Hie_Level_t Level,long HieCod);
-unsigned Cty_DB_GetNumCtysWithUsrs (Rol_Role_t Role,
-                                    Hie_Level_t Level,long Cod);
+unsigned Cty_DB_GetNumCtysWithInss (Hie_Level_t HieLvl,long HieCod);
+unsigned Cty_DB_GetNumCtysWithCtrs (Hie_Level_t HieLvl,long HieCod);
+unsigned Cty_DB_GetNumCtysWithDegs (Hie_Level_t HieLvl,long HieCod);
+unsigned Cty_DB_GetNumCtysWithCrss (Hie_Level_t HieLvl,long HieCod);
+unsigned Cty_DB_GetNumCtysWithUsrs (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Role);
 
 bool Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod);
 bool Cty_DB_CheckIfAlpha2CountryCodeExists (const char *Alpha2);

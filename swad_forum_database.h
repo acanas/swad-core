@@ -41,7 +41,7 @@ unsigned For_DB_GetNumThrsInForumNewerThan (const struct For_Forum *Forum,
                                             const char *Time);
 unsigned For_DB_GetNumPstsOfUsrInForum (const struct For_Forum *Forum,
                                         long UsrCod);
-void For_DB_RemoveForums (Hie_Level_t Level,long HieCod);
+void For_DB_RemoveForums (Hie_Level_t HieLvl,long HieCod);
 
 //------------------------------- Posts ---------------------------------------
 long For_DB_InsertForumPst (long ThrCod,long UsrCod,
@@ -62,8 +62,7 @@ void For_DB_RemovePst (long PstCod);
 void For_DB_RemoveThreadPsts (long ThrCod);
 
 //------------------------------ Threads --------------------------------------
-long For_DB_InsertForumThread (const struct For_Forums *Forums,
-                               long FirstPstCod);
+long For_DB_InsertForumThread (const struct For_Forums *Forums,long FirstPstCod);
 void For_DB_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long LastPstCod);
 void For_DB_UpdateThrLastPst (long ThrCod,long LastPstCod);
 unsigned For_DB_GetForumThreads (MYSQL_RES **mysql_res,

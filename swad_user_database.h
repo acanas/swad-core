@@ -57,14 +57,15 @@ unsigned Usr_DB_GetUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod,
 unsigned Usr_DB_GetSomeUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod);
 void Usr_DB_GetUsrName (long UsrCod,char *Title,size_t TitleSize);
 bool Usr_DB_FindStrInUsrsNames (const char *Str);
-void Usr_DB_BuildQueryToGetUsrsLst (Hie_Level_t Level,Rol_Role_t Role,
+void Usr_DB_BuildQueryToGetUsrsLst (Hie_Level_t HieLvl,Rol_Role_t Role,
 				    char **Query);
 void Usr_DB_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role);
-void Usr_DB_BuildQueryToGetAdmsLst (Hie_Level_t Level,char **Query);
-void Usr_DB_BuildQueryToGetGstsLst (Hie_Level_t Level,char **Query);
-void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query);
+void Usr_DB_BuildQueryToGetAdmsLst (Hie_Level_t HieLvl,char **Query);
+void Usr_DB_BuildQueryToGetGstsLst (Hie_Level_t HieLvl,char **Query);
+void Usr_DB_BuildQueryToSearchListUsrs (Hie_Level_t HieLvl,Rol_Role_t Role,
+					char **Query);
 void Usr_DB_BuildQueryToGetUnorderedStdsCodesInDeg (long DegCod,char **Query);
-unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (const char *SubQuery);
+unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (Hie_Level_t HieLvl,const char *SubQuery);
 unsigned Usr_DB_GetOldUsrs (MYSQL_RES **mysql_res,time_t SecondsWithoutAccess);
 void Usr_DB_CreateTmpTableAndSearchCandidateUsrs (const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1]);
 void Usr_DB_DropTmpTableWithCandidateUsrs (void);

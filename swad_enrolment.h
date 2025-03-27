@@ -81,7 +81,7 @@ typedef enum
 
 void Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs (void);
 void Enr_PutButtonInlineToEnrolStds (long CrsCod,
-				     unsigned Level,const Lay_LastItem_t *IsLastItemInLevel,
+				     unsigned Scope,const Lay_LastItem_t *IsLastItemInLevel,
 				     Lay_Highlight_t Highlight);
 
 void Enr_PutLinkToRequestSignUp (void);
@@ -152,10 +152,10 @@ bool Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *UsrDat);
 void Enr_FlushCacheUsrSharesAnyOfMyCrs (void);
 bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat);
 
-unsigned Enr_GetNumUsrsInCrss (Hie_Level_t Level,long Cod,unsigned Roles);
-unsigned Enr_GetCachedNumUsrsInCrss (Hie_Level_t Level,long Cod,unsigned Roles);
+unsigned Enr_GetNumUsrsInCrss (Hie_Level_t HieLvl,long HieCod,unsigned Roles);
+unsigned Enr_GetCachedNumUsrsInCrss (Hie_Level_t HieLvl,long HieCod,unsigned Roles);
 unsigned Enr_GetCachedNumUsrsNotBelongingToAnyCrs (void);
-double Enr_GetCachedAverageNumUsrsPerCrs (Hie_Level_t Level,long Cod,Rol_Role_t Role);
-double Enr_GetCachedAverageNumCrssPerUsr (Hie_Level_t Level,long Cod,Rol_Role_t Role);
+double Enr_GetCachedAverageNumUsrsPerCrs (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Role);
+double Enr_GetCachedAverageNumCrssPerUsr (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Role);
 
 #endif

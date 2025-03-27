@@ -315,10 +315,10 @@ void Tre_DB_GetNodeTxt (const struct Tre_Node *Node,
 // Returns the number of courses with tree nodes
 // in this location (all the platform, current degree or current course)
 
-unsigned Tre_DB_GetNumCoursesWithNodes (Inf_Type_t InfoType,Hie_Level_t Level)
+unsigned Tre_DB_GetNumCoursesWithNodes (Inf_Type_t InfoType,Hie_Level_t HieLvl)
   {
    /***** Get number of courses with tree nodes from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
          return (unsigned)
@@ -403,9 +403,9 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Inf_Type_t InfoType,Hie_Level_t Level)
 /*****************************************************************************/
 // Returns the number of tree nodes in a hierarchy scope
 
-unsigned Tre_DB_GetNumNodes (Inf_Type_t InfoType,Hie_Level_t Level)
+unsigned Tre_DB_GetNumNodes (Inf_Type_t InfoType,Hie_Level_t HieLvl)
   {
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
          return (unsigned)

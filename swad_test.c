@@ -374,7 +374,7 @@ void Tst_AssessTest (void)
       /***** Begin box *****/
       Box_BoxBegin (Txt_Result,NULL,NULL,
 		    Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
-	 Lay_WriteHeaderClassPhoto (Vie_VIEW);
+	 Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
 
 	 /***** Header *****/
 	 if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG)
@@ -794,7 +794,7 @@ static unsigned Tst_GetParNumQsts (void)
 /********************** Show figures about test questions ********************/
 /*****************************************************************************/
 
-void Tst_GetAndShowTestsStats (void)
+void Tst_GetAndShowTestsStats (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_tests;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -834,7 +834,7 @@ void Tst_GetAndShowTestsStats (void)
 	   AnsType++)
 	{
 	 /***** Get the stats about test questions from this location *****/
-	 Qst_GetTestStats (AnsType,&Stats);
+	 Qst_GetTestStats (HieLvl,AnsType,&Stats);
 
 	 /***** Write stats *****/
 	 HTM_TR_Begin (NULL);
@@ -861,7 +861,7 @@ void Tst_GetAndShowTestsStats (void)
 	}
 
       /***** Get the stats about test questions from this location *****/
-      Qst_GetTestStats (Qst_ANS_UNKNOWN,&Stats);
+      Qst_GetTestStats (HieLvl,Qst_ANS_UNKNOWN,&Stats);
 
       /***** Write stats *****/
       HTM_TR_Begin (NULL);

@@ -27,6 +27,7 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_hierarchy_type.h"
 #include "swad_string.h"
 
 /*****************************************************************************/
@@ -142,6 +143,6 @@ void Ntf_ChangeNotifyEvents (void);
 void Ntf_WriteNumberOfNewNtfs (void);
 
 //-------------------------------- Figures ------------------------------------
-void Ntf_GetAndShowNumUsrsPerNotifyEvent (void);
+void Ntf_GetAndShowNumUsrsPerNotifyEvent (Hie_Level_t HieLvl);
 
 #endif

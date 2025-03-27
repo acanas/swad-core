@@ -64,7 +64,8 @@ unsigned Ntf_DB_GetPendingNtfsToUsr (MYSQL_RES **mysql_res,long ToUsrCod);
 unsigned Ntf_DB_GetNumAllMyUnseenNtfs (void);
 unsigned Ntf_DB_GetNumMyNewUnseenNtfs (void);
 unsigned Ntf_DB_GetUsrsWhoMustBeNotified (MYSQL_RES **mysql_res);
-unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,Ntf_NotifyEvent_t NotifyEvent);
+unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,
+			      Hie_Level_t HieLvl,Ntf_NotifyEvent_t NotifyEvent);
 
 void Ntf_DB_RemoveUsrNtfs (long ToUsrCod);
 void Ntf_DB_RemoveOldNtfs (void);

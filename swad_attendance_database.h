@@ -88,8 +88,8 @@ void Att_DB_RemoveGrpsAssociatedToCrsEvents (long HieCod);
 void Att_DB_RemoveCrsEvents (long HieCod);
 
 unsigned Att_DB_GetNumEventsInCrs (long HieCod);
-unsigned Att_DB_GetNumCoursesWithEvents (Hie_Level_t Level);
+unsigned Att_DB_GetNumCoursesWithEvents (Hie_Level_t HieLvl);
 
-unsigned Att_DB_GetNumEvents (MYSQL_RES **mysql_res,Hie_Level_t Level);
+unsigned Att_DB_GetNumEvents (MYSQL_RES **mysql_res,Hie_Level_t HieLvl);
 
 #endif

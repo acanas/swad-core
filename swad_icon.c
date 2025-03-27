@@ -563,7 +563,7 @@ void Ico_PutIconNotVisible (void)
 /********* Get and show number of users who have chosen an icon set **********/
 /*****************************************************************************/
 
-void Ico_GetAndShowNumUsrsPerIconSet (void)
+void Ico_GetAndShowNumUsrsPerIconSet (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_icons;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -601,7 +601,7 @@ void Ico_GetAndShowNumUsrsPerIconSet (void)
 	 if (asprintf (&SubQuery,"usr_data.IconSet='%s'",
 		       Ico_IconSetId[IconSet]) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 NumUsrs[IconSet] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 NumUsrs[IconSet] = Usr_DB_GetNumUsrsWhoChoseAnOption (HieLvl,SubQuery);
 	 free (SubQuery);
 
 	 /* Update total number of users */

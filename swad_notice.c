@@ -316,7 +316,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    unsigned NumNotices = 0;	// Initialized to avoid warning
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Level != Hie_CRS)	// No course selected
+   if (Gbl.Hierarchy.HieLvl != Hie_CRS)	// No course selected
       return;
 
    switch (TypeNoticesListing)
@@ -699,14 +699,14 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 // Returns the number of (active or obsolete) notices
 // sent from this location (all the platform, current degree or current course)
 
-unsigned Not_GetNumNotices (Hie_Level_t Level,Not_Status_t Status,unsigned *NumNotif)
+unsigned Not_GetNumNotices (Hie_Level_t HieLvl,Not_Status_t Status,unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumNotices;
 
    /***** Get number of notices from database *****/
-   if (Not_DB_GetNumNotices (&mysql_res,Level,Status) == 1)
+   if (Not_DB_GetNumNotices (&mysql_res,HieLvl,Status) == 1)
      {
       /***** Get number of notices *****/
       row = mysql_fetch_row (mysql_res);
@@ -740,14 +740,14 @@ unsigned Not_GetNumNotices (Hie_Level_t Level,Not_Status_t Status,unsigned *NumN
 // Returns the number of deleted notices
 // sent from this location (all the platform, current degree or current course)
 
-unsigned Not_GetNumNoticesDeleted (Hie_Level_t Level,unsigned *NumNotif)
+unsigned Not_GetNumNoticesDeleted (Hie_Level_t HieLvl,unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumNotices;
 
    /***** Get number of notices from database *****/
-   if (Not_DB_GetNumNoticesDeleted (&mysql_res,Level) == 1)
+   if (Not_DB_GetNumNoticesDeleted (&mysql_res,HieLvl) == 1)
      {
       /***** Get number of notices *****/
       row = mysql_fetch_row (mysql_res);
@@ -789,7 +789,7 @@ static void Not_PutParNotCod (void *NotCod)
 /************************** Show figures about notices ***********************/
 /*****************************************************************************/
 
-void Not_GetAndShowNoticesStats (void)
+void Not_GetAndShowNoticesStats (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_notices;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -810,11 +810,11 @@ void Not_GetAndShowNoticesStats (void)
 	NoticeStatus <= (Not_Status_t) (Not_NUM_STATUS - 1);
 	NoticeStatus++)
      {
-      NumNotices[NoticeStatus] = Not_GetNumNotices (Gbl.Scope.Current,NoticeStatus,&NumNotif);
+      NumNotices[NoticeStatus] = Not_GetNumNotices (HieLvl,NoticeStatus,&NumNotif);
       NumTotalNotices += NumNotices[NoticeStatus];
       NumTotalNotifications += NumNotif;
      }
-   NumNoticesDeleted = Not_GetNumNoticesDeleted (Gbl.Scope.Current,&NumNotif);
+   NumNoticesDeleted = Not_GetNumNoticesDeleted (HieLvl,&NumNotif);
    NumTotalNotices += NumNoticesDeleted;
    NumTotalNotifications += NumNotif;
 

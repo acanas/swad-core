@@ -76,7 +76,7 @@ unsigned Ind_DB_GetNumIndicatorsCrs (MYSQL_RES **mysql_res,long CrsCod)
 unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
                                    const struct Ind_Indicators *Indicators)
   {
-   switch (Gbl.Scope.Current)
+   switch (Indicators->HieLvl)
      {
       case Hie_SYS:
          if (Indicators->DptCod >= 0)	// 0 means another department

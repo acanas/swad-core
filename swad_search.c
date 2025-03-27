@@ -73,18 +73,18 @@ static struct Sch_Search Sch_Search =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t DefaultScope);
+static Hie_Level_t Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t DefaultHieLvl);
 static Usr_Can_t Sch_CheckIfICanSearch (Sch_WhatToSearch_t WhatToSearch);
 static void Sch_GetParSearchStr (void);
-static void Sch_SearchInDB (void);
+static void Sch_SearchInDB (Hie_Level_t HieLvl);
 
-static unsigned Sch_SearchCountrsInDB (const char *RangeQuery);
-static unsigned Sch_SearchInstitsInDB (const char *RangeQuery);
-static unsigned Sch_SearchCentersInDB (const char *RangeQuery);
-static unsigned Sch_SearchDegreesInDB (const char *RangeQuery);
+static unsigned Sch_SearchCountrsInDB (Hie_Level_t HieLvl,const char *RangeQuery);
+static unsigned Sch_SearchInstitsInDB (Hie_Level_t HieLvl,const char *RangeQuery);
+static unsigned Sch_SearchCentersInDB (Hie_Level_t HieLvl,const char *RangeQuery);
+static unsigned Sch_SearchDegreesInDB (Hie_Level_t HieLvl,const char *RangeQuery);
 static unsigned Sch_SearchCoursesInDB (const char *RangeQuery);
 
-static unsigned Sch_SearchUsrsInDB (Rol_Role_t Role);
+static unsigned Sch_SearchUsrsInDB (Hie_Level_t HieLvl,Rol_Role_t Role);
 
 static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery);
 static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery);
@@ -117,7 +117,7 @@ void Sch_ReqSysSearch (void)
 /****************** Put a form to search, including scope ********************/
 /*****************************************************************************/
 
-static void Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t DefaultScope)
+static Hie_Level_t Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t DefaultHieLvl)
   {
    extern const char *Hlp_START_Search;
    extern const char *Txt_Scope;
@@ -147,6 +147,8 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t DefaultScop
       [Sch_SEARCH_DOCUM_IN_MY_COURSES] = &Txt_documents_in_my_courses,
       [Sch_SEARCH_MY_DOCUMENTS       ] = &Txt_my_documents,
      };
+   unsigned AllowedLvls;
+   Hie_Level_t HieLvl;
    Sch_WhatToSearch_t WhatToSearch;
    unsigned WTS;
    const struct Sch_Search *Search = Sch_GetSearch ();
@@ -166,14 +168,15 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t DefaultScop
 	    HTM_DIV_Begin ("class=\"CM\"");
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 		  HTM_TxtColonNBSP (Txt_Scope);
-		  Gbl.Scope.Allowed = 1 << Hie_SYS |
-				      1 << Hie_CTY |
-				      1 << Hie_INS |
-				      1 << Hie_CTR |
-				      1 << Hie_DEG |
-				      1 << Hie_CRS;
-		  Sco_GetScope ("ScopeSch",DefaultScope);
-		  Sco_PutSelectorScope ("ScopeSch",HTM_NO_ATTR);
+		  AllowedLvls = 1 << Hie_SYS |
+			        1 << Hie_CTY |
+			        1 << Hie_INS |
+			        1 << Hie_CTR |
+			        1 << Hie_DEG |
+			        1 << Hie_CRS;
+		  HieLvl = Sco_GetScope ("ScopeSch",DefaultHieLvl,AllowedLvls);
+		  Sco_PutSelectorScope ("ScopeSch",HTM_NO_ATTR,
+					HieLvl,AllowedLvls);
 	       HTM_LABEL_End ();
 	    HTM_DIV_End ();
 
@@ -215,6 +218,8 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t DefaultScop
 
    /***** End container *****/
    HTM_DIV_End ();
+
+   return HieLvl;
   }
 
 /*****************************************************************************/
@@ -346,6 +351,7 @@ void Sch_GetParsSearch (void)
 
 void Sch_SysSearch (void)
   {
+   Hie_Level_t HieLvl;
    const struct Sch_Search *Search = Sch_GetSearch ();
 
    if (Search->Str[0])
@@ -354,10 +360,10 @@ void Sch_SysSearch (void)
       Log_SetLogSearch (true);
 
       /***** Show search form again *****/
-      Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_SYS);
+      HieLvl = Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_SYS);
 
       /***** Show results of search *****/
-      Sch_SearchInDB ();
+      Sch_SearchInDB (HieLvl);
      }
    else
       /***** Show search form and selectors *****/
@@ -368,7 +374,7 @@ void Sch_SysSearch (void)
 /**** Search institutions, centers, degrees, courses, teachers, documents ****/
 /*****************************************************************************/
 
-static void Sch_SearchInDB (void)
+static void Sch_SearchInDB (Hie_Level_t HieLvl)
   {
    extern const char *Txt_No_results;
    char RangeQuery[256];
@@ -376,7 +382,7 @@ static void Sch_SearchInDB (void)
    struct Sch_Search *Search = Sch_GetSearch ();
 
    /***** Select courses in all degrees or in current degree *****/
-   switch (Gbl.Scope.Current)
+   switch (HieLvl)
      {
       case Hie_UNK:
 	 // Not aplicable
@@ -410,44 +416,44 @@ static void Sch_SearchInDB (void)
    switch (Search->WhatToSearch)
      {
       case Sch_SEARCH_ALL:
-	 NumResults  = Sch_SearchCountrsInDB (RangeQuery);
-	 NumResults += Sch_SearchInstitsInDB (RangeQuery);
-	 NumResults += Sch_SearchCentersInDB (RangeQuery);
-	 NumResults += Sch_SearchDegreesInDB (RangeQuery);
+	 NumResults  = Sch_SearchCountrsInDB (HieLvl,RangeQuery);
+	 NumResults += Sch_SearchInstitsInDB (HieLvl,RangeQuery);
+	 NumResults += Sch_SearchCentersInDB (HieLvl,RangeQuery);
+	 NumResults += Sch_SearchDegreesInDB (HieLvl,RangeQuery);
 	 NumResults += Sch_SearchCoursesInDB (RangeQuery);
-	 NumResults += Sch_SearchUsrsInDB (Rol_TCH);	// Non-editing teachers and teachers
-	 NumResults += Sch_SearchUsrsInDB (Rol_STD);
-	 NumResults += Sch_SearchUsrsInDB (Rol_GST);
+	 NumResults += Sch_SearchUsrsInDB (HieLvl,Rol_TCH);	// Non-editing teachers and teachers
+	 NumResults += Sch_SearchUsrsInDB (HieLvl,Rol_STD);
+	 NumResults += Sch_SearchUsrsInDB (HieLvl,Rol_GST);
 	 NumResults += Sch_SearchOpenDocumentsInDB (RangeQuery);
 	 NumResults += Sch_SearchDocumentsInMyCoursesInDB (RangeQuery);
 	 NumResults += Sch_SearchMyDocumentsInDB (RangeQuery);
 	 break;
       case Sch_SEARCH_COUNTRIES:
-	 NumResults = Sch_SearchCountrsInDB (RangeQuery);
+	 NumResults = Sch_SearchCountrsInDB (HieLvl,RangeQuery);
 	 break;
       case Sch_SEARCH_INSTITS:
-	 NumResults = Sch_SearchInstitsInDB (RangeQuery);
+	 NumResults = Sch_SearchInstitsInDB (HieLvl,RangeQuery);
 	 break;
       case Sch_SEARCH_CENTERS:
-	 NumResults = Sch_SearchCentersInDB (RangeQuery);
+	 NumResults = Sch_SearchCentersInDB (HieLvl,RangeQuery);
 	 break;
       case Sch_SEARCH_DEGREES:
-	 NumResults = Sch_SearchDegreesInDB (RangeQuery);
+	 NumResults = Sch_SearchDegreesInDB (HieLvl,RangeQuery);
 	 break;
       case Sch_SEARCH_COURSES:
 	 NumResults = Sch_SearchCoursesInDB (RangeQuery);
 	 break;
       case Sch_SEARCH_USERS:
-	 NumResults = Sch_SearchUsrsInDB (Rol_UNK);	// Here Rol_UNK means any user
+	 NumResults = Sch_SearchUsrsInDB (HieLvl,Rol_UNK);	// Here Rol_UNK means any user
 	 break;
       case Sch_SEARCH_TEACHERS:
-	 NumResults = Sch_SearchUsrsInDB (Rol_TCH);	// Non-editing teachers and teachers
+	 NumResults = Sch_SearchUsrsInDB (HieLvl,Rol_TCH);	// Non-editing teachers and teachers
 	 break;
       case Sch_SEARCH_STUDENTS:
-	 NumResults = Sch_SearchUsrsInDB (Rol_STD);
+	 NumResults = Sch_SearchUsrsInDB (HieLvl,Rol_STD);
 	 break;
       case Sch_SEARCH_GUESTS:
-	 NumResults = Sch_SearchUsrsInDB (Rol_GST);
+	 NumResults = Sch_SearchUsrsInDB (HieLvl,Rol_GST);
 	 break;
       case Sch_SEARCH_OPEN_DOCUMENTS:
 	 NumResults = Sch_SearchOpenDocumentsInDB (RangeQuery);
@@ -472,7 +478,7 @@ static void Sch_SearchInDB (void)
 /*****************************************************************************/
 // Returns number of countries found
 
-static unsigned Sch_SearchCountrsInDB (const char *RangeQuery)
+static unsigned Sch_SearchCountrsInDB (Hie_Level_t HieLvl,const char *RangeQuery)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
@@ -481,10 +487,10 @@ static unsigned Sch_SearchCountrsInDB (const char *RangeQuery)
    unsigned NumCtys;
 
    /***** Check scope *****/
-   if (Gbl.Scope.Current != Hie_INS &&
-       Gbl.Scope.Current != Hie_CTR &&
-       Gbl.Scope.Current != Hie_DEG &&
-       Gbl.Scope.Current != Hie_CRS)
+   if (HieLvl != Hie_INS &&
+       HieLvl != Hie_CTR &&
+       HieLvl != Hie_DEG &&
+       HieLvl != Hie_CRS)
       /***** Check user's permission *****/
       if (Sch_CheckIfICanSearch (Sch_SEARCH_COUNTRIES) == Usr_CAN)
 	{
@@ -509,7 +515,7 @@ static unsigned Sch_SearchCountrsInDB (const char *RangeQuery)
 /*****************************************************************************/
 // Returns number of institutions found
 
-static unsigned Sch_SearchInstitsInDB (const char *RangeQuery)
+static unsigned Sch_SearchInstitsInDB (Hie_Level_t HieLvl,const char *RangeQuery)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
@@ -517,9 +523,9 @@ static unsigned Sch_SearchInstitsInDB (const char *RangeQuery)
    unsigned NumInss;
 
    /***** Check scope *****/
-   if (Gbl.Scope.Current != Hie_CTR &&
-       Gbl.Scope.Current != Hie_DEG &&
-       Gbl.Scope.Current != Hie_CRS)
+   if (HieLvl != Hie_CTR &&
+       HieLvl != Hie_DEG &&
+       HieLvl != Hie_CRS)
       /***** Check user's permission *****/
       if (Sch_CheckIfICanSearch (Sch_SEARCH_INSTITS) == Usr_CAN)
 	 /***** Split institutions string into words *****/
@@ -540,15 +546,15 @@ static unsigned Sch_SearchInstitsInDB (const char *RangeQuery)
 /*****************************************************************************/
 // Returns number of centers found
 
-static unsigned Sch_SearchCentersInDB (const char *RangeQuery)
+static unsigned Sch_SearchCentersInDB (Hie_Level_t HieLvl,const char *RangeQuery)
   {
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
    MYSQL_RES *mysql_res;
    unsigned NumCtrs;
 
    /***** Check scope *****/
-   if (Gbl.Scope.Current != Hie_DEG &&
-       Gbl.Scope.Current != Hie_CRS)
+   if (HieLvl != Hie_DEG &&
+       HieLvl != Hie_CRS)
       /***** Check user's permission *****/
       if (Sch_CheckIfICanSearch (Sch_SEARCH_CENTERS) == Usr_CAN)
 	 /***** Split center string into words *****/
@@ -569,14 +575,14 @@ static unsigned Sch_SearchCentersInDB (const char *RangeQuery)
 /*****************************************************************************/
 // Returns number of degrees found
 
-static unsigned Sch_SearchDegreesInDB (const char *RangeQuery)
+static unsigned Sch_SearchDegreesInDB (Hie_Level_t HieLvl,const char *RangeQuery)
   {
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
    MYSQL_RES *mysql_res;
    unsigned NumDegs;
 
    /***** Check scope *****/
-   if (Gbl.Scope.Current != Hie_CRS)
+   if (HieLvl != Hie_CRS)
       /***** Check user's permission *****/
       if (Sch_CheckIfICanSearch (Sch_SEARCH_DEGREES) == Usr_CAN)
 	 /***** Split degree string into words *****/
@@ -623,7 +629,7 @@ static unsigned Sch_SearchCoursesInDB (const char *RangeQuery)
 /*****************************************************************************/
 // Returns number of users found
 
-static unsigned Sch_SearchUsrsInDB (Rol_Role_t Role)
+static unsigned Sch_SearchUsrsInDB (Hie_Level_t HieLvl,Rol_Role_t Role)
   {
    extern const char *Txt_The_search_text_must_be_longer;
    static bool WarningMessageWritten = false;
@@ -634,7 +640,7 @@ static unsigned Sch_SearchUsrsInDB (Rol_Role_t Role)
 			     "CONCAT_WS(' ',FirstName,Surname1,Surname2)",
 			     NULL,NULL))
       /***** Query database and list users found *****/
-      return Usr_ListUsrsFound (Role,SearchQuery);
+      return Usr_ListUsrsFound (HieLvl,Role,SearchQuery);
    else
       // Too short
       if (!WarningMessageWritten)	// To avoid repetitions

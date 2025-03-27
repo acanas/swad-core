@@ -157,7 +157,7 @@ PhoSha_Shape_t PhoSha_GetShapeFromStr (const char *Str)
 /****** Get and show number of users who have chosen a user photo shape ******/
 /*****************************************************************************/
 
-void PhoSha_GetAndShowNumUsrsPerPhotoShape (void)
+void PhoSha_GetAndShowNumUsrsPerPhotoShape (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_user_photos;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -197,7 +197,7 @@ void PhoSha_GetAndShowNumUsrsPerPhotoShape (void)
 	 if (asprintf (&SubQuery,"usr_data.PhotoShape=%u",
 		       (unsigned) Shape) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 NumUsrs[Shape] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 NumUsrs[Shape] = Usr_DB_GetNumUsrsWhoChoseAnOption (HieLvl,SubQuery);
 	 free (SubQuery);
 
 	 /* Update total number of users */

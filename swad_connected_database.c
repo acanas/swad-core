@@ -53,16 +53,17 @@ unsigned Con_DB_GetConnectedUsrsTotal (Rol_Role_t Role)
   }
 
 /*****************************************************************************/
-/************ Get connected users belonging to current location **************/
+/***************** Get connected users belonging to a scope ******************/
 /*****************************************************************************/
 
-unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_t Role)
+unsigned Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
+				 Hie_Level_t HieLvl,Rol_Role_t Role)
   {
    /***** Get number of connected users who belong to current course from database *****/
    switch (Role)
      {
       case Rol_UNK:	// Here Rol_UNK means "any role"
-	 switch (Gbl.Scope.Current)
+	 switch (HieLvl)
 	   {
 	    case Hie_SYS:		// Get connected users in the whole platform
 	       return (unsigned)
@@ -191,7 +192,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
       case Rol_STD:
       case Rol_NET:
       case Rol_TCH:
-	 switch (Gbl.Scope.Current)
+	 switch (HieLvl)
 	   {
 	    case Hie_SYS:		// Get connected users in the whole platform
 	       	return (unsigned)
@@ -324,10 +325,11 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
   }
 
 /*****************************************************************************/
-/***** Get connected users who belong to current location from database ******/
+/** Get connected users of a role who belong to a given scope from database **/
 /*****************************************************************************/
 
-unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_t Role)
+unsigned Con_DB_GetConnectedFromScope (MYSQL_RES **mysql_res,
+				       Hie_Level_t HieLvl,Rol_Role_t Role)
   {
    switch (Role)
      {
@@ -347,7 +349,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
       case Rol_STD:
       case Rol_NET:
       case Rol_TCH:
-	 switch (Gbl.Scope.Current)
+	 switch (HieLvl)
 	   {
 	    case Hie_SYS:		// Show connected users in the whole platform
 	       return (unsigned)

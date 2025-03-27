@@ -376,7 +376,7 @@ void Tmt_ShowCrsTimeTable (void)
 
       /***** Begin time table drawing *****/
       if (Timetable.Type == Tmt_COURSE_TIMETABLE)
-	 Lay_WriteHeaderClassPhoto (ViewType);
+	 Lay_WriteHeaderClassPhoto (Hie_CRS,ViewType);
 
       switch (ViewType)
 	{

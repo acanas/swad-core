@@ -447,11 +447,11 @@ unsigned Ctr_DB_GetNumCtrsWithMapInIns (long HieCod)
 /********************* Get number of centers with degrees ********************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetNumCtrsWithDegs (Hie_Level_t Level,long HieCod)
+unsigned Ctr_DB_GetNumCtrsWithDegs (Hie_Level_t HieLvl,long HieCod)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Level,HieCod);
+   Hie_DB_BuildSubquery (SubQuery,HieLvl,HieCod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of centers with degrees",
@@ -469,11 +469,11 @@ unsigned Ctr_DB_GetNumCtrsWithDegs (Hie_Level_t Level,long HieCod)
 /********************* Get number of centers with courses ********************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetNumCtrsWithCrss (Hie_Level_t Level,long Cod)
+unsigned Ctr_DB_GetNumCtrsWithCrss (Hie_Level_t HieLvl,long HieCod)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Level,Cod);
+   Hie_DB_BuildSubquery (SubQuery,HieLvl,HieCod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of centers with courses",
@@ -493,12 +493,11 @@ unsigned Ctr_DB_GetNumCtrsWithCrss (Hie_Level_t Level,long Cod)
 /********************* Get number of centers with users **********************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetNumCtrsWithUsrs (Rol_Role_t Role,
-                                    Hie_Level_t Level,long Cod)
+unsigned Ctr_DB_GetNumCtrsWithUsrs (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Role)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Level,Cod);
+   Hie_DB_BuildSubquery (SubQuery,HieLvl,HieCod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of centers with users",

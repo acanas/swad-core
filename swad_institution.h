@@ -67,13 +67,13 @@ void Ins_ContEditAfterChgIns (void);
 void Ins_ReceiveReqIns (void);
 void Ins_ReceiveNewIns (void);
 
-unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role);
+unsigned Ins_GetCachedNumInssWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role);
 
 void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss);
 
 void Ins_PutParInsCod (void *InsCod);
 
 //-------------------------------- Figures ------------------------------------
-void Ins_GetAndShowInstitutionsStats (void);
+void Ins_GetAndShowInstitutionsStats (Hie_Level_t HieLvl);
 
 #endif

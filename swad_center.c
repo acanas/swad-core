@@ -1543,7 +1543,7 @@ unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod)
 /********************* Get number of centers with users **********************/
 /*****************************************************************************/
 
-unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role)
+unsigned Ctr_GetCachedNumCtrsWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role)
   {
    static FigCch_FigureCached_t FigureCtrs[Rol_NUM_ROLES] =
      {
@@ -1552,15 +1552,15 @@ unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role)
       [Rol_TCH] = FigCch_NUM_CTRS_WITH_TCHS,	// Teachers
      };
    unsigned NumNodesWithUsrs;
-   long HieCod = Hie_GetCurrentCod ();
+   long HieCod = Hie_GetHieCod (HieLvl);
 
    /***** Get number of centers with users from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureCtrs[Role],Gbl.Scope.Current,HieCod,
+   if (!FigCch_GetFigureFromCache (FigureCtrs[Role],HieLvl,HieCod,
 				   FigCch_UNSIGNED,&NumNodesWithUsrs))
      {
       /***** Get current number of centers with users from database and update cache *****/
-      NumNodesWithUsrs = Ctr_DB_GetNumCtrsWithUsrs (Role,Gbl.Scope.Current,HieCod);
-      FigCch_UpdateFigureIntoCache (FigureCtrs[Role],Gbl.Scope.Current,HieCod,
+      NumNodesWithUsrs = Ctr_DB_GetNumCtrsWithUsrs (HieLvl,HieCod,Role);
+      FigCch_UpdateFigureIntoCache (FigureCtrs[Role],HieLvl,HieCod,
 				    FigCch_UNSIGNED,&NumNodesWithUsrs);
      }
 

@@ -281,6 +281,6 @@ void Prj_RemoveCrsProjects (long CrsCod);
 void Prj_RemoveUsrFromProjects (long UsrCod);
 
 //-------------------------------- Figures ------------------------------------
-void Prj_GetAndShowProjectsStats (void);
+void Prj_GetAndShowProjectsStats (Hie_Level_t HieLvl);
 
 #endif

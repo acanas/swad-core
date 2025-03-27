@@ -70,7 +70,7 @@ void Fol_ReqUnfollowTchs (void);
 void Fol_FollowUsrs (void);
 void Fol_UnfollowUsrs (void);
 
-void Fol_GetAndShowRankingFollowers (void);
+void Fol_GetAndShowRankingFollowers (Hie_Level_t HieLvl);
 
 void Fol_GetNotifFollower (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                            char **ContentStr);
@@ -78,6 +78,6 @@ void Fol_GetNotifFollower (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 void Fol_RemoveUsrFromUsrFollow (long UsrCod);
 
 //-------------------------------- Figures ------------------------------------
-void Fol_GetAndShowFollowStats (void);
+void Fol_GetAndShowFollowStats (Hie_Level_t HieLvl);
 
 #endif

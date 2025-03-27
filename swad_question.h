@@ -266,9 +266,9 @@ void Qst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod);
 void Qst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod);
 void Qst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod);
 
-unsigned Qst_GetNumQuestions (Hie_Level_t Level,Qst_AnswerType_t AnsType,
+unsigned Qst_GetNumQuestions (Hie_Level_t HieLvl,Qst_AnswerType_t AnsType,
                               struct Qst_Stats *Stats);
 
-void Qst_GetTestStats (Qst_AnswerType_t AnsType,struct Qst_Stats *Stats);
+void Qst_GetTestStats (Hie_Level_t HieLvl,Qst_AnswerType_t AnsType,struct Qst_Stats *Stats);
 
 #endif

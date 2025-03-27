@@ -65,13 +65,13 @@ static struct DegTyp_DegType *DegTyp_EditingDegTyp = NULL;	// Static variable to
 /*************************** Private prototypes ******************************/
 /*****************************************************************************/
 
-static void DegTyp_SeeDegTypes (Act_Action_t NextAction,Hie_Level_t Level,
+static void DegTyp_SeeDegTypes (Act_Action_t NextAction,Hie_Level_t HieLvl,
                                 DegTyp_Order_t DefaultOrder);
 static DegTyp_Order_t DegTyp_GetParDegTypOrder (DegTyp_Order_t DefaultOrder);
 
 static void DegTyp_ListDegTypes (const struct DegTyp_DegTypes *DegTypes,
                                  Act_Action_t NextAction,
-                                 Hie_Level_t Level,
+                                 Hie_Level_t HieLvl,
                                  DegTyp_Order_t SelectedOrder);
 
 static void DegTyp_EditDegTypesInternal (const struct DegTyp_DegTypes *DegTypes);
@@ -85,7 +85,7 @@ static void DegTyp_ListDegTypesForEdition (const struct DegTyp_DegTypes *DegType
 static void DegTyp_PutFormToCreateDegreeType (void);
 
 static void DegTyp_PutHeadDegTypesForSeeing (Act_Action_t NextAction,
-                                             Hie_Level_t Level,
+                                             Hie_Level_t HieLvl,
                                              DegTyp_Order_t SelectedOrder);
 static void DegTyp_PutHeadDegTypesForEdition (void);
 
@@ -142,16 +142,16 @@ void DegTyp_WriteSelectorDegTypes (long SelectedDegTypCod)
 void DegTyp_SeeDegTypesInDegTab (void)
   {
    DegTyp_SeeDegTypes (ActSeeDegTyp,Hie_SYS,
-                          DegTyp_ORDER_BY_DEG_TYPE);	// Default order if not specified
+		       DegTyp_ORDER_BY_DEG_TYPE);	// Default order if not specified
   }
 
-void DegTyp_SeeDegTypesInStaTab (void)
+void DegTyp_GetAndShowDegTypesStats (Hie_Level_t HieLvl)
   {
-   DegTyp_SeeDegTypes (ActSeeUseGbl,Gbl.Scope.Current,
-                          DegTyp_ORDER_BY_NUM_DEGS);	// Default order if not specified
+   DegTyp_SeeDegTypes (ActSeeUseGbl,HieLvl,
+		       DegTyp_ORDER_BY_NUM_DEGS);	// Default order if not specified
   }
 
-static void DegTyp_SeeDegTypes (Act_Action_t NextAction,Hie_Level_t Level,
+static void DegTyp_SeeDegTypes (Act_Action_t NextAction,Hie_Level_t HieLvl,
                                 DegTyp_Order_t DefaultOrder)
   {
    DegTyp_Order_t SelectedOrder;
@@ -161,10 +161,10 @@ static void DegTyp_SeeDegTypes (Act_Action_t NextAction,Hie_Level_t Level,
    SelectedOrder = DegTyp_GetParDegTypOrder (DefaultOrder);
 
    /***** Get list of degree types *****/
-   DegTyp_GetListDegTypes (&DegTypes,Level,SelectedOrder);
+   DegTyp_GetListDegTypes (&DegTypes,HieLvl,SelectedOrder);
 
-   /***** List degree types *****/
-   DegTyp_ListDegTypes (&DegTypes,NextAction,Level,SelectedOrder);
+      /***** List degree types *****/
+      DegTyp_ListDegTypes (&DegTypes,NextAction,HieLvl,SelectedOrder);
 
    /***** Free list of degree types *****/
    DegTyp_FreeListDegTypes (&DegTypes);
@@ -191,7 +191,7 @@ static DegTyp_Order_t DegTyp_GetParDegTypOrder (DegTyp_Order_t DefaultOrder)
 
 static void DegTyp_ListDegTypes (const struct DegTyp_DegTypes *DegTypes,
                                  Act_Action_t NextAction,
-                                 Hie_Level_t Level,
+                                 Hie_Level_t HieLvl,
                                  DegTyp_Order_t SelectedOrder)
   {
    extern const char *Hlp_CENTER_DegreeTypes;
@@ -222,7 +222,7 @@ static void DegTyp_ListDegTypes (const struct DegTyp_DegTypes *DegTypes,
       HTM_TABLE_BeginWideMarginPadding (2);
 
          /***** Write heading *****/
-	 DegTyp_PutHeadDegTypesForSeeing (NextAction,Level,SelectedOrder);
+	 DegTyp_PutHeadDegTypesForSeeing (NextAction,HieLvl,SelectedOrder);
 
 	 /***** List current degree types for seeing *****/
 	 DegTyp_ListDegTypesForSeeing (DegTypes);
@@ -366,7 +366,7 @@ static void DegTyp_PutIconsListingDegTypes (__attribute__((unused)) void *Args)
 
 static void DegTyp_PutIconToEditDegTypes (__attribute__((unused)) void *Args)
   {
-   if (Gbl.Hierarchy.Level == Hie_CTR &&	// Only editable if center tab is visible
+   if (Gbl.Hierarchy.HieLvl == Hie_CTR &&	// Only editable if center tab is visible
        DegTyp_CheckIfICanCreateDegTypes () == Usr_CAN)
       Ico_PutContextualIconToEdit (ActEdiDegTyp,NULL,NULL,NULL);
   }
@@ -486,7 +486,7 @@ static void DegTyp_PutFormToCreateDegreeType (void)
 /*****************************************************************************/
 
 static void DegTyp_PutHeadDegTypesForSeeing (Act_Action_t NextAction,
-                                             Hie_Level_t Level,
+                                             Hie_Level_t HieLvl,
                                              DegTyp_Order_t SelectedOrder)
   {
    extern const char *Txt_DEGREE_TYPES_HELP_ORDER[DegTyp_NUM_ORDERS];
@@ -513,7 +513,7 @@ static void DegTyp_PutHeadDegTypesForSeeing (Act_Action_t NextAction,
 	    Frm_BeginForm (NextAction);
 	       if (NextAction == ActSeeUseGbl)
 		 {
-		  Figures.Level      = Level;
+		  Figures.HieLvl      = HieLvl;
 		  Figures.FigureType = Fig_DEGREE_TYPES;
 		  Fig_PutParsFigures (&Figures);
 		 }
@@ -563,14 +563,14 @@ static void DegTyp_PutHeadDegTypesForEdition (void)
 /*****************************************************************************/
 
 void DegTyp_GetListDegTypes (struct DegTyp_DegTypes *DegTypes,
-                             Hie_Level_t Level,DegTyp_Order_t Order)
+                             Hie_Level_t HieLvl,DegTyp_Order_t Order)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumTyp;
 
    /***** Get types of degree from database *****/
-   DegTypes->Num = Deg_DB_GetDegreeTypes (&mysql_res,Level,Order);
+   DegTypes->Num = Deg_DB_GetDegreeTypes (&mysql_res,HieLvl,Order);
    DegTypes->Lst = NULL;
 
    /***** Get degree types *****/
@@ -876,14 +876,4 @@ static void DegTyp_EditingDegTypeDestructor (void)
       free (DegTyp_EditingDegTyp);
       DegTyp_EditingDegTyp = NULL;
      }
-  }
-
-/*****************************************************************************/
-/****************** Get and show stats about institutions ********************/
-/*****************************************************************************/
-
-void DegTyp_GetAndShowDegTypesStats (void)
-  {
-   /***** Show statistic about number of degrees in each type of degree *****/
-   DegTyp_SeeDegTypesInStaTab ();
   }

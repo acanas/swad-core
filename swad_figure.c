@@ -63,10 +63,10 @@ extern struct Globals Gbl;
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
-static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType);
+static Hie_Level_t Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType);
 
 static void Fig_PutParFigureType (Fig_FigureType_t FigureType);
-static void Fig_PutParFigScope (Hie_Level_t Level);
+static void Fig_PutParFigScope (Hie_Level_t HieLvl);
 
 /*****************************************************************************/
 /************************** Show use of the platform *************************/
@@ -77,24 +77,27 @@ void Fig_ReqShowFigures (void)
    Fig_ReqShowFigure (Fig_FIGURE_TYPE_DEF);
   }
 
-static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
+// Returns scope
+static Hie_Level_t Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
   {
    extern const char *Hlp_ANALYTICS_Figures;
    extern const char *Txt_Figures;
    extern const char *Txt_Scope;
    extern const char *Txt_Statistic;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   unsigned AllowedLvls;
+   Hie_Level_t HieLvl;
    Fig_FigureType_t FigType;
    unsigned FigureTypeUnsigned;
 
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << Hie_SYS |
-		       1 << Hie_CTY |
-		       1 << Hie_INS |
-		       1 << Hie_CTR |
-		       1 << Hie_DEG |
-		       1 << Hie_CRS;
-   Sco_GetScope ("FigScope",Hie_SYS);
+   AllowedLvls = 1 << Hie_SYS |
+		 1 << Hie_CTY |
+		 1 << Hie_INS |
+		 1 << Hie_CTR |
+		 1 << Hie_DEG |
+		 1 << Hie_CRS;
+   HieLvl = Sco_GetScope ("FigScope",Hie_SYS,AllowedLvls);
 
    /***** Form to show statistic *****/
    Frm_BeginForm (ActSeeUseGbl);
@@ -114,7 +117,8 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"Frm_C2 LM DAT_%s\"",The_GetSuffix ());
-		  Sco_PutSelectorScope ("FigScope",HTM_NO_ATTR);
+		  Sco_PutSelectorScope ("FigScope",HTM_NO_ATTR,
+					HieLvl,AllowedLvls);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -154,6 +158,8 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 
    /***** End form *****/
    Frm_EndForm ();
+
+   return HieLvl;
   }
 
 /*****************************************************************************/
@@ -164,11 +170,12 @@ void Fig_PutIconToShowFigure (Fig_FigureType_t FigureType)
   {
    struct Fig_Figures Figures;
 
-   /***** Set default scope (used only if Gbl.Scope.Current is unknown) *****/
-   Sco_AdjustScope (Hie_CRS);
+   /***** Set default scope (used only if Scope is unknown) *****/
+   // Sco_AdjustScope (Scope,Allowed,Hie_CRS);
 
    /***** Put icon to show figure *****/
-   Figures.Level      = Gbl.Scope.Current;
+   // Figures.Scope      = *Scope;
+   Figures.HieLvl      = Hie_CRS;
    Figures.FigureType = FigureType;
    Lay_PutContextualLinkOnlyIcon (ActSeeUseGbl,NULL,
                                   Fig_PutParsFigures,&Figures,
@@ -183,7 +190,7 @@ void Fig_PutParsFigures (void *Figures)
   {
    if (Figures)
      {
-      Fig_PutParFigScope (((struct Fig_Figures *) Figures)->Level);
+      Fig_PutParFigScope (((struct Fig_Figures *) Figures)->HieLvl);
       Fig_PutParFigureType (((struct Fig_Figures *) Figures)->FigureType);
      }
   }
@@ -201,9 +208,9 @@ static void Fig_PutParFigureType (Fig_FigureType_t FigureType)
 /********* Put hidden parameter for the type of figure (statistic) ***********/
 /*****************************************************************************/
 
-static void Fig_PutParFigScope (Hie_Level_t Level)
+static void Fig_PutParFigScope (Hie_Level_t HieLvl)
   {
-   Sco_PutParScope ("FigScope",Level);
+   Sco_PutParScope ("FigScope",HieLvl);
   }
 
 /*****************************************************************************/
@@ -212,7 +219,7 @@ static void Fig_PutParFigScope (Hie_Level_t Level)
 
 void Fig_ShowFigures (void)
   {
-   static void (*Fig_Function[Fig_NUM_FIGURES])(void) =	// Array of pointers to functions
+   static void (*Fig_Function[Fig_NUM_FIGURES])(Hie_Level_t HieLvl) =	// Array of pointers to functions
      {
       [Fig_UNKNOWN		] = NULL,
       [Fig_USERS		] = Usr_GetAndShowUsersStats,
@@ -250,6 +257,7 @@ void Fig_ShowFigures (void)
       [Fig_COOKIES		] = Coo_GetAndShowNumUsrsPerCookies,
      };
    Fig_FigureType_t SelectedFigureType;
+   Hie_Level_t HieLvl;
 
    /***** Get the type of figure ******/
    SelectedFigureType = (Fig_FigureType_t)
@@ -259,9 +267,9 @@ void Fig_ShowFigures (void)
 						(unsigned long) Fig_FIGURE_TYPE_DEF);
 
    /***** Show again the form to see use of the platform *****/
-   Fig_ReqShowFigure (SelectedFigureType);
+   HieLvl = Fig_ReqShowFigure (SelectedFigureType);
 
    /***** Show the stat of use selected by user *****/
    HTM_BR ();
-   Fig_Function[SelectedFigureType] ();
+   Fig_Function[SelectedFigureType] (HieLvl);
   }

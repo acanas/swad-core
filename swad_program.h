@@ -57,6 +57,6 @@ void Prg_ExpandNodeEditing (void);
 void Prg_ContractNodeEditing (void);
 
 //-------------------------------- Figures ------------------------------------
-void Prg_GetAndShowCourseProgramStats (void); // TODO: Change function from assignments to schedule
+void Prg_GetAndShowCourseProgramStats (Hie_Level_t HieLvl); // TODO: Change function from assignments to schedule
 
 #endif

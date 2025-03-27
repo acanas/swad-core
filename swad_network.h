@@ -75,7 +75,7 @@ void Net_ShowWebsAndSocialNets (const struct Usr_Data *UsrDat);
 
 void Net_ShowFormMyWebsAndSocialNets (void);
 void Net_UpdateMyWebsAndSocialNets (void);
-void Net_ShowWebAndSocialNetworksStats (void);
+void Net_ShowWebAndSocialNetworksStats (Hie_Level_t HieLvl);
 
 void Net_DB_RemoveUsrWebs (long UsrCod);
 

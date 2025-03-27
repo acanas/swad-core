@@ -1362,7 +1362,7 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
 		 Hlp_ASSESSMENT_Exams_results,Box_NOT_CLOSABLE);
 
       /***** Header *****/
-      Lay_WriteHeaderClassPhoto (Vie_VIEW);
+      Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
 
       /***** Check user data *****/
       /* Get data of the user who answered the exam print */

@@ -57,27 +57,116 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+static struct
+  {
+   unsigned long TimeToRefresh;
+   unsigned NumUsrs;
+   unsigned NumUsrsToList;
+   struct Con_ConnectedUsrs Usrs[Rol_NUM_ROLES];
+   struct
+     {
+      long UsrCod;
+      bool ThisCrs;
+      time_t TimeDiff;
+     } Lst[Cfg_MAX_CONNECTED_SHOWN];
+  } Con_Connected =
+  {
+   .TimeToRefresh = Con_MAX_TIME_TO_REFRESH_CONNECTED_IN_MS,
+  };
+
+/*****************************************************************************/
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void Con_PutIconToUpdateConnected (__attribute__((unused)) void *Args);
-static void Con_PutParScope (__attribute__((unused)) void *Args);
+static unsigned long Con_GetTimeToRefresh (void);
+
+static void Con_PutIconToUpdateConnected (void *Scope);
+static void Con_PutParScope (void *Scope);
 
 static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal);
 
 static void Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_Role_t Role);
-static void Con_ShowConnectedUsrsBelongingToLocation (void);
+static void Con_ShowConnectedUsrsBelongingToScope (Hie_Level_t HieLvl,
+						   unsigned AllowedLvls);
 
-static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_Role_t Role);
-static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_Role_t Role);
+static void Con_ShowConnectedUsrsWithARoleBelongingToScopeOnMainZone (Hie_Level_t HieLvl,
+								      Rol_Role_t Role);
+static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_Role_t Role,unsigned *NumUsr);
 static unsigned Con_GetConnectedUsrsTotal (Rol_Role_t Role);
 
-static void Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_Role_t Role,
-                                                                 struct Con_ConnectedUsrs *Usrs);
-static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role);
-static void Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Rol_Role_t Role);
-static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role);
-static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t Role);
+static void Con_GetNumConnectedWithARole (Hie_Level_t HieLvl,Rol_Role_t Role,
+					  struct Con_ConnectedUsrs *Usrs);
+static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role,
+								 unsigned *NumUsrsConnected,
+								 unsigned *NumUsrsToList);
+static void Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Rol_Role_t Role,unsigned *NumUsr);
+static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role,unsigned NumUsr);
+static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Hie_Level_t HieLvl,
+								    Rol_Role_t Role);
+
+/*****************************************************************************/
+/******** Update time to refresh depending on number of open sessions ********/
+/*****************************************************************************/
+
+void Con_SetTimeToRefresh (unsigned NumSessions)
+  {
+   Con_Connected.TimeToRefresh = (unsigned long) (NumSessions /
+	                                          Cfg_TIMES_PER_SECOND_REFRESH_CONNECTED)
+	                         * 1000UL;
+
+   if (Con_Connected.TimeToRefresh < Con_MIN_TIME_TO_REFRESH_CONNECTED_IN_MS)
+      Con_Connected.TimeToRefresh = Con_MIN_TIME_TO_REFRESH_CONNECTED_IN_MS;
+   else if (Con_Connected.TimeToRefresh > Con_MAX_TIME_TO_REFRESH_CONNECTED_IN_MS)
+      Con_Connected.TimeToRefresh = Con_MAX_TIME_TO_REFRESH_CONNECTED_IN_MS;
+  }
+
+static unsigned long Con_GetTimeToRefresh (void)
+  {
+   return Con_Connected.TimeToRefresh;
+  }
+
+/*****************************************************************************/
+/******************** Refresh connected users via AJAX ***********************/
+/*****************************************************************************/
+
+void Con_RefreshConnected (void)
+  {
+   unsigned NumUsr;
+   bool ShowConnected = (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&
+                        Gbl.Hierarchy.HieLvl == Hie_CRS;	// Right column visible && There is a course selected
+
+   /***** Refresh time *****/
+   HTM_TxtF ("%lu|",Con_GetTimeToRefresh ());
+
+   /***** Number of notications *****/
+   if (Gbl.Usrs.Me.Logged)
+      Ntf_WriteNumberOfNewNtfs ();
+   HTM_Char ('|');
+
+   /***** Number of global connected users *****/
+   Con_ShowGlobalConnectedUsrs ();
+   HTM_Char ('|');
+
+   /***** Number of course connected users *****/
+   if (ShowConnected)
+      Con_ShowConnectedUsrsBelongingToCurrentCrs ();
+   HTM_Char ('|');
+
+   /***** Number of users to list *****/
+   if (ShowConnected)
+      HTM_Unsigned (Con_Connected.NumUsrsToList);
+   HTM_Char ('|');
+
+   /***** Time differences *****/
+   if (ShowConnected)
+      for (NumUsr = 0;
+	   NumUsr < Con_Connected.NumUsrsToList;
+	   NumUsr++)
+         HTM_TxtF ("%ld|",Con_Connected.Lst[NumUsr].TimeDiff);
+  }
 
 /*****************************************************************************/
 /************************** Show connected users *****************************/
@@ -89,6 +178,8 @@ void Con_ShowConnectedUsrs (void)
    extern const char *Txt_Connected_users;
    extern const char *Txt_Sessions;
    extern const char *Txt_Connected_PLURAL;
+   Hie_Level_t HieLvl;
+   unsigned AllowedLvls;
 
    /***** Contextual menu *****/
    if (Gbl.Usrs.Me.Logged)
@@ -99,11 +190,11 @@ void Con_ShowConnectedUsrs (void)
      }
 
    /***** Get scope *****/
-   Sco_SetAllowedScopesForListingStudents ();
-   Sco_GetScope ("ScopeCon",Hie_CRS);
+   AllowedLvls = Sco_GetAllowedScopesForListingStudents ();
+   HieLvl = Sco_GetScope ("ScopeCon",Hie_CRS,AllowedLvls);
 
    /***** Begin box *****/
-   Box_BoxBegin (Txt_Connected_users,Con_PutIconToUpdateConnected,NULL,
+   Box_BoxBegin (Txt_Connected_users,Con_PutIconToUpdateConnected,&HieLvl,
 		 Hlp_USERS_Connected,Box_NOT_CLOSABLE);
 
       /***** Current time *****/
@@ -123,12 +214,12 @@ void Con_ShowConnectedUsrs (void)
 	 Con_ShowGlobalConnectedUsrs ();
       HTM_FIELDSET_End ();
 
-      /***** Show connected users in the current location *****/
-      if (Gbl.Scope.Current != Hie_UNK)
+      /***** Show connected users in the current scope *****/
+      if (HieLvl != Hie_UNK)
 	{
 	 HTM_FIELDSET_Begin ("class=\"CON CON_%s\"",The_GetSuffix ());
 	    HTM_LEGEND (Txt_Connected_PLURAL);
-	    Con_ShowConnectedUsrsBelongingToLocation ();
+	    Con_ShowConnectedUsrsBelongingToScope (HieLvl,AllowedLvls);
 	 HTM_FIELDSET_End ();
 	}
 
@@ -140,15 +231,15 @@ void Con_ShowConnectedUsrs (void)
 /******************** Put icon to update connected users *********************/
 /*****************************************************************************/
 
-static void Con_PutIconToUpdateConnected (__attribute__((unused)) void *Args)
+static void Con_PutIconToUpdateConnected (void *Scope)
   {
    Ico_PutContextualIconToUpdate (ActLstCon,NULL,
-                                  Con_PutParScope,NULL);
+                                  Con_PutParScope,Scope);
   }
 
-static void Con_PutParScope (__attribute__((unused)) void *Args)
+static void Con_PutParScope (void *Scope)
   {
-   Sco_PutParScope ("ScopeCon",Gbl.Scope.Current);
+   Sco_PutParScope ("ScopeCon",*((Hie_Level_t *) Scope));
   }
 
 /*****************************************************************************/
@@ -229,13 +320,12 @@ static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal)
 void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void)
   {
    if ((Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&			// Right column visible
-       Gbl.Hierarchy.Level == Hie_CRS &&				// Course selected
+       Gbl.Hierarchy.HieLvl == Hie_CRS &&				// Course selected
        (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG ||	// I can view users
         Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
      {
-      Gbl.Usrs.Connected.NumUsrs       =
-      Gbl.Usrs.Connected.NumUsrsToList = 0;
-      Gbl.Scope.Current = Hie_CRS;
+      Con_Connected.NumUsrs       =
+      Con_Connected.NumUsrsToList = 0;
 
       /***** Number of teachers, non-editing teachers, and students *****/
       Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_TCH);
@@ -251,39 +341,43 @@ void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void)
 static void Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_Role_t Role)
   {
    /***** Get number of connected users who belong to current course *****/
-   Con_GetNumConnectedWithARoleBelongingToCurrentScope (Role,&Gbl.Usrs.Connected.Usrs[Role]);
+   Con_GetNumConnectedWithARole (Hie_CRS,Role,&Con_Connected.Usrs[Role]);
 
    /***** Get list connected users belonging to this course *****/
-   Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Role);
+   Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Role,
+							&Con_Connected.NumUsrs,
+							&Con_Connected.NumUsrsToList);
   }
 
 /*****************************************************************************/
-/****** Show number of connected users who belong to current location ********/
+/******** Show number of connected users who belong to a given scope *********/
 /*****************************************************************************/
 
-static void Con_ShowConnectedUsrsBelongingToLocation (void)
+static void Con_ShowConnectedUsrsBelongingToScope (Hie_Level_t HieLvl,
+						   unsigned AllowedLvls)
   {
    extern const char *Txt_from;
    struct Con_ConnectedUsrs Usrs;
 
    /***** Number of connected users who belong to scope *****/
-   Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_UNK,&Usrs);
+   Con_GetNumConnectedWithARole (HieLvl,Rol_UNK,&Usrs);
 
    /* Write number of connected users */
    HTM_TxtF ("%u %s ",Usrs.NumUsrs,Txt_from);
 
    /* Put form to change scope */
    Frm_BeginForm (ActLstCon);
-      Sco_PutSelectorScope ("ScopeCon",HTM_SUBMIT_ON_CHANGE);
+      Sco_PutSelectorScope ("ScopeCon",HTM_SUBMIT_ON_CHANGE,
+			    HieLvl,AllowedLvls);
    Frm_EndForm ();
 
    /***** Number of teachers and students *****/
    HTM_TABLE_Begin ("CON_LIST");
-      Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_TCH);
-      Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_NET);
-      Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_STD);
+      Con_ShowConnectedUsrsWithARoleBelongingToScopeOnMainZone (HieLvl,Rol_TCH);
+      Con_ShowConnectedUsrsWithARoleBelongingToScopeOnMainZone (HieLvl,Rol_NET);
+      Con_ShowConnectedUsrsWithARoleBelongingToScopeOnMainZone (HieLvl,Rol_STD);
       if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-	 Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_GST);
+	 Con_ShowConnectedUsrsWithARoleBelongingToScopeOnMainZone (HieLvl,Rol_GST);
    HTM_TABLE_End ();
 
    /***** Put link to register students *****/
@@ -300,6 +394,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    extern const char *Txt_from;
    char CourseName[Nam_MAX_BYTES_SHRT_NAME + 1];
    struct Con_ConnectedUsrs Usrs;
+   unsigned NumUsr = 0;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)	// No course selected
@@ -310,19 +405,18 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    Frm_BeginForm (ActLstCon);
       HTM_BUTTON_Submit_Begin (Txt_Connected_users,"class=\"BT_LINK\"");
 	 Str_Copy (CourseName,Gbl.Hierarchy.Node[Hie_CRS].ShrtName,sizeof (CourseName) - 1);
-	 Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_UNK,&Usrs);
+	 Con_GetNumConnectedWithARole (Hie_CRS,Rol_UNK,&Usrs);
 	 HTM_TxtF ("%u %s %s",Usrs.NumUsrs,Txt_from,CourseName);
       HTM_BUTTON_End ();
    Frm_EndForm ();
 
    /***** Number of teachers and students *****/
    HTM_TABLE_Begin ("CON_LIST");
-      Gbl.Usrs.Connected.NumUsr        = 0;
-      Gbl.Usrs.Connected.NumUsrs       = 0;
-      Gbl.Usrs.Connected.NumUsrsToList = 0;
-      Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_TCH);
-      Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_NET);
-      Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_STD);
+      Con_Connected.NumUsrs       = 0;
+      Con_Connected.NumUsrsToList = 0;
+      Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_TCH,&NumUsr);
+      Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_NET,&NumUsr);
+      Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_STD,&NumUsr);
    HTM_TABLE_End ();
   }
 
@@ -330,14 +424,15 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
 /* Show number of connected users with a role who belong to current location */
 /*****************************************************************************/
 
-static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_Role_t Role)
+static void Con_ShowConnectedUsrsWithARoleBelongingToScopeOnMainZone (Hie_Level_t HieLvl,
+								      Rol_Role_t Role)
   {
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    struct Con_ConnectedUsrs Usrs;
 
    /***** Write number of connected users who belong to current course *****/
-   Con_GetNumConnectedWithARoleBelongingToCurrentScope (Role,&Usrs);
+   Con_GetNumConnectedWithARole (HieLvl,Role,&Usrs);
    if (Usrs.NumUsrs)
      {
       HTM_TR_Begin (NULL);
@@ -350,7 +445,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
       HTM_TR_End ();
 
       /***** I can see connected users *****/
-      Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Role);
+      Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (HieLvl,Role);
      }
   }
 
@@ -358,21 +453,21 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
 /** Show number of connected users with a role who belong to current course **/
 /*****************************************************************************/
 
-static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_Role_t Role)
+static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_Role_t Role,unsigned *NumUsr)
   {
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Connected_users;
-   unsigned NumUsrsThisRole = Gbl.Usrs.Connected.Usrs[Role].NumUsrs;
-   Usr_Sex_t UsrSex = Gbl.Usrs.Connected.Usrs[Role].Sex;
+   unsigned NumUsrsThisRole = Con_Connected.Usrs[Role].NumUsrs;
+   Usr_Sex_t UsrSex = Con_Connected.Usrs[Role].Sex;
 
    if (NumUsrsThisRole)
      {
       /***** Write number of connected users who belong to current course *****/
-      Gbl.Usrs.Connected.NumUsrs       += NumUsrsThisRole;
-      Gbl.Usrs.Connected.NumUsrsToList += NumUsrsThisRole;
-      if (Gbl.Usrs.Connected.NumUsrsToList > Cfg_MAX_CONNECTED_SHOWN)
-	 Gbl.Usrs.Connected.NumUsrsToList = Cfg_MAX_CONNECTED_SHOWN;
+      Con_Connected.NumUsrs       += NumUsrsThisRole;
+      Con_Connected.NumUsrsToList += NumUsrsThisRole;
+      if (Con_Connected.NumUsrsToList > Cfg_MAX_CONNECTED_SHOWN)
+	 Con_Connected.NumUsrsToList = Cfg_MAX_CONNECTED_SHOWN;
 
       HTM_TR_Begin (NULL);
 	 HTM_TD_Begin ("colspan=\"3\" class=\"CON_USR_NARROW_TIT\"");
@@ -383,10 +478,10 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
       HTM_TR_End ();
 
       /***** I can see connected users *****/
-      Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Role);
+      Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Role,NumUsr);
 
       /***** Write message with number of users not listed *****/
-      if (Gbl.Usrs.Connected.NumUsrsToList < Gbl.Usrs.Connected.NumUsrs)
+      if (Con_Connected.NumUsrsToList < Con_Connected.NumUsrs)
 	{
 	 HTM_TR_Begin (NULL);
 	    HTM_TD_Begin ("colspan=\"3\" class=\"CM\"");
@@ -421,8 +516,8 @@ static unsigned Con_GetConnectedUsrsTotal (Rol_Role_t Role)
 /*****************************************************************************/
 // Return user's sex in UsrSex
 
-static void Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_Role_t Role,
-                                                                 struct Con_ConnectedUsrs *Usrs)
+static void Con_GetNumConnectedWithARole (Hie_Level_t HieLvl,Rol_Role_t Role,
+					  struct Con_ConnectedUsrs *Usrs)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    MYSQL_RES *mysql_res;
@@ -435,7 +530,7 @@ static void Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_Role_t Role
    Usrs->Sex = Usr_SEX_UNKNOWN;
 
    /***** Get number of connected users who belong to current course from database *****/
-   if (Con_DB_GetNumConnectedFromCurrentLocation (&mysql_res,Role))
+   if (Con_DB_GetNumConnected (&mysql_res,HieLvl,Role))
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -467,38 +562,40 @@ static void Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_Role_t Role
 /******************* Compute connected users one by one **********************/
 /*****************************************************************************/
 
-static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role)
+static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role,
+								 unsigned *NumUsrsConnected,
+								 unsigned *NumUsrsToList)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
-   unsigned NumUsr = Gbl.Usrs.Connected.NumUsrs;	// Save current number of users
+   unsigned NumUsr = *NumUsrsConnected;	// Save current number of users
 
    /***** Get connected users who belong to current course from database *****/
-   NumUsrs = Con_DB_GetConnectedFromCurrentLocation (&mysql_res,Role);
+   NumUsrs = Con_DB_GetConnectedFromScope (&mysql_res,Hie_CRS,Role);
 
-   Gbl.Usrs.Connected.NumUsrs       += NumUsrs;
-   Gbl.Usrs.Connected.NumUsrsToList += NumUsrs;
-   if (Gbl.Usrs.Connected.NumUsrsToList > Cfg_MAX_CONNECTED_SHOWN)
-      Gbl.Usrs.Connected.NumUsrsToList = Cfg_MAX_CONNECTED_SHOWN;
+   *NumUsrsConnected += NumUsrs;
+   *NumUsrsToList    += NumUsrs;
+   if (*NumUsrsToList > Cfg_MAX_CONNECTED_SHOWN)
+      *NumUsrsToList = Cfg_MAX_CONNECTED_SHOWN;
 
    /***** Write list of connected users *****/
    for (;
-	NumUsr < Gbl.Usrs.Connected.NumUsrsToList;
+	NumUsr < *NumUsrsToList;
 	NumUsr++)
      {
       row = mysql_fetch_row (mysql_res);
 
       /* Get user code (row[0]) */
-      Gbl.Usrs.Connected.Lst[NumUsr].UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+      Con_Connected.Lst[NumUsr].UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get course code (row[1]) */
-      Gbl.Usrs.Connected.Lst[NumUsr].ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) ==
-	                                        Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+      Con_Connected.Lst[NumUsr].ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) ==
+	                                   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
       /* Compute elapsed time from last access */
-      if (sscanf (row[2],"%ld",&Gbl.Usrs.Connected.Lst[NumUsr].TimeDiff) != 1)
-         Gbl.Usrs.Connected.Lst[NumUsr].TimeDiff = (time_t) 0;
+      if (sscanf (row[2],"%ld",&Con_Connected.Lst[NumUsr].TimeDiff) != 1)
+         Con_Connected.Lst[NumUsr].TimeDiff = (time_t) 0;
      }
 
    /***** Free structure that stores the query result *****/
@@ -509,21 +606,21 @@ static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role
 /******************* Show connected users one by one *************************/
 /*****************************************************************************/
 
-static void Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Rol_Role_t Role)
+static void Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Rol_Role_t Role,unsigned *NumUsr)
   {
    /***** Write list of connected users *****/
    for (;
-	Gbl.Usrs.Connected.NumUsr < Gbl.Usrs.Connected.NumUsrsToList;
-	Gbl.Usrs.Connected.NumUsr++)
+	(*NumUsr) < Con_Connected.NumUsrsToList;
+	(*NumUsr)++)
       /* Write row in screen */
-      Con_WriteRowConnectedUsrOnRightColumn (Role);
+      Con_WriteRowConnectedUsrOnRightColumn (Role,*NumUsr);
   }
 
 /*****************************************************************************/
 /********************* Write the name of a connected user ********************/
 /*****************************************************************************/
 
-static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
+static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role,unsigned NumUsr)
   {
    extern const char *Txt_View_record_for_this_course;
    static Act_Action_t NextAction[Rol_NUM_ROLES] =
@@ -546,7 +643,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    struct Usr_Data OtherUsrDat;
 
    /***** Get user's code from list *****/
-   UsrCod = Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].UsrCod;
+   UsrCod = Con_Connected.Lst[NumUsr].UsrCod;
    MeOrOther = Usr_ItsMe (UsrCod);
 
    switch (MeOrOther)
@@ -577,8 +674,8 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
       HTM_TD_End ();
 
       /***** Write full name and link *****/
-      ClassTxt = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs) ? "CON_NAME_NARROW CON_CRS" :
-									       "CON_NAME_NARROW CON_NO_CRS";
+      ClassTxt = (Con_Connected.Lst[NumUsr].ThisCrs) ? "CON_NAME_NARROW CON_CRS" :
+						       "CON_NAME_NARROW CON_NO_CRS";
       HTM_TD_Begin ("class=\"%s %s\"",ClassTxt,The_GetColorRows ());
          if (!NextAction[Role])
 	    Err_WrongRoleExit ();
@@ -596,12 +693,12 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
       HTM_TD_End ();
 
       /***** Write time from last access *****/
-      ClassTxt = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_SINCE CON_CRS" :
-									      "CON_SINCE CON_NO_CRS");
+      ClassTxt = (Con_Connected.Lst[NumUsr].ThisCrs ? "CON_SINCE CON_CRS" :
+						      "CON_SINCE CON_NO_CRS");
       HTM_TD_Begin ("class=\"%s %s\"",ClassTxt,The_GetColorRows ());
-	 HTM_DIV_Begin ("id=\"hm%u\"",Gbl.Usrs.Connected.NumUsr);	// Used for automatic update, only when displayed on right column
-	    Dat_WriteHoursMinutesSecondsFromSeconds (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].TimeDiff);
-	 HTM_DIV_End ();						// Used for automatic update, only when displayed on right column
+	 HTM_DIV_Begin ("id=\"hm%u\"",NumUsr);	// Used for automatic update, only when displayed on right column
+	    Dat_WriteHoursMinutesSecondsFromSeconds (Con_Connected.Lst[NumUsr].TimeDiff);
+	 HTM_DIV_End ();			// Used for automatic update, only when displayed on right column
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -623,7 +720,8 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 /******************** Show connected users one by one ************************/
 /*****************************************************************************/
 
-static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t Role)
+static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Hie_Level_t HieLvl,
+								    Rol_Role_t Role)
   {
    static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
@@ -646,15 +744,15 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
    time_t TimeDiff;
    const char *ClassTxt;
    struct Usr_Data UsrDat;
-   Frm_PutForm_t PutFormRecord = (Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
-	                          Gbl.Scope.Current   == Hie_CRS &&	// Scope is current course
+   Frm_PutForm_t PutFormRecord = (Gbl.Hierarchy.HieLvl == Hie_CRS &&	// Course selected
+	                          HieLvl == Hie_CRS &&			// Scope is current course
 	                          (Role == Rol_STD ||			// Role is student,...
 	                           Role == Rol_NET ||			// ...non-editing teacher...
 	                           Role == Rol_TCH)) ? Frm_PUT_FORM :	// ...or teacher
 	                        		       Frm_DONT_PUT_FORM;
 
    /***** Get connected users who belong to current location from database *****/
-   if ((NumUsrs = Con_DB_GetConnectedFromCurrentLocation (&mysql_res,Role)))
+   if ((NumUsrs = Con_DB_GetConnectedFromScope (&mysql_res,HieLvl,Role)))
      {
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -741,11 +839,13 @@ void Con_WriteScriptClockConnected (void)
   {
    unsigned NumUsr;
 
-   HTM_TxtF ("\tNumUsrsCon = %u;\n",Gbl.Usrs.Connected.NumUsrsToList);
+   HTM_TxtF ("\tNumUsrsCon = %u;\n",Con_Connected.NumUsrsToList);
    for (NumUsr = 0;
-	NumUsr < Gbl.Usrs.Connected.NumUsrsToList;
+	NumUsr < Con_Connected.NumUsrsToList;
 	NumUsr++)
       HTM_TxtF ("\tListSeconds[%u] = %ld;\n",
-                NumUsr,Gbl.Usrs.Connected.Lst[NumUsr].TimeDiff);
+                NumUsr,Con_Connected.Lst[NumUsr].TimeDiff);
    HTM_Txt ("\twriteClockConnected();\n");
+   HTM_TxtF ("\tsetTimeout('refreshConnected()',%lu);\n",
+	     Con_GetTimeToRefresh ());
   }

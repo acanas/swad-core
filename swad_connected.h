@@ -50,6 +50,9 @@ struct Con_ConnectedUsrs
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Con_SetTimeToRefresh (unsigned NumSessions);
+void Con_RefreshConnected (void);
+
 void Con_ShowConnectedUsrs (void);
 void Con_ShowGlobalConnectedUsrs (void);
 void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void);

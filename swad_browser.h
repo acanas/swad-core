@@ -278,7 +278,7 @@ Act_Action_t Brw_GetActionExpand (void);
 Act_Action_t Brw_GetActionContract (void);
 
 //-------------------------------- Figures ------------------------------------
-void Brw_GetAndShowFileBrowsersStats (void);
-void Brw_GetAndShowOERsStats (void);
+void Brw_GetAndShowFileBrowsersStats (Hie_Level_t HieLvl);
+void Brw_GetAndShowOERsStats (Hie_Level_t HieLvl);
 
 #endif

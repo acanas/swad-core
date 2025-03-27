@@ -126,7 +126,7 @@ unsigned For_DB_GetNumPstsOfUsrInForum (const struct For_Forum *Forum,
 /************* Remove all threads and posts in forums of a scope *************/
 /*****************************************************************************/
 
-void For_DB_RemoveForums (Hie_Level_t Level,long HieCod)
+void For_DB_RemoveForums (Hie_Level_t HieLvl,long HieCod)
   {
    static struct
      {
@@ -156,8 +156,8 @@ void For_DB_RemoveForums (Hie_Level_t Level,long HieCod)
 		     " AND for_threads.HieCod=%ld"
 		     " AND for_threads.ThrCod=for_posts.ThrCod"
 		     " AND for_posts.PstCod=for_disabled.PstCod",
-	           ForumType[Level].Usrs,
-	           ForumType[Level].Tchs,
+	           ForumType[HieLvl].Usrs,
+	           ForumType[HieLvl].Tchs,
 	           HieCod);
 
    /***** Remove posts *****/
@@ -171,8 +171,8 @@ void For_DB_RemoveForums (Hie_Level_t Level,long HieCod)
 		      " for_threads.ForumType=%u)"
 		     " AND for_threads.HieCod=%ld"
 		     " AND for_threads.ThrCod=for_posts.ThrCod",
-	           ForumType[Level].Usrs,
-	           ForumType[Level].Tchs,
+	           ForumType[HieLvl].Usrs,
+	           ForumType[HieLvl].Tchs,
 	           HieCod);
 
    /***** Remove threads read *****/
@@ -186,8 +186,8 @@ void For_DB_RemoveForums (Hie_Level_t Level,long HieCod)
 		      " for_threads.ForumType=%u)"
 		     " AND for_threads.HieCod=%ld"
 		     " AND for_threads.ThrCod=for_read.ThrCod",
-	           ForumType[Level].Usrs,
-	           ForumType[Level].Tchs,
+	           ForumType[HieLvl].Usrs,
+	           ForumType[HieLvl].Tchs,
 	           HieCod);
 
    /***** Remove threads *****/
@@ -198,8 +198,8 @@ void For_DB_RemoveForums (Hie_Level_t Level,long HieCod)
 		     " OR"
 		     " for_threads.ForumType=%u)"
 		     " AND HieCod=%ld",
-	           ForumType[Level].Usrs,
-	           ForumType[Level].Tchs,
+	           ForumType[HieLvl].Usrs,
+	           ForumType[HieLvl].Tchs,
 	           HieCod);
   }
 
@@ -418,8 +418,7 @@ void For_DB_RemoveThreadPsts (long ThrCod)
 /*****************************************************************************/
 // Returns the code of the new inserted thread
 
-long For_DB_InsertForumThread (const struct For_Forums *Forums,
-                               long FirstPstCod)
+long For_DB_InsertForumThread (const struct For_Forums *Forums,long FirstPstCod)
   {
    return
    DB_QueryINSERTandReturnCode ("can not create a new thread in a forum",

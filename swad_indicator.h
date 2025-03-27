@@ -63,6 +63,7 @@ struct Ind_IndicatorsCrs
 
 struct Ind_Indicators
   {
+   Hie_Level_t HieLvl;
    long DegTypCod;
    long DptCod;
    char StrChecked[Ind_MAX_SIZE_INDICATORS_CHECKED + 1];

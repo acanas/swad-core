@@ -98,7 +98,7 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 
 static void Svy_HideUnhideSurvey (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
-static void Svy_SetAllowedScopes (struct Svy_Survey *Svy);
+static unsigned Svy_SetAllowedScopes (struct Svy_Survey *Svy);
 static void Svy_ShowLstGrpsToEditSurvey (long SvyCod);
 static void Svy_CreateSurvey (struct Svy_Survey *Svy,const char *Txt);
 static void Svy_UpdateSurvey (struct Svy_Survey *Svy,const char *Txt);
@@ -408,7 +408,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 
    /***** Get data of this survey *****/
    Svy_GetSurveyDataByCod (&Surveys->Svy);
-   if (Surveys->Svy.Level == Hie_UNK)
+   if (Surveys->Svy.HieLvl == Hie_UNK)
       Err_WrongHierarchyLevelExit ();
 
    /***** Begin box *****/
@@ -598,8 +598,8 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 		     The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Scope);
 	 HTM_TxtF ("%s %s",
-	           Txt_HIERARCHY_SINGUL_Abc[Surveys->Svy.Level],
-		   Gbl.Hierarchy.Node[Surveys->Svy.Level].ShrtName);
+	           Txt_HIERARCHY_SINGUL_Abc[Surveys->Svy.HieLvl],
+		   Gbl.Hierarchy.Node[Surveys->Svy.HieLvl].ShrtName);
       HTM_DIV_End ();
 
       /* Users' roles who can answer the survey */
@@ -616,7 +616,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       HTM_DIV_End ();
 
       /* Groups whose users can answer this survey */
-      if (Surveys->Svy.Level == Hie_CRS)
+      if (Surveys->Svy.HieLvl == Hie_CRS)
 	 if (Gbl.Crs.Grps.NumGrps)
 	    Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (&Surveys->Svy);
 
@@ -647,7 +647,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    The_ChangeRowColor ();
 
    /***** Mark possible notification as seen *****/
-   if (Surveys->Svy.Level == Hie_CRS)	// Only course surveys are notified
+   if (Surveys->Svy.HieLvl == Hie_CRS)	// Only course surveys are notified
       Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_SURVEY,Surveys->Svy.HieCod);
 
    if (ShowOnlyThisSvyComplete)
@@ -1061,7 +1061,7 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 		    {
 		     *ScopesAllowed |= 1 << Hie_DEG;
 	             *HiddenAllowed |= 1 << Hie_DEG;	// A system admin can view hidden degree surveys
-		     if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+		     if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
 		       {
 			*ScopesAllowed |= 1 << Hie_CRS;
 	                *HiddenAllowed |= 1 << Hie_CRS;	// A system admin can view hidden course surveys
@@ -1093,7 +1093,7 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
       Svy->SvyCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get survey scope (row[1]) */
-      if ((Svy->Level = Hie_GetLevelFromDBStr (row[1])) == Hie_UNK)
+      if ((Svy->HieLvl = Hie_GetLevelFromDBStr (row[1])) == Hie_UNK)
          Err_WrongHierarchyLevelExit ();
 
       /* Get code of the country, institution, center, degree or course (row[2]) */
@@ -1128,7 +1128,7 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
       Svy->Status.IAmLoggedWithAValidRoleToAnswer = (Svy->Roles & (1 << Gbl.Usrs.Me.Role.Logged));
 
       /* Do I belong to valid groups to answer this survey? */
-      switch (Svy->Level)
+      switch (Svy->HieLvl)
         {
 	 case Hie_SYS:	// System
             Svy->Status.IBelongToScope = Gbl.Usrs.Me.Logged ? Usr_BELONG :
@@ -1138,10 +1138,10 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
 	 case Hie_INS:	// Institution
 	 case Hie_CTR:	// Center
 	 case Hie_DEG:	// Degree
-            Svy->Status.IBelongToScope = Hie_CheckIfIBelongTo (Svy->Level,Svy->HieCod);
+            Svy->Status.IBelongToScope = Hie_CheckIfIBelongTo (Svy->HieLvl,Svy->HieCod);
 	    break;
 	 case Hie_CRS:	// Course
-	    Svy->Status.IBelongToScope = (Hie_CheckIfIBelongTo (Svy->Level,Svy->HieCod) == Usr_BELONG &&
+	    Svy->Status.IBelongToScope = (Hie_CheckIfIBelongTo (Svy->HieLvl,Svy->HieCod) == Usr_BELONG &&
 					  Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (Svy->SvyCod) == Usr_CAN) ? Usr_BELONG :
 														Usr_DONT_BELONG;
 	    break;
@@ -1167,12 +1167,12 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
       switch (Gbl.Usrs.Me.Role.Logged)
         {
          case Rol_STD:
-            Svy->Status.ICanViewResults  = ((Svy->Level == Hie_CRS ||
-        	                             Svy->Level == Hie_DEG ||
-        	                             Svy->Level == Hie_CTR ||
-        	                             Svy->Level == Hie_INS ||
-        	                             Svy->Level == Hie_CTY ||
-        	                             Svy->Level == Hie_SYS) &&
+            Svy->Status.ICanViewResults  = ((Svy->HieLvl == Hie_CRS ||
+        	                             Svy->HieLvl == Hie_DEG ||
+        	                             Svy->HieLvl == Hie_CTR ||
+        	                             Svy->HieLvl == Hie_INS ||
+        	                             Svy->HieLvl == Hie_CTY ||
+        	                             Svy->HieLvl == Hie_SYS) &&
         	                             Svy->NumQsts &&
                                              Svy->Status.Hidden == HidVis_VISIBLE &&
                                              Svy->Status.ClosedOrOpen == CloOpe_OPEN &&
@@ -1185,12 +1185,12 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
             break;
          case Rol_NET:
             Svy->Status.ICanViewResults  =
-            Svy->Status.ICanViewComments = ((Svy->Level == Hie_CRS ||
-        	                             Svy->Level == Hie_DEG ||
-        	                             Svy->Level == Hie_CTR ||
-        	                             Svy->Level == Hie_INS ||
-        	                             Svy->Level == Hie_CTY ||
-        	                             Svy->Level == Hie_SYS) &&
+            Svy->Status.ICanViewComments = ((Svy->HieLvl == Hie_CRS ||
+        	                             Svy->HieLvl == Hie_DEG ||
+        	                             Svy->HieLvl == Hie_CTR ||
+        	                             Svy->HieLvl == Hie_INS ||
+        	                             Svy->HieLvl == Hie_CTY ||
+        	                             Svy->HieLvl == Hie_SYS) &&
         	                             Svy->NumQsts &&
                                              Svy->Status.ICanAnswer == Usr_CAN_NOT) ? Usr_CAN :
                                         						Usr_CAN_NOT;
@@ -1198,54 +1198,54 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
             break;
          case Rol_TCH:
             Svy->Status.ICanViewResults  =
-            Svy->Status.ICanViewComments = ((Svy->Level == Hie_CRS ||
-        	                             Svy->Level == Hie_DEG ||
-        	                             Svy->Level == Hie_CTR ||
-        	                             Svy->Level == Hie_INS ||
-        	                             Svy->Level == Hie_CTY ||
-        	                             Svy->Level == Hie_SYS) &&
+            Svy->Status.ICanViewComments = ((Svy->HieLvl == Hie_CRS ||
+        	                             Svy->HieLvl == Hie_DEG ||
+        	                             Svy->HieLvl == Hie_CTR ||
+        	                             Svy->HieLvl == Hie_INS ||
+        	                             Svy->HieLvl == Hie_CTY ||
+        	                             Svy->HieLvl == Hie_SYS) &&
         	                             Svy->NumQsts &&
                                              Svy->Status.ICanAnswer == Usr_CAN_NOT) ? Usr_CAN :
                                         						Usr_CAN_NOT;
-            Svy->Status.ICanEdit        =   (Svy->Level == Hie_CRS) ? Usr_CAN :
+            Svy->Status.ICanEdit        =   (Svy->HieLvl == Hie_CRS) ? Usr_CAN :
                                         			      Usr_CAN_NOT;
             break;
          case Rol_DEG_ADM:
             Svy->Status.ICanViewResults  =
-            Svy->Status.ICanViewComments = ((Svy->Level == Hie_DEG ||
-        	                             Svy->Level == Hie_CTR ||
-        	                             Svy->Level == Hie_INS ||
-        	                             Svy->Level == Hie_CTY ||
-        	                             Svy->Level == Hie_SYS) &&
+            Svy->Status.ICanViewComments = ((Svy->HieLvl == Hie_DEG ||
+        	                             Svy->HieLvl == Hie_CTR ||
+        	                             Svy->HieLvl == Hie_INS ||
+        	                             Svy->HieLvl == Hie_CTY ||
+        	                             Svy->HieLvl == Hie_SYS) &&
         	                             Svy->NumQsts &&
                                              Svy->Status.ICanAnswer == Usr_CAN_NOT) ? Usr_CAN :
                                         						Usr_CAN_NOT;
-            Svy->Status.ICanEdit         =  (Svy->Level == Hie_DEG &&
+            Svy->Status.ICanEdit         =  (Svy->HieLvl == Hie_DEG &&
                                              Svy->Status.IBelongToScope == Usr_BELONG) ? Usr_CAN :
                                         						   Usr_CAN_NOT;
             break;
          case Rol_CTR_ADM:
             Svy->Status.ICanViewResults  =
-            Svy->Status.ICanViewComments = ((Svy->Level == Hie_CTR ||
-        	                             Svy->Level == Hie_INS ||
-        	                             Svy->Level == Hie_CTY ||
-        	                             Svy->Level == Hie_SYS) &&
+            Svy->Status.ICanViewComments = ((Svy->HieLvl == Hie_CTR ||
+        	                             Svy->HieLvl == Hie_INS ||
+        	                             Svy->HieLvl == Hie_CTY ||
+        	                             Svy->HieLvl == Hie_SYS) &&
         	                             Svy->NumQsts &&
                                              Svy->Status.ICanAnswer == Usr_CAN_NOT) ? Usr_CAN :
                                         						Usr_CAN_NOT;
-            Svy->Status.ICanEdit         =  (Svy->Level == Hie_CTR &&
+            Svy->Status.ICanEdit         =  (Svy->HieLvl == Hie_CTR &&
                                              Svy->Status.IBelongToScope == Usr_BELONG) ? Usr_CAN :
                                         						   Usr_CAN_NOT;
             break;
          case Rol_INS_ADM:
             Svy->Status.ICanViewResults  =
-            Svy->Status.ICanViewComments = ((Svy->Level == Hie_INS ||
-        	                             Svy->Level == Hie_CTY ||
-        	                             Svy->Level == Hie_SYS) &&
+            Svy->Status.ICanViewComments = ((Svy->HieLvl == Hie_INS ||
+        	                             Svy->HieLvl == Hie_CTY ||
+        	                             Svy->HieLvl == Hie_SYS) &&
         	                             Svy->NumQsts &&
                                              Svy->Status.ICanAnswer == Usr_CAN_NOT) ? Usr_CAN :
                                         						Usr_CAN_NOT;
-            Svy->Status.ICanEdit         =  (Svy->Level == Hie_INS &&
+            Svy->Status.ICanEdit         =  (Svy->HieLvl == Hie_INS &&
                                              Svy->Status.IBelongToScope == Usr_BELONG) ? Usr_CAN :
                                         						   Usr_CAN_NOT;
             break;
@@ -1266,7 +1266,7 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
      {
       /* Initialize to empty survey */
       Svy->SvyCod                = -1L;
-      Svy->Level                 = Hie_UNK;
+      Svy->HieLvl                 = Hie_UNK;
       Svy->Roles                 = 0;
       Svy->UsrCod                = -1L;
       Svy->TimeUTC[Dat_STR_TIME] =
@@ -1570,6 +1570,8 @@ void Svy_ReqCreatOrEditSvy (void)
       [Dat_END_TIME] = Dat_HMS_TO_235959
      };
    struct Svy_Surveys Surveys;
+   unsigned AllowedLvls;
+   Hie_Level_t HieLvl;
    OldNew_OldNew_t OldNewSvy;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
@@ -1605,7 +1607,7 @@ void Svy_ReqCreatOrEditSvy (void)
 
 	 /* Initialize to empty survey */
 	 Surveys.Svy.SvyCod = -1L;
-	 Surveys.Svy.Level  = Hie_UNK;
+	 Surveys.Svy.HieLvl  = Hie_UNK;
 	 Surveys.Svy.Roles  = (1 << Rol_STD);
 	 Surveys.Svy.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 	 Surveys.Svy.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
@@ -1643,9 +1645,10 @@ void Svy_ReqCreatOrEditSvy (void)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       Svy_SetAllowedScopes (&Surveys.Svy);
-	       Sco_GetScope ("ScopeSvy",Surveys.Svy.Level);
-	       Sco_PutSelectorScope ("ScopeSvy",HTM_NO_ATTR);
+	       AllowedLvls = Svy_SetAllowedScopes (&Surveys.Svy);
+	       HieLvl = Sco_GetScope ("ScopeSvy",Surveys.Svy.HieLvl,AllowedLvls);
+	       Sco_PutSelectorScope ("ScopeSvy",HTM_NO_ATTR,
+				     HieLvl,AllowedLvls);
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -1730,65 +1733,64 @@ void Svy_ReqCreatOrEditSvy (void)
 /************ Set allowed scopes depending on logged user's role *************/
 /*****************************************************************************/
 
-static void Svy_SetAllowedScopes (struct Svy_Survey *Svy)
+static unsigned Svy_SetAllowedScopes (struct Svy_Survey *Svy)
   {
+   unsigned AllowedLvls = 0;
    Usr_Can_t ICanEdit = Usr_CAN_NOT;
 
    /***** Set allowed scopes *****/
-   Gbl.Scope.Allowed = 0;
-
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_TCH:	// Teachers only can edit course surveys
-	 if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+	 if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
 	   {
-	    if (Svy->Level == Hie_UNK)		// Scope not defined
-	       Svy->Level = Hie_CRS;
-	    if (Svy->Level == Hie_CRS)
+	    if (Svy->HieLvl == Hie_UNK)		// Scope not defined
+	       Svy->HieLvl = Hie_CRS;
+	    if (Svy->HieLvl == Hie_CRS)
 	      {
-	       Gbl.Scope.Allowed = 1 << Hie_CRS;
+	       AllowedLvls = 1 << Hie_CRS;
 	       ICanEdit = Usr_CAN;
 	      }
 	   }
          break;
       case Rol_DEG_ADM:	// Degree admins only can edit degree surveys
-	 if (Svy->Level == Hie_UNK)		// Scope not defined
-	    Svy->Level = Hie_DEG;
-	 if (Svy->Level == Hie_DEG)
+	 if (Svy->HieLvl == Hie_UNK)		// Scope not defined
+	    Svy->HieLvl = Hie_DEG;
+	 if (Svy->HieLvl == Hie_DEG)
 	   {
-	    Gbl.Scope.Allowed = 1 << Hie_DEG;
+	    AllowedLvls = 1 << Hie_DEG;
 	    ICanEdit = Usr_CAN;
 	   }
          break;
       case Rol_CTR_ADM:	// Center admins only can edit center surveys
-	 if (Svy->Level == Hie_UNK)		// Scope not defined
-	    Svy->Level = Hie_CTR;
-	 if (Svy->Level == Hie_CTR)
+	 if (Svy->HieLvl == Hie_UNK)		// Scope not defined
+	    Svy->HieLvl = Hie_CTR;
+	 if (Svy->HieLvl == Hie_CTR)
 	   {
-	    Gbl.Scope.Allowed = 1 << Hie_CTR;
+	    AllowedLvls = 1 << Hie_CTR;
 	    ICanEdit = Usr_CAN;
 	   }
          break;
       case Rol_INS_ADM:	// Institution admins only can edit institution surveys
-	 if (Svy->Level == Hie_UNK)		// Scope not defined
-	    Svy->Level = Hie_INS;
-	 if (Svy->Level == Hie_INS)
+	 if (Svy->HieLvl == Hie_UNK)		// Scope not defined
+	    Svy->HieLvl = Hie_INS;
+	 if (Svy->HieLvl == Hie_INS)
 	   {
-	    Gbl.Scope.Allowed = 1 << Hie_INS;
+	    AllowedLvls = 1 << Hie_INS;
 	    ICanEdit = Usr_CAN;
 	   }
          break;
       case Rol_SYS_ADM:// System admins can edit any survey
-	 if (Svy->Level == Hie_UNK)	// Scope not defined
-	    Svy->Level = (Gbl.Hierarchy.Level < Hie_NUM_LEVELS &&
-		          Gbl.Hierarchy.Level != Hie_UNK) ? Gbl.Hierarchy.Level :
+	 if (Svy->HieLvl == Hie_UNK)	// Scope not defined
+	    Svy->HieLvl = (Gbl.Hierarchy.HieLvl < Hie_NUM_LEVELS &&
+		          Gbl.Hierarchy.HieLvl != Hie_UNK) ? Gbl.Hierarchy.HieLvl :
 		        	                            Hie_SYS;
-         Gbl.Scope.Allowed = 1 << Hie_SYS |
-	                     1 << Hie_CTY |
-	                     1 << Hie_INS |
-	                     1 << Hie_CTR |
-                             1 << Hie_DEG |
-                             1 << Hie_CRS;
+         AllowedLvls = 1 << Hie_SYS |
+		       1 << Hie_CTY |
+		       1 << Hie_INS |
+		       1 << Hie_CTR |
+		       1 << Hie_DEG |
+		       1 << Hie_CRS;
 	 ICanEdit = Usr_CAN;
 	 break;
       default:
@@ -1797,6 +1799,8 @@ static void Svy_SetAllowedScopes (struct Svy_Survey *Svy)
 
    if (ICanEdit == Usr_CAN_NOT)
       Err_NoPermissionExit ();
+
+   return AllowedLvls;
   }
 
 /*****************************************************************************/
@@ -1860,6 +1864,8 @@ void Svy_ReceiveSurvey (void)
    struct Svy_Survey OldSvy;
    struct Svy_Survey NewSvy;
    OldNew_OldNew_t OldNewSvy;
+   unsigned AllowedLvls;
+   Hie_Level_t HieLvl;
    bool SvyIsCorrect = true;
    unsigned NumUsrsToBeNotifiedByEMail;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
@@ -1884,19 +1890,19 @@ void Svy_ReceiveSurvey (void)
 	 Svy_GetSurveyDataByCod (&OldSvy);
 	 if (OldSvy.Status.ICanEdit == Usr_CAN_NOT)
 	    Err_NoPermissionExit ();
-	 NewSvy.Level = OldSvy.Level;
+	 NewSvy.HieLvl = OldSvy.HieLvl;
 	 break;
       case OldNew_NEW:
       default:
-	 NewSvy.Level = Hie_UNK;
+	 NewSvy.HieLvl = Hie_UNK;
 	 break;
      }
 
    /***** Get scope *****/
-   Svy_SetAllowedScopes (&NewSvy);
-   Sco_GetScope ("ScopeSvy",NewSvy.Level);
+   AllowedLvls = Svy_SetAllowedScopes (&NewSvy);
+   HieLvl = Sco_GetScope ("ScopeSvy",NewSvy.HieLvl,AllowedLvls);
    if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
-      switch (Gbl.Scope.Current)
+      switch (HieLvl)
 	{
 	 case Hie_SYS:
 	 case Hie_CTY:
@@ -1920,8 +1926,8 @@ void Svy_ReceiveSurvey (void)
 	       Err_WrongHierarchyLevelExit ();
 	    break;
 	}
-   NewSvy.Level = Gbl.Scope.Current;
-   NewSvy.HieCod = Gbl.Hierarchy.Node[Gbl.Scope.Current].HieCod;
+   NewSvy.HieLvl = HieLvl;
+   NewSvy.HieCod = Gbl.Hierarchy.Node[HieLvl].HieCod;
 
    /***** Get start/end date-times *****/
    NewSvy.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
@@ -1975,7 +1981,7 @@ void Svy_ReceiveSurvey (void)
       Svy_ReqCreatOrEditSvy ();
 
    /***** Notify by email about the new survey *****/
-   if (NewSvy.Level == Hie_CRS)	// Notify only the surveys for a course, not for a degree or global
+   if (NewSvy.HieLvl == Hie_CRS)	// Notify only the surveys for a course, not for a degree or global
       if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SURVEY,NewSvy.SvyCod)))
          Svy_DB_UpdateNumUsrsNotifiedByEMailAboutSurvey (NewSvy.SvyCod,NumUsrsToBeNotifiedByEMail);
 
@@ -2096,23 +2102,23 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
 /************* (country, institution, center, degree or course) **************/
 /*****************************************************************************/
 
-void Svy_RemoveSurveys (Hie_Level_t Level,long HieCod)
+void Svy_RemoveSurveys (Hie_Level_t HieLvl,long HieCod)
   {
    /***** Remove all users in surveys *****/
-   Svy_DB_RemoveUsrsWhoHaveAnsweredSvysIn (Level,HieCod);
+   Svy_DB_RemoveUsrsWhoHaveAnsweredSvysIn (HieLvl,HieCod);
 
    /***** Remove all answers and comments in surveys *****/
-   Svy_DB_RemoveAnswersSvysIn (Level,HieCod);
-   Svy_DB_RemoveCommentsSvysIn (Level,HieCod);
+   Svy_DB_RemoveAnswersSvysIn (HieLvl,HieCod);
+   Svy_DB_RemoveCommentsSvysIn (HieLvl,HieCod);
 
    /***** Remove all questions in surveys *****/
-   Svy_DB_RemoveQstsSvysIn (Level,HieCod);
+   Svy_DB_RemoveQstsSvysIn (HieLvl,HieCod);
 
    /***** Remove all groups *****/
-   Svy_DB_RemoveGrpsSvysIn (Level,HieCod);
+   Svy_DB_RemoveGrpsSvysIn (HieLvl,HieCod);
 
    /***** Remove all surveys *****/
-   Svy_DB_RemoveSvysIn (Level,HieCod);
+   Svy_DB_RemoveSvysIn (HieLvl,HieCod);
   }
 
 /*****************************************************************************/
@@ -3232,14 +3238,14 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
 // Returns the number of surveys for courses
 // in this location (all the platform, current degree or current course)
 
-unsigned Svy_GetNumCrsSurveys (Hie_Level_t Level,unsigned *NumNotif)
+unsigned Svy_GetNumCrsSurveys (Hie_Level_t HieLvl,unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumSurveys;
 
    /***** Get number of surveys from database *****/
-   if (Svy_DB_GetNumCrsSurveys (&mysql_res,Level))
+   if (Svy_DB_GetNumCrsSurveys (&mysql_res,HieLvl))
      {
       /***** Get number of surveys *****/
       row = mysql_fetch_row (mysql_res);
@@ -3268,7 +3274,7 @@ unsigned Svy_GetNumCrsSurveys (Hie_Level_t Level,unsigned *NumNotif)
 /***************************** Show stats of surveys *************************/
 /*****************************************************************************/
 
-void Svy_GetAndShowSurveysStats (void)
+void Svy_GetAndShowSurveysStats (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_surveys;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -3283,10 +3289,10 @@ void Svy_GetAndShowSurveysStats (void)
    double NumQstsPerSurvey;
 
    /***** Get the number of surveys and the average number of questions per survey from this location *****/
-   if ((NumSurveys = Svy_GetNumCrsSurveys (Gbl.Scope.Current,&NumNotif)))
+   if ((NumSurveys = Svy_GetNumCrsSurveys (HieLvl,&NumNotif)))
      {
-      NumCoursesWithSurveys = Svy_DB_GetNumCrssWithCrsSurveys (Gbl.Scope.Current);
-      NumQstsPerSurvey = Svy_DB_GetNumQstsPerCrsSurvey (Gbl.Scope.Current);
+      NumCoursesWithSurveys = Svy_DB_GetNumCrssWithCrsSurveys (HieLvl);
+      NumQstsPerSurvey = Svy_DB_GetNumQstsPerCrsSurvey (HieLvl);
      }
    else
      {

@@ -301,7 +301,7 @@ void Set_DB_UpdateMyUsrListType (void)
 void Set_DB_UpdateMyColsClassPhoto (unsigned Cols)
   {
    if (Gbl.Usrs.Me.Logged &&
-       Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+       Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
       /***** Update number of colums in class photo for current course *****/
       DB_QueryUPDATE ("can not update number of columns in class photo",
 		      "UPDATE crs_user_settings"
@@ -320,7 +320,7 @@ void Set_DB_UpdateMyColsClassPhoto (unsigned Cols)
 void Set_DB_UpdateMyPrefAboutListWithPhotosPhoto (bool WithPhotos)
   {
    if (Gbl.Usrs.Me.Logged &&
-       Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+       Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
       /***** Update number of colums in class photo for current course *****/
       DB_QueryUPDATE ("can not update your preference about photos in listing",
 		      "UPDATE crs_user_settings"

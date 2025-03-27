@@ -44,7 +44,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 unsigned (*Asg_DB_GetListAssignments[Grp_NUM_MY_ALL_GROUPS]) (MYSQL_RES **mysql_res,
-                                                             Dat_StartEndTime_t SelectedOrder) =
+                                                              Dat_StartEndTime_t SelectedOrder) =
   {
    [Grp_MY_GROUPS ] = Asg_DB_GetListAssignmentsMyGrps,
    [Grp_ALL_GROUPS] = Asg_DB_GetListAssignmentsAllGrps,
@@ -577,10 +577,10 @@ unsigned Asg_DB_GetUsrsFromAssignmentExceptMe (MYSQL_RES **mysql_res,long AsgCod
 // Returns the number of courses with assignments
 // in this location (all the platform, the current degree or the current course)
 
-unsigned Asg_DB_GetNumCoursesWithAssignments (Hie_Level_t Level)
+unsigned Asg_DB_GetNumCoursesWithAssignments (Hie_Level_t HieLvl)
   {
    /***** Get number of courses with assignments from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return (unsigned)
@@ -655,10 +655,10 @@ unsigned Asg_DB_GetNumCoursesWithAssignments (Hie_Level_t Level)
 // Returns the number of assignments
 // in this location (all the platform, the current degree or the current course)
 
-unsigned Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Level_t Level)
+unsigned Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
   {
    /***** Get number of assignments from database *****/
-   switch (Level)
+   switch (HieLvl)
      {
       case Hie_SYS:
          return (unsigned)

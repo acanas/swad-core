@@ -1531,7 +1531,7 @@ static void Exa_UpdateExam (struct Exa_Exam *Exam,const char *Txt)
 /*************************** Show stats about exams **************************/
 /*****************************************************************************/
 
-void Exa_GetAndShowExamsStats (void)
+void Exa_GetAndShowExamsStats (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_exams;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -1542,8 +1542,8 @@ void Exa_GetAndShowExamsStats (void)
    unsigned NumCoursesWithExams;
 
    /***** Get the number of exams from this location *****/
-   if ((NumExams = Exa_DB_GetNumExams (Gbl.Scope.Current)))
-      NumCoursesWithExams = Exa_DB_GetNumCoursesWithExams (Gbl.Scope.Current);
+   if ((NumExams = Exa_DB_GetNumExams (HieLvl)))
+      NumCoursesWithExams = Exa_DB_GetNumCoursesWithExams (HieLvl);
    else
       NumCoursesWithExams = 0;
 

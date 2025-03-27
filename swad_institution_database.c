@@ -346,9 +346,9 @@ unsigned Ins_DB_GetFullListOfInssInCty (MYSQL_RES **mysql_res,long HieCod)
 /*************** Get institutions ordered by number of centers ***************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetInssOrderedByNumCtrs (MYSQL_RES **mysql_res)
+unsigned Ins_DB_GetInssOrderedByNumCtrs (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
   {
-   switch (Gbl.Scope.Current)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return (unsigned)
@@ -392,9 +392,9 @@ unsigned Ins_DB_GetInssOrderedByNumCtrs (MYSQL_RES **mysql_res)
 /************** Get institutions ordered by number of degrees ****************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetInssOrderedByNumDegs (MYSQL_RES **mysql_res)
+unsigned Ins_DB_GetInssOrderedByNumDegs (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
   {
-   switch (Gbl.Scope.Current)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return (unsigned)
@@ -445,9 +445,9 @@ unsigned Ins_DB_GetInssOrderedByNumDegs (MYSQL_RES **mysql_res)
 /*************** Get institutions ordered by number of courses ***************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetInssOrderedByNumCrss (MYSQL_RES **mysql_res)
+unsigned Ins_DB_GetInssOrderedByNumCrss (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
   {
-   switch (Gbl.Scope.Current)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return (unsigned)
@@ -504,10 +504,11 @@ unsigned Ins_DB_GetInssOrderedByNumCrss (MYSQL_RES **mysql_res)
 /*************** Get institutions ordered by users in courses ****************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetInssOrderedByNumUsrsInCrss (MYSQL_RES **mysql_res)
+unsigned Ins_DB_GetInssOrderedByNumUsrsInCrss (MYSQL_RES **mysql_res,
+					       Hie_Level_t HieLvl)
   {
    /***** Get institutions ordered by number of users in courses *****/
-   switch (Gbl.Scope.Current)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return (unsigned)
@@ -570,9 +571,10 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsInCrss (MYSQL_RES **mysql_res)
 /** Get institutions ordered by number of users who claim to belong to them **/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (MYSQL_RES **mysql_res)
+unsigned Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (MYSQL_RES **mysql_res,
+							       Hie_Level_t HieLvl)
   {
-   switch (Gbl.Scope.Current)
+   switch (HieLvl)
      {
       case Hie_SYS:
 	 return (unsigned)
@@ -666,11 +668,11 @@ unsigned Ins_DB_GetNumInssInCty (long CtyCod)
 /****************** Get number of institutions with centres ******************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetNumInssWithCtrs (Hie_Level_t Level,long HieCod)
+unsigned Ins_DB_GetNumInssWithCtrs (Hie_Level_t HieLvl,long HieCod)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Level,HieCod);
+   Hie_DB_BuildSubquery (SubQuery,HieLvl,HieCod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of institutions with centers",
@@ -686,11 +688,11 @@ unsigned Ins_DB_GetNumInssWithCtrs (Hie_Level_t Level,long HieCod)
 /****************** Get number of institutions with degrees ******************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetNumInssWithDegs (Hie_Level_t Level,long HieCod)
+unsigned Ins_DB_GetNumInssWithDegs (Hie_Level_t HieLvl,long HieCod)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Level,HieCod);
+   Hie_DB_BuildSubquery (SubQuery,HieLvl,HieCod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of institutions with degrees",
@@ -708,11 +710,11 @@ unsigned Ins_DB_GetNumInssWithDegs (Hie_Level_t Level,long HieCod)
 /****************** Get number of institutions with courses ******************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetNumInssWithCrss (Hie_Level_t Level,long HieCod)
+unsigned Ins_DB_GetNumInssWithCrss (Hie_Level_t HieLvl,long HieCod)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Level,HieCod);
+   Hie_DB_BuildSubquery (SubQuery,HieLvl,HieCod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of institutions with courses",
@@ -732,12 +734,11 @@ unsigned Ins_DB_GetNumInssWithCrss (Hie_Level_t Level,long HieCod)
 /************* Get current number of institutions with users *****************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetNumInnsWithUsrs (Rol_Role_t Role,
-                                    Hie_Level_t Level,long HieCod)
+unsigned Ins_DB_GetNumInnsWithUsrs (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Role)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Level,HieCod);
+   Hie_DB_BuildSubquery (SubQuery,HieLvl,HieCod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of institutions with users",

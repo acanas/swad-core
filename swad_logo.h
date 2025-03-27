@@ -27,11 +27,11 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Lgo_DrawLogo (Hie_Level_t Level,const struct Hie_Node *Node,
+void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
                    const char *IconClass);
-void Lgo_PutIconToChangeLogo (Hie_Level_t Level);
-void Lgo_RequestLogo (Hie_Level_t Level);
-void Lgo_ReceiveLogo (Hie_Level_t Level);
-void Lgo_RemoveLogo (Hie_Level_t Level);
+void Lgo_PutIconToChangeLogo (Hie_Level_t HieLvl);
+void Lgo_RequestLogo (Hie_Level_t HieLvl);
+void Lgo_ReceiveLogo (Hie_Level_t HieLvl);
+void Lgo_RemoveLogo (Hie_Level_t HieLvl);
 
 #endif

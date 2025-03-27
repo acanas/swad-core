@@ -378,7 +378,7 @@ static void UsrClp_GetUsrsLst (void)
    Usr_DB_BuildQueryToGetUsrsInMyClipboard (&Query);
 
    /***** Get list of students from database *****/
-   Usr_GetListUsrsFromQuery (Query,Rol_UNK,Hie_SYS);
+   Usr_GetListUsrsFromQuery (Query,Hie_SYS,Rol_UNK);
 
    /***** Free query string *****/
    free (Query);

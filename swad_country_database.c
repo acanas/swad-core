@@ -296,11 +296,11 @@ unsigned Cty_DB_GetNumCtysInSys (__attribute__((unused)) long SysCod)
 /***************** Get number of countries with institutions *****************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetNumCtysWithInss (Hie_Level_t Level,long HieCod)
+unsigned Cty_DB_GetNumCtysWithInss (Hie_Level_t HieLvl,long HieCod)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Level,HieCod);
+   Hie_DB_BuildSubquery (SubQuery,HieLvl,HieCod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of countries with institutions",
@@ -316,11 +316,11 @@ unsigned Cty_DB_GetNumCtysWithInss (Hie_Level_t Level,long HieCod)
 /******************* Get number of countries with centers ********************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetNumCtysWithCtrs (Hie_Level_t Level,long HieCod)
+unsigned Cty_DB_GetNumCtysWithCtrs (Hie_Level_t HieLvl,long HieCod)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Level,HieCod);
+   Hie_DB_BuildSubquery (SubQuery,HieLvl,HieCod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of countries with centers",
@@ -338,11 +338,11 @@ unsigned Cty_DB_GetNumCtysWithCtrs (Hie_Level_t Level,long HieCod)
 /******************* Get number of countries with degrees ********************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetNumCtysWithDegs (Hie_Level_t Level,long HieCod)
+unsigned Cty_DB_GetNumCtysWithDegs (Hie_Level_t HieLvl,long HieCod)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Level,HieCod);
+   Hie_DB_BuildSubquery (SubQuery,HieLvl,HieCod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of countries with degrees",
@@ -362,11 +362,11 @@ unsigned Cty_DB_GetNumCtysWithDegs (Hie_Level_t Level,long HieCod)
 /******************* Get number of countries with courses ********************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetNumCtysWithCrss (Hie_Level_t Level,long HieCod)
+unsigned Cty_DB_GetNumCtysWithCrss (Hie_Level_t HieLvl,long HieCod)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Level,HieCod);
+   Hie_DB_BuildSubquery (SubQuery,HieLvl,HieCod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of countries with courses",
@@ -388,12 +388,11 @@ unsigned Cty_DB_GetNumCtysWithCrss (Hie_Level_t Level,long HieCod)
 /******************* Get number of countries with users **********************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetNumCtysWithUsrs (Rol_Role_t Role,
-                                    Hie_Level_t Level,long Cod)
+unsigned Cty_DB_GetNumCtysWithUsrs (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Role)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Level,Cod);
+   Hie_DB_BuildSubquery (SubQuery,HieLvl,HieCod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of countries with users",

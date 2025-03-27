@@ -278,7 +278,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 	         Box_NOT_CLOSABLE);
 
       /***** Write header *****/
-      Lay_WriteHeaderClassPhoto (ViewType);
+      Lay_WriteHeaderClassPhoto (Hie_CRS,ViewType);
 
       /***** Preference selector to change first day of week *****/
       if (ViewType == Vie_VIEW)
@@ -323,7 +323,7 @@ static void Cal_PutIconsCalendar (__attribute__((unused)) void *Args)
    Ico_PutContextualIconToPrint (ActPrnCal,NULL,NULL);
 
    /***** View holidays *****/
-   if (Gbl.Hierarchy.Level == Hie_INS)		// Institution selected
+   if (Gbl.Hierarchy.HieLvl == Hie_INS)		// Institution selected
       Hld_PutIconToSeeHlds ();
   }
 
@@ -342,7 +342,7 @@ void Cal_PutIconToSeeCalendar (void)
 /***** Get and show number of users who have chosen a first day of week ******/
 /*****************************************************************************/
 
-void Cal_GetAndShowNumUsrsPerFirstDayOfWeek (void)
+void Cal_GetAndShowNumUsrsPerFirstDayOfWeek (Hie_Level_t HieLvl)
   {
    extern bool Cal_DayIsValidAsFirstDayOfWeek[7];
    extern const char *Hlp_ANALYTICS_Figures_calendar;
@@ -380,7 +380,7 @@ void Cal_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 	    if (asprintf (&SubQuery,"usr_data.FirstDayOfWeek=%u",
 			  (unsigned) FirstDayOfWeek) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    NumUsrs[FirstDayOfWeek] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	    NumUsrs[FirstDayOfWeek] = Usr_DB_GetNumUsrsWhoChoseAnOption (HieLvl,SubQuery);
 	    free (SubQuery);
 
 	    /* Update total number of users */

@@ -1638,6 +1638,7 @@ int swad__findUsers (struct soap *soap,
    struct Sch_Search Search;
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
    Rol_Role_t Role;
+   Hie_Level_t HieLvl;
    bool FilterTooShort = false;
 
    /***** Initializations *****/
@@ -1645,6 +1646,7 @@ int swad__findUsers (struct soap *soap,
    Gbl.WebService.Function = API_findUsers;
    Gbl.Hierarchy.Node[Hie_CRS].HieCod = (courseCode > 0) ? (long) courseCode :
 							   -1L;
+   Hie_InitHierarchy ();
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
@@ -1654,7 +1656,7 @@ int swad__findUsers (struct soap *soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
-   if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+   if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
       /***** Check course *****/
       if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
 						      Gbl.Hierarchy.Node[Hie_CRS].HieCod,
@@ -1669,7 +1671,7 @@ int swad__findUsers (struct soap *soap,
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
-   if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+   if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
       /***** Check if I am a student, non-editing teacher or teacher in the course *****/
       if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
           Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
@@ -1678,7 +1680,7 @@ int swad__findUsers (struct soap *soap,
 				     "Request forbidden",
 				     "Requester must belong to course");
 
-   if (Gbl.Hierarchy.Level == Hie_CRS)
+   if (Gbl.Hierarchy.HieLvl == Hie_CRS)
       /***** Get degree of current course *****/
       Gbl.Hierarchy.Node[Hie_DEG].HieCod = Crs_DB_GetDegCodOfCourseByCod (Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
@@ -1696,8 +1698,8 @@ int swad__findUsers (struct soap *soap,
 
    if (Search.Str[0])	// Search some users
      {
-      Gbl.Scope.Current = (Gbl.Hierarchy.Level == Hie_CRS) ? Hie_CRS :
-							     Hie_SYS;
+      HieLvl = (Gbl.Hierarchy.HieLvl == Hie_CRS) ? Hie_CRS :
+						 Hie_SYS;
       if (Sch_BuildSearchQuery (SearchQuery,&Search,
 				"CONCAT_WS(' ',FirstName,Surname1,Surname2)",
 				NULL,NULL))
@@ -1707,7 +1709,7 @@ int swad__findUsers (struct soap *soap,
 	 Usr_DB_CreateTmpTableAndSearchCandidateUsrs (SearchQuery);
 
 	 /***** Search for users *****/
-	 Usr_SearchListUsrs (Role);
+	 Usr_SearchListUsrs (HieLvl,Role);
 	 API_CopyListUsers (soap,
 			    Role,getUsersOut);
 	 Usr_FreeUsrsList (Role);
@@ -2874,7 +2876,7 @@ int swad__getNotifications (struct soap *soap,
    char *ContentStr;
    Ntf_Status_t Status;
    size_t Length;
-   Hie_Level_t Level;
+   Hie_Level_t L;
    unsigned Col;
 
    /***** Initializations *****/
@@ -2939,12 +2941,12 @@ int swad__getNotifications (struct soap *soap,
 
 	 /* Get institution code, center code, degree code and course code
 	    (row[4], row[5], row[6] and row[7]) */
-	 for (Level  = Hie_INS, Col = 4;
-	      Level <= Hie_CRS;
-	      Level++, Col++)
+	 for (L  = Hie_INS, Col = 4;
+	      L <= Hie_CRS;
+	      L++, Col++)
 	   {
-	    Hie[Level].HieCod = Str_ConvertStrCodToLongCod (row[Col]);
-	    Hie_GetDataByCod[Level] (&Hie[Level]);
+	    Hie[L].HieCod = Str_ConvertStrCodToLongCod (row[Col]);
+	    Hie_GetDataByCod[L] (&Hie[L]);
 	   }
 
          if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Hie[Hie_CRS].HieCod))	// Get some user's data from database
@@ -3007,16 +3009,16 @@ int swad__getNotifications (struct soap *soap,
            }
          else
            {
-	    for (Level  = Hie_CRS;
-		 Level >= Hie_INS;
-		 Level--)
-	       if (Hie[Level].HieCod > 0)
+	    for (L  = Hie_CRS;
+		 L >= Hie_INS;
+		 L--)
+	       if (Hie[L].HieCod > 0)
 		 {
 		  sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
-			   Txt_HIERARCHY_SINGUL_Abc[Level],Hie[Level].ShrtName);
+			   Txt_HIERARCHY_SINGUL_Abc[L],Hie[L].ShrtName);
 		  break;
 		 }
-	    if (Level < Hie_INS)
+	    if (L < Hie_INS)
 	       Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"-",
 			 Ntf_MAX_BYTES_NOTIFY_LOCATION);
            }

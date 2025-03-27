@@ -1936,7 +1936,7 @@ void Rec_ShowFormOtherNewSharedRecord (struct Usr_Data *UsrDat,Rol_Role_t Defaul
    /* In this case UsrDat->Roles.InCurrentCrs
       is not the current role in current course.
       Instead it is initialized with the preferred role. */
-   UsrDat->Roles.InCurrentCrs = (Gbl.Hierarchy.Level == Hie_CRS) ? DefaultRole :	// Course selected
+   UsrDat->Roles.InCurrentCrs = (Gbl.Hierarchy.HieLvl == Hie_CRS) ? DefaultRole :	// Course selected
 	                                                           Rol_UNK;		// No course selected
    Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_NEW_USR_FORM,UsrDat,NULL);
   }
@@ -2407,7 +2407,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 					   Rec_PutParUsrCodEncrypted,NULL,
 					   "user-gear.svg",Ico_BLACK);
 
-	 if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+	 if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
 	   {
 	    if (Rec_Record.UsrDat->Roles.InCurrentCrs == Rol_STD)	// He/she is a student in current course
 	      {
@@ -2787,7 +2787,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 		  HTM_SELECT_End ();
 		  break;
 	       case Rec_SHA_OTHER_EXISTING_USR_FORM:		// The other user already exists in the platform
-		  if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+		  if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
 		    {
 		     /***** Set default role *****/
 		     switch (UsrDat->Roles.InCurrentCrs)
@@ -2890,7 +2890,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 		    }
 		  break;
 	       case Rec_SHA_OTHER_NEW_USR_FORM:	// The user does not exist in platform
-		  if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+		  if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
 		     switch (Gbl.Usrs.Me.Role.Logged)
 		       {
 			case Rol_TCH:

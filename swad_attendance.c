@@ -641,8 +641,8 @@ static void Att_GetListEvents (struct Att_Events *Events,
                                Att_OrderNewestOldest_t OrderNewestOldest)
   {
    extern unsigned (*Att_DB_GetListAttEvents[Grp_NUM_MY_ALL_GROUPS]) (MYSQL_RES **mysql_res,
-							             Dat_StartEndTime_t SelectedOrder,
-							             Att_OrderNewestOldest_t OrderNewestOldest);
+							              Dat_StartEndTime_t SelectedOrder,
+							              Att_OrderNewestOldest_t OrderNewestOldest);
    MYSQL_RES *mysql_res;
    unsigned NumAttEvent;
 
@@ -1345,7 +1345,7 @@ void Att_RemoveCrsEvents (long HieCod)
 // Returns the number of attendance events
 // in this location (all the platform, the current degree or the current course)
 
-unsigned Att_GetNumEvents (Hie_Level_t Level,unsigned *NumNotif)
+unsigned Att_GetNumEvents (Hie_Level_t HieLvl,unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1356,7 +1356,7 @@ unsigned Att_GetNumEvents (Hie_Level_t Level,unsigned *NumNotif)
    *NumNotif = 0;
 
    /***** Get number of attendance events from database *****/
-   if (Att_DB_GetNumEvents (&mysql_res,Level))
+   if (Att_DB_GetNumEvents (&mysql_res,HieLvl))
      {
       /***** Get number of attendance events *****/
       row = mysql_fetch_row (mysql_res);
