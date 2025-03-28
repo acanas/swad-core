@@ -41,8 +41,7 @@ unsigned Ann_DB_GetAnnouncementsNotSeen (MYSQL_RES **mysql_res);
 void Ann_DB_CreateAnnouncement (unsigned Roles,
                                 const char *Subject,const char *Content);
 
-void Ann_DB_HideAnnouncement (long AnnCod);
-void Ann_DB_UnhideAnnouncement (long AnnCod);
+void Ann_DB_ChangeAnnouncementStatus (long AnnCod,HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 void Ann_DB_RemoveUsrsWhoSawAnnouncement (long AnnCod);
 void Ann_DB_RemoveAnnouncement (long AnnCod);

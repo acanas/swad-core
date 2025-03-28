@@ -165,10 +165,6 @@ struct Globals
 	 struct RecordField Field;
 	 struct LstRecordFields LstFields;
 	} Records;
-      struct
-	{
-	 long HighlightNotCod;	// Notice code of a notice to be highlighted
-	} Notices;
      } Crs;
 
    struct

@@ -83,6 +83,8 @@ unsigned Ann_DB_GetAnnouncementsICanSee (MYSQL_RES **mysql_res)
 
 unsigned Ann_DB_GetAnnouncementsForUnknownUsers (MYSQL_RES **mysql_res)
   {
+   extern const unsigned HidVis_Hidden_01[HidVis_NUM_HIDDEN_VISIBLE];
+
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get announcements",
 		   "SELECT AnnCod,"	// row[0]
@@ -94,7 +96,7 @@ unsigned Ann_DB_GetAnnouncementsForUnknownUsers (MYSQL_RES **mysql_res)
 		   " WHERE Status=%u"
 		     " AND (Roles&%u)<>0 "
 		" ORDER BY AnnCod DESC",
-		   (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
+		   HidVis_Hidden_01[HidVis_VISIBLE],
 		   (unsigned) (1 << Rol_UNK));
   }
 
@@ -105,6 +107,8 @@ unsigned Ann_DB_GetAnnouncementsForUnknownUsers (MYSQL_RES **mysql_res)
 
 unsigned Ann_DB_GetAnnouncementsNotSeen (MYSQL_RES **mysql_res)
   {
+   extern const unsigned HidVis_Hidden_01[HidVis_NUM_HIDDEN_VISIBLE];
+
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get announcements",
 		   "SELECT AnnCod,"	// row[0]
@@ -113,14 +117,14 @@ unsigned Ann_DB_GetAnnouncementsNotSeen (MYSQL_RES **mysql_res)
 			  "Subject,"	// row[3]
 			  "Content"	// row[4]
 		    " FROM ann_announcements"
-		   " WHERE Status=%u"
+		   " WHERE Status=%u"		// 0: Visible, 1: Hidden
 		     " AND (Roles&%u)<>0 "	// All my roles in different courses
 		     " AND AnnCod NOT IN"
 			 " (SELECT AnnCod"
 			    " FROM ann_seen"
 			   " WHERE UsrCod=%ld)"
 		" ORDER BY AnnCod DESC",	// Newest first
-		   (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
+		   HidVis_Hidden_01[HidVis_VISIBLE],
 		   (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
  }
@@ -143,30 +147,18 @@ void Ann_DB_CreateAnnouncement (unsigned Roles,
   }
 
 /*****************************************************************************/
-/********************* Set global announcement as hidden *********************/
+/********************** Mark a notice as hidden/visible **********************/
 /*****************************************************************************/
 
-void Ann_DB_HideAnnouncement (long AnnCod)
+void Ann_DB_ChangeAnnouncementStatus (long AnnCod,HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   DB_QueryUPDATE ("can not hide announcement",
-		   "UPDATE ann_announcements"
-		     " SET Status=%u"
-		   " WHERE AnnCod=%ld",
-                   (unsigned) Ann_OBSOLETE_ANNOUNCEMENT,
-                   AnnCod);
-  }
+   extern const unsigned HidVis_Hidden_01[HidVis_NUM_HIDDEN_VISIBLE];
 
-/*****************************************************************************/
-/******************** Set global announcement as unhidden ********************/
-/*****************************************************************************/
-
-void Ann_DB_UnhideAnnouncement (long AnnCod)
-  {
-   DB_QueryUPDATE ("can not unhide announcement",
+   DB_QueryUPDATE ("can not reveal notice",
 		   "UPDATE ann_announcements"
-		     " SET Status=%u"
+		     " SET Status=%u"	// 0: Visible, 1: Hidden
 		   " WHERE AnnCod=%ld",
-                   (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
+	           HidVis_Hidden_01[HiddenOrVisible],
                    AnnCod);
   }
 

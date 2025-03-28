@@ -79,6 +79,8 @@ static void Ann_PutParAnnCod (void *AnnCod);
 static void Ann_PutSubjectMessage (const char *Field,const char *Label,
                                    unsigned Rows);
 
+static void Ann_HideUnhideAnnouncement (HidVis_HiddenOrVisible_t HiddenOrVisible);
+
 /*****************************************************************************/
 /************************** Show global announcements ************************/
 /*****************************************************************************/
@@ -193,7 +195,6 @@ static void Ann_GetAnnouncementDataFromRow (MYSQL_RES *mysql_res,
                                             struct Ann_Announcement *Announcement)
   {
    MYSQL_ROW row;
-   unsigned UnsignedNum;
 
    /***** Get next row from result *****/
    row = mysql_fetch_row (mysql_res);
@@ -203,10 +204,7 @@ static void Ann_GetAnnouncementDataFromRow (MYSQL_RES *mysql_res,
       Err_WrongAnnouncementExit ();
 
    /***** Get status of the announcement (row[1]) *****/
-   Announcement->Status = Ann_OBSOLETE_ANNOUNCEMENT;
-   if (sscanf (row[1],"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < Ann_NUM_STATUS)
-	 Announcement->Status = (Ann_Status_t) UnsignedNum;
+   Announcement->HiddenOrVisible = HidVis_GetHiddenFrom01 (row[1][0]);	// 1 ==> hidden
 
    /***** Get roles (row[2]) *****/
    if (sscanf (row[2],"%u",&Announcement->Roles) != 1)
@@ -229,10 +227,10 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
    extern const char *Txt_Users;
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Do_not_show_again;
-   static const char *ContainerClass[Ann_NUM_STATUS] =
+   static const char *ContainerClass[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [Ann_ACTIVE_ANNOUNCEMENT  ] = "NOTICE_BOX NOTICE_BOX_WIDE",
-      [Ann_OBSOLETE_ANNOUNCEMENT] = "NOTICE_BOX NOTICE_BOX_WIDE LIGHT",
+      [HidVis_HIDDEN ] = "NOTICE_BOX NOTICE_BOX_WIDE LIGHT",
+      [HidVis_VISIBLE] = "NOTICE_BOX NOTICE_BOX_WIDE",
      };
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
@@ -244,7 +242,7 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
 
    /***** Begin yellow note *****/
    HTM_DIV_Begin ("class=\"NOTICE_CONT\"");
-      HTM_DIV_Begin ("class=\"%s\"",ContainerClass[Announcement->Status]);
+      HTM_DIV_Begin ("class=\"%s\"",ContainerClass[Announcement->HiddenOrVisible]);
 
 	 if (ICanEdit == Ann_I_CAN_EDIT)
 	   {
@@ -255,8 +253,7 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
 	    /***** Icon to hide/unhide the announcement *****/
 	    Ico_PutContextualIconToHideUnhide (ActionHideUnhide,NULL,	// TODO: Put anchor
 					       Ann_PutParAnnCod,&Announcement->AnnCod,
-					       Announcement->Status == Ann_OBSOLETE_ANNOUNCEMENT ? HidVis_HIDDEN :
-												   HidVis_VISIBLE);
+					       Announcement->HiddenOrVisible);
 	   }
 
 	 /***** Write the subject of the announcement *****/
@@ -424,33 +421,28 @@ void Ann_ReceiveAnnouncement (void)
   }
 
 /*****************************************************************************/
-/*********** Mark as hidden a global announcement that was active ************/
+/**************************** Hide/unhide a notice ***************************/
 /*****************************************************************************/
 
 void Ann_HideAnnouncement (void)
   {
-   long AnnCod;
-
-   /***** Get the code of the global announcement to hide *****/
-   AnnCod = ParCod_GetAndCheckPar (ParCod_Ann);
-
-   /***** Set global announcement as hidden *****/
-   Ann_DB_HideAnnouncement (AnnCod);
+   Ann_HideUnhideAnnouncement (HidVis_HIDDEN);
   }
-
-/*****************************************************************************/
-/*********** Mark as active a global announcement that was hidden ************/
-/*****************************************************************************/
 
 void Ann_UnhideAnnouncement (void)
   {
+   Ann_HideUnhideAnnouncement (HidVis_VISIBLE);
+  }
+
+static void Ann_HideUnhideAnnouncement (HidVis_HiddenOrVisible_t HiddenOrVisible)
+  {
    long AnnCod;
 
-   /***** Get the code of the global announcement to show *****/
+   /***** Get the code of the global announcement to hide/unhide *****/
    AnnCod = ParCod_GetAndCheckPar (ParCod_Ann);
 
-   /***** Set global announcement as not hidden *****/
-   Ann_DB_UnhideAnnouncement (AnnCod);
+   /***** Set global announcement as hidden *****/
+   Ann_DB_ChangeAnnouncementStatus (AnnCod,HiddenOrVisible);
   }
 
 /*****************************************************************************/

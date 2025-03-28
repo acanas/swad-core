@@ -28,22 +28,16 @@
 /*****************************************************************************/
 
 #include "swad_constant.h"
+#include "swad_hidden_visible.h"
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-#define Ann_NUM_STATUS 2
-typedef enum
-  {
-   Ann_ACTIVE_ANNOUNCEMENT   = 0,	// Visible
-   Ann_OBSOLETE_ANNOUNCEMENT = 1,	// Hidden
-  } Ann_Status_t;	// Don't change these numbers because they are used in database
-
 struct Ann_Announcement
   {
    long AnnCod;
-   Ann_Status_t Status;
+   HidVis_HiddenOrVisible_t HiddenOrVisible;
    unsigned Roles;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char Content[Cns_MAX_BYTES_TEXT + 1];

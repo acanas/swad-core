@@ -73,8 +73,20 @@ static unsigned Not_MaxCharsURLOnScreen[Not_NUM_TYPES_LISTING] =
   };
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+/* Notice code of the notice to be highlighted */
+static long Not_HighlightNotCod = -1L;	// No notice highlighted
+
+/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+static void Not_SetHighlightNotCod (long NotCod);
+static long Not_GetHighlightNotCod (void);
+
+static void Not_HideUnhideNotice (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 static void Not_PutLinkToRSSFile (void);
 
@@ -90,6 +102,20 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              Lay_Highlight_t Highlight);
 
 static void Not_PutParNotCod (void *NotCod);
+
+/*****************************************************************************/
+/*********** Set/get notice code of the notice to be highlighted *************/
+/*****************************************************************************/
+
+static void Not_SetHighlightNotCod (long NotCod)
+  {
+   Not_HighlightNotCod = NotCod;
+  }
+
+static long Not_GetHighlightNotCod (void)
+  {
+   return Not_HighlightNotCod;
+  }
 
 /*****************************************************************************/
 /***************************** Write a new notice ****************************/
@@ -162,7 +188,7 @@ void Not_ReceiveNotice (void)
    TmlNot_StoreAndPublishNote (TmlNot_NOTICE,NotCod);
 
    /***** Set notice to be highlighted *****/
-   Gbl.Crs.Notices.HighlightNotCod = NotCod;
+   Not_SetHighlightNotCod (NotCod);
   }
 
 /*****************************************************************************/
@@ -188,58 +214,47 @@ void Not_ListFullNotices (void)
   {
    /***** Show all notices *****/
    Not_ShowNotices (Not_LIST_FULL_NOTICES,
-	            Gbl.Crs.Notices.HighlightNotCod);	// Highlight notice
+	            Not_GetHighlightNotCod ());	// Highlight notice
   }
 
 /*****************************************************************************/
 /************************* Get highlighted notice code ***********************/
 /*****************************************************************************/
 
-void Not_GetHighlightNotCod (void)
+void Not_GetParHighlightNotCod (void)
   {
-   Gbl.Crs.Notices.HighlightNotCod = ParCod_GetPar (ParCod_Not);
+   Not_SetHighlightNotCod (ParCod_GetPar (ParCod_Not));
   }
 
 /*****************************************************************************/
-/***************** Mark as hidden a notice that was active *******************/
+/**************************** Hide/unhide a notice ***************************/
 /*****************************************************************************/
 
 void Not_HideNotice (void)
   {
-   long NotCod;
-
-   /***** Get the code of the notice to hide *****/
-   NotCod = ParCod_GetAndCheckPar (ParCod_Not);
-
-   /***** Set notice as hidden *****/
-   Not_DB_ChangeNoticeStatus (NotCod,Not_OBSOLETE_NOTICE);
-
-   /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
-
-   /***** Set notice to be highlighted *****/
-   Gbl.Crs.Notices.HighlightNotCod = NotCod;
+   Not_HideUnhideNotice (HidVis_HIDDEN);
   }
-
-/*****************************************************************************/
-/****************** Mark as active a notice that was hidden ******************/
-/*****************************************************************************/
 
 void Not_UnhideNotice (void)
   {
+   Not_HideUnhideNotice (HidVis_VISIBLE);
+  }
+
+static void Not_HideUnhideNotice (HidVis_HiddenOrVisible_t HiddenOrVisible)
+  {
    long NotCod;
 
-   /***** Get the code of the notice to reveal *****/
+   /***** Get the code of the notice to hide/unhide *****/
    NotCod = ParCod_GetAndCheckPar (ParCod_Not);
 
-   /***** Set notice as active *****/
-   Not_DB_ChangeNoticeStatus (NotCod,Not_ACTIVE_NOTICE);
+   /***** Set notice as hidden/visible *****/
+   Not_DB_ChangeNoticeStatus (NotCod,HiddenOrVisible);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
 
    /***** Set notice to be highlighted *****/
-   Gbl.Crs.Notices.HighlightNotCod = NotCod;
+   Not_SetHighlightNotCod (NotCod);
   }
 
 /*****************************************************************************/
@@ -461,7 +476,6 @@ static void Not_GetNoticeDataFromRow (MYSQL_RES *mysql_res,
                                       Not_Listing_t TypeNoticesListing)
   {
    MYSQL_ROW row;
-   unsigned UnsignedNum;
 
    /***** Get next row from result *****/
    row = mysql_fetch_row (mysql_res);
@@ -499,10 +513,7 @@ static void Not_GetNoticeDataFromRow (MYSQL_RES *mysql_res,
      }
 
    /***** Get status of the notice (row[4]) *****/
-   Notice->Status = Not_OBSOLETE_NOTICE;
-   if (sscanf (row[4],"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < Not_NUM_STATUS)
-	Notice->Status = (Not_Status_t) UnsignedNum;
+   Notice->HiddenOrVisible = HidVis_GetHiddenFrom01 (row[4][0]);	// 1 ==> hidden
   }
 
 /*****************************************************************************/
@@ -519,10 +530,10 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       [HidVis_HIDDEN ] = ActUnhNot,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidNot,	// Visible ==> action to hide
      };
-   static const char *ContainerClass[Not_NUM_STATUS] =
+   static const char *ContainerClass[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [Not_ACTIVE_NOTICE  ] = "NOTICE_BOX",
-      [Not_OBSOLETE_NOTICE] = "NOTICE_BOX LIGHT",
+      [HidVis_HIDDEN ] = "NOTICE_BOX LIGHT",
+      [HidVis_VISIBLE] = "NOTICE_BOX",
      };
    static const char *ContainerWidthClass[Not_NUM_TYPES_LISTING] =
      {
@@ -552,7 +563,8 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 
    /***** Begin yellow note *****/
    HTM_DIV_Begin ("class=\"%s %s\"",
-	          ContainerClass[Notice->Status],ContainerWidthClass[TypeNoticesListing]);
+	          ContainerClass[Notice->HiddenOrVisible],
+	          ContainerWidthClass[TypeNoticesListing]);
 
       /***** Write the date in the top part of the yellow note *****/
       /* Write symbol to indicate if notice is obsolete or active */
@@ -566,8 +578,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	    /***** Icon to change the status of the notice *****/
 	    Ico_PutContextualIconToHideUnhide (ActionHideUnhide,NULL,	// TODO: Put anchor
 				               Not_PutParNotCod,&Notice->NotCod,
-				               Notice->Status == Not_OBSOLETE_NOTICE ? HidVis_HIDDEN :
-				        					       HidVis_VISIBLE);
+				               Notice->HiddenOrVisible);
 	   }
 
       /* Write the date */
@@ -699,14 +710,15 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 // Returns the number of (active or obsolete) notices
 // sent from this location (all the platform, current degree or current course)
 
-unsigned Not_GetNumNotices (Hie_Level_t HieLvl,Not_Status_t Status,unsigned *NumNotif)
+unsigned Not_GetNumNotices (Hie_Level_t HieLvl,HidVis_HiddenOrVisible_t HiddenOrVisible,
+			    unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumNotices;
 
    /***** Get number of notices from database *****/
-   if (Not_DB_GetNumNotices (&mysql_res,HieLvl,Status) == 1)
+   if (Not_DB_GetNumNotices (&mysql_res,HieLvl,HiddenOrVisible) == 1)
      {
       /***** Get number of notices *****/
       row = mysql_fetch_row (mysql_res);
@@ -798,20 +810,20 @@ void Not_GetAndShowNoticesStats (Hie_Level_t HieLvl)
    extern const char *Txt_NOTICE_Deleted_BR_notices;
    extern const char *Txt_Total;
    extern const char *Txt_Number_of_BR_notifications;
-   Not_Status_t NoticeStatus;
-   unsigned NumNotices[Not_NUM_STATUS];
+   HidVis_HiddenOrVisible_t HiddenOrVisible;
+   unsigned NumNotices[HidVis_NUM_HIDDEN_VISIBLE];
    unsigned NumNoticesDeleted;
    unsigned NumTotalNotices = 0;
    unsigned NumNotif;
    unsigned NumTotalNotifications = 0;
 
    /***** Get the number of notices active and obsolete *****/
-   for (NoticeStatus  = (Not_Status_t) 0;
-	NoticeStatus <= (Not_Status_t) (Not_NUM_STATUS - 1);
-	NoticeStatus++)
+   for (HiddenOrVisible  = (HidVis_HiddenOrVisible_t) 0;
+	HiddenOrVisible <= (HidVis_HiddenOrVisible_t) (HidVis_NUM_HIDDEN_VISIBLE - 1);
+	HiddenOrVisible++)
      {
-      NumNotices[NoticeStatus] = Not_GetNumNotices (HieLvl,NoticeStatus,&NumNotif);
-      NumTotalNotices += NumNotices[NoticeStatus];
+      NumNotices[HiddenOrVisible] = Not_GetNumNotices (HieLvl,HiddenOrVisible,&NumNotif);
+      NumTotalNotices += NumNotices[HiddenOrVisible];
       NumTotalNotifications += NumNotif;
      }
    NumNoticesDeleted = Not_GetNumNoticesDeleted (HieLvl,&NumNotif);
@@ -833,8 +845,8 @@ void Not_GetAndShowNoticesStats (Hie_Level_t HieLvl)
 
       /***** Write number of notices *****/
       HTM_TR_Begin (NULL);
-	 HTM_TD_Unsigned (NumNotices[Not_ACTIVE_NOTICE]);
-	 HTM_TD_Unsigned (NumNotices[Not_OBSOLETE_NOTICE]);
+	 HTM_TD_Unsigned (NumNotices[HidVis_VISIBLE]);
+	 HTM_TD_Unsigned (NumNotices[HidVis_HIDDEN ]);
 	 HTM_TD_Unsigned (NumNoticesDeleted);
 	 HTM_TD_Unsigned (NumTotalNotices);
 	 HTM_TD_Unsigned (NumTotalNotifications);

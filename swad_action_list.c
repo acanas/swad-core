@@ -1718,7 +1718,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    // Notices
    [ActSeeAllNot	] = { 762, 1,TabMsg,NULL			,Not_ListFullNotices		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
-   [ActSeeOneNot	] = {1164, 1,TabMsg,Not_GetHighlightNotCod	,Not_ListFullNotices		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
+   [ActSeeOneNot	] = {1164, 1,TabMsg,Not_GetParHighlightNotCod	,Not_ListFullNotices		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
    [ActWriNot		] = {  59, 1,TabMsg,NULL			,Not_ShowFormNotice		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActNewNot		] = {  60, 1,TabMsg,Not_ReceiveNotice		,Not_ListFullNotices		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActHidNot		] = { 763, 1,TabMsg,Not_HideNotice		,Not_ListFullNotices		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},

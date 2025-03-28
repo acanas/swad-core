@@ -38,6 +38,12 @@ const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE] =
    [HidVis_VISIBLE] = 'N',
   };
 
+const unsigned HidVis_Hidden_01[HidVis_NUM_HIDDEN_VISIBLE] =
+  {
+   [HidVis_HIDDEN ] = 1,
+   [HidVis_VISIBLE] = 0,
+  };
+
 /* Visible in database fields */
 const char HidVis_Visible_YN[HidVis_NUM_HIDDEN_VISIBLE] =
   {
@@ -93,6 +99,16 @@ const char *HidVis_ShownStyle[HidVis_NUM_HIDDEN_VISIBLE] =
 HidVis_HiddenOrVisible_t HidVis_GetHiddenFromYN (char Ch)
   {
    return (Ch == 'Y') ? HidVis_HIDDEN :
+		        HidVis_VISIBLE;
+  }
+
+/*****************************************************************************/
+/****************** Get if hidden from a '0'/'1' character *******************/
+/*****************************************************************************/
+
+HidVis_HiddenOrVisible_t HidVis_GetHiddenFrom01 (char Ch)
+  {
+   return (Ch == '1') ? HidVis_HIDDEN :
 		        HidVis_VISIBLE;
   }
 

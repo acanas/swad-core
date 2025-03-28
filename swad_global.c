@@ -158,8 +158,6 @@ void Gbl_InitializeGlobals (void)
    /***** Reset current hierarchy *****/
    Hie_ResetHierarchy ();
 
-   Gbl.Crs.Notices.HighlightNotCod = -1L;	// No notice highlighted
-
    Gbl.Crs.Grps.NumGrps   = 0;
    Gbl.Crs.Grps.MyAllGrps = Grp_MY_ALL_GROUPS_DEFAULT;
    Gbl.Crs.Grps.GrpTypes.LstGrpTypes = NULL;

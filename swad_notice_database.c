@@ -43,6 +43,8 @@ extern struct Globals Gbl;
 
 long Not_DB_InsertNotice (const char *Content)
   {
+   extern const unsigned HidVis_Hidden_01[HidVis_NUM_HIDDEN_VISIBLE];
+
    return
    DB_QueryINSERTandReturnCode ("can not create notice",
 				"INSERT INTO not_notices"
@@ -52,21 +54,23 @@ long Not_DB_InsertNotice (const char *Content)
 				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Content,
-				(unsigned) Not_ACTIVE_NOTICE);
+				HidVis_Hidden_01[HidVis_VISIBLE]);	// 0: Visible, 1: Hidden
   }
 
 /*****************************************************************************/
-/********************** Mark as active/hidden a notice ***********************/
+/********************** Mark a notice as hidden/visible **********************/
 /*****************************************************************************/
 
-void Not_DB_ChangeNoticeStatus (long NotCod,Not_Status_t Status)
+void Not_DB_ChangeNoticeStatus (long NotCod,HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
+   extern const unsigned HidVis_Hidden_01[HidVis_NUM_HIDDEN_VISIBLE];
+
    DB_QueryUPDATE ("can not reveal notice",
 		   "UPDATE not_notices"
-		     " SET Status=%u"
+		     " SET Status=%u"	// 0: Visible, 1: Hidden
 		   " WHERE NotCod=%ld"
 		     " AND CrsCod=%ld",
-	           (unsigned) Status,
+	           HidVis_Hidden_01[HiddenOrVisible],
 	           NotCod,
 	           Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
@@ -167,6 +171,8 @@ unsigned Not_DB_GetAllNotices (MYSQL_RES **mysql_res)
 
 unsigned Not_DB_GetActiveNotices (MYSQL_RES **mysql_res,long CrsCod)
   {
+   extern const unsigned HidVis_Hidden_01[HidVis_NUM_HIDDEN_VISIBLE];
+
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get notices from database",
 		   "SELECT NotCod,"			// row[0]
@@ -176,10 +182,10 @@ unsigned Not_DB_GetActiveNotices (MYSQL_RES **mysql_res,long CrsCod)
 			  "Status"			// row[4]
 		    " FROM not_notices"
 		   " WHERE CrsCod=%ld"
-		     " AND Status=%u"
+		     " AND Status=%u"			// 0: Visible, 1: Hidden
 		" ORDER BY CreatTime DESC",
 		   CrsCod,
-		   (unsigned) Not_ACTIVE_NOTICE);
+		   HidVis_Hidden_01[HidVis_VISIBLE]);
   }
 
 /*****************************************************************************/
@@ -187,8 +193,10 @@ unsigned Not_DB_GetActiveNotices (MYSQL_RES **mysql_res,long CrsCod)
 /*****************************************************************************/
 
 unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
-			       Hie_Level_t HieLvl,Not_Status_t Status)
+			       Hie_Level_t HieLvl,HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
+   extern const unsigned HidVis_Hidden_01[HidVis_NUM_HIDDEN_VISIBLE];
+
    switch (HieLvl)
      {
       case Hie_SYS:
@@ -197,8 +205,8 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(NumNotif)"			// row[1]
 			  " FROM not_notices"
-			 " WHERE Status=%u",
-                         Status);
+			 " WHERE Status=%u",			// 0: Visible, 1: Hidden
+                         HidVis_Hidden_01[HiddenOrVisible]);
       case Hie_CTY:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of notices",
@@ -214,9 +222,9 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=not_notices.CrsCod"
-			   " AND not_notices.Status=%u",
+			   " AND not_notices.Status=%u",	// 0: Visible, 1: Hidden
                          Gbl.Hierarchy.Node[Hie_CTY].HieCod,
-                         Status);
+                         HidVis_Hidden_01[HiddenOrVisible]);
       case Hie_INS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of notices",
@@ -230,9 +238,9 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=not_notices.CrsCod"
-			   " AND not_notices.Status=%u",
+			   " AND not_notices.Status=%u",	// 0: Visible, 1: Hidden
                          Gbl.Hierarchy.Node[Hie_INS].HieCod,
-                         Status);
+                         HidVis_Hidden_01[HiddenOrVisible]);
       case Hie_CTR:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of notices",
@@ -244,9 +252,9 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			 " WHERE deg_degrees.CtrCod=%ld"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=not_notices.CrsCod"
-			   " AND not_notices.Status=%u",
+			   " AND not_notices.Status=%u",	// 0: Visible, 1: Hidden
                          Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-                         Status);
+                         HidVis_Hidden_01[HiddenOrVisible]);
       case Hie_DEG:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of notices",
@@ -256,9 +264,9 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			        "not_notices"
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=not_notices.CrsCod"
-			   " AND not_notices.Status=%u",
+			   " AND not_notices.Status=%u",	// 0: Visible, 1: Hidden
                          Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-                         Status);
+                         HidVis_Hidden_01[HiddenOrVisible]);
       case Hie_CRS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of notices",
@@ -266,9 +274,9 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			        "SUM(NumNotif)"			// row[1]
 			  " FROM not_notices"
 			 " WHERE CrsCod=%ld"
-			   " AND Status=%u",
+			   " AND Status=%u",			// 0: Visible, 1: Hidden
                          Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-                         Status);
+                         HidVis_Hidden_01[HiddenOrVisible]);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached

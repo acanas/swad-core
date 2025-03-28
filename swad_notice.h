@@ -27,7 +27,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_statistic.h"
+#include "swad_constant.h"
+#include "swad_hidden_visible.h"
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -40,19 +41,12 @@ typedef enum
    Not_LIST_FULL_NOTICES  = 1,
   } Not_Listing_t;
 
-#define Not_NUM_STATUS 2
-typedef enum
-  {
-   Not_ACTIVE_NOTICE   = 0,
-   Not_OBSOLETE_NOTICE = 1,
-  } Not_Status_t;	// Don't change these numbers because they are used in database
-
 struct Not_Notice
   {
    long NotCod;
    long UsrCod;
    time_t CreatTime;
-   Not_Status_t Status;
+   HidVis_HiddenOrVisible_t HiddenOrVisible;
    // TODO: char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char Content[Cns_MAX_BYTES_TEXT + 1];
   };
@@ -65,7 +59,7 @@ void Not_ShowFormNotice (void);
 void Not_ReceiveNotice (void);
 void Not_ListNoticesAfterRemoval (void);
 void Not_ListFullNotices (void);
-void Not_GetHighlightNotCod (void);
+void Not_GetParHighlightNotCod (void);
 
 void Not_HideNotice (void);
 void Not_UnhideNotice (void);
@@ -78,7 +72,8 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod);
 void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                      char **ContentStr,
                                      long NotCod,Ntf_GetContent_t GetContent);
-unsigned Not_GetNumNotices (Hie_Level_t HieLvl,Not_Status_t Status,unsigned *NumNotif);
+unsigned Not_GetNumNotices (Hie_Level_t HieLvl,HidVis_HiddenOrVisible_t HiddenOrVisible,
+			    unsigned *NumNotif);
 unsigned Not_GetNumNoticesDeleted (Hie_Level_t HieLvl,unsigned *NumNotif);
 
 //-------------------------------- Figures ------------------------------------
