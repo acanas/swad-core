@@ -75,6 +75,13 @@ typedef enum
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+/* Data of assignment when browsing level 1 of an assignment zone */
+static struct Asg_Assignment Asg_Assignment;
+
+/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
@@ -115,6 +122,30 @@ static void Asg_UpdateAssignment (struct Asg_Assignment *Asg,const char *Descrip
 static void Asg_CreateGroups (long AsgCod);
 static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *Asg);
 static Usr_Can_t Asg_CheckIfICanDoAsgBasedOnGroups (long AsgCod);
+
+/*****************************************************************************/
+/***************************** Set/get assignment ****************************/
+/*****************************************************************************/
+
+void Asg_SetAssignment (const struct Asg_Assignment *Asg)
+  {
+   Asg_Assignment.AsgCod = Asg->AsgCod;
+   Asg_Assignment.Hidden = Asg->Hidden;
+   Asg_Assignment.UsrCod = Asg->UsrCod;
+   Asg_Assignment.TimeUTC[Dat_STR_TIME] = Asg->TimeUTC[Dat_STR_TIME];
+   Asg_Assignment.TimeUTC[Dat_END_TIME] = Asg->TimeUTC[Dat_END_TIME];
+   Asg_Assignment.ClosedOrOpen = Asg->ClosedOrOpen;
+   Str_Copy (Asg_Assignment.Title,Asg->Title,sizeof (Asg_Assignment.Title) - 1);
+   Asg_Assignment.SendWork = Asg->SendWork;
+   Str_Copy (Asg_Assignment.Folder,Asg->Folder,sizeof (Asg_Assignment.Folder) - 1);
+   Asg_Assignment.RubCod = Asg->RubCod;
+   Asg_Assignment.ICanDo = Asg->ICanDo;
+  }
+
+const struct Asg_Assignment *Asg_GetAssigment (void)
+  {
+   return &Asg_Assignment;
+  }
 
 /*****************************************************************************/
 /*************************** Reset assignments *******************************/
@@ -874,25 +905,28 @@ void Asg_GetAssignmentDataByCod (struct Asg_Assignment *Asg)
 /*************** Get assignment data using its folder name *******************/
 /*****************************************************************************/
 
-void Asg_GetAssignmentDataByFolder (struct Asg_Assignment *Asg)
+void Asg_GetAssignmentDataByFolder (const char Folder[Brw_MAX_BYTES_FOLDER + 1])
   {
    MYSQL_RES *mysql_res;
+   struct Asg_Assignment Asg;
    unsigned NumAsgs;
 
-   if (Asg->Folder[0])
+   if (Folder[0])
      {
       /***** Query database *****/
-      NumAsgs = Asg_DB_GetAssignmentDataByFolder (&mysql_res,Asg->Folder);
+      NumAsgs = Asg_DB_GetAssignmentDataByFolder (&mysql_res,Folder);
 
       /***** Get data of assignment *****/
-      Asg_GetAssignmentDataFromRow (&mysql_res,Asg,NumAsgs);
+      Asg_GetAssignmentDataFromRow (&mysql_res,&Asg,NumAsgs);
      }
    else
      {
       /***** Clear all assignment data *****/
-      Asg->AsgCod = -1L;
-      Asg_ResetAssignment (Asg);
+      Asg.AsgCod = -1L;
+      Asg_ResetAssignment (&Asg);
      }
+
+   Asg_SetAssignment (&Asg);
   }
 
 /*****************************************************************************/
@@ -1734,7 +1768,7 @@ static Usr_Can_t Asg_CheckIfICanDoAsgBasedOnGroups (long AsgCod)
 /************ Write start and end dates of a folder of assignment ************/
 /*****************************************************************************/
 
-void Asg_WriteDatesAssignment (const struct Asg_Assignment *Asg)
+void Asg_WriteDatesAssignment (void)
   {
    extern const char *Txt_unknown_assignment;
    static const char *DateClass[CloOpe_NUM_CLOSED_OPEN] =
@@ -1743,6 +1777,7 @@ void Asg_WriteDatesAssignment (const struct Asg_Assignment *Asg)
       [CloOpe_OPEN  ] = "ASG_LST_DATE_GREEN",
      };
    static unsigned UniqueId = 0;
+   const struct Asg_Assignment *Asg = Asg_GetAssigment ();
    char *Id;
 
    /***** Begin table cell *****/
@@ -1796,13 +1831,14 @@ void Asg_WriteDatesAssignment (const struct Asg_Assignment *Asg)
 /* Check if I have permission to create a file or folder into an assignment **/
 /*****************************************************************************/
 
-Usr_Can_t Asg_CheckIfICanCreateIntoAssigment (const struct Asg_Assignment *Asg)
+Usr_Can_t Asg_CheckIfICanCreateIntoAssigment (void)
   {
    static Usr_Can_t CloOpe_ICanCreate[CloOpe_NUM_CLOSED_OPEN] =
      {
       [CloOpe_CLOSED] = Usr_CAN_NOT,
       [CloOpe_OPEN  ] = Usr_CAN,
      };
+   const struct Asg_Assignment *Asg = Asg_GetAssigment ();
 
    /***** Trivial check 1: assignment is valid *****/
    if (Asg->AsgCod <= 0)
@@ -1835,15 +1871,14 @@ Usr_Can_t Asg_CheckIfICanCreateIntoAssigment (const struct Asg_Assignment *Asg)
 /*************************** Set assignment folder ***************************/
 /*****************************************************************************/
 
-void Asg_SetFolder (struct Asg_Assignment *Asg,unsigned Level)
+void Asg_SetFolder (unsigned Level,char Folder[Brw_MAX_BYTES_FOLDER + 1])
   {
    const char *Ptr;
    unsigned i;
 
    if (Level == 1)
       // We are in this case: assignments/assignment-folder
-      Str_Copy (Asg->Folder,Gbl.FileBrowser.FilFolLnk.Name,
-		sizeof (Asg->Folder) - 1);
+      Str_Copy (Folder,Gbl.FileBrowser.FilFolLnk.Name,Brw_MAX_BYTES_FOLDER);
    else
      {
       // We are in this case: assignments/assignment-folder/rest-of-path
@@ -1855,8 +1890,8 @@ void Asg_SetFolder (struct Asg_Assignment *Asg,unsigned Level)
       for (i = 0;
 	   i < Brw_MAX_BYTES_FOLDER && *Ptr && *Ptr != '/';
 	   i++, Ptr++)
-	 Asg->Folder[i] = *Ptr;	// Copy assignment folder
-      Asg->Folder[i] = '\0';
+	 Folder[i] = *Ptr;	// Copy assignment folder
+      Folder[i] = '\0';
      }
   }
 

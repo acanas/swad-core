@@ -198,8 +198,6 @@ struct Globals
          char R[NAME_MAX + 1];	// Right directory: rest of chars
         } TmpPubDir;
       bool HiddenLevels[1 + BrwSiz_MAX_DIR_LEVELS];
-      struct Asg_Assignment Asg;	// Data of assignment when browsing level 1 of an assignment zone.
-				        // TODO: Remove from global?
       struct
         {
 	 bool CreateZIP;

@@ -80,6 +80,9 @@ struct Asg_Assignments
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Asg_SetAssignment (const struct Asg_Assignment *Asg);
+const struct Asg_Assignment *Asg_GetAssigment (void);
+
 void Asg_ResetAssignments (struct Asg_Assignments *Assignments);
 
 void Asg_SeeAssignments (void);
@@ -93,7 +96,7 @@ Dat_StartEndTime_t Asg_GetParAsgOrder (void);
 
 void Asg_ReqCreatOrEditAsg (void);
 void Asg_GetAssignmentDataByCod (struct Asg_Assignment *Asg);
-void Asg_GetAssignmentDataByFolder (struct Asg_Assignment *Asg);
+void Asg_GetAssignmentDataByFolder (const char Folder[Brw_MAX_BYTES_FOLDER + 1]);
 
 void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                              char **ContentStr,
@@ -106,9 +109,9 @@ void Asg_UnhideAssignment (void);
 void Asg_ReceiveAssignment (void);
 void Asg_RemoveCrsAssignments (long CrsCod);
 
-void Asg_WriteDatesAssignment (const struct Asg_Assignment *Asg);
-Usr_Can_t Asg_CheckIfICanCreateIntoAssigment (const struct Asg_Assignment *Asg);
-void Asg_SetFolder (struct Asg_Assignment *Asg,unsigned Level);
+void Asg_WriteDatesAssignment (void);
+Usr_Can_t Asg_CheckIfICanCreateIntoAssigment (void);
+void Asg_SetFolder (unsigned Level,char Folder[Brw_MAX_BYTES_FOLDER + 1]);
 
 unsigned Asg_GetNumAssignments (Hie_Level_t HieLvl,unsigned *NumNotif);
 

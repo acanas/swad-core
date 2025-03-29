@@ -1095,10 +1095,13 @@ static Act_Action_t Brw_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   };
 
 /*****************************************************************************/
-/***************************** Private variables *****************************/
+/************************* Private global variables **************************/
 /*****************************************************************************/
 
-Usr_Can_t Brw_ICanEditFileOrFolder;	// Can I modify (remove, rename, create inside, etc.) a file or folder?
+/* Can I modify (remove, rename, create inside, etc.) a file or folder? */
+static Usr_Can_t Brw_ICanEditFileOrFolder;
+
+static long Brw_GrpCod = -1L;
 
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
@@ -1279,8 +1282,6 @@ static void Brw_GetNumberOfOERs (Hie_Level_t HieLvl,Brw_License_t License,
 /*****************************************************************************/
 /***************************** Set/get group code ****************************/
 /*****************************************************************************/
-
-static long Brw_GrpCod = -1L;
 
 void Brw_SetGrpCod (long GrpCod)
   {
@@ -2190,6 +2191,7 @@ static void Brw_GetParsPathInTreeAndFileName (void)
    const char *Ptr;
    Brw_FileType_t FileType;
    char FileNameToShow[NAME_MAX + 1];
+   char Folder[Brw_MAX_BYTES_FOLDER + 1];
 
    /***** Get the path inside the tree
           (this path does not include
@@ -2239,8 +2241,8 @@ static void Brw_GetParsPathInTreeAndFileName (void)
    /***** Get data of assignment *****/
    if (Gbl.FileBrowser.Lvl && Brw_TypeIsAdmAsg[Gbl.FileBrowser.Type])
      {
-      Asg_SetFolder (&Gbl.FileBrowser.Asg,Gbl.FileBrowser.Lvl);
-      Asg_GetAssignmentDataByFolder (&Gbl.FileBrowser.Asg);
+      Asg_SetFolder (Gbl.FileBrowser.Lvl,Folder);
+      Asg_GetAssignmentDataByFolder (Folder);
      }
   }
 
@@ -3899,6 +3901,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    char FileBrowserId[32];
    char TxtStyle[64];
    char *InputStyle;
+   char Folder[Brw_MAX_BYTES_FOLDER + 1];
 
    /***** Initializations *****/
    Gbl.FileBrowser.Clipboard.IsThisFile = false;
@@ -3980,9 +3983,9 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    /***** Get data of assignment using the name of the folder *****/
    if (Brw_TypeIsAdmAsg[Gbl.FileBrowser.Type] && Level == 1)	// Main folder of the assignment
      {
-      Asg_SetFolder (&Gbl.FileBrowser.Asg,Level);
-      Asg_GetAssignmentDataByFolder (&Gbl.FileBrowser.Asg);
-      // The data of this assignment remains in Gbl.FileBrowser.Asg
+      Asg_SetFolder (Level,Folder);
+      Asg_GetAssignmentDataByFolder (Folder);
+      // The data of this assignment remains in global variable
       // for all subsequent rows with Level > 1 (files or folders inside this folder),
       // and they are overwritten on the next row with level == 1 (next assignment)
      }
@@ -4050,8 +4053,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 
    /***** Indentation depending on level, icon, and file/folder name *****/
    /* Begin column */
-   HTM_TD_Begin ("class=\"NO_BR LM %s\" style=\"width:99%%;\"",
-                 The_GetColorRows ());
+   HTM_TD_Begin ("class=\"NO_BR LM %s\" style=\"width:99%%;\"",The_GetColorRows ());
 
       HTM_TABLE_Begin (NULL);
 	 HTM_TR_Begin (NULL);
@@ -4088,8 +4090,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 	       Brw_PutIconNewFileOrFolder ();
 
 	    /* File or folder name */
-	    Brw_WriteFileName (Level,FileMetadata.Public,
-			       TxtStyle,InputStyle);
+	    Brw_WriteFileName (Level,FileMetadata.Public,TxtStyle,InputStyle);
 
 	 HTM_TR_End ();
       HTM_TABLE_End ();
@@ -4102,7 +4103,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
       Mrk_GetAndWriteNumRowsHeaderAndFooter ();
    else if (Brw_TypeIsAdmAsg[Gbl.FileBrowser.Type] && Level == 1)
       /***** Start and end dates of assignment *****/
-      Asg_WriteDatesAssignment (&Gbl.FileBrowser.Asg);
+      Asg_WriteDatesAssignment ();
    else
       /***** File date and size *****/
       Brw_WriteFileSizeAndDate (&FileMetadata,TxtStyle);
@@ -4713,6 +4714,7 @@ static void Brw_WriteFileName (unsigned Level,PriPub_PrivateOrPublic_t PrivateOr
    extern const char *Txt_Download;
    extern const char *Txt_Public_open_educational_resource_OER_for_everyone;
    char FileNameToShow[NAME_MAX + 1];
+   const struct Asg_Assignment *Asg;
 
    /***** Get the name of the file to show *****/
    Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
@@ -4753,7 +4755,10 @@ static void Brw_WriteFileName (unsigned Level,PriPub_PrivateOrPublic_t PrivateOr
 		  default:
 		     /***** Write name of the folder *****/
 		     if (Level == 1 && Brw_TypeIsAdmAsg[Gbl.FileBrowser.Type])
-			HTM_SPAN_Begin ("title=\"%s\"",Gbl.FileBrowser.Asg.Title);
+		       {
+			Asg = Asg_GetAssigment ();
+			HTM_SPAN_Begin ("title=\"%s\"",Asg->Title);
+		       }
 
 		     HTM_STRONG_Begin ();
 			HTM_Txt (FileNameToShow);
@@ -8763,7 +8768,7 @@ static Usr_Can_t Brw_CheckIfICanEditFileOrFolder (unsigned Level)
              Level == 1)
 	    return Usr_CAN_NOT;	// Do not remove / rename main folder of assigment
 
-	 return Asg_CheckIfICanCreateIntoAssigment (&Gbl.FileBrowser.Asg);
+	 return Asg_CheckIfICanCreateIntoAssigment ();
       case Brw_ADMI_DOC_PRJ:
          return Brw_CheckIfICanModifyPrjDocFileOrFolder ();
       case Brw_ADMI_ASS_PRJ:
@@ -8836,7 +8841,7 @@ static Usr_Can_t Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 	 if (Level == 0)	// If root folder
 	    return Usr_CAN_NOT;	// Folders of assigments (level 1)
 				// can only be created automatically
-	 return Asg_CheckIfICanCreateIntoAssigment (&Gbl.FileBrowser.Asg);
+	 return Asg_CheckIfICanCreateIntoAssigment ();
       default:
          return Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type) ? Usr_CAN :
 									  Usr_CAN_NOT;

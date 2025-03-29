@@ -176,9 +176,6 @@ struct Grp_Groups
 void Grp_ResetGroupType (struct GroupType *GrpTyp);
 void Grp_ResetGroup (struct Group *Grp);
 
-void Brw_SetGrpCod (long GrpCod);
-long Brw_GetGrpCod (void);
-
 void Grp_WriteNamesOfSelectedGrps (void);
 void Grp_ReqEditGroups (void);
 
