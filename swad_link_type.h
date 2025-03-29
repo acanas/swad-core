@@ -42,7 +42,7 @@ typedef enum
   } Lnk_Field_t;
 
 #define Lnk_MAX_CHARS_FIELD	(128 - 1)	// 127
-#define Lnk_MAX_BYTES_FIELD	((Lnk_MAX_CHARS_FIELD + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Lnk_MAX_BYTES_FIELD	((Lnk_MAX_CHARS_FIELD + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 struct Lnk_Link
   {

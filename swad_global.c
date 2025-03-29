@@ -183,7 +183,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.FileBrowser.Id = 0;
    Gbl.FileBrowser.Type = Brw_UNKNOWN;
    Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_UNKNOWN;
-   Gbl.FileBrowser.UploadingWithDropzone = false;
 
    Gbl.WebService.Function = API_unknown;
 

@@ -37,7 +37,7 @@
 /*****************************************************************************/
 
 #define Svy_MAX_CHARS_SURVEY_TITLE	(128 - 1)	// 127
-#define Svy_MAX_BYTES_SURVEY_TITLE	((Svy_MAX_CHARS_SURVEY_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Svy_MAX_BYTES_SURVEY_TITLE	((Svy_MAX_CHARS_SURVEY_TITLE + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Svy_ORDER_DEFAULT Dat_STR_TIME
 

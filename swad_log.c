@@ -107,7 +107,7 @@ void Log_LogAccess (const char *Comments)
    /* Log comments */
    if (Comments)
      {
-      MaxLength = strlen (Comments) * Str_MAX_BYTES_PER_CHAR;
+      MaxLength = strlen (Comments) * Cns_MAX_BYTES_PER_CHAR;
       if ((CommentsDB = malloc (MaxLength + 1)) != NULL)
 	{
 	 Str_Copy (CommentsDB,Comments,MaxLength);

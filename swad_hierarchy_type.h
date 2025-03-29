@@ -71,7 +71,7 @@ typedef enum
 
 // Hierarchy node
 #define Hie_MAX_CHARS_INSTITUTIONAL_COD  (16 - 1)	// 15
-#define Hie_MAX_BYTES_INSTITUTIONAL_COD  ((Hie_MAX_CHARS_INSTITUTIONAL_COD + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 255
+#define Hie_MAX_BYTES_INSTITUTIONAL_COD  ((Hie_MAX_CHARS_INSTITUTIONAL_COD + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 255
 
 struct Hie_MyNode
   {

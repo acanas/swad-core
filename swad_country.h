@@ -42,7 +42,7 @@
 /*****************************************************************************/
 
 #define Cty_MAX_CHARS_NAME	(48 - 1)	// 47
-#define Cty_MAX_BYTES_NAME	((Cty_MAX_CHARS_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 767
+#define Cty_MAX_BYTES_NAME	((Cty_MAX_CHARS_NAME + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 767
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

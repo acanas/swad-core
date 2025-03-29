@@ -43,7 +43,7 @@
 /*****************************************************************************/
 
 #define Tre_MAX_CHARS_NODE_TITLE	(128 - 1)	// 127
-#define Tre_MAX_BYTES_NODE_TITLE	((Tre_MAX_CHARS_NODE_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Tre_MAX_BYTES_NODE_TITLE	((Tre_MAX_CHARS_NODE_TITLE + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 struct Tre_NodeHierarchy
   {

@@ -42,7 +42,7 @@
 /*****************************************************************************/
 
 #define Qst_MAX_CHARS_ANSWER_OR_FEEDBACK	(1024 - 1)	// 1023
-#define Qst_MAX_BYTES_ANSWER_OR_FEEDBACK	((Qst_MAX_CHARS_ANSWER_OR_FEEDBACK + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 16383
+#define Qst_MAX_BYTES_ANSWER_OR_FEEDBACK	((Qst_MAX_CHARS_ANSWER_OR_FEEDBACK + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 16383
 
 /*****************************************************************************/
 /******************************* Public types ********************************/

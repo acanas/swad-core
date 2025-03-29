@@ -136,7 +136,7 @@ typedef enum
 
 /***** Project title *****/
 #define Prj_MAX_CHARS_TITLE	(256 - 1)	// 255
-#define Prj_MAX_BYTES_TITLE	((Prj_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 4095
+#define Prj_MAX_BYTES_TITLE	((Prj_MAX_CHARS_TITLE + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 4095
 
 /***** Type of proposal ******/
 #define Prj_NUM_PROPOSAL_TYPES 3

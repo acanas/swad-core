@@ -71,7 +71,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 #define Exa_MAX_CHARS_ANSWER	(1024 - 1)	// 1023
-#define Exa_MAX_BYTES_ANSWER	((Exa_MAX_CHARS_ANSWER + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 16383
+#define Exa_MAX_BYTES_ANSWER	((Exa_MAX_CHARS_ANSWER + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 16383
 
 #define Exa_MAX_ANSWERS_PER_QUESTION	10
 

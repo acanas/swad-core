@@ -6506,6 +6506,7 @@ void Brw_CreateFolder (void)
   {
    extern const char *Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quota;
    extern const char *Txt_Can_not_create_the_folder_X_because_there_is_already_a_folder_or_a_file_with_that_name;
+   extern const char *Txt_UPLOAD_FILE_Invalid_name;
    extern const char *Txt_The_folder_X_has_been_created_inside_the_folder_Y;
    extern const char *Txt_You_can_not_create_folders_here;
    char Path[PATH_MAX + 1 + PATH_MAX + 1];
@@ -6592,7 +6593,7 @@ void Brw_CreateFolder (void)
 	      }
 	   }
 	 else	// Folder name not valid
-	    Ale_ShowAlerts (NULL);
+	    Ale_ShowAlert (Ale_WARNING,Txt_UPLOAD_FILE_Invalid_name);
 	 break;
       case Usr_CAN_NOT:
       default:
@@ -6615,6 +6616,7 @@ void Brw_RenFolder (void)
    extern const char *Txt_The_name_X_has_not_changed;
    extern const char *Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y;
    extern const char *Txt_You_can_not_rename_this_folder;
+   extern const char *Txt_UPLOAD_FILE_Invalid_name;
    char OldPathInTree[PATH_MAX + 1 + NAME_MAX + 1];
    char NewPathInTree[PATH_MAX + 1 + NAME_MAX + 1];
    char OldPath[PATH_MAX + 1 + PATH_MAX + 1 + NAME_MAX + 1];
@@ -6709,7 +6711,7 @@ void Brw_RenFolder (void)
 			      Gbl.FileBrowser.FilFolLnk.Name);
 	   }
 	 else	// Folder name not valid
-	    Ale_ShowAlerts (NULL);
+	    Ale_ShowAlert (Ale_WARNING,Txt_UPLOAD_FILE_Invalid_name);
 	 break;
       case Usr_CAN_NOT:
       default:
@@ -6783,6 +6785,13 @@ static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
    extern const char *Txt_The_file_X_has_been_placed_inside_the_folder_Y;
    extern const char *Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML;
    extern const char *Txt_UPLOAD_FILE_Forbidden_NO_HTML;
+   extern const char *Txt_UPLOAD_FILE_Invalid_name;
+   extern const char *Txt_UPLOAD_FILE_Invalid_name_NO_HTML;
+   static const char **InvalidName[Brw_NUM_UPLOAD_TYPES] =
+     {
+      [Brw_CLASSIC_UPLOAD ] = &Txt_UPLOAD_FILE_Invalid_name,
+      [Brw_DROPZONE_UPLOAD] = &Txt_UPLOAD_FILE_Invalid_name_NO_HTML,
+     };
    struct Par_Param *Par;
    char SrcFileName[PATH_MAX + 1];
    char PathUntilFileName[PATH_MAX + 1];
@@ -6942,6 +6951,8 @@ static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
 			Fil_RemoveTree (PathTmp);
 		    }
 		 }
+	       else
+		  Ale_CreateAlert (Ale_WARNING,NULL,*InvalidName[UploadType]);
 	      }
 	   }
 	 else	// Empty filename

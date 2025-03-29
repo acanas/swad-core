@@ -38,7 +38,7 @@
 #define Tag_MAX_TAGS_PER_QUESTION	5
 
 #define Tag_MAX_CHARS_TAG		(128 - 1)	// 127
-#define Tag_MAX_BYTES_TAG		((Tag_MAX_CHARS_TAG + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Tag_MAX_BYTES_TAG		((Tag_MAX_CHARS_TAG + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Tag_MAX_BYTES_TAGS_LIST		(16 * 1024)
 

@@ -34,7 +34,7 @@
 /*****************************************************************************/
 
 #define DegTyp_MAX_CHARS_DEGREE_TYPE_NAME	(32 - 1)	// 31
-#define DegTyp_MAX_BYTES_DEGREE_TYPE_NAME	((DegTyp_MAX_CHARS_DEGREE_TYPE_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
+#define DegTyp_MAX_BYTES_DEGREE_TYPE_NAME	((DegTyp_MAX_CHARS_DEGREE_TYPE_NAME + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 511
 
 /*****************************************************************************/
 /******************************* Public types ********************************/

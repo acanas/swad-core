@@ -36,10 +36,10 @@
 /*****************************************************************************/
 
 #define Agd_MAX_CHARS_EVENT	(128 - 1)	// 127
-#define Agd_MAX_BYTES_EVENT	((Agd_MAX_CHARS_EVENT + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Agd_MAX_BYTES_EVENT	((Agd_MAX_CHARS_EVENT + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Agd_MAX_CHARS_LOCATION	(128 - 1)	// 127
-#define Agd_MAX_BYTES_LOCATION	((Agd_MAX_CHARS_LOCATION + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Agd_MAX_BYTES_LOCATION	((Agd_MAX_CHARS_LOCATION + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 struct Agd_Event
   {

@@ -39,13 +39,13 @@
 /*****************************************************************************/
 
 #define Exa_MAX_CHARS_TITLE	(128 - 1)	// 127
-#define Exa_MAX_BYTES_TITLE	((Exa_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Exa_MAX_BYTES_TITLE	((Exa_MAX_CHARS_TITLE + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define ExaSet_MAX_CHARS_TITLE	(128 - 1)	// 127
-#define ExaSet_MAX_BYTES_TITLE	((ExaSet_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define ExaSet_MAX_BYTES_TITLE	((ExaSet_MAX_CHARS_TITLE + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define ExaSes_MAX_CHARS_TITLE	(128 - 1)	// 127
-#define ExaSes_MAX_BYTES_TITLE	((ExaSes_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define ExaSes_MAX_BYTES_TITLE	((ExaSes_MAX_CHARS_TITLE + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Exa_NUM_ORDERS 3
 typedef enum

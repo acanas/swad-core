@@ -24,14 +24,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/********************************* Headers ***********************************/
+/***************************** Public constants *****************************/
 /*****************************************************************************/
+/*
+   Some special characters, like a chinese character,
+   are received from a form in a format like this:
+   %26%2335753%3B --> %26 %23 3 5 7 5 3 %3B --> &#35753;
+		       ^   ^             ^
+		       |   |             |
+	      SpecialChar SpecialChar SpecialChar
+   Here one chinese character is converted
+   to 2 special chars + 5 normal chars + 1 special char,
+   and finally is stored as the following 8 bytes: &#35753;
 
-#include "swad_string.h"
-
-/*****************************************************************************/
-/***************************** Public constants ******************************/
-/*****************************************************************************/
+   The maximum UTF-8 code is 1114111 or 0x10FFFF.
+   So, when read from form, a character may be read temporarily as %26%231114111%3B (16 bytes)
+   Then it may be transformed to &#1114111; (10 bytes)
+   So, each char from a form may be transformed finally into a sequence of 1 to 10 bytes,
+   but temporarily it may need 16 bytes
+*/
+#define Cns_MAX_BYTES_PER_CHAR	16	// Maximum number of bytes of a char.
+					// Do not change (or change carefully) because it is used to compute size of database fields
 
 #define Cns_MAX_CHARS_IP	(3 + 1 + 3 + 1 + 3 + 1 + 3)	// 15: max. number of chars of an IP address
 				// Example: 255.255.255.255
@@ -40,7 +53,7 @@
 #define Cns_MAX_BYTES_IP	Cns_MAX_CHARS_IP	// 15
 
 #define Cns_MAX_CHARS_DATE	(16 - 1)	// 15
-#define Cns_MAX_BYTES_DATE	((Cns_MAX_CHARS_DATE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 255
+#define Cns_MAX_BYTES_DATE	((Cns_MAX_CHARS_DATE + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 255
 
 #define Cns_MAX_CHARS_EMAIL_ADDRESS	(256 - 1)			// 255
 #define Cns_MAX_BYTES_EMAIL_ADDRESS	Cns_MAX_CHARS_EMAIL_ADDRESS	// 255
@@ -48,7 +61,7 @@
 #define Cns_MAX_BYTES_USR_LOGIN	Cns_MAX_BYTES_EMAIL_ADDRESS		// 255
 
 #define Cns_MAX_CHARS_SUBJECT	(256 - 1)	// 255
-#define Cns_MAX_BYTES_SUBJECT	((Cns_MAX_CHARS_SUBJECT + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 4095
+#define Cns_MAX_BYTES_SUBJECT	((Cns_MAX_CHARS_SUBJECT + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 4095
 
 #define Cns_MAX_BYTES_TEXT	( 64 * 1024 - 1)	// Used for medium texts
 #define Cns_MAX_BYTES_LONG_TEXT	(256 * 1024 - 1)	// Used for big contents

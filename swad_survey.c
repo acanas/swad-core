@@ -67,7 +67,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 #define Svy_MAX_CHARS_ANSWER	(1024 - 1)	// 1023
-#define Svy_MAX_BYTES_ANSWER	((Svy_MAX_CHARS_ANSWER + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 16383
+#define Svy_MAX_BYTES_ANSWER	((Svy_MAX_CHARS_ANSWER + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 16383
 
 #define Svy_MAX_BYTES_LIST_ANSWER_TYPES	(Svy_NUM_ANS_TYPES * (Cns_MAX_DIGITS_UINT + 1))
 
@@ -2779,7 +2779,7 @@ static void Svy_WriteQstStem (const char *Stem)
    size_t Length;
 
    /* Convert the stem, that is in HTML, to rigorous HTML */
-   Length = strlen (Stem) * Str_MAX_BYTES_PER_CHAR;
+   Length = strlen (Stem) * Cns_MAX_BYTES_PER_CHAR;
    if ((HeadingRigorousHTML = malloc (Length + 1)) == NULL)
       Err_NotEnoughMemoryExit ();
    Str_Copy (HeadingRigorousHTML,Stem,Length);

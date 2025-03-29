@@ -92,8 +92,8 @@ typedef enum
 #define Brw_NUM_UPLOAD_TYPES 2
 typedef enum
   {
-   Brw_DROPZONE_UPLOAD,
    Brw_CLASSIC_UPLOAD,
+   Brw_DROPZONE_UPLOAD,
   } Brw_UploadType_t;
 
 #define Brw_NUM_LICENSES 8
@@ -154,7 +154,7 @@ struct Brw_FileMetadata
 #define Brw_MAX_BYTES_MIME_TYPE	(128 - 1)	// 127: maximum size in bytes of "image/jpeg", "text/html", etc.
 
 #define Brw_MAX_CHARS_LICENSE	(128 - 1)	// 127
-#define Brw_MAX_BYTES_LICENSE	((Brw_MAX_CHARS_LICENSE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Brw_MAX_BYTES_LICENSE	((Brw_MAX_CHARS_LICENSE + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS			"doc"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES		"sha"
@@ -215,6 +215,7 @@ void Brw_RenFolder (void);
 void Brw_RcvFileDZ (void);
 void Brw_RcvFileClassic (void);
 void Brw_CreateLink (void);
+
 void Brw_SetDocumentAsVisible (void);
 void Brw_SetDocumentAsHidden (void);
 HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHidden (Brw_FileType_t FileType,

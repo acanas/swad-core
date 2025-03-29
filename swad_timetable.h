@@ -34,7 +34,7 @@
 /*****************************************************************************/
 
 #define Tmt_MAX_CHARS_INFO	(128 - 1)	// 127
-#define Tmt_MAX_BYTES_INFO	((Tmt_MAX_CHARS_INFO + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Tmt_MAX_BYTES_INFO	((Tmt_MAX_CHARS_INFO + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Tmt_NUM_TIMETABLE_TYPES 3
 typedef enum

@@ -37,7 +37,7 @@
 /*****************************************************************************/
 
 #define Mch_MAX_CHARS_TITLE	Gam_MAX_CHARS_TITLE	// 127
-#define Mch_MAX_BYTES_TITLE	((Mch_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Mch_MAX_BYTES_TITLE	((Mch_MAX_CHARS_TITLE + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Mch_NEW_MATCH_SECTION_ID	"new_match"
 

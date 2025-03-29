@@ -27,6 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_constant.h"
 #include "swad_info.h"
 #include "swad_room.h"
 #include "swad_user.h"
@@ -36,10 +37,10 @@
 /*****************************************************************************/
 
 #define Grp_MAX_CHARS_GROUP_TYPE_NAME	(128 - 1)	// 127
-#define Grp_MAX_BYTES_GROUP_TYPE_NAME	((Grp_MAX_CHARS_GROUP_TYPE_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Grp_MAX_BYTES_GROUP_TYPE_NAME	((Grp_MAX_CHARS_GROUP_TYPE_NAME + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Grp_MAX_CHARS_GROUP_NAME	(128 - 1)	// 127
-#define Grp_MAX_BYTES_GROUP_NAME	((Grp_MAX_CHARS_GROUP_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Grp_MAX_BYTES_GROUP_NAME	((Grp_MAX_CHARS_GROUP_NAME + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Grp_MAX_STUDENTS_IN_A_GROUP	10000	// If max of students in a group is greater than this, it is considered infinite
 #define Grp_NUM_STUDENTS_NOT_LIMITED  INT_MAX	// This number can be stored in database as an integer...

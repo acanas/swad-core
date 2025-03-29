@@ -993,7 +993,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 		    {
 		     /* Convert the answer, that is in HTML, to rigorous HTML */
 		     AnswerTextLength = strlen (Question->Answer.Options[NumOpt].Text) *
-					Str_MAX_BYTES_PER_CHAR;
+					Cns_MAX_BYTES_PER_CHAR;
 		     if ((AnswerText = malloc (AnswerTextLength + 1)) == NULL)
 			Err_NotEnoughMemoryExit ();
 		     Str_Copy (AnswerText,Question->Answer.Options[NumOpt].Text,
@@ -1009,7 +1009,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 			if (Question->Answer.Options[NumOpt].Feedback[0])
 			  {
 			   AnswerFeedbackLength = strlen (Question->Answer.Options[NumOpt].Feedback) *
-						  Str_MAX_BYTES_PER_CHAR;
+						  Cns_MAX_BYTES_PER_CHAR;
 			   if ((AnswerFeedback = malloc (AnswerFeedbackLength + 1)) == NULL)
 			      Err_NotEnoughMemoryExit ();
 			   Str_Copy (AnswerFeedback,

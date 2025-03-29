@@ -1460,6 +1460,7 @@ void Asg_ReceiveAssignment (void)
    extern const char *Txt_Already_existed_an_assignment_with_the_folder_X;
    extern const char *Txt_Created_new_assignment_X;
    extern const char *Txt_The_assignment_has_been_modified;
+   extern const char *Txt_UPLOAD_FILE_Invalid_name;
    extern const char *Txt_You_can_not_disable_file_uploading_once_folders_have_been_created;
    struct Asg_Assignments Assignments;
    struct Asg_Assignment OldAsg;	// Current assigment data in database
@@ -1555,7 +1556,10 @@ void Asg_ReceiveAssignment (void)
 		    }
 		 }
 	       else	// Folder name not valid
+	         {
 		  AsgIsCorrect = false;
+		  Ale_CreateAlert (Ale_WARNING,NULL,Txt_UPLOAD_FILE_Invalid_name);
+	         }
 	       break;
 	    case Asg_DONT_SEND_WORK:
 	    default:

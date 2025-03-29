@@ -169,12 +169,12 @@ void MAC_EditMACAddresses (long RooCod,const char *Anchor,
 
 unsigned long long MAC_GetMACnumFromForm (const char *ParName)
   {
-   char MACstr[MAC_LENGTH_MAC_ADDRESS * Str_MAX_BYTES_PER_CHAR + 1];
+   char MACstr[MAC_LENGTH_MAC_ADDRESS * Cns_MAX_BYTES_PER_CHAR + 1];
    unsigned long long MAC[MAC_NUM_BYTES];
    unsigned long long MACnum;
 
    /***** Get parameter *****/
-   Par_GetParText (ParName,MACstr,MAC_LENGTH_MAC_ADDRESS * Str_MAX_BYTES_PER_CHAR);
+   Par_GetParText (ParName,MACstr,MAC_LENGTH_MAC_ADDRESS * Cns_MAX_BYTES_PER_CHAR);
 
    if (MACstr[0])	// Not empty
      {

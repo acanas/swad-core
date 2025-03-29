@@ -593,7 +593,7 @@ void Qst_WriteQstStem (const char *Stem,const char *ClassStem,
 	 if (Stem[0])
 	   {
 	    /* Convert the stem, that is in HTML, to rigorous HTML */
-	    StemLength = strlen (Stem) * Str_MAX_BYTES_PER_CHAR;
+	    StemLength = strlen (Stem) * Cns_MAX_BYTES_PER_CHAR;
 	    if ((StemRigorousHTML = malloc (StemLength + 1)) == NULL)
 	       Err_NotEnoughMemoryExit ();
 	    Str_Copy (StemRigorousHTML,Stem,StemLength);
@@ -698,7 +698,7 @@ void Qst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
       if (Feedback[0])
 	{
 	 /***** Convert the feedback, that is in HTML, to rigorous HTML *****/
-	 FeedbackLength = strlen (Feedback) * Str_MAX_BYTES_PER_CHAR;
+	 FeedbackLength = strlen (Feedback) * Cns_MAX_BYTES_PER_CHAR;
 	 if ((FeedbackRigorousHTML = malloc (FeedbackLength + 1)) == NULL)
 	    Err_NotEnoughMemoryExit ();
 	 Str_Copy (FeedbackRigorousHTML,Feedback,FeedbackLength);

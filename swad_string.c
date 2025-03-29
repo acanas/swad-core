@@ -2436,10 +2436,6 @@ int Str_ReadFileUntilBoundaryStr (FILE *FileSrc,char *StrDst,
 
 bool Str_ConvertFilFolLnkNameToValid (char *FileName)
   {
-   extern const char *Txt_UPLOAD_FILE_X_invalid_name_NO_HTML;
-   extern const char *Txt_UPLOAD_FILE_X_invalid_name;
-   extern const char *Txt_UPLOAD_FILE_Invalid_name_NO_HTML;
-   extern const char *Txt_UPLOAD_FILE_Invalid_name;
    char *Ptr;
    unsigned NumAlfanum = 0;
    unsigned NumSpaces  = 0;
@@ -2521,16 +2517,7 @@ bool Str_ConvertFilFolLnkNameToValid (char *FileName)
 	}
       if (NumAlfanum)
          FileNameIsOK = true;
-      else
-	 Ale_CreateAlert (Ale_WARNING,NULL,
-			  Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_X_invalid_name_NO_HTML :
-								  Txt_UPLOAD_FILE_X_invalid_name,
-			  FileName);
      }
-   else	// FileName is empty
-      Ale_CreateAlert (Ale_WARNING,NULL,
-		       Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_Invalid_name_NO_HTML :
-							       Txt_UPLOAD_FILE_Invalid_name);
 
    return FileNameIsOK;
   }

@@ -36,7 +36,7 @@
 /*****************************************************************************/
 
 #define Msg_MAX_CHARS_FILTER_CONTENT (128 - 1)	// 127
-#define Msg_MAX_BYTES_FILTER_CONTENT ((Msg_MAX_CHARS_FILTER_CONTENT + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Msg_MAX_BYTES_FILTER_CONTENT ((Msg_MAX_CHARS_FILTER_CONTENT + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Msg_MAX_BYTES_LIST_OTHER_RECIPIENTS	((Cns_MAX_BYTES_USR_LOGIN + 2) * Cfg_MAX_USRS_IN_LIST)
 

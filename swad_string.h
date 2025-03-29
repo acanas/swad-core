@@ -32,29 +32,6 @@
 #include <stdio.h>		// For FILE
 
 /*****************************************************************************/
-/***************************** Public constants *****************************/
-/*****************************************************************************/
-/*
-   Some special characters, like a chinese character,
-   are received from a form in a format like this:
-   %26%2335753%3B --> %26 %23 3 5 7 5 3 %3B --> &#35753;
-		       ^   ^             ^
-		       |   |             |
-	      SpecialChar SpecialChar SpecialChar
-   Here one chinese character is converted
-   to 2 special chars + 5 normal chars + 1 special char,
-   and finally is stored as the following 8 bytes: &#35753;
-
-   The maximum UTF-8 code is 1114111 or 0x10FFFF.
-   So, when read from form, a character may be read temporarily as %26%231114111%3B (16 bytes)
-   Then it may be transformed to &#1114111; (10 bytes)
-   So, each char from a form may be transformed finally into a sequence of 1 to 10 bytes,
-   but temporarily it may need 16 bytes
-*/
-#define Str_MAX_BYTES_PER_CHAR	16	// Maximum number of bytes of a char.
-					// Do not change (or change carefully) because it is used to compute size of database fields
-
-/*****************************************************************************/
 /******************************* Public types *******************************/
 /*****************************************************************************/
 

@@ -37,7 +37,7 @@
 /*****************************************************************************/
 
 #define Asg_MAX_CHARS_ASSIGNMENT_TITLE	(128 - 1)	// 127
-#define Asg_MAX_BYTES_ASSIGNMENT_TITLE	((Asg_MAX_CHARS_ASSIGNMENT_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Asg_MAX_BYTES_ASSIGNMENT_TITLE	((Asg_MAX_CHARS_ASSIGNMENT_TITLE + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Asg_NUM_TYPES_SEND_WORK 2
 typedef enum

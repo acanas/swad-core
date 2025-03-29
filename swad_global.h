@@ -173,7 +173,6 @@ struct Globals
       Brw_FileBrowser_t Type;
       bool FullTree;		// Show full tree?
       bool ShowOnlyPublicFiles;	// Show only public files?
-      bool UploadingWithDropzone;
       struct
 	{
 	 char AboveRootFolder[PATH_MAX + 1];

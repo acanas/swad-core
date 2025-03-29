@@ -36,7 +36,7 @@
 /*****************************************************************************/
 
 #define Gam_MAX_CHARS_TITLE	(128 - 1)	// 127
-#define Gam_MAX_BYTES_TITLE	((Gam_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Gam_MAX_BYTES_TITLE	((Gam_MAX_CHARS_TITLE + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Gam_AFTER_LAST_QUESTION	((unsigned)((1UL << 31) - 1))	// 2^31 - 1, don't change this number because it is used in database to indicate that a match is finished
 

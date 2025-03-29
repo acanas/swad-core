@@ -48,7 +48,7 @@ typedef enum
 #define Cfe_STATUS_DEFAULT Cfe_VISIBLE_CALL_FOR_EXAM
 
 #define Cfe_MAX_CHARS_SESSION	(128 - 1)	// 127
-#define Cfe_MAX_BYTES_SESSION	((Cfe_MAX_CHARS_SESSION + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Cfe_MAX_BYTES_SESSION	((Cfe_MAX_CHARS_SESSION + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 struct Cfe_CallForExam
   {

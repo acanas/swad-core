@@ -1061,29 +1061,6 @@ const char *Txt_UPLOAD_FILE_Invalid_name_NO_HTML =	// Warning: it is very import
 	"Invalid name.";	// Çeviri lazim!
 #endif
 
-const char *Txt_UPLOAD_FILE_X_invalid_name_NO_HTML =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"%s: nom no vàlid.";
-#elif L==2
-	"%s: ungültiger Name.";
-#elif L==3
-	"%s: invalid name.";
-#elif L==4
-	"%s: nombre no válido.";
-#elif L==5
-	"%s: nom incorrect.";
-#elif L==6
-	"%s: nombre no válido.";	// Okoteve traducción
-#elif L==7
-	"%s: nome non valido.";
-#elif L==8
-	"%s: bledna nazwa.";
-#elif L==9
-	"%s: nome inválido.";
-#elif L==10	// tr
-	"%s: invalid name.";		// Çeviri lazim!
-#endif
-
 const char *Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
 	"%s: tipus MIME %s no permès.";

@@ -55223,29 +55223,6 @@ const char *Txt_UPLOAD_FILE_Invalid_name =
 	"Invalid name.";		// Çeviri lazim!
 #endif
 
-const char *Txt_UPLOAD_FILE_X_invalid_name =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"<strong>%s</strong>: nom no v&agrave;lid.";
-#elif L==2	// de
-	"<strong>%s</strong>: ung&uuml;ltiger Name.";
-#elif L==3	// en
-	"<strong>%s</strong>: invalid name.";
-#elif L==4	// es
-	"<strong>%s</strong>: nombre no v&aacute;lido.";
-#elif L==5	// fr
-	"<strong>%s</strong>: nom invalide.";
-#elif L==6	// gn
-	"<strong>%s</strong>: nombre no v&aacute;lido.";	// Okoteve traducción
-#elif L==7	// it
-	"<strong>%s</strong>: nome non valido.";
-#elif L==8	// pl
-	"<strong>%s</strong>: b&lstrok;&eogon;dna nazwa.";
-#elif L==9	// pt
-	"<strong>%s</strong>: nome n&atilde;o v&aacute;lido.";
-#elif L==10	// tr
-	"<strong>%s</strong>: invalid name.";			// Çeviri lazim!
-#endif
-
 const char *Txt_Upload =
 #if   L==1	// ca
 	"Enviar";

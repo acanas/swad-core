@@ -187,7 +187,7 @@ static void ExaLog_LogUsrAgent (long LogCod,long PrnCod)
    /***** Get current user agent *****/
    UserAgent = getenv ("HTTP_USER_AGENT");
    if (UserAgent)
-      MaxBytes = strlen (UserAgent) * Str_MAX_BYTES_PER_CHAR;
+      MaxBytes = strlen (UserAgent) * Cns_MAX_BYTES_PER_CHAR;
    else
       MaxBytes = 0;
    if ((UserAgentDB = malloc (MaxBytes + 1)) == NULL)

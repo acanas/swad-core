@@ -32,7 +32,7 @@
 
 #define Nck_MAX_BYTES_NICK_WITHOUT_ARROBA	Nck_MAX_CHARS_NICK_WITHOUT_ARROBA
 // Several bytes for leading @ because it may come from form
-#define Nck_MAX_BYTES_NICK_WITH_ARROBA	(Str_MAX_BYTES_PER_CHAR + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA)
+#define Nck_MAX_BYTES_NICK_WITH_ARROBA	(Cns_MAX_BYTES_PER_CHAR + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA)
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

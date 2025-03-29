@@ -35,7 +35,7 @@
 /*****************************************************************************/
 
 #define Hld_MAX_CHARS_HOLIDAY_NAME	(128 - 1)	// 127
-#define Hld_MAX_BYTES_HOLIDAY_NAME	((Hld_MAX_CHARS_HOLIDAY_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Hld_MAX_BYTES_HOLIDAY_NAME	((Hld_MAX_CHARS_HOLIDAY_NAME + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Hld_NUM_TYPES_HOLIDAY 2
 typedef enum

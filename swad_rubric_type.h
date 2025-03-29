@@ -39,10 +39,10 @@
 /*****************************************************************************/
 
 #define Rub_MAX_CHARS_TITLE	(128 - 1)	// 127
-#define Rub_MAX_BYTES_TITLE	((Rub_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Rub_MAX_BYTES_TITLE	((Rub_MAX_CHARS_TITLE + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define RubCri_MAX_CHARS_TITLE	(256 - 1)	// 255
-#define RubCri_MAX_BYTES_TITLE	((RubCri_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 4095
+#define RubCri_MAX_BYTES_TITLE	((RubCri_MAX_CHARS_TITLE + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 4095
 
 #define RubCri_NUM_VALUES 2
 typedef enum

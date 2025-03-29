@@ -39,10 +39,10 @@
 #define Med_BYTES_NAME	Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
 
 #define Med_MAX_CHARS_TITLE	(128 - 1)	// 127
-#define Med_MAX_BYTES_TITLE	((Med_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Med_MAX_BYTES_TITLE	((Med_MAX_CHARS_TITLE + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Med_MAX_CHARS_ATTRIBUTION	(256 - 1)	// 255
-#define Med_MAX_BYTES_ATTRIBUTION	((Med_MAX_CHARS_ATTRIBUTION + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 4095
+#define Med_MAX_BYTES_ATTRIBUTION	((Med_MAX_CHARS_ATTRIBUTION + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 4095
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
