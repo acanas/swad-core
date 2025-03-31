@@ -1538,9 +1538,9 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
 
 	 /***** Compute variables related to pagination *****/
 	 Pagination.NumItems = Messages->NumMsgs;
-	 Pagination.CurrentPage = (int) Messages->CurrentPage;
+	 Pagination.CurrentPage = Messages->CurrentPage;
 	 Pag_CalculatePagination (&Pagination);
-	 Messages->CurrentPage = (unsigned) Pagination.CurrentPage;
+	 Messages->CurrentPage = Pagination.CurrentPage;
 
 	 /***** Save my current page in order to show it next time I'll view my received/sent messages *****/
 	 Ses_DB_SaveLastPageMsgIntoSession (WhatPaginate[Messages->TypeOfMessages],

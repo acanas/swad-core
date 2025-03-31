@@ -192,9 +192,9 @@ void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Surveys->Num;
-   Pagination.CurrentPage = (int) Surveys->CurrentPage;
+   Pagination.CurrentPage = Surveys->CurrentPage;
    Pag_CalculatePagination (&Pagination);
-   Surveys->CurrentPage = (unsigned) Pagination.CurrentPage;
+   Surveys->CurrentPage = Pagination.CurrentPage;
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Surveys,Svy_PutIconsListSurveys,Surveys,

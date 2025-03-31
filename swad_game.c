@@ -242,9 +242,9 @@ void Gam_ListAllGames (struct Gam_Games *Games)
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Games->Num;
-   Pagination.CurrentPage = (int) Games->CurrentPage;
+   Pagination.CurrentPage = Games->CurrentPage;
    Pag_CalculatePagination (&Pagination);
-   Games->CurrentPage = (unsigned) Pagination.CurrentPage;
+   Games->CurrentPage = Pagination.CurrentPage;
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Games,Gam_PutIconsListingGames,Games,

@@ -199,9 +199,9 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Assignments->Num;
-   Pagination.CurrentPage = (int) Assignments->CurrentPage;
+   Pagination.CurrentPage = Assignments->CurrentPage;
    Pag_CalculatePagination (&Pagination);
-   Assignments->CurrentPage = (unsigned) Pagination.CurrentPage;
+   Assignments->CurrentPage = Pagination.CurrentPage;
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Assignments,Asg_PutIconsListAssignments,Assignments,

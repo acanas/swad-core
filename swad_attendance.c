@@ -227,9 +227,9 @@ static void Att_ShowAllEvents (struct Att_Events *Events)
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Events->Num;
-   Pagination.CurrentPage = (int) Events->CurrentPage;
+   Pagination.CurrentPage = Events->CurrentPage;
    Pag_CalculatePagination (&Pagination);
-   Events->CurrentPage = (unsigned) Pagination.CurrentPage;
+   Events->CurrentPage = Pagination.CurrentPage;
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Events,Att_PutIconsInListOfEvents,Events,

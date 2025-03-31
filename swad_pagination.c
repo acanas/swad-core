@@ -100,10 +100,8 @@ void Pag_CalculatePagination (struct Pag_Pagination *Pagination)
      {
       Pagination->MoreThanOnePage = true;
 
-      /* If page to show is 0 (special code), then last page must be shown.
-         If page to show is greater than number of pages, then show last page also */
-      if (Pagination->CurrentPage == 0 ||
-          Pagination->CurrentPage > Pagination->NumPags)
+      /* If page to show is greater than number of pages, then show last page also */
+      if (Pagination->CurrentPage > Pagination->NumPags)
          Pagination->CurrentPage = Pagination->NumPags;
 
       /* Compute first page with link around the current */
@@ -135,7 +133,7 @@ void Pag_CalculatePagination (struct Pag_Pagination *Pagination)
   }
 
 /*****************************************************************************/
-/************** Show enlaces a distintas páginas of messages *****************/
+/*********************** Show links to pages (centered) **********************/
 /*****************************************************************************/
 
 void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
@@ -145,161 +143,24 @@ void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
    if (Pagination->MoreThanOnePage)
      {
       HTM_DIV_Begin ("class=\"CM\"");
-	 Pag_WriteLinksToPages (WhatPaginate,Pagination,Context,Cod,
-				For_ENABLED,NULL,"PAG_TXT",false);	// !!!!!!!!!!!!!!!!!!!!!!!!!!
+	 Pag_WriteLinksToPages (WhatPaginate,Pagination,Context,Cod,"PAG_TXT");
       HTM_DIV_End ();
      }
   }
 
 /*****************************************************************************/
-/********************** Show links to pages of messages **********************/
+/***************************** Show links to pages ***************************/
 /*****************************************************************************/
 
 void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                             struct Pag_Pagination *Pagination,
                             const void *Context,long Cod,
-                            For_Disabled_t FirstMsgDisabled,
-			    const char *Subject,const char *ClassTxt,
-                            bool LinkToPagCurrent)
+			    const char *ClassTxt)
   {
    extern const char *Txt_Page_X_of_Y;
-   extern const char *Txt_FORUM_Post_banned;
    Grp_MyAllGrps_t MyAllGrps;
    unsigned NumPage;
    char *Title;
-
-   /***** Link to page 1, including a text *****/
-   if (Subject)
-     {
-      HTM_DIV_Begin (NULL);
-	 if (LinkToPagCurrent)
-	   {
-	    switch (WhatPaginate)
-	      {
-	       case Pag_ASSIGNMENTS:
-		  Frm_BeginFormAnchor (ActSeeAllAsg,Pagination->Anchor);
-		     Pag_PutParPagNum (WhatPaginate,1);
-		     Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
-		     MyAllGrps = Grp_GetParMyAllGrps ();
-		     Grp_PutParMyAllGrps (&MyAllGrps);
-		  break;
-	       case Pag_PROJECTS:
-		  Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
-		     Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
-				   ((struct Prj_Projects *) Context)->SelectedOrder,
-				   1,
-				   Cod,
-				   Usr_USE_LIST_SELECTED_USERS);
-		  break;
-	       case Pag_EXAMS:
-		  Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
-		     Pag_PutParPagNum (WhatPaginate,1);
-		     Par_PutParOrder ((unsigned) ((struct Exa_Exams *) Context)->SelectedOrder);
-		     MyAllGrps = Grp_GetParMyAllGrps ();
-		     Grp_PutParMyAllGrps (&MyAllGrps);
-		  break;
-	       case Pag_GAMES:
-		  Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
-		     Pag_PutParPagNum (WhatPaginate,1);
-		     Par_PutParOrder ((unsigned) ((struct Gam_Games *) Context)->SelectedOrder);
-		     MyAllGrps = Grp_GetParMyAllGrps ();
-		     Grp_PutParMyAllGrps (&MyAllGrps);
-		  break;
-	       case Pag_RUBRICS:
-		  Frm_BeginFormAnchor (ActSeeAllRub,Pagination->Anchor);
-		     Pag_PutParPagNum (WhatPaginate,1);
-		  break;
-	       case Pag_ATT_EVENTS:
-		  Frm_BeginFormAnchor (ActSeeAllAtt,Pagination->Anchor);
-		     Pag_PutParPagNum (WhatPaginate,1);
-		     Par_PutParOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
-		     MyAllGrps = Grp_GetParMyAllGrps ();
-		     Grp_PutParMyAllGrps (&MyAllGrps);
-		  break;
-	       case Pag_THREADS_FORUM:
-		  Frm_BeginFormAnchor (For_ActionsSeeFor[((struct For_Forums *) Context)->Forum.Type],
-				       Pagination->Anchor);
-		     For_PutAllParsForum (1,	// Page of threads = first
-					  1,	// Page of posts   = first
-					  ((struct For_Forums *) Context)->ForumSet,
-					  ((struct For_Forums *) Context)->ThreadsOrder,
-					  ((struct For_Forums *) Context)->Forum.HieCod,
-					  -1L,
-					  -1L);
-		  break;
-	       case Pag_POSTS_FORUM:
-		  Frm_BeginFormAnchor (For_ActionsSeePstFor[((struct For_Forums *) Context)->Forum.Type],
-				       Pagination->Anchor);
-		     For_PutAllParsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
-					  1,	// Page of posts   = first
-					  ((struct For_Forums *) Context)->ForumSet,
-					  ((struct For_Forums *) Context)->ThreadsOrder,
-					  ((struct For_Forums *) Context)->Forum.HieCod,
-					  Cod,
-					  -1L);
-		  break;
-	       case Pag_MESSAGES_RECEIVED:
-		  Frm_BeginFormAnchor (ActSeeRcvMsg,Pagination->Anchor);
-		     Pag_PutParPagNum (WhatPaginate,1);
-		     Msg_PutParsMsgsFilters ((struct Msg_Messages *) Context);
-		  break;
-	       case Pag_MESSAGES_SENT:
-		  Frm_BeginFormAnchor (ActSeeSntMsg,Pagination->Anchor);
-		     Pag_PutParPagNum (WhatPaginate,1);
-		     Msg_PutParsMsgsFilters ((struct Msg_Messages *) Context);
-		  break;
-	       case Pag_SURVEYS:
-		  Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
-		     Pag_PutParPagNum (WhatPaginate,1);
-		     Par_PutParOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
-		     MyAllGrps = Grp_GetParMyAllGrps ();
-		     Grp_PutParMyAllGrps (&MyAllGrps);
-		  break;
-	       case Pag_MY_AGENDA:
-		  Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
-		     Agd_PutParsMyAgenda (((struct Agd_Agenda *) Context)->Past__FutureEvents,
-					  ((struct Agd_Agenda *) Context)->PrivatPublicEvents,
-					  ((struct Agd_Agenda *) Context)->HiddenVisiblEvents,
-					  ((struct Agd_Agenda *) Context)->SelectedOrder,
-					  1,
-					  Cod);
-		  break;
-	       case Pag_ANOTHER_AGENDA:
-		  Frm_BeginFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
-		     Agd_PutParEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
-		     Pag_PutParPagNum (WhatPaginate,1);
-		     Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-		  break;
-	       default:
-		  break;
-	      }
-	    if (asprintf (&Title,Txt_Page_X_of_Y,1,Pagination->NumPags) < 0)
-	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_Submit_Begin (Title,
-	                             "class=\"LT BT_LINK %s_%s\"",
-	                             ClassTxt,The_GetSuffix ());
-	    free (Title);
-	   }
-	 else
-	    HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
-	 switch (FirstMsgDisabled)
-	   {
-	    case For_DISABLED:
-	       HTM_TxtF ("[%s]",Txt_FORUM_Post_banned);
-	       break;
-	    case For_ENABLED:
-	       HTM_Txt (Subject);
-	       break;
-	   }
-	 if (LinkToPagCurrent)
-	   {
-	    HTM_BUTTON_End ();
-	    Frm_EndForm ();
-	   }
-	 else
-	    HTM_SPAN_End ();
-      HTM_DIV_End ();
-     }
 
    /***** Links to several pages start here *****/
    if (Pagination->MoreThanOnePage)
@@ -545,129 +406,128 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
         }
 
       /***** Loop to put links to the pages around the current one *****/
-      for (NumPage = Pagination->StartPage;
+      for (NumPage  = Pagination->StartPage;
 	   NumPage <= Pagination->EndPage;
 	   NumPage++)
         {
-         if (asprintf (&Title,Txt_Page_X_of_Y,NumPage,Pagination->NumPags) < 0)
-	    Err_NotEnoughMemoryExit ();
-         if (!LinkToPagCurrent && NumPage == Pagination->CurrentPage)
-           {
-            HTM_SPAN_Begin ("title=\"%s\" class=\"PAG_CUR PAG_CUR_%s %s_%s\"",
-                            Title,The_GetSuffix (),ClassTxt,The_GetSuffix ());
-	       HTM_Unsigned (NumPage);
-            HTM_SPAN_End ();
-           }
-         else
-           {
-            switch (WhatPaginate)
-              {
-               case Pag_ASSIGNMENTS:
-                  Frm_BeginFormAnchor (ActSeeAllAsg,Pagination->Anchor);
-		     Pag_PutParPagNum (WhatPaginate,NumPage);
-		     Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
-		     MyAllGrps = Grp_GetParMyAllGrps ();
-		     Grp_PutParMyAllGrps (&MyAllGrps);
-                  break;
-	       case Pag_PROJECTS:
-		  Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
-		     Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
-				   ((struct Prj_Projects *) Context)->SelectedOrder,
-				   NumPage,
-				   Cod,
-				   Usr_USE_LIST_SELECTED_USERS);
-		  break;
-               case Pag_EXAMS:
-                  Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
-		     Pag_PutParPagNum (WhatPaginate,NumPage);
-		     Par_PutParOrder ((unsigned) ((struct Exa_Exams *) Context)->SelectedOrder);
-		     MyAllGrps = Grp_GetParMyAllGrps ();
-		     Grp_PutParMyAllGrps (&MyAllGrps);
-                  break;
-               case Pag_GAMES:
-                  Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
-		     Pag_PutParPagNum (WhatPaginate,NumPage);
-		     Par_PutParOrder ((unsigned) ((struct Gam_Games *) Context)->SelectedOrder);
-		     MyAllGrps = Grp_GetParMyAllGrps ();
-		     Grp_PutParMyAllGrps (&MyAllGrps);
-                  break;
-               case Pag_RUBRICS:
-                  Frm_BeginFormAnchor (ActSeeAllRub,Pagination->Anchor);
-		     Pag_PutParPagNum (WhatPaginate,NumPage);
-                  break;
-               case Pag_ATT_EVENTS:
-                  Frm_BeginFormAnchor (ActSeeAllAtt,Pagination->Anchor);
-		     Pag_PutParPagNum (WhatPaginate,NumPage);
-		     Par_PutParOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
-		     MyAllGrps = Grp_GetParMyAllGrps ();
-		     Grp_PutParMyAllGrps (&MyAllGrps);
-                  break;
-               case Pag_THREADS_FORUM:
-                  Frm_BeginFormAnchor (For_ActionsSeeFor[((struct For_Forums *) Context)->Forum.Type],
-                                       Pagination->Anchor);
-		     For_PutAllParsForum (NumPage,	// Page of threads = number of page
-					  1,		// Page of posts   = first
-					  ((struct For_Forums *) Context)->ForumSet,
-					  ((struct For_Forums *) Context)->ThreadsOrder,
-					  ((struct For_Forums *) Context)->Forum.HieCod,
-					  -1L,
-					  -1L);
-                  break;
-               case Pag_POSTS_FORUM:
-                  Frm_BeginFormAnchor (For_ActionsSeePstFor[((struct For_Forums *) Context)->Forum.Type],
-                                       Pagination->Anchor);
-		     For_PutAllParsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
-					  NumPage,	// Page of posts   = number of page
-					  ((struct For_Forums *) Context)->ForumSet,
-					  ((struct For_Forums *) Context)->ThreadsOrder,
-					  ((struct For_Forums *) Context)->Forum.HieCod,
-					  Cod,
-					  -1L);
-                  break;
-               case Pag_MESSAGES_RECEIVED:
-                  Frm_BeginFormAnchor (ActSeeRcvMsg,Pagination->Anchor);
-		     Pag_PutParPagNum (WhatPaginate,NumPage);
-		     Msg_PutParsMsgsFilters ((struct Msg_Messages *) Context);
-                  break;
-               case Pag_MESSAGES_SENT:
-                  Frm_BeginFormAnchor (ActSeeSntMsg,Pagination->Anchor);
-		     Pag_PutParPagNum (WhatPaginate,NumPage);
-		     Msg_PutParsMsgsFilters ((struct Msg_Messages *) Context);
-                  break;
-               case Pag_SURVEYS:
-                  Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
-		     Pag_PutParPagNum (WhatPaginate,NumPage);
-		     Par_PutParOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
-		     MyAllGrps = Grp_GetParMyAllGrps ();
-		     Grp_PutParMyAllGrps (&MyAllGrps);
-                  break;
-               case Pag_MY_AGENDA:
-                  Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
-		     Agd_PutParsMyAgenda (((struct Agd_Agenda *) Context)->Past__FutureEvents,
-					  ((struct Agd_Agenda *) Context)->PrivatPublicEvents,
-					  ((struct Agd_Agenda *) Context)->HiddenVisiblEvents,
-					  ((struct Agd_Agenda *) Context)->SelectedOrder,
-					  NumPage,
-					  Cod);
-                  break;
-               case Pag_ANOTHER_AGENDA:
-                  Frm_BeginFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
-		     Agd_PutParEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
-		     Pag_PutParPagNum (WhatPaginate,NumPage);
-		     Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-                  break;
-	       default:
-		  break;
-              }
+	 switch (WhatPaginate)
+	   {
+	    case Pag_ASSIGNMENTS:
+	       Frm_BeginFormAnchor (ActSeeAllAsg,Pagination->Anchor);
+		  Pag_PutParPagNum (WhatPaginate,NumPage);
+		  Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
+	       break;
+	    case Pag_PROJECTS:
+	       Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
+		  Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
+				((struct Prj_Projects *) Context)->SelectedOrder,
+				NumPage,
+				Cod,
+				Usr_USE_LIST_SELECTED_USERS);
+	       break;
+	    case Pag_EXAMS:
+	       Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
+		  Pag_PutParPagNum (WhatPaginate,NumPage);
+		  Par_PutParOrder ((unsigned) ((struct Exa_Exams *) Context)->SelectedOrder);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
+	       break;
+	    case Pag_GAMES:
+	       Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
+		  Pag_PutParPagNum (WhatPaginate,NumPage);
+		  Par_PutParOrder ((unsigned) ((struct Gam_Games *) Context)->SelectedOrder);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
+	       break;
+	    case Pag_RUBRICS:
+	       Frm_BeginFormAnchor (ActSeeAllRub,Pagination->Anchor);
+		  Pag_PutParPagNum (WhatPaginate,NumPage);
+	       break;
+	    case Pag_ATT_EVENTS:
+	       Frm_BeginFormAnchor (ActSeeAllAtt,Pagination->Anchor);
+		  Pag_PutParPagNum (WhatPaginate,NumPage);
+		  Par_PutParOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
+	       break;
+	    case Pag_THREADS_FORUM:
+	       Frm_BeginFormAnchor (For_ActionsSeeFor[((struct For_Forums *) Context)->Forum.Type],
+				    Pagination->Anchor);
+		  For_PutAllParsForum (NumPage,	// Page of threads = number of page
+				       1,		// Page of posts   = first
+				       ((struct For_Forums *) Context)->ForumSet,
+				       ((struct For_Forums *) Context)->ThreadsOrder,
+				       ((struct For_Forums *) Context)->Forum.HieCod,
+				       -1L,
+				       -1L);
+	       break;
+	    case Pag_POSTS_FORUM:
+	       Frm_BeginFormAnchor (For_ActionsSeePstFor[((struct For_Forums *) Context)->Forum.Type],
+				    Pagination->Anchor);
+		  For_PutAllParsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
+				       NumPage,	// Page of posts   = number of page
+				       ((struct For_Forums *) Context)->ForumSet,
+				       ((struct For_Forums *) Context)->ThreadsOrder,
+				       ((struct For_Forums *) Context)->Forum.HieCod,
+				       Cod,
+				       -1L);
+	       break;
+	    case Pag_MESSAGES_RECEIVED:
+	       Frm_BeginFormAnchor (ActSeeRcvMsg,Pagination->Anchor);
+		  Pag_PutParPagNum (WhatPaginate,NumPage);
+		  Msg_PutParsMsgsFilters ((struct Msg_Messages *) Context);
+	       break;
+	    case Pag_MESSAGES_SENT:
+	       Frm_BeginFormAnchor (ActSeeSntMsg,Pagination->Anchor);
+		  Pag_PutParPagNum (WhatPaginate,NumPage);
+		  Msg_PutParsMsgsFilters ((struct Msg_Messages *) Context);
+	       break;
+	    case Pag_SURVEYS:
+	       Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
+		  Pag_PutParPagNum (WhatPaginate,NumPage);
+		  Par_PutParOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
+	       break;
+	    case Pag_MY_AGENDA:
+	       Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
+		  Agd_PutParsMyAgenda (((struct Agd_Agenda *) Context)->Past__FutureEvents,
+				       ((struct Agd_Agenda *) Context)->PrivatPublicEvents,
+				       ((struct Agd_Agenda *) Context)->HiddenVisiblEvents,
+				       ((struct Agd_Agenda *) Context)->SelectedOrder,
+				       NumPage,
+				       Cod);
+	       break;
+	    case Pag_ANOTHER_AGENDA:
+	       Frm_BeginFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
+		  Agd_PutParEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
+		  Pag_PutParPagNum (WhatPaginate,NumPage);
+		  Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+	       break;
+	    default:
+	       break;
+	   }
+
+	    if (asprintf (&Title,Txt_Page_X_of_Y,NumPage,Pagination->NumPags) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    if (NumPage == Pagination->CurrentPage)
+	      {
 	       HTM_BUTTON_Submit_Begin (Title,
-	                                "class=\"BT_LINK PAG PAG_%s %s_%s\"",
-	                                The_GetSuffix (),
-	                                ClassTxt,The_GetSuffix ());
-		  HTM_Unsigned (NumPage);
-	       HTM_BUTTON_End ();
-            Frm_EndForm ();
-           }
-         free (Title);
+					"class=\"BT_LINK PAG_CUR PAG_CUR_%s %s_%s\"",
+					The_GetSuffix (),
+					ClassTxt,The_GetSuffix ());
+	      }
+	    else
+	       HTM_BUTTON_Submit_Begin (Title,
+					"class=\"BT_LINK PAG PAG_%s %s_%s\"",
+					The_GetSuffix (),
+					ClassTxt,The_GetSuffix ());
+	    free (Title);
+	    HTM_Unsigned (NumPage);
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
         }
 
       /***** Posible link to page right *****/

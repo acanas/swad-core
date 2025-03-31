@@ -229,22 +229,23 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Exams->Num;
-   Pagination.CurrentPage = (int) Exams->CurrentPage;
+   Pagination.CurrentPage = Exams->CurrentPage;
    Pag_CalculatePagination (&Pagination);
-   Exams->CurrentPage = (unsigned) Pagination.CurrentPage;
+   Exams->CurrentPage = Pagination.CurrentPage;
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Exams,Exa_PutIconsListExams,Exams,
                  Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
 
       /***** Write links to pages *****/
-      Pag_WriteLinksToPagesCentered (Pag_EXAMS,&Pagination,
-				     Exams,-1L);
+      Pag_WriteLinksToPagesCentered (Pag_EXAMS,&Pagination,Exams,-1L);
 
       if (Exams->Num)
 	{
-	 /***** Table head *****/
+	 /***** Begin table *****/
 	 HTM_TABLE_Begin ("TBL_SCROLL");
+
+	    /***** Table head *****/
 	    HTM_TR_Begin (NULL);
                HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");	// Column for contextual icons
 
@@ -296,8 +297,7 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
 	 Ale_ShowAlert (Ale_INFO,Txt_No_exams);
 
       /***** Write again links to pages *****/
-      Pag_WriteLinksToPagesCentered (Pag_EXAMS,&Pagination,
-				     Exams,-1L);
+      Pag_WriteLinksToPagesCentered (Pag_EXAMS,&Pagination,Exams,-1L);
 
    /***** End box *****/
    Box_BoxEnd ();

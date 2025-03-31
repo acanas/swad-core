@@ -370,6 +370,10 @@ static void For_ListForumThrs (struct For_Forums *Forums,
                                long ThrCodHighlighted,
                                struct Pag_Pagination *PaginationThrs);
 
+static void For_LinkToFirstPageWithSubject (const struct For_Forums *Forums,
+					    const struct For_Thread *Thr,
+					    unsigned NumPags);
+
 static void For_SetForumType (struct For_Forums *Forums);
 static void For_RestrictAccess (const struct For_Forums *Forums);
 
@@ -780,7 +784,7 @@ void For_ShowPostsOfAThread (struct For_Forums *Forums,
 
 	    /***** Compute variables related to pagination *****/
 	    PaginationPsts.NumItems = NumPsts;
-	    PaginationPsts.CurrentPage = (int) Forums->CurrentPagePsts;
+	    PaginationPsts.CurrentPage = Forums->CurrentPagePsts;
 	    Pag_CalculatePagination (&PaginationPsts);
 	    PaginationPsts.Anchor = For_FORUM_POSTS_SECTION_ID;
 	    Forums->CurrentPagePsts = (unsigned) PaginationPsts.CurrentPage;
@@ -2086,7 +2090,7 @@ void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,
 
    /***** Compute variables related to pagination of threads *****/
    PaginationThrs.NumItems = NumThrs;
-   PaginationThrs.CurrentPage = (int) Forums->CurrentPageThrs;
+   PaginationThrs.CurrentPage = Forums->CurrentPageThrs;
    Pag_CalculatePagination (&PaginationThrs);
    PaginationThrs.Anchor = For_FORUM_THREADS_SECTION_ID;
    Forums->CurrentPageThrs = (unsigned) PaginationThrs.CurrentPage;
@@ -2327,18 +2331,25 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 
 	 /***** Write subject and links to thread pages *****/
 	 HTM_TD_Begin ("class=\"LT %s\"",BgColor);
+
+	    /* Calculate pagination */
 	    PaginationPsts.NumItems = Thr.NumPosts;
-	    PaginationPsts.CurrentPage = 1;	// First page
+	    PaginationPsts.CurrentPage =
+	       (Thr.ThrCod == Forums->Thread.Selected) ? Forums->CurrentPagePsts :	// Current page
+						         0;				// No page is shown
 	    Pag_CalculatePagination (&PaginationPsts);
 	    PaginationPsts.Anchor = For_FORUM_POSTS_SECTION_ID;
+
+	    /* Link to first page with subject */
+	    For_LinkToFirstPageWithSubject (Forums,&Thr,PaginationPsts.NumPags);
+
+	    /* Links to pages */
 	    Pag_WriteLinksToPages (Pag_POSTS_FORUM,
 				   &PaginationPsts,
 				   Forums,Thr.ThrCod,
-				   Thr.Disabled[Dat_STR_TIME],
-				   Thr.Subject,
 				   Thr.NumUnreadPosts ? "BOLD PAG_TXT" :
-							"PAG_TXT",
-				   true);
+							"PAG_TXT");
+
 	 HTM_TD_End ();
 
 	 /***** Write the authors and date-times of first and last posts *****/
@@ -2410,6 +2421,63 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
+  }
+
+/*****************************************************************************/
+/************************ Link to first page with subject ********************/
+/*****************************************************************************/
+
+static void For_LinkToFirstPageWithSubject (const struct For_Forums *Forums,
+					    const struct For_Thread *Thr,
+					    unsigned NumPags)
+  {
+   extern const char *Txt_Page_X_of_Y;
+   extern const char *Txt_FORUM_Post_banned;
+   char *Title;
+
+   /***** Begin container *****/
+   HTM_DIV_Begin (NULL);
+
+      /***** Begin form *****/
+      Frm_BeginFormAnchor (For_ActionsSeePstFor[Forums->Forum.Type],
+			   For_FORUM_POSTS_SECTION_ID);
+	 For_PutAllParsForum (Forums->CurrentPageThrs,	// Page of threads = current
+			      1,			// Page of posts   = first
+			      Forums->ForumSet,
+			      Forums->ThreadsOrder,
+			      Forums->Forum.HieCod,
+			      Thr->ThrCod,
+			      -1L);
+
+	 /***** Begin button *****/
+	 if (asprintf (&Title,Txt_Page_X_of_Y,1,NumPags) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 HTM_BUTTON_Submit_Begin (Title,
+				  "class=\"LT BT_LINK %s_%s\"",
+				  Thr->NumUnreadPosts ? "BOLD PAG_TXT" :
+						        "PAG_TXT",
+				  The_GetSuffix ());
+	 free (Title);
+
+	    /***** Button text *****/
+	    switch (Thr->Disabled[Dat_STR_TIME])
+	      {
+	       case For_DISABLED:
+		  HTM_TxtF ("[%s]",Txt_FORUM_Post_banned);
+		  break;
+	       case For_ENABLED:
+		  HTM_Txt (Thr->Subject);
+		  break;
+	      }
+
+	 /***** End button *****/
+	 HTM_BUTTON_End ();
+
+      /***** End form *****/
+      Frm_EndForm ();
+
+   /***** End container *****/
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

@@ -584,9 +584,9 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 
       /***** Compute variables related to pagination *****/
       Pagination.NumItems = ((struct Prj_Projects *) Projects)->Num;
-      Pagination.CurrentPage = (int) ((struct Prj_Projects *) Projects)->CurrentPage;
+      Pagination.CurrentPage = ((struct Prj_Projects *) Projects)->CurrentPage;
       Pag_CalculatePagination (&Pagination);
-      ((struct Prj_Projects *) Projects)->CurrentPage = (unsigned) Pagination.CurrentPage;
+      ((struct Prj_Projects *) Projects)->CurrentPage = Pagination.CurrentPage;
 
       /***** Begin box *****/
       Box_BoxBegin (Txt_Projects,Prj_PutIconsListProjects,Projects,

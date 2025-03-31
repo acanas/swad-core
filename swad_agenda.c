@@ -528,9 +528,9 @@ static void Agd_ShowEvents (struct Agd_Agenda *Agenda,
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Agenda->Num;
-   Pagination.CurrentPage = (int) Agenda->CurrentPage;
+   Pagination.CurrentPage = Agenda->CurrentPage;
    Pag_CalculatePagination (&Pagination);
-   Agenda->CurrentPage = (unsigned) Pagination.CurrentPage;
+   Agenda->CurrentPage = Pagination.CurrentPage;
 
    /***** Write links to pages *****/
    Pag_WriteLinksToPagesCentered (WhatPaginate[AgendaType],&Pagination,

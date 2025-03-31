@@ -158,9 +158,9 @@ void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics)
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Rubrics->Num;
-   Pagination.CurrentPage = (int) Rubrics->CurrentPage;
+   Pagination.CurrentPage = Rubrics->CurrentPage;
    Pag_CalculatePagination (&Pagination);
-   Rubrics->CurrentPage = (unsigned) Pagination.CurrentPage;
+   Rubrics->CurrentPage = Pagination.CurrentPage;
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Rubrics,Rub_PutIconsListRubrics,Rubrics,
