@@ -62,6 +62,12 @@ typedef enum
    Lay_HIGHLIGHT,
   } Lay_Highlight_t;
 
+typedef enum
+  {
+   Lay_SHOWING_ONLY_ONE,
+   Lay_SHOWING_SEVERAL
+  } Lay_ShowingOneOrSeveral_t;
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/

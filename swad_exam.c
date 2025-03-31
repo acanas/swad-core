@@ -51,6 +51,7 @@
 #include "swad_hidden_visible.h"
 #include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
+#include "swad_layout.h"
 #include "swad_match.h"
 #include "swad_match_result.h"
 #include "swad_pagination.h"
@@ -115,7 +116,8 @@ static void Exa_PutIconsListExams (void *Exams);
 static void Exa_PutIconToCreateNewExam (struct Exa_Exams *Exams);
 static void Exa_PutParsToCreateNewExam (void *Exams);
 
-static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam);
+static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
+			          Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral);
 
 static void Exa_PutIconsViewingOneExam (void *Exams);
 static void Exa_PutIconsEditingOneExam (void *Exams);
@@ -286,8 +288,7 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
 	       Exa_GetExamDataByCod (&Exams->Exam);
 
 	       /* Show exam */
-	       Exa_ShowOneExam (Exams,
-				false);	// Do not show only this exam
+	       Exa_ShowExamMainData (Exams,Lay_SHOWING_SEVERAL);
 	      }
 
 	 /***** End table *****/
@@ -423,9 +424,8 @@ void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
                  Exa_PutIconsViewingOneExam,Exams,
 		 Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
 
-      /***** Show exam *****/
-      Exa_ShowOneExam (Exams,
-		       true);	// Show only this exam
+      /***** Show main data of this exam *****/
+      Exa_ShowExamMainData (Exams,Lay_SHOWING_ONLY_ONE);
 
       /***** List sessions *****/
       ExaSes_ListSessions (Exams,PutFormSession);
@@ -437,7 +437,12 @@ void Exa_ShowOnlyOneExamEnd (void)
    Box_BoxEnd ();
   }
 
-static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
+/*****************************************************************************/
+/********** Show a pair of rows with the main data of a given exam ***********/
+/*****************************************************************************/
+
+static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
+			          Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral)
   {
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Txt_View_exam;
@@ -460,14 +465,14 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
    Frm_SetAnchorStr (Exams->Exam.ExaCod,&Anchor);
 
    /***** Begin box and table *****/
-   if (ShowOnlyThisExam)
+   if (ShowingOneOrSeveral == Lay_SHOWING_ONLY_ONE)
       HTM_TABLE_Begin ("TBL_SCROLL");
 
    /***** Begin first row of this exam *****/
    HTM_TR_Begin (NULL);
 
       /***** Icons related to this exam *****/
-      if (!ShowOnlyThisExam)
+      if (ShowingOneOrSeveral == Lay_SHOWING_SEVERAL)
 	{
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
 		       The_GetColorRows ());
@@ -484,16 +489,19 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 	 if (asprintf (&Id,"exa_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
 
-	 if (ShowOnlyThisExam)
-	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
-			  Id,
-			  CloOpe_Class[ClosedOrOpen][Exams->Exam.Hidden],
-			  The_GetSuffix ());
-	 else
-	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-			  Id,
-			  CloOpe_Class[ClosedOrOpen][Exams->Exam.Hidden],
-			  The_GetSuffix (),The_GetColorRows ());
+	 switch (ShowingOneOrSeveral)
+	   {
+	    case Lay_SHOWING_ONLY_ONE:
+	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
+			     Id,CloOpe_Class[ClosedOrOpen][Exams->Exam.Hidden],
+			     The_GetSuffix ());
+	       break;
+	    case Lay_SHOWING_SEVERAL:
+	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
+			     Id,CloOpe_Class[ClosedOrOpen][Exams->Exam.Hidden],
+			     The_GetSuffix (),The_GetColorRows ());
+	       break;
+	   }
 	 if (Exams->Exam.TimeUTC[Dat_STR_TIME])
 	    Dat_WriteLocalDateHMSFromUTC (Id,Exams->Exam.TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
@@ -507,10 +515,15 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 	}
 
       /***** Exam title and main data *****/
-      if (ShowOnlyThisExam)
-	 HTM_TD_Begin ("class=\"LT\"");
-      else
-	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("class=\"LT\"");
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+	    break;
+	}
 
       /* Exam title */
       HTM_ARTICLE_Begin (Anchor);
@@ -526,8 +539,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 
       /* Number of questions, maximum grade, visibility of results */
       HTM_DIV_Begin ("class=\"%s_%s\"",
-                     HidVis_GroupClass[Exams->Exam.Hidden],
-		     The_GetSuffix ());
+                     HidVis_GroupClass[Exams->Exam.Hidden],The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Sets_of_questions);
 	 HTM_Unsigned (Exams->Exam.NumSets);
 	 HTM_BR ();
@@ -535,22 +547,26 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 	 HTM_Double (Exams->Exam.MaxGrade);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Result_visibility);
-	 TstVis_ShowVisibilityIcons (Exams->Exam.Visibility,
-	                             Exams->Exam.Hidden);
+	 TstVis_ShowVisibilityIcons (Exams->Exam.Visibility,Exams->Exam.Hidden);
       HTM_DIV_End ();
 
       /***** Number of sessions in exam *****/
-      if (ShowOnlyThisExam)
-	 HTM_TD_Begin ("class=\"RT\"");
-      else
-	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("class=\"RT\"");
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+	    break;
+	}
 
       Frm_BeginForm (ActSeeOneExa);
 	 Exa_PutPars (Exams);
 	 HTM_BUTTON_Submit_Begin (Txt_Sessions,"class=\"LT BT_LINK %s_%s\"",
 				  HidVis_TitleClass[Exams->Exam.Hidden],
 				  The_GetSuffix ());
-	    if (ShowOnlyThisExam)
+	    if (ShowingOneOrSeveral == Lay_SHOWING_ONLY_ONE)
 	       HTM_TxtColonNBSP (Txt_Sessions);
 	    HTM_Unsigned (Exams->Exam.NumSess);
 	 HTM_BUTTON_End ();
@@ -565,20 +581,28 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
    HTM_TR_Begin (NULL);
 
       /***** Author of the exam *****/
-      if (ShowOnlyThisExam)
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-      else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-	               The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+	    break;
+	}
       Exa_WriteAuthor (&Exams->Exam);
       HTM_TD_End ();
 
       /***** Text of the exam *****/
-      if (ShowOnlyThisExam)
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-      else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-	               The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+	    break;
+	}
       Exa_DB_GetExamTxt (Exams->Exam.ExaCod,Txt);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
@@ -594,10 +618,15 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
    HTM_TR_End ();
 
    /***** End table *****/
-   if (ShowOnlyThisExam)
-      HTM_TABLE_End ();
-   else
-      The_ChangeRowColor ();
+   switch (ShowingOneOrSeveral)
+     {
+      case Lay_SHOWING_ONLY_ONE:
+	 HTM_TABLE_End ();
+	 break;
+      case Lay_SHOWING_SEVERAL:
+	 The_ChangeRowColor ();
+	 break;
+     }
 
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (&Anchor);

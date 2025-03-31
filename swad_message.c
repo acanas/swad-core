@@ -1518,7 +1518,6 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
 	{
 	 if (Gbl.Action.Act == ActExpRcvMsg)	// Expanding a message, perhaps it is the result of following a link
 						   // from a notification of received message, so show the page where the message is inside
-	   {
 	    /***** Get the page where the expanded message is inside *****/
 	    for (NumMsg = 0;
 		 NumMsg < Messages->NumMsgs;
@@ -1534,7 +1533,6 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
 		  break;
 		 }
 	      }
-	   }
 
 	 /***** Compute variables related to pagination *****/
 	 Pagination.NumItems = Messages->NumMsgs;

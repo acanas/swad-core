@@ -1616,7 +1616,9 @@ void Lay_IndentDependingOnLevel (unsigned Level,
 /*****************************************************************************/
 /************************** Help for the text editor *************************/
 /*****************************************************************************/
-// Online LaTeX formula editor: https://latexeditor.lagrida.com/
+// Online LaTeX formula editors:
+// https://latexeditor.lagrida.com/
+// https://editor.codecogs.com/
 
 void Lay_HelpPlainEditor (void)
   {

@@ -119,7 +119,7 @@ static void Gam_PutIconToCreateNewGame (struct Gam_Games *Games);
 static void Gam_PutParsToCreateNewGame (void *Games);
 
 static void Gam_ShowGameMainData (struct Gam_Games *Games,
-                                  bool ShowOnlyThisGame);
+				  Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral);
 
 static void Gam_PutIconsViewingOneGame (void *Games);
 static void Gam_PutIconsEditingOneGame (void *Games);
@@ -271,8 +271,7 @@ void Gam_ListAllGames (struct Gam_Games *Games)
 	       Gam_GetGameDataByCod (&Games->Game);
 
 	       /* Show a pair of rows with the main data of this game */
-	       Gam_ShowGameMainData (Games,
-				     false);	// Do not show only this game
+	       Gam_ShowGameMainData (Games,Lay_SHOWING_SEVERAL);
 	      }
 
 	 /***** End table *****/
@@ -475,8 +474,7 @@ void Gam_ShowOnlyOneGameBegin (struct Gam_Games *Games,
 		 Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
       /***** Show main data of this game *****/
-      Gam_ShowGameMainData (Games,
-		            true);	// Show only this game
+      Gam_ShowGameMainData (Games,Lay_SHOWING_ONLY_ONE);
 
       if (ListGameQuestions)
 	 /***** Write questions of this game *****/
@@ -497,7 +495,7 @@ void Gam_ShowOnlyOneGameEnd (void)
 /*****************************************************************************/
 
 static void Gam_ShowGameMainData (struct Gam_Games *Games,
-                                  bool ShowOnlyThisGame)
+				  Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral)
   {
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Txt_View_game;
@@ -520,14 +518,14 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
    Frm_SetAnchorStr (Games->Game.GamCod,&Anchor);
 
    /***** Begin box and table *****/
-   if (ShowOnlyThisGame)
+   if (ShowingOneOrSeveral == Lay_SHOWING_ONLY_ONE)
       HTM_TABLE_Begin ("TBL_SCROLL");
 
    /***** Begin first row of this game *****/
    HTM_TR_Begin (NULL);
 
       /***** Icons related to this game *****/
-      if (!ShowOnlyThisGame)
+      if (ShowingOneOrSeveral == Lay_SHOWING_SEVERAL)
 	{
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
 		       The_GetColorRows ());
@@ -544,16 +542,19 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 	 if (asprintf (&Id,"gam_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
 
-	 if (ShowOnlyThisGame)
-	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
-			  Id,
-			  CloOpe_Class[ClosedOrOpen][Games->Game.Hidden],
-			  The_GetSuffix ());
-	 else
-	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-			  Id,
-			  CloOpe_Class[ClosedOrOpen][Games->Game.Hidden],
-			  The_GetSuffix (),The_GetColorRows ());
+	 switch (ShowingOneOrSeveral)
+	   {
+	    case Lay_SHOWING_ONLY_ONE:
+	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
+			     Id,CloOpe_Class[ClosedOrOpen][Games->Game.Hidden],
+			     The_GetSuffix ());
+	       break;
+	    case Lay_SHOWING_SEVERAL:
+	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
+			     Id,CloOpe_Class[ClosedOrOpen][Games->Game.Hidden],
+			     The_GetSuffix (),The_GetColorRows ());
+	       break;
+	   }
 	 if (Games->Game.TimeUTC[Dat_STR_TIME])
 	    Dat_WriteLocalDateHMSFromUTC (Id,Games->Game.TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
@@ -568,10 +569,15 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 	}
 
       /***** Game title and main data *****/
-      if (ShowOnlyThisGame)
-	 HTM_TD_Begin ("class=\"LT\"");
-      else
-	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("class=\"LT\"");
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+	    break;
+	}
 
       /* Game title */
       HTM_ARTICLE_Begin (Anchor);
@@ -595,22 +601,26 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 	 HTM_Double (Games->Game.MaxGrade);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Result_visibility);
-	 TstVis_ShowVisibilityIcons (Games->Game.Visibility,
-	                             Games->Game.Hidden);
+	 TstVis_ShowVisibilityIcons (Games->Game.Visibility,Games->Game.Hidden);
       HTM_DIV_End ();
 
       /***** Number of matches in game *****/
-      if (ShowOnlyThisGame)
-	 HTM_TD_Begin ("class=\"RT\"");
-      else
-	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("class=\"RT\"");
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+	    break;
+	}
 
       Frm_BeginForm (ActSeeOneGam);
 	 Gam_PutPars (Games);
 	 HTM_BUTTON_Submit_Begin (Txt_Matches,"class=\"LT BT_LINK %s_%s\"",
 	                          HidVis_TitleClass[Games->Game.Hidden],
 				  The_GetSuffix ());
-	    if (ShowOnlyThisGame)
+	    if (ShowingOneOrSeveral == Lay_SHOWING_ONLY_ONE)
 	       HTM_TxtColonNBSP (Txt_Matches);
 	    HTM_Unsigned (Games->Game.NumMchs);
 	 HTM_BUTTON_End ();
@@ -625,20 +635,28 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
    HTM_TR_Begin (NULL);
 
       /***** Author of the game *****/
-      if (ShowOnlyThisGame)
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-      else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-	               The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+	    break;
+	}
       Gam_WriteAuthor (&Games->Game);
       HTM_TD_End ();
 
       /***** Text of the game *****/
-      if (ShowOnlyThisGame)
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-      else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-	               The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+	    break;
+	}
       Gam_DB_GetGameTxt (Games->Game.GamCod,Txt);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
@@ -654,10 +672,15 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
    HTM_TR_End ();
 
    /***** End table *****/
-   if (ShowOnlyThisGame)
-      HTM_TABLE_End ();
-   else
-      The_ChangeRowColor ();
+   switch (ShowingOneOrSeveral)
+     {
+      case Lay_SHOWING_ONLY_ONE:
+	 HTM_TABLE_End ();
+	 break;
+      case Lay_SHOWING_SEVERAL:
+	 The_ChangeRowColor ();
+	 break;
+     }
 
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (&Anchor);
