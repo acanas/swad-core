@@ -514,12 +514,11 @@ unsigned Grp_DB_GetGrpTypesInCurrentCrsToBeOpened (MYSQL_RES **mysql_res)
   }
 
 /*****************************************************************************/
-/*********** Query the number of groups that hay in this course **************/
+/**************** Get number of groups in the current course *****************/
 /*****************************************************************************/
 
 unsigned Grp_DB_CountNumGrpsInCurrentCrs (void)
   {
-   /***** Get number of group in current course from database *****/
    return (unsigned)
    DB_QueryCOUNT ("can not get number of groups in this course",
 		  "SELECT COUNT(*)"
@@ -531,7 +530,7 @@ unsigned Grp_DB_CountNumGrpsInCurrentCrs (void)
   }
 
 /*****************************************************************************/
-/******************** Get groups in a course ********************/
+/*********************** Get groups in a given course ************************/
 /*****************************************************************************/
 
 unsigned Grp_DB_GetGrpsInCrs (MYSQL_RES **mysql_res,long CrsCod)

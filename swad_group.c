@@ -503,7 +503,7 @@ static void Grp_PutCheckboxAllGrps (void)
    HTM_DIV_Begin ("class=\"CONTEXT_OPT\"");
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	 HTM_INPUT_CHECKBOX ("AllGroups",
-			     (ICanSelUnselGroup == Usr_CAN) ? (Gbl.Crs.Grps.AllGrps ? HTM_CHECKED :
+			     (ICanSelUnselGroup == Usr_CAN) ? (Gbl.Crs.Grps.AllGrpsSel ? HTM_CHECKED :
 										      HTM_NO_ATTR) :
 							      HTM_DISABLED,
 			     "value=\"Y\"%s",
@@ -528,11 +528,11 @@ void Grp_PutParsCodGrps (void)
 
    /***** Write the boolean parameter that indicates if all groups must be listed *****/
    Par_PutParChar ("AllGroups",
-		   Gbl.Crs.Grps.AllGrps ? 'Y' :
+		   Gbl.Crs.Grps.AllGrpsSel ? 'Y' :
 					  'N');
 
    /***** Write the parameter with the list of group codes to show *****/
-   if (!Gbl.Crs.Grps.AllGrps &&
+   if (!Gbl.Crs.Grps.AllGrpsSel &&
         Gbl.Crs.Grps.LstGrpsSel.NumGrps)
      {
       MaxLengthGrpCods = Gbl.Crs.Grps.LstGrpsSel.NumGrps * (Cns_MAX_DIGITS_LONG + 1) - 1;
@@ -570,7 +570,7 @@ void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
       return;
 
    /***** Get boolean parameter that indicates if all groups must be listed *****/
-   Gbl.Crs.Grps.AllGrps = Par_GetParBool ("AllGroups");
+   Gbl.Crs.Grps.AllGrpsSel = Par_GetParBool ("AllGroups");
 
    /***** Get parameter with list of groups selected *****/
    Grp_GetParCodsSeveralGrps ();
@@ -605,7 +605,7 @@ void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
 
    /***** If no groups selected ==> show all groups *****/
    if (!Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      Gbl.Crs.Grps.AllGrps = true;
+      Gbl.Crs.Grps.AllGrpsSel = true;
   }
 
 /*****************************************************************************/
@@ -2464,7 +2464,7 @@ static HTM_Attributes_t Grp_Checked (long GrpCod)
   {
    unsigned NumGrpSel;
 
-   if (Gbl.Crs.Grps.AllGrps)
+   if (Gbl.Crs.Grps.AllGrpsSel)
       return HTM_CHECKED;
 
    for (NumGrpSel = 0;

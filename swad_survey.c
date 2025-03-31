@@ -187,10 +187,6 @@ void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
    struct Pag_Pagination Pagination;
    unsigned NumSvy;
 
-   /***** Get number of groups in current course *****/
-   if (!Gbl.Crs.Grps.NumGrps)
-      Gbl.Crs.Grps.MyAllGrps = Grp_ALL_GROUPS;
-
    /***** Get list of surveys *****/
    Svy_GetListSurveys (Surveys);
 

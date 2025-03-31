@@ -237,10 +237,6 @@ void Gam_ListAllGames (struct Gam_Games *Games)
    /***** Reset game *****/
    Gam_ResetGame (&Games->Game);
 
-   /***** Get number of groups in current course *****/
-   if (!Gbl.Crs.Grps.NumGrps)
-      Gbl.Crs.Grps.MyAllGrps = Grp_ALL_GROUPS;
-
    /***** Get list of games *****/
    Gam_GetListGames (Games,Games->SelectedOrder);
 

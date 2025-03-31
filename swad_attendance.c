@@ -2487,7 +2487,7 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
      {
       /***** Set which events will be marked as selected by default *****/
       if (!Gbl.Crs.Grps.NumGrps ||	// Course has no groups
-          Gbl.Crs.Grps.AllGrps)		// All groups selected
+          Gbl.Crs.Grps.AllGrpsSel)		// All groups selected
 	 /* Set all events as selected */
 	 for (NumAttEvent = 0;
 	      NumAttEvent < Events->Num;

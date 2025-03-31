@@ -224,10 +224,6 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
    struct Pag_Pagination Pagination;
    unsigned NumExam;
 
-   /***** Get number of groups in current course *****/
-   if (!Gbl.Crs.Grps.NumGrps)
-      Gbl.Crs.Grps.MyAllGrps = Grp_ALL_GROUPS;
-
    /***** Get list of exams *****/
    Exa_GetListExams (Exams,Exams->SelectedOrder);
 
@@ -721,7 +717,7 @@ void Exa_PutPars (void *Exams)
 
 void Exa_GetPars (struct Exa_Exams *Exams,Exa_CheckExaCod_t CheckExaCod)
   {
-   long (*GetExaCo[2]) (ParCod_Param_t ParCode) =
+   long (*GetExaCod[2]) (ParCod_Param_t ParCode) =
      {
       [Exa_DONT_CHECK_EXA_COD] = ParCod_GetPar,
       [Exa_CHECK_EXA_COD     ] = ParCod_GetAndCheckPar,
@@ -732,7 +728,7 @@ void Exa_GetPars (struct Exa_Exams *Exams,Exa_CheckExaCod_t CheckExaCod)
    Exams->CurrentPage = Pag_GetParPagNum (Pag_EXAMS);
 
    /***** Get exam code *****/
-   Exams->Exam.ExaCod = GetExaCo[CheckExaCod] (ParCod_Exa);
+   Exams->Exam.ExaCod = GetExaCod[CheckExaCod] (ParCod_Exa);
   }
 
 /*****************************************************************************/

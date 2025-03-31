@@ -544,7 +544,7 @@ void Usr_DB_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
    */
 
    /***** If there are no groups selected, don't do anything *****/
-   if (!Gbl.Crs.Grps.AllGrps &&
+   if (!Gbl.Crs.Grps.AllGrpsSel &&
        !Gbl.Crs.Grps.LstGrpsSel.NumGrps)
      {
       *Query = NULL;
@@ -585,7 +585,7 @@ void Usr_DB_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
                 (unsigned) Role);
 
    /***** Select users in selected groups *****/
-   if (!Gbl.Crs.Grps.AllGrps)
+   if (!Gbl.Crs.Grps.AllGrpsSel)
      {
       /***** Get list of groups types in current course *****/
       Grp_GetListGrpTypesInCurrentCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);

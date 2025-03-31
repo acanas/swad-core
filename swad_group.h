@@ -165,8 +165,8 @@ struct Grp_Groups
   {
    unsigned NumGrps;
    struct GroupTypes GrpTypes;
-   bool AllGrps;		// All groups selected?
    struct ListCodGrps LstGrpsSel;
+   bool AllGrpsSel;		// All groups selected?
    Grp_MyAllGrps_t MyAllGrps;	// Show my groups or all groups
   };
 

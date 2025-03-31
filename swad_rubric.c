@@ -153,10 +153,6 @@ void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics)
    struct Pag_Pagination Pagination;
    unsigned NumRubric;
 
-   /***** Get number of groups in current course *****/
-   if (!Gbl.Crs.Grps.NumGrps)
-      Gbl.Crs.Grps.MyAllGrps = Grp_ALL_GROUPS;
-
    /***** Get list of rubrics *****/
    Rub_GetListRubrics (Rubrics);
 
@@ -508,7 +504,7 @@ void Rub_PutPars (void *Rubrics)
 
 void Rub_GetPars (struct Rub_Rubrics *Rubrics,Rub_CheckRubCod_t CheckRubCod)
   {
-   long (*GetExaCo[Rub_NUM_CHECK_RUB_COD]) (ParCod_Param_t ParCode) =
+   long (*GetExaCod[Rub_NUM_CHECK_RUB_COD]) (ParCod_Param_t ParCode) =
      {
       [Rub_DONT_CHECK_RUB_COD] = ParCod_GetPar,
       [Rub_CHECK_RUB_COD     ] = ParCod_GetAndCheckPar,
@@ -518,7 +514,7 @@ void Rub_GetPars (struct Rub_Rubrics *Rubrics,Rub_CheckRubCod_t CheckRubCod)
    Rubrics->CurrentPage = Pag_GetParPagNum (Pag_RUBRICS);
 
    /***** Get rubric code *****/
-   Rubrics->Rubric.RubCod = GetExaCo[CheckRubCod] (ParCod_Rub);
+   Rubrics->Rubric.RubCod = GetExaCod[CheckRubCod] (ParCod_Rub);
   }
 
 /*****************************************************************************/

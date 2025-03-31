@@ -4147,7 +4147,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr,bool WithPhotos)
          Err_NotEnoughMemoryExit ();
 
       /***** Begin table with list of students *****/
-      if (!Gbl.Crs.Grps.AllGrps)
+      if (!Gbl.Crs.Grps.AllGrpsSel)
         {
          HTM_TR_Begin (NULL);
 	    HTM_TD_Begin ("colspan=\"%u\" class=\"TIT CM\"",
@@ -4476,7 +4476,7 @@ void Usr_ListAllDataStds (void)
       /***** Begin table with list of students *****/
       HTM_TABLE_BeginWide ();
 
-	 if (!Gbl.Crs.Grps.AllGrps)
+	 if (!Gbl.Crs.Grps.AllGrpsSel)
 	   {
 	    HTM_TR_Begin (NULL);
 	       HTM_TD_Begin ("colspan=\"%u\" class=\"TIT CM\"",NumColsTotal);
@@ -6347,7 +6347,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
   {
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
 
-   if (Gbl.Crs.Grps.AllGrps &&			// All groups selected
+   if (Gbl.Crs.Grps.AllGrpsSel &&			// All groups selected
        Role == Rol_STD &&			// No students found
        Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// Course selected and I am logged as teacher
       /***** Show alert and button to enrol students *****/
@@ -6356,7 +6356,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
                               Btn_ENROL,
 			      Ale_WARNING,Txt_No_users_found[Rol_STD]);
 
-   else if (Gbl.Crs.Grps.AllGrps &&			// All groups selected
+   else if (Gbl.Crs.Grps.AllGrpsSel &&			// All groups selected
             Role == Rol_TCH &&				// No teachers found
             Gbl.Hierarchy.HieLvl == Hie_CRS &&		// Course selected
             Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)	// I am an administrator

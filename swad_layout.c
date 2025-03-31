@@ -1514,7 +1514,7 @@ void Lay_WriteHeaderClassPhoto (Hie_Level_t HieLvl,Vie_ViewType_t ViewType)
 	    if (Hie[Hie_CRS].HieCod > 0)
 	      {
 	       HTM_Txt (Hie[Hie_CRS].FullName);
-	       if (!Gbl.Crs.Grps.AllGrps)
+	       if (!Gbl.Crs.Grps.AllGrpsSel)
 		 {
 		  HTM_BR ();
 		  Grp_WriteNamesOfSelectedGrps ();

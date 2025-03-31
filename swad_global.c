@@ -158,14 +158,15 @@ void Gbl_InitializeGlobals (void)
    /***** Reset current hierarchy *****/
    Hie_ResetHierarchy ();
 
-   Gbl.Crs.Grps.NumGrps   = 0;
-   Gbl.Crs.Grps.MyAllGrps = Grp_MY_ALL_GROUPS_DEFAULT;
+   Gbl.Crs.Grps.NumGrps = 0;
    Gbl.Crs.Grps.GrpTypes.LstGrpTypes = NULL;
    Gbl.Crs.Grps.GrpTypes.NumGrpTypes = 0;
    Gbl.Crs.Grps.GrpTypes.NestedCalls = 0;
    Gbl.Crs.Grps.LstGrpsSel.GrpCods     = NULL;
    Gbl.Crs.Grps.LstGrpsSel.NumGrps     = 0;
    Gbl.Crs.Grps.LstGrpsSel.NestedCalls = 0;
+   Gbl.Crs.Grps.AllGrpsSel = true;
+   Gbl.Crs.Grps.MyAllGrps = Grp_MY_ALL_GROUPS_DEFAULT;
 
    Gbl.Crs.Records.Field.Name[0]    = '\0';
    Gbl.Crs.Records.Field.NumLines   = Rec_MIN_LINES_IN_EDITION_FIELD;
@@ -173,8 +174,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Crs.Records.LstFields.Lst         = NULL;
    Gbl.Crs.Records.LstFields.Num         = 0;
    Gbl.Crs.Records.LstFields.NestedCalls = 0;
-
-   Gbl.Crs.Grps.AllGrps = true;
 
    /* User nickname */
    Gbl.Usrs.Me.UsrDat.Nickname[0] = '\0';
