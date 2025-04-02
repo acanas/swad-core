@@ -100,9 +100,10 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
 static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Session);
 static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Session,
                                                unsigned UniqueId);
-static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
-                                                   const struct ExaSes_Session *Session,
-                                                   const char *Anchor);
+static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
+                                                  const struct ExaSes_Session *Session,
+                                                  const char *Anchor);
+static void ExaSes_WriteModality (const struct ExaSes_Session *Session);
 static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSes_Session *Session);
 static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
                                                 const struct ExaSes_Session *Session);
@@ -294,8 +295,8 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	       /* Start/end date/time */
 	       ExaSes_ListOneOrMoreSessionsTimes (&Session,UniqueId);
 
-	       /* Title and groups */
-	       ExaSes_ListOneOrMoreSessionsTitleGrps (Exams,&Session,Anchor);
+	       /* Title, modality and groups */
+	       ExaSes_ListOneOrMoreSessionsMainData (Exams,&Session,Anchor);
 
 	       /* Session result visible? */
 	       ExaSes_ListOneOrMoreSessionsResult (Exams,&Session);
@@ -511,9 +512,9 @@ static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Sess
 /************** Put a column for exam session title and groups ***************/
 /*****************************************************************************/
 
-static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
-                                                   const struct ExaSes_Session *Session,
-                                                   const char *Anchor)
+static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
+                                                  const struct ExaSes_Session *Session,
+                                                  const char *Anchor)
   {
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
 
@@ -546,6 +547,9 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
 	   }
       HTM_ARTICLE_End ();
 
+      /***** Modality *****/
+      ExaSes_WriteModality (Session);
+
       /***** Groups whose students can answer this exam session *****/
       if (Gbl.Crs.Grps.NumGrps)
 	 ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (Session);
@@ -554,14 +558,38 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
   }
 
 /*****************************************************************************/
+/************** Put a column for exam session title and groups ***************/
+/*****************************************************************************/
+
+static void ExaSes_WriteModality (const struct ExaSes_Session *Session)
+  {
+   extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *Txt_EXAM_SESSION_Modality;
+   extern const char *Txt_EXAM_SESSION_MODALITIES[ExaSes_NUM_MODALITIES];
+
+   HTM_DIV_Begin ("class=\"%s_%s\"",
+                  HidVis_GroupClass[Session->Hidden],The_GetSuffix ());
+
+      /* Label */
+      HTM_TxtColonNBSP (Txt_EXAM_SESSION_Modality);
+
+      /* Modality */
+      Ico_PutIconOff (ExaSes_ModalityIcon[Session->Modality],Ico_BLACK,
+		      Txt_EXAM_SESSION_MODALITIES[Session->Modality]);
+      HTM_NBSPTxt (Txt_EXAM_SESSION_MODALITIES[Session->Modality]);
+
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
 /********* Get and write the names of the groups of an exam session **********/
 /*****************************************************************************/
 
 static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSes_Session *Session)
   {
+   extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Txt_Group;
    extern const char *Txt_Groups;
-   extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGrps;
@@ -1052,8 +1080,8 @@ static void ExaSes_PutSessionModalities (const struct ExaSes_Session *Session)
 				(Modality == Session->Modality ? HTM_REQUIRED | HTM_CHECKED :
 								 HTM_REQUIRED),
 				" value=\"%u\"",(unsigned) Modality);
-	       Ico_PutIcon (ExaSes_ModalityIcon[Modality],Ico_BLACK,
-			    Txt_EXAM_SESSION_MODALITIES[Modality],"CONTEXT_ICOx16");
+	       Ico_PutIconOn (ExaSes_ModalityIcon[Modality],Ico_BLACK,
+			      Txt_EXAM_SESSION_MODALITIES[Modality]);
 	       HTM_NBSPTxt (Txt_EXAM_SESSION_MODALITIES[Modality]);
 	    HTM_LABEL_End ();
 	 HTM_LI_End ();

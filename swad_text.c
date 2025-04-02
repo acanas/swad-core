@@ -12346,6 +12346,29 @@ const char *Txt_EXAM_SESSION_Modality =
 
 const char *Txt_EXAM_SESSION_MODALITIES[ExaSes_NUM_MODALITIES] =
 	{
+	[ExaSes_NONE] =
+#if   L==1	// ca
+	"Cap"
+#elif L==2	// de
+	"Keiner"
+#elif L==3	// en
+	"None"
+#elif L==4	// es
+	"Ninguna"
+#elif L==5	// fr
+	"Aucune"
+#elif L==6	// gn
+	"Ndaip&oacute;ri"
+#elif L==7	// it
+	"Nessuna"
+#elif L==8	// pl
+	"Nic"
+#elif L==9	// pt
+	"Nenhuma"
+#elif L==10	// tr
+	"Hi&ccedil;biri"
+#endif
+	,
 	[ExaSes_ONLINE] =
 #if   L==1	// ca
 	"En l&iacute;nia"
@@ -18187,7 +18210,7 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_SOURCES] =
 #elif L==5	// fr
 	"Aucune information"
 #elif L==6	// gn
-	"Ninguna informaci&oacute;n"	// Okoteve traducción
+	"Ndaip&oacute;ri marandu"
 #elif L==7	// it
 	"Nessuna informazione"
 #elif L==8	// pl
@@ -18195,7 +18218,7 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_SOURCES] =
 #elif L==9	// pt
 	"Sem informa&ccedil;&atilde;o"
 #elif L==10	// tr
-	"No information"		// Çeviri lazim!
+	"Bilgi yok"
 #endif
 	,
 	[Inf_EDITOR] =

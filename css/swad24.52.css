@@ -2111,13 +2111,13 @@ a:hover img.CENTER_PHOTO_SHOW
 	{
 	width: 16px;
 	height: 16px;
-	margin-top:-2px;
+	margin-top: -2px;
 	vertical-align: middle;
 	}
 .CONTEXT_ICOx16
 	{
 	height: 16px;
-	margin-top:-2px;
+	margin-top: -2px;
 	vertical-align: middle;
 	}
 /* Creating filter from RGB: https://codepen.io/sosuke/pen/Pjoqqp */
