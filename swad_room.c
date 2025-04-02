@@ -681,7 +681,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 	    HTM_TD_End ();
 
 	    /* Room type */
-	    HTM_TD_Begin ("class=\"CT\"");
+	    HTM_TD_Begin ("class=\"LT\"");
 	       Frm_BeginFormAnchor (ActChgRooTyp,Anchor);
 		  ParCod_PutPar (ParCod_Roo,Room->RooCod);
 		  Roo_PutSelectorType (Room->Type,HTM_SUBMIT_ON_CHANGE);

@@ -956,6 +956,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActSeeUsrExaResSes	] = {1874, 5,TabAss,NULL			,ExaRes_ShowAllResultsInSes	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [ActSeeOneExaResOth	] = {1875, 5,TabAss,NULL			,ExaRes_ShowOneExaResult	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [ActChgVisExaRes	] = {1876, 5,TabAss,NULL			,ExaSes_ToggleVisResultsSesUsr	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
+   [ActReqPrnOneExa	] = {2181, 5,TabAss,NULL			,ExaRes_ShowOneExaResult	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
 
    // Games
    [ActSeeAllGam	] = {1649, 6,TabAss,NULL			,Gam_SeeAllGames		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
@@ -4208,4 +4209,5 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgBibRef,		// #2179
 
 	ActExpTstQst,		// #2180
+	ActReqPrnOneExa,		// #2181
   };

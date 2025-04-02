@@ -588,7 +588,7 @@ void Usr_DB_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
    if (!Gbl.Crs.Grps.AllGrpsSel)
      {
       /***** Get list of groups types in current course *****/
-      Grp_GetListGrpTypesInCurrentCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+      Grp_GetListGrpTypesInCurrentCrs (Grp_GRP_TYPES_WITH_GROUPS);
 
       /***** Allocate memory for list of booleans AddStdsWithoutGroupOf *****/
       if ((AddStdsWithoutGroupOf = calloc (Gbl.Crs.Grps.GrpTypes.NumGrpTypes,

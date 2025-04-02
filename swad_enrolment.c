@@ -1055,7 +1055,7 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
    if (Gbl.Crs.Grps.NumGrps) // This course has groups?
      {
       /***** Get list of groups types and groups in current course *****/
-      Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+      Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
 
       /***** Get the list of groups to which enrol/remove students *****/
       LstGrps.GrpCods = NULL;	// Initialized to avoid bug reported by Coverity

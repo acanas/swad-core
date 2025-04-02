@@ -16415,6 +16415,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change visibility of exam results"		// Çeviri lazim!
 #endif
 	,
+//	[ActReqPrnOneExa] =
+#if   L==1	// ca
+	"Sol&middot;licitar impressi&oacute; de l'examen"
+#elif L==2	// de
+	"Pr&uuml;fungsausdruck anfordern"
+#elif L==3	// en
+	"Request exam printout"
+#elif L==4	// es
+	"Solicitar impresi&oacute;n del examen"
+#elif L==5	// fr
+	"Demander l'impression de l'examen"
+#elif L==6	// gn
+	"Cambiar visibilidad de resultados de examen"	// Okoteve traducción
+#elif L==7	// it
+	"Richiedi la stampa dell'esame"
+#elif L==8	// pl
+	"Popro&sacute; o wydruk egzaminu"
+#elif L==9	// pt
+	"Solicitar impress&atilde;o do exame"
+#elif L==10	// tr
+	"S&inodot;nav &ccedil;&inodot;kt&inodot;s&inodot; isteyin"
+#endif
+	,
 	[ActSeeAllGam] =
 #if   L==1	// ca
 	"See games"		// Necessita traducció

@@ -1118,7 +1118,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void);
 static void Brw_ShowFileBrowsersAsgWrkUsr (void);
 
 static void Brw_FormToChangeCrsGrpZone (void);
-static void Brw_CheckGroup (long GrpCod);
+static bool Brw_CheckIfIHaveAccessToGrpFilezone (long GrpCod);
 static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat);
 static void Brw_ShowFileBrowserOrWorksInternal (__attribute__((unused)) void *Args);
 static void Brw_ShowFileBrowser (void);
@@ -2048,7 +2048,6 @@ void Brw_GetParAndInitFileBrowser (void)
 static long Brw_GetGrpSettings (void)
   {
    long GrpCod;
-   // Grp_FileZones_t FileZones;			// Group has file zones?
 
    /***** Try to get parameter with group code *****/
    GrpCod = ParCod_GetPar (ParCod_Grp);
@@ -2078,66 +2077,41 @@ static long Brw_GetGrpSettings (void)
 	    break;
 	}
 
-   /***** If group selected ==> check if group file zones are enabled,
-		                and check if I belongs to the selected group *****/
+   /***** If group selected... *****/
    if (GrpCod > 0)
-     {
-      Brw_CheckGroup (GrpCod);
-      /*
-      FileZones = Grp_GetFileZones (GrpCod);
+      /***** ...check if group file zones are enabled,
+	     and check if I belongs to the selected group *****/
+      if (!Brw_CheckIfIHaveAccessToGrpFilezone (GrpCod))
+	 switch (Gbl.Action.Act)
+	   {
+	    case ActSeeAdmDocCrsGrp:	// Access to see/admin a documents zone from menu
 
-      switch (Gbl.Action.Act)
-	{
-	 case ActSeeAdmDocCrsGrp:	// Access to see/admin a documents zone from menu
+	    case ActChgToSeeDocCrs:	// Access to see a documents zone
+	    case ActSeeDocGrp:		// Access to see a documents zone
 
-	 case ActChgToSeeDocCrs:	// Access to see a documents zone
-	 case ActSeeDocGrp:		// Access to see a documents zone
+	    case ActChgToAdmDocCrs:	// Access to admin a documents zone
+	    case ActAdmDocGrp:		// Access to admin a documents zone
 
-	 case ActChgToAdmDocCrs:	// Access to admin a documents zone
-	 case ActAdmDocGrp:		// Access to admin a documents zone
+	    case ActAdmTchCrsGrp:	// Access to admin a teachers' zone from menu
+	    case ActChgToAdmTch:	// Access to admin a teachers' zone
+	    case ActAdmTchGrp:		// Access to admin a teachers' zone
 
-	 case ActAdmTchCrsGrp:		// Access to admin a teachers' zone from menu
-	 case ActChgToAdmTch:		// Access to admin a teachers' zone
-	 case ActAdmTchGrp:		// Access to admin a teachers' zone
+	    case ActAdmShaCrsGrp:	// Access to admin a shared zone from menu
+	    case ActChgToAdmSha:	// Access to admin a shared zone
+	    case ActAdmShaGrp:		// Access to admin a shared zone
 
-	 case ActAdmShaCrsGrp:		// Access to admin a shared zone from menu
-	 case ActChgToAdmSha:		// Access to admin a shared zone
-	 case ActAdmShaGrp:		// Access to admin a shared zone
+	    case ActSeeAdmMrk:		// Access to see/admin a marks zone from menu
+	    case ActChgToSeeMrk:	// Access to see a marks zone
+	    case ActSeeMrkGrp:		// Access to see a marks zone
 
-	 case ActSeeAdmMrk:		// Access to see/admin a marks zone from menu
-	 case ActChgToSeeMrk:		// Access to see a marks zone
-	 case ActSeeMrkGrp:		// Access to see a marks zone
-
-	 case ActChgToAdmMrk:		// Access to admin a marks zone
-	 case ActAdmMrkGrp:		// Access to admin a marks zone
-	    switch (FileZones)
-	      {
-	       case Grp_HAS_FILEZONES:
-		  if (Grp_GetIfIBelongToGrp (GrpCod) == Usr_DONT_BELONG)
-		     GrpCod = -1L;	// Go to course zone
-		  break;
-	       case Grp_HAS_NOT_FILEZONES:
-	       default:
-	          GrpCod = -1L;	// Go to course zone
-	          break;
-	      }
-	    break;
-	 default:
-	    switch (FileZones)
-	      {
-	       case Grp_HAS_FILEZONES:
-		  if (Grp_GetIfIBelongToGrp (GrpCod) == Usr_DONT_BELONG)
-	             Err_ShowErrorAndExit ("You don't have access to the group.");
-		  break;
-	       case Grp_HAS_NOT_FILEZONES:
-	       default:
-	          Err_ShowErrorAndExit ("The group has no file zones.");
-	          break;
-	      }
-	    break;
-	}
-      */
-     }
+	    case ActChgToAdmMrk:	// Access to admin a marks zone
+	    case ActAdmMrkGrp:		// Access to admin a marks zone
+	       GrpCod = -1L;		// Go to course zone
+	       break;
+	    default:
+	       Err_NoPermissionExit ();
+	       break;
+	   }
 
    return GrpCod;
   }
@@ -2977,27 +2951,18 @@ static void Brw_FormToChangeCrsGrpZone (void)
 /*****************************************************************************/
 /*********** Check if group has file zones and I belong to group *************/
 /*****************************************************************************/
+// GrpCod should be > 0
+// Return true if group has file zones and I belong to group
 
-static void Brw_CheckGroup (long GrpCod)
+static bool Brw_CheckIfIHaveAccessToGrpFilezone (long GrpCod)
   {
-   if (GrpCod > 0)
-     {
-      /***** For security, check if group file zones are enabled,
-             and check if I belongs to the selected group *****/
-      switch (Grp_GetFileZones (GrpCod))
-	{
-	 case Grp_HAS_FILEZONES:
-            if (Grp_GetIfIBelongToGrp (GrpCod) == Usr_DONT_BELONG)
-               Err_NoPermissionExit ();
-	    break;
-	 case Grp_HAS_NOT_FILEZONES:
-	 default:
-            Err_NoPermissionExit ();
-	    break;
-	}
-     }
-   else
-      Err_NoPermissionExit ();
+   /***** Check if group file zones are enabled,
+	  and check if I belongs to the group *****/
+   if (Grp_GetFileZones (GrpCod) == Grp_HAS_FILEZONES)
+      if (Grp_GetIfIBelongToGrp (GrpCod) == Usr_BELONG)
+	 return true;
+
+   return false;
   }
 
 /*****************************************************************************/
@@ -5314,7 +5279,7 @@ static void Brw_WriteCurrentClipboard (void)
       case Brw_ADMI_DOC_GRP:
          Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
          Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
-	 Grp_GetGroupTypeDataByCod (&GrpTyp);
+         Grp_GetGroupTypeDataByCod (&GrpTyp);
          Hie[Hie_CRS].HieCod = CrsCod;
 	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
@@ -5741,7 +5706,15 @@ void Brw_Paste (void)
              check if group file zones are enabled,
              and check if I belongs to the group *****/
       if (Brw_TypeIsGrpBrw[Gbl.FileBrowser.Clipboard.FileBrowser])	// If copying from group zone
-	 Brw_CheckGroup (Gbl.FileBrowser.Clipboard.HieCod);		// Group code of source zone
+        {
+	 if (Gbl.FileBrowser.Clipboard.HieCod > 0)	// Group code of source zone specified
+	   {
+	    if (!Brw_CheckIfIHaveAccessToGrpFilezone (Gbl.FileBrowser.Clipboard.HieCod))
+	       Err_NoPermissionExit ();
+	   }
+	 else						// No group code of source zone specified
+	    Err_NoPermissionExit ();
+        }
 
       /***** Copy files recursively *****/
       Brw_PasteClipboard (Size);

@@ -420,6 +420,7 @@ static void Ale_ShowFixAlertAndButtonBegin (Ale_AlertType_t AlertType,const char
       [Ale_QUESTION ] = Box_CLOSABLE,
       [Ale_WARNING  ] = Box_CLOSABLE,
       [Ale_ERROR    ] = Box_CLOSABLE,
+      [Ale_DEBUG    ] = Box_CLOSABLE,
     };
    static const char *Ale_AlertIcons[Ale_NUM_ALERT_TYPES] =
      {
@@ -430,6 +431,7 @@ static void Ale_ShowFixAlertAndButtonBegin (Ale_AlertType_t AlertType,const char
       [Ale_QUESTION ] = "question64x64.gif",	// animated gif
       [Ale_WARNING  ] = "warning64x64.gif",	// animated gif
       [Ale_ERROR    ] = "error64x64.gif",	// animated gif
+      [Ale_DEBUG    ] = "warning64x64.gif",	// animated gif
      };
 
    /****** If start of page is not written yet, do it now ******/

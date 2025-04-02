@@ -140,11 +140,21 @@ struct ExaSet_Set
    char Title[ExaSet_MAX_BYTES_TITLE + 1];	// Title of the set
   };
 
+#define ExaSes_NUM_MODALITIES 3
+typedef enum
+  {
+   ExaSes_NONE,
+   ExaSes_ONLINE,
+   ExaSes_PAPER,
+  } ExaSes_Modality_t;
+#define ExaSes_MODALITY_DEFAULT ExaSes_NONE
+
 struct ExaSes_Session
   {
    long SesCod;
    long ExaCod;
    long UsrCod;
+   ExaSes_Modality_t Modality;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    char Title[ExaSes_MAX_BYTES_TITLE + 1];
    HidVis_HiddenOrVisible_t Hidden;

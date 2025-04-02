@@ -70,6 +70,7 @@
 #include "swad_degree_type.h"
 #include "swad_department.h"
 #include "swad_exam_log.h"
+#include "swad_exam_session.h"
 #include "swad_figure.h"
 #include "swad_forum.h"
 #include "swad_hidden_visible.h"
@@ -1269,7 +1270,7 @@ const char *Txt_Administer_multiple_teachers =
 #elif L==9	// pt
 	"Gerenciar v&aacute;rios professores";
 #elif L==10	// tr
-	"Administer multiple teachers";		// Çeviri lazim!
+	"Birden fazla &ouml;&gbreve;retmeni y&ouml;netin";
 #endif
 
 const char *Txt_Administer_one_user =
@@ -1292,7 +1293,7 @@ const char *Txt_Administer_one_user =
 #elif L==9	// pt
 	"Gerenciar um utilizador";
 #elif L==10	// tr
-	"Administer one user";		// Çeviri lazim!
+	"Bir kullan&inodot;c&inodot;y&inodot; y&ouml;net";
 #endif
 
 const char *Txt_AGENDA_PAST___FUTURE_EVENTS[Agd_NUM_PAST_FUTURE_EVENTS] =
@@ -10994,8 +10995,8 @@ const char *Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1 =
 	"Eliminar completamente de la plataforma"
 	" los usuarios indicados en el paso 1";
 #elif L==5	// fr
-	"&Eacute;liminer de la plate-forme"
-	" les utilisateurs qui sont sur la liste";
+	"&Eacute;liminer de la plateforme"
+	" les utilisateurs indiqu&eacute;s &agrave; l'&eacute;tape 1";
 #elif L==6	// gn
 	"Eliminar completamente de la plataforma"
 	" los usuarios indicados en el paso 1";		// Okoteve traducción
@@ -11003,14 +11004,14 @@ const char *Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1 =
 	"Rimuovere dalla piattaforma"
 	" gli utenti che sono in lista";
 #elif L==8	// pl
-	"Wyeliminuj z platformy"
-	" uzytkownikow kt&oacute;rzy sa na liscie";
+	"Usu&nacute; z platformy"
+	" u&zdot;ytkownik&oacute;w wskazanych w kroku 1";
 #elif L==9	// pt
 	"Eliminar da plataforma"
-	" os utilizadores que est&atilde;o na lista";
+	" os utilizadores indicados no passo 1";
 #elif L==10	// tr
-	"Eliminate from the platform"
-	" the users indicated on step 1";		// Çeviri lazim!
+	"1. ad&inodot;mda belirtilen"
+	" kullan&inodot;c&inodot;lar&inodot; platformdan kald&inodot;r&inodot;n";
 #endif
 
 const char *Txt_Eliminate_old_courses =
@@ -11556,31 +11557,31 @@ const char *Txt_Enrol_students =
 
 const char *Txt_Enrol_the_users_indicated_in_step_1 =
 #if   L==1	// ca
-	"A&ntilde;adir (inscribir los usuarios indicados en el paso 1)";	// Necessita traducció
+	"Afegir (inscriure els usuaris indicats al pas 1)";
 #elif L==2	// de
-	"Anmeldung Sie die Benutzer, die auf der Liste";
+	"Hinzuf&uuml;gen (registrieren Sie die in Schritt 1 angegebenen Benutzer)";
 #elif L==3	// en
 	"Add (enrol the users indicated in step 1)";
 #elif L==4	// es
 	"A&ntilde;adir (inscribir los usuarios indicados en el paso 1)";
 #elif L==5	// fr
-	"Inscrire les utilisateurs qui sont sur la liste";
+	"Ajouter (inscrire les utilisateurs indiqu&eacute;s &agrave; l'&eacute;tape 1)";
 #elif L==6	// gn
 	"A&ntilde;adir (inscribir los usuarios indicados en el paso 1)";	// Okoteve traducción
 #elif L==7	// it
-	"Registrare gli utenti che sono in lista";
+	"Aggiungi (iscrivi gli utenti indicati al punto 1)";
 #elif L==8	// pl
-	"Rejestracja uzytkownik&oacute;w, kt&oacute;rzy sa na liscie";
+	"Dodaj (zarejestruj u&zdot;ytkownik&oacute;w wskazanych w kroku 1)";
 #elif L==9	// pt
-	"Registrar os utilizadores que est&atilde;o na lista";
+	"Adicionar (inscrever os utilizadores indicados no passo 1)";
 #elif L==10	// tr
-	"Add (enrol the users indicated in step 1)";				// Çeviri lazim!
+	"Ekle (1. ad&inodot;mda belirtilen kullan&inodot;c&inodot;lar&inodot; kaydedin)";				// Çeviri lazim!
 #endif
 
 const char *Txt_Enrol_the_users_indicated_in_step_1_and_remove_the_users_not_indicated =
 #if   L==1	// ca
-	"Actualizar (inscribir los usuarios indicados en el paso 1"
-	" y eliminar los <strong>no</strong> indicados)";		// Necessita traducció
+	"Actualitzar (inscriure els usuaris indicats al pas 1"
+	" i eliminar els <strong>no</strong> indicats)";
 #elif L==2	// de
 	"Entfernen Sie die Benutzer, die <strong>nicht</strong> auf der Liste,"
 	" und Anmeldung Sie die Benutzer, die auf der Liste";
@@ -11591,23 +11592,23 @@ const char *Txt_Enrol_the_users_indicated_in_step_1_and_remove_the_users_not_ind
 	"Actualizar (inscribir los usuarios indicados en el paso 1"
 	" y eliminar los <strong>no</strong> indicados)";
 #elif L==5	// fr
-	"Enlever les utilisateurs qui <strong>ne</strong> sont <strong>pas</strong> sur la liste,"
-	" et inscrire les utilisateurs qui sont sur la liste";
+	"Mettre &agrave; jour (inscrire les utilisateurs indiqu&eacute;s &agrave; l'&eacute;tape 1"
+	" et supprimer les utilisateurs <strong>non</strong> indiqu&eacute;s)";
 #elif L==6	// gn
 	"Actualizar (inscribir los usuarios indicados en el paso 1"
 	" y eliminar los <strong>no</strong> indicados)";		// Okoteve traducción
 #elif L==7	// it
-	"Rimuovere gli utenti che <strong>non</strong> sono sulla lista,"
-	" e registrare gli utenti che invece lo sono";
+	"Aggiornare (iscrivere gli utenti indicati nel passo 1"
+	" ed eliminare quelli <strong>non</strong> indicati)";
 #elif L==8	// pl
-	"Usun u&zdot;ytkownikami, kt&oacute;rzy sa <strong>nie</strong> na liscie,"
-	"i  zarejestrowac uzytkownik&oacute;w, kt&oacute;rzy sa na liscie";
+	"Aktualizuj (zarejestruj u&zdot;ytkownik&oacute;w wskazanych w kroku 1"
+	" i usu&nacute; u&zdot;ytkownik&oacute;w, kt&oacute;rzy <strong>nie</strong> zostali wskazani)";
 #elif L==9	// pt
-	"Tirar os utilizadores que <strong>n&atilde;o</strong> est&atilde;o na lista,"
-	" e registrar os utilizadores que est&atilde;o na lista";
+	"Atualizar (inscrever os utilizadores indicados no passo 1"
+	" e remover os utilizadores <strong>n&atilde;o</strong> indicados)";
 #elif L==10	// tr
-	"Update (enrol the users indicated in step 1"
-	" and remove the users <strong>not</strong> indicated)";	// Çeviri lazim!
+	"G&uuml;ncelleme (1. ad&inodot;mda belirtilen kullan&inodot;c&inodot;lar&inodot; kaydedin"
+	" ve <strong>belirtilmeyen</strong> kullan&inodot;c&inodot;lar&inodot; kald&inodot;r&inodot;n)";
 #endif
 
 const char *Txt_Enrol_me =
@@ -12319,6 +12320,78 @@ const char *Txt_Exam_X_removed =	// Warning: it is very important to include %s 
 #elif L==10	// tr
 	"Exam <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
+
+const char *Txt_EXAM_SESSION_Modality =
+#if   L==1	// ca
+	"Modalitat";
+#elif L==2	// de
+	"Pr&uuml;fungsmodalit&auml;t";
+#elif L==3	// en
+	"Modality";
+#elif L==4	// es
+	"Modalidad";
+#elif L==5	// fr
+	"Modalit&eacute;";
+#elif L==6	// gn
+	"Modalidad";	// Okoteve traducción
+#elif L==7	// it
+	"Modalit&agrave;";
+#elif L==8	// pl
+	"Tryb";
+#elif L==9	// pt
+	"Modalidade";
+#elif L==10	// tr
+	"Y&ouml;ntemi";
+#endif
+
+const char *Txt_EXAM_SESSION_MODALITIES[ExaSes_NUM_MODALITIES] =
+	{
+	[ExaSes_ONLINE] =
+#if   L==1	// ca
+	"En l&iacute;nia"
+#elif L==2	// de
+	"Online-Pr&uuml;fung"
+#elif L==3	// en
+	"Online"
+#elif L==4	// es
+	"Online"
+#elif L==5	// fr
+	"En ligne"
+#elif L==6	// gn
+	"En l&iacute;nea"
+#elif L==7	// it
+	"Online"
+#elif L==8	// pl
+	"Online"
+#elif L==9	// pt
+	"On-line"
+#elif L==10	// tr
+	"&Ccedil;evrimi&ccedil;i"
+#endif
+	,
+	[ExaSes_PAPER] =
+#if   L==1	// ca
+	"En paper (option still under development)"
+#elif L==2	// de
+	"Papierpr&uuml;fung (option still under development)"
+#elif L==3	// en
+	"Paper (option still under development)"
+#elif L==4	// es
+	"En papel (opci&oacute;n a&uacute;n en desarrollo)"
+#elif L==5	// fr
+	"Sur papier (option still under development)"
+#elif L==6	// gn
+	"Kuatia (option still under development)"
+#elif L==7	// it
+	"Cartacei (option still under development)"
+#elif L==8	// pl
+	"Papierowy (option still under development)"
+#elif L==9	// pt
+	"Em papel (option still under development)"
+#elif L==10	// tr
+	"Ka&gbreve;&inodot;t s&inodot;nav&inodot; (option still under development)"
+#endif
+	};
 
 const char *Txt_Exams =
 #if   L==1	// ca
@@ -33676,48 +33749,48 @@ const char *Txt_Remove_old_files =
 
 const char *Txt_Remove_the_users_not_indicated_in_step_1 =
 #if   L==1	// ca
-	"Eliminar los usuarios <strong>no</strong> indicados en el paso 1";	// Necessita traducció
+	"Eliminar els usuaris  <strong>no</strong> indicats al pas 1";
 #elif L==2	// de
-	"Entfernen Sie die Benutzer, die <strong>nicht</strong> auf der Liste";
+	"Entfernen Sie die Benutzer, die in Schritt 1 <strong>nicht</strong> angegeben wurden";
 #elif L==3	// en
 	"Remove the users <strong>not</strong> indicated in step 1";
 #elif L==4	// es
 	"Eliminar los usuarios <strong>no</strong> indicados en el paso 1";
 #elif L==5	// fr
-	"Enlever les utilisateurs qui <strong>ne</strong> sont <strong>pas</strong> sur la liste";
+	"Enlever les utilisateurs <strong>non</strong> indiqu&eacute;s &agrave; l'&eacute;tape 1";
 #elif L==6	// gn
 	"Eliminar los usuarios <strong>no</strong> indicados en el paso 1";	// Okoteve traducción
 #elif L==7	// it
-	"Rimuovere gli utenti che <strong>non</strong> sono sulla lista";
+	"Rimuovere gli utenti <strong>non</strong> indicati nel passaggio 1";
 #elif L==8	// pl
-	"Usu&nacute; u&zdot;ytkownikami, kt&oacute;rzy sa <strong>nie</strong> na liscie";
+	"Usu&nacute; u&zdot;ytkownik&oacute;w <strong>niewskazanych</strong> w kroku 1";
 #elif L==9	// pt
-	"Tirar os utilizadores que <strong>n&atilde;o</strong> est&atilde;o na lista";
+	"Tirar os utilizadores <strong>n&atilde;o</strong> indicados no passo 1";
 #elif L==10	// tr
-	"Remove the users <strong>not</strong> indicated in step 1";		// Çeviri lazim!
+	"1. ad&inodot;mda <strong>belirtilmeyen</strong> kullan&inodot;c&inodot;lar&inodot; kald&inodot;r&inodot;n";
 #endif
 
 const char *Txt_Remove_the_users_indicated_in_step_1 =
 #if   L==1	// ca
-	"Eliminar los usuarios indicados en el paso 1";	// Necessita traducció
+	"Eliminar els usuaris indicats al pas 1";
 #elif L==2	// de
-	"Entfernen Sie die Benutzer, die auf der Liste";
+	"Entfernen Sie die in Schritt 1 angegebenen Benutzer";
 #elif L==3	// en
 	"Remove the users indicated in step 1";
 #elif L==4	// es
 	"Eliminar los usuarios indicados en el paso 1";
 #elif L==5	// fr
-	"Enlever les utilisateurs qui sont sur la liste";
+	"Enlever les utilisateurs indiqu&eacute;s &agrave; l'&eacute;tape 1";
 #elif L==6	// gn
 	"Eliminar los usuarios indicados en el paso 1";	// Okoteve traducción
 #elif L==7	// it
-	"Rimuovere gli utenti che sono in lista";
+	"Rimuovere gli utenti indicati nel passaggio 1";
 #elif L==8	// pl
-	"Usu&nacute; u&zdot;ytkownikami, kt&oacute;rzy sa na liscie";
+	"Usu&nacute; u&zdot;ytkownik&oacute;w wskazanych w kroku 1";
 #elif L==9	// pt
-	"Tirar os utilizadores que est&atilde;o na lista";
+	"Tirar os utilizadores indicados na etapa 1";
 #elif L==10	// tr
-	"Remove the users indicated in step 1";		// Çeviri lazim!
+	"1. ad&inodot;mda belirtilen kullan&inodot;c&inodot;lar&inodot; kald&inodot;r&inodot;n";
 #endif
 
 const char *Txt_Remove_USER_as_an_administrator_of_the_center_X =	// Warning: it is very important to include %s in the following sentences

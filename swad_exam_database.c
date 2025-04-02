@@ -1287,7 +1287,10 @@ void Exa_DB_RemoveAllSetAnswersFromCrs (long CrsCod)
 
 long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
   {
+   extern const char *ExaSes_ModalityDB[ExaSes_NUM_MODALITIES];
    extern const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE];
+
+   Ale_ShowAlert (Ale_DEBUG,"ExaSes_ModalityDB[Session->Modality] = %s",ExaSes_ModalityDB[Session->Modality]);
 
    return
    DB_QueryINSERTandReturnCode ("can not create exam session",
@@ -1295,6 +1298,7 @@ long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
 				" (ExaCod,"
 				  "Hidden,"
 				  "UsrCod,"
+				  "Modality,"
 				  "StartTime,"
 				  "EndTime,"
 				  "Title,"
@@ -1303,15 +1307,17 @@ long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
 				" (%ld,"		// ExaCod
                                  "'%c',"		// Hidden
 				 "%ld,"			// UsrCod
+				 "'%s',"		// Modality
                                  "FROM_UNIXTIME(%ld),"	// Start time
                                  "FROM_UNIXTIME(%ld),"	// End time
 				 "'%s',"		// Title
 				 "'N')",		// ShowUsrResults: Don't show user results initially
 				Session->ExaCod,
 				HidVis_Hidden_YN[Session->Hidden],
-				Gbl.Usrs.Me.UsrDat.UsrCod,	// Session creator
-				Session->TimeUTC[Dat_STR_TIME],	// Start time
-				Session->TimeUTC[Dat_END_TIME],	// End time
+				Gbl.Usrs.Me.UsrDat.UsrCod,		// Session creator
+				ExaSes_ModalityDB[Session->Modality],	// Modality
+				Session->TimeUTC[Dat_STR_TIME],		// Start time
+				Session->TimeUTC[Dat_END_TIME],		// End time
 				Session->Title);
   }
 
@@ -1321,6 +1327,7 @@ long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
 
 void Exa_DB_UpdateSession (const struct ExaSes_Session *Session)
   {
+   extern const char *ExaSes_ModalityDB[ExaSes_NUM_MODALITIES];
    extern const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE];
 
    /***** Insert this new exam session into database *****/
@@ -1328,6 +1335,7 @@ void Exa_DB_UpdateSession (const struct ExaSes_Session *Session)
 		   "UPDATE exa_sessions,"
 		          "exa_exams"
 		     " SET exa_sessions.Hidden='%c',"
+			  "exa_sessions.Modality='%s',"
 		          "exa_sessions.StartTime=FROM_UNIXTIME(%ld),"
                           "exa_sessions.EndTime=FROM_UNIXTIME(%ld),"
                           "exa_sessions.Title='%s',"
@@ -1335,10 +1343,11 @@ void Exa_DB_UpdateSession (const struct ExaSes_Session *Session)
 		   " WHERE exa_sessions.SesCod=%ld"
 		     " AND exa_sessions.ExaCod=%ld"	// Extra check
 		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
-		     " AND exa_exams.CrsCod=%ld",	// Extra check
+		     " AND exa_exams.CrsCod=%ld",		// Extra check
 		   HidVis_Hidden_YN[Session->Hidden],
-	           Session->TimeUTC[Dat_STR_TIME],	// Start time
-		   Session->TimeUTC[Dat_END_TIME],	// End time
+		   ExaSes_ModalityDB[Session->Modality],	// Modality
+	           Session->TimeUTC[Dat_STR_TIME],		// Start time
+		   Session->TimeUTC[Dat_END_TIME],		// End time
 		   Session->Title,
 		   Session->ShowUsrResults ? 'Y' :
 			                     'N',
@@ -1373,7 +1382,7 @@ unsigned Exa_DB_GetNumSessionsInExam (long ExaCod)
 unsigned Exa_DB_GetNumOpenSessionsInExam (long ExaCod)
   {
    /***** Trivial check *****/
-   if (ExaCod < 0)	// A non-existing exam...
+   if (ExaCod <= 0)	// A non-existing exam...
       return 0;		// ...has no sessions
 
    /***** Get number of open sessions in an exam from database *****/
@@ -1444,11 +1453,12 @@ unsigned Exa_DB_GetSessions (MYSQL_RES **mysql_res,long ExaCod)
 			  "ExaCod,"					// row[1]
 			  "Hidden,"					// row[2]
 			  "UsrCod,"					// row[3]
-			  "UNIX_TIMESTAMP(StartTime),"			// row[4]
-			  "UNIX_TIMESTAMP(EndTime),"			// row[5]
-			  "NOW() BETWEEN StartTime AND EndTime,"	// row[6]
-			  "Title,"					// row[7]
-			  "ShowUsrResults"				// row[8]
+			  "Modality,"					// row[4]
+			  "UNIX_TIMESTAMP(StartTime),"			// row[5]
+			  "UNIX_TIMESTAMP(EndTime),"			// row[6]
+			  "NOW() BETWEEN StartTime AND EndTime,"	// row[7]
+			  "Title,"					// row[8]
+			  "ShowUsrResults"				// row[9]
 		    " FROM exa_sessions"
 		   " WHERE ExaCod=%ld%s%s"
 		" ORDER BY SesCod",
@@ -1475,11 +1485,12 @@ unsigned Exa_DB_GetSessionDataByCod (MYSQL_RES **mysql_res,long SesCod)
 			  "ExaCod,"					// row[1]
 			  "Hidden,"					// row[2]
 			  "UsrCod,"					// row[3]
-			  "UNIX_TIMESTAMP(StartTime),"			// row[4]
-			  "UNIX_TIMESTAMP(EndTime),"			// row[5]
-			  "NOW() BETWEEN StartTime AND EndTime,"	// row[6]
-			  "Title,"					// row[7]
-			  "ShowUsrResults"				// row[8]
+			  "Modality,"					// row[4]
+			  "UNIX_TIMESTAMP(StartTime),"			// row[5]
+			  "UNIX_TIMESTAMP(EndTime),"			// row[6]
+			  "NOW() BETWEEN StartTime AND EndTime,"	// row[7]
+			  "Title,"					// row[8]
+			  "ShowUsrResults"				// row[9]
 		    " FROM exa_sessions"
 		   " WHERE SesCod=%ld"
 		     " AND ExaCod IN"		// Extra check

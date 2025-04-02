@@ -773,7 +773,8 @@ static void Gam_PutIconsToRemEditOneGame (struct Gam_Games *Games,
 
    /***** Put icon to view matches results *****/
    if (ActionShowResults[Gbl.Usrs.Me.Role.Logged])
-      Ico_PutContextualIconToShowResults (ActionShowResults[Gbl.Usrs.Me.Role.Logged],MchRes_RESULTS_BOX_ID,
+      Ico_PutContextualIconToShowResults (ActionShowResults[Gbl.Usrs.Me.Role.Logged],
+					  MchRes_RESULTS_BOX_ID,
 					  Gam_PutPars,Games);
 
    /***** Link to get resource link *****/

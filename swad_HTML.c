@@ -1337,8 +1337,8 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
    HTM_ElementEnd ();
   }
 
-void HTM_INPUT_RADIO (const char *Name,
-      		      HTM_Attributes_t Attributes,const char *fmt,...)
+void HTM_INPUT_RADIO (const char *Name,HTM_Attributes_t Attributes,
+      		      const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -1368,8 +1368,8 @@ void HTM_INPUT_RADIO (const char *Name,
    HTM_ElementEnd ();
   }
 
-void HTM_INPUT_CHECKBOX (const char *Name,
-			 HTM_Attributes_t Attributes,const char *fmt,...)
+void HTM_INPUT_CHECKBOX (const char *Name,HTM_Attributes_t Attributes,
+			 const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;

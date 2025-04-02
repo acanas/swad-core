@@ -1610,7 +1610,7 @@ int swad__getUsers (struct soap *soap,
    API_GetLstGrpsSel (groups);
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       /***** Get list of groups types and groups in current course *****/
-      Grp_GetListGrpTypesInCurrentCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+      Grp_GetListGrpTypesInCurrentCrs (Grp_GRP_TYPES_WITH_GROUPS);
 
    /***** Get list of users *****/
    Usr_GetListUsrs (Hie_CRS,Role);

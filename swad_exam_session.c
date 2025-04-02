@@ -56,6 +56,24 @@
 #include "swad_test.h"
 
 /*****************************************************************************/
+/***************************** Public constants ******************************/
+/*****************************************************************************/
+
+const char *ExaSes_ModalityDB[ExaSes_NUM_MODALITIES] =
+  {
+   [ExaSes_NONE  ] = "none",
+   [ExaSes_ONLINE] = "online",
+   [ExaSes_PAPER ] = "paper",
+  };
+
+const char *ExaSes_ModalityIcon[ExaSes_NUM_MODALITIES] =
+  {
+   [ExaSes_NONE  ] = NULL,
+   [ExaSes_ONLINE] = "display.svg",		// "computer.svg",
+   [ExaSes_PAPER ] = "file-signature.svg"	// "print.svg"
+  };
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -95,11 +113,14 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
 
 static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
 				          struct ExaSes_Session *Session);
+static ExaSes_Modality_t ExaSes_GetModalityFromString (const char *Str);
 
 static void ExaSes_HideUnhideSession (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 static void ExaSes_PutFormSession (struct ExaSes_Session *Session);
 static void ExaSes_ParsFormSession (void *Session);
+
+static void ExaSes_PutSessionModalities (const struct ExaSes_Session *Session);
 
 static void ExaSes_ShowLstGrpsToCreateSession (long SesCod);
 
@@ -118,17 +139,18 @@ void ExaSes_ResetSession (struct ExaSes_Session *Session)
    Dat_StartEndTime_t StartEndTime;
 
    /***** Initialize to empty match *****/
-   Session->SesCod                   = -1L;
-   Session->ExaCod                   = -1L;
-   Session->UsrCod                   = -1L;
+   Session->SesCod   = -1L;
+   Session->ExaCod   = -1L;
+   Session->UsrCod   = -1L;
+   Session->Modality = ExaSes_NONE;
    for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
       Session->TimeUTC[StartEndTime] = (time_t) 0;
-   Session->Title[0]                 = '\0';
-   Session->Hidden	     = HidVis_VISIBLE;
-   Session->ClosedOrOpen             = CloOpe_CLOSED;
-   Session->ShowUsrResults           = false;
+   Session->Title[0]       = '\0';
+   Session->Hidden         = HidVis_VISIBLE;
+   Session->ClosedOrOpen   = CloOpe_CLOSED;
+   Session->ShowUsrResults = false;
   };
 
 /*****************************************************************************/
@@ -486,15 +508,13 @@ static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Sess
   }
 
 /*****************************************************************************/
-/************** Put a column for exam session title and grous ****************/
+/************** Put a column for exam session title and groups ***************/
 /*****************************************************************************/
 
 static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
                                                    const struct ExaSes_Session *Session,
                                                    const char *Anchor)
   {
-   extern const char *Txt_Play;
-   extern const char *Txt_Resume;
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
 
    HTM_TD_Begin ("rowspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
@@ -507,8 +527,7 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
 	       Frm_BeginForm (ActSeeExaPrn);
 		  Exa_PutPars (Exams);
 		  ParCod_PutPar (ParCod_Ses,Session->SesCod);
-		  HTM_BUTTON_Submit_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
-										Txt_Resume,
+		  HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeExaPrn),
 					   "class=\"LT BT_LINK %s_%s\"",
 					   HidVis_TitleClass[Session->Hidden],
 					   The_GetSuffix ());
@@ -716,11 +735,12 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
    row[1]	ExaCod
    row[2]	Hidden
    row[3]	UsrCod
-   row[4]	UNIX_TIMESTAMP(StartTime)
-   row[5]	UNIX_TIMESTAMP(EndTime)
-   row[6]	Open = NOW() BETWEEN StartTime AND EndTime
-   row[7]	Title
-   row[8]	ShowUsrResults
+   row[4]	Modality
+   row[5]	UNIX_TIMESTAMP(StartTime)
+   row[6]	UNIX_TIMESTAMP(EndTime)
+   row[7]	Open = NOW() BETWEEN StartTime AND EndTime
+   row[8]	Title
+   row[9]	ShowUsrResults
    */
 
    /***** Get session data *****/
@@ -738,20 +758,42 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
    /* Get session teacher (row[3]) */
    Session->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
-   /* Get start/end times (row[4], row[5] hold start/end UTC times) */
+   /* Get modality (row[4]) */
+   Session->Modality = ExaSes_GetModalityFromString (row[4]);
+
+   /* Get start/end times (row[5], row[6] hold start/end UTC times) */
    for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
-      Session->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[4 + StartEndTime]);
+      Session->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[5 + StartEndTime]);
 
-   /* Get whether the session is open or closed (row(6)) */
-   Session->ClosedOrOpen = CloOpe_GetClosedOrOpenFrom01 (row[6][0]);
+   /* Get whether the session is open or closed (row(7)) */
+   Session->ClosedOrOpen = CloOpe_GetClosedOrOpenFrom01 (row[7][0]);
 
-   /* Get the title of the session (row[7]) */
-   Str_Copy (Session->Title,row[7],sizeof (Session->Title) - 1);
+   /* Get the title of the session (row[8]) */
+   Str_Copy (Session->Title,row[8],sizeof (Session->Title) - 1);
 
-   /* Get whether to show user results or not (row(8)) */
-   Session->ShowUsrResults = (row[8][0] == 'Y');
+   /* Get whether to show user results or not (row(9)) */
+   Session->ShowUsrResults = (row[9][0] == 'Y');
+  }
+
+/*****************************************************************************/
+/********************** Convert from string to type **************************/
+/*****************************************************************************/
+
+static ExaSes_Modality_t ExaSes_GetModalityFromString (const char *Str)
+  {
+   extern const char *ExaSes_ModalityDB[ExaSes_NUM_MODALITIES];
+   ExaSes_Modality_t Modality;
+
+   /***** Compare string with all string modalities *****/
+   for (Modality  = (ExaSes_Modality_t) 0;
+	Modality <= (ExaSes_Modality_t) (ExaSes_NUM_MODALITIES - 1);
+	Modality++)
+      if (!strcmp (ExaSes_ModalityDB[Modality],Str))
+	 return Modality;
+
+   return ExaSes_NONE;
   }
 
 /*****************************************************************************/
@@ -819,8 +861,7 @@ void ExaSes_RemoveSession (void)
    Exa_DB_RemoveSessionFromAllTables (Session.SesCod);
 
    /***** Write message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Session_X_removed,
-		  Session.Title);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Session_X_removed,Session.Title);
 
    /***** Get exam data again to update it after changes in session *****/
    Exa_GetExamDataByCod (&Exams.Exam);
@@ -911,6 +952,7 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
 static void ExaSes_PutFormSession (struct ExaSes_Session *Session)
   {
    extern const char *Txt_Title;
+   extern const char *Txt_EXAM_SESSION_Modality;
    static struct
      {
       Act_Action_t Action;
@@ -953,6 +995,19 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session)
 
 	 HTM_TR_End ();
 
+	 /***** Session type *****/
+	 HTM_TR_Begin (NULL);
+
+	    /* Label */
+	    Frm_LabelColumn ("Frm_C1 RT","Modality",Txt_EXAM_SESSION_Modality);
+
+	    /* Data */
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
+	       ExaSes_PutSessionModalities (Session);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
 	 /***** Start and end dates *****/
 	 Dat_PutFormStartEndClientLocalDateTimes (Session->TimeUTC,
 						  Dat_FORM_SECONDS_OFF,
@@ -975,6 +1030,40 @@ static void ExaSes_ParsFormSession (void *Session)
   }
 
 /*****************************************************************************/
+/**** Put different actions to enrol/remove users to/from current course *****/
+/*****************************************************************************/
+
+static void ExaSes_PutSessionModalities (const struct ExaSes_Session *Session)
+  {
+   extern const char *Txt_EXAM_SESSION_MODALITIES[ExaSes_NUM_MODALITIES];
+   ExaSes_Modality_t Modality;
+
+   /***** Begin list of checkboxes *****/
+   HTM_UL_Begin ("class=\"LIST_LEFT FORM_IN_%s\"",The_GetSuffix ());
+
+      /***** *****/
+      for (Modality  = (ExaSes_Modality_t) 1;
+	   Modality <= (ExaSes_Modality_t) (ExaSes_NUM_MODALITIES - 1);
+	   Modality++)
+        {
+	 HTM_LI_Begin (NULL);
+	    HTM_LABEL_Begin (NULL);
+	       HTM_INPUT_RADIO ("Modality",
+				(Modality == Session->Modality ? HTM_REQUIRED | HTM_CHECKED :
+								 HTM_REQUIRED),
+				" value=\"%u\"",(unsigned) Modality);
+	       Ico_PutIcon (ExaSes_ModalityIcon[Modality],Ico_BLACK,
+			    Txt_EXAM_SESSION_MODALITIES[Modality],"CONTEXT_ICOx16");
+	       HTM_NBSPTxt (Txt_EXAM_SESSION_MODALITIES[Modality]);
+	    HTM_LABEL_End ();
+	 HTM_LI_End ();
+        }
+
+   /***** End list of checkboxes *****/
+   HTM_UL_End ();
+  }
+
+/*****************************************************************************/
 /************* Show list of groups to create a new exam session **************/
 /*****************************************************************************/
 
@@ -983,7 +1072,7 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
    extern const char *Txt_Groups;
 
    /***** Get list of groups types and groups in this course *****/
-   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
 
    if (Gbl.Crs.Grps.GrpTypes.NumGrpTypes)
      {
@@ -1104,7 +1193,7 @@ void ExaSes_ReceiveSession (void)
 	 /* Get session data from database */
 	 ExaSes_GetSessionDataByCod (&Session);
 	 if (Session.ExaCod != Exams.Exam.ExaCod)
-	    Err_WrongExamExit ();
+	    Err_WrongExamSessionExit ();
 	 break;
       case OldNew_NEW:
       default:
@@ -1118,6 +1207,15 @@ void ExaSes_ReceiveSession (void)
    /***** Get parameters from form *****/
    /* Get session title */
    Par_GetParText ("Title",Session.Title,ExaSes_MAX_BYTES_TITLE);
+
+   /* Get modality */
+   Session.Modality = (ExaSes_Modality_t)
+		      Par_GetParUnsignedLong ("Modality",
+					      0,
+					      ExaSes_NUM_MODALITIES - 1,
+					      (unsigned long) ExaSes_NONE);
+   if (Session.Modality == ExaSes_NONE)
+      Err_WrongExamSessionExit ();
 
    /* Get start/end date-times */
    Session.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
@@ -1137,6 +1235,8 @@ void ExaSes_ReceiveSession (void)
 	 break;
       case OldNew_NEW:
       default:
+ 	 Ale_ShowAlert (Ale_DEBUG,"Session.Modality = %u",Session.Modality);
+
 	 ExaSes_CreateSession (&Session);
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_session_X,Session.Title);
 	 break;

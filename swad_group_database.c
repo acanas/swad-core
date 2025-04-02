@@ -122,6 +122,8 @@ void Grp_DB_GetGrpTypTitle (long GrpTypCod,char *Title,size_t TitleSize)
 
 unsigned Grp_DB_GetGroupTypeData (MYSQL_RES **mysql_res,long GrpTypCod)
   {
+   // GrpTypCod can belong to a course distinct from the current one,
+   // so don't extra check course
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get type of group",
 		       "SELECT GrpTypName,"			// row[0]
@@ -130,10 +132,8 @@ unsigned Grp_DB_GetGroupTypeData (MYSQL_RES **mysql_res,long GrpTypCod)
 			      "MustBeOpened,"			// row[3]
 			      "UNIX_TIMESTAMP(OpenTime)"	// row[4]
 			" FROM grp_types"
-		       " WHERE GrpTypCod=%ld"
-		         " AND CrsCod=%ld",	// Extra check
-		       GrpTypCod,
-		       Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		       " WHERE GrpTypCod=%ld",
+		       GrpTypCod);
   }
 
 /*****************************************************************************/
@@ -170,6 +170,8 @@ unsigned Grp_DB_GetFileZones (MYSQL_RES **mysql_res,long GrpCod)
 
 unsigned Grp_DB_GetGroupDataByCod (MYSQL_RES **mysql_res,long GrpCod)
   {
+   // GrpCod can belong to a course distinct from the current one,
+   // so don't extra check course
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a group",
 		   "SELECT grp_groups.GrpTypCod,"	// row[0]

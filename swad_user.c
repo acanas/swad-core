@@ -4439,7 +4439,7 @@ void Usr_ListAllDataStds (void)
      {
       /* Get list of groups types and groups in current course
          This is necessary to show columns with group selection */
-      Grp_GetListGrpTypesInCurrentCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+      Grp_GetListGrpTypesInCurrentCrs (Grp_GRP_TYPES_WITH_GROUPS);
 
       /* Get groups to show */
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -4464,7 +4464,8 @@ void Usr_ListAllDataStds (void)
       else
          NumColsTotal = NumColsRecordAndGroups = NumColsCommonRecord;
 
-      /***** Allocate memory for the string with the list of group names where student belongs to *****/
+      /***** Allocate memory for the string with the list of group names
+             where student belongs to *****/
       if (HieLvl == Hie_CRS)
 	{
 	 Length = (size_t) (Grp_MAX_BYTES_GROUP_NAME + 2) *
@@ -4506,7 +4507,7 @@ void Usr_ListAllDataStds (void)
 		    {
 		     GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
 
-		     if (GrpTyp->NumGrps)         // If current course tiene groups of este type
+		     if (GrpTyp->NumGrps)         // If current course has groups of this type
 		       {
 			HTM_TH_Span_Begin (HTM_HEAD_LEFT,1,1,"BG_HIGHLIGHT");
 			   HTM_TxtF ("%s %s",Txt_Group,GrpTyp->Name);

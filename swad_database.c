@@ -1319,25 +1319,27 @@ mysql> DESCRIBE exa_prints;
    /***** Table exa_sessions *****/
 /*
 mysql> DESCRIBE exa_sessions;
-+----------------+---------------+------+-----+---------+----------------+
-| Field          | Type          | Null | Key | Default | Extra          |
-+----------------+---------------+------+-----+---------+----------------+
-| SesCod         | int(11)       | NO   | PRI | NULL    | auto_increment |
-| ExaCod         | int(11)       | NO   | MUL | NULL    |                |
-| Hidden         | enum('N','Y') | NO   |     | N       |                |
-| UsrCod         | int(11)       | NO   |     | NULL    |                |
-| StartTime      | datetime      | NO   |     | NULL    |                |
-| EndTime        | datetime      | NO   |     | NULL    |                |
-| Title          | varchar(2047) | NO   |     | NULL    |                |
-| ShowUsrResults | enum('N','Y') | NO   |     | N       |                |
-+----------------+---------------+------+-----+---------+----------------+
-8 rows in set (0.00 sec)
++----------------+-------------------------------+------+-----+---------+----------------+
+| Field          | Type                          | Null | Key | Default | Extra          |
++----------------+-------------------------------+------+-----+---------+----------------+
+| SesCod         | int                           | NO   | PRI | NULL    | auto_increment |
+| ExaCod         | int                           | NO   | MUL | NULL    |                |
+| Hidden         | enum('N','Y')                 | NO   |     | N       |                |
+| UsrCod         | int                           | NO   |     | NULL    |                |
+| Modality       | enum('none','online','paper') | NO   |     | none    |                |
+| StartTime      | datetime                      | NO   |     | NULL    |                |
+| EndTime        | datetime                      | NO   |     | NULL    |                |
+| Title          | varchar(2047)                 | NO   |     | NULL    |                |
+| ShowUsrResults | enum('N','Y')                 | NO   |     | N       |                |
++----------------+-------------------------------+------+-----+---------+----------------+
+9 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_sessions ("
 			"SesCod INT NOT NULL AUTO_INCREMENT,"
 			"ExaCod INT NOT NULL,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"UsrCod INT NOT NULL,"
+			"Modality ENUM('none','online','paper') NOT NULL DEFAULT 'none',"
 			"StartTime DATETIME NOT NULL,"
 			"EndTime DATETIME NOT NULL,"
 			"Title VARCHAR(2047) NOT NULL,"	// ExaSes_MAX_BYTES_TITLE

@@ -53,15 +53,15 @@
 #define Grp_NUM_WHICH_GROUP_TYPES 2
 typedef enum
   {
-   Grp_ONLY_GROUP_TYPES_WITH_GROUPS,
-   Grp_ALL_GROUP_TYPES,
+   Grp_GRP_TYPES_WITH_GROUPS,
+   Grp_ALL_GROUP_TYPES
   } Grp_WhichGrpTypes_t;
 
 #define Grp_NUM_MY_ALL_GROUPS 2
 typedef enum
   {
    Grp_MY_GROUPS,
-   Grp_ALL_GROUPS,
+   Grp_ALL_GROUPS
   } Grp_MyAllGrps_t;
 #define Grp_MY_ALL_GROUPS_DEFAULT Grp_ALL_GROUPS
 
@@ -69,35 +69,35 @@ typedef enum
 typedef enum
   {
    Grp_ONLY_CLOSED_GROUPS,
-   Grp_CLOSED_AND_OPEN_GROUPS,
+   Grp_CLOSED_AND_OPEN_GROUPS
   } Grp_ClosedOpenGrps_t;
 
 #define Grp_NUM_MUST_BE_OPENED 2
 typedef enum
   {
    Grp_MUST_NOT_BE_OPENED,
-   Grp_MUST_BE_OPENED,
+   Grp_MUST_BE_OPENED
   } Grp_MustBeOpened_t;
 
 #define Grp_NUM_FILEZONES 2
 typedef enum
   {
    Grp_HAS_NOT_FILEZONES,
-   Grp_HAS_FILEZONES,
+   Grp_HAS_FILEZONES
   } Grp_HasFileZones_t;
 
 #define Grp_NUM_OPTIONAL_MANDATORY 2
 typedef enum
   {
    Grp_OPTIONAL,
-   Grp_MANDATORY,
+   Grp_MANDATORY
   } Grp_OptionalOrMandatory_t;
 
 #define Grp_NUM_SINGLE_MULTIPLE 2
 typedef enum
   {
    Grp_SINGLE,
-   Grp_MULTIPLE,
+   Grp_MULTIPLE
   } Grp_SingleOrMultiple_t;
 
 struct Group
@@ -111,8 +111,8 @@ struct Group
      } Room;
    unsigned NumUsrs[Rol_NUM_ROLES];		// Number of users in the group
    unsigned MaxStds;				// Maximum number of students in the group
-   CloOpe_ClosedOrOpen_t Open;		// Group is closed or open?
-   Grp_HasFileZones_t HasFileZones;			// Group has file zones?
+   CloOpe_ClosedOrOpen_t Open;			// Group is closed or open?
+   Grp_HasFileZones_t HasFileZones;		// Group has file zones?
   };
 
 struct GroupType

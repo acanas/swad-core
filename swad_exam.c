@@ -328,7 +328,7 @@ Usr_Can_t Exa_CheckIfICanEditExams (void)
 
 static void Exa_PutIconsListExams (void *Exams)
   {
-   static Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static Act_Action_t ActionShowResults[Rol_NUM_ROLES] =
      {
       [Rol_STD    ] = ActSeeMyExaResCrs,
       [Rol_NET    ] = ActReqSeeUsrExaRes,
@@ -343,8 +343,8 @@ static void Exa_PutIconsListExams (void *Exams)
 	 Exa_PutIconToCreateNewExam ((struct Exa_Exams *) Exams);
 
       /***** Put icon to view sessions results *****/
-      if (NextAction[Gbl.Usrs.Me.Role.Logged])
-	 Ico_PutContextualIconToShowResults (NextAction[Gbl.Usrs.Me.Role.Logged],NULL,
+      if (ActionShowResults[Gbl.Usrs.Me.Role.Logged])
+	 Ico_PutContextualIconToShowResults (ActionShowResults[Gbl.Usrs.Me.Role.Logged],NULL,
 					     NULL,NULL);
 
       /***** Link to get resource link *****/
@@ -697,6 +697,14 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
       [Rol_TCH    ] = ActSeeUsrExaResExa,
       [Rol_SYS_ADM] = ActSeeUsrExaResExa,
      };
+   /*
+   static Act_Action_t ActionPrintExam[Rol_NUM_ROLES] =
+     {
+      [Rol_NET    ] = ActReqPrnOneExa,
+      [Rol_TCH    ] = ActReqPrnOneExa,
+      [Rol_SYS_ADM] = ActReqPrnOneExa,
+     };
+   */
 
    if (Exa_CheckIfICanEditExams () == Usr_CAN)
      {
@@ -715,8 +723,16 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
 
    /***** Put icon to view results of sessions in exam *****/
    if (ActionShowResults[Gbl.Usrs.Me.Role.Logged])
-      Ico_PutContextualIconToShowResults (ActionShowResults[Gbl.Usrs.Me.Role.Logged],ExaRes_RESULTS_BOX_ID,
+      Ico_PutContextualIconToShowResults (ActionShowResults[Gbl.Usrs.Me.Role.Logged],
+					  ExaRes_RESULTS_BOX_ID,
 					  Exa_PutPars,Exams);
+
+   /***** Put icon to print exam *****/
+   /*
+   if (ActionPrintExam[Gbl.Usrs.Me.Role.Logged])
+      Ico_PutContextualIconToPrint (ActionPrintExam[Gbl.Usrs.Me.Role.Logged],
+				    Exa_PutPars,Exams);
+   */
 
    /***** Link to get resource link *****/
    Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,Exa_PutPars,Exams);

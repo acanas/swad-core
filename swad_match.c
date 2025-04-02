@@ -1240,7 +1240,7 @@ static void Mch_ShowLstGrpsToEditMatch (long MchCod)
    extern const char *Txt_Groups;
 
    /***** Get list of groups types and groups in this course *****/
-   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
 
    if (Gbl.Crs.Grps.GrpTypes.NumGrpTypes)
      {

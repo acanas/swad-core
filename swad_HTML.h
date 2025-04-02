@@ -167,10 +167,10 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
 		      double Step,	// Use 0 for "any"
 		      double Value,
                       HTM_Attributes_t Attributes,const char *fmt,...);
-void HTM_INPUT_RADIO (const char *Name,
-      		      HTM_Attributes_t Attributes,const char *fmt,...);
-void HTM_INPUT_CHECKBOX (const char *Name,
-			 HTM_Attributes_t Attributes,const char *fmt,...);
+void HTM_INPUT_RADIO (const char *Name,HTM_Attributes_t Attributes,
+      		      const char *fmt,...);
+void HTM_INPUT_CHECKBOX (const char *Name,HTM_Attributes_t Attributes,
+			 const char *fmt,...);
 
 void HTM_BUTTON_Submit_Begin (const char *Title,const char *fmt,...);
 void HTM_BUTTON_Begin (const char *Title,const char *fmt,...);

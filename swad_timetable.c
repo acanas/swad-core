@@ -1043,7 +1043,7 @@ static void Tmt_DrawTimeTable (const struct Tmt_Timetable *Timetable)
       /***** Get list of groups types and groups in this course *****/
       if (Gbl.Action.Act == ActEdiCrsTT ||
 	  Gbl.Action.Act == ActChgCrsTT)
-	 Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+	 Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
 
       /***** Write the table row by row *****/
       for (WhichCell.Interval = 0, Min = Timetable->Config.Range.MinutesPerInterval;

@@ -451,7 +451,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
 	 Grp_PutCheckboxAllGrps ();
 
 	 /***** Get list of groups types and groups in this course *****/
-	 Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+	 Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
 
 	 /***** List the groups for each group type *****/
 	 for (NumGrpTyp = 0;
@@ -504,7 +504,7 @@ static void Grp_PutCheckboxAllGrps (void)
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	 HTM_INPUT_CHECKBOX ("AllGroups",
 			     (ICanSelUnselGroup == Usr_CAN) ? (Gbl.Crs.Grps.AllGrpsSel ? HTM_CHECKED :
-										      HTM_NO_ATTR) :
+										         HTM_NO_ATTR) :
 							      HTM_DISABLED,
 			     "value=\"Y\"%s",
 			     (ICanSelUnselGroup == Usr_CAN) ? " onclick=\"togglecheckChildren(this,'GrpCods')\"" :
@@ -529,7 +529,7 @@ void Grp_PutParsCodGrps (void)
    /***** Write the boolean parameter that indicates if all groups must be listed *****/
    Par_PutParChar ("AllGroups",
 		   Gbl.Crs.Grps.AllGrpsSel ? 'Y' :
-					  'N');
+					     'N');
 
    /***** Write the parameter with the list of group codes to show *****/
    if (!Gbl.Crs.Grps.AllGrpsSel &&
@@ -715,7 +715,7 @@ void Grp_ChangeUsrGrps (Usr_MeOrOther_t MeOrOther,Cns_Verbose_t Verbose)
       return;
 
    /***** Get list of groups types and groups in current course *****/
-   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
 
    /***** Get the list of groups to which enrol this user *****/
    LstGrpsUsrWants.GrpCods = NULL;	// Initialized to avoid bug reported by Coverity
@@ -782,7 +782,7 @@ bool Grp_ChangeGrpsAtomically (Usr_MeOrOther_t MeOrOther,
       Grp_DB_LockTables ();
 
    /***** Get list of groups types and groups in this course *****/
-   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
 
    /***** Query in the database the group codes which user belongs to *****/
    Grp_GetLstCodGrpsUsrBelongs (Usr_UsrDat[MeOrOther]->UsrCod,-1L,
@@ -1824,7 +1824,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
    if (Gbl.Crs.Grps.NumGrps) // This course has groups
      {
       /***** Get list of groups types and groups in this course *****/
-      Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+      Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
 
       /***** Show warnings to students *****/
       // Students are required to join groups with mandatory enrolment; teachers don't
@@ -2218,7 +2218,7 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
    struct GroupType *GrpTyp;
 
    /***** Get list of groups types and groups in current course *****/
-   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Groups,NULL,NULL,
@@ -2655,6 +2655,10 @@ static void Grp_PutFormToCreateGroupType (const struct GroupType *GrpTyp)
 	    HTM_TD_Begin ("class=\"BM\"");
 	    HTM_TD_End ();
 
+	    /***** Column to get resource link, disabled here *****/
+	    HTM_TD_Begin ("class=\"BM\"");
+	    HTM_TD_End ();
+
 	    /***** Name of group type *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
@@ -2896,10 +2900,11 @@ void Grp_GetListGrpTypesInCurrentCrs (Grp_WhichGrpTypes_t WhichGrpTypes)
    MYSQL_ROW row;
    unsigned long NumGrpTyp;
    struct GroupType *GrpTyp;
-   static unsigned (*Grp_DB_GetGrpTypesInCurrentCrs[Grp_NUM_WHICH_GROUP_TYPES]) (MYSQL_RES **mysql_res,long HieCod) =
+   static unsigned (*Grp_DB_GetGrpTypesInCurrentCrs[Grp_NUM_WHICH_GROUP_TYPES]) (MYSQL_RES **mysql_res,
+										 long HieCod) =
     {
-     [Grp_ONLY_GROUP_TYPES_WITH_GROUPS] = Grp_DB_GetGrpTypesWithGrpsInCrs,
-     [Grp_ALL_GROUP_TYPES             ] = Grp_DB_GetAllGrpTypesInCrs,
+     [Grp_GRP_TYPES_WITH_GROUPS] = Grp_DB_GetGrpTypesWithGrpsInCrs,
+     [Grp_ALL_GROUP_TYPES      ] = Grp_DB_GetAllGrpTypesInCrs,
     };
 
    if (++Gbl.Crs.Grps.GrpTypes.NestedCalls > 1) // If list is created yet, there's nothing to do
@@ -2910,7 +2915,9 @@ void Grp_GetListGrpTypesInCurrentCrs (Grp_WhichGrpTypes_t WhichGrpTypes)
    Grp_OpenGroupsAutomatically ();
 
    /***** Get group types from database *****/
-   Gbl.Crs.Grps.GrpTypes.NumGrpTypes = Grp_DB_GetGrpTypesInCurrentCrs[WhichGrpTypes] (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+   Gbl.Crs.Grps.GrpTypes.NumGrpTypes =
+   Grp_DB_GetGrpTypesInCurrentCrs[WhichGrpTypes] (&mysql_res,
+						  Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
    /***** Get group types *****/
    Gbl.Crs.Grps.GrpTypes.NumGrpsTotal = 0;
@@ -3231,8 +3238,8 @@ void Grp_GetGroupDataByCod (long *CrsCod,long *GrpTypCod,struct Group *Grp)
    Grp->Room.RooCod      = -1L;
    Grp->Room.ShrtName[0] = '\0';
    Grp->MaxStds          = 0;
-   Grp->Open     = CloOpe_CLOSED;
-   Grp->HasFileZones        = Grp_HAS_NOT_FILEZONES;
+   Grp->Open             = CloOpe_CLOSED;
+   Grp->HasFileZones     = Grp_HAS_NOT_FILEZONES;
 
    if (Grp->GrpCod > 0)
      {

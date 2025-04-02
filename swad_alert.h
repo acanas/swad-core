@@ -41,7 +41,7 @@
 /********************************* Public types ******************************/
 /*****************************************************************************/
 
-#define Ale_NUM_ALERT_TYPES 7
+#define Ale_NUM_ALERT_TYPES 8
 typedef enum
   {
    Ale_NONE      = 0,
@@ -51,6 +51,7 @@ typedef enum
    Ale_QUESTION  = 4,
    Ale_WARNING   = 5,
    Ale_ERROR     = 6,
+   Ale_DEBUG     = 7
   } Ale_AlertType_t;
 
 /*****************************************************************************/
