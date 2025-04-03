@@ -103,7 +103,8 @@ static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Sess
 static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
                                                   const struct ExaSes_Session *Session,
                                                   const char *Anchor);
-static void ExaSes_ListOneOrMoreSessionsPrints (const struct ExaSes_Session *Session);
+static void ExaSes_ListOneOrMoreSessionsPrints (struct Exa_Exams *Exams,
+					        const struct ExaSes_Session *Session);
 static void ExaSes_PutLinkSession (struct Exa_Exams *Exams,
 				   const struct ExaSes_Session *Session,
 			           const char *Txt);
@@ -325,7 +326,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 
 	       /* Prints in the session */
 	       if (ICanEditSessions)
-	          ExaSes_ListOneOrMoreSessionsPrints (&Session);
+	          ExaSes_ListOneOrMoreSessionsPrints (Exams,&Session);
 
 	       /* Session result visible? */
 	       ExaSes_ListOneOrMoreSessionsResult (Exams,&Session);
@@ -607,15 +608,19 @@ static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
 /************** Put a column for exam session title and groups ***************/
 /*****************************************************************************/
 
-static void ExaSes_ListOneOrMoreSessionsPrints (const struct ExaSes_Session *Session)
+static void ExaSes_ListOneOrMoreSessionsPrints (struct Exa_Exams *Exams,
+					        const struct ExaSes_Session *Session)
   {
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
+   char StrNumPrintsInSession[Cns_MAX_DIGITS_UINT + 1];
 
    /***** Number of prints in the session ******/
    HTM_TD_Begin ("rowspan=\"2\" class=\"RT %s_%s %s\"",
                  HidVis_DataClass[Session->Hidden],The_GetSuffix (),
                  The_GetColorRows ());
-      HTM_Unsigned (Exa_DB_GetNumPrintsInSession (Session->SesCod));
+      snprintf (StrNumPrintsInSession,sizeof (StrNumPrintsInSession),
+		"%u",Exa_DB_GetNumPrintsInSession (Session->SesCod));
+      ExaSes_PutLinkSession (Exams,Session,StrNumPrintsInSession);
    HTM_TD_End ();
   }
 
