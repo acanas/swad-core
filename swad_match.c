@@ -268,8 +268,7 @@ void Mch_ResetMatch (struct Mch_Match *Match)
 /************************* List the matches of a game ************************/
 /*****************************************************************************/
 
-void Mch_ListMatches (struct Gam_Games *Games,
-		      Frm_PutForm_t PutFormNewMatch)
+void Mch_ListMatches (struct Gam_Games *Games,Frm_PutForm_t PutFormNewMatch)
   {
    extern const char *Hlp_ASSESSMENT_Games_matches;
    extern const char *Txt_Matches;

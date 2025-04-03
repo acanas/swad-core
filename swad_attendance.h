@@ -90,7 +90,7 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Att_SeeEvents (void);
+void Att_ShowEvents (void);
 
 Usr_Can_t Att_CheckIfICanEditEvents (void);
 
@@ -112,9 +112,7 @@ void Att_RemoveCrsEvents (long HieCod);
 
 unsigned Att_GetNumEvents (Hie_Level_t HieLvl,unsigned *NumNotif);
 
-void Att_SeeOneEvent (void);
-
-void Att_PutParsCodGrps (long AttCod);
+void Att_ShowOneEvent (void);
 
 void Att_RegisterMeAsStdInEvent (void);
 void Att_RegisterStudentsInEvent (void);

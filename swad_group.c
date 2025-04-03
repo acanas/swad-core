@@ -515,7 +515,7 @@ static void Grp_PutCheckboxAllGrps (void)
   }
 
 /*****************************************************************************/
-/************ Put parameters with the groups of students selected ************/
+/****************** Put parameters with the groups selected ******************/
 /*****************************************************************************/
 
 void Grp_PutParsCodGrps (void)
@@ -555,6 +555,68 @@ void Grp_PutParsCodGrps (void)
       Par_PutParString (NULL,"GrpCods",GrpCods);
       free (GrpCods);
      }
+  }
+
+/*****************************************************************************/
+/************** Put parameters with the default groups         ***************/
+/************** associated to exam session or attendance event ***************/
+/*****************************************************************************/
+
+void Grp_PutParsCodGrpsAssociated (Grp_Association_t Association,long Cod)
+  {
+   extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
+   static unsigned (*GetGrpCodsAssociatedTo[Grp_NUM_ASSOCIATIONS]) (MYSQL_RES **mysql_res,
+								    long Cod) =
+     {
+      [Grp_EXAM_SESSION    ] = Exa_DB_GetGrpCodsAssociatedToSes,
+      [Grp_ATTENDANCE_EVENT] = Att_DB_GetGrpCodsAssociatedToEvent,
+     };
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumGrp;
+   unsigned NumGrps;
+   size_t MaxLengthGrpCods;
+   char *GrpCods;
+
+   /***** Get groups associated from database *****/
+   if (Gbl.Crs.Grps.NumGrps)
+      NumGrps = GetGrpCodsAssociatedTo[Association] (&mysql_res,Cod);
+   else
+      NumGrps = 0;
+
+   /***** Get groups *****/
+   if (NumGrps) // Groups found...
+     {
+      MaxLengthGrpCods = NumGrps * (1 + 20) - 1;
+      if ((GrpCods = malloc (MaxLengthGrpCods + 1)) == NULL)
+	 Err_NotEnoughMemoryExit ();
+      GrpCods[0] = '\0';
+
+      /* Get groups */
+      for (NumGrp = 0;
+	   NumGrp < NumGrps;
+	   NumGrp++)
+        {
+         /* Get next group */
+         row = mysql_fetch_row (mysql_res);
+
+         /* Append group code to list */
+         if (NumGrp)
+            Str_Concat (GrpCods,Par_SEPARATOR_PARAM_MULTIPLE,MaxLengthGrpCods);
+         Str_Concat (GrpCods,row[0],MaxLengthGrpCods);
+        }
+
+      Par_PutParString (NULL,"GrpCods",GrpCods);
+      free (GrpCods);
+     }
+   else
+      /***** Write the boolean parameter that indicates
+             if all groups should be listed *****/
+      Par_PutParChar ("AllGroups",'Y');
+
+   /***** Free structure that stores the query result *****/
+   if (Gbl.Crs.Grps.NumGrps)
+      DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -643,9 +705,10 @@ void Grp_GetParCodsSeveralGrps (void)
 	    Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
 	 Gbl.Crs.Grps.LstGrpsSel.NumGrps = NumGrp;
 
-	 if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)	// If I have selected groups...
+	 /***** If I have selected any group... *****/
+	 if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
 	   {
-	    /***** Create a list of groups selected from LstCodGrps *****/
+	    /***** ...create a list of groups selected *****/
 	    if ((Gbl.Crs.Grps.LstGrpsSel.GrpCods = calloc (Gbl.Crs.Grps.LstGrpsSel.NumGrps,
 	                                                   sizeof (*Gbl.Crs.Grps.LstGrpsSel.GrpCods))) == NULL)
 	       Err_NotEnoughMemoryExit ();
@@ -4601,7 +4664,7 @@ void Grp_PutParMyAllGrps (void *MyAllGrps)
   {
    if (MyAllGrps)
       Par_PutParUnsigned (NULL,"WhichGrps",
-				  (unsigned) *((Grp_MyAllGrps_t *) MyAllGrps));
+			  (unsigned) *((Grp_MyAllGrps_t *) MyAllGrps));
   }
 
 void Grp_PutParWhichGrpsOnlyMyGrps (void)

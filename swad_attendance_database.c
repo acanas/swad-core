@@ -318,7 +318,7 @@ void Att_DB_HideOrUnhideEvent (long AttCod,
 /****************** Create group of an attendance event **********************/
 /*****************************************************************************/
 
-void Att_DB_CreateGroup (long AttCod,long GrpCod)
+void Att_DB_CreateGroupAssociatedToEvent (long AttCod,long GrpCod)
   {
    DB_QueryINSERT ("can not associate a group to an attendance event",
 		   "INSERT INTO att_groups"

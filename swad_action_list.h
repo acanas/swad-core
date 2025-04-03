@@ -864,6 +864,7 @@ typedef enum
 	ActRemExaQst,
 	ActValSetQst,
 	ActInvSetQst,
+	ActSeeOneExaSes,
 	ActReqNewExaSes,
 	ActReqChgExaSes,
 	ActNewExaSes,
@@ -885,7 +886,6 @@ typedef enum
 	ActSeeUsrExaResSes,
 	ActSeeOneExaResOth,
 	ActChgVisExaRes,
-	ActReqPrnOneExa,
 
    // Games -------------------------------------------------------------------
 

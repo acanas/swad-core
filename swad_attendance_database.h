@@ -55,7 +55,7 @@ void Att_DB_UpdateEvent (const struct Att_Event *Event,const char *Description);
 void Att_DB_HideOrUnhideEvent (long AttCod,
 			       HidVis_HiddenOrVisible_t HiddenOrVisible);
 
-void Att_DB_CreateGroup (long AttCod,long GrpCod);
+void Att_DB_CreateGroupAssociatedToEvent (long AttCod,long GrpCod);
 unsigned Att_DB_GetGrpCodsAssociatedToEvent (MYSQL_RES **mysql_res,long AttCod);
 unsigned Att_DB_GetGroupsAssociatedToEvent (MYSQL_RES **mysql_res,long AttCod);
 void Att_DB_RemoveGroup (long GrpCod);

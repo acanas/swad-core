@@ -5600,7 +5600,6 @@ static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_US
    extern const char *Txt_Add_to_clipboard;
    extern const char *Txt_Overwrite_clipboard;
    extern const char *Txt_View_homework;
-   extern const char *Txt_View_attendance;
    extern const char *Txt_Create_email_message;
    extern const char *Txt_Follow;
    extern const char *Txt_Unfollow;
@@ -5611,7 +5610,7 @@ static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_US
       [Usr_OPTION_ADD_TO_CLIPBOARD	] = &Txt_Add_to_clipboard,
       [Usr_OPTION_OVERWRITE_CLIPBOARD	] = &Txt_Overwrite_clipboard,
       [Usr_OPTION_HOMEWORK		] = &Txt_View_homework,
-      [Usr_OPTION_ATTENDANCE		] = &Txt_View_attendance,
+      [Usr_OPTION_ATTENDANCE		] = &Txt_Actions[ActSeeLstUsrAtt],
       [Usr_OPTION_MESSAGE		] = &Txt_Actions[ActReqMsgUsr],
       [Usr_OPTION_EMAIL			] = &Txt_Create_email_message,
       [Usr_OPTION_FOLLOW		] = &Txt_Follow,

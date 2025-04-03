@@ -188,7 +188,7 @@ static void Att_ResetEvents (struct Att_Events *Events)
 /************************ List all attendance events *************************/
 /*****************************************************************************/
 
-void Att_SeeEvents (void)
+void Att_ShowEvents (void)
   {
    struct Att_Events Events;
 
@@ -433,7 +433,6 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
-   extern const char *Txt_View_event;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -491,7 +490,8 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
       else
 	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
       HTM_ARTICLE_Begin (Anchor);
-	 Att_PutLinkEvent (&Events->Event,Txt_View_event,Events->Event.Title);
+	 Att_PutLinkEvent (&Events->Event,Act_GetActionText (ActSeeOneAtt),
+			   Events->Event.Title);
       HTM_ARTICLE_End ();
       HTM_TD_End ();
 
@@ -827,7 +827,7 @@ void Att_AskRemEvent (void)
 	                Events.Event.Title);
 
    /***** Show attendance events again *****/
-   Att_SeeEvents ();
+   Att_ShowEvents ();
   }
 
 /*****************************************************************************/
@@ -854,7 +854,7 @@ void Att_GetAndRemEvent (void)
 	          Event.Title);
 
    /***** Show attendance events again *****/
-   Att_SeeEvents ();
+   Att_ShowEvents ();
   }
 
 /*****************************************************************************/
@@ -901,7 +901,7 @@ static void Att_HideUnhideEvent (HidVis_HiddenOrVisible_t HiddenOrVisible)
    Att_DB_HideOrUnhideEvent (Event.AttCod,HiddenOrVisible);
 
    /***** Show attendance events again *****/
-   Att_SeeEvents ();
+   Att_ShowEvents ();
   }
 
 /*****************************************************************************/
@@ -1215,7 +1215,7 @@ void Att_ReceiveEvent (void)
       Att_ReqCreatOrEditEvent ();
 
    /***** Show attendance events again *****/
-   Att_SeeEvents ();
+   Att_ShowEvents ();
   }
 
 /*****************************************************************************/
@@ -1262,7 +1262,7 @@ static void Att_CreateGroups (long AttCod)
    for (NumGrp = 0;
 	NumGrp < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
 	NumGrp++)
-      Att_DB_CreateGroup (AttCod,Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp]);
+      Att_DB_CreateGroupAssociatedToEvent (AttCod,Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp]);
   }
 
 /*****************************************************************************/
@@ -1379,7 +1379,7 @@ unsigned Att_GetNumEvents (Hie_Level_t HieLvl,unsigned *NumNotif)
 /************************ Show one attendance event **************************/
 /*****************************************************************************/
 
-void Att_SeeOneEvent (void)
+void Att_ShowOneEvent (void)
   {
    struct Att_Events Events;
 
@@ -1830,7 +1830,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
   }
 
 /*****************************************************************************/
-/**************** Put link to view one attendance event **********************/
+/***************** Put link to view an attendance event **********************/
 /*****************************************************************************/
 
 static void Att_PutLinkEvent (struct Att_Event *Event,
@@ -1841,7 +1841,7 @@ static void Att_PutLinkEvent (struct Att_Event *Event,
    /***** Begin form *****/
    Frm_BeginForm (ActSeeOneAtt);
       ParCod_PutPar (ParCod_Att,Event->AttCod);
-      Att_PutParsCodGrps (Event->AttCod);
+      Grp_PutParsCodGrpsAssociated (Grp_ATTENDANCE_EVENT,Event->AttCod);
 
       /***** Link to view attendance event *****/
       HTM_BUTTON_Submit_Begin (Title,"class=\"LT BT_LINK %s_%s\"",
@@ -1852,61 +1852,6 @@ static void Att_PutLinkEvent (struct Att_Event *Event,
 
    /***** End form *****/
    Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/****** Put parameters with the default groups in an attendance event ********/
-/*****************************************************************************/
-
-void Att_PutParsCodGrps (long AttCod)
-  {
-   extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumGrp;
-   unsigned NumGrps;
-   size_t MaxLengthGrpCods;
-   char *GrpCods;
-
-   /***** Get groups associated to an attendance event from database *****/
-   if (Gbl.Crs.Grps.NumGrps)
-      NumGrps = Att_DB_GetGrpCodsAssociatedToEvent (&mysql_res,AttCod);
-   else
-      NumGrps = 0;
-
-   /***** Get groups *****/
-   if (NumGrps) // Groups found...
-     {
-      MaxLengthGrpCods = NumGrps * (1 + 20) - 1;
-      if ((GrpCods = malloc (MaxLengthGrpCods + 1)) == NULL)
-	 Err_NotEnoughMemoryExit ();
-      GrpCods[0] = '\0';
-
-      /* Get groups */
-      for (NumGrp = 0;
-	   NumGrp < NumGrps;
-	   NumGrp++)
-        {
-         /* Get next group */
-         row = mysql_fetch_row (mysql_res);
-
-         /* Append group code to list */
-         if (NumGrp)
-            Str_Concat (GrpCods,Par_SEPARATOR_PARAM_MULTIPLE,MaxLengthGrpCods);
-         Str_Concat (GrpCods,row[0],MaxLengthGrpCods);
-        }
-
-      Par_PutParString (NULL,"GrpCods",GrpCods);
-      free (GrpCods);
-     }
-   else
-      /***** Write the boolean parameter that indicates
-             if all groups should be listed *****/
-      Par_PutParChar ("AllGroups",'Y');
-
-   /***** Free structure that stores the query result *****/
-   if (Gbl.Crs.Grps.NumGrps)
-      DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -2879,9 +2824,7 @@ static void Att_WriteTableHeadSeveralAttEvents (struct Att_Events *Events,
 	    /***** Put link to this attendance event *****/
             HTM_TH_Begin (HTM_HEAD_CENTER);
 	       snprintf (StrNumAttEvent,sizeof (StrNumAttEvent),"%u",NumAttEvent + 1);
-	       Att_PutLinkEvent (&Events->Event,
-				    Events->Event.Title,
-				    StrNumAttEvent);
+	       Att_PutLinkEvent (&Events->Event,Events->Event.Title,StrNumAttEvent);
 	    HTM_TH_End ();
 	   }
 

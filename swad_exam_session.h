@@ -52,6 +52,9 @@ void ExaSes_ResetSession (struct ExaSes_Session *Session);
 
 void ExaSes_ListSessions (struct Exa_Exams *Exams,
                           Frm_PutForm_t PutFormSession);
+
+void ExaSes_ShowOneSession (void);
+
 void ExaSes_GetSessionDataByCod (struct ExaSes_Session *Session);
 
 void ExaSes_ToggleVisResultsSesUsr (void);

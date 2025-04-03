@@ -498,7 +498,6 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 				  Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral)
   {
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
-   extern const char *Txt_View_game;
    extern const char *Txt_Number_of_questions;
    extern const char *Txt_Maximum_grade;
    extern const char *Txt_Result_visibility;
@@ -583,7 +582,8 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeOneGam);
 	    Gam_PutPars (Games);
-	    HTM_BUTTON_Submit_Begin (Txt_View_game,"class=\"LT BT_LINK %s_%s\"",
+	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneGam),
+				     "class=\"LT BT_LINK %s_%s\"",
 				     HidVis_TitleClass[Games->Game.Hidden],
 				     The_GetSuffix ());
 	       HTM_Txt (Games->Game.Title);

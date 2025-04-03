@@ -1656,7 +1656,21 @@ void Exa_DB_CreateGrpAssociatedToSes (long SesCod,long GrpCod)
   }
 
 /*****************************************************************************/
-/*********** Get groups associated to an exam session from database **********/
+/************** Get group codes associated to an exam session ****************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetGrpCodsAssociatedToSes (MYSQL_RES **mysql_res,long SesCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get groups of an exam session",
+		   "SELECT GrpCod"	// row[0]
+		    " FROM exa_groups"
+		   " WHERE SesCod=%ld",
+		   SesCod);
+  }
+
+/*****************************************************************************/
+/****************** Get groups associated to an exam session *****************/
 /*****************************************************************************/
 
 unsigned Exa_DB_GetGrpsAssociatedToSes (MYSQL_RES **mysql_res,long SesCod)

@@ -59,5 +59,5 @@ void AttRsc_GetLinkToEvent (void)
                 	             Txt_Control_of_class_attendance);
 
    /***** Show attendance events again *****/
-   Att_SeeEvents ();
+   Att_ShowEvents ();
   }

@@ -935,6 +935,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemExaQst	] = {1889, 5,TabAss,NULL			,ExaSet_RemoveQstFromSet	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActValSetQst	] = {1909, 5,TabAss,NULL			,ExaSet_ValidateQst		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActInvSetQst	] = {1910, 5,TabAss,NULL			,ExaSet_InvalidateQst		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActSeeOneExaSes	] = {2181, 5,TabAss,NULL			,ExaSes_ShowOneSession		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActReqNewExaSes	] = {1852, 5,TabAss,NULL			,ExaSes_ReqCreatOrEditSes	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [ActReqChgExaSes	] = {1902, 5,TabAss,NULL			,ExaSes_ReqCreatOrEditSes	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActNewExaSes	] = {1853, 5,TabAss,NULL			,ExaSes_ReceiveSession		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
@@ -956,7 +957,6 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActSeeUsrExaResSes	] = {1874, 5,TabAss,NULL			,ExaRes_ShowAllResultsInSes	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [ActSeeOneExaResOth	] = {1875, 5,TabAss,NULL			,ExaRes_ShowOneExaResult	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [ActChgVisExaRes	] = {1876, 5,TabAss,NULL			,ExaSes_ToggleVisResultsSesUsr	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
-   [ActReqPrnOneExa	] = {2181, 5,TabAss,NULL			,ExaRes_ShowOneExaResult	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
 
    // Games
    [ActSeeAllGam	] = {1649, 6,TabAss,NULL			,Gam_ShowAllGames		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
@@ -1676,7 +1676,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemDupUsr	] = {1580, 3,TabUsr,NULL			,Dup_RemoveUsrFromListDupUsrs	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},
 
    // Attendance
-   [ActSeeAllAtt	] = { 861, 4,TabUsr,NULL			,Att_SeeEvents			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActSeeAllAtt	] = { 861, 4,TabUsr,NULL			,Att_ShowEvents			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActReqLstUsrAtt	] = {1073, 4,TabUsr,NULL			,Att_ReqListUsrsAttendanceCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [ActSeeLstMyAtt	] = {1473, 4,TabUsr,NULL			,Att_ListMyAttendanceCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActPrnLstMyAtt	] = {1474, 4,TabUsr,NULL			,Att_PrintMyAttendanceCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_NEW},
@@ -1690,7 +1690,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemAtt		] = {1068, 4,TabUsr,NULL			,Att_GetAndRemEvent		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActHidAtt		] = {1069, 4,TabUsr,NULL			,Att_HideEvent			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActUnhAtt		] = {1070, 4,TabUsr,NULL			,Att_UnhideEvent		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActSeeOneAtt	] = {1071, 4,TabUsr,NULL			,Att_SeeOneEvent		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActSeeOneAtt	] = {1071, 4,TabUsr,NULL			,Att_ShowOneEvent		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActReqLnkAtt	] = {1938, 4,TabUsr,NULL			,AttRsc_GetLinkToEvent		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRecAttStd	] = {1072, 4,TabUsr,NULL			,Att_RegisterStudentsInEvent	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRecAttMe		] = {1076, 4,TabUsr,NULL			,Att_RegisterMeAsStdInEvent	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
@@ -4209,5 +4209,5 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgBibRef,		// #2179
 
 	ActExpTstQst,		// #2180
-	ActReqPrnOneExa,		// #2181
+	ActSeeOneExaSes,	// #2181
   };

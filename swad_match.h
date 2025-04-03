@@ -65,7 +65,8 @@ struct Mch_Match
    char Title[Gam_MAX_BYTES_TITLE + 1];
    struct
      {
-      unsigned QstInd;	// 0 means that the game has not started. First question has index 1.
+      unsigned QstInd;		// 0 means that the game has not started.
+				// First question has index 1.
       long QstCod;
       time_t QstStartTimeUTC;
       Mch_Showing_t Showing;	// What is shown on teacher's screen
@@ -94,8 +95,7 @@ long Mch_GetMchCodBeingPlayed (void);
 
 void Mch_ResetMatch (struct Mch_Match *Match);
 
-void Mch_ListMatches (struct Gam_Games *Games,
-		      Frm_PutForm_t PutFormNewMatch);
+void Mch_ListMatches (struct Gam_Games *Games,Frm_PutForm_t PutFormNewMatch);
 void Mch_GetMatchDataByCod (struct Mch_Match *Match);
 
 void Mch_ToggleVisResultsMchUsr (void);

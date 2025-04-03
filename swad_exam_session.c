@@ -104,6 +104,9 @@ static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
                                                   const struct ExaSes_Session *Session,
                                                   const char *Anchor);
 static void ExaSes_ListOneOrMoreSessionsPrints (const struct ExaSes_Session *Session);
+static void ExaSes_PutLinkSession (struct Exa_Exams *Exams,
+				   const struct ExaSes_Session *Session,
+			           const char *Txt);
 static void ExaSes_WriteModality (const struct ExaSes_Session *Session);
 static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSes_Session *Session);
 static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
@@ -131,6 +134,8 @@ static void ExaSes_UpdateSession (struct ExaSes_Session *Session);
 
 static void ExaSes_CreateGrpsAssociatedToExamSession (long SesCod,
                                                       const struct ListCodGrps *LstGrpsSel);
+
+
 
 /*****************************************************************************/
 /***************************** Reset exam session ****************************/
@@ -190,6 +195,27 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/******************************* Show one session ****************************/
+/*****************************************************************************/
+
+void ExaSes_ShowOneSession (void)
+  {
+   // struct Att_Events Events;
+
+   /***** Reset attendance events *****/
+   // Att_ResetEvents (&Events);
+
+   /***** Get attendance event code *****/
+   // Events.Event.AttCod = ParCod_GetAndCheckPar (ParCod_Att);
+
+   /***** Show event *****/
+   // Att_ShowEvent (&Events);
+
+
+   Ale_ShowAlert (Ale_INFO,"Under development");
   }
 
 /*****************************************************************************/
@@ -528,29 +554,43 @@ static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
 
       /***** Session title *****/
       HTM_ARTICLE_Begin (Anchor);
-	 switch (ExaSes_CheckIfICanAnswerThisSession (&Exams->Exam,Session))
+
+	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
-	    case Usr_CAN:
-	       Frm_BeginForm (ActSeeExaPrn);
-		  Exa_PutPars (Exams);
-		  ParCod_PutPar (ParCod_Ses,Session->SesCod);
-		  HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeExaPrn),
-					   "class=\"LT BT_LINK %s_%s\"",
-					   HidVis_TitleClass[Session->Hidden],
-					   The_GetSuffix ());
-		     HTM_Txt (Session->Title);
-		  HTM_BUTTON_End ();
-	       Frm_EndForm ();
+	    case Rol_STD:
+	       switch (ExaSes_CheckIfICanAnswerThisSession (&Exams->Exam,Session))
+		 {
+		  case Usr_CAN:
+		     Frm_BeginForm (ActSeeExaPrn);
+			Exa_PutPars (Exams);
+			ParCod_PutPar (ParCod_Ses,Session->SesCod);
+			HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeExaPrn),
+						 "class=\"LT BT_LINK %s_%s\"",
+						 HidVis_TitleClass[Session->Hidden],
+						 The_GetSuffix ());
+			   HTM_Txt (Session->Title);
+			HTM_BUTTON_End ();
+		     Frm_EndForm ();
+		     break;
+		  case Usr_CAN_NOT:
+		  default:
+		     HTM_SPAN_Begin ("class=\"%s_%s\"",
+				     HidVis_TitleClass[Session->Hidden],
+				     The_GetSuffix ());
+			HTM_Txt (Session->Title);
+		     HTM_SPAN_End ();
+		     break;
+		 }
 	       break;
-	    case Usr_CAN_NOT:
+	    case Rol_NET:
+	    case Rol_TCH:
+	    case Rol_SYS_ADM:
+	       ExaSes_PutLinkSession (Exams,Session,Session->Title);
+	       break;
 	    default:
-	       HTM_SPAN_Begin ("class=\"%s_%s\"",
-			       HidVis_TitleClass[Session->Hidden],
-			       The_GetSuffix ());
-		  HTM_Txt (Session->Title);
-	       HTM_SPAN_End ();
-	       break;
+	       Err_NoPermissionExit ();
 	   }
+
       HTM_ARTICLE_End ();
 
       /***** Modality *****/
@@ -580,7 +620,35 @@ static void ExaSes_ListOneOrMoreSessionsPrints (const struct ExaSes_Session *Ses
   }
 
 /*****************************************************************************/
-/************** Put a column for exam session title and groups ***************/
+/***************** Put link to view an attendance event **********************/
+/*****************************************************************************/
+
+static void ExaSes_PutLinkSession (struct Exa_Exams *Exams,
+				   const struct ExaSes_Session *Session,
+			           const char *Txt)
+  {
+   extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
+
+   /***** Begin form *****/
+   Frm_BeginForm (ActSeeOneExaSes);
+      Exa_PutPars (Exams);
+      ParCod_PutPar (ParCod_Ses,Session->SesCod);
+      Grp_PutParsCodGrpsAssociated (Grp_EXAM_SESSION,Session->SesCod);
+
+      /***** Link to view attendance event *****/
+      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneExaSes),
+			       "class=\"LT BT_LINK %s_%s\"",
+			       HidVis_TitleClass[Session->Hidden],
+			       The_GetSuffix ());
+	 HTM_Txt (Txt);
+      HTM_BUTTON_End ();
+
+   /***** End form *****/
+   Frm_EndForm ();
+  }
+
+/*****************************************************************************/
+/*************************** Write session modality **************************/
 /*****************************************************************************/
 
 static void ExaSes_WriteModality (const struct ExaSes_Session *Session)

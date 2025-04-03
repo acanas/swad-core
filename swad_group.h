@@ -50,6 +50,13 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
+#define Grp_NUM_ASSOCIATIONS 2
+typedef enum
+  {
+   Grp_EXAM_SESSION,
+   Grp_ATTENDANCE_EVENT,
+  } Grp_Association_t;
+
 #define Grp_NUM_WHICH_GROUP_TYPES 2
 typedef enum
   {
@@ -184,6 +191,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
 				        void (*FuncPars) (void *Args),void *Args,
 				        const char *OnSubmit);
 void Grp_PutParsCodGrps (void);
+void Grp_PutParsCodGrpsAssociated (Grp_Association_t Association,long Cod);
 void Grp_GetParCodsSeveralGrpsToShowUsrs (void);
 void Grp_GetParCodsSeveralGrps (void);
 void Grp_FreeListCodSelectedGrps (void);

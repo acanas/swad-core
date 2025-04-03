@@ -445,7 +445,6 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
 			          Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral)
   {
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
-   extern const char *Txt_View_exam;
    extern const char *Txt_Sets_of_questions;
    extern const char *Txt_Maximum_grade;
    extern const char *Txt_Result_visibility;
@@ -529,7 +528,8 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeOneExa);
 	    Exa_PutPars (Exams);
-	    HTM_BUTTON_Submit_Begin (Txt_View_exam,"class=\"LT BT_LINK %s_%s\"",
+	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneExa),
+				     "class=\"LT BT_LINK %s_%s\"",
 				     HidVis_TitleClass[Exams->Exam.Hidden],
 				     The_GetSuffix ());
 	       HTM_Txt (Exams->Exam.Title);
@@ -697,14 +697,6 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
       [Rol_TCH    ] = ActSeeUsrExaResExa,
       [Rol_SYS_ADM] = ActSeeUsrExaResExa,
      };
-   /*
-   static Act_Action_t ActionPrintExam[Rol_NUM_ROLES] =
-     {
-      [Rol_NET    ] = ActReqPrnOneExa,
-      [Rol_TCH    ] = ActReqPrnOneExa,
-      [Rol_SYS_ADM] = ActReqPrnOneExa,
-     };
-   */
 
    if (Exa_CheckIfICanEditExams () == Usr_CAN)
      {
@@ -726,13 +718,6 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
       Ico_PutContextualIconToShowResults (ActionShowResults[Gbl.Usrs.Me.Role.Logged],
 					  ExaRes_RESULTS_BOX_ID,
 					  Exa_PutPars,Exams);
-
-   /***** Put icon to print exam *****/
-   /*
-   if (ActionPrintExam[Gbl.Usrs.Me.Role.Logged])
-      Ico_PutContextualIconToPrint (ActionPrintExam[Gbl.Usrs.Me.Role.Logged],
-				    Exa_PutPars,Exams);
-   */
 
    /***** Link to get resource link *****/
    Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,Exa_PutPars,Exams);
