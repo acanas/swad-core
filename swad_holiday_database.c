@@ -127,10 +127,10 @@ unsigned Hld_DB_GetListHolidays (MYSQL_RES **mysql_res,Hld_Order_t SelectedOrder
   {
    static const char *OrderBySubQuery[Hld_NUM_ORDERS] =
      {
-      [Hld_ORDER_BY_PLACE     ] = "Place,"
-	                          "StartDate",
-      [Hld_ORDER_BY_START_DATE] = "StartDate,"
-	                          "Place",
+      [Hld_ORDER_BY_PLACE   ] = "Place,"
+	                        "StartDate",
+      [Hld_ORDER_BY_STR_DATE] = "StartDate,"
+	                        "Place",
      };
 
    return (unsigned)

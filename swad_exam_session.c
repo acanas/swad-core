@@ -103,6 +103,7 @@ static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Sess
 static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
                                                   const struct ExaSes_Session *Session,
                                                   const char *Anchor);
+static void ExaSes_ListOneOrMoreSessionsPrints (const struct ExaSes_Session *Session);
 static void ExaSes_WriteModality (const struct ExaSes_Session *Session);
 static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSes_Session *Session);
 static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
@@ -169,28 +170,26 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
    /***** Get data of sessions from database *****/
    NumSessions = Exa_DB_GetSessions (&mysql_res,Exams->Exam.ExaCod);
 
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_Sessions,ExaSes_PutIconsInListOfSessions,Exams,
-                 Hlp_ASSESSMENT_Exams_sessions,Box_NOT_CLOSABLE);
+      /***** Begin box *****/
+      Box_BoxBegin (Txt_Sessions,ExaSes_PutIconsInListOfSessions,Exams,
+		    Hlp_ASSESSMENT_Exams_sessions,Box_NOT_CLOSABLE);
 
-      /***** Select whether show only my groups or all groups *****/
-      if (Gbl.Crs.Grps.NumGrps &&
-	  ExaSes_CheckIfICanEditSessions () == Usr_CAN)
-	{
-	 Set_BeginSettingsHead ();
-	    Grp_ShowFormToSelMyAllGrps (ActSeeOneExa,Exa_PutPars,Exams);
-	 Set_EndSettingsHead ();
-	}
+	 /***** Select whether show only my groups or all groups *****/
+	 if (Gbl.Crs.Grps.NumGrps && ExaSes_CheckIfICanEditSessions () == Usr_CAN)
+	   {
+	    Set_BeginSettingsHead ();
+	       Grp_ShowFormToSelMyAllGrps (ActSeeOneExa,Exa_PutPars,Exams);
+	    Set_EndSettingsHead ();
+	   }
 
-      /***** Show the table with the sessions *****/
-      ExaSes_ListOneOrMoreSessions (Exams,PutFormSession,
-				    NumSessions,mysql_res);
+	 /***** Show the table with the sessions *****/
+	 ExaSes_ListOneOrMoreSessions (Exams,PutFormSession,NumSessions,mysql_res);
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+      /***** End box *****/
+      Box_BoxEnd ();
 
-   /***** End box *****/
-   Box_BoxEnd ();
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -298,6 +297,10 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	       /* Title, modality and groups */
 	       ExaSes_ListOneOrMoreSessionsMainData (Exams,&Session,Anchor);
 
+	       /* Prints in the session */
+	       if (ICanEditSessions)
+	          ExaSes_ListOneOrMoreSessionsPrints (&Session);
+
 	       /* Session result visible? */
 	       ExaSes_ListOneOrMoreSessionsResult (Exams,&Session);
 
@@ -356,6 +359,7 @@ static void ExaSes_ListOneOrMoreSessionsHeading (Usr_Can_t ICanEditSessions)
   {
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Session;
+   extern const char *Txt_Exam_printouts;
    extern const char *Txt_Results;
 
    /***** Begin row *****/
@@ -366,10 +370,12 @@ static void ExaSes_ListOneOrMoreSessionsHeading (Usr_Can_t ICanEditSessions)
 	 HTM_TH_Empty (1);
 
       /***** The rest of columns *****/
-      HTM_TH (Txt_START_END_TIME[Exa_ORDER_BY_START_DATE],HTM_HEAD_LEFT  );
-      HTM_TH (Txt_START_END_TIME[Exa_ORDER_BY_END_DATE  ],HTM_HEAD_LEFT  );
-      HTM_TH (Txt_Session                                ,HTM_HEAD_LEFT  );
-      HTM_TH (Txt_Results                                ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_START_END_TIME[Exa_ORDER_BY_STR_DATE]	,HTM_HEAD_LEFT);
+      HTM_TH (Txt_START_END_TIME[Exa_ORDER_BY_END_DATE]	,HTM_HEAD_LEFT);
+      HTM_TH (Txt_Session				,HTM_HEAD_LEFT);
+      if (ICanEditSessions == Usr_CAN)
+	 HTM_TH (Txt_Exam_printouts			,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Results				,HTM_HEAD_CENTER);
 
    /***** End row *****/
    HTM_TR_End ();
@@ -554,6 +560,22 @@ static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
       if (Gbl.Crs.Grps.NumGrps)
 	 ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (Session);
 
+   HTM_TD_End ();
+  }
+
+/*****************************************************************************/
+/************** Put a column for exam session title and groups ***************/
+/*****************************************************************************/
+
+static void ExaSes_ListOneOrMoreSessionsPrints (const struct ExaSes_Session *Session)
+  {
+   extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
+
+   /***** Number of prints in the session ******/
+   HTM_TD_Begin ("rowspan=\"2\" class=\"RT %s_%s %s\"",
+                 HidVis_DataClass[Session->Hidden],The_GetSuffix (),
+                 The_GetColorRows ());
+      HTM_Unsigned (Exa_DB_GetNumPrintsInSession (Session->SesCod));
    HTM_TD_End ();
   }
 

@@ -38,12 +38,12 @@
 void Exa_ResetExams (struct Exa_Exams *Exams);
 void Exa_ResetExam (struct Exa_Exam *Exam);
 
-void Exa_SeeAllExams (void);
+void Exa_ShoeAllExams (void);
 void Exa_ListAllExams (struct Exa_Exams *Exams);
 
 Usr_Can_t Exa_CheckIfICanEditExams (void);
 
-void Exa_SeeOneExam (void);
+void Exa_ShowOneExam (void);
 void Exa_ShowOnlyOneExam (struct Exa_Exams *Exams,Frm_PutForm_t PutFormSession);
 void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
 			       Frm_PutForm_t PutFormSession);

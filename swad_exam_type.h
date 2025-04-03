@@ -50,11 +50,11 @@
 #define Exa_NUM_ORDERS 3
 typedef enum
   {
-   Exa_ORDER_BY_START_DATE = 0,
-   Exa_ORDER_BY_END_DATE   = 1,
-   Exa_ORDER_BY_TITLE      = 2,
+   Exa_ORDER_BY_STR_DATE = 0,
+   Exa_ORDER_BY_END_DATE = 1,
+   Exa_ORDER_BY_TITLE    = 2,
   } Exa_Order_t;
-#define Exa_ORDER_DEFAULT Exa_ORDER_BY_START_DATE
+#define Exa_ORDER_DEFAULT Exa_ORDER_BY_STR_DATE
 
 typedef enum
   {

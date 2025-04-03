@@ -208,7 +208,7 @@ void Gam_ResetGame (struct Gam_Game *Game)
 /***************************** List all games ********************************/
 /*****************************************************************************/
 
-void Gam_SeeAllGames (void)
+void Gam_ShowAllGames (void)
   {
    struct Gam_Games Games;
 
@@ -427,7 +427,7 @@ static void Gam_PutParsToCreateNewGame (void *Games)
 /******************************* Show one game *******************************/
 /*****************************************************************************/
 
-void Gam_SeeOneGame (void)
+void Gam_ShowOneGame (void)
   {
    struct Gam_Games Games;
 

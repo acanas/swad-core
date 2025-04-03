@@ -279,27 +279,26 @@ void Mch_ListMatches (struct Gam_Games *Games,
    /***** Get data of matches from database *****/
    NumMatches = Mch_DB_GetMatchesInGame (&mysql_res,Games->Game.GamCod);
 
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_Matches,Mch_PutIconsInListOfMatches,Games,
-                 Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE);
+      /***** Begin box *****/
+      Box_BoxBegin (Txt_Matches,Mch_PutIconsInListOfMatches,Games,
+		    Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE);
 
-      /***** Select whether show only my groups or all groups *****/
-      if (Gbl.Crs.Grps.NumGrps && Mch_CheckIfICanEditMatches () == Usr_CAN)
-	{
-	 Set_BeginSettingsHead ();
-	    Grp_ShowFormToSelMyAllGrps (ActSeeOneGam,Gam_PutPars,Games);
-	 Set_EndSettingsHead ();
-	}
+	 /***** Select whether show only my groups or all groups *****/
+	 if (Gbl.Crs.Grps.NumGrps && Mch_CheckIfICanEditMatches () == Usr_CAN)
+	   {
+	    Set_BeginSettingsHead ();
+	       Grp_ShowFormToSelMyAllGrps (ActSeeOneGam,Gam_PutPars,Games);
+	    Set_EndSettingsHead ();
+	   }
 
-      /***** Show the table with the matches *****/
-      Mch_ListOneOrMoreMatches (Games,PutFormNewMatch,
-				NumMatches,mysql_res);
+	 /***** Show the table with the matches *****/
+	 Mch_ListOneOrMoreMatches (Games,PutFormNewMatch,NumMatches,mysql_res);
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+      /***** End box *****/
+      Box_BoxEnd ();
 
-   /***** End box *****/
-   Box_BoxEnd ();
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -477,14 +476,14 @@ static void Mch_ListOneOrMoreMatchesHeading (Usr_Can_t ICanEditMatches)
 	 HTM_TH_Empty (1);
 
       /***** The rest of columns *****/
-      HTM_TH (Txt_START_END_TIME[Gam_ORDER_BY_START_DATE]   ,HTM_HEAD_LEFT  );
-      HTM_TH (Txt_START_END_TIME[Gam_ORDER_BY_END_DATE  ]   ,HTM_HEAD_LEFT  );
-      HTM_TH (Txt_Match                                     ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_START_END_TIME[Gam_ORDER_BY_STR_DATE]	,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_START_END_TIME[Gam_ORDER_BY_END_DATE]	,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Match					,HTM_HEAD_LEFT  );
       HTM_TH_Begin (HTM_HEAD_RIGHT);
 	 Ico_PutIconOn ("users.svg",Ico_BLUE,Txt_Players);
       HTM_TH_End ();
-      HTM_TH (Txt_Status                                    ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Results                                   ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Status				,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Results				,HTM_HEAD_CENTER);
 
    /***** End row *****/
    HTM_TR_End ();

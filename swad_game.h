@@ -43,11 +43,11 @@
 #define Gam_NUM_ORDERS 3
 typedef enum
   {
-   Gam_ORDER_BY_START_DATE = 0,
-   Gam_ORDER_BY_END_DATE   = 1,
-   Gam_ORDER_BY_TITLE      = 2,
+   Gam_ORDER_BY_STR_DATE = 0,
+   Gam_ORDER_BY_END_DATE = 1,
+   Gam_ORDER_BY_TITLE    = 2,
   } Gam_Order_t;
-#define Gam_ORDER_DEFAULT Gam_ORDER_BY_START_DATE
+#define Gam_ORDER_DEFAULT Gam_ORDER_BY_STR_DATE
 
 #define Gam_NUM_ANS_TYPES	2
 typedef enum
@@ -103,9 +103,9 @@ struct Gam_Games
 void Gam_ResetGames (struct Gam_Games *Games);
 void Gam_ResetGame (struct Gam_Game *Game);
 
-void Gam_SeeAllGames (void);
+void Gam_ShowAllGames (void);
 void Gam_ListAllGames (struct Gam_Games *Games);
-void Gam_SeeOneGame (void);
+void Gam_ShowOneGame (void);
 void Gam_ShowOnlyOneGame (struct Gam_Games *Games,
 			  bool ListGameQuestions,
 			  Frm_PutForm_t PutFormNewMatch);

@@ -1067,8 +1067,8 @@ unsigned Mch_DB_GetPrintsInMatch (MYSQL_RES **mysql_res,long MchCod)
 
 unsigned Mch_DB_GetNumUsrsWhoHavePlayedMch (long MchCod)
   {
-   /***** Get number of users who have played the match
-          (users who have a result for this match, even blank result)
+   /***** Get number of results in the match
+          (number of users who have a result for this match, even blank result)
           from database *****/
    return (unsigned)
    DB_QueryCOUNT ("can not get number of users who have played a match",

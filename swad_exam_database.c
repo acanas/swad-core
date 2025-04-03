@@ -136,13 +136,13 @@ unsigned Exa_DB_GetListExams (MYSQL_RES **mysql_res,Exa_Order_t SelectedOrder)
   {
    static const char *OrderBySubQuery[Exa_NUM_ORDERS] =
      {
-      [Exa_ORDER_BY_START_DATE] = "StartTime DESC,"
-	                          "EndTime DESC,"
-	                          "exa_exams.Title DESC",
-      [Exa_ORDER_BY_END_DATE  ] = "EndTime DESC,"
-	                          "StartTime DESC,"
-	                          "exa_exams.Title DESC",
-      [Exa_ORDER_BY_TITLE     ] = "exa_exams.Title",
+      [Exa_ORDER_BY_STR_DATE] = "StartTime DESC,"
+	                        "EndTime DESC,"
+	                        "exa_exams.Title DESC",
+      [Exa_ORDER_BY_END_DATE] = "EndTime DESC,"
+	                        "StartTime DESC,"
+	                        "exa_exams.Title DESC",
+      [Exa_ORDER_BY_TITLE   ] = "exa_exams.Title",
      };
    char *HiddenSubQuery;
    unsigned NumExams;
@@ -2288,6 +2288,27 @@ unsigned Exa_DB_GetAllUsrsWhoHaveMadeSession (MYSQL_RES **mysql_res,long SesCod)
 		" ORDER BY usr_data.Surname1,"
 			  "usr_data.Surname2,"
 			  "usr_data.FirstName",
+		   SesCod,
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+  }
+
+/*****************************************************************************/
+/*** Get all users who have answered any question in a given exam session ****/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetNumPrintsInSession (long SesCod)
+  {
+   /***** Get number of users who have played the match
+          (users who have a result for this match, even blank result)
+          from database *****/
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of prints in sessions",
+		  "SELECT COUNT(*)"
+		   " FROM exa_prints,exa_sessions,exa_exams"
+		  " WHERE exa_prints.SesCod=%ld"
+		    " AND exa_prints.SesCod=exa_sessions.SesCod"
+		    " AND exa_sessions.ExaCod=exa_exams.ExaCod"
+		    " AND exa_exams.CrsCod=%ld",	// Extra check
 		   SesCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }

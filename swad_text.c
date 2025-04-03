@@ -12298,6 +12298,29 @@ const char *Txt_EXAM_Open =
 	"Open";		// Çeviri lazim!
 #endif
 
+const char *Txt_Exam_printouts =
+#if   L==1	// ca
+	"Impressions d'ex&agrave;mens";
+#elif L==2	// de
+	"Pr&uuml;fungsausdrucke";
+#elif L==3	// en
+	"Exam printouts";
+#elif L==4	// es
+	"Impresiones de ex&aacute;menes";
+#elif L==5	// fr
+	"Impressions d'examen";
+#elif L==6	// gn
+	"Impresiones de ex&aacute;menes";	// Okoteve traducción
+#elif L==7	// it
+	"Stampe degli esami";
+#elif L==8	// pl
+	"Wydruki egzaminacyjne";
+#elif L==9	// pt
+	"Impress&otilde;es de exames";
+#elif L==10	// tr
+	"S&inodot;nav &ccedil;&inodot;kt&inodot;lar&inodot;";
+#endif
+
 const char *Txt_Exam_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Examen <strong>%s</strong> eliminat.";
@@ -12441,7 +12464,7 @@ const char *Txt_Exams =
 
 const char *Txt_EXAMS_ORDER[Exa_NUM_ORDERS] =
 	{
-	[Exa_ORDER_BY_START_DATE] =
+	[Exa_ORDER_BY_STR_DATE] =
 #if   L==1	// ca
 	"Inici"
 #elif L==2	// de
@@ -12513,7 +12536,7 @@ const char *Txt_EXAMS_ORDER[Exa_NUM_ORDERS] =
 
 const char *Txt_EXAMS_ORDER_HELP[Gam_NUM_ORDERS] =
 	{
-	[Exa_ORDER_BY_START_DATE] =
+	[Exa_ORDER_BY_STR_DATE] =
 #if   L==1	// ca
 	"Ordenar per data de comen&ccedil;ament"
 #elif L==2	// de
@@ -15058,7 +15081,7 @@ const char *Txt_Games =
 
 const char *Txt_GAMES_ORDER[Gam_NUM_ORDERS] =
 	{
-	[Gam_ORDER_BY_START_DATE] =
+	[Gam_ORDER_BY_STR_DATE] =
 #if   L==1	// ca
 	"Inici"
 #elif L==2	// de
@@ -15130,7 +15153,7 @@ const char *Txt_GAMES_ORDER[Gam_NUM_ORDERS] =
 
 const char *Txt_GAMES_ORDER_HELP[Gam_NUM_ORDERS] =
 	{
-	[Gam_ORDER_BY_START_DATE] =
+	[Gam_ORDER_BY_STR_DATE] =
 #if   L==1	// ca
 	"Ordenar per data de comen&ccedil;ament"
 #elif L==2	// de
@@ -16828,7 +16851,7 @@ const char *Txt_HOLIDAYS_HELP_ORDER[Hld_NUM_ORDERS] =
 	"Sort by place"		// Çeviri lazim!
 #endif
 	,
-	[Hld_ORDER_BY_START_DATE] =
+	[Hld_ORDER_BY_STR_DATE] =
 #if   L==1	// ca
 	"Ordenar per data"
 #elif L==2	// de
@@ -16874,10 +16897,10 @@ const char *Txt_HOLIDAYS_ORDER[Hld_NUM_ORDERS] =
 #elif L==9	// pt
 	"Localiza&ccedil;&atilde;o"
 #elif L==10	// tr
-	"Place"	// Çeviri lazim!
+	"Yer"
 #endif
 	,
-	[Hld_ORDER_BY_START_DATE] =
+	[Hld_ORDER_BY_STR_DATE] =
 #if   L==1	// ca
 	"Data inicial"
 #elif L==2	// de
@@ -16889,7 +16912,7 @@ const char *Txt_HOLIDAYS_ORDER[Hld_NUM_ORDERS] =
 #elif L==5	// fr
 	"Date initiale"
 #elif L==6	// gn
-	"Fecha inicial"	// Okoteve traducción
+	"&Aacute;ra o&ntilde;epyr&utilde; hagu&atilde;"
 #elif L==7	// it
 	"Data iniziale"
 #elif L==8	// pl
@@ -16897,7 +16920,7 @@ const char *Txt_HOLIDAYS_ORDER[Hld_NUM_ORDERS] =
 #elif L==9	// pt
 	"Data de in&iacute;cio"
 #elif L==10	// tr
-	"Start date"	// Çeviri lazim!
+	"Ba&scedil;lang&inodot;&ccedil; tarihi"
 #endif
 	};
 
@@ -16921,7 +16944,7 @@ const char *Txt_Home_PAGE =
 #elif L==9	// pt
 	"Home";
 #elif L==10	// tr
-	"Home";		// Çeviri lazim!
+	"Ana";
 #endif
 
 const char *Txt_hour =
@@ -16944,7 +16967,7 @@ const char *Txt_hour =
 #elif L==9	// pt
 	"hora";
 #elif L==10	// tr
-	"hour";	// Çeviri lazim!
+	"saat";
 #endif
 
 const char *Txt_hours =
@@ -16967,7 +16990,7 @@ const char *Txt_hours =
 #elif L==9	// pt
 	"horas";
 #elif L==10	// tr
-	"hours";	// Çeviri lazim!
+	"saat";
 #endif
 
 const char *Txt_hours_ABBREVIATION =	// Abbreviation of "hours"
@@ -16990,7 +17013,7 @@ const char *Txt_hours_ABBREVIATION =	// Abbreviation of "hours"
 #elif L==9	// pt
 	"h";
 #elif L==10	// tr
-	"h";	// Çeviri lazim!
+	"s";
 #endif
 
 const char *Txt_I_have_read_this_information =
@@ -17005,7 +17028,7 @@ const char *Txt_I_have_read_this_information =
 #elif L==5	// fr
 	"J'ai lu cette information";
 #elif L==6	// gn
-	"He le&iacute;do esta informaci&oacute;n";	// Okoteve traducción
+	"Amo&ntilde;e'&etilde;ma ko marandu";
 #elif L==7	// it
 	"Ho letto questa informazione";
 #elif L==8	// pl
@@ -17013,7 +17036,7 @@ const char *Txt_I_have_read_this_information =
 #elif L==9	// pt
 	"Eu li esta informa&ccedil;&atilde;o";
 #elif L==10	// tr
-	"I have read this information";			// Çeviri lazim!
+	"Bu bilgiyi okudum";
 #endif
 
 const char *Txt_I_understand_that_this_action_can_not_be_undone =
@@ -17028,7 +17051,7 @@ const char *Txt_I_understand_that_this_action_can_not_be_undone =
 #elif L==5	// fr
 	"Je comprends que cette action ne peut &ecirc;tre annul&eacute;e.";
 #elif L==6	// gn
-	"Entiendo que esta acci&oacute;n no se puede deshacer.";	// Okoteve traducción
+	"A&ntilde;eteh&aacute;pe ko acci&oacute;n ndaikatuiha ojedesatina.";
 #elif L==7	// it
 	"Mi rendo conto che questa azione non pu&ograve; essere annullata.";
 #elif L==8	// pl
@@ -17036,7 +17059,7 @@ const char *Txt_I_understand_that_this_action_can_not_be_undone =
 #elif L==9	// pt
 	"Eu entendo que esta a&ccedil;&atilde;o n&atilde;o pode ser desfeita.";
 #elif L==10	// tr
-	"I understand that this action can not be undone.";		// Çeviri lazim!
+	"Bu i&scedil;lemin geri al&inodot;namayaca&gbreve;&inodot;n&inodot; anl&inodot;yorum.";
 #endif
 
 const char *Txt_Icons =

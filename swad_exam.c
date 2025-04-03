@@ -196,7 +196,7 @@ void Exa_ResetExam (struct Exa_Exam *Exam)
 /***************************** List all exams ********************************/
 /*****************************************************************************/
 
-void Exa_SeeAllExams (void)
+void Exa_ShoeAllExams (void)
   {
    struct Exa_Exams Exams;
 
@@ -382,7 +382,7 @@ static void Exa_PutParsToCreateNewExam (void *Exams)
 /****************************** Show one exam ******************************/
 /*****************************************************************************/
 
-void Exa_SeeOneExam (void)
+void Exa_ShowOneExam (void)
   {
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;

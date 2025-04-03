@@ -65,10 +65,10 @@ struct Hld_Holiday
 #define Hld_NUM_ORDERS 2
 typedef enum
   {
-   Hld_ORDER_BY_PLACE      = 0,
-   Hld_ORDER_BY_START_DATE = 1,
+   Hld_ORDER_BY_PLACE    = 0,
+   Hld_ORDER_BY_STR_DATE = 1,
   } Hld_Order_t;
-#define Hld_DEFAULT_ORDER_TYPE Hld_ORDER_BY_START_DATE
+#define Hld_DEFAULT_ORDER_TYPE Hld_ORDER_BY_STR_DATE
 
 struct Hld_Holidays
   {

@@ -117,13 +117,13 @@ unsigned Gam_DB_GetListGames (MYSQL_RES **mysql_res,Gam_Order_t SelectedOrder)
   {
    static const char *OrderBySubQuery[Gam_NUM_ORDERS] =
      {
-      [Gam_ORDER_BY_START_DATE] = "StartTime DESC,"
-	                          "EndTime DESC,"
-	                          "gam_games.Title DESC",
-      [Gam_ORDER_BY_END_DATE  ] = "EndTime DESC,"
-	                          "StartTime DESC,"
-	                          "gam_games.Title DESC",
-      [Gam_ORDER_BY_TITLE     ] = "gam_games.Title",
+      [Gam_ORDER_BY_STR_DATE] = "StartTime DESC,"
+	                        "EndTime DESC,"
+	                        "gam_games.Title DESC",
+      [Gam_ORDER_BY_END_DATE] = "EndTime DESC,"
+	                        "StartTime DESC,"
+	                        "gam_games.Title DESC",
+      [Gam_ORDER_BY_TITLE   ] = "gam_games.Title",
      };
    char *HiddenSubQuery;
    unsigned NumGames;

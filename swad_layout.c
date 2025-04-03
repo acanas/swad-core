@@ -557,7 +557,7 @@ static void Lay_WriteScripts (void)
       Hld_ResetHolidays (&Holidays);
 
       /***** Get list of holidays *****/
-      Holidays.SelectedOrder = Hld_ORDER_BY_START_DATE;
+      Holidays.SelectedOrder = Hld_ORDER_BY_STR_DATE;
       Hld_GetListHolidays (&Holidays);
 
       /***** Reset exam announcements context *****/
