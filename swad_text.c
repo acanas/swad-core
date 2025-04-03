@@ -5228,29 +5228,6 @@ const char *Txt_Check_another_ID =
 	"Ba&scedil;ka bir kimli&gbreve;i kontrol et?";
 #endif
 
-const char *Txt_Check_marks_in_the_file =
-#if   L==1	// ca
-	"Consultar qualificacions al fitxer";
-#elif L==2	// de
-	"&Uuml;berpr&uuml;fen Sie die Noten in der Datei";
-#elif L==3	// en
-	"Check marks in the file";
-#elif L==4	// es
-	"Consultar calificaciones en el archivo";
-#elif L==5	// fr
-	"Consulter les notes dans le fichier";
-#elif L==6	// gn
-	"Consultar calificaciones en el archivo";	// Okoteve traducción
-#elif L==7	// it
-	"Consultare le valutazioni nel file";
-#elif L==8	// pl
-	"Sprawd&zacute; oceny w pliku";
-#elif L==9	// pt
-	"Verifique as notas no arquivo";
-#elif L==10	// tr
-	"Check marks in the file";			// Çeviri lazim!
-#endif
-
 const char *Txt_Click =
 #if   L==1	// ca
 	"Clic";
@@ -41172,29 +41149,6 @@ const char *Txt_See_new_activity =
 	"See new activity";	// Çeviri lazim!
 #endif
 
-const char *Txt_See_notifications =
-#if   L==1	// ca
-	"Ver notificaciones";	// Necessita traducció
-#elif L==2	// de
-	"Siehe Anmeldungen";
-#elif L==3	// en
-	"See notifications";
-#elif L==4	// es
-	"Ver notificaciones";
-#elif L==5	// fr
-	"Voir notifications";
-#elif L==6	// gn
-	"Ver notificaciones";	// Okoteve traducción
-#elif L==7	// it
-	"Vedi notifiche";
-#elif L==8	// pl
-	"See notifications";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Ver notifica&ccedil;&otilde;es";
-#elif L==10	// tr
-	"See notifications";	// Çeviri lazim!
-#endif
-
 const char *Txt_See_only_the_latest_X_COMMENTS =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
 	"Veure nom&eacute;s els %u &uacute;ltims";
@@ -42352,52 +42306,6 @@ const char *Txt_Show_all_notifications =
 	"Mostrar todas as notifica&ccedil;&otilde;es";
 #elif L==10	// tr
 	"Show all notifications";		// Çeviri lazim!
-#endif
-
-const char *Txt_Show_agenda =
-#if   L==1	// ca
-	"Mostrar agenda";
-#elif L==2	// de
-	"Organizer anzeigen";
-#elif L==3	// en
-	"Show agenda";
-#elif L==4	// es
-	"Ver agenda";
-#elif L==5	// fr
-	"Afficher agenda";
-#elif L==6	// gn
-	"Ver agenda";	// Okoteve traducción
-#elif L==7	// it
-	"Mostra agenda";
-#elif L==8	// pl
-	"Poka&zdot; pami&eogon;tnik";
-#elif L==9	// pt
-	"Mostrar agenda";
-#elif L==10	// tr
-	"Show agenda";	// Çeviri lazim!
-#endif
-
-const char *Txt_Show_calendar =
-#if   L==1	// ca
-	"Mostrar calendari";
-#elif L==2	// de
-	"Kalender anzeigen";
-#elif L==3	// en
-	"Show calendar";
-#elif L==4	// es
-	"Ver calendario";
-#elif L==5	// fr
-	"Afficher calendrier";
-#elif L==6	// gn
-	"Ver calendario";	// Okoteve traducción
-#elif L==7	// it
-	"Mostra calendario";
-#elif L==8	// pl
-	"Poka&zdot; kalendarz";
-#elif L==9	// pt
-	"Mostrar calend&aacute;rio";
-#elif L==10	// tr
-	"Show calendar";	// Çeviri lazim!
 #endif
 
 const char *Txt_Show_more_details =
@@ -56407,29 +56315,6 @@ const char *Txt_View_in_a_new_window =
 	"Ver em uma nova janela";
 #elif L==10	// tr
 	"View in a new window";		// Çeviri lazim!
-#endif
-
-const char *Txt_View_record_for_this_course =
-#if   L==1	// ca
-	"Veure fitxa en aquesta assignatura";
-#elif L==2	// de
-	"Anzeigen profil bei Kurs";
-#elif L==3	// en
-	"View record for this course";
-#elif L==4	// es
-	"Ver ficha en esta asignatura";
-#elif L==5	// fr
-	"Voir carte dans mati&egrave;re";
-#elif L==6	// gn
-	"Ver ficha en esta asignatura";	// Okoteve traducción
-#elif L==7	// it
-	"Vedi scheda per questo corso";
-#elif L==8	// pl
-	"Zobacz rekord na ten kurs";
-#elif L==9	// pt
-	"Ver cart&atilde;o em disciplina";
-#elif L==10	// tr
-	"View record for this course";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_records =

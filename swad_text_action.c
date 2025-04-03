@@ -1258,25 +1258,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeOthPubPrf] =
 #if   L==1	// ca
-	"Show user profile"		// Necessita traducció
+	"Perfil d'un altre usuari"
 #elif L==2	// de
-	"Show user profile"		// Need Übersetzung
+	"Profil eines anderen Benutzers"
 #elif L==3	// en
-	"Show user profile"
+	"Another user's profile"
 #elif L==4	// es
-	"Mostrar perfil de usuario"
+	"Perfil de otro usuario"
 #elif L==5	// fr
-	"Show user profile"		// Besoin de traduction
+	"Profil d'un autre utilisateur"
 #elif L==6	// gn
-	"Mostrar perfil de usuario"	// Okoteve traducción
+	"Perfil de otro usuario"	// Okoteve traducción
 #elif L==7	// it
-	"Show user profile"		// Bisogno di traduzione
+	"Altro profilo di utente"
 #elif L==8	// pl
-	"Show user profile"		// Potrzebujesz tlumaczenie
+	"Profil innego u&zdot;ytkownika"
 #elif L==9	// pt
-	"Show user profile"		// Precisa de tradução
+	"Perfil de outro usu&aacute;rio"
 #elif L==10	// tr
-	"Show user profile"		// Çeviri lazim!
+	"Another user's profile"	// Çeviri lazim!
 #endif
 	,
 	[ActCalFig] =
@@ -1511,25 +1511,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeNewNtf] =
 #if   L==1	// ca
-	"Show notifications"		// Necessita traducció
+	"Ver notificaciones"	// Necessita traducció
 #elif L==2	// de
-	"Show notifications"		// Need Übersetzung
+	"Siehe Anmeldungen"
 #elif L==3	// en
-	"Show notifications"
+	"See notifications"
 #elif L==4	// es
-	"Mostrar notificaciones"
+	"Ver notificaciones"
 #elif L==5	// fr
-	"Show notifications"		// Besoin de traduction
+	"Voir notifications"
 #elif L==6	// gn
-	"Mostrar notificaciones"	// Okoteve traducción
+	"Ver notificaciones"	// Okoteve traducción
 #elif L==7	// it
-	"Show notifications"		// Bisogno di traduzione
+	"Vedi notifiche"
 #elif L==8	// pl
-	"Show notifications"		// Potrzebujesz tlumaczenie
+	"See notifications"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Show notifications"		// Precisa de tradução
+	"Ver notifica&ccedil;&otilde;es"
 #elif L==10	// tr
-	"Show notifications"		// Çeviri lazim!
+	"See notifications"	// Çeviri lazim!
 #endif
 	,
 	[ActMrkNtfSee] =
@@ -26491,25 +26491,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeMyMrkCrs] =
 #if   L==1	// ca
-	"Individualized access to marks file in course"				// Necessita traducció
+	"Consulteu qualificacions a l'assignatura"
 #elif L==2	// de
-	"Individualized access to marks file in course"				// Need Übersetzung
+	"Noten im Fach pr&uuml;fen"
 #elif L==3	// en
-	"Individualized access to marks file in course"
+	"Check marks in the course"
 #elif L==4	// es
-	"Acceso individualizado a archivo de calificaciones en asignatura"
+	"Consultar calificaciones en la asignatura"
 #elif L==5	// fr
-	"Individualized access to marks file in course"				// Besoin de traduction
+	"V&eacute;rifier les notes dans la mati&egrave;re"
 #elif L==6	// gn
-	"Acceso individualizado a archivo de calificaciones en asignatura"	// Okoteve traducción
+	"Ohecha umi nota o&itilde;va pe asignatura-pe"
 #elif L==7	// it
-	"Individualized access to marks file in course"				// Bisogno di traduzione
+	"Consultare le valutazioni nella materia"
 #elif L==8	// pl
-	"Individualized access to marks file in course"				// Potrzebujesz tlumaczenie
+	"Sprawd&zacute; oceny z przedmiotuu"
 #elif L==9	// pt
-	"Individualized access to marks file in course"				// Precisa de tradução
+	"Verifique as notas na disciplina"
 #elif L==10	// tr
-	"Individualized access to marks file in course"				// Çeviri lazim!
+	"Dosyadaki onay i&scedil;aretleri"
 #endif
 	,
 	[ActSeeMrkGrp] =
@@ -26606,25 +26606,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeMyMrkGrp] =
 #if   L==1	// ca
-	"Individualized access to marks file in group"			// Necessita traducció
+	"Consulteu qualificacions a l'assignatura"
 #elif L==2	// de
-	"Individualized access to marks file in group"			// Need Übersetzung
+	"Noten in der Gruppe pr&uuml;fen"
 #elif L==3	// en
-	"Individualized access to marks file in group"
+	"Check marks in the course"
 #elif L==4	// es
-	"Acceso individualizado a archivo de calificaciones en grupo"
+	"Consultar calificaciones en el grupo"
 #elif L==5	// fr
-	"Individualized access to marks file in group"			// Besoin de traduction
+	"V&eacute;rifier les notes dans le groupe"
 #elif L==6	// gn
-	"Acceso individualizado a archivo de calificaciones en grupo"	// Okoteve traducción
+	"Ojesareko umi nota o&icirc;va grupo-pe"
 #elif L==7	// it
-	"Individualized access to marks file in group"			// Bisogno di traduzione
+	"Consultare le valutazioni nel gruppo"
 #elif L==8	// pl
-	"Individualized access to marks file in group"			// Potrzebujesz tlumaczenie
+	"Sprawd&zacute; oceny z w grupie"
 #elif L==9	// pt
-	"Individualized access to marks file in group"			// Precisa de tradução
+	"Verifique as notas no grupo"
 #elif L==10	// tr
-	"Individualized access to marks file in group"			// Çeviri lazim!
+	"Topardaky bahalary barla&ncaron;"
 #endif
 	,
 	[ActChgToAdmMrk] =
@@ -29596,25 +29596,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeRecOneStd] =
 #if   L==1	// ca
-	"See student's record"		// Necessita traducció
+	"Veure fitxa d'estudiant"
 #elif L==2	// de
-	"See student's record"		// Need Übersetzung
+	"Studentenprofil anzeigen"
 #elif L==3	// en
 	"See student's record"
 #elif L==4	// es
 	"Ver ficha de estudiante"
 #elif L==5	// fr
-	"See student's record"		// Besoin de traduction
+	"Voir la fiche de l'&eacute;tudiant"
 #elif L==6	// gn
-	"Ver ficha de estudiante"	// Okoteve traducción
+	"Ehecha temimbo'e perfil"
 #elif L==7	// it
-	"See student's record"		// Bisogno di traduzione
+	"Visualizza il profilo dello studente"
 #elif L==8	// pl
-	"See student's record"		// Potrzebujesz tlumaczenie
+	"Zobacz profil studenta"
 #elif L==9	// pt
-	"See student's record"		// Precisa de tradução
+	"Ver perfil do aluno"
 #elif L==10	// tr
-	"See student's record"		// Çeviri lazim!
+	"&Ouml;&gbreve;renci profilini g&ouml;r&uuml;nt&uuml;le"
 #endif
 	,
 	[ActReqEnrSevStd] =
@@ -30861,25 +30861,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeRecOneTch] =
 #if   L==1	// ca
-	"See teacher's record"		// Necessita traducció
+	"Veure fitxa de professor"
 #elif L==2	// de
-	"See teacher's record"		// Need Übersetzung
+	"Lehrerprofil anzeigen"
 #elif L==3	// en
 	"See teacher's record"
 #elif L==4	// es
 	"Ver ficha de profesor"
 #elif L==5	// fr
-	"See teacher's record"		// Besoin de traduction
+	"Voir la fiche de l'enseignant"
 #elif L==6	// gn
-	"Ver ficha de profesor"		// Okoteve traducción
+	"Ehecha mbo'eh&aacute;ra perfil"
 #elif L==7	// it
-	"See teacher's record"		// Bisogno di traduzione
+	"Visualizza il profilo del docente"
 #elif L==8	// pl
-	"See teacher's record"		// Potrzebujesz tlumaczenie
+	"Zobacz profil nauczyciela"
 #elif L==9	// pt
-	"See teacher's record"		// Precisa de tradução
+	"Ver perfil do professor"
 #elif L==10	// tr
-	"See teacher's record"		// Çeviri lazim!
+	"&Ouml;&gbreve;retmenin profiline bak&inodot;n"
 #endif
 	,
 	[ActReqEnrSevNET] =
@@ -32563,25 +32563,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActLstCon] =
 #if   L==1	// ca
-	"List connected users"		// Necessita traducció
+	"Usuaris connectats"
 #elif L==2	// de
-	"List connected users"		// Need Übersetzung
+	"Angemeldet Benutzer"
 #elif L==3	// en
-	"List connected users"
+	"Connected users"
 #elif L==4	// es
-	"Listar usuarios conectados"
+	"Usuarios conectados"
 #elif L==5	// fr
-	"List connected users"		// Besoin de traduction
+	"Utilisateurs connect&eacute;s"
 #elif L==6	// gn
-	"Listar usuarios conectados"	// Okoteve traducción
+	"Umi oipor&uacute;va en l&iacute;nea"
 #elif L==7	// it
-	"List connected users"		// Bisogno di traduzione
+	"Utenti connessi"
 #elif L==8	// pl
-	"List connected users"		// Potrzebujesz tlumaczenie
+	"U&zdot;ytkownicy online"
 #elif L==9	// pt
-	"List connected users"		// Precisa de tradução
+	"Utilizadores conectados"
 #elif L==10	// tr
-	"List connected users"		// Çeviri lazim!
+	"Ba&gbreve;l&inodot; kullan&inodot;c&inodot;lar"
 #endif
 	,
 	[ActSeeAnn] =
@@ -37485,25 +37485,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeMyAgd] =
 #if   L==1	// ca
-	"See my full agenda (personal organizer)"	// Necessita traducció
+	"Veure la meva agenda"
 #elif L==2	// de
-	"See my full agenda (personal organizer)"	// Need Übersetzung
+	"Meine Agenda anzeigen"
 #elif L==3	// en
-	"See my full agenda (personal organizer)"
+	"Show my agenda"
 #elif L==4	// es
-	"Ver mi agenda completa (organizador personal)"
+	"Ver mi agenda"
 #elif L==5	// fr
-	"See my full agenda (personal organizer)"	// Besoin de traduction
+	"Voir mon agenda"
 #elif L==6	// gn
-	"Ver mi agenda completa (organizador personal)"	// Okoteve traducción
+	"Ehechauka che agenda"
 #elif L==7	// it
-	"See my full agenda (personal organizer)"	// Bisogno di traduzione
+	"Mostra la mia agenda"
 #elif L==8	// pl
-	"See my full agenda (personal organizer)"	// Potrzebujesz tlumaczenie
+	"Zobacz m&oacute;j kalendarz"
 #elif L==9	// pt
-	"See my full agenda (personal organizer)"	// Precisa de tradução
+	"Mostrar a minha agenda"
 #elif L==10	// tr
-	"See my full agenda (personal organizer)"	// Çeviri lazim!
+	"G&uuml;ndemimi g&ouml;ster"
 #endif
 	,
 	[ActFrmNewEvtMyAgd] =

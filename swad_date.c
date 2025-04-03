@@ -479,9 +479,6 @@ bool Dat_GetDateFromYYYYMMDD (struct Dat_Date *Date,const char *YYYYMMDD)
 
 void Dat_ShowClientLocalTime (void)
   {
-   extern const char *Txt_Show_calendar;
-   extern const char *Txt_Show_agenda;
-
    /***** Draw the current date and time *****/
    /* Begin container */
    HTM_DIV_Begin ("id=\"current_date\"");
@@ -489,7 +486,7 @@ void Dat_ShowClientLocalTime (void)
       /* Month with link to calendar */
       HTM_DIV_Begin ("id=\"current_month\"");
 	 Frm_BeginForm (ActSeeCal);
-	    HTM_BUTTON_Submit_Begin (Txt_Show_calendar,
+	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCal),
 	                             "class=\"BT_LINK CURRENT_MONTH\"");
 	       HTM_SPAN_Begin ("id=\"current_month_txt\"");
 	       // JavaScript will write HTML here
@@ -503,7 +500,7 @@ void Dat_ShowClientLocalTime (void)
 	 if (Gbl.Usrs.Me.Logged)
 	   {
 	    Frm_BeginForm (ActSeeMyAgd);
-	       HTM_BUTTON_Submit_Begin (Txt_Show_agenda,
+	       HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeMyAgd),
 	                                "class=\"BT_LINK CURRENT_DAY\"");
 	   }
 	 HTM_SPAN_Begin ("id=\"current_day_txt\"");

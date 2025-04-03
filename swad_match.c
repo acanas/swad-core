@@ -2583,7 +2583,7 @@ static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
 	 ParCod_PutPar (ParCod_Mch,Match->MchCod);	// Current match being played
 
 	 /***** Put icon with link *****/
-	 HTM_BUTTON_Submit_Begin (Txt_View_results,
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (ActChgVisResMchQst),
 	                          "class=\"BT_LINK ICO_HIGHLIGHT\"");
 	    HTM_TxtF ("<i class=\"%s\"></i>",
 		      Match->Status.ShowQstResults ? "fas fa-toggle-on" :

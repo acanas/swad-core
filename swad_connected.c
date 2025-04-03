@@ -249,7 +249,6 @@ static void Con_PutParScope (void *Scope)
 void Con_ShowGlobalConnectedUsrs (void)
   {
    extern const char *Txt_Sessions;
-   extern const char *Txt_Connected_users;
    extern const char *Txt_session;
    extern const char *Txt_sessions;
    extern const char *Txt_user[Usr_NUM_SEXS];
@@ -270,7 +269,7 @@ void Con_ShowGlobalConnectedUsrs (void)
    /***** Number of sessions *****/
    /* Link to view more details about connected users */
    Frm_BeginForm (ActLstCon);
-      HTM_BUTTON_Submit_Begin (Txt_Connected_users,"class=\"BT_LINK\"");
+      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActLstCon),"class=\"BT_LINK\"");
 
 	 /* Write total number of sessions */
 	 HTM_TxtF ("%u&nbsp;%s",Gbl.Session.NumSessions,
@@ -390,7 +389,6 @@ static void Con_ShowConnectedUsrsBelongingToScope (Hie_Level_t HieLvl,
 
 void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
   {
-   extern const char *Txt_Connected_users;
    extern const char *Txt_from;
    char CourseName[Nam_MAX_BYTES_SHRT_NAME + 1];
    struct Con_ConnectedUsrs Usrs;
@@ -403,7 +401,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    /***** Number of connected users who belong to course *****/
    /* Link to view more details about connected users */
    Frm_BeginForm (ActLstCon);
-      HTM_BUTTON_Submit_Begin (Txt_Connected_users,"class=\"BT_LINK\"");
+      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActLstCon),"class=\"BT_LINK\"");
 	 Str_Copy (CourseName,Gbl.Hierarchy.Node[Hie_CRS].ShrtName,sizeof (CourseName) - 1);
 	 Con_GetNumConnectedWithARole (Hie_CRS,Rol_UNK,&Usrs);
 	 HTM_TxtF ("%u %s %s",Usrs.NumUsrs,Txt_from,CourseName);
@@ -457,7 +455,6 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
   {
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Connected_users;
    unsigned NumUsrsThisRole = Con_Connected.Usrs[Role].NumUsrs;
    Usr_Sex_t UsrSex = Con_Connected.Usrs[Role].Sex;
 
@@ -488,7 +485,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 	       Frm_BeginForm (ActLstCon);
 		  Sco_PutParScope ("ScopeCon",Hie_CRS);
 		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"ellipsis-h.svg",
-		                   Txt_Connected_users,
+		                   Act_GetActionText (ActLstCon),
 				   "class=\"ICO16x16 ICO_HIGHLIGHT ICO_BLACK_%s\"",
 				   The_GetSuffix ());
 	       Frm_EndForm ();
@@ -622,7 +619,6 @@ static void Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Rol_Role_t Rol
 
 static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role,unsigned NumUsr)
   {
-   extern const char *Txt_View_record_for_this_course;
    static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_STD] = ActSeeRecOneStd,
@@ -683,7 +679,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role,unsigned NumU
 	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 
 	    HTM_DIV_Begin ("class=\"CON_NAME_NARROW\"");	// Limited width
-	       HTM_BUTTON_Submit_Begin (Txt_View_record_for_this_course,
+	       HTM_BUTTON_Submit_Begin (Act_GetActionText (NextAction[Role]),
 	                                "class=\"LT BT_LINK\"");
 		  Usr_WriteFirstNameBRSurnames (UsrDat);
 	       HTM_BUTTON_End ();

@@ -617,7 +617,8 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 
       Frm_BeginForm (ActSeeOneGam);
 	 Gam_PutPars (Games);
-	 HTM_BUTTON_Submit_Begin (Txt_Matches,"class=\"LT BT_LINK %s_%s\"",
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneGam),
+				  "class=\"LT BT_LINK %s_%s\"",
 	                          HidVis_TitleClass[Games->Game.Hidden],
 				  The_GetSuffix ());
 	    if (ShowingOneOrSeveral == Lay_SHOWING_ONLY_ONE)

@@ -563,7 +563,6 @@ static void Fol_ListFollowersUsr (struct Usr_Data *UsrDat)
 
 static void Fol_ShowFollowedOrFollower (struct Usr_Data *UsrDat)
   {
-   extern const char *Txt_Another_user_s_profile;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC60x80",
@@ -592,7 +591,7 @@ static void Fol_ShowFollowedOrFollower (struct Usr_Data *UsrDat)
 	       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	       HTM_DIV_Begin ("class=\"LT FOLLOW_TXT_NAME DAT_%s\"",	// Limited width
 			      The_GetSuffix ());
-		  HTM_BUTTON_Submit_Begin (Txt_Another_user_s_profile,
+		  HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOthPubPrf),
 					   "class=\"BT_LINK LT\"");
 		     Usr_WriteFirstNameBRSurnames (UsrDat);
 		  HTM_BUTTON_End ();
@@ -627,7 +626,6 @@ static void Fol_ShowFollowedOrFollower (struct Usr_Data *UsrDat)
 
 static void Fol_WriteRowUsrToFollowOnRightColumn (struct Usr_Data *UsrDat)
   {
-   extern const char *Txt_Another_user_s_profile;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -655,7 +653,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct Usr_Data *UsrDat)
 	    Frm_BeginForm (ActSeeOthPubPrf);
 	       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	       HTM_DIV_Begin ("class=\"CON_NAME_FOLLOW CON_CRS LT\"");	// Limited width
-		  HTM_BUTTON_Submit_Begin (Txt_Another_user_s_profile,
+		  HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOthPubPrf),
 		                           "class=\"LT BT_LINK\"");
 		     Usr_WriteFirstNameBRSurnames (UsrDat);
 		  HTM_BUTTON_End ();

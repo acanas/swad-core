@@ -625,7 +625,7 @@ static void ExaSes_ListOneOrMoreSessionsPrints (struct Exa_Exams *Exams,
   }
 
 /*****************************************************************************/
-/***************** Put link to view an attendance event **********************/
+/********************* Put link to view an exam session **********************/
 /*****************************************************************************/
 
 static void ExaSes_PutLinkSession (struct Exa_Exams *Exams,

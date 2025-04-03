@@ -1722,7 +1722,6 @@ void Ntf_ChangeNotifyEvents (void)
 
 void Ntf_WriteNumberOfNewNtfs (void)
   {
-   extern const char *Txt_See_notifications;
    extern const char *Txt_notification;
    extern const char *Txt_notifications;
    extern const char *Txt_Notifications;
@@ -1739,7 +1738,8 @@ void Ntf_WriteNumberOfNewNtfs (void)
    Frm_BeginForm (ActSeeNewNtf);
 
       /***** Begin link *****/
-      HTM_BUTTON_Submit_Begin (Txt_See_notifications,"class=\"BT_LINK\"");
+      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeNewNtf),
+			       "class=\"BT_LINK\"");
 
 	 /***** Number of unseen notifications *****/
 	 HTM_SPAN_Begin ("id=\"notif_all\"");

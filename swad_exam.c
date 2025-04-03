@@ -563,7 +563,8 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
 
       Frm_BeginForm (ActSeeOneExa);
 	 Exa_PutPars (Exams);
-	 HTM_BUTTON_Submit_Begin (Txt_Sessions,"class=\"LT BT_LINK %s_%s\"",
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneExa),
+				  "class=\"LT BT_LINK %s_%s\"",
 				  HidVis_TitleClass[Exams->Exam.Hidden],
 				  The_GetSuffix ());
 	    if (ShowingOneOrSeveral == Lay_SHOWING_ONLY_ONE)

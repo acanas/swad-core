@@ -1350,7 +1350,6 @@ void Usr_PutFormLogIn (void)
 
 void Usr_WriteLoggedUsrHead (void)
   {
-   extern const char *Txt_Role;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -1368,7 +1367,8 @@ void Usr_WriteLoggedUsrHead (void)
       if (NumAvailableRoles == 1)
 	{
 	 Frm_BeginForm (ActFrmRolSes);
-	    HTM_BUTTON_Submit_Begin (Txt_Role,"class=\"BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActFrmRolSes),
+				     "class=\"BT_LINK\"");
 	       HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();

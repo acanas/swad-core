@@ -791,7 +791,7 @@ static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod)
       Usr_PutParUsrCodEncrypted (EncryptedUsrCod);
 
       /***** Put icon to refresh *****/
-      HTM_BUTTON_Submit_Begin (Txt_Calculate,
+      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActCalFig),
 			       "class=\"BT_LINK FORM_OUT_%s BOLD\"",
 			       The_GetSuffix ());
 	 Ico_PutIconTextUpdate (Txt_Calculate);
@@ -1323,7 +1323,6 @@ void Prf_GetAndShowRankingClicksPerDay (Hie_Level_t HieLvl)
 static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,
                                   Usr_MeOrOther_t MeOrOther)
   {
-   extern const char *Txt_Another_user_s_profile;
    static const char *Class[Usr_NUM_ME_OR_OTHER] =
      {
       [Usr_ME   ] = "DAT_SMALL_STRONG",
@@ -1358,7 +1357,7 @@ static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,
 	{
 	 Frm_BeginForm (ActSeeOthPubPrf);
 	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
-	    HTM_BUTTON_Submit_Begin (Txt_Another_user_s_profile,
+	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOthPubPrf),
 				     "class=\"LM BT_LINK\"");
 	       Usr_WriteFirstNameBRSurnames (UsrDat);
 	    HTM_BUTTON_End ();

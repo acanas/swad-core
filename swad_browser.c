@@ -401,6 +401,39 @@ static Act_Action_t Brw_ActFromAdmToSee[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActUnk,
   };
 
+static Act_Action_t Brw_ActSeeMyMrk[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActUnk,
+   [Brw_SHOW_MRK_CRS] = ActSeeMyMrkCrs,
+   [Brw_ADMI_DOC_CRS] = ActUnk,
+   [Brw_ADMI_SHR_CRS] = ActUnk,
+   [Brw_ADMI_SHR_GRP] = ActUnk,
+   [Brw_ADMI_WRK_USR] = ActUnk,
+   [Brw_ADMI_WRK_CRS] = ActUnk,
+   [Brw_ADMI_MRK_CRS] = ActUnk,
+   [Brw_ADMI_BRF_USR] = ActUnk,
+   [Brw_SHOW_DOC_GRP] = ActUnk,
+   [Brw_ADMI_DOC_GRP] = ActUnk,
+   [Brw_SHOW_MRK_GRP] = ActSeeMyMrkGrp,
+   [Brw_ADMI_MRK_GRP] = ActUnk,
+   [Brw_ADMI_ASG_USR] = ActUnk,
+   [Brw_ADMI_ASG_CRS] = ActUnk,
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActUnk,
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActUnk,
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActUnk,
+   [Brw_ADMI_SHR_DEG] = ActUnk,
+   [Brw_ADMI_SHR_CTR] = ActUnk,
+   [Brw_ADMI_SHR_INS] = ActUnk,
+   [Brw_ADMI_TCH_CRS] = ActUnk,
+   [Brw_ADMI_TCH_GRP] = ActUnk,
+   [Brw_ADMI_DOC_PRJ] = ActUnk,
+   [Brw_ADMI_ASS_PRJ] = ActUnk,
+  };
+
 static Act_Action_t Brw_ActChgZone[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -2971,7 +3004,6 @@ static bool Brw_CheckIfIHaveAccessToGrpFilezone (long GrpCod)
 
 static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat)
   {
-   extern const char *Txt_View_record_for_this_course;
    static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_STD] = ActSeeRecOneStd,
@@ -3006,7 +3038,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat)
 	 /***** Show user's name *****/
 	 HTM_BR ();
 
-	 HTM_BUTTON_Submit_Begin (Txt_View_record_for_this_course,
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (NextAction[UsrDat->Roles.InCurrentCrs]),
 				  "class=\"BT_LINK\"");
 	    HTM_Txt (UsrDat->Surname1);
 	    if (UsrDat->Surname2[0])
@@ -4675,8 +4707,6 @@ static void Brw_PutButtonToDownloadZIPOfAFolder (void)
 static void Brw_WriteFileName (unsigned Level,PriPub_PrivateOrPublic_t PrivateOrPublic,
 			       const char *TxtStyle,const char *InputStyle)
   {
-   extern const char *Txt_Check_marks_in_the_file;
-   extern const char *Txt_Download;
    extern const char *Txt_Public_open_educational_resource_OER_for_everyone;
    char FileNameToShow[NAME_MAX + 1];
    const struct Asg_Assignment *Asg;
@@ -4752,8 +4782,7 @@ static void Brw_WriteFileName (unsigned Level,PriPub_PrivateOrPublic_t PrivateOr
 	       Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
 	       /* Link to the form and to the file */
-	       HTM_BUTTON_Submit_Begin (Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type] ? Txt_Check_marks_in_the_file :
-										 Txt_Download,
+	       HTM_BUTTON_Submit_Begin (Act_GetActionText (Brw_ActDowFile[Gbl.FileBrowser.Type]),
 					"class=\"LM BT_LINK FILENAME\"");
 		  HTM_Txt (FileNameToShow);
 	       HTM_BUTTON_End ();
@@ -7998,7 +8027,6 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
                                             struct Brw_FileMetadata *FileMetadata,
                                             const char *FileNameToShow)
   {
-   extern const char *Txt_Check_marks_in_the_file;
    extern const char *Txt_Download;
    extern const char *Txt_Link;
    const char *Title;
@@ -8007,8 +8035,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
    if (Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type])
      {
       /* Form to see marks */
-      Frm_BeginForm (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ? ActSeeMyMrkCrs :
-								ActSeeMyMrkGrp);
+      Frm_BeginForm (Brw_ActSeeMyMrk[Gbl.FileBrowser.Type]);
 
 	 Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,FileMetadata->FilFolLnk.Path,
 		   sizeof (Gbl.FileBrowser.FilFolLnk.Path) - 1);
@@ -8018,7 +8045,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 	 Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
 	 /* Begin link */
-	 HTM_BUTTON_Submit_Begin (Txt_Check_marks_in_the_file,
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (Brw_ActSeeMyMrk[Gbl.FileBrowser.Type]),
 	                          "class=\"BT_LINK ICO_HIGHLIGHT FILENAME_BIG_%s\"",
 	                          The_GetSuffix ());
 
@@ -8031,7 +8058,9 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 
 	    /* Name of the file of marks, link end and form end */
 	    HTM_TxtF ("&nbsp;%s&nbsp;",FileNameToShow);
-	    Ico_PutIcon ("list-alt.svg",Ico_UNCHANGED,Txt_Check_marks_in_the_file,"ICO40x40");
+	    Ico_PutIcon ("list-alt.svg",Ico_UNCHANGED,
+			 Act_GetActionText (Brw_ActSeeMyMrk[Gbl.FileBrowser.Type]),
+			 "ICO40x40");
 
 	 /* End link */
 	 HTM_BUTTON_End ();
@@ -8067,14 +8096,11 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 	                                      struct Brw_FileMetadata *FileMetadata,
                                               const char *FileNameToShow)
   {
-   extern const char *Txt_Check_marks_in_the_file;
-
    /***** On the screen a link will be shown to download the file *****/
    if (Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type])
      {
       /* Form to see marks */
-      Frm_BeginForm (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ? ActSeeMyMrkCrs :
-								ActSeeMyMrkGrp);
+      Frm_BeginForm (Brw_ActSeeMyMrk[Gbl.FileBrowser.Type]);
 	 Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,FileMetadata->FilFolLnk.Path,
 		   sizeof (Gbl.FileBrowser.FilFolLnk.Path) - 1);
 	 Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,FileMetadata->FilFolLnk.Name,
@@ -8083,7 +8109,7 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 	 Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
 	 /* Begin link */
-	 HTM_BUTTON_Submit_Begin (Txt_Check_marks_in_the_file,
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (Brw_ActSeeMyMrk[Gbl.FileBrowser.Type]),
 	                          "class=\"BT_LINK\"");
 
 	    /* Name of the file of marks */
