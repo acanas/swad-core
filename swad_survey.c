@@ -390,7 +390,6 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Hlp_ANALYTICS_Surveys;
    extern const char *Txt_Survey;
-   extern const char *Txt_View_survey;
    extern const char *Txt_Number_of_questions;
    extern const char *Txt_Number_of_users;
    extern const char *Txt_Scope;
@@ -497,7 +496,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	    MyAllGrps = Grp_GetParMyAllGrps ();
 	    Grp_PutParMyAllGrps (&MyAllGrps);
 	    Pag_PutParPagNum (Pag_SURVEYS,Surveys->CurrentPage);
-	    HTM_BUTTON_Submit_Begin (Txt_View_survey,"class=\"LT BT_LINK %s_%s\"",
+	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneSvy),"class=\"LT BT_LINK %s_%s\"",
 				     HidVis_TitleClass[Surveys->Svy.Status.Hidden],
 				     The_GetSuffix ());
 	       HTM_Txt (Surveys->Svy.Title);

@@ -16831,25 +16831,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeMchAnsQstStd] =
 #if   L==1	// ca
-	"View my answer to match question"		// Necessita traducció
+	"Veure la meva resposta"
 #elif L==2	// de
-	"View my answer to match question"		// Need Übersetzung
+	"Meine Antwort anzeigen"
 #elif L==3	// en
-	"View my answer to match question"
+	"View my answer"
 #elif L==4	// es
-	"Ver mi respuesta a pregunta de partida"
+	"Ver mi respuesta"
 #elif L==5	// fr
-	"View my answer to match question"		// Besoin de traduction
+	"Voir ma r&eacute;ponse"
 #elif L==6	// gn
-	"Ver mi respuesta a pregunta de partida"	// Okoteve traducción
+	"Ver mi respuesta"	// Okoteve traducción
 #elif L==7	// it
-	"View my answer to match question"		// Bisogno di traduzione
+	"Vedi la mia risposta"
 #elif L==8	// pl
-	"View my answer to match question"		// Potrzebujesz tlumaczenie
+	"Zobacz moj&aogon; odpowied&zacute;"
 #elif L==9	// pt
-	"View my answer to match question"		// Precisa de tradução
+	"Ver minha resposta"
 #elif L==10	// tr
-	"View my answer to match question"		// Çeviri lazim!
+	"View my answer"	// Çeviri lazim!
 #endif
 	,
 	[ActRemMchAnsQstStd] =
@@ -36680,25 +36680,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeOneSvy] =
 #if   L==1	// ca
-	"Show survey"		// Necessita traducció
+	"Veure enquesta"
 #elif L==2	// de
-	"Show survey"		// Need Übersetzung
+	"Anzeigen Umfrage"
 #elif L==3	// en
-	"Show survey"
+	"View survey"
 #elif L==4	// es
-	"Mostrar encuesta"
+	"Ver encuesta"
 #elif L==5	// fr
-	"Show survey"		// Besoin de traduction
+	"Voir sondage"
 #elif L==6	// gn
-	"Mostrar encuesta"	// Okoteve traducción
+	"Ojehecha encuesta"
 #elif L==7	// it
-	"Show survey"		// Bisogno di traduzione
+	"Vedi sondaggio"
 #elif L==8	// pl
-	"Show survey"		// Potrzebujesz tlumaczenie
+	"Zobacz ankiet&eogon;"
 #elif L==9	// pt
-	"Show survey"		// Precisa de tradução
+	"Ver inqu&eacute;rito"
 #elif L==10	// tr
-	"Show survey"		// Çeviri lazim!
+	"Anketi g&ouml;r&uuml;nt&uuml;le"
 #endif
 	,
 	[ActAnsSvy] =

@@ -2604,7 +2604,6 @@ static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
 
 static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
   {
-   extern const char *Txt_View_my_answer;
    extern const char *Txt_MATCH_QUESTION_Answered;
    extern const char *Txt_MATCH_QUESTION_Unanswered;
 
@@ -2620,7 +2619,7 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
 	 Frm_BeginForm (ActSeeMchAnsQstStd);
 	    ParCod_PutPar (ParCod_Mch,Match->MchCod);	// Current match being played
 
-	    HTM_BUTTON_Submit_Begin (Txt_View_my_answer,
+	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeMchAnsQstStd),
 	                             "class=\"BT_LINK DAT_SMALL_GREEN_%s\""
 	                             " onmousedown=\"this.form.submit();return false;\"",
 	                             The_GetSuffix ());

@@ -363,7 +363,6 @@ void Rub_ShowOnlyOneRubric (struct Rub_Rubrics *Rubrics)
 void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
                              bool ShowOnlyThisRubric)
   {
-   extern const char *Txt_View_rubric;
    extern const char *Txt_Number_of_criteria;
 
    /***** Begin box and table *****/
@@ -391,7 +390,8 @@ void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
       /* Rubric title */
       Frm_BeginForm (ActSeeOneRub);
 	 Rub_PutPars (Rubrics);
-	 HTM_BUTTON_Submit_Begin (Txt_View_rubric,"class=\"LT BT_LINK ASG_TITLE_%s\"",
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneRub),
+				  "class=\"LT BT_LINK ASG_TITLE_%s\"",
 				  The_GetSuffix ());
 	    HTM_Txt (Rubrics->Rubric.Title);
 	 HTM_BUTTON_End ();

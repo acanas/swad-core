@@ -56409,29 +56409,6 @@ const char *Txt_View_in_a_new_window =
 	"View in a new window";		// Çeviri lazim!
 #endif
 
-const char *Txt_View_my_answer =
-#if   L==1	// ca
-	"Veure la meva resposta";
-#elif L==2	// de
-	"Meine Antwort anzeigen";
-#elif L==3	// en
-	"View my answer";
-#elif L==4	// es
-	"Ver mi respuesta";
-#elif L==5	// fr
-	"Voir ma r&eacute;ponse";
-#elif L==6	// gn
-	"Ver mi respuesta";	// Okoteve traducción
-#elif L==7	// it
-	"Vedi la mia risposta";
-#elif L==8	// pl
-	"Zobacz moj&aogon; odpowied&zacute;";
-#elif L==9	// pt
-	"Ver minha resposta";
-#elif L==10	// tr
-	"View my answer";	// Çeviri lazim!
-#endif
-
 const char *Txt_View_record_for_this_course =
 #if   L==1	// ca
 	"Veure fitxa en aquesta assignatura";
@@ -56499,52 +56476,6 @@ const char *Txt_View_results =
 	"Ver resultados";
 #elif L==10	// tr
 	"View results";		// Çeviri lazim!
-#endif
-
-const char *Txt_View_rubric =
-#if   L==1	// ca
-	"Veure r&uacute;brica";
-#elif L==2	// de
-	"Anzeigen Rubrik";
-#elif L==3	// en
-	"View rubric";
-#elif L==4	// es
-	"Ver r&uacute;brica";
-#elif L==5	// fr
-	"Voir rubrique";
-#elif L==6	// gn
-	"Ver r&uacute;brica";	// Okoteve traducción
-#elif L==7	// it
-	"Vedi rubrica";
-#elif L==8	// pl
-	"Zobacz rubryk&eogon;";
-#elif L==9	// pt
-	"Ver rubrica";
-#elif L==10	// tr
-	"Puan anahtar&inodot;n&inodot; g&ouml;r&uuml;nt&uuml;le";
-#endif
-
-const char *Txt_View_survey =
-#if   L==1	// ca
-	"Veure enquesta";
-#elif L==2	// de
-	"Anzeigen Umfrage";
-#elif L==3	// en
-	"View survey";
-#elif L==4	// es
-	"Ver encuesta";
-#elif L==5	// fr
-	"Voir sondage";
-#elif L==6	// gn
-	"Ver encuesta";	// Okoteve traducción
-#elif L==7	// it
-	"Vedi sondaggio";
-#elif L==8	// pl
-	"Zobacz ankiet&eogon;";
-#elif L==9	// pt
-	"Ver inqu&eacute;rito";
-#elif L==10	// tr
-	"View survey";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_homework =
