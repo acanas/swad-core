@@ -65,7 +65,6 @@ void ExaSes_RemoveSession (void);
 void ExaSes_HideSession (void);
 void ExaSes_UnhideSession (void);
 
-void ExaSes_PutParsEdit (void *Exams);
 void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
                              struct ExaSes_Session *Session);
 

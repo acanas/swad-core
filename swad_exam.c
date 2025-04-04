@@ -739,6 +739,7 @@ void Exa_PutPars (void *Exams)
       MyAllGrps = Grp_GetParMyAllGrps ();
       Grp_PutParMyAllGrps (&MyAllGrps);
       Pag_PutParPagNum (Pag_EXAMS,((struct Exa_Exams *) Exams)->CurrentPage);
+      ParCod_PutPar (ParCod_Ses,((struct Exa_Exams *) Exams)->SesCod);
      }
   }
 

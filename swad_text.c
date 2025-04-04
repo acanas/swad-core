@@ -34881,7 +34881,7 @@ const char *Txt_Results_of_session_X =	// Warning: it is very important to inclu
 #elif L==9	// pt
 	"Resultados da sess&atilde;o &quot;%s&quot;";
 #elif L==10	// tr
-	"Results of session &quot;%s&quot;";			// Çeviri lazim!
+	"&quot;%s&quot; oturumunun sonu&ccedil;lar&inodot;";
 #endif
 
 const char *Txt_results_per_page =
@@ -41466,9 +41466,9 @@ const char *Txt_Selected_users_X_Followed_Y_Not_followed_Z =	// Warning: it is v
 	"&bull; Seguidos: %u<br>"
 	"&bull; N&atilde;o seguidos: %u";
 #elif L==10	// tr
-	"Selected users: %u<br>"
-	"&bull; Followed: %u<br>"
-	"&bull; Not followed: %u";	// Çeviri lazim!
+	"Se&ccedil;ili kullan&inodot;c&inodot;lar: %u<br>"
+	"&bull; Takip edildi: %u<br>"
+	"&bull; Takip edilmedi: %u";
 #endif
 
 const char *Txt_Send =
@@ -41491,7 +41491,7 @@ const char *Txt_Send =
 #elif L==9	// pt
 	"Enviar";
 #elif L==10	// tr
-	"Send";	// Çeviri lazim!
+	"G&ouml;ndermek";
 #endif
 
 const char *Txt_Session =
@@ -41537,7 +41537,30 @@ const char *Txt_session =
 #elif L==9	// pt
 	"sess&atilde;o";
 #elif L==10	// tr
-	"session";		// Çeviri lazim!
+	"oturum";
+#endif
+
+const char *Txt_Session_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Sessi&oacute; &quot;%s&quot;";
+#elif L==2	// de
+	"Sitzung &quot;%s&quot;";
+#elif L==3	// en
+	"Session &quot;%s&quot;";
+#elif L==4	// es
+	"Sesi&oacute;n &quot;%s&quot;";
+#elif L==5	// fr
+	"Session &quot;%s&quot;";
+#elif L==6	// gn
+	"Sesi&oacute;n &quot;%s&quot;";	// Okoteve traducción
+#elif L==7	// it
+	"Sessione &quot;%s&quot;";
+#elif L==8	// pl
+	"Sesja &quot;%s&quot;";
+#elif L==9	// pt
+	"Sess&atilde;o &quot;%s&quot;";
+#elif L==10	// tr
+	"Oturum &quot;%s&quot;";
 #endif
 
 const char *Txt_Session_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -41560,7 +41583,7 @@ const char *Txt_Session_X_removed =	// Warning: it is very important to include 
 #elif L==9	// pt
 	"Sess&atilde;o <strong>%s</strong> removida.";
 #elif L==10	// tr
-	"Session <strong>%s</strong> removed.";		// Çeviri lazim!
+	"Oturum <strong>%s</strong> kald&inodot;r&inodot;ld&inodot;.";
 #endif
 
 const char *Txt_Sessions =
@@ -41583,7 +41606,7 @@ const char *Txt_Sessions =
 #elif L==9	// pt
 	"Sess&otilde;es";
 #elif L==10	// tr
-	"Sessions";	// Çeviri lazim!
+	"Oturumlar";
 #endif
 
 const char *Txt_sessions =
@@ -41606,7 +41629,7 @@ const char *Txt_sessions =
 #elif L==9	// pt
 	"sess&otilde;es";
 #elif L==10	// tr
-	"sessions";	// Çeviri lazim!
+	"oturumlar";
 #endif
 
 const char *Txt_Set_of_questions =
@@ -41629,7 +41652,7 @@ const char *Txt_Set_of_questions =
 #elif L==9	// pt
 	"Conjunto de perguntas";
 #elif L==10	// tr
-	"Set of questions";		// Çeviri lazim!
+	"Soru seti";
 #endif
 
 const char *Txt_Set_of_questions_removed =
@@ -41652,7 +41675,7 @@ const char *Txt_Set_of_questions_removed =
 #elif L==9	// pt
 	"Conjunto de perguntas removido.";
 #elif L==10	// tr
-	"Set of questions removed.";		// Çeviri lazim!
+	"Soru seti kald&inodot;r&inodot;ld&inodot;.";
 #endif
 
 const char *Txt_Set_up =
@@ -41675,7 +41698,7 @@ const char *Txt_Set_up =
 #elif L==9	// pt
 	"Instalar";
 #elif L==10	// tr
-	"Set up";	// Çeviri lazim!
+	"Kurmak";
 #endif
 
 const char *Txt_Sets_of_questions =

@@ -50,7 +50,9 @@
 #include "swad_group_database.h"
 #include "swad_hidden_visible.h"
 #include "swad_HTML.h"
+#include "swad_ID.h"
 #include "swad_parameter_code.h"
+#include "swad_photo.h"
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_test.h"
@@ -82,6 +84,13 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
+				     const struct ExaSes_Session *Session);
+static void ExaSes_WriteRowUsrInSession (unsigned NumUsr,
+					 struct Usr_Data *UsrDat,
+					 const struct ExaSes_Session *Session,
+					 bool ShowPhoto);
 
 static void ExaSes_PutIconsInListOfSessions (void *Exams);
 static void ExaSes_PutIconToCreateNewSession (struct Exa_Exams *Exams);
@@ -135,8 +144,6 @@ static void ExaSes_UpdateSession (struct ExaSes_Session *Session);
 
 static void ExaSes_CreateGrpsAssociatedToExamSession (long SesCod,
                                                       const struct ListCodGrps *LstGrpsSel);
-
-
 
 /*****************************************************************************/
 /***************************** Reset exam session ****************************/
@@ -204,19 +211,212 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 
 void ExaSes_ShowOneSession (void)
   {
-   // struct Att_Events Events;
+   struct Exa_Exams Exams;
+   struct ExaSes_Session Session;
 
-   /***** Reset attendance events *****/
-   // Att_ResetEvents (&Events);
+   /***** Reset exams context *****/
+   Exa_ResetExams (&Exams);
+   Exa_ResetExam (&Exams.Exam);
+   ExaSes_ResetSession (&Session);
 
-   /***** Get attendance event code *****/
-   // Events.Event.AttCod = ParCod_GetAndCheckPar (ParCod_Att);
+   /***** Get parameters *****/
+   Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
+   Exams.SesCod = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
 
-   /***** Show event *****/
-   // Att_ShowEvent (&Events);
+   /***** Get exam data and session *****/
+   Exa_GetExamDataByCod (&Exams.Exam);
+   ExaSes_GetSessionDataByCod (&Session);
 
+   /***** Exam begin *****/
+   Exa_ShowOnlyOneExamBegin (&Exams,Frm_DONT_PUT_FORM);
 
-   Ale_ShowAlert (Ale_INFO,"Under development");
+      /***** List exam prints in session *****/
+      ExaSes_ShowUsersSession (&Exams,&Session);
+
+   /***** Exam end *****/
+   Exa_ShowOnlyOneExamEnd ();
+  }
+
+static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
+				     const struct ExaSes_Session *Session)
+  {
+   extern const char *Hlp_ASSESSMENT_Exams;
+   extern const char *Txt_Session_X;
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   char *Title;
+   unsigned NumUsr;
+   struct Usr_Data UsrDat;
+   bool WithPhotos;
+
+   /***** Get groups to show ******/
+   Grp_GetParCodsSeveralGrpsToShowUsrs ();
+
+   /***** Get and order list of students in this course *****/
+   Usr_GetListUsrs (Hie_CRS,Rol_STD);
+
+   /***** Begin section *****/
+   HTM_SECTION_Begin (ExaRes_RESULTS_BOX_ID);
+
+      /***** Begin box *****/
+      if (asprintf (&Title,Txt_Session_X,Session->Title) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Box_BoxBegin (Title,NULL,NULL,
+		    Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
+      free (Title);
+
+	 /***** Form to select groups *****/
+	 Grp_ShowFormToSelectSeveralGroups (ActSeeOneExaSes,Exa_PutPars,Exams,NULL);
+
+	 /***** Begin section with user list *****/
+	 HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
+
+	    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
+	      {
+	       /***** Get my preference about photos in users' list for current course *****/
+	       WithPhotos = Set_GetMyPrefAboutListWithPhotosFromDB ();
+
+	       /***** Initialize structure with user's data *****/
+	       Usr_UsrDataConstructor (&UsrDat);
+
+	       /*
+	       / Begin form *
+	       Frm_BeginForm (ActRecAttStd);
+		  ParCod_PutPar (ParCod_Att,Events->Event.AttCod);
+		  Grp_PutParsCodGrps ();
+	       */
+
+	       /* Begin table */
+	       HTM_TABLE_Begin ("TBL_SCROLL");
+
+		  /* Header */
+		  HTM_TR_Begin (NULL);
+
+		     HTM_TH_Empty (3);
+		     if (WithPhotos)
+			HTM_TH_Empty (1);
+		     HTM_TH_Span (Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN],HTM_HEAD_LEFT,1,2,NULL);
+
+		  HTM_TR_End ();
+
+		  /* List of students */
+		  for (NumUsr = 0;
+		       NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
+		       NumUsr++)
+		    {
+		     /* Copy user's basic data from list */
+		     Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
+
+		     /* Get list of user's IDs */
+		     ID_GetListIDsFromUsrCod (&UsrDat);
+
+		     ExaSes_WriteRowUsrInSession (NumUsr + 1,&UsrDat,
+						  Session,WithPhotos);
+		    }
+
+	       /* End table */
+	       HTM_TABLE_End ();
+
+	       /*
+	       * Send button and end form *
+		  Btn_PutButton (Btn_SAVE_CHANGES);
+	       Frm_EndForm ();
+	       */
+
+	       /***** Free memory used for user's data *****/
+	       Usr_UsrDataDestructor (&UsrDat);
+	      }
+	    else	// Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
+	       /***** Show warning indicating no students found *****/
+	       Usr_ShowWarningNoUsersFound (Rol_STD);
+
+	 /***** End section with user list *****/
+	 HTM_SECTION_End ();
+
+      /***** End box *****/
+      Box_BoxEnd ();
+
+   /***** End section *****/
+   HTM_SECTION_End ();
+
+   /***** Free memory for students list *****/
+   Usr_FreeUsrsList (Rol_STD);
+
+   /***** Free memory for list of selected groups *****/
+   Grp_FreeListCodSelectedGrps ();
+  }
+
+/*****************************************************************************/
+/************** Write a row of a table with the data of a user ***************/
+/*****************************************************************************/
+
+static void ExaSes_WriteRowUsrInSession (unsigned NumUsr,
+					 struct Usr_Data *UsrDat,
+					 const struct ExaSes_Session *Session,
+					 bool ShowPhoto)
+  {
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
+     {
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO45x60",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
+     };
+
+   /***** Check if this student is already present in the current event *****/
+   /*
+   Present = Att_CheckIfUsrIsPresentInEventAndGetComments (Event->AttCod,UsrDat->UsrCod,
+							   CommentStd,CommentTch); */
+
+   /***** Begin table row *****/
+   HTM_TR_Begin (NULL);
+
+      /***** Checkbox to select user *****/
+      HTM_TD_Begin ("class=\"CT %s\"",The_GetColorRows ());
+	 HTM_INPUT_CHECKBOX ("UsrCodStd",HTM_NO_ATTR,
+			     "id=\"Std%u\" value=\"%s\"",
+			     NumUsr,UsrDat->EnUsrCod);
+      HTM_TD_End ();
+
+      /***** Write number of student in the list *****/
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
+		    UsrDat->Accepted ? "DAT_STRONG" :
+				       "DAT",
+		    The_GetSuffix (),The_GetColorRows ());
+	 HTM_Unsigned (NumUsr);
+      HTM_TD_End ();
+
+      /***** Show student's photo *****/
+      if (ShowPhoto)
+	{
+	 HTM_TD_Begin ("class=\"%s LT\"",The_GetColorRows ());
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
+	 HTM_TD_End ();
+	}
+
+      /***** Write user's ID ******/
+      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
+		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
+				       "DAT_SMALL",
+		    The_GetSuffix (),The_GetColorRows ());
+	 ID_WriteUsrIDs (UsrDat,NULL);
+      HTM_TD_End ();
+
+      /***** Write student's name *****/
+      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
+		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
+				       "DAT_SMALL",
+		    The_GetSuffix (),The_GetColorRows ());
+	 HTM_Txt (UsrDat->Surname1);
+	 if (UsrDat->Surname2[0])
+	    HTM_SPTxt (UsrDat->Surname2);
+	 HTM_TxtF (", %s",UsrDat->FrstName);
+      HTM_TD_End ();
+
+   /***** End table row *****/
+   HTM_TR_End ();
+
+   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/
@@ -343,7 +543,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 		Session.SesCod == SesCodToBeEdited)			// ...this session
 	      {
 	       HTM_TR_Begin (NULL);
-		  HTM_TD_Begin ("colspan=\"5\" class=\"LT %s\"",
+		  HTM_TD_Begin ("colspan=\"6\" class=\"LT %s\"",
 		                The_GetColorRows ());
 		     ExaSes_PutFormSession (&Session);	// Form to edit this session
 		  HTM_TD_End ();
@@ -368,7 +568,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 
 	 /* Put form to create new session */
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("colspan=\"5\" class=\"LT %s\"",The_GetColorRows ());
+	    HTM_TD_Begin ("colspan=\"6\" class=\"LT %s\"",The_GetColorRows ());
 	       ExaSes_PutFormSession (&Session);	// Form to create session
 	    HTM_TD_End ();
 	 HTM_TR_End ();
@@ -480,16 +680,16 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
 	{
 	 /***** Icon to remove the exam session *****/
 	 Ico_PutContextualIconToRemove (ActReqRemExaSes,NULL,
-					ExaSes_PutParsEdit,Exams);
+					Exa_PutPars,Exams);
 
 	 /***** Icon to hide/unhide the exam session *****/
 	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
-					    ExaSes_PutParsEdit,Exams,
+					    Exa_PutPars,Exams,
 					    Session->Hidden);
 
 	 /***** Icon to edit the exam session *****/
 	 Ico_PutContextualIconToEdit (ActReqChgExaSes,Anchor,
-				      ExaSes_PutParsEdit,Exams);
+				      Exa_PutPars,Exams);
 	}
 
    /***** End cell *****/
@@ -564,7 +764,7 @@ static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
 		  case Usr_CAN:
 		     Frm_BeginForm (ActSeeExaPrn);
 			Exa_PutPars (Exams);
-			ParCod_PutPar (ParCod_Ses,Session->SesCod);
+			// ParCod_PutPar (ParCod_Ses,Session->SesCod);
 			HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeExaPrn),
 						 "class=\"LT BT_LINK %s_%s\"",
 						 HidVis_TitleClass[Session->Hidden],
@@ -637,8 +837,11 @@ static void ExaSes_PutLinkSession (struct Exa_Exams *Exams,
    /***** Begin form *****/
    Frm_BeginForm (ActSeeOneExaSes);
       Exa_PutPars (Exams);
+      Grp_PutParsCodGrpsAssociated (Grp_EXAM_SESSION,Exams->SesCod);
+      /*
       ParCod_PutPar (ParCod_Ses,Session->SesCod);
       Grp_PutParsCodGrpsAssociated (Grp_EXAM_SESSION,Session->SesCod);
+      */
 
       /***** Link to view attendance event *****/
       HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneExaSes),
@@ -764,7 +967,7 @@ static void ExaSes_ListOneOrMoreSessionsResultStd (struct Exa_Exams *Exams,
       Exams->Exam.ExaCod = Session->ExaCod;
       Exams->SesCod      = Session->SesCod;
       Lay_PutContextualLinkOnlyIcon (ActSeeMyExaResSes,ExaRes_RESULTS_BOX_ID,
-				     ExaSes_PutParsEdit,Exams,
+				     Exa_PutPars,Exams,
 				     "trophy.svg",Ico_BLACK);
      }
    else
@@ -784,7 +987,7 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
    /***** Show exam session results *****/
    if (ExaSes_CheckIfICanEditThisSession (Session->UsrCod) == Usr_CAN)
       Lay_PutContextualLinkOnlyIcon (ActSeeUsrExaResSes,ExaRes_RESULTS_BOX_ID,
-				     ExaSes_PutParsEdit,Exams,
+				     Exa_PutPars,Exams,
 				     "trophy.svg",Ico_BLACK);
 
    /***** Check if visibility of session results can be changed *****/
@@ -794,11 +997,11 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
 	 /***** Put form to change visibility of session results *****/
 	 if (Session->ShowUsrResults)
 	    Lay_PutContextualLinkOnlyIcon (ActChgVisExaRes,NULL,
-					   ExaSes_PutParsEdit,Exams,
+					   Exa_PutPars,Exams,
 					   "eye.svg",Ico_GREEN);
 	 else
 	    Lay_PutContextualLinkOnlyIcon (ActChgVisExaRes,NULL,
-					   ExaSes_PutParsEdit,Exams,
+					   Exa_PutPars,Exams,
 					   "eye-slash.svg",Ico_RED);
 	 break;
       case Usr_CAN_NOT:	// Don't put form
@@ -941,7 +1144,7 @@ void ExaSes_ReqRemSession (void)
    Exams.Exam.ExaCod = Session.ExaCod;
    Exams.SesCod      = Session.SesCod;
    Ale_ShowAlertRemove (ActRemExaSes,NULL,
-			ExaSes_PutParsEdit,&Exams,
+			Exa_PutPars,&Exams,
 			Txt_Do_you_really_want_to_remove_the_session_X,
 	                Session.Title);
 
@@ -1032,19 +1235,6 @@ static void ExaSes_HideUnhideSession (HidVis_HiddenOrVisible_t HiddenOrVisible)
   }
 
 /*****************************************************************************/
-/******************* Params used to edit an exam session *********************/
-/*****************************************************************************/
-
-void ExaSes_PutParsEdit (void *Exams)
-  {
-   if (Exams)
-     {
-      Exa_PutPars (Exams);
-      ParCod_PutPar (ParCod_Ses,((struct Exa_Exams *) Exams)->SesCod);
-     }
-  }
-
-/*****************************************************************************/
 /************************** Get and check parameters *************************/
 /*****************************************************************************/
 
@@ -1102,7 +1292,7 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session)
 			  ExaSes_ParsFormSession,Session,
 			  "TBL_WIDE");
 
-	 /***** Session title *****/
+	 /***** Title *****/
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
@@ -1118,7 +1308,7 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session)
 
 	 HTM_TR_End ();
 
-	 /***** Session type *****/
+	 /***** Modality *****/
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
@@ -1239,19 +1429,14 @@ void ExaSes_ReqCreatOrEditSes (void)
   {
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;
-   OldNew_OldNew_t OldNewSession;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
    Exa_ResetExam (&Exams.Exam);
-   ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
    Grp_GetParMyAllGrps ();
-   Session.SesCod = ParCod_GetPar (ParCod_Ses);
-   OldNewSession = (Session.SesCod > 0) ? OldNew_OLD :
-					  OldNew_NEW;
 
    /***** Get exam data from database *****/
    Exa_GetExamDataByCod (&Exams.Exam);
@@ -1259,19 +1444,24 @@ void ExaSes_ReqCreatOrEditSes (void)
       Err_WrongExamExit ();
 
    /***** Get session data *****/
-   switch (OldNewSession)
+   switch (Gbl.Action.Act)
      {
-      case OldNew_OLD:
+      case ActReqNewExaSes:
+	 /* Initialize to empty session */
+	 ExaSes_ResetSession (&Session);
+	 Session.ExaCod = Exams.Exam.ExaCod;
+	 break;
+      case ActReqChgExaSes:
+	 /* Get code of session from form */
+         Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
+
 	 /* Get session data from database */
 	 ExaSes_GetSessionDataByCod (&Session);
 	 if (Exams.Exam.ExaCod != Session.ExaCod)
 	    Err_WrongExamExit ();
 	 break;
-      case OldNew_NEW:
       default:
-	 /* Initialize to empty session */
-	 ExaSes_ResetSession (&Session);
-	 Session.ExaCod = Exams.Exam.ExaCod;
+	 Err_WrongActionExit ();
 	 break;
      }
    Exams.SesCod = Session.SesCod;

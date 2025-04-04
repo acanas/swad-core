@@ -1050,12 +1050,12 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 		       {
 			case Usr_ME:
 			   Frm_BeginForm (ActSeeOneExaResMe);
-			      ExaSes_PutParsEdit (Exams);
+			      Exa_PutPars (Exams);
 			      Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneExaResMe);
 			   break;
 			case Usr_OTHER:
 			   Frm_BeginForm (ActSeeOneExaResOth);
-			      ExaSes_PutParsEdit (Exams);
+			      Exa_PutPars (Exams);
 			      Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 			      Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneExaResOth);
 			   break;
