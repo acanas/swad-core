@@ -474,7 +474,8 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 
 	    /* Department code */
 	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_GetSuffix ());
-	       HTM_TxtF ("%ld&nbsp;",Dpt->DptCod);
+	       HTM_Long (Dpt->DptCod);
+	       HTM_NBSP ();
 	    HTM_TD_End ();
 
 	    /* Institution */

@@ -1290,8 +1290,6 @@ long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
    extern const char *ExaSes_ModalityDB[ExaSes_NUM_MODALITIES];
    extern const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE];
 
-   Ale_ShowAlert (Ale_DEBUG,"ExaSes_ModalityDB[Session->Modality] = %s",ExaSes_ModalityDB[Session->Modality]);
-
    return
    DB_QueryINSERTandReturnCode ("can not create exam session",
 				"INSERT exa_sessions"
@@ -2292,7 +2290,9 @@ unsigned Exa_DB_GetAllUsrsWhoHaveMadeSession (MYSQL_RES **mysql_res,long SesCod)
    DB_QuerySELECT (mysql_res,"can not get users in session",
 		   "SELECT users.UsrCod"	// row[0]
 		    " FROM (SELECT exa_prints.UsrCod AS UsrCod"
-			    " FROM exa_prints,exa_sessions,exa_exams"
+			    " FROM exa_prints,"
+			          "exa_sessions,"
+			          "exa_exams"
 			   " WHERE exa_prints.SesCod=%ld"
 			     " AND exa_prints.SesCod=exa_sessions.SesCod"
 			     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
@@ -2332,7 +2332,7 @@ unsigned Exa_DB_GetNumPrintsInSession (long SesCod)
 /*****************************************************************************/
 
 unsigned Exa_DB_GetResults (MYSQL_RES **mysql_res,
-			    Usr_MeOrOther_t MeOrOther,
+			    Usr_MeOrOther_t MeOrOther,long UsrCod,
 			    long SesCod,	// <= 0 ==> any
 			    long ExaCod,	// <= 0 ==> any
 			    const char *ExamsSelectedCommas)
@@ -2341,12 +2341,7 @@ unsigned Exa_DB_GetResults (MYSQL_RES **mysql_res,
    char *HidSesSubQuery;
    char *HidExaSubQuery;
    char *ExaSubQuery;
-   long UsrCod;
    unsigned NumResults;
-
-   /***** Set user *****/
-   UsrCod = (MeOrOther == Usr_ME) ? Gbl.Usrs.Me.UsrDat.UsrCod :
-				    Gbl.Usrs.Other.UsrDat.UsrCod;
 
    /***** Build sessions subquery *****/
    if (SesCod > 0)	// One unique session
@@ -2424,7 +2419,9 @@ unsigned Exa_DB_GetResults (MYSQL_RES **mysql_res,
    NumResults = (unsigned)
    DB_QuerySELECT (mysql_res,"can not get sessions results",
 		   "SELECT exa_prints.PrnCod"			// row[0]
-		    " FROM exa_prints,exa_sessions,exa_exams"
+		    " FROM exa_prints,"
+		          "exa_sessions,"
+		          "exa_exams"
 		   " WHERE exa_prints.UsrCod=%ld"
 		      "%s"	// Session subquery
 		     " AND exa_prints.SesCod=exa_sessions.SesCod"

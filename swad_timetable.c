@@ -1477,7 +1477,7 @@ static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
 	 if (Grp.Room.RooCod > 0)
 	   {
 	    HTM_BR ();
-	    HTM_TxtF ("(%s)",Grp.Room.ShrtName);
+	    HTM_ParTxtPar (Grp.Room.ShrtName);
 	   }
 	}
 

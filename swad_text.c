@@ -24373,6 +24373,8 @@ const char *Txt_Name =
 	"&Idot;sim";
 #endif
 
+const char *Txt_NBSP = "&nbsp;";
+
 const char *Txt_New_email =
 #if   L==1	// ca
 	"Nou correu";

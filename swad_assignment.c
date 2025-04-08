@@ -1825,7 +1825,10 @@ void Asg_WriteDatesAssignment (void)
 	 free (Id);
 	}
       else
-	 HTM_TxtF ("&nbsp;(%s)",Txt_unknown_assignment);
+        {
+	 HTM_NBSP ();
+	 HTM_ParTxtPar (Txt_unknown_assignment);
+        }
 
    /***** End table cell *****/
    HTM_TD_End ();

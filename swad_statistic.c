@@ -1253,7 +1253,8 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 	 /* Write the number of row */
 	 HTM_TD_Begin ("class=\"RT LOG_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
-	    HTM_TxtF ("%u&nbsp;",NumRow);
+	    HTM_Unsigned (NumRow);
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write the user's ID if user is a student */
@@ -1266,14 +1267,18 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 	 /* Write the first name and the surnames */
 	 HTM_TD_Begin ("class=\"LT LOG_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
-	    HTM_TxtF ("%s&nbsp;",UsrDat.FullName);
+	    HTM_Txt (UsrDat.FullName);
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write the user's role */
 	 HTM_TD_Begin ("class=\"CT LOG_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
-	    HTM_TxtF ("%s&nbsp;",RoleFromLog < Rol_NUM_ROLES ? Txt_ROLES_SINGUL_Abc[RoleFromLog][UsrDat.Sex] :
-							       "?");
+	    if (RoleFromLog < Rol_NUM_ROLES)
+	       HTM_Txt (Txt_ROLES_SINGUL_Abc[RoleFromLog][UsrDat.Sex]);
+	    else
+	       HTM_Question ();
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write the date-time (row[3]) */
@@ -1297,9 +1302,10 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 	 HTM_TD_Begin ("class=\"LT LOG_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
 	    if (ActCod >= 0)
-	       HTM_TxtF ("%s&nbsp;",Act_GetActionText (Act_GetActionFromActCod (ActCod)));
+	       HTM_Txt (Act_GetActionText (Act_GetActionFromActCod (ActCod)));
 	    else
-	       HTM_TxtF ("?&nbsp;");
+	       HTM_Question ();
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write the comments of the access */
@@ -1390,7 +1396,8 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
 	 /* Write the number of row */
 	 HTM_TD_Begin ("class=\"RT LOG_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
-	    HTM_TxtF ("%u&nbsp;",NumHit);
+	    HTM_Unsigned (NumHit);
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Show the photo */
@@ -1409,13 +1416,15 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
 	 /* Write the name and the surnames */
 	 HTM_TD_Begin ("class=\"LT LOG_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
-	    HTM_TxtF ("%s&nbsp;",UsrDat.FullName);
+	    HTM_Txt (UsrDat.FullName);
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write user's role */
 	 HTM_TD_Begin ("class=\"CT LOG_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
-	    HTM_TxtF ("%s&nbsp;",Txt_ROLES_SINGUL_Abc[UsrDat.Roles.InCurrentCrs][UsrDat.Sex]);
+	    HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat.Roles.InCurrentCrs][UsrDat.Sex]);
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write the number of clicks */
@@ -1523,7 +1532,8 @@ static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
 	                  NumDayWeek == 6 ? "LOG_R" :
 					    "LOG",
 			  The_GetSuffix ());
-	       HTM_TxtF ("%s&nbsp;",StrDate);
+	       HTM_Txt (StrDate);
+	       HTM_NBSP ();
 	    HTM_TD_End ();
 
 	    /* Write the day of the week */
@@ -1531,7 +1541,8 @@ static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
 	                  NumDayWeek == 6 ? "LOG_R" :
 					    "LOG",
 			  The_GetSuffix ());
-	       HTM_TxtF ("%s&nbsp;",Txt_DAYS[NumDayWeek]);
+	       HTM_Txt (Txt_DAYS[NumDayWeek]);
+	       HTM_NBSP ();
 	    HTM_TD_End ();
 
 	    /* Draw bar proportional to number of hits */
@@ -1567,7 +1578,8 @@ static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
 	               NumDayWeek == 6 ? "LOG_R" :
 				         "LOG",
 		       The_GetSuffix ());
-	    HTM_TxtF ("%s&nbsp;",StrDate);
+	    HTM_Txt (StrDate);
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write the day of the week */
@@ -1575,7 +1587,8 @@ static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
 	               NumDayWeek == 6 ? "LOG_R" :
 				         "LOG",
 		       The_GetSuffix ());
-	    HTM_TxtF ("%s&nbsp;",Txt_DAYS[NumDayWeek]);
+	    HTM_Txt (Txt_DAYS[NumDayWeek]);
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Draw bar proportional to number of hits */
@@ -1753,7 +1766,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 	                     NumDayWeek == 6 ? "LOG_R" :
 					       "LOG",
 			     The_GetSuffix ());
-		  HTM_TxtF ("%s&nbsp;",StrDate);
+		  HTM_Txt (StrDate);
+	          HTM_NBSP ();
 	       HTM_TD_End ();
 
 	       /* Write the day of the week */
@@ -1761,7 +1775,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 	                     NumDayWeek == 6 ? "LOG_R" :
 					       "LOG",
 			     The_GetSuffix ());
-		  HTM_TxtF ("%s&nbsp;",Txt_DAYS[NumDayWeek]);
+		  HTM_Txt (Txt_DAYS[NumDayWeek]);
+	          HTM_NBSP ();
 	       HTM_TD_End ();
 
 	       /* Draw a cell with the color proportional to the number of clicks */
@@ -1807,7 +1822,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 	               NumDayWeek == 6 ? "LOG_R" :
 					 "LOG",
 		       The_GetSuffix ());
-	    HTM_TxtF ("%s&nbsp;",StrDate);
+	    HTM_Txt (StrDate);
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write the day of the week */
@@ -1815,7 +1831,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 	               NumDayWeek == 6 ? "LOG_R" :
 					 "LOG",
 		       The_GetSuffix ());
-	    HTM_TxtF ("%s&nbsp;",Txt_DAYS[NumDayWeek]);
+	    HTM_Txt (Txt_DAYS[NumDayWeek]);
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Draw the color proporcional al number of clicks */
@@ -1849,7 +1866,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 	               NumDayWeek == 6 ? "LOG_R" :
 					 "LOG",
 		       The_GetSuffix ());
-	    HTM_TxtF ("%s&nbsp;",StrDate);
+	    HTM_Txt (StrDate);
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write the day of the week */
@@ -1857,7 +1875,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 	               NumDayWeek == 6 ? "LOG_R" :
 					 "LOG",
 		       The_GetSuffix ());
-	    HTM_TxtF ("%s&nbsp;",Txt_DAYS[NumDayWeek]);
+	    HTM_Txt (Txt_DAYS[NumDayWeek]);
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Draw the color proportional to number of clicks */
@@ -2112,7 +2131,8 @@ static void Sta_ShowNumHitsPerWeek (Sta_CountType_t CountType,
 
 	    /* Write week */
 	    HTM_TD_Begin ("class=\"LT LOG_%s\"",The_GetSuffix ());
-	       HTM_TxtF ("%04u-%02u&nbsp;",Date.Year,Date.Week);
+	       HTM_TxtF ("%04u-%02u",Date.Year,Date.Week);
+	       HTM_NBSP ();
 	    HTM_TD_End ();
 
 	    /* Draw bar proportional to number of hits */
@@ -2141,7 +2161,8 @@ static void Sta_ShowNumHitsPerWeek (Sta_CountType_t CountType,
 
 	/* Write week */
 	HTM_TD_Begin ("class=\"LT LOG_%s\"",The_GetSuffix ());
-	   HTM_TxtF ("%04u-%02u&nbsp;",Date.Year,Date.Week);
+	   HTM_TxtF ("%04u-%02u",Date.Year,Date.Week);
+	   HTM_NBSP ();
 	HTM_TD_End ();
 
 	/* Draw bar proportional to number of hits */
@@ -2212,7 +2233,8 @@ static void Sta_ShowNumHitsPerMonth (Sta_CountType_t CountType,
 
 	    /* Write the month */
 	    HTM_TD_Begin ("class=\"LT LOG_%s\"",The_GetSuffix ());
-	       HTM_TxtF ("%04u-%02u&nbsp;",Date.Year,Date.Month);
+	       HTM_TxtF ("%04u-%02u",Date.Year,Date.Month);
+	       HTM_NBSP ();
 	    HTM_TD_End ();
 
 	    /* Draw bar proportional to number of hits */
@@ -2240,7 +2262,8 @@ static void Sta_ShowNumHitsPerMonth (Sta_CountType_t CountType,
 
 	/* Write the month */
 	HTM_TD_Begin ("class=\"LT LOG_%s\"",The_GetSuffix ());
-	   HTM_TxtF ("%04u-%02u&nbsp;",Date.Year,Date.Month);
+	   HTM_TxtF ("%04u-%02u",Date.Year,Date.Month);
+	   HTM_NBSP ();
 	HTM_TD_End ();
 
 	/* Draw bar proportional to number of hits */
@@ -2311,7 +2334,8 @@ static void Sta_ShowNumHitsPerYear (Sta_CountType_t CountType,
 
 	    /* Write the year */
 	    HTM_TD_Begin ("class=\"LT LOG_%s\"",The_GetSuffix ());
-	       HTM_TxtF ("%04u&nbsp;",Date.Year);
+	       HTM_TxtF ("%04u",Date.Year);
+	       HTM_NBSP ();
 	    HTM_TD_End ();
 
 	    /* Draw bar proportional to number of hits */
@@ -2339,7 +2363,8 @@ static void Sta_ShowNumHitsPerYear (Sta_CountType_t CountType,
 
 	/* Write the year */
 	HTM_TD_Begin ("class=\"LT LOG_%s\"",The_GetSuffix ());
-	   HTM_TxtF ("%04u&nbsp;",Date.Year);
+	   HTM_TxtF ("%04u",Date.Year);
+	   HTM_NBSP ();
 	HTM_TD_End ();
 
 	/* Draw bar proportional to number of hits */
@@ -2832,7 +2857,8 @@ static void Sta_ShowNumHitsPerWSFunction (Sta_CountType_t CountType,
 	    Err_ShowErrorAndExit ("Wrong function code.");
 
 	 HTM_TD_Begin ("class=\"LT LOG_%s\"",The_GetSuffix ());
-	    HTM_TxtF ("%s&nbsp;",API_GetFunctionNameFromFunCod (FunCod));
+	    HTM_Txt (API_GetFunctionNameFromFunCod (FunCod));
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Draw bar proportional to number of hits */
@@ -2995,8 +3021,12 @@ static void Sta_WriteCountry (long CtyCod)
 					    "COUNTRY_MAP_TINY");
 	}
       else			// Hit with no country selected
+        {
 	 /***** No country selected *****/
-	 HTM_Txt ("&nbsp;-&nbsp;");
+	 HTM_NBSP ();
+	 HTM_Hyphen ();
+	 HTM_NBSP ();
+        }
 
    /***** End cell *****/
    HTM_TD_End ();
@@ -3087,7 +3117,9 @@ static void Sta_WriteInstit (long InsCod)
      {
       /***** No institution selected *****/
       HTM_TD_Begin ("class=\"LM LOG_%s\"",The_GetSuffix ());
-	 HTM_Txt ("&nbsp;-&nbsp;");
+	 HTM_NBSP ();
+	 HTM_Hyphen ();
+	 HTM_NBSP ();
      }
 
    /***** End cell *****/
@@ -3179,7 +3211,9 @@ static void Sta_WriteCenter (long CtrCod)
      {
       /***** No center selected *****/
       HTM_TD_Begin ("class=\"LM LOG_%s\"",The_GetSuffix ());
-	 HTM_Txt ("&nbsp;-&nbsp;");
+	 HTM_NBSP ();
+	 HTM_Hyphen ();
+	 HTM_NBSP ();
      }
 
    /***** End cell *****/
@@ -3271,7 +3305,9 @@ static void Sta_WriteDegree (long DegCod)
      {
       /***** No degree selected *****/
       HTM_TD_Begin ("class=\"LM LOG_%s\"",The_GetSuffix ());
-	 HTM_Txt ("&nbsp;-&nbsp;");
+	 HTM_NBSP ();
+	 HTM_Hyphen ();
+	 HTM_NBSP ();
      }
 
    /***** End cell *****/
@@ -3437,14 +3473,21 @@ static void Sta_DrawBarNumHits (char Color,
 	 /***** Write the number of hits *****/
 	 HTM_NBSP ();
 	 HTM_DoubleFewDigits (HitsNum);
-	 HTM_TxtF ("&nbsp;(%u",(unsigned) (((HitsNum * 100.0) /
-					     HitsTotal) + 0.5));
+	 HTM_NBSP ();
+	 HTM_OpenParenthesis ();
+	 HTM_Unsigned ((unsigned) (((HitsNum * 100.0) / HitsTotal) + 0.5));
 	}
       else
+        {
 	 /***** Write the number of clicks *****/
-	 HTM_Txt ("0&nbsp;(0");
-
-      HTM_Txt ("%)&nbsp;");
+	 HTM_NBSP ();
+	 HTM_0 ();
+	 HTM_NBSP ();
+	 HTM_OpenParenthesis ();
+	 HTM_0 ();
+        }
+      HTM_Percent ();
+      HTM_CloseParenthesis ();
 
    HTM_TD_End ();
   }

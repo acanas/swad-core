@@ -1209,20 +1209,22 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 		 {
 		  if (CallsForExams->CallForExam.Duration.Hour)
 		    {
+		     HTM_Unsigned (CallsForExams->CallForExam.Duration.Hour);
 		     if (CallsForExams->CallForExam.Duration.Minute)
-			HTM_TxtF ("%u%s %u&prime;",CallsForExams->CallForExam.Duration.Hour,
-						   Txt_hours_ABBREVIATION,
-						   CallsForExams->CallForExam.Duration.Minute);
+		       {
+			HTM_TxtSP (Txt_hours_ABBREVIATION);
+			HTM_Unsigned (CallsForExams->CallForExam.Duration.Minute);
+			HTM_Txt ("&prime;");
+		       }
 		     else
-			HTM_TxtF ("%u&nbsp;%s",CallsForExams->CallForExam.Duration.Hour,
-					       CallsForExams->CallForExam.Duration.Hour == 1 ? Txt_hour :
-											       Txt_hours);
+			HTM_NBSPTxt (CallsForExams->CallForExam.Duration.Hour == 1 ? Txt_hour :
+										     Txt_hours);
 		    }
 		  else if (CallsForExams->CallForExam.Duration.Minute)
 		    {
-		     HTM_TxtF ("%u&nbsp;%s",CallsForExams->CallForExam.Duration.Minute,
-					    CallsForExams->CallForExam.Duration.Minute == 1 ? Txt_minute :
-											      Txt_minutes);
+		     HTM_Unsigned (CallsForExams->CallForExam.Duration.Minute);
+		     HTM_NBSPTxt (CallsForExams->CallForExam.Duration.Minute == 1 ? Txt_minute :
+										    Txt_minutes);
 		    }
 		 }
 	    HTM_TD_End ();

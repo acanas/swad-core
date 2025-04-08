@@ -2294,7 +2294,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 		  else	// Pho_DEGREES_PRINT
 		    {
 		     Lgo_DrawLogo (Hie_DEG,&Deg,"CT ICO20x20");
-		     HTM_TxtF ("&nbsp;%s",Deg.FullName);
+		     HTM_NBSPTxt (Deg.FullName);
 		    }
 	       HTM_TD_End ();
 
@@ -2367,14 +2367,22 @@ static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto)
    extern const char *Txt_photos;
 
    HTM_SPAN_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-      HTM_TxtF ("%d&nbsp;",NumStds);
+      HTM_Int (NumStds);
+      HTM_NBSP ();
    HTM_SPAN_End ();
 
    HTM_SPAN_Begin ("class=\"DAT_SMALL_%s\"",The_GetSuffix ());
-      HTM_TxtF ("(%d&nbsp;%s,&nbsp;%d%%)",
-		NumStdsWithPhoto,Txt_photos,
-		NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
-			      0);
+      HTM_OpenParenthesis ();
+         HTM_Int (NumStdsWithPhoto);
+         HTM_NBSPTxt (Txt_photos);
+         HTM_Comma ();
+         HTM_NBSP ();
+         if (NumStds > 0)
+            HTM_Int ((int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5));
+         else
+            HTM_0 ();
+         HTM_Percent ();
+      HTM_CloseParenthesis ();
    HTM_SPAN_End ();
   }
 
@@ -2487,9 +2495,11 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
                   The_GetSuffix ());
       HTM_Txt (Deg->ShrtName);
       HTM_BR ();
-      HTM_TxtF ("%d&nbsp;%s",NumStds,Txt_students_ABBREVIATION);
+      HTM_Int (NumStds);
+      HTM_NBSPTxt (Txt_students_ABBREVIATION);
       HTM_BR ();
-      HTM_TxtF ("%d&nbsp;%s",NumStdsWithPhoto,Txt_photos);
+      HTM_Int (NumStdsWithPhoto);
+      HTM_NBSPTxt (Txt_photos);
       HTM_BR ();
       HTM_TxtF ("(%d%%)",
 		NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :

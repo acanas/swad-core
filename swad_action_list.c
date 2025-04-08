@@ -1527,7 +1527,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActReqLnkGrpTyp	] = {1994, 0,TabUsr,NULL			,GrpRsc_GetLinkToGrpTyp		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Students
-   [ActLstStd		] = { 678, 1,TabUsr,NULL			,Usr_SeeStudents		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
+   [ActLstStd		] = { 678, 1,TabUsr,NULL			,Usr_ListStudents		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
    [ActLstStdAll	] = {  42, 1,TabUsr,NULL			,Usr_ListAllDataStds		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3F8}},Act_NORM,Act_NEW},
    [ActPrnStdPho	] = { 120, 1,TabUsr,NULL			,Usr_SeeStdClassPhotoPrn	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3F8}},Act_NORM,Act_NEW},
    [Act_DoAct_OnSevStd	] = {1754, 1,TabUsr,Usr_DoActionOnUsrs1		,Usr_DoActionOnUsrs2		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
@@ -1579,7 +1579,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRcvRecCrs	] = { 301, 1,TabUsr,NULL			,Rec_UpdateAndShowMyCrsRecord	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x208}},Act_NORM,Act_1ST},
 
    // Teachers
-   [ActLstTch		] = { 679, 2,TabUsr,NULL			,Usr_SeeTeachers		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActLstTch		] = { 679, 2,TabUsr,NULL			,Usr_ListTeachers		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActLstTchAll	] = { 578, 2,TabUsr,NULL			,Usr_ListAllDataTchs 		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3F8}},Act_NORM,Act_NEW},
    [ActPrnTchPho	] = { 443, 2,TabUsr,NULL			,Usr_SeeTchClassPhotoPrn	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_NEW},
    [Act_DoAct_OnSevTch	] = {1755, 2,TabUsr,Usr_DoActionOnUsrs1		,Usr_DoActionOnUsrs2		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
@@ -1640,7 +1640,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemAdmCtr	] = {1340, 3,TabUsr,NULL			,Adm_RemAdmCtr			,{{    0,    0},{0x380,0x380},{0x380,0x380},{0x380,0x380},{0x380,0x380},{0x380,0x380},{0x380,0x380}},Act_NORM,Act_1ST},
    [ActNewAdmDeg	] = { 586, 3,TabUsr,NULL			,Adm_AddAdmToDeg		,{{    0,    0},{0x380,0x380},{0x380,0x380},{0x380,0x380},{0x380,0x380},{0x380,0x380},{0x380,0x380}},Act_NORM,Act_1ST},
    [ActRemAdmDeg	] = { 584, 3,TabUsr,NULL			,Adm_RemAdmDeg			,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActLstGst		] = { 587, 3,TabUsr,NULL			,Usr_SeeGuests			,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActLstGst		] = { 587, 3,TabUsr,NULL			,Usr_ListGuests			,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActLstGstAll	] = {1189, 3,TabUsr,NULL			,Usr_ListAllDataGsts		,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_NEW},
    [ActPrnGstPho	] = {1190, 3,TabUsr,NULL			,Usr_SeeGstClassPhotoPrn	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_NEW},
    [Act_DoAct_OnSevGst	] = {1753, 3,TabUsr,Usr_DoActionOnUsrs1		,Usr_DoActionOnUsrs2		,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},

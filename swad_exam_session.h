@@ -72,7 +72,7 @@ void ExaSes_ReqCreatOrEditSes (void);
 void ExaSes_ReceiveSession (void);
 
 Usr_Can_t ExaSes_CheckIfICanAnswerThisSession (const struct Exa_Exam *Exam,
-                                                const struct ExaSes_Session *Session);
+                                               const struct ExaSes_Session *Session);
 Usr_Can_t ExaSes_CheckIfICanListThisSessionBasedOnGrps (long SesCod);
 
 #endif

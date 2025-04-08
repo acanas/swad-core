@@ -783,8 +783,10 @@ static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
 		    TxtClassNormal,The_GetSuffix (),BgColor,
 		    NumCrss ? Txt_DEGREE_With_courses :
 			      Txt_DEGREE_Without_courses);
-	 HTM_Txt (NumCrss ? "&check;" :
-			    "&nbsp;");
+	 if (NumCrss)
+	    HTM_Txt ("&check;");
+	 else
+	    HTM_NBSP ();
       HTM_TD_End ();
 
       /***** Number of degree in this list *****/

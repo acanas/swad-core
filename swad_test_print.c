@@ -379,6 +379,7 @@ static void TstPrn_WriteTF_AnsToFill (const struct TstPrn_PrintedQuestion *Print
                                       unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question)
   {
+   extern const char *Txt_NBSP;
    extern const char *Txt_TF_QST[2];
 
    /***** Write selector for the answer *****/
@@ -391,15 +392,15 @@ static void TstPrn_WriteTF_AnsToFill (const struct TstPrn_PrintedQuestion *Print
       HTM_OPTION (HTM_Type_STRING,"" ,
                   (PrintedQuestion->StrAnswers[0] == '\0') ? HTM_SELECTED :
 	                				     HTM_NO_ATTR,
-                  "&nbsp;");
+                  Txt_NBSP);
       HTM_OPTION (HTM_Type_STRING,"T",
                   (PrintedQuestion->StrAnswers[0] == 'T') ? HTM_SELECTED :
 	                				    HTM_NO_ATTR,
-                  "%s",Txt_TF_QST[0]);
+                  Txt_TF_QST[0]);
       HTM_OPTION (HTM_Type_STRING,"F",
                   (PrintedQuestion->StrAnswers[0] == 'F') ? HTM_SELECTED :
 	                				    HTM_NO_ATTR,
-                  "%s",Txt_TF_QST[1]);
+                  Txt_TF_QST[1]);
    HTM_SELECT_End ();
   }
 
@@ -1493,7 +1494,9 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
 
 	    /* Answer letter (a, b, c,...) */
 	    HTM_TD_Begin ("class=\"LT %s_%s\"",ClassTxt,The_GetSuffix ());
-	       HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
+	       HTM_Char ('a' + (char) NumOpt);
+	       HTM_CloseParenthesis ();
+	       HTM_NBSP ();
 	    HTM_TD_End ();
 
 	    /* Answer text and feedback */
@@ -1628,7 +1631,9 @@ static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
 			   /* Answer letter (a, b, c,...) */
 			   HTM_TD_Begin ("class=\"LT Qst_ANS_0_%s\"",
 					 The_GetSuffix ());
-			      HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
+			      HTM_Char ('a' + (char) NumOpt);
+			      HTM_CloseParenthesis ();
+			      HTM_NBSP ();
 			   HTM_TD_End ();
 
 			   /* Answer text and feedback */
@@ -1906,7 +1911,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
    /***** Show user's data *****/
    HTM_TR_Begin (NULL);
 
-      Usr_ShowTableCellWithUsrData (UsrDat,NumPrints);
+      Usr_ShowTableCellWithUsrData (UsrDat,NumPrints + 1);
 
       /***** Get and print tests *****/
       if (NumPrints)

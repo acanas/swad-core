@@ -524,7 +524,8 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 
 		  /* Holiday code */
 		  HTM_TD_Begin ("class=\"CODE DAT_%s\"",The_GetSuffix ());
-		     HTM_TxtF ("%ld&nbsp;",Hld->HldCod);
+		     HTM_Long (Hld->HldCod);
+		     HTM_NBSP ();
 		  HTM_TD_End ();
 
 		  /* Holiday place */

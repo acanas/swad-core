@@ -126,9 +126,6 @@ void Dup_ListDuplicateUsrs (void)
       /***** List possible duplicated users *****/
       if ((NumUsrs = Dup_DB_GetListDuplicateUsrs (&mysql_res)))
 	{
-	 /***** Initialize field names *****/
-	 Usr_SetUsrDatMainFieldNames ();
-
 	 /***** Initialize structure with user's data *****/
 	 Usr_UsrDataConstructor (&UsrDat);
 
@@ -246,9 +243,6 @@ static void Dup_ListSimilarUsrs (void)
    /***** List possible similar users *****/
    if ((NumUsrs = Dup_DB_GetUsrsSimilarTo (&mysql_res,&Gbl.Usrs.Other.UsrDat)))
      {
-      /***** Initialize field names *****/
-      Usr_SetUsrDatMainFieldNames ();
-
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 

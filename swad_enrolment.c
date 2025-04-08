@@ -716,7 +716,8 @@ void Enr_AskRemoveOldUsrs (void)
 
 	 /***** Form to request number of months without clicks *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_TxtF ("%s&nbsp;",Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2);
+	    HTM_Txt (Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2);
+	    HTM_NBSP ();
 	    HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 			      "name=\"Months\" class=\"INPUT_%s\"",
 			      The_GetSuffix ());

@@ -476,23 +476,26 @@ static void Prf_ShowTimeSinceFirstClick (const struct Usr_Data *UsrDat,
 	 HTM_OpenParenthesis ();
 	    NumYears = UsrFigures->NumDays / 365;
 	    if (NumYears)
-	       HTM_TxtF ("%d&nbsp;%s",
-			 NumYears,
-			 (NumYears == 1) ? Txt_year :
-					   Txt_years);
+	      {
+	       HTM_Int (NumYears);
+	       HTM_NBSPTxt (NumYears == 1 ? Txt_year :
+					    Txt_years);
+	      }
 	    else		// Less than one year
 	      {
 	       NumMonths = UsrFigures->NumDays / 30;
 	       if (NumMonths)
-		  HTM_TxtF ("%d&nbsp;%s",
-			    NumMonths,
-			    (NumMonths == 1) ? Txt_month :
-					       Txt_months);
+	         {
+		  HTM_Int (NumMonths);
+		  HTM_NBSPTxt (NumMonths == 1 ? Txt_month :
+					        Txt_months);
+	         }
 	       else	// Less than one month
-		  HTM_TxtF ("%d&nbsp;%s",
-			    UsrFigures->NumDays,
-			    (UsrFigures->NumDays == 1) ? Txt_day :
-							 Txt_days);
+	         {
+		  HTM_Int (UsrFigures->NumDays);
+		  HTM_NBSPTxt (UsrFigures->NumDays == 1 ? Txt_day :
+							  Txt_days);
+	         }
 	      }
 	 HTM_CloseParenthesis ();
         }
@@ -529,17 +532,23 @@ static void Prf_ShowNumCrssWithRole (const struct Usr_Data *UsrDat,
 
    Prf_BeginListItem (Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex],Rol_Icons[Role]);
 
-      HTM_TxtF ("%u&nbsp;%s",NumCrss,Txt_courses_ABBREVIATION);
+      HTM_Unsigned (NumCrss);
+      HTM_NBSPTxt (Txt_courses_ABBREVIATION);
 
       if (NumCrss)
-	 HTM_TxtF ("&nbsp;(%u&nbsp;%s/%u&nbsp;%s)",
-		   Enr_DB_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Role,
-					       (1 << Rol_NET) |
-					       (1 << Rol_TCH)),
-		   Txt_teachers_ABBREVIATION,
-		   Enr_DB_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Role,
-					       (1 << Rol_STD)),
-		   Txt_students_ABBREVIATION);
+        {
+	 HTM_NBSP ();
+	 HTM_OpenParenthesis ();
+	    HTM_Unsigned (Enr_DB_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Role,
+						         (1 << Rol_NET) |
+						         (1 << Rol_TCH)));
+	    HTM_NBSPTxt (Txt_teachers_ABBREVIATION);
+	    HTM_Slash ();
+	    HTM_Unsigned (Enr_DB_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Role,
+						         (1 << Rol_STD)));
+	    HTM_NBSPTxt (Txt_students_ABBREVIATION);
+	 HTM_CloseParenthesis ();
+        }
 
    Prf_EndListItem ();
   }
@@ -565,11 +574,13 @@ static void Prf_ShowNumFilesCurrentlyPublished (const struct Usr_Data *UsrDat)
 
    Prf_BeginListItem (Txt_Files_uploaded,"file.svg");
 
-      HTM_TxtF ("%u&nbsp;%s",NumFiles,(NumFiles == 1) ? Txt_file :
-						        Txt_files);
+      HTM_Unsigned (NumFiles);
+      HTM_NBSPTxt (NumFiles == 1 ? Txt_file :
+				   Txt_files);
       HTM_NBSP ();
       HTM_OpenParenthesis ();
-	 HTM_TxtF ("%u&nbsp;%s",NumPublicFiles,Txt_public_FILES);
+         HTM_Unsigned (NumPublicFiles);
+	 HTM_NBSPTxt (Txt_public_FILES);
       HTM_CloseParenthesis ();
 
    Prf_EndListItem ();
@@ -592,7 +603,8 @@ static void Prf_ShowNumClicks (const struct Usr_Data *UsrDat,
       if (UsrFigures->NumClicks >= 0)
 	{
 	 HTM_Long (UsrFigures->NumClicks);
-	 HTM_TxtF ("&nbsp;%s&nbsp;",Txt_clicks);
+	 HTM_NBSPTxt (Txt_clicks);
+	 HTM_NBSP ();
 	 Prf_ShowRanking (Prf_DB_GetUsrRankingFigure (UsrDat->UsrCod,"NumClicks"),
 			  Prf_DB_GetNumUsrsWithFigure ("NumClicks"));
 	 if (UsrFigures->NumDays > 0)
@@ -601,7 +613,9 @@ static void Prf_ShowNumClicks (const struct Usr_Data *UsrDat,
 	    HTM_OpenParenthesis ();
 	       HTM_DoubleFewDigits ((double) UsrFigures->NumClicks /
 				    (double) UsrFigures->NumDays);
-	       HTM_TxtF ("/%s&nbsp;",Txt_day);
+	       HTM_Slash ();
+	       HTM_Txt (Txt_day);
+	       HTM_NBSP ();
 	       Prf_ShowRanking (Prf_DB_GetRankingNumClicksPerDay (UsrDat->UsrCod),
 				Prf_DB_GetNumUsrsWithNumClicksPerDay ());
 	   HTM_CloseParenthesis ();
@@ -632,16 +646,20 @@ static void Prf_ShowNumFileViews (const struct Usr_Data *UsrDat,
       if (UsrFigures->NumFileViews >= 0)
 	{
 	 HTM_Long (UsrFigures->NumFileViews);
-	 HTM_TxtF ("&nbsp;%s&nbsp;",(UsrFigures->NumFileViews == 1) ? Txt_download :
-								      Txt_downloads);
+	 HTM_NBSPTxt (UsrFigures->NumFileViews == 1 ? Txt_download :
+						      Txt_downloads);
+	 HTM_NBSP ();
 	 Prf_ShowRanking (Prf_DB_GetUsrRankingFigure (UsrDat->UsrCod,"NumFileViews"),
 			  Prf_DB_GetNumUsrsWithFigure ("NumFileViews"));
 	 if (UsrFigures->NumDays > 0)
 	   {
-	    HTM_TxtF ("&nbsp;%s","(");
-	    HTM_DoubleFewDigits ((double) UsrFigures->NumFileViews /
-				 (double) UsrFigures->NumDays);
-	    HTM_TxtF ("/%s)",Txt_day);
+	    HTM_NBSP ();
+	    HTM_OpenParenthesis ();
+	       HTM_DoubleFewDigits ((double) UsrFigures->NumFileViews /
+				    (double) UsrFigures->NumDays);
+	       HTM_Slash ();
+	       HTM_Txt (Txt_day);
+	    HTM_CloseParenthesis ();
 	   }
 	}
       else	// Number of file views is unknown
@@ -669,16 +687,20 @@ static void Prf_ShowNumTimelinePubs (const struct Usr_Data *UsrDat,
       if (UsrFigures->NumTimelinePubs >= 0)
 	{
 	 HTM_Int (UsrFigures->NumTimelinePubs);
-	 HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumTimelinePubs == 1 ? Txt_TIMELINE_post :
-								 Txt_TIMELINE_posts);
+	 HTM_NBSPTxt (UsrFigures->NumTimelinePubs == 1 ? Txt_TIMELINE_post :
+							 Txt_TIMELINE_posts);
+	 HTM_NBSP ();
 	 Prf_ShowRanking (Prf_DB_GetUsrRankingFigure (UsrDat->UsrCod,"NumSocPub"),
 			  Prf_DB_GetNumUsrsWithFigure ("NumSocPub"));
 	 if (UsrFigures->NumDays > 0)
 	   {
-	    HTM_TxtF ("&nbsp;%s","(");
-	    HTM_DoubleFewDigits ((double) UsrFigures->NumTimelinePubs /
-				 (double) UsrFigures->NumDays);
-	    HTM_TxtF ("/%s)",Txt_day);
+	    HTM_NBSP ();
+	    HTM_OpenParenthesis ();
+	       HTM_DoubleFewDigits ((double) UsrFigures->NumTimelinePubs /
+				    (double) UsrFigures->NumDays);
+	       HTM_Slash ();
+	       HTM_Txt (Txt_day);
+	    HTM_CloseParenthesis ();
 	   }
 	}
       else	// Number of timeline publications is unknown
@@ -706,16 +728,20 @@ static void Prf_ShowNumForumPosts (const struct Usr_Data *UsrDat,
       if (UsrFigures->NumForumPosts >= 0)
 	{
 	 HTM_Long (UsrFigures->NumForumPosts);
-	 HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumForumPosts == 1 ? Txt_FORUM_post :
-								 Txt_FORUM_posts);
+	 HTM_NBSPTxt (UsrFigures->NumForumPosts == 1 ? Txt_FORUM_post :
+						       Txt_FORUM_posts);
+	 HTM_NBSP ();
 	 Prf_ShowRanking (Prf_DB_GetUsrRankingFigure (UsrDat->UsrCod,"NumForPst"),
 			  Prf_DB_GetNumUsrsWithFigure ("NumForPst"));
 	 if (UsrFigures->NumDays > 0)
 	   {
-	    HTM_TxtF ("&nbsp;%s","(");
-	    HTM_DoubleFewDigits ((double) UsrFigures->NumForumPosts /
-				 (double) UsrFigures->NumDays);
-	    HTM_TxtF ("/%s)",Txt_day);
+	    HTM_NBSP ();
+	    HTM_OpenParenthesis ();
+	       HTM_DoubleFewDigits ((double) UsrFigures->NumForumPosts /
+				    (double) UsrFigures->NumDays);
+	       HTM_Slash ();
+	       HTM_Txt (Txt_day);
+	    HTM_CloseParenthesis ();
 	   }
 	}
       else	// Number of forum posts is unknown
@@ -743,16 +769,20 @@ static void Prf_ShowNumMessagesSent (const struct Usr_Data *UsrDat,
       if (UsrFigures->NumMessagesSent >= 0)
 	{
 	 HTM_Long (UsrFigures->NumMessagesSent);
-	 HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumMessagesSent == 1 ? Txt_message :
-								 Txt_messages);
+	 HTM_NBSPTxt (UsrFigures->NumMessagesSent == 1 ? Txt_message :
+							 Txt_messages);
+	 HTM_NBSP ();
 	 Prf_ShowRanking (Prf_DB_GetUsrRankingFigure (UsrDat->UsrCod,"NumMsgSnt"),
 			  Prf_DB_GetNumUsrsWithFigure ("NumMsgSnt"));
 	 if (UsrFigures->NumDays > 0)
 	   {
-	    HTM_TxtF ("&nbsp;%s","(");
-	    HTM_DoubleFewDigits ((double) UsrFigures->NumMessagesSent /
-				 (double) UsrFigures->NumDays);
-	    HTM_TxtF ("/%s)",Txt_day);
+	    HTM_NBSP ();
+	    HTM_OpenParenthesis ();
+	       HTM_DoubleFewDigits ((double) UsrFigures->NumMessagesSent /
+				    (double) UsrFigures->NumDays);
+	       HTM_Slash ();
+	       HTM_Txt (Txt_day);
+	    HTM_CloseParenthesis ();
 	   }
 	}
       else	// Number of messages sent is unknown

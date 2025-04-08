@@ -471,7 +471,9 @@ void Cty_DrawCountryMapAndNameWithLink (struct Hie_Node *Cty,Act_Action_t Action
 	    Cty_DrawCountryMap (Cty,ClassMap);
 
 	    /***** Write country name *****/
-	    HTM_TxtF ("&nbsp;%s&nbsp;(%s)",Cty->FullName,Cty->ShrtName);
+	    HTM_NBSPTxt (Cty->FullName);
+	    HTM_NBSP ();
+	    HTM_ParTxtPar (Cty->ShrtName);
 
 	 /***** End link *****/
 	 HTM_BUTTON_End ();

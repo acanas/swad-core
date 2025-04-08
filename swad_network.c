@@ -231,7 +231,8 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 			      Ico_PutIcon (Net_WebsAndSocialNetworksIcons[NumURL],Ico_BLACK,
 					   Net_WebsAndSocialNetworksTitle[NumURL],
 					   "CONTEXT_OPT CONTEXT_ICO16x16");
-			      HTM_TxtF ("&nbsp;%s:",Net_WebsAndSocialNetworksTitle[NumURL]);
+			      HTM_NBSP ();
+			      HTM_TxtColon (Net_WebsAndSocialNetworksTitle[NumURL]);
 			   HTM_LABEL_End ();
 			HTM_TD_End ();
 

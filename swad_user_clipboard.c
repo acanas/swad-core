@@ -222,19 +222,19 @@ static void UsrClp_OverwriteUsrsClipboard (void)
 void UsrClp_ShowClipboardGsts (void)
   {
    UsrClp_ShowClipboard (Rol_GST);
-   Usr_SeeGuests ();
+   Usr_ListGuests ();
   }
 
 void UsrClp_ShowClipboardStds (void)
   {
    UsrClp_ShowClipboard (Rol_STD);
-   Usr_SeeStudents ();
+   Usr_ListStudents ();
   }
 
 void UsrClp_ShowClipboardTchs (void)
   {
    UsrClp_ShowClipboard (Rol_TCH);
-   Usr_SeeTeachers ();
+   Usr_ListTeachers ();
   }
 
 static void UsrClp_ShowClipboard (Rol_Role_t Role)

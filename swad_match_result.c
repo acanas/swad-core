@@ -717,7 +717,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 
    /***** Show user's data *****/
    HTM_TR_Begin (NULL);
-   Usr_ShowTableCellWithUsrData (UsrDat,NumResults);
+   Usr_ShowTableCellWithUsrData (UsrDat,NumResults + 1);
 
    /***** Get and print matches results *****/
    if (NumResults)

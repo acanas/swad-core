@@ -256,7 +256,9 @@ void Grp_WriteNamesOfSelectedGrps (void)
         {
          GrpTyp.GrpTypCod = -GrpCod;
          Grp_GetGroupTypeDataByCod (&GrpTyp);
-         HTM_TxtF ("%s&nbsp;(%s)",GrpTyp.Name,Txt_users_with_no_group);
+	 HTM_Txt (GrpTyp.Name);
+	 HTM_NBSP ();
+	 HTM_ParTxtPar (Txt_users_with_no_group);
         }
 
       /* Write separator */
@@ -1517,7 +1519,7 @@ static void Grp_WriteHeadingGroupTypes (void)
       HTM_TH_Begin (HTM_HEAD_CENTER);
 	 HTM_Txt (Txt_Type_of_group);
 	 HTM_BR ();
-	 HTM_TxtF ("(%s)",Txt_eg_Lectures_Practicals);
+	 HTM_ParTxtPar (Txt_eg_Lectures_Practicals);
       HTM_TH_End ();
       HTM_TH (Txt_Mandatory_enrolment,HTM_HEAD_CENTER);
       HTM_TH (Txt_Multiple_enrolment ,HTM_HEAD_CENTER);
@@ -1740,7 +1742,7 @@ static void Grp_WriteHeadingGroups (void)
       HTM_TH_Begin (HTM_HEAD_CENTER);
 	 HTM_Txt (Txt_Group_name);
 	 HTM_BR ();
-	 HTM_TxtF ("(%s)",Txt_eg_A_B);
+	 HTM_ParTxtPar (Txt_eg_A_B);
       HTM_TH_End ();
       HTM_TH (Txt_Room,HTM_HEAD_CENTER);
       for (Role  = Rol_TCH;
@@ -2672,7 +2674,8 @@ static void Grp_WriteRowGrp (const struct Group *Grp,Lay_Highlight_t Highlight)
    HTM_TD_Begin ("class=\"CM DAT_%s%s\"",
                  The_GetSuffix (),HighlightClass[Highlight]);
       Grp_WriteMaxStds (StrMaxStudents,Grp->MaxStds);
-      HTM_TxtF ("%s&nbsp;",StrMaxStudents);
+      HTM_Txt (StrMaxStudents);
+      HTM_NBSP ();
    HTM_TD_End ();
 
    /***** Vacants in this group *****/

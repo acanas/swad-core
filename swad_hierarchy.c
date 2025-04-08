@@ -658,7 +658,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	       case Hie_SYS:	// System
 		  Ico_PutIcon ("swad64x64.png",Ico_UNCHANGED,
 		               Txt_all_degrees,"ICO16x16");
-		  HTM_TxtF ("&nbsp;%s",Txt_all_degrees);
+		  HTM_NBSPTxt (Txt_all_degrees);
 		  break;
 	       case Hie_INS:	// Institution
 		  if ((Hie[Hie_INS].HieCod = Str_ConvertStrCodToLongCod (row[1])) > 0)

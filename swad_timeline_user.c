@@ -181,7 +181,8 @@ static void TmlUsr_ShowNumSharersOrFavers (unsigned NumUsrs)
   {
    /***** Show number of sharers or favers
           (users who have shared or marked this note as favourite) *****/
-   HTM_TxtF ("&nbsp;%u",NumUsrs);
+   HTM_NBSP ();
+   HTM_Unsigned (NumUsrs);
   }
 
 static void TmlUsr_ListSharersOrFavers (MYSQL_RES **mysql_res,

@@ -1855,6 +1855,13 @@ void HTM_NBSPTxt (const char *Txt)
    HTM_Txt (Txt);
   }
 
+void HTM_ParTxtPar (const char *Txt)
+  {
+   HTM_OpenParenthesis ();
+   HTM_Txt (Txt);
+   HTM_CloseParenthesis ();
+  }
+
 /*****************************************************************************/
 /*************** In a loop from 0 to n-1 elements,            ****************/
 /*************** prints a separator between element i and i+1 ****************/
@@ -1942,6 +1949,11 @@ void HTM_Slash (void)
 void HTM_Question (void)
   {
    HTM_Char ('?');
+  }
+
+void HTM_Percent (void)
+  {
+   HTM_Char ('%');
   }
 
 void HTM_OpenParenthesis (void)

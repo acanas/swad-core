@@ -2198,10 +2198,12 @@ static void Mch_PutCountdownAndHourglassIcon (struct Mch_Match *Match)
 	 HTM_BUTTON_Begin (Txt_Countdown,"class=\"%s\"",Class);
 
 	    /* Countdown */
+	    HTM_NBSP ();
 	    if (Match->Status.Countdown > 0)
-	       HTM_TxtF ("&nbsp;%02ld&Prime;",Match->Status.Countdown);
-	    else
-	       HTM_NBSP ();
+	      {
+	       HTM_TxtF ("%02ld",Match->Status.Countdown);
+	       HTM_Txt ("&prime;");
+	      }
 	    HTM_BR ();
 
 	    /* Icon */
@@ -3132,7 +3134,8 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
 		  "class=\"MCH_SCO_BAR\" style=\"width:%u%%;\"",BarWidth);
 	 free (Title);
 	 free (Icon);
-	 HTM_TxtF ("&nbsp;%u",NumUsrs);
+	 HTM_NBSP ();
+	 HTM_Unsigned (NumUsrs);
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3682,10 +3685,18 @@ void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,
 
       /***** Write the number of users *****/
       if (NumRespondersAns && NumRespondersQst)
-	 HTM_TxtF ("%u&nbsp;(%u%%&nbsp;%s&nbsp;%u)",
-		   NumRespondersAns,
-		   (unsigned) ((((double) NumRespondersAns * 100.0) / (double) NumRespondersQst) + 0.5),
-		   Txt_of_PART_OF_A_TOTAL,NumRespondersQst);
+        {
+	 HTM_Unsigned (NumRespondersAns);
+	 HTM_NBSP ();
+	 HTM_OpenParenthesis ();
+	    HTM_Unsigned ((unsigned) ((((double) NumRespondersAns * 100.0) /
+		                        (double) NumRespondersQst) + 0.5));
+	    HTM_Percent ();
+	    HTM_NBSPTxt (Txt_of_PART_OF_A_TOTAL);
+	    HTM_NBSP ();
+	    HTM_Unsigned (NumRespondersQst);
+	 HTM_CloseParenthesis ();
+        }
       else
 	 HTM_NBSP ();
 

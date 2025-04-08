@@ -303,7 +303,6 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,
 				       const char *OnSubmit,
 				       bool WithPhotos);
 unsigned Usr_GetColumnsForSelectUsrs (bool WithPhotos);
-void Usr_SetUsrDatMainFieldNames (void);
 void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr,bool WithPhotos);
 
 void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
@@ -317,6 +316,9 @@ void Usr_GetSelectedUsrsAndGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 				    void (*FuncWhenUsrsSelected) (void *ArgsSelected),void *ArgsSelected,
                                     void (*FuncWhenNoUsrsSelected) (void *ArgsNoSelected),void *ArgsNoSelected);
 void Usr_ListUsersToSelect (struct Usr_SelectedUsrs *SelectedUsrs,bool WithPhotos);
+void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUsrs,
+				      Rol_Role_t Role,
+				      bool WithPhotos,unsigned ColSpan);
 void Usr_WriteNumUsrsInList (Rol_Role_t Role);
 
 void Usr_ListAllDataGsts (void);
@@ -326,9 +328,9 @@ unsigned Usr_ListUsrsFound (Hie_Level_t HieLvl,Rol_Role_t Role,
                             const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1]);
 void Usr_ListDataAdms (void);
 
-void Usr_SeeGuests (void);
-void Usr_SeeStudents (void);
-void Usr_SeeTeachers (void);
+void Usr_ListGuests (void);
+void Usr_ListStudents (void);
+void Usr_ListTeachers (void);
 
 void Usr_DoActionOnUsrs1 (void);
 void Usr_DoActionOnUsrs2 (void);

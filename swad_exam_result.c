@@ -85,7 +85,7 @@ static void ExaRes_PutFormToSelUsrsToViewResults (__attribute__((unused)) void *
 static void ExaRes_ShowAllResultsInSelectedExams (void *Exams);
 static void ExaRes_ListAllResultsInSelectedExams (struct Exa_Exams *Exams);
 static void ExaRes_ListAllResultsInExa (struct Exa_Exams *Exams);
-static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams,long SesCod);
+static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams);
 
 static void ExaRes_ShowResultsBegin (struct Exa_Exams *Exams,
                                      const char *Title,bool ListExamsToSelect);
@@ -102,8 +102,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 				long ExaCod,	// <= 0 ==> any
 				const char *ExamsSelectedCommas);
 static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
-                                          const struct ExaPrn_NumQuestions *NumTotalQsts,
-                                          const struct ExaPrn_Score *TotalScore,
+					  const struct ExaPrn_NumQuestions *NumTotalQsts,
+					  const struct ExaPrn_Score *TotalScore,
 					  double TotalGrade);
 
 static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
@@ -118,7 +118,6 @@ static void ExaRes_CheckIfICanViewResult (const struct Exa_Exam *Exam,
                                           long UsrCod,
                                           struct ExaRes_ICanView *ICanView);
 
-static void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print);
 static void ExaRes_ShowExamResultTime (struct ExaPrn_Print *Print);
 static void ExaRes_ShowExamResultNumQsts (struct ExaPrn_Print *Print,
                                           const struct ExaRes_ICanView *ICanView);
@@ -156,7 +155,7 @@ void ExaRes_ShowMyResultsInCrs (void)
 
    /***** List my sessions results in the current course *****/
    ExaRes_ShowResultsBegin (&Exams,Txt_Results,true);	// List exams to select
-   ExaRes_ListMyResultsInCrs (&Exams);
+      ExaRes_ListMyResultsInCrs (&Exams);
    ExaRes_ShowResultsEnd ();
 
    /***** Free list of exams *****/
@@ -206,7 +205,7 @@ void ExaRes_ShowMyResultsInExa (void)
 	 Err_NotEnoughMemoryExit ();
       ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
       free (Title);
-      ExaRes_ListMyResultsInExa (&Exams);
+	 ExaRes_ListMyResultsInExa (&Exams);
       ExaRes_ShowResultsEnd ();
 
    /***** Exam end *****/
@@ -253,7 +252,7 @@ void ExaRes_ShowMyResultsInSes (void)
 	 Err_NotEnoughMemoryExit ();
       ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
       free (Title);
-      ExaRes_ListMyResultsInSes (&Exams);
+	 ExaRes_ListMyResultsInSes (&Exams);
       ExaRes_ShowResultsEnd ();
 
    /***** Exam end *****/
@@ -330,7 +329,7 @@ static void ExaRes_ShowAllResultsInSelectedExams (void *Exams)
    ExaRes_ShowResultsBegin ((struct Exa_Exams *) Exams,
                             Txt_Results,
                             true);	// List exams to select
-   ExaRes_ListAllResultsInSelectedExams ((struct Exa_Exams *) Exams);
+      ExaRes_ListAllResultsInSelectedExams ((struct Exa_Exams *) Exams);
    ExaRes_ShowResultsEnd ();
 
    /***** Free list of exams *****/
@@ -396,7 +395,7 @@ void ExaRes_ShowAllResultsInExa (void)
 	 Err_NotEnoughMemoryExit ();
       ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
       free (Title);
-      ExaRes_ListAllResultsInExa (&Exams);
+	 ExaRes_ListAllResultsInExa (&Exams);
       ExaRes_ShowResultsEnd ();
 
    /***** Exam end *****/
@@ -467,14 +466,14 @@ void ExaRes_ShowAllResultsInSes (void)
 	 Err_NotEnoughMemoryExit ();
       ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
       free (Title);
-      ExaRes_ListAllResultsInSes (&Exams,Session.SesCod);
+	 ExaRes_ListAllResultsInSes (&Exams);
       ExaRes_ShowResultsEnd ();
 
    /***** Exam end *****/
    Exa_ShowOnlyOneExamEnd ();
   }
 
-static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams,long SesCod)
+static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams)
   {
    MYSQL_RES *mysql_res;
    unsigned NumUsrs;
@@ -484,7 +483,7 @@ static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams,long SesCod)
    ExaRes_ShowHeaderResults (Usr_OTHER);
 
    /***** Get all users who have answered any session question in this exam *****/
-   NumUsrs = Exa_DB_GetAllUsrsWhoHaveMadeSession (&mysql_res,SesCod);
+   NumUsrs = Exa_DB_GetAllUsrsWhoHaveMadeSession (&mysql_res,Exams->SesCod);
 
    /***** List sessions results for each user *****/
    for (NumUsr = 0;
@@ -499,7 +498,7 @@ static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams,long SesCod)
 	      {
 	       /***** Show sessions results *****/
 	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-	       ExaRes_ShowResults (Exams,Usr_OTHER,SesCod,-1L,NULL);
+	       ExaRes_ShowResults (Exams,Usr_OTHER,Exams->SesCod,-1L,NULL);
 	      }
 
    /***** Free structure that stores the query result *****/
@@ -519,8 +518,7 @@ static void ExaRes_ShowResultsBegin (struct Exa_Exams *Exams,
    HTM_SECTION_Begin (ExaRes_RESULTS_BOX_ID);
 
       /***** Begin box *****/
-      Box_BoxBegin (Title,NULL,NULL,
-		    Hlp_ASSESSMENT_Exams_results,Box_NOT_CLOSABLE);
+      Box_BoxBegin (Title,NULL,NULL,Hlp_ASSESSMENT_Exams_results,Box_NOT_CLOSABLE);
 
 	 /***** List exams to select *****/
 	 if (ListExamsToSelect)
@@ -762,18 +760,19 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
    TotalScore.All   =
    TotalScore.Valid = 0.0;
 
-   /***** Make database query *****/
-   // Do not filter by groups, because a student who has changed groups
-   // must be able to access exams taken in other groups
-   NumResults = Exa_DB_GetResults (&mysql_res,MeOrOther,SesCod,ExaCod,ExamsSelectedCommas);
-
    /***** Set user *****/
    UsrDat = (MeOrOther == Usr_ME) ? &Gbl.Usrs.Me.UsrDat :
 				    &Gbl.Usrs.Other.UsrDat;
 
+   /***** Make database query *****/
+   // Do not filter by groups, because a student who has changed groups
+   // must be able to access exams taken in other groups
+   NumResults = Exa_DB_GetResults (&mysql_res,MeOrOther,UsrDat->UsrCod,
+				   SesCod,ExaCod,ExamsSelectedCommas);
+
    /***** Show user's data *****/
    HTM_TR_Begin (NULL);
-      Usr_ShowTableCellWithUsrData (UsrDat,NumResults);
+      Usr_ShowTableCellWithUsrData (UsrDat,NumResults + 1);
 
       /***** Get and print sessions results *****/
       if (NumResults)
@@ -1123,22 +1122,22 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 /*****************************************************************************/
 
 static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
-                                          const struct ExaPrn_NumQuestions *NumTotalQsts,
-                                          const struct ExaPrn_Score *TotalScore,
+					  const struct ExaPrn_NumQuestions *NumTotalQsts,
+					  const struct ExaPrn_Score *TotalScore,
 					  double TotalGrade)
   {
    extern const char *Txt_Sessions;
    unsigned NumTotalQstsInvalid;
 
    /***** Row title *****/
-   HTM_TD_Begin ("colspan=\"3\" class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
+   HTM_TD_Begin ("colspan=\"3\" class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
                  The_GetSuffix (),The_GetColorRows ());
       HTM_TxtColonNBSP (Txt_Sessions);
       HTM_Unsigned (NumResults);
    HTM_TD_End ();
 
    /***** Write total number of questions *****/
-   HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
+   HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
                  The_GetSuffix (),The_GetColorRows ());
       HTM_Unsigned (NumTotalQsts->All);
    HTM_TD_End ();
@@ -1206,13 +1205,13 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
    HTM_TD_End ();
 
    /***** Write total valid score *****/
-   HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
+   HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
                  The_GetSuffix (),The_GetColorRows ());
       HTM_DoublePartOfUnsigned (TotalScore->Valid,NumTotalQsts->Valid.Total);
    HTM_TD_End ();
 
    /***** Write average valid score per valid question *****/
-   HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
+   HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
                  The_GetSuffix (),The_GetColorRows ());
       HTM_Double2Decimals (NumTotalQsts->Valid.Total ? TotalScore->Valid /
 						       (double) NumTotalQsts->Valid.Total :
@@ -1221,14 +1220,14 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
 
 
    /***** Write total grade *****/
-   HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
+   HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
                  The_GetSuffix (),The_GetColorRows ());
       HTM_Double2Decimals (TotalGrade);
    HTM_TD_End ();
 
    /***** Last cell *****/
-   HTM_TD_Begin ("class=\"DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                 The_GetSuffix (),The_GetColorRows ());
+   HTM_TD_Begin ("class=\"LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
+		 The_GetColorRows ());
    HTM_TD_End ();
   }
 
@@ -1460,7 +1459,7 @@ static void ExaRes_CheckIfICanViewResult (const struct Exa_Exam *Exam,
 /****** Compute total score of exam print counting only valid questions ******/
 /*****************************************************************************/
 
-static void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
+void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1965,7 +1964,10 @@ static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 			       The_GetSuffix ());
 		  HTM_Double2Decimals (Print->PrintedQuestions[QstInd].Score);
 		  if (Question->Validity == ExaSet_INVALID_QUESTION)
-		     HTM_TxtF (" (%s)",Txt_Invalid_question);
+		    {
+		     HTM_SP ();
+		     HTM_ParTxtPar (Txt_Invalid_question);
+		    }
 	       HTM_SPAN_End ();
 	    HTM_DIV_End ();
 	   }

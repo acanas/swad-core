@@ -87,10 +87,10 @@ extern struct Globals Gbl;
 
 static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
 				     const struct ExaSes_Session *Session);
-static void ExaSes_WriteRowUsrInSession (unsigned NumUsr,
-					 struct Usr_Data *UsrDat,
-					 const struct ExaSes_Session *Session,
-					 bool ShowPhoto);
+static void ExaSes_ShowHeaderResults (void);
+static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
+				         unsigned NumUsr,
+					 struct Usr_Data *UsrDat,bool ShowPhoto);
 
 static void ExaSes_PutIconsInListOfSessions (void *Exams);
 static void ExaSes_PutIconToCreateNewSession (struct Exa_Exams *Exams);
@@ -242,7 +242,7 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
   {
    extern const char *Hlp_ASSESSMENT_Exams;
    extern const char *Txt_Session_X;
-   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   // extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    char *Title;
    unsigned NumUsr;
    struct Usr_Data UsrDat;
@@ -288,15 +288,21 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
 	       /* Begin table */
 	       HTM_TABLE_Begin ("TBL_SCROLL");
 
+		  /***** Begin table with list of students *****/
+		  if (!Gbl.Crs.Grps.AllGrpsSel)
+		    {
+		     HTM_TR_Begin (NULL);
+			HTM_TD_Begin ("colspan=\"16\" class=\"TIT CM\"");
+			   Grp_WriteNamesOfSelectedGrps ();
+			HTM_TD_End ();
+		     HTM_TR_End ();
+		    }
+
+		  /***** Put a row to select all users *****/
+		  Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_STD,WithPhotos,16);
+
 		  /* Header */
-		  HTM_TR_Begin (NULL);
-
-		     HTM_TH_Empty (3);
-		     if (WithPhotos)
-			HTM_TH_Empty (1);
-		     HTM_TH_Span (Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN],HTM_HEAD_LEFT,1,2,NULL);
-
-		  HTM_TR_End ();
+		  ExaSes_ShowHeaderResults ();
 
 		  /* List of students */
 		  for (NumUsr = 0;
@@ -309,8 +315,8 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
 		     /* Get list of user's IDs */
 		     ID_GetListIDsFromUsrCod (&UsrDat);
 
-		     ExaSes_WriteRowUsrInSession (NumUsr + 1,&UsrDat,
-						  Session,WithPhotos);
+		     ExaSes_WriteRowUsrInSession (Exams,NumUsr + 1,
+						  &UsrDat,WithPhotos);
 		    }
 
 	       /* End table */
@@ -346,14 +352,72 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
   }
 
 /*****************************************************************************/
+/********************* Show header of my sessions results *********************/
+/*****************************************************************************/
+
+static void ExaSes_ShowHeaderResults (void)
+  {
+   extern const char *Txt_User[Usr_NUM_SEXS];
+   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
+   extern const char *Txt_Questions;
+   extern const char *Txt_Valid_answers;
+   extern const char *Txt_Score;
+   extern const char *Txt_Grade;
+   extern const char *Txt_total;
+   extern const char *Txt_QUESTIONS_valid;
+   extern const char *Txt_QUESTIONS_invalid;
+   extern const char *Txt_ANSWERS_correct;
+   extern const char *Txt_ANSWERS_wrong;
+   extern const char *Txt_ANSWERS_blank;
+   extern const char *Txt_average;
+
+   /***** First row *****/
+   HTM_TR_Begin (NULL);
+      HTM_TH_Span (Txt_User[Usr_SEX_UNKNOWN]		,HTM_HEAD_CENTER,3,2,"LINE_BOTTOM");
+      HTM_TH_Span (Txt_START_END_TIME[Dat_STR_TIME]     ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
+      HTM_TH_Span (Txt_START_END_TIME[Dat_END_TIME]     ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
+      HTM_TH_Span (Txt_Questions                        ,HTM_HEAD_CENTER,1,3,"LINE_LEFT");
+      HTM_TH_Span (Txt_Valid_answers                    ,HTM_HEAD_CENTER,1,5,"LINE_LEFT");
+      HTM_TH_Span (Txt_Score                            ,HTM_HEAD_CENTER,1,2,"LINE_LEFT");
+      HTM_TH_Span (Txt_Grade                            ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM LINE_LEFT");
+      HTM_TH_Span (NULL                                 ,HTM_HEAD_CENTER,3,1,"LINE_BOTTOM LINE_LEFT");
+   HTM_TR_End ();
+
+   /***** Second row *****/
+   HTM_TR_Begin (NULL);
+      HTM_TH_Span (Txt_total                            ,HTM_HEAD_RIGHT ,2,1,"LINE_BOTTOM LINE_LEFT");
+      HTM_TH_Span (Txt_QUESTIONS_valid                  ,HTM_HEAD_RIGHT ,2,1,"LINE_BOTTOM");
+      HTM_TH_Span (Txt_QUESTIONS_invalid                ,HTM_HEAD_RIGHT ,2,1,"LINE_BOTTOM");
+      HTM_TH_Span (Txt_ANSWERS_correct                  ,HTM_HEAD_RIGHT ,1,1,"LINE_LEFT");
+      HTM_TH_Span (Txt_ANSWERS_wrong                    ,HTM_HEAD_CENTER,1,3,NULL);
+      HTM_TH_Span (Txt_ANSWERS_blank                    ,HTM_HEAD_RIGHT ,1,1,NULL);
+      HTM_TH_Span (Txt_total                            ,HTM_HEAD_RIGHT ,1,1,"LINE_LEFT");
+      HTM_TH_Span (Txt_average                          ,HTM_HEAD_RIGHT ,1,1,NULL);
+   HTM_TR_End ();
+
+   /***** Third row *****/
+   HTM_TR_Begin (NULL);
+      HTM_TH_Span ("{<em>p<sub>i</sub></em>=1}"         ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM LINE_LEFT");
+      HTM_TH_Span ("{-1&le;<em>p<sub>i</sub></em>&lt;0}",HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM");
+      HTM_TH_Span ("{<em>p<sub>i</sub></em>=0}"         ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM");
+      HTM_TH_Span ("{0&lt;<em>p<sub>i</sub></em>&lt;1}" ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM");
+      HTM_TH_Span ("{<em>p<sub>i</sub></em>=0}"         ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM");
+      HTM_TH_Span ("<em>&Sigma;p<sub>i</sub></em>"      ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM LINE_LEFT");
+      HTM_TH_Span ("-1&le;"
+	           "<em style=\"text-decoration:overline;\">p</em>"
+	           "&le;1"                              ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM");
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
 /************** Write a row of a table with the data of a user ***************/
 /*****************************************************************************/
 
-static void ExaSes_WriteRowUsrInSession (unsigned NumUsr,
-					 struct Usr_Data *UsrDat,
-					 const struct ExaSes_Session *Session,
-					 bool ShowPhoto)
+static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
+				         unsigned NumUsr,
+					 struct Usr_Data *UsrDat,bool ShowPhoto)
   {
+   /*
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
@@ -361,60 +425,255 @@ static void ExaSes_WriteRowUsrInSession (unsigned NumUsr,
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO45x60",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
+   */
 
-   /***** Check if this student is already present in the current event *****/
-   /*
-   Present = Att_CheckIfUsrIsPresentInEventAndGetComments (Event->AttCod,UsrDat->UsrCod,
-							   CommentStd,CommentTch); */
+   MYSQL_RES *mysql_res;
+   unsigned NumResults;
+   unsigned NumResult;
+   static unsigned UniqueId = 0;
+   char *Id;
+   struct ExaPrn_Print Print;
+   struct Exa_Exam Exam;
+   Dat_StartEndTime_t StartEndTime;
+   unsigned NumQstsInvalid;
+   struct ExaPrn_NumQuestions NumTotalQsts;
+   struct ExaPrn_Score TotalScore;
+   double Grade;
+   double TotalGrade = 0.0;
+
+   /***** Reset total number of questions and total score *****/
+   NumTotalQsts.All                  =
+   NumTotalQsts.NotBlank             =
+   NumTotalQsts.Valid.Correct        =
+   NumTotalQsts.Valid.Wrong.Negative =
+   NumTotalQsts.Valid.Wrong.Zero     =
+   NumTotalQsts.Valid.Wrong.Positive =
+   NumTotalQsts.Valid.Blank          =
+   NumTotalQsts.Valid.Total          = 0;
+   TotalScore.All   =
+   TotalScore.Valid = 0.0;
+
+   /***** Make database query *****/
+   // Do not filter by groups, because a student who has changed groups
+   // must be able to access exams taken in other groups
+   NumResults = Exa_DB_GetResults (&mysql_res,Usr_OTHER,UsrDat->UsrCod,
+				   Exams->SesCod,-1L,NULL);
 
    /***** Begin table row *****/
    HTM_TR_Begin (NULL);
 
       /***** Checkbox to select user *****/
+      /*
       HTM_TD_Begin ("class=\"CT %s\"",The_GetColorRows ());
 	 HTM_INPUT_CHECKBOX ("UsrCodStd",HTM_NO_ATTR,
 			     "id=\"Std%u\" value=\"%s\"",
 			     NumUsr,UsrDat->EnUsrCod);
       HTM_TD_End ();
+      */
 
-      /***** Write number of student in the list *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-		    UsrDat->Accepted ? "DAT_STRONG" :
-				       "DAT",
-		    The_GetSuffix (),The_GetColorRows ());
-	 HTM_Unsigned (NumUsr);
-      HTM_TD_End ();
+      /***** Show user's data *****/
+      Usr_ShowTableCellWithUsrData (UsrDat,NumResults);
 
-      /***** Show student's photo *****/
-      if (ShowPhoto)
+      /***** Get and print sessions results *****/
+      if (NumResults)
 	{
-	 HTM_TD_Begin ("class=\"%s LT\"",The_GetColorRows ());
-	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
+	 for (NumResult = 0;
+	      NumResult < NumResults;
+	      NumResult++)
+	   {
+	    /* Get print code (row[0]) */
+	    if ((Print.PrnCod = DB_GetNextCode (mysql_res)) <= 0)
+	       Err_WrongExamExit ();
+
+	    /* Get print data */
+	    ExaPrn_GetPrintDataByPrnCod (&Print);
+
+	    if (NumResult)
+	       HTM_TR_Begin (NULL);
+
+	    /* Write start/end times */
+	    for (StartEndTime  = (Dat_StartEndTime_t) 0;
+		 StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+		 StartEndTime++)
+	      {
+	       UniqueId++;
+	       if (asprintf (&Id,"exa_res_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       HTM_TD_Begin ("id =\"%s\" class=\"LT DAT_%s LINE_BOTTOM %s\"",
+			     Id,The_GetSuffix (),The_GetColorRows ());
+		  Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
+						Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+						Dat_WRITE_TODAY |
+						Dat_WRITE_DATE_ON_SAME_DAY |
+						Dat_WRITE_HOUR |
+						Dat_WRITE_MINUTE |
+						Dat_WRITE_SECOND);
+	       HTM_TD_End ();
+	       free (Id);
+	      }
+
+	    /* Get and accumulate questions and score */
+	    /* Get questions and user's answers of exam print from database */
+	    ExaPrn_GetPrintQuestionsFromDB (&Print);
+	    NumTotalQsts.All += Print.NumQsts.All;
+
+	    /* Compute score taking into account only valid questions */
+	    ExaRes_ComputeValidPrintScore (&Print);
+	    NumTotalQsts.Valid.Correct        += Print.NumQsts.Valid.Correct;
+	    NumTotalQsts.Valid.Wrong.Negative += Print.NumQsts.Valid.Wrong.Negative;
+	    NumTotalQsts.Valid.Wrong.Zero     += Print.NumQsts.Valid.Wrong.Zero;
+	    NumTotalQsts.Valid.Wrong.Positive += Print.NumQsts.Valid.Wrong.Positive;
+	    NumTotalQsts.Valid.Blank          += Print.NumQsts.Valid.Blank;
+	    NumTotalQsts.Valid.Total          += Print.NumQsts.Valid.Total;
+	    TotalScore.Valid                  += Print.Score.Valid;
+
+	    /* Write total number of questions */
+	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM LINE_LEFT %s\"",
+	                  The_GetSuffix (),The_GetColorRows ());
+		     HTM_Unsigned (Print.NumQsts.All);
+	    HTM_TD_End ();
+
+	    /* Valid questions */
+	    HTM_TD_Begin ("class=\"RT DAT_GREEN_%s LINE_BOTTOM %s\"",
+			  The_GetSuffix (),The_GetColorRows ());
+	       if (Print.NumQsts.Valid.Total)
+		  HTM_Unsigned (Print.NumQsts.Valid.Total);
+	       else
+		  HTM_Light0 ();
+	    HTM_TD_End ();
+
+	    /* Invalid questions */
+	    HTM_TD_Begin ("class=\"RT DAT_RED_%s LINE_BOTTOM %s\"",
+	                  The_GetSuffix (),The_GetColorRows ());
+	       NumQstsInvalid = Print.NumQsts.All -
+				Print.NumQsts.Valid.Total;
+	       if (NumQstsInvalid)
+		  HTM_Unsigned (NumQstsInvalid);
+	       else
+		  HTM_Light0 ();
+	    HTM_TD_End ();
+
+	    /* Write number of correct questions */
+	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM LINE_LEFT %s\"",
+	                  The_GetSuffix (),The_GetColorRows ());
+	       if (Print.NumQsts.Valid.Correct)
+		  HTM_Unsigned (Print.NumQsts.Valid.Correct);
+	       else
+		  HTM_Light0 ();
+	    HTM_TD_End ();
+
+	    /* Write number of wrong questions */
+	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM %s\"",
+	                  The_GetSuffix (),The_GetColorRows ());
+	       if (Print.NumQsts.Valid.Wrong.Negative)
+		  HTM_Unsigned (Print.NumQsts.Valid.Wrong.Negative);
+	       else
+		  HTM_Light0 ();
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM %s\"",
+	                  The_GetSuffix (),The_GetColorRows ());
+	       if (Print.NumQsts.Valid.Wrong.Zero)
+		  HTM_Unsigned (Print.NumQsts.Valid.Wrong.Zero);
+	       else
+		  HTM_Light0 ();
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM %s\"",
+	                  The_GetSuffix (),The_GetColorRows ());
+	       if (Print.NumQsts.Valid.Wrong.Positive)
+		  HTM_Unsigned (Print.NumQsts.Valid.Wrong.Positive);
+	       else
+		  HTM_Light0 ();
+	    HTM_TD_End ();
+
+	    /* Write number of blank questions */
+	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM %s\"",
+	                  The_GetSuffix (),The_GetColorRows ());
+	       if (Print.NumQsts.Valid.Blank)
+		  HTM_Unsigned (Print.NumQsts.Valid.Blank);
+	       else
+		  HTM_Light0 ();
+	    HTM_TD_End ();
+
+	    /* Write score valid (taking into account only valid questions) */
+	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM LINE_LEFT %s\"",
+	                  The_GetSuffix (),The_GetColorRows ());
+	       HTM_DoublePartOfUnsigned (Print.Score.Valid,
+					 Print.NumQsts.Valid.Total);
+	    HTM_TD_End ();
+
+	    /* Write average score per question (taking into account only valid questions) */
+	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM %s\"",
+	                  The_GetSuffix (),The_GetColorRows ());
+	       HTM_Double2Decimals (Print.NumQsts.Valid.Total ? Print.Score.Valid /
+								(double) Print.NumQsts.Valid.Total :
+								0.0);
+	    HTM_TD_End ();
+
+	    /* Write grade over maximum grade (taking into account only valid questions) */
+	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM LINE_LEFT %s\"",
+	                  The_GetSuffix (),The_GetColorRows ());
+	       Grade = TstPrn_ComputeGrade (Print.NumQsts.Valid.Total,
+					    Print.Score.Valid,
+					    Exam.MaxGrade);
+	       HTM_DoublePartOfDouble (Grade,Exam.MaxGrade);
+	       TotalGrade += Grade;
+	    HTM_TD_End ();
+
+	    /* Link to show this result */
+	    HTM_TD_Begin ("class=\"RT LINE_BOTTOM LINE_LEFT %s\"",The_GetColorRows ());
+	       Frm_BeginForm (ActSeeOneExaResOth);
+		  Exa_PutPars (Exams);
+		  Usr_PutParOtherUsrCodEncrypted (UsrDat->EnUsrCod);
+		  Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneExaResOth);
+	       Frm_EndForm ();
+	    HTM_TD_End ();
+
+	    HTM_TR_End ();
+	   }
+
+	 /***** Write totals for this user *****/
+	 HTM_TR_Begin (NULL);
+	}
+      else
+	{
+	 /* Columns for dates */
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM %s\"",
+		       The_GetColorRows ());
+	 HTM_TD_End ();
+
+	 /* Columns for questions */
+	 HTM_TD_Begin ("colspan=\"3\" class=\"LINE_BOTTOM LINE_LEFT %s\"",
+		       The_GetColorRows ());
+	 HTM_TD_End ();
+
+	 /* Columns for answers */
+	 HTM_TD_Begin ("colspan=\"5\" class=\"LINE_BOTTOM LINE_LEFT %s\"",
+		       The_GetColorRows ());
+	 HTM_TD_End ();
+
+	 /* Columns for score */
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT %s\"",
+		       The_GetColorRows ());
+	 HTM_TD_End ();
+
+	 /* Column for grade */
+	 HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",
+		       The_GetColorRows ());
+	 HTM_TD_End ();
+
+	 /* Column for link to show the result */
+	 HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",
+		       The_GetColorRows ());
 	 HTM_TD_End ();
 	}
 
-      /***** Write user's ID ******/
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
-				       "DAT_SMALL",
-		    The_GetSuffix (),The_GetColorRows ());
-	 ID_WriteUsrIDs (UsrDat,NULL);
-      HTM_TD_End ();
-
-      /***** Write student's name *****/
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
-				       "DAT_SMALL",
-		    The_GetSuffix (),The_GetColorRows ());
-	 HTM_Txt (UsrDat->Surname1);
-	 if (UsrDat->Surname2[0])
-	    HTM_SPTxt (UsrDat->Surname2);
-	 HTM_TxtF (", %s",UsrDat->FrstName);
-      HTM_TD_End ();
-
-   /***** End table row *****/
+   /***** End last row *****/
    HTM_TR_End ();
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
 
    The_ChangeRowColor ();
   }
@@ -483,9 +742,10 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
    struct ExaSes_Session Session;
    char *Anchor;
    Usr_Can_t ICanEditSessions = ExaSes_CheckIfICanEditSessions ();
-   long SesCodToBeEdited = PutFormSession == Frm_PUT_FORM &&
-			   Exams->SesCod > 0 ? Exams->SesCod :
-					       -1L;
+   long SesCodSelected;
+
+   /***** Make session backup *****/
+   SesCodSelected = Exams->SesCod;
 
    /***** Reset session *****/
    ExaSes_ResetSession (&Session);
@@ -504,6 +764,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	{
 	 /***** Get exam session data from row *****/
 	 ExaSes_GetSessionDataFromRow (mysql_res,&Session);
+	 Exams->SesCod = Session.SesCod;	// To be used as hidden parameter in forms
 
 	 if (ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session.SesCod) == Usr_CAN)
 	   {
@@ -540,7 +801,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 
 	    /***** Third row: form to edit this session ****/
 	    if (ICanEditSessions && PutFormSession == Frm_PUT_FORM &&	// Editing...
-		Session.SesCod == SesCodToBeEdited)			// ...this session
+		Session.SesCod == SesCodSelected)			// ...this session
 	      {
 	       HTM_TR_Begin (NULL);
 		  HTM_TD_Begin ("colspan=\"6\" class=\"LT %s\"",
@@ -557,7 +818,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 
       /***** Put form to create a new exam session in this exam *****/
       if (ICanEditSessions && PutFormSession == Frm_PUT_FORM &&
-	  SesCodToBeEdited <= 0)
+	  SesCodSelected <= 0)
 	{
 	 /* Reset session */
 	 ExaSes_ResetSession (&Session);
@@ -576,6 +837,9 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 
    /***** End table with sessions *****/
    HTM_TABLE_End ();
+
+   /***** Restore session backup *****/
+   Exams->SesCod = SesCodSelected;
   }
 
 /*****************************************************************************/
@@ -669,9 +933,6 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
       [HidVis_HIDDEN ] = ActUnhExaSes,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidExaSes,	// Visible ==> action to hide
      };
-
-   Exams->Exam.ExaCod = Session->ExaCod;
-   Exams->SesCod      = Session->SesCod;
 
    /***** Begin cell *****/
    HTM_TD_Begin ("rowspan=\"2\" class=\"BT %s\"",The_GetColorRows ());
@@ -1548,8 +1809,6 @@ void ExaSes_ReceiveSession (void)
 	 break;
       case OldNew_NEW:
       default:
- 	 Ale_ShowAlert (Ale_DEBUG,"Session.Modality = %u",Session.Modality);
-
 	 ExaSes_CreateSession (&Session);
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_session_X,Session.Title);
 	 break;
@@ -1618,7 +1877,7 @@ static void ExaSes_CreateGrpsAssociatedToExamSession (long SesCod,
 /*****************************************************************************/
 
 Usr_Can_t ExaSes_CheckIfICanAnswerThisSession (const struct Exa_Exam *Exam,
-                                                const struct ExaSes_Session *Session)
+                                               const struct ExaSes_Session *Session)
   {
    /***** 1. Sessions in hidden exams are not accesible
           2. Hidden or closed sessions are not accesible *****/

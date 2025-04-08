@@ -97,14 +97,6 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-const char *Usr_StringsSexIcons[Usr_NUM_SEXS] =
-  {
-   [Usr_SEX_UNKNOWN] = "?",
-   [Usr_SEX_FEMALE ] = "&female;",
-   [Usr_SEX_MALE   ] = "&male;",
-   [Usr_SEX_ALL    ] = "*",
-   };
-
 const char *Usr_StringsSexDB[Usr_NUM_SEXS] =
   {
    [Usr_SEX_UNKNOWN] = "unknown",
@@ -128,7 +120,30 @@ static const char *Usr_IconsClassPhotoOrList[Set_NUM_USR_LIST_TYPES] =
 #define Usr_NUM_ALL_FIELDS_DATA_GST	14
 #define Usr_NUM_ALL_FIELDS_DATA_STD	10
 #define Usr_NUM_ALL_FIELDS_DATA_TCH	11
-const char *Usr_UsrDatMainFieldNames[Usr_NUM_MAIN_FIELDS_DATA_USR];
+
+extern const char *Txt_NBSP;
+extern const char *Txt_No_INDEX;
+extern const char *Txt_Photo;
+extern const char *Txt_ID;
+extern const char *Txt_Surname_1;
+extern const char *Txt_Surname_2;
+extern const char *Txt_First_name;
+extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
+static struct
+  {
+   const char **Txt;
+   HTM_HeadAlign HeadAlign;
+  } Usr_UsrDatMainFieldNames[Usr_NUM_MAIN_FIELDS_DATA_USR] =
+  {
+     {&Txt_NBSP				,HTM_HEAD_CENTER},
+     {&Txt_No_INDEX			,HTM_HEAD_RIGHT },
+     {&Txt_Photo			,HTM_HEAD_CENTER},
+     {&Txt_ID				,HTM_HEAD_LEFT  },
+     {&Txt_Surname_1			,HTM_HEAD_LEFT  },
+     {&Txt_Surname_2			,HTM_HEAD_LEFT  },
+     {&Txt_First_name			,HTM_HEAD_LEFT  },
+     {&Txt_HIERARCHY_SINGUL_Abc[Hie_INS],HTM_HEAD_LEFT  },
+  };
 
 /*****************************************************************************/
 /******************************* Private types *******************************/
@@ -238,8 +253,6 @@ static void Usr_ListUsersByRoleToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
 					 Rol_Role_t Role,bool WithPhotos);
 static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
 				      Rol_Role_t Role,bool WithPhotos);
-static void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUsrs,
-					     Rol_Role_t Role,bool WithPhotos);
 static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role);
 static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
                                          const char *EncryptedUsrCod,
@@ -1390,7 +1403,7 @@ void Usr_WriteLoggedUsrHead (void)
 
       /***** User's name *****/
       if (Gbl.Usrs.Me.UsrDat.FrstName[0])
-	 HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Me.UsrDat.FrstName);
+	 HTM_NBSPTxt (Gbl.Usrs.Me.UsrDat.FrstName);
 
    HTM_DIV_End ();
   }
@@ -3841,11 +3854,9 @@ static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
 
    if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
      {
-      /***** Initialize field names *****/
-      Usr_SetUsrDatMainFieldNames ();
-
       /***** Put a row to select all users *****/
-      Usr_PutCheckboxToSelectAllUsers (SelectedUsrs,Role,WithPhotos);
+      Usr_PutCheckboxToSelectAllUsers (SelectedUsrs,Role,WithPhotos,
+				       Usr_GetColumnsForSelectUsrs (WithPhotos));
 
       /***** Heading row with column names *****/
       Usr_WriteHeaderFieldsUsrDat (true,	// Columns for the data
@@ -3879,8 +3890,9 @@ static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
 /******** Put a row, in a classphoto or a list, to select all users **********/
 /*****************************************************************************/
 
-static void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUsrs,
-					     Rol_Role_t Role,bool WithPhotos)
+void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUsrs,
+				      Rol_Role_t Role,
+				      bool WithPhotos,unsigned ColSpan)
   {
    char *ParName;
 
@@ -4023,31 +4035,6 @@ static void Usr_PutCheckboxListWithPhotos (bool WithPhotos)
   }
 
 /*****************************************************************************/
-/*********************** Set field names of user's data **********************/
-/*****************************************************************************/
-
-void Usr_SetUsrDatMainFieldNames (void)
-  {
-   extern const char *Txt_No_INDEX;
-   extern const char *Txt_Photo;
-   extern const char *Txt_ID;
-   extern const char *Txt_Surname_1;
-   extern const char *Txt_Surname_2;
-   extern const char *Txt_First_name;
-   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
-
-   /***** Initialize field names *****/
-   Usr_UsrDatMainFieldNames[0] = "&nbsp;";
-   Usr_UsrDatMainFieldNames[1] = Txt_No_INDEX;
-   Usr_UsrDatMainFieldNames[2] = Txt_Photo;
-   Usr_UsrDatMainFieldNames[3] = Txt_ID;
-   Usr_UsrDatMainFieldNames[4] = Txt_Surname_1;
-   Usr_UsrDatMainFieldNames[5] = Txt_Surname_2;
-   Usr_UsrDatMainFieldNames[6] = Txt_First_name;
-   Usr_UsrDatMainFieldNames[7] = Txt_HIERARCHY_SINGUL_Abc[Hie_INS];
-  }
-
-/*****************************************************************************/
 /************ Write header with main field names of user's data **************/
 /*****************************************************************************/
 
@@ -4066,7 +4053,9 @@ void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr,bool WithPhotos)
 	   NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
 	   NumCol++)
 	 if (NumCol != 2 || WithPhotos)        // Skip photo column if I don't want this column
-	    HTM_TH_Span (Usr_UsrDatMainFieldNames[NumCol],HTM_HEAD_LEFT,1,1,"BG_HIGHLIGHT");
+	    HTM_TH_Span (*Usr_UsrDatMainFieldNames[NumCol].Txt,
+		          Usr_UsrDatMainFieldNames[NumCol].HeadAlign,
+		         1,1,"BG_HIGHLIGHT");
 
    HTM_TR_End ();
   }
@@ -4082,12 +4071,10 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr,bool WithPhotos)
 
    if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
      {
-      /***** Initialize field names *****/
-      Usr_SetUsrDatMainFieldNames ();
-
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
-         Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_GST,WithPhotos);
+         Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_GST,WithPhotos,
+				          Usr_GetColumnsForSelectUsrs (WithPhotos));
 
       /***** Heading row with column names *****/
       Usr_WriteHeaderFieldsUsrDat (PutCheckBoxToSelectUsr,	// Columns for the data
@@ -4131,13 +4118,8 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr,bool WithPhotos)
 static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr,bool WithPhotos)
   {
    unsigned NumUsr;
-   char *GroupNames;
+   char *GroupNames = NULL;        // To avoid warning
    struct Usr_Data UsrDat;
-
-   /***** Initialize field names *****/
-   Usr_SetUsrDatMainFieldNames ();
-
-   GroupNames = NULL;        // To avoid warning
 
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
@@ -4159,7 +4141,8 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr,bool WithPhotos)
 
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
-	 Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_STD,WithPhotos);
+	 Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_STD,WithPhotos,
+				          Usr_GetColumnsForSelectUsrs (WithPhotos));
 
       /***** Heading row with column names *****/
       Usr_WriteHeaderFieldsUsrDat (PutCheckBoxToSelectUsr,	// Columns for the data
@@ -4218,7 +4201,8 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,
      {
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
-	 Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Role,WithPhotos);
+	 Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Role,WithPhotos,
+				          Usr_GetColumnsForSelectUsrs (WithPhotos));
 
       /***** Heading row with column names *****/
       /* Begin row */
@@ -4233,7 +4217,9 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,
 	      NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
 	      NumCol++)
 	    if (NumCol != 2 || WithPhotos)        // Skip photo column if I don't want this column
-	       HTM_TH_Span (Usr_UsrDatMainFieldNames[NumCol],HTM_HEAD_LEFT,1,1,"BG_HIGHLIGHT");
+	       HTM_TH_Span (*Usr_UsrDatMainFieldNames[NumCol].Txt,
+		             Usr_UsrDatMainFieldNames[NumCol].HeadAlign,
+		            1,1,"BG_HIGHLIGHT");
 
       /* End row */
       HTM_TR_End ();
@@ -4541,8 +4527,7 @@ void Usr_ListAllDataStds (void)
 			  NumField++)
 		       {
 			HTM_TH_Span_Begin (HTM_HEAD_LEFT,1,1,"BG_HIGHLIGHT");
-			   HTM_TxtF ("(%s)",
-			             Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
+			   HTM_ParTxtPar (Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
 			HTM_TH_End ();
 		       }
 		 }
@@ -4757,9 +4742,6 @@ unsigned Usr_ListUsrsFound (Hie_Level_t HieLvl,Rol_Role_t Role,
    struct Usr_Data UsrDat;
    Usr_Sex_t Sex;
    struct Usr_InList *UsrInList;
-
-   /***** Initialize field names *****/
-   Usr_SetUsrDatMainFieldNames ();
 
    /***** Create temporary table with candidate users *****/
    // Search is faster (aproximately x2) using temporary tables
@@ -5035,7 +5017,7 @@ static void Usr_PutLinkToSeeGuests (void)
 /********************* Show list or class photo of guests ********************/
 /*****************************************************************************/
 
-void Usr_SeeGuests (void)
+void Usr_ListGuests (void)
   {
    extern const char *Hlp_USERS_Guests;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -5160,7 +5142,7 @@ void Usr_SeeGuests (void)
 /******************** Show list or class photo of students *******************/
 /*****************************************************************************/
 
-void Usr_SeeStudents (void)
+void Usr_ListStudents (void)
   {
    extern const char *Hlp_USERS_Students;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -5323,7 +5305,7 @@ void Usr_SeeStudents (void)
 /******************** Show list or class photo of teachers *******************/
 /*****************************************************************************/
 
-void Usr_SeeTeachers (void)
+void Usr_ListTeachers (void)
   {
    extern const char *Hlp_USERS_Teachers;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -5464,9 +5446,6 @@ void Usr_SeeTeachers (void)
 					    ListingPars.WithPhotos);
 			break;
 		     case Set_USR_LIST_AS_LISTING:
-			/* Initialize field names */
-			Usr_SetUsrDatMainFieldNames ();
-
 			/* List teachers and non-editing teachers */
 			Usr_ListMainDataTchs (Rol_TCH,
 					      PutForm,	// Put checkbox to select user?
@@ -5822,13 +5801,13 @@ void Usr_DoActionOnUsrs2 (void)
    switch (Gbl.Action.Act)
      {
       case Act_DoAct_OnSevGst:
-	 Usr_SeeGuests ();
+	 Usr_ListGuests ();
 	 break;
       case Act_DoAct_OnSevStd:
-	 Usr_SeeStudents ();
+	 Usr_ListStudents ();
 	 break;
       case Act_DoAct_OnSevTch:
-	 Usr_SeeTeachers ();
+	 Usr_ListTeachers ();
 	 break;
       default:
 	 break;
@@ -6193,7 +6172,8 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
      {
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
-	 Usr_PutCheckboxToSelectAllUsers (SelectedUsrs,Role,WithPhotos);
+	 Usr_PutCheckboxToSelectAllUsers (SelectedUsrs,Role,WithPhotos,
+				          Usr_GetColumnsForSelectUsrs (WithPhotos));
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -6518,9 +6498,9 @@ void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows)
      };
 
    /***** Show user's photo *****/
-   if (NumRows)
+   if (NumRows > 1)
       HTM_TD_Begin ("rowspan=\"%u\" class=\"LT LINE_BOTTOM %s\"",
-	            NumRows + 1,The_GetColorRows ());
+	            NumRows,The_GetColorRows ());
    else
       HTM_TD_Begin ("class=\"LT LINE_BOTTOM %s\"",The_GetColorRows ());
    Pho_ShowUsrPhotoIfAllowed (UsrDat,ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
@@ -6528,9 +6508,9 @@ void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows)
 
    /***** User's IDs and name *****/
    /* Begin cell */
-   if (NumRows)
+   if (NumRows > 1)
       HTM_TD_Begin ("rowspan=\"%u\" class=\"LT LINE_BOTTOM %s\"",
-	            NumRows + 1,The_GetColorRows ());
+	            NumRows,The_GetColorRows ());
    else
       HTM_TD_Begin ("class=\"LT LINE_BOTTOM %s\"",The_GetColorRows ());
 

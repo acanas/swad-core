@@ -631,7 +631,9 @@ void Ins_WriteInstitutionNameAndCty (long InsCod)
    Ins_GetShrtNameAndCtyOfInstitution (&Ins,CtyName);
 
    /***** Write institution short name and country name *****/
-   HTM_TxtF ("%s&nbsp;(%s)",Ins.ShrtName,CtyName);
+   HTM_Txt (Ins.ShrtName);
+   HTM_NBSP ();
+   HTM_ParTxtPar (CtyName);
   }
 
 /*****************************************************************************/

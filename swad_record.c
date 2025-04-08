@@ -1710,8 +1710,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 		    {
 		     HTM_SPAN_Begin ("class=\"DAT_SMALL_%s\"",The_GetSuffix ());
 			HTM_NBSP ();
-			HTM_TxtF ("(%s)",
-			          Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
+			HTM_ParTxtPar (Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
 		     HTM_SPAN_End ();
 		    }
 	       HTM_TD_End ();
@@ -2997,14 +2996,21 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 static void Rec_ShowFormSex (struct Usr_Data *UsrDat,Usr_Sex_t Sex)
   {
    extern const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS];
-   extern const char *Usr_StringsSexIcons[Usr_NUM_SEXS];
+   static const char *StringsSexIcons[Usr_NUM_SEXS] =
+     {
+      [Usr_SEX_UNKNOWN] = "?",
+      [Usr_SEX_FEMALE ] = "&female;",
+      [Usr_SEX_MALE   ] = "&male;",
+      [Usr_SEX_ALL    ] = "*",
+      };
 
    HTM_LABEL_Begin ("class=\"DAT_STRONG_%s\"",The_GetSuffix ());
       HTM_INPUT_RADIO ("Sex",
 		       ((Sex == UsrDat->Sex) ? HTM_CHECKED :
 					       HTM_NO_ATTR) | HTM_REQUIRED,
 		       "value=\"%u\"",(unsigned) Sex);
-      HTM_TxtF ("%s&nbsp;%s",Usr_StringsSexIcons[Sex],Txt_SEX_SINGULAR_Abc[Sex]);
+      HTM_NBSPTxt (StringsSexIcons[Sex]);
+      HTM_Txt (Txt_SEX_SINGULAR_Abc[Sex]);
    HTM_LABEL_End ();
   }
 

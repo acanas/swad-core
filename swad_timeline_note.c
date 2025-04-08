@@ -607,7 +607,10 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
          /* Text ("not available") */
 	 HTM_Txt (Txt_TIMELINE_NOTE[Not->Type]);
 	 if (Not->Unavailable)
-	    HTM_TxtF ("&nbsp;(%s)",Txt_not_available);
+	   {
+	    HTM_NBSP ();
+	    HTM_ParTxtPar (Txt_not_available);
+	   }
 
       /* End container */
       HTM_DIV_End ();

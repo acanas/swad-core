@@ -2030,8 +2030,12 @@ static void For_WriteNumberOfThrs (unsigned NumThrs)
    extern const char *Txt_threads;
 
    /***** Write number of threads and number of posts *****/
-   HTM_TxtF (" [%u&nbsp;%s]",NumThrs,NumThrs == 1 ? Txt_thread :
-			                            Txt_threads);
+   HTM_SP ();
+   HTM_OpenBracket ();
+      HTM_Unsigned (NumThrs);
+      HTM_NBSPTxt (NumThrs == 1 ? Txt_thread :
+				  Txt_threads);
+   HTM_CloseBracket ();
   }
 
 /*****************************************************************************/
@@ -2398,22 +2402,26 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 
 	 /***** Write number of posts in this thread *****/
 	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",Class,The_GetSuffix (),BgColor);
-	    HTM_TxtF ("%u&nbsp;",Thr.NumPosts);
+	    HTM_Unsigned (Thr.NumPosts);
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /***** Write number of new posts in this thread *****/
 	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",Class,The_GetSuffix (),BgColor);
-	    HTM_TxtF ("%u&nbsp;",Thr.NumUnreadPosts);
+	    HTM_Unsigned (Thr.NumUnreadPosts);
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /***** Write number of users who have write posts in this thread *****/
 	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",Class,The_GetSuffix (),BgColor);
-	    HTM_TxtF ("%u&nbsp;",Thr.NumWriters);
+	    HTM_Unsigned (Thr.NumWriters);
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /***** Write number of users who have read this thread *****/
 	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",Class,The_GetSuffix (),BgColor);
-	    HTM_TxtF ("%u&nbsp;",Thr.NumReaders);
+	    HTM_Unsigned (Thr.NumReaders);
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
       HTM_TR_End ();

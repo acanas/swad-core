@@ -901,7 +901,10 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
       HTM_TD_Begin ("class=\"CT %s_%s %s\"",
                     ClassData,The_GetSuffix (),The_GetColorRows ());
 	 if (!QuestionExists)
-	    HTM_TxtF ("%u&nbsp;",++NumNonExistingQst);
+	   {
+	    HTM_Unsigned (++NumNonExistingQst);
+	    HTM_NBSP ();
+	   }
       HTM_TD_End ();
 
       /***** Write the question tags *****/
@@ -918,7 +921,10 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 		  HTM_TR_Begin (NULL);
 
 		     HTM_TD_Begin ("class=\"%s LT\"",ClassData);
-			HTM_TxtF ("&nbsp;%s&nbsp;","&#8226;");
+		       {
+			HTM_NBSPTxt ("&#8226;");
+			HTM_NBSP ();
+		       }
 		     HTM_TD_End ();
 
 		     HTM_TD_Begin ("class=\"%s LT\"",ClassData);
@@ -932,7 +938,9 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 	 else	// no tags for this question
 	   {
 	    HTM_SPAN_Begin ("class=\"%s\"",ClassData);
-	       HTM_TxtF ("&nbsp;(%s)&nbsp;",Txt_no_tags);
+	       HTM_NBSP ();
+               HTM_ParTxtPar (Txt_no_tags);
+	       HTM_NBSP ();
 	    HTM_SPAN_End ();
 	   }
 
@@ -940,7 +948,8 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 
       /***** Write the question type *****/
       HTM_TD_Begin ("class=\"%s CT %s\"",ClassData,The_GetColorRows ());
-	 HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[Question->Answer.Type]);
+	 HTM_Txt (Txt_TST_STR_ANSWER_TYPES[Question->Answer.Type]);
+	 HTM_NBSP ();
       HTM_TD_End ();
 
       /***** Write if shuffle is enabled *****/
@@ -1033,7 +1042,9 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 
 			/* Write the number of option */
 			HTM_TD_Begin ("class=\"%s LT\"",ClassData);
-			   HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
+			   HTM_Char ('a' + (char) NumOpt);
+			   HTM_CloseParenthesis ();
+			   HTM_NBSP ();
 			HTM_TD_End ();
 
 			/* Write the text and the feedback of the answer */

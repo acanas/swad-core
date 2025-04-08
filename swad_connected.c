@@ -272,9 +272,9 @@ void Con_ShowGlobalConnectedUsrs (void)
       HTM_BUTTON_Submit_Begin (Act_GetActionText (ActLstCon),"class=\"BT_LINK\"");
 
 	 /* Write total number of sessions */
-	 HTM_TxtF ("%u&nbsp;%s",Gbl.Session.NumSessions,
-				Gbl.Session.NumSessions == 1 ? Txt_session :
-							       Txt_sessions);
+         HTM_Unsigned (Gbl.Session.NumSessions);
+	 HTM_NBSPTxt (Gbl.Session.NumSessions == 1 ? Txt_session :
+						     Txt_sessions);
 
       HTM_BUTTON_End ();
    Frm_EndForm ();
@@ -284,9 +284,10 @@ void Con_ShowGlobalConnectedUsrs (void)
       HTM_DIV_Begin ("class=\"CON_LIST\"");
 
 	 /***** Write total number of users *****/
-	 HTM_TxtF ("%u&nbsp;%s:",NumUsrsTotal,
-				 NumUsrsTotal == 1 ? Txt_user[Usr_SEX_UNKNOWN] :
-						     Txt_users[Usr_SEX_UNKNOWN]);
+         HTM_Unsigned (NumUsrsTotal);
+         HTM_NBSP ();
+         HTM_TxtColon (NumUsrsTotal == 1 ? Txt_user[Usr_SEX_UNKNOWN] :
+					   Txt_users[Usr_SEX_UNKNOWN]);
 
 	 /***** Write total number of users with each role *****/
 	 for (Role  = Rol_GST, NumUsrsTotal = 0;
@@ -306,9 +307,9 @@ static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal)
    if (UsrsTotal)
      {
       HTM_BR ();
-      HTM_TxtF ("%u&nbsp;%s",UsrsTotal,
-			     UsrsTotal == 1 ? Txt_ROLES_SINGUL_abc[Role][Usr_SEX_UNKNOWN] :
-					      Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
+      HTM_Unsigned (UsrsTotal);
+      HTM_NBSPTxt (UsrsTotal == 1 ? Txt_ROLES_SINGUL_abc[Role][Usr_SEX_UNKNOWN] :
+			            Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
      }
   }
 
@@ -435,10 +436,9 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToScopeOnMainZone (Hie_Level_
      {
       HTM_TR_Begin (NULL);
 	 HTM_TD_Begin ("colspan=\"3\" class=\"CT\"");
-	    HTM_TxtF ("%u&nbsp;%s",
-	              Usrs.NumUsrs,
-		      Usrs.NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Role][Usrs.Sex] :
-					  Txt_ROLES_PLURAL_abc[Role][Usrs.Sex]);
+	    HTM_Unsigned (Usrs.NumUsrs);
+	    HTM_NBSPTxt (Usrs.NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Role][Usrs.Sex] :
+					     Txt_ROLES_PLURAL_abc[Role][Usrs.Sex]);
 	 HTM_TD_End ();
       HTM_TR_End ();
 
@@ -468,9 +468,9 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 
       HTM_TR_Begin (NULL);
 	 HTM_TD_Begin ("colspan=\"3\" class=\"CON_USR_NARROW_TIT\"");
-	    HTM_TxtF ("%u&nbsp;%s",NumUsrsThisRole,
-				   NumUsrsThisRole == 1 ? Txt_ROLES_SINGUL_abc[Role][UsrSex] :
-							  Txt_ROLES_PLURAL_abc[Role][UsrSex]);
+	    HTM_Unsigned (NumUsrsThisRole);
+	    HTM_NBSPTxt (NumUsrsThisRole == 1 ? Txt_ROLES_SINGUL_abc[Role][UsrSex] :
+						Txt_ROLES_PLURAL_abc[Role][UsrSex]);
 	 HTM_TD_End ();
       HTM_TR_End ();
 

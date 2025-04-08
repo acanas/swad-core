@@ -802,6 +802,7 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
 	                              unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question)
   {
+   extern const char *Txt_NBSP;
    extern const char *Txt_TF_QST[2];
    char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
 
@@ -816,15 +817,15 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
       HTM_OPTION (HTM_Type_STRING,"" ,
                   (Print->PrintedQuestions[QstInd].StrAnswers[0] == '\0') ? HTM_SELECTED :
                 							    HTM_NO_ATTR,
-                  "&nbsp;");
+                  Txt_NBSP);
       HTM_OPTION (HTM_Type_STRING,"T",
                   (Print->PrintedQuestions[QstInd].StrAnswers[0] == 'T') ? HTM_SELECTED :
                 							   HTM_NO_ATTR,
-                  "%s",Txt_TF_QST[0]);
+                  Txt_TF_QST[0]);
       HTM_OPTION (HTM_Type_STRING,"F",
                   (Print->PrintedQuestions[QstInd].StrAnswers[0] == 'F') ? HTM_SELECTED :
                 							   HTM_NO_ATTR,
-                  "%s",Txt_TF_QST[1]);
+                  Txt_TF_QST[1]);
    HTM_Txt ("</select>");
   }
 
@@ -880,7 +881,9 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"Qst_TXT_%s\"",
 	                        QstInd,NumOpt,The_GetSuffix ());
-		  HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
+		  HTM_Char ('a' + (char) NumOpt);
+		  HTM_CloseParenthesis ();
+		  HTM_NBSP ();
 	       HTM_LABEL_End ();
 	    HTM_TD_End ();
 

@@ -523,7 +523,8 @@ void Qst_ListQuestionForEdition (struct Qst_Question *Question,
    /***** Write question code *****/
    HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s CT\"",
                  The_GetSuffix (),The_GetColorRows ());
-      HTM_TxtF ("%ld&nbsp;",Question->QstCod);
+      HTM_Long (Question->QstCod);
+      HTM_NBSP ();
    HTM_TD_End ();
 
    /***** Write the question tags *****/
@@ -965,7 +966,8 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 	 /* Question code */
 	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
-	    HTM_TxtF ("%ld&nbsp;",Questions->Question.QstCod);
+	    HTM_Long (Questions->Question.QstCod);
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Date (row[0] has the UTC date-time) */
@@ -1267,13 +1269,15 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 	 /* Write number of question */
 	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
-	    HTM_TxtF ("%u&nbsp;",QstInd + 1);
+	    HTM_Unsigned (QstInd + 1);
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write question code */
 	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
-	    HTM_TxtF ("%ld&nbsp;",Question->QstCod);
+	    HTM_Long (Question->QstCod);
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write the date (row[0] has the UTC date-time) */
@@ -1299,7 +1303,8 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 	 /* Write the question type */
 	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
-	    HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[Question->Answer.Type]);
+	    HTM_Txt (Txt_TST_STR_ANSWER_TYPES[Question->Answer.Type]);
+	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write if shuffle is allowed */
@@ -1490,7 +1495,9 @@ static void Qst_WriteChoAns (struct Qst_Question *Question,
 
 	    /* Write the number of option */
 	    HTM_TD_Begin ("class=\"LT %s_%s\"",ClassTxt,The_GetSuffix ());
-	       HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
+	       HTM_Char ('a' + (char) NumOpt);
+	       HTM_CloseParenthesis ();
+	       HTM_NBSP ();
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LT\"");
@@ -1817,6 +1824,7 @@ void Qst_ShowFormEditOneQst (void)
 void Qst_PutFormEditOneQst (struct Qst_Question *Question)
   {
    extern const char *Hlp_ASSESSMENT_Questions_writing_a_question;
+   extern const char *Txt_NBSP;
    extern const char *Txt_Question_code_X;
    extern const char *Txt_Question;
    extern const char *Txt_Tags;
@@ -1936,8 +1944,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 					     IndTag,IndTag,The_GetSuffix ());
 			   free (FuncOnChange);
 			      HTM_OPTION (HTM_Type_STRING,"",
-			                  HTM_NO_ATTR,
-			                  "&nbsp;");
+			                  HTM_NO_ATTR,Txt_NBSP);
 			      mysql_data_seek (mysql_res,0);
 			      TagFound = false;
 			      for (NumTag  = 1;
@@ -2013,7 +2020,10 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
 	       /***** Feedback *****/
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-		  HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
+	          HTM_Txt (Txt_Feedback);
+          	  HTM_NBSP ();
+		  HTM_ParTxtPar (Txt_optional);
+		  HTM_Colon ();
 		  HTM_BR ();
 		  HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				      "name=\"Feedback\" rows=\"2\""
@@ -2046,7 +2056,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 				      "value=\"%u\""
 				      " onclick=\"enableDisableAns(this.form);\"",
 				      (unsigned) AnsType);
-		     HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[AnsType]);
+		     HTM_Txt (Txt_TST_STR_ANSWER_TYPES[AnsType]);
+		     HTM_NBSP ();
 		  HTM_LABEL_End ();
 		  HTM_BR ();
 		 }
@@ -2216,7 +2227,10 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
 			   /* Feedback */
 			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-			      HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
+			      HTM_Txt (Txt_Feedback);
+			      HTM_NBSP ();
+			      HTM_ParTxtPar (Txt_optional);
+			      HTM_Colon ();
 			      HTM_BR ();
 			      HTM_TEXTAREA_Begin (ChoiceDisabled,
 						  "name=\"FbStr%u\" rows=\"2\""
@@ -2262,7 +2276,8 @@ void Qst_PutFloatInputField (const char *Label,const char *Field,
    char StrDouble[32];
 
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-      HTM_TxtF ("%s&nbsp;",Label);
+      HTM_Txt (Label);
+      HTM_NBSP ();
       snprintf (StrDouble,sizeof (StrDouble),"%.15lg",
 		Question->Answer.FloatingPoint[Index]);
       HTM_INPUT_TEXT (Field,Qst_MAX_BYTES_FLOAT_ANSWER,StrDouble,

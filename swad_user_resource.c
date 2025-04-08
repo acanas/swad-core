@@ -82,6 +82,6 @@ void UsrRsc_GetLinkToTch (void)
 		     Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_ALL]);
 
       /* Show teachers */
-      Usr_SeeTeachers ();
+      Usr_ListTeachers ();
      }
   }

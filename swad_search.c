@@ -185,7 +185,8 @@ static Hie_Level_t Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t Defa
 
 	    /***** What to search? *****/
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_TxtF (" %s&nbsp;",Txt_SEARCH_X_in_Y);
+	       HTM_SPTxt (Txt_SEARCH_X_in_Y);
+	       HTM_NBSP ();
 	       HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 				 "name=\"WhatToSearch\""
 				 " class=\"WHAT_TO_SEARCH INPUT_%s\"",

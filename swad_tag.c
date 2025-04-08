@@ -503,7 +503,7 @@ void Tag_GetAndWriteTagsQst (long QstCod)
    else
      {
       HTM_SPAN_Begin ("class=\"DAT_SMALL_%s\"",The_GetSuffix ());
-	 HTM_TxtF ("(%s)",Txt_no_tags);
+	 HTM_ParTxtPar (Txt_no_tags);
       HTM_SPAN_End ();
      }
 

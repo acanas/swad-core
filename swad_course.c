@@ -489,8 +489,10 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 			  TxtClassNormal,The_GetSuffix (),BgColor,
 			  NumUsrs[Rol_UNK] ? Txt_COURSE_With_users :
 					     Txt_COURSE_Without_users);
-	       HTM_Txt (NumUsrs[Rol_UNK] ? "&check;" :
-					   "&nbsp;");
+	       if (NumUsrs[Rol_UNK])
+		  HTM_Txt ("&check;");
+	       else
+		  HTM_NBSP ();
 	    HTM_TD_End ();
 
 	    /* Course year */
@@ -925,7 +927,9 @@ static void Crs_PutHeadCoursesForEdition (void)
       HTM_TH      (Txt_Code                           ,HTM_HEAD_RIGHT );
       HTM_TH      (Txt_Year_OF_A_DEGREE               ,HTM_HEAD_CENTER);
       HTM_TH_Begin (HTM_HEAD_LEFT);
-	 HTM_TxtF ("%s&nbsp;(%s)",Txt_Institutional_code,Txt_optional);
+	 HTM_Txt (Txt_Institutional_code);
+ 	 HTM_NBSP ();
+	 HTM_ParTxtPar (Txt_optional);
       HTM_TH_End ();
       HTM_TH      (Txt_Short_name_of_the_course       ,HTM_HEAD_LEFT  );
       HTM_TH      (Txt_Full_name_of_the_course        ,HTM_HEAD_LEFT  );
@@ -1823,7 +1827,9 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	                             "class=\"LT BT_LINK\"");
             Str_FreeGoToTitle ();
 	       Lgo_DrawLogo (Hie_DEG,&Deg,"CT ICO20x20");
-	       HTM_TxtF ("&nbsp;%s&nbsp;(%s)",row[2],row[6]);
+	       HTM_NBSPTxt (row[2]);
+	       HTM_NBSP ();
+	       HTM_ParTxtPar (row[6]);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
       HTM_TD_End ();
@@ -1919,7 +1925,8 @@ void Crs_AskRemoveOldCrss (void)
 
       /***** Form to request number of months without clicks *****/
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	 HTM_TxtF ("%s&nbsp;",Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);
+	 HTM_Txt (Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);
+	 HTM_NBSP ();
 	 HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 			   "name=\"Months\" class=\"INPUT_%s\"",
 			   The_GetSuffix ());

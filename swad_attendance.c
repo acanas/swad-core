@@ -1307,7 +1307,10 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToEvent (struct Att_Event *Event
 	    /* Write the name of the room (row[2]) */
 	    if (row[2])	// May be NULL because of LEFT JOIN
 	       if (row[2][0])
-		  HTM_TxtF ("&nbsp;(%s)",row[2]);
+	         {
+		  HTM_NBSP ();
+		  HTM_ParTxtPar (row[2]);
+	         }
 
 	    /* Write separator */
 	    HTM_ListSeparator (NumGrp,NumGrps);

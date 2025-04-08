@@ -2341,7 +2341,7 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
          if ((FromThisCrs = (CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod)))	// Message sent from current course
            {
             HTM_DIV_Begin ("class=\"MSG_AUT_%s\"",The_GetSuffix ());
-	       HTM_TxtF ("(%s)",Txt_from_this_course);
+	       HTM_ParTxtPar (Txt_from_this_course);
             HTM_DIV_End ();
            }
          else	// Message sent from another course
@@ -2365,7 +2365,7 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
    if (!ThereIsOrgCrs)	// It's an old message without origin source specified, or is a message sent from none course
      {
       HTM_DIV_Begin ("class=\"MSG_AUT_%s\"",The_GetSuffix ());
-	 HTM_TxtF ("(%s)",Txt_no_course_of_origin);
+	 HTM_ParTxtPar (Txt_no_course_of_origin);
       HTM_DIV_End ();
      }
 
