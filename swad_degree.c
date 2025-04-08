@@ -204,7 +204,8 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Hie_Node *Deg,Act_Action_t Action
 
 	 /***** Degree logo and name *****/
 	 Lgo_DrawLogo (Hie_DEG,Deg,IconClass);
-	 HTM_NBSPTxt (Deg->FullName);
+	 HTM_NBSP ();
+         HTM_Txt (Deg->FullName);
 
       /***** End link *****/
       HTM_BUTTON_End ();

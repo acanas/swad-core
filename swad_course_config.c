@@ -418,7 +418,8 @@ static void CrsCfg_Indicators (void)
 			  Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,"class=\"LB BT_LINK\"");
-	       HTM_NBSPTxt (Title);
+	       HTM_NBSP ();
+	       HTM_Txt (Title);
 	       if (IndicatorsCrs.NumIndicators == Ind_NUM_INDICATORS)
 		  Ico_PutIcon ("check-circle.svg",Ico_GREEN,
 			       Title,"ICO16x16");

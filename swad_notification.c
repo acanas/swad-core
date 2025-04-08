@@ -1634,7 +1634,8 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 		  HTM_TR_Begin (NULL);
 
 		     HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
-			HTM_TxtColon (Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
+			HTM_Txt (Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
+			HTM_Colon ();
 		     HTM_TD_End ();
 
 		     HTM_TD_Begin ("class=\"CM\"");
@@ -1744,8 +1745,9 @@ void Ntf_WriteNumberOfNewNtfs (void)
 	 /***** Number of unseen notifications *****/
 	 HTM_SPAN_Begin ("id=\"notif_all\"");
 	    HTM_Unsigned (NumUnseenNtfs);
-	    HTM_NBSPTxt (NumUnseenNtfs == 1 ? Txt_notification :
-					      Txt_notifications);
+	    HTM_NBSP ();
+	    HTM_Txt (NumUnseenNtfs == 1 ? Txt_notification :
+					  Txt_notifications);
 	 HTM_SPAN_End ();
 
 	 /***** Icon and number of new notifications *****/
@@ -1757,8 +1759,9 @@ void Ntf_WriteNumberOfNewNtfs (void)
 	    HTM_NBSP ();
 	    HTM_Unsigned (NumNewNtfs);
 	    HTM_SPAN_Begin ("id=\"notif_new\"");
-	       HTM_NBSPTxt (NumNewNtfs == 1 ? Txt_NOTIF_new_SINGULAR :
-					      Txt_NOTIF_new_PLURAL);
+	       HTM_NBSP ();
+	       HTM_Txt (NumNewNtfs == 1 ? Txt_NOTIF_new_SINGULAR :
+					  Txt_NOTIF_new_PLURAL);
 	    HTM_SPAN_End ();
 	   }
 

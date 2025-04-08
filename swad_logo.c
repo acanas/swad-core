@@ -258,7 +258,9 @@ void Lgo_RequestLogo (Hie_Level_t HieLvl)
 
 	 /***** Upload logo *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_TxtColonNBSP (Txt_File_with_the_logo);
+	    HTM_Txt (Txt_File_with_the_logo);
+	    HTM_Colon ();
+	    HTM_NBSP ();
 	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/png",
 			    HTM_SUBMIT_ON_CHANGE,
 			    NULL);

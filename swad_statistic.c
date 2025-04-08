@@ -401,7 +401,9 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			   // To use getElementById in Firefox, it's necessary to have the id attribute
 			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 			      HTM_CloseParenthesis ();
-				 HTM_TxtColonNBSP (Txt_results_per_page);
+				 HTM_Txt (Txt_results_per_page);
+				 HTM_Colon ();
+				 HTM_NBSP ();
 				 HTM_SELECT_Begin ((Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? HTM_NO_ATTR :
 													      HTM_DISABLED,
 						   NULL,
@@ -1662,7 +1664,9 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 	      }
 
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_TxtColonNBSP (Txt_Color_of_the_graphic);
+	       HTM_Txt (Txt_Color_of_the_graphic);
+	       HTM_Colon ();
+	       HTM_NBSP ();
 	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				 "name=\"ColorType\"");
 		  for (ColorType  = (Sta_ColorType_t) 0;

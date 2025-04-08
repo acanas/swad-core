@@ -224,7 +224,8 @@ void HTM_TBODY_Begin (const char *fmt,...)
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -259,7 +260,8 @@ void HTM_TR_Begin (const char *fmt,...)
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -472,7 +474,8 @@ void HTM_TD_Begin (const char *fmt,...)
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -540,7 +543,8 @@ void HTM_DIV_Begin (const char *fmt,...)
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -624,7 +628,8 @@ void HTM_SPAN_Begin (const char *fmt,...)
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -683,7 +688,8 @@ void HTM_UL_Begin (const char *fmt,...)
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -725,7 +731,8 @@ void HTM_LI_Begin (const char *fmt,...)
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -822,7 +829,8 @@ void HTM_A_Begin (const char *fmt,...)
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -918,7 +926,8 @@ void HTM_FIELDSET_Begin (const char *fmt,...)
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -967,7 +976,8 @@ void HTM_LABEL_Begin (const char *fmt,...)
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -1012,7 +1022,8 @@ void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -1044,7 +1055,8 @@ void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -1074,7 +1086,8 @@ void HTM_INPUT_TEL (const char *Name,const char *Value,
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -1106,7 +1119,8 @@ void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -1138,7 +1152,8 @@ void HTM_INPUT_URL (const char *Name,const char *Value,
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -1170,7 +1185,8 @@ void HTM_INPUT_FILE (const char *Name,const char *Accept,
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -1214,7 +1230,8 @@ void HTM_INPUT_IMAGE (const char *URL,const char *Icon,const char *Title,
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -1251,7 +1268,8 @@ void HTM_INPUT_PASSWORD (const char *Name,
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -1284,7 +1302,8 @@ void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -1326,7 +1345,8 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -1357,7 +1377,8 @@ void HTM_INPUT_RADIO (const char *Name,HTM_Attributes_t Attributes,
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -1388,7 +1409,8 @@ void HTM_INPUT_CHECKBOX (const char *Name,HTM_Attributes_t Attributes,
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -1425,7 +1447,8 @@ void HTM_BUTTON_Submit_Begin (const char *Title,const char *fmt,...)
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -1458,7 +1481,8 @@ void HTM_BUTTON_Begin (const char *Title,const char *fmt,...)
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -1501,7 +1525,8 @@ void HTM_TEXTAREA_Begin (HTM_Attributes_t Attributes,const char *fmt,...)
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -1547,7 +1572,8 @@ void HTM_SELECT_Begin (HTM_Attributes_t Attributes,
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -1704,7 +1730,8 @@ void HTM_IMG (const char *URL,const char *Icon,const char *Title,
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
-	 HTM_SPTxt (Attr);
+	 HTM_SP ();
+	 HTM_Txt (Attr);
 
 	 free (Attr);
 	}
@@ -1824,37 +1851,6 @@ void HTM_Char (char Ch)
       fputc ((int) Ch,Fil_GetOutputFile ());
   }
 
-void HTM_TxtColon (const char *Txt)
-  {
-   HTM_Txt (Txt);
-   HTM_Colon ();
-  }
-
-void HTM_TxtColonNBSP (const char *Txt)
-  {
-   HTM_Txt (Txt);
-   HTM_Colon ();
-   HTM_NBSP ();
-  }
-
-void HTM_TxtSP (const char *Txt)
-  {
-   HTM_Txt (Txt);
-   HTM_SP ();
-  }
-
-void HTM_SPTxt (const char *Txt)
-  {
-   HTM_SP ();
-   HTM_Txt (Txt);
-  }
-
-void HTM_NBSPTxt (const char *Txt)
-  {
-   HTM_NBSP ();
-   HTM_Txt (Txt);
-  }
-
 void HTM_ParTxtPar (const char *Txt)
   {
    HTM_OpenParenthesis ();
@@ -1877,23 +1873,19 @@ void HTM_ListSeparator (unsigned i,unsigned n)
       if (i <= n - 2)
         {
 	 if (i == n - 2)	// Just before the last element
-	    HTM_SPTxt (Txt_and);
+	   {
+	    HTM_SP ();
+	    HTM_Txt (Txt_and);
+	   }
 	 else			// Before the penultimate element
 	    HTM_Comma ();
 	 HTM_SP ();
         }
   }
 
-void HTM_CommaSP (void)
-  {
-   HTM_Comma ();
-   HTM_SP ();
-  }
-
-void HTM_SemicolonSP (void)
+void HTM_Semicolon (void)
   {
    HTM_Char (';');
-   HTM_SP ();
   }
 
 void HTM_SP (void)
@@ -1906,9 +1898,9 @@ void HTM_NBSP (void)
    HTM_Txt ("&nbsp;");
   }
 
-void HTM_NBSP_GT_NBSP (void)
+void HTM_GT (void)
   {
-   HTM_Txt ("&nbsp;&gt;&nbsp;");
+   HTM_Txt ("&gt;");
   }
 
 void HTM_EllipsisDots (void)
@@ -2064,7 +2056,8 @@ void HTM_DoubleRange (double Min,double Max)
   {
    HTM_OpenBracket ();
       HTM_Double (Min);
-      HTM_SemicolonSP ();
+      HTM_Semicolon ();
+      HTM_SP ();
       HTM_Double (Max);
    HTM_CloseBracket ();
   }
@@ -2091,7 +2084,8 @@ void HTM_TD_Txt_Right (const char *Txt)
 void HTM_TD_TxtColon (const char *Txt)
   {
    HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
-      HTM_TxtColon (Txt);
+      HTM_Txt (Txt);
+      HTM_Colon ();
    HTM_TD_End ();
   }
 

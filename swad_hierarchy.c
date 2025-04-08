@@ -234,7 +234,9 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_NBSP_GT_NBSP ();
+	 HTM_NBSP ();
+	 HTM_GT ();
+	 HTM_NBSP ();
 
 	 /***** Form to go to see institutions of this country *****/
 	 Frm_BeginFormGoTo (ActSeeIns);
@@ -252,7 +254,9 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_NBSP_GT_NBSP ();
+	 HTM_NBSP ();
+	 HTM_GT ();
+	 HTM_NBSP ();
 
 	 /***** Form to go to select countries *****/
 	 Frm_BeginFormGoTo (ActSeeCty);
@@ -269,7 +273,9 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_NBSP_GT_NBSP ();
+	 HTM_NBSP ();
+	 HTM_GT ();
+	 HTM_NBSP ();
 
 	 /***** Form to see centers of this institution *****/
 	 Frm_BeginFormGoTo (ActSeeCtr);
@@ -287,7 +293,9 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_NBSP_GT_NBSP ();
+	 HTM_NBSP ();
+	 HTM_GT ();
+	 HTM_NBSP ();
 
 	 /***** Form to go to select institutions *****/
 	 Frm_BeginFormGoTo (ActSeeIns);
@@ -303,7 +311,9 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_OFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_NBSP_GT_NBSP ();
+	 HTM_NBSP ();
+	 HTM_GT ();
+	 HTM_NBSP ();
 
 	 /***** Hidden institution *****/
 	 HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_INS]);
@@ -316,7 +326,9 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_NBSP_GT_NBSP ();
+	 HTM_NBSP ();
+	 HTM_GT ();
+	 HTM_NBSP ();
 
 	 /***** Form to see degrees of this center *****/
 	 Frm_BeginFormGoTo (ActSeeDeg);
@@ -334,7 +346,9 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_NBSP_GT_NBSP ();
+	 HTM_NBSP ();
+	 HTM_GT ();
+	 HTM_NBSP ();
 
 	 /***** Form to go to select centers *****/
 	 Frm_BeginFormGoTo (ActSeeCtr);
@@ -350,7 +364,9 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_OFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_NBSP_GT_NBSP ();
+	 HTM_NBSP ();
+	 HTM_GT ();
+	 HTM_NBSP ();
 
 	 /***** Hidden center *****/
 	 HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]);
@@ -363,7 +379,9 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_NBSP_GT_NBSP ();
+	 HTM_NBSP ();
+	 HTM_GT ();
+	 HTM_NBSP ();
 
 	 /***** Form to go to see courses of this degree *****/
 	 Frm_BeginFormGoTo (ActSeeCrs);
@@ -381,7 +399,9 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_NBSP_GT_NBSP ();
+	 HTM_NBSP ();
+	 HTM_GT ();
+	 HTM_NBSP ();
 
 	 /***** Form to go to select degrees *****/
 	 Frm_BeginFormGoTo (ActSeeDeg);
@@ -397,7 +417,9 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_Begin ("class=\"BC BC_OFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
-	 HTM_NBSP_GT_NBSP ();
+	 HTM_NBSP ();
+	 HTM_GT ();
+	 HTM_NBSP ();
 
 	 /***** Hidden degree *****/
 	 HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]);
@@ -412,7 +434,9 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 		  The_GetSuffix ());
 
       /***** Separator *****/
-      HTM_NBSP_GT_NBSP ();
+      HTM_NBSP ();
+      HTM_GT ();
+      HTM_NBSP ();
 
    HTM_DIV_End ();
   }
@@ -658,7 +682,8 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	       case Hie_SYS:	// System
 		  Ico_PutIcon ("swad64x64.png",Ico_UNCHANGED,
 		               Txt_all_degrees,"ICO16x16");
-		  HTM_NBSPTxt (Txt_all_degrees);
+		  HTM_NBSP ();
+		  HTM_Txt (Txt_all_degrees);
 		  break;
 	       case Hie_INS:	// Institution
 		  if ((Hie[Hie_INS].HieCod = Str_ConvertStrCodToLongCod (row[1])) > 0)
@@ -1660,7 +1685,8 @@ static void Hie_WriteRowMyHierarchy (Hie_Level_t HieLvl,
 
 	    /* Node name */
 	    HTM_DIV_Begin ("class=\"MY_CRS_TXT\"");
-	       HTM_NBSPTxt (Hie[HieLvl].ShrtName);
+	       HTM_NBSP ();
+	       HTM_Txt (Hie[HieLvl].ShrtName);
 	    HTM_DIV_End ();
 
 	 HTM_BUTTON_End ();

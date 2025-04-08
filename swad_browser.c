@@ -2968,7 +2968,8 @@ static void Brw_FormToChangeCrsGrpZone (void)
 								       HTM_NO_ATTR) | HTM_SUBMIT_ON_CLICK,
 				      "value=\"%ld\"",Grp.GrpCod);
 		     HTM_Txt (GrpTyp.Name);
-		     HTM_NBSPTxt (Grp.Name);
+		     HTM_NBSP ();
+		     HTM_Txt (Grp.Name);
 		  HTM_LABEL_End ();
 	       HTM_LI_End ();
 	      }
@@ -3043,11 +3044,15 @@ static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat)
 				  "class=\"BT_LINK\"");
 	    HTM_Txt (UsrDat->Surname1);
 	    if (UsrDat->Surname2[0])
-	       HTM_NBSPTxt (UsrDat->Surname2);
+	      {
+	       HTM_NBSP ();
+               HTM_Txt (UsrDat->Surname2);
+	      }
 	    if (UsrDat->FrstName[0])
 	      {
 	       HTM_Comma ();
-	       HTM_SPTxt (UsrDat->FrstName);
+	       HTM_SP ();
+	       HTM_Txt (UsrDat->FrstName);
 	      }
 	 HTM_BUTTON_End ();
 
@@ -4871,7 +4876,8 @@ static void Brw_WriteFileSizeAndDate (struct Brw_FileMetadata *FileMetadata,
    else
       FileSizeStr[0] = '\0';
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtStyle,The_GetColorRows ());
-      HTM_NBSPTxt (FileSizeStr);
+      HTM_NBSP ();
+      HTM_Txt (FileSizeStr);
    HTM_TD_End ();
 
    /***** Write the date *****/
@@ -6302,7 +6308,9 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 
 	 /* Folder */
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_TxtColonNBSP (Txt_Folder);
+	    HTM_Txt (Txt_Folder);
+	    HTM_Colon ();
+	    HTM_NBSP ();
 	    HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,"",
 			    HTM_REQUIRED,
 			    "size=\"30\" class=\"INPUT_%s\"",The_GetSuffix ());
@@ -7643,8 +7651,9 @@ void Brw_ShowFileMetadata (void)
 		     HTM_NBSP ();
 		     HTM_OpenParenthesis ();
 			HTM_Unsigned (FileMetadata.NumLoggedUsrs);
-			HTM_SPTxt (FileMetadata.NumLoggedUsrs == 1 ? Txt_user[Usr_SEX_UNKNOWN] :
-								     Txt_users[Usr_SEX_UNKNOWN]);
+			HTM_SP ();
+			HTM_Txt (FileMetadata.NumLoggedUsrs == 1 ? Txt_user[Usr_SEX_UNKNOWN] :
+								   Txt_users[Usr_SEX_UNKNOWN]);
 		     HTM_CloseParenthesis ();
 		  HTM_TD_End ();
 
@@ -8063,7 +8072,8 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 	       Ico_PutIcon ("up-right-from-square.svg",Ico_BLACK,Txt_Link,"ICO40x40");
 
 	    /* Name of the file of marks, link end and form end */
-	    HTM_NBSPTxt (FileNameToShow);
+	    HTM_NBSP ();
+            HTM_Txt (FileNameToShow);
 	    HTM_NBSP ();
 	    Ico_PutIcon ("list-alt.svg",Ico_UNCHANGED,
 			 Act_GetActionText (Brw_ActSeeMyMrk[Gbl.FileBrowser.Type]),
@@ -8089,7 +8099,8 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 			     Frm_DONT_PUT_FORM);	// Don't put link to view metadata
 	 else
 	    Ico_PutIcon ("up-right-from-square.svg",Ico_BLACK,Txt_Link,"ICO40x40");
-	 HTM_NBSPTxt (FileNameToShow);
+	 HTM_NBSP ();
+         HTM_Txt (FileNameToShow);
 	 HTM_NBSP ();
 	 Ico_PutIcon ("download.svg",Ico_BLACK,Title,"ICO40x40");
       HTM_A_End ();
@@ -9334,7 +9345,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 					"class=\"LT BT_LINK\"");
 	       Str_FreeGoToTitle ();
 		  Lgo_DrawLogo (Hie_INS,&Hie[Hie_INS],"LT BT_LINK ICO20x20");
-		  HTM_NBSPTxt (Hie[Hie_INS].ShrtName);
+		  HTM_NBSP ();
+                  HTM_Txt (Hie[Hie_INS].ShrtName);
 	       HTM_BUTTON_End ();
 	    Frm_EndForm ();
 	   }
@@ -9350,7 +9362,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 					"class=\"LT BT_LINK\"");
 	       Str_FreeGoToTitle ();
 		  Lgo_DrawLogo (Hie_CTR,&Hie[Hie_CTR],"LT ICO20x20");
-		  HTM_NBSPTxt (Hie[Hie_CTR].ShrtName);
+		  HTM_NBSP ();
+		  HTM_Txt (Hie[Hie_CTR].ShrtName);
 	       HTM_BUTTON_End ();
 	    Frm_EndForm ();
 	   }
@@ -9366,7 +9379,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 					"class=\"LT BT_LINK\"");
 	       Str_FreeGoToTitle ();
 		  Lgo_DrawLogo (Hie_DEG,&Hie[Hie_DEG],"LT ICO20x20");
-		  HTM_NBSPTxt (Hie[Hie_DEG].ShrtName);
+		  HTM_NBSP ();
+		  HTM_Txt (Hie[Hie_DEG].ShrtName);
 	       HTM_BUTTON_End ();
 	    Frm_EndForm ();
 	   }
@@ -9501,7 +9515,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	       default:
 		  break;
 	      }
-	    HTM_NBSPTxt (FileNameToShow);
+	    HTM_NBSP ();
+	    HTM_Txt (FileNameToShow);
 	 HTM_BUTTON_End ();
 
 	 /* End form */

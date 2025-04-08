@@ -1646,7 +1646,8 @@ void Crs_GetAndWriteCrssOfAUsr (const struct Usr_Data *UsrDat,Rol_Role_t Role)
 				  Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
 						    Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       HTM_TxtColon (Txt);
+	       HTM_Txt (Txt);
+	       HTM_Colon ();
 	       free (Txt);
 	    HTM_TH_End ();
 
@@ -1827,7 +1828,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	                             "class=\"LT BT_LINK\"");
             Str_FreeGoToTitle ();
 	       Lgo_DrawLogo (Hie_DEG,&Deg,"CT ICO20x20");
-	       HTM_NBSPTxt (row[2]);
+	       HTM_NBSP ();
+	       HTM_Txt (row[2]);
 	       HTM_NBSP ();
 	       HTM_ParTxtPar (row[6]);
 	    HTM_BUTTON_End ();

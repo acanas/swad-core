@@ -681,7 +681,9 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 	       if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE] == Usr_CAN)
 		 {
 		  HTM_DIV_Begin ("class=\"LM DAT_SMALL_%s\"",The_GetSuffix ());
-		     HTM_TxtColonNBSP (Txt_Score);
+		     HTM_Txt (Txt_Score);
+		     HTM_Colon ();
+		     HTM_NBSP ();
 		     HTM_SPAN_Begin ("class=\"%s_%s\"",
 				     PrintedQuestions[QstInd].StrAnswers[0] ?
 				     (PrintedQuestions[QstInd].Score > 0 ? "Qst_ANS_OK" :	// Correct
@@ -2178,7 +2180,9 @@ static void TstPrn_ShowPrintsSummaryRow (Usr_MeOrOther_t MeOrOther,
 	            " class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
                     The_GetSuffix (),
                     The_GetColorRows ());
-	 HTM_TxtColonNBSP (Txt_Visible_tests);
+	 HTM_Txt (Txt_Visible_tests);
+	 HTM_Colon ();
+	 HTM_NBSP ();
 	 HTM_Unsigned (NumPrints);
       HTM_TD_End ();
 
@@ -2308,16 +2312,25 @@ void TstPrn_ShowOnePrint (void)
 
 	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
 			  The_GetSuffix ());
-	       HTM_TxtColon (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs][Gbl.Usrs.Other.UsrDat.Sex]);
+	       HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs][Gbl.Usrs.Other.UsrDat.Sex]);
+	       HTM_Colon ();
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	       ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
-	       HTM_SPTxt (Gbl.Usrs.Other.UsrDat.Surname1);
+	       HTM_SP ();
+	       HTM_Txt (Gbl.Usrs.Other.UsrDat.Surname1);
 	       if (Gbl.Usrs.Other.UsrDat.Surname2[0])
-		  HTM_SPTxt (Gbl.Usrs.Other.UsrDat.Surname2);
+	         {
+		  HTM_SP ();
+		  HTM_Txt (Gbl.Usrs.Other.UsrDat.Surname2);
+	         }
 	       if (Gbl.Usrs.Other.UsrDat.FrstName[0])
-		  HTM_TxtF (", %s",Gbl.Usrs.Other.UsrDat.FrstName);
+	         {
+		  HTM_Comma ();
+		  HTM_SP ();
+		  HTM_Txt (Gbl.Usrs.Other.UsrDat.FrstName);
+	         }
 	       HTM_BR ();
 	       Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,
 					  ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
@@ -2335,13 +2348,12 @@ void TstPrn_ShowOnePrint (void)
 
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
-			     The_GetSuffix ());
-		  HTM_TxtColon (Txt_START_END_TIME[StartEndTime]);
+	       HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
+		  HTM_Txt (Txt_START_END_TIME[StartEndTime]);
+		  HTM_Colon ();
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("id=\"%s\" class=\"LT DAT_%s\"",
-			     Id,The_GetSuffix ());
+	       HTM_TD_Begin ("id=\"%s\" class=\"LT DAT_%s\"",Id,The_GetSuffix ());
 		  Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
 						Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 						Dat_WRITE_TODAY |
@@ -2360,13 +2372,12 @@ void TstPrn_ShowOnePrint (void)
 	 /***** Number of questions *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
-			  The_GetSuffix ());
-	       HTM_TxtColon (Txt_Questions);
+	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
+	       HTM_Txt (Txt_Questions);
+	       HTM_Colon ();
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LB DAT_%s\"",
-			  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (Print.NumQsts.All);
 	    HTM_TD_End ();
 
@@ -2375,13 +2386,12 @@ void TstPrn_ShowOnePrint (void)
 	 /***** Number of answers *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
-			  The_GetSuffix ());
-	       HTM_TxtColon (Txt_Answers);
+	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
+	       HTM_Txt (Txt_Answers);
+	       HTM_Colon ();
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LB DAT_%s\"",
-			  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (Print.NumQsts.NotBlank);
 	    HTM_TD_End ();
 
@@ -2390,13 +2400,12 @@ void TstPrn_ShowOnePrint (void)
 	 /***** Score *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
-			  The_GetSuffix ());
-	       HTM_TxtColon (Txt_Score);
+	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
+	       HTM_Txt (Txt_Score);
+	       HTM_Colon ();
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LB DAT_%s\"",
-			  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
@@ -2416,13 +2425,12 @@ void TstPrn_ShowOnePrint (void)
 	 /***** Grade *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
-			  The_GetSuffix ());
-	       HTM_TxtColon (Txt_Grade);
+	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
+	       HTM_Txt (Txt_Grade);
+	       HTM_Colon ();
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LB DAT_%s\"",
-			  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
@@ -2443,13 +2451,12 @@ void TstPrn_ShowOnePrint (void)
 	 /***** Tags present in this test *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
-			  The_GetSuffix ());
-	       HTM_TxtColon (Txt_Tags);
+	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
+	       HTM_Txt (Txt_Tags);
+	       HTM_Colon ();
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LB DAT_%s\"",
-			  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	       TstPrn_ShowTagsPresentInAPrint (Print.PrnCod);
 	    HTM_TD_End ();
 

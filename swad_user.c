@@ -758,7 +758,10 @@ void Usr_WriteFirstNameBRSurnames (const struct Usr_Data *UsrDat)
 
    /***** Write surname2 if exists *****/
    if (UsrDat->Surname2[0])
-      HTM_SPTxt (UsrDat->Surname2);
+     {
+      HTM_SP ();
+      HTM_Txt (UsrDat->Surname2);
+     }
   }
 
 /*****************************************************************************/
@@ -1403,7 +1406,10 @@ void Usr_WriteLoggedUsrHead (void)
 
       /***** User's name *****/
       if (Gbl.Usrs.Me.UsrDat.FrstName[0])
-	 HTM_NBSPTxt (Gbl.Usrs.Me.UsrDat.FrstName);
+        {
+	 HTM_NBSP ();
+         HTM_Txt (Gbl.Usrs.Me.UsrDat.FrstName);
+        }
 
    HTM_DIV_End ();
   }
@@ -2064,7 +2070,9 @@ void Usr_ShowFormsLogoutAndRole (void)
       if (Rol_GetNumAvailableRoles () == 1)
 	{
 	 HTM_SPAN_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-	    HTM_TxtColonNBSP (Txt_Role);
+	    HTM_Txt (Txt_Role);
+	    HTM_Colon ();
+	    HTM_NBSP ();
 	 HTM_SPAN_End ();
 
 	 HTM_SPAN_Begin ("class=\"DAT_STRONG_%s BOLD\"",The_GetSuffix ());
@@ -2074,7 +2082,9 @@ void Usr_ShowFormsLogoutAndRole (void)
       else
 	{
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_TxtColonNBSP (Txt_Role);
+	    HTM_Txt (Txt_Role);
+	    HTM_Colon ();
+	    HTM_NBSP ();
 	    if (asprintf (&ClassSelect,"INPUT_%s",The_GetSuffix ()) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Rol_PutFormToChangeMyRole (ClassSelect);
@@ -3653,7 +3663,8 @@ static void Set_FormToSelectUsrListType (Act_Action_t NextAction,
 				  The_GetSuffix ());
       Ico_PutIcon (Usr_IconsClassPhotoOrList[ListType],Ico_BLACK,
 		   Txt_USR_LIST_TYPES[ListType],"ICO20x20");
-      HTM_NBSPTxt (Txt_USR_LIST_TYPES[ListType]);
+      HTM_NBSP ();
+      HTM_Txt (Txt_USR_LIST_TYPES[ListType]);
       HTM_BUTTON_End ();
 
    /***** End form *****/
@@ -3855,7 +3866,7 @@ static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
    if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
      {
       /***** Put a row to select all users *****/
-      Usr_PutCheckboxToSelectAllUsers (SelectedUsrs,Role,WithPhotos,
+      Usr_PutCheckboxToSelectAllUsers (SelectedUsrs,Role,
 				       Usr_GetColumnsForSelectUsrs (WithPhotos));
 
       /***** Heading row with column names *****/
@@ -3891,14 +3902,12 @@ static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
 /*****************************************************************************/
 
 void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUsrs,
-				      Rol_Role_t Role,
-				      bool WithPhotos,unsigned ColSpan)
+				      Rol_Role_t Role,unsigned ColSpan)
   {
    char *ParName;
 
    HTM_TR_Begin (NULL);
-      HTM_TD_Begin ("colspan=\"%u\" class=\"LT\"",
-		    Usr_GetColumnsForSelectUsrs (WithPhotos));
+      HTM_TD_Begin ("colspan=\"%u\" class=\"LT\"",ColSpan);
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    if (Usr_NameSelUnsel[Role] && Usr_ParUsrCod[Role])
 	      {
@@ -4073,7 +4082,7 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr,bool WithPhotos)
      {
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
-         Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_GST,WithPhotos,
+         Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_GST,
 				          Usr_GetColumnsForSelectUsrs (WithPhotos));
 
       /***** Heading row with column names *****/
@@ -4141,7 +4150,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr,bool WithPhotos)
 
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
-	 Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_STD,WithPhotos,
+	 Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_STD,
 				          Usr_GetColumnsForSelectUsrs (WithPhotos));
 
       /***** Heading row with column names *****/
@@ -4201,7 +4210,7 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,
      {
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
-	 Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Role,WithPhotos,
+	 Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Role,
 				          Usr_GetColumnsForSelectUsrs (WithPhotos));
 
       /***** Heading row with column names *****/
@@ -4496,7 +4505,9 @@ void Usr_ListAllDataStds (void)
 		     if (GrpTyp->NumGrps)         // If current course has groups of this type
 		       {
 			HTM_TH_Span_Begin (HTM_HEAD_LEFT,1,1,"BG_HIGHLIGHT");
-			   HTM_TxtF ("%s %s",Txt_Group,GrpTyp->Name);
+			   HTM_Txt (Txt_Group);
+			   HTM_SP ();
+			   HTM_Txt (GrpTyp->Name);
 			HTM_TH_End ();
 		       }
 		    }
@@ -4915,7 +4926,9 @@ void Usr_ListDataAdms (void)
 	 Frm_BeginForm (ActLstOth);
 	    Set_PutParListWithPhotos (WithPhotos);
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_TxtColonNBSP (Txt_Scope);
+	       HTM_Txt (Txt_Scope);
+	       HTM_Colon ();
+	       HTM_NBSP ();
 	       Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE,
 				     HieLvl,AllowedLvls);
 	    HTM_LABEL_End ();
@@ -5059,7 +5072,9 @@ void Usr_ListGuests (void)
 	    Frm_BeginForm (ActLstGst);
 	       Set_PutParsPrefsAboutUsrList ();
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-		  HTM_TxtColonNBSP (Txt_Scope);
+		  HTM_Txt (Txt_Scope);
+		  HTM_Colon ();
+		  HTM_NBSP ();
 		  Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE,
 					ListingPars.HieLvl,AllowedLvls);
 	       HTM_LABEL_End ();
@@ -5208,7 +5223,9 @@ void Usr_ListStudents (void)
 	       Frm_BeginForm (ActLstStd);
 		  Set_PutParsPrefsAboutUsrList ();
 		  HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-		     HTM_TxtColonNBSP (Txt_Scope);
+		     HTM_Txt (Txt_Scope);
+		     HTM_Colon ();
+		     HTM_NBSP ();
 		     Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE,
 					   ListingPars.HieLvl,AllowedLvls);
 		  HTM_LABEL_End ();
@@ -5386,7 +5403,9 @@ void Usr_ListTeachers (void)
 	 Frm_BeginForm (ActLstTch);
 	    Set_PutParsPrefsAboutUsrList ();
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_TxtColonNBSP (Txt_Scope);
+	       HTM_Txt (Txt_Scope);
+	       HTM_Colon ();
+	       HTM_NBSP ();
 	       Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE,
 				     ListingPars.HieLvl,AllowedLvls);
 	    HTM_LABEL_End ();
@@ -6172,7 +6191,7 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
      {
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
-	 Usr_PutCheckboxToSelectAllUsers (SelectedUsrs,Role,WithPhotos,
+	 Usr_PutCheckboxToSelectAllUsers (SelectedUsrs,Role,
 				          Usr_GetColumnsForSelectUsrs (WithPhotos));
 
       /***** Initialize structure with user's data *****/
@@ -6535,7 +6554,10 @@ void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows)
    HTM_BR ();
    HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
-      HTM_SPTxt (UsrDat->Surname2);
+     {
+      HTM_SP ();
+      HTM_Txt (UsrDat->Surname2);
+     }
    if (UsrDat->FrstName[0])
      {
       HTM_Comma ();

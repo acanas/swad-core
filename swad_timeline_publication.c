@@ -468,7 +468,8 @@ void TmlPub_PutLinkToViewNewPubs (void)
 		   The_GetSuffix ());
 
          /* Text */
-	 HTM_TxtSP (Txt_See_new_activity);
+	 HTM_Txt (Txt_See_new_activity);
+	 HTM_SP ();
 	 HTM_OpenParenthesis ();
 	    HTM_SPAN_Begin ("id=\"view_new_count\"");
 	       HTM_0 ();

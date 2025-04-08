@@ -1412,7 +1412,8 @@ static void Rec_ShowSelectorRecsPerPag (unsigned RecsPerPag)
 					       HTM_NO_ATTR,
 			   "%u",i);
 	 HTM_SELECT_End ();
-	 HTM_SPTxt (Txt_record_cards_per_page);
+	 HTM_SP ();
+	 HTM_Txt (Txt_record_cards_per_page);
       HTM_CloseParenthesis ();
    HTM_LABEL_End ();
   }
@@ -1704,7 +1705,8 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 			     ICanEditThisField == Usr_CAN ? "FORM_IN" :
 							    "REC_DAT_SMALL",	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			     The_GetSuffix (),The_GetColorRows ());
-		  HTM_TxtColon (Gbl.Crs.Records.LstFields.Lst[NumField].Name);
+		  HTM_Txt (Gbl.Crs.Records.LstFields.Lst[NumField].Name);
+		  HTM_Colon ();
 		  if (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
 		      TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
 		    {
@@ -3009,7 +3011,8 @@ static void Rec_ShowFormSex (struct Usr_Data *UsrDat,Usr_Sex_t Sex)
 		       ((Sex == UsrDat->Sex) ? HTM_CHECKED :
 					       HTM_NO_ATTR) | HTM_REQUIRED,
 		       "value=\"%u\"",(unsigned) Sex);
-      HTM_NBSPTxt (StringsSexIcons[Sex]);
+      HTM_NBSP ();
+      HTM_Txt (StringsSexIcons[Sex]);
       HTM_Txt (Txt_SEX_SINGULAR_Abc[Sex]);
    HTM_LABEL_End ();
   }

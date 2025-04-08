@@ -665,7 +665,9 @@ static void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedi
 			     Attributes,
 			     "id=\"chg_img_%u\" value=\"%u\"",
 			     UniqueId,(unsigned) Med_ACTION_NEW_MEDIA);
-	    HTM_TxtColonNBSP (Txt_Change_image_video);
+	    HTM_Txt (Txt_Change_image_video);
+	    HTM_Colon ();
+	    HTM_NBSP ();
 	 HTM_LABEL_End ();
 	 if (asprintf (&ClassInput,"Tst_MED_INPUT INPUT_%s",
 	               The_GetSuffix ()) < 0)
@@ -2074,7 +2076,9 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-		  HTM_TxtColonNBSP (Txt_Integer_number);
+		  HTM_Txt (Txt_Integer_number);
+		  HTM_Colon ();
+		  HTM_NBSP ();
 		  snprintf (StrInteger,sizeof (StrInteger),"%ld",Question->Answer.Integer);
 		  HTM_INPUT_TEXT ("AnsInt",Cns_MAX_DIGITS_LONG,StrInteger,
 				  (Question->Answer.Type == Qst_ANS_INT) ? HTM_NO_ATTR :

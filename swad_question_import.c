@@ -144,7 +144,9 @@ void QstImp_ShowFormImpQstsFromXML (void)
       /***** Write a form to import questions *****/
       Frm_BeginForm (ActImpTstQst);
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_TxtColonNBSP (Txt_XML_file);
+	    HTM_Txt (Txt_XML_file);
+	    HTM_Colon ();
+	    HTM_NBSP ();
 	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,".xml",
 			    HTM_SUBMIT_ON_CHANGE,
 			    NULL);
@@ -922,7 +924,8 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 
 		     HTM_TD_Begin ("class=\"%s LT\"",ClassData);
 		       {
-			HTM_NBSPTxt ("&#8226;");
+			HTM_NBSP ();
+			HTM_Txt ("&#8226;");
 			HTM_NBSP ();
 		       }
 		     HTM_TD_End ();

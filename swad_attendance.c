@@ -1287,8 +1287,10 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToEvent (struct Att_Event *Event
                   HidVis_GroupClass[Event->Hidden],The_GetSuffix ());
 
       /***** Write heading *****/
-      HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
-				       Txt_Groups);
+      HTM_Txt (NumGrps == 1 ? Txt_Group  :
+			      Txt_Groups);
+      HTM_Colon ();
+      HTM_NBSP ();
 
       /***** Write groups *****/
       if (NumGrps) // Groups found...
@@ -1302,7 +1304,9 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToEvent (struct Att_Event *Event
 	    row = mysql_fetch_row (mysql_res);
 
 	    /* Write group type name (row[0]) and group name (row[1]) */
-	    HTM_TxtF ("%s %s",row[0],row[1]);
+	    HTM_Txt (row[0]);
+	    HTM_SP ();
+	    HTM_Txt (row[1]);
 
 	    /* Write the name of the room (row[2]) */
 	    if (row[2])	// May be NULL because of LEFT JOIN
@@ -1770,8 +1774,13 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 		    The_GetSuffix (),The_GetColorRows ());
 	 HTM_Txt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
-	    HTM_SPTxt (UsrDat->Surname2);
-	 HTM_TxtF (", %s",UsrDat->FrstName);
+	   {
+	    HTM_SP ();
+	    HTM_Txt (UsrDat->Surname2);
+	   }
+	 HTM_Comma ();
+	 HTM_SP ();
+	 HTM_Txt (UsrDat->FrstName);
       HTM_TD_End ();
 
       /***** Student's comment: write form or text */
@@ -2766,7 +2775,8 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
 			     WithPhotos ? 4 :
 					  3,
 			     The_GetSuffix ());
-		  HTM_TxtColon (Txt_Number_of_users);
+		  HTM_Txt (Txt_Number_of_users);
+		  HTM_Colon ();
 	       HTM_TD_End ();
 
 	       for (NumAttEvent = 0, Total = 0;
@@ -2889,8 +2899,13 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
 		    The_GetSuffix (),The_GetColorRows ());
 	 HTM_Txt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
-	    HTM_SPTxt (UsrDat->Surname2);
-	 HTM_TxtF (", %s",UsrDat->FrstName);
+	   {
+	    HTM_SP ();
+	    HTM_Txt (UsrDat->Surname2);
+	   }
+	 HTM_Comma ();
+	 HTM_SP ();
+	 HTM_Txt (UsrDat->FrstName);
       HTM_TD_End ();
 
       /***** Check/cross to show if the user is present/absent *****/
@@ -3077,8 +3092,13 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 			     The_GetSuffix ());
 		  HTM_Txt (UsrDat->Surname1);
 		  if (UsrDat->Surname2[0])
-		     HTM_SPTxt (UsrDat->Surname2);
-		  HTM_TxtF (", %s",UsrDat->FrstName);
+		    {
+		     HTM_SP ();
+		     HTM_Txt (UsrDat->Surname2);
+		    }
+		  HTM_Comma ();
+		  HTM_SP ();
+		  HTM_Txt (UsrDat->FrstName);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -3162,7 +3182,8 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 					  CommentStd,Cns_MAX_BYTES_TEXT,
 					  Str_DONT_REMOVE_SPACES);
 			HTM_DT_Begin ();
-			   HTM_TxtColon (Txt_Student_comment);
+			   HTM_Txt (Txt_Student_comment);
+			   HTM_Colon ();
 			HTM_DT_End ();
 			HTM_DD_Begin ();
 			   HTM_Txt (CommentStd);
@@ -3174,7 +3195,8 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 					  CommentTch,Cns_MAX_BYTES_TEXT,
 					  Str_DONT_REMOVE_SPACES);
 			HTM_DT_Begin ();
-			   HTM_TxtColon (Txt_Teachers_comment);
+			   HTM_Txt (Txt_Teachers_comment);
+			   HTM_Colon ();
 			HTM_DT_End ();
 			HTM_DD_Begin ();
 			   HTM_Txt (CommentTch);

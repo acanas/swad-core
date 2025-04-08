@@ -327,7 +327,8 @@ static void MFU_PutIconAndText (Act_Action_t Action,
       HTM_IMG (URLIconSet,Act_GetIconFromAction (Action),MenuStr,
 	       "class=\"ICO_%s_%s\"",
 	       Ico_GetPreffix (Color[Gbl.Prefs.IconSet]),The_GetSuffix ());
-   HTM_NBSPTxt (MenuStr);
+   HTM_NBSP ();
+   HTM_Txt (MenuStr);
   }
 
 /*****************************************************************************/

@@ -399,8 +399,9 @@ void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
 
       /* Number of criteria */
       HTM_DIV_Begin ("class=\"ASG_GRP_%s\"",The_GetSuffix ());
-	 HTM_TxtColonNBSP (Txt_Number_of_criteria);
-	 // HTM_Unsigned (Rubrics->Rubric.NumCriteria);
+	 HTM_Txt (Txt_Number_of_criteria);
+	 HTM_Colon ();
+	 HTM_NBSP ();
 	 HTM_Unsigned (Rub_DB_GetNumCriteriaInRubric (Rubrics->Rubric.RubCod));
       HTM_DIV_End ();
 

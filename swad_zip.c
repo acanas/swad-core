@@ -551,7 +551,8 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
       HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_TxtColon (Txt_Filename);
+	    HTM_Txt (Txt_Filename);
+	    HTM_Colon ();
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
@@ -569,7 +570,8 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
       HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_TxtColon (Txt_File_size);
+	    HTM_Txt (Txt_File_size);
+	    HTM_Colon ();
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());

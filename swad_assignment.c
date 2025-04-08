@@ -1706,8 +1706,10 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
    HTM_DIV_Begin ("class=\"%s_%s\"",
                   HidVis_GroupClass[Asg->Hidden],The_GetSuffix ());
 
-      HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
-				       Txt_Groups);
+      HTM_Txt (NumGrps == 1 ? Txt_Group  :
+			      Txt_Groups);
+      HTM_Colon ();
+      HTM_NBSP ();
 
       /***** Write groups *****/
       if (NumGrps) // Groups found...
@@ -1719,8 +1721,10 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
 	    /* Get next group */
 	    row = mysql_fetch_row (mysql_res);
 
-	    /* Write group type name and group name */
-	    HTM_TxtF ("%s %s",row[0],row[1]);
+	    /* Write group type name (row[0]) and group name (row[1]) */
+	    HTM_Txt (row[0]);
+	    HTM_SP ();
+	    HTM_Txt (row[1]);
 
 	    /* Write separator */
 	    HTM_ListSeparator (NumGrp,NumGrps);

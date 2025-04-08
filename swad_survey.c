@@ -508,11 +508,20 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       HTM_DIV_Begin ("class=\"%s_%s\"",
 		     HidVis_GroupClass[Surveys->Svy.Status.Hidden],
 		     The_GetSuffix ());
-	 HTM_TxtColonNBSP (Txt_Number_of_questions);
+
+	 HTM_Txt (Txt_Number_of_questions);
+	 HTM_Colon ();
+	 HTM_NBSP ();
 	 HTM_Unsigned (Surveys->Svy.NumQsts);
-	 HTM_SemicolonSP ();
-	 HTM_TxtColonNBSP (Txt_Number_of_users);
+
+	 HTM_Semicolon ();
+	 HTM_SP ();
+
+	 HTM_Txt (Txt_Number_of_users);
+	 HTM_Colon ();
+	 HTM_NBSP ();
 	 HTM_Unsigned (Surveys->Svy.NumUsrs);
+
       HTM_DIV_End ();
 
       HTM_TD_End ();
@@ -591,17 +600,20 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       HTM_DIV_Begin ("class=\"%s_%s\"",
 		     HidVis_GroupClass[Surveys->Svy.Status.Hidden],
 		     The_GetSuffix ());
-	 HTM_TxtColonNBSP (Txt_Scope);
-	 HTM_TxtF ("%s %s",
-	           Txt_HIERARCHY_SINGUL_Abc[Surveys->Svy.HieLvl],
-		   Gbl.Hierarchy.Node[Surveys->Svy.HieLvl].ShrtName);
+	 HTM_Txt (Txt_Scope);
+	 HTM_Colon ();
+	 HTM_NBSP ();
+	 HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Surveys->Svy.HieLvl]);
+	 HTM_SP ();
+	 HTM_Txt (Gbl.Hierarchy.Node[Surveys->Svy.HieLvl].ShrtName);
       HTM_DIV_End ();
 
       /* Users' roles who can answer the survey */
       HTM_DIV_Begin ("class=\"%s_%s\"",
 		     HidVis_GroupClass[Surveys->Svy.Status.Hidden],
 		     The_GetSuffix ());
-	 HTM_TxtColon (Txt_Users);
+	 HTM_Txt (Txt_Users);
+         HTM_Colon ();
 	 HTM_BR ();
 	 Rol_WriteSelectorRoles (1 << Rol_STD |
 				 1 << Rol_NET |
@@ -2062,8 +2074,10 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
    HTM_DIV_Begin ("class=\"%s_%s\"",
 		  HidVis_GroupClass[Svy->Status.Hidden],
 		  The_GetSuffix ());
-      HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
-				       Txt_Groups);
+      HTM_Txt (NumGrps == 1 ? Txt_Group  :
+			      Txt_Groups);
+      HTM_Colon ();
+      HTM_NBSP ();
 
       /***** Write groups *****/
       if (NumGrps) // Groups found...
@@ -2076,8 +2090,10 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
 	    /* Get next group */
 	    row = mysql_fetch_row (mysql_res);
 
-	    /* Write group type name and group name */
-	    HTM_TxtF ("%s %s",row[0],row[1]);
+	    /* Write group type name (row[0]) and group name (row[1]) */
+	    HTM_Txt (row[0]);
+	    HTM_SP ();
+	    HTM_Txt (row[1]);
 
 	    /* Write separator */
 	    HTM_ListSeparator (NumGrp,NumGrps);
@@ -2928,7 +2944,8 @@ static void Svy_WriteCommentsOfAQst (struct Svy_Survey *Svy,
 	    HTM_DL_Begin ();
 
 	       HTM_DT_Begin ();
-		  HTM_TxtColon (Txt_Comments);
+		  HTM_Txt (Txt_Comments);
+		  HTM_Colon ();
 	       HTM_DT_End ();
 
 	       HTM_DD_Begin ();
@@ -3017,7 +3034,8 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 	       "class=\"LT\" style=\"width:%upx; height:20px;\"",BarWidth);
 
       /***** Write the number of users *****/
-      HTM_NBSPTxt (Title);
+      HTM_NBSP ();
+      HTM_Txt (Title);
 
       /***** Free string with the number of users *****/
       free (Title);

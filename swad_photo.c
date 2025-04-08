@@ -338,7 +338,9 @@ static void Pho_ReqPhoto (const struct Usr_Data *UsrDat)
 
 	 /***** Form to upload photo *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_TxtColonNBSP (Txt_File_with_the_photo);
+	    HTM_Txt (Txt_File_with_the_photo);
+	    HTM_Colon ();
+	    HTM_NBSP ();
 	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/*",
 			    HTM_SUBMIT_ON_CHANGE,
 			    NULL);
@@ -2294,7 +2296,8 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 		  else	// Pho_DEGREES_PRINT
 		    {
 		     Lgo_DrawLogo (Hie_DEG,&Deg,"CT ICO20x20");
-		     HTM_NBSPTxt (Deg.FullName);
+		     HTM_NBSP ();
+		     HTM_Txt (Deg.FullName);
 		    }
 	       HTM_TD_End ();
 
@@ -2374,7 +2377,8 @@ static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto)
    HTM_SPAN_Begin ("class=\"DAT_SMALL_%s\"",The_GetSuffix ());
       HTM_OpenParenthesis ();
          HTM_Int (NumStdsWithPhoto);
-         HTM_NBSPTxt (Txt_photos);
+         HTM_NBSP ();
+         HTM_Txt (Txt_photos);
          HTM_Comma ();
          HTM_NBSP ();
          if (NumStds > 0)
@@ -2496,10 +2500,12 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
       HTM_Txt (Deg->ShrtName);
       HTM_BR ();
       HTM_Int (NumStds);
-      HTM_NBSPTxt (Txt_students_ABBREVIATION);
+      HTM_NBSP ();
+      HTM_Txt (Txt_students_ABBREVIATION);
       HTM_BR ();
       HTM_Int (NumStdsWithPhoto);
-      HTM_NBSPTxt (Txt_photos);
+      HTM_NBSP ();
+      HTM_Txt (Txt_photos);
       HTM_BR ();
       HTM_TxtF ("(%d%%)",
 		NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :

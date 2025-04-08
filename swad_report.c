@@ -281,7 +281,9 @@ static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
    HTM_DIV_Begin ("class=\"TITLE_REPORT DAT_%s\"",The_GetSuffix ());
 
       /***** User *****/
-      HTM_TxtColonNBSP (Txt_User[Gbl.Usrs.Me.UsrDat.Sex]);
+      HTM_Txt (Txt_User[Gbl.Usrs.Me.UsrDat.Sex]);
+      HTM_Colon ();
+      HTM_NBSP ();
       HTM_SPAN_Begin ("class=\"DAT_STRONG_%s BOLD\"",The_GetSuffix ());
 	 HTM_Txt (Gbl.Usrs.Me.UsrDat.FullName);
       HTM_SPAN_End ();
@@ -290,7 +292,9 @@ static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
       if (CurrentTimeUTC)
 	{
 	 HTM_BR ();
-	 HTM_TxtColonNBSP (Txt_Date);
+	 HTM_Txt (Txt_Date);
+	 HTM_Colon ();
+	 HTM_NBSP ();
 	 HTM_SPAN_Begin ("class=\"DAT_STRONG_%s\"",The_GetSuffix ());
 	    HTM_TxtF ("%s %s UTC",CurrentTimeUTC->StrDate,
 				  CurrentTimeUTC->StrTime);

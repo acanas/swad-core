@@ -167,7 +167,9 @@ static Hie_Level_t Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t Defa
 			  current center, current degree or current course) *****/
 	    HTM_DIV_Begin ("class=\"CM\"");
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-		  HTM_TxtColonNBSP (Txt_Scope);
+		  HTM_Txt (Txt_Scope);
+		  HTM_Colon ();
+		  HTM_NBSP ();
 		  AllowedLvls = 1 << Hie_SYS |
 			        1 << Hie_CTY |
 			        1 << Hie_INS |
@@ -185,7 +187,8 @@ static Hie_Level_t Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t Defa
 
 	    /***** What to search? *****/
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_SPTxt (Txt_SEARCH_X_in_Y);
+	       HTM_SP ();
+	       HTM_Txt (Txt_SEARCH_X_in_Y);
 	       HTM_NBSP ();
 	       HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 				 "name=\"WhatToSearch\""

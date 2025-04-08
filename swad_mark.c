@@ -108,7 +108,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 					    ActChgNumRowHeaCrs);	// Course zone
 	    Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 	    HTM_LABEL_Begin (NULL);
-	       HTM_TxtColon (Txt_TABLE_Header);
+	       HTM_Txt (Txt_TABLE_Header);
+	       HTM_Colon ();
 	       snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),"%u",Marks.Header);
 	       HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_HEADER],Cns_MAX_DIGITS_UINT,StrHeadOrFoot,
 			       HTM_SUBMIT_ON_CHANGE,
@@ -125,7 +126,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 				            ActChgNumRowFooCrs);	// Course zone
 	    Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 	    HTM_LABEL_Begin (NULL);
-	       HTM_TxtColon (Txt_TABLE_Footer);
+	       HTM_Txt (Txt_TABLE_Footer);
+	       HTM_Colon ();
 	       snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),"%u",Marks.Footer);
 	       HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_FOOTER],Cns_MAX_DIGITS_UINT,StrHeadOrFoot,
 			       HTM_SUBMIT_ON_CHANGE,

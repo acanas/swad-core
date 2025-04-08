@@ -695,7 +695,8 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	       /* Icon and text */
 	       Ico_PutIcon (Tml_Icons[Not->Type],Ico_BLACK,
 	                    Txt_TIMELINE_NOTE[Not->Type],"CONTEXT_ICOx16");
-	       HTM_NBSPTxt (Txt_TIMELINE_NOTE[Not->Type]);
+	       HTM_NBSP ();
+	       HTM_Txt (Txt_TIMELINE_NOTE[Not->Type]);
 
 	    /* End button */
 	    HTM_BUTTON_End ();

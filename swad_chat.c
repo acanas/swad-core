@@ -321,7 +321,8 @@ static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)
 	       HTM_STRONG_Begin ();
 
 	    /* Room name and users */
-	    HTM_NBSPTxt (RoomFullName);
+	    HTM_NBSP ();
+	    HTM_Txt (RoomFullName);
 	    if (NumUsrsInRoom > 1)
 	       HTM_TxtF (" [%d %s]",NumUsrsInRoom,Txt_connected_PLURAL);
 	    else if (NumUsrsInRoom == 1)

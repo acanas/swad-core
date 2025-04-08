@@ -299,7 +299,7 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
 		    }
 
 		  /***** Put a row to select all users *****/
-		  Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_STD,WithPhotos,16);
+		  Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_STD,16);
 
 		  /* Header */
 		  ExaSes_ShowHeaderResults ();
@@ -1130,12 +1130,15 @@ static void ExaSes_WriteModality (const struct ExaSes_Session *Session)
                   HidVis_GroupClass[Session->Hidden],The_GetSuffix ());
 
       /* Label */
-      HTM_TxtColonNBSP (Txt_EXAM_SESSION_Modality);
+      HTM_Txt (Txt_EXAM_SESSION_Modality);
+      HTM_Colon ();
+      HTM_NBSP ();
 
       /* Modality */
       Ico_PutIconOff (ExaSes_ModalityIcon[Session->Modality],Ico_BLACK,
 		      Txt_EXAM_SESSION_MODALITIES[Session->Modality]);
-      HTM_NBSPTxt (Txt_EXAM_SESSION_MODALITIES[Session->Modality]);
+      HTM_NBSP ();
+      HTM_Txt (Txt_EXAM_SESSION_MODALITIES[Session->Modality]);
 
    HTM_DIV_End ();
   }
@@ -1161,8 +1164,10 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
    HTM_DIV_Begin ("class=\"%s_%s\"",
                   HidVis_GroupClass[Session->Hidden],The_GetSuffix ());
 
-      HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
-				       Txt_Groups);
+      HTM_Txt (NumGrps == 1 ? Txt_Group  :
+			      Txt_Groups);
+      HTM_Colon ();
+      HTM_NBSP ();
 
       /***** Write groups *****/
       if (NumGrps) // Groups found...
@@ -1176,7 +1181,9 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
 	    row = mysql_fetch_row (mysql_res);
 
 	    /* Write group type name (row[0]) and group name (row[1]) */
-	    HTM_TxtF ("%s %s",row[0],row[1]);
+	    HTM_Txt (row[0]);
+	    HTM_SP ();
+	    HTM_Txt (row[1]);
 
 	    /* Write separator */
 	    HTM_ListSeparator (NumGrp,NumGrps);
@@ -1628,7 +1635,8 @@ static void ExaSes_PutSessionModalities (const struct ExaSes_Session *Session)
 				" value=\"%u\"",(unsigned) Modality);
 	       Ico_PutIconOn (ExaSes_ModalityIcon[Modality],Ico_BLACK,
 			      Txt_EXAM_SESSION_MODALITIES[Modality]);
-	       HTM_NBSPTxt (Txt_EXAM_SESSION_MODALITIES[Modality]);
+	       HTM_NBSP ();
+	       HTM_Txt (Txt_EXAM_SESSION_MODALITIES[Modality]);
 	    HTM_LABEL_End ();
 	 HTM_LI_End ();
         }

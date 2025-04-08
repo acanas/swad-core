@@ -232,7 +232,8 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 					   Net_WebsAndSocialNetworksTitle[NumURL],
 					   "CONTEXT_OPT CONTEXT_ICO16x16");
 			      HTM_NBSP ();
-			      HTM_TxtColon (Net_WebsAndSocialNetworksTitle[NumURL]);
+			      HTM_Txt (Net_WebsAndSocialNetworksTitle[NumURL]);
+			      HTM_Colon ();
 			   HTM_LABEL_End ();
 			HTM_TD_End ();
 
@@ -379,7 +380,8 @@ void Net_ShowWebAndSocialNetworksStats (Hie_Level_t HieLvl)
 	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	          Ico_PutIcon (Net_WebsAndSocialNetworksIcons[Web],Ico_BLACK,
 	                       Net_WebsAndSocialNetworksTitle[Web],"ICOx16");
-	          HTM_NBSPTxt (Net_WebsAndSocialNetworksTitle[Web]);
+	          HTM_NBSP ();
+	          HTM_Txt (Net_WebsAndSocialNetworksTitle[Web]);
 	       HTM_TD_End ();
 
 	       HTM_TD_Unsigned (NumUsrs);

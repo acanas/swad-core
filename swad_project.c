@@ -1843,7 +1843,8 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
 			  ClassLabel,The_GetSuffix ());
 	    break;
 	}
-	 HTM_TxtColon (Txt_Review);
+	 HTM_Txt (Txt_Review);
+         HTM_Colon ();
       HTM_TD_End ();
 
       switch (Projects->View)
@@ -2029,7 +2030,8 @@ static void Prj_ShowAssigned (const struct Prj_Projects *Projects,
 			  ClassLabel,The_GetSuffix ());
 	    break;
 	}
-	 HTM_TxtColon (Txt_Assigned_QUESTION);
+	 HTM_Txt (Txt_Assigned_QUESTION);
+         HTM_Colon ();
       HTM_TD_End ();
 
       switch (Projects->View)
@@ -2080,7 +2082,8 @@ static void Prj_ShowNumStds (const struct Prj_Projects *Projects,
 			  ClassLabel,The_GetSuffix ());
 	    break;
 	}
-	 HTM_TxtColon (Txt_Number_of_students);
+	 HTM_Txt (Txt_Number_of_students);
+         HTM_Colon ();
       HTM_TD_End ();
 
       switch (Projects->View)
@@ -2171,22 +2174,25 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Projects,
 	       HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s %s\"",
 			     HidVis_LabelClass[Projects->Prj.Hidden],
 			     The_GetSuffix (),The_GetColorRows ());
-		  HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInPrj] :
-					       Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
+		  HTM_Txt (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInPrj] :
+					  Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
+		  HTM_Colon ();
 	       break;
 	    case Prj_VIEW_ONE_PROJECT:
 	    case Prj_PRINT_ONE_PROJECT:
 	       HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
 			     HidVis_LabelClass[Projects->Prj.Hidden],
 			     The_GetSuffix ());
-		  HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInPrj] :
-					       Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
+		  HTM_Txt (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInPrj] :
+					  Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
+		  HTM_Colon ();
 	       break;
 	    case Prj_EDIT_ONE_PROJECT:
 	       HTM_TD_Begin ("class=\"RT %s_%s\"",
 			     HidVis_LabelClass[Projects->Prj.Hidden],
 			     The_GetSuffix ());
-		  HTM_TxtColon (Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
+		  HTM_Txt (Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
+		  HTM_Colon ();
 	       break;
 	   }
 	 HTM_TD_End ();
@@ -2369,7 +2375,8 @@ static void Prj_ShowProposal (const struct Prj_Projects *Projects,
 	                  ClassLabel,The_GetSuffix ());
 	 break;
      }
-	 HTM_TxtColon (Txt_Proposal);
+	 HTM_Txt (Txt_Proposal);
+         HTM_Colon ();
       HTM_TD_End ();
 
       switch (Projects->View)
@@ -2422,7 +2429,8 @@ static void Prj_ShowTxtField (const struct Prj_Projects *Projects,
 	 // Not applicable
 	 break;
      }
-	 HTM_TxtColon (Label);
+	 HTM_Txt (Label);
+         HTM_Colon ();
       HTM_TD_End ();
 
       /***** Change text format *****/
@@ -2494,7 +2502,8 @@ static void Prj_ShowURL (const struct Prj_Projects *Projects,
 	 // Not applicable
 	 break;
      }
-	 HTM_TxtColon (Txt_URL);
+	 HTM_Txt (Txt_URL);
+         HTM_Colon ();
       HTM_TD_End ();
 
       switch (Projects->View)
@@ -2839,8 +2848,12 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *
 		  HTM_LI_Begin (NULL);
 		     HTM_Txt (Gbl.Usrs.Other.UsrDat.Surname1);
 		     if (Gbl.Usrs.Other.UsrDat.Surname2[0])
-			HTM_SPTxt (Gbl.Usrs.Other.UsrDat.Surname2);
-		     HTM_CommaSP ();
+		       {
+			HTM_SP ();
+			HTM_Txt (Gbl.Usrs.Other.UsrDat.Surname2);
+		       }
+		     HTM_Comma ();
+		     HTM_SP ();
 		     HTM_Txt (Gbl.Usrs.Other.UsrDat.FrstName);
 		  HTM_LI_End ();
 		 }

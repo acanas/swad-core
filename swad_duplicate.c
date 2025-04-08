@@ -175,7 +175,9 @@ void Dup_ListDuplicateUsrs (void)
 			   Err_ShowErrorAndExit ("Wrong number of informants.");
 			if (NumInformants > 1)
 			  {
-			   HTM_TxtColonNBSP (Txt_Informants);
+			   HTM_Txt (Txt_Informants);
+			   HTM_Colon ();
+			   HTM_NBSP ();
 			   HTM_Unsigned (NumInformants);
 			   HTM_BR ();
 			  }

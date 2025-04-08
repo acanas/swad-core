@@ -686,8 +686,10 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Gam_Games 
 		  The_GetSuffix ());
 
       /***** Write heading *****/
-      HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
-				       Txt_Groups);
+      HTM_Txt (NumGrps == 1 ? Txt_Group  :
+			      Txt_Groups);
+      HTM_Colon ();
+      HTM_NBSP ();
 
       /***** Write groups *****/
       if (NumGrps) // Groups found...
@@ -701,7 +703,9 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Gam_Games 
 	    row = mysql_fetch_row (mysql_res);
 
 	    /* Write group type name and group name */
-	    HTM_TxtF ("%s %s",row[0],row[1]);
+	    HTM_Txt (row[0]);
+	    HTM_SP ();
+	    HTM_Txt (row[1]);
 
 	    /* Write separator */
 	    HTM_ListSeparator (NumGrp,NumGrps);
@@ -2590,7 +2594,8 @@ static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
 	    HTM_TxtF ("<i class=\"%s\"></i>",
 		      Match->Status.ShowQstResults ? "fas fa-toggle-on" :
 						     "fas fa-toggle-off");
-	    HTM_NBSPTxt (Txt_View_results);
+	    HTM_NBSP ();
+	    HTM_Txt (Txt_View_results);
 	 HTM_BUTTON_End ();
 
       /***** End form *****/
@@ -2626,7 +2631,8 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
 	                             " onmousedown=\"this.form.submit();return false;\"",
 	                             The_GetSuffix ());
 	       HTM_TxtF ("<i class=\"%s\"></i>","fas fa-check-circle");
-	       HTM_NBSPTxt (Txt_MATCH_QUESTION_Answered);
+	       HTM_NBSP ();
+	       HTM_Txt (Txt_MATCH_QUESTION_Answered);
 	    HTM_BUTTON_End ();
 
 	 /* End form */
@@ -2642,8 +2648,9 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
 				 "fas fa-exclamation-circle",
 		      Answered ? Txt_MATCH_QUESTION_Answered :
 				 Txt_MATCH_QUESTION_Unanswered);
-	    HTM_NBSPTxt (Answered ? Txt_MATCH_QUESTION_Answered :
-				    Txt_MATCH_QUESTION_Unanswered);
+	    HTM_NBSP ();
+	    HTM_Txt (Answered ? Txt_MATCH_QUESTION_Answered :
+				Txt_MATCH_QUESTION_Unanswered);
 	 HTM_DIV_End ();
 	}
 
@@ -3692,7 +3699,8 @@ void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,
 	    HTM_Unsigned ((unsigned) ((((double) NumRespondersAns * 100.0) /
 		                        (double) NumRespondersQst) + 0.5));
 	    HTM_Percent ();
-	    HTM_NBSPTxt (Txt_of_PART_OF_A_TOTAL);
+	    HTM_NBSP ();
+	    HTM_Txt (Txt_of_PART_OF_A_TOTAL);
 	    HTM_NBSP ();
 	    HTM_Unsigned (NumRespondersQst);
 	 HTM_CloseParenthesis ();

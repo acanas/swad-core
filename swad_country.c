@@ -471,7 +471,8 @@ void Cty_DrawCountryMapAndNameWithLink (struct Hie_Node *Cty,Act_Action_t Action
 	    Cty_DrawCountryMap (Cty,ClassMap);
 
 	    /***** Write country name *****/
-	    HTM_NBSPTxt (Cty->FullName);
+	    HTM_NBSP ();
+	    HTM_Txt (Cty->FullName);
 	    HTM_NBSP ();
 	    HTM_ParTxtPar (Cty->ShrtName);
 
@@ -1066,7 +1067,8 @@ static void Cty_ListCountriesForEdition (void)
 
 	       /* Language */
 	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-		  HTM_TxtColon (Txt_STR_LANG_NAME[Lan]);
+		  HTM_Txt (Txt_STR_LANG_NAME[Lan]);
+		  HTM_Colon ();
 	       HTM_TD_End ();
 
 	       /* Name */

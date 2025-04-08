@@ -283,7 +283,8 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
 		  break;
 	       case Ann_SHOW_ALL:
 		  /* Users' roles who can view this announcement */
-		  HTM_TxtColon (Txt_Users);
+		  HTM_Txt (Txt_Users);
+		  HTM_Colon ();
 		  for (Role  = Rol_UNK, SomeRolesAreSelected = false;
 		       Role <= Rol_TCH;
 		       Role++)
@@ -292,7 +293,8 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
 			if (SomeRolesAreSelected)
 			   HTM_Comma ();
 			SomeRolesAreSelected = true;
-			HTM_SPTxt (Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
+			HTM_SP ();
+			HTM_Txt (Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
 		       }
 		  break;
 	      }

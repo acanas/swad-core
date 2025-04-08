@@ -1212,19 +1212,24 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 		     HTM_Unsigned (CallsForExams->CallForExam.Duration.Hour);
 		     if (CallsForExams->CallForExam.Duration.Minute)
 		       {
-			HTM_TxtSP (Txt_hours_ABBREVIATION);
+			HTM_Txt (Txt_hours_ABBREVIATION);
+			HTM_SP ();
 			HTM_Unsigned (CallsForExams->CallForExam.Duration.Minute);
 			HTM_Txt ("&prime;");
 		       }
 		     else
-			HTM_NBSPTxt (CallsForExams->CallForExam.Duration.Hour == 1 ? Txt_hour :
-										     Txt_hours);
+		       {
+			HTM_NBSP ();
+			HTM_Txt (CallsForExams->CallForExam.Duration.Hour == 1 ? Txt_hour :
+										 Txt_hours);
+		       }
 		    }
 		  else if (CallsForExams->CallForExam.Duration.Minute)
 		    {
 		     HTM_Unsigned (CallsForExams->CallForExam.Duration.Minute);
-		     HTM_NBSPTxt (CallsForExams->CallForExam.Duration.Minute == 1 ? Txt_minute :
-										    Txt_minutes);
+		     HTM_NBSP ();
+		     HTM_Txt (CallsForExams->CallForExam.Duration.Minute == 1 ? Txt_minute :
+										Txt_minutes);
 		    }
 		 }
 	    HTM_TD_End ();

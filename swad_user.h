@@ -317,8 +317,7 @@ void Usr_GetSelectedUsrsAndGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
                                     void (*FuncWhenNoUsrsSelected) (void *ArgsNoSelected),void *ArgsNoSelected);
 void Usr_ListUsersToSelect (struct Usr_SelectedUsrs *SelectedUsrs,bool WithPhotos);
 void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUsrs,
-				      Rol_Role_t Role,
-				      bool WithPhotos,unsigned ColSpan);
+				      Rol_Role_t Role,unsigned ColSpan);
 void Usr_WriteNumUsrsInList (Rol_Role_t Role);
 
 void Usr_ListAllDataGsts (void);

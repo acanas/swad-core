@@ -1331,7 +1331,9 @@ void Lay_WriteAboutZone (void)
 
       /***** Questions and problems *****/
       HTM_DIV_Begin (NULL);
-	 HTM_TxtColonNBSP (Txt_Questions_and_problems);
+	 HTM_Txt (Txt_Questions_and_problems);
+	 HTM_Colon ();
+	 HTM_NBSP ();
 	 HTM_A_Begin ("href=\"mailto:%s\" class=\"ABOUT\" target=\"_blank\"",
 		      Cfg_PLATFORM_RESPONSIBLE_EMAIL);
 	    HTM_Txt (Cfg_PLATFORM_RESPONSIBLE_EMAIL);

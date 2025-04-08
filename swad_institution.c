@@ -241,7 +241,8 @@ void Ins_DrawInstitLogoAndNameWithLink (struct Hie_Node *Ins,Act_Action_t Action
 
 	 /***** Institution logo and name *****/
 	 Lgo_DrawLogo (Hie_INS,Ins,IconClass);
-	 HTM_NBSPTxt (Ins->FullName);
+	 HTM_NBSP ();
+         HTM_Txt (Ins->FullName);
 
       /***** End link *****/
       HTM_BUTTON_End ();

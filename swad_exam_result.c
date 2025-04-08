@@ -1132,7 +1132,9 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
    /***** Row title *****/
    HTM_TD_Begin ("colspan=\"3\" class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
                  The_GetSuffix (),The_GetColorRows ());
-      HTM_TxtColonNBSP (Txt_Sessions);
+      HTM_Txt (Txt_Sessions);
+      HTM_Colon ();
+      HTM_NBSP ();
       HTM_Unsigned (NumResults);
    HTM_TD_End ();
 
@@ -1547,18 +1549,24 @@ void ExaRes_ShowExamResultUser (struct Usr_Data *UsrDat)
 
       /***** Label *****/
       HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
-	 HTM_TxtColon (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs][UsrDat->Sex]);
+	 HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs][UsrDat->Sex]);
+         HTM_Colon ();
       HTM_TD_End ();
 
       /***** User's data *****/
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
-	 HTM_NBSPTxt (UsrDat->Surname1);
+	 HTM_NBSP ();
+         HTM_Txt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
-	    HTM_SPTxt (UsrDat->Surname2);
+	   {
+	    HTM_SP ();
+	    HTM_Txt (UsrDat->Surname2);
+	   }
 	 if (UsrDat->FrstName[0])
 	   {
-	    HTM_CommaSP ();
+	    HTM_Comma ();
+	    HTM_SP ();
 	    HTM_Txt (UsrDat->FrstName);
 	   }
 	 HTM_BR ();
@@ -1589,7 +1597,8 @@ static void ExaRes_ShowExamResultTime (struct ExaPrn_Print *Print)
 
 	 /***** Label *****/
 	 HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
-	    HTM_TxtColon (Txt_START_END_TIME[StartEndTime]);
+	    HTM_Txt (Txt_START_END_TIME[StartEndTime]);
+	    HTM_Colon ();
 	 HTM_TD_End ();
 
 	 /***** Time *****/
@@ -1628,7 +1637,8 @@ static void ExaRes_ShowExamResultNumQsts (struct ExaPrn_Print *Print,
 
       /***** Label *****/
       HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
-	 HTM_TxtColon (Txt_Questions);
+	 HTM_Txt (Txt_Questions);
+         HTM_Colon ();
       HTM_TD_End ();
 
       /***** Number of questions *****/
@@ -1644,7 +1654,9 @@ static void ExaRes_ShowExamResultNumQsts (struct ExaPrn_Print *Print,
 
 		     /* Valid questions */
 		     HTM_SPAN_Begin ("class=\"DAT_GREEN_%s\"",The_GetSuffix ());
-			HTM_TxtColonNBSP (Txt_QUESTIONS_valid);
+			HTM_Txt (Txt_QUESTIONS_valid);
+			HTM_Colon ();
+			HTM_NBSP ();
 			HTM_Unsigned (Print->NumQsts.Valid.Total);
 		     HTM_SPAN_End ();
 
@@ -1653,7 +1665,9 @@ static void ExaRes_ShowExamResultNumQsts (struct ExaPrn_Print *Print,
 
 		     /* Invalid questions */
 		     HTM_SPAN_Begin ("class=\"DAT_RED_%s\"",The_GetSuffix ());
-			HTM_TxtColonNBSP (Txt_QUESTIONS_invalid);
+			HTM_Txt (Txt_QUESTIONS_invalid);
+			HTM_Colon ();
+			HTM_NBSP ();
 			HTM_Unsigned (Print->NumQsts.All - Print->NumQsts.Valid.Total);
 		     HTM_SPAN_End ();
 
@@ -1688,7 +1702,8 @@ static void ExaRes_ShowExamResultNumAnss (struct ExaPrn_Print *Print,
 
       /***** Label *****/
       HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
-	 HTM_TxtColon (Txt_Valid_answers);
+	 HTM_Txt (Txt_Valid_answers);
+         HTM_Colon ();
       HTM_TD_End ();
 
       /***** Number of answers *****/
@@ -1733,7 +1748,8 @@ static void ExaRes_ShowExamResultScore (struct ExaPrn_Print *Print,
 
       /***** Label *****/
       HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
-	 HTM_TxtColon (Txt_Score);
+	 HTM_Txt (Txt_Score);
+         HTM_Colon ();
       HTM_TD_End ();
 
       /***** Score *****/
@@ -1751,8 +1767,11 @@ static void ExaRes_ShowExamResultScore (struct ExaPrn_Print *Print,
 	       /* Scoure counting only valid questions */
 	       if (Print->NumQsts.All != Print->NumQsts.Valid.Total)
 		 {
-		  HTM_SemicolonSP ();
-		  HTM_TxtColonNBSP (Txt_valid_score);
+		  HTM_Semicolon ();
+		  HTM_SP ();
+		  HTM_Txt (Txt_valid_score);
+		  HTM_Colon ();
+		  HTM_NBSP ();
 		  HTM_STRONG_Begin ();
 		     HTM_DoublePartOfUnsigned (Print->Score.Valid,
 					       Print->NumQsts.Valid.Total);
@@ -1786,7 +1805,8 @@ static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
 
       /***** Label *****/
       HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
-	 HTM_TxtColon (Txt_Grade);
+	 HTM_Txt (Txt_Grade);
+         HTM_Colon ();
       HTM_TD_End ();
 
       /***** Grade *****/
@@ -1804,8 +1824,11 @@ static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
 	       /* Grade counting only valid questions */
 	       if (Print->NumQsts.All != Print->NumQsts.Valid.Total)
 		 {
-		  HTM_SemicolonSP ();
-		  HTM_TxtColonNBSP (Txt_valid_grade);
+		  HTM_Semicolon ();
+		  HTM_SP ();
+		  HTM_Txt (Txt_valid_grade);
+		  HTM_Colon ();
+		  HTM_NBSP ();
 		  HTM_STRONG_Begin ();
 		     TstPrn_ComputeAndShowGrade (Print->NumQsts.Valid.Total,
 						 Print->Score.Valid,
@@ -1955,7 +1978,9 @@ static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 	 if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE] == Usr_CAN)
 	   {
 	    HTM_DIV_Begin ("class=\"LM DAT_SMALL_%s\"",The_GetSuffix ());
-	       HTM_TxtColonNBSP (Txt_Score);
+	       HTM_Txt (Txt_Score);
+	       HTM_Colon ();
+	       HTM_NBSP ();
 	       HTM_SPAN_Begin ("class=\"%s_%s\"",
 			       Print->PrintedQuestions[QstInd].StrAnswers[0] ?
 			       (Print->PrintedQuestions[QstInd].Score > 0 ? "Qst_ANS_OK" :	// Correct

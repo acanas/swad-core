@@ -239,8 +239,10 @@ void Grp_WriteNamesOfSelectedGrps (void)
    struct Group Grp;
 
    /***** Show the selected groups *****/
-   HTM_TxtColonNBSP (Gbl.Crs.Grps.LstGrpsSel.NumGrps == 1 ? Txt_Group  :
-                                                            Txt_Groups);
+   HTM_Txt (Gbl.Crs.Grps.LstGrpsSel.NumGrps == 1 ? Txt_Group  :
+                                                   Txt_Groups);
+   HTM_Colon ();
+   HTM_NBSP ();
    for (NumGrpSel = 0;
 	NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
 	NumGrpSel++)
@@ -250,7 +252,9 @@ void Grp_WriteNamesOfSelectedGrps (void)
          Grp.GrpCod = GrpCod;
          Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
 	 Grp_GetGroupTypeDataByCod (&GrpTyp);
-         HTM_TxtF ("%s %s",GrpTyp.Name,Grp.Name);
+         HTM_Txt (GrpTyp.Name);
+	 HTM_SP ();
+	 HTM_Txt (Grp.Name);
         }
       else	// GrpCod < 0 ==> students not belonging to any group of type (-GrpCod)
         {
@@ -1760,7 +1764,9 @@ void Grp_WriteTheWholeCourse (void)
   {
    extern const char *Txt_The_whole_course;
 
-   HTM_TxtF ("%s %s",Txt_The_whole_course,Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+   HTM_Txt (Txt_The_whole_course);
+   HTM_SP ();
+   HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
   }
 
 /*****************************************************************************/
