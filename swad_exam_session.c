@@ -1130,9 +1130,7 @@ static void ExaSes_WriteModality (const struct ExaSes_Session *Session)
                   HidVis_GroupClass[Session->Hidden],The_GetSuffix ());
 
       /* Label */
-      HTM_Txt (Txt_EXAM_SESSION_Modality);
-      HTM_Colon ();
-      HTM_NBSP ();
+      HTM_Txt (Txt_EXAM_SESSION_Modality); HTM_Colon (); HTM_NBSP ();
 
       /* Modality */
       Ico_PutIconOff (ExaSes_ModalityIcon[Session->Modality],Ico_BLACK,
@@ -1166,8 +1164,7 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
 
       HTM_Txt (NumGrps == 1 ? Txt_Group  :
 			      Txt_Groups);
-      HTM_Colon ();
-      HTM_NBSP ();
+      HTM_Colon (); HTM_NBSP ();
 
       /***** Write groups *****/
       if (NumGrps) // Groups found...

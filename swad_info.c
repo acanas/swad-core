@@ -2158,9 +2158,7 @@ void Inf_EditPagInfo (void)
 	 /***** File *****/
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_File);
-	       HTM_Colon ();
-	       HTM_NBSP ();
+	       HTM_Txt (Txt_File); HTM_Colon (); HTM_NBSP ();
 	       HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,".htm,.html,.pdf,.zip",
 			       HTM_SUBMIT_ON_CHANGE,
 			       NULL);
@@ -2353,9 +2351,7 @@ void Inf_EditURLInfo (void)
 
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_URL);
-	       HTM_Colon ();
-	       HTM_NBSP ();
+	       HTM_Txt (Txt_URL); HTM_Colon (); HTM_NBSP ();
 	       HTM_INPUT_URL ("InfoSrcURL",URL,
 			      HTM_NO_ATTR,	// TODO: Required?
 			      "size=\"50\" class=\"INPUT_%s\"",The_GetSuffix ());

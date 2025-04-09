@@ -682,9 +682,7 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 	       if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE] == Usr_CAN)
 		 {
 		  HTM_DIV_Begin ("class=\"LM DAT_SMALL_%s\"",The_GetSuffix ());
-		     HTM_Txt (Txt_Score);
-		     HTM_Colon ();
-		     HTM_NBSP ();
+		     HTM_Txt (Txt_Score); HTM_Colon (); HTM_NBSP ();
 		     HTM_SPAN_Begin ("class=\"%s_%s\"",
 				     PrintedQuestions[QstInd].StrAnswers[0] ?
 				     (PrintedQuestions[QstInd].Score > 0 ? "Qst_ANS_OK" :	// Correct
@@ -2181,9 +2179,7 @@ static void TstPrn_ShowPrintsSummaryRow (Usr_MeOrOther_t MeOrOther,
 	            " class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
                     The_GetSuffix (),
                     The_GetColorRows ());
-	 HTM_Txt (Txt_Visible_tests);
-	 HTM_Colon ();
-	 HTM_NBSP ();
+	 HTM_Txt (Txt_Visible_tests); HTM_Colon (); HTM_NBSP ();
 	 HTM_Unsigned (NumPrints);
       HTM_TD_End ();
 
@@ -2350,8 +2346,7 @@ void TstPrn_ShowOnePrint (void)
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
-		  HTM_Txt (Txt_START_END_TIME[StartEndTime]);
-		  HTM_Colon ();
+		  HTM_Txt (Txt_START_END_TIME[StartEndTime]); HTM_Colon ();
 	       HTM_TD_End ();
 
 	       HTM_TD_Begin ("id=\"%s\" class=\"LT DAT_%s\"",Id,The_GetSuffix ());
@@ -2374,8 +2369,7 @@ void TstPrn_ShowOnePrint (void)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_Questions);
-	       HTM_Colon ();
+	       HTM_Txt (Txt_Questions); HTM_Colon ();
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
@@ -2388,8 +2382,7 @@ void TstPrn_ShowOnePrint (void)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_Answers);
-	       HTM_Colon ();
+	       HTM_Txt (Txt_Answers); HTM_Colon ();
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
@@ -2402,8 +2395,7 @@ void TstPrn_ShowOnePrint (void)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_Score);
-	       HTM_Colon ();
+	       HTM_Txt (Txt_Score); HTM_Colon ();
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
@@ -2427,8 +2419,7 @@ void TstPrn_ShowOnePrint (void)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_Grade);
-	       HTM_Colon ();
+	       HTM_Txt (Txt_Grade); HTM_Colon ();
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
@@ -2453,8 +2444,7 @@ void TstPrn_ShowOnePrint (void)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_Tags);
-	       HTM_Colon ();
+	       HTM_Txt (Txt_Tags); HTM_Colon ();
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());

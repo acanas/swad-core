@@ -338,9 +338,7 @@ static void Pho_ReqPhoto (const struct Usr_Data *UsrDat)
 
 	 /***** Form to upload photo *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_Txt (Txt_File_with_the_photo);
-	    HTM_Colon ();
-	    HTM_NBSP ();
+	    HTM_Txt (Txt_File_with_the_photo); HTM_Colon (); HTM_NBSP ();
 	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/*",
 			    HTM_SUBMIT_ON_CHANGE,
 			    NULL);

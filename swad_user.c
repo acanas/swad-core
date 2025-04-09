@@ -2070,9 +2070,7 @@ void Usr_ShowFormsLogoutAndRole (void)
       if (Rol_GetNumAvailableRoles () == 1)
 	{
 	 HTM_SPAN_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-	    HTM_Txt (Txt_Role);
-	    HTM_Colon ();
-	    HTM_NBSP ();
+	    HTM_Txt (Txt_Role); HTM_Colon (); HTM_NBSP ();
 	 HTM_SPAN_End ();
 
 	 HTM_SPAN_Begin ("class=\"DAT_STRONG_%s BOLD\"",The_GetSuffix ());
@@ -2082,9 +2080,7 @@ void Usr_ShowFormsLogoutAndRole (void)
       else
 	{
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_Txt (Txt_Role);
-	    HTM_Colon ();
-	    HTM_NBSP ();
+	    HTM_Txt (Txt_Role); HTM_Colon (); HTM_NBSP ();
 	    if (asprintf (&ClassSelect,"INPUT_%s",The_GetSuffix ()) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Rol_PutFormToChangeMyRole (ClassSelect);
@@ -4926,9 +4922,7 @@ void Usr_ListDataAdms (void)
 	 Frm_BeginForm (ActLstOth);
 	    Set_PutParListWithPhotos (WithPhotos);
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_Scope);
-	       HTM_Colon ();
-	       HTM_NBSP ();
+	       HTM_Txt (Txt_Scope); HTM_Colon (); HTM_NBSP ();
 	       Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE,
 				     HieLvl,AllowedLvls);
 	    HTM_LABEL_End ();
@@ -5072,9 +5066,7 @@ void Usr_ListGuests (void)
 	    Frm_BeginForm (ActLstGst);
 	       Set_PutParsPrefsAboutUsrList ();
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-		  HTM_Txt (Txt_Scope);
-		  HTM_Colon ();
-		  HTM_NBSP ();
+		  HTM_Txt (Txt_Scope); HTM_Colon (); HTM_NBSP ();
 		  Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE,
 					ListingPars.HieLvl,AllowedLvls);
 	       HTM_LABEL_End ();
@@ -5223,9 +5215,7 @@ void Usr_ListStudents (void)
 	       Frm_BeginForm (ActLstStd);
 		  Set_PutParsPrefsAboutUsrList ();
 		  HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-		     HTM_Txt (Txt_Scope);
-		     HTM_Colon ();
-		     HTM_NBSP ();
+		     HTM_Txt (Txt_Scope); HTM_Colon (); HTM_NBSP ();
 		     Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE,
 					   ListingPars.HieLvl,AllowedLvls);
 		  HTM_LABEL_End ();
@@ -5403,9 +5393,7 @@ void Usr_ListTeachers (void)
 	 Frm_BeginForm (ActLstTch);
 	    Set_PutParsPrefsAboutUsrList ();
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_Scope);
-	       HTM_Colon ();
-	       HTM_NBSP ();
+	       HTM_Txt (Txt_Scope); HTM_Colon (); HTM_NBSP ();
 	       Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE,
 				     ListingPars.HieLvl,AllowedLvls);
 	    HTM_LABEL_End ();

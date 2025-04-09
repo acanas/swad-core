@@ -273,9 +273,7 @@ void Pwd_ShowFormSendNewPwd (void)
 
 	 /***** User's ID/nickname *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_Txt (Txt_nick_email_or_ID);
-	    HTM_Colon ();
-	    HTM_NBSP ();
+	    HTM_Txt (Txt_nick_email_or_ID); HTM_Colon (); HTM_NBSP ();
 	    HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,
 			    HTM_REQUIRED,
 			    "size=\"8\" class=\"INPUT_%s\"",The_GetSuffix ());
@@ -795,8 +793,7 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
       /***** Password *****/
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	 HTM_Txt (Txt_For_security_enter_your_password);
-	 HTM_Colon ();
-	 HTM_NBSP ();
+	 HTM_Colon (); HTM_NBSP ();
 	 HTM_INPUT_PASSWORD ("OthUsrPwd",NULL,"off",
 			     HTM_REQUIRED,
 			     "class=\"INPUT_%s\"",The_GetSuffix ());

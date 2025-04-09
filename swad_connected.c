@@ -285,8 +285,7 @@ void Con_ShowGlobalConnectedUsrs (void)
       HTM_DIV_Begin ("class=\"CON_LIST\"");
 
 	 /***** Write total number of users *****/
-         HTM_Unsigned (NumUsrsTotal);
-         HTM_NBSP ();
+         HTM_Unsigned (NumUsrsTotal); HTM_NBSP ();
          HTM_Txt (NumUsrsTotal == 1 ? Txt_user[Usr_SEX_UNKNOWN] :
 				      Txt_users[Usr_SEX_UNKNOWN]);
          HTM_Colon ();

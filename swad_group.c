@@ -241,8 +241,7 @@ void Grp_WriteNamesOfSelectedGrps (void)
    /***** Show the selected groups *****/
    HTM_Txt (Gbl.Crs.Grps.LstGrpsSel.NumGrps == 1 ? Txt_Group  :
                                                    Txt_Groups);
-   HTM_Colon ();
-   HTM_NBSP ();
+   HTM_Colon (); HTM_NBSP ();
    for (NumGrpSel = 0;
 	NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
 	NumGrpSel++)

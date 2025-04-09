@@ -2775,8 +2775,7 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
 			     WithPhotos ? 4 :
 					  3,
 			     The_GetSuffix ());
-		  HTM_Txt (Txt_Number_of_users);
-		  HTM_Colon ();
+		  HTM_Txt (Txt_Number_of_users); HTM_Colon ();
 	       HTM_TD_End ();
 
 	       for (NumAttEvent = 0, Total = 0;
@@ -3182,8 +3181,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 					  CommentStd,Cns_MAX_BYTES_TEXT,
 					  Str_DONT_REMOVE_SPACES);
 			HTM_DT_Begin ();
-			   HTM_Txt (Txt_Student_comment);
-			   HTM_Colon ();
+			   HTM_Txt (Txt_Student_comment); HTM_Colon ();
 			HTM_DT_End ();
 			HTM_DD_Begin ();
 			   HTM_Txt (CommentStd);
@@ -3195,8 +3193,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 					  CommentTch,Cns_MAX_BYTES_TEXT,
 					  Str_DONT_REMOVE_SPACES);
 			HTM_DT_Begin ();
-			   HTM_Txt (Txt_Teachers_comment);
-			   HTM_Colon ();
+			   HTM_Txt (Txt_Teachers_comment); HTM_Colon ();
 			HTM_DT_End ();
 			HTM_DD_Begin ();
 			   HTM_Txt (CommentTch);

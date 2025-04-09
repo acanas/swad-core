@@ -983,9 +983,7 @@ static void MchRes_ShowMchResultsSummaryRow (unsigned NumResults,
       /***** Row title *****/
       HTM_TD_Begin ("colspan=\"3\" class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
                     The_GetSuffix (),The_GetColorRows ());
-	 HTM_Txt (Txt_Matches);
-	 HTM_Colon ();
-	 HTM_NBSP ();
+	 HTM_Txt (Txt_Matches); HTM_Colon (); HTM_NBSP ();
 	 HTM_Unsigned (NumResults);
       HTM_TD_End ();
 
@@ -1162,8 +1160,7 @@ void MchRes_ShowOneMchResult (void)
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
-		  HTM_Txt (Txt_START_END_TIME[StartEndTime]);
-		  HTM_Colon ();
+		  HTM_Txt (Txt_START_END_TIME[StartEndTime]); HTM_Colon ();
 	       HTM_TD_End ();
 
 	       if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
@@ -1187,8 +1184,7 @@ void MchRes_ShowOneMchResult (void)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_Questions);
-	       HTM_Colon ();
+	       HTM_Txt (Txt_Questions); HTM_Colon ();
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
@@ -1201,8 +1197,7 @@ void MchRes_ShowOneMchResult (void)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_Answers);
-	       HTM_Colon ();
+	       HTM_Txt (Txt_Answers); HTM_Colon ();
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
@@ -1215,8 +1210,7 @@ void MchRes_ShowOneMchResult (void)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_Score);
-	       HTM_Colon ();
+	       HTM_Txt (Txt_Score); HTM_Colon ();
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
@@ -1240,8 +1234,7 @@ void MchRes_ShowOneMchResult (void)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_Grade);
-	       HTM_Colon ();
+	       HTM_Txt (Txt_Grade); HTM_Colon ();
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
@@ -1266,8 +1259,7 @@ void MchRes_ShowOneMchResult (void)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_Tags);
-	       HTM_Colon ();
+	       HTM_Txt (Txt_Tags); HTM_Colon ();
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());

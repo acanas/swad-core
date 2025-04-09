@@ -210,6 +210,7 @@ void HTM_ListSeparator (unsigned i,unsigned n);
 void HTM_Semicolon (void);
 void HTM_SP (void);
 void HTM_NBSP (void);
+void HTM_LT (void);
 void HTM_GT (void);
 void HTM_EllipsisDots (void);
 void HTM_Colon (void);

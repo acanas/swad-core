@@ -662,8 +662,7 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	    For_ResetForums (&Forums);
 	    For_GetThreadForumTypeAndHieCodOfAPost (Cod,&Forums.Forum);
 	    For_SetForumName (&Forums.Forum,ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
-	    HTM_Txt (Txt_Forum); HTM_Colon ();
-	    HTM_SP (); HTM_Txt (ForumName);
+	    HTM_Txt (Txt_Forum); HTM_Colon (); HTM_SP (); HTM_Txt (ForumName);
 	    switch (PutForm)
 	      {
 	       case Frm_DONT_PUT_FORM:

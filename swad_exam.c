@@ -540,21 +540,13 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
       /* Number of questions, maximum grade, visibility of results */
       HTM_DIV_Begin ("class=\"%s_%s\"",
                      HidVis_GroupClass[Exams->Exam.Hidden],The_GetSuffix ());
-	 HTM_Txt (Txt_Sets_of_questions);
-	 HTM_Colon ();
-	 HTM_NBSP ();
-	 HTM_Unsigned (Exams->Exam.NumSets);
-	 HTM_BR ();
+	 HTM_Txt (Txt_Sets_of_questions); HTM_Colon (); HTM_NBSP ();
+	 HTM_Unsigned (Exams->Exam.NumSets); HTM_BR ();
 
-	 HTM_Txt (Txt_Maximum_grade);
-	 HTM_Colon ();
-	 HTM_NBSP ();
-	 HTM_Double (Exams->Exam.MaxGrade);
-	 HTM_BR ();
+	 HTM_Txt (Txt_Maximum_grade); HTM_Colon (); HTM_NBSP ();
+	 HTM_Double (Exams->Exam.MaxGrade); HTM_BR ();
 
-	 HTM_Txt (Txt_Result_visibility);
-	 HTM_Colon ();
-	 HTM_NBSP ();
+	 HTM_Txt (Txt_Result_visibility); HTM_Colon (); HTM_NBSP ();
 	 TstVis_ShowVisibilityIcons (Exams->Exam.Visibility,Exams->Exam.Hidden);
       HTM_DIV_End ();
 
@@ -577,9 +569,7 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
 				  The_GetSuffix ());
 	    if (ShowingOneOrSeveral == Lay_SHOWING_ONLY_ONE)
 	      {
-	       HTM_Txt (Txt_Sessions);
-	       HTM_Colon ();
-	       HTM_NBSP ();
+	       HTM_Txt (Txt_Sessions); HTM_Colon (); HTM_NBSP ();
 	      }
 	    HTM_Unsigned (Exams->Exam.NumSess);
 	 HTM_BUTTON_End ();

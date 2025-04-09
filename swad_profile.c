@@ -200,9 +200,7 @@ void Prf_ReqUserProfile (void)
 	 /* By default, the nickname is filled with my nickname
 	    If no user logged ==> the nickname is empty */
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_Txt (Txt_Nickname);
-	    HTM_Colon ();
-	    HTM_NBSP ();
+	    HTM_Txt (Txt_Nickname); HTM_Colon (); HTM_NBSP ();
 	    snprintf (NickWithArr,sizeof (NickWithArr),"@%s",
 		      Gbl.Usrs.Me.UsrDat.Nickname);
 	    HTM_INPUT_TEXT ("usr",sizeof (NickWithArr) - 1,NickWithArr,

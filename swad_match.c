@@ -688,8 +688,7 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Gam_Games 
       /***** Write heading *****/
       HTM_Txt (NumGrps == 1 ? Txt_Group  :
 			      Txt_Groups);
-      HTM_Colon ();
-      HTM_NBSP ();
+      HTM_Colon (); HTM_NBSP ();
 
       /***** Write groups *****/
       if (NumGrps) // Groups found...

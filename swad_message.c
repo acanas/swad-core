@@ -547,8 +547,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool OtherRecipientsBefo
 		    " class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_Txt (OtherRecipientsBefore ? Txt_Other_recipients :
 				       Txt_Recipients);
-      HTM_Colon ();
-   HTM_LABEL_End ();
+      HTM_Colon (); HTM_LABEL_End ();
 
    /***** Textarea with users' @nicknames, emails or IDs *****/
    HTM_TEXTAREA_Begin (HTM_NO_ATTR,
@@ -2143,9 +2142,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 
 	 /***** Write "From:" *****/
 	 HTM_TD_Begin ("class=\"RT MSG_TIT_%s\"",The_GetSuffix ());
-	    HTM_Txt (Txt_MSG_From_USER);
-	    HTM_Colon ();
-	    HTM_NBSP ();
+	    HTM_Txt (Txt_MSG_From_USER); HTM_Colon (); HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
@@ -2158,9 +2155,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
       HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"RT MSG_TIT_%s\"",The_GetSuffix ());
-	    HTM_Txt (Txt_MSG_To);
-	    HTM_Colon ();
-	    HTM_NBSP ();
+	    HTM_Txt (Txt_MSG_To); HTM_Colon (); HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
@@ -2179,9 +2174,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 
 	 /***** Write "Content:" *****/
 	 HTM_TD_Begin ("class=\"RT MSG_TIT_%s\"",The_GetSuffix ());
-	    HTM_Txt (Txt_MSG_Content);
-	    HTM_Colon ();
-	    HTM_NBSP ();
+	    HTM_Txt (Txt_MSG_Content);  HTM_Colon (); HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /***** Show content and media *****/

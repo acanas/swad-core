@@ -509,17 +509,12 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 		     HidVis_GroupClass[Surveys->Svy.Status.Hidden],
 		     The_GetSuffix ());
 
-	 HTM_Txt (Txt_Number_of_questions);
-	 HTM_Colon ();
-	 HTM_NBSP ();
+	 HTM_Txt (Txt_Number_of_questions); HTM_Colon (); HTM_NBSP ();
 	 HTM_Unsigned (Surveys->Svy.NumQsts);
 
-	 HTM_Semicolon ();
-	 HTM_SP ();
+	 HTM_Semicolon (); HTM_SP ();
 
-	 HTM_Txt (Txt_Number_of_users);
-	 HTM_Colon ();
-	 HTM_NBSP ();
+	 HTM_Txt (Txt_Number_of_users); HTM_Colon (); HTM_NBSP ();
 	 HTM_Unsigned (Surveys->Svy.NumUsrs);
 
       HTM_DIV_End ();
@@ -600,11 +595,8 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       HTM_DIV_Begin ("class=\"%s_%s\"",
 		     HidVis_GroupClass[Surveys->Svy.Status.Hidden],
 		     The_GetSuffix ());
-	 HTM_Txt (Txt_Scope);
-	 HTM_Colon ();
-	 HTM_NBSP ();
-	 HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Surveys->Svy.HieLvl]);
-	 HTM_SP ();
+	 HTM_Txt (Txt_Scope); HTM_Colon (); HTM_NBSP ();
+	 HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Surveys->Svy.HieLvl]); HTM_SP ();
 	 HTM_Txt (Gbl.Hierarchy.Node[Surveys->Svy.HieLvl].ShrtName);
       HTM_DIV_End ();
 
@@ -612,9 +604,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       HTM_DIV_Begin ("class=\"%s_%s\"",
 		     HidVis_GroupClass[Surveys->Svy.Status.Hidden],
 		     The_GetSuffix ());
-	 HTM_Txt (Txt_Users);
-         HTM_Colon ();
-	 HTM_BR ();
+	 HTM_Txt (Txt_Users); HTM_Colon (); HTM_BR ();
 	 Rol_WriteSelectorRoles (1 << Rol_STD |
 				 1 << Rol_NET |
 				 1 << Rol_TCH,
@@ -2076,8 +2066,7 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
 		  The_GetSuffix ());
       HTM_Txt (NumGrps == 1 ? Txt_Group  :
 			      Txt_Groups);
-      HTM_Colon ();
-      HTM_NBSP ();
+      HTM_Colon (); HTM_NBSP ();
 
       /***** Write groups *****/
       if (NumGrps) // Groups found...
@@ -2944,8 +2933,7 @@ static void Svy_WriteCommentsOfAQst (struct Svy_Survey *Svy,
 	    HTM_DL_Begin ();
 
 	       HTM_DT_Begin ();
-		  HTM_Txt (Txt_Comments);
-		  HTM_Colon ();
+		  HTM_Txt (Txt_Comments); HTM_Colon ();
 	       HTM_DT_End ();
 
 	       HTM_DD_Begin ();

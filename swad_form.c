@@ -333,8 +333,7 @@ void Frm_LabelColumn (const char *TDClass,const char *Id,const char *Label)
      }
    else
       HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-   HTM_Txt (Label);
-   HTM_Colon ();
+   HTM_Txt (Label); HTM_Colon ();
    HTM_LABEL_End ();
 
    /***** Column/cell end *****/

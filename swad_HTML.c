@@ -1901,6 +1901,11 @@ void HTM_NBSP (void)
    HTM_Txt ("&nbsp;");
   }
 
+void HTM_LT (void)
+  {
+   HTM_Txt ("&lt;");
+  }
+
 void HTM_GT (void)
   {
    HTM_Txt ("&gt;");
@@ -2087,8 +2092,7 @@ void HTM_TD_Txt_Right (const char *Txt)
 void HTM_TD_TxtColon (const char *Txt)
   {
    HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
-      HTM_Txt (Txt);
-      HTM_Colon ();
+      HTM_Txt (Txt); HTM_Colon ();
    HTM_TD_End ();
   }
 

@@ -1231,7 +1231,9 @@ static void Tmt_DrawHourCell (unsigned Hour,unsigned Min,const char *Align)
 		       "Tmt_HOUR00",
 		 The_GetSuffix (),
 		 Align);
-      HTM_TxtF ("%02u:%02u",Hour,Min);
+      HTM_TxtF ("%02u",Hour);
+      HTM_Colon ();
+      HTM_TxtF ("%02u",Min);
    HTM_TD_End ();
   }
 
@@ -1458,11 +1460,14 @@ static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
 	}
 
       /***** Type of class and duration *****/
-      HTM_TxtF ("%s (%u:%02u)",
-		Txt_TIMETABLE_CLASS_TYPES[ClassType],
-		(DurationNumIntervals / Timetable->Config.IntervalsPerHour),	// Hours
-		(DurationNumIntervals % Timetable->Config.IntervalsPerHour) *
-		Timetable->Config.Range.MinutesPerInterval);			// Minutes
+      HTM_Txt (Txt_TIMETABLE_CLASS_TYPES[ClassType]); HTM_SP ();
+      HTM_OpenParenthesis ();
+	 HTM_Unsigned (DurationNumIntervals / Timetable->Config.IntervalsPerHour);	// Hours
+	 HTM_Colon ();
+	 HTM_TxtF ("%02u",
+		   (DurationNumIntervals % Timetable->Config.IntervalsPerHour) *
+		   Timetable->Config.Range.MinutesPerInterval);				// Minutes
+      HTM_CloseParenthesis ();
 
       /***** Group *****/
       if (GrpCod > 0 && Timetable->Type != Tmt_TUTORING_TIMETABLE)

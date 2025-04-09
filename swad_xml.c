@@ -418,12 +418,11 @@ void XML_PrintTree (struct XMLElement *ParentElem)
 	   i < Level;
 	   i++)
         {
-         HTM_SP ();
-         HTM_SP ();
-         HTM_SP ();
+         HTM_SP (); HTM_SP (); HTM_SP ();
         }
-      HTM_TxtF ("&lt;%s",ParentElem->TagName ? ParentElem->TagName :
-        	                               "");
+      HTM_LT ();
+      if (ParentElem->TagName)
+         HTM_Txt (ParentElem->TagName);
 
       /* Print attributes */
       for (Attribute = ParentElem->FirstAttribute;
@@ -433,7 +432,7 @@ void XML_PrintTree (struct XMLElement *ParentElem)
                    Attribute->AttributeName,
                    Attribute->Content);
 
-      HTM_Txt ("&gt;\n");
+      HTM_GT (); HTM_Txt ("\n");
 
       /***** Print content *****/
       if (ParentElem->Content)
@@ -442,11 +441,9 @@ void XML_PrintTree (struct XMLElement *ParentElem)
               i < Level;
               i++)
 	   {
-	    HTM_SP ();
-	    HTM_SP ();
-	    HTM_SP ();
+	    HTM_SP (); HTM_SP (); HTM_SP ();
 	   }
-         HTM_TxtF ("%s\n",ParentElem->Content);
+         HTM_Txt (ParentElem->Content); HTM_Txt ("\n");
         }
      }
 
@@ -466,12 +463,12 @@ void XML_PrintTree (struct XMLElement *ParentElem)
 	   i < Level;
 	   i++)
         {
-         HTM_SP ();
-         HTM_SP ();
-         HTM_SP ();
+         HTM_SP (); HTM_SP (); HTM_SP ();
         }
-      HTM_TxtF ("&lt;/%s&gt;\n",ParentElem->TagName ? ParentElem->TagName :
-        	                                      "");
+      HTM_LT (); HTM_Slash ();
+      if (ParentElem->TagName)
+	 HTM_Txt (ParentElem->TagName);
+      HTM_GT (); HTM_Txt ("\n");
      }
 
    Level--;

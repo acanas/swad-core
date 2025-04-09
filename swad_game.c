@@ -594,21 +594,13 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
       /* Number of questions, maximum grade, visibility of results */
       HTM_DIV_Begin ("class=\"%s_%s\"",
                      HidVis_GroupClass[Games->Game.Hidden],The_GetSuffix ());
-	 HTM_Txt (Txt_Number_of_questions);
-	 HTM_Colon ();
-	 HTM_NBSP ();
-	 HTM_Unsigned (Games->Game.NumQsts);
-	 HTM_BR ();
+	 HTM_Txt (Txt_Number_of_questions); HTM_Colon (); HTM_NBSP ();
+	 HTM_Unsigned (Games->Game.NumQsts); HTM_BR ();
 
-	 HTM_Txt (Txt_Maximum_grade);
-	 HTM_Colon ();
-	 HTM_NBSP ();
-	 HTM_Double (Games->Game.MaxGrade);
-	 HTM_BR ();
+	 HTM_Txt (Txt_Maximum_grade); HTM_Colon (); HTM_NBSP ();
+	 HTM_Double (Games->Game.MaxGrade); HTM_BR ();
 
-	 HTM_Txt (Txt_Result_visibility);
-	 HTM_Colon ();
-	 HTM_NBSP ();
+	 HTM_Txt (Txt_Result_visibility); HTM_Colon (); HTM_NBSP ();
 	 TstVis_ShowVisibilityIcons (Games->Game.Visibility,Games->Game.Hidden);
       HTM_DIV_End ();
 
@@ -631,9 +623,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 				  The_GetSuffix ());
 	    if (ShowingOneOrSeveral == Lay_SHOWING_ONLY_ONE)
 	      {
-	       HTM_Txt (Txt_Matches);
-	       HTM_Colon ();
-	       HTM_NBSP ();
+	       HTM_Txt (Txt_Matches); HTM_Colon (); HTM_NBSP ();
 	      }
 	    HTM_Unsigned (Games->Game.NumMchs);
 	 HTM_BUTTON_End ();

@@ -395,9 +395,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncPars) (v
       /***** Label *****/
       HTM_LABEL_Begin ("for=\"OtherUsrIDNickOrEMail\" class=\"RM FORM_IN_%s\"",
 		       The_GetSuffix ());
-	 HTM_Txt (Txt_nick_email_or_ID);
-	 HTM_Colon ();
-	 HTM_NBSP ();
+	 HTM_Txt (Txt_nick_email_or_ID); HTM_Colon (); HTM_NBSP ();
       HTM_LABEL_End ();
 
       /***** Input box to enter user *****/

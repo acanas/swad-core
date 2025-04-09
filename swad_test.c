@@ -391,15 +391,10 @@ void Tst_AssessTest (void)
 	 if (TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()))
 	   {
 	    HTM_DIV_Begin ("class=\"CM DAT_STRONG_%s BOLD\"",The_GetSuffix ());
-	       HTM_Txt (Txt_Score);
-	       HTM_Colon ();
-	       HTM_NBSP ();
-	       HTM_Double2Decimals (Print.Score);
-	       HTM_BR ();
+	       HTM_Txt (Txt_Score); HTM_Colon (); HTM_NBSP ();
+	       HTM_Double2Decimals (Print.Score); HTM_BR ();
 
-	       HTM_Txt (Txt_Grade);
-	       HTM_Colon ();
-	       HTM_NBSP ();
+	       HTM_Txt (Txt_Grade); HTM_Colon (); HTM_NBSP ();
 	       TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Tst_SCORE_MAX);
 	    HTM_DIV_End ();
 	   }

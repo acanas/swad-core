@@ -6308,9 +6308,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 
 	 /* Folder */
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_Txt (Txt_Folder);
-	    HTM_Colon ();
-	    HTM_NBSP ();
+	    HTM_Txt (Txt_Folder); HTM_Colon (); HTM_NBSP ();
 	    HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,"",
 			    HTM_REQUIRED,
 			    "size=\"30\" class=\"INPUT_%s\"",The_GetSuffix ());

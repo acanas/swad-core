@@ -283,8 +283,7 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
 		  break;
 	       case Ann_SHOW_ALL:
 		  /* Users' roles who can view this announcement */
-		  HTM_Txt (Txt_Users);
-		  HTM_Colon ();
+		  HTM_Txt (Txt_Users); HTM_Colon ();
 		  for (Role  = Rol_UNK, SomeRolesAreSelected = false;
 		       Role <= Rol_TCH;
 		       Role++)

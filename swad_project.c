@@ -1843,8 +1843,7 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
 			  ClassLabel,The_GetSuffix ());
 	    break;
 	}
-	 HTM_Txt (Txt_Review);
-         HTM_Colon ();
+	 HTM_Txt (Txt_Review); HTM_Colon ();
       HTM_TD_End ();
 
       switch (Projects->View)
@@ -2030,8 +2029,7 @@ static void Prj_ShowAssigned (const struct Prj_Projects *Projects,
 			  ClassLabel,The_GetSuffix ());
 	    break;
 	}
-	 HTM_Txt (Txt_Assigned_QUESTION);
-         HTM_Colon ();
+	 HTM_Txt (Txt_Assigned_QUESTION); HTM_Colon ();
       HTM_TD_End ();
 
       switch (Projects->View)
@@ -2082,8 +2080,7 @@ static void Prj_ShowNumStds (const struct Prj_Projects *Projects,
 			  ClassLabel,The_GetSuffix ());
 	    break;
 	}
-	 HTM_Txt (Txt_Number_of_students);
-         HTM_Colon ();
+	 HTM_Txt (Txt_Number_of_students); HTM_Colon ();
       HTM_TD_End ();
 
       switch (Projects->View)
@@ -2375,8 +2372,7 @@ static void Prj_ShowProposal (const struct Prj_Projects *Projects,
 	                  ClassLabel,The_GetSuffix ());
 	 break;
      }
-	 HTM_Txt (Txt_Proposal);
-         HTM_Colon ();
+	 HTM_Txt (Txt_Proposal); HTM_Colon ();
       HTM_TD_End ();
 
       switch (Projects->View)
@@ -2429,8 +2425,7 @@ static void Prj_ShowTxtField (const struct Prj_Projects *Projects,
 	 // Not applicable
 	 break;
      }
-	 HTM_Txt (Label);
-         HTM_Colon ();
+	 HTM_Txt (Label); HTM_Colon ();
       HTM_TD_End ();
 
       /***** Change text format *****/
@@ -2502,8 +2497,7 @@ static void Prj_ShowURL (const struct Prj_Projects *Projects,
 	 // Not applicable
 	 break;
      }
-	 HTM_Txt (Txt_URL);
-         HTM_Colon ();
+	 HTM_Txt (Txt_URL); HTM_Colon ();
       HTM_TD_End ();
 
       switch (Projects->View)

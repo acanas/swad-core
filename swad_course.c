@@ -1646,8 +1646,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct Usr_Data *UsrDat,Rol_Role_t Role)
 				  Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
 						    Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       HTM_Txt (Txt);
-	       HTM_Colon ();
+	       HTM_Txt (Txt); HTM_Colon ();
 	       free (Txt);
 	    HTM_TH_End ();
 
