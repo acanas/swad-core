@@ -848,11 +848,14 @@ void Tst_GetAndShowTestsStats (Hie_Level_t HieLvl)
 	    HTM_TD_Unsigned (Stats.NumCoursesWithQuestions);
 
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_TxtF ("%u (%.1lf%%)",
-			 Stats.NumCoursesWithPluggableQuestions,
-			 Stats.NumCoursesWithQuestions ? (double) Stats.NumCoursesWithPluggableQuestions * 100.0 /
-							 (double) Stats.NumCoursesWithQuestions :
-							 0.0);
+	       HTM_Unsigned (Stats.NumCoursesWithPluggableQuestions); HTM_SP ();
+	       HTM_OpenParenthesis ();
+		  HTM_TxtF ("%.1lf",
+			    Stats.NumCoursesWithQuestions ? (double) Stats.NumCoursesWithPluggableQuestions * 100.0 /
+							    (double) Stats.NumCoursesWithQuestions :
+							    0.0);
+		  HTM_Percent ();
+	       HTM_CloseParenthesis ();
 	    HTM_TD_End ();
 
 	    HTM_TD_Unsigned        (Stats.NumQsts);
@@ -875,11 +878,14 @@ void Tst_GetAndShowTestsStats (Hie_Level_t HieLvl)
 	 HTM_TD_LINE_TOP_Unsigned (Stats.NumCoursesWithQuestions);
 
 	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",The_GetSuffix ());
-	    HTM_TxtF ("%u (%.1f%%)",
-		      Stats.NumCoursesWithPluggableQuestions,
-		      Stats.NumCoursesWithQuestions ? (double) Stats.NumCoursesWithPluggableQuestions * 100.0 /
-						      (double) Stats.NumCoursesWithQuestions :
-						      0.0);
+	    HTM_Unsigned (Stats.NumCoursesWithPluggableQuestions); HTM_SP ();
+	    HTM_OpenParenthesis ();
+	       HTM_TxtF ("%.1f",
+			 Stats.NumCoursesWithQuestions ? (double) Stats.NumCoursesWithPluggableQuestions * 100.0 /
+							 (double) Stats.NumCoursesWithQuestions :
+							 0.0);
+	       HTM_Percent ();
+	    HTM_CloseParenthesis ();
 	 HTM_TD_End ();
 
 	 HTM_TD_LINE_TOP_Unsigned (Stats.NumQsts);

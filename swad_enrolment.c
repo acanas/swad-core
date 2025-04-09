@@ -1700,7 +1700,7 @@ static void Enr_PutActionModifyOneUsr (HTM_Attributes_t *Attributes,
      };
 
    Enr_EnrRemOneUsrActionBegin (Enr_ENROL_MODIFY_ONE_USR_IN_CRS,Attributes);
-      HTM_TxtF (Txt[UsrBelongsToCrs][MeOrOther]);
+      HTM_Txt (Txt[UsrBelongsToCrs][MeOrOther]);
    Enr_EnrRemOneUsrActionEnd ();
   }
 
@@ -2525,7 +2525,9 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			   HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs.FullName),
 						    "class=\"LT BT_LINK\"");
 			   Str_FreeGoToTitle ();
-			      HTM_TxtF ("%s &gt; %s",Deg.ShrtName,Crs.ShrtName);
+			      HTM_Txt (Deg.ShrtName);
+			      HTM_SP (); HTM_GT (); HTM_SP ();
+			      HTM_Txt (Crs.ShrtName);
 			   HTM_BUTTON_End ();
 			Frm_EndForm ();
 

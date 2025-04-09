@@ -323,10 +323,16 @@ static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)
 	    /* Room name and users */
 	    HTM_NBSP ();
 	    HTM_Txt (RoomFullName);
-	    if (NumUsrsInRoom > 1)
-	       HTM_TxtF (" [%d %s]",NumUsrsInRoom,Txt_connected_PLURAL);
-	    else if (NumUsrsInRoom == 1)
-	       HTM_TxtF (" [1 %s]",Txt_connected_SINGULAR);
+	    if (NumUsrsInRoom)
+	      {
+	       HTM_SP ();
+	       HTM_OpenBracket ();
+		  HTM_Unsigned (NumUsrsInRoom);
+		  HTM_SP ();
+		  HTM_Txt (NumUsrsInRoom == 1 ? Txt_connected_SINGULAR :
+						Txt_connected_PLURAL);
+	       HTM_CloseBracket ();
+	      }
 
             /* End strong if room has users */
 	    if (NumUsrsInRoom)

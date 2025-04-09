@@ -1353,7 +1353,8 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
       HTM_TH (Txt_Degrees_ABBREVIATION,HTM_HEAD_RIGHT);
       HTM_TH (Txt_Courses_ABBREVIATION,HTM_HEAD_RIGHT);
       HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+	 HTM_Char ('+');
 	 HTM_BR ();
 	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
       HTM_TH_End ();
@@ -1390,7 +1391,8 @@ static void Ctr_PutHeadCentersForEdition (void)
       HTM_TH (Txt_Users                   ,HTM_HEAD_RIGHT);
       HTM_TH (Txt_Degrees_ABBREVIATION    ,HTM_HEAD_RIGHT);
       HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+	 HTM_Char ('+');
 	 HTM_BR ();
 	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
       HTM_TH_End ();

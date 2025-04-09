@@ -2323,7 +2323,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 			HTM_TD_Begin ("class=\"RT\"");
 			   HTM_LABEL_Begin ("for=\"AnsStr%u\" class=\"FORM_IN_%s\"",
 					    NumAns,The_GetSuffix ());
-			      HTM_TxtF ("%u)",NumAns + 1);
+			      HTM_Unsigned (NumAns + 1); HTM_CloseParenthesis ();
 			   HTM_LABEL_End ();
 			HTM_TD_End ();
 
@@ -2890,7 +2890,7 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 		  HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"DAT_%s\"",
 				   (unsigned) SvyQst->QstCod,NumAns,
 				   The_GetSuffix ());
-		     HTM_TxtF ("%u)",NumAns + 1);
+		     HTM_Unsigned (NumAns + 1); HTM_CloseParenthesis ();
 		  HTM_LABEL_End ();
 	       HTM_TD_End ();
 

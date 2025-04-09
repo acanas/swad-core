@@ -505,10 +505,13 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"%s\"",Class);
-	       HTM_TxtF ("(%.1f%%)",
-			 NumCrss ? (double) NumCrssWithIndicatorYes[Ind] * 100.0 /
-				   (double) NumCrss :
-				   0.0);
+	       HTM_OpenParenthesis ();
+		  HTM_TxtF ("%.1f",
+			    NumCrss ? (double) NumCrssWithIndicatorYes[Ind] * 100.0 /
+				      (double) NumCrss :
+				      0.0);
+		  HTM_Percent ();
+	       HTM_CloseParenthesis ();
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -524,8 +527,11 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 	 HTM_TD_LINE_TOP_Unsigned (NumCrss);
 
 	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",The_GetSuffix ());
-	    HTM_TxtF ("(%.1f%%)",100.0);
-	 HTM_TD_End ();
+	    HTM_OpenParenthesis ();
+	       HTM_TxtF ("%.1f",100.0);
+	       HTM_Percent ();
+	    HTM_CloseParenthesis ();
+         HTM_TD_End ();
 
       HTM_TR_End ();
 
@@ -596,41 +602,41 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 	    HTM_TR_End ();
 
 	    HTM_TR_Begin (NULL);
-	       HTM_TH_Span (Txt_No_INDEX              ,HTM_HEAD_CENTER,2, 1,NULL);
+	       HTM_TH_Span (Txt_No_INDEX,HTM_HEAD_CENTER,2, 1,NULL);
 	       HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,2,NULL);
-		  HTM_TxtF ("(A) %s",Txt_Syllabus_of_the_course);
+		  HTM_Txt ("(A) "); HTM_Txt (Txt_Syllabus_of_the_course);
 	       HTM_TH_End ();
 	       HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,2,NULL);
-		  HTM_TxtF ("(B) %s",Txt_Guided_academic_assignments);
+		  HTM_Txt ("(B) "); HTM_Txt (Txt_Guided_academic_assignments);
 	       HTM_TH_End ();
 	       HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,2,NULL);
-		  HTM_TxtF ("(C) %s",Txt_Online_tutoring);
+		  HTM_Txt ("(C) "); HTM_Txt (Txt_Online_tutoring);
 	       HTM_TH_End ();
 	       HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,2,NULL);
-		  HTM_TxtF ("(D) %s",Txt_Materials);
+		  HTM_Txt ("(D) "); HTM_Txt (Txt_Materials);
 	       HTM_TH_End ();
 	       HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,2,NULL);
-		  HTM_TxtF ("(E) %s",Txt_Assessment_criteria);
+		  HTM_Txt ("(E) "); HTM_Txt (Txt_Assessment_criteria);
 	       HTM_TH_End ();
 	    HTM_TR_End ();
 
 	    HTM_TR_Begin (NULL);
-	       HTM_TH      (Txt_YES                            ,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_NO                             ,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_YES                            ,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_NO                             ,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_YES                            ,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_NO                             ,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_YES                            ,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_NO                             ,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_YES                            ,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_NO                             ,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_YES	,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_NO	,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_YES	,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_NO 	,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_YES	,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_NO	,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_YES	,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_NO	,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_YES	,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_NO	,HTM_HEAD_CENTER);
 	    HTM_TR_End ();
 	    break;
 	 case Ind_INDICATORS_FULL:
 	    HTM_TR_Begin (NULL);
-	       HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]         ,HTM_HEAD_LEFT  ,3, 1,NULL);
-	       HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]         ,HTM_HEAD_LEFT  ,3, 1,NULL);
+	       HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]  ,HTM_HEAD_LEFT  ,3, 1,NULL);
+	       HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]  ,HTM_HEAD_LEFT  ,3, 1,NULL);
 	       HTM_TH_Span (Txt_Institutional_BR_code          ,HTM_HEAD_LEFT  ,3, 1,NULL);
 	       HTM_TH_Span (Txt_Web_page_of_the_course         ,HTM_HEAD_LEFT  ,3, 1,NULL);
 	       HTM_TH_Span (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],HTM_HEAD_LEFT  ,3, 1,NULL);
@@ -639,48 +645,48 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 	    HTM_TR_End ();
 
 	    HTM_TR_Begin (NULL);
-	       HTM_TH_Span (Txt_No_INDEX                       ,HTM_HEAD_CENTER,2,1,NULL);
+	       HTM_TH_Span (Txt_No_INDEX,HTM_HEAD_CENTER,2,1,NULL);
 	       HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,5,NULL);
-		  HTM_TxtF ("(A) %s",Txt_Syllabus_of_the_course);
+		  HTM_Txt ("(A) "); HTM_Txt (Txt_Syllabus_of_the_course);
 	       HTM_TH_End ();
 	       HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,5,NULL);
-		  HTM_TxtF ("(B) %s",Txt_Guided_academic_assignments);
+		  HTM_Txt ("(B) "); HTM_Txt (Txt_Guided_academic_assignments);
 	       HTM_TH_End ();
 	       HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,5,NULL);
-		  HTM_TxtF ("(C) %s",Txt_Online_tutoring);
+		  HTM_Txt ("(C) "); HTM_Txt (Txt_Online_tutoring);
 	       HTM_TH_End ();
 	       HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,4,NULL);
-		  HTM_TxtF ("(D) %s",Txt_Materials);
+		  HTM_Txt ("(D) "); HTM_Txt (Txt_Materials);
 	       HTM_TH_End ();
 	       HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,4,NULL);
-		  HTM_TxtF ("(E) %s",Txt_Assessment_criteria);
+		  HTM_Txt ("(E) "); HTM_Txt (Txt_Assessment_criteria);
 	       HTM_TH_End ();
 	    HTM_TR_End ();
 
 	    HTM_TR_Begin (NULL);
-	       HTM_TH      (Txt_YES				,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_NO				,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_INFO_TITLE[Inf_SYLLABUS_LEC]	,HTM_HEAD_LEFT  );
-	       HTM_TH      (Txt_INFO_TITLE[Inf_SYLLABUS_PRA]	,HTM_HEAD_LEFT  );
-	       HTM_TH      (Txt_INFO_TITLE[Inf_TEACH_GUIDE]	,HTM_HEAD_LEFT  );
-	       HTM_TH      (Txt_YES				,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_NO				,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_Assignments			,HTM_HEAD_RIGHT );
-	       HTM_TH      (Txt_Files_assignments		,HTM_HEAD_RIGHT );
-	       HTM_TH      (Txt_Files_works			,HTM_HEAD_RIGHT );
-	       HTM_TH      (Txt_YES				,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_NO				,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_Forum_threads			,HTM_HEAD_RIGHT );
-	       HTM_TH      (Txt_Forum_posts			,HTM_HEAD_RIGHT );
-	       HTM_TH      (Txt_Messages_sent_by_teachers	,HTM_HEAD_RIGHT );
-	       HTM_TH      (Txt_YES				,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_NO				,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_Number_of_files_in_DOCUM_zones	,HTM_HEAD_RIGHT );
-	       HTM_TH      (Txt_Number_of_files_in_SHARE_zones	,HTM_HEAD_RIGHT );
-	       HTM_TH      (Txt_YES				,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_NO				,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_INFO_TITLE[Inf_ASSESSMENT]	,HTM_HEAD_LEFT  );
-	       HTM_TH      (Txt_INFO_TITLE[Inf_TEACH_GUIDE]	,HTM_HEAD_LEFT  );
+	       HTM_TH (Txt_YES					,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_NO					,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_INFO_TITLE[Inf_SYLLABUS_LEC]		,HTM_HEAD_LEFT  );
+	       HTM_TH (Txt_INFO_TITLE[Inf_SYLLABUS_PRA]		,HTM_HEAD_LEFT  );
+	       HTM_TH (Txt_INFO_TITLE[Inf_TEACH_GUIDE]		,HTM_HEAD_LEFT  );
+	       HTM_TH (Txt_YES					,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_NO					,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_Assignments				,HTM_HEAD_RIGHT );
+	       HTM_TH (Txt_Files_assignments			,HTM_HEAD_RIGHT );
+	       HTM_TH (Txt_Files_works				,HTM_HEAD_RIGHT );
+	       HTM_TH (Txt_YES					,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_NO					,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_Forum_threads			,HTM_HEAD_RIGHT );
+	       HTM_TH (Txt_Forum_posts				,HTM_HEAD_RIGHT );
+	       HTM_TH (Txt_Messages_sent_by_teachers		,HTM_HEAD_RIGHT );
+	       HTM_TH (Txt_YES					,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_NO					,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_Number_of_files_in_DOCUM_zones	,HTM_HEAD_RIGHT );
+	       HTM_TH (Txt_Number_of_files_in_SHARE_zones	,HTM_HEAD_RIGHT );
+	       HTM_TH (Txt_YES					,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_NO					,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_INFO_TITLE[Inf_ASSESSMENT]		,HTM_HEAD_LEFT  );
+	       HTM_TH (Txt_INFO_TITLE[Inf_TEACH_GUIDE]		,HTM_HEAD_LEFT  );
 	    HTM_TR_End ();
 	 break;
 	}

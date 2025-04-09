@@ -9242,10 +9242,10 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 	    HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,7,NULL);
 	       HTM_OpenParenthesis ();
 		  NumDocsHidden = NumDocs - NumDocsNotHidden;
-		  HTM_TxtF ("%u %s",
-			    NumDocsHidden,
-			    NumDocsHidden == 1 ? Txt_hidden_document :
-						 Txt_hidden_documents);
+		  HTM_Unsigned (NumDocsHidden);
+		  HTM_SP ();
+		  HTM_Txt (NumDocsHidden == 1 ? Txt_hidden_document :
+						Txt_hidden_documents);
 	       HTM_CloseParenthesis ();
 	    HTM_TH_End ();
 
@@ -9941,20 +9941,17 @@ static void Brw_WriteStatsFileZonesTableHead2 (void)
       HTM_TH (Txt_File_zones,HTM_HEAD_LEFT);
 
       HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 HTM_TxtF ("%s/",Txt_Folders);
-	 HTM_BR ();
+	 HTM_Txt (Txt_Folders);	HTM_Slash ();	HTM_BR ();
 	 HTM_Txt (Txt_HIERARCHY_SINGUL_abc[Hie_CRS]);
       HTM_TH_End ();
 
       HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 HTM_TxtF ("%s/",Txt_Files);
-	 HTM_BR ();
+	 HTM_Txt (Txt_Files);	HTM_Slash ();	HTM_BR ();
 	 HTM_Txt (Txt_HIERARCHY_SINGUL_abc[Hie_CRS]);
       HTM_TH_End ();
 
       HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 HTM_TxtF ("%s/",Txt_Size);
-	 HTM_BR ();
+	 HTM_Txt (Txt_Size);	HTM_Slash ();	HTM_BR ();
 	 HTM_Txt (Txt_HIERARCHY_SINGUL_abc[Hie_CRS]);
       HTM_TH_End ();
 
@@ -9974,20 +9971,17 @@ static void Brw_WriteStatsFileZonesTableHead3 (void)
       HTM_TH (Txt_File_zones,HTM_HEAD_LEFT);
 
       HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 HTM_TxtF ("%s/",Txt_Folders);
-	 HTM_BR ();
+	 HTM_Txt (Txt_Folders);	HTM_Slash ();	HTM_BR ();
 	 HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
       HTM_TH_End ();
 
       HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 HTM_TxtF ("%s/",Txt_Files);
-	 HTM_BR ();
+	 HTM_Txt (Txt_Files);	HTM_Slash ();	HTM_BR ();
 	 HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
       HTM_TH_End ();
 
       HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 HTM_TxtF ("%s/",Txt_Size);
-	 HTM_BR ();
+	 HTM_Txt (Txt_Size);	HTM_Slash ();	HTM_BR ();
 	 HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
       HTM_TH_End ();
 

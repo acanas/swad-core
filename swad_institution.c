@@ -480,7 +480,8 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
       HTM_TH (Txt_Courses_ABBREVIATION    ,HTM_HEAD_RIGHT);
       HTM_TH (Txt_Departments_ABBREVIATION,HTM_HEAD_RIGHT);
       HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+	 HTM_Char ('+');
 	 HTM_BR ();
 	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
       HTM_TH_End ();
@@ -1404,7 +1405,8 @@ static void Ins_PutHeadInstitutionsForEdition (void)
       HTM_TH (Txt_Users                        ,HTM_HEAD_RIGHT);
       HTM_TH (Txt_Centers_ABBREVIATION         ,HTM_HEAD_RIGHT);
       HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+	 HTM_Char ('+');
 	 HTM_BR ();
 	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
       HTM_TH_End ();

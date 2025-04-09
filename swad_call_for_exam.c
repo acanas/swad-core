@@ -1001,7 +1001,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	                  The_GetSuffix ());
 	       HTM_NBSP ();
 	       HTM_BR ();
-		  HTM_TxtF (Txt_Call_for_exam);
+	       HTM_Txt (Txt_Call_for_exam);
 	       HTM_BR ();
 	       HTM_NBSP ();
 	    HTM_TD_End ();

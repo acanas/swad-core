@@ -248,7 +248,8 @@ static void TmlNot_WriteTopMessage (Tml_TopMessage_t TopMessage,long PublisherCo
          TmlNot_WriteAuthorName (&PublisherDat,"BT_LINK");
 
 	 /***** Show action made *****/
-	 HTM_TxtF (" %s:",Txt_TIMELINE_NOTE_TOP_MESSAGES[TopMessage]);
+         HTM_SP ();
+         HTM_Txt (Txt_TIMELINE_NOTE_TOP_MESSAGES[TopMessage]); HTM_Colon ();
 
       /***** End container *****/
       HTM_DIV_End ();
@@ -498,32 +499,33 @@ static void TmlNot_WriteLocationInHierarchy (const struct TmlNot_Note *Not,
 	 case TmlNot_INS_DOC_PUB_FILE:
 	 case TmlNot_INS_SHA_PUB_FILE:
 	    /* Write location (institution) in hierarchy */
-	    HTM_TxtF ("%s: %s",
-		      Txt_HIERARCHY_SINGUL_Abc[Hie_INS],Hie[Hie_INS].ShrtName);
+	    HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_INS]); HTM_Colon ();
+	    HTM_SP (); HTM_Txt (Hie[Hie_INS].ShrtName);
 	    break;
 	 case TmlNot_CTR_DOC_PUB_FILE:
 	 case TmlNot_CTR_SHA_PUB_FILE:
 	    /* Write location (center) in hierarchy */
-	    HTM_TxtF ("%s: %s",
-		      Txt_HIERARCHY_SINGUL_Abc[Hie_CTR],Hie[Hie_CTR].ShrtName);
+	    HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]); HTM_Colon ();
+	    HTM_SP (); HTM_Txt (Hie[Hie_CTR].ShrtName);
 	    break;
 	 case TmlNot_DEG_DOC_PUB_FILE:
 	 case TmlNot_DEG_SHA_PUB_FILE:
 	    /* Write location (degree) in hierarchy */
-	    HTM_TxtF ("%s: %s",
-		      Txt_HIERARCHY_SINGUL_Abc[Hie_DEG],Hie[Hie_DEG].ShrtName);
+	    HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]); HTM_Colon ();
+	    HTM_SP (); HTM_Txt (Hie[Hie_DEG].ShrtName);
 	    break;
 	 case TmlNot_CRS_DOC_PUB_FILE:
 	 case TmlNot_CRS_SHA_PUB_FILE:
 	 case TmlNot_CALL_FOR_EXAM:
 	 case TmlNot_NOTICE:
 	    /* Write location (course) in hierarchy */
-	    HTM_TxtF ("%s: %s",
-		      Txt_HIERARCHY_SINGUL_Abc[Hie_CRS],Hie[Hie_CRS].ShrtName);
+	    HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]); HTM_Colon ();
+	    HTM_SP (); HTM_Txt (Hie[Hie_CRS].ShrtName);
 	    break;
 	 case TmlNot_FORUM_POST:
 	    /* Write forum name */
-	    HTM_TxtF ("%s: %s",Txt_Forum,ForumName);
+	    HTM_Txt (Txt_Forum); HTM_Colon ();
+	    HTM_SP (); HTM_Txt (ForumName);
 	    break;
 	 default:
 	    break;

@@ -454,13 +454,20 @@ static void Lay_WritePageTitle (void)
       if (Par_GetMethod () == Par_METHOD_GET &&
 	  Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
 	{
-	 HTM_TxtF ("%s &gt; %s",
-	           Cfg_PLATFORM_SHORT_NAME,Gbl.Hierarchy.Node[Hie_DEG].ShrtName);
+	 HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
+	 HTM_SP (); HTM_GT (); HTM_SP ();
+	 HTM_Txt (Gbl.Hierarchy.Node[Hie_DEG].ShrtName);
 	 if (Gbl.Hierarchy.HieLvl == Hie_CRS)
-	    HTM_TxtF (" &gt; %s",Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+	   {
+	    HTM_SP (); HTM_GT (); HTM_SP ();
+	    HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+	   }
 	}
       else
-	 HTM_TxtF ("%s: %s",Cfg_PLATFORM_SHORT_NAME,Txt_TAGLINE);
+        {
+	 HTM_Txt (Cfg_PLATFORM_SHORT_NAME); HTM_Colon (); HTM_SP ();
+	 HTM_Txt (Txt_TAGLINE);
+        }
 
    HTM_TITLE_End ();
   }

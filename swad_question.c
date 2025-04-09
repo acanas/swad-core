@@ -1428,7 +1428,9 @@ static void Qst_WriteIntAns (struct Qst_Question *Question,
                              __attribute__((unused)) const char *ClassFeedback)
   {
    HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
-      HTM_TxtF ("(%ld)",Question->Answer.Integer);
+      HTM_OpenParenthesis ();
+         HTM_Long (Question->Answer.Integer);
+      HTM_CloseParenthesis ();
    HTM_SPAN_End ();
   }
 
@@ -2178,7 +2180,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		     /***** Center column: letter of the answer and expand / contract icon *****/
 		     HTM_TD_Begin ("class=\"FORM_IN_%s Qst_ANS_CENTER_COL %s\"",
 				   The_GetSuffix (),The_GetColorRows ());
-			HTM_TxtF ("%c)",'a' + (char) NumOpt);
+			HTM_Char ('a' + (char) NumOpt);
+			HTM_CloseParenthesis ();
 
 			/* Icon to expand (show the answer) */
 			HTM_A_Begin ("href=\"\" id=\"exp_%u\"%s"

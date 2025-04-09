@@ -223,9 +223,15 @@ void HieCfg_Shortcut (Vie_ViewType_t ViewType,ParCod_Param_t ParCode,long HieCod
 			    Par_CodeStr[ParCode],HieCod,The_GetSuffix ());
 	   }
 	 if (ParCode == ParCod_None)
-	    HTM_TxtF ("%s/",Cfg_URL_SWAD_CGI);
+	   {
+	    HTM_Txt (Cfg_URL_SWAD_CGI);
+	    HTM_Slash ();
+	   }
 	 else
-	    HTM_TxtF ("%s/?%s=%ld",Cfg_URL_SWAD_CGI,Par_CodeStr[ParCode],HieCod);
+	   {
+	    HTM_Txt (Cfg_URL_SWAD_CGI); HTM_Slash (); HTM_Question ();
+	    HTM_Txt (Par_CodeStr[ParCode]); HTM_Char ('='); HTM_Long (HieCod);
+	   }
 	 if (ViewType == Vie_VIEW)
 	    HTM_A_End ();
       HTM_TD_End ();
@@ -288,11 +294,13 @@ void HieCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap)
 
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
-	 HTM_TxtF ("%u (%.1lf%%)",
-		   NumCtrsWithMap,
-		   NumCtrs ? (double) NumCtrsWithMap * 100.0 /
-			     (double) NumCtrs :
-			     0.0);
+         HTM_Unsigned (NumCtrsWithMap); HTM_SP ();
+         HTM_OpenParenthesis ();
+	    HTM_TxtF ("%.1lf",
+		      NumCtrs ? (double) NumCtrsWithMap * 100.0 / (double) NumCtrs :
+				0.0);
+	    HTM_Percent ();
+	 HTM_CloseParenthesis ();
       HTM_TD_End ();
 
    HTM_TR_End ();

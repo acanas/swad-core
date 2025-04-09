@@ -296,8 +296,9 @@ static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
 	 HTM_Colon ();
 	 HTM_NBSP ();
 	 HTM_SPAN_Begin ("class=\"DAT_STRONG_%s\"",The_GetSuffix ());
-	    HTM_TxtF ("%s %s UTC",CurrentTimeUTC->StrDate,
-				  CurrentTimeUTC->StrTime);
+	    HTM_Txt (CurrentTimeUTC->StrDate); HTM_SP ();
+	    HTM_Txt (CurrentTimeUTC->StrTime); HTM_SP ();
+	    HTM_Txt ("UTC");
 	 HTM_SPAN_End ();
 	}
 

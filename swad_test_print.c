@@ -472,7 +472,8 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"Qst_TXT_%s\"",
 	                        QstInd,NumOpt,The_GetSuffix ());
-		  HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
+		  HTM_Char ('a' + (char) NumOpt);
+		  HTM_CloseParenthesis (); HTM_NBSP ();
 	       HTM_LABEL_End ();
 	    HTM_TD_End ();
 

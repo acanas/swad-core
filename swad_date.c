@@ -237,9 +237,10 @@ void Dat_WriteTimeToGenerateAndSendPage (void)
 
    Dat_WriteTime (StrTimeGenerationInMicroseconds,Dat_GetTimeGenerationInMicroseconds ());
    Dat_WriteTime (StrTimeSendInMicroseconds      ,Dat_GetTimeSendInMicroseconds ());
-   HTM_TxtF ("%s %s %s %s",
-             Txt_PAGE1_Page_generated_in,StrTimeGenerationInMicroseconds,
-             Txt_PAGE2_and_sent_in,StrTimeSendInMicroseconds);
+   HTM_Txt (Txt_PAGE1_Page_generated_in);	HTM_SP ();
+   HTM_Txt (StrTimeGenerationInMicroseconds);	HTM_SP ();
+   HTM_Txt (Txt_PAGE2_and_sent_in);		HTM_SP ();
+   HTM_Txt (StrTimeSendInMicroseconds);
   }
 
 /*****************************************************************************/
@@ -1714,11 +1715,19 @@ void Dat_WriteHoursMinutesSecondsFromSeconds (time_t Seconds)
 
    Seconds %= 60;
    if (Hours)
-      HTM_TxtF ("%ld:%02ld&prime;%02ld&Prime;",(long) Hours,(long) Minutes,(long) Seconds);
+     {
+      HTM_Long ((long) Hours);			HTM_Colon ();
+      HTM_TxtF ("%02ld",(long) Minutes);	HTM_Txt ("&prime;");
+      HTM_TxtF ("%02ld",(long) Seconds);
+     }
    else if (Minutes)
-      HTM_TxtF ("%ld&prime;%02ld&Prime;",(long) Minutes,(long) Seconds);
+     {
+      HTM_Long ((long) Minutes);		HTM_Txt ("&prime;");
+      HTM_TxtF ("%02ld",(long) Seconds);
+     }
    else
-      HTM_TxtF ("%ld&Prime;",(long) Seconds);
+      HTM_Long ((long) Seconds);
+   HTM_Txt ("&Prime;");
   }
 
 /*****************************************************************************/

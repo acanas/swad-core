@@ -458,8 +458,7 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
       [Hie_CRS] = TabCrs,
      };
 
-   HTM_TxtF ("<h1 id=\"main_title\" class=\"MAIN_TITLE_%s\">",
-	     The_GetSuffix ());
+   HTM_TxtF ("<h1 id=\"main_title\" class=\"MAIN_TITLE_%s\">",The_GetSuffix ());
 
       /***** Logo and text *****/
       HTM_DIV_Begin ("id=\"big_name_container\"");

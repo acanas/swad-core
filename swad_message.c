@@ -565,7 +565,9 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool OtherRecipientsBefo
 	{
 	 Nck_DB_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Nickname);
 	 if (Nickname[0])
-	    HTM_TxtF ("@%s",Nickname);
+	   {
+	    HTM_Char ('@'); HTM_Txt (Nickname);
+	   }
 	}
    HTM_TEXTAREA_End ();
   }
@@ -2254,7 +2256,7 @@ void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg)
 			  "MSG_TIT",The_GetSuffix (),
 		 NewMsg ? "MSG_BG_NEW" :
 			  "MSG_BG" ,The_GetSuffix ());
-      HTM_TxtF ("%lu:",MsgNum);
+      HTM_UnsignedLong (MsgNum); HTM_Colon ();
    HTM_TD_End ();
   }
 
@@ -2311,7 +2313,11 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 	    if (Subject[0])
 	       HTM_Txt (Subject);
 	    else
-	       HTM_TxtF ("[%s]",Txt_no_subject);
+	      {
+	       HTM_OpenBracket ();
+	          HTM_Txt (Txt_no_subject);
+	       HTM_CloseBracket ();
+	      }
 
 	 /***** End form to expand the message *****/
 	 HTM_BUTTON_End ();
@@ -2459,7 +2465,11 @@ static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
 		 }
 	      }
 	    else
-	       HTM_TxtF ("[%s]",Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);	// User not found, likely an old user who has been removed
+	      {
+	       HTM_OpenBracket ();
+	          HTM_Txt (Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);	// User not found, likely an old user who has been removed
+	       HTM_CloseBracket ();
+	      }
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -2593,7 +2603,11 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 		  if (UsrValid)
 		     HTM_Txt (UsrDat.FullName);
 		  else
-		     HTM_TxtF ("[%s]",Txt_unknown_recipient);	// User not found, likely a user who has been removed
+		    {
+		     HTM_OpenBracket ();
+		        HTM_Txt (Txt_unknown_recipient);	// User not found, likely a user who has been removed
+		     HTM_CloseBracket ();
+		    }
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -2607,10 +2621,12 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 
 	       HTM_TD_Begin ("colspan=\"3\" class=\"LM MSG_AUT_%s\"",
 	                     The_GetSuffix ());
-		  HTM_TxtF ("[%u %s]",
-			    NumRecipients.Unknown,
-			    (NumRecipients.Unknown == 1) ? Txt_unknown_recipient :
+		  HTM_OpenBracket ();
+		     HTM_Unsigned (NumRecipients.Unknown);
+		     HTM_SP ();
+		     HTM_Txt (NumRecipients.Unknown == 1 ? Txt_unknown_recipient :
 							   Txt_unknown_recipients);
+		  HTM_CloseBracket ();
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -2631,7 +2647,8 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 			HTM_BUTTON_Submit_Begin (Txt_View_all_recipients,
 			                         "class=\"LM BT_LINK\"");
 			   HTM_TxtF (Txt_and_X_other_recipients,
-				     NumRecipients.Known - NumRecipients.ToShow);
+				     NumRecipients.Known -
+				     NumRecipients.ToShow);
 			HTM_BUTTON_End ();
 		  Frm_EndForm ();
 	       HTM_TD_End ();

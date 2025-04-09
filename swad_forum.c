@@ -989,14 +989,20 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
          switch (Disabled)
            {
             case For_DISABLED:
-               HTM_TxtF ("[%s]",Txt_FORUM_Post_banned);
+               HTM_OpenBracket ();
+                  HTM_Txt (Txt_FORUM_Post_banned);
+               HTM_CloseBracket ();
                break;
             case For_ENABLED:
             default:
 	       if (Subject[0])
 		  HTM_Txt (Subject);
 	       else
-		  HTM_TxtF ("[%s]",Txt_no_subject);
+	         {
+                  HTM_OpenBracket ();
+		     HTM_Txt (Txt_no_subject);
+                  HTM_CloseBracket ();
+	         }
                break;
            }
       HTM_TD_End ();
@@ -1162,8 +1168,12 @@ static void For_WriteNumberOfPosts (const struct For_Forums *Forums,long UsrCod)
 
    /***** Write number of posts *****/
    HTM_DIV_Begin ("class=\"LT MSG_AUT_%s\"",The_GetSuffix ());
-      HTM_TxtF ("[%u %s]",NumPsts,NumPsts == 1 ? Txt_FORUM_post :
-						 Txt_FORUM_posts);
+      HTM_OpenBracket ();
+	 HTM_Unsigned (NumPsts);
+	 HTM_SP ();
+	 HTM_Txt (NumPsts == 1 ? Txt_FORUM_post :
+				 Txt_FORUM_posts);
+      HTM_CloseBracket ();
    HTM_DIV_End ();
   }
 
@@ -2473,7 +2483,9 @@ static void For_LinkToFirstPageWithSubject (const struct For_Forums *Forums,
 	    switch (Thr->Disabled[Dat_STR_TIME])
 	      {
 	       case For_DISABLED:
-		  HTM_TxtF ("[%s]",Txt_FORUM_Post_banned);
+		  HTM_OpenBracket ();
+		     HTM_Txt (Txt_FORUM_Post_banned);
+		  HTM_CloseBracket ();
 		  break;
 	       case For_ENABLED:
 		  HTM_Txt (Thr->Subject);

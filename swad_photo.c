@@ -2491,12 +2491,10 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
      }
    else
       HTM_IMG (Cfg_URL_ICON_PUBLIC,"usr_bl.jpg",Deg->ShrtName,
-	       "style=\"width:%upx;height:%upx;\"",
-	       PhotoWidth,PhotoHeight);
+	       "style=\"width:%upx;height:%upx;\"",PhotoWidth,PhotoHeight);
 
    /***** Caption *****/
-   HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION CLASSPHOTO_%s\"",
-                  The_GetSuffix ());
+   HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION CLASSPHOTO_%s\"",The_GetSuffix ());
       HTM_Txt (Deg->ShrtName);
       HTM_BR ();
       HTM_Int (NumStds);
@@ -2507,9 +2505,11 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
       HTM_NBSP ();
       HTM_Txt (Txt_photos);
       HTM_BR ();
-      HTM_TxtF ("(%d%%)",
-		NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
-			      0);
+      HTM_OpenParenthesis ();
+	 HTM_Int (NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
+				0);
+	 HTM_Percent ();
+      HTM_CloseParenthesis ();
    HTM_DIV_End ();
 
    if (SeeOrPrint == Pho_DEGREES_SEE)

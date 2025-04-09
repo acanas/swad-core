@@ -756,7 +756,9 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Gam_Games *Games,
 	 HTM_DIV_Begin ("class=\"%s_%s\"",
 			HidVis_DataClass[Games->Game.Hidden],
 			The_GetSuffix ());
-	    HTM_TxtF ("%u/%u",Match->Status.QstInd,NumQsts);
+	    HTM_Unsigned (Match->Status.QstInd);
+	    HTM_Slash ();
+	    HTM_Unsigned (NumQsts);
 	 HTM_DIV_End ();
 	}
 
@@ -2150,7 +2152,8 @@ static void Mch_WriteNumRespondersQst (struct Mch_Match *Match)
 	    Match->Status.NumPlayers = Mch_DB_GetNumPlayers (Match->MchCod);
 
 	    /* Show current number of players */
-	    HTM_TxtF ("/%u",Match->Status.NumPlayers);
+	    HTM_Slash ();
+	    HTM_Unsigned (Match->Status.NumPlayers);
 	   }
 
       HTM_STRONG_End ();
@@ -2206,7 +2209,7 @@ static void Mch_PutCountdownAndHourglassIcon (struct Mch_Match *Match)
 	    if (Match->Status.Countdown > 0)
 	      {
 	       HTM_TxtF ("%02ld",Match->Status.Countdown);
-	       HTM_Txt ("&prime;");
+	       HTM_Txt ("&Prime;");
 	      }
 	    HTM_BR ();
 
@@ -2277,7 +2280,10 @@ static void Mch_PutFormCountdown (struct Mch_Match *Match,long Seconds,const cha
 
 	    HTM_NBSP ();
 	    if (Seconds >= 0)
-	       HTM_TxtF ("%ld&Prime;",Seconds);
+	      {
+	       HTM_Long (Seconds);
+	       HTM_Txt ("&Prime;");
+	      }
 	    else
 	      {
 	       HTM_Txt ("&infin;");
@@ -2423,7 +2429,9 @@ static void Mch_ShowNumQstInMch (const struct Mch_Match *Match)
 	    HTM_Txt (Txt_MATCH_End);
 	    break;
 	 default:
-	    HTM_TxtF ("%u/%u",Match->Status.QstInd,NumQsts);
+	    HTM_Unsigned (Match->Status.QstInd);
+	    HTM_Slash ();
+	    HTM_Unsigned (NumQsts);
 	    break;
 	}
    HTM_DIV_End ();
@@ -2846,7 +2854,7 @@ static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
 	    /***** Write letter for this option *****/
 	    HTM_TD_Begin ("class=\"MCH_TCH_BUTTON_TD\"");
 	       HTM_DIV_Begin ("class=\"MCH_TCH_BUTTON BT_%c\"",'A' + (char) NumOpt);
-		  HTM_TxtF ("%c",'a' + (char) NumOpt);
+		  HTM_Char ('a' + (char) NumOpt);
 	       HTM_DIV_End ();
 	    HTM_TD_End ();
 
@@ -2937,7 +2945,7 @@ static void Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 					   Update == Mch_CHANGE_STATUS_BY_STUDENT ? " MCH_STD_ANSWER_SELECTED" :
 										    "",
 					   'A' + (char) NumOpt);
-		     HTM_TxtF ("%c",'a' + (char) NumOpt);
+		     HTM_Char ('a' + (char) NumOpt);
 		  HTM_BUTTON_End ();
 
 	       Frm_EndForm ();

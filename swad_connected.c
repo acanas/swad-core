@@ -366,7 +366,7 @@ static void Con_ShowConnectedUsrsBelongingToScope (Hie_Level_t HieLvl,
    Con_GetNumConnectedWithARole (HieLvl,Rol_UNK,&Usrs);
 
    /* Write number of connected users */
-   HTM_TxtF ("%u %s ",Usrs.NumUsrs,Txt_from);
+   HTM_Unsigned (Usrs.NumUsrs); HTM_SP (); HTM_Txt (Txt_from); HTM_SP ();
 
    /* Put form to change scope */
    Frm_BeginForm (ActLstCon);
@@ -408,7 +408,8 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
       HTM_BUTTON_Submit_Begin (Act_GetActionText (ActLstCon),"class=\"BT_LINK\"");
 	 Str_Copy (CourseName,Gbl.Hierarchy.Node[Hie_CRS].ShrtName,sizeof (CourseName) - 1);
 	 Con_GetNumConnectedWithARole (Hie_CRS,Rol_UNK,&Usrs);
-	 HTM_TxtF ("%u %s %s",Usrs.NumUsrs,Txt_from,CourseName);
+	 HTM_Unsigned (Usrs.NumUsrs); HTM_SP ();
+	 HTM_Txt (Txt_from); HTM_SP (); HTM_Txt (CourseName);
       HTM_BUTTON_End ();
    Frm_EndForm ();
 

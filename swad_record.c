@@ -2631,7 +2631,7 @@ static void Rec_ShowNickname (struct Usr_Data *UsrDat,
 		  HTM_BUTTON_Submit_Begin (Title[Usr_ItsMe (UsrDat->UsrCod)],
 					   "class=\"BT_LINK\"");
 	      }
-	    HTM_TxtF ("@%s",UsrDat->Nickname);
+	    HTM_Char ('@'); HTM_Txt (UsrDat->Nickname);
 	    if (PutFormLinks == Frm_PUT_FORM)
 	      {
 		  HTM_BUTTON_End ();

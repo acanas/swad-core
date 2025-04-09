@@ -1646,7 +1646,7 @@ static void ExaRes_ShowExamResultNumQsts (struct ExaPrn_Print *Print,
 	 switch (ICanView->Result)
 	   {
 	    case Usr_CAN:
-	       HTM_TxtF ("%u",Print->NumQsts.All);
+	       HTM_Unsigned (Print->NumQsts.All);
 	       if (Print->NumQsts.All != Print->NumQsts.Valid.Total)
 		 {
 		  HTM_SP ();

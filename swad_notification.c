@@ -662,7 +662,8 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	    For_ResetForums (&Forums);
 	    For_GetThreadForumTypeAndHieCodOfAPost (Cod,&Forums.Forum);
 	    For_SetForumName (&Forums.Forum,ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
-	    HTM_TxtF ("%s: %s",Txt_Forum,ForumName);
+	    HTM_Txt (Txt_Forum); HTM_Colon ();
+	    HTM_SP (); HTM_Txt (ForumName);
 	    switch (PutForm)
 	      {
 	       case Frm_DONT_PUT_FORM:
@@ -701,9 +702,8 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 		 HieLvl--)
 	       if (Hie[HieLvl].HieCod > 0)
 		 {
-		  HTM_TxtF ("%s: %s",
-			    Txt_HIERARCHY_SINGUL_Abc[HieLvl],
-			    Hie[HieLvl].ShrtName);
+	          HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[HieLvl]); HTM_Colon ();
+	          HTM_SP (); HTM_Txt (Hie[HieLvl].ShrtName);
 		  break;
 		 }
 	    if (HieLvl < Hie_INS)

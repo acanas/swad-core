@@ -919,7 +919,7 @@ static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs)
                                "class=\"BT_LINK FORM_OUT_%s\"",
                                The_GetSuffix ());
       free (Title);
-	 HTM_TxtF ("#%u",Rank);
+         HTM_Char ('#'); HTM_Unsigned (Rank);
       HTM_BUTTON_End ();
    Frm_EndForm ();
   }
@@ -1383,7 +1383,7 @@ static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,
 
    HTM_TD_Begin ("class=\"RM %s_%s %s\"",
 		 Class[MeOrOther],The_GetSuffix (),The_GetColorRows ());
-      HTM_TxtF ("#%u",Rank);
+      HTM_Char ('#'); HTM_Unsigned (Rank);
    HTM_TD_End ();
 
    /***** Check if I can see the public profile *****/

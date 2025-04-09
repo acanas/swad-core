@@ -2453,6 +2453,7 @@ static void Sta_ShowNumHitsPerHour (unsigned NumHits,
 
 static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned ColumnWidth)
   {
+   extern const char *Txt_hours_ABBREVIATION;
    unsigned BarHeight;
 
    HTM_TD_Begin ("class=\"CB DAT_SMALL_%s\" style=\"width:%upx;\"",
@@ -2461,11 +2462,9 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
       /* Draw bar with a height porportional to the number of clicks */
       if (Hits->Num > 0.0)
 	{
-	 HTM_TxtF ("%u%%",(unsigned) (((Hits->Num * 100.0) /
-					Hits->Total) + 0.5));
-	 HTM_BR ();
-	 HTM_DoubleFewDigits (Hits->Num);
-	 HTM_BR ();
+	 HTM_Unsigned ((unsigned) (((Hits->Num * 100.0) / Hits->Total) + 0.5));
+	 HTM_Percent (); HTM_BR ();
+	 HTM_DoubleFewDigits (Hits->Num); HTM_BR ();
 	 BarHeight = (unsigned) (((Hits->Num * 500.0) / Hits->Max) + 0.5);
 	 if (BarHeight == 0)
 	    BarHeight = 1;
@@ -2474,14 +2473,13 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
 	}
       else
 	{
-	 HTM_Txt ("0%");
-	 HTM_BR ();
+	 HTM_Txt ("0%"); HTM_BR ();
 	 HTM_0 ();
 	}
 
       /* Write the hour */
       HTM_BR ();
-      HTM_TxtF ("%uh",Hour);
+      HTM_Unsigned (Hour); HTM_Txt (Txt_hours_ABBREVIATION);
 
    HTM_TD_End ();
   }
@@ -2643,6 +2641,7 @@ static void Sta_WriteLabelsXAxisAccMin (double IncX,const char *Format)
 
 static void Sta_WriteHitsMinute (unsigned Minute,double HitsNum,double MaxX)
   {
+   extern const char *Txt_hours_ABBREVIATION;
    unsigned BarWidth;
 
    /***** Begin row *****/
@@ -2685,7 +2684,7 @@ static void Sta_WriteHitsMinute (unsigned Minute,double HitsNum,double MaxX)
 		       " background-repeat:repeat;\"",
 		       The_GetSuffix (),
 		       Sta_WIDTH_SEMIDIVISION_GRAPHIC,Cfg_URL_ICON_PUBLIC);
-	    HTM_TxtF ("%02uh",(Minute + 30) / 60);
+	    HTM_TxtF ("%02u",(Minute + 30) / 60); HTM_Txt (Txt_hours_ABBREVIATION);
 	 HTM_TD_End ();
 	}
 
