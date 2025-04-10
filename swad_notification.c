@@ -1743,10 +1743,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
 
 	 /***** Number of unseen notifications *****/
 	 HTM_SPAN_Begin ("id=\"notif_all\"");
-	    HTM_Unsigned (NumUnseenNtfs);
-	    HTM_NBSP ();
-	    HTM_Txt (NumUnseenNtfs == 1 ? Txt_notification :
-					  Txt_notifications);
+	    HTM_UnsignedTxt (NumUnseenNtfs,Txt_notification,Txt_notifications);
 	 HTM_SPAN_End ();
 
 	 /***** Icon and number of new notifications *****/
@@ -1756,11 +1753,9 @@ void Ntf_WriteNumberOfNewNtfs (void)
 	    HTM_IMG (Cfg_URL_ICON_PUBLIC,"bell.svg",Txt_Notifications,
 		     "class=\"ICO16x16 NOTIF_ICO_%s\"",The_GetSuffix ());
 	    HTM_NBSP ();
-	    HTM_Unsigned (NumNewNtfs);
 	    HTM_SPAN_Begin ("id=\"notif_new\"");
-	       HTM_NBSP ();
-	       HTM_Txt (NumNewNtfs == 1 ? Txt_NOTIF_new_SINGULAR :
-					  Txt_NOTIF_new_PLURAL);
+	       HTM_UnsignedTxt (NumNewNtfs,
+				Txt_NOTIF_new_SINGULAR,Txt_NOTIF_new_PLURAL);
 	    HTM_SPAN_End ();
 	   }
 

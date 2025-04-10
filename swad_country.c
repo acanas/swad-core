@@ -312,7 +312,6 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
    extern const char *Txt_Centers_ABBREVIATION;
    extern const char *Txt_Degrees_ABBREVIATION;
    extern const char *Txt_Courses_ABBREVIATION;
-   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    Hie_Order_t Order;
    static HTM_HeadAlign Align[Hie_NUM_ORDERS] =
      {
@@ -351,12 +350,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
       HTM_TH (Txt_Centers_ABBREVIATION     ,HTM_HEAD_RIGHT);
       HTM_TH (Txt_Degrees_ABBREVIATION     ,HTM_HEAD_RIGHT);
       HTM_TH (Txt_Courses_ABBREVIATION     ,HTM_HEAD_RIGHT);
-      HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-	 HTM_Char ('+');
-	 HTM_BR ();
-	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-      HTM_TH_End ();
+      Usr_THTchsPlusStds ();
 
    HTM_TR_End ();
   }
@@ -1380,7 +1374,7 @@ static void Cty_PutFormToCreateCountry (void)
 	 /***** Number of users *****/
 	 HTM_TD_Begin ("rowspan=\"%u\" class=\"RT DAT_%s\"",
 		       1 + Lan_NUM_LANGUAGES,The_GetSuffix ());
-	    HTM_Unsigned (0);
+	    HTM_0 ();
 	 HTM_TD_End ();
 
 	 /***** Number of institutions *****/

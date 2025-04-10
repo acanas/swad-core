@@ -501,8 +501,7 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
       else
 	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
       HTM_SPAN_Begin ("class=\"%s_%s\"",
-		       HidVis_TitleClass[Events->Event.Hidden],
-		       The_GetSuffix ());
+		       HidVis_TitleClass[Events->Event.Hidden],The_GetSuffix ());
          HTM_Unsigned (Events->Event.NumStdsTotal);
       HTM_SPAN_End ();
       HTM_TD_End ();
@@ -533,8 +532,7 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
 	 Att_GetAndWriteNamesOfGrpsAssociatedToEvent (&Events->Event);
 
       HTM_DIV_Begin ("class=\"%s_%s\"",
-                     HidVis_DataClass[Events->Event.Hidden],
-		     The_GetSuffix ());
+                     HidVis_DataClass[Events->Event.Hidden],The_GetSuffix ());
 	 HTM_Txt (Description);
       HTM_DIV_End ();
 
@@ -2647,7 +2645,7 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
 	       HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
 	                     The_GetSuffix (),The_GetColorRows ());
 		  HTM_LABEL_Begin ("for=\"Event%u\"",NumAttEvent);
-		     HTM_UnsignedColon (NumAttEvent + 1);
+		     HTM_Unsigned (NumAttEvent + 1); HTM_Colon ();
 		  HTM_LABEL_End ();
 	       HTM_TD_End ();
 
@@ -3061,7 +3059,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 		    UsrDat->Accepted ? "DAT_STRONG" :
 				       "DAT",
 		    The_GetSuffix (),The_GetColorRows ());
-	 HTM_UnsignedColon (NumUsr);
+	 HTM_Unsigned (NumUsr); HTM_Colon ();
       HTM_TD_End ();
 
       /***** Show student's photo *****/
@@ -3133,7 +3131,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 
 	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
 			  Class[Present],The_GetSuffix (),The_GetColorRows ());
-	       HTM_UnsignedColon (NumAttEvent + 1);
+	       HTM_Unsigned (NumAttEvent + 1); HTM_Colon ();
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());

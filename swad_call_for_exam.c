@@ -1161,8 +1161,11 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 		  HTM_SELECT_End ();
 		 }
 	       else if (CallsForExams->CallForExam.StartTime.Hour)
-		  HTM_TxtF ("%2u:%02u",CallsForExams->CallForExam.StartTime.Hour,
-				       CallsForExams->CallForExam.StartTime.Minute);
+	         {
+		  HTM_Unsigned2 (CallsForExams->CallForExam.StartTime.Hour);
+		  HTM_Colon ();
+		  HTM_Unsigned02 (CallsForExams->CallForExam.StartTime.Minute);
+	         }
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -1209,28 +1212,20 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 		 {
 		  if (CallsForExams->CallForExam.Duration.Hour)
 		    {
-		     HTM_Unsigned (CallsForExams->CallForExam.Duration.Hour);
 		     if (CallsForExams->CallForExam.Duration.Minute)
 		       {
-			HTM_Txt (Txt_hours_ABBREVIATION);
-			HTM_SP ();
+		        HTM_Unsigned (CallsForExams->CallForExam.Duration.Hour);
+			HTM_Txt (Txt_hours_ABBREVIATION); HTM_SP ();
 			HTM_Unsigned (CallsForExams->CallForExam.Duration.Minute);
-			HTM_Txt ("&prime;");
+			HTM_Minutes ();
 		       }
 		     else
-		       {
-			HTM_NBSP ();
-			HTM_Txt (CallsForExams->CallForExam.Duration.Hour == 1 ? Txt_hour :
-										 Txt_hours);
-		       }
+		        HTM_UnsignedTxt (CallsForExams->CallForExam.Duration.Hour,
+					 Txt_hour,Txt_hours);
 		    }
 		  else if (CallsForExams->CallForExam.Duration.Minute)
-		    {
-		     HTM_Unsigned (CallsForExams->CallForExam.Duration.Minute);
-		     HTM_NBSP ();
-		     HTM_Txt (CallsForExams->CallForExam.Duration.Minute == 1 ? Txt_minute :
-										Txt_minutes);
-		    }
+		     HTM_UnsignedTxt (CallsForExams->CallForExam.Duration.Minute,
+				      Txt_minute,Txt_minutes);
 		 }
 	    HTM_TD_End ();
 

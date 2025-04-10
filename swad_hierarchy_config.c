@@ -224,13 +224,12 @@ void HieCfg_Shortcut (Vie_ViewType_t ViewType,ParCod_Param_t ParCode,long HieCod
 	   }
 	 if (ParCode == ParCod_None)
 	   {
-	    HTM_Txt (Cfg_URL_SWAD_CGI);
-	    HTM_Slash ();
+	    HTM_Txt (Cfg_URL_SWAD_CGI); HTM_Slash ();
 	   }
 	 else
 	   {
 	    HTM_Txt (Cfg_URL_SWAD_CGI); HTM_Slash (); HTM_Question ();
-	    HTM_Txt (Par_CodeStr[ParCode]); HTM_Char ('='); HTM_Long (HieCod);
+	    HTM_Txt (Par_CodeStr[ParCode]); HTM_Equal (); HTM_Long (HieCod);
 	   }
 	 if (ViewType == Vie_VIEW)
 	    HTM_A_End ();

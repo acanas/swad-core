@@ -536,10 +536,7 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 	    /* Valid questions */
 	    HTM_TD_Begin ("class=\"RT DAT_GREEN_%s LINE_BOTTOM %s\"",
 			  The_GetSuffix (),The_GetColorRows ());
-	       if (Print.NumQsts.Valid.Total)
-		  HTM_Unsigned (Print.NumQsts.Valid.Total);
-	       else
-		  HTM_Light0 ();
+	       HTM_UnsignedLight0 (Print.NumQsts.Valid.Total);
 	    HTM_TD_End ();
 
 	    /* Invalid questions */
@@ -547,53 +544,35 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 	                  The_GetSuffix (),The_GetColorRows ());
 	       NumQstsInvalid = Print.NumQsts.All -
 				Print.NumQsts.Valid.Total;
-	       if (NumQstsInvalid)
-		  HTM_Unsigned (NumQstsInvalid);
-	       else
-		  HTM_Light0 ();
+	       HTM_UnsignedLight0 (NumQstsInvalid);
 	    HTM_TD_End ();
 
 	    /* Write number of correct questions */
 	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM LINE_LEFT %s\"",
 	                  The_GetSuffix (),The_GetColorRows ());
-	       if (Print.NumQsts.Valid.Correct)
-		  HTM_Unsigned (Print.NumQsts.Valid.Correct);
-	       else
-		  HTM_Light0 ();
+	       HTM_UnsignedLight0 (Print.NumQsts.Valid.Correct);
 	    HTM_TD_End ();
 
 	    /* Write number of wrong questions */
 	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM %s\"",
 	                  The_GetSuffix (),The_GetColorRows ());
-	       if (Print.NumQsts.Valid.Wrong.Negative)
-		  HTM_Unsigned (Print.NumQsts.Valid.Wrong.Negative);
-	       else
-		  HTM_Light0 ();
+	       HTM_UnsignedLight0 (Print.NumQsts.Valid.Wrong.Negative);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM %s\"",
 	                  The_GetSuffix (),The_GetColorRows ());
-	       if (Print.NumQsts.Valid.Wrong.Zero)
-		  HTM_Unsigned (Print.NumQsts.Valid.Wrong.Zero);
-	       else
-		  HTM_Light0 ();
+	       HTM_UnsignedLight0 (Print.NumQsts.Valid.Wrong.Zero);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM %s\"",
 	                  The_GetSuffix (),The_GetColorRows ());
-	       if (Print.NumQsts.Valid.Wrong.Positive)
-		  HTM_Unsigned (Print.NumQsts.Valid.Wrong.Positive);
-	       else
-		  HTM_Light0 ();
+	       HTM_UnsignedLight0 (Print.NumQsts.Valid.Wrong.Positive);
 	    HTM_TD_End ();
 
 	    /* Write number of blank questions */
 	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM %s\"",
 	                  The_GetSuffix (),The_GetColorRows ());
-	       if (Print.NumQsts.Valid.Blank)
-		  HTM_Unsigned (Print.NumQsts.Valid.Blank);
-	       else
-		  HTM_Light0 ();
+	       HTM_UnsignedLight0 (Print.NumQsts.Valid.Blank);
 	    HTM_TD_End ();
 
 	    /* Write score valid (taking into account only valid questions) */

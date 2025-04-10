@@ -565,7 +565,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool OtherRecipientsBefo
 	 Nck_DB_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Nickname);
 	 if (Nickname[0])
 	   {
-	    HTM_Char ('@'); HTM_Txt (Nickname);
+	    HTM_Arroba (); HTM_Txt (Nickname);
 	   }
 	}
    HTM_TEXTAREA_End ();
@@ -648,7 +648,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 		     When Content is "\nLorem ipsum" (a white line before "Lorem ipsum"),
 		     if we don't put the initial '\n' ==> the form will be sent starting
 		     by "Lorem", without the white line */
-		  HTM_Txt ("\n");
+		  HTM_LF ();
 
 		  if (!SubjectAndContentComeFromForm)
 		     HTM_TxtF ("\n\n----- %s -----\n",Txt_Original_message);
@@ -683,7 +683,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 		     When Content is "\nLorem ipsum" (a white line before "Lorem ipsum"),
 		     if we don't put the initial '\n' ==> the form will be sent starting
 		     by "Lorem", without the white line */
-		  HTM_Txt ("\n");
+		  HTM_LF ();
 		  HTM_Txt (Messages->Content);
 	}
 
@@ -2615,10 +2615,9 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 	       HTM_TD_Begin ("colspan=\"3\" class=\"LM MSG_AUT_%s\"",
 	                     The_GetSuffix ());
 		  HTM_OpenBracket ();
-		     HTM_Unsigned (NumRecipients.Unknown);
-		     HTM_SP ();
-		     HTM_Txt (NumRecipients.Unknown == 1 ? Txt_unknown_recipient :
-							   Txt_unknown_recipients);
+		     HTM_UnsignedTxt (NumRecipients.Unknown,
+				      Txt_unknown_recipient,
+				      Txt_unknown_recipients);
 		  HTM_CloseBracket ();
 	       HTM_TD_End ();
 

@@ -457,33 +457,25 @@ void BrwSiz_ShowAndStoreSizeOfFileBrowser (const struct BrwSiz_BrowserSize *Size
       if (Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type))
 	{
 	 Fil_WriteFileSizeFull ((double) Size->TotalSiz,FileSizeStr);
-	 HTM_TxtF ("%u %s; %lu %s; %lu %s",
-		   Size->NumLevls,
-		   Size->NumLevls == 1 ? Txt_level :
-					 Txt_levels ,
-		   Size->NumFolds,
-		   Size->NumFolds == 1 ? Txt_folder :
-					 Txt_folders,
-		   Size->NumFiles,
-		   Size->NumFiles == 1 ? Txt_file :
-					 Txt_files);
-	 HTM_BR ();
+	 HTM_UnsignedTxt (Size->NumLevls,Txt_level ,Txt_levels ); HTM_Semicolon (); HTM_SP ();
+	 HTM_UnsignedTxt (Size->NumFolds,Txt_folder,Txt_folders); HTM_Semicolon (); HTM_SP ();
+	 HTM_UnsignedTxt (Size->NumFiles,Txt_file  ,Txt_files  ); HTM_BR ();
 	 HTM_Txt (FileSizeStr);
 
 	 if (Size->MaxQuota)
 	   {
 	    Fil_WriteFileSizeBrief ((double) Size->MaxQuota,FileSizeStr);
-	    HTM_TxtF (" (%.1f%% %s %s)",
-		      100.0 * ((double) Size->TotalSiz /
-			       (double) Size->MaxQuota),
-		      Txt_of_PART_OF_A_TOTAL,
-		      FileSizeStr);
+	    HTM_SP ();
+	    HTM_OpenParenthesis ();
+	       HTM_Double1Decimal (100.0 * ((double) Size->TotalSiz /
+					    (double) Size->MaxQuota));
+	       HTM_Percent (); HTM_SP ();
+	       HTM_Txt (Txt_of_PART_OF_A_TOTAL); HTM_SP (); HTM_Txt (FileSizeStr);
+	    HTM_CloseParenthesis ();
 	   }
 
 	 Brw_DB_StoreSizeOfFileBrowser (Size);
 	}
-      // else
-	//  HTM_NBSP ();	// Blank to occupy the same space as the text for the browser size
 
    HTM_DIV_End ();
   }

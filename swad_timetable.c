@@ -1231,9 +1231,7 @@ static void Tmt_DrawHourCell (unsigned Hour,unsigned Min,const char *Align)
 		       "Tmt_HOUR00",
 		 The_GetSuffix (),
 		 Align);
-      HTM_TxtF ("%02u",Hour);
-      HTM_Colon ();
-      HTM_TxtF ("%02u",Min);
+      HTM_Unsigned02 (Hour); HTM_Colon (); HTM_Unsigned02 (Min);
    HTM_TD_End ();
   }
 
@@ -1464,9 +1462,8 @@ static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
       HTM_OpenParenthesis ();
 	 HTM_Unsigned (DurationNumIntervals / Timetable->Config.IntervalsPerHour);	// Hours
 	 HTM_Colon ();
-	 HTM_TxtF ("%02u",
-		   (DurationNumIntervals % Timetable->Config.IntervalsPerHour) *
-		   Timetable->Config.Range.MinutesPerInterval);				// Minutes
+	 HTM_Unsigned02 ((DurationNumIntervals % Timetable->Config.IntervalsPerHour) *
+		         Timetable->Config.Range.MinutesPerInterval);			// Minutes
       HTM_CloseParenthesis ();
 
       /***** Group *****/

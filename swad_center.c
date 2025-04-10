@@ -1312,7 +1312,6 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
    extern const char *Txt_Place;
    extern const char *Txt_Degrees_ABBREVIATION;
    extern const char *Txt_Courses_ABBREVIATION;
-   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    Hie_Order_t Order;
    static HTM_HeadAlign Align[Hie_NUM_ORDERS] =
      {
@@ -1352,12 +1351,7 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
       HTM_TH (Txt_Place               ,HTM_HEAD_LEFT );
       HTM_TH (Txt_Degrees_ABBREVIATION,HTM_HEAD_RIGHT);
       HTM_TH (Txt_Courses_ABBREVIATION,HTM_HEAD_RIGHT);
-      HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-	 HTM_Char ('+');
-	 HTM_BR ();
-	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-      HTM_TH_End ();
+      Usr_THTchsPlusStds ();
       HTM_TH_Empty (1);
 
    HTM_TR_End ();
@@ -1376,7 +1370,6 @@ static void Ctr_PutHeadCentersForEdition (void)
    extern const char *Txt_WWW;
    extern const char *Txt_Users;
    extern const char *Txt_Degrees_ABBREVIATION;
-   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Requester;
 
    HTM_TR_Begin (NULL);
@@ -1390,12 +1383,7 @@ static void Ctr_PutHeadCentersForEdition (void)
       HTM_TH (Txt_WWW                     ,HTM_HEAD_LEFT );
       HTM_TH (Txt_Users                   ,HTM_HEAD_RIGHT);
       HTM_TH (Txt_Degrees_ABBREVIATION    ,HTM_HEAD_RIGHT);
-      HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-	 HTM_Char ('+');
-	 HTM_BR ();
-	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-      HTM_TH_End ();
+      Usr_THTchsPlusStds ();
       HTM_TH (Txt_Requester               ,HTM_HEAD_LEFT );
       HTM_TH_Empty (1);
 

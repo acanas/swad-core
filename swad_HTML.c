@@ -92,7 +92,7 @@ void HTM_TITLE_Begin (void)
 
 void HTM_TITLE_End (void)
   {
-   HTM_Txt ("</title>\n");
+   HTM_Txt ("</title>");
   }
 
 /*****************************************************************************/
@@ -863,7 +863,7 @@ void HTM_SCRIPT_Begin (const char *URL,const char *CharSet)
    if (CharSet)
       if (CharSet[0])
          HTM_TxtF (" charset=\"%s\"",CharSet);
-   HTM_Txt (">\n");
+   HTM_Txt (">");
 
    HTM_SCRIPT_NestingLevel++;
   }
@@ -873,7 +873,7 @@ void HTM_SCRIPT_End (void)
    if (HTM_SCRIPT_NestingLevel == 0)	// No SCRIPT open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened SCRIPT.");
 
-   HTM_Txt ("</script>\n");
+   HTM_Txt ("</script>");
 
    HTM_SCRIPT_NestingLevel--;
   }
@@ -898,7 +898,7 @@ void HTM_PARAM (const char *Name,const char *fmt,...)
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-	 HTM_TxtF ("\n<param name=\"%s\" value=\"%s\">",Name,Value);
+	 HTM_TxtF ("<param name=\"%s\" value=\"%s\">",Name,Value);
 
 	 free (Value);
 	}
@@ -1848,6 +1848,11 @@ void HTM_Txt (const char *Txt)
          fputs (Txt,Fil_GetOutputFile ());
   }
 
+void HTM_Option (unsigned NumOpt)
+  {
+   HTM_Char ('a' + (char) NumOpt);
+  }
+
 void HTM_Char (char Ch)
   {
    if (Ch)
@@ -1886,16 +1891,6 @@ void HTM_ListSeparator (unsigned i,unsigned n)
         }
   }
 
-void HTM_Semicolon (void)
-  {
-   HTM_Char (';');
-  }
-
-void HTM_SP (void)
-  {
-   HTM_Char (' ');
-  }
-
 void HTM_NBSP (void)
   {
    HTM_Txt ("&nbsp;");
@@ -1916,9 +1911,44 @@ void HTM_EllipsisDots (void)
    HTM_Txt ("&hellip;");
   }
 
+void HTM_Minutes (void)
+  {
+   HTM_Txt ("&prime;");
+  }
+
+void HTM_Seconds (void)
+  {
+   HTM_Txt ("&Prime;");
+  }
+
+void HTM_Infinite (void)
+  {
+   HTM_Txt ("&infin;");
+  }
+
+void HTM_LF (void)
+  {
+   HTM_Char ('\n');
+  }
+
+void HTM_SP (void)
+  {
+   HTM_Char (' ');
+  }
+
+void HTM_Semicolon (void)
+  {
+   HTM_Char (';');
+  }
+
 void HTM_Colon (void)
   {
    HTM_Char (':');
+  }
+
+void HTM_Equal (void)
+  {
+   HTM_Char ('=');
   }
 
 void HTM_Dot (void)
@@ -1941,6 +1971,16 @@ void HTM_Asterisk (void)
    HTM_Char ('*');
   }
 
+void HTM_Arroba (void)
+  {
+   HTM_Char ('@');
+  }
+
+void HTM_Number (void)
+  {
+   HTM_Char ('#');
+  }
+
 void HTM_Slash (void)
   {
    HTM_Char ('/');
@@ -1954,6 +1994,11 @@ void HTM_Question (void)
 void HTM_Percent (void)
   {
    HTM_Char ('%');
+  }
+
+void HTM_Plus (void)
+  {
+   HTM_Char ('+');
   }
 
 void HTM_OpenParenthesis (void)
@@ -1976,21 +2021,44 @@ void HTM_CloseBracket (void)
    HTM_Char (']');
   }
 
+void HTM_UnsignedLight0 (unsigned Num)
+  {
+   if (Num)
+      HTM_Unsigned (Num);
+   else
+     {
+      HTM_SPAN_Begin ("class=\"VERY_LIGHT\"");
+	 HTM_0 ();
+      HTM_SPAN_End ();
+     }
+  }
+
+void HTM_UnsignedTxt (unsigned Num,const char *TxtOne,const char *TxtMultiple)
+  {
+   HTM_Unsigned (Num);
+   HTM_NBSP ();
+   HTM_Txt (Num == 1 ? TxtOne :
+		       TxtMultiple);
+  }
+
 void HTM_Unsigned (unsigned Num)
   {
    HTM_TxtF ("%u",Num);
   }
 
-void HTM_UnsignedColon (unsigned Num)
+void HTM_Unsigned2 (unsigned Num)
   {
-   HTM_TxtF ("%u:",Num);
+   HTM_TxtF ("%2u",Num);
   }
 
-void HTM_Light0 (void)
+void HTM_Unsigned02 (unsigned Num)
   {
-   HTM_SPAN_Begin ("class=\"VERY_LIGHT\"");
-      HTM_0 ();
-   HTM_SPAN_End ();
+   HTM_TxtF ("%02u",Num);
+  }
+
+void HTM_Unsigned04 (unsigned Num)
+  {
+   HTM_TxtF ("%04u",Num);
   }
 
 void HTM_0 (void)
@@ -2039,6 +2107,11 @@ void HTM_DoubleFewDigits (double Num)
 
    /***** Free memory allocated for string *****/
    free (Str);
+  }
+
+void HTM_Double1Decimal (double Num)
+  {
+   HTM_TxtF ("%.1lf",Num);
   }
 
 void HTM_Double2Decimals (double Num)

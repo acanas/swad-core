@@ -288,8 +288,8 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct Usr_
       /***** Write user's ID and name *****/
       HTM_TD_Begin ("class=\"LT DAT_STRONG_%s %s\"",
                     The_GetSuffix (),The_GetColorRows ());
-         HTM_Txt (Txt_ID);	HTM_Colon (); HTM_NBSP (); HTM_Txt (ID); HTM_BR ();
-	 HTM_Txt (Txt_Name);	HTM_Colon (); HTM_NBSP ();
+         HTM_Txt (Txt_ID);   HTM_Colon (); HTM_NBSP (); HTM_Txt (ID); HTM_BR ();
+	 HTM_Txt (Txt_Name); HTM_Colon (); HTM_NBSP ();
 	 if (UsrDat->FullName[0])
 	   {
 	    HTM_STRONG_Begin ();

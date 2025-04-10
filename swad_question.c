@@ -1269,15 +1269,13 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 	 /* Write number of question */
 	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
-	    HTM_Unsigned (QstInd + 1);
-	    HTM_NBSP ();
+	    HTM_Unsigned (QstInd + 1); HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write question code */
 	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
-	    HTM_Long (Question->QstCod);
-	    HTM_NBSP ();
+	    HTM_Long (Question->QstCod); HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write the date (row[0] has the UTC date-time) */
@@ -1303,8 +1301,7 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 	 /* Write the question type */
 	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
-	    HTM_Txt (Txt_TST_STR_ANSWER_TYPES[Question->Answer.Type]);
-	    HTM_NBSP ();
+	    HTM_Txt (Txt_TST_STR_ANSWER_TYPES[Question->Answer.Type]); HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write if shuffle is allowed */
@@ -1497,9 +1494,7 @@ static void Qst_WriteChoAns (struct Qst_Question *Question,
 
 	    /* Write the number of option */
 	    HTM_TD_Begin ("class=\"LT %s_%s\"",ClassTxt,The_GetSuffix ());
-	       HTM_Char ('a' + (char) NumOpt);
-	       HTM_CloseParenthesis ();
-	       HTM_NBSP ();
+	       HTM_Option (NumOpt); HTM_CloseParenthesis (); HTM_NBSP ();
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LT\"");
@@ -2173,8 +2168,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		     /***** Center column: letter of the answer and expand / contract icon *****/
 		     HTM_TD_Begin ("class=\"FORM_IN_%s Qst_ANS_CENTER_COL %s\"",
 				   The_GetSuffix (),The_GetColorRows ());
-			HTM_Char ('a' + (char) NumOpt);
-			HTM_CloseParenthesis ();
+			HTM_Option (NumOpt); HTM_CloseParenthesis ();
 
 			/* Icon to expand (show the answer) */
 			HTM_A_Begin ("href=\"\" id=\"exp_%u\"%s"

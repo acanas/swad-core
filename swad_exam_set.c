@@ -1677,10 +1677,7 @@ void ExaSet_WriteSetTitle (const struct ExaSet_Set *Set)
 
       /***** Number of questions to appear in exam print *****/
       HTM_TD_Begin ("class=\"EXA_SET_NUM_QSTS_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Set->NumQstsToPrint);
-	 HTM_NBSP ();
-	 HTM_Txt (Set->NumQstsToPrint == 1 ? Txt_question :
-					     Txt_questions);
+	 HTM_UnsignedTxt (Set->NumQstsToPrint,Txt_question,Txt_questions);
       HTM_TD_End ();
 
    /***** End table *****/

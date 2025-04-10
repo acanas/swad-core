@@ -319,7 +319,7 @@ static void DegTyp_ListDegTypesForSeeing (const struct DegTyp_DegTypes *DegTypes
      {
       BgColor = (DegTypes->Lst[NumDegTyp].DegTypCod ==
 	         Gbl.Hierarchy.Node[Hie_DEG].Specific.TypCod) ? "BG_HIGHLIGHT" :
-								   The_GetColorRows ();
+								The_GetColorRows ();
 
       /* Begin table row */
       HTM_TR_Begin (NULL);

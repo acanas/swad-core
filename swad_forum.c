@@ -1169,10 +1169,7 @@ static void For_WriteNumberOfPosts (const struct For_Forums *Forums,long UsrCod)
    /***** Write number of posts *****/
    HTM_DIV_Begin ("class=\"LT MSG_AUT_%s\"",The_GetSuffix ());
       HTM_OpenBracket ();
-	 HTM_Unsigned (NumPsts);
-	 HTM_SP ();
-	 HTM_Txt (NumPsts == 1 ? Txt_FORUM_post :
-				 Txt_FORUM_posts);
+	 HTM_UnsignedTxt (NumPsts,Txt_FORUM_post,Txt_FORUM_posts);
       HTM_CloseBracket ();
    HTM_DIV_End ();
   }
@@ -2043,10 +2040,7 @@ static void For_WriteNumberOfThrs (unsigned NumThrs)
    /***** Write number of threads and number of posts *****/
    HTM_SP ();
    HTM_OpenBracket ();
-      HTM_Unsigned (NumThrs);
-      HTM_NBSP ();
-      HTM_Txt (NumThrs == 1 ? Txt_thread :
-			      Txt_threads);
+      HTM_UnsignedTxt (NumThrs,Txt_thread,Txt_threads);
    HTM_CloseBracket ();
   }
 
@@ -2414,26 +2408,22 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 
 	 /***** Write number of posts in this thread *****/
 	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",Class,The_GetSuffix (),BgColor);
-	    HTM_Unsigned (Thr.NumPosts);
-	    HTM_NBSP ();
+	    HTM_Unsigned (Thr.NumPosts); HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /***** Write number of new posts in this thread *****/
 	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",Class,The_GetSuffix (),BgColor);
-	    HTM_Unsigned (Thr.NumUnreadPosts);
-	    HTM_NBSP ();
+	    HTM_Unsigned (Thr.NumUnreadPosts); HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /***** Write number of users who have write posts in this thread *****/
 	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",Class,The_GetSuffix (),BgColor);
-	    HTM_Unsigned (Thr.NumWriters);
-	    HTM_NBSP ();
+	    HTM_Unsigned (Thr.NumWriters); HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /***** Write number of users who have read this thread *****/
 	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",Class,The_GetSuffix (),BgColor);
-	    HTM_Unsigned (Thr.NumReaders);
-	    HTM_NBSP ();
+	    HTM_Unsigned (Thr.NumReaders); HTM_NBSP ();
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -3568,7 +3558,7 @@ static void For_WriteForumTitleAndStats (For_ForumType_t ForumType,
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
-      HTM_Unsigned (NumForums);
+	 HTM_Unsigned (NumForums);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());

@@ -472,8 +472,7 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"Qst_TXT_%s\"",
 	                        QstInd,NumOpt,The_GetSuffix ());
-		  HTM_Char ('a' + (char) NumOpt);
-		  HTM_CloseParenthesis (); HTM_NBSP ();
+		  HTM_Option (NumOpt); HTM_CloseParenthesis (); HTM_NBSP ();
 	       HTM_LABEL_End ();
 	    HTM_TD_End ();
 
@@ -1495,9 +1494,7 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
 
 	    /* Answer letter (a, b, c,...) */
 	    HTM_TD_Begin ("class=\"LT %s_%s\"",ClassTxt,The_GetSuffix ());
-	       HTM_Char ('a' + (char) NumOpt);
-	       HTM_CloseParenthesis ();
-	       HTM_NBSP ();
+	       HTM_Option (NumOpt); HTM_CloseParenthesis (); HTM_NBSP ();
 	    HTM_TD_End ();
 
 	    /* Answer text and feedback */
@@ -1632,9 +1629,7 @@ static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
 			   /* Answer letter (a, b, c,...) */
 			   HTM_TD_Begin ("class=\"LT Qst_ANS_0_%s\"",
 					 The_GetSuffix ());
-			      HTM_Char ('a' + (char) NumOpt);
-			      HTM_CloseParenthesis ();
-			      HTM_NBSP ();
+			      HTM_Option (NumOpt); HTM_CloseParenthesis (); HTM_NBSP ();
 			   HTM_TD_End ();
 
 			   /* Answer text and feedback */
@@ -1984,10 +1979,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	       switch (ICanView.Result)
 		 {
 		  case Usr_CAN:
-		     if (Print.NumQsts.NotBlank)
-			HTM_Unsigned (Print.NumQsts.NotBlank);
-		     else
-			HTM_Light0 ();
+		     HTM_UnsignedLight0 (Print.NumQsts.NotBlank);
 		     break;
 		  case Usr_CAN_NOT:
 		  default:
@@ -2003,10 +1995,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 		 {
 		  case Usr_CAN:
 		     NumQstsBlank = Print.NumQsts.All - Print.NumQsts.NotBlank;
-		     if (NumQstsBlank)
-			HTM_Unsigned (NumQstsBlank);
-		     else
-			HTM_Light0 ();
+		     HTM_UnsignedLight0 (NumQstsBlank);
 		     break;
 		  case Usr_CAN_NOT:
 		  default:

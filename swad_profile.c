@@ -534,9 +534,7 @@ static void Prf_ShowNumCrssWithRole (const struct Usr_Data *UsrDat,
 
    Prf_BeginListItem (Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex],Rol_Icons[Role]);
 
-      HTM_Unsigned (NumCrss);
-      HTM_NBSP ();
-      HTM_Txt (Txt_courses_ABBREVIATION);
+      HTM_Unsigned (NumCrss); HTM_NBSP (); HTM_Txt (Txt_courses_ABBREVIATION);
 
       if (NumCrss)
         {
@@ -545,13 +543,10 @@ static void Prf_ShowNumCrssWithRole (const struct Usr_Data *UsrDat,
 	    HTM_Unsigned (Enr_DB_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Role,
 						         (1 << Rol_NET) |
 						         (1 << Rol_TCH)));
-	    HTM_NBSP ();
-	    HTM_Txt (Txt_teachers_ABBREVIATION);
-	    HTM_Slash ();
+	    HTM_NBSP (); HTM_Txt (Txt_teachers_ABBREVIATION); HTM_Slash ();
 	    HTM_Unsigned (Enr_DB_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Role,
 						         (1 << Rol_STD)));
-	    HTM_NBSP ();
-	    HTM_Txt (Txt_students_ABBREVIATION);
+	    HTM_NBSP (); HTM_Txt (Txt_students_ABBREVIATION);
 	 HTM_CloseParenthesis ();
         }
 
@@ -579,15 +574,9 @@ static void Prf_ShowNumFilesCurrentlyPublished (const struct Usr_Data *UsrDat)
 
    Prf_BeginListItem (Txt_Files_uploaded,"file.svg");
 
-      HTM_Unsigned (NumFiles);
-      HTM_NBSP ();
-      HTM_Txt (NumFiles == 1 ? Txt_file :
-			       Txt_files);
-      HTM_NBSP ();
+      HTM_UnsignedTxt (NumFiles,Txt_file,Txt_files); HTM_NBSP ();
       HTM_OpenParenthesis ();
-         HTM_Unsigned (NumPublicFiles);
-	 HTM_NBSP ();
-         HTM_Txt (Txt_public_FILES);
+         HTM_Unsigned (NumPublicFiles); HTM_NBSP (); HTM_Txt (Txt_public_FILES);
       HTM_CloseParenthesis ();
 
    Prf_EndListItem ();
@@ -609,10 +598,8 @@ static void Prf_ShowNumClicks (const struct Usr_Data *UsrDat,
 
       if (UsrFigures->NumClicks >= 0)
 	{
-	 HTM_Long (UsrFigures->NumClicks);
-	 HTM_NBSP ();
-         HTM_Txt (Txt_clicks);
-	 HTM_NBSP ();
+	 HTM_Long (UsrFigures->NumClicks); HTM_NBSP ();
+         HTM_Txt (Txt_clicks); HTM_NBSP ();
 	 Prf_ShowRanking (Prf_DB_GetUsrRankingFigure (UsrDat->UsrCod,"NumClicks"),
 			  Prf_DB_GetNumUsrsWithFigure ("NumClicks"));
 	 if (UsrFigures->NumDays > 0)
@@ -621,9 +608,7 @@ static void Prf_ShowNumClicks (const struct Usr_Data *UsrDat,
 	    HTM_OpenParenthesis ();
 	       HTM_DoubleFewDigits ((double) UsrFigures->NumClicks /
 				    (double) UsrFigures->NumDays);
-	       HTM_Slash ();
-	       HTM_Txt (Txt_day);
-	       HTM_NBSP ();
+	       HTM_Slash (); HTM_Txt (Txt_day); HTM_NBSP ();
 	       Prf_ShowRanking (Prf_DB_GetRankingNumClicksPerDay (UsrDat->UsrCod),
 				Prf_DB_GetNumUsrsWithNumClicksPerDay ());
 	   HTM_CloseParenthesis ();
@@ -917,7 +902,7 @@ static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs)
                                "class=\"BT_LINK FORM_OUT_%s\"",
                                The_GetSuffix ());
       free (Title);
-         HTM_Char ('#'); HTM_Unsigned (Rank);
+         HTM_Number (); HTM_Unsigned (Rank);
       HTM_BUTTON_End ();
    Frm_EndForm ();
   }
@@ -1381,7 +1366,7 @@ static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,
 
    HTM_TD_Begin ("class=\"RM %s_%s %s\"",
 		 Class[MeOrOther],The_GetSuffix (),The_GetColorRows ());
-      HTM_Char ('#'); HTM_Unsigned (Rank);
+      HTM_Number (); HTM_Unsigned (Rank);
    HTM_TD_End ();
 
    /***** Check if I can see the public profile *****/

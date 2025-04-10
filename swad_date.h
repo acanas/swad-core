@@ -230,7 +230,7 @@ void Dat_AssignDate (struct Dat_Date *DateDst,struct Dat_Date *DateSrc);
 
 void Dat_WriteScriptMonths (void);
 
-void Dat_WriteHoursMinutesSecondsFromSeconds (time_t Seconds);
+void Dat_WriteHoursMinutesSecondsFromSeconds (time_t TotalSeconds);
 void Dat_WriteHoursMinutesSeconds (struct Dat_Time *Time);
 
 void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,

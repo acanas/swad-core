@@ -432,7 +432,7 @@ void XML_PrintTree (struct XMLElement *ParentElem)
                    Attribute->AttributeName,
                    Attribute->Content);
 
-      HTM_GT (); HTM_Txt ("\n");
+      HTM_GT (); HTM_LF ();
 
       /***** Print content *****/
       if (ParentElem->Content)
@@ -443,7 +443,7 @@ void XML_PrintTree (struct XMLElement *ParentElem)
 	   {
 	    HTM_SP (); HTM_SP (); HTM_SP ();
 	   }
-         HTM_Txt (ParentElem->Content); HTM_Txt ("\n");
+         HTM_Txt (ParentElem->Content); HTM_LF ();
         }
      }
 
@@ -468,7 +468,7 @@ void XML_PrintTree (struct XMLElement *ParentElem)
       HTM_LT (); HTM_Slash ();
       if (ParentElem->TagName)
 	 HTM_Txt (ParentElem->TagName);
-      HTM_GT (); HTM_Txt ("\n");
+      HTM_GT (); HTM_LF ();
      }
 
    Level--;

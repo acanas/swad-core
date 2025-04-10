@@ -2668,22 +2668,19 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
 
 		  /* Write index of question inside survey */
 		  HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
-				The_GetSuffix (),
-				The_GetColorRows ());
+				The_GetSuffix (),The_GetColorRows ());
 		     HTM_Unsigned (SvyQst.QstInd + 1);
 		  HTM_TD_End ();
 
 		  /* Write the question type (row[2]) */
 		  HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
-				The_GetSuffix (),
-				The_GetColorRows ());
+				The_GetSuffix (),The_GetColorRows ());
 		     HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[SvyQst.AnswerType]);
 		  HTM_TD_End ();
 
 		  /* Write the stem and the answers of this question */
 		  HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-				The_GetSuffix (),
-				The_GetColorRows ());
+				The_GetSuffix (),The_GetColorRows ());
 		     Svy_WriteQstStem (Stem);
 		     Svy_WriteAnswersOfAQst (&Surveys->Svy,&SvyQst,
 					     PutFormAnswerSurvey);

@@ -603,7 +603,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 		  HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
 		                The_GetSuffix (),The_GetColorRows ());
 		     HTM_LABEL_Begin ("for=\"Gam%u\"",NumExam);
-			HTM_UnsignedColon (NumExam + 1);
+			HTM_Unsigned (NumExam + 1); HTM_Colon ();
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 
@@ -866,10 +866,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
-		     if (Print.NumQsts.Valid.Total)
-			HTM_Unsigned (Print.NumQsts.Valid.Total);
-		     else
-			HTM_Light0 ();
+		     HTM_UnsignedLight0 (Print.NumQsts.Valid.Total);
 		     break;
 		  case Usr_CAN_NOT:
 		  default:
@@ -886,10 +883,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 		  case Usr_CAN:
 		     NumQstsInvalid = Print.NumQsts.All -
 				      Print.NumQsts.Valid.Total;
-		     if (NumQstsInvalid)
-			HTM_Unsigned (NumQstsInvalid);
-		     else
-			HTM_Light0 ();
+		     HTM_UnsignedLight0 (NumQstsInvalid);
 		     break;
 		  case Usr_CAN_NOT:
 		  default:
@@ -904,10 +898,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
-		     if (Print.NumQsts.Valid.Correct)
-			HTM_Unsigned (Print.NumQsts.Valid.Correct);
-		     else
-			HTM_Light0 ();
+		     HTM_UnsignedLight0 (Print.NumQsts.Valid.Correct);
 		     break;
 		  case Usr_CAN_NOT:
 		  default:
@@ -922,10 +913,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
-		     if (Print.NumQsts.Valid.Wrong.Negative)
-			HTM_Unsigned (Print.NumQsts.Valid.Wrong.Negative);
-		     else
-			HTM_Light0 ();
+		     HTM_UnsignedLight0 (Print.NumQsts.Valid.Wrong.Negative);
 		     break;
 		  case Usr_CAN_NOT:
 		  default:
@@ -939,10 +927,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
-		     if (Print.NumQsts.Valid.Wrong.Zero)
-			HTM_Unsigned (Print.NumQsts.Valid.Wrong.Zero);
-		     else
-			HTM_Light0 ();
+		     HTM_UnsignedLight0 (Print.NumQsts.Valid.Wrong.Zero);
 		     break;
 		  case Usr_CAN_NOT:
 		  default:
@@ -956,10 +941,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
-		     if (Print.NumQsts.Valid.Wrong.Positive)
-			HTM_Unsigned (Print.NumQsts.Valid.Wrong.Positive);
-		     else
-			HTM_Light0 ();
+		     HTM_UnsignedLight0 (Print.NumQsts.Valid.Wrong.Positive);
 		     break;
 		  case Usr_CAN_NOT:
 		  default:
@@ -974,10 +956,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
-		     if (Print.NumQsts.Valid.Blank)
-			HTM_Unsigned (Print.NumQsts.Valid.Blank);
-		     else
-			HTM_Light0 ();
+		     HTM_UnsignedLight0 (Print.NumQsts.Valid.Blank);
 		     break;
 		  case Usr_CAN_NOT:
 		  default:
@@ -1145,63 +1124,42 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
    /***** Write total number of valid questions *****/
    HTM_TD_Begin ("class=\"RT DAT_GREEN_%s LINE_TOP LINE_BOTTOM %s\"",
                  The_GetSuffix (),The_GetColorRows ());
-      if (NumTotalQsts->Valid.Total)
-	 HTM_Unsigned (NumTotalQsts->Valid.Total);
-      else
-	 HTM_Light0 ();
+      HTM_UnsignedLight0 (NumTotalQsts->Valid.Total);
    HTM_TD_End ();
 
    /***** Write total number of invalid questions *****/
    HTM_TD_Begin ("class=\"RT DAT_RED_%s LINE_TOP LINE_BOTTOM %s\"",
                  The_GetSuffix (),The_GetColorRows ());
       NumTotalQstsInvalid = NumTotalQsts->All - NumTotalQsts->Valid.Total;
-      if (NumTotalQstsInvalid)
-	 HTM_Unsigned (NumTotalQstsInvalid);
-      else
-	 HTM_Light0 ();
+      HTM_UnsignedLight0 (NumTotalQstsInvalid);
    HTM_TD_End ();
 
    /***** Write number of correct questions *****/
    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
                  The_GetSuffix (),The_GetColorRows ());
-      if (NumTotalQsts->Valid.Correct)
-	 HTM_Unsigned (NumTotalQsts->Valid.Correct);
-      else
-	 HTM_Light0 ();
+      HTM_UnsignedLight0 (NumTotalQsts->Valid.Correct);
    HTM_TD_End ();
 
    /***** Write number of wrong questions *****/
    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
                  The_GetSuffix (),The_GetColorRows ());
-      if (NumTotalQsts->Valid.Wrong.Negative)
-	 HTM_Unsigned (NumTotalQsts->Valid.Wrong.Negative);
-      else
-	 HTM_Light0 ();
+      HTM_UnsignedLight0 (NumTotalQsts->Valid.Wrong.Negative);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
                  The_GetSuffix (),The_GetColorRows ());
-      if (NumTotalQsts->Valid.Wrong.Zero)
-	 HTM_Unsigned (NumTotalQsts->Valid.Wrong.Zero);
-      else
-	 HTM_Light0 ();
+      HTM_UnsignedLight0 (NumTotalQsts->Valid.Wrong.Zero);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
                  The_GetSuffix (),The_GetColorRows ());
-      if (NumTotalQsts->Valid.Wrong.Positive)
-	 HTM_Unsigned (NumTotalQsts->Valid.Wrong.Positive);
-      else
-	 HTM_Light0 ();
+      HTM_UnsignedLight0 (NumTotalQsts->Valid.Wrong.Positive);
    HTM_TD_End ();
 
    /***** Write number of blank questions *****/
    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
                  The_GetSuffix (),The_GetColorRows ());
-      if (NumTotalQsts->Valid.Blank)
-	 HTM_Unsigned (NumTotalQsts->Valid.Blank);
-      else
-	 HTM_Light0 ();
+      HTM_UnsignedLight0 (NumTotalQsts->Valid.Blank);
    HTM_TD_End ();
 
    /***** Write total valid score *****/

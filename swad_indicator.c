@@ -496,7 +496,7 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 
 	    HTM_TD_Begin ("class=\"%s\"",Class);
 	       HTM_LABEL_Begin ("for=\"Indicators%u\"",Ind);
-		  HTM_UnsignedColon (Ind);
+		  HTM_Unsigned (Ind); HTM_Colon ();
 	       HTM_LABEL_End ();
 	    HTM_TD_End ();
 
@@ -506,10 +506,9 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 
 	    HTM_TD_Begin ("class=\"%s\"",Class);
 	       HTM_OpenParenthesis ();
-		  HTM_TxtF ("%.1f",
-			    NumCrss ? (double) NumCrssWithIndicatorYes[Ind] * 100.0 /
-				      (double) NumCrss :
-				      0.0);
+		  HTM_Double1Decimal (NumCrss ? (double) NumCrssWithIndicatorYes[Ind] * 100.0 /
+						(double) NumCrss :
+						0.0);
 		  HTM_Percent ();
 	       HTM_CloseParenthesis ();
 	    HTM_TD_End ();
@@ -528,8 +527,7 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 
 	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",The_GetSuffix ());
 	    HTM_OpenParenthesis ();
-	       HTM_TxtF ("%.1f",100.0);
-	       HTM_Percent ();
+	       HTM_Double1Decimal (100.0); HTM_Percent ();
 	    HTM_CloseParenthesis ();
          HTM_TD_End ();
 

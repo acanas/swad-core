@@ -1251,29 +1251,22 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
       HTM_TR_Begin (NULL);
 
 	 /* Write the number of row */
-	 HTM_TD_Begin ("class=\"RT LOG_%s %s\"",
-	               The_GetSuffix (),The_GetColorRows ());
-	    HTM_Unsigned (NumRow);
-	    HTM_NBSP ();
+	 HTM_TD_Begin ("class=\"RT LOG_%s %s\"",The_GetSuffix (),The_GetColorRows ());
+	    HTM_Unsigned (NumRow); HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write the user's ID if user is a student */
-	 HTM_TD_Begin ("class=\"CT LOG_%s %s\"",
-	               The_GetSuffix (),The_GetColorRows ());
-	    ID_WriteUsrIDs (&UsrDat,NULL);
-	    HTM_NBSP ();
+	 HTM_TD_Begin ("class=\"CT LOG_%s %s\"",The_GetSuffix (),The_GetColorRows ());
+	    ID_WriteUsrIDs (&UsrDat,NULL); HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write the first name and the surnames */
-	 HTM_TD_Begin ("class=\"LT LOG_%s %s\"",
-	               The_GetSuffix (),The_GetColorRows ());
-	    HTM_Txt (UsrDat.FullName);
-	    HTM_NBSP ();
+	 HTM_TD_Begin ("class=\"LT LOG_%s %s\"",The_GetSuffix (),The_GetColorRows ());
+	    HTM_Txt (UsrDat.FullName); HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write the user's role */
-	 HTM_TD_Begin ("class=\"CT LOG_%s %s\"",
-	               The_GetSuffix (),The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"CT LOG_%s %s\"",The_GetSuffix (),The_GetColorRows ());
 	    if (RoleFromLog < Rol_NUM_ROLES)
 	       HTM_Txt (Txt_ROLES_SINGUL_Abc[RoleFromLog][UsrDat.Sex]);
 	    else
@@ -1394,10 +1387,8 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
       HTM_TR_Begin (NULL);
 
 	 /* Write the number of row */
-	 HTM_TD_Begin ("class=\"RT LOG_%s %s\"",
-	               The_GetSuffix (),The_GetColorRows ());
-	    HTM_Unsigned (NumHit);
-	    HTM_NBSP ();
+	 HTM_TD_Begin ("class=\"RT LOG_%s %s\"",The_GetSuffix (),The_GetColorRows ());
+	    HTM_Unsigned (NumHit); HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Show the photo */
@@ -1409,15 +1400,13 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
 	 /* Write the user's ID if user is a student in current course */
 	 HTM_TD_Begin ("class=\"LT LOG_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
-	    ID_WriteUsrIDs (&UsrDat,NULL);
-	    HTM_NBSP ();
+	    ID_WriteUsrIDs (&UsrDat,NULL); HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write the name and the surnames */
 	 HTM_TD_Begin ("class=\"LT LOG_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
-	    HTM_Txt (UsrDat.FullName);
-	    HTM_NBSP ();
+	    HTM_Txt (UsrDat.FullName); HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write user's role */
@@ -1620,6 +1609,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
    extern const char *Txt_Date;
    extern const char *Txt_Day;
    extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
+   extern const char *Txt_hours_ABBREVIATION;
    extern const char *Txt_DAYS[7];
    Sta_ColorType_t ColorType;
    unsigned ColorTypeUnsigned;
@@ -1713,7 +1703,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 	{
 	 HTM_TD_Begin ("class=\"CT LOG_%s\" style=\"width:%upx;\"",
 	               The_GetSuffix (),GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH);
-	    HTM_TxtF ("%02uh",Hour);
+	    HTM_Unsigned02 (Hour); HTM_Txt (Txt_hours_ABBREVIATION);
 	 HTM_TD_End ();
 	}
    HTM_TR_End ();
@@ -2131,8 +2121,8 @@ static void Sta_ShowNumHitsPerWeek (Sta_CountType_t CountType,
 
 	    /* Write week */
 	    HTM_TD_Begin ("class=\"LT LOG_%s\"",The_GetSuffix ());
-	       HTM_TxtF ("%04u-%02u",Date.Year,Date.Week);
-	       HTM_NBSP ();
+	       HTM_Unsigned04 (Date.Year); HTM_Hyphen ();
+	       HTM_Unsigned02 (Date.Week); HTM_NBSP ();
 	    HTM_TD_End ();
 
 	    /* Draw bar proportional to number of hits */
@@ -2161,8 +2151,8 @@ static void Sta_ShowNumHitsPerWeek (Sta_CountType_t CountType,
 
 	/* Write week */
 	HTM_TD_Begin ("class=\"LT LOG_%s\"",The_GetSuffix ());
-	   HTM_TxtF ("%04u-%02u",Date.Year,Date.Week);
-	   HTM_NBSP ();
+	   HTM_Unsigned04 (Date.Year); HTM_Hyphen ();
+	   HTM_Unsigned02 (Date.Week); HTM_NBSP ();
 	HTM_TD_End ();
 
 	/* Draw bar proportional to number of hits */
@@ -2233,8 +2223,8 @@ static void Sta_ShowNumHitsPerMonth (Sta_CountType_t CountType,
 
 	    /* Write the month */
 	    HTM_TD_Begin ("class=\"LT LOG_%s\"",The_GetSuffix ());
-	       HTM_TxtF ("%04u-%02u",Date.Year,Date.Month);
-	       HTM_NBSP ();
+	       HTM_Unsigned04 (Date.Year); HTM_Hyphen ();
+	       HTM_Unsigned02 (Date.Month); HTM_NBSP ();
 	    HTM_TD_End ();
 
 	    /* Draw bar proportional to number of hits */
@@ -2262,8 +2252,8 @@ static void Sta_ShowNumHitsPerMonth (Sta_CountType_t CountType,
 
 	/* Write the month */
 	HTM_TD_Begin ("class=\"LT LOG_%s\"",The_GetSuffix ());
-	   HTM_TxtF ("%04u-%02u",Date.Year,Date.Month);
-	   HTM_NBSP ();
+	   HTM_Unsigned04 (Date.Year); HTM_Hyphen ();
+	   HTM_Unsigned02 (Date.Month); HTM_NBSP ();
 	HTM_TD_End ();
 
 	/* Draw bar proportional to number of hits */
@@ -2334,8 +2324,7 @@ static void Sta_ShowNumHitsPerYear (Sta_CountType_t CountType,
 
 	    /* Write the year */
 	    HTM_TD_Begin ("class=\"LT LOG_%s\"",The_GetSuffix ());
-	       HTM_TxtF ("%04u",Date.Year);
-	       HTM_NBSP ();
+	       HTM_Unsigned04 (Date.Year); HTM_NBSP ();
 	    HTM_TD_End ();
 
 	    /* Draw bar proportional to number of hits */
@@ -2363,8 +2352,7 @@ static void Sta_ShowNumHitsPerYear (Sta_CountType_t CountType,
 
 	/* Write the year */
 	HTM_TD_Begin ("class=\"LT LOG_%s\"",The_GetSuffix ());
-	   HTM_TxtF ("%04u",Date.Year);
-	   HTM_NBSP ();
+	   HTM_Unsigned04 (Date.Year); HTM_NBSP ();
 	HTM_TD_End ();
 
 	/* Draw bar proportional to number of hits */
@@ -2680,7 +2668,7 @@ static void Sta_WriteHitsMinute (unsigned Minute,double HitsNum,double MaxX)
 		       " background-repeat:repeat;\"",
 		       The_GetSuffix (),
 		       Sta_WIDTH_SEMIDIVISION_GRAPHIC,Cfg_URL_ICON_PUBLIC);
-	    HTM_TxtF ("%02u",(Minute + 30) / 60); HTM_Txt (Txt_hours_ABBREVIATION);
+	    HTM_Unsigned02 ((Minute + 30) / 60); HTM_Txt (Txt_hours_ABBREVIATION);
 	 HTM_TD_End ();
 	}
 

@@ -3933,16 +3933,15 @@ void Usr_WriteNumUsrsInList (Rol_Role_t Role)
    extern const char *Txt_users[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   Usr_Sex_t Sex;
    unsigned NumUsrs = Gbl.Usrs.LstUsrs[Role].NumUsrs;
+   Usr_Sex_t Sex = Usr_GetSexOfUsrsLst (Role);
 
-   Sex = Usr_GetSexOfUsrsLst (Role);
-   HTM_Unsigned (NumUsrs);
-   HTM_NBSP ();
-   HTM_Txt ((Role == Rol_UNK) ? (NumUsrs == 1 ? Txt_user[Sex] :
-						Txt_users[Sex]) :
-				(NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Role][Sex] :
-						Txt_ROLES_PLURAL_abc[Role][Sex]));
+   if (Role == Rol_UNK)
+      HTM_UnsignedTxt (NumUsrs,Txt_user[Sex],Txt_users[Sex]);
+   else
+      HTM_UnsignedTxt (NumUsrs,
+		       Txt_ROLES_SINGUL_abc[Role][Sex],
+		       Txt_ROLES_PLURAL_abc[Role][Sex]);
    if (NumUsrs)
       HTM_Colon ();
   }
@@ -6629,6 +6628,20 @@ Usr_Who_t Usr_GetParWho (void)
                                               1,
                                               Usr_NUM_WHO - 1,
                                               Usr_WHO_UNKNOWN);
+  }
+
+/*****************************************************************************/
+/******************* Put header for teachers plus students *******************/
+/*****************************************************************************/
+
+void Usr_THTchsPlusStds (void)
+  {
+   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
+
+   HTM_TH_Begin (HTM_HEAD_RIGHT);
+      HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]); HTM_Plus (); HTM_BR ();
+      HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+   HTM_TH_End ();
   }
 
 /*****************************************************************************/

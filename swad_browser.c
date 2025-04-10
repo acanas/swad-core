@@ -7648,10 +7648,9 @@ void Brw_ShowFileMetadata (void)
 		     HTM_Unsigned (FileMetadata.NumViewsFromLoggedUsrs);
 		     HTM_NBSP ();
 		     HTM_OpenParenthesis ();
-			HTM_Unsigned (FileMetadata.NumLoggedUsrs);
-			HTM_SP ();
-			HTM_Txt (FileMetadata.NumLoggedUsrs == 1 ? Txt_user[Usr_SEX_UNKNOWN] :
-								   Txt_users[Usr_SEX_UNKNOWN]);
+		        HTM_UnsignedTxt (FileMetadata.NumLoggedUsrs,
+		                         Txt_user[Usr_SEX_UNKNOWN],
+					 Txt_users[Usr_SEX_UNKNOWN]);
 		     HTM_CloseParenthesis ();
 		  HTM_TD_End ();
 
@@ -9240,10 +9239,8 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 	    HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,7,NULL);
 	       HTM_OpenParenthesis ();
 		  NumDocsHidden = NumDocs - NumDocsNotHidden;
-		  HTM_Unsigned (NumDocsHidden);
-		  HTM_SP ();
-		  HTM_Txt (NumDocsHidden == 1 ? Txt_hidden_document :
-						Txt_hidden_documents);
+		  HTM_UnsignedTxt (NumDocsHidden,
+				   Txt_hidden_document,Txt_hidden_documents);
 	       HTM_CloseParenthesis ();
 	    HTM_TH_End ();
 

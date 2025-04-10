@@ -1812,8 +1812,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	}
 
       /***** Write number of course in this search *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-                    ClassTxt,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",ClassTxt,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (NumCrs);
       HTM_TD_End ();
 
@@ -1826,24 +1825,20 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[2]),
 	                             "class=\"LT BT_LINK\"");
             Str_FreeGoToTitle ();
-	       Lgo_DrawLogo (Hie_DEG,&Deg,"CT ICO20x20");
-	       HTM_NBSP ();
-	       HTM_Txt (row[2]);
-	       HTM_NBSP ();
+	       Lgo_DrawLogo (Hie_DEG,&Deg,"CT ICO20x20"); HTM_NBSP ();
+	       HTM_Txt (row[2]); HTM_NBSP ();
 	       HTM_ParTxtPar (row[6]);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
       HTM_TD_End ();
 
       /***** Write year (row[4]) *****/
-      HTM_TD_Begin ("class=\"CT %s_%s %s\"",
-                    ClassTxt,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"CT %s_%s %s\"",ClassTxt,The_GetSuffix (),BgColor);
 	 HTM_Txt (Txt_YEAR_OF_DEGREE[Deg_ConvStrToYear (row[4])]);
       HTM_TD_End ();
 
       /***** Write course full name (row[5]) *****/
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-                    ClassTxt,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"LT %s_%s %s\"",ClassTxt,The_GetSuffix (),BgColor);
 	 Frm_BeginFormGoTo (ActSeeCrsInf);
 	    ParCod_PutPar (ParCod_Crs,CrsCod);
 	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[5]),
@@ -1855,20 +1850,17 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       HTM_TD_End ();
 
       /***** Write number of teachers in course *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-                    ClassTxt,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",ClassTxt,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (NumTchs);
       HTM_TD_End ();
 
       /***** Write number of non-editing teachers in course *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-                    ClassTxt,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",ClassTxt,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (NumNETs);
       HTM_TD_End ();
 
       /***** Write number of students in course *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-                    ClassTxt,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",ClassTxt,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (NumStds);
       HTM_TD_End ();
 

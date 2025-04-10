@@ -436,7 +436,6 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
   {
    extern const char *Txt_INSTITUTIONS_HELP_ORDER[2];
    extern const char *Txt_INSTITUTIONS_ORDER[2];
-   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Centers_ABBREVIATION;
    extern const char *Txt_Degrees_ABBREVIATION;
    extern const char *Txt_Courses_ABBREVIATION;
@@ -479,12 +478,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
       HTM_TH (Txt_Degrees_ABBREVIATION    ,HTM_HEAD_RIGHT);
       HTM_TH (Txt_Courses_ABBREVIATION    ,HTM_HEAD_RIGHT);
       HTM_TH (Txt_Departments_ABBREVIATION,HTM_HEAD_RIGHT);
-      HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-	 HTM_Char ('+');
-	 HTM_BR ();
-	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-      HTM_TH_End ();
+      Usr_THTchsPlusStds ();
       HTM_TH_Empty (1);
 
    HTM_TR_End ();
@@ -1391,7 +1385,6 @@ static void Ins_PutHeadInstitutionsForEdition (void)
    extern const char *Txt_WWW;
    extern const char *Txt_Users;
    extern const char *Txt_Centers_ABBREVIATION;
-   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Requester;
 
    HTM_TR_Begin (NULL);
@@ -1404,12 +1397,7 @@ static void Ins_PutHeadInstitutionsForEdition (void)
       HTM_TH (Txt_WWW                          ,HTM_HEAD_LEFT );
       HTM_TH (Txt_Users                        ,HTM_HEAD_RIGHT);
       HTM_TH (Txt_Centers_ABBREVIATION         ,HTM_HEAD_RIGHT);
-      HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-	 HTM_Char ('+');
-	 HTM_BR ();
-	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-      HTM_TH_End ();
+      Usr_THTchsPlusStds ();
       HTM_TH (Txt_Requester                    ,HTM_HEAD_LEFT );
       HTM_TH_Empty (1);
 
@@ -1848,8 +1836,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 
 	       /***** Write link to institution *****/
 	       HTM_TD_Begin ("class=\"CM FORM_IN_%s\"",The_GetSuffix ());
-		  Ins_DrawInstitutionLogoWithLink (&Ins,"ICO40x40");
-		  HTM_BR ();
+		  Ins_DrawInstitutionLogoWithLink (&Ins,"ICO40x40"); HTM_BR ();
 		  HTM_Unsigned (NumberThisRow);
                HTM_TD_End ();
 

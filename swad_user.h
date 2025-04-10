@@ -353,6 +353,8 @@ void Usr_PutWhoIcon (Usr_Who_t Who);
 void Usr_PutParWho (Usr_Who_t Who);
 Usr_Who_t Usr_GetParWho (void);
 
+void Usr_THTchsPlusStds (void);
+
 //-------------------------------- Figures ------------------------------------
 void Usr_GetAndShowUsersStats (Hie_Level_t HieLvl);
 void Usr_GetAndShowUsersRanking (Hie_Level_t HieLvl);

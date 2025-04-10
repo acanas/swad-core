@@ -1708,26 +1708,26 @@ void Dat_WriteScriptMonths (void)
 /********* Write time difference in seconds as hours:minutes:seconds *********/
 /*****************************************************************************/
 
-void Dat_WriteHoursMinutesSecondsFromSeconds (time_t Seconds)
+void Dat_WriteHoursMinutesSecondsFromSeconds (time_t TotalSeconds)
   {
-   time_t Hours   = Seconds / (60 * 60);
-   time_t Minutes = (Seconds / 60) % 60;
+   unsigned Hours   = (unsigned) (TotalSeconds / (60 * 60));
+   unsigned Minutes = (unsigned) ((TotalSeconds / 60) % 60);
+   unsigned Seconds = (unsigned) (TotalSeconds % 60);
 
-   Seconds %= 60;
    if (Hours)
      {
-      HTM_Long ((long) Hours);			HTM_Colon ();
-      HTM_TxtF ("%02ld",(long) Minutes);	HTM_Txt ("&prime;");
-      HTM_TxtF ("%02ld",(long) Seconds);
+      HTM_Unsigned   (Hours);	HTM_Colon ();
+      HTM_Unsigned02 (Minutes);	HTM_Minutes ();
+      HTM_Unsigned02 (Seconds);
      }
    else if (Minutes)
      {
-      HTM_Long ((long) Minutes);		HTM_Txt ("&prime;");
-      HTM_TxtF ("%02ld",(long) Seconds);
+      HTM_Unsigned   (Minutes);	HTM_Minutes ();
+      HTM_Unsigned02 (Seconds);
      }
    else
-      HTM_Long ((long) Seconds);
-   HTM_Txt ("&Prime;");
+      HTM_Unsigned   (Seconds);
+   HTM_Seconds ();
   }
 
 /*****************************************************************************/
@@ -1737,11 +1737,19 @@ void Dat_WriteHoursMinutesSecondsFromSeconds (time_t Seconds)
 void Dat_WriteHoursMinutesSeconds (struct Dat_Time *Time)
   {
    if (Time->Hour)
-      HTM_TxtF ("%u:%02u&prime;%02u&Prime;",Time->Hour,Time->Minute,Time->Second);
+     {
+      HTM_Unsigned   (Time->Hour  );	HTM_Colon ();
+      HTM_Unsigned02 (Time->Minute);	HTM_Minutes ();
+      HTM_Unsigned02 (Time->Second);
+     }
    else if (Time->Minute)
-      HTM_TxtF ("%u&prime;%02u&Prime;",Time->Minute,Time->Second);
+     {
+      HTM_Unsigned   (Time->Minute);	HTM_Minutes ();
+      HTM_Unsigned02 (Time->Second);
+     }
    else
-      HTM_TxtF ("%u&Prime;",Time->Second);
+      HTM_Unsigned   (Time->Second);
+   HTM_Seconds ();
   }
 
 /*****************************************************************************/

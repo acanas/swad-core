@@ -327,10 +327,8 @@ static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)
 	      {
 	       HTM_SP ();
 	       HTM_OpenBracket ();
-		  HTM_Unsigned (NumUsrsInRoom);
-		  HTM_SP ();
-		  HTM_Txt (NumUsrsInRoom == 1 ? Txt_connected_SINGULAR :
-						Txt_connected_PLURAL);
+		  HTM_UnsignedTxt (NumUsrsInRoom,
+				   Txt_connected_SINGULAR,Txt_connected_PLURAL);
 	       HTM_CloseBracket ();
 	      }
 
@@ -528,7 +526,6 @@ void Cht_OpenChatWindow (void)
 
    /***** Begin writing the index.html file to the output *****/
    HTM_Txt ("Content-type: text/html; charset=windows-1252\n\n");	// Two carriage returns at the end of the line are mandatory!
-
    Gbl.Layout.HTMLStartWritten = true;
 
    /***** Copy index.html file until the end of the applet code *****/

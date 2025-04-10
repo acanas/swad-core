@@ -902,8 +902,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
                     ClassData,The_GetSuffix (),The_GetColorRows ());
 	 if (!QuestionExists)
 	   {
-	    HTM_Unsigned (++NumNonExistingQst);
-	    HTM_NBSP ();
+	    HTM_Unsigned (++NumNonExistingQst); HTM_NBSP ();
 	   }
       HTM_TD_End ();
 
@@ -921,11 +920,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 		  HTM_TR_Begin (NULL);
 
 		     HTM_TD_Begin ("class=\"%s LT\"",ClassData);
-		       {
-			HTM_NBSP ();
-			HTM_Txt ("&#8226;");
-			HTM_NBSP ();
-		       }
+			HTM_NBSP (); HTM_Txt ("&#8226;"); HTM_NBSP ();
 		     HTM_TD_End ();
 
 		     HTM_TD_Begin ("class=\"%s LT\"",ClassData);
@@ -939,9 +934,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 	 else	// no tags for this question
 	   {
 	    HTM_SPAN_Begin ("class=\"%s\"",ClassData);
-	       HTM_NBSP ();
-               HTM_ParTxtPar (Txt_no_tags);
-	       HTM_NBSP ();
+	       HTM_NBSP (); HTM_ParTxtPar (Txt_no_tags); HTM_NBSP ();
 	    HTM_SPAN_End ();
 	   }
 
@@ -1043,9 +1036,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 
 			/* Write the number of option */
 			HTM_TD_Begin ("class=\"%s LT\"",ClassData);
-			   HTM_Char ('a' + (char) NumOpt);
-			   HTM_CloseParenthesis ();
-			   HTM_NBSP ();
+			   HTM_Option (NumOpt); HTM_CloseParenthesis (); HTM_NBSP ();
 			HTM_TD_End ();
 
 			/* Write the text and the feedback of the answer */

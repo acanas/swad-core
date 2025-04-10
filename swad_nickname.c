@@ -291,7 +291,7 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
 		 }
 
 	       /* Nickname */
-	       HTM_Char ('@'); HTM_Txt (row[0]);
+	       HTM_Arroba (); HTM_Txt (row[0]);
 
 	       /* Link to QR code */
 	       if (NumNick == 1 && Usr_UsrDat[MeOrOther]->Nickname[0])

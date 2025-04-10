@@ -569,7 +569,7 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
 		  HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
 		                The_GetSuffix (),The_GetColorRows ());
 		     HTM_LABEL_Begin ("for=\"Gam%u\"",NumGame);
-			HTM_UnsignedColon (NumGame + 1);
+			HTM_Unsigned (NumGame + 1); HTM_Colon ();
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 
@@ -804,10 +804,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	    switch (ICanView.Score)
 	      {
 	       case Usr_CAN:
-		  if (Print.NumQsts.NotBlank)
-		     HTM_Unsigned (Print.NumQsts.NotBlank);
-		  else
-		     HTM_Light0 ();
+		  HTM_UnsignedLight0 (Print.NumQsts.NotBlank);
 		  break;
 	       case Usr_CAN_NOT:
 	       default:
@@ -823,10 +820,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	    switch (ICanView.Score)
 	      {
 	       case Usr_CAN:
-		  if (NumQstsBlank)
-		     HTM_Unsigned (NumQstsBlank);
-		  else
-		     HTM_Light0 ();
+		  HTM_UnsignedLight0 (NumQstsBlank);
 		  break;
 	       case Usr_CAN_NOT:
 	       default:

@@ -598,7 +598,6 @@ static void Deg_PutHeadDegreesForSeeing (void)
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Type;
    extern const char *Txt_Courses_ABBREVIATION;
-   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
 
    HTM_TR_Begin (NULL);
 
@@ -607,12 +606,7 @@ static void Deg_PutHeadDegreesForSeeing (void)
       HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG],HTM_HEAD_LEFT  );
       HTM_TH (Txt_Type                  ,HTM_HEAD_LEFT  );
       HTM_TH (Txt_Courses_ABBREVIATION  ,HTM_HEAD_RIGHT );
-      HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-	 HTM_Char ('+');
-	 HTM_BR ();
-	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-      HTM_TH_End ();
+      Usr_THTchsPlusStds ();
       HTM_TH_Empty (1);
 
    HTM_TR_End ();
@@ -630,7 +624,6 @@ static void Deg_PutHeadDegreesForEdition (void)
    extern const char *Txt_Type;
    extern const char *Txt_WWW;
    extern const char *Txt_Courses_ABBREVIATION;
-   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Requester;
 
    HTM_TR_Begin (NULL);
@@ -643,12 +636,7 @@ static void Deg_PutHeadDegreesForEdition (void)
       HTM_TH (Txt_Type                    ,HTM_HEAD_LEFT );
       HTM_TH (Txt_WWW                     ,HTM_HEAD_LEFT );
       HTM_TH (Txt_Courses_ABBREVIATION    ,HTM_HEAD_RIGHT);
-      HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-	 HTM_Char ('+');
-	 HTM_BR ();
-	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-      HTM_TH_End ();
+      Usr_THTchsPlusStds ();
       HTM_TH (Txt_Requester               ,HTM_HEAD_LEFT );
       HTM_TH_Empty (1);
 

@@ -755,8 +755,7 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Gam_Games *Games,
 	 HTM_DIV_Begin ("class=\"%s_%s\"",
 			HidVis_DataClass[Games->Game.Hidden],
 			The_GetSuffix ());
-	    HTM_Unsigned (Match->Status.QstInd);
-	    HTM_Slash ();
+	    HTM_Unsigned (Match->Status.QstInd); HTM_Slash ();
 	    HTM_Unsigned (NumQsts);
 	 HTM_DIV_End ();
 	}
@@ -2207,8 +2206,8 @@ static void Mch_PutCountdownAndHourglassIcon (struct Mch_Match *Match)
 	    HTM_NBSP ();
 	    if (Match->Status.Countdown > 0)
 	      {
-	       HTM_TxtF ("%02ld",Match->Status.Countdown);
-	       HTM_Txt ("&Prime;");
+	       HTM_Unsigned02 ((unsigned) Match->Status.Countdown);
+	       HTM_Seconds ();
 	      }
 	    HTM_BR ();
 
@@ -2280,13 +2279,11 @@ static void Mch_PutFormCountdown (struct Mch_Match *Match,long Seconds,const cha
 	    HTM_NBSP ();
 	    if (Seconds >= 0)
 	      {
-	       HTM_Long (Seconds);
-	       HTM_Txt ("&Prime;");
+	       HTM_Long (Seconds); HTM_Seconds ();
 	      }
 	    else
 	      {
-	       HTM_Txt ("&infin;");
-	       HTM_NBSP ();
+	       HTM_Infinite (); HTM_NBSP ();
 	      }
 
 	 HTM_BUTTON_End ();
@@ -2428,8 +2425,7 @@ static void Mch_ShowNumQstInMch (const struct Mch_Match *Match)
 	    HTM_Txt (Txt_MATCH_End);
 	    break;
 	 default:
-	    HTM_Unsigned (Match->Status.QstInd);
-	    HTM_Slash ();
+	    HTM_Unsigned (Match->Status.QstInd); HTM_Slash ();
 	    HTM_Unsigned (NumQsts);
 	    break;
 	}
@@ -2853,7 +2849,7 @@ static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
 	    /***** Write letter for this option *****/
 	    HTM_TD_Begin ("class=\"MCH_TCH_BUTTON_TD\"");
 	       HTM_DIV_Begin ("class=\"MCH_TCH_BUTTON BT_%c\"",'A' + (char) NumOpt);
-		  HTM_Char ('a' + (char) NumOpt);
+		  HTM_Option (NumOpt);
 	       HTM_DIV_End ();
 	    HTM_TD_End ();
 
@@ -2944,7 +2940,7 @@ static void Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 					   Update == Mch_CHANGE_STATUS_BY_STUDENT ? " MCH_STD_ANSWER_SELECTED" :
 										    "",
 					   'A' + (char) NumOpt);
-		     HTM_Char ('a' + (char) NumOpt);
+		     HTM_Option (NumOpt);
 		  HTM_BUTTON_End ();
 
 	       Frm_EndForm ();
@@ -3148,8 +3144,7 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
 		  "class=\"MCH_SCO_BAR\" style=\"width:%u%%;\"",BarWidth);
 	 free (Title);
 	 free (Icon);
-	 HTM_NBSP ();
-	 HTM_Unsigned (NumUsrs);
+	 HTM_NBSP (); HTM_Unsigned (NumUsrs);
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3700,15 +3695,12 @@ void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,
       /***** Write the number of users *****/
       if (NumRespondersAns && NumRespondersQst)
         {
-	 HTM_Unsigned (NumRespondersAns);
-	 HTM_NBSP ();
+	 HTM_Unsigned (NumRespondersAns); HTM_NBSP ();
 	 HTM_OpenParenthesis ();
 	    HTM_Unsigned ((unsigned) ((((double) NumRespondersAns * 100.0) /
 		                        (double) NumRespondersQst) + 0.5));
-	    HTM_Percent ();
-	    HTM_NBSP ();
-	    HTM_Txt (Txt_of_PART_OF_A_TOTAL);
-	    HTM_NBSP ();
+	    HTM_Percent (); HTM_NBSP ();
+	    HTM_Txt (Txt_of_PART_OF_A_TOTAL); HTM_NBSP ();
 	    HTM_Unsigned (NumRespondersQst);
 	 HTM_CloseParenthesis ();
         }
