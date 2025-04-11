@@ -639,6 +639,7 @@ TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de t
 #define CSS_FILE		"swad24.75.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 24.76.2:  Apr 12, 2025  Changes in exam sessions. (345448 lines)
 	Version 24.76.1:  Apr 12, 2025  Changes in exam sessions. (345457 lines)
 	Version 24.76:    Apr 11, 2025  Changes in form to select users. (345497 lines)
 	Version 24.75.1:  Apr 11, 2025  Code refactoring in asprintf. (345475 lines)
