@@ -1554,7 +1554,7 @@ static void Med_ShowJPG (const struct Med_Media *Media,
 		    Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDir) < 0)
 	 Err_NotEnoughMemoryExit ();
       HTM_IMG (URL,FileNameJPG,Media->Title,
-	       "class=\"%s\" lazyload=\"on\"",ClassMedia);	// Lazy load of the media
+	       "class=\"%s\" loading=\"lazy\"",ClassMedia);	// Lazy load of the media
       free (URL);
      }
    else
@@ -1636,7 +1636,7 @@ static void Med_ShowGIF (const struct Med_Media *Media,
 
 	    /* Image */
 	    HTM_IMG (URL,FileNamePNG,Media->Title,
-		     "class=\"%s\" lazyload=\"on\"",ClassMedia);	// Lazy load of the media
+		     "class=\"%s\" loading=\"lazy\"",ClassMedia);	// Lazy load of the media
 
 	    /* Overlay with GIF label */
 	    HTM_SPAN_Begin ("class=\"MED_PLAY_ICO\"");
@@ -1714,7 +1714,7 @@ static void Med_ShowVideo (const struct Med_Media *Media,
       if (Media->Title)
 	 if (Media->Title[0])
 	    HTM_TxtF (" title=\"%s\"",Media->Title);
-      HTM_Txt (" lazyload=\"on\">"	// Lazy load of the media
+      HTM_Txt (" loading=\"lazy\">"	// Lazy load of the media
                "Your browser does not support HTML5 video."
 	       "</video>");
       free (URL);

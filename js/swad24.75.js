@@ -75,24 +75,24 @@ function submitForm(FormId) {
 // Separator is HTML code to write between date and time
 // Write: a bit set ==> true
 
-const Dat_WRITE_TODAY				= (1 << 5);
+const Dat_WRITE_TODAY			= (1 << 5);
 const Dat_WRITE_DATE_ON_SAME_DAY	= (1 << 4);
-const Dat_WRITE_WEEK_DAY			= (1 << 3);
-const Dat_WRITE_HOUR				= (1 << 2);
-const Dat_WRITE_MINUTE				= (1 << 1);
-const Dat_WRITE_SECOND				= (1 << 0);
+const Dat_WRITE_WEEK_DAY		= (1 << 3);
+const Dat_WRITE_HOUR			= (1 << 2);
+const Dat_WRITE_MINUTE			= (1 << 1);
+const Dat_WRITE_SECOND			= (1 << 0);
 
 const txtToday = [
-	"",					// Unknown
-	"Avui",				// CA
-	"Heute",			// DE
-	"Today",			// EN
-	"Hoy",				// ES
+	"",			// Unknown
+	"Avui",			// CA
+	"Heute",		// DE
+	"Today",		// EN
+	"Hoy",			// ES
 	"Aujourd'hui",		// FR
 	"Ko &aacute;ra",	// GN
-	"Oggi",				// IT
-	"Dzisiaj",			// PL
-	"Hoje",				// PT
+	"Oggi",			// IT
+	"Dzisiaj",		// PL
+	"Hoje",			// PT
 	"Bug&uuml;n",		// TR
 ];
 
@@ -505,8 +505,7 @@ function refreshConnected () {
 		// onreadystatechange must be lowercase
 		objXMLHttpReqCon.onreadystatechange = readConnUsrsData;
 		objXMLHttpReqCon.open('POST',actionAJAX,true);
-		objXMLHttpReqCon.setRequestHeader('Content-Type',
-										  'application/x-www-form-urlencoded');
+		objXMLHttpReqCon.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		objXMLHttpReqCon.send(refreshParams);
 	}
 }
@@ -515,13 +514,13 @@ function refreshConnected () {
 function readConnUsrsData () {
 	if (objXMLHttpReqCon.readyState == 4)	// Check if data have been received
 		if (objXMLHttpReqCon.status == 200) {
-			var endOfDelay   = objXMLHttpReqCon.responseText.indexOf('|',0);				// Get separator position
+			var endOfDelay   = objXMLHttpReqCon.responseText.indexOf('|',0);		// Get separator position
 			var endOfNotif   = objXMLHttpReqCon.responseText.indexOf('|',endOfDelay  + 1);	// Get separator position
 			var endOfGblCon  = objXMLHttpReqCon.responseText.indexOf('|',endOfNotif  + 1);	// Get separator position
 			var endOfCrsCon  = objXMLHttpReqCon.responseText.indexOf('|',endOfGblCon + 1);	// Get separator position
 			var endOfNumUsrs = objXMLHttpReqCon.responseText.indexOf('|',endOfCrsCon + 1);	// Get separator position
 
-			var delay = parseInt(objXMLHttpReqCon.responseText.substring(0,endOfDelay));			// Get refresh delay
+			var delay = parseInt(objXMLHttpReqCon.responseText.substring(0,endOfDelay));		// Get refresh delay
 			var htmlNotif  = objXMLHttpReqCon.responseText.substring(endOfDelay  + 1,endOfNotif);	// Get HTML code for new notifications
 			var htmlGblCon = objXMLHttpReqCon.responseText.substring(endOfNotif  + 1,endOfGblCon);	// Get HTML code for connected
 			var htmlCrsCon = objXMLHttpReqCon.responseText.substring(endOfGblCon + 1,endOfCrsCon);	// Get HTML code for course connected
@@ -562,29 +561,29 @@ function readConnUsrsData () {
 /*****************************************************************************/
 
 var txtConnectionIssues = [
-	"",																									// Unknown
-	"Problemes de connexi&oacute;. Els canvis no s&apos;han desat.",									// CA
-	"Verbindungsprobleme. Die &Auml;nderungen wurden nicht gespeichert.",								// DE
-	"Connection issues. The changes have not been saved.",												// EN
-	"Problema de conexi&oacute;n. Los cambios no se han guardado.",										// ES
-	"Probl&egrave;mes de connexion. Les modifications n'ont pas &eacute;t&eacute; enregistr&eacute;es.",// FR
-	"Problema de conexi&oacute;n. Los cambios no se han guardado.",										// GN Okoteve traducción
-	"Problemi di connessione. Le modifiche non sono state salvate.",									// IT
-	"Problemy z po&lstrok;&aogon;czeniem. Zmiany nie zosta&lstrok;y zapisane.",							// PL
-	"Problemas de conex&atilde;o. As altera&ccedil;&otilde;es n&atilde;o foram salvas."					// PT
+	"",													// Unknown
+	"Problemes de connexi&oacute;. Els canvis no s&apos;han desat.",					// CA
+	"Verbindungsprobleme. Die &Auml;nderungen wurden nicht gespeichert.",					// DE
+	"Connection issues. The changes have not been saved.",							// EN
+	"Problema de conexi&oacute;n. Los cambios no se han guardado.",						// ES
+	"Probl&egrave;mes de connexion. Les modifications n'ont pas &eacute;t&eacute; enregistr&eacute;es.",	// FR
+	"Problema de conexi&oacute;n. Los cambios no se han guardado.",						// GN Okoteve traducción
+	"Problemi di connessione. Le modifiche non sono state salvate.",					// IT
+	"Problemy z po&lstrok;&aogon;czeniem. Zmiany nie zosta&lstrok;y zapisane.",				// PL
+	"Problemas de conex&atilde;o. As altera&ccedil;&otilde;es n&atilde;o foram salvas."			// PT
 ];
 
 var txtSaving = [
-	"",							// Unknown
-	"Desant&hellip;",			// CA
+	"",				// Unknown
+	"Desant&hellip;",		// CA
 	"Speichern&hellip;",		// DE
-	"Saving&hellip;",			// EN
+	"Saving&hellip;",		// EN
 	"Guardando&hellip;",		// ES
 	"Enregistrement&hellip;",	// FR
 	"Guardando&hellip;",		// GN Okoteve traducción
 	"Salvataggio&hellip;",		// IT
 	"Zapisywanie&hellip;",		// PL
-	"Salvando&hellip;",			// PT
+	"Salvando&hellip;",		// PT
 ];
 
 var IHaveFinishedTxt;
@@ -647,8 +646,8 @@ function updateExamPrint (idDiv,idInput,nameInput,Params,Language) {
 					var val = inputElem.value;
 
 					// Params += '&' + nameInput + '=' + encodeURIComponent(val);	// UTF-8 escaped
-					// Params += '&' + nameInput + '=' + escape(val);				// ISO-8859-1 escaped (deprecated)
-					Params += '&' + nameInput + '=' + getEscapedString(val);		// ISO-8859-1 escaped, replacement for deprecated escape()
+					// Params += '&' + nameInput + '=' + escape(val);		// ISO-8859-1 escaped (deprecated)
+					Params += '&' + nameInput + '=' + getEscapedString(val);	// ISO-8859-1 escaped, replacement for deprecated escape()
 					inputElem.value = '?';	// Reset while waiting response. If connection is broken ==> user will see ? input
 				}
 			}
@@ -656,8 +655,7 @@ function updateExamPrint (idDiv,idInput,nameInput,Params,Language) {
 		IHaveFinishedTxt = disableFinished (txtSaving[Language]);	// Disable finished button on sending. When answer is saved and response received ==> the button will be reloaded
 
 		objXMLHttp.open('POST',actionAJAX,true);
-		objXMLHttp.setRequestHeader('Content-Type',
-									'application/x-www-form-urlencoded');
+		objXMLHttp.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		objXMLHttp.send(Params);
 
 		/* Timeout to abort in 5 seconds.
@@ -681,32 +679,32 @@ function getEscapedString (str) {
 	for (var i = 0; i < len; i++) {
         const code = str.charCodeAt(i);
         switch (true) {	// Escape punctuation marks except - _ . ! ~ * ' ( )
-        	case (code <= 0x09):									// Spec.
+        	case (code <= 0x09):						// Spec.
         		escaped += '%0' + code.toString(16).toUpperCase();	// %0X
         		break;
-        	case (code >= 0x10 && code <= 0x20):					// Spec.   0x20 space
-        	case (code >= 0x22 && code <= 0x26):					// 0x22 "  0x23 #  0x24 $  0x25 %  0x26 &
-        	case (code == 0x2B):									// 0x2B +
-        	case (code == 0x2C):									// 0x2C ,
-        	case (code == 0x2F):									// 0x2F /
-        	case (code >= 0x3A && code <= 0x40):					// 0x3A :  0x3B ;  0x3C <  0x3D =  0x3E >  0x3F ?  0x40 @
-        	case (code >= 0x5B && code <= 0x5E):					// 0x5B [  0x5C \  0x5D ]  0x5E ^
-        	case (code == 0x60):									// 0x60 `
-        	case (code >= 0x7B && code <= 0x7D):					// 0x7B {  0x7C |  0x7D }
-        	case (code >= 0x7F && code <= 0xFF):					// ISO-8859-1 or windows-1252
+        	case (code >= 0x10 && code <= 0x20):				// Spec.   0x20 space
+        	case (code >= 0x22 && code <= 0x26):				// 0x22 "  0x23 #  0x24 $  0x25 %  0x26 &
+        	case (code == 0x2B):						// 0x2B +
+        	case (code == 0x2C):						// 0x2C ,
+        	case (code == 0x2F):						// 0x2F /
+        	case (code >= 0x3A && code <= 0x40):				// 0x3A :  0x3B ;  0x3C <  0x3D =  0x3E >  0x3F ?  0x40 @
+        	case (code >= 0x5B && code <= 0x5E):				// 0x5B [  0x5C \  0x5D ]  0x5E ^
+        	case (code == 0x60):						// 0x60 `
+        	case (code >= 0x7B && code <= 0x7D):				// 0x7B {  0x7C |  0x7D }
+        	case (code >= 0x7F && code <= 0xFF):				// ISO-8859-1 or windows-1252
         		escaped += '%' + code.toString(16).toUpperCase();	// %XX
         		break;
         	case (code >= 0x100):
         		escaped += '%26%23' + code.toString(10) + '%3B';	// &#code; instead of %uXXXX
         		break;
 	        default:	// 0x21 !
-       					// 0x27 '  0x28 (  0x29 )  0x2A *
-	        			// 0x2D -  0x2E .
-	        			// 0x30 0   ...    0x39 9
-	        			// 0x41 A   ...    0x5A Z
-	        			// 0x5F _
-	        			// 0x61 a   ...    0x7A z
-	        			// 0x7E ~
+       				// 0x27 '  0x28 (  0x29 )  0x2A *
+	        		// 0x2D -  0x2E .
+	        		// 0x30 0   ...    0x39 9
+	        		// 0x41 A   ...    0x5A Z
+	        		// 0x5F _
+	        		// 0x61 a   ...    0x7A z
+	        		// 0x7E ~
 	        	escaped += str.charAt(i);
 	        	break;
         }
@@ -769,8 +767,7 @@ function refreshMatchStd () {
 		// onreadystatechange must be lowercase
 		objXMLHttpReqMchStd.onreadystatechange = readMatchStdData;
 		objXMLHttpReqMchStd.open('POST',actionAJAX,true);
-		objXMLHttpReqMchStd.setRequestHeader('Content-Type',
-											 'application/x-www-form-urlencoded');
+		objXMLHttpReqMchStd.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		objXMLHttpReqMchStd.send(refreshParams);
 	}
 }
@@ -804,8 +801,7 @@ function refreshMatchTch () {
 		// onreadystatechange must be lowercase
 		objXMLHttpReqMchTch.onreadystatechange = readMatchTchData;
 		objXMLHttpReqMchTch.open('POST',actionAJAX,true);
-		objXMLHttpReqMchTch.setRequestHeader('Content-Type',
-											 'application/x-www-form-urlencoded');
+		objXMLHttpReqMchTch.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		objXMLHttpReqMchTch.send(refreshParams);
 	}
 }
@@ -860,8 +856,7 @@ function updateMatchTch (id,Params) {
 					}
 		};
 		objXMLHttp.open('POST',actionAJAX,true);
-		objXMLHttp.setRequestHeader('Content-Type',
-									'application/x-www-form-urlencoded');
+		objXMLHttp.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		objXMLHttp.send(Params);
 	}
 }
@@ -882,8 +877,7 @@ function refreshLastClicks () {
 		// onreadystatechange must be lowercase
 		objXMLHttpReqLog.onreadystatechange = readLastClicksData;
 		objXMLHttpReqLog.open('POST',actionAJAX,true);
-		objXMLHttpReqLog.setRequestHeader('Content-Type',
-										  'application/x-www-form-urlencoded');
+		objXMLHttpReqLog.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		objXMLHttpReqLog.send(refreshParams);
 	}
 }
@@ -922,8 +916,7 @@ function refreshNewTimeline () {
 		// onreadystatechange must be lowercase
 		objXMLHttpReqNewTml.onreadystatechange = readNewTimelineData;
 		objXMLHttpReqNewTml.open('POST',actionAJAX,true);
-		objXMLHttpReqNewTml.setRequestHeader('Content-Type',
-											 'application/x-www-form-urlencoded');
+		objXMLHttpReqNewTml.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		objXMLHttpReqNewTml.send(refreshParams);
 	}
 }
@@ -1056,8 +1049,7 @@ function refreshOldTimeline () {
 		// onreadystatechange must be lowercase
 		objXMLHttpReqOldTml.onreadystatechange = readOldTimelineData;
 		objXMLHttpReqOldTml.open('POST',actionAJAX,true);
-		objXMLHttpReqOldTml.setRequestHeader('Content-Type',
-											 'application/x-www-form-urlencoded');
+		objXMLHttpReqOldTml.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		objXMLHttpReqOldTml.send(refreshParams);
 	}
 }
@@ -1150,8 +1142,7 @@ function updateDivHiddenComments (form,Params) {
 					}
 		};
 		objXMLHttp.open('POST',actionAJAX,true);
-		objXMLHttp.setRequestHeader('Content-Type',
-									'application/x-www-form-urlencoded');
+		objXMLHttp.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		objXMLHttp.send(Params);
 	}
 }
@@ -1178,8 +1169,7 @@ function updateDivLockUnlockProject (form,Params) {
 					}
 		};
 		objXMLHttp.open('POST',actionAJAX,true);
-		objXMLHttp.setRequestHeader('Content-Type',
-									'application/x-www-form-urlencoded');
+		objXMLHttp.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		objXMLHttp.send(Params);
 	}
 }
@@ -1206,8 +1196,7 @@ function updateDivFaversSharers (form,Params) {
 					}
 		};
 		objXMLHttp.open('POST',actionAJAX,true);
-		objXMLHttp.setRequestHeader('Content-Type',
-									'application/x-www-form-urlencoded');
+		objXMLHttp.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		objXMLHttp.send(Params);
 	}
 }

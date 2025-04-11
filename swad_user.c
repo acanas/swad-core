@@ -254,10 +254,7 @@ static void Usr_ListUsersByRoleToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
 static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
 				      Rol_Role_t Role,bool WithPhotos);
 static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role);
-static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
-                                         const char *EncryptedUsrCod,
-                                         bool UsrIsTheMsgSender,
-					 struct Usr_SelectedUsrs *SelectedUsrs);
+
 static void Usr_PutCheckboxListWithPhotos (bool WithPhotos);
 
 static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr,bool WithPhotos);
@@ -3987,10 +3984,10 @@ unsigned Usr_GetColumnsForSelectUsrs (bool WithPhotos)
 /******* Put a checkbox, in a classphoto or a list, to select a user *********/
 /*****************************************************************************/
 
-static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
-                                         const char *EncryptedUsrCod,
-                                         bool UsrIsTheMsgSender,
-					 struct Usr_SelectedUsrs *SelectedUsrs)
+void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
+				  const char *EncryptedUsrCod,
+				  bool UsrIsTheMsgSender,
+				  struct Usr_SelectedUsrs *SelectedUsrs)
   {
    HTM_Attributes_t Attributes;
    char *ParName;
@@ -5162,6 +5159,11 @@ void Usr_ListStudents (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
+	 /***** Contextual menu *****/
+         Mnu_ContextMenuBegin ();
+	    Enr_PutLinkToAdminOneUsr (ActReqID_MdfStd);	// Admin one user in listing of students
+         Mnu_ContextMenuEnd ();
+	 break;
       case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
@@ -5169,9 +5171,8 @@ void Usr_ListStudents (void)
       case Rol_SYS_ADM:
 	 /***** Contextual menu *****/
          Mnu_ContextMenuBegin ();
-	    Enr_PutLinkToAdminOneUsr (ActReqID_MdfStd);	// Admin one student
-	    if (Gbl.Hierarchy.HieLvl == Hie_CRS &&	// Course selected
-		Gbl.Usrs.Me.Role.Logged != Rol_STD)	// Teacher or admin
+	    Enr_PutLinkToAdminOneUsr (ActReqID_MdfStd);	// Admin one user in listing of students
+	    if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
 	      {
 	       Enr_PutLinkToAdminSeveralUsrs (Rol_STD);	// Admin several students
 	       Rec_PutLinkToEditRecordFields ();	// Edit record fields
@@ -6196,55 +6197,47 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
 
 	 /* Copy user's basic data from list */
 	 Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
+	 UsrIsTheMsgSender = (ClassPhotoType == Usr_CLASS_PHOTO_SEL &&
+			      UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	 /* Get list of user's IDs */
 	 ID_GetListIDsFromUsrCod (&UsrDat);
 
 	 /***** Begin user's cell *****/
-	 if (ClassPhotoType == Usr_CLASS_PHOTO_SEL &&
-	     UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
-	   {
-	    UsrIsTheMsgSender = true;
-	    HTM_TD_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s CB LIGHT_GREEN\"",
-	                  The_GetSuffix ());
-	   }
-	 else
-	   {
-	    UsrIsTheMsgSender = false;
-	    HTM_TD_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s CB\"",
-	                  The_GetSuffix ());
-	   }
+	 HTM_TD_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s CB%s\"",
+		       The_GetSuffix (),UsrIsTheMsgSender ? " LIGHT_GREEN" :
+							    "");
 
-	 /***** Checkbox to select this user *****/
-	 if (PutCheckBoxToSelectUsr)
-	    Usr_PutCheckboxToSelectUser (Role,UsrDat.EnUsrCod,UsrIsTheMsgSender,
-					 SelectedUsrs);
+	    /***** Checkbox to select this user *****/
+	    if (PutCheckBoxToSelectUsr)
+	       Usr_PutCheckboxToSelectUser (Role,UsrDat.EnUsrCod,UsrIsTheMsgSender,
+					    SelectedUsrs);
 
-	 /***** Show photo *****/
-	 Pho_ShowUsrPhotoIfAllowed (&UsrDat,
-	                            ClassPhoto[ClassPhotoType][Gbl.Prefs.PhotoShape],Pho_ZOOM);
+	    /***** Show photo *****/
+	    Pho_ShowUsrPhotoIfAllowed (&UsrDat,
+				       ClassPhoto[ClassPhotoType][Gbl.Prefs.PhotoShape],Pho_ZOOM);
 
-	 /***** Photo foot *****/
-	 HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION CLASSPHOTO_%s\"",
-	                The_GetSuffix ());
+	    /***** Photo foot *****/
+	    HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION CLASSPHOTO_%s\"",
+			   The_GetSuffix ());
 
-	    /* Name */
-	    if (UsrDat.FrstName[0])
-	       HTM_Txt (UsrDat.FrstName);
-	    else
-	       HTM_NBSP ();
-	    HTM_BR ();
-	    if (UsrDat.Surname1[0])
-	       HTM_Txt (UsrDat.Surname1);
-	    else
-	       HTM_NBSP ();
-	    HTM_BR ();
-	    if (UsrDat.Surname2[0])
-	       HTM_Txt (UsrDat.Surname2);
-	    else
-	       HTM_NBSP ();
+	       /* Name */
+	       if (UsrDat.FrstName[0])
+		  HTM_Txt (UsrDat.FrstName);
+	       else
+		  HTM_NBSP ();
+	       HTM_BR ();
+	       if (UsrDat.Surname1[0])
+		  HTM_Txt (UsrDat.Surname1);
+	       else
+		  HTM_NBSP ();
+	       HTM_BR ();
+	       if (UsrDat.Surname2[0])
+		  HTM_Txt (UsrDat.Surname2);
+	       else
+		  HTM_NBSP ();
 
-	 HTM_DIV_End ();
+	    HTM_DIV_End ();
 
 	 /***** End user's cell *****/
 	 HTM_TD_End ();

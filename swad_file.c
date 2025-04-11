@@ -666,6 +666,7 @@ bool Fil_GetPublicDirFromCache (const char *FullPathPriv,
   {
    bool Cached;
    bool TmpPubDirExists;
+   char FullPathTmpPubDir[PATH_MAX + 1];
 
    /***** Reset temporary directory *****/
    TmpPubDir[0] = '\0';
@@ -683,7 +684,9 @@ bool Fil_GetPublicDirFromCache (const char *FullPathPriv,
      {
       /* If not exists (it could be deleted if its lifetime has expired)
 	 ==> remove from cache */
-      TmpPubDirExists = Fil_CheckIfPathExists (TmpPubDir);
+      snprintf (FullPathTmpPubDir,sizeof (FullPathTmpPubDir),"%s/%s",
+		Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,TmpPubDir);
+      TmpPubDirExists = Fil_CheckIfPathExists (FullPathTmpPubDir);
       if (!TmpPubDirExists)
 	 Fil_DB_RemovePublicDirFromCache (FullPathPriv);
       return TmpPubDirExists;

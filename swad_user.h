@@ -303,6 +303,10 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,
 				       const char *OnSubmit,
 				       bool WithPhotos);
 unsigned Usr_GetColumnsForSelectUsrs (bool WithPhotos);
+void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
+				  const char *EncryptedUsrCod,
+				  bool UsrIsTheMsgSender,
+				  struct Usr_SelectedUsrs *SelectedUsrs);
 void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr,bool WithPhotos);
 
 void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,

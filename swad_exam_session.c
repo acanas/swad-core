@@ -278,55 +278,51 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
 	       /***** Initialize structure with user's data *****/
 	       Usr_UsrDataConstructor (&UsrDat);
 
-	       /*
-	       / Begin form *
-	       Frm_BeginForm (ActRecAttStd);
-		  ParCod_PutPar (ParCod_Att,Events->Event.AttCod);
+	       /* Begin form */
+	       Frm_BeginForm (ActSeeOneExaSes);
+	          Exa_PutPars (Exams);
 		  Grp_PutParsCodGrps ();
-	       */
 
-	       /* Begin table */
-	       HTM_TABLE_Begin ("TBL_SCROLL");
+		  /* Begin table */
+		  HTM_TABLE_Begin ("TBL_SCROLL");
 
-		  /***** Begin table with list of students *****/
-		  if (!Gbl.Crs.Grps.AllGrpsSel)
-		    {
-		     HTM_TR_Begin (NULL);
-			HTM_TD_Begin ("colspan=\"16\" class=\"TIT CM\"");
-			   Grp_WriteNamesOfSelectedGrps ();
-			HTM_TD_End ();
-		     HTM_TR_End ();
-		    }
+		     /***** Begin table with list of students *****/
+		     if (!Gbl.Crs.Grps.AllGrpsSel)
+		       {
+			HTM_TR_Begin (NULL);
+			   HTM_TD_Begin ("colspan=\"17\" class=\"TIT CM\"");
+			      Grp_WriteNamesOfSelectedGrps ();
+			   HTM_TD_End ();
+			HTM_TR_End ();
+		       }
 
-		  /***** Put a row to select all users *****/
-		  Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_STD,16);
+		     /***** Put a row to select all users *****/
+		     Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_STD,17);
 
-		  /* Header */
-		  ExaSes_ShowHeaderResults ();
+		     /* Header */
+		     ExaSes_ShowHeaderResults ();
 
-		  /* List of students */
-		  for (NumUsr = 0;
-		       NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
-		       NumUsr++)
-		    {
-		     /* Copy user's basic data from list */
-		     Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
+		     /* List of students */
+		     for (NumUsr = 0;
+			  NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
+			  NumUsr++)
+		       {
+			/* Copy user's basic data from list */
+			Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
 
-		     /* Get list of user's IDs */
-		     ID_GetListIDsFromUsrCod (&UsrDat);
+			/* Get list of user's IDs */
+			ID_GetListIDsFromUsrCod (&UsrDat);
 
-		     ExaSes_WriteRowUsrInSession (Exams,NumUsr + 1,
-						  &UsrDat,WithPhotos);
-		    }
+			ExaSes_WriteRowUsrInSession (Exams,NumUsr + 1,
+						     &UsrDat,WithPhotos);
+		       }
 
-	       /* End table */
-	       HTM_TABLE_End ();
+		  /* End table */
+		  HTM_TABLE_End ();
 
-	       /*
-	       * Send button and end form *
-		  Btn_PutButton (Btn_SAVE_CHANGES);
+	       /* Send button and end form */
+		  Btn_PutButton (Btn_CONTINUE);
 	       Frm_EndForm ();
-	       */
 
 	       /***** Free memory used for user's data *****/
 	       Usr_UsrDataDestructor (&UsrDat);
@@ -373,7 +369,7 @@ static void ExaSes_ShowHeaderResults (void)
 
    /***** First row *****/
    HTM_TR_Begin (NULL);
-      HTM_TH_Span (Txt_User[Usr_SEX_UNKNOWN]		,HTM_HEAD_CENTER,3,2,"LINE_BOTTOM");
+      HTM_TH_Span (Txt_User[Usr_SEX_UNKNOWN]		,HTM_HEAD_CENTER,3,3,"LINE_BOTTOM");
       HTM_TH_Span (Txt_START_END_TIME[Dat_STR_TIME]     ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (Txt_START_END_TIME[Dat_END_TIME]     ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (Txt_Questions                        ,HTM_HEAD_CENTER,1,3,"LINE_LEFT");
@@ -463,13 +459,10 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
    HTM_TR_Begin (NULL);
 
       /***** Checkbox to select user *****/
-      /*
-      HTM_TD_Begin ("class=\"CT %s\"",The_GetColorRows ());
-	 HTM_INPUT_CHECKBOX ("UsrCodStd",HTM_NO_ATTR,
-			     "id=\"Std%u\" value=\"%s\"",
-			     NumUsr,UsrDat->EnUsrCod);
+      HTM_TD_Begin ("class=\"CM %s\"",The_GetColorRows ());
+	 Usr_PutCheckboxToSelectUser (Rol_STD,UsrDat->EnUsrCod,false,
+				      &Gbl.Usrs.Selected);
       HTM_TD_End ();
-      */
 
       /***** Show user's data *****/
       Usr_ShowTableCellWithUsrData (UsrDat,NumResults);
