@@ -89,8 +89,7 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
 				     const struct ExaSes_Session *Session);
 static void ExaSes_ShowHeaderResults (void);
 static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
-				         unsigned NumUsr,
-					 struct Usr_Data *UsrDat,bool ShowPhoto);
+				         unsigned NumUsr,struct Usr_Data *UsrDat);
 
 static void ExaSes_PutIconsInListOfSessions (void *Exams);
 static void ExaSes_PutIconToCreateNewSession (struct Exa_Exams *Exams);
@@ -242,11 +241,9 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
   {
    extern const char *Hlp_ASSESSMENT_Exams;
    extern const char *Txt_Session_X;
-   // extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    char *Title;
    unsigned NumUsr;
    struct Usr_Data UsrDat;
-   bool WithPhotos;
 
    /***** Get groups to show ******/
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -272,9 +269,6 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
 
 	    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
 	      {
-	       /***** Get my preference about photos in users' list for current course *****/
-	       WithPhotos = Set_GetMyPrefAboutListWithPhotosFromDB ();
-
 	       /***** Initialize structure with user's data *****/
 	       Usr_UsrDataConstructor (&UsrDat);
 
@@ -314,8 +308,8 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
 		     /* Get list of user's IDs */
 		     ID_GetListIDsFromUsrCod (&UsrDat);
 
-		     ExaSes_WriteRowUsrInSession (Exams,NumUsr + 1,
-						  &UsrDat,WithPhotos);
+		     /* Write a row for this user */
+		     ExaSes_WriteRowUsrInSession (Exams,NumUsr + 1,&UsrDat);
 		    }
 
 	       /* End table */
@@ -353,6 +347,7 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
 
 static void ExaSes_ShowHeaderResults (void)
   {
+   extern const char *Txt_No_INDEX;
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Questions;
@@ -369,7 +364,9 @@ static void ExaSes_ShowHeaderResults (void)
 
    /***** First row *****/
    HTM_TR_Begin (NULL);
-      HTM_TH_Span (Txt_User[Usr_SEX_UNKNOWN]		,HTM_HEAD_CENTER,3,3,"LINE_BOTTOM");
+      HTM_TH_Span (NULL                                 ,HTM_HEAD_CENTER,3,1,"LINE_BOTTOM");
+      HTM_TH_Span (Txt_No_INDEX				,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM");
+      HTM_TH_Span (Txt_User[Usr_SEX_UNKNOWN]		,HTM_HEAD_CENTER,3,2,"LINE_BOTTOM");
       HTM_TH_Span (Txt_START_END_TIME[Dat_STR_TIME]     ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (Txt_START_END_TIME[Dat_END_TIME]     ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (Txt_Questions                        ,HTM_HEAD_CENTER,1,3,"LINE_LEFT");
@@ -410,44 +407,16 @@ static void ExaSes_ShowHeaderResults (void)
 /*****************************************************************************/
 
 static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
-				         unsigned NumUsr,
-					 struct Usr_Data *UsrDat,bool ShowPhoto)
+				         unsigned NumUsr,struct Usr_Data *UsrDat)
   {
-   /*
-   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
-     {
-      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
-      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
-      [PhoSha_SHAPE_OVAL     ] = "PHOTOO45x60",
-      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
-     };
-   */
-
    MYSQL_RES *mysql_res;
    unsigned NumResults;
-   unsigned NumResult;
    static unsigned UniqueId = 0;
    char *Id;
    struct ExaPrn_Print Print;
-   struct Exa_Exam Exam;
    Dat_StartEndTime_t StartEndTime;
    unsigned NumQstsInvalid;
-   struct ExaPrn_NumQuestions NumTotalQsts;
-   struct ExaPrn_Score TotalScore;
    double Grade;
-   double TotalGrade = 0.0;
-
-   /***** Reset total number of questions and total score *****/
-   NumTotalQsts.All                  =
-   NumTotalQsts.NotBlank             =
-   NumTotalQsts.Valid.Correct        =
-   NumTotalQsts.Valid.Wrong.Negative =
-   NumTotalQsts.Valid.Wrong.Zero     =
-   NumTotalQsts.Valid.Wrong.Positive =
-   NumTotalQsts.Valid.Blank          =
-   NumTotalQsts.Valid.Total          = 0;
-   TotalScore.All   =
-   TotalScore.Valid = 0.0;
 
    /***** Make database query *****/
    // Do not filter by groups, because a student who has changed groups
@@ -459,30 +428,30 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
    HTM_TR_Begin (NULL);
 
       /***** Checkbox to select user *****/
-      HTM_TD_Begin ("class=\"CM %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"CM LINE_BOTTOM %s\"",The_GetColorRows ());
 	 Usr_PutCheckboxToSelectUser (Rol_STD,UsrDat->EnUsrCod,false,
 				      &Gbl.Usrs.Selected);
+      HTM_TD_End ();
+
+      /***** Write number of user in the list *****/
+      HTM_TD_Begin ("class=\"RM LINE_BOTTOM %s\"",The_GetColorRows ());
+	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
 
       /***** Show user's data *****/
       Usr_ShowTableCellWithUsrData (UsrDat,NumResults);
 
       /***** Get and print sessions results *****/
-      if (NumResults)
+      if (NumResults)	// Only one result per session-user is possible
 	{
-	 for (NumResult = 0;
-	      NumResult < NumResults;
-	      NumResult++)
-	   {
-	    /* Get print code (row[0]) */
-	    if ((Print.PrnCod = DB_GetNextCode (mysql_res)) <= 0)
-	       Err_WrongExamExit ();
+	 /* Get print code (row[0]) */
+	 if ((Print.PrnCod = DB_GetNextCode (mysql_res)) <= 0)
+	    Err_WrongExamExit ();
 
-	    /* Get print data */
-	    ExaPrn_GetPrintDataByPrnCod (&Print);
+	 /* Get print data */
+	 ExaPrn_GetPrintDataByPrnCod (&Print);
 
-	    if (NumResult)
-	       HTM_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
 	    /* Write start/end times */
 	    for (StartEndTime  = (Dat_StartEndTime_t) 0;
@@ -508,22 +477,14 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 	    /* Get and accumulate questions and score */
 	    /* Get questions and user's answers of exam print from database */
 	    ExaPrn_GetPrintQuestionsFromDB (&Print);
-	    NumTotalQsts.All += Print.NumQsts.All;
 
 	    /* Compute score taking into account only valid questions */
 	    ExaRes_ComputeValidPrintScore (&Print);
-	    NumTotalQsts.Valid.Correct        += Print.NumQsts.Valid.Correct;
-	    NumTotalQsts.Valid.Wrong.Negative += Print.NumQsts.Valid.Wrong.Negative;
-	    NumTotalQsts.Valid.Wrong.Zero     += Print.NumQsts.Valid.Wrong.Zero;
-	    NumTotalQsts.Valid.Wrong.Positive += Print.NumQsts.Valid.Wrong.Positive;
-	    NumTotalQsts.Valid.Blank          += Print.NumQsts.Valid.Blank;
-	    NumTotalQsts.Valid.Total          += Print.NumQsts.Valid.Total;
-	    TotalScore.Valid                  += Print.Score.Valid;
 
 	    /* Write total number of questions */
 	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM LINE_LEFT %s\"",
-	                  The_GetSuffix (),The_GetColorRows ());
-		     HTM_Unsigned (Print.NumQsts.All);
+			  The_GetSuffix (),The_GetColorRows ());
+	       HTM_Unsigned (Print.NumQsts.All);
 	    HTM_TD_End ();
 
 	    /* Valid questions */
@@ -534,7 +495,7 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 
 	    /* Invalid questions */
 	    HTM_TD_Begin ("class=\"RT DAT_RED_%s LINE_BOTTOM %s\"",
-	                  The_GetSuffix (),The_GetColorRows ());
+			  The_GetSuffix (),The_GetColorRows ());
 	       NumQstsInvalid = Print.NumQsts.All -
 				Print.NumQsts.Valid.Total;
 	       HTM_UnsignedLight0 (NumQstsInvalid);
@@ -542,42 +503,42 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 
 	    /* Write number of correct questions */
 	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM LINE_LEFT %s\"",
-	                  The_GetSuffix (),The_GetColorRows ());
+			  The_GetSuffix (),The_GetColorRows ());
 	       HTM_UnsignedLight0 (Print.NumQsts.Valid.Correct);
 	    HTM_TD_End ();
 
 	    /* Write number of wrong questions */
 	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM %s\"",
-	                  The_GetSuffix (),The_GetColorRows ());
+			  The_GetSuffix (),The_GetColorRows ());
 	       HTM_UnsignedLight0 (Print.NumQsts.Valid.Wrong.Negative);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM %s\"",
-	                  The_GetSuffix (),The_GetColorRows ());
+			  The_GetSuffix (),The_GetColorRows ());
 	       HTM_UnsignedLight0 (Print.NumQsts.Valid.Wrong.Zero);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM %s\"",
-	                  The_GetSuffix (),The_GetColorRows ());
+			  The_GetSuffix (),The_GetColorRows ());
 	       HTM_UnsignedLight0 (Print.NumQsts.Valid.Wrong.Positive);
 	    HTM_TD_End ();
 
 	    /* Write number of blank questions */
 	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM %s\"",
-	                  The_GetSuffix (),The_GetColorRows ());
+			  The_GetSuffix (),The_GetColorRows ());
 	       HTM_UnsignedLight0 (Print.NumQsts.Valid.Blank);
 	    HTM_TD_End ();
 
 	    /* Write score valid (taking into account only valid questions) */
 	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM LINE_LEFT %s\"",
-	                  The_GetSuffix (),The_GetColorRows ());
+			  The_GetSuffix (),The_GetColorRows ());
 	       HTM_DoublePartOfUnsigned (Print.Score.Valid,
 					 Print.NumQsts.Valid.Total);
 	    HTM_TD_End ();
 
 	    /* Write average score per question (taking into account only valid questions) */
 	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM %s\"",
-	                  The_GetSuffix (),The_GetColorRows ());
+			  The_GetSuffix (),The_GetColorRows ());
 	       HTM_Double2Decimals (Print.NumQsts.Valid.Total ? Print.Score.Valid /
 								(double) Print.NumQsts.Valid.Total :
 								0.0);
@@ -585,12 +546,11 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 
 	    /* Write grade over maximum grade (taking into account only valid questions) */
 	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM LINE_LEFT %s\"",
-	                  The_GetSuffix (),The_GetColorRows ());
+			  The_GetSuffix (),The_GetColorRows ());
 	       Grade = TstPrn_ComputeGrade (Print.NumQsts.Valid.Total,
 					    Print.Score.Valid,
-					    Exam.MaxGrade);
-	       HTM_DoublePartOfDouble (Grade,Exam.MaxGrade);
-	       TotalGrade += Grade;
+					    Exams->Exam.MaxGrade);
+	       HTM_DoublePartOfDouble (Grade,Exams->Exam.MaxGrade);
 	    HTM_TD_End ();
 
 	    /* Link to show this result */
@@ -602,11 +562,7 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
-	    HTM_TR_End ();
-	   }
-
-	 /***** Write totals for this user *****/
-	 HTM_TR_Begin (NULL);
+	 HTM_TR_End ();
 	}
       else
 	{

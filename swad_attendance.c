@@ -1854,9 +1854,9 @@ static void Att_PutLinkEvent (struct Att_Event *Event,
       Grp_PutParsCodGrpsAssociated (Grp_ATTENDANCE_EVENT,Event->AttCod);
 
       /***** Link to view attendance event *****/
-      HTM_BUTTON_Submit_Begin (Title,"class=\"LT BT_LINK %s_%s\"",NULL,
-			       HidVis_TitleClass[Event->Hidden],
-			       The_GetSuffix ());
+      HTM_BUTTON_Submit_Begin (Title,NULL,
+			       "class=\"LT BT_LINK %s_%s\"",
+			       HidVis_TitleClass[Event->Hidden],The_GetSuffix ());
 	 HTM_Txt (Txt);
       HTM_BUTTON_End ();
 
