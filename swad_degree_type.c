@@ -520,7 +520,7 @@ static void DegTyp_PutHeadDegTypesForSeeing (Act_Action_t NextAction,
 	       Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 
 	       /* Link with the head of this column */
-	       HTM_BUTTON_Submit_Begin (Txt_DEGREE_TYPES_HELP_ORDER[Order],
+	       HTM_BUTTON_Submit_Begin (Txt_DEGREE_TYPES_HELP_ORDER[Order],NULL,
 	                                "class=\"BT_LINK\"");
 		  if (Order == SelectedOrder)
 		     HTM_U_Begin ();

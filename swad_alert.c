@@ -97,8 +97,7 @@ void Ale_CreateAlert (Ale_AlertType_t Type,const char *Section,
    Ale_Alerts.List[i].Section = NULL;
    if (Section)
       if (Section[0])
-	 if (asprintf (&Ale_Alerts.List[i].Section,"%s",
-	               Section) < 0)
+	 if (asprintf (&Ale_Alerts.List[i].Section,"%s",Section) < 0)
 	    Err_NotEnoughMemoryExit ();
 
    va_start (ap,fmt);
@@ -503,7 +502,7 @@ void Ale_ShowAlertAndButtonEnd (Act_Action_t NextAction,const char *Anchor,const
 	       FuncPars (Args);
 
 	    /* Put button */
-	    Btn_PutButton (Button);
+	    Btn_PutButton (Button,NULL);
 
 	 /* End form */
 	 Frm_EndForm ();

@@ -226,7 +226,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 		  /* Icon and text */
 		  HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
 		     Frm_BeginForm (Action);
-			HTM_BUTTON_Submit_Begin (TabMenuStr,
+			HTM_BUTTON_Submit_Begin (TabMenuStr,NULL,
 			                         "class=\"BT_LINK FORM_IN_%s NOWRAP\"",
 			                         The_GetSuffix ());
 			   MFU_PutIconAndText (Action,MenuStr);
@@ -284,7 +284,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 	       /* Icon and text */
 	       HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
 		  Frm_BeginForm (Action);
-		     HTM_BUTTON_Submit_Begin (TabMenuStr,"class=\"BT_LINK\"");
+		     HTM_BUTTON_Submit_Begin (TabMenuStr,NULL,"class=\"BT_LINK\"");
 			MFU_PutIconAndText (Action,MenuStr);
 		     HTM_BUTTON_End ();
 		  Frm_EndForm ();

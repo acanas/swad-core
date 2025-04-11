@@ -188,7 +188,7 @@ void Roo_SeeRooms (void)
             HTM_TH_Begin (HTM_HEAD_LEFT);
 	       Frm_BeginForm (ActSeeRoo);
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
-		  HTM_BUTTON_Submit_Begin (Txt_ROOMS_HELP_ORDER[Order],
+		  HTM_BUTTON_Submit_Begin (Txt_ROOMS_HELP_ORDER[Order],NULL,
 		                           "class=\"BT_LINK\"");
 		     if (Order == Rooms.SelectedOrder)
 			HTM_U_Begin ();

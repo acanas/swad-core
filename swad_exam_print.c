@@ -25,10 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <stddef.h>		// For NULL
-#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_action_list.h"
@@ -665,7 +663,7 @@ static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
    /***** Form to end/close this exam print *****/
    Frm_BeginForm (ActEndExaPrn);
       Exa_PutPars (Exams);
-      Btn_PutButton (Btn_DONE);
+      Btn_PutButton (Btn_DONE,NULL);
    Frm_EndForm ();
   }
 
@@ -1031,7 +1029,7 @@ void ExaPrn_ReceivePrintAnswer (void)
 	 /***** Form to end/close this exam print *****/
 	 Frm_BeginForm (ActEndExaPrn);
 	    Exa_PutPars (&Exams);
-	    Btn_PutButton (Btn_CONTINUE);
+	    Btn_PutButton (Btn_CONTINUE,NULL);
 	 Frm_EndForm ();
 	 break;
      }

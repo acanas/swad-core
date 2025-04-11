@@ -25,10 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
-#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 
@@ -298,7 +296,7 @@ static void SysCfg_NumCtys (void)
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeCty);
-	    HTM_BUTTON_Submit_Begin (Txt_HIERARCHY_PLURAL_Abc[Hie_CTY],
+	    HTM_BUTTON_Submit_Begin (Txt_HIERARCHY_PLURAL_Abc[Hie_CTY],NULL,
 				     "class=\"LB BT_LINK\"");
 	       HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTY,	// Number of countries...
 						            Hie_SYS,	// ...in system

@@ -1425,7 +1425,8 @@ void HTM_INPUT_CHECKBOX (const char *Name,HTM_Attributes_t Attributes,
 /********************************** Buttons **********************************/
 /*****************************************************************************/
 
-void HTM_BUTTON_Submit_Begin (const char *Title,const char *fmt,...)
+void HTM_BUTTON_Submit_Begin (const char *Title,const char *FormId,
+			      const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -1435,6 +1436,9 @@ void HTM_BUTTON_Submit_Begin (const char *Title,const char *fmt,...)
    if (Title)
       if (Title[0])
          HTM_TxtF (" title=\"%s\"",Title);
+   if (FormId)
+      if (FormId[0])
+         HTM_TxtF (" form=\"%s\"",FormId);
 
    if (fmt)
      {

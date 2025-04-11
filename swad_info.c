@@ -1264,7 +1264,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
 			   if (Actions[InfoType].FuncPars)
 			      Actions[InfoType].FuncPars (Actions[InfoType].Args);
 			   TitleAction = Act_GetTitleAction (Actions[InfoType].NextAction);
-			   HTM_BUTTON_Submit_Begin (TitleAction,
+			   HTM_BUTTON_Submit_Begin (TitleAction,NULL,
 						    "class=\"BT_LINK FORM_IN_%s\"",
 						    The_GetSuffix ());
 			      HTM_Txt (TitleAction);
@@ -2359,7 +2359,7 @@ void Inf_EditURLInfo (void)
 	 HTM_DIV_End ();
 
 	 /***** Send button *****/
-	 Btn_PutButton (Btn_SAVE_CHANGES);
+	 Btn_PutButton (Btn_SAVE_CHANGES,NULL);
 
       /***** End form *****/
       Frm_EndForm ();

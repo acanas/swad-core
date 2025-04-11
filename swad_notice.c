@@ -589,7 +589,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	    /* Form to view full notice */
 	    Frm_BeginFormAnchor (ActSeeOneNot,Anchor);
 	       ParCod_PutPar (ParCod_Not,Notice->NotCod);
-	       HTM_BUTTON_Submit_Begin (Txt_See_full_notice,
+	       HTM_BUTTON_Submit_Begin (Txt_See_full_notice,NULL,
 	                                "class=\"RT BT_LINK\"");
 	   }
 	 if (asprintf (&Id,"not_date_%u",UniqueId) < 0)

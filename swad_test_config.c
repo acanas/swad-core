@@ -232,7 +232,7 @@ static void TstCfg_ShowFormConfig (void)
 	 HTM_TABLE_End ();
 
 	 /***** Send button *****/
-	 Btn_PutButton (Btn_SAVE_CHANGES);
+	 Btn_PutButton (Btn_SAVE_CHANGES,NULL);
 
       /***** End form *****/
       Frm_EndForm ();

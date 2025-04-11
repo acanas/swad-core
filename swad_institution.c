@@ -213,7 +213,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,const char *IconClass
      {
       Frm_BeginForm (ActSeeInsInf);
 	 ParCod_PutPar (ParCod_Ins,Ins->HieCod);
-	 HTM_BUTTON_Submit_Begin (Ins->FullName,"class=\"BT_LINK\"");
+	 HTM_BUTTON_Submit_Begin (Ins->FullName,NULL,"class=\"BT_LINK\"");
      }
    Lgo_DrawLogo (Hie_INS,Ins,IconClass);
    if (PutLink == Hie_PUT_LINK)
@@ -235,7 +235,7 @@ void Ins_DrawInstitLogoAndNameWithLink (struct Hie_Node *Ins,Act_Action_t Action
       ParCod_PutPar (ParCod_Ins,Ins->HieCod);
 
       /***** Link to action *****/
-      HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Ins->FullName),
+      HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Ins->FullName),NULL,
                                "class=\"BT_LINK LT\"");
       Str_FreeGoToTitle ();
 
@@ -459,7 +459,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	      {
 	       Frm_BeginForm (ActSeeIns);
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
-		  HTM_BUTTON_Submit_Begin (Txt_INSTITUTIONS_HELP_ORDER[Order],
+		  HTM_BUTTON_Submit_Begin (Txt_INSTITUTIONS_HELP_ORDER[Order],NULL,
 		                           "class=\"BT_LINK RT\"");
 		     if (Order == Gbl.Hierarchy.List[Hie_CTY].SelectedOrder)
 			HTM_U_Begin ();
@@ -1877,7 +1877,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		     /* Icon and name of this institution */
 		     Frm_BeginForm (ActSeeInsInf);
 			ParCod_PutPar (ParCod_Ins,Ins.HieCod);
-			HTM_BUTTON_Submit_Begin (Ins.ShrtName,
+			HTM_BUTTON_Submit_Begin (Ins.ShrtName,NULL,
 			                         "class=\"LM BT_LINK\"");
 			   if (WithPhotos)
 			     {

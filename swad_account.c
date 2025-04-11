@@ -171,7 +171,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 
       /***** Form to skip this step *****/
       Frm_BeginForm (ActCreMyAcc);
-	 Btn_PutButton (Btn_SKIP_THIS_STEP);
+	 Btn_PutButton (Btn_SKIP_THIS_STEP,NULL);
       Frm_EndForm ();
 
    /***** End box *****/
@@ -397,7 +397,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
 
       /***** Button to go to request the creation of a new account *****/
       Frm_BeginForm (ActFrmMyAcc);
-	 Btn_PutButton (Btn_CREATE_ACCOUNT);
+	 Btn_PutButton (Btn_CREATE_ACCOUNT,NULL);
       Frm_EndForm ();
 
    /***** End box *****/
@@ -858,7 +858,7 @@ void Acc_AskIfRemoveMyAccount (void)
    /* Show form to request confirmation */
    Frm_BeginForm (ActRemMyAcc);
       Pwd_AskForConfirmationOnDangerousAction ();
-      Btn_PutButton (Btn_ELIMINATE);
+      Btn_PutButton (Btn_ELIMINATE,NULL);
    Frm_EndForm ();
 
    /* End alert */
@@ -886,7 +886,7 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
       Frm_BeginForm (ActRemUsrGbl);
 	 Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	 Pwd_AskForConfirmationOnDangerousAction ();
-	 Btn_PutButton (Btn_ELIMINATE);
+	 Btn_PutButton (Btn_ELIMINATE,NULL);
       Frm_EndForm ();
 
       /* End alert */

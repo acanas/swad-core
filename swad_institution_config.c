@@ -25,10 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
-#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 
 #include "swad_action_list.h"
@@ -327,7 +325,7 @@ static void InsCfg_Country (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 		 {
 		  Frm_BeginFormGoTo (ActSeeCtyInf);
 		     ParCod_PutPar (ParCod_Cty,Gbl.Hierarchy.Node[Hie_CTY].HieCod);
-		     HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Node[Hie_CTY].FullName),
+		     HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Node[Hie_CTY].FullName),NULL,
 					      "class=\"BT_LINK\"");
 		     Str_FreeGoToTitle ();
 		 }

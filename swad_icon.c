@@ -599,8 +599,7 @@ void Ico_GetAndShowNumUsrsPerIconSet (Hie_Level_t HieLvl)
 	   IconSet++)
 	{
 	 /* Get the number of users who have chosen this icon set from database */
-	 if (asprintf (&SubQuery,"usr_data.IconSet='%s'",
-		       Ico_IconSetId[IconSet]) < 0)
+	 if (asprintf (&SubQuery,"usr_data.IconSet='%s'",Ico_IconSetId[IconSet]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 NumUsrs[IconSet] = Usr_DB_GetNumUsrsWhoChoseAnOption (HieLvl,SubQuery);
 	 free (SubQuery);

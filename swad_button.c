@@ -114,12 +114,13 @@ static struct
 /********************** Put a button to submit a form ************************/
 /*****************************************************************************/
 
-void Btn_PutButton (Btn_Button_t Button)
+void Btn_PutButton (Btn_Button_t Button,const char *FormId)
   {
    if (Button != Btn_NO_BUTTON)
      {
       HTM_DIV_Begin ("class=\"CM\"");
-	 HTM_BUTTON_Submit_Begin (NULL,"class=\"BT_SUBMIT %s\"",
+	 HTM_BUTTON_Submit_Begin (NULL,FormId,
+				  "class=\"BT_SUBMIT %s\"",
 				  But_Buttons[Button].Class);
 	    HTM_Txt (*But_Buttons[Button].Txt);
 	 HTM_BUTTON_End ();
@@ -131,7 +132,7 @@ void Btn_PutButtonInline (Btn_Button_t Button)
   {
    if (Button != Btn_NO_BUTTON)
      {
-      HTM_BUTTON_Submit_Begin (NULL,"class=\"BT_SUBMIT_INLINE %s\"",
+      HTM_BUTTON_Submit_Begin (NULL,"class=\"BT_SUBMIT_INLINE %s\"",NULL,
 			       But_Buttons[Button].Class);
 	 HTM_Txt (*But_Buttons[Button].Txt);
       HTM_BUTTON_End ();

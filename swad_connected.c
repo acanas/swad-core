@@ -25,11 +25,9 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <limits.h>		// For maximum values
 #include <linux/limits.h>	// For PATH_MAX
 #include <stddef.h>		// For NULL
-#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 
@@ -269,7 +267,8 @@ void Con_ShowGlobalConnectedUsrs (void)
    /***** Number of sessions *****/
    /* Link to view more details about connected users */
    Frm_BeginForm (ActLstCon);
-      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActLstCon),"class=\"BT_LINK\"");
+      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActLstCon),NULL,
+			       "class=\"BT_LINK\"");
 
 	 /* Write total number of sessions */
          HTM_UnsignedTxt (Gbl.Session.NumSessions,Txt_session,Txt_sessions);
@@ -399,7 +398,8 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    /***** Number of connected users who belong to course *****/
    /* Link to view more details about connected users */
    Frm_BeginForm (ActLstCon);
-      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActLstCon),"class=\"BT_LINK\"");
+      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActLstCon),NULL,
+			       "class=\"BT_LINK\"");
 	 Str_Copy (CourseName,Gbl.Hierarchy.Node[Hie_CRS].ShrtName,sizeof (CourseName) - 1);
 	 Con_GetNumConnectedWithARole (Hie_CRS,Rol_UNK,&Usrs);
 	 HTM_Unsigned (Usrs.NumUsrs); HTM_SP ();
@@ -677,7 +677,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role,unsigned NumU
 	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 
 	    HTM_DIV_Begin ("class=\"CON_NAME_NARROW\"");	// Limited width
-	       HTM_BUTTON_Submit_Begin (Act_GetActionText (NextAction[Role]),
+	       HTM_BUTTON_Submit_Begin (Act_GetActionText (NextAction[Role]),NULL,
 	                                "class=\"LT BT_LINK\"");
 		  Usr_WriteFirstNameBRSurnames (UsrDat);
 	       HTM_BUTTON_End ();
@@ -791,7 +791,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Hie_Level_t 
 			Err_WrongRoleExit ();
 		     Frm_BeginForm (NextAction[Role]);
 		     Usr_PutParUsrCodEncrypted (UsrDat.EnUsrCod);
-			HTM_BUTTON_Submit_Begin (UsrDat.FullName,
+			HTM_BUTTON_Submit_Begin (UsrDat.FullName,NULL,
 						 "class=\"LT BT_LINK\"");
 		    }
 		  Usr_WriteFirstNameBRSurnames (&UsrDat);

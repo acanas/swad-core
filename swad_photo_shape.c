@@ -194,8 +194,7 @@ void PhoSha_GetAndShowNumUsrsPerPhotoShape (Hie_Level_t HieLvl)
 	   Shape++)
 	{
 	 /* Get the number of users who have chosen this layout of columns from database */
-	 if (asprintf (&SubQuery,"usr_data.PhotoShape=%u",
-		       (unsigned) Shape) < 0)
+	 if (asprintf (&SubQuery,"usr_data.PhotoShape=%u",(unsigned) Shape) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 NumUsrs[Shape] = Usr_DB_GetNumUsrsWhoChoseAnOption (HieLvl,SubQuery);
 	 free (SubQuery);

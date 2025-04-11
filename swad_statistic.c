@@ -427,7 +427,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 		  Dat_PutParBrowserTZDiff ();
 
 		  /***** Send button *****/
-		  Btn_PutButton (Btn_SHOW);
+		  Btn_PutButton (Btn_SHOW,NULL);
 
 	       /***** End form *****/
 	       Frm_EndForm ();
@@ -1168,7 +1168,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 		    {
 		     if (asprintf (&Title,Txt_Show_previous_X_clicks,Stats->RowsPerPage) < 0)
 			Err_NotEnoughMemoryExit ();
-		     HTM_BUTTON_Submit_Begin (Title,"class=\"BT_LINK\"");
+		     HTM_BUTTON_Submit_Begin (Title,NULL,"class=\"BT_LINK\"");
 		     free (Title);
 			HTM_TxtF ("&lt;%s",Txt_PAGES_Previous);
 		     HTM_BUTTON_End ();
@@ -1202,7 +1202,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 		    {
 		     if (asprintf (&Title,Txt_Show_next_X_clicks,Stats->RowsPerPage) < 0)
 			Err_NotEnoughMemoryExit ();
-		     HTM_BUTTON_Submit_Begin (Title,"class=\"BT_LINK\"");
+		     HTM_BUTTON_Submit_Begin (Title,NULL,"class=\"BT_LINK\"");
 		     free (Title);
 			HTM_TxtF ("%s&gt;",Txt_PAGES_Next);
 		     HTM_BUTTON_End ();
@@ -3376,7 +3376,7 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
 	      {
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
 		  ParCod_PutPar (ParCod_Crs,Crs.HieCod);
-		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs.FullName),
+		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs.FullName),NULL,
 		                           "class=\"LT BT_LINK\"");
 		  Str_FreeGoToTitle ();
 		     HTM_Txt (Crs.ShrtName);

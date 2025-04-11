@@ -219,7 +219,7 @@ static void DegCfg_Center (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 		 {
 		  Frm_BeginFormGoTo (ActSeeCtrInf);
 		     ParCod_PutPar (ParCod_Ctr,Gbl.Hierarchy.Node[Hie_CTR].HieCod);
-		     HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Node[Hie_CTR].ShrtName),
+		     HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Node[Hie_CTR].ShrtName),NULL,
 					      "class=\"LB BT_LINK\"");
 		     Str_FreeGoToTitle ();
 		 }
@@ -288,7 +288,7 @@ static void DegCfg_NumCrss (void)
 	    if (asprintf (&Title,Txt_Courses_of_DEGREE_X,
 			  Gbl.Hierarchy.Node[Hie_DEG].ShrtName) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_Submit_Begin (Title,"class=\"LB BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Title,NULL,"class=\"LB BT_LINK\"");
 	    free (Title);
 	       HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
 						            Hie_DEG,	// ...in degree

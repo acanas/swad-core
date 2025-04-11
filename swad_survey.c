@@ -235,7 +235,7 @@ void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 			Grp_PutParMyAllGrps (&MyAllGrps);
 			Pag_PutParPagNum (Pag_SURVEYS,Surveys->CurrentPage);
 			Par_PutParOrder ((unsigned) Order);
-			HTM_BUTTON_Submit_Begin (Txt_START_END_TIME_HELP[Order],
+			HTM_BUTTON_Submit_Begin (Txt_START_END_TIME_HELP[Order],NULL,
 			                         "class=\"BT_LINK\"");
 			   if (Order == Surveys->SelectedOrder)
 			      HTM_U_Begin ();
@@ -496,7 +496,8 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	    MyAllGrps = Grp_GetParMyAllGrps ();
 	    Grp_PutParMyAllGrps (&MyAllGrps);
 	    Pag_PutParPagNum (Pag_SURVEYS,Surveys->CurrentPage);
-	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneSvy),"class=\"LT BT_LINK %s_%s\"",
+	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneSvy),NULL,
+				     "class=\"LT BT_LINK %s_%s\"",
 				     HidVis_TitleClass[Surveys->Svy.Status.Hidden],
 				     The_GetSuffix ());
 	       HTM_Txt (Surveys->Svy.Title);
@@ -2351,7 +2352,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
       HTM_TABLE_End ();
 
       /***** Send button *****/
-      Btn_PutButton (Forms[OldNewQst].Button);
+      Btn_PutButton (Forms[OldNewQst].Button,NULL);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -2698,7 +2699,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
 	 if (PutFormAnswerSurvey == Frm_PUT_FORM)
 	   {
 	    /***** Button to create/modify survey *****/
-	    Btn_PutButton (Btn_DONE);
+	    Btn_PutButton (Btn_DONE,NULL);
 
 	    /***** End form *****/
 	    Frm_EndForm ();
@@ -2995,7 +2996,8 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
      {
       if (asprintf (&Title,"%u&nbsp;(%u%%&nbsp;%s&nbsp;%u)",
                     NumUsrs,
-                    (unsigned) ((((double) NumUsrs * 100.0) / (double) MaxUsrs) + 0.5),
+                    (unsigned) ((((double) NumUsrs * 100.0) /
+                		  (double) MaxUsrs) + 0.5),
                     Txt_of_PART_OF_A_TOTAL,MaxUsrs) < 0)
          Err_NotEnoughMemoryExit ();
      }

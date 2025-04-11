@@ -1384,7 +1384,7 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
   {
    extern const char *Txt_Print;
 
-   HTM_BUTTON_Submit_Begin (Txt_Print,
+   HTM_BUTTON_Submit_Begin (Txt_Print,NULL,
                             "class=\"BT_LINK FORM_OUT_%s BOLD\"",
                             The_GetSuffix ());
       Ico_PutIconTextLink ("print.svg",Ico_BLACK,Txt_Print);
@@ -2232,17 +2232,17 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	       switch (TypeOfView)
 		 {
 		  case Rec_SHA_SIGN_UP_IN_CRS_FORM:
-		     Btn_PutButton (Btn_ENROL);
+		     Btn_PutButton (Btn_ENROL,NULL);
 		     Frm_EndForm ();
 		     break;
 		  case Rec_SHA_MY_RECORD_FORM:
-		     Btn_PutButton (Btn_SAVE_CHANGES);
+		     Btn_PutButton (Btn_SAVE_CHANGES,NULL);
 		     Frm_EndForm ();
 		     break;
 		  case Rec_SHA_OTHER_NEW_USR_FORM:
 		     if (Gbl.Crs.Grps.NumGrps) // This course has groups?
 			Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
-		     Btn_PutButton (Btn_ENROL);
+		     Btn_PutButton (Btn_ENROL,NULL);
 		     Frm_EndForm ();
 		     break;
 		  case Rec_SHA_OTHER_EXISTING_USR_FORM:
@@ -2262,7 +2262,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
 		     /***** Which action, register or removing? *****/
 		     if (Enr_PutActionsEnrRemOneUsr (MeOrOther))
-			Btn_PutButton (Btn_CONFIRM);
+			Btn_PutButton (Btn_CONFIRM,NULL);
 
 		     Frm_EndForm ();
 		     break;
@@ -2536,7 +2536,7 @@ static void Rec_ShowInstitutionInHead (struct Hie_Node *Ins,
 	   {
 	    Frm_BeginFormGoTo (ActSeeInsInf);
 	       ParCod_PutPar (ParCod_Ins,Ins->HieCod);
-	       HTM_BUTTON_Submit_Begin (Ins->FullName,"class=\"BT_LINK\"");
+	       HTM_BUTTON_Submit_Begin (Ins->FullName,NULL,"class=\"BT_LINK\"");
 	   }
 	 Lgo_DrawLogo (Hie_INS,Ins,"ICO");
 	 if (PutFormLinks == Frm_PUT_FORM)
@@ -2556,7 +2556,8 @@ static void Rec_ShowInstitutionInHead (struct Hie_Node *Ins,
 	   {
 	    Frm_BeginFormGoTo (ActSeeInsInf);
 	       ParCod_PutPar (ParCod_Ins,Ins->HieCod);
-	       HTM_BUTTON_Submit_Begin (Ins->FullName,"class=\"LM BT_LINK\"");
+	       HTM_BUTTON_Submit_Begin (Ins->FullName,NULL,
+					"class=\"LM BT_LINK\"");
 	   }
 	 HTM_Txt (Ins->FullName);
 	 if (PutFormLinks == Frm_PUT_FORM)
@@ -2628,7 +2629,7 @@ static void Rec_ShowNickname (struct Usr_Data *UsrDat,
 	       /* Put form to go to public profile */
 	       Frm_BeginForm (ActSeeOthPubPrf);
 		  Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
-		  HTM_BUTTON_Submit_Begin (Title[Usr_ItsMe (UsrDat->UsrCod)],
+		  HTM_BUTTON_Submit_Begin (Title[Usr_ItsMe (UsrDat->UsrCod)],NULL,
 					   "class=\"BT_LINK\"");
 	      }
 	    HTM_Arroba (); HTM_Txt (UsrDat->Nickname);
@@ -2971,8 +2972,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 
 	 /* Data */
 	 HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-	    Rec_ShowFormSex (UsrDat,Usr_SEX_FEMALE);
-	    HTM_BR ();
+	    Rec_ShowFormSex (UsrDat,Usr_SEX_FEMALE); HTM_BR ();
 	    Rec_ShowFormSex (UsrDat,Usr_SEX_MALE  );
 	 HTM_TD_End ();
 	}

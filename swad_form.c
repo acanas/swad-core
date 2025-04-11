@@ -255,7 +255,7 @@ void Frm_EndFormTable (Btn_Button_t Button)
 	 HTM_TABLE_End ();
 
 	 /***** Send button *****/
-         Btn_PutButton (Button);
+         Btn_PutButton (Button,NULL);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -290,8 +290,7 @@ void Frm_SetAnchorStr (long Cod,char **Anchor)
   {
    if (Cod > 0)
      {
-      if (asprintf (Anchor,"cod_%ld",
-		    Cod) < 0)
+      if (asprintf (Anchor,"cod_%ld",Cod) < 0)
 	 Err_NotEnoughMemoryExit ();
      }
    else

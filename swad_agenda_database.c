@@ -75,8 +75,7 @@ unsigned Agd_DB_GetListEvents (MYSQL_RES **mysql_res,
      {
       case Agd_MY_AGENDA_TODAY:
       case Agd_MY_AGENDA:
-	 if (asprintf (&UsrSubQuery,"UsrCod=%ld",
-		       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+	 if (asprintf (&UsrSubQuery,"UsrCod=%ld",Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 if (AgendaType == Agd_MY_AGENDA_TODAY)
 	    Str_Copy (Past__FutureEventsSubQuery,
@@ -131,8 +130,7 @@ unsigned Agd_DB_GetListEvents (MYSQL_RES **mysql_res,
 	 break;
       case Agd_ANOTHER_AGENDA_TODAY:
       case Agd_ANOTHER_AGENDA:
-	 if (asprintf (&UsrSubQuery,"UsrCod=%ld",
-	               Gbl.Usrs.Other.UsrDat.UsrCod) < 0)
+	 if (asprintf (&UsrSubQuery,"UsrCod=%ld",Gbl.Usrs.Other.UsrDat.UsrCod) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 if (AgendaType == Agd_ANOTHER_AGENDA_TODAY)
 	    Str_Copy (Past__FutureEventsSubQuery,

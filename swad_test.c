@@ -25,13 +25,11 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <limits.h>		// For UINT_MAX
 #include <linux/limits.h>	// For PATH_MAX
 #include <mysql/mysql.h>	// To access MySQL databases
 #include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
-#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For exit, system, malloc, free, etc
 #include <string.h>		// For string functions
 #include <sys/stat.h>		// For mkdir
@@ -165,7 +163,7 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
 	       HTM_TABLE_End ();
 
 	       /***** Send button *****/
-	       Btn_PutButton (Btn_CONTINUE);
+	       Btn_PutButton (Btn_CONTINUE,NULL);
 
 	    Frm_EndForm ();
 	   }

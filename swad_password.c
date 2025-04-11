@@ -25,8 +25,6 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
-#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For system, getenv, etc.
 #include <string.h>		// For string functions
 #include <sys/wait.h>		// For the macro WEXITSTATUS
@@ -757,7 +755,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 	       Pwd_PutFormToGetNewPasswordTwice ();
 	    HTM_TABLE_End ();
 
-	    Btn_PutButton (Btn_CHANGE);
+	    Btn_PutButton (Btn_CHANGE,NULL);
 
 	 /* End form */
 	 Frm_EndForm ();

@@ -261,7 +261,7 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
 		     Frm_BeginForm (ActSeeAllExa);
 			Pag_PutParPagNum (Pag_EXAMS,Exams->CurrentPage);
 			Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
-			HTM_BUTTON_Submit_Begin (Txt_EXAMS_ORDER_HELP[Order],
+			HTM_BUTTON_Submit_Begin (Txt_EXAMS_ORDER_HELP[Order],NULL,
 			                         "class=\"BT_LINK\"");
 			   if (Order == Exams->SelectedOrder)
 			      HTM_U_Begin ();
@@ -528,7 +528,7 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeOneExa);
 	    Exa_PutPars (Exams);
-	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneExa),
+	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneExa),NULL,
 				     "class=\"LT BT_LINK %s_%s\"",
 				     HidVis_TitleClass[Exams->Exam.Hidden],
 				     The_GetSuffix ());
@@ -563,7 +563,7 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
 
       Frm_BeginForm (ActSeeOneExa);
 	 Exa_PutPars (Exams);
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneExa),
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneExa),NULL,
 				  "class=\"LT BT_LINK %s_%s\"",
 				  HidVis_TitleClass[Exams->Exam.Hidden],
 				  The_GetSuffix ());
@@ -1420,7 +1420,7 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
       HTM_TABLE_End ();
 
       /***** Send button *****/
-      Btn_PutButton (Forms[OldNewExam].Button);
+      Btn_PutButton (Forms[OldNewExam].Button,NULL);
 
    /***** End form *****/
    Frm_EndForm ();

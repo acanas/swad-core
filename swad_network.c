@@ -252,7 +252,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	       HTM_TABLE_End ();
 
 	       /***** Confirm button *****/
-	       Btn_PutButton (Btn_SAVE_CHANGES);
+	       Btn_PutButton (Btn_SAVE_CHANGES,NULL);
 
 	    /***** End form *****/
 	    Frm_EndForm ();

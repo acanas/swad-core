@@ -364,7 +364,7 @@ void TmlNot_WriteAuthorName (const struct Usr_Data *UsrDat,
       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 
       /* Author's name */
-      HTM_BUTTON_Submit_Begin (Title[Usr_ItsMe (UsrDat->UsrCod)],
+      HTM_BUTTON_Submit_Begin (Title[Usr_ItsMe (UsrDat->UsrCod)],NULL,
 			       "class=\"%s\"",Class);
 	 HTM_Txt (UsrDat->FullName);
       HTM_BUTTON_End ();
@@ -690,7 +690,7 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 
 	    /***** Icon and link to go to action *****/
 	    /* Begin button */
-	    HTM_BUTTON_Submit_Begin (Txt_TIMELINE_NOTE[Not->Type],
+	    HTM_BUTTON_Submit_Begin (Txt_TIMELINE_NOTE[Not->Type],NULL,
 	                             "class=\"BT_LINK FORM_IN_%s ICO_HIGHLIGHT\"",
 	                             The_GetSuffix ());
 

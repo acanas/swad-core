@@ -33,7 +33,7 @@
 /*****************************************************************************/
 
 /* Extensions allowed for uploaded files */
-const char *Ext_FileExtensionsAllowed[Ext_NUM_FILE_EXT_ALLOWED] =
+const char *Ext_FileExtAllowed[Ext_NUM_FILE_EXT_ALLOWED] =
   {
    "3gp"  ,	// Video Android mobile
    "7z"   ,
@@ -162,8 +162,7 @@ bool Ext_CheckIfFileExtensionIsAllowed (const char FilFolLnkName[NAME_MAX + 1])
    for (Type = 0;
 	Type < Ext_NUM_FILE_EXT_ALLOWED;
 	Type++)
-      if (Str_FileIs (FilFolLnkName,
-	              Ext_FileExtensionsAllowed[Type]))
+      if (Str_FileIs (FilFolLnkName,Ext_FileExtAllowed[Type]))
 	 return true;
 
    return false;

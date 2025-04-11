@@ -25,11 +25,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <float.h>		// For DBL_MAX
 #include <linux/limits.h>	// For PATH_MAX
 #include <stddef.h>		// For NULL
-#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 

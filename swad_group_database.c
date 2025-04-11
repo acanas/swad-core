@@ -946,14 +946,13 @@ bool Grp_DB_CheckIfAvailableGrpTyp (long GrpTypCod)
 
    if (GrpTypCod > 0)	// restrict to the given group type, mandatory or not
      {
-      if (asprintf (&SubQueryGrpTypes,"grp_types.GrpTypCod=%ld",
-	            GrpTypCod) < 0)
+      if (asprintf (&SubQueryGrpTypes,"grp_types.GrpTypCod=%ld",GrpTypCod) < 0)
 	 Err_NotEnoughMemoryExit ();
      }
    else			// all mandatory group types in the current course
      {
       if (asprintf (&SubQueryGrpTypes,"grp_types.CrsCod=%ld"
-	                              " AND grp_types.Mandatory='Y'",
+	                         " AND grp_types.Mandatory='Y'",
 	            Gbl.Hierarchy.Node[Hie_CRS].HieCod) < 0)
 	 Err_NotEnoughMemoryExit ();
      }

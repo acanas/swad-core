@@ -1281,7 +1281,7 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects)
 				  Projects->CurrentPage,
 				  -1L,
 				  Usr_USE_LIST_SELECTED_USERS);
-		     HTM_BUTTON_Submit_Begin (Txt_PROJECT_ORDER_HELP[Order],
+		     HTM_BUTTON_Submit_Begin (Txt_PROJECT_ORDER_HELP[Order],NULL,
 		                              "class=\"BT_LINK\"");
 			if (Order == Projects->SelectedOrder)
 			   HTM_U_Begin ();
@@ -1741,7 +1741,7 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Projects,
 	       NextAction = NextActions[Prj_CheckIfICanViewProjectFiles (Projects->Prj.PrjCod)];
 	       Frm_BeginForm (NextAction);
 		  Prj_PutCurrentPars (Projects);
-		  HTM_BUTTON_Submit_Begin (Act_GetActionText (NextAction),
+		  HTM_BUTTON_Submit_Begin (Act_GetActionText (NextAction),NULL,
 					   "class=\"LT BT_LINK %s_%s\"",
 					   HidVis_TitleClass[Projects->Prj.Hidden],
 					   The_GetSuffix ());
@@ -3204,7 +3204,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
 	       /* Show form to request confirmation */
 	       Frm_BeginForm (ActionRemUsr[RoleInPrj]);
 		  Prj_PutCurrentPars (Projects);
-		  Btn_PutButton (Btn_REMOVE);
+		  Btn_PutButton (Btn_REMOVE,NULL);
 	       Frm_EndForm ();
 
 	    /* End alert */
@@ -4070,7 +4070,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	    HTM_TABLE_End ();
 
 	    /* Send button */
-	    Btn_PutButton (Forms[OldNewPrj].Button);
+	    Btn_PutButton (Forms[OldNewPrj].Button,NULL);
 
 	 /* End data form */
 	 Frm_EndForm ();

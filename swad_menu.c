@@ -280,7 +280,7 @@ void Mnu_WriteMenuThisTab (void)
 		  Frm_BeginForm (Action);
 
 		     /***** Begin link *****/
-		     HTM_BUTTON_Submit_Begin (Title,"class=\"BT_LINK\"");
+		     HTM_BUTTON_Submit_Begin (Title,NULL,"class=\"BT_LINK\"");
 
 			/***** Icon and text *****/
 			HTM_DIV_Begin ("class=\"MENU_ICO_TXT\"");
@@ -458,8 +458,7 @@ void Mnu_GetAndShowNumUsrsPerMenu (Hie_Level_t HieLvl)
 	   Menu++)
 	{
 	 /* Get number of users who have chosen this menu from database */
-	 if (asprintf (&SubQuery,"usr_data.Menu=%u",
-		       (unsigned) Menu) < 0)
+	 if (asprintf (&SubQuery,"usr_data.Menu=%u",(unsigned) Menu) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 NumUsrs[Menu] = Usr_DB_GetNumUsrsWhoChoseAnOption (HieLvl,SubQuery);
 	 free (SubQuery);

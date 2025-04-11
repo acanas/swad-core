@@ -24,10 +24,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <float.h>		// For DBL_MAX
 #include <mysql/mysql.h>	// To access MySQL databases
-#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 

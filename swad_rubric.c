@@ -390,7 +390,7 @@ void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
       /* Rubric title */
       Frm_BeginForm (ActSeeOneRub);
 	 Rub_PutPars (Rubrics);
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneRub),
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneRub),NULL,
 				  "class=\"LT BT_LINK ASG_TITLE_%s\"",
 				  The_GetSuffix ());
 	    HTM_Txt (Rubrics->Rubric.Title);
@@ -857,7 +857,7 @@ static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
       HTM_TABLE_End ();
 
       /***** Send button *****/
-      Btn_PutButton (Forms[OldNewRubric].Button);
+      Btn_PutButton (Forms[OldNewRubric].Button,NULL);
 
    /***** End form *****/
    Frm_EndForm ();

@@ -555,8 +555,7 @@ char Str_ConvertToLowerLetter (char Ch)
 
 void Str_DoubleNumToStr (char **Str,double Number)
   {
-   if (asprintf (Str,"%.15lg",
-		 Number) < 0)
+   if (asprintf (Str,"%.15lg",Number) < 0)
       Err_NotEnoughMemoryExit ();
   }
 

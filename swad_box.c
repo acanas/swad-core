@@ -234,7 +234,7 @@ void Box_BoxTableWithButtonEnd (Btn_Button_t Button)
 
 void Box_BoxWithButtonEnd (Btn_Button_t Button)
   {
-      Btn_PutButton (Button);
+      Btn_PutButton (Button,NULL);
    Box_BoxEnd ();
   }
 

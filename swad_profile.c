@@ -818,7 +818,7 @@ static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod)
       Usr_PutParUsrCodEncrypted (EncryptedUsrCod);
 
       /***** Put icon to refresh *****/
-      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActCalFig),
+      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActCalFig),NULL,
 			       "class=\"BT_LINK FORM_OUT_%s BOLD\"",
 			       The_GetSuffix ());
 	 Ico_PutIconTextUpdate (Txt_Calculate);
@@ -895,10 +895,9 @@ static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs)
    Frm_BeginForm (ActSeeUseGbl);
       Sco_PutParScope ("ScopeSta",Hie_SYS);
       Par_PutParUnsigned (NULL,"FigureType",(unsigned) Fig_USERS_RANKING);
-      if (asprintf (&Title,"#%u %s %u",
-		    Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs) < 0)
+      if (asprintf (&Title,"#%u %s %u",Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs) < 0)
 	 Err_NotEnoughMemoryExit ();
-      HTM_BUTTON_Submit_Begin (Title,
+      HTM_BUTTON_Submit_Begin (Title,NULL,
                                "class=\"BT_LINK FORM_OUT_%s\"",
                                The_GetSuffix ());
       free (Title);
@@ -1384,7 +1383,7 @@ static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,
 	{
 	 Frm_BeginForm (ActSeeOthPubPrf);
 	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
-	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOthPubPrf),
+	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOthPubPrf),NULL,
 				     "class=\"LM BT_LINK\"");
 	       Usr_WriteFirstNameBRSurnames (UsrDat);
 	    HTM_BUTTON_End ();

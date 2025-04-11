@@ -305,9 +305,8 @@ static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShrtName,
 	 Cht_WriteParsRoomCodeAndNames (RoomCode,RoomShrtName,RoomFullName);
 
 	 /* Begin button */
-	 HTM_BUTTON_Submit_Begin (RoomFullName,
-	                          "class=\"BT_LINK FORM_IN_%s\"",
-	                          The_GetSuffix ());
+	 HTM_BUTTON_Submit_Begin (RoomFullName,NULL,
+	                          "class=\"BT_LINK FORM_IN_%s\"",The_GetSuffix ());
   }
 
 static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)

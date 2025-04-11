@@ -300,8 +300,7 @@ void The_GetAndShowNumUsrsPerTheme (Hie_Level_t HieLvl)
 	   Theme++)
 	{
 	 /* Get number of users who have chosen this theme from database */
-	 if (asprintf (&SubQuery,"usr_data.Theme='%s'",
-		       The_ThemeId[Theme]) < 0)
+	 if (asprintf (&SubQuery,"usr_data.Theme='%s'",The_ThemeId[Theme]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 NumUsrs[Theme] = Usr_DB_GetNumUsrsWhoChoseAnOption (HieLvl,SubQuery);
 	 free (SubQuery);

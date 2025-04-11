@@ -25,9 +25,7 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <stdbool.h>		// For boolean type
-#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_action_list.h"
@@ -379,7 +377,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct Usr_Data *UsrDat,
 	 /* Form to list users */
 	 Frm_BeginFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
 	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
-	    HTM_BUTTON_Submit_Begin (Title,"class=\"BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Title,NULL,"class=\"BT_LINK\"");
 	}
       HTM_Unsigned (NumUsrs);
       if (NumUsrs)
@@ -397,7 +395,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct Usr_Data *UsrDat,
 	    /* Form to list users */
 	    Frm_BeginFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
 	       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
-	       HTM_BUTTON_Submit_Begin (Title,"class=\"BT_LINK\"");
+	       HTM_BUTTON_Submit_Begin (Title,NULL,"class=\"BT_LINK\"");
 	   }
 	 HTM_Txt (Title);
 	 if (NumUsrs)
@@ -591,7 +589,7 @@ static void Fol_ShowFollowedOrFollower (struct Usr_Data *UsrDat)
 	       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	       HTM_DIV_Begin ("class=\"LT FOLLOW_TXT_NAME DAT_%s\"",	// Limited width
 			      The_GetSuffix ());
-		  HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOthPubPrf),
+		  HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOthPubPrf),NULL,
 					   "class=\"BT_LINK LT\"");
 		     Usr_WriteFirstNameBRSurnames (UsrDat);
 		  HTM_BUTTON_End ();
@@ -653,7 +651,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct Usr_Data *UsrDat)
 	    Frm_BeginForm (ActSeeOthPubPrf);
 	       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	       HTM_DIV_Begin ("class=\"CON_NAME_FOLLOW CON_CRS LT\"");	// Limited width
-		  HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOthPubPrf),
+		  HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOthPubPrf),NULL,
 		                           "class=\"LT BT_LINK\"");
 		     Usr_WriteFirstNameBRSurnames (UsrDat);
 		  HTM_BUTTON_End ();

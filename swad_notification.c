@@ -618,7 +618,7 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,&Forums);
 	       PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
 						Frm_DONT_PUT_FORM;
-		  HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
+		  HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],NULL,
 					   "class=\"Ntf_TYPE LT %s_%s\"",
 					   Class.Link,The_GetSuffix ());
 		     HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
@@ -653,7 +653,7 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 				  Class.Txt,The_GetSuffix ());
 		  break;
 	       case Frm_PUT_FORM:
-		  HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
+		  HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],NULL,
 					   "class=\"Ntf_LOCATION %s_%s\"",
 					   Class.Link,The_GetSuffix ());
 		  break;
@@ -690,7 +690,7 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 				 Class.Txt,The_GetSuffix ());
 		  break;
 	       case Frm_PUT_FORM:
-		  HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
+		  HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],NULL,
 					   "class=\"Ntf_LOCATION %s_%s\"",
 					   Class.Link,The_GetSuffix ());
 		  break;
@@ -1659,7 +1659,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 	    HTM_TABLE_End ();
 
 	    /***** Button to save changes *****/
-	    Btn_PutButton (Btn_SAVE_CHANGES);
+	    Btn_PutButton (Btn_SAVE_CHANGES,NULL);
 
 	 /***** End form *****/
 	 Frm_EndForm ();
@@ -1738,7 +1738,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
    Frm_BeginForm (ActSeeNewNtf);
 
       /***** Begin link *****/
-      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeNewNtf),
+      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeNewNtf),NULL,
 			       "class=\"BT_LINK\"");
 
 	 /***** Number of unseen notifications *****/

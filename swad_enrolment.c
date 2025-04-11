@@ -405,7 +405,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncPars) (v
 		      " class=\"INPUT_%s\"",The_GetSuffix ());
 
       /***** Send button*****/
-      Btn_PutButton (Btn_CONTINUE);
+      Btn_PutButton (Btn_CONTINUE,NULL);
 
    Frm_EndForm ();
   }
@@ -2002,7 +2002,7 @@ void Enr_AskRemAllStdsThisCrs (void)
 	 Frm_BeginForm (ActRemAllStdCrs);
 	    Grp_PutParAllGroups ();
 	    Pwd_AskForConfirmationOnDangerousAction ();
-	    Btn_PutButton (Btn_REMOVE);
+	    Btn_PutButton (Btn_REMOVE,NULL);
 	 Frm_EndForm ();
 
 	 /* End alert */
@@ -2190,8 +2190,7 @@ void Enr_GetNotifEnrolmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
       if (GetContent == Ntf_GET_CONTENT)
 	 /* Write desired role into content */
-	 if (asprintf (ContentStr,
-		       "%s",	// TODO: Write more info in this content
+	 if (asprintf (ContentStr,"%s",	// TODO: Write more info in this content
 		       Txt_ROLES_SINGUL_Abc[DesiredRole][UsrDat.Sex]) < 0)
 	    Err_NotEnoughMemoryExit ();
 
@@ -2520,7 +2519,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
 			Frm_BeginFormGoTo (ActSeeCrsInf);
 			   ParCod_PutPar (ParCod_Crs,Crs.HieCod);
-			   HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs.FullName),
+			   HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs.FullName),NULL,
 						    "class=\"LT BT_LINK\"");
 			   Str_FreeGoToTitle ();
 			      HTM_Txt (Deg.ShrtName);
@@ -3422,7 +3421,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat)
 	 Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
 	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	    Pwd_AskForConfirmationOnDangerousAction ();
-	    Btn_PutButton (Btn_REMOVE);
+	    Btn_PutButton (Btn_REMOVE,NULL);
 	 Frm_EndForm ();
 
 	 /* End alert */

@@ -1527,8 +1527,7 @@ static void Med_ShowJPG (const struct Med_Media *Media,
    /***** Build private path to JPG *****/
    snprintf (FileNameJPG,sizeof (FileNameJPG),"%s.%s",
 	     Media->Name,Med_Extensions[Med_JPG]);
-   if (asprintf (&FullPathJPGPriv,"%s/%s",
-	         PathMedPriv,FileNameJPG) < 0)
+   if (asprintf (&FullPathJPGPriv,"%s/%s",PathMedPriv,FileNameJPG) < 0)
       Err_NotEnoughMemoryExit ();
 
    /***** Check if private media file exists *****/
@@ -1550,8 +1549,7 @@ static void Med_ShowJPG (const struct Med_Media *Media,
 	}
 
       /***** Show media *****/
-      if (asprintf (&URL,"%s/%s",
-		    Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDir) < 0)
+      if (asprintf (&URL,"%s/%s",Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDir) < 0)
 	 Err_NotEnoughMemoryExit ();
       HTM_IMG (URL,FileNameJPG,Media->Title,
 	       "class=\"%s\" loading=\"lazy\"",ClassMedia);	// Lazy load of the media
@@ -1585,14 +1583,12 @@ static void Med_ShowGIF (const struct Med_Media *Media,
    /***** Build private path to animated GIF image *****/
    snprintf (FileNameGIF,sizeof (FileNameGIF),"%s.%s",
 	     Media->Name,Med_Extensions[Med_GIF]);
-   if (asprintf (&FullPathGIFPriv,"%s/%s",	// The animated GIF image
-		 PathMedPriv,FileNameGIF) < 0)
+   if (asprintf (&FullPathGIFPriv,"%s/%s",PathMedPriv,FileNameGIF) < 0)	// The animated GIF image
       Err_NotEnoughMemoryExit ();
 
    /***** Build private path to static PNG image *****/
    snprintf (FileNamePNG,sizeof (FileNamePNG),"%s.png",Media->Name);
-   if (asprintf (&FullPathPNGPriv,"%s/%s",
-		 PathMedPriv,FileNamePNG) < 0)
+   if (asprintf (&FullPathPNGPriv,"%s/%s",PathMedPriv,FileNamePNG) < 0)
       Err_NotEnoughMemoryExit ();
 
    /***** Check if private media file exists *****/
@@ -1615,8 +1611,7 @@ static void Med_ShowGIF (const struct Med_Media *Media,
 	}
 
       /***** Create URLs pointing to symbolic links *****/
-      if (asprintf (&URL,"%s/%s",
-		    Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDir) < 0)
+      if (asprintf (&URL,"%s/%s",Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDir) < 0)
 	 Err_NotEnoughMemoryExit ();
       if (asprintf (&URL_GIF,"%s/%s",URL,FileNameGIF) < 0)
 	 Err_NotEnoughMemoryExit ();
@@ -1679,8 +1674,7 @@ static void Med_ShowVideo (const struct Med_Media *Media,
    /***** Build private path to video *****/
    snprintf (FileNameVideo,sizeof (FileNameVideo),"%s.%s",
 	     Media->Name,Med_Extensions[Media->Type]);
-   if (asprintf (&FullPathVideoPriv,"%s/%s",
-	         PathMedPriv,FileNameVideo) < 0)
+   if (asprintf (&FullPathVideoPriv,"%s/%s",PathMedPriv,FileNameVideo) < 0)
       Err_NotEnoughMemoryExit ();
 
    /***** Check if private media file exists *****/
@@ -1702,8 +1696,7 @@ static void Med_ShowVideo (const struct Med_Media *Media,
 	}
 
       /***** Create URL pointing to symbolic link *****/
-      if (asprintf (&URL,"%s/%s",
-		    Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDir) < 0)
+      if (asprintf (&URL,"%s/%s",Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDir) < 0)
 	 Err_NotEnoughMemoryExit ();
 
       /***** Show media *****/
@@ -2046,8 +2039,7 @@ void Med_RemoveMedia (long MedCod)
                   free (FullPathPriv);
 
 		  /***** Remove private PNG file *****/
-		  if (asprintf (&FullPathPriv,"%s/%s.png",
-			        PathPriv,Media.Name) < 0)
+		  if (asprintf (&FullPathPriv,"%s/%s.png",PathPriv,Media.Name) < 0)
 		     Err_NotEnoughMemoryExit ();
 		  unlink (FullPathPriv);
                   free (FullPathPriv);

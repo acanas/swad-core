@@ -254,14 +254,14 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
 	   {
 	    case TstPrn_REQUEST:
 	       /* Send button */
-	       Btn_PutButton (Btn_DONE);
+	       Btn_PutButton (Btn_DONE,NULL);
 	       break;
 	    case TstPrn_CONFIRM:
 	       /* Will the test be visible by teachers? */
 	       TstPrn_PutCheckBoxAllowTeachers (true);
 
 	       /* Send button */
-	       Btn_PutButton (Btn_SEND);
+	       Btn_PutButton (Btn_SEND,NULL);
 	       break;
 	   }
 

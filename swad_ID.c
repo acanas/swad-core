@@ -435,7 +435,7 @@ static void ID_PutLinkToConfirmID (struct Usr_Data *UsrDat,unsigned NumID,
       Par_PutParString (NULL,"UsrID",UsrDat->IDs.List[NumID].ID);
 
       /***** Put link *****/
-      HTM_BUTTON_Submit_Begin (Txt_Confirm,
+      HTM_BUTTON_Submit_Begin (Txt_Confirm,NULL,
                                "class=\"BT_LINK FORM_OUT_%s BOLD\"",
                                The_GetSuffix ());
 	 Ico_PutIconTextLink ("check.svg",Ico_BLACK,Txt_Confirm);
@@ -585,12 +585,14 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 	    else						// I can remove
 	       /* Form to remove user's ID */
 	       Ico_PutContextualIconToRemove (ActID[MeOrOther].Remove,ID_ID_SECTION_ID,
-					      FuncParsRemove[MeOrOther],Usr_UsrDat[MeOrOther]->IDs.List[NumID].ID);
+					      FuncParsRemove[MeOrOther],
+					      Usr_UsrDat[MeOrOther]->IDs.List[NumID].ID);
 	   }
 
 	    /* User's ID */
-	    if (asprintf (&Title,Usr_UsrDat[MeOrOther]->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
-								                    Txt_ID_X_not_confirmed,
+	    if (asprintf (&Title,
+		          Usr_UsrDat[MeOrOther]->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
+								             Txt_ID_X_not_confirmed,
 			  Usr_UsrDat[MeOrOther]->IDs.List[NumID].ID) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_SPAN_Begin ("class=\"%s\" title=\"%s\"",

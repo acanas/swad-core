@@ -1380,7 +1380,7 @@ void Usr_WriteLoggedUsrHead (void)
       if (NumAvailableRoles == 1)
 	{
 	 Frm_BeginForm (ActFrmRolSes);
-	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActFrmRolSes),
+	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActFrmRolSes),NULL,
 				     "class=\"BT_LINK\"");
 	       HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
 	    HTM_BUTTON_End ();
@@ -3647,11 +3647,11 @@ static void Set_FormToSelectUsrListType (Act_Action_t NextAction,
 
       /***** Link and image *****/
       if (OnSubmit)
-	 HTM_BUTTON_Submit_Begin (Txt_USR_LIST_TYPES[ListType],
+	 HTM_BUTTON_Submit_Begin (Txt_USR_LIST_TYPES[ListType],NULL,
 				  "class=\"BT_LINK FORM_IN_%s NOWRAP\" onsubmit=\"%s\"",
 				  The_GetSuffix (),OnSubmit);
       else
-	 HTM_BUTTON_Submit_Begin (Txt_USR_LIST_TYPES[ListType],
+	 HTM_BUTTON_Submit_Begin (Txt_USR_LIST_TYPES[ListType],NULL,
 				  "class=\"BT_LINK FORM_IN_%s NOWRAP\"",
 				  The_GetSuffix ());
       Ico_PutIcon (Usr_IconsClassPhotoOrList[ListType],Ico_BLACK,
@@ -3759,7 +3759,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 		  HTM_TABLE_End ();
 
 		  /***** Send button *****/
-		  Btn_PutButton (Button);
+		  Btn_PutButton (Button,NULL);
 
 	       /***** End form *****/
 	       Frm_EndForm ();
@@ -3907,9 +3907,9 @@ void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUsrs,
 	       Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
 	       HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Role],
 				   HTM_NO_ATTR,
-				   "value=\"\""
+				   "value=\"\" form=\"%s\""
 				   " onclick=\"togglecheckChildren(this,'%s')\"",
-				   ParName);
+				   Usr_FORM_TO_SELECT_USRS_ID,ParName);
 	       free (ParName);
 	      }
 	    else
@@ -4006,8 +4006,10 @@ void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
       Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
       HTM_INPUT_CHECKBOX (ParName,
 			  Attributes,
-			  "value=\"%s\" onclick=\"checkParent(this,'%s')\"",
-			  EncryptedUsrCod,Usr_NameSelUnsel[Role]);
+			  "value=\"%s\" form=\"%s\""
+			  " onclick=\"checkParent(this,'%s')\"",
+			  EncryptedUsrCod,Usr_FORM_TO_SELECT_USRS_ID,
+			  Usr_NameSelUnsel[Role]);
       free (ParName);
      }
    else
@@ -4756,11 +4758,12 @@ unsigned Usr_ListUsrsFound (Hie_Level_t HieLvl,Rol_Role_t Role,
      {
       /***** Begin box with number of users found *****/
       Sex = Usr_GetSexOfUsrsLst (Role);
-      if (asprintf (&Title,"%u %s",NumUsrs,
-				   (Role == Rol_UNK) ? (NumUsrs == 1 ? Txt_user[Sex] :
-								       Txt_users[Sex]) :
-						       (NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Role][Sex] :
-								       Txt_ROLES_PLURAL_abc[Role][Sex])) < 0)
+      if (asprintf (&Title,"%u %s",
+		    NumUsrs,
+		    (Role == Rol_UNK) ? (NumUsrs == 1 ? Txt_user[Sex] :
+							Txt_users[Sex]) :
+					(NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Role][Sex] :
+							Txt_ROLES_PLURAL_abc[Role][Sex])) < 0)
 	 Err_NotEnoughMemoryExit ();
       Box_BoxBegin (Title,NULL,NULL,NULL,Box_NOT_CLOSABLE);
       free (Title);
@@ -5622,7 +5625,7 @@ static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_US
    HTM_UL_End ();
 
    /***** Put button to confirm *****/
-   Btn_PutButton (Btn_CONTINUE);
+   Btn_PutButton (Btn_CONTINUE,NULL);
   }
 
 /*****************************************************************************/
@@ -6522,7 +6525,7 @@ void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows)
       /* Begin form to go to user's record card */
       Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
 	 Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
-	 HTM_BUTTON_Submit_Begin (UsrDat->FullName,
+	 HTM_BUTTON_Submit_Begin (UsrDat->FullName,NULL,
 	                          "class=\"LT BT_LINK MSG_AUT_%s\"",
 	                          The_GetSuffix ());
      }

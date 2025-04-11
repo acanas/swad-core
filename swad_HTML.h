@@ -172,7 +172,8 @@ void HTM_INPUT_RADIO (const char *Name,HTM_Attributes_t Attributes,
 void HTM_INPUT_CHECKBOX (const char *Name,HTM_Attributes_t Attributes,
 			 const char *fmt,...);
 
-void HTM_BUTTON_Submit_Begin (const char *Title,const char *fmt,...);
+void HTM_BUTTON_Submit_Begin (const char *Title,const char *FormId,
+			      const char *fmt,...);
 void HTM_BUTTON_Begin (const char *Title,const char *fmt,...);
 void HTM_BUTTON_End (void);
 

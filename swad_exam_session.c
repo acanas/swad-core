@@ -278,51 +278,51 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
 	       /***** Initialize structure with user's data *****/
 	       Usr_UsrDataConstructor (&UsrDat);
 
-	       /* Begin form */
-	       Frm_BeginForm (ActSeeOneExaSes);
+	       /* Form to select users */
+	       Frm_BeginFormId (ActSeeOneExaSes,Usr_FORM_TO_SELECT_USRS_ID);
 	          Exa_PutPars (Exams);
 		  Grp_PutParsCodGrps ();
-
-		  /* Begin table */
-		  HTM_TABLE_Begin ("TBL_SCROLL");
-
-		     /***** Begin table with list of students *****/
-		     if (!Gbl.Crs.Grps.AllGrpsSel)
-		       {
-			HTM_TR_Begin (NULL);
-			   HTM_TD_Begin ("colspan=\"17\" class=\"TIT CM\"");
-			      Grp_WriteNamesOfSelectedGrps ();
-			   HTM_TD_End ();
-			HTM_TR_End ();
-		       }
-
-		     /***** Put a row to select all users *****/
-		     Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_STD,17);
-
-		     /* Header */
-		     ExaSes_ShowHeaderResults ();
-
-		     /* List of students */
-		     for (NumUsr = 0;
-			  NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
-			  NumUsr++)
-		       {
-			/* Copy user's basic data from list */
-			Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
-
-			/* Get list of user's IDs */
-			ID_GetListIDsFromUsrCod (&UsrDat);
-
-			ExaSes_WriteRowUsrInSession (Exams,NumUsr + 1,
-						     &UsrDat,WithPhotos);
-		       }
-
-		  /* End table */
-		  HTM_TABLE_End ();
-
-	       /* Send button and end form */
-		  Btn_PutButton (Btn_CONTINUE);
 	       Frm_EndForm ();
+
+	       /* Begin table */
+	       HTM_TABLE_Begin ("TBL_SCROLL");
+
+		  /***** Begin table with list of students *****/
+		  if (!Gbl.Crs.Grps.AllGrpsSel)
+		    {
+		     HTM_TR_Begin (NULL);
+			HTM_TD_Begin ("colspan=\"17\" class=\"TIT CM\"");
+			   Grp_WriteNamesOfSelectedGrps ();
+			HTM_TD_End ();
+		     HTM_TR_End ();
+		    }
+
+		  /***** Put a row to select all users *****/
+		  Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_STD,17);
+
+		  /* Header */
+		  ExaSes_ShowHeaderResults ();
+
+		  /* List of students */
+		  for (NumUsr = 0;
+		       NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
+		       NumUsr++)
+		    {
+		     /* Copy user's basic data from list */
+		     Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
+
+		     /* Get list of user's IDs */
+		     ID_GetListIDsFromUsrCod (&UsrDat);
+
+		     ExaSes_WriteRowUsrInSession (Exams,NumUsr + 1,
+						  &UsrDat,WithPhotos);
+		    }
+
+	       /* End table */
+	       HTM_TABLE_End ();
+
+	       /* Send button */
+	       Btn_PutButton (Btn_CONTINUE,Usr_FORM_TO_SELECT_USRS_ID);
 
 	       /***** Free memory used for user's data *****/
 	       Usr_UsrDataDestructor (&UsrDat);
@@ -998,7 +998,7 @@ static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
 		     Frm_BeginForm (ActSeeExaPrn);
 			Exa_PutPars (Exams);
 			// ParCod_PutPar (ParCod_Ses,Session->SesCod);
-			HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeExaPrn),
+			HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeExaPrn),NULL,
 						 "class=\"LT BT_LINK %s_%s\"",
 						 HidVis_TitleClass[Session->Hidden],
 						 The_GetSuffix ());
@@ -1077,7 +1077,7 @@ static void ExaSes_PutLinkSession (struct Exa_Exams *Exams,
       */
 
       /***** Link to view attendance event *****/
-      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneExaSes),
+      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneExaSes),NULL,
 			       "class=\"LT BT_LINK %s_%s\"",
 			       HidVis_TitleClass[Session->Hidden],
 			       The_GetSuffix ());

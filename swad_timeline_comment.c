@@ -627,7 +627,7 @@ static void TmlCom_WriteAuthorName (const struct Usr_Data *UsrDat)	// Author
       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 
       /* Author's name */
-      HTM_BUTTON_Submit_Begin (Title[Usr_ItsMe (UsrDat->UsrCod)],
+      HTM_BUTTON_Submit_Begin (Title[Usr_ItsMe (UsrDat->UsrCod)],NULL,
 			       "class=\"Tml_COM_AUTHOR Tml_COM_AUTHOR_WIDTH BT_LINK DAT_%s BOLD\"",
                                The_GetSuffix ());
 	 HTM_Txt (UsrDat->FullName);

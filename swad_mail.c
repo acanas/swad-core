@@ -154,7 +154,7 @@ void Mai_SeeMailDomains (void)
 
 	    Frm_BeginForm (ActSeeMai);
 	       Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
-	       HTM_BUTTON_Submit_Begin (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],
+	       HTM_BUTTON_Submit_Begin (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],NULL,
 	                                "class=\"BT_LINK\"");
 		  if (Order == Mails.SelectedOrder)
 		     HTM_U_Begin ();

@@ -566,7 +566,7 @@ static void CtrCfg_Institution (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 		 {
 		  Frm_BeginFormGoTo (ActSeeInsInf);
 		     ParCod_PutPar (ParCod_Ins,Gbl.Hierarchy.Node[Hie_INS].HieCod);
-		     HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Node[Hie_INS].ShrtName),
+		     HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Node[Hie_INS].ShrtName),NULL,
 					      "class=\"LT BT_LINK\"");
 		     Str_FreeGoToTitle ();
 		 }
@@ -733,7 +733,7 @@ static void CtrCfg_NumDegs (void)
 	    if (asprintf (&Title,Txt_Degrees_of_CENTER_X,
 			  Gbl.Hierarchy.Node[Hie_CTR].ShrtName) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_Submit_Begin (Title,"class=\"LB BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Title,NULL,"class=\"LB BT_LINK\"");
 	    free (Title);
 	       HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
 						            Hie_CTR,	// ...in center

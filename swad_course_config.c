@@ -226,7 +226,7 @@ static void CrsCfg_Degree (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 		 {
 		  Frm_BeginFormGoTo (ActSeeDegInf);
 		     ParCod_PutPar (ParCod_Deg,Gbl.Hierarchy.Node[Hie_DEG].HieCod);
-		     HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Node[Hie_DEG].ShrtName),
+		     HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Node[Hie_DEG].ShrtName),NULL,
 					      "class=\"LT BT_LINK\"");
 		     Str_FreeGoToTitle ();
 		 }
@@ -417,7 +417,7 @@ static void CrsCfg_Indicators (void)
 			  IndicatorsCrs.NumIndicators,
 			  Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_Submit_Begin (Title,"class=\"LB BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Title,NULL,"class=\"LB BT_LINK\"");
 	       HTM_NBSP ();
 	       HTM_Txt (Title);
 	       if (IndicatorsCrs.NumIndicators == Ind_NUM_INDICATORS)

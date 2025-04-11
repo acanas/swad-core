@@ -1315,7 +1315,7 @@ void Pho_ShowUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
      {
       Frm_BeginForm (ActSeeOthPubPrf);
          Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
-	 HTM_BUTTON_Submit_Begin (NULL,"class=\"BT_LINK\"");
+	 HTM_BUTTON_Submit_Begin (NULL,NULL,"class=\"BT_LINK\"");
      }
 
    /***** Hidden div to pass user's name to Javascript *****/
@@ -2051,7 +2051,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 	    Set_PutParsPrefsAboutUsrList ();
 
 	    /***** Put button to refresh *****/
-	    HTM_BUTTON_Submit_Begin (Txt_Calculate_average_photo_of_THE_DEGREE_X,
+	    HTM_BUTTON_Submit_Begin (Txt_Calculate_average_photo_of_THE_DEGREE_X,NULL,
 				     "class=\"BT_LINK FORM_IN_%s BOLD\"",
 				     The_GetSuffix ());
 	       Ico_PutIconTextUpdate (Txt_Calculate_average_photo_of_THE_DEGREE_X);
@@ -2425,7 +2425,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
      {
       Frm_BeginFormGoTo (ActSeeDegInf);
 	 ParCod_PutPar (ParCod_Deg,Deg->HieCod);
-	 HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Deg->FullName),
+	 HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Deg->FullName),NULL,
 	                          "class=\"BT_LINK\"");
 	 Str_FreeGoToTitle ();
      }

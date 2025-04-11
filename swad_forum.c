@@ -1821,7 +1821,7 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 			      -1L,
 			      -1L);
 
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (For_ActionsSeeFor[Forum->Type]),
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (For_ActionsSeeFor[Forum->Type]),NULL,
 				  NumThrsWithNewPosts ? "class=\"BT_LINK FORM_IN_%s BOLD\"" :
 	                                                "class=\"BT_LINK FORM_IN_%s\"",
 	                          The_GetSuffix ());
@@ -2159,7 +2159,7 @@ void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,
 				                Forums->Forum.HieCod,
 					        -1L,
 					        -1L);
-			   HTM_BUTTON_Submit_Begin (Txt_FORUM_THREAD_HELP_ORDER[Order],
+			   HTM_BUTTON_Submit_Begin (Txt_FORUM_THREAD_HELP_ORDER[Order],NULL,
 			                            "class=\"BT_LINK\"");
 			      if (Order == Forums->ThreadsOrder)
 				 HTM_U_Begin ();
@@ -2462,7 +2462,7 @@ static void For_LinkToFirstPageWithSubject (const struct For_Forums *Forums,
 	 /***** Begin button *****/
 	 if (asprintf (&Title,Txt_Page_X_of_Y,1,NumPags) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 HTM_BUTTON_Submit_Begin (Title,
+	 HTM_BUTTON_Submit_Begin (Title,NULL,
 				  "class=\"LT BT_LINK %s_%s\"",
 				  Thr->NumUnreadPosts ? "BOLD PAG_TXT" :
 						        "PAG_TXT",
@@ -2950,7 +2950,7 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 	 free (ClassInput);
 
 	 /***** Send button *****/
-	 Btn_PutButton (Btn_SEND);
+	 Btn_PutButton (Btn_SEND,NULL);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -3545,8 +3545,7 @@ static void For_WriteForumTitleAndStats (For_ForumType_t ForumType,
    HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"BT\"");
-	 if (asprintf (&ForumName,"%s%s",
-		       ForumName1,ForumName2) < 0)
+	 if (asprintf (&ForumName,"%s%s",ForumName1,ForumName2) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 Ico_PutIcon (Icon,Ico_BLACK,ForumName,"ICOx16");
 	 free (ForumName);

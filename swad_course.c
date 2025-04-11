@@ -512,7 +512,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	                  TxtClassStrong,The_GetSuffix (),BgColor);
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
 		  ParCod_PutPar (ParCod_Crs,Crs->HieCod);
-		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs->FullName),
+		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs->FullName),NULL,
 					   "class=\"BT_LINK LT\"");
 		  Str_FreeGoToTitle ();
 		     HTM_Txt (Crs->FullName);
@@ -1606,7 +1606,7 @@ static void Crs_PutButtonToRegisterInCrs (void)
       if (Crs_EditingCrs->HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
 	 ParCod_PutPar (ParCod_Crs,Crs_EditingCrs->HieCod);
 
-      Btn_PutButton (Btn_ENROL);
+      Btn_PutButton (Btn_ENROL,NULL);
 
    Frm_EndForm ();
   }
@@ -1643,8 +1643,8 @@ void Crs_GetAndWriteCrssOfAUsr (const struct Usr_Data *UsrDat,Rol_Role_t Role)
 
 	    HTM_TH_Span_Begin (HTM_HEAD_LEFT,1,7,NULL);
 	       if (asprintf (&Txt,Txt_USER_in_COURSE,
-				  Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
-						    Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]) < 0)
+			     Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
+					       Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       HTM_Txt (Txt); HTM_Colon ();
 	       free (Txt);
@@ -1822,7 +1822,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
                     ClassTxt,The_GetSuffix (),BgColor);
 	 Frm_BeginFormGoTo (ActSeeDegInf);
 	    ParCod_PutPar (ParCod_Deg,Deg.HieCod);
-	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[2]),
+	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[2]),NULL,
 	                             "class=\"LT BT_LINK\"");
             Str_FreeGoToTitle ();
 	       Lgo_DrawLogo (Hie_DEG,&Deg,"CT ICO20x20"); HTM_NBSP ();
@@ -1841,7 +1841,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",ClassTxt,The_GetSuffix (),BgColor);
 	 Frm_BeginFormGoTo (ActSeeCrsInf);
 	    ParCod_PutPar (ParCod_Crs,CrsCod);
-	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[5]),
+	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[5]),NULL,
 	                             "class=\"LT BT_LINK\"");
             Str_FreeGoToTitle ();
 	       HTM_Txt (row[5]);

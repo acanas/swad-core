@@ -198,7 +198,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Hie_Node *Deg,Act_Action_t Action
       ParCod_PutPar (ParCod_Deg,Deg->HieCod);
 
       /***** Link to action *****/
-      HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Deg->FullName),
+      HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Deg->FullName),NULL,
                                "class=\"BT_LINK LT\"");
       Str_FreeGoToTitle ();
 

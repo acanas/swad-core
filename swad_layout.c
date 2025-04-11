@@ -1040,7 +1040,7 @@ static void Lay_WritePageTopHeading (void)
 
 	       HTM_DIV_Begin ("id=\"head_row_1_tagline\" class=\"TAGLINE_%s\"",
 	                      The_GetSuffix ());
-		  HTM_BUTTON_Submit_Begin (Txt_TAGLINE,"class=\"BT_LINK\"");
+		  HTM_BUTTON_Submit_Begin (Txt_TAGLINE,NULL,"class=\"BT_LINK\"");
 		     HTM_Txt (Txt_TAGLINE_BR);
 		  HTM_BUTTON_End ();
 	       HTM_DIV_End ();	// head_row_1_tagline
@@ -1241,11 +1241,11 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 
       /***** Put icon and text with link *****/
 	 if (OnSubmit)
-	    HTM_BUTTON_Submit_Begin (Text,
+	    HTM_BUTTON_Submit_Begin (Text,NULL,
 				     "class=\"BT_LINK FORM_OUT_%s BOLD\" onsubmit=\"%s\"",
 				     The_GetSuffix (),OnSubmit);
 	 else
-	    HTM_BUTTON_Submit_Begin (Text,
+	    HTM_BUTTON_Submit_Begin (Text,NULL,
 				     "class=\"BT_LINK FORM_OUT_%s BOLD\"",
 				     The_GetSuffix ());
 	 Ico_PutIconTextLink (Icon,Color,Text);
@@ -1703,11 +1703,11 @@ void Lay_WriteLinkToUpdate (const char *Txt,const char *OnSubmit)
   {
    HTM_DIV_Begin ("class=\"UPD\"");
       if (OnSubmit)
-	 HTM_BUTTON_Submit_Begin (Txt,
+	 HTM_BUTTON_Submit_Begin (Txt,NULL,
 				  "class=\"BT_LINK FORM_IN_%s BOLD\" onsubmit=\"%s\"",
 				  The_GetSuffix (),OnSubmit);
       else
-	 HTM_BUTTON_Submit_Begin (Txt,
+	 HTM_BUTTON_Submit_Begin (Txt,NULL,
 				  "class=\"BT_LINK FORM_IN_%s BOLD\"",
 				  The_GetSuffix ());
       Ico_PutIconTextUpdate (Txt);
@@ -1750,8 +1750,7 @@ void Lay_GetAndShowNumUsrsPerSideColumns (Hie_Level_t HieLvl)
 	   SideCols++)
 	{
 	 /* Get the number of users who have chosen this layout of columns from database */
-	 if (asprintf (&SubQuery,"usr_data.SideCols=%u",
-		       SideCols) < 0)
+	 if (asprintf (&SubQuery,"usr_data.SideCols=%u",SideCols) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 NumUsrs[SideCols] = Usr_DB_GetNumUsrsWhoChoseAnOption (HieLvl,SubQuery);
 	 free (SubQuery);

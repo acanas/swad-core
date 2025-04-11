@@ -191,7 +191,7 @@ void Ctr_DrawCenterLogoAndNameWithLink (struct Hie_Node *Ctr,Act_Action_t Action
       ParCod_PutPar (ParCod_Ctr,Ctr->HieCod);
 
       /***** Link to action *****/
-      HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Ctr->FullName),
+      HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Ctr->FullName),NULL,
                                "class=\"LT BT_LINK\"");
       Str_FreeGoToTitle ();
 
@@ -1332,7 +1332,7 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
 	      {
 	       Frm_BeginForm (ActSeeCtr);
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
-		  HTM_BUTTON_Submit_Begin (Txt_CENTERS_HELP_ORDER[Order],
+		  HTM_BUTTON_Submit_Begin (Txt_CENTERS_HELP_ORDER[Order],NULL,
 					   "class=\"BT_LINK RT\"");
 		     if (Order == Gbl.Hierarchy.List[Hie_INS].SelectedOrder)
 			HTM_U_Begin ();

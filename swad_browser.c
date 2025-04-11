@@ -3040,7 +3040,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat)
 	 /***** Show user's name *****/
 	 HTM_BR ();
 
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (NextAction[UsrDat->Roles.InCurrentCrs]),
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (NextAction[UsrDat->Roles.InCurrentCrs]),NULL,
 				  "class=\"BT_LINK\"");
 	    HTM_Txt (UsrDat->Surname1);
 	    if (UsrDat->Surname2[0])
@@ -3997,8 +3997,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
      }
 
    /***** Begin this row *****/
-   if (asprintf (&Anchor,"fil_brw_%u_%s",
-		 Gbl.FileBrowser.Id,RowId) < 0)
+   if (asprintf (&Anchor,"fil_brw_%u_%s",Gbl.FileBrowser.Id,RowId) < 0)
       Err_NotEnoughMemoryExit ();
    switch (IconThisRow)
      {
@@ -4652,7 +4651,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (const struct Brw_FileMetadata
 void Brw_PutIconFile (const char *FileName,
 		      const char *Class,Frm_PutForm_t PutFormToGo)
   {
-   extern const char *Ext_FileExtensionsAllowed[Ext_NUM_FILE_EXT_ALLOWED];
+   extern const char *Ext_FileExtAllowed[Ext_NUM_FILE_EXT_ALLOWED];
    extern const char *Txt_X_file;
    char *URL;
    char *Icon;
@@ -4660,19 +4659,16 @@ void Brw_PutIconFile (const char *FileName,
    unsigned DocType;
    bool NotFound;
 
-   if (asprintf (&URL,"%s32x32",
-		 CfG_URL_ICON_FILEXT_PUBLIC) < 0)
+   if (asprintf (&URL,"%s32x32",CfG_URL_ICON_FILEXT_PUBLIC) < 0)
       Err_NotEnoughMemoryExit ();
    for (DocType = 0, NotFound = true;
 	DocType < Ext_NUM_FILE_EXT_ALLOWED && NotFound;
 	DocType++)
-      if (Str_FileIs (FileName,Ext_FileExtensionsAllowed[DocType]))
+      if (Str_FileIs (FileName,Ext_FileExtAllowed[DocType]))
 	{
-	 if (asprintf (&Icon,"%s32x32.gif",
-		       Ext_FileExtensionsAllowed[DocType]) < 0)
+	 if (asprintf (&Icon,"%s32x32.gif",Ext_FileExtAllowed[DocType]) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 if (asprintf (&Title,Txt_X_file,
-		       Ext_FileExtensionsAllowed[DocType]) < 0)
+	 if (asprintf (&Title,Txt_X_file,Ext_FileExtAllowed[DocType]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 NotFound = false;
 	}
@@ -4791,7 +4787,7 @@ static void Brw_WriteFileName (unsigned Level,PriPub_PrivateOrPublic_t PrivateOr
 	       Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
 	       /* Link to the form and to the file */
-	       HTM_BUTTON_Submit_Begin (Act_GetActionText (Brw_ActDowFile[Gbl.FileBrowser.Type]),
+	       HTM_BUTTON_Submit_Begin (Act_GetActionText (Brw_ActDowFile[Gbl.FileBrowser.Type]),NULL,
 					"class=\"LM BT_LINK FILENAME\"");
 		  HTM_Txt (FileNameToShow);
 	       HTM_BUTTON_End ();
@@ -6371,7 +6367,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 				    -1L);		// Not used
 
 	    /***** Button to finish *****/
-	    Btn_PutButton (Btn_DONE);
+	    Btn_PutButton (Btn_DONE,NULL);
 
 	 /***** End form *****/
 	 Frm_EndForm ();
@@ -7673,7 +7669,7 @@ void Brw_ShowFileMetadata (void)
 	    /***** End form *****/
 	    if (ICanEdit == Usr_CAN)	// I can edit file properties
 	      {
-		  Btn_PutButton (Btn_SAVE_CHANGES);
+		  Btn_PutButton (Btn_SAVE_CHANGES,NULL);
 	       Frm_EndForm ();
 	      }
 
@@ -8057,7 +8053,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 	 Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
 	 /* Begin link */
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (Brw_ActSeeMyMrk[Gbl.FileBrowser.Type]),
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (Brw_ActSeeMyMrk[Gbl.FileBrowser.Type]),NULL,
 	                          "class=\"BT_LINK ICO_HIGHLIGHT FILENAME_BIG_%s\"",
 	                          The_GetSuffix ());
 
@@ -8125,7 +8121,7 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 	 Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
 	 /* Begin link */
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (Brw_ActSeeMyMrk[Gbl.FileBrowser.Type]),
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (Brw_ActSeeMyMrk[Gbl.FileBrowser.Type]),NULL,
 	                          "class=\"BT_LINK\"");
 
 	    /* Name of the file of marks */
@@ -9336,7 +9332,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	   {
 	    Frm_BeginFormGoTo (ActSeeInsInf);
 	       ParCod_PutPar (ParCod_Ins,Hie[Hie_INS].HieCod);
-	       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie[Hie_INS].ShrtName),
+	       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie[Hie_INS].ShrtName),NULL,
 					"class=\"LT BT_LINK\"");
 	       Str_FreeGoToTitle ();
 		  Lgo_DrawLogo (Hie_INS,&Hie[Hie_INS],"LT BT_LINK ICO20x20");
@@ -9353,7 +9349,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	   {
 	    Frm_BeginFormGoTo (ActSeeCtrInf);
 	       ParCod_PutPar (ParCod_Ctr,Hie[Hie_CTR].HieCod);
-	       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie[Hie_CTR].ShrtName),
+	       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie[Hie_CTR].ShrtName),NULL,
 					"class=\"LT BT_LINK\"");
 	       Str_FreeGoToTitle ();
 		  Lgo_DrawLogo (Hie_CTR,&Hie[Hie_CTR],"LT ICO20x20");
@@ -9370,7 +9366,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	   {
 	    Frm_BeginFormGoTo (ActSeeDegInf);
 	       ParCod_PutPar (ParCod_Deg,Hie[Hie_DEG].HieCod);
-	       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie[Hie_DEG].ShrtName),
+	       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie[Hie_DEG].ShrtName),NULL,
 					"class=\"LT BT_LINK\"");
 	       Str_FreeGoToTitle ();
 		  Lgo_DrawLogo (Hie_DEG,&Hie[Hie_DEG],"LT ICO20x20");
@@ -9387,7 +9383,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	   {
 	    Frm_BeginFormGoTo (ActSeeCrsInf);
 	       ParCod_PutPar (ParCod_Crs,Hie[Hie_CRS].HieCod);
-	       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie[Hie_CRS].ShrtName),
+	       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie[Hie_CRS].ShrtName),NULL,
 					"class=\"LT BT_LINK\"");
 	       Str_FreeGoToTitle ();
 		  HTM_Txt (Hie[Hie_CRS].ShrtName);
@@ -9491,7 +9487,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 				    FileMetadata.FilCod);
 
 	 /* File or folder icon */
-	 HTM_BUTTON_Submit_Begin (FileNameToShow,"class=\"LT BT_LINK\"");
+	 HTM_BUTTON_Submit_Begin (FileNameToShow,NULL,"class=\"LT BT_LINK\"");
 	    switch (FileMetadata.FilFolLnk.Type)
 	      {
 	       case Brw_IS_FILE:

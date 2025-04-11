@@ -317,7 +317,7 @@ static void Gam_ListAllGamesHeading (const struct Gam_Games *Games)
 	       Pag_PutParPagNum (Pag_GAMES,Games->CurrentPage);
 	       Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 
-	       HTM_BUTTON_Submit_Begin (Txt_GAMES_ORDER_HELP[Order],
+	       HTM_BUTTON_Submit_Begin (Txt_GAMES_ORDER_HELP[Order],NULL,
 					"class=\"BT_LINK\"");
 		  if (Order == Games->SelectedOrder)
 		     HTM_U_Begin ();
@@ -582,7 +582,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeOneGam);
 	    Gam_PutPars (Games);
-	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneGam),
+	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneGam),NULL,
 				     "class=\"LT BT_LINK %s_%s\"",
 				     HidVis_TitleClass[Games->Game.Hidden],
 				     The_GetSuffix ());
@@ -617,7 +617,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 
       Frm_BeginForm (ActSeeOneGam);
 	 Gam_PutPars (Games);
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneGam),
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneGam),NULL,
 				  "class=\"LT BT_LINK %s_%s\"",
 	                          HidVis_TitleClass[Games->Game.Hidden],
 				  The_GetSuffix ());
@@ -1429,7 +1429,7 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
       HTM_TABLE_End ();
 
       /***** Send button *****/
-      Btn_PutButton (Forms[OldNewGame].Button);
+      Btn_PutButton (Forms[OldNewGame].Button,NULL);
 
    /***** End form *****/
    Frm_EndForm ();

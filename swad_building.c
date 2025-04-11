@@ -132,7 +132,7 @@ void Bld_SeeBuildings (void)
 	    HTM_TH_Begin (HTM_HEAD_LEFT);
 	       Frm_BeginForm (ActSeeBld);
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
-		  HTM_BUTTON_Submit_Begin (Txt_BUILDINGS_HELP_ORDER[Order],
+		  HTM_BUTTON_Submit_Begin (Txt_BUILDINGS_HELP_ORDER[Order],NULL,
 					   "class=\"BT_LINK\"");
 		     if (Order == Buildings.SelectedOrder)
 			HTM_U_Begin ();

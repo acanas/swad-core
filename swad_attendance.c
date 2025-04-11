@@ -269,7 +269,7 @@ static void Att_ShowAllEvents (struct Att_Events *Events)
 			Pag_PutParPagNum (Pag_ATT_EVENTS,Events->CurrentPage);
 			Par_PutParOrder ((unsigned) Order);
 
-			HTM_BUTTON_Submit_Begin (Txt_START_END_TIME_HELP[Order],
+			HTM_BUTTON_Submit_Begin (Txt_START_END_TIME_HELP[Order],NULL,
 			                         "class=\"BT_LINK\"");
 
 			   if (Order == Events->SelectedOrder)
@@ -1524,7 +1524,7 @@ static void Att_ListEventOnlyMeAsStudent (struct Att_Event *Event)
       /* Send button and end form */
       if (ICanMakeAnyChange == Usr_CAN)
 	{
-	    Btn_PutButton (Btn_SAVE_CHANGES);
+	    Btn_PutButton (Btn_SAVE_CHANGES,NULL);
 	 Frm_EndForm ();
 	}
 
@@ -1629,7 +1629,7 @@ static void Att_ListEventStudents (struct Att_Events *Events)
             /* Send button and end form */
 	    if (ICanMakeAnyChange)
 	      {
-		  Btn_PutButton (Btn_SAVE_CHANGES);
+		  Btn_PutButton (Btn_SAVE_CHANGES,NULL);
 	       Frm_EndForm ();
 	      }
 
@@ -1854,7 +1854,7 @@ static void Att_PutLinkEvent (struct Att_Event *Event,
       Grp_PutParsCodGrpsAssociated (Grp_ATTENDANCE_EVENT,Event->AttCod);
 
       /***** Link to view attendance event *****/
-      HTM_BUTTON_Submit_Begin (Title,"class=\"LT BT_LINK %s_%s\"",
+      HTM_BUTTON_Submit_Begin (Title,"class=\"LT BT_LINK %s_%s\"",NULL,
 			       HidVis_TitleClass[Event->Hidden],
 			       The_GetSuffix ());
 	 HTM_Txt (Txt);
@@ -2569,7 +2569,7 @@ static void Att_PutButtonToShowDetails (const struct Att_Events *Events)
 	    Par_PutParString (NULL,"AttCods",Events->StrAttCodsSelected);
 
       /* Button */
-      Btn_PutButton (Btn_SHOW_MORE_DETAILS);
+      Btn_PutButton (Btn_SHOW_MORE_DETAILS,NULL);
 
    /* End form */
    Frm_EndForm ();

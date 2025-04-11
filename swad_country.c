@@ -331,7 +331,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 	      {
 	       Frm_BeginForm (ActSeeCty);
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
-		  HTM_BUTTON_Submit_Begin (Txt_COUNTRIES_HELP_ORDER[Order],
+		  HTM_BUTTON_Submit_Begin (Txt_COUNTRIES_HELP_ORDER[Order],NULL,
 					   "class=\"BT_LINK\"");
 		     if (Order == Gbl.Hierarchy.List[Hie_SYS].SelectedOrder)
 			HTM_U_Begin ();
@@ -458,7 +458,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Hie_Node *Cty,Act_Action_t Action
       HTM_DIV_Begin ("class=\"%s\"",ClassContainer);
 
 	 /***** Link to action *****/
-	 HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Cty->FullName),
+	 HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Cty->FullName),NULL,
 				  "class=\"BT_LINK\"");
 	 Str_FreeGoToTitle ();
 
@@ -834,7 +834,7 @@ void Cty_WriteCountryName (long CtyCod)
 	 /***** Write country name with link to country information *****/
 	 Frm_BeginForm (ActSeeCtyInf);
 	    ParCod_PutPar (ParCod_Cty,CtyCod);
-	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtyInf),
+	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtyInf),NULL,
 				     "class=\"BT_LINK\"");
 	       HTM_Txt (CtyName);
 	    HTM_BUTTON_End ();

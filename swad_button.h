@@ -71,7 +71,7 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Btn_PutButton (Btn_Button_t Button);
+void Btn_PutButton (Btn_Button_t Button,const char *FormId);
 void Btn_PutButtonInline (Btn_Button_t Button);
 
 #endif

@@ -96,7 +96,7 @@ void Tab_DrawTabs (void)
 
 		  Frm_BeginForm (ActMnu);
 		     Par_PutParUnsigned (NULL,"NxtTab",(unsigned) NumTab);
-		     HTM_BUTTON_Submit_Begin (TabTxt,"class=\"BT_LINK\"");
+		     HTM_BUTTON_Submit_Begin (TabTxt,NULL,"class=\"BT_LINK\"");
 			snprintf (URLIconSet,sizeof (URLIconSet),"%s/%s",
 				  Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
 		        if (ClassIcoTab[Gbl.Prefs.IconSet])

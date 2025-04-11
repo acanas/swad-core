@@ -487,7 +487,7 @@ void Dat_ShowClientLocalTime (void)
       /* Month with link to calendar */
       HTM_DIV_Begin ("id=\"current_month\"");
 	 Frm_BeginForm (ActSeeCal);
-	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCal),
+	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCal),NULL,
 	                             "class=\"BT_LINK CURRENT_MONTH\"");
 	       HTM_SPAN_Begin ("id=\"current_month_txt\"");
 	       // JavaScript will write HTML here
@@ -501,7 +501,7 @@ void Dat_ShowClientLocalTime (void)
 	 if (Gbl.Usrs.Me.Logged)
 	   {
 	    Frm_BeginForm (ActSeeMyAgd);
-	       HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeMyAgd),
+	       HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeMyAgd),NULL,
 	                                "class=\"BT_LINK CURRENT_DAY\"");
 	   }
 	 HTM_SPAN_Begin ("id=\"current_day_txt\"");
@@ -1807,8 +1807,7 @@ void Dat_GetAndShowNumUsrsPerDateFormat (Hie_Level_t HieLvl)
 	   Format++)
 	{
 	 /* Get number of users who have chosen this date format from database */
-	 if (asprintf (&SubQuery,"usr_data.DateFormat=%u",
-		       (unsigned) Format) < 0)
+	 if (asprintf (&SubQuery,"usr_data.DateFormat=%u",(unsigned) Format) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 NumUsrs[Format] = Usr_DB_GetNumUsrsWhoChoseAnOption (HieLvl,SubQuery);
 	 free (SubQuery);

@@ -269,7 +269,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
            }
 	    if (asprintf (&Title,Txt_Page_X_of_Y,1,Pagination->NumPags) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_Submit_Begin (Title,
+	    HTM_BUTTON_Submit_Begin (Title,NULL,
 	                             "class=\"BT_LINK PAG PAG_%s %s_%s\"",
 	                             The_GetSuffix (),ClassTxt,The_GetSuffix ());
 	       HTM_Unsigned (1);
@@ -390,7 +390,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	    if (asprintf (&Title,Txt_Page_X_of_Y,
 			  Pagination->LeftPage,Pagination->NumPags) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_Submit_Begin (Title,
+	    HTM_BUTTON_Submit_Begin (Title,NULL,
 	                             "class=\"BT_LINK PAG PAG_%s %s_%s\"",
 	                             The_GetSuffix (),ClassTxt,The_GetSuffix ());
 	       HTM_Unsigned (Pagination->LeftPage);
@@ -514,13 +514,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       Err_NotEnoughMemoryExit ();
 	    if (NumPage == Pagination->CurrentPage)
 	      {
-	       HTM_BUTTON_Submit_Begin (Title,
+	       HTM_BUTTON_Submit_Begin (Title,NULL,
 					"class=\"BT_LINK PAG_CUR PAG_CUR_%s %s_%s\"",
 					The_GetSuffix (),
 					ClassTxt,The_GetSuffix ());
 	      }
 	    else
-	       HTM_BUTTON_Submit_Begin (Title,
+	       HTM_BUTTON_Submit_Begin (Title,NULL,
 					"class=\"BT_LINK PAG PAG_%s %s_%s\"",
 					The_GetSuffix (),
 					ClassTxt,The_GetSuffix ());
@@ -642,7 +642,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	    if (asprintf (&Title,Txt_Page_X_of_Y,
 			  Pagination->RightPage,Pagination->NumPags) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_Submit_Begin (Title,
+	    HTM_BUTTON_Submit_Begin (Title,NULL,
 	                             "class=\"BT_LINK PAG PAG_%s %s_%s\"",
 	                             The_GetSuffix (),
 	                             ClassTxt,The_GetSuffix ());
@@ -763,7 +763,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	    if (asprintf (&Title,Txt_Page_X_of_Y,
 			  Pagination->NumPags,Pagination->NumPags) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_Submit_Begin (Title,
+	    HTM_BUTTON_Submit_Begin (Title,NULL,
 	                             "class=\"BT_LINK PAG PAG_%s %s_%s\"",
 	                             The_GetSuffix (),
 	                             ClassTxt,The_GetSuffix ());

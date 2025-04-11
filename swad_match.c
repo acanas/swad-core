@@ -647,6 +647,7 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Gam_Games *Games,
 
 	    HTM_BUTTON_Submit_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 									  Txt_Resume,
+				     NULL,
 				     "class=\"LT BT_LINK %s_%s\"",
 				     HidVis_TitleClass[Games->Game.Hidden],
 				     The_GetSuffix ());
@@ -2274,7 +2275,7 @@ static void Mch_PutFormCountdown (struct Mch_Match *Match,long Seconds,const cha
       /***** Put icon *****/
       HTM_DIV_Begin ("class=\"MCH_SMALLBUTTON_CONT %s\"",Color);
 
-	 HTM_BUTTON_Submit_Begin (Title[PutForm],fmt[PutForm]);
+	 HTM_BUTTON_Submit_Begin (Title[PutForm],NULL,fmt[PutForm]);
 
 	    HTM_NBSP ();
 	    if (Seconds >= 0)
@@ -2592,7 +2593,7 @@ static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
 	 ParCod_PutPar (ParCod_Mch,Match->MchCod);	// Current match being played
 
 	 /***** Put icon with link *****/
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (ActChgVisResMchQst),
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (ActChgVisResMchQst),NULL,
 	                          "class=\"BT_LINK ICO_HIGHLIGHT\"");
 	    HTM_TxtF ("<i class=\"%s\"></i>",
 		      Match->Status.ShowQstResults ? "fas fa-toggle-on" :
@@ -2629,7 +2630,7 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
 	 Frm_BeginForm (ActSeeMchAnsQstStd);
 	    ParCod_PutPar (ParCod_Mch,Match->MchCod);	// Current match being played
 
-	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeMchAnsQstStd),
+	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeMchAnsQstStd),NULL,
 	                             "class=\"BT_LINK DAT_SMALL_GREEN_%s\""
 	                             " onmousedown=\"this.form.submit();return false;\"",
 	                             The_GetSuffix ());
@@ -2679,7 +2680,7 @@ static void Mch_PutIconToRemoveMyAnswer (const struct Mch_Match *Match)
 
 	 /***** Put icon with link *****/
 	 HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
-	    HTM_BUTTON_Submit_Begin (Txt_Delete_my_answer,
+	    HTM_BUTTON_Submit_Begin (Txt_Delete_my_answer,NULL,
 	                             "BT_LINK MCH_BUTTON_ON ICO_DARKRED\""
 	                             " onmousedown=\"this.form.submit();return false;\"");
 	       HTM_Txt ("<i class=\"fas fa-trash\"></i>");
@@ -2933,7 +2934,7 @@ static void Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 		  Gam_PutParQstInd (Match->Status.QstInd);	// Current question index shown
 		  Mch_PutParNumOpt (NumOpt);			// Number of button
 
-		  HTM_BUTTON_Submit_Begin (NULL,
+		  HTM_BUTTON_Submit_Begin (NULL,NULL,
 					   "class=\"MCH_STD_BUTTON%s BT_%c\""
 					   " onmousedown=\"this.form.submit();return false;\"",
 				           UsrAnswer->NumOpt == (int) NumOpt &&	// Student's answer
@@ -3198,7 +3199,7 @@ static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
 
       /***** Put icon with link *****/
       HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
-	 HTM_BUTTON_Submit_Begin (Txt,
+	 HTM_BUTTON_Submit_Begin (Txt,NULL,
 	                          "class=\"BT_LINK MCH_BUTTON_ON ICO_BLACK_%s\"",
 	                          The_GetSuffix ());
 	    HTM_TxtF ("<i class=\"%s\"></i>",Icon);

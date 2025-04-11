@@ -236,7 +236,7 @@ void Ind_ReqIndicatorsCourses (void)
 	    ParCod_PutPar (ParCod_Dpt      ,Indicators.DptCod   );
 	    if (Indicators.StrChecked[0])
 	       Par_PutParString (NULL,"Indicators",Indicators.StrChecked);
-	    Btn_PutButton (Btn_SHOW_MORE_DETAILS);
+	    Btn_PutButton (Btn_SHOW_MORE_DETAILS,NULL);
 	 Frm_EndForm ();
 	}
 

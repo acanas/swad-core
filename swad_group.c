@@ -1931,7 +1931,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 	 if (PutFormToChangeGrps)
 	   {
 	       if (ICanChangeMyGrps == Usr_CAN)
-		  Btn_PutButton (Btn_SAVE_CHANGES);
+		  Btn_PutButton (Btn_SAVE_CHANGES,NULL);
 	    Frm_EndForm ();
 	   }
 	}

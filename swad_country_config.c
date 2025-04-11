@@ -384,7 +384,7 @@ static void CtyCfg_Platform (Vie_ViewType_t ViewType)
 	 if (ViewType == Vie_VIEW)
 	   {
 	    Frm_BeginFormGoTo (ActSeeSysInf);
-	       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Cfg_PLATFORM_SHORT_NAME),
+	       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Cfg_PLATFORM_SHORT_NAME),NULL,
 					"class=\"LT BT_LINK\"");
 	       Str_FreeGoToTitle ();
 	   }
@@ -474,7 +474,7 @@ static void CtyCfg_NumInss (void)
 	    if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
 	                  Gbl.Hierarchy.Node[Hie_CTY].FullName) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_Submit_Begin (Title,"class=\"LT BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Title,NULL,"class=\"LT BT_LINK\"");
 	    free (Title);
 	       HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_INS,	// Number of institutions...
 							    Hie_CTY,	// ...in country

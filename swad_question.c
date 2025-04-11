@@ -210,7 +210,7 @@ void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions)
 	    HTM_TABLE_End ();
 
 	    /***** Send button *****/
-	    Btn_PutButton (Btn_SHOW_QUESTIONS);
+	    Btn_PutButton (Btn_SHOW_QUESTIONS,NULL);
 
 	 Frm_EndForm ();
 	}
@@ -379,7 +379,7 @@ void Qst_ShowFormRequestSelectQstsForExamSet (struct Exa_Exams *Exams,
 	    HTM_TABLE_End ();
 
 	    /***** Send button *****/
-	    Btn_PutButton (Btn_SHOW_QUESTIONS);
+	    Btn_PutButton (Btn_SHOW_QUESTIONS,NULL);
 
 	 Frm_EndForm ();
 	}
@@ -433,7 +433,7 @@ void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
 	    HTM_TABLE_End ();
 
 	    /***** Send button *****/
-	    Btn_PutButton (Btn_SHOW_QUESTIONS);
+	    Btn_PutButton (Btn_SHOW_QUESTIONS,NULL);
 
 	 Frm_EndForm ();
 	}
@@ -667,8 +667,7 @@ static void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedi
 			     UniqueId,(unsigned) Med_ACTION_NEW_MEDIA);
 	    HTM_Txt (Txt_Change_image_video); HTM_Colon (); HTM_NBSP ();
 	 HTM_LABEL_End ();
-	 if (asprintf (&ClassInput,"Tst_MED_INPUT INPUT_%s",
-	               The_GetSuffix ()) < 0)
+	 if (asprintf (&ClassInput,"Tst_MED_INPUT INPUT_%s",The_GetSuffix ()) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 Med_PutMediaUploader (NumMedia,ClassInput);
 	 free (ClassInput);
@@ -903,7 +902,7 @@ void Qst_WriteHeadingRowQuestionsForEdition (struct Qst_Questions *Questions)
 	       Frm_BeginForm (ActLstTstQst);
 		  Qst_PutParsEditQst (Questions);
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
-		  HTM_BUTTON_Submit_Begin (Txt_TST_STR_ORDER_FULL[Order],
+		  HTM_BUTTON_Submit_Begin (Txt_TST_STR_ORDER_FULL[Order],NULL,
 		                           "class=\"BT_LINK\"");
 		     if (Order == Questions->SelectedOrder)
 			HTM_U_Begin ();
@@ -1129,7 +1128,7 @@ void Qst_ListOneOrMoreQstsForSelectionForExamSet (struct Exa_Exams *Exams,
 	 HTM_TABLE_End ();
 
 	 /***** Button to add questions *****/
-	 Btn_PutButton (Btn_ADD_QUESTIONS);
+	 Btn_PutButton (Btn_ADD_QUESTIONS,NULL);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -1209,7 +1208,7 @@ void Qst_ListOneOrMoreQstsForSelectionForGame (struct Gam_Games *Games,
 	 HTM_TABLE_End ();
 
 	 /***** Button to add questions *****/
-	 Btn_PutButton (Btn_ADD_QUESTIONS);
+	 Btn_PutButton (Btn_ADD_QUESTIONS,NULL);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -2177,7 +2176,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 				     DisplayRightColumn ? " style=\"display:none;\"" :	// Answer does have content ==> Hide icon
 							  "",
 				     NumOpt);
-			   if (asprintf (&Title,"%s %c)",Txt_Expand,'a' + (char) NumOpt) < 0)
+			   if (asprintf (&Title,"%s %c)",Txt_Expand,
+					 'a' + (char) NumOpt) < 0)
 			      Err_NotEnoughMemoryExit ();
 			   Ico_PutIcon ("caret-right.svg",Ico_BLACK,Title,"ICO16x16");
 			   free (Title);
@@ -2190,7 +2190,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 				     DisplayRightColumn ? "" :
 							  " style=\"display:none;\"",	// Answer does not have content ==> Hide icon
 				     NumOpt);
-			   if (asprintf (&Title,"%s %c)",Txt_Contract,'a' + (char) NumOpt) < 0)
+			   if (asprintf (&Title,"%s %c)",Txt_Contract,
+					 'a' + (char) NumOpt) < 0)
 			      Err_NotEnoughMemoryExit ();
 			   Ico_PutIcon ("caret-down.svg",Ico_BLACK,Title,"ICO16x16");
 			   free (Title);
@@ -2247,7 +2248,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
       HTM_TABLE_End ();	// Table for this question
 
       /***** Send button *****/
-      Btn_PutButton (Forms[OldNewQst].Button);
+      Btn_PutButton (Forms[OldNewQst].Button,NULL);
 
    /***** End form *****/
    Frm_EndForm ();

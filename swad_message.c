@@ -390,7 +390,7 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
 	 free (ClassInput);
 
 	 /***** Send button *****/
-	 Btn_PutButton (Btn_SEND);
+	 Btn_PutButton (Btn_SEND,NULL);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -2300,7 +2300,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 	 Messages->MsgCod = MsgCod;	// Message to be contracted/expanded
 	 Msg_PutParsOneMsg (Messages);
 
-	 HTM_BUTTON_Submit_Begin (*Title[Expanded],"class=\"LT BT_LINK\"");
+	 HTM_BUTTON_Submit_Begin (*Title[Expanded],NULL,"class=\"LT BT_LINK\"");
 
 	    /***** Write subject *****/
 	    if (Subject[0])
@@ -2357,7 +2357,7 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
 	       ParCod_PutPar (ParCod_Crs,Crs.HieCod);
 	       HTM_DIV_Begin ("class=\"MSG_AUT_%s\"",The_GetSuffix ());
 		  HTM_OpenParenthesis ();
-		     HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs.FullName),
+		     HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs.FullName),NULL,
 					      "class=\"BT_LINK\"");
 		     Str_FreeGoToTitle ();
 			HTM_Txt (Crs.ShrtName);
@@ -2636,7 +2636,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 		     Messages->MsgCod = MsgCod;	// Message to be expanded with all recipients visible
 		     Msg_PutParsOneMsg (Messages);
 		     Par_PutParChar ("SeeAllRcpts",'Y');
-			HTM_BUTTON_Submit_Begin (Txt_View_all_recipients,
+			HTM_BUTTON_Submit_Begin (Txt_View_all_recipients,NULL,
 			                         "class=\"LM BT_LINK\"");
 			   HTM_TxtF (Txt_and_X_other_recipients,
 				     NumRecipients.Known -
