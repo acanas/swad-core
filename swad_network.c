@@ -211,7 +211,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	    Frm_BeginFormAnchor (ActChgMyNet,Net_MY_WEBS_ID);
 
 	       /***** Begin table *****/
-	       HTM_TABLE_BeginPadding (2);
+	       HTM_TABLE_BeginCenterPadding (2);
 
 		  /***** List webs and social networks *****/
 		  for (NumURL  = (Net_WebsAndSocialNetworks_t) 0;

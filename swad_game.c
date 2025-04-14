@@ -1361,7 +1361,7 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
       Gam_PutPars (Games);
 
       /***** Begin table *****/
-      HTM_TABLE_BeginPadding (2);
+      HTM_TABLE_BeginCenterPadding (2);
 
 	 /***** Game title *****/
 	 HTM_TR_Begin (NULL);

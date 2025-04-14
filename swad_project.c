@@ -595,7 +595,7 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 	 /***** Filters to choice which projects to show *****/
 	 HTM_FIELDSET_Begin (NULL);
 	    HTM_LEGEND (Txt_Filters);
-	    HTM_TABLE_BeginPadding (2);
+	    HTM_TABLE_BeginCenterPadding (2);
 	       for (Filter = 0;
 		    Filter < Prj_NUM_FILTERS;
 		    Filter++)

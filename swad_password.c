@@ -751,7 +751,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 	    Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 
 	    /* New password */
-	    HTM_TABLE_BeginPadding (2);
+	    HTM_TABLE_BeginCenterPadding (2);
 	       Pwd_PutFormToGetNewPasswordTwice ();
 	    HTM_TABLE_End ();
 

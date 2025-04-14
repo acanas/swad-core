@@ -1148,7 +1148,7 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
    NumEmails = Mai_DB_GetMyEmails (&mysql_res,Usr_UsrDat[MeOrOther]->UsrCod);
 
    /***** Begin table *****/
-   HTM_TABLE_BeginPadding (2);
+   HTM_TABLE_BeginCenterPadding (2);
 
       /***** List emails *****/
       for (NumEmail  = 1;

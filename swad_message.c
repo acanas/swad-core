@@ -1500,13 +1500,14 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
 	 Frm_BeginForm (ActionSee[Messages->TypeOfMessages]);
 
 	    /* Filters */
-	    HTM_TABLE_BeginPadding (2);
+	    HTM_TABLE_BeginCenterPadding (2);
 
 	       Msg_ShowFormSelectCourseSentOrRecMsgs (Messages);
 	       if (Messages->TypeOfMessages == Msg_RECEIVED)
 		  Msg_ShowFormToShowOnlyUnreadMessages (Messages);
 
 	       Msg_ShowFormToFilterMsgs (Messages);
+
 	    HTM_TABLE_End ();
 
 	    /* Put button to refresh */

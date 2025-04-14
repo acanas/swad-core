@@ -132,7 +132,8 @@ void Btn_PutButtonInline (Btn_Button_t Button)
   {
    if (Button != Btn_NO_BUTTON)
      {
-      HTM_BUTTON_Submit_Begin (NULL,"class=\"BT_SUBMIT_INLINE %s\"",NULL,
+      HTM_BUTTON_Submit_Begin (NULL,NULL,
+			       "class=\"BT_SUBMIT_INLINE %s\"",
 			       But_Buttons[Button].Class);
 	 HTM_Txt (*But_Buttons[Button].Txt);
       HTM_BUTTON_End ();

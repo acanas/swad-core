@@ -127,7 +127,7 @@ static void DegCfg_Configuration (Vie_ViewType_t ViewType)
       HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
 
 	 /***** Begin table *****/
-	 HTM_TABLE_BeginPadding (2);
+	 HTM_TABLE_BeginCenterPadding (2);
 
 	    /***** Center *****/
 	    DegCfg_Center (ViewType,PutFormCtr);

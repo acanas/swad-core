@@ -148,7 +148,7 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
 						// User can not select between several tags
 		  ParCod_PutPar (ParCod_Tag,Questions->Tags.PreselectedTagCod);
 
-	       HTM_TABLE_BeginPadding (2);
+	       HTM_TABLE_BeginCenterPadding (2);
 
 		  /***** Selection of tags *****/
 		  Tag_ShowFormSelTags (&Questions->Tags,mysql_res,
