@@ -78,6 +78,9 @@ struct ExaPrn_Print
 
 void ExaPrn_ResetPrint (struct ExaPrn_Print *Print);
 
+void ExaPrn_ListSelectedExaPrns (void);
+void ExaPrn_PrintSelectedExaPrns (void);
+
 void ExaPrn_ShowExamPrint (void);
 
 void ExaPrn_GetPrintDataByPrnCod (struct ExaPrn_Print *Print);

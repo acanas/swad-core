@@ -865,6 +865,8 @@ typedef enum
 	ActValSetQst,
 	ActInvSetQst,
 	ActSeeOneExaSes,
+	ActSeeExaPrnSes,
+	ActPrnExaPrnSes,
 	ActReqNewExaSes,
 	ActReqChgExaSes,
 	ActNewExaSes,
@@ -2004,7 +2006,7 @@ typedef enum
 
 #define ActLst_NUM_ACTIONS		((unsigned) ActChgNtfPrf + 1)
 
-#define ActLst_MAX_ACTION_COD		2181
+#define ActLst_MAX_ACTION_COD		2183
 
 #define ActLst_DEFAULT_ACTION_AFTER_LOGIN ActSeeGblTL
 

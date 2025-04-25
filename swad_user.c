@@ -3725,7 +3725,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 
 	       /***** Form to select users and select date range ****/
 	       /* Begin form */
-	       Frm_BeginForm (NextAction);
+	       Frm_BeginFormId (NextAction,Usr_FORM_TO_SELECT_USRS_ID);
 
 		  /* Hidden parameters */
 		  Grp_PutParsCodGrps ();
@@ -3795,13 +3795,17 @@ void Usr_GetSelectedUsrsAndGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 
    /***** Check number of users *****/
    if (Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (SelectedUsrs))	// If some users are selected...
-      FuncWhenUsrsSelected (ArgsSelected);
+     {
+      if (FuncWhenUsrsSelected)
+         FuncWhenUsrsSelected (ArgsSelected);
+     }
    else	// If no users are selected...
      {
       // ...write warning alert
       Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
       // ...and show again the form
-      FuncWhenNoUsrsSelected (ArgsNoSelected);
+      if (FuncWhenNoUsrsSelected)
+         FuncWhenNoUsrsSelected (ArgsNoSelected);
      }
 
    /***** Free memory used by list of selected users' codes *****/
@@ -5259,7 +5263,8 @@ void Usr_ListStudents (void)
 	       /* Begin form */
 	       if (PutForm == Frm_PUT_FORM)
 		 {
-		  Frm_BeginForm (Act_DoAct_OnSevStd);
+		  /* Form to select users */
+		  Frm_BeginFormId (Act_DoAct_OnSevStd,Usr_FORM_TO_SELECT_USRS_ID);
 		     Grp_PutParsCodGrps ();
 		 }
 

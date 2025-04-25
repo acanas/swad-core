@@ -1564,7 +1564,7 @@ static void Att_ListEventStudents (struct Att_Events *Events)
    /***** Get groups to show ******/
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
-   /***** Get and order list of students in this course *****/
+   /***** Get list of students in this course *****/
    Usr_GetListUsrs (Hie_CRS,Rol_STD);
 
    /***** Begin box *****/

@@ -15955,6 +15955,52 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"S&inodot;nav oturumunu g&ouml;ster"
 #endif
 	,
+	[ActSeeExaPrnSes] =
+#if   L==1	// ca
+	"Mostra ex&agrave;mens d'una sessi&oacute; d'examen"
+#elif L==2	// de
+	"Pr&uuml;fungen aus einer Pr&uuml;fungssession anzeigen"
+#elif L==3	// en
+	"Show exams from an exam session"
+#elif L==4	// es
+	"Mostrar ex&aacute;menes de una sesi&oacute;n de examen"
+#elif L==5	// fr
+	"Afficher les examens d'une session d'examen"
+#elif L==6	// gn
+	"Mostrar ex&aacute;menes de una sesi&oacute;n de examen"	// Okoteve traducción
+#elif L==7	// it
+	"Mostra gli esami da una sessione d'esame"
+#elif L==8	// pl
+	"Poka&zdot; egzaminy z sesji egzaminacyjnej"
+#elif L==9	// pt
+	"Mostrar exames de uma sess&atilde;o de exames"
+#elif L==10	// tr
+	"S&inodot;nav oturumundan s&inodot;navlar&inodot; g&ouml;ster"
+#endif
+	,
+	[ActPrnExaPrnSes] =
+#if   L==1	// ca
+	"Imprimeix ex&agrave;mens d'una sessi&oacute; d'examen"
+#elif L==2	// de
+	"Drucken von Pr&uuml;fungen aus einer Pr&uuml;fungssitzung"
+#elif L==3	// en
+	"Print exams from an exam session"
+#elif L==4	// es
+	"Imprimir ex&aacute;menes de una sesi&oacute;n de examen"
+#elif L==5	// fr
+	"Imprimer les examens d'une session d'examen"
+#elif L==6	// gn
+	"Imprimir ex&aacute;menes de una sesi&oacute;n de examen"	// Okoteve traducción
+#elif L==7	// it
+	"Stampare gli esami da una sessione d'esame"
+#elif L==8	// pl
+	"Wydrukuj egzaminy z sesji egzaminacyjnej"
+#elif L==9	// pt
+	"Imprimir exames de uma sess&atilde;o de exames"
+#elif L==10	// tr
+	"S&inodot;nav oturumundan s&inodot;navlar&inodot; yazd&inodot;r&inodot;n"
+#endif
+	,
 	[ActReqNewExaSes] =
 #if   L==1	// ca
 	"Request new exam session"			// Necessita traducció

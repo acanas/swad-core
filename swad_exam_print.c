@@ -57,8 +57,34 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/******************************** Private types ******************************/
+/*****************************************************************************/
+
+#define ExaPrn_TYPES_OF_VIEW 2
+typedef enum
+  {
+   // ExaPrn_VIEW_ONLY_ME,	// View only me
+   ExaPrn_VIEW_SEL_USR,		// View selected users
+   // ExaPrn_PRNT_ONLY_ME,	// Print only me
+   ExaPrn_PRNT_SEL_USR,		// Print selected users
+  } ExaPrn_TypeOfView_t;
+
+/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+//-----------------------------------------------------------------------------
+
+static void ExaPrn_GetUsrsAndListOrPrintExaPrns (ExaPrn_TypeOfView_t TypeOfView);
+static void ExaPrn_ListOrPrintExaPrns (void *TypeOfView);
+static void ExaPrn_PutIconsPrintExaPrns (void *Exams);
+static void ExaPrn_PutParsToPrintExaPrns (void *Exams);
+static void ExaPrn_ShowMultipleExaPrns (struct Exa_Exams *Exams,
+					ExaPrn_TypeOfView_t TypeOfView,
+					unsigned NumUsrsInList,
+					long *LstSelectedUsrCods);
+
+//-----------------------------------------------------------------------------
 
 static void ExaPrn_GetPrintDataFromRow (MYSQL_RES **mysql_res,
                                         struct ExaPrn_Print *Print,
@@ -154,6 +180,177 @@ void ExaPrn_ResetPrint (struct ExaPrn_Print *Print)
    Print->NumQsts.Valid.Total          = 0;
    Print->Score.All   =
    Print->Score.Valid = 0.0;
+  }
+
+/*****************************************************************************/
+/********** List/Print selected exam printouts from an exam session **********/
+/*****************************************************************************/
+
+void ExaPrn_ListSelectedExaPrns (void)
+  {
+   ExaPrn_GetUsrsAndListOrPrintExaPrns (ExaPrn_VIEW_SEL_USR);
+  }
+
+void ExaPrn_PrintSelectedExaPrns (void)
+  {
+   ExaPrn_GetUsrsAndListOrPrintExaPrns (ExaPrn_PRNT_SEL_USR);
+  }
+
+static void ExaPrn_GetUsrsAndListOrPrintExaPrns (ExaPrn_TypeOfView_t TypeOfView)
+  {
+   Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
+				  ExaPrn_ListOrPrintExaPrns,&TypeOfView,
+                                  ExaSes_ShowOneSessionInternal,NULL);
+  }
+
+static void ExaPrn_ListOrPrintExaPrns (void *TypeOfView)
+  {
+   extern const char *Hlp_ASSESSMENT_Exams;	// TODO: Change to link to section of listing/printing selected exams in a session
+   extern const char *Txt_Listing_of_exams_of_selected_students_in_session_X;
+   struct Exa_Exams Exams;
+   struct ExaSes_Session Session;
+   char *Title;
+   unsigned NumUsrsInList;
+   long *LstSelectedUsrCods;
+
+   switch (*((ExaPrn_TypeOfView_t *) TypeOfView))
+     {
+      case ExaPrn_VIEW_SEL_USR:
+      case ExaPrn_PRNT_SEL_USR:
+	 /***** Reset exams context *****/
+	 Exa_ResetExams (&Exams);
+	 Exa_ResetExam (&Exams.Exam);
+	 ExaSes_ResetSession (&Session);
+
+	 /***** Get parameters *****/
+	 /* Get exams context and session */
+	 Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
+	 Exams.SesCod = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
+
+	 /* Get list of groups selected */
+	 Grp_GetParCodsSeveralGrpsToShowUsrs ();
+
+	 /***** Get exam data and session *****/
+	 Exa_GetExamDataByCod (&Exams.Exam);
+	 ExaSes_GetSessionDataByCod (&Session);
+
+	 /***** Exam begin *****/
+	 if (*((ExaPrn_TypeOfView_t *) TypeOfView) == ExaPrn_VIEW_SEL_USR)
+	    Exa_ShowOnlyOneExamBegin (&Exams,Frm_DONT_PUT_FORM);
+
+	 /***** Count number of valid users in list of encrypted user codes *****/
+	 NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
+
+	 if (NumUsrsInList)
+	   {
+	    /***** Get list of students selected to show their attendances *****/
+	    Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,NumUsrsInList,&LstSelectedUsrCods);
+
+	    /***** Get exam data and session *****/
+	    Exa_GetExamDataByCod (&Exams.Exam);
+	    ExaSes_GetSessionDataByCod (&Session);
+
+	    /***** Begin box *****/
+	    if (*((ExaPrn_TypeOfView_t *) TypeOfView) == ExaPrn_VIEW_SEL_USR)
+	      {
+	       if (asprintf (&Title,Txt_Listing_of_exams_of_selected_students_in_session_X,
+			     Session.Title) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       Box_BoxBegin (Title,ExaPrn_PutIconsPrintExaPrns,&Exams,
+			     Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
+	       free (Title);
+	      }
+
+	    /***** Show table with attendances for every student in list *****/
+	    ExaPrn_ShowMultipleExaPrns (&Exams,*((ExaPrn_TypeOfView_t *) TypeOfView),
+					NumUsrsInList,LstSelectedUsrCods);
+
+	    /***** End box *****/
+	    if (*((ExaPrn_TypeOfView_t *) TypeOfView) == ExaPrn_VIEW_SEL_USR)
+	       Box_BoxEnd ();
+
+	    /***** Free list of user codes *****/
+	    Usr_FreeListSelectedUsrCods (LstSelectedUsrCods);
+	   }
+
+	 /***** Exam end *****/
+	 if (*((ExaPrn_TypeOfView_t *) TypeOfView) == ExaPrn_VIEW_SEL_USR)
+	    Exa_ShowOnlyOneExamEnd ();
+	 break;
+      default:
+	 Err_WrongTypeExit ();
+	 break;
+     }
+  }
+
+/*****************************************************************************/
+/****** Put icon to print selected exam printouts from an exam session *******/
+/*****************************************************************************/
+
+static void ExaPrn_PutIconsPrintExaPrns (void *Exams)
+  {
+   if (Exams)
+      Ico_PutContextualIconToPrint (ActPrnExaPrnSes,
+				    ExaPrn_PutParsToPrintExaPrns,Exams);
+  }
+
+static void ExaPrn_PutParsToPrintExaPrns (void *Exams)
+  {
+   if (Exams)
+     {
+      Exa_PutPars (Exams);
+      Grp_PutParsCodGrps ();
+      Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
+     }
+  }
+
+/*****************************************************************************/
+/************ Show table with attendances for every user in list *************/
+/*****************************************************************************/
+
+static void ExaPrn_ShowMultipleExaPrns (struct Exa_Exams *Exams,
+					ExaPrn_TypeOfView_t TypeOfView,
+					unsigned NumUsrsInList,
+					long *LstSelectedUsrCods)
+  {
+   struct Usr_Data UsrDat;
+   unsigned NumUsr;
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
+
+   /***** List start *****/
+   HTM_UL_Begin ("class=\"LIST_LEFT\"");
+
+   /***** List the users *****/
+   for (NumUsr = 0;
+	NumUsr < NumUsrsInList;
+	NumUsr++)
+     {
+      UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,		// Get from the database the data of the student
+						   Usr_DONT_GET_PREFS,
+						   Usr_DONT_GET_ROLE_IN_CRS))
+        {
+	 HTM_LI_Begin (NULL);
+	    HTM_Txt (UsrDat.Surname1);
+	    if (UsrDat.Surname2[0])
+	      {
+	       HTM_SP ();
+	       HTM_Txt (UsrDat.Surname2);
+	      }
+	    HTM_Comma ();
+	    HTM_SP ();
+	    HTM_Txt (UsrDat.FrstName);
+	 HTM_LI_End ();
+	}
+     }
+
+   /***** List end *****/
+   HTM_UL_End ();
+
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
   }
 
 /*****************************************************************************/

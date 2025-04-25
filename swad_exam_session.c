@@ -210,6 +210,11 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 
 void ExaSes_ShowOneSession (void)
   {
+   ExaSes_ShowOneSessionInternal (NULL);
+  }
+
+void ExaSes_ShowOneSessionInternal (__attribute__((unused)) void *Args)
+  {
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;
 
@@ -248,7 +253,7 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
    /***** Get groups to show ******/
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
-   /***** Get and order list of students in this course *****/
+   /***** Get list of students in this course *****/
    Usr_GetListUsrs (Hie_CRS,Rol_STD);
 
    /***** Begin section *****/
@@ -273,7 +278,7 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
 	       Usr_UsrDataConstructor (&UsrDat);
 
 	       /* Form to select users */
-	       Frm_BeginFormId (ActSeeOneExaSes,Usr_FORM_TO_SELECT_USRS_ID);
+	       Frm_BeginFormId (ActSeeExaPrnSes,Usr_FORM_TO_SELECT_USRS_ID);
 	          Exa_PutPars (Exams);
 		  Grp_PutParsCodGrps ();
 	       Frm_EndForm ();
@@ -316,7 +321,7 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
 	       HTM_TABLE_End ();
 
 	       /* Send button */
-	       Btn_PutButton (Btn_CONTINUE,Usr_FORM_TO_SELECT_USRS_ID);
+	       Btn_PutButton (Btn_SHOW,Usr_FORM_TO_SELECT_USRS_ID);
 
 	       /***** Free memory used for user's data *****/
 	       Usr_UsrDataDestructor (&UsrDat);
@@ -1010,10 +1015,6 @@ static void ExaSes_PutLinkSession (struct Exa_Exams *Exams,
    Frm_BeginForm (ActSeeOneExaSes);
       Exa_PutPars (Exams);
       Grp_PutParsCodGrpsAssociated (Grp_EXAM_SESSION,Exams->SesCod);
-      /*
-      ParCod_PutPar (ParCod_Ses,Session->SesCod);
-      Grp_PutParsCodGrpsAssociated (Grp_EXAM_SESSION,Session->SesCod);
-      */
 
       /***** Link to view attendance event *****/
       HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneExaSes),NULL,
