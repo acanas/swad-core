@@ -1702,6 +1702,7 @@ static void TstPrn_PutFormToSelectUsrsToViewUsrsPrints (__attribute__((unused)) 
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
 
+   /***** List users to select some of them *****/
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
 				     ActSeeUsrTstResCrs,
 				     NULL,NULL,

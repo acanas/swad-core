@@ -106,6 +106,11 @@ void Frm_BeginFormId (Act_Action_t NextAction,const char *Id)
    Frm_BeginFormInternal (NextAction,true,Id,NULL,NULL);	// Do put now parameter location (if no open session)
   }
 
+void Frm_BeginFormIdAnchor (Act_Action_t NextAction,const char *Id,const char *Anchor)
+  {
+   Frm_BeginFormInternal (NextAction,true,Id,Anchor,NULL);	// Do put now parameter location (if no open session)
+  }
+
 static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParLocationIfNoSesion,
                                    const char *Id,const char *Anchor,const char *OnSubmit)
   {

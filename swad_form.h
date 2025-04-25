@@ -61,10 +61,11 @@ bool Frm_CheckIfInside (void);
 
 void Frm_BeginFormGoTo (Act_Action_t NextAction);
 void Frm_BeginForm (Act_Action_t NextAction);
+void Frm_BeginFormAnchor (Act_Action_t NextAction,const char *Anchor);
 void Frm_BeginFormOnSubmit (Act_Action_t NextAction,const char *OnSubmit);
 void Frm_BeginFormAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit);
 void Frm_BeginFormId (Act_Action_t NextAction,const char *Id);
-void Frm_BeginFormAnchor (Act_Action_t NextAction,const char *Anchor);
+void Frm_BeginFormIdAnchor (Act_Action_t NextAction,const char *Id,const char *Anchor);
 void Frm_BeginFormNoAction (void);
 void Frm_SetParsForm (char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1],
 		      Act_Action_t NextAction,

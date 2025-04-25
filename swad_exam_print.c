@@ -250,24 +250,32 @@ static void ExaPrn_ListOrPrintExaPrns (void *TypeOfView)
 	    Exa_GetExamDataByCod (&Exams.Exam);
 	    ExaSes_GetSessionDataByCod (&Session);
 
-	    /***** Begin box *****/
 	    if (*((ExaPrn_TypeOfView_t *) TypeOfView) == ExaPrn_VIEW_SEL_USR)
 	      {
-	       if (asprintf (&Title,Txt_Listing_of_exams_of_selected_students_in_session_X,
-			     Session.Title) < 0)
-		  Err_NotEnoughMemoryExit ();
-	       Box_BoxBegin (Title,ExaPrn_PutIconsPrintExaPrns,&Exams,
-			     Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
-	       free (Title);
+	       /***** Begin section *****/
+	       HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
+
+		  /***** Begin box *****/
+		  if (asprintf (&Title,Txt_Listing_of_exams_of_selected_students_in_session_X,
+				Session.Title) < 0)
+		     Err_NotEnoughMemoryExit ();
+		  Box_BoxBegin (Title,ExaPrn_PutIconsPrintExaPrns,&Exams,
+				Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
+		  free (Title);
 	      }
 
 	    /***** Show table with attendances for every student in list *****/
 	    ExaPrn_ShowMultipleExaPrns (&Exams,*((ExaPrn_TypeOfView_t *) TypeOfView),
 					NumUsrsInList,LstSelectedUsrCods);
 
-	    /***** End box *****/
 	    if (*((ExaPrn_TypeOfView_t *) TypeOfView) == ExaPrn_VIEW_SEL_USR)
-	       Box_BoxEnd ();
+	      {
+		  /***** End box *****/
+		  Box_BoxEnd ();
+
+	       /***** End section *****/
+	       HTM_SECTION_End ();
+	      }
 
 	    /***** Free list of user codes *****/
 	    Usr_FreeListSelectedUsrCods (LstSelectedUsrCods);

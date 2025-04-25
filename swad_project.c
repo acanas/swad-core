@@ -2992,6 +2992,7 @@ static void Prj_FormToSelectUsrs (struct Prj_Projects *Projects,
      };
    char *TxtButton;
 
+
    /***** Get parameters *****/
    Prj_GetPars (Projects,Usr_USE_LIST_SELECTED_USERS);
    Projects->Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
@@ -3000,6 +3001,8 @@ static void Prj_FormToSelectUsrs (struct Prj_Projects *Projects,
    if (asprintf (&TxtButton,Txt_Add_USERS,
 	         Txt_PROJECT_ROLES_PLURAL_abc[RoleInPrj]) < 0)
       Err_NotEnoughMemoryExit ();
+
+   /***** List users to select some of them *****/
    Usr_PutFormToSelectUsrsToGoToAct (&Prj_MembersToAdd,
 				     ActionAddUsr[RoleInPrj],
 				     Prj_PutCurrentPars,Projects,

@@ -3710,6 +3710,9 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
       /***** Begin section with user list *****/
       HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
+	 /***** Show pending alerts *****/
+	 Ale_ShowAlerts (Usr_USER_LIST_SECTION_ID);
+
 	 if (NumTotalUsrs)
 	   {
 	    if (Usr_GetIfShowBigList (NumTotalUsrs,
@@ -3725,7 +3728,8 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 
 	       /***** Form to select users and select date range ****/
 	       /* Begin form */
-	       Frm_BeginFormId (NextAction,Usr_FORM_TO_SELECT_USRS_ID);
+	       Frm_BeginFormIdAnchor (NextAction,Usr_FORM_TO_SELECT_USRS_ID,
+				      Usr_USER_LIST_SECTION_ID);
 
 		  /* Hidden parameters */
 		  Grp_PutParsCodGrps ();
@@ -3802,7 +3806,8 @@ void Usr_GetSelectedUsrsAndGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
    else	// If no users are selected...
      {
       // ...write warning alert
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
+      Ale_CreateAlert (Ale_WARNING,Usr_USER_LIST_SECTION_ID,
+		       Txt_You_must_select_one_ore_more_users);
       // ...and show again the form
       if (FuncWhenNoUsrsSelected)
          FuncWhenNoUsrsSelected (ArgsNoSelected);
@@ -5080,6 +5085,9 @@ void Usr_ListGuests (void)
       /***** Begin section with user list *****/
       HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
+	 /***** Show pending alerts *****/
+	 Ale_ShowAlerts (Usr_USER_LIST_SECTION_ID);
+
 	 if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
 	   {
 	    if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs,
@@ -5241,6 +5249,9 @@ void Usr_ListStudents (void)
       /***** Begin section with user list *****/
       HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
+	 /***** Show pending alerts *****/
+	 Ale_ShowAlerts (Usr_USER_LIST_SECTION_ID);
+
 	 if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
 	   {
 	    if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,
@@ -5264,7 +5275,8 @@ void Usr_ListStudents (void)
 	       if (PutForm == Frm_PUT_FORM)
 		 {
 		  /* Form to select users */
-		  Frm_BeginFormId (Act_DoAct_OnSevStd,Usr_FORM_TO_SELECT_USRS_ID);
+		  Frm_BeginFormIdAnchor (Act_DoAct_OnSevStd,Usr_FORM_TO_SELECT_USRS_ID,
+					 Usr_USER_LIST_SECTION_ID);
 		     Grp_PutParsCodGrps ();
 		 }
 
@@ -5417,6 +5429,9 @@ void Usr_ListTeachers (void)
       /***** Begin section with user list *****/
       HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
+	 /***** Show pending alerts *****/
+	 Ale_ShowAlerts (Usr_USER_LIST_SECTION_ID);
+
 	 if (NumUsrs)
 	   {
 	    if (Usr_GetIfShowBigList (NumUsrs,
@@ -5439,7 +5454,8 @@ void Usr_ListTeachers (void)
 	       /* Begin form */
 	       if (PutForm == Frm_PUT_FORM)
 		 {
-		  Frm_BeginForm (Act_DoAct_OnSevTch);
+		  Frm_BeginFormIdAnchor (Act_DoAct_OnSevTch,Usr_FORM_TO_SELECT_USRS_ID,
+					 Usr_USER_LIST_SECTION_ID);
 		     Grp_PutParsCodGrps ();
 		 }
 
@@ -5795,20 +5811,20 @@ void Usr_DoActionOnUsrs1 (void)
 	    break;
 	}
 
-      if (Gbl.Action.Act == Gbl.Action.Original)	// Fail, no change in action
-	 Ale_CreateAlert (Ale_ERROR,NULL,"Wrong action.");
-      else						// Success, action has changed
+      if (Gbl.Action.Act == Gbl.Action.Original)		// Fail, no change in action
+	 Ale_CreateAlert (Ale_ERROR,Usr_USER_LIST_SECTION_ID,"Wrong action.");
+      else							// Success, action has changed
 	 Tab_SetCurrentTab ();
      }
-   else							// If no users selected...
-      Ale_CreateAlert (Ale_WARNING,NULL,		// ...write warning notice
+   else								// If no users selected...
+      Ale_CreateAlert (Ale_WARNING,Usr_USER_LIST_SECTION_ID,	// ...write warning notice
 	               Txt_You_must_select_one_ore_more_users);
   }
 
 void Usr_DoActionOnUsrs2 (void)
   {
    /***** Show possible alerts *****/
-   Ale_ShowAlerts (NULL);
+   /* Ale_ShowAlerts (NULL); */
 
    /***** If success, action has changed.
           No change in action means an error in form has happened,

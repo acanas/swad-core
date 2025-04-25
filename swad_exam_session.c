@@ -81,6 +81,8 @@ const char *ExaSes_ModalityIcon[ExaSes_NUM_MODALITIES] =
 
 extern struct Globals Gbl;
 
+#define ExaSes_SESSION_BOX_ID		"exases_box"
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -257,7 +259,7 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
    Usr_GetListUsrs (Hie_CRS,Rol_STD);
 
    /***** Begin section *****/
-   HTM_SECTION_Begin (ExaRes_RESULTS_BOX_ID);
+   HTM_SECTION_Begin (ExaSes_SESSION_BOX_ID);
 
       /***** Begin box *****/
       if (asprintf (&Title,Txt_Session_X,Session->Title) < 0)
@@ -272,13 +274,17 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
 	 /***** Begin section with user list *****/
 	 HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
+	    /***** Show pending alerts *****/
+	    Ale_ShowAlerts (Usr_USER_LIST_SECTION_ID);
+
 	    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
 	      {
 	       /***** Initialize structure with user's data *****/
 	       Usr_UsrDataConstructor (&UsrDat);
 
 	       /* Form to select users */
-	       Frm_BeginFormId (ActSeeExaPrnSes,Usr_FORM_TO_SELECT_USRS_ID);
+	       Frm_BeginFormIdAnchor (ActSeeExaPrnSes,Usr_FORM_TO_SELECT_USRS_ID,
+				      Usr_USER_LIST_SECTION_ID);
 	          Exa_PutPars (Exams);
 		  Grp_PutParsCodGrps ();
 	       Frm_EndForm ();
@@ -1012,7 +1018,7 @@ static void ExaSes_PutLinkSession (struct Exa_Exams *Exams,
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
 
    /***** Begin form *****/
-   Frm_BeginForm (ActSeeOneExaSes);
+   Frm_BeginFormAnchor (ActSeeOneExaSes,ExaSes_SESSION_BOX_ID);
       Exa_PutPars (Exams);
       Grp_PutParsCodGrpsAssociated (Grp_EXAM_SESSION,Exams->SesCod);
 

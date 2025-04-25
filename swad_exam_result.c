@@ -284,6 +284,7 @@ static void ExaRes_PutFormToSelUsrsToViewResults (__attribute__((unused)) void *
    extern const char *Hlp_ASSESSMENT_Exams_results;
    extern const char *Txt_Results;
 
+   /***** List users to select some of them *****/
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
 				     ActSeeUsrExaResCrs,
 				     NULL,NULL,

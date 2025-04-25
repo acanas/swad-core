@@ -638,10 +638,11 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.77 (2025-04-25)"
+#define Log_PLATFORM_VERSION	"SWAD 24.77.1 (2025-04-25)"
 #define CSS_FILE		"swad24.75.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 24.77.1:  Apr 25, 2025  Changes in alerts related to lists of users. (345731 lines)
 	Version 24.77:    Apr 25, 2025  Changes in exam sessions. (345699 lines)
 	Version 24.76.3:  Apr 14, 2025  Some tables are now centered. (345451 lines)
 	Version 24.76.2:  Apr 12, 2025  Changes in exam sessions. (345448 lines)

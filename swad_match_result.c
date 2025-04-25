@@ -329,6 +329,7 @@ static void MchRes_PutFormToSelUsrsToViewMchResults (__attribute__((unused)) voi
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Results;
 
+   /***** List users to select some of them *****/
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
 				     ActSeeUsrMchResCrs,
 				     NULL,NULL,
