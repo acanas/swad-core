@@ -1029,7 +1029,7 @@ bool Pho_ShowingUsrPhotoIsAllowed (struct Usr_Data *UsrDat,
   {
    /***** Photo is shown if I can see it, and it exists *****/
    return (Pri_CheckIfICanView (UsrDat->PhotoVisibility,UsrDat) == Usr_CAN) ? Pho_BuildLinkToPhoto (UsrDat,PhotoURL) :
-									        false;
+									      false;
   }
 
 /*****************************************************************************/
@@ -1038,7 +1038,8 @@ bool Pho_ShowingUsrPhotoIsAllowed (struct Usr_Data *UsrDat,
 // Returns false if photo does not exist
 // Returns true if link is created successfully
 
-bool Pho_BuildLinkToPhoto (const struct Usr_Data *UsrDat,char PhotoURL[WWW_MAX_BYTES_WWW + 1])
+bool Pho_BuildLinkToPhoto (struct Usr_Data *UsrDat,
+			   char PhotoURL[WWW_MAX_BYTES_WWW + 1])
   {
    char PathPublPhoto[PATH_MAX + 1];
    char PathPrivPhoto[PATH_MAX + 1];

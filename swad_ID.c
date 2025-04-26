@@ -72,7 +72,7 @@ const char *ID_ID_SECTION_ID = "id_section";
 
 static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned MinDigits);
 
-static void ID_PutLinkToConfirmID (struct Usr_Data *UsrDat,unsigned NumID,
+static void ID_PutLinkToConfirmID (const struct Usr_Data *UsrDat,unsigned NumID,
                                    const char *Anchor);
 
 static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillInID);
@@ -305,7 +305,7 @@ static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned Min
 /*************************** Write list of user's ID *************************/
 /*****************************************************************************/
 
-void ID_WriteUsrIDs (struct Usr_Data *UsrDat,const char *Anchor)
+void ID_WriteUsrIDs (const struct Usr_Data *UsrDat,const char *Anchor)
   {
    unsigned NumID;
    Usr_Can_t ICanSeeUsrID = ID_ICanSeeOtherUsrIDs (UsrDat);
@@ -397,7 +397,7 @@ Usr_Can_t ID_ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat)
 /****************** Put a link to confirm another user's ID ******************/
 /*****************************************************************************/
 
-static void ID_PutLinkToConfirmID (struct Usr_Data *UsrDat,unsigned NumID,
+static void ID_PutLinkToConfirmID (const struct Usr_Data *UsrDat,unsigned NumID,
                                    const char *Anchor)
   {
    extern const char *Txt_Confirm;

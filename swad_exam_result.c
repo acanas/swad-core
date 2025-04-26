@@ -1326,7 +1326,7 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
       /* Get data of the user who answered the exam print */
       if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,
 						    Usr_DONT_GET_PREFS,
-						    Usr_DONT_GET_ROLE_IN_CRS))
+						    Usr_GET_ROLE_IN_CRS))
 	 Err_WrongUserExit ();
       if (Usr_CheckIfICanViewTstExaMchResult (UsrDat) == Usr_CAN_NOT)
 	 Err_NoPermissionExit ();

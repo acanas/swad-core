@@ -119,7 +119,8 @@ void Pho_ShowUsrPhotoIfAllowed (struct Usr_Data *UsrDat,
                                 const char *ClassPhoto,Pho_Zoom_t Zoom);
 bool Pho_ShowingUsrPhotoIsAllowed (struct Usr_Data *UsrDat,
                                    char PhotoURL[WWW_MAX_BYTES_WWW + 1]);
-bool Pho_BuildLinkToPhoto (const struct Usr_Data *UsrDat,char PhotoURL[WWW_MAX_BYTES_WWW + 1]);
+bool Pho_BuildLinkToPhoto (struct Usr_Data *UsrDat,
+			   char PhotoURL[WWW_MAX_BYTES_WWW + 1]);
 bool Pho_CheckIfPrivPhotoExists (long UsrCod,char PathPrivRelPhoto[PATH_MAX + 1]);
 void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
 			    const char *ClassPhoto,Pho_Zoom_t Zoom,

@@ -249,7 +249,7 @@ Pri_Visibility_t Pri_GetParVisibility (const char *ParName,
 /*****************************************************************************/
 
 Usr_Can_t Pri_CheckIfICanView (Pri_Visibility_t Visibility,
-				struct Usr_Data *UsrDat)
+			       struct Usr_Data *UsrDat)
   {
    /***** I always can see my things *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)

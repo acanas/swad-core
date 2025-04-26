@@ -2323,10 +2323,10 @@ void Qst_QstConstructor (struct Qst_Question *Question)
    Question->Feedback[0] = '\0';
 
    /***** Initialize answers *****/
-   Question->Answer.Type         = Qst_ANS_UNIQUE_CHOICE;
-   Question->Answer.NumOptions   = 0;
-   Question->Answer.Shuffle = Qst_DONT_SHUFFLE;
-   Question->Answer.TF           = ' ';
+   Question->Answer.Type       = Qst_ANS_UNIQUE_CHOICE;
+   Question->Answer.NumOptions = 0;
+   Question->Answer.Shuffle    = Qst_DONT_SHUFFLE;
+   Question->Answer.TF         = ' ';
 
    /* Initialize image attached to stem */
    Med_MediaConstructor (&Question->Media);

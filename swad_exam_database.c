@@ -220,7 +220,7 @@ unsigned Exa_DB_GetExamStartEnd (MYSQL_RES **mysql_res,long ExaCod)
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get exam data",
 		   "SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
-			  "UNIX_TIMESTAMP(MAX(EndTime))"		// row[1]
+			  "UNIX_TIMESTAMP(MAX(EndTime))"	// row[1]
 		    " FROM exa_sessions"
 		   " WHERE ExaCod=%ld",
 		   ExaCod);
@@ -1789,21 +1789,29 @@ void Exa_DB_RemoveGroup (long GrpCod)
   }
 
 /*****************************************************************************/
-/***************** Create new blank exam print in database *******************/
+/********************** Create new blank exam print **************************/
 /*****************************************************************************/
 
-long Exa_DB_CreatePrint (const struct ExaPrn_Print *Print)
+long Exa_DB_CreatePrint (const struct ExaPrn_Print *Print,bool Start)
   {
+   const char *TimeStr[2] =
+     {
+      [false] = "NOW()",		// Student start exam print
+      [true ] = "FROM_UNIXTIME(0)",	// Teacher pre-creates exam print
+     };
+
    return
    DB_QueryINSERTandReturnCode ("can not create new exam print",
 				"INSERT INTO exa_prints"
 				" (SesCod,UsrCod,StartTime,EndTime,"
 				  "NumQsts,NumQstsNotBlank,Sent,Score)"
 				" VALUES"
-				" (%ld,%ld,NOW(),NOW(),"
+				" (%ld,%ld,%s,%s,"
 				  "%u,0,'N',0)",
 				Print->SesCod,
 				Print->UsrCod,
+				TimeStr[Start],
+				TimeStr[Start],
 				Print->NumQsts.All);
   }
 
