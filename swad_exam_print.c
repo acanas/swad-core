@@ -80,10 +80,12 @@ static void ExaPrn_ListOrPrintExaPrns (void *TypeOfView);
 static void ExaPrn_PutIconsPrintExaPrns (void *Exams);
 static void ExaPrn_PutParsToPrintExaPrns (void *Exams);
 static void ExaPrn_ShowMultipleExaPrns (struct Exa_Exams *Exams,
+				        const struct ExaSes_Session *Session,
 					ExaPrn_TypeOfView_t TypeOfView,
 					unsigned NumUsrsInList,
 					long *LstSelectedUsrCods);
 static void ExaPrn_ShowPrintToTch (struct Exa_Exams *Exams,
+      				   const struct ExaSes_Session *Session,
 				   ExaPrn_TypeOfView_t TypeOfView,
 				   struct Usr_Data *UsrDat);
 
@@ -102,6 +104,7 @@ static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *Printed
 static void ExaPrn_CreatePrint (struct ExaPrn_Print *Print,bool Start);
 
 static void ExaPrn_ShowPrintToShow (struct Exa_Exams *Exams,
+				    const struct ExaSes_Session *Session,
 				    ExaPrn_TypeOfView_t TypeOfView,
 				    struct Usr_Data *UsrDat,
                                     struct ExaPrn_Print *Print);
@@ -244,7 +247,8 @@ static void ExaPrn_ListOrPrintExaPrns (void *TypeOfView)
    /***** Get parameters *****/
    /* Get exams context and session */
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
-   Exams.SesCod = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
+   Exams.SesCod.Selected =
+   Exams.SesCod.Showing  = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
 
    /* Get list of groups selected */
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -282,7 +286,8 @@ static void ExaPrn_ListOrPrintExaPrns (void *TypeOfView)
 	}
 
       /***** Show table with exam prints *****/
-      ExaPrn_ShowMultipleExaPrns (&Exams,*((ExaPrn_TypeOfView_t *) TypeOfView),
+      ExaPrn_ShowMultipleExaPrns (&Exams,&Session,
+				  *((ExaPrn_TypeOfView_t *) TypeOfView),
 				  NumUsrsInList,LstSelectedUsrCods);
 
       /***** End box and section *****/
@@ -327,6 +332,7 @@ static void ExaPrn_PutParsToPrintExaPrns (void *Exams)
 /*****************************************************************************/
 
 static void ExaPrn_ShowMultipleExaPrns (struct Exa_Exams *Exams,
+				        const struct ExaSes_Session *Session,
 					ExaPrn_TypeOfView_t TypeOfView,
 					unsigned NumUsrsInList,
 					long *LstSelectedUsrCods)
@@ -349,9 +355,9 @@ static void ExaPrn_ShowMultipleExaPrns (struct Exa_Exams *Exams,
 	{
 	 /***** Show exam print *****/
 	 HTM_DIV_Begin (TypeOfView == ExaPrn_PRNT_SEL_USR &&
-	                NumUsr ? "style=\"page-break-before:always;\"" :
+	                NumUsr ? "style=\"break-before:page;\"" :
 				 NULL);
-	    ExaPrn_ShowPrintToTch (Exams,TypeOfView,&UsrDat);
+	    ExaPrn_ShowPrintToTch (Exams,Session,TypeOfView,&UsrDat);
 	 HTM_DIV_End ();
 	}
      }
@@ -365,13 +371,14 @@ static void ExaPrn_ShowMultipleExaPrns (struct Exa_Exams *Exams,
 /*****************************************************************************/
 
 static void ExaPrn_ShowPrintToTch (struct Exa_Exams *Exams,
+      				   const struct ExaSes_Session *Session,
 				   ExaPrn_TypeOfView_t TypeOfView,
 				   struct Usr_Data *UsrDat)
   {
    struct ExaPrn_Print Print;
 
    /***** Set basic data of exam print *****/
-   Print.SesCod = Exams->SesCod;
+   Print.SesCod = Session->SesCod;
    Print.UsrCod = UsrDat->UsrCod;
 
    /***** Get exam print data from database *****/
@@ -380,7 +387,7 @@ static void ExaPrn_ShowPrintToTch (struct Exa_Exams *Exams,
    if (Print.PrnCod <= 0)	// Exam print does not exists ==> create it
      {
       /***** Set again basic data of exam print *****/
-      Print.SesCod = Exams->SesCod;
+      Print.SesCod = Session->SesCod;
       Print.UsrCod = UsrDat->UsrCod;
 
       /***** Get questions from database *****/
@@ -401,7 +408,7 @@ static void ExaPrn_ShowPrintToTch (struct Exa_Exams *Exams,
      }
 
    /***** Show exam print to be shown on screen or printed on paper *****/
-   ExaPrn_ShowPrintToShow (Exams,TypeOfView,UsrDat,&Print);
+   ExaPrn_ShowPrintToShow (Exams,Session,TypeOfView,UsrDat,&Print);
   }
 
 /*****************************************************************************/
@@ -826,6 +833,7 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 /*****************************************************************************/
 
 static void ExaPrn_ShowPrintToShow (struct Exa_Exams *Exams,
+				    const struct ExaSes_Session *Session,
 				    ExaPrn_TypeOfView_t TypeOfView,
 				    struct Usr_Data *UsrDat,
                                     struct ExaPrn_Print *Print)
@@ -834,7 +842,7 @@ static void ExaPrn_ShowPrintToShow (struct Exa_Exams *Exams,
 
    /***** Begin box *****/
    if (TypeOfView == ExaPrn_VIEW_SEL_USR)
-      Box_BoxBegin (Exams->Exam.Title,NULL,NULL,
+      Box_BoxBegin (Session->Title,NULL,NULL,
 		    Hlp_ASSESSMENT_Exams_answer_exam,Box_NOT_CLOSABLE);
 
    /***** Heading *****/
@@ -1453,7 +1461,8 @@ void ExaPrn_ReceivePrintAnswer (void)
    ExaSes_GetSessionDataByCod (&Session);
    if (Session.SesCod <= 0)
       Err_WrongExamExit ();
-   Exams.SesCod = Session.SesCod;
+   Exams.SesCod.Selected =
+   Exams.SesCod.Showing  = Session.SesCod;
 
    /***** Get exam data *****/
    Exams.Exam.ExaCod = Session.ExaCod;

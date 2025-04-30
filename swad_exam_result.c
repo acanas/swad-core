@@ -240,7 +240,8 @@ void ExaRes_ShowMyResultsInSes (void)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
-   Exams.SesCod = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
+   Exams.SesCod.Selected =
+   Exams.SesCod.Showing  = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
    Exa_GetExamDataByCod (&Exams.Exam);
    ExaSes_GetSessionDataByCod (&Session);
 
@@ -266,7 +267,7 @@ static void ExaRes_ListMyResultsInSes (struct Exa_Exams *Exams)
 
    /***** List my sessions results in exam *****/
    TstCfg_GetConfig ();	// Get feedback type
-   ExaRes_ShowResults (Exams,Usr_ME,Exams->SesCod,-1L,NULL);
+   ExaRes_ShowResults (Exams,Usr_ME,Exams->SesCod.Selected,-1L,NULL);
   }
 
 /*****************************************************************************/
@@ -453,7 +454,8 @@ void ExaRes_ShowAllResultsInSes (void)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
-   Exams.SesCod = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
+   Exams.SesCod.Selected =
+   Exams.SesCod.Showing  = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
 
    /***** Get exam data and session *****/
    Exa_GetExamDataByCod (&Exams.Exam);
@@ -483,8 +485,8 @@ static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams)
    /***** Table head *****/
    ExaRes_ShowHeaderResults (Usr_OTHER);
 
-   /***** Get all users who have answered any session question in this exam *****/
-   NumUsrs = Exa_DB_GetAllUsrsWhoHaveMadeSession (&mysql_res,Exams->SesCod);
+   /***** Get all users who have answered any question in this session *****/
+   NumUsrs = Exa_DB_GetAllUsrsWhoHaveMadeSession (&mysql_res,Exams->SesCod.Selected);
 
    /***** List sessions results for each user *****/
    for (NumUsr = 0;
@@ -494,12 +496,12 @@ static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams)
       if ((Gbl.Usrs.Other.UsrDat.UsrCod = DB_GetNextCode (mysql_res)) > 0)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CRS))
+	                                              Usr_GET_ROLE_IN_CRS))
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	      {
 	       /***** Show sessions results *****/
 	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-	       ExaRes_ShowResults (Exams,Usr_OTHER,Exams->SesCod,-1L,NULL);
+	       ExaRes_ShowResults (Exams,Usr_OTHER,Exams->SesCod.Selected,-1L,NULL);
 	      }
 
    /***** Free structure that stores the query result *****/
@@ -1024,7 +1026,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 		 {
 		  case Usr_CAN:
 		     Exams->Exam.ExaCod = Session.ExaCod;
-		     Exams->SesCod      = Session.SesCod;
+		     Exams->SesCod.Showing = Session.SesCod;
 		     switch (MeOrOther)
 		       {
 			case Usr_ME:

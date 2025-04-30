@@ -156,18 +156,19 @@ static void Exa_UpdateExam (struct Exa_Exam *Exam,const char *Txt);
 
 void Exa_ResetExams (struct Exa_Exams *Exams)
   {
-   Exams->LstIsRead         = false;	// List not read from database...
-   Exams->Num               = 0;	// Total number of exams
-   Exams->NumSelected       = 0;	// Number of exams selected
-   Exams->Lst               = NULL;	// List of exams
-   Exams->SelectedOrder     = Exa_ORDER_DEFAULT;
-   Exams->CurrentPage       = 0;
-   Exams->ListQuestions     = NULL;
-   Exams->ExaCodsSelected   = NULL;	// String with selected exam codes separated by separator multiple
-   Exams->Exam.ExaCod       = -1L;	// Selected/current exam code
-   Exams->SesCod            = -1L;	// Selected/current session code
-   Exams->SetInd            = 0;	// Current set index
-   Exams->QstCod            = -1L;	// Current question code
+   Exams->LstIsRead		= false;	// List not read from database...
+   Exams->Num			= 0;	// Total number of exams
+   Exams->NumSelected		= 0;	// Number of exams selected
+   Exams->Lst			= NULL;	// List of exams
+   Exams->SelectedOrder		= Exa_ORDER_DEFAULT;
+   Exams->CurrentPage		= 0;
+   Exams->ListQuestions		= NULL;
+   Exams->ExaCodsSelected	= NULL;	// String with selected exam codes separated by separator multiple
+   Exams->Exam.ExaCod		= -1L;	// Selected/current exam code
+   Exams->SesCod.Selected	=
+   Exams->SesCod.Showing	= -1L;	// Selected/current session code
+   Exams->SetInd		= 0;	// Current set index
+   Exams->QstCod		= -1L;	// Current question code
   }
 
 /*****************************************************************************/
@@ -177,19 +178,19 @@ void Exa_ResetExams (struct Exa_Exams *Exams)
 void Exa_ResetExam (struct Exa_Exam *Exam)
   {
    /***** Initialize to empty exam *****/
-   Exam->ExaCod                  = -1L;
-   Exam->CrsCod                  = -1L;
-   Exam->UsrCod                  = -1L;
-   Exam->MaxGrade                = Exa_MAX_GRADE_DEFAULT;
-   Exam->Visibility              = TstVis_VISIBILITY_DEFAULT;
+   Exam->ExaCod			= -1L;
+   Exam->CrsCod			= -1L;
+   Exam->UsrCod			= -1L;
+   Exam->MaxGrade		= Exa_MAX_GRADE_DEFAULT;
+   Exam->Visibility		= TstVis_VISIBILITY_DEFAULT;
    Exam->TimeUTC[Dat_STR_TIME] = (time_t) 0;
-   Exam->TimeUTC[Dat_END_TIME] = (time_t) 0;
-   Exam->Title[0]                = '\0';
-   Exam->Hidden         = HidVis_VISIBLE;
-   Exam->NumSets                 = 0;
-   Exam->NumQsts                 = 0;
-   Exam->NumSess                 = 0;
-   Exam->NumOpenSess             = 0;
+   Exam->TimeUTC[Dat_END_TIME]	= (time_t) 0;
+   Exam->Title[0]		= '\0';
+   Exam->Hidden			= HidVis_VISIBLE;
+   Exam->NumSets		= 0;
+   Exam->NumQsts		= 0;
+   Exam->NumSess		= 0;
+   Exam->NumOpenSess		= 0;
   }
 
 /*****************************************************************************/
@@ -741,7 +742,7 @@ void Exa_PutPars (void *Exams)
       MyAllGrps = Grp_GetParMyAllGrps ();
       Grp_PutParMyAllGrps (&MyAllGrps);
       Pag_PutParPagNum (Pag_EXAMS,((struct Exa_Exams *) Exams)->CurrentPage);
-      ParCod_PutPar (ParCod_Ses,((struct Exa_Exams *) Exams)->SesCod);
+      ParCod_PutPar (ParCod_Ses,((struct Exa_Exams *) Exams)->SesCod.Showing);
      }
   }
 

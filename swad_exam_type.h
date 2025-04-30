@@ -100,7 +100,11 @@ struct Exa_Exams
    char *ExaCodsSelected;	// String with selected exam codes separated by separator multiple
    struct Exa_Exam Exam;	// Selected/current exam
    long SetCod;			// Selected/current set code
-   long SesCod;			// Selected/current session code
+   struct
+     {
+      long Selected;		// The one that has been selected
+      long Showing;		// The one that is being shown right now
+     } SesCod;			// Session code
    unsigned SetInd;		// Current set index
    long QstCod;			// Current question code
   };
@@ -158,8 +162,8 @@ struct ExaSes_Session
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    char Title[ExaSes_MAX_BYTES_TITLE + 1];
    HidVis_HiddenOrVisible_t Hidden;
-   CloOpe_ClosedOrOpen_t ClosedOrOpen;	// If now is between start and end dates
-   bool ShowUsrResults;			// Show exam with results of all questions for the student
+   CloOpe_ClosedOrOpen_t Open;	// If now is between start and end dates
+   bool ShowUsrResults;		// Show exam with results of all questions for the student
   };
 
 #endif

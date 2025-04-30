@@ -1846,23 +1846,23 @@ static void Grp_ListGrpsOfATypeToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp
 	    /* Put checkbox to select the group */
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ((IBelongToThisGroup == Usr_BELONG) ? "class=\"LM BG_HIGHLIGHT\"" :
-								  "class=\"LM\"");
+	       HTM_TD_Begin (IBelongToThisGroup == Usr_BELONG ? "class=\"LM BG_HIGHLIGHT\"" :
+								"class=\"LM\"");
 		  HTM_INPUT_CHECKBOX ("GrpCods",
 				      (Grp_DB_CheckIfAssociatedToGrp (AssociationsToGrps[WhichIsAssociatedToGrp].Table,
 								      AssociationsToGrps[WhichIsAssociatedToGrp].Field,
 								      Cod,Grp->GrpCod) ? HTM_CHECKED :
 											 HTM_NO_ATTR) |
-				      ((IBelongToThisGroup == Usr_BELONG ||
-					Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? HTM_NO_ATTR :
-										  HTM_DISABLED),
+				      (IBelongToThisGroup == Usr_BELONG ||
+				       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? HTM_NO_ATTR :
+										HTM_DISABLED),
 				      "id=\"Grp%ld\" value=\"%ld\""
 				      " onclick=\"uncheckParent(this,'WholeCrs')\"",
 				      Grp->GrpCod,Grp->GrpCod);
 	       HTM_TD_End ();
 
-	       Grp_WriteRowGrp (Grp,(IBelongToThisGroup == Usr_BELONG) ? Lay_HIGHLIGHT :
-									 Lay_NO_HIGHLIGHT);
+	       Grp_WriteRowGrp (Grp,IBelongToThisGroup == Usr_BELONG ? Lay_HIGHLIGHT :
+								       Lay_NO_HIGHLIGHT);
 
 	    HTM_TR_End ();
 	   }

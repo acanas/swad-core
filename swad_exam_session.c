@@ -106,22 +106,27 @@ static Usr_Can_t ExaSes_CheckIfICanEditThisSession (long UsrCod);
 static Usr_Can_t ExaSes_CheckIfICanChangeVisibilityOfResults (const struct ExaSes_Session *Session);
 static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
                                                const struct ExaSes_Session *Session,
+                                               const char *BgColor,
 					       const char *Anchor);
-static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Session);
+static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Session,
+						const char *BgColor);
 static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Session,
-                                               unsigned UniqueId);
+                                               unsigned UniqueId,
+					       const char *BgColor);
 static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
                                                   const struct ExaSes_Session *Session,
+                                                  const char *BgColor,
                                                   const char *Anchor);
-static void ExaSes_ListOneOrMoreSessionsPrints (struct Exa_Exams *Exams,
-					        const struct ExaSes_Session *Session);
+static void ExaSes_ListOneOrMoreSessionsPrints (const struct ExaSes_Session *Session,
+						const char *BgColor);
 static void ExaSes_PutLinkSession (struct Exa_Exams *Exams,
 				   const struct ExaSes_Session *Session,
 			           const char *Txt);
 static void ExaSes_WriteModality (const struct ExaSes_Session *Session);
 static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSes_Session *Session);
 static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
-                                                const struct ExaSes_Session *Session);
+                                                const struct ExaSes_Session *Session,
+                                                const char *BgColor);
 static void ExaSes_ListOneOrMoreSessionsResultStd (struct Exa_Exams *Exams,
                                                    const struct ExaSes_Session *Session);
 static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
@@ -165,7 +170,7 @@ void ExaSes_ResetSession (struct ExaSes_Session *Session)
       Session->TimeUTC[StartEndTime] = (time_t) 0;
    Session->Title[0]       = '\0';
    Session->Hidden         = HidVis_VISIBLE;
-   Session->ClosedOrOpen   = CloOpe_CLOSED;
+   Session->Open   = CloOpe_CLOSED;
    Session->ShowUsrResults = false;
   };
 
@@ -227,7 +232,8 @@ void ExaSes_ShowOneSessionInternal (__attribute__((unused)) void *Args)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
-   Exams.SesCod = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
+   Exams.SesCod.Selected =
+   Exams.SesCod.Showing  = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
 
    /***** Get exam data and session *****/
    Exa_GetExamDataByCod (&Exams.Exam);
@@ -433,7 +439,7 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
    // Do not filter by groups, because a student who has changed groups
    // must be able to access exams taken in other groups
    NumResults = Exa_DB_GetResults (&mysql_res,Usr_OTHER,UsrDat->UsrCod,
-				   Exams->SesCod,-1L,NULL);
+				   Exams->SesCod.Selected,-1L,NULL);
 
    /***** Begin table row *****/
    HTM_TR_Begin (NULL);
@@ -662,12 +668,9 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
    unsigned NumSession;
    unsigned UniqueId;
    struct ExaSes_Session Session;
+   const char *BgColor;
    char *Anchor;
    Usr_Can_t ICanEditSessions = ExaSes_CheckIfICanEditSessions ();
-   long SesCodSelected;
-
-   /***** Make session backup *****/
-   SesCodSelected = Exams->SesCod;
 
    /***** Reset session *****/
    ExaSes_ResetSession (&Session);
@@ -686,10 +689,13 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	{
 	 /***** Get exam session data from row *****/
 	 ExaSes_GetSessionDataFromRow (mysql_res,&Session);
-	 Exams->SesCod = Session.SesCod;	// To be used as hidden parameter in forms
+	 Exams->SesCod.Showing = Session.SesCod;	// To be used as hidden parameter in forms
 
 	 if (ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session.SesCod) == Usr_CAN)
 	   {
+	    BgColor = (Session.SesCod == Exams->SesCod.Selected) ? "BG_HIGHLIGHT" :
+								   The_GetColorRows ();
+
 	    /***** Build anchor string *****/
 	    if (asprintf (&Anchor,"evt_%ld_%ld",Exams->Exam.ExaCod,Session.SesCod) < 0)
 	       Err_NotEnoughMemoryExit ();
@@ -699,31 +705,31 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 
 	       /* Icons */
 	       if (ICanEditSessions)
-		  ExaSes_ListOneOrMoreSessionsIcons (Exams,&Session,Anchor);
+		  ExaSes_ListOneOrMoreSessionsIcons (Exams,&Session,BgColor,Anchor);
 
 	       /* Start/end date/time */
-	       ExaSes_ListOneOrMoreSessionsTimes (&Session,UniqueId);
+	       ExaSes_ListOneOrMoreSessionsTimes (&Session,UniqueId,BgColor);
 
 	       /* Title, modality and groups */
-	       ExaSes_ListOneOrMoreSessionsMainData (Exams,&Session,Anchor);
+	       ExaSes_ListOneOrMoreSessionsMainData (Exams,&Session,BgColor,Anchor);
 
 	       /* Prints in the session */
 	       if (ICanEditSessions)
-	          ExaSes_ListOneOrMoreSessionsPrints (Exams,&Session);
+	          ExaSes_ListOneOrMoreSessionsPrints (&Session,BgColor);
 
 	       /* Session result visible? */
-	       ExaSes_ListOneOrMoreSessionsResult (Exams,&Session);
+	       ExaSes_ListOneOrMoreSessionsResult (Exams,&Session,BgColor);
 
 	    HTM_TR_End ();
 
 	    /***** Second row: session author */
 	    HTM_TR_Begin (NULL);
-	       ExaSes_ListOneOrMoreSessionsAuthor (&Session);
+	       ExaSes_ListOneOrMoreSessionsAuthor (&Session,BgColor);
 	    HTM_TR_End ();
 
 	    /***** Third row: form to edit this session ****/
 	    if (ICanEditSessions && PutFormSession == Frm_PUT_FORM &&	// Editing...
-		Session.SesCod == SesCodSelected)			// ...this session
+		Session.SesCod == Exams->SesCod.Selected)		// ...this session
 	      {
 	       HTM_TR_Begin (NULL);
 		  HTM_TD_Begin ("colspan=\"6\" class=\"LT %s\"",
@@ -740,7 +746,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 
       /***** Put form to create a new exam session in this exam *****/
       if (ICanEditSessions && PutFormSession == Frm_PUT_FORM &&
-	  SesCodSelected <= 0)
+	  Exams->SesCod.Selected <= 0)
 	{
 	 /* Reset session */
 	 ExaSes_ResetSession (&Session);
@@ -759,9 +765,6 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 
    /***** End table with sessions *****/
    HTM_TABLE_End ();
-
-   /***** Restore session backup *****/
-   Exams->SesCod = SesCodSelected;
   }
 
 /*****************************************************************************/
@@ -848,6 +851,7 @@ static Usr_Can_t ExaSes_CheckIfICanChangeVisibilityOfResults (const struct ExaSe
 
 static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
                                                const struct ExaSes_Session *Session,
+                                               const char *BgColor,
 					       const char *Anchor)
   {
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
@@ -857,7 +861,7 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
      };
 
    /***** Begin cell *****/
-   HTM_TD_Begin ("rowspan=\"2\" class=\"BT %s\"",The_GetColorRows ());
+   HTM_TD_Begin ("rowspan=\"2\" class=\"BT %s\"",BgColor);
 
       if (ExaSes_CheckIfICanEditThisSession (Session->UsrCod) == Usr_CAN)
 	{
@@ -883,10 +887,11 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
 /********** Put a column for teacher who created the exam session ************/
 /*****************************************************************************/
 
-static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Session)
+static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Session,
+						const char *BgColor)
   {
    /***** Session author (teacher) *****/
-   HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+   HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",BgColor);
       Usr_WriteAuthor1Line (Session->UsrCod,Session->Hidden);
    HTM_TD_End ();
   }
@@ -896,7 +901,8 @@ static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Ses
 /*****************************************************************************/
 
 static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Session,
-                                               unsigned UniqueId)
+                                               unsigned UniqueId,
+					       const char *BgColor)
   {
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
    Dat_StartEndTime_t StartEndTime;
@@ -910,8 +916,8 @@ static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Sess
 	 Err_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 		    Id,
-		    CloOpe_Class[Session->ClosedOrOpen][Session->Hidden],
-		    The_GetSuffix (),The_GetColorRows ());
+		    CloOpe_Class[Session->Open][Session->Hidden],The_GetSuffix (),
+		    BgColor);
 	 Dat_WriteLocalDateHMSFromUTC (Id,Session->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       Dat_WRITE_TODAY |
@@ -930,11 +936,13 @@ static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Sess
 
 static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
                                                   const struct ExaSes_Session *Session,
+                                                  const char *BgColor,
                                                   const char *Anchor)
   {
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
 
-   HTM_TD_Begin ("rowspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+
+   HTM_TD_Begin ("rowspan=\"2\" class=\"LT %s\"",BgColor);
 
       /***** Session title *****/
       HTM_ARTICLE_Begin (Anchor);
@@ -947,7 +955,6 @@ static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
 		  case Usr_CAN:
 		     Frm_BeginForm (ActSeeExaPrn);
 			Exa_PutPars (Exams);
-			// ParCod_PutPar (ParCod_Ses,Session->SesCod);
 			HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeExaPrn),NULL,
 						 "class=\"LT BT_LINK %s_%s\"",
 						 HidVis_TitleClass[Session->Hidden],
@@ -988,22 +995,17 @@ static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
   }
 
 /*****************************************************************************/
-/************** Put a column for exam session title and groups ***************/
+/************ Put a column for number of prints in an exam session ***********/
 /*****************************************************************************/
 
-static void ExaSes_ListOneOrMoreSessionsPrints (struct Exa_Exams *Exams,
-					        const struct ExaSes_Session *Session)
+static void ExaSes_ListOneOrMoreSessionsPrints (const struct ExaSes_Session *Session,
+						const char *BgColor)
   {
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
-   char StrNumPrintsInSession[Cns_MAX_DIGITS_UINT + 1];
 
-   /***** Number of prints in the session ******/
    HTM_TD_Begin ("rowspan=\"2\" class=\"RT %s_%s %s\"",
-                 HidVis_DataClass[Session->Hidden],The_GetSuffix (),
-                 The_GetColorRows ());
-      snprintf (StrNumPrintsInSession,sizeof (StrNumPrintsInSession),
-		"%u",Exa_DB_GetNumPrintsInSession (Session->SesCod));
-      ExaSes_PutLinkSession (Exams,Session,StrNumPrintsInSession);
+                 HidVis_DataClass[Session->Hidden],The_GetSuffix (),BgColor);
+      HTM_Unsigned (Exa_DB_GetNumPrintsInSession (Session->SesCod));
    HTM_TD_End ();
   }
 
@@ -1020,7 +1022,7 @@ static void ExaSes_PutLinkSession (struct Exa_Exams *Exams,
    /***** Begin form *****/
    Frm_BeginFormAnchor (ActSeeOneExaSes,ExaSes_SESSION_BOX_ID);
       Exa_PutPars (Exams);
-      Grp_PutParsCodGrpsAssociated (Grp_EXAM_SESSION,Exams->SesCod);
+      Grp_PutParsCodGrpsAssociated (Grp_EXAM_SESSION,Exams->SesCod.Showing);
 
       /***** Link to view attendance event *****/
       HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneExaSes),NULL,
@@ -1118,7 +1120,8 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
 /*****************************************************************************/
 
 static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
-                                                const struct ExaSes_Session *Session)
+                                                const struct ExaSes_Session *Session,
+                                                const char *BgColor)
   {
    static void (*Function[Rol_NUM_ROLES]) (struct Exa_Exams *Exams,
 	                                   const struct ExaSes_Session *Session) =
@@ -1130,7 +1133,7 @@ static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
      };
 
    HTM_TD_Begin ("rowspan=\"2\" class=\"CT DAT_%s %s\"",
-                 The_GetSuffix (),The_GetColorRows ());
+                 The_GetSuffix (),BgColor);
 
       if (Function[Gbl.Usrs.Me.Role.Logged])
 	 Function[Gbl.Usrs.Me.Role.Logged] (Exams,Session);
@@ -1148,7 +1151,7 @@ static void ExaSes_ListOneOrMoreSessionsResultStd (struct Exa_Exams *Exams,
      {
       /* Result is visible by me */
       Exams->Exam.ExaCod = Session->ExaCod;
-      Exams->SesCod      = Session->SesCod;
+      Exams->SesCod.Showing = Session->SesCod;
       Lay_PutContextualLinkOnlyIcon (ActSeeMyExaResSes,ExaRes_RESULTS_BOX_ID,
 				     Exa_PutPars,Exams,
 				     "trophy.svg",Ico_BLACK);
@@ -1165,7 +1168,7 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
    extern const char *Txt_Hidden_results;
 
    Exams->Exam.ExaCod = Session->ExaCod;
-   Exams->SesCod      = Session->SesCod;
+   Exams->SesCod.Showing = Session->SesCod;
 
    /***** Show exam session results *****/
    if (ExaSes_CheckIfICanEditThisSession (Session->UsrCod) == Usr_CAN)
@@ -1277,7 +1280,7 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
       Session->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[5 + StartEndTime]);
 
    /* Get whether the session is open or closed (row(7)) */
-   Session->ClosedOrOpen = CloOpe_GetClosedOrOpenFrom01 (row[7][0]);
+   Session->Open = CloOpe_GetClosedOrOpenFrom01 (row[7][0]);
 
    /* Get the title of the session (row[8]) */
    Str_Copy (Session->Title,row[8],sizeof (Session->Title) - 1);
@@ -1325,7 +1328,8 @@ void ExaSes_ReqRemSession (void)
 
    /***** Show question and button to remove question *****/
    Exams.Exam.ExaCod = Session.ExaCod;
-   Exams.SesCod      = Session.SesCod;
+   Exams.SesCod.Selected =
+   Exams.SesCod.Showing  = Session.SesCod;
    Ale_ShowAlertRemove (ActRemExaSes,NULL,
 			Exa_PutPars,&Exams,
 			Txt_Do_you_really_want_to_remove_the_session_X,
@@ -1438,7 +1442,8 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
    ExaSes_GetSessionDataByCod (Session);
    if (Session->ExaCod != Exams->Exam.ExaCod)
       Err_WrongSetExit ();
-   Exams->SesCod = Session->SesCod;
+   Exams->SesCod.Selected =
+   Exams->SesCod.Showing  = Session->SesCod;
   }
 
 /*****************************************************************************/
@@ -1648,7 +1653,8 @@ void ExaSes_ReqCreatOrEditSes (void)
 	 Err_WrongActionExit ();
 	 break;
      }
-   Exams.SesCod = Session.SesCod;
+   Exams.SesCod.Selected =
+   Exams.SesCod.Showing  = Session.SesCod;
 
    /***** Show exam *****/
    Exa_ShowOnlyOneExam (&Exams,Frm_PUT_FORM);	// Put form for session
@@ -1699,7 +1705,8 @@ void ExaSes_ReceiveSession (void)
 	 Session.ExaCod = Exams.Exam.ExaCod;
 	 break;
      }
-   Exams.SesCod = Session.SesCod;
+   Exams.SesCod.Selected =
+   Exams.SesCod.Showing  = Session.SesCod;
 
    /***** Get parameters from form *****/
    /* Get session title */
@@ -1806,7 +1813,7 @@ Usr_Can_t ExaSes_CheckIfICanAnswerThisSession (const struct Exa_Exam *Exam,
           2. Hidden or closed sessions are not accesible *****/
    if (Exam->Hidden == HidVis_HIDDEN ||
        Session->Hidden == HidVis_HIDDEN ||
-       Session->ClosedOrOpen == CloOpe_CLOSED)
+       Session->Open == CloOpe_CLOSED)
       return Usr_CAN_NOT;
 
    /***** Exam is visible, session is visible and open ==>
