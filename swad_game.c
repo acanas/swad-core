@@ -170,17 +170,18 @@ static Usr_Can_t Gam_CheckIfICanEditGame (const struct Gam_Game *Game);
 
 void Gam_ResetGames (struct Gam_Games *Games)
   {
-   Games->LstIsRead         = false;	// List not read from database...
-   Games->Num               = 0;	// Total number of games
-   Games->NumSelected       = 0;	// Number of games selected
-   Games->Lst               = NULL;	// List of games
-   Games->SelectedOrder     = Gam_ORDER_DEFAULT;
-   Games->CurrentPage       = 0;
-   Games->ListQuestions     = NULL;
-   Games->GamCodsSelected   = NULL;	// String with selected game codes separated by separator multiple
-   Games->Game.GamCod       = -1L;	// Current/selected game code
-   Games->MchCod            = -1L;	// Current/selected match code
-   Games->QstInd            = 0;	// Current question index
+   Games->LstIsRead       = false;	// List not read from database...
+   Games->Num             = 0;		// Total number of games
+   Games->NumSelected     = 0;		// Number of games selected
+   Games->Lst             = NULL;	// List of games
+   Games->SelectedOrder   = Gam_ORDER_DEFAULT;
+   Games->CurrentPage     = 0;
+   Games->ListQuestions   = NULL;
+   Games->GamCodsSelected = NULL;	// String with selected game codes separated by separator multiple
+   Games->Game.GamCod     = -1L;	// Current/selected game code
+   Games->MchCod.Selected =
+   Games->MchCod.Showing  = -1L;	// Selected/showing match code
+   Games->QstInd          = 0;		// Current question index
   }
 
 /*****************************************************************************/
@@ -665,8 +666,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 			Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       HTM_DIV_Begin ("class=\"PAR %s_%s\"",
-                     HidVis_DataClass[Games->Game.Hidden],
-                     The_GetSuffix ());
+                     HidVis_DataClass[Games->Game.Hidden],The_GetSuffix ());
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
       HTM_TD_End ();
@@ -718,7 +718,7 @@ static void Gam_PutIconsEditingOneGame (void *Games)
   }
 
 /*****************************************************************************/
-/*********************** Write the author of a game ************************/
+/************************ Write the author of a game *************************/
 /*****************************************************************************/
 
 static void Gam_WriteAuthor (struct Gam_Game *Game)
@@ -1116,8 +1116,7 @@ void Gam_RemoveGame (void)
    Gam_RemoveGameFromAllTables (Games.Game.GamCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Game_X_removed,
-                  Games.Game.Title);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Game_X_removed,Games.Game.Title);
 
    /***** Show games again *****/
    Gam_ListAllGames (&Games);
@@ -1542,8 +1541,7 @@ static void Gam_CreateGame (struct Gam_Game *Game,const char *Txt)
    Game->GamCod = Gam_DB_CreateGame (Game,Txt);
 
    /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_game_X,
-                  Game->Title);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_game_X,Game->Title);
   }
 
 /*****************************************************************************/

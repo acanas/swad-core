@@ -111,8 +111,8 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
 static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Session,
 						const char *BgColor);
 static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Session,
-                                               unsigned UniqueId,
-					       const char *BgColor);
+					       const char *BgColor,
+                                               unsigned UniqueId);
 static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
                                                   const struct ExaSes_Session *Session,
                                                   const char *BgColor,
@@ -708,7 +708,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 		  ExaSes_ListOneOrMoreSessionsIcons (Exams,&Session,BgColor,Anchor);
 
 	       /* Start/end date/time */
-	       ExaSes_ListOneOrMoreSessionsTimes (&Session,UniqueId,BgColor);
+	       ExaSes_ListOneOrMoreSessionsTimes (&Session,BgColor,UniqueId);
 
 	       /* Title, modality and groups */
 	       ExaSes_ListOneOrMoreSessionsMainData (Exams,&Session,BgColor,Anchor);
@@ -732,8 +732,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 		Session.SesCod == Exams->SesCod.Selected)		// ...this session
 	      {
 	       HTM_TR_Begin (NULL);
-		  HTM_TD_Begin ("colspan=\"6\" class=\"LT %s\"",
-		                The_GetColorRows ());
+		  HTM_TD_Begin ("colspan=\"6\" class=\"LT %s\"",BgColor);
 		     ExaSes_PutFormSession (&Session);	// Form to edit this session
 		  HTM_TD_End ();
 	       HTM_TR_End ();
@@ -901,8 +900,8 @@ static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Ses
 /*****************************************************************************/
 
 static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Session,
-                                               unsigned UniqueId,
-					       const char *BgColor)
+					       const char *BgColor,
+                                               unsigned UniqueId)
   {
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
    Dat_StartEndTime_t StartEndTime;
