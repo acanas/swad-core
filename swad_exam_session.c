@@ -92,6 +92,7 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
 static void ExaSes_ShowHeaderResults (void);
 static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 				         unsigned NumUsr,struct Usr_Data *UsrDat);
+static Frm_PutForm_t ExaSes_SetOptionsListUsrsAllowed (Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
 
 static void ExaSes_PutIconsInListOfSessions (void *Exams);
 static void ExaSes_PutIconToCreateNewSession (struct Exa_Exams *Exams);
@@ -178,8 +179,7 @@ void ExaSes_ResetSession (struct ExaSes_Session *Session)
 /************************ List the sessions of an exam ***********************/
 /*****************************************************************************/
 
-void ExaSes_ListSessions (struct Exa_Exams *Exams,
-                          Frm_PutForm_t PutFormSession)
+void ExaSes_ListSessions (struct Exa_Exams *Exams,Frm_PutForm_t PutFormSession)
   {
    extern const char *Hlp_ASSESSMENT_Exams_sessions;
    extern const char *Txt_Sessions;
@@ -217,11 +217,6 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 
 void ExaSes_ShowOneSession (void)
   {
-   ExaSes_ShowOneSessionInternal (NULL);
-  }
-
-void ExaSes_ShowOneSessionInternal (__attribute__((unused)) void *Args)
-  {
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;
 
@@ -257,6 +252,7 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
    char *Title;
    unsigned NumUsr;
    struct Usr_Data UsrDat;
+   Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
 
    /***** Get groups to show ******/
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -289,7 +285,7 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
 	       Usr_UsrDataConstructor (&UsrDat);
 
 	       /* Form to select users */
-	       Frm_BeginFormIdAnchor (ActSeeExaPrnSes,Usr_FORM_TO_SELECT_USRS_ID,
+	       Frm_BeginFormIdAnchor (Act_DoAct_ExaSes,Usr_FORM_TO_SELECT_USRS_ID,
 				      Usr_USER_LIST_SECTION_ID);
 	          Exa_PutPars (Exams);
 		  Grp_PutParsCodGrps ();
@@ -333,7 +329,8 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
 	       HTM_TABLE_End ();
 
 	       /* Send button */
-	       Btn_PutButton (Btn_SHOW,Usr_FORM_TO_SELECT_USRS_ID);
+	       ExaSes_SetOptionsListUsrsAllowed (ICanChooseOption);
+	       Usr_PutOptionsListUsrs (ICanChooseOption);
 
 	       /***** Free memory used for user's data *****/
 	       Usr_UsrDataDestructor (&UsrDat);
@@ -604,6 +601,29 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
    DB_FreeMySQLResult (&mysql_res);
 
    The_ChangeRowColor ();
+  }
+
+/*****************************************************************************/
+/**************** Set allowed options to do with several users ***************/
+/*****************************************************************************/
+// Returns true if any option is allowed
+
+static Frm_PutForm_t ExaSes_SetOptionsListUsrsAllowed (Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
+  {
+   Usr_ListUsrsOption_t Opt;
+
+   /***** Check which options I can choose *****/
+   /* Set default (I can not choose options) */
+   for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
+	Opt <= (Usr_ListUsrsOption_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
+	Opt++)
+      ICanChooseOption[Opt] = Usr_CAN_NOT;
+
+   /* Activate some options */
+   ICanChooseOption[Usr_OPTION_SHOW_EMPTY_EXAMS	] =
+   ICanChooseOption[Usr_OPTION_PRINT_EMPTY_EXAMS] = Usr_CAN;
+
+   return Frm_PUT_FORM;
   }
 
 /*****************************************************************************/

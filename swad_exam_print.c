@@ -75,8 +75,7 @@ typedef enum
 
 //-----------------------------------------------------------------------------
 
-static void ExaPrn_GetUsrsAndListOrPrintExaPrns (ExaPrn_TypeOfView_t TypeOfView);
-static void ExaPrn_ListOrPrintExaPrns (void *TypeOfView);
+static void ExaPrn_ListOrPrintExaPrns (ExaPrn_TypeOfView_t TypeOfView);
 static void ExaPrn_PutIconsPrintExaPrns (void *Exams);
 static void ExaPrn_PutParsToPrintExaPrns (void *Exams);
 static void ExaPrn_ShowMultipleExaPrns (struct Exa_Exams *Exams,
@@ -214,22 +213,15 @@ void ExaPrn_ResetPrint (struct ExaPrn_Print *Print)
 
 void ExaPrn_ListSelectedExaPrns (void)
   {
-   ExaPrn_GetUsrsAndListOrPrintExaPrns (ExaPrn_VIEW_SEL_USR);
+   ExaPrn_ListOrPrintExaPrns (ExaPrn_VIEW_SEL_USR);
   }
 
 void ExaPrn_PrintSelectedExaPrns (void)
   {
-   ExaPrn_GetUsrsAndListOrPrintExaPrns (ExaPrn_PRNT_SEL_USR);
+   ExaPrn_ListOrPrintExaPrns (ExaPrn_PRNT_SEL_USR);
   }
 
-static void ExaPrn_GetUsrsAndListOrPrintExaPrns (ExaPrn_TypeOfView_t TypeOfView)
-  {
-   Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
-				  ExaPrn_ListOrPrintExaPrns,&TypeOfView,
-                                  ExaSes_ShowOneSessionInternal,NULL);
-  }
-
-static void ExaPrn_ListOrPrintExaPrns (void *TypeOfView)
+static void ExaPrn_ListOrPrintExaPrns (ExaPrn_TypeOfView_t TypeOfView)
   {
    extern const char *Hlp_ASSESSMENT_Exams;	// TODO: Change to link to section of listing/printing selected exams in a session
    extern const char *Txt_Listing_of_exams_of_selected_students_in_session_X;
@@ -258,8 +250,11 @@ static void ExaPrn_ListOrPrintExaPrns (void *TypeOfView)
    ExaSes_GetSessionDataByCod (&Session);
 
    /***** Exam begin *****/
-   if (*((ExaPrn_TypeOfView_t *) TypeOfView) == ExaPrn_VIEW_SEL_USR)
+   if (TypeOfView == ExaPrn_VIEW_SEL_USR)
       Exa_ShowOnlyOneExamBegin (&Exams,Frm_DONT_PUT_FORM);
+
+   /***** Get lists of the selected users if not already got *****/
+   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
    /***** Count number of valid users in list of encrypted user codes *****/
    NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
@@ -274,7 +269,7 @@ static void ExaPrn_ListOrPrintExaPrns (void *TypeOfView)
       ExaSes_GetSessionDataByCod (&Session);
 
       /***** Begin section and box *****/
-      if (*((ExaPrn_TypeOfView_t *) TypeOfView) == ExaPrn_VIEW_SEL_USR)
+      if (TypeOfView == ExaPrn_VIEW_SEL_USR)
 	{
 	 HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 	    if (asprintf (&Title,Txt_Listing_of_exams_of_selected_students_in_session_X,
@@ -286,12 +281,11 @@ static void ExaPrn_ListOrPrintExaPrns (void *TypeOfView)
 	}
 
       /***** Show table with exam prints *****/
-      ExaPrn_ShowMultipleExaPrns (&Exams,&Session,
-				  *((ExaPrn_TypeOfView_t *) TypeOfView),
+      ExaPrn_ShowMultipleExaPrns (&Exams,&Session,TypeOfView,
 				  NumUsrsInList,LstSelectedUsrCods);
 
       /***** End box and section *****/
-      if (*((ExaPrn_TypeOfView_t *) TypeOfView) == ExaPrn_VIEW_SEL_USR)
+      if (TypeOfView == ExaPrn_VIEW_SEL_USR)
 	{
 	    Box_BoxEnd ();
 	 HTM_SECTION_End ();
@@ -302,7 +296,7 @@ static void ExaPrn_ListOrPrintExaPrns (void *TypeOfView)
      }
 
    /***** Exam end *****/
-   if (*((ExaPrn_TypeOfView_t *) TypeOfView) == ExaPrn_VIEW_SEL_USR)
+   if (TypeOfView == ExaPrn_VIEW_SEL_USR)
       Exa_ShowOnlyOneExamEnd ();
   }
 

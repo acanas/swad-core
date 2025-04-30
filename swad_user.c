@@ -57,6 +57,7 @@
 #include "swad_enrolment.h"
 #include "swad_enrolment_database.h"
 #include "swad_error.h"
+#include "swad_exam_session.h"
 #include "swad_figure.h"
 #include "swad_figure_cache.h"
 #include "swad_follow.h"
@@ -270,7 +271,6 @@ static void Usr_PutLinkToSeeGuests (void);
 
 static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Hie_Level_t HieLvl,Rol_Role_t UsrsRole,
                                                     Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
-static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
 static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
                                        const char *Label);
 static Usr_ListUsrsOption_t Usr_GetListUsrsOption (Usr_ListUsrsOption_t DefaultAction);
@@ -5571,7 +5571,7 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Hie_Level_t HieLvl,Rol_Role_
 	 ICanChooseOption[Usr_OPTION_OVERWRITE_CLIPBOARD] =
 	 ICanChooseOption[Usr_OPTION_MESSAGE		] =
 	 ICanChooseOption[Usr_OPTION_EMAIL		] =
-	 ICanChooseOption[Usr_OPTION_FOLLOW	]	 =
+	 ICanChooseOption[Usr_OPTION_FOLLOW		] =
 	 ICanChooseOption[Usr_OPTION_UNFOLLOW		] = (HieLvl == Hie_CRS &&
 							     (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
 							      Gbl.Usrs.Me.Role.Logged == Rol_NET ||
@@ -5601,9 +5601,8 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Hie_Level_t HieLvl,Rol_Role_
 /*****************************************************************************/
 /*************** Put different options to do with several users **************/
 /*****************************************************************************/
-// Returns true if at least one action can be shown
 
-static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
+void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
   {
    extern const char *Txt_View_records;
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
@@ -5625,11 +5624,22 @@ static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_US
       [Usr_OPTION_EMAIL			] = &Txt_Create_email_message,
       [Usr_OPTION_FOLLOW		] = &Txt_Follow,
       [Usr_OPTION_UNFOLLOW		] = &Txt_Unfollow,
+      [Usr_OPTION_SHOW_EMPTY_EXAMS	] = &Txt_Actions[ActSeeExaPrnSes],
+      [Usr_OPTION_PRINT_EMPTY_EXAMS	] = &Txt_Actions[ActPrnExaPrnSes],
      };
    Usr_ListUsrsOption_t Opt;
+   Usr_ListUsrsOption_t DefaultAction = Usr_OPTION_UNKNOWN;
 
    /***** Get the selected option from form *****/
-   Gbl.Usrs.Selected.Option = Usr_GetListUsrsOption (Usr_LIST_USRS_DEFAULT_OPTION);
+   for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
+	Opt <= (Usr_ListUsrsOption_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
+	Opt++)
+      if (ICanChooseOption[Opt] == Usr_CAN)
+        {
+	 DefaultAction = Opt;
+	 break;
+        }
+   Gbl.Usrs.Selected.Option = Usr_GetListUsrsOption (DefaultAction);
 
    /***** Write list of options *****/
    /* Begin list of options */
@@ -5646,7 +5656,7 @@ static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_US
    HTM_UL_End ();
 
    /***** Put button to confirm *****/
-   Btn_PutButton (Btn_CONTINUE,NULL);
+   Btn_PutButton (Btn_CONTINUE,Usr_FORM_TO_SELECT_USRS_ID);
   }
 
 /*****************************************************************************/
@@ -5661,14 +5671,15 @@ static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
 	 HTM_INPUT_RADIO ("ListUsrsAction",
 			  (ListUsrsAction == Gbl.Usrs.Selected.Option) ? HTM_CHECKED :
 								         HTM_NO_ATTR,
-			  "value=\"%u\"",(unsigned) ListUsrsAction);
+			  "value=\"%u\" form=\"%s\"",
+			  (unsigned) ListUsrsAction,Usr_FORM_TO_SELECT_USRS_ID);
 	 HTM_Txt (Label);
       HTM_LABEL_End ();
    HTM_LI_End ();
   }
 
 /*****************************************************************************/
-/********************** Do action on several students ************************/
+/*********************** Do action on several users **************************/
 /*****************************************************************************/
 
 void Usr_DoActionOnUsrs1 (void)
@@ -5807,6 +5818,26 @@ void Usr_DoActionOnUsrs1 (void)
 		  break;
 	      }
 	    break;
+	 case Usr_OPTION_SHOW_EMPTY_EXAMS:
+	    switch (Gbl.Action.Act)
+	      {
+	       case Act_DoAct_ExaSes:
+		  Gbl.Action.Act = ActSeeExaPrnSes;
+		  break;
+	       default:
+		  break;
+	      }
+	    break;
+	 case Usr_OPTION_PRINT_EMPTY_EXAMS:
+	    switch (Gbl.Action.Act)
+	      {
+	       case Act_DoAct_ExaSes:
+		  Gbl.Action.Act = ActPrnExaPrnSes;
+		  break;
+	       default:
+		  break;
+	      }
+	    break;
 	 default:
 	    break;
 	}
@@ -5823,9 +5854,6 @@ void Usr_DoActionOnUsrs1 (void)
 
 void Usr_DoActionOnUsrs2 (void)
   {
-   /***** Show possible alerts *****/
-   /* Ale_ShowAlerts (NULL); */
-
    /***** If success, action has changed.
           No change in action means an error in form has happened,
           so show again the form to selected users *****/
@@ -5839,6 +5867,9 @@ void Usr_DoActionOnUsrs2 (void)
 	 break;
       case Act_DoAct_OnSevTch:
 	 Usr_ListTeachers ();
+	 break;
+      case Act_DoAct_ExaSes:
+	 ExaSes_ShowOneSession ();
 	 break;
       default:
 	 break;

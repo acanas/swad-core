@@ -15955,50 +15955,73 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"S&inodot;nav oturumunu g&ouml;ster"
 #endif
 	,
+	[Act_DoAct_ExaSes] =
+#if   L==1	// ca
+	"Do an exam session action on several selected students"					// Necessita traducció
+#elif L==2	// de
+	"Do an exam session action on several selected students"					// Need Übersetzung
+#elif L==3	// en
+	"Do an exam session action on several selected students"
+#elif L==4	// es
+	"Realizar una acci&oacute;n de sesi&oacute;n de examen sobre varios estudiantes seleccionados"
+#elif L==5	// fr
+	"Do an exam session action on several selected students"					// Besoin de traduction
+#elif L==6	// gn
+	"Realizar una acci&oacute;n de sesi&oacute;n de examen sobre varios estudiantes seleccionados"	// Okoteve traducción
+#elif L==7	// it
+	"Do an exam session action on several selected students"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Do an exam session action on several selected students"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Do an exam session action on several selected students"					// Precisa de tradução
+#elif L==10	// tr
+	"Do an exam session action on several selected students"					// Çeviri lazim!
+#endif
+	,
 	[ActSeeExaPrnSes] =
 #if   L==1	// ca
-	"Mostra ex&agrave;mens d'una sessi&oacute; d'examen"
+	"Mostrar ex&agrave;mens (nom&eacute;s enunciats)"
 #elif L==2	// de
-	"Pr&uuml;fungen aus einer Pr&uuml;fungssession anzeigen"
+	"Pr&uuml;fungen anzeigen (nur Bescheinigungen)"
 #elif L==3	// en
-	"Show exams from an exam session"
+	"Show exams (statements only)"
 #elif L==4	// es
-	"Mostrar ex&aacute;menes de una sesi&oacute;n de examen"
+	"Mostrar ex&aacute;menes (s&oacute;lo enunciados)"
 #elif L==5	// fr
-	"Afficher les examens d'une session d'examen"
+	"Afficher les examens (relev&eacute;s uniquement)"
 #elif L==6	// gn
-	"Mostrar ex&aacute;menes de una sesi&oacute;n de examen"	// Okoteve traducción
+	"Mostrar ex&aacute;menes (s&oacute;lo enunciados)"	// Okoteve traducción
 #elif L==7	// it
-	"Mostra gli esami da una sessione d'esame"
+	"Mostra esami (solo dichiarazioni)"
 #elif L==8	// pl
-	"Poka&zdot; egzaminy z sesji egzaminacyjnej"
+	"Poka&zdot; egzaminy (tylko o&sacute;wiadczenia)"
 #elif L==9	// pt
-	"Mostrar exames de uma sess&atilde;o de exames"
+	"Mostrar exames (apenas extratos)"
 #elif L==10	// tr
-	"S&inodot;nav oturumundan s&inodot;navlar&inodot; g&ouml;ster"
+	"S&inodot;navlar&inodot; g&ouml;ster (sadece ifadeler)"
 #endif
 	,
 	[ActPrnExaPrnSes] =
 #if   L==1	// ca
-	"Imprimeix ex&agrave;mens d'una sessi&oacute; d'examen"
+	"Imprimir ex&agrave;mens (nom&eacute;s enunciats)"
 #elif L==2	// de
-	"Drucken von Pr&uuml;fungen aus einer Pr&uuml;fungssitzung"
+	"Pr&uuml;fungen ausdrucken (nur Bescheinigungen)"
 #elif L==3	// en
-	"Print exams from an exam session"
+	"Print exams (statements only)"
 #elif L==4	// es
-	"Imprimir ex&aacute;menes de una sesi&oacute;n de examen"
+	"Imprimir ex&aacute;menes (s&oacute;lo enunciados)"
 #elif L==5	// fr
-	"Imprimer les examens d'une session d'examen"
+	"Imprimer les examens (relev&eacute;s uniquement)"
 #elif L==6	// gn
-	"Imprimir ex&aacute;menes de una sesi&oacute;n de examen"	// Okoteve traducción
+	"Imprimir ex&aacute;menes (s&oacute;lo enunciados)"	// Okoteve traducción
 #elif L==7	// it
-	"Stampare gli esami da una sessione d'esame"
+	"Stampa esami (solo dichiarazioni)"
 #elif L==8	// pl
-	"Wydrukuj egzaminy z sesji egzaminacyjnej"
+	"Wydrukuj egzaminy (tylko o&sacute;wiadczenia)"
 #elif L==9	// pt
-	"Imprimir exames de uma sess&atilde;o de exames"
+	"Imprimir exames (apenas extratos)"
 #elif L==10	// tr
-	"S&inodot;nav oturumundan s&inodot;navlar&inodot; yazd&inodot;r&inodot;n"
+	"S&inodot;navlar&inodot; yazd&inodot;r (sadece ifadeler)"
 #endif
 	,
 	[ActReqNewExaSes] =

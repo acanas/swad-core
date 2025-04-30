@@ -96,10 +96,12 @@ typedef enum
    Usr_CLASS_PHOTO_PRN,		// Only print users
   } Usr_ClassPhotoType_t;
 
-#define Usr_LIST_USRS_NUM_OPTIONS 10
+#define Usr_LIST_USRS_NUM_OPTIONS 12
 typedef enum
   {
    Usr_OPTION_UNKNOWN			= 0,
+
+   // Listing users ------------------------
    Usr_OPTION_RECORDS			= 1,
    Usr_OPTION_ADD_TO_CLIPBOARD		= 2,
    Usr_OPTION_OVERWRITE_CLIPBOARD	= 3,
@@ -109,8 +111,12 @@ typedef enum
    Usr_OPTION_EMAIL			= 7,
    Usr_OPTION_FOLLOW			= 8,
    Usr_OPTION_UNFOLLOW			= 9,
+
+   // Exam sessions ------------------------
+   Usr_OPTION_SHOW_EMPTY_EXAMS		= 10,
+   Usr_OPTION_PRINT_EMPTY_EXAMS		= 11,
+
   } Usr_ListUsrsOption_t;
-#define Usr_LIST_USRS_DEFAULT_OPTION Usr_OPTION_RECORDS
 
 #define Usr_NUM_CAN 2
 typedef enum
