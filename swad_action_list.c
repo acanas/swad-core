@@ -56,6 +56,7 @@
 #include "swad_exam_result.h"
 #include "swad_exam_session.h"
 #include "swad_exam_set.h"
+#include "swad_exam_template.h"
 #include "swad_enrolment.h"
 #include "swad_FAQ.h"
 #include "swad_figure.h"
@@ -939,6 +940,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [Act_DoAct_ExaSes	] = {2184, 1,TabAss,Usr_DoActionOnUsrs1		,Usr_DoActionOnUsrs2		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActSeeExaPrnSes	] = {2183, 5,TabAss,NULL			,ExaPrn_ListSelectedExaPrns	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActPrnExaPrnSes	] = {2182, 5,TabAss,NULL			,ExaPrn_PrintSelectedExaPrns	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_NEW},
+   [ActSeeExaTmpSes	] = {2185, 5,TabAss,NULL			,ExaTmp_ListSelectedExaTmps	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActPrnExaTmpSes	] = {2186, 5,TabAss,NULL			,ExaTmp_PrintSelectedExaTmps	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_NEW},
    [ActReqNewExaSes	] = {1852, 5,TabAss,NULL			,ExaSes_ReqCreatOrEditSes	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [ActReqChgExaSes	] = {1902, 5,TabAss,NULL			,ExaSes_ReqCreatOrEditSes	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActNewExaSes	] = {1853, 5,TabAss,NULL			,ExaSes_ReceiveSession		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
@@ -4216,4 +4219,6 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActPrnExaPrnSes,	// #2182
 	ActSeeExaPrnSes,	// #2183
 	Act_DoAct_ExaSes,	// #2184
+	ActSeeExaTmpSes,	// #2185
+	ActPrnExaTmpSes,	// #2186
   };

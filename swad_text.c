@@ -19752,27 +19752,50 @@ const char *Txt_Links_removed =
 	"Links removed";	// Çeviri lazim!
 #endif
 
-const char *Txt_Listing_of_exams_of_selected_students_in_session_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Listing_of_exams_in_session_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Llista d'ex&agrave;mens dels estudiants seleccionats a la sessi&oacute; &quot;%s&quot;";
+	"Llistat d'ex&agrave;mens a la sessi&oacute; &quot;%s&quot;";
 #elif L==2	// de
-	"Auflistung der Pr%uuml;fungen ausgewählter Studierender in der Session &quot;%s&quot;";
+	"Auflistung der Pr&uuml;fungen in der Session &quot;%s&quot;";
 #elif L==3	// en
-	"Listing of exams of selected students in session &quot;%s&quot;";
+	"Listing of exams in session &quot;%s&quot;";
 #elif L==4	// es
-	"Listado de ex&aacute;menes de estudiantes seleccionados en la sesi&oacute;n &quot;%s&quot;";
+	"Listado de ex&aacute;menes en la sesi&oacute;n &quot;%s&quot;";
 #elif L==5	// fr
-	"Liste des examens des &eacute;tudiants s&eacute;lectionn&eacute;s en session &quot;%s&quot;";
+	"Liste des examens dans la session &quot;%s&quot;";
 #elif L==6	// gn
-	"Listado de ex&aacute;menes de estudiantes seleccionados en la sesi&oacute;n &quot;%s&quot;";	// Okoteve traducción
+	"Listado de ex&aacute;menes en la sesi&oacute;n &quot;%s&quot;";	// Okoteve traducción
 #elif L==7	// it
-	"Elenco degli esami degli studenti selezionati nella sessione &quot;%s&quot;";
+	"Elenco degli esami nella sessione &quot;%s&quot;";
 #elif L==8	// pl
-	"Wykaz egzamin&oacute;w wybranych student&oacute;w w sesji &quot;%s&quot;";
+	"Wykaz egzamin&oacute;w w sesji &quot;%s&quot;";
 #elif L==9	// pt
-	"Listagem de provas dos alunos selecionados na sess&atilde;o &quot;%s&quot;";
+	"Listagem de exames na sess&atilde;o &quot;%s&quot;";
 #elif L==10	// tr
-	"&quot;%s&quot; oturumunda se&ccedil;ilen &ouml;&gbreve;rencilerin s&inodot;navlar&inodot;n&inodot;n listelenmesi";
+	"&quot;%s&quot; oturumdaki s&inodot;navlar&inodot;n listelenmesi";
+#endif
+
+const char *Txt_Listing_of_templates_in_session_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Llistat d'ex&agrave;mens a la sessi&oacute; &quot;%s&quot;";
+#elif L==2	// de
+	"Auflistung der Vorlagen in der Session &quot;%s&quot;";
+#elif L==3	// en
+	"Listing of templates in session &quot;%s&quot;";
+#elif L==4	// es
+	"Listado de plantillas en la sesi&oacute;n &quot;%s&quot;";
+#elif L==5	// fr
+	"Liste des mod&egrave;les dans la session &quot;%s&quot;";
+#elif L==6	// gn
+	"Listado de plantillas en la sesi&oacute;n &quot;%s&quot;";	// Okoteve traducción
+#elif L==7	// it
+	"Elenco degli modelli nella sessione &quot;%s&quot;";
+#elif L==8	// pl
+	"Wykaz szablon&oacute;w w sesji &quot;%s&quot;";
+#elif L==9	// pt
+	"Listagem de modelos na sess&atilde;o &quot;%s&quot;";
+#elif L==10	// tr
+	"&quot;%s&quot; oturumundaki &scedil;ablonlar&inodot;n listelenmesi";
 #endif
 
 const char *Txt_Location =

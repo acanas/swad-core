@@ -102,8 +102,8 @@ struct Exa_Exams
    long SetCod;			// Selected/current set code
    struct
      {
-      long Selected;		// The one that has been selected
-      long Showing;		// The one that is being shown right now
+      long Sel;			// Selected session
+      long Par;			// Parameter to be used in forms
      } SesCod;			// Session code
    unsigned SetInd;		// Current set index
    long QstCod;			// Current question code

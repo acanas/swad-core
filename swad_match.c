@@ -384,8 +384,8 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 
 	 if (Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match) == Usr_CAN)
 	   {
-	    BgColor = (Match.MchCod == Games->MchCod.Selected) ? "BG_HIGHLIGHT" :
-								    The_GetColorRows ();
+	    BgColor = (Match.MchCod == Games->MchCod.Sel) ? "BG_HIGHLIGHT" :
+							    The_GetColorRows ();
 
 	    /***** Build anchor string *****/
 	    if (asprintf (&Anchor,"mch_%ld",Match.MchCod) < 0)
@@ -422,8 +422,8 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 
 	    /***** Third row for this match used for edition ****/
 	    if (ICanEditMatches == Usr_CAN &&
-		PutFormMatch == Frm_PUT_FORM &&			// Editing...
-		Match.MchCod == Games->MchCod.Selected)	// ...this match
+		PutFormMatch == Frm_PUT_FORM &&		// Editing...
+		Match.MchCod == Games->MchCod.Sel)	// ...this match
 	       /***** Check if I can edit this match *****/
 	       if (Mch_CheckIfICanEditThisMatch (&Match) == Usr_CAN)
 		 {
@@ -442,7 +442,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
       /***** Put button to play a new match in this game *****/
       if (ICanEditMatches == Usr_CAN &&
 	  PutFormMatch == Frm_PUT_FORM &&
-	  Games->MchCod.Selected <= 0)
+	  Games->MchCod.Sel <= 0)
 	{
 	 /* Reset match */
          Mch_ResetMatch (&Match);
@@ -559,7 +559,7 @@ static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
       switch (Mch_CheckIfICanEditThisMatch (Match))
 	{
 	 case Usr_CAN:
-	    Games->MchCod.Showing = Match->MchCod;
+	    Games->MchCod.Par = Match->MchCod;
 
 	    /***** Put icon to remove the match *****/
 	    Ico_PutContextualIconToRemove (ActReqRemMch,NULL,Mch_PutParsEdit,Games);
@@ -823,7 +823,7 @@ static void Mch_ListOneOrMoreMatchesResult (struct Gam_Games *Games,
 static void Mch_ListOneOrMoreMatchesResultStd (struct Gam_Games *Games,
                                                const struct Mch_Match *Match)
   {
-   Games->MchCod.Showing = Match->MchCod;
+   Games->MchCod.Par = Match->MchCod;
 
    /***** Is match result visible or hidden? *****/
    if (Match->Status.ShowUsrResults)
@@ -842,7 +842,7 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
    extern const char *Txt_Visible_results;
    extern const char *Txt_Hidden_results;
 
-   Games->MchCod.Showing = Match->MchCod;
+   Games->MchCod.Par = Match->MchCod;
 
    /***** Show match results *****/
    if (Mch_CheckIfICanEditThisMatch (Match) == Usr_CAN)
@@ -1152,7 +1152,7 @@ void Mch_PutParsEdit (void *Games)
    if (Games)
      {
       Gam_PutPars (Games);
-      ParCod_PutPar (ParCod_Mch,((struct Gam_Games *) Games)->MchCod.Showing);
+      ParCod_PutPar (ParCod_Mch,((struct Gam_Games *) Games)->MchCod.Par);
      }
   }
 
@@ -1183,8 +1183,8 @@ void Mch_GetAndCheckPars (struct Gam_Games *Games,
       Mch_ResetMatch (Match);
 
    /***** Initialize context *****/
-   Games->MchCod.Selected =
-   Games->MchCod.Showing  = Match->MchCod;
+   Games->MchCod.Sel =
+   Games->MchCod.Par = Match->MchCod;
   }
 
 /*****************************************************************************/

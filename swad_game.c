@@ -170,18 +170,18 @@ static Usr_Can_t Gam_CheckIfICanEditGame (const struct Gam_Game *Game);
 
 void Gam_ResetGames (struct Gam_Games *Games)
   {
-   Games->LstIsRead       = false;	// List not read from database...
-   Games->Num             = 0;		// Total number of games
-   Games->NumSelected     = 0;		// Number of games selected
-   Games->Lst             = NULL;	// List of games
-   Games->SelectedOrder   = Gam_ORDER_DEFAULT;
-   Games->CurrentPage     = 0;
-   Games->ListQuestions   = NULL;
-   Games->GamCodsSelected = NULL;	// String with selected game codes separated by separator multiple
-   Games->Game.GamCod     = -1L;	// Current/selected game code
-   Games->MchCod.Selected =
-   Games->MchCod.Showing  = -1L;	// Selected/showing match code
-   Games->QstInd          = 0;		// Current question index
+   Games->LstIsRead		= false;	// List not read from database...
+   Games->Num			= 0;		// Total number of games
+   Games->NumSelected		= 0;		// Number of games selected
+   Games->Lst			= NULL;	// List of games
+   Games->SelectedOrder		= Gam_ORDER_DEFAULT;
+   Games->CurrentPage		= 0;
+   Games->ListQuestions		= NULL;
+   Games->GamCodsSelected	= NULL;	// String with selected game codes separated by separator multiple
+   Games->Game.GamCod		= -1L;	// Current/selected game code
+   Games->MchCod.Sel		=
+   Games->MchCod.Par		= -1L;	// Selected/parameter match code
+   Games->QstInd		= 0;	// Current question index
   }
 
 /*****************************************************************************/

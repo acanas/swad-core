@@ -83,6 +83,11 @@ void ExaPrn_PrintSelectedExaPrns (void);
 
 void ExaPrn_ShowPrintToStdToFill (void);
 
+void ExaPrn_GetQstsPrint (struct Exa_Exams *Exams,
+			  const struct ExaSes_Session *Session,
+			  struct Usr_Data *UsrDat,
+			  struct ExaPrn_Print *Print,
+			  bool Start);
 void ExaPrn_GetPrintDataByPrnCod (struct ExaPrn_Print *Print);
 void ExaPrn_GetPrintDataBySesCodAndUsrCod (struct ExaPrn_Print *Print);
 

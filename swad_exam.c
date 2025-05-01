@@ -165,8 +165,8 @@ void Exa_ResetExams (struct Exa_Exams *Exams)
    Exams->ListQuestions		= NULL;
    Exams->ExaCodsSelected	= NULL;	// String with selected exam codes separated by separator multiple
    Exams->Exam.ExaCod		= -1L;	// Selected/current exam code
-   Exams->SesCod.Selected	=
-   Exams->SesCod.Showing	= -1L;	// Selected/current session code
+   Exams->SesCod.Sel		=
+   Exams->SesCod.Par		= -1L;	// Selected/parameter session code
    Exams->SetInd		= 0;	// Current set index
    Exams->QstCod		= -1L;	// Current question code
   }
@@ -742,7 +742,7 @@ void Exa_PutPars (void *Exams)
       MyAllGrps = Grp_GetParMyAllGrps ();
       Grp_PutParMyAllGrps (&MyAllGrps);
       Pag_PutParPagNum (Pag_EXAMS,((struct Exa_Exams *) Exams)->CurrentPage);
-      ParCod_PutPar (ParCod_Ses,((struct Exa_Exams *) Exams)->SesCod.Showing);
+      ParCod_PutPar (ParCod_Ses,((struct Exa_Exams *) Exams)->SesCod.Par);
      }
   }
 
@@ -1556,6 +1556,26 @@ static void Exa_UpdateExam (struct Exa_Exam *Exam,const char *Txt)
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_exam_has_been_modified);
+  }
+
+/*****************************************************************************/
+/*********************** Get and write exam description **********************/
+/*****************************************************************************/
+
+void Exa_GetAndWriteDescription (long ExaCod)
+  {
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
+
+   /***** Get description from database *****/
+   Exa_DB_GetExamTxt (ExaCod,Txt);
+   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+                     Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
+   ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);			// Insert links
+
+   /***** Write description *****/
+   HTM_DIV_Begin ("class=\"EXA_PRN_DESC DAT_SMALL_%s\"",The_GetSuffix ());
+      HTM_Txt (Txt);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

@@ -227,8 +227,8 @@ void ExaSes_ShowOneSession (void)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
-   Exams.SesCod.Selected =
-   Exams.SesCod.Showing  = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
+   Exams.SesCod.Sel =
+   Exams.SesCod.Par = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
 
    /***** Get exam data and session *****/
    Exa_GetExamDataByCod (&Exams.Exam);
@@ -271,6 +271,7 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
       free (Title);
 
 	 /***** Form to select groups *****/
+         Exams->SesCod.Par = Exams->SesCod.Sel;	// To be used as parameter
 	 Grp_ShowFormToSelectSeveralGroups (ActSeeOneExaSes,Exa_PutPars,Exams,NULL);
 
 	 /***** Begin section with user list *****/
@@ -436,7 +437,7 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
    // Do not filter by groups, because a student who has changed groups
    // must be able to access exams taken in other groups
    NumResults = Exa_DB_GetResults (&mysql_res,Usr_OTHER,UsrDat->UsrCod,
-				   Exams->SesCod.Selected,-1L,NULL);
+				   Exams->SesCod.Sel,-1L,NULL);
 
    /***** Begin table row *****/
    HTM_TR_Begin (NULL);
@@ -620,8 +621,8 @@ static Frm_PutForm_t ExaSes_SetOptionsListUsrsAllowed (Usr_Can_t ICanChooseOptio
       ICanChooseOption[Opt] = Usr_CAN_NOT;
 
    /* Activate some options */
-   ICanChooseOption[Usr_OPTION_SHOW_EMPTY_EXAMS	] =
-   ICanChooseOption[Usr_OPTION_PRINT_EMPTY_EXAMS] = Usr_CAN;
+   ICanChooseOption[Usr_OPTION_EMPTY_EXAMS	] =
+   ICanChooseOption[Usr_OPTION_EXAM_TEMPLATES	] = Usr_CAN;
 
    return Frm_PUT_FORM;
   }
@@ -709,12 +710,12 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	{
 	 /***** Get exam session data from row *****/
 	 ExaSes_GetSessionDataFromRow (mysql_res,&Session);
-	 Exams->SesCod.Showing = Session.SesCod;	// To be used as hidden parameter in forms
+	 Exams->SesCod.Par = Session.SesCod;	// To be used as hidden parameter in forms
 
 	 if (ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session.SesCod) == Usr_CAN)
 	   {
-	    BgColor = (Session.SesCod == Exams->SesCod.Selected) ? "BG_HIGHLIGHT" :
-								   The_GetColorRows ();
+	    BgColor = (Session.SesCod == Exams->SesCod.Sel) ? "BG_HIGHLIGHT" :
+							      The_GetColorRows ();
 
 	    /***** Build anchor string *****/
 	    if (asprintf (&Anchor,"evt_%ld_%ld",Exams->Exam.ExaCod,Session.SesCod) < 0)
@@ -748,8 +749,9 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	    HTM_TR_End ();
 
 	    /***** Third row: form to edit this session ****/
-	    if (ICanEditSessions && PutFormSession == Frm_PUT_FORM &&	// Editing...
-		Session.SesCod == Exams->SesCod.Selected)		// ...this session
+	    if (ICanEditSessions &&
+		PutFormSession == Frm_PUT_FORM &&	// Editing...
+		Session.SesCod == Exams->SesCod.Sel)	// ...this session
 	      {
 	       HTM_TR_Begin (NULL);
 		  HTM_TD_Begin ("colspan=\"6\" class=\"LT %s\"",BgColor);
@@ -764,8 +766,9 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	}
 
       /***** Put form to create a new exam session in this exam *****/
-      if (ICanEditSessions && PutFormSession == Frm_PUT_FORM &&
-	  Exams->SesCod.Selected <= 0)
+      if (ICanEditSessions &&
+	  PutFormSession == Frm_PUT_FORM &&
+	  Exams->SesCod.Sel <= 0)
 	{
 	 /* Reset session */
 	 ExaSes_ResetSession (&Session);
@@ -1041,7 +1044,7 @@ static void ExaSes_PutLinkSession (struct Exa_Exams *Exams,
    /***** Begin form *****/
    Frm_BeginFormAnchor (ActSeeOneExaSes,ExaSes_SESSION_BOX_ID);
       Exa_PutPars (Exams);
-      Grp_PutParsCodGrpsAssociated (Grp_EXAM_SESSION,Exams->SesCod.Showing);
+      Grp_PutParsCodGrpsAssociated (Grp_EXAM_SESSION,Exams->SesCod.Par);
 
       /***** Link to view attendance event *****/
       HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneExaSes),NULL,
@@ -1170,7 +1173,7 @@ static void ExaSes_ListOneOrMoreSessionsResultStd (struct Exa_Exams *Exams,
      {
       /* Result is visible by me */
       Exams->Exam.ExaCod = Session->ExaCod;
-      Exams->SesCod.Showing = Session->SesCod;
+      Exams->SesCod.Par  = Session->SesCod;
       Lay_PutContextualLinkOnlyIcon (ActSeeMyExaResSes,ExaRes_RESULTS_BOX_ID,
 				     Exa_PutPars,Exams,
 				     "trophy.svg",Ico_BLACK);
@@ -1187,7 +1190,7 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
    extern const char *Txt_Hidden_results;
 
    Exams->Exam.ExaCod = Session->ExaCod;
-   Exams->SesCod.Showing = Session->SesCod;
+   Exams->SesCod.Par  = Session->SesCod;
 
    /***** Show exam session results *****/
    if (ExaSes_CheckIfICanEditThisSession (Session->UsrCod) == Usr_CAN)
@@ -1347,8 +1350,8 @@ void ExaSes_ReqRemSession (void)
 
    /***** Show question and button to remove question *****/
    Exams.Exam.ExaCod = Session.ExaCod;
-   Exams.SesCod.Selected =
-   Exams.SesCod.Showing  = Session.SesCod;
+   Exams.SesCod.Sel  =
+   Exams.SesCod.Par  = Session.SesCod;
    Ale_ShowAlertRemove (ActRemExaSes,NULL,
 			Exa_PutPars,&Exams,
 			Txt_Do_you_really_want_to_remove_the_session_X,
@@ -1461,8 +1464,8 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
    ExaSes_GetSessionDataByCod (Session);
    if (Session->ExaCod != Exams->Exam.ExaCod)
       Err_WrongSetExit ();
-   Exams->SesCod.Selected =
-   Exams->SesCod.Showing  = Session->SesCod;
+   Exams->SesCod.Sel =
+   Exams->SesCod.Par = Session->SesCod;
   }
 
 /*****************************************************************************/
@@ -1672,8 +1675,8 @@ void ExaSes_ReqCreatOrEditSes (void)
 	 Err_WrongActionExit ();
 	 break;
      }
-   Exams.SesCod.Selected =
-   Exams.SesCod.Showing  = Session.SesCod;
+   Exams.SesCod.Sel =
+   Exams.SesCod.Par = Session.SesCod;
 
    /***** Show exam *****/
    Exa_ShowOnlyOneExam (&Exams,Frm_PUT_FORM);	// Put form for session
@@ -1724,8 +1727,8 @@ void ExaSes_ReceiveSession (void)
 	 Session.ExaCod = Exams.Exam.ExaCod;
 	 break;
      }
-   Exams.SesCod.Selected =
-   Exams.SesCod.Showing  = Session.SesCod;
+   Exams.SesCod.Sel =
+   Exams.SesCod.Par = Session.SesCod;
 
    /***** Get parameters from form *****/
    /* Get session title */

@@ -16024,6 +16024,52 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"S&inodot;navlar&inodot; yazd&inodot;r (sadece ifadeler)"
 #endif
 	,
+	[ActSeeExaTmpSes] =
+#if   L==1	// ca
+	"Mostrar plantilles d'ex&agrave;mens (solucions)"
+#elif L==2	// de
+	"Pr&uuml;fungsvorlagen (L&ouml;sungen) anzeigen"
+#elif L==3	// en
+	"Show exam templates (solutions)"
+#elif L==4	// es
+	"Mostrar plantillas de ex&aacute;menes (soluciones)"
+#elif L==5	// fr
+	"Afficher les mod&egrave;les d'examen (solutions)"
+#elif L==6	// gn
+	"Mostrar plantillas de ex&aacute;menes (soluciones)"	// Okoteve traducción
+#elif L==7	// it
+	"Mostra modelli di esame (soluzioni)"
+#elif L==8	// pl
+	"Poka&zdot; szablony egzamin&oacute;w (rozwi&aogon;zania)"
+#elif L==9	// pt
+	"Mostrar modelos de exames (solu&ccedil;&otilde;es)"
+#elif L==10	// tr
+	"S&inodot;nav &scedil;ablonlar&inodot;n&inodot; (&ccedil;&ouml;z&uuml;mleri) g&ouml;ster"
+#endif
+	,
+	[ActPrnExaTmpSes] =
+#if   L==1	// ca
+	"Imprimir plantilles d'ex&agrave;mens (solucions)"
+#elif L==2	// de
+	"Pr&uuml;fungsvorlagen (L&ouml;sungen) ausdrucken"
+#elif L==3	// en
+	"Print exam templates (solutions)"
+#elif L==4	// es
+	"Imprimir plantillas de ex&aacute;menes (soluciones)"
+#elif L==5	// fr
+	"Imprimer les mod&egrave;les d'examen (solutions)"
+#elif L==6	// gn
+	"Imprimir plantillas de ex&aacute;menes (soluciones)"	// Okoteve traducción
+#elif L==7	// it
+	"Stampa modelli di esame (soluzioni)"
+#elif L==8	// pl
+	"Wydrukuj szablony egzamin&oacute;w (rozwi&aogon;zania)"
+#elif L==9	// pt
+	"Imprimir modelos de exames (solu&ccedil;&otilde;es)"
+#elif L==10	// tr
+	"S&inodot;nav &scedil;ablonlar&inodot;n&inodot; (&ccedil;&ouml;z&uuml;mleri) yazd&inodot;r"
+#endif
+	,
 	[ActReqNewExaSes] =
 #if   L==1	// ca
 	"Request new exam session"			// Necessita traducció

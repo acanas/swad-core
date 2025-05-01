@@ -49,6 +49,7 @@
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
 #include "swad_photo.h"
+#include "swad_view.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -57,35 +58,22 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/******************************** Private types ******************************/
-/*****************************************************************************/
-
-#define ExaPrn_TYPES_OF_VIEW 2
-typedef enum
-  {
-   // ExaPrn_VIEW_ONLY_ME,	// View only me
-   ExaPrn_VIEW_SEL_USR,		// View selected users
-   // ExaPrn_PRNT_ONLY_ME,	// Print only me
-   ExaPrn_PRNT_SEL_USR,		// Print selected users
-  } ExaPrn_TypeOfView_t;
-
-/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
 //-----------------------------------------------------------------------------
 
-static void ExaPrn_ListOrPrintExaPrns (ExaPrn_TypeOfView_t TypeOfView);
+static void ExaPrn_ListOrPrintExaPrns (Vie_ViewType_t ViewType);
 static void ExaPrn_PutIconsPrintExaPrns (void *Exams);
 static void ExaPrn_PutParsToPrintExaPrns (void *Exams);
 static void ExaPrn_ShowMultipleExaPrns (struct Exa_Exams *Exams,
 				        const struct ExaSes_Session *Session,
-					ExaPrn_TypeOfView_t TypeOfView,
+					Vie_ViewType_t ViewType,
 					unsigned NumUsrsInList,
 					long *LstSelectedUsrCods);
 static void ExaPrn_ShowPrintToTch (struct Exa_Exams *Exams,
       				   const struct ExaSes_Session *Session,
-				   ExaPrn_TypeOfView_t TypeOfView,
+				   Vie_ViewType_t ViewType,
 				   struct Usr_Data *UsrDat);
 
 //-----------------------------------------------------------------------------
@@ -104,12 +92,11 @@ static void ExaPrn_CreatePrint (struct ExaPrn_Print *Print,bool Start);
 
 static void ExaPrn_ShowPrintToShow (struct Exa_Exams *Exams,
 				    const struct ExaSes_Session *Session,
-				    ExaPrn_TypeOfView_t TypeOfView,
+				    Vie_ViewType_t ViewType,
 				    struct Usr_Data *UsrDat,
                                     struct ExaPrn_Print *Print);
 static void ExaPrn_ShowPrintToFill (struct Exa_Exams *Exams,
                                     struct ExaPrn_Print *Print);
-static void ExaPrn_GetAndWriteDescription (long ExaCod);
 
 static void ExaPrn_ShowTableWithQstsToShow (const struct ExaPrn_Print *Print);
 static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
@@ -213,18 +200,18 @@ void ExaPrn_ResetPrint (struct ExaPrn_Print *Print)
 
 void ExaPrn_ListSelectedExaPrns (void)
   {
-   ExaPrn_ListOrPrintExaPrns (ExaPrn_VIEW_SEL_USR);
+   ExaPrn_ListOrPrintExaPrns (Vie_VIEW);
   }
 
 void ExaPrn_PrintSelectedExaPrns (void)
   {
-   ExaPrn_ListOrPrintExaPrns (ExaPrn_PRNT_SEL_USR);
+   ExaPrn_ListOrPrintExaPrns (Vie_PRINT);
   }
 
-static void ExaPrn_ListOrPrintExaPrns (ExaPrn_TypeOfView_t TypeOfView)
+static void ExaPrn_ListOrPrintExaPrns (Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_ASSESSMENT_Exams;	// TODO: Change to link to section of listing/printing selected exams in a session
-   extern const char *Txt_Listing_of_exams_of_selected_students_in_session_X;
+   extern const char *Txt_Listing_of_exams_in_session_X;
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;
    char *Title;
@@ -239,8 +226,8 @@ static void ExaPrn_ListOrPrintExaPrns (ExaPrn_TypeOfView_t TypeOfView)
    /***** Get parameters *****/
    /* Get exams context and session */
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
-   Exams.SesCod.Selected =
-   Exams.SesCod.Showing  = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
+   Exams.SesCod.Sel =
+   Exams.SesCod.Par = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
 
    /* Get list of groups selected */
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -250,7 +237,7 @@ static void ExaPrn_ListOrPrintExaPrns (ExaPrn_TypeOfView_t TypeOfView)
    ExaSes_GetSessionDataByCod (&Session);
 
    /***** Exam begin *****/
-   if (TypeOfView == ExaPrn_VIEW_SEL_USR)
+   if (ViewType == Vie_VIEW)
       Exa_ShowOnlyOneExamBegin (&Exams,Frm_DONT_PUT_FORM);
 
    /***** Get lists of the selected users if not already got *****/
@@ -269,10 +256,10 @@ static void ExaPrn_ListOrPrintExaPrns (ExaPrn_TypeOfView_t TypeOfView)
       ExaSes_GetSessionDataByCod (&Session);
 
       /***** Begin section and box *****/
-      if (TypeOfView == ExaPrn_VIEW_SEL_USR)
+      if (ViewType == Vie_VIEW)
 	{
 	 HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
-	    if (asprintf (&Title,Txt_Listing_of_exams_of_selected_students_in_session_X,
+	    if (asprintf (&Title,Txt_Listing_of_exams_in_session_X,
 			  Session.Title) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Box_BoxBegin (Title,ExaPrn_PutIconsPrintExaPrns,&Exams,
@@ -281,11 +268,11 @@ static void ExaPrn_ListOrPrintExaPrns (ExaPrn_TypeOfView_t TypeOfView)
 	}
 
       /***** Show table with exam prints *****/
-      ExaPrn_ShowMultipleExaPrns (&Exams,&Session,TypeOfView,
+      ExaPrn_ShowMultipleExaPrns (&Exams,&Session,ViewType,
 				  NumUsrsInList,LstSelectedUsrCods);
 
       /***** End box and section *****/
-      if (TypeOfView == ExaPrn_VIEW_SEL_USR)
+      if (ViewType == Vie_VIEW)
 	{
 	    Box_BoxEnd ();
 	 HTM_SECTION_End ();
@@ -296,7 +283,7 @@ static void ExaPrn_ListOrPrintExaPrns (ExaPrn_TypeOfView_t TypeOfView)
      }
 
    /***** Exam end *****/
-   if (TypeOfView == ExaPrn_VIEW_SEL_USR)
+   if (ViewType == Vie_VIEW)
       Exa_ShowOnlyOneExamEnd ();
   }
 
@@ -322,12 +309,12 @@ static void ExaPrn_PutParsToPrintExaPrns (void *Exams)
   }
 
 /*****************************************************************************/
-/************ Show table with attendances for every user in list *************/
+/******* Show table with selected exam printouts from an exam session ********/
 /*****************************************************************************/
 
 static void ExaPrn_ShowMultipleExaPrns (struct Exa_Exams *Exams,
 				        const struct ExaSes_Session *Session,
-					ExaPrn_TypeOfView_t TypeOfView,
+					Vie_ViewType_t ViewType,
 					unsigned NumUsrsInList,
 					long *LstSelectedUsrCods)
   {
@@ -348,10 +335,10 @@ static void ExaPrn_ShowMultipleExaPrns (struct Exa_Exams *Exams,
 						   Usr_GET_ROLE_IN_CRS))
 	{
 	 /***** Show exam print *****/
-	 HTM_DIV_Begin (TypeOfView == ExaPrn_PRNT_SEL_USR &&
+	 HTM_DIV_Begin (ViewType == Vie_PRINT &&
 	                NumUsr ? "style=\"break-before:page;\"" :
 				 NULL);
-	    ExaPrn_ShowPrintToTch (Exams,Session,TypeOfView,&UsrDat);
+	    ExaPrn_ShowPrintToTch (Exams,Session,ViewType,&UsrDat);
 	 HTM_DIV_End ();
 	}
      }
@@ -366,43 +353,17 @@ static void ExaPrn_ShowMultipleExaPrns (struct Exa_Exams *Exams,
 
 static void ExaPrn_ShowPrintToTch (struct Exa_Exams *Exams,
       				   const struct ExaSes_Session *Session,
-				   ExaPrn_TypeOfView_t TypeOfView,
+				   Vie_ViewType_t ViewType,
 				   struct Usr_Data *UsrDat)
   {
    struct ExaPrn_Print Print;
 
-   /***** Set basic data of exam print *****/
-   Print.SesCod = Session->SesCod;
-   Print.UsrCod = UsrDat->UsrCod;
-
-   /***** Get exam print data from database *****/
-   ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
-
-   if (Print.PrnCod <= 0)	// Exam print does not exists ==> create it
-     {
-      /***** Set again basic data of exam print *****/
-      Print.SesCod = Session->SesCod;
-      Print.UsrCod = UsrDat->UsrCod;
-
-      /***** Get questions from database *****/
-      ExaPrn_GetQuestionsForNewPrintFromDB (&Print,Exams->Exam.ExaCod);
-
-      /***** Create new exam print in database *****/
-      if (Print.NumQsts.All)
-	 ExaPrn_CreatePrint (&Print,
-			     false);	// Pre-create exam print, but not start it
-     }
-   else			// Exam print exists
-     {
-      /***** Get exam print data from database *****/
-      ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
-
-      /***** Get questions and current user's answers from database *****/
-      ExaPrn_GetPrintQuestionsFromDB (&Print);
-     }
+   /***** Create print or get existing print *****/
+   ExaPrn_GetQstsPrint (Exams,Session,UsrDat,&Print,
+			false);	// Start/resume
 
    /***** Show exam print to be shown on screen or printed on paper *****/
-   ExaPrn_ShowPrintToShow (Exams,Session,TypeOfView,UsrDat,&Print);
+   ExaPrn_ShowPrintToShow (Exams,Session,ViewType,UsrDat,&Print);
   }
 
 /*****************************************************************************/
@@ -428,47 +389,9 @@ void ExaPrn_ShowPrintToStdToFill (void)
    switch (ExaSes_CheckIfICanAnswerThisSession (&Exams.Exam,&Session))
      {
       case Usr_CAN:
-	 /***** Set basic data of exam print *****/
-	 Print.SesCod = Session.SesCod;
-	 Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-
-	 /***** Get exam print data from database *****/
-	 ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
-
-	 if (Print.PrnCod <= 0)	// Exam print does not exists ==> create it
-	   {
-	    /***** Set again basic data of exam print *****/
-	    Print.SesCod = Session.SesCod;
-	    Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-
-	    /***** Get questions from database *****/
-	    ExaPrn_GetQuestionsForNewPrintFromDB (&Print,Exams.Exam.ExaCod);
-
-	    if (Print.NumQsts.All)
-	      {
-	       /***** Create new exam print in database *****/
-	       ExaPrn_CreatePrint (&Print,
-				   true);	// Create and start exam print
-
-	       /***** Set log print code and action *****/
-	       ExaLog_SetPrnCod (Print.PrnCod);
-	       ExaLog_SetAction (ExaLog_START_EXAM);
-	       ExaLog_SetIfCanAnswer (true);
-	      }
-	   }
-	 else			// Exam print exists
-	   {
-	    /***** Get exam print data from database *****/
-	    ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
-
-	    /***** Get questions and current user's answers from database *****/
-	    ExaPrn_GetPrintQuestionsFromDB (&Print);
-
-	    /***** Set log print code and action *****/
-	    ExaLog_SetPrnCod (Print.PrnCod);
-	    ExaLog_SetAction (ExaLog_RESUME_EXAM);
-	    ExaLog_SetIfCanAnswer (true);
-	   }
+	 /***** Create print or get existing print *****/
+	 ExaPrn_GetQstsPrint (&Exams,&Session,&Gbl.Usrs.Me.UsrDat,&Print,
+			      true);	// Start/resume
 
 	 /***** Show exam print to be answered *****/
 	 ExaPrn_ShowPrintToFill (&Exams,&Print);
@@ -478,6 +401,66 @@ void ExaPrn_ShowPrintToStdToFill (void)
 	 /***** Show warning *****/
 	 Ale_ShowAlert (Ale_INFO,Txt_You_dont_have_access_to_the_exam);
 	 break;
+     }
+  }
+
+
+/*****************************************************************************/
+/*** Get questions of a printout. If printout does not exists, create it. ****/
+/*****************************************************************************/
+
+void ExaPrn_GetQstsPrint (struct Exa_Exams *Exams,
+			  const struct ExaSes_Session *Session,
+			  struct Usr_Data *UsrDat,
+			  struct ExaPrn_Print *Print,
+			  bool Start)
+  {
+   /***** Set basic data of exam print *****/
+   Print->SesCod = Session->SesCod;
+   Print->UsrCod = UsrDat->UsrCod;
+
+   /***** Get exam print data from database *****/
+   ExaPrn_GetPrintDataBySesCodAndUsrCod (Print);
+
+   if (Print->PrnCod <= 0)	// Exam print does not exists ==> create it
+     {
+      /***** Set again basic data of exam print *****/
+      Print->SesCod = Session->SesCod;
+      Print->UsrCod = UsrDat->UsrCod;
+
+      /***** Get questions from database *****/
+      ExaPrn_GetQuestionsForNewPrintFromDB (Print,Exams->Exam.ExaCod);
+
+      if (Print->NumQsts.All)
+	{
+	 /***** Create new exam print in database *****/
+	 ExaPrn_CreatePrint (Print,
+			     Start);	// Create and start exam print?
+
+	 /***** Set log print code and action *****/
+	 if (Start)
+	   {
+	    ExaLog_SetPrnCod (Print->PrnCod);
+	    ExaLog_SetAction (ExaLog_START_EXAM);
+	    ExaLog_SetIfCanAnswer (true);
+	   }
+	}
+     }
+   else			// Exam print exists
+     {
+      /***** Get exam print data from database *****/
+      ExaPrn_GetPrintDataBySesCodAndUsrCod (Print);
+
+      /***** Get questions and current user's answers from database *****/
+      ExaPrn_GetPrintQuestionsFromDB (Print);
+
+      /***** Set log print code and action *****/
+      if (Start)
+	{
+	 ExaLog_SetPrnCod (Print->PrnCod);
+	 ExaLog_SetAction (ExaLog_RESUME_EXAM);
+	 ExaLog_SetIfCanAnswer (true);
+	}
      }
   }
 
@@ -828,14 +811,14 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 
 static void ExaPrn_ShowPrintToShow (struct Exa_Exams *Exams,
 				    const struct ExaSes_Session *Session,
-				    ExaPrn_TypeOfView_t TypeOfView,
+				    Vie_ViewType_t ViewType,
 				    struct Usr_Data *UsrDat,
                                     struct ExaPrn_Print *Print)
   {
    extern const char *Hlp_ASSESSMENT_Exams_answer_exam;
 
    /***** Begin box *****/
-   if (TypeOfView == ExaPrn_VIEW_SEL_USR)
+   if (ViewType == Vie_VIEW)
       Box_BoxBegin (Session->Title,NULL,NULL,
 		    Hlp_ASSESSMENT_Exams_answer_exam,Box_NOT_CLOSABLE);
 
@@ -843,20 +826,20 @@ static void ExaPrn_ShowPrintToShow (struct Exa_Exams *Exams,
    /* Institution, degree and course */
    Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
 
-   /***** Show user and time *****/
+   /***** Show student *****/
    HTM_TABLE_BeginWideMarginPadding (10);
       ExaRes_ShowExamResultUser (UsrDat);
    HTM_TABLE_End ();
 
    /***** Exam description *****/
-   ExaPrn_GetAndWriteDescription (Exams->Exam.ExaCod);
+   Exa_GetAndWriteDescription (Exams->Exam.ExaCod);
 
    /***** Show table with questions *****/
    if (Print->NumQsts.All)
       ExaPrn_ShowTableWithQstsToShow (Print);
 
    /***** End box *****/
-   if (TypeOfView == ExaPrn_VIEW_SEL_USR)
+   if (ViewType == Vie_VIEW)
       Box_BoxEnd ();
   }
 
@@ -883,7 +866,7 @@ static void ExaPrn_ShowPrintToFill (struct Exa_Exams *Exams,
       HTM_TABLE_End ();
 
       /***** Exam description *****/
-      ExaPrn_GetAndWriteDescription (Exams->Exam.ExaCod);
+      Exa_GetAndWriteDescription (Exams->Exam.ExaCod);
 
       /***** Show table with questions to answer *****/
       if (Print->NumQsts.All)
@@ -895,26 +878,6 @@ static void ExaPrn_ShowPrintToFill (struct Exa_Exams *Exams,
 
    /***** End box *****/
    Box_BoxEnd ();
-  }
-
-/*****************************************************************************/
-/********************* Write description in an exam print ********************/
-/*****************************************************************************/
-
-static void ExaPrn_GetAndWriteDescription (long ExaCod)
-  {
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
-
-   /***** Get description from database *****/
-   Exa_DB_GetExamTxt (ExaCod,Txt);
-   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                     Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
-   ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);			// Insert links
-
-   /***** Write description *****/
-   HTM_DIV_Begin ("class=\"EXA_PRN_DESC DAT_SMALL_%s\"",The_GetSuffix ());
-      HTM_Txt (Txt);
-   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -1011,6 +974,10 @@ static void ExaPrn_WriteQstAndAnsToShow (const struct ExaPrn_Print *Print,
       .Title[0] = '\0'
      };
 
+   /***** If this is the first question *****/
+   if (QstInd == 0)
+      CurrentSet.SetCod = -1L;	// Reset current set
+
    if (Print->PrintedQuestions[QstInd].SetCod != CurrentSet.SetCod)
      {
       /***** Get data of this set *****/
@@ -1070,6 +1037,10 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
       .NumQstsToPrint = 0,
       .Title[0] = '\0'
      };
+
+   /***** If this is the first question *****/
+   if (QstInd == 0)
+      CurrentSet.SetCod = -1L;	// Reset current set
 
    if (Print->PrintedQuestions[QstInd].SetCod != CurrentSet.SetCod)
      {
@@ -1455,8 +1426,8 @@ void ExaPrn_ReceivePrintAnswer (void)
    ExaSes_GetSessionDataByCod (&Session);
    if (Session.SesCod <= 0)
       Err_WrongExamExit ();
-   Exams.SesCod.Selected =
-   Exams.SesCod.Showing  = Session.SesCod;
+   Exams.SesCod.Sel =
+   Exams.SesCod.Par = Session.SesCod;
 
    /***** Get exam data *****/
    Exams.Exam.ExaCod = Session.ExaCod;

@@ -113,8 +113,8 @@ typedef enum
    Usr_OPTION_UNFOLLOW			= 9,
 
    // Exam sessions ------------------------
-   Usr_OPTION_SHOW_EMPTY_EXAMS		= 10,
-   Usr_OPTION_PRINT_EMPTY_EXAMS		= 11,
+   Usr_OPTION_EMPTY_EXAMS		= 10,
+   Usr_OPTION_EXAM_TEMPLATES		= 11,
 
   } Usr_ListUsrsOption_t;
 
