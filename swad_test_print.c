@@ -155,7 +155,7 @@ static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
 				     __attribute__((unused)) const char *ClassFeedback);
 //-----------------------------------------------------------------------------
 
-static void TstPrn_WriteHeadUserCorrect (struct Usr_Data *UsrDat);
+static void TstPrn_WriteHeadUserCorrect (const struct Usr_Data *UsrDat);
 
 static void TstPrn_PutFormToSelectUsrsToViewUsrsPrints (__attribute__((unused)) void *Args);
 
@@ -1675,16 +1675,16 @@ static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
 /********* one for the user's answer and other for the correct answer ********/
 /*****************************************************************************/
 
-static void TstPrn_WriteHeadUserCorrect (struct Usr_Data *UsrDat)
+static void TstPrn_WriteHeadUserCorrect (const struct Usr_Data *UsrDat)
   {
-   extern const char *Txt_User[Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    HTM_TD_Begin ("class=\"CM DAT_SMALL_%s\"",The_GetSuffix ());
-      HTM_Txt (Txt_User[UsrDat->Sex]);
+      HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs][UsrDat->Sex]);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"CM DAT_SMALL_%s\"",The_GetSuffix ());
+   HTM_TD_Begin ("class=\"LM DAT_SMALL_%s\"",The_GetSuffix ());
       HTM_Txt (Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
    HTM_TD_End ();
   }
