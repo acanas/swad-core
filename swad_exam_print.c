@@ -63,19 +63,6 @@ extern struct Globals Gbl;
 
 //-----------------------------------------------------------------------------
 
-static void ExaPrn_ListOrPrintExaPrns (Vie_ViewType_t ViewType);
-static void ExaPrn_PutIconsPrintExaPrns (void *Exams);
-static void ExaPrn_PutParsToPrintExaPrns (void *Exams);
-static void ExaPrn_ShowMultipleExaPrns (struct Exa_Exams *Exams,
-				        const struct ExaSes_Session *Session,
-					Vie_ViewType_t ViewType,
-					unsigned NumUsrsInList,
-					long *LstSelectedUsrCods);
-static void ExaPrn_ShowPrintToTch (struct Exa_Exams *Exams,
-      				   const struct ExaSes_Session *Session,
-				   Vie_ViewType_t ViewType,
-				   struct Usr_Data *UsrDat);
-
 //-----------------------------------------------------------------------------
 
 static void ExaPrn_GetPrintDataFromRow (MYSQL_RES **mysql_res,
@@ -90,54 +77,39 @@ static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *Printed
 					  Qst_Shuffle_t Shuffle);
 static void ExaPrn_CreatePrint (struct ExaPrn_Print *Print,bool Start);
 
-static void ExaPrn_ShowPrintToShow (struct Exa_Exams *Exams,
-				    const struct ExaSes_Session *Session,
-				    Vie_ViewType_t ViewType,
-				    struct Usr_Data *UsrDat,
-                                    struct ExaPrn_Print *Print);
 static void ExaPrn_ShowPrintToFill (struct Exa_Exams *Exams,
                                     struct ExaPrn_Print *Print);
 
-static void ExaPrn_ShowTableWithQstsToShow (const struct ExaPrn_Print *Print);
 static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
 					    const struct ExaPrn_Print *Print);
 
-static void ExaPrn_WriteQstAndAnsToShow (const struct ExaPrn_Print *Print,
-                                         unsigned QstInd,
-                                         struct Qst_Question *Question);
 static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
                                          unsigned QstInd,
                                          struct Qst_Question *Question);
 
-static void ExaPrn_WriteAnswersToShow (const struct ExaPrn_Print *Print,
-                                       unsigned QstInd,
-                                       struct Qst_Question *Question);
 static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
                                        unsigned QstInd,
                                        struct Qst_Question *Question);
 
 //-----------------------------------------------------------------------------
+
 static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
 				      unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question);
 static void ExaPrn_WriteFltAnsToFill (const struct ExaPrn_Print *Print,
 				      unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question);
-static void ExaPrn_WriteTF_AnsToShow (__attribute__((unused)) const struct ExaPrn_Print *Print,
-	                              __attribute__((unused)) unsigned QstInd,
-                                      __attribute__((unused)) struct Qst_Question *Question);
+
 static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
 	                              unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question);
-static void ExaPrn_WriteChoAnsToShow (const struct ExaPrn_Print *Print,
-                                      unsigned QstInd,
-                                      struct Qst_Question *Question);
 static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
                                       unsigned QstInd,
                                       struct Qst_Question *Question);
 static void ExaPrn_WriteTxtAnsToFill (const struct ExaPrn_Print *Print,
 	                              unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question);
+
 //-----------------------------------------------------------------------------
 
 static void ExaPrn_WriteJSToUpdateExamPrint (const struct ExaPrn_Print *Print,
@@ -192,178 +164,6 @@ void ExaPrn_ResetPrint (struct ExaPrn_Print *Print)
    Print->NumQsts.Valid.Total          = 0;
    Print->Score.All   =
    Print->Score.Valid = 0.0;
-  }
-
-/*****************************************************************************/
-/********** List/Print selected exam printouts from an exam session **********/
-/*****************************************************************************/
-
-void ExaPrn_ListSelectedExaPrns (void)
-  {
-   ExaPrn_ListOrPrintExaPrns (Vie_VIEW);
-  }
-
-void ExaPrn_PrintSelectedExaPrns (void)
-  {
-   ExaPrn_ListOrPrintExaPrns (Vie_PRINT);
-  }
-
-static void ExaPrn_ListOrPrintExaPrns (Vie_ViewType_t ViewType)
-  {
-   extern const char *Hlp_ASSESSMENT_Exams;	// TODO: Change to link to section of listing/printing selected exams in a session
-   extern const char *Txt_List_of_exam_question_sheets_for_session_X;
-   struct Exa_Exams Exams;
-   struct ExaSes_Session Session;
-   char *Title;
-   unsigned NumUsrsInList;
-   long *LstSelectedUsrCods;
-
-   /***** Reset exams context *****/
-   Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exams.Exam);
-   ExaSes_ResetSession (&Session);
-
-   /***** Get parameters *****/
-   /* Get exams context and session */
-   Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
-   Exams.SesCod.Sel =
-   Exams.SesCod.Par = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
-
-   /* Get list of groups selected */
-   Grp_GetParCodsSeveralGrpsToShowUsrs ();
-
-   /***** Get exam data and session *****/
-   Exa_GetExamDataByCod (&Exams.Exam);
-   ExaSes_GetSessionDataByCod (&Session);
-
-   /***** Exam begin *****/
-   if (ViewType == Vie_VIEW)
-      Exa_ShowOnlyOneExamBegin (&Exams,Frm_DONT_PUT_FORM);
-
-   /***** Get lists of the selected users if not already got *****/
-   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
-
-   /***** Count number of valid users in list of encrypted user codes *****/
-   NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
-
-   if (NumUsrsInList)
-     {
-      /***** Get list of students selected to show their attendances *****/
-      Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,NumUsrsInList,&LstSelectedUsrCods);
-
-      /***** Get exam data and session *****/
-      Exa_GetExamDataByCod (&Exams.Exam);
-      ExaSes_GetSessionDataByCod (&Session);
-
-      /***** Begin section and box *****/
-      if (ViewType == Vie_VIEW)
-	{
-	 HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
-	    if (asprintf (&Title,Txt_List_of_exam_question_sheets_for_session_X,
-			  Session.Title) < 0)
-	       Err_NotEnoughMemoryExit ();
-	    Box_BoxBegin (Title,ExaPrn_PutIconsPrintExaPrns,&Exams,
-			  Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
-	    free (Title);
-	}
-
-      /***** Show table with exam prints *****/
-      ExaPrn_ShowMultipleExaPrns (&Exams,&Session,ViewType,
-				  NumUsrsInList,LstSelectedUsrCods);
-
-      /***** End box and section *****/
-      if (ViewType == Vie_VIEW)
-	{
-	    Box_BoxEnd ();
-	 HTM_SECTION_End ();
-	}
-
-      /***** Free list of user codes *****/
-      Usr_FreeListSelectedUsrCods (LstSelectedUsrCods);
-     }
-
-   /***** Exam end *****/
-   if (ViewType == Vie_VIEW)
-      Exa_ShowOnlyOneExamEnd ();
-  }
-
-/*****************************************************************************/
-/****** Put icon to print selected exam printouts from an exam session *******/
-/*****************************************************************************/
-
-static void ExaPrn_PutIconsPrintExaPrns (void *Exams)
-  {
-   if (Exams)
-      Ico_PutContextualIconToPrint (ActPrnExaQstShe,
-				    ExaPrn_PutParsToPrintExaPrns,Exams);
-  }
-
-static void ExaPrn_PutParsToPrintExaPrns (void *Exams)
-  {
-   if (Exams)
-     {
-      Exa_PutPars (Exams);
-      Grp_PutParsCodGrps ();
-      Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
-     }
-  }
-
-/*****************************************************************************/
-/******* Show table with selected exam printouts from an exam session ********/
-/*****************************************************************************/
-
-static void ExaPrn_ShowMultipleExaPrns (struct Exa_Exams *Exams,
-				        const struct ExaSes_Session *Session,
-					Vie_ViewType_t ViewType,
-					unsigned NumUsrsInList,
-					long *LstSelectedUsrCods)
-  {
-   struct Usr_Data UsrDat;
-   unsigned NumUsr;
-
-   /***** Initialize structure with user's data *****/
-   Usr_UsrDataConstructor (&UsrDat);
-
-   /***** List the exam prints (one for each user) *****/
-   for (NumUsr = 0;
-	NumUsr < NumUsrsInList;
-	NumUsr++)
-     {
-      UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,		// Get from the database the data of the student
-						   Usr_DONT_GET_PREFS,
-						   Usr_GET_ROLE_IN_CRS))
-	{
-	 /***** Show exam print *****/
-	 HTM_DIV_Begin (ViewType == Vie_PRINT &&
-	                NumUsr ? "style=\"break-before:page;\"" :
-				 NULL);
-	    ExaPrn_ShowPrintToTch (Exams,Session,ViewType,&UsrDat);
-	 HTM_DIV_End ();
-	}
-     }
-
-   /***** Free memory used for user's data *****/
-   Usr_UsrDataDestructor (&UsrDat);
-  }
-
-/*****************************************************************************/
-/********** Show a printout of the exam to a teacher to be printed ***********/
-/*****************************************************************************/
-
-static void ExaPrn_ShowPrintToTch (struct Exa_Exams *Exams,
-      				   const struct ExaSes_Session *Session,
-				   Vie_ViewType_t ViewType,
-				   struct Usr_Data *UsrDat)
-  {
-   struct ExaPrn_Print Print;
-
-   /***** Create print or get existing print *****/
-   ExaPrn_GetQstsPrint (Exams,Session,UsrDat,&Print,
-			false);	// Start/resume
-
-   /***** Show exam print to be shown on screen or printed on paper *****/
-   ExaPrn_ShowPrintToShow (Exams,Session,ViewType,UsrDat,&Print);
   }
 
 /*****************************************************************************/
@@ -806,44 +606,6 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
   }
 
 /*****************************************************************************/
-/******** Show exam print to be shown on screen or printed on paper **********/
-/*****************************************************************************/
-
-static void ExaPrn_ShowPrintToShow (struct Exa_Exams *Exams,
-				    const struct ExaSes_Session *Session,
-				    Vie_ViewType_t ViewType,
-				    struct Usr_Data *UsrDat,
-                                    struct ExaPrn_Print *Print)
-  {
-   extern const char *Hlp_ASSESSMENT_Exams_answer_exam;
-
-   /***** Begin box *****/
-   if (ViewType == Vie_VIEW)
-      Box_BoxBegin (Session->Title,NULL,NULL,
-		    Hlp_ASSESSMENT_Exams_answer_exam,Box_NOT_CLOSABLE);
-
-   /***** Heading *****/
-   /* Institution, degree and course */
-   Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
-
-   /***** Show student *****/
-   HTM_TABLE_BeginWideMarginPadding (10);
-      ExaRes_ShowExamResultUser (UsrDat);
-   HTM_TABLE_End ();
-
-   /***** Exam description *****/
-   Exa_GetAndWriteDescription (Exams->Exam.ExaCod);
-
-   /***** Show table with questions *****/
-   if (Print->NumQsts.All)
-      ExaPrn_ShowTableWithQstsToShow (Print);
-
-   /***** End box *****/
-   if (ViewType == Vie_VIEW)
-      Box_BoxEnd ();
-  }
-
-/*****************************************************************************/
 /******************** Show an exam print to be answered **********************/
 /*****************************************************************************/
 
@@ -878,41 +640,6 @@ static void ExaPrn_ShowPrintToFill (struct Exa_Exams *Exams,
 
    /***** End box *****/
    Box_BoxEnd ();
-  }
-
-/*****************************************************************************/
-/********** Show the main part (table) of an exam print to be shown **********/
-/*****************************************************************************/
-
-static void ExaPrn_ShowTableWithQstsToShow (const struct ExaPrn_Print *Print)
-  {
-   unsigned QstInd;
-   struct Qst_Question Question;
-
-   /***** Begin table *****/
-   HTM_TABLE_BeginWideMarginPadding (10);
-
-      /***** Write one row for each question *****/
-      for (QstInd = 0;
-	   QstInd < Print->NumQsts.All;
-	   QstInd++)
-	{
-	 /* Create test question */
-	 Qst_QstConstructor (&Question);
-	 Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
-
-	 /* Get question from database */
-	 ExaSet_GetQstDataFromDB (&Question);
-
-	 /* Write question and answers */
-	 ExaPrn_WriteQstAndAnsToShow (Print,QstInd,&Question);
-
-	 /* Destroy test question */
-	 Qst_QstDestructor (&Question);
-	}
-
-   /***** End table *****/
-   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -955,70 +682,6 @@ static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
       Exa_PutPars (Exams);
       Btn_PutButton (Btn_DONE,NULL);
    Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/****** Write a row of an exam print, with one question and its answer *******/
-/*****************************************************************************/
-
-static void ExaPrn_WriteQstAndAnsToShow (const struct ExaPrn_Print *Print,
-                                         unsigned QstInd,
-                                         struct Qst_Question *Question)
-  {
-   static struct ExaSet_Set CurrentSet =
-     {
-      .ExaCod = -1L,
-      .SetCod = -1L,
-      .SetInd = 0,
-      .NumQstsToPrint = 0,
-      .Title[0] = '\0'
-     };
-
-   /***** If this is the first question *****/
-   if (QstInd == 0)
-      CurrentSet.SetCod = -1L;	// Reset current set
-
-   if (Print->PrintedQuestions[QstInd].SetCod != CurrentSet.SetCod)
-     {
-      /***** Get data of this set *****/
-      CurrentSet.SetCod = Print->PrintedQuestions[QstInd].SetCod;
-      ExaSet_GetSetDataByCod (&CurrentSet);
-
-      /***** Title for this set *****/
-      HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",The_GetColorRows ());
-	    ExaSet_WriteSetTitle (&CurrentSet);
-	 HTM_TD_End ();
-      HTM_TR_End ();
-     }
-
-   /***** Begin row *****/
-   HTM_TR_Begin (NULL);
-
-      /***** Number of question and answer type *****/
-      HTM_TD_Begin ("class=\"RT\"");
-	 Lay_WriteIndex (QstInd + 1,"BIG_INDEX");
-	 Qst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
-      HTM_TD_End ();
-
-      /***** Stem, media and answers *****/
-      HTM_TD_Begin ("class=\"LT\"");
-
-	 /* Stem */
-	 Qst_WriteQstStem (Question->Stem,"Qst_TXT",HidVis_VISIBLE);
-
-	 /* Media */
-	 Med_ShowMedia (&Question->Media,
-			"Tst_MED_SHOW_CONT",
-			"Tst_MED_SHOW");
-
-	 /* Answers */
-	 ExaPrn_WriteAnswersToShow (Print,QstInd,Question);
-
-      HTM_TD_End ();
-
-   /***** End row *****/
-   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -1088,31 +751,6 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
   }
 
 /*****************************************************************************/
-/***************** Write answers of a question to show them ******************/
-/*****************************************************************************/
-
-static void ExaPrn_WriteAnswersToShow (const struct ExaPrn_Print *Print,
-                                       unsigned QstInd,
-                                       struct Qst_Question *Question)
-  {
-   void (*ExaPrn_WriteAnsToShow[Qst_NUM_ANS_TYPES]) (const struct ExaPrn_Print *Print,
-                                                     unsigned QstInd,
-                                                     struct Qst_Question *Question) =
-    {
-     [Qst_ANS_INT            ] = NULL,
-     [Qst_ANS_FLOAT          ] = NULL,
-     [Qst_ANS_TRUE_FALSE     ] = ExaPrn_WriteTF_AnsToShow,
-     [Qst_ANS_UNIQUE_CHOICE  ] = ExaPrn_WriteChoAnsToShow,
-     [Qst_ANS_MULTIPLE_CHOICE] = ExaPrn_WriteChoAnsToShow,
-     [Qst_ANS_TEXT           ] = NULL,
-    };
-
-   /***** Write answers *****/
-   if (ExaPrn_WriteAnsToShow[Question->Answer.Type])
-      ExaPrn_WriteAnsToShow[Question->Answer.Type] (Print,QstInd,Question);
-  }
-
-/*****************************************************************************/
 /***************** Write answers of a question to fill them ******************/
 /*****************************************************************************/
 
@@ -1179,22 +817,6 @@ static void ExaPrn_WriteFltAnsToFill (const struct ExaPrn_Print *Print,
 /************** Write false / true answer when seeing a test ****************/
 /*****************************************************************************/
 
-static void ExaPrn_WriteTF_AnsToShow (__attribute__((unused)) const struct ExaPrn_Print *Print,
-	                              __attribute__((unused)) unsigned QstInd,
-                                      __attribute__((unused)) struct Qst_Question *Question)
-  {
-   extern const char *Txt_TF_QST[2];
-
-   /***** Write selector for the answer *****/
-   HTM_Txt (Txt_TF_QST[0]);
-   HTM_Slash ();
-   HTM_Txt (Txt_TF_QST[1]);
-  }
-
-/*****************************************************************************/
-/************** Write false / true answer when seeing a test ****************/
-/*****************************************************************************/
-
 static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
 	                              unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question)
@@ -1224,58 +846,6 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
                 							   HTM_NO_ATTR,
                   Txt_TF_QST[1]);
    HTM_Txt ("</select>");
-  }
-
-/*****************************************************************************/
-/***** Write single or multiple choice answer when seeing an exam print ******/
-/*****************************************************************************/
-
-static void ExaPrn_WriteChoAnsToShow (const struct ExaPrn_Print *Print,
-                                      unsigned QstInd,
-                                      struct Qst_Question *Question)
-  {
-   unsigned NumOpt;
-   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-
-   /***** Change format of answers text *****/
-   Qst_ChangeFormatAnswersText (Question);
-
-   /***** Get indexes for this question from string *****/
-   TstPrn_GetIndexesFromStr (Print->PrintedQuestions[QstInd].StrIndexes,Indexes);
-
-   /***** Begin table *****/
-   HTM_TABLE_BeginPadding (2);
-
-      for (NumOpt = 0;
-	   NumOpt < Question->Answer.NumOptions;
-	   NumOpt++)
-	{
-	 /***** Indexes are 0 1 2 3... if no shuffle
-		or 3 1 0 2... (example) if shuffle *****/
-	 HTM_TR_Begin (NULL);
-
-	    /***** Write letter of this option *****/
-	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_LABEL_Begin ("class=\"Qst_TXT_%s\"",The_GetSuffix ());
-		  HTM_Option (NumOpt); HTM_CloseParenthesis (); HTM_NBSP ();
-	       HTM_LABEL_End ();
-	    HTM_TD_End ();
-
-	    /***** Write the option text *****/
-	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_LABEL_Begin ("class=\"Qst_TXT_%s\"",The_GetSuffix ());
-		  HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
-	       HTM_LABEL_End ();
-	       Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
-			      "Tst_MED_SHOW_CONT",
-			      "Tst_MED_SHOW");
-	    HTM_TD_End ();
-
-	 HTM_TR_End ();
-	}
-
-   /***** End table *****/
-   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/

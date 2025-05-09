@@ -78,8 +78,8 @@ struct ExaPrn_Print
 
 void ExaPrn_ResetPrint (struct ExaPrn_Print *Print);
 
-void ExaPrn_ListSelectedExaPrns (void);
-void ExaPrn_PrintSelectedExaPrns (void);
+void ExaQstShe_ListExamQstSheets (void);
+void ExaQstShe_PrintExamQstSheets (void);
 
 void ExaPrn_ShowPrintToStdToFill (void);
 
