@@ -621,8 +621,9 @@ static Frm_PutForm_t ExaSes_SetOptionsListUsrsAllowed (Usr_Can_t ICanChooseOptio
       ICanChooseOption[Opt] = Usr_CAN_NOT;
 
    /* Activate some options */
-   ICanChooseOption[Usr_OPTION_EMPTY_EXAMS	] =
-   ICanChooseOption[Usr_OPTION_EXAM_TEMPLATES	] = Usr_CAN;
+   ICanChooseOption[Usr_OPTION_EXAMS_QST_SHEETS	     ] =
+   ICanChooseOption[Usr_OPTION_BLANK_EXAMS_ANS_SHEETS] =
+   ICanChooseOption[Usr_OPTION_SOLVD_EXAMS_ANS_SHEETS] = Usr_CAN;
 
    return Frm_PUT_FORM;
   }

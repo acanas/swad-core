@@ -1793,7 +1793,7 @@ static void Med_ShowEmbed (const struct Med_Media *Media,const char *ClassMedia)
 	       /* iframe for external media */
 	       HTM_TxtF ("<iframe src=\"%s\""
 			 " frameborder=\"0\""
-			 " marginwidth=\"0\" marginheight=\"0\" scrolling=\"no\""
+			 " marginwidth=\"0\" marginheight=\"0\" scrolling=\"auto\""
 			 " allowfullscreen=\"allowfullscreen\""
 			 " class=\"%s\"",
 			 Media->URL,ClassMedia);

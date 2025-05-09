@@ -5624,8 +5624,9 @@ void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_
       [Usr_OPTION_EMAIL			] = &Txt_Create_email_message,
       [Usr_OPTION_FOLLOW		] = &Txt_Follow,
       [Usr_OPTION_UNFOLLOW		] = &Txt_Unfollow,
-      [Usr_OPTION_EMPTY_EXAMS		] = &Txt_Actions[ActSeeExaPrnSes],
-      [Usr_OPTION_EXAM_TEMPLATES	] = &Txt_Actions[ActSeeExaTmpSes],
+      [Usr_OPTION_EXAMS_QST_SHEETS	] = &Txt_Actions[ActSeeExaQstShe],
+      [Usr_OPTION_BLANK_EXAMS_ANS_SHEETS] = &Txt_Actions[ActSeeBlkExaAnsShe],
+      [Usr_OPTION_SOLVD_EXAMS_ANS_SHEETS] = &Txt_Actions[ActSeeSolExaAnsShe],
      };
    Usr_ListUsrsOption_t Opt;
    Usr_ListUsrsOption_t DefaultAction = Usr_OPTION_UNKNOWN;
@@ -5818,21 +5819,31 @@ void Usr_DoActionOnUsrs1 (void)
 		  break;
 	      }
 	    break;
-	 case Usr_OPTION_EMPTY_EXAMS:
+	 case Usr_OPTION_EXAMS_QST_SHEETS:
 	    switch (Gbl.Action.Act)
 	      {
 	       case Act_DoAct_ExaSes:
-		  Gbl.Action.Act = ActSeeExaPrnSes;
+		  Gbl.Action.Act = ActSeeExaQstShe;
 		  break;
 	       default:
 		  break;
 	      }
 	    break;
-	 case Usr_OPTION_EXAM_TEMPLATES:
+	 case Usr_OPTION_BLANK_EXAMS_ANS_SHEETS:
 	    switch (Gbl.Action.Act)
 	      {
 	       case Act_DoAct_ExaSes:
-		  Gbl.Action.Act = ActSeeExaTmpSes;
+		  Gbl.Action.Act = ActSeeBlkExaAnsShe;
+		  break;
+	       default:
+		  break;
+	      }
+	    break;
+	 case Usr_OPTION_SOLVD_EXAMS_ANS_SHEETS:
+	    switch (Gbl.Action.Act)
+	      {
+	       case Act_DoAct_ExaSes:
+		  Gbl.Action.Act = ActSeeSolExaAnsShe;
 		  break;
 	       default:
 		  break;

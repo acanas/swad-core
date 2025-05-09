@@ -1335,13 +1335,13 @@ static void TstPrn_WriteTF_AnsPrint (struct Usr_Data *UsrDat,
 				     __attribute__((unused)) const char *ClassTxt,
 				     __attribute__((unused)) const char *ClassFeedback)
   {
-   char AnsTFUsr;
+   char AnsTFStd;
 
    /***** Check if number of rows is correct *****/
    Qst_CheckIfNumberOfAnswersIsOne (Question);
 
    /***** Get answer true or false *****/
-   AnsTFUsr = PrintedQuestion->StrAnswers[0];
+   AnsTFStd = PrintedQuestion->StrAnswers[0];
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -1356,11 +1356,11 @@ static void TstPrn_WriteTF_AnsPrint (struct Usr_Data *UsrDat,
 	 /***** Write the user answer *****/
 	 HTM_TD_Begin ("class=\"CM %s_%s\"",
 		       ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_CAN ?
-			  (AnsTFUsr == Question->Answer.TF ? "Qst_ANS_OK" :	// Correct
+			  (AnsTFStd == Question->Answer.TF ? "Qst_ANS_OK" :	// Correct
 							     "Qst_ANS_BAD") :	// Wrong
 							     "Qst_ANS_0",	// Blank answer
 		       The_GetSuffix ());
-	    Qst_WriteAnsTF (AnsTFUsr);
+	    Qst_WriteAnsTF (AnsTFStd);
 	 HTM_TD_End ();
 
 	 /***** Write the correct answer *****/

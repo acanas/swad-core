@@ -1,7 +1,7 @@
-// swad_exam_template.h: exam template (each template of an exam in a session for a student)
+// swad_exam_answer_sheet.h: exams blank answer sheets and exams solved answer sheets
 
-#ifndef _SWAD_EXA_TMP
-#define _SWAD_EXA_TMP
+#ifndef _SWAD_EXA_ANS_SHE
+#define _SWAD_EXA_ANS_SHE
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -35,7 +35,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ExaTmp_ListSelectedExaTmps (void);
-void ExaTmp_PrintSelectedExaTmps (void);
+void ExaAnsShe_ListExaAnsSheets (void);
+void ExaAnsShe_PrintExaAnsSheets (void);
 
 #endif

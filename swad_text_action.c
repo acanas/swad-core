@@ -15978,96 +15978,142 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Do an exam session action on several selected students"					// Çeviri lazim!
 #endif
 	,
-	[ActSeeExaPrnSes] =
+	[ActSeeExaQstShe] =
 #if   L==1	// ca
-	"Mostrar ex&agrave;mens (nom&eacute;s enunciats)"
+	"Mostrar fulls de preguntes d'examen"
 #elif L==2	// de
-	"Pr&uuml;fungen anzeigen (nur Bescheinigungen)"
+	"Pr&uuml;fungsfragen anzeigen"
 #elif L==3	// en
-	"Show exams (statements only)"
+	"Display exams question sheets"
 #elif L==4	// es
-	"Mostrar ex&aacute;menes (s&oacute;lo enunciados)"
+	"Mostrar hojas de preguntas de ex&aacute;menes"
 #elif L==5	// fr
-	"Afficher les examens (relev&eacute;s uniquement)"
+	"Afficher les feuilles de questions d'examen"
 #elif L==6	// gn
-	"Mostrar ex&aacute;menes (s&oacute;lo enunciados)"	// Okoteve traducción
+	"Mostrar hojas de preguntas de ex&aacute;menes"	// Okoteve traducción
 #elif L==7	// it
-	"Mostra esami (solo dichiarazioni)"
+	"Visualizza i fogli delle domande d'esame"
 #elif L==8	// pl
-	"Poka&zdot; egzaminy (tylko o&sacute;wiadczenia)"
+	"Wy&sacute;wietl arkusze pyta&ntilde; egzaminacyjnych"
 #elif L==9	// pt
-	"Mostrar exames (apenas extratos)"
+	"Mostrar folhas de perguntas de exame"
 #elif L==10	// tr
-	"S&inodot;navlar&inodot; g&ouml;ster (sadece ifadeler)"
+	"S&inodot;nav soru ka&gbreve;&inodot;tlar&inodot;n&inodot; g&ouml;r&uuml;nt&uuml;le"
 #endif
 	,
-	[ActPrnExaPrnSes] =
+	[ActPrnExaQstShe] =
 #if   L==1	// ca
-	"Imprimir ex&agrave;mens (nom&eacute;s enunciats)"
+	"Imprimir fulls de preguntes d'examen"
 #elif L==2	// de
-	"Pr&uuml;fungen ausdrucken (nur Bescheinigungen)"
+	"Pr&uuml;fungsfragen drucken"
 #elif L==3	// en
-	"Print exams (statements only)"
+	"Print exams question sheets"
 #elif L==4	// es
-	"Imprimir ex&aacute;menes (s&oacute;lo enunciados)"
+	"Imprimir hojas de preguntas de ex&aacute;menes"
 #elif L==5	// fr
-	"Imprimer les examens (relev&eacute;s uniquement)"
+	"Imprimer les feuilles de questions d'examen"
 #elif L==6	// gn
-	"Imprimir ex&aacute;menes (s&oacute;lo enunciados)"	// Okoteve traducción
+	"Imprimir hojas de preguntas de ex&aacute;menes"	// Okoteve traducción
 #elif L==7	// it
-	"Stampa esami (solo dichiarazioni)"
+	"Stampa i fogli delle domande d'esame"
 #elif L==8	// pl
-	"Wydrukuj egzaminy (tylko o&sacute;wiadczenia)"
+	"Drukuj arkusze pyta&nacute; egzaminacyjnych"
 #elif L==9	// pt
-	"Imprimir exames (apenas extratos)"
+	"Imprimir folhas de perguntas de exame"
 #elif L==10	// tr
-	"S&inodot;navlar&inodot; yazd&inodot;r (sadece ifadeler)"
+	"S&inodot;nav soru ka&gbreve;&inodot;tlar&inodot;n&inodot; yazd&inodot;r"
 #endif
 	,
-	[ActSeeExaTmpSes] =
+	[ActSeeBlkExaAnsShe] =
 #if   L==1	// ca
-	"Mostrar plantilles d'ex&agrave;mens (solucions)"
+	"Mostrar fulls de respostes d'examen en blanc"
 #elif L==2	// de
-	"Pr&uuml;fungsvorlagen (L&ouml;sungen) anzeigen"
+	"Leere Pr&uuml;fungsantwortb&ouml;gen anzeigen"
 #elif L==3	// en
-	"Show exam templates (solutions)"
+	"Display blank exams answer sheets"
 #elif L==4	// es
-	"Mostrar plantillas de ex&aacute;menes (soluciones)"
+	"Mostrar hojas de respuestas de ex&aacute;menes en blanco"
 #elif L==5	// fr
-	"Afficher les mod&egrave;les d'examen (solutions)"
+	"Afficher les feuilles de r&eacute;ponses d'examen vierges"
 #elif L==6	// gn
-	"Mostrar plantillas de ex&aacute;menes (soluciones)"	// Okoteve traducción
+	"Mostrar hojas de respuestas de ex&aacute;menes en blanco"	// Okoteve traducción
 #elif L==7	// it
-	"Mostra modelli di esame (soluzioni)"
+	"Visualizza i fogli delle risposte d'esame vuoti"
 #elif L==8	// pl
-	"Poka&zdot; szablony egzamin&oacute;w (rozwi&aogon;zania)"
+	"Wy&sacute;wietl puste arkusze odpowiedzi egzaminacyjnych"
 #elif L==9	// pt
-	"Mostrar modelos de exames (solu&ccedil;&otilde;es)"
+	"Mostrar folhas de respostas de exames em branco"
 #elif L==10	// tr
-	"S&inodot;nav &scedil;ablonlar&inodot;n&inodot; (&ccedil;&ouml;z&uuml;mleri) g&ouml;ster"
+	"Bo&scedil; s&inodot;nav cevap ka&gbreve;&inodot;tlar&inodot;n&inodot; g&ouml;r&uuml;nt&uuml;le"
 #endif
 	,
-	[ActPrnExaTmpSes] =
+	[ActPrnBlkExaAnsShe] =
 #if   L==1	// ca
-	"Imprimir plantilles d'ex&agrave;mens (solucions)"
+	"Imprimir fulls de respostes d'examen en blanc"
 #elif L==2	// de
-	"Pr&uuml;fungsvorlagen (L&ouml;sungen) ausdrucken"
+	"Leere Pr&uuml;fungsantwortb&ouml;gen drucken"
 #elif L==3	// en
-	"Print exam templates (solutions)"
+	"Print blank exams answer sheets"
 #elif L==4	// es
-	"Imprimir plantillas de ex&aacute;menes (soluciones)"
+	"Imprimir hojas de respuestas de ex&aacute;menes en blanco"
 #elif L==5	// fr
-	"Imprimer les mod&egrave;les d'examen (solutions)"
+	"Imprimer les feuilles de r&eacute;ponses d'examen vierges"
 #elif L==6	// gn
-	"Imprimir plantillas de ex&aacute;menes (soluciones)"	// Okoteve traducción
+	"Imprimir hojas de respuestas de ex&aacute;menes en blanco"	// Okoteve traducción
 #elif L==7	// it
-	"Stampa modelli di esame (soluzioni)"
+	"Stampa i fogli delle risposte d'esame vuoti"
 #elif L==8	// pl
-	"Wydrukuj szablony egzamin&oacute;w (rozwi&aogon;zania)"
+	"Drukuj puste arkusze odpowiedzi egzaminacyjnych"
 #elif L==9	// pt
-	"Imprimir modelos de exames (solu&ccedil;&otilde;es)"
+	"Imprimir folhas de respostas de exames em branco"
 #elif L==10	// tr
-	"S&inodot;nav &scedil;ablonlar&inodot;n&inodot; (&ccedil;&ouml;z&uuml;mleri) yazd&inodot;r"
+	"Bo&scedil; s&inodot;nav cevap ka&gbreve;&inodot;tlar&inodot;n&inodot; yazd&inodot;r"
+#endif
+	,
+	[ActSeeSolExaAnsShe] =
+#if   L==1	// ca
+	"Mostrar fulls de respostes d'examen resolts"
+#elif L==2	// de
+	"Gel&ouml;ste Pr&uuml;fungsantwortb&ouml;gen anzeigen"
+#elif L==3	// en
+	"Display solved exams answer sheets"
+#elif L==4	// es
+	"Mostrar hojas de respuestas de ex&aacute;menes resueltas"
+#elif L==5	// fr
+	"Afficher les feuilles de r&eacute;ponses d'examen r&eacute;solues"
+#elif L==6	// gn
+	"Mostrar hojas de respuestas de ex&aacute;menes resueltas"	// Okoteve traducción
+#elif L==7	// it
+	"Visualizza i fogli delle risposte d'esame risolti"
+#elif L==8	// pl
+	"Wy&sacute;wietl rozwi&aogon;zane arkusze odpowiedzi egzaminacyjnych"
+#elif L==9	// pt
+	"Mostrar folhas de respostas de exames resolvidas"
+#elif L==10	// tr
+	"&Ccedil;&ouml;z&uuml;len s&inodot;nav cevap ka&gbreve;&inodot;tlar&inodot;n&inodot; g&ouml;r&uuml;nt&uuml;le"
+#endif
+	,
+	[ActPrnSolExaAnsShe] =
+#if   L==1	// ca
+	"Imprimir fulls de respostes d'examen resolts"
+#elif L==2	// de
+	"Gel&ouml;ste Pr&uuml;fungsantwortb&ouml;gen drucken"
+#elif L==3	// en
+	"Print solved exams answer sheets"
+#elif L==4	// es
+	"Imprimir hojas de respuestas de ex&aacute;menes resueltas"
+#elif L==5	// fr
+	"Imprimer les feuilles de r&eacute;ponses d'examen r&eacute;solues"
+#elif L==6	// gn
+	"Imprimir hojas de respuestas de ex&aacute;menes resueltas"	// Okoteve traducción
+#elif L==7	// it
+	"Stampa i fogli delle risposte d'esame risolti"
+#elif L==8	// pl
+	"Drukuj rozwi&aogon;zane arkusze odpowiedzi egzaminacyjnych"
+#elif L==9	// pt
+	"Imprimir folhas de respostas de exames resolvidas"
+#elif L==10	// tr
+	"&Ccedil;&ouml;z&uuml;len s&inodot;nav cevap ka&gbreve;&inodot;tlar&inodot;n&inodot; yazd&inodot;r"
 #endif
 	,
 	[ActReqNewExaSes] =

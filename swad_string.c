@@ -61,7 +61,7 @@ static int Str_ReadCharAndSkipCommentsBackward (FILE *FileSrc,Str_SkipHTMLCommen
 /*****************************************************************************/
 
 /***** Conversion to Base64URL *****/
-// base64url is described in document http://tools.ietf.org/html/rfc4648.
+// base64url is described in document https://datatracker.ietf.org/doc/html/rfc4648
 // It uses '-' and '_' because they are safe for URL/parameters (without enconding) and for filenames.
 const char Str_BIN_TO_BASE64URL[64 + 1] =
   {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',

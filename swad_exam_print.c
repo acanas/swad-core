@@ -211,7 +211,7 @@ void ExaPrn_PrintSelectedExaPrns (void)
 static void ExaPrn_ListOrPrintExaPrns (Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_ASSESSMENT_Exams;	// TODO: Change to link to section of listing/printing selected exams in a session
-   extern const char *Txt_Listing_of_exams_in_session_X;
+   extern const char *Txt_List_of_exam_question_sheets_for_session_X;
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;
    char *Title;
@@ -259,7 +259,7 @@ static void ExaPrn_ListOrPrintExaPrns (Vie_ViewType_t ViewType)
       if (ViewType == Vie_VIEW)
 	{
 	 HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
-	    if (asprintf (&Title,Txt_Listing_of_exams_in_session_X,
+	    if (asprintf (&Title,Txt_List_of_exam_question_sheets_for_session_X,
 			  Session.Title) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Box_BoxBegin (Title,ExaPrn_PutIconsPrintExaPrns,&Exams,
@@ -294,7 +294,7 @@ static void ExaPrn_ListOrPrintExaPrns (Vie_ViewType_t ViewType)
 static void ExaPrn_PutIconsPrintExaPrns (void *Exams)
   {
    if (Exams)
-      Ico_PutContextualIconToPrint (ActPrnExaPrnSes,
+      Ico_PutContextualIconToPrint (ActPrnExaQstShe,
 				    ExaPrn_PutParsToPrintExaPrns,Exams);
   }
 
