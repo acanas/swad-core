@@ -864,7 +864,8 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	   }
 
 	 /****** Get lists of selected users ******/
-	 Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+	 Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
+					        Usr_GET_LIST_ALL_USRS);
 
 	 /***** Count number of valid users in list of encrypted user codes *****/
 	 NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);

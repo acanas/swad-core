@@ -157,7 +157,8 @@ static void UsrClp_AddUsrsToClipboard (void)
    Usr_DB_RemoveExpiredClipboards ();   // Someone must do this work. Let's do it whenever a user click in copy
 
    /***** Get list of selected users if not already got *****/
-   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
+					  Usr_GET_LIST_ALL_USRS);
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);

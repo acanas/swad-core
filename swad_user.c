@@ -3080,7 +3080,8 @@ void Usr_PutParSelectedUsrsCods (const struct Usr_SelectedUsrs *SelectedUsrs)
 /************************* Get list of selected users ************************/
 /*****************************************************************************/
 
-void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs)
+void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs,
+					    Usr_GetListAllUsrs_t GetListAllUsrs)
   {
    extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
    char *ParName;
@@ -3089,26 +3090,27 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsr
 
    if (!SelectedUsrs->Filled)	// Get list only if not already got
      {
-      /***** Build name of the parameter.
-	     Sometimes a unique action needs several distinct lists of users,
-	     so, it's necessary to use distinct names for the parameters. *****/
-      Usr_BuildParName (&ParName,Usr_ParUsrCod[Rol_UNK],SelectedUsrs->ParSuffix);
-
-      /***** Get possible list of all selected users *****/
+      /* Allocate memory for list of encrypted user codes */
       Usr_AllocateListSelectedEncryptedUsrCods (SelectedUsrs,Rol_UNK);
-      if (!Par_GetParMultiToText (ParName,SelectedUsrs->List[Rol_UNK],
-				  Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS))
-	 if (Gbl.Session.Status == Ses_OPEN)	// If the session is open, get parameter from DB
-	   {
-	    Ses_DB_GetPar (ParName,SelectedUsrs->List[Rol_UNK],
-			   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
-	    Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,SelectedUsrs->List[Rol_UNK],
-			      Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,
-			      Str_REMOVE_SPACES);
-	   }
 
-      /***** Free allocated memory for parameter name *****/
-      free (ParName);
+      if (GetListAllUsrs == Usr_GET_LIST_ALL_USRS)
+        {
+	 /* Get possible list of all selected users */
+	 // Sometimes a unique action needs several distinct lists of users,
+	 // so, it's necessary to use distinct names for the parameters.
+	 Usr_BuildParName (&ParName,Usr_ParUsrCod[Rol_UNK],SelectedUsrs->ParSuffix);
+	 if (!Par_GetParMultiToText (ParName,SelectedUsrs->List[Rol_UNK],
+				     Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS))
+	    if (Gbl.Session.Status == Ses_OPEN)	// If the session is open, get parameter from DB
+	      {
+	       Ses_DB_GetPar (ParName,SelectedUsrs->List[Rol_UNK],
+			      Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
+	       Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,SelectedUsrs->List[Rol_UNK],
+				 Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,
+				 Str_REMOVE_SPACES);
+	      }
+	 free (ParName);
+        }
 
       /***** Get list of selected users for each possible role *****/
       for (Role  = Rol_TCH;	// From the highest possible role of selected users...
@@ -3116,15 +3118,13 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsr
 	   Role--)
 	 if (Usr_ParUsrCod[Role])
 	   {
-            /* Build name of the parameter */
-	    Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
+	    /* Allocate memory for list of encrypted user codes */
+	    Usr_AllocateListSelectedEncryptedUsrCods (SelectedUsrs,Role);
 
 	    /* Get parameter with selected users with this role */
-	    Usr_AllocateListSelectedEncryptedUsrCods (SelectedUsrs,Role);
+	    Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
 	    Par_GetParMultiToText (ParName,SelectedUsrs->List[Role],
 				   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
-
-	    /* Free allocated memory for parameter name */
 	    free (ParName);
 
 	    /* Add selected users with this role
@@ -3190,7 +3190,8 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 
    /***** Get list of selected encrypted users's codes if not already got.
           This list is necessary to add encrypted user's codes at the end. *****/
-   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
+					  Usr_GET_LIST_ALL_USRS);
    LengthSelectedUsrsCods = strlen (Gbl.Usrs.Selected.List[Rol_UNK]);
 
    /***** Allocate memory for the lists of recipients written explicetely *****/
@@ -3421,7 +3422,7 @@ unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUs
   }
 
 /*****************************************************************************/
-/****************** Allocate memory for list of students *********************/
+/************ Allocate memory for list of encrypted user codes ***************/
 /*****************************************************************************/
 // Role = Rol_UNK here means all users
 
@@ -3795,7 +3796,8 @@ void Usr_GetSelectedUsrsAndGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
    extern const char *Txt_You_must_select_one_ore_more_users;
 
    /***** Get lists of the selected users if not already got *****/
-   Usr_GetListsSelectedEncryptedUsrsCods (SelectedUsrs);
+   Usr_GetListsSelectedEncryptedUsrsCods (SelectedUsrs,
+					  Usr_GET_LIST_ALL_USRS);
 
    /***** Check number of users *****/
    if (Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (SelectedUsrs))	// If some users are selected...
@@ -5109,7 +5111,8 @@ void Usr_ListGuests (void)
 
 	       /* Begin form */
 	       if (PutForm == Frm_PUT_FORM)
-		  Frm_BeginForm (Act_DoAct_OnSevGst);
+		  Frm_BeginFormIdAnchor (Act_DoAct_OnSevGst,Usr_FORM_TO_SELECT_USRS_ID,
+					 Usr_USER_LIST_SECTION_ID);
 
 	       /* Begin table */
 	       HTM_TABLE_Begin ("TBL_SCROLL");
@@ -5689,7 +5692,8 @@ void Usr_DoActionOnUsrs1 (void)
 
    /***** Get parameters from form *****/
    /* Get list of selected users */
-   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
+					  Usr_DONT_GET_LIST_ALL_USRS);
 
    /* Check if there are selected users */
    if (Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected))

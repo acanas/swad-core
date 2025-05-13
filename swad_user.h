@@ -282,7 +282,8 @@ bool Usr_GetIfShowBigList (unsigned NumUsrs,
 
 void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct Usr_SelectedUsrs *SelectedUsrs);
 void Usr_PutParSelectedUsrsCods (const struct Usr_SelectedUsrs *SelectedUsrs);
-void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs);
+void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs,
+					    Usr_GetListAllUsrs_t GetListAllUsrs);
 
 bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs);
 

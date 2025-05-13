@@ -1092,7 +1092,8 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
       Par_GetParText ("UsrsIDs",ListUsrsIDs,ID_MAX_BYTES_LIST_USRS_IDS);
 
       /***** Get list of selected users if not already got *****/
-      Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+      Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
+					     Usr_GET_LIST_ALL_USRS);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);

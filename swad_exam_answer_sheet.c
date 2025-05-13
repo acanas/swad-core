@@ -154,12 +154,14 @@ static void ExaAnsShe_ListOrPrintExamAnsSheets (Vie_ViewType_t ViewType)
    Exa_GetExamDataByCod (&Exams.Exam);
    ExaSes_GetSessionDataByCod (&Session);
 
-   /***** Exam begin *****/
    if (ViewType == Vie_VIEW)
+     {
+      /***** Exam begin *****/
       Exa_ShowOnlyOneExamBegin (&Exams,Frm_DONT_PUT_FORM);
 
-   /***** Get lists of the selected users if not already got *****/
-   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+	 /***** List of users for selection *****/
+	 ExaSes_ListUsersForSelection (&Exams,&Session);
+     }
 
    /***** Count number of valid users in list of encrypted user codes *****/
    NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
@@ -176,7 +178,7 @@ static void ExaAnsShe_ListOrPrintExamAnsSheets (Vie_ViewType_t ViewType)
       /***** Begin section and box *****/
       if (ViewType == Vie_VIEW)
 	{
-	 HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
+	 HTM_SECTION_Begin (ExaSes_EXAM_SHEET_OPTIONS_SECTION_ID);
 	    if (asprintf (&Title,Txt_List_of_exam_answer_sheets_for_session_X,
 			  Session.Title) < 0)
 	       Err_NotEnoughMemoryExit ();
@@ -200,8 +202,8 @@ static void ExaAnsShe_ListOrPrintExamAnsSheets (Vie_ViewType_t ViewType)
       Usr_FreeListSelectedUsrCods (LstSelectedUsrCods);
      }
 
-   /***** Exam end *****/
    if (ViewType == Vie_VIEW)
+      /***** Exam end *****/
       Exa_ShowOnlyOneExamEnd ();
   }
 

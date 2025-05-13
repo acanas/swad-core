@@ -317,7 +317,8 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
 
 		  if (ShowUsrsInCrs)
 		     /***** Get lists of selected users *****/
-		     Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+		     Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
+							    Usr_GET_LIST_ALL_USRS);
 		 }
 
 	    /***** End section with user list *****/
@@ -752,7 +753,8 @@ void Msg_RecMsgFromUsr (void)
    Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    /* Get lists of selected users */
-   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
+					  Usr_GET_LIST_ALL_USRS);
 
    /* Get list of users' IDs or nicknames written explicitely */
    Error = Usr_GetListMsgRecipientsWrittenExplicitelyBySender (true);

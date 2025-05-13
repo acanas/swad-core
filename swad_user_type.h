@@ -152,4 +152,10 @@ typedef enum
   } Usr_Who_t;
 #define Usr_WHO_DEFAULT Usr_WHO_ALL
 
+typedef enum
+  {
+   Usr_DONT_GET_LIST_ALL_USRS,	// Don't get parameter with list of all users
+   Usr_GET_LIST_ALL_USRS,	// Get parameter with list of all users
+  } Usr_GetListAllUsrs_t;
+
 #endif

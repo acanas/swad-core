@@ -868,7 +868,8 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
    unsigned RecsPerPag = Rec_DEF_RECORDS_PER_PAGE;
 
    /***** Get list of selected users if not already got *****/
-   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
+					  Usr_GET_LIST_ALL_USRS);
 
    /***** Get parameter with number of user records per page (only for printing) *****/
    if (TypeOfView == Rec_SHA_RECORD_PRINT)
@@ -1061,7 +1062,8 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
    unsigned RecsPerPag = Rec_DEF_RECORDS_PER_PAGE;
 
    /***** Get list of selected users if not already got *****/
-   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
+					  Usr_GET_LIST_ALL_USRS);
 
    /***** Get parameter with number of user records per page (only for printing) *****/
    if (ShaTypeOfView == Rec_SHA_RECORD_PRINT)
@@ -1275,7 +1277,8 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    unsigned RecsPerPag = Rec_DEF_RECORDS_PER_PAGE;
 
    /***** Get list of selected users if not already got *****/
-   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
+					  Usr_GET_LIST_ALL_USRS);
 
    /***** Get if I want to see teachers' office hours in teachers' records *****/
    ShowOfficeHours = Rec_GetParShowOfficeHours ();

@@ -87,8 +87,6 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
-				     const struct ExaSes_Session *Session);
 static void ExaSes_ShowHeaderResults (void);
 static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 				         unsigned NumUsr,struct Usr_Data *UsrDat);
@@ -237,15 +235,19 @@ void ExaSes_ShowOneSession (void)
    /***** Exam begin *****/
    Exa_ShowOnlyOneExamBegin (&Exams,Frm_DONT_PUT_FORM);
 
-      /***** List exam prints in session *****/
-      ExaSes_ShowUsersSession (&Exams,&Session);
+      /***** List of users for selection *****/
+      ExaSes_ListUsersForSelection (&Exams,&Session);
 
    /***** Exam end *****/
    Exa_ShowOnlyOneExamEnd ();
   }
 
-static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
-				     const struct ExaSes_Session *Session)
+/*****************************************************************************/
+/**************** List users in an exam session for selection ****************/
+/*****************************************************************************/
+
+void ExaSes_ListUsersForSelection (struct Exa_Exams *Exams,
+				   const struct ExaSes_Session *Session)
   {
    extern const char *Hlp_ASSESSMENT_Exams;
    extern const char *Txt_Session_X;
@@ -277,61 +279,63 @@ static void ExaSes_ShowUsersSession (struct Exa_Exams *Exams,
 	 /***** Begin section with user list *****/
 	 HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
-	    /***** Show pending alerts *****/
-	    Ale_ShowAlerts (Usr_USER_LIST_SECTION_ID);
-
 	    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
 	      {
 	       /***** Initialize structure with user's data *****/
 	       Usr_UsrDataConstructor (&UsrDat);
 
-	       /* Form to select users */
-	       Frm_BeginFormIdAnchor (Act_DoAct_ExaSes,Usr_FORM_TO_SELECT_USRS_ID,
-				      Usr_USER_LIST_SECTION_ID);
-	          Exa_PutPars (Exams);
-		  Grp_PutParsCodGrps ();
-	       Frm_EndForm ();
+		  /* Form to select users */
+		  Frm_BeginFormIdAnchor (Act_DoAct_ExaSes,Usr_FORM_TO_SELECT_USRS_ID,
+					 ExaSes_EXAM_SHEET_OPTIONS_SECTION_ID);
+		     Exa_PutPars (Exams);
+		     Grp_PutParsCodGrps ();
+		  Frm_EndForm ();
 
-	       /* Begin table */
-	       HTM_TABLE_Begin ("TBL_SCROLL");
+		  /* Begin table */
+		  HTM_TABLE_Begin ("TBL_SCROLL");
 
-		  /***** Begin table with list of students *****/
-		  if (!Gbl.Crs.Grps.AllGrpsSel)
-		    {
-		     HTM_TR_Begin (NULL);
-			HTM_TD_Begin ("colspan=\"18\" class=\"TIT CM\"");
-			   Grp_WriteNamesOfSelectedGrps ();
-			HTM_TD_End ();
-		     HTM_TR_End ();
-		    }
+		     /***** Begin table with list of students *****/
+		     if (!Gbl.Crs.Grps.AllGrpsSel)
+		       {
+			HTM_TR_Begin (NULL);
+			   HTM_TD_Begin ("colspan=\"18\" class=\"TIT CM\"");
+			      Grp_WriteNamesOfSelectedGrps ();
+			   HTM_TD_End ();
+			HTM_TR_End ();
+		       }
 
-		  /***** Put a row to select all users *****/
-		  Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_STD,18);
+		     /***** Put a row to select all users *****/
+		     Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_STD,18);
 
-		  /* Header */
-		  ExaSes_ShowHeaderResults ();
+		     /* Header */
+		     ExaSes_ShowHeaderResults ();
 
-		  /* List of students */
-		  for (NumUsr = 0;
-		       NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
-		       NumUsr++)
-		    {
-		     /* Copy user's basic data from list */
-		     Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
+		     /* List of students */
+		     for (NumUsr = 0;
+			  NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
+			  NumUsr++)
+		       {
+			/* Copy user's basic data from list */
+			Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
 
-		     /* Get list of user's IDs */
-		     ID_GetListIDsFromUsrCod (&UsrDat);
+			/* Get list of user's IDs */
+			ID_GetListIDsFromUsrCod (&UsrDat);
 
-		     /* Write a row for this user */
-		     ExaSes_WriteRowUsrInSession (Exams,NumUsr + 1,&UsrDat);
-		    }
+			/* Write a row for this user */
+			ExaSes_WriteRowUsrInSession (Exams,NumUsr + 1,&UsrDat);
+		       }
 
-	       /* End table */
-	       HTM_TABLE_End ();
+		  /* End table */
+		  HTM_TABLE_End ();
 
-	       /* Send button */
-	       ExaSes_SetOptionsListUsrsAllowed (ICanChooseOption);
-	       Usr_PutOptionsListUsrs (ICanChooseOption);
+		  /***** Show pending alerts *****/
+		  Ale_ShowAlerts (Usr_USER_LIST_SECTION_ID);
+
+		  /* Options and continue button */
+		  HTM_SECTION_Begin (ExaSes_EXAM_SHEET_OPTIONS_SECTION_ID);
+		     ExaSes_SetOptionsListUsrsAllowed (ICanChooseOption);
+		     Usr_PutOptionsListUsrs (ICanChooseOption);
+		  HTM_SECTION_End ();
 
 	       /***** Free memory used for user's data *****/
 	       Usr_UsrDataDestructor (&UsrDat);

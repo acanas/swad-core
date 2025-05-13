@@ -1228,7 +1228,8 @@ void Prj_GetPars (struct Prj_Projects *Projects,
    /***** Get selected users *****/
    if (Projects->Filter.Who == Usr_WHO_SELECTED &&
        UseListSelectedUsrs == Usr_USE_LIST_SELECTED_USERS)
-      Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+      Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
+					     Usr_GET_LIST_ALL_USRS);
   }
 
 /*****************************************************************************/

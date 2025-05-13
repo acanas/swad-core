@@ -1962,34 +1962,36 @@ void Att_RegisterStudentsInEvent (void)
          Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].Remove = true;
 
       /***** 3. Get list of students marked as present by me: Gbl.Usrs.Selected.List[Rol_STD] *****/
-      Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
-
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrData);
+      Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
+					     Usr_DONT_GET_LIST_ALL_USRS);
 
       /***** 4. Loop over the list Gbl.Usrs.Selected.List[Rol_STD],
                 that holds the list of the students marked as present,
                 marking the students in Gbl.Usrs.LstUsrs[Rol_STD].Lst as Remove=false *****/
-      for (Ptr = Gbl.Usrs.Selected.List[Rol_STD];
-           *Ptr;
-          )
-	{
-	 Par_GetNextStrUntilSeparParMult (&Ptr,UsrData.EnUsrCod,
-	                                  Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-	 Usr_GetUsrCodFromEncryptedUsrCod (&UsrData);
-	 if (UsrData.UsrCod > 0)	// Student exists in database
-	    /***** Mark student to not be removed *****/
-	    for (NumUsr = 0;
-		 NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
-		 NumUsr++)
-	       if (Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod == UsrData.UsrCod)
-		 {
-		  Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].Remove = false;
-	          break;	// Found! Exit loop
-	         }
-	}
+      /* Initialize structure with user's data */
+      Usr_UsrDataConstructor (&UsrData);
 
-      /***** Free memory used for user's data *****/
+         /* For each students marked as present... */
+	 for (Ptr = Gbl.Usrs.Selected.List[Rol_STD];
+	      *Ptr;
+	     )
+	   {
+	    Par_GetNextStrUntilSeparParMult (&Ptr,UsrData.EnUsrCod,
+					     Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+	    Usr_GetUsrCodFromEncryptedUsrCod (&UsrData);
+	    if (UsrData.UsrCod > 0)	// Student exists in database
+	       /* Mark student to not be removed */
+	       for (NumUsr = 0;
+		    NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
+		    NumUsr++)
+		  if (Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod == UsrData.UsrCod)
+		    {
+		     Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].Remove = false;
+		     break;	// Found! Exit loop
+		    }
+	   }
+
+      /* Free memory used for user's data */
       Usr_UsrDataDestructor (&UsrData);
 
       /***** Free memory *****/

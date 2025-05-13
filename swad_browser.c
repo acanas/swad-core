@@ -1967,7 +1967,8 @@ void Brw_GetParAndInitFileBrowser (void)
    else if (Brw_TypeIsAdmCrsAsgWrk[Gbl.FileBrowser.Type])
      {
       /* Get lists of the selected users if not already got */
-      Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+      Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
+					     Usr_GET_LIST_ALL_USRS);
       /* Get user whose folder will be used to make any operation */
       Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
       /* Get whether we must create the zip file or not */
