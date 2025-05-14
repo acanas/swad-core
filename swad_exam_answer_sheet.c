@@ -53,6 +53,16 @@
 #include "swad_view.h"
 
 /*****************************************************************************/
+/******************************* Private types *******************************/
+/*****************************************************************************/
+
+typedef enum
+  {
+   ExaAnsShe_BLANK,
+   ExaAnsShe_SOLVED,
+  } ExaAnsShe_BlankOrSolved_t;
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -62,30 +72,37 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void ExaAnsShe_ListOrPrintExamAnsSheets (Vie_ViewType_t ViewType);
+static void ExaAnsShe_ListOrPrintSheets (Vie_ViewType_t ViewType,
+					 ExaAnsShe_BlankOrSolved_t BlankOrSolved);
 static void ExaAnsShe_PutIconsPrintExamAnsSheets (void *Exams);
 static void ExaAnsShe_PutParsToPrintExamAnsSheets (void *Exams);
-static void ExaAnsShe_ShowMultipleExamAnsSheets (struct Exa_Exams *Exams,
-						 const struct ExaSes_Session *Session,
-						 Vie_ViewType_t ViewType,
-						 unsigned NumUsrsInList,
-						 long *LstSelectedUsrCods);
-static void ExaAnsShe_GetQstsAndShowExamAnsSheet (struct Exa_Exams *Exams,
-						  const struct ExaSes_Session *Session,
-						  Vie_ViewType_t ViewType,
-						  struct Usr_Data *UsrDat);
-static void ExaAnsShe_ShowExamAnsSheet (struct Exa_Exams *Exams,
-					const struct ExaSes_Session *Session,
-					Vie_ViewType_t ViewType,
-					struct Usr_Data *UsrDat,
-					struct ExaPrn_Print *Print);
-static void ExaAnsShe_ShowTableAnswers (const struct Usr_Data *UsrDat,
+static void ExaAnsShe_ShowMultipleSheets (struct Exa_Exams *Exams,
+					  const struct ExaSes_Session *Session,
+					  Vie_ViewType_t ViewType,
+					  ExaAnsShe_BlankOrSolved_t BlankOrSolved,
+					  unsigned NumUsrsInList,
+					  long *LstSelectedUsrCods);
+static void ExaAnsShe_GetQstsAndShowSheet (struct Exa_Exams *Exams,
+					   const struct ExaSes_Session *Session,
+					   Vie_ViewType_t ViewType,
+					   ExaAnsShe_BlankOrSolved_t BlankOrSolved,
+					   struct Usr_Data *UsrDat);
+static void ExaAnsShe_ShowSheet (struct Exa_Exams *Exams,
+			         const struct ExaSes_Session *Session,
+			         Vie_ViewType_t ViewType,
+			         ExaAnsShe_BlankOrSolved_t BlankOrSolved,
+			         struct Usr_Data *UsrDat,
+			         struct ExaPrn_Print *Print);
+static void ExaAnsShe_ShowTableAnswers (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
+					const struct Usr_Data *UsrDat,
 					const struct ExaPrn_Print *Print);
-static void ExaAnsShe_WriteQst (const struct Usr_Data *UsrDat,
+static void ExaAnsShe_WriteQst (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
+				const struct Usr_Data *UsrDat,
 			        const struct ExaPrn_Print *Print,
                                 unsigned QstInd,
                                 struct Qst_Question *Question);
-static void ExaAnsShe_WriteAnswers (const struct Usr_Data *UsrDat,
+static void ExaAnsShe_WriteAnswers (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
+				    const struct Usr_Data *UsrDat,
 				    const struct ExaPrn_Print *Print,
 				    unsigned QstInd,
 				    struct Qst_Question *Question);
@@ -116,17 +133,28 @@ static void ExaAnsShe_WriteHeadStudent (const struct Usr_Data *UsrDat);
 /****** Display/Print selected exam answer sheets from an exam session *******/
 /*****************************************************************************/
 
-void ExaAnsShe_ListExamAnsSheets (void)
+void ExaAnsShe_ListBlankSheets (void)
   {
-   ExaAnsShe_ListOrPrintExamAnsSheets (Vie_VIEW);
+   ExaAnsShe_ListOrPrintSheets (Vie_VIEW,ExaAnsShe_BLANK);
   }
 
-void ExaAnsShe_PrintExamAnsSheets (void)
+void ExaAnsShe_PrintBlankSheets (void)
   {
-   ExaAnsShe_ListOrPrintExamAnsSheets (Vie_PRINT);
+   ExaAnsShe_ListOrPrintSheets (Vie_PRINT,ExaAnsShe_BLANK);
   }
 
-static void ExaAnsShe_ListOrPrintExamAnsSheets (Vie_ViewType_t ViewType)
+void ExaAnsShe_ListSolvedSheets (void)
+  {
+   ExaAnsShe_ListOrPrintSheets (Vie_VIEW,ExaAnsShe_SOLVED);
+  }
+
+void ExaAnsShe_PrintSolvedSheets (void)
+  {
+   ExaAnsShe_ListOrPrintSheets (Vie_PRINT,ExaAnsShe_SOLVED);
+  }
+
+static void ExaAnsShe_ListOrPrintSheets (Vie_ViewType_t ViewType,
+					 ExaAnsShe_BlankOrSolved_t BlankOrSolved)
   {
    extern const char *Hlp_ASSESSMENT_Exams;	// TODO: Change to link to section of listing/printing selected exams in a session
    extern const char *Txt_List_of_exam_answer_sheets_for_session_X;
@@ -188,8 +216,8 @@ static void ExaAnsShe_ListOrPrintExamAnsSheets (Vie_ViewType_t ViewType)
 	}
 
       /***** Show table with exam templates *****/
-      ExaAnsShe_ShowMultipleExamAnsSheets (&Exams,&Session,ViewType,
-				  NumUsrsInList,LstSelectedUsrCods);
+      ExaAnsShe_ShowMultipleSheets (&Exams,&Session,ViewType,BlankOrSolved,
+				    NumUsrsInList,LstSelectedUsrCods);
 
       /***** End box and section *****/
       if (ViewType == Vie_VIEW)
@@ -232,11 +260,12 @@ static void ExaAnsShe_PutParsToPrintExamAnsSheets (void *Exams)
 /***** Show table with selected exam answer sheets from an exam session ******/
 /*****************************************************************************/
 
-static void ExaAnsShe_ShowMultipleExamAnsSheets (struct Exa_Exams *Exams,
-						 const struct ExaSes_Session *Session,
-						 Vie_ViewType_t ViewType,
-						 unsigned NumUsrsInList,
-						 long *LstSelectedUsrCods)
+static void ExaAnsShe_ShowMultipleSheets (struct Exa_Exams *Exams,
+					  const struct ExaSes_Session *Session,
+					  Vie_ViewType_t ViewType,
+					  ExaAnsShe_BlankOrSolved_t BlankOrSolved,
+					  unsigned NumUsrsInList,
+					  long *LstSelectedUsrCods)
   {
    struct Usr_Data UsrDat;
    unsigned NumUsr;
@@ -258,7 +287,8 @@ static void ExaAnsShe_ShowMultipleExamAnsSheets (struct Exa_Exams *Exams,
 	 HTM_DIV_Begin (ViewType == Vie_PRINT &&
 	                NumUsr ? "style=\"break-before:page;\"" :
 				 NULL);
-	    ExaAnsShe_GetQstsAndShowExamAnsSheet (Exams,Session,ViewType,&UsrDat);
+	    ExaAnsShe_GetQstsAndShowSheet (Exams,Session,
+					   ViewType,BlankOrSolved,&UsrDat);
 	 HTM_DIV_End ();
 	}
      }
@@ -271,10 +301,11 @@ static void ExaAnsShe_ShowMultipleExamAnsSheets (struct Exa_Exams *Exams,
 /**************** Get questions and show an exam answer sheet ****************/
 /*****************************************************************************/
 
-static void ExaAnsShe_GetQstsAndShowExamAnsSheet (struct Exa_Exams *Exams,
-						  const struct ExaSes_Session *Session,
-						  Vie_ViewType_t ViewType,
-						  struct Usr_Data *UsrDat)
+static void ExaAnsShe_GetQstsAndShowSheet (struct Exa_Exams *Exams,
+					   const struct ExaSes_Session *Session,
+					   Vie_ViewType_t ViewType,
+					   ExaAnsShe_BlankOrSolved_t BlankOrSolved,
+					   struct Usr_Data *UsrDat)
   {
    struct ExaPrn_Print Print;
 
@@ -283,18 +314,19 @@ static void ExaAnsShe_GetQstsAndShowExamAnsSheet (struct Exa_Exams *Exams,
 			false);	// Start/resume
 
    /***** Show exam answer sheet *****/
-   ExaAnsShe_ShowExamAnsSheet (Exams,Session,ViewType,UsrDat,&Print);
+   ExaAnsShe_ShowSheet (Exams,Session,ViewType,BlankOrSolved,UsrDat,&Print);
   }
 
 /*****************************************************************************/
 /*************************** Show exam answer sheet **************************/
 /*****************************************************************************/
 
-static void ExaAnsShe_ShowExamAnsSheet (struct Exa_Exams *Exams,
-					const struct ExaSes_Session *Session,
-					Vie_ViewType_t ViewType,
-					struct Usr_Data *UsrDat,
-					struct ExaPrn_Print *Print)
+static void ExaAnsShe_ShowSheet (struct Exa_Exams *Exams,
+			         const struct ExaSes_Session *Session,
+			         Vie_ViewType_t ViewType,
+			         ExaAnsShe_BlankOrSolved_t BlankOrSolved,
+			         struct Usr_Data *UsrDat,
+			         struct ExaPrn_Print *Print)
   {
    extern const char *Hlp_ASSESSMENT_Exams_answer_exam;
 
@@ -317,7 +349,7 @@ static void ExaAnsShe_ShowExamAnsSheet (struct Exa_Exams *Exams,
 
    /***** Show table with answers *****/
    if (Print->NumQsts.All)
-      ExaAnsShe_ShowTableAnswers (UsrDat,Print);
+      ExaAnsShe_ShowTableAnswers (BlankOrSolved,UsrDat,Print);
 
    /***** End box *****/
    if (ViewType == Vie_VIEW)
@@ -328,9 +360,18 @@ static void ExaAnsShe_ShowExamAnsSheet (struct Exa_Exams *Exams,
 /************ Show the main part (table) of an exam answer sheet *************/
 /*****************************************************************************/
 
-static void ExaAnsShe_ShowTableAnswers (const struct Usr_Data *UsrDat,
+static void ExaAnsShe_ShowTableAnswers (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
+					const struct Usr_Data *UsrDat,
 					const struct ExaPrn_Print *Print)
   {
+   static struct ExaSet_Set CurrentSet =
+     {
+      .ExaCod = -1L,
+      .SetCod = -1L,
+      .SetInd = 0,
+      .NumQstsToPrint = 0,
+      .Title[0] = '\0'
+     };
    unsigned QstInd;
    struct Qst_Question Question;
 
@@ -342,6 +383,24 @@ static void ExaAnsShe_ShowTableAnswers (const struct Usr_Data *UsrDat,
 	   QstInd < Print->NumQsts.All;
 	   QstInd++)
 	{
+	 /* If this is the first question */
+	 if (QstInd == 0)
+	    CurrentSet.SetCod = -1L;	// Reset current set
+
+	 if (Print->PrintedQuestions[QstInd].SetCod != CurrentSet.SetCod)
+	   {
+	    /* Get data of this set */
+	    CurrentSet.SetCod = Print->PrintedQuestions[QstInd].SetCod;
+	    ExaSet_GetSetDataByCod (&CurrentSet);
+
+	    /* Title for this set */
+	    HTM_TR_Begin (NULL);
+	       HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",The_GetColorRows ());
+		  ExaSet_WriteSetTitle (&CurrentSet);
+	       HTM_TD_End ();
+	    HTM_TR_End ();
+	   }
+
 	 /* Create test question */
 	 Qst_QstConstructor (&Question);
 
@@ -350,7 +409,7 @@ static void ExaAnsShe_ShowTableAnswers (const struct Usr_Data *UsrDat,
 	    ExaSet_GetQstDataFromDB (&Question);
 
 	    /* Write question answers */
-	    ExaAnsShe_WriteQst (UsrDat,Print,QstInd,&Question);
+	    ExaAnsShe_WriteQst (BlankOrSolved,UsrDat,Print,QstInd,&Question);
 
 	 /* Destroy test question */
 	 Qst_QstDestructor (&Question);
@@ -364,38 +423,12 @@ static void ExaAnsShe_ShowTableAnswers (const struct Usr_Data *UsrDat,
 /*** Write a row of an exam answer sheet, with the answer to one question ****/
 /*****************************************************************************/
 
-static void ExaAnsShe_WriteQst (const struct Usr_Data *UsrDat,
+static void ExaAnsShe_WriteQst (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
+				const struct Usr_Data *UsrDat,
 			        const struct ExaPrn_Print *Print,
                                 unsigned QstInd,
                                 struct Qst_Question *Question)
   {
-   static struct ExaSet_Set CurrentSet =
-     {
-      .ExaCod = -1L,
-      .SetCod = -1L,
-      .SetInd = 0,
-      .NumQstsToPrint = 0,
-      .Title[0] = '\0'
-     };
-
-   /***** If this is the first question *****/
-   if (QstInd == 0)
-      CurrentSet.SetCod = -1L;	// Reset current set
-
-   if (Print->PrintedQuestions[QstInd].SetCod != CurrentSet.SetCod)
-     {
-      /***** Get data of this set *****/
-      CurrentSet.SetCod = Print->PrintedQuestions[QstInd].SetCod;
-      ExaSet_GetSetDataByCod (&CurrentSet);
-
-      /***** Title for this set *****/
-      HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",The_GetColorRows ());
-	    ExaSet_WriteSetTitle (&CurrentSet);
-	 HTM_TD_End ();
-      HTM_TR_End ();
-     }
-
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
@@ -409,7 +442,7 @@ static void ExaAnsShe_WriteQst (const struct Usr_Data *UsrDat,
       HTM_TD_Begin ("class=\"LT\"");
 
 	 /* Answers */
-	 ExaAnsShe_WriteAnswers (UsrDat,Print,QstInd,Question);
+	 ExaAnsShe_WriteAnswers (BlankOrSolved,UsrDat,Print,QstInd,Question);
 
       HTM_TD_End ();
 
@@ -421,15 +454,28 @@ static void ExaAnsShe_WriteQst (const struct Usr_Data *UsrDat,
 /************ Write answers of a question in an exam answer sheet ************/
 /*****************************************************************************/
 
-static void ExaAnsShe_WriteAnswers (const struct Usr_Data *UsrDat,
+static void ExaAnsShe_WriteAnswers (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
+				    const struct Usr_Data *UsrDat,
 				    const struct ExaPrn_Print *Print,
 				    unsigned QstInd,
 				    struct Qst_Question *Question)
   {
-   void (*ExaAnsShe_WriteAns[Qst_NUM_ANS_TYPES]) (const struct Usr_Data *UsrDat,
-					          const struct ExaPrn_Print *Print,
-					          unsigned QstInd,
-					          struct Qst_Question *Question) =
+   static void (*ExaAnsShe_WriteBlankAns[Qst_NUM_ANS_TYPES]) (const struct Usr_Data *UsrDat,
+							      const struct ExaPrn_Print *Print,
+							      unsigned QstInd,
+							      struct Qst_Question *Question) =
+    {
+     [Qst_ANS_INT            ] = ExaAnsShe_WriteIntAns,
+     [Qst_ANS_FLOAT          ] = ExaAnsShe_WriteFltAns,
+     [Qst_ANS_TRUE_FALSE     ] = ExaAnsShe_WriteTF_Ans,
+     [Qst_ANS_UNIQUE_CHOICE  ] = ExaAnsShe_WriteChoAns,
+     [Qst_ANS_MULTIPLE_CHOICE] = ExaAnsShe_WriteChoAns,
+     [Qst_ANS_TEXT           ] = ExaAnsShe_WriteTxtAns,
+    };
+   static void (*ExaAnsShe_WriteSolvedAns[Qst_NUM_ANS_TYPES]) (const struct Usr_Data *UsrDat,
+							       const struct ExaPrn_Print *Print,
+							       unsigned QstInd,
+							       struct Qst_Question *Question) =
     {
      [Qst_ANS_INT            ] = ExaAnsShe_WriteIntAns,
      [Qst_ANS_FLOAT          ] = ExaAnsShe_WriteFltAns,
@@ -439,8 +485,17 @@ static void ExaAnsShe_WriteAnswers (const struct Usr_Data *UsrDat,
      [Qst_ANS_TEXT           ] = ExaAnsShe_WriteTxtAns,
     };
 
-   /***** Get correct answer and compute answer score depending on type *****/
-   ExaAnsShe_WriteAns[Question->Answer.Type] (UsrDat,Print,QstInd,Question);
+   switch (BlankOrSolved)
+     {
+      case ExaAnsShe_BLANK:
+	 ExaAnsShe_WriteBlankAns[Question->Answer.Type] (UsrDat,Print,QstInd,Question);
+	 break;
+      case ExaAnsShe_SOLVED:
+	 ExaAnsShe_WriteSolvedAns[Question->Answer.Type] (UsrDat,Print,QstInd,Question);
+	 break;
+      default:
+	 break;
+     }
   }
 
 /*****************************************************************************/

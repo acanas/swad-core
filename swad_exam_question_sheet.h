@@ -35,7 +35,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ExaQstShe_ListExamQstSheets (void);
-void ExaQstShe_PrintExamQstSheets (void);
+void ExaQstShe_ListSheets (void);
+void ExaQstShe_PrintSheets (void);
 
 #endif

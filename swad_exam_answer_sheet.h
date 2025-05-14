@@ -35,7 +35,9 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ExaAnsShe_ListExamAnsSheets (void);
-void ExaAnsShe_PrintExamAnsSheets (void);
+void ExaAnsShe_ListBlankSheets (void);
+void ExaAnsShe_PrintBlankSheets (void);
+void ExaAnsShe_ListSolvedSheets (void);
+void ExaAnsShe_PrintSolvedSheets (void);
 
 #endif
