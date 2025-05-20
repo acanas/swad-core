@@ -3750,6 +3750,18 @@ legend {font-size: 12pt; font-weight: bold;}
 	margin: 1%;
 	}
 
+.EXA_TBL td,.Ind_TBL th
+	{
+	border: 1px solid silver;
+	border-collapse: collapse;
+	padding: 1px;
+	}
+.EXA_BLANK_ANSWER_INT,
+.EXA_BLANK_ANSWER_FLOAT		{width: 200px; text-align: center; vertical-align: middle;}
+.EXA_BLANK_ANSWER_TF,
+.EXA_BLANK_ANSWER_CHOICE	{width: 20px; text-align: center; vertical-align: middle;}
+.EXA_BLANK_ANSWER_TEXT		{width: 400px; text-align: center; vertical-align: middle;}
+
 /********************************** Matches **********************************/
 .MCH_BG
 	{

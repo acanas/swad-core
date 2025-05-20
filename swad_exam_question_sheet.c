@@ -144,6 +144,10 @@ static void ExaQstShe_ListOrPrintSheets (Vie_ViewType_t ViewType)
 	 ExaSes_ListUsersForSelection (&Exams,&Session);
      }
 
+   /***** Get list of selected users if not already got (necessary when *****/
+   Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
+					  Usr_GET_LIST_ALL_USRS);
+
    /***** Count number of valid users in list of encrypted user codes *****/
    NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
 
