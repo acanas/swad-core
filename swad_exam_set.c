@@ -646,7 +646,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 
 	    /***** Current number of questions in set *****/
 	    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
-	       HTM_SPAN_Begin ("class=\"EXA_SET_NUM_QSTS_%s\"",
+	       HTM_SPAN_Begin ("class=\"Exa_SET_NUM_QSTS_%s\"",
 			       The_GetSuffix ());
 		  HTM_Unsigned (Exa_DB_GetNumQstsInSet (Set.SetCod));
 	       HTM_SPAN_End ();
@@ -667,7 +667,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 		 }
 	       else
 		 {
-		  HTM_SPAN_Begin ("class=\"EXA_SET_NUM_QSTS_%s\"",
+		  HTM_SPAN_Begin ("class=\"Exa_SET_NUM_QSTS_%s\"",
 				  The_GetSuffix ());
 		     HTM_Unsigned (Set.NumQstsToPrint);
 		  HTM_SPAN_End ();
@@ -1040,11 +1040,6 @@ static void ExaSet_ListQuestionForEdition (struct Qst_Question *Question,
       [ExaSet_INVALID_QUESTION] = "BIG_INDEX_RED",
       [ExaSet_VALID_QUESTION  ] = "BIG_INDEX",
      };
-   const char *ClassAnswerType[ExaSet_NUM_VALIDITIES] =
-     {
-      [ExaSet_INVALID_QUESTION] = "DAT_SMALL_RED",
-      [ExaSet_VALID_QUESTION  ] = "DAT_SMALL",
-     };
    static const char *ClassTxt[ExaSet_NUM_VALIDITIES] =
      {
       [ExaSet_INVALID_QUESTION] = "Qst_TXT_RED",
@@ -1059,8 +1054,7 @@ static void ExaSet_ListQuestionForEdition (struct Qst_Question *Question,
    /***** Number of question and answer type (row[1]) *****/
    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
       Lay_WriteIndex (QstInd,ClassNumQst[Question->Validity]);
-      Qst_WriteAnswerType (Question->Answer.Type,
-                           ClassAnswerType[Question->Validity]);
+      Qst_WriteAnswerType (Question->Answer.Type,Question->Validity);
    HTM_TD_End ();
 
    /***** Write stem (row[3]) and media *****/
@@ -1073,8 +1067,7 @@ static void ExaSet_ListQuestionForEdition (struct Qst_Question *Question,
 
 	 /* Show media */
 	 Med_ShowMedia (&Question->Media,
-			"Tst_MED_EDIT_LIST_CONT",
-			"Tst_MED_EDIT_LIST");
+			"Tst_MED_EDIT_LIST_CONT","Tst_MED_EDIT_LIST");
 
 	 /* Show feedback */
 	 Qst_WriteQstFeedback (Question->Feedback,
@@ -1674,7 +1667,7 @@ void ExaSet_WriteSetTitle (const struct ExaSet_Set *Set)
       HTM_TD_End ();
 
       /***** Number of questions to appear in exam print *****/
-      HTM_TD_Begin ("class=\"EXA_SET_NUM_QSTS_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Exa_SET_NUM_QSTS_%s\"",The_GetSuffix ());
 	 HTM_UnsignedTxt (Set->NumQstsToPrint,Txt_question,Txt_questions);
       HTM_TD_End ();
 

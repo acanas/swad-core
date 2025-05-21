@@ -326,6 +326,8 @@ static void ExaQstShe_ShowTableQuestions (const struct ExaPrn_Print *Print)
    unsigned QstInd;
    struct Qst_Question Question;
 
+   CurrentSet.SetCod = -1L;	// Reset current set
+
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (10);
 
@@ -334,10 +336,6 @@ static void ExaQstShe_ShowTableQuestions (const struct ExaPrn_Print *Print)
 	   QstInd < Print->NumQsts.All;
 	   QstInd++)
 	{
-	 /* If this is the first question */
-	 if (QstInd == 0)
-	    CurrentSet.SetCod = -1L;	// Reset current set
-
 	 if (Print->PrintedQuestions[QstInd].SetCod != CurrentSet.SetCod)
 	   {
 	    /* Get data of this set */
@@ -384,23 +382,14 @@ static void ExaQstShe_WriteQst (const struct ExaPrn_Print *Print,
       /***** Number of question and answer type *****/
       HTM_TD_Begin ("class=\"RT\"");
 	 Lay_WriteIndex (QstInd + 1,"BIG_INDEX");
-	 Qst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
+	 Qst_WriteAnswerType (Question->Answer.Type,Question->Validity);
       HTM_TD_End ();
 
       /***** Stem, media and answers *****/
-      HTM_TD_Begin ("class=\"LT\"");
-
-	 /* Stem */
+      HTM_TD_Begin ("class=\"LM\"");
 	 Qst_WriteQstStem (Question->Stem,"Qst_TXT",HidVis_VISIBLE);
-
-	 /* Media */
-	 Med_ShowMedia (&Question->Media,
-			"Tst_MED_SHOW_CONT",
-			"Tst_MED_SHOW");
-
-	 /* Answers */
+	 Med_ShowMedia (&Question->Media,"Tst_MED_SHOW_CONT","Tst_MED_SHOW");
 	 ExaQstShe_WriteAnswers (Print,QstInd,Question);
-
       HTM_TD_End ();
 
    /***** End row *****/
@@ -489,8 +478,7 @@ static void ExaQstShe_WriteChoAns (const struct ExaPrn_Print *Print,
 		  HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
 	       HTM_LABEL_End ();
 	       Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
-			      "Tst_MED_SHOW_CONT",
-			      "Tst_MED_SHOW");
+			      "Tst_MED_SHOW_CONT","Tst_MED_SHOW");
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();

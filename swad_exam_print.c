@@ -725,7 +725,7 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
       /***** Number of question and answer type *****/
       HTM_TD_Begin ("class=\"RT\"");
 	 Lay_WriteIndex (QstInd + 1,"BIG_INDEX");
-	 Qst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
+	 Qst_WriteAnswerType (Question->Answer.Type,Question->Validity);
       HTM_TD_End ();
 
       /***** Stem, media and answers *****/
@@ -735,9 +735,7 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
 	 Qst_WriteQstStem (Question->Stem,"Qst_TXT",HidVis_VISIBLE);
 
 	 /* Media */
-	 Med_ShowMedia (&Question->Media,
-			"Tst_MED_SHOW_CONT",
-			"Tst_MED_SHOW");
+	 Med_ShowMedia (&Question->Media,"Tst_MED_SHOW_CONT","Tst_MED_SHOW");
 
 	 /* Answers */
 	 Frm_BeginFormNoAction ();	// Form that can not be submitted, to avoid enter key to send it
@@ -911,8 +909,7 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
 		  HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
 	       HTM_LABEL_End ();
 	       Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
-			      "Tst_MED_SHOW_CONT",
-			      "Tst_MED_SHOW");
+			      "Tst_MED_SHOW_CONT","Tst_MED_SHOW");
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();

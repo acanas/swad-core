@@ -517,7 +517,7 @@ void Qst_ListQuestionForEdition (struct Qst_Question *Question,
    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
       Lay_WriteIndex (QstInd,"BIG_INDEX");
       if (QuestionExists)
-	 Qst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
+	 Qst_WriteAnswerType (Question->Answer.Type,Question->Validity);
    HTM_TD_End ();
 
    /***** Write question code *****/
@@ -543,8 +543,7 @@ void Qst_ListQuestionForEdition (struct Qst_Question *Question,
 
 	    /* Show media */
 	    Med_ShowMedia (&Question->Media,
-			   "Tst_MED_EDIT_LIST_CONT",
-			   "Tst_MED_EDIT_LIST");
+			   "Tst_MED_EDIT_LIST_CONT","Tst_MED_EDIT_LIST");
 
 	    /* Show feedback */
 	    Qst_WriteQstFeedback (Question->Feedback,"Qst_TXT_LIGHT");
@@ -566,11 +565,16 @@ void Qst_ListQuestionForEdition (struct Qst_Question *Question,
 /************************** Write the type of answer *************************/
 /*****************************************************************************/
 
-void Qst_WriteAnswerType (Qst_AnswerType_t AnswerType,const char *Class)
+void Qst_WriteAnswerType (Qst_AnswerType_t AnswerType,ExaSet_Validity_t Validity)
   {
    extern const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES];
+   static const char *Class[ExaSet_NUM_VALIDITIES] =
+     {
+      [ExaSet_INVALID_QUESTION] = "Qst_TYPE_INVALID",
+      [ExaSet_VALID_QUESTION  ] = "Qst_TYPE_VALID",
+     };
 
-   HTM_DIV_Begin ("class=\"%s_%s\"",Class,The_GetSuffix ());
+   HTM_DIV_Begin ("class=\"%s_%s\"",Class[Validity],The_GetSuffix ());
       HTM_Txt (Txt_TST_STR_ANSWER_TYPES[AnswerType]);
    HTM_DIV_End ();
   }
@@ -654,9 +658,7 @@ static void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedi
 			     "value=\"%u\"",(unsigned) Med_ACTION_KEEP_MEDIA);
 	    HTM_Txt (Txt_Current_image_video);
 	 HTM_LABEL_End ();
-	 Med_ShowMedia (Media,
-			"Tst_MED_EDIT_ONE_CONT",
-			"Tst_MED_EDIT_ONE");
+	 Med_ShowMedia (Media,"Tst_MED_EDIT_ONE_CONT","Tst_MED_EDIT_ONE");
 
 	 /***** Choice 3: Change media *****/
 	 UniqueId++;
@@ -959,7 +961,8 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 	 /* Number of question and answer type */
 	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 	    Lay_WriteIndex (QstInd + 1,"BIG_INDEX");
-	    Qst_WriteAnswerType (Questions->Question.Answer.Type,"DAT_SMALL");
+	    Qst_WriteAnswerType (Questions->Question.Answer.Type,
+				 Questions->Question.Validity);
 	 HTM_TD_End ();
 
 	 /* Question code */
@@ -1012,8 +1015,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 
 	    /***** Get and show media (row[5]) *****/
 	    Med_ShowMedia (&Questions->Question.Media,
-			   "Tst_MED_EDIT_LIST_CONT",
-			   "Tst_MED_EDIT_LIST");
+			   "Tst_MED_EDIT_LIST_CONT","Tst_MED_EDIT_LIST");
 
 	    /* Feedback (row[4]) and answers */
 	    Qst_WriteQstFeedback (Questions->Question.Feedback,"Qst_TXT_LIGHT");
@@ -1318,8 +1320,7 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 
 	    /***** Get and show media *****/
 	    Med_ShowMedia (&Question->Media,
-			   "Tst_MED_EDIT_LIST_CONT",
-			   "Tst_MED_EDIT_LIST");
+			   "Tst_MED_EDIT_LIST_CONT","Tst_MED_EDIT_LIST");
 
 	    /* Write feedback */
 	    Qst_WriteQstFeedback (Question->Feedback,"Qst_TXT_LIGHT");
@@ -1502,8 +1503,7 @@ static void Qst_WriteChoAns (struct Qst_Question *Question,
 	       HTM_DIV_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
 		  HTM_Txt (Question->Answer.Options[NumOpt].Text);
 		  Med_ShowMedia (&Question->Answer.Options[NumOpt].Media,
-				 "Tst_MED_EDIT_LIST_CONT",
-				 "Tst_MED_EDIT_LIST");
+				 "Tst_MED_EDIT_LIST_CONT","Tst_MED_EDIT_LIST");
 	       HTM_DIV_End ();
 
 	       /* Write the text of the feedback */

@@ -287,7 +287,7 @@ static void TstPrn_WriteQstAndAnsToFill (struct TstPrn_PrintedQuestion *PrintedQ
       /***** Number of question and answer type *****/
       HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 	 Lay_WriteIndex (QstInd + 1,"BIG_INDEX");
-	 Qst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
+	 Qst_WriteAnswerType (Question->Answer.Type,Question->Validity);
       HTM_TD_End ();
 
       /***** Stem, media and answers *****/
@@ -300,9 +300,7 @@ static void TstPrn_WriteQstAndAnsToFill (struct TstPrn_PrintedQuestion *PrintedQ
 	 Qst_WriteQstStem (Question->Stem,"Qst_TXT",HidVis_VISIBLE);
 
 	 /* Media */
-	 Med_ShowMedia (&Question->Media,
-			"Tst_MED_SHOW_CONT",
-			"Tst_MED_SHOW");
+	 Med_ShowMedia (&Question->Media,"Tst_MED_SHOW_CONT","Tst_MED_SHOW");
 
 	 /* Answers */
 	 TstPrn_WriteAnswersToFill (PrintedQuestion,QstInd,Question);
@@ -483,8 +481,7 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
 		  HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
 	       HTM_LABEL_End ();
 	       Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
-			      "Tst_MED_SHOW_CONT",
-			      "Tst_MED_SHOW");
+			      "Tst_MED_SHOW_CONT","Tst_MED_SHOW");
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -652,7 +649,7 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
       HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 	 Lay_WriteIndex (QstInd + 1,"BIG_INDEX");
 	 if (QuestionUneditedAfterExam)
-	    Qst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
+	    Qst_WriteAnswerType (Question->Answer.Type,Question->Validity);
       HTM_TD_End ();
 
       /***** Stem, media and answers *****/
@@ -669,8 +666,7 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 	       /* Media */
 	       if (ICanView[TstVis_VISIBLE_QST_ANS_TXT] == Usr_CAN)
 		  Med_ShowMedia (&Question->Media,
-				 "Tst_MED_SHOW_CONT",
-				 "Tst_MED_SHOW");
+				 "Tst_MED_SHOW_CONT","Tst_MED_SHOW");
 
 	       /* Answers */
 	       TstPrn_ComputeAnswerScore (&PrintedQuestions[QstInd],Question);
@@ -1506,8 +1502,7 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
 		     case Usr_CAN:
 			HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
 			Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
-				       "Tst_MED_SHOW_CONT",
-				       "Tst_MED_SHOW");
+				       "Tst_MED_SHOW_CONT","Tst_MED_SHOW");
 			break;
 		     case Usr_CAN_NOT:
 		     default:

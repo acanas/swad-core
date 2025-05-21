@@ -56,6 +56,7 @@
 /******************************* Private types *******************************/
 /*****************************************************************************/
 
+#define ExaAnsShe_NUM_BLANK_OR_SOLVED 2
 typedef enum
   {
    ExaAnsShe_BLANK,
@@ -74,7 +75,8 @@ extern struct Globals Gbl;
 
 static void ExaAnsShe_ListOrPrintSheets (Vie_ViewType_t ViewType,
 					 ExaAnsShe_BlankOrSolved_t BlankOrSolved);
-static void ExaAnsShe_PutIconsPrintExamAnsSheets (void *Exams);
+static void ExaAnsShe_PutIconsPrintBlankExamAnsSheets (void *Exams);
+static void ExaAnsShe_PutIconsPrintSolvedExamAnsSheets (void *Exams);
 static void ExaAnsShe_PutParsToPrintExamAnsSheets (void *Exams);
 static void ExaAnsShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 					  const struct ExaSes_Session *Session,
@@ -166,6 +168,12 @@ static void ExaAnsShe_ListOrPrintSheets (Vie_ViewType_t ViewType,
   {
    extern const char *Hlp_ASSESSMENT_Exams;	// TODO: Change to link to section of listing/printing selected exams in a session
    extern const char *Txt_List_of_exam_answer_sheets_for_session_X;
+   static void (*ExaAnsShe_PutIcons[ExaAnsShe_NUM_BLANK_OR_SOLVED]) (void *Exams) =
+     {
+      [ExaAnsShe_BLANK ] = ExaAnsShe_PutIconsPrintBlankExamAnsSheets,
+      [ExaAnsShe_SOLVED] = ExaAnsShe_PutIconsPrintSolvedExamAnsSheets
+     };
+
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;
    char *Title;
@@ -222,7 +230,7 @@ static void ExaAnsShe_ListOrPrintSheets (Vie_ViewType_t ViewType,
 	    if (asprintf (&Title,Txt_List_of_exam_answer_sheets_for_session_X,
 			  Session.Title) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    Box_BoxBegin (Title,ExaAnsShe_PutIconsPrintExamAnsSheets,&Exams,
+	    Box_BoxBegin (Title,ExaAnsShe_PutIcons[BlankOrSolved],&Exams,
 			  Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
 	    free (Title);
 	}
@@ -254,10 +262,17 @@ static void ExaAnsShe_ListOrPrintSheets (Vie_ViewType_t ViewType,
 /************* Put icon to print selected exam answer sheets *****************/
 /*****************************************************************************/
 
-static void ExaAnsShe_PutIconsPrintExamAnsSheets (void *Exams)
+static void ExaAnsShe_PutIconsPrintBlankExamAnsSheets (void *Exams)
   {
    if (Exams)
       Ico_PutContextualIconToPrint (ActPrnBlkExaAnsShe,
+				    ExaAnsShe_PutParsToPrintExamAnsSheets,Exams);
+  }
+
+static void ExaAnsShe_PutIconsPrintSolvedExamAnsSheets (void *Exams)
+  {
+   if (Exams)
+      Ico_PutContextualIconToPrint (ActPrnSolExaAnsShe,
 				    ExaAnsShe_PutParsToPrintExamAnsSheets,Exams);
   }
 
@@ -390,18 +405,16 @@ static void ExaAnsShe_ShowTableAnswers (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
    unsigned QstInd;
    struct Qst_Question Question;
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginWideMarginPadding (10);
+   CurrentSet.SetCod = -1L;	// Reset current set
+
+   /***** Write questions in two columns *****/
+   HTM_DIV_Begin ("class=\"Exa_COLS\"");
 
       /***** Write one row for each question *****/
       for (QstInd = 0;
 	   QstInd < Print->NumQsts.All;
 	   QstInd++)
 	{
-	 /* If this is the first question */
-	 if (QstInd == 0)
-	    CurrentSet.SetCod = -1L;	// Reset current set
-
 	 if (Print->PrintedQuestions[QstInd].SetCod != CurrentSet.SetCod)
 	   {
 	    /* Get data of this set */
@@ -409,11 +422,9 @@ static void ExaAnsShe_ShowTableAnswers (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
 	    ExaSet_GetSetDataByCod (&CurrentSet);
 
 	    /* Title for this set */
-	    HTM_TR_Begin (NULL);
-	       HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",The_GetColorRows ());
-		  ExaSet_WriteSetTitle (&CurrentSet);
-	       HTM_TD_End ();
-	    HTM_TR_End ();
+	    HTM_DIV_Begin ("class=\"%s\"",The_GetColorRows ());
+	       ExaSet_WriteSetTitle (&CurrentSet);
+	    HTM_DIV_End ();
 	   }
 
 	 /* Create test question */
@@ -430,8 +441,8 @@ static void ExaAnsShe_ShowTableAnswers (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
 	 Qst_QstDestructor (&Question);
 	}
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+   /***** End list of questions *****/
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -445,24 +456,21 @@ static void ExaAnsShe_WriteQst (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
                                 struct Qst_Question *Question)
   {
    /***** Begin row *****/
-   HTM_TR_Begin (NULL);
+   HTM_DIV_Begin ("class=\"Exa_CONTAINER\"");
 
       /***** Number of question and answer type *****/
-      HTM_TD_Begin ("class=\"RT\"");
+      HTM_DIV_Begin ("class=\"Exa_LEFT\"");
 	 Lay_WriteIndex (QstInd + 1,"BIG_INDEX");
-	 Qst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
-      HTM_TD_End ();
+	 Qst_WriteAnswerType (Question->Answer.Type,Question->Validity);
+      HTM_DIV_End ();
 
       /***** Answers *****/
-      HTM_TD_Begin ("class=\"LT\"");
-
-	 /* Answers */
+      HTM_DIV_Begin ("class=\"Exa_RIGHT\"");
 	 ExaAnsShe_WriteAnswers (BlankOrSolved,UsrDat,Print,QstInd,Question);
-
-      HTM_TD_End ();
+      HTM_DIV_End ();
 
    /***** End row *****/
-   HTM_TR_End ();
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -518,11 +526,11 @@ static void ExaAnsShe_WriteAnswers (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
 static void ExaAnsShe_WriteBlankIntAns (__attribute__((unused)) const struct Qst_Question *Question)
   {
    /***** Begin table *****/
-   HTM_TABLE_Begin ("EXA_TBL");
+   HTM_TABLE_Begin ("Exa_TBL");
 
       /***** Write the student answer *****/
       HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("class=\"EXA_BLANK_ANSWER_INT Qst_TXT_LIGHT_%s\"",
+	 HTM_TD_Begin ("class=\"Exa_BLANK_ANSWER_INT Qst_ANS_0_%s\"",
 		       The_GetSuffix ());
 	    HTM_NBSP ();
 	 HTM_TD_End ();
@@ -538,11 +546,11 @@ static void ExaAnsShe_WriteBlankIntAns (__attribute__((unused)) const struct Qst
 static void ExaAnsShe_WriteBlankFltAns (__attribute__((unused)) const struct Qst_Question *Question)
   {
    /***** Begin table *****/
-   HTM_TABLE_Begin ("EXA_TBL");
+   HTM_TABLE_Begin ("Exa_TBL");
 
       /***** Write the student answer *****/
       HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("class=\"EXA_BLANK_ANSWER_FLOAT Qst_TXT_LIGHT_%s\"",
+	 HTM_TD_Begin ("class=\"Exa_BLANK_ANSWER_FLOAT Qst_ANS_0_%s\"",
 		       The_GetSuffix ());
 	    HTM_NBSP ();
 	 HTM_TD_End ();
@@ -561,7 +569,7 @@ static void ExaAnsShe_WriteBlankTF_Ans (__attribute__((unused)) const struct Qst
    unsigned NumOpt;
 
    /***** Begin table *****/
-   HTM_TABLE_Begin ("EXA_TBL");
+   HTM_TABLE_Begin ("Exa_TBL");
 
       /***** Write the student answer *****/
       HTM_TR_Begin (NULL);
@@ -570,7 +578,7 @@ static void ExaAnsShe_WriteBlankTF_Ans (__attribute__((unused)) const struct Qst
 	      NumOpt < 2;
 	      NumOpt++)
 	   {
-	    HTM_TD_Begin ("class=\"EXA_BLANK_ANSWER_TF Qst_TXT_LIGHT_%s\"",
+	    HTM_TD_Begin ("class=\"Exa_BLANK_ANSWER_TF Qst_ANS_0_%s\"",
 			  The_GetSuffix ());
 	       HTM_Txt (Txt_TF_QST[NumOpt]);
 	    HTM_TD_End ();
@@ -590,7 +598,7 @@ static void ExaAnsShe_WriteBlankChoAns (const struct Qst_Question *Question)
    unsigned NumOpt;
 
    /***** Begin table *****/
-   HTM_TABLE_Begin ("EXA_TBL");
+   HTM_TABLE_Begin ("Exa_TBL");
 
       /***** Write student's answers (one column per answer) *****/
       HTM_TR_Begin (NULL);
@@ -598,7 +606,7 @@ static void ExaAnsShe_WriteBlankChoAns (const struct Qst_Question *Question)
 	      NumOpt < Question->Answer.NumOptions;
 	      NumOpt++)
 	   {
-	    HTM_TD_Begin ("class=\"EXA_BLANK_ANSWER_CHOICE Qst_TXT_LIGHT_%s\"",
+	    HTM_TD_Begin ("class=\"Exa_BLANK_ANSWER_CHOICE Qst_ANS_0_%s\"",
 			  The_GetSuffix ());
 	       HTM_Option (NumOpt);
 	    HTM_TD_End ();
@@ -616,11 +624,11 @@ static void ExaAnsShe_WriteBlankChoAns (const struct Qst_Question *Question)
 static void ExaAnsShe_WriteBlankTxtAns (__attribute__((unused)) const struct Qst_Question *Question)
   {
    /***** Begin table *****/
-   HTM_TABLE_Begin ("EXA_TBL");
+   HTM_TABLE_Begin ("Exa_TBL");
 
       /***** Write the student answer *****/
       HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("class=\"EXA_BLANK_ANSWER_TEXT Qst_TXT_LIGHT_%s\"",
+	 HTM_TD_Begin ("class=\"Exa_BLANK_ANSWER_TEXT Qst_ANS_0_%s\"",
 		       The_GetSuffix ());
 	    HTM_NBSP ();
 	 HTM_TD_End ();
@@ -644,7 +652,7 @@ static void ExaAnsShe_WriteSolvedIntAns (const struct Usr_Data *UsrDat,
    Qst_CheckIfNumberOfAnswersIsOne (Question);
 
    /***** Begin table *****/
-   HTM_TABLE_Begin ("EXA_TBL");
+   HTM_TABLE_Begin ("Exa_TBL");
 
       /***** Write the correct answer *****/
       HTM_TR_Begin (NULL);
@@ -704,7 +712,7 @@ static void ExaAnsShe_WriteSolvedFltAns (const struct Usr_Data *UsrDat,
       Err_WrongAnswerExit ();
 
    /***** Begin table *****/
-   HTM_TABLE_Begin ("EXA_TBL");
+   HTM_TABLE_Begin ("Exa_TBL");
 
       /***** Write the correct answer *****/
       HTM_TR_Begin (NULL);
@@ -761,7 +769,7 @@ static void ExaAnsShe_WriteSolvedTF_Ans (const struct Usr_Data *UsrDat,
    AnsTFStd = Print->PrintedQuestions[QstInd].StrAnswers[0];
 
    /***** Begin table *****/
-   HTM_TABLE_Begin ("EXA_TBL");
+   HTM_TABLE_Begin ("Exa_TBL");
 
       /***** Write the correct answer *****/
       HTM_TR_Begin (NULL);
@@ -801,17 +809,15 @@ static void ExaAnsShe_WriteSolvedChoAns (const struct Usr_Data *UsrDat,
 					 unsigned QstInd,
 					 struct Qst_Question *Question)
   {
-   extern const char *Txt_TST_Answer_given_by_the_user;
-   extern const char *Txt_TST_Answer_given_by_the_teachers;
    struct Answer
      {
-      char *Class;
-      char *Str;
+      char *ClassTch;	// Class for teachers' answer
+      char *ClassStd;	// Class for student's answer
      };
    static struct Answer AnsWrongOrCorrect[Qst_NUM_WRONG_CORRECT] =
      {
-      [Qst_WRONG  ] = {.Class = "Qst_ANS_BAD",.Str = "&cross;"},
-      [Qst_CORRECT] = {.Class = "Qst_ANS_OK" ,.Str = "&check;"}
+      [Qst_WRONG  ] = {.ClassTch = "Qst_TXT_LIGHT"	,.ClassStd = "Qst_ANS_BAD"},
+      [Qst_CORRECT] = {.ClassTch = "Qst_ANS_0"		,.ClassStd = "Qst_ANS_OK" }
      };
    unsigned NumOpt;
    Qst_WrongOrCorrect_t OptionWrongOrCorrect;
@@ -826,7 +832,7 @@ static void ExaAnsShe_WriteSolvedChoAns (const struct Usr_Data *UsrDat,
    TstPrn_GetAnswersFromStr (Print->PrintedQuestions[QstInd].StrAnswers,UsrAnswers);
 
    /***** Begin table *****/
-   HTM_TABLE_Begin ("EXA_TBL");
+   HTM_TABLE_Begin ("Exa_TBL");
 
       /***** Write teachers' answers (one column per answer) *****/
       HTM_TR_Begin (NULL);
@@ -836,21 +842,10 @@ static void ExaAnsShe_WriteSolvedChoAns (const struct Usr_Data *UsrDat,
 	      NumOpt++)
 	   {
 	    OptionWrongOrCorrect = Question->Answer.Options[Indexes[NumOpt]].Correct;
+	    Ans = &AnsWrongOrCorrect[OptionWrongOrCorrect];
 
-	    /* Draw icon that indicates whether the answer is correct */
-	    switch (OptionWrongOrCorrect)
-	      {
-	       case Qst_CORRECT:
-		  HTM_TD_Begin ("class=\"BM_SEL Qst_ANS_0_%s\" title=\"%s\"",
-				The_GetSuffix (),
-				Txt_TST_Answer_given_by_the_teachers);
-		  break;
-	       case Qst_WRONG:
-	       default:
-		  HTM_TD_Begin ("class=\"BM Qst_TXT_LIGHT_%s\"",
-				The_GetSuffix ());
-		  break;
-	      }
+	    /* Write option letter */
+	    HTM_TD_Begin ("class=\"BM %s_%s\"",Ans->ClassTch,The_GetSuffix ());
 	       HTM_Option (NumOpt);
 	    HTM_TD_End ();
 	   }
@@ -865,14 +860,12 @@ static void ExaAnsShe_WriteSolvedChoAns (const struct Usr_Data *UsrDat,
 	   {
 	    OptionWrongOrCorrect = Question->Answer.Options[Indexes[NumOpt]].Correct;
 
-	    /* Draw icon depending on user's answer */
+	    /* Write letter depending on user's answer */
 	    if (UsrAnswers[Indexes[NumOpt]] == HTM_CHECKED)	// This answer has been selected by the user
 	      {
 	       Ans = &AnsWrongOrCorrect[OptionWrongOrCorrect];
-	       HTM_TD_Begin ("class=\"BM %s_%s\" title=\"%s\"",
-			     Ans->Class,The_GetSuffix (),
-			     Txt_TST_Answer_given_by_the_user);
-		  HTM_Txt (Ans->Str);
+	       HTM_TD_Begin ("class=\"BM %s_%s\"",Ans->ClassStd,The_GetSuffix ());
+	          HTM_Option (NumOpt);
 	       HTM_TD_End ();
 	      }
 	    else	// This answer has NOT been selected by the user
@@ -907,14 +900,14 @@ static void ExaAnsShe_WriteSolvedTxtAns (const struct Usr_Data *UsrDat,
    Qst_ChangeFormatAnswersText (Question);
 
    /***** Begin table *****/
-   HTM_TABLE_Begin ("EXA_TBL");
+   HTM_TABLE_Begin ("Exa_TBL");
 
       /***** Write the correct answer *****/
       HTM_TR_Begin (NULL);
 
          ExaAnsShe_WriteHeadCorrect ();
 
-	 HTM_TD_Begin ("class=\"CT Qst_ANS_0_%s\"",The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"Exa_SOLVED_ANSWER_TEXT Qst_ANS_0_%s\"",The_GetSuffix ());
 	    for (NumOpt = 0;
 		 NumOpt < Question->Answer.NumOptions;
 		 NumOpt++)

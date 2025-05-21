@@ -638,10 +638,12 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.84.2 (2025-05-20)"
-#define CSS_FILE		"swad24.84.2.css"
+#define Log_PLATFORM_VERSION	"SWAD 24.84.4 (2025-05-21)"
+#define CSS_FILE		"swad24.84.4.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 24.84.4:  May 21, 2025  Changes in exam answer sheets. (347221 lines)
+	Version 24.84.3:  May 20, 2025  Exam blank answer sheets are displayed in two columns. (347195 lines)
 	Version 24.84.2:  May 20, 2025  Changes in exam answer sheets. (347195 lines)
 	Version 24.84.1:  May 14, 2025  Code refactoring in exam question sheets and exam answer sheets. (347079 lines)
 	Version 24.84:    May 13, 2025  New module for exam question sheets.

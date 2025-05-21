@@ -2767,8 +2767,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
 
 	 /* Show media */
 	 Med_ShowMedia (&Question.Media,
-			"Tst_MED_EDIT_LIST_CONT",
-			"Tst_MED_EDIT_LIST");
+			"Tst_MED_EDIT_LIST_CONT","Tst_MED_EDIT_LIST");
 
 	 /***** Write answers? *****/
 	 switch (Match->Status.Showing)
@@ -2873,8 +2872,7 @@ static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
 		  HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
 	       HTM_LABEL_End ();
 	       Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
-			      "Tst_MED_SHOW_CONT",
-			      "Tst_MED_SHOW");
+			      "Tst_MED_SHOW_CONT","Tst_MED_SHOW");
 
 	       /* Show result (number of users who answered? */
 	       if (ShowResult)

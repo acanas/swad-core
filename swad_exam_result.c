@@ -1838,11 +1838,6 @@ static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
       [ExaSet_INVALID_QUESTION] = "BIG_INDEX_RED",
       [ExaSet_VALID_QUESTION  ] = "BIG_INDEX",
      };
-   static const char *ClassAnswerType[ExaSet_NUM_VALIDITIES] =
-     {
-      [ExaSet_INVALID_QUESTION] = "DAT_SMALL_RED",
-      [ExaSet_VALID_QUESTION  ] = "DAT_SMALL",
-     };
    static const char *ClassTxt[ExaSet_NUM_VALIDITIES] =
      {
       [ExaSet_INVALID_QUESTION] = "Qst_TXT_RED",
@@ -1892,8 +1887,7 @@ static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
       /***** Number of question and answer type *****/
       HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 	 Lay_WriteIndex (QstInd + 1,ClassNumQst[Question->Validity]);
-	 Qst_WriteAnswerType (Question->Answer.Type,
-	                      ClassAnswerType[Question->Validity]);
+	 Qst_WriteAnswerType (Question->Answer.Type,Question->Validity);
       HTM_TD_End ();
 
       /***** Stem, media and answers *****/
@@ -1906,9 +1900,7 @@ static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 
 	 /* Media */
 	 if (ICanView[TstVis_VISIBLE_QST_ANS_TXT] == Usr_CAN)
-	    Med_ShowMedia (&Question->Media,
-			   "Tst_MED_SHOW_CONT",
-			   "Tst_MED_SHOW");
+	    Med_ShowMedia (&Question->Media,"Tst_MED_SHOW_CONT","Tst_MED_SHOW");
 
 	 /* Answers */
 	 ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[QstInd],Question);

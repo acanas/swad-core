@@ -3605,6 +3605,22 @@ legend {font-size: 12pt; font-weight: bold;}
 	vertical-align: middle;
 	}
 
+.Qst_TYPE_VALID_WHITE,
+.Qst_TYPE_VALID_GREY,
+.Qst_TYPE_VALID_PURPLE,
+.Qst_TYPE_VALID_BLUE,
+.Qst_TYPE_VALID_YELLOW,
+.Qst_TYPE_VALID_PINK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #404040; font-size: 10pt;}
+.Qst_TYPE_VALID_DARK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #d0d0d0; font-size: 10pt;}
+
+.Qst_TYPE_INVALID_WHITE,
+.Qst_TYPE_INVALID_GREY,
+.Qst_TYPE_INVALID_PURPLE,
+.Qst_TYPE_INVALID_BLUE,
+.Qst_TYPE_INVALID_YELLOW,
+.Qst_TYPE_INVALID_PINK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #660000; font-size: 10pt;}
+.Qst_TYPE_INVALID_DARK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #ff8080; font-size: 10pt;}
+
 .Qst_TXT_WHITE,
 .Qst_TXT_GREY,
 .Qst_TXT_PURPLE,
@@ -3731,13 +3747,13 @@ legend {font-size: 12pt; font-weight: bold;}
 .EXA_SET_TITLE_PINK	{text-align: left; vertical-align: middle; color: black; font-size: 16pt;}
 .EXA_SET_TITLE_DARK	{text-align: left; vertical-align: middle; color: white; font-size: 16pt;}
 
-.EXA_SET_NUM_QSTS_WHITE,
-.EXA_SET_NUM_QSTS_GREY,
-.EXA_SET_NUM_QSTS_PURPLE,
-.EXA_SET_NUM_QSTS_BLUE,
-.EXA_SET_NUM_QSTS_YELLOW,
-.EXA_SET_NUM_QSTS_PINK	{text-align: right; vertical-align: middle; color: #404040; font-size: 12pt;}
-.EXA_SET_NUM_QSTS_DARK	{text-align: right; vertical-align: middle; color: #d0d0d0; font-size: 12pt;}
+.Exa_SET_NUM_QSTS_WHITE,
+.Exa_SET_NUM_QSTS_GREY,
+.Exa_SET_NUM_QSTS_PURPLE,
+.Exa_SET_NUM_QSTS_BLUE,
+.Exa_SET_NUM_QSTS_YELLOW,
+.Exa_SET_NUM_QSTS_PINK	{text-align: right; vertical-align: middle; color: #404040; font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; font-size: 10pt;}
+.Exa_SET_NUM_QSTS_DARK	{text-align: right; vertical-align: middle; color: #d0d0d0; font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; font-size: 10pt;}
 
 .EXA_PRN_DESC
 	{
@@ -3750,17 +3766,67 @@ legend {font-size: 12pt; font-weight: bold;}
 	margin: 1%;
 	}
 
-.EXA_TBL td,.Ind_TBL th
+.Exa_TBL
 	{
-	border: 1px solid silver;
 	border-collapse: collapse;
+	}
+.Exa_TBL td
+	{
+	border: 1px solid black;
 	padding: 1px;
 	}
-.EXA_BLANK_ANSWER_INT,
-.EXA_BLANK_ANSWER_FLOAT		{width: 200px; text-align: center; vertical-align: middle;}
-.EXA_BLANK_ANSWER_TF,
-.EXA_BLANK_ANSWER_CHOICE	{width: 20px; text-align: center; vertical-align: middle;}
-.EXA_BLANK_ANSWER_TEXT		{width: 400px; text-align: center; vertical-align: middle;}
+
+.Exa_COLS {
+	column-count: 3;
+	column-gap: 20px;
+	column-rule-style: solid;
+	column-rule-width: 1px;
+}
+
+.Exa_CONTAINER
+	{
+	display: table;
+	padding: 4px 0;
+	text-align: left;
+	}
+.Exa_LEFT
+	{
+	display: table-cell;
+	padding-right: 10px;
+	text-align: right;
+	vertical-align: top;
+	width: 100px;
+	}
+.Exa_RIGHT
+	{
+	display: table-cell;
+	padding-left: 10px;
+	text-align: left;
+	vertical-align: middle;
+	min-width: 200px;
+	}
+
+.Exa_BLANK_ANSWER_INT,
+.Exa_BLANK_ANSWER_FLOAT		{width: 150px; text-align: right; vertical-align: middle;}
+.Exa_BLANK_ANSWER_TF,
+.Exa_BLANK_ANSWER_CHOICE	{width: 30px; text-align: center; vertical-align: middle;}
+.Exa_BLANK_ANSWER_TEXT
+	{
+	width: 300px;
+	text-align: left;
+	vertical-align: middle;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	}
+.Exa_SOLVED_ANSWER_TEXT
+	{
+	max-width: 200px;
+	text-align: left;
+	vertical-align: middle;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	}
 
 /********************************** Matches **********************************/
 .MCH_BG
@@ -5339,10 +5405,13 @@ table.TBL_WIDE > tbody > tr > th {padding: 2px;}
 	}
 .TBL_SCROLL th,.TBL_SCROLL td {padding: 0 2px;}
 
+.Ind_TBL
+	{
+	border-collapse: collapse;
+	}
 .Ind_TBL td,.Ind_TBL th
 	{
 	border: 1px solid silver;
-	border-collapse: collapse;
 	padding: 1px;
 	}
 
