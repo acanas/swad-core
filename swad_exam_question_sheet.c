@@ -79,7 +79,8 @@ static void ExaQstShe_ShowSheet (struct Exa_Exams *Exams,
 				 Vie_ViewType_t ViewType,
 				 struct Usr_Data *UsrDat,
 				 struct ExaPrn_Print *Print);
-static void ExaQstShe_ShowTableQuestions (const struct ExaPrn_Print *Print);
+static void ExaQstShe_ShowTableQuestions (const struct ExaSes_Session *Session,
+					  const struct ExaPrn_Print *Print);
 static void ExaQstShe_WriteQst (const struct ExaPrn_Print *Print,
 				unsigned QstInd,
 				struct Qst_Question *Question);
@@ -130,6 +131,9 @@ static void ExaQstShe_ListOrPrintSheets (Vie_ViewType_t ViewType)
 
    /* Get list of groups selected */
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
+
+   /* Get number of columns */
+   Session.NumCols = ExaSes_GetParNumCols ();
 
    /***** Get exam data and session *****/
    Exa_GetExamDataByCod (&Exams.Exam);
@@ -226,27 +230,30 @@ static void ExaQstShe_ShowMultipleSheets (struct Exa_Exams *Exams,
    struct Usr_Data UsrDat;
    unsigned NumUsr;
 
+   /***** Show form to select columns *****/
+   ExaSes_ShowFormColumns (Session);
+
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
-   /***** List the exam prints (one for each user) *****/
-   for (NumUsr = 0;
-	NumUsr < NumUsrsInList;
-	NumUsr++)
-     {
-      UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,		// Get from the database the data of the student
-						   Usr_DONT_GET_PREFS,
-						   Usr_GET_ROLE_IN_CRS))
+      /***** List the exam prints (one for each user) *****/
+      for (NumUsr = 0;
+	   NumUsr < NumUsrsInList;
+	   NumUsr++)
 	{
-	 /***** Show exam print *****/
-	 HTM_DIV_Begin (ViewType == Vie_PRINT &&
-	                NumUsr ? "style=\"break-before:page;\"" :
-				 NULL);
-	    ExaQstShe_GetQstsAndShowSheet (Exams,Session,ViewType,&UsrDat);
-	 HTM_DIV_End ();
+	 UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,		// Get from the database the data of the student
+						      Usr_DONT_GET_PREFS,
+						      Usr_GET_ROLE_IN_CRS))
+	   {
+	    /***** Show exam print *****/
+	    HTM_DIV_Begin (ViewType == Vie_PRINT &&
+			   NumUsr ? "style=\"break-before:page;\"" :
+				    NULL);
+	       ExaQstShe_GetQstsAndShowSheet (Exams,Session,ViewType,&UsrDat);
+	    HTM_DIV_End ();
+	   }
 	}
-     }
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -302,7 +309,7 @@ static void ExaQstShe_ShowSheet (struct Exa_Exams *Exams,
 
    /***** Show table with questions *****/
    if (Print->NumQsts.All)
-      ExaQstShe_ShowTableQuestions (Print);
+      ExaQstShe_ShowTableQuestions (Session,Print);
 
    /***** End box *****/
    if (ViewType == Vie_VIEW)
@@ -313,7 +320,8 @@ static void ExaQstShe_ShowSheet (struct Exa_Exams *Exams,
 /*********** Show the main part (table) of an exam question sheet ************/
 /*****************************************************************************/
 
-static void ExaQstShe_ShowTableQuestions (const struct ExaPrn_Print *Print)
+static void ExaQstShe_ShowTableQuestions (const struct ExaSes_Session *Session,
+					  const struct ExaPrn_Print *Print)
   {
    static struct ExaSet_Set CurrentSet =
      {
@@ -328,8 +336,8 @@ static void ExaQstShe_ShowTableQuestions (const struct ExaPrn_Print *Print)
 
    CurrentSet.SetCod = -1L;	// Reset current set
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginWideMarginPadding (10);
+   /***** Write questions in columns *****/
+   HTM_DIV_Begin ("class=\"Exa_COLS_%u\"",Session->NumCols);
 
       /***** Write one row for each question *****/
       for (QstInd = 0;
@@ -343,11 +351,9 @@ static void ExaQstShe_ShowTableQuestions (const struct ExaPrn_Print *Print)
 	    ExaSet_GetSetDataByCod (&CurrentSet);
 
 	    /* Title for this set */
-	    HTM_TR_Begin (NULL);
-	       HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",The_GetColorRows ());
-		  ExaSet_WriteSetTitle (&CurrentSet);
-	       HTM_TD_End ();
-	    HTM_TR_End ();
+	    HTM_DIV_Begin ("class=\"Exa_COL_SPAN %s\"",The_GetColorRows ());
+	       ExaSet_WriteSetTitle (&CurrentSet);
+	    HTM_DIV_End ();
 	   }
 
 	 /* Create test question */
@@ -364,8 +370,8 @@ static void ExaQstShe_ShowTableQuestions (const struct ExaPrn_Print *Print)
 	 Qst_QstDestructor (&Question);
 	}
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+   /***** End list of questions *****/
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -377,23 +383,23 @@ static void ExaQstShe_WriteQst (const struct ExaPrn_Print *Print,
 				struct Qst_Question *Question)
   {
    /***** Begin row *****/
-   HTM_TR_Begin (NULL);
+   HTM_DIV_Begin ("class=\"Exa_CONTAINER\"");
 
       /***** Number of question and answer type *****/
-      HTM_TD_Begin ("class=\"RT\"");
+      HTM_DIV_Begin ("class=\"Exa_LEFT\"");
 	 Lay_WriteIndex (QstInd + 1,"BIG_INDEX");
 	 Qst_WriteAnswerType (Question->Answer.Type,Question->Validity);
-      HTM_TD_End ();
+      HTM_DIV_End ();
 
       /***** Stem, media and answers *****/
-      HTM_TD_Begin ("class=\"LM\"");
+      HTM_DIV_Begin ("class=\"Exa_RIGHT\"");
 	 Qst_WriteQstStem (Question->Stem,"Qst_TXT",HidVis_VISIBLE);
 	 Med_ShowMedia (&Question->Media,"Tst_MED_SHOW_CONT","Tst_MED_SHOW");
 	 ExaQstShe_WriteAnswers (Print,QstInd,Question);
-      HTM_TD_End ();
+      HTM_DIV_End ();
 
    /***** End row *****/
-   HTM_TR_End ();
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

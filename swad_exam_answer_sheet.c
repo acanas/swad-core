@@ -95,7 +95,8 @@ static void ExaAnsShe_ShowSheet (struct Exa_Exams *Exams,
 			         ExaAnsShe_BlankOrSolved_t BlankOrSolved,
 			         struct Usr_Data *UsrDat,
 			         struct ExaPrn_Print *Print);
-static void ExaAnsShe_ShowTableAnswers (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
+static void ExaAnsShe_ShowTableAnswers (const struct ExaSes_Session *Session,
+					ExaAnsShe_BlankOrSolved_t BlankOrSolved,
 					const struct Usr_Data *UsrDat,
 					const struct ExaPrn_Print *Print);
 static void ExaAnsShe_WriteQst (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
@@ -194,6 +195,9 @@ static void ExaAnsShe_ListOrPrintSheets (Vie_ViewType_t ViewType,
    /* Get list of groups selected */
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
+   /* Get number of columns */
+   Session.NumCols = ExaSes_GetParNumCols ();
+
    /***** Get exam data and session *****/
    Exa_GetExamDataByCod (&Exams.Exam);
    ExaSes_GetSessionDataByCod (&Session);
@@ -235,7 +239,7 @@ static void ExaAnsShe_ListOrPrintSheets (Vie_ViewType_t ViewType,
 	    free (Title);
 	}
 
-      /***** Show table with exam templates *****/
+      /***** Show table with exam answer sheets *****/
       ExaAnsShe_ShowMultipleSheets (&Exams,&Session,ViewType,BlankOrSolved,
 				    NumUsrsInList,LstSelectedUsrCods);
 
@@ -300,28 +304,31 @@ static void ExaAnsShe_ShowMultipleSheets (struct Exa_Exams *Exams,
    struct Usr_Data UsrDat;
    unsigned NumUsr;
 
+   /***** Show form to select columns *****/
+   ExaSes_ShowFormColumns (Session);
+
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
-   /***** List the exam prints (one for each user) *****/
-   for (NumUsr = 0;
-	NumUsr < NumUsrsInList;
-	NumUsr++)
-     {
-      UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,		// Get from the database the data of the student
-						   Usr_DONT_GET_PREFS,
-						   Usr_GET_ROLE_IN_CRS))
+      /***** List the exam prints (one for each user) *****/
+      for (NumUsr = 0;
+	   NumUsr < NumUsrsInList;
+	   NumUsr++)
 	{
-	 /***** Show exam print *****/
-	 HTM_DIV_Begin (ViewType == Vie_PRINT &&
-	                NumUsr ? "style=\"break-before:page;\"" :
-				 NULL);
-	    ExaAnsShe_GetQstsAndShowSheet (Exams,Session,
-					   ViewType,BlankOrSolved,&UsrDat);
-	 HTM_DIV_End ();
+	 UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,		// Get from the database the data of the student
+						      Usr_DONT_GET_PREFS,
+						      Usr_GET_ROLE_IN_CRS))
+	   {
+	    /***** Show exam print *****/
+	    HTM_DIV_Begin (ViewType == Vie_PRINT &&
+			   NumUsr ? "style=\"break-before:page;\"" :
+				    NULL);
+	       ExaAnsShe_GetQstsAndShowSheet (Exams,Session,
+					      ViewType,BlankOrSolved,&UsrDat);
+	    HTM_DIV_End ();
+	   }
 	}
-     }
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -379,7 +386,7 @@ static void ExaAnsShe_ShowSheet (struct Exa_Exams *Exams,
 
    /***** Show table with answers *****/
    if (Print->NumQsts.All)
-      ExaAnsShe_ShowTableAnswers (BlankOrSolved,UsrDat,Print);
+      ExaAnsShe_ShowTableAnswers (Session,BlankOrSolved,UsrDat,Print);
 
    /***** End box *****/
    if (ViewType == Vie_VIEW)
@@ -390,7 +397,8 @@ static void ExaAnsShe_ShowSheet (struct Exa_Exams *Exams,
 /************ Show the main part (table) of an exam answer sheet *************/
 /*****************************************************************************/
 
-static void ExaAnsShe_ShowTableAnswers (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
+static void ExaAnsShe_ShowTableAnswers (const struct ExaSes_Session *Session,
+					ExaAnsShe_BlankOrSolved_t BlankOrSolved,
 					const struct Usr_Data *UsrDat,
 					const struct ExaPrn_Print *Print)
   {
@@ -407,8 +415,8 @@ static void ExaAnsShe_ShowTableAnswers (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
 
    CurrentSet.SetCod = -1L;	// Reset current set
 
-   /***** Write questions in two columns *****/
-   HTM_DIV_Begin ("class=\"Exa_COLS\"");
+   /***** Write questions in columns *****/
+   HTM_DIV_Begin ("class=\"Exa_COLS_%u\"",Session->NumCols);
 
       /***** Write one row for each question *****/
       for (QstInd = 0;
@@ -422,7 +430,7 @@ static void ExaAnsShe_ShowTableAnswers (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
 	    ExaSet_GetSetDataByCod (&CurrentSet);
 
 	    /* Title for this set */
-	    HTM_DIV_Begin ("class=\"%s\"",The_GetColorRows ());
+	    HTM_DIV_Begin ("class=\"Exa_COL_SPAN %s\"",The_GetColorRows ());
 	       ExaSet_WriteSetTitle (&CurrentSet);
 	    HTM_DIV_End ();
 	   }
@@ -530,8 +538,7 @@ static void ExaAnsShe_WriteBlankIntAns (__attribute__((unused)) const struct Qst
 
       /***** Write the student answer *****/
       HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("class=\"Exa_BLANK_ANSWER_INT Qst_ANS_0_%s\"",
-		       The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"Exa_ANSWER_INT Qst_ANS_0_%s\"",The_GetSuffix ());
 	    HTM_NBSP ();
 	 HTM_TD_End ();
       HTM_TR_End ();
@@ -550,8 +557,7 @@ static void ExaAnsShe_WriteBlankFltAns (__attribute__((unused)) const struct Qst
 
       /***** Write the student answer *****/
       HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("class=\"Exa_BLANK_ANSWER_FLOAT Qst_ANS_0_%s\"",
-		       The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"Exa_ANSWER_FLOAT Qst_ANS_0_%s\"",The_GetSuffix ());
 	    HTM_NBSP ();
 	 HTM_TD_End ();
       HTM_TR_End ();
@@ -578,8 +584,7 @@ static void ExaAnsShe_WriteBlankTF_Ans (__attribute__((unused)) const struct Qst
 	      NumOpt < 2;
 	      NumOpt++)
 	   {
-	    HTM_TD_Begin ("class=\"Exa_BLANK_ANSWER_TF Qst_ANS_0_%s\"",
-			  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"Exa_ANSWER_TF Qst_ANS_0_%s\"",The_GetSuffix ());
 	       HTM_Txt (Txt_TF_QST[NumOpt]);
 	    HTM_TD_End ();
 	   }
@@ -606,8 +611,7 @@ static void ExaAnsShe_WriteBlankChoAns (const struct Qst_Question *Question)
 	      NumOpt < Question->Answer.NumOptions;
 	      NumOpt++)
 	   {
-	    HTM_TD_Begin ("class=\"Exa_BLANK_ANSWER_CHOICE Qst_ANS_0_%s\"",
-			  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"Exa_ANSWER_CHOICE Qst_ANS_0_%s\"",The_GetSuffix ());
 	       HTM_Option (NumOpt);
 	    HTM_TD_End ();
 	   }
@@ -628,8 +632,7 @@ static void ExaAnsShe_WriteBlankTxtAns (__attribute__((unused)) const struct Qst
 
       /***** Write the student answer *****/
       HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("class=\"Exa_BLANK_ANSWER_TEXT Qst_ANS_0_%s\"",
-		       The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"Exa_ANSWER_TEXT Qst_ANS_0_%s\"",The_GetSuffix ());
 	    HTM_NBSP ();
 	 HTM_TD_End ();
       HTM_TR_End ();
@@ -845,7 +848,8 @@ static void ExaAnsShe_WriteSolvedChoAns (const struct Usr_Data *UsrDat,
 	    Ans = &AnsWrongOrCorrect[OptionWrongOrCorrect];
 
 	    /* Write option letter */
-	    HTM_TD_Begin ("class=\"BM %s_%s\"",Ans->ClassTch,The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"Exa_ANSWER_CHOICE %s_%s\"",
+			  Ans->ClassTch,The_GetSuffix ());
 	       HTM_Option (NumOpt);
 	    HTM_TD_End ();
 	   }
@@ -864,7 +868,8 @@ static void ExaAnsShe_WriteSolvedChoAns (const struct Usr_Data *UsrDat,
 	    if (UsrAnswers[Indexes[NumOpt]] == HTM_CHECKED)	// This answer has been selected by the user
 	      {
 	       Ans = &AnsWrongOrCorrect[OptionWrongOrCorrect];
-	       HTM_TD_Begin ("class=\"BM %s_%s\"",Ans->ClassStd,The_GetSuffix ());
+	       HTM_TD_Begin ("class=\"Exa_ANSWER_CHOICE %s_%s\"",
+			     Ans->ClassStd,The_GetSuffix ());
 	          HTM_Option (NumOpt);
 	       HTM_TD_End ();
 	      }

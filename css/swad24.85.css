@@ -1692,6 +1692,13 @@ a:hover img.CENTER_PHOTO_SHOW
 	background-color: #ef5555;
 	border-color: #c33b3b;
 	}
+.BT_NONE
+	{
+	margin: 0;
+	padding: 0;
+	border-width: 0;
+	background-color: transparent;
+	}
 .BT_SUBMIT
 	{
 	margin: 8px auto;
@@ -3739,13 +3746,13 @@ legend {font-size: 12pt; font-weight: bold;}
 	}
 
 /*********************************** Exams ***********************************/
-.EXA_SET_TITLE_WHITE,
-.EXA_SET_TITLE_GREY,
-.EXA_SET_TITLE_PURPLE,
-.EXA_SET_TITLE_BLUE,
-.EXA_SET_TITLE_YELLOW,
-.EXA_SET_TITLE_PINK	{text-align: left; vertical-align: middle; color: black; font-size: 16pt;}
-.EXA_SET_TITLE_DARK	{text-align: left; vertical-align: middle; color: white; font-size: 16pt;}
+.Exa_SET_TITLE_WHITE,
+.Exa_SET_TITLE_GREY,
+.Exa_SET_TITLE_PURPLE,
+.Exa_SET_TITLE_BLUE,
+.Exa_SET_TITLE_YELLOW,
+.Exa_SET_TITLE_PINK	{text-align: left; vertical-align: middle; color: black; font-size: 16pt;}
+.Exa_SET_TITLE_DARK	{text-align: left; vertical-align: middle; color: white; font-size: 16pt;}
 
 .Exa_SET_NUM_QSTS_WHITE,
 .Exa_SET_NUM_QSTS_GREY,
@@ -3755,7 +3762,7 @@ legend {font-size: 12pt; font-weight: bold;}
 .Exa_SET_NUM_QSTS_PINK	{text-align: right; vertical-align: middle; color: #404040; font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; font-size: 10pt;}
 .Exa_SET_NUM_QSTS_DARK	{text-align: right; vertical-align: middle; color: #d0d0d0; font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; font-size: 10pt;}
 
-.EXA_PRN_DESC
+.Exa_PRN_DESC
 	{
 	margin: 1%;
 	text-align: left;
@@ -3776,17 +3783,20 @@ legend {font-size: 12pt; font-weight: bold;}
 	padding: 1px;
 	}
 
-.Exa_COLS {
-	column-count: 3;
-	column-gap: 20px;
-	column-rule-style: solid;
-	column-rule-width: 1px;
-}
+.Exa_COLS_1 {column-count: 1; column-gap: 20px; column-rule-style: none;}
+.Exa_COLS_2 {column-count: 2; column-gap: 20px; column-rule-style: none;}
+.Exa_COLS_3 {column-count: 3; column-gap: 20px; column-rule-style: none;}
+.Exa_COLS_4 {column-count: 4; column-gap: 20px; column-rule-style: none;}
+
+.Exa_COL_SPAN
+	{
+	column-span: all;
+	}
 
 .Exa_CONTAINER
 	{
 	display: table;
-	padding: 4px 0;
+	padding: 8px 0;
 	text-align: left;
 	}
 .Exa_LEFT
@@ -3806,21 +3816,23 @@ legend {font-size: 12pt; font-weight: bold;}
 	min-width: 200px;
 	}
 
-.Exa_BLANK_ANSWER_INT,
-.Exa_BLANK_ANSWER_FLOAT		{width: 150px; text-align: right; vertical-align: middle;}
-.Exa_BLANK_ANSWER_TF,
-.Exa_BLANK_ANSWER_CHOICE	{width: 30px; text-align: center; vertical-align: middle;}
-.Exa_BLANK_ANSWER_TEXT
+.Exa_ANSWER_INT,
+.Exa_ANSWER_FLOAT
+	{
+	width: 150px;
+	text-align: right;
+	vertical-align: middle;
+	}
+.Exa_ANSWER_TF,
+.Exa_ANSWER_CHOICE
+	{
+	width: 30px;
+	text-align: center;
+	vertical-align: middle;
+	}
+.Exa_ANSWER_TEXT
 	{
 	width: 300px;
-	text-align: left;
-	vertical-align: middle;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	}
-.Exa_SOLVED_ANSWER_TEXT
-	{
-	max-width: 200px;
 	text-align: left;
 	vertical-align: middle;
 	white-space: nowrap;
@@ -4341,8 +4353,7 @@ legend {font-size: 12pt; font-weight: bold;}
 	padding: 6px;
 	text-align: center;
 	vertical-align: middle;
-	border: solid 1px;
-	border-color: transparent;
+	border: solid 1px transparent;
 	}
 .PREF_ON
 	{
@@ -4351,9 +4362,8 @@ legend {font-size: 12pt; font-weight: bold;}
 	padding: 6px;
 	text-align: center;
 	vertical-align: middle;
-	border: solid 1px;
-	border-color: rgba(77,136,161,0.5);	/* #4d88a1 */
-	background-color: rgba(192,218,228,0.5); /* #c0dae4 */
+	border: solid 1px rgba(77,136,161,0.5);	/* #4d88a1 */
+	background-color: rgba(192,218,228,0.5);	/* #c0dae4 */
 	}
 
 /************************************* Log ***********************************/

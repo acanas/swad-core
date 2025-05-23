@@ -38748,7 +38748,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change date format"		// Çeviri lazim!
 #endif
 	,
-	[ActChgCol] =
+	[ActChgSidCol] =
 #if   L==1	// ca
 	"Change side columns"		// Necessita traducció
 #elif L==2	// de

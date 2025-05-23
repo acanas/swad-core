@@ -937,7 +937,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActValSetQst	] = {1909, 5,TabAss,NULL			,ExaSet_ValidateQst		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActInvSetQst	] = {1910, 5,TabAss,NULL			,ExaSet_InvalidateQst		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActSeeOneExaSes	] = {2181, 5,TabAss,NULL			,ExaSes_ShowOneSession		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [Act_DoAct_ExaSes	] = {2184, 1,TabAss,Usr_DoActionOnUsrs1		,Usr_DoActionOnUsrs2		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [Act_DoAct_ExaSes	] = {2184, 5,TabAss,Usr_DoActionOnUsrs1		,Usr_DoActionOnUsrs2		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActSeeExaQstShe	] = {2183, 5,TabAss,NULL			,ExaQstShe_ListSheets		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActPrnExaQstShe	] = {2182, 5,TabAss,NULL			,ExaQstShe_PrintSheets		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_NEW},
    [ActSeeBlkExaAnsShe	] = {2185, 5,TabAss,NULL			,ExaAnsShe_ListBlankSheets	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
@@ -2019,7 +2019,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActChgLan		] = { 654, 6,TabPrf,Lan_ChangeLanguage		,Set_EditSettings		,{{    0,    0},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
    [ActChg1stDay	] = {1484, 6,TabPrf,Cal_Change1stDayOfWeek	,Set_EditSettings		,{{    0,    0},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
    [ActChgDatFmt	] = {1638, 6,TabPrf,Dat_ChangeDateFormat	,Set_EditSettings		,{{    0,    0},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
-   [ActChgCol		] = { 674, 6,TabPrf,Set_ChangeSideCols		,Set_EditSettings		,{{    0,    0},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
+   [ActChgSidCol	] = { 674, 6,TabPrf,Set_ChangeSideCols		,Set_EditSettings		,{{    0,    0},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
    [ActChgIco		] = {1092, 6,TabPrf,Ico_ChangeIconSet		,Set_EditSettings		,{{    0,    0},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
    [ActChgMnu		] = {1243, 6,TabPrf,Mnu_ChangeMenu		,Set_EditSettings		,{{    0,    0},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
    [ActChgUsrPho	] = {1917, 6,TabPrf,PhoSha_ChangePhotoShape	,Set_EditSettings		,{{    0,    0},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
@@ -2706,7 +2706,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActUnk,			// #671 (obsolete action)
 	ActUnk,			// #672 (obsolete action)
 	ActReqEdiSet,		// #673
-	ActChgCol,		// #674
+	ActChgSidCol,		// #674
 	ActSeeDpt,		// #675
 	ActSeeCtr,		// #676
 	ActEdiDpt,		// #677

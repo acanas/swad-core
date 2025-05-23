@@ -144,7 +144,7 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Usrs.Selected.Filled = false;	// Lists of encrypted codes of users selected from form are not filled
    Gbl.Usrs.Selected.ParSuffix = NULL;	// Don't add suffix to param names
-   Gbl.Usrs.Selected.Option = Usr_OPTION_UNKNOWN;
+   Gbl.Usrs.Selected.Action = Usr_ACT_UNKNOWN;
    for (Role  = (Rol_Role_t) 0;
 	Role <= (Rol_Role_t) (Rol_NUM_ROLES - 1);
 	Role++)

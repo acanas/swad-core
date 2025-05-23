@@ -151,7 +151,7 @@ struct Usr_SelectedUsrs Prj_MembersToAdd =
      },
    .Filled    = false,
    .ParSuffix = "Member",
-   .Option    = Usr_OPTION_UNKNOWN,
+   .Action    = Usr_ACT_UNKNOWN,
   };
 
 /***** Type of view when writing one project *****/

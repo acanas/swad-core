@@ -163,6 +163,7 @@ struct ExaSes_Session
    char Title[ExaSes_MAX_BYTES_TITLE + 1];
    HidVis_HiddenOrVisible_t Hidden;
    CloOpe_ClosedOrOpen_t Open;	// If now is between start and end dates
+   unsigned NumCols;		// Number of columns in exam sheets
    bool ShowUsrResults;		// Show exam with results of all questions for the student
   };
 

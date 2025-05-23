@@ -99,25 +99,25 @@ typedef enum
 #define Usr_LIST_USRS_NUM_OPTIONS 13
 typedef enum
   {
-   Usr_OPTION_UNKNOWN			= 0,
+   Usr_ACT_UNKNOWN			= 0,
 
    // Listing users ------------------------
-   Usr_OPTION_RECORDS			= 1,
-   Usr_OPTION_ADD_TO_CLIPBOARD		= 2,
-   Usr_OPTION_OVERWRITE_CLIPBOARD	= 3,
-   Usr_OPTION_HOMEWORK			= 4,
-   Usr_OPTION_ATTENDANCE		= 5,
-   Usr_OPTION_MESSAGE			= 6,
-   Usr_OPTION_EMAIL			= 7,
-   Usr_OPTION_FOLLOW			= 8,
-   Usr_OPTION_UNFOLLOW			= 9,
+   Usr_ACT_RECORDS			= 1,
+   Usr_ACT_ADD_TO_CLIPBOARD		= 2,
+   Usr_ACT_OVERWRITE_CLIPBOARD		= 3,
+   Usr_ACT_HOMEWORK			= 4,
+   Usr_ACT_ATTENDANCE			= 5,
+   Usr_ACT_MESSAGE			= 6,
+   Usr_ACT_EMAIL			= 7,
+   Usr_ACT_FOLLOW			= 8,
+   Usr_ACT_UNFOLLOW			= 9,
 
    // Exam sessions ------------------------
-   Usr_OPTION_EXAMS_QST_SHEETS	= 10,
-   Usr_OPTION_BLANK_EXAMS_ANS_SHEETS	= 11,
-   Usr_OPTION_SOLVD_EXAMS_ANS_SHEETS	= 12,
+   Usr_ACT_EXAMS_QST_SHEETS		= 10,
+   Usr_ACT_BLANK_EXAMS_ANS_SHEETS	= 11,
+   Usr_ACT_SOLVD_EXAMS_ANS_SHEETS	= 12,
 
-  } Usr_ListUsrsOption_t;
+  } Usr_ListUsrsAction_t;
 
 #define Usr_NUM_CAN 2
 typedef enum

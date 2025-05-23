@@ -58,6 +58,8 @@ void ExaSes_ShowOneSession (void);
 
 void ExaSes_ListUsersForSelection (struct Exa_Exams *Exams,
 				   const struct ExaSes_Session *Session);
+void ExaSes_ShowFormColumns (const struct ExaSes_Session *Session);
+unsigned ExaSes_GetParNumCols (void);
 
 void ExaSes_GetSessionDataByCod (struct ExaSes_Session *Session);
 

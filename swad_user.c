@@ -269,11 +269,11 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
 static void Usr_PutLinkToSeeAdmins (void);
 static void Usr_PutLinkToSeeGuests (void);
 
-static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Hie_Level_t HieLvl,Rol_Role_t UsrsRole,
+static Frm_PutForm_t Usr_SetAllowedListUsrsActions (Hie_Level_t HieLvl,Rol_Role_t UsrsRole,
                                                     Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
-static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
+static void Usr_ShowOneListUsrsAction (Usr_ListUsrsAction_t ListUsrsAction,
                                        const char *Label);
-static Usr_ListUsrsOption_t Usr_GetListUsrsOption (Usr_ListUsrsOption_t DefaultAction);
+static Usr_ListUsrsAction_t Usr_GetListUsrsAction (Usr_ListUsrsAction_t DefaultAction);
 
 static void Usr_PutIconsListGsts (void *WithPhotos);
 static void Usr_PutIconsListStds (void *WithPhotos);
@@ -5105,7 +5105,7 @@ void Usr_ListGuests (void)
 		  Lay_WriteHeaderClassPhoto (ListingPars.HieLvl,Vie_VIEW);
 
 	       /* Set options allowed */
-	       PutForm = Usr_SetOptionsListUsrsAllowed (ListingPars.HieLvl,Rol_GST,
+	       PutForm = Usr_SetAllowedListUsrsActions (ListingPars.HieLvl,Rol_GST,
 							ICanChooseOption) ? Frm_PUT_FORM :
 									    Frm_DONT_PUT_FORM;
 
@@ -5140,7 +5140,7 @@ void Usr_ListGuests (void)
 	       /***** Which action, show records, follow...? *****/
 	       if (PutForm == Frm_PUT_FORM)
 		 {
-		     Usr_PutOptionsListUsrs (ICanChooseOption);
+		     Usr_PutListUsrsActions (ICanChooseOption);
 		  Frm_EndForm ();
 		 }
 	      }
@@ -5270,7 +5270,7 @@ void Usr_ListStudents (void)
 		  Lay_WriteHeaderClassPhoto (ListingPars.HieLvl,Vie_VIEW);
 
 	       /* Set options allowed */
-	       PutForm = Usr_SetOptionsListUsrsAllowed (ListingPars.HieLvl,Rol_STD,
+	       PutForm = Usr_SetAllowedListUsrsActions (ListingPars.HieLvl,Rol_STD,
 						        ICanChooseOption) ? Frm_PUT_FORM :
 									    Frm_DONT_PUT_FORM;
 
@@ -5309,7 +5309,7 @@ void Usr_ListStudents (void)
 	       /***** Which action, show records, follow...? *****/
 	       if (PutForm == Frm_PUT_FORM)
 		 {
-		     Usr_PutOptionsListUsrs (ICanChooseOption);
+		     Usr_PutListUsrsActions (ICanChooseOption);
 		  Frm_EndForm ();
 		 }
 	      }
@@ -5450,7 +5450,7 @@ void Usr_ListTeachers (void)
 		  Lay_WriteHeaderClassPhoto (ListingPars.HieLvl,Vie_VIEW);
 
 	       /* Set options allowed */
-	       PutForm = Usr_SetOptionsListUsrsAllowed (ListingPars.HieLvl,Rol_TCH,
+	       PutForm = Usr_SetAllowedListUsrsActions (ListingPars.HieLvl,Rol_TCH,
 							ICanChooseOption) ? Frm_PUT_FORM :
 									    Frm_DONT_PUT_FORM;
 
@@ -5498,7 +5498,7 @@ void Usr_ListTeachers (void)
 	       /***** Which action, show records, follow...? *****/
 	       if (PutForm == Frm_PUT_FORM)
 		 {
-		     Usr_PutOptionsListUsrs (ICanChooseOption);
+		     Usr_PutListUsrsActions (ICanChooseOption);
 		  Frm_EndForm ();
 		 }
 	      }
@@ -5526,15 +5526,15 @@ void Usr_ListTeachers (void)
 /*****************************************************************************/
 // Returns true if any option is allowed
 
-static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Hie_Level_t HieLvl,Rol_Role_t UsrsRole,
+static Frm_PutForm_t Usr_SetAllowedListUsrsActions (Hie_Level_t HieLvl,Rol_Role_t UsrsRole,
                                                     Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
   {
-   Usr_ListUsrsOption_t Opt;
+   Usr_ListUsrsAction_t Opt;
 
    /***** Check which options I can choose *****/
    /* Set default (I can not choose options) */
-   for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
-	Opt <= (Usr_ListUsrsOption_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
+   for (Opt  = (Usr_ListUsrsAction_t) 1;	// Skip unknown option
+	Opt <= (Usr_ListUsrsAction_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
 	Opt++)
       ICanChooseOption[Opt] = Usr_CAN_NOT;
 
@@ -5542,46 +5542,46 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Hie_Level_t HieLvl,Rol_Role_
    switch (UsrsRole)
      {
       case Rol_GST:
-	 ICanChooseOption[Usr_OPTION_RECORDS		] =
-	 ICanChooseOption[Usr_OPTION_ADD_TO_CLIPBOARD	] =
-	 ICanChooseOption[Usr_OPTION_OVERWRITE_CLIPBOARD] = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+	 ICanChooseOption[Usr_ACT_RECORDS		] =
+	 ICanChooseOption[Usr_ACT_ADD_TO_CLIPBOARD	] =
+	 ICanChooseOption[Usr_ACT_OVERWRITE_CLIPBOARD	] = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
 												       Usr_CAN_NOT;
 	 break;
       case Rol_STD:
-	 ICanChooseOption[Usr_OPTION_RECORDS		] =
-	 ICanChooseOption[Usr_OPTION_ADD_TO_CLIPBOARD	] =
-	 ICanChooseOption[Usr_OPTION_OVERWRITE_CLIPBOARD] =
-	 ICanChooseOption[Usr_OPTION_MESSAGE		] =
-	 ICanChooseOption[Usr_OPTION_FOLLOW 		] =
-	 ICanChooseOption[Usr_OPTION_UNFOLLOW		] = (HieLvl == Hie_CRS &&
+	 ICanChooseOption[Usr_ACT_RECORDS		] =
+	 ICanChooseOption[Usr_ACT_ADD_TO_CLIPBOARD	] =
+	 ICanChooseOption[Usr_ACT_OVERWRITE_CLIPBOARD	] =
+	 ICanChooseOption[Usr_ACT_MESSAGE		] =
+	 ICanChooseOption[Usr_ACT_FOLLOW 		] =
+	 ICanChooseOption[Usr_ACT_UNFOLLOW		] = (HieLvl == Hie_CRS &&
 							     (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
 							      Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 							      Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 							      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
 													 Usr_CAN_NOT;
 
-         ICanChooseOption[Usr_OPTION_HOMEWORK		] =
-         ICanChooseOption[Usr_OPTION_ATTENDANCE		] =
-         ICanChooseOption[Usr_OPTION_EMAIL		] = (HieLvl == Hie_CRS &&
+         ICanChooseOption[Usr_ACT_HOMEWORK		] =
+         ICanChooseOption[Usr_ACT_ATTENDANCE		] =
+         ICanChooseOption[Usr_ACT_EMAIL			] = (HieLvl == Hie_CRS &&
 							     (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 							      Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 							      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
 													 Usr_CAN_NOT;
 	 break;
       case Rol_TCH:
-	 ICanChooseOption[Usr_OPTION_RECORDS		] =
-	 ICanChooseOption[Usr_OPTION_ADD_TO_CLIPBOARD	] =
-	 ICanChooseOption[Usr_OPTION_OVERWRITE_CLIPBOARD] =
-	 ICanChooseOption[Usr_OPTION_MESSAGE		] =
-	 ICanChooseOption[Usr_OPTION_EMAIL		] =
-	 ICanChooseOption[Usr_OPTION_FOLLOW		] =
-	 ICanChooseOption[Usr_OPTION_UNFOLLOW		] = (HieLvl == Hie_CRS &&
+	 ICanChooseOption[Usr_ACT_RECORDS		] =
+	 ICanChooseOption[Usr_ACT_ADD_TO_CLIPBOARD	] =
+	 ICanChooseOption[Usr_ACT_OVERWRITE_CLIPBOARD	] =
+	 ICanChooseOption[Usr_ACT_MESSAGE		] =
+	 ICanChooseOption[Usr_ACT_EMAIL			] =
+	 ICanChooseOption[Usr_ACT_FOLLOW		] =
+	 ICanChooseOption[Usr_ACT_UNFOLLOW		] = (HieLvl == Hie_CRS &&
 							     (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
 							      Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 							      Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 							      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
 													 Usr_CAN_NOT;
-         ICanChooseOption[Usr_OPTION_HOMEWORK		] = (HieLvl == Hie_CRS &&
+         ICanChooseOption[Usr_ACT_HOMEWORK		] = (HieLvl == Hie_CRS &&
 							     (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 							      Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 							      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
@@ -5592,8 +5592,8 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Hie_Level_t HieLvl,Rol_Role_
      }
 
    /***** Check if any option is allowed *****/
-   for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
-	Opt <= (Usr_ListUsrsOption_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
+   for (Opt  = (Usr_ListUsrsAction_t) 1;	// Skip unknown option
+	Opt <= (Usr_ListUsrsAction_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
 	Opt++)
       if (ICanChooseOption[Opt] == Usr_CAN)
 	 return Frm_PUT_FORM;
@@ -5605,7 +5605,7 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Hie_Level_t HieLvl,Rol_Role_
 /*************** Put different options to do with several users **************/
 /*****************************************************************************/
 
-void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
+void Usr_PutListUsrsActions (const Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
   {
    extern const char *Txt_View_records;
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
@@ -5617,44 +5617,44 @@ void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_
    extern const char *Txt_Unfollow;
    static const char **Label[Usr_LIST_USRS_NUM_OPTIONS] =
      {
-      [Usr_OPTION_UNKNOWN		] = NULL,
-      [Usr_OPTION_RECORDS		] = &Txt_View_records,
-      [Usr_OPTION_ADD_TO_CLIPBOARD	] = &Txt_Add_to_clipboard,
-      [Usr_OPTION_OVERWRITE_CLIPBOARD	] = &Txt_Overwrite_clipboard,
-      [Usr_OPTION_HOMEWORK		] = &Txt_View_homework,
-      [Usr_OPTION_ATTENDANCE		] = &Txt_Actions[ActSeeLstUsrAtt],
-      [Usr_OPTION_MESSAGE		] = &Txt_Actions[ActReqMsgUsr],
-      [Usr_OPTION_EMAIL			] = &Txt_Create_email_message,
-      [Usr_OPTION_FOLLOW		] = &Txt_Follow,
-      [Usr_OPTION_UNFOLLOW		] = &Txt_Unfollow,
-      [Usr_OPTION_EXAMS_QST_SHEETS	] = &Txt_Actions[ActSeeExaQstShe],
-      [Usr_OPTION_BLANK_EXAMS_ANS_SHEETS] = &Txt_Actions[ActSeeBlkExaAnsShe],
-      [Usr_OPTION_SOLVD_EXAMS_ANS_SHEETS] = &Txt_Actions[ActSeeSolExaAnsShe],
+      [Usr_ACT_UNKNOWN			] = NULL,
+      [Usr_ACT_RECORDS			] = &Txt_View_records,
+      [Usr_ACT_ADD_TO_CLIPBOARD		] = &Txt_Add_to_clipboard,
+      [Usr_ACT_OVERWRITE_CLIPBOARD	] = &Txt_Overwrite_clipboard,
+      [Usr_ACT_HOMEWORK			] = &Txt_View_homework,
+      [Usr_ACT_ATTENDANCE		] = &Txt_Actions[ActSeeLstUsrAtt],
+      [Usr_ACT_MESSAGE			] = &Txt_Actions[ActReqMsgUsr],
+      [Usr_ACT_EMAIL			] = &Txt_Create_email_message,
+      [Usr_ACT_FOLLOW			] = &Txt_Follow,
+      [Usr_ACT_UNFOLLOW			] = &Txt_Unfollow,
+      [Usr_ACT_EXAMS_QST_SHEETS		] = &Txt_Actions[ActSeeExaQstShe],
+      [Usr_ACT_BLANK_EXAMS_ANS_SHEETS	] = &Txt_Actions[ActSeeBlkExaAnsShe],
+      [Usr_ACT_SOLVD_EXAMS_ANS_SHEETS	] = &Txt_Actions[ActSeeSolExaAnsShe],
      };
-   Usr_ListUsrsOption_t Opt;
-   Usr_ListUsrsOption_t DefaultAction = Usr_OPTION_UNKNOWN;
+   Usr_ListUsrsAction_t Act;
+   Usr_ListUsrsAction_t DefaultAction = Usr_ACT_UNKNOWN;
 
-   /***** Get the selected option from form *****/
-   for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
-	Opt <= (Usr_ListUsrsOption_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
-	Opt++)
-      if (ICanChooseOption[Opt] == Usr_CAN)
+   /***** Get the selected action from form *****/
+   for (Act  = (Usr_ListUsrsAction_t) 1;	// Skip unknown action
+	Act <= (Usr_ListUsrsAction_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
+	Act++)
+      if (ICanChooseOption[Act] == Usr_CAN)
         {
-	 DefaultAction = Opt;
+	 DefaultAction = Act;
 	 break;
         }
-   Gbl.Usrs.Selected.Option = Usr_GetListUsrsOption (DefaultAction);
+   Gbl.Usrs.Selected.Action = Usr_GetListUsrsAction (DefaultAction);
 
    /***** Write list of options *****/
    /* Begin list of options */
    HTM_UL_Begin ("class=\"LIST_LEFT FORM_IN_%s\"",The_GetSuffix ());
 
       /* Show option items */
-      for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
-	   Opt <= (Usr_ListUsrsOption_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
-	   Opt++)
-	 if (ICanChooseOption[Opt] == Usr_CAN)
-	    Usr_ShowOneListUsrsOption (Opt,*Label[Opt]);
+      for (Act  = (Usr_ListUsrsAction_t) 1;	// Skip unknown option
+	   Act <= (Usr_ListUsrsAction_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
+	   Act++)
+	 if (ICanChooseOption[Act] == Usr_CAN)
+	    Usr_ShowOneListUsrsAction (Act,*Label[Act]);
 
    /* End list of options */
    HTM_UL_End ();
@@ -5664,16 +5664,37 @@ void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_
   }
 
 /*****************************************************************************/
+/******* Write parameter with action to do with list of selected users *******/
+/*****************************************************************************/
+/*
+void Usr_PutParListUsrsAction (Usr_ListUsrsAction_t ListUsrsAction)
+  {
+   Par_PutParUnsigned (NULL,"ListUsrsAction",ListUsrsAction);
+  }
+*/
+/*****************************************************************************/
+/*************** Get action to do with list of selected users ****************/
+/*****************************************************************************/
+
+static Usr_ListUsrsAction_t Usr_GetListUsrsAction (Usr_ListUsrsAction_t DefaultAction)
+  {
+   return (Usr_ListUsrsAction_t) Par_GetParUnsignedLong ("ListUsrsAction",
+							 0,
+							 Usr_LIST_USRS_NUM_OPTIONS - 1,
+							 (unsigned long) DefaultAction);
+  }
+
+/*****************************************************************************/
 /************ Put start/end of action to register/remove one user ************/
 /*****************************************************************************/
 
-static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
+static void Usr_ShowOneListUsrsAction (Usr_ListUsrsAction_t ListUsrsAction,
                                        const char *Label)
   {
    HTM_LI_Begin (NULL);
       HTM_LABEL_Begin (NULL);
 	 HTM_INPUT_RADIO ("ListUsrsAction",
-			  (ListUsrsAction == Gbl.Usrs.Selected.Option) ? HTM_CHECKED :
+			  (ListUsrsAction == Gbl.Usrs.Selected.Action) ? HTM_CHECKED :
 								         HTM_NO_ATTR,
 			  "value=\"%u\" form=\"%s\"",
 			  (unsigned) ListUsrsAction,Usr_FORM_TO_SELECT_USRS_ID);
@@ -5699,14 +5720,14 @@ void Usr_DoActionOnUsrs1 (void)
    if (Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected))
      {
       /* Get the action to do */
-      Gbl.Usrs.Selected.Option = Usr_GetListUsrsOption (Usr_OPTION_UNKNOWN);
+      Gbl.Usrs.Selected.Action = Usr_GetListUsrsAction (Usr_ACT_UNKNOWN);
 
       /***** Change action depending on my selection *****/
       Gbl.Action.Original = Gbl.Action.Act;	// To check if action changes
 
-      switch (Gbl.Usrs.Selected.Option)
+      switch (Gbl.Usrs.Selected.Action)
 	{
-	 case Usr_OPTION_RECORDS:
+	 case Usr_ACT_RECORDS:
 	    switch (Gbl.Action.Act)
 	      {
 	       case Act_DoAct_OnSevGst:
@@ -5722,7 +5743,7 @@ void Usr_DoActionOnUsrs1 (void)
 		  break;
 	      }
 	    break;
-	 case Usr_OPTION_ADD_TO_CLIPBOARD:
+	 case Usr_ACT_ADD_TO_CLIPBOARD:
 	    switch (Gbl.Action.Act)
 	      {
 	       case Act_DoAct_OnSevGst:
@@ -5738,7 +5759,7 @@ void Usr_DoActionOnUsrs1 (void)
 		  break;
 	      }
 	    break;
-	 case Usr_OPTION_OVERWRITE_CLIPBOARD:
+	 case Usr_ACT_OVERWRITE_CLIPBOARD:
 	    switch (Gbl.Action.Act)
 	      {
 	       case Act_DoAct_OnSevGst:
@@ -5754,7 +5775,7 @@ void Usr_DoActionOnUsrs1 (void)
 		  break;
 	      }
 	    break;
-	 case Usr_OPTION_HOMEWORK:
+	 case Usr_ACT_HOMEWORK:
 	    switch (Gbl.Action.Act)
 	      {
 	       case Act_DoAct_OnSevStd:
@@ -5765,7 +5786,7 @@ void Usr_DoActionOnUsrs1 (void)
 		  break;
 	      }
 	    break;
-	 case Usr_OPTION_ATTENDANCE:
+	 case Usr_ACT_ATTENDANCE:
 	    switch (Gbl.Action.Act)
 	      {
 	       case Act_DoAct_OnSevStd:
@@ -5775,7 +5796,7 @@ void Usr_DoActionOnUsrs1 (void)
 		  break;
 	      }
 	    break;
-	 case Usr_OPTION_MESSAGE:
+	 case Usr_ACT_MESSAGE:
 	    switch (Gbl.Action.Act)
 	      {
 	       case Act_DoAct_OnSevStd:
@@ -5786,7 +5807,7 @@ void Usr_DoActionOnUsrs1 (void)
 		  break;
 	      }
 	    break;
-	 case Usr_OPTION_EMAIL:
+	 case Usr_ACT_EMAIL:
 	    switch (Gbl.Action.Act)
 	      {
 	       case Act_DoAct_OnSevStd:
@@ -5797,7 +5818,7 @@ void Usr_DoActionOnUsrs1 (void)
 		  break;
 	      }
 	    break;
-	 case Usr_OPTION_FOLLOW:
+	 case Usr_ACT_FOLLOW:
 	    switch (Gbl.Action.Act)
 	      {
 	       case Act_DoAct_OnSevStd:
@@ -5810,7 +5831,7 @@ void Usr_DoActionOnUsrs1 (void)
 		  break;
 	      }
 	    break;
-	 case Usr_OPTION_UNFOLLOW:
+	 case Usr_ACT_UNFOLLOW:
 	    switch (Gbl.Action.Act)
 	      {
 	       case Act_DoAct_OnSevStd:
@@ -5823,7 +5844,7 @@ void Usr_DoActionOnUsrs1 (void)
 		  break;
 	      }
 	    break;
-	 case Usr_OPTION_EXAMS_QST_SHEETS:
+	 case Usr_ACT_EXAMS_QST_SHEETS:
 	    switch (Gbl.Action.Act)
 	      {
 	       case Act_DoAct_ExaSes:
@@ -5833,7 +5854,7 @@ void Usr_DoActionOnUsrs1 (void)
 		  break;
 	      }
 	    break;
-	 case Usr_OPTION_BLANK_EXAMS_ANS_SHEETS:
+	 case Usr_ACT_BLANK_EXAMS_ANS_SHEETS:
 	    switch (Gbl.Action.Act)
 	      {
 	       case Act_DoAct_ExaSes:
@@ -5843,7 +5864,7 @@ void Usr_DoActionOnUsrs1 (void)
 		  break;
 	      }
 	    break;
-	 case Usr_OPTION_SOLVD_EXAMS_ANS_SHEETS:
+	 case Usr_ACT_SOLVD_EXAMS_ANS_SHEETS:
 	    switch (Gbl.Action.Act)
 	      {
 	       case Act_DoAct_ExaSes:
@@ -5892,18 +5913,6 @@ void Usr_DoActionOnUsrs2 (void)
 
    /***** Free memory used by list of selected users' codes *****/
    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
-  }
-
-/*****************************************************************************/
-/*************** Get action to do with list of selected users ****************/
-/*****************************************************************************/
-
-static Usr_ListUsrsOption_t Usr_GetListUsrsOption (Usr_ListUsrsOption_t DefaultAction)
-  {
-   return (Usr_ListUsrsOption_t) Par_GetParUnsignedLong ("ListUsrsAction",
-							 0,
-							 Usr_LIST_USRS_NUM_OPTIONS - 1,
-							 (unsigned long) DefaultAction);
   }
 
 /*****************************************************************************/

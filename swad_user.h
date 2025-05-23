@@ -176,7 +176,7 @@ struct Usr_SelectedUsrs
    char *List[Rol_NUM_ROLES];	// Lists of encrypted codes of users selected from a form
    bool Filled;			// If lists are already filled/readed
    char *ParSuffix;
-   Usr_ListUsrsOption_t Option;	// What option I have selected to do with these selected users
+   Usr_ListUsrsAction_t Action;	// What action I have selected to do with these selected users
   };
 
 struct Usr_ListUsrCods
@@ -342,7 +342,8 @@ void Usr_ListGuests (void);
 void Usr_ListStudents (void);
 void Usr_ListTeachers (void);
 
-void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
+void Usr_PutListUsrsActions (const Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
+// void Usr_PutParListUsrsAction (Usr_ListUsrsAction_t ListUsrsAction);
 void Usr_DoActionOnUsrs1 (void);
 void Usr_DoActionOnUsrs2 (void);
 

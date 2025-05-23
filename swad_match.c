@@ -2531,7 +2531,7 @@ static void Mch_PutMatchControlButtons (const struct Mch_Match *Match)
   }
 
 /*****************************************************************************/
-/** Show form to choice whether to show answers in one column or two columns */
+/**** Show form to choice whether to show answers in 1, 2, 3 or 4 columns ****/
 /*****************************************************************************/
 
 static void Mch_ShowFormColumns (const struct Mch_Match *Match)

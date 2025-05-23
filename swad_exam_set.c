@@ -636,7 +636,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 		    }
 		  else
 		    {
-		     HTM_SPAN_Begin ("class=\"EXA_SET_TITLE_%s\"",
+		     HTM_SPAN_Begin ("class=\"Exa_SET_TITLE_%s\"",
 				     The_GetSuffix ());
 			HTM_Txt (Set.Title);
 		     HTM_SPAN_End ();
@@ -1662,7 +1662,7 @@ void ExaSet_WriteSetTitle (const struct ExaSet_Set *Set)
    HTM_TABLE_BeginWide ();
 
       /***** Title *****/
-      HTM_TD_Begin ("class=\"EXA_SET_TITLE_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Exa_SET_TITLE_%s\"",The_GetSuffix ());
 	 HTM_Txt (Set->Title);
       HTM_TD_End ();
 

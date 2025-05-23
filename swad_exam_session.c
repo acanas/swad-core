@@ -76,12 +76,19 @@ const char *ExaSes_ModalityIcon[ExaSes_NUM_MODALITIES] =
   };
 
 /*****************************************************************************/
+/**************************** Private constants ******************************/
+/*****************************************************************************/
+
+#define ExaSes_MAX_COLS		4
+#define ExaSes_NUM_COLS_DEFAULT	2
+
+#define ExaSes_SESSION_BOX_ID		"exases_box"
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-
-#define ExaSes_SESSION_BOX_ID		"exases_box"
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -90,7 +97,7 @@ extern struct Globals Gbl;
 static void ExaSes_ShowHeaderResults (void);
 static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 				         unsigned NumUsr,struct Usr_Data *UsrDat);
-static Frm_PutForm_t ExaSes_SetOptionsListUsrsAllowed (Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
+static Frm_PutForm_t ExaSes_SetListUsrsAllowedActions (Usr_Can_t AllowedActions[Usr_LIST_USRS_NUM_OPTIONS]);
 
 static void ExaSes_PutIconsInListOfSessions (void *Exams);
 static void ExaSes_PutIconToCreateNewSession (struct Exa_Exams *Exams);
@@ -167,9 +174,10 @@ void ExaSes_ResetSession (struct ExaSes_Session *Session)
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
       Session->TimeUTC[StartEndTime] = (time_t) 0;
-   Session->Title[0]       = '\0';
-   Session->Hidden         = HidVis_VISIBLE;
-   Session->Open   = CloOpe_CLOSED;
+   Session->Title[0] = '\0';
+   Session->Hidden   = HidVis_VISIBLE;
+   Session->Open     = CloOpe_CLOSED;
+   Session->NumCols  = ExaSes_NUM_COLS_DEFAULT;
    Session->ShowUsrResults = false;
   };
 
@@ -333,8 +341,8 @@ void ExaSes_ListUsersForSelection (struct Exa_Exams *Exams,
 
 		  /* Options and continue button */
 		  HTM_SECTION_Begin (ExaSes_EXAM_SHEET_OPTIONS_SECTION_ID);
-		     ExaSes_SetOptionsListUsrsAllowed (ICanChooseOption);
-		     Usr_PutOptionsListUsrs (ICanChooseOption);
+		     ExaSes_SetListUsrsAllowedActions (ICanChooseOption);
+		     Usr_PutListUsrsActions (ICanChooseOption);
 		  HTM_SECTION_End ();
 
 	       /***** Free memory used for user's data *****/
@@ -358,6 +366,64 @@ void ExaSes_ListUsersForSelection (struct Exa_Exams *Exams,
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
+  }
+
+/*****************************************************************************/
+/**** Show form to choice whether to show answers in 1, 2, 3 or 4 columns ****/
+/*****************************************************************************/
+
+void ExaSes_ShowFormColumns (const struct ExaSes_Session *Session)
+  {
+   extern const char *Txt_column;
+   extern const char *Txt_columns;
+   char *Title;
+   unsigned NumCols;
+   static const char *NumColsIcon[1 + ExaSes_MAX_COLS] =
+     {
+      "",		// Not used
+      "1col.png",	// 1 column
+      "2col.png",	// 2 columns
+      "3col.png",	// 3 columns
+      "4col.png",	// 4 columns
+     };
+
+   Set_BeginOneSettingSelector ();
+      for (NumCols  = 1;
+	   NumCols <= ExaSes_MAX_COLS;
+	   NumCols++)
+	{
+	 Set_BeginPref (NumCols == Session->NumCols);
+	    if (asprintf (&Title,"%u %s",NumCols,
+					 NumCols == 1 ? Txt_column :
+							Txt_columns) < 0)
+	       Err_NotEnoughMemoryExit ();
+
+	    // Input image can not be used to pass a value to the form,
+	    // so use a button with an image inside
+	    HTM_BUTTON_Submit_Begin (NULL,Usr_FORM_TO_SELECT_USRS_ID,
+				     "name=\"NumCols\" value=\"%u\" class=\"BT_NONE\"",
+				     NumCols);
+	       HTM_IMG (Cfg_URL_ICON_PUBLIC,NumColsIcon[NumCols],Title,
+			"class=\"ICO_HIGHLIGHT ICOx20 ICO_%s_%s\"",
+			Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
+	    HTM_BUTTON_End ();
+
+	    free (Title);
+	 Set_EndPref ();
+	}
+   Set_EndOneSettingSelector ();
+  }
+
+/*****************************************************************************/
+/************** Get parameter used to show/hide side columns *****************/
+/*****************************************************************************/
+
+unsigned ExaSes_GetParNumCols (void)
+  {
+   return (unsigned) Par_GetParUnsignedLong ("NumCols",
+                                             1,
+                                             ExaSes_MAX_COLS,
+                                             ExaSes_NUM_COLS_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -613,21 +679,21 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 /*****************************************************************************/
 // Returns true if any option is allowed
 
-static Frm_PutForm_t ExaSes_SetOptionsListUsrsAllowed (Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
+static Frm_PutForm_t ExaSes_SetListUsrsAllowedActions (Usr_Can_t AllowedActions[Usr_LIST_USRS_NUM_OPTIONS])
   {
-   Usr_ListUsrsOption_t Opt;
+   Usr_ListUsrsAction_t Act;
 
-   /***** Check which options I can choose *****/
-   /* Set default (I can not choose options) */
-   for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
-	Opt <= (Usr_ListUsrsOption_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
-	Opt++)
-      ICanChooseOption[Opt] = Usr_CAN_NOT;
+   /***** Check which actions I can choose *****/
+   /* Set default (I can not choose action) */
+   for (Act  = (Usr_ListUsrsAction_t) 1;	// Skip unknown action
+	Act <= (Usr_ListUsrsAction_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
+	Act++)
+      AllowedActions[Act] = Usr_CAN_NOT;
 
    /* Activate some options */
-   ICanChooseOption[Usr_OPTION_EXAMS_QST_SHEETS	     ] =
-   ICanChooseOption[Usr_OPTION_BLANK_EXAMS_ANS_SHEETS] =
-   ICanChooseOption[Usr_OPTION_SOLVD_EXAMS_ANS_SHEETS] = Usr_CAN;
+   AllowedActions[Usr_ACT_EXAMS_QST_SHEETS		] =
+   AllowedActions[Usr_ACT_BLANK_EXAMS_ANS_SHEETS	] =
+   AllowedActions[Usr_ACT_SOLVD_EXAMS_ANS_SHEETS	] = Usr_CAN;
 
    return Frm_PUT_FORM;
   }

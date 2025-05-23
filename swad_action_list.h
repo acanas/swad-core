@@ -1995,7 +1995,7 @@ typedef enum
 	ActChgLan,
 	ActChg1stDay,
 	ActChgDatFmt,
-	ActChgCol,
+	ActChgSidCol,
 	ActChgIco,
 	ActChgMnu,
 	ActChgUsrPho,

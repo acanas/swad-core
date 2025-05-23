@@ -198,7 +198,7 @@ static void Set_PutIconsToSelectSideCols (void)
 	      SideCols++)
 	   {
 	    Set_BeginPref (SideCols == Gbl.Prefs.SideCols);
-	       Frm_BeginForm (ActChgCol);
+	       Frm_BeginForm (ActChgSidCol);
 		  Par_PutParUnsigned (NULL,"SideCols",SideCols);
 		  snprintf (Icon,sizeof (Icon),"layout%u%u_32x20.gif",
 			    SideCols >> 1,SideCols & 1);

@@ -1573,7 +1573,7 @@ void Exa_GetAndWriteDescription (long ExaCod)
    ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);			// Insert links
 
    /***** Write description *****/
-   HTM_DIV_Begin ("class=\"EXA_PRN_DESC DAT_SMALL_%s\"",The_GetSuffix ());
+   HTM_DIV_Begin ("class=\"Exa_PRN_DESC DAT_SMALL_%s\"",The_GetSuffix ());
       HTM_Txt (Txt);
    HTM_DIV_End ();
   }
