@@ -1479,16 +1479,17 @@ unsigned Exa_DB_GetSessionDataByCod (MYSQL_RES **mysql_res,long SesCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get sessions",
-		   "SELECT SesCod,"					// row[0]
-			  "ExaCod,"					// row[1]
-			  "Hidden,"					// row[2]
-			  "UsrCod,"					// row[3]
-			  "Modality,"					// row[4]
-			  "UNIX_TIMESTAMP(StartTime),"			// row[5]
-			  "UNIX_TIMESTAMP(EndTime),"			// row[6]
-			  "NOW() BETWEEN StartTime AND EndTime,"	// row[7]
-			  "Title,"					// row[8]
-			  "ShowUsrResults"				// row[9]
+		   "SELECT SesCod,"					// row[ 0]
+			  "ExaCod,"					// row[ 1]
+			  "Hidden,"					// row[ 2]
+			  "UsrCod,"					// row[ 3]
+			  "Modality,"					// row[ 4]
+			  "UNIX_TIMESTAMP(StartTime),"			// row[ 5]
+			  "UNIX_TIMESTAMP(EndTime),"			// row[ 6]
+			  "NOW() BETWEEN StartTime AND EndTime,"	// row[ 7]
+			  "Title,"					// row[ 8]
+			  "ShowUsrResults,"				// row[ 9]
+			  "NumCols"					// row[10]
 		    " FROM exa_sessions"
 		   " WHERE SesCod=%ld"
 		     " AND ExaCod IN"		// Extra check
@@ -1561,6 +1562,27 @@ void Exa_DB_HideUnhideSession (const struct ExaSes_Session *Session,
 		   Session->ExaCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
+
+/*****************************************************************************/
+/******************* Update number of colums in a session ********************/
+/*****************************************************************************/
+
+void Exa_DB_UpdateNumCols (const struct ExaSes_Session *Session)
+  {
+   DB_QueryUPDATE ("can not hide exam sessions",
+		   "UPDATE exa_sessions,"
+		          "exa_exams"
+		     " SET exa_sessions.NumCols=%u"
+		   " WHERE exa_sessions.SesCod=%ld"
+		     " AND exa_sessions.ExaCod=%ld"	// Extra check
+		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
+		     " AND exa_exams.CrsCod=%ld",	// Extra check
+		   Session->NumCols,
+		   Session->SesCod,
+		   Session->ExaCod,
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+  }
+
 
 /*****************************************************************************/
 /******************* Remove exam session from all tables *********************/

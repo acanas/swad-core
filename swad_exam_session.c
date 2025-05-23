@@ -415,15 +415,39 @@ void ExaSes_ShowFormColumns (const struct ExaSes_Session *Session)
   }
 
 /*****************************************************************************/
-/************** Get parameter used to show/hide side columns *****************/
+/**************** Get parameter with the number of columns *******************/
 /*****************************************************************************/
 
 unsigned ExaSes_GetParNumCols (void)
   {
    return (unsigned) Par_GetParUnsignedLong ("NumCols",
-                                             1,
+                                             0,
                                              ExaSes_MAX_COLS,
-                                             ExaSes_NUM_COLS_DEFAULT);
+                                             0);
+  }
+
+/*****************************************************************************/
+/****************** Update number of columns in database *********************/
+/*****************************************************************************/
+
+void ExaSes_UpdateNumCols (struct ExaSes_Session *Session,unsigned NewNumCols)
+  {
+   if (NewNumCols == 0)				// Not got from form
+     {
+      if (Session->NumCols == 0)		// Not stored in database
+	{
+	 Session->NumCols = ExaSes_NUM_COLS_DEFAULT;
+	 Exa_DB_UpdateNumCols (Session);
+	}
+     }
+   else						// Got from form
+     {
+      if (NewNumCols != Session->NumCols)	// Different from stored in database
+	{
+	 Session->NumCols = NewNumCols;
+	 Exa_DB_UpdateNumCols (Session);
+	}
+     }
   }
 
 /*****************************************************************************/
@@ -1336,16 +1360,17 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
    /***** Get next row from result *****/
    row = mysql_fetch_row (mysql_res);
    /*
-   row[0]	SesCod
-   row[1]	ExaCod
-   row[2]	Hidden
-   row[3]	UsrCod
-   row[4]	Modality
-   row[5]	UNIX_TIMESTAMP(StartTime)
-   row[6]	UNIX_TIMESTAMP(EndTime)
-   row[7]	Open = NOW() BETWEEN StartTime AND EndTime
-   row[8]	Title
-   row[9]	ShowUsrResults
+   row[ 0]	SesCod
+   row[ 1]	ExaCod
+   row[ 2]	Hidden
+   row[ 3]	UsrCod
+   row[ 4]	Modality
+   row[ 5]	UNIX_TIMESTAMP(StartTime)
+   row[ 6]	UNIX_TIMESTAMP(EndTime)
+   row[ 7]	Open = NOW() BETWEEN StartTime AND EndTime
+   row[ 8]	Title
+   row[ 9]	ShowUsrResults
+   row[10]	NumCols
    */
 
    /***** Get session data *****/
@@ -1380,6 +1405,9 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
 
    /* Get whether to show user results or not (row(9)) */
    Session->ShowUsrResults = (row[9][0] == 'Y');
+
+   /* Get number of columns (row[10]) */
+   Session->NumCols = Str_ConvertStrToUnsigned (row[10]);
   }
 
 /*****************************************************************************/

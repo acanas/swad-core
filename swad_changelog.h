@@ -638,10 +638,14 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.85 (2025-05-23)"
+#define Log_PLATFORM_VERSION	"SWAD 24.86 (2025-05-23)"
 #define CSS_FILE		"swad24.85.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 24.86:    May 23, 2025  Columns in exam sheets are stored in database. (347365 lines)
+					1 changes necessary in database:
+ALTER TABLE exa_sessions ADD COLUMN NumCols TINYINT NOT NULL DEFAULT 0 AFTER ShowUsrResults;
+
 	Version 24.85:    May 23, 2025  Teachers can change columns in exam sheets. (347308 lines)
 	Version 24.84.4:  May 21, 2025  Changes in exam answer sheets. (347221 lines)
 	Version 24.84.3:  May 20, 2025  Exam blank answer sheets are displayed in two columns. (347195 lines)

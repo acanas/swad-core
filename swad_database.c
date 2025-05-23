@@ -1331,8 +1331,9 @@ mysql> DESCRIBE exa_sessions;
 | EndTime        | datetime                      | NO   |     | NULL    |                |
 | Title          | varchar(2047)                 | NO   |     | NULL    |                |
 | ShowUsrResults | enum('N','Y')                 | NO   |     | N       |                |
+| NumCols        | tinyint                       | NO   |     | 0       |                |
 +----------------+-------------------------------+------+-----+---------+----------------+
-9 rows in set (0,00 sec)
+10 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_sessions ("
 			"SesCod INT NOT NULL AUTO_INCREMENT,"
@@ -1344,6 +1345,7 @@ mysql> DESCRIBE exa_sessions;
 			"EndTime DATETIME NOT NULL,"
 			"Title VARCHAR(2047) NOT NULL,"	// ExaSes_MAX_BYTES_TITLE
 			"ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"NumCols TINYINT NOT NULL DEFAULT 0,"	// 0 means not set ==> use default
 		   "UNIQUE INDEX(SesCod),"
 		   "INDEX(ExaCod))");
 

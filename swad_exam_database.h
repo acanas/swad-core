@@ -121,6 +121,7 @@ void Exa_DB_GetSessionTitle (long SesCod,char Title[ExaSes_MAX_BYTES_TITLE + 1])
 void Exa_DB_ToggleVisResultsSesUsr (const struct ExaSes_Session *Session);
 void Exa_DB_HideUnhideSession (const struct ExaSes_Session *Session,
 			       HidVis_HiddenOrVisible_t HiddenOrVisible);
+void Exa_DB_UpdateNumCols (const struct ExaSes_Session *Session);
 void Exa_DB_RemoveSessionFromAllTables (long SesCod);
 void Exa_DB_RemoveAllSessionsFromExam (long ExaCod);
 void Exa_DB_RemoveAllSessionsFromCrs (long CrsCod);

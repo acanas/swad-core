@@ -114,6 +114,7 @@ static void ExaQstShe_ListOrPrintSheets (Vie_ViewType_t ViewType)
    extern const char *Txt_List_of_exam_question_sheets_for_session_X;
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;
+   unsigned NumCols;
    char *Title;
    unsigned NumUsrsInList;
    long *LstSelectedUsrCods;
@@ -133,11 +134,14 @@ static void ExaQstShe_ListOrPrintSheets (Vie_ViewType_t ViewType)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /* Get number of columns */
-   Session.NumCols = ExaSes_GetParNumCols ();
+   NumCols = ExaSes_GetParNumCols ();
 
    /***** Get exam data and session *****/
    Exa_GetExamDataByCod (&Exams.Exam);
    ExaSes_GetSessionDataByCod (&Session);
+
+   /***** Update number of columns *****/
+   ExaSes_UpdateNumCols (&Session,NumCols);
 
    if (ViewType == Vie_VIEW)
      {
