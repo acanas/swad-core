@@ -79,10 +79,20 @@ const char *ExaSes_ModalityIcon[ExaSes_NUM_MODALITIES] =
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
+#define ExaSes_MIN_COLS		1
 #define ExaSes_MAX_COLS		4
 #define ExaSes_NUM_COLS_DEFAULT	2
 
 #define ExaSes_SESSION_BOX_ID		"exases_box"
+
+static const char *ExaSes_NumColsIcon[1 + ExaSes_MAX_COLS] =
+  {
+   "",		// Not used
+   "1col.png",	// 1 column,	ExaSes_MIN_COLS
+   "2col.png",	// 2 columns
+   "3col.png",	// 3 columns
+   "4col.png",	// 4 columns,	ExaSes_MAX_COLS
+  };
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -148,8 +158,8 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session);
 static void ExaSes_ParsFormSession (void *Session);
 
 static void ExaSes_PutSessionModalities (const struct ExaSes_Session *Session);
-
 static void ExaSes_ShowLstGrpsToCreateSession (long SesCod);
+static void ExaSes_PutSessionNumCols (const struct ExaSes_Session *Session);
 
 static void ExaSes_CreateSession (struct ExaSes_Session *Session);
 static void ExaSes_UpdateSession (struct ExaSes_Session *Session);
@@ -378,17 +388,9 @@ void ExaSes_ShowFormColumns (const struct ExaSes_Session *Session)
    extern const char *Txt_columns;
    char *Title;
    unsigned NumCols;
-   static const char *NumColsIcon[1 + ExaSes_MAX_COLS] =
-     {
-      "",		// Not used
-      "1col.png",	// 1 column
-      "2col.png",	// 2 columns
-      "3col.png",	// 3 columns
-      "4col.png",	// 4 columns
-     };
 
    Set_BeginOneSettingSelector ();
-      for (NumCols  = 1;
+      for (NumCols  = ExaSes_MIN_COLS;
 	   NumCols <= ExaSes_MAX_COLS;
 	   NumCols++)
 	{
@@ -403,7 +405,7 @@ void ExaSes_ShowFormColumns (const struct ExaSes_Session *Session)
 	    HTM_BUTTON_Submit_Begin (NULL,Usr_FORM_TO_SELECT_USRS_ID,
 				     "name=\"NumCols\" value=\"%u\" class=\"BT_NONE\"",
 				     NumCols);
-	       HTM_IMG (Cfg_URL_ICON_PUBLIC,NumColsIcon[NumCols],Title,
+	       HTM_IMG (Cfg_URL_ICON_PUBLIC,ExaSes_NumColsIcon[NumCols],Title,
 			"class=\"ICO_HIGHLIGHT ICOx20 ICO_%s_%s\"",
 			Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
 	    HTM_BUTTON_End ();
@@ -418,12 +420,12 @@ void ExaSes_ShowFormColumns (const struct ExaSes_Session *Session)
 /**************** Get parameter with the number of columns *******************/
 /*****************************************************************************/
 
-unsigned ExaSes_GetParNumCols (void)
+unsigned ExaSes_GetParNumCols (unsigned DefaultCols)
   {
    return (unsigned) Par_GetParUnsignedLong ("NumCols",
-                                             0,
+                                             ExaSes_MIN_COLS,
                                              ExaSes_MAX_COLS,
-                                             0);
+                                             DefaultCols);	// If parameter does not exists
   }
 
 /*****************************************************************************/
@@ -432,21 +434,10 @@ unsigned ExaSes_GetParNumCols (void)
 
 void ExaSes_UpdateNumCols (struct ExaSes_Session *Session,unsigned NewNumCols)
   {
-   if (NewNumCols == 0)				// Not got from form
+   if (NewNumCols != Session->NumCols)	// Different from stored in database
      {
-      if (Session->NumCols == 0)		// Not stored in database
-	{
-	 Session->NumCols = ExaSes_NUM_COLS_DEFAULT;
-	 Exa_DB_UpdateNumCols (Session);
-	}
-     }
-   else						// Got from form
-     {
-      if (NewNumCols != Session->NumCols)	// Different from stored in database
-	{
-	 Session->NumCols = NewNumCols;
-	 Exa_DB_UpdateNumCols (Session);
-	}
+      Session->NumCols = NewNumCols;
+      Exa_DB_UpdateNumCols (Session);
      }
   }
 
@@ -805,6 +796,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	{
 	 /***** Get exam session data from row *****/
 	 ExaSes_GetSessionDataFromRow (mysql_res,&Session);
+
 	 Exams->SesCod.Par = Session.SesCod;	// To be used as hidden parameter in forms
 
 	 if (ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session.SesCod) == Usr_CAN)
@@ -1408,6 +1400,9 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
 
    /* Get number of columns (row[10]) */
    Session->NumCols = Str_ConvertStrToUnsigned (row[10]);
+   if (Session->NumCols < ExaSes_MIN_COLS ||
+       Session->NumCols > ExaSes_MAX_COLS)
+      Session->NumCols = ExaSes_NUM_COLS_DEFAULT;
   }
 
 /*****************************************************************************/
@@ -1575,6 +1570,7 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session)
   {
    extern const char *Txt_Title;
    extern const char *Txt_EXAM_SESSION_Modality;
+   extern const char *Txt_Columns;
    static struct
      {
       Act_Action_t Action;
@@ -1638,6 +1634,19 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session)
 	 /***** Groups *****/
 	 ExaSes_ShowLstGrpsToCreateSession (Session->SesCod);
 
+	 /***** Number of columns *****/
+	 HTM_TR_Begin (NULL);
+
+	    /* Label */
+	    Frm_LabelColumn ("Frm_C1 RT","NumCols",Txt_Columns);
+
+	    /* Data */
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
+	       ExaSes_PutSessionNumCols (Session);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
       /***** End form to create *****/
       Frm_EndFormTable (Forms[OldNewSession].Button);
 
@@ -1652,7 +1661,7 @@ static void ExaSes_ParsFormSession (void *Session)
   }
 
 /*****************************************************************************/
-/**** Put different actions to enrol/remove users to/from current course *****/
+/*********************** Modalities in an exam session ***********************/
 /*****************************************************************************/
 
 static void ExaSes_PutSessionModalities (const struct ExaSes_Session *Session)
@@ -1729,6 +1738,51 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
 
    /***** Free list of groups types and groups in this course *****/
    Grp_FreeListGrpTypesAndGrps ();
+  }
+
+/*****************************************************************************/
+/******************** Number of columns in an exam session *******************/
+/*****************************************************************************/
+
+static void ExaSes_PutSessionNumCols (const struct ExaSes_Session *Session)
+  {
+   extern const char *Txt_column;
+   extern const char *Txt_columns;
+   unsigned NumCols;		// Number of columns in exam sheets
+   char *Title;
+
+   /***** Begin list of checkboxes *****/
+   HTM_UL_Begin ("class=\"LIST_LEFT FORM_IN_%s\"",The_GetSuffix ());
+
+      for (NumCols  = ExaSes_MIN_COLS;
+	   NumCols <= ExaSes_MAX_COLS;
+	   NumCols++)
+	{
+	 if (asprintf (&Title,"%u %s",NumCols,
+				      NumCols == 1 ? Txt_column :
+						     Txt_columns) < 0)
+	    Err_NotEnoughMemoryExit ();
+
+	 /* Begin label */
+	 HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
+
+	    /* Checkbox with icon */
+	    HTM_INPUT_RADIO ("NumCols",
+			     (NumCols == Session->NumCols) ? HTM_CHECKED :
+							     HTM_NO_ATTR,
+			     "value=\"%u\"",NumCols);
+	    Ico_PutIconOn (ExaSes_NumColsIcon[NumCols],Ico_BLACK,Title);
+	    HTM_Unsigned (NumCols);
+
+	 /* End label */
+	 HTM_LABEL_End ();
+	 HTM_NBSP (); HTM_NBSP (); HTM_NBSP ();
+
+ 	 free (Title);
+	}
+
+   /***** End list of checkboxes *****/
+   HTM_UL_End ();
   }
 
 /*****************************************************************************/
@@ -1848,6 +1902,9 @@ void ExaSes_ReceiveSession (void)
 
    /* Get groups associated to the session */
    Grp_GetParCodsSeveralGrps ();
+
+   /* Get number of columns in exam sheets */
+   Session.NumCols = ExaSes_GetParNumCols (Session.NumCols);
 
    /***** Create/update session *****/
    switch (OldNewSession)

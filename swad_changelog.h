@@ -638,10 +638,11 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.86 (2025-05-23)"
+#define Log_PLATFORM_VERSION	"SWAD 24.87 (2025-05-26)"
 #define CSS_FILE		"swad24.85.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 24.87:    May 26, 2025  Form to edit exam session includes the number of columns in exam sheets. (347410 lines)
 	Version 24.86:    May 23, 2025  Columns in exam sheets are stored in database. (347365 lines)
 					1 changes necessary in database:
 ALTER TABLE exa_sessions ADD COLUMN NumCols TINYINT NOT NULL DEFAULT 0 AFTER ShowUsrResults;

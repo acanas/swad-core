@@ -129,18 +129,14 @@ static void ExaQstShe_ListOrPrintSheets (Vie_ViewType_t ViewType)
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
    Exams.SesCod.Sel =
    Exams.SesCod.Par = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
+   Exa_GetExamDataByCod (&Exams.Exam);
+   ExaSes_GetSessionDataByCod (&Session);
 
    /* Get list of groups selected */
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
-   /* Get number of columns */
-   NumCols = ExaSes_GetParNumCols ();
-
-   /***** Get exam data and session *****/
-   Exa_GetExamDataByCod (&Exams.Exam);
-   ExaSes_GetSessionDataByCod (&Session);
-
-   /***** Update number of columns *****/
+   /* Get and update number of columns */
+   NumCols = ExaSes_GetParNumCols (Session.NumCols);
    ExaSes_UpdateNumCols (&Session,NumCols);
 
    if (ViewType == Vie_VIEW)

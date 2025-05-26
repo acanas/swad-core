@@ -1300,7 +1300,8 @@ long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
 				  "StartTime,"
 				  "EndTime,"
 				  "Title,"
-				  "ShowUsrResults)"
+				  "ShowUsrResults,"
+				  "NumCols)"
 				" VALUES"
 				" (%ld,"		// ExaCod
                                  "'%c',"		// Hidden
@@ -1309,14 +1310,16 @@ long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
                                  "FROM_UNIXTIME(%ld),"	// Start time
                                  "FROM_UNIXTIME(%ld),"	// End time
 				 "'%s',"		// Title
-				 "'N')",		// ShowUsrResults: Don't show user results initially
+				 "'N',"			// ShowUsrResults: Don't show user results initially
+				 "%u)",			// Number of columns
 				Session->ExaCod,
 				HidVis_Hidden_YN[Session->Hidden],
 				Gbl.Usrs.Me.UsrDat.UsrCod,		// Session creator
 				ExaSes_ModalityDB[Session->Modality],	// Modality
 				Session->TimeUTC[Dat_STR_TIME],		// Start time
 				Session->TimeUTC[Dat_END_TIME],		// End time
-				Session->Title);
+				Session->Title,				// Title
+				Session->NumCols);			// Number of columns
   }
 
 /*****************************************************************************/
@@ -1337,18 +1340,20 @@ void Exa_DB_UpdateSession (const struct ExaSes_Session *Session)
 		          "exa_sessions.StartTime=FROM_UNIXTIME(%ld),"
                           "exa_sessions.EndTime=FROM_UNIXTIME(%ld),"
                           "exa_sessions.Title='%s',"
-                          "exa_sessions.ShowUsrResults='%c'"
+                          "exa_sessions.ShowUsrResults='%c',"
+                          "exa_sessions.NumCols=%u"
 		   " WHERE exa_sessions.SesCod=%ld"
-		     " AND exa_sessions.ExaCod=%ld"	// Extra check
+		     " AND exa_sessions.ExaCod=%ld"		// Extra check
 		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
 		     " AND exa_exams.CrsCod=%ld",		// Extra check
-		   HidVis_Hidden_YN[Session->Hidden],
+		   HidVis_Hidden_YN[Session->Hidden],		// Hidden?
 		   ExaSes_ModalityDB[Session->Modality],	// Modality
 	           Session->TimeUTC[Dat_STR_TIME],		// Start time
 		   Session->TimeUTC[Dat_END_TIME],		// End time
-		   Session->Title,
+		   Session->Title,				// Title
 		   Session->ShowUsrResults ? 'Y' :
 			                     'N',
+		   Session->NumCols,				// Number of columns
 		   Session->SesCod,
 		   Session->ExaCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
@@ -1447,16 +1452,17 @@ unsigned Exa_DB_GetSessions (MYSQL_RES **mysql_res,long ExaCod)
    /***** Get data of sessions from database *****/
    NumSessions = (unsigned)
    DB_QuerySELECT (mysql_res,"can not get sessions",
-		   "SELECT SesCod,"					// row[0]
-			  "ExaCod,"					// row[1]
-			  "Hidden,"					// row[2]
-			  "UsrCod,"					// row[3]
-			  "Modality,"					// row[4]
-			  "UNIX_TIMESTAMP(StartTime),"			// row[5]
-			  "UNIX_TIMESTAMP(EndTime),"			// row[6]
-			  "NOW() BETWEEN StartTime AND EndTime,"	// row[7]
-			  "Title,"					// row[8]
-			  "ShowUsrResults"				// row[9]
+		   "SELECT SesCod,"					// row[ 0]
+			  "ExaCod,"					// row[ 1]
+			  "Hidden,"					// row[ 2]
+			  "UsrCod,"					// row[ 3]
+			  "Modality,"					// row[ 4]
+			  "UNIX_TIMESTAMP(StartTime),"			// row[ 5]
+			  "UNIX_TIMESTAMP(EndTime),"			// row[ 6]
+			  "NOW() BETWEEN StartTime AND EndTime,"	// row[ 7]
+			  "Title,"					// row[ 8]
+			  "ShowUsrResults,"				// row[ 9]
+			  "NumCols"					// row[10]
 		    " FROM exa_sessions"
 		   " WHERE ExaCod=%ld%s%s"
 		" ORDER BY SesCod",
