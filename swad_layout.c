@@ -1475,78 +1475,74 @@ void Lay_WriteHeaderClassPhoto (Hie_Level_t HieLvl,Vie_ViewType_t ViewType)
    Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]);
    Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (10);
+   /***** Begin container *****/
+   HTM_DIV_Begin ("class=\"CLASSPHOTO_HEAD_CONT\"");
 
-      HTM_TR_Begin (NULL);
+      /***** First column: institution logo *****/
+      HTM_DIV_Begin ("class=\"CLASSPHOTO_HEAD_LEFT\"");
+	 if (Hie[Hie_INS].HieCod > 0)
+	   {
+	    if (ViewType == Vie_VIEW)
+	       HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Hie[Hie_INS].WWW);
+	    Lgo_DrawLogo (Hie_INS,&Hie[Hie_INS],"ICO40x40");
+	    if (ViewType == Vie_VIEW)
+	       HTM_A_End ();
+	   }
+      HTM_DIV_End ();
 
-	 /***** First column: institution logo *****/
-	 HTM_TD_Begin ("class=\"LT\" style=\"width:60px;\"");
+      /***** Second column: class photo title *****/
+      HTM_DIV_Begin ("class=\"CLASSPHOTO_HEAD_CENTER CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
+		     The_GetSuffix ());
+	 if (Hie[Hie_INS].HieCod > 0)
+	   {
+	    if (ViewType == Vie_VIEW)
+	       HTM_A_Begin ("href=\"%s\" target=\"_blank\""
+			    " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
+			    Hie[Hie_INS].WWW,The_GetSuffix ());
+	    HTM_Txt (Hie[Hie_INS].FullName);
+	    if (ViewType == Vie_VIEW)
+	       HTM_A_End ();
+	   }
+	 if (Hie[Hie_DEG].HieCod > 0)
+	   {
 	    if (Hie[Hie_INS].HieCod > 0)
+	       HTM_Txt (" - ");
+	    if (ViewType == Vie_VIEW)
+	       HTM_A_Begin ("href=\"%s\" target=\"_blank\""
+			    " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
+			    Hie[Hie_DEG].WWW,The_GetSuffix ());
+	    HTM_Txt (Hie[Hie_DEG].FullName);
+	    if (ViewType == Vie_VIEW)
+	       HTM_A_End ();
+	   }
+	 HTM_BR ();
+	 if (Hie[Hie_CRS].HieCod > 0)
+	   {
+	    HTM_Txt (Hie[Hie_CRS].FullName);
+	    if (!Gbl.Crs.Grps.AllGrpsSel)
 	      {
-	       if (ViewType == Vie_VIEW)
-		  HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Hie[Hie_INS].WWW);
-	       Lgo_DrawLogo (Hie_INS,&Hie[Hie_INS],"ICO40x40");
-	       if (ViewType == Vie_VIEW)
-		  HTM_A_End ();
+	       HTM_BR ();
+	       Grp_WriteNamesOfSelectedGrps ();
 	      }
-	 HTM_TD_End ();
+	   }
+      HTM_DIV_End ();
 
-	 /***** Second column: class photo title *****/
-	 HTM_TD_Begin ("class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s CM\"",
-	               The_GetSuffix ());
-	    if (Hie[Hie_INS].HieCod > 0)
-	      {
-	       if (ViewType == Vie_VIEW)
-		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
-			       Hie[Hie_INS].WWW,The_GetSuffix ());
-	       HTM_Txt (Hie[Hie_INS].FullName);
-	       if (ViewType == Vie_VIEW)
-		  HTM_A_End ();
-	      }
-	    if (Hie[Hie_DEG].HieCod > 0)
-	      {
-	       if (Hie[Hie_INS].HieCod > 0)
-		  HTM_Txt (" - ");
-	       if (ViewType == Vie_VIEW)
-		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
-			       Hie[Hie_DEG].WWW,The_GetSuffix ());
-	       HTM_Txt (Hie[Hie_DEG].FullName);
-	       if (ViewType == Vie_VIEW)
-		  HTM_A_End ();
-	      }
-	    HTM_BR ();
-	    if (Hie[Hie_CRS].HieCod > 0)
-	      {
-	       HTM_Txt (Hie[Hie_CRS].FullName);
-	       if (!Gbl.Crs.Grps.AllGrpsSel)
-		 {
-		  HTM_BR ();
-		  Grp_WriteNamesOfSelectedGrps ();
-		 }
-	      }
-	 HTM_TD_End ();
+      /***** Third column: degree logo *****/
+      HTM_DIV_Begin ("class=\"CLASSPHOTO_HEAD_RIGHT\"");
+	 if (Hie[Hie_DEG].HieCod > 0)
+	   {
+	    if (ViewType == Vie_VIEW)
+	       HTM_A_Begin ("href=\"%s\" target=\"_blank\""
+			    " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
+			    Hie[Hie_DEG].WWW,The_GetSuffix ());
+	    Lgo_DrawLogo (Hie_DEG,&Hie[Hie_DEG],"ICO40x40");
+	    if (ViewType == Vie_VIEW)
+	       HTM_A_End ();
+	   }
+      HTM_DIV_End ();
 
-	 /***** Third column: degree logo *****/
-	 HTM_TD_Begin ("class=\"RT\" style=\"width:60px;\"");
-	    if (Hie[Hie_DEG].HieCod > 0)
-	      {
-	       if (ViewType == Vie_VIEW)
-		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
-			       Hie[Hie_DEG].WWW,The_GetSuffix ());
-	       Lgo_DrawLogo (Hie_DEG,&Hie[Hie_DEG],"ICO40x40");
-	       if (ViewType == Vie_VIEW)
-		  HTM_A_End ();
-	      }
-	 HTM_TD_End ();
-
-      HTM_TR_End ();
-
-   /***** End table *****/
-   HTM_TABLE_End ();
+   /***** End container *****/
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

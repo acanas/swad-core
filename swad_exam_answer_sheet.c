@@ -95,10 +95,10 @@ static void ExaAnsShe_ShowSheet (struct Exa_Exams *Exams,
 			         ExaAnsShe_BlankOrSolved_t BlankOrSolved,
 			         struct Usr_Data *UsrDat,
 			         struct ExaPrn_Print *Print);
-static void ExaAnsShe_ShowTableAnswers (const struct ExaSes_Session *Session,
-					ExaAnsShe_BlankOrSolved_t BlankOrSolved,
-					const struct Usr_Data *UsrDat,
-					const struct ExaPrn_Print *Print);
+static void ExaAnsShe_ShowAnswers (const struct ExaSes_Session *Session,
+				   ExaAnsShe_BlankOrSolved_t BlankOrSolved,
+				   const struct Usr_Data *UsrDat,
+				   const struct ExaPrn_Print *Print);
 static void ExaAnsShe_WriteQst (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
 				const struct Usr_Data *UsrDat,
 			        const struct ExaPrn_Print *Print,
@@ -377,16 +377,14 @@ static void ExaAnsShe_ShowSheet (struct Exa_Exams *Exams,
    Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
 
    /***** Show student *****/
-   HTM_TABLE_BeginWideMarginPadding (10);
-      ExaRes_ShowExamResultUser (UsrDat);
-   HTM_TABLE_End ();
+   ExaRes_ShowExamResultUser (UsrDat);
 
    /***** Exam description *****/
    Exa_GetAndWriteDescription (Exams->Exam.ExaCod);
 
    /***** Show table with answers *****/
    if (Print->NumQsts.All)
-      ExaAnsShe_ShowTableAnswers (Session,BlankOrSolved,UsrDat,Print);
+      ExaAnsShe_ShowAnswers (Session,BlankOrSolved,UsrDat,Print);
 
    /***** End box *****/
    if (ViewType == Vie_VIEW)
@@ -397,10 +395,10 @@ static void ExaAnsShe_ShowSheet (struct Exa_Exams *Exams,
 /************ Show the main part (table) of an exam answer sheet *************/
 /*****************************************************************************/
 
-static void ExaAnsShe_ShowTableAnswers (const struct ExaSes_Session *Session,
-					ExaAnsShe_BlankOrSolved_t BlankOrSolved,
-					const struct Usr_Data *UsrDat,
-					const struct ExaPrn_Print *Print)
+static void ExaAnsShe_ShowAnswers (const struct ExaSes_Session *Session,
+				   ExaAnsShe_BlankOrSolved_t BlankOrSolved,
+				   const struct Usr_Data *UsrDat,
+				   const struct ExaPrn_Print *Print)
   {
    static struct ExaSet_Set CurrentSet =
      {

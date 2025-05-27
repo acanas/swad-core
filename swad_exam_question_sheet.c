@@ -79,8 +79,8 @@ static void ExaQstShe_ShowSheet (struct Exa_Exams *Exams,
 				 Vie_ViewType_t ViewType,
 				 struct Usr_Data *UsrDat,
 				 struct ExaPrn_Print *Print);
-static void ExaQstShe_ShowTableQuestions (const struct ExaSes_Session *Session,
-					  const struct ExaPrn_Print *Print);
+static void ExaQstShe_ShowQuestions (const struct ExaSes_Session *Session,
+				     const struct ExaPrn_Print *Print);
 static void ExaQstShe_WriteQst (const struct ExaPrn_Print *Print,
 				unsigned QstInd,
 				struct Qst_Question *Question);
@@ -300,16 +300,14 @@ static void ExaQstShe_ShowSheet (struct Exa_Exams *Exams,
    Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
 
    /***** Show student *****/
-   HTM_TABLE_BeginWideMarginPadding (10);
-      ExaRes_ShowExamResultUser (UsrDat);
-   HTM_TABLE_End ();
+   ExaRes_ShowExamResultUser (UsrDat);
 
    /***** Exam description *****/
    Exa_GetAndWriteDescription (Exams->Exam.ExaCod);
 
    /***** Show table with questions *****/
    if (Print->NumQsts.All)
-      ExaQstShe_ShowTableQuestions (Session,Print);
+      ExaQstShe_ShowQuestions (Session,Print);
 
    /***** End box *****/
    if (ViewType == Vie_VIEW)
@@ -320,8 +318,8 @@ static void ExaQstShe_ShowSheet (struct Exa_Exams *Exams,
 /*********** Show the main part (table) of an exam question sheet ************/
 /*****************************************************************************/
 
-static void ExaQstShe_ShowTableQuestions (const struct ExaSes_Session *Session,
-					  const struct ExaPrn_Print *Print)
+static void ExaQstShe_ShowQuestions (const struct ExaSes_Session *Session,
+				     const struct ExaPrn_Print *Print)
   {
    static struct ExaSet_Set CurrentSet =
      {

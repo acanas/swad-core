@@ -3342,6 +3342,35 @@ table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 	}
 
 /******************************** Class photo ********************************/
+
+.CLASSPHOTO_HEAD_CONT
+	{
+	display: table;
+	width: 100%;
+	}
+.CLASSPHOTO_HEAD_LEFT
+	{
+	display: table-cell;
+	width: 60px;
+	padding: 8px;
+	text-align: left;
+	vertical-align: top;
+	}
+.CLASSPHOTO_HEAD_CENTER
+	{
+	display: table-cell;
+	padding: 8px;
+	text-align: center;
+	vertical-align: middle;
+	}
+.CLASSPHOTO_HEAD_RIGHT
+	{
+	display: table-cell;
+	padding: 8px;
+	text-align: right;
+	vertical-align: top;
+	}
+
 .CLASSPHOTO_TITLE
 	{
 	font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
@@ -3544,6 +3573,7 @@ legend {font-size: 12pt; font-weight: bold;}
 .BIG_INDEX_RED_YELLOW,
 .BIG_INDEX_RED_PINK	{color: #660000; font-size: 16pt; font-weight: bold;}
 .BIG_INDEX_RED_DARK	{color: #ff8080; font-size: 16pt; font-weight: bold;}
+
 
 /******************************** Update links *******************************/
 .UPD
@@ -3762,7 +3792,27 @@ legend {font-size: 12pt; font-weight: bold;}
 .Exa_SET_NUM_QSTS_PINK	{text-align: right; vertical-align: middle; color: #404040; font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; font-size: 10pt;}
 .Exa_SET_NUM_QSTS_DARK	{text-align: right; vertical-align: middle; color: #d0d0d0; font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; font-size: 10pt;}
 
-.Exa_PRN_DESC
+.Exa_HEAD_CONT
+	{
+	display: table;
+	}
+.Exa_HEAD_LEFT
+	{
+	display: table-cell;
+	width: 100px;
+	padding: 2px 4px 2px 0;
+	text-align: right;
+	vertical-align: top;
+	}
+.Exa_HEAD_RIGHT
+	{
+	display: table-cell;
+	padding: 2px 0 2px 4px;
+	text-align: left;
+	vertical-align: bottom;
+	}
+
+.Exa_DESC
 	{
 	margin: 1%;
 	text-align: left;

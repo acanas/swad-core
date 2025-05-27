@@ -128,14 +128,15 @@ static void ExaRes_ShowExamResultScore (struct ExaPrn_Print *Print,
 static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
 	                                struct ExaPrn_Print *Print,
                                         const struct ExaRes_ICanView *ICanView);
-static void ExaRes_ShowExamAnswers (struct Usr_Data *UsrDat,
+static void ExaRes_ShowQstsAndAnss (struct Usr_Data *UsrDat,
+				    const struct ExaSes_Session *Session,
 			            struct ExaPrn_Print *Print,
 			            unsigned Visibility);
-static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
-				       struct ExaPrn_Print *Print,
-				       unsigned QstInd,
-				       struct Qst_Question *Question,
-				       unsigned Visibility);
+static void ExaRes_WriteQstAndAns (struct Usr_Data *UsrDat,
+				   struct ExaPrn_Print *Print,
+				   unsigned QstInd,
+				   struct Qst_Question *Question,
+				   unsigned Visibility);
 
 /*****************************************************************************/
 /*************************** Show my sessions results **************************/
@@ -1333,33 +1334,27 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
       if (Usr_CheckIfICanViewTstExaMchResult (UsrDat) == Usr_CAN_NOT)
 	 Err_NoPermissionExit ();
 
-      /***** Begin table *****/
-      HTM_TABLE_BeginWideMarginPadding (10);
+      /* User */
+      ExaRes_ShowExamResultUser (UsrDat);
 
-	 /* User */
-	 ExaRes_ShowExamResultUser (UsrDat);
+      /* Start/end time (for user in this exam print) */
+      ExaRes_ShowExamResultTime (Print);
 
-	 /* Start/end time (for user in this exam print) */
-	 ExaRes_ShowExamResultTime (Print);
+      /* Number of questions */
+      ExaRes_ShowExamResultNumQsts (Print,ICanView);
 
-	 /* Number of questions */
-	 ExaRes_ShowExamResultNumQsts (Print,ICanView);
+      /* Number of answers */
+      ExaRes_ShowExamResultNumAnss (Print,ICanView);
 
-	 /* Number of answers */
-	 ExaRes_ShowExamResultNumAnss (Print,ICanView);
+      /* Score */
+      ExaRes_ShowExamResultScore (Print,ICanView);
 
-	 /* Score */
-	 ExaRes_ShowExamResultScore (Print,ICanView);
+      /* Grade */
+      ExaRes_ShowExamResultGrade (Exam,Print,ICanView);
 
-	 /* Grade */
-	 ExaRes_ShowExamResultGrade (Exam,Print,ICanView);
-
-	 /* Answers and solutions */
-	 if (ICanView->Result == Usr_CAN)
-	    ExaRes_ShowExamAnswers (UsrDat,Print,Visibility);
-
-      /***** End table *****/
-      HTM_TABLE_End ();
+      /* Answers and solutions */
+      if (ICanView->Result == Usr_CAN)
+	 ExaRes_ShowQstsAndAnss (UsrDat,Session,Print,Visibility);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -1503,20 +1498,20 @@ void ExaRes_ShowExamResultUser (struct Usr_Data *UsrDat)
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
 
-   /***** Row begin *****/
-   HTM_TR_Begin (NULL);
+   /***** Begin container *****/
+   HTM_DIV_Begin ("class=\"Exa_HEAD_CONT\"");
 
       /***** Label *****/
-      HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
+      HTM_DIV_Begin ("class=\"Exa_HEAD_LEFT DAT_STRONG_%s\"",The_GetSuffix ());
 	 HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs][UsrDat->Sex]);
-         HTM_Colon ();
-      HTM_TD_End ();
+	 HTM_Colon ();
+      HTM_DIV_End ();
 
       /***** User's data *****/
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_DIV_Begin ("class=\"Exa_HEAD_RIGHT DAT_%s\"",The_GetSuffix ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
-         HTM_Txt (UsrDat->Surname1);
+	 HTM_Txt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
 	   {
 	    HTM_SP ();
@@ -1524,17 +1519,16 @@ void ExaRes_ShowExamResultUser (struct Usr_Data *UsrDat)
 	   }
 	 if (UsrDat->FrstName[0])
 	   {
-	    HTM_Comma ();
-	    HTM_SP ();
+	    HTM_Comma (); HTM_SP ();
 	    HTM_Txt (UsrDat->FrstName);
 	   }
 	 HTM_BR ();
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
-      HTM_TD_End ();
+				    ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
+      HTM_DIV_End ();
 
-   /***** Row end *****/
-   HTM_TR_End ();
+   /***** End container *****/
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -1551,18 +1545,18 @@ static void ExaRes_ShowExamResultTime (struct ExaPrn_Print *Print)
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
      {
-      /***** Row begin *****/
-      HTM_TR_Begin (NULL);
+      /***** Begin container *****/
+      HTM_DIV_Begin ("class=\"Exa_HEAD_CONT\"");
 
 	 /***** Label *****/
-	 HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
+	 HTM_DIV_Begin ("class=\"Exa_HEAD_LEFT DAT_STRONG_%s\"",The_GetSuffix ());
 	    HTM_Txt (Txt_START_END_TIME[StartEndTime]); HTM_Colon ();
-	 HTM_TD_End ();
+	 HTM_DIV_End ();
 
 	 /***** Time *****/
 	 if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("id=\"%s\" class=\"LB DAT_%s\"",Id,The_GetSuffix ());
+	 HTM_DIV_Begin ("id=\"%s\" class=\"Exa_HEAD_RIGHT DAT_%s\"",Id,The_GetSuffix ());
 	    Dat_WriteLocalDateHMSFromUTC (Id,Print->TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 					  Dat_WRITE_TODAY |
@@ -1571,11 +1565,11 @@ static void ExaRes_ShowExamResultTime (struct ExaPrn_Print *Print)
 					  Dat_WRITE_HOUR |
 					  Dat_WRITE_MINUTE |
 					  Dat_WRITE_SECOND);
-	 HTM_TD_End ();
+	 HTM_DIV_End ();
 	 free (Id);
 
-      /***** Row end *****/
-      HTM_TR_End ();
+      /***** End container *****/
+      HTM_DIV_End ();
      }
   }
 
@@ -1590,16 +1584,16 @@ static void ExaRes_ShowExamResultNumQsts (struct ExaPrn_Print *Print,
    extern const char *Txt_QUESTIONS_valid;
    extern const char *Txt_QUESTIONS_invalid;
 
-   /***** Row begin *****/
-   HTM_TR_Begin (NULL);
+   /***** Begin container *****/
+   HTM_DIV_Begin ("class=\"Exa_HEAD_CONT\"");
 
       /***** Label *****/
-      HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
+      HTM_DIV_Begin ("class=\"Exa_HEAD_LEFT DAT_STRONG_%s\"",The_GetSuffix ());
 	 HTM_Txt (Txt_Questions); HTM_Colon ();
-      HTM_TD_End ();
+      HTM_DIV_End ();
 
       /***** Number of questions *****/
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_DIV_Begin ("class=\"Exa_HEAD_RIGHT DAT_%s\"",The_GetSuffix ());
 	 switch (ICanView->Result)
 	   {
 	    case Usr_CAN:
@@ -1631,10 +1625,10 @@ static void ExaRes_ShowExamResultNumQsts (struct ExaPrn_Print *Print,
 	       Ico_PutIconNotVisible ();
 	       break;
 	   }
-      HTM_TD_End ();
+      HTM_DIV_End ();
 
-   /***** Row end *****/
-   HTM_TR_End ();
+   /***** End container *****/
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -1649,16 +1643,16 @@ static void ExaRes_ShowExamResultNumAnss (struct ExaPrn_Print *Print,
    extern const char *Txt_ANSWERS_wrong;
    extern const char *Txt_ANSWERS_blank;
 
-   /***** Row begin *****/
-   HTM_TR_Begin (NULL);
+   /***** Begin container *****/
+   HTM_DIV_Begin ("class=\"Exa_HEAD_CONT\"");
 
       /***** Label *****/
-      HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
+      HTM_DIV_Begin ("class=\"Exa_HEAD_LEFT DAT_STRONG_%s\"",The_GetSuffix ());
 	 HTM_Txt (Txt_Valid_answers); HTM_Colon ();
-      HTM_TD_End ();
+      HTM_DIV_End ();
 
       /***** Number of answers *****/
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_DIV_Begin ("class=\"Exa_HEAD_RIGHT DAT_%s\"",The_GetSuffix ());
 	 switch (ICanView->Score)
 	   {
 	    case Usr_CAN:
@@ -1678,10 +1672,10 @@ static void ExaRes_ShowExamResultNumAnss (struct ExaPrn_Print *Print,
 	       Ico_PutIconNotVisible ();
 	       break;
 	   }
-      HTM_TD_End ();
+      HTM_DIV_End ();
 
-   /***** Row end *****/
-   HTM_TR_End ();
+   /***** End container *****/
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -1694,16 +1688,16 @@ static void ExaRes_ShowExamResultScore (struct ExaPrn_Print *Print,
    extern const char *Txt_Score;
    extern const char *Txt_valid_score;
 
-   /***** Row begin *****/
-   HTM_TR_Begin (NULL);
+   /***** Begin container *****/
+   HTM_DIV_Begin ("class=\"Exa_HEAD_CONT\"");
 
       /***** Label *****/
-      HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
+      HTM_DIV_Begin ("class=\"Exa_HEAD_LEFT DAT_STRONG_%s\"",The_GetSuffix ());
 	 HTM_Txt (Txt_Score); HTM_Colon ();
-      HTM_TD_End ();
+      HTM_DIV_End ();
 
       /***** Score *****/
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_DIV_Begin ("class=\"Exa_HEAD_RIGHT DAT_%s\"",The_GetSuffix ());
 	 switch (ICanView->Score)
 	   {
 	    case Usr_CAN:
@@ -1730,10 +1724,10 @@ static void ExaRes_ShowExamResultScore (struct ExaPrn_Print *Print,
 	       Ico_PutIconNotVisible ();
 	       break;
 	   }
-      HTM_TD_End ();
+      HTM_DIV_End ();
 
-   /***** Row end *****/
-   HTM_TR_End ();
+   /***** End container *****/
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -1747,16 +1741,16 @@ static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
    extern const char *Txt_Grade;
    extern const char *Txt_valid_grade;
 
-   /***** Row begin *****/
-   HTM_TR_Begin (NULL);
+   /***** Begin container *****/
+   HTM_DIV_Begin ("class=\"Exa_HEAD_CONT\"");
 
       /***** Label *****/
-      HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
+      HTM_DIV_Begin ("class=\"Exa_HEAD_LEFT DAT_STRONG_%s\"",The_GetSuffix ());
 	 HTM_Txt (Txt_Grade); HTM_Colon ();
-      HTM_TD_End ();
+      HTM_DIV_End ();
 
       /***** Grade *****/
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_DIV_Begin ("class=\"Exa_HEAD_RIGHT DAT_%s\"",The_GetSuffix ());
 	 switch (ICanView->Score)
 	   {
 	    case Usr_CAN:
@@ -1784,51 +1778,58 @@ static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
 	       Ico_PutIconNotVisible ();
 	       break;
 	   }
-      HTM_TD_End ();
+      HTM_DIV_End ();
 
-   /***** Row end *****/
-   HTM_TR_End ();
+   /***** End container *****/
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
 /**************** Show user's and correct answers of a test ******************/
 /*****************************************************************************/
 
-static void ExaRes_ShowExamAnswers (struct Usr_Data *UsrDat,
+static void ExaRes_ShowQstsAndAnss (struct Usr_Data *UsrDat,
+				    const struct ExaSes_Session *Session,
 			            struct ExaPrn_Print *Print,
 			            unsigned Visibility)
   {
    unsigned QstInd;
    struct Qst_Question Question;
 
-   for (QstInd = 0, The_ResetRowColor ();
-	QstInd < Print->NumQsts.All;
-	QstInd++, The_ChangeRowColor ())
-     {
-      /***** Create test question *****/
-      Qst_QstConstructor (&Question);
-      Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
+   /***** Write questions in columns *****/
+   HTM_DIV_Begin ("class=\"Exa_COLS_%u\"",Session->NumCols);
 
-      /***** Get question data *****/
-      ExaSet_GetQstDataFromDB (&Question);
+      for (QstInd = 0, The_ResetRowColor ();
+	   QstInd < Print->NumQsts.All;
+	   QstInd++, The_ChangeRowColor ())
+	{
+	 /***** Create test question *****/
+	 Qst_QstConstructor (&Question);
+	 Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
 
-      /***** Write questions and answers *****/
-      ExaRes_WriteQstAndAnsExam (UsrDat,Print,QstInd,&Question,Visibility);
+	 /***** Get question data *****/
+	 ExaSet_GetQstDataFromDB (&Question);
 
-      /***** Destroy test question *****/
-      Qst_QstDestructor (&Question);
-     }
+	 /***** Write questions and answers *****/
+	 ExaRes_WriteQstAndAns (UsrDat,Print,QstInd,&Question,Visibility);
+
+	 /***** Destroy test question *****/
+	 Qst_QstDestructor (&Question);
+	}
+
+   /***** End list of questions *****/
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
 /********** Write a row of a test, with one question and its answer **********/
 /*****************************************************************************/
 
-static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
-				       struct ExaPrn_Print *Print,
-				       unsigned QstInd,
-				       struct Qst_Question *Question,
-				       unsigned Visibility)
+static void ExaRes_WriteQstAndAns (struct Usr_Data *UsrDat,
+				   struct ExaPrn_Print *Print,
+				   unsigned QstInd,
+				   struct Qst_Question *Question,
+				   unsigned Visibility)
   {
    extern const char *Txt_Score;
    extern const char *Txt_Invalid_question;
@@ -1882,16 +1883,16 @@ static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
      }
 
    /***** Begin row *****/
-   HTM_TR_Begin (NULL);
+   HTM_DIV_Begin ("class=\"Exa_CONTAINER\"");
 
       /***** Number of question and answer type *****/
-      HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+      HTM_DIV_Begin ("class=\"Exa_LEFT\"");
 	 Lay_WriteIndex (QstInd + 1,ClassNumQst[Question->Validity]);
 	 Qst_WriteAnswerType (Question->Answer.Type,Question->Validity);
-      HTM_TD_End ();
+      HTM_DIV_End ();
 
       /***** Stem, media and answers *****/
-      HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+      HTM_DIV_Begin ("class=\"Exa_RIGHT\"");
 
 	 /* Stem */
 	 Qst_WriteQstStem (Question->Stem,ClassTxt[Question->Validity],
@@ -1935,8 +1936,8 @@ static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 	    Qst_WriteQstFeedback (Question->Feedback,
 	                          ClassFeedback[Question->Validity]);
 
-      HTM_TD_End ();
+      HTM_DIV_End ();
 
    /***** End row *****/
-   HTM_TR_End ();
+   HTM_DIV_End ();
   }

@@ -78,10 +78,12 @@ static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *Printed
 static void ExaPrn_CreatePrint (struct ExaPrn_Print *Print,bool Start);
 
 static void ExaPrn_ShowPrintToFill (struct Exa_Exams *Exams,
-                                    struct ExaPrn_Print *Print);
+      				    const struct ExaSes_Session *Session,
+                                    const struct ExaPrn_Print *Print);
 
-static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
-					    const struct ExaPrn_Print *Print);
+static void ExaPrn_ShowQstsAndAnssToFill (struct Exa_Exams *Exams,
+					  const struct ExaSes_Session *Session,
+				          const struct ExaPrn_Print *Print);
 
 static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
                                          unsigned QstInd,
@@ -194,7 +196,7 @@ void ExaPrn_ShowPrintToStdToFill (void)
 			      true);	// Start/resume
 
 	 /***** Show exam print to be answered *****/
-	 ExaPrn_ShowPrintToFill (&Exams,&Print);
+	 ExaPrn_ShowPrintToFill (&Exams,&Session,&Print);
 	 break;
       case Usr_CAN_NOT:	// Session not open or accessible
       default:
@@ -610,7 +612,8 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 /*****************************************************************************/
 
 static void ExaPrn_ShowPrintToFill (struct Exa_Exams *Exams,
-                                    struct ExaPrn_Print *Print)
+      				    const struct ExaSes_Session *Session,
+                                    const struct ExaPrn_Print *Print)
   {
    extern const char *Hlp_ASSESSMENT_Exams_answer_exam;
 
@@ -623,9 +626,7 @@ static void ExaPrn_ShowPrintToFill (struct Exa_Exams *Exams,
       Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
 
       /***** Show user and time *****/
-      HTM_TABLE_BeginWideMarginPadding (10);
-   	 ExaRes_ShowExamResultUser (&Gbl.Usrs.Me.UsrDat);
-      HTM_TABLE_End ();
+      ExaRes_ShowExamResultUser (&Gbl.Usrs.Me.UsrDat);
 
       /***** Exam description *****/
       Exa_GetAndWriteDescription (Exams->Exam.ExaCod);
@@ -634,7 +635,7 @@ static void ExaPrn_ShowPrintToFill (struct Exa_Exams *Exams,
       if (Print->NumQsts.All)
 	{
 	 HTM_DIV_Begin ("id=\"examprint\"");	// Used for AJAX based refresh
-	    ExaPrn_ShowTableWithQstsToFill (Exams,Print);
+	    ExaPrn_ShowQstsAndAnssToFill (Exams,Session,Print);
 	 HTM_DIV_End ();			// Used for AJAX based refresh
 	}
 
@@ -646,14 +647,15 @@ static void ExaPrn_ShowPrintToFill (struct Exa_Exams *Exams,
 /********* Show the main part (table) of an exam print to be answered ********/
 /*****************************************************************************/
 
-static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
-					    const struct ExaPrn_Print *Print)
+static void ExaPrn_ShowQstsAndAnssToFill (struct Exa_Exams *Exams,
+					  const struct ExaSes_Session *Session,
+				          const struct ExaPrn_Print *Print)
   {
    unsigned QstInd;
    struct Qst_Question Question;
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginWideMarginPadding (10);
+   /***** Write questions in columns *****/
+   HTM_DIV_Begin ("class=\"Exa_COLS_%u\"",Session->NumCols);
 
       /***** Write one row for each question *****/
       for (QstInd = 0;
@@ -674,8 +676,8 @@ static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
 	 Qst_QstDestructor (&Question);
 	}
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+   /***** End list of questions *****/
+   HTM_DIV_End ();
 
    /***** Form to end/close this exam print *****/
    Frm_BeginForm (ActEndExaPrn);
@@ -712,24 +714,22 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
       ExaSet_GetSetDataByCod (&CurrentSet);
 
       /***** Title for this set *****/
-      HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",The_GetColorRows ());
-	    ExaSet_WriteSetTitle (&CurrentSet);
-	 HTM_TD_End ();
-      HTM_TR_End ();
+      HTM_DIV_Begin ("class=\"Exa_COL_SPAN %s\"",The_GetColorRows ());
+	 ExaSet_WriteSetTitle (&CurrentSet);
+      HTM_DIV_End ();
      }
 
    /***** Begin row *****/
-   HTM_TR_Begin (NULL);
+   HTM_DIV_Begin ("class=\"Exa_CONTAINER\"");
 
       /***** Number of question and answer type *****/
-      HTM_TD_Begin ("class=\"RT\"");
+      HTM_DIV_Begin ("class=\"Exa_LEFT\"");
 	 Lay_WriteIndex (QstInd + 1,"BIG_INDEX");
 	 Qst_WriteAnswerType (Question->Answer.Type,Question->Validity);
-      HTM_TD_End ();
+      HTM_DIV_End ();
 
       /***** Stem, media and answers *****/
-      HTM_TD_Begin ("class=\"LT\"");
+      HTM_DIV_Begin ("class=\"Exa_RIGHT\"");
 
 	 /* Stem */
 	 Qst_WriteQstStem (Question->Stem,"Qst_TXT",HidVis_VISIBLE);
@@ -742,10 +742,10 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
 	    ExaPrn_WriteAnswersToFill (Print,QstInd,Question);
 	 Frm_EndForm ();
 
-      HTM_TD_End ();
+      HTM_DIV_End ();
 
    /***** End row *****/
-   HTM_TR_End ();
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -1035,7 +1035,7 @@ void ExaPrn_ReceivePrintAnswer (void)
 	 Exa_DB_UpdatePrint (&Print);
 
 	 /***** Show table with questions to answer *****/
-	 ExaPrn_ShowTableWithQstsToFill (&Exams,&Print);
+	 ExaPrn_ShowQstsAndAnssToFill (&Exams,&Session,&Print);
 	 break;
       case Usr_CAN_NOT:	// Not accessible to answer
       default:
