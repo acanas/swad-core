@@ -97,15 +97,12 @@ static void ExaAnsShe_ShowSheet (struct Exa_Exams *Exams,
 			         struct ExaPrn_Print *Print);
 static void ExaAnsShe_ShowAnswers (const struct ExaSes_Session *Session,
 				   ExaAnsShe_BlankOrSolved_t BlankOrSolved,
-				   const struct Usr_Data *UsrDat,
 				   const struct ExaPrn_Print *Print);
 static void ExaAnsShe_WriteQst (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
-				const struct Usr_Data *UsrDat,
 			        const struct ExaPrn_Print *Print,
                                 unsigned QstInd,
                                 struct Qst_Question *Question);
 static void ExaAnsShe_WriteAnswers (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
-				    const struct Usr_Data *UsrDat,
 				    const struct ExaPrn_Print *Print,
 				    unsigned QstInd,
 				    struct Qst_Question *Question);
@@ -116,29 +113,23 @@ static void ExaAnsShe_WriteBlankTF_Ans (__attribute__((unused)) const struct Qst
 static void ExaAnsShe_WriteBlankChoAns (const struct Qst_Question *Question);
 static void ExaAnsShe_WriteBlankTxtAns (__attribute__((unused)) const struct Qst_Question *Question);
 
-static void ExaAnsShe_WriteSolvedIntAns (const struct Usr_Data *UsrDat,
-					 const struct ExaPrn_Print *Print,
+static void ExaAnsShe_WriteSolvedIntAns (const struct ExaPrn_Print *Print,
 					 unsigned QstInd,
 					 struct Qst_Question *Question);
-static void ExaAnsShe_WriteSolvedFltAns (const struct Usr_Data *UsrDat,
-					 const struct ExaPrn_Print *Print,
+static void ExaAnsShe_WriteSolvedFltAns (const struct ExaPrn_Print *Print,
 					 unsigned QstInd,
 					 struct Qst_Question *Question);
-static void ExaAnsShe_WriteSolvedTF_Ans (const struct Usr_Data *UsrDat,
-					 const struct ExaPrn_Print *Print,
+static void ExaAnsShe_WriteSolvedTF_Ans (const struct ExaPrn_Print *Print,
 					 unsigned QstInd,
 					 struct Qst_Question *Question);
-static void ExaAnsShe_WriteSolvedChoAns (const struct Usr_Data *UsrDat,
-					 const struct ExaPrn_Print *Print,
+static void ExaAnsShe_WriteSolvedChoAns (const struct ExaPrn_Print *Print,
 					 unsigned QstInd,
 					 struct Qst_Question *Question);
-static void ExaAnsShe_WriteSolvedTxtAns (const struct Usr_Data *UsrDat,
-					 const struct ExaPrn_Print *Print,
+static void ExaAnsShe_WriteSolvedTxtAns (const struct ExaPrn_Print *Print,
 					 unsigned QstInd,
 					 struct Qst_Question *Question);
 
-static void ExaAnsShe_WriteHeadCorrect (void);
-static void ExaAnsShe_WriteHeadStudent (const struct Usr_Data *UsrDat);
+static void ExaAnsShe_WriteHead (ExaAnsShe_AnswerType_t AnswerType);
 
 /*****************************************************************************/
 /****** Display/Print selected exam answer sheets from an exam session *******/
@@ -384,7 +375,7 @@ static void ExaAnsShe_ShowSheet (struct Exa_Exams *Exams,
 
    /***** Show table with answers *****/
    if (Print->NumQsts.All)
-      ExaAnsShe_ShowAnswers (Session,BlankOrSolved,UsrDat,Print);
+      ExaAnsShe_ShowAnswers (Session,BlankOrSolved,Print);
 
    /***** End box *****/
    if (ViewType == Vie_VIEW)
@@ -397,7 +388,6 @@ static void ExaAnsShe_ShowSheet (struct Exa_Exams *Exams,
 
 static void ExaAnsShe_ShowAnswers (const struct ExaSes_Session *Session,
 				   ExaAnsShe_BlankOrSolved_t BlankOrSolved,
-				   const struct Usr_Data *UsrDat,
 				   const struct ExaPrn_Print *Print)
   {
    static struct ExaSet_Set CurrentSet =
@@ -441,7 +431,7 @@ static void ExaAnsShe_ShowAnswers (const struct ExaSes_Session *Session,
 	    ExaSet_GetQstDataFromDB (&Question);
 
 	    /* Write question answers */
-	    ExaAnsShe_WriteQst (BlankOrSolved,UsrDat,Print,QstInd,&Question);
+	    ExaAnsShe_WriteQst (BlankOrSolved,Print,QstInd,&Question);
 
 	 /* Destroy test question */
 	 Qst_QstDestructor (&Question);
@@ -456,7 +446,6 @@ static void ExaAnsShe_ShowAnswers (const struct ExaSes_Session *Session,
 /*****************************************************************************/
 
 static void ExaAnsShe_WriteQst (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
-				const struct Usr_Data *UsrDat,
 			        const struct ExaPrn_Print *Print,
                                 unsigned QstInd,
                                 struct Qst_Question *Question)
@@ -472,7 +461,7 @@ static void ExaAnsShe_WriteQst (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
 
       /***** Answers *****/
       HTM_DIV_Begin ("class=\"Exa_RIGHT\"");
-	 ExaAnsShe_WriteAnswers (BlankOrSolved,UsrDat,Print,QstInd,Question);
+	 ExaAnsShe_WriteAnswers (BlankOrSolved,Print,QstInd,Question);
       HTM_DIV_End ();
 
    /***** End row *****/
@@ -484,7 +473,6 @@ static void ExaAnsShe_WriteQst (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
 /*****************************************************************************/
 
 static void ExaAnsShe_WriteAnswers (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
-				    const struct Usr_Data *UsrDat,
 				    const struct ExaPrn_Print *Print,
 				    unsigned QstInd,
 				    struct Qst_Question *Question)
@@ -498,8 +486,7 @@ static void ExaAnsShe_WriteAnswers (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
      [Qst_ANS_MULTIPLE_CHOICE] = ExaAnsShe_WriteBlankChoAns,
      [Qst_ANS_TEXT           ] = ExaAnsShe_WriteBlankTxtAns,
     };
-   static void (*ExaAnsShe_WriteSolvedAns[Qst_NUM_ANS_TYPES]) (const struct Usr_Data *UsrDat,
-							       const struct ExaPrn_Print *Print,
+   static void (*ExaAnsShe_WriteSolvedAns[Qst_NUM_ANS_TYPES]) (const struct ExaPrn_Print *Print,
 							       unsigned QstInd,
 							       struct Qst_Question *Question) =
     {
@@ -517,7 +504,7 @@ static void ExaAnsShe_WriteAnswers (ExaAnsShe_BlankOrSolved_t BlankOrSolved,
 	 ExaAnsShe_WriteBlankAns[Question->Answer.Type] (Question);
 	 break;
       case ExaAnsShe_SOLVED:
-	 ExaAnsShe_WriteSolvedAns[Question->Answer.Type] (UsrDat,Print,QstInd,Question);
+	 ExaAnsShe_WriteSolvedAns[Question->Answer.Type] (Print,QstInd,Question);
 	 break;
       default:
 	 break;
@@ -642,8 +629,7 @@ static void ExaAnsShe_WriteBlankTxtAns (__attribute__((unused)) const struct Qst
 /*************** Write integer answer in an exam answer sheet ****************/
 /*****************************************************************************/
 
-static void ExaAnsShe_WriteSolvedIntAns (const struct Usr_Data *UsrDat,
-					 const struct ExaPrn_Print *Print,
+static void ExaAnsShe_WriteSolvedIntAns (const struct ExaPrn_Print *Print,
 					 unsigned QstInd,
 					 struct Qst_Question *Question)
   {
@@ -658,9 +644,9 @@ static void ExaAnsShe_WriteSolvedIntAns (const struct Usr_Data *UsrDat,
       /***** Write the correct answer *****/
       HTM_TR_Begin (NULL);
 
-         ExaAnsShe_WriteHeadCorrect ();
+         ExaAnsShe_WriteHead (ExaAnsShe_CORRECT_ANSWER);
 
-	 HTM_TD_Begin ("class=\"CM Qst_ANS_0_%s\"",The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"Exa_ANSWER_INT Qst_ANS_0_%s\"",The_GetSuffix ());
 	    HTM_Long (Question->Answer.Integer);
 	 HTM_TD_End ();
 
@@ -669,13 +655,13 @@ static void ExaAnsShe_WriteSolvedIntAns (const struct Usr_Data *UsrDat,
       /***** Write the student answer *****/
       HTM_TR_Begin (NULL);
 
-         ExaAnsShe_WriteHeadStudent (UsrDat);
+         ExaAnsShe_WriteHead (ExaAnsShe_ONLINE_ANSWER);
 
 	 if (Print->PrintedQuestions[QstInd].StrAnswers[0])	// If student has answered the question
 	   {
 	    if (sscanf (Print->PrintedQuestions[QstInd].StrAnswers,"%ld",&IntAnswerUsr) == 1)
 	      {
-	       HTM_TD_Begin ("class=\"CM %s_%s\"",
+	       HTM_TD_Begin ("class=\"Exa_ANSWER_INT %s_%s\"",
 			     IntAnswerUsr == Question->Answer.Integer ? "Qst_ANS_OK" :	// Correct
 									"Qst_ANS_BAD",	// Wrong
 			     The_GetSuffix ());
@@ -684,7 +670,7 @@ static void ExaAnsShe_WriteSolvedIntAns (const struct Usr_Data *UsrDat,
 	      }
 	    else
 	      {
-	       HTM_TD_Begin ("class=\"CM Qst_ANS_0_%s\"",The_GetSuffix ());
+	       HTM_TD_Begin ("class=\"Exa_ANSWER_INT Qst_ANS_0_%s\"",The_GetSuffix ());
 		  HTM_Question ();
 	       HTM_TD_End ();
 	      }
@@ -701,8 +687,7 @@ static void ExaAnsShe_WriteSolvedIntAns (const struct Usr_Data *UsrDat,
 /**************** Write float answer in an exam answer sheet *****************/
 /*****************************************************************************/
 
-static void ExaAnsShe_WriteSolvedFltAns (const struct Usr_Data *UsrDat,
-					 const struct ExaPrn_Print *Print,
+static void ExaAnsShe_WriteSolvedFltAns (const struct ExaPrn_Print *Print,
 					 unsigned QstInd,
 					 struct Qst_Question *Question)
   {
@@ -718,9 +703,9 @@ static void ExaAnsShe_WriteSolvedFltAns (const struct Usr_Data *UsrDat,
       /***** Write the correct answer *****/
       HTM_TR_Begin (NULL);
 
-         ExaAnsShe_WriteHeadCorrect ();
+         ExaAnsShe_WriteHead (ExaAnsShe_CORRECT_ANSWER);
 
-	 HTM_TD_Begin ("class=\"CM Qst_ANS_0_%s\"",The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"Exa_ANSWER_FLOAT Qst_ANS_0_%s\"",The_GetSuffix ());
 	    HTM_DoubleRange (Question->Answer.FloatingPoint[0],
 			     Question->Answer.FloatingPoint[1]);
 	 HTM_TD_End ();
@@ -730,13 +715,13 @@ static void ExaAnsShe_WriteSolvedFltAns (const struct Usr_Data *UsrDat,
       /***** Write the student answer *****/
       HTM_TR_Begin (NULL);
 
-         ExaAnsShe_WriteHeadStudent (UsrDat);
+         ExaAnsShe_WriteHead (ExaAnsShe_ONLINE_ANSWER);
 
 	 if (Print->PrintedQuestions[QstInd].StrAnswers[0])	// If student has answered the question
 	   {
 	    FloatAnsUsr = Str_GetDoubleFromStr (Print->PrintedQuestions[QstInd].StrAnswers);
 	    // A bad formatted floating point answer will interpreted as 0.0
-	    HTM_TD_Begin ("class=\"CM %s_%s\"",
+	    HTM_TD_Begin ("class=\"Exa_ANSWER_FLOAT %s_%s\"",
 			  (FloatAnsUsr >= Question->Answer.FloatingPoint[0] &&
 			   FloatAnsUsr <= Question->Answer.FloatingPoint[1]) ? "Qst_ANS_OK" :	// Correct
 									       "Qst_ANS_BAD",	// Wrong,		// Blank answer
@@ -756,8 +741,7 @@ static void ExaAnsShe_WriteSolvedFltAns (const struct Usr_Data *UsrDat,
 /************* Write false / true answer in an exam answer sheet *************/
 /*****************************************************************************/
 
-static void ExaAnsShe_WriteSolvedTF_Ans (const struct Usr_Data *UsrDat,
-					 const struct ExaPrn_Print *Print,
+static void ExaAnsShe_WriteSolvedTF_Ans (const struct ExaPrn_Print *Print,
 					 unsigned QstInd,
 					 struct Qst_Question *Question)
   {
@@ -775,9 +759,9 @@ static void ExaAnsShe_WriteSolvedTF_Ans (const struct Usr_Data *UsrDat,
       /***** Write the correct answer *****/
       HTM_TR_Begin (NULL);
 
-         ExaAnsShe_WriteHeadCorrect ();
+         ExaAnsShe_WriteHead (ExaAnsShe_CORRECT_ANSWER);
 
-	 HTM_TD_Begin ("class=\"BM_SEL Qst_ANS_0_%s\"",The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"Exa_ANSWER_TF Qst_ANS_0_%s\"",The_GetSuffix ());
 	    Qst_WriteAnsTF (Question->Answer.TF);
 	 HTM_TD_End ();
 
@@ -786,9 +770,9 @@ static void ExaAnsShe_WriteSolvedTF_Ans (const struct Usr_Data *UsrDat,
       /***** Write the student answer *****/
       HTM_TR_Begin (NULL);
 
-         ExaAnsShe_WriteHeadStudent (UsrDat);
+         ExaAnsShe_WriteHead (ExaAnsShe_ONLINE_ANSWER);
 
-	 HTM_TD_Begin ("class=\"BM %s_%s\"",
+	 HTM_TD_Begin ("class=\"Exa_ANSWER_TF %s_%s\"",
 		       AnsTFStd == Question->Answer.TF ? "Qst_ANS_OK" :	// Correct
 							 "Qst_ANS_BAD",	// Blank answer
 		       The_GetSuffix ());
@@ -805,26 +789,28 @@ static void ExaAnsShe_WriteSolvedTF_Ans (const struct Usr_Data *UsrDat,
 /****** Write single or multiple choice answer in an exam answer sheet *******/
 /*****************************************************************************/
 
-static void ExaAnsShe_WriteSolvedChoAns (const struct Usr_Data *UsrDat,
-					 const struct ExaPrn_Print *Print,
+static void ExaAnsShe_WriteSolvedChoAns (const struct ExaPrn_Print *Print,
 					 unsigned QstInd,
 					 struct Qst_Question *Question)
   {
-   struct Answer
+   static const char *Correct[Qst_NUM_WRONG_CORRECT] =
      {
-      char *ClassTch;	// Class for teachers' answer
-      char *ClassStd;	// Class for student's answer
+      [Qst_WRONG  ] = "Qst_TXT_LIGHT",
+      [Qst_CORRECT] = "Qst_ANS_0",
      };
-   static struct Answer AnsWrongOrCorrect[Qst_NUM_WRONG_CORRECT] =
+   struct
      {
-      [Qst_WRONG  ] = {.ClassTch = "Qst_TXT_LIGHT"	,.ClassStd = "Qst_ANS_BAD"},
-      [Qst_CORRECT] = {.ClassTch = "Qst_ANS_0"		,.ClassStd = "Qst_ANS_OK" }
+      char *Class;
+      char *Str;
+     } Online[Qst_NUM_WRONG_CORRECT] =
+     {
+      [Qst_WRONG  ] = {.Class = "Qst_ANS_BAD",.Str = "&cross;"},
+      [Qst_CORRECT] = {.Class = "Qst_ANS_OK" ,.Str = "&check;"}
      };
    unsigned NumOpt;
    Qst_WrongOrCorrect_t OptionWrongOrCorrect;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
-   const struct Answer *Ans;
 
    /***** Get indexes for this question from string *****/
    TstPrn_GetIndexesFromStr (Print->PrintedQuestions[QstInd].StrIndexes,Indexes);
@@ -835,27 +821,26 @@ static void ExaAnsShe_WriteSolvedChoAns (const struct Usr_Data *UsrDat,
    /***** Begin table *****/
    HTM_TABLE_Begin ("Exa_TBL");
 
-      /***** Write teachers' answers (one column per answer) *****/
+      /***** Write correct answers (one column per answer) *****/
       HTM_TR_Begin (NULL);
-         ExaAnsShe_WriteHeadCorrect ();
+         ExaAnsShe_WriteHead (ExaAnsShe_CORRECT_ANSWER);
 	 for (NumOpt = 0;
 	      NumOpt < Question->Answer.NumOptions;
 	      NumOpt++)
 	   {
 	    OptionWrongOrCorrect = Question->Answer.Options[Indexes[NumOpt]].Correct;
-	    Ans = &AnsWrongOrCorrect[OptionWrongOrCorrect];
 
 	    /* Write option letter */
 	    HTM_TD_Begin ("class=\"Exa_ANSWER_CHOICE %s_%s\"",
-			  Ans->ClassTch,The_GetSuffix ());
+			  Correct[OptionWrongOrCorrect],The_GetSuffix ());
 	       HTM_Option (NumOpt);
 	    HTM_TD_End ();
 	   }
       HTM_TR_End ();
 
-      /***** Write student's answers (one column per answer) *****/
+      /***** Write online answers (one column per answer) *****/
       HTM_TR_Begin (NULL);
-         ExaAnsShe_WriteHeadStudent (UsrDat);
+         ExaAnsShe_WriteHead (ExaAnsShe_ONLINE_ANSWER);
 	 for (NumOpt = 0;
 	      NumOpt < Question->Answer.NumOptions;
 	      NumOpt++)
@@ -865,14 +850,45 @@ static void ExaAnsShe_WriteSolvedChoAns (const struct Usr_Data *UsrDat,
 	    /* Write letter depending on user's answer */
 	    if (UsrAnswers[Indexes[NumOpt]] == HTM_CHECKED)	// This answer has been selected by the user
 	      {
-	       Ans = &AnsWrongOrCorrect[OptionWrongOrCorrect];
 	       HTM_TD_Begin ("class=\"Exa_ANSWER_CHOICE %s_%s\"",
-			     Ans->ClassStd,The_GetSuffix ());
-	          HTM_Option (NumOpt);
+			     Online[OptionWrongOrCorrect].Class,The_GetSuffix ());
+		  HTM_Txt (Online[OptionWrongOrCorrect].Str);
 	       HTM_TD_End ();
 	      }
 	    else	// This answer has NOT been selected by the user
-	       HTM_TD_Empty (1);
+	      {
+	       HTM_TD_Begin ("class=\"Exa_ANSWER_CHOICE Qst_ANS_0_%s\"",
+			     The_GetSuffix ());
+	          HTM_NBSP ();
+	       HTM_TD_End ();
+	      }
+   	   }
+      HTM_TR_End ();
+
+      /***** Write paper answers (one column per answer) *****/
+      HTM_TR_Begin (NULL);
+         ExaAnsShe_WriteHead (ExaAnsShe_PAPER_ANSWER);
+	 for (NumOpt = 0;
+	      NumOpt < Question->Answer.NumOptions;
+	      NumOpt++)
+	   {
+	    OptionWrongOrCorrect = Question->Answer.Options[Indexes[NumOpt]].Correct;
+
+	    /* Write letter depending on user's answer */
+	    if (UsrAnswers[Indexes[NumOpt]] == HTM_CHECKED)	// This answer has been selected by the user
+	      {
+	       HTM_TD_Begin ("class=\"Exa_ANSWER_CHOICE %s_%s\"",
+			     Online[OptionWrongOrCorrect].Class,The_GetSuffix ());
+		  HTM_Txt (Online[OptionWrongOrCorrect].Str);
+	       HTM_TD_End ();
+	      }
+	    else	// This answer has NOT been selected by the user
+	      {
+	       HTM_TD_Begin ("class=\"Exa_ANSWER_CHOICE Qst_ANS_0_%s\"",
+			     The_GetSuffix ());
+	          HTM_NBSP ();
+	       HTM_TD_End ();
+	      }
    	   }
       HTM_TR_End ();
 
@@ -884,8 +900,7 @@ static void ExaAnsShe_WriteSolvedChoAns (const struct Usr_Data *UsrDat,
 /**************** Write text answer in an exam answer sheet ******************/
 /*****************************************************************************/
 
-static void ExaAnsShe_WriteSolvedTxtAns (const struct Usr_Data *UsrDat,
-					 const struct ExaPrn_Print *Print,
+static void ExaAnsShe_WriteSolvedTxtAns (const struct ExaPrn_Print *Print,
 					 unsigned QstInd,
 					 struct Qst_Question *Question)
   {
@@ -908,9 +923,9 @@ static void ExaAnsShe_WriteSolvedTxtAns (const struct Usr_Data *UsrDat,
       /***** Write the correct answer *****/
       HTM_TR_Begin (NULL);
 
-         ExaAnsShe_WriteHeadCorrect ();
+         ExaAnsShe_WriteHead (ExaAnsShe_CORRECT_ANSWER);
 
-	 HTM_TD_Begin ("class=\"Exa_SOLVED_ANSWER_TEXT Qst_ANS_0_%s\"",The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"Exa_ANSWER_TEXT Qst_ANS_0_%s\"",The_GetSuffix ());
 	    for (NumOpt = 0;
 		 NumOpt < Question->Answer.NumOptions;
 		 NumOpt++)
@@ -928,7 +943,7 @@ static void ExaAnsShe_WriteSolvedTxtAns (const struct Usr_Data *UsrDat,
       /***** Write the student answer *****/
       HTM_TR_Begin (NULL);
 
-         ExaAnsShe_WriteHeadStudent (UsrDat);
+         ExaAnsShe_WriteHead (ExaAnsShe_ONLINE_ANSWER);
 
 	 if (Print->PrintedQuestions[QstInd].StrAnswers[0])	// If student has answered the question
 	   {
@@ -959,7 +974,7 @@ static void ExaAnsShe_WriteSolvedTxtAns (const struct Usr_Data *UsrDat,
 		 }
 	      }
 
-	    HTM_TD_Begin ("class=\"CT %s_%s\"",
+	    HTM_TD_Begin ("class=\"Exa_ANSWER_TEXT %s_%s\"",
 			  Class[WrongOrCorrect],The_GetSuffix ());
 	       HTM_Txt (Print->PrintedQuestions[QstInd].StrAnswers);
 	    HTM_TD_End ();
@@ -973,27 +988,26 @@ static void ExaAnsShe_WriteSolvedTxtAns (const struct Usr_Data *UsrDat,
   }
 
 /*****************************************************************************/
-/********************* Write head for the correct answer *********************/
+/************************* Write head for the answer *************************/
 /*****************************************************************************/
 
-static void ExaAnsShe_WriteHeadCorrect (void)
+static void ExaAnsShe_WriteHead (ExaAnsShe_AnswerType_t AnswerType)
   {
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_EXAM_ANSWER_TYPES[ExaAnsShe_NUM_TYPES];
+   static struct
+     {
+      const char *Icon;
+      Ico_Color_t Color;
+     } AnswerTypeIcons[ExaAnsShe_NUM_TYPES] =
+     {
+      [ExaAnsShe_CORRECT_ANSWER] = {"check.svg"		,Ico_GREEN},
+      [ExaAnsShe_ONLINE_ANSWER ] = {"display.svg"	,Ico_BLACK},
+      [ExaAnsShe_PAPER_ANSWER  ] = {"file-signature.svg",Ico_BLACK},
+     };
 
    HTM_TD_Begin ("class=\"LM DAT_SMALL_%s\"",The_GetSuffix ());
-      HTM_Txt (Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
-   HTM_TD_End ();
-  }
-
-/*****************************************************************************/
-/********************* Write head for the student answer *********************/
-/*****************************************************************************/
-
-static void ExaAnsShe_WriteHeadStudent (const struct Usr_Data *UsrDat)
-  {
-   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-
-   HTM_TD_Begin ("class=\"CM DAT_SMALL_%s\"",The_GetSuffix ());
-      HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs][UsrDat->Sex]);
+      Ico_PutIconOff (AnswerTypeIcons[AnswerType].Icon,
+		      AnswerTypeIcons[AnswerType].Color,
+		      Txt_EXAM_ANSWER_TYPES[AnswerType]);
    HTM_TD_End ();
   }

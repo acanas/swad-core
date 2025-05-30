@@ -69,6 +69,7 @@
 #include "swad_degree.h"
 #include "swad_degree_type.h"
 #include "swad_department.h"
+#include "swad_exam_answer_sheet.h"
 #include "swad_exam_log.h"
 #include "swad_exam_session.h"
 #include "swad_figure.h"
@@ -12413,6 +12414,78 @@ const char *Txt_EXAM_SESSION_MODALITIES[ExaSes_NUM_MODALITIES] =
 	"Em papel (option still under development)"
 #elif L==10	// tr
 	"Ka&gbreve;&inodot;t s&inodot;nav&inodot; (option still under development)"
+#endif
+	};
+
+const char *Txt_EXAM_ANSWER_TYPES[ExaAnsShe_NUM_TYPES] =
+	{
+	[ExaAnsShe_CORRECT_ANSWER] =
+#if   L==1	// ca
+	"Resposta correcta"
+#elif L==2	// de
+	"Richtige Antwort"
+#elif L==3	// en
+	"Correct answer"
+#elif L==4	// es
+	"Respuesta correcta"
+#elif L==5	// fr
+	"R&eacute;ponse correcte"
+#elif L==6	// gn
+	"Mbohov&aacute;i hekopete"
+#elif L==7	// it
+	"Risposta corretta"
+#elif L==8	// pl
+	"Poprawna odpowied&zacute;"
+#elif L==9	// pt
+	"Resposta correta"
+#elif L==10	// tr
+	"Do&gbreve;ru cevap"
+#endif
+	,
+	[ExaAnsShe_ONLINE_ANSWER] =
+#if   L==1	// ca
+	"Resposta en l&iacute;nia"
+#elif L==2	// de
+	"Online-Antwort"
+#elif L==3	// en
+	"Online answer"
+#elif L==4	// es
+	"Respuesta online"
+#elif L==5	// fr
+	"R&eacute;ponse en ligne"
+#elif L==6	// gn
+	"Mbohov&aacute;i en l&iacute;nea"
+#elif L==7	// it
+	"Risposta online"
+#elif L==8	// pl
+	"Odpowied&zacute; online"
+#elif L==9	// pt
+	"Resposta on-line"
+#elif L==10	// tr
+	"&Ccedil;evrimi&ccedil;i cevap"
+#endif
+	,
+	[ExaAnsShe_PAPER_ANSWER] =
+#if   L==1	// ca
+	"Resposta en paper"
+#elif L==2	// de
+	"Papierantwort"
+#elif L==3	// en
+	"Paper answer"
+#elif L==4	// es
+	"Respuesta en papel"
+#elif L==5	// fr
+	"R&eacute;ponse papier"
+#elif L==6	// gn
+	"Kuatia &ntilde;embohov&aacute;i"
+#elif L==7	// it
+	"Risposta cartacea"
+#elif L==8	// pl
+	"Odpowied&zacute; papierowa"
+#elif L==9	// pt
+	"Resposta em papel"
+#elif L==10	// tr
+	"Ka&gbreve;&inodot;t cevap"
 #endif
 	};
 

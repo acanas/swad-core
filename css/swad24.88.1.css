@@ -3866,7 +3866,12 @@ legend {font-size: 12pt; font-weight: bold;}
 	min-width: 200px;
 	}
 
-.Exa_ANSWER_INT,
+.Exa_ANSWER_INT
+	{
+	width: 100px;
+	text-align: right;
+	vertical-align: middle;
+	}
 .Exa_ANSWER_FLOAT
 	{
 	width: 150px;
@@ -3883,6 +3888,7 @@ legend {font-size: 12pt; font-weight: bold;}
 .Exa_ANSWER_TEXT
 	{
 	width: 300px;
+	max-width: 300px;
 	text-align: left;
 	vertical-align: middle;
 	white-space: nowrap;
