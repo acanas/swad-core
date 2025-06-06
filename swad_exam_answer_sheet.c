@@ -1042,15 +1042,7 @@ static void ExaAnsShe_WritePaperIntAns (struct Qst_Question *Question,
 					const struct ExaPrn_Print *Print,
 					unsigned QstInd)
   {
-   struct
-     {
-      long Value;
-      bool Valid;
-     } AnswerUsr =
-     {
-      .Value = 0,
-      .Valid = false,
-     };
+   long LongNum;
    Qst_WrongOrCorrect_t WrongOrCorrect = Qst_BLANK;
    char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
 
@@ -1059,22 +1051,19 @@ static void ExaAnsShe_WritePaperIntAns (struct Qst_Question *Question,
 
    /***** Write paper answer *****/
    if (Print->PrintedQuestions[QstInd].StrAnswers[0])	// If student has answered the question
-      if (sscanf (Print->PrintedQuestions[QstInd].StrAnswers,"%ld",&AnswerUsr.Value) == 1)
-        {
-	 AnswerUsr.Valid = true;
-	 WrongOrCorrect = (AnswerUsr.Value == Question->Answer.Integer) ? Qst_CORRECT :
-								          Qst_WRONG;
-        }
+      if (sscanf (Print->PrintedQuestions[QstInd].StrAnswers,"%ld",&LongNum) == 1)
+	 WrongOrCorrect = (LongNum == Question->Answer.Integer) ? Qst_CORRECT :
+								  Qst_WRONG;
 
-   HTM_TD_Begin ("class=\"Exa_ANSWER_FLOAT\"");
+   HTM_TD_Begin ("class=\"Exa_ANSWER_INT\"");
 
       /***** Write input field for the answer *****/
       snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
       HTM_TxtF ("<input type=\"number\" id=\"%s\" name=\"Ans\""
 		" class=\"Exa_ANSWER_INPUT_INT %s_%s\" value=\"",
 		Id,ExaAnsShe_Class[WrongOrCorrect],The_GetSuffix ());
-      if (AnswerUsr.Valid)
-	 HTM_Long (AnswerUsr.Value);
+      if (WrongOrCorrect != Qst_BLANK)
+	 HTM_Long (LongNum);
       HTM_Char ('"');
       // ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
       HTM_ElementEnd ();
@@ -1133,20 +1122,46 @@ static void ExaAnsShe_WritePaperTF_Ans (struct Qst_Question *Question,
 					const struct ExaPrn_Print *Print,
 					unsigned QstInd)
   {
-   char AnsTFStd;
+   extern const char *Txt_NBSP;
+   extern const char *Txt_TF_QST[2];
+   char AnsUsr;
+   Qst_WrongOrCorrect_t WrongOrCorrect;
+   char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Check if number of rows is correct *****/
    Qst_CheckIfNumberOfAnswersIsOne (Question);
 
    /***** Get answer true or false *****/
-   AnsTFStd = Print->PrintedQuestions[QstInd].StrAnswers[0];
+   AnsUsr = Print->PrintedQuestions[QstInd].StrAnswers[0];
+   WrongOrCorrect = AnsUsr ? (AnsUsr == Question->Answer.TF ? Qst_CORRECT :
+							      Qst_WRONG) :
+			     Qst_BLANK;
 
    /***** Write paper answer *****/
-   HTM_TD_Begin ("class=\"Exa_ANSWER_TF %s_%s\"",
-		 AnsTFStd == Question->Answer.TF ? "Qst_ANS_OK" :	// Correct
-						   "Qst_ANS_BAD",	// Blank answer
-		 The_GetSuffix ());
-      Qst_WriteAnsTF (AnsTFStd);
+   /*
+   HTM_TD_Begin ("class=\"Exa_ANSWER_TF %s_%s\"",ExaAnsShe_Class[WrongOrCorrect],The_GetSuffix ());
+      Qst_WriteAnsTF (AnsUsr);
+   HTM_TD_End ();
+   */
+   HTM_TD_Begin ("class=\"Exa_ANSWER_TF\"");
+
+      /***** Write selector for the answer *****/
+      snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
+      HTM_TxtF ("<select id=\"%s\" name=\"Ans\" class=\"%s_%s\"",
+		Id,ExaAnsShe_Class[WrongOrCorrect],The_GetSuffix ());
+      // ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
+      HTM_ElementEnd ();
+	 HTM_OPTION (HTM_Type_STRING,"" ,(AnsUsr == '\0') ? HTM_SELECTED :
+							    HTM_NO_ATTR,
+		     Txt_NBSP);
+	 HTM_OPTION (HTM_Type_STRING,"T",(AnsUsr == 'T' ) ? HTM_SELECTED :
+							    HTM_NO_ATTR,
+		     Txt_TF_QST[0]);
+	 HTM_OPTION (HTM_Type_STRING,"F",(AnsUsr == 'F' ) ? HTM_SELECTED :
+							    HTM_NO_ATTR,
+		     Txt_TF_QST[1]);
+      HTM_Txt ("</select>");
+
    HTM_TD_End ();
   }
 

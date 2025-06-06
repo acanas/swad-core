@@ -3890,7 +3890,12 @@ legend {font-size: 12pt; font-weight: bold;}
 	text-align: right;
 	vertical-align: middle;
 	}
-.Exa_ANSWER_TF,
+.Exa_ANSWER_TF
+	{
+	width: 40px;
+	text-align: center;
+	vertical-align: middle;
+	}
 .Exa_ANSWER_CHOICE
 	{
 	width: 30px;
