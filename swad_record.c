@@ -315,7 +315,7 @@ static void Rec_ListFieldsRecordsForEdition (void)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgRowFie);
 		  ParCod_PutPar (ParCod_Fld,Fld->FieldCod);
-		  HTM_INPUT_LONG ("NumLines",1,UINT_MAX,(long) Fld->NumLines,
+		  HTM_INPUT_LONG ("NumLines",1L,(long) UINT_MAX,(long) Fld->NumLines,
 				  HTM_REQUIRED | HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_LONG INPUT_%s\"",
 				  The_GetSuffix ());
@@ -383,7 +383,7 @@ void Rec_ShowFormCreateRecordField (void)
 
 	 /***** Number of lines in form ******/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_INPUT_LONG ("NumLines",1,UINT_MAX,
+	    HTM_INPUT_LONG ("NumLines",1L,(long) UINT_MAX,
 			    (long) Gbl.Crs.Records.Field.NumLines,
 			    HTM_REQUIRED,
 			    "class=\"INPUT_LONG INPUT_%s\"",The_GetSuffix ());

@@ -927,9 +927,9 @@ void Exa_GetExamDataByCod (struct Exa_Exam *Exam)
       Exam->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
       /* Get maximum grade (row[4]) */
-      Exam->MaxGrade = Str_GetDoubleFromStr (row[4]);
-      if (Exam->MaxGrade < 0.0)	// Only positive values allowed
-	 Exam->MaxGrade = 0.0;
+      if (Str_GetDoubleFromStr (row[4],&Exam->MaxGrade))
+	 if (Exam->MaxGrade < 0.0)	// Only positive values allowed
+	    Exam->MaxGrade = 0.0;
 
       /* Get visibility (row[5]) */
       Exam->Visibility = TstVis_GetVisibilityFromStr (row[5]);
@@ -1489,9 +1489,9 @@ static void Exa_ReceiveExamFieldsFromForm (struct Exa_Exam *Exam,
 
    /***** Get maximum grade *****/
    Par_GetParText ("MaxGrade",MaxGradeStr,sizeof (MaxGradeStr) - 1);
-   Exam->MaxGrade = Str_GetDoubleFromStr (MaxGradeStr);
-   if (Exam->MaxGrade < 0.0)	// Only positive values allowed
-      Exam->MaxGrade = 0.0;
+   if (Str_GetDoubleFromStr (MaxGradeStr,&Exam->MaxGrade))
+      if (Exam->MaxGrade < 0.0)	// Only positive values allowed
+	 Exam->MaxGrade = 0.0;
 
    /***** Get visibility *****/
    Exam->Visibility = TstVis_GetVisibilityFromForm ();

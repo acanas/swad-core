@@ -312,6 +312,7 @@ static void QstImp_WriteAnswersOfAQstXML (const struct Qst_Question *Question,
    extern const char *Txt_NEW_LINE;
    static const char *Correct_YesNo[Qst_NUM_WRONG_CORRECT] =
      {
+      [Qst_BLANK  ] = "",
       [Qst_WRONG  ] = "No",
       [Qst_CORRECT] = "Yes",
      };
@@ -819,7 +820,7 @@ static void QstImp_GetAnswerFromXML (struct XMLElement *AnswerElem,
 		     if (!strcmp (Attribute->AttributeName,"correct"))
 		       {
 			Question->Answer.Options[NumOpt].Correct = XML_GetAttributteYesNoFromXMLTree (Attribute) ? Qst_CORRECT :
-														          Qst_WRONG;
+														   Qst_WRONG;
 			break;	// Only first attribute "correct"
 		       }
                }

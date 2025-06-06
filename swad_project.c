@@ -4003,7 +4003,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
 		  /* Data */
 		  HTM_TD_Begin ("class=\"Frm_C2 LM\"");
-		     HTM_INPUT_LONG ("NumStds",(long) 0,(long) UINT_MAX,
+		     HTM_INPUT_LONG ("NumStds",0L,(long) UINT_MAX,
 				     (long) Projects->Prj.NumStds,
 				     HTM_REQUIRED,
 				     "class=\"Frm_C2_INPUT INPUT_%s\"",

@@ -164,7 +164,8 @@ void Map_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom,
       /* Get latitude (row[0]), longitude (row[1]) and maximum distance (row[2]) */
       Coord->Latitude  = Map_GetLatitudeFromStr (row[0]);
       Coord->Longitude = Map_GetLongitudeFromStr (row[1]);
-      MaxDistance      = Str_GetDoubleFromStr (row[2]);
+      if (!Str_GetDoubleFromStr (row[2],&MaxDistance))
+	 MaxDistance = 0.0;
      }
    else
       Coord->Latitude  =
@@ -185,13 +186,17 @@ void Map_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom,
 
 double Map_GetLatitudeFromStr (char *Str)
   {
-   double Latitude = Str_GetDoubleFromStr (Str);
+   double Latitude;
 
-   if (Latitude < -90.0)
-      return -90.0;	// South Pole
-   if (Latitude > 90.0)
-      return 90.0;	// North Pole
-   return Latitude;
+   if (Str_GetDoubleFromStr (Str,&Latitude))
+     {
+      if (Latitude < -90.0)
+	 return -90.0;	// South Pole
+      if (Latitude > 90.0)
+	 return 90.0;	// North Pole
+      return Latitude;
+     }
+   return 0.0;
   }
 
 /*****************************************************************************/
@@ -201,13 +206,17 @@ double Map_GetLatitudeFromStr (char *Str)
 
 double Map_GetLongitudeFromStr (char *Str)
   {
-   double Longitude = Str_GetDoubleFromStr (Str);
+   double Longitude;
 
-   if (Longitude < -180.0)
-      return -180.0;	// West
-   if (Longitude > 180.0)
-      return 180.0;	// East
-   return Longitude;
+   if (Str_GetDoubleFromStr (Str,&Longitude))
+     {
+      if (Longitude < -180.0)
+	 return -180.0;	// West
+      if (Longitude > 180.0)
+	 return 180.0;	// East
+      return Longitude;
+     }
+   return 0.0;
   }
 
 /*****************************************************************************/
@@ -217,13 +226,17 @@ double Map_GetLongitudeFromStr (char *Str)
 
 double Map_GetAltitudeFromStr (char *Str)
   {
-   double Altitude = Str_GetDoubleFromStr (Str);
+   double Altitude;
 
-   if (Altitude < -413.0)
-      return -413.0;	// Dead Sea shore
-   if (Altitude > 8848.0)
-      return 8848.0;	// Mount Everest
-   return Altitude;
+   if (Str_GetDoubleFromStr (Str,&Altitude))
+     {
+      if (Altitude < -413.0)
+	 return -413.0;	// Dead Sea shore
+      if (Altitude > 8848.0)
+	 return 8848.0;	// Mount Everest
+      return Altitude;
+     }
+   return 0.0;
   }
 
 /*****************************************************************************/

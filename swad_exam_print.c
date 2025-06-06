@@ -784,8 +784,8 @@ static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
 
    /***** Write input field for the answer *****/
    snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
-   HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"Ans\""
-	     " size=\"11\" maxlength=\"11\" value=\"%s\"",
+   HTM_TxtF ("<input type=\"number\" id=\"%s\" name=\"Ans\""
+	     " class=\"Exa_ANSWER_INPUT_INT\" value=\"%s\"",
 	     Id,Print->PrintedQuestions[QstInd].StrAnswers);
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_ElementEnd ();
@@ -803,10 +803,9 @@ static void ExaPrn_WriteFltAnsToFill (const struct ExaPrn_Print *Print,
 
    /***** Write input field for the answer *****/
    snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
-   HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"Ans\""
-	     " size=\"11\" maxlength=\"%u\" value=\"%s\"",
-	     Id,Qst_MAX_BYTES_FLOAT_ANSWER,
-	     Print->PrintedQuestions[QstInd].StrAnswers);
+   HTM_TxtF ("<input type=\"number\" id=\"%s\" name=\"Ans\""
+	     " class=\"Exa_ANSWER_INPUT_FLOAT\" value=\"%s\"",
+	     Id,Print->PrintedQuestions[QstInd].StrAnswers);
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_ElementEnd ();
   }
@@ -1062,7 +1061,7 @@ static void ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print,unsigned QstInd
   {
    /***** Get answers selected by user for this question *****/
    Par_GetParText ("Ans",Print->PrintedQuestions[QstInd].StrAnswers,
-		     Qst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
+		   Qst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
   }
 
 /*****************************************************************************/
@@ -1216,6 +1215,7 @@ static void ExaPrn_GetCorrectFltAnswerFromDB (struct Qst_Question *Question)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumOpt;
+   bool Valid;
    double Tmp;
 
    /***** Query database *****/
@@ -1226,21 +1226,22 @@ static void ExaPrn_GetCorrectFltAnswerFromDB (struct Qst_Question *Question)
       Err_WrongAnswerExit ();
 
    /***** Get float range *****/
-   for (NumOpt = 0;
-	NumOpt < 2;
+   for (Valid = true, NumOpt = 0;
+	Valid && NumOpt < 2;
 	NumOpt++)
      {
       row = mysql_fetch_row (mysql_res);
-      Question->Answer.FloatingPoint[NumOpt] = Str_GetDoubleFromStr (row[0]);
+      Valid = Str_GetDoubleFromStr (row[0],&Question->Answer.FloatingPoint[NumOpt]);
      }
-   if (Question->Answer.FloatingPoint[0] >
-       Question->Answer.FloatingPoint[1]) 	// The maximum and the minimum are swapped
-    {
-      /* Swap maximum and minimum */
-      Tmp = Question->Answer.FloatingPoint[0];
-      Question->Answer.FloatingPoint[0] = Question->Answer.FloatingPoint[1];
-      Question->Answer.FloatingPoint[1] = Tmp;
-     }
+   if (Valid)
+      if (Question->Answer.FloatingPoint[0] >
+	  Question->Answer.FloatingPoint[1]) 	// The maximum and the minimum are swapped
+       {
+	 /* Swap maximum and minimum */
+	 Tmp = Question->Answer.FloatingPoint[0];
+	 Question->Answer.FloatingPoint[0] = Question->Answer.FloatingPoint[1];
+	 Question->Answer.FloatingPoint[1] = Tmp;
+	}
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

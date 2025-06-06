@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
+#include <float.h>		// For DBL_MAX
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
@@ -78,6 +79,7 @@ const char *Qst_OrderByShuffle[Qst_NUM_SHUFFLE] =
 /* Correct in database fields */
 const char Qst_Correct_YN[Qst_NUM_WRONG_CORRECT] =
   {
+   [Qst_BLANK  ] = ' ',	// Not applicable here
    [Qst_WRONG  ] = 'N',
    [Qst_CORRECT] = 'Y',
   };
@@ -115,6 +117,12 @@ static void Qst_WriteTF_Ans (struct Qst_Question *Question,
 static void Qst_WriteChoAns (struct Qst_Question *Question,
                              const char *ClassTxt,
                              const char *ClassFeedback);
+
+static void Qst_PutIntInputField (const struct Qst_Question *Question);
+static void Qst_PutFloatInputField (const struct Qst_Question *Question,
+				    unsigned Index);
+static void Qst_PutTFInputField (const struct Qst_Question *Question,
+				 unsigned Index);
 
 static Qst_Shuffle_t Qst_GetParShuffle (void);
 
@@ -1547,6 +1555,7 @@ void Qst_GetCorrectFltAnswerFromDB (struct Qst_Question *Question)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumOpt;
+   bool Valid;
    double Tmp;
 
    /***** Query database *****/
@@ -1557,21 +1566,22 @@ void Qst_GetCorrectFltAnswerFromDB (struct Qst_Question *Question)
       Err_WrongAnswerExit ();
 
    /***** Get float range *****/
-   for (NumOpt = 0;
-	NumOpt < 2;
+   for (Valid = true, NumOpt = 0;
+	Valid && NumOpt < 2;
 	NumOpt++)
      {
       row = mysql_fetch_row (mysql_res);
-      Question->Answer.FloatingPoint[NumOpt] = Str_GetDoubleFromStr (row[0]);
+      Valid = Str_GetDoubleFromStr (row[0],&Question->Answer.FloatingPoint[NumOpt]);
      }
-   if (Question->Answer.FloatingPoint[0] >
-       Question->Answer.FloatingPoint[1]) 	// The maximum and the minimum are swapped
-    {
-      /* Swap maximum and minimum */
-      Tmp = Question->Answer.FloatingPoint[0];
-      Question->Answer.FloatingPoint[0] = Question->Answer.FloatingPoint[1];
-      Question->Answer.FloatingPoint[1] = Tmp;
-     }
+   if (Valid)
+      if (Question->Answer.FloatingPoint[0] >
+	  Question->Answer.FloatingPoint[1]) 	// The maximum and the minimum are swapped
+       {
+	 /* Swap maximum and minimum */
+	 Tmp = Question->Answer.FloatingPoint[0];
+	 Question->Answer.FloatingPoint[0] = Question->Answer.FloatingPoint[1];
+	 Question->Answer.FloatingPoint[1] = Tmp;
+	}
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1831,10 +1841,6 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
    extern const char *Txt_Type;
    extern const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES];
    extern const char *Txt_Answers;
-   extern const char *Txt_Integer_number;
-   extern const char *Txt_Real_number_between_A_and_B_1;
-   extern const char *Txt_Real_number_between_A_and_B_2;
-   extern const char *Txt_TF_QST[2];
    extern const char *Txt_Shuffle;
    extern const char *Txt_Expand;
    extern const char *Txt_Contract;
@@ -1849,6 +1855,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
      };
    static HTM_Attributes_t AttributesCorrectChecked[Qst_NUM_WRONG_CORRECT] =
      {
+      [Qst_BLANK  ] = HTM_NO_ATTR,	// Not applicable here
       [Qst_WRONG  ] = HTM_NO_ATTR,
       [Qst_CORRECT] = HTM_CHECKED
      };
@@ -1869,7 +1876,6 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
    bool AnswerHasContent;
    bool DisplayRightColumn;
    char StrTagTxt[6 + Cns_MAX_DIGITS_UINT + 1];
-   char StrInteger[Cns_MAX_DIGITS_UINT + 1];
    char *Title;
    char *FuncOnChange;
    OldNew_OldNew_t OldNewQst = (Question->QstCod > 0) ? OldNew_OLD :
@@ -2066,15 +2072,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-		  HTM_Txt (Txt_Integer_number); HTM_Colon (); HTM_NBSP ();
-		  snprintf (StrInteger,sizeof (StrInteger),"%ld",Question->Answer.Integer);
-		  HTM_INPUT_TEXT ("AnsInt",Cns_MAX_DIGITS_LONG,StrInteger,
-				  (Question->Answer.Type == Qst_ANS_INT) ? HTM_NO_ATTR :
-								           HTM_DISABLED | HTM_REQUIRED,
-				  "size=\"11\" class=\"INPUT_%s\"",
-				  The_GetSuffix ());
-	       HTM_LABEL_End ();
+	       Qst_PutIntInputField (Question);
 	    HTM_TD_End ();
 	 HTM_TR_End ();
 
@@ -2082,10 +2080,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	 HTM_TR_Begin (NULL);
 	    HTM_TD_Empty (1);
 	    HTM_TD_Begin ("class=\"LT\"");
-	       Qst_PutFloatInputField (Txt_Real_number_between_A_and_B_1,"AnsFloatMin",
-				       Question,0);
-	       Qst_PutFloatInputField (Txt_Real_number_between_A_and_B_2,"AnsFloatMax",
-				       Question,1);
+	       Qst_PutFloatInputField (Question,0);
+	       Qst_PutFloatInputField (Question,1);
 	    HTM_TD_End ();
 	 HTM_TR_End ();
 
@@ -2093,8 +2089,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	 HTM_TR_Begin (NULL);
 	    HTM_TD_Empty (1);
 	    HTM_TD_Begin ("class=\"LT\"");
-	       Qst_PutTFInputField (Question,Txt_TF_QST[0],'T');
-	       Qst_PutTFInputField (Question,Txt_TF_QST[1],'F');
+	       Qst_PutTFInputField (Question,0);
+	       Qst_PutTFInputField (Question,1);
 	    HTM_TD_End ();
 	 HTM_TR_End ();
 
@@ -2258,25 +2254,44 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
   }
 
 /*****************************************************************************/
+/********************* Put input field for integer answer ********************/
+/*****************************************************************************/
+
+static void Qst_PutIntInputField (const struct Qst_Question *Question)
+  {
+   extern const char *Txt_Integer_number;
+
+   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+      HTM_Txt (Txt_Integer_number); HTM_Colon (); HTM_NBSP ();
+      HTM_INPUT_LONG ("AnsInt",(long) INT_MIN,(long) INT_MAX,Question->Answer.Integer,
+	              (Question->Answer.Type == Qst_ANS_INT) ? HTM_NO_ATTR :
+							       HTM_DISABLED | HTM_REQUIRED,
+		      "class=\"Exa_ANSWER_INPUT_INT INPUT_%s\"",
+		      The_GetSuffix ());
+   HTM_LABEL_End ();
+  }
+
+/*****************************************************************************/
 /********************* Put input field for floating answer *******************/
 /*****************************************************************************/
 
-void Qst_PutFloatInputField (const char *Label,const char *Field,
-                             const struct Qst_Question *Question,
-                             unsigned Index)
+static void Qst_PutFloatInputField (const struct Qst_Question *Question,
+				    unsigned Index)
   {
-   char StrDouble[32];
+   extern const char *Txt_Real_number_between_A_and_B[2];
+   static const char *Fields[2] =
+     {
+      "AnsFloatMin",
+      "AnsFloatMax"
+     };
 
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-      HTM_Txt (Label);
-      HTM_NBSP ();
-      snprintf (StrDouble,sizeof (StrDouble),"%.15lg",
-		Question->Answer.FloatingPoint[Index]);
-      HTM_INPUT_TEXT (Field,Qst_MAX_BYTES_FLOAT_ANSWER,StrDouble,
-		      ((Question->Answer.Type == Qst_ANS_FLOAT) ? HTM_NO_ATTR :
-								  HTM_DISABLED) | HTM_REQUIRED,
-		      "size=\"11\" class=\"INPUT_%s\"",
-		      The_GetSuffix ());
+      HTM_Txt (Txt_Real_number_between_A_and_B[Index]); HTM_NBSP ();
+      HTM_INPUT_FLOAT (Fields[Index],-DBL_MAX,DBL_MAX,
+		       0,Question->Answer.FloatingPoint[Index],
+		       ((Question->Answer.Type == Qst_ANS_FLOAT) ? HTM_NO_ATTR :
+								   HTM_DISABLED) | HTM_REQUIRED,
+		       "class=\"Exa_ANSWER_INPUT_FLOAT INPUT_%s\"",The_GetSuffix ());
    HTM_LABEL_End ();
   }
 
@@ -2284,18 +2299,25 @@ void Qst_PutFloatInputField (const char *Label,const char *Field,
 /*********************** Put input field for T/F answer **********************/
 /*****************************************************************************/
 
-void Qst_PutTFInputField (const struct Qst_Question *Question,
-                          const char *Label,char Value)
+static void Qst_PutTFInputField (const struct Qst_Question *Question,
+				 unsigned Index)
   {
+   extern const char *Txt_TF_QST[2];
+   static const char Values[2] =
+     {
+      'T',
+      'F'
+     };
+
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_INPUT_RADIO ("AnsTF",
-		       ((Question->Answer.TF == Value) ? HTM_CHECKED :
-							 HTM_NO_ATTR) |
+		       ((Question->Answer.TF == Values[Index]) ? HTM_CHECKED :
+							         HTM_NO_ATTR) |
 		       HTM_REQUIRED |
 		       ((Question->Answer.Type == Qst_ANS_TRUE_FALSE) ? HTM_NO_ATTR :
 								        HTM_DISABLED),
-		       "value=\"%c\"",Value);
-      HTM_Txt (Label);
+		       "value=\"%c\"",Values[Index]);
+      HTM_Txt (Txt_TF_QST[Index]);
    HTM_LABEL_End ();
   }
 
@@ -2561,7 +2583,9 @@ bool Qst_GetQstDataByCod (struct Qst_Question *Question)
 	    case Qst_ANS_FLOAT:
 	       if (Question->Answer.NumOptions != 2)
 		  Err_WrongAnswerExit ();
-	       Question->Answer.FloatingPoint[NumOpt] = Str_GetDoubleFromStr (row[1]);
+	       if (!Str_GetDoubleFromStr (row[1],
+					  &Question->Answer.FloatingPoint[NumOpt]))
+		  Err_WrongAnswerExit ();
 	       break;
 	    case Qst_ANS_TRUE_FALSE:
 	       Qst_CheckIfNumberOfAnswersIsOne (Question);
@@ -2924,8 +2948,8 @@ bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Quest
    extern const char *Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to_the_upper_limit;
    unsigned NumOpt;
    unsigned NumLastOpt;
+   bool Valid;
    bool ThereIsEndOfAnswers;
-   unsigned i;
 
    /***** This function also counts the number of options. Initialize this number to 0. *****/
    Question->Answer.NumOptions = 0;
@@ -2979,14 +3003,23 @@ bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Quest
            }
 
          /* Lower limit should be <= upper limit */
-         for (i = 0;
-              i < 2;
-              i++)
-            Question->Answer.FloatingPoint[i] = Str_GetDoubleFromStr (Question->Answer.Options[i].Text);
-         if (Question->Answer.FloatingPoint[0] >
-             Question->Answer.FloatingPoint[1])
+         for (Valid = true, NumOpt = 0;
+              Valid && NumOpt < 2;
+              NumOpt++)
+            Valid = Str_GetDoubleFromStr (Question->Answer.Options[NumOpt].Text,
+        				  &Question->Answer.FloatingPoint[NumOpt]);
+         if (Valid)
            {
-            Ale_ShowAlert (Ale_WARNING,Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to_the_upper_limit);
+	    if (Question->Answer.FloatingPoint[0] >
+		Question->Answer.FloatingPoint[1])
+	      {
+	       Ale_ShowAlert (Ale_WARNING,Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to_the_upper_limit);
+	       return false;
+	      }
+           }
+         else
+           {
+            Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer);
             return false;
            }
 
@@ -3104,7 +3137,7 @@ bool Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question)
    unsigned NumQstsWithThisStem;
    unsigned NumOpt;
    unsigned NumOptsExistingQstInDB;
-   unsigned i;
+   double DoubleNum;
 
    /***** Check if there are existing questions in database
           with the same stem that the one of this question *****/
@@ -3130,12 +3163,15 @@ bool Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question)
                IdenticalQuestionFound = (Qst_GetIntAnsFromStr (row[0]) == Question->Answer.Integer);
                break;
             case Qst_ANS_FLOAT:
-               for (IdenticalAnswers = true, i = 0;
-                    IdenticalAnswers && i < 2;
-                    i++)
+               for (IdenticalAnswers = true, NumOpt = 0;
+                    IdenticalAnswers && NumOpt < 2;
+                    NumOpt++)
                  {
                   row = mysql_fetch_row (mysql_res_ans);
-                  IdenticalAnswers = (Str_GetDoubleFromStr (row[0]) == Question->Answer.FloatingPoint[i]);
+                  if (Str_GetDoubleFromStr (row[0],&DoubleNum))
+                     IdenticalAnswers = (DoubleNum == Question->Answer.FloatingPoint[NumOpt]);
+                  else
+                     IdenticalAnswers = false;
                  }
                IdenticalQuestionFound = IdenticalAnswers;
                break;

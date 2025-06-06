@@ -72,11 +72,12 @@ typedef enum
    Qst_SHUFFLE      = 1,
   } Qst_Shuffle_t;
 
-#define Qst_NUM_WRONG_CORRECT 2
+#define Qst_NUM_WRONG_CORRECT 3
 typedef enum
   {
-   Qst_WRONG   = 0,
-   Qst_CORRECT = 1,
+   Qst_BLANK   = 0,
+   Qst_WRONG   = 1,
+   Qst_CORRECT = 2,
   } Qst_WrongOrCorrect_t;
 
 struct Qst_Question
@@ -210,11 +211,6 @@ Qst_AnswerType_t Qst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
 
 void Qst_ShowFormEditOneQst (void);
 void Qst_PutFormEditOneQst (struct Qst_Question *Question);
-void Qst_PutFloatInputField (const char *Label,const char *Field,
-                             const struct Qst_Question *Question,
-                             unsigned Index);
-void Qst_PutTFInputField (const struct Qst_Question *Question,
-                          const char *Label,char Value);
 
 void Qst_QstConstructor (struct Qst_Question *Question);
 void Qst_QstDestructor (struct Qst_Question *Question);

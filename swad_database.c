@@ -4311,8 +4311,8 @@ double DB_QuerySELECTDouble (const char *MsgError,
    if (DB_QuerySELECTusingQueryStr (Query,&mysql_res,MsgError))	// Row found
      {
       row = mysql_fetch_row (mysql_res);
-      if (row[0])
-         DoubleNum = Str_GetDoubleFromStr (row[0]);
+      if (!Str_GetDoubleFromStr (row[0],&DoubleNum))
+	 DoubleNum = 0.0;
      }
 
    /***** Free structure that stores the query result *****/

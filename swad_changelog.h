@@ -638,10 +638,11 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.88.2 (2025-05-30)"
-#define CSS_FILE		"swad24.88.1.css"
+#define Log_PLATFORM_VERSION	"SWAD 24.88.3 (2025-06-06)"
+#define CSS_FILE		"swad24.88.3.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 24.88.3:  Jun 06, 2025  Changes in exam answer sheets. (347918 lines)
 	Version 24.88.2:  May 30, 2025  Changes in exam answer sheets. (347776 lines)
 	Version 24.88.1:  May 30, 2025  Changes in exam answer sheets. (347553 lines)
 	Version 24.88:    May 27, 2025  Changes in exam layouts. (347452 lines)

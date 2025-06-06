@@ -4026,6 +4026,7 @@ int swad__getGames (struct soap *soap,
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    long StartTime;
    long EndTime;
+   double DoubleNum;
    size_t Length;
 
    /***** Initializations *****/
@@ -4135,8 +4136,13 @@ int swad__getGames (struct soap *soap,
          getGamesOut->gamesArray.__ptr[NumGame].endTime = EndTime;
 
 	 /* Get maximum grade (row[4]) */
-	 getGamesOut->gamesArray.__ptr[NumGame].maxGrade = Str_GetDoubleFromStr (row[4]);
-	 if (getGamesOut->gamesArray.__ptr[NumGame].maxGrade < 0.0)	// Only positive values allowed
+	 if (Str_GetDoubleFromStr (row[4],&DoubleNum))
+	   {
+	    getGamesOut->gamesArray.__ptr[NumGame].maxGrade = (float) DoubleNum;
+	    if (getGamesOut->gamesArray.__ptr[NumGame].maxGrade < 0.0)	// Only positive values allowed
+	       getGamesOut->gamesArray.__ptr[NumGame].maxGrade = 0.0;
+	   }
+	 else
 	    getGamesOut->gamesArray.__ptr[NumGame].maxGrade = 0.0;
 
 	 /* Get visibility (row[5]) */

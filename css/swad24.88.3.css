@@ -3872,9 +3872,21 @@ legend {font-size: 12pt; font-weight: bold;}
 	text-align: right;
 	vertical-align: middle;
 	}
+.Exa_ANSWER_INPUT_INT
+	{
+	width: 80px;
+	text-align: right;
+	vertical-align: middle;
+	}
 .Exa_ANSWER_FLOAT
 	{
 	width: 150px;
+	text-align: right;
+	vertical-align: middle;
+	}
+.Exa_ANSWER_INPUT_FLOAT
+	{
+	width: 130px;
 	text-align: right;
 	vertical-align: middle;
 	}
@@ -3894,6 +3906,12 @@ legend {font-size: 12pt; font-weight: bold;}
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	}
+.Exa_ANSWER_INPUT_TEXT
+	{
+	width: 280px;
+	text-align: left;
+	vertical-align: middle;
 	}
 
 /********************************** Matches **********************************/

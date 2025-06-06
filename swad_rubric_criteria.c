@@ -290,12 +290,14 @@ static void RubCri_ReceiveCriterionFieldsFromForm (struct RubCri_Criterion *Crit
 	ValueRange++)
      {
       Par_GetParText (RubCri_ParValues[ValueRange],ValueStr,sizeof (ValueStr) - 1);
-      Criterion->Values[ValueRange] = Str_GetDoubleFromStr (ValueStr);
+      if (!Str_GetDoubleFromStr (ValueStr,&Criterion->Values[ValueRange]))
+	 Criterion->Values[ValueRange] = 0.0;
      }
 
    /***** Get criterion weight *****/
    Par_GetParText ("Weight",WeightStr,sizeof (WeightStr) - 1);
-   Criterion->Weight = Str_GetDoubleFromStr (WeightStr);
+   if (!Str_GetDoubleFromStr (WeightStr,&Criterion->Weight))
+      Criterion->Weight = 0.0;
   }
 
 static bool RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Criterion *Criterion,
@@ -407,7 +409,8 @@ static void RubCri_ChangeValueCriterion (RubCri_ValueRange_t ValueRange)
 
    /***** Receive new value from form *****/
    Par_GetParText (RubCri_ParValues[ValueRange],ValueStr,sizeof (ValueStr) - 1);
-   Rubrics.Criterion.Values[ValueRange] = Str_GetDoubleFromStr (ValueStr);
+   if (!Str_GetDoubleFromStr (ValueStr,&Rubrics.Criterion.Values[ValueRange]))
+      Rubrics.Criterion.Values[ValueRange] = 0.0;
 
    /***** Change value *****/
    /* Update the table changing old value by new value */
@@ -448,7 +451,8 @@ void RubCri_ChangeWeight (void)
 
    /***** Receive new weight from form *****/
    Par_GetParText ("Weight",WeightStr,sizeof (WeightStr) - 1);
-   Rubrics.Criterion.Weight = Str_GetDoubleFromStr (WeightStr);
+   if (!Str_GetDoubleFromStr (WeightStr,&Rubrics.Criterion.Weight))
+      Rubrics.Criterion.Weight = 0.0;
 
    /***** Change value *****/
    /* Update the table changing old weight by new weight */
@@ -1155,10 +1159,13 @@ bool Rub_FindRubCodInStack (const struct Rub_Node *TOS,long RubCod)
 double RubCri_GetParScore (void)
   {
    char ScoreStr[64];
+   double DoubleNum;
 
    /***** Get criterion weight *****/
    Par_GetParText ("Score",ScoreStr,sizeof (ScoreStr) - 1);
-   return Str_GetDoubleFromStr (ScoreStr);
+   if (Str_GetDoubleFromStr (ScoreStr,&DoubleNum))
+      return DoubleNum;
+   return 0.0;
   }
 
 /*****************************************************************************/
@@ -1201,10 +1208,13 @@ void RubCri_GetCriterionDataFromRow (MYSQL_RES *mysql_res,
    for (ValueRange  = (RubCri_ValueRange_t) 0;
 	ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
 	ValueRange++)
-      Criterion->Values[ValueRange] = Str_GetDoubleFromStr (row[5 + ValueRange]);
+       if (!Str_GetDoubleFromStr (row[5 + ValueRange],
+				  &Criterion->Values[ValueRange]))
+	  Criterion->Values[ValueRange] = 0.0;
 
    /***** Get criterion weight (row[7]) *****/
-   Criterion->Weight = Str_GetDoubleFromStr (row[5 + RubCri_NUM_VALUES]);
+   if (!Str_GetDoubleFromStr (row[5 + RubCri_NUM_VALUES],&Criterion->Weight))
+      Criterion->Weight = 0.0;
 
    /***** Get the title of the criterion (row[8]) *****/
    Str_Copy (Criterion->Title,row[5 + RubCri_NUM_VALUES + 1],

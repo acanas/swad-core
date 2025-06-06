@@ -33086,51 +33086,52 @@ const char *Txt_ReaBRders =
 	"Rea-<br>ders";	// Çeviri lazim!
 #endif
 
-const char *Txt_Real_number_between_A_and_B_1 =
+const char *Txt_Real_number_between_A_and_B[2] =
+	{
 #if   L==1	// ca
-	"Nombre real entre";
+	"Nombre real entre"
 #elif L==2	// de
-	"Reelle Zahl zwischen";
+	"Reelle Zahl zwischen"
 #elif L==3	// en
-	"Real number between";
+	"Real number between"
 #elif L==4	// es
-	"N.&ordm; real entre";
+	"N.&ordm; real entre"
 #elif L==5	// fr
-	"Nombre r&eacute;el entre";
+	"Nombre r&eacute;el entre"
 #elif L==6	// gn
-	"N.&ordm; real entre";	// Okoteve traducción
+	"N.&ordm; real entre"	// Okoteve traducción
 #elif L==7	// it
-	"Numero reale compreso tra";
+	"Numero reale compreso tra"
 #elif L==8	// pl
-	"Prawdziwa liczbe miedzy";
+	"Prawdziwa liczbe miedzy"
 #elif L==9	// pt
-	"N.&ordm; real entre";
+	"N.&ordm; real entre"
 #elif L==10	// tr
-	"Real number between";	// Çeviri lazim!
+	"Real number between"	// Çeviri lazim!
 #endif
-
-const char *Txt_Real_number_between_A_and_B_2 =	// Must start by space
+	,
 #if   L==1	// ca
-	" i";
+	" i"
 #elif L==2	// de
-	" und";
+	" und"
 #elif L==3	// en
-	" and";
+	" and"
 #elif L==4	// es
-	" y";
+	" y"
 #elif L==5	// fr
-	" et";
+	" et"
 #elif L==6	// gn
-	" y";	// Okoteve traducción
+	" y"	// Okoteve traducción
 #elif L==7	// it
-	" e";
+	" e"
 #elif L==8	// pl
-	" i";
+	" i"
 #elif L==9	// pt
-	" e";
+	" e"
 #elif L==10	// tr
-	" and";	// Çeviri lazim!
+	" and"	// Çeviri lazim!
 #endif
+	};
 
 const char *Txt_Reading =
 #if   L==1	// ca

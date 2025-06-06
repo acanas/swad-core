@@ -3657,6 +3657,7 @@ void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,
   {
    static const char *WroCor_Class[Qst_NUM_WRONG_CORRECT] =
      {
+      [Qst_BLANK  ] = "MCH_RES_VOID",
       [Qst_WRONG  ] = "MCH_RES_WRONG",
       [Qst_CORRECT] = "MCH_RES_CORRECT",
      };

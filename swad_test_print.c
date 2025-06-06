@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
+#include <float.h>		// For DBL_MAX
 #include <math.h>		// For fabs
 #include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
@@ -364,9 +365,10 @@ static void TstPrn_WriteFltAnsToFill (const struct TstPrn_PrintedQuestion *Print
 
    /***** Write input field for the answer *****/
    snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
-   HTM_INPUT_TEXT (StrAns,Qst_MAX_BYTES_FLOAT_ANSWER,PrintedQuestion->StrAnswers,
-                   HTM_NO_ATTR,
-		   "size=\"11\" class=\"INPUT_%s\"",The_GetSuffix ());
+   HTM_TxtF ("<input type=\"number\" name=\"%s\""
+	     " class=\"Exa_ANSWER_INPUT_FLOAT INPUT_%s\" value=\"%s\"",
+	     StrAns,The_GetSuffix (),PrintedQuestion->StrAnswers);
+   HTM_ElementEnd ();
   }
 
 /*****************************************************************************/
@@ -869,7 +871,7 @@ void TstPrn_ComputeIntAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 void TstPrn_ComputeFltAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				const struct Qst_Question *Question)
   {
-   double AnswerUsr;
+   double AnsUsr;
 
    PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_BLANK;
    PrintedQuestion->Score = 0.0;	// Default score for blank or wrong answer
@@ -877,15 +879,13 @@ void TstPrn_ComputeFltAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
    if (PrintedQuestion->StrAnswers[0])	// If user has answered the answer
      {
       PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
-      AnswerUsr = Str_GetDoubleFromStr (PrintedQuestion->StrAnswers);
-
-      // A bad formatted floating point answer will interpreted as 0.0
-      if (AnswerUsr >= Question->Answer.FloatingPoint[0] &&
-	  AnswerUsr <= Question->Answer.FloatingPoint[1])
-	{
-	 PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_CORRECT;
-         PrintedQuestion->Score = 1.0; // Correct (inside the interval)
-	}
+      if (Str_GetDoubleFromStr (PrintedQuestion->StrAnswers,&AnsUsr))
+	 if (AnsUsr >= Question->Answer.FloatingPoint[0] &&
+	     AnsUsr <= Question->Answer.FloatingPoint[1])
+	   {
+	    PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_CORRECT;
+	    PrintedQuestion->Score = 1.0; // Correct (inside the interval)
+	   }
      }
   }
 
@@ -1266,7 +1266,8 @@ static void TstPrn_WriteFltAnsPrint (struct Usr_Data *UsrDat,
 				     __attribute__((unused)) const char *ClassTxt,
 				     __attribute__((unused)) const char *ClassFeedback)
   {
-   double FloatAnsUsr = 0.0;
+   double AnsUsr;
+   bool Valid;
 
    /***** Check if number of rows is correct *****/
    if (Question->Answer.NumOptions != 2)
@@ -1285,16 +1286,18 @@ static void TstPrn_WriteFltAnsPrint (struct Usr_Data *UsrDat,
 	 /***** Write the user answer *****/
 	 if (PrintedQuestion->StrAnswers[0])	// If user has answered the question
 	   {
-	    FloatAnsUsr = Str_GetDoubleFromStr (PrintedQuestion->StrAnswers);
+	    Valid = Str_GetDoubleFromStr (PrintedQuestion->StrAnswers,&AnsUsr);
+
 	    // A bad formatted floating point answer will interpreted as 0.0
 	    HTM_TD_Begin ("class=\"CM %s_%s\"",
-			  ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_CAN ?
-			     ((FloatAnsUsr >= Question->Answer.FloatingPoint[0] &&
-			       FloatAnsUsr <= Question->Answer.FloatingPoint[1]) ? "Qst_ANS_OK" :	// Correct
-										   "Qst_ANS_BAD") :	// Wrong
-										   "Qst_ANS_0",		// Blank answer
+			  ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_CAN && Valid ?
+			     ((AnsUsr >= Question->Answer.FloatingPoint[0] &&
+			       AnsUsr <= Question->Answer.FloatingPoint[1]) ? "Qst_ANS_OK" :	// Correct
+									      "Qst_ANS_BAD") :	// Wrong
+									      "Qst_ANS_0",	// Blank answer
 			  The_GetSuffix ());
-	       HTM_Double (FloatAnsUsr);
+	       if (Valid)
+	          HTM_Double (AnsUsr);
 	    HTM_TD_End ();
 	   }
 	 else					// If user has omitted the answer
@@ -1398,6 +1401,7 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
      };
    static struct Answer AnsWrongOrCorrect[Qst_NUM_WRONG_CORRECT] =
      {
+      [Qst_BLANK  ] = {.Class = "Qst_ANS_0"  ,.Str = "&nbsp;" },
       [Qst_WRONG  ] = {.Class = "Qst_ANS_BAD",.Str = "&cross;"},
       [Qst_CORRECT] = {.Class = "Qst_ANS_OK" ,.Str = "&check;"}
      };
@@ -1541,15 +1545,16 @@ static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
 				     __attribute__((unused)) const char *ClassTxt,
 				     __attribute__((unused)) const char *ClassFeedback)
   {
-   static const char *Class[HidVis_NUM_HIDDEN_VISIBLE] =
+   static const char *Class[Qst_NUM_WRONG_CORRECT] =
      {
+      [Qst_BLANK  ] = "Qst_ANS_0",
       [Qst_WRONG  ] = "Qst_ANS_BAD",
       [Qst_CORRECT] = "Qst_ANS_OK",
      };
    unsigned NumOpt;
    char TextAnsUsr[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
    char TextAnsOK[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
-   Qst_WrongOrCorrect_t WrongOrCorrect = Qst_WRONG;
+   Qst_WrongOrCorrect_t WrongOrCorrect;
 
    /***** Change format of answers text *****/
    Qst_ChangeFormatAnswersText (Question);
@@ -1581,7 +1586,7 @@ static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
 
 	    Str_ConvertToComparable (TextAnsUsr);
 
-	    for (NumOpt = 0;
+	    for (NumOpt = 0, WrongOrCorrect = Qst_WRONG;
 		 NumOpt < Question->Answer.NumOptions;
 		 NumOpt++)
 	      {

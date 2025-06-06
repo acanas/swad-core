@@ -615,33 +615,34 @@ void Str_ConvertStrFloatCommaToStrFloatPoint (char *Str)
 /*****************************************************************************/
 /************************ Get a double from a string *************************/
 /*****************************************************************************/
-// This function may change Str on wrong double
+// If Str contains a valid value, return true and Value will be a double number
+// If Str does not contain a valid value, return false and Value is undefined
 
-double Str_GetDoubleFromStr (const char *Str)
+bool Str_GetDoubleFromStr (const char *Str,double *Value)
   {
    char *StrPoint;
-   double DoubleNum;
+   bool Valid = false;
 
    /***** Trivial check *****/
-   if (Str == NULL)	// If no string...
-      return 0.0;	// ...the number is reset to 0
+   if (Str)
+     {
+      /***** Copy source string to temporary string to convert to point *****/
+      if (asprintf (&StrPoint,"%s",Str) < 0)
+	 Err_NotEnoughMemoryExit ();
 
-   /***** Copy source string to temporary string to convert to point *****/
-   if (asprintf (&StrPoint,"%s",Str) < 0)
-      Err_NotEnoughMemoryExit ();
+      /***** The string is "scanned" in floating point
+	     (it must have a point, not a comma as decimal separator) *****/
+      Str_ConvertStrFloatCommaToStrFloatPoint (StrPoint);
+      Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
+	 if (sscanf (StrPoint,"%lf",Value) == 1)	// If the string hold a valid number...
+	    Valid = true;
+      Str_SetDecimalPointToLocal ();	// Return to local system
 
-   /***** The string is "scanned" in floating point
-          (it must have a point, not a comma as decimal separator) *****/
-   Str_ConvertStrFloatCommaToStrFloatPoint (StrPoint);
-   Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
-   if (sscanf (StrPoint,"%lf",&DoubleNum) != 1)	// If the string does not hold a valid number...
-      DoubleNum = 0.0;				// ...the number is reset to 0
-   Str_SetDecimalPointToLocal ();	// Return to local system
+      /***** Free temporary string *****/
+      free (StrPoint);
+     }
 
-   /***** Free temporary string *****/
-   free (StrPoint);
-
-   return DoubleNum;
+   return Valid;
   }
 
 /*****************************************************************************/
