@@ -1459,7 +1459,7 @@ void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
 	 if (Question.Validity == ExaSet_VALID_QUESTION)
 	   {
 	    ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[QstInd],&Question);
-	    switch (Print->PrintedQuestions[QstInd].AnswerIsCorrect)
+	    switch (Print->PrintedQuestions[QstInd].Answers.Online.IsCorrect)
 	      {
 	       case TstPrn_ANSWER_IS_CORRECT:
 	          Print->NumQsts.Valid.Correct++;
@@ -1478,7 +1478,7 @@ void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
 		  break;
 	      }
 	    Print->NumQsts.Valid.Total++;
-	    Print->Score.Valid += Print->PrintedQuestions[QstInd].Score;
+	    Print->Score.Valid += Print->PrintedQuestions[QstInd].Answers.Online.Score;
 	   }
      }
   }
@@ -1916,12 +1916,12 @@ static void ExaRes_WriteQstAndAns (struct Usr_Data *UsrDat,
 	    HTM_DIV_Begin ("class=\"LM DAT_SMALL_%s\"",The_GetSuffix ());
 	       HTM_Txt (Txt_Score); HTM_Colon (); HTM_NBSP ();
 	       HTM_SPAN_Begin ("class=\"%s_%s\"",
-			       Print->PrintedQuestions[QstInd].StrAnswers[0] ?
-			       (Print->PrintedQuestions[QstInd].Score > 0 ? "Qst_ANS_OK" :	// Correct
-									    "Qst_ANS_BAD") :	// Wrong
-									    "Qst_ANS_0",	// Blank answer
+			       Print->PrintedQuestions[QstInd].Answers.Online.Str[0] ?
+			       (Print->PrintedQuestions[QstInd].Answers.Online.Score > 0 ? "Qst_ANS_OK" :	// Correct
+											   "Qst_ANS_BAD") :	// Wrong
+											   "Qst_ANS_0",		// Blank answer
 			       The_GetSuffix ());
-		  HTM_Double2Decimals (Print->PrintedQuestions[QstInd].Score);
+		  HTM_Double2Decimals (Print->PrintedQuestions[QstInd].Answers.Online.Score);
 		  if (Question->Validity == ExaSet_INVALID_QUESTION)
 		    {
 		     HTM_SP ();

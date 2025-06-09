@@ -1288,20 +1288,19 @@ mysql> DESCRIBE exa_print_questions;
    /***** Table exa_prints *****/
 /*
 mysql> DESCRIBE exa_prints;
-+-----------------+---------------+------+-----+---------+----------------+
-| Field           | Type          | Null | Key | Default | Extra          |
-+-----------------+---------------+------+-----+---------+----------------+
-| PrnCod          | int(11)       | NO   | PRI | NULL    | auto_increment |
-| SesCod          | int(11)       | NO   | MUL | NULL    |                |
-| UsrCod          | int(11)       | NO   |     | NULL    |                |
-| StartTime       | datetime      | NO   |     | NULL    |                |
-| EndTime         | datetime      | NO   |     | NULL    |                |
-| NumQsts         | int(11)       | NO   |     | 0       |                |
-| NumQstsNotBlank | int(11)       | NO   |     | 0       |                |
-| Sent            | enum('N','Y') | NO   |     | N       |                |
-| Score           | double        | NO   |     | 0       |                |
-+-----------------+---------------+------+-----+---------+----------------+
-9 rows in set (0.00 sec)
++-----------------+----------+------+-----+---------+----------------+
+| Field           | Type     | Null | Key | Default | Extra          |
++-----------------+----------+------+-----+---------+----------------+
+| PrnCod          | int      | NO   | PRI | NULL    | auto_increment |
+| SesCod          | int      | NO   | MUL | NULL    |                |
+| UsrCod          | int      | NO   |     | NULL    |                |
+| StartTime       | datetime | NO   |     | NULL    |                |
+| EndTime         | datetime | NO   |     | NULL    |                |
+| NumQsts         | int      | NO   |     | 0       |                |
+| NumQstsNotBlank | int      | NO   |     | 0       |                |
+| Score           | double   | NO   |     | 0       |                |
++-----------------+----------+------+-----+---------+----------------+
+8 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_prints ("
 			"PrnCod INT NOT NULL AUTO_INCREMENT,"
@@ -1311,7 +1310,6 @@ mysql> DESCRIBE exa_prints;
 			"EndTime DATETIME NOT NULL,"
 			"NumQsts INT NOT NULL DEFAULT 0,"
 			"NumQstsNotBlank INT NOT NULL DEFAULT 0,"
-			"Sent ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(PrnCod),"
 		   "UNIQUE INDEX(SesCod,UsrCod))");

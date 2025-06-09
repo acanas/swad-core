@@ -172,6 +172,9 @@ static void ExaAnsShe_WritePaperChoAns (struct Qst_Question *Question,
 static void ExaAnsShe_WritePaperTxtAns (struct Qst_Question *Question,
 					const struct ExaPrn_Print *Print,
 					unsigned QstInd);
+static void ExaAnsShe_WriteJSToUpdateSheet (const struct ExaPrn_Print *Print,
+	                                    unsigned QstInd,
+	                                    const char *Id,int NumOpt);
 
 static void ExaAnsShe_WriteHead (ExaAnsShe_AnswerType_t AnswerType);
 
@@ -837,9 +840,10 @@ static void ExaAnsShe_WriteOnlineIntAns (struct Qst_Question *Question,
    Qst_CheckIfNumberOfAnswersIsOne (Question);
 
    /***** Write online answer *****/
-   if (Print->PrintedQuestions[QstInd].StrAnswers[0])	// If student has answered the question
+   if (Print->PrintedQuestions[QstInd].Answers.Online.Str[0])	// If student has answered the question
      {
-      if (sscanf (Print->PrintedQuestions[QstInd].StrAnswers,"%ld",&IntAnswerUsr) == 1)
+      if (sscanf (Print->PrintedQuestions[QstInd].Answers.Online.Str,
+		  "%ld",&IntAnswerUsr) == 1)
 	{
 	 HTM_TD_Begin ("class=\"Exa_ANSWER_INT %s_%s\"",
 		       IntAnswerUsr == Question->Answer.Integer ? "Qst_ANS_OK" :	// Correct
@@ -875,9 +879,9 @@ static void ExaAnsShe_WriteOnlineFltAns (struct Qst_Question *Question,
       Err_WrongAnswerExit ();
 
    /***** Write online answer *****/
-   if (Print->PrintedQuestions[QstInd].StrAnswers[0])	// If student has answered the question
+   if (Print->PrintedQuestions[QstInd].Answers.Online.Str[0])	// If student has answered the question
      {
-      Valid = Str_GetDoubleFromStr (Print->PrintedQuestions[QstInd].StrAnswers,
+      Valid = Str_GetDoubleFromStr (Print->PrintedQuestions[QstInd].Answers.Online.Str,
 			            &AnsUsr);
       // A bad formatted floating point answer will interpreted as 0.0
       HTM_TD_Begin ("class=\"Exa_ANSWER_FLOAT %s_%s\"",
@@ -908,7 +912,7 @@ static void ExaAnsShe_WriteOnlineTF_Ans (struct Qst_Question *Question,
    Qst_CheckIfNumberOfAnswersIsOne (Question);
 
    /***** Get answer true or false *****/
-   AnsTFStd = Print->PrintedQuestions[QstInd].StrAnswers[0];
+   AnsTFStd = Print->PrintedQuestions[QstInd].Answers.Online.Str[0];
 
    /***** Write online answer *****/
    HTM_TD_Begin ("class=\"Exa_ANSWER_TF %s_%s\"",
@@ -946,7 +950,7 @@ static void ExaAnsShe_WriteOnlineChoAns (struct Qst_Question *Question,
    TstPrn_GetIndexesFromStr (Print->PrintedQuestions[QstInd].StrIndexes,Indexes);
 
    /***** Get the user's answers for this question from string *****/
-   TstPrn_GetAnswersFromStr (Print->PrintedQuestions[QstInd].StrAnswers,UsrAnswers);
+   TstPrn_GetAnswersFromStr (Print->PrintedQuestions[QstInd].Answers.Online.Str,UsrAnswers);
 
    /***** Write online answers (one column per answer) *****/
    for (NumOpt = 0;
@@ -996,10 +1000,10 @@ static void ExaAnsShe_WriteOnlineTxtAns (struct Qst_Question *Question,
    Qst_ChangeFormatAnswersText (Question);
 
    /***** Write online answer *****/
-   if (Print->PrintedQuestions[QstInd].StrAnswers[0])	// If student has answered the question
+   if (Print->PrintedQuestions[QstInd].Answers.Online.Str[0])	// If student has answered the question
      {
       /* Filter the user answer */
-      Str_Copy (TextAnsUsr,Print->PrintedQuestions[QstInd].StrAnswers,
+      Str_Copy (TextAnsUsr,Print->PrintedQuestions[QstInd].Answers.Online.Str,
 		sizeof (TextAnsUsr) - 1);
 
       /* In order to compare student answer to stored answer,
@@ -1027,7 +1031,7 @@ static void ExaAnsShe_WriteOnlineTxtAns (struct Qst_Question *Question,
 
       HTM_TD_Begin ("class=\"Exa_ANSWER_TEXT %s_%s\"",
 		    Class[WrongOrCorrect],The_GetSuffix ());
-	 HTM_Txt (Print->PrintedQuestions[QstInd].StrAnswers);
+	 HTM_Txt (Print->PrintedQuestions[QstInd].Answers.Online.Str);
       HTM_TD_End ();
      }
    else							// If student has omitted the answer
@@ -1050,8 +1054,9 @@ static void ExaAnsShe_WritePaperIntAns (struct Qst_Question *Question,
    Qst_CheckIfNumberOfAnswersIsOne (Question);
 
    /***** Write paper answer *****/
-   if (Print->PrintedQuestions[QstInd].StrAnswers[0])	// If student has answered the question
-      if (sscanf (Print->PrintedQuestions[QstInd].StrAnswers,"%ld",&LongNum) == 1)
+   if (Print->PrintedQuestions[QstInd].Answers.Online.Str[0])	// If student has answered the question
+      if (sscanf (Print->PrintedQuestions[QstInd].Answers.Online.Str,
+		  "%ld",&LongNum) == 1)
 	 WrongOrCorrect = (LongNum == Question->Answer.Integer) ? Qst_CORRECT :
 								  Qst_WRONG;
 
@@ -1065,7 +1070,7 @@ static void ExaAnsShe_WritePaperIntAns (struct Qst_Question *Question,
       if (WrongOrCorrect != Qst_BLANK)
 	 HTM_Long (LongNum);
       HTM_Char ('"');
-      // ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
+      ExaAnsShe_WriteJSToUpdateSheet (Print,QstInd,Id,-1);
       HTM_ElementEnd ();
 
    HTM_TD_End ();
@@ -1089,9 +1094,9 @@ static void ExaAnsShe_WritePaperFltAns (struct Qst_Question *Question,
       Err_WrongAnswerExit ();
 
    /***** Write paper answer *****/
-   if (Print->PrintedQuestions[QstInd].StrAnswers[0])	// If student has answered the question
+   if (Print->PrintedQuestions[QstInd].Answers.Online.Str[0])	// If student has answered the question
      {
-      Valid = Str_GetDoubleFromStr (Print->PrintedQuestions[QstInd].StrAnswers,
+      Valid = Str_GetDoubleFromStr (Print->PrintedQuestions[QstInd].Answers.Online.Str,
 				    &AnsUsr);
       // A bad formatted floating point answer will interpreted as 0.0
       WrongOrCorrect = Valid ? ((AnsUsr >= Question->Answer.FloatingPoint[0] &&
@@ -1107,8 +1112,8 @@ static void ExaAnsShe_WritePaperFltAns (struct Qst_Question *Question,
       HTM_TxtF ("<input type=\"number\" id=\"%s\" name=\"Ans\""
 		" class=\"Exa_ANSWER_INPUT_FLOAT %s_%s\" value=\"%s\"",
 		Id,ExaAnsShe_Class[WrongOrCorrect],The_GetSuffix (),
-		Print->PrintedQuestions[QstInd].StrAnswers);
-      // ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
+		Print->PrintedQuestions[QstInd].Answers.Online.Str);
+      ExaAnsShe_WriteJSToUpdateSheet (Print,QstInd,Id,-1);
       HTM_ElementEnd ();
 
    HTM_TD_End ();
@@ -1132,24 +1137,19 @@ static void ExaAnsShe_WritePaperTF_Ans (struct Qst_Question *Question,
    Qst_CheckIfNumberOfAnswersIsOne (Question);
 
    /***** Get answer true or false *****/
-   AnsUsr = Print->PrintedQuestions[QstInd].StrAnswers[0];
+   AnsUsr = Print->PrintedQuestions[QstInd].Answers.Online.Str[0];
    WrongOrCorrect = AnsUsr ? (AnsUsr == Question->Answer.TF ? Qst_CORRECT :
 							      Qst_WRONG) :
 			     Qst_BLANK;
 
    /***** Write paper answer *****/
-   /*
-   HTM_TD_Begin ("class=\"Exa_ANSWER_TF %s_%s\"",ExaAnsShe_Class[WrongOrCorrect],The_GetSuffix ());
-      Qst_WriteAnsTF (AnsUsr);
-   HTM_TD_End ();
-   */
    HTM_TD_Begin ("class=\"Exa_ANSWER_TF\"");
 
       /***** Write selector for the answer *****/
       snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
       HTM_TxtF ("<select id=\"%s\" name=\"Ans\" class=\"%s_%s\"",
 		Id,ExaAnsShe_Class[WrongOrCorrect],The_GetSuffix ());
-      // ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
+      ExaAnsShe_WriteJSToUpdateSheet (Print,QstInd,Id,-1);
       HTM_ElementEnd ();
 	 HTM_OPTION (HTM_Type_STRING,"" ,(AnsUsr == '\0') ? HTM_SELECTED :
 							    HTM_NO_ATTR,
@@ -1173,14 +1173,8 @@ static void ExaAnsShe_WritePaperChoAns (struct Qst_Question *Question,
 					const struct ExaPrn_Print *Print,
 					unsigned QstInd)
   {
-   static const char *Str[Qst_NUM_WRONG_CORRECT] =
-     {
-      [Qst_BLANK  ] = "&nbsp;",
-      [Qst_WRONG  ] = "&cross;",
-      [Qst_CORRECT] = "&check;"
-     };
    unsigned NumOpt;
-   Qst_WrongOrCorrect_t OptionWrongOrCorrect;
+   char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
 
@@ -1188,30 +1182,27 @@ static void ExaAnsShe_WritePaperChoAns (struct Qst_Question *Question,
    TstPrn_GetIndexesFromStr (Print->PrintedQuestions[QstInd].StrIndexes,Indexes);
 
    /***** Get the user's answers for this question from string *****/
-   TstPrn_GetAnswersFromStr (Print->PrintedQuestions[QstInd].StrAnswers,UsrAnswers);
+   TstPrn_GetAnswersFromStr (Print->PrintedQuestions[QstInd].Answers.Online.Str,
+			     UsrAnswers);
 
    /***** Write paper answers (one column per answer) *****/
    for (NumOpt = 0;
 	NumOpt < Question->Answer.NumOptions;
 	NumOpt++)
      {
-      OptionWrongOrCorrect = Question->Answer.Options[Indexes[NumOpt]].Correct;
+      HTM_TD_Begin ("class=\"Exa_ANSWER_CHOICE\"");
 
-      /* Write letter depending on user's answer */
-      if (UsrAnswers[Indexes[NumOpt]] == HTM_CHECKED)	// This answer has been selected by the user
-	{
-	 HTM_TD_Begin ("class=\"Exa_ANSWER_CHOICE %s_%s\"",
-		       ExaAnsShe_Class[OptionWrongOrCorrect],The_GetSuffix ());
-	    HTM_Txt (Str[OptionWrongOrCorrect]);
-	 HTM_TD_End ();
-	}
-      else	// This answer has NOT been selected by the user
-	{
-	 HTM_TD_Begin ("class=\"Exa_ANSWER_CHOICE Qst_ANS_0_%s\"",
-		       The_GetSuffix ());
-	    HTM_NBSP ();
-	 HTM_TD_End ();
-	}
+	 snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
+	 HTM_TxtF ("<input type=\"%s\" id=\"%s_%u\" name=\"Ans\" value=\"%u\"",
+		   Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE ? "radio" :
+								    "checkbox",
+		   Id,NumOpt,Indexes[NumOpt]);
+	 if ((UsrAnswers[Indexes[NumOpt]] & HTM_CHECKED))
+	    HTM_Txt (" checked");
+	 ExaAnsShe_WriteJSToUpdateSheet (Print,QstInd,Id,(int) NumOpt);
+	 HTM_ElementEnd ();
+
+      HTM_TD_End ();
      }
   }
 
@@ -1230,10 +1221,10 @@ static void ExaAnsShe_WritePaperTxtAns (struct Qst_Question *Question,
    char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write paper answer *****/
-   if (Print->PrintedQuestions[QstInd].StrAnswers[0])	// If student has answered the question
+   if (Print->PrintedQuestions[QstInd].Answers.Online.Str[0])	// If student has answered the question
      {
       /* Filter the user answer */
-      Str_Copy (TextAnsUsr,Print->PrintedQuestions[QstInd].StrAnswers,
+      Str_Copy (TextAnsUsr,Print->PrintedQuestions[QstInd].Answers.Online.Str,
 		sizeof (TextAnsUsr) - 1);
 
       /* In order to compare student answer to stored answer,
@@ -1271,11 +1262,34 @@ static void ExaAnsShe_WritePaperTxtAns (struct Qst_Question *Question,
 		" class=\"Exa_ANSWER_INPUT_TEXT %s_%s\" value=\"%s\"",
 		Id,Qst_MAX_CHARS_ANSWERS_ONE_QST,
 		ExaAnsShe_Class[WrongOrCorrect],The_GetSuffix (),
-		Print->PrintedQuestions[QstInd].StrAnswers);
-      // ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
+		Print->PrintedQuestions[QstInd].Answers.Online.Str);
+      ExaAnsShe_WriteJSToUpdateSheet (Print,QstInd,Id,-1);
       HTM_ElementEnd ();
 
    HTM_TD_End ();
+  }
+
+/*****************************************************************************/
+/********************** Receive answer to an exam print **********************/
+/*****************************************************************************/
+
+static void ExaAnsShe_WriteJSToUpdateSheet (const struct ExaPrn_Print *Print,
+	                                    unsigned QstInd,
+	                                    const char *Id,int NumOpt)
+  {
+   if (NumOpt < 0)
+      HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
+			    "'act=%ld&ses=%s&SesCod=%ld&QstInd=%u',%u);",
+		Id,
+		Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,QstInd,
+		(unsigned) Gbl.Prefs.Language);
+   else	// NumOpt >= 0
+      HTM_TxtF (" onclick=\"updateExamPrint('examprint','%s_%d','Ans',"
+		           "'act=%ld&ses=%s&SesCod=%ld&QstInd=%u',%u);",
+		Id,NumOpt,
+		Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,QstInd,
+	        (unsigned) Gbl.Prefs.Language);
+   HTM_Txt (" return false;\"");	// return false is necessary to not submit form
   }
 
 /*****************************************************************************/

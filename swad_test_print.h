@@ -44,25 +44,6 @@ struct TstPrn_NumQuestions
    unsigned NotBlank;	// Answered questions
   };
 
-typedef enum
-  {
-   TstPrn_ANSWER_IS_CORRECT,
-   TstPrn_ANSWER_IS_WRONG_NEGATIVE,
-   TstPrn_ANSWER_IS_WRONG_ZERO,
-   TstPrn_ANSWER_IS_WRONG_POSITIVE,
-   TstPrn_ANSWER_IS_BLANK,
-  } TstPrn_Correct_t;
-
-struct TstPrn_PrintedQuestion
-  {
-   long QstCod;		// Question code
-   long SetCod;		// Only for exams
-   char StrIndexes[Qst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
-   char StrAnswers[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
-   TstPrn_Correct_t AnswerIsCorrect;	// Is question wrong, medium or correct?
-   double Score;			// Question score
-  };
-
 struct TstPrn_Print
   {
    long PrnCod;			// Test print code
@@ -72,7 +53,7 @@ struct TstPrn_Print
 					// "Sent" means that user has clicked "Send" button after finishing
    HidVis_HiddenOrVisible_t VisibleByTchs;	// Are teachers allowed to see this test result?
    double Score;			// Total score of the test print
-   struct TstPrn_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST];
+   struct Qst_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST];
   };
 
 #define Tst_NUM_REQUEST_OR_CONFIRM 2
@@ -98,20 +79,20 @@ void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print);
 
 void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
                                                    bool UpdateQstScore);
-void TstPrn_ComputeAnswerScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+void TstPrn_ComputeAnswerScore (struct Qst_PrintedQuestion *PrintedQuestion,
 				struct Qst_Question *Question);
 
 //-----------------------------------------------------------------------------
 
-void TstPrn_ComputeIntAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+void TstPrn_ComputeIntAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 		                const struct Qst_Question *Question);
-void TstPrn_ComputeFltAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+void TstPrn_ComputeFltAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 				const struct Qst_Question *Question);
-void TstPrn_ComputeTF_AnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+void TstPrn_ComputeTF_AnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 			        const struct Qst_Question *Question);
-void TstPrn_ComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+void TstPrn_ComputeChoAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 	                        const struct Qst_Question *Question);
-void TstPrn_ComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+void TstPrn_ComputeTxtAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 				const struct Qst_Question *Question);
 
 //-----------------------------------------------------------------------------
@@ -128,7 +109,7 @@ void TstPrn_ComputeAndShowGrade (unsigned NumQsts,double Score,double MaxGrade);
 double TstPrn_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade);
 
 void TstPrn_WriteAnswersExam (struct Usr_Data *UsrDat,
-                              const struct TstPrn_PrintedQuestion *PrintedQuestion,
+                              const struct Qst_PrintedQuestion *PrintedQuestion,
 			      struct Qst_Question *Question,
 			      Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 			      const char *ClassTxt,
@@ -142,7 +123,7 @@ void TstPrn_GetUsrsAndShowPrints (void);
 void TstPrn_ShowOnePrint (void);
 void TstPrn_ShowPrintAnswers (struct Usr_Data *UsrDat,
 			      unsigned NumQsts,
-			      struct TstPrn_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST],
+			      struct Qst_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST],
 			      time_t TimeUTC[Dat_NUM_START_END_TIME],
 			      unsigned Visibility);
 void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print);

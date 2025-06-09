@@ -1832,10 +1832,10 @@ long Exa_DB_CreatePrint (const struct ExaPrn_Print *Print,bool Start)
    DB_QueryINSERTandReturnCode ("can not create new exam print",
 				"INSERT INTO exa_prints"
 				" (SesCod,UsrCod,StartTime,EndTime,"
-				  "NumQsts,NumQstsNotBlank,Sent,Score)"
+				  "NumQsts,NumQstsNotBlank,Score)"
 				" VALUES"
 				" (%ld,%ld,%s,%s,"
-				  "%u,0,'N',0)",
+				  "%u,0,0)",
 				Print->SesCod,
 				Print->UsrCod,
 				TimeStr[Start],
@@ -1855,14 +1855,11 @@ void Exa_DB_UpdatePrint (const struct ExaPrn_Print *Print)
 		   "UPDATE exa_prints"
 	           " SET EndTime=NOW(),"
 	                "NumQstsNotBlank=%u,"
-		        "Sent='%c',"
 	                "Score='%.15lg'"
 	           " WHERE PrnCod=%ld"
 	             " AND SesCod=%ld"
 	             " AND UsrCod=%ld",	// Extra checks
 		   Print->NumQsts.NotBlank,
-		   Print->Sent ? 'Y' :
-			         'N',
 		   Print->Score,
 		   Print->PrnCod,
 		   Print->SesCod,
@@ -1885,8 +1882,7 @@ unsigned Exa_DB_GetPrintDataByPrnCod (MYSQL_RES **mysql_res,long PrnCod)
 			  "UNIX_TIMESTAMP(EndTime),"	// row[4]
 			  "NumQsts,"			// row[5]
 			  "NumQstsNotBlank,"		// row[6]
-			  "Sent,"			// row[7]
-			  "Score"			// row[8]
+			  "Score"			// row[7]
 		    " FROM exa_prints"
 		   " WHERE PrnCod=%ld",
 		   PrnCod);
@@ -1908,8 +1904,7 @@ unsigned Exa_DB_GetPrintDataBySesCodAndUsrCod (MYSQL_RES **mysql_res,
 			  "UNIX_TIMESTAMP(EndTime),"	// row[4]
 			  "NumQsts,"			// row[5]
 			  "NumQstsNotBlank,"		// row[6]
-			  "Sent,"			// row[7]
-			  "Score"			// row[8]
+			  "Score"			// row[7]
 		    " FROM exa_prints"
 		   " WHERE SesCod=%ld"
 		     " AND UsrCod=%ld",
@@ -2009,9 +2004,9 @@ void Exa_DB_StoreOneQstOfPrint (const struct ExaPrn_Print *Print,
 		    Print->PrintedQuestions[QstInd].QstCod,
 		    QstInd,	// 0, 1, 2, 3...
 		    Print->PrintedQuestions[QstInd].SetCod,
-		    Print->PrintedQuestions[QstInd].Score,
+		    Print->PrintedQuestions[QstInd].Answers.Online.Score,
 		    Print->PrintedQuestions[QstInd].StrIndexes,
-		    Print->PrintedQuestions[QstInd].StrAnswers);
+		    Print->PrintedQuestions[QstInd].Answers.Online.Str);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 

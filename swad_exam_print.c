@@ -73,7 +73,7 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,lon
 static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
                                                   struct ExaSet_Set *Set,
                                                   unsigned *NumQstsInPrint);
-static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQuestion,
 					  Qst_Shuffle_t Shuffle);
 static void ExaPrn_CreatePrint (struct ExaPrn_Print *Print,bool Start);
 
@@ -126,15 +126,15 @@ static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Pri
                                                         unsigned QstInd);
 
 //-----------------------------------------------------------------------------
-static void ExaPrn_GetCorrectAndComputeIntAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_GetCorrectAndComputeIntAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 				                    struct Qst_Question *Question);
-static void ExaPrn_GetCorrectAndComputeFltAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_GetCorrectAndComputeFltAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 				                    struct Qst_Question *Question);
-static void ExaPrn_GetCorrectAndComputeTF_AnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_GetCorrectAndComputeTF_AnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 				                    struct Qst_Question *Question);
-static void ExaPrn_GetCorrectAndComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_GetCorrectAndComputeChoAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 				                    struct Qst_Question *Question);
-static void ExaPrn_GetCorrectAndComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_GetCorrectAndComputeTxtAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 				                    struct Qst_Question *Question);
 //-----------------------------------------------------------------------------
 static void ExaPrn_GetCorrectIntAnswerFromDB (struct Qst_Question *Question);
@@ -155,7 +155,6 @@ void ExaPrn_ResetPrint (struct ExaPrn_Print *Print)
    Print->UsrCod = -1L;
    Print->TimeUTC[Dat_STR_TIME] =
    Print->TimeUTC[Dat_END_TIME] = (time_t) 0;
-   Print->Sent                    = false;	// After creating an exam print, it's not sent
    Print->NumQsts.All                  =
    Print->NumQsts.NotBlank             =
    Print->NumQsts.Valid.Correct        =
@@ -314,7 +313,16 @@ static void ExaPrn_GetPrintDataFromRow (MYSQL_RES **mysql_res,
      {
       /* Get next row from result */
       row = mysql_fetch_row (*mysql_res);
-
+      /*
+      row[0]: PrnCod
+      row[1]: SesCod
+      row[2]: UsrCod
+      row[3]: UNIX_TIMESTAMP(StartTime)
+      row[4]: UNIX_TIMESTAMP(EndTime)
+      row[5]: NumQsts
+      row[6]: NumQstsNotBlank
+      row[7]: Score
+      */
       /* Get print code (row[0]) */
       Print->PrnCod = Str_ConvertStrCodToLongCod (row[0]);
 
@@ -336,12 +344,9 @@ static void ExaPrn_GetPrintDataFromRow (MYSQL_RES **mysql_res,
       if (sscanf (row[6],"%u",&Print->NumQsts.NotBlank) != 1)
 	 Print->NumQsts.NotBlank = 0;
 
-      /* Get if exam has been sent (row[7]) */
-      Print->Sent = (row[7][0] == 'Y');
-
-      /* Get score (row[8]) */
+      /* Get score (row[7]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[8],"%lf",&Print->Score.All) != 1)
+      if (sscanf (row[7],"%lf",&Print->Score.All) != 1)
 	 Print->Score.All = 0.0;
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
@@ -462,10 +467,10 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
          Initially user has not answered the question ==> initially all answers will be blank.
          If the user does not confirm the submission of their exam ==>
          ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-      Print->PrintedQuestions[*NumQstsInPrint].StrAnswers[0] = '\0';
+      Print->PrintedQuestions[*NumQstsInPrint].Answers.Online.Str[0] = '\0';
 
       /* Reset score of this question in print */
-      Print->PrintedQuestions[*NumQstsInPrint].Score = 0.0;
+      Print->PrintedQuestions[*NumQstsInPrint].Answers.Online.Score = 0.0;
      }
 
    return NumQstsInSet;
@@ -475,7 +480,7 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
 /*************** Generate choice indexes depending on shuffle ****************/
 /*****************************************************************************/
 
-static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQuestion,
 					  Qst_Shuffle_t Shuffle)
   {
    struct Qst_Question Question;
@@ -588,7 +593,7 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 
          /* Get score (row[2]) */
 	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-         if (sscanf (row[2],"%lf",&Print->PrintedQuestions[QstInd].Score) != 1)
+         if (sscanf (row[2],"%lf",&Print->PrintedQuestions[QstInd].Answers.Online.Score) != 1)
             Err_ShowErrorAndExit ("Wrong question score.");
          Str_SetDecimalPointToLocal ();	// Return to local system
 
@@ -596,8 +601,8 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 	    and answers selected by user for this question (row[4]) */
 	 Str_Copy (Print->PrintedQuestions[QstInd].StrIndexes,row[3],
 		   sizeof (Print->PrintedQuestions[QstInd].StrIndexes) - 1);
-	 Str_Copy (Print->PrintedQuestions[QstInd].StrAnswers,row[4],
-		   sizeof (Print->PrintedQuestions[QstInd].StrAnswers) - 1);
+	 Str_Copy (Print->PrintedQuestions[QstInd].Answers.Online.Str,row[4],
+		   sizeof (Print->PrintedQuestions[QstInd].Answers.Online.Str) - 1);
 	}
 
    /***** Free structure that stores the query result *****/
@@ -786,7 +791,7 @@ static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
    snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
    HTM_TxtF ("<input type=\"number\" id=\"%s\" name=\"Ans\""
 	     " class=\"Exa_ANSWER_INPUT_INT\" value=\"%s\"",
-	     Id,Print->PrintedQuestions[QstInd].StrAnswers);
+	     Id,Print->PrintedQuestions[QstInd].Answers.Online.Str);
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_ElementEnd ();
   }
@@ -805,7 +810,7 @@ static void ExaPrn_WriteFltAnsToFill (const struct ExaPrn_Print *Print,
    snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
    HTM_TxtF ("<input type=\"number\" id=\"%s\" name=\"Ans\""
 	     " class=\"Exa_ANSWER_INPUT_FLOAT\" value=\"%s\"",
-	     Id,Print->PrintedQuestions[QstInd].StrAnswers);
+	     Id,Print->PrintedQuestions[QstInd].Answers.Online.Str);
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_ElementEnd ();
   }
@@ -831,16 +836,16 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_ElementEnd ();
       HTM_OPTION (HTM_Type_STRING,"" ,
-                  (Print->PrintedQuestions[QstInd].StrAnswers[0] == '\0') ? HTM_SELECTED :
-                							    HTM_NO_ATTR,
+                  (Print->PrintedQuestions[QstInd].Answers.Online.Str[0] == '\0') ? HTM_SELECTED :
+                								    HTM_NO_ATTR,
                   Txt_NBSP);
       HTM_OPTION (HTM_Type_STRING,"T",
-                  (Print->PrintedQuestions[QstInd].StrAnswers[0] == 'T') ? HTM_SELECTED :
-                							   HTM_NO_ATTR,
+                  (Print->PrintedQuestions[QstInd].Answers.Online.Str[0] == 'T') ? HTM_SELECTED :
+                								   HTM_NO_ATTR,
                   Txt_TF_QST[0]);
       HTM_OPTION (HTM_Type_STRING,"F",
-                  (Print->PrintedQuestions[QstInd].StrAnswers[0] == 'F') ? HTM_SELECTED :
-                							   HTM_NO_ATTR,
+                  (Print->PrintedQuestions[QstInd].Answers.Online.Str[0] == 'F') ? HTM_SELECTED :
+                								   HTM_NO_ATTR,
                   Txt_TF_QST[1]);
    HTM_Txt ("</select>");
   }
@@ -865,7 +870,8 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
    TstPrn_GetIndexesFromStr (Print->PrintedQuestions[QstInd].StrIndexes,Indexes);
 
    /***** Get the user's answers for this question from string *****/
-   TstPrn_GetAnswersFromStr (Print->PrintedQuestions[QstInd].StrAnswers,UsrAnswers);
+   TstPrn_GetAnswersFromStr (Print->PrintedQuestions[QstInd].Answers.Online.Str,
+			     UsrAnswers);
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -879,9 +885,6 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
 	 HTM_TR_Begin (NULL);
 
 	    /***** Write selectors and letter of this option *****/
-	    /* Initially user has not answered the question ==> initially all answers will be blank.
-	       If the user does not confirm the submission of their exam ==>
-	       ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
 	    HTM_TD_Begin ("class=\"LT\"");
 	       snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
 	       HTM_TxtF ("<input type=\"%s\" id=\"%s_%u\" name=\"Ans\" value=\"%u\"",
@@ -933,7 +936,7 @@ static void ExaPrn_WriteTxtAnsToFill (const struct ExaPrn_Print *Print,
    HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"Ans\""
 	     " size=\"40\" maxlength=\"%u\" value=\"%s\"",
 	     Id,Qst_MAX_CHARS_ANSWERS_ONE_QST,
-	     Print->PrintedQuestions[QstInd].StrAnswers);
+	     Print->PrintedQuestions[QstInd].Answers.Online.Str);
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_ElementEnd ();
   }
@@ -965,7 +968,7 @@ static void ExaPrn_WriteJSToUpdateExamPrint (const struct ExaPrn_Print *Print,
 /********************** Receive answer to an exam print **********************/
 /*****************************************************************************/
 
-void ExaPrn_ReceivePrintAnswer (void)
+void ExaPrn_ReceiveAnswer (void)
   {
    extern const char *Txt_You_dont_have_access_to_the_exam;
    struct Exa_Exams Exams;
@@ -1054,13 +1057,12 @@ void ExaPrn_ReceivePrintAnswer (void)
   }
 
 /*****************************************************************************/
-/******** Get questions and answers from form to assess an exam print ********/
+/* Get answer given by user for a given question from form in an exam print **/
 /*****************************************************************************/
 
 static void ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print,unsigned QstInd)
   {
-   /***** Get answers selected by user for this question *****/
-   Par_GetParText ("Ans",Print->PrintedQuestions[QstInd].StrAnswers,
+   Par_GetParText ("Ans",Print->PrintedQuestions[QstInd].Answers.Online.Str,
 		   Qst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
   }
 
@@ -1099,14 +1101,16 @@ static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Pri
           ==> uncheck it by deleting answer *****/
    if (Question.Answer.Type == Qst_ANS_UNIQUE_CHOICE)
      {
-      Exa_DB_GetAnswersFromQstInPrint (Print->PrnCod,Print->PrintedQuestions[QstInd].QstCod,
+      Exa_DB_GetAnswersFromQstInPrint (Print->PrnCod,
+				       Print->PrintedQuestions[QstInd].QstCod,
                                        CurrentStrAnswersInDB);
-      if (!strcmp (Print->PrintedQuestions[QstInd].StrAnswers,CurrentStrAnswersInDB))
+      if (!strcmp (Print->PrintedQuestions[QstInd].Answers.Online.Str,
+		   CurrentStrAnswersInDB))
 	{
 	 /* The answer just clicked by user
 	    is the same as the last one checked and stored in database */
-	 Print->PrintedQuestions[QstInd].StrAnswers[0]    = '\0';	// Uncheck option
-	 Print->PrintedQuestions[QstInd].Score            = 0;		// Clear question score
+	 Print->PrintedQuestions[QstInd].Answers.Online.Str[0] = '\0';	// Uncheck option
+	 Print->PrintedQuestions[QstInd].Answers.Online.Score  = 0;	// Clear question score
 	}
      }
 
@@ -1119,10 +1123,10 @@ static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Pri
 /************* Write answers of a question when assessing a test *************/
 /*****************************************************************************/
 
-void ExaPrn_ComputeAnswerScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+void ExaPrn_ComputeAnswerScore (struct Qst_PrintedQuestion *PrintedQuestion,
 				struct Qst_Question *Question)
   {
-   void (*ExaPrn_GetCorrectAndComputeAnsScore[Qst_NUM_ANS_TYPES]) (struct TstPrn_PrintedQuestion *PrintedQuestion,
+   void (*ExaPrn_GetCorrectAndComputeAnsScore[Qst_NUM_ANS_TYPES]) (struct Qst_PrintedQuestion *PrintedQuestion,
 				                                   struct Qst_Question *Question) =
     {
      [Qst_ANS_INT            ] = ExaPrn_GetCorrectAndComputeIntAnsScore,
@@ -1141,7 +1145,7 @@ void ExaPrn_ComputeAnswerScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 /******* Get correct answer and compute score for each type of answer ********/
 /*****************************************************************************/
 
-static void ExaPrn_GetCorrectAndComputeIntAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_GetCorrectAndComputeIntAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 				                    struct Qst_Question *Question)
   {
    /***** Get the numerical value of the correct answer,
@@ -1150,7 +1154,7 @@ static void ExaPrn_GetCorrectAndComputeIntAnsScore (struct TstPrn_PrintedQuestio
    TstPrn_ComputeIntAnsScore (PrintedQuestion,Question);
   }
 
-static void ExaPrn_GetCorrectAndComputeFltAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_GetCorrectAndComputeFltAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 				                    struct Qst_Question *Question)
   {
    /***** Get the numerical value of the minimum and maximum correct answers,
@@ -1159,7 +1163,7 @@ static void ExaPrn_GetCorrectAndComputeFltAnsScore (struct TstPrn_PrintedQuestio
    TstPrn_ComputeFltAnsScore (PrintedQuestion,Question);
   }
 
-static void ExaPrn_GetCorrectAndComputeTF_AnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_GetCorrectAndComputeTF_AnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 				                    struct Qst_Question *Question)
   {
    /***** Get answer true or false,
@@ -1168,7 +1172,7 @@ static void ExaPrn_GetCorrectAndComputeTF_AnsScore (struct TstPrn_PrintedQuestio
    TstPrn_ComputeTF_AnsScore (PrintedQuestion,Question);
   }
 
-static void ExaPrn_GetCorrectAndComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_GetCorrectAndComputeChoAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 				                    struct Qst_Question *Question)
   {
    /***** Get correct options of test question from database,
@@ -1177,7 +1181,7 @@ static void ExaPrn_GetCorrectAndComputeChoAnsScore (struct TstPrn_PrintedQuestio
    TstPrn_ComputeChoAnsScore (PrintedQuestion,Question);
   }
 
-static void ExaPrn_GetCorrectAndComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_GetCorrectAndComputeTxtAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 				                    struct Qst_Question *Question)
   {
    /***** Get correct text answers for this question from database,

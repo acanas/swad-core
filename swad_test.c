@@ -83,7 +83,7 @@ static bool Tst_CheckIfNextTstAllowed (void);
 
 static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
                                               struct TstPrn_Print *Print);
-static void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void Tst_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQuestion,
 				       Qst_Shuffle_t Shuffle);
 
 static unsigned Tst_GetParNumTst (void);
@@ -577,7 +577,7 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
          · If the user does not confirm the submission of their exam ==>
          ==> the exam may be half filled ==>
          ==> the answers displayed will be those selected by the user. */
-      Print->PrintedQuestions[QstInd].StrAnswers[0] = '\0';
+      Print->PrintedQuestions[QstInd].Answers.Online.Str[0] = '\0';
      }
 
    /***** Get if test print will be visible by teachers *****/
@@ -589,7 +589,7 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
 /*************** Generate choice indexes depending on shuffle ****************/
 /*****************************************************************************/
 
-static void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void Tst_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQuestion,
 				       Qst_Shuffle_t Shuffle)
   {
    struct Qst_Question Question;

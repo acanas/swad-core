@@ -65,11 +65,9 @@ struct ExaPrn_Print
    long SesCod;		// Session code associated to this print
    long UsrCod;		// User who answered the exam print
    time_t TimeUTC[Dat_NUM_START_END_TIME];
-   bool Sent;		// This exam print has been sent or not?
-			// "Sent" means that user has clicked "Send" button after finishing
    struct ExaPrn_NumQuestions NumQsts;
    struct ExaPrn_Score Score;
-   struct TstPrn_PrintedQuestion PrintedQuestions[ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT];
+   struct Qst_PrintedQuestion PrintedQuestions[ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT];
   };
 
 /*****************************************************************************/
@@ -93,9 +91,9 @@ void ExaPrn_GetPrintDataBySesCodAndUsrCod (struct ExaPrn_Print *Print);
 
 void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print);
 
-void ExaPrn_ReceivePrintAnswer (void);
+void ExaPrn_ReceiveAnswer (void);
 
-void ExaPrn_ComputeAnswerScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+void ExaPrn_ComputeAnswerScore (struct Qst_PrintedQuestion *PrintedQuestion,
 				struct Qst_Question *Question);
 
 #endif

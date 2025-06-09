@@ -13585,7 +13585,7 @@ Llama a:
    Mch_GetMatchQuestionsFromDB (&Print);
    MchPrn_ComputeScore (&Print);
       TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
-         TstPrn_GetCorrectAndComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+         TstPrn_GetCorrectAndComputeChoAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 				                 struct Qst_Question *Question);
 	    Qst_GetCorrectChoAnswerFromDB (Question);		// <----- Aquí estaba el fallo
 	          SELECT Correct

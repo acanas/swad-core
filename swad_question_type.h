@@ -58,4 +58,31 @@ typedef enum
 #define Qst_MAX_CHARS_ANSWERS_ONE_QST	(128 - 1)	// 127
 #define Qst_MAX_BYTES_ANSWERS_ONE_QST	((Qst_MAX_CHARS_ANSWERS_ONE_QST + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
+typedef enum
+  {
+   TstPrn_ANSWER_IS_CORRECT,
+   TstPrn_ANSWER_IS_WRONG_NEGATIVE,
+   TstPrn_ANSWER_IS_WRONG_ZERO,
+   TstPrn_ANSWER_IS_WRONG_POSITIVE,
+   TstPrn_ANSWER_IS_BLANK,
+  } Qst_Correct_t;
+
+struct Qst_Answer
+  {
+   char Str[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by the student/teacher in form
+   Qst_Correct_t IsCorrect;			// Is answer wrong, medium or correct?
+   double Score;				// Answer score
+  };
+struct Qst_PrintedQuestion
+  {
+   long QstCod;		// Question code
+   long SetCod;		// Only for exams
+   char StrIndexes[Qst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
+   struct
+     {
+      struct Qst_Answer Online;	// Answers selected by the student in form
+      struct Qst_Answer Paper;	// Answers copied by teachers from paper to form
+     } Answers;
+  };
+
 #endif

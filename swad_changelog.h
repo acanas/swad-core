@@ -638,10 +638,15 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.88.4 (2025-06-06)"
-#define CSS_FILE		"swad24.88.4.css"
+#define Log_PLATFORM_VERSION	"SWAD 24.89.1 (2025-06-09)"
+#define CSS_FILE		"swad24.89.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 24.89.1:  Jun 09, 2025  Code refactoring in questions and answers. (347962 lines)
+	Version 24.89:    Jun 09, 2025  Sent field removed from exam prints. (347943 lines)
+					1 change necessary in database:
+ALTER TABLE exa_prints DROP COLUMN Sent;
+
 	Version 24.88.4:  Jun 06, 2025  Changes in exam answer sheets. (347937 lines)
 	Version 24.88.3:  Jun 06, 2025  Changes in exam answer sheets. (347918 lines)
 	Version 24.88.2:  May 30, 2025  Changes in exam answer sheets. (347776 lines)
@@ -649,7 +654,7 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 	Version 24.88:    May 27, 2025  Changes in exam layouts. (347452 lines)
 	Version 24.87:    May 26, 2025  Form to edit exam session includes the number of columns in exam sheets. (347410 lines)
 	Version 24.86:    May 23, 2025  Columns in exam sheets are stored in database. (347365 lines)
-					1 changes necessary in database:
+					1 change necessary in database:
 ALTER TABLE exa_sessions ADD COLUMN NumCols TINYINT NOT NULL DEFAULT 0 AFTER ShowUsrResults;
 
 	Version 24.85:    May 23, 2025  Teachers can change columns in exam sheets. (347308 lines)

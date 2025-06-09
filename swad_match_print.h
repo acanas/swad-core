@@ -46,7 +46,7 @@ struct MchPrn_Print
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    struct MchPrn_NumQuestions NumQsts;	// Number of questions
    double Score;	// Total score of the match for this user
-   struct TstPrn_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST];
+   struct Qst_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST];
   };
 
 /*****************************************************************************/
