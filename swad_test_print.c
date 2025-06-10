@@ -348,7 +348,7 @@ static void TstPrn_WriteIntAnsToFill (const struct Qst_PrintedQuestion *PrintedQ
 
    /***** Write input field for the answer *****/
    snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
-   HTM_INPUT_TEXT (StrAns,11,PrintedQuestion->Answers.Online.Str,
+   HTM_INPUT_TEXT (StrAns,11,PrintedQuestion->Ans.Online.Str,
                    HTM_NO_ATTR,
 		   "size=\"11\" class=\"INPUT_%s\"",The_GetSuffix ());
   }
@@ -367,7 +367,7 @@ static void TstPrn_WriteFltAnsToFill (const struct Qst_PrintedQuestion *PrintedQ
    snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
    HTM_TxtF ("<input type=\"number\" name=\"%s\""
 	     " class=\"Exa_ANSWER_INPUT_FLOAT INPUT_%s\" value=\"%s\"",
-	     StrAns,The_GetSuffix (),PrintedQuestion->Answers.Online.Str);
+	     StrAns,The_GetSuffix (),PrintedQuestion->Ans.Online.Str);
    HTM_ElementEnd ();
   }
 
@@ -390,15 +390,15 @@ static void TstPrn_WriteTF_AnsToFill (const struct Qst_PrintedQuestion *PrintedQ
 		     "name=\"Ans%010u\" class=\"INPUT_%s\"",
 		     QstInd,The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"" ,
-                  (PrintedQuestion->Answers.Online.Str[0] == '\0') ? HTM_SELECTED :
+                  (PrintedQuestion->Ans.Online.Str[0] == '\0') ? HTM_SELECTED :
 	                					     HTM_NO_ATTR,
                   Txt_NBSP);
       HTM_OPTION (HTM_Type_STRING,"T",
-                  (PrintedQuestion->Answers.Online.Str[0] == 'T') ? HTM_SELECTED :
+                  (PrintedQuestion->Ans.Online.Str[0] == 'T') ? HTM_SELECTED :
 	                					    HTM_NO_ATTR,
                   Txt_TF_QST[0]);
       HTM_OPTION (HTM_Type_STRING,"F",
-                  (PrintedQuestion->Answers.Online.Str[0] == 'F') ? HTM_SELECTED :
+                  (PrintedQuestion->Ans.Online.Str[0] == 'F') ? HTM_SELECTED :
 	                					    HTM_NO_ATTR,
                   Txt_TF_QST[1]);
    HTM_SELECT_End ();
@@ -425,7 +425,7 @@ static void TstPrn_WriteChoAnsToFill (const struct Qst_PrintedQuestion *PrintedQ
    TstPrn_GetIndexesFromStr (PrintedQuestion->StrIndexes,Indexes);
 
    /***** Get the user's answers for this question from string *****/
-   TstPrn_GetAnswersFromStr (PrintedQuestion->Answers.Online.Str,UsrAnswers);
+   TstPrn_GetAnswersFromStr (PrintedQuestion->Ans.Online.Str,UsrAnswers);
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -506,7 +506,7 @@ static void TstPrn_WriteTxtAnsToFill (const struct Qst_PrintedQuestion *PrintedQ
    /***** Write input field for the answer *****/
    snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
    HTM_INPUT_TEXT (StrAns,Qst_MAX_CHARS_ANSWERS_ONE_QST,
-		   PrintedQuestion->Answers.Online.Str,
+		   PrintedQuestion->Ans.Online.Str,
                    HTM_NO_ATTR,
 		   "size=\"40\" class=\"INPUT_%s\"",The_GetSuffix ());
   }
@@ -570,15 +570,15 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
 	 Tst_DB_StoreOneQstOfPrint (Print,QstInd);
 
 	 /***** Compute total score *****/
-	 Print->Score += Print->PrintedQuestions[QstInd].Answers.Online.Score;
-	 if (Print->PrintedQuestions[QstInd].Answers.Online.Str[0])	// User's answer is not blank
+	 Print->Score += Print->PrintedQuestions[QstInd].Ans.Online.Score;
+	 if (Print->PrintedQuestions[QstInd].Ans.Online.Str[0])	// User's answer is not blank
 	    Print->NumQsts.NotBlank++;
 
 	 /***** Update the number of accesses and the score of this question *****/
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
 	    Qst_DB_UpdateQstScore (Print->PrintedQuestions[QstInd].QstCod,
-	                           Print->PrintedQuestions[QstInd].Answers.Online.Str[0] != '\0',
-	                           Print->PrintedQuestions[QstInd].Answers.Online.Score);
+	                           Print->PrintedQuestions[QstInd].Ans.Online.Str[0] != '\0',
+	                           Print->PrintedQuestions[QstInd].Ans.Online.Score);
 
 	 /***** Destroy test question *****/
 	 Qst_QstDestructor (&Question);
@@ -682,12 +682,12 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 		  HTM_DIV_Begin ("class=\"LM DAT_SMALL_%s\"",The_GetSuffix ());
 		     HTM_Txt (Txt_Score); HTM_Colon (); HTM_NBSP ();
 		     HTM_SPAN_Begin ("class=\"%s_%s\"",
-				     PrintedQuestions[QstInd].Answers.Online.Str[0] ?
-				     (PrintedQuestions[QstInd].Answers.Online.Score > 0 ? "Qst_ANS_OK" :	// Correct
+				     PrintedQuestions[QstInd].Ans.Online.Str[0] ?
+				     (PrintedQuestions[QstInd].Ans.Online.Score > 0 ? "Qst_ANS_OK" :	// Correct
 											  "Qst_ANS_BAD") :	// Wrong
 											  "Qst_ANS_0",		// Blank answer
 				     The_GetSuffix ());
-			HTM_Double2Decimals (PrintedQuestions[QstInd].Answers.Online.Score);
+			HTM_Double2Decimals (PrintedQuestions[QstInd].Ans.Online.Score);
 		     HTM_SPAN_End ();
 		  HTM_DIV_End ();
 		 }
@@ -725,9 +725,9 @@ void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print)
      {
       /* Get answers selected by user for this question */
       snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
-      Par_GetParMultiToText (StrAns,Print->PrintedQuestions[QstInd].Answers.Online.Str,
+      Par_GetParMultiToText (StrAns,Print->PrintedQuestions[QstInd].Ans.Online.Str,
                              Qst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
-      Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[QstInd].Answers.Online.Str);
+      Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[QstInd].Ans.Online.Str);
      }
   }
 
@@ -762,15 +762,15 @@ void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
 				 QstInd);	// 0, 1, 2, 3...
 
       /* Accumulate total score */
-      Print->Score += Print->PrintedQuestions[QstInd].Answers.Online.Score;
-      if (Print->PrintedQuestions[QstInd].Answers.Online.Str[0])	// User's answer is not blank
+      Print->Score += Print->PrintedQuestions[QstInd].Ans.Online.Score;
+      if (Print->PrintedQuestions[QstInd].Ans.Online.Str[0])	// User's answer is not blank
 	 Print->NumQsts.NotBlank++;
 
       /* Update the number of hits and the score of this question in tests database */
       if (UpdateQstScore)
 	 Qst_DB_UpdateQstScore (Print->PrintedQuestions[QstInd].QstCod,
-				Print->PrintedQuestions[QstInd].Answers.Online.Str[0] != '\0',
-				Print->PrintedQuestions[QstInd].Answers.Online.Score);
+				Print->PrintedQuestions[QstInd].Ans.Online.Str[0] != '\0',
+				Print->PrintedQuestions[QstInd].Ans.Online.Score);
      }
   }
 
@@ -854,17 +854,17 @@ void TstPrn_ComputeIntAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
   {
    long AnswerUsr;
 
-   PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_BLANK;
-   PrintedQuestion->Answers.Online.Score = 0.0;	// Default score for blank or wrong answer
+   PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_BLANK;
+   PrintedQuestion->Ans.Online.Score = 0.0;	// Default score for blank or wrong answer
 
-   if (PrintedQuestion->Answers.Online.Str[0])	// If user has answered the answer
+   if (PrintedQuestion->Ans.Online.Str[0])	// If user has answered the answer
      {
-      PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
-      if (sscanf (PrintedQuestion->Answers.Online.Str,"%ld",&AnswerUsr) == 1)
+      PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
+      if (sscanf (PrintedQuestion->Ans.Online.Str,"%ld",&AnswerUsr) == 1)
 	 if (AnswerUsr == Question->Answer.Integer)	// Correct answer
 	   {
-	    PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
-	    PrintedQuestion->Answers.Online.Score = 1.0;
+	    PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
+	    PrintedQuestion->Ans.Online.Score = 1.0;
 	   }
      }
   }
@@ -874,18 +874,18 @@ void TstPrn_ComputeFltAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
   {
    double AnsUsr;
 
-   PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_BLANK;
-   PrintedQuestion->Answers.Online.Score = 0.0;	// Default score for blank or wrong answer
+   PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_BLANK;
+   PrintedQuestion->Ans.Online.Score = 0.0;	// Default score for blank or wrong answer
 
-   if (PrintedQuestion->Answers.Online.Str[0])	// If user has answered the answer
+   if (PrintedQuestion->Ans.Online.Str[0])	// If user has answered the answer
      {
-      PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
-      if (Str_GetDoubleFromStr (PrintedQuestion->Answers.Online.Str,&AnsUsr))
+      PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
+      if (Str_GetDoubleFromStr (PrintedQuestion->Ans.Online.Str,&AnsUsr))
 	 if (AnsUsr >= Question->Answer.FloatingPoint[0] &&
 	     AnsUsr <= Question->Answer.FloatingPoint[1])
 	   {
-	    PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
-	    PrintedQuestion->Answers.Online.Score = 1.0; // Correct (inside the interval)
+	    PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
+	    PrintedQuestion->Ans.Online.Score = 1.0; // Correct (inside the interval)
 	   }
      }
   }
@@ -893,20 +893,20 @@ void TstPrn_ComputeFltAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 void TstPrn_ComputeTF_AnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 			        const struct Qst_Question *Question)
   {
-   PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_BLANK;
-   PrintedQuestion->Answers.Online.Score = 0.0;
+   PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_BLANK;
+   PrintedQuestion->Ans.Online.Score = 0.0;
 
-   if (PrintedQuestion->Answers.Online.Str[0])	// If user has selected T or F
+   if (PrintedQuestion->Ans.Online.Str[0])	// If user has selected T or F
      {
-      if (PrintedQuestion->Answers.Online.Str[0] == Question->Answer.TF)
+      if (PrintedQuestion->Ans.Online.Str[0] == Question->Answer.TF)
 	{
- 	 PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
-         PrintedQuestion->Answers.Online.Score = 1.0;	// Correct
+ 	 PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
+         PrintedQuestion->Ans.Online.Score = 1.0;	// Correct
 	}
       else
 	{
- 	 PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_WRONG_NEGATIVE;
-         PrintedQuestion->Answers.Online.Score = -1.0;	// Wrong
+ 	 PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_WRONG_NEGATIVE;
+         PrintedQuestion->Ans.Online.Score = -1.0;	// Wrong
 	}
      }
   }
@@ -923,14 +923,14 @@ void TstPrn_ComputeChoAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
    unsigned NumAnsGood = 0;
    unsigned NumAnsBad = 0;
 
-   PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_BLANK;
-   PrintedQuestion->Answers.Online.Score = 0.0;
+   PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_BLANK;
+   PrintedQuestion->Ans.Online.Score = 0.0;
 
    /***** Get indexes for this question from string *****/
    TstPrn_GetIndexesFromStr (PrintedQuestion->StrIndexes,Indexes);
 
    /***** Get the user's answers for this question from string *****/
-   TstPrn_GetAnswersFromStr (PrintedQuestion->Answers.Online.Str,UsrAnswers);
+   TstPrn_GetAnswersFromStr (PrintedQuestion->Ans.Online.Str,UsrAnswers);
 
    /***** Compute the total score of this question *****/
    for (NumOpt = 0;
@@ -964,13 +964,13 @@ void TstPrn_ComputeChoAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
            {
             if (NumAnsGood == 1 && NumAnsBad == 0)
               {
-               PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
-               PrintedQuestion->Answers.Online.Score = 1;
+               PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
+               PrintedQuestion->Ans.Online.Score = 1;
               }
             else if (NumAnsGood == 0 && NumAnsBad == 1)
               {
-               PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_WRONG_NEGATIVE;
-               PrintedQuestion->Answers.Online.Score = -1.0 /
+               PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_WRONG_NEGATIVE;
+               PrintedQuestion->Ans.Online.Score = -1.0 /
         					       (double) (NumOptTotInQst - 1);
               }
             // other case should be impossible
@@ -983,33 +983,33 @@ void TstPrn_ComputeChoAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
            {
             if (NumAnsGood == NumOptCorrInQst && NumAnsBad == 0)
               {
-	       PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
-	       PrintedQuestion->Answers.Online.Score = 1.0;
+	       PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
+	       PrintedQuestion->Ans.Online.Score = 1.0;
               }
             else
               {
 	       if (NumOptCorrInQst < NumOptTotInQst)	// If there are correct options and wrong options (typical case)
 		 {
-		  PrintedQuestion->Answers.Online.Score = (double) NumAnsGood / (double) NumOptCorrInQst -
+		  PrintedQuestion->Ans.Online.Score = (double) NumAnsGood / (double) NumOptCorrInQst -
 							  (double) NumAnsBad  / (double) (NumOptTotInQst - NumOptCorrInQst);
-		  if (PrintedQuestion->Answers.Online.Score > 0.000001)
-		     PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_WRONG_POSITIVE;
-		  else if (PrintedQuestion->Answers.Online.Score < -0.000001)
-		     PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_WRONG_NEGATIVE;
+		  if (PrintedQuestion->Ans.Online.Score > 0.000001)
+		     PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_WRONG_POSITIVE;
+		  else if (PrintedQuestion->Ans.Online.Score < -0.000001)
+		     PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_WRONG_NEGATIVE;
 		  else	// Score is 0
-		     PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
+		     PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
 		 }
 	       else					// If all options are correct (extrange case)
 		 {
 		  if (NumAnsGood == 0)
 		    {
-		     PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
-		     PrintedQuestion->Answers.Online.Score = 0.0;
+		     PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
+		     PrintedQuestion->Ans.Online.Score = 0.0;
 		    }
 		  else
 		    {
-		     PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_WRONG_POSITIVE;
-		     PrintedQuestion->Answers.Online.Score = (double) NumAnsGood /
+		     PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_WRONG_POSITIVE;
+		     PrintedQuestion->Ans.Online.Score = (double) NumAnsGood /
 							     (double) NumOptCorrInQst;
 		    }
 		 }
@@ -1027,13 +1027,13 @@ void TstPrn_ComputeTxtAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
    char TextAnsUsr[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
    char TextAnsOK[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
 
-   PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_BLANK;
-   PrintedQuestion->Answers.Online.Score = 0.0;	// Default score for blank or wrong answer
+   PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_BLANK;
+   PrintedQuestion->Ans.Online.Score = 0.0;	// Default score for blank or wrong answer
 
-   if (PrintedQuestion->Answers.Online.Str[0])	// If user has answered the answer
+   if (PrintedQuestion->Ans.Online.Str[0])	// If user has answered the answer
      {
       /* Filter the user answer */
-      Str_Copy (TextAnsUsr,PrintedQuestion->Answers.Online.Str,
+      Str_Copy (TextAnsUsr,PrintedQuestion->Ans.Online.Str,
 		sizeof (TextAnsUsr) - 1);
 
       /* In order to compare student answer to stored answer,
@@ -1041,7 +1041,7 @@ void TstPrn_ComputeTxtAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
       Str_ReplaceSeveralSpacesForOne (TextAnsUsr);
       Str_ConvertToComparable (TextAnsUsr);
 
-      PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
+      PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
       for (NumOpt = 0;
 	   NumOpt < Question->Answer.NumOptions;
 	   NumOpt++)
@@ -1054,8 +1054,8 @@ void TstPrn_ComputeTxtAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
          /* Check is user answer is correct */
          if (!strcoll (TextAnsUsr,TextAnsOK))
            {
-            PrintedQuestion->Answers.Online.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
-	    PrintedQuestion->Answers.Online.Score = 1.0;	// Correct answer
+            PrintedQuestion->Ans.Online.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
+	    PrintedQuestion->Ans.Online.Score = 1.0;	// Correct answer
 	    break;
            }
         }
@@ -1217,9 +1217,9 @@ static void TstPrn_WriteIntAnsPrint (struct Usr_Data *UsrDat,
       HTM_TR_Begin (NULL);
 
 	 /***** Write the user answer *****/
-	 if (PrintedQuestion->Answers.Online.Str[0])		// If user has answered the question
+	 if (PrintedQuestion->Ans.Online.Str[0])		// If user has answered the question
 	   {
-	    if (sscanf (PrintedQuestion->Answers.Online.Str,
+	    if (sscanf (PrintedQuestion->Ans.Online.Str,
 			"%ld",&IntAnswerUsr) == 1)
 	      {
 	       HTM_TD_Begin ("class=\"CM %s_%s\"",
@@ -1289,9 +1289,9 @@ static void TstPrn_WriteFltAnsPrint (struct Usr_Data *UsrDat,
       HTM_TR_Begin (NULL);
 
 	 /***** Write the user answer *****/
-	 if (PrintedQuestion->Answers.Online.Str[0])	// If user has answered the question
+	 if (PrintedQuestion->Ans.Online.Str[0])	// If user has answered the question
 	   {
-	    Valid = Str_GetDoubleFromStr (PrintedQuestion->Answers.Online.Str,&AnsUsr);
+	    Valid = Str_GetDoubleFromStr (PrintedQuestion->Ans.Online.Str,&AnsUsr);
 
 	    // A bad formatted floating point answer will interpreted as 0.0
 	    HTM_TD_Begin ("class=\"CM %s_%s\"",
@@ -1345,7 +1345,7 @@ static void TstPrn_WriteTF_AnsPrint (struct Usr_Data *UsrDat,
    Qst_CheckIfNumberOfAnswersIsOne (Question);
 
    /***** Get answer true or false *****/
-   AnsTFStd = PrintedQuestion->Answers.Online.Str[0];
+   AnsTFStd = PrintedQuestion->Ans.Online.Str[0];
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -1429,7 +1429,7 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
    TstPrn_GetIndexesFromStr (PrintedQuestion->StrIndexes,Indexes);
 
    /***** Get the user's answers for this question from string *****/
-   TstPrn_GetAnswersFromStr (PrintedQuestion->Answers.Online.Str,UsrAnswers);
+   TstPrn_GetAnswersFromStr (PrintedQuestion->Ans.Online.Str,UsrAnswers);
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -1579,10 +1579,10 @@ static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
       HTM_TR_Begin (NULL);
 
 	 /***** Write the user answer *****/
-	 if (PrintedQuestion->Answers.Online.Str[0])	// If user has answered the question
+	 if (PrintedQuestion->Ans.Online.Str[0])	// If user has answered the question
 	   {
 	    /* Filter the user answer */
-	    Str_Copy (TextAnsUsr,PrintedQuestion->Answers.Online.Str,
+	    Str_Copy (TextAnsUsr,PrintedQuestion->Ans.Online.Str,
 		      sizeof (TextAnsUsr) - 1);
 
 	    /* In order to compare student answer to stored answer,
@@ -1612,7 +1612,7 @@ static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
 			  ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_CAN ? Class[WrongOrCorrect] :
 									       "Qst_ANS_0",	// Blank answer
 			  The_GetSuffix ());
-	       HTM_Txt (PrintedQuestion->Answers.Online.Str);
+	       HTM_Txt (PrintedQuestion->Ans.Online.Str);
 	    HTM_TD_End ();
 	   }
 	 else						// If user has omitted the answer
@@ -2644,7 +2644,7 @@ bool TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
 
 	 /* Get score (row[1]) */
 	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-         if (sscanf (row[1],"%lf",&Print->PrintedQuestions[QstInd].Answers.Online.Score) != 1)
+         if (sscanf (row[1],"%lf",&Print->PrintedQuestions[QstInd].Ans.Online.Score) != 1)
             Err_ShowErrorAndExit ("Wrong question score.");
          Str_SetDecimalPointToLocal ();	// Return to local system
 
@@ -2652,8 +2652,8 @@ bool TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
 	    and answers selected by user for this question (row[3]) */
 	 Str_Copy (Print->PrintedQuestions[QstInd].StrIndexes,row[2],
 		   sizeof (Print->PrintedQuestions[QstInd].StrIndexes) - 1);
-	 Str_Copy (Print->PrintedQuestions[QstInd].Answers.Online.Str,row[3],
-		   sizeof (Print->PrintedQuestions[QstInd].Answers.Online.Str) - 1);
+	 Str_Copy (Print->PrintedQuestions[QstInd].Ans.Online.Str,row[3],
+		   sizeof (Print->PrintedQuestions[QstInd].Ans.Online.Str) - 1);
 	}
 
    /***** Free structure that stores the query result *****/

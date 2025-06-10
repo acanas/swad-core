@@ -67,7 +67,7 @@ struct ExaPrn_Print
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    struct ExaPrn_NumQuestions NumQsts;
    struct ExaPrn_Score Score;
-   struct Qst_PrintedQuestion PrintedQuestions[ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT];
+   struct Qst_PrintedQuestion Qsts[ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT];
   };
 
 /*****************************************************************************/

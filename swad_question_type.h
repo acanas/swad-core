@@ -80,9 +80,9 @@ struct Qst_PrintedQuestion
    char StrIndexes[Qst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
    struct
      {
-      struct Qst_Answer Online;	// Answers selected by the student in form
-      struct Qst_Answer Paper;	// Answers copied by teachers from paper to form
-     } Answers;
+      struct Qst_Answer Online;	// Answer selected by the student in form
+      struct Qst_Answer Paper;	// Answer copied by teacher from paper to form
+     } Ans;			// Answers
   };
 
 #endif

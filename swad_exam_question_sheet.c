@@ -342,10 +342,10 @@ static void ExaQstShe_ShowQuestions (const struct ExaSes_Session *Session,
 	   QstInd < Print->NumQsts.All;
 	   QstInd++)
 	{
-	 if (Print->PrintedQuestions[QstInd].SetCod != CurrentSet.SetCod)
+	 if (Print->Qsts[QstInd].SetCod != CurrentSet.SetCod)
 	   {
 	    /* Get data of this set */
-	    CurrentSet.SetCod = Print->PrintedQuestions[QstInd].SetCod;
+	    CurrentSet.SetCod = Print->Qsts[QstInd].SetCod;
 	    ExaSet_GetSetDataByCod (&CurrentSet);
 
 	    /* Title for this set */
@@ -356,7 +356,7 @@ static void ExaQstShe_ShowQuestions (const struct ExaSes_Session *Session,
 
 	 /* Create test question */
 	 Qst_QstConstructor (&Question);
-	 Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
+	 Question.QstCod = Print->Qsts[QstInd].QstCod;
 
 	 /* Get question from database */
 	 ExaSet_GetQstDataFromDB (&Question);
@@ -456,7 +456,7 @@ static void ExaQstShe_WriteChoAns (const struct ExaPrn_Print *Print,
    Qst_ChangeFormatAnswersText (Question);
 
    /***** Get indexes for this question from string *****/
-   TstPrn_GetIndexesFromStr (Print->PrintedQuestions[QstInd].StrIndexes,Indexes);
+   TstPrn_GetIndexesFromStr (Print->Qsts[QstInd].StrIndexes,Indexes);
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);

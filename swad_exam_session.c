@@ -134,6 +134,7 @@ static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
                                                   const char *BgColor,
                                                   const char *Anchor);
 static void ExaSes_ListOneOrMoreSessionsPrints (const struct ExaSes_Session *Session,
+						unsigned NumPrints,
 						const char *BgColor);
 static void ExaSes_PutLinkSession (struct Exa_Exams *Exams,
 				   const struct ExaSes_Session *Session,
@@ -154,10 +155,12 @@ static ExaSes_Modality_t ExaSes_GetModalityFromString (const char *Str);
 
 static void ExaSes_HideUnhideSession (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
-static void ExaSes_PutFormSession (struct ExaSes_Session *Session);
+static void ExaSes_PutFormSession (struct ExaSes_Session *Session,
+				   Usr_Can_t ICanChangeModality);
 static void ExaSes_ParsFormSession (void *Session);
 
-static void ExaSes_PutSessionModalities (const struct ExaSes_Session *Session);
+static void ExaSes_PutSessionModalities (const struct ExaSes_Session *Session,
+					 Usr_Can_t ICanChangeModality);
 static void ExaSes_ShowLstGrpsToCreateSession (long SesCod);
 static void ExaSes_PutSessionNumCols (const struct ExaSes_Session *Session);
 
@@ -777,7 +780,9 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
    struct ExaSes_Session Session;
    const char *BgColor;
    char *Anchor;
+   unsigned NumPrints;
    Usr_Can_t ICanEditSessions = ExaSes_CheckIfICanEditSessions ();
+   Usr_Can_t ICanChangeModality = false;
 
    /***** Reset session *****/
    ExaSes_ResetSession (&Session);
@@ -812,7 +817,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	    HTM_TR_Begin (NULL);
 
 	       /* Icons */
-	       if (ICanEditSessions)
+	       if (ICanEditSessions == Usr_CAN)
 		  ExaSes_ListOneOrMoreSessionsIcons (Exams,&Session,BgColor,Anchor);
 
 	       /* Start/end date/time */
@@ -822,8 +827,13 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	       ExaSes_ListOneOrMoreSessionsMainData (Exams,&Session,BgColor,Anchor);
 
 	       /* Prints in the session */
-	       if (ICanEditSessions)
-	          ExaSes_ListOneOrMoreSessionsPrints (&Session,BgColor);
+	       if (ICanEditSessions == Usr_CAN)
+	         {
+		  NumPrints = Exa_DB_GetNumPrintsInSes (Session.SesCod);
+		  ICanChangeModality = (NumPrints == 0) ? Usr_CAN : // Only if there are no exam prints yet
+							  Usr_CAN_NOT;
+	          ExaSes_ListOneOrMoreSessionsPrints (&Session,NumPrints,BgColor);
+	         }
 
 	       /* Session result visible? */
 	       ExaSes_ListOneOrMoreSessionsResult (Exams,&Session,BgColor);
@@ -836,13 +846,13 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	    HTM_TR_End ();
 
 	    /***** Third row: form to edit this session ****/
-	    if (ICanEditSessions &&
+	    if (ICanEditSessions == Usr_CAN &&
 		PutFormSession == Frm_PUT_FORM &&	// Editing...
 		Session.SesCod == Exams->SesCod.Sel)	// ...this session
 	      {
 	       HTM_TR_Begin (NULL);
 		  HTM_TD_Begin ("colspan=\"6\" class=\"LT %s\"",BgColor);
-		     ExaSes_PutFormSession (&Session);	// Form to edit this session
+		     ExaSes_PutFormSession (&Session,ICanChangeModality);
 		  HTM_TD_End ();
 	       HTM_TR_End ();
 	      }
@@ -853,7 +863,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	}
 
       /***** Put form to create a new exam session in this exam *****/
-      if (ICanEditSessions &&
+      if (ICanEditSessions == Usr_CAN &&
 	  PutFormSession == Frm_PUT_FORM &&
 	  Exams->SesCod.Sel <= 0)
 	{
@@ -867,7 +877,8 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	 /* Put form to create new session */
 	 HTM_TR_Begin (NULL);
 	    HTM_TD_Begin ("colspan=\"6\" class=\"LT %s\"",The_GetColorRows ());
-	       ExaSes_PutFormSession (&Session);	// Form to create session
+	       ExaSes_PutFormSession (&Session,
+				      true);	// Modality can be changed
 	    HTM_TD_End ();
 	 HTM_TR_End ();
 	}
@@ -1108,13 +1119,14 @@ static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
 /*****************************************************************************/
 
 static void ExaSes_ListOneOrMoreSessionsPrints (const struct ExaSes_Session *Session,
+						unsigned NumPrints,
 						const char *BgColor)
   {
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
 
    HTM_TD_Begin ("rowspan=\"2\" class=\"RT %s_%s %s\"",
                  HidVis_DataClass[Session->Hidden],The_GetSuffix (),BgColor);
-      HTM_Unsigned (Exa_DB_GetNumPrintsInSession (Session->SesCod));
+      HTM_Unsigned (NumPrints);
    HTM_TD_End ();
   }
 
@@ -1566,7 +1578,8 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
 /* Put a big button to play exam session (start a new session) as a teacher **/
 /*****************************************************************************/
 
-static void ExaSes_PutFormSession (struct ExaSes_Session *Session)
+static void ExaSes_PutFormSession (struct ExaSes_Session *Session,
+				   Usr_Can_t ICanChangeModality)
   {
    extern const char *Txt_Title;
    extern const char *Txt_EXAM_SESSION_Modality;
@@ -1621,7 +1634,7 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       ExaSes_PutSessionModalities (Session);
+	       ExaSes_PutSessionModalities (Session,ICanChangeModality);
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -1664,7 +1677,8 @@ static void ExaSes_ParsFormSession (void *Session)
 /*********************** Modalities in an exam session ***********************/
 /*****************************************************************************/
 
-static void ExaSes_PutSessionModalities (const struct ExaSes_Session *Session)
+static void ExaSes_PutSessionModalities (const struct ExaSes_Session *Session,
+					 Usr_Can_t ICanChangeModality)
   {
    extern const char *Txt_EXAM_SESSION_MODALITIES[ExaSes_NUM_MODALITIES];
    ExaSes_Modality_t Modality;
@@ -1681,7 +1695,8 @@ static void ExaSes_PutSessionModalities (const struct ExaSes_Session *Session)
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_RADIO ("Modality",
 				(Modality == Session->Modality ? HTM_REQUIRED | HTM_CHECKED :
-								 HTM_REQUIRED),
+				(ICanChangeModality == Usr_CAN ? HTM_REQUIRED :
+								 HTM_DISABLED)),
 				" value=\"%u\"",(unsigned) Modality);
 	       Ico_PutIconOn (ExaSes_ModalityIcon[Modality],Ico_BLACK,
 			      Txt_EXAM_SESSION_MODALITIES[Modality]);
@@ -1846,6 +1861,7 @@ void ExaSes_ReceiveSession (void)
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;
    OldNew_OldNew_t OldNewSession;
+   Usr_Can_t ICanChangeModality;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -1872,12 +1888,15 @@ void ExaSes_ReceiveSession (void)
 	 ExaSes_GetSessionDataByCod (&Session);
 	 if (Session.ExaCod != Exams.Exam.ExaCod)
 	    Err_WrongExamSessionExit ();
+	 ICanChangeModality = (Exa_DB_GetNumPrintsInSes (Session.SesCod) == 0) ? Usr_CAN :	// Only if there are no exam prints yet
+										 Usr_CAN_NOT;
 	 break;
       case OldNew_NEW:
       default:
 	 /* Initialize to empty session */
 	 ExaSes_ResetSession (&Session);
 	 Session.ExaCod = Exams.Exam.ExaCod;
+	 ICanChangeModality = Usr_CAN;
 	 break;
      }
    Exams.SesCod.Sel =
@@ -1887,14 +1906,15 @@ void ExaSes_ReceiveSession (void)
    /* Get session title */
    Par_GetParText ("Title",Session.Title,ExaSes_MAX_BYTES_TITLE);
 
-   /* Get modality */
-   Session.Modality = (ExaSes_Modality_t)
-		      Par_GetParUnsignedLong ("Modality",
-					      0,
-					      ExaSes_NUM_MODALITIES - 1,
-					      (unsigned long) ExaSes_NONE);
+   /* Get modality if it can be changed */
+   if (ICanChangeModality == Usr_CAN)
+      Session.Modality = (ExaSes_Modality_t)
+			 Par_GetParUnsignedLong ("Modality",
+						 0,
+						 ExaSes_NUM_MODALITIES - 1,
+						 (unsigned long) ExaSes_MODALITY_DEFAULT);
    if (Session.Modality == ExaSes_NONE)
-      Err_WrongExamSessionExit ();
+      Session.Modality = ExaSes_MODALITY_DEFAULT;
 
    /* Get start/end date-times */
    Session.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);

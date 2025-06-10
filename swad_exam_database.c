@@ -2001,12 +2001,12 @@ void Exa_DB_StoreOneQstOfPrint (const struct ExaPrn_Print *Print,
 		    " VALUES"
 		    " (%ld,%ld,%u,%ld,'%.15lg','%s','%s')",
 		    Print->PrnCod,
-		    Print->PrintedQuestions[QstInd].QstCod,
+		    Print->Qsts[QstInd].QstCod,
 		    QstInd,	// 0, 1, 2, 3...
-		    Print->PrintedQuestions[QstInd].SetCod,
-		    Print->PrintedQuestions[QstInd].Answers.Online.Score,
-		    Print->PrintedQuestions[QstInd].StrIndexes,
-		    Print->PrintedQuestions[QstInd].Answers.Online.Str);
+		    Print->Qsts[QstInd].SetCod,
+		    Print->Qsts[QstInd].Ans.Online.Score,
+		    Print->Qsts[QstInd].StrIndexes,
+		    Print->Qsts[QstInd].Ans.Online.Str);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 
@@ -2338,18 +2338,17 @@ unsigned Exa_DB_GetAllUsrsWhoHaveMadeSession (MYSQL_RES **mysql_res,long SesCod)
   }
 
 /*****************************************************************************/
-/*** Get all users who have answered any question in a given exam session ****/
+/*********** Get number of exam printouts in a given exam session ************/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetNumPrintsInSession (long SesCod)
+unsigned Exa_DB_GetNumPrintsInSes (long SesCod)
   {
-   /***** Get number of users who have played the match
-          (users who have a result for this match, even blank result)
-          from database *****/
    return (unsigned)
    DB_QueryCOUNT ("can not get number of prints in sessions",
 		  "SELECT COUNT(*)"
-		   " FROM exa_prints,exa_sessions,exa_exams"
+		   " FROM exa_prints,"
+			 "exa_sessions,"
+			 "exa_exams"
 		  " WHERE exa_prints.SesCod=%ld"
 		    " AND exa_prints.SesCod=exa_sessions.SesCod"
 		    " AND exa_sessions.ExaCod=exa_exams.ExaCod"

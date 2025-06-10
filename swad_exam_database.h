@@ -175,7 +175,7 @@ unsigned Exa_DB_GetExamLog (MYSQL_RES **mysql_res,long PrnCod);
 //--------------------------------- Results -----------------------------------
 unsigned Exa_DB_GetAllUsrsWhoHaveMadeExam (MYSQL_RES **mysql_res,long ExaCod);
 unsigned Exa_DB_GetAllUsrsWhoHaveMadeSession (MYSQL_RES **mysql_res,long SesCod);
-unsigned Exa_DB_GetNumPrintsInSession (long SesCod);
+unsigned Exa_DB_GetNumPrintsInSes (long SesCod);
 unsigned Exa_DB_GetResults (MYSQL_RES **mysql_res,
 			    Usr_MeOrOther_t MeOrOther,long UsrCod,
 			    long SesCod,	// <= 0 ==> any

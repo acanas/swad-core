@@ -432,10 +432,10 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
       */
 
       /* Get question code (row[0]) */
-      Print->PrintedQuestions[*NumQstsInPrint].QstCod = Str_ConvertStrCodToLongCod (row[0]);
+      Print->Qsts[*NumQstsInPrint].QstCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Set set of questions */
-      Print->PrintedQuestions[*NumQstsInPrint].SetCod = Set->SetCod;
+      Print->Qsts[*NumQstsInPrint].SetCod = Set->SetCod;
 
       /* Get answer type (row[1]) */
       AnswerType = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
@@ -450,13 +450,13 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
 	 case Qst_ANS_FLOAT:
 	 case Qst_ANS_TRUE_FALSE:
 	 case Qst_ANS_TEXT:
-	    Print->PrintedQuestions[*NumQstsInPrint].StrIndexes[0] = '\0';
+	    Print->Qsts[*NumQstsInPrint].StrIndexes[0] = '\0';
 	    break;
 	 case Qst_ANS_UNIQUE_CHOICE:
 	 case Qst_ANS_MULTIPLE_CHOICE:
             /* If answer type is unique or multiple option,
                generate indexes of answers depending on shuffle */
-	    ExaPrn_GenerateChoiceIndexes (&Print->PrintedQuestions[*NumQstsInPrint],
+	    ExaPrn_GenerateChoiceIndexes (&Print->Qsts[*NumQstsInPrint],
 					  Shuffle);
 	    break;
 	 default:
@@ -467,10 +467,10 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
          Initially user has not answered the question ==> initially all answers will be blank.
          If the user does not confirm the submission of their exam ==>
          ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-      Print->PrintedQuestions[*NumQstsInPrint].Answers.Online.Str[0] = '\0';
+      Print->Qsts[*NumQstsInPrint].Ans.Online.Str[0] = '\0';
 
       /* Reset score of this question in print */
-      Print->PrintedQuestions[*NumQstsInPrint].Answers.Online.Score = 0.0;
+      Print->Qsts[*NumQstsInPrint].Ans.Online.Score = 0.0;
      }
 
    return NumQstsInSet;
@@ -586,23 +586,23 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 
 	 /* Get question code (row[0])
 	    and set code (row[1]) */
-	 if ((Print->PrintedQuestions[QstInd].QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	 if ((Print->Qsts[QstInd].QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
 	    Err_WrongQuestionExit ();
-	 if ((Print->PrintedQuestions[QstInd].SetCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
+	 if ((Print->Qsts[QstInd].SetCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
 	    Err_WrongSetExit ();
 
          /* Get score (row[2]) */
 	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-         if (sscanf (row[2],"%lf",&Print->PrintedQuestions[QstInd].Answers.Online.Score) != 1)
+         if (sscanf (row[2],"%lf",&Print->Qsts[QstInd].Ans.Online.Score) != 1)
             Err_ShowErrorAndExit ("Wrong question score.");
          Str_SetDecimalPointToLocal ();	// Return to local system
 
 	 /* Get indexes for this question (row[3])
 	    and answers selected by user for this question (row[4]) */
-	 Str_Copy (Print->PrintedQuestions[QstInd].StrIndexes,row[3],
-		   sizeof (Print->PrintedQuestions[QstInd].StrIndexes) - 1);
-	 Str_Copy (Print->PrintedQuestions[QstInd].Answers.Online.Str,row[4],
-		   sizeof (Print->PrintedQuestions[QstInd].Answers.Online.Str) - 1);
+	 Str_Copy (Print->Qsts[QstInd].StrIndexes,row[3],
+		   sizeof (Print->Qsts[QstInd].StrIndexes) - 1);
+	 Str_Copy (Print->Qsts[QstInd].Ans.Online.Str,row[4],
+		   sizeof (Print->Qsts[QstInd].Ans.Online.Str) - 1);
 	}
 
    /***** Free structure that stores the query result *****/
@@ -669,7 +669,7 @@ static void ExaPrn_ShowQstsAndAnssToFill (struct Exa_Exams *Exams,
 	{
 	 /* Create test question */
 	 Qst_QstConstructor (&Question);
-	 Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
+	 Question.QstCod = Print->Qsts[QstInd].QstCod;
 
 	 /* Get question from database */
 	 ExaSet_GetQstDataFromDB (&Question);
@@ -712,10 +712,10 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
    if (QstInd == 0)
       CurrentSet.SetCod = -1L;	// Reset current set
 
-   if (Print->PrintedQuestions[QstInd].SetCod != CurrentSet.SetCod)
+   if (Print->Qsts[QstInd].SetCod != CurrentSet.SetCod)
      {
       /***** Get data of this set *****/
-      CurrentSet.SetCod = Print->PrintedQuestions[QstInd].SetCod;
+      CurrentSet.SetCod = Print->Qsts[QstInd].SetCod;
       ExaSet_GetSetDataByCod (&CurrentSet);
 
       /***** Title for this set *****/
@@ -791,7 +791,7 @@ static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
    snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
    HTM_TxtF ("<input type=\"number\" id=\"%s\" name=\"Ans\""
 	     " class=\"Exa_ANSWER_INPUT_INT\" value=\"%s\"",
-	     Id,Print->PrintedQuestions[QstInd].Answers.Online.Str);
+	     Id,Print->Qsts[QstInd].Ans.Online.Str);
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_ElementEnd ();
   }
@@ -810,7 +810,7 @@ static void ExaPrn_WriteFltAnsToFill (const struct ExaPrn_Print *Print,
    snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
    HTM_TxtF ("<input type=\"number\" id=\"%s\" name=\"Ans\""
 	     " class=\"Exa_ANSWER_INPUT_FLOAT\" value=\"%s\"",
-	     Id,Print->PrintedQuestions[QstInd].Answers.Online.Str);
+	     Id,Print->Qsts[QstInd].Ans.Online.Str);
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_ElementEnd ();
   }
@@ -836,15 +836,15 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_ElementEnd ();
       HTM_OPTION (HTM_Type_STRING,"" ,
-                  (Print->PrintedQuestions[QstInd].Answers.Online.Str[0] == '\0') ? HTM_SELECTED :
+                  (Print->Qsts[QstInd].Ans.Online.Str[0] == '\0') ? HTM_SELECTED :
                 								    HTM_NO_ATTR,
                   Txt_NBSP);
       HTM_OPTION (HTM_Type_STRING,"T",
-                  (Print->PrintedQuestions[QstInd].Answers.Online.Str[0] == 'T') ? HTM_SELECTED :
+                  (Print->Qsts[QstInd].Ans.Online.Str[0] == 'T') ? HTM_SELECTED :
                 								   HTM_NO_ATTR,
                   Txt_TF_QST[0]);
       HTM_OPTION (HTM_Type_STRING,"F",
-                  (Print->PrintedQuestions[QstInd].Answers.Online.Str[0] == 'F') ? HTM_SELECTED :
+                  (Print->Qsts[QstInd].Ans.Online.Str[0] == 'F') ? HTM_SELECTED :
                 								   HTM_NO_ATTR,
                   Txt_TF_QST[1]);
    HTM_Txt ("</select>");
@@ -867,10 +867,10 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
    Qst_ChangeFormatAnswersText (Question);
 
    /***** Get indexes for this question from string *****/
-   TstPrn_GetIndexesFromStr (Print->PrintedQuestions[QstInd].StrIndexes,Indexes);
+   TstPrn_GetIndexesFromStr (Print->Qsts[QstInd].StrIndexes,Indexes);
 
    /***** Get the user's answers for this question from string *****/
-   TstPrn_GetAnswersFromStr (Print->PrintedQuestions[QstInd].Answers.Online.Str,
+   TstPrn_GetAnswersFromStr (Print->Qsts[QstInd].Ans.Online.Str,
 			     UsrAnswers);
 
    /***** Begin table *****/
@@ -936,7 +936,7 @@ static void ExaPrn_WriteTxtAnsToFill (const struct ExaPrn_Print *Print,
    HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"Ans\""
 	     " size=\"40\" maxlength=\"%u\" value=\"%s\"",
 	     Id,Qst_MAX_CHARS_ANSWERS_ONE_QST,
-	     Print->PrintedQuestions[QstInd].Answers.Online.Str);
+	     Print->Qsts[QstInd].Ans.Online.Str);
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_ElementEnd ();
   }
@@ -1062,7 +1062,7 @@ void ExaPrn_ReceiveAnswer (void)
 
 static void ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print,unsigned QstInd)
   {
-   Par_GetParText ("Ans",Print->PrintedQuestions[QstInd].Answers.Online.Str,
+   Par_GetParText ("Ans",Print->Qsts[QstInd].Ans.Online.Str,
 		   Qst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
   }
 
@@ -1092,9 +1092,9 @@ static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Pri
 
    /***** Compute question score *****/
    Qst_QstConstructor (&Question);
-   Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
+   Question.QstCod = Print->Qsts[QstInd].QstCod;
    Question.Answer.Type = ExaSet_GetAnswerType (Question.QstCod);
-   ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[QstInd],&Question);
+   ExaPrn_ComputeAnswerScore (&Print->Qsts[QstInd],&Question);
    Qst_QstDestructor (&Question);
 
    /***** If type is unique choice and the option (radio button) is checked
@@ -1102,15 +1102,15 @@ static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Pri
    if (Question.Answer.Type == Qst_ANS_UNIQUE_CHOICE)
      {
       Exa_DB_GetAnswersFromQstInPrint (Print->PrnCod,
-				       Print->PrintedQuestions[QstInd].QstCod,
+				       Print->Qsts[QstInd].QstCod,
                                        CurrentStrAnswersInDB);
-      if (!strcmp (Print->PrintedQuestions[QstInd].Answers.Online.Str,
+      if (!strcmp (Print->Qsts[QstInd].Ans.Online.Str,
 		   CurrentStrAnswersInDB))
 	{
 	 /* The answer just clicked by user
 	    is the same as the last one checked and stored in database */
-	 Print->PrintedQuestions[QstInd].Answers.Online.Str[0] = '\0';	// Uncheck option
-	 Print->PrintedQuestions[QstInd].Answers.Online.Score  = 0;	// Clear question score
+	 Print->Qsts[QstInd].Ans.Online.Str[0] = '\0';	// Uncheck option
+	 Print->Qsts[QstInd].Ans.Online.Score  = 0;	// Clear question score
 	}
      }
 

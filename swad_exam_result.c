@@ -1437,7 +1437,7 @@ void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
 	QstInd++)
      {
       /***** Copy question code *****/
-      Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
+      Question.QstCod = Print->Qsts[QstInd].QstCod;
 
       /***** Get validity and answer type from database *****/
       if ((QuestionExists = (Exa_DB_GetValidityAndAnswerType (&mysql_res,Question.QstCod) != 0)))
@@ -1458,8 +1458,8 @@ void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
       if (QuestionExists)
 	 if (Question.Validity == ExaSet_VALID_QUESTION)
 	   {
-	    ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[QstInd],&Question);
-	    switch (Print->PrintedQuestions[QstInd].Answers.Online.IsCorrect)
+	    ExaPrn_ComputeAnswerScore (&Print->Qsts[QstInd],&Question);
+	    switch (Print->Qsts[QstInd].Ans.Online.IsCorrect)
 	      {
 	       case TstPrn_ANSWER_IS_CORRECT:
 	          Print->NumQsts.Valid.Correct++;
@@ -1478,7 +1478,7 @@ void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
 		  break;
 	      }
 	    Print->NumQsts.Valid.Total++;
-	    Print->Score.Valid += Print->PrintedQuestions[QstInd].Answers.Online.Score;
+	    Print->Score.Valid += Print->Qsts[QstInd].Ans.Online.Score;
 	   }
      }
   }
@@ -1805,7 +1805,7 @@ static void ExaRes_ShowQstsAndAnss (struct Usr_Data *UsrDat,
 	{
 	 /***** Create test question *****/
 	 Qst_QstConstructor (&Question);
-	 Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
+	 Question.QstCod = Print->Qsts[QstInd].QstCod;
 
 	 /***** Get question data *****/
 	 ExaSet_GetQstDataFromDB (&Question);
@@ -1904,8 +1904,8 @@ static void ExaRes_WriteQstAndAns (struct Usr_Data *UsrDat,
 	    Med_ShowMedia (&Question->Media,"Tst_MED_SHOW_CONT","Tst_MED_SHOW");
 
 	 /* Answers */
-	 ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[QstInd],Question);
-	 TstPrn_WriteAnswersExam (UsrDat,&Print->PrintedQuestions[QstInd],Question,
+	 ExaPrn_ComputeAnswerScore (&Print->Qsts[QstInd],Question);
+	 TstPrn_WriteAnswersExam (UsrDat,&Print->Qsts[QstInd],Question,
 				  ICanView,
 				  ClassTxt[Question->Validity],
 				  ClassFeedback[Question->Validity]);
@@ -1916,12 +1916,12 @@ static void ExaRes_WriteQstAndAns (struct Usr_Data *UsrDat,
 	    HTM_DIV_Begin ("class=\"LM DAT_SMALL_%s\"",The_GetSuffix ());
 	       HTM_Txt (Txt_Score); HTM_Colon (); HTM_NBSP ();
 	       HTM_SPAN_Begin ("class=\"%s_%s\"",
-			       Print->PrintedQuestions[QstInd].Answers.Online.Str[0] ?
-			       (Print->PrintedQuestions[QstInd].Answers.Online.Score > 0 ? "Qst_ANS_OK" :	// Correct
+			       Print->Qsts[QstInd].Ans.Online.Str[0] ?
+			       (Print->Qsts[QstInd].Ans.Online.Score > 0 ? "Qst_ANS_OK" :	// Correct
 											   "Qst_ANS_BAD") :	// Wrong
 											   "Qst_ANS_0",		// Blank answer
 			       The_GetSuffix ());
-		  HTM_Double2Decimals (Print->PrintedQuestions[QstInd].Answers.Online.Score);
+		  HTM_Double2Decimals (Print->Qsts[QstInd].Ans.Online.Score);
 		  if (Question->Validity == ExaSet_INVALID_QUESTION)
 		    {
 		     HTM_SP ();

@@ -151,7 +151,7 @@ typedef enum
    ExaSes_ONLINE,
    ExaSes_PAPER,
   } ExaSes_Modality_t;
-#define ExaSes_MODALITY_DEFAULT ExaSes_NONE
+#define ExaSes_MODALITY_DEFAULT ExaSes_ONLINE
 
 struct ExaSes_Session
   {
