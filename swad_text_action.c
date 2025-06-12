@@ -16116,6 +16116,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"&Ccedil;&ouml;z&uuml;len s&inodot;nav cevap ka&gbreve;&inodot;tlar&inodot;n&inodot; yazd&inodot;r"
 #endif
 	,
+	[ActAnsExaAnsShe] =
+#if   L==1	// ca
+	"Respondre una pregunta d'un examen d'un estudiant"
+#elif L==2	// de
+	"Beantworte eine Pr&uuml;fungsfrage eines Studierenden"
+#elif L==3	// en
+	"Answer a question from a student's exam"
+#elif L==4	// es
+	"Responder una pregunta de un examen de un estudiante"
+#elif L==5	// fr
+	"R&eacute;pondre &agrave; une question d'examen d'un &eacute;tudiant"
+#elif L==6	// gn
+	"Embohov&aacute;i petet porandu petet temimbo e ex&aacute;mengui"
+#elif L==7	// it
+	"Rispondi a una domanda dell'esame di uno studente"
+#elif L==8	// pl
+	"Odpowiedz na pytanie z egzaminu studenta"
+#elif L==9	// pt
+	"Responder a uma pergunta do exame de um aluno"
+#elif L==10	// tr
+	"Bir &ouml;&gbreve;rencinin s&inodot;nav&inodot;ndan bir soruyu cevapla"
+#endif
+	,
 	[ActReqNewExaSes] =
 #if   L==1	// ca
 	"Request new exam session"			// Necessita traducció
@@ -16325,25 +16348,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActAnsExaPrn] =
 #if   L==1	// ca
-	"Respondre pregunta d'examen"
+	"Respondre una pregunta del meu examen"
 #elif L==2	// de
-	"Beantworten Sie die Pr&uuml;fungsfrage"
+	"Beantworte eine Pr&uuml;fungsfrage"
 #elif L==3	// en
-	"Answer exam question"
+	"Answer a question from my exam"
 #elif L==4	// es
-	"Responder pregunta de examen"
+	"Responder una pregunta de mi examen"
 #elif L==5	// fr
-	"R&eacute;pondre question d'examen"
+	"R&eacute;pondre &agrave; une question de mon examen"
 #elif L==6	// gn
-	"Responder pregunta de examen"		// Okoteve traducción
+	"Ambohov&aacute;i pete&itilde; porandu che ex&aacute;men-gui"
 #elif L==7	// it
-	"Rispondi domanda d'esame"
+	"Rispondi a una domanda del mio esame"
 #elif L==8	// pl
-	"Odpowiedz pytanie egzaminacyjne"
+	"Odpowiedz na pytanie z mojego egzaminu"
 #elif L==9	// pt
-	"Responda pergunta do exame"
+	"Responder a uma pergunta do minho exame"
 #elif L==10	// tr
-	"Answer exam question"			// Çeviri lazim!
+	"S&inodot;nav&inodot;mdan bir soruyu cevaplan"
 #endif
 	,
 	[ActEndExaPrn] =

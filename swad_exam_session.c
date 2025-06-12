@@ -553,6 +553,7 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 
 	 /* Get print data */
 	 ExaPrn_GetPrintDataByPrnCod (&Print);
+	 Str_Copy (Print.EnUsrCod,UsrDat->EnUsrCod,sizeof (Print.EnUsrCod) - 1);
 
 	 /* Get and accumulate questions and score */
 	 /* Get questions and user's answers of exam print from database */

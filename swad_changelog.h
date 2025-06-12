@@ -638,10 +638,11 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.89.2 (2025-06-10)"
-#define CSS_FILE		"swad24.89.css"
+#define Log_PLATFORM_VERSION	"SWAD 24.90 (2025-06-12)"
+#define CSS_FILE		"swad24.90.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 24.90:    Jun 12, 2025  Changes in exams. (348065 lines)
 	Version 24.89.2:  Jun 10, 2025  Do not change exam session modality when exam prints exist. (347979 lines)
 	Version 24.89.1:  Jun 09, 2025  Code refactoring in questions and answers. (347962 lines)
 	Version 24.89:    Jun 09, 2025  Sent field removed from exam prints. (347943 lines)

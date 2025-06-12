@@ -3812,15 +3812,10 @@ legend {font-size: 12pt; font-weight: bold;}
 	vertical-align: bottom;
 	}
 
-.Exa_DESC
+.Exa_DESC, .Exa_QSTS
 	{
 	margin: 1%;
 	text-align: left;
-	vertical-align: top;
-	}
-#examprint
-	{
-	margin: 1%;
 	}
 
 .Exa_TBL

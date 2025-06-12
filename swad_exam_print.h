@@ -64,6 +64,7 @@ struct ExaPrn_Print
    long PrnCod;		// Exam print code
    long SesCod;		// Session code associated to this print
    long UsrCod;		// User who answered the exam print
+   char EnUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    struct ExaPrn_NumQuestions NumQsts;
    struct ExaPrn_Score Score;
@@ -92,6 +93,10 @@ void ExaPrn_GetPrintDataBySesCodAndUsrCod (struct ExaPrn_Print *Print);
 void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print);
 
 void ExaPrn_ReceiveAnswer (void);
+void ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print,unsigned QstInd);
+unsigned ExaPrn_GetParQstInd (void);
+void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Print,
+                                                 unsigned QstInd);
 
 void ExaPrn_ComputeAnswerScore (struct Qst_PrintedQuestion *PrintedQuestion,
 				struct Qst_Question *Question);

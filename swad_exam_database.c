@@ -2004,9 +2004,9 @@ void Exa_DB_StoreOneQstOfPrint (const struct ExaPrn_Print *Print,
 		    Print->Qsts[QstInd].QstCod,
 		    QstInd,	// 0, 1, 2, 3...
 		    Print->Qsts[QstInd].SetCod,
-		    Print->Qsts[QstInd].Ans.Online.Score,
+		    Print->Qsts[QstInd].Answer.Score,
 		    Print->Qsts[QstInd].StrIndexes,
-		    Print->Qsts[QstInd].Ans.Online.Str);
+		    Print->Qsts[QstInd].Answer.Str);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 

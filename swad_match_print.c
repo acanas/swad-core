@@ -104,7 +104,7 @@ static void MchPrn_ComputeScore (struct MchPrn_Print *Print)
       TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
 
       /***** Update total score *****/
-      Print->Score += Print->PrintedQuestions[NumQst].Ans.Online.Score;
+      Print->Score += Print->PrintedQuestions[NumQst].Answer.Score;
 
       /***** Destroy test question *****/
       Qst_QstDestructor (&Question);

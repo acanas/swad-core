@@ -65,15 +65,15 @@
 struct Usr_Data
   {
    long UsrCod;
-   char EnUsrCod [Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
+   char EnUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
    char UsrIDNickOrEmail[Cns_MAX_BYTES_USR_LOGIN + 1];	// String to store the ID, nickname or email
    struct
      {
       struct ListIDs *List;
       unsigned Num;
      } IDs;
-   char Nickname        [Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
-   char Password        [Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
+   char Nickname[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
+   char Password[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
    struct
      {
       Rol_Role_t InCurrentCrs;	// Role in current course (Rol_UNK is not filled/calculated or no course selected)
@@ -83,21 +83,21 @@ struct Usr_Data
 			//  <0 ==> not yet filled/calculated
      } Roles;
    bool Accepted;	// User has accepted joining to current course?
-   char Surname1	[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
-   char Surname2	[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
-   char FrstName	[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
-   char FullName	[Usr_MAX_BYTES_FULL_NAME + 1];
+   char Surname1[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
+   char Surname2[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
+   char FrstName[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
+   char FullName[Usr_MAX_BYTES_FULL_NAME + 1];
    Usr_Sex_t Sex;
-   char Email		[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
+   char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
    bool EmailConfirmed;
-   char Photo		[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Name of public link to photo
+   char Photo[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Name of public link to photo
    Pri_Visibility_t PhotoVisibility;	// Who can see user's photo
    Pri_Visibility_t BaPrfVisibility;	// Who can see user's basic public profile (minimal record card)
    Pri_Visibility_t ExPrfVisibility;	// Who can see user's extended public profile (figures, follow)
    long CtyCod;		// Country
    struct Dat_Date Birthday;
-   char StrBirthday	[Cns_MAX_BYTES_DATE + 1];
-   char Phone           [2][Usr_MAX_BYTES_PHONE + 1];
+   char StrBirthday[Cns_MAX_BYTES_DATE + 1];
+   char Phone[2][Usr_MAX_BYTES_PHONE + 1];
    char *Comments;
    long InsCtyCod;	// Country of the institution
    long InsCod;		// Institution
@@ -105,8 +105,8 @@ struct Usr_Data
      {
       long CtrCod;	// Center
       long DptCod;	// Department
-      char Office	[Usr_MAX_BYTES_ADDRESS + 1];
-      char OfficePhone	[Usr_MAX_BYTES_PHONE  + 1];
+      char Office[Usr_MAX_BYTES_ADDRESS + 1];
+      char OfficePhone[Usr_MAX_BYTES_PHONE  + 1];
      } Tch;
    struct
      {

@@ -371,9 +371,9 @@ void Tst_DB_StoreOneQstOfPrint (const struct TstPrn_Print *Print,unsigned QstInd
 		    Print->PrnCod,
 		    Print->PrintedQuestions[QstInd].QstCod,
 		    QstInd,	// 0, 1, 2, 3...
-		    Print->PrintedQuestions[QstInd].Ans.Online.Score,
+		    Print->PrintedQuestions[QstInd].Answer.Score,
 		    Print->PrintedQuestions[QstInd].StrIndexes,
-		    Print->PrintedQuestions[QstInd].Ans.Online.Str);
+		    Print->PrintedQuestions[QstInd].Answer.Str);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 

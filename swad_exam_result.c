@@ -791,6 +791,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 
 	    /* Get print data */
 	    ExaPrn_GetPrintDataByPrnCod (&Print);
+	    Str_Copy (Print.EnUsrCod,UsrDat->EnUsrCod,
+		      sizeof (Print.EnUsrCod) - 1);
 
 	    /* Get data of session and exam */
 	    Session.SesCod = Print.SesCod;
@@ -1221,6 +1223,8 @@ void ExaRes_ShowExaResultAfterFinish (void)
    Print.SesCod = Session.SesCod;
    Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
+   Str_Copy (Print.EnUsrCod,Gbl.Usrs.Me.UsrDat.EnUsrCod,
+	     sizeof (Print.EnUsrCod) - 1);
 
    /***** Set log action and print code *****/
    // The user has clicked on the "I have finished" button in an exam print
@@ -1275,6 +1279,8 @@ void ExaRes_ShowOneExaResult (void)
    Print.SesCod = Session.SesCod;
    Print.UsrCod = UsrDat->UsrCod;
    ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
+   Str_Copy (Print.EnUsrCod,UsrDat->EnUsrCod,
+	     sizeof (Print.EnUsrCod) - 1);
 
    /***** Get questions and user's answers of exam print from database *****/
    ExaPrn_GetPrintQuestionsFromDB (&Print);
@@ -1459,7 +1465,7 @@ void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
 	 if (Question.Validity == ExaSet_VALID_QUESTION)
 	   {
 	    ExaPrn_ComputeAnswerScore (&Print->Qsts[QstInd],&Question);
-	    switch (Print->Qsts[QstInd].Ans.Online.IsCorrect)
+	    switch (Print->Qsts[QstInd].Answer.IsCorrect)
 	      {
 	       case TstPrn_ANSWER_IS_CORRECT:
 	          Print->NumQsts.Valid.Correct++;
@@ -1478,7 +1484,7 @@ void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
 		  break;
 	      }
 	    Print->NumQsts.Valid.Total++;
-	    Print->Score.Valid += Print->Qsts[QstInd].Ans.Online.Score;
+	    Print->Score.Valid += Print->Qsts[QstInd].Answer.Score;
 	   }
      }
   }
@@ -1916,12 +1922,12 @@ static void ExaRes_WriteQstAndAns (struct Usr_Data *UsrDat,
 	    HTM_DIV_Begin ("class=\"LM DAT_SMALL_%s\"",The_GetSuffix ());
 	       HTM_Txt (Txt_Score); HTM_Colon (); HTM_NBSP ();
 	       HTM_SPAN_Begin ("class=\"%s_%s\"",
-			       Print->Qsts[QstInd].Ans.Online.Str[0] ?
-			       (Print->Qsts[QstInd].Ans.Online.Score > 0 ? "Qst_ANS_OK" :	// Correct
+			       Print->Qsts[QstInd].Answer.Str[0] ?
+			       (Print->Qsts[QstInd].Answer.Score > 0 ? "Qst_ANS_OK" :	// Correct
 											   "Qst_ANS_BAD") :	// Wrong
 											   "Qst_ANS_0",		// Blank answer
 			       The_GetSuffix ());
-		  HTM_Double2Decimals (Print->Qsts[QstInd].Ans.Online.Score);
+		  HTM_Double2Decimals (Print->Qsts[QstInd].Answer.Score);
 		  if (Question->Validity == ExaSet_INVALID_QUESTION)
 		    {
 		     HTM_SP ();

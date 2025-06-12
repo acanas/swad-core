@@ -24,22 +24,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/********************************** Headers **********************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
-/************************* Public types and constants ************************/
-/*****************************************************************************/
-
-#define ExaAnsShe_NUM_TYPES 3
-typedef enum
-  {
-   ExaAnsShe_CORRECT_ANSWER,
-   ExaAnsShe_ONLINE_ANSWER,
-   ExaAnsShe_PAPER_ANSWER,
-  } ExaAnsShe_AnswerType_t;
-
-/*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
@@ -47,5 +31,7 @@ void ExaAnsShe_ListBlankSheets (void);
 void ExaAnsShe_PrintBlankSheets (void);
 void ExaAnsShe_ListSolvedSheets (void);
 void ExaAnsShe_PrintSolvedSheets (void);
+
+void ExaAnsShe_ReceiveAnswer (void);
 
 #endif

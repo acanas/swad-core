@@ -577,7 +577,7 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
          · If the user does not confirm the submission of their exam ==>
          ==> the exam may be half filled ==>
          ==> the answers displayed will be those selected by the user. */
-      Print->PrintedQuestions[QstInd].Ans.Online.Str[0] = '\0';
+      Print->PrintedQuestions[QstInd].Answer.Str[0] = '\0';
      }
 
    /***** Get if test print will be visible by teachers *****/

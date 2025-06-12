@@ -12395,31 +12395,31 @@ const char *Txt_EXAM_SESSION_MODALITIES[ExaSes_NUM_MODALITIES] =
 	,
 	[ExaSes_PAPER] =
 #if   L==1	// ca
-	"En paper (option still under development)"
+	"En paper"
 #elif L==2	// de
-	"Papierpr&uuml;fung (option still under development)"
+	"Papierpr&uuml;fung"
 #elif L==3	// en
-	"Paper (option still under development)"
+	"Paper-based"
 #elif L==4	// es
-	"En papel (opci&oacute;n a&uacute;n en desarrollo)"
+	"En papel"
 #elif L==5	// fr
-	"Sur papier (option still under development)"
+	"Sur papier"
 #elif L==6	// gn
-	"Kuatia (option still under development)"
+	"Kuatia"
 #elif L==7	// it
-	"Cartacei (option still under development)"
+	"Cartacei"
 #elif L==8	// pl
-	"Papierowy (option still under development)"
+	"Papierowy"
 #elif L==9	// pt
-	"Em papel (option still under development)"
+	"Em papel"
 #elif L==10	// tr
-	"Ka&gbreve;&inodot;t s&inodot;nav&inodot; (option still under development)"
+	"Ka&gbreve;&inodot;t s&inodot;nav&inodot;"
 #endif
 	};
 
-const char *Txt_EXAM_ANSWER_TYPES[ExaAnsShe_NUM_TYPES] =
+const char *Txt_EXAM_ANSWER_TYPES[ExaSes_NUM_MODALITIES] =
 	{
-	[ExaAnsShe_CORRECT_ANSWER] =
+	[ExaSes_NONE] =	// Here means correct answer
 #if   L==1	// ca
 	"Resposta correcta"
 #elif L==2	// de
@@ -12442,7 +12442,7 @@ const char *Txt_EXAM_ANSWER_TYPES[ExaAnsShe_NUM_TYPES] =
 	"Do&gbreve;ru cevap"
 #endif
 	,
-	[ExaAnsShe_ONLINE_ANSWER] =
+	[ExaSes_ONLINE] =
 #if   L==1	// ca
 	"Resposta en l&iacute;nia"
 #elif L==2	// de
@@ -12465,7 +12465,7 @@ const char *Txt_EXAM_ANSWER_TYPES[ExaAnsShe_NUM_TYPES] =
 	"&Ccedil;evrimi&ccedil;i cevap"
 #endif
 	,
-	[ExaAnsShe_PAPER_ANSWER] =
+	[ExaSes_PAPER] =
 #if   L==1	// ca
 	"Resposta en paper"
 #elif L==2	// de

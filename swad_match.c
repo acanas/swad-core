@@ -3633,13 +3633,13 @@ void Mch_GetMatchQuestionsFromDB (struct MchPrn_Print *Print)
       Mch_GetQstAnsFromDB (Print->MchCod,Print->UsrCod,QstInd,&UsrAnswer);
       if (UsrAnswer.AnsInd >= 0)	// UsrAnswer.AnsInd >= 0 ==> answer selected
 	{
-         snprintf (Print->PrintedQuestions[NumQst].Ans.Online.Str,
-                   sizeof (Print->PrintedQuestions[NumQst].Ans.Online.Str),
+         snprintf (Print->PrintedQuestions[NumQst].Answer.Str,
+                   sizeof (Print->PrintedQuestions[NumQst].Answer.Str),
                    "%d",UsrAnswer.AnsInd);
          Print->NumQsts.NotBlank++;
         }
       else				// UsrAnswer.AnsInd < 0 ==> no answer selected
-	 Print->PrintedQuestions[NumQst].Ans.Online.Str[0] = '\0';	// Empty answer
+	 Print->PrintedQuestions[NumQst].Answer.Str[0] = '\0';	// Empty answer
      }
 
    /***** Free structure that stores the query result *****/
