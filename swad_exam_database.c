@@ -1820,12 +1820,13 @@ void Exa_DB_RemoveGroup (long GrpCod)
 /********************** Create new blank exam print **************************/
 /*****************************************************************************/
 
-long Exa_DB_CreatePrint (const struct ExaPrn_Print *Print,bool Start)
+long Exa_DB_CreatePrint (const struct ExaPrn_Print *Print,
+			 ExaPrn_UpdateDates_t UpdateDates)
   {
-   const char *TimeStr[2] =
+   const char *TimeStr[ExaPrn_NUM_UPDATE_DATES] =
      {
-      [false] = "NOW()",		// Student start exam print
-      [true ] = "FROM_UNIXTIME(0)",	// Teacher pre-creates exam print
+      [ExaPrn_DO_NOT_UPDATE_DATES] = "FROM_UNIXTIME(0)",	// Teacher pre-creates exam print
+      [ExaPrn_UPDATE_DATES       ] = "NOW()",			// Student starts exam print
      };
 
    return
@@ -1838,8 +1839,8 @@ long Exa_DB_CreatePrint (const struct ExaPrn_Print *Print,bool Start)
 				  "%u,0,0)",
 				Print->SesCod,
 				Print->UsrCod,
-				TimeStr[Start],
-				TimeStr[Start],
+				TimeStr[UpdateDates],
+				TimeStr[UpdateDates],
 				Print->NumQsts.All);
   }
 

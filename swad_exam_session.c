@@ -571,9 +571,12 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 	 UniqueId++;
 	 if (asprintf (&Id,"exa_res_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("id =\"%s\" class=\"LT DAT_%s LINE_BOTTOM %s\"",
+	 HTM_TD_Begin ("id=\"%s\" class=\"LT DAT_%s LINE_BOTTOM %s\"",
 		       Id,The_GetSuffix (),The_GetColorRows ());
-	    if (NumResults)
+	    // If an exam print has been created by a teacher
+	    // but has not been answered yet online by the student ==>
+	    // ==> the time is 0 ==> don't print anything
+	    if (Print.TimeUTC[StartEndTime])
 	       Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
 					     Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 					     Dat_WRITE_TODAY |

@@ -75,7 +75,8 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
                                                   unsigned *NumQstsInPrint);
 static void ExaPrn_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQuestion,
 					  Qst_Shuffle_t Shuffle);
-static void ExaPrn_CreatePrint (struct ExaPrn_Print *Print,bool Start);
+static void ExaPrn_CreatePrint (struct ExaPrn_Print *Print,
+				ExaPrn_UpdateDates_t UpdateDates);
 
 static void ExaPrn_ShowPrintToFill (struct Exa_Exams *Exams,
       				    const struct ExaSes_Session *Session,
@@ -187,7 +188,7 @@ void ExaPrn_ShowPrintToStdToFill (void)
       case Usr_CAN:
 	 /***** Create print or get existing print *****/
 	 ExaPrn_GetQstsPrint (&Exams,&Session,&Gbl.Usrs.Me.UsrDat,&Print,
-			      true);	// Start/resume
+			      ExaPrn_UPDATE_DATES);
 
 	 /***** Show exam print to be answered *****/
 	 ExaPrn_ShowPrintToFill (&Exams,&Session,&Print);
@@ -200,7 +201,6 @@ void ExaPrn_ShowPrintToStdToFill (void)
      }
   }
 
-
 /*****************************************************************************/
 /*** Get questions of a printout. If printout does not exists, create it. ****/
 /*****************************************************************************/
@@ -209,7 +209,7 @@ void ExaPrn_GetQstsPrint (struct Exa_Exams *Exams,
 			  const struct ExaSes_Session *Session,
 			  struct Usr_Data *UsrDat,
 			  struct ExaPrn_Print *Print,
-			  bool Start)
+			  ExaPrn_UpdateDates_t UpdateDates)
   {
    /***** Set basic data of exam print *****/
    Print->SesCod = Session->SesCod;
@@ -231,32 +231,28 @@ void ExaPrn_GetQstsPrint (struct Exa_Exams *Exams,
       if (Print->NumQsts.All)
 	{
 	 /***** Create new exam print in database *****/
-	 ExaPrn_CreatePrint (Print,
-			     Start);	// Create and start exam print?
+	 ExaPrn_CreatePrint (Print,UpdateDates);	// Create and start exam print?
 
 	 /***** Set log print code and action *****/
-	 if (Start)
+	 if (UpdateDates == ExaPrn_UPDATE_DATES)
 	   {
 	    ExaLog_SetPrnCod (Print->PrnCod);
 	    ExaLog_SetAction (ExaLog_START_EXAM);
-	    ExaLog_SetIfCanAnswer (true);
+	    ExaLog_SetIfCanAnswer (Usr_CAN);
 	   }
 	}
      }
    else				// Exam print exists
      {
-      /***** Get exam print data from database *****/
-      // ExaPrn_GetPrintDataBySesCodAndUsrCod (Print);	// TODO: Remove
-
       /***** Get questions and current user's answers from database *****/
       ExaPrn_GetPrintQuestionsFromDB (Print);
 
       /***** Set log print code and action *****/
-      if (Start)
+      if (UpdateDates == ExaPrn_UPDATE_DATES)
 	{
 	 ExaLog_SetPrnCod (Print->PrnCod);
 	 ExaLog_SetAction (ExaLog_RESUME_EXAM);
-	 ExaLog_SetIfCanAnswer (true);
+	 ExaLog_SetIfCanAnswer (Usr_CAN);
 	}
      }
 
@@ -549,12 +545,13 @@ static void ExaPrn_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQue
 /***************** Create new blank exam print in database *******************/
 /*****************************************************************************/
 
-static void ExaPrn_CreatePrint (struct ExaPrn_Print *Print,bool Start)
+static void ExaPrn_CreatePrint (struct ExaPrn_Print *Print,
+				ExaPrn_UpdateDates_t UpdateDates)
   {
    unsigned QstInd;
 
    /***** Insert new exam print into database *****/
-   Print->PrnCod = Exa_DB_CreatePrint (Print,Start);
+   Print->PrnCod = Exa_DB_CreatePrint (Print,UpdateDates);
 
    /***** Store all questions (with blank answers)
           of this exam print just generated in database *****/
@@ -978,6 +975,7 @@ void ExaPrn_ReceiveAnswer (void)
    struct ExaSes_Session Session;
    struct ExaPrn_Print Print;
    unsigned QstInd;
+   Usr_Can_t ICanAnswerThisSession;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -1020,12 +1018,12 @@ void ExaPrn_ReceiveAnswer (void)
    ExaLog_SetQstInd (QstInd);
 
    /***** Check if session if visible and open *****/
-   switch (ExaSes_CheckIfICanAnswerThisSession (&Exams.Exam,&Session))
+   ICanAnswerThisSession = ExaSes_CheckIfICanAnswerThisSession (&Exams.Exam,&Session);
+   ExaLog_SetIfCanAnswer (ICanAnswerThisSession);
+
+   switch (ICanAnswerThisSession)
      {
       case Usr_CAN:
-	 /***** Set log open to true ****/
-	 ExaLog_SetIfCanAnswer (true);
-
 	 /***** Get questions and current user's answers of exam print from database *****/
 	 ExaPrn_GetPrintQuestionsFromDB (&Print);
 
@@ -1046,9 +1044,6 @@ void ExaPrn_ReceiveAnswer (void)
 	 break;
       case Usr_CAN_NOT:	// Not accessible to answer
       default:
-	 /***** Set log open to false ****/
-	 ExaLog_SetIfCanAnswer (false);
-
 	 /***** Show warning *****/
 	 Ale_ShowAlert (Ale_INFO,Txt_You_dont_have_access_to_the_exam);
 

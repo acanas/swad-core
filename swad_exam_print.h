@@ -71,6 +71,15 @@ struct ExaPrn_Print
    struct Qst_PrintedQuestion Qsts[ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT];
   };
 
+// If an exam print is created by a student online, the start and end dates must be initialized to NOW()
+// If an exam print is created by a teacher, the start and end dates must be reset to 0
+#define ExaPrn_NUM_UPDATE_DATES 2
+typedef enum
+  {
+   ExaPrn_DO_NOT_UPDATE_DATES,
+   ExaPrn_UPDATE_DATES,
+  } ExaPrn_UpdateDates_t;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -86,7 +95,7 @@ void ExaPrn_GetQstsPrint (struct Exa_Exams *Exams,
 			  const struct ExaSes_Session *Session,
 			  struct Usr_Data *UsrDat,
 			  struct ExaPrn_Print *Print,
-			  bool Start);
+			  ExaPrn_UpdateDates_t UpdateDates);
 void ExaPrn_GetPrintDataByPrnCod (struct ExaPrn_Print *Print);
 void ExaPrn_GetPrintDataBySesCodAndUsrCod (struct ExaPrn_Print *Print);
 

@@ -54,7 +54,7 @@ void ExaLog_SetAction (ExaLog_Action_t Action);
 ExaLog_Action_t ExaLog_GetAction (void);
 void ExaLog_SetQstInd (unsigned QstInd);
 int ExaLog_GetQstInd (void);
-void ExaLog_SetIfCanAnswer (Usr_Can_t CanBeAnswered);
+void ExaLog_SetIfCanAnswer (Usr_Can_t ICanAnswer);
 Usr_Can_t ExaLog_GetIfCanAnswer (void);
 
 void ExaLog_LogAccess (long LogCod);

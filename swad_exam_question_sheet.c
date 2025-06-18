@@ -271,8 +271,7 @@ static void ExaQstShe_GetQstsAndShowSheet (struct Exa_Exams *Exams,
    struct ExaPrn_Print Print;
 
    /***** Create print or get existing print *****/
-   ExaPrn_GetQstsPrint (Exams,Session,UsrDat,&Print,
-			false);	// Start/resume
+   ExaPrn_GetQstsPrint (Exams,Session,UsrDat,&Print,ExaPrn_DO_NOT_UPDATE_DATES);
 
    /***** Show exam question sheet *****/
    ExaQstShe_ShowSheet (Exams,Session,ViewType,UsrDat,&Print);

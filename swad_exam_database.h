@@ -139,7 +139,8 @@ void Exa_DB_RemoveAllGrpsOfType (long GrpTypCod);
 void Exa_DB_RemoveGroup (long GrpCod);
 
 //---------------------------------- Prints -----------------------------------
-long Exa_DB_CreatePrint (const struct ExaPrn_Print *Print,bool Start);
+long Exa_DB_CreatePrint (const struct ExaPrn_Print *Print,
+			 ExaPrn_UpdateDates_t UpdateDates);
 void Exa_DB_UpdatePrint (const struct ExaPrn_Print *Print);
 unsigned Exa_DB_GetPrintDataByPrnCod (MYSQL_RES **mysql_res,long PrnCod);
 unsigned Exa_DB_GetPrintDataBySesCodAndUsrCod (MYSQL_RES **mysql_res,
