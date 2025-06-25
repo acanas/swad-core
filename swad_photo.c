@@ -1437,6 +1437,43 @@ void Pho_ChangePhotoVisibility (void)
   }
 
 /*****************************************************************************/
+/*********** Show form to choice whether to display users' photos ************/
+/*****************************************************************************/
+
+void Pho_ShowFormShowPhotos (Pho_ShowPhotos_t CurrentShowPhotos)
+  {
+   extern const char *Txt_Display_photos;
+
+   Set_BeginOneSettingSelector ();
+      Set_BeginPref (CurrentShowPhotos == Pho_PHOTOS_SHOW);
+	 // Input image can not be used to pass a value to the form,
+	 // so use a button with an image inside
+	 HTM_BUTTON_Submit_Begin (NULL,Usr_FORM_TO_SELECT_USRS_ID,
+				  "name=\"ShowPhotos\" value=\"%u\" class=\"BT_NONE\"",
+				  (unsigned) (CurrentShowPhotos ==
+					      Pho_PHOTOS_SHOW ? Pho_PHOTOS_DONT_SHOW :
+								Pho_PHOTOS_SHOW));
+	    HTM_IMG (Cfg_URL_ICON_PUBLIC,"image-portrait.svg",Txt_Display_photos,
+		     "class=\"ICO_HIGHLIGHT ICOx20 ICO_%s_%s\"",
+		     Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
+	 HTM_BUTTON_End ();
+      Set_EndPref ();
+   Set_EndOneSettingSelector ();
+  }
+
+/*****************************************************************************/
+/************** Get from form the preference about users' photos *************/
+/*****************************************************************************/
+
+Pho_ShowPhotos_t Pho_GetParShowPhotos (void)
+  {
+   return (unsigned) Par_GetParUnsignedLong ("ShowPhotos",
+                                             (unsigned long) 0,
+                                             (unsigned long) (Pho_NUM_PHOTOS - 1),
+                                             (unsigned long) Pho_PHOTOS_UNKNOWN);	// If parameter does not exists
+  }
+
+/*****************************************************************************/
 /******** Calculate average photos of all students from each degree **********/
 /*****************************************************************************/
 

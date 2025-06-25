@@ -98,8 +98,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void ExaSes_ShowFormColumns (const struct ExaSes_Session *Session);
-static void ExaSes_ShowFormShowPhotos (const struct ExaSes_Session *Session);
+static void ExaSes_ShowFormColumns (unsigned CurrentNumCols);
 
 static void ExaSes_ShowHeaderResults (void);
 static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
@@ -388,10 +387,10 @@ void ExaSes_ShowFormSettings (const struct ExaSes_Session *Session)
    Set_BeginSettingsHead ();
 
       /***** Show form to select whether display photos *****/
-      ExaSes_ShowFormColumns (Session);
+      ExaSes_ShowFormColumns (Session->NumCols);
 
       /***** Show form to select columns *****/
-      ExaSes_ShowFormShowPhotos (Session);
+      Pho_ShowFormShowPhotos (Session->ShowPhotos);
 
    Set_EndSettingsHead ();
   }
@@ -400,7 +399,7 @@ void ExaSes_ShowFormSettings (const struct ExaSes_Session *Session)
 /**** Show form to choice whether to show answers in 1, 2, 3 or 4 columns ****/
 /*****************************************************************************/
 
-static void ExaSes_ShowFormColumns (const struct ExaSes_Session *Session)
+static void ExaSes_ShowFormColumns (unsigned CurrentNumCols)
   {
    extern const char *Txt_column;
    extern const char *Txt_columns;
@@ -412,7 +411,7 @@ static void ExaSes_ShowFormColumns (const struct ExaSes_Session *Session)
 	   NumCols <= ExaSes_MAX_COLS;
 	   NumCols++)
 	{
-	 Set_BeginPref (NumCols == Session->NumCols);
+	 Set_BeginPref (NumCols == CurrentNumCols);
 	    if (asprintf (&Title,"%u %s",NumCols,
 					 NumCols == 1 ? Txt_column :
 							Txt_columns) < 0)
@@ -435,31 +434,6 @@ static void ExaSes_ShowFormColumns (const struct ExaSes_Session *Session)
   }
 
 /*****************************************************************************/
-/*********** Show form to choice whether to display users' phptps ************/
-/*****************************************************************************/
-
-static void ExaSes_ShowFormShowPhotos (const struct ExaSes_Session *Session)
-  {
-   extern const char *Txt_Display_photos;
-
-   Set_BeginOneSettingSelector ();
-      Set_BeginPref (Session->ShowPhotos == ExaSet_PHOTOS_SHOW);
-	 // Input image can not be used to pass a value to the form,
-	 // so use a button with an image inside
-	 HTM_BUTTON_Submit_Begin (NULL,Usr_FORM_TO_SELECT_USRS_ID,
-				  "name=\"ShowPhotos\" value=\"%u\" class=\"BT_NONE\"",
-				  (unsigned) (Session->ShowPhotos ==
-					      ExaSet_PHOTOS_SHOW ? ExaSet_PHOTOS_DONT_SHOW :
-								   ExaSet_PHOTOS_SHOW));
-	    HTM_IMG (Cfg_URL_ICON_PUBLIC,"image-portrait.svg",Txt_Display_photos,
-		     "class=\"ICO_HIGHLIGHT ICOx20 ICO_%s_%s\"",
-		     Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
-	 HTM_BUTTON_End ();
-      Set_EndPref ();
-   Set_EndOneSettingSelector ();
-  }
-
-/*****************************************************************************/
 /**************** Get parameter with the number of columns *******************/
 /*****************************************************************************/
 
@@ -469,18 +443,6 @@ unsigned ExaSes_GetParNumCols (unsigned DefaultCols)
                                              (unsigned long) ExaSes_MIN_COLS,
                                              (unsigned long) ExaSes_MAX_COLS,
                                              (unsigned long) DefaultCols);	// If parameter does not exists
-  }
-
-/*****************************************************************************/
-/************** Get from form the preference about users' photos *************/
-/*****************************************************************************/
-
-ExaSet_ShowPhotos_t ExaSes_GetParShowPhotos (void)
-  {
-   return (unsigned) Par_GetParUnsignedLong ("ShowPhotos",
-                                             (unsigned long) 0,
-                                             (unsigned long) (ExaSet_NUM_PHOTOS - 1),
-                                             (unsigned long) ExaSet_PHOTOS_UNKNOWN);	// If parameter does not exists
   }
 
 /*****************************************************************************/
@@ -501,9 +463,9 @@ void ExaSes_UpdateNumCols (struct ExaSes_Session *Session,unsigned NumColsFromFo
 /*****************************************************************************/
 
 void ExaSes_UpdateShowPhotos (struct ExaSes_Session *Session,
-			      ExaSet_ShowPhotos_t ShowPhotosFromForm)
+			      Pho_ShowPhotos_t ShowPhotosFromForm)
   {
-   if (ShowPhotosFromForm != ExaSet_PHOTOS_UNKNOWN &&
+   if (ShowPhotosFromForm != Pho_PHOTOS_UNKNOWN &&
        ShowPhotosFromForm != Session->ShowPhotos)	// Different from stored in database
      {
       Session->ShowPhotos = ShowPhotosFromForm;
@@ -1489,8 +1451,8 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
       Session->NumCols = ExaSes_NUM_COLS_DEFAULT;
 
    /* Get whether to display users' photos */
-   Session->ShowPhotos = (row[11][0] == 'Y') ? ExaSet_PHOTOS_SHOW :
-					       ExaSet_PHOTOS_DONT_SHOW;
+   Session->ShowPhotos = (row[11][0] == 'Y') ? Pho_PHOTOS_SHOW :
+					       Pho_PHOTOS_DONT_SHOW;
   }
 
 /*****************************************************************************/

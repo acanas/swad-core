@@ -43,6 +43,16 @@ typedef enum
    Pho_NO_ZOOM,
   } Pho_Zoom_t;
 
+/***** Show photos when listing students? *****/
+#define Pho_NUM_PHOTOS 3
+typedef enum
+  {
+   Pho_PHOTOS_UNKNOWN,
+   Pho_PHOTOS_DONT_SHOW,
+   Pho_PHOTOS_SHOW,
+  } Pho_ShowPhotos_t;
+#define Pho_PHOTOS_DEFAULT Pho_PHOTOS_SHOW
+
 /***** Average photos of students in degrees ******/
 
 typedef enum
@@ -133,6 +143,9 @@ bool Pho_RemovePhoto (struct Usr_Data *UsrDat);
 void Pho_UpdatePhotoName (struct Usr_Data *UsrDat);
 
 void Pho_ChangePhotoVisibility (void);
+
+void Pho_ShowFormShowPhotos (Pho_ShowPhotos_t CurrentShowPhotos);
+Pho_ShowPhotos_t Pho_GetParShowPhotos (void);
 
 void Pho_CalcPhotoDegree (void);
 void Pho_ShowPhotoDegree (void);

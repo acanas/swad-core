@@ -54,11 +54,11 @@ const char *Exa_DB_Modality[ExaSes_NUM_MODALITIES] =
    [ExaSes_PAPER ] = "paper",
   };
 
-static const char Exa_DB_ShowPhotos[ExaSet_NUM_PHOTOS] =
+static const char Exa_DB_ShowPhotos[Pho_NUM_PHOTOS] =
   {
-   [ExaSet_PHOTOS_UNKNOWN	] = 'Y',
-   [ExaSet_PHOTOS_DONT_SHOW	] = 'N',
-   [ExaSet_PHOTOS_SHOW		] = 'Y',
+   [Pho_PHOTOS_UNKNOWN	] = 'Y',
+   [Pho_PHOTOS_DONT_SHOW	] = 'N',
+   [Pho_PHOTOS_SHOW		] = 'Y',
   };
 
 /*****************************************************************************/

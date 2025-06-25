@@ -1529,7 +1529,7 @@ void ExaRes_ShowExamResultUser (const struct ExaSes_Session *Session,
 	    HTM_Comma (); HTM_SP ();
 	    HTM_Txt (UsrDat->FrstName);
 	   }
-	 if (Session->ShowPhotos == ExaSet_PHOTOS_SHOW)
+	 if (Session->ShowPhotos == Pho_PHOTOS_SHOW)
 	   {
 	    HTM_BR ();
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,

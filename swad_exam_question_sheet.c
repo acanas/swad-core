@@ -115,7 +115,7 @@ static void ExaQstShe_ListOrPrintSheets (Vie_ViewType_t ViewType)
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;
    unsigned NumColsFromForm;
-   ExaSet_ShowPhotos_t ShowPhotosFromForm;
+   Pho_ShowPhotos_t ShowPhotosFromForm;
    char *Title;
    unsigned NumUsrsInList;
    long *LstSelectedUsrCods;
@@ -141,7 +141,7 @@ static void ExaQstShe_ListOrPrintSheets (Vie_ViewType_t ViewType)
    ExaSes_UpdateNumCols (&Session,NumColsFromForm);
 
    /* Get and update whether to display users' photos */
-   ShowPhotosFromForm = ExaSes_GetParShowPhotos ();
+   ShowPhotosFromForm = Pho_GetParShowPhotos ();
    ExaSes_UpdateShowPhotos (&Session,ShowPhotosFromForm);
 
    if (ViewType == Vie_VIEW)

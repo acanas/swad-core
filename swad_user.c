@@ -3582,6 +3582,9 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,
 				       const char *OnSubmit,
 				       bool WithPhotos)
   {
+   extern const char *Txt_Display_photos;
+   Pho_ShowPhotos_t CurrentShowPhotos;
+
    Set_BeginSettingsHead ();
       Set_BeginOneSettingSelector ();
 
@@ -3623,6 +3626,33 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,
 	 Set_EndPref ();
 
       Set_EndOneSettingSelector ();
+
+      /***** Show photos? *****/
+      CurrentShowPhotos = WithPhotos ? Pho_PHOTOS_SHOW :
+				       Pho_PHOTOS_DONT_SHOW;
+      Set_BeginOneSettingSelector ();
+	 Set_BeginPref (CurrentShowPhotos == Pho_PHOTOS_SHOW);
+	    Frm_BeginFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
+	       Grp_PutParsCodGrps ();
+	       Set_PutParUsrListType (Gbl.Usrs.Me.ListType);
+	       if (FuncPars)
+		  FuncPars (Args);
+	       if (OnSubmit)
+		  HTM_BUTTON_Submit_Begin (Txt_Display_photos,NULL,
+					   "class=\"BT_LINK FORM_IN_%s\" onsubmit=\"%s\"",
+					   The_GetSuffix (),OnSubmit);
+	       else
+		  HTM_BUTTON_Submit_Begin (Txt_Display_photos,NULL,
+					   "class=\"BT_LINK FORM_IN_%s\"",
+					   The_GetSuffix ());
+	       HTM_IMG (Cfg_URL_ICON_PUBLIC,"image-portrait.svg",Txt_Display_photos,
+			"class=\"ICO_HIGHLIGHT ICOx20 ICO_%s_%s\"",
+			Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
+	       HTM_BUTTON_End ();
+	    Frm_EndForm ();
+	 Set_EndPref ();
+      Set_EndOneSettingSelector ();
+
    Set_EndSettingsHead ();
   }
 
