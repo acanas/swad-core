@@ -384,16 +384,16 @@ void Tmt_ShowCrsTimeTable (void)
 	    /***** Setting selector *****/
 	    Set_BeginSettingsHead ();
 
-	    /* Select whether show only my groups or all groups */
-	    if ( Timetable.Type == Tmt_MY_TIMETABLE ||
-		(Timetable.Type == Tmt_COURSE_TIMETABLE &&
-		 Gbl.Crs.Grps.NumGrps))
-	       Tmt_PutFormToSelectMyAllGrps (&Timetable);
+	       /* Select whether show only my groups or all groups */
+	       if ( Timetable.Type == Tmt_MY_TIMETABLE ||
+		   (Timetable.Type == Tmt_COURSE_TIMETABLE &&
+		    Gbl.Crs.Grps.NumGrps))
+		  Tmt_PutFormToSelectMyAllGrps (&Timetable);
 
-	    /* Show form to change first day of week */
-	    MyAllGrps = Grp_GetParMyAllGrps ();
-	    Cal_ShowFormToSelFirstDayOfWeek (ActChgTT1stDay[Timetable.Type],
-					     Grp_PutParMyAllGrps,&MyAllGrps);
+	       /* Show form to change first day of week */
+	       MyAllGrps = Grp_GetParMyAllGrps ();
+	       Cal_ShowFormToSelFirstDayOfWeek (ActChgTT1stDay[Timetable.Type],
+						Grp_PutParMyAllGrps,&MyAllGrps);
 
 	    Set_EndSettingsHead ();
 	    break;

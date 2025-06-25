@@ -217,7 +217,8 @@ static void ExaAnsShe_ListOrPrintSheets (Vie_ViewType_t ViewType,
 
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;
-   unsigned NumCols;
+   unsigned NumColsFromForm;
+   ExaSet_ShowPhotos_t ShowPhotosFromForm;
    char *Title;
    unsigned NumUsrsInList;
    long *LstSelectedUsrCods;
@@ -239,8 +240,12 @@ static void ExaAnsShe_ListOrPrintSheets (Vie_ViewType_t ViewType,
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /* Get and update number of columns */
-   NumCols = ExaSes_GetParNumCols (Session.NumCols);
-   ExaSes_UpdateNumCols (&Session,NumCols);
+   NumColsFromForm = ExaSes_GetParNumCols (Session.NumCols);
+   ExaSes_UpdateNumCols (&Session,NumColsFromForm);
+
+   /* Get and update whether to display users' photos */
+   ShowPhotosFromForm = ExaSes_GetParShowPhotos ();
+   ExaSes_UpdateShowPhotos (&Session,ShowPhotosFromForm);
 
    if (ViewType == Vie_VIEW)
      {
@@ -344,8 +349,8 @@ static void ExaAnsShe_ShowMultipleSheets (struct Exa_Exams *Exams,
    struct Usr_Data UsrDat;
    unsigned NumUsr;
 
-   /***** Show form to select columns *****/
-   ExaSes_ShowFormColumns (Session);
+   /***** Settings *****/
+   ExaSes_ShowFormSettings (Session);
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -417,7 +422,7 @@ static void ExaAnsShe_ShowSheet (struct Exa_Exams *Exams,
    Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
 
    /***** Show student *****/
-   ExaRes_ShowExamResultUser (UsrDat);
+   ExaRes_ShowExamResultUser (Session,UsrDat);
 
    /***** Exam description *****/
    Exa_GetAndWriteDescription (Exams->Exam.ExaCod);

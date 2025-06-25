@@ -193,19 +193,19 @@ static void Set_PutIconsToSelectSideCols (void)
                  Hlp_PROFILE_Settings_columns,Box_NOT_CLOSABLE);
       Set_BeginSettingsHead ();
 	 Set_BeginOneSettingSelector ();
-	 for (SideCols  = 0;
-	      SideCols <= Lay_SHOW_BOTH_COLUMNS;
-	      SideCols++)
-	   {
-	    Set_BeginPref (SideCols == Gbl.Prefs.SideCols);
-	       Frm_BeginForm (ActChgSidCol);
-		  Par_PutParUnsigned (NULL,"SideCols",SideCols);
-		  snprintf (Icon,sizeof (Icon),"layout%u%u_32x20.gif",
-			    SideCols >> 1,SideCols & 1);
-		  Ico_PutSettingIconLink (Icon,Ico_UNCHANGED,Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
-	       Frm_EndForm ();
-	    Set_EndPref ();
-	   }
+	    for (SideCols  = 0;
+		 SideCols <= Lay_SHOW_BOTH_COLUMNS;
+		 SideCols++)
+	      {
+	       Set_BeginPref (SideCols == Gbl.Prefs.SideCols);
+		  Frm_BeginForm (ActChgSidCol);
+		     Par_PutParUnsigned (NULL,"SideCols",SideCols);
+		     snprintf (Icon,sizeof (Icon),"layout%u%u_32x20.gif",
+			       SideCols >> 1,SideCols & 1);
+		     Ico_PutSettingIconLink (Icon,Ico_UNCHANGED,Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
+		  Frm_EndForm ();
+	       Set_EndPref ();
+	      }
 	 Set_EndOneSettingSelector ();
       Set_EndSettingsHead ();
    Box_BoxEnd ();

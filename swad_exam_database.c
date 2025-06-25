@@ -41,10 +41,24 @@
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
-const char Exa_DB_InvalidQuestionYN[ExaSet_NUM_VALIDITIES] =
+static const char Exa_DB_InvalidQuestionYN[ExaSet_NUM_VALIDITIES] =
   {
    [ExaSet_INVALID_QUESTION] = 'Y',
    [ExaSet_VALID_QUESTION  ] = 'N',
+  };
+
+const char *Exa_DB_Modality[ExaSes_NUM_MODALITIES] =
+  {
+   [ExaSes_NONE  ] = "none",
+   [ExaSes_ONLINE] = "online",
+   [ExaSes_PAPER ] = "paper",
+  };
+
+static const char Exa_DB_ShowPhotos[ExaSet_NUM_PHOTOS] =
+  {
+   [ExaSet_PHOTOS_UNKNOWN	] = 'Y',
+   [ExaSet_PHOTOS_DONT_SHOW	] = 'N',
+   [ExaSet_PHOTOS_SHOW		] = 'Y',
   };
 
 /*****************************************************************************/
@@ -1287,7 +1301,6 @@ void Exa_DB_RemoveAllSetAnswersFromCrs (long CrsCod)
 
 long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
   {
-   extern const char *ExaSes_ModalityDB[ExaSes_NUM_MODALITIES];
    extern const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE];
 
    return
@@ -1301,7 +1314,8 @@ long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
 				  "EndTime,"
 				  "Title,"
 				  "ShowUsrResults,"
-				  "NumCols)"
+				  "NumCols,"
+				  "ShowPhotos)"
 				" VALUES"
 				" (%ld,"		// ExaCod
                                  "'%c',"		// Hidden
@@ -1311,15 +1325,17 @@ long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
                                  "FROM_UNIXTIME(%ld),"	// End time
 				 "'%s',"		// Title
 				 "'N',"			// ShowUsrResults: Don't show user results initially
-				 "%u)",			// Number of columns
+				 "%u,",			// Number of columns
+				 "'%c')",		// Number of columns
 				Session->ExaCod,
 				HidVis_Hidden_YN[Session->Hidden],
 				Gbl.Usrs.Me.UsrDat.UsrCod,		// Session creator
-				ExaSes_ModalityDB[Session->Modality],	// Modality
+				Exa_DB_Modality[Session->Modality],	// Modality
 				Session->TimeUTC[Dat_STR_TIME],		// Start time
 				Session->TimeUTC[Dat_END_TIME],		// End time
 				Session->Title,				// Title
-				Session->NumCols);			// Number of columns
+				Session->NumCols,			// Number of columns
+				Exa_DB_ShowPhotos[Session->ShowPhotos]);// Show users' photos
   }
 
 /*****************************************************************************/
@@ -1328,7 +1344,6 @@ long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
 
 void Exa_DB_UpdateSession (const struct ExaSes_Session *Session)
   {
-   extern const char *ExaSes_ModalityDB[ExaSes_NUM_MODALITIES];
    extern const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE];
 
    /***** Insert this new exam session into database *****/
@@ -1341,19 +1356,21 @@ void Exa_DB_UpdateSession (const struct ExaSes_Session *Session)
                           "exa_sessions.EndTime=FROM_UNIXTIME(%ld),"
                           "exa_sessions.Title='%s',"
                           "exa_sessions.ShowUsrResults='%c',"
-                          "exa_sessions.NumCols=%u"
+                          "exa_sessions.NumCols=%u,"
+                          "exa_sessions.ShowPhotos='%c'"
 		   " WHERE exa_sessions.SesCod=%ld"
 		     " AND exa_sessions.ExaCod=%ld"		// Extra check
 		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
 		     " AND exa_exams.CrsCod=%ld",		// Extra check
 		   HidVis_Hidden_YN[Session->Hidden],		// Hidden?
-		   ExaSes_ModalityDB[Session->Modality],	// Modality
+		   Exa_DB_Modality[Session->Modality],		// Modality
 	           Session->TimeUTC[Dat_STR_TIME],		// Start time
 		   Session->TimeUTC[Dat_END_TIME],		// End time
 		   Session->Title,				// Title
 		   Session->ShowUsrResults ? 'Y' :
 			                     'N',
 		   Session->NumCols,				// Number of columns
+		   Exa_DB_ShowPhotos[Session->ShowPhotos],	// Show users' photos
 		   Session->SesCod,
 		   Session->ExaCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
@@ -1462,7 +1479,8 @@ unsigned Exa_DB_GetSessions (MYSQL_RES **mysql_res,long ExaCod)
 			  "NOW() BETWEEN StartTime AND EndTime,"	// row[ 7]
 			  "Title,"					// row[ 8]
 			  "ShowUsrResults,"				// row[ 9]
-			  "NumCols"					// row[10]
+			  "NumCols,"					// row[10]
+			  "ShowPhotos"					// row[11]
 		    " FROM exa_sessions"
 		   " WHERE ExaCod=%ld%s%s"
 		" ORDER BY SesCod",
@@ -1495,7 +1513,8 @@ unsigned Exa_DB_GetSessionDataByCod (MYSQL_RES **mysql_res,long SesCod)
 			  "NOW() BETWEEN StartTime AND EndTime,"	// row[ 7]
 			  "Title,"					// row[ 8]
 			  "ShowUsrResults,"				// row[ 9]
-			  "NumCols"					// row[10]
+			  "NumCols,"					// row[10]
+			  "ShowPhotos"					// row[11]
 		    " FROM exa_sessions"
 		   " WHERE SesCod=%ld"
 		     " AND ExaCod IN"		// Extra check
@@ -1589,6 +1608,25 @@ void Exa_DB_UpdateNumCols (const struct ExaSes_Session *Session)
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
+/*****************************************************************************/
+/************ Update whether to show users' photos in a session **************/
+/*****************************************************************************/
+
+void Exa_DB_UpdateShowPhotos (const struct ExaSes_Session *Session)
+  {
+   DB_QueryUPDATE ("can not hide exam sessions",
+		   "UPDATE exa_sessions,"
+		          "exa_exams"
+		     " SET exa_sessions.ShowPhotos='%c'"
+		   " WHERE exa_sessions.SesCod=%ld"
+		     " AND exa_sessions.ExaCod=%ld"		// Extra check
+		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
+		     " AND exa_exams.CrsCod=%ld",		// Extra check
+		   Exa_DB_ShowPhotos[Session->ShowPhotos],	// Show users' photos
+		   Session->SesCod,
+		   Session->ExaCod,
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+  }
 
 /*****************************************************************************/
 /******************* Remove exam session from all tables *********************/

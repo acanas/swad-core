@@ -211,9 +211,9 @@ static void Agd_ShowMyAgenda (struct Agd_Agenda *Agenda)
 
       /***** Put forms to choice which events to show *****/
       Set_BeginSettingsHead ();
-      Agd_ShowFormToSelPast__FutureEvents (Agenda);
-      Agd_ShowFormToSelPrivatPublicEvents (Agenda);
-      Agd_ShowFormToSelHiddenVisiblEvents (Agenda);
+	 Agd_ShowFormToSelPast__FutureEvents (Agenda);
+	 Agd_ShowFormToSelPrivatPublicEvents (Agenda);
+	 Agd_ShowFormToSelHiddenVisiblEvents (Agenda);
       Set_EndSettingsHead ();
 
       /***** Show the current events in the user's agenda *****/
@@ -928,11 +928,11 @@ static void Agd_PutCurrentParsMyAgenda (void *Agenda)
    Each parameter is passed only if its value is distinct to default. */
 
 void Agd_PutParsMyAgenda (unsigned Past__FutureEvents,
-                            unsigned PrivatPublicEvents,
-                            unsigned HiddenVisiblEvents,
-			    Dat_StartEndTime_t Order,
-                            unsigned NumPage,
-                            long AgdCodToEdit)
+                          unsigned PrivatPublicEvents,
+                          unsigned HiddenVisiblEvents,
+			  Dat_StartEndTime_t Order,
+                          unsigned NumPage,
+                          long AgdCodToEdit)
   {
    if (Past__FutureEvents != (Agd_DEFAULT_PAST___EVENTS |
 	                      Agd_DEFAULT_FUTURE_EVENTS))

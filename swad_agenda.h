@@ -114,11 +114,11 @@ void Agd_ShowOtherAgendaAfterLogIn (void);
 void Agd_ReqCreatOrEditEvent (void);
 
 void Agd_PutParsMyAgenda (unsigned Past__FutureEvents,
-                            unsigned PrivatPublicEvents,
-                            unsigned HiddenVisiblEvents,
-			    Dat_StartEndTime_t Order,
-                            unsigned NumPage,
-                            long AgdCodToEdit);
+                          unsigned PrivatPublicEvents,
+                          unsigned HiddenVisiblEvents,
+			  Dat_StartEndTime_t Order,
+                          unsigned NumPage,
+                          long AgdCodToEdit);
 void Agd_PutParEventsOrder (Dat_StartEndTime_t SelectedOrder);
 
 void Agd_AskRemEvent (void);

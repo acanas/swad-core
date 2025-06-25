@@ -638,10 +638,16 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.90.1 (2025-06-18)"
-#define CSS_FILE		"swad24.90.css"
+#define Log_PLATFORM_VERSION	"SWAD 24.91 (2025-06-25)"
+#define CSS_FILE		"swad24.91.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 24.91:    Jun 25, 2025  Select whether to show users' photos in exam sessions. (348202 lines)
+					1 change necessary in database:
+ALTER TABLE exa_sessions ADD COLUMN ShowPhotos ENUM('N','Y') NOT NULL DEFAULT 'Y' AFTER NumCols;
+					Copy the following icon to icon public directory:
+sudo cp icon/image-portrait.svg /var/www/html/swad/icon/
+
 	Version 24.90.1:  Jun 18, 2025  Changes in exams answer sheets. (348076 lines)
 	Version 24.90:    Jun 12, 2025  Changes in exams. (348065 lines)
 	Version 24.89.2:  Jun 10, 2025  Do not change exam session modality when exam prints exist. (347979 lines)

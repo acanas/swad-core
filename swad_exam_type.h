@@ -153,6 +153,15 @@ typedef enum
   } ExaSes_Modality_t;
 #define ExaSes_MODALITY_DEFAULT ExaSes_ONLINE
 
+#define ExaSet_NUM_PHOTOS 3
+typedef enum
+  {
+   ExaSet_PHOTOS_UNKNOWN,
+   ExaSet_PHOTOS_DONT_SHOW,
+   ExaSet_PHOTOS_SHOW,
+  } ExaSet_ShowPhotos_t;
+#define ExaSes_PHOTOS_DEFAULT ExaSet_PHOTOS_SHOW
+
 struct ExaSes_Session
   {
    long SesCod;
@@ -162,9 +171,10 @@ struct ExaSes_Session
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    char Title[ExaSes_MAX_BYTES_TITLE + 1];
    HidVis_HiddenOrVisible_t Hidden;
-   CloOpe_ClosedOrOpen_t Open;	// If now is between start and end dates
-   unsigned NumCols;		// Number of columns in exam sheets
-   bool ShowUsrResults;		// Show exam with results of all questions for the student
+   CloOpe_ClosedOrOpen_t Open;		// If now is between start and end dates
+   bool ShowUsrResults;			// Show exam with results of all questions for the student
+   unsigned NumCols;			// Number of columns in exam sheets
+   ExaSet_ShowPhotos_t ShowPhotos;	// Whether to display users' photos
   };
 
 #endif

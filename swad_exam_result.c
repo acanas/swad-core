@@ -128,9 +128,9 @@ static void ExaRes_ShowExamResultScore (struct ExaPrn_Print *Print,
 static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
 	                                struct ExaPrn_Print *Print,
                                         const struct ExaRes_ICanView *ICanView);
-static void ExaRes_ShowQstsAndAnss (struct Usr_Data *UsrDat,
-				    const struct ExaSes_Session *Session,
+static void ExaRes_ShowQstsAndAnss (const struct ExaSes_Session *Session,
 			            struct ExaPrn_Print *Print,
+			            struct Usr_Data *UsrDat,
 			            unsigned Visibility);
 static void ExaRes_WriteQstAndAns (struct Usr_Data *UsrDat,
 				   struct ExaPrn_Print *Print,
@@ -1341,7 +1341,7 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
 	 Err_NoPermissionExit ();
 
       /* User */
-      ExaRes_ShowExamResultUser (UsrDat);
+      ExaRes_ShowExamResultUser (Session,UsrDat);
 
       /* Start/end time (for user in this exam print) */
       ExaRes_ShowExamResultTime (Print);
@@ -1360,7 +1360,7 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
 
       /* Answers and solutions */
       if (ICanView->Result == Usr_CAN)
-	 ExaRes_ShowQstsAndAnss (UsrDat,Session,Print,Visibility);
+	 ExaRes_ShowQstsAndAnss (Session,Print,UsrDat,Visibility);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -1493,7 +1493,8 @@ void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
 /************************ Show user row in exam result ***********************/
 /*****************************************************************************/
 
-void ExaRes_ShowExamResultUser (struct Usr_Data *UsrDat)
+void ExaRes_ShowExamResultUser (const struct ExaSes_Session *Session,
+				struct Usr_Data *UsrDat)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -1513,7 +1514,7 @@ void ExaRes_ShowExamResultUser (struct Usr_Data *UsrDat)
 	 HTM_Colon ();
       HTM_DIV_End ();
 
-      /***** User's data *****/
+      /***** User's data and photo *****/
       HTM_DIV_Begin ("class=\"Exa_HEAD_RIGHT DAT_%s\"",The_GetSuffix ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
@@ -1528,9 +1529,12 @@ void ExaRes_ShowExamResultUser (struct Usr_Data *UsrDat)
 	    HTM_Comma (); HTM_SP ();
 	    HTM_Txt (UsrDat->FrstName);
 	   }
-	 HTM_BR ();
-	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
-				    ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
+	 if (Session->ShowPhotos == ExaSet_PHOTOS_SHOW)
+	   {
+	    HTM_BR ();
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
+				       ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
+	   }
       HTM_DIV_End ();
 
    /***** End container *****/
@@ -1794,9 +1798,9 @@ static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
 /**************** Show user's and correct answers of a test ******************/
 /*****************************************************************************/
 
-static void ExaRes_ShowQstsAndAnss (struct Usr_Data *UsrDat,
-				    const struct ExaSes_Session *Session,
+static void ExaRes_ShowQstsAndAnss (const struct ExaSes_Session *Session,
 			            struct ExaPrn_Print *Print,
+			            struct Usr_Data *UsrDat,
 			            unsigned Visibility)
   {
    unsigned QstInd;

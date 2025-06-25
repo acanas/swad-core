@@ -93,8 +93,7 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
    Box_BoxBegin (Txt_Calendar,Cal_PutIconsFirstDayOfWeek,NULL,
                  Hlp_PROFILE_Settings_calendar,Box_NOT_CLOSABLE);
       Set_BeginSettingsHead ();
-	 Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,
-					  NULL,NULL);
+	 Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,NULL,NULL);
       Set_EndSettingsHead ();
    Box_BoxEnd ();
   }

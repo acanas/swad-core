@@ -627,7 +627,7 @@ static void ExaPrn_ShowPrintToFill (struct Exa_Exams *Exams,
       Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
 
       /***** Show user and time *****/
-      ExaRes_ShowExamResultUser (&Gbl.Usrs.Me.UsrDat);
+      ExaRes_ShowExamResultUser (Session,&Gbl.Usrs.Me.UsrDat);
 
       /***** Exam description *****/
       Exa_GetAndWriteDescription (Exams->Exam.ExaCod);
