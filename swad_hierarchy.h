@@ -37,6 +37,11 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+Hie_Level_t Hie_GetLevelFromDBStr (const char *HieLvlDBStr);
+const char *Hie_GetDBStrFromLevel (Hie_Level_t HieLvl);
+
+long Hie_GetHieCod (Hie_Level_t HieLvl);
+
 void Hie_SeePending (void);
 
 void Hie_WriteMenuHierarchy (void);

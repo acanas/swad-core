@@ -317,8 +317,10 @@ void Set_DB_UpdateMyColsClassPhoto (unsigned Cols)
 /**** Save my preference about photos in users' list for current course ******/
 /*****************************************************************************/
 
-void Set_DB_UpdateMyPrefAboutListWithPhotosPhoto (bool WithPhotos)
+void Set_DB_UpdateMyPrefAboutListWithPhotosPhoto (Pho_ShowPhotos_t ShowPhotos)
   {
+   extern const char Pho_DB_ShowPhotos[Pho_NUM_PHOTOS];
+
    if (Gbl.Usrs.Me.Logged &&
        Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
       /***** Update number of colums in class photo for current course *****/
@@ -327,8 +329,7 @@ void Set_DB_UpdateMyPrefAboutListWithPhotosPhoto (bool WithPhotos)
 		        " SET ListWithPhotos='%c'"
                       " WHERE UsrCod=%ld"
                         " AND CrsCod=%ld",
-		      WithPhotos ? 'Y' :
-				   'N',
+		      Pho_DB_ShowPhotos[ShowPhotos],
 		      Gbl.Usrs.Me.UsrDat.UsrCod,
 		      Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }

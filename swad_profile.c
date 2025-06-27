@@ -60,6 +60,7 @@
 #include "swad_profile_database.h"
 #include "swad_role.h"
 #include "swad_role_type.h"
+#include "swad_scope.h"
 #include "swad_setting.h"
 #include "swad_setting_database.h"
 #include "swad_theme.h"

@@ -45,6 +45,7 @@
 #include "swad_mail.h"
 #include "swad_record.h"
 #include "swad_session.h"
+#include "swad_setting.h"
 
 /*****************************************************************************/
 /******************************* Public types ********************************/

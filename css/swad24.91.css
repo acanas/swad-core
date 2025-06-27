@@ -1692,6 +1692,7 @@ a:hover img.CENTER_PHOTO_SHOW
 	background-color: #ef5555;
 	border-color: #c33b3b;
 	}
+/*
 .BT_NONE
 	{
 	margin: 0;
@@ -1699,6 +1700,7 @@ a:hover img.CENTER_PHOTO_SHOW
 	border-width: 0;
 	background-color: transparent;
 	}
+*/
 .BT_SUBMIT
 	{
 	margin: 8px auto;
@@ -4412,7 +4414,7 @@ legend {font-size: 12pt; font-weight: bold;}
 /********************************* Preference ********************************/
 .PREF_CONTS
 	{
-	margin: 0 auto;
+	margin: 4px auto;
 	text-align: center;
 	}
 .PREF_CONT
@@ -4424,7 +4426,7 @@ legend {font-size: 12pt; font-weight: bold;}
 	{
 	display: inline-block;
 	box-sizing: border-box;
-	padding: 6px;
+	padding: 4px;
 	text-align: center;
 	vertical-align: middle;
 	border: solid 1px transparent;
@@ -4433,7 +4435,7 @@ legend {font-size: 12pt; font-weight: bold;}
 	{
 	display: inline-block;
 	box-sizing: border-box;
-	padding: 6px;
+	padding: 4px;
 	text-align: center;
 	vertical-align: middle;
 	border: solid 1px rgba(77,136,161,0.5);	/* #4d88a1 */

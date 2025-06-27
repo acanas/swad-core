@@ -54,13 +54,6 @@ const char *Exa_DB_Modality[ExaSes_NUM_MODALITIES] =
    [ExaSes_PAPER ] = "paper",
   };
 
-static const char Exa_DB_ShowPhotos[Pho_NUM_PHOTOS] =
-  {
-   [Pho_PHOTOS_UNKNOWN	] = 'Y',
-   [Pho_PHOTOS_DONT_SHOW	] = 'N',
-   [Pho_PHOTOS_SHOW		] = 'Y',
-  };
-
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -1302,6 +1295,7 @@ void Exa_DB_RemoveAllSetAnswersFromCrs (long CrsCod)
 long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
   {
    extern const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char Pho_DB_ShowPhotos[Pho_NUM_PHOTOS];
 
    return
    DB_QueryINSERTandReturnCode ("can not create exam session",
@@ -1335,7 +1329,7 @@ long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
 				Session->TimeUTC[Dat_END_TIME],		// End time
 				Session->Title,				// Title
 				Session->NumCols,			// Number of columns
-				Exa_DB_ShowPhotos[Session->ShowPhotos]);// Show users' photos
+				Pho_DB_ShowPhotos[Session->ShowPhotos]);// Show users' photos
   }
 
 /*****************************************************************************/
@@ -1345,6 +1339,7 @@ long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
 void Exa_DB_UpdateSession (const struct ExaSes_Session *Session)
   {
    extern const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char Pho_DB_ShowPhotos[Pho_NUM_PHOTOS];
 
    /***** Insert this new exam session into database *****/
    DB_QueryUPDATE ("can not update exam session",
@@ -1370,7 +1365,7 @@ void Exa_DB_UpdateSession (const struct ExaSes_Session *Session)
 		   Session->ShowUsrResults ? 'Y' :
 			                     'N',
 		   Session->NumCols,				// Number of columns
-		   Exa_DB_ShowPhotos[Session->ShowPhotos],	// Show users' photos
+		   Pho_DB_ShowPhotos[Session->ShowPhotos],	// Show users' photos
 		   Session->SesCod,
 		   Session->ExaCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
@@ -1614,6 +1609,8 @@ void Exa_DB_UpdateNumCols (const struct ExaSes_Session *Session)
 
 void Exa_DB_UpdateShowPhotos (const struct ExaSes_Session *Session)
   {
+   extern const char Pho_DB_ShowPhotos[Pho_NUM_PHOTOS];
+
    DB_QueryUPDATE ("can not hide exam sessions",
 		   "UPDATE exa_sessions,"
 		          "exa_exams"
@@ -1622,7 +1619,7 @@ void Exa_DB_UpdateShowPhotos (const struct ExaSes_Session *Session)
 		     " AND exa_sessions.ExaCod=%ld"		// Extra check
 		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
 		     " AND exa_exams.CrsCod=%ld",		// Extra check
-		   Exa_DB_ShowPhotos[Session->ShowPhotos],	// Show users' photos
+		   Pho_DB_ShowPhotos[Session->ShowPhotos],	// Show users' photos
 		   Session->SesCod,
 		   Session->ExaCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);

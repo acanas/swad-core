@@ -25,10 +25,12 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include <string.h>		// For string functions
+
 #include "swad_database.h"
+#include "swad_hierarchy.h"
 #include "swad_hierarchy_database.h"
 #include "swad_hierarchy_type.h"
-#include "swad_scope.h"
 
 /*****************************************************************************/
 /******************* Get number of countries with users **********************/

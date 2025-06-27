@@ -57,12 +57,11 @@ unsigned Set_GetParSideCols (void);
 unsigned Set_GetSideColsFromStr (const char *Str);
 
 //------------------------ My settings on users' list -------------------------
-void Set_GetAndUpdatePrefsAboutUsrList (bool *WithPhotos);
+void Set_GetAndUpdatePrefsAboutUsrList (Pho_ShowPhotos_t *ShowPhotos);
 void Set_PutParUsrListType (Set_ShowUsrsType_t ListType);
 unsigned Set_GetColsClassPhoto (void);
-void Set_PutParListWithPhotos (bool WithPhotos);
+void Set_PutParListWithPhotos (Pho_ShowPhotos_t ShowPhotos);
 void Set_PutParsPrefsAboutUsrList (void);
-bool Set_GetMyPrefAboutListWithPhotosFromDB (void);
 
 void Set_BeginSettingsHead (void);
 void Set_EndSettingsHead (void);

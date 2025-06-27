@@ -56,6 +56,7 @@
 #include "swad_parameter_code.h"
 #include "swad_photo.h"
 #include "swad_photo_database.h"
+#include "swad_photo_type.h"
 #include "swad_privacy.h"
 #include "swad_setting.h"
 #include "swad_setting_database.h"
@@ -131,12 +132,12 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 static void Pho_GetMaxStdsPerDegree (struct Pho_DegPhotos *DegPhotos);
 static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
                                               Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
-                                              bool WithPhotos);
+                                              Pho_ShowPhotos_t ShowPhotos);
 static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,
                                     int *NumStds,int *NumStdsWithPhoto);
 static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
                                         Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
-                                        bool WithPhotos);
+                                        Pho_ShowPhotos_t ShowPhotos);
 
 static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto);
 static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
@@ -1011,25 +1012,27 @@ void Pho_ShowUsrPhotoIfAllowed (struct Usr_Data *UsrDat,
                                 const char *ClassPhoto,Pho_Zoom_t Zoom)
   {
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
-   bool ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
+   Pho_ShowPhotos_t ShowPhotos = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
 
-   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-					NULL,
+   Pho_ShowUsrPhoto (UsrDat,ShowPhotos == Pho_PHOTOS_SHOW ? PhotoURL :
+							    NULL,
 		     ClassPhoto,Zoom);
   }
 
 /*****************************************************************************/
 /********************* Check if user's photo can be shown ********************/
 /*****************************************************************************/
-// Returns true if the photo can be shown and false if not.
-// Public photo means two different things depending on the user's type
+// Returns whether the photo can be shown
 
-bool Pho_ShowingUsrPhotoIsAllowed (struct Usr_Data *UsrDat,
-                                   char PhotoURL[WWW_MAX_BYTES_WWW + 1])
+Pho_ShowPhotos_t Pho_ShowingUsrPhotoIsAllowed (struct Usr_Data *UsrDat,
+					       char PhotoURL[WWW_MAX_BYTES_WWW + 1])
   {
    /***** Photo is shown if I can see it, and it exists *****/
-   return (Pri_CheckIfICanView (UsrDat->PhotoVisibility,UsrDat) == Usr_CAN) ? Pho_BuildLinkToPhoto (UsrDat,PhotoURL) :
-									      false;
+   if (Pri_CheckIfICanView (UsrDat->PhotoVisibility,UsrDat) == Usr_CAN)
+      if (Pho_BuildLinkToPhoto (UsrDat,PhotoURL))
+	 return Pho_PHOTOS_SHOW;
+
+   return Pho_PHOTOS_DONT_SHOW;
   }
 
 /*****************************************************************************/
@@ -1449,7 +1452,7 @@ void Pho_ShowFormShowPhotos (Pho_ShowPhotos_t CurrentShowPhotos)
 	 // Input image can not be used to pass a value to the form,
 	 // so use a button with an image inside
 	 HTM_BUTTON_Submit_Begin (NULL,Usr_FORM_TO_SELECT_USRS_ID,
-				  "name=\"ShowPhotos\" value=\"%u\" class=\"BT_NONE\"",
+				  "name=\"ShowPhotos\" value=\"%u\" class=\"BT_LINK\"",
 				  (unsigned) (CurrentShowPhotos ==
 					      Pho_PHOTOS_SHOW ? Pho_PHOTOS_DONT_SHOW :
 								Pho_PHOTOS_SHOW));
@@ -1471,6 +1474,35 @@ Pho_ShowPhotos_t Pho_GetParShowPhotos (void)
                                              (unsigned long) 0,
                                              (unsigned long) (Pho_NUM_PHOTOS - 1),
                                              (unsigned long) Pho_PHOTOS_UNKNOWN);	// If parameter does not exists
+  }
+
+/*****************************************************************************/
+/***** Get my preference about photos in users' list for current course ******/
+/*****************************************************************************/
+
+Pho_ShowPhotos_t Pho_GetMyPrefAboutListWithPhotosFromDB (void)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   Pho_ShowPhotos_t ShowPhotos = Pho_PHOTOS_DEFAULT;
+
+   /***** If no user logged or not course selected... *****/
+   if (Gbl.Usrs.Me.Logged && Gbl.Hierarchy.Node[Hie_CRS].HieCod)
+     {
+      /***** Get if listing of users must show photos from database *****/
+      if (Set_DB_GetMyPrefAboutListWithPhotosPhoto (&mysql_res))
+        {
+         /* Get number of columns in class photo */
+         row = mysql_fetch_row (mysql_res);
+         ShowPhotos = (row[0][0] == 'Y') ? Pho_PHOTOS_SHOW :
+					   Pho_PHOTOS_DONT_SHOW;
+        }
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
+
+   return ShowPhotos;
   }
 
 /*****************************************************************************/
@@ -1761,13 +1793,13 @@ static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    static void (*ShowOrPrintDegrees[Set_NUM_USR_LIST_TYPES]) (struct Pho_DegPhotos *DegPhotos,
                                                               Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
-                                                              bool WithPhotos) =
+                                                              Pho_ShowPhotos_t ShowPhotos) =
      {
       [Set_USR_LIST_AS_CLASS_PHOTO] = Pho_ShowOrPrintClassPhotoDegrees,
       [Set_USR_LIST_AS_LISTING	  ] = Pho_ShowOrPrintListDegrees,
      };
    struct Pho_DegPhotos DegPhotos;
-   bool WithPhotos;
+   Pho_ShowPhotos_t ShowPhotos;
 
    /***** Get parameters from form *****/
    DegPhotos.TypeOfAverage       = Pho_GetPhotoAvgTypeFromForm ();
@@ -1777,7 +1809,7 @@ static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
+   Set_GetAndUpdatePrefsAboutUsrList (&ShowPhotos);
 
    switch (SeeOrPrint)
      {
@@ -1817,7 +1849,7 @@ static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
    /***** Draw the classphoto/list *****/
    if (ShowOrPrintDegrees[Gbl.Usrs.Me.ListType])
-      ShowOrPrintDegrees[Gbl.Usrs.Me.ListType] (&DegPhotos,SeeOrPrint,WithPhotos);
+      ShowOrPrintDegrees[Gbl.Usrs.Me.ListType] (&DegPhotos,SeeOrPrint,ShowPhotos);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -2184,7 +2216,7 @@ static void Pho_GetMaxStdsPerDegree (struct Pho_DegPhotos *DegPhotos)
 
 static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
                                               Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
-                                              bool WithPhotos)
+                                              Pho_ShowPhotos_t ShowPhotos)
   {
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    MYSQL_RES *mysql_res;
@@ -2203,7 +2235,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
       /***** Form to select type of list used to display degree photos *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
 	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg,Pho_PutParsDegPhoto,DegPhotos,
-					   NULL,WithPhotos);
+					   NULL,ShowPhotos);
 
       HTM_TABLE_BeginCenter ();
 
@@ -2265,7 +2297,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 
 static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
                                         Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
-                                        bool WithPhotos)
+                                        Pho_ShowPhotos_t ShowPhotos)
   {
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_No_INDEX;
@@ -2288,7 +2320,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
       if (SeeOrPrint == Pho_DEGREES_SEE)
 	 /***** Form to select type of list used to display degree photos *****/
 	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg,Pho_PutParsDegPhoto,DegPhotos,
-					   NULL,WithPhotos);
+					   NULL,ShowPhotos);
 
       /***** Write heading *****/
       HTM_TABLE_BeginCenterPadding (2);
@@ -2345,7 +2377,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 		  Pho_GetNumStdsInDegree (Deg.HieCod,Sex,&NumStds,&NumStdsWithPhoto);
 		  HTM_TD_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s RM %s\"",
 		                The_GetSuffix (),The_GetColorRows ());
-		     if (WithPhotos)
+		     if (ShowPhotos == Pho_PHOTOS_SHOW)
 			Pho_ShowDegreeAvgPhotoAndStat (&Deg,DegPhotos,
 						       SeeOrPrint,Sex,
 						       NumStds,NumStdsWithPhoto);

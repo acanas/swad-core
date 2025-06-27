@@ -52,6 +52,7 @@
 #include "swad_program.h"
 #include "swad_resource.h"
 #include "swad_role.h"
+#include "swad_scope.h"
 #include "swad_setting.h"
 #include "swad_survey.h"
 #include "swad_survey_database.h"

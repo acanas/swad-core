@@ -28,6 +28,7 @@
 #include "swad_alert.h"
 #include "swad_database.h"
 #include "swad_figure_database.h"
+#include "swad_hierarchy.h"
 
 /*****************************************************************************/
 /****************** Update unsigned figure value into cache ******************/

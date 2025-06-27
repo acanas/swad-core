@@ -239,7 +239,7 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
    bool GetUsrsInCrs;
    bool OtherRecipientsBefore = false;
    char *ClassInput;
-   bool WithPhotos;
+   Pho_ShowPhotos_t ShowPhotos;
 
    Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs =
    Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs =
@@ -267,7 +267,7 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
       /***** Get and update type of list,
 	     number of columns in class photo
 	     and preference about view photos *****/
-      Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
+      Set_GetAndUpdatePrefsAboutUsrList (&ShowPhotos);
 
       /***** Get groups to show ******/
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -305,7 +305,7 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
 		  /***** Form to select type of list used for select several users *****/
 		  Usr_ShowFormsToSelectUsrListType (NextAction,Msg_PutParsWriteMsg,Messages,
 						    "CopyMessageToHiddenFields();",
-						    WithPhotos);
+						    ShowPhotos);
 
 		  /***** Put link to register students *****/
 		  Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs ();
@@ -362,7 +362,7 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
 		       {
 			/***** Show potential recipients *****/
 			HTM_TABLE_Begin ("TBL_SCROLL_C2");
-			   Usr_ListUsersToSelect (&Gbl.Usrs.Selected,WithPhotos);
+			   Usr_ListUsersToSelect (&Gbl.Usrs.Selected,ShowPhotos);
 			   OtherRecipientsBefore = true;
 			HTM_TABLE_End ();
 		       }
@@ -2518,7 +2518,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
    bool Deleted;
    bool OpenByDst;
    bool UsrValid;
-   bool ShowPhoto;
+   Pho_ShowPhotos_t ShowPhotos;
    const char *Title;
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
 
@@ -2540,7 +2540,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 	 else	// A lot of recipients
 	    /***** Get parameter that indicates if I want to see all recipients *****/
 	    NumRecipients.ToShow = Par_GetParBool ("SeeAllRcpts") ? NumRecipients.Known :
-								      Msg_DEF_RECIPIENTS_TO_SHOW;
+								    Msg_DEF_RECIPIENTS_TO_SHOW;
 
 	 /***** Initialize structure with user's data *****/
 	 Usr_UsrDataConstructor (&UsrDat);
@@ -2584,10 +2584,10 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 
 	       /* Put user's photo */
 	       HTM_TD_Begin ("class=\"CT\" style=\"width:30px;\"");
-		  ShowPhoto = (UsrValid ? Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL) :
-					  false);
-		  Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-							NULL,
+		  ShowPhotos = (UsrValid ? Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL) :
+					   Pho_PHOTOS_DONT_SHOW);
+		  Pho_ShowUsrPhoto (&UsrDat,ShowPhotos == Pho_PHOTOS_SHOW ? PhotoURL :
+									    NULL,
 				    ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 	       HTM_TD_End ();
 

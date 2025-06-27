@@ -27,6 +27,7 @@
 
 #include <limits.h>		// For maximum values
 #include <linux/limits.h>	// For PATH_MAX
+#include <mysql/mysql.h>	// To access MySQL databases
 #include <stddef.h>		// For NULL
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
@@ -45,6 +46,7 @@
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_role.h"
+#include "swad_scope.h"
 #include "swad_string.h"
 #include "swad_user.h"
 

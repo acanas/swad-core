@@ -48,9 +48,5 @@ unsigned Sco_GetAllowedScopesForListingGuests (void);
 unsigned Sco_GetAllowedScopesForListingStudents (void);
 
 Hie_Level_t Sco_GetScopeFromUnsignedStr (const char *UnsignedStr);
-Hie_Level_t Hie_GetLevelFromDBStr (const char *HieLvlDBStr);
-const char *Hie_GetDBStrFromLevel (Hie_Level_t HieLvl);
-
-long Hie_GetHieCod (Hie_Level_t HieLvl);
 
 #endif

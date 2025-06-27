@@ -61,7 +61,7 @@ extern struct Globals Gbl;
 /************************* Private global variables **************************/
 /*****************************************************************************/
 
-static bool Set_WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
+static Pho_ShowPhotos_t Set_ShowPhotos = Pho_PHOTOS_DEFAULT;
 static unsigned Set_ClassPhotoCols = Usr_CLASS_PHOTO_COLS_DEF;
 
 /*****************************************************************************/
@@ -80,8 +80,7 @@ static unsigned Set_GetMyColsClassPhotoFromDB (void);
 static void Set_PutParColsClassPhoto (void);
 static unsigned Set_GetParColsClassPhotoFromForm (void);
 
-static bool Set_GetAndUpdatePrefAboutListWithPhotos (void);
-static bool Set_GetParListWithPhotosFromForm (bool *WithPhotos);
+static Pho_ShowPhotos_t Set_GetAndUpdatePrefAboutListWithPhotos (void);
 
 /*****************************************************************************/
 /***************************** Edit settings ******************************/
@@ -271,7 +270,7 @@ unsigned Set_GetSideColsFromStr (const char *Str)
 /****************** and preference about viewing photos **********************/
 /*****************************************************************************/
 
-void Set_GetAndUpdatePrefsAboutUsrList (bool *WithPhotos)
+void Set_GetAndUpdatePrefsAboutUsrList (Pho_ShowPhotos_t *ShowPhotos)
   {
    /***** Get and update type of list *****/
    Set_GetAndUpdateUsrListType ();
@@ -280,7 +279,7 @@ void Set_GetAndUpdatePrefsAboutUsrList (bool *WithPhotos)
    Set_SetColsClassPhoto ();
 
    /***** Get and update preference about viewing photos *****/
-   *WithPhotos = Set_GetAndUpdatePrefAboutListWithPhotos ();
+   *ShowPhotos = Set_GetAndUpdatePrefAboutListWithPhotos ();
   }
 
 /*****************************************************************************/
@@ -440,20 +439,27 @@ static unsigned Set_GetParColsClassPhotoFromForm (void)
 /********** Get and update preference about photos in users' list ************/
 /*****************************************************************************/
 
-static bool Set_GetAndUpdatePrefAboutListWithPhotos (void)
+static Pho_ShowPhotos_t Set_GetAndUpdatePrefAboutListWithPhotos (void)
   {
-   bool WithPhotos;
+   Pho_ShowPhotos_t ShowPhotos;
 
-   /***** Get my preference about photos in users' list from form *****/
-   if (Set_GetParListWithPhotosFromForm (&WithPhotos))
-      /* Save preference about photos in users' list into the database */
-      Set_DB_UpdateMyPrefAboutListWithPhotosPhoto (WithPhotos);
-   else
-      /* If parameter can't be retrieved from form,
-         get my preference from database */
-      WithPhotos = Set_GetMyPrefAboutListWithPhotosFromDB ();
+   /***** Get and update whether to display users' photos *****/
+   ShowPhotos = Pho_GetParShowPhotos ();
+   switch (ShowPhotos)
+     {
+      case Pho_PHOTOS_DONT_SHOW:
+      case Pho_PHOTOS_SHOW:
+	 Set_DB_UpdateMyPrefAboutListWithPhotosPhoto (ShowPhotos);
+	 break;
+      case Pho_PHOTOS_UNKNOWN:
+      default:
+	 /* If parameter can't be retrieved from form,
+	    get my preference from database */
+	 ShowPhotos = Pho_GetMyPrefAboutListWithPhotosFromDB ();
+	 break;
+     }
 
-   return Set_WithPhotos = WithPhotos;
+   return Set_ShowPhotos = ShowPhotos;
   }
 
 /*****************************************************************************/
@@ -466,64 +472,17 @@ void Set_PutParsPrefsAboutUsrList (void)
   {
    Set_PutParUsrListType (Gbl.Usrs.Me.ListType);
    Set_PutParColsClassPhoto ();
-   Set_PutParListWithPhotos (Set_WithPhotos);
+   Set_PutParListWithPhotos (Set_ShowPhotos);
   }
 
 /*****************************************************************************/
 /** Put a hidden parameter with the preference about photos in users' list ***/
 /*****************************************************************************/
 
-void Set_PutParListWithPhotos (bool WithPhotos)
+void Set_PutParListWithPhotos (Pho_ShowPhotos_t ShowPhotos)
   {
-   Par_PutParChar ("WithPhotosExists",'Y');
-   Par_PutParChar ("WithPhotos",WithPhotos ? 'Y' :
-                        	             'N');
-  }
-
-/*****************************************************************************/
-/********* Get from form the preference about photos in users' list **********/
-/*****************************************************************************/
-
-static bool Set_GetParListWithPhotosFromForm (bool *WithPhotos)
-  {
-   /***** Get if exists parameter with preference about photos in users' list *****/
-   if (Par_GetParBool ("WithPhotosExists"))
-     {
-      /***** Parameter with preference about photos in users' list exists, so get it *****/
-      *WithPhotos = Par_GetParBool ("WithPhotos");
-      return true;
-     }
-
-   *WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
-   return false;
-  }
-
-/*****************************************************************************/
-/***** Get my preference about photos in users' list for current course ******/
-/*****************************************************************************/
-
-bool Set_GetMyPrefAboutListWithPhotosFromDB (void)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   bool WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
-
-   /***** If no user logged or not course selected... *****/
-   if (Gbl.Usrs.Me.Logged && Gbl.Hierarchy.Node[Hie_CRS].HieCod)
-     {
-      /***** Get if listing of users must show photos from database *****/
-      if (Set_DB_GetMyPrefAboutListWithPhotosPhoto (&mysql_res))
-        {
-         /* Get number of columns in class photo */
-         row = mysql_fetch_row (mysql_res);
-         WithPhotos = (row[0][0] == 'Y');
-        }
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-
-   return WithPhotos;
+   if (ShowPhotos != Pho_PHOTOS_UNKNOWN)
+      Par_PutParUnsigned (NULL,"ShowPhotos",(unsigned) ShowPhotos);
   }
 
 /*****************************************************************************/

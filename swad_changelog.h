@@ -638,10 +638,11 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.91.1 (2025-06-25)"
+#define Log_PLATFORM_VERSION	"SWAD 24.92 (2025-06-27)"
 #define CSS_FILE		"swad24.91.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 24.92:    Jun 27, 2025  Changes in users' listing. (348312 lines)
 	Version 24.91.1:  Jun 25, 2025  Changes in users' listing. Not finished. (348232 lines)
 	Version 24.91:    Jun 25, 2025  Select whether to show users' photos in exam sessions. (348202 lines)
 					1 change necessary in database:

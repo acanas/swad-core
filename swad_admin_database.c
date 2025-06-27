@@ -30,6 +30,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

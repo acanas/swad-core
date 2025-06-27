@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #include <stdlib.h>		// For free
+#include <string.h>		// For string functions
 
 #include "swad_action_list.h"
 #include "swad_alert.h"
@@ -140,6 +141,67 @@ static void Hie_WriteRowMyHierarchy (Hie_Level_t HieLvl,
 				     const struct Hie_Node Hie[Hie_NUM_LEVELS],
 				     Lay_Highlight_t Highlight,
 				     Lay_LastItem_t IsLastItemInLevel[1 + 6]);
+
+/*****************************************************************************/
+/***************** Get hierarchy level from database string ******************/
+/*****************************************************************************/
+
+Hie_Level_t Hie_GetLevelFromDBStr (const char *HieLvlDBStr)
+  {
+   Hie_Level_t HieLvl;
+
+   for (HieLvl  = (Hie_Level_t) 0;
+	HieLvl <= (Hie_Level_t) (Hie_NUM_LEVELS - 1);
+	HieLvl++)
+      if (!strcmp (Hie_GetDBStrFromLevel (HieLvl),HieLvlDBStr))
+	 return HieLvl;
+
+   return Hie_UNK;
+  }
+
+/*****************************************************************************/
+/****************** Get database string from hierarchy level *****************/
+/*****************************************************************************/
+
+const char *Hie_GetDBStrFromLevel (Hie_Level_t HieLvl)
+  {
+   static const char *Sco_ScopeDB[Hie_NUM_LEVELS] =
+     {
+      [Hie_UNK] = "Unk",
+      [Hie_SYS] = "Sys",
+      [Hie_CTY] = "Cty",
+      [Hie_INS] = "Ins",
+      [Hie_CTR] = "Ctr",
+      [Hie_DEG] = "Deg",
+      [Hie_CRS] = "Crs",
+     };
+
+   if (HieLvl >= Hie_NUM_LEVELS)
+      HieLvl = Hie_UNK;
+
+   return Sco_ScopeDB[HieLvl];
+  }
+
+/*****************************************************************************/
+/************************** Get current hierarchy code ***********************/
+/*****************************************************************************/
+
+long Hie_GetHieCod (Hie_Level_t HieLvl)
+  {
+   switch (HieLvl)
+     {
+      case Hie_SYS:
+      case Hie_CTY:
+      case Hie_INS:
+      case Hie_CTR:
+      case Hie_DEG:
+      case Hie_CRS:
+	 return Gbl.Hierarchy.Node[HieLvl].HieCod;
+      default:
+	 Err_WrongHierarchyLevelExit ();
+	 return -1L;	// Not reached
+     }
+  }
 
 /*****************************************************************************/
 /********** List pending institutions, centers, degrees and courses **********/

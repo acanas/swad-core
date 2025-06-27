@@ -153,7 +153,7 @@ static struct
 struct Usr_ListingPars
   {
    Hie_Level_t HieLvl;
-   bool WithPhotos;
+   Pho_ShowPhotos_t ShowPhotos;
   };
 
 /*****************************************************************************/
@@ -215,12 +215,15 @@ static void Usr_SetMyPrefsAndRoles (void);
 
 static void Usr_PutLinkToLogOut (__attribute__((unused)) void *Args);
 
-static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,bool ShowPhoto);
+static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,
+				    Pho_ShowPhotos_t ShowPhotos);
 static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
-				    bool ShowPhoto,Hie_Level_t HieLvl);
-static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,bool ShowPhoto);
+				    Pho_ShowPhotos_t ShowPhotos,
+				    Hie_Level_t HieLvl);
+static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
+				    Pho_ShowPhotos_t ShowPhotos);
 static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat,
-				 bool ShowPhoto);
+				 Pho_ShowPhotos_t ShowPhotos);
 static void Usr_WriteUsrSurnamesAndName (struct Usr_Data *UsrDat,
                                          const char *BgColor);
 static void Usr_WriteEmail (struct Usr_Data *UsrDat,const char *BgColor);
@@ -249,22 +252,26 @@ static void Set_FormToSelectUsrListType (Act_Action_t NextAction,
 					 void (*FuncPars) (void *Args),void *Args,
 					 const char *OnSubmit,
 					 Set_ShowUsrsType_t ListType,
-					 bool WithPhotos);
+					 Pho_ShowPhotos_t ShowPhotos);
 static void Usr_ListUsersByRoleToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
-					 Rol_Role_t Role,bool WithPhotos);
+					 Rol_Role_t Role,Pho_ShowPhotos_t ShowPhotos);
 static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
-				      Rol_Role_t Role,bool WithPhotos);
+				      Rol_Role_t Role,Pho_ShowPhotos_t ShowPhotos);
 static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role);
 
-static void Usr_PutCheckboxListWithPhotos (bool WithPhotos);
+static void Usr_PutButtonListWithPhotos (Pho_ShowPhotos_t ShowPhotos);
 
-static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr,bool WithPhotos);
-static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr,bool WithPhotos);
+static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr,
+				  Pho_ShowPhotos_t ShowPhotos);
+static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr,
+				  Pho_ShowPhotos_t ShowPhotos);
 static void Usr_ListMainDataTchs (Rol_Role_t Role,
-				  bool PutCheckBoxToSelectUsr,bool WithPhotos);
+				  bool PutCheckBoxToSelectUsr,
+				  Pho_ShowPhotos_t ShowPhotos);
 static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
                                      const char *FieldNames[Usr_NUM_ALL_FIELDS_DATA_TCH],
-                                     unsigned NumColumns,bool WithPhotos);
+                                     unsigned NumColumns,
+                                     Pho_ShowPhotos_t ShowPhotos);
 
 static void Usr_PutLinkToSeeAdmins (void);
 static void Usr_PutLinkToSeeGuests (void);
@@ -275,25 +282,25 @@ static void Usr_ShowOneListUsrsAction (Usr_ListUsrsAction_t ListUsrsAction,
                                        const char *Label);
 static Usr_ListUsrsAction_t Usr_GetListUsrsAction (Usr_ListUsrsAction_t DefaultAction);
 
-static void Usr_PutIconsListGsts (void *WithPhotos);
-static void Usr_PutIconsListStds (void *WithPhotos);
+static void Usr_PutIconsListGsts (void *ShowPhotos);
+static void Usr_PutIconsListStds (void *ShowPhotos);
 static void Usr_PutIconsListTchs (void *ListingPars);
 
-static void Usr_PutIconToPrintGsts (bool WithPhotos);
-static void Usr_PutIconToPrintStds (bool WithPhotos);
+static void Usr_PutIconToPrintGsts (Pho_ShowPhotos_t ShowPhotos);
+static void Usr_PutIconToPrintStds (Pho_ShowPhotos_t ShowPhotos);
 static void Usr_PutIconToPrintTchs (struct Usr_ListingPars *ListingPars);
-static void Usr_PutIconToShowGstsAllData (bool WithPhotos);
-static void Usr_PutIconToShowStdsAllData (bool WithPhotos);
-static void Usr_PutIconToShowTchsAllData (bool WithPhotos);
-static void Usr_ShowGstsAllDataPars (void *WithPhotos);
-static void Usr_ShowStdsAllDataPars (void *WithPhotos);
+static void Usr_PutIconToShowGstsAllData (Pho_ShowPhotos_t ShowPhotos);
+static void Usr_PutIconToShowStdsAllData (Pho_ShowPhotos_t ShowPhotos);
+static void Usr_PutIconToShowTchsAllData (Pho_ShowPhotos_t ShowPhotos);
+static void Usr_ShowGstsAllDataPars (void *ShowPhotos);
+static void Usr_ShowStdsAllDataPars (void *ShowPhotos);
 static void Usr_ShowTchsAllDataPars (void *ListingPars);
 
 static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
                                 Rol_Role_t Role,
 				Usr_ClassPhotoType_t ClassPhotoType,
 				bool PutCheckBoxToSelectUsr,
-				bool WithPhotos);
+				Pho_ShowPhotos_t ShowPhotos);
 static void Usr_PutSelectorNumColsClassPhoto (void);
 
 static void Usr_GetAndShowNumUsrsInCrss (Hie_Level_t HieLvl,Rol_Role_t Role);
@@ -2149,7 +2156,7 @@ void Usr_UpdateMyLastData (void)
 void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
                               bool PutCheckBoxToSelectUsr,Rol_Role_t Role,
 			      struct Usr_SelectedUsrs *SelectedUsrs,
-			      bool ShowPhoto)
+			      Pho_ShowPhotos_t ShowPhotos)
   {
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_Enrolment_confirmed;
@@ -2212,7 +2219,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
       HTM_TD_End ();
 
       /***** Show user's photo *****/
-      if (ShowPhoto)
+      if (ShowPhotos == Pho_PHOTOS_SHOW)
 	{
 	 HTM_TD_Begin ("class=\"CM %s\"",BgColor);
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
@@ -2245,7 +2252,8 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
 /*************** Write a row of a table with the data of a guest *************/
 /*****************************************************************************/
 
-static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,bool ShowPhoto)
+static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,
+				    Pho_ShowPhotos_t ShowPhotos)
   {
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -2262,7 +2270,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,bool ShowPhoto)
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
-      if (ShowPhoto)
+      if (ShowPhotos == Pho_PHOTOS_SHOW)
 	{
 	 /***** Show guest's photo *****/
 	 HTM_TD_Begin ("class=\"%s LM\"",The_GetColorRows ());
@@ -2336,7 +2344,8 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,bool ShowPhoto)
 /*****************************************************************************/
 
 static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
-				    bool ShowPhoto,Hie_Level_t HieLvl)
+				    Pho_ShowPhotos_t ShowPhotos,
+				    Hie_Level_t HieLvl)
   {
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -2359,7 +2368,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
-      if (ShowPhoto)
+      if (ShowPhotos == Pho_PHOTOS_SHOW)
 	{
 	 /***** Show student's photo *****/
 	 HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
@@ -2451,7 +2460,8 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
 /*** Write a row of a table with the data of a teacher or an administrator ***/
 /*****************************************************************************/
 
-static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,bool ShowPhoto)
+static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
+				    Pho_ShowPhotos_t ShowPhotos)
   {
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -2470,7 +2480,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,bool ShowPhoto)
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
-      if (ShowPhoto)
+      if (ShowPhotos == Pho_PHOTOS_SHOW)
 	{
 	 /***** Show teacher's photo *****/
 	 HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
@@ -2533,7 +2543,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,bool ShowPhoto)
 /*****************************************************************************/
 
 static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat,
-				 bool ShowPhoto)
+				 Pho_ShowPhotos_t ShowPhotos)
   {
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -2554,7 +2564,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat,
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
 
-      if (ShowPhoto)
+      if (ShowPhotos == Pho_PHOTOS_SHOW)
 	{
 	 /***** Show administrator's photo *****/
 	 HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
@@ -2585,8 +2595,8 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat,
 
    /***** Write degrees which are administrated by this administrator *****/
    Hie_GetAndWriteInsCtrDegAdminBy (UsrDat->UsrCod,
-                                    ShowPhoto ? Usr_NUM_MAIN_FIELDS_DATA_ADM :
-                                	        Usr_NUM_MAIN_FIELDS_DATA_ADM - 1);
+                                    ShowPhotos == Pho_PHOTOS_SHOW ? Usr_NUM_MAIN_FIELDS_DATA_ADM :
+                                				    Usr_NUM_MAIN_FIELDS_DATA_ADM - 1);
   }
 
 /*****************************************************************************/
@@ -3580,10 +3590,9 @@ void Usr_FreeListOtherRecipients (void)
 void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,
 				       void (*FuncPars) (void *Args),void *Args,
 				       const char *OnSubmit,
-				       bool WithPhotos)
+				       Pho_ShowPhotos_t ShowPhotos)
   {
    extern const char *Txt_Display_photos;
-   Pho_ShowPhotos_t CurrentShowPhotos;
 
    Set_BeginSettingsHead ();
       Set_BeginOneSettingSelector ();
@@ -3593,13 +3602,15 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,
 
 	    Set_FormToSelectUsrListType (NextAction,FuncPars,Args,OnSubmit,
 					 Set_USR_LIST_AS_CLASS_PHOTO,
-					 WithPhotos);
+					 ShowPhotos);
+
+	    HTM_NBSP ();
 
 	    /* Number of columns in the class photo */
 	    Frm_BeginFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
 	       Grp_PutParsCodGrps ();
 	       Set_PutParUsrListType (Set_USR_LIST_AS_CLASS_PHOTO);
-	       Set_PutParListWithPhotos (WithPhotos);
+	       Set_PutParListWithPhotos (ShowPhotos);
 	       Usr_PutSelectorNumColsClassPhoto ();
 	       if (FuncPars)
 		  FuncPars (Args);
@@ -3612,26 +3623,15 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,
 
 	    Set_FormToSelectUsrListType (NextAction,FuncPars,Args,OnSubmit,
 					 Set_USR_LIST_AS_LISTING,
-					 WithPhotos);
-
-	    /* See the photos in list? */
-	    Frm_BeginFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
-	       Grp_PutParsCodGrps ();
-	       Set_PutParUsrListType (Set_USR_LIST_AS_LISTING);
-	       if (FuncPars)
-		  FuncPars (Args);
-	       Usr_PutCheckboxListWithPhotos (WithPhotos);
-	    Frm_EndForm ();
+					 ShowPhotos);
 
 	 Set_EndPref ();
 
       Set_EndOneSettingSelector ();
 
       /***** Show photos? *****/
-      CurrentShowPhotos = WithPhotos ? Pho_PHOTOS_SHOW :
-				       Pho_PHOTOS_DONT_SHOW;
       Set_BeginOneSettingSelector ();
-	 Set_BeginPref (CurrentShowPhotos == Pho_PHOTOS_SHOW);
+	 Set_BeginPref (ShowPhotos == Pho_PHOTOS_SHOW);
 	    Frm_BeginFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
 	       Grp_PutParsCodGrps ();
 	       Set_PutParUsrListType (Gbl.Usrs.Me.ListType);
@@ -3639,15 +3639,24 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,
 		  FuncPars (Args);
 	       if (OnSubmit)
 		  HTM_BUTTON_Submit_Begin (Txt_Display_photos,NULL,
-					   "class=\"BT_LINK FORM_IN_%s\" onsubmit=\"%s\"",
-					   The_GetSuffix (),OnSubmit);
+					   "name=\"ShowPhotos\" value=\"%u\""
+					   " class=\"BT_LINK\" onsubmit=\"%s\"",
+					   (unsigned) (ShowPhotos ==
+						       Pho_PHOTOS_SHOW ? Pho_PHOTOS_DONT_SHOW :
+									 Pho_PHOTOS_SHOW),
+					   OnSubmit);
 	       else
 		  HTM_BUTTON_Submit_Begin (Txt_Display_photos,NULL,
-					   "class=\"BT_LINK FORM_IN_%s\"",
-					   The_GetSuffix ());
+					   "name=\"ShowPhotos\" value=\"%u\""
+					   " class=\"BT_LINK\"",
+					   (unsigned) (ShowPhotos ==
+						       Pho_PHOTOS_SHOW ? Pho_PHOTOS_DONT_SHOW :
+									 Pho_PHOTOS_SHOW));
+
 	       HTM_IMG (Cfg_URL_ICON_PUBLIC,"image-portrait.svg",Txt_Display_photos,
 			"class=\"ICO_HIGHLIGHT ICOx20 ICO_%s_%s\"",
 			Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
+
 	       HTM_BUTTON_End ();
 	    Frm_EndForm ();
 	 Set_EndPref ();
@@ -3664,7 +3673,7 @@ static void Set_FormToSelectUsrListType (Act_Action_t NextAction,
 					 void (*FuncPars) (void *Args),void *Args,
 					 const char *OnSubmit,
 					 Set_ShowUsrsType_t ListType,
-					 bool WithPhotos)
+					 Pho_ShowPhotos_t ShowPhotos)
   {
    extern const char *Txt_USR_LIST_TYPES[Set_NUM_USR_LIST_TYPES];
 
@@ -3672,7 +3681,7 @@ static void Set_FormToSelectUsrListType (Act_Action_t NextAction,
    Frm_BeginFormAnchorOnSubmit (NextAction,Usr_USER_LIST_SECTION_ID,OnSubmit);
       Grp_PutParsCodGrps ();
       Set_PutParUsrListType (ListType);
-      Set_PutParListWithPhotos (WithPhotos);
+      Set_PutParListWithPhotos (ShowPhotos);
       if (FuncPars)
 	 FuncPars (Args);
 
@@ -3687,8 +3696,6 @@ static void Set_FormToSelectUsrListType (Act_Action_t NextAction,
 				  The_GetSuffix ());
       Ico_PutIcon (Usr_IconsClassPhotoOrList[ListType],Ico_BLACK,
 		   Txt_USR_LIST_TYPES[ListType],"ICO20x20");
-      HTM_NBSP ();
-      HTM_Txt (Txt_USR_LIST_TYPES[ListType]);
       HTM_BUTTON_End ();
 
    /***** End form *****/
@@ -3713,7 +3720,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
       [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
       [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
      };
-   bool WithPhotos;
+   Pho_ShowPhotos_t ShowPhotos;
    unsigned NumTotalUsrs;
 
    /***** Begin box *****/
@@ -3722,7 +3729,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
       /***** Get and update type of list,
 	     number of columns in class photo
 	     and preference about view photos *****/
-      Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
+      Set_GetAndUpdatePrefsAboutUsrList (&ShowPhotos);
 
       /***** Get groups to show ******/
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -3752,7 +3759,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 	      {
 	       /***** Form to select type of list used for select several users *****/
 	       Usr_ShowFormsToSelectUsrListType (NextAction,FuncPars,Args,NULL,
-						 WithPhotos);
+						 ShowPhotos);
 
 	       /***** Link to register students *****/
 	       Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs ();
@@ -3782,7 +3789,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 			/* Data */
 			HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 		           HTM_TABLE_Begin ("TBL_SCROLL_C2");
-			      Usr_ListUsersToSelect (SelectedUsrs,WithPhotos);
+			      Usr_ListUsersToSelect (SelectedUsrs,ShowPhotos);
 			   HTM_TABLE_End ();
 			HTM_TD_End ();
 		     HTM_TR_End ();
@@ -3853,11 +3860,12 @@ void Usr_GetSelectedUsrsAndGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 /********************** List users to select some of them ********************/
 /*****************************************************************************/
 
-void Usr_ListUsersToSelect (struct Usr_SelectedUsrs *SelectedUsrs,bool WithPhotos)
+void Usr_ListUsersToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
+			    Pho_ShowPhotos_t ShowPhotos)
   {
-   Usr_ListUsersByRoleToSelect (SelectedUsrs,Rol_TCH,WithPhotos);
-   Usr_ListUsersByRoleToSelect (SelectedUsrs,Rol_NET,WithPhotos);
-   Usr_ListUsersByRoleToSelect (SelectedUsrs,Rol_STD,WithPhotos);
+   Usr_ListUsersByRoleToSelect (SelectedUsrs,Rol_TCH,ShowPhotos);
+   Usr_ListUsersByRoleToSelect (SelectedUsrs,Rol_NET,ShowPhotos);
+   Usr_ListUsersByRoleToSelect (SelectedUsrs,Rol_STD,ShowPhotos);
   }
 
 /*****************************************************************************/
@@ -3865,7 +3873,7 @@ void Usr_ListUsersToSelect (struct Usr_SelectedUsrs *SelectedUsrs,bool WithPhoto
 /*****************************************************************************/
 
 static void Usr_ListUsersByRoleToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
-					 Rol_Role_t Role,bool WithPhotos)
+					 Rol_Role_t Role,Pho_ShowPhotos_t ShowPhotos)
   {
    /***** If there are no users, don't list anything *****/
    if (!Gbl.Usrs.LstUsrs[Role].NumUsrs)
@@ -3877,10 +3885,10 @@ static void Usr_ListUsersByRoleToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
       case Set_USR_LIST_AS_CLASS_PHOTO:
          Usr_DrawClassPhoto (SelectedUsrs,Role,Usr_CLASS_PHOTO_SEL,
 			     true,	// Put checkbox to select user
-			     WithPhotos);
+			     ShowPhotos);
          break;
       case Set_USR_LIST_AS_LISTING:
-         Usr_ListUsrsForSelection (SelectedUsrs,Role,WithPhotos);
+         Usr_ListUsrsForSelection (SelectedUsrs,Role,ShowPhotos);
          break;
       default:
 	 break;
@@ -3892,7 +3900,7 @@ static void Usr_ListUsersByRoleToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
 /*****************************************************************************/
 
 static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
-				      Rol_Role_t Role,bool WithPhotos)
+				      Rol_Role_t Role,Pho_ShowPhotos_t ShowPhotos)
   {
    unsigned NumUsr;
    struct Usr_Data UsrDat;
@@ -3901,11 +3909,11 @@ static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
      {
       /***** Put a row to select all users *****/
       Usr_PutCheckboxToSelectAllUsers (SelectedUsrs,Role,
-				       Usr_GetColumnsForSelectUsrs (WithPhotos));
+				       Usr_GetColumnsForSelectUsrs (ShowPhotos));
 
       /***** Heading row with column names *****/
       Usr_WriteHeaderFieldsUsrDat (true,	// Columns for the data
-				   WithPhotos);
+				   ShowPhotos);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -3923,7 +3931,7 @@ static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
 
          /* Show row for this user */
          Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,true,Role,SelectedUsrs,
-				  WithPhotos);
+				  ShowPhotos);
 	}
 
       /***** Free memory used for user's data *****/
@@ -4014,11 +4022,11 @@ static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role)
 /**** Get number of table columns, in classphoto or list, to select users ****/
 /*****************************************************************************/
 
-unsigned Usr_GetColumnsForSelectUsrs (bool WithPhotos)
+unsigned Usr_GetColumnsForSelectUsrs (Pho_ShowPhotos_t ShowPhotos)
   {
    return (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO) ? Set_GetColsClassPhoto () :
-                                                                 (WithPhotos ? 1 + Usr_NUM_MAIN_FIELDS_DATA_USR :
-                                                                                   Usr_NUM_MAIN_FIELDS_DATA_USR);
+                                                                 (ShowPhotos == Pho_PHOTOS_SHOW ? 1 + Usr_NUM_MAIN_FIELDS_DATA_USR :
+												      Usr_NUM_MAIN_FIELDS_DATA_USR);
   }
 
 /*****************************************************************************/
@@ -4058,31 +4066,42 @@ void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
   }
 
 /*****************************************************************************/
-/********* Put a checkbox to select whether list users with photos ***********/
+/*********** Put a button to select whether list users with photos ***********/
 /*****************************************************************************/
 
-static void Usr_PutCheckboxListWithPhotos (bool WithPhotos)
+static void Usr_PutButtonListWithPhotos (Pho_ShowPhotos_t ShowPhotos)
   {
    extern const char *Txt_Display_photos;
 
-   Par_PutParChar ("WithPhotosExists",'Y');
-
    /***** Put checkbox to select whether list users with photos *****/
+   /*
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-      HTM_INPUT_CHECKBOX ("WithPhotos",
-			  (WithPhotos ? HTM_CHECKED :
-					HTM_NO_ATTR) |
+      HTM_INPUT_CHECKBOX ("ShowPhotos",
+			  (ShowPhotos == Pho_PHOTOS_SHOW ? HTM_CHECKED :
+							   HTM_NO_ATTR) |
 			  HTM_SUBMIT_ON_CHANGE,
 			  "value=\"Y\"");
       HTM_Txt (Txt_Display_photos);
    HTM_LABEL_End ();
+   */
+   HTM_BUTTON_Submit_Begin (Txt_Display_photos,NULL,
+			    "name=\"ShowPhotos\" value=\"%u\""
+			    " class=\"BT_LINK\"",
+			    (unsigned) (ShowPhotos ==
+					Pho_PHOTOS_SHOW ? Pho_PHOTOS_DONT_SHOW :
+							  Pho_PHOTOS_SHOW));
+      HTM_IMG (Cfg_URL_ICON_PUBLIC,"image-portrait.svg",Txt_Display_photos,
+	       "class=\"ICO_HIGHLIGHT ICOx20 ICO_%s_%s\"",
+	       Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
+   HTM_BUTTON_End ();
   }
 
 /*****************************************************************************/
 /************ Write header with main field names of user's data **************/
 /*****************************************************************************/
 
-void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr,bool WithPhotos)
+void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr,
+				  Pho_ShowPhotos_t ShowPhotos)
   {
    unsigned NumCol;
 
@@ -4096,7 +4115,7 @@ void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr,bool WithPhotos)
       for (NumCol = 0;
 	   NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
 	   NumCol++)
-	 if (NumCol != 2 || WithPhotos)        // Skip photo column if I don't want this column
+	 if (NumCol != 2 || ShowPhotos == Pho_PHOTOS_SHOW)        // Skip photo column if I don't want this column
 	    HTM_TH_Span (*Usr_UsrDatMainFieldNames[NumCol].Txt,
 		          Usr_UsrDatMainFieldNames[NumCol].HeadAlign,
 		         1,1,"BG_HIGHLIGHT");
@@ -4108,7 +4127,8 @@ void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr,bool WithPhotos)
 /************************** List guests' main data ***************************/
 /*****************************************************************************/
 
-static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr,bool WithPhotos)
+static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr,
+				  Pho_ShowPhotos_t ShowPhotos)
   {
    unsigned NumUsr;
    struct Usr_Data UsrDat;
@@ -4118,11 +4138,11 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr,bool WithPhotos)
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
          Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_GST,
-				          Usr_GetColumnsForSelectUsrs (WithPhotos));
+				          Usr_GetColumnsForSelectUsrs (ShowPhotos));
 
       /***** Heading row with column names *****/
       Usr_WriteHeaderFieldsUsrDat (PutCheckBoxToSelectUsr,	// Columns for the data
-				   WithPhotos);
+				   ShowPhotos);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -4141,7 +4161,7 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr,bool WithPhotos)
 	    /* Show row for this guest */
 	    Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,true,Rol_GST,
 				     &Gbl.Usrs.Selected,
-				     WithPhotos);
+				     ShowPhotos);
 	   }
 
       /***** Free memory used for user's data *****/
@@ -4159,7 +4179,8 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr,bool WithPhotos)
 /*************************** List main students' data ************************/
 /*****************************************************************************/
 
-static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr,bool WithPhotos)
+static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr,
+				  Pho_ShowPhotos_t ShowPhotos)
   {
    unsigned NumUsr;
    char *GroupNames = NULL;        // To avoid warning
@@ -4186,11 +4207,11 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr,bool WithPhotos)
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
 	 Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_STD,
-				          Usr_GetColumnsForSelectUsrs (WithPhotos));
+				          Usr_GetColumnsForSelectUsrs (ShowPhotos));
 
       /***** Heading row with column names *****/
       Usr_WriteHeaderFieldsUsrDat (PutCheckBoxToSelectUsr,	// Columns for the data
-				   WithPhotos);
+				   ShowPhotos);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -4210,7 +4231,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr,bool WithPhotos)
          Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,
                                   PutCheckBoxToSelectUsr,Rol_STD,
 				  &Gbl.Usrs.Selected,
-				  WithPhotos);
+				  ShowPhotos);
         }
 
       /***** Free memory used for user's data *****/
@@ -4235,7 +4256,8 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr,bool WithPhotos)
 // - Rol_TCH
 
 static void Usr_ListMainDataTchs (Rol_Role_t Role,
-				  bool PutCheckBoxToSelectUsr,bool WithPhotos)
+				  bool PutCheckBoxToSelectUsr,
+				  Pho_ShowPhotos_t ShowPhotos)
   {
    unsigned NumCol;
    unsigned NumUsr;
@@ -4246,7 +4268,7 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
 	 Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Role,
-				          Usr_GetColumnsForSelectUsrs (WithPhotos));
+				          Usr_GetColumnsForSelectUsrs (ShowPhotos));
 
       /***** Heading row with column names *****/
       /* Begin row */
@@ -4260,7 +4282,8 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,
 	 for (NumCol = 0;
 	      NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
 	      NumCol++)
-	    if (NumCol != 2 || WithPhotos)        // Skip photo column if I don't want this column
+	    if (NumCol != 2 ||
+		ShowPhotos == Pho_PHOTOS_SHOW)        // Skip photo column if I don't want this column
 	       HTM_TH_Span (*Usr_UsrDatMainFieldNames[NumCol].Txt,
 		             Usr_UsrDatMainFieldNames[NumCol].HeadAlign,
 		            1,1,"BG_HIGHLIGHT");
@@ -4286,7 +4309,7 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,
 	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,
 	                          PutCheckBoxToSelectUsr,Role,
 				  &Gbl.Usrs.Selected,
-				  WithPhotos);
+				  ShowPhotos);
         }
 
       /***** Free memory used for user's data *****/
@@ -4313,7 +4336,7 @@ void Usr_ListAllDataGsts (void)
    extern const char *Txt_Date_of_birth;
    unsigned AllowedLvls;
    Hie_Level_t HieLvl;
-   bool WithPhotos;
+   Pho_ShowPhotos_t ShowPhotos;
    unsigned NumColumnsCommonCard;
    unsigned NumCol;
    unsigned NumUsr;
@@ -4339,7 +4362,7 @@ void Usr_ListAllDataGsts (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about viewing photos *****/
-   Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
+   Set_GetAndUpdatePrefsAboutUsrList (&ShowPhotos);
 
    /***** Get scope *****/
    AllowedLvls = Sco_GetAllowedScopesForListingGuests ();
@@ -4360,8 +4383,8 @@ void Usr_ListAllDataGsts (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Columns for the data */
-	    for (NumCol = WithPhotos ? 0 :
-				       1;
+	    for (NumCol = ShowPhotos == Pho_PHOTOS_SHOW ? 0 :
+							  1;
 		 NumCol < NumColumnsCommonCard;
 		 NumCol++)
 	       HTM_TH_Span (FieldNames[NumCol],HTM_HEAD_LEFT,1,1,"BG_HIGHLIGHT");
@@ -4388,7 +4411,7 @@ void Usr_ListAllDataGsts (void)
 					// ...so they have not accepted...
 					// ...inscription in any course
 	       NumUsr++;
-	       Usr_WriteRowGstAllData (&UsrDat,WithPhotos);
+	       Usr_WriteRowGstAllData (&UsrDat,ShowPhotos);
 
 	       The_ChangeRowColor ();
 	      }
@@ -4427,7 +4450,7 @@ void Usr_ListAllDataStds (void)
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
    unsigned AllowedLvls;
    Hie_Level_t HieLvl;
-   bool WithPhotos;
+   Pho_ShowPhotos_t ShowPhotos;
    unsigned NumColsCommonRecord;
    unsigned NumColsRecordAndGroups;
    unsigned NumColsTotal;
@@ -4458,7 +4481,7 @@ void Usr_ListAllDataStds (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about viewing photos *****/
-   Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
+   Set_GetAndUpdatePrefsAboutUsrList (&ShowPhotos);
 
    /***** Get scope *****/
    AllowedLvls = Sco_GetAllowedScopesForListingStudents ();
@@ -4521,8 +4544,8 @@ void Usr_ListAllDataStds (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* 1. Columns for the data */
-	    for (NumCol = WithPhotos ? 0 :
-				       1;
+	    for (NumCol = (ShowPhotos == Pho_PHOTOS_SHOW) ? 0 :
+							    1;
 		 NumCol < NumColsCommonRecord;
 		 NumCol++)
 	       HTM_TH_Span (FieldNames[NumCol],HTM_HEAD_LEFT,1,1,"BG_HIGHLIGHT");
@@ -4563,7 +4586,8 @@ void Usr_ListAllDataStds (void)
 		     for (NumCol = 0;
 			  NumCol < NumColsRecordAndGroups;
 			  NumCol++)
-			if (NumCol != 1 || WithPhotos)        // Skip photo column if I don't want it in listing
+			if (NumCol != 1 ||
+			    ShowPhotos == Pho_PHOTOS_SHOW)        // Skip photo column if I don't want it in listing
 			  {
 			   HTM_TD_Begin ("class=\"LM BG_HIGHLIGHT\"");
 			   HTM_TD_End ();
@@ -4599,7 +4623,7 @@ void Usr_ListAllDataStds (void)
 							// his/her role from database.
 	       UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].Accepted;
 	       NumUsr++;
-	       Usr_WriteRowStdAllData (&UsrDat,GroupNames,WithPhotos,HieLvl);
+	       Usr_WriteRowStdAllData (&UsrDat,GroupNames,ShowPhotos,HieLvl);
 
 	       The_ChangeRowColor ();
 	      }
@@ -4647,7 +4671,7 @@ void Usr_ListAllDataTchs (void)
    extern const char *Txt_Phone;
    unsigned AllowedLvls;
    Hie_Level_t HieLvl;
-   bool WithPhotos;
+   Pho_ShowPhotos_t ShowPhotos;
    unsigned NumUsrs;
    unsigned NumColumns;
    const char *FieldNames[Usr_NUM_ALL_FIELDS_DATA_TCH];
@@ -4668,7 +4692,7 @@ void Usr_ListAllDataTchs (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about viewing photos *****/
-   Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
+   Set_GetAndUpdatePrefsAboutUsrList (&ShowPhotos);
 
    /***** Get scope *****/
    AllowedLvls = 1 << Hie_SYS |
@@ -4705,8 +4729,8 @@ void Usr_ListAllDataTchs (void)
       HTM_TABLE_BeginWide ();
 
 	 /***** List teachers and non-editing teachers *****/
-	 Usr_ListRowsAllDataTchs (Rol_TCH,FieldNames,NumColumns,WithPhotos);
-	 Usr_ListRowsAllDataTchs (Rol_NET,FieldNames,NumColumns,WithPhotos);
+	 Usr_ListRowsAllDataTchs (Rol_TCH,FieldNames,NumColumns,ShowPhotos);
+	 Usr_ListRowsAllDataTchs (Rol_NET,FieldNames,NumColumns,ShowPhotos);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -4726,7 +4750,8 @@ void Usr_ListAllDataTchs (void)
 
 static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
                                      const char *FieldNames[Usr_NUM_ALL_FIELDS_DATA_TCH],
-                                     unsigned NumColumns,bool WithPhotos)
+                                     unsigned NumColumns,
+                                     Pho_ShowPhotos_t ShowPhotos)
   {
    unsigned NumCol;
    struct Usr_Data UsrDat;
@@ -4735,8 +4760,8 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
    /***** Heading row *****/
    HTM_TR_Begin (NULL);
 
-      for (NumCol = WithPhotos ? 0 :
-				 1;
+      for (NumCol = (ShowPhotos == Pho_PHOTOS_SHOW) ? 0 :
+						      1;
 	   NumCol < NumColumns;
 	   NumCol++)
 	 HTM_TH_Span (FieldNames[NumCol],HTM_HEAD_LEFT,1,1,"BG_HIGHLIGHT");
@@ -4760,7 +4785,7 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
 						// his/her role from database.
 	 UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
 	 NumUsr++;
-	 Usr_WriteRowTchAllData (&UsrDat,WithPhotos);
+	 Usr_WriteRowTchAllData (&UsrDat,ShowPhotos);
 
 	 The_ChangeRowColor ();
 	}
@@ -4812,8 +4837,8 @@ unsigned Usr_ListUsrsFound (Hie_Level_t HieLvl,Rol_Role_t Role,
          HTM_TABLE_Begin ("TBL_SCROLL");
 
 	    /***** Heading row with column names *****/
-	    Usr_WriteHeaderFieldsUsrDat (false,	// Columns for the data
-					 true);	// Show photos
+	    Usr_WriteHeaderFieldsUsrDat (false,			// Columns for the data
+					 Pho_PHOTOS_SHOW);	// Show photos
 
 	    /***** Initialize structure with user's data *****/
 	    Usr_UsrDataConstructor (&UsrDat);
@@ -4834,7 +4859,7 @@ unsigned Usr_ListUsrsFound (Hie_Level_t HieLvl,Rol_Role_t Role,
 	       /* Write data of this user */
 	       Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,false,Role,
 					&Gbl.Usrs.Selected,
-					true);	// Show photos
+					Pho_PHOTOS_SHOW);	// Show photos
 
 	       /* Write all courses this user belongs to */
 	       if (Role != Rol_GST &&				// Guests do not belong to any course
@@ -4898,7 +4923,7 @@ void Usr_ListDataAdms (void)
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    unsigned AllowedLvls;
    Hie_Level_t HieLvl;
-   bool WithPhotos;
+   Pho_ShowPhotos_t ShowPhotos;
    unsigned NumCol;
    unsigned NumUsr;
    struct Usr_Data UsrDat;
@@ -4940,7 +4965,7 @@ void Usr_ListDataAdms (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about viewing photos *****/
-   Set_GetAndUpdatePrefsAboutUsrList (&WithPhotos);
+   Set_GetAndUpdatePrefsAboutUsrList (&ShowPhotos);
 
    /***** Get scope *****/
    AllowedLvls = 1 << Hie_SYS |
@@ -4960,7 +4985,7 @@ void Usr_ListDataAdms (void)
       /***** Form to select scope *****/
       HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_BeginForm (ActLstOth);
-	    Set_PutParListWithPhotos (WithPhotos);
+	    Set_PutParListWithPhotos (ShowPhotos);
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_Txt (Txt_Scope); HTM_Colon (); HTM_NBSP ();
 	       Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE,
@@ -4972,14 +4997,27 @@ void Usr_ListDataAdms (void)
       if (Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs)
 	{
 	 /****** Show photos? *****/
+	 Set_BeginSettingsHead ();
+	    Set_BeginOneSettingSelector ();
+	       Set_BeginPref (ShowPhotos == Pho_PHOTOS_SHOW);
+		  Frm_BeginForm (ActLstOth);
+		     Sco_PutParCurrentScope (&HieLvl);
+		     Usr_PutButtonListWithPhotos (ShowPhotos);
+		  Frm_EndForm ();
+	       Set_EndPref ();
+	    Set_EndOneSettingSelector ();
+	 Set_EndSettingsHead ();
+
+	 /*
 	 HTM_DIV_Begin ("class=\"PREF_CONT\"");
 	    HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	       Frm_BeginForm (ActLstOth);
 		  Sco_PutParCurrentScope (&HieLvl);
-		  Usr_PutCheckboxListWithPhotos (WithPhotos);
+		  Usr_PutCheckboxListWithPhotos (ShowPhotos);
 	       Frm_EndForm ();
 	    HTM_DIV_End ();
 	 HTM_DIV_End ();
+	 */
 
 	 /***** Heading row with column names *****/
 	 HTM_TABLE_Begin ("TBL_SCROLL");
@@ -4988,7 +5026,8 @@ void Usr_ListDataAdms (void)
 	       for (NumCol = 0;
 		    NumCol < Usr_NUM_MAIN_FIELDS_DATA_ADM;
 		    NumCol++)
-		  if (NumCol != 1 || WithPhotos)        // Skip photo column if I don't want this column
+		  if (NumCol != 1 ||
+		      ShowPhotos == Pho_PHOTOS_SHOW)        // Skip photo column if I don't want this column
 		     HTM_TH_Span (FieldNames[NumCol],HTM_HEAD_LEFT,1,1,"BG_HIGHLIGHT");
 
 	    HTM_TR_End ();
@@ -5006,7 +5045,7 @@ void Usr_ListDataAdms (void)
 							    Usr_DONT_GET_ROLE_IN_CRS))
 		 {
 		  UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_DEG_ADM].Lst[NumUsr].Accepted;
-		  Usr_WriteRowAdmData (++NumUsr,&UsrDat,WithPhotos);
+		  Usr_WriteRowAdmData (++NumUsr,&UsrDat,ShowPhotos);
 
 		  The_ChangeRowColor ();
 		 }
@@ -5085,7 +5124,7 @@ void Usr_ListGuests (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Set_GetAndUpdatePrefsAboutUsrList (&ListingPars.WithPhotos);
+   Set_GetAndUpdatePrefsAboutUsrList (&ListingPars.ShowPhotos);
 
    /***** Get scope *****/
    AllowedLvls = Sco_GetAllowedScopesForListingGuests ();
@@ -5096,7 +5135,7 @@ void Usr_ListGuests (void)
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],
-                 Usr_PutIconsListGsts,&ListingPars.WithPhotos,
+                 Usr_PutIconsListGsts,&ListingPars.ShowPhotos,
 		 Hlp_USERS_Guests,Box_NOT_CLOSABLE);
 
       /***** Form to select scope *****/
@@ -5128,7 +5167,7 @@ void Usr_ListGuests (void)
 	      {
 	       /***** Form to select type of list of users *****/
 	       Usr_ShowFormsToSelectUsrListType (ActLstGst,Sco_PutParCurrentScope,&ListingPars.HieLvl,
-						 NULL,ListingPars.WithPhotos);
+						 NULL,ListingPars.ShowPhotos);
 
 	       /***** Draw a class photo with guests *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
@@ -5154,11 +5193,11 @@ void Usr_ListGuests (void)
 			Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_GST,
 					    Usr_CLASS_PHOTO_SEL_SEE,
 					    PutForm,	// Put checkbox to select user?
-					    ListingPars.WithPhotos);
+					    ListingPars.ShowPhotos);
 			break;
 		     case Set_USR_LIST_AS_LISTING:
 			Usr_ListMainDataGsts (PutForm,	// Put checkbox to select user?
-					      ListingPars.WithPhotos);
+					      ListingPars.ShowPhotos);
 			break;
 		     default:
 			break;
@@ -5234,7 +5273,7 @@ void Usr_ListStudents (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Set_GetAndUpdatePrefsAboutUsrList (&ListingPars.WithPhotos);
+   Set_GetAndUpdatePrefsAboutUsrList (&ListingPars.ShowPhotos);
 
    /***** Get scope *****/
    AllowedLvls = Sco_GetAllowedScopesForListingStudents ();
@@ -5249,7 +5288,7 @@ void Usr_ListStudents (void)
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
-                 Usr_PutIconsListStds,&ListingPars.WithPhotos,
+                 Usr_PutIconsListStds,&ListingPars.ShowPhotos,
 		 Hlp_USERS_Students,Box_NOT_CLOSABLE);
 
       /***** Form to select scope *****/
@@ -5293,7 +5332,7 @@ void Usr_ListStudents (void)
 	      {
 	       /***** Form to select type of list of users *****/
 	       Usr_ShowFormsToSelectUsrListType (ActLstStd,Sco_PutParCurrentScope,&ListingPars.HieLvl,
-						 NULL,ListingPars.WithPhotos);
+						 NULL,ListingPars.ShowPhotos);
 
 	       /***** Draw a class photo with students of the course *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
@@ -5323,11 +5362,11 @@ void Usr_ListStudents (void)
 			Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_STD,
 					    Usr_CLASS_PHOTO_SEL_SEE,
 					    PutForm,	// Put checkbox to select user?
-					    ListingPars.WithPhotos);
+					    ListingPars.ShowPhotos);
 			break;
 		     case Set_USR_LIST_AS_LISTING:
 			Usr_ListMainDataStds (PutForm,	// Put checkbox to select user?
-					      ListingPars.WithPhotos);
+					      ListingPars.ShowPhotos);
 			break;
 		     default:
 			break;
@@ -5404,7 +5443,7 @@ void Usr_ListTeachers (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Set_GetAndUpdatePrefsAboutUsrList (&ListingPars.WithPhotos);
+   Set_GetAndUpdatePrefsAboutUsrList (&ListingPars.ShowPhotos);
 
    /***** Get scope *****/
    AllowedLvls = 1 << Hie_SYS |
@@ -5473,7 +5512,7 @@ void Usr_ListTeachers (void)
 	      {
 	       /***** Form to select type of list of users *****/
 	       Usr_ShowFormsToSelectUsrListType (ActLstTch,Sco_PutParCurrentScope,&ListingPars.HieLvl,
-						 NULL,ListingPars.WithPhotos);
+						 NULL,ListingPars.ShowPhotos);
 
 	       /***** Draw a class photo with teachers of the course *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
@@ -5503,20 +5542,20 @@ void Usr_ListTeachers (void)
 			Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_TCH,
 					    Usr_CLASS_PHOTO_SEL_SEE,
 					    PutForm,	// Put checkbox to select user?
-					    ListingPars.WithPhotos);
+					    ListingPars.ShowPhotos);
 			Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_NET,
 					    Usr_CLASS_PHOTO_SEL_SEE,
 					    PutForm,	// Put checkbox to select user?
-					    ListingPars.WithPhotos);
+					    ListingPars.ShowPhotos);
 			break;
 		     case Set_USR_LIST_AS_LISTING:
 			/* List teachers and non-editing teachers */
 			Usr_ListMainDataTchs (Rol_TCH,
 					      PutForm,	// Put checkbox to select user?
-					      ListingPars.WithPhotos);
+					      ListingPars.ShowPhotos);
 			Usr_ListMainDataTchs (Rol_NET,
 					      PutForm,	// Put checkbox to select user?
-					      ListingPars.WithPhotos);
+					      ListingPars.ShowPhotos);
 			break;
 		     default:
 			break;
@@ -5949,18 +5988,18 @@ void Usr_DoActionOnUsrs2 (void)
 /***************** Put contextual icons in list of guests ********************/
 /*****************************************************************************/
 
-static void Usr_PutIconsListGsts (void *WithPhotos)
+static void Usr_PutIconsListGsts (void *ShowPhotos)
   {
    switch (Gbl.Usrs.Me.ListType)
      {
       case Set_USR_LIST_AS_CLASS_PHOTO:
 	 if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
 	    /***** Put icon to print guests *****/
-	    Usr_PutIconToPrintGsts (*(bool *) WithPhotos);
+	    Usr_PutIconToPrintGsts (*(Pho_ShowPhotos_t *) ShowPhotos);
 	 break;
       case Set_USR_LIST_AS_LISTING:
 	 /***** Put icon to show all data of guests *****/
-	 Usr_PutIconToShowGstsAllData (*(bool *) WithPhotos);
+	 Usr_PutIconToShowGstsAllData (*(Pho_ShowPhotos_t *) ShowPhotos);
 	 break;
       default:
 	 break;
@@ -5977,18 +6016,18 @@ static void Usr_PutIconsListGsts (void *WithPhotos)
 /**************** Put contextual icons in list of students *******************/
 /*****************************************************************************/
 
-static void Usr_PutIconsListStds (void *WithPhotos)
+static void Usr_PutIconsListStds (void *ShowPhotos)
   {
    switch (Gbl.Usrs.Me.ListType)
      {
       case Set_USR_LIST_AS_CLASS_PHOTO:
 	 if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
 	    /***** Put icon to print students *****/
-	    Usr_PutIconToPrintStds (*(bool *) WithPhotos);
+	    Usr_PutIconToPrintStds (*(Pho_ShowPhotos_t *) ShowPhotos);
 	 break;
       case Set_USR_LIST_AS_LISTING:
 	 /***** Put icon to show all data of students *****/
-	 Usr_PutIconToShowStdsAllData (*(bool *) WithPhotos);
+	 Usr_PutIconToShowStdsAllData (*(Pho_ShowPhotos_t *) ShowPhotos);
 	 break;
       default:
 	 break;
@@ -6016,7 +6055,7 @@ static void Usr_PutIconsListTchs (void *ListingPars)
 	 break;
       case Set_USR_LIST_AS_LISTING:
 	 /***** Put icon to show all data of teachers *****/
-	 Usr_PutIconToShowTchsAllData (((struct Usr_ListingPars *) ListingPars)->WithPhotos);
+	 Usr_PutIconToShowTchsAllData (((struct Usr_ListingPars *) ListingPars)->ShowPhotos);
 	 break;
       default:
 	 break;
@@ -6036,14 +6075,14 @@ static void Usr_PutIconsListTchs (void *ListingPars)
 /***************** Functions used to print lists of users ********************/
 /*****************************************************************************/
 
-static void Usr_PutIconToPrintGsts (bool WithPhotos)
+static void Usr_PutIconToPrintGsts (Pho_ShowPhotos_t ShowPhotos)
   {
-   Ico_PutContextualIconToPrint (ActPrnGstPho,Usr_ShowGstsAllDataPars,&WithPhotos);
+   Ico_PutContextualIconToPrint (ActPrnGstPho,Usr_ShowGstsAllDataPars,&ShowPhotos);
   }
 
-static void Usr_PutIconToPrintStds (bool WithPhotos)
+static void Usr_PutIconToPrintStds (Pho_ShowPhotos_t ShowPhotos)
   {
-   Ico_PutContextualIconToPrint (ActPrnStdPho,Usr_ShowStdsAllDataPars,&WithPhotos);
+   Ico_PutContextualIconToPrint (ActPrnStdPho,Usr_ShowStdsAllDataPars,&ShowPhotos);
   }
 
 static void Usr_PutIconToPrintTchs (struct Usr_ListingPars *ListingPars)
@@ -6055,42 +6094,42 @@ static void Usr_PutIconToPrintTchs (struct Usr_ListingPars *ListingPars)
 /**************** Functions used to list all data of users *******************/
 /*****************************************************************************/
 
-static void Usr_PutIconToShowGstsAllData (bool WithPhotos)
+static void Usr_PutIconToShowGstsAllData (Pho_ShowPhotos_t ShowPhotos)
   {
    Lay_PutContextualLinkOnlyIcon (ActLstGstAll,NULL,
-                                  Usr_ShowGstsAllDataPars,&WithPhotos,
+                                  Usr_ShowGstsAllDataPars,&ShowPhotos,
 				  "table.svg",Ico_BLACK);
   }
 
-static void Usr_PutIconToShowStdsAllData (bool WithPhotos)
+static void Usr_PutIconToShowStdsAllData (Pho_ShowPhotos_t ShowPhotos)
   {
    Lay_PutContextualLinkOnlyIcon (ActLstStdAll,NULL,
-                                  Usr_ShowStdsAllDataPars,&WithPhotos,
+                                  Usr_ShowStdsAllDataPars,&ShowPhotos,
 			          "table.svg",Ico_BLACK);
   }
 
-static void Usr_PutIconToShowTchsAllData (bool WithPhotos)
+static void Usr_PutIconToShowTchsAllData (Pho_ShowPhotos_t ShowPhotos)
   {
    Lay_PutContextualLinkOnlyIcon (ActLstTchAll,NULL,
-                                  Usr_ShowTchsAllDataPars,&WithPhotos,
+                                  Usr_ShowTchsAllDataPars,&ShowPhotos,
 			          "table.svg",Ico_BLACK);
   }
 
-static void Usr_ShowGstsAllDataPars (void *WithPhotos)
+static void Usr_ShowGstsAllDataPars (void *ShowPhotos)
   {
-   Set_PutParListWithPhotos (*(bool *) WithPhotos);
+   Set_PutParListWithPhotos (*(Pho_ShowPhotos_t *) ShowPhotos);
   }
 
-static void Usr_ShowStdsAllDataPars (void *WithPhotos)
+static void Usr_ShowStdsAllDataPars (void *ShowPhotos)
   {
    Grp_PutParsCodGrps ();
-   Set_PutParListWithPhotos (*(bool *) WithPhotos);
+   Set_PutParListWithPhotos (*(Pho_ShowPhotos_t *) ShowPhotos);
   }
 
 static void Usr_ShowTchsAllDataPars (void *ListingPars)
   {
    Sco_PutParCurrentScope (&((struct Usr_ListingPars *) ListingPars)->HieLvl);
-   Set_PutParListWithPhotos (((struct Usr_ListingPars *) ListingPars)->WithPhotos);
+   Set_PutParListWithPhotos (((struct Usr_ListingPars *) ListingPars)->ShowPhotos);
   }
 
 /*****************************************************************************/
@@ -6105,7 +6144,7 @@ void Usr_SeeGstClassPhotoPrn (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Set_GetAndUpdatePrefsAboutUsrList (&ListingPars.WithPhotos);
+   Set_GetAndUpdatePrefsAboutUsrList (&ListingPars.ShowPhotos);
 
    /***** Get scope *****/
    AllowedLvls = Sco_GetAllowedScopesForListingGuests ();
@@ -6122,7 +6161,7 @@ void Usr_SeeGstClassPhotoPrn (void)
 	 Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_GST,
 			     Usr_CLASS_PHOTO_PRN,
 			     false,	// Don't put checkbox to select user
-			     ListingPars.WithPhotos);
+			     ListingPars.ShowPhotos);
       HTM_TABLE_End ();
      }
    else	// Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs
@@ -6145,7 +6184,7 @@ void Usr_SeeStdClassPhotoPrn (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Set_GetAndUpdatePrefsAboutUsrList (&ListingPars.WithPhotos);
+   Set_GetAndUpdatePrefsAboutUsrList (&ListingPars.ShowPhotos);
 
    /***** Get scope *****/
    AllowedLvls = Sco_GetAllowedScopesForListingStudents ();
@@ -6165,7 +6204,7 @@ void Usr_SeeStdClassPhotoPrn (void)
 	 Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_STD,
 			     Usr_CLASS_PHOTO_PRN,
 			     false,	// Don't put checkbox to select user
-			     ListingPars.WithPhotos);
+			     ListingPars.ShowPhotos);
       HTM_TABLE_End ();
      }
    else	// Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
@@ -6192,7 +6231,7 @@ void Usr_SeeTchClassPhotoPrn (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Set_GetAndUpdatePrefsAboutUsrList (&ListingPars.WithPhotos);
+   Set_GetAndUpdatePrefsAboutUsrList (&ListingPars.ShowPhotos);
 
    /***** Get scope *****/
    AllowedLvls = 1 << Hie_SYS |
@@ -6233,11 +6272,11 @@ void Usr_SeeTchClassPhotoPrn (void)
 	 Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_TCH,
 			     Usr_CLASS_PHOTO_PRN,
 			     false,	// Don't put checkbox to select user
-			     ListingPars.WithPhotos);
+			     ListingPars.ShowPhotos);
 	 Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_NET,
 			     Usr_CLASS_PHOTO_PRN,
 			     false,	// Don't put checkbox to select user
-			     ListingPars.WithPhotos);
+			     ListingPars.ShowPhotos);
 
       HTM_TABLE_End ();
      }
@@ -6261,7 +6300,7 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
                                 Rol_Role_t Role,
 				Usr_ClassPhotoType_t ClassPhotoType,
 				bool PutCheckBoxToSelectUsr,
-				bool WithPhotos)
+				Pho_ShowPhotos_t ShowPhotos)
   {
    static const char *ClassPhoto[Usr_NUM_CLASS_PHOTO_TYPE][PhoSha_NUM_SHAPES] =
      {
@@ -6289,7 +6328,7 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
 	 Usr_PutCheckboxToSelectAllUsers (SelectedUsrs,Role,
-				          Usr_GetColumnsForSelectUsrs (WithPhotos));
+				          Usr_GetColumnsForSelectUsrs (ShowPhotos));
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -6556,7 +6595,7 @@ void Usr_WriteAuthor1Line (long UsrCod,HidVis_HiddenOrVisible_t HiddenOrVisible)
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR15x20",
      };
    extern const char *HidVis_MsgClass[HidVis_NUM_HIDDEN_VISIBLE];
-   bool ShowPhoto = false;
+   Pho_ShowPhotos_t ShowPhotos = Pho_PHOTOS_DONT_SHOW;
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    struct Usr_Data UsrDat;
 
@@ -6568,11 +6607,11 @@ void Usr_WriteAuthor1Line (long UsrCod,HidVis_HiddenOrVisible_t HiddenOrVisible)
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
                                                 Usr_DONT_GET_PREFS,
                                                 Usr_DONT_GET_ROLE_IN_CRS))
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+      ShowPhotos = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 
    /***** Show photo *****/
-   Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-                	                 NULL,
+   Pho_ShowUsrPhoto (&UsrDat,ShowPhotos == Pho_PHOTOS_SHOW ? PhotoURL :
+                					     NULL,
 	             ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 
    /***** Write name *****/

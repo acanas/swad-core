@@ -27,79 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_user.h"
-
-/*****************************************************************************/
-/************************* Public types and constants ************************/
-/*****************************************************************************/
-
-#define Pho_PHOTO_REAL_WIDTH		186
-#define Pho_PHOTO_REAL_HEIGHT		248
-
-/***** Zoom? *****/
-typedef enum
-  {
-   Pho_ZOOM,
-   Pho_NO_ZOOM,
-  } Pho_Zoom_t;
-
-/***** Show photos when listing students? *****/
-#define Pho_NUM_PHOTOS 3
-typedef enum
-  {
-   Pho_PHOTOS_UNKNOWN,
-   Pho_PHOTOS_DONT_SHOW,
-   Pho_PHOTOS_SHOW,
-  } Pho_ShowPhotos_t;
-#define Pho_PHOTOS_DEFAULT Pho_PHOTOS_SHOW
-
-/***** Average photos of students in degrees ******/
-
-typedef enum
-  {
-   Pho_DEGREES_SEE,
-   Pho_DEGREES_PRINT,
-  } Pho_AvgPhotoSeeOrPrint_t;
-
-#define Pho_NUM_AVERAGE_PHOTO_TYPES 2
-typedef enum
-  {
-   Pho_PHOTO_MEDIAN_ALL  = 0,
-   Pho_PHOTO_AVERAGE_ALL = 1,
-  } Pho_AvgPhotoTypeOfAverage_t;
-#define Pho_PHOTO_AVG_DEFAULT Pho_PHOTO_MEDIAN_ALL
-
-#define Pho_NUM_HOW_COMPUTE_PHOTO_SIZES 4
-typedef enum
-  {
-   Pho_PROPORTIONAL_TO_NUMBER_OF_STUDENTS = 0,
-   Pho_PROPORTIONAL_TO_NUMBER_OF_PHOTOS   = 1,
-   Pho_PROPORTIONAL_TO_PERCENT            = 2,
-   Pho_UNIQUE_SIZE                        = 3,
-  } Pho_HowComputePhotoSize_t;
-#define Pho_PHOTO_SIZE_DEFAULT Pho_PROPORTIONAL_TO_NUMBER_OF_STUDENTS
-
-#define Pho_NUM_HOW_ORDER_DEGREES 4
-typedef enum
-  {
-   Pho_NUMBER_OF_STUDENTS = 0,
-   Pho_NUMBER_OF_PHOTOS   = 1,
-   Pho_PERCENT            = 2,
-   Pho_DEGREE_NAME        = 3,
-  } Pho_HowOrderDegrees_t;
-#define Pho_ORDER_DEFAULT Pho_NUMBER_OF_STUDENTS
-
-#define Pho_MAX_CLICKS_WITHOUT_PHOTO	 50
-
-struct Pho_DegPhotos
-  {
-   Pho_AvgPhotoTypeOfAverage_t TypeOfAverage;
-   Pho_HowComputePhotoSize_t HowComputePhotoSize;
-   Pho_HowOrderDegrees_t HowOrderDegrees;
-   int MaxStds;
-   int MaxStdsWithPhoto;
-   double MaxPercent;
-  };
+#include "swad_user_type.h"
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -127,8 +55,8 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void);
 
 void Pho_ShowUsrPhotoIfAllowed (struct Usr_Data *UsrDat,
                                 const char *ClassPhoto,Pho_Zoom_t Zoom);
-bool Pho_ShowingUsrPhotoIsAllowed (struct Usr_Data *UsrDat,
-                                   char PhotoURL[WWW_MAX_BYTES_WWW + 1]);
+Pho_ShowPhotos_t Pho_ShowingUsrPhotoIsAllowed (struct Usr_Data *UsrDat,
+					       char PhotoURL[WWW_MAX_BYTES_WWW + 1]);
 bool Pho_BuildLinkToPhoto (struct Usr_Data *UsrDat,
 			   char PhotoURL[WWW_MAX_BYTES_WWW + 1]);
 bool Pho_CheckIfPrivPhotoExists (long UsrCod,char PathPrivRelPhoto[PATH_MAX + 1]);
@@ -146,6 +74,7 @@ void Pho_ChangePhotoVisibility (void);
 
 void Pho_ShowFormShowPhotos (Pho_ShowPhotos_t CurrentShowPhotos);
 Pho_ShowPhotos_t Pho_GetParShowPhotos (void);
+Pho_ShowPhotos_t Pho_GetMyPrefAboutListWithPhotosFromDB (void);
 
 void Pho_CalcPhotoDegree (void);
 void Pho_ShowPhotoDegree (void);

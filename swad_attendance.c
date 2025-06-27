@@ -124,7 +124,7 @@ static void Att_ListEventStudents (struct Att_Events *Events);
 static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
                                           struct Usr_Data *UsrDat,
                                           struct Att_Event *Event,
-                                          bool ShowPhoto);
+                                          Pho_ShowPhotos_t ShowPhotos);
 static void Att_PutLinkEvent (struct Att_Event *Event,
 			      const char *Title,const char *Txt);
 static unsigned Att_GetNumUsrsFromAListWhoAreInEvent (long AttCod,
@@ -157,10 +157,10 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
 	                                 unsigned NumUsrsInList,
                                          long *LstSelectedUsrCods);
 static void Att_WriteTableHeadSeveralAttEvents (struct Att_Events *Events,
-						bool WithPhotos);
+						Pho_ShowPhotos_t ShowPhotos);
 static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
                                              unsigned NumUsr,struct Usr_Data *UsrDat,
-                                             bool ShowPhoto);
+                                             Pho_ShowPhotos_t ShowPhotos);
 static void Att_PutCheckOrCross (Att_AbsentOrPresent_t Present);
 static void Att_ListStdsWithAttEventsDetails (struct Att_Events *Events,
                                               unsigned NumUsrsInList,
@@ -1469,7 +1469,7 @@ static void Att_ListEventOnlyMeAsStudent (struct Att_Event *Event)
    extern const char *Txt_Teachers_comment;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    static Usr_Can_t ICanMakeAnyChange;
-   bool WithPhotos;
+   Pho_ShowPhotos_t ShowPhotos;
 
    /***** Set who can edit *****/
    ICanMakeAnyChange = Usr_CAN_NOT;
@@ -1485,7 +1485,7 @@ static void Att_ListEventOnlyMeAsStudent (struct Att_Event *Event)
      }
 
    /***** Get my setting about photos in users' list for current course *****/
-   WithPhotos = Set_GetMyPrefAboutListWithPhotosFromDB ();
+   ShowPhotos = Pho_GetMyPrefAboutListWithPhotosFromDB ();
 
    /***** List students (only me) *****/
    /* Begin box */
@@ -1507,7 +1507,7 @@ static void Att_ListEventOnlyMeAsStudent (struct Att_Event *Event)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TH_Empty (3);
-	    if (WithPhotos)
+	    if (ShowPhotos == Pho_PHOTOS_SHOW)
 	       HTM_TH_Empty (1);
 	    HTM_TH_Span (Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN],HTM_HEAD_LEFT,1,2,NULL);
 	    HTM_TH      (Txt_Student_comment                           ,HTM_HEAD_LEFT);
@@ -1516,7 +1516,7 @@ static void Att_ListEventOnlyMeAsStudent (struct Att_Event *Event)
 	 HTM_TR_End ();
 
 	 /* List of students (only me) */
-	 Att_WriteRowUsrToCallTheRoll (1,&Gbl.Usrs.Me.UsrDat,Event,WithPhotos);
+	 Att_WriteRowUsrToCallTheRoll (1,&Gbl.Usrs.Me.UsrDat,Event,ShowPhotos);
 
       /* End table */
       HTM_TABLE_End ();
@@ -1547,7 +1547,7 @@ static void Att_ListEventStudents (struct Att_Events *Events)
    unsigned NumUsr;
    struct Usr_Data UsrDat;
    static Usr_Can_t ICanMakeAnyChange;
-   bool WithPhotos;
+   Pho_ShowPhotos_t ShowPhotos;
 
    /***** Set who can edit *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -1580,7 +1580,7 @@ static void Att_ListEventStudents (struct Att_Events *Events)
 	 if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
 	   {
 	    /***** Get my preference about photos in users' list for current course *****/
-	    WithPhotos = Set_GetMyPrefAboutListWithPhotosFromDB ();
+	    ShowPhotos = Pho_GetMyPrefAboutListWithPhotosFromDB ();
 
 	    /***** Initialize structure with user's data *****/
 	    Usr_UsrDataConstructor (&UsrDat);
@@ -1600,7 +1600,7 @@ static void Att_ListEventStudents (struct Att_Events *Events)
 	       HTM_TR_Begin (NULL);
 
 		  HTM_TH_Empty (3);
-		  if (WithPhotos)
+		  if (ShowPhotos == Pho_PHOTOS_SHOW)
 		     HTM_TH_Empty (1);
 		  HTM_TH_Span (Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN],HTM_HEAD_LEFT,1,2,NULL);
 		  HTM_TH      (Txt_Student_comment                           ,HTM_HEAD_LEFT);
@@ -1620,7 +1620,7 @@ static void Att_ListEventStudents (struct Att_Events *Events)
 		  ID_GetListIDsFromUsrCod (&UsrDat);
 
 		  Att_WriteRowUsrToCallTheRoll (NumUsr + 1,&UsrDat,&Events->Event,
-						WithPhotos);
+						ShowPhotos);
 		 }
 
 	    /* End table */
@@ -1670,7 +1670,7 @@ static void Att_PutParAttCod (void *Events)
 static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
                                           struct Usr_Data *UsrDat,
                                           struct Att_Event *Event,
-                                          bool ShowPhoto)
+                                          Pho_ShowPhotos_t ShowPhotos)
   {
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -1749,7 +1749,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_TD_End ();
 
       /***** Show student's photo *****/
-      if (ShowPhoto)
+      if (ShowPhotos == Pho_PHOTOS_SHOW)
 	{
 	 HTM_TD_Begin ("class=\"%s LT\"",The_GetColorRows ());
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
@@ -2730,13 +2730,13 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
    unsigned NumUsr;
    unsigned NumAttEvent;
    unsigned Total;
-   bool WithPhotos;
+   Pho_ShowPhotos_t ShowPhotos;
    bool PutButtonShowDetails = (TypeOfView == Att_VIEW_ONLY_ME ||
 	                        TypeOfView == Att_VIEW_SEL_USR) &&
 	                        !Events->ShowDetails;
 
    /***** Get my preference about photos in users' list for current course *****/
-   WithPhotos = Set_GetMyPrefAboutListWithPhotosFromDB ();
+   ShowPhotos = Pho_GetMyPrefAboutListWithPhotosFromDB ();
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -2748,7 +2748,7 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
       HTM_TABLE_Begin ("TBL_SCROLL");
 
 	 /***** Heading row *****/
-	 Att_WriteTableHeadSeveralAttEvents (Events,WithPhotos);
+	 Att_WriteTableHeadSeveralAttEvents (Events,ShowPhotos);
 
 	 /***** List the users *****/
 	 for (NumUsr = 0;
@@ -2762,7 +2762,7 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
 	       if (Usr_CheckIfICanViewAtt (&UsrDat) == Usr_CAN)
 		 {
 		  UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
-		  Att_WriteRowUsrSeveralAttEvents (Events,NumUsr,&UsrDat,WithPhotos);
+		  Att_WriteRowUsrSeveralAttEvents (Events,NumUsr,&UsrDat,ShowPhotos);
 		 }
 	   }
 
@@ -2772,8 +2772,8 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("colspan=\"%u\" class=\"RM DAT_STRONG_%s LINE_TOP\"",
-			     WithPhotos ? 4 :
-					  3,
+			     ShowPhotos == Pho_PHOTOS_SHOW ? 4 :
+							     3,
 			     The_GetSuffix ());
 		  HTM_Txt (Txt_Number_of_users); HTM_Colon ();
 	       HTM_TD_End ();
@@ -2811,7 +2811,7 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
 /*****************************************************************************/
 
 static void Att_WriteTableHeadSeveralAttEvents (struct Att_Events *Events,
-						bool WithPhotos)
+						Pho_ShowPhotos_t ShowPhotos)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Attendance;
@@ -2821,8 +2821,8 @@ static void Att_WriteTableHeadSeveralAttEvents (struct Att_Events *Events,
    HTM_TR_Begin (NULL);
 
       HTM_TH_Span (Txt_ROLES_SINGUL_Abc[Rol_USR][Usr_SEX_UNKNOWN],HTM_HEAD_LEFT,
-	           1,WithPhotos ? 4 :
-				  3,NULL);
+	           1,ShowPhotos == Pho_PHOTOS_SHOW ? 4 :
+	        				     3,NULL);
 
       for (NumAttEvent = 0;
 	   NumAttEvent < Events->Num;
@@ -2851,7 +2851,7 @@ static void Att_WriteTableHeadSeveralAttEvents (struct Att_Events *Events,
 
 static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
                                              unsigned NumUsr,struct Usr_Data *UsrDat,
-                                             bool ShowPhoto)
+                                             Pho_ShowPhotos_t ShowPhotos)
   {
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -2875,7 +2875,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
       HTM_TD_End ();
 
       /***** Show user's photo *****/
-      if (ShowPhoto)
+      if (ShowPhotos == Pho_PHOTOS_SHOW)
 	{
 	 HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,

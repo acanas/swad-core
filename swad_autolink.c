@@ -479,7 +479,7 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
    size_t Length;
    char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1];
    struct Usr_Data UsrDat;
-   bool ShowPhoto = false;
+   Pho_ShowPhotos_t ShowPhotos = Pho_PHOTOS_DONT_SHOW;
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    char *CaptionStr;
    char *ImgStr;
@@ -561,9 +561,9 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
 		     (*Link)->NickAnchor[1].Len = strlen ((*Link)->NickAnchor[1].Str);
 
 		     /***** Store third part of anchor *****/
-		     ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-		     Pho_BuildHTMLUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-								NULL,
+		     ShowPhotos = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+		     Pho_BuildHTMLUsrPhoto (&UsrDat,ShowPhotos == Pho_PHOTOS_SHOW ? PhotoURL :
+										    NULL,
 					    ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 					    &CaptionStr,
 					    &ImgStr);

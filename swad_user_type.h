@@ -1,4 +1,4 @@
-// swad_user_type.h: definition of types for users
+// swad_user_type.h: Definition of types for users
 
 #ifndef _SWAD_USR_TYP
 #define _SWAD_USR_TYP
@@ -23,6 +23,26 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+/*****************************************************************************/
+/********************************** Headers **********************************/
+/*****************************************************************************/
+
+#include "swad_cookie.h"
+#include "swad_cryptography.h"
+#include "swad_date.h"
+#include "swad_icon.h"
+#include "swad_language.h"
+#include "swad_menu.h"
+#include "swad_nickname.h"
+#include "swad_password.h"
+#include "swad_photo_shape.h"
+#include "swad_photo_type.h"
+#include "swad_privacy_visibility_type.h"
+#include "swad_role_type.h"
+#include "swad_search.h"
+#include "swad_theme.h"
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -157,5 +177,129 @@ typedef enum
    Usr_DONT_GET_LIST_ALL_USRS,	// Don't get parameter with list of all users
    Usr_GET_LIST_ALL_USRS,	// Get parameter with list of all users
   } Usr_GetListAllUsrs_t;
+
+// Related with user's data
+struct Usr_Data
+  {
+   long UsrCod;
+   char EnUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
+   char UsrIDNickOrEmail[Cns_MAX_BYTES_USR_LOGIN + 1];	// String to store the ID, nickname or email
+   struct
+     {
+      struct ListIDs *List;
+      unsigned Num;
+     } IDs;
+   char Nickname[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
+   char Password[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
+   struct
+     {
+      Rol_Role_t InCurrentCrs;	// Role in current course (Rol_UNK is not filled/calculated or no course selected)
+      int InCrss;	// Roles in all his/her courses
+			// Check always if filled/calculated
+			// >=0 ==> filled/calculated
+			//  <0 ==> not yet filled/calculated
+     } Roles;
+   bool Accepted;	// User has accepted joining to current course?
+   char Surname1[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
+   char Surname2[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
+   char FrstName[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
+   char FullName[Usr_MAX_BYTES_FULL_NAME + 1];
+   Usr_Sex_t Sex;
+   char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
+   bool EmailConfirmed;
+   char Photo[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Name of public link to photo
+   Pri_Visibility_t PhotoVisibility;	// Who can see user's photo
+   Pri_Visibility_t BaPrfVisibility;	// Who can see user's basic public profile (minimal record card)
+   Pri_Visibility_t ExPrfVisibility;	// Who can see user's extended public profile (figures, follow)
+   long CtyCod;		// Country
+   struct Dat_Date Birthday;
+   char StrBirthday[Cns_MAX_BYTES_DATE + 1];
+   char Phone[2][Usr_MAX_BYTES_PHONE + 1];
+   char *Comments;
+   long InsCtyCod;	// Country of the institution
+   long InsCod;		// Institution
+   struct
+     {
+      long CtrCod;	// Center
+      long DptCod;	// Department
+      char Office[Usr_MAX_BYTES_ADDRESS + 1];
+      char OfficePhone[Usr_MAX_BYTES_PHONE  + 1];
+     } Tch;
+   struct
+     {
+      unsigned CreateNotif;	// One bit activated for each type of event
+      unsigned SendEmail;	// One bit activated for each type of event
+     } NtfEvents;
+   struct
+     {
+      Lan_Language_t Language;
+      unsigned FirstDayOfWeek;
+      Dat_Format_t DateFormat;
+      The_Theme_t Theme;
+      Ico_IconSet_t IconSet;
+      Mnu_Menu_t Menu;
+      unsigned SideCols;
+      PhoSha_Shape_t PhotoShape;
+      Coo_RefuseAccept_t AcceptCookies;	// User has accepted third party cookies
+     } Prefs;
+  };
+
+struct Usr_Last
+  {
+   Sch_WhatToSearch_t WhatToSearch;	// Search courses, teachers, documents...?
+   struct
+     {
+      Hie_Level_t HieLvl;	// Course, degree, center, etc.
+      long HieCod;		// Course code, degree code, center code, etc.
+     } LastHie;
+   Act_Action_t LastAct;
+   Rol_Role_t LastRole;
+   long LastTime;
+   long LastAccNotif;
+  };
+
+struct Usr_InList
+  {
+   long UsrCod;
+   char EnUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
+   char Password[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
+   char Surname1[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
+   char Surname2[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
+   char FrstName[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
+   Usr_Sex_t Sex;
+   char Photo[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Name of public link to photo
+   Pri_Visibility_t PhotoVisibility;				// Who can see user's photo
+   long CtyCod;		// Country
+   long InsCod;		// Institution
+   Rol_Role_t RoleInCurrentCrsDB;	// Role in current course in database
+   bool Accepted;	// User has accepted joining to one/all courses?
+   bool Remove;		// A boolean associated with each user that indicates if it must be removed
+  };
+
+struct Usr_ListUsrs
+  {
+   struct Usr_InList *Lst;	// List of users
+   unsigned NumUsrs;		// Number of users in the list
+  };
+
+typedef enum
+  {
+   Usr_DONT_USE_LIST_SELECTED_USERS,
+   Usr_USE_LIST_SELECTED_USERS,
+  } Usr_UseListSelectedUsrs;
+
+struct Usr_SelectedUsrs
+  {
+   char *List[Rol_NUM_ROLES];	// Lists of encrypted codes of users selected from a form
+   bool Filled;			// If lists are already filled/readed
+   char *ParSuffix;
+   Usr_ListUsrsAction_t Action;	// What action I have selected to do with these selected users
+  };
+
+struct Usr_ListUsrCods
+  {
+   long *Lst;		// List of users' codes
+   unsigned NumUsrs;	// Number of users in the list
+  };
 
 #endif

@@ -420,7 +420,7 @@ static void ExaSes_ShowFormColumns (unsigned CurrentNumCols)
 	    // Input image can not be used to pass a value to the form,
 	    // so use a button with an image inside
 	    HTM_BUTTON_Submit_Begin (NULL,Usr_FORM_TO_SELECT_USRS_ID,
-				     "name=\"NumCols\" value=\"%u\" class=\"BT_NONE\"",
+				     "name=\"NumCols\" value=\"%u\" class=\"BT_LINK\"",
 				     NumCols);
 	       HTM_IMG (Cfg_URL_ICON_PUBLIC,ExaSes_NumColsIcon[NumCols],Title,
 			"class=\"ICO_HIGHLIGHT ICOx20 ICO_%s_%s\"",
