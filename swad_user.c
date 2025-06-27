@@ -3993,8 +3993,8 @@ static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role)
 unsigned Usr_GetColumnsForSelectUsrs (Pho_ShowPhotos_t ShowPhotos)
   {
    return (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO) ? Set_GetColsClassPhoto () :
-                                                                 (ShowPhotos == Pho_PHOTOS_SHOW ? 1 + Usr_NUM_MAIN_FIELDS_DATA_USR :
-												      Usr_NUM_MAIN_FIELDS_DATA_USR);
+                                                                  (ShowPhotos == Pho_PHOTOS_SHOW ? 1 + Usr_NUM_MAIN_FIELDS_DATA_USR :
+												       Usr_NUM_MAIN_FIELDS_DATA_USR);
   }
 
 /*****************************************************************************/
@@ -6280,8 +6280,10 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
 					    SelectedUsrs);
 
 	    /***** Show photo *****/
-	    Pho_ShowUsrPhotoIfAllowed (&UsrDat,
-				       ClassPhoto[ClassPhotoType][Gbl.Prefs.PhotoShape],Pho_ZOOM);
+	    if (ShowPhotos == Pho_PHOTOS_SHOW)
+	       Pho_ShowUsrPhotoIfAllowed (&UsrDat,
+					  ClassPhoto[ClassPhotoType][Gbl.Prefs.PhotoShape],
+					  Pho_ZOOM);
 
 	    /***** Photo foot *****/
 	    HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION CLASSPHOTO_%s\"",

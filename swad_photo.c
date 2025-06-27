@@ -144,7 +144,8 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
                                            const struct Pho_DegPhotos *DegPhotos,
                                            Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
                                            Usr_Sex_t Sex,
-                                           int NumStds,int NumStdsWithPhoto);
+                                           int NumStds,int NumStdsWithPhoto,
+                                           Pho_ShowPhotos_t ShowPhotos);
 static void Pho_ComputePhotoSize (const struct Pho_DegPhotos *DegPhotos,
                                   int NumStds,int NumStdsWithPhoto,
                                   unsigned *PhotoWidth,unsigned *PhotoHeight);
@@ -2277,7 +2278,8 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 		  Pho_ShowDegreeAvgPhotoAndStat (&Deg,DegPhotos,
 						 SeeOrPrint,
 						 Usr_SEX_ALL,
-						 NumStds,NumStdsWithPhoto);
+						 NumStds,NumStdsWithPhoto,
+						 ShowPhotos);
 	       HTM_TD_End ();
 
 	       if ((++NumDegsNotEmpty % Cols) == 0)
@@ -2389,7 +2391,8 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 		     if (ShowPhotos == Pho_PHOTOS_SHOW)
 			Pho_ShowDegreeAvgPhotoAndStat (&Deg,DegPhotos,
 						       SeeOrPrint,Sex,
-						       NumStds,NumStdsWithPhoto);
+						       NumStds,NumStdsWithPhoto,
+						       ShowPhotos);
 		     else
 			Pho_ShowDegreeStat (NumStds,NumStdsWithPhoto);
 		  HTM_TD_End ();
@@ -2475,7 +2478,8 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
                                            const struct Pho_DegPhotos *DegPhotos,
                                            Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
                                            Usr_Sex_t Sex,
-                                           int NumStds,int NumStdsWithPhoto)
+                                           int NumStds,int NumStdsWithPhoto,
+                                           Pho_ShowPhotos_t ShowPhotos)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    extern const char *Txt_students_ABBREVIATION;
@@ -2552,23 +2556,26 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
      }
 
    /***** Show photo *****/
-   if (PhotoURL[0])
+   if (ShowPhotos == Pho_PHOTOS_SHOW)
      {
-      if (PhotoCaption[0])
-         HTM_IMG (PhotoURL,NULL,Deg->ShrtName,
-	          " style=\"width:%upx;height:%upx;\""
-		  " onmouseover=\"zoom(this,'%s','%s');\""
-	          " onmouseout=\"noZoom();\"",
-	          PhotoWidth,PhotoHeight,
-		  PhotoURL,IdCaption);
+      if (PhotoURL[0])
+	{
+	 if (PhotoCaption[0])
+	    HTM_IMG (PhotoURL,NULL,Deg->ShrtName,
+		     " style=\"width:%upx;height:%upx;\""
+		     " onmouseover=\"zoom(this,'%s','%s');\""
+		     " onmouseout=\"noZoom();\"",
+		     PhotoWidth,PhotoHeight,
+		     PhotoURL,IdCaption);
+	 else
+	    HTM_IMG (PhotoURL,NULL,Deg->ShrtName,
+		     " style=\"width:%upx;height:%upx;\">",
+		     PhotoWidth,PhotoHeight);
+	}
       else
-         HTM_IMG (PhotoURL,NULL,Deg->ShrtName,
-                  " style=\"width:%upx;height:%upx;\">",
-	          PhotoWidth,PhotoHeight);
+	 HTM_IMG (Cfg_URL_ICON_PUBLIC,"usr_bl.jpg",Deg->ShrtName,
+		  "style=\"width:%upx;height:%upx;\"",PhotoWidth,PhotoHeight);
      }
-   else
-      HTM_IMG (Cfg_URL_ICON_PUBLIC,"usr_bl.jpg",Deg->ShrtName,
-	       "style=\"width:%upx;height:%upx;\"",PhotoWidth,PhotoHeight);
 
    /***** Caption *****/
    HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION CLASSPHOTO_%s\"",The_GetSuffix ());
