@@ -72,7 +72,8 @@ void Pho_UpdatePhotoName (struct Usr_Data *UsrDat);
 
 void Pho_ChangePhotoVisibility (void);
 
-void Pho_ShowFormShowPhotos (Pho_ShowPhotos_t CurrentShowPhotos);
+void Pho_PutButtonShowPhotos (Pho_ShowPhotos_t ShowPhotos,
+			      const char *FormId,const char *OnSubmit);
 Pho_ShowPhotos_t Pho_GetParShowPhotos (void);
 Pho_ShowPhotos_t Pho_GetMyPrefAboutListWithPhotosFromDB (void);
 

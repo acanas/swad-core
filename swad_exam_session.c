@@ -99,6 +99,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void ExaSes_ShowFormColumns (unsigned CurrentNumCols);
+static void ExaSes_ShowFormShowPhotos (Pho_ShowPhotos_t ShowPhotos);
 
 static void ExaSes_ShowHeaderResults (void);
 static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
@@ -390,7 +391,7 @@ void ExaSes_ShowFormSettings (const struct ExaSes_Session *Session)
       ExaSes_ShowFormColumns (Session->NumCols);
 
       /***** Show form to select columns *****/
-      Pho_ShowFormShowPhotos (Session->ShowPhotos);
+      ExaSes_ShowFormShowPhotos (Session->ShowPhotos);
 
    Set_EndSettingsHead ();
   }
@@ -430,6 +431,19 @@ static void ExaSes_ShowFormColumns (unsigned CurrentNumCols)
 	    free (Title);
 	 Set_EndPref ();
 	}
+   Set_EndOneSettingSelector ();
+  }
+
+/*****************************************************************************/
+/*********** Show form to choice whether to display users' photos ************/
+/*****************************************************************************/
+
+static void ExaSes_ShowFormShowPhotos (Pho_ShowPhotos_t ShowPhotos)
+  {
+   Set_BeginOneSettingSelector ();
+      Set_BeginPref (ShowPhotos == Pho_PHOTOS_SHOW);
+	 Pho_PutButtonShowPhotos (ShowPhotos,Usr_FORM_TO_SELECT_USRS_ID,NULL);
+      Set_EndPref ();
    Set_EndOneSettingSelector ();
   }
 

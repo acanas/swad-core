@@ -248,7 +248,7 @@ static void Usr_AllocateListSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *S
 						      Rol_Role_t Role);
 static void Usr_AllocateListOtherRecipients (void);
 
-static void Set_FormToSelectUsrListType (Act_Action_t NextAction,
+static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,
 					 void (*FuncPars) (void *Args),void *Args,
 					 const char *OnSubmit,
 					 Set_ShowUsrsType_t ListType,
@@ -258,8 +258,6 @@ static void Usr_ListUsersByRoleToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
 static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
 				      Rol_Role_t Role,Pho_ShowPhotos_t ShowPhotos);
 static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role);
-
-static void Usr_PutButtonListWithPhotos (Pho_ShowPhotos_t ShowPhotos);
 
 static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr,
 				  Pho_ShowPhotos_t ShowPhotos);
@@ -398,7 +396,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct Usr_Data *UsrDat)
    UsrDat->Prefs.SideCols	= Cfg_DEFAULT_COLUMNS;
    UsrDat->Prefs.PhotoShape	= PhoSha_SHAPE_DEFAULT;
    UsrDat->Prefs.AcceptCookies = Coo_REFUSE;	// By default, don't accept third party cookies
-   UsrDat->NtfEvents.SendEmail	= 0;       		// By default, don't notify anything
+   UsrDat->NtfEvents.SendEmail	= 0;       	// By default, don't notify anything
   }
 
 /*****************************************************************************/
@@ -1441,23 +1439,14 @@ void Usr_GetParUsrIdLogin (void)
   }
 
 /*****************************************************************************/
-/******* Get parameter user's identificator of other user from a form ********/
+/** Get parameter with the plain user's ID, @nick or email of another user ***/
 /*****************************************************************************/
 
 static void Usr_GetParOtherUsrIDNickOrEMail (void)
   {
-   /***** Get parameter with the plain user's ID, @nick or email of another user *****/
    Par_GetParText ("OtherUsrIDNickOrEMail",
-                     Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,
-                     sizeof (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail) - 1);
-
-   // If it's a user's ID (if does not contain '@')
-   if (strchr (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,(int) '@') != NULL)	// '@' not found
-     {
-      // Users' IDs are always stored internally in capitals and without leading zeros
-      Str_RemoveLeadingZeros (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
-      // Str_ConvertToUpperText (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
-     }
+                   Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,
+                   sizeof (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail) - 1);
   }
 
 /*****************************************************************************/
@@ -1490,7 +1479,7 @@ unsigned Usr_GetParOtherUsrIDNickOrEMailAndGetUsrCods (struct Usr_ListUsrCods *L
 	    ListUsrCods->Lst[0] = Gbl.Usrs.Other.UsrDat.UsrCod;
 	   }
 	}
-      else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail))		// 2: It's an email
+      else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail))	// 2: It's an email
 	{
 	 if ((Gbl.Usrs.Other.UsrDat.UsrCod = Mai_DB_GetUsrCodFromEmail (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail)) > 0)
 	   {
@@ -1499,7 +1488,7 @@ unsigned Usr_GetParOtherUsrIDNickOrEMailAndGetUsrCods (struct Usr_ListUsrCods *L
 	    ListUsrCods->Lst[0] = Gbl.Usrs.Other.UsrDat.UsrCod;
 	   }
 	}
-      else											// 3: It's not a nickname nor email
+      else										// 3: It's not a nickname nor email
 	{
 	 // Users' IDs are always stored internally in capitals and without leading zeros
 	 Str_RemoveLeadingZeros (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
@@ -3592,15 +3581,13 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,
 				       const char *OnSubmit,
 				       Pho_ShowPhotos_t ShowPhotos)
   {
-   extern const char *Txt_Display_photos;
-
    Set_BeginSettingsHead ();
       Set_BeginOneSettingSelector ();
 
 	 /***** Select Set_USR_LIST_AS_CLASS_PHOTO *****/
 	 Set_BeginPref (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO);
 
-	    Set_FormToSelectUsrListType (NextAction,FuncPars,Args,OnSubmit,
+	    Usr_FormToSelectUsrListType (NextAction,FuncPars,Args,OnSubmit,
 					 Set_USR_LIST_AS_CLASS_PHOTO,
 					 ShowPhotos);
 
@@ -3620,11 +3607,9 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,
 
 	 /***** Select Usr_LIST_AS_LISTING *****/
 	 Set_BeginPref (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_LISTING);
-
-	    Set_FormToSelectUsrListType (NextAction,FuncPars,Args,OnSubmit,
+	    Usr_FormToSelectUsrListType (NextAction,FuncPars,Args,OnSubmit,
 					 Set_USR_LIST_AS_LISTING,
 					 ShowPhotos);
-
 	 Set_EndPref ();
 
       Set_EndOneSettingSelector ();
@@ -3632,33 +3617,15 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,
       /***** Show photos? *****/
       Set_BeginOneSettingSelector ();
 	 Set_BeginPref (ShowPhotos == Pho_PHOTOS_SHOW);
+
 	    Frm_BeginFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
 	       Grp_PutParsCodGrps ();
 	       Set_PutParUsrListType (Gbl.Usrs.Me.ListType);
 	       if (FuncPars)
 		  FuncPars (Args);
-	       if (OnSubmit)
-		  HTM_BUTTON_Submit_Begin (Txt_Display_photos,NULL,
-					   "name=\"ShowPhotos\" value=\"%u\""
-					   " class=\"BT_LINK\" onsubmit=\"%s\"",
-					   (unsigned) (ShowPhotos ==
-						       Pho_PHOTOS_SHOW ? Pho_PHOTOS_DONT_SHOW :
-									 Pho_PHOTOS_SHOW),
-					   OnSubmit);
-	       else
-		  HTM_BUTTON_Submit_Begin (Txt_Display_photos,NULL,
-					   "name=\"ShowPhotos\" value=\"%u\""
-					   " class=\"BT_LINK\"",
-					   (unsigned) (ShowPhotos ==
-						       Pho_PHOTOS_SHOW ? Pho_PHOTOS_DONT_SHOW :
-									 Pho_PHOTOS_SHOW));
-
-	       HTM_IMG (Cfg_URL_ICON_PUBLIC,"image-portrait.svg",Txt_Display_photos,
-			"class=\"ICO_HIGHLIGHT ICOx20 ICO_%s_%s\"",
-			Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
-
-	       HTM_BUTTON_End ();
+	       Pho_PutButtonShowPhotos (ShowPhotos,NULL,OnSubmit);
 	    Frm_EndForm ();
+
 	 Set_EndPref ();
       Set_EndOneSettingSelector ();
 
@@ -3669,7 +3636,7 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,
 /************* Put a radio element to select a users' list type **************/
 /*****************************************************************************/
 
-static void Set_FormToSelectUsrListType (Act_Action_t NextAction,
+static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,
 					 void (*FuncPars) (void *Args),void *Args,
 					 const char *OnSubmit,
 					 Set_ShowUsrsType_t ListType,
@@ -3688,7 +3655,8 @@ static void Set_FormToSelectUsrListType (Act_Action_t NextAction,
       /***** Link and image *****/
       if (OnSubmit)
 	 HTM_BUTTON_Submit_Begin (Txt_USR_LIST_TYPES[ListType],NULL,
-				  "class=\"BT_LINK FORM_IN_%s NOWRAP\" onsubmit=\"%s\"",
+				  "class=\"BT_LINK FORM_IN_%s NOWRAP\""
+				  " onsubmit=\"%s\"",
 				  The_GetSuffix (),OnSubmit);
       else
 	 HTM_BUTTON_Submit_Begin (Txt_USR_LIST_TYPES[ListType],NULL,
@@ -4063,37 +4031,6 @@ void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
      }
    else
       Err_WrongRoleExit ();
-  }
-
-/*****************************************************************************/
-/*********** Put a button to select whether list users with photos ***********/
-/*****************************************************************************/
-
-static void Usr_PutButtonListWithPhotos (Pho_ShowPhotos_t ShowPhotos)
-  {
-   extern const char *Txt_Display_photos;
-
-   /***** Put checkbox to select whether list users with photos *****/
-   /*
-   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-      HTM_INPUT_CHECKBOX ("ShowPhotos",
-			  (ShowPhotos == Pho_PHOTOS_SHOW ? HTM_CHECKED :
-							   HTM_NO_ATTR) |
-			  HTM_SUBMIT_ON_CHANGE,
-			  "value=\"Y\"");
-      HTM_Txt (Txt_Display_photos);
-   HTM_LABEL_End ();
-   */
-   HTM_BUTTON_Submit_Begin (Txt_Display_photos,NULL,
-			    "name=\"ShowPhotos\" value=\"%u\""
-			    " class=\"BT_LINK\"",
-			    (unsigned) (ShowPhotos ==
-					Pho_PHOTOS_SHOW ? Pho_PHOTOS_DONT_SHOW :
-							  Pho_PHOTOS_SHOW));
-      HTM_IMG (Cfg_URL_ICON_PUBLIC,"image-portrait.svg",Txt_Display_photos,
-	       "class=\"ICO_HIGHLIGHT ICOx20 ICO_%s_%s\"",
-	       Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
-   HTM_BUTTON_End ();
   }
 
 /*****************************************************************************/
@@ -4635,7 +4572,8 @@ void Usr_ListAllDataStds (void)
       /***** End table *****/
       HTM_TABLE_End ();
 
-      /***** Free memory used by the string with the list of group names where student belongs to *****/
+      /***** Free memory used by the string with the list of group names
+             where student belongs to *****/
       if (HieLvl == Hie_CRS)
          free (GroupNames);
      }
@@ -4863,7 +4801,7 @@ unsigned Usr_ListUsrsFound (Hie_Level_t HieLvl,Rol_Role_t Role,
 
 	       /* Write all courses this user belongs to */
 	       if (Role != Rol_GST &&				// Guests do not belong to any course
-		   Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)		// Only admins can view the courses
+		   Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)	// Only admins can view the courses
 		 {
 		  HTM_TR_Begin (NULL);
 
@@ -5002,22 +4940,11 @@ void Usr_ListDataAdms (void)
 	       Set_BeginPref (ShowPhotos == Pho_PHOTOS_SHOW);
 		  Frm_BeginForm (ActLstOth);
 		     Sco_PutParCurrentScope (&HieLvl);
-		     Usr_PutButtonListWithPhotos (ShowPhotos);
+		     Pho_PutButtonShowPhotos (ShowPhotos,NULL,NULL);
 		  Frm_EndForm ();
 	       Set_EndPref ();
 	    Set_EndOneSettingSelector ();
 	 Set_EndSettingsHead ();
-
-	 /*
-	 HTM_DIV_Begin ("class=\"PREF_CONT\"");
-	    HTM_DIV_Begin ("class=\"PREF_OFF\"");
-	       Frm_BeginForm (ActLstOth);
-		  Sco_PutParCurrentScope (&HieLvl);
-		  Usr_PutCheckboxListWithPhotos (ShowPhotos);
-	       Frm_EndForm ();
-	    HTM_DIV_End ();
-	 HTM_DIV_End ();
-	 */
 
 	 /***** Heading row with column names *****/
 	 HTM_TABLE_Begin ("TBL_SCROLL");
@@ -5426,7 +5353,7 @@ void Usr_ListTeachers (void)
       case Rol_SYS_ADM:
 	 /***** Contextual menu *****/
 	 Mnu_ContextMenuBegin ();
-	    Enr_PutLinkToAdminOneUsr (ActReqID_MdfTch);	// Admin one teacher
+	    Enr_PutLinkToAdminOneUsr (ActReqID_MdfTch);		// Admin one teacher
 	    if (Gbl.Hierarchy.HieLvl == Hie_CRS)		// Course selected
 	      {
 	       if (Gbl.Usrs.Me.Role.Logged >= Rol_TCH)		// I am logged as teacher
@@ -5732,15 +5659,6 @@ void Usr_PutListUsrsActions (const Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_
    Btn_PutButton (Btn_CONTINUE,Usr_FORM_TO_SELECT_USRS_ID);
   }
 
-/*****************************************************************************/
-/******* Write parameter with action to do with list of selected users *******/
-/*****************************************************************************/
-/*
-void Usr_PutParListUsrsAction (Usr_ListUsrsAction_t ListUsrsAction)
-  {
-   Par_PutParUnsigned (NULL,"ListUsrsAction",ListUsrsAction);
-  }
-*/
 /*****************************************************************************/
 /*************** Get action to do with list of selected users ****************/
 /*****************************************************************************/
@@ -6475,8 +6393,8 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
 
    if (Gbl.Crs.Grps.AllGrpsSel &&			// All groups selected
-       Role == Rol_STD &&			// No students found
-       Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// Course selected and I am logged as teacher
+       Role == Rol_STD &&				// No students found
+       Gbl.Usrs.Me.Role.Logged == Rol_TCH)		// Course selected and I am logged as teacher
       /***** Show alert and button to enrol students *****/
       Ale_ShowAlertAndButton (ActReqEnrSevStd,NULL,NULL,
                               NULL,NULL,
@@ -6510,7 +6428,7 @@ unsigned Usr_GetTotalNumberOfUsers (Hie_Level_t HieLvl)
    switch (HieLvl)
      {
       case Hie_SYS:
-	 return (unsigned) DB_GetNumRowsTable ("usr_data");			// All users in platform
+	 return (unsigned) DB_GetNumRowsTable ("usr_data");	// All users in platform
       case Hie_CTY:
       case Hie_INS:
       case Hie_CTR:

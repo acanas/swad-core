@@ -197,7 +197,6 @@ void Usr_ListStudents (void);
 void Usr_ListTeachers (void);
 
 void Usr_PutListUsrsActions (const Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
-// void Usr_PutParListUsrsAction (Usr_ListUsrsAction_t ListUsrsAction);
 void Usr_DoActionOnUsrs1 (void);
 void Usr_DoActionOnUsrs2 (void);
 

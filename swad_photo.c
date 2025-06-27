@@ -1443,25 +1443,34 @@ void Pho_ChangePhotoVisibility (void)
 /*********** Show form to choice whether to display users' photos ************/
 /*****************************************************************************/
 
-void Pho_ShowFormShowPhotos (Pho_ShowPhotos_t CurrentShowPhotos)
+void Pho_PutButtonShowPhotos (Pho_ShowPhotos_t ShowPhotos,
+			      const char *FormId,const char *OnSubmit)
   {
    extern const char *Txt_Display_photos;
 
-   Set_BeginOneSettingSelector ();
-      Set_BeginPref (CurrentShowPhotos == Pho_PHOTOS_SHOW);
-	 // Input image can not be used to pass a value to the form,
-	 // so use a button with an image inside
-	 HTM_BUTTON_Submit_Begin (NULL,Usr_FORM_TO_SELECT_USRS_ID,
-				  "name=\"ShowPhotos\" value=\"%u\" class=\"BT_LINK\"",
-				  (unsigned) (CurrentShowPhotos ==
-					      Pho_PHOTOS_SHOW ? Pho_PHOTOS_DONT_SHOW :
-								Pho_PHOTOS_SHOW));
-	    HTM_IMG (Cfg_URL_ICON_PUBLIC,"image-portrait.svg",Txt_Display_photos,
-		     "class=\"ICO_HIGHLIGHT ICOx20 ICO_%s_%s\"",
-		     Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
-	 HTM_BUTTON_End ();
-      Set_EndPref ();
-   Set_EndOneSettingSelector ();
+   // Input image can not be used to pass a value to the form,
+   // so use a button with an image inside
+   if (OnSubmit)
+      HTM_BUTTON_Submit_Begin (Txt_Display_photos,FormId,
+			       "name=\"ShowPhotos\" value=\"%u\""
+			       " class=\"BT_LINK\" onsubmit=\"%s\"",
+			       (unsigned) (ShowPhotos ==
+					   Pho_PHOTOS_SHOW ? Pho_PHOTOS_DONT_SHOW :
+							     Pho_PHOTOS_SHOW),
+			       OnSubmit);
+   else
+      HTM_BUTTON_Submit_Begin (Txt_Display_photos,FormId,
+			       "name=\"ShowPhotos\" value=\"%u\""
+			       " class=\"BT_LINK\"",
+			       (unsigned) (ShowPhotos ==
+					   Pho_PHOTOS_SHOW ? Pho_PHOTOS_DONT_SHOW :
+							     Pho_PHOTOS_SHOW));
+
+   HTM_IMG (Cfg_URL_ICON_PUBLIC,"image-portrait.svg",Txt_Display_photos,
+	    "class=\"ICO_HIGHLIGHT ICOx20 ICO_%s_%s\"",
+	    Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
+
+   HTM_BUTTON_End ();
   }
 
 /*****************************************************************************/
