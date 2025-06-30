@@ -638,10 +638,11 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.92.2 (2025-06-27)"
-#define CSS_FILE		"swad24.91.css"
+#define Log_PLATFORM_VERSION	"SWAD 24.92.3 (2025-06-28)"
+#define CSS_FILE		"swad24.92.3.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 24.92.3:  Jun 30, 2025  Class photo with automatic columns. (348284 lines)
 	Version 24.92.2:  Jun 27, 2025  Users' photos can be not shown in class photos. (348269 lines)
 	Version 24.92.1:  Jun 27, 2025  Code refactoring in users' listing. (348259 lines)
 	Version 24.92:    Jun 27, 2025  Changes in users' listing. (348312 lines)

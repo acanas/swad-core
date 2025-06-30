@@ -208,13 +208,13 @@ void Pho_PutIconToChangeUsrPhoto (struct Usr_Data *UsrDat)
       case Usr_ME:
 	 Lay_PutContextualLinkOnlyIcon (ActReqMyPho,NULL,
 					NULL,NULL,
-					"camera.svg",Ico_BLACK);
+					"image-portrait.svg",Ico_BLACK);
 	 break;
       case Usr_OTHER:
 	 if (Pho_ICanChangeOtherUsrPhoto (UsrDat) == Usr_CAN)
 	    Lay_PutContextualLinkOnlyIcon (NextAction[UsrDat->Roles.InCurrentCrs],NULL,
 					   Rec_PutParUsrCodEncrypted,NULL,
-					   "camera.svg",Ico_BLACK);
+					   "image-portrait.svg",Ico_BLACK);
 	 break;
      }
   }

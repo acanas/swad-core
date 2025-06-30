@@ -3378,8 +3378,32 @@ table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 	font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
 	font-size: 12pt;
 	}
+.CLASSPHOTO_CONT
+	{
+	display: table;
+	box-sizing: border-box;
+	margin: 0 auto;
+	padding: 0 10px;
+	text-align: left;
+	/*
+	border: solid 1px red;
+	background-color: pink;
+	*/
+	}
+.CLASSPHOTO_CONT_C2
+	{
+	display: table;
+	box-sizing: border-box;
+	text-align: left;
+	/*
+	border: solid 1px red;
+	background-color: pink;
+	*/
+	}
 .CLASSPHOTO
 	{
+	display: inline-block;
+	width: 80px;
 	font-size: 10pt;
 	line-height: 110%;
 	white-space: nowrap;

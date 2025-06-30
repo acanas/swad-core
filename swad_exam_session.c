@@ -324,7 +324,11 @@ void ExaSes_ListUsersForSelection (struct Exa_Exams *Exams,
 		       }
 
 		     /***** Put a row to select all users *****/
-		     Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_STD,18);
+		     HTM_TR_Begin (NULL);
+			HTM_TD_Begin ("colspan=\"18\" class=\"LT\"");
+			   Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_STD);
+			HTM_TD_End ();
+		     HTM_TR_End ();
 
 		     /* Header */
 		     ExaSes_ShowHeaderResults ();

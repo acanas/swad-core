@@ -309,9 +309,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 
 			/* Data */
 			HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-		           HTM_TABLE_Begin ("TBL_SCROLL_C2");
-			      Usr_ListUsersToSelect (&Gbl.Usrs.Selected,ShowPhotos);
-			   HTM_TABLE_End ();
+			   Usr_ListUsersToSelect (&Gbl.Usrs.Selected,ShowPhotos);
 			HTM_TD_End ();
 		     HTM_TR_End ();
 

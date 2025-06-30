@@ -182,7 +182,7 @@ void Usr_GetSelectedUsrsAndGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 void Usr_ListUsersToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
 			    Pho_ShowPhotos_t ShowPhotos);
 void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUsrs,
-				      Rol_Role_t Role,unsigned ColSpan);
+				      Rol_Role_t Role);
 void Usr_WriteNumUsrsInList (Rol_Role_t Role);
 
 void Usr_ListAllDataGsts (void);

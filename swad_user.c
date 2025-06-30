@@ -3756,9 +3756,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 
 			/* Data */
 			HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-		           HTM_TABLE_Begin ("TBL_SCROLL_C2");
-			      Usr_ListUsersToSelect (SelectedUsrs,ShowPhotos);
-			   HTM_TABLE_End ();
+			   Usr_ListUsersToSelect (SelectedUsrs,ShowPhotos);
 			HTM_TD_End ();
 		     HTM_TR_End ();
 
@@ -3831,9 +3829,33 @@ void Usr_GetSelectedUsrsAndGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 void Usr_ListUsersToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
 			    Pho_ShowPhotos_t ShowPhotos)
   {
+   switch (Gbl.Usrs.Me.ListType)
+     {
+      case Set_USR_LIST_AS_CLASS_PHOTO:
+         HTM_DIV_Begin ("class=\"CLASSPHOTO_CONT_C2\"");
+         break;
+      case Set_USR_LIST_AS_LISTING:
+	 HTM_TABLE_Begin ("TBL_SCROLL_C2");
+         break;
+      default:
+	 break;
+     }
+
    Usr_ListUsersByRoleToSelect (SelectedUsrs,Rol_TCH,ShowPhotos);
    Usr_ListUsersByRoleToSelect (SelectedUsrs,Rol_NET,ShowPhotos);
    Usr_ListUsersByRoleToSelect (SelectedUsrs,Rol_STD,ShowPhotos);
+
+   switch (Gbl.Usrs.Me.ListType)
+     {
+      case Set_USR_LIST_AS_CLASS_PHOTO:
+	 HTM_DIV_End ();
+         break;
+      case Set_USR_LIST_AS_LISTING:
+	 HTM_TABLE_End ();
+         break;
+      default:
+	 break;
+     }
   }
 
 /*****************************************************************************/
@@ -3851,7 +3873,7 @@ static void Usr_ListUsersByRoleToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
    switch (Gbl.Usrs.Me.ListType)
      {
       case Set_USR_LIST_AS_CLASS_PHOTO:
-         Usr_DrawClassPhoto (SelectedUsrs,Role,Usr_CLASS_PHOTO_SEL,
+	 Usr_DrawClassPhoto (SelectedUsrs,Role,Usr_CLASS_PHOTO_SEL,
 			     true,	// Put checkbox to select user
 			     ShowPhotos);
          break;
@@ -3873,18 +3895,20 @@ static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
    unsigned NumUsr;
    struct Usr_Data UsrDat;
 
-   if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
-     {
-      /***** Put a row to select all users *****/
-      Usr_PutCheckboxToSelectAllUsers (SelectedUsrs,Role,
-				       Usr_GetColumnsForSelectUsrs (ShowPhotos));
+   /***** Put a row to select all users *****/
+   HTM_TR_Begin (NULL);
+      HTM_TD_Begin ("colspan=\"%u\" class=\"LT\"",
+		    Usr_GetColumnsForSelectUsrs (ShowPhotos));
+	 Usr_PutCheckboxToSelectAllUsers (SelectedUsrs,Role);
+      HTM_TD_End ();
+   HTM_TR_End ();
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
 
       /***** Heading row with column names *****/
       Usr_WriteHeaderFieldsUsrDat (true,	// Columns for the data
 				   ShowPhotos);
-
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
 
       /***** List users' data *****/
       for (NumUsr = 0, The_ResetRowColor ();
@@ -3892,19 +3916,18 @@ static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
 	   NumUsr++, The_ChangeRowColor ())
 	{
 	 /* Copy user's basic data from list */
-         Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
+	 Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
 
 	 /* Get list of user's IDs */
-         ID_GetListIDsFromUsrCod (&UsrDat);
+	 ID_GetListIDsFromUsrCod (&UsrDat);
 
-         /* Show row for this user */
-         Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,true,Role,SelectedUsrs,
+	 /* Show row for this user */
+	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,true,Role,SelectedUsrs,
 				  ShowPhotos);
 	}
 
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
-     }
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
   }
 
 /*****************************************************************************/
@@ -3912,29 +3935,25 @@ static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
 /*****************************************************************************/
 
 void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUsrs,
-				      Rol_Role_t Role,unsigned ColSpan)
+				      Rol_Role_t Role)
   {
    char *ParName;
 
-   HTM_TR_Begin (NULL);
-      HTM_TD_Begin ("colspan=\"%u\" class=\"LT\"",ColSpan);
-	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    if (Usr_NameSelUnsel[Role] && Usr_ParUsrCod[Role])
-	      {
-	       Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
-	       HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Role],
-				   HTM_NO_ATTR,
-				   "value=\"\" form=\"%s\""
-				   " onclick=\"togglecheckChildren(this,'%s')\"",
-				   Usr_FORM_TO_SELECT_USRS_ID,ParName);
-	       free (ParName);
-	      }
-	    else
-	       Err_WrongRoleExit ();
-	    Usr_WriteNumUsrsInList (Role);
-	 HTM_LABEL_End ();
-      HTM_TD_End ();
-   HTM_TR_End ();
+   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+      if (Usr_NameSelUnsel[Role] && Usr_ParUsrCod[Role])
+	{
+	 Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
+	 HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Role],
+			     HTM_NO_ATTR,
+			     "value=\"\" form=\"%s\""
+			     " onclick=\"togglecheckChildren(this,'%s')\"",
+			     Usr_FORM_TO_SELECT_USRS_ID,ParName);
+	 free (ParName);
+	}
+      else
+	 Err_WrongRoleExit ();
+      Usr_WriteNumUsrsInList (Role);
+   HTM_LABEL_End ();
   }
 
 /*****************************************************************************/
@@ -4070,46 +4089,43 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr,
    unsigned NumUsr;
    struct Usr_Data UsrDat;
 
-   if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
+   /***** Put a row to select all users *****/
+   if (PutCheckBoxToSelectUsr)
      {
-      /***** Put a row to select all users *****/
-      if (PutCheckBoxToSelectUsr)
-         Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_GST,
-				          Usr_GetColumnsForSelectUsrs (ShowPhotos));
+      HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("colspan=\"%u\" class=\"LT\"",
+		       Usr_GetColumnsForSelectUsrs (ShowPhotos));
+	    Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_GST);
+	 HTM_TD_End ();
+      HTM_TR_End ();
+     }
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
 
       /***** Heading row with column names *****/
       Usr_WriteHeaderFieldsUsrDat (PutCheckBoxToSelectUsr,	// Columns for the data
 				   ShowPhotos);
 
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
+      /***** List guests' data *****/
+      for (NumUsr = 0, The_ResetRowColor ();
+	   NumUsr < Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs;
+	   NumUsr++, The_ChangeRowColor ())
+	{
+	 /* Copy user's basic data from list */
+	 Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_GST].Lst[NumUsr]);
 
-	 /***** List guests' data *****/
-	 for (NumUsr = 0, The_ResetRowColor ();
-	      NumUsr < Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs;
-	      NumUsr++, The_ChangeRowColor ())
-	   {
-	    /* Copy user's basic data from list */
-	    Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_GST].Lst[NumUsr]);
+	 /* Get list of user's IDs */
+	 ID_GetListIDsFromUsrCod (&UsrDat);
 
-	    /* Get list of user's IDs */
-	    ID_GetListIDsFromUsrCod (&UsrDat);
+	 /* Show row for this guest */
+	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,true,Rol_GST,
+				  &Gbl.Usrs.Selected,
+				  ShowPhotos);
+	}
 
-	    /* Show row for this guest */
-	    Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,true,Rol_GST,
-				     &Gbl.Usrs.Selected,
-				     ShowPhotos);
-	   }
-
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
-     }
-   else        // Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs == 0
-      /***** Show warning indicating no guests found *****/
-      Usr_ShowWarningNoUsersFound (Rol_GST);
-
-   /***** Free memory for guests list *****/
-   Usr_FreeUsrsList (Rol_GST);
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
   }
 
 /*****************************************************************************/
@@ -4120,69 +4136,46 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr,
 				  Pho_ShowPhotos_t ShowPhotos)
   {
    unsigned NumUsr;
-   char *GroupNames = NULL;        // To avoid warning
    struct Usr_Data UsrDat;
 
-   if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
+   /***** Put a row to select all users *****/
+   if (PutCheckBoxToSelectUsr)
      {
-      /***** Allocate memory for the string with the list of group names where student belongs to *****/
-      if ((GroupNames = malloc (Gbl.Crs.Grps.GrpTypes.NumGrpsTotal *
-                                (Grp_MAX_BYTES_GROUP_NAME + 3))) == NULL)
-         Err_NotEnoughMemoryExit ();
+      HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("colspan=\"%u\" class=\"LT\"",
+		       Usr_GetColumnsForSelectUsrs (ShowPhotos));
+	    Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_STD);
+	 HTM_TD_End ();
+      HTM_TR_End ();
+     }
 
-      /***** Begin table with list of students *****/
-      if (!Gbl.Crs.Grps.AllGrpsSel)
-        {
-         HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("colspan=\"%u\" class=\"TIT CM\"",
-			  1 + Usr_NUM_MAIN_FIELDS_DATA_USR);
-	       Grp_WriteNamesOfSelectedGrps ();
-	    HTM_TD_End ();
-         HTM_TR_End ();
-        }
-
-      /***** Put a row to select all users *****/
-      if (PutCheckBoxToSelectUsr)
-	 Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_STD,
-				          Usr_GetColumnsForSelectUsrs (ShowPhotos));
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
 
       /***** Heading row with column names *****/
       Usr_WriteHeaderFieldsUsrDat (PutCheckBoxToSelectUsr,	// Columns for the data
 				   ShowPhotos);
 
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
-
       /***** List students' data *****/
       for (NumUsr = 0, The_ResetRowColor ();
-           NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
-           NumUsr++, The_ChangeRowColor ())
-        {
+	   NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
+	   NumUsr++, The_ChangeRowColor ())
+	{
 	 /* Copy user's basic data from list */
-         Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
+	 Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
 
 	 /* Get list of user's IDs */
-         ID_GetListIDsFromUsrCod (&UsrDat);
+	 ID_GetListIDsFromUsrCod (&UsrDat);
 
-         /* Show row for this student */
-         Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,
-                                  PutCheckBoxToSelectUsr,Rol_STD,
+	 /* Show row for this student */
+	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,
+				  PutCheckBoxToSelectUsr,Rol_STD,
 				  &Gbl.Usrs.Selected,
 				  ShowPhotos);
-        }
+	}
 
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
-
-      /***** Free memory used by the string with the list of group names where student belongs to *****/
-      free (GroupNames);
-     }
-   else        // Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
-      /***** Show warning indicating no students found *****/
-      Usr_ShowWarningNoUsersFound (Rol_STD);
-
-   /***** Free memory for students list *****/
-   Usr_FreeUsrsList (Rol_STD);
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
   }
 
 /*****************************************************************************/
@@ -4204,50 +4197,56 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,
      {
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
-	 Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Role,
-				          Usr_GetColumnsForSelectUsrs (ShowPhotos));
-
-      /***** Heading row with column names *****/
-      /* Begin row */
-      HTM_TR_Begin (NULL);
-
-	 /* First column used for selection  */
-	 if (PutCheckBoxToSelectUsr)
-	    HTM_TH_Span (NULL,HTM_HEAD_LEFT,1,1,"BG_HIGHLIGHT");
-
-	 /* Columns for the data */
-	 for (NumCol = 0;
-	      NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
-	      NumCol++)
-	    if (NumCol != 2 ||
-		ShowPhotos == Pho_PHOTOS_SHOW)        // Skip photo column if I don't want this column
-	       HTM_TH_Span (*Usr_UsrDatMainFieldNames[NumCol].Txt,
-		             Usr_UsrDatMainFieldNames[NumCol].HeadAlign,
-		            1,1,"BG_HIGHLIGHT");
-
-      /* End row */
-      HTM_TR_End ();
+        {
+	 HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("colspan=\"%u\" class=\"LT\"",
+			  Usr_GetColumnsForSelectUsrs (ShowPhotos));
+	       Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Role);
+	    HTM_TD_End ();
+	 HTM_TR_End ();
+        }
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      /***** List teachers' data *****/
-      for (NumUsr = 0, The_ResetRowColor ();
-           NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
-           NumUsr++, The_ChangeRowColor ())
-        {
-	 /* Copy user's basic data from list */
-         Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
+	 /***** Heading row with column names *****/
+	 /* Begin row */
+	 HTM_TR_Begin (NULL);
 
-	 /* Get list of user's IDs */
-         ID_GetListIDsFromUsrCod (&UsrDat);
+	    /* First column used for selection  */
+	    if (PutCheckBoxToSelectUsr)
+	       HTM_TH_Span (NULL,HTM_HEAD_LEFT,1,1,"BG_HIGHLIGHT");
 
-         /* Show row for this teacher */
-	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,
-	                          PutCheckBoxToSelectUsr,Role,
-				  &Gbl.Usrs.Selected,
-				  ShowPhotos);
-        }
+	    /* Columns for the data */
+	    for (NumCol = 0;
+		 NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
+		 NumCol++)
+	       if (NumCol != 2 ||
+		   ShowPhotos == Pho_PHOTOS_SHOW)        // Skip photo column if I don't want this column
+		  HTM_TH_Span (*Usr_UsrDatMainFieldNames[NumCol].Txt,
+				Usr_UsrDatMainFieldNames[NumCol].HeadAlign,
+			       1,1,"BG_HIGHLIGHT");
+
+	 /* End row */
+	 HTM_TR_End ();
+
+	 /***** List teachers' data *****/
+	 for (NumUsr = 0, The_ResetRowColor ();
+	      NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
+	      NumUsr++, The_ChangeRowColor ())
+	   {
+	    /* Copy user's basic data from list */
+	    Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
+
+	    /* Get list of user's IDs */
+	    ID_GetListIDsFromUsrCod (&UsrDat);
+
+	    /* Show row for this teacher */
+	    Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,
+				     PutCheckBoxToSelectUsr,Role,
+				     &Gbl.Usrs.Selected,
+				     ShowPhotos);
+	   }
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -5097,9 +5096,6 @@ void Usr_ListGuests (void)
 						 NULL,ListingPars.ShowPhotos);
 
 	       /***** Draw a class photo with guests *****/
-	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
-		  Lay_WriteHeaderClassPhoto (ListingPars.HieLvl,Vie_VIEW);
-
 	       /* Set options allowed */
 	       PutForm = Usr_SetAllowedListUsrsActions (ListingPars.HieLvl,Rol_GST,
 							ICanChooseOption) ? Frm_PUT_FORM :
@@ -5110,28 +5106,27 @@ void Usr_ListGuests (void)
 		  Frm_BeginFormIdAnchor (Act_DoAct_OnSevGst,Usr_FORM_TO_SELECT_USRS_ID,
 					 Usr_USER_LIST_SECTION_ID);
 
-	       /* Begin table */
-	       HTM_TABLE_Begin ("TBL_SCROLL");
-
-		  /* Draw the classphoto/list */
-		  switch (Gbl.Usrs.Me.ListType)
-		    {
-		     case Set_USR_LIST_AS_CLASS_PHOTO:
+	       switch (Gbl.Usrs.Me.ListType)
+		 {
+		  /* Draw the classphoto of guests */
+		  case Set_USR_LIST_AS_CLASS_PHOTO:
+		     HTM_DIV_Begin ("class=\"CLASSPHOTO_CONT\"");
 			Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_GST,
 					    Usr_CLASS_PHOTO_SEL_SEE,
 					    PutForm,	// Put checkbox to select user?
 					    ListingPars.ShowPhotos);
-			break;
-		     case Set_USR_LIST_AS_LISTING:
+		     HTM_DIV_End ();
+		     break;
+		  case Set_USR_LIST_AS_LISTING:
+		     /* List the guests */
+		     HTM_TABLE_Begin ("TBL_SCROLL");
 			Usr_ListMainDataGsts (PutForm,	// Put checkbox to select user?
 					      ListingPars.ShowPhotos);
-			break;
-		     default:
-			break;
-		    }
-
-	       /* End table */
-	       HTM_TABLE_End ();
+		     HTM_TABLE_End ();
+		     break;
+		  default:
+		     break;
+		 }
 
 	       /***** Which action, show records, follow...? *****/
 	       if (PutForm == Frm_PUT_FORM)
@@ -5262,8 +5257,7 @@ void Usr_ListStudents (void)
 						 NULL,ListingPars.ShowPhotos);
 
 	       /***** Draw a class photo with students of the course *****/
-	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
-		  Lay_WriteHeaderClassPhoto (ListingPars.HieLvl,Vie_VIEW);
+	       Lay_WriteHeaderClassPhoto (ListingPars.HieLvl,Vie_VIEW);
 
 	       /* Set options allowed */
 	       PutForm = Usr_SetAllowedListUsrsActions (ListingPars.HieLvl,Rol_STD,
@@ -5279,28 +5273,27 @@ void Usr_ListStudents (void)
 		     Grp_PutParsCodGrps ();
 		 }
 
-	       /* Begin table */
-	       HTM_TABLE_Begin ("TBL_SCROLL");
-
-		  /* Draw the classphoto/list */
-		  switch (Gbl.Usrs.Me.ListType)
-		    {
-		     case Set_USR_LIST_AS_CLASS_PHOTO:
+	       switch (Gbl.Usrs.Me.ListType)
+		 {
+		  case Set_USR_LIST_AS_CLASS_PHOTO:
+		     /* Draw classphoto of students */
+		     HTM_DIV_Begin ("class=\"CLASSPHOTO_CONT\"");
 			Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_STD,
 					    Usr_CLASS_PHOTO_SEL_SEE,
 					    PutForm,	// Put checkbox to select user?
 					    ListingPars.ShowPhotos);
-			break;
-		     case Set_USR_LIST_AS_LISTING:
+		     HTM_DIV_End ();
+		     break;
+		  case Set_USR_LIST_AS_LISTING:
+		     /* List students */
+		     HTM_TABLE_Begin ("TBL_SCROLL");
 			Usr_ListMainDataStds (PutForm,	// Put checkbox to select user?
 					      ListingPars.ShowPhotos);
-			break;
-		     default:
-			break;
-		    }
-
-	       /* End table */
-	       HTM_TABLE_End ();
+		     HTM_TABLE_End ();
+		     break;
+		  default:
+		     break;
+		 }
 
 	       /***** Which action, show records, follow...? *****/
 	       if (PutForm == Frm_PUT_FORM)
@@ -5442,8 +5435,7 @@ void Usr_ListTeachers (void)
 						 NULL,ListingPars.ShowPhotos);
 
 	       /***** Draw a class photo with teachers of the course *****/
-	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
-		  Lay_WriteHeaderClassPhoto (ListingPars.HieLvl,Vie_VIEW);
+	       Lay_WriteHeaderClassPhoto (ListingPars.HieLvl,Vie_VIEW);
 
 	       /* Set options allowed */
 	       PutForm = Usr_SetAllowedListUsrsActions (ListingPars.HieLvl,Rol_TCH,
@@ -5458,14 +5450,12 @@ void Usr_ListTeachers (void)
 		     Grp_PutParsCodGrps ();
 		 }
 
-	       /* Begin table */
-	       HTM_TABLE_Begin ("TBL_SCROLL");
-
-		  /***** Draw the classphoto/list  *****/
-		  switch (Gbl.Usrs.Me.ListType)
-		    {
-		     case Set_USR_LIST_AS_CLASS_PHOTO:
-			/* List teachers and non-editing teachers */
+	       /***** Draw the classphoto/list  *****/
+	       switch (Gbl.Usrs.Me.ListType)
+		 {
+		  case Set_USR_LIST_AS_CLASS_PHOTO:
+		     /* Class photo of teachers and non-editing teachers */
+		     HTM_DIV_Begin ("class=\"CLASSPHOTO_CONT\"");
 			Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_TCH,
 					    Usr_CLASS_PHOTO_SEL_SEE,
 					    PutForm,	// Put checkbox to select user?
@@ -5474,22 +5464,22 @@ void Usr_ListTeachers (void)
 					    Usr_CLASS_PHOTO_SEL_SEE,
 					    PutForm,	// Put checkbox to select user?
 					    ListingPars.ShowPhotos);
-			break;
-		     case Set_USR_LIST_AS_LISTING:
-			/* List teachers and non-editing teachers */
+		     HTM_DIV_End ();
+		     break;
+		  case Set_USR_LIST_AS_LISTING:
+		     /* List teachers and non-editing teachers */
+		     HTM_TABLE_Begin ("TBL_SCROLL");
 			Usr_ListMainDataTchs (Rol_TCH,
 					      PutForm,	// Put checkbox to select user?
 					      ListingPars.ShowPhotos);
 			Usr_ListMainDataTchs (Rol_NET,
 					      PutForm,	// Put checkbox to select user?
 					      ListingPars.ShowPhotos);
-			break;
-		     default:
-			break;
-		    }
-
-	       /* End table */
-	       HTM_TABLE_End ();
+		     HTM_TABLE_End ();
+		     break;
+		  default:
+		     break;
+		 }
 
 	       /***** Which action, show records, follow...? *****/
 	       if (PutForm == Frm_PUT_FORM)
@@ -6075,12 +6065,12 @@ void Usr_SeeGstClassPhotoPrn (void)
      {
       /***** Draw the guests' class photo *****/
       Lay_WriteHeaderClassPhoto (ListingPars.HieLvl,Vie_PRINT);
-      HTM_TABLE_BeginWide ();
+      HTM_DIV_Begin ("class=\"CLASSPHOTO_CONT\"");
 	 Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_GST,
 			     Usr_CLASS_PHOTO_PRN,
 			     false,	// Don't put checkbox to select user
 			     ListingPars.ShowPhotos);
-      HTM_TABLE_End ();
+      HTM_DIV_End ();
      }
    else	// Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs
       /***** Show warning indicating no guests found *****/
@@ -6118,12 +6108,12 @@ void Usr_SeeStdClassPhotoPrn (void)
      {
       /***** Draw the students' class photo *****/
       Lay_WriteHeaderClassPhoto (ListingPars.HieLvl,Vie_PRINT);
-      HTM_TABLE_BeginWide ();
+      HTM_DIV_Begin ("class=\"CLASSPHOTO_CONT\"");
 	 Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_STD,
 			     Usr_CLASS_PHOTO_PRN,
 			     false,	// Don't put checkbox to select user
 			     ListingPars.ShowPhotos);
-      HTM_TABLE_End ();
+      HTM_DIV_End ();
      }
    else	// Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
       /***** Show warning indicating no students found *****/
@@ -6184,9 +6174,9 @@ void Usr_SeeTchClassPhotoPrn (void)
      {
       /***** Draw the teachers' class photo *****/
       Lay_WriteHeaderClassPhoto (ListingPars.HieLvl,Vie_PRINT);
-      HTM_TABLE_BeginWide ();
 
-	 /* List teachers and non-editing teachers */
+      /* Class photo of teachers and non-editing teachers */
+      HTM_DIV_Begin ("class=\"CLASSPHOTO_CONT\"");
 	 Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_TCH,
 			     Usr_CLASS_PHOTO_PRN,
 			     false,	// Don't put checkbox to select user
@@ -6195,8 +6185,7 @@ void Usr_SeeTchClassPhotoPrn (void)
 			     Usr_CLASS_PHOTO_PRN,
 			     false,	// Don't put checkbox to select user
 			     ListingPars.ShowPhotos);
-
-      HTM_TABLE_End ();
+      HTM_DIV_End ();
      }
    else	// NumUsrs == 0
       /***** Show warning indicating no teachers found *****/
@@ -6236,8 +6225,6 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
       [Usr_CLASS_PHOTO_PRN    ][PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
    unsigned NumUsr;
-   unsigned Cols = Set_GetColsClassPhoto ();
-   bool TRIsOpen = false;
    bool UsrIsTheMsgSender;
    struct Usr_Data UsrDat;
 
@@ -6245,79 +6232,69 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
      {
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
-	 Usr_PutCheckboxToSelectAllUsers (SelectedUsrs,Role,
-				          Usr_GetColumnsForSelectUsrs (ShowPhotos));
+	{
+	 HTM_DIV_Begin (NULL);
+	    Usr_PutCheckboxToSelectAllUsers (SelectedUsrs,Role);
+	 HTM_DIV_End ();
+	}
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      /***** Loop for showing users photos, names and place of birth *****/
-      for (NumUsr = 0;
-	   NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs; )
-	{
-	 if ((NumUsr % Cols) == 0)
+	 /***** Loop for showing users photos, names and place of birth *****/
+	 for (NumUsr = 0;
+	      NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
+	      NumUsr++)
 	   {
-	    HTM_TR_Begin (NULL);
-	    TRIsOpen = true;
-	   }
+	    /* Copy user's basic data from list */
+	    Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
+	    UsrIsTheMsgSender = (ClassPhotoType == Usr_CLASS_PHOTO_SEL &&
+				 UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
 
-	 /* Copy user's basic data from list */
-	 Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
-	 UsrIsTheMsgSender = (ClassPhotoType == Usr_CLASS_PHOTO_SEL &&
-			      UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+	    /* Get list of user's IDs */
+	    ID_GetListIDsFromUsrCod (&UsrDat);
 
-	 /* Get list of user's IDs */
-	 ID_GetListIDsFromUsrCod (&UsrDat);
+	    /***** Begin user's cell *****/
+	    HTM_DIV_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s CB%s\"",
+			   The_GetSuffix (),UsrIsTheMsgSender ? " LIGHT_GREEN" :
+								"");
 
-	 /***** Begin user's cell *****/
-	 HTM_TD_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s CB%s\"",
-		       The_GetSuffix (),UsrIsTheMsgSender ? " LIGHT_GREEN" :
-							    "");
+	       /***** Checkbox to select this user *****/
+	       if (PutCheckBoxToSelectUsr)
+		  Usr_PutCheckboxToSelectUser (Role,UsrDat.EnUsrCod,UsrIsTheMsgSender,
+					       SelectedUsrs);
 
-	    /***** Checkbox to select this user *****/
-	    if (PutCheckBoxToSelectUsr)
-	       Usr_PutCheckboxToSelectUser (Role,UsrDat.EnUsrCod,UsrIsTheMsgSender,
-					    SelectedUsrs);
+	       /***** Show photo *****/
+	       if (ShowPhotos == Pho_PHOTOS_SHOW)
+		  Pho_ShowUsrPhotoIfAllowed (&UsrDat,
+					     ClassPhoto[ClassPhotoType][Gbl.Prefs.PhotoShape],
+					     Pho_ZOOM);
 
-	    /***** Show photo *****/
-	    if (ShowPhotos == Pho_PHOTOS_SHOW)
-	       Pho_ShowUsrPhotoIfAllowed (&UsrDat,
-					  ClassPhoto[ClassPhotoType][Gbl.Prefs.PhotoShape],
-					  Pho_ZOOM);
+	       /***** Photo foot *****/
+	       HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION CLASSPHOTO_%s\"",
+			      The_GetSuffix ());
 
-	    /***** Photo foot *****/
-	    HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION CLASSPHOTO_%s\"",
-			   The_GetSuffix ());
+		  /* Name */
+		  if (UsrDat.FrstName[0])
+		     HTM_Txt (UsrDat.FrstName);
+		  else
+		     HTM_NBSP ();
+		  HTM_BR ();
+		  if (UsrDat.Surname1[0])
+		     HTM_Txt (UsrDat.Surname1);
+		  else
+		     HTM_NBSP ();
+		  HTM_BR ();
+		  if (UsrDat.Surname2[0])
+		     HTM_Txt (UsrDat.Surname2);
+		  else
+		     HTM_NBSP ();
 
-	       /* Name */
-	       if (UsrDat.FrstName[0])
-		  HTM_Txt (UsrDat.FrstName);
-	       else
-		  HTM_NBSP ();
-	       HTM_BR ();
-	       if (UsrDat.Surname1[0])
-		  HTM_Txt (UsrDat.Surname1);
-	       else
-		  HTM_NBSP ();
-	       HTM_BR ();
-	       if (UsrDat.Surname2[0])
-		  HTM_Txt (UsrDat.Surname2);
-	       else
-		  HTM_NBSP ();
+	       HTM_DIV_End ();
 
+	    /***** End user's cell *****/
 	    HTM_DIV_End ();
-
-	 /***** End user's cell *****/
-	 HTM_TD_End ();
-
-	 if ((++NumUsr % Cols) == 0)
-	   {
-	    HTM_TR_End ();
-	    TRIsOpen = false;
 	   }
-	}
-      if (TRIsOpen)
-	 HTM_TR_End ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);

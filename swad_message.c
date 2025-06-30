@@ -361,10 +361,8 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
 		     if (ShowUsrsInCrs)
 		       {
 			/***** Show potential recipients *****/
-			HTM_TABLE_Begin ("TBL_SCROLL_C2");
-			   Usr_ListUsersToSelect (&Gbl.Usrs.Selected,ShowPhotos);
-			   OtherRecipientsBefore = true;
-			HTM_TABLE_End ();
+			Usr_ListUsersToSelect (&Gbl.Usrs.Selected,ShowPhotos);
+			OtherRecipientsBefore = true;
 		       }
 		     UsrClp_ListUsrsInMyClipboard (Frm_PUT_FORM,
 						   false);		// Don't show if empty
