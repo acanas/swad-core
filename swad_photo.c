@@ -2233,12 +2233,8 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
    unsigned long NumDeg;
    unsigned long NumDegs;
    struct Hie_Node Deg;
-   unsigned NumDegsNotEmpty;
    int NumStds;
    int NumStdsWithPhoto;
-   // unsigned Cols = Set_GetColsClassPhoto ();
-   unsigned Cols = 10;	// TODO: Class photo with flexible number of columns
-   bool TRIsOpen = false;
 
    /***** Get degrees from database *****/
    if ((NumDegs = Pho_DB_QueryDegrees (&mysql_res,DegPhotos->HowOrderDegrees)))	// Degrees with students found
@@ -2248,10 +2244,10 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg,Pho_PutParsDegPhoto,DegPhotos,
 					   NULL,ShowPhotos);
 
-      HTM_TABLE_BeginCenter ();
+      HTM_DIV_Begin ("class=\"CLASSPHOTO_CONT\"");
 
 	 /***** Get and print degrees *****/
-	 for (NumDeg = 0, NumDegsNotEmpty = 0;
+	 for (NumDeg = 0;
 	      NumDeg < NumDegs;
 	      NumDeg++)
 	   {
@@ -2267,33 +2263,19 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 
 	    if (NumStds > 0)
 	      {
-	       if ((NumDegsNotEmpty % Cols) == 0)
-		 {
-		  HTM_TR_Begin (NULL);
-		  TRIsOpen = true;
-		 }
-
 	       /***** Show average photo of students belonging to this degree *****/
-	       HTM_TD_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s CM\"",
-	                     The_GetSuffix ());
+	       HTM_DIV_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s CB\"",
+			      The_GetSuffix ());
 		  Pho_ShowDegreeAvgPhotoAndStat (&Deg,DegPhotos,
 						 SeeOrPrint,
 						 Usr_SEX_ALL,
 						 NumStds,NumStdsWithPhoto,
 						 ShowPhotos);
-	       HTM_TD_End ();
-
-	       if ((++NumDegsNotEmpty % Cols) == 0)
-		 {
-		  HTM_TR_End ();
-		  TRIsOpen = false;
-		 }
+	       HTM_DIV_End ();
 	      }
 	   }
-	 if (TRIsOpen)
-	    HTM_TR_End ();
 
-      HTM_TABLE_End ();
+      HTM_DIV_End ();
      }
    else	// No degrees with students found
       /***** Show warning indicating no students found *****/
@@ -2337,7 +2319,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
       /***** Write heading *****/
       HTM_TABLE_BeginCenterPadding (2);
 	 HTM_TR_Begin (NULL);
-	    HTM_TH (Txt_No_INDEX	      ,HTM_HEAD_RIGHT );
+	    HTM_TH (Txt_No_INDEX	             ,HTM_HEAD_RIGHT );
 	    HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG],HTM_HEAD_CENTER);
 	    for (Sex  = (Usr_Sex_t) 0;
 		 Sex <= (Usr_Sex_t) (Usr_NUM_SEXS - 1);
@@ -2387,8 +2369,8 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 		 {
 		  /***** Show average photo of students belonging to this degree *****/
 		  Pho_GetNumStdsInDegree (Deg.HieCod,Sex,&NumStds,&NumStdsWithPhoto);
-		  HTM_TD_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s RM %s\"",
-		                The_GetSuffix (),The_GetColorRows ());
+		  HTM_TD_Begin ("class=\"RM DAT_SMALL_%s %s\"",
+				The_GetSuffix (),The_GetColorRows ());
 		     if (ShowPhotos == Pho_PHOTOS_SHOW)
 			Pho_ShowDegreeAvgPhotoAndStat (&Deg,DegPhotos,
 						       SeeOrPrint,Sex,

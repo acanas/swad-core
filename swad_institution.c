@@ -1675,7 +1675,6 @@ static void Ins_GetAndShowInssOrderedByNumCtrs (Hie_Level_t HieLvl,
 
    Box_BoxBegin (Txt_Institutions_by_number_of_centers,NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);
-      HTM_TABLE_Begin ("TBL_SCROLL");
 
 	 /***** Get institutions ordered by number of centers *****/
 	 NumInss = Ins_DB_GetInssOrderedByNumCtrs (&mysql_res,HieLvl);
@@ -1686,7 +1685,6 @@ static void Ins_GetAndShowInssOrderedByNumCtrs (Hie_Level_t HieLvl,
 	 /***** Free structure that stores the query result *****/
 	 DB_FreeMySQLResult (&mysql_res);
 
-      HTM_TABLE_End ();
    Box_BoxEnd ();
   }
 
@@ -1821,9 +1819,6 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
    unsigned NumberLastRow;
    unsigned NumberThisRow;
    struct Hie_Node Ins;
-   // unsigned Cols = Set_GetColsClassPhoto ();
-   unsigned Cols = 10;	// TODO: Class photo with flexible number of columns
-   bool TRIsOpen = false;
 
    /***** Query database *****/
    if (NumInss)
@@ -1833,80 +1828,77 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	{
 	 case Set_USR_LIST_AS_CLASS_PHOTO:
 	    /***** Draw institutions as a class photo *****/
-	    for (NumIns = 0;
-		 NumIns < NumInss;)
-	      {
-	       if ((NumIns % Cols) == 0)
+	    HTM_DIV_Begin ("class=\"CLASSPHOTO_CONT\"");
+
+	       for (NumIns = 0;
+		    NumIns < NumInss;
+		    NumIns++)
 		 {
-		  HTM_TR_Begin (NULL);
-		  TRIsOpen = true;
+		  HTM_DIV_Begin ("class=\"CLASSPHOTO FORM_IN_%s CB\"",
+				 The_GetSuffix ());
+
+		     /***** Get institution data and statistic *****/
+		     NumberThisRow = Ins_GetInsAndStat (&Ins,*mysql_res);
+
+		     /***** Write link to institution *****/
+		     Ins_DrawInstitutionLogoWithLink (&Ins,"ICO40x40"); HTM_BR ();
+		     HTM_Unsigned (NumberThisRow);
+
+	          HTM_DIV_End ();
 		 }
 
-	       /***** Get institution data and statistic *****/
-	       NumberThisRow = Ins_GetInsAndStat (&Ins,*mysql_res);
-
-	       /***** Write link to institution *****/
-	       HTM_TD_Begin ("class=\"CM FORM_IN_%s\"",The_GetSuffix ());
-		  Ins_DrawInstitutionLogoWithLink (&Ins,"ICO40x40"); HTM_BR ();
-		  HTM_Unsigned (NumberThisRow);
-               HTM_TD_End ();
-
-	       if ((++NumIns % Cols) == 0)
-		 {
-		  HTM_TR_End ();
-		  TRIsOpen = false;
-		 }
-	      }
-	    if (TRIsOpen)
-	       HTM_TR_End ();
-
+	    HTM_DIV_End ();
 	    break;
 	 case Set_USR_LIST_AS_LISTING:
 	    /***** Draw institutions as a list *****/
-	    HTM_TR_Begin (NULL);
-	       HTM_TH_Empty (1);
-	       HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_INS],HTM_HEAD_LEFT );
-	       HTM_TH (TxtFigure      		 	,HTM_HEAD_RIGHT);
-	    HTM_TR_End ();
-
-	    for (NumIns  = 1, NumOrder = 1, NumberLastRow = 0;
-		 NumIns <= NumInss;
-		 NumIns++)
-	      {
-	       /***** Get institution data and statistic *****/
-	       NumberThisRow = Ins_GetInsAndStat (&Ins,*mysql_res);
+	    HTM_TABLE_Begin ("TBL_SCROLL");
 
 	       HTM_TR_Begin (NULL);
-
-		  /***** Number of order *****/
-		  if (NumberThisRow != NumberLastRow)
-		     NumOrder = NumIns;
-		  HTM_TD_Unsigned (NumOrder);
-
-		  /***** Write link to institution *****/
-		  HTM_TD_Begin ("class=\"LM FORM_IN_%s\"",The_GetSuffix ());
-		     /* Icon and name of this institution */
-		     Frm_BeginForm (ActSeeInsInf);
-			ParCod_PutPar (ParCod_Ins,Ins.HieCod);
-			HTM_BUTTON_Submit_Begin (Ins.ShrtName,NULL,
-			                         "class=\"LM BT_LINK\"");
-			   if (ShowPhotos == Pho_PHOTOS_SHOW)
-			     {
-			      Lgo_DrawLogo (Hie_INS,&Ins,"ICO40x40");
-			      HTM_NBSP ();
-			     }
-			   HTM_Txt (Ins.FullName);
-			HTM_BUTTON_End ();
-		     Frm_EndForm ();
-		  HTM_TD_End ();
-
-		  /***** Write statistic *****/
-		  HTM_TD_Unsigned (NumberThisRow);
-
+		  HTM_TH_Empty (1);
+		  HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_INS],HTM_HEAD_LEFT );
+		  HTM_TH (TxtFigure      		   ,HTM_HEAD_RIGHT);
 	       HTM_TR_End ();
 
-	       NumberLastRow = NumberThisRow;
-	      }
+	       for (NumIns  = 1, NumOrder = 1, NumberLastRow = 0;
+		    NumIns <= NumInss;
+		    NumIns++)
+		 {
+		  /***** Get institution data and statistic *****/
+		  NumberThisRow = Ins_GetInsAndStat (&Ins,*mysql_res);
+
+		  HTM_TR_Begin (NULL);
+
+		     /***** Number of order *****/
+		     if (NumberThisRow != NumberLastRow)
+			NumOrder = NumIns;
+		     HTM_TD_Unsigned (NumOrder);
+
+		     /***** Write link to institution *****/
+		     HTM_TD_Begin ("class=\"LM FORM_IN_%s\"",The_GetSuffix ());
+			/* Icon and name of this institution */
+			Frm_BeginForm (ActSeeInsInf);
+			   ParCod_PutPar (ParCod_Ins,Ins.HieCod);
+			   HTM_BUTTON_Submit_Begin (Ins.ShrtName,NULL,
+						    "class=\"LM BT_LINK\"");
+			      if (ShowPhotos == Pho_PHOTOS_SHOW)
+				{
+				 Lgo_DrawLogo (Hie_INS,&Ins,"ICO40x40");
+				 HTM_NBSP ();
+				}
+			      HTM_Txt (Ins.FullName);
+			   HTM_BUTTON_End ();
+			Frm_EndForm ();
+		     HTM_TD_End ();
+
+		     /***** Write statistic *****/
+		     HTM_TD_Unsigned (NumberThisRow);
+
+		  HTM_TR_End ();
+
+		  NumberLastRow = NumberThisRow;
+		 }
+
+	    HTM_TABLE_End ();
 	    break;
 	 default:
 	    break;

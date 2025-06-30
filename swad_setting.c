@@ -62,7 +62,6 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static Pho_ShowPhotos_t Set_ShowPhotos = Pho_PHOTOS_DEFAULT;
-// static unsigned Set_ClassPhotoCols = Usr_CLASS_PHOTO_COLS_DEF;
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -74,11 +73,6 @@ static void Set_PutIconsSideColumns (__attribute__((unused)) void *Args);
 static void Set_GetAndUpdateUsrListType (void);
 static void Set_GetUsrListTypeFromForm (void);
 static void Set_GetMyUsrListTypeFromDB (void);
-
-// static void Set_SetColsClassPhoto (void);
-// static unsigned Set_GetMyColsClassPhotoFromDB (void);
-// static void Set_PutParColsClassPhoto (void);
-// static unsigned Set_GetParColsClassPhotoFromForm (void);
 
 static Pho_ShowPhotos_t Set_GetAndUpdatePrefAboutListWithPhotos (void);
 
@@ -358,83 +352,6 @@ static void Set_GetMyUsrListTypeFromDB (void)
    DB_FreeMySQLResult (&mysql_res);
   }
 
-/*****************************************************************************/
-/************** Set and get number of columns in class photo *****************/
-/*****************************************************************************/
-/*
-static void Set_SetColsClassPhoto (void)
-  {
-   unsigned Cols;
-
-   ***** Get the number of columns in class photo from form *****
-   if ((Cols = Set_GetParColsClassPhotoFromForm ()))
-      * Save the number of columns into the database *
-      Set_DB_UpdateMyColsClassPhoto (Cols);
-   else if (Gbl.Usrs.Me.Logged &&		// If user logged...
-	    Gbl.Hierarchy.HieLvl == Hie_CRS)	// ...and course selected,
-      Cols = Set_GetMyColsClassPhotoFromDB ();	// ==> get my preference from database
-   else
-      Cols = Usr_CLASS_PHOTO_COLS_DEF;
-
-   Set_ClassPhotoCols = Cols;
-  }
-
-unsigned Set_GetColsClassPhoto (void)
-  {
-   return Set_ClassPhotoCols;
-  }
-*/
-/*****************************************************************************/
-/** Get my prefs. about number of colums in class photo for current course ***/
-/*****************************************************************************/
-/*
-static unsigned Set_GetMyColsClassPhotoFromDB (void)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned Cols;
-
-   ***** Get number of columns in class photo from database *****
-   if (Set_DB_GetMyColsClassPhoto (&mysql_res))
-     {
-      * Get number of columns in class photo *
-      row = mysql_fetch_row (mysql_res);
-      if (row[0])
-	 if (sscanf (row[0],"%u",&Cols) == 1)
-	    if (Cols < 1 ||
-		Cols > Usr_CLASS_PHOTO_COLS_MAX)
-	       Cols = Usr_CLASS_PHOTO_COLS_DEF;
-     }
-   else
-      Cols = Usr_CLASS_PHOTO_COLS_DEF;
-
-   ***** Free structure that stores the query result *****
-   DB_FreeMySQLResult (&mysql_res);
-
-   return Cols;
-  }
-*/
-/*****************************************************************************/
-/****** Put a hidden parameter with the number of colums in class photo ******/
-/*****************************************************************************/
-/*
-static void Set_PutParColsClassPhoto (void)
-  {
-   Par_PutParUnsigned (NULL,"ColsClassPhoto",Set_GetColsClassPhoto ());
-  }
-*/
-/*****************************************************************************/
-/************* Get from form the number of colums in class photo *************/
-/*****************************************************************************/
-/*
-static unsigned Set_GetParColsClassPhotoFromForm (void)
-  {
-   return (unsigned) Par_GetParUnsignedLong ("ColsClassPhoto",
-					     1,
-					     Usr_CLASS_PHOTO_COLS_MAX,
-					     0);
-  }
-*/
 /*****************************************************************************/
 /********** Get and update preference about photos in users' list ************/
 /*****************************************************************************/

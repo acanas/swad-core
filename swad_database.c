@@ -897,19 +897,18 @@ mysql> DESCRIBE crs_user_settings;
 +----------------+---------------------------+------+-----+------------+-------+
 | Field          | Type                      | Null | Key | Default    | Extra |
 +----------------+---------------------------+------+-----+------------+-------+
-| UsrCod         | int(11)                   | NO   | PRI | NULL       |       |
-| CrsCod         | int(11)                   | NO   | PRI | NULL       |       |
-| LastDowGrpCod  | int(11)                   | NO   |     | -1         |       |
-| LastComGrpCod  | int(11)                   | NO   |     | -1         |       |
-| LastAssGrpCod  | int(11)                   | NO   |     | -1         |       |
-| NumAccTst      | int(11)                   | NO   |     | 0          |       |
+| UsrCod         | int                       | NO   | PRI | NULL       |       |
+| CrsCod         | int                       | NO   | PRI | NULL       |       |
+| LastDowGrpCod  | int                       | NO   |     | -1         |       |
+| LastComGrpCod  | int                       | NO   |     | -1         |       |
+| LastAssGrpCod  | int                       | NO   |     | -1         |       |
+| NumAccTst      | int                       | NO   |     | 0          |       |
 | LastAccTst     | datetime                  | NO   |     | NULL       |       |
-| NumQstsLastTst | int(11)                   | NO   |     | 0          |       |
+| NumQstsLastTst | int                       | NO   |     | 0          |       |
 | UsrListType    | enum('classphoto','list') | NO   |     | classphoto |       |
-| ColsClassPhoto | tinyint(4)                | NO   |     | NULL       |       |
 | ListWithPhotos | enum('N','Y')             | NO   |     | Y          |       |
 +----------------+---------------------------+------+-----+------------+-------+
-11 rows in set (0.00 sec)
+10 rows in set (0,01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_user_settings ("
 			"UsrCod INT NOT NULL,"
@@ -921,7 +920,6 @@ mysql> DESCRIBE crs_user_settings;
 			"LastAccTst DATETIME NOT NULL,"
 			"NumQstsLastTst INT NOT NULL DEFAULT 0,"
 			"UsrListType ENUM('classphoto','list') NOT NULL DEFAULT 'classphoto',"
-			// "ColsClassPhoto TINYINT NOT NULL,"
 			"ListWithPhotos ENUM('N','Y') NOT NULL DEFAULT 'Y',"
 		   "UNIQUE INDEX(UsrCod,CrsCod))");
 

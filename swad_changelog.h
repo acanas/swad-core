@@ -638,10 +638,14 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.92.4 (2025-06-28)"
+#define Log_PLATFORM_VERSION	"SWAD 24.93 (2025-07-01)"
 #define CSS_FILE		"swad24.92.3.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 24.93:    Jul 01, 2025  Automatic columns in class photos of institutions and degrees. (348166 lines)
+					1 change necessary in database:
+ALTER TABLE crs_user_settings DROP COLUMN ColsClassPhoto;
+
 	Version 24.92.4:  Jun 30, 2025  Class photo with automatic columns. Not finished. (348327 lines)
 	Version 24.92.3:  Jun 30, 2025  Class photo with automatic columns. Not finished. (348284 lines)
 	Version 24.92.2:  Jun 27, 2025  Users' photos can be not shown in class photos. (348269 lines)
