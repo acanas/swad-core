@@ -59,7 +59,7 @@ unsigned Set_GetSideColsFromStr (const char *Str);
 //------------------------ My settings on users' list -------------------------
 void Set_GetAndUpdatePrefsAboutUsrList (Pho_ShowPhotos_t *ShowPhotos);
 void Set_PutParUsrListType (Set_ShowUsrsType_t ListType);
-unsigned Set_GetColsClassPhoto (void);
+// unsigned Set_GetColsClassPhoto (void);
 void Set_PutParListWithPhotos (Pho_ShowPhotos_t ShowPhotos);
 void Set_PutParsPrefsAboutUsrList (void);
 

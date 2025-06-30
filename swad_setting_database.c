@@ -242,6 +242,7 @@ unsigned Set_DB_GetMyLanguage (MYSQL_RES **mysql_res)
 
 void Set_DB_InsertUsrInCrsSettings (long UsrCod,long HieCod)
   {
+   /*
    DB_QueryINSERT ("can not register user in course",
 		   "INSERT INTO crs_user_settings"
 		   " (UsrCod,CrsCod,"
@@ -258,6 +259,25 @@ void Set_DB_InsertUsrInCrsSettings (long UsrCod,long HieCod)
 	           (long) (time_t) 0,	// The user never accessed to tests in this course
 	           Set_DB_StringsUsrListTypes[Set_SHOW_USRS_TYPE_DEFAULT],
 	           Usr_CLASS_PHOTO_COLS_DEF,
+	           Usr_LIST_WITH_PHOTOS_DEF ? 'Y' :
+					      'N');
+   */
+   DB_QueryINSERT ("can not register user in course",
+		   "INSERT INTO crs_user_settings"
+		   " (UsrCod,CrsCod,"
+		     "LastDowGrpCod,LastComGrpCod,LastAssGrpCod,"
+		     "NumAccTst,LastAccTst,NumQstsLastTst,"
+		     "UsrListType,ListWithPhotos)"
+		   " VALUES"
+		   " (%ld,%ld,"
+		     "-1,-1,-1,"
+		     "0,FROM_UNIXTIME(%ld),0,"
+		     "'%s','%c')",
+	           UsrCod,
+	           HieCod,
+	           (long) (time_t) 0,	// The user never accessed to tests in this course
+	           Set_DB_StringsUsrListTypes[Set_SHOW_USRS_TYPE_DEFAULT],
+	           // Usr_CLASS_PHOTO_COLS_DEF,
 	           Usr_LIST_WITH_PHOTOS_DEF ? 'Y' :
 					      'N');
   }
@@ -297,12 +317,12 @@ void Set_DB_UpdateMyUsrListType (void)
 /*****************************************************************************/
 /** Save my prefs. about number of colums in class photo for current course **/
 /*****************************************************************************/
-
+/*
 void Set_DB_UpdateMyColsClassPhoto (unsigned Cols)
   {
    if (Gbl.Usrs.Me.Logged &&
        Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
-      /***** Update number of colums in class photo for current course *****/
+      ***** Update number of colums in class photo for current course *****
       DB_QueryUPDATE ("can not update number of columns in class photo",
 		      "UPDATE crs_user_settings"
 		        " SET ColsClassPhoto=%u"
@@ -312,7 +332,7 @@ void Set_DB_UpdateMyColsClassPhoto (unsigned Cols)
 		      Gbl.Usrs.Me.UsrDat.UsrCod,
 		      Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
-
+*/
 /*****************************************************************************/
 /**** Save my preference about photos in users' list for current course ******/
 /*****************************************************************************/
@@ -353,7 +373,7 @@ unsigned Set_DB_GetMyUsrListType (MYSQL_RES **mysql_res)
 /*****************************************************************************/
 /*********** Get my number of columns in class photo from database ***********/
 /*****************************************************************************/
-
+/*
 unsigned Set_DB_GetMyColsClassPhoto (MYSQL_RES **mysql_res)
   {
    return (unsigned)
@@ -365,7 +385,7 @@ unsigned Set_DB_GetMyColsClassPhoto (MYSQL_RES **mysql_res)
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
-
+*/
 /*****************************************************************************/
 /********* Get my preference about listing with photos from database *********/
 /*****************************************************************************/

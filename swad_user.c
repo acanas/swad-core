@@ -299,7 +299,7 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
 				Usr_ClassPhotoType_t ClassPhotoType,
 				bool PutCheckBoxToSelectUsr,
 				Pho_ShowPhotos_t ShowPhotos);
-static void Usr_PutSelectorNumColsClassPhoto (void);
+// static void Usr_PutSelectorNumColsClassPhoto (void);
 
 static void Usr_GetAndShowNumUsrsInCrss (Hie_Level_t HieLvl,Rol_Role_t Role);
 static void Usr_GetAndShowNumUsrsNotBelongingToAnyCrs (void);
@@ -3591,9 +3591,10 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,
 					 Set_USR_LIST_AS_CLASS_PHOTO,
 					 ShowPhotos);
 
-	    HTM_NBSP ();
+	    // HTM_NBSP ();
 
 	    /* Number of columns in the class photo */
+	    /*
 	    Frm_BeginFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
 	       Grp_PutParsCodGrps ();
 	       Set_PutParUsrListType (Set_USR_LIST_AS_CLASS_PHOTO);
@@ -3602,6 +3603,7 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,
 	       if (FuncPars)
 		  FuncPars (Args);
 	    Frm_EndForm ();
+	    */
 
 	 Set_EndPref ();
 
@@ -4011,9 +4013,13 @@ static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role)
 
 unsigned Usr_GetColumnsForSelectUsrs (Pho_ShowPhotos_t ShowPhotos)
   {
+   /*
    return (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO) ? Set_GetColsClassPhoto () :
                                                                   (ShowPhotos == Pho_PHOTOS_SHOW ? 1 + Usr_NUM_MAIN_FIELDS_DATA_USR :
 												       Usr_NUM_MAIN_FIELDS_DATA_USR);
+   */
+   return (ShowPhotos == Pho_PHOTOS_SHOW ? 1 + Usr_NUM_MAIN_FIELDS_DATA_USR :
+					       Usr_NUM_MAIN_FIELDS_DATA_USR);
   }
 
 /*****************************************************************************/
@@ -6304,22 +6310,22 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
 /*****************************************************************************/
 /***************** Write selector of columns in class photo ******************/
 /*****************************************************************************/
-
+/*
 static void Usr_PutSelectorNumColsClassPhoto (void)
   {
    extern const char *Txt_columns;
    unsigned Cols = Set_GetColsClassPhoto ();
    unsigned NumCols;
 
-   /***** Begin label *****/
+   ***** Begin label *****
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 
-      /***** Begin selector *****/
+      ***** Begin selector *****
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			"name=\"ColsClassPhoto\" class=\"INPUT_%s\"",
 			The_GetSuffix ());
 
-	 /***** Put a row in selector for every number of columns *****/
+	 ***** Put a row in selector for every number of columns *****
 	 for (NumCols  = 1;
 	      NumCols <= Usr_CLASS_PHOTO_COLS_MAX;
 	      NumCols++)
@@ -6328,15 +6334,15 @@ static void Usr_PutSelectorNumColsClassPhoto (void)
 	                		    HTM_NO_ATTR,
 			"%u",NumCols);
 
-      /***** End selector *****/
+      ***** End selector *****
       HTM_SELECT_End ();
 
       HTM_Txt (Txt_columns);
 
-   /***** End label *****/
+   ***** End label *****
    HTM_LABEL_End ();
   }
-
+*/
 /*****************************************************************************/
 /********** Build the relative path of a user from his user's code ***********/
 /*****************************************************************************/

@@ -62,7 +62,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static Pho_ShowPhotos_t Set_ShowPhotos = Pho_PHOTOS_DEFAULT;
-static unsigned Set_ClassPhotoCols = Usr_CLASS_PHOTO_COLS_DEF;
+// static unsigned Set_ClassPhotoCols = Usr_CLASS_PHOTO_COLS_DEF;
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -75,10 +75,10 @@ static void Set_GetAndUpdateUsrListType (void);
 static void Set_GetUsrListTypeFromForm (void);
 static void Set_GetMyUsrListTypeFromDB (void);
 
-static void Set_SetColsClassPhoto (void);
-static unsigned Set_GetMyColsClassPhotoFromDB (void);
-static void Set_PutParColsClassPhoto (void);
-static unsigned Set_GetParColsClassPhotoFromForm (void);
+// static void Set_SetColsClassPhoto (void);
+// static unsigned Set_GetMyColsClassPhotoFromDB (void);
+// static void Set_PutParColsClassPhoto (void);
+// static unsigned Set_GetParColsClassPhotoFromForm (void);
 
 static Pho_ShowPhotos_t Set_GetAndUpdatePrefAboutListWithPhotos (void);
 
@@ -276,7 +276,7 @@ void Set_GetAndUpdatePrefsAboutUsrList (Pho_ShowPhotos_t *ShowPhotos)
    Set_GetAndUpdateUsrListType ();
 
    /***** Get and update number of columns in class photo *****/
-   Set_SetColsClassPhoto ();
+   // Set_SetColsClassPhoto ();
 
    /***** Get and update preference about viewing photos *****/
    *ShowPhotos = Set_GetAndUpdatePrefAboutListWithPhotos ();
@@ -361,14 +361,14 @@ static void Set_GetMyUsrListTypeFromDB (void)
 /*****************************************************************************/
 /************** Set and get number of columns in class photo *****************/
 /*****************************************************************************/
-
+/*
 static void Set_SetColsClassPhoto (void)
   {
    unsigned Cols;
 
-   /***** Get the number of columns in class photo from form *****/
+   ***** Get the number of columns in class photo from form *****
    if ((Cols = Set_GetParColsClassPhotoFromForm ()))
-      /* Save the number of columns into the database */
+      * Save the number of columns into the database *
       Set_DB_UpdateMyColsClassPhoto (Cols);
    else if (Gbl.Usrs.Me.Logged &&		// If user logged...
 	    Gbl.Hierarchy.HieLvl == Hie_CRS)	// ...and course selected,
@@ -383,21 +383,21 @@ unsigned Set_GetColsClassPhoto (void)
   {
    return Set_ClassPhotoCols;
   }
-
+*/
 /*****************************************************************************/
 /** Get my prefs. about number of colums in class photo for current course ***/
 /*****************************************************************************/
-
+/*
 static unsigned Set_GetMyColsClassPhotoFromDB (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned Cols;
 
-   /***** Get number of columns in class photo from database *****/
+   ***** Get number of columns in class photo from database *****
    if (Set_DB_GetMyColsClassPhoto (&mysql_res))
      {
-      /* Get number of columns in class photo */
+      * Get number of columns in class photo *
       row = mysql_fetch_row (mysql_res);
       if (row[0])
 	 if (sscanf (row[0],"%u",&Cols) == 1)
@@ -408,25 +408,25 @@ static unsigned Set_GetMyColsClassPhotoFromDB (void)
    else
       Cols = Usr_CLASS_PHOTO_COLS_DEF;
 
-   /***** Free structure that stores the query result *****/
+   ***** Free structure that stores the query result *****
    DB_FreeMySQLResult (&mysql_res);
 
    return Cols;
   }
-
+*/
 /*****************************************************************************/
 /****** Put a hidden parameter with the number of colums in class photo ******/
 /*****************************************************************************/
-
+/*
 static void Set_PutParColsClassPhoto (void)
   {
    Par_PutParUnsigned (NULL,"ColsClassPhoto",Set_GetColsClassPhoto ());
   }
-
+*/
 /*****************************************************************************/
 /************* Get from form the number of colums in class photo *************/
 /*****************************************************************************/
-
+/*
 static unsigned Set_GetParColsClassPhotoFromForm (void)
   {
    return (unsigned) Par_GetParUnsignedLong ("ColsClassPhoto",
@@ -434,7 +434,7 @@ static unsigned Set_GetParColsClassPhotoFromForm (void)
 					     Usr_CLASS_PHOTO_COLS_MAX,
 					     0);
   }
-
+*/
 /*****************************************************************************/
 /********** Get and update preference about photos in users' list ************/
 /*****************************************************************************/
@@ -471,7 +471,7 @@ static Pho_ShowPhotos_t Set_GetAndUpdatePrefAboutListWithPhotos (void)
 void Set_PutParsPrefsAboutUsrList (void)
   {
    Set_PutParUsrListType (Gbl.Usrs.Me.ListType);
-   Set_PutParColsClassPhoto ();
+   // Set_PutParColsClassPhoto ();
    Set_PutParListWithPhotos (Set_ShowPhotos);
   }
 

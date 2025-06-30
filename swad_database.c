@@ -921,7 +921,7 @@ mysql> DESCRIBE crs_user_settings;
 			"LastAccTst DATETIME NOT NULL,"
 			"NumQstsLastTst INT NOT NULL DEFAULT 0,"
 			"UsrListType ENUM('classphoto','list') NOT NULL DEFAULT 'classphoto',"
-			"ColsClassPhoto TINYINT NOT NULL,"
+			// "ColsClassPhoto TINYINT NOT NULL,"
 			"ListWithPhotos ENUM('N','Y') NOT NULL DEFAULT 'Y',"
 		   "UNIQUE INDEX(UsrCod,CrsCod))");
 

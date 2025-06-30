@@ -1821,7 +1821,8 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
    unsigned NumberLastRow;
    unsigned NumberThisRow;
    struct Hie_Node Ins;
-   unsigned Cols = Set_GetColsClassPhoto ();
+   // unsigned Cols = Set_GetColsClassPhoto ();
+   unsigned Cols = 10;	// TODO: Class photo with flexible number of columns
    bool TRIsOpen = false;
 
    /***** Query database *****/

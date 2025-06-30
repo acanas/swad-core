@@ -68,8 +68,8 @@
 #define Usr_MAX_CHARS_PHONE	16
 #define Usr_MAX_BYTES_PHONE	Usr_MAX_CHARS_PHONE
 
-#define Usr_CLASS_PHOTO_COLS_DEF	 10	// Default number of columns in a class photo
-#define Usr_CLASS_PHOTO_COLS_MAX	100	// Maximum number of columns in a class photo
+// #define Usr_CLASS_PHOTO_COLS_DEF	 10	// Default number of columns in a class photo
+// #define Usr_CLASS_PHOTO_COLS_MAX	100	// Maximum number of columns in a class photo
 
 #define Usr_LIST_WITH_PHOTOS_DEF	true
 

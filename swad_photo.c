@@ -2236,7 +2236,8 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
    unsigned NumDegsNotEmpty;
    int NumStds;
    int NumStdsWithPhoto;
-   unsigned Cols = Set_GetColsClassPhoto ();
+   // unsigned Cols = Set_GetColsClassPhoto ();
+   unsigned Cols = 10;	// TODO: Class photo with flexible number of columns
    bool TRIsOpen = false;
 
    /***** Get degrees from database *****/
