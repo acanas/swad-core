@@ -117,7 +117,7 @@ a:hover						/* Default ==> underlined */
 .NICK_YELLOW,
 .NICK_PINK
 	{
-	background: transparent;
+	background-color: transparent;
 	border: none;
 	padding: 0;
 	font: inherit;
@@ -126,7 +126,7 @@ a:hover						/* Default ==> underlined */
 	}
 .NICK_DARK
 	{
-	background: transparent;
+	background-color: transparent;
 	border: none;
 	padding: 0;
 	font: inherit;
@@ -3375,21 +3375,18 @@ table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 
 .CLASSPHOTO_TITLE
 	{
-	font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
+	font-family: Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
 	font-size: 12pt;
 	}
 .CLASSPHOTO_CONT
 	{
 	display: table;
-	box-sizing: border-box;
-	margin: 0 auto;
 	padding: 0 10px;
 	text-align: left;
+	margin: 0 auto;
 	}
 .CLASSPHOTO_CONT_C2
 	{
-	display: table;
-	box-sizing: border-box;
 	text-align: left;
 	}
 .CLASSPHOTO
@@ -4157,7 +4154,7 @@ legend {font-size: 12pt; font-weight: bold;}
 	width: 95%;
 	text-align: left;
 	vertical-align: middle;
-	background: white;
+	background-color: white;
 	height: 10px;
 	font-size: 6pt;
 	font-weight: bold;
@@ -4280,12 +4277,12 @@ legend {font-size: 12pt; font-weight: bold;}
 .MCH_RES_CORRECT
 	{
 	width: 1%;
-	background:green;
+	background-color: green;
 	}
 .MCH_RES_WRONG
 	{
 	width: 1%;
-	background: red;
+	background-color: red;
 	}
 .MCH_RES_VOID
 	{
