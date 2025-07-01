@@ -3385,20 +3385,12 @@ table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 	margin: 0 auto;
 	padding: 0 10px;
 	text-align: left;
-	/*
-	border: solid 1px red;
-	background-color: pink;
-	*/
 	}
 .CLASSPHOTO_CONT_C2
 	{
 	display: table;
 	box-sizing: border-box;
 	text-align: left;
-	/*
-	border: solid 1px red;
-	background-color: pink;
-	*/
 	}
 .CLASSPHOTO
 	{
@@ -3407,6 +3399,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 	font-size: 10pt;
 	line-height: 110%;
 	white-space: nowrap;
+	overflow: hidden;
 	}
 .CLASSPHOTO_CAPTION
 	{
@@ -3427,13 +3420,13 @@ table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 .CLASSPHOTO_DARK	{color: #d0d0d0;}
 
 /************************** Left column menu *********************************/
-.INS_LNK_WHITE,		.MFU_WHITE,		.MONTH_NAME_WHITE,
-.INS_LNK_GREY,		.MFU_GREY,		.MONTH_NAME_GREY,
+.INS_LNK_WHITE,		.MFU_WHITE,	.MONTH_NAME_WHITE,
+.INS_LNK_GREY,		.MFU_GREY,	.MONTH_NAME_GREY,
 .INS_LNK_PURPLE,	.MFU_PURPLE,	.MONTH_NAME_PURPLE,
-.INS_LNK_BLUE,		.MFU_BLUE,		.MONTH_NAME_BLUE,
+.INS_LNK_BLUE,		.MFU_BLUE,	.MONTH_NAME_BLUE,
 .INS_LNK_YELLOW,	.MFU_YELLOW,	.MONTH_NAME_YELLOW,
-.INS_LNK_PINK,		.MFU_PINK,		.MONTH_NAME_PINK	{color: #4d88a1;}
-.INS_LNK_DARK,		.MFU_DARK,		.MONTH_NAME_DARK	{color: #8cbcce;}
+.INS_LNK_PINK,		.MFU_PINK,	.MONTH_NAME_PINK	{color: #4d88a1;}
+.INS_LNK_DARK,		.MFU_DARK,	.MONTH_NAME_DARK	{color: #8cbcce;}
 
 /***************** Text decoration of fieldset and legend ********************/
 fieldset

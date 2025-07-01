@@ -2182,7 +2182,7 @@ void HTM_TD_LINE_TOP_Txt (const char *Txt)
 
 void HTM_TD_Unsigned (unsigned Num)
   {
-   HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
+   HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
       HTM_Unsigned (Num);
    HTM_TD_End ();
   }

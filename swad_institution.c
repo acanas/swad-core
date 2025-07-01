@@ -209,7 +209,9 @@ void Ins_SeeInsWithPendingCtrs (void)
 /********************** Draw institution logo with link **********************/
 /*****************************************************************************/
 
-void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,const char *IconClass)
+void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,
+				      Pho_ShowPhotos_t ShowPhotos,
+				      const char *IconClass)
   {
    Hie_PutLink_t PutLink = Frm_CheckIfInside () ? Hie_DONT_PUT_LINK :	// Don't put link to institution if already inside a form
 						  Hie_PUT_LINK;
@@ -218,9 +220,13 @@ void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,const char *IconClass
      {
       Frm_BeginForm (ActSeeInsInf);
 	 ParCod_PutPar (ParCod_Ins,Ins->HieCod);
-	 HTM_BUTTON_Submit_Begin (Ins->FullName,NULL,"class=\"BT_LINK\"");
+	 HTM_BUTTON_Submit_Begin (Ins->FullName,NULL,
+				  "class=\"CLASSPHOTO_CAPTION BT_LINK\"");
      }
-   Lgo_DrawLogo (Hie_INS,Ins,IconClass);
+   if (ShowPhotos == Pho_PHOTOS_SHOW)
+      Lgo_DrawLogo (Hie_INS,Ins,IconClass);
+   else
+      HTM_Txt (Ins->ShrtName);
    if (PutLink == Hie_PUT_LINK)
      {
 	 HTM_BUTTON_End ();
@@ -1841,7 +1847,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		     NumberThisRow = Ins_GetInsAndStat (&Ins,*mysql_res);
 
 		     /***** Write link to institution *****/
-		     Ins_DrawInstitutionLogoWithLink (&Ins,"ICO40x40"); HTM_BR ();
+		     Ins_DrawInstitutionLogoWithLink (&Ins,ShowPhotos,"ICO40x40");
 		     HTM_Unsigned (NumberThisRow);
 
 	          HTM_DIV_End ();
