@@ -222,7 +222,7 @@ void Att_DB_GetEventDescription (long AttCod,char Description[Cns_MAX_BYTES_TEXT
 /***** Check if the title or the folder of an attendance event exists ********/
 /*****************************************************************************/
 
-bool Att_DB_CheckIfSimilarEventExists (const char *Field,const char *Value,long AttCod)
+Exi_Exist_t Att_DB_CheckIfSimilarEventExists (const char *Field,const char *Value,long AttCod)
   {
    return
    DB_QueryEXISTS ("can not check similar attendance events",
@@ -658,7 +658,7 @@ void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,bool SetOthersAsA
          (leading and trailing spaces are removed) */
       Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
       if ((UsrDat.UsrCod = Str_ConvertStrCodToLongCod (LongStr)) > 0)
-	 if (Usr_DB_ChkIfUsrCodExists (UsrDat.UsrCod))
+	 if (Usr_DB_ChkIfUsrCodExists (UsrDat.UsrCod) == Exi_EXISTS)
 	    // The user must belong to course,
 	    // but it's not necessary he/she belongs to groups associated to the event
 	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)

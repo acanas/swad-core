@@ -666,25 +666,27 @@ static void Dpt_RenameDepartment (Nam_ShrtOrFullName_t ShrtOrFull)
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
-        {
          /***** If name department was not in database... *****/
-         if (Dpt_DB_CheckIfDepartmentNameExists (Nam_Fields[ShrtOrFull],
-						 NewName,Dpt_EditingDpt->DptCod,
-						 -1L,	// Unused
-						 0))	// Unused
-            Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
-         else
-           {
-            /* Update the table changing old name by new name */
-            Dpt_DB_UpdateDptName (Dpt_EditingDpt->DptCod,
-        			  Nam_Fields[ShrtOrFull],NewName);
+         switch (Dpt_DB_CheckIfDepartmentNameExists (Nam_Fields[ShrtOrFull],
+						     NewName,Dpt_EditingDpt->DptCod,
+						     -1L,	// Unused
+						     0))	// Unused
+	   {
+	    case Exi_EXISTS:
+	       Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       /* Update the table changing old name by new name */
+	       Dpt_DB_UpdateDptName (Dpt_EditingDpt->DptCod,
+				     Nam_Fields[ShrtOrFull],NewName);
 
-            /* Write message to show the change made */
-            Ale_CreateAlert (Ale_SUCCESS,NULL,
-        	             Txt_The_department_X_has_been_renamed_as_Y,
-                             CurrentName[ShrtOrFull],NewName);
-           }
-        }
+	       /* Write message to show the change made */
+	       Ale_CreateAlert (Ale_SUCCESS,NULL,
+				Txt_The_department_X_has_been_renamed_as_Y,
+				CurrentName[ShrtOrFull],NewName);
+	       break;
+	   }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
                           Txt_The_name_X_has_not_changed,
@@ -878,11 +880,11 @@ void Dpt_ReceiveNewDpt (void)
       if (Dpt_EditingDpt->WWW[0])
         {
          /***** If name of department was not in database... *****/
-	 if (!Nam_CheckIfNameExists (Dpt_DB_CheckIfDepartmentNameExists,
-				     (const char **) Names,
-				     -1L,
-				     -1L,	// Unused
-				     0))	// Unused
+	 if (Nam_CheckIfNameExists (Dpt_DB_CheckIfDepartmentNameExists,
+				    (const char **) Names,
+				    -1L,
+				    -1L,			// Unused
+				    0) == Exi_DOES_NOT_EXIST)	// Unused
            {
             Dpt_DB_CreateDepartment (Dpt_EditingDpt);
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_department_X,

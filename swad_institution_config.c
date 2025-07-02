@@ -509,11 +509,11 @@ void InsCfg_ChangeInsCty (void)
       /***** Check if it already exists an institution with the same name in the new country *****/
       Names[Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_INS].ShrtName;
       Names[Nam_FULL_NAME] = Gbl.Hierarchy.Node[Hie_INS].FullName;
-      if (!Nam_CheckIfNameExists (Ins_DB_CheckIfInsNameExistsInCty,
-				  Names,
-				  -1L,
-				  NewCty.HieCod,
-				  0))	// Unused
+      if (Nam_CheckIfNameExists (Ins_DB_CheckIfInsNameExistsInCty,
+				 Names,
+				 -1L,
+				 NewCty.HieCod,
+				 0) == Exi_DOES_NOT_EXIST)	// Unused
 	{
 	 /***** Update the table changing the country of the institution *****/
 	 Ins_DB_UpdateInsCty (Gbl.Hierarchy.Node[Hie_INS].HieCod,NewCty.HieCod);

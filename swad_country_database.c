@@ -417,7 +417,7 @@ unsigned Cty_DB_GetNumCtysWithUsrs (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Ro
 /******************* Check if a numeric country code exists ******************/
 /*****************************************************************************/
 
-bool Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod)
+Exi_Exist_t Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod)
   {
    return
    DB_QueryEXISTS ("can not check if the numeric code of a country already existed",
@@ -432,7 +432,7 @@ bool Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod)
 /*************** Check if an alphabetic country code exists ******************/
 /*****************************************************************************/
 
-bool Cty_DB_CheckIfAlpha2CountryCodeExists (const char *Alpha2)
+Exi_Exist_t Cty_DB_CheckIfAlpha2CountryCodeExists (const char *Alpha2)
   {
    return
    DB_QueryEXISTS ("can not check if the alphabetic code of a country already existed",
@@ -447,7 +447,7 @@ bool Cty_DB_CheckIfAlpha2CountryCodeExists (const char *Alpha2)
 /******************** Check if the name of country exists ********************/
 /*****************************************************************************/
 
-bool Cty_DB_CheckIfCountryNameExists (Lan_Language_t Language,const char *Name,long CtyCod)
+Exi_Exist_t Cty_DB_CheckIfCountryNameExists (Lan_Language_t Language,const char *Name,long CtyCod)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
@@ -549,7 +549,7 @@ unsigned Cty_DB_GetMapAttr (MYSQL_RES **mysql_res,long CtyCod)
 /************ Check if any of the centers in a country has map ***************/
 /*****************************************************************************/
 
-bool Cty_DB_CheckIfMapIsAvailable (long CtyCod)
+Exi_Exist_t Cty_DB_CheckIfMapExists (long CtyCod)
   {
    /***** Check if any center in current country has a coordinate set
           (coordinates 0, 0 means not set ==> don't show map) *****/

@@ -195,7 +195,7 @@ unsigned Grp_DB_GetGroupDataByCod (MYSQL_RES **mysql_res,long GrpCod)
 /******************** Check if a group exists in database ********************/
 /*****************************************************************************/
 
-bool Grp_DB_CheckIfGrpExists (long GrpCod)
+Exi_Exist_t Grp_DB_CheckIfGrpExists (long GrpCod)
   {
    return
    DB_QueryEXISTS ("can not check if a group exists",
@@ -210,7 +210,7 @@ bool Grp_DB_CheckIfGrpExists (long GrpCod)
 /******************* Check if a group belongs to a course ********************/
 /*****************************************************************************/
 
-bool Grp_DB_CheckIfGrpBelongsToCrs (long GrpCod,long CrsCod)
+Exi_Exist_t Grp_DB_CheckIfGrpExistsInCrs (long GrpCod,long CrsCod)
   {
    return
    DB_QueryEXISTS ("can not check if a group belongs to a course",
@@ -221,14 +221,14 @@ bool Grp_DB_CheckIfGrpBelongsToCrs (long GrpCod,long CrsCod)
 		    " WHERE grp_groups.GrpCod=%ld"
 		      " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
 		      " AND grp_types.CrsCod=%ld)",
-		   GrpCod,CrsCod);
+		   GrpCod,CrsCod) == Exi_EXISTS;
   }
 
 /*****************************************************************************/
 /******************* Check if name of group type exists **********************/
 /*****************************************************************************/
 
-bool Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (const char *GrpTypName,long GrpTypCod)
+Exi_Exist_t Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (const char *GrpTypName,long GrpTypCod)
   {
    return
    DB_QueryEXISTS ("can not check if the name of type of group already existed",
@@ -247,7 +247,7 @@ bool Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (const char *GrpTypName,long Grp
 /************************ Check if name of group exists **********************/
 /*****************************************************************************/
 
-bool Grp_DB_CheckIfGrpNameExistsForGrpTyp (long GrpTypCod,const char *GrpName,long GrpCod)
+Exi_Exist_t Grp_DB_CheckIfGrpNameExistsForGrpTyp (long GrpTypCod,const char *GrpName,long GrpCod)
   {
    return
    DB_QueryEXISTS ("can not check if the name of group already existed",
@@ -388,8 +388,8 @@ Usr_Belong_t Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod)
 		      " AND grp_groups.GrpCod=grp_users.GrpCod"
 		      " AND grp_users.UsrCod=%ld)",	// I belong
 		   GrpTypCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_BELONG :
-						Usr_DONT_BELONG;
+		   Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS ? Usr_BELONG :
+							      Usr_DONT_BELONG;
   }
 
 /*****************************************************************************/
@@ -406,8 +406,8 @@ Usr_Belong_t Grp_DB_CheckIfIBelongToGrp (long GrpCod)
 		    " WHERE GrpCod=%ld"
 		      " AND UsrCod=%ld)",	// I belong
 		   GrpCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_BELONG :
-						Usr_DONT_BELONG;
+		   Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS ? Usr_BELONG :
+							       Usr_DONT_BELONG;
   }
 
 /*****************************************************************************/
@@ -433,7 +433,7 @@ bool Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (long UsrCod)
 			      " AND grp_types.CrsCod=%ld))",
 		   UsrCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_EXISTS;
   }
 
 /*****************************************************************************/
@@ -721,7 +721,7 @@ bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
 		      " AND GrpCod=%ld)",
 		   Table,
 		   Field,Cod,
-		   GrpCod);
+		   GrpCod) == Exi_EXISTS;
   }
 
 /*****************************************************************************/
@@ -744,7 +744,7 @@ bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Co
 		     " FROM %s"
 		    " WHERE %s=%ld)",
 		   Table,
-		   Field,Cod);
+		   Field,Cod) == Exi_EXISTS;
   }
 
 /*****************************************************************************/

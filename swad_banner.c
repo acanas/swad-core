@@ -629,23 +629,25 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
-        {
          /***** If banner was in database... *****/
-         if (Ban_DB_CheckIfBannerNameExists (Nam_Fields[ShrtOrFull],
-					     NewName,Ban->BanCod,
-					     -1L,0))	// Unused
-	    Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
-         else
+         switch (Ban_DB_CheckIfBannerNameExists (Nam_Fields[ShrtOrFull],
+					         NewName,Ban->BanCod,
+					         -1L,0))	// Unused
            {
-            /* Update the table changing old name by new name */
-            Ban_DB_UpdateBanName (Ban->BanCod,Nam_Fields[ShrtOrFull],NewName);
+            case Exi_EXISTS:
+	       Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
+               break;
+            case Exi_DOES_NOT_EXIST:
+            default:
+	       /* Update the table changing old name by new name */
+	       Ban_DB_UpdateBanName (Ban->BanCod,Nam_Fields[ShrtOrFull],NewName);
 
-            /* Write message to show the change made */
-	    Ale_CreateAlert (Ale_SUCCESS,NULL,
-			     Txt_The_banner_X_has_been_renamed_as_Y,
-                             CurrentName[ShrtOrFull],NewName);
+	       /* Write message to show the change made */
+	       Ale_CreateAlert (Ale_SUCCESS,NULL,
+				Txt_The_banner_X_has_been_renamed_as_Y,
+				CurrentName[ShrtOrFull],NewName);
+	       break;
            }
-        }
       else	// The same name
          /* Write warning message */
 	 Ale_CreateAlert (Ale_INFO,NULL,Txt_The_name_X_has_not_changed,
@@ -870,11 +872,11 @@ void Ban_ReceiveNewBanner (void)
        Ban->FullName[0])	// If there's a banner name
      {
       /***** If name of banner was not in database... *****/
-      if (!Nam_CheckIfNameExists (Ban_DB_CheckIfBannerNameExists,
-				  (const char **) Names,
-				  -1L,
-				  -1L,	// Unused
-				  0))	// Unused
+      if (Nam_CheckIfNameExists (Ban_DB_CheckIfBannerNameExists,
+				 (const char **) Names,
+				 -1L,
+				 -1L,				// Unused
+				 0) == Exi_DOES_NOT_EXIST)	// Unused
         {
 	 if (!Ban->Img[0])
 	    Ale_CreateAlert (Ale_WARNING,NULL,

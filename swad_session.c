@@ -77,7 +77,7 @@ void Ses_CreateSession (void)
 	     sizeof (Gbl.Session.Id) - 1);
 
    /***** Check that session is not open *****/
-   if (Ses_DB_CheckIfSessionExists (Gbl.Session.Id))
+   if (Ses_DB_CheckIfSessionExists (Gbl.Session.Id) == Exi_EXISTS)
       Err_ShowErrorAndExit ("Can not create session.");
 
    /***** Add session to database *****/

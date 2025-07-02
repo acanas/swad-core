@@ -47,7 +47,7 @@ unsigned Exa_DB_GetExamDataByCod (MYSQL_RES **mysql_res,long ExaCod);
 unsigned Exa_DB_GetExamStartEnd (MYSQL_RES **mysql_res,long ExaCod);
 void Exa_DB_GetExamTitle (long ExaCod,char *Title,size_t TitleSize);
 void Exa_DB_GetExamTxt (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
-bool Exa_DB_CheckIfSimilarExamExists (long CrsCod,long ExaCod,const char *Title);
+Exi_Exist_t Exa_DB_CheckIfSimilarExamExists (long CrsCod,long ExaCod,const char *Title);
 unsigned Exa_DB_GetNumCoursesWithExams (Hie_Level_t HieLvl);
 unsigned Exa_DB_GetNumExams (Hie_Level_t HieLvl);
 double Exa_DB_GetNumQstsPerCrsExam (Hie_Level_t HieLvl);
@@ -66,8 +66,8 @@ unsigned Exa_DB_GetNumSetsExam (long ExaCod);
 unsigned Exa_DB_GetNumQstsExam (long ExaCod);
 unsigned Exa_DB_GetExamSets (MYSQL_RES **mysql_res,long ExaCod);
 unsigned Exa_DB_GetSetDataByCod (MYSQL_RES **mysql_res,long SetCod);
-bool Exa_DB_CheckIfSimilarSetExists (const struct ExaSet_Set *Set,
-                                     const char Title[ExaSet_MAX_BYTES_TITLE + 1]);
+Exi_Exist_t Exa_DB_CheckIfSimilarSetExists (const struct ExaSet_Set *Set,
+         				    const char Title[ExaSet_MAX_BYTES_TITLE + 1]);
 unsigned Exa_DB_GetSetIndFromSetCod (const struct ExaSet_Set *Set);
 long Exa_DB_GetSetCodFromSetInd (long ExaCod,unsigned SetInd);
 unsigned Exa_DB_GetMaxSetIndexInExam (long ExaCod);

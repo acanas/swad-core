@@ -194,7 +194,7 @@ long Plg_DB_GetPlgCodFromAppKey (const char *AppKey)
 /******************** Check if the name of plugin exists *********************/
 /*****************************************************************************/
 
-bool Plg_DB_CheckIfPluginNameExists (const char *Name,long PlgCod)
+Exi_Exist_t Plg_DB_CheckIfPluginNameExists (const char *Name,long PlgCod)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a plugin already existed",

@@ -2881,46 +2881,50 @@ static void Enr_ShowFormToEditOtherUsr (void)
    extern const char *Txt_THE_USER_X_already_exists_in_Y;
 
    /***** If user exists... *****/
-   if (Usr_DB_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
+   switch (Usr_DB_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
-      /***** Show form to edit user *****/
-      if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
-	 /* Check if this user belongs to the current course */
-	 switch (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
+      case Exi_EXISTS:
+	 /***** Show form to edit user *****/
+	 if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
+	    /* Check if this user belongs to the current course */
+	    switch (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
+	      {
+	       case Usr_BELONG:
+		  Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+		  if (Gbl.Usrs.Other.UsrDat.Accepted)
+		     Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
+				    Gbl.Usrs.Other.UsrDat.FullName,
+				    Gbl.Hierarchy.Node[Hie_CRS].FullName);
+		  else        // Enrolment not yet accepted
+		     Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_in_the_course_Y_but_has_not_yet_accepted_the_enrolment,
+				    Gbl.Usrs.Other.UsrDat.FullName,
+				    Gbl.Hierarchy.Node[Hie_CRS].FullName);
+
+		  Rec_ShowOtherSharedRecordEditable ();
+		  break;
+	       case Usr_DONT_BELONG:	// User does not belong to the current course
+	       default:
+		  Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_exists_in_Y_but_is_not_enroled_in_the_course_Z,
+				 Gbl.Usrs.Other.UsrDat.FullName,
+				 Cfg_PLATFORM_SHORT_NAME,
+				 Gbl.Hierarchy.Node[Hie_CRS].FullName);
+
+		  Rec_ShowOtherSharedRecordEditable ();
+		  break;
+	      }
+	 else	// No course selected
 	   {
-	    case Usr_BELONG:
-	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-	       if (Gbl.Usrs.Other.UsrDat.Accepted)
-		  Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
-				 Gbl.Usrs.Other.UsrDat.FullName,
-				 Gbl.Hierarchy.Node[Hie_CRS].FullName);
-	       else        // Enrolment not yet accepted
-		  Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_in_the_course_Y_but_has_not_yet_accepted_the_enrolment,
-				 Gbl.Usrs.Other.UsrDat.FullName,
-				 Gbl.Hierarchy.Node[Hie_CRS].FullName);
+	    Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_already_exists_in_Y,
+			   Gbl.Usrs.Other.UsrDat.FullName,Cfg_PLATFORM_SHORT_NAME);
 
-	       Rec_ShowOtherSharedRecordEditable ();
-	       break;
-	    case Usr_DONT_BELONG:	// User does not belong to the current course
-	    default:
-	       Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_exists_in_Y_but_is_not_enroled_in_the_course_Z,
-			      Gbl.Usrs.Other.UsrDat.FullName,
-			      Cfg_PLATFORM_SHORT_NAME,
-			      Gbl.Hierarchy.Node[Hie_CRS].FullName);
-
-	       Rec_ShowOtherSharedRecordEditable ();
-	       break;
+	    Rec_ShowOtherSharedRecordEditable ();
 	   }
-      else	// No course selected
-	{
-	 Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_already_exists_in_Y,
-			Gbl.Usrs.Other.UsrDat.FullName,Cfg_PLATFORM_SHORT_NAME);
-
-	 Rec_ShowOtherSharedRecordEditable ();
-	}
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/

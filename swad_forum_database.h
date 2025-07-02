@@ -49,7 +49,7 @@ long For_DB_InsertForumPst (long ThrCod,long UsrCod,
                             long MedCod);
 void For_DB_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,
                                                    unsigned NumUsrsToBeNotifiedByEMail);
-bool For_DB_CheckIfForumPstExists (long PstCod);
+Exi_Exist_t For_DB_CheckIfForumPstExists (long PstCod);
 unsigned For_DB_GetPstData (MYSQL_RES **mysql_res,long PstCod);
 unsigned For_DB_GetPstSubjectAndContent (MYSQL_RES **mysql_res,long PstCod);
 unsigned For_DB_GetThreadForumTypeAndHieCodOfAPost (MYSQL_RES **mysql_res,long PstCod);
@@ -69,7 +69,7 @@ unsigned For_DB_GetForumThreads (MYSQL_RES **mysql_res,
                                  const struct For_Forums *Forums);
 unsigned For_DB_GetThreadData (MYSQL_RES **mysql_res,long ThrCod);
 void For_DB_GetThreadTitle (long ThrCod,char *Subject,size_t TitleSize);
-bool For_DB_CheckIfThrBelongsToForum (long ThrCod,const struct For_Forum *Forum);
+Exi_Exist_t For_DB_CheckIfThrExistsInForum (long ThrCod,const struct For_Forum *Forum);
 long For_DB_GetThrLastPst (long ThrCod);
 void For_DB_GetThrSubject (long ThrCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
 unsigned For_DB_GetNumOfWritersInThr (long ThrCod);

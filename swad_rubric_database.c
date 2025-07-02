@@ -155,7 +155,7 @@ void Rub_DB_GetRubricTxt (struct Rub_Rubric *Rubric)
 /******************* Check if the title of a rubric exists *******************/
 /*****************************************************************************/
 
-bool Rub_DB_CheckIfSimilarRubricExists (const struct Rub_Rubric *Rubric)
+Exi_Exist_t Rub_DB_CheckIfSimilarRubricExists (const struct Rub_Rubric *Rubric)
   {
    return
    DB_QueryEXISTS ("can not check similar rubrics",
@@ -664,8 +664,8 @@ unsigned Rub_DB_GetCriterionDataByCod (MYSQL_RES **mysql_res,long CriCod)
 /************** Check if the title of a rubric criterion exists **************/
 /*****************************************************************************/
 
-bool Rub_DB_CheckIfSimilarCriterionExists (const struct RubCri_Criterion *Criterion,
-                                           const char Title[RubCri_MAX_BYTES_TITLE + 1])
+Exi_Exist_t Rub_DB_CheckIfSimilarCriterionExists (const struct RubCri_Criterion *Criterion,
+						  const char Title[RubCri_MAX_BYTES_TITLE + 1])
   {
    return
    DB_QueryEXISTS ("can not check similar criterion",

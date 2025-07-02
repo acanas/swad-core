@@ -174,8 +174,8 @@ Usr_Belong_t Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long HieCod,
 			"%s)",
 		   HieCod,
 		   UsrCod,
-		   SubQuery) ? Usr_BELONG :
-			       Usr_DONT_BELONG;
+		   SubQuery) == Exi_EXISTS ? Usr_BELONG :
+					     Usr_DONT_BELONG;
   }
 
 /*****************************************************************************/
@@ -197,7 +197,7 @@ bool Enr_DB_CheckIfUsrSharesAnyOfMyCrs (long UsrCod)
 		      " AND CrsCod IN"
 			  " (SELECT CrsCod"
 			     " FROM my_courses_tmp))",
-		   UsrCod);
+		   UsrCod) == Exi_EXISTS;
   }
 
 /*****************************************************************************/
@@ -232,13 +232,13 @@ bool Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
 
    /* Get if a user shares any course with me from database */
    UsrSharesAnyOfMyCrsWithDifferentRole =
-   DB_QueryEXISTS ("can not check if a user shares any course with you",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM my_courses_tmp,"
-			   "usr_courses_tmp"
-		    " WHERE my_courses_tmp.CrsCod=usr_courses_tmp.CrsCod"
-		      " AND my_courses_tmp.Role<>usr_courses_tmp.Role)");
+      DB_QueryEXISTS ("can not check if a user shares any course with you",
+		      "SELECT EXISTS"
+		      "(SELECT *"
+			" FROM my_courses_tmp,"
+			      "usr_courses_tmp"
+		       " WHERE my_courses_tmp.CrsCod=usr_courses_tmp.CrsCod"
+			 " AND my_courses_tmp.Role<>usr_courses_tmp.Role)") == Exi_EXISTS;
 
    /* Remove temporary table if exists */
    DB_DropTmpTable ("usr_courses_tmp");

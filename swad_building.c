@@ -553,27 +553,28 @@ static void Bld_RenameBuilding (Nam_ShrtOrFullName_t ShrtOrFull)
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
-        {
          /***** If building was in database... *****/
-         if (Bld_DB_CheckIfBuildingNameExists (Nam_Fields[ShrtOrFull],
-					       NewName,Bld_EditingBuilding->BldCod,
-					       -1L,0))	// Unused
-            Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
-         else
+         switch (Bld_DB_CheckIfBuildingNameExists (Nam_Fields[ShrtOrFull],
+					           NewName,Bld_EditingBuilding->BldCod,
+					           -1L,0))	// Unused
            {
-            /* Update the table changing old name by new name */
-            Bld_DB_UpdateBuildingField (Bld_EditingBuilding->BldCod,
-        			        Nam_Fields[ShrtOrFull],NewName);
+            case Exi_EXISTS:
+               Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
+               break;
+            case Exi_DOES_NOT_EXIST:
+            default:
+	       /* Update the table changing old name by new name */
+	       Bld_DB_UpdateBuildingField (Bld_EditingBuilding->BldCod,
+					   Nam_Fields[ShrtOrFull],NewName);
 
-            /* Write message to show the change made */
-            Ale_CreateAlert (Ale_SUCCESS,NULL,
-        	             Txt_The_building_X_has_been_renamed_as_Y,
-                             CurrentName[ShrtOrFull],NewName);
+	       /* Write message to show the change made */
+	       Ale_CreateAlert (Ale_SUCCESS,NULL,
+				Txt_The_building_X_has_been_renamed_as_Y,
+				CurrentName[ShrtOrFull],NewName);
+	       break;
            }
-        }
       else	// The same name
-         Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_X_has_not_changed,
+         Ale_CreateAlert (Ale_INFO,NULL,Txt_The_name_X_has_not_changed,
                           CurrentName[ShrtOrFull]);
      }
    else
@@ -733,11 +734,11 @@ void Bld_ReceiveNewBuilding (void)
        Bld_EditingBuilding->FullName[0])	// If there's a building name
      {
       /***** If name of building was not in database... *****/
-      if (!Nam_CheckIfNameExists (Bld_DB_CheckIfBuildingNameExists,
-				  (const char **) Names,
-				  -1L,
-				  -1L,	// Unused
-				  0))	// Unused
+      if (Nam_CheckIfNameExists (Bld_DB_CheckIfBuildingNameExists,
+				 (const char **) Names,
+				 -1L,
+				 -1L,				// Unused
+				 0) == Exi_DOES_NOT_EXIST)	// Unused
         {
          Bld_DB_CreateBuilding (Bld_EditingBuilding);
 	 Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_building_X,

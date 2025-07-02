@@ -53,7 +53,7 @@ unsigned Svy_DB_GetSurveyDataByCod (MYSQL_RES **mysql_res,long SvyCod);
 void Svy_DB_GetSurveyTitle (long SvyCod,char *Title,size_t TitleSize);
 unsigned Svy_DB_GetSurveyTitleAndText (MYSQL_RES **mysql_res,long SvyCod);
 void Svy_DB_GetSurveyTxt (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
-bool Svy_DB_CheckIfSimilarSurveyExists (const struct Svy_Survey *Svy);
+Exi_Exist_t Svy_DB_CheckIfSimilarSurveyExists (const struct Svy_Survey *Svy);
 unsigned Svy_DB_GetNumCrssWithCrsSurveys (Hie_Level_t HieLvl);
 unsigned Svy_DB_GetNumCrsSurveys (MYSQL_RES **mysql_res,Hie_Level_t HieLvl);
 double Svy_DB_GetNumQstsPerCrsSurvey (Hie_Level_t HieLvl);
@@ -99,7 +99,7 @@ void Svy_DB_UpdateAnswerText (long QstCod,unsigned AnsInd,const char *Text);
 void Svy_DB_ResetAnswersSvy (long SvyCod);
 void Svy_DB_IncreaseAnswer (long QstCod,unsigned AnsInd);
 
-bool Svy_DB_CheckIfAnswerExists (long QstCod,unsigned AnsInd);
+Exi_Exist_t Svy_DB_CheckIfAnswerExists (long QstCod,unsigned AnsInd);
 unsigned Svy_DB_GetAnswersQst (MYSQL_RES **mysql_res,long QstCod);
 Svy_AnswerType_t Svy_DB_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeDB);
 

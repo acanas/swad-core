@@ -99,7 +99,7 @@ bool ID_DB_CheckIfConfirmed (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1])
 		      " AND UsrID='%s'"
 		      " AND Confirmed='Y')",
 		   UsrCod,
-		   ID);
+		   ID) == Exi_EXISTS;
   }
 
 /*****************************************************************************/
@@ -114,7 +114,7 @@ bool ID_DB_FindStrInUsrsIDs (const char *Str)
 		   "(SELECT *"
 		     " FROM usr_ids"
 		    " WHERE UsrID='%s')",
-		   Str);
+		   Str) == Exi_EXISTS;
   }
 
 /*****************************************************************************/

@@ -114,7 +114,7 @@ unsigned Mch_DB_GetElapsedTimeInMatch (MYSQL_RES **mysql_res,long MchCod);
 void Mch_DB_CreateMatchPrint (const struct MchPrn_Print *Print);
 void Mch_DB_UpdateMatchPrint (const struct MchPrn_Print *Print);
 
-bool Mch_DB_CheckIfMatchPrintExists (const struct MchPrn_Print *Print);
+Exi_Exist_t Mch_DB_CheckIfMatchPrintExists (const struct MchPrn_Print *Print);
 unsigned Mch_DB_GetMatchPrintData (MYSQL_RES **mysql_res,
                                    const struct MchPrn_Print *Print);
 unsigned Mch_DB_GetPrintsInMatch (MYSQL_RES **mysql_res,long MchCod);

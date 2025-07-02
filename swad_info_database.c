@@ -283,7 +283,7 @@ bool Inf_DB_CheckIfIHaveReadInfo (Inf_Type_t InfoType)
 		      " AND InfoType='%s')",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Inf_DB_NamesForInfoType[InfoType]);
+		   Inf_DB_NamesForInfoType[InfoType]) == Exi_EXISTS;
   }
 
 /*****************************************************************************/

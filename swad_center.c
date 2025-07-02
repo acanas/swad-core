@@ -1065,28 +1065,31 @@ void Ctr_RenameCenter (struct Hie_Node *Ctr,Nam_ShrtOrFullName_t ShrtOrFull)
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
-        {
          /***** If degree was in database... *****/
-         if (Ctr_DB_CheckIfCtrNameExistsInIns (Nam_Fields[ShrtOrFull],
-					       NewName,Ctr->HieCod,
-					       Gbl.Hierarchy.Node[Hie_INS].HieCod,
-					       0))	// Unused
-            Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
-         else
+         switch (Ctr_DB_CheckIfCtrNameExistsInIns (Nam_Fields[ShrtOrFull],
+					           NewName,Ctr->HieCod,
+					           Gbl.Hierarchy.Node[Hie_INS].HieCod,
+					           0))	// Unused
            {
-            /* Update the table changing old name by new name */
-            Ctr_DB_UpdateCtrName (Ctr->HieCod,
-        			  Nam_Fields[ShrtOrFull],NewName);
+            case Exi_EXISTS:
+	       Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
+	       break;
+            case Exi_DOES_NOT_EXIST:
+            default:
+	       /* Update the table changing old name by new name */
+	       Ctr_DB_UpdateCtrName (Ctr->HieCod,
+				     Nam_Fields[ShrtOrFull],NewName);
 
-            /* Write message to show the change made */
-            Ale_CreateAlert (Ale_SUCCESS,NULL,
-        	             Txt_The_center_X_has_been_renamed_as_Y,
-                             CurrentName[ShrtOrFull],NewName);
+	       /* Write message to show the change made */
+	       Ale_CreateAlert (Ale_SUCCESS,NULL,
+				Txt_The_center_X_has_been_renamed_as_Y,
+				CurrentName[ShrtOrFull],NewName);
 
-	    /* Change current center name in order to display it properly */
-	    Str_Copy (CurrentName[ShrtOrFull],NewName,Nam_MaxBytes[ShrtOrFull]);
+	       /* Change current center name in order to display it properly */
+	       Str_Copy (CurrentName[ShrtOrFull],NewName,
+		         Nam_MaxBytes[ShrtOrFull]);
+	       break;
            }
-        }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
                           Txt_The_name_X_has_not_changed,
@@ -1446,11 +1449,11 @@ static void Ctr_ReceiveRequestOrCreateCtr (Hie_Status_t Status)
       if (Ctr_EditingCtr->WWW[0])
         {
          /***** If name of center was in database... *****/
-	 if (!Nam_CheckIfNameExists (Ctr_DB_CheckIfCtrNameExistsInIns,
-				     (const char **) Names,
-				     -1L,
-				     Gbl.Hierarchy.Node[Hie_INS].HieCod,
-				     0))	// Unused
+	 if (Nam_CheckIfNameExists (Ctr_DB_CheckIfCtrNameExistsInIns,
+				    (const char **) Names,
+				    -1L,
+				    Gbl.Hierarchy.Node[Hie_INS].HieCod,
+				    0) == Exi_DOES_NOT_EXIST)	// Unused
            {
             Ctr_EditingCtr->HieCod = Ctr_DB_CreateCenter (Ctr_EditingCtr,Status);
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_center_X,
@@ -1460,7 +1463,7 @@ static void Ctr_ReceiveRequestOrCreateCtr (Hie_Status_t Status)
       else	// If there is not a web
          Ale_CreateAlertYouMustSpecifyTheWebAddress ();
      }
-   else	// If there is not a center name
+   else		// If there is not a center name
       Ale_CreateAlertYouMustSpecifyShrtNameAndFullName ();
   }
 

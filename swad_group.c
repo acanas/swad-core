@@ -3644,22 +3644,23 @@ void Grp_ReceiveNewGrpTyp (void)
 									       Grp_MUST_NOT_BE_OPENED;
 
    if (GrpTyp.Name[0])	// If there's a group type name
-     {
       /***** If name of group type was in database... *****/
-      if (Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (GrpTyp.Name,-1L))
+      switch (Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (GrpTyp.Name,-1L))
         {
-         AlertType = Ale_WARNING;
-         snprintf (AlertTxt,sizeof (AlertTxt),
-                   Txt_The_type_of_group_X_already_exists,GrpTyp.Name);
+         case Exi_EXISTS:
+	    AlertType = Ale_WARNING;
+	    snprintf (AlertTxt,sizeof (AlertTxt),
+		      Txt_The_type_of_group_X_already_exists,GrpTyp.Name);
+	    break;
+         case Exi_DOES_NOT_EXIST:
+         default:
+            /* Add new group type to database */
+	    Grp_DB_CreateGroupType (&GrpTyp);
+	    AlertType = Ale_SUCCESS;
+	    snprintf (AlertTxt,sizeof (AlertTxt),
+		      Txt_Created_new_type_of_group_X,GrpTyp.Name);
+            break;
         }
-      else	// Add new group type to database
-	{
-         Grp_DB_CreateGroupType (&GrpTyp);
-         AlertType = Ale_SUCCESS;
-	 snprintf (AlertTxt,sizeof (AlertTxt),
-	           Txt_Created_new_type_of_group_X,GrpTyp.Name);
-	}
-     }
    else	// If there is not a group type name
      {
       AlertType = Ale_WARNING;
@@ -3719,25 +3720,26 @@ void Grp_ReceiveNewGrp (void)
 					    Grp_NUM_STUDENTS_NOT_LIMITED);
 
       if (Grp.Name[0])	// If there's a group name
-        {
          /***** If name of group was in database... *****/
-         if (Grp_DB_CheckIfGrpNameExistsForGrpTyp (GrpTyp.GrpTypCod,
-						   Grp.Name,-1L))
-           {
-            AlertType = Ale_WARNING;
-            snprintf (AlertTxt,sizeof (AlertTxt),
-	              Txt_The_group_X_already_exists,Grp.Name);
-           }
-         else	// Add new group to database
-           {
-            Grp_DB_CreateGroup (GrpTyp.GrpTypCod,&Grp);
+         switch (Grp_DB_CheckIfGrpNameExistsForGrpTyp (GrpTyp.GrpTypCod,
+						       Grp.Name,-1L))
+	   {
+	    case Exi_EXISTS:
+	       AlertType = Ale_WARNING;
+	       snprintf (AlertTxt,sizeof (AlertTxt),
+			 Txt_The_group_X_already_exists,Grp.Name);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       /* Add new group to database */
+	       Grp_DB_CreateGroup (GrpTyp.GrpTypCod,&Grp);
 
-	    /* Write success message */
-            AlertType = Ale_SUCCESS;
-	    snprintf (AlertTxt,sizeof (AlertTxt),
-	              Txt_Created_new_group_X,Grp.Name);
-           }
-        }
+	       /* Write success message */
+	       AlertType = Ale_SUCCESS;
+	       snprintf (AlertTxt,sizeof (AlertTxt),
+			 Txt_Created_new_group_X,Grp.Name);
+	       break;
+	   }
       else	// If there is not a group name
         {
          AlertType = Ale_ERROR;
@@ -4107,23 +4109,25 @@ void Grp_ChangeGroupType (void)
    Grp_GetGroupTypeDataByCod (&GrpTyp);
 
    /***** If group was in database... *****/
-   if (Grp_DB_CheckIfGrpNameExistsForGrpTyp (NewGrpTypCod,Grp.Name,-1L))
+   switch (Grp_DB_CheckIfGrpNameExistsForGrpTyp (NewGrpTypCod,Grp.Name,-1L))
      {
-      /* Create warning message */
-      AlertType = Ale_WARNING;
-      snprintf (AlertTxt,sizeof (AlertTxt),
-	        Txt_The_group_X_already_exists,Grp.Name);
-     }
-   else	// Group is not in database
-     {
-      /* Update the table of groups changing old type by new type */
-      GrpTyp.GrpTypCod = NewGrpTypCod;
-      Grp_DB_ChangeGrpTypOfGrp (Grp.GrpCod,NewGrpTypCod);
+      case Exi_EXISTS:
+	 /* Create warning message */
+	 AlertType = Ale_WARNING;
+	 snprintf (AlertTxt,sizeof (AlertTxt),
+		   Txt_The_group_X_already_exists,Grp.Name);
+	 break;
+      case Exi_DOES_NOT_EXIST:	// Group is not in database
+      default:
+	 /* Update the table of groups changing old type by new type */
+	 GrpTyp.GrpTypCod = NewGrpTypCod;
+	 Grp_DB_ChangeGrpTypOfGrp (Grp.GrpCod,NewGrpTypCod);
 
-      /* Create message to show the change made */
-      AlertType = Ale_SUCCESS;
-      snprintf (AlertTxt,sizeof (AlertTxt),
-	        Txt_The_type_of_group_of_the_group_X_has_changed,Grp.Name);
+	 /* Create message to show the change made */
+	 AlertType = Ale_SUCCESS;
+	 snprintf (AlertTxt,sizeof (AlertTxt),
+		   Txt_The_type_of_group_of_the_group_X_has_changed,Grp.Name);
+	 break;
      }
 
    /***** Show the form again *****/
@@ -4429,28 +4433,28 @@ void Grp_RenameGroupType (void)
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
       if (strcmp (GrpTyp.Name,NewGrpTypName))	// Different names
-        {
          /***** If group type was in database... *****/
-         if (Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (NewGrpTypName,
-							 GrpTyp.GrpTypCod))
-           {
-	    AlertType = Ale_WARNING;
-            snprintf (AlertTxt,sizeof (AlertTxt),
-	              Txt_The_type_of_group_X_already_exists,NewGrpTypName);
-           }
-         else
-           {
-            /***** Update the table changing old name by new name *****/
-	    Str_Copy (GrpTyp.Name,NewGrpTypName,sizeof (GrpTyp.Name) - 1);
-            Grp_DB_RenameGrpTyp (&GrpTyp);
+         switch (Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (NewGrpTypName,
+							     GrpTyp.GrpTypCod))
+	   {
+	    case Exi_EXISTS:
+	       AlertType = Ale_WARNING;
+	       snprintf (AlertTxt,sizeof (AlertTxt),
+			 Txt_The_type_of_group_X_already_exists,NewGrpTypName);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       /***** Update the table changing old name by new name *****/
+	       Str_Copy (GrpTyp.Name,NewGrpTypName,sizeof (GrpTyp.Name) - 1);
+	       Grp_DB_RenameGrpTyp (&GrpTyp);
 
-            /***** Write message to show the change made *****/
-	    AlertType = Ale_SUCCESS;
-            snprintf (AlertTxt,sizeof (AlertTxt),
-	              Txt_The_type_of_group_X_has_been_renamed_as_Y,
-                      GrpTyp.Name,NewGrpTypName);
-           }
-        }
+	       /***** Write message to show the change made *****/
+	       AlertType = Ale_SUCCESS;
+	       snprintf (AlertTxt,sizeof (AlertTxt),
+			 Txt_The_type_of_group_X_has_been_renamed_as_Y,
+			 GrpTyp.Name,NewGrpTypName);
+	       break;
+	   }
       else	// The same name
         {
 	 AlertType = Ale_INFO;
@@ -4510,26 +4514,26 @@ void Grp_RenameGroup (void)
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
       if (strcmp (Grp.Name,NewGrpName))	// Different names
-        {
          /***** If group was in database... *****/
-         if (Grp_DB_CheckIfGrpNameExistsForGrpTyp (GrpTyp.GrpTypCod,NewGrpName,
-						   Grp.GrpCod))
-           {
-	    AlertType = Ale_WARNING;
-            snprintf (AlertTxt,sizeof (AlertTxt),
-	              Txt_The_group_X_already_exists,NewGrpName);
-           }
-         else
-           {
-            /***** Update the table changing old name by new name *****/
-            Grp_DB_RenameGrp (Grp.GrpCod,NewGrpName);
+         switch (Grp_DB_CheckIfGrpNameExistsForGrpTyp (GrpTyp.GrpTypCod,NewGrpName,
+						       Grp.GrpCod))
+	   {
+	    case Exi_EXISTS:
+	       AlertType = Ale_WARNING;
+	       snprintf (AlertTxt,sizeof (AlertTxt),
+			 Txt_The_group_X_already_exists,NewGrpName);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       /***** Update the table changing old name by new name *****/
+	       Grp_DB_RenameGrp (Grp.GrpCod,NewGrpName);
 
-            /***** Write message to show the change made *****/
-	    AlertType = Ale_SUCCESS;
-            snprintf (AlertTxt,sizeof (AlertTxt),
-	              Txt_The_group_X_has_been_renamed_as_Y,Grp.Name,NewGrpName);
-           }
-        }
+	       /***** Write message to show the change made *****/
+	       AlertType = Ale_SUCCESS;
+	       snprintf (AlertTxt,sizeof (AlertTxt),
+			 Txt_The_group_X_has_been_renamed_as_Y,Grp.Name,NewGrpName);
+	       break;
+	   }
       else	// The same name
         {
 	 AlertType = Ale_INFO;

@@ -312,15 +312,14 @@ static bool RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Crit
       /***** Check if old and new titles are the same
 	     (this happens when return is pressed without changes) *****/
       if (strcmp (Criterion->Title,NewTitle))	// Different titles
-	{
 	 /* If title of criterion was in database... */
-	 if (Rub_DB_CheckIfSimilarCriterionExists (Criterion,NewTitle))
+	 if (Rub_DB_CheckIfSimilarCriterionExists (Criterion,NewTitle) == Exi_EXISTS)
 	   {
 	    TitleIsCorrect = false;
-	    Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_a_criterion_in_this_rubric_with_the_title_X,
+	    Ale_ShowAlert (Ale_WARNING,
+			   Txt_Already_existed_a_criterion_in_this_rubric_with_the_title_X,
 			   Criterion->Title);
 	   }
-	}
      }
    else	// If there is not a criterion title
      {

@@ -996,11 +996,11 @@ void CtrCfg_ChangeCtrIns (void)
       /***** Check if it already exists a center with the same name in the new institution *****/
       Names[Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_CTR].ShrtName;
       Names[Nam_FULL_NAME] = Gbl.Hierarchy.Node[Hie_CTR].FullName;
-      if (!Nam_CheckIfNameExists (Ctr_DB_CheckIfCtrNameExistsInIns,
-			          Names,
-				  Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-				  NewIns.HieCod,
-				  0))	// Unused
+      if (Nam_CheckIfNameExists (Ctr_DB_CheckIfCtrNameExistsInIns,
+			         Names,
+				 Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+				 NewIns.HieCod,
+				 0) == Exi_DOES_NOT_EXIST)	// Unused
 	{
 	 /***** Update institution in table of centers *****/
 	 Ctr_DB_UpdateCtrIns (Gbl.Hierarchy.Node[Hie_CTR].HieCod,NewIns.HieCod);

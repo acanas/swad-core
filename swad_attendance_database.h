@@ -31,6 +31,7 @@
 
 #include "swad_attendance.h"
 #include "swad_date.h"
+#include "swad_exist.h"
 #include "swad_group.h"
 
 /*****************************************************************************/
@@ -48,7 +49,7 @@ unsigned Att_DB_GetEventDataByCod (MYSQL_RES **mysql_res,long AttCod);
 void Att_DB_GetEventTitle (long AttCod,char *Title,size_t TitleSize);
 void Att_DB_GetEventDescription (long AttCod,char Description[Cns_MAX_BYTES_TEXT + 1]);
 
-bool Att_DB_CheckIfSimilarEventExists (const char *Field,const char *Value,long AttCod);
+Exi_Exist_t Att_DB_CheckIfSimilarEventExists (const char *Field,const char *Value,long AttCod);
 
 long Att_DB_CreateEvent (const struct Att_Event *Event,const char *Description);
 void Att_DB_UpdateEvent (const struct Att_Event *Event,const char *Description);

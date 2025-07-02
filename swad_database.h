@@ -29,6 +29,7 @@
 
 #include <mysql/mysql.h>	// To access MySQL databases
 
+#include "swad_exist.h"
 #include "swad_role.h"
 
 /*****************************************************************************/
@@ -58,7 +59,7 @@ void DB_QuerySELECTString (char *Str,size_t StrSize,const char *MsgError,
 long DB_GetNextCode (MYSQL_RES *mysql_res);
 unsigned long DB_GetNumRowsTable (const char *Table);
 unsigned long DB_QueryCOUNT (const char *MsgError,const char *fmt,...);
-bool DB_QueryEXISTS (const char *MsgError,const char *fmt,...);
+Exi_Exist_t DB_QueryEXISTS (const char *MsgError,const char *fmt,...);
 
 void DB_QueryINSERT (const char *MsgError,const char *fmt,...);
 

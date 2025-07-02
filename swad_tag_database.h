@@ -49,7 +49,7 @@ unsigned Tag_DB_GetTagsQst (MYSQL_RES **mysql_res,long QstCod);
 unsigned Tag_DB_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res);
 unsigned Tag_DB_GetEnabledTagsFromCrs (MYSQL_RES **mysql_res,
 				       long TagCod,long CrsCod);
-bool Tag_DB_CheckIfCurrentCrsHasTestTags (void);
+Exi_Exist_t Tag_DB_CheckIfTagsExistInCurrentCrs (void);
 long Tag_DB_GetTagCodFromTagTxt (const char *TagTxt);
 void Tag_DB_GetTagTitle (long TagCod,char *Title,size_t TitleSize);
 

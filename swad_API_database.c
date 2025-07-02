@@ -51,7 +51,7 @@ void API_DB_CreateAPIKey (char APIKey[API_BYTES_KEY + 1],long UsrCod,long PlgCod
 /********************** Check API key exists in database *********************/
 /*****************************************************************************/
 
-bool API_DB_CheckIfAPIKeyExists (char APIKey[API_BYTES_KEY + 1])
+Exi_Exist_t API_DB_CheckIfAPIKeyExists (char APIKey[API_BYTES_KEY + 1])
   {
    return
    DB_QueryEXISTS ("can not get existence of key",

@@ -614,7 +614,7 @@ static bool Acc_GetParsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WIT
      {
       /* Check if the new nickname
          matches any of the nicknames of other users */
-      if (Acc_DB_CheckIfNicknameAlreadyExists (NewNickWithoutArr))
+      if (Acc_DB_CheckIfNicknameAlreadyExists (NewNickWithoutArr) == Exi_EXISTS)
 	{
 	 Error = true;
 	 Ale_ShowAlert (Ale_WARNING,Txt_The_nickname_had_been_registered_by_another_user);
@@ -635,8 +635,9 @@ static bool Acc_GetParsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WIT
      {
       /* Check if the new email matches
          any of the confirmed emails of other users */
-      if (Acc_DB_CheckIfEmailAlreadyExists (NewEmail))	// An email of another user is the same that my email
+      if (Acc_DB_CheckIfEmailAlreadyExists (NewEmail) == Exi_EXISTS)
 	{
+	 // An email of another user is the same that my email
 	 Error = true;
 	 Ale_ShowAlert (Ale_WARNING,Txt_The_email_address_X_had_been_registered_by_another_user,
 		        NewEmail);
@@ -872,28 +873,32 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
   {
    extern const char *Txt_Do_you_really_want_to_completely_eliminate_the_following_user;
 
-   if (Usr_DB_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
+   switch (Usr_DB_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
-      /***** Show question and button to remove user account *****/
-      /* Begin alert */
-      Ale_ShowAlertAndButtonBegin (Ale_QUESTION,
-				   Txt_Do_you_really_want_to_completely_eliminate_the_following_user);
+      case Exi_EXISTS:
+	 /***** Show question and button to remove user account *****/
+	 /* Begin alert */
+	 Ale_ShowAlertAndButtonBegin (Ale_QUESTION,
+				      Txt_Do_you_really_want_to_completely_eliminate_the_following_user);
 
-      /* Show user's record */
-      Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+	 /* Show user's record */
+	 Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
-      /* Show form to request confirmation */
-      Frm_BeginForm (ActRemUsrGbl);
-	 Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-	 Pwd_AskForConfirmationOnDangerousAction ();
-	 Btn_PutButton (Btn_ELIMINATE,NULL);
-      Frm_EndForm ();
+	 /* Show form to request confirmation */
+	 Frm_BeginForm (ActRemUsrGbl);
+	    Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+	    Pwd_AskForConfirmationOnDangerousAction ();
+	    Btn_PutButton (Btn_ELIMINATE,NULL);
+	 Frm_EndForm ();
 
-      /* End alert */
-      Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
+	 /* End alert */
+	 Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/

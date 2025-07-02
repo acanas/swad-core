@@ -1167,10 +1167,11 @@ void Att_ReceiveEvent (void)
    if (ReceivedAtt.Title[0])	// If there's an attendance event title
      {
       /* If title of attendance event was in database... */
-      if (Att_DB_CheckIfSimilarEventExists ("Title",ReceivedAtt.Title,ReceivedAtt.AttCod))
+      if (Att_DB_CheckIfSimilarEventExists ("Title",
+					    ReceivedAtt.Title,
+					    ReceivedAtt.AttCod) == Exi_EXISTS)
         {
          ReceivedAttEventIsCorrect = false;
-
 	 Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_an_event_with_the_title_X,
                         ReceivedAtt.Title);
         }

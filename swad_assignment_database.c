@@ -228,8 +228,8 @@ void Asg_DB_GetAssignmentTxt (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
 /******** Check if the title or the folder of an assignment exists ***********/
 /*****************************************************************************/
 
-bool Asg_DB_CheckIfSimilarAssignmentExists (const char *Field,const char *Value,
-                                            long AsgCod)
+Exi_Exist_t Asg_DB_CheckIfSimilarAssignmentExists (const char *Field,const char *Value,
+                                                   long AsgCod)
   {
    return
    DB_QueryEXISTS ("can not check if similar assignments exist",
@@ -365,7 +365,7 @@ void Asg_DB_UpdateRubCod (long AsgCod,long RubCod)
 			   " WHERE RubCod=%ld"
 			     " AND CrsCod=%ld)",
 			  RubCod,
-			  Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+			  Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_EXISTS)
          /* Update the rubric of the assignment */
 	 DB_QueryREPLACE ("can not update assignment rubric",
 			  "REPLACE INTO asg_rubrics"
@@ -410,8 +410,8 @@ Usr_Can_t Asg_DB_CheckIfICanDoAsgBasedOnGroups (long AsgCod)
 				" AND asg_groups.GrpCod=grp_users.GrpCod)"
 			   "))",
 		   AsgCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_CAN :
-						Usr_CAN_NOT;
+		   Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS ? Usr_CAN :
+							      Usr_CAN_NOT;
   }
 
 /*****************************************************************************/

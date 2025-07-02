@@ -640,20 +640,23 @@ void DegTyp_ReceiveNewDegTyp (void)
    Par_GetParText ("DegTypName",DegTyp_EditingDegTyp->DegTypName,DegTyp_MAX_BYTES_DEGREE_TYPE_NAME);
 
    if (DegTyp_EditingDegTyp->DegTypName[0])	// If there's a degree type name
-     {
       /***** If name of degree type was in database... *****/
-      if (Deg_DB_CheckIfDegreeTypeNameExists (DegTyp_EditingDegTyp->DegTypName,-1L))
-         Ale_CreateAlert (Ale_WARNING,NULL,
-                          Txt_The_type_of_degree_X_already_exists,
-                          DegTyp_EditingDegTyp->DegTypName);
-      else	// Add new degree type to database
+      switch (Deg_DB_CheckIfDegreeTypeNameExists (DegTyp_EditingDegTyp->DegTypName,-1L))
         {
-         Deg_DB_CreateDegreeType (DegTyp_EditingDegTyp->DegTypName);
-      	 Ale_CreateAlert (Ale_SUCCESS,NULL,
-      	                  Txt_Created_new_type_of_degree_X,
-			  DegTyp_EditingDegTyp->DegTypName);
+         case Exi_EXISTS:
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+			     Txt_The_type_of_degree_X_already_exists,
+			     DegTyp_EditingDegTyp->DegTypName);
+            break;
+         case Exi_DOES_NOT_EXIST:
+         default:
+            /* Add new degree type to database */
+	    Deg_DB_CreateDegreeType (DegTyp_EditingDegTyp->DegTypName);
+	    Ale_CreateAlert (Ale_SUCCESS,NULL,
+			     Txt_Created_new_type_of_degree_X,
+			     DegTyp_EditingDegTyp->DegTypName);
+            break;
         }
-     }
    else	// If there is not a degree type name
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_must_specify_the_name);
@@ -797,25 +800,25 @@ void DegTyp_RenameDegTyp (void)
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
       if (strcmp (DegTyp_EditingDegTyp->DegTypName,NewNameDegTyp))	// Different names
-        {
          /***** If degree type was in database... *****/
-         if (Deg_DB_CheckIfDegreeTypeNameExists (NewNameDegTyp,DegTyp_EditingDegTyp->DegTypCod))
-            Ale_CreateAlert (Ale_WARNING,NULL,
-        	             Txt_The_type_of_degree_X_already_exists,
-                             NewNameDegTyp);
-         else
-           {
-            /* Update the table changing old name by new name */
-            Deg_DB_UpdateDegTypName (DegTyp_EditingDegTyp->DegTypCod,NewNameDegTyp);
+         switch (Deg_DB_CheckIfDegreeTypeNameExists (NewNameDegTyp,DegTyp_EditingDegTyp->DegTypCod))
+	   {
+	    case Exi_EXISTS:
+	       Ale_CreateAlert (Ale_WARNING,NULL,
+				Txt_The_type_of_degree_X_already_exists,
+				NewNameDegTyp);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       /* Update the table changing old name by new name */
+	       Deg_DB_UpdateDegTypName (DegTyp_EditingDegTyp->DegTypCod,NewNameDegTyp);
 
-            /* Write message to show the change made */
-            Ale_CreateAlert (Ale_SUCCESS,NULL,
-        	             Txt_The_type_of_degree_X_has_been_renamed_as_Y,
-                             DegTyp_EditingDegTyp->DegTypName,NewNameDegTyp);
-           }
-
-
-        }
+	       /* Write message to show the change made */
+	       Ale_CreateAlert (Ale_SUCCESS,NULL,
+				Txt_The_type_of_degree_X_has_been_renamed_as_Y,
+				DegTyp_EditingDegTyp->DegTypName,NewNameDegTyp);
+	       break;
+	   }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
                           Txt_The_name_X_has_not_changed,NewNameDegTyp);

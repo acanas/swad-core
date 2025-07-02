@@ -144,10 +144,10 @@ void Nam_ExistingShortAndFullNames (Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_
 /****************** Check if a short or full name exists *********************/
 /*****************************************************************************/
 
-bool Nam_CheckIfNameExists (bool (*FuncToCheck) (const char *FldName,const char *Name,
-					         long Cod,long PrtCod,unsigned Year),
-		            const char *Names[Nam_NUM_SHRT_FULL_NAMES],
-			    long Cod,long PrtCod,unsigned Year)
+Exi_Exist_t Nam_CheckIfNameExists (Exi_Exist_t (*FuncToCheck) (const char *FldName,const char *Name,
+							       long Cod,long PrtCod,unsigned Year),
+							       const char *Names[Nam_NUM_SHRT_FULL_NAMES],
+							       long Cod,long PrtCod,unsigned Year)
   {
    extern const char *Txt_X_already_exists;
    Nam_ShrtOrFullName_t ShrtOrFull;
@@ -158,8 +158,8 @@ bool Nam_CheckIfNameExists (bool (*FuncToCheck) (const char *FldName,const char 
       if (FuncToCheck (Nam_Fields[ShrtOrFull],Names[ShrtOrFull],Cod,PrtCod,Year))
 	{
 	 Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,Names[ShrtOrFull]);
-	 return true;	// Exists
+	 return Exi_EXISTS;	// Exists
 	}
 
-   return false;	// Does not exist
+   return Exi_DOES_NOT_EXIST;	// Does not exist
   }

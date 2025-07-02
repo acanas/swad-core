@@ -1060,30 +1060,30 @@ static void Roo_RenameRoom (Nam_ShrtOrFullName_t ShrtOrFull)
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
-        {
          /***** If room was in database... *****/
-         if (Roo_DB_CheckIfRoomNameExists (Nam_Fields[ShrtOrFull],
-                                           NewName,Roo_EditingRoom->RooCod,
-                                           Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-                                           0))	// Unused
-            Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,
-                             NewName);
-         else
-           {
-            /* Update the table changing old name by new name */
-            Roo_DB_UpdateRoomName (Roo_EditingRoom->RooCod,
-        			   Nam_Fields[ShrtOrFull],NewName);
+         switch (Roo_DB_CheckIfRoomNameExists (Nam_Fields[ShrtOrFull],
+					       NewName,Roo_EditingRoom->RooCod,
+					       Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+					       0))	// Unused
+	   {
+	    case Exi_EXISTS:
+	       Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       /* Update the table changing old name by new name */
+	       Roo_DB_UpdateRoomName (Roo_EditingRoom->RooCod,
+				      Nam_Fields[ShrtOrFull],NewName);
 
-            /* Write message to show the change made */
-            Ale_CreateAlert (Ale_SUCCESS,NULL,
-        	             Txt_The_room_X_has_been_renamed_as_Y,
-                             CurrentName[ShrtOrFull],NewName);
-           }
-        }
+	       /* Write message to show the change made */
+	       Ale_CreateAlert (Ale_SUCCESS,NULL,
+				Txt_The_room_X_has_been_renamed_as_Y,
+				CurrentName[ShrtOrFull],NewName);
+	       break;
+	   }
       else	// The same name
-         Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_X_has_not_changed,
-                          CurrentName[ShrtOrFull]);
+         Ale_CreateAlert (Ale_INFO,NULL,Txt_The_name_X_has_not_changed,
+			  CurrentName[ShrtOrFull]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
@@ -1310,11 +1310,11 @@ void Roo_ReceiveNewRoom (void)
        Roo_EditingRoom->FullName[0])	// If there's a room name
      {
       /***** If name of room was not in database... *****/
-      if (!Nam_CheckIfNameExists (Roo_DB_CheckIfRoomNameExists,
-				  (const char **) Names,
-				  -1L,
-				  Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-				  0))	// Unused
+      if (Nam_CheckIfNameExists (Roo_DB_CheckIfRoomNameExists,
+				 (const char **) Names,
+				 -1L,
+				 Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+				 0) == Exi_DOES_NOT_EXIST)	// Unused
         {
          Roo_CreateRoom (Roo_EditingRoom);
 	 Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_room_X,

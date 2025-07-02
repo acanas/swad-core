@@ -551,28 +551,29 @@ static void SysLnk_RenameLink (Nam_ShrtOrFullName_t ShrtOrFull)
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
-        {
          /***** If link was in database... *****/
-         if (SysLnk_DB_CheckIfLinkNameExists (Nam_Fields[ShrtOrFull],
-					   NewName,SysLnk_EditingLnk->LnkCod,
-					   -1L,	// Unused
-					   0))	// Unused
-            Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
-         else
-           {
-            /* Update the table changing old name by new name */
-            SysLnk_DB_UpdateLnkName (SysLnk_EditingLnk->LnkCod,
-        			  Nam_Fields[ShrtOrFull],NewName);
+         switch (SysLnk_DB_CheckIfLinkNameExists (Nam_Fields[ShrtOrFull],
+						  NewName,SysLnk_EditingLnk->LnkCod,
+						  -1L,	// Unused
+						  0))	// Unused
+	   {
+	    case Exi_EXISTS:
+	       Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       /* Update the table changing old name by new name */
+	       SysLnk_DB_UpdateLnkName (SysLnk_EditingLnk->LnkCod,
+				        Nam_Fields[ShrtOrFull],NewName);
 
-            /* Write message to show the change made */
-            Ale_CreateAlert (Ale_SUCCESS,NULL,
-        	             Txt_The_link_X_has_been_renamed_as_Y,
-                             CurrentName[ShrtOrFull],NewName);
-           }
-        }
+	       /* Write message to show the change made */
+	       Ale_CreateAlert (Ale_SUCCESS,NULL,
+				Txt_The_link_X_has_been_renamed_as_Y,
+				CurrentName[ShrtOrFull],NewName);
+	       break;
+	   }
       else	// The same name
-         Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_X_has_not_changed,
+         Ale_CreateAlert (Ale_INFO,NULL,Txt_The_name_X_has_not_changed,
                           CurrentName[ShrtOrFull]);
      }
    else
@@ -726,11 +727,11 @@ void SysLnk_ReceiveNewLink (void)
        SysLnk_EditingLnk->FullName[0])	// If there's a link name
      {
       /***** If name of link was in database... *****/
-      if (!Nam_CheckIfNameExists (SysLnk_DB_CheckIfLinkNameExists,
-				  (const char **) Names,
-				  -1L,
-				  -1L,	// Unused
-				  0))	// Unused
+      if (Nam_CheckIfNameExists (SysLnk_DB_CheckIfLinkNameExists,
+				 (const char **) Names,
+				 -1L,
+				 -1L,				// Unused
+				 0) == Exi_DOES_NOT_EXIST)	// Unused
 	{
 	 if (!SysLnk_EditingLnk->WWW[0])
 	    Ale_CreateAlert (Ale_WARNING,NULL,

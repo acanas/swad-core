@@ -266,7 +266,7 @@ void Exa_DB_GetExamTxt (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
 /******************* Check if the title of an exam exists ********************/
 /*****************************************************************************/
 
-bool Exa_DB_CheckIfSimilarExamExists (long CrsCod,long ExaCod,const char *Title)
+Exi_Exist_t Exa_DB_CheckIfSimilarExamExists (long CrsCod,long ExaCod,const char *Title)
   {
    return
    DB_QueryEXISTS ("can not check similar exams",
@@ -700,8 +700,8 @@ unsigned Exa_DB_GetSetDataByCod (MYSQL_RES **mysql_res,long SetCod)
 /************** Check if the title of a set of questions exists **************/
 /*****************************************************************************/
 
-bool Exa_DB_CheckIfSimilarSetExists (const struct ExaSet_Set *Set,
-                                     const char Title[ExaSet_MAX_BYTES_TITLE + 1])
+Exi_Exist_t Exa_DB_CheckIfSimilarSetExists (const struct ExaSet_Set *Set,
+					    const char Title[ExaSet_MAX_BYTES_TITLE + 1])
   {
    return
    DB_QueryEXISTS ("can not check similar sets of questions",
@@ -1773,8 +1773,8 @@ Usr_Can_t Exa_DB_CheckIfICanListThisSessionBasedOnGrps (long SesCod)
 			     " WHERE grp_users.UsrCod=%ld"
 			       " AND grp_users.GrpCod=exa_groups.GrpCod)))",
 		   SesCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_CAN :
-						Usr_CAN_NOT;
+		   Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS ? Usr_CAN :
+							      Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -2213,7 +2213,7 @@ bool Exa_DB_CheckIfSessionIsTheSameAsTheLast (long PrnCod)
 			    " WHERE PrnCod=%ld)"
 		      " AND SessionId='%s')",
 		   PrnCod,
-		   Gbl.Session.Id);
+		   Gbl.Session.Id) == Exi_EXISTS;
   }
 
 /*****************************************************************************/
@@ -2233,7 +2233,7 @@ bool Exa_DB_CheckIfUserAgentIsTheSameAsTheLast (long PrnCod,const char *UserAgen
 			    " WHERE PrnCod=%ld)"
 		      " AND UserAgent='%s')",
 		   PrnCod,
-		   UserAgentDB);
+		   UserAgentDB) == Exi_EXISTS;
   }
 
 /*****************************************************************************/

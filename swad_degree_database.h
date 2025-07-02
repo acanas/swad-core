@@ -48,16 +48,16 @@ unsigned Deg_DB_GetDegreeDataByCod (MYSQL_RES **mysql_res,long HieCod);
 long Deg_DB_GetInsCodOfDegreeByCod (long HieCod);
 long Deg_DB_GetCtrCodOfDegreeByCod (long HieCod);
 void Deg_DB_GetDegShrtName (long HieCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1]);
-bool Deg_DB_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod);
+Exi_Exist_t Deg_DB_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod);
 unsigned Deg_DB_GetNumDegsOfType (long DegTypCod);
 unsigned Deg_DB_GetDegsOfType (MYSQL_RES **mysql_res,long DegTypCod);
 unsigned Deg_DB_GetDegsOfCurrentCtrBasic (MYSQL_RES **mysql_res);
 unsigned Deg_DB_GetDegsOfCurrentCtrFull (MYSQL_RES **mysql_res);
 unsigned Deg_DB_GetDegsWithPendingCrss (MYSQL_RES **mysql_res);
 unsigned Deg_DB_GetDegsWithStds (MYSQL_RES **mysql_res);
-bool Deg_DB_CheckIfDegNameExistsInCtr (const char *FldName,const char *Name,
-                                       long Cod,long PrtCod,
-				       __attribute__((unused)) unsigned Year);
+Exi_Exist_t Deg_DB_CheckIfDegNameExistsInCtr (const char *FldName,const char *Name,
+                   			      long Cod,long PrtCod,
+                   			      __attribute__((unused)) unsigned Year);
 
 unsigned Deg_DB_SearchDegs (MYSQL_RES **mysql_res,
                             const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],

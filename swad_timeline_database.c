@@ -1142,7 +1142,7 @@ bool Tml_DB_CheckIfFavedByUsr (TmlUsr_FavSha_t FavSha,long Cod,long UsrCod)
 		    " WHERE %s=%ld"
 		      " AND UsrCod=%ld)",
 		   Tml_DB_TableFav[FavSha],
-		   Tml_DB_FieldFav[FavSha],Cod,UsrCod);
+		   Tml_DB_FieldFav[FavSha],Cod,UsrCod) == Exi_EXISTS;
   }
 
 /*****************************************************************************/
@@ -1285,7 +1285,7 @@ bool Tml_DB_CheckIfSharedByUsr (long NotCod,long UsrCod)
 		      " AND PubType=%u)",
 		   NotCod,
 		   UsrCod,
-		   (unsigned) TmlPub_SHARED_NOTE);
+		   (unsigned) TmlPub_SHARED_NOTE) == Exi_EXISTS;
   }
 
 /*****************************************************************************/

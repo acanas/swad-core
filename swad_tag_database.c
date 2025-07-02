@@ -234,7 +234,7 @@ unsigned Tag_DB_GetEnabledTagsFromCrs (MYSQL_RES **mysql_res,
 /*****************************************************************************/
 // Return the number of rows of the result
 
-bool Tag_DB_CheckIfCurrentCrsHasTestTags (void)
+Exi_Exist_t Tag_DB_CheckIfTagsExistInCurrentCrs (void)
   {
    return
    DB_QueryEXISTS ("can not check if course has tags",

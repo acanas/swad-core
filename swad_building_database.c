@@ -116,9 +116,9 @@ unsigned Bld_DB_GetBuildingDataByCod (MYSQL_RES **mysql_res,long BldCod)
 /******************** Check if the name of building exists *******************/
 /*****************************************************************************/
 
-bool Bld_DB_CheckIfBuildingNameExists (const char *FldName,const char *Name,long Cod,
-				       __attribute__((unused)) long PrtCod,
-				       __attribute__((unused)) unsigned Year)
+Exi_Exist_t Bld_DB_CheckIfBuildingNameExists (const char *FldName,const char *Name,long Cod,
+					      __attribute__((unused)) long PrtCod,
+					      __attribute__((unused)) unsigned Year)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a building already existed",
@@ -132,7 +132,6 @@ bool Bld_DB_CheckIfBuildingNameExists (const char *FldName,const char *Name,long
 		   FldName,Name,
 		   Cod);
   }
-
 
 /*****************************************************************************/
 /************* Update building changing old field by new field **************/

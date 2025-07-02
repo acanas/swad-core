@@ -3772,8 +3772,10 @@ long Brw_GetGrpLastAccZone (const char *FieldNameDB)
 
    /***** Check if group exists (it's possible that this group has been removed after my last access to it) *****/
    if (GrpCod >= 0)
-      if (Grp_DB_CheckIfGrpExists (GrpCod))
-         /* Check if I belong to this group (it's possible that I have been removed from this group after my last access to it) */
+      if (Grp_DB_CheckIfGrpExists (GrpCod) == Exi_EXISTS)
+         /* Check if I belong to this group
+            (it's possible that I have been removed from this group
+             after my last access to it) */
          if (Grp_GetIfIBelongToGrp (GrpCod) == Usr_BELONG)
             return GrpCod;
 
@@ -5885,19 +5887,26 @@ static void Brw_PasteClipboard (struct BrwSiz_BrowserSize *Size)
 	       Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
 	       if (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
 		 {
-		  Usr_UsrDataConstructor (&UsrDat);
-		  if (Usr_DB_ChkIfUsrCodExists (Gbl.FileBrowser.Clipboard.WorksUsrCod))
-
-		  UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
-		  Usr_GetAllUsrDataFromUsrCod (&UsrDat,
-					       Usr_DONT_GET_PREFS,
-					       Usr_DONT_GET_ROLE_IN_CRS);	// Check that user exists
-		  snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%02u/%ld/%s",
-			    Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_USR,
-			    (unsigned) (Gbl.FileBrowser.Clipboard.WorksUsrCod % 100),
-			    Gbl.FileBrowser.Clipboard.WorksUsrCod,
-			    Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
-		  Usr_UsrDataDestructor (&UsrDat);
+		  switch (Usr_DB_ChkIfUsrCodExists (Gbl.FileBrowser.Clipboard.WorksUsrCod))
+		    {
+		     case Exi_EXISTS:
+			Usr_UsrDataConstructor (&UsrDat);
+			   UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
+			   Usr_GetAllUsrDataFromUsrCod (&UsrDat,
+							Usr_DONT_GET_PREFS,
+							Usr_DONT_GET_ROLE_IN_CRS);	// Check that user exists
+			   snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%02u/%ld/%s",
+				     Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_USR,
+				     (unsigned) (Gbl.FileBrowser.Clipboard.WorksUsrCod % 100),
+				     Gbl.FileBrowser.Clipboard.WorksUsrCod,
+				     Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
+			Usr_UsrDataDestructor (&UsrDat);
+			break;
+		     case Exi_DOES_NOT_EXIST:
+		     default:
+			Err_WrongCopySrcExit ();
+			break;
+		    }
 		 }
 	       else
 		  Err_WrongCopySrcExit ();

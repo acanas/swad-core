@@ -263,9 +263,9 @@ unsigned Roo_DB_GetListRooms (MYSQL_RES **mysql_res,
 /********************** Check if the name of room exists *********************/
 /*****************************************************************************/
 
-bool Roo_DB_CheckIfRoomNameExists (const char *FldName,const char *Name,
-				   long Cod,long PrtCod,
-				   __attribute__((unused)) unsigned Year)
+Exi_Exist_t Roo_DB_CheckIfRoomNameExists (const char *FldName,const char *Name,
+					  long Cod,long PrtCod,
+					  __attribute__((unused)) unsigned Year)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a room already existed",
@@ -426,8 +426,8 @@ Usr_Can_t Roo_DB_CheckIfICanSeeUsrLocation (long UsrCod)
 			      " AND crs_courses.DegCod=deg_degrees.DegCod) AS C2"	// centers of user's courses
 			    " WHERE C1.CtrCod=C2.CtrCod)",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   UsrCod) ? Usr_CAN :
-			     Usr_CAN_NOT;
+		   UsrCod) == Exi_EXISTS ? Usr_CAN :
+					   Usr_CAN_NOT;
   }
 
 /*****************************************************************************/

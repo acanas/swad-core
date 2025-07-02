@@ -117,12 +117,18 @@ static void MchPrn_ComputeScore (struct MchPrn_Print *Print)
 
 static void MchPrn_UpdateMatchPrintInDB (const struct MchPrn_Print *Print)
   {
-   if (Mch_DB_CheckIfMatchPrintExists (Print))	// Match print exists
-      /* Update match print */
-      Mch_DB_UpdateMatchPrint (Print);
-   else					// Match print doesn't exist
-      /* Create match print */
-      Mch_DB_CreateMatchPrint (Print);
+   switch (Mch_DB_CheckIfMatchPrintExists (Print))
+     {
+      case Exi_EXISTS:		// Match print exists
+	 /* Update match print */
+	 Mch_DB_UpdateMatchPrint (Print);
+	 break;
+      case Exi_DOES_NOT_EXIST:	// Match print doesn't exist
+      default:
+	 /* Create match print */
+	 Mch_DB_CreateMatchPrint (Print);
+	 break;
+     }
   }
 
 /*****************************************************************************/

@@ -531,23 +531,25 @@ void Plg_RenamePlugin (void)
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
       if (strcmp (Plg_EditingPlg->Name,NewPlgName))	// Different names
-        {
          /***** If plugin was in database... *****/
-         if (Plg_DB_CheckIfPluginNameExists (NewPlgName,Plg_EditingPlg->PlgCod))
-            Ale_CreateAlert (Ale_WARNING,NULL,
-        	             Txt_The_plugin_X_already_exists,
-                             NewPlgName);
-         else
-           {
-            /* Update the table changing old name by new name */
-            Plg_DB_ChangeName (Plg_EditingPlg->PlgCod,NewPlgName);
+         switch (Plg_DB_CheckIfPluginNameExists (NewPlgName,
+						 Plg_EditingPlg->PlgCod))
+	   {
+	    case Exi_EXISTS:
+	       Ale_CreateAlert (Ale_WARNING,NULL,
+				Txt_The_plugin_X_already_exists,NewPlgName);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       /* Update the table changing old name by new name */
+	       Plg_DB_ChangeName (Plg_EditingPlg->PlgCod,NewPlgName);
 
-            /* Write message to show the change made */
-            Ale_CreateAlert (Ale_SUCCESS,NULL,
-        	             Txt_The_plugin_X_has_been_renamed_as_Y,
-                             Plg_EditingPlg->Name,NewPlgName);
-           }
-        }
+	       /* Write message to show the change made */
+	       Ale_CreateAlert (Ale_SUCCESS,NULL,
+				Txt_The_plugin_X_has_been_renamed_as_Y,
+				Plg_EditingPlg->Name,NewPlgName);
+	       break;
+	   }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
                           Txt_The_name_X_has_not_changed,Plg_EditingPlg->Name);
@@ -910,20 +912,21 @@ void Plg_ReceiveNewPlg (void)
 	  Plg_EditingPlg->AppKey[0] &&
 	  Plg_EditingPlg->URL[0]    &&
 	  Plg_EditingPlg->IP[0])
-        {
          /***** If name of plugin was in database... *****/
-         if (Plg_DB_CheckIfPluginNameExists (Plg_EditingPlg->Name,-1L))
-            Ale_CreateAlert (Ale_WARNING,NULL,
-        	             Txt_The_plugin_X_already_exists,
-                             Plg_EditingPlg->Name);
-         else	// Add new plugin to database
-           {
-            Plg_DB_CreatePlugin (Plg_EditingPlg);
-	    Ale_CreateAlert (Ale_SUCCESS,NULL,
-		             Txt_Created_new_plugin_X,
-			     Plg_EditingPlg->Name);
-           }
-        }
+         switch (Plg_DB_CheckIfPluginNameExists (Plg_EditingPlg->Name,-1L))
+	   {
+	    case Exi_EXISTS:
+	       Ale_CreateAlert (Ale_WARNING,NULL,Txt_The_plugin_X_already_exists,
+				Plg_EditingPlg->Name);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       /* Add new plugin to database */
+	       Plg_DB_CreatePlugin (Plg_EditingPlg);
+	       Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_plugin_X,
+				Plg_EditingPlg->Name);
+	       break;
+	   }
       else	// If there is not a logo, a URL or a IP
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_You_must_specify_the_logo_the_application_key_the_URL_and_the_IP_address_of_the_new_plugin);

@@ -142,7 +142,7 @@ void Ses_DB_UpdateSessionLastRefresh (void)
 // Return true if session exists
 // Return false if session does not exist or error
 
-bool Ses_DB_CheckIfSessionExists (const char *IdSes)
+Exi_Exist_t Ses_DB_CheckIfSessionExists (const char *IdSes)
   {
    return
    DB_QueryEXISTS ("can not check if a session already existed",
@@ -291,7 +291,7 @@ bool Ses_DB_CheckIfParIsAlreadyStored (const char *ParName)
 		    " WHERE SessionId='%s'"
 		      " AND ParamName='%s')",
 		   Gbl.Session.Id,
-		   ParName);
+		   ParName) == Exi_EXISTS;
   }
 
 /*****************************************************************************/

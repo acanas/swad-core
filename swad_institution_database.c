@@ -189,11 +189,11 @@ unsigned Ins_DB_GetInsShrtNameAndCty (MYSQL_RES **mysql_res,long InsCod)
 /****** Check if the name of institution exists in the current country *******/
 /*****************************************************************************/
 
-bool Ins_DB_CheckIfInsNameExistsInCty (const char *FldName,
-                                       const char *Name,
-				       long Cod,
-				       long PrtCod,
-				       __attribute__((unused)) unsigned Year)
+Exi_Exist_t Ins_DB_CheckIfInsNameExistsInCty (const char *FldName,
+					      const char *Name,
+					      long Cod,
+					      long PrtCod,
+					      __attribute__((unused)) unsigned Year)
   {
    return
    DB_QueryEXISTS ("can not check if the name of an institution already existed",

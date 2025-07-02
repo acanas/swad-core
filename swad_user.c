@@ -2108,7 +2108,7 @@ bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct Usr_Data *UsrDat,
                                               Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs)
   {
    /***** Check if a user exists having this user's code *****/
-   if (Usr_DB_ChkIfUsrCodExists (UsrDat->UsrCod))
+   if (Usr_DB_ChkIfUsrCodExists (UsrDat->UsrCod) == Exi_EXISTS)
      {
       /* Get user's data */
       Usr_GetAllUsrDataFromUsrCod (UsrDat,GetPrefs,GetRoleInCurrentCrs);

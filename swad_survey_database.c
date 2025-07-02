@@ -324,7 +324,7 @@ void Svy_DB_GetSurveyTxt (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
 /******************* Check if the title of a survey exists *******************/
 /*****************************************************************************/
 
-bool Svy_DB_CheckIfSimilarSurveyExists (const struct Svy_Survey *Svy)
+Exi_Exist_t Svy_DB_CheckIfSimilarSurveyExists (const struct Svy_Survey *Svy)
   {
    return
    DB_QueryEXISTS ("can not get similar surveys",
@@ -762,8 +762,8 @@ Usr_Can_t Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod)
 			     " WHERE grp_users.UsrCod=%ld"
 			       " AND grp_users.GrpCod=svy_groups.GrpCod)))",
 		   SvyCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_CAN :
-						Usr_CAN_NOT;
+		   Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS ? Usr_CAN :
+							      Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -1094,7 +1094,7 @@ void Svy_DB_IncreaseAnswer (long QstCod,unsigned AnsInd)
 /*********** Check if an answer of a question exists in database *************/
 /*****************************************************************************/
 
-bool Svy_DB_CheckIfAnswerExists (long QstCod,unsigned AnsInd)
+Exi_Exist_t Svy_DB_CheckIfAnswerExists (long QstCod,unsigned AnsInd)
   {
    return
    DB_QueryEXISTS ("can not check if an answer exists",
@@ -1310,7 +1310,7 @@ bool Svy_DB_CheckIfIHaveAnsweredSvy (long SvyCod)
 		    " WHERE SvyCod=%ld"
 		      " AND UsrCod=%ld)",
 		   SvyCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS;
   }
 
 /*****************************************************************************/

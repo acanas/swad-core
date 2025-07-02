@@ -92,7 +92,7 @@ bool Adm_DB_CheckIfUsrIsAdm (long UsrCod,Hie_Level_t HieLvl)
 		      " AND Cod=%ld)",
 		   UsrCod,
 		   Hie_GetDBStrFromLevel (HieLvl),
-		   Gbl.Hierarchy.Node[HieLvl].HieCod);
+		   Gbl.Hierarchy.Node[HieLvl].HieCod) == Exi_EXISTS;
   }
 
 /*****************************************************************************/
@@ -109,7 +109,7 @@ bool Adm_DB_CheckIfUsrIsSuperuser (long UsrCod)
 		    " WHERE UsrCod=%ld"
 		      " AND Scope='%s')",
 		   UsrCod,
-		   Hie_GetDBStrFromLevel (Hie_SYS));
+		   Hie_GetDBStrFromLevel (Hie_SYS)) == Exi_EXISTS;
    }
 
 /*****************************************************************************/

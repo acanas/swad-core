@@ -39,7 +39,7 @@ void Ses_DB_SaveLastSearchIntoSession (const struct Sch_Search *Search);
 void Ses_DB_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage);
 void Ses_DB_UpdateSessionLastRefresh (void);
 
-bool Ses_DB_CheckIfSessionExists (const char *IdSes);
+Exi_Exist_t Ses_DB_CheckIfSessionExists (const char *IdSes);
 unsigned Ses_DB_GetSessionData (MYSQL_RES **mysql_res);
 unsigned Ses_DB_GetSomeSessionData (MYSQL_RES **mysql_res,const char *SessionId);
 unsigned Ses_DB_GetLastPageMsgFromSession (Pag_WhatPaginate_t WhatPaginate);

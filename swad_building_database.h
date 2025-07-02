@@ -41,9 +41,9 @@ unsigned Bld_DB_GetListBuildings (MYSQL_RES **mysql_res,
                                   Bld_WhichData_t WhichData,
                                   Bld_Order_t SelectedOrder);
 unsigned Bld_DB_GetBuildingDataByCod (MYSQL_RES **mysql_res,long BldCod);
-bool Bld_DB_CheckIfBuildingNameExists (const char *FldName,const char *Name,long Cod,
-				       __attribute__((unused)) long PrtCod,
-				       __attribute__((unused)) unsigned Year);
+Exi_Exist_t Bld_DB_CheckIfBuildingNameExists (const char *FldName,const char *Name,long Cod,
+					      __attribute__((unused)) long PrtCod,
+					      __attribute__((unused)) unsigned Year);
 
 void Bld_DB_UpdateBuildingField (long BldCod,
 				 const char *FldName,const char *Value);

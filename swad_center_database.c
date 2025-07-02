@@ -297,9 +297,9 @@ unsigned Ctr_DB_GetPhotoAttribution (MYSQL_RES **mysql_res,long CtrCod)
 /********************* Check if the name of center exists ********************/
 /*****************************************************************************/
 
-bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FldName,const char *Name,
-				       long Cod,long PrtCod,
-				       __attribute__((unused)) unsigned Year)
+Exi_Exist_t Ctr_DB_CheckIfCtrNameExistsInIns (const char *FldName,const char *Name,
+					      long Cod,long PrtCod,
+					      __attribute__((unused)) unsigned Year)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a center already existed",
@@ -624,7 +624,7 @@ void Ctr_DB_UpdateCtrStatus (long HieCod,Hie_Status_t NewStatus)
 /********** Check if any of the centers in an institution has map ************/
 /*****************************************************************************/
 
-bool Ctr_DB_CheckIfMapIsAvailableInIns (long HieCod)
+Exi_Exist_t Ctr_DB_CheckIfMapExistsInIns (long HieCod)
   {
    /***** Get if any center in current institution has a coordinate set
           (coordinates 0, 0 means not set ==> don't show map) *****/

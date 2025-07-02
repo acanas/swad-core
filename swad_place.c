@@ -587,28 +587,29 @@ static void Plc_RenamePlace (Nam_ShrtOrFullName_t ShrtOrFull)
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
-        {
          /***** If place was in database... *****/
-         if (Plc_DB_CheckIfPlaceNameExists (Nam_Fields[ShrtOrFull],
-					    NewName,Plc_EditingPlc->PlcCod,
-					    Gbl.Hierarchy.Node[Hie_INS].HieCod,
-					    0))	// Unused
-            Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
-         else
-           {
-            /* Update the table changing old name by new name */
-            Plc_DB_UpdatePlcName (Plc_EditingPlc->PlcCod,
-        			  Nam_Fields[ShrtOrFull],NewName);
+         switch (Plc_DB_CheckIfPlaceNameExists (Nam_Fields[ShrtOrFull],
+					        NewName,Plc_EditingPlc->PlcCod,
+					        Gbl.Hierarchy.Node[Hie_INS].HieCod,
+					        0))	// Unused
+	   {
+	    case Exi_EXISTS:
+	       Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       /* Update the table changing old name by new name */
+	       Plc_DB_UpdatePlcName (Plc_EditingPlc->PlcCod,
+				     Nam_Fields[ShrtOrFull],NewName);
 
-            /* Write message to show the change made */
-            Ale_CreateAlert (Ale_SUCCESS,NULL,
-        	             Txt_The_place_X_has_been_renamed_as_Y,
-                             CurrentName[ShrtOrFull],NewName);
-           }
-        }
+	       /* Write message to show the change made */
+	       Ale_CreateAlert (Ale_SUCCESS,NULL,
+				Txt_The_place_X_has_been_renamed_as_Y,
+				CurrentName[ShrtOrFull],NewName);
+	       break;
+	   }
       else	// The same name
-         Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_X_has_not_changed,
+         Ale_CreateAlert (Ale_INFO,NULL,Txt_The_name_X_has_not_changed,
                           CurrentName[ShrtOrFull]);
      }
    else
@@ -714,11 +715,11 @@ void Plc_ReceiveNewPlace (void)
        Plc_EditingPlc->FullName[0])	// If there's a place name
      {
       /***** If name of place was not in database... *****/
-      if (!Nam_CheckIfNameExists (Plc_DB_CheckIfPlaceNameExists,
-				  (const char **) Names,
-				  -1L,
-				  Gbl.Hierarchy.Node[Hie_INS].HieCod,
-				  0))	// Unused
+      if (Nam_CheckIfNameExists (Plc_DB_CheckIfPlaceNameExists,
+				 (const char **) Names,
+				 -1L,
+				 Gbl.Hierarchy.Node[Hie_INS].HieCod,
+				 0) == Exi_DOES_NOT_EXIST)	// Unused
         {
          Plc_DB_CreatePlace (Plc_EditingPlc);
 	 Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_place_X,

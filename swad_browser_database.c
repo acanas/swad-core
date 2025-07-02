@@ -1437,7 +1437,7 @@ bool Brw_DB_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1])
 		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		   Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
 		   Brw_GetZoneUsrCodForFileBrowser (),
-		   Path);
+		   Path) == Exi_EXISTS;
   }
 
 /*****************************************************************************/
@@ -2332,8 +2332,8 @@ HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadat
 		   FileMetadata->Cod,
 		   FileMetadata->ZoneUsrCod,
 		   FileMetadata->FilFolLnk.Full,
-		   FileMetadata->FilFolLnk.Full) ? HidVis_HIDDEN :
-						   HidVis_VISIBLE;
+		   FileMetadata->FilFolLnk.Full) == Exi_EXISTS ? HidVis_HIDDEN :
+								 HidVis_VISIBLE;
   }
 
 /*****************************************************************************/
@@ -2427,8 +2427,8 @@ ConExp_ContractedOrExpanded_t Brw_DB_GetIfContractedOrExpandedFolder (const char
 			 (unsigned) FileBrowserForExpandedFolders,
 			 Cod,
 			 WorksUsrCod,
-			 Path) ? ConExp_EXPANDED :
-				 ConExp_CONTRACTED;
+			 Path) == Exi_EXISTS ? ConExp_EXPANDED :
+					       ConExp_CONTRACTED;
       else
 	 return
 	 DB_QueryEXISTS ("can not check if a folder is expanded",
@@ -2442,8 +2442,8 @@ ConExp_ContractedOrExpanded_t Brw_DB_GetIfContractedOrExpandedFolder (const char
 			 Gbl.Usrs.Me.UsrDat.UsrCod,
 			 (unsigned) FileBrowserForExpandedFolders,
 			 Cod,
-			 Path) ? ConExp_EXPANDED :
-				 ConExp_CONTRACTED;
+			 Path) == Exi_EXISTS ? ConExp_EXPANDED :
+					       ConExp_CONTRACTED;
      }
    else	// Briefcase
       return
@@ -2456,8 +2456,8 @@ ConExp_ContractedOrExpanded_t Brw_DB_GetIfContractedOrExpandedFolder (const char
 			 " AND Path='%s/')",
 		      Gbl.Usrs.Me.UsrDat.UsrCod,
 		      (unsigned) FileBrowserForExpandedFolders,
-		      Path) ? ConExp_EXPANDED :
-			      ConExp_CONTRACTED;
+		      Path) == Exi_EXISTS ? ConExp_EXPANDED :
+					    ConExp_CONTRACTED;
   }
 
 /*****************************************************************************/

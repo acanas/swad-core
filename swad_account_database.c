@@ -61,7 +61,7 @@ unsigned Acc_DB_GetUsrsWithID (MYSQL_RES **mysql_res,
 /****** Check if a nickname matches any of the nicknames of other users ******/
 /*****************************************************************************/
 
-bool Acc_DB_CheckIfNicknameAlreadyExists (const char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1])
+Exi_Exist_t Acc_DB_CheckIfNicknameAlreadyExists (const char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1])
   {
    return
    DB_QueryEXISTS ("can not check if nickname already existed",
@@ -78,7 +78,7 @@ bool Acc_DB_CheckIfNicknameAlreadyExists (const char NewNickWithoutArr[Nck_MAX_B
 /******** Check if an email matches any of the emails of other users *********/
 /*****************************************************************************/
 
-bool Acc_DB_CheckIfEmailAlreadyExists (const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
+Exi_Exist_t Acc_DB_CheckIfEmailAlreadyExists (const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
    return
    DB_QueryEXISTS ("can not check if email already existed",

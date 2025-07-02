@@ -32,6 +32,7 @@
 
 #include "swad_database.h"
 #include "swad_error.h"
+#include "swad_exist.h"
 #include "swad_global.h"
 #include "swad_message.h"
 #include "swad_message_database.h"
@@ -767,14 +768,14 @@ void Msg_DB_GetStatusOfRcvMsg (long MsgCod,CloOpe_ClosedOrOpen_t *Open,
 bool Msg_DB_CheckIfSntMsgIsDeleted (long MsgCod)
   {
    return
-   !DB_QueryEXISTS ("can not check if a sent message is deleted",
-		    "SELECT EXISTS"
-		    "(SELECT *"
-		      " FROM msg_snt"
-		     " WHERE MsgCod=%ld)",
-		    MsgCod);	// The message has been deleted
-				// by its author when it is not present
-				// in table of sent messages undeleted
+   DB_QueryEXISTS ("can not check if a sent message is deleted",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM msg_snt"
+		    " WHERE MsgCod=%ld)",
+		   MsgCod) == Exi_DOES_NOT_EXIST;	// The message has been deleted
+							// by its author when it is not present
+							// in table of sent messages undeleted
   }
 
 /*****************************************************************************/
@@ -784,14 +785,14 @@ bool Msg_DB_CheckIfSntMsgIsDeleted (long MsgCod)
 bool Msg_DB_CheckIfRcvMsgIsDeletedForAllItsRecipients (long MsgCod)
   {
    return
-   !DB_QueryEXISTS ("can not check if a received message is deleted by all recipients",
-		    "SELECT EXISTS"
-		    "(SELECT *"
-		      " FROM msg_rcv"
-		     " WHERE MsgCod=%ld)",
-		    MsgCod);	// The message has been deleted
-				// by all its recipients when it is not present
-				// in table of received messages undeleted
+   DB_QueryEXISTS ("can not check if a received message is deleted by all recipients",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM msg_rcv"
+		    " WHERE MsgCod=%ld)",
+		   MsgCod) == Exi_DOES_NOT_EXIST;	// The message has been deleted
+							// by all its recipients when it is not present
+							// in table of received messages undeleted
   }
 
 /*****************************************************************************/
@@ -832,7 +833,7 @@ bool Msg_DB_CheckIfMsgHasBeenReceivedByMe (long MsgCod)
 		    " WHERE UsrCod=%ld"
 		      " AND MsgCod=%ld)",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,MsgCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod,MsgCod);
+		   Gbl.Usrs.Me.UsrDat.UsrCod,MsgCod) == Exi_EXISTS;
   }
 
 /*****************************************************************************/
@@ -1569,7 +1570,7 @@ bool Msg_DB_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod)
 		    " WHERE FromUsrCod=%ld"
 		      " AND ToUsrCod=%ld)",
 		   FromUsrCod,
-		   ToUsrCod);
+		   ToUsrCod) == Exi_EXISTS;
   }
 
 /*****************************************************************************/

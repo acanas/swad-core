@@ -444,7 +444,7 @@ static int API_CheckIdSession (struct soap *soap,
      }
 
    /***** Query if session identifier already exists in database *****/
-   if (!Ses_DB_CheckIfSessionExists (IdSes))
+   if (Ses_DB_CheckIfSessionExists (IdSes) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Bad session identifier",
 	                          "Session identifier does not exist in database");
@@ -496,17 +496,19 @@ static int API_CheckCourseAndGroupCodes (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /***** Query if course code already exists in database *****/
-   if (!Crs_DB_CheckIfCrsCodExists (CrsCod))
+   if (Crs_DB_CheckIfCrsCodExists (CrsCod) == Exi_DOES_NOT_EXIST)
       return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code does not exist in database");
 
-   /***** Course code exists in database, so check if group code exists in database and belongs to course *****/
+   /***** Course code exists in database,
+          so check if group code exists in database and belongs to course *****/
    if (GrpCod > 0)	// <= 0 means "the whole course"
-      if (!Grp_DB_CheckIfGrpBelongsToCrs (GrpCod,CrsCod))
+      if (Grp_DB_CheckIfGrpExistsInCrs (GrpCod,CrsCod) == Exi_DOES_NOT_EXIST)
          return soap_sender_fault (soap,
                                    "Bad group code",
-                                   "Group code does not exist in database or it's not a group of the specified course");
+                                   "Group code does not exist in database"
+                                   " or it's not a group of the specified course");
 
    return SOAP_OK;
   }
@@ -526,7 +528,7 @@ static int API_GenerateNewAPIKey (struct soap *soap,
    Str_Copy (APIKey,Cry_GetUniqueNameEncrypted (),API_BYTES_KEY);
 
    /***** Check that key does not exist in database *****/
-   if (API_DB_CheckIfAPIKeyExists (APIKey))
+   if (API_DB_CheckIfAPIKeyExists (APIKey) == Exi_EXISTS)
       return soap_receiver_fault (soap,
 	                          "Error when generating key",
 	                          "Generated key already existed in database");
@@ -697,17 +699,19 @@ static int API_CheckParsNewAccount (char *NewNickWithArr,		// Input
       /***** Output value of nickname without leading arrobas *****/
       Str_Copy (NewNickWithoutArr,CopyOfNewNick,Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
      }
-   else        // New nickname is not valid
+   else        						// New nickname is not valid
       return API_CHECK_NEW_ACCOUNT_NICKNAME_NOT_VALID;
 
    /***** Step 2/3: Check new email *****/
    if (Mai_CheckIfEmailIsValid (NewEmail))	// New email is valid
      {
-      /***** Check if the new email matches any of the confirmed emails of other users *****/
-      if (Mai_DB_CheckIfEmailExistsConfirmed (NewEmail))	// An email of another user is the same that my email
+      /***** Check if the new email matches
+	     any of the confirmed emails of other users *****/
+      if (Mai_DB_CheckIfEmailExistsConfirmed (NewEmail) == Exi_EXISTS)
+	 // An email of another user is the same that my email
 	 return API_CHECK_NEW_ACCOUNT_EMAIL_REGISTERED_BY_ANOTHER_USER;
      }
-   else	// New email is not valid
+   else						// New email is not valid
       return API_CHECK_NEW_ACCOUNT_EMAIL_NOT_VALID;
 
    /***** Step 3/3: Check new password *****/
@@ -2631,7 +2635,8 @@ static void API_GetLstGrpsSel (const char *Groups)
 	{
 	 Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
 	 Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
-	 if (Grp_DB_CheckIfGrpBelongsToCrs (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp],Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+	 if (Grp_DB_CheckIfGrpExistsInCrs (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp],
+					   Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_EXISTS)
 	    NumGrp++;
 	}
       Gbl.Crs.Grps.LstGrpsSel.NumGrps = NumGrp;	// Update number of groups

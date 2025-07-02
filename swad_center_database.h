@@ -50,9 +50,9 @@ unsigned Ctr_DB_GetCoordByCod (MYSQL_RES **mysql_res,long HieCod);
 long Ctr_DB_GetInsCodOfCenterByCod (long HieCod);
 void Ctr_DB_GetCtrShrtName (long HieCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1]);
 unsigned Ctr_DB_GetPhotoAttribution (MYSQL_RES **mysql_res,long CtrCod);
-bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FldName,const char *Name,
-				       long Cod,long PrtCod,
-				       __attribute__((unused)) unsigned Year);
+Exi_Exist_t Ctr_DB_CheckIfCtrNameExistsInIns (const char *FldName,const char *Name,
+					      long Cod,long PrtCod,
+					      __attribute__((unused)) unsigned Year);
 
 unsigned Ctr_DB_SearchCtrs (MYSQL_RES **mysql_res,
                             const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
@@ -80,7 +80,7 @@ void Ctr_DB_UpdateCtrCoordinate (long HieCod,
 void Ctr_DB_UpdateCtrStatus (long HieCod,Hie_Status_t NewStatus);
 
 
-bool Ctr_DB_CheckIfMapIsAvailableInIns (long HieCod);
+Exi_Exist_t Ctr_DB_CheckIfMapExistsInIns (long HieCod);
 void Ctr_DB_GetAvgCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom);
 void Ctr_DB_GetAvgCoordAndZoomInCurrentIns (struct Map_Coordinates *Coord,unsigned *Zoom);
 unsigned Ctr_DB_GetCtrsWithCoords (MYSQL_RES **mysql_res);

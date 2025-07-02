@@ -215,7 +215,7 @@ void Crs_DB_GetShortNamesByCod (long CrsCod,
 /************** Check if course code exists in existing courses **************/
 /*****************************************************************************/
 
-bool Crs_DB_CheckIfCrsCodExists (long CrsCod)
+Exi_Exist_t Crs_DB_CheckIfCrsCodExists (long CrsCod)
   {
    return
    DB_QueryEXISTS ("can not check if a course already existed",
@@ -230,8 +230,8 @@ bool Crs_DB_CheckIfCrsCodExists (long CrsCod)
 /********** Check if the name of course exists in existing courses ***********/
 /*****************************************************************************/
 
-bool Crs_DB_CheckIfCrsNameExistsInYearOfDeg (const char *FldName,const char *Name,
-					     long Cod,long PrtCod,unsigned Year)
+Exi_Exist_t Crs_DB_CheckIfCrsNameExistsInYearOfDeg (const char *FldName,const char *Name,
+						    long Cod,long PrtCod,unsigned Year)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a course already existed",

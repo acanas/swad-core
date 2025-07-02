@@ -1155,31 +1155,32 @@ void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFull
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
-        {
          /***** If institution was not in database... *****/
-         if (Ins_DB_CheckIfInsNameExistsInCty (Nam_Fields[ShrtOrFull],
-					       NewName,Ins->HieCod,
-                                               Gbl.Hierarchy.Node[Hie_CTY].HieCod,
-                                               0))	// Unused
-            Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
-         else
-           {
-            /* Update the table changing old name by new name */
-            Ins_UpdateInsNameDB (Ins->HieCod,
-        			 Nam_Fields[ShrtOrFull],NewName);
+         switch (Ins_DB_CheckIfInsNameExistsInCty (Nam_Fields[ShrtOrFull],
+						   NewName,Ins->HieCod,
+						   Gbl.Hierarchy.Node[Hie_CTY].HieCod,
+						   0))	// Unused
+	   {
+	    case Exi_EXISTS:
+	       Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       /* Update the table changing old name by new name */
+	       Ins_UpdateInsNameDB (Ins->HieCod,
+				    Nam_Fields[ShrtOrFull],NewName);
 
-            /* Create message to show the change made */
-            Ale_CreateAlert (Ale_SUCCESS,NULL,
-        	             Txt_The_institution_X_has_been_renamed_as_Y,
-                             CurrentName[ShrtOrFull],NewName);
+	       /* Create message to show the change made */
+	       Ale_CreateAlert (Ale_SUCCESS,NULL,
+				Txt_The_institution_X_has_been_renamed_as_Y,
+				CurrentName[ShrtOrFull],NewName);
 
-	    /* Change current institution name in order to display it properly */
-	    Str_Copy (CurrentName[ShrtOrFull],NewName,Nam_MaxBytes[ShrtOrFull]);
-           }
-        }
+	       /* Change current institution name in order to display it properly */
+	       Str_Copy (CurrentName[ShrtOrFull],NewName,Nam_MaxBytes[ShrtOrFull]);
+	       break;
+	   }
       else	// The same name
-         Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_X_has_not_changed,
+         Ale_CreateAlert (Ale_INFO,NULL,Txt_The_name_X_has_not_changed,
                           CurrentName[ShrtOrFull]);
      }
    else
@@ -1468,11 +1469,11 @@ static void Ins_ReceiveRequestOrCreateIns (Hie_Status_t Status)
       if (Ins_EditingIns->WWW[0])
         {
          /***** If name of institution was not in database... *****/
-	 if (!Nam_CheckIfNameExists (Ins_DB_CheckIfInsNameExistsInCty,
-				     (const char **) Names,
-				     -1L,
-				     Gbl.Hierarchy.Node[Hie_CTY].HieCod,
-				     0))	// Unused
+	 if (Nam_CheckIfNameExists (Ins_DB_CheckIfInsNameExistsInCty,
+				    (const char **) Names,
+				    -1L,
+				    Gbl.Hierarchy.Node[Hie_CTY].HieCod,
+				    0) == Exi_DOES_NOT_EXIST)	// Unused
            {
             Ins_EditingIns->HieCod = Ins_DB_CreateInstitution (Ins_EditingIns,Status);
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_institution_X,
@@ -1603,7 +1604,7 @@ static void Ins_EditingInstitutionDestructor (void)
 
 static void Ins_FormToGoToMap (struct Hie_Node *Ins)
   {
-   if (Ctr_DB_CheckIfMapIsAvailableInIns (Ins->HieCod))
+   if (Ctr_DB_CheckIfMapExistsInIns (Ins->HieCod) == Exi_EXISTS)
      {
       Ins_EditingIns = Ins;	// Used to pass parameter with the code of the institution
       Lay_PutContextualLinkOnlyIcon (ActSeeInsInf,NULL,

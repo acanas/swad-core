@@ -31,6 +31,7 @@
 
 #include "swad_assignment.h"
 #include "swad_browser.h"
+#include "swad_exist.h"
 #include "swad_group.h"
 
 /*****************************************************************************/
@@ -49,8 +50,8 @@ unsigned Asg_DB_GetAssignmentTitleAndTxt (MYSQL_RES **mysql_res,long AsgCod);
 void Asg_DB_GetAssignmentTitle (long AsgCod,char *Title,size_t TitleSize);
 void Asg_DB_GetAssignmentTxt (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
-bool Asg_DB_CheckIfSimilarAssignmentExists (const char *Field,const char *Value,
-                                            long AsgCod);
+Exi_Exist_t Asg_DB_CheckIfSimilarAssignmentExists (const char *Field,const char *Value,
+                                                   long AsgCod);
 
 long Asg_DB_CreateAssignment (const struct Asg_Assignment *Asg,const char *Txt);
 void Asg_DB_UpdateAssignment (const struct Asg_Assignment *Asg,const char *Txt);

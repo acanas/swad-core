@@ -614,24 +614,25 @@ static void Mai_RenameMailDomain (Nam_ShrtOrFullName_t ShrtOrFull)
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
-        {
          /***** If mail was in database... *****/
-         if (Mai_DB_CheckIfMailDomainNameExists (FldName[ShrtOrFull],NewName,
-						 Mai_EditingMai->MaiCod))
-	    Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
-		             Txt_The_email_domain_X_already_exists,
-                             NewName);
-         else
-           {
-            /* Update the table changing old name by new name */
-            Mai_DB_UpdateMailDomainName (Mai_EditingMai->MaiCod,FldName[ShrtOrFull],NewName);
+         switch (Mai_DB_CheckIfMailDomainNameExists (FldName[ShrtOrFull],NewName,
+						     Mai_EditingMai->MaiCod))
+	   {
+	    case Exi_EXISTS:
+	       Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
+				Txt_The_email_domain_X_already_exists,NewName);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       /* Update the table changing old name by new name */
+	       Mai_DB_UpdateMailDomainName (Mai_EditingMai->MaiCod,FldName[ShrtOrFull],NewName);
 
-            /* Write message to show the change made */
-	    Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
-		             Txt_The_email_domain_X_has_been_renamed_as_Y,
-                             CurrentName[ShrtOrFull],NewName);
-           }
-        }
+	       /* Write message to show the change made */
+	       Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
+				Txt_The_email_domain_X_has_been_renamed_as_Y,
+				CurrentName[ShrtOrFull],NewName);
+	       break;
+	   }
       else	// The same name
 	 Ale_CreateAlert (Ale_INFO,Mai_EMAIL_SECTION_ID,
 	                  Txt_The_email_domain_X_has_not_changed,
@@ -749,11 +750,13 @@ void Mai_ReceiveNewMailDom (void)
        Mai_EditingMai->Info[0])	// If there's a mail name
      {
       /***** If name of mail was in database... *****/
-      if (Mai_DB_CheckIfMailDomainNameExists ("Domain",Mai_EditingMai->Domain,-1L))
+      if (Mai_DB_CheckIfMailDomainNameExists ("Domain",
+					      Mai_EditingMai->Domain,-1L) == Exi_EXISTS)
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_email_domain_X_already_exists,
                           Mai_EditingMai->Domain);
-      else if (Mai_DB_CheckIfMailDomainNameExists ("Info",Mai_EditingMai->Info,-1L))
+      else if (Mai_DB_CheckIfMailDomainNameExists ("Info",
+						   Mai_EditingMai->Info,-1L) == Exi_EXISTS)
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_email_domain_X_already_exists,
                           Mai_EditingMai->Info);

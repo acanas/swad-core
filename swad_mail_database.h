@@ -41,7 +41,7 @@ unsigned Mai_DB_GetMyEmails (MYSQL_RES **mysql_res,long UsrCod);
 unsigned Mai_DB_GetEmailFromUsrCod (MYSQL_RES **mysql_res,long UsrCod);
 long Mai_DB_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 char Mai_DB_CheckIfEmailIsConfirmed (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
-bool Mai_DB_CheckIfEmailExistsConfirmed (const char *Email);
+Exi_Exist_t Mai_DB_CheckIfEmailExistsConfirmed (const char *Email);
 bool Mai_DB_CheckIfEmailBelongToAnotherUsr (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
 void Mai_DB_RemoveNotConfirmedEmailForOtherUsrs (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
@@ -68,7 +68,7 @@ void Mai_DB_UpdateMailDomainName (long MaiCod,
 
 unsigned Mai_DB_GetMailDomains (MYSQL_RES **mysql_res,Mai_DomainsOrder_t SelectedOrder);
 unsigned Mai_DB_GetMailDomainDataByCod (MYSQL_RES **mysql_res,long MaiCod);
-bool Mai_DB_CheckIfMailDomainNameExists (const char *FldName,const char *Name,long MaiCod);
+Exi_Exist_t Mai_DB_CheckIfMailDomainNameExists (const char *FldName,const char *Name,long MaiCod);
 bool Mai_DB_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
 void Mai_DB_RemoveMailDomain (long MaiCod);

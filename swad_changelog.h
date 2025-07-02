@@ -638,10 +638,11 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.94 (2025-07-01)"
+#define Log_PLATFORM_VERSION	"SWAD 24.95 (2025-07-02)"
 #define CSS_FILE		"swad24.94.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 24.95:    Jul 02, 2025  New type for exists/does not exist. (348286 lines)
 	Version 24.94:    Jul 01, 2025  Changes in class photos. (348166 lines)
 	Version 24.93.1:  Jul 01, 2025  Changes in class photos of institutions. (348168 lines)
 	Version 24.93:    Jul 01, 2025  Automatic columns in class photos of institutions and degrees. (348166 lines)

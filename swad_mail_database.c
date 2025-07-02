@@ -147,7 +147,7 @@ char Mai_DB_CheckIfEmailIsConfirmed (long UsrCod,const char Email[Cns_MAX_BYTES_
 /********** Check if an email matches any of the confirmed emails ************/
 /*****************************************************************************/
 
-bool Mai_DB_CheckIfEmailExistsConfirmed (const char *Email)
+Exi_Exist_t Mai_DB_CheckIfEmailExistsConfirmed (const char *Email)
   {
    return
    DB_QueryEXISTS ("can not check if email already existed",
@@ -174,7 +174,7 @@ bool Mai_DB_CheckIfEmailBelongToAnotherUsr (long UsrCod,const char Email[Cns_MAX
 		      " AND Confirmed='Y'"
 		      " AND UsrCod<>%ld)",
 		   Email,
-		   UsrCod);
+		   UsrCod) == Exi_EXISTS;
   }
 
 /*****************************************************************************/
@@ -410,7 +410,7 @@ unsigned Mai_DB_GetMailDomainDataByCod (MYSQL_RES **mysql_res,long MaiCod)
 /********************** Check if the name of mail exists *********************/
 /*****************************************************************************/
 
-bool Mai_DB_CheckIfMailDomainNameExists (const char *FldName,const char *Name,long MaiCod)
+Exi_Exist_t Mai_DB_CheckIfMailDomainNameExists (const char *FldName,const char *Name,long MaiCod)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a mail domain already existed",
@@ -435,7 +435,7 @@ bool Mai_DB_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MAX_BY
 		   "(SELECT *"
 		     " FROM ntf_mail_domains"
 		    " WHERE Domain='%s')",
-		   MailDomain);
+		   MailDomain) == Exi_EXISTS;
   }
 
 /*****************************************************************************/

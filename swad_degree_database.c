@@ -361,7 +361,7 @@ void Deg_DB_GetDegShrtName (long HieCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 
 /****************** Check if name of degree type exists **********************/
 /*****************************************************************************/
 
-bool Deg_DB_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod)
+Exi_Exist_t Deg_DB_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a type of degree already existed",
@@ -516,9 +516,9 @@ unsigned Deg_DB_GetDegsWithStds (MYSQL_RES **mysql_res)
 /********************* Check if the name of degree exists ********************/
 /*****************************************************************************/
 
-bool Deg_DB_CheckIfDegNameExistsInCtr (const char *FldName,const char *Name,
-                                       long Cod,long PrtCod,
-				       __attribute__((unused)) unsigned Year)
+Exi_Exist_t Deg_DB_CheckIfDegNameExistsInCtr (const char *FldName,const char *Name,
+					      long Cod,long PrtCod,
+					      __attribute__((unused)) unsigned Year)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a degree already existed",
@@ -845,8 +845,8 @@ Usr_Belong_t Deg_DB_CheckIfUsrBelongsToDeg (long UsrCod,long HieCod,
 		      " AND crs_courses.DegCod=%ld)",
 		   UsrCod,
 		   SubQuery,
-		   HieCod) ? Usr_BELONG :
-			     Usr_DONT_BELONG;
+		   HieCod) == Exi_EXISTS ? Usr_BELONG :
+					   Usr_DONT_BELONG;
   }
 
 /*****************************************************************************/

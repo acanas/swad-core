@@ -1512,7 +1512,7 @@ static bool Gam_CheckGameFieldsReceivedFromForm (const struct Gam_Game *Game)
    if (Game->Title[0])	// If there's a game title
      {
       /* If title of game was in database... */
-      if (Gam_DB_CheckIfSimilarGameExists (Game))
+      if (Gam_DB_CheckIfSimilarGameExists (Game) == Exi_EXISTS)
 	{
 	 GameIsCorrect = false;
 	 Ale_CreateAlert (Ale_WARNING,NULL,

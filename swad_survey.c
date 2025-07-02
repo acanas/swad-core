@@ -1951,7 +1951,7 @@ void Svy_ReceiveSurvey (void)
    if (NewSvy.Title[0])	// If there's a survey title
      {
       /* If title of survey was in database... */
-      if (Svy_DB_CheckIfSimilarSurveyExists (&NewSvy))
+      if (Svy_DB_CheckIfSimilarSurveyExists (&NewSvy) == Exi_EXISTS)
         {
          SvyIsCorrect = false;
          Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_a_survey_with_the_title_X,
@@ -2525,23 +2525,25 @@ void Svy_ReceiveQst (void)
       for (NumAns = 0;
 	   NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
 	   NumAns++)
-         if (Svy_DB_CheckIfAnswerExists (SvyQst.QstCod,NumAns))	// If this answer exists...
-           {
-            if (SvyQst.AnsChoice[NumAns].Text[0])	// Answer is not empty
-               /* Update answer text */
-               Svy_DB_UpdateAnswerText (SvyQst.QstCod,NumAns,
-                                        SvyQst.AnsChoice[NumAns].Text);
-            else					// Answer is empty
-               /* Delete answer from database */
-               Svy_DB_RemoveAnswerQst (SvyQst.QstCod,NumAns);
-           }
-         else	// If this answer does not exist...
-           {
-            if (SvyQst.AnsChoice[NumAns].Text[0])	// Answer is not empty
-               /* Create answer into database */
-               Svy_DB_CreateAnswer (SvyQst.QstCod,NumAns,
-                                    SvyQst.AnsChoice[NumAns].Text);
-           }
+         switch (Svy_DB_CheckIfAnswerExists (SvyQst.QstCod,NumAns))
+	   {
+	    case Exi_EXISTS:		// If this answer exists...
+	       if (SvyQst.AnsChoice[NumAns].Text[0])	// Answer is not empty
+		  /* Update answer text */
+		  Svy_DB_UpdateAnswerText (SvyQst.QstCod,NumAns,
+					   SvyQst.AnsChoice[NumAns].Text);
+	       else					// Answer is empty
+		  /* Delete answer from database */
+		  Svy_DB_RemoveAnswerQst (SvyQst.QstCod,NumAns);
+	       break;
+	    case Exi_DOES_NOT_EXIST:	// If this answer does not exist...
+	    default:
+	       if (SvyQst.AnsChoice[NumAns].Text[0])	// Answer is not empty
+		  /* Create answer into database */
+		  Svy_DB_CreateAnswer (SvyQst.QstCod,NumAns,
+				       SvyQst.AnsChoice[NumAns].Text);
+	       break;
+	   }
 
       /***** List the questions of this survey, including the new one just inserted into the database *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_survey_has_been_modified);

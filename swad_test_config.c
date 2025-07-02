@@ -131,7 +131,7 @@ bool TstCfg_CheckIfPluggableIsUnknownAndCrsHasTests (void)
 
    /***** Get if current course has tests from database *****/
    if (TstCfg_GetConfigPluggable () == TstCfg_PLUGGABLE_UNKNOWN)
-      return Tag_DB_CheckIfCurrentCrsHasTestTags ();	// Return true if course has test tags
+      return Tag_DB_CheckIfTagsExistInCurrentCrs () == Exi_EXISTS;	// Return true if course has test tags
 
    return false;	// Pluggable is not unknown
   }

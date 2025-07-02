@@ -284,15 +284,13 @@ static bool ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
       /***** Check if old and new titles are the same
 	     (this happens when return is pressed without changes) *****/
       if (strcmp (Set->Title,NewTitle))	// Different titles
-	{
 	 /* If title of set was in database... */
-	 if (Exa_DB_CheckIfSimilarSetExists (Set,NewTitle))
+	 if (Exa_DB_CheckIfSimilarSetExists (Set,NewTitle) == Exi_EXISTS)
 	   {
 	    TitleIsCorrect = false;
 	    Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_a_set_of_questions_in_this_exam_with_the_title_X,
 			   Set->Title);
 	   }
-	}
      }
    else	// If there is not a set title
      {

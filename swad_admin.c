@@ -377,23 +377,27 @@ static void Adm_AskIfRemAdm (Usr_MeOrOther_t MeOrOther,Hie_Level_t HieLvl)
       [Usr_OTHER] = Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X,
      };
 
-   if (Usr_DB_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
+   switch (Usr_DB_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
-      /***** Show question and button to remove user as administrator *****/
-      /* Begin alert */
-      Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Question[MeOrOther],
-			           Gbl.Hierarchy.Node[HieLvl].FullName);
+      case Exi_EXISTS:
+	 /***** Show question and button to remove user as administrator *****/
+	 /* Begin alert */
+	 Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Question[MeOrOther],
+				      Gbl.Hierarchy.Node[HieLvl].FullName);
 
-      /* Show user's record */
-      Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+	 /* Show user's record */
+	 Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
-      /* End alert */
-      Ale_ShowAlertAndButtonEnd (ActRemAdm[HieLvl],NULL,NULL,
-                                 Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-                                 Btn_REMOVE);
+	 /* End alert */
+	 Ale_ShowAlertAndButtonEnd (ActRemAdm[HieLvl],NULL,NULL,
+				    Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+				    Btn_REMOVE);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/

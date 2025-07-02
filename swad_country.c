@@ -1205,29 +1205,30 @@ void Cty_RenameCountry (void)
              (this happens when return is pressed without changes) *****/
       Cty_GetCountryNameInLanguage (Cty_EditingCty->HieCod,Language,OldCtyName);
       if (strcmp (OldCtyName,NewCtyName))	// Different names
-	{
 	 /***** If country was in database... *****/
-	 if (Cty_DB_CheckIfCountryNameExists (Language,NewCtyName,Cty_EditingCty->HieCod))
-	    Ale_CreateAlert (Ale_WARNING,NULL,
-		             Txt_The_country_X_already_exists,
-		             NewCtyName);
-	 else
+	 switch (Cty_DB_CheckIfCountryNameExists (Language,NewCtyName,
+						  Cty_EditingCty->HieCod))
 	   {
-	    /* Update the table changing old name by new name */
-	    snprintf (FldName,sizeof (FldName),"Name_%s",
-		      Lan_STR_LANG_ID[Language]);
-	    Cty_UpdateCtyName (Cty_EditingCty->HieCod,FldName,NewCtyName);
+	    case Exi_EXISTS:
+	       Ale_CreateAlert (Ale_WARNING,NULL,
+				Txt_The_country_X_already_exists,NewCtyName);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       /* Update the table changing old name by new name */
+	       snprintf (FldName,sizeof (FldName),"Name_%s",
+			 Lan_STR_LANG_ID[Language]);
+	       Cty_UpdateCtyName (Cty_EditingCty->HieCod,FldName,NewCtyName);
 
-	    /* Write message to show the change made */
-	    Ale_CreateAlert (Ale_SUCCESS,NULL,
-		             Txt_The_country_X_has_been_renamed_as_Y,
-		             OldCtyName,NewCtyName);
+	       /* Write message to show the change made */
+	       Ale_CreateAlert (Ale_SUCCESS,NULL,
+				Txt_The_country_X_has_been_renamed_as_Y,
+				OldCtyName,NewCtyName);
+	       break;
 	   }
-	}
       else	// The same name
 	 Ale_CreateAlert (Ale_INFO,NULL,
-	                  Txt_The_name_X_has_not_changed,
-	                  OldCtyName);
+			  Txt_The_name_X_has_not_changed,OldCtyName);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
@@ -1486,7 +1487,7 @@ void Cty_ReceiveNewCountry (void)
 	               Txt_You_must_specify_the_numerical_code_of_the_new_country);
       CreateCountry = false;
      }
-   else if (Cty_DB_CheckIfNumericCountryCodeExists (Cty_EditingCty->HieCod))
+   else if (Cty_DB_CheckIfNumericCountryCodeExists (Cty_EditingCty->HieCod) == Exi_EXISTS)
      {
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_The_numerical_code_X_already_exists,
@@ -1511,7 +1512,7 @@ void Cty_ReceiveNewCountry (void)
            }
       if (CreateCountry)
         {
-         if (Cty_DB_CheckIfAlpha2CountryCodeExists (Cty_EditingCty->ShrtName))
+         if (Cty_DB_CheckIfAlpha2CountryCodeExists (Cty_EditingCty->ShrtName) == Exi_EXISTS)
            {
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_alphabetical_code_X_already_exists,
@@ -1531,7 +1532,9 @@ void Cty_ReceiveNewCountry (void)
                if (NameInSeveralLanguages[Lan][0])	// If there's a country name
                  {
                   /***** If name of country was in database... *****/
-                  if (Cty_DB_CheckIfCountryNameExists (Lan,NameInSeveralLanguages[Lan],-1L))
+                  if (Cty_DB_CheckIfCountryNameExists (Lan,
+                				       NameInSeveralLanguages[Lan],
+                				       -1L) == Exi_EXISTS)
                     {
                      Ale_CreateAlert (Ale_WARNING,NULL,
                 	              Txt_The_country_X_already_exists,
@@ -1683,7 +1686,7 @@ static void Cty_EditingCountryDestructor (void)
 
 static void Cty_FormToGoToMap (struct Hie_Node *Cty)
   {
-   if (Cty_DB_CheckIfMapIsAvailable (Cty->HieCod))
+   if (Cty_DB_CheckIfMapExists (Cty->HieCod) == Exi_EXISTS)
      {
       Cty_EditingCty = Cty;	// Used to pass parameter with the code of the country
       Lay_PutContextualLinkOnlyIcon (ActSeeCtyInf,NULL,

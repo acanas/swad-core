@@ -458,11 +458,11 @@ void CrsCfg_ChangeCrsDeg (void)
       /***** If name of course was not in database in the new degree... *****/
       Names[Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_CRS].ShrtName;
       Names[Nam_FULL_NAME] = Gbl.Hierarchy.Node[Hie_CRS].FullName;
-      if (!Nam_CheckIfNameExists (Crs_DB_CheckIfCrsNameExistsInYearOfDeg,
-				  Names,
-				  -1L,
-				  NewDeg.HieCod,
-				  Gbl.Hierarchy.Node[Hie_CRS].Specific.Year))
+      if (Nam_CheckIfNameExists (Crs_DB_CheckIfCrsNameExistsInYearOfDeg,
+				 Names,
+				 -1L,
+				 NewDeg.HieCod,
+				 Gbl.Hierarchy.Node[Hie_CRS].Specific.Year) == Exi_DOES_NOT_EXIST)
 	{
 	 /***** Update degree in table of courses *****/
 	 Crs_DB_UpdateCrsDeg (Gbl.Hierarchy.Node[Hie_CRS].HieCod,NewDeg.HieCod);
@@ -517,11 +517,11 @@ void CrsCfg_ChangeCrsYear (void)
       /***** If name of course was not in database in the new year... *****/
       Names[Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_CRS].ShrtName;
       Names[Nam_FULL_NAME] = Gbl.Hierarchy.Node[Hie_CRS].FullName;
-      if (!Nam_CheckIfNameExists (Crs_DB_CheckIfCrsNameExistsInYearOfDeg,
-				  Names,
-				  -1L,
-				  Gbl.Hierarchy.Node[Hie_CRS].PrtCod,
-				  NewYear))
+      if (Nam_CheckIfNameExists (Crs_DB_CheckIfCrsNameExistsInYearOfDeg,
+				 Names,
+				 -1L,
+				 Gbl.Hierarchy.Node[Hie_CRS].PrtCod,
+				 NewYear) == Exi_DOES_NOT_EXIST)
 	{
 	 /***** Update year in table of courses *****/
          Crs_UpdateCrsYear (&Gbl.Hierarchy.Node[Hie_CRS],NewYear);

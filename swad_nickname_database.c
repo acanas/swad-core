@@ -103,7 +103,7 @@ bool Nck_DB_CheckIfNickMatchesAnyNick (const char *NickWithoutArr)
 		   "(SELECT *"
 		     " FROM usr_nicknames"
 		    " WHERE Nickname='%s')",
-		   NickWithoutArr);
+		   NickWithoutArr) == Exi_EXISTS;
   }
 
 /*****************************************************************************/
@@ -120,7 +120,7 @@ bool Nck_DB_CheckIfNickMatchesAnyUsrNick (long UsrCod,const char *NickWithoutArr
 		    " WHERE UsrCod=%ld"
 		      " AND Nickname='%s')",
 		   UsrCod,
-		   NickWithoutArr);
+		   NickWithoutArr) == Exi_EXISTS;
   }
 
 /*****************************************************************************/
@@ -137,7 +137,7 @@ bool Nck_DB_CheckIfNickMatchesAnyOtherUsrsNicks (long UsrCod,const char *NickWit
 		    " WHERE Nickname='%s'"
 		      " AND UsrCod<>%ld)",
 		   NickWithoutArr,
-		   UsrCod);	// A nickname of another user is the same that user's nickname
+		   UsrCod) == Exi_EXISTS;	// A nickname of another user is the same that user's nickname
   }
 
 /*****************************************************************************/

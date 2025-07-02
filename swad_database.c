@@ -4485,14 +4485,14 @@ unsigned long DB_QueryCOUNT (const char *MsgError,const char *fmt,...)
    return NumRows;
   }
 
-bool DB_QueryEXISTS (const char *MsgError,const char *fmt,...)
+Exi_Exist_t DB_QueryEXISTS (const char *MsgError,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
    char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   bool Exists = false;
+   Exi_Exist_t Exists = Exi_DOES_NOT_EXIST;
 
    va_start (ap,fmt);
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
@@ -4504,7 +4504,8 @@ bool DB_QueryEXISTS (const char *MsgError,const char *fmt,...)
    if (DB_QuerySELECTusingQueryStr (Query,&mysql_res,MsgError))
      {
       row = mysql_fetch_row (mysql_res);
-      Exists = (row[0][0] == '1');
+      if (row[0][0] == '1')
+	 Exists = Exi_EXISTS;
      }
 
    /***** Free structure that stores the query result *****/

@@ -103,7 +103,7 @@ bool Dup_DB_CheckIfUsrIsDup (long UsrCod)
 		   "(SELECT *"
 		     " FROM usr_duplicated"
 		    " WHERE UsrCod=%ld)",
-		   UsrCod);
+		   UsrCod) == Exi_EXISTS;
   }
 
 /*****************************************************************************/

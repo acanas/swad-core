@@ -245,7 +245,7 @@ void For_DB_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,
 /******************** Get if a forum post exists in database *****************/
 /*****************************************************************************/
 
-bool For_DB_CheckIfForumPstExists (long PstCod)
+Exi_Exist_t For_DB_CheckIfForumPstExists (long PstCod)
   {
    return
    DB_QueryEXISTS ("can not check if a post of a forum already existed",
@@ -553,7 +553,7 @@ void For_DB_GetThreadTitle (long ThrCod,char *Subject,size_t TitleSize)
 /***************** Get if a thread belongs to current forum ******************/
 /*****************************************************************************/
 
-bool For_DB_CheckIfThrBelongsToForum (long ThrCod,const struct For_Forum *Forum)
+Exi_Exist_t For_DB_CheckIfThrExistsInForum (long ThrCod,const struct For_Forum *Forum)
   {
    char SubQuery[256];
 
@@ -981,8 +981,8 @@ For_Disabled_t For_DB_GetIfPstIsDisabled (long PstCod)
 		   "(SELECT *"
 		     " FROM for_disabled"
 		    " WHERE PstCod=%ld)",
-		   PstCod) ? For_DISABLED :
-			     For_ENABLED;	// Post is enabled if it does not appear in table of disabled posts
+		   PstCod) == Exi_EXISTS ? For_DISABLED :
+					   For_ENABLED;	// Post is enabled if it does not appear in table of disabled posts
   }
 
 /*****************************************************************************/

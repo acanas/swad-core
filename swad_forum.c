@@ -1789,26 +1789,28 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 
       /***** Write paste button used to move a thread in clipboard to this forum *****/
       if (Forums->Thread.ToMove >= 0) // If I have permission to paste threads and there is a thread ready to be pasted...
-	{
 	 /* Check if thread to move is yet in current forum */
-	 if (For_DB_CheckIfThrBelongsToForum (Forums->Thread.ToMove,Forum))
-	    Ico_PutIcon ("paste.svg",Ico_BLACK,
-			 Txt_Copy_not_allowed,"CONTEXT_OPT ICO_HIDDEN ICO16x16");
-	 else
+	 switch (For_DB_CheckIfThrExistsInForum (Forums->Thread.ToMove,Forum))
 	   {
-	    Frm_BeginFormAnchor (For_ActionsPasThrFor[Forum->Type],
-				 For_FORUM_THREADS_SECTION_ID);
-	       For_PutAllParsForum (1,	// Page of threads = first
-				    1,	// Page of posts   = first
-				    Forums->ForumSet,
-				    Forums->ThreadsOrder,
-				    Forum->HieCod,
-				    Forums->Thread.ToMove,
-				    -1L);
-	       Ico_PutIconPaste (For_ActionsPasThrFor[Forum->Type]);
-	    Frm_EndForm ();
+	    case Exi_EXISTS:
+	       Ico_PutIcon ("paste.svg",Ico_BLACK,
+			    Txt_Copy_not_allowed,"CONTEXT_OPT ICO_HIDDEN ICO16x16");
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       Frm_BeginFormAnchor (For_ActionsPasThrFor[Forum->Type],
+				    For_FORUM_THREADS_SECTION_ID);
+		  For_PutAllParsForum (1,	// Page of threads = first
+				       1,	// Page of posts   = first
+				       Forums->ForumSet,
+				       Forums->ThreadsOrder,
+				       Forum->HieCod,
+				       Forums->Thread.ToMove,
+				       -1L);
+		  Ico_PutIconPaste (For_ActionsPasThrFor[Forum->Type]);
+	       Frm_EndForm ();
+	       break;
 	   }
-	}
 
       /***** Write link to forum *****/
       Frm_BeginFormAnchor (For_ActionsSeeFor[Forum->Type],
@@ -3308,38 +3310,40 @@ void For_PasteThread (void)
    For_DB_GetThrSubject (Forums.Thread.Current,Subject);
 
    /***** Check if paste (move) the thread to current forum has sense *****/
-   if (For_DB_CheckIfThrBelongsToForum (Forums.Thread.Current,&Forums.Forum))
+   switch (For_DB_CheckIfThrExistsInForum (Forums.Thread.Current,&Forums.Forum))
      {
-      /***** Show forum list again *****/
-      For_ShowForumList (&Forums);
+      case Exi_EXISTS:
+	 /***** Show forum list again *****/
+	 For_ShowForumList (&Forums);
 
-      /***** Show the threads again *****/
-      if (Subject[0])
-	{
-         snprintf (Message,sizeof (Message),
-                   Txt_The_thread_X_is_already_in_this_forum,Subject);
-         For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_WARNING,Message);
-        }
-      else
-         For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_WARNING,Txt_The_thread_is_already_in_this_forum);
-     }
-   else
-     {
-      /***** Paste (move) the thread to current forum *****/
-      For_DB_MoveThrToCurrentForum (&Forums);
+	 /***** Show the threads again *****/
+	 if (Subject[0])
+	   {
+	    snprintf (Message,sizeof (Message),
+		      Txt_The_thread_X_is_already_in_this_forum,Subject);
+	    For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_WARNING,Message);
+	   }
+	 else
+	    For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_WARNING,Txt_The_thread_is_already_in_this_forum);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 /***** Paste (move) the thread to current forum *****/
+	 For_DB_MoveThrToCurrentForum (&Forums);
 
-      /***** Show forum list again *****/
-      For_ShowForumList (&Forums);
+	 /***** Show forum list again *****/
+	 For_ShowForumList (&Forums);
 
-      /***** Show the threads again *****/
-      if (Subject[0])
-	{
-         snprintf (Message,sizeof (Message),
-	           Txt_Thread_X_moved_to_this_forum,Subject);
-         For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_SUCCESS,Message);
-	}
-      else
-         For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_SUCCESS,Txt_Thread_moved_to_this_forum);
+	 /***** Show the threads again *****/
+	 if (Subject[0])
+	   {
+	    snprintf (Message,sizeof (Message),
+		      Txt_Thread_X_moved_to_this_forum,Subject);
+	    For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_SUCCESS,Message);
+	   }
+	 else
+	    For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_SUCCESS,Txt_Thread_moved_to_this_forum);
+	 break;
      }
   }
 

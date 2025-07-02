@@ -238,7 +238,7 @@ bool Fol_DB_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod)
 		    " WHERE FollowerCod=%ld"
 		      " AND FollowedCod=%ld)",
 		   FollowerCod,
-		   FollowedCod);
+		   FollowedCod) == Exi_EXISTS;
   }
 
 /*****************************************************************************/

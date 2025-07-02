@@ -324,11 +324,11 @@ void DegCfg_ChangeDegCtr (void)
       /***** Check if it already existed a degree with the same name in the new center *****/
       Names[Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_DEG].ShrtName;
       Names[Nam_FULL_NAME] = Gbl.Hierarchy.Node[Hie_DEG].FullName;
-      if (!Nam_CheckIfNameExists (Deg_DB_CheckIfDegNameExistsInCtr,
-				  Names,
-				  Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-				  NewCtr.HieCod,
-				  0))	// Unused
+      if (Nam_CheckIfNameExists (Deg_DB_CheckIfDegNameExistsInCtr,
+				 Names,
+				 Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+				 NewCtr.HieCod,
+				 0) == Exi_DOES_NOT_EXIST)	// Unused
 	{
 	 /***** Update center in table of degrees *****/
 	 Deg_DB_UpdateDegCtr (Gbl.Hierarchy.Node[Hie_DEG].HieCod,NewCtr.HieCod);

@@ -1526,54 +1526,54 @@ void Asg_ReceiveAssignment (void)
 
    /***** Check if title is correct *****/
    if (Assignments.Asg.Title[0])	// If there's an assignment title
-     {
       /* If title of assignment was in database... */
-      if (Asg_DB_CheckIfSimilarAssignmentExists ("Title",
-						 Assignments.Asg.Title,
-						 Assignments.Asg.AsgCod))
+      switch (Asg_DB_CheckIfSimilarAssignmentExists ("Title",
+						     Assignments.Asg.Title,
+						     Assignments.Asg.AsgCod))
         {
-         AsgIsCorrect = false;
-
-	 Ale_CreateAlert (Ale_WARNING,NULL,
-			  Txt_Already_existed_an_assignment_with_the_title_X,
-                          Assignments.Asg.Title);
-        }
-      else	// Title is correct
-        {
-         switch (Assignments.Asg.SendWork)
-           {
-	    case Asg_SEND_WORK:
-	       if (Str_ConvertFilFolLnkNameToValid (Assignments.Asg.Folder))	// If folder name is valid...
-		 {
-		  if (Asg_DB_CheckIfSimilarAssignmentExists ("Folder",
-							     Assignments.Asg.Folder,
-							     Assignments.Asg.AsgCod))	// If folder of assignment was in database...
+	 case Exi_EXISTS:
+	    AsgIsCorrect = false;
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+			     Txt_Already_existed_an_assignment_with_the_title_X,
+			     Assignments.Asg.Title);
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	    // Title is correct
+	    switch (Assignments.Asg.SendWork)
+	      {
+	       case Asg_SEND_WORK:
+		  if (Str_ConvertFilFolLnkNameToValid (Assignments.Asg.Folder))	// If folder name is valid...
+		    {
+		     if (Asg_DB_CheckIfSimilarAssignmentExists ("Folder",
+								Assignments.Asg.Folder,
+								Assignments.Asg.AsgCod) == Exi_EXISTS)	// If folder of assignment was in database...
+		       {
+			AsgIsCorrect = false;
+			Ale_CreateAlert (Ale_WARNING,NULL,
+					 Txt_Already_existed_an_assignment_with_the_folder_X,
+					 Assignments.Asg.Folder);
+		       }
+		    }
+		  else	// Folder name not valid
 		    {
 		     AsgIsCorrect = false;
-		     Ale_CreateAlert (Ale_WARNING,NULL,
-			              Txt_Already_existed_an_assignment_with_the_folder_X,
-				      Assignments.Asg.Folder);
+		     Ale_CreateAlert (Ale_WARNING,NULL,Txt_UPLOAD_FILE_Invalid_name);
 		    }
-		 }
-	       else	// Folder name not valid
-	         {
-		  AsgIsCorrect = false;
-		  Ale_CreateAlert (Ale_WARNING,NULL,Txt_UPLOAD_FILE_Invalid_name);
-	         }
-	       break;
-	    case Asg_DONT_SEND_WORK:
-	    default:
-	       if (OldAsg.SendWork == Asg_SEND_WORK)
-		  if (Brw_CheckIfExistsFolderAssigmentForAnyUsr (OldAsg.Folder))
-		    {
-		     AsgIsCorrect = false;
-		     Ale_CreateAlert (Ale_WARNING,NULL,
-			              Txt_You_can_not_disable_file_uploading_once_folders_have_been_created);
-		    }
-	       break;
-           }
+		  break;
+	       case Asg_DONT_SEND_WORK:
+	       default:
+		  if (OldAsg.SendWork == Asg_SEND_WORK)
+		     if (Brw_CheckIfExistsFolderAssigmentForAnyUsr (OldAsg.Folder))
+		       {
+			AsgIsCorrect = false;
+			Ale_CreateAlert (Ale_WARNING,NULL,
+					 Txt_You_can_not_disable_file_uploading_once_folders_have_been_created);
+		       }
+		  break;
+	      }
+	    break;
         }
-     }
    else	// If there is not an assignment title
      {
       AsgIsCorrect = false;

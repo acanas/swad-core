@@ -1043,11 +1043,11 @@ static void Deg_ReceiveRequestOrCreateDeg (Hie_Status_t Status)
       if (Deg_EditingDeg->WWW[0])
 	{
 	 /***** If name of degree was not in database... *****/
-	 if (!Nam_CheckIfNameExists (Deg_DB_CheckIfDegNameExistsInCtr,
-				     (const char **) Names,
-				     -1L,
-				     Deg_EditingDeg->PrtCod,
-				     0))	// Unused
+	 if (Nam_CheckIfNameExists (Deg_DB_CheckIfDegNameExistsInCtr,
+				    (const char **) Names,
+				    -1L,
+				    Deg_EditingDeg->PrtCod,
+				    0) == Exi_DOES_NOT_EXIST)	// Unused
 	   {
 	    Deg_DB_CreateDegree (Deg_EditingDeg,Status);
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_degree_X,
@@ -1286,31 +1286,33 @@ void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFull)
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
-        {
          /***** If degree was in database... *****/
-         if (Deg_DB_CheckIfDegNameExistsInCtr (Nam_Fields[ShrtOrFull],
-					       NewName,Deg->HieCod,Deg->PrtCod,
-					       0))	// Unused
-            Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
-         else
-           {
-            /* Update the table changing old name by new name */
-            Deg_DB_UpdateDegNameDB (Deg->HieCod,
-        			    Nam_Fields[ShrtOrFull],NewName);
+         switch (Deg_DB_CheckIfDegNameExistsInCtr (Nam_Fields[ShrtOrFull],
+						   NewName,Deg->HieCod,Deg->PrtCod,
+						   0))	// Unused
+	   {
+	    case Exi_EXISTS:
+	       Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       /* Update the table changing old name by new name */
+	       Deg_DB_UpdateDegNameDB (Deg->HieCod,
+				       Nam_Fields[ShrtOrFull],NewName);
 
-            /* Write message to show the change made */
-            Ale_CreateAlert (Ale_SUCCESS,NULL,
-        	             Txt_The_degree_X_has_been_renamed_as_Y,
-                             CurrentName[ShrtOrFull],NewName);
+	       /* Write message to show the change made */
+	       Ale_CreateAlert (Ale_SUCCESS,NULL,
+				Txt_The_degree_X_has_been_renamed_as_Y,
+				CurrentName[ShrtOrFull],NewName);
 
-	    /* Change current degree name in order to display it properly */
-	    Str_Copy (CurrentName[ShrtOrFull],NewName,Nam_MaxBytes[ShrtOrFull]);
-           }
-        }
+	       /* Change current degree name in order to display it properly */
+	       Str_Copy (CurrentName[ShrtOrFull],NewName,
+			 Nam_MaxBytes[ShrtOrFull]);
+	       break;
+	   }
       else	// The same name
-         Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_X_has_not_changed,
-                          CurrentName[ShrtOrFull]);
+         Ale_CreateAlert (Ale_INFO,NULL,Txt_The_name_X_has_not_changed,
+			  CurrentName[ShrtOrFull]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

@@ -71,11 +71,11 @@ void Usr_DB_UpdateMyOfficePhone (void)
 /************** Check if a user exists with a given user's code **************/
 /*****************************************************************************/
 
-bool Usr_DB_ChkIfUsrCodExists (long UsrCod)
+Exi_Exist_t Usr_DB_ChkIfUsrCodExists (long UsrCod)
   {
    /***** Trivial check: user's code should be > 0 *****/
    if (UsrCod <= 0)	// Wrong user's code
-      return false;
+      return Exi_DOES_NOT_EXIST;
 
    /***** Check if a user exists in database *****/
    return
@@ -351,7 +351,7 @@ bool Usr_DB_FindStrInUsrsNames (const char *Str)
 		       " OR Surname2='%s')",
 		   Str,
 		   Str,
-		   Str);
+		   Str) == Exi_EXISTS;
   }
 
 /*****************************************************************************/
@@ -1551,7 +1551,7 @@ bool Usr_DB_CheckMyLastData (void)
 		   "(SELECT *"
 		     " FROM usr_last"
 		    " WHERE UsrCod=%ld)",
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS;
   }
 
 /*****************************************************************************/
@@ -1612,7 +1612,7 @@ bool Usr_DB_CheckIfMyBirthdayHasNotBeenCongratulated (void)
 		   "(SELECT *"
 		     " FROM usr_birthdays_today"
 		    " WHERE UsrCod=%ld)",
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS;
   }
 
 /*****************************************************************************/

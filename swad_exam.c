@@ -1510,7 +1510,7 @@ static bool Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam)
      {
       /* If title of exam was in database... */
       if (Exa_DB_CheckIfSimilarExamExists (Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-                                           Exam->ExaCod,Exam->Title))
+                                           Exam->ExaCod,Exam->Title) == Exi_EXISTS)
 	{
 	 ExamIsCorrect = false;
 	 Ale_CreateAlert (Ale_WARNING,NULL,

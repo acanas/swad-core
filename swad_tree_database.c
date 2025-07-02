@@ -288,7 +288,7 @@ bool Tre_DB_CheckIfNodeHasTxt (const struct Tre_Node *Node)
 		      " AND Txt<>'')",
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Node->InfoType]);
+		   Tre_DB_Types[Node->InfoType]) == Exi_EXISTS;
   }
 
 /*****************************************************************************/
@@ -550,8 +550,8 @@ ConExp_ContractedOrExpanded_t Tre_DB_GetIfContractedOrExpandedNode (long NodCod)
 		    " WHERE UsrCod=%ld"
 		      " AND NodCod=%ld)",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   NodCod) ? ConExp_EXPANDED :
-		             ConExp_CONTRACTED;
+		   NodCod) == Exi_EXISTS ? ConExp_EXPANDED :
+					   ConExp_CONTRACTED;
   }
 
 /*****************************************************************************/
@@ -576,7 +576,7 @@ bool Tre_DB_CheckListItems (const struct Tre_Node *Node,bool ShowHiddenResources
   {
    const char *Table = Tre_DB_TablesItems[Node->InfoType];
    char *HiddenSubQuery;
-   bool Exists;
+   Exi_Exist_t Exists;
 
    /***** Trivial check: are there items for this info type? *****/
    if (!Table)
@@ -616,7 +616,7 @@ bool Tre_DB_CheckListItems (const struct Tre_Node *Node,bool ShowHiddenResources
    /***** Free subquery *****/
    free (HiddenSubQuery);
 
-   return Exists;
+   return Exists == Exi_EXISTS;
   }
 
 /*****************************************************************************/

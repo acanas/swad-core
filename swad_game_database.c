@@ -256,7 +256,7 @@ void Gam_DB_GetGameTxt (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
 /******************* Check if the title of a game exists *******************/
 /*****************************************************************************/
 
-bool Gam_DB_CheckIfSimilarGameExists (const struct Gam_Game *Game)
+Exi_Exist_t Gam_DB_CheckIfSimilarGameExists (const struct Gam_Game *Game)
   {
    return
    DB_QueryEXISTS ("can not check similar games",

@@ -29,6 +29,7 @@
 
 #include <mysql/mysql.h>	// To access MySQL databases
 
+#include "swad_exist.h"
 #include "swad_group.h"
 #include "swad_parameter.h"
 
@@ -47,11 +48,11 @@ unsigned Grp_DB_GetSingleMultiple (MYSQL_RES **mysql_res,long GrpTypCod);
 unsigned Grp_DB_GetFileZones (MYSQL_RES **mysql_res,long GrpCod);
 unsigned Grp_DB_GetGroupDataByCod (MYSQL_RES **mysql_res,long GrpCod);
 
-bool Grp_DB_CheckIfGrpExists (long GrpCod);
-bool Grp_DB_CheckIfGrpBelongsToCrs (long GrpCod,long CrsCod);
+Exi_Exist_t Grp_DB_CheckIfGrpExists (long GrpCod);
+Exi_Exist_t Grp_DB_CheckIfGrpExistsInCrs (long GrpCod,long CrsCod);
 
-bool Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (const char *GrpTypName,long GrpTypCod);
-bool Grp_DB_CheckIfGrpNameExistsForGrpTyp (long GrpTypCod,const char *GrpName,long GrpCod);
+Exi_Exist_t Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (const char *GrpTypName,long GrpTypCod);
+Exi_Exist_t Grp_DB_CheckIfGrpNameExistsForGrpTyp (long GrpTypCod,const char *GrpName,long GrpCod);
 
 unsigned Grp_DB_CountNumUsrsInGrp (Rol_Role_t Role,long GrpCod);
 unsigned Grp_DB_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod);

@@ -994,11 +994,11 @@ static void Crs_ReceiveRequestOrCreateCrs (Hie_Status_t Status)
 	 /***** If name of course was not in database... *****/
 	 Names[Nam_SHRT_NAME] = Crs_EditingCrs->ShrtName;
 	 Names[Nam_FULL_NAME] = Crs_EditingCrs->FullName;
-	 if (!Nam_CheckIfNameExists (Crs_DB_CheckIfCrsNameExistsInYearOfDeg,
-				     Names,
-				     -1L,
-				     Crs_EditingCrs->PrtCod,
-				     Crs_EditingCrs->Specific.Year))
+	 if (Nam_CheckIfNameExists (Crs_DB_CheckIfCrsNameExistsInYearOfDeg,
+				    Names,
+				    -1L,
+				    Crs_EditingCrs->PrtCod,
+				    Crs_EditingCrs->Specific.Year) == Exi_DOES_NOT_EXIST)
 	   {
 	    Crs_DB_CreateCourse (Crs_EditingCrs,Status);
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_course_X,
@@ -1351,11 +1351,11 @@ void Crs_ChangeCrsYear (void)
       /***** If name of course was not in database in the new year... *****/
       Names[Nam_SHRT_NAME] = Crs_EditingCrs->ShrtName;
       Names[Nam_FULL_NAME] = Crs_EditingCrs->FullName;
-      if (!Nam_CheckIfNameExists (Crs_DB_CheckIfCrsNameExistsInYearOfDeg,
-				  Names,
-				  -1L,
-				  Crs_EditingCrs->PrtCod,
-				  NewYear))
+      if (Nam_CheckIfNameExists (Crs_DB_CheckIfCrsNameExistsInYearOfDeg,
+				 Names,
+				 -1L,
+				 Crs_EditingCrs->PrtCod,
+				 NewYear) == Exi_DOES_NOT_EXIST)
 	{
 	 /***** Update year in table of courses *****/
 	 Crs_UpdateCrsYear (Crs_EditingCrs,NewYear);
@@ -1457,27 +1457,29 @@ void Crs_RenameCourse (struct Hie_Node *Crs,Nam_ShrtOrFullName_t ShrtOrFull)
       /***** Check if old and new names are the same
 	     (this happens when return is pressed without changes) *****/
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
-	{
 	 /***** If course was in database... *****/
-	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (Nam_Fields[ShrtOrFull],
-						     NewName,Crs->HieCod,
-						     Crs->PrtCod,Crs->Specific.Year))
-	    Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
-	 else
+	 switch (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (Nam_Fields[ShrtOrFull],
+						         NewName,Crs->HieCod,
+						         Crs->PrtCod,Crs->Specific.Year))
 	   {
-	    /* Update the table changing old name by new name */
-	    Crs_DB_UpdateCrsName (Crs->HieCod,
-				  Nam_Fields[ShrtOrFull],NewName);
+	    case Exi_EXISTS:
+	       Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       /* Update the table changing old name by new name */
+	       Crs_DB_UpdateCrsName (Crs->HieCod,
+				     Nam_Fields[ShrtOrFull],NewName);
 
-	    /* Create alert to show the change made */
-	    Ale_CreateAlert (Ale_SUCCESS,NULL,
-			     Txt_The_course_X_has_been_renamed_as_Y,
-			     CurrentName[ShrtOrFull],NewName);
+	       /* Create alert to show the change made */
+	       Ale_CreateAlert (Ale_SUCCESS,NULL,
+				Txt_The_course_X_has_been_renamed_as_Y,
+				CurrentName[ShrtOrFull],NewName);
 
-	    /* Change current course name in order to display it properly */
-	    Str_Copy (CurrentName[ShrtOrFull],NewName,Nam_MaxBytes[ShrtOrFull]);
+	       /* Change current course name in order to display it properly */
+	       Str_Copy (CurrentName[ShrtOrFull],NewName,Nam_MaxBytes[ShrtOrFull]);
+	       break;
 	   }
-	}
       else	// The same name
 	 Ale_CreateAlert (Ale_INFO,NULL,
 			  Txt_The_name_X_has_not_changed,CurrentName[ShrtOrFull]);

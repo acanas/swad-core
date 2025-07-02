@@ -58,9 +58,9 @@ unsigned Cty_DB_GetNumCtysWithDegs (Hie_Level_t HieLvl,long HieCod);
 unsigned Cty_DB_GetNumCtysWithCrss (Hie_Level_t HieLvl,long HieCod);
 unsigned Cty_DB_GetNumCtysWithUsrs (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Role);
 
-bool Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod);
-bool Cty_DB_CheckIfAlpha2CountryCodeExists (const char *Alpha2);
-bool Cty_DB_CheckIfCountryNameExists (Lan_Language_t Language,const char *Name,long CtyCod);
+Exi_Exist_t Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod);
+Exi_Exist_t Cty_DB_CheckIfAlpha2CountryCodeExists (const char *Alpha2);
+Exi_Exist_t Cty_DB_CheckIfCountryNameExists (Lan_Language_t Language,const char *Name,long CtyCod);
 
 unsigned Cty_DB_SearchCtys (MYSQL_RES **mysql_res,
                             const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
@@ -69,7 +69,7 @@ unsigned Cty_DB_SearchCtys (MYSQL_RES **mysql_res,
 void Cty_DB_GetAvgCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom);
 unsigned Cty_DB_GetCtrsWithCoordsInCurrentCty (MYSQL_RES **mysql_res);
 unsigned Cty_DB_GetMapAttr (MYSQL_RES **mysql_res,long CtyCod);
-bool Cty_DB_CheckIfMapIsAvailable (long CtyCod);
+Exi_Exist_t Cty_DB_CheckIfMapExists (long CtyCod);
 
 void Cty_DB_UpdateCtyField (long CtyCod,const char *FldName,const char *FldValue);
 void Cty_DB_UpdateCtyMapAttr (const char NewMapAttribution[Med_MAX_BYTES_ATTRIBUTION + 1]);

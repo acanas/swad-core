@@ -588,8 +588,8 @@ Usr_Can_t Mch_DB_CheckIfICanPlayThisMatchBasedOnGrps (long MchCod)
 			     " WHERE grp_users.UsrCod=%ld"
 			       " AND grp_users.GrpCod=mch_groups.GrpCod)))",
 		   MchCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_CAN :
-						Usr_CAN_NOT;
+		   Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS ? Usr_CAN :
+							      Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -842,7 +842,7 @@ bool Mch_DB_CheckIfMatchIsBeingPlayed (long MchCod)
 		   "(SELECT *"
 		     " FROM mch_playing"
 		    " WHERE MchCod=%ld)",
-		   MchCod);
+		   MchCod) == Exi_EXISTS;
   }
 
 /*****************************************************************************/
@@ -1004,7 +1004,7 @@ void Mch_DB_UpdateMatchPrint (const struct MchPrn_Print *Print)
 /*********************** Check if match print exists *************************/
 /*****************************************************************************/
 
-bool Mch_DB_CheckIfMatchPrintExists (const struct MchPrn_Print *Print)
+Exi_Exist_t Mch_DB_CheckIfMatchPrintExists (const struct MchPrn_Print *Print)
   {
    return
    DB_QueryEXISTS ("can not check if match print exists",
