@@ -293,7 +293,8 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 	       Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs ();
 
 	       /***** Begin form *****/
-	       Frm_BeginFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
+	       Frm_BeginFormIdAnchor (ActSeeAccCrs,Usr_FORM_TO_SELECT_USRS_ID,
+				      Sta_STAT_RESULTS_SECTION_ID);
 
 		  Grp_PutParsCodGrps ();
 		  Par_PutParLong (NULL,"FirstRow",0);

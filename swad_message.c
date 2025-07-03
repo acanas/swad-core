@@ -330,7 +330,8 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
 	}
 
       /***** Begin form to select recipients and write the message *****/
-      Frm_BeginForm (ActRcvMsgUsr);
+      Frm_BeginFormId (ActRcvMsgUsr,Usr_FORM_TO_SELECT_USRS_ID);
+
 	 if (Messages->Reply.IsReply)
 	   {
 	    Par_PutParChar ("IsReply",'Y');
