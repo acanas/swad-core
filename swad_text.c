@@ -25743,29 +25743,6 @@ const char *Txt_no_tags =		// Tags used in test
 	"no tags";		// Çeviri lazim!
 #endif
 
-const char *Txt_No_teachers_or_students_found =
-#if   L==1	// ca
-	"No hi ha professors ni estudiants.";
-#elif L==2	// de
-	"Keine Lehrer oder Studenten gefunden.";
-#elif L==3	// en
-	"No teachers or students found.";
-#elif L==4	// es
-	"No hay profesores ni estudiantes.";
-#elif L==5	// fr
-	"Aucun enseignant ou &eacute;tudiant trouv&eacute;.";
-#elif L==6	// gn
-	"No hay profesores ni estudiantes.";	// Okoteve traducción
-#elif L==7	// it
-	"Nessun professore o studente trovato.";
-#elif L==8	// pl
-	"Nie znaleziono nauczycieli i uczni&oacute;w.";
-#elif L==9	// pt
-	"Nenhum professor ou estudante encontrado.";
-#elif L==10	// tr
-	"No teachers or students found.";	// Çeviri lazim!
-#endif
-
 const char *Txt_No_types_of_degree =
 #if   L==1	// ca
 	"No hi ha cap tipus de titulaci&oacute;.";

@@ -1573,7 +1573,7 @@ static void Att_ListEventStudents (struct Att_Events *Events)
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
       /***** Form to select groups *****/
-      Grp_ShowFormToSelectSeveralGroups (ActSeeOneAtt,Att_PutParAttCod,Events,NULL);
+      Grp_ShowFormToSelectSeveralGroups (Att_PutParAttCod,Events,NULL);
 
       /***** Begin section with user list *****/
       HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);

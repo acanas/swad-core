@@ -1640,9 +1640,9 @@ void Ins_GetAndShowInstitutionsStats (Hie_Level_t HieLvl)
 
       /***** Form to select type of list used to display degree photos *****/
       Set_GetAndUpdatePrefsAboutUsrList (&ShowPhotos);
-      Figures.HieLvl      = HieLvl;
+      Figures.HieLvl     = HieLvl;
       Figures.FigureType = Fig_INSTITS;
-      Usr_ShowFormsToSelectUsrListType (ActSeeUseGbl,Fig_PutParsFigures,&Figures,
+      Usr_ShowFormsToSelectUsrListType (Fig_PutParsFigures,&Figures,
 				        NULL,ShowPhotos);
 
       /***** Institutions ordered by number of centers *****/

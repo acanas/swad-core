@@ -219,7 +219,6 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
    extern const char *Txt_distributed_by;
    extern const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY];
    extern const char *Txt_results_per_page;
-   extern const char *Txt_No_teachers_or_students_found;
 #define NUM_OPTIONS_ROWS_PER_PAGE 12
    static unsigned RowsPerPage[NUM_OPTIONS_ROWS_PER_PAGE] =
      {
@@ -237,7 +236,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
       Sta_MAX_ROWS_PER_PAGE,
      };
    Pho_ShowPhotos_t ShowPhotos;
-   unsigned NumTotalUsrs;
+   unsigned NumUsrs;
    char *Title;
    Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME];
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
@@ -262,9 +261,9 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
    Usr_GetListUsrs (Hie_CRS,Rol_STD);
    Usr_GetListUsrs (Hie_CRS,Rol_NET);
    Usr_GetListUsrs (Hie_CRS,Rol_TCH);
-   NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +
-	          Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
-	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
+   NumUsrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +
+	     Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
+	     Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Statistics_of_visits_to_the_course_X,
@@ -275,20 +274,18 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
    free (Title);
 
       /***** Show form to select the groups *****/
-      Grp_ShowFormToSelectSeveralGroups (ActReqAccCrs,NULL,NULL,NULL);
+      Grp_ShowFormToSelectSeveralGroups (NULL,NULL,NULL);
 
       /***** Begin section with user list *****/
       HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
-	 if (NumTotalUsrs)
+	 if (NumUsrs)
 	   {
-	    if (Usr_GetIfShowBigList (NumTotalUsrs,
-				      ActReqAccCrs,NULL,NULL,NULL))
-	      {
-	       /***** Form to select type of list used for select several users *****/
-	       Usr_ShowFormsToSelectUsrListType (ActReqAccCrs,NULL,NULL,NULL,
-						 ShowPhotos);
+	    /***** Form to select type of list used for select several users *****/
+	    Usr_ShowFormsToSelectUsrListType (NULL,NULL,NULL,ShowPhotos);
 
+	    if (Usr_GetIfShowBigList (NumUsrs,NULL,NULL,NULL))
+	      {
 	       /***** Put link to register students *****/
 	       Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs ();
 
@@ -347,8 +344,8 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			   /***** Option a) Graphic of clicks in this course *****/
 			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 			      HTM_INPUT_RADIO ("GroupedOrDetailed",
-					       ((Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? HTM_NO_ATTR :
-													   HTM_CHECKED),
+					       (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? HTM_NO_ATTR :
+													  HTM_CHECKED,
 					       "value=\"%u\""
 					       " onclick=\"disableDetailedClicks();\"",
 					       (unsigned) Sta_CLICKS_GROUPED);
@@ -433,8 +430,9 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 	       Frm_EndForm ();
 	      }
 	   }
-	 else	// No teachers nor students found
-	    Ale_ShowAlert (Ale_WARNING,Txt_No_teachers_or_students_found);
+	 else	// NumUsrs == 0
+	    /***** Show warning indicating no users found *****/
+	    Usr_ShowWarningNoUsersFound (Rol_UNK);
 
       /***** End section with user list *****/
       HTM_SECTION_End ();

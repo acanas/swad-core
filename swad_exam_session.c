@@ -293,7 +293,7 @@ void ExaSes_ListUsersForSelection (struct Exa_Exams *Exams,
 
 	 /***** Form to select groups *****/
          Exams->SesCod.Par = Exams->SesCod.Sel;	// To be used as parameter
-	 Grp_ShowFormToSelectSeveralGroups (ActSeeOneExaSes,Exa_PutPars,Exams,NULL);
+	 Grp_ShowFormToSelectSeveralGroups (Exa_PutPars,Exams,NULL);
 
 	 /***** Begin section with user list *****/
 	 HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);

@@ -426,8 +426,7 @@ static void Grp_PutIconsEditingGroups (__attribute__((unused)) void *Args)
 /*************** Show form to select one or several groups *******************/
 /*****************************************************************************/
 
-void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
-				        void (*FuncPars) (void *Args),void *Args,
+void Grp_ShowFormToSelectSeveralGroups (void (*FuncPars) (void *Args),void *Args,
 				        const char *OnSubmit)
   {
    extern const char *Hlp_USERS_Groups;
@@ -447,7 +446,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
 
       /***** Begin form to update the students listed
 	     depending on the groups selected *****/
-      Frm_BeginFormAnchorOnSubmit (NextAction,Usr_USER_LIST_SECTION_ID,OnSubmit);
+      Frm_BeginFormAnchorOnSubmit (Gbl.Action.Act,Usr_USER_LIST_SECTION_ID,OnSubmit);
 	 Set_PutParsPrefsAboutUsrList ();
 	 if (FuncPars)
 	    FuncPars (Args);

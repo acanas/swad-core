@@ -98,8 +98,7 @@ static Pag_WhatPaginate_t Msg_WhatPaginate[Msg_NUM_TYPES_OF_MSGS] =
 
 static void Msg_ResetMessages (struct Msg_Messages *Messages);
 
-static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
-			        struct Msg_Messages *Messages);
+static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages);
 
 static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages);
 static void Msg_PutLinkToViewBannedUsers(void);
@@ -218,7 +217,7 @@ void Msg_FormMsgUsrs (void)
                               Str_TO_TEXT,Str_DONT_REMOVE_SPACES);
 
    /***** Show a form to compose a message to users *****/
-   Msg_PutFormMsgUsrs (ActReqMsgUsr,&Messages);
+   Msg_PutFormMsgUsrs (&Messages);
 
    /***** Free allocated memory for message content *****/
    free (Messages.Content);
@@ -228,8 +227,7 @@ void Msg_FormMsgUsrs (void)
 /***************** Put a form to write a new message to users ****************/
 /*****************************************************************************/
 
-static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
-			        struct Msg_Messages *Messages)
+static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
   {
    extern const char *Hlp_COMMUNICATION_Messages_write;
    extern const char *Txt_Message;
@@ -294,7 +292,7 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
 	 if (GetUsrsInCrs)
 	   {
 	    /***** Form to select groups *****/
-	    Grp_ShowFormToSelectSeveralGroups (NextAction,Msg_PutParsWriteMsg,Messages,
+	    Grp_ShowFormToSelectSeveralGroups (Msg_PutParsWriteMsg,Messages,
 					       "CopyMessageToHiddenFields();");
 
 	    /***** Begin section with user list *****/
@@ -303,7 +301,7 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
 	       if (NumUsrsInCrs)
 		 {
 		  /***** Form to select type of list used for select several users *****/
-		  Usr_ShowFormsToSelectUsrListType (NextAction,Msg_PutParsWriteMsg,Messages,
+		  Usr_ShowFormsToSelectUsrListType (Msg_PutParsWriteMsg,Messages,
 						    "CopyMessageToHiddenFields();",
 						    ShowPhotos);
 
@@ -312,7 +310,7 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
 
 		  /***** Check if it's a big list *****/
 		  ShowUsrsInCrs = Usr_GetIfShowBigList (NumUsrsInCrs,
-							NextAction,Msg_PutParsWriteMsg,Messages,
+							Msg_PutParsWriteMsg,Messages,
 							"CopyMessageToHiddenFields();");
 
 		  if (ShowUsrsInCrs)
@@ -782,7 +780,7 @@ void Msg_RecMsgFromUsr (void)
       /* Show the form again, with the subject and the message filled */
       Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
                         Messages.Content,Cns_MAX_BYTES_LONG_TEXT,Str_REMOVE_SPACES);
-      Msg_PutFormMsgUsrs (ActRcvMsgUsr,&Messages);
+      Msg_PutFormMsgUsrs (&Messages);
      }
    else
      {

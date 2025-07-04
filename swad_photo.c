@@ -2241,7 +2241,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
      {
       /***** Form to select type of list used to display degree photos *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
-	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg,Pho_PutParsDegPhoto,DegPhotos,
+	 Usr_ShowFormsToSelectUsrListType (Pho_PutParsDegPhoto,DegPhotos,
 					   NULL,ShowPhotos);
 
       HTM_DIV_Begin ("class=\"CLASSPHOTO_CONT\"");
@@ -2313,7 +2313,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
       /***** Class photo start *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
 	 /***** Form to select type of list used to display degree photos *****/
-	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg,Pho_PutParsDegPhoto,DegPhotos,
+	 Usr_ShowFormsToSelectUsrListType (Pho_PutParsDegPhoto,DegPhotos,
 					   NULL,ShowPhotos);
 
       /***** Write heading *****/
