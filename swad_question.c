@@ -738,31 +738,35 @@ void Qst_ListQuestionsToEdit (void)
    /***** Create test *****/
    Qst_Constructor (&Questions);
 
-   /***** Get parameters, query the database and list the questions *****/
-   if (Tst_GetParsTst (&Questions,Tst_EDIT_QUESTIONS))	// Get parameters from the form
-     {
-      /***** Get question codes from database *****/
-      if ((Questions.NumQsts = Qst_DB_GetQsts (&mysql_res,&Questions)))
-        {
-	 /* Contextual menu */
-	 if (QstImp_GetCreateXMLParFromForm ())
-	   {
-            Mnu_ContextMenuBegin ();
-	       QstImp_CreateXML (Questions.NumQsts,mysql_res);	// Create XML file with exported questions...
-								// ...and put a link to download it
-            Mnu_ContextMenuEnd ();
-	   }
+      /***** Get parameters, query the database and list the questions *****/
+      switch (Tst_GetParsTst (&Questions,Tst_EDIT_QUESTIONS))	// Get parameters from the form
+	{
+	 case Err_SUCCESS:
+	    /***** Get question codes from database *****/
+	    if ((Questions.NumQsts = Qst_DB_GetQsts (&mysql_res,&Questions)))
+	      {
+	       /* Contextual menu */
+	       if (QstImp_GetCreateXMLParFromForm ())
+		 {
+		  Mnu_ContextMenuBegin ();
+		     QstImp_CreateXML (Questions.NumQsts,mysql_res);	// Create XML file with exported questions...
+								      // ...and put a link to download it
+		  Mnu_ContextMenuEnd ();
+		 }
 
-	 /* Show the table with the questions */
-         Qst_ListOneOrMoreQstsForEdition (&Questions,mysql_res);
-        }
+	       /* Show the table with the questions */
+	       Qst_ListOneOrMoreQstsForEdition (&Questions,mysql_res);
+	      }
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-   else
-      /* Show the form again */
-      Qst_ShowFormRequestEditQsts (&Questions);
+	    /***** Free structure that stores the query result *****/
+	    DB_FreeMySQLResult (&mysql_res);
+	    break;
+	 case Err_ERROR:
+	 default:
+	    /* Show the form again */
+	    Qst_ShowFormRequestEditQsts (&Questions);
+	    break;
+	}
 
    /***** Destroy test *****/
    Qst_Destructor (&Questions);
@@ -780,19 +784,23 @@ void Qst_ListQuestionsToSelectForExamSet (struct Exa_Exams *Exams)
    /***** Create test *****/
    Qst_Constructor (&Questions);
 
-   /***** Get parameters, query the database and list the questions *****/
-   if (Tst_GetParsTst (&Questions,Tst_SELECT_QUESTIONS_FOR_EXAM))	// Get parameters from the form
-     {
-      if ((Questions.NumQsts = Qst_DB_GetQsts (&mysql_res,&Questions)))
-	 /* Show the table with the questions */
-         Qst_ListOneOrMoreQstsForSelectionForExamSet (Exams,Questions.NumQsts,mysql_res);
+      /***** Get parameters, query the database and list the questions *****/
+      switch (Tst_GetParsTst (&Questions,Tst_SELECT_QUESTIONS_FOR_EXAM))	// Get parameters from the form
+	{
+	 case Err_SUCCESS:
+	    if ((Questions.NumQsts = Qst_DB_GetQsts (&mysql_res,&Questions)))
+	       /* Show the table with the questions */
+	       Qst_ListOneOrMoreQstsForSelectionForExamSet (Exams,Questions.NumQsts,mysql_res);
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-   else
-      /* Show the form again */
-      Qst_ShowFormRequestSelectQstsForExamSet (Exams,&Questions);
+	    /***** Free structure that stores the query result *****/
+	    DB_FreeMySQLResult (&mysql_res);
+	    break;
+	 case Err_ERROR:
+	 default:
+	    /* Show the form again */
+	    Qst_ShowFormRequestSelectQstsForExamSet (Exams,&Questions);
+	    break;
+	}
 
    /***** Destroy test *****/
    Qst_Destructor (&Questions);
@@ -810,19 +818,23 @@ void Qst_ListQuestionsToSelectForGame (struct Gam_Games *Games)
    /***** Create test *****/
    Qst_Constructor (&Questions);
 
-   /***** Get parameters, query the database and list the questions *****/
-   if (Tst_GetParsTst (&Questions,Tst_SELECT_QUESTIONS_FOR_GAME))	// Get parameters from the form
-     {
-      if ((Questions.NumQsts = Qst_DB_GetQsts (&mysql_res,&Questions)))
-	 /* Show the table with the questions */
-         Qst_ListOneOrMoreQstsForSelectionForGame (Games,Questions.NumQsts,mysql_res);
+      /***** Get parameters, query the database and list the questions *****/
+      switch (Tst_GetParsTst (&Questions,Tst_SELECT_QUESTIONS_FOR_GAME))	// Get parameters from the form
+	{
+	 case Err_SUCCESS:
+	    if ((Questions.NumQsts = Qst_DB_GetQsts (&mysql_res,&Questions)))
+	       /* Show the table with the questions */
+	       Qst_ListOneOrMoreQstsForSelectionForGame (Games,Questions.NumQsts,mysql_res);
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-   else
-      /* Show the form again */
-      Qst_ShowFormRequestSelectQstsForGame (Games,&Questions);
+	    /***** Free structure that stores the query result *****/
+	    DB_FreeMySQLResult (&mysql_res);
+	    break;
+	 case Err_ERROR:
+	 default:
+	    /* Show the form again */
+	    Qst_ShowFormRequestSelectQstsForGame (Games,&Questions);
+	    break;
+	}
 
    /***** Destroy test *****/
    Qst_Destructor (&Questions);
@@ -3281,17 +3293,21 @@ void Qst_ReqRemSelectedQsts (void)
    /***** Create test *****/
    Qst_Constructor (&Questions);
 
-   /***** Get parameters *****/
-   if (Tst_GetParsTst (&Questions,Tst_EDIT_QUESTIONS))	// Get parameters from the form
-     {
-      /***** Show question and button to remove question *****/
-      Ale_ShowAlertRemove (ActRemSevTstQst,NULL,
-			   Qst_PutParsEditQst,&Questions,
-			   Txt_Do_you_really_want_to_remove_the_selected_questions,
-			   NULL);
-     }
-   else
-      Ale_ShowAlert (Ale_ERROR,"Wrong parameters.");
+      /***** Get parameters *****/
+      switch (Tst_GetParsTst (&Questions,Tst_EDIT_QUESTIONS))	// Get parameters from the form
+	{
+	 case Err_SUCCESS:
+	    /***** Show question and button to remove question *****/
+	    Ale_ShowAlertRemove (ActRemSevTstQst,NULL,
+				 Qst_PutParsEditQst,&Questions,
+				 Txt_Do_you_really_want_to_remove_the_selected_questions,
+				 NULL);
+	    break;
+	 case Err_ERROR:
+	 default:
+	    Ale_ShowAlert (Ale_ERROR,"Wrong parameters.");
+	    break;
+       }
 
    /***** Continue editing questions *****/
    Qst_ListQuestionsToEdit ();
@@ -3316,32 +3332,32 @@ void Qst_RemoveSelectedQsts (void)
    /***** Create test *****/
    Qst_Constructor (&Questions);
 
-   /***** Get parameters *****/
-   if (Tst_GetParsTst (&Questions,Tst_EDIT_QUESTIONS))	// Get parameters
-     {
-      /***** Get question codes *****/
-      Questions.NumQsts = Qst_DB_GetQsts (&mysql_res,&Questions);
-
-      /***** Remove questions one by one *****/
-      for (NumQst = 0;
-	   NumQst < Questions.NumQsts;
-	   NumQst++)
+      /***** Get parameters *****/
+      if (Tst_GetParsTst (&Questions,Tst_EDIT_QUESTIONS) == Err_SUCCESS)	// Get parameters
 	{
-	 /* Get question code (row[0]) */
-	 row = mysql_fetch_row (mysql_res);
-	 if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-	    Err_WrongQuestionExit ();
+	 /***** Get question codes *****/
+	 Questions.NumQsts = Qst_DB_GetQsts (&mysql_res,&Questions);
 
-	 /* Remove test question from database */
-	 Qst_RemoveOneQstFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,QstCod);
+	 /***** Remove questions one by one *****/
+	 for (NumQst = 0;
+	      NumQst < Questions.NumQsts;
+	      NumQst++)
+	   {
+	    /* Get question code (row[0]) */
+	    row = mysql_fetch_row (mysql_res);
+	    if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	       Err_WrongQuestionExit ();
+
+	    /* Remove test question from database */
+	    Qst_RemoveOneQstFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,QstCod);
+	   }
+
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
+
+	 /***** Write message *****/
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_Questions_removed_X,Questions.NumQsts);
 	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-
-      /***** Write message *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Questions_removed_X,Questions.NumQsts);
-     }
 
    /***** Destroy test *****/
    Qst_Destructor (&Questions);
@@ -3381,7 +3397,7 @@ void Qst_ReqRemOneQst (void)
 
    /* Get other parameters */
    if (!EditingOnlyThisQst)
-      if (!Tst_GetParsTst (&Questions,Tst_EDIT_QUESTIONS))
+      if (Tst_GetParsTst (&Questions,Tst_EDIT_QUESTIONS) == Err_ERROR)
 	 Err_ShowErrorAndExit ("Wrong test parameters.");
 
    /***** Show question and button to remove question *****/

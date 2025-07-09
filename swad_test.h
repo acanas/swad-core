@@ -66,8 +66,8 @@ void Tst_AssessTest (void);
 
 void Tst_PutIconsTests (void *Questions);
 
-bool Tst_GetParsTst (struct Qst_Questions *Questions,
-                     Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions);
+Err_SuccessOrError_t Tst_GetParsTst (struct Qst_Questions *Questions,
+				     Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions);
 
 //-------------------------------- Figures ------------------------------------
 void Tst_GetAndShowTestsStats (Hie_Level_t HieLvl);

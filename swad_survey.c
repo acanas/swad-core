@@ -2443,7 +2443,7 @@ void Svy_ReceiveQst (void)
    unsigned NumAns;
    char AnsStr[8 + 10 + 1];
    bool ThereIsEndOfAnswers;
-   bool Error = false;
+   Err_SuccessOrError_t SuccessOrError;
 
    /***** Reset surveys *****/
    Svy_ResetSurveys (&Surveys);
@@ -2487,15 +2487,15 @@ void Svy_ReceiveQst (void)
    /***** Make sure that stem is not empty *****/
    if (Stem[0])
      {
-      for (NumAns = 0, ThereIsEndOfAnswers = false;
-	   !Error && NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
+      for (NumAns = 0, ThereIsEndOfAnswers = false, SuccessOrError = Err_SUCCESS;
+	   SuccessOrError == Err_SUCCESS && NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
 	   NumAns++)
 	 if (SvyQst.AnsChoice[NumAns].Text[0])
 	   {
 	    if (ThereIsEndOfAnswers)
 	      {
 	       Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_empty_intermediate_answers);
-	       Error = true;
+	       SuccessOrError = Err_ERROR;
 	      }
 	   }
 	 else
@@ -2504,49 +2504,53 @@ void Svy_ReceiveQst (void)
    else
      {
       Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_the_question_stem);
-      Error = true;
+      SuccessOrError = Err_ERROR;
      }
 
-   if (Error)
-      Svy_ShowFormEditOneQst (&Surveys,&SvyQst,Stem);
-   else
+   switch (SuccessOrError)
      {
-      /***** Form is received OK ==> insert question and answer in the database *****/
-      if (SvyQst.QstCod < 0)	// It's a new question
-        {
-         SvyQst.QstInd = Svy_GetNextQuestionIndexInSvy (Surveys.Svy.SvyCod);
-         SvyQst.QstCod = Svy_DB_CreateQuestion (Surveys.Svy.SvyCod,&SvyQst,Stem);
-        }
-      else			// It's an existing question
-         /* Update question */
-         Svy_DB_UpdateQuestion (Surveys.Svy.SvyCod,&SvyQst,Stem);
-
-      /* Insert, update or delete answers in the answers table */
-      for (NumAns = 0;
-	   NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
-	   NumAns++)
-         switch (Svy_DB_CheckIfAnswerExists (SvyQst.QstCod,NumAns))
+      case Err_SUCCESS:
+	 /***** Form is received OK ==> insert question and answer in the database *****/
+	 if (SvyQst.QstCod < 0)	// It's a new question
 	   {
-	    case Exi_EXISTS:		// If this answer exists...
-	       if (SvyQst.AnsChoice[NumAns].Text[0])	// Answer is not empty
-		  /* Update answer text */
-		  Svy_DB_UpdateAnswerText (SvyQst.QstCod,NumAns,
-					   SvyQst.AnsChoice[NumAns].Text);
-	       else					// Answer is empty
-		  /* Delete answer from database */
-		  Svy_DB_RemoveAnswerQst (SvyQst.QstCod,NumAns);
-	       break;
-	    case Exi_DOES_NOT_EXIST:	// If this answer does not exist...
-	    default:
-	       if (SvyQst.AnsChoice[NumAns].Text[0])	// Answer is not empty
-		  /* Create answer into database */
-		  Svy_DB_CreateAnswer (SvyQst.QstCod,NumAns,
-				       SvyQst.AnsChoice[NumAns].Text);
-	       break;
+	    SvyQst.QstInd = Svy_GetNextQuestionIndexInSvy (Surveys.Svy.SvyCod);
+	    SvyQst.QstCod = Svy_DB_CreateQuestion (Surveys.Svy.SvyCod,&SvyQst,Stem);
 	   }
+	 else			// It's an existing question
+	    /* Update question */
+	    Svy_DB_UpdateQuestion (Surveys.Svy.SvyCod,&SvyQst,Stem);
 
-      /***** List the questions of this survey, including the new one just inserted into the database *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_survey_has_been_modified);
+	 /* Insert, update or delete answers in the answers table */
+	 for (NumAns = 0;
+	      NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
+	      NumAns++)
+	    switch (Svy_DB_CheckIfAnswerExists (SvyQst.QstCod,NumAns))
+	      {
+	       case Exi_EXISTS:		// If this answer exists...
+		  if (SvyQst.AnsChoice[NumAns].Text[0])	// Answer is not empty
+		     /* Update answer text */
+		     Svy_DB_UpdateAnswerText (SvyQst.QstCod,NumAns,
+					      SvyQst.AnsChoice[NumAns].Text);
+		  else					// Answer is empty
+		     /* Delete answer from database */
+		     Svy_DB_RemoveAnswerQst (SvyQst.QstCod,NumAns);
+		  break;
+	       case Exi_DOES_NOT_EXIST:	// If this answer does not exist...
+	       default:
+		  if (SvyQst.AnsChoice[NumAns].Text[0])	// Answer is not empty
+		     /* Create answer into database */
+		     Svy_DB_CreateAnswer (SvyQst.QstCod,NumAns,
+					  SvyQst.AnsChoice[NumAns].Text);
+		  break;
+	      }
+
+	 /***** List the questions of this survey, including the new one just inserted into the database *****/
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_survey_has_been_modified);
+	 break;
+      case Err_ERROR:
+      default:
+         Svy_ShowFormEditOneQst (&Surveys,&SvyQst,Stem);
+         break;
      }
 
    /***** Free answers *****/

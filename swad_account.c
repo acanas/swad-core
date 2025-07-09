@@ -92,9 +92,9 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title);
 static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct Usr_Data *UsrDat);
 static void Acc_ShowFormRequestNewAccountWithPars (const char *NewNickWithoutArr,
                                                    const char *NewEmail);
-static bool Acc_GetParsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],
-                                   char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
-                                   char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1]);
+static Err_SuccessOrError_t Acc_GetParsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],
+						   char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
+						   char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1]);
 static void Acc_CreateNewEncryptedUsrCod (struct Usr_Data *UsrDat);
 
 static void Acc_PutParsToRemoveMyAccount (void *EncryptedUsrCod);
@@ -535,50 +535,48 @@ static void Acc_PutParsToRemoveMyAccount (void *EncryptedUsrCod)
 /*****************************************************************************/
 /*************** Create new user account with an ID and login ****************/
 /*****************************************************************************/
-// Return true if no error and user can be logged in
-// Return false on error
 
-bool Acc_CreateMyNewAccountAndLogIn (void)
+Err_SuccessOrError_t Acc_CreateMyNewAccountAndLogIn (void)
   {
    char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
    char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
    char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
 
-   if (Acc_GetParsNewAccount (NewNickWithoutArr,NewEmail,NewEncryptedPassword))
+   switch (Acc_GetParsNewAccount (NewNickWithoutArr,NewEmail,NewEncryptedPassword))
      {
-      /***** User's has no ID *****/
-      Gbl.Usrs.Me.UsrDat.IDs.Num = 0;
-      Gbl.Usrs.Me.UsrDat.IDs.List = NULL;
+      case Err_SUCCESS:
+	 /***** User's has no ID *****/
+	 Gbl.Usrs.Me.UsrDat.IDs.Num = 0;
+	 Gbl.Usrs.Me.UsrDat.IDs.List = NULL;
 
-      /***** Set password to the password typed by the user *****/
-      Str_Copy (Gbl.Usrs.Me.UsrDat.Password,NewEncryptedPassword,
-                sizeof (Gbl.Usrs.Me.UsrDat.Password) - 1);
+	 /***** Set password to the password typed by the user *****/
+	 Str_Copy (Gbl.Usrs.Me.UsrDat.Password,NewEncryptedPassword,
+		   sizeof (Gbl.Usrs.Me.UsrDat.Password) - 1);
 
-      /***** User does not exist in the platform, so create him/her! *****/
-      Acc_CreateNewUsr (&Gbl.Usrs.Me.UsrDat,Usr_ME);
+	 /***** User does not exist in the platform, so create him/her! *****/
+	 Acc_CreateNewUsr (&Gbl.Usrs.Me.UsrDat,Usr_ME);
 
-      /***** Save nickname *****/
-      Nck_DB_UpdateNick (Gbl.Usrs.Me.UsrDat.UsrCod,NewNickWithoutArr);
-      Str_Copy (Gbl.Usrs.Me.UsrDat.Nickname,NewNickWithoutArr,
-                sizeof (Gbl.Usrs.Me.UsrDat.Nickname) - 1);
+	 /***** Save nickname *****/
+	 Nck_DB_UpdateNick (Gbl.Usrs.Me.UsrDat.UsrCod,NewNickWithoutArr);
+	 Str_Copy (Gbl.Usrs.Me.UsrDat.Nickname,NewNickWithoutArr,
+		   sizeof (Gbl.Usrs.Me.UsrDat.Nickname) - 1);
 
-      /***** Save email *****/
-      if (Mai_UpdateEmailInDB (&Gbl.Usrs.Me.UsrDat,NewEmail))
-	{
-	 /* Email updated sucessfully */
-	 Str_Copy (Gbl.Usrs.Me.UsrDat.Email,NewEmail,
-	           sizeof (Gbl.Usrs.Me.UsrDat.Email) - 1);
+	 /***** Save email *****/
+	 if (Mai_UpdateEmailInDB (&Gbl.Usrs.Me.UsrDat,NewEmail))
+	   {
+	    /* Email updated sucessfully */
+	    Str_Copy (Gbl.Usrs.Me.UsrDat.Email,NewEmail,
+		      sizeof (Gbl.Usrs.Me.UsrDat.Email) - 1);
 
-	 Gbl.Usrs.Me.UsrDat.EmailConfirmed = false;
-	}
+	    Gbl.Usrs.Me.UsrDat.EmailConfirmed = false;
+	   }
 
-      return true;
-     }
-   else
-     {
-      /***** Show form again ******/
-      Acc_ShowFormRequestNewAccountWithPars (NewNickWithoutArr,NewEmail);
-      return false;
+	 return Err_SUCCESS;
+      case Err_ERROR:
+      default:
+	 /***** Show form again ******/
+	 Acc_ShowFormRequestNewAccountWithPars (NewNickWithoutArr,NewEmail);
+	 return Err_ERROR;
      }
   }
 
@@ -587,9 +585,9 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
 /*****************************************************************************/
 // Return false on error
 
-static bool Acc_GetParsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],
-                                   char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
-                                   char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1])
+static Err_SuccessOrError_t Acc_GetParsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],
+						   char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
+						   char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1])
   {
    extern const char *Txt_The_nickname_had_been_registered_by_another_user;
    extern const char *Txt_The_nickname_is_not_valid_;
@@ -597,7 +595,7 @@ static bool Acc_GetParsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WIT
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
    char NewNick[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
    char NewPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
-   bool Error = false;
+   Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
 
    /***** Step 1/3: Get new nickname from form *****/
    Par_GetParText ("NewNick",NewNick,sizeof (NewNick) - 1);
@@ -607,8 +605,7 @@ static bool Acc_GetParsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WIT
    Str_Copy (NewNickWithoutArr,NewNick,sizeof (NewNick) - 1);
 
    /* Create a new version of the nickname with arroba */
-   snprintf (NewNick,sizeof (NewNick),"@%s",
-	     NewNickWithoutArr);
+   snprintf (NewNick,sizeof (NewNick),"@%s",NewNickWithoutArr);
 
    if (Nck_CheckIfNickWithArrIsValid (NewNick))        // If new nickname is valid
      {
@@ -616,13 +613,14 @@ static bool Acc_GetParsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WIT
          matches any of the nicknames of other users */
       if (Acc_DB_CheckIfNicknameAlreadyExists (NewNickWithoutArr) == Exi_EXISTS)
 	{
-	 Error = true;
-	 Ale_ShowAlert (Ale_WARNING,Txt_The_nickname_had_been_registered_by_another_user);
+	 SuccessOrError = Err_ERROR;
+	 Ale_ShowAlert (Ale_WARNING,
+			Txt_The_nickname_had_been_registered_by_another_user);
 	}
      }
    else        // New nickname is not valid
      {
-      Error = true;
+      SuccessOrError = Err_ERROR;
       Ale_ShowAlert (Ale_WARNING,Txt_The_nickname_is_not_valid_,
 		     Nck_MIN_CHARS_NICK_WITHOUT_ARROBA,
 		     Nck_MAX_CHARS_NICK_WITHOUT_ARROBA);
@@ -638,14 +636,15 @@ static bool Acc_GetParsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WIT
       if (Acc_DB_CheckIfEmailAlreadyExists (NewEmail) == Exi_EXISTS)
 	{
 	 // An email of another user is the same that my email
-	 Error = true;
-	 Ale_ShowAlert (Ale_WARNING,Txt_The_email_address_X_had_been_registered_by_another_user,
+	 SuccessOrError = Err_ERROR;
+	 Ale_ShowAlert (Ale_WARNING,
+			Txt_The_email_address_X_had_been_registered_by_another_user,
 		        NewEmail);
 	}
      }
    else	// New email is not valid
      {
-      Error = true;
+      SuccessOrError = Err_ERROR;
       Ale_ShowAlert (Ale_WARNING,Txt_The_email_address_entered_X_is_not_valid,
                      NewEmail);
      }
@@ -655,11 +654,11 @@ static bool Acc_GetParsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WIT
    Cry_EncryptSHA512Base64 (NewPlainPassword,NewEncryptedPassword);
    if (!Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword,NewEncryptedPassword,-1L))        // New password is good?
      {
-      Error = true;
+      SuccessOrError = Err_ERROR;
       Ale_ShowAlerts (NULL);	// Error message is set in Pwd_SlowCheckIfPasswordIsGood
      }
 
-   return !Error;
+   return SuccessOrError;
   }
 
 /*****************************************************************************/
@@ -757,23 +756,16 @@ void Acc_AfterCreationNewAccount (void)
 
 void Acc_GetUsrCodAndRemUsrGbl (void)
   {
-   bool Error = false;
+   Err_SuccessOrError_t SuccessOrError = Err_ERROR;
 
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-      switch (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
+      if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_CAN)
         {
-         case Usr_CAN:
-            Acc_ReqRemAccountOrRemAccount (Acc_REMOVE_USR);
-            break;
-         case Usr_CAN_NOT:
-         default:
-            Error = true;
-            break;
+         Acc_ReqRemAccountOrRemAccount (Acc_REMOVE_USR);
+         SuccessOrError = Err_SUCCESS;
         }
-   else	// User not found
-      Error = true;
 
-   if (Error)
+   if (SuccessOrError == Err_ERROR)
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 

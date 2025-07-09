@@ -985,7 +985,7 @@ static void Med_ProcessVideo (struct Med_Media *Media,
 	 if (rename (PathFileOrg,PathFileTmp))	// Fail
 	    /* Show error alert */
             Med_ErrorProcessingMediaFile ();
-	 else						// Success
+	 else					// Success
 	    Media->Status = Med_PROCESSED;
 	}
       else	// Size exceeded

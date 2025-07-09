@@ -30,6 +30,7 @@
 #include <stdbool.h>		// For boolean type
 
 #include "swad_constant.h"
+#include "swad_error.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -55,7 +56,7 @@ void Acc_ShowFormGoToRequestNewAccount (void);
 void Acc_ShowFormChgMyAccount (void);
 void Acc_ShowFormChgOtherUsrAccount (void);
 void Acc_PutLinkToRemoveMyAccount (__attribute__((unused)) void *Args);
-bool Acc_CreateMyNewAccountAndLogIn (void);
+Err_SuccessOrError_t Acc_CreateMyNewAccountAndLogIn (void);
 void Acc_CreateNewUsr (struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOther);
 void Acc_AfterCreationNewAccount (void);
 

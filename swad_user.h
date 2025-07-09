@@ -28,6 +28,7 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_error.h"
 #include "swad_forum.h"
 #include "swad_user_type.h"
 
@@ -136,7 +137,7 @@ void Usr_PutParSelectedUsrsCods (const struct Usr_SelectedUsrs *SelectedUsrs);
 void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs,
 					    Usr_GetListAllUsrs_t GetListAllUsrs);
 
-bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs);
+Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs);
 
 bool Usr_FindEncUsrCodInListOfSelectedEncUsrCods (const char *EncryptedUsrCodToFind,
 						  struct Usr_SelectedUsrs *SelectedUsrs);

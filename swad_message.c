@@ -238,6 +238,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
    bool OtherRecipientsBefore = false;
    char *ClassInput;
    Pho_ShowPhotos_t ShowPhotos;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs =
    Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs =
@@ -324,7 +325,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
 	   }
 
 	 /***** Get list of users' IDs or nicknames written explicitely *****/
-	 Usr_GetListMsgRecipientsWrittenExplicitelyBySender (false);
+	 SuccessOrError = Usr_GetListMsgRecipientsWrittenExplicitelyBySender (false);
 	}
 
       /***** Begin form to select recipients and write the message *****/
@@ -726,7 +727,7 @@ void Msg_RecMsgFromUsr (void)
    extern const char *Txt_The_message_has_been_sent_to_X_recipients;
    extern const char *Txt_There_have_been_X_errors_in_sending_the_message;
    struct Msg_Messages Messages;
-   bool Error = false;
+   Err_SuccessOrError_t SuccessOrError;
 
    /***** Reset messages context *****/
    Msg_ResetMessages (&Messages);
@@ -754,7 +755,7 @@ void Msg_RecMsgFromUsr (void)
 					  Usr_GET_LIST_ALL_USRS);
 
    /* Get list of users' IDs or nicknames written explicitely */
-   Error = Usr_GetListMsgRecipientsWrittenExplicitelyBySender (true);
+   SuccessOrError = Usr_GetListMsgRecipientsWrittenExplicitelyBySender (true);
 
    /***** Check number of recipients *****/
    if ((Messages.Rcv.NumRecipients = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected)))
@@ -764,48 +765,50 @@ void Msg_RecMsgFromUsr (void)
         {
          /* Write warning message */
          Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_send_a_message_to_so_many_recipients_);
-         Error = true;
+         SuccessOrError = Err_ERROR;
         }
      }
    else	// No recipients selected
      {
       /* Write warning message */
       Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_recipients);
-      Error = true;
+      SuccessOrError = Err_ERROR;
      }
 
    /***** If error in list of recipients, show again the form used to write a message *****/
-   if (Error)
+   switch (SuccessOrError)
      {
-      /* Show the form again, with the subject and the message filled */
-      Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
-                        Messages.Content,Cns_MAX_BYTES_LONG_TEXT,Str_REMOVE_SPACES);
-      Msg_PutFormMsgUsrs (&Messages);
-     }
-   else
-     {
-      /***** Loop over the list Gbl.Usrs.Selected.List[Rol_UNK],
-             that holds the list of the recipients,
-             creating a received message for each recipient *****/
-      Msg_CreateRcvMsgForEachRecipient (&Messages);
+      case Err_SUCCESS:
+	 /***** Loop over the list Gbl.Usrs.Selected.List[Rol_UNK],
+		that holds the list of the recipients,
+		creating a received message for each recipient *****/
+	 Msg_CreateRcvMsgForEachRecipient (&Messages);
 
-      /***** Update received message setting Replied field to true *****/
-      if (Messages.Reply.Replied)
-	 Msg_DB_SetRcvMsgAsReplied (Messages.Reply.OriginalMsgCod);
+	 /***** Update received message setting Replied field to true *****/
+	 if (Messages.Reply.Replied)
+	    Msg_DB_SetRcvMsgAsReplied (Messages.Reply.OriginalMsgCod);
 
-      /***** Write final message *****/
-      if (Messages.Rcv.NumRecipients == 0)
-	 Ale_ShowAlert (Ale_WARNING,Txt_The_message_has_not_been_sent_to_any_recipient);
-      else if (Messages.Rcv.NumRecipients == 1)
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_message_has_been_sent_to_1_recipient);
-      else
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_message_has_been_sent_to_X_recipients,
-			Messages.Rcv.NumRecipients);
+	 /***** Write final message *****/
+	 if (Messages.Rcv.NumRecipients == 0)
+	    Ale_ShowAlert (Ale_WARNING,Txt_The_message_has_not_been_sent_to_any_recipient);
+	 else if (Messages.Rcv.NumRecipients == 1)
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_message_has_been_sent_to_1_recipient);
+	 else
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_message_has_been_sent_to_X_recipients,
+			   Messages.Rcv.NumRecipients);
 
-      /***** Show alert about errors on sending message *****/
-      if (Messages.Rcv.NumErrors > 1)
-	 Ale_ShowAlert (Ale_ERROR,Txt_There_have_been_X_errors_in_sending_the_message,
-		       Messages.Rcv.NumErrors);
+	 /***** Show alert about errors on sending message *****/
+	 if (Messages.Rcv.NumErrors > 1)
+	    Ale_ShowAlert (Ale_ERROR,Txt_There_have_been_X_errors_in_sending_the_message,
+			  Messages.Rcv.NumErrors);
+	 break;
+      case Err_ERROR:
+      default:
+	 /* Show the form again, with the subject and the message filled */
+	 Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
+			   Messages.Content,Cns_MAX_BYTES_LONG_TEXT,Str_REMOVE_SPACES);
+	 Msg_PutFormMsgUsrs (&Messages);
+	 break;
      }
 
    /***** Free memory *****/

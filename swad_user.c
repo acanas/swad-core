@@ -1627,7 +1627,7 @@ void Usr_ChkUsrGetUsrDataAndAdjustAction (void)
       if (Gbl.Action.Act == ActCreUsrAcc)
 	{
 	 /***** Create my new account and login *****/
-	 if (Acc_CreateMyNewAccountAndLogIn ())		// User logged in
+	 if (Acc_CreateMyNewAccountAndLogIn () == Err_SUCCESS)	// User logged in
 	   {
 	    Gbl.Usrs.Me.Logged = true;
 	    Usr_SetMyPrefsAndRoles ();
@@ -1648,7 +1648,7 @@ void Usr_ChkUsrGetUsrDataAndAdjustAction (void)
 	 /***** Check user and get user's data *****/
 	 if (Gbl.Session.Status == Ses_OPEN)
 	   {
-	    if (Usr_ChkUsrAndGetUsrDataFromSession ())	// User logged in
+	    if (Usr_ChkUsrAndGetUsrDataFromSession ())		// User logged in
 	      {
 	       Gbl.Usrs.Me.Logged = true;
 
@@ -3163,9 +3163,8 @@ static void Usr_BuildParName (char **ParName,
 /*****************************************************************************/
 /*** Get list of recipients of a message written explicitely by the sender ***/
 /*****************************************************************************/
-// Returns true if no errors
 
-bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
+Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
   {
    extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
    extern const char *Txt_There_is_no_user_with_nickname_X;
@@ -3179,7 +3178,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
    char UsrIDNickOrEmail[Cns_MAX_BYTES_USR_LOGIN + 1];
    struct Usr_Data UsrDat;
    struct Usr_ListUsrCods ListUsrCods;
-   bool Error = false;
+   Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
 
    /***** Get list of selected encrypted users's codes if not already got.
           This list is necessary to add encrypted user's codes at the end. *****/
@@ -3228,7 +3227,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		  if (WriteErrorMsgs)
 		     Ale_ShowAlert (Ale_WARNING,Txt_There_is_no_user_with_nickname_X,
 			            UsrIDNickOrEmail);
-		  Error = true;
+		  SuccessOrError = Err_ERROR;
 		 }
 	      }
 	    else if (Mai_CheckIfEmailIsValid (UsrIDNickOrEmail))	// 2: It's an email
@@ -3244,7 +3243,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		  if (WriteErrorMsgs)
 		     Ale_ShowAlert (Ale_WARNING,Txt_There_is_no_user_with_email_X,
 			            UsrIDNickOrEmail);
-		  Error = true;
+		  SuccessOrError = Err_ERROR;
 		 }
 	      }
             else							// 3: It's not a nickname nor email
@@ -3269,7 +3268,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 			if (WriteErrorMsgs)
 			   Ale_ShowAlert (Ale_ERROR,Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
 				          UsrIDNickOrEmail);
-			Error = true;
+			SuccessOrError = Err_ERROR;
 		       }
 		    }
 		  else	// No users found
@@ -3277,7 +3276,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		     if (WriteErrorMsgs)
 			Ale_ShowAlert (Ale_ERROR,Txt_There_is_no_user_with_ID_nick_or_email_X,
 				       UsrIDNickOrEmail);
-		     Error = true;
+		     SuccessOrError = Err_ERROR;
 		    }
 		 }
 	       else	// String is not a valid user's nickname, email or ID
@@ -3285,7 +3284,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		  if (WriteErrorMsgs)
 		     Ale_ShowAlert (Ale_WARNING,Txt_The_ID_nickname_or_email_X_is_not_valid,
 			            UsrIDNickOrEmail);
-		  Error = true;
+		  SuccessOrError = Err_ERROR;
 		 }
               }
 
@@ -3340,7 +3339,8 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
       /* Free memory used for user's data */
       Usr_UsrDataDestructor (&UsrDat);
      }
-   return Error;
+
+   return SuccessOrError;
   }
 
 /*****************************************************************************/

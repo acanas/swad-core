@@ -439,7 +439,7 @@ void Fil_RemoveTree (const char *Path)
    struct dirent **FileList;
    int NumFile,NumFiles;
    char PathFileRel[PATH_MAX + 1];
-   bool Error;
+   Err_SuccessOrError_t SuccessOrError;
    char ErrorMsg[128 + PATH_MAX];
 
    if (Fil_CheckIfPathExists (Path))
@@ -450,7 +450,7 @@ void Fil_RemoveTree (const char *Path)
 	{
 	 if (rmdir (Path))
 	   {
-	    Error = false;
+	    SuccessOrError = Err_SUCCESS;
 	    if (errno == ENOTEMPTY)
 	      {
 	       /***** Remove each directory and file under this directory *****/
@@ -476,13 +476,13 @@ void Fil_RemoveTree (const char *Path)
 	       else
 		  Err_ShowErrorAndExit ("Error while scanning directory.");
 
-	       /***** Remove of new the directory, now empty *****/
+	       /***** Remove the directory, now empty *****/
 	       if (rmdir (Path))
-		  Error = true;
+		  SuccessOrError = Err_ERROR;
 	      }
 	    else
-	       Error = true;
-	    if (Error)
+	       SuccessOrError = Err_ERROR;
+	    if (SuccessOrError == Err_ERROR)
 	      {
 	       snprintf (ErrorMsg,sizeof (ErrorMsg),
 	                 "Can not remove folder %s.",Path);

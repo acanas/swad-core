@@ -222,44 +222,46 @@ void Tst_ShowNewTest (void)
    /***** Create test *****/
    Qst_Constructor (&Questions);
 
-   /***** Read test configuration from database *****/
-   TstCfg_GetConfig ();
+      /***** Read test configuration from database *****/
+      TstCfg_GetConfig ();
 
-   if (Tst_CheckIfNextTstAllowed ())
-     {
-      /***** Check that all parameters used to generate a test are valid *****/
-      if (Tst_GetParsTst (&Questions,Tst_SHOW_TEST_TO_ANSWER))	// Get parameters from form
-        {
-         /***** Get questions *****/
-	 TstPrn_ResetPrint (&Print);
-	 Tst_GetQuestionsForNewTest (&Questions,&Print);
-         if (Print.NumQsts.All)
-           {
-            /***** Increase number of exams generated (answered or not) by me *****/
-            Tst_DB_IncreaseNumMyPrints ();
-            NumPrintsGeneratedByMe = TstPrn_GetNumPrintsGeneratedByMe ();
+      if (Tst_CheckIfNextTstAllowed ())
+	 /***** Check that all parameters used to generate a test are valid *****/
+	 switch (Tst_GetParsTst (&Questions,Tst_SHOW_TEST_TO_ANSWER))	// Get parameters from form
+	   {
+	    case Err_SUCCESS:
+	       /***** Get questions *****/
+	       TstPrn_ResetPrint (&Print);
+	       Tst_GetQuestionsForNewTest (&Questions,&Print);
+	       if (Print.NumQsts.All)
+		 {
+		  /***** Increase number of exams generated (answered or not) by me *****/
+		  Tst_DB_IncreaseNumMyPrints ();
+		  NumPrintsGeneratedByMe = TstPrn_GetNumPrintsGeneratedByMe ();
 
-	    /***** Create new test print in database *****/
-	    Print.PrnCod = Tst_DB_CreatePrint (Print.NumQsts.All);
-	    TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
-	                                                  false);	// Don't update question score
+		  /***** Create new test print in database *****/
+		  Print.PrnCod = Tst_DB_CreatePrint (Print.NumQsts.All);
+		  TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
+								false);	// Don't update question score
 
-            /***** Show test print to be answered *****/
-            TstPrn_ShowTestPrintToFillIt (&Print,NumPrintsGeneratedByMe,TstPrn_REQUEST);
+		  /***** Show test print to be answered *****/
+		  TstPrn_ShowTestPrintToFillIt (&Print,NumPrintsGeneratedByMe,TstPrn_REQUEST);
 
-            /***** Update date-time of my next allowed access to test *****/
-            if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
-               Tst_DB_UpdateLastAccTst (Questions.NumQsts);
-           }
-         else	// No questions found
-           {
-            Ale_ShowAlert (Ale_INFO,Txt_No_questions_found_matching_your_search_criteria);
-            Tst_ShowFormRequestTest (&Questions);	// Show the form again
-           }
-        }
-      else
-         Tst_ShowFormRequestTest (&Questions);		// Show the form again
-     }
+		  /***** Update date-time of my next allowed access to test *****/
+		  if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
+		     Tst_DB_UpdateLastAccTst (Questions.NumQsts);
+		 }
+	       else	// No questions found
+		 {
+		  Ale_ShowAlert (Ale_INFO,Txt_No_questions_found_matching_your_search_criteria);
+		  Tst_ShowFormRequestTest (&Questions);	// Show the form again
+		 }
+	       break;
+	    case Err_ERROR:
+	    default:
+	       Tst_ShowFormRequestTest (&Questions);		// Show the form again
+	       break;
+	   }
 
    /***** Destroy test *****/
    Qst_Destructor (&Questions);
@@ -652,17 +654,15 @@ static void Tst_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQuesti
 /*****************************************************************************/
 /************ Get parameters for the selection of test questions *************/
 /*****************************************************************************/
-// Return true (OK) if all parameters are found,
-// or false (error) if any necessary parameter is not found
 
-bool Tst_GetParsTst (struct Qst_Questions *Questions,
-                     Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions)
+Err_SuccessOrError_t Tst_GetParsTst (struct Qst_Questions *Questions,
+				     Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions)
   {
    extern const char *Txt_You_must_select_one_ore_more_tags;
    extern const char *Txt_You_must_select_one_ore_more_types_of_answer;
    extern const char *Txt_The_number_of_questions_must_be_in_the_interval_X;
    char *ListSelectedTxt;
-   bool Error = false;
+   Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
    char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    unsigned UnsignedNum;
 
@@ -687,7 +687,7 @@ bool Tst_GetParsTst (struct Qst_Questions *Questions,
 	 else	// If no tags selected, write alert
 	   {
 	    Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_tags);
-	    Error = true;
+	    SuccessOrError = Err_ERROR;
 	   }
 
 	 free (ListSelectedTxt);
@@ -710,7 +710,7 @@ bool Tst_GetParsTst (struct Qst_Questions *Questions,
 	 if (Qst_CountNumAnswerTypesInList (&Questions->AnswerTypes) == 0)	// If no types of answer selected...
 	   {									// ...write warning alert
 	    Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_types_of_answer);
-	    Error = true;
+	    SuccessOrError = Err_ERROR;
 	   }
 	 break;
       case Tst_SELECT_QUESTIONS_FOR_GAME:
@@ -733,7 +733,7 @@ bool Tst_GetParsTst (struct Qst_Questions *Questions,
 	   {
 	    Ale_ShowAlert (Ale_WARNING,Txt_The_number_of_questions_must_be_in_the_interval_X,
 		           TstCfg_GetConfigMin (),TstCfg_GetConfigMax ());
-	    Error = true;
+	    SuccessOrError = Err_ERROR;
 	   }
 	 break;
       case Tst_EDIT_QUESTIONS:
@@ -761,7 +761,7 @@ bool Tst_GetParsTst (struct Qst_Questions *Questions,
 	 break;
      }
 
-   return !Error;
+   return SuccessOrError;
   }
 
 /*****************************************************************************/
