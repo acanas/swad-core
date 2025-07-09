@@ -145,7 +145,7 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 				    OldNew_OldNew_t OldNewExam);
 static void Exa_ReceiveExamFieldsFromForm (struct Exa_Exam *Exam,
 				           char Txt[Cns_MAX_BYTES_TEXT + 1]);
-static bool Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam);
+static Err_SuccessOrError_t Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam);
 
 static void Exa_CreateExam (struct Exa_Exam *Exam,const char *Txt);
 static void Exa_UpdateExam (struct Exa_Exam *Exam,const char *Txt);
@@ -1458,7 +1458,7 @@ void Exa_ReceiveExam (void)
 
    /***** Overwrite some exam data with the data received from form *****/
    Exa_ReceiveExamFieldsFromForm (&Exams.Exam,Txt);
-   if (Exa_CheckExamFieldsReceivedFromForm (&Exams.Exam))
+   if (Exa_CheckExamFieldsReceivedFromForm (&Exams.Exam) == Err_SUCCESS)
       /***** Create a new exam or update an existing one *****/
       switch (OldNewExam)
 	{
@@ -1500,10 +1500,10 @@ static void Exa_ReceiveExamFieldsFromForm (struct Exa_Exam *Exam,
    Par_GetParHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
   }
 
-static bool Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam)
+static Err_SuccessOrError_t Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam)
   {
    extern const char *Txt_Already_existed_an_exam_with_the_title_X;
-   bool ExamIsCorrect = true;
+   Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
 
    /***** Check if title is correct *****/
    if (Exam->Title[0])	// If there's an exam title
@@ -1512,7 +1512,7 @@ static bool Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam)
       if (Exa_DB_CheckIfSimilarExamExists (Gbl.Hierarchy.Node[Hie_CRS].HieCod,
                                            Exam->ExaCod,Exam->Title) == Exi_EXISTS)
 	{
-	 ExamIsCorrect = false;
+	 SuccessOrError = Err_ERROR;
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 			  Txt_Already_existed_an_exam_with_the_title_X,
 			  Exam->Title);
@@ -1520,11 +1520,11 @@ static bool Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam)
      }
    else	// If there is not an exam title
      {
-      ExamIsCorrect = false;
+      SuccessOrError = Err_ERROR;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
-   return ExamIsCorrect;
+   return SuccessOrError;
   }
 
 /*****************************************************************************/

@@ -74,7 +74,7 @@ static void Rub_RemoveRubricFromAllTables (long RubCod);
 static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
 			              OldNew_OldNew_t OldNewRubric);
 static void Rub_ReceiveRubricFieldsFromForm (struct Rub_Rubric *Rubric);
-static bool Rub_CheckRubricFieldsReceivedFromForm (const struct Rub_Rubric *Rubric);
+static Err_SuccessOrError_t Rub_CheckRubricFieldsReceivedFromForm (const struct Rub_Rubric *Rubric);
 
 static void Rub_CreateRubric (struct Rub_Rubric *Rubric);
 static void Rub_UpdateRubric (struct Rub_Rubric *Rubric);
@@ -895,7 +895,7 @@ void Rub_ReceiveRubric (void)
 
    /***** Overwrite some rubric data with the data received from form *****/
    Rub_ReceiveRubricFieldsFromForm (&Rubrics.Rubric);
-   if (Rub_CheckRubricFieldsReceivedFromForm (&Rubrics.Rubric))
+   if (Rub_CheckRubricFieldsReceivedFromForm (&Rubrics.Rubric) == Err_SUCCESS)
       /***** Create a new rubric or update an existing one *****/
       switch (OldNewRubric)
 	{
@@ -928,10 +928,10 @@ static void Rub_ReceiveRubricFieldsFromForm (struct Rub_Rubric *Rubric)
    Par_GetParHTML ("Txt",Rubric->Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
   }
 
-static bool Rub_CheckRubricFieldsReceivedFromForm (const struct Rub_Rubric *Rubric)
+static Err_SuccessOrError_t Rub_CheckRubricFieldsReceivedFromForm (const struct Rub_Rubric *Rubric)
   {
    extern const char *Txt_Already_existed_a_game_with_the_title_X;
-   bool RubricIsCorrect = true;
+   Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
 
    /***** Check if title is correct *****/
    if (Rubric->Title[0])	// If there's a rubric title
@@ -939,7 +939,7 @@ static bool Rub_CheckRubricFieldsReceivedFromForm (const struct Rub_Rubric *Rubr
       /* If title of rubric was in database... */
       if (Rub_DB_CheckIfSimilarRubricExists (Rubric) == Exi_EXISTS)
 	{
-	 RubricIsCorrect = false;
+	 SuccessOrError = Err_ERROR;
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 			  Txt_Already_existed_a_game_with_the_title_X,
 			  Rubric->Title);
@@ -947,11 +947,11 @@ static bool Rub_CheckRubricFieldsReceivedFromForm (const struct Rub_Rubric *Rubr
      }
    else				// If there is not a rubric title
      {
-      RubricIsCorrect = false;
+      SuccessOrError = Err_ERROR;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
-   return RubricIsCorrect;
+   return SuccessOrError;
   }
 
 /*****************************************************************************/

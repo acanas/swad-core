@@ -1476,7 +1476,8 @@ void Agd_ReceiveEvent (void)
    struct Agd_Agenda Agenda;
    struct Agd_Event AgdEvent;
    OldNew_OldNew_t OldNewEvent;
-   bool EventIsCorrect = true;
+   Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
+
    char EventTxt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Reset agenda context *****/
@@ -1514,47 +1515,51 @@ void Agd_ReceiveEvent (void)
    /***** Check if event is correct *****/
    if (!AgdEvent.Location[0])	// If there is no event
      {
-      EventIsCorrect = false;
+      SuccessOrError = Err_ERROR;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
    /***** Check if event is correct *****/
    if (!AgdEvent.Title[0])	// If there is no event
      {
-      EventIsCorrect = false;
+      SuccessOrError = Err_ERROR;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
    /***** Create a new event or update an existing one *****/
-   if (EventIsCorrect)
+   switch (SuccessOrError)
      {
-      switch (OldNewEvent)
-	{
-	 case OldNew_OLD:
-	    Agd_DB_UpdateEvent (&AgdEvent,EventTxt);
+      case Err_SUCCESS:
+	 switch (OldNewEvent)
+	   {
+	    case OldNew_OLD:
+	       Agd_DB_UpdateEvent (&AgdEvent,EventTxt);
 
-	    /***** Write success message *****/
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
-	    break;
-	 case OldNew_NEW:
-	 default:
-	    AgdEvent.AgdCod = Agd_DB_CreateEvent (&AgdEvent,EventTxt);	// Add new event to database
+	       /***** Write success message *****/
+	       Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
+	       break;
+	    case OldNew_NEW:
+	    default:
+	       AgdEvent.AgdCod = Agd_DB_CreateEvent (&AgdEvent,EventTxt);	// Add new event to database
 
-	    /***** Write success message *****/
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_event_X,
-			   AgdEvent.Title);
-	    break;
-	}
+	       /***** Write success message *****/
+	       Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_event_X,
+			      AgdEvent.Title);
+	       break;
+	   }
 
-      /* Free memory for list of selected groups */
-      Grp_FreeListCodSelectedGrps ();
+	 /* Free memory for list of selected groups */
+	 Grp_FreeListCodSelectedGrps ();
 
-      /***** Show events again *****/
-      Agd_ShowMyAgenda (&Agenda);
+	 /***** Show events again *****/
+	 Agd_ShowMyAgenda (&Agenda);
+	 break;
+      case Err_ERROR:
+      default:
+	 // TODO: The form should be filled with partial data, now is always empty
+	 Agd_ReqCreatOrEditEvent ();
+	 break;
      }
-   else
-      // TODO: The form should be filled with partial data, now is always empty
-      Agd_ReqCreatOrEditEvent ();
   }
 
 /*****************************************************************************/

@@ -1128,7 +1128,7 @@ void Att_ReceiveEvent (void)
    struct Att_Event OldAtt;
    struct Att_Event ReceivedAtt;
    OldNew_OldNew_t OldNewEvent;
-   bool ReceivedAttEventIsCorrect = true;
+   Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the code of the attendance event *****/
@@ -1171,47 +1171,51 @@ void Att_ReceiveEvent (void)
 					    ReceivedAtt.Title,
 					    ReceivedAtt.AttCod) == Exi_EXISTS)
         {
-         ReceivedAttEventIsCorrect = false;
+         SuccessOrError = Err_ERROR;
 	 Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_an_event_with_the_title_X,
                         ReceivedAtt.Title);
         }
      }
    else	// If there is not an attendance event title
      {
-      ReceivedAttEventIsCorrect = false;
+      SuccessOrError = Err_ERROR;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
    /***** Create a new attendance event or update an existing one *****/
-   if (ReceivedAttEventIsCorrect)
+   switch (SuccessOrError)
      {
-      /* Get groups for this attendance events */
-      Grp_GetParCodsSeveralGrps ();
+      case Err_SUCCESS:
+	 /* Get groups for this attendance events */
+	 Grp_GetParCodsSeveralGrps ();
 
-      switch (OldNewEvent)
-	{
-	 case OldNew_OLD:
-	    Att_UpdateEvent (&ReceivedAtt,Description);
+	 switch (OldNewEvent)
+	   {
+	    case OldNew_OLD:
+	       Att_UpdateEvent (&ReceivedAtt,Description);
 
-	    /***** Write success message *****/
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
-	    break;
-	 case OldNew_NEW:
-	 default:
-	    ReceivedAtt.Hidden = HidVis_VISIBLE;	// New attendance events are visible by default
-	    Att_CreateEvent (&ReceivedAtt,Description);		// Add new attendance event to database
+	       /***** Write success message *****/
+	       Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
+	       break;
+	    case OldNew_NEW:
+	    default:
+	       ReceivedAtt.Hidden = HidVis_VISIBLE;	// New attendance events are visible by default
+	       Att_CreateEvent (&ReceivedAtt,Description);		// Add new attendance event to database
 
-	    /***** Write success message *****/
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_event_X,
-			   ReceivedAtt.Title);
-	    break;
-	}
+	       /***** Write success message *****/
+	       Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_event_X,
+			      ReceivedAtt.Title);
+	       break;
+	   }
 
-      /* Free memory for list of selected groups */
-      Grp_FreeListCodSelectedGrps ();
+	 /* Free memory for list of selected groups */
+	 Grp_FreeListCodSelectedGrps ();
+	 break;
+      case Err_ERROR:
+      default:
+	 Att_ReqCreatOrEditEvent ();
+	 break;
      }
-   else
-      Att_ReqCreatOrEditEvent ();
 
    /***** Show attendance events again *****/
    Att_ShowEvents ();

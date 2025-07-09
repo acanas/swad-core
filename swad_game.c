@@ -143,7 +143,7 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
 			            OldNew_OldNew_t OldNewGame);
 static void Gam_ReceiveGameFieldsFromForm (struct Gam_Game *Game,
 				           char Txt[Cns_MAX_BYTES_TEXT + 1]);
-static bool Gam_CheckGameFieldsReceivedFromForm (const struct Gam_Game *Game);
+static Err_SuccessOrError_t Gam_CheckGameFieldsReceivedFromForm (const struct Gam_Game *Game);
 
 static void Gam_CreateGame (struct Gam_Game *Game,const char *Txt);
 static void Gam_UpdateGame (struct Gam_Game *Game,const char *Txt);
@@ -1461,7 +1461,7 @@ void Gam_ReceiveGame (void)
 
    /***** Receive game from form *****/
    Gam_ReceiveGameFieldsFromForm (&Games.Game,Txt);
-   if (Gam_CheckGameFieldsReceivedFromForm (&Games.Game))
+   if (Gam_CheckGameFieldsReceivedFromForm (&Games.Game) == Err_SUCCESS)
       /***** Create a new game or update an existing one *****/
       switch (OldNewGame)
 	{
@@ -1503,10 +1503,10 @@ static void Gam_ReceiveGameFieldsFromForm (struct Gam_Game *Game,
    Par_GetParHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
   }
 
-static bool Gam_CheckGameFieldsReceivedFromForm (const struct Gam_Game *Game)
+static Err_SuccessOrError_t Gam_CheckGameFieldsReceivedFromForm (const struct Gam_Game *Game)
   {
    extern const char *Txt_Already_existed_a_game_with_the_title_X;
-   bool GameIsCorrect = true;
+   Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
 
    /***** Check if title is correct *****/
    if (Game->Title[0])	// If there's a game title
@@ -1514,7 +1514,7 @@ static bool Gam_CheckGameFieldsReceivedFromForm (const struct Gam_Game *Game)
       /* If title of game was in database... */
       if (Gam_DB_CheckIfSimilarGameExists (Game) == Exi_EXISTS)
 	{
-	 GameIsCorrect = false;
+	 SuccessOrError = Err_ERROR;
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 			  Txt_Already_existed_a_game_with_the_title_X,
 			  Game->Title);
@@ -1522,11 +1522,11 @@ static bool Gam_CheckGameFieldsReceivedFromForm (const struct Gam_Game *Game)
      }
    else	// If there is not a game title
      {
-      GameIsCorrect = false;
+      SuccessOrError = Err_ERROR;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
-   return GameIsCorrect;
+   return SuccessOrError;
   }
 
 /*****************************************************************************/

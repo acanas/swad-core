@@ -78,8 +78,8 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 				  struct ExaSet_Set *Set,
 				  unsigned MaxSetInd);
 static void ExaSet_ReceiveSetFieldsFromForm (struct ExaSet_Set *Set);
-static bool ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
-                                                  const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1]);
+static Err_SuccessOrError_t ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
+								  const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1]);
 
 static void ExaSet_CreateSet (struct ExaSet_Set *Set);
 
@@ -253,7 +253,7 @@ void ExaSet_ReceiveSet (void)
 
    /***** If I can edit exams ==> receive set from form *****/
    ExaSet_ReceiveSetFieldsFromForm (&Set);
-   if (ExaSet_CheckSetTitleReceivedFromForm (&Set,Set.Title))
+   if (ExaSet_CheckSetTitleReceivedFromForm (&Set,Set.Title) == Err_SUCCESS)
       ExaSet_CreateSet (&Set);	// Add new set to database
 
    /***** Show current exam and its sets *****/
@@ -272,11 +272,11 @@ static void ExaSet_ReceiveSetFieldsFromForm (struct ExaSet_Set *Set)
                                                             0);
   }
 
-static bool ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
-                                                  const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1])
+static Err_SuccessOrError_t ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
+								  const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1])
   {
    extern const char *Txt_Already_existed_a_set_of_questions_in_this_exam_with_the_title_X;
-   bool TitleIsCorrect = true;
+   Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
 
    /***** Check if title is correct *****/
    if (NewTitle[0])	// If there's an set title
@@ -287,18 +287,18 @@ static bool ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
 	 /* If title of set was in database... */
 	 if (Exa_DB_CheckIfSimilarSetExists (Set,NewTitle) == Exi_EXISTS)
 	   {
-	    TitleIsCorrect = false;
+	    SuccessOrError = Err_ERROR;
 	    Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_a_set_of_questions_in_this_exam_with_the_title_X,
 			   Set->Title);
 	   }
      }
    else	// If there is not a set title
      {
-      TitleIsCorrect = false;
+      SuccessOrError = Err_ERROR;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
-   return TitleIsCorrect;
+   return SuccessOrError;
   }
 
 /*****************************************************************************/
@@ -331,7 +331,7 @@ void ExaSet_ChangeSetTitle (void)
    Par_GetParText ("Title",NewTitle,ExaSet_MAX_BYTES_TITLE);
 
    /***** Check if title should be changed *****/
-   if (ExaSet_CheckSetTitleReceivedFromForm (&Set,NewTitle))
+   if (ExaSet_CheckSetTitleReceivedFromForm (&Set,NewTitle) == Err_SUCCESS)
      {
       /* Update the table changing old title by new title */
       Exa_DB_UpdateSetTitle (Set.SetCod,Set.ExaCod,NewTitle);

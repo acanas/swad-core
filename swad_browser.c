@@ -2563,8 +2563,8 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod)
 /*****************************************************************************/
 // Folders are in level 1, just under root folder
 
-bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,
-                                                   const char *NewFolderName)
+Err_SuccessOrError_t Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,
+								   const char *NewFolderName)
   {
    extern const char *Txt_Can_not_rename_a_folder_of_assignment;
    extern const char *Txt_Users;
@@ -2578,7 +2578,7 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,
    char NewPath[PATH_MAX + 1];
    char PathOldFolder[PATH_MAX * 2 + 128];
    char PathNewFolder[PATH_MAX * 2 + 128];
-   bool RenamingIsPossible = true;
+   Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
    unsigned NumUsrsError = 0;
    unsigned NumUsrsSuccess = 0;
 
@@ -2587,7 +2587,7 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,
 
    /***** Check if there exist folders with the new name *****/
    for (NumUsr = 0;
-	NumUsr < NumUsrs && RenamingIsPossible;
+	NumUsr < NumUsrs && SuccessOrError == Err_SUCCESS;
 	NumUsr++)
      {
       /* Get next user */
@@ -2608,77 +2608,81 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,
                 NewFolderName);
       if (Fil_CheckIfPathExists (PathOldFolder) &&
           Fil_CheckIfPathExists (PathNewFolder))
-         RenamingIsPossible = false;
+         SuccessOrError = Err_ERROR;
      }
 
    /***** Rename folder for each user *****/
-   if (RenamingIsPossible)
+   switch (SuccessOrError)
      {
-      mysql_data_seek (mysql_res,0);
-      for (NumUsr = 0;
-	   NumUsr < NumUsrs;
-	   NumUsr++)
-        {
-	 /* Get next user */
-	 UsrCod = DB_GetNextCode (mysql_res);
+      case Err_SUCCESS:
+	 mysql_data_seek (mysql_res,0);
+	 for (NumUsr = 0;
+	      NumUsr < NumUsrs;
+	      NumUsr++)
+	   {
+	    /* Get next user */
+	    UsrCod = DB_GetNextCode (mysql_res);
 
-         /* Rename folder if exists */
-         snprintf (PathOldFolder,sizeof (PathOldFolder),"%s/usr/%02u/%ld/%s/%s",
-                   Gbl.Crs.Path.AbsPriv,
-                   (unsigned) (UsrCod % 100),
-                   UsrCod,	// User's code
-                   Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-                   OldFolderName);
-         if (Fil_CheckIfPathExists (PathOldFolder))
-           {
-            snprintf (PathNewFolder,sizeof (PathNewFolder),"%s/usr/%02u/%ld/%s/%s",
-                      Gbl.Crs.Path.AbsPriv,
-	 	      (unsigned) (UsrCod % 100),
- 		      UsrCod,	// User's code
-                      Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-                      NewFolderName);
-            if (rename (PathOldFolder,PathNewFolder))	// Fail
+	    /* Rename folder if exists */
+	    snprintf (PathOldFolder,sizeof (PathOldFolder),"%s/usr/%02u/%ld/%s/%s",
+		      Gbl.Crs.Path.AbsPriv,
+		      (unsigned) (UsrCod % 100),
+		      UsrCod,	// User's code
+		      Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+		      OldFolderName);
+	    if (Fil_CheckIfPathExists (PathOldFolder))
 	      {
-               Ale_ShowAlert (Ale_ERROR,Txt_Can_not_rename_a_folder_of_assignment);
-               NumUsrsError++;
+	       snprintf (PathNewFolder,sizeof (PathNewFolder),"%s/usr/%02u/%ld/%s/%s",
+			 Gbl.Crs.Path.AbsPriv,
+			 (unsigned) (UsrCod % 100),
+			 UsrCod,	// User's code
+			 Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+			 NewFolderName);
+	       if (rename (PathOldFolder,PathNewFolder))	// Fail
+		 {
+		  Ale_ShowAlert (Ale_ERROR,Txt_Can_not_rename_a_folder_of_assignment);
+		  NumUsrsError++;
+		 }
+	       else					// Success
+		 {
+		  /* Remove affected clipboards */
+		  Brw_DB_RemoveAffectedClipboards (Brw_ADMI_ASG_USR,UsrCod,-1L);
+		  Brw_DB_RemoveAffectedClipboards (Brw_ADMI_ASG_CRS,-1L,UsrCod);
+
+		  /* Rename affected expanded folders */
+		  snprintf (OldPath,sizeof (OldPath),"%s/%s",
+			    Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,OldFolderName);
+		  snprintf (NewPath,sizeof (NewPath),"%s/%s",
+			    Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,NewFolderName);
+		  Brw_DB_RenameAffectedExpandedFolders (Brw_ADMI_ASG_USR,UsrCod,-1L,
+							OldPath,NewPath);
+		  Brw_DB_RenameAffectedExpandedFolders (Brw_ADMI_ASG_CRS,-1L,UsrCod,
+							OldPath,NewPath);
+
+		  NumUsrsSuccess++;
+		 }
 	      }
-            else					// Success
-              {
-               /* Remove affected clipboards */
-               Brw_DB_RemoveAffectedClipboards (Brw_ADMI_ASG_USR,UsrCod,-1L);
-               Brw_DB_RemoveAffectedClipboards (Brw_ADMI_ASG_CRS,-1L,UsrCod);
+	   }
 
-               /* Rename affected expanded folders */
-               snprintf (OldPath,sizeof (OldPath),"%s/%s",
-			 Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,OldFolderName);
-               snprintf (NewPath,sizeof (NewPath),"%s/%s",
-			 Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,NewFolderName);
-               Brw_DB_RenameAffectedExpandedFolders (Brw_ADMI_ASG_USR,UsrCod,-1L,
-        	                                     OldPath,NewPath);
-               Brw_DB_RenameAffectedExpandedFolders (Brw_ADMI_ASG_CRS,-1L,UsrCod,
-        	                                     OldPath,NewPath);
-
-               NumUsrsSuccess++;
-              }
-           }
-        }
-
-      /***** Summary message *****/
-      Ale_ShowAlert (Ale_INFO,"%s: %u<br>"
-                              "%s: %u<br>"
-                              "%s: %u.",
-                     Txt_Users,NumUsrs,
-                     Txt_Folders_renamed,NumUsrsSuccess,
-                     Txt_Folders_not_renamed,NumUsrsError);
+	 /***** Summary message *****/
+	 Ale_ShowAlert (Ale_INFO,"%s: %u<br>"
+				 "%s: %u<br>"
+				 "%s: %u.",
+			Txt_Users,NumUsrs,
+			Txt_Folders_renamed,NumUsrsSuccess,
+			Txt_Folders_not_renamed,NumUsrsError);
+	 break;
+      case Err_ERROR:
+      default:
+	 /***** Warning message *****/
+	 Ale_ShowAlert (Ale_WARNING,Txt_Can_not_rename_a_folder_of_assignment);
+	 break;
      }
-   else
-      /***** Warning message *****/
-      Ale_ShowAlert (Ale_WARNING,Txt_Can_not_rename_a_folder_of_assignment);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return RenamingIsPossible;
+   return SuccessOrError;
   }
 
 /*****************************************************************************/
@@ -6055,6 +6059,7 @@ static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
    int NumFiles;
    unsigned NumLevls;
    long FilCod;	// File code of the file pasted
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    bool CopyIsGoingSuccessful = true;
 
    /***** Get the name (only the name) of the origin file or folder *****/
@@ -6123,7 +6128,7 @@ static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
 	      {
 	       /* Check extension of the file */
 	       if (Str_FileIsHTML (FileNameOrg))
-		  Mrk_CheckFileOfMarks (PathOrg,&Marks);
+		  SuccessOrError = Mrk_CheckFileOfMarks (PathOrg,&Marks);
 	       else
 		 {
 		  Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_X_because_you_can_not_paste_a_file_here_of_a_type_other_than_HTML,
@@ -6872,7 +6877,7 @@ static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
 		     /* Check if the content of the file of marks is valid */
 		     if (FileIsValid)
 			if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
-			   if (!Mrk_CheckFileOfMarks (PathTmp,&Marks))
+			   if (Mrk_CheckFileOfMarks (PathTmp,&Marks) == Err_ERROR)
 			      FileIsValid = false;
 
 		     if (FileIsValid)

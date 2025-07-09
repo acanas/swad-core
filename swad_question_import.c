@@ -623,7 +623,7 @@ static void QstImp_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		     QstImp_GetAnswerFromXML (AnswerElem,&Question);
 
 		     /* Make sure that tags, text and answer are not empty */
-		     if (Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question))
+		     if (Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question) == Err_SUCCESS)
 		       {
 			/* Check if question already exists in database */
 			QuestionExists = Qst_CheckIfQuestionExistsInDB (&Question);

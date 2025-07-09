@@ -49,7 +49,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void);
 void Mrk_ChangeNumRowsHeader (void);
 void Mrk_ChangeNumRowsFooter (void);
 
-bool Mrk_CheckFileOfMarks (const char *Path,struct Mrk_Properties *Marks);
+Err_SuccessOrError_t Mrk_CheckFileOfMarks (const char *Path,struct Mrk_Properties *Marks);
 void Mrk_ShowMyMarks (void);
 void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                           char **ContentStr,

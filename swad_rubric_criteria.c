@@ -79,8 +79,8 @@ static void RubCri_PutParsOneCriterion (void *Rubrics);
 static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 				        unsigned MaxCriInd);
 static void RubCri_ReceiveCriterionFieldsFromForm (struct RubCri_Criterion *Criterion);
-static bool RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Criterion *Criterion,
-                                                        const char NewTitle[RubCri_MAX_BYTES_TITLE + 1]);
+static Err_SuccessOrError_t RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Criterion *Criterion,
+                                     					const char NewTitle[RubCri_MAX_BYTES_TITLE + 1]);
 
 static void RubCri_ChangeValueCriterion (RubCri_ValueRange_t ValueRange);
 
@@ -260,7 +260,8 @@ void RubCri_ReceiveCriterion (void)
    /***** If I can edit rubrics ==> receive criterion from form *****/
    RubCri_ReceiveCriterionFieldsFromForm (&Rubrics.Criterion);
 
-   if (RubCri_CheckCriterionTitleReceivedFromForm (&Rubrics.Criterion,Rubrics.Criterion.Title))
+   if (RubCri_CheckCriterionTitleReceivedFromForm (&Rubrics.Criterion,
+						   Rubrics.Criterion.Title) == Err_SUCCESS)
       RubCri_CreateCriterion (&Rubrics.Criterion);	// Add new criterion to database
 
    /***** Show current rubric and its criteria *****/
@@ -300,11 +301,11 @@ static void RubCri_ReceiveCriterionFieldsFromForm (struct RubCri_Criterion *Crit
       Criterion->Weight = 0.0;
   }
 
-static bool RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Criterion *Criterion,
-                                                        const char NewTitle[RubCri_MAX_BYTES_TITLE + 1])
+static Err_SuccessOrError_t RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Criterion *Criterion,
+                                     					const char NewTitle[RubCri_MAX_BYTES_TITLE + 1])
   {
    extern const char *Txt_Already_existed_a_criterion_in_this_rubric_with_the_title_X;
-   bool TitleIsCorrect = true;
+   Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
 
    /***** Check if title is correct *****/
    if (NewTitle[0])	// If there's an criterion title
@@ -315,7 +316,7 @@ static bool RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Crit
 	 /* If title of criterion was in database... */
 	 if (Rub_DB_CheckIfSimilarCriterionExists (Criterion,NewTitle) == Exi_EXISTS)
 	   {
-	    TitleIsCorrect = false;
+	    SuccessOrError = Err_ERROR;
 	    Ale_ShowAlert (Ale_WARNING,
 			   Txt_Already_existed_a_criterion_in_this_rubric_with_the_title_X,
 			   Criterion->Title);
@@ -323,11 +324,11 @@ static bool RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Crit
      }
    else	// If there is not a criterion title
      {
-      TitleIsCorrect = false;
+      SuccessOrError = Err_ERROR;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
-   return TitleIsCorrect;
+   return SuccessOrError;
   }
 
 /*****************************************************************************/
@@ -355,7 +356,8 @@ void RubCri_ChangeTitle (void)
    Par_GetParText ("Title",NewTitle,RubCri_MAX_BYTES_TITLE);
 
    /***** Check if title should be changed *****/
-   if (RubCri_CheckCriterionTitleReceivedFromForm (&Rubrics.Criterion,NewTitle))
+   if (RubCri_CheckCriterionTitleReceivedFromForm (&Rubrics.Criterion,
+						   NewTitle) == Err_SUCCESS)
      {
       /* Update title and database table */
       Str_Copy (Rubrics.Criterion.Title,NewTitle,

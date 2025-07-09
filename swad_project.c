@@ -4171,7 +4171,7 @@ void Prj_ReceiveProject (void)
    struct Prj_Projects Projects;
    OldNew_OldNew_t OldNewPrj;
    Usr_Can_t ICanEditProject;
-   bool PrjIsCorrect = true;
+   Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
 
    /***** Reset projects *****/
    Prj_ResetPrjsAndReadConfig (&Projects);
@@ -4239,36 +4239,39 @@ void Prj_ReceiveProject (void)
    /***** Check if title is correct *****/
    if (!Projects.Prj.Title[0])	// If there is not a project title
      {
-      PrjIsCorrect = false;
+      SuccessOrError = Err_ERROR;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
    /***** Create a new project or update an existing one *****/
-   if (PrjIsCorrect)
-      switch (OldNewPrj)
-	{
-	 case OldNew_OLD:
-	    if (PrjIsCorrect)
-	      {
+   switch (SuccessOrError)
+     {
+      case Err_SUCCESS:
+	 switch (OldNewPrj)
+	   {
+	    case OldNew_OLD:
 	       /* Update project */
 	       Prj_UpdateProject (&Projects.Prj);
 
 	       /* Write success message */
 	       Ale_ShowAlert (Ale_SUCCESS,Txt_The_project_has_been_modified);
-	      }
-	    break;
-	 case OldNew_NEW:
-	 default:
-	    /* Create project */
-	    Prj_CreateProject (&Projects.Prj);	// Add new project to database
+	       break;
+	    case OldNew_NEW:
+	    default:
+	       /* Create project (add new project to database) */
+	       Prj_CreateProject (&Projects.Prj);
 
-	    /* Write success message */
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_project_X,
-			   Projects.Prj.Title);
-	    break;
-	}
-   else
-      Prj_PutFormProject (&Projects,OldNewPrj);
+	       /* Write success message */
+	       Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_project_X,
+			      Projects.Prj.Title);
+	       break;
+	   }
+	 break;
+      case Err_ERROR:
+      default:
+	 Prj_PutFormProject (&Projects,OldNewPrj);
+	 break;
+     }
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Projects.Prj);

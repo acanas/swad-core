@@ -1465,7 +1465,7 @@ void Asg_ReceiveAssignment (void)
    struct Asg_Assignments Assignments;
    struct Asg_Assignment OldAsg;	// Current assigment data in database
    OldNew_OldNew_t OldNewAsg;
-   bool AsgIsCorrect = true;
+   Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
    Dat_StartEndTime_t StartEndTime;
    unsigned NumUsrsToBeNotifiedByEMail;
    char Description[Cns_MAX_BYTES_TEXT + 1];
@@ -1532,7 +1532,7 @@ void Asg_ReceiveAssignment (void)
 						     Assignments.Asg.AsgCod))
         {
 	 case Exi_EXISTS:
-	    AsgIsCorrect = false;
+	    SuccessOrError = Err_ERROR;
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 			     Txt_Already_existed_an_assignment_with_the_title_X,
 			     Assignments.Asg.Title);
@@ -1549,7 +1549,7 @@ void Asg_ReceiveAssignment (void)
 								Assignments.Asg.Folder,
 								Assignments.Asg.AsgCod) == Exi_EXISTS)	// If folder of assignment was in database...
 		       {
-			AsgIsCorrect = false;
+			SuccessOrError = Err_ERROR;
 			Ale_CreateAlert (Ale_WARNING,NULL,
 					 Txt_Already_existed_an_assignment_with_the_folder_X,
 					 Assignments.Asg.Folder);
@@ -1557,7 +1557,7 @@ void Asg_ReceiveAssignment (void)
 		    }
 		  else	// Folder name not valid
 		    {
-		     AsgIsCorrect = false;
+		     SuccessOrError = Err_ERROR;
 		     Ale_CreateAlert (Ale_WARNING,NULL,Txt_UPLOAD_FILE_Invalid_name);
 		    }
 		  break;
@@ -1566,7 +1566,7 @@ void Asg_ReceiveAssignment (void)
 		  if (OldAsg.SendWork == Asg_SEND_WORK)
 		     if (Brw_CheckIfExistsFolderAssigmentForAnyUsr (OldAsg.Folder))
 		       {
-			AsgIsCorrect = false;
+			SuccessOrError = Err_ERROR;
 			Ale_CreateAlert (Ale_WARNING,NULL,
 					 Txt_You_can_not_disable_file_uploading_once_folders_have_been_created);
 		       }
@@ -1576,7 +1576,7 @@ void Asg_ReceiveAssignment (void)
         }
    else	// If there is not an assignment title
      {
-      AsgIsCorrect = false;
+      SuccessOrError = Err_ERROR;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
@@ -1584,54 +1584,58 @@ void Asg_ReceiveAssignment (void)
    Ale_ShowAlerts (NULL);
 
    /***** Create/update assignment *****/
-   if (AsgIsCorrect)
+   switch (SuccessOrError)
      {
-      /* Check if current rubric code must be changed */
-      OldAsg.RubCod = Asg_DB_GetAssignmentRubCod (OldAsg.AsgCod);
-      if (Assignments.Asg.RubCod != OldAsg.RubCod)
-         Asg_DB_UpdateRubCod (OldAsg.AsgCod,Assignments.Asg.RubCod);
+      case Err_SUCCESS:
+	 /* Check if current rubric code must be changed */
+	 OldAsg.RubCod = Asg_DB_GetAssignmentRubCod (OldAsg.AsgCod);
+	 if (Assignments.Asg.RubCod != OldAsg.RubCod)
+	    Asg_DB_UpdateRubCod (OldAsg.AsgCod,Assignments.Asg.RubCod);
 
-      /* Get groups for this assignments */
-      Grp_GetParCodsSeveralGrps ();
+	 /* Get groups for this assignments */
+	 Grp_GetParCodsSeveralGrps ();
 
-      switch (OldNewAsg)
-	{
-	 case OldNew_OLD:
-	    if (OldAsg.Folder[0] && Assignments.Asg.Folder[0])
-	       if (strcmp (OldAsg.Folder,Assignments.Asg.Folder))	// Folder name has changed
-		  AsgIsCorrect = Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (OldAsg.Folder,
-									       Assignments.Asg.Folder);
-	    if (AsgIsCorrect)
-	      {
-	       Asg_UpdateAssignment (&Assignments.Asg,Description);
+	 switch (OldNewAsg)
+	   {
+	    case OldNew_OLD:
+	       if (OldAsg.Folder[0] && Assignments.Asg.Folder[0])
+		  if (strcmp (OldAsg.Folder,Assignments.Asg.Folder))	// Folder name has changed
+		     SuccessOrError = Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (OldAsg.Folder,
+										    Assignments.Asg.Folder);
+	       if (SuccessOrError == Err_SUCCESS)
+		 {
+		  Asg_UpdateAssignment (&Assignments.Asg,Description);
+
+		  /***** Write success message *****/
+		  Ale_ShowAlert (Ale_SUCCESS,
+				 Txt_The_assignment_has_been_modified);
+		 }
+	       break;
+	    case OldNew_NEW:
+	    default:
+	       Asg_CreateAssignment (&Assignments.Asg,Description);	// Add new assignment to database
 
 	       /***** Write success message *****/
-	       Ale_ShowAlert (Ale_SUCCESS,Txt_The_assignment_has_been_modified);
-	      }
-	    break;
-	 case OldNew_NEW:
-	 default:
-	    Asg_CreateAssignment (&Assignments.Asg,Description);	// Add new assignment to database
+	       Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_assignment_X,
+			      Assignments.Asg.Title);
+	       break;
+	   }
 
-	    /***** Write success message *****/
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_assignment_X,
-			   Assignments.Asg.Title);
-	    break;
-	}
+	 /* Free memory for list of selected groups */
+	 Grp_FreeListCodSelectedGrps ();
 
-      /* Free memory for list of selected groups */
-      Grp_FreeListCodSelectedGrps ();
-
-      /***** Notify by email about the new assignment *****/
-      if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ASSIGNMENT,Assignments.Asg.AsgCod)))
-	 Asg_DB_UpdateNumUsrsNotifiedByEMailAboutAssignment (Assignments.Asg.AsgCod,
-	                                                     NumUsrsToBeNotifiedByEMail);
-     }
-   else	// Assignment is not correct
-     {
-      /***** Put the form again *****/
-      Asg_PutFormCreatOrEditAsg (&Assignments,Description);
-      HTM_BR ();
+	 /***** Notify by email about the new assignment *****/
+	 if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ASSIGNMENT,
+									   Assignments.Asg.AsgCod)))
+	    Asg_DB_UpdateNumUsrsNotifiedByEMailAboutAssignment (Assignments.Asg.AsgCod,
+								NumUsrsToBeNotifiedByEMail);
+	 break;
+      case Err_ERROR:	// Assignment is not correct
+      default:
+	 /***** Put the form again *****/
+	 Asg_PutFormCreatOrEditAsg (&Assignments,Description);
+	 HTM_BR ();
+	 break;
      }
 
    /***** Show all assignments again *****/

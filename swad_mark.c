@@ -223,10 +223,8 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
 /*****************************************************************************/
 /************************ Receive a new file of marks ************************/
 /*****************************************************************************/
-// Returns true if the format of the HTML file of marks is correct
-// Returns true if the format of the HTML file of marks is wrong
 
-bool Mrk_CheckFileOfMarks (const char *Path,struct Mrk_Properties *Marks)
+Err_SuccessOrError_t Mrk_CheckFileOfMarks (const char *Path,struct Mrk_Properties *Marks)
   {
    extern const char *Txt_There_are_more_than_one_table_in_the_file_of_marks;
    extern const char *Txt_Table_not_found_in_the_file_of_marks;
@@ -234,7 +232,7 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct Mrk_Properties *Marks)
    FILE *FileAllMarks;
    bool EndOfHead = false;
    bool EndOfTable = false;
-   bool FileIsCorrect = true;
+   Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
    unsigned NumRowsStds = 0;
 
    Marks->Header = Marks->Footer = 0;
@@ -253,7 +251,7 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct Mrk_Properties *Marks)
            {
             Ale_CreateAlert (Ale_WARNING,NULL,
         		     Txt_There_are_more_than_one_table_in_the_file_of_marks);
-            FileIsCorrect = false;
+            SuccessOrError = Err_ERROR;
            }
          else
            {
@@ -315,14 +313,14 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct Mrk_Properties *Marks)
         {
          Ale_CreateAlert (Ale_WARNING,NULL,
 			  Txt_Table_not_found_in_the_file_of_marks);
-         FileIsCorrect = false;
+         SuccessOrError = Err_ERROR;
         }
 
       /***** The file of marks is no more necessary. Close it. *****/
       fclose (FileAllMarks);
      }
 
-   return FileIsCorrect;
+   return SuccessOrError;
   }
 
 /*****************************************************************************/

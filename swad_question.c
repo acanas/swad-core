@@ -2716,31 +2716,33 @@ void Qst_ReceiveQst (void)
    /***** Create test *****/
    Qst_Constructor (&Questions);
 
-   /***** Get parameters of the question from form *****/
-   Qst_GetQstFromForm (&Questions.Question);
+      /***** Get parameters of the question from form *****/
+      Qst_GetQstFromForm (&Questions.Question);
 
-   /***** Make sure that tags, text and answer are not empty *****/
-   if (Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Questions.Question))
-     {
-      /***** Move images to definitive directories *****/
-      Qst_MoveMediaToDefinitiveDirectories (&Questions.Question);
+      /***** Make sure that tags, text and answer are not empty *****/
+      switch (Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Questions.Question))
+	{
+	 case Err_SUCCESS:
+	    /***** Move images to definitive directories *****/
+	    Qst_MoveMediaToDefinitiveDirectories (&Questions.Question);
 
-      /***** Insert or update question, tags and answer in the database *****/
-      Qst_InsertOrUpdateQstTagsAnsIntoDB (&Questions.Question);
+	    /***** Insert or update question, tags and answer in the database *****/
+	    Qst_InsertOrUpdateQstTagsAnsIntoDB (&Questions.Question);
 
-      /***** Show the question just inserted in the database *****/
-      snprintf (Questions.AnswerTypes.List,sizeof (Questions.AnswerTypes.List),"%u",
-		(unsigned) Questions.Question.Answer.Type);
-      Qst_ListOneQstToEdit (&Questions);
-     }
-   else	// Question is wrong
-     {
-      /***** Whether images has been received or not, reset images *****/
-      Qst_ResetMediaOfQuestion (&Questions.Question);
+	    /***** Show the question just inserted in the database *****/
+	    snprintf (Questions.AnswerTypes.List,sizeof (Questions.AnswerTypes.List),"%u",
+		      (unsigned) Questions.Question.Answer.Type);
+	    Qst_ListOneQstToEdit (&Questions);
+	    break;
+	 case Err_ERROR:	// Question is wrong
+	 default:
+	    /***** Whether images has been received or not, reset images *****/
+	    Qst_ResetMediaOfQuestion (&Questions.Question);
 
-      /***** Put form to edit question again *****/
-      Qst_PutFormEditOneQst (&Questions.Question);
-     }
+	    /***** Put form to edit question again *****/
+	    Qst_PutFormEditOneQst (&Questions.Question);
+	    break;
+	}
 
    /***** Destroy test *****/
    Qst_Destructor (&Questions);
@@ -2942,11 +2944,10 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
 /*****************************************************************************/
 /*********************** Check if a question is correct **********************/
 /*****************************************************************************/
-// Returns false if question format is wrong
 // Counts Question->Answer.NumOptions
 // Computes Question->Answer.Integer and Question->Answer.FloatingPoint[0..1]
 
-bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Question)
+Err_SuccessOrError_t Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Question)
   {
    extern const char *Txt_You_must_type_at_least_one_tag_for_the_question;
    extern const char *Txt_You_must_type_the_question_stem;
@@ -2970,14 +2971,14 @@ bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Quest
    if (!Question->Tags.Num) // There are no tags with text
      {
       Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_one_tag_for_the_question);
-      return false;
+      return Err_ERROR;
      }
 
    /***** A question must have a stem *****/
    if (!Question->Stem[0])
      {
       Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_the_question_stem);
-      return false;
+      return Err_ERROR;
      }
 
    /***** Check answer *****/
@@ -2988,12 +2989,12 @@ bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Quest
          if (!Question->Answer.Options[0].Text)
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_an_integer_value_as_the_correct_answer);
-            return false;
+            return Err_ERROR;
            }
          if (!Question->Answer.Options[0].Text[0])
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_an_integer_value_as_the_correct_answer);
-            return false;
+            return Err_ERROR;
            }
 
          Question->Answer.Integer = Qst_GetIntAnsFromStr (Question->Answer.Options[0].Text);
@@ -3005,13 +3006,13 @@ bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Quest
              !Question->Answer.Options[1].Text)
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer);
-            return false;
+            return Err_ERROR;
            }
          if (!Question->Answer.Options[0].Text[0] ||
              !Question->Answer.Options[1].Text[0])
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer);
-            return false;
+            return Err_ERROR;
            }
 
          /* Lower limit should be <= upper limit */
@@ -3026,13 +3027,13 @@ bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Quest
 		Question->Answer.FloatingPoint[1])
 	      {
 	       Ale_ShowAlert (Ale_WARNING,Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to_the_upper_limit);
-	       return false;
+	       return Err_ERROR;
 	      }
            }
          else
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer);
-            return false;
+            return Err_ERROR;
            }
 
          Question->Answer.NumOptions = 2;
@@ -3043,7 +3044,7 @@ bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Quest
              Question->Answer.TF != 'F')
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_a_T_F_answer);
-            return false;
+            return Err_ERROR;
            }
 
          Question->Answer.NumOptions = 1;
@@ -3062,7 +3063,7 @@ bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Quest
                   if (ThereIsEndOfAnswers)
                     {
                      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_empty_intermediate_answers);
-                     return false;
+                     return Err_ERROR;
                     }
                   NumLastOpt = NumOpt;
                   Question->Answer.NumOptions++;
@@ -3077,7 +3078,7 @@ bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Quest
          if (NumLastOpt < 1)
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
-            return false;
+            return Err_ERROR;
            }
 
          /* Its mandatory to mark at least one option as correct */
@@ -3089,7 +3090,7 @@ bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Quest
          if (NumOpt > NumLastOpt)
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_mark_an_answer_as_correct);
-            return false;
+            return Err_ERROR;
            }
          break;
       case Qst_ANS_TEXT:
@@ -3097,12 +3098,12 @@ bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Quest
          if (!Question->Answer.Options[0].Text)		// If the first answer is empty
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_answer);
-            return false;
+            return Err_ERROR;
            }
          if (!Question->Answer.Options[0].Text[0])	// If the first answer is empty
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_answer);
-            return false;
+            return Err_ERROR;
            }
 
 	 /* No option should be empty before a non-empty option */
@@ -3116,7 +3117,7 @@ bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Quest
                   if (ThereIsEndOfAnswers)
                     {
                      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_empty_intermediate_answers);
-                     return false;
+                     return Err_ERROR;
                     }
                   Question->Answer.NumOptions++;
                  }
@@ -3130,7 +3131,7 @@ bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Quest
          break;
      }
 
-    return true;	// Question format without errors
+    return Err_SUCCESS;	// Question format without errors
    }
 
 /*****************************************************************************/

@@ -1567,7 +1567,7 @@ void Mai_ConfirmEmail (void)
    char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1];
    long UsrCod;
    char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
-   bool KeyIsCorrect;
+   Err_SuccessOrError_t SuccessOrError;
 
    /***** Get parameter Key *****/
    Par_GetParText ("key",MailKey,Mai_LENGTH_EMAIL_CONFIRM_KEY);
@@ -1583,19 +1583,19 @@ void Mai_ConfirmEmail (void)
       /* Get user's email (row[1]) */
       Str_Copy (Email,row[1],sizeof (Email) - 1);
 
-      KeyIsCorrect = true;
+      SuccessOrError = Err_SUCCESS;
      }
    else
      {
       row = NULL;
       UsrCod = -1L;
-      KeyIsCorrect = false;
+      SuccessOrError = Err_ERROR;
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   if (KeyIsCorrect)
+   if (SuccessOrError == Err_SUCCESS)
      {
       /***** Delete this pending email *****/
       Mai_DB_RemovePendingEmail (MailKey);

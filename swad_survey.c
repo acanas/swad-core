@@ -1865,7 +1865,7 @@ void Svy_ReceiveSurvey (void)
    OldNew_OldNew_t OldNewSvy;
    unsigned AllowedLvls;
    Hie_Level_t HieLvl;
-   bool SvyIsCorrect = true;
+   Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
    unsigned NumUsrsToBeNotifiedByEMail;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
@@ -1953,31 +1953,34 @@ void Svy_ReceiveSurvey (void)
       /* If title of survey was in database... */
       if (Svy_DB_CheckIfSimilarSurveyExists (&NewSvy) == Exi_EXISTS)
         {
-         SvyIsCorrect = false;
+         SuccessOrError = Err_ERROR;
          Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_a_survey_with_the_title_X,
                         NewSvy.Title);
         }
      }
    else	// If there is not a survey title
      {
-      SvyIsCorrect = false;
+      SuccessOrError = Err_ERROR;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
    /***** Create a new survey or update an existing one *****/
-   if (SvyIsCorrect)
+   switch (SuccessOrError)
      {
-      /* Get groups for this surveys */
-      Grp_GetParCodsSeveralGrps ();
+      case Err_SUCCESS:
+	 /* Get groups for this surveys */
+	 Grp_GetParCodsSeveralGrps ();
 
-      /* Create or update survey */
-      CreateUpdate[OldNewSvy] (&NewSvy,Txt);
+	 /* Create or update survey */
+	 CreateUpdate[OldNewSvy] (&NewSvy,Txt);
 
-      /* Free memory for list of selected groups */
-      Grp_FreeListCodSelectedGrps ();
+	 /* Free memory for list of selected groups */
+	 Grp_FreeListCodSelectedGrps ();
+	 break;
+      case Err_ERROR:
+      default:
+	 Svy_ReqCreatOrEditSvy ();
      }
-   else
-      Svy_ReqCreatOrEditSvy ();
 
    /***** Notify by email about the new survey *****/
    if (NewSvy.HieLvl == Hie_CRS)	// Notify only the surveys for a course, not for a degree or global

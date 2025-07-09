@@ -230,7 +230,7 @@ void Qst_GetMediaFromDB (long CrsCod,long QstCod,int NumOpt,
                          struct Med_Media *Media);
 void Qst_ReceiveQst (void);
 void Qst_GetQstFromForm (struct Qst_Question *Question);
-bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Question);
+Err_SuccessOrError_t Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Question);
 
 bool Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question);
 
