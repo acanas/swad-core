@@ -979,9 +979,10 @@ void CtrCfg_ChangeCtrPhotoAttr (void)
 
 void CtrCfg_ChangeCtrIns (void)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_center_X_has_been_moved_to_the_institution_Y;
    struct Hie_Node NewIns;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Get parameter with institution code *****/
@@ -991,7 +992,7 @@ void CtrCfg_ChangeCtrIns (void)
    if (NewIns.HieCod != Gbl.Hierarchy.Node[Hie_CTR].PrtCod)
      {
       /***** Get data of new institution *****/
-      Hie_GetDataByCod[Hie_INS] (&NewIns);
+      SuccessOrError = Hie_GetDataByCod[Hie_INS] (&NewIns);
 
       /***** Check if it already exists a center with the same name in the new institution *****/
       Names[Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_CTR].ShrtName;

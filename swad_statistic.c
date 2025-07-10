@@ -3005,8 +3005,9 @@ static void Sta_ShowNumHitsPerCountry (Sta_CountType_t CountType,
 
 static void Sta_WriteCountry (long CtyCod)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Cty;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Begin cell *****/
    HTM_TD_Begin ("class=\"LM LOG_%s\"",The_GetSuffix ());
@@ -3015,7 +3016,7 @@ static void Sta_WriteCountry (long CtyCod)
 	{
 	 /***** Get data of country *****/
 	 Cty.HieCod = CtyCod;
-	 Hie_GetDataByCod[Hie_CTY] (&Cty);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CTY] (&Cty);
 
 	 /***** Form to go to country *****/
 	 Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeCtyInf,
@@ -3099,15 +3100,16 @@ static void Sta_ShowNumHitsPerInstitution (Sta_CountType_t CountType,
 
 static void Sta_WriteInstit (long InsCod)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Ins;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Begin cell *****/
    if (InsCod > 0)	// Hit with an institution selected
      {
       /***** Get data of institution *****/
       Ins.HieCod = InsCod;
-      Hie_GetDataByCod[Hie_INS] (&Ins);
+      SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
 
       /***** Title in cell *****/
       HTM_TD_Begin ("class=\"LM LOG_%s\" title=\"%s\"",
@@ -3194,15 +3196,16 @@ static void Sta_ShowNumHitsPerCenter (Sta_CountType_t CountType,
 
 static void Sta_WriteCenter (long CtrCod)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Ctr;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Begin cell *****/
    if (CtrCod > 0)	// Hit with a center selected
      {
       /***** Get data of center *****/
       Ctr.HieCod = CtrCod;
-      Hie_GetDataByCod[Hie_CTR] (&Ctr);
+      SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 
       /***** Title in cell *****/
       HTM_TD_Begin ("class=\"LM LOG_%s\" title=\"%s\"",
@@ -3289,15 +3292,16 @@ static void Sta_ShowNumHitsPerDegree (Sta_CountType_t CountType,
 
 static void Sta_WriteDegree (long DegCod)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Deg;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Begin cell *****/
    if (DegCod > 0)	// Hit with a degree selected
      {
       /***** Get data of degree *****/
       Deg.HieCod = DegCod;
-      Hie_GetDataByCod[Hie_DEG] (&Deg);
+      SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Deg);
 
       /***** Title in cell *****/
       HTM_TD_Begin ("class=\"LM LOG_%s\" title=\"%s\"",
@@ -3327,7 +3331,7 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
                                       unsigned NumHits,
                                       MYSQL_RES *mysql_res)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_No_INDEX;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Year_OF_A_DEGREE;
@@ -3337,7 +3341,7 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
    unsigned Ranking;
    struct Sta_Hits Hits;
    MYSQL_ROW row;
-   bool CrsOK;
+   Err_SuccessOrError_t SuccessOrError;
    struct Hie_Node Crs;
 
    /***** Write heading *****/
@@ -3365,13 +3369,13 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
       Crs.HieCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get data of current degree */
-      CrsOK = Hie_GetDataByCod[Hie_CRS] (&Crs);
+      SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Crs);
 
       HTM_TR_Begin (NULL);
 
 	 /* Write ranking of this course */
 	 HTM_TD_Begin ("class=\"RT LOG_%s\"",The_GetSuffix ());
-	    if (CrsOK)
+	    if (SuccessOrError == Err_SUCCESS)
 	       HTM_Unsigned (++Ranking);
 	    HTM_NBSP ();
 	 HTM_TD_End ();
@@ -3381,29 +3385,39 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
 
 	 /* Write degree year */
 	 HTM_TD_Begin ("class=\"CT LOG_%s\"",The_GetSuffix ());
-	    if (CrsOK)
-	       HTM_Txt (Txt_YEAR_OF_DEGREE[Crs.Specific.Year]);
-	    else
-	       HTM_Hyphen ();
+	    switch (SuccessOrError)
+	      {
+	       case Err_SUCCESS:
+		  HTM_Txt (Txt_YEAR_OF_DEGREE[Crs.Specific.Year]);
+		  break;
+	       case Err_ERROR:
+	       default:
+		  HTM_Hyphen ();
+		  break;
+	      }
 	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write course, including link */
 	 HTM_TD_Begin ("class=\"LT LOG_%s\"",The_GetSuffix ());
-	    if (CrsOK)
+	    switch (SuccessOrError)
 	      {
-	       Frm_BeginFormGoTo (ActSeeCrsInf);
-		  ParCod_PutPar (ParCod_Crs,Crs.HieCod);
-		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs.FullName),NULL,
-		                           "class=\"LT BT_LINK\"");
-		  Str_FreeGoToTitle ();
-		     HTM_Txt (Crs.ShrtName);
-		  HTM_BUTTON_End ();
+	       case Err_SUCCESS:
+		  Frm_BeginFormGoTo (ActSeeCrsInf);
+		     ParCod_PutPar (ParCod_Crs,Crs.HieCod);
+		     HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs.FullName),NULL,
+					      "class=\"LT BT_LINK\"");
+		     Str_FreeGoToTitle ();
+			HTM_Txt (Crs.ShrtName);
+		     HTM_BUTTON_End ();
+		  break;
+	       case Err_ERROR:
+	       default:
+		  HTM_Hyphen ();
+		  break;
 	      }
-	    else
-	       HTM_Hyphen ();
 	    HTM_NBSP ();
-	    if (CrsOK)
+	    if (SuccessOrError == Err_SUCCESS)
 	       Frm_EndForm ();
 	 HTM_TD_End ();
 

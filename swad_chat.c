@@ -105,7 +105,7 @@ void Cht_ShowChatRooms (void)
 
 void Cht_ShowListOfAvailableChatRooms (void)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_Chat_rooms;
    extern const char *Txt_General;
    extern const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS];
@@ -117,6 +117,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    unsigned NumMyDeg;
    struct Hie_Node Deg;
    struct Hie_Node Crs;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCrss;
@@ -177,7 +178,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	   {
 	    /* Get data of this degree */
 	    Deg.HieCod = Gbl.Usrs.Me.Hierarchy[Hie_DEG].Nodes[NumMyDeg].HieCod;
-	    if (!Hie_GetDataByCod[Hie_DEG] (&Deg))
+	    if (Hie_GetDataByCod[Hie_DEG] (&Deg) == Err_ERROR)
 	       Err_WrongDegreeExit ();
 
 	    /* Link to the room of this degree */
@@ -208,7 +209,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	       if ((Crs.HieCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 		 {
 		  /* Get data of this course */
-		  Hie_GetDataByCod[Hie_CRS] (&Crs);
+		  SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Crs);
 
 		  /* Link to the room of this course */
 		  IsLastItemInLevel[2] = (NumCrs == NumCrss - 1) ? Lay_LAST_ITEM :
@@ -367,7 +368,7 @@ void Cht_WriteParsRoomCodeAndNames (const char *RoomCode,const char *RoomShrtNam
 
 void Cht_OpenChatWindow (void)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS];
    extern const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS];
    extern const char *Txt_General;
@@ -382,6 +383,7 @@ void Cht_OpenChatWindow (void)
    unsigned NumMyCrs;
    struct Hie_Node Deg;
    struct Hie_Node Crs;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    char ThisRoomCode[Cht_MAX_BYTES_ROOM_CODE + 1];
    char ThisRoomShortName[Cht_MAX_BYTES_ROOM_SHRT_NAME + 1];
    char ThisRoomFullName [Cht_MAX_BYTES_ROOM_FULL_NAME + 1];
@@ -477,7 +479,7 @@ void Cht_OpenChatWindow (void)
 
          /* Get data of this degree */
          Deg.HieCod = Gbl.Usrs.Me.Hierarchy[Hie_DEG].Nodes[NumMyDeg].HieCod;
-         Hie_GetDataByCod[Hie_DEG] (&Deg);
+         SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Deg);
 
          snprintf (ThisRoomShortName,sizeof (ThisRoomShortName),"%s",
 		   Deg.ShrtName);
@@ -504,7 +506,7 @@ void Cht_OpenChatWindow (void)
 
          /* Get data of this course */
          Crs.HieCod = Gbl.Usrs.Me.Hierarchy[Hie_CRS].Nodes[NumMyCrs].HieCod;
-         Hie_GetDataByCod[Hie_CRS] (&Crs);
+         SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Crs);
 
          snprintf (ThisRoomShortName,sizeof (ThisRoomShortName),
                    "%s",

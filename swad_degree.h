@@ -31,6 +31,7 @@
 
 #include "swad_action.h"
 #include "swad_constant.h"
+#include "swad_error.h"
 #include "swad_figure_cache.h"
 #include "swad_hierarchy_type.h"
 #include "swad_name.h"
@@ -70,7 +71,7 @@ void Deg_ReceiveReqDeg (void);
 void Deg_ReceiveNewDeg (void);
 void Deg_RemoveDeg (void);
 
-bool Deg_GetDegreeDataByCod (struct Hie_Node *Node);
+Err_SuccessOrError_t Deg_GetDegreeDataByCod (struct Hie_Node *Node);
 void Deg_RemoveDegreeCompletely (long DegCod);
 void Deg_RenameDegShrt (void);
 void Deg_RenameDegFull (void);

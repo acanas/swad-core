@@ -483,9 +483,10 @@ static void Ntf_GetNotif (MYSQL_RES *mysql_res,
 			  long *Cod,time_t *DateTimeUTC,
 			  Ntf_Status_t *Status)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    MYSQL_ROW row;
    Hie_Level_t HieLvl;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    unsigned Col;
 
    /***** Get next notification *****/
@@ -507,7 +508,7 @@ static void Ntf_GetNotif (MYSQL_RES *mysql_res,
 	HieLvl++, Col++)
      {
       Hie[HieLvl].HieCod = Str_ConvertStrCodToLongCod (row[Col]);
-      Hie_GetDataByCod[HieLvl] (&Hie[HieLvl]);
+      SuccessOrError = Hie_GetDataByCod[HieLvl] (&Hie[HieLvl]);
      }
 
    /***** Get message/post/... code (row[6]) *****/
@@ -1317,7 +1318,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
                                                  unsigned *NumNotif,
                                                  unsigned *NumMails)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Lan_NUM_LANGUAGES];
@@ -1337,6 +1338,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
    Ntf_NotifyEvent_t NotifyEvent = (Ntf_NotifyEvent_t) 0;	// Initialized to avoid warning
    struct Hie_Node Hie[Hie_NUM_LEVELS];
    Hie_Level_t HieLvl;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    unsigned Col;
    long Cod;
    struct For_Forum ForumSelected;
@@ -1407,7 +1409,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
 		 HieLvl++, Col++)
 	       {
 	        Hie[HieLvl].HieCod = Str_ConvertStrCodToLongCod (row[Col]);
-		Hie_GetDataByCod[HieLvl] (&Hie[HieLvl]);
+		SuccessOrError = Hie_GetDataByCod[HieLvl] (&Hie[HieLvl]);
 	       }
 
 	    /* Get message/post/... code (row[6]) */

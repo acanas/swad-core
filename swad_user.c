@@ -2145,7 +2145,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
 			      struct Usr_SelectedUsrs *SelectedUsrs,
 			      Pho_ShowPhotos_t ShowPhotos)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_Enrolment_confirmed;
    extern const char *Txt_Enrolment_not_confirmed;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -2159,6 +2159,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
    bool UsrIsTheMsgSender = PutCheckBoxToSelectUsr &&
 	                    (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
    struct Hie_Node Ins;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -2224,7 +2225,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
 
       /***** Write rest of main user's data *****/
       Ins.HieCod = UsrDat->InsCod;
-      Hie_GetDataByCod[Hie_INS] (&Ins);
+      SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
       Usr_WriteUsrSurnamesAndName (UsrDat,BgColor);
 
       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
@@ -2242,7 +2243,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
 static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,
 				    Pho_ShowPhotos_t ShowPhotos)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2253,6 +2254,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,
    struct Hie_Node Ins;
    struct Hie_Node Ctr;
    struct Dpt_Department Dpt;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -2275,7 +2277,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,
 
       /***** Write rest of guest's main data *****/
       Ins.HieCod = UsrDat->InsCod;
-      Hie_GetDataByCod[Hie_INS] (&Ins);
+      SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
       Usr_WriteUsrSurnamesAndName (UsrDat,The_GetColorRows ());
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
       Usr_WriteUsrData (The_GetColorRows (),
@@ -2286,7 +2288,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,
       if (UsrDat->Tch.CtrCod > 0)
 	{
 	 Ctr.HieCod = UsrDat->Tch.CtrCod;
-	 Hie_GetDataByCod[Hie_CTR] (&Ctr);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	}
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Tch.CtrCod > 0 ? Ctr.FullName :
@@ -2334,7 +2336,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
 				    Pho_ShowPhotos_t ShowPhotos,
 				    Hie_Level_t HieLvl)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2349,6 +2351,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
    MYSQL_ROW row;
    char Text[Cns_MAX_BYTES_TEXT + 1];
    struct Hie_Node Ins;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    bool ShowData = (Gbl.Usrs.Me.Role.Logged == Rol_TCH && UsrDat->Accepted) ||
                     Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM;
 
@@ -2375,7 +2378,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
 
       /***** Write rest of main student's data *****/
       Ins.HieCod = UsrDat->InsCod;
-      Hie_GetDataByCod[Hie_INS] (&Ins);
+      SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
       Usr_WriteUsrSurnamesAndName (UsrDat,The_GetColorRows ());
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
       Usr_WriteUsrData (The_GetColorRows (),
@@ -2450,7 +2453,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
 static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
 				    Pho_ShowPhotos_t ShowPhotos)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2461,6 +2464,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
    struct Hie_Node Ins;
    struct Hie_Node Ctr;
    struct Dpt_Department Dpt;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    bool ShowData = (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME || UsrDat->Accepted ||
                     Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM ||
                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
@@ -2487,7 +2491,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
 
       /***** Write rest of main teacher's data *****/
       Ins.HieCod = UsrDat->InsCod;
-      Hie_GetDataByCod[Hie_INS] (&Ins);
+      SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
       Usr_WriteUsrSurnamesAndName (UsrDat,The_GetColorRows ());
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
       Usr_WriteUsrData (The_GetColorRows (),
@@ -2498,7 +2502,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
       if (ShowData && UsrDat->Tch.CtrCod > 0)
 	{
 	 Ctr.HieCod = UsrDat->Tch.CtrCod;
-	 Hie_GetDataByCod[Hie_CTR] (&Ctr);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	}
       Usr_WriteUsrData (The_GetColorRows (),
 			(ShowData && UsrDat->Tch.CtrCod > 0) ? Ctr.FullName :
@@ -2532,7 +2536,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
 static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat,
 				 Pho_ShowPhotos_t ShowPhotos)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2541,6 +2545,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat,
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    struct Hie_Node Ins;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -2571,7 +2576,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat,
 
       /***** Write rest of main administrator's data *****/
       Ins.HieCod = UsrDat->InsCod;
-      Hie_GetDataByCod[Hie_INS] (&Ins);
+      SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
       Usr_WriteUsrSurnamesAndName (UsrDat,The_GetColorRows ());
 
       HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());

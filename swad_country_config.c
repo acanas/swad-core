@@ -251,7 +251,7 @@ static void CtyCfg_Title (Hie_PutLink_t PutLink)
 
 static void CtyCfg_Map (void)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    MYSQL_RES *mysql_res;
    struct Map_Coordinates CtyAvgCoord;
    unsigned Zoom;
@@ -259,6 +259,7 @@ static void CtyCfg_Map (void)
    unsigned NumCtr;
    struct Hie_Node Ins;
    struct Hie_Node Ctr;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    struct Map_Coordinates Coord;
 
    /***** Leaflet CSS *****/
@@ -293,14 +294,14 @@ static void CtyCfg_Map (void)
 	 Ctr.HieCod = DB_GetNextCode (mysql_res);
 
 	 /* Get data of center */
-	 Hie_GetDataByCod[Hie_CTR] (&Ctr);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 
 	 /* Get coordinates of center */
 	 Ctr_GetCoordByCod (Ctr.HieCod,&Coord);
 
 	 /* Get data of institution */
 	 Ins.HieCod = Ctr.PrtCod;
-	 Hie_GetDataByCod[Hie_INS] (&Ins);
+	 SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
 
 	 /* Add marker */
 	 Map_AddMarker (&Coord);

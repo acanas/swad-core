@@ -1594,7 +1594,7 @@ void Cfe_GetSummaryAndContentCallForExam (char SummaryStr[Ntf_MAX_BYTES_SUMMARY 
 static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *CallsForExams,
                                             char **ContentStr)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_CALL_FOR_EXAM_Course;
@@ -1613,18 +1613,19 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
    extern const char *Txt_hours_ABBREVIATION;
    struct Hie_Node Hie[Hie_NUM_LEVELS];
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Get data of course *****/
    Hie[Hie_CRS].HieCod = CallsForExams->CallForExam.CrsCod;
-   Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
+   SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
 
    /***** Get data of degree *****/
    Hie[Hie_DEG].HieCod = Hie[Hie_CRS].PrtCod;
-   Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]);
+   SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]);
 
    /***** Get data of institution *****/
    Hie[Hie_INS].HieCod = Deg_DB_GetInsCodOfDegreeByCod (Hie[Hie_DEG].HieCod);
-   Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]);
+   SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]);
 
    /***** Convert struct date to a date string *****/
    Dat_ConvDateToDateStr (&CallsForExams->CallForExam.ExamDate,StrExamDate);

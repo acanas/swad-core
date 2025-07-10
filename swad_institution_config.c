@@ -231,12 +231,13 @@ static void InsCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
 
 static void InsCfg_Map (void)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    MYSQL_RES *mysql_res;
    unsigned Zoom;
    unsigned NumCtrs;
    unsigned NumCtr;
    struct Hie_Node Ctr;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    struct Map_Coordinates Coord;
    struct Map_Coordinates InsAvgCoord;
 
@@ -272,7 +273,7 @@ static void InsCfg_Map (void)
       Ctr.HieCod = DB_GetNextCode (mysql_res);
 
       /* Get data of center */
-      Hie_GetDataByCod[Hie_CTR] (&Ctr);
+      SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 
       /* Get coordinates of center */
       Ctr_GetCoordByCod (Ctr.HieCod,&Coord);
@@ -492,9 +493,10 @@ void InsCfg_RemoveLogo (void)
 
 void InsCfg_ChangeInsCty (void)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_country_of_the_institution_X_has_changed_to_Y;
    struct Hie_Node NewCty;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Get the new country code for the institution *****/
@@ -504,7 +506,7 @@ void InsCfg_ChangeInsCty (void)
    if (NewCty.HieCod != Gbl.Hierarchy.Node[Hie_INS].PrtCod)
      {
       /***** Get data of the country from database *****/
-      Hie_GetDataByCod[Hie_CTY] (&NewCty);
+      SuccessOrError = Hie_GetDataByCod[Hie_CTY] (&NewCty);
 
       /***** Check if it already exists an institution with the same name in the new country *****/
       Names[Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_INS].ShrtName;

@@ -2355,7 +2355,7 @@ void Enr_UpdateEnrolmentRequests (void)
 
 static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Hlp_USERS_Requests;
    extern const char *Txt_Enrolment_requests;
    extern const char *Txt_Scope;
@@ -2383,6 +2383,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    long ReqCod;
    struct Hie_Node Deg;
    struct Hie_Node Crs;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    struct Usr_Data UsrDat;
    bool UsrExists;
    Usr_Belong_t UsrBelongsToCrs;
@@ -2514,9 +2515,9 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		     /***** Link to course *****/
 		     HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 
-			Hie_GetDataByCod[Hie_CRS] (&Crs);
+			SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Crs);
 			Deg.HieCod = Crs.PrtCod;
-			Hie_GetDataByCod[Hie_DEG] (&Deg);
+			SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Deg);
 
 			Frm_BeginFormGoTo (ActSeeCrsInf);
 			   ParCod_PutPar (ParCod_Crs,Crs.HieCod);

@@ -112,7 +112,7 @@ static void Ctr_PutParCtrCod (void *CtrCod);
 
 void Ctr_SeeCtrWithPendingDegs (void)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Hlp_SYSTEM_Pending;
    extern const char *Txt_Centers_with_pending_degrees;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
@@ -123,6 +123,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
    unsigned NumCtrs;
    unsigned NumCtr;
    struct Hie_Node Ctr;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    const char *BgColor;
 
    /***** Get centers with pending degrees *****/
@@ -152,7 +153,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
 									The_GetColorRows ();
 
 	    /* Get data of center */
-	    Hie_GetDataByCod[Hie_CTR] (&Ctr);
+	    SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 
 	    /* Center logo and full name */
 	    HTM_TR_Begin (NULL);
@@ -527,10 +528,10 @@ void Ctr_GetFullListOfCenters (long InsCod,Hie_Order_t SelectedOrder)
 /************************ Get data of center by code *************************/
 /*****************************************************************************/
 
-bool Ctr_GetCenterDataByCod (struct Hie_Node *Node)
+Err_SuccessOrError_t Ctr_GetCenterDataByCod (struct Hie_Node *Node)
   {
    MYSQL_RES *mysql_res;
-   bool Found = false;
+   Err_SuccessOrError_t SuccessOrError = Err_ERROR;
 
    /***** Clear data *****/
    Node->PrtCod          = -1L;
@@ -553,14 +554,14 @@ bool Ctr_GetCenterDataByCod (struct Hie_Node *Node)
                                    false);	// Don't get number of users who claim to belong to this center
 
          /* Set return value */
-         Found = true;
+         SuccessOrError = Err_SUCCESS;
         }
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
 
-   return Found;
+   return SuccessOrError;
   }
 
 /*****************************************************************************/
@@ -907,9 +908,10 @@ static Usr_Can_t Ctr_CheckIfICanEditACenter (struct Hie_Node *Ctr)
 
 void Ctr_RemoveCenter (void)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_To_remove_a_center_you_must_first_remove_all_degrees_and_teachers_in_the_center;
    extern const char *Txt_Center_X_removed;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    char PathCtr[PATH_MAX + 1];
 
    /***** Center constructor *****/
@@ -919,7 +921,7 @@ void Ctr_RemoveCenter (void)
    Ctr_EditingCtr->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /***** Get data of the center from database *****/
-   Hie_GetDataByCod[Hie_CTR] (Ctr_EditingCtr);
+   SuccessOrError = Hie_GetDataByCod[Hie_CTR] (Ctr_EditingCtr);
 
    /***** Check if this center has teachers *****/
    if (Hie_GetNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
@@ -982,9 +984,10 @@ void Ctr_RemoveCenter (void)
 
 void Ctr_ChangeCtrPlc (void)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_place_of_the_center_has_changed;
    long NewPlcCod;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Center constructor *****/
    Ctr_EditingCenterConstructor ();
@@ -996,7 +999,7 @@ void Ctr_ChangeCtrPlc (void)
    NewPlcCod = ParCod_GetAndCheckParMin (ParCod_Plc,0);	// 0 (another place) is allowed here
 
    /***** Get data of center from database *****/
-   Hie_GetDataByCod[Hie_CTR] (Ctr_EditingCtr);
+   SuccessOrError = Hie_GetDataByCod[Hie_CTR] (Ctr_EditingCtr);
 
    /***** Update place in table of centers *****/
    Ctr_DB_UpdateCtrPlc (Ctr_EditingCtr->HieCod,NewPlcCod);
@@ -1037,12 +1040,13 @@ void Ctr_RenameCenterFull (void)
 
 void Ctr_RenameCenter (struct Hie_Node *Ctr,Nam_ShrtOrFullName_t ShrtOrFull)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
    extern const char *Txt_The_center_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = Ctr->ShrtName,
@@ -1055,7 +1059,7 @@ void Ctr_RenameCenter (struct Hie_Node *Ctr,Nam_ShrtOrFullName_t ShrtOrFull)
    Nam_GetParShrtOrFullName (ShrtOrFull,NewName);
 
    /***** Get from the database the old names of the center *****/
-   Hie_GetDataByCod[Hie_CTR] (Ctr);
+   SuccessOrError = Hie_GetDataByCod[Hie_CTR] (Ctr);
 
    /***** Check if new name is empty *****/
    if (!NewName[0])
@@ -1103,8 +1107,9 @@ void Ctr_RenameCenter (struct Hie_Node *Ctr,Nam_ShrtOrFullName_t ShrtOrFull)
 
 void Ctr_ChangeCtrWWW (void)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_new_web_address_is_X;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
    /***** Center constructor *****/
@@ -1117,7 +1122,7 @@ void Ctr_ChangeCtrWWW (void)
    Par_GetParText ("WWW",NewWWW,WWW_MAX_BYTES_WWW);
 
    /***** Get data of center *****/
-   Hie_GetDataByCod[Hie_CTR] (Ctr_EditingCtr);
+   SuccessOrError = Hie_GetDataByCod[Hie_CTR] (Ctr_EditingCtr);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -1142,9 +1147,10 @@ void Ctr_ChangeCtrWWW (void)
 
 void Ctr_ChangeCtrStatus (void)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_status_of_the_center_X_has_changed;
    Hie_Status_t Status;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Center constructor *****/
    Ctr_EditingCenterConstructor ();
@@ -1157,7 +1163,7 @@ void Ctr_ChangeCtrStatus (void)
    Status = Hie_GetParStatus ();	// New status
 
    /***** Get data of center *****/
-   Hie_GetDataByCod[Hie_CTR] (Ctr_EditingCtr);
+   SuccessOrError = Hie_GetDataByCod[Hie_CTR] (Ctr_EditingCtr);
 
    /***** Update status *****/
    Ctr_DB_UpdateCtrStatus (Ctr_EditingCtr->HieCod,Status);
@@ -1567,12 +1573,13 @@ unsigned Ctr_GetCachedNumCtrsWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role)
 
 void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_HIERARCHY_SINGUL_abc[Hie_NUM_LEVELS];
    extern const char *Txt_HIERARCHY_PLURAL_abc[Hie_NUM_LEVELS];
    unsigned NumCtr;
    char *Title;
    struct Hie_Node Ctr;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Query database *****/
    if (NumCtrs)
@@ -1598,7 +1605,7 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
 	    Ctr.HieCod = DB_GetNextCode (*mysql_res);
 
 	    /* Get data of center */
-	    Hie_GetDataByCod[Hie_CTR] (&Ctr);
+	    SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 
 	    /* Write data of this center */
 	    Ctr_ListOneCenterForSeeing (&Ctr,NumCtr);

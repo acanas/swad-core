@@ -68,7 +68,7 @@ void Cty_EditCountries (void);
 void Cty_GetBasicListOfCountries (void);
 void Cty_WriteSelectorOfCountry (void);
 void Cty_WriteCountryName (long CtyCod);
-bool Cty_GetCountrDataByCod (struct Hie_Node *Node);
+Err_SuccessOrError_t Cty_GetCountrDataByCod (struct Hie_Node *Node);
 void Cty_GetNamesAndWWWsByCod (struct Hie_Node *Cty,
 			       char NameInSeveralLanguages[1 + Lan_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1],
 			       char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][WWW_MAX_BYTES_WWW + 1]);

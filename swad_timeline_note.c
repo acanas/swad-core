@@ -429,7 +429,8 @@ static void TmlNot_GetLocationInHierarchy (const struct TmlNot_Note *Not,
                                            struct For_Forum *Forum,
                                            char ForumName[For_MAX_BYTES_FORUM_NAME + 1])
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Initialize location in hierarchy *****/
    Hie[Hie_CTY].HieCod =
@@ -445,19 +446,19 @@ static void TmlNot_GetLocationInHierarchy (const struct TmlNot_Note *Not,
       case TmlNot_INS_SHA_PUB_FILE:
 	 /* Get institution data */
 	 Hie[Hie_INS].HieCod = Not->HieCod;
-	 Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]);
 	 break;
       case TmlNot_CTR_DOC_PUB_FILE:
       case TmlNot_CTR_SHA_PUB_FILE:
 	 /* Get center data */
 	 Hie[Hie_CTR].HieCod = Not->HieCod;
-	 Hie_GetDataByCod[Hie_CTR] (&Hie[Hie_CTR]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Hie[Hie_CTR]);
 	 break;
       case TmlNot_DEG_DOC_PUB_FILE:
       case TmlNot_DEG_SHA_PUB_FILE:
 	 /* Get degree data */
 	 Hie[Hie_DEG].HieCod = Not->HieCod;
-	 Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]);
 	 break;
       case TmlNot_CRS_DOC_PUB_FILE:
       case TmlNot_CRS_SHA_PUB_FILE:
@@ -465,7 +466,7 @@ static void TmlNot_GetLocationInHierarchy (const struct TmlNot_Note *Not,
       case TmlNot_NOTICE:
 	 /* Get course data */
 	 Hie[Hie_CRS].HieCod = Not->HieCod;
-	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
 	 break;
       case TmlNot_FORUM_POST:
 	 /* Get forum type of the post */

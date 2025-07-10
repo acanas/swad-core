@@ -101,7 +101,7 @@ static void Cty_FormToGoToMap (struct Hie_Node *Cty);
 
 void Cty_SeeCtyWithPendingInss (void)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Hlp_SYSTEM_Pending;
    extern const char *Txt_Countries_with_pending_institutions;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
@@ -112,6 +112,7 @@ void Cty_SeeCtyWithPendingInss (void)
    unsigned NumCtys;
    unsigned NumCty;
    struct Hie_Node Cty;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    const char *BgColor;
 
    /***** Trivial check: only system admins can see countries with pending institutions *****/
@@ -150,7 +151,7 @@ void Cty_SeeCtyWithPendingInss (void)
 									The_GetColorRows ();
 
 	    /* Get data of country */
-	    Hie_GetDataByCod[Hie_CTY] (&Cty);
+	    SuccessOrError = Hie_GetDataByCod[Hie_CTY] (&Cty);
 
 	    /* Begin row for this country */
 	    HTM_TR_Begin (NULL);
@@ -847,15 +848,15 @@ void Cty_WriteCountryName (long CtyCod)
 /***************** Get basic data of country given its code ******************/
 /*****************************************************************************/
 
-bool Cty_GetCountrDataByCod (struct Hie_Node *Node)
+Err_SuccessOrError_t Cty_GetCountrDataByCod (struct Hie_Node *Node)
   {
    extern const char *Txt_Another_country;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   bool Found;
+   Err_SuccessOrError_t SuccessOrError;
 
    if (Node->HieCod < 0)
-      return false;
+      return Err_ERROR;
 
    /***** Clear data *****/
    Node->ShrtName[0] = '\0';
@@ -867,14 +868,15 @@ bool Cty_GetCountrDataByCod (struct Hie_Node *Node)
    if (Node->HieCod == 0)
      {
       Str_Copy (Node->FullName,Txt_Another_country,sizeof (Node->FullName) - 1);
-      return false;
+      return Err_ERROR;
      }
 
    // Here Cty->CtyCod > 0
 
    /***** Get data of a country from database *****/
-   Found = (Cty_DB_GetBasicCountryDataByCod (&mysql_res,Node->HieCod) != 0);
-   if (Found) // Country found...
+   SuccessOrError = (Cty_DB_GetBasicCountryDataByCod (&mysql_res,Node->HieCod) != 0) ? Err_SUCCESS :
+										       Err_ERROR;
+   if (SuccessOrError == Err_SUCCESS) // Country found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -890,7 +892,7 @@ bool Cty_GetCountrDataByCod (struct Hie_Node *Node)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return Found;
+   return SuccessOrError;
   }
 
 /*****************************************************************************/
@@ -1113,10 +1115,11 @@ static void Cty_PutParOthCtyCod (void *CtyCod)
 
 void Cty_RemoveCountry (void)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_You_can_not_remove_a_country_with_institutions_or_users;
    extern const char *Txt_Country_X_removed;
    Hie_Level_t HieLvl;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Country constructor *****/
    Cty_EditingCountryConstructor ();
@@ -1125,7 +1128,7 @@ void Cty_RemoveCountry (void)
    Cty_EditingCty->HieCod = ParCod_GetAndCheckPar (ParCod_OthCty);
 
    /***** Get data of the country from database *****/
-   Hie_GetDataByCod[Hie_CTY] (Cty_EditingCty);
+   SuccessOrError = Hie_GetDataByCod[Hie_CTY] (Cty_EditingCty);
 
    /***** Check if this country has users *****/
    if (Hie_GetNumNodesInHieLvl (Hie_INS,	// Number of institutions...
@@ -1173,11 +1176,12 @@ void Cty_RemoveCountry (void)
 
 void Cty_RenameCountry (void)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_country_X_already_exists;
    extern const char *Txt_The_country_X_has_been_renamed_as_Y;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_The_name_X_has_not_changed;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    char OldCtyName[Cty_MAX_BYTES_NAME + 1];
    char NewCtyName[Cty_MAX_BYTES_NAME + 1];
    Lan_Language_t Language;
@@ -1196,7 +1200,7 @@ void Cty_RenameCountry (void)
    Par_GetParText ("Name",NewCtyName,Cty_MAX_BYTES_NAME);
 
    /***** Get from the database the data of the country *****/
-   Hie_GetDataByCod[Hie_CTY] (Cty_EditingCty);
+   SuccessOrError = Hie_GetDataByCod[Hie_CTY] (Cty_EditingCty);
 
    /***** Check if new name is empty *****/
    if (NewCtyName[0])
@@ -1253,9 +1257,10 @@ static void Cty_UpdateCtyName (long CtyCod,const char *FldName,const char *NewCt
 
 void Cty_ChangeCtyWWW (void)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_The_new_web_address_is_X;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    char NewWWW[WWW_MAX_BYTES_WWW + 1];
    Lan_Language_t Language;
    char FldName[3 + 1 + 2 + 1];	// Example: "WWW_en"
@@ -1273,7 +1278,7 @@ void Cty_ChangeCtyWWW (void)
    Par_GetParText ("WWW",NewWWW,WWW_MAX_BYTES_WWW);
 
    /***** Get from the database the data of the country *****/
-   Hie_GetDataByCod[Hie_CTY] (Cty_EditingCty);
+   SuccessOrError = Hie_GetDataByCod[Hie_CTY] (Cty_EditingCty);
 
    /***** Update the table changing old WWW by new WWW *****/
    snprintf (FldName,sizeof (FldName),"WWW_%s",
@@ -1603,12 +1608,13 @@ unsigned Cty_GetCachedNumCtysWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role)
 
 void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_HIERARCHY_SINGUL_abc[Hie_NUM_LEVELS];
    extern const char *Txt_HIERARCHY_PLURAL_abc[Hie_NUM_LEVELS];
    char *Title;
    unsigned NumCty;
    struct Hie_Node Cty;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Query database *****/
    if (NumCtys)
@@ -1634,7 +1640,7 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
 	    Cty.HieCod = DB_GetNextCode (*mysql_res);
 
 	    /* Get data of country */
-	    Hie_GetDataByCod[Hie_CTY] (&Cty);
+	    SuccessOrError = Hie_GetDataByCod[Hie_CTY] (&Cty);
 
 	    /* Write data of this country */
 	    Cty_ListOneCountryForSeeing (&Cty,NumCty);

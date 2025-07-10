@@ -1459,8 +1459,9 @@ static void Lay_WriteFootFromHTMLFile (void)
 
 void Lay_WriteHeaderClassPhoto (Hie_Level_t HieLvl,Vie_ViewType_t ViewType)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Hie[Hie_NUM_LEVELS];
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Initialize institution, degree and course to show in header *****/
    Hie[Hie_INS].HieCod = (HieLvl >= Hie_INS) ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
@@ -1471,9 +1472,9 @@ void Lay_WriteHeaderClassPhoto (Hie_Level_t HieLvl,Vie_ViewType_t ViewType)
 					       -1L;
 
    /***** Get data of institution, degree and course *****/
-   Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]);
-   Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]);
-   Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
+   SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]);
+   SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]);
+   SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
 
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"CLASSPHOTO_HEAD_CONT\"");

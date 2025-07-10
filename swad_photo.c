@@ -2101,13 +2101,14 @@ static void Pho_PutLinkToPrintViewOfDegreeStatsPars (void *DegPhotos)
 
 static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPhotos)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_Calculate_average_photo_of_THE_DEGREE_X;
    extern const char *Txt_unknown_TIME;
    extern const char *Txt_time;
    struct Hie_List Degs;
    unsigned NumDeg;
    struct Hie_Node Deg;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    long EstimatedTimeToComputeAvgPhotoInMicroseconds;
    char StrEstimatedTimeToComputeAvgPhoto[Dat_MAX_BYTES_TIME + 1];
    HTM_Attributes_t Attributes;
@@ -2118,7 +2119,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
       Deg_GetListAllDegsWithStds (&Degs);
 
       /***** Get data of the degree from database *****/
-      Hie_GetDataByCod[Hie_DEG] (&Deg);
+      SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Deg);
 
       /***** Contextual menu *****/
       HTM_DIV_Begin ("class=\"UPD\"");
@@ -2228,11 +2229,12 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
                                               Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
                                               Pho_ShowPhotos_t ShowPhotos)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    MYSQL_RES *mysql_res;
    unsigned long NumDeg;
    unsigned long NumDegs;
    struct Hie_Node Deg;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    int NumStds;
    int NumStdsWithPhoto;
 
@@ -2256,7 +2258,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 	       Err_WrongDegreeExit ();
 
 	    /* Get data of degree */
-	    Hie_GetDataByCod[Hie_DEG] (&Deg);
+	    SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Deg);
 
 	    /* Get number of students and number of students with photo in this degree */
 	    Pho_GetNumStdsInDegree (Deg.HieCod,Usr_SEX_ALL,&NumStds,&NumStdsWithPhoto);
@@ -2293,7 +2295,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
                                         Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
                                         Pho_ShowPhotos_t ShowPhotos)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_No_INDEX;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS];
@@ -2305,6 +2307,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
    int NumStds;
    int NumStdsWithPhoto;
    struct Hie_Node Deg;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    Usr_Sex_t Sex;
 
    /***** Get degrees from database *****/
@@ -2340,7 +2343,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 	       Err_WrongDegreeExit ();
 
 	    /* Get data of degree */
-	    Hie_GetDataByCod[Hie_DEG] (&Deg);
+	    SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Deg);
 
 	    HTM_TR_Begin (NULL);
 

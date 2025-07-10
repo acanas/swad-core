@@ -862,12 +862,13 @@ int swad__loginBySessionKey (struct soap *soap,
                              char *sessionID,char *appKey,					// input
                              struct swad__loginBySessionKeyOutput *loginBySessionKeyOut)	// output
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    int ReturnCode;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    bool UsrFound;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
@@ -923,7 +924,7 @@ int swad__loginBySessionKey (struct soap *soap,
 
       /***** Get course (row[2]) *****/
       Gbl.Hierarchy.Node[Hie_CRS].HieCod = Str_ConvertStrCodToLongCod (row[2]);
-      Hie_GetDataByCod[Hie_CRS] (&Gbl.Hierarchy.Node[Hie_CRS]);
+      SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Gbl.Hierarchy.Node[Hie_CRS]);
       loginBySessionKeyOut->courseCode = (int) Gbl.Hierarchy.Node[Hie_CRS].HieCod;
       Str_Copy (loginBySessionKeyOut->courseName,Gbl.Hierarchy.Node[Hie_CRS].FullName,
                 Nam_MAX_BYTES_FULL_NAME);
@@ -935,7 +936,7 @@ int swad__loginBySessionKey (struct soap *soap,
 
       /***** Get degree (row[1]) *****/
       Gbl.Hierarchy.Node[Hie_DEG].HieCod = Str_ConvertStrCodToLongCod (row[1]);
-      Hie_GetDataByCod[Hie_DEG] (&Gbl.Hierarchy.Node[Hie_DEG]);
+      SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Gbl.Hierarchy.Node[Hie_DEG]);
       loginBySessionKeyOut->degreeCode = (int) Gbl.Hierarchy.Node[Hie_DEG].HieCod;
       Str_Copy (loginBySessionKeyOut->degreeName,Gbl.Hierarchy.Node[Hie_DEG].FullName,
                 Nam_MAX_BYTES_FULL_NAME);
@@ -2860,7 +2861,7 @@ int swad__getNotifications (struct soap *soap,
                             char *wsKey,long beginTime,					// input
                             struct swad__getNotificationsOutput *getNotificationsOut)	// output
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS];
    extern const char *Txt_Forum;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
@@ -2875,6 +2876,7 @@ int swad__getNotifications (struct soap *soap,
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    struct Hie_Node Hie[Hie_NUM_LEVELS];
    long Cod;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    struct For_Forum ForumSelected;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
@@ -2951,7 +2953,7 @@ int swad__getNotifications (struct soap *soap,
 	      L++, Col++)
 	   {
 	    Hie[L].HieCod = Str_ConvertStrCodToLongCod (row[Col]);
-	    Hie_GetDataByCod[L] (&Hie[L]);
+	    SuccessOrError = Hie_GetDataByCod[L] (&Hie[L]);
 	   }
 
          if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Hie[Hie_CRS].HieCod))	// Get some user's data from database

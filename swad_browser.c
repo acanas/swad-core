@@ -5219,7 +5219,7 @@ void Brw_Copy (void)
 
 static void Brw_WriteCurrentClipboard (void)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_Copy_source;
    extern const char *Txt_documents_management_area;
    extern const char *Txt_teachers_files_area;
@@ -5240,6 +5240,7 @@ static void Brw_WriteCurrentClipboard (void)
    extern const char *Txt_link;
    extern const char *Txt_all_files_inside_the_root_folder;
    struct Hie_Node Hie[Hie_NUM_LEVELS];
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    long CrsCod;
    struct GroupType GrpTyp;
    struct Group Grp;
@@ -5264,7 +5265,7 @@ static void Brw_WriteCurrentClipboard (void)
      {
       case Brw_ADMI_DOC_INS:
 	 Hie[Hie_INS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-	 Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_documents_management_area,
@@ -5272,7 +5273,7 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_SHR_INS:
 	 Hie[Hie_INS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-	 Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_shared_files_area,
@@ -5280,7 +5281,7 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_DOC_CTR:
 	 Hie[Hie_CTR].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-	 Hie_GetDataByCod[Hie_CTR] (&Hie[Hie_CTR]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Hie[Hie_CTR]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_documents_management_area,
@@ -5288,7 +5289,7 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_SHR_CTR:
 	 Hie[Hie_CTR].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-	 Hie_GetDataByCod[Hie_CTR] (&Hie[Hie_CTR]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Hie[Hie_CTR]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_shared_files_area,
@@ -5296,7 +5297,7 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_DOC_DEG:
 	 Hie[Hie_DEG].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-	 Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_documents_management_area,
@@ -5304,7 +5305,7 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_SHR_DEG:
 	 Hie[Hie_DEG].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-	 Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_shared_files_area,
@@ -5312,7 +5313,7 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_DOC_CRS:
 	 Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_documents_management_area,
@@ -5323,7 +5324,7 @@ static void Brw_WriteCurrentClipboard (void)
          Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
          Grp_GetGroupTypeDataByCod (&GrpTyp);
          Hie[Hie_CRS].HieCod = CrsCod;
-	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                    Txt_documents_management_area,
@@ -5332,7 +5333,7 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_TCH_CRS:
 	 Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_teachers_files_area,
@@ -5343,7 +5344,7 @@ static void Brw_WriteCurrentClipboard (void)
          Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
 	 Grp_GetGroupTypeDataByCod (&GrpTyp);
          Hie[Hie_CRS].HieCod = CrsCod;
-	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                    Txt_teachers_files_area,
@@ -5352,7 +5353,7 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_SHR_CRS:
 	 Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_shared_files_area,
@@ -5363,7 +5364,7 @@ static void Brw_WriteCurrentClipboard (void)
          Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
 	 Grp_GetGroupTypeDataByCod (&GrpTyp);
          Hie[Hie_CRS].HieCod = CrsCod;
-	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                    Txt_shared_files_area,
@@ -5372,7 +5373,7 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_ASG_USR:
 	 Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                    Txt_assignments_area,
@@ -5381,7 +5382,7 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_WRK_USR:
 	 Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                    Txt_works_area,
@@ -5390,7 +5391,7 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_ASG_CRS:
 	 Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          Usr_UsrDataConstructor (&UsrDat);
          UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
          Usr_GetAllUsrDataFromUsrCod (&UsrDat,
@@ -5405,7 +5406,7 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_WRK_CRS:
 	 Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          Usr_UsrDataConstructor (&UsrDat);
          UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
          Usr_GetAllUsrDataFromUsrCod (&UsrDat,
@@ -5424,7 +5425,7 @@ static void Brw_WriteCurrentClipboard (void)
          Prj.PrjCod = Gbl.FileBrowser.Clipboard.HieCod;
          Prj_GetProjectDataByCod (&Prj);
          Hie[Hie_CRS].HieCod = Prj.HieCod;
-	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                    Gbl.FileBrowser.Clipboard.FileBrowser == Brw_ADMI_DOC_PRJ ? Txt_project_documents :
@@ -5435,7 +5436,7 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_MRK_CRS:
 	 Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_marks_management_area,
@@ -5446,7 +5447,7 @@ static void Brw_WriteCurrentClipboard (void)
          Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
 	 Grp_GetGroupTypeDataByCod (&GrpTyp);
          Hie[Hie_CRS].HieCod = CrsCod;
-	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                    Txt_marks_management_area,
@@ -5797,7 +5798,7 @@ void Brw_Paste (void)
 
 static void Brw_PasteClipboard (struct BrwSiz_BrowserSize *Size)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_copy_has_been_successful;
    extern const char *Txt_Files_copied;
    extern const char *Txt_Links_copied;
@@ -5827,50 +5828,74 @@ static void Brw_PasteClipboard (struct BrwSiz_BrowserSize *Size)
 	    case Brw_ADMI_DOC_INS:
 	    case Brw_ADMI_SHR_INS:
 	       Hie[Hie_INS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-	       if (Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]))
-		  snprintf (PathOrg,sizeof (PathOrg),"%s/%02u/%u/%s",
-			    Cfg_PATH_INS_PRIVATE,
-			    (unsigned) (Hie[Hie_INS].HieCod % 100),
-			    (unsigned) Hie[Hie_INS].HieCod,
-			    Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
-	       else
-		  Err_WrongCopySrcExit ();
+	       switch (Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]))
+	         {
+		  case Err_SUCCESS:
+		     snprintf (PathOrg,sizeof (PathOrg),"%s/%02u/%u/%s",
+			       Cfg_PATH_INS_PRIVATE,
+			       (unsigned) (Hie[Hie_INS].HieCod % 100),
+			       (unsigned) Hie[Hie_INS].HieCod,
+			       Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
+		     break;
+		  case Err_ERROR:
+		  default:
+		     Err_WrongCopySrcExit ();
+		     break;
+	         }
 	       break;
 	    case Brw_ADMI_DOC_CTR:
 	    case Brw_ADMI_SHR_CTR:
 	       Hie[Hie_CTR].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-	       if (Hie_GetDataByCod[Hie_CTR] (&Hie[Hie_CTR]))
-		  snprintf (PathOrg,sizeof (PathOrg),"%s/%02u/%u/%s",
-			    Cfg_PATH_CTR_PRIVATE,
-			    (unsigned) (Hie[Hie_CTR].HieCod % 100),
-			    (unsigned) Hie[Hie_CTR].HieCod,
-			    Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
-	       else
-		  Err_WrongCopySrcExit ();
+	       switch (Hie_GetDataByCod[Hie_CTR] (&Hie[Hie_CTR]))
+  	         {
+		  case Err_SUCCESS:
+		     snprintf (PathOrg,sizeof (PathOrg),"%s/%02u/%u/%s",
+			       Cfg_PATH_CTR_PRIVATE,
+			       (unsigned) (Hie[Hie_CTR].HieCod % 100),
+			       (unsigned) Hie[Hie_CTR].HieCod,
+			       Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
+		     break;
+		  case Err_ERROR:
+		  default:
+		     Err_WrongCopySrcExit ();
+		     break;
+	         }
 	       break;
 	    case Brw_ADMI_DOC_DEG:
 	    case Brw_ADMI_SHR_DEG:
 	       Hie[Hie_DEG].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-	       if (Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]))
-		  snprintf (PathOrg,sizeof (PathOrg),"%s/%02u/%u/%s",
-			    Cfg_PATH_DEG_PRIVATE,
-			    (unsigned) (Hie[Hie_DEG].HieCod % 100),
-			    (unsigned) Hie[Hie_DEG].HieCod,
-			    Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
-	       else
-		  Err_WrongCopySrcExit ();
+	       switch (Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]))
+  	         {
+		  case Err_SUCCESS:
+		     snprintf (PathOrg,sizeof (PathOrg),"%s/%02u/%u/%s",
+			       Cfg_PATH_DEG_PRIVATE,
+			       (unsigned) (Hie[Hie_DEG].HieCod % 100),
+			       (unsigned) Hie[Hie_DEG].HieCod,
+			       Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
+		     break;
+		  case Err_ERROR:
+		  default:
+		     Err_WrongCopySrcExit ();
+		     break;
+	         }
 	       break;
 	    case Brw_ADMI_DOC_CRS:
 	    case Brw_ADMI_TCH_CRS:
 	    case Brw_ADMI_SHR_CRS:
 	    case Brw_ADMI_MRK_CRS:
 	       Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-	       if (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
-		  snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s",
-			    Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,
-			    Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
-	       else
-		  Err_WrongCopySrcExit ();
+	       switch (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
+  	         {
+		  case Err_SUCCESS:
+		     snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s",
+			       Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,
+			       Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
+		     break;
+		  case Err_ERROR:
+		  default:
+		     Err_WrongCopySrcExit ();
+		     break;
+	         }
 	       break;
 	    case Brw_ADMI_DOC_GRP:
 	    case Brw_ADMI_TCH_GRP:
@@ -5878,67 +5903,89 @@ static void Brw_PasteClipboard (struct BrwSiz_BrowserSize *Size)
 	    case Brw_ADMI_MRK_GRP:
 	       Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
 	       Grp_GetGroupDataByCod (&Hie[Hie_CRS].HieCod,&GrpTyp.GrpTypCod,&Grp);
-	       if (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
-		  snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%ld/%s",
-			    Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_GRP,
-			    Grp.GrpCod,
-			    Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
-	       else
-		  Err_WrongCopySrcExit ();
+	       switch (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
+  	         {
+		  case Err_SUCCESS:
+		     snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%ld/%s",
+			       Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_GRP,
+			       Grp.GrpCod,
+			       Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
+		     break;
+		  case Err_ERROR:
+		  default:
+		     Err_WrongCopySrcExit ();
+		     break;
+	         }
 	       break;
 	    case Brw_ADMI_ASG_CRS:
 	    case Brw_ADMI_WRK_CRS:
 	       Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-	       if (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
-		 {
-		  switch (Usr_DB_ChkIfUsrCodExists (Gbl.FileBrowser.Clipboard.WorksUsrCod))
-		    {
-		     case Exi_EXISTS:
-			Usr_UsrDataConstructor (&UsrDat);
-			   UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
-			   Usr_GetAllUsrDataFromUsrCod (&UsrDat,
-							Usr_DONT_GET_PREFS,
-							Usr_DONT_GET_ROLE_IN_CRS);	// Check that user exists
-			   snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%02u/%ld/%s",
-				     Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_USR,
-				     (unsigned) (Gbl.FileBrowser.Clipboard.WorksUsrCod % 100),
-				     Gbl.FileBrowser.Clipboard.WorksUsrCod,
-				     Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
-			Usr_UsrDataDestructor (&UsrDat);
-			break;
-		     case Exi_DOES_NOT_EXIST:
-		     default:
-			Err_WrongCopySrcExit ();
-			break;
-		    }
-		 }
-	       else
-		  Err_WrongCopySrcExit ();
+	       switch (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
+  	         {
+		  case Err_SUCCESS:
+		     switch (Usr_DB_ChkIfUsrCodExists (Gbl.FileBrowser.Clipboard.WorksUsrCod))
+		       {
+			case Exi_EXISTS:
+			   Usr_UsrDataConstructor (&UsrDat);
+			      UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
+			      Usr_GetAllUsrDataFromUsrCod (&UsrDat,
+							   Usr_DONT_GET_PREFS,
+							   Usr_DONT_GET_ROLE_IN_CRS);	// Check that user exists
+			      snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%02u/%ld/%s",
+					Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_USR,
+					(unsigned) (Gbl.FileBrowser.Clipboard.WorksUsrCod % 100),
+					Gbl.FileBrowser.Clipboard.WorksUsrCod,
+					Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
+			   Usr_UsrDataDestructor (&UsrDat);
+			   break;
+			case Exi_DOES_NOT_EXIST:
+			default:
+			   Err_WrongCopySrcExit ();
+			   break;
+		       }
+		     break;
+		  case Err_ERROR:
+		  default:
+		     Err_WrongCopySrcExit ();
+		     break;
+	         }
 	       break;
 	    case Brw_ADMI_ASG_USR:
 	    case Brw_ADMI_WRK_USR:
 	       Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-	       if (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
-		  snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%02u/%ld/%s",
-			    Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_USR,
-			    (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
-			    Gbl.Usrs.Me.UsrDat.UsrCod,
-			    Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
-	       else
-		  Err_WrongCopySrcExit ();
+	       switch (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
+  	         {
+		  case Err_SUCCESS:
+		     snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%02u/%ld/%s",
+			       Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_USR,
+			       (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
+			       Gbl.Usrs.Me.UsrDat.UsrCod,
+			       Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
+		     break;
+		  case Err_ERROR:
+		  default:
+		     Err_WrongCopySrcExit ();
+		     break;
+	         }
 	       break;
 	    case Brw_ADMI_DOC_PRJ:
 	    case Brw_ADMI_ASS_PRJ:
 	       PrjCod = Gbl.FileBrowser.Clipboard.HieCod;
 	       Hie[Hie_CRS].HieCod = Prj_DB_GetCrsOfPrj (PrjCod);
-	       if (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
-		  snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%02u/%ld/%s",
-			   Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_PRJ,
-			   (unsigned) (PrjCod % 100),
-			   PrjCod,
-			   Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
-	       else
-		  Err_WrongCopySrcExit ();
+	       switch (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
+  	         {
+		  case Err_SUCCESS:
+		     snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%02u/%ld/%s",
+			      Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_PRJ,
+			      (unsigned) (PrjCod % 100),
+			      PrjCod,
+			      Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
+		     break;
+		  case Err_ERROR:
+		  default:
+		     Err_WrongCopySrcExit ();
+		     break;
+	         }
 	       break;
 	    case Brw_ADMI_BRF_USR:
 	       snprintf (PathOrg,sizeof (PathOrg),"%s/%s",
@@ -8627,12 +8674,13 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
                                     long *CrsCod,
                                     long *GrpCod)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Ctr;
    struct Hie_Node Deg;
    struct Hie_Node Crs;
    struct GroupType GrpTyp;
    struct Group Grp;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    switch (FileBrowser)
      {
@@ -8652,7 +8700,7 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
 	 *CrsCod =
 	 *DegCod = -1L;
 	 *CtrCod = Ctr.HieCod = Cod;
-	 Hie_GetDataByCod[Hie_CTR] (&Ctr);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	 *InsCod = Ctr.PrtCod;
          break;
       case Brw_ADMI_DOC_DEG:
@@ -8661,9 +8709,9 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
 	 *GrpCod =
 	 *CrsCod = -1L;
 	 *DegCod = Deg.HieCod = Cod;
-	 Hie_GetDataByCod[Hie_DEG] (&Deg);
+	 SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Deg);
 	 *CtrCod = Ctr.HieCod = Deg.PrtCod;
-	 Hie_GetDataByCod[Hie_CTR] (&Ctr);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	 *InsCod = Ctr.PrtCod;
          break;
       case Brw_ADMI_DOC_CRS:
@@ -8675,11 +8723,11 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
 	 /* Cod stores the course code */
 	 *GrpCod = -1L;
 	 *CrsCod = Crs.HieCod = Cod;
-	 Hie_GetDataByCod[Hie_CRS] (&Crs);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Crs);
 	 *DegCod = Deg.HieCod = Crs.PrtCod;
-	 Hie_GetDataByCod[Hie_DEG] (&Deg);
+	 SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Deg);
 	 *CtrCod = Ctr.HieCod = Deg.PrtCod;
-	 Hie_GetDataByCod[Hie_CTR] (&Ctr);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	 *InsCod = Ctr.PrtCod;
 	 break;
       case Brw_ADMI_DOC_GRP:
@@ -8690,11 +8738,11 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
 	 *GrpCod = Grp.GrpCod = Cod;
 	 Grp_GetGroupDataByCod (&Crs.HieCod,&GrpTyp.GrpTypCod,&Grp);
 	 *CrsCod = Crs.HieCod;
-	 Hie_GetDataByCod[Hie_CRS] (&Crs);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Crs);
 	 *DegCod = Deg.HieCod = Crs.PrtCod;
-	 Hie_GetDataByCod[Hie_DEG] (&Deg);
+	 SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Deg);
 	 *CtrCod = Ctr.HieCod = Deg.PrtCod;
-	 Hie_GetDataByCod[Hie_CTR] (&Ctr);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	 *InsCod = Ctr.PrtCod;
 	 break;
       case Brw_ADMI_DOC_PRJ:
@@ -8702,11 +8750,11 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
 	 /* Cod stores the project code */
 	 *GrpCod = -1L;
 	 *CrsCod = Crs.HieCod = Prj_DB_GetCrsOfPrj (Cod);
-	 Hie_GetDataByCod[Hie_CRS] (&Crs);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Crs);
 	 *DegCod = Deg.HieCod = Crs.PrtCod;
-	 Hie_GetDataByCod[Hie_DEG] (&Deg);
+	 SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Deg);
 	 *CtrCod = Ctr.HieCod = Deg.PrtCod;
-	 Hie_GetDataByCod[Hie_CTR] (&Ctr);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	 *InsCod = Ctr.PrtCod;
 	 break;
       default:
@@ -9099,13 +9147,14 @@ void Brw_RemoveUsrWorksInCrs (struct Usr_Data *UsrDat,struct Hie_Node *Crs)
 
 void Brw_RemoveUsrWorksInAllCrss (struct Usr_Data *UsrDat)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCrss;
    unsigned NumCrs;
    unsigned NumCrssWorksRemoved = 0;
    struct Hie_Node Crs;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Query database *****/
    NumCrss = Crs_DB_GetCrssFromUsr (&mysql_res,UsrDat->UsrCod,-1L);
@@ -9120,7 +9169,7 @@ void Brw_RemoveUsrWorksInAllCrss (struct Usr_Data *UsrDat)
       Crs.HieCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get data of course */
-      Hie_GetDataByCod[Hie_CRS] (&Crs);
+      SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Crs);
       Brw_RemoveUsrWorksInCrs (UsrDat,&Crs);
       NumCrssWorksRemoved++;
      }

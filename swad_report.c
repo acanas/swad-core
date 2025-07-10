@@ -477,13 +477,14 @@ static void Rep_WriteSectionPlatform (void)
 
 static void Rep_WriteSectionUsrInfo (void)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_Personal_information;
    extern const char *Txt_Name;
    extern const char *Txt_Email;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    char CtyName[Nam_MAX_BYTES_FULL_NAME + 1];
    struct Hie_Node Ins;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Begin section *****/
    fprintf (Rep_File,"<section>"
@@ -508,7 +509,7 @@ static void Rep_WriteSectionUsrInfo (void)
 
    /***** User's institution *****/
    Ins.HieCod = Gbl.Usrs.Me.UsrDat.InsCod;
-   Hie_GetDataByCod[Hie_INS] (&Ins);
+   SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
    fprintf (Rep_File,"<li>%s: %s</li>",
             Txt_HIERARCHY_SINGUL_Abc[Hie_INS],Ins.FullName);
 
@@ -1026,7 +1027,7 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
                                  struct Rep_Report *Report,
                                  bool WriteNumUsrs)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_teachers_ABBREVIATION;
    extern const char *Txt_students_ABBREVIATION;
@@ -1034,14 +1035,15 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
    extern const char *Txt_no_course_selected;
    struct Hie_Node Crs;
    struct Hie_Node Deg;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Get course data *****/
    Crs.HieCod = CrsCod;
-   Hie_GetDataByCod[Hie_CRS] (&Crs);
+   SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Crs);
 
    /***** Get degree data *****/
    Deg.HieCod = Crs.PrtCod;
-   Hie_GetDataByCod[Hie_DEG] (&Deg);
+   SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Deg);
 
    /***** Begin row *****/
    fprintf (Rep_File,"<li>");

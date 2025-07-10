@@ -51,7 +51,7 @@ void Ins_GetBasicListOfInstitutions (long CtyCod);
 void Ins_GetFullListOfInstitutions (long CtyCod);
 
 void Ins_WriteInstitutionNameAndCty (long InsCod);
-bool Ins_GetInstitDataByCod (struct Hie_Node *Node);
+Err_SuccessOrError_t Ins_GetInstitDataByCod (struct Hie_Node *Node);
 void Ins_FlushCacheFullNameAndCtyOfInstitution (void);
 void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
                                          char CtyName[Nam_MAX_BYTES_FULL_NAME + 1]);
