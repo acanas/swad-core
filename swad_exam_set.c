@@ -910,11 +910,15 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   bool QuestionExists;
+   Exi_Exist_t QuestionExists;
    unsigned NumOpt;
 
    /***** Get question data from database *****/
-   if ((QuestionExists = (Exa_DB_GetQstDataByCod (&mysql_res,Question->QstCod) != 0)))
+   QuestionExists = (Exa_DB_GetQstDataByCod (&mysql_res,
+					     Question->QstCod) != 0) ? Exi_EXISTS :
+								       Exi_DOES_NOT_EXIST;
+
+   if (QuestionExists == Exi_EXISTS)
      {
       row = mysql_fetch_row (mysql_res);
       /*
@@ -1010,10 +1014,10 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
 	}
      }
 
-   /* Free structure that stores the query result */
+   /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   if (!QuestionExists)
+   if (QuestionExists == Exi_DOES_NOT_EXIST)
       Err_WrongQuestionExit ();
   }
 
@@ -1184,52 +1188,56 @@ static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long Q
    Qst_QstConstructor (&Question);
    Question.QstCod = QstCod;
 
-   /***** Get data of question from database *****/
-   if (Qst_GetQstDataByCod (&Question))
-     {
-      /***** Clone media *****/
-      CloneMedCod = Med_CloneMedia (&Question.Media);
-
-      /***** Add question to set *****/
-      QstCodInSet = Exa_DB_AddQuestionToSet (Set->SetCod,&Question,CloneMedCod);
-
-      /***** Get the answers from the database *****/
-      Question.Answer.NumOptions = Qst_DB_GetAnswersData (&mysql_res,Question.QstCod,
-			                                  Qst_DONT_SHUFFLE);
-      /*
-      row[0] AnsInd
-      row[1] Answer
-      row[2] Feedback
-      row[3] MedCod
-      row[4] Correct
-      */
-      for (NumOpt = 0;
-	   NumOpt < Question.Answer.NumOptions;
-	   NumOpt++)
+      /***** Get data of question from database *****/
+      switch (Qst_GetQstDataByCod (&Question))
 	{
-	 row = mysql_fetch_row (mysql_res);
+	 case Exi_EXISTS:
+	    /***** Clone media *****/
+	    CloneMedCod = Med_CloneMedia (&Question.Media);
 
-	 /* Get media (row[3]) */
-	 Question.Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
-	 Med_GetMediaDataByCod (&Question.Answer.Options[NumOpt].Media);
+	    /***** Add question to set *****/
+	    QstCodInSet = Exa_DB_AddQuestionToSet (Set->SetCod,&Question,CloneMedCod);
 
-	 /* Clone media */
-	 CloneMedCod = Med_CloneMedia (&Question.Answer.Options[NumOpt].Media);
+	    /***** Get the answers from the database *****/
+	    Question.Answer.NumOptions = Qst_DB_GetAnswersData (&mysql_res,Question.QstCod,
+								Qst_DONT_SHUFFLE);
+	    /*
+	    row[0] AnsInd
+	    row[1] Answer
+	    row[2] Feedback
+	    row[3] MedCod
+	    row[4] Correct
+	    */
+	    for (NumOpt = 0;
+		 NumOpt < Question.Answer.NumOptions;
+		 NumOpt++)
+	      {
+	       row = mysql_fetch_row (mysql_res);
 
-	 /* Copy answer option to exam set */
-	 Exa_DB_AddAnsToQstInSet (QstCodInSet,		// Question code in set
-	                          NumOpt,		// Answer index (number of option)
-				  row[1],		// Copy of text
-				  row[2],		// Copy of feedback
-				  CloneMedCod,		// Media code of the new cloned media
-				  Qst_GetCorrectFromYN (row[4][0]));	// Copy of correct
+	       /* Get media (row[3]) */
+	       Question.Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
+	       Med_GetMediaDataByCod (&Question.Answer.Options[NumOpt].Media);
+
+	       /* Clone media */
+	       CloneMedCod = Med_CloneMedia (&Question.Answer.Options[NumOpt].Media);
+
+	       /* Copy answer option to exam set */
+	       Exa_DB_AddAnsToQstInSet (QstCodInSet,	// Question code in set
+					NumOpt,		// Answer index (number of option)
+					row[1],		// Copy of text
+					row[2],		// Copy of feedback
+					CloneMedCod,	// Media code of the new cloned media
+					Qst_GetCorrectFromYN (row[4][0]));	// Copy of correct
+	      }
+
+	    /* Free structure that stores the query result */
+	    DB_FreeMySQLResult (&mysql_res);
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	 Ale_ShowAlert (Ale_WARNING,Txt_Question_removed);
+	    break;
 	}
-
-      /* Free structure that stores the query result */
-      DB_FreeMySQLResult (&mysql_res);
-     }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_Question_removed);
 
    /***** Destroy test question *****/
    Qst_QstDestructor (&Question);

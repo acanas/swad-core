@@ -49,6 +49,7 @@
 #include "swad_photo.h"
 #include "swad_question.h"
 #include "swad_question_database.h"
+#include "swad_question_type.h"
 #include "swad_test.h"
 #include "swad_test_database.h"
 #include "swad_test_print.h"
@@ -109,7 +110,7 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 				       unsigned QstInd,
 				       time_t TimeUTC[Dat_NUM_START_END_TIME],
 				       struct Qst_Question *Question,
-				       bool QuestionExists,
+				       Exi_Exist_t QuestionExists,
 				       unsigned Visibility);
 
 //-----------------------------------------------------------------------------
@@ -236,12 +237,13 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
 	       Qst_QstConstructor (&Question);
 	       Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
 
-	       /* Show question */
-	       if (!Qst_GetQstDataByCod (&Question))	// Question exists
-		  Err_WrongQuestionExit ();
+		  /* Show question */
+		  if (Qst_GetQstDataByCod (&Question) == Exi_DOES_NOT_EXIST)
+		     Err_WrongQuestionExit ();
 
-	       /* Write question and answers */
-	       TstPrn_WriteQstAndAnsToFill (&Print->PrintedQuestions[QstInd],QstInd,&Question);
+		  /* Write question and answers */
+		  TstPrn_WriteQstAndAnsToFill (&Print->PrintedQuestions[QstInd],
+					       QstInd,&Question);
 
 	       /* Destroy test question */
 	       Qst_QstDestructor (&Question);
@@ -539,7 +541,7 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
   {
    unsigned QstInd;
    struct Qst_Question Question;
-   bool QuestionExists;
+   Exi_Exist_t QuestionExists;
 
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (10);
@@ -597,7 +599,7 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 				       unsigned QstInd,
 				       time_t TimeUTC[Dat_NUM_START_END_TIME],
 				       struct Qst_Question *Question,
-				       bool QuestionExists,
+				       Exi_Exist_t QuestionExists,
 				       unsigned Visibility)
   {
    extern const char *Txt_Score;
@@ -640,10 +642,16 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 
    /***** If this question has been edited later than test time
 	  ==> don't show question ****/
-   if (QuestionExists)
-      QuestionUneditedAfterExam = (Question->EditTime < TimeUTC[Dat_STR_TIME]);
-   else
-      QuestionUneditedAfterExam = false;
+   switch (QuestionExists)
+     {
+      case Exi_EXISTS:
+	 QuestionUneditedAfterExam = (Question->EditTime < TimeUTC[Dat_STR_TIME]);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 QuestionUneditedAfterExam = false;
+	 break;
+     }
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -657,46 +665,50 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 
       /***** Stem, media and answers *****/
       HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	 if (QuestionExists)
+	 switch (QuestionExists)
 	   {
-	    if (QuestionUneditedAfterExam)
-	      {
-	       /* Stem */
-	       Qst_WriteQstStem (Question->Stem,"Qst_TXT",
-	                         ICanView[TstVis_VISIBLE_QST_ANS_TXT] ? HidVis_VISIBLE :
-									HidVis_HIDDEN);
-
-	       /* Media */
-	       if (ICanView[TstVis_VISIBLE_QST_ANS_TXT] == Usr_CAN)
-		  Med_ShowMedia (&Question->Media,
-				 "Tst_MED_SHOW_CONT","Tst_MED_SHOW");
-
-	       /* Answers */
-	       TstPrn_ComputeAnswerScore (&PrintedQuestions[QstInd],Question);
-	       TstPrn_WriteAnswersExam (UsrDat,&PrintedQuestions[QstInd],Question,
-					ICanView,"Qst_TXT","Qst_TXT_LIGHT");
-
-	       /* Write score retrieved from database */
-	       if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE] == Usr_CAN)
+	    case Exi_EXISTS:
+	       if (QuestionUneditedAfterExam)
 		 {
-		  HTM_DIV_Begin ("class=\"LM DAT_SMALL_%s\"",The_GetSuffix ());
-		     HTM_Txt (Txt_Score); HTM_Colon (); HTM_NBSP ();
-		     HTM_SPAN_Begin ("class=\"%s_%s\"",
-				     PrintedQuestions[QstInd].Answer.Str[0] ?
-				     (PrintedQuestions[QstInd].Answer.Score > 0 ? "Qst_ANS_OK" :	// Correct
-											  "Qst_ANS_BAD") :	// Wrong
-											  "Qst_ANS_0",		// Blank answer
-				     The_GetSuffix ());
-			HTM_Double2Decimals (PrintedQuestions[QstInd].Answer.Score);
-		     HTM_SPAN_End ();
-		  HTM_DIV_End ();
+		  /* Stem */
+		  Qst_WriteQstStem (Question->Stem,"Qst_TXT",
+				    ICanView[TstVis_VISIBLE_QST_ANS_TXT] ? HidVis_VISIBLE :
+									   HidVis_HIDDEN);
+
+		  /* Media */
+		  if (ICanView[TstVis_VISIBLE_QST_ANS_TXT] == Usr_CAN)
+		     Med_ShowMedia (&Question->Media,
+				    "Tst_MED_SHOW_CONT","Tst_MED_SHOW");
+
+		  /* Answers */
+		  TstPrn_ComputeAnswerScore (&PrintedQuestions[QstInd],Question);
+		  TstPrn_WriteAnswersExam (UsrDat,&PrintedQuestions[QstInd],Question,
+					   ICanView,"Qst_TXT","Qst_TXT_LIGHT");
+
+		  /* Write score retrieved from database */
+		  if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE] == Usr_CAN)
+		    {
+		     HTM_DIV_Begin ("class=\"LM DAT_SMALL_%s\"",The_GetSuffix ());
+			HTM_Txt (Txt_Score); HTM_Colon (); HTM_NBSP ();
+			HTM_SPAN_Begin ("class=\"%s_%s\"",
+					PrintedQuestions[QstInd].Answer.Str[0] ?
+					(PrintedQuestions[QstInd].Answer.Score > 0 ? "Qst_ANS_OK" :	// Correct
+											     "Qst_ANS_BAD") :	// Wrong
+											     "Qst_ANS_0",		// Blank answer
+					The_GetSuffix ());
+			   HTM_Double2Decimals (PrintedQuestions[QstInd].Answer.Score);
+			HTM_SPAN_End ();
+		     HTM_DIV_End ();
+		    }
 		 }
-	      }
-	    else
-	       Ale_ShowAlert (Ale_WARNING,Txt_Question_modified);
+	       else
+		  Ale_ShowAlert (Ale_WARNING,Txt_Question_modified);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       Ale_ShowAlert (Ale_WARNING,Txt_Question_removed);
+	       break;
 	   }
-	 else
-	    Ale_ShowAlert (Ale_WARNING,Txt_Question_removed);
 
 	 /* Question feedback */
 	 if (QuestionUneditedAfterExam)
@@ -1021,7 +1033,7 @@ void TstPrn_ComputeChoAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
   }
 
 void TstPrn_ComputeTxtAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-				 const struct Qst_Question *Question)
+				const struct Qst_Question *Question)
   {
    unsigned NumOpt;
    char TextAnsUsr[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
@@ -2545,7 +2557,7 @@ void TstPrn_ShowPrintAnswers (struct Usr_Data *UsrDat,
   {
    unsigned QstInd;
    struct Qst_Question Question;
-   bool QuestionExists;
+   Exi_Exist_t QuestionExists;
 
    for (QstInd = 0, The_ResetRowColor ();
 	QstInd < NumQsts;

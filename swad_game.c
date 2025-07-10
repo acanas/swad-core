@@ -1705,7 +1705,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
    unsigned QstInd;
    unsigned MaxQstInd;
    char StrQstInd[Cns_MAX_DIGITS_UINT + 1];
-   bool QuestionExists;
+   Exi_Exist_t QuestionExists;
    char *Anchor = NULL;
 
    /***** Trivial check *****/

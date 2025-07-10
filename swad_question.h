@@ -153,7 +153,7 @@ void Qst_PutIconsRequestBankQsts (__attribute__((unused)) void *Args);
 void Qst_PutIconsEditBankQsts (void *Questions);
 
 void Qst_ListQuestionForEdition (struct Qst_Question *Question,
-                                 unsigned QstInd,bool QuestionExists,
+                                 unsigned QstInd,Exi_Exist_t QuestionExists,
                                  const char *Anchor);
 void Qst_WriteAnswerType (Qst_AnswerType_t AnswerType,ExaSet_Validity_t Validity);
 void Qst_WriteQstStem (const char *Stem,const char *ClassStem,
@@ -222,7 +222,7 @@ void Qst_FreeTextChoiceAnswer (struct Qst_Question *Question,unsigned NumOpt);
 void Qst_ResetMediaOfQuestion (struct Qst_Question *Question);
 void Qst_FreeMediaOfQuestion (struct Qst_Question *Question);
 
-bool Qst_GetQstDataByCod (struct Qst_Question *Question);
+Exi_Exist_t Qst_GetQstDataByCod (struct Qst_Question *Question);
 Qst_Shuffle_t Qst_GetShuffleFromYN (char Ch);
 Qst_WrongOrCorrect_t Qst_GetCorrectFromYN (char Ch);
 long Qst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt);
@@ -232,7 +232,7 @@ void Qst_ReceiveQst (void);
 void Qst_GetQstFromForm (struct Qst_Question *Question);
 Err_SuccessOrError_t Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Question);
 
-bool Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question);
+Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question);
 
 void Qst_MoveMediaToDefinitiveDirectories (struct Qst_Question *Question);
 

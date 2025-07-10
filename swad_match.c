@@ -2737,10 +2737,6 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
    extern const char *Txt_Question_removed;
    struct Qst_Question Question;
 
-   /***** Create test question *****/
-   Qst_QstConstructor (&Question);
-   Question.QstCod = Match->Status.QstCod;
-
    /***** Trivial check: do not show anything on match start and end *****/
    switch (Match->Status.Showing)
      {
@@ -2751,54 +2747,62 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
 	 break;
      }
 
-   /***** Get data of question from database *****/
-   if (Qst_GetQstDataByCod (&Question))
-     {
-      /***** Show question *****/
-      /* Check answer type */
-      if (Question.Answer.Type != Qst_ANS_UNIQUE_CHOICE)
-	 Err_WrongAnswerExit ();
+   /***** Create test question *****/
+   Qst_QstConstructor (&Question);
+   Question.QstCod = Match->Status.QstCod;
 
-      /* Begin container */
-      HTM_DIV_Begin ("class=\"MCH_BOTTOM\"");	// Bottom
+      /***** Get data of question from database *****/
+      switch (Qst_GetQstDataByCod (&Question))
+	{
+	 case Exi_EXISTS:
+	    /***** Show question *****/
+	    /* Check answer type */
+	    if (Question.Answer.Type != Qst_ANS_UNIQUE_CHOICE)
+	       Err_WrongAnswerExit ();
 
-	 /* Write stem */
-	 Qst_WriteQstStem (Question.Stem,"MCH_TCH_STEM",HidVis_VISIBLE);
+	    /* Begin container */
+	    HTM_DIV_Begin ("class=\"MCH_BOTTOM\"");	// Bottom
 
-	 /* Show media */
-	 Med_ShowMedia (&Question.Media,
-			"Tst_MED_EDIT_LIST_CONT","Tst_MED_EDIT_LIST");
+	       /* Write stem */
+	       Qst_WriteQstStem (Question.Stem,"MCH_TCH_STEM",HidVis_VISIBLE);
 
-	 /***** Write answers? *****/
-	 switch (Match->Status.Showing)
-	   {
-	    case Mch_ANSWERS:
-	       if (Match->Status.Playing)		// Match is being played
-		  /* Write answers */
-		  Mch_WriteAnswersMatchResult (Match,
-					       &Question,
-					       "MCH_TCH_ANS",
-					       false);	// Don't show result
-	       else					// Match is paused, not being played
-		  Mch_ShowWaitImage (Txt_MATCH_Paused);
-	       break;
-	    case Mch_RESULTS:
-	       /* Write answers with results */
-	       Mch_WriteAnswersMatchResult (Match,
-					    &Question,
-					    "MCH_TCH_ANS",
-					    true);	// Show result
-	       break;
-	    default:
-	       /* Don't write anything */
-	       break;
-	   }
+	       /* Show media */
+	       Med_ShowMedia (&Question.Media,
+			      "Tst_MED_EDIT_LIST_CONT","Tst_MED_EDIT_LIST");
 
-      /* End container */
-      HTM_DIV_End ();				// Bottom
-     }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_Question_removed);
+	       /***** Write answers? *****/
+	       switch (Match->Status.Showing)
+		 {
+		  case Mch_ANSWERS:
+		     if (Match->Status.Playing)		// Match is being played
+			/* Write answers */
+			Mch_WriteAnswersMatchResult (Match,
+						     &Question,
+						     "MCH_TCH_ANS",
+						     false);	// Don't show result
+		     else					// Match is paused, not being played
+			Mch_ShowWaitImage (Txt_MATCH_Paused);
+		     break;
+		  case Mch_RESULTS:
+		     /* Write answers with results */
+		     Mch_WriteAnswersMatchResult (Match,
+						  &Question,
+						  "MCH_TCH_ANS",
+						  true);	// Show result
+		     break;
+		  default:
+		     /* Don't write anything */
+		     break;
+		 }
+
+	    /* End container */
+	    HTM_DIV_End ();				// Bottom
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	    Ale_ShowAlert (Ale_WARNING,Txt_Question_removed);
+	    break;
+	}
 
    /***** Destroy test question *****/
    Qst_QstDestructor (&Question);

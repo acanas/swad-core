@@ -516,7 +516,7 @@ void Qst_PutIconsEditBankQsts (void *Questions)
 /*****************************************************************************/
 
 void Qst_ListQuestionForEdition (struct Qst_Question *Question,
-                                 unsigned QstInd,bool QuestionExists,
+                                 unsigned QstInd,Exi_Exist_t QuestionExists,
                                  const char *Anchor)
   {
    extern const char *Txt_Question_removed;
@@ -524,7 +524,7 @@ void Qst_ListQuestionForEdition (struct Qst_Question *Question,
    /***** Number of question and answer type (row[1]) *****/
    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
       Lay_WriteIndex (QstInd,"BIG_INDEX");
-      if (QuestionExists)
+      if (QuestionExists == Exi_EXISTS)
 	 Qst_WriteAnswerType (Question->Answer.Type,Question->Validity);
    HTM_TD_End ();
 
@@ -537,33 +537,34 @@ void Qst_ListQuestionForEdition (struct Qst_Question *Question,
 
    /***** Write the question tags *****/
    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-      if (QuestionExists)
+      if (QuestionExists == Exi_EXISTS)
 	 Tag_GetAndWriteTagsQst (Question->QstCod);
    HTM_TD_End ();
 
    /***** Write stem (row[3]) and media *****/
    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
       HTM_ARTICLE_Begin (Anchor);
-	 if (QuestionExists)
+	 switch (QuestionExists)
 	   {
-	    /* Write stem */
-	    Qst_WriteQstStem (Question->Stem,"Qst_TXT",HidVis_VISIBLE);
+	    case Exi_EXISTS:
+	       /* Write stem */
+	       Qst_WriteQstStem (Question->Stem,"Qst_TXT",HidVis_VISIBLE);
 
-	    /* Show media */
-	    Med_ShowMedia (&Question->Media,
-			   "Tst_MED_EDIT_LIST_CONT","Tst_MED_EDIT_LIST");
+	       /* Show media */
+	       Med_ShowMedia (&Question->Media,
+			      "Tst_MED_EDIT_LIST_CONT","Tst_MED_EDIT_LIST");
 
-	    /* Show feedback */
-	    Qst_WriteQstFeedback (Question->Feedback,"Qst_TXT_LIGHT");
+	       /* Show feedback */
+	       Qst_WriteQstFeedback (Question->Feedback,"Qst_TXT_LIGHT");
 
-	    /* Show answers */
-	    Qst_WriteAnswers (Question,"Qst_TXT","Qst_TXT_LIGHT");
-	   }
-	 else
-	   {
-	    HTM_SPAN_Begin ("class=\"DAT_LIGHT_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_Question_removed);
-	    HTM_SPAN_End ();
+	       /* Show answers */
+	       Qst_WriteAnswers (Question,"Qst_TXT","Qst_TXT_LIGHT");
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       HTM_SPAN_Begin ("class=\"DAT_LIGHT_%s\"",The_GetSuffix ());
+		  HTM_Txt (Txt_Question_removed);
+	       HTM_SPAN_End ();
 	   }
       HTM_ARTICLE_End ();
    HTM_TD_End ();
@@ -960,7 +961,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
    char *Id;
 
    /***** Get and show question data *****/
-   if (Qst_GetQstDataByCod (&Questions->Question))
+   if (Qst_GetQstDataByCod (&Questions->Question) == Exi_EXISTS)
      {
       /***** Begin table row *****/
       HTM_TR_Begin (NULL);
@@ -1273,7 +1274,7 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
    char *Id;
 
    /***** Get and show questvoidion data *****/
-   if (Qst_GetQstDataByCod (Question))
+   if (Qst_GetQstDataByCod (Question) == Exi_EXISTS)
      {
       /***** Begin table row *****/
       HTM_TR_Begin (NULL);
@@ -1812,8 +1813,8 @@ void Qst_ShowFormEditOneQst (void)
    if (Question.QstCod <= 0)	// New question
       PutFormToEditQuestion = Frm_PUT_FORM;
    else
-      PutFormToEditQuestion = Qst_GetQstDataByCod (&Question) ? Frm_PUT_FORM :
-								Frm_DONT_PUT_FORM;
+      PutFormToEditQuestion = (Qst_GetQstDataByCod (&Question) == Exi_EXISTS) ? Frm_PUT_FORM :
+									        Frm_DONT_PUT_FORM;
 
    /***** Put form to edit question *****/
    switch (PutFormToEditQuestion)
@@ -2506,17 +2507,20 @@ void Qst_FreeMediaOfQuestion (struct Qst_Question *Question)
 /********************* Get question data using its code **********************/
 /*****************************************************************************/
 
-bool Qst_GetQstDataByCod (struct Qst_Question *Question)
+Exi_Exist_t Qst_GetQstDataByCod (struct Qst_Question *Question)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   bool QuestionExists;
+   Exi_Exist_t QuestionExists;
    unsigned NumTags;
    unsigned NumTag;
    unsigned NumOpt;
 
    /***** Get question data from database *****/
-   if ((QuestionExists = (Qst_DB_GetQstDataByCod (&mysql_res,Question->QstCod) != 0)))
+   QuestionExists = (Qst_DB_GetQstDataByCod (&mysql_res,
+					     Question->QstCod) != 0) ? Exi_EXISTS :
+								       Exi_DOES_NOT_EXIST;
+   if (QuestionExists == Exi_EXISTS)
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -3138,7 +3142,7 @@ Err_SuccessOrError_t Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst
 /*********** Check if a test question already exists in database *************/
 /*****************************************************************************/
 
-bool Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question)
+Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question)
   {
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
    MYSQL_RES *mysql_res_qst;
@@ -3225,7 +3229,8 @@ bool Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question)
    /* Free structure that stores the query result for questions */
    DB_FreeMySQLResult (&mysql_res_qst);
 
-   return IdenticalQuestionFound;
+   return IdenticalQuestionFound ? Exi_EXISTS :
+				   Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

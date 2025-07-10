@@ -70,7 +70,7 @@ static void QstImp_WriteHeadingListImportedQst (void);
 static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
                                         struct XMLElement *FeedbackElem,
                                         const struct Qst_Question *Question,
-                                        bool QuestionExists);
+                                        Exi_Exist_t QuestionExists);
 
 /*****************************************************************************/
 /**************** Put a link (form) to export test questions *****************/
@@ -238,7 +238,7 @@ static void QstImp_ExportQuestion (struct Qst_Question *Question,FILE *FileXML)
       [Qst_SHUFFLE     ] = "yes"
      };
 
-   if (Qst_GetQstDataByCod (Question))
+   if (Qst_GetQstDataByCod (Question) == Exi_EXISTS)
      {
       /***** Write the answer type *****/
       fprintf (FileXML,"<question type=\"%s\">%s",
@@ -478,7 +478,7 @@ static void QstImp_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
    struct XMLElement *AnswerElem;
    struct XMLAttribute *Attribute;
    struct Qst_Question Question;
-   bool QuestionExists;
+   Exi_Exist_t QuestionExists;
    bool AnswerTypeFound;
 
    /***** Allocate and get XML tree *****/
@@ -630,10 +630,10 @@ static void QstImp_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 
 			/* Write row with this imported question */
 			QstImp_WriteRowImportedQst (StemElem,FeedbackElem,
-						 &Question,QuestionExists);
+						    &Question,QuestionExists);
 
 			/***** If a new question ==> insert question, tags and answer in the database *****/
-			if (!QuestionExists)
+			if (QuestionExists == Exi_DOES_NOT_EXIST)
 			  {
 			   Question.QstCod = -1L;
 			   Qst_InsertOrUpdateQstTagsAnsIntoDB (&Question);
@@ -860,7 +860,7 @@ static void QstImp_WriteHeadingListImportedQst (void)
 static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
                                         struct XMLElement *FeedbackElem,
                                         const struct Qst_Question *Question,
-                                        bool QuestionExists)
+                                        Exi_Exist_t QuestionExists)
   {
    extern const char *Txt_Existing_question;
    extern const char *Txt_New_question;
@@ -879,10 +879,10 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
    size_t AnswerTextLength;
    char *AnswerFeedback;
    size_t AnswerFeedbackLength;
-   const char *ClassData = QuestionExists ? "DAT_SMALL_LIGHT" :
-	                                    "DAT_SMALL";
-   const char *ClassStem = QuestionExists ? "Qst_TXT_LIGHT" :
-	                                    "Qst_TXT";
+   const char *ClassData = (QuestionExists == Exi_EXISTS) ? "DAT_SMALL_LIGHT" :
+	                                                    "DAT_SMALL";
+   const char *ClassStem = (QuestionExists == Exi_EXISTS) ? "Qst_TXT_LIGHT" :
+							    "Qst_TXT";
 
    NumQst++;
 
@@ -890,18 +890,24 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 
       /***** Put icon to indicate that a question does not exist in database *****/
       HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
-         if (QuestionExists)
-	    Ico_PutIcon ("tr16x16.gif"     ,Ico_UNCHANGED,
-			 Txt_Existing_question,"CONTEXT_ICO16x16");
-         else
-	    Ico_PutIcon ("check-circle.svg",Ico_GREEN    ,
-			 Txt_New_question     ,"CONTEXT_ICO16x16");
+	 switch (QuestionExists)
+	   {
+	    case Exi_EXISTS:
+	       Ico_PutIcon ("tr16x16.gif"     ,Ico_UNCHANGED,
+			    Txt_Existing_question,"CONTEXT_ICO16x16");
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       Ico_PutIcon ("check-circle.svg",Ico_GREEN    ,
+			    Txt_New_question     ,"CONTEXT_ICO16x16");
+	       break;
+	   }
       HTM_TD_End ();
 
       /***** Write number of question *****/
       HTM_TD_Begin ("class=\"CT %s_%s %s\"",
                     ClassData,The_GetSuffix (),The_GetColorRows ());
-	 if (!QuestionExists)
+	 if (QuestionExists == Exi_DOES_NOT_EXIST)
 	   {
 	    HTM_Unsigned (++NumNonExistingQst); HTM_NBSP ();
 	   }
@@ -955,8 +961,8 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 	    if (Question->Answer.Shuffle == Qst_SHUFFLE)
 	       Ico_PutIcon ("check.svg",Ico_BLACK,
 	                    Txt_TST_Answer_given_by_the_teachers,
-			    QuestionExists ? "ICO_HIDDEN ICO16x16" :
-					     "ICO16x16");
+			    QuestionExists == Exi_EXISTS ? "ICO_HIDDEN ICO16x16" :
+							   "ICO16x16");
       HTM_TD_End ();
 
       /***** Write the stem and the answers *****/
@@ -1031,8 +1037,8 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 			   if (Question->Answer.Options[NumOpt].Correct == Qst_CORRECT)
 			      Ico_PutIcon ("check.svg",Ico_BLACK,
 			                   Txt_TST_Answer_given_by_the_teachers,
-					   QuestionExists ? "ICO_HIDDEN CONTEXT_ICO16x16" :
-							    "CONTEXT_ICO16x16");
+					   QuestionExists == Exi_EXISTS ? "ICO_HIDDEN CONTEXT_ICO16x16" :
+									  "CONTEXT_ICO16x16");
 			HTM_TD_End ();
 
 			/* Write the number of option */

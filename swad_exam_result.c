@@ -1427,7 +1427,7 @@ void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
    MYSQL_ROW row;
    unsigned QstInd;
    struct Qst_Question Question;
-   bool QuestionExists;
+   Exi_Exist_t QuestionExists;
 
    /***** Initialize score valid *****/
    Print->NumQsts.Valid.Correct        =
@@ -1446,7 +1446,10 @@ void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
       Question.QstCod = Print->Qsts[QstInd].QstCod;
 
       /***** Get validity and answer type from database *****/
-      if ((QuestionExists = (Exa_DB_GetValidityAndAnswerType (&mysql_res,Question.QstCod) != 0)))
+      QuestionExists = (Exa_DB_GetValidityAndAnswerType (&mysql_res,
+							 Question.QstCod) != 0) ? Exi_EXISTS :
+										  Exi_DOES_NOT_EXIST;
+      if (QuestionExists == Exi_EXISTS)
 	{
 	 row = mysql_fetch_row (mysql_res);
 
@@ -1461,7 +1464,7 @@ void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Compute answer score *****/
-      if (QuestionExists)
+      if (QuestionExists == Exi_EXISTS)
 	 if (Question.Validity == ExaSet_VALID_QUESTION)
 	   {
 	    ExaPrn_ComputeAnswerScore (&Print->Qsts[QstInd],&Question);
