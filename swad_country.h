@@ -60,7 +60,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Hie_Node *Cty,Act_Action_t Action
                                         const char *ClassContainer,
                                         const char *ClassMap);
 void Cty_DrawCountryMap (const struct Hie_Node *Cty,const char *Class);
-bool Cty_CheckIfCountryPhotoExists (const struct Hie_Node *Cty);
+Exi_Exist_t Cty_CheckIfCountryPhotoExists (const struct Hie_Node *Cty);
 
 void Cty_WriteScriptGoogleGeochart (void);
 void Cty_PutParCtyOrder (void);

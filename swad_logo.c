@@ -122,7 +122,7 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 			 (unsigned) (DegCod % 100),
 			 (unsigned)  DegCod,
 			 (unsigned)  DegCod);
-	       LogoFound = Fil_CheckIfPathExists (PathLogo);
+	       LogoFound = (Fil_CheckIfPathExists (PathLogo) == Exi_EXISTS);
 	       if (LogoFound)
 		  HieCod = DegCod;
 	      }
@@ -140,7 +140,7 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 			 (unsigned) (CtrCod % 100),
 			 (unsigned)  CtrCod,
 			 (unsigned)  CtrCod);
-	       LogoFound = Fil_CheckIfPathExists (PathLogo);
+	       LogoFound = (Fil_CheckIfPathExists (PathLogo) == Exi_EXISTS);
 	       if (LogoFound)
 		  HieCod = CtrCod;
 	      }
@@ -156,7 +156,7 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 			 (unsigned) (InsCod % 100),
 			 (unsigned)  InsCod,
 			 (unsigned)  InsCod);
-	       LogoFound = Fil_CheckIfPathExists (PathLogo);
+	       LogoFound = (Fil_CheckIfPathExists (PathLogo) == Exi_EXISTS);
 	       if (LogoFound)
 		  HieCod = InsCod;
 	      }
@@ -172,16 +172,14 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 	       if (asprintf (&Icon,"%u.png",(unsigned) HieCod) < 0)
 		  Err_NotEnoughMemoryExit ();
 
-	       HTM_IMG (URL,Icon,Node->FullName,
-			"class=\"%s\"",IconClass);
+	       HTM_IMG (URL,Icon,Node->FullName,"class=\"%s\"",IconClass);
 	       free (Icon);
 	       free (URL);
 	      }
 	    else
 	       HTM_IMG (Cfg_URL_ICON_PUBLIC,Hie_Icons[HieLvl],Node->ShrtName,
 			"class=\"%s ICO_%s_%s\"",
-			IconClass,
-			Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
+			IconClass,Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
 	   }
 	 break;
       default:
@@ -245,8 +243,8 @@ void Lgo_RequestLogo (Hie_Level_t HieLvl)
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Logo,
-	         Fil_CheckIfPathExists (PathLogo) ? FunctionToDrawContextualIcons[HieLvl] :
-						    NULL,NULL,
+	         Fil_CheckIfPathExists (PathLogo) == Exi_EXISTS ? FunctionToDrawContextualIcons[HieLvl] :
+								  NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
       /***** Begin form to upload logo *****/

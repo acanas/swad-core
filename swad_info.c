@@ -864,13 +864,13 @@ static bool Inf_CheckPage (Inf_Type_t InfoType)
    /* 1. Check if index.html exists */
    snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
 	     PathRelDirHTML);
-   if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
+   if (Fil_CheckIfPathExists (PathRelFileHTML) == Exi_EXISTS)	// TODO: Check if not empty?
       return true;
 
    /* 2. If index.html does not exist, try index.htm */
    snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.htm",
 	     PathRelDirHTML);
-   if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
+   if (Fil_CheckIfPathExists (PathRelFileHTML) == Exi_EXISTS)	// TODO: Check if not empty?
       return true;
 
    return false;
@@ -898,7 +898,7 @@ static bool Inf_CheckAndShowPage (Inf_Type_t InfoType)
    /* 1. Check if index.html exists */
    snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
 	     PathRelDirHTML);
-   if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
+   if (Fil_CheckIfPathExists (PathRelFileHTML) == Exi_EXISTS)	// TODO: Check if not empty?
      {
       snprintf (URL,sizeof (URL),"%s/%ld/%s/index.html",
 	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
@@ -911,7 +911,7 @@ static bool Inf_CheckAndShowPage (Inf_Type_t InfoType)
    /* 2. If index.html does not exist, try index.htm */
    snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.htm",
 	     PathRelDirHTML);
-   if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
+   if (Fil_CheckIfPathExists (PathRelFileHTML) == Exi_EXISTS)	// TODO: Check if not empty?
      {
       snprintf (URL,sizeof (URL),"%s/%ld/%s/index.htm",
 	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
@@ -2254,25 +2254,31 @@ void Inf_ReceivePagInfo (void)
                /* Check if uploaded file is index.html or index.htm */
                snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
         	         "%s/index.html",PathRelDirHTML);
-               if (Fil_CheckIfPathExists (PathRelFileHTML))
-                 {
-                  Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);
-                  Ale_ShowAlert (Ale_SUCCESS,Txt_Found_an_index_html_file);
-                  FileIsOK = true;
-                 }
-	       else
-	         {
-	          snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
-	        	    "%s/index.htm",PathRelDirHTML);
-	          if (Fil_CheckIfPathExists (PathRelFileHTML))
-                    {
-                     Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);
-                     Ale_ShowAlert (Ale_SUCCESS,Txt_Found_an_index_html_file);
-                     FileIsOK = true;
-                    }
-	          else
-                     Ale_ShowAlert (Ale_WARNING,Txt_No_file_index_html_found_within_the_ZIP_file);
-	         }
+	       switch (Fil_CheckIfPathExists (PathRelFileHTML))
+		 {
+		  case Exi_EXISTS:
+		     Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);
+		     Ale_ShowAlert (Ale_SUCCESS,Txt_Found_an_index_html_file);
+		     FileIsOK = true;
+		     break;
+		  case Exi_DOES_NOT_EXIST:
+		  default:
+		     snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
+			       "%s/index.htm",PathRelDirHTML);
+		     switch (Fil_CheckIfPathExists (PathRelFileHTML))
+		       {
+			case Exi_EXISTS:
+			   Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);
+			   Ale_ShowAlert (Ale_SUCCESS,Txt_Found_an_index_html_file);
+			   FileIsOK = true;
+			   break;
+			case Exi_DOES_NOT_EXIST:
+			default:
+			   Ale_ShowAlert (Ale_WARNING,Txt_No_file_index_html_found_within_the_ZIP_file);
+			   break;
+		       }
+		     break;
+		 }
 	      }
             else
                Err_ShowErrorAndExit ("Can not unzip file.");

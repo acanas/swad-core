@@ -675,9 +675,9 @@ void Hie_InitHierarchy (void)
 	        Cfg_URL_CRS_PUBLIC  ,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
       /***** If any of the course directories does not exist, create it *****/
-      if (!Fil_CheckIfPathExists (Gbl.Crs.Path.AbsPriv))
+      if (Fil_CheckIfPathExists (Gbl.Crs.Path.AbsPriv) == Exi_DOES_NOT_EXIST)
 	 Fil_CreateDirIfNotExists (Gbl.Crs.Path.AbsPriv);
-      if (!Fil_CheckIfPathExists (Gbl.Crs.Path.RelPubl))
+      if (Fil_CheckIfPathExists (Gbl.Crs.Path.RelPubl) == Exi_DOES_NOT_EXIST)
 	 Fil_CreateDirIfNotExists (Gbl.Crs.Path.RelPubl);
 
       /***** Count number of groups in current course

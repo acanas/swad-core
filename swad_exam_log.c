@@ -226,6 +226,20 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
    extern const char *Txt_Session;
    extern const char *Txt_Web_browser;
    extern const char *Txt_EXAM_LOG_ACTIONS[ExaLog_NUM_ACTIONS];
+   static const char *NumClickClass[Usr_NUM_CAN] =
+     {
+      [Usr_CAN_NOT] = "DAT_SMALL_LIGHT"	,
+      [Usr_CAN    ] = "DAT_SMALL"	,
+     };
+   static struct
+     {
+      const char *Class;
+      const char *Icon;
+     } Status[Usr_NUM_CAN] =
+     {
+      [Usr_CAN_NOT] = {.Class = "DAT_SMALL_RED"		,.Icon = "&cross;"},
+      [Usr_CAN    ] = {.Class = "DAT_SMALL_GREEN"	,.Icon = "&check;"},
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumClicks;
@@ -233,7 +247,7 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
    unsigned ActCod;
    ExaLog_Action_t Action;
    int QstInd;
-   bool UsrCouldAnswer;
+   Usr_Can_t UsrCouldAnswer;
    time_t ClickTimeUTC;
    char IP[Cns_MAX_BYTES_IP + 1];
    char *Id;
@@ -283,7 +297,15 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 	      {
 	       /***** Get row *****/
 	       row = mysql_fetch_row (mysql_res);
-
+	       /*
+	       row[0]: exa_log.ActCod
+	       row[1]: exa_log.QstInd
+	       row[2]: exa_log.CanAnswer
+	       row[3]: UNIX_TIMESTAMP(exa_log.ClickTime)
+	       row[4]: exa_log.IP
+	       row[5]: exa_log_sessions.SessionId
+	       row[6]: exa_log_user_agents.UserAgent
+	        */
 	       /* Get code of action (row[0]) */
 	       ActCod = Str_ConvertStrToUnsigned (row[0]);
 	       if (ActCod < ExaLog_NUM_ACTIONS)
@@ -295,7 +317,8 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 	       QstInd = (int) Str_ConvertStrCodToLongCod (row[1]);
 
 	       /* Get if the user could answer (row[2]) */
-	       UsrCouldAnswer = (row[2][0] == 'Y');
+	       UsrCouldAnswer = (row[2][0] == 'Y') ? Usr_CAN :
+						     Usr_CAN_NOT;
 
 	       /* Get click time (row[3] holds the UTC time) */
 	       ClickTimeUTC = Dat_GetUNIXTimeFromStr (row[3]);
@@ -318,9 +341,8 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 
 		  /* Write number of click */
 		  HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-				UsrCouldAnswer ? "DAT_SMALL" :
-						 "DAT_SMALL_LIGHT",
-				The_GetSuffix (),The_GetColorRows ());
+				NumClickClass[UsrCouldAnswer],The_GetSuffix (),
+				The_GetColorRows ());
 		     HTM_Unsigned (NumClick + 1);
 		  HTM_TD_End ();
 
@@ -355,11 +377,9 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 
 		  /* Write if exam print was open and accesible to answer */
 		  HTM_TD_Begin ("class=\"CT %s_%s %s\"",
-				UsrCouldAnswer ? "DAT_SMALL_GREEN" :
-						 "DAT_SMALL_RED",
-				The_GetSuffix (),The_GetColorRows ());
-		     HTM_Txt (UsrCouldAnswer ? "&check;" :
-					       "&cross;");
+				Status[UsrCouldAnswer].Class,The_GetSuffix (),
+				The_GetColorRows ());
+		     HTM_Txt (Status[UsrCouldAnswer].Icon);
 		  HTM_TD_End ();
 
 		  /* Write IP */

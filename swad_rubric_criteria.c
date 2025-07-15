@@ -92,7 +92,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 					            unsigned MaxCriInd,
 					            unsigned NumCriteria,
                                                     MYSQL_RES *mysql_res);
-static void RubCri_ListOneOrMoreCriteriaToFill (Rsc_Type_t RscType,long RscCod,bool ICanFill,
+static void RubCri_ListOneOrMoreCriteriaToFill (Rsc_Type_t RscType,long RscCod,Usr_Can_t ICanFill,
                                                 Act_Action_t NextAction,
                                                 void (*FuncPars) (void *Args),void *Args,
                                                 struct Rub_Node **TOS,
@@ -796,7 +796,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 /********************* List rubric criteria to fill them *********************/
 /*****************************************************************************/
 
-static void RubCri_ListOneOrMoreCriteriaToFill (Rsc_Type_t RscType,long RscCod,bool ICanFill,
+static void RubCri_ListOneOrMoreCriteriaToFill (Rsc_Type_t RscType,long RscCod,Usr_Can_t ICanFill,
                                                 Act_Action_t NextAction,
                                                 void (*FuncPars) (void *Args),void *Args,
                                                 struct Rub_Node **TOS,
@@ -848,27 +848,29 @@ static void RubCri_ListOneOrMoreCriteriaToFill (Rsc_Type_t RscType,long RscCod,b
 	      {
 	       case Rsc_NONE:
 		  CriterionScore = Rub_DB_GetScore (RscType,RscCod,-1L,Criterion.CriCod);
-		  if (ICanFill)
+		  switch (ICanFill)
 		    {
-		     Frm_BeginFormAnchor (NextAction,Anchor);
-		        if (FuncPars)
-			   FuncPars (Args);
-			ParCod_PutPar (ParCod_Cri,Criterion.CriCod);
-			HTM_INPUT_FLOAT ("Score",
-					 Criterion.Values[RubCri_MIN],
-					 Criterion.Values[RubCri_MAX],
-					 RubCri_SCORE_STEP,
-					 CriterionScore,
-					 HTM_REQUIRED | HTM_SUBMIT_ON_CHANGE,
-					 " class=\"INPUT_FLOAT INPUT_%s\"",
-					 The_GetSuffix ());
-		     Frm_EndForm ();
-		    }
-		  else
-		    {
-		     HTM_SPAN_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-			HTM_Double2Decimals (CriterionScore);
-		     HTM_SPAN_End ();
+		     case Usr_CAN:
+			Frm_BeginFormAnchor (NextAction,Anchor);
+			   if (FuncPars)
+			      FuncPars (Args);
+			   ParCod_PutPar (ParCod_Cri,Criterion.CriCod);
+			   HTM_INPUT_FLOAT ("Score",
+					    Criterion.Values[RubCri_MIN],
+					    Criterion.Values[RubCri_MAX],
+					    RubCri_SCORE_STEP,
+					    CriterionScore,
+					    HTM_REQUIRED | HTM_SUBMIT_ON_CHANGE,
+					    " class=\"INPUT_FLOAT INPUT_%s\"",
+					    The_GetSuffix ());
+			Frm_EndForm ();
+			break;
+		     case Usr_CAN_NOT:
+		     default:
+			HTM_SPAN_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
+			   HTM_Double2Decimals (CriterionScore);
+			HTM_SPAN_End ();
+			break;
 		    }
 		  break;
 	       case Rsc_RUBRIC:

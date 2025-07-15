@@ -495,26 +495,29 @@ void Cty_DrawCountryMap (const struct Hie_Node *Cty,const char *Class)
    char *Icon;
 
    /***** Draw country map *****/
-   if (Cty_CheckIfCountryPhotoExists (Cty))
+   switch (Cty_CheckIfCountryPhotoExists (Cty))
      {
-      if (asprintf (&URL,"%s/%s",Cfg_URL_ICON_COUNTRIES_PUBLIC,Cty->ShrtName) < 0)
-	 Err_NotEnoughMemoryExit ();
-      if (asprintf (&Icon,"%s.png",Cty->ShrtName) < 0)
-	 Err_NotEnoughMemoryExit ();
-      HTM_IMG (URL,Icon,Cty->FullName,"class=\"%s\"",Class);
-      free (Icon);
-      free (URL);
+      case Exi_EXISTS:
+	 if (asprintf (&URL,"%s/%s",Cfg_URL_ICON_COUNTRIES_PUBLIC,Cty->ShrtName) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 if (asprintf (&Icon,"%s.png",Cty->ShrtName) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 HTM_IMG (URL,Icon,Cty->FullName,"class=\"%s\"",Class);
+	 free (Icon);
+	 free (URL);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ico_PutIcon ("tr16x16.gif",Ico_UNCHANGED,Cty->FullName,Class);
+	 break;
      }
-   else
-      Ico_PutIcon ("tr16x16.gif",Ico_UNCHANGED,
-		   Cty->FullName,Class);
   }
 
 /*****************************************************************************/
 /*********************** Check if country map exists *************************/
 /*****************************************************************************/
 
-bool Cty_CheckIfCountryPhotoExists (const struct Hie_Node *Cty)
+Exi_Exist_t Cty_CheckIfCountryPhotoExists (const struct Hie_Node *Cty)
   {
    char PathMap[PATH_MAX + 1];
 

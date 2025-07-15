@@ -154,7 +154,7 @@ const char *Ico_GetIcon (const char *IconWithoutExtension)
 		Cfg_PATH_ICON_SETS_PUBLIC,
 		Ico_IconSetId[Gbl.Prefs.IconSet],
 		IconWithExtension);
-      if (Fil_CheckIfPathExists (PathIcon))
+      if (Fil_CheckIfPathExists (PathIcon) == Exi_EXISTS)
 	 return IconWithExtension;
      }
 

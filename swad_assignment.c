@@ -694,14 +694,24 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
 				       Vie_ViewType_t ViewType)
   {
    extern const char *Txt_Folder;
+   static struct
+     {
+      const char *Icon;
+      Ico_Color_t Color;
+     } Icons[Usr_NUM_CAN] =
+     {
+      [Usr_CAN_NOT] = {.Icon = "folder.svg"		,.Color = Ico_RED	},
+      [Usr_CAN    ] = {.Icon = "folder-open.svg"	,.Color = Ico_GREEN	},
+     };
    Act_Action_t NextAction;
-   bool ICanSendFiles = Asg->Hidden == HidVis_VISIBLE &&	// It's visible (not hidden)
-                        Asg->ClosedOrOpen == CloOpe_OPEN &&		// It's open (inside dates)
-                        Asg->ICanDo == Usr_CAN;			// I can do (I belong to course/group)
+   Usr_Can_t ICanSendFiles = (Asg->Hidden == HidVis_VISIBLE &&		// It's visible (not hidden)
+			      Asg->ClosedOrOpen == CloOpe_OPEN &&	// It's open (inside dates)
+			      Asg->ICanDo == Usr_CAN) ? Usr_CAN :	// I can do (I belong to course/group)
+							Usr_CAN_NOT;
 
    /***** Folder icon *****/
-   if (ViewType == Vie_VIEW &&	// Not print view
-       ICanSendFiles)		// I can send files to this assignment folder
+   if (ViewType == Vie_VIEW &&		// Not print view
+       ICanSendFiles == Usr_CAN)	// I can send files to this assignment folder
      {
       /* Form to create a new file or folder */
       Gbl.FileBrowser.FullTree = true;	// By default, show all files
@@ -751,12 +761,8 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
         }
      }
    else			// Sending of files disabled
-     {
-      if (ICanSendFiles)
-	 Ico_PutIconOff ("folder-open.svg",Ico_GREEN,Txt_Folder);
-      else
-	 Ico_PutIconOff ("folder.svg"     ,Ico_RED  ,Txt_Folder);
-     }
+      Ico_PutIconOff (Icons[ICanSendFiles].Icon,
+		      Icons[ICanSendFiles].Color,Txt_Folder);
 
    /***** Folder name *****/
    HTM_Txt (Asg->Folder);
@@ -1564,7 +1570,7 @@ void Asg_ReceiveAssignment (void)
 	       case Asg_DONT_SEND_WORK:
 	       default:
 		  if (OldAsg.SendWork == Asg_SEND_WORK)
-		     if (Brw_CheckIfExistsFolderAssigmentForAnyUsr (OldAsg.Folder))
+		     if (Brw_CheckIfExistsFolderAssigmentForAnyUsr (OldAsg.Folder) == Exi_EXISTS)
 		       {
 			SuccessOrError = Err_ERROR;
 			Ale_CreateAlert (Ale_WARNING,NULL,

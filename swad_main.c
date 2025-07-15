@@ -73,7 +73,7 @@ int main (void)
     "touch swad.lock" in CGI directory if you want to disable SWAD
     "rm swad.lock" in CGI directory if you want to enable SWAD
    */
-   if (Fil_CheckIfPathExists ("./swad.lock"))
+   if (Fil_CheckIfPathExists ("./swad.lock") == Exi_EXISTS)
      {
       fprintf (stdout,"Content-type: text/html; charset=windows-1252\r\n"
 		      "Status: 503 Service Temporarily Unavailable\r\n\r\n"

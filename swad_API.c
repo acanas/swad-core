@@ -1490,7 +1490,7 @@ static int API_WritePageIntoHTMLBuffer (struct soap *soap,
    char PathRelDirHTML[PATH_MAX + 1];
    char PathRelFileHTML[PATH_MAX + 1 + 10 + 1];
    FILE *FileHTML;
-   bool FileExists = false;
+   Exi_Exist_t FileExists;
    size_t Length;
 
    /***** Initialize buffer *****/
@@ -1503,18 +1503,16 @@ static int API_WritePageIntoHTMLBuffer (struct soap *soap,
    /* 1. Check if index.html exists */
    snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
 	     PathRelDirHTML);
-   if (Fil_CheckIfPathExists (PathRelFileHTML))		// TODO: Check if not empty?
-      FileExists = true;
-   else
+   FileExists = Fil_CheckIfPathExists (PathRelFileHTML);	// TODO: Check if not empty?
+   if (FileExists == Exi_DOES_NOT_EXIST)
      {
       /* 2. If index.html not exists, try index.htm */
       snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.htm",
 		PathRelDirHTML);
-      if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
-         FileExists = true;
+      FileExists = Fil_CheckIfPathExists (PathRelFileHTML);	// TODO: Check if not empty?
      }
 
-   if (FileExists)
+   if (FileExists == Exi_EXISTS)
      {
       /***** Write page from file to text buffer *****/
       /* Open file */

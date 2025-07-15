@@ -102,7 +102,7 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_COUNTRY_Information;
    Hie_PutLink_t PutLink;
-   bool MapImageExists;
+   Exi_Exist_t MapImageExists;
    unsigned NumCtrs;
    unsigned NumCtrsWithMap;
 
@@ -185,7 +185,7 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
       /* Check country map */
       MapImageExists = Cty_CheckIfCountryPhotoExists (&Gbl.Hierarchy.Node[Hie_CTY]);
 
-      if (NumCtrsWithMap || MapImageExists)
+      if (NumCtrsWithMap || MapImageExists == Exi_EXISTS)
 	{
 	 /* Begin container */
 	 HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT\"");
@@ -195,7 +195,7 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
 	       CtyCfg_Map ();
 
 	    /* Country map image */
-	    if (MapImageExists)
+	    if (MapImageExists == Exi_EXISTS)
 	       CtyCfg_MapImage (ViewType,PutLink);
 
 	 /* End container */

@@ -181,7 +181,7 @@ long Brw_GetGrpCod (void);
 
 void Brw_GetParAndInitFileBrowser (void);
 void Brw_InitializeFileBrowser (void);
-bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName);
+Exi_Exist_t Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName);
 Err_SuccessOrError_t Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,
 								   const char *NewFolderName);
 void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName);

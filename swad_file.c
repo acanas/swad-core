@@ -355,7 +355,7 @@ void Fil_CreateUpdateFile (const char CurrentName[PATH_MAX + 1],
 
    /* The new file shouldn't exist. If it exists is due to any error when running this CGI formerly
       and the file was not renamed successfully. In this case, remove it! */
-   if (Fil_CheckIfPathExists (NewName))
+   if (Fil_CheckIfPathExists (NewName) == Exi_EXISTS)
       unlink (NewName);
 
    /* Open the new file */
@@ -401,14 +401,18 @@ void Fil_CloseUpdateFile (const char CurrentName[PATH_MAX + 1],
 /*****************************************************************************/
 /***************** Check if existe a file or directory ***********************/
 /*****************************************************************************/
-/* Return true if exists and false if not exists */
 
-bool Fil_CheckIfPathExists (const char *Path)
+Exi_Exist_t Fil_CheckIfPathExists (const char *Path)
   {
+   /* access (): On success (all requested permissions granted, or mode is F_OK and
+      the file exists), zero is returned.  On error (at least one bit in
+      mode asked for a permission that is denied, or mode is F_OK and
+      the file does not exist, or some other error occurred), -1 is
+      returned, and errno is set to indicate the error. */
    // Important: access with a link returns
    // if exists the file pointed by the link, not the link itself
-   return access (Path,F_OK) ? false :
-	                       true;
+   return access (Path,F_OK) ? Exi_DOES_NOT_EXIST :
+	                       Exi_EXISTS;
   }
 
 /*****************************************************************************/
@@ -419,7 +423,7 @@ void Fil_CreateDirIfNotExists (const char *Path)
   {
    char ErrorMsg[128 + PATH_MAX];
 
-   if (!Fil_CheckIfPathExists (Path))
+   if (Fil_CheckIfPathExists (Path) == Exi_DOES_NOT_EXIST)
       if (mkdir (Path,(mode_t) 0xFFF))
         {
 	 snprintf (ErrorMsg,sizeof (ErrorMsg),
@@ -442,7 +446,7 @@ void Fil_RemoveTree (const char *Path)
    Err_SuccessOrError_t SuccessOrError;
    char ErrorMsg[128 + PATH_MAX];
 
-   if (Fil_CheckIfPathExists (Path))
+   if (Fil_CheckIfPathExists (Path) == Exi_EXISTS)
      {
       if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
 	 Err_ShowErrorAndExit ("Can not get information about a file or folder.");
@@ -661,11 +665,11 @@ void Fil_AddPublicDirToCache (const char *FullPathPriv,
 /******** Get public directory used to link private path from cache **********/
 /*****************************************************************************/
 
-bool Fil_GetPublicDirFromCache (const char *FullPathPriv,
-                                char TmpPubDir[PATH_MAX + 1])
+Exi_Exist_t Fil_GetPublicDirFromCache (const char *FullPathPriv,
+				       char TmpPubDir[PATH_MAX + 1])
   {
    bool Cached;
-   bool TmpPubDirExists;
+   Exi_Exist_t TmpPubDirExists;
    char FullPathTmpPubDir[PATH_MAX + 1];
 
    /***** Reset temporary directory *****/
@@ -673,7 +677,7 @@ bool Fil_GetPublicDirFromCache (const char *FullPathPriv,
 
    /***** Trivial check: if no current session, don't do anything *****/
    if (Gbl.Session.Status != Ses_OPEN)
-      return false;
+      return Exi_DOES_NOT_EXIST;
 
    /***** Get temporary directory from cache *****/
    Fil_DB_GetPublicDirFromCache (FullPathPriv,TmpPubDir);
@@ -687,10 +691,10 @@ bool Fil_GetPublicDirFromCache (const char *FullPathPriv,
       snprintf (FullPathTmpPubDir,sizeof (FullPathTmpPubDir),"%s/%s",
 		Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,TmpPubDir);
       TmpPubDirExists = Fil_CheckIfPathExists (FullPathTmpPubDir);
-      if (!TmpPubDirExists)
+      if (TmpPubDirExists == Exi_DOES_NOT_EXIST)
 	 Fil_DB_RemovePublicDirFromCache (FullPathPriv);
       return TmpPubDirExists;
      }
 
-   return false;
+   return Exi_DOES_NOT_EXIST;
   }

@@ -399,7 +399,7 @@ static void Not_PutLinkToRSSFile (void)
    snprintf (PathRelRSSFile,sizeof (PathRelRSSFile),"%s/%ld/%s/%s",
 	     Cfg_PATH_CRS_PUBLIC,
 	     Gbl.Hierarchy.Node[Hie_CRS].HieCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
-   if (!Fil_CheckIfPathExists (PathRelRSSFile))
+   if (Fil_CheckIfPathExists (PathRelRSSFile) == Exi_DOES_NOT_EXIST)
       RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
 
    /***** Put a link to the RSS file *****/

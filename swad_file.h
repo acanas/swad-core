@@ -71,7 +71,7 @@ void Fil_CloseUpdateFile (const char CurrentName[PATH_MAX + 1],
 			  const char NewName[PATH_MAX + 1],
 			  FILE *NewFile);
 
-bool Fil_CheckIfPathExists (const char *Path);
+Exi_Exist_t Fil_CheckIfPathExists (const char *Path);
 void Fil_CreateDirIfNotExists (const char *Path);
 void Fil_RemoveTree (const char *Path);
 
@@ -89,7 +89,7 @@ void Fil_WriteFileSizeFull (double SizeInBytes,
 
 void Fil_AddPublicDirToCache (const char *FullPathPriv,
                               const char TmpPubDir[PATH_MAX + 1]);
-bool Fil_GetPublicDirFromCache (const char *FullPathPriv,
-                                char TmpPubDir[PATH_MAX + 1]);
+Exi_Exist_t Fil_GetPublicDirFromCache (const char *FullPathPriv,
+				       char TmpPubDir[PATH_MAX + 1]);
 
 #endif

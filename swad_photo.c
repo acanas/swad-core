@@ -110,6 +110,9 @@ static const char *Pho_GetFileNamePhoto (void);
 static void Pho_ChangePhoto1 (struct Usr_Data *UsrDat);
 static void Pho_ChangePhoto2 (void);
 
+static Exi_Exist_t Pho_CheckIfPrivPhotoExists (long UsrCod,
+					       char PathPrivRelPhoto[PATH_MAX + 1]);
+
 static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void);
 static long Pho_GetTimeAvgPhotoWasComputed (long DegCod);
 static long Pho_GetTimeToComputeAvgPhoto (long DegCod);
@@ -911,24 +914,28 @@ static void Pho_ChangePhoto1 (struct Usr_Data *UsrDat)
    /***** Convert the temporary photo resulting of the processing to the current photo of the user *****/
    snprintf (PathPhotoTmp,sizeof (PathPhotoTmp),"%s/%s_paso3.jpg",
              Cfg_PATH_PHOTO_TMP_PUBLIC,FileNamePhoto);
-   if (Fil_CheckIfPathExists (PathPhotoTmp))        // The file with the selected photo exists
+   switch (Fil_CheckIfPathExists (PathPhotoTmp))        // The file with the selected photo exists
      {
-      /* Copy the temporary file of the third (last) step resulting of the processing to the directory of private photos */
-      snprintf (PathRelPhoto,sizeof (PathRelPhoto),"%s/%02u/%ld.jpg",
-                Cfg_PATH_PHOTO_PRIVATE,
-                (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
-      Fil_FastCopyOfFiles (PathPhotoTmp,PathRelPhoto);
+      case Exi_EXISTS:
+	 /* Copy the temporary file of the third (last) step resulting of the processing to the directory of private photos */
+	 snprintf (PathRelPhoto,sizeof (PathRelPhoto),"%s/%02u/%ld.jpg",
+		   Cfg_PATH_PHOTO_PRIVATE,
+		   (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
+	 Fil_FastCopyOfFiles (PathPhotoTmp,PathRelPhoto);
 
-      /* Update public photo name in database */
-      Pho_UpdatePhotoName (UsrDat);
+	 /* Update public photo name in database */
+	 Pho_UpdatePhotoName (UsrDat);
 
-      /* Remove the user from the list of users without photo */
-      Pho_DB_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
+	 /* Remove the user from the list of users without photo */
+	 Pho_DB_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
 
-      Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Photo_has_been_updated);
+	 Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Photo_has_been_updated);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_CreateAlert (Ale_ERROR,NULL,"Error updating photo.");
+	 break;
      }
-   else
-      Ale_CreateAlert (Ale_ERROR,NULL,"Error updating photo.");
   }
 
 static void Pho_ChangePhoto2 (void)
@@ -1060,7 +1067,7 @@ bool Pho_BuildLinkToPhoto (struct Usr_Data *UsrDat,
                 (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
 
       /***** Create a symbolic link to the private photo, if not exists *****/
-      if (!Fil_CheckIfPathExists (PathPublPhoto))
+      if (Fil_CheckIfPathExists (PathPublPhoto) == Exi_DOES_NOT_EXIST)
          if (symlink (PathPrivPhoto,PathPublPhoto))
             Err_ShowErrorAndExit ("Can not create public link"
                                  " to access to user's private photo");
@@ -1081,10 +1088,9 @@ bool Pho_BuildLinkToPhoto (struct Usr_Data *UsrDat,
 /*****************************************************************************/
 /*************** Check if photo exists and return path to it *****************/
 /*****************************************************************************/
-// Returns false if photo does not exist
-// Returns true if photo exists
 
-bool Pho_CheckIfPrivPhotoExists (long UsrCod,char PathPrivRelPhoto[PATH_MAX + 1])
+static Exi_Exist_t Pho_CheckIfPrivPhotoExists (long UsrCod,
+					       char PathPrivRelPhoto[PATH_MAX + 1])
   {
    /***** Make path to private photo *****/
    snprintf (PathPrivRelPhoto,PATH_MAX + 1,"%s/%02u/%ld.jpg",
@@ -1361,17 +1367,17 @@ bool Pho_RemovePhoto (struct Usr_Data *UsrDat)
       /***** Remove public link *****/
       snprintf (PathPublPhoto,sizeof (PathPublPhoto),"%s/%s.jpg",
                 Cfg_PATH_PHOTO_PUBLIC,UsrDat->Photo);
-      if (Fil_CheckIfPathExists (PathPublPhoto))	// Public link exists
-         if (unlink (PathPublPhoto))			// Remove public link
+      if (Fil_CheckIfPathExists (PathPublPhoto) == Exi_EXISTS)		// Public link exists
+         if (unlink (PathPublPhoto))					// Remove public link
             NumErrors++;
 
       /***** Remove photo *****/
       snprintf (PathPrivRelPhoto,sizeof (PathPrivRelPhoto),"%s/%02u/%ld.jpg",
                 Cfg_PATH_PHOTO_PRIVATE,
                 (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
-      if (Fil_CheckIfPathExists (PathPrivRelPhoto))        // Photo exists
+      if (Fil_CheckIfPathExists (PathPrivRelPhoto) == Exi_EXISTS)	// Photo exists
         {
-         if (unlink (PathPrivRelPhoto))                        // Remove photo
+         if (unlink (PathPrivRelPhoto))                        		// Remove photo
             NumErrors++;
         }
 
@@ -1380,8 +1386,8 @@ bool Pho_RemovePhoto (struct Usr_Data *UsrDat)
                 "%s/%02u/%ld_original.jpg",
                 Cfg_PATH_PHOTO_PRIVATE,
                 (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
-      if (Fil_CheckIfPathExists (PathPrivRelPhoto))		// Original photo exists
-         if (unlink (PathPrivRelPhoto))				// Remove original photo
+      if (Fil_CheckIfPathExists (PathPrivRelPhoto) == Exi_EXISTS)	// Original photo exists
+         if (unlink (PathPrivRelPhoto))					// Remove original photo
             NumErrors++;
 
       /***** Clear photo name in user's data *****/
@@ -1708,7 +1714,7 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
       Err_NotEnoughMemoryExit ();
 
    /***** Remove old file if exists *****/
-   if (Fil_CheckIfPathExists (PathRelAvgPhoto))  // If file exists
+   if (Fil_CheckIfPathExists (PathRelAvgPhoto) == Exi_EXISTS)  // If file exists
       unlink (PathRelAvgPhoto);
 
    /***** Build names for text file with photo paths *****/
@@ -1730,7 +1736,8 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
 
 	 /***** Add photo to file for average face calculation *****/
 	 Gbl.Usrs.Other.UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
-	 if (Pho_CheckIfPrivPhotoExists (Gbl.Usrs.Other.UsrDat.UsrCod,PathPrivRelPhoto))
+	 if (Pho_CheckIfPrivPhotoExists (Gbl.Usrs.Other.UsrDat.UsrCod,
+					 PathPrivRelPhoto) == Exi_EXISTS)
 	   {
 	    (*NumStdsWithPhoto)++;
 	    fprintf (FilePhotoNames,"%s\n",PathPrivRelPhoto);
@@ -2512,7 +2519,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
 	        Cfg_PATH_PHOTO_PUBLIC,
 	        Pho_StrAvgPhotoDirs[DegPhotos->TypeOfAverage],
 	        Deg->HieCod,Usr_StringsSexDB[Sex]);
-      if (Fil_CheckIfPathExists (PathRelAvgPhoto))
+      if (Fil_CheckIfPathExists (PathRelAvgPhoto) == Exi_EXISTS)
 	{
 	 snprintf (PhotoURL,sizeof (PhotoURL),"%s/%s/%ld_%s.jpg",
 		   Cfg_URL_PHOTO_PUBLIC,

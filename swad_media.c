@@ -818,7 +818,7 @@ static void Med_GetAndProcessFileFromForm (const char *ParFile,
      }
 
    /***** Remove temporary original file *****/
-   if (Fil_CheckIfPathExists (PathFileOrg))
+   if (Fil_CheckIfPathExists (PathFileOrg) == Exi_EXISTS)
       unlink (PathFileOrg);
   }
 
@@ -884,7 +884,7 @@ static void Med_ProcessJPG (struct Med_Media *Media,
    else // Error processing media
      {
       /* Remove temporary destination media file */
-      if (Fil_CheckIfPathExists (PathFileJPGTmp))
+      if (Fil_CheckIfPathExists (PathFileJPGTmp) == Exi_EXISTS)
 	 unlink (PathFileJPGTmp);
 
       /* Show error alert */
@@ -938,7 +938,7 @@ static void Med_ProcessGIF (struct Med_Media *Media,
 	 else // Error getting first frame
 	   {
 	    /* Remove temporary PNG file */
-	    if (Fil_CheckIfPathExists (PathFilePNGTmp))
+	    if (Fil_CheckIfPathExists (PathFilePNGTmp) == Exi_EXISTS)
 	       unlink (PathFilePNGTmp);
 
 	    /* Show error alert */
@@ -1531,32 +1531,36 @@ static void Med_ShowJPG (const struct Med_Media *Media,
       Err_NotEnoughMemoryExit ();
 
    /***** Check if private media file exists *****/
-   if (Fil_CheckIfPathExists (FullPathJPGPriv))
+   switch (Fil_CheckIfPathExists (FullPathJPGPriv))
      {
-      /***** Get cached public link to private file *****/
-      Cached = Fil_GetPublicDirFromCache (FullPathJPGPriv,TmpPubDir);
+      case Exi_EXISTS:
+	 /***** Get cached public link to private file *****/
+	 Cached = (Fil_GetPublicDirFromCache (FullPathJPGPriv,TmpPubDir) == Exi_EXISTS);
 
-      if (!Cached)
-	{
-	 /***** Create symbolic link from temporary public directory to private file
-		in order to gain access to it for showing/downloading *****/
-	 Brw_CreateDirDownloadTmp ();
-	 Brw_CreateTmpPublicLinkToPrivateFile (FullPathJPGPriv,FileNameJPG);
+	 if (!Cached)
+	   {
+	    /***** Create symbolic link from temporary public directory to private file
+		   in order to gain access to it for showing/downloading *****/
+	    Brw_CreateDirDownloadTmp ();
+	    Brw_CreateTmpPublicLinkToPrivateFile (FullPathJPGPriv,FileNameJPG);
 
-	 snprintf (TmpPubDir,sizeof (TmpPubDir),"%s/%s",
-	           Gbl.FileBrowser.TmpPubDir.L,Gbl.FileBrowser.TmpPubDir.R);
-	 Fil_AddPublicDirToCache (FullPathJPGPriv,TmpPubDir);
-	}
+	    snprintf (TmpPubDir,sizeof (TmpPubDir),"%s/%s",
+		      Gbl.FileBrowser.TmpPubDir.L,Gbl.FileBrowser.TmpPubDir.R);
+	    Fil_AddPublicDirToCache (FullPathJPGPriv,TmpPubDir);
+	   }
 
-      /***** Show media *****/
-      if (asprintf (&URL,"%s/%s",Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDir) < 0)
-	 Err_NotEnoughMemoryExit ();
-      HTM_IMG (URL,FileNameJPG,Media->Title,
-	       "class=\"%s\" loading=\"lazy\"",ClassMedia);	// Lazy load of the media
-      free (URL);
+	 /***** Show media *****/
+	 if (asprintf (&URL,"%s/%s",Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDir) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 HTM_IMG (URL,FileNameJPG,Media->Title,
+		  "class=\"%s\" loading=\"lazy\"",ClassMedia);	// Lazy load of the media
+	 free (URL);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 HTM_Txt (Txt_File_not_found);
+	 break;
      }
-   else
-      HTM_Txt (Txt_File_not_found);
 
    free (FullPathJPGPriv);
   }
@@ -1592,65 +1596,69 @@ static void Med_ShowGIF (const struct Med_Media *Media,
       Err_NotEnoughMemoryExit ();
 
    /***** Check if private media file exists *****/
-   if (Fil_CheckIfPathExists (FullPathGIFPriv))		// The animated GIF image
+   switch (Fil_CheckIfPathExists (FullPathGIFPriv))		// The animated GIF image
      {
-      /***** Get cached public link to private file *****/
-      Cached = Fil_GetPublicDirFromCache (FullPathGIFPriv,TmpPubDir);
+      case Exi_EXISTS:
+	 /***** Get cached public link to private file *****/
+	 Cached = (Fil_GetPublicDirFromCache (FullPathGIFPriv,TmpPubDir) == Exi_EXISTS);
 
-      if (!Cached)
-	{
-	 /***** Create symbolic link from temporary public directory to private file
-		in order to gain access to it for showing/downloading *****/
-	 Brw_CreateDirDownloadTmp ();
-	 Brw_CreateTmpPublicLinkToPrivateFile (FullPathGIFPriv,FileNameGIF);
-	 Brw_CreateTmpPublicLinkToPrivateFile (FullPathPNGPriv,FileNamePNG);
+	 if (!Cached)
+	   {
+	    /***** Create symbolic link from temporary public directory to private file
+		   in order to gain access to it for showing/downloading *****/
+	    Brw_CreateDirDownloadTmp ();
+	    Brw_CreateTmpPublicLinkToPrivateFile (FullPathGIFPriv,FileNameGIF);
+	    Brw_CreateTmpPublicLinkToPrivateFile (FullPathPNGPriv,FileNamePNG);
 
-	 snprintf (TmpPubDir,sizeof (TmpPubDir),"%s/%s",
-	           Gbl.FileBrowser.TmpPubDir.L,Gbl.FileBrowser.TmpPubDir.R);
-	 Fil_AddPublicDirToCache (FullPathGIFPriv,TmpPubDir);
-	}
+	    snprintf (TmpPubDir,sizeof (TmpPubDir),"%s/%s",
+		      Gbl.FileBrowser.TmpPubDir.L,Gbl.FileBrowser.TmpPubDir.R);
+	    Fil_AddPublicDirToCache (FullPathGIFPriv,TmpPubDir);
+	   }
 
-      /***** Create URLs pointing to symbolic links *****/
-      if (asprintf (&URL,"%s/%s",Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDir) < 0)
-	 Err_NotEnoughMemoryExit ();
-      if (asprintf (&URL_GIF,"%s/%s",URL,FileNameGIF) < 0)
-	 Err_NotEnoughMemoryExit ();
-      if (asprintf (&URL_PNG,"%s/%s",URL,FileNamePNG) < 0)	// The static PNG image
-	 Err_NotEnoughMemoryExit ();
+	 /***** Create URLs pointing to symbolic links *****/
+	 if (asprintf (&URL,"%s/%s",Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDir) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 if (asprintf (&URL_GIF,"%s/%s",URL,FileNameGIF) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 if (asprintf (&URL_PNG,"%s/%s",URL,FileNamePNG) < 0)	// The static PNG image
+	    Err_NotEnoughMemoryExit ();
 
-      /***** Check if private media file exists *****/
-      if (Fil_CheckIfPathExists (FullPathPNGPriv))		// The static PNG image
-	{
-	 /***** Show static PNG and animated GIF *****/
-	 /* Begin container */
-	 HTM_DIV_Begin ("class=\"MED_PLAY\""
-			" onmouseover=\"toggleOnGIF(this,'%s');\""
-			" onmouseout=\"toggleOffGIF(this,'%s');\"",
-			URL_GIF,
-			URL_PNG);
+	 /***** Check if private media file exists *****/
+	 if (Fil_CheckIfPathExists (FullPathPNGPriv))		// The static PNG image
+	   {
+	    /***** Show static PNG and animated GIF *****/
+	    /* Begin container */
+	    HTM_DIV_Begin ("class=\"MED_PLAY\""
+			   " onmouseover=\"toggleOnGIF(this,'%s');\""
+			   " onmouseout=\"toggleOffGIF(this,'%s');\"",
+			   URL_GIF,
+			   URL_PNG);
 
-	    /* Image */
-	    HTM_IMG (URL,FileNamePNG,Media->Title,
-		     "class=\"%s\" loading=\"lazy\"",ClassMedia);	// Lazy load of the media
+	       /* Image */
+	       HTM_IMG (URL,FileNamePNG,Media->Title,
+			"class=\"%s\" loading=\"lazy\"",ClassMedia);	// Lazy load of the media
 
-	    /* Overlay with GIF label */
-	    HTM_SPAN_Begin ("class=\"MED_PLAY_ICO\"");
-	       HTM_Txt ("GIF");
-	    HTM_SPAN_End ();
+	       /* Overlay with GIF label */
+	       HTM_SPAN_Begin ("class=\"MED_PLAY_ICO\"");
+		  HTM_Txt ("GIF");
+	       HTM_SPAN_End ();
 
-	 /* End container */
-	 HTM_DIV_End ();
-	}
-      else
+	    /* End container */
+	    HTM_DIV_End ();
+	   }
+	 else
+	    HTM_Txt (Txt_File_not_found);
+
+	 /***** Free URLs *****/
+	 free (URL_PNG);
+	 free (URL_GIF);
+	 free (URL);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
 	 HTM_Txt (Txt_File_not_found);
-
-      /***** Free URLs *****/
-      free (URL_PNG);
-      free (URL_GIF);
-      free (URL);
+	 break;
      }
-   else
-      HTM_Txt (Txt_File_not_found);
 
    free (FullPathPNGPriv);
    free (FullPathGIFPriv);
@@ -1678,42 +1686,46 @@ static void Med_ShowVideo (const struct Med_Media *Media,
       Err_NotEnoughMemoryExit ();
 
    /***** Check if private media file exists *****/
-   if (Fil_CheckIfPathExists (FullPathVideoPriv))
+   switch (Fil_CheckIfPathExists (FullPathVideoPriv))
      {
-      /***** Get cached public link to private file *****/
-      Cached = Fil_GetPublicDirFromCache (FullPathVideoPriv,TmpPubDir);
+      case Exi_EXISTS:
+	 /***** Get cached public link to private file *****/
+	 Cached = (Fil_GetPublicDirFromCache (FullPathVideoPriv,TmpPubDir) == Exi_EXISTS);
 
-      if (!Cached)
-	{
-	 /***** Create symbolic link from temporary public directory to private file
-		in order to gain access to it for showing/downloading *****/
-	 Brw_CreateDirDownloadTmp ();
-	 Brw_CreateTmpPublicLinkToPrivateFile (FullPathVideoPriv,FileNameVideo);
+	 if (!Cached)
+	   {
+	    /***** Create symbolic link from temporary public directory to private file
+		   in order to gain access to it for showing/downloading *****/
+	    Brw_CreateDirDownloadTmp ();
+	    Brw_CreateTmpPublicLinkToPrivateFile (FullPathVideoPriv,FileNameVideo);
 
-	 snprintf (TmpPubDir,sizeof (TmpPubDir),"%s/%s",
-	           Gbl.FileBrowser.TmpPubDir.L,Gbl.FileBrowser.TmpPubDir.R);
-	 Fil_AddPublicDirToCache (FullPathVideoPriv,TmpPubDir);
-	}
+	    snprintf (TmpPubDir,sizeof (TmpPubDir),"%s/%s",
+		      Gbl.FileBrowser.TmpPubDir.L,Gbl.FileBrowser.TmpPubDir.R);
+	    Fil_AddPublicDirToCache (FullPathVideoPriv,TmpPubDir);
+	   }
 
-      /***** Create URL pointing to symbolic link *****/
-      if (asprintf (&URL,"%s/%s",Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDir) < 0)
-	 Err_NotEnoughMemoryExit ();
+	 /***** Create URL pointing to symbolic link *****/
+	 if (asprintf (&URL,"%s/%s",Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDir) < 0)
+	    Err_NotEnoughMemoryExit ();
 
-      /***** Show media *****/
-      HTM_TxtF ("<video src=\"%s/%s\""
-		" preload=\"metadata\" controls=\"controls\""
-		" class=\"%s\"",
-	        URL,FileNameVideo,ClassMedia);
-      if (Media->Title)
-	 if (Media->Title[0])
-	    HTM_TxtF (" title=\"%s\"",Media->Title);
-      HTM_Txt (" loading=\"lazy\">"	// Lazy load of the media
-               "Your browser does not support HTML5 video."
-	       "</video>");
-      free (URL);
+	 /***** Show media *****/
+	 HTM_TxtF ("<video src=\"%s/%s\""
+		   " preload=\"metadata\" controls=\"controls\""
+		   " class=\"%s\"",
+		   URL,FileNameVideo,ClassMedia);
+	 if (Media->Title)
+	    if (Media->Title[0])
+	       HTM_TxtF (" title=\"%s\"",Media->Title);
+	 HTM_Txt (" loading=\"lazy\">"	// Lazy load of the media
+		  "Your browser does not support HTML5 video."
+		  "</video>");
+	 free (URL);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 HTM_Txt (Txt_File_not_found);
+	 break;
      }
-   else
-      HTM_Txt (Txt_File_not_found);
 
    free (FullPathVideoPriv);
   }

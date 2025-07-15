@@ -132,7 +132,7 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
    Frm_PutForm_t PutFormPhoto;
    bool MapIsAvailable;
    char PathPhoto[PATH_MAX + 1];
-   bool PhotoExists;
+   Exi_Exist_t PhotoExists;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Node[Hie_CTR].HieCod <= 0)	// No center selected
@@ -241,7 +241,7 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
 		(unsigned)  Gbl.Hierarchy.Node[Hie_CTR].HieCod);
       PhotoExists = Fil_CheckIfPathExists (PathPhoto);
 
-      if (MapIsAvailable || PhotoExists)
+      if (MapIsAvailable || PhotoExists == Exi_EXISTS)
 	{
 	 HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT\"");
 
@@ -250,7 +250,7 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
 	       CtrCfg_Map (&Coord);
 
 	    /***** Center photo *****/
-	    if (PhotoExists)
+	    if (PhotoExists == Exi_EXISTS)
 	       CtrCfg_Photo (ViewType,PutFormPhoto,PutLink,PathPhoto);
 
 	 HTM_DIV_End ();
