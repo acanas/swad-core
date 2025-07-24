@@ -157,9 +157,9 @@ Exi_Exist_t Ses_DB_CheckIfSessionExists (const char *IdSes)
 /******* Get the data (user code and password) of an initiated session *******/
 /*****************************************************************************/
 
-unsigned Ses_DB_GetSessionData (MYSQL_RES **mysql_res)
+Err_SuccessOrError_t Ses_DB_GetSessionData (MYSQL_RES **mysql_res)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get session data",
 		   "SELECT UsrCod,"		// row[0]
 			  "Password,"		// row[1]
@@ -173,7 +173,8 @@ unsigned Ses_DB_GetSessionData (MYSQL_RES **mysql_res)
 			  "SearchStr"		// row[9]
 		    " FROM ses_sessions"
 		   " WHERE SessionId='%s'",
-		   Gbl.Session.Id);
+		   Gbl.Session.Id) ? Err_SUCCESS :
+				     Err_ERROR;
   }
 
 /*****************************************************************************/

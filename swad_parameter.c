@@ -793,16 +793,19 @@ void Par_GetMainPars (void)
    /***** Get session identifier, if exists *****/
    Par_GetParText ("ses",Gbl.Session.Id,Cns_BYTES_SESSION_ID);
    if (Gbl.Session.Id[0])
-     {
-      /***** Get user's code, password, current degree and current course from stored session *****/
-      if (Ses_GetSessionData ())
-	 Gbl.Session.Status = Ses_OPEN;
-      else
+      /***** Get user's code, password, current degree and current course
+             from stored session *****/
+      switch (Ses_GetSessionData ())
 	{
-	 Gbl.Session.Status = Ses_EXPIRED;
-	 Gbl.Session.Id[0] = '\0';
+	 case Err_SUCCESS:
+	    Gbl.Session.Status = Ses_OPEN;
+	    break;
+	 case Err_ERROR:
+	 default:
+	    Gbl.Session.Status = Ses_EXPIRED;
+	    Gbl.Session.Id[0] = '\0';
+	    break;
 	}
-     }
 
    /***** Get user password and login *****/
    switch (Gbl.Action.Act)

@@ -141,16 +141,17 @@ static void Ses_RemoveSessionFromDB (void)
 /******* Get the data (user code and password) of an initiated session *******/
 /*****************************************************************************/
 
-bool Ses_GetSessionData (void)
+Err_SuccessOrError_t Ses_GetSessionData (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned UnsignedNum;
-   bool Result = false;
+   Err_SuccessOrError_t SuccessOrError;
    struct Sch_Search *Search;
 
    /***** Check if the session existed in the database *****/
-   if (Ses_DB_GetSessionData (&mysql_res))
+   SuccessOrError = Ses_DB_GetSessionData (&mysql_res);
+   if (SuccessOrError == Err_SUCCESS)
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -192,14 +193,12 @@ bool Ses_GetSessionData (void)
 	 /* Get search string (row[9]) */
 	 Str_Copy (Search->Str,row[9],sizeof (Search->Str) - 1);
 	}
-
-      Result = true;
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return Result;
+   return SuccessOrError;
   }
 
 /*****************************************************************************/

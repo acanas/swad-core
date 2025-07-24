@@ -40,7 +40,7 @@ void Ses_DB_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned
 void Ses_DB_UpdateSessionLastRefresh (void);
 
 Exi_Exist_t Ses_DB_CheckIfSessionExists (const char *IdSes);
-unsigned Ses_DB_GetSessionData (MYSQL_RES **mysql_res);
+Err_SuccessOrError_t Ses_DB_GetSessionData (MYSQL_RES **mysql_res);
 unsigned Ses_DB_GetSomeSessionData (MYSQL_RES **mysql_res,const char *SessionId);
 unsigned Ses_DB_GetLastPageMsgFromSession (Pag_WhatPaginate_t WhatPaginate);
 
