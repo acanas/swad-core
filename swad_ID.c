@@ -27,7 +27,6 @@
 
 #define _GNU_SOURCE 		// For asprintf
 #include <ctype.h>		// For isalnum, isdigit, etc.
-#include <stdbool.h>		// For boolean type
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
 #include <string.h>		// For string functions

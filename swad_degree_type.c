@@ -26,7 +26,6 @@
 /*****************************************************************************/
 
 #include <ctype.h>		// For isprint, isspace, etc.
-#include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
 #include <stdlib.h>		// For exit, system, calloc, free, etc.
 #include <string.h>		// For string functions

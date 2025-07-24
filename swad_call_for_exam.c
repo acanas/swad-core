@@ -712,7 +712,7 @@ void Cfe_CreateListCallsForExams (struct Cfe_CallsForExams *CallsForExams)
    unsigned NumExaAnns;
    unsigned NumExaAnn;
 
-   if (DB_CheckIfDatabaseIsOpen ())
+   if (DB_CheckIfDatabaseIsOpen () == CloOpe_OPEN)
      {
       /***** Get exam dates (ordered from more recent to older)
              of visible calls for exams

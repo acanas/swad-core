@@ -1456,7 +1456,7 @@ static void Usr_GetParOtherUsrIDNickOrEMail (void)
 unsigned Usr_GetParOtherUsrIDNickOrEMailAndGetUsrCods (struct Usr_ListUsrCods *ListUsrCods)
   {
    extern const char *Txt_The_ID_nickname_or_email_X_is_not_valid;
-   bool Wrong = false;
+   Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
 
    /***** Reset default list of users' codes *****/
    ListUsrCods->NumUsrs = 0;
@@ -1504,13 +1504,13 @@ unsigned Usr_GetParOtherUsrIDNickOrEMailAndGetUsrCods (struct Usr_ListUsrCods *L
 	    ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Other.UsrDat,NULL,ListUsrCods,false);
 	   }
 	 else	// Not a valid user's nickname, email or ID
-	    Wrong = true;
+	    SuccessOrError = Err_ERROR;
 	}
      }
    else	// Empty string
-      Wrong = true;
+      SuccessOrError = Err_ERROR;
 
-   if (Wrong)
+   if (SuccessOrError == Err_ERROR)
       /***** String is not a valid user's nickname, email or ID *****/
       Ale_ShowAlert (Ale_WARNING,Txt_The_ID_nickname_or_email_X_is_not_valid,
 	             Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
@@ -1972,7 +1972,8 @@ static void Usr_SetMyPrefsAndRoles (void)
    Usr_ConstructPathUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.PathDir);
 
    /***** Check if my photo exists and create a link to it ****/
-   Gbl.Usrs.Me.MyPhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL);
+   Gbl.Usrs.Me.MyPhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,
+						     Gbl.Usrs.Me.PhotoURL);
 
    /***** Get my last data *****/
    Usr_GetMyLastData ();

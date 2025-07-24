@@ -26,7 +26,6 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
-#include <stdbool.h>		// For boolean type
 #include <stdlib.h>		// For malloc and free
 #include <stdio.h>		// For asprintf
 

@@ -182,7 +182,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	       free (Description);
 	      }
 
-	    if (!Gbl.Usrs.Me.MyPhotoExists)		// I have no photo
+	    if (Gbl.Usrs.Me.MyPhotoExists == Exi_DOES_NOT_EXIST)	// I have no photo
 	       /***** Upload my photo *****/
 	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Upload_my_picture,
 						    ActReqMyPho,

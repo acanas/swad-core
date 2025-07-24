@@ -247,7 +247,7 @@ static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat)
    char LinkTmpUsr[PATH_MAX + 1];
    char Link[PATH_MAX + 1 + Cns_MAX_DIGITS_UINT + 1];
    unsigned NumTry;
-   bool Success;
+   Err_SuccessOrError_t ErrorOrSuccess;
 
    /***** Create a link in the tree of compression
           with a name that identifies the owner
@@ -283,18 +283,18 @@ static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat)
    /* Try to create a link named LinkTmpUsr to PathFolderUsrInsideCrs */
    if (symlink (PathFolderUsrInsideCrs,LinkTmpUsr))
      {
-      for (Success = false, NumTry = 2;
-	   !Success && errno == EEXIST && NumTry<=1000;
+      for (ErrorOrSuccess = Err_ERROR, NumTry = 2;
+	   ErrorOrSuccess == Err_ERROR && errno == EEXIST && NumTry<=1000;
 	   NumTry++)
 	{
 	 // Link exists ==> a former user share the same name and ID
 	 // (probably a unique user has created two or more accounts)
 	 snprintf (Link,sizeof (Link),"%s-%u",LinkTmpUsr,NumTry);
 	 if (symlink (PathFolderUsrInsideCrs,Link) == 0)
-	    Success = true;
+	    ErrorOrSuccess = Err_SUCCESS;
 	}
 
-      if (!Success)
+      if (ErrorOrSuccess == Err_ERROR)
 	 Err_ShowErrorAndExit ("Can not create temporary link for compression.");
      }
   }

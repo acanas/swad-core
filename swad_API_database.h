@@ -28,7 +28,6 @@
 /*****************************************************************************/
 
 #include <mysql/mysql.h>	// To access MySQL databases
-#include <stdbool.h>		// For boolean type
 
 #include "swad_API.h"
 #include "swad_exist.h"

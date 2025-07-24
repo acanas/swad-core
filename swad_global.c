@@ -126,7 +126,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Me.Role.LoggedBeforeCloseSession =
    Gbl.Usrs.Me.Role.Max                      = Rol_UNK;
    Gbl.Usrs.Me.Role.HasChanged = false;
-   Gbl.Usrs.Me.MyPhotoExists = false;
+   Gbl.Usrs.Me.MyPhotoExists = Exi_DOES_NOT_EXIST;
    Gbl.Usrs.Me.NumAccWithoutPhoto = 0;
    Gbl.Usrs.Me.TimeLastAccToThisFileBrowser = LONG_MAX;	// Initialized to a big value, so by default files are not shown as recent or new
    Hie_ResetMyHierarchy ();

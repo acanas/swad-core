@@ -28,7 +28,6 @@
 /*****************************************************************************/
 
 #include <mysql/mysql.h>	// To access MySQL databases
-#include <stdbool.h>		// For boolean type
 #include <sys/types.h>		// For time_t
 
 #include "swad_cryptography.h"

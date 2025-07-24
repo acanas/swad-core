@@ -27,8 +27,6 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-#include <stdbool.h>		// For boolean type
-
 #include "swad_action_list.h"
 #include "swad_hierarchy_type.h"
 #include "swad_tab.h"

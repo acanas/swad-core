@@ -501,7 +501,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 
 static unsigned Con_GetConnectedUsrsTotal (Rol_Role_t Role)
   {
-   if (!DB_CheckIfDatabaseIsOpen ())
+   if (DB_CheckIfDatabaseIsOpen () == CloOpe_CLOSED)
       return 0;
 
    /***** Get number of connected users with a role from database *****/

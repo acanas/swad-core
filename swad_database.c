@@ -49,11 +49,11 @@
 static struct
   {
    MYSQL mysql;
-   bool IsOpen;
+   CloOpe_ClosedOrOpen_t IsOpen;
    bool ThereAreLockedTables;
   } DB_Database =
   {
-   .IsOpen = false,
+   .IsOpen = CloOpe_CLOSED,
    .ThereAreLockedTables = false,
   };
 
@@ -4151,14 +4151,14 @@ void DB_OpenDBConnection (void)
 	                   Cfg_DATABASE_DBNAME,0,NULL,0) == NULL)
       DB_ExitOnMySQLError ("can not connect to database");
 
-   DB_Database.IsOpen = true;
+   DB_Database.IsOpen = CloOpe_OPEN;
   }
 
 /*****************************************************************************/
 /************************ Check if database is open **************************/
 /*****************************************************************************/
 
-bool DB_CheckIfDatabaseIsOpen (void)
+CloOpe_ClosedOrOpen_t DB_CheckIfDatabaseIsOpen (void)
   {
    return DB_Database.IsOpen;
   }
@@ -4169,10 +4169,10 @@ bool DB_CheckIfDatabaseIsOpen (void)
 
 void DB_CloseDBConnection (void)
   {
-   if (DB_CheckIfDatabaseIsOpen ())
+   if (DB_CheckIfDatabaseIsOpen () == CloOpe_OPEN)
      {
       mysql_close (&DB_Database.mysql);	// Close the connection to the database
-      DB_Database.IsOpen = false;
+      DB_Database.IsOpen = CloOpe_CLOSED;
      }
   }
 

@@ -308,7 +308,7 @@ void Lgo_ReceiveLogo (Hie_Level_t HieLvl)
    char FileNameLogoSrc[PATH_MAX + 1];
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    char FileNameLogo[PATH_MAX + 1];	// Full name (including path and .png) of the destination file
-   bool WrongType = false;
+   Err_SuccessOrError_t SuccessOrError;
 
    /***** Creates directories if not exist *****/
    snprintf (Path,sizeof (Path),"%s/%s",
@@ -334,25 +334,29 @@ void Lgo_ReceiveLogo (Hie_Level_t HieLvl)
                                      FileNameLogoSrc,MIMEType);
 
    /* Check if the file type is image/jpeg or image/pjpeg or application/octet-stream */
+   SuccessOrError = Err_SUCCESS;
    if (strcmp (MIMEType,"image/png"))
       if (strcmp (MIMEType,"image/x-png"))
          if (strcmp (MIMEType,"application/octet-stream"))
             if (strcmp (MIMEType,"application/octetstream"))
                if (strcmp (MIMEType,"application/octet"))
-                  WrongType = true;
-   if (WrongType)
-      Ale_ShowAlert (Ale_WARNING,Txt_The_file_is_not_X,
-		     "png");
-   else
+                  SuccessOrError = Err_ERROR;
+   switch (SuccessOrError)
      {
-      /* End the reception of logo in a temporary file */
-      snprintf (FileNameLogo,sizeof (FileNameLogo),"%s/%s/%02u/%u/logo/%u.png",
-	        Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl],
-	        (unsigned) (HieCod % 100),
-	        (unsigned)  HieCod,
-	        (unsigned)  HieCod);
-      if (!Fil_EndReceptionOfFile (FileNameLogo,Par))
-	 Ale_ShowAlert (Ale_ERROR,"Error copying file.");
+      case Err_SUCCESS:
+	 /* End the reception of logo in a temporary file */
+	 snprintf (FileNameLogo,sizeof (FileNameLogo),"%s/%s/%02u/%u/logo/%u.png",
+		   Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl],
+		   (unsigned) (HieCod % 100),
+		   (unsigned)  HieCod,
+		   (unsigned)  HieCod);
+	 if (!Fil_EndReceptionOfFile (FileNameLogo,Par))
+	    Ale_ShowAlert (Ale_ERROR,"Error copying file.");
+         break;
+      case Err_ERROR:
+      default:
+	 Ale_ShowAlert (Ale_WARNING,Txt_The_file_is_not_X,"png");
+	 break;
      }
   }
 

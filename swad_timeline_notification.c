@@ -25,7 +25,6 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#include <stdbool.h>		// For boolean type
 #include <string.h>		// For string functions
 
 #include "swad_global.h"

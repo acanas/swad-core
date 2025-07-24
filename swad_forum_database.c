@@ -25,8 +25,6 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stdbool.h>		// For boolean type
-
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_forum.h"

@@ -126,7 +126,7 @@ struct Globals
          char PendingPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
 	 char PathDir[PATH_MAX + 1];
 	 bool Logged;
-         bool MyPhotoExists;
+         Exi_Exist_t MyPhotoExists;
          unsigned NumAccWithoutPhoto;
          char PhotoURL[WWW_MAX_BYTES_WWW + 1];
          time_t TimeLastAccToThisFileBrowser;

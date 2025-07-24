@@ -27,7 +27,6 @@
 
 #define _GNU_SOURCE         	// For strcasestr, asprintf
 #include <linux/limits.h>	// For PATH_MAX
-#include <stdbool.h>		// For boolean type
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For exit, system, malloc, free, etc
 #include <string.h>		// For string functions

@@ -38,7 +38,7 @@
 
 void DB_CreateTablesIfNotExist (void);
 void DB_OpenDBConnection (void);
-bool DB_CheckIfDatabaseIsOpen (void);
+CloOpe_ClosedOrOpen_t DB_CheckIfDatabaseIsOpen (void);
 void DB_CloseDBConnection (void);
 
 void DB_BuildQuery (char **Query,const char *fmt,...);

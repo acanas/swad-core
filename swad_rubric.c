@@ -25,7 +25,6 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
 #include <stdlib.h>		// For free, malloc
 

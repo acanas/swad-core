@@ -228,7 +228,7 @@ void Pho_PutIconToChangeUsrPhoto (struct Usr_Data *UsrDat)
 
 static void Pho_PutIconToReqRemMyPhoto (__attribute__((unused)) void *Args)
   {
-   if (Gbl.Usrs.Me.MyPhotoExists)
+   if (Gbl.Usrs.Me.MyPhotoExists == Exi_EXISTS)
       Lay_PutContextualLinkOnlyIcon (ActReqRemMyPho,NULL,
 				     NULL,NULL,
 				     "trash.svg",Ico_RED);
@@ -241,7 +241,6 @@ static void Pho_PutIconToReqRemMyPhoto (__attribute__((unused)) void *Args)
 static void Pho_PutIconToReqRemOtherUsrPhoto (__attribute__((unused)) void *Args)
   {
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
-   bool PhotoExists;
    static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_UNK	  ] = ActReqRemOthPho,
@@ -257,8 +256,7 @@ static void Pho_PutIconToReqRemOtherUsrPhoto (__attribute__((unused)) void *Args
      };
 
    /***** Link to request the removal of another user's photo *****/
-   PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-   if (PhotoExists)
+   if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL) == Exi_EXISTS)
       Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,
 				     Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 				     "trash.svg",Ico_RED);
@@ -461,24 +459,28 @@ void Pho_ReqRemMyPhoto (void)
      };
 
    /***** Show current photo and help message *****/
-   if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL))
+   switch (Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL))
      {
-      /***** Show question and button to remove my photo *****/
-      /* Begin alert */
-      Ale_ShowAlertAndButtonBegin (Ale_QUESTION,
-				   Txt_Do_you_really_want_to_remove_your_photo);
+      case Exi_EXISTS:
+	 /***** Show question and button to remove my photo *****/
+	 /* Begin alert */
+	 Ale_ShowAlertAndButtonBegin (Ale_QUESTION,
+				      Txt_Do_you_really_want_to_remove_your_photo);
 
-      /* Show current photo */
-      Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL,
-			ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM);
+	 /* Show current photo */
+	 Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL,
+			   ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM);
 
-      /* End alert */
-      Ale_ShowAlertAndButtonEnd (ActRemMyPho,NULL,NULL,
-                                 NULL,NULL,
-                                 Btn_REMOVE);
+	 /* End alert */
+	 Ale_ShowAlertAndButtonEnd (ActRemMyPho,NULL,NULL,
+				    NULL,NULL,
+				    Btn_REMOVE);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
+	 break;
      }
-   else
-      Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
 
    /***** Show my record and other data *****/
    Rec_ShowMySharedRecordAndMore ();
@@ -493,8 +495,10 @@ void Pho_RemoveMyPhoto1 (void)
    /***** Remove photo *****/
    Pho_RemovePhoto (&Gbl.Usrs.Me.UsrDat);
 
-   /***** The link to my photo is not valid now, so build it again before writing the web page *****/
-   Gbl.Usrs.Me.MyPhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL);
+   /***** The link to my photo is not valid now,
+          so build it again before writing the web page *****/
+   Gbl.Usrs.Me.MyPhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,
+						     Gbl.Usrs.Me.PhotoURL);
   }
 
 void Pho_RemoveMyPhoto2 (void)
@@ -548,25 +552,29 @@ void Pho_ReqRemUsrPhoto (void)
 	{
 	 case Usr_CAN:
 	    /***** Show current photo and help message *****/
-	    if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL))
+	    switch (Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL))
 	      {
-	       /***** Show question and button to remove user's photo *****/
-	       /* Begin alert */
-	       Ale_ShowAlertAndButtonBegin (Ale_QUESTION,
-					    Txt_Do_you_really_want_to_remove_the_photo_of_X,
-					    Gbl.Usrs.Other.UsrDat.FullName);
+	       case Exi_EXISTS:
+		  /***** Show question and button to remove user's photo *****/
+		  /* Begin alert */
+		  Ale_ShowAlertAndButtonBegin (Ale_QUESTION,
+					       Txt_Do_you_really_want_to_remove_the_photo_of_X,
+					       Gbl.Usrs.Other.UsrDat.FullName);
 
-	       /* Show current photo */
-	       Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,
-				 ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM);
+		  /* Show current photo */
+		  Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,
+				    ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM);
 
-	       /* End alert */
-	       Ale_ShowAlertAndButtonEnd (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,NULL,
-					  Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-					  Btn_REMOVE);
+		  /* End alert */
+		  Ale_ShowAlertAndButtonEnd (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,NULL,
+					     Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+					     Btn_REMOVE);
+		  break;
+	       case Exi_DOES_NOT_EXIST:
+	       default:
+		  Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
+		  break;
 	      }
-	    else
-	       Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
 	    break;
 	 case Usr_CAN_NOT:
 	 default:
@@ -632,7 +640,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
    char PathRelPhoto[PATH_MAX + 1];
    FILE *FileTxtMap = NULL;		// Temporary file with the text neccesary to make the image map. Initialized to avoid warning
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
-   bool WrongType = false;
+   Err_SuccessOrError_t SuccessOrError;
    char Command[256 + PATH_MAX];	// Command to call the program of preprocessing of photos
    int ReturnCode;
    char FormId[32];
@@ -687,16 +695,16 @@ static bool Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
                                      FileNamePhotoSrc,MIMEType);
 
    /* Check if the file type is image/jpeg or image/pjpeg or application/octet-stream */
+   SuccessOrError = Err_SUCCESS;
    if (strcmp (MIMEType,"image/jpeg"))
       if (strcmp (MIMEType,"image/pjpeg"))
          if (strcmp (MIMEType,"application/octet-stream"))
             if (strcmp (MIMEType,"application/octetstream"))
                if (strcmp (MIMEType,"application/octet"))
-                  WrongType = true;
-   if (WrongType)
+                  SuccessOrError = Err_ERROR;
+   if (SuccessOrError == Err_ERROR)
      {
-      Ale_ShowAlert (Ale_WARNING,Txt_The_file_is_not_X,
-		     "jpg");
+      Ale_ShowAlert (Ale_WARNING,Txt_The_file_is_not_X,"jpg");
       return false;
      }
 
@@ -851,8 +859,10 @@ void Pho_UpdateMyPhoto1 (void)
   {
    Pho_ChangePhoto1 (&Gbl.Usrs.Me.UsrDat);
 
-   /***** The link to my photo is not valid now, so build it again before writing the web page *****/
-   Gbl.Usrs.Me.MyPhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL);
+   /***** The link to my photo is not valid now,
+          so build it again before writing the web page *****/
+   Gbl.Usrs.Me.MyPhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,
+						     Gbl.Usrs.Me.PhotoURL);
   }
 
 void Pho_UpdateMyPhoto2 (void)
@@ -1037,7 +1047,7 @@ Pho_ShowPhotos_t Pho_ShowingUsrPhotoIsAllowed (struct Usr_Data *UsrDat,
   {
    /***** Photo is shown if I can see it, and it exists *****/
    if (Pri_CheckIfICanView (UsrDat->PhotoVisibility,UsrDat) == Usr_CAN)
-      if (Pho_BuildLinkToPhoto (UsrDat,PhotoURL))
+      if (Pho_BuildLinkToPhoto (UsrDat,PhotoURL) == Exi_EXISTS)
 	 return Pho_PHOTOS_SHOW;
 
    return Pho_PHOTOS_DONT_SHOW;
@@ -1046,11 +1056,11 @@ Pho_ShowPhotos_t Pho_ShowingUsrPhotoIsAllowed (struct Usr_Data *UsrDat,
 /*****************************************************************************/
 /***************** Create a public link to a private photo *******************/
 /*****************************************************************************/
-// Returns false if photo does not exist
-// Returns true if link is created successfully
+// Returns Exi_DOES_NOT_EXIST if photo does not exist
+// Returns Exi_EXISTS if link is created successfully
 
-bool Pho_BuildLinkToPhoto (struct Usr_Data *UsrDat,
-			   char PhotoURL[WWW_MAX_BYTES_WWW + 1])
+Exi_Exist_t Pho_BuildLinkToPhoto (struct Usr_Data *UsrDat,
+				  char PhotoURL[WWW_MAX_BYTES_WWW + 1])
   {
    char PathPublPhoto[PATH_MAX + 1];
    char PathPrivPhoto[PATH_MAX + 1];
@@ -1076,12 +1086,12 @@ bool Pho_BuildLinkToPhoto (struct Usr_Data *UsrDat,
       snprintf (PhotoURL,WWW_MAX_BYTES_WWW + 1,"%s/%s.jpg",
                 Cfg_URL_PHOTO_PUBLIC,UsrDat->Photo);
 
-      return true;
+      return Exi_EXISTS;
      }
    else
      {
       PhotoURL[0] = '\0';
-      return false;
+      return Exi_DOES_NOT_EXIST;
      }
   }
 

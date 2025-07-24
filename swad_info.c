@@ -2189,7 +2189,7 @@ void Inf_ReceivePagInfo (void)
    char PathRelFileZIP[PATH_MAX + 1 + NAME_MAX + 1];
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    char StrUnzip[128 + PATH_MAX + 1 + NAME_MAX + 1 + PATH_MAX + 1];
-   bool WrongType = false;
+   Err_SuccessOrError_t SuccessOrError;
    bool FileIsOK = false;
 
    /***** Set info type *****/
@@ -2200,6 +2200,7 @@ void Inf_ReceivePagInfo (void)
                                    SourceFileName,MIMEType);
 
    /***** Check that MIME type is HTML or ZIP *****/
+   SuccessOrError = Err_SUCCESS;
    if (strcmp (MIMEType,"text/html"))
       if (strcmp (MIMEType,"text/plain"))
          if (strcmp (MIMEType,"application/x-zip-compressed"))
@@ -2208,86 +2209,90 @@ void Inf_ReceivePagInfo (void)
 		  if (strcmp (MIMEType,"application/octet-stream"))
 	             if (strcmp (MIMEType,"application/octetstream"))
 	                if (strcmp (MIMEType,"application/octet"))
-                           WrongType = true;
-   if (WrongType)
-      Ale_ShowAlert (Ale_INFO,Txt_The_file_type_is_X_and_should_be_HTML_or_ZIP,
-                     MIMEType);
-   else
+                           SuccessOrError = Err_ERROR;
+   switch (SuccessOrError)
      {
-      /***** Build path of directory containing web page *****/
-      Inf_BuildPathPage (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,
-			 PathRelDirHTML);
+      case Err_SUCCESS:
+	 /***** Build path of directory containing web page *****/
+	 Inf_BuildPathPage (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,
+			    PathRelDirHTML);
 
-      /***** End the reception of the data *****/
-      if (Str_FileIs (SourceFileName,"html") ||
-          Str_FileIs (SourceFileName,"htm" )) // .html or .htm file
-        {
-         Fil_RemoveTree (PathRelDirHTML);
-         Fil_CreateDirIfNotExists (PathRelDirHTML);
-         snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
-		   PathRelDirHTML);
-         if (Fil_EndReceptionOfFile (PathRelFileHTML,Par))
-           {
-            Ale_ShowAlert (Ale_SUCCESS,Txt_The_HTML_file_has_been_received_successfully);
-            FileIsOK = true;
-           }
-         else
-            Ale_ShowAlert (Ale_ERROR,"Error uploading file.");
-        }
-      else if (Str_FileIs (SourceFileName,"zip")) // .zip file
-        {
-         Fil_RemoveTree (PathRelDirHTML);
-         Fil_CreateDirIfNotExists (PathRelDirHTML);
-         snprintf (PathRelFileZIP,sizeof (PathRelFileZIP),"%s/%s.zip",
-                   Gbl.Crs.Path.AbsPriv,
-                   Inf_FileNamesForInfoType[InfoType]);
-
-         if (Fil_EndReceptionOfFile (PathRelFileZIP,Par))
-           {
-            Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_received_successfully);
-
-            /* Uncompress ZIP */
-            snprintf (StrUnzip,sizeof (StrUnzip),"unzip -qq -o %s -d %s",
-                      PathRelFileZIP,PathRelDirHTML);
-            if (system (StrUnzip) == 0)
-              {
-               /* Check if uploaded file is index.html or index.htm */
-               snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
-        	         "%s/index.html",PathRelDirHTML);
-	       switch (Fil_CheckIfPathExists (PathRelFileHTML))
-		 {
-		  case Exi_EXISTS:
-		     Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);
-		     Ale_ShowAlert (Ale_SUCCESS,Txt_Found_an_index_html_file);
-		     FileIsOK = true;
-		     break;
-		  case Exi_DOES_NOT_EXIST:
-		  default:
-		     snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
-			       "%s/index.htm",PathRelDirHTML);
-		     switch (Fil_CheckIfPathExists (PathRelFileHTML))
-		       {
-			case Exi_EXISTS:
-			   Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);
-			   Ale_ShowAlert (Ale_SUCCESS,Txt_Found_an_index_html_file);
-			   FileIsOK = true;
-			   break;
-			case Exi_DOES_NOT_EXIST:
-			default:
-			   Ale_ShowAlert (Ale_WARNING,Txt_No_file_index_html_found_within_the_ZIP_file);
-			   break;
-		       }
-		     break;
-		 }
+	 /***** End the reception of the data *****/
+	 if (Str_FileIs (SourceFileName,"html") ||
+	     Str_FileIs (SourceFileName,"htm" )) // .html or .htm file
+	   {
+	    Fil_RemoveTree (PathRelDirHTML);
+	    Fil_CreateDirIfNotExists (PathRelDirHTML);
+	    snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
+		      PathRelDirHTML);
+	    if (Fil_EndReceptionOfFile (PathRelFileHTML,Par))
+	      {
+	       Ale_ShowAlert (Ale_SUCCESS,Txt_The_HTML_file_has_been_received_successfully);
+	       FileIsOK = true;
 	      }
-            else
-               Err_ShowErrorAndExit ("Can not unzip file.");
-           }
-         else
-            Ale_ShowAlert (Ale_ERROR,"Error uploading file.");
-        }
-      else
-         Ale_ShowAlert (Ale_WARNING,Txt_The_file_type_should_be_HTML_or_ZIP);
+	    else
+	       Ale_ShowAlert (Ale_ERROR,"Error uploading file.");
+	   }
+	 else if (Str_FileIs (SourceFileName,"zip")) // .zip file
+	   {
+	    Fil_RemoveTree (PathRelDirHTML);
+	    Fil_CreateDirIfNotExists (PathRelDirHTML);
+	    snprintf (PathRelFileZIP,sizeof (PathRelFileZIP),"%s/%s.zip",
+		      Gbl.Crs.Path.AbsPriv,
+		      Inf_FileNamesForInfoType[InfoType]);
+
+	    if (Fil_EndReceptionOfFile (PathRelFileZIP,Par))
+	      {
+	       Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_received_successfully);
+
+	       /* Uncompress ZIP */
+	       snprintf (StrUnzip,sizeof (StrUnzip),"unzip -qq -o %s -d %s",
+			 PathRelFileZIP,PathRelDirHTML);
+	       if (system (StrUnzip) == 0)
+		 {
+		  /* Check if uploaded file is index.html or index.htm */
+		  snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
+			    "%s/index.html",PathRelDirHTML);
+		  switch (Fil_CheckIfPathExists (PathRelFileHTML))
+		    {
+		     case Exi_EXISTS:
+			Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);
+			Ale_ShowAlert (Ale_SUCCESS,Txt_Found_an_index_html_file);
+			FileIsOK = true;
+			break;
+		     case Exi_DOES_NOT_EXIST:
+		     default:
+			snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
+				  "%s/index.htm",PathRelDirHTML);
+			switch (Fil_CheckIfPathExists (PathRelFileHTML))
+			  {
+			   case Exi_EXISTS:
+			      Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);
+			      Ale_ShowAlert (Ale_SUCCESS,Txt_Found_an_index_html_file);
+			      FileIsOK = true;
+			      break;
+			   case Exi_DOES_NOT_EXIST:
+			   default:
+			      Ale_ShowAlert (Ale_WARNING,Txt_No_file_index_html_found_within_the_ZIP_file);
+			      break;
+			  }
+			break;
+		    }
+		 }
+	       else
+		  Err_ShowErrorAndExit ("Can not unzip file.");
+	      }
+	    else
+	       Ale_ShowAlert (Ale_ERROR,"Error uploading file.");
+	   }
+	 else
+	    Ale_ShowAlert (Ale_WARNING,Txt_The_file_type_should_be_HTML_or_ZIP);
+         break;
+      case Err_ERROR:
+      default:
+	 Ale_ShowAlert (Ale_INFO,Txt_The_file_type_is_X_and_should_be_HTML_or_ZIP,
+			MIMEType);
+	 break;
      }
 
    if (FileIsOK)

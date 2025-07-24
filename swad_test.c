@@ -28,7 +28,6 @@
 #include <limits.h>		// For UINT_MAX
 #include <linux/limits.h>	// For PATH_MAX
 #include <mysql/mysql.h>	// To access MySQL databases
-#include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
 #include <stdlib.h>		// For exit, system, malloc, free, etc
 #include <string.h>		// For string functions

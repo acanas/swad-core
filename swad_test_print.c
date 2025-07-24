@@ -28,7 +28,6 @@
 #define _GNU_SOURCE 		// For asprintf
 #include <float.h>		// For DBL_MAX
 #include <math.h>		// For fabs
-#include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free

@@ -320,7 +320,7 @@ void Hld_GetListHolidays (struct Hld_Holidays *Holidays)
    MYSQL_RES *mysql_res;
    unsigned NumHld;
 
-   if (DB_CheckIfDatabaseIsOpen ())
+   if (DB_CheckIfDatabaseIsOpen () == CloOpe_OPEN)
      {
       if (Holidays->LstIsRead)
 	 Hld_FreeListHolidays (Holidays);

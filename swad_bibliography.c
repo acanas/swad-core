@@ -26,7 +26,6 @@
 /*****************************************************************************/
 
 #include <mysql/mysql.h>	// To access MySQL databases
-#include <stdbool.h>		// For boolean type
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 

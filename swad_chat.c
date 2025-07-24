@@ -26,7 +26,6 @@
 /*****************************************************************************/
 
 #include <stddef.h>		// For NULL
-#include <stdbool.h>		// For boolean type
 #include <string.h>
 
 #include "swad_action_list.h"

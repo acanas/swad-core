@@ -425,7 +425,7 @@ void Act_AdjustCurrentAction (void)
 		   If limit of clicks is reached,
 		   the only action possible
 		   is to show a form to send my photo *****/
-	    if (!Gbl.Usrs.Me.MyPhotoExists)
+	    if (Gbl.Usrs.Me.MyPhotoExists == Exi_DOES_NOT_EXIST)
 	       if (!(ActLst_Actions[Gbl.Action.Act].Permission[Hie_CRS][Usr_BELONG] & (1 << Rol_UNK)))
 		  if ((Gbl.Usrs.Me.NumAccWithoutPhoto =
 		       Pho_UpdateMyClicksWithoutPhoto ()) > Pho_MAX_CLICKS_WITHOUT_PHOTO)

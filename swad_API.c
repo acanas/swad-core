@@ -733,6 +733,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
    char UsrIDNickOrEmail[Cns_MAX_BYTES_USR_LOGIN + 1];
    int ReturnCode;
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
+   __attribute__((unused)) Exi_Exist_t PhotoExists;
    bool UsrFound;
 
    /***** Initializations *****/
@@ -824,7 +825,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
       Str_Copy (loginByUserPasswordKeyOut->userFirstname,
                 Gbl.Usrs.Me.UsrDat.FrstName,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
-      Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
+      PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
       Str_Copy (loginByUserPasswordKeyOut->userPhoto,PhotoURL,WWW_MAX_BYTES_WWW);
 
       Str_Copy (loginByUserPasswordKeyOut->userBirthday,
@@ -867,6 +868,7 @@ int swad__loginBySessionKey (struct soap *soap,
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
+   __attribute__((unused)) Exi_Exist_t PhotoExists;
    bool UsrFound;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
@@ -972,7 +974,7 @@ int swad__loginBySessionKey (struct soap *soap,
       Str_Copy (loginBySessionKeyOut->userFirstname,
                 Gbl.Usrs.Me.UsrDat.FrstName,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
-      Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
+      PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
       Str_Copy (loginBySessionKeyOut->userPhoto,PhotoURL,WWW_MAX_BYTES_WWW);
 
       Str_Copy (loginBySessionKeyOut->userBirthday,
@@ -2199,6 +2201,7 @@ static void API_CopyUsrData (struct soap *soap,
 			     Usr_Can_t ICanSeeUsrID)
   {
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
+   __attribute__((unused)) Exi_Exist_t PhotoExists;
    const char *FirstID;
    size_t Length;
 
@@ -2235,7 +2238,7 @@ static void API_CopyUsrData (struct soap *soap,
    Str_Copy (Usr->userFirstname,UsrDat->FrstName,Length);
 
    /* User's photo URL */
-   Pho_BuildLinkToPhoto (UsrDat,PhotoURL);
+   PhotoExists = Pho_BuildLinkToPhoto (UsrDat,PhotoURL);
    Length = strlen (PhotoURL);
    Usr->userPhoto = soap_malloc (soap,Length + 1);
    Str_Copy (Usr->userPhoto,PhotoURL,Length);
@@ -2256,6 +2259,7 @@ int swad__getAttendanceEvents (struct soap *soap,
    unsigned NumAttEvent;
    struct Att_Event Event;
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
+   __attribute__((unused)) Exi_Exist_t PhotoExists;
    size_t Length;
 
    /***** Initializations *****/
@@ -2339,7 +2343,7 @@ int swad__getAttendanceEvents (struct soap *soap,
             Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userFirstname,
                       Gbl.Usrs.Other.UsrDat.FrstName,Length);
 
-            Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+            PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
             Length = strlen (PhotoURL);
             getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userPhoto =
                soap_malloc (soap,Length + 1);
@@ -2658,6 +2662,7 @@ int swad__getAttendanceUsers (struct soap *soap,
    unsigned NumUsrs;
    unsigned NumUsr;
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
+   __attribute__((unused)) Exi_Exist_t PhotoExists;
    size_t Length;
 
    /***** Initializations *****/
@@ -2760,7 +2765,7 @@ int swad__getAttendanceUsers (struct soap *soap,
             Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumUsr].userFirstname,
                       Gbl.Usrs.Other.UsrDat.FrstName,Length);
 
-            Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+            PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
             Length = strlen (PhotoURL);
             getAttendanceUsersOut->usersArray.__ptr[NumUsr].userPhoto =
                soap_malloc (soap,Length + 1);
@@ -2872,6 +2877,7 @@ int swad__getNotifications (struct soap *soap,
    Ntf_NotifyEvent_t NotifyEvent;
    long EventTime;
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
+   __attribute__((unused)) Exi_Exist_t PhotoExists;
    struct Hie_Node Hie[Hie_NUM_LEVELS];
    long Cod;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
@@ -2980,7 +2986,7 @@ int swad__getNotifications (struct soap *soap,
                       Gbl.Usrs.Other.UsrDat.FrstName,
                       Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
-            Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+            PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
             getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto =
                soap_malloc (soap,WWW_MAX_BYTES_WWW + 1);
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto,
@@ -4029,6 +4035,7 @@ int swad__getGames (struct soap *soap,
    int NumGame;
    long GamCod;
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
+   __attribute__((unused)) Exi_Exist_t PhotoExists;
    long StartTime;
    long EndTime;
    double DoubleNum;
@@ -4113,7 +4120,7 @@ int swad__getGames (struct soap *soap,
             Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].userFirstname,
                       Gbl.Usrs.Other.UsrDat.FrstName,Length);
 
-            Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+            PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
             Length = strlen (PhotoURL);
             getGamesOut->gamesArray.__ptr[NumGame].userPhoto =
                soap_malloc (soap,Length + 1);
@@ -4189,6 +4196,7 @@ int swad__getMatches (struct soap *soap,
    int NumMatch;
    long MchCod;
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
+   __attribute__((unused)) Exi_Exist_t PhotoExists;
    long StartTime;
    long EndTime;
    size_t Length;
@@ -4283,7 +4291,7 @@ int swad__getMatches (struct soap *soap,
             Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userFirstname,
                       Gbl.Usrs.Other.UsrDat.FrstName,Length);
 
-            Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+            PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
             Length = strlen (PhotoURL);
             getMatchesOut->matchesArray.__ptr[NumMatch].userPhoto =
                soap_malloc (soap,Length + 1);
@@ -4823,6 +4831,7 @@ static bool API_WriteRowFileBrowser (FILE *XML,unsigned Level,
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
    struct Brw_FileMetadata FileMetadata;
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
+   __attribute__((unused)) Exi_Exist_t PhotoExists;
 
    /***** Is this row hidden or visible? *****/
    if (Gbl.FileBrowser.Type == Brw_SHOW_DOC_CRS ||
@@ -4855,7 +4864,7 @@ static bool API_WriteRowFileBrowser (FILE *XML,unsigned Level,
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                Usr_DONT_GET_PREFS,
                                                Usr_DONT_GET_ROLE_IN_CRS);
-      Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
+      PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
 
       fprintf (XML,"<file name=\"%s\">"
 		   "<code>%ld</code>"
@@ -4904,6 +4913,7 @@ int swad__getFile (struct soap *soap,
    long GrpCod;
    char URL[WWW_MAX_BYTES_WWW + 1];
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
+   __attribute__((unused)) Exi_Exist_t PhotoExists;
 
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
@@ -5045,7 +5055,7 @@ int swad__getFile (struct soap *soap,
 	 Str_Copy (getFileOut->publisherName,Gbl.Usrs.Other.UsrDat.FullName,
 	           Usr_MAX_BYTES_FULL_NAME);
 
-	 Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+	 PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
 	 Str_Copy (getFileOut->publisherPhoto,PhotoURL,WWW_MAX_BYTES_WWW);
 	}
 

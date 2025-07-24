@@ -386,7 +386,7 @@ void QstImp_ImpQstsFromXML (void)
    char FileNameXMLSrc[PATH_MAX + 1];
    char FileNameXMLTmp[PATH_MAX + 1];	// Full name (including path and .xml) of the destination temporary file
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
-   bool WrongType = false;
+   Err_SuccessOrError_t SuccessOrError;
 
    /***** Creates directory if not exists *****/
    Fil_CreateDirIfNotExists (Cfg_PATH_TEST_PRIVATE);
@@ -396,26 +396,30 @@ void QstImp_ImpQstsFromXML (void)
                                    FileNameXMLSrc,MIMEType);
 
    /* Check if the file type is XML */
+   SuccessOrError = Err_SUCCESS;
    if (strcmp (MIMEType,"text/xml"))
       if (strcmp (MIMEType,"application/xml"))
 	 if (strcmp (MIMEType,"application/octet-stream"))
 	    if (strcmp (MIMEType,"application/octetstream"))
 	       if (strcmp (MIMEType,"application/octet"))
-                  WrongType = true;
+                  SuccessOrError = Err_ERROR;
 
-   if (WrongType)
-      Ale_ShowAlert (Ale_WARNING,Txt_The_file_is_not_X,
-		     "xml");
-   else
+   switch (SuccessOrError)
      {
-      /* End the reception of XML in a temporary file */
-      snprintf (FileNameXMLTmp,sizeof (FileNameXMLTmp),"%s/%s.xml",
-		Cfg_PATH_TEST_PRIVATE,Cry_GetUniqueNameEncrypted ());
-      if (Fil_EndReceptionOfFile (FileNameXMLTmp,Par))
-         /***** Get questions from XML file and store them in database *****/
-         QstImp_ReadQuestionsFromXMLFileAndStoreInDB (FileNameXMLTmp);
-      else
-         Ale_ShowAlert (Ale_WARNING,"Error copying file.");
+      case Err_SUCCESS:
+	 /* End the reception of XML in a temporary file */
+	 snprintf (FileNameXMLTmp,sizeof (FileNameXMLTmp),"%s/%s.xml",
+		   Cfg_PATH_TEST_PRIVATE,Cry_GetUniqueNameEncrypted ());
+	 if (Fil_EndReceptionOfFile (FileNameXMLTmp,Par))
+	    /***** Get questions from XML file and store them in database *****/
+	    QstImp_ReadQuestionsFromXMLFileAndStoreInDB (FileNameXMLTmp);
+	 else
+	    Ale_ShowAlert (Ale_WARNING,"Error copying file.");
+	 break;
+      case Err_ERROR:
+      default:
+	 Ale_ShowAlert (Ale_WARNING,Txt_The_file_is_not_X,"xml");
+	 break;
      }
   }
 

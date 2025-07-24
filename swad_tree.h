@@ -27,7 +27,6 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stdbool.h>		// For boolean type
 #include <time.h>		// For time
 
 #include "swad_bibliography_type.h"

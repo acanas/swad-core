@@ -26,7 +26,6 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
-#include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
@@ -854,7 +853,7 @@ void CtrCfg_ReceivePhoto (void)
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    char PathFileImgTmp[PATH_MAX + 1];	// Full name (including path and .jpg) of the destination temporary file
    char PathFileImg[PATH_MAX + 1];	// Full name (including path and .jpg) of the destination file
-   bool WrongType = false;
+   Err_SuccessOrError_t SuccessOrError;
    char Command[1024 + PATH_MAX * 2];
    int ReturnCode;
    char ErrorMsg[256];
@@ -864,12 +863,13 @@ void CtrCfg_ReceivePhoto (void)
                                    FileNameImgSrc,MIMEType);
 
    /* Check if the file type is image/ or application/octet-stream */
+   SuccessOrError = Err_SUCCESS;
    if (strncmp (MIMEType,"image/",strlen ("image/")))
       if (strcmp (MIMEType,"application/octet-stream"))
 	 if (strcmp (MIMEType,"application/octetstream"))
 	    if (strcmp (MIMEType,"application/octet"))
-	       WrongType = true;
-   if (WrongType)
+	       SuccessOrError = Err_ERROR;
+   if (SuccessOrError == Err_ERROR)
      {
       Ale_ShowAlert (Ale_WARNING,Txt_Wrong_file_type);
       return;

@@ -305,7 +305,7 @@ static void SysLnk_GetListLinks (struct SysLnk_Links *Links)
    Links->Num = 0;
    Links->Lst = NULL;
 
-   if (DB_CheckIfDatabaseIsOpen ())
+   if (DB_CheckIfDatabaseIsOpen () == CloOpe_OPEN)
      {
       /***** Get institutional links from database *****/
       if ((Links->Num = SysLnk_DB_GetLinks (&mysql_res))) // Links found...
