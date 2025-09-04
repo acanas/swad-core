@@ -272,10 +272,10 @@ static void Plg_GetListPlugins (struct Plg_Plugins *Plugins)
 /******************** Get data of a plugin using its code ********************/
 /*****************************************************************************/
 
-bool Plg_GetPluginDataByCod (struct Plg_Plugin *Plg)
+Exi_Exist_t Plg_GetPluginDataByCod (struct Plg_Plugin *Plg)
   {
    MYSQL_RES *mysql_res;
-   bool PluginFound;
+   Exi_Exist_t PlgExists;
 
    /***** Clear data *****/
    Plg->Name[0]        =
@@ -286,22 +286,18 @@ bool Plg_GetPluginDataByCod (struct Plg_Plugin *Plg)
 
    /***** Check if plugin code is correct *****/
    if (Plg->PlgCod <= 0)
-      return false;
+      return Exi_DOES_NOT_EXIST;
    // Plg->PlgCod > 0
 
    /***** Get data of a plugin from database *****/
-   if (Plg_DB_GetPluginDataByCod (&mysql_res,Plg->PlgCod)) // Plugin found...
-     {
+   PlgExists = Plg_DB_GetPluginDataByCod (&mysql_res,Plg->PlgCod);
+   if (PlgExists == Exi_EXISTS) // Plugin found...
       Plg_GetPluginDataFromRow (mysql_res,Plg);
-      PluginFound = true;
-     }
-   else
-      PluginFound = false;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return PluginFound;
+   return PlgExists;
   }
 
 /*****************************************************************************/
@@ -481,6 +477,7 @@ static void Plg_PutParPlgCod (void *PlgCod)
 void Plg_RemovePlugin (void)
   {
    extern const char *Txt_Plugin_X_removed;
+   __attribute__((unused)) Exi_Exist_t PlgExists;
 
    /***** Plugin constructor *****/
    Plg_EditingPluginConstructor ();
@@ -489,7 +486,7 @@ void Plg_RemovePlugin (void)
    Plg_EditingPlg->PlgCod = ParCod_GetAndCheckPar (ParCod_Plg);
 
    /***** Get data of the plugin from database *****/
-   Plg_GetPluginDataByCod (Plg_EditingPlg);
+   PlgExists = Plg_GetPluginDataByCod (Plg_EditingPlg);
 
    /***** Remove plugin *****/
    Plg_DB_RemovePlugin (Plg_EditingPlg->PlgCod);
@@ -510,6 +507,7 @@ void Plg_RenamePlugin (void)
    extern const char *Txt_The_plugin_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
    char NewPlgName[Plg_MAX_BYTES_PLUGIN_NAME + 1];
+   __attribute__((unused)) Exi_Exist_t PlgExists;
 
    /***** Plugin constructor *****/
    Plg_EditingPluginConstructor ();
@@ -522,7 +520,7 @@ void Plg_RenamePlugin (void)
    Par_GetParText ("Name",NewPlgName,Plg_MAX_BYTES_PLUGIN_NAME);
 
    /***** Get plugin data from the database *****/
-   Plg_GetPluginDataByCod (Plg_EditingPlg);
+   PlgExists = Plg_GetPluginDataByCod (Plg_EditingPlg);
 
    /***** Check if new name is empty *****/
    if (NewPlgName[0])
@@ -568,6 +566,7 @@ void Plg_ChangePlgDesc (void)
   {
    extern const char *Txt_The_new_description_is_X;
    char NewDescription[Plg_MAX_BYTES_PLUGIN_DESCRIPTION + 1];
+   __attribute__((unused)) Exi_Exist_t PlgExists;
 
    /***** Plugin constructor *****/
    Plg_EditingPluginConstructor ();
@@ -580,7 +579,7 @@ void Plg_ChangePlgDesc (void)
    Par_GetParText ("Description",NewDescription,Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
 
    /***** Get plugin data from the database *****/
-   Plg_GetPluginDataByCod (Plg_EditingPlg);
+   PlgExists = Plg_GetPluginDataByCod (Plg_EditingPlg);
 
    /***** Check if new description is empty *****/
    if (NewDescription[0])
@@ -609,6 +608,7 @@ void Plg_ChangePlgLogo (void)
   {
    extern const char *Txt_The_new_logo_is_X;
    char NewLogo[Plg_MAX_BYTES_PLUGIN_LOGO + 1];
+   __attribute__((unused)) Exi_Exist_t PlgExists;
 
    /***** Plugin constructor *****/
    Plg_EditingPluginConstructor ();
@@ -621,7 +621,7 @@ void Plg_ChangePlgLogo (void)
    Par_GetParText ("Logo",NewLogo,Plg_MAX_BYTES_PLUGIN_LOGO);
 
    /***** Get plugin data from the database *****/
-   Plg_GetPluginDataByCod (Plg_EditingPlg);
+   PlgExists = Plg_GetPluginDataByCod (Plg_EditingPlg);
 
    /***** Check if new logo is empty *****/
    if (NewLogo[0])
@@ -649,6 +649,7 @@ void Plg_ChangePlgAppKey (void)
   {
    extern const char *Txt_The_new_application_key_is_X;
    char NewAppKey[Plg_MAX_BYTES_PLUGIN_APP_KEY + 1];
+   __attribute__((unused)) Exi_Exist_t PlgExists;
 
    /***** Plugin constructor *****/
    Plg_EditingPluginConstructor ();
@@ -661,7 +662,7 @@ void Plg_ChangePlgAppKey (void)
    Par_GetParText ("AppKey",NewAppKey,Plg_MAX_BYTES_PLUGIN_APP_KEY);
 
    /***** Get plugin data from the database *****/
-   Plg_GetPluginDataByCod (Plg_EditingPlg);
+   PlgExists = Plg_GetPluginDataByCod (Plg_EditingPlg);
 
    /***** Check if new logo is empty *****/
    if (NewAppKey[0])
@@ -689,6 +690,7 @@ void Plg_ChangePlgURL (void)
   {
    extern const char *Txt_The_new_URL_is_X;
    char NewURL[WWW_MAX_BYTES_WWW + 1];
+   __attribute__((unused)) Exi_Exist_t PlgExists;
 
    /***** Plugin constructor *****/
    Plg_EditingPluginConstructor ();
@@ -701,7 +703,7 @@ void Plg_ChangePlgURL (void)
    Par_GetParText ("URL",NewURL,WWW_MAX_BYTES_WWW);
 
    /***** Get plugin data from the database *****/
-   Plg_GetPluginDataByCod (Plg_EditingPlg);
+   PlgExists = Plg_GetPluginDataByCod (Plg_EditingPlg);
 
    /***** Check if new URL is empty *****/
    if (NewURL[0])
@@ -729,6 +731,7 @@ void Plg_ChangePlgIP (void)
   {
    extern const char *Txt_The_new_IP_address_is_X;
    char NewIP[Cns_MAX_BYTES_IP + 1];
+   __attribute__((unused)) Exi_Exist_t PlgExists;
 
    /***** Plugin constructor *****/
    Plg_EditingPluginConstructor ();
@@ -741,7 +744,7 @@ void Plg_ChangePlgIP (void)
    Par_GetParText ("IP",NewIP,Cns_MAX_BYTES_IP);
 
    /***** Get plugin data from the database *****/
-   Plg_GetPluginDataByCod (Plg_EditingPlg);
+   PlgExists = Plg_GetPluginDataByCod (Plg_EditingPlg);
 
    /***** Check if new IP is empty *****/
    if (NewIP[0])

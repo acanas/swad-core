@@ -160,9 +160,9 @@ unsigned Plg_DB_GetListPlugins (MYSQL_RES **mysql_res)
 /*************************** Get data of a plugin ****************************/
 /*****************************************************************************/
 
-unsigned Plg_DB_GetPluginDataByCod (MYSQL_RES **mysql_res,long PlgCod)
+Exi_Exist_t Plg_DB_GetPluginDataByCod (MYSQL_RES **mysql_res,long PlgCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of a plugin",
 		   "SELECT PlgCod,"		// row[0]
 			  "Name,"		// row[1]
@@ -173,7 +173,8 @@ unsigned Plg_DB_GetPluginDataByCod (MYSQL_RES **mysql_res,long PlgCod)
 			  "IP"			// row[6]
 		    " FROM plg_plugins"
 		   " WHERE PlgCod=%ld",
-		   PlgCod);
+		   PlgCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

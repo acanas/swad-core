@@ -66,15 +66,17 @@ Exi_Exist_t API_DB_CheckIfAPIKeyExists (char APIKey[API_BYTES_KEY + 1])
 /************************** Get data from an API key *************************/
 /*****************************************************************************/
 
-unsigned API_DB_GetDataFromAPIKey (MYSQL_RES **mysql_res,char APIKey[API_BYTES_KEY + 1])
+Exi_Exist_t API_DB_GetDataFromAPIKey (MYSQL_RES **mysql_res,
+				      char APIKey[API_BYTES_KEY + 1])
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not data from API key",
 		   "SELECT UsrCod,"	// row[0]
 			  "PlgCod"	// row[1]
 		    " FROM api_keys"
 		   " WHERE WSKey='%s'",
-		   APIKey);
+		   APIKey) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

@@ -39,8 +39,8 @@ unsigned Agd_DB_GetListEvents (MYSQL_RES **mysql_res,
                                const struct Agd_Agenda *Agenda,
                                Agd_AgendaType_t AgendaType);
 
-unsigned Agd_DB_GetEventDataByCod (MYSQL_RES **mysql_res,
-                                   const struct Agd_Event *AgdEvent);
+Exi_Exist_t Agd_DB_GetEventDataByCod (MYSQL_RES **mysql_res,
+                                      const struct Agd_Event *AgdEvent);
 void Agd_DB_GetEventTxt (const struct Agd_Event *AgdEvent,
                          char Txt[Cns_MAX_BYTES_TEXT + 1]);
 

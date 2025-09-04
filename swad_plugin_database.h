@@ -48,7 +48,7 @@ void Plg_DB_ChangeIP (long PlgCod,
                       const char NewIP[Cns_MAX_BYTES_IP + 1]);
 
 unsigned Plg_DB_GetListPlugins (MYSQL_RES **mysql_res);
-unsigned Plg_DB_GetPluginDataByCod (MYSQL_RES **mysql_res,long PlgCod);
+Exi_Exist_t Plg_DB_GetPluginDataByCod (MYSQL_RES **mysql_res,long PlgCod);
 long Plg_DB_GetPlgCodFromAppKey (const char *AppKey);
 Exi_Exist_t Plg_DB_CheckIfPluginNameExists (const char *Name,long PlgCod);
 

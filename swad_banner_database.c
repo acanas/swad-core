@@ -95,9 +95,9 @@ unsigned Ban_DB_GetRandomBanners (MYSQL_RES **mysql_res)
 /********************* Get data of a banner from database ********************/
 /*****************************************************************************/
 
-unsigned Ban_DB_GetBannerDataByCod (MYSQL_RES **mysql_res,long BanCod)
+Exi_Exist_t Ban_DB_GetBannerDataByCod (MYSQL_RES **mysql_res,long BanCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of a banner",
 		   "SELECT BanCod,"	// row[0]
 			  "Hidden,"	// row[1]
@@ -107,7 +107,8 @@ unsigned Ban_DB_GetBannerDataByCod (MYSQL_RES **mysql_res,long BanCod)
 			  "WWW"		// row[5]
 		    " FROM ban_banners"
 		   " WHERE BanCod=%ld",
-		   BanCod);
+		   BanCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

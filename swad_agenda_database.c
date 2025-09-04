@@ -170,11 +170,11 @@ unsigned Agd_DB_GetListEvents (MYSQL_RES **mysql_res,
 /*********************** Get event data using its code ***********************/
 /*****************************************************************************/
 
-unsigned Agd_DB_GetEventDataByCod (MYSQL_RES **mysql_res,
-                                   const struct Agd_Event *AgdEvent)
+Exi_Exist_t Agd_DB_GetEventDataByCod (MYSQL_RES **mysql_res,
+                                      const struct Agd_Event *AgdEvent)
   {
    /***** Get data of event from database *****/
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get agenda event data",
 		   "SELECT AgdCod,"			// row[0]
 			  "Public,"			// row[1]
@@ -189,7 +189,8 @@ unsigned Agd_DB_GetEventDataByCod (MYSQL_RES **mysql_res,
 		   " WHERE AgdCod=%ld"
 		     " AND UsrCod=%ld",
 		   AgdEvent->AgdCod,
-		   AgdEvent->UsrCod);
+		   AgdEvent->UsrCod) ? Exi_EXISTS :
+				       Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

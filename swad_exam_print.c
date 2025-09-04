@@ -483,7 +483,7 @@ static void ExaPrn_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQue
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned Index;
-   bool ErrorInIndex;
+   Err_SuccessOrError_t ErrorInIndex;
    char StrInd[1 + Cns_MAX_DIGITS_UINT + 1];
 
    /***** Create test question *****/
@@ -514,15 +514,15 @@ static void ExaPrn_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQue
       /***** Assign index (row[0]).
              Index is 0,1,2,3... if no shuffle
              or 1,3,0,2... (example) if shuffle *****/
-      ErrorInIndex = false;
+      ErrorInIndex = Err_SUCCESS;
       if (sscanf (row[0],"%u",&Index) == 1)
         {
          if (Index >= Qst_MAX_OPTIONS_PER_QUESTION)
-            ErrorInIndex = true;
+            ErrorInIndex = Err_ERROR;
         }
       else
-         ErrorInIndex = true;
-      if (ErrorInIndex)
+         ErrorInIndex = Err_ERROR;
+      if (ErrorInIndex == Err_ERROR)
          Err_WrongAnswerIndexExit ();
 
       /***** Add index to string *****/

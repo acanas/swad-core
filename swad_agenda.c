@@ -1075,53 +1075,55 @@ static void Agd_GetventDataByCod (struct Agd_Event *AgdEvent)
    MYSQL_ROW row;
 
    /***** Get data of event from database *****/
-   if (Agd_DB_GetEventDataByCod (&mysql_res,AgdEvent))	// Event found...
+   switch (Agd_DB_GetEventDataByCod (&mysql_res,AgdEvent))
      {
-      /* Get row:
-      row[0] AgdCod
-      row[1] Public
-      row[2] Hidden
-      row[3] UNIX_TIMESTAMP(StartTime)
-      row[4] UNIX_TIMESTAMP(EndTime)
-      row[5] NOW()>EndTime	// Past event?
-      row[6] NOW()<StartTime	// Future event?
-      row[7] Event
-      row[8] Location
-      */
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 /* Get row:
+	 row[0] AgdCod
+	 row[1] Public
+	 row[2] Hidden
+	 row[3] UNIX_TIMESTAMP(StartTime)
+	 row[4] UNIX_TIMESTAMP(EndTime)
+	 row[5] NOW()>EndTime	// Past event?
+	 row[6] NOW()<StartTime	// Future event?
+	 row[7] Event
+	 row[8] Location
+	 */
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get code of the event (row[0]) */
-      AgdEvent->AgdCod = Str_ConvertStrCodToLongCod (row[0]);
+	 /* Get code of the event (row[0]) */
+	 AgdEvent->AgdCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get whether the event is public or not (row[1])
-         and whether it is hidden or not (row[2])  */
-      AgdEvent->Public = PriPub_GetPublicFromYN (row[1][0]);
-      AgdEvent->Hidden = HidVis_GetHiddenFromYN (row[2][0]);
+	 /* Get whether the event is public or not (row[1])
+	    and whether it is hidden or not (row[2])  */
+	 AgdEvent->Public = PriPub_GetPublicFromYN (row[1][0]);
+	 AgdEvent->Hidden = HidVis_GetHiddenFromYN (row[2][0]);
 
-      /* Get start date (row[3]) and end date (row[4]) in UTC time */
-      AgdEvent->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
-      AgdEvent->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
+	 /* Get start date (row[3]) and end date (row[4]) in UTC time */
+	 AgdEvent->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
+	 AgdEvent->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
 
-      /* Get whether the event is past, present or future (row(5), row[6]) */
-      AgdEvent->TimeStatus = ((row[5][0] == '1') ? Dat_PAST :
-	                     ((row[6][0] == '1') ? Dat_FUTURE :
-	                	                   Dat_PRESENT));
+	 /* Get whether the event is past, present or future (row(5), row[6]) */
+	 AgdEvent->TimeStatus = ((row[5][0] == '1') ? Dat_PAST :
+				((row[6][0] == '1') ? Dat_FUTURE :
+						      Dat_PRESENT));
 
-      /* Get the event (row[7]) and its location (row[8]) */
-      Str_Copy (AgdEvent->Title   ,row[7],sizeof (AgdEvent->Title   ) - 1);
-      Str_Copy (AgdEvent->Location,row[8],sizeof (AgdEvent->Location) - 1);
-     }
-   else
-     {
-      /***** Clear all event data *****/
-      AgdEvent->AgdCod                = -1L;
-      AgdEvent->Public		      = PriPub_PRIVATE;
-      AgdEvent->Hidden		      = HidVis_VISIBLE;
-      AgdEvent->TimeUTC[Dat_STR_TIME] =
-      AgdEvent->TimeUTC[Dat_END_TIME] = (time_t) 0;
-      AgdEvent->TimeStatus            = Dat_FUTURE;
-      AgdEvent->Title[0]              = '\0';
-      AgdEvent->Location[0]           = '\0';
+	 /* Get the event (row[7]) and its location (row[8]) */
+	 Str_Copy (AgdEvent->Title   ,row[7],sizeof (AgdEvent->Title   ) - 1);
+	 Str_Copy (AgdEvent->Location,row[8],sizeof (AgdEvent->Location) - 1);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 /***** Clear all event data *****/
+	 AgdEvent->AgdCod		 = -1L;
+	 AgdEvent->Public		 = PriPub_PRIVATE;
+	 AgdEvent->Hidden		 = HidVis_VISIBLE;
+	 AgdEvent->TimeUTC[Dat_STR_TIME] =
+	 AgdEvent->TimeUTC[Dat_END_TIME] = (time_t) 0;
+	 AgdEvent->TimeStatus		 = Dat_FUTURE;
+	 AgdEvent->Title[0]		 = '\0';
+	 AgdEvent->Location[0]		 = '\0';
+	 break;
      }
 
    /***** Free structure that stores the query result *****/

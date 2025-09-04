@@ -468,7 +468,7 @@ static int API_CheckAPIKey (char APIKey[API_BYTES_KEY + 1])
    Gbl.WebService.PlgCod = -1L;
 
    /***** Check that key does not exist in database *****/
-   if (API_DB_GetDataFromAPIKey (&mysql_res,APIKey))
+   if (API_DB_GetDataFromAPIKey (&mysql_res,APIKey) == Exi_EXISTS)
      {
       row = mysql_fetch_row (mysql_res);
 

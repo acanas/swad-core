@@ -174,10 +174,10 @@ unsigned Rec_DB_GetFieldByCod (MYSQL_RES **mysql_res,long CrsCod,long FldCod)
 /************** Get the text of a field of a record of course ****************/
 /*****************************************************************************/
 
-unsigned Rec_DB_GetFieldTxtFromUsrRecord (MYSQL_RES **mysql_res,
-                                          long FldCod,long UsrCod)
+Exi_Exist_t Rec_DB_GetFieldTxtFromUsrRecord (MYSQL_RES **mysql_res,
+                                             long FldCod,long UsrCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get the text"
 			     " of a field of a record",
 		   "SELECT Txt"		// row[0]
@@ -185,7 +185,8 @@ unsigned Rec_DB_GetFieldTxtFromUsrRecord (MYSQL_RES **mysql_res,
 		   " WHERE FieldCod=%ld"
 		     " AND UsrCod=%ld",
 		   FldCod,
-		   UsrCod);
+		   UsrCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

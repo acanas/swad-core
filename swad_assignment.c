@@ -106,7 +106,7 @@ static void Asg_PutPars (void *Assignments);
 static void Asg_GetListAssignments (struct Asg_Assignments *Assignments);
 static void Asg_GetAssignmentDataFromRow (MYSQL_RES **mysql_res,
                                           struct Asg_Assignment *Asg,
-                                          unsigned NumAsgs);
+                                          Exi_Exist_t AsgExists);
 static void Asg_ResetAssignment (struct Asg_Assignment *Asg);
 static void Asg_FreeListAssignments (struct Asg_Assignments *Assignments);
 static void Asg_HideUnhideAssignment (HidVis_HiddenOrVisible_t HiddenOrVisible);
@@ -889,15 +889,15 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
 void Asg_GetAssignmentDataByCod (struct Asg_Assignment *Asg)
   {
    MYSQL_RES *mysql_res;
-   unsigned NumAsgs;
+   Exi_Exist_t AsgExists;
 
    if (Asg->AsgCod > 0)
      {
       /***** Build query *****/
-      NumAsgs = Asg_DB_GetAssignmentDataByCod (&mysql_res,Asg->AsgCod);
+      AsgExists = Asg_DB_GetAssignmentDataByCod (&mysql_res,Asg->AsgCod);
 
       /***** Get data of assignment *****/
-      Asg_GetAssignmentDataFromRow (&mysql_res,Asg,NumAsgs);
+      Asg_GetAssignmentDataFromRow (&mysql_res,Asg,AsgExists);
      }
    else
      {
@@ -915,15 +915,15 @@ void Asg_GetAssignmentDataByFolder (const char Folder[Brw_MAX_BYTES_FOLDER + 1])
   {
    MYSQL_RES *mysql_res;
    struct Asg_Assignment Asg;
-   unsigned NumAsgs;
+   Exi_Exist_t AsgExists;
 
    if (Folder[0])
      {
       /***** Query database *****/
-      NumAsgs = Asg_DB_GetAssignmentDataByFolder (&mysql_res,Folder);
+      AsgExists = Asg_DB_GetAssignmentDataByFolder (&mysql_res,Folder);
 
       /***** Get data of assignment *****/
-      Asg_GetAssignmentDataFromRow (&mysql_res,&Asg,NumAsgs);
+      Asg_GetAssignmentDataFromRow (&mysql_res,&Asg,AsgExists);
      }
    else
      {
@@ -941,7 +941,7 @@ void Asg_GetAssignmentDataByFolder (const char Folder[Brw_MAX_BYTES_FOLDER + 1])
 
 static void Asg_GetAssignmentDataFromRow (MYSQL_RES **mysql_res,
                                           struct Asg_Assignment *Asg,
-                                          unsigned NumAsgs)
+                                          Exi_Exist_t AsgExists)
   {
    MYSQL_ROW row;
 
@@ -949,7 +949,7 @@ static void Asg_GetAssignmentDataFromRow (MYSQL_RES **mysql_res,
    Asg_ResetAssignment (Asg);
 
    /***** Get data of assignment from database *****/
-   if (NumAsgs) // Assignment found...
+   if (AsgExists == Exi_EXISTS) // Assignment found...
      {
       /* Get next row from result */
       row = mysql_fetch_row (*mysql_res);

@@ -2429,17 +2429,22 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
 	      NumField++)
 	   {
 	    /* Get the text of the field */
-	    if (Rec_DB_GetFieldTxtFromUsrRecord (&mysql_res,
-					         Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
-					         UsrDat->UsrCod))
+	    switch (Rec_DB_GetFieldTxtFromUsrRecord (&mysql_res,
+					             Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+					             UsrDat->UsrCod))
 	      {
-	       row = mysql_fetch_row (mysql_res);
-	       Str_Copy (Text,row[0],sizeof (Text) - 1);
-	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-				 Text,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
+	       case Exi_EXISTS:
+		  row = mysql_fetch_row (mysql_res);
+		  Str_Copy (Text,row[0],sizeof (Text) - 1);
+		  Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				    Text,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
+		  break;
+	       case Exi_DOES_NOT_EXIST:
+	       default:
+		  Text[0] = '\0';
+		  break;
 	      }
-	    else
-	       Text[0] = '\0';
+
 	    Usr_WriteUsrData (The_GetColorRows (),Text,NULL,false,UsrDat->Accepted);
 
 	    /* Free structure that stores the query result */

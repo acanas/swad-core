@@ -136,9 +136,9 @@ unsigned Asg_DB_GetListAssignmentsAllGrps (MYSQL_RES **mysql_res,
 /******************* Get assignment data using its code **********************/
 /*****************************************************************************/
 
-unsigned Asg_DB_GetAssignmentDataByCod (MYSQL_RES **mysql_res,long AsgCod)
+Exi_Exist_t Asg_DB_GetAssignmentDataByCod (MYSQL_RES **mysql_res,long AsgCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get assignment data",
 		   "SELECT AsgCod,"					// row[0]
 			  "Hidden,"					// row[1]
@@ -152,17 +152,18 @@ unsigned Asg_DB_GetAssignmentDataByCod (MYSQL_RES **mysql_res,long AsgCod)
 		   " WHERE AsgCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
 		   AsgCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? Exi_EXISTS :
+							 Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /**************** Get assignment data using its folder name ******************/
 /*****************************************************************************/
 
-unsigned Asg_DB_GetAssignmentDataByFolder (MYSQL_RES **mysql_res,
-                                           const char Folder[Brw_MAX_BYTES_FOLDER + 1])
+Exi_Exist_t Asg_DB_GetAssignmentDataByFolder (MYSQL_RES **mysql_res,
+                                              const char Folder[Brw_MAX_BYTES_FOLDER + 1])
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get assignment data",
 		   "SELECT AsgCod,"					// row[0]
 			  "Hidden,"					// row[1]
@@ -176,7 +177,8 @@ unsigned Asg_DB_GetAssignmentDataByFolder (MYSQL_RES **mysql_res,
 		   " WHERE CrsCod=%ld"		// Extra check
 		     " AND Folder='%s'",
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Folder);
+		   Folder) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

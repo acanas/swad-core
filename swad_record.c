@@ -1585,7 +1585,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    MYSQL_RES *mysql_res;
    MYSQL_ROW row = NULL; // Initialized to avoid warning
    bool ShowField;
-   bool ThisFieldHasText;
+   Exi_Exist_t ThisFieldWithTextExists;
    Usr_Can_t ICanEditThisField;
    char Text[Cns_MAX_BYTES_TEXT + 1];
 
@@ -1721,15 +1721,11 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	       HTM_TD_End ();
 
 	       /* Get the text of the field */
-	       if (Rec_DB_GetFieldTxtFromUsrRecord (&mysql_res,
-						    Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
-						    UsrDat->UsrCod))
-		 {
-		  ThisFieldHasText = true;
+	       ThisFieldWithTextExists = Rec_DB_GetFieldTxtFromUsrRecord (&mysql_res,
+									  Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+									  UsrDat->UsrCod);
+	       if (ThisFieldWithTextExists == Exi_EXISTS)
 		  row = mysql_fetch_row (mysql_res);
-		 }
-	       else
-		  ThisFieldHasText = false;
 
 	       /* Write form, text, or nothing depending on
 		  the user's role and the visibility of the field */
@@ -1744,22 +1740,26 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 					    Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
 					    Gbl.Crs.Records.LstFields.Lst[NumField].NumLines,
 					    The_GetSuffix ());
-			   if (ThisFieldHasText)
+			   if (ThisFieldWithTextExists == Exi_EXISTS)
 			      HTM_Txt (row[0]);
 			HTM_TEXTAREA_End ();
 			break;
 		     case Usr_CAN_NOT:	// Show without form
 		     default:
-			if (ThisFieldHasText)
+			switch (ThisFieldWithTextExists)
 			  {
-			   Str_Copy (Text,row[0],sizeof (Text));
-			   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-					     Text,Cns_MAX_BYTES_TEXT,
-					     Str_DONT_REMOVE_SPACES);
-			   HTM_Txt (Text);
+			   case Exi_EXISTS:
+			      Str_Copy (Text,row[0],sizeof (Text));
+			      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+						Text,Cns_MAX_BYTES_TEXT,
+						Str_DONT_REMOVE_SPACES);
+			      HTM_Txt (Text);
+			      break;
+			   case Exi_DOES_NOT_EXIST:
+			   default:
+			      HTM_Hyphen ();
+			      break;
 			  }
-			else
-			   HTM_Hyphen ();
 			break;
 		    }
 	       HTM_TD_End ();
@@ -1818,7 +1818,7 @@ void Rec_UpdateCrsRecord (long UsrCod)
   {
    unsigned NumField;
    MYSQL_RES *mysql_res;
-   bool FieldAlreadyExists;
+   Exi_Exist_t FieldAlreadyExists;
 
    for (NumField = 0;
 	NumField < Gbl.Crs.Records.LstFields.Num;
@@ -1826,27 +1826,32 @@ void Rec_UpdateCrsRecord (long UsrCod)
       if (Rec_CheckIfICanEditField (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility) == Usr_CAN)
         {
          /***** Check if already exists this field for this user in database *****/
-         FieldAlreadyExists = (Rec_DB_GetFieldTxtFromUsrRecord (&mysql_res,
-                                                                Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
-                                                                UsrCod) != 0);
+         FieldAlreadyExists = Rec_DB_GetFieldTxtFromUsrRecord (&mysql_res,
+                                                               Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+                                                               UsrCod);
          DB_FreeMySQLResult (&mysql_res);
-         if (FieldAlreadyExists)
-           {
-            if (Gbl.Crs.Records.LstFields.Lst[NumField].Text[0])
-               /***** Update text of the field of course record *****/
-               Rec_DB_UpdateFieldTxt (Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
-                                            UsrCod,
-                                            Gbl.Crs.Records.LstFields.Lst[NumField].Text);
-            else
-               /***** Remove text of the field of course record *****/
-               Rec_DB_RemoveFieldContentFromUsrRecord (Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
-                                            UsrCod);
-           }
-         else if (Gbl.Crs.Records.LstFields.Lst[NumField].Text[0])
-	    /***** Insert text field of course record *****/
-            Rec_DB_CreateFieldContent (Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
-			                 UsrCod,
-			                 Gbl.Crs.Records.LstFields.Lst[NumField].Text);
+	 switch (FieldAlreadyExists)
+	   {
+	    case Exi_EXISTS:
+	       if (Gbl.Crs.Records.LstFields.Lst[NumField].Text[0])
+		  /***** Update text of the field of course record *****/
+		  Rec_DB_UpdateFieldTxt (Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+					 UsrCod,
+					 Gbl.Crs.Records.LstFields.Lst[NumField].Text);
+	       else
+		  /***** Remove text of the field of course record *****/
+		  Rec_DB_RemoveFieldContentFromUsrRecord (Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+							  UsrCod);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       if (Gbl.Crs.Records.LstFields.Lst[NumField].Text[0])
+		  /***** Insert text field of course record *****/
+		  Rec_DB_CreateFieldContent (Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+					     UsrCod,
+					     Gbl.Crs.Records.LstFields.Lst[NumField].Text);
+	       break;
+	   }
        }
   }
 

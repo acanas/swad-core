@@ -66,7 +66,7 @@ struct Plg_Plugin
 
 void Plg_ListPlugins (void);
 void Plg_EditPlugins (void);
-bool Plg_GetPluginDataByCod (struct Plg_Plugin *Plg);
+Exi_Exist_t Plg_GetPluginDataByCod (struct Plg_Plugin *Plg);
 void Plg_RemovePlugin (void);
 void Plg_RenamePlugin (void);
 void Plg_ChangePlgDesc (void);

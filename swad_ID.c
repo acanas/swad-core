@@ -830,7 +830,7 @@ static void ID_ChangeUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOt
    extern const char *Txt_The_ID_X_is_not_valid;
    char NewID[ID_MAX_BYTES_USR_ID + 1];
    unsigned NumID;
-   bool AlreadyExists;
+   Exi_Exist_t AlreadyExists;
    unsigned NumIDFound = 0;	// Initialized to avoid warning
 
    switch (Usr_CheckIfICanEditOtherUsr (UsrDat))
@@ -845,51 +845,54 @@ static void ID_ChangeUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOt
 	 if (ID_CheckIfUsrIDIsValid (NewID))        // If new ID is valid
 	   {
 	    /***** Check if the new ID matches any of the old IDs *****/
-	    for (NumID = 0, AlreadyExists = false;
-		 NumID < UsrDat->IDs.Num && !AlreadyExists;
+	    for (NumID = 0, AlreadyExists = Exi_DOES_NOT_EXIST;
+		 NumID < UsrDat->IDs.Num && AlreadyExists == Exi_DOES_NOT_EXIST;
 		 NumID++)
 	       if (!strcasecmp (UsrDat->IDs.List[NumID].ID,NewID))
 		 {
-		  AlreadyExists = true;
+		  AlreadyExists = Exi_EXISTS;
 		  NumIDFound = NumID;
 		 }
 
-	    if (AlreadyExists)	// This new ID was already associated to this user
+	    switch (AlreadyExists)
 	      {
-	       if (MeOrOther == Usr_ME || UsrDat->IDs.List[NumIDFound].Confirmed)
-		  Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
-				   Txt_The_ID_X_matches_one_of_the_existing,
-				   NewID);
-	       else	// It's not me && !Confirmed
-		 {
-		  /***** Mark this ID as confirmed *****/
-		  ID_DB_ConfirmUsrID (UsrDat->UsrCod,NewID);
+	       case Exi_EXISTS:
+		  if (MeOrOther == Usr_ME || UsrDat->IDs.List[NumIDFound].Confirmed)
+		     Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
+				      Txt_The_ID_X_matches_one_of_the_existing,
+				      NewID);
+		  else	// It's not me && !Confirmed
+		    {
+		     /***** Mark this ID as confirmed *****/
+		     ID_DB_ConfirmUsrID (UsrDat->UsrCod,NewID);
 
-		  Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
-				   Txt_The_ID_X_has_been_confirmed,
-				   NewID);
-		 }
-	      }
-	    else if (UsrDat->IDs.Num >= ID_MAX_IDS_PER_USER)
-	       Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
-				Txt_A_user_can_not_have_more_than_X_IDs,
-				ID_MAX_IDS_PER_USER);
-	    else	// OK ==> add this new ID to my list of IDs
-	      {
-	       /***** Save this new ID *****/
-	       // It's me ==> ID not confirmed
-	       // Not me  ==> ID confirmed
-	       ID_DB_InsertANewUsrID (UsrDat->UsrCod,NewID,MeOrOther == Usr_OTHER);
+		     Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
+				      Txt_The_ID_X_has_been_confirmed,NewID);
+		    }
+		  break;
+	       case Exi_DOES_NOT_EXIST:
+	       default:
+		  if (UsrDat->IDs.Num >= ID_MAX_IDS_PER_USER)
+		     Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
+				      Txt_A_user_can_not_have_more_than_X_IDs,
+				      ID_MAX_IDS_PER_USER);
+		  else	// OK ==> add this new ID to my list of IDs
+		    {
+		     /***** Save this new ID *****/
+		     // It's me ==> ID not confirmed
+		     // Not me  ==> ID confirmed
+		     ID_DB_InsertANewUsrID (UsrDat->UsrCod,NewID,MeOrOther == Usr_OTHER);
 
-	       Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
-				Txt_The_ID_X_has_been_registered_successfully,
-				NewID);
+		     Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
+				      Txt_The_ID_X_has_been_registered_successfully,
+				      NewID);
+		    }
+		  break;
 	      }
 	   }
 	 else        // New ID is not valid
 	    Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
-			     Txt_The_ID_X_is_not_valid,
-			     NewID);
+			     Txt_The_ID_X_is_not_valid,NewID);
 	 break;
       case Usr_CAN_NOT:
       default:

@@ -2799,10 +2799,16 @@ static void Sta_ShowNumHitsPerPlugin (Sta_CountType_t CountType,
 	 if (sscanf (row[0],"%ld",&Plg.PlgCod) != 1)
 	    Err_WrongPluginExit ();
 	 HTM_TD_Begin ("class=\"RT LOG_%s\"",The_GetSuffix ());
-	    if (Plg_GetPluginDataByCod (&Plg))
-	       HTM_Txt (Plg.Name);
-	    else
-	       HTM_Question ();
+	    switch (Plg_GetPluginDataByCod (&Plg))
+	      {
+	       case Exi_EXISTS:
+		  HTM_Txt (Plg.Name);
+		  break;
+	       case Exi_DOES_NOT_EXIST:
+	       default:
+		  HTM_Question ();
+		  break;
+	      }
 	    HTM_NBSP ();
 	 HTM_TD_End ();
 

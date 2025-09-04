@@ -299,7 +299,7 @@ void Ban_GetBannerDataByCod (struct Ban_Banner *Ban)
    if (Ban->BanCod > 0)
      {
       /***** Get data of a banner from database *****/
-      if (Ban_DB_GetBannerDataByCod (&mysql_res,Ban->BanCod)) // Banner found...
+      if (Ban_DB_GetBannerDataByCod (&mysql_res,Ban->BanCod) == Exi_EXISTS) // Banner found...
 	 Ban_GetBannerDataFromRow (mysql_res,Ban);
 
       /***** Free structure that stores the query result *****/

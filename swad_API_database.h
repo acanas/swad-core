@@ -39,7 +39,8 @@
 void API_DB_CreateAPIKey (char APIKey[API_BYTES_KEY + 1],long UsrCod,long PlgCod);
 
 Exi_Exist_t API_DB_CheckIfAPIKeyExists (char APIKey[API_BYTES_KEY + 1]);
-unsigned API_DB_GetDataFromAPIKey (MYSQL_RES **mysql_res,char APIKey[API_BYTES_KEY + 1]);
+Exi_Exist_t API_DB_GetDataFromAPIKey (MYSQL_RES **mysql_res,
+				      char APIKey[API_BYTES_KEY + 1]);
 
 void API_DB_RemoveOldAPIKeys (void);
 

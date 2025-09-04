@@ -43,8 +43,8 @@ void Rec_DB_UpdateFieldVisibility (long FldCod,Rec_VisibilityRecordFields_t NewV
 unsigned Rec_DB_CountNumRecordsWithFieldContent (long FldCod);
 unsigned Rec_DB_GetAllFieldsInCrs (MYSQL_RES **mysql_res,long CrsCod);
 unsigned Rec_DB_GetFieldByCod (MYSQL_RES **mysql_res,long CrsCod,long FldCod);
-unsigned Rec_DB_GetFieldTxtFromUsrRecord (MYSQL_RES **mysql_res,
-                                          long FldCod,long UsrCod);
+Exi_Exist_t Rec_DB_GetFieldTxtFromUsrRecord (MYSQL_RES **mysql_res,
+                                             long FldCod,long UsrCod);
 
 void Rec_DB_RemoveFieldContentFromAllUsrsRecords (long FldCod);
 void Rec_DB_RemoveFieldContentFromUsrRecord (long FldCod,long UsrCod);
