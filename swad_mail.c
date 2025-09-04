@@ -972,32 +972,29 @@ bool Mai_CheckIfEmailIsValid (const char *Email)
 /********** Get email address of a user from his/her user's code *************/
 /*****************************************************************************/
 
-bool Mai_GetEmailFromUsrCod (struct Usr_Data *UsrDat)
+void Mai_GetEmailFromUsrCod (struct Usr_Data *UsrDat)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   bool Found;
 
    /***** Get current (last updated) user's nickname from database *****/
-   if (Mai_DB_GetEmailFromUsrCod (&mysql_res,UsrDat->UsrCod))
+   switch (Mai_DB_GetEmailFromUsrCod (&mysql_res,UsrDat->UsrCod))
      {
-      /* Get email */
-      row = mysql_fetch_row (mysql_res);
-      Str_Copy (UsrDat->Email,row[0],sizeof (UsrDat->Email) - 1);
-      UsrDat->EmailConfirmed = (row[1][0] == 'Y');
-      Found = true;
-     }
-   else
-     {
-      UsrDat->Email[0] = '\0';
-      UsrDat->EmailConfirmed = false;
-      Found = false;
+      case Exi_EXISTS:
+	 /* Get email */
+	 row = mysql_fetch_row (mysql_res);
+	 Str_Copy (UsrDat->Email,row[0],sizeof (UsrDat->Email) - 1);
+	 UsrDat->EmailConfirmed = (row[1][0] == 'Y');
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 UsrDat->Email[0] = '\0';
+	 UsrDat->EmailConfirmed = false;
+	 break;
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-
-   return Found;
   }
 
 /*****************************************************************************/

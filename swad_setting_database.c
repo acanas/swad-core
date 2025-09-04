@@ -226,7 +226,7 @@ void Set_DB_UpdateMySettingsAboutNotifyEvents (void)
 /********************* Get my language from database *************************/
 /*****************************************************************************/
 
-unsigned Set_DB_GetMyLanguage (MYSQL_RES **mysql_res)
+Exi_Exist_t Set_DB_GetMyLanguage (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get user's language",

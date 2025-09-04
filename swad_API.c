@@ -246,7 +246,8 @@ static int API_CheckCourseAndGroupCodes (struct soap *soap,
 static int API_GenerateNewAPIKey (struct soap *soap,
                                   long UsrCod,
                                   char APIKey[API_BYTES_KEY + 1]);
-static bool API_GetSomeUsrDataFromUsrCod (struct Usr_Data *UsrDat,long CrsCod);
+static Exi_Exist_t API_GetSomeUsrDataFromUsrCod (struct Usr_Data *UsrDat,
+						 long CrsCod);
 
 static int API_CheckParsNewAccount (char *NewNickWithArr,		// Input
                                     char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],	// Output
@@ -542,20 +543,22 @@ static int API_GenerateNewAPIKey (struct soap *soap,
 /*****************************************************************************/
 /************ Get user's data from database giving a user's code *************/
 /*****************************************************************************/
-// Return false if UsrDat->UsrCod does not exist ini database
+// Return if UsrDat->UsrCod exists in database
 
-static bool API_GetSomeUsrDataFromUsrCod (struct Usr_Data *UsrDat,long CrsCod)
+static Exi_Exist_t API_GetSomeUsrDataFromUsrCod (struct Usr_Data *UsrDat,
+						 long CrsCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   bool UsrFound;
+   Exi_Exist_t UsrExists;
 
    /***** Check if user's code is valid *****/
    if (UsrDat->UsrCod <= 0)
-      return false;
+      return Exi_DOES_NOT_EXIST;
 
    /***** Get some user's data *****/
-   if ((UsrFound = Usr_DB_GetSomeUsrDataFromUsrCod (&mysql_res,UsrDat->UsrCod)))
+   if ((UsrExists = Usr_DB_GetSomeUsrDataFromUsrCod (&mysql_res,
+						     UsrDat->UsrCod)) == Exi_EXISTS)
      {
       /***** Read some user's data *****/
       row = mysql_fetch_row (mysql_res);
@@ -587,7 +590,7 @@ static bool API_GetSomeUsrDataFromUsrCod (struct Usr_Data *UsrDat,long CrsCod)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return UsrFound;
+   return UsrExists;
   }
 
 /*****************************************************************************/
@@ -734,7 +737,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
    int ReturnCode;
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    __attribute__((unused)) Exi_Exist_t PhotoExists;
-   bool UsrFound;
+   Exi_Exist_t UsrExists;
 
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
@@ -799,59 +802,61 @@ int swad__loginByUserPasswordKey (struct soap *soap,
    /***** Get user's data from database *****/
    if (Gbl.Usrs.Me.UsrDat.UsrCod > 0)	// User found in table of users' data
       /***** Get user's data *****/
-      UsrFound = API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L);	// Get some user's data from database
+      UsrExists = API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L);	// Get some user's data from database
    else
-      UsrFound = false;
+      UsrExists = Exi_DOES_NOT_EXIST;
 
-   if (UsrFound)
+   switch (UsrExists)
      {
-      Gbl.Usrs.Me.Logged = true;
-      Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+      case Exi_EXISTS:
+	 Gbl.Usrs.Me.Logged = true;
+	 Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
-      loginByUserPasswordKeyOut->userCode = (int) Gbl.Usrs.Me.UsrDat.UsrCod;
+	 loginByUserPasswordKeyOut->userCode = (int) Gbl.Usrs.Me.UsrDat.UsrCod;
 
-      Str_Copy (loginByUserPasswordKeyOut->userNickname,
-                Gbl.Usrs.Me.UsrDat.Nickname,Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
+	 Str_Copy (loginByUserPasswordKeyOut->userNickname,
+		   Gbl.Usrs.Me.UsrDat.Nickname,Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
 
-      if (Gbl.Usrs.Me.UsrDat.IDs.Num)
-	 Str_Copy (loginByUserPasswordKeyOut->userID,
-	           Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,	// TODO: What user's ID?
-	           ID_MAX_BYTES_USR_ID);
+	 if (Gbl.Usrs.Me.UsrDat.IDs.Num)
+	    Str_Copy (loginByUserPasswordKeyOut->userID,
+		      Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,	// TODO: What user's ID?
+		      ID_MAX_BYTES_USR_ID);
 
-      Str_Copy (loginByUserPasswordKeyOut->userSurname1,
-                Gbl.Usrs.Me.UsrDat.Surname1,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
-      Str_Copy (loginByUserPasswordKeyOut->userSurname2,
-                Gbl.Usrs.Me.UsrDat.Surname2,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
-      Str_Copy (loginByUserPasswordKeyOut->userFirstname,
-                Gbl.Usrs.Me.UsrDat.FrstName,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
+	 Str_Copy (loginByUserPasswordKeyOut->userSurname1,
+		   Gbl.Usrs.Me.UsrDat.Surname1,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
+	 Str_Copy (loginByUserPasswordKeyOut->userSurname2,
+		   Gbl.Usrs.Me.UsrDat.Surname2,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
+	 Str_Copy (loginByUserPasswordKeyOut->userFirstname,
+		   Gbl.Usrs.Me.UsrDat.FrstName,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
-      PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
-      Str_Copy (loginByUserPasswordKeyOut->userPhoto,PhotoURL,WWW_MAX_BYTES_WWW);
+	 PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
+	 Str_Copy (loginByUserPasswordKeyOut->userPhoto,PhotoURL,WWW_MAX_BYTES_WWW);
 
-      Str_Copy (loginByUserPasswordKeyOut->userBirthday,
-                Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,Dat_LENGTH_YYYYMMDD);
+	 Str_Copy (loginByUserPasswordKeyOut->userBirthday,
+		   Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,Dat_LENGTH_YYYYMMDD);
 
-      loginByUserPasswordKeyOut->userRole =
-      API_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs];
+	 loginByUserPasswordKeyOut->userRole =
+	 API_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs];
 
-      /***** Generate a key used in subsequents calls to other web services *****/
-      return API_GenerateNewAPIKey (soap,
-				   (long) loginByUserPasswordKeyOut->userCode,
-                                   loginByUserPasswordKeyOut->wsKey);
-     }
-   else
-     {
-      loginByUserPasswordKeyOut->userCode      = -1;
-      loginByUserPasswordKeyOut->userID        = NULL;
-      loginByUserPasswordKeyOut->userSurname1  = NULL;
-      loginByUserPasswordKeyOut->userSurname2  = NULL;
-      loginByUserPasswordKeyOut->userFirstname = NULL;
-      loginByUserPasswordKeyOut->userPhoto     = NULL;
-      loginByUserPasswordKeyOut->userRole      = 0;
+	 /***** Generate a key used in subsequents calls to other web services *****/
+	 return API_GenerateNewAPIKey (soap,
+				      (long) loginByUserPasswordKeyOut->userCode,
+				      loginByUserPasswordKeyOut->wsKey);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 loginByUserPasswordKeyOut->userCode      = -1;
+	 loginByUserPasswordKeyOut->userID        = NULL;
+	 loginByUserPasswordKeyOut->userSurname1  = NULL;
+	 loginByUserPasswordKeyOut->userSurname2  = NULL;
+	 loginByUserPasswordKeyOut->userFirstname = NULL;
+	 loginByUserPasswordKeyOut->userPhoto     = NULL;
+	 loginByUserPasswordKeyOut->userRole      = 0;
 
-      return soap_receiver_fault (soap,
-	                          "Bad log in",
-	                          "User's ID or nickname don't exist or password is wrong");
+	 return soap_receiver_fault (soap,
+				     "Bad log in",
+				     "User's ID or nickname don't exist or password is wrong");
+	 break;
      }
   }
 
@@ -869,7 +874,7 @@ int swad__loginBySessionKey (struct soap *soap,
    MYSQL_ROW row;
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    __attribute__((unused)) Exi_Exist_t PhotoExists;
-   bool UsrFound;
+   Exi_Exist_t UsrExists;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Initializations *****/
@@ -933,8 +938,8 @@ int swad__loginBySessionKey (struct soap *soap,
 
       /***** Get user code (row[0]) *****/
       Gbl.Usrs.Me.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-      UsrFound = API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
-					       Gbl.Hierarchy.Node[Hie_CRS].HieCod);	// Get some user's data from database
+      UsrExists = API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+					        Gbl.Hierarchy.Node[Hie_CRS].HieCod);	// Get some user's data from database
 
       /***** Get degree (row[1]) *****/
       Gbl.Hierarchy.Node[Hie_DEG].HieCod = Str_ConvertStrCodToLongCod (row[1]);
@@ -944,7 +949,7 @@ int swad__loginBySessionKey (struct soap *soap,
                 Nam_MAX_BYTES_FULL_NAME);
      }
    else
-      UsrFound = false;
+      UsrExists = Exi_DOES_NOT_EXIST;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -952,45 +957,49 @@ int swad__loginBySessionKey (struct soap *soap,
    /***** Get degree of current course *****/
    Gbl.Hierarchy.Node[Hie_DEG].HieCod = Crs_DB_GetDegCodOfCourseByCod (Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
-   if (UsrFound)
+   switch (UsrExists)
      {
-      Gbl.Usrs.Me.Logged = true;
-      Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+      case Exi_EXISTS:
+	 Gbl.Usrs.Me.Logged = true;
+	 Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
-      loginBySessionKeyOut->userCode = (int) Gbl.Usrs.Me.UsrDat.UsrCod;
+	 loginBySessionKeyOut->userCode = (int) Gbl.Usrs.Me.UsrDat.UsrCod;
 
-      Str_Copy (loginBySessionKeyOut->userNickname,Gbl.Usrs.Me.UsrDat.Nickname,
-                Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
+	 Str_Copy (loginBySessionKeyOut->userNickname,Gbl.Usrs.Me.UsrDat.Nickname,
+		   Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
 
-      if (Gbl.Usrs.Me.UsrDat.IDs.Num)
-	 Str_Copy (loginBySessionKeyOut->userID,
-	           Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,	// TODO: What user's ID?
-	           ID_MAX_BYTES_USR_ID);
+	 if (Gbl.Usrs.Me.UsrDat.IDs.Num)
+	    Str_Copy (loginBySessionKeyOut->userID,
+		      Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,	// TODO: What user's ID?
+		      ID_MAX_BYTES_USR_ID);
 
-      Str_Copy (loginBySessionKeyOut->userSurname1,
-                Gbl.Usrs.Me.UsrDat.Surname1,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
-      Str_Copy (loginBySessionKeyOut->userSurname2,
-                Gbl.Usrs.Me.UsrDat.Surname2,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
-      Str_Copy (loginBySessionKeyOut->userFirstname,
-                Gbl.Usrs.Me.UsrDat.FrstName,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
+	 Str_Copy (loginBySessionKeyOut->userSurname1,
+		   Gbl.Usrs.Me.UsrDat.Surname1,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
+	 Str_Copy (loginBySessionKeyOut->userSurname2,
+		   Gbl.Usrs.Me.UsrDat.Surname2,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
+	 Str_Copy (loginBySessionKeyOut->userFirstname,
+		   Gbl.Usrs.Me.UsrDat.FrstName,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
-      PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
-      Str_Copy (loginBySessionKeyOut->userPhoto,PhotoURL,WWW_MAX_BYTES_WWW);
+	 PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
+	 Str_Copy (loginBySessionKeyOut->userPhoto,PhotoURL,WWW_MAX_BYTES_WWW);
 
-      Str_Copy (loginBySessionKeyOut->userBirthday,
-                Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,Dat_LENGTH_YYYYMMDD);
+	 Str_Copy (loginBySessionKeyOut->userBirthday,
+		   Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,Dat_LENGTH_YYYYMMDD);
 
-      loginBySessionKeyOut->userRole = API_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs];
+	 loginBySessionKeyOut->userRole = API_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs];
 
-      /***** Generate a key used in subsequents calls to other web services *****/
-      return API_GenerateNewAPIKey (soap,
-				   (long) loginBySessionKeyOut->userCode,
-                                   loginBySessionKeyOut->wsKey);
+	 /***** Generate a key used in subsequents calls to other web services *****/
+	 return API_GenerateNewAPIKey (soap,
+				      (long) loginBySessionKeyOut->userCode,
+				      loginBySessionKeyOut->wsKey);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 return soap_receiver_fault (soap,
+				     "Bad session identifier",
+				     "Session identifier does not exist in database");
+	 break;
      }
-   else
-      return soap_receiver_fault (soap,
-	                          "Bad session identifier",
-	                          "Session identifier does not exist in database");
   }
 
 /*****************************************************************************/
@@ -1026,7 +1035,8 @@ int swad__getAvailableRoles (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     -1L) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -1135,7 +1145,8 @@ int swad__getCourses (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     -1L) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -1250,7 +1261,8 @@ int swad__getCourseInfo (struct soap *soap,
       return ReturnCode;
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -1585,7 +1597,8 @@ int swad__getUsers (struct soap *soap,
       return ReturnCode;
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -1669,7 +1682,8 @@ int swad__findUsers (struct soap *soap,
 	 return ReturnCode;
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -1838,7 +1852,8 @@ int swad__getGroupTypes (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -1952,7 +1967,8 @@ int swad__getGroups (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -2074,7 +2090,8 @@ int swad__sendMyGroups (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -2282,7 +2299,8 @@ int swad__getAttendanceEvents (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -2323,40 +2341,43 @@ int swad__getAttendanceEvents (struct soap *soap,
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].hidden = (Event.Hidden == HidVis_HIDDEN) ? 1 :
 										                                    0;
          Gbl.Usrs.Other.UsrDat.UsrCod = Event.UsrCod;
-         if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))	// Get some user's data from database
-           {
-            Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
-            getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname1 =
-               soap_malloc (soap,Length + 1);
-            Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname1,
-                      Gbl.Usrs.Other.UsrDat.Surname1,Length);
+	 switch (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+					       Gbl.Hierarchy.Node[Hie_CRS].HieCod))	// Get some user's data from database
+	   {
+	    case Exi_EXISTS:
+	       Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
+	       getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname1 =
+		  soap_malloc (soap,Length + 1);
+	       Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname1,
+			 Gbl.Usrs.Other.UsrDat.Surname1,Length);
 
-            Length = strlen (Gbl.Usrs.Other.UsrDat.Surname2);
-            getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname2 =
-               soap_malloc (soap,Length + 1);
-            Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname2,
-                      Gbl.Usrs.Other.UsrDat.Surname2,Length);
+	       Length = strlen (Gbl.Usrs.Other.UsrDat.Surname2);
+	       getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname2 =
+		  soap_malloc (soap,Length + 1);
+	       Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname2,
+			 Gbl.Usrs.Other.UsrDat.Surname2,Length);
 
-            Length = strlen (Gbl.Usrs.Other.UsrDat.FrstName);
-            getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userFirstname =
-               soap_malloc (soap,Length + 1);
-            Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userFirstname,
-                      Gbl.Usrs.Other.UsrDat.FrstName,Length);
+	       Length = strlen (Gbl.Usrs.Other.UsrDat.FrstName);
+	       getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userFirstname =
+		  soap_malloc (soap,Length + 1);
+	       Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userFirstname,
+			 Gbl.Usrs.Other.UsrDat.FrstName,Length);
 
-            PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-            Length = strlen (PhotoURL);
-            getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userPhoto =
-               soap_malloc (soap,Length + 1);
-            Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userPhoto,
-                      PhotoURL,Length);
-           }
-         else
-           {
-            getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname1  = NULL;
-            getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname2  = NULL;
-            getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userFirstname = NULL;
-            getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userPhoto     = NULL;
-           }
+	       PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+	       Length = strlen (PhotoURL);
+	       getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userPhoto =
+		  soap_malloc (soap,Length + 1);
+	       Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userPhoto,
+			 PhotoURL,Length);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname1  = NULL;
+	       getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname2  = NULL;
+	       getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userFirstname = NULL;
+	       getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userPhoto     = NULL;
+	       break;
+	   }
 
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].startTime = (int) Event.TimeUTC[Dat_STR_TIME];
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].endTime   = (int) Event.TimeUTC[Dat_END_TIME];
@@ -2441,6 +2462,7 @@ int swad__sendAttendanceEvent (struct soap *soap,
    int ReturnCode;
    struct Att_Event Event;
    OldNew_OldNew_t OldNewEvent;
+   __attribute__((unused)) Exi_Exist_t AttExists;
    static void (*CreateUpdate[OldNew_NUM_OLD_NEW]) (struct Att_Event *Event,const char *Description) =
      {
       [OldNew_OLD] = Att_UpdateEvent,
@@ -2467,7 +2489,8 @@ int swad__sendAttendanceEvent (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -2490,7 +2513,7 @@ int swad__sendAttendanceEvent (struct soap *soap,
    switch (OldNewEvent)
      {
       case OldNew_OLD:
-	 Att_GetEventDataByCod (&Event);
+	 AttExists = Att_GetEventDataByCod (&Event);
 	 if (Event.CrsCod != (long) courseCode)
 	    return soap_receiver_fault (soap,
 					"Request forbidden",
@@ -2548,6 +2571,7 @@ int swad__removeAttendanceEvent (struct soap *soap,
   {
    int ReturnCode;
    struct Att_Event Event;
+   __attribute__((unused)) Exi_Exist_t AttExists;
 
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
@@ -2569,7 +2593,7 @@ int swad__removeAttendanceEvent (struct soap *soap,
    /* Course code */
    if (Event.AttCod > 0)	// The event already exists
      {
-      Att_GetEventDataByCod (&Event);
+      AttExists = Att_GetEventDataByCod (&Event);
       Gbl.Hierarchy.Node[Hie_CRS].HieCod = Event.CrsCod;
      }
    else
@@ -2584,7 +2608,8 @@ int swad__removeAttendanceEvent (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -2656,6 +2681,7 @@ int swad__getAttendanceUsers (struct soap *soap,
   {
    int ReturnCode;
    struct Att_Event Event;
+   __attribute__((unused)) Exi_Exist_t AttExists;
    bool AttEventIsAsociatedToGrps;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2679,11 +2705,12 @@ int swad__getAttendanceUsers (struct soap *soap,
 
    /***** Get course of this attendance event *****/
    Event.AttCod = (long) attendanceEventCode;
-   Att_GetEventDataByCod (&Event);
+   AttExists = Att_GetEventDataByCod (&Event);
    Gbl.Hierarchy.Node[Hie_CRS].HieCod = Event.CrsCod;
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -2724,63 +2751,65 @@ int swad__getAttendanceUsers (struct soap *soap,
          getAttendanceUsersOut->usersArray.__ptr[NumUsr].userCode = (int) Gbl.Usrs.Other.UsrDat.UsrCod;
 
          /* Get user's data */
-         if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,-1L))	// Get some user's data from database
-           {
-            Length = strlen (Gbl.Usrs.Other.UsrDat.Nickname);
-            getAttendanceUsersOut->usersArray.__ptr[NumUsr].userNickname =
-               soap_malloc (soap,Length + 1);
-            Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumUsr].userNickname,
-                      Gbl.Usrs.Other.UsrDat.Nickname,Length);
+	 switch (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,-1L))	// Get some user's data from database
+	   {
+	    case Exi_EXISTS:
+	       Length = strlen (Gbl.Usrs.Other.UsrDat.Nickname);
+	       getAttendanceUsersOut->usersArray.__ptr[NumUsr].userNickname =
+		  soap_malloc (soap,Length + 1);
+	       Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumUsr].userNickname,
+			 Gbl.Usrs.Other.UsrDat.Nickname,Length);
 
-            if (Gbl.Usrs.Other.UsrDat.IDs.Num)
-              {
-	       Length = strlen (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);	// TODO: What user's ID?
-	       getAttendanceUsersOut->usersArray.__ptr[NumUsr].userID =
-	          soap_malloc (soap,Length + 1);
-	       Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumUsr].userID,
-	                 Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,Length);
-              }
-            else
-              {
-	       getAttendanceUsersOut->usersArray.__ptr[NumUsr].userID =
-	          soap_malloc (soap,1);
-	       getAttendanceUsersOut->usersArray.__ptr[NumUsr].userID[0] = '\0';
-              }
+	       if (Gbl.Usrs.Other.UsrDat.IDs.Num)
+		 {
+		  Length = strlen (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);	// TODO: What user's ID?
+		  getAttendanceUsersOut->usersArray.__ptr[NumUsr].userID =
+		     soap_malloc (soap,Length + 1);
+		  Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumUsr].userID,
+			    Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,Length);
+		 }
+	       else
+		 {
+		  getAttendanceUsersOut->usersArray.__ptr[NumUsr].userID =
+		     soap_malloc (soap,1);
+		  getAttendanceUsersOut->usersArray.__ptr[NumUsr].userID[0] = '\0';
+		 }
 
-            Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
-            getAttendanceUsersOut->usersArray.__ptr[NumUsr].userSurname1 =
-               soap_malloc (soap,Length + 1);
-            Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumUsr].userSurname1,
-                      Gbl.Usrs.Other.UsrDat.Surname1,Length);
+	       Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
+	       getAttendanceUsersOut->usersArray.__ptr[NumUsr].userSurname1 =
+		  soap_malloc (soap,Length + 1);
+	       Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumUsr].userSurname1,
+			 Gbl.Usrs.Other.UsrDat.Surname1,Length);
 
-            Length = strlen (Gbl.Usrs.Other.UsrDat.Surname2);
-            getAttendanceUsersOut->usersArray.__ptr[NumUsr].userSurname2 =
-               soap_malloc (soap,Length + 1);
-            Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumUsr].userSurname2,
-                      Gbl.Usrs.Other.UsrDat.Surname2,Length);
+	       Length = strlen (Gbl.Usrs.Other.UsrDat.Surname2);
+	       getAttendanceUsersOut->usersArray.__ptr[NumUsr].userSurname2 =
+		  soap_malloc (soap,Length + 1);
+	       Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumUsr].userSurname2,
+			 Gbl.Usrs.Other.UsrDat.Surname2,Length);
 
-            Length = strlen (Gbl.Usrs.Other.UsrDat.FrstName);
-            getAttendanceUsersOut->usersArray.__ptr[NumUsr].userFirstname =
-               soap_malloc (soap,Length + 1);
-            Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumUsr].userFirstname,
-                      Gbl.Usrs.Other.UsrDat.FrstName,Length);
+	       Length = strlen (Gbl.Usrs.Other.UsrDat.FrstName);
+	       getAttendanceUsersOut->usersArray.__ptr[NumUsr].userFirstname =
+		  soap_malloc (soap,Length + 1);
+	       Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumUsr].userFirstname,
+			 Gbl.Usrs.Other.UsrDat.FrstName,Length);
 
-            PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-            Length = strlen (PhotoURL);
-            getAttendanceUsersOut->usersArray.__ptr[NumUsr].userPhoto =
-               soap_malloc (soap,Length + 1);
-            Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumUsr].userPhoto,
-                      PhotoURL,Length);
-           }
-         else
-           {
-            getAttendanceUsersOut->usersArray.__ptr[NumUsr].userNickname  = NULL;
-	    getAttendanceUsersOut->usersArray.__ptr[NumUsr].userID        = NULL;
-            getAttendanceUsersOut->usersArray.__ptr[NumUsr].userSurname1  = NULL;
-            getAttendanceUsersOut->usersArray.__ptr[NumUsr].userSurname2  = NULL;
-            getAttendanceUsersOut->usersArray.__ptr[NumUsr].userFirstname = NULL;
-            getAttendanceUsersOut->usersArray.__ptr[NumUsr].userPhoto     = NULL;
-           }
+	       PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+	       Length = strlen (PhotoURL);
+	       getAttendanceUsersOut->usersArray.__ptr[NumUsr].userPhoto =
+		  soap_malloc (soap,Length + 1);
+	       Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumUsr].userPhoto,
+			 PhotoURL,Length);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       getAttendanceUsersOut->usersArray.__ptr[NumUsr].userNickname  = NULL;
+	       getAttendanceUsersOut->usersArray.__ptr[NumUsr].userID        = NULL;
+	       getAttendanceUsersOut->usersArray.__ptr[NumUsr].userSurname1  = NULL;
+	       getAttendanceUsersOut->usersArray.__ptr[NumUsr].userSurname2  = NULL;
+	       getAttendanceUsersOut->usersArray.__ptr[NumUsr].userFirstname = NULL;
+	       getAttendanceUsersOut->usersArray.__ptr[NumUsr].userPhoto     = NULL;
+	       break;
+	   }
 
 	 /* Get if user is present or not (row[1]) */
 	 getAttendanceUsersOut->usersArray.__ptr[NumUsr].present = (row[1][0] == 'Y') ? 1 :
@@ -2826,12 +2855,13 @@ int swad__sendAttendanceUsers (struct soap *soap,
 
    /***** Get course of this attendance event *****/
    Event.AttCod = (long) attendanceEventCode;
-   if (!Att_GetEventDataByCod (&Event))
+   if (Att_GetEventDataByCod (&Event) == Exi_DOES_NOT_EXIST)
       return SOAP_OK;	// return with success = 0
    Gbl.Hierarchy.Node[Hie_CRS].HieCod = Event.CrsCod;
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -2903,7 +2933,8 @@ int swad__getNotifications (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     -1L) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -2960,46 +2991,49 @@ int swad__getNotifications (struct soap *soap,
 	    SuccessOrError = Hie_GetDataByCod[L] (&Hie[L]);
 	   }
 
-         if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Hie[Hie_CRS].HieCod))	// Get some user's data from database
-           {
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userNickname =
-               soap_malloc (soap,Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1);
-            Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userNickname,
-                      Gbl.Usrs.Other.UsrDat.Nickname,
-                      Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
+	 switch (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+					       Hie[Hie_CRS].HieCod))	// Get some user's data from database
+	   {
+	    case Exi_EXISTS:
+	       getNotificationsOut->notificationsArray.__ptr[NumNotif].userNickname =
+		  soap_malloc (soap,Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1);
+	       Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userNickname,
+			 Gbl.Usrs.Other.UsrDat.Nickname,
+			 Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
 
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1 =
-               soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
-            Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1,
-                      Gbl.Usrs.Other.UsrDat.Surname1,
-                      Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
+	       getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1 =
+		  soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
+	       Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1,
+			 Gbl.Usrs.Other.UsrDat.Surname1,
+			 Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2 =
-               soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
-            Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2,
-                      Gbl.Usrs.Other.UsrDat.Surname2,
-                      Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
+	       getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2 =
+		  soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
+	       Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2,
+			 Gbl.Usrs.Other.UsrDat.Surname2,
+			 Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname =
-               soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
-            Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname,
-                      Gbl.Usrs.Other.UsrDat.FrstName,
-                      Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
+	       getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname =
+		  soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
+	       Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname,
+			 Gbl.Usrs.Other.UsrDat.FrstName,
+			 Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
-            PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto =
-               soap_malloc (soap,WWW_MAX_BYTES_WWW + 1);
-            Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto,
-                      PhotoURL,WWW_MAX_BYTES_WWW);
-           }
-         else
-           {
-	    getNotificationsOut->notificationsArray.__ptr[NumNotif].userNickname  = NULL;
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1  = NULL;
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2  = NULL;
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname = NULL;
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto     = NULL;
-           }
+	       PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+	       getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto =
+		  soap_malloc (soap,WWW_MAX_BYTES_WWW + 1);
+	       Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto,
+			 PhotoURL,WWW_MAX_BYTES_WWW);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       getNotificationsOut->notificationsArray.__ptr[NumNotif].userNickname  = NULL;
+	       getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1  = NULL;
+	       getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2  = NULL;
+	       getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname = NULL;
+	       getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto     = NULL;
+	       break;
+	   }
 
          /* Get message/post/... code (row[8]) */
          Cod = Str_ConvertStrCodToLongCod (row[8]);
@@ -3092,12 +3126,14 @@ static int API_GetMyLanguage (struct soap *soap)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   bool UsrFound;
+   Exi_Exist_t UsrExists;
 
    /***** Get user's language *****/
-   if ((UsrFound = Set_DB_GetMyLanguage (&mysql_res)))
+   UsrExists = Set_DB_GetMyLanguage (&mysql_res);
+
+   /***** Get language from database *****/
+   if (UsrExists == Exi_EXISTS)
      {
-      /***** Get language from database *****/
       row = mysql_fetch_row (mysql_res);
 
       /* Get language (row[0]) */
@@ -3109,7 +3145,7 @@ static int API_GetMyLanguage (struct soap *soap)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   if (!UsrFound)
+   if (UsrExists == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's language from database",
 	                          "User doen't exist in database");
@@ -3145,7 +3181,8 @@ int swad__markNotificationsAsRead (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     -1L) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -3207,7 +3244,8 @@ int swad__sendMessage (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     -1L) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -3361,7 +3399,8 @@ int swad__sendNotice (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -3423,7 +3462,8 @@ int swad__getTestConfig (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -3517,7 +3557,8 @@ int swad__getTests (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -3859,7 +3900,8 @@ int swad__getTrivialQuestion (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -4061,7 +4103,8 @@ int swad__getGames (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -4100,40 +4143,43 @@ int swad__getGames (struct soap *soap,
 
 	 /* Get user's code of the user who created the game (row[1]) */
          Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
-         if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))	// Get some user's data from database
-           {
-            Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
-            getGamesOut->gamesArray.__ptr[NumGame].userSurname1 =
-               soap_malloc (soap,Length + 1);
-            Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].userSurname1,
-                      Gbl.Usrs.Other.UsrDat.Surname1,Length);
+	 switch (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+					       Gbl.Hierarchy.Node[Hie_CRS].HieCod))	// Get some user's data from database
+	   {
+	    case Exi_EXISTS:
+	       Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
+	       getGamesOut->gamesArray.__ptr[NumGame].userSurname1 =
+		  soap_malloc (soap,Length + 1);
+	       Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].userSurname1,
+			 Gbl.Usrs.Other.UsrDat.Surname1,Length);
 
-            Length = strlen (Gbl.Usrs.Other.UsrDat.Surname2);
-            getGamesOut->gamesArray.__ptr[NumGame].userSurname2 =
-               soap_malloc (soap,Length + 1);
-            Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].userSurname2,
-                      Gbl.Usrs.Other.UsrDat.Surname2,Length);
+	       Length = strlen (Gbl.Usrs.Other.UsrDat.Surname2);
+	       getGamesOut->gamesArray.__ptr[NumGame].userSurname2 =
+		  soap_malloc (soap,Length + 1);
+	       Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].userSurname2,
+			 Gbl.Usrs.Other.UsrDat.Surname2,Length);
 
-            Length = strlen (Gbl.Usrs.Other.UsrDat.FrstName);
-            getGamesOut->gamesArray.__ptr[NumGame].userFirstname =
-               soap_malloc (soap,Length + 1);
-            Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].userFirstname,
-                      Gbl.Usrs.Other.UsrDat.FrstName,Length);
+	       Length = strlen (Gbl.Usrs.Other.UsrDat.FrstName);
+	       getGamesOut->gamesArray.__ptr[NumGame].userFirstname =
+		  soap_malloc (soap,Length + 1);
+	       Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].userFirstname,
+			 Gbl.Usrs.Other.UsrDat.FrstName,Length);
 
-            PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-            Length = strlen (PhotoURL);
-            getGamesOut->gamesArray.__ptr[NumGame].userPhoto =
-               soap_malloc (soap,Length + 1);
-            Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].userPhoto,
-                      PhotoURL,Length);
-           }
-         else
-           {
-            getGamesOut->gamesArray.__ptr[NumGame].userSurname1  = NULL;
-            getGamesOut->gamesArray.__ptr[NumGame].userSurname2  = NULL;
-            getGamesOut->gamesArray.__ptr[NumGame].userFirstname = NULL;
-            getGamesOut->gamesArray.__ptr[NumGame].userPhoto     = NULL;
-           }
+	       PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+	       Length = strlen (PhotoURL);
+	       getGamesOut->gamesArray.__ptr[NumGame].userPhoto =
+		  soap_malloc (soap,Length + 1);
+	       Str_Copy (getGamesOut->gamesArray.__ptr[NumGame].userPhoto,
+			 PhotoURL,Length);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       getGamesOut->gamesArray.__ptr[NumGame].userSurname1  = NULL;
+	       getGamesOut->gamesArray.__ptr[NumGame].userSurname2  = NULL;
+	       getGamesOut->gamesArray.__ptr[NumGame].userFirstname = NULL;
+	       getGamesOut->gamesArray.__ptr[NumGame].userPhoto     = NULL;
+	       break;
+	   }
 
 	 /* Get game start time (row[2]) */
          StartTime = 0L;
@@ -4232,7 +4278,8 @@ int swad__getMatches (struct soap *soap,
    Gam_GetGameDataByCod (&Game);
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -4271,40 +4318,43 @@ int swad__getMatches (struct soap *soap,
 
 	 /* Get user's code of the user who created the game (row[1]) */
          Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
-         if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))	// Get some user's data from database
-           {
-            Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
-            getMatchesOut->matchesArray.__ptr[NumMatch].userSurname1 =
-               soap_malloc (soap,Length + 1);
-            Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userSurname1,
-                      Gbl.Usrs.Other.UsrDat.Surname1,Length);
+	 switch (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+					       Gbl.Hierarchy.Node[Hie_CRS].HieCod))	// Get some user's data from database
+	   {
+	    case Exi_EXISTS:
+	       Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
+	       getMatchesOut->matchesArray.__ptr[NumMatch].userSurname1 =
+		  soap_malloc (soap,Length + 1);
+	       Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userSurname1,
+			 Gbl.Usrs.Other.UsrDat.Surname1,Length);
 
-            Length = strlen (Gbl.Usrs.Other.UsrDat.Surname2);
-            getMatchesOut->matchesArray.__ptr[NumMatch].userSurname2 =
-               soap_malloc (soap,Length + 1);
-            Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userSurname2,
-                      Gbl.Usrs.Other.UsrDat.Surname2,Length);
+	       Length = strlen (Gbl.Usrs.Other.UsrDat.Surname2);
+	       getMatchesOut->matchesArray.__ptr[NumMatch].userSurname2 =
+		  soap_malloc (soap,Length + 1);
+	       Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userSurname2,
+			 Gbl.Usrs.Other.UsrDat.Surname2,Length);
 
-            Length = strlen (Gbl.Usrs.Other.UsrDat.FrstName);
-            getMatchesOut->matchesArray.__ptr[NumMatch].userFirstname =
-               soap_malloc (soap,Length + 1);
-            Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userFirstname,
-                      Gbl.Usrs.Other.UsrDat.FrstName,Length);
+	       Length = strlen (Gbl.Usrs.Other.UsrDat.FrstName);
+	       getMatchesOut->matchesArray.__ptr[NumMatch].userFirstname =
+		  soap_malloc (soap,Length + 1);
+	       Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userFirstname,
+			 Gbl.Usrs.Other.UsrDat.FrstName,Length);
 
-            PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-            Length = strlen (PhotoURL);
-            getMatchesOut->matchesArray.__ptr[NumMatch].userPhoto =
-               soap_malloc (soap,Length + 1);
-            Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userPhoto,
-                      PhotoURL,Length);
-           }
-         else
-           {
-            getMatchesOut->matchesArray.__ptr[NumMatch].userSurname1  = NULL;
-            getMatchesOut->matchesArray.__ptr[NumMatch].userSurname2  = NULL;
-            getMatchesOut->matchesArray.__ptr[NumMatch].userFirstname = NULL;
-            getMatchesOut->matchesArray.__ptr[NumMatch].userPhoto     = NULL;
-           }
+	       PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+	       Length = strlen (PhotoURL);
+	       getMatchesOut->matchesArray.__ptr[NumMatch].userPhoto =
+		  soap_malloc (soap,Length + 1);
+	       Str_Copy (getMatchesOut->matchesArray.__ptr[NumMatch].userPhoto,
+			 PhotoURL,Length);
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       getMatchesOut->matchesArray.__ptr[NumMatch].userSurname1  = NULL;
+	       getMatchesOut->matchesArray.__ptr[NumMatch].userSurname2  = NULL;
+	       getMatchesOut->matchesArray.__ptr[NumMatch].userFirstname = NULL;
+	       getMatchesOut->matchesArray.__ptr[NumMatch].userPhoto     = NULL;
+	       break;
+	   }
 
 	 /* Get match start time (row[2]) */
          StartTime = 0L;
@@ -4405,7 +4455,8 @@ int swad__getMatchStatus (struct soap *soap,
 	                        "Match does not belong to game");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -4625,7 +4676,8 @@ int swad__getDirectoryTree (struct soap *soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -4966,7 +5018,8 @@ int swad__getFile (struct soap *soap,
    Hie_InitHierarchy ();
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -5117,7 +5170,8 @@ int swad__getMarks (struct soap *soap,
       return ReturnCode;
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -5188,7 +5242,8 @@ int swad__getLocation (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -5239,7 +5294,8 @@ int swad__sendMyLocation (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_DOES_NOT_EXIST)
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");

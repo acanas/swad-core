@@ -41,7 +41,7 @@ void Set_DB_UpdateMySettingsAboutBasicProfile (void);
 void Set_DB_UpdateMySettingsAboutExtendedProfile (void);
 void Set_DB_UpdateMySettingsAboutNotifyEvents (void);
 
-unsigned Set_DB_GetMyLanguage (MYSQL_RES **mysql_res);
+Exi_Exist_t Set_DB_GetMyLanguage (MYSQL_RES **mysql_res);
 
 //-------------------- User settings in the current course --------------------
 void Set_DB_InsertUsrInCrsSettings (long UsrCod,long HieCod);

@@ -681,38 +681,39 @@ static void Att_GetListEvents (struct Att_Events *Events,
 
 static void Att_GetEventDataByCodAndCheckCrs (struct Att_Event *Event)
   {
-   if (Att_GetEventDataByCod (Event))
+   switch (Att_GetEventDataByCod (Event))
      {
-      if (Event->CrsCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
+      case Exi_EXISTS:
+	 if (Event->CrsCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
+	    Err_WrongEventExit ();
+	 break;
+      case Exi_DOES_NOT_EXIST:	// Attendance event not found
+      default:
          Err_WrongEventExit ();
+	 break;
      }
-   else	// Attendance event not found
-      Err_WrongEventExit ();
   }
 
 /*****************************************************************************/
 /**************** Get attendance event data using its code *******************/
 /*****************************************************************************/
-// Returns true if attendance event exists
+// Returns if attendance event exists
 // This function can be called from web service, so do not display messages
 
-bool Att_GetEventDataByCod (struct Att_Event *Event)
+Exi_Exist_t Att_GetEventDataByCod (struct Att_Event *Event)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumAttEvents;
-   bool Found = false;
+   Exi_Exist_t AttExists;
 
    /***** Reset attendance event data *****/
    Att_ResetEvent (Event);
 
    if (Event->AttCod > 0)
      {
-      /***** Build query *****/
-      NumAttEvents = Att_DB_GetEventDataByCod (&mysql_res,Event->AttCod);
-
       /***** Get data of attendance event from database *****/
-      if ((Found = (NumAttEvents != 0))) // Attendance event found...
+      if ((AttExists = Att_DB_GetEventDataByCod (&mysql_res,
+						 Event->AttCod)) == Exi_EXISTS) // Attendance event found...
 	{
          /* Get next row from result */
 	 row = mysql_fetch_row (mysql_res);
@@ -723,9 +724,11 @@ bool Att_GetEventDataByCod (struct Att_Event *Event)
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
+
+      return AttExists;
      }
 
-   return Found;
+   return Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

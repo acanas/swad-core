@@ -42,13 +42,14 @@ void AttRsc_GetLinkToEvent (void)
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    extern const char *Txt_Control_of_class_attendance;
    struct Att_Event Event;
+   __attribute__((unused)) Exi_Exist_t AttExists;
 
    /***** Get attendance event code *****/
    Event.AttCod = ParCod_GetPar (ParCod_Att);
 
    /***** Get attendance event data *****/
    if (Event.AttCod > 0)
-      Att_GetEventDataByCod (&Event);
+      AttExists = Att_GetEventDataByCod (&Event);
 
    /***** Copy link to attendance event into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_ATT_EVENT,Event.AttCod);

@@ -38,7 +38,7 @@ void Mai_DB_UpdateEmail (long UsrCod,const char NewEmail[Cns_MAX_BYTES_EMAIL_ADD
 void Mai_DB_ConfirmEmail (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
 unsigned Mai_DB_GetMyEmails (MYSQL_RES **mysql_res,long UsrCod);
-unsigned Mai_DB_GetEmailFromUsrCod (MYSQL_RES **mysql_res,long UsrCod);
+Exi_Exist_t Mai_DB_GetEmailFromUsrCod (MYSQL_RES **mysql_res,long UsrCod);
 long Mai_DB_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 char Mai_DB_CheckIfEmailIsConfirmed (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 Exi_Exist_t Mai_DB_CheckIfEmailExistsConfirmed (const char *Email);

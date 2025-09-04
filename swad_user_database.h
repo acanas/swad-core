@@ -51,9 +51,9 @@ long Usr_DB_GetUsrCodFromEmail (const char *Email);
 long Usr_DB_GetUsrCodFromEmailPwd (const char *Email,const char *Password);
 long Usr_DB_GetUsrCodFromID (const char *ID);
 long Usr_DB_GetUsrCodFromIDPwd (const char *ID,const char *Password);
-unsigned Usr_DB_GetUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod,
-                                      Usr_GetPrefs_t GetPrefs);
-unsigned Usr_DB_GetSomeUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod);
+Exi_Exist_t Usr_DB_GetUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod,
+                                         Usr_GetPrefs_t GetPrefs);
+Exi_Exist_t Usr_DB_GetSomeUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod);
 void Usr_DB_GetUsrName (long UsrCod,char *Title,size_t TitleSize);
 bool Usr_DB_FindStrInUsrsNames (const char *Str);
 void Usr_DB_BuildQueryToGetUsrsLst (Hie_Level_t HieLvl,Rol_Role_t Role,

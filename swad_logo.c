@@ -80,7 +80,7 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
    extern const char *Hie_Icons[Hie_NUM_LEVELS];
    const char *Folder = NULL;	// To avoid warning
    char PathLogo[PATH_MAX + 1];
-   bool LogoFound = false;
+   Exi_Exist_t LogoExists = Exi_DOES_NOT_EXIST;
    long HieCod;
    long InsCod;
    long CtrCod;
@@ -112,7 +112,7 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 	    /* Course */
 
 	    /* Degree */
-	    if (!LogoFound && HieLvl >= Hie_DEG)
+	    if (LogoExists == Exi_DOES_NOT_EXIST && HieLvl >= Hie_DEG)
 	      {
 	       Folder = Cfg_FOLDER_DEG;
 	       if (HieLvl >= Hie_CRS)
@@ -122,13 +122,12 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 			 (unsigned) (DegCod % 100),
 			 (unsigned)  DegCod,
 			 (unsigned)  DegCod);
-	       LogoFound = (Fil_CheckIfPathExists (PathLogo) == Exi_EXISTS);
-	       if (LogoFound)
+	       if ((LogoExists = Fil_CheckIfPathExists (PathLogo)) == Exi_EXISTS)
 		  HieCod = DegCod;
 	      }
 
 	    /* Center */
-	    if (!LogoFound && HieLvl >= Hie_CTR)
+	    if (LogoExists == Exi_DOES_NOT_EXIST && HieLvl >= Hie_CTR)
 	      {
 	       Folder = Cfg_FOLDER_CTR;
 	       if (HieLvl >= Hie_DEG)
@@ -140,13 +139,12 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 			 (unsigned) (CtrCod % 100),
 			 (unsigned)  CtrCod,
 			 (unsigned)  CtrCod);
-	       LogoFound = (Fil_CheckIfPathExists (PathLogo) == Exi_EXISTS);
-	       if (LogoFound)
+	       if ((LogoExists = Fil_CheckIfPathExists (PathLogo)) == Exi_EXISTS)
 		  HieCod = CtrCod;
 	      }
 
 	    /* Institution */
-	    if (!LogoFound)
+	    if (LogoExists == Exi_DOES_NOT_EXIST)
 	      {
 	       Folder = Cfg_FOLDER_INS;
 	       if (HieLvl >= Hie_CTR)
@@ -156,30 +154,33 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 			 (unsigned) (InsCod % 100),
 			 (unsigned)  InsCod,
 			 (unsigned)  InsCod);
-	       LogoFound = (Fil_CheckIfPathExists (PathLogo) == Exi_EXISTS);
-	       if (LogoFound)
+	       if ((LogoExists = Fil_CheckIfPathExists (PathLogo)) == Exi_EXISTS)
 		  HieCod = InsCod;
 	      }
 
 	    /***** Draw logo *****/
-	    if (LogoFound)
+	    switch (LogoExists)
 	      {
-	       if (asprintf (&URL,"%s/%s/%02u/%u/logo",
-			     Cfg_URL_SWAD_PUBLIC,Folder,
-			     (unsigned) (HieCod % 100),
-			     (unsigned) HieCod) < 0)
-		  Err_NotEnoughMemoryExit ();
-	       if (asprintf (&Icon,"%u.png",(unsigned) HieCod) < 0)
-		  Err_NotEnoughMemoryExit ();
+	       case Exi_EXISTS:
+		  if (asprintf (&URL,"%s/%s/%02u/%u/logo",
+				Cfg_URL_SWAD_PUBLIC,Folder,
+				(unsigned) (HieCod % 100),
+				(unsigned) HieCod) < 0)
+		     Err_NotEnoughMemoryExit ();
+		  if (asprintf (&Icon,"%u.png",(unsigned) HieCod) < 0)
+		     Err_NotEnoughMemoryExit ();
 
-	       HTM_IMG (URL,Icon,Node->FullName,"class=\"%s\"",IconClass);
-	       free (Icon);
-	       free (URL);
+		  HTM_IMG (URL,Icon,Node->FullName,"class=\"%s\"",IconClass);
+		  free (Icon);
+		  free (URL);
+		  break;
+	       case Exi_DOES_NOT_EXIST:
+	       default:
+		  HTM_IMG (Cfg_URL_ICON_PUBLIC,Hie_Icons[HieLvl],Node->ShrtName,
+			   "class=\"%s ICO_%s_%s\"",
+			   IconClass,Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
+		  break;
 	      }
-	    else
-	       HTM_IMG (Cfg_URL_ICON_PUBLIC,Hie_Icons[HieLvl],Node->ShrtName,
-			"class=\"%s ICO_%s_%s\"",
-			IconClass,Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
 	   }
 	 break;
       default:

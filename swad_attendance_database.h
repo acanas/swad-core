@@ -45,7 +45,7 @@ unsigned Att_DB_GetListEventsAllGrps (MYSQL_RES **mysql_res,
                                       Dat_StartEndTime_t SelectedOrder,
                                       Att_OrderNewestOldest_t OrderNewestOldest);
 unsigned Att_DB_GetAllEventsData (MYSQL_RES **mysql_res,long CrsCod);
-unsigned Att_DB_GetEventDataByCod (MYSQL_RES **mysql_res,long AttCod);
+Exi_Exist_t Att_DB_GetEventDataByCod (MYSQL_RES **mysql_res,long AttCod);
 void Att_DB_GetEventTitle (long AttCod,char *Title,size_t TitleSize);
 void Att_DB_GetEventDescription (long AttCod,char Description[Cns_MAX_BYTES_TEXT + 1]);
 

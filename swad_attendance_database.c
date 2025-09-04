@@ -170,9 +170,9 @@ unsigned Att_DB_GetAllEventsData (MYSQL_RES **mysql_res,long CrsCod)
 /**************** Get attendance event data using its code *******************/
 /*****************************************************************************/
 
-unsigned Att_DB_GetEventDataByCod (MYSQL_RES **mysql_res,long AttCod)
+Exi_Exist_t Att_DB_GetEventDataByCod (MYSQL_RES **mysql_res,long AttCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get attendance event data",
 		   "SELECT AttCod,"					// row[0]
 			  "CrsCod,"					// row[1]
@@ -185,7 +185,8 @@ unsigned Att_DB_GetEventDataByCod (MYSQL_RES **mysql_res,long AttCod)
 			  "Title"					// row[8]
 		    " FROM att_events"
 		   " WHERE AttCod=%ld",
-		   AttCod);
+		   AttCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

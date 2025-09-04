@@ -86,9 +86,9 @@ unsigned Mai_DB_GetMyEmails (MYSQL_RES **mysql_res,long UsrCod)
 /********** Get email address of a user from his/her user's code *************/
 /*****************************************************************************/
 
-unsigned Mai_DB_GetEmailFromUsrCod (MYSQL_RES **mysql_res,long UsrCod)
+Exi_Exist_t Mai_DB_GetEmailFromUsrCod (MYSQL_RES **mysql_res,long UsrCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get email address",
 		   "SELECT E_mail,"	// row[0]
 			  "Confirmed"	// row[1]
@@ -96,7 +96,8 @@ unsigned Mai_DB_GetEmailFromUsrCod (MYSQL_RES **mysql_res,long UsrCod)
 		   " WHERE UsrCod=%ld"
 		" ORDER BY CreatTime DESC"
 		   " LIMIT 1",
-		   UsrCod);
+		   UsrCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

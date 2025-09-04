@@ -97,7 +97,7 @@ void Att_ShowEvents (void);
 Usr_Can_t Att_CheckIfICanEditEvents (void);
 
 void Att_ReqCreatOrEditEvent (void);
-bool Att_GetEventDataByCod (struct Att_Event *Event);
+Exi_Exist_t Att_GetEventDataByCod (struct Att_Event *Event);
 void Att_GetEventDataFromRow (MYSQL_ROW row,struct Att_Event *Event);
 
 void Att_AskRemEvent (void);

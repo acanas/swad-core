@@ -219,13 +219,13 @@ long Usr_DB_GetUsrCodFromIDPwd (const char *ID,const char *Password)
 /*****************************************************************************/
 // UsrDat->UsrCod must contain an existing user's code
 
-unsigned Usr_DB_GetUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod,
-                                      Usr_GetPrefs_t GetPrefs)
+Exi_Exist_t Usr_DB_GetUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod,
+                                         Usr_GetPrefs_t GetPrefs)
   {
    switch (GetPrefs)
      {
       case Usr_DONT_GET_PREFS:
-	 return (unsigned)
+	 return
 	 DB_QuerySELECT (mysql_res,"can not get user's data",
 		         "SELECT EncryptedUsrCod,"	// row[ 0]
 			        "Password,"		// row[ 1]
@@ -253,10 +253,11 @@ unsigned Usr_DB_GetUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod,
 			        "EmailNtfEvents"	// row[22]
 			  " FROM usr_data"
 		         " WHERE UsrCod=%ld",
-		          UsrCod);
+		         UsrCod) ? Exi_EXISTS :
+		        	   Exi_DOES_NOT_EXIST;
       case Usr_GET_PREFS:
       default:
-	 return (unsigned)
+	 return
 	 DB_QuerySELECT (mysql_res,"can not get user's data",
 		         "SELECT EncryptedUsrCod,"	// row[ 0]
 			        "Password,"		// row[ 1]
@@ -296,7 +297,8 @@ unsigned Usr_DB_GetUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod,
 			        "ThirdPartyCookies"	// row[31]
 			  " FROM usr_data"
 		         " WHERE UsrCod=%ld",
-		         UsrCod);
+		         UsrCod) ? Exi_EXISTS :
+		        	   Exi_DOES_NOT_EXIST;
      }
   }
 
@@ -305,9 +307,9 @@ unsigned Usr_DB_GetUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod,
 /*****************************************************************************/
 // UsrDat->UsrCod must contain an existing user's code
 
-unsigned Usr_DB_GetSomeUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod)
+Exi_Exist_t Usr_DB_GetSomeUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get user's data",
 		   "SELECT Surname1,"				// row[0]
 			  "Surname2,"				// row[1]
@@ -316,7 +318,8 @@ unsigned Usr_DB_GetSomeUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod)
 			  "DATE_FORMAT(Birthday,'%%Y%%m%%d')"	// row[4]
 		    " FROM usr_data"
 		   " WHERE UsrCod=%ld",
-		   UsrCod);
+		   UsrCod) != 0 ? Exi_EXISTS :
+				  Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

@@ -505,112 +505,116 @@ void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
    MYSQL_ROW row;
 
    /***** Get user's data from database *****/
-   if (Usr_DB_GetUsrDataFromUsrCod (&mysql_res,UsrDat->UsrCod,GetPrefs))
+   switch (Usr_DB_GetUsrDataFromUsrCod (&mysql_res,UsrDat->UsrCod,GetPrefs))
      {
-      /***** Read user's data *****/
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 /***** Read user's data *****/
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get encrypted user's code (row[0])
-         and encrypted password (row[1]) */
-      Str_Copy (UsrDat->EnUsrCod,row[0],sizeof (UsrDat->EnUsrCod) - 1);
-      Str_Copy (UsrDat->Password,row[1],sizeof (UsrDat->Password) - 1);
+	 /* Get encrypted user's code (row[0])
+	    and encrypted password (row[1]) */
+	 Str_Copy (UsrDat->EnUsrCod,row[0],sizeof (UsrDat->EnUsrCod) - 1);
+	 Str_Copy (UsrDat->Password,row[1],sizeof (UsrDat->Password) - 1);
 
-      /* Get roles */
-      switch (GetRoleInCurrentCrs)
-	{
-	 case Usr_DONT_GET_ROLE_IN_CRS:
-	    UsrDat->Roles.InCurrentCrs = Rol_UNK;
-	    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
-	    break;
-	 case Usr_GET_ROLE_IN_CRS:
-	    UsrDat->Roles.InCurrentCrs = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
-							      Gbl.Hierarchy.Node[Hie_CRS].HieCod);
-	    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
-	    break;
-	}
+	 /* Get roles */
+	 switch (GetRoleInCurrentCrs)
+	   {
+	    case Usr_DONT_GET_ROLE_IN_CRS:
+	       UsrDat->Roles.InCurrentCrs = Rol_UNK;
+	       UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
+	       break;
+	    case Usr_GET_ROLE_IN_CRS:
+	       UsrDat->Roles.InCurrentCrs = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
+								 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+	       UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
+	       break;
+	   }
 
-      /* Get name (row[2], row[3], row[4]) */
-      Str_Copy (UsrDat->Surname1,row[2],sizeof (UsrDat->Surname1) - 1);
-      Str_Copy (UsrDat->Surname2,row[3],sizeof (UsrDat->Surname2) - 1);
-      Str_Copy (UsrDat->FrstName,row[4],sizeof (UsrDat->FrstName) - 1);
-      Str_ConvertToTitleType (UsrDat->Surname1 );
-      Str_ConvertToTitleType (UsrDat->Surname2 );
-      Str_ConvertToTitleType (UsrDat->FrstName);
-      Usr_BuildFullName (UsrDat);	// Create full name using FirstName, Surname1 and Surname2
+	 /* Get name (row[2], row[3], row[4]) */
+	 Str_Copy (UsrDat->Surname1,row[2],sizeof (UsrDat->Surname1) - 1);
+	 Str_Copy (UsrDat->Surname2,row[3],sizeof (UsrDat->Surname2) - 1);
+	 Str_Copy (UsrDat->FrstName,row[4],sizeof (UsrDat->FrstName) - 1);
+	 Str_ConvertToTitleType (UsrDat->Surname1 );
+	 Str_ConvertToTitleType (UsrDat->Surname2 );
+	 Str_ConvertToTitleType (UsrDat->FrstName);
+	 Usr_BuildFullName (UsrDat);	// Create full name using FirstName, Surname1 and Surname2
 
-      /* Get sex (row[5]) */
-      UsrDat->Sex = Usr_GetSexFromStr (row[5]);
+	 /* Get sex (row[5]) */
+	 UsrDat->Sex = Usr_GetSexFromStr (row[5]);
 
-      /* Get photo (row[6]) */
-      Str_Copy (UsrDat->Photo,row[6],sizeof (UsrDat->Photo) - 1);
+	 /* Get photo (row[6]) */
+	 Str_Copy (UsrDat->Photo,row[6],sizeof (UsrDat->Photo) - 1);
 
-      /* Get photo visibility (row[7]) */
-      UsrDat->PhotoVisibility = Pri_GetVisibilityFromStr (row[7]);
+	 /* Get photo visibility (row[7]) */
+	 UsrDat->PhotoVisibility = Pri_GetVisibilityFromStr (row[7]);
 
-      /* Get profile visibility (row[8], row[9]) */
-      UsrDat->BaPrfVisibility = Pri_GetVisibilityFromStr (row[8]);
-      UsrDat->ExPrfVisibility = Pri_GetVisibilityFromStr (row[9]);
+	 /* Get profile visibility (row[8], row[9]) */
+	 UsrDat->BaPrfVisibility = Pri_GetVisibilityFromStr (row[8]);
+	 UsrDat->ExPrfVisibility = Pri_GetVisibilityFromStr (row[9]);
 
-      /* Get country (row[10]), institution country (row[11]),
-             institution (row[12]), department (row[13]) and center (row[14]) */
-      UsrDat->CtyCod     = Str_ConvertStrCodToLongCod (row[10]);
-      UsrDat->InsCtyCod  = Str_ConvertStrCodToLongCod (row[11]);
-      UsrDat->InsCod     = Str_ConvertStrCodToLongCod (row[12]);
-      UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[13]);
-      UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[14]);
+	 /* Get country (row[10]), institution country (row[11]),
+		institution (row[12]), department (row[13]) and center (row[14]) */
+	 UsrDat->CtyCod     = Str_ConvertStrCodToLongCod (row[10]);
+	 UsrDat->InsCtyCod  = Str_ConvertStrCodToLongCod (row[11]);
+	 UsrDat->InsCod     = Str_ConvertStrCodToLongCod (row[12]);
+	 UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[13]);
+	 UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[14]);
 
-      /* Get office (row[15]) and office phone (row[16]) */
-      Str_Copy (UsrDat->Tch.Office     ,row[15],sizeof (UsrDat->Tch.Office     ) - 1);
-      Str_Copy (UsrDat->Tch.OfficePhone,row[16],sizeof (UsrDat->Tch.OfficePhone) - 1);
+	 /* Get office (row[15]) and office phone (row[16]) */
+	 Str_Copy (UsrDat->Tch.Office     ,row[15],sizeof (UsrDat->Tch.Office     ) - 1);
+	 Str_Copy (UsrDat->Tch.OfficePhone,row[16],sizeof (UsrDat->Tch.OfficePhone) - 1);
 
-      /* Get phones (row[17]) and row[18] */
-      Str_Copy (UsrDat->Phone[0],row[17],sizeof (UsrDat->Phone[0]) - 1);
-      Str_Copy (UsrDat->Phone[1],row[18],sizeof (UsrDat->Phone[1]) - 1);
+	 /* Get phones (row[17]) and row[18] */
+	 Str_Copy (UsrDat->Phone[0],row[17],sizeof (UsrDat->Phone[0]) - 1);
+	 Str_Copy (UsrDat->Phone[1],row[18],sizeof (UsrDat->Phone[1]) - 1);
 
-      /* Get birthday (row[19]) */
-      Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[19]);
-      Dat_ConvDateToDateStr (&(UsrDat->Birthday),UsrDat->StrBirthday);
+	 /* Get birthday (row[19]) */
+	 Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[19]);
+	 Dat_ConvDateToDateStr (&(UsrDat->Birthday),UsrDat->StrBirthday);
 
-      /* Get comments (row[20]) */
-      Usr_GetUsrCommentsFromString (row[20] ? row[20] :
-					      "",
-				    UsrDat);
+	 /* Get comments (row[20]) */
+	 Usr_GetUsrCommentsFromString (row[20] ? row[20] :
+						 "",
+				       UsrDat);
 
-      /* Get on which events the user wants to be notified inside the platform (row[21]) */
-      if (sscanf (row[21],"%u",&UsrDat->NtfEvents.CreateNotif) != 1)
-	 UsrDat->NtfEvents.CreateNotif = (unsigned) -1;	// 0xFF..FF
+	 /* Get on which events the user wants to be notified inside the platform (row[21]) */
+	 if (sscanf (row[21],"%u",&UsrDat->NtfEvents.CreateNotif) != 1)
+	    UsrDat->NtfEvents.CreateNotif = (unsigned) -1;	// 0xFF..FF
 
-      /* Get on which events the user wants to be notified by email (row[22]) */
-      if (sscanf (row[22],"%u",&UsrDat->NtfEvents.SendEmail) != 1)
-	 UsrDat->NtfEvents.SendEmail = 0;
-      if (UsrDat->NtfEvents.SendEmail >= (1 << Ntf_NUM_NOTIFY_EVENTS))	// Maximum binary value for NotifyEvents is 000...0011...11
-	 UsrDat->NtfEvents.SendEmail = 0;
+	 /* Get on which events the user wants to be notified by email (row[22]) */
+	 if (sscanf (row[22],"%u",&UsrDat->NtfEvents.SendEmail) != 1)
+	    UsrDat->NtfEvents.SendEmail = 0;
+	 if (UsrDat->NtfEvents.SendEmail >= (1 << Ntf_NUM_NOTIFY_EVENTS))	// Maximum binary value for NotifyEvents is 000...0011...11
+	    UsrDat->NtfEvents.SendEmail = 0;
 
-      /***** Get user's settings *****/
-      if (GetPrefs == Usr_GET_PREFS)
-	{
-	 /* Get language (row[23]),
-		first day of week (row[24]),
-		date format (row[25]),
-		theme (row[26]),
-		icon set (row[27]),
-		menu (row[28]),
-		if user wants to show side columns (row[29]),
-		user settings on user photo shape (row[30]),
-	    	and if user accepts third party cookies (row[31]) */
-	 UsrDat->Prefs.Language	      = Lan_GetLanguageFromStr (row[23]);
-	 UsrDat->Prefs.FirstDayOfWeek = Cal_GetFirstDayOfWeekFromStr (row[24]);
-	 UsrDat->Prefs.DateFormat     = Dat_GetDateFormatFromStr (row[25]);
-	 UsrDat->Prefs.Theme          = The_GetThemeFromStr (row[26]);
-	 UsrDat->Prefs.IconSet        = Ico_GetIconSetFromStr (row[27]);
-	 UsrDat->Prefs.Menu           = Mnu_GetMenuFromStr (row[28]);
-	 UsrDat->Prefs.SideCols       = Set_GetSideColsFromStr (row[29]);
-	 UsrDat->Prefs.PhotoShape     = PhoSha_GetShapeFromStr (row[30]);
-	 UsrDat->Prefs.AcceptCookies  = Coo_GetAcceptFromYN (row[31][0]);
-	}
+	 /***** Get user's settings *****/
+	 if (GetPrefs == Usr_GET_PREFS)
+	   {
+	    /* Get language (row[23]),
+		   first day of week (row[24]),
+		   date format (row[25]),
+		   theme (row[26]),
+		   icon set (row[27]),
+		   menu (row[28]),
+		   if user wants to show side columns (row[29]),
+		   user settings on user photo shape (row[30]),
+		   and if user accepts third party cookies (row[31]) */
+	    UsrDat->Prefs.Language	      = Lan_GetLanguageFromStr (row[23]);
+	    UsrDat->Prefs.FirstDayOfWeek = Cal_GetFirstDayOfWeekFromStr (row[24]);
+	    UsrDat->Prefs.DateFormat     = Dat_GetDateFormatFromStr (row[25]);
+	    UsrDat->Prefs.Theme          = The_GetThemeFromStr (row[26]);
+	    UsrDat->Prefs.IconSet        = Ico_GetIconSetFromStr (row[27]);
+	    UsrDat->Prefs.Menu           = Mnu_GetMenuFromStr (row[28]);
+	    UsrDat->Prefs.SideCols       = Set_GetSideColsFromStr (row[29]);
+	    UsrDat->Prefs.PhotoShape     = PhoSha_GetShapeFromStr (row[30]);
+	    UsrDat->Prefs.AcceptCookies  = Coo_GetAcceptFromYN (row[31][0]);
+	   }
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Err_WrongUserExit ();
+	 break;
      }
-   else
-      Err_WrongUserExit ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
