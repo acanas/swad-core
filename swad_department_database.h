@@ -40,7 +40,7 @@ void Dpt_DB_CreateDepartment (const struct Dpt_Department *Dpt);
 
 unsigned Dpt_DB_GetListDepartments (MYSQL_RES **mysql_res,
                                     long InsCod,Dpt_Order_t SelectedOrder);
-unsigned Dpt_DB_GetDepartmentDataByCod (MYSQL_RES **mysql_res,long DptCod);
+Exi_Exist_t Dpt_DB_GetDepartmentDataByCod (MYSQL_RES **mysql_res,long DptCod);
 Exi_Exist_t Dpt_DB_CheckIfDepartmentNameExists (const char *FldName,const char *Name,long Cod,
 						__attribute__((unused)) long PrtCod,
 						__attribute__((unused)) unsigned Year);

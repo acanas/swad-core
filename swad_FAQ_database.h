@@ -40,7 +40,7 @@
 long FAQ_DB_CreateQaA (const struct Tre_Node *Node);
 unsigned FAQ_DB_GetListQaAs (MYSQL_RES **mysql_res,long NodCod,
                              bool ShowHiddenQaAs);
-unsigned FAQ_DB_GetQaADataByCod (MYSQL_RES **mysql_res,long ItmCod);
+Exi_Exist_t FAQ_DB_GetQaADataByCod (MYSQL_RES **mysql_res,long ItmCod);
 
 void FAQ_DB_UpdateQaA (const struct Tre_Node *Node);
 

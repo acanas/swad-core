@@ -123,7 +123,8 @@ void TreSpc_ResetItem (struct Tre_Node *Node)
 
 void TreSpc_GetItemDataByCod (struct Tre_Node *Node)
   {
-   static unsigned (*GetItemDataByCod[Inf_NUM_TYPES]) (MYSQL_RES **mysql_res,long ItmCod) =
+   static Exi_Exist_t (*GetItemDataByCod[Inf_NUM_TYPES]) (MYSQL_RES **mysql_res,
+							  long ItmCod) =
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = NULL,
@@ -141,11 +142,17 @@ void TreSpc_GetItemDataByCod (struct Tre_Node *Node)
    if (Node->Item.Cod > 0)
      {
       /***** Get data of resource *****/
-      if (GetItemDataByCod[Node->InfoType] (&mysql_res,Node->Item.Cod))
-         TreSpc_GetItemDataFromRow[Node->InfoType] (mysql_res,Node);
-      else
-	 /* Clear all node data except type */
-         Tre_ResetNode (Node);
+      switch (GetItemDataByCod[Node->InfoType] (&mysql_res,Node->Item.Cod))
+	{
+	 case Exi_EXISTS:
+	    TreSpc_GetItemDataFromRow[Node->InfoType] (mysql_res,Node);
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	    /* Clear all node data except type */
+	    Tre_ResetNode (Node);
+	    break;
+	}
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);

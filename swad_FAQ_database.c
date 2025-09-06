@@ -96,11 +96,11 @@ unsigned FAQ_DB_GetListQaAs (MYSQL_RES **mysql_res,long NodCod,
 /**************** Get question & answer data using its code ********************/
 /*****************************************************************************/
 
-unsigned FAQ_DB_GetQaADataByCod (MYSQL_RES **mysql_res,long ItmCod)
+Exi_Exist_t FAQ_DB_GetQaADataByCod (MYSQL_RES **mysql_res,long ItmCod)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get node question & answer data",
 		   "SELECT faq_questions.NodCod,"	// row[0]
 			  "faq_questions.ItmCod,"	// row[1]
@@ -116,7 +116,8 @@ unsigned FAQ_DB_GetQaADataByCod (MYSQL_RES **mysql_res,long ItmCod)
 		     " AND tre_nodes.Type='%s'",	// Extra check
 		   ItmCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_FAQ]);
+		   Tre_DB_Types[Inf_FAQ]) ? Exi_EXISTS :
+					    Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

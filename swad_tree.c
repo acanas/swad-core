@@ -158,7 +158,7 @@ static bool Tre_CheckIfMoveRightIsAllowed (unsigned NumNode);
 static void Tre_GetNodeDataByCod (struct Tre_Node *Node);
 static void Tre_GetNodeDataFromRow (MYSQL_RES **mysql_res,
                                     struct Tre_Node *Node,
-                                    unsigned NumRows);
+                                    Exi_Exist_t NodeExists);
 
 static bool Tre_ExchangeNodeRanges (Inf_Type_t InfoType,
 				    int NumNodeTop,int NumNodeBottom);
@@ -1393,15 +1393,15 @@ unsigned Tre_GetNumNodes (void)
 static void Tre_GetNodeDataByCod (struct Tre_Node *Node)
   {
    MYSQL_RES *mysql_res;
-   unsigned NumRows;
+   Exi_Exist_t NodeExists;
 
    if (Node->Hierarchy.NodCod > 0)
      {
       /***** Build query *****/
-      NumRows = Tre_DB_GetNodeDataByCod (Node,&mysql_res);
+      NodeExists = Tre_DB_GetNodeDataByCod (Node,&mysql_res);
 
       /***** Get data of tree node *****/
-      Tre_GetNodeDataFromRow (&mysql_res,Node,NumRows);
+      Tre_GetNodeDataFromRow (&mysql_res,Node,NodeExists);
      }
    else
       /***** Clear all node data except type *****/
@@ -1415,55 +1415,59 @@ static void Tre_GetNodeDataByCod (struct Tre_Node *Node)
 
 static void Tre_GetNodeDataFromRow (MYSQL_RES **mysql_res,
                                     struct Tre_Node *Node,
-                                    unsigned NumRows)
+                                    Exi_Exist_t NodeExists)
   {
    MYSQL_ROW row;
 
    /***** Get data of tree node from database *****/
-   if (NumRows) // Item found...
+   switch (NodeExists) // Item found...
      {
-      /* Get row */
-      row = mysql_fetch_row (*mysql_res);
-      /*
-      NodCod					row[0]
-      NodInd					row[1]
-      Level					row[2]
-      Hidden					row[3]
-      UsrCod					row[4]
-      UNIX_TIMESTAMP(StartTime)			row[5]
-      UNIX_TIMESTAMP(EndTime)			row[6]
-      NOW() BETWEEN StartTime AND EndTime	row[7]
-      Title					row[8]
-      */
+      case Exi_EXISTS:
+	 /* Get row */
+	 row = mysql_fetch_row (*mysql_res);
+	 /*
+	 NodCod					row[0]
+	 NodInd					row[1]
+	 Level					row[2]
+	 Hidden					row[3]
+	 UsrCod					row[4]
+	 UNIX_TIMESTAMP(StartTime)		row[5]
+	 UNIX_TIMESTAMP(EndTime)		row[6]
+	 NOW() BETWEEN StartTime AND EndTime	row[7]
+	 Title					row[8]
+	 */
 
-      /* Get code of the tree node (row[0]) */
-      Node->Hierarchy.NodCod = Str_ConvertStrCodToLongCod (row[0]);
+	 /* Get code of the tree node (row[0]) */
+	 Node->Hierarchy.NodCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get index of the tree node (row[1])
-         and level of the tree node (row[2]) */
-      Node->Hierarchy.NodInd = Str_ConvertStrToUnsigned (row[1]);
-      Node->Hierarchy.Level = Str_ConvertStrToUnsigned (row[2]);
+	 /* Get index of the tree node (row[1])
+	    and level of the tree node (row[2]) */
+	 Node->Hierarchy.NodInd = Str_ConvertStrToUnsigned (row[1]);
+	 Node->Hierarchy.Level = Str_ConvertStrToUnsigned (row[2]);
 
-      /* Get whether the tree node is hidden or not (row[3]) */
-      Node->Hierarchy.Hidden = HidVis_GetHiddenFromYN (row[3][0]);
+	 /* Get whether the tree node is hidden or not (row[3]) */
+	 Node->Hierarchy.Hidden = HidVis_GetHiddenFromYN (row[3][0]);
 
-      /* Get author of the tree node (row[4]) */
-      Node->UsrCod = Str_ConvertStrCodToLongCod (row[4]);
+	 /* Get author of the tree node (row[4]) */
+	 Node->UsrCod = Str_ConvertStrCodToLongCod (row[4]);
 
-      /* Get start date (row[5] holds the start UTC time)
-         and end date   (row[6] holds the end   UTC time) */
-      Node->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[5]);
-      Node->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[6]);
+	 /* Get start date (row[5] holds the start UTC time)
+	    and end date   (row[6] holds the end   UTC time) */
+	 Node->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[5]);
+	 Node->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[6]);
 
-      /* Get whether the tree node is open or closed (row(7)) */
-      Node->ClosedOrOpen = CloOpe_GetClosedOrOpenFrom01 (row[7][0]);
+	 /* Get whether the tree node is open or closed (row(7)) */
+	 Node->ClosedOrOpen = CloOpe_GetClosedOrOpenFrom01 (row[7][0]);
 
-      /* Get the title of the tree node (row[8]) */
-      Str_Copy (Node->Title,row[8],sizeof (Node->Title) - 1);
+	 /* Get the title of the tree node (row[8]) */
+	 Str_Copy (Node->Title,row[8],sizeof (Node->Title) - 1);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 /***** Clear all node data except type *****/
+	 Tre_ResetNode (Node);
+	 break;
      }
-   else
-      /***** Clear all node data except type *****/
-      Tre_ResetNode (Node);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (mysql_res);

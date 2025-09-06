@@ -48,7 +48,7 @@ long Rsc_DB_CreateRsc (const struct Tre_Node *Node);
 bool Rsc_DB_CheckListResources (long NodCod,bool ShowHiddenResources);
 unsigned Rsc_DB_GetListRscs (MYSQL_RES **mysql_res,long NodCod,
                                   bool ShowHiddenResources);
-unsigned Rsc_DB_GetRscDataByCod (MYSQL_RES **mysql_res,long ItmCod);
+Exi_Exist_t Rsc_DB_GetRscDataByCod (MYSQL_RES **mysql_res,long ItmCod);
 
 void Rsc_DB_UpdateRsc (const struct Tre_Node *Node);
 

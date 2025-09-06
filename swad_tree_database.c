@@ -249,9 +249,10 @@ unsigned Tre_DB_GetListNodes (Inf_Type_t InfoType,MYSQL_RES **mysql_res)
 /******************** Get tree node data using its code **********************/
 /*****************************************************************************/
 
-unsigned Tre_DB_GetNodeDataByCod (const struct Tre_Node *Node,MYSQL_RES **mysql_res)
+Exi_Exist_t Tre_DB_GetNodeDataByCod (const struct Tre_Node *Node,
+				     MYSQL_RES **mysql_res)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get tree node data",
 		   "SELECT NodCod,"					// row[0]
 			  "NodInd,"					// row[1]
@@ -268,7 +269,8 @@ unsigned Tre_DB_GetNodeDataByCod (const struct Tre_Node *Node,MYSQL_RES **mysql_
 		     " AND Type='%s'",	// Extra check
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Node->InfoType]);
+		   Tre_DB_Types[Node->InfoType]) ? Exi_EXISTS :
+						   Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

@@ -40,7 +40,7 @@
 long Lnk_DB_CreateLnk (const struct Tre_Node *Node);
 unsigned Lnk_DB_GetListLnks (MYSQL_RES **mysql_res,long NodCod,
                                  bool ShowHiddenCrsLinks);
-unsigned Lnk_DB_GetLnkDataByCod (MYSQL_RES **mysql_res,long ItmCod);
+Exi_Exist_t Lnk_DB_GetLnkDataByCod (MYSQL_RES **mysql_res,long ItmCod);
 
 void Lnk_DB_UpdateLnk (const struct Tre_Node *Node);
 

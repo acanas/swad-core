@@ -109,9 +109,9 @@ unsigned Dpt_DB_GetListDepartments (MYSQL_RES **mysql_res,
 /****************** Get data of department using its code ********************/
 /*****************************************************************************/
 
-unsigned Dpt_DB_GetDepartmentDataByCod (MYSQL_RES **mysql_res,long DptCod)
+Exi_Exist_t Dpt_DB_GetDepartmentDataByCod (MYSQL_RES **mysql_res,long DptCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of a department",
 		   "(SELECT dpt_departments.DptCod,"			// row[0]
                            "dpt_departments.InsCod,"			// row[1]
@@ -144,7 +144,8 @@ unsigned Dpt_DB_GetDepartmentDataByCod (MYSQL_RES **mysql_res,long DptCod)
 			    " WHERE crs_users.Role=%u"
 			      " AND crs_users.UsrCod=usr_data.UsrCod))",
 		   DptCod,(unsigned) Rol_TCH,
-		   DptCod,(unsigned) Rol_TCH);
+		   DptCod,(unsigned) Rol_TCH) ? Exi_EXISTS :
+						Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

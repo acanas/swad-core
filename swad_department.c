@@ -375,7 +375,7 @@ void Dpt_GetDepartmentDataByCod (struct Dpt_Department *Dpt)
    else if (Dpt->DptCod > 0)
      {
       /***** Get data of a department from database *****/
-      if (Dpt_DB_GetDepartmentDataByCod (&mysql_res,Dpt->DptCod)) // Department found...
+      if (Dpt_DB_GetDepartmentDataByCod (&mysql_res,Dpt->DptCod) == Exi_EXISTS) // Department found...
 	 Dpt_GetDepartmentDataFromRow (mysql_res,Dpt);
 
       /***** Free structure that stores the query result *****/

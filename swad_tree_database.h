@@ -49,7 +49,8 @@ void Tre_DB_MoveLeftRightNodeRange (Inf_Type_t InfoType,
                                     Tre_MoveLeftRight_t LeftRight);
 
 unsigned Tre_DB_GetListNodes (Inf_Type_t InfoType,MYSQL_RES **mysql_res);
-unsigned Tre_DB_GetNodeDataByCod (const struct Tre_Node *Node,MYSQL_RES **mysql_res);
+Exi_Exist_t Tre_DB_GetNodeDataByCod (const struct Tre_Node *Node,
+				     MYSQL_RES **mysql_res);
 bool Tre_DB_CheckIfNodeHasTxt (const struct Tre_Node *Node);
 void Tre_DB_GetNodeTxt (const struct Tre_Node *Node,
 			char Txt[Cns_MAX_BYTES_TEXT + 1]);

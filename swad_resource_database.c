@@ -213,11 +213,11 @@ unsigned Rsc_DB_GetListRscs (MYSQL_RES **mysql_res,long NodCod,
 /******************** Get resource data using its code ***********************/
 /*****************************************************************************/
 
-unsigned Rsc_DB_GetRscDataByCod (MYSQL_RES **mysql_res,long ItmCod)
+Exi_Exist_t Rsc_DB_GetRscDataByCod (MYSQL_RES **mysql_res,long ItmCod)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get node resource data",
 		   "SELECT prg_resources.NodCod,"	// row[0]
 			  "prg_resources.ItmCod,"	// row[1]
@@ -234,7 +234,8 @@ unsigned Rsc_DB_GetRscDataByCod (MYSQL_RES **mysql_res,long ItmCod)
 		     " AND tre_nodes.Type='%s'",	// Extra check
 		   ItmCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_PROGRAM]);
+		   Tre_DB_Types[Inf_PROGRAM]) ? Exi_EXISTS :
+						Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

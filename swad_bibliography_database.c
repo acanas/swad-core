@@ -108,11 +108,11 @@ unsigned Bib_DB_GetListRefs (MYSQL_RES **mysql_res,
 /************* Get bibliographic reference data using its code ***************/
 /*****************************************************************************/
 
-unsigned Bib_DB_GetRefDataByCod (MYSQL_RES **mysql_res,long ItmCod)
+Exi_Exist_t Bib_DB_GetRefDataByCod (MYSQL_RES **mysql_res,long ItmCod)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get node bibliographic reference data",
 		   "SELECT crs_bibliography.NodCod,"	// row[ 0]
 			  "crs_bibliography.ItmCod,"	// row[ 1]
@@ -133,7 +133,8 @@ unsigned Bib_DB_GetRefDataByCod (MYSQL_RES **mysql_res,long ItmCod)
 		     " AND tre_nodes.Type='%s'",	// Extra check
 		   ItmCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_BIBLIOGRAPHY]);
+		   Tre_DB_Types[Inf_BIBLIOGRAPHY]) ? Exi_EXISTS :
+						     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
