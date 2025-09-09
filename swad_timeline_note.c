@@ -1292,11 +1292,17 @@ void TmlNot_GetNoteDataByCod (struct TmlNot_Note *Not)
      }
 
    /***** Get data of note from database *****/
-   if (Tml_DB_GetNoteDataByCod (Not->NotCod,&mysql_res))
-      TmlNot_GetNoteDataFromRow (mysql_res,Not);
-   else
-      /* Reset fields of note */
-      TmlNot_ResetNote (Not);
+   switch (Tml_DB_GetNoteDataByCod (Not->NotCod,&mysql_res))
+     {
+      case Exi_EXISTS:
+	 TmlNot_GetNoteDataFromRow (mysql_res,Not);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 /* Reset fields of note */
+	 TmlNot_ResetNote (Not);
+	 break;
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

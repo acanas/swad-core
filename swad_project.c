@@ -3515,7 +3515,7 @@ void Prj_GetProjectDataByCod (struct Prj_Project *Prj)
       Prj_ResetProject (Prj);
 
       /***** Get data of project *****/
-      if (Prj_DB_GetProjectDataByCod (&mysql_res,Prj->PrjCod))	// Project found...
+      if (Prj_DB_GetProjectDataByCod (&mysql_res,Prj->PrjCod) == Exi_EXISTS)	// Project found...
 	{
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);

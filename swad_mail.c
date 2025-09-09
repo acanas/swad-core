@@ -369,7 +369,7 @@ void Mai_GetMailDomainDataByCod (struct Mail *Mai)
    if (Mai->MaiCod > 0)
      {
       /***** Get data of a mail domain from database *****/
-      if (Mai_DB_GetMailDomainDataByCod (&mysql_res,Mai->MaiCod)) // Mail found...
+      if (Mai_DB_GetMailDomainDataByCod (&mysql_res,Mai->MaiCod) == Exi_EXISTS) // Mail found...
 	 Mai_GetMailDomainDataFromRow (mysql_res,Mai,
 	                               false);	// Don't get number of users
 

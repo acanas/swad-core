@@ -27,7 +27,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-unsigned Med_DB_GetMediaDataByCod (MYSQL_RES **mysql_res,long MedCod);
+Exi_Exist_t Med_DB_GetMediaDataByCod (MYSQL_RES **mysql_res,long MedCod);
 
 long Med_DB_StoreMedia (const struct Med_Media *Media);
 

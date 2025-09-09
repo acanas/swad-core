@@ -209,11 +209,11 @@ unsigned Cty_DB_GetCtysFull (MYSQL_RES **mysql_res)
 /***************** Get basic data of country given its code ******************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetBasicCountryDataByCod (MYSQL_RES **mysql_res,long CtyCod)
+Exi_Exist_t Cty_DB_GetBasicCountryDataByCod (MYSQL_RES **mysql_res,long CtyCod)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of a country",
 		   "SELECT Alpha2,"	// row[0]
 			  "Name_%s,"	// row[1]

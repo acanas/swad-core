@@ -344,7 +344,7 @@ void SysLnk_GetLinkDataByCod (struct SysLnk_Link *Lnk)
    if (Lnk->LnkCod > 0)
      {
       /***** Get data of a system link from database *****/
-      if (SysLnk_DB_GetLinkDataByCod (&mysql_res,Lnk->LnkCod)) // Link found...
+      if (SysLnk_DB_GetLinkDataByCod (&mysql_res,Lnk->LnkCod) == Exi_EXISTS) // Link found...
 	 SysLnk_GetLinkDataFromRow (mysql_res,Lnk);
 
       /***** Free structure that stores the query result *****/

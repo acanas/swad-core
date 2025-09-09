@@ -395,16 +395,17 @@ unsigned Mai_DB_GetMailDomains (MYSQL_RES **mysql_res,Mai_DomainsOrder_t Selecte
 /**************************** Get mail domain data ***************************/
 /*****************************************************************************/
 
-unsigned Mai_DB_GetMailDomainDataByCod (MYSQL_RES **mysql_res,long MaiCod)
+Exi_Exist_t Mai_DB_GetMailDomainDataByCod (MYSQL_RES **mysql_res,long MaiCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get mail domain",
 		   "SELECT MaiCod,"	// row[0]
 			  "Domain,"	// row[1]
 			  "Info"	// row[2]
 		    " FROM ntf_mail_domains"
 		   " WHERE MaiCod=%ld",
-		   MaiCod);
+		   MaiCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

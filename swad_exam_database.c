@@ -202,9 +202,9 @@ unsigned Exa_DB_GetListExams (MYSQL_RES **mysql_res,Exa_Order_t SelectedOrder)
 /********************** Get exam data using its code *************************/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetExamDataByCod (MYSQL_RES **mysql_res,long ExaCod)
+Exi_Exist_t Exa_DB_GetExamDataByCod (MYSQL_RES **mysql_res,long ExaCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get exam data",
 		   "SELECT ExaCod,"	// row[0]
 			  "CrsCod,"	// row[1]
@@ -215,7 +215,8 @@ unsigned Exa_DB_GetExamDataByCod (MYSQL_RES **mysql_res,long ExaCod)
 			  "Title"	// row[6]
 		    " FROM exa_exams"
 		   " WHERE ExaCod=%ld",
-		   ExaCod);
+		   ExaCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

@@ -329,7 +329,8 @@ void Bld_GetBuildingDataByCod (struct Bld_Building *Building)
    if (Building->BldCod > 0)
      {
       /***** Get data of a building from database *****/
-      if (Bld_DB_GetBuildingDataByCod (&mysql_res,Building->BldCod)) // Building found...
+      if (Bld_DB_GetBuildingDataByCod (&mysql_res,
+				       Building->BldCod) == Exi_EXISTS) // Building found...
          Bld_GetBuildingDataFromRow (mysql_res,Building,Bld_ALL_DATA);
 
       /***** Free structure that stores the query result *****/

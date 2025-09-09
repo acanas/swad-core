@@ -44,7 +44,7 @@ unsigned Roo_DB_GetListRooms (MYSQL_RES **mysql_res,
 Exi_Exist_t Roo_DB_CheckIfRoomNameExists (const char *FldName,const char *Name,
 					  long Cod,long PrtCod,
 					  __attribute__((unused)) unsigned Year);
-unsigned Roo_DB_GetRoomDataByCod (MYSQL_RES **mysql_res,long RooCod);
+Exi_Exist_t Roo_DB_GetRoomDataByCod (MYSQL_RES **mysql_res,long RooCod);
 unsigned Roo_DB_GetMACAddresses (MYSQL_RES **mysql_res,long RooCod);
 
 void Roo_DB_RemoveRoom (long RooCod);

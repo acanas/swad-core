@@ -46,7 +46,7 @@ void Grp_DB_GetGrpTypTitle (long GrpTypCod,char *Title,size_t TitleSize);
 unsigned Grp_DB_GetGroupTypeData (MYSQL_RES **mysql_res,long GrpTypCod);
 unsigned Grp_DB_GetSingleMultiple (MYSQL_RES **mysql_res,long GrpTypCod);
 unsigned Grp_DB_GetFileZones (MYSQL_RES **mysql_res,long GrpCod);
-unsigned Grp_DB_GetGroupDataByCod (MYSQL_RES **mysql_res,long GrpCod);
+Exi_Exist_t Grp_DB_GetGroupDataByCod (MYSQL_RES **mysql_res,long GrpCod);
 
 Exi_Exist_t Grp_DB_CheckIfGrpExists (long GrpCod);
 Exi_Exist_t Grp_DB_CheckIfGrpExistsInCrs (long GrpCod,long CrsCod);

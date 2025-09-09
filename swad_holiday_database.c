@@ -174,9 +174,9 @@ unsigned Hld_DB_GetListHolidays (MYSQL_RES **mysql_res,Hld_Order_t SelectedOrder
 /************************* Get holiday data by code **************************/
 /*****************************************************************************/
 
-unsigned Hld_DB_GetHolidayDataByCod (MYSQL_RES **mysql_res,long HldCod)
+Exi_Exist_t Hld_DB_GetHolidayDataByCod (MYSQL_RES **mysql_res,long HldCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of a holiday",
 		   "(SELECT hld_holidays.HldCod,"				// row[0]
                            "hld_holidays.PlcCod,"				// row[1]
@@ -212,7 +212,8 @@ unsigned Hld_DB_GetHolidayDataByCod (MYSQL_RES **mysql_res,long HldCod)
 		   Gbl.Hierarchy.Node[Hie_INS].HieCod,
 		   HldCod,
 		   Gbl.Hierarchy.Node[Hie_INS].HieCod,
-		   Gbl.Hierarchy.Node[Hie_INS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_INS].HieCod) ? Exi_EXISTS :
+							 Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

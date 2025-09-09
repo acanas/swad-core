@@ -785,7 +785,7 @@ void Cfe_GetCallForExamDataByCod (struct Cfe_CallsForExams *CallsForExams,
    unsigned Second;
 
    /***** Get data of a call for exam from database *****/
-   if (Cfe_DB_GetCallForExamDataByCod (&mysql_res,ExaCod) != 1)
+   if (Cfe_DB_GetCallForExamDataByCod (&mysql_res,ExaCod) == Exi_DOES_NOT_EXIST)
       Err_WrongCallForExamExit ();
 
    /***** Get the data of the call for exam *****/

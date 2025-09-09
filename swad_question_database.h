@@ -57,7 +57,7 @@ unsigned Qst_DB_GetRecentQuestions (MYSQL_RES **mysql_res,
 unsigned Qst_DB_GetRecentAnswers (MYSQL_RES **mysql_res,
                                   long CrsCod,time_t BeginTime);
 
-unsigned Qst_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod);
+Exi_Exist_t Qst_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod);
 Qst_AnswerType_t Qst_DB_GetQstAnswerType (long QstCod);
 long Qst_DB_GetQstMedCod (long CrsCod,long QstCod);
 unsigned Qst_DB_GetQstCodFromTypeAnsStem (MYSQL_RES **mysql_res,

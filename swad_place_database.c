@@ -116,9 +116,9 @@ unsigned Plc_DB_GetListPlaces (MYSQL_RES **mysql_res,Plc_Order_t SelectedOrder)
 /********************* Get data of a place from database *********************/
 /*****************************************************************************/
 
-unsigned Plc_DB_GetPlaceDataByCod (MYSQL_RES **mysql_res,long PlcCod)
+Exi_Exist_t Plc_DB_GetPlaceDataByCod (MYSQL_RES **mysql_res,long PlcCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of a place",
 		   "(SELECT plc_places.PlcCod,"		// row[0]
 			   "plc_places.ShortName,"	// row[1]
@@ -143,7 +143,8 @@ unsigned Plc_DB_GetPlaceDataByCod (MYSQL_RES **mysql_res,long PlcCod)
 			     " FROM ctr_centers))",
 		   PlcCod,
 		   PlcCod,
-		   PlcCod);
+		   PlcCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
    }
 
 /*****************************************************************************/

@@ -2517,9 +2517,7 @@ Exi_Exist_t Qst_GetQstDataByCod (struct Qst_Question *Question)
    unsigned NumOpt;
 
    /***** Get question data from database *****/
-   QuestionExists = (Qst_DB_GetQstDataByCod (&mysql_res,
-					     Question->QstCod) != 0) ? Exi_EXISTS :
-								       Exi_DOES_NOT_EXIST;
+   QuestionExists = Qst_DB_GetQstDataByCod (&mysql_res,Question->QstCod);
    if (QuestionExists == Exi_EXISTS)
      {
       row = mysql_fetch_row (mysql_res);

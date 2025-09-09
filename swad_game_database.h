@@ -44,7 +44,7 @@ void Gam_DB_HideOrUnhideGame (long GamCod,
 
 unsigned Gam_DB_GetListGames (MYSQL_RES **mysql_res,Gam_Order_t SelectedOrder);
 unsigned Gam_DB_GetListAvailableGames (MYSQL_RES **mysql_res);
-unsigned Gam_DB_GetGameDataByCod (MYSQL_RES **mysql_res,long GamCod);
+Exi_Exist_t Gam_DB_GetGameDataByCod (MYSQL_RES **mysql_res,long GamCod);
 void Gam_DB_GetGameTitle (long GamCod,char *Title,size_t TitleSize);
 void Gam_DB_GetGameTxt (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 Exi_Exist_t Gam_DB_CheckIfSimilarGameExists (const struct Gam_Game *Game);

@@ -248,7 +248,6 @@ void Med_GetMediaDataByCod (struct Med_Media *Media)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRows;
    size_t Length;
 
    /***** Trivial check: media code should be > 0 *****/
@@ -259,61 +258,60 @@ void Med_GetMediaDataByCod (struct Med_Media *Media)
      }
 
    /***** Get data of a media from database *****/
-   NumRows = Med_DB_GetMediaDataByCod (&mysql_res,Media->MedCod);
-
-   /***** Result should have a unique row *****/
-   if (NumRows == 0)	// Media not found
-      /***** Reset media data *****/
-      Med_ResetMedia (Media);
-   else if (NumRows == 1)
+   switch (Med_DB_GetMediaDataByCod (&mysql_res,Media->MedCod))
      {
-      /***** Get row *****/
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 /***** Get row *****/
+	 row = mysql_fetch_row (mysql_res);
 
-      /***** Convert type string (row[0]) to type *****/
-      Media->Type = Med_DB_GetTypeFromStr (row[0]);
+	 /***** Convert type string (row[0]) to type *****/
+	 Media->Type = Med_DB_GetTypeFromStr (row[0]);
 
-      /***** Set status of media file *****/
-      Media->Status = (Media->Type != Med_TYPE_NONE) ? Med_STORED_IN_DB :
-						       Med_STATUS_NONE;
+	 /***** Set status of media file *****/
+	 Media->Status = (Media->Type != Med_TYPE_NONE) ? Med_STORED_IN_DB :
+							  Med_STATUS_NONE;
 
-      /***** Copy media name (row[1]) to struct *****/
-      Str_Copy (Media->Name,row[1],sizeof (Media->Name) - 1);
+	 /***** Copy media name (row[1]) to struct *****/
+	 Str_Copy (Media->Name,row[1],sizeof (Media->Name) - 1);
 
-      /***** Copy media URL (row[2]) to struct *****/
-      // Media->URL can be empty or filled with previous value
-      // If filled  ==> free it
-      Med_FreeMediaURL (Media);
-      if (row[2][0])
-	{
-	 /* Get and limit length of the URL */
-	 Length = strlen (row[2]);
-	 if (Length > WWW_MAX_BYTES_WWW)
-	     Length = WWW_MAX_BYTES_WWW;
+	 /***** Copy media URL (row[2]) to struct *****/
+	 // Media->URL can be empty or filled with previous value
+	 // If filled  ==> free it
+	 Med_FreeMediaURL (Media);
+	 if (row[2][0])
+	   {
+	    /* Get and limit length of the URL */
+	    Length = strlen (row[2]);
+	    if (Length > WWW_MAX_BYTES_WWW)
+		Length = WWW_MAX_BYTES_WWW;
 
-	 if ((Media->URL = malloc (Length + 1)) == NULL)
-            Err_NotEnoughMemoryExit ();
-	 Str_Copy (Media->URL,row[2],Length);
-	}
+	    if ((Media->URL = malloc (Length + 1)) == NULL)
+	       Err_NotEnoughMemoryExit ();
+	    Str_Copy (Media->URL,row[2],Length);
+	   }
 
-      /***** Copy media title (row[3]) to struct *****/
-      // Media->Title can be empty or filled with previous value
-      // If filled  ==> free it
-      Med_FreeMediaTitle (Media);
-      if (row[3][0])
-	{
-	 /* Get and limit length of the title */
-	 Length = strlen (row[3]);
-	 if (Length > Med_MAX_BYTES_TITLE)
-	     Length = Med_MAX_BYTES_TITLE;
+	 /***** Copy media title (row[3]) to struct *****/
+	 // Media->Title can be empty or filled with previous value
+	 // If filled  ==> free it
+	 Med_FreeMediaTitle (Media);
+	 if (row[3][0])
+	   {
+	    /* Get and limit length of the title */
+	    Length = strlen (row[3]);
+	    if (Length > Med_MAX_BYTES_TITLE)
+		Length = Med_MAX_BYTES_TITLE;
 
-	 if ((Media->Title = malloc (Length + 1)) == NULL)
-            Err_NotEnoughMemoryExit ();
-	 Str_Copy (Media->Title,row[3],Length);
-	}
+	    if ((Media->Title = malloc (Length + 1)) == NULL)
+	       Err_NotEnoughMemoryExit ();
+	    Str_Copy (Media->Title,row[3],Length);
+	   }
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 /***** Reset media data *****/
+	 Med_ResetMedia (Media);
+	 break;
      }
-   else
-      Err_ShowErrorAndExit ("Internal error in database when getting media data.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

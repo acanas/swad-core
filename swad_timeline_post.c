@@ -100,25 +100,27 @@ static void TmlPst_GetPostContent (long PstCod,struct TmlPst_Content *Content)
    MYSQL_ROW row;
 
    /***** Get post from database *****/
-   if (Tml_DB_GetPostByCod (PstCod,&mysql_res) == 1)
+   switch (Tml_DB_GetPostDataByCod (PstCod,&mysql_res))
      {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
-      /*
-      row[0]	Txt
-      row[1]	MedCod
-      */
-      /* Get content (row[0]) */
-      Str_Copy (Content->Txt,row[0],sizeof (Content->Txt) - 1);
+      case Exi_EXISTS:
+	 /* Get row */
+	 row = mysql_fetch_row (mysql_res);
+	 /*
+	 row[0]	Txt
+	 row[1]	MedCod
+	 */
+	 /* Get content (row[0]) */
+	 Str_Copy (Content->Txt,row[0],sizeof (Content->Txt) - 1);
 
-      /* Get media (row[1]) */
-      Content->Media.MedCod = Str_ConvertStrCodToLongCod (row[1]);
-      Med_GetMediaDataByCod (&Content->Media);
-     }
-   else
-     {
-      Content->Txt[0] = '\0';
-      Med_ResetMedia (&Content->Media);
+	 /* Get media (row[1]) */
+	 Content->Media.MedCod = Str_ConvertStrCodToLongCod (row[1]);
+	 Med_GetMediaDataByCod (&Content->Media);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Content->Txt[0] = '\0';
+	 Med_ResetMedia (&Content->Media);
+	 break;
      }
 
    /***** Free structure that stores the query result *****/

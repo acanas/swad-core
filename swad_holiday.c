@@ -368,7 +368,7 @@ static void Hld_GetHolidayDataByCod (struct Hld_Holiday *Hld)
       Err_WrongHolidayExit ();
 
    /***** Get data of holiday from database *****/
-   if (Hld_DB_GetHolidayDataByCod (&mysql_res,Hld->HldCod)) // Holiday found...
+   if (Hld_DB_GetHolidayDataByCod (&mysql_res,Hld->HldCod) == Exi_EXISTS) // Holiday found...
       Hld_GetHolidayDataFromRow (mysql_res,Hld);
 
    /***** Free structure that stores the query result *****/

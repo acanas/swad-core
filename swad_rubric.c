@@ -567,30 +567,32 @@ void Rub_GetRubricDataByCod (struct Rub_Rubric *Rubric)
    MYSQL_ROW row;
 
    /***** Get data of rubric from database *****/
-   if (Rub_DB_GetRubricDataByCod (&mysql_res,Rubric->RubCod)) // Rubric found...
+   switch (Rub_DB_GetRubricDataByCod (&mysql_res,Rubric->RubCod))
      {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 /* Get row */
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get code of the rubric (row[0]), course (row[1] and author (row[2]) */
-      Rubric->RubCod = Str_ConvertStrCodToLongCod (row[0]);
-      Rubric->HieCod = Str_ConvertStrCodToLongCod (row[1]);
-      Rubric->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
+	 /* Get code of the rubric (row[0]), course (row[1] and author (row[2]) */
+	 Rubric->RubCod = Str_ConvertStrCodToLongCod (row[0]);
+	 Rubric->HieCod = Str_ConvertStrCodToLongCod (row[1]);
+	 Rubric->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
-      /* Get the title of the rubric (row[3]) */
-      Str_Copy (Rubric->Title,row[3],sizeof (Rubric->Title) - 1);
+	 /* Get the title of the rubric (row[3]) */
+	 Str_Copy (Rubric->Title,row[3],sizeof (Rubric->Title) - 1);
 
-      /* Get rubric text */
-      Rub_DB_GetRubricTxt (Rubric);
-     }
-   else
-     {
-      /***** Initialize to empty rubric *****/
-      Rubric->RubCod   = -1L;
-      Rubric->HieCod   = -1L;
-      Rubric->UsrCod   = -1L;
-      Rubric->Title[0] = '\0';
-      Rubric->Txt[0]   = '\0';
+	 /* Get rubric text */
+	 Rub_DB_GetRubricTxt (Rubric);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 /***** Initialize to empty rubric *****/
+	 Rubric->RubCod   = -1L;
+	 Rubric->HieCod   = -1L;
+	 Rubric->UsrCod   = -1L;
+	 Rubric->Title[0] = '\0';
+	 Rubric->Txt[0]   = '\0';
+	 break;
      }
 
    /* Free structure that stores the query result */

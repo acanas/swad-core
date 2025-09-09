@@ -649,9 +649,9 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 /********************* Get project data using its code ***********************/
 /*****************************************************************************/
 
-unsigned Prj_DB_GetProjectDataByCod (MYSQL_RES **mysql_res,long PrjCod)
+Exi_Exist_t Prj_DB_GetProjectDataByCod (MYSQL_RES **mysql_res,long PrjCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get project data",
 		   "SELECT PrjCod,"			// row[ 0]
 			  "CrsCod,"			// row[ 1]
@@ -675,7 +675,8 @@ unsigned Prj_DB_GetProjectDataByCod (MYSQL_RES **mysql_res,long PrjCod)
 		   " WHERE PrjCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
 		   PrjCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? Exi_EXISTS :
+							 Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

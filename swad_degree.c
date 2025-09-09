@@ -1124,7 +1124,7 @@ Err_SuccessOrError_t Deg_GetDegreeDataByCod (struct Hie_Node *Node)
    if (Node->HieCod > 0)
      {
       /***** Get data of a degree from database *****/
-      if (Deg_DB_GetDegreeDataByCod (&mysql_res,Node->HieCod)) // Degree found...
+      if (Deg_DB_GetDegreeDataByCod (&mysql_res,Node->HieCod) == Exi_EXISTS) // Degree found...
 	{
 	 /***** Get data of degree *****/
 	 Deg_GetDegreeDataFromRow (mysql_res,Node);

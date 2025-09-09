@@ -3314,7 +3314,7 @@ void Grp_GetGroupDataByCod (long *CrsCod,long *GrpTypCod,struct Group *Grp)
    if (Grp->GrpCod > 0)
      {
       /***** Get data of a group from database *****/
-      if (Grp_DB_GetGroupDataByCod (&mysql_res,Grp->GrpCod) == 1)
+      if (Grp_DB_GetGroupDataByCod (&mysql_res,Grp->GrpCod) == Exi_EXISTS)
 	{
 	 /***** Get data of group *****/
 	 row = mysql_fetch_row (mysql_res);

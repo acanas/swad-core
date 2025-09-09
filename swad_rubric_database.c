@@ -107,9 +107,9 @@ unsigned Rub_DB_GetListRubrics (MYSQL_RES **mysql_res)
 /********************* Get rubric data using its code ************************/
 /*****************************************************************************/
 
-unsigned Rub_DB_GetRubricDataByCod (MYSQL_RES **mysql_res,long RubCod)
+Exi_Exist_t Rub_DB_GetRubricDataByCod (MYSQL_RES **mysql_res,long RubCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get rubric data",
 		   "SELECT RubCod,"		// row[0]
 			  "CrsCod,"		// row[1]
@@ -119,7 +119,8 @@ unsigned Rub_DB_GetRubricDataByCod (MYSQL_RES **mysql_res,long RubCod)
 		   " WHERE RubCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
 		   RubCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? Exi_EXISTS :
+							 Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -640,9 +641,9 @@ unsigned Rub_DB_GetCriteria (MYSQL_RES **mysql_res,long RubCod)
 /***************** Get rubric criterion data using its code ******************/
 /*****************************************************************************/
 
-unsigned Rub_DB_GetCriterionDataByCod (MYSQL_RES **mysql_res,long CriCod)
+Exi_Exist_t Rub_DB_GetCriterionDataByCod (MYSQL_RES **mysql_res,long CriCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get criterion data",
 		   "SELECT CriCod,"	// row[0]
 			  "RubCod,"	// row[1]
@@ -657,7 +658,8 @@ unsigned Rub_DB_GetCriterionDataByCod (MYSQL_RES **mysql_res,long CriCod)
 		   " WHERE CriCod=%ld",
 		   RubCri_ValuesFields[RubCri_MIN],
 		   RubCri_ValuesFields[RubCri_MAX],
-		   CriCod);
+		   CriCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

@@ -546,11 +546,12 @@ Err_SuccessOrError_t Ctr_GetCenterDataByCod (struct Hie_Node *Node)
    if (Node->HieCod > 0)
      {
       /***** Get data of a center from database *****/
-      if (Ctr_DB_GetCenterDataByCod (&mysql_res,Node->HieCod)) // Center found...
+      if (Ctr_DB_GetCenterDataByCod (&mysql_res,Node->HieCod) == Exi_EXISTS) // Center found...
         {
          /* Get center data */
          Ctr_GetCenterDataFromRow (mysql_res,Node,
-                                   false);	// Don't get number of users who claim to belong to this center
+                                   false);	// Don't get number of users
+						// who claim to belong to this center
 
          /* Set return value */
          SuccessOrError = Err_SUCCESS;

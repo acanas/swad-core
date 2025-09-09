@@ -46,7 +46,7 @@ void Prj_DB_UpdateReview (const struct Prj_Project *Prj);
 unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
                                  const struct Prj_Projects *Projects,
                                  const char *UsrsSubQuery);	// NULL if no users
-unsigned Prj_DB_GetProjectDataByCod (MYSQL_RES **mysql_res,long PrjCod);
+Exi_Exist_t Prj_DB_GetProjectDataByCod (MYSQL_RES **mysql_res,long PrjCod);
 void Prj_DB_GetProjectTitle (long PrjCod,char *Title,size_t TitleSize);
 unsigned Prj_DB_GetPrjDataToCheckFaults (MYSQL_RES **mysql_res,long PrjCod);
 unsigned Prj_DB_GetNumUsrsInPrj (long PrjCod,Prj_RoleInProject_t RoleInProject);

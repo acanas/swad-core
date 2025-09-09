@@ -90,9 +90,9 @@ void Mrk_DB_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter,unsigne
 /*********************** Get marks data from database ************************/
 /*****************************************************************************/
 
-unsigned Mrk_DB_GetMarksDataByCod (MYSQL_RES **mysql_res,long MrkCod)
+Exi_Exist_t Mrk_DB_GetMarksDataByCod (MYSQL_RES **mysql_res,long MrkCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get the number of rows"
 			     " in header and footer",
 		   "SELECT brw_files.FileBrowser,"	// row[0]
@@ -104,7 +104,8 @@ unsigned Mrk_DB_GetMarksDataByCod (MYSQL_RES **mysql_res,long MrkCod)
 			  "mrk_marks"
 		   " WHERE brw_files.FilCod=%ld"
 		     " AND brw_files.FilCod=mrk_marks.FilCod",
-		    MrkCod);
+		    MrkCod) ? Exi_EXISTS :
+			      Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

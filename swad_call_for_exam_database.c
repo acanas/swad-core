@@ -157,9 +157,9 @@ unsigned Cfe_DB_GetFutureCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
 /***************** Get data of a call for exam from database *****************/
 /*****************************************************************************/
 
-unsigned Cfe_DB_GetCallForExamDataByCod (MYSQL_RES **mysql_res,long ExaCod)
+Exi_Exist_t Cfe_DB_GetCallForExamDataByCod (MYSQL_RES **mysql_res,long ExaCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of a call for exam",
 		   "SELECT CrsCod,"		// row[ 0]
 			  "Status,"		// row[ 1]
@@ -178,7 +178,8 @@ unsigned Cfe_DB_GetCallForExamDataByCod (MYSQL_RES **mysql_res,long ExaCod)
 			  "OtherInfo"		// row[14]
 		    " FROM cfe_exams"
 		   " WHERE ExaCod=%ld",
-		   ExaCod);
+		   ExaCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

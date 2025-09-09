@@ -40,7 +40,7 @@ void SysLnk_DB_UpdateLnkName (long LnkCod,const char *FldName,const char *NewLnk
 void SysLnk_DB_UpdateLnkWWW (long LnkCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1]);
 
 unsigned SysLnk_DB_GetLinks (MYSQL_RES **mysql_res);
-unsigned SysLnk_DB_GetLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod);
+Exi_Exist_t SysLnk_DB_GetLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod);
 Exi_Exist_t SysLnk_DB_CheckIfLinkNameExists (const char *FldName,const char *Name,long Cod,
 					     __attribute__((unused)) long PrtCod,
 					     __attribute__((unused)) unsigned Year);

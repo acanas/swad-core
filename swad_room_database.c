@@ -284,9 +284,9 @@ Exi_Exist_t Roo_DB_CheckIfRoomNameExists (const char *FldName,const char *Name,
 /************* Get room data from database using the room code ***************/
 /*****************************************************************************/
 
-unsigned Roo_DB_GetRoomDataByCod (MYSQL_RES **mysql_res,long RooCod)
+Exi_Exist_t Roo_DB_GetRoomDataByCod (MYSQL_RES **mysql_res,long RooCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of a room",
 		   "SELECT roo_rooms.RooCod,"		// row[0]
 			  "roo_rooms.BldCod,"		// row[1]
@@ -299,7 +299,8 @@ unsigned Roo_DB_GetRoomDataByCod (MYSQL_RES **mysql_res,long RooCod)
 		    " FROM roo_rooms LEFT JOIN bld_buildings"
 		      " ON roo_rooms.BldCod=bld_buildings.BldCod"
 		   " WHERE roo_rooms.RooCod=%ld",
-		   RooCod);
+		   RooCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

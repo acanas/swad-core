@@ -665,11 +665,12 @@ Err_SuccessOrError_t Ins_GetInstitDataByCod (struct Hie_Node *Node)
    if (Node->HieCod > 0)
      {
       /***** Get data of an institution from database *****/
-      if (Ins_DB_GetInsDataByCod (&mysql_res,Node->HieCod))	// Institution found...
+      if (Ins_DB_GetInsDataByCod (&mysql_res,Node->HieCod) == Exi_EXISTS)	// Institution found...
 	{
          /* Get institution data */
          Ins_GetInstitDataFromRow (mysql_res,Node,
-                                   false);	// Don't get number of users who claim to belong to this institution
+                                   false);	// Don't get number of users
+						// who claim to belong to this institution
 
          /* Set return value */
 	 SuccessOrError = Err_SUCCESS;

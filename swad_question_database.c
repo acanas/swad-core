@@ -1213,9 +1213,9 @@ unsigned Qst_DB_GetRecentAnswers (MYSQL_RES **mysql_res,
 /****************** Get data of a question from database *********************/
 /*****************************************************************************/
 
-unsigned Qst_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod)
+Exi_Exist_t Qst_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get a question",
 		   "SELECT UNIX_TIMESTAMP(EditTime),"	// row[0]
 			  "AnsType,"			// row[1]
@@ -1230,7 +1230,8 @@ unsigned Qst_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod)
 		   " WHERE QstCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
 		   QstCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? Exi_EXISTS :
+							 Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

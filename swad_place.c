@@ -374,7 +374,7 @@ void Plc_GetPlaceDataByCod (struct Plc_Place *Plc)
    else if (Plc->PlcCod > 0)
      {
       /***** Get data of a place from database *****/
-      if (Plc_DB_GetPlaceDataByCod (&mysql_res,Plc->PlcCod)) // Place found...
+      if (Plc_DB_GetPlaceDataByCod (&mysql_res,Plc->PlcCod) == Exi_EXISTS) // Place found...
          Plc_GetPlaceDataFromRow (mysql_res,Plc);
 
       /***** Free structure that stores the query result *****/

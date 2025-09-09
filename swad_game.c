@@ -971,46 +971,50 @@ void Gam_GetGameDataByCod (struct Gam_Game *Game)
    MYSQL_ROW row;
 
    /***** Get data of game from database *****/
-   if (Gam_DB_GetGameDataByCod (&mysql_res,Game->GamCod)) // Game found...
+   switch (Gam_DB_GetGameDataByCod (&mysql_res,Game->GamCod))
      {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 /* Get row */
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get code of the game (row[0]) */
-      Game->GamCod = Str_ConvertStrCodToLongCod (row[0]);
+	 /* Get code of the game (row[0]) */
+	 Game->GamCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get code of the course (row[1]) */
-      Game->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
+	 /* Get code of the course (row[1]) */
+	 Game->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
-      /* Get whether the game is hidden (row[2]) */
-      Game->Hidden = HidVis_GetHiddenFromYN (row[2][0]);
+	 /* Get whether the game is hidden (row[2]) */
+	 Game->Hidden = HidVis_GetHiddenFromYN (row[2][0]);
 
-      /* Get author of the game (row[3]) */
-      Game->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
+	 /* Get author of the game (row[3]) */
+	 Game->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
-      /* Get maximum grade (row[4]) */
-      if (Str_GetDoubleFromStr (row[4],&Game->MaxGrade))
-	 if (Game->MaxGrade < 0.0)	// Only positive values allowed
-	    Game->MaxGrade = 0.0;
+	 /* Get maximum grade (row[4]) */
+	 if (Str_GetDoubleFromStr (row[4],&Game->MaxGrade))
+	    if (Game->MaxGrade < 0.0)	// Only positive values allowed
+	       Game->MaxGrade = 0.0;
 
-      /* Get visibility (row[5]) */
-      Game->Visibility = TstVis_GetVisibilityFromStr (row[5]);
+	 /* Get visibility (row[5]) */
+	 Game->Visibility = TstVis_GetVisibilityFromStr (row[5]);
 
-      /* Get the title of the game (row[6]) */
-      Str_Copy (Game->Title,row[6],sizeof (Game->Title) - 1);
+	 /* Get the title of the game (row[6]) */
+	 Str_Copy (Game->Title,row[6],sizeof (Game->Title) - 1);
 
-      /* Get number of questions */
-      Game->NumQsts = Gam_DB_GetNumQstsGame (Game->GamCod);
+	 /* Get number of questions */
+	 Game->NumQsts = Gam_DB_GetNumQstsGame (Game->GamCod);
 
-      /* Get number of matches */
-      Game->NumMchs = Mch_DB_GetNumMchsInGame (Game->GamCod);
+	 /* Get number of matches */
+	 Game->NumMchs = Mch_DB_GetNumMchsInGame (Game->GamCod);
 
-      /* Get number of unfinished matches */
-      Game->NumUnfinishedMchs = Mch_DB_GetNumUnfinishedMchsInGame (Game->GamCod);
+	 /* Get number of unfinished matches */
+	 Game->NumUnfinishedMchs = Mch_DB_GetNumUnfinishedMchsInGame (Game->GamCod);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 /* Initialize to empty game */
+	 Gam_ResetGame (Game);
+	 break;
      }
-   else
-      /* Initialize to empty game */
-      Gam_ResetGame (Game);
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);

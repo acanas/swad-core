@@ -206,9 +206,9 @@ unsigned Ctr_DB_GetCtrsWithPendingDegs (MYSQL_RES **mysql_res)
 /************************ Get data of center by code *************************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetCenterDataByCod (MYSQL_RES **mysql_res,long HieCod)
+Exi_Exist_t Ctr_DB_GetCenterDataByCod (MYSQL_RES **mysql_res,long HieCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of a center",
 		   "SELECT CtrCod,"		// row[0]
 			  "InsCod,"		// row[1]
@@ -220,7 +220,8 @@ unsigned Ctr_DB_GetCenterDataByCod (MYSQL_RES **mysql_res,long HieCod)
 			  "WWW"			// row[7]
 		    " FROM ctr_centers"
 		   " WHERE CtrCod=%ld",
-		   HieCod);
+		   HieCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

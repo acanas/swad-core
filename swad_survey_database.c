@@ -260,23 +260,24 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
 /********************* Get survey data using its code ************************/
 /*****************************************************************************/
 
-unsigned Svy_DB_GetSurveyDataByCod (MYSQL_RES **mysql_res,long SvyCod)
+Exi_Exist_t Svy_DB_GetSurveyDataByCod (MYSQL_RES **mysql_res,long SvyCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get survey data",
-		   "SELECT SvyCod,"					// row[0]
-			  "Scope,"					// row[1]
-			  "Cod,"					// row[2]
-			  "Hidden,"					// row[3]
-			  "Roles,"					// row[4]
-			  "UsrCod,"					// row[5]
-			  "UNIX_TIMESTAMP(StartTime),"			// row[6]
-			  "UNIX_TIMESTAMP(EndTime),"			// row[7]
-			  "NOW() BETWEEN StartTime AND EndTime,"	// row[8]
+		   "SELECT SvyCod,"				// row[0]
+			  "Scope,"				// row[1]
+			  "Cod,"				// row[2]
+			  "Hidden,"				// row[3]
+			  "Roles,"				// row[4]
+			  "UsrCod,"				// row[5]
+			  "UNIX_TIMESTAMP(StartTime),"		// row[6]
+			  "UNIX_TIMESTAMP(EndTime),"		// row[7]
+			  "NOW() BETWEEN StartTime AND EndTime,"// row[8]
 			  "Title"
 		    " FROM svy_surveys"
 		   " WHERE SvyCod=%ld",
-		   SvyCod);
+		   SvyCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -940,9 +941,9 @@ unsigned Svy_DB_GetSurveyQsts (MYSQL_RES **mysql_res,long SvyCod)
 /************ Get question data from question code in a survey ***************/
 /*****************************************************************************/
 
-unsigned Svy_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod,long SvyCod)
+Exi_Exist_t Svy_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod,long SvyCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get a question",
 		   "SELECT QstCod,"		// row[0]
 		          "QstInd,"		// row[1]
@@ -951,9 +952,10 @@ unsigned Svy_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod,long SvyCod)
 		          "Stem"		// row[4]
 		    " FROM svy_questions"
 		   " WHERE QstCod=%ld"
-		     " AND SvyCod=%ld",	// Extra check
+		     " AND SvyCod=%ld",		// Extra check
 		   QstCod,
-		   SvyCod);
+		   SvyCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
    }
 
 /*****************************************************************************/

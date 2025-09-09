@@ -910,45 +910,49 @@ void Exa_GetExamDataByCod (struct Exa_Exam *Exam)
      }
 
    /***** Get exam data from database *****/
-   if (Exa_DB_GetExamDataByCod (&mysql_res,Exam->ExaCod)) // Exam found...
+   switch (Exa_DB_GetExamDataByCod (&mysql_res,Exam->ExaCod))
      {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 /* Get row */
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get code of the exam (row[0])
-         and code of the course (row[1]) */
-      Exam->ExaCod = Str_ConvertStrCodToLongCod (row[0]);
-      Exam->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
+	 /* Get code of the exam (row[0])
+	    and code of the course (row[1]) */
+	 Exam->ExaCod = Str_ConvertStrCodToLongCod (row[0]);
+	 Exam->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
-      /* Get whether the exam is hidden (row[2]) */
-      Exam->Hidden = HidVis_GetHiddenFromYN (row[2][0]);
+	 /* Get whether the exam is hidden (row[2]) */
+	 Exam->Hidden = HidVis_GetHiddenFromYN (row[2][0]);
 
-      /* Get author of the exam (row[3]) */
-      Exam->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
+	 /* Get author of the exam (row[3]) */
+	 Exam->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
-      /* Get maximum grade (row[4]) */
-      if (Str_GetDoubleFromStr (row[4],&Exam->MaxGrade))
-	 if (Exam->MaxGrade < 0.0)	// Only positive values allowed
-	    Exam->MaxGrade = 0.0;
+	 /* Get maximum grade (row[4]) */
+	 if (Str_GetDoubleFromStr (row[4],&Exam->MaxGrade))
+	    if (Exam->MaxGrade < 0.0)	// Only positive values allowed
+	       Exam->MaxGrade = 0.0;
 
-      /* Get visibility (row[5]) */
-      Exam->Visibility = TstVis_GetVisibilityFromStr (row[5]);
+	 /* Get visibility (row[5]) */
+	 Exam->Visibility = TstVis_GetVisibilityFromStr (row[5]);
 
-      /* Get the title of the exam (row[6]) */
-      Str_Copy (Exam->Title,row[6],sizeof (Exam->Title) - 1);
+	 /* Get the title of the exam (row[6]) */
+	 Str_Copy (Exam->Title,row[6],sizeof (Exam->Title) - 1);
 
-      /* Get number of sets,
-             number of questions,
-             number of sessions
-         and number of open sessions */
-      Exam->NumSets     = Exa_DB_GetNumSetsExam (Exam->ExaCod);
-      Exam->NumQsts     = Exa_DB_GetNumQstsExam (Exam->ExaCod);
-      Exam->NumSess     = Exa_DB_GetNumSessionsInExam (Exam->ExaCod);
-      Exam->NumOpenSess = Exa_DB_GetNumOpenSessionsInExam (Exam->ExaCod);
+	 /* Get number of sets,
+		number of questions,
+		number of sessions
+	    and number of open sessions */
+	 Exam->NumSets     = Exa_DB_GetNumSetsExam (Exam->ExaCod);
+	 Exam->NumQsts     = Exa_DB_GetNumQstsExam (Exam->ExaCod);
+	 Exam->NumSess     = Exa_DB_GetNumSessionsInExam (Exam->ExaCod);
+	 Exam->NumOpenSess = Exa_DB_GetNumOpenSessionsInExam (Exam->ExaCod);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 /* Initialize to empty exam */
+	 Exa_ResetExam (Exam);
+	 break;
      }
-   else
-      /* Initialize to empty exam */
-      Exa_ResetExam (Exam);
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);

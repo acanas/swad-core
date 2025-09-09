@@ -139,9 +139,9 @@ unsigned Crs_DB_GetCrssInCurrentDegFull (MYSQL_RES **mysql_res)
 /********************* Get data of a course from its code ********************/
 /*****************************************************************************/
 
-unsigned Crs_DB_GetCourseDataByCod (MYSQL_RES **mysql_res,long CrsCod)
+Exi_Exist_t Crs_DB_GetCourseDataByCod (MYSQL_RES **mysql_res,long CrsCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of a course",
 		   "SELECT CrsCod,"		// row[0]
 			  "DegCod,"		// row[1]
@@ -153,7 +153,8 @@ unsigned Crs_DB_GetCourseDataByCod (MYSQL_RES **mysql_res,long CrsCod)
 			  "FullName"		// row[7]
 		    " FROM crs_courses"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   CrsCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

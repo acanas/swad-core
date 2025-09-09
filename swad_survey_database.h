@@ -49,7 +49,7 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
                                 unsigned ScopesAllowed,
                                 unsigned HiddenAllowed,
                                 Dat_StartEndTime_t SelectedOrder);
-unsigned Svy_DB_GetSurveyDataByCod (MYSQL_RES **mysql_res,long SvyCod);
+Exi_Exist_t Svy_DB_GetSurveyDataByCod (MYSQL_RES **mysql_res,long SvyCod);
 void Svy_DB_GetSurveyTitle (long SvyCod,char *Title,size_t TitleSize);
 unsigned Svy_DB_GetSurveyTitleAndText (MYSQL_RES **mysql_res,long SvyCod);
 void Svy_DB_GetSurveyTxt (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
@@ -85,7 +85,7 @@ void Svy_DB_ChangeIndexesQsts (long SvyCod,unsigned QstInd);
 unsigned Svy_DB_GetNumQstsSvy (long SvyCod);
 unsigned Svy_DB_GetSurveyQstsCodes (MYSQL_RES **mysql_res,long SvyCod);
 unsigned Svy_DB_GetSurveyQsts (MYSQL_RES **mysql_res,long SvyCod);
-unsigned Svy_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod,long SvyCod);
+Exi_Exist_t Svy_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod,long SvyCod);
 unsigned Svy_DB_GetQstIndFromQstCod (long QstCod);
 unsigned Svy_DB_GetLastQstInd (MYSQL_RES **mysql_res,long SvyCod);
 

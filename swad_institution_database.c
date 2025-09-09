@@ -125,9 +125,9 @@ void Ins_DB_UpdateInsWWW (long HieCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1])
 /************************* Get data of an institution ************************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetInsDataByCod (MYSQL_RES **mysql_res,long HieCod)
+Exi_Exist_t Ins_DB_GetInsDataByCod (MYSQL_RES **mysql_res,long HieCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of an institution",
 		   "SELECT InsCod,"		// row[0]
 			  "CtyCod,"		// row[1]
@@ -139,7 +139,8 @@ unsigned Ins_DB_GetInsDataByCod (MYSQL_RES **mysql_res,long HieCod)
                   	  "0 AS NumUsrs"	// row[7] (not used)
 		    " FROM ins_instits"
 		   " WHERE InsCod=%ld",
-		   HieCod);
+		   HieCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

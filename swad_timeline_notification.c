@@ -105,7 +105,7 @@ void TmlNtf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    Content.Txt[0] = '\0';
 
    /***** Get summary and content from post from database *****/
-   if (Tml_DB_GetPubDataByCod (PubCod,&mysql_res) == 1)   // Result should have a unique row
+   if (Tml_DB_GetPubDataByCod (PubCod,&mysql_res) == Exi_EXISTS)
       /* Get data of publication from row */
       TmlPub_GetPubDataFromRow (mysql_res,&Pub);
 
@@ -126,7 +126,7 @@ void TmlNtf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 if (Not.Type == TmlNot_POST)
 	   {
 	    /***** Get post from database *****/
-            if (Tml_DB_GetPostByCod (Not.Cod,&mysql_res) == 1)   // Result should have a unique row
+            if (Tml_DB_GetPostDataByCod (Not.Cod,&mysql_res) == Exi_EXISTS)
 	      {
 	       /* Get row */
 	       row = mysql_fetch_row (mysql_res);
@@ -158,7 +158,7 @@ void TmlNtf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 break;
       case TmlPub_COMMENT_TO_NOTE:
 	 /***** Get content of comment from database *****/
-	 if (Tml_DB_GetCommDataByCod (Pub.PubCod,&mysql_res) == 1)   // Result should have a unique row
+	 if (Tml_DB_GetCommDataByCod (Pub.PubCod,&mysql_res) == Exi_EXISTS)
 	   {
 	    /* Get row */
 	    row = mysql_fetch_row (mysql_res);

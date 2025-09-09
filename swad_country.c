@@ -876,19 +876,27 @@ Err_SuccessOrError_t Cty_GetCountrDataByCod (struct Hie_Node *Node)
    // Here Cty->CtyCod > 0
 
    /***** Get data of a country from database *****/
-   SuccessOrError = (Cty_DB_GetBasicCountryDataByCod (&mysql_res,Node->HieCod) != 0) ? Err_SUCCESS :
-										       Err_ERROR;
-   if (SuccessOrError == Err_SUCCESS) // Country found...
+   switch (Cty_DB_GetBasicCountryDataByCod (&mysql_res,Node->HieCod))
      {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 /* Get row */
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get Alpha-2 country code (row[0]) */
-      Str_Copy (Node->ShrtName,row[0],sizeof (Node->ShrtName) - 1);
+	 /* Get Alpha-2 country code (row[0]) */
+	 Str_Copy (Node->ShrtName,row[0],sizeof (Node->ShrtName) - 1);
 
-      /* Get name and WWW of the country in current language */
-      Str_Copy (Node->FullName,row[1],sizeof (Node->FullName) - 1);
-      Str_Copy (Node->WWW     ,row[2],sizeof (Node->WWW     ) - 1);
+	 /* Get name and WWW of the country in current language */
+	 Str_Copy (Node->FullName,row[1],sizeof (Node->FullName) - 1);
+	 Str_Copy (Node->WWW     ,row[2],sizeof (Node->WWW     ) - 1);
+
+	 /* Set return value */
+	 SuccessOrError = Err_SUCCESS;
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 /* Set return value */
+	 SuccessOrError = Err_ERROR;
+	 break;
      }
 
    /***** Free structure that stores the query result *****/

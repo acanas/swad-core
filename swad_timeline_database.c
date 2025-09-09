@@ -102,16 +102,15 @@ void Tml_DB_UpdateWho (Usr_Who_t Who)
 /*****************************************************************************/
 /********************* Get data of note using its code ***********************/
 /*****************************************************************************/
-// Returns the number of rows got
 
-unsigned Tml_DB_GetNoteDataByCod (long NotCod,MYSQL_RES **mysql_res)
+Exi_Exist_t Tml_DB_GetNoteDataByCod (long NotCod,MYSQL_RES **mysql_res)
   {
    /***** Trivial check: note code should be > 0 *****/
    if (NotCod <= 0)
-      return 0;
+      return Exi_DOES_NOT_EXIST;
 
    /***** Get data of note from database *****/
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of note",
 		   "SELECT NotCod,"			// row[0]
 			  "NoteType,"			// row[1]
@@ -122,7 +121,8 @@ unsigned Tml_DB_GetNoteDataByCod (long NotCod,MYSQL_RES **mysql_res)
 			  "UNIX_TIMESTAMP(TimeNote)"	// row[6]
 		    " FROM tml_notes"
 		   " WHERE NotCod=%ld",
-		   NotCod);
+		   NotCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -549,23 +549,23 @@ void Tml_DB_RemoveAllNotesUsr (long UsrCod)
 /*****************************************************************************/
 /********************* Get data of post using its code ***********************/
 /*****************************************************************************/
-// Returns the number of rows got
 
-unsigned Tml_DB_GetPostByCod (long PstCod,MYSQL_RES **mysql_res)
+Exi_Exist_t Tml_DB_GetPostDataByCod (long PstCod,MYSQL_RES **mysql_res)
   {
    /***** Trivial check: post code should be > 0 *****/
    if (PstCod <= 0)
-      return 0;
+      return Exi_DOES_NOT_EXIST;
 
    /***** Get data of post from database *****/
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get the content"
 			     " of a post",
 		   "SELECT Txt,"	// row[0]
 			  "MedCod"	// row[1]
 		    " FROM tml_posts"
 		   " WHERE PstCod=%ld",
-		   PstCod);
+		   PstCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -711,16 +711,15 @@ unsigned Tml_DB_GetFinalComms (long NotCod,unsigned NumFinalCommsToGet,
 /*****************************************************************************/
 /******************* Get data of comment using its code **********************/
 /*****************************************************************************/
-// Returns the number of rows got
 
-unsigned Tml_DB_GetCommDataByCod (long PubCod,MYSQL_RES **mysql_res)
+Exi_Exist_t Tml_DB_GetCommDataByCod (long PubCod,MYSQL_RES **mysql_res)
   {
    /***** Trivial check: publication code should be > 0 *****/
    if (PubCod <= 0)
-      return 0;
+      return Exi_DOES_NOT_EXIST;
 
    /***** Get data of comment from database *****/
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of comment",
 		   "SELECT tml_pubs.PubCod,"				// row[0]
 			  "tml_pubs.PublisherCod,"			// row[1]
@@ -732,7 +731,9 @@ unsigned Tml_DB_GetCommDataByCod (long PubCod,MYSQL_RES **mysql_res)
 		   " WHERE tml_pubs.PubCod=%ld"
 		     " AND tml_pubs.PubType=%u"
 		     " AND tml_pubs.PubCod=tml_comments.PubCod",
-		   PubCod,(unsigned) TmlPub_COMMENT_TO_NOTE);
+		   PubCod,
+		   (unsigned) TmlPub_COMMENT_TO_NOTE) ? Exi_EXISTS :
+							Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -944,16 +945,15 @@ unsigned Tml_DB_SelectTheMostRecentPub (MYSQL_RES **mysql_res,
 /*****************************************************************************/
 /****************** Get data of publication using its code *******************/
 /*****************************************************************************/
-// Returns the number of rows got
 
-unsigned Tml_DB_GetPubDataByCod (long PubCod,MYSQL_RES **mysql_res)
+Exi_Exist_t Tml_DB_GetPubDataByCod (long PubCod,MYSQL_RES **mysql_res)
   {
    /***** Trivial check: publication code should be > 0 *****/
    if (PubCod <= 0)
-      return 0;
+      return Exi_DOES_NOT_EXIST;
 
    /***** Get data of publication from database *****/
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of publication",
 		   "SELECT PubCod,"		// row[0]
 		          "NotCod,"		// row[1]
@@ -961,7 +961,8 @@ unsigned Tml_DB_GetPubDataByCod (long PubCod,MYSQL_RES **mysql_res)
 			  "PubType"		// row[3]
 		    " FROM tml_pubs"
 		   " WHERE PubCod=%ld",
-		   PubCod);
+		   PubCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

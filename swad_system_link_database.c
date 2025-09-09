@@ -92,9 +92,9 @@ unsigned SysLnk_DB_GetLinks (MYSQL_RES **mysql_res)
 /**************************** Get link full name *****************************/
 /*****************************************************************************/
 
-unsigned SysLnk_DB_GetLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod)
+Exi_Exist_t SysLnk_DB_GetLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of a system link",
 		   "SELECT LnkCod,"	// row[0]
 		          "ShortName,"	// row[1]
@@ -102,7 +102,8 @@ unsigned SysLnk_DB_GetLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod)
 			  "WWW"		// row[3]
 		    " FROM lnk_links"
 		   " WHERE LnkCod=%ld",
-		   LnkCod);
+		   LnkCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

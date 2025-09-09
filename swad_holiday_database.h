@@ -42,7 +42,7 @@ void Hld_DB_ChangeDate (long HldCod,const char *StrStartOrEndDate,
 void Hld_DB_ChangeName (long HldCod,char NewHldName[Hld_MAX_BYTES_HOLIDAY_NAME + 1]);
 
 unsigned Hld_DB_GetListHolidays (MYSQL_RES **mysql_res,Hld_Order_t SelectedOrder);
-unsigned Hld_DB_GetHolidayDataByCod (MYSQL_RES **mysql_res,long HldCod);
+Exi_Exist_t Hld_DB_GetHolidayDataByCod (MYSQL_RES **mysql_res,long HldCod);
 
 void Hld_DB_RemoveHoliday (long HldCod);
 

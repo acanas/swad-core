@@ -168,11 +168,11 @@ unsigned Grp_DB_GetFileZones (MYSQL_RES **mysql_res,long GrpCod)
 /********************** Get data of a group from its code ********************/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetGroupDataByCod (MYSQL_RES **mysql_res,long GrpCod)
+Exi_Exist_t Grp_DB_GetGroupDataByCod (MYSQL_RES **mysql_res,long GrpCod)
   {
    // GrpCod can belong to a course distinct from the current one,
    // so don't extra check course
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of a group",
 		   "SELECT grp_groups.GrpTypCod,"	// row[0]
 			  "grp_types.CrsCod,"		// row[1]
@@ -188,7 +188,8 @@ unsigned Grp_DB_GetGroupDataByCod (MYSQL_RES **mysql_res,long GrpCod)
 		      " ON grp_groups.RooCod=roo_rooms.RooCod"
 		   " WHERE grp_groups.GrpCod=%ld"
 		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod",
-		   GrpCod);
+		   GrpCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

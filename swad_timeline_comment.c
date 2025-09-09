@@ -1060,11 +1060,17 @@ void TmlCom_GetCommDataByCod (struct TmlCom_Comment *Com)
      }
 
    /***** Get data of comment from database *****/
-   if (Tml_DB_GetCommDataByCod (Com->PubCod,&mysql_res))
-      TmlCom_GetCommDataFromRow (mysql_res,Com);
-   else
-      /* Reset fields of comment */
-      TmlCom_ResetComm (Com);
+   switch (Tml_DB_GetCommDataByCod (Com->PubCod,&mysql_res))
+     {
+      case Exi_EXISTS:
+	 TmlCom_GetCommDataFromRow (mysql_res,Com);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 /* Reset fields of comment */
+	 TmlCom_ResetComm (Com);
+	 break;
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

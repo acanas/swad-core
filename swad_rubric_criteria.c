@@ -151,13 +151,19 @@ void RubCri_GetCriterionDataByCod (struct RubCri_Criterion *Criterion)
      }
 
    /***** Get data of rubric criterion from database *****/
-   if (Rub_DB_GetCriterionDataByCod (&mysql_res,Criterion->CriCod)) // Criterion found...
-      RubCri_GetCriterionDataFromRow (mysql_res,Criterion);
-   else
-      /* Initialize to empty criterion */
-      RubCri_ResetCriterion (Criterion);
+   switch (Rub_DB_GetCriterionDataByCod (&mysql_res,Criterion->CriCod))
+     {
+      case Exi_EXISTS:
+	 RubCri_GetCriterionDataFromRow (mysql_res,Criterion);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 /* Initialize to empty criterion */
+	 RubCri_ResetCriterion (Criterion);
+	 break;
+     }
 
-   /* Free structure that stores the query result */
+   /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
   }
 

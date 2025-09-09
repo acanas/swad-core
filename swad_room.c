@@ -498,7 +498,7 @@ static void Roo_GetRoomDataByCod (struct Roo_Room *Room)
       return;
 
    /***** Get data of a room from database *****/
-   if (Roo_DB_GetRoomDataByCod (&mysql_res,Room->RooCod)) // Room found...
+   if (Roo_DB_GetRoomDataByCod (&mysql_res,Room->RooCod) == Exi_EXISTS) // Room found...
       Roo_GetRoomDataFromRow (mysql_res,Room,Roo_ALL_DATA);
 
    /***** Free structure that stores the query result *****/

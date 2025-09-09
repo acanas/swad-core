@@ -280,9 +280,9 @@ void Deg_DB_GetDegTypeNameByCod (struct DegTyp_DegType *DegTyp)
 /********************* Get data of a degree from its code ********************/
 /*****************************************************************************/
 
-unsigned Deg_DB_GetDegreeDataByCod (MYSQL_RES **mysql_res,long HieCod)
+Exi_Exist_t Deg_DB_GetDegreeDataByCod (MYSQL_RES **mysql_res,long HieCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of a degree",
 		   "SELECT DegCod,"		// row[0]
 			  "CtrCod,"		// row[1]
@@ -294,7 +294,8 @@ unsigned Deg_DB_GetDegreeDataByCod (MYSQL_RES **mysql_res,long HieCod)
 			  "WWW"			// row[7]
 		    " FROM deg_degrees"
 		   " WHERE DegCod=%ld",
-		   HieCod);
+		   HieCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

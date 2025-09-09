@@ -204,9 +204,9 @@ unsigned Gam_DB_GetListAvailableGames (MYSQL_RES **mysql_res)
 /********************** Get game data using its code *************************/
 /*****************************************************************************/
 
-unsigned Gam_DB_GetGameDataByCod (MYSQL_RES **mysql_res,long GamCod)
+Exi_Exist_t Gam_DB_GetGameDataByCod (MYSQL_RES **mysql_res,long GamCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get game data",
 		   "SELECT gam_games.GamCod,"		// row[0]
 			  "gam_games.CrsCod,"		// row[1]
@@ -221,7 +221,8 @@ unsigned Gam_DB_GetGameDataByCod (MYSQL_RES **mysql_res,long GamCod)
 		   " WHERE gam_games.GamCod=%ld"
 		     " AND gam_games.CrsCod=%ld",	// Extra check
 		   GamCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? Exi_EXISTS :
+							 Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

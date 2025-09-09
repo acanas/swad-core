@@ -1100,7 +1100,7 @@ Err_SuccessOrError_t Crs_GetCourseDataByCod (struct Hie_Node *Node)
    if (Node->HieCod > 0)
      {
       /***** Get data of a course from database *****/
-      if (Crs_DB_GetCourseDataByCod (&mysql_res,Node->HieCod)) // Course found...
+      if (Crs_DB_GetCourseDataByCod (&mysql_res,Node->HieCod) == Exi_EXISTS) // Course found...
 	{
 	 /***** Get data of the course *****/
 	 Crs_GetCourseDataFromRow (mysql_res,Node);

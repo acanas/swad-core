@@ -671,7 +671,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    ID_GetListIDsFromUsrCod (&UsrDat);
 
    /***** Get marks data from database *****/
-   if (Mrk_DB_GetMarksDataByCod (&mysql_res,MrkCod) == 1)	// Result should have a unique row
+   if (Mrk_DB_GetMarksDataByCod (&mysql_res,MrkCod) == Exi_EXISTS)
      {
       /***** Get data of this file of marks *****/
       row = mysql_fetch_row (mysql_res);
