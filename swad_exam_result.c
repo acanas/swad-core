@@ -1446,9 +1446,8 @@ void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
       Question.QstCod = Print->Qsts[QstInd].QstCod;
 
       /***** Get validity and answer type from database *****/
-      QuestionExists = (Exa_DB_GetValidityAndAnswerType (&mysql_res,
-							 Question.QstCod) != 0) ? Exi_EXISTS :
-										  Exi_DOES_NOT_EXIST;
+      QuestionExists = Exa_DB_GetValidityAndAnswerType (&mysql_res,
+							Question.QstCod);
       if (QuestionExists == Exi_EXISTS)
 	{
 	 row = mysql_fetch_row (mysql_res);
@@ -1820,11 +1819,11 @@ static void ExaRes_ShowQstsAndAnss (const struct ExaSes_Session *Session,
 	 Qst_QstConstructor (&Question);
 	 Question.QstCod = Print->Qsts[QstInd].QstCod;
 
-	 /***** Get question data *****/
-	 ExaSet_GetQstDataFromDB (&Question);
+	    /***** Get question data *****/
+	    ExaSet_GetQstDataFromDB (&Question);
 
-	 /***** Write questions and answers *****/
-	 ExaRes_WriteQstAndAns (UsrDat,Print,QstInd,&Question,Visibility);
+	    /***** Write questions and answers *****/
+	    ExaRes_WriteQstAndAns (UsrDat,Print,QstInd,&Question,Visibility);
 
 	 /***** Destroy test question *****/
 	 Qst_QstDestructor (&Question);

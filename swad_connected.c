@@ -527,7 +527,7 @@ static void Con_GetNumConnectedWithARole (Hie_Level_t HieLvl,Rol_Role_t Role,
    Usrs->Sex = Usr_SEX_UNKNOWN;
 
    /***** Get number of connected users who belong to current course from database *****/
-   if (Con_DB_GetNumConnected (&mysql_res,HieLvl,Role))
+   if (Con_DB_GetNumConnected (&mysql_res,HieLvl,Role) == Exi_EXISTS)
      {
       row = mysql_fetch_row (mysql_res);
 

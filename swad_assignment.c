@@ -1046,7 +1046,7 @@ void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Query database. Result should have a unique row *****/
-   if (Asg_DB_GetAssignmentTitleAndTxt (&mysql_res,AsgCod) == 1)
+   if (Asg_DB_GetAssignmentTitleAndTxt (&mysql_res,AsgCod) == Exi_EXISTS)
      {
       /***** Get row *****/
       row = mysql_fetch_row (mysql_res);
@@ -1933,7 +1933,7 @@ unsigned Asg_GetNumAssignments (Hie_Level_t HieLvl,unsigned *NumNotif)
    *NumNotif = 0;
 
    /***** Get number of assignments from database *****/
-   if (Asg_DB_GetNumAssignments (&mysql_res,HieLvl))
+   if (Asg_DB_GetNumAssignments (&mysql_res,HieLvl) == Exi_EXISTS)
      {
       /***** Get number of assignments *****/
       row = mysql_fetch_row (mysql_res);

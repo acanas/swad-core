@@ -2170,7 +2170,7 @@ void Enr_GetNotifEnrolmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    SummaryStr[0] = '\0';        // Return nothing on error
 
    /***** Get user and requested role from database *****/
-   if (Enr_DB_GetEnrolmentRequestByCod (&mysql_res,ReqCod) == 1)	// Result should have a unique row
+   if (Enr_DB_GetEnrolmentRequestByCod (&mysql_res,ReqCod) == Exi_EXISTS)
      {
       /***** Get user and requested role *****/
       row = mysql_fetch_row (mysql_res);

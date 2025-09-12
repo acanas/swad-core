@@ -38,6 +38,6 @@ void MFU_DB_UpdateScoreForOtherActions (long ActCod);
 
 unsigned MFU_DB_GetMFUActionsOrderByScore (MYSQL_RES **mysql_res);
 unsigned MFU_DB_GetMFUActionsOrderByLastClick (MYSQL_RES **mysql_res);
-unsigned MFU_DB_GetScoreForCurrentAction (MYSQL_RES **mysql_res,long ActCod);
+Exi_Exist_t MFU_DB_GetScoreForCurrentAction (MYSQL_RES **mysql_res,long ActCod);
 
 #endif

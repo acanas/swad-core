@@ -168,6 +168,15 @@ Exi_Exist_t Dpt_DB_CheckIfDepartmentNameExists (const char *FldName,const char *
   }
 
 /*****************************************************************************/
+/************************** Get number of departments ************************/
+/*****************************************************************************/
+
+unsigned Dpt_DB_GetTotalNumberOfDepartments (void)
+  {
+   return (unsigned) DB_GetNumRowsTable ("dpt_departments");
+  }
+
+/*****************************************************************************/
 /************** Get number of departments in an institution ******************/
 /*****************************************************************************/
 

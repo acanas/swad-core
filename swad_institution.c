@@ -769,21 +769,23 @@ void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
    /***** 3. Slow: get short name and country of institution from database *****/
    Gbl.Cache.InstitutionShrtNameAndCty.HieCod = Ins->HieCod;
 
-   if (Ins_DB_GetInsShrtNameAndCty (&mysql_res,Ins->HieCod) == 1)
+   switch (Ins_DB_GetInsShrtNameAndCty (&mysql_res,Ins->HieCod))
      {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 /* Get row */
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get short name (row[0]) and country name (row[1]) of this institution */
-      Str_Copy (Gbl.Cache.InstitutionShrtNameAndCty.ShrtName,row[0],
-		sizeof (Gbl.Cache.InstitutionShrtNameAndCty.ShrtName) - 1);
-      Str_Copy (Gbl.Cache.InstitutionShrtNameAndCty.CtyName ,row[1],
-		sizeof (Gbl.Cache.InstitutionShrtNameAndCty.CtyName ) - 1);
-     }
-   else
-     {
-      Gbl.Cache.InstitutionShrtNameAndCty.ShrtName[0] = '\0';
-      Gbl.Cache.InstitutionShrtNameAndCty.CtyName [0] = '\0';
+	 /* Get short name (row[0]) and country name (row[1]) of this institution */
+	 Str_Copy (Gbl.Cache.InstitutionShrtNameAndCty.ShrtName,row[0],
+		   sizeof (Gbl.Cache.InstitutionShrtNameAndCty.ShrtName) - 1);
+	 Str_Copy (Gbl.Cache.InstitutionShrtNameAndCty.CtyName ,row[1],
+		   sizeof (Gbl.Cache.InstitutionShrtNameAndCty.CtyName ) - 1);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Gbl.Cache.InstitutionShrtNameAndCty.ShrtName[0] = '\0';
+	 Gbl.Cache.InstitutionShrtNameAndCty.CtyName [0] = '\0';
+	 break;
      }
 
    /* Free structure that stores the query result */

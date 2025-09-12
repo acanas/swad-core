@@ -100,11 +100,11 @@ static void MchPrn_ComputeScore (struct MchPrn_Print *Print)
       Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
       Question.Answer.Type = Qst_ANS_UNIQUE_CHOICE;
 
-      /***** Compute score for this answer ******/
-      TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
+	 /***** Compute score for this answer ******/
+	 TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
 
-      /***** Update total score *****/
-      Print->Score += Print->PrintedQuestions[NumQst].Answer.Score;
+	 /***** Update total score *****/
+	 Print->Score += Print->PrintedQuestions[NumQst].Answer.Score;
 
       /***** Destroy test question *****/
       Qst_QstDestructor (&Question);
@@ -142,32 +142,35 @@ void MchPrn_GetMatchPrintDataByMchCodAndUsrCod (struct MchPrn_Print *Print)
    Dat_StartEndTime_t StartEndTime;
 
    /***** Make database query *****/
-   if (Mch_DB_GetMatchPrintData (&mysql_res,Print) == 1)
+   switch (Mch_DB_GetMatchPrintData (&mysql_res,Print))
      {
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get start time (row[0] and row[1] hold UTC date-times) */
-      for (StartEndTime  = (Dat_StartEndTime_t) 0;
-	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
-	   StartEndTime++)
-         Print->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[StartEndTime]);
+	 /* Get start time (row[0] and row[1] hold UTC date-times) */
+	 for (StartEndTime  = (Dat_StartEndTime_t) 0;
+	      StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	      StartEndTime++)
+	    Print->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[StartEndTime]);
 
-      /* Get number of questions (row[2]) */
-      if (sscanf (row[2],"%u",&Print->NumQsts.All) != 1)
-	 Print->NumQsts.All = 0;
+	 /* Get number of questions (row[2])
+	    and number of questions not blank (row[3]) */
+	 if (sscanf (row[2],"%u",&Print->NumQsts.All     ) != 1)
+	    Print->NumQsts.All      = 0;
+   	 if (sscanf (row[3],"%u",&Print->NumQsts.NotBlank) != 1)
+	    Print->NumQsts.NotBlank = 0;
 
-      /* Get number of questions not blank (row[3]) */
-      if (sscanf (row[3],"%u",&Print->NumQsts.NotBlank) != 1)
-	 Print->NumQsts.NotBlank = 0;
-
-      /* Get score (row[4]) */
-      Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[4],"%lf",&Print->Score) != 1)
-	 Print->Score = 0.0;
-      Str_SetDecimalPointToLocal ();	// Return to local system
+	 /* Get score (row[4]) */
+	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
+	 if (sscanf (row[4],"%lf",&Print->Score) != 1)
+	    Print->Score = 0.0;
+	 Str_SetDecimalPointToLocal ();	// Return to local system
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 MchPrn_ResetPrint (Print);
+	 break;
      }
-   else
-      MchPrn_ResetPrint (Print);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

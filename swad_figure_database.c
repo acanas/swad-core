@@ -74,10 +74,10 @@ void Fig_DB_UpdateDoubleFigureIntoCache (FigCch_FigureCached_t Figure,
 /************************** Get figure from cache ****************************/
 /*****************************************************************************/
 
-unsigned Fig_DB_GetFigureFromCache (MYSQL_RES **mysql_res,
-                                    FigCch_FigureCached_t Figure,
-                                    Hie_Level_t HieLvl,long HieCod,
-                                    FigCch_Type_t Type,time_t TimeCached)
+Exi_Exist_t Fig_DB_GetFigureFromCache (MYSQL_RES **mysql_res,
+				       FigCch_FigureCached_t Figure,
+				       Hie_Level_t HieLvl,long HieCod,
+				       FigCch_Type_t Type,time_t TimeCached)
   {
    static const char *Field[FigCch_NUM_TYPES] =
      {
@@ -85,7 +85,7 @@ unsigned Fig_DB_GetFigureFromCache (MYSQL_RES **mysql_res,
       [FigCch_DOUBLE  ] = "ValueDouble",
      };
 
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get cached figure value",
 		   "SELECT %s"		// row[0]
 		    " FROM fig_figures"
@@ -95,5 +95,6 @@ unsigned Fig_DB_GetFigureFromCache (MYSQL_RES **mysql_res,
 		     " AND LastUpdate>FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
 		   Field[Type],
 		   (unsigned) Figure,Hie_GetDBStrFromLevel (HieLvl),HieCod,
-		   TimeCached);
+		   TimeCached) ? Exi_EXISTS :
+				 Exi_DOES_NOT_EXIST;
   }

@@ -991,7 +991,7 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get first click from log table *****/
-      if (Log_DB_GetUsrFirstClick (&mysql_res,UsrCod))
+      if (Log_DB_GetUsrFirstClick (&mysql_res,UsrCod) == Exi_EXISTS)
 	{
 	 /* Get first click */
 	 row = mysql_fetch_row (mysql_res);

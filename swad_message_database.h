@@ -64,9 +64,9 @@ unsigned Msg_DB_GetSntOrRcvMsgs (MYSQL_RES **mysql_res,
                                  const struct Msg_Messages *Messages,
 			         long UsrCod,
 			         const char FilterFromToSubquery[Msg_DB_MAX_BYTES_MESSAGES_QUERY + 1]);
-unsigned Msg_DB_GetSubjectAndContent (MYSQL_RES **mysql_res,long MsgCod);
+Exi_Exist_t Msg_DB_GetSubjectAndContent (MYSQL_RES **mysql_res,long MsgCod);
 void Msg_DB_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
-unsigned Msg_DB_GetMsgContent (MYSQL_RES **mysql_res,long MsgCod);
+Exi_Exist_t Msg_DB_GetMsgContent (MYSQL_RES **mysql_res,long MsgCod);
 unsigned Msg_DB_GetMsgSntData (MYSQL_RES **mysql_res,long MsgCod,bool *Deleted);
 bool Msg_DB_GetStatusOfSntMsg (long MsgCod);
 void Msg_DB_GetStatusOfRcvMsg (long MsgCod,CloOpe_ClosedOrOpen_t *Open,

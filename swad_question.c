@@ -868,13 +868,13 @@ void Qst_ListOneOrMoreQstsForEdition (struct Qst_Questions *Questions,
 	 /***** Create test question *****/
 	 Qst_QstConstructor (&Questions->Question);
 
-	 /***** Get question code (row[0]) *****/
-	 row = mysql_fetch_row (mysql_res);
-	 if ((Questions->Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-	    Err_WrongQuestionExit ();
+	    /***** Get question code (row[0]) *****/
+	    row = mysql_fetch_row (mysql_res);
+	    if ((Questions->Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	       Err_WrongQuestionExit ();
 
-	 /***** Write question row *****/
-	 Qst_WriteQuestionListing (Questions,QstInd);
+	    /***** Write question row *****/
+	    Qst_WriteQuestionListing (Questions,QstInd);
 
 	 /***** Destroy test question *****/
 	 Qst_QstDestructor (&Questions->Question);
@@ -1135,13 +1135,13 @@ void Qst_ListOneOrMoreQstsForSelectionForExamSet (struct Exa_Exams *Exams,
 	       /* Create test question */
 	       Qst_QstConstructor (&Question);
 
-	       /* Get question code (row[0]) */
-	       row = mysql_fetch_row (mysql_res);
-	       if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-		  Err_WrongQuestionExit ();
+		  /* Get question code (row[0]) */
+		  row = mysql_fetch_row (mysql_res);
+		  if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+		     Err_WrongQuestionExit ();
 
-	       /* Write question row */
-	       Qst_WriteQuestionRowForSelection (QstInd,&Question);
+		  /* Write question row */
+		  Qst_WriteQuestionRowForSelection (QstInd,&Question);
 
 	       /* Destroy test question */
 	       Qst_QstDestructor (&Question);
@@ -1215,13 +1215,13 @@ void Qst_ListOneOrMoreQstsForSelectionForGame (struct Gam_Games *Games,
 	       /* Create test question */
 	       Qst_QstConstructor (&Question);
 
-	       /* Get question code (row[0]) */
-	       row = mysql_fetch_row (mysql_res);
-	       if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-		  Err_WrongQuestionExit ();
+		  /* Get question code (row[0]) */
+		  row = mysql_fetch_row (mysql_res);
+		  if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+		     Err_WrongQuestionExit ();
 
-	       /* Write question row */
-	       Qst_WriteQuestionRowForSelection (QstInd,&Question);
+		  /* Write question row */
+		  Qst_WriteQuestionRowForSelection (QstInd,&Question);
 
 	       /* Destroy test question */
 	       Qst_QstDestructor (&Question);
@@ -1808,24 +1808,24 @@ void Qst_ShowFormEditOneQst (void)
    /***** Create test question *****/
    Qst_QstConstructor (&Question);
 
-   /***** Get question data *****/
-   Question.QstCod = ParCod_GetPar (ParCod_Qst);
-   if (Question.QstCod <= 0)	// New question
-      PutFormToEditQuestion = Frm_PUT_FORM;
-   else
-      PutFormToEditQuestion = (Qst_GetQstDataByCod (&Question) == Exi_EXISTS) ? Frm_PUT_FORM :
-									        Frm_DONT_PUT_FORM;
+      /***** Get question data *****/
+      Question.QstCod = ParCod_GetPar (ParCod_Qst);
+      if (Question.QstCod <= 0)	// New question
+	 PutFormToEditQuestion = Frm_PUT_FORM;
+      else
+	 PutFormToEditQuestion = (Qst_GetQstDataByCod (&Question) == Exi_EXISTS) ? Frm_PUT_FORM :
+										   Frm_DONT_PUT_FORM;
 
-   /***** Put form to edit question *****/
-   switch (PutFormToEditQuestion)
-     {
-      case Frm_DONT_PUT_FORM:
-	 Ale_ShowAlert (Ale_WARNING,Txt_Question_removed);
-	 break;
-      case Frm_PUT_FORM:
-         Qst_PutFormEditOneQst (&Question);
-	 break;
-     }
+      /***** Put form to edit question *****/
+      switch (PutFormToEditQuestion)
+	{
+	 case Frm_DONT_PUT_FORM:
+	    Ale_ShowAlert (Ale_WARNING,Txt_Question_removed);
+	    break;
+	 case Frm_PUT_FORM:
+	    Qst_PutFormEditOneQst (&Question);
+	    break;
+	}
 
    /***** Destroy test question *****/
    Qst_QstDestructor (&Question);

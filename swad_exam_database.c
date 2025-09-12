@@ -223,15 +223,16 @@ Exi_Exist_t Exa_DB_GetExamDataByCod (MYSQL_RES **mysql_res,long ExaCod)
 /*********************** Get exam start and end times ************************/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetExamStartEnd (MYSQL_RES **mysql_res,long ExaCod)
+Exi_Exist_t Exa_DB_GetExamStartEnd (MYSQL_RES **mysql_res,long ExaCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get exam data",
 		   "SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
 			  "UNIX_TIMESTAMP(MAX(EndTime))"	// row[1]
 		    " FROM exa_sessions"
 		   " WHERE ExaCod=%ld",
-		   ExaCod);
+		   ExaCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -683,9 +684,9 @@ unsigned Exa_DB_GetExamSets (MYSQL_RES **mysql_res,long ExaCod)
 /*********************** Get set data using its code *************************/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetSetDataByCod (MYSQL_RES **mysql_res,long SetCod)
+Exi_Exist_t Exa_DB_GetSetDataByCod (MYSQL_RES **mysql_res,long SetCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get set data",
 		   "SELECT SetCod,"		// row[0]
 			  "ExaCod,"		// row[1]
@@ -694,7 +695,8 @@ unsigned Exa_DB_GetSetDataByCod (MYSQL_RES **mysql_res,long SetCod)
 			  "Title"		// row[4]
 		    " FROM exa_sets"
 		   " WHERE SetCod=%ld",
-		   SetCod);
+		   SetCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -958,9 +960,9 @@ unsigned Exa_DB_GetSomeQstsFromSetToPrint (MYSQL_RES **mysql_res,
 /********************* Get data from a question in a set *********************/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod)
+Exi_Exist_t Exa_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get a question",
 		   "SELECT Invalid,"	// row[0]
 			  "AnsType,"	// row[1]
@@ -970,36 +972,39 @@ unsigned Exa_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod)
 			  "MedCod"	// row[5]
 		    " FROM exa_set_questions"
 		   " WHERE QstCod=%ld",
-		   QstCod);
+		   QstCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /********** Get validity and answer type from a question in a set ************/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetValidityAndAnswerType (MYSQL_RES **mysql_res,long QstCod)
+Exi_Exist_t Exa_DB_GetValidityAndAnswerType (MYSQL_RES **mysql_res,long QstCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get a question",
 		   "SELECT Invalid,"	// row[0]
 			  "AnsType"	// row[1]
 		    " FROM exa_set_questions"
 		   " WHERE QstCod=%ld",
-		   QstCod);
+		   QstCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /***************** Get answer type from a question in a set ******************/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetAnswerType (MYSQL_RES **mysql_res,long QstCod)
+Exi_Exist_t Exa_DB_GetAnswerType (MYSQL_RES **mysql_res,long QstCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get a question",
 		   "SELECT AnsType"	// row[0]
 		    " FROM exa_set_questions"
 		   " WHERE QstCod=%ld",
-		   QstCod);
+		   QstCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -1495,22 +1500,22 @@ unsigned Exa_DB_GetSessions (MYSQL_RES **mysql_res,long ExaCod)
 /******************* Get exam session data using its code ********************/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetSessionDataByCod (MYSQL_RES **mysql_res,long SesCod)
+Exi_Exist_t Exa_DB_GetSessionDataByCod (MYSQL_RES **mysql_res,long SesCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get sessions",
-		   "SELECT SesCod,"					// row[ 0]
-			  "ExaCod,"					// row[ 1]
-			  "Hidden,"					// row[ 2]
-			  "UsrCod,"					// row[ 3]
-			  "Modality,"					// row[ 4]
-			  "UNIX_TIMESTAMP(StartTime),"			// row[ 5]
-			  "UNIX_TIMESTAMP(EndTime),"			// row[ 6]
-			  "NOW() BETWEEN StartTime AND EndTime,"	// row[ 7]
-			  "Title,"					// row[ 8]
-			  "ShowUsrResults,"				// row[ 9]
-			  "NumCols,"					// row[10]
-			  "ShowPhotos"					// row[11]
+		   "SELECT SesCod,"				// row[ 0]
+			  "ExaCod,"				// row[ 1]
+			  "Hidden,"				// row[ 2]
+			  "UsrCod,"				// row[ 3]
+			  "Modality,"				// row[ 4]
+			  "UNIX_TIMESTAMP(StartTime),"		// row[ 5]
+			  "UNIX_TIMESTAMP(EndTime),"		// row[ 6]
+			  "NOW() BETWEEN StartTime AND EndTime,"// row[ 7]
+			  "Title,"				// row[ 8]
+			  "ShowUsrResults,"			// row[ 9]
+			  "NumCols,"				// row[10]
+			  "ShowPhotos"				// row[11]
 		    " FROM exa_sessions"
 		   " WHERE SesCod=%ld"
 		     " AND ExaCod IN"		// Extra check
@@ -1518,7 +1523,8 @@ unsigned Exa_DB_GetSessionDataByCod (MYSQL_RES **mysql_res,long SesCod)
 			    " FROM exa_exams"
 			   " WHERE CrsCod=%ld)",
 		   SesCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? Exi_EXISTS :
+							 Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -1908,9 +1914,9 @@ void Exa_DB_UpdatePrint (const struct ExaPrn_Print *Print)
 /**************** Get data of an exam print using print code *****************/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetPrintDataByPrnCod (MYSQL_RES **mysql_res,long PrnCod)
+Exi_Exist_t Exa_DB_GetPrintDataByPrnCod (MYSQL_RES **mysql_res,long PrnCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of an exam print",
 		   "SELECT PrnCod,"			// row[0]
 			  "SesCod,"			// row[1]
@@ -1922,17 +1928,18 @@ unsigned Exa_DB_GetPrintDataByPrnCod (MYSQL_RES **mysql_res,long PrnCod)
 			  "Score"			// row[7]
 		    " FROM exa_prints"
 		   " WHERE PrnCod=%ld",
-		   PrnCod);
+		   PrnCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /******** Get data of an exam print using session code and user code *********/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetPrintDataBySesCodAndUsrCod (MYSQL_RES **mysql_res,
-                                               long SesCod,long UsrCod)
+Exi_Exist_t Exa_DB_GetPrintDataBySesCodAndUsrCod (MYSQL_RES **mysql_res,
+                                                  long SesCod,long UsrCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of an exam print",
 		   "SELECT PrnCod,"			// row[0]
 			  "SesCod,"			// row[1]
@@ -1946,7 +1953,8 @@ unsigned Exa_DB_GetPrintDataBySesCodAndUsrCod (MYSQL_RES **mysql_res,
 		   " WHERE SesCod=%ld"
 		     " AND UsrCod=%ld",
 		   SesCod,
-		   UsrCod);
+		   UsrCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

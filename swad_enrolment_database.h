@@ -74,7 +74,7 @@ void Enr_DB_UpdateMyEnrolmentRequestInCurrentCrs (long ReqCod,Rol_Role_t NewRole
 
 unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,
 				      Hie_Level_t HieLvl,unsigned RolesSelected);
-unsigned Enr_DB_GetEnrolmentRequestByCod (MYSQL_RES **mysql_res,long ReqCod);
+Exi_Exist_t Enr_DB_GetEnrolmentRequestByCod (MYSQL_RES **mysql_res,long ReqCod);
 long Enr_DB_GetUsrEnrolmentRequestInCrs (long UsrCod,long HieCod);
 
 void Enr_DB_RemRequest (long ReqCod);

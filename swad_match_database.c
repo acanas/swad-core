@@ -170,9 +170,9 @@ void Mch_DB_UpdateVisResultsMchUsr (long MchCod,bool ShowUsrResults)
 /********************** Get match data using its code ************************/
 /*****************************************************************************/
 
-unsigned Mch_DB_GetMatchDataByCod (MYSQL_RES **mysql_res,long MchCod)
+Exi_Exist_t Mch_DB_GetMatchDataByCod (MYSQL_RES **mysql_res,long MchCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get matches",
 		   "SELECT MchCod,"			// row[ 0]
 			  "GamCod,"			// row[ 1]
@@ -194,22 +194,24 @@ unsigned Mch_DB_GetMatchDataByCod (MYSQL_RES **mysql_res,long MchCod)
 		            " FROM gam_games"
 		           " WHERE CrsCod=%ld)",
 		 MchCod,
-		 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		 Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? Exi_EXISTS :
+						       Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /********* Get start of first match and end of last match in a game **********/
 /*****************************************************************************/
 
-unsigned Mch_DB_GetStartEndMatchesInGame (MYSQL_RES **mysql_res,long GamCod)
+Exi_Exist_t Mch_DB_GetStartEndMatchesInGame (MYSQL_RES **mysql_res,long GamCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get game data",
 		   "SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
 			  "UNIX_TIMESTAMP(MAX(EndTime))"	// row[1]
 		   " FROM mch_matches"
 		   " WHERE GamCod=%ld",
-		   GamCod);
+		   GamCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -684,10 +686,10 @@ void Mch_DB_UpdateIndexesOfQstsGreaterThan (long GamCod,unsigned QstInd)
 /******************** Get user's answer to a match question ******************/
 /*****************************************************************************/
 
-unsigned Mch_DB_GetUsrAnsToQst (MYSQL_RES **mysql_res,
-                                long MchCod,long UsrCod,unsigned QstInd)
+Exi_Exist_t Mch_DB_GetUsrAnsToQst (MYSQL_RES **mysql_res,
+                                   long MchCod,long UsrCod,unsigned QstInd)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get user's answer to a match question",
 		   "SELECT NumOpt,"	// row[0]
 			  "AnsInd"	// row[1]
@@ -697,7 +699,8 @@ unsigned Mch_DB_GetUsrAnsToQst (MYSQL_RES **mysql_res,
 		     " AND QstInd=%u",
 		   MchCod,
 		   UsrCod,
-		   QstInd);
+		   QstInd) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -920,31 +923,33 @@ void Mch_DB_UpdateElapsedTimeInQuestion (long MchCod,long QstInd)
 /******************* Get elapsed time in a match question ********************/
 /*****************************************************************************/
 
-unsigned Mch_DB_GetElapsedTimeInQuestion (MYSQL_RES **mysql_res,
-					  long MchCod,unsigned QstInd)
+Exi_Exist_t Mch_DB_GetElapsedTimeInQuestion (MYSQL_RES **mysql_res,
+					     long MchCod,unsigned QstInd)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get elapsed time",
 		   "SELECT ElapsedTime"	// row[0]
 		    " FROM mch_times"
 		   " WHERE MchCod=%ld"
 		     " AND QstInd=%u",
 		   MchCod,
-		   QstInd);
+		   QstInd) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /*********************** Get elapsed time in a match *************************/
 /*****************************************************************************/
 
-unsigned Mch_DB_GetElapsedTimeInMatch (MYSQL_RES **mysql_res,long MchCod)
+Exi_Exist_t Mch_DB_GetElapsedTimeInMatch (MYSQL_RES **mysql_res,long MchCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get elapsed time",
 		   "SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(ElapsedTime)))"	// row[0]
 		    " FROM mch_times"
 		   " WHERE MchCod=%ld",
-		   MchCod);
+		   MchCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -1021,10 +1026,10 @@ Exi_Exist_t Mch_DB_CheckIfMatchPrintExists (const struct MchPrn_Print *Print)
 /********* Get data of a match print using match code and user code **********/
 /*****************************************************************************/
 
-unsigned Mch_DB_GetMatchPrintData (MYSQL_RES **mysql_res,
-                                   const struct MchPrn_Print *Print)
+Exi_Exist_t Mch_DB_GetMatchPrintData (MYSQL_RES **mysql_res,
+                                      const struct MchPrn_Print *Print)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of a match print",
 		   "SELECT UNIX_TIMESTAMP(mch_results.StartTime),"	// row[1]
 			  "UNIX_TIMESTAMP(mch_results.EndTime),"	// row[2]
@@ -1041,7 +1046,8 @@ unsigned Mch_DB_GetMatchPrintData (MYSQL_RES **mysql_res,
 		     " AND gam_games.CrsCod=%ld",		// Extra check
 		   Print->MchCod,
 		   Print->UsrCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? Exi_EXISTS :
+							 Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

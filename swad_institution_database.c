@@ -169,11 +169,11 @@ void Ins_DB_GetInsShrtName (long HieCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 
 /******** Get short name and country of an institution from its code *********/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetInsShrtNameAndCty (MYSQL_RES **mysql_res,long InsCod)
+Exi_Exist_t Ins_DB_GetInsShrtNameAndCty (MYSQL_RES **mysql_res,long InsCod)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get short name and country"
 			    " of an institution",
 		   "SELECT ins_instits.ShortName,"	// row[0]
@@ -183,7 +183,8 @@ unsigned Ins_DB_GetInsShrtNameAndCty (MYSQL_RES **mysql_res,long InsCod)
 		   " WHERE ins_instits.InsCod=%ld"
 		     " AND ins_instits.CtyCod=cty_countrs.CtyCod",
 		   Lan_STR_LANG_ID[Gbl.Prefs.Language],
-		   InsCod);
+		   InsCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

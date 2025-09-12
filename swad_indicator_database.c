@@ -56,16 +56,16 @@ void Ind_DB_StoreIndicatorsCrs (long CrsCod,unsigned NumIndicators)
 /*****************************************************************************/
 /************ Get number of indicators of a course from database *************/
 /*****************************************************************************/
-// This function returns -1 if number of indicators is not yet calculated
 
-unsigned Ind_DB_GetNumIndicatorsCrs (MYSQL_RES **mysql_res,long CrsCod)
+Exi_Exist_t Ind_DB_GetNumIndicatorsCrs (MYSQL_RES **mysql_res,long CrsCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get number of indicators",
 		   "SELECT NumIndicators"	// row[0]
 		    " FROM crs_courses"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   CrsCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

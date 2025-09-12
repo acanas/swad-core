@@ -101,7 +101,8 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
       return false;
 
    /***** Get figure's value if cached and recent *****/
-   if (Fig_DB_GetFigureFromCache (&mysql_res,Figure,HieLvl,HieCod,Type,TimeCached[HieLvl]))
+   if (Fig_DB_GetFigureFromCache (&mysql_res,Figure,HieLvl,HieCod,
+				  Type,TimeCached[HieLvl]) == Exi_EXISTS)
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);

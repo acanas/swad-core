@@ -607,7 +607,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 		  if (!SubjectAndContentComeFromForm)
 		    {
 		     /* Get subject and content of message from database */
-		     if (Msg_DB_GetSubjectAndContent (&mysql_res,MsgCod) != 1)
+		     if (Msg_DB_GetSubjectAndContent (&mysql_res,MsgCod) == Exi_DOES_NOT_EXIST)
 			Err_WrongMessageExit ();
 
 		     row = mysql_fetch_row (mysql_res);
@@ -1968,7 +1968,7 @@ static void Msg_GetMsgContent (long MsgCod,
    MYSQL_ROW row;
 
    /***** Get content of message from database *****/
-   if (Msg_DB_GetMsgContent (&mysql_res,MsgCod) != 1)
+   if (Msg_DB_GetMsgContent (&mysql_res,MsgCod) == Exi_EXISTS)
       Err_WrongMessageExit ();
 
    /***** Get number of rows *****/
@@ -2212,7 +2212,7 @@ void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Get subject of message from database *****/
-   if (Msg_DB_GetSubjectAndContent (&mysql_res,MsgCod) == 1)	// Result should have a unique row
+   if (Msg_DB_GetSubjectAndContent (&mysql_res,MsgCod) == Exi_EXISTS)
      {
       /***** Get subject and content of the message *****/
       row = mysql_fetch_row (mysql_res);

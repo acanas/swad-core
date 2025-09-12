@@ -1022,7 +1022,7 @@ void Gam_GetGameDataByCod (struct Gam_Game *Game)
    if (Game->GamCod > 0)
      {
       /***** Get start and end times from database *****/
-      if (Mch_DB_GetStartEndMatchesInGame (&mysql_res,Game->GamCod))
+      if (Mch_DB_GetStartEndMatchesInGame (&mysql_res,Game->GamCod) == Exi_EXISTS)
 	{
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);
@@ -1738,78 +1738,78 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	 /***** Create test question *****/
 	 Qst_QstConstructor (&Question);
 
-	 /***** Get question data *****/
-	 row = mysql_fetch_row (mysql_res);
-	 /*
-	 row[0] QstCod
-	 row[1] QstInd
-	 */
-	 /* Get question code (row[0]) */
-	 Question.QstCod = Str_ConvertStrCodToLongCod (row[0]);
+	    /***** Get question data *****/
+	    row = mysql_fetch_row (mysql_res);
+	    /*
+	    row[0] QstCod
+	    row[1] QstInd
+	    */
+	    /* Get question code (row[0]) */
+	    Question.QstCod = Str_ConvertStrCodToLongCod (row[0]);
 
-	 /* Get question index (row[1]) */
-	 QstInd = Str_ConvertStrToUnsigned (row[1]);
-	 snprintf (StrQstInd,sizeof (StrQstInd),"%u",QstInd);
+	    /* Get question index (row[1]) */
+	    QstInd = Str_ConvertStrToUnsigned (row[1]);
+	    snprintf (StrQstInd,sizeof (StrQstInd),"%u",QstInd);
 
-	 /* Initialize context */
-	 Games->QstInd = QstInd;
+	    /* Initialize context */
+	    Games->QstInd = QstInd;
 
-	 /***** Build anchor string *****/
-	 Frm_SetAnchorStr (Question.QstCod,&Anchor);
+	    /***** Build anchor string *****/
+	    Frm_SetAnchorStr (Question.QstCod,&Anchor);
 
-	 /***** Begin row *****/
-	 HTM_TR_Begin (NULL);
+	    /***** Begin row *****/
+	    HTM_TR_Begin (NULL);
 
-	    /***** Icons *****/
-	    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
+	       /***** Icons *****/
+	       HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
 
-	       /* Put icon to remove the question */
-	       switch (ICanEditQuestions)
-		 {
-		  case Usr_CAN:
-		     Ico_PutContextualIconToRemove (ActReqRemGamQst,NULL,
-						    Gam_PutParsOneQst,Games);
-		     break;
-		  case Usr_CAN_NOT:
-		  default:
-		     Ico_PutIconRemovalNotAllowed ();
-		     break;
-		 }
+		  /* Put icon to remove the question */
+		  switch (ICanEditQuestions)
+		    {
+		     case Usr_CAN:
+			Ico_PutContextualIconToRemove (ActReqRemGamQst,NULL,
+						       Gam_PutParsOneQst,Games);
+			break;
+		     case Usr_CAN_NOT:
+		     default:
+			Ico_PutIconRemovalNotAllowed ();
+			break;
+		    }
 
-	       /* Put icon to move up the question */
-	       if (ICanEditQuestions == Usr_CAN && QstInd > 1)
-		  Lay_PutContextualLinkOnlyIcon (ActUp_GamQst,Anchor,
-						 Gam_PutParsOneQst,Games,
-						 "arrow-up.svg",Ico_BLACK);
-	       else
-		  Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,
-		                  Txt_Movement_not_allowed);
+		  /* Put icon to move up the question */
+		  if (ICanEditQuestions == Usr_CAN && QstInd > 1)
+		     Lay_PutContextualLinkOnlyIcon (ActUp_GamQst,Anchor,
+						    Gam_PutParsOneQst,Games,
+						    "arrow-up.svg",Ico_BLACK);
+		  else
+		     Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,
+				     Txt_Movement_not_allowed);
 
-	       /* Put icon to move down the question */
-	       if (ICanEditQuestions == Usr_CAN && QstInd < MaxQstInd)
-		  Lay_PutContextualLinkOnlyIcon (ActDwnGamQst,Anchor,
-						 Gam_PutParsOneQst,Games,
-						 "arrow-down.svg",Ico_BLACK);
-	       else
-		  Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,
-		                  Txt_Movement_not_allowed);
+		  /* Put icon to move down the question */
+		  if (ICanEditQuestions == Usr_CAN && QstInd < MaxQstInd)
+		     Lay_PutContextualLinkOnlyIcon (ActDwnGamQst,Anchor,
+						    Gam_PutParsOneQst,Games,
+						    "arrow-down.svg",Ico_BLACK);
+		  else
+		     Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,
+				     Txt_Movement_not_allowed);
 
-	       /* Put icon to edit the question */
-	       if (ICanEditQuestions == Usr_CAN)
-		  Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
-					       Qst_PutParQstCod,&Question.QstCod);
+		  /* Put icon to edit the question */
+		  if (ICanEditQuestions == Usr_CAN)
+		     Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
+						  Qst_PutParQstCod,&Question.QstCod);
 
-	    HTM_TD_End ();
+	       HTM_TD_End ();
 
-	    /***** Question *****/
-	    QuestionExists = Qst_GetQstDataByCod (&Question);
-	    Qst_ListQuestionForEdition (&Question,QstInd,QuestionExists,Anchor);
+	       /***** Question *****/
+	       QuestionExists = Qst_GetQstDataByCod (&Question);
+	       Qst_ListQuestionForEdition (&Question,QstInd,QuestionExists,Anchor);
 
-	 /***** End row *****/
-	 HTM_TR_End ();
+	    /***** End row *****/
+	    HTM_TR_End ();
 
-	 /***** Free anchor string *****/
-	 Frm_FreeAnchorStr (&Anchor);
+	    /***** Free anchor string *****/
+	    Frm_FreeAnchorStr (&Anchor);
 
 	 /***** Destroy test question *****/
 	 Qst_QstDestructor (&Question);

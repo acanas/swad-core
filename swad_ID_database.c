@@ -75,7 +75,7 @@ unsigned ID_DB_GetIDsFromUsrCod (MYSQL_RES **mysql_res,long UsrCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get user's IDs",
-		   "SELECT UsrID,"		// row[0]
+		   "SELECT UsrID,"	// row[0]
 			  "Confirmed"	// row[1]
 		    " FROM usr_ids"
 		   " WHERE UsrCod=%ld"

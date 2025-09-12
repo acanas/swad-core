@@ -181,14 +181,15 @@ unsigned Log_DB_GetLastClicks (MYSQL_RES **mysql_res)
 /*** Get first click of a user from log table and store in user's figures ****/
 /*****************************************************************************/
 
-unsigned Log_DB_GetUsrFirstClick (MYSQL_RES **mysql_res,long UsrCod)
+Exi_Exist_t Log_DB_GetUsrFirstClick (MYSQL_RES **mysql_res,long UsrCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get user's first click",
 		   "SELECT UNIX_TIMESTAMP((SELECT MIN(ClickTime)"
 					   " FROM log"
 					  " WHERE UsrCod=%ld))",
-		   UsrCod);
+		   UsrCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -232,10 +233,10 @@ unsigned Log_DB_GetMyClicksGroupedByAction (MYSQL_RES **mysql_res,
 /************ Get my maximum number of hits per course-year-role ************/
 /*****************************************************************************/
 
-unsigned Log_DB_GetMyMaxHitsPerYear (MYSQL_RES **mysql_res,
-                                     time_t FirstClickTimeUTC)
+Exi_Exist_t Log_DB_GetMyMaxHitsPerYear (MYSQL_RES **mysql_res,
+                                        time_t FirstClickTimeUTC)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get last question index",
 		   "SELECT MAX(N) FROM ("
 		   // Clicks without course selected --------------------------
@@ -272,7 +273,8 @@ unsigned Log_DB_GetMyMaxHitsPerYear (MYSQL_RES **mysql_res,
 		   (long) FirstClickTimeUTC,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) Rol_STD,
-		   (unsigned) Rol_TCH);
+		   (unsigned) Rol_TCH) ? Exi_EXISTS :
+					 Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

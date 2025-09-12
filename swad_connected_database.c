@@ -56,8 +56,8 @@ unsigned Con_DB_GetConnectedUsrsTotal (Rol_Role_t Role)
 /***************** Get connected users belonging to a scope ******************/
 /*****************************************************************************/
 
-unsigned Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
-				 Hie_Level_t HieLvl,Rol_Role_t Role)
+Exi_Exist_t Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
+				    Hie_Level_t HieLvl,Rol_Role_t Role)
   {
    /***** Get number of connected users who belong to current course from database *****/
    switch (Role)
@@ -66,7 +66,7 @@ unsigned Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
 	 switch (HieLvl)
 	   {
 	    case Hie_SYS:		// Get connected users in the whole platform
-	       return (unsigned)
+	       return
 	       DB_QuerySELECT (mysql_res,"can not get number"
 			                  " of connected users"
 					  " who belong to this location",
@@ -75,9 +75,10 @@ unsigned Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
 			              "MIN(usr_data.Sex)"			// row[2]
 			        " FROM usr_connected,"
 			              "usr_data"
-			       " WHERE usr_connected.UsrCod=usr_data.UsrCod");
+			       " WHERE usr_connected.UsrCod=usr_data.UsrCod") ? Exi_EXISTS :
+									        Exi_DOES_NOT_EXIST;
 	    case Hie_CTY:		// Get connected users in the current country
-	       return (unsigned)
+	       return
 	       DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -98,9 +99,10 @@ unsigned Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
 			         " AND crs_courses.CrsCod=crs_users.CrsCod"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+			       Gbl.Hierarchy.Node[Hie_CTY].HieCod) ? Exi_EXISTS :
+								     Exi_DOES_NOT_EXIST;
 	    case Hie_INS:		// Get connected users in the current institution
-	       return (unsigned)
+	       return
 	       DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -119,9 +121,10 @@ unsigned Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
 			         " AND crs_courses.CrsCod=crs_users.CrsCod"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[Hie_INS].HieCod);
+			       Gbl.Hierarchy.Node[Hie_INS].HieCod) ? Exi_EXISTS :
+								     Exi_DOES_NOT_EXIST;
 	    case Hie_CTR:		// Get connected users in the current center
-	       return (unsigned)
+	       return
 	       DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -138,9 +141,10 @@ unsigned Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
 			         " AND crs_courses.CrsCod=crs_users.CrsCod"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+			       Gbl.Hierarchy.Node[Hie_CTR].HieCod) ? Exi_EXISTS :
+								     Exi_DOES_NOT_EXIST;
 	    case Hie_DEG:		// Get connected users in the current degree
-	       return (unsigned)
+	       return
 	       DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -155,9 +159,10 @@ unsigned Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
 			         " AND crs_courses.CrsCod=crs_users.CrsCod"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+			       Gbl.Hierarchy.Node[Hie_DEG].HieCod) ? Exi_EXISTS :
+								     Exi_DOES_NOT_EXIST;
 	    case Hie_CRS:		// Get connected users in the current course
-	       return (unsigned)
+	       return
 	       DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -170,13 +175,14 @@ unsigned Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
 			       " WHERE crs_users.CrsCod=%ld"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			       Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? Exi_EXISTS :
+								     Exi_DOES_NOT_EXIST;
 	    default:
 	       Err_WrongHierarchyLevelExit ();
 	   }
-	 return 0;	// Not reached
+	 return Exi_DOES_NOT_EXIST;	// Not reached
       case Rol_GST:
-	 return (unsigned)
+	 return
 	 DB_QuerySELECT (mysql_res,"can not get number"
 				    " of connected users"
 				    " who belong to this location",
@@ -188,14 +194,15 @@ unsigned Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
 			 " WHERE usr_connected.UsrCod NOT IN"
 			       " (SELECT UsrCod"
 			          " FROM crs_users)"
-			   " AND usr_connected.UsrCod=usr_data.UsrCod");
+			   " AND usr_connected.UsrCod=usr_data.UsrCod") ? Exi_EXISTS :
+								          Exi_DOES_NOT_EXIST;
       case Rol_STD:
       case Rol_NET:
       case Rol_TCH:
 	 switch (HieLvl)
 	   {
 	    case Hie_SYS:		// Get connected users in the whole platform
-	       	return (unsigned)
+	       	return
 	        DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -208,9 +215,10 @@ unsigned Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
 			        " WHERE usr_connected.UsrCod=crs_users.UsrCod"
 			          " AND crs_users.Role=%u"
 			          " AND usr_connected.UsrCod=usr_data.UsrCod",
-			        (unsigned) Role);
+			        (unsigned) Role) ? Exi_EXISTS :
+						   Exi_DOES_NOT_EXIST;
 	    case Hie_CTY:		// Get connected users in the current country
-	       return (unsigned)
+	       return
 	       DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -233,9 +241,10 @@ unsigned Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Node[Hie_CTY].HieCod,
-			       (unsigned) Role);
+			       (unsigned) Role) ? Exi_EXISTS :
+						  Exi_DOES_NOT_EXIST;
 	    case Hie_INS:		// Get connected users in the current institution
-	       return (unsigned)
+	       return
 	       DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -256,9 +265,10 @@ unsigned Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Node[Hie_INS].HieCod,
-			       (unsigned) Role);
+			       (unsigned) Role) ? Exi_EXISTS :
+						  Exi_DOES_NOT_EXIST;
 	    case Hie_CTR:		// Get connected users in the current center
-	       return (unsigned)
+	       return
 	       DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -277,9 +287,10 @@ unsigned Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-			       (unsigned) Role);
+			       (unsigned) Role) ? Exi_EXISTS :
+						  Exi_DOES_NOT_EXIST;
 	    case Hie_DEG:		// Get connected users in the current degree
-	       return (unsigned)
+	       return
 	       DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -296,9 +307,10 @@ unsigned Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-			       (unsigned) Role);
+			       (unsigned) Role) ? Exi_EXISTS :
+						  Exi_DOES_NOT_EXIST;
 	    case Hie_CRS:		// Get connected users in the current course
-	       return (unsigned)
+	       return
 	       DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -313,14 +325,15 @@ unsigned Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-			       (unsigned) Role);
+			       (unsigned) Role) ? Exi_EXISTS :
+						  Exi_DOES_NOT_EXIST;
 	    default:
 	       Err_WrongHierarchyLevelExit ();
 	   }
-	 return 0;	// Not reached
+	 return Exi_DOES_NOT_EXIST;	// Not reached
       default:
 	 Err_WrongRoleExit ();
-	 return 0;	// Not reached
+	 return Exi_DOES_NOT_EXIST;	// Not reached
      }
   }
 

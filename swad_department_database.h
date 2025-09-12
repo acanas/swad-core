@@ -44,6 +44,8 @@ Exi_Exist_t Dpt_DB_GetDepartmentDataByCod (MYSQL_RES **mysql_res,long DptCod);
 Exi_Exist_t Dpt_DB_CheckIfDepartmentNameExists (const char *FldName,const char *Name,long Cod,
 						__attribute__((unused)) long PrtCod,
 						__attribute__((unused)) unsigned Year);
+
+unsigned Dpt_DB_GetTotalNumberOfDepartments (void);
 unsigned Dpt_DB_GetNumDepartmentsInInstitution (long InsCod);
 unsigned Dpt_DB_GetNumTchsCurrentInsInDepartment (long DptCod);
 

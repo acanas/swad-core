@@ -40,18 +40,18 @@ Inf_Type_t Inf_DB_ConvertFromStrDBToInfoType (const char *StrInfoTypeDB);
 
 //------------------------------ Info source ----------------------------------
 void Inf_DB_SetInfoSrc (Inf_Type_t InfoType,Inf_Src_t InfoSrc);
-unsigned Inf_DB_GetInfoSrc (MYSQL_RES **mysql_res,
-                            long CrsCod,Inf_Type_t InfoType);
-unsigned Inf_DB_GetInfoSrcAndMustBeRead (MYSQL_RES **mysql_res,
-                                         long CrsCod,Inf_Type_t InfoType);
+Exi_Exist_t Inf_DB_GetInfoSrc (MYSQL_RES **mysql_res,
+                               long CrsCod,Inf_Type_t InfoType);
+Exi_Exist_t Inf_DB_GetInfoSrcAndMustBeRead (MYSQL_RES **mysql_res,
+                                            long CrsCod,Inf_Type_t InfoType);
 Inf_Src_t Inf_DB_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB);
 
 //------------------------------- Info text -----------------------------------
 void Inf_DB_SetInfoTxt (Inf_Type_t InfoType,
 			const char *InfoTxtHTML,const char *InfoTxtMD);
 
-unsigned Inf_DB_GetInfoTxt (MYSQL_RES **mysql_res,
-                            long CrsCod,Inf_Type_t InfoType);
+Exi_Exist_t Inf_DB_GetInfoTxt (MYSQL_RES **mysql_res,
+                               long CrsCod,Inf_Type_t InfoType);
 
 //------------------------- Info read by students? ----------------------------
 void Inf_DB_SetForceRead (Inf_Type_t InfoType,bool MustBeRead);

@@ -1085,7 +1085,7 @@ int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
    int NumIndicatorsFromDB = -1;	// -1 means not yet calculated
 
    /***** Get number of indicators of a course from database *****/
-   if (Ind_DB_GetNumIndicatorsCrs (&mysql_res,CrsCod))
+   if (Ind_DB_GetNumIndicatorsCrs (&mysql_res,CrsCod) == Exi_EXISTS)
      {
       /***** Get row *****/
       row = mysql_fetch_row (mysql_res);

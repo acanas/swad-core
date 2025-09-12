@@ -1593,20 +1593,22 @@ void Deg_GetUsrMainDeg (long UsrCod,
    MYSQL_ROW row;
 
    /***** Get the degree in which a user is enroled in more courses *****/
-   if (Deg_DB_GetUsrMainDeg (&mysql_res,UsrCod))
+   switch (Deg_DB_GetUsrMainDeg (&mysql_res,UsrCod))
      {
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get degree name (row[0]) */
-      Str_Copy (ShrtName,row[0],Nam_MAX_BYTES_SHRT_NAME);
+	 /* Get degree name (row[0]) */
+	 Str_Copy (ShrtName,row[0],Nam_MAX_BYTES_SHRT_NAME);
 
-      /* Get maximum role (row[1]) */
-      *MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
-     }
-   else	// User is not enroled in any course
-     {
-      ShrtName[0] = '\0';
-      *MaxRole = Rol_UNK;
+	 /* Get maximum role (row[1]) */
+	 *MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+	 break;
+      case Exi_DOES_NOT_EXIST:	// User is not enroled in any course
+      default:
+	 ShrtName[0] = '\0';
+	 *MaxRole = Rol_UNK;
+	 break;
      }
 
    /***** Free structure that stores the query result *****/

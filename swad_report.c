@@ -862,7 +862,8 @@ static void Rep_GetMaxHitsPerYear (struct Rep_Report *Report)
    Report->MaxHitsPerYear = 0;
 
    /***** Get the maximum number of hits per year *****/
-   if (Log_DB_GetMyMaxHitsPerYear (&mysql_res,Report->UsrFigures.FirstClickTimeUTC))
+   if (Log_DB_GetMyMaxHitsPerYear (&mysql_res,
+				   Report->UsrFigures.FirstClickTimeUTC) == Exi_EXISTS)
      {
       row = mysql_fetch_row (mysql_res);
       if (row[0])	// There are questions

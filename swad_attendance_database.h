@@ -67,7 +67,8 @@ unsigned Att_DB_GetNumStdsTotalWhoAreInEvent (long AttCod);
 unsigned Att_DB_GetNumStdsFromListWhoAreInEvent (long AttCod,const char *SubQueryUsrs);
 bool Att_DB_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,
 				       Att_AbsentOrPresent_t *Present);
-unsigned Att_DB_GetPresentAndComments (MYSQL_RES **mysql_res,long AttCod,long UsrCod);
+Exi_Exist_t Att_DB_GetPresentAndComments (MYSQL_RES **mysql_res,
+					  long AttCod,long UsrCod);
 unsigned Att_DB_GetListUsrsInEvent (MYSQL_RES **mysql_res,
                                     long AttCod,bool AttEventIsAsociatedToGrps);
 void Att_DB_RegUsrInEventChangingComments (long AttCod,long UsrCod,
@@ -91,6 +92,6 @@ void Att_DB_RemoveCrsEvents (long HieCod);
 unsigned Att_DB_GetNumEventsInCrs (long HieCod);
 unsigned Att_DB_GetNumCoursesWithEvents (Hie_Level_t HieLvl);
 
-unsigned Att_DB_GetNumEvents (MYSQL_RES **mysql_res,Hie_Level_t HieLvl);
+Exi_Exist_t Att_DB_GetNumEvents (MYSQL_RES **mysql_res,Hie_Level_t HieLvl);
 
 #endif

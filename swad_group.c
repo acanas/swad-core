@@ -3219,7 +3219,8 @@ void Grp_GetGroupTypeDataByCod (struct GroupType *GrpTyp)
    if (GrpTyp->GrpTypCod > 0)
      {
       /***** Get data of a type of group from database *****/
-      if (Grp_DB_GetGroupTypeData (&mysql_res,GrpTyp->GrpTypCod) != 1)
+      if (Grp_DB_GetGroupTypeDataFromGrpTypCod (&mysql_res,
+						GrpTyp->GrpTypCod) == Exi_DOES_NOT_EXIST)
 	 Err_WrongGrpTypExit ();
 
       /***** Get some data of group type *****/
@@ -3255,7 +3256,7 @@ static Grp_SingleOrMultiple_t Grp_GetSingleMultiple (long GrpTypCod)
    Grp_SingleOrMultiple_t SingleMultiple;
 
    /***** Get data of a type of group from database *****/
-   if (Grp_DB_GetSingleMultiple (&mysql_res,GrpTypCod) != 1)
+   if (Grp_DB_GetSingleMultiple (&mysql_res,GrpTypCod) == Exi_DOES_NOT_EXIST)
       Err_ShowErrorAndExit ("Error when getting type of enrolment.");
 
    /***** Get multiple enrolment *****/
@@ -3279,7 +3280,7 @@ Grp_HasFileZones_t Grp_GetFileZones (long GrpCod)
    Grp_HasFileZones_t HasFileZones;
 
    /***** Get data of a group from database *****/
-   if (Grp_DB_GetFileZones (&mysql_res,GrpCod) != 1)
+   if (Grp_DB_GetFileZones (&mysql_res,GrpCod) == Exi_DOES_NOT_EXIST)
       Err_ShowErrorAndExit ("Error when getting file zones.");
 
    /***** Get file zones *****/

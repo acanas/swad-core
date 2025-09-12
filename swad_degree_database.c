@@ -799,9 +799,9 @@ unsigned Deg_DB_GetMyDegs (MYSQL_RES **mysql_res,long PrtCod)
 /********* Get the degree in which a user is enroled in more courses *********/
 /*****************************************************************************/
 
-unsigned Deg_DB_GetUsrMainDeg (MYSQL_RES **mysql_res,long UsrCod)
+Exi_Exist_t Deg_DB_GetUsrMainDeg (MYSQL_RES **mysql_res,long UsrCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get user's main degree",
 		   "SELECT deg_degrees.ShortName,"	// row[0]
 			  "main_degree.MaxRole"		// row[1]
@@ -821,7 +821,8 @@ unsigned Deg_DB_GetUsrMainDeg (MYSQL_RES **mysql_res,long UsrCod)
 			" AS main_degree"
 
 		 " WHERE deg_degrees.DegCod=main_degree.DegCod",
-		 UsrCod);
+		 UsrCod) ? Exi_EXISTS :
+			   Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

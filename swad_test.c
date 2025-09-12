@@ -605,46 +605,46 @@ static void Tst_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQuesti
    Qst_QstConstructor (&Question);
    Question.QstCod = PrintedQuestion->QstCod;
 
-   /***** Get answers of question from database *****/
-   Question.Answer.NumOptions = Qst_DB_GetAnswersData (&mysql_res,Question.QstCod,
-						       Shuffle);
-   /*
-   row[0] AnsInd
-   row[1] Answer
-   row[2] Feedback
-   row[3] MedCod
-   row[4] Correct
-   */
+      /***** Get answers of question from database *****/
+      Question.Answer.NumOptions = Qst_DB_GetAnswersData (&mysql_res,Question.QstCod,
+							  Shuffle);
+      /*
+      row[0] AnsInd
+      row[1] Answer
+      row[2] Feedback
+      row[3] MedCod
+      row[4] Correct
+      */
 
-   for (NumOpt = 0;
-	NumOpt < Question.Answer.NumOptions;
-	NumOpt++)
-     {
-      /***** Get next answer *****/
-      row = mysql_fetch_row (mysql_res);
+      for (NumOpt = 0;
+	   NumOpt < Question.Answer.NumOptions;
+	   NumOpt++)
+	{
+	 /***** Get next answer *****/
+	 row = mysql_fetch_row (mysql_res);
 
-      /***** Assign index (row[0]).
-             Index is 0,1,2,3... if no shuffle
-             or 1,3,0,2... (example) if shuffle *****/
-      ErrorInIndex = false;
-      if (sscanf (row[0],"%u",&Index) == 1)
-        {
-         if (Index >= Qst_MAX_OPTIONS_PER_QUESTION)
-            ErrorInIndex = true;
-        }
-      else
-         ErrorInIndex = true;
-      if (ErrorInIndex)
-         Err_WrongAnswerIndexExit ();
+	 /***** Assign index (row[0]).
+		Index is 0,1,2,3... if no shuffle
+		or 1,3,0,2... (example) if shuffle *****/
+	 ErrorInIndex = false;
+	 if (sscanf (row[0],"%u",&Index) == 1)
+	   {
+	    if (Index >= Qst_MAX_OPTIONS_PER_QUESTION)
+	       ErrorInIndex = true;
+	   }
+	 else
+	    ErrorInIndex = true;
+	 if (ErrorInIndex)
+	    Err_WrongAnswerIndexExit ();
 
-      snprintf (StrInd,sizeof (StrInd),NumOpt ? ",%u" :
-						"%u",Index);
-      Str_Concat (PrintedQuestion->StrIndexes,StrInd,
-                  sizeof (PrintedQuestion->StrIndexes) - 1);
-     }
+	 snprintf (StrInd,sizeof (StrInd),NumOpt ? ",%u" :
+						   "%u",Index);
+	 Str_Concat (PrintedQuestion->StrIndexes,StrInd,
+		     sizeof (PrintedQuestion->StrIndexes) - 1);
+	}
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
 
    /***** Destroy test question *****/
    Qst_QstDestructor (&Question);

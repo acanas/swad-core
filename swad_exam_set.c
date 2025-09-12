@@ -162,13 +162,19 @@ void ExaSet_GetSetDataByCod (struct ExaSet_Set *Set)
      }
 
    /***** Get data of set of questions from database *****/
-   if (Exa_DB_GetSetDataByCod (&mysql_res,Set->SetCod)) // Set found...
-      ExaSet_GetSetDataFromRow (mysql_res,Set);
-   else
-      /* Initialize to empty set */
-      ExaSet_ResetSet (Set);
+   switch (Exa_DB_GetSetDataByCod (&mysql_res,Set->SetCod))
+     {
+      case Exi_EXISTS:
+	 ExaSet_GetSetDataFromRow (mysql_res,Set);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 /* Initialize to empty set */
+	 ExaSet_ResetSet (Set);
+	 break;
+     }
 
-   /* Free structure that stores the query result */
+   /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
   }
 
@@ -826,49 +832,49 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 	 /***** Create test question *****/
 	 Qst_QstConstructor (&Question);
 
-	 /***** Get question data *****/
-	 /* Get question code */
-	 Exams->QstCod = Question.QstCod = DB_GetNextCode (mysql_res);
-	 ExaSet_GetQstDataFromDB (&Question);
+	    /***** Get question data *****/
+	    /* Get question code */
+	    Exams->QstCod = Question.QstCod = DB_GetNextCode (mysql_res);
+	    ExaSet_GetQstDataFromDB (&Question);
 
-	 /***** Build anchor string *****/
-	 Frm_SetAnchorStr (Exams->QstCod,&Anchor);
+	    /***** Build anchor string *****/
+	    Frm_SetAnchorStr (Exams->QstCod,&Anchor);
 
-	 /***** Begin row *****/
-	 HTM_TR_Begin (NULL);
+	    /***** Begin row *****/
+	    HTM_TR_Begin (NULL);
 
-	    /***** Icons *****/
-	    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
+	       /***** Icons *****/
+	       HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
 
-	       /* Put icon to remove the question */
-	       switch (ICanEditQuestions)
-		 {
-		  case Usr_CAN:
-		     Ico_PutContextualIconToRemove (ActReqRemSetQst,NULL,
-						    ExaSet_PutParsOneQst,Exams);
-		     break;
-		  case Usr_CAN_NOT:
-		  default:
-		     Ico_PutIconRemovalNotAllowed ();
-		     break;
-		 }
+		  /* Put icon to remove the question */
+		  switch (ICanEditQuestions)
+		    {
+		     case Usr_CAN:
+			Ico_PutContextualIconToRemove (ActReqRemSetQst,NULL,
+						       ExaSet_PutParsOneQst,Exams);
+			break;
+		     case Usr_CAN_NOT:
+		     default:
+			Ico_PutIconRemovalNotAllowed ();
+			break;
+		    }
 
-	       /* Put icon to validate/invalidate the question */
-	       Lay_PutContextualLinkOnlyIcon (ValInv[Question.Validity].NextAction,Anchor,
-					      ExaSet_PutParsOneQst,Exams,
-					      ValInv[Question.Validity].Icon,
-					      ValInv[Question.Validity].Color);
+		  /* Put icon to validate/invalidate the question */
+		  Lay_PutContextualLinkOnlyIcon (ValInv[Question.Validity].NextAction,Anchor,
+						 ExaSet_PutParsOneQst,Exams,
+						 ValInv[Question.Validity].Icon,
+						 ValInv[Question.Validity].Color);
 
-	    HTM_TD_End ();
+	       HTM_TD_End ();
 
-	    /***** List question *****/
-	    ExaSet_ListQuestionForEdition (&Question,QstInd + 1,Anchor);
+	       /***** List question *****/
+	       ExaSet_ListQuestionForEdition (&Question,QstInd + 1,Anchor);
 
-	 /***** End row *****/
-	 HTM_TR_End ();
+	    /***** End row *****/
+	    HTM_TR_End ();
 
-	 /***** Free anchor string *****/
-	 Frm_FreeAnchorStr (&Anchor);
+	    /***** Free anchor string *****/
+	    Frm_FreeAnchorStr (&Anchor);
 
 	 /***** Destroy test question *****/
 	 Qst_QstDestructor (&Question);
@@ -889,7 +895,7 @@ Qst_AnswerType_t ExaSet_GetAnswerType (long QstCod)
    Qst_AnswerType_t AnswerType;
 
    /***** Get type of answer from database *****/
-   if (!Exa_DB_GetAnswerType (&mysql_res,QstCod))
+   if (Exa_DB_GetAnswerType (&mysql_res,QstCod) == Exi_DOES_NOT_EXIST)
       Err_WrongQuestionExit ();
 
    /* Get type of answer */
@@ -914,9 +920,7 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
    unsigned NumOpt;
 
    /***** Get question data from database *****/
-   QuestionExists = (Exa_DB_GetQstDataByCod (&mysql_res,
-					     Question->QstCod) != 0) ? Exi_EXISTS :
-								       Exi_DOES_NOT_EXIST;
+   QuestionExists = Exa_DB_GetQstDataByCod (&mysql_res,Question->QstCod);
 
    if (QuestionExists == Exi_EXISTS)
      {

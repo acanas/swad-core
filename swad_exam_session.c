@@ -784,12 +784,18 @@ void ExaSes_GetSessionDataByCod (struct ExaSes_Session *Session)
      }
 
    /***** Get exam data session from database *****/
-   if (Exa_DB_GetSessionDataByCod (&mysql_res,Session->SesCod)) // Session found...
-      /* Get exam session data from row */
-      ExaSes_GetSessionDataFromRow (mysql_res,Session);
-   else
-      /* Initialize to empty exam session */
-      ExaSes_ResetSession (Session);
+   switch (Exa_DB_GetSessionDataByCod (&mysql_res,Session->SesCod))
+     {
+      case Exi_EXISTS:
+	 /* Get exam session data from row */
+	 ExaSes_GetSessionDataFromRow (mysql_res,Session);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 /* Initialize to empty exam session */
+	 ExaSes_ResetSession (Session);
+	 break;
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

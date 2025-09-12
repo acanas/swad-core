@@ -356,17 +356,21 @@ void MFU_UpdateMFUActions (void)
    Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
 
    /***** Get current score *****/
-   if (MFU_DB_GetScoreForCurrentAction (&mysql_res,ActCod))
+   switch (MFU_DB_GetScoreForCurrentAction (&mysql_res,ActCod))
      {
-      row = mysql_fetch_row (mysql_res);
-      if (sscanf (row[0],"%lf",&Score) != 1)
-         Err_ShowErrorAndExit ("Error when getting score for current action.");
-      Score *= MFU_INCREASE_FACTOR;
-      if (Score > MFU_MAX_SCORE)
-         Score = MFU_MAX_SCORE;
+      case Exi_EXISTS:
+	 row = mysql_fetch_row (mysql_res);
+	 if (sscanf (row[0],"%lf",&Score) != 1)
+	    Err_ShowErrorAndExit ("Error when getting score for current action.");
+	 Score *= MFU_INCREASE_FACTOR;
+	 if (Score > MFU_MAX_SCORE)
+	    Score = MFU_MAX_SCORE;
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Score = MFU_MIN_SCORE;	// Initial score for a new action not present in MFU table
+	 break;
      }
-   else
-      Score = MFU_MIN_SCORE;	// Initial score for a new action not present in MFU table
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);

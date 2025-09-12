@@ -476,9 +476,10 @@ bool Att_DB_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,
 /********** Get if a student attended to an event and get comments ***********/
 /*****************************************************************************/
 
-unsigned Att_DB_GetPresentAndComments (MYSQL_RES **mysql_res,long AttCod,long UsrCod)
+Exi_Exist_t Att_DB_GetPresentAndComments (MYSQL_RES **mysql_res,
+					  long AttCod,long UsrCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get if a student"
 			     " is already registered in an event",
 		   "SELECT Present,"	// row[0]
@@ -488,7 +489,8 @@ unsigned Att_DB_GetPresentAndComments (MYSQL_RES **mysql_res,long AttCod,long Us
 		   " WHERE AttCod=%ld"
 		     " AND UsrCod=%ld",
 		   AttCod,
-		   UsrCod);
+		   UsrCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -918,19 +920,20 @@ unsigned Att_DB_GetNumCoursesWithEvents (Hie_Level_t HieLvl)
 /********************* Get number of attendance events ***********************/
 /*****************************************************************************/
 
-unsigned Att_DB_GetNumEvents (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
+Exi_Exist_t Att_DB_GetNumEvents (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
   {
    switch (HieLvl)
      {
       case Hie_SYS:
-         return (unsigned)
+         return
          DB_QuerySELECT (mysql_res,"can not get number of attendance events",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(NumNotif)"			// row[1]
 			  " FROM att_events"
-			 " WHERE CrsCod>0");
+			 " WHERE CrsCod>0") ? Exi_EXISTS :
+					      Exi_DOES_NOT_EXIST;
       case Hie_INS:
-         return (unsigned)
+         return
          DB_QuerySELECT (mysql_res,"can not get number of attendance events",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(att_events.NumNotif)"	// row[1]
@@ -942,9 +945,10 @@ unsigned Att_DB_GetNumEvents (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=att_events.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_INS].HieCod);
+                         Gbl.Hierarchy.Node[Hie_INS].HieCod) ? Exi_EXISTS :
+							       Exi_DOES_NOT_EXIST;
       case Hie_CTR:
-         return (unsigned)
+         return
          DB_QuerySELECT (mysql_res,"can not get number of attendance events",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(att_events.NumNotif)"	// row[1]
@@ -954,9 +958,10 @@ unsigned Att_DB_GetNumEvents (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 			 " WHERE deg_degrees.CtrCod=%ld"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=att_events.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+                         Gbl.Hierarchy.Node[Hie_CTR].HieCod) ? Exi_EXISTS :
+							       Exi_DOES_NOT_EXIST;
       case Hie_DEG:
-         return (unsigned)
+         return
          DB_QuerySELECT (mysql_res,"can not get number of attendance events",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(att_events.NumNotif)"	// row[1]
@@ -964,17 +969,19 @@ unsigned Att_DB_GetNumEvents (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 			        "att_events"
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=att_events.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+                         Gbl.Hierarchy.Node[Hie_DEG].HieCod) ? Exi_EXISTS :
+							       Exi_DOES_NOT_EXIST;
       case Hie_CRS:
-         return (unsigned)
+         return
          DB_QuerySELECT (mysql_res,"can not get number of attendance events",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(NumNotif)"			// row[1]
 			  " FROM att_events"
 			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+                         Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? Exi_EXISTS :
+							       Exi_DOES_NOT_EXIST;
       default:
 	 Err_WrongHierarchyLevelExit ();
-	 return 0;	// Not reached
+	 return Exi_DOES_NOT_EXIST;	// Not reached
      }
   }

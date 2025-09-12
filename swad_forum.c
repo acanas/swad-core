@@ -541,7 +541,7 @@ static unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod)
       return NumPsts;
 
    /***** Get number of posts in the thread that holds a post from database *****/
-   if (For_DB_GetThreadAndNumPostsGivenPstCod (&mysql_res,PstCod) == 1)	// Result should have one row
+   if (For_DB_GetThreadAndNumPostsGivenPstCod (&mysql_res,PstCod) == Exi_EXISTS)
      {
       row = mysql_fetch_row (mysql_res);
       /*
@@ -608,7 +608,7 @@ long For_GetThreadForumTypeAndHieCodOfAPost (long PstCod,struct For_Forum *Forum
    ThrCod = -1L;
 
    /***** Check if there is a row with forum type *****/
-   if (For_DB_GetThreadForumTypeAndHieCodOfAPost (&mysql_res,PstCod))
+   if (For_DB_GetThreadForumTypeAndHieCodOfAPost (&mysql_res,PstCod) == Exi_EXISTS)
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -647,7 +647,7 @@ void For_GetForumTypeAndHieCodOfAThread (long ThrCod,struct For_Forum *Forum)
    Forum->HieCod = -1L;
 
    /***** Check if there is a row with forum type *****/
-   if (For_DB_GetForumTypeAndHieCodOfAThread (&mysql_res,ThrCod))
+   if (For_DB_GetForumTypeAndHieCodOfAThread (&mysql_res,ThrCod) == Exi_EXISTS)
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -676,16 +676,18 @@ static time_t For_GetThrReadTime (long ThrCod)
    time_t ReadTimeUTC;
 
    /***** Get read time of a thread from database *****/
-   if (For_DB_GetThrReadTime (&mysql_res,ThrCod))
+   switch (For_DB_GetThrReadTimeFromThrCod (&mysql_res,ThrCod))
      {
-      /***** There is a row ==> get read time *****/
-      row = mysql_fetch_row (mysql_res);
-
-      ReadTimeUTC = Dat_GetUNIXTimeFromStr (row[0]);
+      case Exi_EXISTS:
+	 row = mysql_fetch_row (mysql_res);
+	 ReadTimeUTC = Dat_GetUNIXTimeFromStr (row[0]);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 ReadTimeUTC = (time_t) 0;	// If this thread does not exist for current user,
+					// then current user has not read this thread
+	 break;
      }
-   else
-      ReadTimeUTC = (time_t) 0;	// If there is no row for this thread and current user,
-				// then current user has not read this thread
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1092,7 +1094,7 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
    MYSQL_ROW row;
 
    /***** Get data of a post from database *****/
-   if (For_DB_GetPstData (&mysql_res,PstCod) != 1)
+   if (For_DB_GetPstData (&mysql_res,PstCod) == Exi_DOES_NOT_EXIST)
       Err_WrongPostExit ();
 
    /***** Get number of rows *****/
@@ -1131,7 +1133,7 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Get post subject and content from database *****/
-   if (For_DB_GetPstSubjectAndContent (&mysql_res,PstCod) == 1)
+   if (For_DB_GetPstSubjectAndContent (&mysql_res,PstCod) == Exi_EXISTS)
      {
       /***** Get subject and content of the post *****/
       row = mysql_fetch_row (mysql_res);
@@ -1993,7 +1995,7 @@ static unsigned For_GetNumThrsWithNewPstsInForum (const struct For_Forum *Forum,
    unsigned NumThrsWithNewPosts = NumThreads;	// By default, all threads are new to me
 
    /***** Get last time I read this forum from database *****/
-   if (For_DB_GetLastTimeIReadForum (&mysql_res,Forum))
+   if (For_DB_GetLastTimeIReadForum (&mysql_res,Forum) == Exi_EXISTS)
      {
       /***** Get number of threads with a last message modify time > newest read time (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
@@ -2017,7 +2019,7 @@ static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr
    unsigned NumUnreadPosts = NumPostsInThr;	// By default, all posts are unread by me
 
    /***** Get last time I read this thread from database *****/
-   if (For_DB_GetLastTimeIReadThread (&mysql_res,ThrCod))
+   if (For_DB_GetLastTimeIReadThread (&mysql_res,ThrCod) == Exi_EXISTS)
      {
       /***** Get the number of posts in thread with a modify time > newest read time for me (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
@@ -2506,7 +2508,7 @@ void For_GetThreadData (struct For_Thread *Thr)
    Dat_StartEndTime_t Order;
 
    /***** Get data of a thread from database *****/
-   if (For_DB_GetThreadData (&mysql_res,Thr->ThrCod) != 1)
+   if (For_DB_GetThreadDataFromThrCod (&mysql_res,Thr->ThrCod) == Exi_DOES_NOT_EXIST)
       Err_WrongThreadExit ();
    row = mysql_fetch_row (mysql_res);
 

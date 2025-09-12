@@ -1369,7 +1369,7 @@ unsigned Att_GetNumEvents (Hie_Level_t HieLvl,unsigned *NumNotif)
    *NumNotif = 0;
 
    /***** Get number of attendance events from database *****/
-   if (Att_DB_GetNumEvents (&mysql_res,HieLvl))
+   if (Att_DB_GetNumEvents (&mysql_res,HieLvl) == Exi_EXISTS)
      {
       /***** Get number of attendance events *****/
       row = mysql_fetch_row (mysql_res);
@@ -2117,23 +2117,25 @@ static Att_AbsentOrPresent_t Att_CheckIfUsrIsPresentInEventAndGetComments (long 
    Att_AbsentOrPresent_t Present;
 
    /***** Check if a students is registered in an event in database *****/
-   if (Att_DB_GetPresentAndComments (&mysql_res,AttCod,UsrCod))
+   switch (Att_DB_GetPresentAndComments (&mysql_res,AttCod,UsrCod))
      {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 /* Get row */
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get if present (row[0]) */
-      Present = Att_GetPresentFromYN (row[0][0]);
+	 /* Get if present (row[0]) */
+	 Present = Att_GetPresentFromYN (row[0][0]);
 
-      /* Get student's (row[1]) and teacher's (row[2]) comment */
-      Str_Copy (CommentStd,row[1],Cns_MAX_BYTES_TEXT);
-      Str_Copy (CommentTch,row[2],Cns_MAX_BYTES_TEXT);
-     }
-   else	// User is not present
-     {
-      Present = Att_ABSENT;
-      CommentStd[0] =
-      CommentTch[0] = '\0';
+	 /* Get student's (row[1]) and teacher's (row[2]) comment */
+	 Str_Copy (CommentStd,row[1],Cns_MAX_BYTES_TEXT);
+	 Str_Copy (CommentTch,row[2],Cns_MAX_BYTES_TEXT);
+	 break;
+      case Exi_DOES_NOT_EXIST:	// User is not present
+      default:
+	 Present = Att_ABSENT;
+	 CommentStd[0] =
+	 CommentTch[0] = '\0';
+	 break;
      }
 
    /***** Free structure that stores the query result *****/

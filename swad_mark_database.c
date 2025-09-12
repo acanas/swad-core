@@ -112,7 +112,7 @@ Exi_Exist_t Mrk_DB_GetMarksDataByCod (MYSQL_RES **mysql_res,long MrkCod)
 /******** Get number of rows of header and of footer of a file of marks ******/
 /*****************************************************************************/
 
-unsigned Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res)
+Exi_Exist_t Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res)
   {
    extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
 
@@ -120,7 +120,7 @@ unsigned Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res)
    /* There should be a single file in database.
       If, due to an error, there is more than one file,
       get the number of rows of the more recent file. */
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get the number of rows"
 			     " in header and footer",
 		   "SELECT mrk_marks.%s,"	// row[0]
@@ -137,5 +137,6 @@ unsigned Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res)
 		   Mrk_DB_HeadOrFootStr[Brw_FOOTER],
 		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		   Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
-		   Gbl.FileBrowser.FilFolLnk.Full);
+		   Gbl.FileBrowser.FilFolLnk.Full) ? Exi_EXISTS :
+						     Exi_DOES_NOT_EXIST;
   }

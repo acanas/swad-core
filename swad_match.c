@@ -160,8 +160,8 @@ static void Mch_GetElapsedTimeInQuestion (const struct Mch_Match *Match,
 				          struct Dat_Time *Time);
 static void Mch_GetElapsedTimeInMatch (const struct Mch_Match *Match,
 				       struct Dat_Time *Time);
-static void Mch_GetElapsedTime (unsigned NumRows,MYSQL_RES *mysql_res,
-				struct Dat_Time *Time);
+static void Mch_GetElapsedTime (Exi_Exist_t ElapsedTimeExists,
+				MYSQL_RES *mysql_res,struct Dat_Time *Time);
 
 static void Mch_SetMatchStatusToPrev (struct Mch_Match *Match);
 static void Mch_SetMatchStatusToPrevQst (struct Mch_Match *Match);
@@ -315,12 +315,18 @@ void Mch_GetMatchDataByCod (struct Mch_Match *Match)
    MYSQL_RES *mysql_res;
 
    /***** Get data of match from database *****/
-   if (Mch_DB_GetMatchDataByCod (&mysql_res,Match->MchCod)) // Match found...
-      /* Get match data from row */
-      Mch_GetMatchDataFromRow (mysql_res,Match);
-   else
-      /* Initialize to empty match */
-      Mch_ResetMatch (Match);
+   switch (Mch_DB_GetMatchDataByCod (&mysql_res,Match->MchCod))
+     {
+      case Exi_EXISTS:	// Match found...
+	 /* Get match data from row */
+	 Mch_GetMatchDataFromRow (mysql_res,Match);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 /* Initialize to empty match */
+	 Mch_ResetMatch (Match);
+	 break;
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1454,32 +1460,32 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
       /***** Create test question *****/
       Qst_QstConstructor (&Question);
 
-      /***** Get question data *****/
-      row = mysql_fetch_row (mysql_res);
-      /*
-      gam_questions.QstCod	row[0]
-      gam_questions.QstInd	row[1]
-      tst_questions.AnsType	row[2]
-      tst_questions.Shuffle	row[3]
-      */
+	 /***** Get question data *****/
+	 row = mysql_fetch_row (mysql_res);
+	 /*
+	 gam_questions.QstCod	row[0]
+	 gam_questions.QstInd	row[1]
+	 tst_questions.AnsType	row[2]
+	 tst_questions.Shuffle	row[3]
+	 */
 
-      /* Get question code (row[0]) */
-      if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-	 Err_WrongQuestionExit ();
+	 /* Get question code (row[0]) */
+	 if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	    Err_WrongQuestionExit ();
 
-      /* Get question index (row[1]) */
-      QstInd = Str_ConvertStrToUnsigned (row[1]);
+	 /* Get question index (row[1]) */
+	 QstInd = Str_ConvertStrToUnsigned (row[1]);
 
-      /* Get answer type (row[2]) */
-      Question.Answer.Type = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-      if (Question.Answer.Type != Qst_ANS_UNIQUE_CHOICE)
-	 Err_WrongAnswerExit ();
+	 /* Get answer type (row[2]) */
+	 Question.Answer.Type = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
+	 if (Question.Answer.Type != Qst_ANS_UNIQUE_CHOICE)
+	    Err_WrongAnswerExit ();
 
-      /* Get shuffle (row[3]) */
-      Question.Answer.Shuffle = Qst_GetShuffleFromYN (row[3][0]);
+	 /* Get shuffle (row[3]) */
+	 Question.Answer.Shuffle = Qst_GetShuffleFromYN (row[3][0]);
 
-      /***** Reorder answer *****/
-      Mch_ReorderAnswer (MchCod,QstInd,&Question);
+	 /***** Reorder answer *****/
+	 Mch_ReorderAnswer (MchCod,QstInd,&Question);
 
       /***** Destroy test question *****/
       Qst_QstDestructor (&Question);
@@ -1606,15 +1612,15 @@ static void Mch_GetElapsedTimeInQuestion (const struct Mch_Match *Match,
 					  struct Dat_Time *Time)
   {
    MYSQL_RES *mysql_res;
-   unsigned NumRows;
+   Exi_Exist_t ElapsedTimeExists;
 
    /***** Query database *****/
-   NumRows = Mch_DB_GetElapsedTimeInQuestion (&mysql_res,
-                                              Match->MchCod,
-                                              Match->Status.QstInd);
+   ElapsedTimeExists = Mch_DB_GetElapsedTimeInQuestion (&mysql_res,
+							Match->MchCod,
+							Match->Status.QstInd);
 
    /***** Get elapsed time from query result *****/
-   Mch_GetElapsedTime (NumRows,mysql_res,Time);
+   Mch_GetElapsedTime (ElapsedTimeExists,mysql_res,Time);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1628,13 +1634,13 @@ static void Mch_GetElapsedTimeInMatch (const struct Mch_Match *Match,
 				       struct Dat_Time *Time)
   {
    MYSQL_RES *mysql_res;
-   unsigned NumRows;
+   Exi_Exist_t ElapsedTimeExists;
 
    /***** Query database *****/
-   NumRows = Mch_DB_GetElapsedTimeInMatch (&mysql_res,Match->MchCod);
+   ElapsedTimeExists = Mch_DB_GetElapsedTimeInMatch (&mysql_res,Match->MchCod);
 
    /***** Get elapsed time from query result *****/
-   Mch_GetElapsedTime (NumRows,mysql_res,Time);
+   Mch_GetElapsedTime (ElapsedTimeExists,mysql_res,Time);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1644,14 +1650,14 @@ static void Mch_GetElapsedTimeInMatch (const struct Mch_Match *Match,
 /*********************** Get elapsed time in a match *************************/
 /*****************************************************************************/
 
-static void Mch_GetElapsedTime (unsigned NumRows,MYSQL_RES *mysql_res,
-				struct Dat_Time *Time)
+static void Mch_GetElapsedTime (Exi_Exist_t ElapsedTimeExists,
+				MYSQL_RES *mysql_res,struct Dat_Time *Time)
   {
    MYSQL_ROW row;
-   bool ElapsedTimeGotFromDB = false;
+   Err_SuccessOrError_t ElapsedTimeGotFromDB = Err_ERROR;
 
    /***** Get time from H...H:MM:SS string *****/
-   if (NumRows)
+   if (ElapsedTimeExists == Exi_EXISTS)
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -1661,11 +1667,11 @@ static void Mch_GetElapsedTime (unsigned NumRows,MYSQL_RES *mysql_res,
 	             &Time->Hour,
 	             &Time->Minute,
 	             &Time->Second) == 3)
-	    ElapsedTimeGotFromDB = true;
+	    ElapsedTimeGotFromDB = Err_SUCCESS;
      }
 
    /***** Initialize time to default value (0) *****/
-   if (!ElapsedTimeGotFromDB)
+   if (ElapsedTimeGotFromDB == Err_ERROR)
       Time->Hour   =
       Time->Minute =
       Time->Second = 0;
@@ -3496,7 +3502,7 @@ void Mch_GetQstAnsFromDB (long MchCod,long UsrCod,unsigned QstInd,
    UsrAnswer->AnsInd = -1;	// < 0 ==> no answer selected
 
    /***** Get student's answer *****/
-   if (Mch_DB_GetUsrAnsToQst (&mysql_res,MchCod,UsrCod,QstInd)) // Answer found...
+   if (Mch_DB_GetUsrAnsToQst (&mysql_res,MchCod,UsrCod,QstInd) == Exi_EXISTS) // Answer found...
      {
       row = mysql_fetch_row (mysql_res);
 

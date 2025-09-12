@@ -258,9 +258,9 @@ Exi_Exist_t For_DB_CheckIfForumPstExists (long PstCod)
 /*************************** Get data of a forum post ************************/
 /*****************************************************************************/
 
-unsigned For_DB_GetPstData (MYSQL_RES **mysql_res,long PstCod)
+Exi_Exist_t For_DB_GetPstData (MYSQL_RES **mysql_res,long PstCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of a post",
 		   "SELECT UsrCod,"			// row[0]
 			  "UNIX_TIMESTAMP(CreatTime),"	// row[1]
@@ -269,31 +269,34 @@ unsigned For_DB_GetPstData (MYSQL_RES **mysql_res,long PstCod)
 			  "MedCod"			// row[4]
 		    " FROM for_posts"
 		   " WHERE PstCod=%ld",
-		   PstCod);
+		   PstCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /***************** Get subject and content for a forum post ******************/
 /*****************************************************************************/
 
-unsigned For_DB_GetPstSubjectAndContent (MYSQL_RES **mysql_res,long PstCod)
+Exi_Exist_t For_DB_GetPstSubjectAndContent (MYSQL_RES **mysql_res,long PstCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get subject and content",
 		   "SELECT Subject,"	// row[0]
 			  "Content"	// row[1]
 		    " FROM for_posts"
 		   " WHERE PstCod=%ld",
-		   PstCod);
+		   PstCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /********* Get the forum thread, type and hierarchy code of a post ***********/
 /*****************************************************************************/
 
-unsigned For_DB_GetThreadForumTypeAndHieCodOfAPost (MYSQL_RES **mysql_res,long PstCod)
+Exi_Exist_t For_DB_GetThreadForumTypeAndHieCodOfAPost (MYSQL_RES **mysql_res,
+						       long PstCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get forum thread, type and hierarchy",
 		   "SELECT for_threads.ThrCod,"		// row[0]
 			  "for_threads.ForumType,"	// row[1]
@@ -302,22 +305,25 @@ unsigned For_DB_GetThreadForumTypeAndHieCodOfAPost (MYSQL_RES **mysql_res,long P
 			  "for_threads"
 		   " WHERE for_posts.PstCod=%ld"
 		     " AND for_posts.ThrCod=for_threads.ThrCod",
-		   PstCod);
+		   PstCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /*********** Get the forum type and hierarchy code of a thread ***************/
 /*****************************************************************************/
 
-unsigned For_DB_GetForumTypeAndHieCodOfAThread (MYSQL_RES **mysql_res,long ThrCod)
+Exi_Exist_t For_DB_GetForumTypeAndHieCodOfAThread (MYSQL_RES **mysql_res,
+						   long ThrCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get forum type and hierarchy",
 		   "SELECT ForumType,"	// row[0]
 			  "HieCod"	// row[1]
 		    " FROM for_threads"
 		   " WHERE ThrCod=%ld",
-		   ThrCod);
+		   ThrCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -353,9 +359,10 @@ unsigned For_DB_GetPostsOfAThread (MYSQL_RES **mysql_res,long ThrCod)
 /*********** Get the number of posts in the thread than holds a post *********/
 /*****************************************************************************/
 
-unsigned For_DB_GetThreadAndNumPostsGivenPstCod (MYSQL_RES **mysql_res,long PstCod)
+Exi_Exist_t For_DB_GetThreadAndNumPostsGivenPstCod (MYSQL_RES **mysql_res,
+						    long PstCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get number of posts in a thread",
 		   "SELECT ThrCod,"		// row[1]
 			 " COUNT(PstCod)"	// row[0]
@@ -365,7 +372,8 @@ unsigned For_DB_GetThreadAndNumPostsGivenPstCod (MYSQL_RES **mysql_res,long PstC
 			    " FROM for_posts"
 			   " WHERE PstCod=%ld)"
 	        " GROUP BY ThrCod;",
-		   PstCod);
+		   PstCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -468,6 +476,11 @@ void For_DB_UpdateThrLastPst (long ThrCod,long LastPstCod)
 unsigned For_DB_GetForumThreads (MYSQL_RES **mysql_res,
                                  const struct For_Forums *Forums)
   {
+   static const char *FieldPstCod[Dat_NUM_START_END_TIME] =
+     {
+      [Dat_STR_TIME] = "FirstPstCod",
+      [Dat_END_TIME] = "LastPstCod",
+     };
    char SubQuery[256];
 
    /***** Get threads of a forum from database *****/
@@ -477,44 +490,27 @@ unsigned For_DB_GetForumThreads (MYSQL_RES **mysql_res,
    else
       SubQuery[0] = '\0';
 
-   switch (Forums->ThreadsOrder)
-     {
-      case Dat_STR_TIME:	// First post time
-         return (unsigned)
-         DB_QuerySELECT (mysql_res,"can not get thread of a forum",
-			 "SELECT for_threads.ThrCod"	// row[0]
-			  " FROM for_threads,"
-				"for_posts"
-			 " WHERE for_threads.ForumType=%u"
-			   "%s"
-			   " AND for_threads.FirstPstCod=for_posts.PstCod"
-		      " ORDER BY for_posts.CreatTime DESC",
-			 (unsigned) Forums->Forum.Type,
-			 SubQuery);
-      case Dat_END_TIME:	// Last post time
-         return (unsigned)
-         DB_QuerySELECT (mysql_res,"can not get thread of a forum",
-			 "SELECT for_threads.ThrCod"	// row[0]
-			  " FROM for_threads,"
-				"for_posts"
-			 " WHERE for_threads.ForumType=%u"
-			   "%s"
-			   " AND for_threads.LastPstCod=for_posts.PstCod"
-		      " ORDER BY for_posts.CreatTime DESC",
-			 (unsigned) Forums->Forum.Type,
-			 SubQuery);
-      default:	// Impossible
-	 return 0;
-     }
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get thread of a forum",
+		   "SELECT for_threads.ThrCod"	// row[0]
+		    " FROM for_threads,"
+			  "for_posts"
+		   " WHERE for_threads.ForumType=%u"
+		     "%s"
+		     " AND for_threads.%s=for_posts.PstCod"
+		" ORDER BY for_posts.CreatTime DESC",
+		   (unsigned) Forums->Forum.Type,
+		   SubQuery,
+		   FieldPstCod[Forums->ThreadsOrder]);
   }
 
 /*****************************************************************************/
 /***************************** Get data of a thread **************************/
 /*****************************************************************************/
 
-unsigned For_DB_GetThreadData (MYSQL_RES **mysql_res,long ThrCod)
+Exi_Exist_t For_DB_GetThreadDataFromThrCod (MYSQL_RES **mysql_res,long ThrCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get data of a thread of a forum",
 		       "SELECT m0.PstCod,"			// row[0]
 			      "m1.PstCod,"			// row[1]
@@ -529,14 +525,15 @@ unsigned For_DB_GetThreadData (MYSQL_RES **mysql_res,long ThrCod)
 		       " WHERE for_threads.ThrCod=%ld"
 			 " AND for_threads.FirstPstCod=m0.PstCod"
 			 " AND for_threads.LastPstCod=m1.PstCod",
-		       ThrCod);
+		       ThrCod) ? Exi_EXISTS :
+				 Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /***************************** Get thread subject ****************************/
 /*****************************************************************************/
 
-void For_DB_GetThreadTitle (long ThrCod,char *Subject,size_t TitleSize)
+void For_DB_GetThreadTitleFromThrCod (long ThrCod,char *Subject,size_t TitleSize)
   {
    DB_QuerySELECTString (Subject,TitleSize,"can not get thread subject",
 		         "SELECT for_posts.Subject"	// row[0]
@@ -728,9 +725,9 @@ unsigned For_DB_GetNumReadersOfThr (long ThrCod)
 /****************** Get thread read time for the current user ****************/
 /*****************************************************************************/
 
-unsigned For_DB_GetThrReadTime (MYSQL_RES **mysql_res,long ThrCod)
+Exi_Exist_t For_DB_GetThrReadTimeFromThrCod (MYSQL_RES **mysql_res,long ThrCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get date of reading"
 			     " of a thread of a forum",
 		   "SELECT UNIX_TIMESTAMP(ReadTime)"	// row[0]
@@ -738,15 +735,16 @@ unsigned For_DB_GetThrReadTime (MYSQL_RES **mysql_res,long ThrCod)
 		   " WHERE ThrCod=%ld"
 		     " AND UsrCod=%ld",
 		   ThrCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Gbl.Usrs.Me.UsrDat.UsrCod) ? Exi_EXISTS :
+						Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /*********************** Get last time I read a forum ************************/
 /*****************************************************************************/
 
-unsigned For_DB_GetLastTimeIReadForum (MYSQL_RES **mysql_res,
-                                       const struct For_Forum *Forum)
+Exi_Exist_t For_DB_GetLastTimeIReadForum (MYSQL_RES **mysql_res,
+                                          const struct For_Forum *Forum)
   {
    char SubQuery[256];
 
@@ -755,7 +753,7 @@ unsigned For_DB_GetLastTimeIReadForum (MYSQL_RES **mysql_res,
    else
       SubQuery[0] = '\0';
 
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get the date of reading of a forum",
 		   "SELECT IFNULL(MAX(for_read.ReadTime),FROM_UNIXTIME(0))"	// row[0]
 		    " FROM for_read,"
@@ -766,23 +764,25 @@ unsigned For_DB_GetLastTimeIReadForum (MYSQL_RES **mysql_res,
 		     "%s",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) Forum->Type,
-		   SubQuery);
+		   SubQuery) ? Exi_EXISTS :
+			       Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /*********************** Get last time I read a thread ***********************/
 /*****************************************************************************/
 
-unsigned For_DB_GetLastTimeIReadThread (MYSQL_RES **mysql_res,long ThrCod)
+Exi_Exist_t For_DB_GetLastTimeIReadThread (MYSQL_RES **mysql_res,long ThrCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get the date of reading of a thread",
 		   "SELECT ReadTime"		// row[0]
 		    " FROM for_read"
 		   " WHERE ThrCod=%ld"
 		     " AND UsrCod=%ld",
 		   ThrCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Gbl.Usrs.Me.UsrDat.UsrCod) ? Exi_EXISTS :
+						Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

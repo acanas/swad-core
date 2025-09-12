@@ -43,9 +43,9 @@ void Fig_DB_UpdateDoubleFigureIntoCache (FigCch_FigureCached_t Figure,
                                          Hie_Level_t HieLvl,long HieCod,
                                          double Value);
 
-unsigned Fig_DB_GetFigureFromCache (MYSQL_RES **mysql_res,
-                                    FigCch_FigureCached_t Figure,
-                                    Hie_Level_t HieLvl,long HieCod,
-                                    FigCch_Type_t Type,time_t TimeCached);
+Exi_Exist_t Fig_DB_GetFigureFromCache (MYSQL_RES **mysql_res,
+				       FigCch_FigureCached_t Figure,
+				       Hie_Level_t HieLvl,long HieCod,
+				       FigCch_Type_t Type,time_t TimeCached);
 
 #endif

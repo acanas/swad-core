@@ -1587,15 +1587,16 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,
 /****** Get enrolment request (user and requested role) given its code *******/
 /*****************************************************************************/
 
-unsigned Enr_DB_GetEnrolmentRequestByCod (MYSQL_RES **mysql_res,long ReqCod)
+Exi_Exist_t Enr_DB_GetEnrolmentRequestByCod (MYSQL_RES **mysql_res,long ReqCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get enrolment request",
 		   "SELECT UsrCod,"		// row[0]
 			  "Role"		// row[1]
 		    " FROM crs_requests"
 		   " WHERE ReqCod=%ld",
-		   ReqCod);
+		   ReqCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

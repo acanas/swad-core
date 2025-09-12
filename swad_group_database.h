@@ -43,9 +43,9 @@ long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp);
 void Grp_DB_CreateGroup (long GrpTypCod,const struct Group *Grp);
 
 void Grp_DB_GetGrpTypTitle (long GrpTypCod,char *Title,size_t TitleSize);
-unsigned Grp_DB_GetGroupTypeData (MYSQL_RES **mysql_res,long GrpTypCod);
-unsigned Grp_DB_GetSingleMultiple (MYSQL_RES **mysql_res,long GrpTypCod);
-unsigned Grp_DB_GetFileZones (MYSQL_RES **mysql_res,long GrpCod);
+Exi_Exist_t Grp_DB_GetGroupTypeDataFromGrpTypCod (MYSQL_RES **mysql_res,long GrpTypCod);
+Exi_Exist_t Grp_DB_GetSingleMultiple (MYSQL_RES **mysql_res,long GrpTypCod);
+Exi_Exist_t Grp_DB_GetFileZones (MYSQL_RES **mysql_res,long GrpCod);
 Exi_Exist_t Grp_DB_GetGroupDataByCod (MYSQL_RES **mysql_res,long GrpCod);
 
 Exi_Exist_t Grp_DB_CheckIfGrpExists (long GrpCod);
@@ -77,7 +77,8 @@ unsigned Grp_DB_GetLstCodGrpsInAllCrssUsrBelongs (MYSQL_RES **mysql_res,long Usr
 unsigned Grp_DB_GetLstCodGrpsOfAnyTypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,
 							      long UsrCod,
 							      Grp_ClosedOpenGrps_t ClosedOpenGroups);
-unsigned Grp_DB_GetLstCodGrpsOfATypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,long UsrCod,long GrpTypCod);
+unsigned Grp_DB_GetLstCodGrpsOfATypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,
+							    long UsrCod,long GrpTypCod);
 unsigned Grp_DB_GetLstCodGrpsWithFileZonesInCurrentCrsIBelong (MYSQL_RES **mysql_res);
 unsigned Grp_DB_GetNamesGrpsUsrBelongsTo (MYSQL_RES **mysql_res,
                                           long UsrCod,long GrpTypCod);

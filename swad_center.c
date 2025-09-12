@@ -573,10 +573,16 @@ void Ctr_GetCoordByCod (long CtrCod,struct Map_Coordinates *Coord)
    MYSQL_RES *mysql_res;
 
    /***** Get coordinates of a center from database *****/
-   if (Ctr_DB_GetCoordByCod (&mysql_res,CtrCod)) // Center found...
-      Ctr_GetCoordFromRow (mysql_res,Coord);
-   else
-      Coord->Latitude = Coord->Longitude = Coord->Altitude = 0.0;
+   switch (Ctr_DB_GetCoordByCod (&mysql_res,CtrCod))
+     {
+      case Exi_EXISTS:
+	 Ctr_GetCoordFromRow (mysql_res,Coord);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Coord->Latitude = Coord->Longitude = Coord->Altitude = 0.0;
+	 break;
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

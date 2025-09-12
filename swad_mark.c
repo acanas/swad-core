@@ -150,22 +150,26 @@ static void Mrk_GetNumRowsHeaderAndFooter (struct Mrk_Properties *Marks)
    /* There should be a single file in database.
       If, due to an error, there is more than one file,
       get the number of rows of the more recent file. */
-   if (Mrk_DB_GetNumRowsHeaderAndFooter (&mysql_res) == 1)
+   switch (Mrk_DB_GetNumRowsHeaderAndFooter (&mysql_res))
      {
-      /***** Get number of header and footer rows *****/
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 /***** Get number of header and footer rows *****/
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Header (row[0]) */
-      if (sscanf (row[0],"%u",&(Marks->Header)) != 1)
-         Err_WrongNumberOfRowsExit ();
+	 /* Header (row[0]) */
+	 if (sscanf (row[0],"%u",&(Marks->Header)) != 1)
+	    Err_WrongNumberOfRowsExit ();
 
-      /* Footer (row[1]) */
-      if (sscanf (row[1],"%u",&(Marks->Footer)) != 1)
-         Err_WrongNumberOfRowsExit ();
+	 /* Footer (row[1]) */
+	 if (sscanf (row[1],"%u",&(Marks->Footer)) != 1)
+	    Err_WrongNumberOfRowsExit ();
+	 break;
+      case Exi_DOES_NOT_EXIST:	// Unknown numbers of header and footer rows
+      default:
+	 Marks->Header =
+	 Marks->Footer = 0;
+	 break;
      }
-   else	// Unknown numbers of header and footer rows
-      Marks->Header =
-      Marks->Footer = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

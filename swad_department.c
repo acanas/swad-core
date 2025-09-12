@@ -898,16 +898,6 @@ void Dpt_ReceiveNewDpt (void)
   }
 
 /*****************************************************************************/
-/************************** Get number of departments ************************/
-/*****************************************************************************/
-
-unsigned Dpt_GetTotalNumberOfDepartments (void)
-  {
-   /***** Get number of departments from database *****/
-   return (unsigned) DB_GetNumRowsTable ("dpt_departments");
-  }
-
-/*****************************************************************************/
 /**************** Get number of departments in a institution *****************/
 /*****************************************************************************/
 

@@ -28,7 +28,7 @@
 /*****************************************************************************/
 
 void Ind_DB_StoreIndicatorsCrs (long CrsCod,unsigned NumIndicators);
-unsigned Ind_DB_GetNumIndicatorsCrs (MYSQL_RES **mysql_res,long CrsCod);
+Exi_Exist_t Ind_DB_GetNumIndicatorsCrs (MYSQL_RES **mysql_res,long CrsCod);
 
 unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
                                    const struct Ind_Indicators *Indicators);

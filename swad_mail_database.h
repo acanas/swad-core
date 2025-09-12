@@ -52,8 +52,8 @@ void Mai_DB_RemoveUsrEmails (long UsrCod);
 void Mai_DB_InsertPendingEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
                                 const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1]);
 
-unsigned Mai_DB_GetPendingEmail (MYSQL_RES **mysql_res,
-                                 const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1]);
+Exi_Exist_t Mai_DB_GetPendingEmail (MYSQL_RES **mysql_res,
+                                    const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1]);
 
 void Mai_DB_RemovePendingEmailForOtherUsrs (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 void Mai_DB_RemovePendingEmail (const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1]);

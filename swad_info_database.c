@@ -136,28 +136,28 @@ void Inf_DB_SetInfoSrc (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
 /***************** Get info source for a type of course info *****************/
 /*****************************************************************************/
 
-unsigned Inf_DB_GetInfoSrc (MYSQL_RES **mysql_res,
-                            long CrsCod,Inf_Type_t InfoType)
+Exi_Exist_t Inf_DB_GetInfoSrc (MYSQL_RES **mysql_res,
+                               long CrsCod,Inf_Type_t InfoType)
   {
-   /***** Get info source for a specific type of info from database *****/
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get info source",
 		   "SELECT InfoSrc"	// row[0]
 		    " FROM crs_info_src"
 		   " WHERE CrsCod=%ld"
 		     " AND InfoType='%s'",
 		   CrsCod,
-		   Inf_DB_NamesForInfoType[InfoType]);
+		   Inf_DB_NamesForInfoType[InfoType]) ? Exi_EXISTS :
+						        Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /*** Get info source and wether info must be read for a type of course info **/
 /*****************************************************************************/
 
-unsigned Inf_DB_GetInfoSrcAndMustBeRead (MYSQL_RES **mysql_res,
-                                         long CrsCod,Inf_Type_t InfoType)
+Exi_Exist_t Inf_DB_GetInfoSrcAndMustBeRead (MYSQL_RES **mysql_res,
+                                            long CrsCod,Inf_Type_t InfoType)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get info source",
 		   "SELECT InfoSrc,"	// row[0]
 			  "MustBeRead"	// row[1]
@@ -165,7 +165,8 @@ unsigned Inf_DB_GetInfoSrcAndMustBeRead (MYSQL_RES **mysql_res,
 		   " WHERE CrsCod=%ld"
 		     " AND InfoType='%s'",
 		   CrsCod,
-		   Inf_DB_NamesForInfoType[InfoType]);
+		   Inf_DB_NamesForInfoType[InfoType]) ? Exi_EXISTS :
+						        Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -208,10 +209,10 @@ void Inf_DB_SetInfoTxt (Inf_Type_t InfoType,
 /********** Get info text for a type of course info from database ************/
 /*****************************************************************************/
 
-unsigned Inf_DB_GetInfoTxt (MYSQL_RES **mysql_res,
-                            long CrsCod,Inf_Type_t InfoType)
+Exi_Exist_t Inf_DB_GetInfoTxt (MYSQL_RES **mysql_res,
+                               long CrsCod,Inf_Type_t InfoType)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get info text",
 		   "SELECT InfoTxtHTML,"	// row[0]
 			  "InfoTxtMD"		// row[1]
@@ -219,7 +220,8 @@ unsigned Inf_DB_GetInfoTxt (MYSQL_RES **mysql_res,
 		   " WHERE CrsCod=%ld"
 		     " AND InfoType='%s'",
 		   CrsCod,
-		   Inf_DB_NamesForInfoType[InfoType]);
+		   Inf_DB_NamesForInfoType[InfoType]) ? Exi_EXISTS :
+						        Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

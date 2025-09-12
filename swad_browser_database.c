@@ -266,9 +266,9 @@ long Brw_DB_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
 // This function only gets metadata stored in table files,
 // does not get size, time, numviews...
 
-unsigned Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,const char *Path)
+Exi_Exist_t Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,const char *Path)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get file metadata",
 		   "SELECT FilCod,"		// row[0]
 			  "FileBrowser,"	// row[1]
@@ -290,7 +290,8 @@ unsigned Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,const char *Path)
 		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		   Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
 		   Brw_GetZoneUsrCodForFileBrowser (),
-		   Path);
+		   Path) ? Exi_EXISTS :
+			   Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -299,9 +300,9 @@ unsigned Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,const char *Path)
 // This function only gets metadata stored in table files,
 // does not get size, time, numviews...
 
-unsigned Brw_DB_GetFileMetadataByCod (MYSQL_RES **mysql_res,long FilCod)
+Exi_Exist_t Brw_DB_GetFileMetadataByCod (MYSQL_RES **mysql_res,long FilCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get file metadata",
 		   "SELECT FilCod,"		// row[0]
 			  "FileBrowser,"	// row[1]
@@ -315,7 +316,8 @@ unsigned Brw_DB_GetFileMetadataByCod (MYSQL_RES **mysql_res,long FilCod)
 			  "License"		// row[9]
 		    " FROM brw_files"
 		   " WHERE FilCod=%ld",
-		   FilCod);
+		   FilCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

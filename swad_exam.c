@@ -960,7 +960,7 @@ void Exa_GetExamDataByCod (struct Exa_Exam *Exam)
    if (Exam->ExaCod > 0)
      {
       /***** Get start and end times from database *****/
-      if (Exa_DB_GetExamStartEnd (&mysql_res,Exam->ExaCod))
+      if (Exa_DB_GetExamStartEnd (&mysql_res,Exam->ExaCod) == Exi_EXISTS)
 	{
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);

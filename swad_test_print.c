@@ -557,29 +557,29 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
 	 Qst_QstConstructor (&Question);
 	 Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
 
-	 /***** Get question data *****/
-	 QuestionExists = Qst_GetQstDataByCod (&Question);
+	    /***** Get question data *****/
+	    QuestionExists = Qst_GetQstDataByCod (&Question);
 
-	 /***** Write question and answers *****/
-	 TstPrn_WriteQstAndAnsExam (&Gbl.Usrs.Me.UsrDat,
-				    Print->PrintedQuestions,QstInd,
-				    Print->TimeUTC,
-				    &Question,QuestionExists,
-				    TstCfg_GetConfigVisibility ());
+	    /***** Write question and answers *****/
+	    TstPrn_WriteQstAndAnsExam (&Gbl.Usrs.Me.UsrDat,
+				       Print->PrintedQuestions,QstInd,
+				       Print->TimeUTC,
+				       &Question,QuestionExists,
+				       TstCfg_GetConfigVisibility ());
 
-	 /***** Store test question in database *****/
-	 Tst_DB_StoreOneQstOfPrint (Print,QstInd);
+	    /***** Store test question in database *****/
+	    Tst_DB_StoreOneQstOfPrint (Print,QstInd);
 
-	 /***** Compute total score *****/
-	 Print->Score += Print->PrintedQuestions[QstInd].Answer.Score;
-	 if (Print->PrintedQuestions[QstInd].Answer.Str[0])	// User's answer is not blank
-	    Print->NumQsts.NotBlank++;
+	    /***** Compute total score *****/
+	    Print->Score += Print->PrintedQuestions[QstInd].Answer.Score;
+	    if (Print->PrintedQuestions[QstInd].Answer.Str[0])	// User's answer is not blank
+	       Print->NumQsts.NotBlank++;
 
-	 /***** Update the number of accesses and the score of this question *****/
-	 if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
-	    Qst_DB_UpdateQstScore (Print->PrintedQuestions[QstInd].QstCod,
-	                           Print->PrintedQuestions[QstInd].Answer.Str[0] != '\0',
-	                           Print->PrintedQuestions[QstInd].Answer.Score);
+	    /***** Update the number of accesses and the score of this question *****/
+	    if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
+	       Qst_DB_UpdateQstScore (Print->PrintedQuestions[QstInd].QstCod,
+				      Print->PrintedQuestions[QstInd].Answer.Str[0] != '\0',
+				      Print->PrintedQuestions[QstInd].Answer.Score);
 
 	 /***** Destroy test question *****/
 	 Qst_QstDestructor (&Question);
@@ -765,7 +765,7 @@ void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
       Qst_QstConstructor (&Question);
       Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
       Question.Answer.Type = Qst_DB_GetQstAnswerType (Question.QstCod);
-      TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[QstInd],&Question);
+	 TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[QstInd],&Question);
       Qst_QstDestructor (&Question);
 
       /* Store test question in database */
@@ -2566,15 +2566,15 @@ void TstPrn_ShowPrintAnswers (struct Usr_Data *UsrDat,
       Qst_QstConstructor (&Question);
       Question.QstCod = PrintedQuestions[QstInd].QstCod;
 
-      /***** Get question data *****/
-      QuestionExists = Qst_GetQstDataByCod (&Question);
+	 /***** Get question data *****/
+	 QuestionExists = Qst_GetQstDataByCod (&Question);
 
-      /***** Write questions and answers *****/
-      TstPrn_WriteQstAndAnsExam (UsrDat,
-				 PrintedQuestions,QstInd,
-				 TimeUTC,
-				 &Question,QuestionExists,
-				 Visibility);
+	 /***** Write questions and answers *****/
+	 TstPrn_WriteQstAndAnsExam (UsrDat,
+				    PrintedQuestions,QstInd,
+				    TimeUTC,
+				    &Question,QuestionExists,
+				    Visibility);
 
       /***** Destroy test question *****/
       Qst_QstDestructor (&Question);

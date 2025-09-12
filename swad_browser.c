@@ -8373,13 +8373,17 @@ void Brw_GetFileMetadataByPath (struct Brw_FileMetadata *FileMetadata)
    MYSQL_RES *mysql_res;
 
    /***** Get metadata of a file from database *****/
-   if (Brw_DB_GetFileMetadataByPath (&mysql_res,Gbl.FileBrowser.FilFolLnk.Full))
+   switch (Brw_DB_GetFileMetadataByPath (&mysql_res,Gbl.FileBrowser.FilFolLnk.Full))
      {
-      Brw_ResetFileMetadata (FileMetadata);
-      Brw_GetFileMetadataFromRow (mysql_res,FileMetadata);
+      case Exi_EXISTS:
+	 Brw_ResetFileMetadata (FileMetadata);
+	 Brw_GetFileMetadataFromRow (mysql_res,FileMetadata);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Brw_ResetFileMetadata (FileMetadata);
+	 break;
      }
-   else
-      Brw_ResetFileMetadata (FileMetadata);
   }
 
 /*****************************************************************************/
@@ -8394,13 +8398,17 @@ void Brw_GetFileMetadataByCod (struct Brw_FileMetadata *FileMetadata)
    MYSQL_RES *mysql_res;
 
    /***** Get metadata of a file from database *****/
-   if (Brw_DB_GetFileMetadataByCod (&mysql_res,FileMetadata->FilCod))
+   switch (Brw_DB_GetFileMetadataByCod (&mysql_res,FileMetadata->FilCod))
      {
-      Brw_ResetFileMetadata (FileMetadata);
-      Brw_GetFileMetadataFromRow (mysql_res,FileMetadata);
+      case Exi_EXISTS:
+	 Brw_ResetFileMetadata (FileMetadata);
+	 Brw_GetFileMetadataFromRow (mysql_res,FileMetadata);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Brw_ResetFileMetadata (FileMetadata);
+	 break;
      }
-   else
-      Brw_ResetFileMetadata (FileMetadata);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

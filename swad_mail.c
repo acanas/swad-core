@@ -1564,35 +1564,35 @@ void Mai_ConfirmEmail (void)
    char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1];
    long UsrCod;
    char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
-   Err_SuccessOrError_t SuccessOrError;
+   Exi_Exist_t PendingEmailExists;
 
    /***** Get parameter Key *****/
    Par_GetParText ("key",MailKey,Mai_LENGTH_EMAIL_CONFIRM_KEY);
 
    /***** Get user's code and email from key *****/
-   if (Mai_DB_GetPendingEmail (&mysql_res,MailKey))
+   PendingEmailExists = Mai_DB_GetPendingEmail (&mysql_res,MailKey);
+   switch (PendingEmailExists)
      {
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get user's code (row[0]) */
-      UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+	 /* Get user's code (row[0]) */
+	 UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get user's email (row[1]) */
-      Str_Copy (Email,row[1],sizeof (Email) - 1);
-
-      SuccessOrError = Err_SUCCESS;
-     }
-   else
-     {
-      row = NULL;
-      UsrCod = -1L;
-      SuccessOrError = Err_ERROR;
+	 /* Get user's email (row[1]) */
+	 Str_Copy (Email,row[1],sizeof (Email) - 1);
+   	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 row = NULL;
+	 UsrCod = -1L;
+	 break;
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   if (SuccessOrError == Err_SUCCESS)
+   if (PendingEmailExists == Exi_EXISTS)
      {
       /***** Delete this pending email *****/
       Mai_DB_RemovePendingEmail (MailKey);

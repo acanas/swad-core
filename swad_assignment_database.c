@@ -185,15 +185,16 @@ Exi_Exist_t Asg_DB_GetAssignmentDataByFolder (MYSQL_RES **mysql_res,
 /************* Get title and text of assignment using its code ***************/
 /*****************************************************************************/
 
-unsigned Asg_DB_GetAssignmentTitleAndTxt (MYSQL_RES **mysql_res,long AsgCod)
+Exi_Exist_t Asg_DB_GetAssignmentTitleAndTxt (MYSQL_RES **mysql_res,long AsgCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get assignment title and text",
 		   "SELECT Title,"	// row[0]
 			  "Txt"		// row[1]
 		    " FROM asg_assignments"
 		   " WHERE AsgCod=%ld",
-		   AsgCod);
+		   AsgCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -654,23 +655,21 @@ unsigned Asg_DB_GetNumCoursesWithAssignments (Hie_Level_t HieLvl)
 /*****************************************************************************/
 /************************ Get number of assignments **************************/
 /*****************************************************************************/
-// Returns the number of assignments
-// in this location (all the platform, the current degree or the current course)
 
-unsigned Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
+Exi_Exist_t Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
   {
-   /***** Get number of assignments from database *****/
    switch (HieLvl)
      {
       case Hie_SYS:
-         return (unsigned)
+         return
          DB_QuerySELECT (mysql_res,"can not get number of assignments",
                          "SELECT COUNT(*),"			// row[0]
                                 "SUM(NumNotif)"			// row[1]
 			  " FROM asg_assignments"
-			 " WHERE CrsCod>0");
+			 " WHERE CrsCod>0") ? Exi_EXISTS :
+					      Exi_DOES_NOT_EXIST;
       case Hie_CTY:
-         return (unsigned)
+         return
          DB_QuerySELECT (mysql_res,"can not get number of assignments",
                          "SELECT COUNT(*),"			// row[0]
                                 "SUM(asg_assignments.NumNotif)"	// row[1]
@@ -684,9 +683,10 @@ unsigned Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=asg_assignments.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+                         Gbl.Hierarchy.Node[Hie_CTY].HieCod) ? Exi_EXISTS :
+							       Exi_DOES_NOT_EXIST;
       case Hie_INS:
-         return (unsigned)
+         return
          DB_QuerySELECT (mysql_res,"can not get number of assignments",
                          "SELECT COUNT(*),"			// row[0]
                                 "SUM(asg_assignments.NumNotif)"	// row[1]
@@ -698,9 +698,10 @@ unsigned Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=asg_assignments.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_INS].HieCod);
+                         Gbl.Hierarchy.Node[Hie_INS].HieCod) ? Exi_EXISTS :
+							       Exi_DOES_NOT_EXIST;
       case Hie_CTR:
-         return (unsigned)
+         return
          DB_QuerySELECT (mysql_res,"can not get number of assignments",
                          "SELECT COUNT(*),"			// row[0]
                                 "SUM(asg_assignments.NumNotif)"	// row[1]
@@ -710,9 +711,10 @@ unsigned Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 			 " WHERE deg_degrees.CtrCod=%ld"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=asg_assignments.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+                         Gbl.Hierarchy.Node[Hie_CTR].HieCod) ? Exi_EXISTS :
+							       Exi_DOES_NOT_EXIST;
       case Hie_DEG:
-         return (unsigned)
+         return
          DB_QuerySELECT (mysql_res,"can not get number of assignments",
                          "SELECT COUNT(*),"			// row[0]
                                 "SUM(asg_assignments.NumNotif)"	// row[1]
@@ -720,18 +722,20 @@ unsigned Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 			        "asg_assignments"
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=asg_assignments.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+                         Gbl.Hierarchy.Node[Hie_DEG].HieCod) ? Exi_EXISTS :
+							       Exi_DOES_NOT_EXIST;
       case Hie_CRS:
-         return (unsigned)
+         return
          DB_QuerySELECT (mysql_res,"can not get number of assignments",
                          "SELECT COUNT(*),"			// row[0]
                                 "SUM(NumNotif)"			// row[1]
 			  " FROM asg_assignments"
 			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+                         Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? Exi_EXISTS :
+							       Exi_DOES_NOT_EXIST;
       default:
 	 Err_WrongHierarchyLevelExit ();
-         return 0;	// Not reached
+         return Exi_DOES_NOT_EXIST;	// Not reached
      }
   }
 

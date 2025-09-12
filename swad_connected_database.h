@@ -36,8 +36,8 @@
 /*****************************************************************************/
 
 unsigned Con_DB_GetConnectedUsrsTotal (Rol_Role_t Role);
-unsigned Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
-				 Hie_Level_t HieLvl,Rol_Role_t Role);
+Exi_Exist_t Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
+				    Hie_Level_t HieLvl,Rol_Role_t Role);
 unsigned Con_DB_GetConnectedFromScope (MYSQL_RES **mysql_res,
 				       Hie_Level_t HieLvl,Rol_Role_t Role);
 

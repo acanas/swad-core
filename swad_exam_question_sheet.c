@@ -362,11 +362,11 @@ static void ExaQstShe_ShowQuestions (const struct ExaSes_Session *Session,
 	 Qst_QstConstructor (&Question);
 	 Question.QstCod = Print->Qsts[QstInd].QstCod;
 
-	 /* Get question from database */
-	 ExaSet_GetQstDataFromDB (&Question);
+	    /* Get question from database */
+	    ExaSet_GetQstDataFromDB (&Question);
 
-	 /* Write question */
-	 ExaQstShe_WriteQst (Print,QstInd,&Question);
+	    /* Write question */
+	    ExaQstShe_WriteQst (Print,QstInd,&Question);
 
 	 /* Destroy test question */
 	 Qst_QstDestructor (&Question);

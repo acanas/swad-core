@@ -81,7 +81,7 @@ void Deg_DB_UpdateDegWWW (long HieCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1]);
 void Deg_DB_UpdateDegStatus (long DegCod,Hie_Status_t NewStatus);
 
 unsigned Deg_DB_GetMyDegs (MYSQL_RES **mysql_res,long HieCod);
-unsigned Deg_DB_GetUsrMainDeg (MYSQL_RES **mysql_res,long UsrCod);
+Exi_Exist_t Deg_DB_GetUsrMainDeg (MYSQL_RES **mysql_res,long UsrCod);
 Usr_Belong_t Deg_DB_CheckIfUsrBelongsToDeg (long UsrCod,long HieCod,
 					    bool CountOnlyAcceptedCourses);
 

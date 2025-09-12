@@ -63,11 +63,9 @@ extern struct Globals Gbl;
 
 //-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-
 static void ExaPrn_GetPrintDataFromRow (MYSQL_RES **mysql_res,
                                         struct ExaPrn_Print *Print,
-                                        unsigned NumPrints);
+                                        Exi_Exist_t PrintExists);
 
 static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,long ExaCod);
 static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
@@ -267,13 +265,13 @@ void ExaPrn_GetQstsPrint (struct Exa_Exams *Exams,
 void ExaPrn_GetPrintDataByPrnCod (struct ExaPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
-   unsigned NumPrints;
+   Exi_Exist_t PrintExists;
 
    /***** Make database query *****/
-   NumPrints = Exa_DB_GetPrintDataByPrnCod (&mysql_res,Print->PrnCod);
+   PrintExists = Exa_DB_GetPrintDataByPrnCod (&mysql_res,Print->PrnCod);
 
    /***** Get data of print *****/
-   ExaPrn_GetPrintDataFromRow (&mysql_res,Print,NumPrints);
+   ExaPrn_GetPrintDataFromRow (&mysql_res,Print,PrintExists);
   }
 
 /*****************************************************************************/
@@ -283,15 +281,15 @@ void ExaPrn_GetPrintDataByPrnCod (struct ExaPrn_Print *Print)
 void ExaPrn_GetPrintDataBySesCodAndUsrCod (struct ExaPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
-   unsigned NumPrints;
+   Exi_Exist_t PrintExists;
 
    /***** Make database query *****/
-   NumPrints = Exa_DB_GetPrintDataBySesCodAndUsrCod (&mysql_res,
-                                                     Print->SesCod,
-                                                     Print->UsrCod);
+   PrintExists = Exa_DB_GetPrintDataBySesCodAndUsrCod (&mysql_res,
+                                                       Print->SesCod,
+                                                       Print->UsrCod);
 
    /***** Get data of print *****/
-   ExaPrn_GetPrintDataFromRow (&mysql_res,Print,NumPrints);
+   ExaPrn_GetPrintDataFromRow (&mysql_res,Print,PrintExists);
   }
 
 /*****************************************************************************/
@@ -300,53 +298,51 @@ void ExaPrn_GetPrintDataBySesCodAndUsrCod (struct ExaPrn_Print *Print)
 
 static void ExaPrn_GetPrintDataFromRow (MYSQL_RES **mysql_res,
                                         struct ExaPrn_Print *Print,
-                                        unsigned NumPrints)
+                                        Exi_Exist_t PrintExists)
   {
    MYSQL_ROW row;
 
-   if (NumPrints)
+   switch (PrintExists)
      {
-      /* Get next row from result */
-      row = mysql_fetch_row (*mysql_res);
-      /*
-      row[0]: PrnCod
-      row[1]: SesCod
-      row[2]: UsrCod
-      row[3]: UNIX_TIMESTAMP(StartTime)
-      row[4]: UNIX_TIMESTAMP(EndTime)
-      row[5]: NumQsts
-      row[6]: NumQstsNotBlank
-      row[7]: Score
-      */
-      /* Get print code (row[0]) */
-      Print->PrnCod = Str_ConvertStrCodToLongCod (row[0]);
+      case Exi_EXISTS:
+	 /* Get next row from result */
+	 row = mysql_fetch_row (*mysql_res);
+	 /*
+	 row[0]: PrnCod
+	 row[1]: SesCod
+	 row[2]: UsrCod
+	 row[3]: UNIX_TIMESTAMP(StartTime)
+	 row[4]: UNIX_TIMESTAMP(EndTime)
+	 row[5]: NumQsts
+	 row[6]: NumQstsNotBlank
+	 row[7]: Score
+	 */
+	 /* Get print code (row[0]), session code (row[1]) and user code (row[2]) */
+	 Print->PrnCod = Str_ConvertStrCodToLongCod (row[0]);
+	 Print->SesCod = Str_ConvertStrCodToLongCod (row[1]);
+	 Print->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
-      /* Get session code (row[1]) */
-      Print->SesCod = Str_ConvertStrCodToLongCod (row[1]);
+	 /* Get date-time (row[3] and row[4] hold UTC date-time) */
+	 Print->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
+	 Print->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
 
-      /* Get user code (row[2]) */
-      Print->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
+	 /* Get number of questions (row[5]) and number of questions not blank (row[6]) */
+	 if (sscanf (row[5],"%u",&Print->NumQsts.All) != 1)
+	    Print->NumQsts.All = 0;
+	 if (sscanf (row[6],"%u",&Print->NumQsts.NotBlank) != 1)
+	    Print->NumQsts.NotBlank = 0;
 
-      /* Get date-time (row[3] and row[4] hold UTC date-time) */
-      Print->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
-      Print->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
-
-      /* Get number of questions (row[5]) */
-      if (sscanf (row[5],"%u",&Print->NumQsts.All) != 1)
-	 Print->NumQsts.All = 0;
-
-      /* Get number of questions not blank (row[6]) */
-      if (sscanf (row[6],"%u",&Print->NumQsts.NotBlank) != 1)
-	 Print->NumQsts.NotBlank = 0;
-
-      /* Get score (row[7]) */
-      Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[7],"%lf",&Print->Score.All) != 1)
-	 Print->Score.All = 0.0;
-      Str_SetDecimalPointToLocal ();	// Return to local system
+	 /* Get score (row[7]) */
+	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
+	 if (sscanf (row[7],"%lf",&Print->Score.All) != 1)
+	    Print->Score.All = 0.0;
+	 Str_SetDecimalPointToLocal ();	// Return to local system
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 ExaPrn_ResetPrint (Print);
+	 break;
      }
-   else
-      ExaPrn_ResetPrint (Print);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (mysql_res);
@@ -490,52 +486,52 @@ static void ExaPrn_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQue
    Qst_QstConstructor (&Question);
    Question.QstCod = PrintedQuestion->QstCod;
 
-   /***** Get answers of question from database *****/
-   Question.Answer.NumOptions = Exa_DB_GetQstAnswersFromSet (&mysql_res,
-                                                             Question.QstCod,
-                                                             Shuffle);
-   /*
-   row[0] AnsInd
-   row[1] Answer
-   row[2] Feedback
-   row[3] MedCod
-   row[4] Correct
-   */
-   /***** Reset string of indexes *****/
-   PrintedQuestion->StrIndexes[0] = '\0';
+      /***** Get answers of question from database *****/
+      Question.Answer.NumOptions = Exa_DB_GetQstAnswersFromSet (&mysql_res,
+								Question.QstCod,
+								Shuffle);
+      /*
+      row[0] AnsInd
+      row[1] Answer
+      row[2] Feedback
+      row[3] MedCod
+      row[4] Correct
+      */
+      /***** Reset string of indexes *****/
+      PrintedQuestion->StrIndexes[0] = '\0';
 
-   for (NumOpt = 0;
-	NumOpt < Question.Answer.NumOptions;
-	NumOpt++)
-     {
-      /***** Get next answer *****/
-      row = mysql_fetch_row (mysql_res);
+      for (NumOpt = 0;
+	   NumOpt < Question.Answer.NumOptions;
+	   NumOpt++)
+	{
+	 /***** Get next answer *****/
+	 row = mysql_fetch_row (mysql_res);
 
-      /***** Assign index (row[0]).
-             Index is 0,1,2,3... if no shuffle
-             or 1,3,0,2... (example) if shuffle *****/
-      ErrorInIndex = Err_SUCCESS;
-      if (sscanf (row[0],"%u",&Index) == 1)
-        {
-         if (Index >= Qst_MAX_OPTIONS_PER_QUESTION)
-            ErrorInIndex = Err_ERROR;
-        }
-      else
-         ErrorInIndex = Err_ERROR;
-      if (ErrorInIndex == Err_ERROR)
-         Err_WrongAnswerIndexExit ();
+	 /***** Assign index (row[0]).
+		Index is 0,1,2,3... if no shuffle
+		or 1,3,0,2... (example) if shuffle *****/
+	 ErrorInIndex = Err_SUCCESS;
+	 if (sscanf (row[0],"%u",&Index) == 1)
+	   {
+	    if (Index >= Qst_MAX_OPTIONS_PER_QUESTION)
+	       ErrorInIndex = Err_ERROR;
+	   }
+	 else
+	    ErrorInIndex = Err_ERROR;
+	 if (ErrorInIndex == Err_ERROR)
+	    Err_WrongAnswerIndexExit ();
 
-      /***** Add index to string *****/
-      if (NumOpt == 0)
-	 snprintf (StrInd,sizeof (StrInd),"%u",Index);
-      else
-	 snprintf (StrInd,sizeof (StrInd),",%u",Index);
-      Str_Concat (PrintedQuestion->StrIndexes,StrInd,
-                  sizeof (PrintedQuestion->StrIndexes) - 1);
-     }
+	 /***** Add index to string *****/
+	 if (NumOpt == 0)
+	    snprintf (StrInd,sizeof (StrInd),"%u",Index);
+	 else
+	    snprintf (StrInd,sizeof (StrInd),",%u",Index);
+	 Str_Concat (PrintedQuestion->StrIndexes,StrInd,
+		     sizeof (PrintedQuestion->StrIndexes) - 1);
+	}
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
 
    /***** Destroy test question *****/
    Qst_QstDestructor (&Question);
@@ -667,11 +663,11 @@ static void ExaPrn_ShowQstsAndAnssToFill (struct Exa_Exams *Exams,
 	 Qst_QstConstructor (&Question);
 	 Question.QstCod = Print->Qsts[QstInd].QstCod;
 
-	 /* Get question from database */
-	 ExaSet_GetQstDataFromDB (&Question);
+	    /* Get question from database */
+	    ExaSet_GetQstDataFromDB (&Question);
 
-	 /* Write question and answers */
-	 ExaPrn_WriteQstAndAnsToFill (Print,QstInd,&Question);
+	    /* Write question and answers */
+	    ExaPrn_WriteQstAndAnsToFill (Print,QstInd,&Question);
 
 	 /* Destroy test question */
 	 Qst_QstDestructor (&Question);

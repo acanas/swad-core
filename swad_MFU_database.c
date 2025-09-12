@@ -105,15 +105,15 @@ unsigned MFU_DB_GetMFUActionsOrderByLastClick (MYSQL_RES **mysql_res)
 /************************ Get score of current action ************************/
 /*****************************************************************************/
 
-unsigned MFU_DB_GetScoreForCurrentAction (MYSQL_RES **mysql_res,long ActCod)
+Exi_Exist_t MFU_DB_GetScoreForCurrentAction (MYSQL_RES **mysql_res,long ActCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get score for current action",
 		   "SELECT Score"	// row[0]
 		    " FROM act_frequent"
 		   " WHERE UsrCod=%ld"
 		     " AND ActCod=%ld",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   ActCod);
+		   ActCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
-

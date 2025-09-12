@@ -37,6 +37,6 @@ void Mrk_DB_AddMarks (long FilCod,const struct Mrk_Properties *Marks);
 void Mrk_DB_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter,unsigned NumRows);
 
 Exi_Exist_t Mrk_DB_GetMarksDataByCod (MYSQL_RES **mysql_res,long MrkCod);
-unsigned Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res);
+Exi_Exist_t Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res);
 
 #endif

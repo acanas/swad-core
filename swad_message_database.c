@@ -624,15 +624,16 @@ unsigned Msg_DB_GetSntOrRcvMsgs (MYSQL_RES **mysql_res,
 /****************** Get subject and content of a message *********************/
 /*****************************************************************************/
 
-unsigned Msg_DB_GetSubjectAndContent (MYSQL_RES **mysql_res,long MsgCod)
+Exi_Exist_t Msg_DB_GetSubjectAndContent (MYSQL_RES **mysql_res,long MsgCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get message content",
 		   "SELECT Subject,"	// row[0]
 			  "Content"	// row[1]
 		    " FROM msg_content"
 		   " WHERE MsgCod=%ld",
-		   MsgCod);
+		   MsgCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -654,15 +655,16 @@ void Msg_DB_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1])
 /*************** Get content and optional image of a message *****************/
 /*****************************************************************************/
 
-unsigned Msg_DB_GetMsgContent (MYSQL_RES **mysql_res,long MsgCod)
+Exi_Exist_t Msg_DB_GetMsgContent (MYSQL_RES **mysql_res,long MsgCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get the content of a message",
 		   "SELECT Content,"	// row[0]
 			  "MedCod"	// row[1]
 		    " FROM msg_content"
 		   " WHERE MsgCod=%ld",
-		   MsgCod);
+		   MsgCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

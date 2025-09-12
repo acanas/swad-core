@@ -44,7 +44,7 @@ void Exa_DB_HideOrUnhideExam (long ExaCod,
 			      HidVis_HiddenOrVisible_t HiddenOrVisible);
 unsigned Exa_DB_GetListExams (MYSQL_RES **mysql_res,Exa_Order_t SelectedOrder);
 Exi_Exist_t Exa_DB_GetExamDataByCod (MYSQL_RES **mysql_res,long ExaCod);
-unsigned Exa_DB_GetExamStartEnd (MYSQL_RES **mysql_res,long ExaCod);
+Exi_Exist_t Exa_DB_GetExamStartEnd (MYSQL_RES **mysql_res,long ExaCod);
 void Exa_DB_GetExamTitle (long ExaCod,char *Title,size_t TitleSize);
 void Exa_DB_GetExamTxt (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 Exi_Exist_t Exa_DB_CheckIfSimilarExamExists (long CrsCod,long ExaCod,const char *Title);
@@ -65,7 +65,7 @@ void Exa_DB_LockTables (void);
 unsigned Exa_DB_GetNumSetsExam (long ExaCod);
 unsigned Exa_DB_GetNumQstsExam (long ExaCod);
 unsigned Exa_DB_GetExamSets (MYSQL_RES **mysql_res,long ExaCod);
-unsigned Exa_DB_GetSetDataByCod (MYSQL_RES **mysql_res,long SetCod);
+Exi_Exist_t Exa_DB_GetSetDataByCod (MYSQL_RES **mysql_res,long SetCod);
 Exi_Exist_t Exa_DB_CheckIfSimilarSetExists (const struct ExaSet_Set *Set,
          				    const char Title[ExaSet_MAX_BYTES_TITLE + 1]);
 unsigned Exa_DB_GetSetIndFromSetCod (const struct ExaSet_Set *Set);
@@ -85,9 +85,9 @@ unsigned Exa_DB_GetNumQstsInSet (long SetCod);
 unsigned Exa_DB_GetQstsFromSet (MYSQL_RES **mysql_res,long SetCod);
 unsigned Exa_DB_GetSomeQstsFromSetToPrint (MYSQL_RES **mysql_res,
                                            long SetCod,unsigned NumQstsToPrint);
-unsigned Exa_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod);
-unsigned Exa_DB_GetValidityAndAnswerType (MYSQL_RES **mysql_res,long QstCod);
-unsigned Exa_DB_GetAnswerType (MYSQL_RES **mysql_res,long QstCod);
+Exi_Exist_t Exa_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod);
+Exi_Exist_t Exa_DB_GetValidityAndAnswerType (MYSQL_RES **mysql_res,long QstCod);
+Exi_Exist_t Exa_DB_GetAnswerType (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetMediaFromStemOfQst (MYSQL_RES **mysql_res,long QstCod,long SetCod);
 unsigned Exa_DB_GetAllMediaFomStemOfAllQstsFromExam (MYSQL_RES **mysql_res,long ExaCod);
 unsigned Exa_DB_GetAllMediaFomStemOfAllQstsFromCrs (MYSQL_RES **mysql_res,long CrsCod);
@@ -116,7 +116,7 @@ void Exa_DB_UpdateSession (const struct ExaSes_Session *Session);
 unsigned Exa_DB_GetNumSessionsInExam (long ExaCod);
 unsigned Exa_DB_GetNumOpenSessionsInExam (long ExaCod);
 unsigned Exa_DB_GetSessions (MYSQL_RES **mysql_res,long ExaCod);
-unsigned Exa_DB_GetSessionDataByCod (MYSQL_RES **mysql_res,long SesCod);
+Exi_Exist_t Exa_DB_GetSessionDataByCod (MYSQL_RES **mysql_res,long SesCod);
 void Exa_DB_GetSessionTitle (long SesCod,char Title[ExaSes_MAX_BYTES_TITLE + 1]);
 void Exa_DB_ToggleVisResultsSesUsr (const struct ExaSes_Session *Session);
 void Exa_DB_HideUnhideSession (const struct ExaSes_Session *Session,
@@ -143,9 +143,9 @@ void Exa_DB_RemoveGroup (long GrpCod);
 long Exa_DB_CreatePrint (const struct ExaPrn_Print *Print,
 			 ExaPrn_UpdateDates_t UpdateDates);
 void Exa_DB_UpdatePrint (const struct ExaPrn_Print *Print);
-unsigned Exa_DB_GetPrintDataByPrnCod (MYSQL_RES **mysql_res,long PrnCod);
-unsigned Exa_DB_GetPrintDataBySesCodAndUsrCod (MYSQL_RES **mysql_res,
-                                               long SesCod,long UsrCod);
+Exi_Exist_t Exa_DB_GetPrintDataByPrnCod (MYSQL_RES **mysql_res,long PrnCod);
+Exi_Exist_t Exa_DB_GetPrintDataBySesCodAndUsrCod (MYSQL_RES **mysql_res,
+                                                  long SesCod,long UsrCod);
 void Exa_DB_RemoveAllPrintsMadeByUsrInAllCrss (long UsrCod);
 void Exa_DB_RemoveAllPrintsMadeByUsrInCrs (long UsrCod,long CrsCod);
 void Exa_DB_RemoveAllPrintsFromSes (long SesCod);

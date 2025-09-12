@@ -487,7 +487,7 @@ static void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
       [Rsc_GROUPS	] = Grp_DB_GetGrpTypTitle,
       [Rsc_TEACHER	] = Usr_DB_GetUsrName,
       [Rsc_ATT_EVENT	] = Att_DB_GetEventTitle,
-      [Rsc_FORUM_THREAD	] = For_DB_GetThreadTitle,
+      [Rsc_FORUM_THREAD	] = For_DB_GetThreadTitleFromThrCod,
       [Rsc_SURVEY	] = Svy_DB_GetSurveyTitle,
      };
    static const char **GenericTitle[Rsc_NUM_TYPES] =

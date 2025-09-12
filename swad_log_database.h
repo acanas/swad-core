@@ -35,13 +35,13 @@ void Log_DB_LogAPI (long LogCod);
 void Log_DB_LogBanner (long LogCod,long BanCodClicked);
 
 unsigned Log_DB_GetLastClicks (MYSQL_RES **mysql_res);
-unsigned Log_DB_GetUsrFirstClick (MYSQL_RES **mysql_res,long UsrCod);
+Exi_Exist_t Log_DB_GetUsrFirstClick (MYSQL_RES **mysql_res,long UsrCod);
 unsigned Log_DB_GetUsrNumClicks (long UsrCod);
 unsigned Log_DB_GetMyClicksGroupedByAction (MYSQL_RES **mysql_res,
                                             time_t FirstClickTimeUTC,
                                             unsigned MaxActions);
-unsigned Log_DB_GetMyMaxHitsPerYear (MYSQL_RES **mysql_res,
-                                     time_t FirstClickTimeUTC);
+Exi_Exist_t Log_DB_GetMyMaxHitsPerYear (MYSQL_RES **mysql_res,
+                                        time_t FirstClickTimeUTC);
 unsigned Log_DB_GetMyCrssAndHitsPerCrs (MYSQL_RES **mysql_res,Rol_Role_t Role);
 unsigned Log_DB_GetMyHistoricCrss (MYSQL_RES **mysql_res,
                                    Rol_Role_t Role,unsigned MinClicksCrs);

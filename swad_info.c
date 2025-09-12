@@ -1608,16 +1608,20 @@ Inf_Src_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_Type_t InfoType)
    Inf_Src_t InfoSrc;
 
    /***** Get info source for a specific type of info from database *****/
-   if (Inf_DB_GetInfoSrc (&mysql_res,CrsCod,InfoType))
+   switch (Inf_DB_GetInfoSrc (&mysql_res,CrsCod,InfoType))
      {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 /* Get row */
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get info source (row[0]) */
-      InfoSrc = Inf_DB_ConvertFromStrDBToInfoSrc (row[0]);
+	 /* Get info source (row[0]) */
+	 InfoSrc = Inf_DB_ConvertFromStrDBToInfoSrc (row[0]);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 InfoSrc = Inf_SRC_NONE;
+	 break;
      }
-   else
-      InfoSrc = Inf_SRC_NONE;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1639,7 +1643,9 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Inf_Info *Info)
    Info->FromDB.MustBeRead = false;
 
    /***** Get info source for a specific type of info from database *****/
-   if (Inf_DB_GetInfoSrcAndMustBeRead (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod,Info->Type) == 1)
+   if (Inf_DB_GetInfoSrcAndMustBeRead (&mysql_res,
+				       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+				       Info->Type) == Exi_EXISTS)
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1666,25 +1672,27 @@ void Inf_GetInfoTxtFromDB (long CrsCod,Inf_Type_t InfoType,
 
    /***** Get info source for a specific type of course information
           (bibliography, FAQ, links or assessment) from database *****/
-   if (Inf_DB_GetInfoTxt (&mysql_res,CrsCod,InfoType) == 1)
+   switch (Inf_DB_GetInfoTxt (&mysql_res,CrsCod,InfoType))
      {
-      /* Get info text */
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 /* Get info text */
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get text in HTML format (not rigorous) */
-      if (InfoTxtHTML)
-	 Str_Copy (InfoTxtHTML,row[0],Cns_MAX_BYTES_LONG_TEXT);
+	 /* Get text in HTML format (not rigorous) */
+	 if (InfoTxtHTML)
+	    Str_Copy (InfoTxtHTML,row[0],Cns_MAX_BYTES_LONG_TEXT);
 
-      /* Get text in Markdown format */
-      if (InfoTxtMD)
-	 Str_Copy (InfoTxtMD  ,row[1],Cns_MAX_BYTES_LONG_TEXT);
-     }
-   else
-     {
-      if (InfoTxtHTML)
-         InfoTxtHTML[0] = '\0';
-      if (InfoTxtMD)
-         InfoTxtMD  [0] = '\0';
+	 /* Get text in Markdown format */
+	 if (InfoTxtMD)
+	    Str_Copy (InfoTxtMD  ,row[1],Cns_MAX_BYTES_LONG_TEXT);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 if (InfoTxtHTML)
+	    InfoTxtHTML[0] = '\0';
+	 if (InfoTxtMD)
+	    InfoTxtMD  [0] = '\0';
+	 break;
      }
 
    /***** Free structure that stores the query result *****/

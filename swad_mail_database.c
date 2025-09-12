@@ -240,16 +240,17 @@ void Mai_DB_InsertPendingEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1
 /******************** Get user's code and email from key *********************/
 /*****************************************************************************/
 
-unsigned Mai_DB_GetPendingEmail (MYSQL_RES **mysql_res,
-                                 const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1])
+Exi_Exist_t Mai_DB_GetPendingEmail (MYSQL_RES **mysql_res,
+                                    const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1])
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get user's code and email from key",
 		   "SELECT UsrCod,"		// row[0]
 			  "E_mail"		// row[1]
 		    " FROM usr_pending_emails"
 		   " WHERE MailKey='%s'",
-		   MailKey);
+		   MailKey) ? Exi_EXISTS :
+			      Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

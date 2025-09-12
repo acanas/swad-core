@@ -228,16 +228,17 @@ Exi_Exist_t Ctr_DB_GetCenterDataByCod (MYSQL_RES **mysql_res,long HieCod)
 /******************** Get coordinates of center by code **********************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetCoordByCod (MYSQL_RES **mysql_res,long HieCod)
+Exi_Exist_t Ctr_DB_GetCoordByCod (MYSQL_RES **mysql_res,long HieCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get coordinares of a center",
-		   "SELECT Latitude,"		// row[ 0]
-			  "Longitude,"		// row[ 1]
-			  "Altitude"		// row[ 2]
+		   "SELECT Latitude,"	// row[ 0]
+			  "Longitude,"	// row[ 1]
+			  "Altitude"	// row[ 2]
 		    " FROM ctr_centers"
 		   " WHERE CtrCod=%ld",
-		   HieCod);
+		   HieCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

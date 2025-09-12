@@ -40,8 +40,8 @@ void Mch_DB_UpdateMatchTitle (long MchCod,
                               const char Title[Gam_MAX_BYTES_TITLE + 1]);
 void Mch_DB_UpdateVisResultsMchUsr (long MchCod,bool ShowUsrResults);
 
-unsigned Mch_DB_GetMatchDataByCod (MYSQL_RES **mysql_res,long MchCod);
-unsigned Mch_DB_GetStartEndMatchesInGame (MYSQL_RES **mysql_res,long GamCod);
+Exi_Exist_t Mch_DB_GetMatchDataByCod (MYSQL_RES **mysql_res,long MchCod);
+Exi_Exist_t Mch_DB_GetStartEndMatchesInGame (MYSQL_RES **mysql_res,long GamCod);
 unsigned Mch_DB_GetMatchesInGame (MYSQL_RES **mysql_res,long GamCod);
 unsigned Mch_DB_GetAvailableMatchesInGame (MYSQL_RES **mysql_res,long GamCod);
 unsigned Mch_DB_GetMatchesBetweenDates (MYSQL_RES **mysql_res,
@@ -79,8 +79,8 @@ void Mch_DB_UpdateMyAnswerToMatchQuestion (const struct Mch_Match *Match,
                                            const struct Mch_UsrAnswer *UsrAnswer);
 void Mch_DB_UpdateIndexesOfQstsGreaterThan (long GamCod,unsigned QstInd);
 
-unsigned Mch_DB_GetUsrAnsToQst (MYSQL_RES **mysql_res,
-                                long MchCod,long UsrCod,unsigned QstInd);
+Exi_Exist_t Mch_DB_GetUsrAnsToQst (MYSQL_RES **mysql_res,
+                                   long MchCod,long UsrCod,unsigned QstInd);
 unsigned Mch_DB_GetNumUsrsWhoAnsweredQst (long MchCod,unsigned QstInd);
 unsigned Mch_DB_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd);
 
@@ -106,17 +106,17 @@ void Mch_DB_RemoveOldPlaying (void);
 //----------------------------- Elapsed times ---------------------------------
 void Mch_DB_UpdateElapsedTimeInQuestion (long MchCod,long QstInd);
 
-unsigned Mch_DB_GetElapsedTimeInQuestion (MYSQL_RES **mysql_res,
-					  long MchCod,unsigned QstInd);
-unsigned Mch_DB_GetElapsedTimeInMatch (MYSQL_RES **mysql_res,long MchCod);
+Exi_Exist_t Mch_DB_GetElapsedTimeInQuestion (MYSQL_RES **mysql_res,
+					     long MchCod,unsigned QstInd);
+Exi_Exist_t Mch_DB_GetElapsedTimeInMatch (MYSQL_RES **mysql_res,long MchCod);
 
 //----------------------------- Match results ---------------------------------
 void Mch_DB_CreateMatchPrint (const struct MchPrn_Print *Print);
 void Mch_DB_UpdateMatchPrint (const struct MchPrn_Print *Print);
 
 Exi_Exist_t Mch_DB_CheckIfMatchPrintExists (const struct MchPrn_Print *Print);
-unsigned Mch_DB_GetMatchPrintData (MYSQL_RES **mysql_res,
-                                   const struct MchPrn_Print *Print);
+Exi_Exist_t Mch_DB_GetMatchPrintData (MYSQL_RES **mysql_res,
+                                      const struct MchPrn_Print *Print);
 unsigned Mch_DB_GetPrintsInMatch (MYSQL_RES **mysql_res,long MchCod);
 unsigned Mch_DB_GetNumUsrsWhoHavePlayedMch (long MchCod);
 unsigned Mch_DB_GetUsrsWhoHavePlayedMch (MYSQL_RES **mysql_res,long MchCod);

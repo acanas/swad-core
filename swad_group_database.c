@@ -120,11 +120,11 @@ void Grp_DB_GetGrpTypTitle (long GrpTypCod,char *Title,size_t TitleSize)
 /******************* Get data of a group type from its code ******************/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetGroupTypeData (MYSQL_RES **mysql_res,long GrpTypCod)
+Exi_Exist_t Grp_DB_GetGroupTypeDataFromGrpTypCod (MYSQL_RES **mysql_res,long GrpTypCod)
   {
    // GrpTypCod can belong to a course distinct from the current one,
    // so don't extra check course
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get type of group",
 		       "SELECT GrpTypName,"			// row[0]
 			      "Mandatory,"			// row[1]
@@ -133,35 +133,38 @@ unsigned Grp_DB_GetGroupTypeData (MYSQL_RES **mysql_res,long GrpTypCod)
 			      "UNIX_TIMESTAMP(OpenTime)"	// row[4]
 			" FROM grp_types"
 		       " WHERE GrpTypCod=%ld",
-		       GrpTypCod);
+		       GrpTypCod) ? Exi_EXISTS :
+				    Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /************* Check if a group type has multiple enrolment *****************/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetSingleMultiple (MYSQL_RES **mysql_res,long GrpTypCod)
+Exi_Exist_t Grp_DB_GetSingleMultiple (MYSQL_RES **mysql_res,long GrpTypCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get if type of group has multiple enrolment",
 		   "SELECT Multiple"	// row[0]
 		    " FROM grp_types"
 		   " WHERE GrpTypCod=%ld",
-		   GrpTypCod);
+		   GrpTypCod) ? Exi_EXISTS :
+				Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /******************** Check if a group has file zones ************************/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetFileZones (MYSQL_RES **mysql_res,long GrpCod)
+Exi_Exist_t Grp_DB_GetFileZones (MYSQL_RES **mysql_res,long GrpCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get if group has file zones",
 		   "SELECT FileZones"	// row[0]
 		    " FROM grp_groups"
 		   " WHERE GrpCod=%ld",
-		   GrpCod);
+		   GrpCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -618,7 +621,8 @@ unsigned Grp_DB_GetLstCodGrpsOfAnyTypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_
 /************ to which a user belongs to (in the current course) *************/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetLstCodGrpsOfATypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,long UsrCod,long GrpTypCod)
+unsigned Grp_DB_GetLstCodGrpsOfATypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,
+							    long UsrCod,long GrpTypCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get the groups which a user belongs to",
