@@ -39,8 +39,8 @@ void Not_DB_CopyNoticeToDeleted (long NotCod);
 void Not_DB_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,
                                                      unsigned NumUsrsToBeNotifiedByEMail);
 
-unsigned Not_DB_GetNoticeData (MYSQL_RES **mysql_res,long NotCod);
-unsigned Not_DB_ContentNotice (MYSQL_RES **mysql_res,long NotCod);
+Exi_Exist_t Not_DB_GetNoticeData (MYSQL_RES **mysql_res,long NotCod);
+Exi_Exist_t Not_DB_ContentNotice (MYSQL_RES **mysql_res,long NotCod);
 unsigned Not_DB_GetAllNotices (MYSQL_RES **mysql_res);
 unsigned Not_DB_GetActiveNotices (MYSQL_RES **mysql_res,long CrsCod);
 unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,

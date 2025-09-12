@@ -105,14 +105,15 @@ void Pho_DB_IncrMyClicksWithoutPhoto (void)
 /************ Get number of clicks without photo from database ***************/
 /*****************************************************************************/
 
-unsigned Pho_DB_GetMyClicksWithoutPhoto (MYSQL_RES **mysql_res)
+Exi_Exist_t Pho_DB_GetMyClicksWithoutPhoto (MYSQL_RES **mysql_res)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get number of clicks without photo",
 		   "SELECT NumClicks"		// row[0]
 		    " FROM usr_clicks_without_photo"
 		   " WHERE UsrCod=%ld",
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Gbl.Usrs.Me.UsrDat.UsrCod) ? Exi_EXISTS :
+						Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -257,27 +258,28 @@ long Pho_DB_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
 /********* Get maximum number of students in a degree from database **********/
 /*****************************************************************************/
 
-unsigned Pho_DB_GetMaxStdsPerDegree (MYSQL_RES **mysql_res)
+Exi_Exist_t Pho_DB_GetMaxStdsPerDegree (MYSQL_RES **mysql_res)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get maximum number of students in a degree",
 		   "SELECT MAX(NumStds),"			// row[0]
 			  "MAX(NumStdsWithPhoto),"		// row[1]
 			  "MAX(NumStdsWithPhoto/NumStds)"	// row[2]
 		    " FROM sta_degrees"
 		   " WHERE Sex='all'"
-		     " AND NumStds>0");
+		     " AND NumStds>0") ? Exi_EXISTS :
+					 Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /*** Get number of students and number of students with photo in a degree ****/
 /*****************************************************************************/
 
-unsigned Pho_DB_GetNumStdsInDegree (MYSQL_RES **mysql_res,long DegCod,Usr_Sex_t Sex)
+Exi_Exist_t Pho_DB_GetNumStdsInDegree (MYSQL_RES **mysql_res,long DegCod,Usr_Sex_t Sex)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
 
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get the number of students in a degree",
 		   "SELECT NumStds,"		// row[0]
 			  "NumStdsWithPhoto"	// row[1]
@@ -285,22 +287,24 @@ unsigned Pho_DB_GetNumStdsInDegree (MYSQL_RES **mysql_res,long DegCod,Usr_Sex_t 
 		   " WHERE DegCod=%ld"
 		     " AND Sex='%s'",
 		   DegCod,
-		   Usr_StringsSexDB[Sex]);
+		   Usr_StringsSexDB[Sex]) ? Exi_EXISTS :
+					    Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /********* Get last time an average photo was computed from database *********/
 /*****************************************************************************/
 
-unsigned Pho_DB_GetTimeAvgPhotoWasComputed (MYSQL_RES **mysql_res,long DegCod)
+Exi_Exist_t Pho_DB_GetTimeAvgPhotoWasComputed (MYSQL_RES **mysql_res,long DegCod)
   {
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not get last time"
 			    " an average photo was computed",
 		   "SELECT COALESCE(MIN(UNIX_TIMESTAMP(TimeAvgPhoto)),0)"	// row[0]
 		    " FROM sta_degrees"
 		   " WHERE DegCod=%ld",
-		   DegCod);
+		   DegCod) ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

@@ -44,7 +44,7 @@ void Pho_DB_UpdatePhotoName (long UsrCod,
 void Pho_DB_InitMyClicksWithoutPhoto (void);
 void Pho_DB_IncrMyClicksWithoutPhoto (void);
 
-unsigned Pho_DB_GetMyClicksWithoutPhoto (MYSQL_RES **mysql_res);
+Exi_Exist_t Pho_DB_GetMyClicksWithoutPhoto (MYSQL_RES **mysql_res);
 
 void Pho_DB_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod);
 
@@ -57,9 +57,9 @@ unsigned Pho_DB_QueryDegrees (MYSQL_RES **mysql_res,
                               Pho_HowOrderDegrees_t HowOrderDegrees);
 long Pho_DB_GetADegWithStdsNotInTableOfComputedDegs (void);
 long Pho_DB_GetDegWithAvgPhotoLeastRecentlyUpdated (void);
-unsigned Pho_DB_GetMaxStdsPerDegree (MYSQL_RES **mysql_res);
-unsigned Pho_DB_GetNumStdsInDegree (MYSQL_RES **mysql_res,long DegCod,Usr_Sex_t Sex);
-unsigned Pho_DB_GetTimeAvgPhotoWasComputed (MYSQL_RES **mysql_res,long DegCod);
+Exi_Exist_t Pho_DB_GetMaxStdsPerDegree (MYSQL_RES **mysql_res);
+Exi_Exist_t Pho_DB_GetNumStdsInDegree (MYSQL_RES **mysql_res,long DegCod,Usr_Sex_t Sex);
+Exi_Exist_t Pho_DB_GetTimeAvgPhotoWasComputed (MYSQL_RES **mysql_res,long DegCod);
 unsigned Pho_DB_GetTimeToComputeAvgPhoto (MYSQL_RES **mysql_res,long DegCod);
 
 void Pho_DB_RemoveObsoleteStatDegrees (void);

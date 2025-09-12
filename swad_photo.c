@@ -995,24 +995,26 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
    unsigned NumClicks;
 
    /***** Get number of clicks without photo from database *****/
-   if (Pho_DB_GetMyClicksWithoutPhoto (&mysql_res))        // The user exists ==> update number of clicks without photo
+   switch (Pho_DB_GetMyClicksWithoutPhoto (&mysql_res))
      {
-      /* Get current number of clicks */
-      row = mysql_fetch_row (mysql_res);
-      sscanf (row[0],"%u",&NumClicks);
+      case Exi_EXISTS:		// The user exists ==> update number of clicks without photo
+	 /* Get current number of clicks */
+	 row = mysql_fetch_row (mysql_res);
+	 sscanf (row[0],"%u",&NumClicks);
 
-      /* Update number of clicks */
-      if (NumClicks <= Pho_MAX_CLICKS_WITHOUT_PHOTO)
-        {
-         Pho_DB_IncrMyClicksWithoutPhoto ();
-         NumClicks++;
-        }
-     }
-   else                                      		  // The user does not exist ==> add him/her
-     {
-      /* Add the user, with one access */
-      Pho_DB_InitMyClicksWithoutPhoto ();
-      NumClicks = 1;
+	 /* Update number of clicks */
+	 if (NumClicks <= Pho_MAX_CLICKS_WITHOUT_PHOTO)
+	   {
+	    Pho_DB_IncrMyClicksWithoutPhoto ();
+	    NumClicks++;
+	   }
+	 break;
+      case Exi_DOES_NOT_EXIST:	// The user does not exist ==> add him/her
+      default:
+	 /* Add the user, with one access */
+	 Pho_DB_InitMyClicksWithoutPhoto ();
+	 NumClicks = 1;
+	 break;
      }
 
    /***** Free structure that stores the query result *****/
@@ -1631,7 +1633,7 @@ static long Pho_GetTimeAvgPhotoWasComputed (long DegCod)
    long TimeAvgPhotoWasComputed = 0L;
 
    /***** Get last time an average photo was computed from database *****/
-   if (Pho_DB_GetTimeAvgPhotoWasComputed (&mysql_res,DegCod) == 1)
+   if (Pho_DB_GetTimeAvgPhotoWasComputed (&mysql_res,DegCod) == Exi_EXISTS)
      {
       /***** Get row *****/
       row = mysql_fetch_row (mysql_res);
@@ -2209,32 +2211,34 @@ static void Pho_GetMaxStdsPerDegree (struct Pho_DegPhotos *DegPhotos)
    MYSQL_ROW row;
 
    /***** Get maximum number of students in a degree from database *****/
-   if (Pho_DB_GetMaxStdsPerDegree (&mysql_res) == 1)
+   switch (Pho_DB_GetMaxStdsPerDegree (&mysql_res))
      {
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 row = mysql_fetch_row (mysql_res);
 
-      if (row[0] == NULL)
-	 DegPhotos->MaxStds = -1;
-      else if (sscanf (row[0],"%d",&DegPhotos->MaxStds) != 1)
-	 DegPhotos->MaxStds = -1;
+	 if (row[0] == NULL)
+	    DegPhotos->MaxStds = -1;
+	 else if (sscanf (row[0],"%d",&DegPhotos->MaxStds) != 1)
+	    DegPhotos->MaxStds = -1;
 
-      if (row[1] == NULL)
-	 DegPhotos->MaxStdsWithPhoto = -1;
-      else if (sscanf (row[1],"%d",&DegPhotos->MaxStdsWithPhoto) != 1)
-	 DegPhotos->MaxStdsWithPhoto = -1;
+	 if (row[1] == NULL)
+	    DegPhotos->MaxStdsWithPhoto = -1;
+	 else if (sscanf (row[1],"%d",&DegPhotos->MaxStdsWithPhoto) != 1)
+	    DegPhotos->MaxStdsWithPhoto = -1;
 
-      if (row[2] == NULL)
+	 if (row[2] == NULL)
+	    DegPhotos->MaxPercent = -1.0;
+	 else if (sscanf (row[2],"%lf",&DegPhotos->MaxPercent) != 1)
+	    DegPhotos->MaxPercent = -1.0;
+
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 DegPhotos->MaxStds = DegPhotos->MaxStdsWithPhoto = -1;
 	 DegPhotos->MaxPercent = -1.0;
-      else if (sscanf (row[2],"%lf",&DegPhotos->MaxPercent) != 1)
-	 DegPhotos->MaxPercent = -1.0;
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-   else
-     {
-      DegPhotos->MaxStds = DegPhotos->MaxStdsWithPhoto = -1;
-      DegPhotos->MaxPercent = -1.0;
+	 break;
      }
   }
 
@@ -2426,22 +2430,26 @@ static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,
    MYSQL_ROW row;
 
    /***** Get the number of students in a degree from database *****/
-   if (Pho_DB_GetNumStdsInDegree (&mysql_res,DegCod,Sex))
+   switch (Pho_DB_GetNumStdsInDegree (&mysql_res,DegCod,Sex))
      {
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get number of students (row[0])
-         and number of students with photo (row[1]) */
-      if (sscanf (row[0],"%d",NumStds) != 1)
-	 *NumStds = -1;
-      if (sscanf (row[1],"%d",NumStdsWithPhoto) != 1)
-	 *NumStdsWithPhoto = -1;
+	 /* Get number of students (row[0])
+	    and number of students with photo (row[1]) */
+	 if (sscanf (row[0],"%d",NumStds) != 1)
+	    *NumStds = -1;
+	 if (sscanf (row[1],"%d",NumStdsWithPhoto) != 1)
+	    *NumStdsWithPhoto = -1;
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 *NumStds = *NumStdsWithPhoto = -1;
+	 break;
      }
-   else
-      *NumStds = *NumStdsWithPhoto = -1;
   }
 
 /*****************************************************************************/

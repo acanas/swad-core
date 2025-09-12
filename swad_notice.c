@@ -455,7 +455,7 @@ static void Not_GetDataAndShowNotice (long NotCod)
    struct Not_Notice Notice;
 
    /***** Get notice data from database *****/
-   if (Not_DB_GetNoticeData (&mysql_res,NotCod))
+   if (Not_DB_GetNoticeData (&mysql_res,NotCod) == Exi_EXISTS)
      {
       Not_GetNoticeDataFromRow (mysql_res,&Notice,Not_LIST_FULL_NOTICES);
 
@@ -672,7 +672,7 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Get content of message from database *****/
-   if (Not_DB_ContentNotice (&mysql_res,NotCod) == 1)	// Result should have a unique row
+   if (Not_DB_ContentNotice (&mysql_res,NotCod) == Exi_EXISTS)
      {
       /***** Get sumary / content *****/
       row = mysql_fetch_row (mysql_res);
