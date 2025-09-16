@@ -627,13 +627,12 @@ unsigned Msg_DB_GetSntOrRcvMsgs (MYSQL_RES **mysql_res,
 Exi_Exist_t Msg_DB_GetSubjectAndContent (MYSQL_RES **mysql_res,long MsgCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get message content",
-		   "SELECT Subject,"	// row[0]
-			  "Content"	// row[1]
-		    " FROM msg_content"
-		   " WHERE MsgCod=%ld",
-		   MsgCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get message content",
+			 "SELECT Subject,"	// row[0]
+				"Content"	// row[1]
+			  " FROM msg_content"
+			 " WHERE MsgCod=%ld",
+			 MsgCod);
   }
 
 /*****************************************************************************/
@@ -658,13 +657,12 @@ void Msg_DB_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1])
 Exi_Exist_t Msg_DB_GetMsgContent (MYSQL_RES **mysql_res,long MsgCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get the content of a message",
-		   "SELECT Content,"	// row[0]
-			  "MedCod"	// row[1]
-		    " FROM msg_content"
-		   " WHERE MsgCod=%ld",
-		   MsgCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get the content of a message",
+			 "SELECT Content,"	// row[0]
+				"MedCod"	// row[1]
+			  " FROM msg_content"
+			 " WHERE MsgCod=%ld",
+			 MsgCod);
   }
 
 /*****************************************************************************/
@@ -737,16 +735,16 @@ void Msg_DB_GetStatusOfRcvMsg (long MsgCod,CloOpe_ClosedOrOpen_t *Open,
    MYSQL_ROW row;
 
    /***** Get if received message has been open/replied/expanded from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get if a received message"
-				  " has been replied/expanded",
-		       "SELECT Open,"		// row[0]
-			      "Replied,"	// row[1]
-			      "Expanded"	// row[2]
-			" FROM msg_rcv"
-		       " WHERE MsgCod=%ld"
-			 " AND UsrCod=%ld",
-		       MsgCod,
-		       Gbl.Usrs.Me.UsrDat.UsrCod) != 1)
+   if (DB_QuerySELECTunique (&mysql_res,"can not get if a received message"
+					" has been replied/expanded",
+			     "SELECT Open,"	// row[0]
+				    "Replied,"	// row[1]
+				    "Expanded"	// row[2]
+			      " FROM msg_rcv"
+			     " WHERE MsgCod=%ld"
+			       " AND UsrCod=%ld",
+			     MsgCod,
+			     Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_DOES_NOT_EXIST)
       Err_ShowErrorAndExit ("Error when getting if a received message has been replied/expanded.");
 
    /***** Get number of rows *****/

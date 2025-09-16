@@ -128,19 +128,18 @@ void Ins_DB_UpdateInsWWW (long HieCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1])
 Exi_Exist_t Ins_DB_GetInsDataByCod (MYSQL_RES **mysql_res,long HieCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get data of an institution",
-		   "SELECT InsCod,"		// row[0]
-			  "CtyCod,"		// row[1]
-			  "Status,"		// row[2]
-			  "RequesterUsrCod,"	// row[3]
-			  "ShortName,"		// row[4]
-			  "FullName,"		// row[5]
-			  "WWW,"		// row[6]
-                  	  "0 AS NumUsrs"	// row[7] (not used)
-		    " FROM ins_instits"
-		   " WHERE InsCod=%ld",
-		   HieCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get data of an institution",
+			 "SELECT InsCod,"		// row[0]
+				"CtyCod,"		// row[1]
+				"Status,"		// row[2]
+				"RequesterUsrCod,"	// row[3]
+				"ShortName,"		// row[4]
+				"FullName,"		// row[5]
+				"WWW,"			// row[6]
+				"0 AS NumUsrs"		// row[7] (not used)
+			  " FROM ins_instits"
+			 " WHERE InsCod=%ld",
+			 HieCod);
   }
 
 /*****************************************************************************/
@@ -174,17 +173,16 @@ Exi_Exist_t Ins_DB_GetInsShrtNameAndCty (MYSQL_RES **mysql_res,long InsCod)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
    return
-   DB_QuerySELECT (mysql_res,"can not get short name and country"
-			    " of an institution",
-		   "SELECT ins_instits.ShortName,"	// row[0]
-			  "cty_countrs.Name_%s"		// row[1]
-		    " FROM ins_instits,"
-			  "cty_countrs"
-		   " WHERE ins_instits.InsCod=%ld"
-		     " AND ins_instits.CtyCod=cty_countrs.CtyCod",
-		   Lan_STR_LANG_ID[Gbl.Prefs.Language],
-		   InsCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get short name and country"
+				   " of an institution",
+			 "SELECT ins_instits.ShortName,"	// row[0]
+				"cty_countrs.Name_%s"		// row[1]
+			  " FROM ins_instits,"
+				"cty_countrs"
+			 " WHERE ins_instits.InsCod=%ld"
+			   " AND ins_instits.CtyCod=cty_countrs.CtyCod",
+			 Lan_STR_LANG_ID[Gbl.Prefs.Language],
+			 InsCod);
   }
 
 /*****************************************************************************/

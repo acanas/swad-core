@@ -99,8 +99,8 @@ void Tml_DB_CreateSubQueryPublishers (TmlUsr_UsrOrGbl_t UsrOrGbl,Usr_Who_t Who,
                                       char SubQuery[TmlPub_MAX_BYTES_SUBQUERY + 1]);
 void Tml_DB_CreateSubQueryRange (TmlPub_Range_t Range,long PubCod,
                                  char SubQuery[TmlPub_MAX_BYTES_SUBQUERY + 1]);
-unsigned Tml_DB_SelectTheMostRecentPub (MYSQL_RES **mysql_res,
-                                        const struct TmlPub_SubQueries *SubQueries);
+Exi_Exist_t Tml_DB_SelectTheMostRecentPub (MYSQL_RES **mysql_res,
+                                           const struct TmlPub_SubQueries *SubQueries);
 Exi_Exist_t Tml_DB_GetPubDataByCod (long PubCod,MYSQL_RES **mysql_res);
 long Tml_DB_GetNotCodFromPubCod (long PubCod);
 long Tml_DB_GetPubCodFromSession (TmlPub_FirstLast_t FirstLast);

@@ -70,13 +70,12 @@ Exi_Exist_t API_DB_GetDataFromAPIKey (MYSQL_RES **mysql_res,
 				      char APIKey[API_BYTES_KEY + 1])
   {
    return
-   DB_QuerySELECT (mysql_res,"can not data from API key",
-		   "SELECT UsrCod,"	// row[0]
-			  "PlgCod"	// row[1]
-		    " FROM api_keys"
-		   " WHERE WSKey='%s'",
-		   APIKey) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not data from API key",
+			 "SELECT UsrCod,"	// row[0]
+				"PlgCod"	// row[1]
+			  " FROM api_keys"
+			 " WHERE WSKey='%s'",
+			 APIKey);
   }
 
 /*****************************************************************************/

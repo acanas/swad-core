@@ -50,7 +50,7 @@ void Ses_GetNumSessions (void);
 void Ses_CreateSession (void);
 void Ses_CloseSession (void);
 
-Err_SuccessOrError_t Ses_GetSessionData (void);
+Exi_Exist_t Ses_GetSessionData (void);
 
 //---------------------------- Session parameters -----------------------------
 void Ses_InsertParInDB (const char *ParName,const char *ParValue);

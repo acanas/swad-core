@@ -205,18 +205,17 @@ unsigned Exa_DB_GetListExams (MYSQL_RES **mysql_res,Exa_Order_t SelectedOrder)
 Exi_Exist_t Exa_DB_GetExamDataByCod (MYSQL_RES **mysql_res,long ExaCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get exam data",
-		   "SELECT ExaCod,"	// row[0]
-			  "CrsCod,"	// row[1]
-			  "Hidden,"	// row[2]
-			  "UsrCod,"	// row[3]
-			  "MaxGrade,"	// row[4]
-			  "Visibility,"	// row[5]
-			  "Title"	// row[6]
-		    " FROM exa_exams"
-		   " WHERE ExaCod=%ld",
-		   ExaCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get exam data",
+			 "SELECT ExaCod,"	// row[0]
+				"CrsCod,"	// row[1]
+				"Hidden,"	// row[2]
+				"UsrCod,"	// row[3]
+				"MaxGrade,"	// row[4]
+				"Visibility,"	// row[5]
+				"Title"	// row[6]
+			  " FROM exa_exams"
+			 " WHERE ExaCod=%ld",
+			 ExaCod);
   }
 
 /*****************************************************************************/
@@ -226,13 +225,12 @@ Exi_Exist_t Exa_DB_GetExamDataByCod (MYSQL_RES **mysql_res,long ExaCod)
 Exi_Exist_t Exa_DB_GetExamStartEnd (MYSQL_RES **mysql_res,long ExaCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get exam data",
-		   "SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
-			  "UNIX_TIMESTAMP(MAX(EndTime))"	// row[1]
-		    " FROM exa_sessions"
-		   " WHERE ExaCod=%ld",
-		   ExaCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get exam data",
+			 "SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
+				"UNIX_TIMESTAMP(MAX(EndTime))"		// row[1]
+			  " FROM exa_sessions"
+			 " WHERE ExaCod=%ld",
+			 ExaCod);
   }
 
 /*****************************************************************************/
@@ -687,16 +685,15 @@ unsigned Exa_DB_GetExamSets (MYSQL_RES **mysql_res,long ExaCod)
 Exi_Exist_t Exa_DB_GetSetDataByCod (MYSQL_RES **mysql_res,long SetCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get set data",
-		   "SELECT SetCod,"		// row[0]
-			  "ExaCod,"		// row[1]
-			  "SetInd,"		// row[2]
-			  "NumQstsToPrint,"	// row[3]
-			  "Title"		// row[4]
-		    " FROM exa_sets"
-		   " WHERE SetCod=%ld",
-		   SetCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get set data",
+			 "SELECT SetCod,"		// row[0]
+				"ExaCod,"		// row[1]
+				"SetInd,"		// row[2]
+				"NumQstsToPrint,"	// row[3]
+				"Title"		// row[4]
+			  " FROM exa_sets"
+			 " WHERE SetCod=%ld",
+			 SetCod);
   }
 
 /*****************************************************************************/
@@ -963,17 +960,16 @@ unsigned Exa_DB_GetSomeQstsFromSetToPrint (MYSQL_RES **mysql_res,
 Exi_Exist_t Exa_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get a question",
-		   "SELECT Invalid,"	// row[0]
-			  "AnsType,"	// row[1]
-			  "Shuffle,"	// row[2]
-			  "Stem,"	// row[3]
-			  "Feedback,"	// row[4]
-			  "MedCod"	// row[5]
-		    " FROM exa_set_questions"
-		   " WHERE QstCod=%ld",
-		   QstCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get a question",
+			 "SELECT Invalid,"	// row[0]
+				"AnsType,"	// row[1]
+				"Shuffle,"	// row[2]
+				"Stem,"		// row[3]
+				"Feedback,"	// row[4]
+				"MedCod"	// row[5]
+			  " FROM exa_set_questions"
+			 " WHERE QstCod=%ld",
+			 QstCod);
   }
 
 /*****************************************************************************/
@@ -983,13 +979,12 @@ Exi_Exist_t Exa_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod)
 Exi_Exist_t Exa_DB_GetValidityAndAnswerType (MYSQL_RES **mysql_res,long QstCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get a question",
-		   "SELECT Invalid,"	// row[0]
-			  "AnsType"	// row[1]
-		    " FROM exa_set_questions"
-		   " WHERE QstCod=%ld",
-		   QstCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get a question",
+			 "SELECT Invalid,"	// row[0]
+				"AnsType"	// row[1]
+			  " FROM exa_set_questions"
+			 " WHERE QstCod=%ld",
+			 QstCod);
   }
 
 /*****************************************************************************/
@@ -999,12 +994,11 @@ Exi_Exist_t Exa_DB_GetValidityAndAnswerType (MYSQL_RES **mysql_res,long QstCod)
 Exi_Exist_t Exa_DB_GetAnswerType (MYSQL_RES **mysql_res,long QstCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get a question",
-		   "SELECT AnsType"	// row[0]
-		    " FROM exa_set_questions"
-		   " WHERE QstCod=%ld",
-		   QstCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get a question",
+			 "SELECT AnsType"	// row[0]
+			  " FROM exa_set_questions"
+			 " WHERE QstCod=%ld",
+			 QstCod);
   }
 
 /*****************************************************************************/
@@ -1503,28 +1497,27 @@ unsigned Exa_DB_GetSessions (MYSQL_RES **mysql_res,long ExaCod)
 Exi_Exist_t Exa_DB_GetSessionDataByCod (MYSQL_RES **mysql_res,long SesCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get sessions",
-		   "SELECT SesCod,"				// row[ 0]
-			  "ExaCod,"				// row[ 1]
-			  "Hidden,"				// row[ 2]
-			  "UsrCod,"				// row[ 3]
-			  "Modality,"				// row[ 4]
-			  "UNIX_TIMESTAMP(StartTime),"		// row[ 5]
-			  "UNIX_TIMESTAMP(EndTime),"		// row[ 6]
-			  "NOW() BETWEEN StartTime AND EndTime,"// row[ 7]
-			  "Title,"				// row[ 8]
-			  "ShowUsrResults,"			// row[ 9]
-			  "NumCols,"				// row[10]
-			  "ShowPhotos"				// row[11]
-		    " FROM exa_sessions"
-		   " WHERE SesCod=%ld"
-		     " AND ExaCod IN"		// Extra check
-		         " (SELECT ExaCod"
-			    " FROM exa_exams"
-			   " WHERE CrsCod=%ld)",
-		   SesCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? Exi_EXISTS :
-							 Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get sessions",
+			 "SELECT SesCod,"				// row[ 0]
+				"ExaCod,"				// row[ 1]
+				"Hidden,"				// row[ 2]
+				"UsrCod,"				// row[ 3]
+				"Modality,"				// row[ 4]
+				"UNIX_TIMESTAMP(StartTime),"		// row[ 5]
+				"UNIX_TIMESTAMP(EndTime),"		// row[ 6]
+				"NOW() BETWEEN StartTime AND EndTime,"	// row[ 7]
+				"Title,"				// row[ 8]
+				"ShowUsrResults,"			// row[ 9]
+				"NumCols,"				// row[10]
+				"ShowPhotos"				// row[11]
+			  " FROM exa_sessions"
+			 " WHERE SesCod=%ld"
+			   " AND ExaCod IN"		// Extra check
+			       " (SELECT ExaCod"
+				  " FROM exa_exams"
+				 " WHERE CrsCod=%ld)",
+			 SesCod,
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -1917,19 +1910,18 @@ void Exa_DB_UpdatePrint (const struct ExaPrn_Print *Print)
 Exi_Exist_t Exa_DB_GetPrintDataByPrnCod (MYSQL_RES **mysql_res,long PrnCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get data of an exam print",
-		   "SELECT PrnCod,"			// row[0]
-			  "SesCod,"			// row[1]
-			  "UsrCod,"			// row[2]
-			  "UNIX_TIMESTAMP(StartTime),"	// row[3]
-			  "UNIX_TIMESTAMP(EndTime),"	// row[4]
-			  "NumQsts,"			// row[5]
-			  "NumQstsNotBlank,"		// row[6]
-			  "Score"			// row[7]
-		    " FROM exa_prints"
-		   " WHERE PrnCod=%ld",
-		   PrnCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get data of an exam print",
+			 "SELECT PrnCod,"			// row[0]
+				"SesCod,"			// row[1]
+				"UsrCod,"			// row[2]
+				"UNIX_TIMESTAMP(StartTime),"	// row[3]
+				"UNIX_TIMESTAMP(EndTime),"	// row[4]
+				"NumQsts,"			// row[5]
+				"NumQstsNotBlank,"		// row[6]
+				"Score"				// row[7]
+			  " FROM exa_prints"
+			 " WHERE PrnCod=%ld",
+			 PrnCod);
   }
 
 /*****************************************************************************/
@@ -1940,21 +1932,20 @@ Exi_Exist_t Exa_DB_GetPrintDataBySesCodAndUsrCod (MYSQL_RES **mysql_res,
                                                   long SesCod,long UsrCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get data of an exam print",
-		   "SELECT PrnCod,"			// row[0]
-			  "SesCod,"			// row[1]
-			  "UsrCod,"			// row[2]
-			  "UNIX_TIMESTAMP(StartTime),"	// row[3]
-			  "UNIX_TIMESTAMP(EndTime),"	// row[4]
-			  "NumQsts,"			// row[5]
-			  "NumQstsNotBlank,"		// row[6]
-			  "Score"			// row[7]
-		    " FROM exa_prints"
-		   " WHERE SesCod=%ld"
-		     " AND UsrCod=%ld",
-		   SesCod,
-		   UsrCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get data of an exam print",
+			 "SELECT PrnCod,"			// row[0]
+				"SesCod,"			// row[1]
+				"UsrCod,"			// row[2]
+				"UNIX_TIMESTAMP(StartTime),"	// row[3]
+				"UNIX_TIMESTAMP(EndTime),"	// row[4]
+				"NumQsts,"			// row[5]
+				"NumQstsNotBlank,"		// row[6]
+				"Score"				// row[7]
+			  " FROM exa_prints"
+			 " WHERE SesCod=%ld"
+			   " AND UsrCod=%ld",
+			 SesCod,
+			 UsrCod);
   }
 
 /*****************************************************************************/

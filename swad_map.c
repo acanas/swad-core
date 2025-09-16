@@ -155,22 +155,26 @@ void Map_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom,
    double MaxDistance;
 
    /***** Get average coordinates *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get coordinates",
-		       "%s",Query))
+   switch (DB_QuerySELECTunique (&mysql_res,"can not get coordinates",
+				 "%s",Query))
      {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 /* Get row */
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get latitude (row[0]), longitude (row[1]) and maximum distance (row[2]) */
-      Coord->Latitude  = Map_GetLatitudeFromStr (row[0]);
-      Coord->Longitude = Map_GetLongitudeFromStr (row[1]);
-      if (!Str_GetDoubleFromStr (row[2],&MaxDistance))
-	 MaxDistance = 0.0;
+	 /* Get latitude (row[0]), longitude (row[1]) and maximum distance (row[2]) */
+	 Coord->Latitude  = Map_GetLatitudeFromStr (row[0]);
+	 Coord->Longitude = Map_GetLongitudeFromStr (row[1]);
+	 if (!Str_GetDoubleFromStr (row[2],&MaxDistance))
+	    MaxDistance = 0.0;
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Coord->Latitude  =
+	 Coord->Longitude =
+	 MaxDistance      = 0.0;
+	 break;
      }
-   else
-      Coord->Latitude  =
-      Coord->Longitude =
-      MaxDistance      = 0.0;
 
    /***** Convert distance to zoom *****/
    *Zoom = Map_GetZoomFromDistance (MaxDistance);

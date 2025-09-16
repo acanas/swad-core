@@ -92,20 +92,20 @@ void Tst_DB_UpdateLastAccTst (unsigned NumQsts)
 /********** Get date of next allowed access to test from database ************/
 /*****************************************************************************/
 
-unsigned Tst_DB_GetDateNextTstAllowed (MYSQL_RES **mysql_res)
+Exi_Exist_t Tst_DB_GetDateNextTstAllowed (MYSQL_RES **mysql_res)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get date of last test print",
-		   "SELECT UNIX_TIMESTAMP(LastAccTst+INTERVAL (NumQstsLastTst*%lu) SECOND)-"
-			  "UNIX_TIMESTAMP(),"							// row[0]
-			  "UNIX_TIMESTAMP(LastAccTst+INTERVAL (NumQstsLastTst*%lu) SECOND)"	// row[1]
-		    " FROM crs_user_settings"
-		   " WHERE UsrCod=%ld"
-		     " AND CrsCod=%ld",
-		   TstCfg_GetConfigMinTimeNxtTstPerQst (),
-		   TstCfg_GetConfigMinTimeNxtTstPerQst (),
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+   return
+   DB_QuerySELECTunique (mysql_res,"can not get date of last test print",
+			 "SELECT UNIX_TIMESTAMP(LastAccTst+INTERVAL (NumQstsLastTst*%lu) SECOND)-"
+				"UNIX_TIMESTAMP(),"							// row[0]
+				"UNIX_TIMESTAMP(LastAccTst+INTERVAL (NumQstsLastTst*%lu) SECOND)"	// row[1]
+			  " FROM crs_user_settings"
+			 " WHERE UsrCod=%ld"
+			   " AND CrsCod=%ld",
+			 TstCfg_GetConfigMinTimeNxtTstPerQst (),
+			 TstCfg_GetConfigMinTimeNxtTstPerQst (),
+			 Gbl.Usrs.Me.UsrDat.UsrCod,
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -150,33 +150,34 @@ void Tst_DB_SaveConfig (void)
 /***************** Get configuration of test in a course *********************/
 /*****************************************************************************/
 
-unsigned Tst_DB_GetConfig (MYSQL_RES **mysql_res,long CrsCod)
+Exi_Exist_t Tst_DB_GetConfig (MYSQL_RES **mysql_res,long CrsCod)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get configuration of test",
-		   "SELECT Pluggable,"			// row[0]
-			  "Min,"			// row[1]
-			  "Def,"			// row[2]
-			  "Max,"			// row[3]
-			  "MinTimeNxtTstPerQst,"	// row[4]
-			  "Visibility"			// row[5]
-		    " FROM tst_config"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
+   return
+   DB_QuerySELECTunique (mysql_res,"can not get configuration of test",
+			 "SELECT Pluggable,"		// row[0]
+				"Min,"			// row[1]
+				"Def,"			// row[2]
+				"Max,"			// row[3]
+				"MinTimeNxtTstPerQst,"	// row[4]
+				"Visibility"		// row[5]
+			  " FROM tst_config"
+			 " WHERE CrsCod=%ld",
+			 CrsCod);
   }
 
 /*****************************************************************************/
 /********* Get pluggability of tests for current course from database ********/
 /*****************************************************************************/
 
-unsigned Tst_DB_GetPluggableFromConfig (MYSQL_RES **mysql_res)
+Exi_Exist_t Tst_DB_GetPluggableFromConfig (MYSQL_RES **mysql_res)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get configuration of test",
-		   "SELECT Pluggable"		// row[0]
-		    " FROM tst_config"
-		   " WHERE CrsCod=%ld",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+   return
+   DB_QuerySELECTunique (mysql_res,"can not get configuration of test",
+			 "SELECT Pluggable"	// row[0]
+			  " FROM tst_config"
+			 " WHERE CrsCod=%ld",
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod)
+;
   }
 
 /*****************************************************************************/
@@ -298,23 +299,23 @@ unsigned Tst_DB_GetUsrPrintsInCurrentCrs (MYSQL_RES **mysql_res,long UsrCod)
 /**************** Get data of a test using its test code *********************/
 /*****************************************************************************/
 
-unsigned Tst_DB_GetPrintDataByPrnCod (MYSQL_RES **mysql_res,long PrnCod)
+Exi_Exist_t Tst_DB_GetPrintDataByPrnCod (MYSQL_RES **mysql_res,long PrnCod)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get data of a test print",
-		   "SELECT UsrCod,"			// row[0]
-			  "UNIX_TIMESTAMP(StartTime),"	// row[1]
-			  "UNIX_TIMESTAMP(EndTime),"	// row[2]
-			  "NumQsts,"			// row[3]
-			  "NumQstsNotBlank,"		// row[4]
-			  "Sent,"			// row[5]
-			  "AllowTeachers,"		// row[6]
-			  "Score"			// row[7]
-		    " FROM tst_exams"
-		   " WHERE ExaCod=%ld"
-		     " AND CrsCod=%ld",		// Extra check
-		   PrnCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+   return
+   DB_QuerySELECTunique (mysql_res,"can not get data of a test print",
+			 "SELECT UsrCod,"			// row[0]
+				"UNIX_TIMESTAMP(StartTime),"	// row[1]
+				"UNIX_TIMESTAMP(EndTime),"	// row[2]
+				"NumQsts,"			// row[3]
+				"NumQstsNotBlank,"		// row[4]
+				"Sent,"				// row[5]
+				"AllowTeachers,"		// row[6]
+				"Score"				// row[7]
+			  " FROM tst_exams"
+			 " WHERE ExaCod=%ld"
+			   " AND CrsCod=%ld",		// Extra check
+			 PrnCod,
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/

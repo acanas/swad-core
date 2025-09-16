@@ -157,40 +157,39 @@ Exi_Exist_t Ses_DB_CheckIfSessionExists (const char *IdSes)
 /******* Get the data (user code and password) of an initiated session *******/
 /*****************************************************************************/
 
-Err_SuccessOrError_t Ses_DB_GetSessionData (MYSQL_RES **mysql_res)
+Exi_Exist_t Ses_DB_GetSessionData (MYSQL_RES **mysql_res)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get session data",
-		   "SELECT UsrCod,"		// row[0]
-			  "Password,"		// row[1]
-			  "Role,"		// row[2]
-			  "CtyCod,"		// row[3]
-			  "InsCod,"		// row[4]
-			  "CtrCod,"		// row[5]
-			  "DegCod,"		// row[6]
-			  "CrsCod,"		// row[7]
-			  "WhatToSearch,"	// row[8]
-			  "SearchStr"		// row[9]
-		    " FROM ses_sessions"
-		   " WHERE SessionId='%s'",
-		   Gbl.Session.Id) ? Err_SUCCESS :
-				     Err_ERROR;
+   DB_QuerySELECTunique (mysql_res,"can not get session data",
+			 "SELECT UsrCod,"	// row[0]
+				"Password,"	// row[1]
+				"Role,"		// row[2]
+				"CtyCod,"	// row[3]
+				"InsCod,"	// row[4]
+				"CtrCod,"	// row[5]
+				"DegCod,"	// row[6]
+				"CrsCod,"	// row[7]
+				"WhatToSearch,"	// row[8]
+				"SearchStr"	// row[9]
+			  " FROM ses_sessions"
+			 " WHERE SessionId='%s'",
+			 Gbl.Session.Id);
   }
 
 /*****************************************************************************/
 /************************* Get some data of a session ************************/
 /*****************************************************************************/
 
-unsigned Ses_DB_GetSomeSessionData (MYSQL_RES **mysql_res,const char *SessionId)
+Exi_Exist_t Ses_DB_GetSomeSessionData (MYSQL_RES **mysql_res,const char *SessionId)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get session data",
-		   "SELECT UsrCod,"	// row[0]
-			  "DegCod,"	// row[1]
-			  "CrsCod"	// row[2]
-		    " FROM ses_sessions"
-		   " WHERE SessionId='%s'",
-		   SessionId);
+   return
+   DB_QuerySELECTunique (mysql_res,"can not get session data",
+			 "SELECT UsrCod,"	// row[0]
+				"DegCod,"	// row[1]
+				"CrsCod"	// row[2]
+			  " FROM ses_sessions"
+			 " WHERE SessionId='%s'",
+			 SessionId);
   }
 
 /*****************************************************************************/

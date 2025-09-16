@@ -103,24 +103,23 @@ Exi_Exist_t Lnk_DB_GetLnkDataByCod (MYSQL_RES **mysql_res,long ItmCod)
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    return
-   DB_QuerySELECT (mysql_res,"can not get node course link data",
-		   "SELECT crs_links.NodCod,"		// row[0]
-			  "crs_links.ItmCod,"		// row[1]
-                          "crs_links.ItmInd,"		// row[2]
-			  "crs_links.Hidden,"		// row[3]
-			  "crs_links.Title,"		// row[4]
-			  "crs_links.Description,"	// row[5]
-			  "crs_links.WWW"		// row[6]
-		    " FROM crs_links,"
-		          "tre_nodes"
-		   " WHERE crs_links.ItmCod=%ld"
-		     " AND crs_links.NodCod=tre_nodes.NodCod"
-		     " AND tre_nodes.CrsCod=%ld"	// Extra check
-		     " AND tre_nodes.Type='%s'",	// Extra check
-		   ItmCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_LINKS]) ? Exi_EXISTS :
-					      Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get node course link data",
+			 "SELECT crs_links.NodCod,"		// row[0]
+				"crs_links.ItmCod,"		// row[1]
+				"crs_links.ItmInd,"		// row[2]
+				"crs_links.Hidden,"		// row[3]
+				"crs_links.Title,"		// row[4]
+				"crs_links.Description,"	// row[5]
+				"crs_links.WWW"		// row[6]
+			  " FROM crs_links,"
+				"tre_nodes"
+			 " WHERE crs_links.ItmCod=%ld"
+			   " AND crs_links.NodCod=tre_nodes.NodCod"
+			   " AND tre_nodes.CrsCod=%ld"	// Extra check
+			   " AND tre_nodes.Type='%s'",	// Extra check
+			 ItmCod,
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			 Tre_DB_Types[Inf_LINKS]);
   }
 
 /*****************************************************************************/

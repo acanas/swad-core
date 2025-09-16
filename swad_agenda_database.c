@@ -175,22 +175,21 @@ Exi_Exist_t Agd_DB_GetEventDataByCod (MYSQL_RES **mysql_res,
   {
    /***** Get data of event from database *****/
    return
-   DB_QuerySELECT (mysql_res,"can not get agenda event data",
-		   "SELECT AgdCod,"			// row[0]
-			  "Public,"			// row[1]
-			  "Hidden,"			// row[2]
-			  "UNIX_TIMESTAMP(StartTime),"	// row[3]
-			  "UNIX_TIMESTAMP(EndTime),"	// row[4]
-			  "NOW()>EndTime,"		// row[5]	Past event?
-			  "NOW()<StartTime,"		// row[6]	Future event?
-			  "Event,"			// row[7]
-			  "Location"			// row[8]
-		    " FROM agd_agendas"
-		   " WHERE AgdCod=%ld"
-		     " AND UsrCod=%ld",
-		   AgdEvent->AgdCod,
-		   AgdEvent->UsrCod) ? Exi_EXISTS :
-				       Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get agenda event data",
+			 "SELECT AgdCod,"			// row[0]
+				"Public,"			// row[1]
+				"Hidden,"			// row[2]
+				"UNIX_TIMESTAMP(StartTime),"	// row[3]
+				"UNIX_TIMESTAMP(EndTime),"	// row[4]
+				"NOW()>EndTime,"		// row[5]	Past event?
+				"NOW()<StartTime,"		// row[6]	Future event?
+				"Event,"			// row[7]
+				"Location"			// row[8]
+			  " FROM agd_agendas"
+			 " WHERE AgdCod=%ld"
+			   " AND UsrCod=%ld",
+			 AgdEvent->AgdCod,
+			 AgdEvent->UsrCod);
   }
 
 /*****************************************************************************/

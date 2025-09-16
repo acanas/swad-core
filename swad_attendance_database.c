@@ -173,20 +173,19 @@ unsigned Att_DB_GetAllEventsData (MYSQL_RES **mysql_res,long CrsCod)
 Exi_Exist_t Att_DB_GetEventDataByCod (MYSQL_RES **mysql_res,long AttCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get attendance event data",
-		   "SELECT AttCod,"					// row[0]
-			  "CrsCod,"					// row[1]
-			  "Hidden,"					// row[2]
-			  "UsrCod,"					// row[3]
-			  "UNIX_TIMESTAMP(StartTime),"			// row[4]
-			  "UNIX_TIMESTAMP(EndTime),"			// row[5]
-			  "NOW() BETWEEN StartTime AND EndTime,"	// row[6]
-			  "CommentTchVisible,"				// row[7]
-			  "Title"					// row[8]
-		    " FROM att_events"
-		   " WHERE AttCod=%ld",
-		   AttCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get attendance event data",
+			 "SELECT AttCod,"				// row[0]
+				"CrsCod,"				// row[1]
+				"Hidden,"				// row[2]
+				"UsrCod,"				// row[3]
+				"UNIX_TIMESTAMP(StartTime),"		// row[4]
+				"UNIX_TIMESTAMP(EndTime),"		// row[5]
+				"NOW() BETWEEN StartTime AND EndTime,"	// row[6]
+				"CommentTchVisible,"			// row[7]
+				"Title"					// row[8]
+			  " FROM att_events"
+			 " WHERE AttCod=%ld",
+			 AttCod);
   }
 
 /*****************************************************************************/
@@ -480,17 +479,16 @@ Exi_Exist_t Att_DB_GetPresentAndComments (MYSQL_RES **mysql_res,
 					  long AttCod,long UsrCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get if a student"
-			     " is already registered in an event",
-		   "SELECT Present,"	// row[0]
-			  "CommentStd,"	// row[1]
-			  "CommentTch"	// row[2]
-		    " FROM att_users"
-		   " WHERE AttCod=%ld"
-		     " AND UsrCod=%ld",
-		   AttCod,
-		   UsrCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get if a student"
+				   " is already registered in an event",
+			 "SELECT Present,"	// row[0]
+				"CommentStd,"	// row[1]
+				"CommentTch"	// row[2]
+			  " FROM att_users"
+			 " WHERE AttCod=%ld"
+			   " AND UsrCod=%ld",
+			 AttCod,
+			 UsrCod);
   }
 
 /*****************************************************************************/
@@ -926,60 +924,55 @@ Exi_Exist_t Att_DB_GetNumEvents (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
      {
       case Hie_SYS:
          return
-         DB_QuerySELECT (mysql_res,"can not get number of attendance events",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(NumNotif)"			// row[1]
-			  " FROM att_events"
-			 " WHERE CrsCod>0") ? Exi_EXISTS :
-					      Exi_DOES_NOT_EXIST;
+         DB_QuerySELECTunique (mysql_res,"can not get number of attendance events",
+			       "SELECT COUNT(*),"			// row[0]
+				      "SUM(NumNotif)"			// row[1]
+				" FROM att_events"
+			       " WHERE CrsCod>0");
       case Hie_INS:
          return
-         DB_QuerySELECT (mysql_res,"can not get number of attendance events",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(att_events.NumNotif)"	// row[1]
-			  " FROM ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "att_events"
-			 " WHERE ctr_centers.InsCod=%ld"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=att_events.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_INS].HieCod) ? Exi_EXISTS :
-							       Exi_DOES_NOT_EXIST;
+         DB_QuerySELECTunique (mysql_res,"can not get number of attendance events",
+			       "SELECT COUNT(*),"			// row[0]
+				      "SUM(att_events.NumNotif)"	// row[1]
+				" FROM ctr_centers,"
+				      "deg_degrees,"
+				      "crs_courses,"
+				      "att_events"
+			       " WHERE ctr_centers.InsCod=%ld"
+				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+				 " AND deg_degrees.DegCod=crs_courses.DegCod"
+				 " AND crs_courses.CrsCod=att_events.CrsCod",
+			       Gbl.Hierarchy.Node[Hie_INS].HieCod);
       case Hie_CTR:
          return
-         DB_QuerySELECT (mysql_res,"can not get number of attendance events",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(att_events.NumNotif)"	// row[1]
-			  " FROM deg_degrees,"
-			        "crs_courses,"
-			        "att_events"
-			 " WHERE deg_degrees.CtrCod=%ld"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=att_events.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_CTR].HieCod) ? Exi_EXISTS :
-							       Exi_DOES_NOT_EXIST;
+         DB_QuerySELECTunique (mysql_res,"can not get number of attendance events",
+			       "SELECT COUNT(*),"			// row[0]
+				      "SUM(att_events.NumNotif)"	// row[1]
+				" FROM deg_degrees,"
+				      "crs_courses,"
+				      "att_events"
+			       " WHERE deg_degrees.CtrCod=%ld"
+				 " AND deg_degrees.DegCod=crs_courses.DegCod"
+				 " AND crs_courses.CrsCod=att_events.CrsCod",
+			       Gbl.Hierarchy.Node[Hie_CTR].HieCod);
       case Hie_DEG:
          return
-         DB_QuerySELECT (mysql_res,"can not get number of attendance events",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(att_events.NumNotif)"	// row[1]
-			  " FROM crs_courses,"
-			        "att_events"
-			 " WHERE crs_courses.DegCod=%ld"
-			   " AND crs_courses.CrsCod=att_events.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_DEG].HieCod) ? Exi_EXISTS :
-							       Exi_DOES_NOT_EXIST;
+         DB_QuerySELECTunique (mysql_res,"can not get number of attendance events",
+			       "SELECT COUNT(*),"			// row[0]
+				      "SUM(att_events.NumNotif)"	// row[1]
+				" FROM crs_courses,"
+				      "att_events"
+			       " WHERE crs_courses.DegCod=%ld"
+				 " AND crs_courses.CrsCod=att_events.CrsCod",
+			       Gbl.Hierarchy.Node[Hie_DEG].HieCod);
       case Hie_CRS:
          return
-         DB_QuerySELECT (mysql_res,"can not get number of attendance events",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(NumNotif)"			// row[1]
-			  " FROM att_events"
-			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? Exi_EXISTS :
-							       Exi_DOES_NOT_EXIST;
+         DB_QuerySELECTunique (mysql_res,"can not get number of attendance events",
+			       "SELECT COUNT(*),"			// row[0]
+				      "SUM(NumNotif)"			// row[1]
+				" FROM att_events"
+			       " WHERE CrsCod=%ld",
+			       Gbl.Hierarchy.Node[Hie_CRS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return Exi_DOES_NOT_EXIST;	// Not reached

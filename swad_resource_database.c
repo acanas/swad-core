@@ -218,24 +218,23 @@ Exi_Exist_t Rsc_DB_GetRscDataByCod (MYSQL_RES **mysql_res,long ItmCod)
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    return
-   DB_QuerySELECT (mysql_res,"can not get node resource data",
-		   "SELECT prg_resources.NodCod,"	// row[0]
-			  "prg_resources.ItmCod,"	// row[1]
-                          "prg_resources.ItmInd,"	// row[2]
-			  "prg_resources.Hidden,"	// row[3]
-			  "prg_resources.Type,"		// row[4]
-			  "prg_resources.Cod,"		// row[5]
-			  "prg_resources.Title"		// row[6]
-		    " FROM prg_resources,"
-		          "tre_nodes"
-		   " WHERE prg_resources.ItmCod=%ld"
-		     " AND prg_resources.NodCod=tre_nodes.NodCod"
-		     " AND tre_nodes.CrsCod=%ld"	// Extra check
-		     " AND tre_nodes.Type='%s'",	// Extra check
-		   ItmCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_PROGRAM]) ? Exi_EXISTS :
-						Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get node resource data",
+			 "SELECT prg_resources.NodCod,"	// row[0]
+				"prg_resources.ItmCod,"	// row[1]
+				"prg_resources.ItmInd,"	// row[2]
+				"prg_resources.Hidden,"	// row[3]
+				"prg_resources.Type,"	// row[4]
+				"prg_resources.Cod,"	// row[5]
+				"prg_resources.Title"	// row[6]
+			  " FROM prg_resources,"
+				"tre_nodes"
+			 " WHERE prg_resources.ItmCod=%ld"
+			   " AND prg_resources.NodCod=tre_nodes.NodCod"
+			   " AND tre_nodes.CrsCod=%ld"	// Extra check
+			   " AND tre_nodes.Type='%s'",	// Extra check
+			 ItmCod,
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			 Tre_DB_Types[Inf_PROGRAM]);
   }
 
 /*****************************************************************************/

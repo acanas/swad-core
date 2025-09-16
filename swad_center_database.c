@@ -209,19 +209,18 @@ unsigned Ctr_DB_GetCtrsWithPendingDegs (MYSQL_RES **mysql_res)
 Exi_Exist_t Ctr_DB_GetCenterDataByCod (MYSQL_RES **mysql_res,long HieCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get data of a center",
-		   "SELECT CtrCod,"		// row[0]
-			  "InsCod,"		// row[1]
-			  "PlcCod,"		// row[2]
-			  "Status,"		// row[3]
-			  "Altitude,"		// row[4]
-			  "ShortName,"		// row[5]
-			  "FullName,"		// row[6]
-			  "WWW"			// row[7]
-		    " FROM ctr_centers"
-		   " WHERE CtrCod=%ld",
-		   HieCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get data of a center",
+			 "SELECT CtrCod,"		// row[0]
+				"InsCod,"		// row[1]
+				"PlcCod,"		// row[2]
+				"Status,"		// row[3]
+				"Altitude,"		// row[4]
+				"ShortName,"		// row[5]
+				"FullName,"		// row[6]
+				"WWW"			// row[7]
+			  " FROM ctr_centers"
+			 " WHERE CtrCod=%ld",
+			 HieCod);
   }
 
 /*****************************************************************************/
@@ -231,14 +230,13 @@ Exi_Exist_t Ctr_DB_GetCenterDataByCod (MYSQL_RES **mysql_res,long HieCod)
 Exi_Exist_t Ctr_DB_GetCoordByCod (MYSQL_RES **mysql_res,long HieCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get coordinares of a center",
-		   "SELECT Latitude,"	// row[ 0]
-			  "Longitude,"	// row[ 1]
-			  "Altitude"	// row[ 2]
-		    " FROM ctr_centers"
-		   " WHERE CtrCod=%ld",
-		   HieCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get coordinares of a center",
+			 "SELECT Latitude,"	// row[ 0]
+				"Longitude,"	// row[ 1]
+				"Altitude"	// row[ 2]
+			  " FROM ctr_centers"
+			 " WHERE CtrCod=%ld",
+			 HieCod);
   }
 
 /*****************************************************************************/

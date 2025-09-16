@@ -95,15 +95,14 @@ unsigned SysLnk_DB_GetLinks (MYSQL_RES **mysql_res)
 Exi_Exist_t SysLnk_DB_GetLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get data of a system link",
-		   "SELECT LnkCod,"	// row[0]
-		          "ShortName,"	// row[1]
-			  "FullName,"	// row[2]
-			  "WWW"		// row[3]
-		    " FROM lnk_links"
-		   " WHERE LnkCod=%ld",
-		   LnkCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get data of a system link",
+			 "SELECT LnkCod,"	// row[0]
+				"ShortName,"	// row[1]
+				"FullName,"	// row[2]
+				"WWW"		// row[3]
+			  " FROM lnk_links"
+			 " WHERE LnkCod=%ld",
+			 LnkCod);
   }
 
 /*****************************************************************************/

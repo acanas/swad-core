@@ -113,28 +113,27 @@ Exi_Exist_t Bib_DB_GetRefDataByCod (MYSQL_RES **mysql_res,long ItmCod)
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    return
-   DB_QuerySELECT (mysql_res,"can not get node bibliographic reference data",
-		   "SELECT crs_bibliography.NodCod,"	// row[ 0]
-			  "crs_bibliography.ItmCod,"	// row[ 1]
-                          "crs_bibliography.ItmInd,"	// row[ 2]
-			  "crs_bibliography.Hidden,"	// row[ 3]
-			  "crs_bibliography.Authors,"	// row[ 4]
-			  "crs_bibliography.Title,"	// row[ 5]
-			  "crs_bibliography.Source,"	// row[ 6]
-			  "crs_bibliography.Publisher,"	// row[ 7]
-			  "crs_bibliography.Date,"	// row[ 8]
-			  "crs_bibliography.Id,"	// row[ 9]
-			  "crs_bibliography.URL"	// row[10]
-		    " FROM crs_bibliography,"
-		          "tre_nodes"
-		   " WHERE crs_bibliography.ItmCod=%ld"
-		     " AND crs_bibliography.NodCod=tre_nodes.NodCod"
-		     " AND tre_nodes.CrsCod=%ld"	// Extra check
-		     " AND tre_nodes.Type='%s'",	// Extra check
-		   ItmCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_BIBLIOGRAPHY]) ? Exi_EXISTS :
-						     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get node bibliographic reference data",
+			 "SELECT crs_bibliography.NodCod,"	// row[ 0]
+				"crs_bibliography.ItmCod,"	// row[ 1]
+				"crs_bibliography.ItmInd,"	// row[ 2]
+				"crs_bibliography.Hidden,"	// row[ 3]
+				"crs_bibliography.Authors,"	// row[ 4]
+				"crs_bibliography.Title,"	// row[ 5]
+				"crs_bibliography.Source,"	// row[ 6]
+				"crs_bibliography.Publisher,"	// row[ 7]
+				"crs_bibliography.Date,"	// row[ 8]
+				"crs_bibliography.Id,"	// row[ 9]
+				"crs_bibliography.URL"	// row[10]
+			  " FROM crs_bibliography,"
+				"tre_nodes"
+			 " WHERE crs_bibliography.ItmCod=%ld"
+			   " AND crs_bibliography.NodCod=tre_nodes.NodCod"
+			   " AND tre_nodes.CrsCod=%ld"	// Extra check
+			   " AND tre_nodes.Type='%s'",	// Extra check
+			 ItmCod,
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			 Tre_DB_Types[Inf_BIBLIOGRAPHY]);
   }
 
 /*****************************************************************************/

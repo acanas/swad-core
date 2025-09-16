@@ -89,15 +89,14 @@ unsigned Mai_DB_GetMyEmails (MYSQL_RES **mysql_res,long UsrCod)
 Exi_Exist_t Mai_DB_GetEmailFromUsrCod (MYSQL_RES **mysql_res,long UsrCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get email address",
-		   "SELECT E_mail,"	// row[0]
-			  "Confirmed"	// row[1]
-		    " FROM usr_emails"
-		   " WHERE UsrCod=%ld"
-		" ORDER BY CreatTime DESC"
-		   " LIMIT 1",
-		   UsrCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get email address",
+			 "SELECT E_mail,"	// row[0]
+				"Confirmed"	// row[1]
+			  " FROM usr_emails"
+			 " WHERE UsrCod=%ld"
+		      " ORDER BY CreatTime DESC"
+			 " LIMIT 1",
+			 UsrCod);
   }
 
 /*****************************************************************************/
@@ -244,13 +243,12 @@ Exi_Exist_t Mai_DB_GetPendingEmail (MYSQL_RES **mysql_res,
                                     const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1])
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get user's code and email from key",
-		   "SELECT UsrCod,"		// row[0]
-			  "E_mail"		// row[1]
-		    " FROM usr_pending_emails"
-		   " WHERE MailKey='%s'",
-		   MailKey) ? Exi_EXISTS :
-			      Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get user's code and email from key",
+			 "SELECT UsrCod,"		// row[0]
+				"E_mail"		// row[1]
+			  " FROM usr_pending_emails"
+			 " WHERE MailKey='%s'",
+			 MailKey);
   }
 
 /*****************************************************************************/
@@ -399,14 +397,13 @@ unsigned Mai_DB_GetMailDomains (MYSQL_RES **mysql_res,Mai_DomainsOrder_t Selecte
 Exi_Exist_t Mai_DB_GetMailDomainDataByCod (MYSQL_RES **mysql_res,long MaiCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get mail domain",
-		   "SELECT MaiCod,"	// row[0]
-			  "Domain,"	// row[1]
-			  "Info"	// row[2]
-		    " FROM ntf_mail_domains"
-		   " WHERE MaiCod=%ld",
-		   MaiCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get mail domain",
+			 "SELECT MaiCod,"	// row[0]
+				"Domain,"	// row[1]
+				"Info"		// row[2]
+			  " FROM ntf_mail_domains"
+			 " WHERE MaiCod=%ld",
+			 MaiCod);
   }
 
 /*****************************************************************************/

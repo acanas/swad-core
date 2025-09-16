@@ -51,7 +51,7 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
                                 Dat_StartEndTime_t SelectedOrder);
 Exi_Exist_t Svy_DB_GetSurveyDataByCod (MYSQL_RES **mysql_res,long SvyCod);
 void Svy_DB_GetSurveyTitle (long SvyCod,char *Title,size_t TitleSize);
-unsigned Svy_DB_GetSurveyTitleAndText (MYSQL_RES **mysql_res,long SvyCod);
+Exi_Exist_t Svy_DB_GetSurveyTitleAndText (MYSQL_RES **mysql_res,long SvyCod);
 void Svy_DB_GetSurveyTxt (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 Exi_Exist_t Svy_DB_CheckIfSimilarSurveyExists (const struct Svy_Survey *Svy);
 unsigned Svy_DB_GetNumCrssWithCrsSurveys (Hie_Level_t HieLvl);
@@ -87,7 +87,7 @@ unsigned Svy_DB_GetSurveyQstsCodes (MYSQL_RES **mysql_res,long SvyCod);
 unsigned Svy_DB_GetSurveyQsts (MYSQL_RES **mysql_res,long SvyCod);
 Exi_Exist_t Svy_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod,long SvyCod);
 unsigned Svy_DB_GetQstIndFromQstCod (long QstCod);
-unsigned Svy_DB_GetLastQstInd (MYSQL_RES **mysql_res,long SvyCod);
+Exi_Exist_t Svy_DB_GetLastQstInd (MYSQL_RES **mysql_res,long SvyCod);
 
 void Svy_DB_RemoveQst (long QstCod);
 void Svy_DB_RemoveQstsSvy (long SvyCod);

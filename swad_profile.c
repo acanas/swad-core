@@ -838,46 +838,50 @@ void Prf_GetUsrFigures (long UsrCod,struct Prf_UsrFigures *UsrFigures)
    MYSQL_ROW row;
 
    /***** Get user's figures from database *****/
-   if (Prf_DB_GetUsrFigures (&mysql_res,UsrCod))
+   switch (Prf_DB_GetUsrFigures (&mysql_res,UsrCod))
      {
-      /***** Get user's figures *****/
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 /***** Get user's figures *****/
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get first click (row[0] holds first click time UTC) */
-      UsrFigures->FirstClickTimeUTC = Dat_GetUNIXTimeFromStr (row[0]);
+	 /* Get first click (row[0] holds first click time UTC) */
+	 UsrFigures->FirstClickTimeUTC = Dat_GetUNIXTimeFromStr (row[0]);
 
-      /* Get number of days since first click (row[1]) */
-      if (UsrFigures->FirstClickTimeUTC)
-	{
-	 if (sscanf (row[1],"%d",&UsrFigures->NumDays) != 1)
+	 /* Get number of days since first click (row[1]) */
+	 if (UsrFigures->FirstClickTimeUTC)
+	   {
+	    if (sscanf (row[1],"%d",&UsrFigures->NumDays) != 1)
+	       UsrFigures->NumDays = -1;
+	   }
+	 else
 	    UsrFigures->NumDays = -1;
-	}
-      else
-	 UsrFigures->NumDays = -1;
 
-      /* Get number of clicks (row[2]) */
-      if (sscanf (row[2],"%d",&UsrFigures->NumClicks) != 1)
-	 UsrFigures->NumClicks = -1;
+	 /* Get number of clicks (row[2]) */
+	 if (sscanf (row[2],"%d",&UsrFigures->NumClicks) != 1)
+	    UsrFigures->NumClicks = -1;
 
-      /* Get number of timeline publications (row[3]) */
-      if (sscanf (row[3],"%d",&UsrFigures->NumTimelinePubs) != 1)
-	 UsrFigures->NumTimelinePubs = -1;
+	 /* Get number of timeline publications (row[3]) */
+	 if (sscanf (row[3],"%d",&UsrFigures->NumTimelinePubs) != 1)
+	    UsrFigures->NumTimelinePubs = -1;
 
-      /* Get number of file views (row[4]) */
-      if (sscanf (row[4],"%d",&UsrFigures->NumFileViews) != 1)
-	 UsrFigures->NumFileViews = -1;
+	 /* Get number of file views (row[4]) */
+	 if (sscanf (row[4],"%d",&UsrFigures->NumFileViews) != 1)
+	    UsrFigures->NumFileViews = -1;
 
-      /* Get number of forum posts (row[5]) */
-      if (sscanf (row[5],"%d",&UsrFigures->NumForumPosts) != 1)
-	 UsrFigures->NumForumPosts = -1;
+	 /* Get number of forum posts (row[5]) */
+	 if (sscanf (row[5],"%d",&UsrFigures->NumForumPosts) != 1)
+	    UsrFigures->NumForumPosts = -1;
 
-      /* Get number of messages sent (row[6]) */
-      if (sscanf (row[6],"%d",&UsrFigures->NumMessagesSent) != 1)
-	 UsrFigures->NumMessagesSent = -1;
+	 /* Get number of messages sent (row[6]) */
+	 if (sscanf (row[6],"%d",&UsrFigures->NumMessagesSent) != 1)
+	    UsrFigures->NumMessagesSent = -1;
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 /***** Return special user's figures indicating "not present" *****/
+	 Prf_ResetUsrFigures (UsrFigures);
+	 break;
      }
-   else
-      /***** Return special user's figures indicating "not present" *****/
-      Prf_ResetUsrFigures (UsrFigures);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

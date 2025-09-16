@@ -56,7 +56,7 @@ void Roo_DB_RemoveAllRoomsInCtr (long CtrCod);
 long Roo_DB_CheckIn (long RooCod);
 
 Usr_Can_t Roo_DB_CheckIfICanSeeUsrLocation (long UsrCod);
-unsigned Roo_DB_GetUsrLastLocation (MYSQL_RES **mysql_res,long UsrCod);
-unsigned Roo_DB_GetLocationByMAC (MYSQL_RES **mysql_res,unsigned long long MACnum);
+Exi_Exist_t Roo_DB_GetUsrLastLocation (MYSQL_RES **mysql_res,long UsrCod);
+Exi_Exist_t Roo_DB_GetLocationByMAC (MYSQL_RES **mysql_res,unsigned long long MACnum);
 
 #endif

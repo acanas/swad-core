@@ -1216,22 +1216,21 @@ unsigned Qst_DB_GetRecentAnswers (MYSQL_RES **mysql_res,
 Exi_Exist_t Qst_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get a question",
-		   "SELECT UNIX_TIMESTAMP(EditTime),"	// row[0]
-			  "AnsType,"			// row[1]
-			  "Shuffle,"			// row[2]
-			  "Stem,"			// row[3]
-			  "Feedback,"			// row[4]
-			  "MedCod,"			// row[5]
-			  "NumHits,"			// row[6]
-			  "NumHitsNotBlank,"		// row[7]
-			  "Score"			// row[8]
-		    " FROM tst_questions"
-		   " WHERE QstCod=%ld"
-		     " AND CrsCod=%ld",	// Extra check
-		   QstCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? Exi_EXISTS :
-							 Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get a question",
+			 "SELECT UNIX_TIMESTAMP(EditTime),"	// row[0]
+				"AnsType,"			// row[1]
+				"Shuffle,"			// row[2]
+				"Stem,"				// row[3]
+				"Feedback,"			// row[4]
+				"MedCod,"			// row[5]
+				"NumHits,"			// row[6]
+				"NumHitsNotBlank,"		// row[7]
+				"Score"				// row[8]
+			  " FROM tst_questions"
+			 " WHERE QstCod=%ld"
+			   " AND CrsCod=%ld",	// Extra check
+			 QstCod,
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -1268,11 +1267,11 @@ long Qst_DB_GetQstMedCod (long CrsCod,long QstCod)
   }
 
 /*****************************************************************************/
-/****************** Get question code from type and stem *********************/
+/****************** Get question codes from type and stem ********************/
 /*****************************************************************************/
 
-unsigned Qst_DB_GetQstCodFromTypeAnsStem (MYSQL_RES **mysql_res,
-                                          const struct Qst_Question *Question)
+unsigned Qst_DB_GetQstCodsFromTypeAnsStem (MYSQL_RES **mysql_res,
+                                           const struct Qst_Question *Question)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not check if a question exists",

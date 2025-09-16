@@ -142,19 +142,18 @@ unsigned Crs_DB_GetCrssInCurrentDegFull (MYSQL_RES **mysql_res)
 Exi_Exist_t Crs_DB_GetCourseDataByCod (MYSQL_RES **mysql_res,long CrsCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get data of a course",
-		   "SELECT CrsCod,"		// row[0]
-			  "DegCod,"		// row[1]
-			  "Year,"		// row[2]
-			  "InsCrsCod,"		// row[3]
-			  "Status,"		// row[4]
-			  "RequesterUsrCod,"	// row[5]
-			  "ShortName,"		// row[6]
-			  "FullName"		// row[7]
-		    " FROM crs_courses"
-		   " WHERE CrsCod=%ld",
-		   CrsCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get data of a course",
+			 "SELECT CrsCod,"		// row[0]
+				"DegCod,"		// row[1]
+				"Year,"			// row[2]
+				"InsCrsCod,"		// row[3]
+				"Status,"		// row[4]
+				"RequesterUsrCod,"	// row[5]
+				"ShortName,"		// row[6]
+				"FullName"		// row[7]
+			  " FROM crs_courses"
+			 " WHERE CrsCod=%ld",
+			 CrsCod);
   }
 
 /*****************************************************************************/
@@ -193,14 +192,14 @@ void Crs_DB_GetShortNamesByCod (long CrsCod,
       return;
 
    /***** Get the short name of a degree from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get the short name of a course",
-		       "SELECT crs_courses.ShortName,"	// row[0]
-			      "deg_degrees.ShortName"	// row[1]
-			" FROM crs_courses,"
-			      "deg_degrees"
-		       " WHERE crs_courses.CrsCod=%ld"
-			 " AND crs_courses.DegCod=deg_degrees.DegCod",
-		       CrsCod) == 1)
+   if (DB_QuerySELECTunique (&mysql_res,"can not get the short name of a course",
+			     "SELECT crs_courses.ShortName,"	// row[0]
+				    "deg_degrees.ShortName"	// row[1]
+			      " FROM crs_courses,"
+				    "deg_degrees"
+			     " WHERE crs_courses.CrsCod=%ld"
+			       " AND crs_courses.DegCod=deg_degrees.DegCod",
+			     CrsCod) == Exi_EXISTS)
      {
       /***** Get the course short name and degree short name *****/
       row = mysql_fetch_row (mysql_res);

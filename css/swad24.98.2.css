@@ -2037,14 +2037,15 @@ a:hover img.CENTER_PHOTO_SHOW
 	margin: 8px auto;
 	padding: 12px;
 	border-radius: 2px;
-	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 2px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12);
+	/* box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 2px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12); */
 	}
 .ALERT_BG_WHITE,
 .ALERT_BG_GREY,
 .ALERT_BG_PURPLE,
 .ALERT_BG_BLUE,
 .ALERT_BG_YELLOW,
-.ALERT_BG_PINK		{background-color: #fff8e5;}
+.ALERT_BG_PINK		{background-color: #fff4cd; border: #ffca05 solid 1px;}
+			/* {background-color: #fff8e5;} */
 .ALERT_BG_DARK		{background-color: #808080;}
 
 .ALERT_CLOSE

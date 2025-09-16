@@ -207,22 +207,21 @@ unsigned Gam_DB_GetListAvailableGames (MYSQL_RES **mysql_res)
 Exi_Exist_t Gam_DB_GetGameDataByCod (MYSQL_RES **mysql_res,long GamCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get game data",
-		   "SELECT gam_games.GamCod,"		// row[0]
-			  "gam_games.CrsCod,"		// row[1]
-			  "gam_games.Hidden,"		// row[2]
-			  "gam_games.UsrCod,"		// row[3]
-			  "gam_games.MaxGrade,"		// row[4]
-			  "gam_games.Visibility,"	// row[5]
-			  "gam_games.Title"		// row[6]
-		    " FROM gam_games"
-		    " LEFT JOIN mch_matches"
-		      " ON gam_games.GamCod=mch_matches.GamCod"
-		   " WHERE gam_games.GamCod=%ld"
-		     " AND gam_games.CrsCod=%ld",	// Extra check
-		   GamCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? Exi_EXISTS :
-							 Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get game data",
+			 "SELECT gam_games.GamCod,"	// row[0]
+				"gam_games.CrsCod,"	// row[1]
+				"gam_games.Hidden,"	// row[2]
+				"gam_games.UsrCod,"	// row[3]
+				"gam_games.MaxGrade,"	// row[4]
+				"gam_games.Visibility,"	// row[5]
+				"gam_games.Title"	// row[6]
+			  " FROM gam_games"
+			  " LEFT JOIN mch_matches"
+			    " ON gam_games.GamCod=mch_matches.GamCod"
+			 " WHERE gam_games.GamCod=%ld"
+			   " AND gam_games.CrsCod=%ld",	// Extra check
+			 GamCod,
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/

@@ -1321,7 +1321,7 @@ void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Get title and text *****/
-   if (Svy_DB_GetSurveyTitleAndText (&mysql_res,SvyCod))
+   if (Svy_DB_GetSurveyTitleAndText (&mysql_res,SvyCod) == Exi_EXISTS)
      {
       /***** Get row *****/
       row = mysql_fetch_row (mysql_res);
@@ -2583,7 +2583,7 @@ static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod)
    unsigned QstInd = 0;
 
    /***** Get last question index *****/
-   if (Svy_DB_GetLastQstInd (&mysql_res,SvyCod))
+   if (Svy_DB_GetLastQstInd (&mysql_res,SvyCod) == Exi_EXISTS)
      {
       row = mysql_fetch_row (mysql_res);
       if (row[0])	// There are questions

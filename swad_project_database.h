@@ -48,7 +48,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
                                  const char *UsrsSubQuery);	// NULL if no users
 Exi_Exist_t Prj_DB_GetProjectDataByCod (MYSQL_RES **mysql_res,long PrjCod);
 void Prj_DB_GetProjectTitle (long PrjCod,char *Title,size_t TitleSize);
-unsigned Prj_DB_GetPrjDataToCheckFaults (MYSQL_RES **mysql_res,long PrjCod);
+Exi_Exist_t Prj_DB_GetPrjDataToCheckFaults (MYSQL_RES **mysql_res,long PrjCod);
 unsigned Prj_DB_GetNumUsrsInPrj (long PrjCod,Prj_RoleInProject_t RoleInProject);
 unsigned Prj_DB_GetUsrsInPrj (MYSQL_RES **mysql_res,
                               long PrjCod,Prj_RoleInProject_t RoleInProject);
@@ -71,7 +71,7 @@ void Prj_DB_RemoveCrsPrjs (long CrsCod);
 void Prj_DB_UpdateNETCanCreate (const struct Prj_Projects *Projects);
 void Prj_DB_UpdateRubrics (PrjCfg_RubricType_t RubricType,
                            const struct PrgCfg_ListRubCods *ListRubCods);
-unsigned Prj_DB_GetConfig (MYSQL_RES **mysql_res);
+Exi_Exist_t Prj_DB_GetConfig (MYSQL_RES **mysql_res);
 unsigned Prj_DB_GetRubricsOfType (MYSQL_RES **mysql_res,
                                   PrjCfg_RubricType_t RubricType);
 PrjCfg_RubricType_t Prj_DB_GetWichRubricFromRubCod (long RubCod);

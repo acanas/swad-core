@@ -263,21 +263,20 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
 Exi_Exist_t Svy_DB_GetSurveyDataByCod (MYSQL_RES **mysql_res,long SvyCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get survey data",
-		   "SELECT SvyCod,"				// row[0]
-			  "Scope,"				// row[1]
-			  "Cod,"				// row[2]
-			  "Hidden,"				// row[3]
-			  "Roles,"				// row[4]
-			  "UsrCod,"				// row[5]
-			  "UNIX_TIMESTAMP(StartTime),"		// row[6]
-			  "UNIX_TIMESTAMP(EndTime),"		// row[7]
-			  "NOW() BETWEEN StartTime AND EndTime,"// row[8]
-			  "Title"
-		    " FROM svy_surveys"
-		   " WHERE SvyCod=%ld",
-		   SvyCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get survey data",
+			 "SELECT SvyCod,"				// row[0]
+				"Scope,"				// row[1]
+				"Cod,"				// row[2]
+				"Hidden,"				// row[3]
+				"Roles,"				// row[4]
+				"UsrCod,"				// row[5]
+				"UNIX_TIMESTAMP(StartTime),"		// row[6]
+				"UNIX_TIMESTAMP(EndTime),"		// row[7]
+				"NOW() BETWEEN StartTime AND EndTime,"// row[8]
+				"Title"
+			  " FROM svy_surveys"
+			 " WHERE SvyCod=%ld",
+			 SvyCod);
   }
 
 /*****************************************************************************/
@@ -297,15 +296,15 @@ void Svy_DB_GetSurveyTitle (long SvyCod,char *Title,size_t TitleSize)
 /*************** Get survey title and text using its code ********************/
 /*****************************************************************************/
 
-unsigned Svy_DB_GetSurveyTitleAndText (MYSQL_RES **mysql_res,long SvyCod)
+Exi_Exist_t Svy_DB_GetSurveyTitleAndText (MYSQL_RES **mysql_res,long SvyCod)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get groups of a survey",
-		   "SELECT Title,"	// row[0]
-			  "Txt"		// row[1]
-		    " FROM svy_surveys"
-		   " WHERE SvyCod=%ld",
-		   SvyCod);
+   return
+   DB_QuerySELECTunique (mysql_res,"can not get groups of a survey",
+			 "SELECT Title,"	// row[0]
+				"Txt"		// row[1]
+			  " FROM svy_surveys"
+			 " WHERE SvyCod=%ld",
+			 SvyCod);
   }
 
 /*****************************************************************************/
@@ -944,18 +943,17 @@ unsigned Svy_DB_GetSurveyQsts (MYSQL_RES **mysql_res,long SvyCod)
 Exi_Exist_t Svy_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod,long SvyCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get a question",
-		   "SELECT QstCod,"		// row[0]
-		          "QstInd,"		// row[1]
-		          "AnsType,"		// row[2]
-                          "CommentsAllowed,"	// row[3]
-		          "Stem"		// row[4]
-		    " FROM svy_questions"
-		   " WHERE QstCod=%ld"
-		     " AND SvyCod=%ld",		// Extra check
-		   QstCod,
-		   SvyCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get a question",
+			 "SELECT QstCod,"		// row[0]
+				"QstInd,"		// row[1]
+				"AnsType,"		// row[2]
+				"CommentsAllowed,"	// row[3]
+				"Stem"			// row[4]
+			  " FROM svy_questions"
+			 " WHERE QstCod=%ld"
+			   " AND SvyCod=%ld",		// Extra check
+			 QstCod,
+			 SvyCod);
    }
 
 /*****************************************************************************/
@@ -975,14 +973,14 @@ unsigned Svy_DB_GetQstIndFromQstCod (long QstCod)
 /*********************** Get last question index *****************************/
 /*****************************************************************************/
 
-unsigned Svy_DB_GetLastQstInd (MYSQL_RES **mysql_res,long SvyCod)
+Exi_Exist_t Svy_DB_GetLastQstInd (MYSQL_RES **mysql_res,long SvyCod)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get last question index",
-		   "SELECT MAX(QstInd)"		// row[0]
-		    " FROM svy_questions"
-		   " WHERE SvyCod=%ld",
-		   SvyCod);
+   return
+   DB_QuerySELECTunique (mysql_res,"can not get last question index",
+			 "SELECT MAX(QstInd)"		// row[0]
+			  " FROM svy_questions"
+			 " WHERE SvyCod=%ld",
+			 SvyCod);
   }
 
 /*****************************************************************************/

@@ -283,19 +283,18 @@ void Deg_DB_GetDegTypeNameByCod (struct DegTyp_DegType *DegTyp)
 Exi_Exist_t Deg_DB_GetDegreeDataByCod (MYSQL_RES **mysql_res,long HieCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get data of a degree",
-		   "SELECT DegCod,"		// row[0]
-			  "CtrCod,"		// row[1]
-			  "DegTypCod,"		// row[2]
-			  "Status,"		// row[3]
-			  "RequesterUsrCod,"	// row[4]
-			  "ShortName,"		// row[5]
-			  "FullName,"		// row[6]
-			  "WWW"			// row[7]
-		    " FROM deg_degrees"
-		   " WHERE DegCod=%ld",
-		   HieCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get data of a degree",
+			 "SELECT DegCod,"		// row[0]
+				"CtrCod,"		// row[1]
+				"DegTypCod,"		// row[2]
+				"Status,"		// row[3]
+				"RequesterUsrCod,"	// row[4]
+				"ShortName,"		// row[5]
+				"FullName,"		// row[6]
+				"WWW"			// row[7]
+			  " FROM deg_degrees"
+			 " WHERE DegCod=%ld",
+			 HieCod);
   }
 
 /*****************************************************************************/
@@ -802,27 +801,26 @@ unsigned Deg_DB_GetMyDegs (MYSQL_RES **mysql_res,long PrtCod)
 Exi_Exist_t Deg_DB_GetUsrMainDeg (MYSQL_RES **mysql_res,long UsrCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get user's main degree",
-		   "SELECT deg_degrees.ShortName,"	// row[0]
-			  "main_degree.MaxRole"		// row[1]
-		   " FROM deg_degrees,"
+   DB_QuerySELECTunique (mysql_res,"can not get user's main degree",
+			 "SELECT deg_degrees.ShortName,"	// row[0]
+				"main_degree.MaxRole"		// row[1]
+			 " FROM deg_degrees,"
 
-			 // The second table contain only one row with the main degree
-			" (SELECT crs_courses.DegCod AS DegCod,"
-				 "MAX(crs_users.Role) AS MaxRole,"
-				 "COUNT(*) AS N"
-			  " FROM crs_users,"
-			        "crs_courses"
-			 " WHERE crs_users.UsrCod=%ld"
-			   " AND crs_users.CrsCod=crs_courses.CrsCod"
-		      " GROUP BY crs_courses.DegCod"
-		      " ORDER BY N DESC"	// Ordered by number of courses in which user is enroled
-			 " LIMIT 1)"		// We need only the main degree
-			" AS main_degree"
+			       // The second table contain only one row with the main degree
+			      " (SELECT crs_courses.DegCod AS DegCod,"
+				       "MAX(crs_users.Role) AS MaxRole,"
+				       "COUNT(*) AS N"
+				" FROM crs_users,"
+				      "crs_courses"
+			       " WHERE crs_users.UsrCod=%ld"
+				 " AND crs_users.CrsCod=crs_courses.CrsCod"
+			    " GROUP BY crs_courses.DegCod"
+			    " ORDER BY N DESC"	// Ordered by number of courses in which user is enroled
+			       " LIMIT 1)"		// We need only the main degree
+			      " AS main_degree"
 
-		 " WHERE deg_degrees.DegCod=main_degree.DegCod",
-		 UsrCod) ? Exi_EXISTS :
-			   Exi_DOES_NOT_EXIST;
+		       " WHERE deg_degrees.DegCod=main_degree.DegCod",
+		       UsrCod);
   }
 
 /*****************************************************************************/

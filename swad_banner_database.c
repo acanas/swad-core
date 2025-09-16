@@ -98,17 +98,16 @@ unsigned Ban_DB_GetRandomBanners (MYSQL_RES **mysql_res)
 Exi_Exist_t Ban_DB_GetBannerDataByCod (MYSQL_RES **mysql_res,long BanCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get data of a banner",
-		   "SELECT BanCod,"	// row[0]
-			  "Hidden,"	// row[1]
-			  "ShortName,"	// row[2]
-			  "FullName,"	// row[3]
-			  "Img,"	// row[4]
-			  "WWW"		// row[5]
-		    " FROM ban_banners"
-		   " WHERE BanCod=%ld",
-		   BanCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get data of a banner",
+			 "SELECT BanCod,"	// row[0]
+				"Hidden,"	// row[1]
+				"ShortName,"	// row[2]
+				"FullName,"	// row[3]
+				"Img,"	// row[4]
+				"WWW"		// row[5]
+			  " FROM ban_banners"
+			 " WHERE BanCod=%ld",
+			 BanCod);
   }
 
 /*****************************************************************************/

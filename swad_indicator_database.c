@@ -60,12 +60,11 @@ void Ind_DB_StoreIndicatorsCrs (long CrsCod,unsigned NumIndicators)
 Exi_Exist_t Ind_DB_GetNumIndicatorsCrs (MYSQL_RES **mysql_res,long CrsCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get number of indicators",
-		   "SELECT NumIndicators"	// row[0]
-		    " FROM crs_courses"
-		   " WHERE CrsCod=%ld",
-		   CrsCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get number of indicators",
+			 "SELECT NumIndicators"	// row[0]
+			  " FROM crs_courses"
+			 " WHERE CrsCod=%ld",
+			 CrsCod);
   }
 
 /*****************************************************************************/

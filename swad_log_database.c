@@ -184,12 +184,11 @@ unsigned Log_DB_GetLastClicks (MYSQL_RES **mysql_res)
 Exi_Exist_t Log_DB_GetUsrFirstClick (MYSQL_RES **mysql_res,long UsrCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get user's first click",
-		   "SELECT UNIX_TIMESTAMP((SELECT MIN(ClickTime)"
-					   " FROM log"
-					  " WHERE UsrCod=%ld))",
-		   UsrCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get user's first click",
+			 "SELECT UNIX_TIMESTAMP((SELECT MIN(ClickTime)"
+						 " FROM log"
+						" WHERE UsrCod=%ld))",
+			 UsrCod);
   }
 
 /*****************************************************************************/
@@ -237,44 +236,43 @@ Exi_Exist_t Log_DB_GetMyMaxHitsPerYear (MYSQL_RES **mysql_res,
                                         time_t FirstClickTimeUTC)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get last question index",
-		   "SELECT MAX(N) FROM ("
-		   // Clicks without course selected --------------------------
-	           "SELECT -1 AS CrsCod,"
-	                  "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
-	                  "%u AS Role,"
-	                  "COUNT(*) AS N"
-	            " FROM log"
-	           " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
-	             " AND UsrCod=%ld"
-	             " AND CrsCod<=0"
-	        " GROUP BY Year"
-		   // ---------------------------------------------------------
-	           " UNION "
-		   // Clicks as student, non-editing teacher or teacher in courses
-	           "SELECT CrsCod,"
-	                  "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
-	                  "Role,"
-	                  "COUNT(*) AS N"
-	            " FROM log"
-	           " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
-	             " AND UsrCod=%ld"
-	             " AND Role>=%u"	// Student
-	             " AND Role<=%u"	// Teacher
-	             " AND CrsCod>0"
-	        " GROUP BY CrsCod,"
-	                  "Year,"
-	                  "Role"
-		   // ---------------------------------------------------------
-	           ") AS hits_per_crs_year",
-		   (unsigned) Rol_UNK,
-		   (long) FirstClickTimeUTC,
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   (long) FirstClickTimeUTC,
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   (unsigned) Rol_STD,
-		   (unsigned) Rol_TCH) ? Exi_EXISTS :
-					 Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get last question index",
+			 "SELECT MAX(N) FROM ("
+			 // Clicks without course selected --------------------------
+			 "SELECT -1 AS CrsCod,"
+				"YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
+				"%u AS Role,"
+				"COUNT(*) AS N"
+			  " FROM log"
+			 " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
+			   " AND UsrCod=%ld"
+			   " AND CrsCod<=0"
+		      " GROUP BY Year"
+			 // ---------------------------------------------------------
+			 " UNION "
+			 // Clicks as student, non-editing teacher or teacher in courses
+			 "SELECT CrsCod,"
+				"YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
+				"Role,"
+				"COUNT(*) AS N"
+			  " FROM log"
+			 " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
+			   " AND UsrCod=%ld"
+			   " AND Role>=%u"	// Student
+			   " AND Role<=%u"	// Teacher
+			   " AND CrsCod>0"
+		      " GROUP BY CrsCod,"
+				"Year,"
+				"Role"
+			 // ---------------------------------------------------------
+			 ") AS hits_per_crs_year",
+			 (unsigned) Rol_UNK,
+			 (long) FirstClickTimeUTC,
+			 Gbl.Usrs.Me.UsrDat.UsrCod,
+			 (long) FirstClickTimeUTC,
+			 Gbl.Usrs.Me.UsrDat.UsrCod,
+			 (unsigned) Rol_STD,
+			 (unsigned) Rol_TCH);
   }
 
 /*****************************************************************************/

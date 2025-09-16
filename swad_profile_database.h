@@ -55,7 +55,7 @@ unsigned Prf_DB_GetNumUsrsWithFigure (const char *FldName);
 unsigned Prf_DB_GetRankingNumClicksPerDay (long UsrCod);
 unsigned Prf_DB_GetNumUsrsWithNumClicksPerDay (void);
 bool Prf_DB_CheckIfUsrFiguresExists (long UsrCod);
-unsigned Prf_DB_GetUsrFigures (MYSQL_RES **mysql_res,long UsrCod);
+Exi_Exist_t Prf_DB_GetUsrFigures (MYSQL_RES **mysql_res,long UsrCod);
 bool Prf_DB_CheckIfUsrBanned (long UsrCod);
 
 void Prf_DB_RemoveUsrFigures (long UsrCod);

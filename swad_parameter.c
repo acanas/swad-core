@@ -797,10 +797,10 @@ void Par_GetMainPars (void)
              from stored session *****/
       switch (Ses_GetSessionData ())
 	{
-	 case Err_SUCCESS:
+	 case Exi_EXISTS:
 	    Gbl.Session.Status = Ses_OPEN;
 	    break;
-	 case Err_ERROR:
+	 case Exi_DOES_NOT_EXIST:
 	 default:
 	    Gbl.Session.Status = Ses_EXPIRED;
 	    Gbl.Session.Id[0] = '\0';

@@ -50,8 +50,8 @@ void Set_DB_UpdateGrpMyLastAccZone (const char *FieldNameDB,long GrpCod);
 void Set_DB_UpdateMyUsrListType (void);
 void Set_DB_UpdateMyPrefAboutListWithPhotosPhoto (Pho_ShowPhotos_t ShowPhotos);
 
-unsigned Set_DB_GetMyUsrListType (MYSQL_RES **mysql_res);
-unsigned Set_DB_GetMyPrefAboutListWithPhotosPhoto (MYSQL_RES **mysql_res);
+Exi_Exist_t Set_DB_GetMyUsrListType (MYSQL_RES **mysql_res);
+Exi_Exist_t Set_DB_GetMyPrefAboutListWithPhotosPhoto (MYSQL_RES **mysql_res);
 
 void Set_DB_RemUsrFromCrsSettings (long UsrCod,long HieCod);
 void Set_DB_RemUsrFromAllCrssSettings (long UsrCod);
@@ -61,7 +61,7 @@ void Set_DB_RemAllUsrsFromCrsSettings (long HieCod);
 void Set_DB_UpdateMyIPSettingsForCurrentIP (void);
 void Set_DB_UpdateMyIPSettingsForAllMyIPs (void);
 
-unsigned Set_DB_GetSettingsFromIP (MYSQL_RES **mysql_res);
+Exi_Exist_t Set_DB_GetSettingsFromIP (MYSQL_RES **mysql_res);
 
 void Set_DB_RemoveOldSettingsFromIP (void);
 

@@ -287,20 +287,19 @@ Exi_Exist_t Roo_DB_CheckIfRoomNameExists (const char *FldName,const char *Name,
 Exi_Exist_t Roo_DB_GetRoomDataByCod (MYSQL_RES **mysql_res,long RooCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get data of a room",
-		   "SELECT roo_rooms.RooCod,"		// row[0]
-			  "roo_rooms.BldCod,"		// row[1]
-			  "bld_buildings.ShortName,"	// row[2]
-			  "roo_rooms.Floor,"		// row[3]
-			  "roo_rooms.Type,"		// row[4]
-			  "roo_rooms.ShortName,"	// row[5]
-			  "roo_rooms.FullName,"		// row[6]
-			  "roo_rooms.Capacity"		// row[7]
-		    " FROM roo_rooms LEFT JOIN bld_buildings"
-		      " ON roo_rooms.BldCod=bld_buildings.BldCod"
-		   " WHERE roo_rooms.RooCod=%ld",
-		   RooCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get data of a room",
+			 "SELECT roo_rooms.RooCod,"		// row[0]
+				"roo_rooms.BldCod,"		// row[1]
+				"bld_buildings.ShortName,"	// row[2]
+				"roo_rooms.Floor,"		// row[3]
+				"roo_rooms.Type,"		// row[4]
+				"roo_rooms.ShortName,"		// row[5]
+				"roo_rooms.FullName,"		// row[6]
+				"roo_rooms.Capacity"		// row[7]
+			  " FROM roo_rooms LEFT JOIN bld_buildings"
+			    " ON roo_rooms.BldCod=bld_buildings.BldCod"
+			 " WHERE roo_rooms.RooCod=%ld",
+			 RooCod);
   }
 
 /*****************************************************************************/
@@ -435,77 +434,77 @@ Usr_Can_t Roo_DB_CheckIfICanSeeUsrLocation (long UsrCod)
 /***************** Check in (send user's current location) *******************/
 /*****************************************************************************/
 
-unsigned Roo_DB_GetUsrLastLocation (MYSQL_RES **mysql_res,long UsrCod)
+Exi_Exist_t Roo_DB_GetUsrLastLocation (MYSQL_RES **mysql_res,long UsrCod)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get matches",
-		   "SELECT ins_instits.InsCod,"				// row[ 0]
-			  "ins_instits.ShortName,"			// row[ 1]
-			  "ins_instits.FullName,"			// row[ 2]
-			  "ctr_centers.CtrCod,"				// row[ 3]
-			  "ctr_centers.ShortName,"			// row[ 4]
-			  "ctr_centers.FullName,"			// row[ 5]
-			  "bld_buildings.BldCod,"			// row[ 6]
-			  "bld_buildings.ShortName,"			// row[ 7]
-			  "bld_buildings.FullName,"			// row[ 8]
-			  "roo_rooms.Floor,"				// row[ 9]
-			  "roo_rooms.RooCod,"				// row[10]
-			  "roo_rooms.ShortName,"			// row[11]
-			  "roo_rooms.FullName,"				// row[12]
-			  "UNIX_TIMESTAMP(roo_check_in.CheckInTime)"	// row[13]
-		    " FROM roo_check_in,"
-			  "roo_rooms,"
-			  "bld_buildings,"
-			  "ctr_centers,"
-			  "ins_instits"
-		  " WHERE roo_check_in.UsrCod=%ld"
-		    " AND roo_check_in.ChkCod="
-			 "(SELECT ChkCod"
-			   " FROM roo_check_in"
-			  " WHERE UsrCod=%ld"
-		       " ORDER BY ChkCod DESC"
-			  " LIMIT 1)"	// Faster than SELECT MAX
-		    " AND roo_check_in.RooCod=roo_rooms.RooCod"
-		    " AND roo_rooms.BldCod=bld_buildings.BldCod"
-		    " AND bld_buildings.CtrCod=ctr_centers.CtrCod"
-		    " AND ctr_centers.InsCod=ins_instits.InsCod",
-		   UsrCod,
-		   UsrCod);
+   return
+   DB_QuerySELECTunique (mysql_res,"can not get matches",
+			 "SELECT ins_instits.InsCod,"				// row[ 0]
+				"ins_instits.ShortName,"			// row[ 1]
+				"ins_instits.FullName,"				// row[ 2]
+				"ctr_centers.CtrCod,"				// row[ 3]
+				"ctr_centers.ShortName,"			// row[ 4]
+				"ctr_centers.FullName,"				// row[ 5]
+				"bld_buildings.BldCod,"				// row[ 6]
+				"bld_buildings.ShortName,"			// row[ 7]
+				"bld_buildings.FullName,"			// row[ 8]
+				"roo_rooms.Floor,"				// row[ 9]
+				"roo_rooms.RooCod,"				// row[10]
+				"roo_rooms.ShortName,"				// row[11]
+				"roo_rooms.FullName,"				// row[12]
+				"UNIX_TIMESTAMP(roo_check_in.CheckInTime)"	// row[13]
+			  " FROM roo_check_in,"
+				"roo_rooms,"
+				"bld_buildings,"
+				"ctr_centers,"
+				"ins_instits"
+			" WHERE roo_check_in.UsrCod=%ld"
+			  " AND roo_check_in.ChkCod="
+			       "(SELECT ChkCod"
+				 " FROM roo_check_in"
+				" WHERE UsrCod=%ld"
+			     " ORDER BY ChkCod DESC"
+				" LIMIT 1)"	// Faster than SELECT MAX
+			  " AND roo_check_in.RooCod=roo_rooms.RooCod"
+			  " AND roo_rooms.BldCod=bld_buildings.BldCod"
+			  " AND bld_buildings.CtrCod=ctr_centers.CtrCod"
+			  " AND ctr_centers.InsCod=ins_instits.InsCod",
+			 UsrCod,
+			 UsrCod);
   }
 
 /*****************************************************************************/
 /**************** Get location associated to a MAC address *******************/
 /*****************************************************************************/
 
-unsigned Roo_DB_GetLocationByMAC (MYSQL_RES **mysql_res,unsigned long long MACnum)
+Exi_Exist_t Roo_DB_GetLocationByMAC (MYSQL_RES **mysql_res,unsigned long long MACnum)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get matches",
-		   "SELECT ins_instits.InsCod,"		// row[ 0]
-			  "ins_instits.ShortName,"	// row[ 1]
-			  "ins_instits.FullName,"	// row[ 2]
-			  "ctr_centers.CtrCod,"		// row[ 3]
-			  "ctr_centers.ShortName,"	// row[ 4]
-			  "ctr_centers.FullName,"	// row[ 5]
-			  "bld_buildings.BldCod,"	// row[ 6]
-			  "bld_buildings.ShortName,"	// row[ 7]
-			  "bld_buildings.FullName,"	// row[ 8]
-			  "roo_rooms.Floor,"		// row[ 9]
-			  "roo_rooms.RooCod,"		// row[10]
-			  "roo_rooms.ShortName,"	// row[11]
-			  "roo_rooms.FullName"		// row[12]
-		    " FROM roo_macs,"
-			  "roo_rooms,"
-			  "bld_buildings,"
-			  "ctr_centers,"
-			  "ins_instits"
-		   " WHERE roo_macs.MAC=%llu"
-		     " AND roo_macs.RooCod=roo_rooms.RooCod"
-		     " AND roo_rooms.BldCod=bld_buildings.BldCod"
-		     " AND bld_buildings.CtrCod=ctr_centers.CtrCod"
-		     " AND ctr_centers.InsCod=ins_instits.InsCod"
-		" ORDER BY roo_rooms.Capacity DESC,"	// Get the biggest room
-			  "roo_rooms.ShortName"
-		   " LIMIT 1",
-		   MACnum);
+   return
+   DB_QuerySELECTunique (mysql_res,"can not get matches",
+			 "SELECT ins_instits.InsCod,"		// row[ 0]
+				"ins_instits.ShortName,"	// row[ 1]
+				"ins_instits.FullName,"		// row[ 2]
+				"ctr_centers.CtrCod,"		// row[ 3]
+				"ctr_centers.ShortName,"	// row[ 4]
+				"ctr_centers.FullName,"		// row[ 5]
+				"bld_buildings.BldCod,"		// row[ 6]
+				"bld_buildings.ShortName,"	// row[ 7]
+				"bld_buildings.FullName,"	// row[ 8]
+				"roo_rooms.Floor,"		// row[ 9]
+				"roo_rooms.RooCod,"		// row[10]
+				"roo_rooms.ShortName,"		// row[11]
+				"roo_rooms.FullName"		// row[12]
+			  " FROM roo_macs,"
+				"roo_rooms,"
+				"bld_buildings,"
+				"ctr_centers,"
+				"ins_instits"
+			 " WHERE roo_macs.MAC=%llu"
+			   " AND roo_macs.RooCod=roo_rooms.RooCod"
+			   " AND roo_rooms.BldCod=bld_buildings.BldCod"
+			   " AND bld_buildings.CtrCod=ctr_centers.CtrCod"
+			   " AND ctr_centers.InsCod=ins_instits.InsCod"
+		      " ORDER BY roo_rooms.Capacity DESC,"	// Get the biggest room
+				"roo_rooms.ShortName"
+			 " LIMIT 1",
+			 MACnum);
   }

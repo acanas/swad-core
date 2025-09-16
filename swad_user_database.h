@@ -77,7 +77,7 @@ void Usr_DB_UpdateMyLastData (void);
 void Usr_DB_UpdateMyLastWhatToSearch (Sch_WhatToSearch_t WhatToSearch);
 
 bool Usr_DB_CheckMyLastData (void);
-unsigned Usr_DB_GetMyLastData (MYSQL_RES **mysql_res);
+Exi_Exist_t Usr_DB_GetMyLastData (MYSQL_RES **mysql_res);
 
 void Usr_DB_RemoveUsrLastData (long UsrCod);
 

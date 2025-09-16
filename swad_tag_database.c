@@ -188,14 +188,15 @@ unsigned Tag_DB_GetTagsQst (MYSQL_RES **mysql_res,long QstCod)
 unsigned Tag_DB_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res)
   {
    /***** Get available tags from database *****/
-   return (unsigned) DB_QuerySELECT (mysql_res,"can not get available tags",
-				     "SELECT TagCod,"	// row[0]
-					    "TagTxt,"	// row[1]
-					    "TagHidden"	// row[2]
-				      " FROM tst_tags"
-				     " WHERE CrsCod=%ld"
-				  " ORDER BY TagTxt",
-				     Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get available tags",
+		   "SELECT TagCod,"	// row[0]
+			  "TagTxt,"	// row[1]
+			  "TagHidden"	// row[2]
+		    " FROM tst_tags"
+		   " WHERE CrsCod=%ld"
+		" ORDER BY TagTxt",
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/

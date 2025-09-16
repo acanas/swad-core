@@ -119,18 +119,17 @@ void Not_DB_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,
 Exi_Exist_t Not_DB_GetNoticeData (MYSQL_RES **mysql_res,long NotCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get notice from database",
-		   "SELECT NotCod,"				// row[0]
-			  "UNIX_TIMESTAMP(CreatTime) AS F,"	// row[1]
-			  "UsrCod,"				// row[2]
-			  "Content,"				// row[3]
-			  "Status"				// row[4]
-		    " FROM not_notices"
-		   " WHERE NotCod=%ld"
-		     " AND CrsCod=%ld",	// Extra check
-		   NotCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? Exi_EXISTS :
-						         Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get notice from database",
+			 "SELECT NotCod,"				// row[0]
+				"UNIX_TIMESTAMP(CreatTime) AS F,"	// row[1]
+				"UsrCod,"				// row[2]
+				"Content,"				// row[3]
+				"Status"				// row[4]
+			  " FROM not_notices"
+			 " WHERE NotCod=%ld"
+			   " AND CrsCod=%ld",	// Extra check
+			 NotCod,
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -139,13 +138,12 @@ Exi_Exist_t Not_DB_GetNoticeData (MYSQL_RES **mysql_res,long NotCod)
 
 Exi_Exist_t Not_DB_ContentNotice (MYSQL_RES **mysql_res,long NotCod)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get content of notice",
-		   "SELECT Content"	// row[0]
-		    " FROM not_notices"
-		   " WHERE NotCod=%ld",
-		   NotCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   return
+   DB_QuerySELECTunique (mysql_res,"can not get content of notice",
+			 "SELECT Content"	// row[0]
+			  " FROM not_notices"
+			 " WHERE NotCod=%ld",
+			 NotCod);
   }
 
 /*****************************************************************************/

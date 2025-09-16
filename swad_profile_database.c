@@ -638,20 +638,20 @@ bool Prf_DB_CheckIfUsrFiguresExists (long UsrCod)
 /********************** Get user's figures from database *********************/
 /*****************************************************************************/
 
-unsigned Prf_DB_GetUsrFigures (MYSQL_RES **mysql_res,long UsrCod)
+Exi_Exist_t Prf_DB_GetUsrFigures (MYSQL_RES **mysql_res,long UsrCod)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get user's figures",
-		   "SELECT UNIX_TIMESTAMP(FirstClickTime),"	// row[0]
-			  "DATEDIFF(NOW(),FirstClickTime)+1,"	// row[1]
-			  "NumClicks,"				// row[2]
-			  "NumSocPub,"				// row[3]
-			  "NumFileViews,"			// row[4]
-			  "NumForPst,"				// row[5]
-			  "NumMsgSnt"				// row[6]
-		    " FROM usr_figures"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
+   return
+   DB_QuerySELECTunique (mysql_res,"can not get user's figures",
+			 "SELECT UNIX_TIMESTAMP(FirstClickTime),"	// row[0]
+				"DATEDIFF(NOW(),FirstClickTime)+1,"	// row[1]
+				"NumClicks,"				// row[2]
+				"NumSocPub,"				// row[3]
+				"NumFileViews,"				// row[4]
+				"NumForPst,"				// row[5]
+				"NumMsgSnt"				// row[6]
+			  " FROM usr_figures"
+			 " WHERE UsrCod=%ld",
+			 UsrCod);
   }
 
 /*****************************************************************************/

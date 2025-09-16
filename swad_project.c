@@ -1142,62 +1142,62 @@ static Usr_Who_t Prj_GetParWho (void)
 static unsigned Prj_GetParRolPrj (void)
   {
    return (unsigned)
-	  Par_GetParUnsignedLong (Prj_PAR_FILTER_ROL_PRJ_NAME,
-                                  0,
-                                  (1 << Prj_ROLE_UNK) |
-                                  (1 << Prj_ROLE_STD) |
-                                  (1 << Prj_ROLE_TUT) |
-                                  (1 << Prj_ROLE_EVL),
-                                  (unsigned) Prj_FILTER_ROLE_UNK_DEFAULT |
-                                  (unsigned) Prj_FILTER_ROLE_STD_DEFAULT |
-                                  (unsigned) Prj_FILTER_ROLE_TUT_DEFAULT |
-                                  (unsigned) Prj_FILTER_ROLE_EVL_DEFAULT);
+   Par_GetParUnsignedLong (Prj_PAR_FILTER_ROL_PRJ_NAME,
+			   0,
+			   (1 << Prj_ROLE_UNK) |
+			   (1 << Prj_ROLE_STD) |
+			   (1 << Prj_ROLE_TUT) |
+			   (1 << Prj_ROLE_EVL),
+			   (unsigned) Prj_FILTER_ROLE_UNK_DEFAULT |
+			   (unsigned) Prj_FILTER_ROLE_STD_DEFAULT |
+			   (unsigned) Prj_FILTER_ROLE_TUT_DEFAULT |
+			   (unsigned) Prj_FILTER_ROLE_EVL_DEFAULT);
   }
 
 static unsigned Prj_GetParAssign (void)
   {
    return (unsigned)
-	  Par_GetParUnsignedLong (Prj_PAR_FILTER_ASG_NON_NAME,
-                                  0,
-                                  (1 << Prj_NONASSIG) |
-                                  (1 << Prj_ASSIGNED),
-                                  (unsigned) Prj_FILTER_NONASSIG_DEFAULT |
-                                  (unsigned) Prj_FILTER_ASSIGNED_DEFAULT);
+   Par_GetParUnsignedLong (Prj_PAR_FILTER_ASG_NON_NAME,
+			   0,
+			   (1 << Prj_NONASSIG) |
+			   (1 << Prj_ASSIGNED),
+			   (unsigned) Prj_FILTER_NONASSIG_DEFAULT |
+			   (unsigned) Prj_FILTER_ASSIGNED_DEFAULT);
   }
 
 static unsigned Prj_GetParHidden (void)
   {
    return (unsigned)
-	  Par_GetParUnsignedLong (Prj_PAR_FILTER_HID_VIS_NAME,
-				  0,
-				  (1 << HidVis_HIDDEN) |
-				  (1 << HidVis_VISIBLE),
-				  (unsigned) Prj_FILTER_HIDDEN_DEFAULT |
-				  (unsigned) Prj_FILTER_VISIBL_DEFAULT);
+   Par_GetParUnsignedLong (Prj_PAR_FILTER_HID_VIS_NAME,
+			   0,
+			   (1 << HidVis_HIDDEN) |
+			   (1 << HidVis_VISIBLE),
+			   (unsigned) Prj_FILTER_HIDDEN_DEFAULT |
+			   (unsigned) Prj_FILTER_VISIBL_DEFAULT);
   }
 
 static unsigned Prj_GetParFaulti (void)
   {
    return (unsigned)
-	  Par_GetParUnsignedLong (Prj_PAR_FILTER_FAULTIN_NAME,
-                                  0,
-                                  (1 << Prj_FAULTY) |
-                                  (1 << Prj_FAULTLESS),
-                                  (unsigned) Prj_FILTER_FAULTY_DEFAULT |
-                                  (unsigned) Prj_FILTER_FAULTLESS_DEFAULT);
+   Par_GetParUnsignedLong (Prj_PAR_FILTER_FAULTIN_NAME,
+			   0,
+			   (1 << Prj_FAULTY) |
+			   (1 << Prj_FAULTLESS),
+			   (unsigned) Prj_FILTER_FAULTY_DEFAULT |
+			   (unsigned) Prj_FILTER_FAULTLESS_DEFAULT);
   }
 
 static unsigned Prj_GetParReview (void)
   {
    return (unsigned)
-	  Par_GetParUnsignedLong (Prj_PAR_FILTER_REVIEW_NAME,
-                                  0,
-                                  (1 << Prj_UNREVIEWED) |
-                                  (1 << Prj_UNAPPROVED) |
-                                  (1 << Prj_APPROVED),
-                                  (unsigned) Prj_FILTER_UNREVIEWED_DEFAULT |
-                                  (unsigned) Prj_FILTER_UNAPPROVED_DEFAULT |
-                                  (unsigned) Prj_FILTER_APPROVED_DEFAULT);
+   Par_GetParUnsignedLong (Prj_PAR_FILTER_REVIEW_NAME,
+			   0,
+			   (1 << Prj_UNREVIEWED) |
+			   (1 << Prj_UNAPPROVED) |
+			   (1 << Prj_APPROVED),
+			   (unsigned) Prj_FILTER_UNREVIEWED_DEFAULT |
+			   (unsigned) Prj_FILTER_UNAPPROVED_DEFAULT |
+			   (unsigned) Prj_FILTER_APPROVED_DEFAULT);
   }
 
 static long Prj_GetParFilterDptCod (void)
@@ -2550,7 +2550,7 @@ static void Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
    if (PrjCod > 0)
      {
       /***** Query database *****/
-      if (Prj_DB_GetPrjDataToCheckFaults (&mysql_res,PrjCod))	// Project found...
+      if (Prj_DB_GetPrjDataToCheckFaults (&mysql_res,PrjCod) == Exi_EXISTS)	// Project found...
 	{
          /***** Get some data of project *****/
 	 /* Get row */

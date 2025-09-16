@@ -86,15 +86,14 @@ Exi_Exist_t Fig_DB_GetFigureFromCache (MYSQL_RES **mysql_res,
      };
 
    return
-   DB_QuerySELECT (mysql_res,"can not get cached figure value",
-		   "SELECT %s"		// row[0]
-		    " FROM fig_figures"
-		   " WHERE Figure=%u"
-		     " AND Scope='%s'"
-		     " AND Cod=%ld"
-		     " AND LastUpdate>FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-		   Field[Type],
-		   (unsigned) Figure,Hie_GetDBStrFromLevel (HieLvl),HieCod,
-		   TimeCached) ? Exi_EXISTS :
-				 Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get cached figure value",
+			 "SELECT %s"		// row[0]
+			  " FROM fig_figures"
+			 " WHERE Figure=%u"
+			   " AND Scope='%s'"
+			   " AND Cod=%ld"
+			   " AND LastUpdate>FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
+			 Field[Type],
+			 (unsigned) Figure,Hie_GetDBStrFromLevel (HieLvl),HieCod,
+			 TimeCached);
   }

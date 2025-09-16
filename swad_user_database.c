@@ -226,79 +226,77 @@ Exi_Exist_t Usr_DB_GetUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod,
      {
       case Usr_DONT_GET_PREFS:
 	 return
-	 DB_QuerySELECT (mysql_res,"can not get user's data",
-		         "SELECT EncryptedUsrCod,"	// row[ 0]
-			        "Password,"		// row[ 1]
-			        "Surname1,"		// row[ 2]
-			        "Surname2,"		// row[ 3]
-			        "FirstName,"		// row[ 4]
-			        "Sex,"			// row[ 5]
-			        "Photo,"		// row[ 6]
-			        "PhotoVisibility,"	// row[ 7]
-			        "BaPrfVisibility,"	// row[ 8]
-			        "ExPrfVisibility,"	// row[ 9]
-			        "CtyCod,"		// row[10]
-			        "InsCtyCod,"		// row[11]
-			        "InsCod,"		// row[12]
-			        "DptCod,"		// row[13]
-			        "CtrCod,"		// row[14]
-			        "Office,"		// row[15]
-			        "OfficePhone,"		// row[16]
-			        "LocalPhone,"		// row[17]
-			        "FamilyPhone,"		// row[18]
-			        "DATE_FORMAT(Birthday,"
-			        "'%%Y%%m%%d'),"		// row[19]
-			        "Comments,"		// row[20]
-			        "NotifNtfEvents,"	// row[21]
-			        "EmailNtfEvents"	// row[22]
-			  " FROM usr_data"
-		         " WHERE UsrCod=%ld",
-		         UsrCod) ? Exi_EXISTS :
-		        	   Exi_DOES_NOT_EXIST;
+	 DB_QuerySELECTunique (mysql_res,"can not get user's data",
+			       "SELECT EncryptedUsrCod,"	// row[ 0]
+				      "Password,"		// row[ 1]
+				      "Surname1,"		// row[ 2]
+				      "Surname2,"		// row[ 3]
+				      "FirstName,"		// row[ 4]
+				      "Sex,"			// row[ 5]
+				      "Photo,"			// row[ 6]
+				      "PhotoVisibility,"	// row[ 7]
+				      "BaPrfVisibility,"	// row[ 8]
+				      "ExPrfVisibility,"	// row[ 9]
+				      "CtyCod,"			// row[10]
+				      "InsCtyCod,"		// row[11]
+				      "InsCod,"			// row[12]
+				      "DptCod,"			// row[13]
+				      "CtrCod,"			// row[14]
+				      "Office,"			// row[15]
+				      "OfficePhone,"		// row[16]
+				      "LocalPhone,"		// row[17]
+				      "FamilyPhone,"		// row[18]
+				      "DATE_FORMAT(Birthday,"
+				      "'%%Y%%m%%d'),"		// row[19]
+				      "Comments,"		// row[20]
+				      "NotifNtfEvents,"		// row[21]
+				      "EmailNtfEvents"		// row[22]
+				" FROM usr_data"
+			       " WHERE UsrCod=%ld",
+			       UsrCod);
       case Usr_GET_PREFS:
       default:
 	 return
-	 DB_QuerySELECT (mysql_res,"can not get user's data",
-		         "SELECT EncryptedUsrCod,"	// row[ 0]
-			        "Password,"		// row[ 1]
-			        "Surname1,"		// row[ 2]
-			        "Surname2,"		// row[ 3]
-			        "FirstName,"		// row[ 4]
-			        "Sex,"			// row[ 5]
-			        "Photo,"		// row[ 6]
-			        "PhotoVisibility,"	// row[ 7]
-			        "BaPrfVisibility,"	// row[ 8]
-			        "ExPrfVisibility,"	// row[ 9]
-			        "CtyCod,"		// row[10]
-			        "InsCtyCod,"		// row[11]
-			        "InsCod,"		// row[12]
-			        "DptCod,"		// row[13]
-			        "CtrCod,"		// row[14]
-			        "Office,"		// row[15]
-			        "OfficePhone,"		// row[16]
-			        "LocalPhone,"		// row[17]
-			        "FamilyPhone,"		// row[18]
-			        "DATE_FORMAT(Birthday,"
-			        "'%%Y%%m%%d'),"		// row[19]
-			        "Comments,"		// row[20]
-			        "NotifNtfEvents,"	// row[21]
-			        "EmailNtfEvents,"	// row[22]
+	 DB_QuerySELECTunique (mysql_res,"can not get user's data",
+			       "SELECT EncryptedUsrCod,"	// row[ 0]
+				      "Password,"		// row[ 1]
+				      "Surname1,"		// row[ 2]
+				      "Surname2,"		// row[ 3]
+				      "FirstName,"		// row[ 4]
+				      "Sex,"			// row[ 5]
+				      "Photo,"			// row[ 6]
+				      "PhotoVisibility,"	// row[ 7]
+				      "BaPrfVisibility,"	// row[ 8]
+				      "ExPrfVisibility,"	// row[ 9]
+				      "CtyCod,"			// row[10]
+				      "InsCtyCod,"		// row[11]
+				      "InsCod,"			// row[12]
+				      "DptCod,"			// row[13]
+				      "CtrCod,"			// row[14]
+				      "Office,"			// row[15]
+				      "OfficePhone,"		// row[16]
+				      "LocalPhone,"		// row[17]
+				      "FamilyPhone,"		// row[18]
+				      "DATE_FORMAT(Birthday,"
+				      "'%%Y%%m%%d'),"		// row[19]
+				      "Comments,"		// row[20]
+				      "NotifNtfEvents,"		// row[21]
+				      "EmailNtfEvents,"		// row[22]
 
-			        // Settings (usually not necessary
-			        // when getting another user's data)
-			        "Language,"		// row[23]
-			        "FirstDayOfWeek,"	// row[24]
-			        "DateFormat,"		// row[25]
-			        "Theme,"		// row[26]
-			        "IconSet,"		// row[27]
-			        "Menu,"			// row[28]
-			        "SideCols,"		// row[29]
-			        "PhotoShape,"		// row[30]
-			        "ThirdPartyCookies"	// row[31]
-			  " FROM usr_data"
-		         " WHERE UsrCod=%ld",
-		         UsrCod) ? Exi_EXISTS :
-		        	   Exi_DOES_NOT_EXIST;
+				      // Settings (usually not necessary
+				      // when getting another user's data)
+				      "Language,"		// row[23]
+				      "FirstDayOfWeek,"		// row[24]
+				      "DateFormat,"		// row[25]
+				      "Theme,"			// row[26]
+				      "IconSet,"		// row[27]
+				      "Menu,"			// row[28]
+				      "SideCols,"		// row[29]
+				      "PhotoShape,"		// row[30]
+				      "ThirdPartyCookies"	// row[31]
+				" FROM usr_data"
+			       " WHERE UsrCod=%ld",
+			       UsrCod);
      }
   }
 
@@ -310,16 +308,15 @@ Exi_Exist_t Usr_DB_GetUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod,
 Exi_Exist_t Usr_DB_GetSomeUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get user's data",
-		   "SELECT Surname1,"				// row[0]
-			  "Surname2,"				// row[1]
-			  "FirstName,"				// row[2]
-			  "Photo,"				// row[3]
-			  "DATE_FORMAT(Birthday,'%%Y%%m%%d')"	// row[4]
-		    " FROM usr_data"
-		   " WHERE UsrCod=%ld",
-		   UsrCod) != 0 ? Exi_EXISTS :
-				  Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get user's data",
+			 "SELECT Surname1,"				// row[0]
+				"Surname2,"				// row[1]
+				"FirstName,"				// row[2]
+				"Photo,"				// row[3]
+				"DATE_FORMAT(Birthday,'%%Y%%m%%d')"	// row[4]
+			  " FROM usr_data"
+			 " WHERE UsrCod=%ld",
+			 UsrCod);
   }
 
 /*****************************************************************************/
@@ -1561,20 +1558,20 @@ bool Usr_DB_CheckMyLastData (void)
 /********** Get user's last data from database giving a user's code **********/
 /*****************************************************************************/
 
-unsigned Usr_DB_GetMyLastData (MYSQL_RES **mysql_res)
+Exi_Exist_t Usr_DB_GetMyLastData (MYSQL_RES **mysql_res)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get user's last data",
-		   "SELECT WhatToSearch,"			// row[0]
-			  "LastSco,"				// row[1]
-			  "LastCod,"				// row[2]
-			  "LastAct,"				// row[3]
-			  "LastRole,"				// row[4]
-			  "UNIX_TIMESTAMP(LastTime),"		// row[5]
-			  "UNIX_TIMESTAMP(LastAccNotif)"	// row[6]
-		    " FROM usr_last"
-		   " WHERE UsrCod=%ld",
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+   return
+   DB_QuerySELECTunique (mysql_res,"can not get user's last data",
+			 "SELECT WhatToSearch,"			// row[0]
+				"LastSco,"			// row[1]
+				"LastCod,"			// row[2]
+				"LastAct,"			// row[3]
+				"LastRole,"			// row[4]
+				"UNIX_TIMESTAMP(LastTime),"	// row[5]
+				"UNIX_TIMESTAMP(LastAccNotif)"	// row[6]
+			  " FROM usr_last"
+			 " WHERE UsrCod=%ld",
+			 Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

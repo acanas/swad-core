@@ -173,29 +173,28 @@ void Mch_DB_UpdateVisResultsMchUsr (long MchCod,bool ShowUsrResults)
 Exi_Exist_t Mch_DB_GetMatchDataByCod (MYSQL_RES **mysql_res,long MchCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get matches",
-		   "SELECT MchCod,"			// row[ 0]
-			  "GamCod,"			// row[ 1]
-			  "UsrCod,"			// row[ 2]
-			  "UNIX_TIMESTAMP(StartTime),"	// row[ 3]
-			  "UNIX_TIMESTAMP(EndTime),"	// row[ 4]
-			  "Title,"			// row[ 5]
-			  "QstInd,"			// row[ 6]
-			  "QstCod,"			// row[ 7]
-			  "Showing,"			// row[ 8]
-			  "Countdown,"			// row[ 9]
-			  "NumCols,"			// row[10]
-			  "ShowQstResults,"		// row[11]
-			  "ShowUsrResults"		// row[12]
-		    " FROM mch_matches"
-		   " WHERE MchCod=%ld"
-		     " AND GamCod IN"		// Extra check
-		         " (SELECT GamCod"
-		            " FROM gam_games"
-		           " WHERE CrsCod=%ld)",
-		 MchCod,
-		 Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? Exi_EXISTS :
-						       Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get matches",
+			 "SELECT MchCod,"			// row[ 0]
+				"GamCod,"			// row[ 1]
+				"UsrCod,"			// row[ 2]
+				"UNIX_TIMESTAMP(StartTime),"	// row[ 3]
+				"UNIX_TIMESTAMP(EndTime),"	// row[ 4]
+				"Title,"			// row[ 5]
+				"QstInd,"			// row[ 6]
+				"QstCod,"			// row[ 7]
+				"Showing,"			// row[ 8]
+				"Countdown,"			// row[ 9]
+				"NumCols,"			// row[10]
+				"ShowQstResults,"		// row[11]
+				"ShowUsrResults"		// row[12]
+			  " FROM mch_matches"
+			 " WHERE MchCod=%ld"
+			   " AND GamCod IN"		// Extra check
+			       " (SELECT GamCod"
+				  " FROM gam_games"
+				 " WHERE CrsCod=%ld)",
+		       MchCod,
+		       Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -205,13 +204,12 @@ Exi_Exist_t Mch_DB_GetMatchDataByCod (MYSQL_RES **mysql_res,long MchCod)
 Exi_Exist_t Mch_DB_GetStartEndMatchesInGame (MYSQL_RES **mysql_res,long GamCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get game data",
-		   "SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
-			  "UNIX_TIMESTAMP(MAX(EndTime))"	// row[1]
-		   " FROM mch_matches"
-		   " WHERE GamCod=%ld",
-		   GamCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get game data",
+			 "SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
+				"UNIX_TIMESTAMP(MAX(EndTime))"	// row[1]
+			 " FROM mch_matches"
+			 " WHERE GamCod=%ld",
+			 GamCod);
   }
 
 /*****************************************************************************/
@@ -690,17 +688,16 @@ Exi_Exist_t Mch_DB_GetUsrAnsToQst (MYSQL_RES **mysql_res,
                                    long MchCod,long UsrCod,unsigned QstInd)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get user's answer to a match question",
-		   "SELECT NumOpt,"	// row[0]
-			  "AnsInd"	// row[1]
-		    " FROM mch_answers"
-		   " WHERE MchCod=%ld"
-		     " AND UsrCod=%ld"
-		     " AND QstInd=%u",
-		   MchCod,
-		   UsrCod,
-		   QstInd) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get user's answer to a match question",
+			 "SELECT NumOpt,"	// row[0]
+				"AnsInd"	// row[1]
+			  " FROM mch_answers"
+			 " WHERE MchCod=%ld"
+			   " AND UsrCod=%ld"
+			   " AND QstInd=%u",
+			 MchCod,
+			 UsrCod,
+			 QstInd);
   }
 
 /*****************************************************************************/
@@ -927,14 +924,13 @@ Exi_Exist_t Mch_DB_GetElapsedTimeInQuestion (MYSQL_RES **mysql_res,
 					     long MchCod,unsigned QstInd)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get elapsed time",
-		   "SELECT ElapsedTime"	// row[0]
-		    " FROM mch_times"
-		   " WHERE MchCod=%ld"
-		     " AND QstInd=%u",
-		   MchCod,
-		   QstInd) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get elapsed time",
+			 "SELECT ElapsedTime"	// row[0]
+			  " FROM mch_times"
+			 " WHERE MchCod=%ld"
+			   " AND QstInd=%u",
+			 MchCod,
+			 QstInd);
   }
 
 /*****************************************************************************/
@@ -944,12 +940,11 @@ Exi_Exist_t Mch_DB_GetElapsedTimeInQuestion (MYSQL_RES **mysql_res,
 Exi_Exist_t Mch_DB_GetElapsedTimeInMatch (MYSQL_RES **mysql_res,long MchCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get elapsed time",
-		   "SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(ElapsedTime)))"	// row[0]
-		    " FROM mch_times"
-		   " WHERE MchCod=%ld",
-		   MchCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get elapsed time",
+			 "SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(ElapsedTime)))"	// row[0]
+			  " FROM mch_times"
+			 " WHERE MchCod=%ld",
+			 MchCod);
   }
 
 /*****************************************************************************/
@@ -1030,24 +1025,23 @@ Exi_Exist_t Mch_DB_GetMatchPrintData (MYSQL_RES **mysql_res,
                                       const struct MchPrn_Print *Print)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get data of a match print",
-		   "SELECT UNIX_TIMESTAMP(mch_results.StartTime),"	// row[1]
-			  "UNIX_TIMESTAMP(mch_results.EndTime),"	// row[2]
-			  "mch_results.NumQsts,"			// row[3]
-			  "mch_results.NumQstsNotBlank,"		// row[4]
-			  "mch_results.Score"				// row[5]
-		    " FROM mch_results,"
-			  "mch_matches,"
-			  "gam_games"
-		   " WHERE mch_results.MchCod=%ld"
-		     " AND mch_results.UsrCod=%ld"
-		     " AND mch_results.MchCod=mch_matches.MchCod"
-		     " AND mch_matches.GamCod=gam_games.GamCod"
-		     " AND gam_games.CrsCod=%ld",		// Extra check
-		   Print->MchCod,
-		   Print->UsrCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? Exi_EXISTS :
-							 Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get data of a match print",
+			 "SELECT UNIX_TIMESTAMP(mch_results.StartTime),"	// row[1]
+				"UNIX_TIMESTAMP(mch_results.EndTime),"		// row[2]
+				"mch_results.NumQsts,"				// row[3]
+				"mch_results.NumQstsNotBlank,"			// row[4]
+				"mch_results.Score"				// row[5]
+			  " FROM mch_results,"
+				"mch_matches,"
+				"gam_games"
+			 " WHERE mch_results.MchCod=%ld"
+			   " AND mch_results.UsrCod=%ld"
+			   " AND mch_results.MchCod=mch_matches.MchCod"
+			   " AND mch_matches.GamCod=gam_games.GamCod"
+			   " AND gam_games.CrsCod=%ld",		// Extra check
+			 Print->MchCod,
+			 Print->UsrCod,
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/

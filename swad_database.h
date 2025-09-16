@@ -45,6 +45,8 @@ void DB_BuildQuery (char **Query,const char *fmt,...);
 
 unsigned long DB_QuerySELECT (MYSQL_RES **mysql_res,const char *MsgError,
                               const char *fmt,...);
+Exi_Exist_t DB_QuerySELECTunique (MYSQL_RES **mysql_res,const char *MsgError,
+                                  const char *fmt,...);
 long DB_QuerySELECTCode (const char *MsgError,
                          const char *fmt,...);
 unsigned DB_QuerySELECTUnsigned (const char *MsgError,

@@ -93,19 +93,18 @@ void Mrk_DB_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter,unsigne
 Exi_Exist_t Mrk_DB_GetMarksDataByCod (MYSQL_RES **mysql_res,long MrkCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get the number of rows"
-			     " in header and footer",
-		   "SELECT brw_files.FileBrowser,"	// row[0]
-			  "brw_files.Cod,"		// row[1]
-			  "brw_files.Path,"		// row[2]
-			  "mrk_marks.Header,"		// row[3]
-			  "mrk_marks.Footer"		// row[4]
-		    " FROM brw_files,"
-			  "mrk_marks"
-		   " WHERE brw_files.FilCod=%ld"
-		     " AND brw_files.FilCod=mrk_marks.FilCod",
-		    MrkCod) ? Exi_EXISTS :
-			      Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get the number of rows"
+				   " in header and footer",
+			 "SELECT brw_files.FileBrowser,"	// row[0]
+				"brw_files.Cod,"		// row[1]
+				"brw_files.Path,"		// row[2]
+				"mrk_marks.Header,"		// row[3]
+				"mrk_marks.Footer"		// row[4]
+			  " FROM brw_files,"
+				"mrk_marks"
+			 " WHERE brw_files.FilCod=%ld"
+			   " AND brw_files.FilCod=mrk_marks.FilCod",
+			  MrkCod);
   }
 
 /*****************************************************************************/
@@ -121,22 +120,21 @@ Exi_Exist_t Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res)
       If, due to an error, there is more than one file,
       get the number of rows of the more recent file. */
    return
-   DB_QuerySELECT (mysql_res,"can not get the number of rows"
-			     " in header and footer",
-		   "SELECT mrk_marks.%s,"	// row[0]
-			  "mrk_marks.%s"	// row[1]
-		    " FROM brw_files,"
-			  "mrk_marks"
-		   " WHERE brw_files.FileBrowser=%u"
-		     " AND brw_files.Cod=%ld"
-		     " AND brw_files.Path='%s'"
-		     " AND brw_files.FilCod=mrk_marks.FilCod"
-		" ORDER BY brw_files.FilCod DESC"
-		   " LIMIT 1",	// On duplicate entries, get the more recent
-		   Mrk_DB_HeadOrFootStr[Brw_HEADER],
-		   Mrk_DB_HeadOrFootStr[Brw_FOOTER],
-		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-		   Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
-		   Gbl.FileBrowser.FilFolLnk.Full) ? Exi_EXISTS :
-						     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get the number of rows"
+				   " in header and footer",
+			 "SELECT mrk_marks.%s,"	// row[0]
+				"mrk_marks.%s"	// row[1]
+			  " FROM brw_files,"
+				"mrk_marks"
+			 " WHERE brw_files.FileBrowser=%u"
+			   " AND brw_files.Cod=%ld"
+			   " AND brw_files.Path='%s'"
+			   " AND brw_files.FilCod=mrk_marks.FilCod"
+		      " ORDER BY brw_files.FilCod DESC"
+			 " LIMIT 1",	// On duplicate entries, get the more recent
+			 Mrk_DB_HeadOrFootStr[Brw_HEADER],
+			 Mrk_DB_HeadOrFootStr[Brw_FOOTER],
+			 (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+			 Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
+			 Gbl.FileBrowser.FilFolLnk.Full);
   }

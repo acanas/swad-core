@@ -111,18 +111,17 @@ Exi_Exist_t Tml_DB_GetNoteDataByCod (long NotCod,MYSQL_RES **mysql_res)
 
    /***** Get data of note from database *****/
    return
-   DB_QuerySELECT (mysql_res,"can not get data of note",
-		   "SELECT NotCod,"			// row[0]
-			  "NoteType,"			// row[1]
-			  "Cod,"			// row[2]
-			  "UsrCod,"			// row[3]
-			  "HieCod,"			// row[4]
-			  "Unavailable,"		// row[5]
-			  "UNIX_TIMESTAMP(TimeNote)"	// row[6]
-		    " FROM tml_notes"
-		   " WHERE NotCod=%ld",
-		   NotCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get data of note",
+			 "SELECT NotCod,"			// row[0]
+				"NoteType,"			// row[1]
+				"Cod,"			// row[2]
+				"UsrCod,"			// row[3]
+				"HieCod,"			// row[4]
+				"Unavailable,"		// row[5]
+				"UNIX_TIMESTAMP(TimeNote)"	// row[6]
+			  " FROM tml_notes"
+			 " WHERE NotCod=%ld",
+			 NotCod);
   }
 
 /*****************************************************************************/
@@ -558,14 +557,13 @@ Exi_Exist_t Tml_DB_GetPostDataByCod (long PstCod,MYSQL_RES **mysql_res)
 
    /***** Get data of post from database *****/
    return
-   DB_QuerySELECT (mysql_res,"can not get the content"
-			     " of a post",
-		   "SELECT Txt,"	// row[0]
-			  "MedCod"	// row[1]
-		    " FROM tml_posts"
-		   " WHERE PstCod=%ld",
-		   PstCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get the content"
+				   " of a post",
+			 "SELECT Txt,"	// row[0]
+				"MedCod"	// row[1]
+			  " FROM tml_posts"
+			 " WHERE PstCod=%ld",
+			 PstCod);
   }
 
 /*****************************************************************************/
@@ -720,20 +718,19 @@ Exi_Exist_t Tml_DB_GetCommDataByCod (long PubCod,MYSQL_RES **mysql_res)
 
    /***** Get data of comment from database *****/
    return
-   DB_QuerySELECT (mysql_res,"can not get data of comment",
-		   "SELECT tml_pubs.PubCod,"				// row[0]
-			  "tml_pubs.PublisherCod,"			// row[1]
-			  "tml_pubs.NotCod,"				// row[2]
-			  "UNIX_TIMESTAMP(tml_pubs.TimePublish),"	// row[3]
-			  "tml_comments.Txt,"				// row[4]
-			  "tml_comments.MedCod"				// row[5]
-		    " FROM tml_pubs,tml_comments"
-		   " WHERE tml_pubs.PubCod=%ld"
-		     " AND tml_pubs.PubType=%u"
-		     " AND tml_pubs.PubCod=tml_comments.PubCod",
-		   PubCod,
-		   (unsigned) TmlPub_COMMENT_TO_NOTE) ? Exi_EXISTS :
-							Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get data of comment",
+			 "SELECT tml_pubs.PubCod,"			// row[0]
+				"tml_pubs.PublisherCod,"		// row[1]
+				"tml_pubs.NotCod,"			// row[2]
+				"UNIX_TIMESTAMP(tml_pubs.TimePublish),"	// row[3]
+				"tml_comments.Txt,"			// row[4]
+				"tml_comments.MedCod"			// row[5]
+			  " FROM tml_pubs,tml_comments"
+			 " WHERE tml_pubs.PubCod=%ld"
+			   " AND tml_pubs.PubType=%u"
+			   " AND tml_pubs.PubCod=tml_comments.PubCod",
+			 PubCod,
+			 (unsigned) TmlPub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
@@ -920,27 +917,27 @@ void Tml_DB_CreateSubQueryRange (TmlPub_Range_t Range,long PubCod,
 /*****************************************************************************/
 // Returns the number of rows got
 
-unsigned Tml_DB_SelectTheMostRecentPub (MYSQL_RES **mysql_res,
-                                        const struct TmlPub_SubQueries *SubQueries)
+Exi_Exist_t Tml_DB_SelectTheMostRecentPub (MYSQL_RES **mysql_res,
+                                           const struct TmlPub_SubQueries *SubQueries)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get publication",
-		   "SELECT tml_pubs.PubCod,"		// row[0]
-			  "tml_pubs.NotCod,"		// row[1]
-			  "tml_pubs.PublisherCod,"	// row[2]
-			  "tml_pubs.PubType"		// row[3]
-		    " FROM tml_pubs%s"
-		   " WHERE %s%s%s"
-                   	 " tml_pubs.NotCod NOT IN"
-			 " (SELECT NotCod"
-			    " FROM tml_tmp_timeline)"
-		" ORDER BY tml_pubs.PubCod DESC"
-		   " LIMIT 1",
-		   SubQueries->Publishers.Table,
-		   SubQueries->Range.Bottom,
-		   SubQueries->Range.Top,
-		   SubQueries->Publishers.SubQuery);
-  }
+   return
+   DB_QuerySELECTunique (mysql_res,"can not get publication",
+			 "SELECT tml_pubs.PubCod,"		// row[0]
+				"tml_pubs.NotCod,"		// row[1]
+				"tml_pubs.PublisherCod,"	// row[2]
+				"tml_pubs.PubType"		// row[3]
+			  " FROM tml_pubs%s"
+			 " WHERE %s%s%s"
+			       " tml_pubs.NotCod NOT IN"
+			       " (SELECT NotCod"
+				  " FROM tml_tmp_timeline)"
+		      " ORDER BY tml_pubs.PubCod DESC"
+			 " LIMIT 1",
+			 SubQueries->Publishers.Table,
+			 SubQueries->Range.Bottom,
+			 SubQueries->Range.Top,
+			 SubQueries->Publishers.SubQuery);
+	}
 
 /*****************************************************************************/
 /****************** Get data of publication using its code *******************/
@@ -954,15 +951,14 @@ Exi_Exist_t Tml_DB_GetPubDataByCod (long PubCod,MYSQL_RES **mysql_res)
 
    /***** Get data of publication from database *****/
    return
-   DB_QuerySELECT (mysql_res,"can not get data of publication",
-		   "SELECT PubCod,"		// row[0]
-		          "NotCod,"		// row[1]
-			  "PublisherCod,"	// row[2]
-			  "PubType"		// row[3]
-		    " FROM tml_pubs"
-		   " WHERE PubCod=%ld",
-		   PubCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get data of publication",
+			 "SELECT PubCod,"	// row[0]
+				"NotCod,"	// row[1]
+				"PublisherCod,"	// row[2]
+				"PubType"	// row[3]
+			  " FROM tml_pubs"
+			 " WHERE PubCod=%ld",
+			 PubCod);
   }
 
 /*****************************************************************************/

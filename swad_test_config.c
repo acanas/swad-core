@@ -102,28 +102,29 @@ bool TstCfg_CheckIfPluggableIsUnknownAndCrsHasTests (void)
    extern const char *Tst_DB_Pluggable[TstCfg_NUM_OPTIONS_PLUGGABLE];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRows;
    TstCfg_Pluggable_t Pluggable;
 
    /***** Get pluggability of tests for current course from database *****/
-   NumRows = Tst_DB_GetPluggableFromConfig (&mysql_res);
-
-   if (NumRows == 0)
-      TstCfg_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
-   else // NumRows == 1
+   switch (Tst_DB_GetPluggableFromConfig (&mysql_res))
      {
-      /***** Get whether test are visible via plugins or not *****/
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 /***** Get whether test are visible via plugins or not *****/
+	 row = mysql_fetch_row (mysql_res);
 
-      TstCfg_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
-      for (Pluggable  = TstCfg_PLUGGABLE_NO;
-	   Pluggable <= TstCfg_PLUGGABLE_YES;
-	   Pluggable++)
-         if (!strcmp (row[0],Tst_DB_Pluggable[Pluggable]))
-           {
-            TstCfg_SetConfigPluggable (Pluggable);
-            break;
-           }
+	 TstCfg_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
+	 for (Pluggable  = TstCfg_PLUGGABLE_NO;
+	      Pluggable <= TstCfg_PLUGGABLE_YES;
+	      Pluggable++)
+	    if (!strcmp (row[0],Tst_DB_Pluggable[Pluggable]))
+	      {
+	       TstCfg_SetConfigPluggable (Pluggable);
+	       break;
+	      }
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 TstCfg_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
+	 break;
      }
 
    /***** Free structure that stores the query result *****/
@@ -278,16 +279,20 @@ void TstCfg_GetConfig (void)
    MYSQL_RES *mysql_res;
 
    /***** Get configuration of test for current course from database *****/
-   if (Tst_DB_GetConfig (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
-      TstCfg_GetConfigDataFromRow (mysql_res);
-   else
+   switch (Tst_DB_GetConfig (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
      {
-      TstCfg_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
-      TstCfg_SetConfigMin (TstCfg_DEFAULT_MIN_QUESTIONS);
-      TstCfg_SetConfigDef (TstCfg_DEFAULT_DEF_QUESTIONS);
-      TstCfg_SetConfigMax (TstCfg_DEFAULT_MAX_QUESTIONS);
-      TstCfg_SetConfigMinTimeNxtTstPerQst (0UL);
-      TstCfg_SetConfigVisibility (TstVis_VISIBILITY_DEFAULT);
+      case Exi_EXISTS:
+	 TstCfg_GetConfigDataFromRow (mysql_res);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 TstCfg_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
+	 TstCfg_SetConfigMin (TstCfg_DEFAULT_MIN_QUESTIONS);
+	 TstCfg_SetConfigDef (TstCfg_DEFAULT_DEF_QUESTIONS);
+	 TstCfg_SetConfigMax (TstCfg_DEFAULT_MAX_QUESTIONS);
+	 TstCfg_SetConfigMinTimeNxtTstPerQst (0UL);
+	 TstCfg_SetConfigVisibility (TstVis_VISIBILITY_DEFAULT);
+	 break;
      }
 
    /***** Free structure that stores the query result *****/

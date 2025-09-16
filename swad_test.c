@@ -423,17 +423,21 @@ static bool Tst_CheckIfNextTstAllowed (void)
       return true;
 
    /***** Get date of next allowed access to test from database *****/
-   if (Tst_DB_GetDateNextTstAllowed (&mysql_res))
+   switch (Tst_DB_GetDateNextTstAllowed (&mysql_res))
      {
-      /* Get seconds from now to next access to test (row[0]) */
-      row = mysql_fetch_row (mysql_res);
-      if (row[0])
-         if (sscanf (row[0],"%ld",&NumSecondsFromNowToNextAccTst) == 1)
-            /* Time UTC of next access allowed (row[1]) */
-            TimeNextTestUTC = Dat_GetUNIXTimeFromStr (row[1]);
+      case Exi_EXISTS:
+	 /* Get seconds from now to next access to test (row[0]) */
+	 row = mysql_fetch_row (mysql_res);
+	 if (row[0])
+	    if (sscanf (row[0],"%ld",&NumSecondsFromNowToNextAccTst) == 1)
+	       /* Time UTC of next access allowed (row[1]) */
+	       TimeNextTestUTC = Dat_GetUNIXTimeFromStr (row[1]);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Err_WrongDateExit ();
+	 break;
      }
-   else
-      Err_WrongDateExit ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

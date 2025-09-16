@@ -652,31 +652,30 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 Exi_Exist_t Prj_DB_GetProjectDataByCod (MYSQL_RES **mysql_res,long PrjCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get project data",
-		   "SELECT PrjCod,"			// row[ 0]
-			  "CrsCod,"			// row[ 1]
-			  "DptCod,"			// row[ 2]
-			  "Locked,"			// row[ 3]
-			  "Hidden,"			// row[ 4]
-			  "Assigned,"			// row[ 5]
-			  "NumStds,"			// row[ 6]
-			  "Proposal,"			// row[ 7]
-			  "UNIX_TIMESTAMP(CreatTime),"	// row[ 8]
-			  "UNIX_TIMESTAMP(ModifTime),"	// row[ 9]
-			  "Title,"			// row[10]
-			  "Description,"		// row[11]
-			  "Knowledge,"			// row[12]
-			  "Materials,"			// row[13]
-			  "URL,"			// row[14]
-			  "ReviewStatus,"		// row[15]
-			  "UNIX_TIMESTAMP(ReviewTime),"	// row[16]
-			  "ReviewTxt"			// row[17]
-		    " FROM prj_projects"
-		   " WHERE PrjCod=%ld"
-		     " AND CrsCod=%ld",	// Extra check
-		   PrjCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? Exi_EXISTS :
-							 Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get project data",
+			 "SELECT PrjCod,"			// row[ 0]
+				"CrsCod,"			// row[ 1]
+				"DptCod,"			// row[ 2]
+				"Locked,"			// row[ 3]
+				"Hidden,"			// row[ 4]
+				"Assigned,"			// row[ 5]
+				"NumStds,"			// row[ 6]
+				"Proposal,"			// row[ 7]
+				"UNIX_TIMESTAMP(CreatTime),"	// row[ 8]
+				"UNIX_TIMESTAMP(ModifTime),"	// row[ 9]
+				"Title,"			// row[10]
+				"Description,"			// row[11]
+				"Knowledge,"			// row[12]
+				"Materials,"			// row[13]
+				"URL,"				// row[14]
+				"ReviewStatus,"			// row[15]
+				"UNIX_TIMESTAMP(ReviewTime),"	// row[16]
+				"ReviewTxt"			// row[17]
+			  " FROM prj_projects"
+			 " WHERE PrjCod=%ld"
+			   " AND CrsCod=%ld",	// Extra check
+			 PrjCod,
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -698,21 +697,21 @@ void Prj_DB_GetProjectTitle (long PrjCod,char *Title,size_t TitleSize)
 /******************* Get some project data to check faults *******************/
 /*****************************************************************************/
 
-unsigned Prj_DB_GetPrjDataToCheckFaults (MYSQL_RES **mysql_res,long PrjCod)
+Exi_Exist_t Prj_DB_GetPrjDataToCheckFaults (MYSQL_RES **mysql_res,long PrjCod)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get project data",
-		   "SELECT Assigned='Y',"					// row[0] = 0 / 1
-			  "NumStds,"						// row[1] =
-			  "Title<>'',"						// row[2] = 0 / 1
-			  "Description<>'',"					// row[3] = 0 / 1
-			  "ReviewStatus='%s',"					// row[4] = 0 / 1
-			  "ReviewStatus<>'%s' AND ModifTime>ReviewTime"		// row[5] = 0 / 1
-		    " FROM prj_projects"
-		   " WHERE PrjCod=%ld",
-		   Prj_DB_ReviewStatus[Prj_UNAPPROVED],
-		   Prj_DB_ReviewStatus[Prj_UNREVIEWED],
-		   PrjCod);
+   return
+   DB_QuerySELECTunique (mysql_res,"can not get project data",
+			 "SELECT Assigned='Y',"					// row[0] = 0 / 1
+				"NumStds,"					// row[1] =
+				"Title<>'',"					// row[2] = 0 / 1
+				"Description<>'',"				// row[3] = 0 / 1
+				"ReviewStatus='%s',"				// row[4] = 0 / 1
+				"ReviewStatus<>'%s' AND ModifTime>ReviewTime"	// row[5] = 0 / 1
+			  " FROM prj_projects"
+			 " WHERE PrjCod=%ld",
+			 Prj_DB_ReviewStatus[Prj_UNAPPROVED],
+			 Prj_DB_ReviewStatus[Prj_UNREVIEWED],
+			 PrjCod);
   }
 
 /*****************************************************************************/
@@ -1106,14 +1105,14 @@ void Prj_DB_UpdateRubrics (PrjCfg_RubricType_t RubricType,
 /************** Get configuration of projects for current course *************/
 /*****************************************************************************/
 
-unsigned Prj_DB_GetConfig (MYSQL_RES **mysql_res)
+Exi_Exist_t Prj_DB_GetConfig (MYSQL_RES **mysql_res)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get project configuration",
-		   "SELECT NETCanCreate"	// row[0]
-		    " FROM prj_config"
-		   " WHERE CrsCod=%ld",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+   return
+   DB_QuerySELECTunique (mysql_res,"can not get project configuration",
+			 "SELECT NETCanCreate"	// row[0]
+			  " FROM prj_config"
+			 " WHERE CrsCod=%ld",
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/

@@ -253,24 +253,23 @@ Exi_Exist_t Tre_DB_GetNodeDataByCod (const struct Tre_Node *Node,
 				     MYSQL_RES **mysql_res)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get tree node data",
-		   "SELECT NodCod,"					// row[0]
-			  "NodInd,"					// row[1]
-			  "Level,"					// row[2]
-			  "Hidden,"					// row[3]
-			  "UsrCod,"					// row[4]
-			  "UNIX_TIMESTAMP(StartTime),"			// row[5]
-			  "UNIX_TIMESTAMP(EndTime),"			// row[6]
-			  "NOW() BETWEEN StartTime AND EndTime,"	// row[7]
-			  "Title"					// row[8]
-		    " FROM tre_nodes"
-		   " WHERE NodCod=%ld"
-		     " AND CrsCod=%ld"	// Extra check
-		     " AND Type='%s'",	// Extra check
-		   Node->Hierarchy.NodCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Node->InfoType]) ? Exi_EXISTS :
-						   Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get tree node data",
+			 "SELECT NodCod,"				// row[0]
+				"NodInd,"				// row[1]
+				"Level,"				// row[2]
+				"Hidden,"				// row[3]
+				"UsrCod,"				// row[4]
+				"UNIX_TIMESTAMP(StartTime),"		// row[5]
+				"UNIX_TIMESTAMP(EndTime),"		// row[6]
+				"NOW() BETWEEN StartTime AND EndTime,"	// row[7]
+				"Title"					// row[8]
+			  " FROM tre_nodes"
+			 " WHERE NodCod=%ld"
+			   " AND CrsCod=%ld"	// Extra check
+			   " AND Type='%s'",	// Extra check
+			 Node->Hierarchy.NodCod,
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			 Tre_DB_Types[Node->InfoType]);
   }
 
 /*****************************************************************************/

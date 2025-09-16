@@ -3156,7 +3156,7 @@ Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question)
 
    /***** Check if there are existing questions in database
           with the same stem that the one of this question *****/
-   if ((NumQstsWithThisStem = Qst_DB_GetQstCodFromTypeAnsStem (&mysql_res_qst,Question)))
+   if ((NumQstsWithThisStem = Qst_DB_GetQstCodsFromTypeAnsStem (&mysql_res_qst,Question)))
      {
       /***** Check if the answer exists in any of the questions with the same stem *****/
       /* For each question with the same stem */

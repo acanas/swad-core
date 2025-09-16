@@ -214,15 +214,15 @@ Exi_Exist_t Cty_DB_GetBasicCountryDataByCod (MYSQL_RES **mysql_res,long CtyCod)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
    return
-   DB_QuerySELECT (mysql_res,"can not get data of a country",
-		   "SELECT Alpha2,"	// row[0]
-			  "Name_%s,"	// row[1]
-			  "WWW_%s"	// row[2]
-		    " FROM cty_countrs"
-		   " WHERE CtyCod='%03ld'",
-		   Lan_STR_LANG_ID[Gbl.Prefs.Language],
-		   Lan_STR_LANG_ID[Gbl.Prefs.Language],
-		   CtyCod);
+   DB_QuerySELECTunique (mysql_res,"can not get data of a country",
+			 "SELECT Alpha2,"	// row[0]
+				"Name_%s,"	// row[1]
+				"WWW_%s"	// row[2]
+			  " FROM cty_countrs"
+			 " WHERE CtyCod='%03ld'",
+			 Lan_STR_LANG_ID[Gbl.Prefs.Language],
+			 Lan_STR_LANG_ID[Gbl.Prefs.Language],
+			 CtyCod);
   }
 
 /*****************************************************************************/

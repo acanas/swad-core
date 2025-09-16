@@ -632,7 +632,8 @@ static void Rec_GetFieldByCod (long FldCod,char Name[Rec_MAX_BYTES_NAME_FIELD + 
    unsigned Vis;
 
    /***** Get a field of a record in a course from database *****/
-   if (Rec_DB_GetFieldByCod (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod,FldCod) != 1)
+   if (Rec_DB_GetFieldByCod (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			     FldCod) == Exi_DOES_NOT_EXIST)
       Err_WrongRecordFieldExit ();
 
    /***** Get the field *****/

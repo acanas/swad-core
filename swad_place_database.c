@@ -119,32 +119,31 @@ unsigned Plc_DB_GetListPlaces (MYSQL_RES **mysql_res,Plc_Order_t SelectedOrder)
 Exi_Exist_t Plc_DB_GetPlaceDataByCod (MYSQL_RES **mysql_res,long PlcCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get data of a place",
-		   "(SELECT plc_places.PlcCod,"		// row[0]
-			   "plc_places.ShortName,"	// row[1]
-			   "plc_places.FullName,"	// row[2]
-			   "COUNT(*)"			// row[3]
-		     " FROM plc_places,"
-			   "ctr_centers"
-		    " WHERE plc_places.PlcCod=%ld"
-		      " AND plc_places.PlcCod=ctr_centers.PlcCod"
-		      " AND ctr_centers.PlcCod=%ld"
-		 " GROUP BY plc_places.PlcCod)"
-		    " UNION "
-		   "(SELECT PlcCod,"			// row[0]
-			   "ShortName,"			// row[1]
-			   "FullName,"			// row[2]
-			   "0"				// row[3]
-		     " FROM plc_places"
-		    " WHERE PlcCod=%ld"
-		      " AND PlcCod NOT IN"
-			  " (SELECT DISTINCT "
-			           "PlcCod"
-			     " FROM ctr_centers))",
-		   PlcCod,
-		   PlcCod,
-		   PlcCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get data of a place",
+			 "(SELECT plc_places.PlcCod,"		// row[0]
+				 "plc_places.ShortName,"	// row[1]
+				 "plc_places.FullName,"	// row[2]
+				 "COUNT(*)"			// row[3]
+			   " FROM plc_places,"
+				 "ctr_centers"
+			  " WHERE plc_places.PlcCod=%ld"
+			    " AND plc_places.PlcCod=ctr_centers.PlcCod"
+			    " AND ctr_centers.PlcCod=%ld"
+		       " GROUP BY plc_places.PlcCod)"
+			  " UNION "
+			 "(SELECT PlcCod,"			// row[0]
+				 "ShortName,"			// row[1]
+				 "FullName,"			// row[2]
+				 "0"				// row[3]
+			   " FROM plc_places"
+			  " WHERE PlcCod=%ld"
+			    " AND PlcCod NOT IN"
+				" (SELECT DISTINCT "
+					 "PlcCod"
+				   " FROM ctr_centers))",
+			 PlcCod,
+			 PlcCod,
+			 PlcCod);
    }
 
 /*****************************************************************************/

@@ -112,40 +112,39 @@ unsigned Dpt_DB_GetListDepartments (MYSQL_RES **mysql_res,
 Exi_Exist_t Dpt_DB_GetDepartmentDataByCod (MYSQL_RES **mysql_res,long DptCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get data of a department",
-		   "(SELECT dpt_departments.DptCod,"			// row[0]
-                           "dpt_departments.InsCod,"			// row[1]
-			   "dpt_departments.ShortName,"			// row[2]
-			   "dpt_departments.FullName,"			// row[3]
-			   "dpt_departments.WWW,"			// row[4]
-			   "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"	// row[5]
-		     " FROM dpt_departments,"
-			   "usr_data,"
-			   "crs_users"
-		    " WHERE dpt_departments.DptCod=%ld"
-		      " AND dpt_departments.DptCod=usr_data.DptCod"
-		      " AND usr_data.UsrCod=crs_users.UsrCod"
-		      " AND crs_users.Role=%u"
-		 " GROUP BY dpt_departments.DptCod)"
-		   " UNION "
-		   "(SELECT DptCod,"					// row[0]
-		           "InsCod,"					// row[1]
-			   "ShortName,"					// row[2]
-			   "FullName,"					// row[3]
-			   "WWW,"					// row[4]
-			   "0"						// row[5]
-		     " FROM dpt_departments"
-		    " WHERE DptCod=%ld"
-		      " AND DptCod NOT IN"
-			  " (SELECT DISTINCT "
-			           "usr_data.DptCod"
-			     " FROM usr_data,"
-				   "crs_users"
-			    " WHERE crs_users.Role=%u"
-			      " AND crs_users.UsrCod=usr_data.UsrCod))",
-		   DptCod,(unsigned) Rol_TCH,
-		   DptCod,(unsigned) Rol_TCH) ? Exi_EXISTS :
-						Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get data of a department",
+			 "(SELECT dpt_departments.DptCod,"			// row[0]
+				 "dpt_departments.InsCod,"			// row[1]
+				 "dpt_departments.ShortName,"			// row[2]
+				 "dpt_departments.FullName,"			// row[3]
+				 "dpt_departments.WWW,"			// row[4]
+				 "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"	// row[5]
+			   " FROM dpt_departments,"
+				 "usr_data,"
+				 "crs_users"
+			  " WHERE dpt_departments.DptCod=%ld"
+			    " AND dpt_departments.DptCod=usr_data.DptCod"
+			    " AND usr_data.UsrCod=crs_users.UsrCod"
+			    " AND crs_users.Role=%u"
+		       " GROUP BY dpt_departments.DptCod)"
+			 " UNION "
+			 "(SELECT DptCod,"					// row[0]
+				 "InsCod,"					// row[1]
+				 "ShortName,"					// row[2]
+				 "FullName,"					// row[3]
+				 "WWW,"					// row[4]
+				 "0"						// row[5]
+			   " FROM dpt_departments"
+			  " WHERE DptCod=%ld"
+			    " AND DptCod NOT IN"
+				" (SELECT DISTINCT "
+					 "usr_data.DptCod"
+				   " FROM usr_data,"
+					 "crs_users"
+				  " WHERE crs_users.Role=%u"
+				    " AND crs_users.UsrCod=usr_data.UsrCod))",
+			 DptCod,(unsigned) Rol_TCH,
+			 DptCod,(unsigned) Rol_TCH);
   }
 
 /*****************************************************************************/

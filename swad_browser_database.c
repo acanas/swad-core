@@ -269,29 +269,28 @@ long Brw_DB_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
 Exi_Exist_t Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,const char *Path)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get file metadata",
-		   "SELECT FilCod,"		// row[0]
-			  "FileBrowser,"	// row[1]
-			  "Cod,"		// row[2]
-			  "ZoneUsrCod,"		// row[3]
-			  "PublisherUsrCod,"	// row[4]
-			  "FileType,"		// row[5]
-			  "Path,"		// row[6]
-			  "Hidden,"		// row[7]
-			  "Public,"		// row[8]
-			  "License"		// row[9]
-		    " FROM brw_files"
-		   " WHERE FileBrowser=%u"
-		     " AND Cod=%ld"
-		     " AND ZoneUsrCod=%ld"
-		     " AND Path='%s'"
-		" ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
-		   " LIMIT 1",		// Select the most recent entry.
-		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-		   Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
-		   Brw_GetZoneUsrCodForFileBrowser (),
-		   Path) ? Exi_EXISTS :
-			   Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get file metadata",
+			 "SELECT FilCod,"		// row[0]
+				"FileBrowser,"		// row[1]
+				"Cod,"			// row[2]
+				"ZoneUsrCod,"		// row[3]
+				"PublisherUsrCod,"	// row[4]
+				"FileType,"		// row[5]
+				"Path,"			// row[6]
+				"Hidden,"		// row[7]
+				"Public,"		// row[8]
+				"License"		// row[9]
+			  " FROM brw_files"
+			 " WHERE FileBrowser=%u"
+			   " AND Cod=%ld"
+			   " AND ZoneUsrCod=%ld"
+			   " AND Path='%s'"
+		      " ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
+			 " LIMIT 1",		// Select the most recent entry.
+			 (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+			 Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
+			 Brw_GetZoneUsrCodForFileBrowser (),
+			 Path);
   }
 
 /*****************************************************************************/
@@ -303,21 +302,20 @@ Exi_Exist_t Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,const char *Path
 Exi_Exist_t Brw_DB_GetFileMetadataByCod (MYSQL_RES **mysql_res,long FilCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get file metadata",
-		   "SELECT FilCod,"		// row[0]
-			  "FileBrowser,"	// row[1]
-			  "Cod,"		// row[2]
-			  "ZoneUsrCod,"		// row[3]
-			  "PublisherUsrCod,"	// row[4]
-			  "FileType,"		// row[5]
-			  "Path,"		// row[6]
-			  "Hidden,"		// row[7]
-			  "Public,"		// row[8]
-			  "License"		// row[9]
-		    " FROM brw_files"
-		   " WHERE FilCod=%ld",
-		   FilCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get file metadata",
+			 "SELECT FilCod,"		// row[0]
+				"FileBrowser,"		// row[1]
+				"Cod,"			// row[2]
+				"ZoneUsrCod,"		// row[3]
+				"PublisherUsrCod,"	// row[4]
+				"FileType,"		// row[5]
+				"Path,"			// row[6]
+				"Hidden,"		// row[7]
+				"Public,"		// row[8]
+				"License"		// row[9]
+			  " FROM brw_files"
+			 " WHERE FilCod=%ld",
+			 FilCod);
   }
 
 /*****************************************************************************/
@@ -2289,20 +2287,20 @@ HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (M
 								               const char *Path)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not check if a file is hidden",
-		   "SELECT Hidden"		// row[0]
-		    " FROM brw_files"
-		   " WHERE FileBrowser=%u"
-		     " AND Cod=%ld"
-		     " AND ZoneUsrCod=%ld"
-		     " AND Path='%s'"
-		" ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
-		   " LIMIT 1",		// Select the most recent entry.
-		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-		   Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
-		   Brw_GetZoneUsrCodForFileBrowser (),
-		   Path) ? HidVis_HIDDEN :
-			   HidVis_VISIBLE;
+   DB_QuerySELECTunique (mysql_res,"can not check if a file is hidden",
+			 "SELECT Hidden"	// row[0]
+			  " FROM brw_files"
+			 " WHERE FileBrowser=%u"
+			   " AND Cod=%ld"
+			   " AND ZoneUsrCod=%ld"
+			   " AND Path='%s'"
+		      " ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
+			 " LIMIT 1",		// Select the most recent entry.
+			 (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+			 Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
+			 Brw_GetZoneUsrCodForFileBrowser (),
+			 Path) == Exi_EXISTS ? HidVis_HIDDEN :
+					       HidVis_VISIBLE;
   }
 
 /*****************************************************************************/

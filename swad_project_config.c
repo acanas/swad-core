@@ -72,7 +72,7 @@ void PrjCfg_GetConfig (struct PrjCfg_Config *Config)
    MYSQL_RES *mysql_res;
 
    Config->NETCanCreate = PrjCfg_NET_CAN_CREATE_DEFAULT;
-   if (Prj_DB_GetConfig (&mysql_res))
+   if (Prj_DB_GetConfig (&mysql_res) == Exi_EXISTS)
       PrjCfg_GetConfigDataFromRow (mysql_res,Config);
    DB_FreeMySQLResult (&mysql_res);
   }

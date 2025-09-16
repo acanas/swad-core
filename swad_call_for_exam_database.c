@@ -160,26 +160,25 @@ unsigned Cfe_DB_GetFutureCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
 Exi_Exist_t Cfe_DB_GetCallForExamDataByCod (MYSQL_RES **mysql_res,long ExaCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get data of a call for exam",
-		   "SELECT CrsCod,"		// row[ 0]
-			  "Status,"		// row[ 1]
-			  "CrsFullName,"	// row[ 2]
-			  "Year,"		// row[ 3]
-			  "ExamSession,"	// row[ 4]
-			  "CallDate,"		// row[ 5]
-			  "ExamDate,"		// row[ 6]
-			  "Duration,"		// row[ 7]
-			  "Place,"		// row[ 8]
-			  "ExamMode,"		// row[ 9]
-			  "Structure,"		// row[10]
-			  "DocRequired,"	// row[11]
-			  "MatRequired,"	// row[12]
-			  "MatAllowed,"		// row[13]
-			  "OtherInfo"		// row[14]
-		    " FROM cfe_exams"
-		   " WHERE ExaCod=%ld",
-		   ExaCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get data of a call for exam",
+			 "SELECT CrsCod,"	// row[ 0]
+				"Status,"	// row[ 1]
+				"CrsFullName,"	// row[ 2]
+				"Year,"		// row[ 3]
+				"ExamSession,"	// row[ 4]
+				"CallDate,"	// row[ 5]
+				"ExamDate,"	// row[ 6]
+				"Duration,"	// row[ 7]
+				"Place,"	// row[ 8]
+				"ExamMode,"	// row[ 9]
+				"Structure,"	// row[10]
+				"DocRequired,"	// row[11]
+				"MatRequired,"	// row[12]
+				"MatAllowed,"	// row[13]
+				"OtherInfo"	// row[14]
+			  " FROM cfe_exams"
+			 " WHERE ExaCod=%ld",
+			 ExaCod);
   }
 
 /*****************************************************************************/

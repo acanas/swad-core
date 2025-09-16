@@ -67,135 +67,128 @@ Exi_Exist_t Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
 	   {
 	    case Hie_SYS:		// Get connected users in the whole platform
 	       return
-	       DB_QuerySELECT (mysql_res,"can not get number"
-			                  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM usr_connected,"
-			              "usr_data"
-			       " WHERE usr_connected.UsrCod=usr_data.UsrCod") ? Exi_EXISTS :
-									        Exi_DOES_NOT_EXIST;
+	       DB_QuerySELECTunique (mysql_res,"can not get number"
+					       " of connected users"
+					       " who belong to this location",
+				     "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
+					    "COUNT(DISTINCT usr_data.Sex),"		// row[1]
+					    "MIN(usr_data.Sex)"				// row[2]
+				      " FROM usr_connected,"
+					    "usr_data"
+				     " WHERE usr_connected.UsrCod=usr_data.UsrCod");
 	    case Hie_CTY:		// Get connected users in the current country
 	       return
-	       DB_QuerySELECT (mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM ins_instits,"
-			              "ctr_centers,"
-			              "deg_degrees,"
-			              "crs_courses,"
-			              "crs_users,"
-			              "usr_connected,"
-			              "usr_data"
-			       " WHERE ins_instits.CtyCod=%ld"
-			         " AND ins_instits.InsCod=ctr_centers.InsCod"
-			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[Hie_CTY].HieCod) ? Exi_EXISTS :
-								     Exi_DOES_NOT_EXIST;
+	       DB_QuerySELECTunique (mysql_res,"can not get number"
+					       " of connected users"
+					       " who belong to this location",
+				     "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
+					    "COUNT(DISTINCT usr_data.Sex),"		// row[1]
+					    "MIN(usr_data.Sex)"				// row[2]
+				      " FROM ins_instits,"
+					    "ctr_centers,"
+					    "deg_degrees,"
+					    "crs_courses,"
+					    "crs_users,"
+					    "usr_connected,"
+					    "usr_data"
+				     " WHERE ins_instits.CtyCod=%ld"
+				       " AND ins_instits.InsCod=ctr_centers.InsCod"
+				       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+				       " AND deg_degrees.DegCod=crs_courses.DegCod"
+				       " AND crs_courses.CrsCod=crs_users.CrsCod"
+				       " AND crs_users.UsrCod=usr_connected.UsrCod"
+				       " AND usr_connected.UsrCod=usr_data.UsrCod",
+				     Gbl.Hierarchy.Node[Hie_CTY].HieCod);
 	    case Hie_INS:		// Get connected users in the current institution
 	       return
-	       DB_QuerySELECT (mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM ctr_centers,"
-			              "deg_degrees,"
-			              "crs_courses,"
-			              "crs_users,"
-			              "usr_connected,"
-			              "usr_data"
-			       " WHERE ctr_centers.InsCod=%ld"
-			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[Hie_INS].HieCod) ? Exi_EXISTS :
-								     Exi_DOES_NOT_EXIST;
+	       DB_QuerySELECTunique (mysql_res,"can not get number"
+					       " of connected users"
+					       " who belong to this location",
+				     "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
+					    "COUNT(DISTINCT usr_data.Sex),"		// row[1]
+					    "MIN(usr_data.Sex)"				// row[2]
+				      " FROM ctr_centers,"
+					    "deg_degrees,"
+					    "crs_courses,"
+					    "crs_users,"
+					    "usr_connected,"
+					    "usr_data"
+				     " WHERE ctr_centers.InsCod=%ld"
+				       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+				       " AND deg_degrees.DegCod=crs_courses.DegCod"
+				       " AND crs_courses.CrsCod=crs_users.CrsCod"
+				       " AND crs_users.UsrCod=usr_connected.UsrCod"
+				       " AND usr_connected.UsrCod=usr_data.UsrCod",
+				     Gbl.Hierarchy.Node[Hie_INS].HieCod);
 	    case Hie_CTR:		// Get connected users in the current center
 	       return
-	       DB_QuerySELECT (mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM deg_degrees,"
-			              "crs_courses,"
-			              "crs_users,"
-			              "usr_connected,"
-			              "usr_data"
-			       " WHERE deg_degrees.CtrCod=%ld"
-			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[Hie_CTR].HieCod) ? Exi_EXISTS :
-								     Exi_DOES_NOT_EXIST;
+	       DB_QuerySELECTunique (mysql_res,"can not get number"
+					       " of connected users"
+					       " who belong to this location",
+				     "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
+					    "COUNT(DISTINCT usr_data.Sex),"		// row[1]
+					    "MIN(usr_data.Sex)"				// row[2]
+				      " FROM deg_degrees,"
+					    "crs_courses,"
+					    "crs_users,"
+					    "usr_connected,"
+					    "usr_data"
+				     " WHERE deg_degrees.CtrCod=%ld"
+				       " AND deg_degrees.DegCod=crs_courses.DegCod"
+				       " AND crs_courses.CrsCod=crs_users.CrsCod"
+				       " AND crs_users.UsrCod=usr_connected.UsrCod"
+				       " AND usr_connected.UsrCod=usr_data.UsrCod",
+				     Gbl.Hierarchy.Node[Hie_CTR].HieCod);
 	    case Hie_DEG:		// Get connected users in the current degree
 	       return
-	       DB_QuerySELECT (mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM crs_courses,"
-			              "crs_users,"
-			              "usr_connected,"
-			              "usr_data"
-			       " WHERE crs_courses.DegCod=%ld"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[Hie_DEG].HieCod) ? Exi_EXISTS :
-								     Exi_DOES_NOT_EXIST;
+	       DB_QuerySELECTunique (mysql_res,"can not get number"
+					       " of connected users"
+	           			       " who belong to this location",
+				     "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
+					    "COUNT(DISTINCT usr_data.Sex),"		// row[1]
+					    "MIN(usr_data.Sex)"				// row[2]
+				      " FROM crs_courses,"
+					    "crs_users,"
+					    "usr_connected,"
+					    "usr_data"
+				     " WHERE crs_courses.DegCod=%ld"
+				       " AND crs_courses.CrsCod=crs_users.CrsCod"
+				       " AND crs_users.UsrCod=usr_connected.UsrCod"
+				       " AND usr_connected.UsrCod=usr_data.UsrCod",
+				     Gbl.Hierarchy.Node[Hie_DEG].HieCod);
 	    case Hie_CRS:		// Get connected users in the current course
 	       return
-	       DB_QuerySELECT (mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM crs_users,"
-			              "usr_connected,"
-			              "usr_data"
-			       " WHERE crs_users.CrsCod=%ld"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? Exi_EXISTS :
-								     Exi_DOES_NOT_EXIST;
+	       DB_QuerySELECTunique (mysql_res,"can not get number"
+					       " of connected users"
+					       " who belong to this location",
+				     "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
+					    "COUNT(DISTINCT usr_data.Sex),"		// row[1]
+					    "MIN(usr_data.Sex)"				// row[2]
+				      " FROM crs_users,"
+					    "usr_connected,"
+					    "usr_data"
+				     " WHERE crs_users.CrsCod=%ld"
+				       " AND crs_users.UsrCod=usr_connected.UsrCod"
+				       " AND usr_connected.UsrCod=usr_data.UsrCod",
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 	    default:
 	       Err_WrongHierarchyLevelExit ();
 	   }
 	 return Exi_DOES_NOT_EXIST;	// Not reached
       case Rol_GST:
 	 return
-	 DB_QuerySELECT (mysql_res,"can not get number"
-				    " of connected users"
-				    " who belong to this location",
-			 "SELECT COUNT(DISTINCT usr_connected.UsrCod),"		// row[0]
-			        "COUNT(DISTINCT usr_data.Sex),"			// row[1]
-			        "MIN(usr_data.Sex)"				// row[2]
-			  " FROM usr_connected,"
-			        "usr_data"
-			 " WHERE usr_connected.UsrCod NOT IN"
-			       " (SELECT UsrCod"
-			          " FROM crs_users)"
-			   " AND usr_connected.UsrCod=usr_data.UsrCod") ? Exi_EXISTS :
-								          Exi_DOES_NOT_EXIST;
+	 DB_QuerySELECTunique (mysql_res,"can not get number"
+					 " of connected users"
+					 " who belong to this location",
+			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"		// row[0]
+				      "COUNT(DISTINCT usr_data.Sex),"			// row[1]
+				      "MIN(usr_data.Sex)"				// row[2]
+				" FROM usr_connected,"
+				      "usr_data"
+			       " WHERE usr_connected.UsrCod NOT IN"
+				     " (SELECT UsrCod"
+					" FROM crs_users)"
+				 " AND usr_connected.UsrCod=usr_data.UsrCod");
       case Rol_STD:
       case Rol_NET:
       case Rol_TCH:
@@ -203,130 +196,124 @@ Exi_Exist_t Con_DB_GetNumConnected (MYSQL_RES **mysql_res,
 	   {
 	    case Hie_SYS:		// Get connected users in the whole platform
 	       	return
-	        DB_QuerySELECT (mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			        "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			               "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			               "MIN(usr_data.Sex)"			// row[2]
-			         " FROM usr_connected,"
-			               "crs_users,"
-			               "usr_data"
-			        " WHERE usr_connected.UsrCod=crs_users.UsrCod"
-			          " AND crs_users.Role=%u"
-			          " AND usr_connected.UsrCod=usr_data.UsrCod",
-			        (unsigned) Role) ? Exi_EXISTS :
-						   Exi_DOES_NOT_EXIST;
+	        DB_QuerySELECTunique (mysql_res,"can not get number"
+						" of connected users"
+						" who belong to this location",
+				      "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
+					     "COUNT(DISTINCT usr_data.Sex),"		// row[1]
+					     "MIN(usr_data.Sex)"			// row[2]
+				       " FROM usr_connected,"
+					     "crs_users,"
+					     "usr_data"
+				      " WHERE usr_connected.UsrCod=crs_users.UsrCod"
+					" AND crs_users.Role=%u"
+					" AND usr_connected.UsrCod=usr_data.UsrCod",
+				      (unsigned) Role);
 	    case Hie_CTY:		// Get connected users in the current country
 	       return
-	       DB_QuerySELECT (mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM ins_instits,"
-			              "ctr_centers,"
-			              "deg_degrees,"
-			              "crs_courses,"
-			              "crs_users,"
-			              "usr_connected,"
-			              "usr_data"
-			       " WHERE ins_instits.CtyCod=%ld"
-			         " AND ins_instits.InsCod=ctr_centers.InsCod"
-			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.Role=%u"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[Hie_CTY].HieCod,
-			       (unsigned) Role) ? Exi_EXISTS :
-						  Exi_DOES_NOT_EXIST;
+	       DB_QuerySELECTunique (mysql_res,"can not get number"
+					       " of connected users"
+					       " who belong to this location",
+				     "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
+					    "COUNT(DISTINCT usr_data.Sex),"		// row[1]
+					    "MIN(usr_data.Sex)"				// row[2]
+				      " FROM ins_instits,"
+					    "ctr_centers,"
+					    "deg_degrees,"
+					    "crs_courses,"
+					    "crs_users,"
+					    "usr_connected,"
+					    "usr_data"
+				     " WHERE ins_instits.CtyCod=%ld"
+				       " AND ins_instits.InsCod=ctr_centers.InsCod"
+				       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+				       " AND deg_degrees.DegCod=crs_courses.DegCod"
+				       " AND crs_courses.CrsCod=crs_users.CrsCod"
+				       " AND crs_users.Role=%u"
+				       " AND crs_users.UsrCod=usr_connected.UsrCod"
+				       " AND usr_connected.UsrCod=usr_data.UsrCod",
+				     Gbl.Hierarchy.Node[Hie_CTY].HieCod,
+				     (unsigned) Role);
 	    case Hie_INS:		// Get connected users in the current institution
 	       return
-	       DB_QuerySELECT (mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM ctr_centers,"
-			              "deg_degrees,"
-			              "crs_courses,"
-			              "crs_users,"
-			              "usr_connected,"
-			              "usr_data"
-			       " WHERE ctr_centers.InsCod=%ld"
-			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.Role=%u"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[Hie_INS].HieCod,
-			       (unsigned) Role) ? Exi_EXISTS :
-						  Exi_DOES_NOT_EXIST;
+	       DB_QuerySELECTunique (mysql_res,"can not get number"
+					       " of connected users"
+					       " who belong to this location",
+				     "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
+					    "COUNT(DISTINCT usr_data.Sex),"		// row[1]
+					    "MIN(usr_data.Sex)"				// row[2]
+				      " FROM ctr_centers,"
+					    "deg_degrees,"
+					    "crs_courses,"
+					    "crs_users,"
+					    "usr_connected,"
+					    "usr_data"
+				     " WHERE ctr_centers.InsCod=%ld"
+				       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+				       " AND deg_degrees.DegCod=crs_courses.DegCod"
+				       " AND crs_courses.CrsCod=crs_users.CrsCod"
+				       " AND crs_users.Role=%u"
+				       " AND crs_users.UsrCod=usr_connected.UsrCod"
+				       " AND usr_connected.UsrCod=usr_data.UsrCod",
+				     Gbl.Hierarchy.Node[Hie_INS].HieCod,
+				     (unsigned) Role);
 	    case Hie_CTR:		// Get connected users in the current center
 	       return
-	       DB_QuerySELECT (mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM deg_degrees,"
-			              "crs_courses,"
-			              "crs_users,"
-			              "usr_connected,"
-			              "usr_data"
-			       " WHERE deg_degrees.CtrCod=%ld"
-			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.Role=%u"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-			       (unsigned) Role) ? Exi_EXISTS :
-						  Exi_DOES_NOT_EXIST;
+	       DB_QuerySELECTunique (mysql_res,"can not get number"
+					       " of connected users"
+					       " who belong to this location",
+				     "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
+					    "COUNT(DISTINCT usr_data.Sex),"		// row[1]
+					    "MIN(usr_data.Sex)"				// row[2]
+				      " FROM deg_degrees,"
+					    "crs_courses,"
+					    "crs_users,"
+					    "usr_connected,"
+					    "usr_data"
+				     " WHERE deg_degrees.CtrCod=%ld"
+				       " AND deg_degrees.DegCod=crs_courses.DegCod"
+				       " AND crs_courses.CrsCod=crs_users.CrsCod"
+				       " AND crs_users.Role=%u"
+				       " AND crs_users.UsrCod=usr_connected.UsrCod"
+				       " AND usr_connected.UsrCod=usr_data.UsrCod",
+				     Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+				     (unsigned) Role);
 	    case Hie_DEG:		// Get connected users in the current degree
 	       return
-	       DB_QuerySELECT (mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM crs_courses,"
-			              "crs_users,"
-			              "usr_connected,"
-			              "usr_data"
-			       " WHERE crs_courses.DegCod=%ld"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.Role=%u"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-			       (unsigned) Role) ? Exi_EXISTS :
-						  Exi_DOES_NOT_EXIST;
+	       DB_QuerySELECTunique (mysql_res,"can not get number"
+					       " of connected users"
+					       " who belong to this location",
+				     "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
+					    "COUNT(DISTINCT usr_data.Sex),"		// row[1]
+					    "MIN(usr_data.Sex)"				// row[2]
+				      " FROM crs_courses,"
+					    "crs_users,"
+					    "usr_connected,"
+					    "usr_data"
+				     " WHERE crs_courses.DegCod=%ld"
+				       " AND crs_courses.CrsCod=crs_users.CrsCod"
+				       " AND crs_users.Role=%u"
+				       " AND crs_users.UsrCod=usr_connected.UsrCod"
+				       " AND usr_connected.UsrCod=usr_data.UsrCod",
+				     Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+				     (unsigned) Role);
 	    case Hie_CRS:		// Get connected users in the current course
 	       return
-	       DB_QuerySELECT (mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM crs_users,"
-			              "usr_connected,"
-			              "usr_data"
-			       " WHERE crs_users.CrsCod=%ld"
-			         " AND crs_users.Role=%u"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-			       (unsigned) Role) ? Exi_EXISTS :
-						  Exi_DOES_NOT_EXIST;
+	       DB_QuerySELECTunique (mysql_res,"can not get number"
+					       " of connected users"
+					       " who belong to this location",
+				     "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
+					    "COUNT(DISTINCT usr_data.Sex),"		// row[1]
+					    "MIN(usr_data.Sex)"				// row[2]
+				      " FROM crs_users,"
+					    "usr_connected,"
+					    "usr_data"
+				     " WHERE crs_users.CrsCod=%ld"
+				       " AND crs_users.Role=%u"
+				       " AND crs_users.UsrCod=usr_connected.UsrCod"
+				       " AND usr_connected.UsrCod=usr_data.UsrCod",
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+				     (unsigned) Role);
 	    default:
 	       Err_WrongHierarchyLevelExit ();
 	   }

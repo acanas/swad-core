@@ -125,16 +125,15 @@ Exi_Exist_t Grp_DB_GetGroupTypeDataFromGrpTypCod (MYSQL_RES **mysql_res,long Grp
    // GrpTypCod can belong to a course distinct from the current one,
    // so don't extra check course
    return
-   DB_QuerySELECT (mysql_res,"can not get type of group",
-		       "SELECT GrpTypName,"			// row[0]
-			      "Mandatory,"			// row[1]
-			      "Multiple,"			// row[2]
-			      "MustBeOpened,"			// row[3]
-			      "UNIX_TIMESTAMP(OpenTime)"	// row[4]
-			" FROM grp_types"
-		       " WHERE GrpTypCod=%ld",
-		       GrpTypCod) ? Exi_EXISTS :
-				    Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get type of group",
+		         "SELECT GrpTypName,"			// row[0]
+			        "Mandatory,"			// row[1]
+			        "Multiple,"			// row[2]
+			        "MustBeOpened,"			// row[3]
+			        "UNIX_TIMESTAMP(OpenTime)"	// row[4]
+			  " FROM grp_types"
+		         " WHERE GrpTypCod=%ld",
+		         GrpTypCod);
   }
 
 /*****************************************************************************/
@@ -144,12 +143,11 @@ Exi_Exist_t Grp_DB_GetGroupTypeDataFromGrpTypCod (MYSQL_RES **mysql_res,long Grp
 Exi_Exist_t Grp_DB_GetSingleMultiple (MYSQL_RES **mysql_res,long GrpTypCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get if type of group has multiple enrolment",
-		   "SELECT Multiple"	// row[0]
-		    " FROM grp_types"
-		   " WHERE GrpTypCod=%ld",
-		   GrpTypCod) ? Exi_EXISTS :
-				Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get if type of group has multiple enrolment",
+			 "SELECT Multiple"	// row[0]
+			  " FROM grp_types"
+			 " WHERE GrpTypCod=%ld",
+			 GrpTypCod);
   }
 
 /*****************************************************************************/
@@ -159,12 +157,11 @@ Exi_Exist_t Grp_DB_GetSingleMultiple (MYSQL_RES **mysql_res,long GrpTypCod)
 Exi_Exist_t Grp_DB_GetFileZones (MYSQL_RES **mysql_res,long GrpCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get if group has file zones",
-		   "SELECT FileZones"	// row[0]
-		    " FROM grp_groups"
-		   " WHERE GrpCod=%ld",
-		   GrpCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get if group has file zones",
+			 "SELECT FileZones"	// row[0]
+			  " FROM grp_groups"
+			 " WHERE GrpCod=%ld",
+			 GrpCod);
   }
 
 /*****************************************************************************/
@@ -176,23 +173,22 @@ Exi_Exist_t Grp_DB_GetGroupDataByCod (MYSQL_RES **mysql_res,long GrpCod)
    // GrpCod can belong to a course distinct from the current one,
    // so don't extra check course
    return
-   DB_QuerySELECT (mysql_res,"can not get data of a group",
-		   "SELECT grp_groups.GrpTypCod,"	// row[0]
-			  "grp_types.CrsCod,"		// row[1]
-			  "grp_groups.GrpName,"		// row[2]
-			  "grp_groups.RooCod,"		// row[3]
-			  "grp_groups.MaxStudents,"	// row[4]
-			  "grp_groups.Open,"		// row[5]
-			  "grp_groups.FileZones,"	// row[6]
-			  "roo_rooms.ShortName"		// row[7]
-		    " FROM (grp_groups,"
-			   "grp_types)"
-		    " LEFT JOIN roo_rooms"
-		      " ON grp_groups.RooCod=roo_rooms.RooCod"
-		   " WHERE grp_groups.GrpCod=%ld"
-		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod",
-		   GrpCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get data of a group",
+			 "SELECT grp_groups.GrpTypCod,"		// row[0]
+				"grp_types.CrsCod,"		// row[1]
+				"grp_groups.GrpName,"		// row[2]
+				"grp_groups.RooCod,"		// row[3]
+				"grp_groups.MaxStudents,"	// row[4]
+				"grp_groups.Open,"		// row[5]
+				"grp_groups.FileZones,"		// row[6]
+				"roo_rooms.ShortName"		// row[7]
+			  " FROM (grp_groups,"
+				 "grp_types)"
+			  " LEFT JOIN roo_rooms"
+			    " ON grp_groups.RooCod=roo_rooms.RooCod"
+			 " WHERE grp_groups.GrpCod=%ld"
+			   " AND grp_groups.GrpTypCod=grp_types.GrpTypCod",
+			 GrpCod);
   }
 
 /*****************************************************************************/

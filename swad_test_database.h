@@ -37,13 +37,13 @@
 void Tst_DB_IncreaseNumMyPrints (void);
 void Tst_DB_UpdateLastAccTst (unsigned NumQsts);
 
-unsigned Tst_DB_GetDateNextTstAllowed (MYSQL_RES **mysql_res);
+Exi_Exist_t Tst_DB_GetDateNextTstAllowed (MYSQL_RES **mysql_res);
 unsigned Tst_DB_GetNumPrintsGeneratedByMe (MYSQL_RES **mysql_res);
 
 //--------------------------- Test configuration ------------------------------
 void Tst_DB_SaveConfig (void);
-unsigned Tst_DB_GetConfig (MYSQL_RES **mysql_res,long CrsCod);
-unsigned Tst_DB_GetPluggableFromConfig (MYSQL_RES **mysql_res);
+Exi_Exist_t Tst_DB_GetConfig (MYSQL_RES **mysql_res,long CrsCod);
+Exi_Exist_t Tst_DB_GetPluggableFromConfig (MYSQL_RES **mysql_res);
 
 void Tst_DB_RemoveTstConfig (long CrsCod);
 
@@ -55,7 +55,7 @@ unsigned Tst_DB_GetPrintsBetweenDates (MYSQL_RES **mysql_res,
                                        const char *From,
                                        const char *To);
 unsigned Tst_DB_GetUsrPrintsInCurrentCrs (MYSQL_RES **mysql_res,long UsrCod);
-unsigned Tst_DB_GetPrintDataByPrnCod (MYSQL_RES **mysql_res,long PrnCod);
+Exi_Exist_t Tst_DB_GetPrintDataByPrnCod (MYSQL_RES **mysql_res,long PrnCod);
 
 void Tst_DB_RemovePrintsMadeByUsrInAllCrss (long UsrCod);
 void Tst_DB_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod);

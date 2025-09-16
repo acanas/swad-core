@@ -638,10 +638,13 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 TODO: OPTIMIZAR LA SEGUNDA CONSULTA en la función Msg_DB_MoveUnusedMsgsContentToDeleted
 */
-#define Log_PLATFORM_VERSION	"SWAD 24.98.1 (2025-09-12)"
-#define CSS_FILE		"swad24.94.css"
+#define Log_PLATFORM_VERSION	"SWAD 25.1 (2025-09-16)"
+#define CSS_FILE		"swad24.98.2.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 25.1:     Sep 16, 2025  Code refactoring related to exists/does-not-exist. (348791 lines)
+	Version 25.0:     Sep 16, 2025  Code refactoring related to exists/does-not-exist. (348906 lines)
+	Version 24.98.2:  Sep 13, 2025  Changes in alert design. (348851 lines)
 	Version 24.98.1:  Sep 12, 2025  Code refactoring related to exists/does-not-exist. (348849 lines)
 	Version 24.98:    Sep 12, 2025  Code refactoring related to exists/does-not-exist. (348834 lines)
 	Version 24.97.6:  Sep 09, 2025  Code refactoring related to exists/does-not-exist. (348714 lines)

@@ -648,65 +648,67 @@ static void Usr_GetMyLastData (void)
    long ActCod;
 
    /***** Get user's last data from database *****/
-   if (Usr_DB_GetMyLastData (&mysql_res))
+   switch (Usr_DB_GetMyLastData (&mysql_res))
      {
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get last type of search (row[0]) */
-      Gbl.Usrs.Me.UsrLast.WhatToSearch = Sch_SEARCH_UNKNOWN;
-      if (sscanf (row[0],"%u",&UnsignedNum) == 1)
-         if (UnsignedNum < Sch_NUM_WHAT_TO_SEARCH)
-            Gbl.Usrs.Me.UsrLast.WhatToSearch = (Sch_WhatToSearch_t) UnsignedNum;
-      if (Gbl.Usrs.Me.UsrLast.WhatToSearch == Sch_SEARCH_UNKNOWN)
-	 Gbl.Usrs.Me.UsrLast.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
+	 /* Get last type of search (row[0]) */
+	 Gbl.Usrs.Me.UsrLast.WhatToSearch = Sch_SEARCH_UNKNOWN;
+	 if (sscanf (row[0],"%u",&UnsignedNum) == 1)
+	    if (UnsignedNum < Sch_NUM_WHAT_TO_SEARCH)
+	       Gbl.Usrs.Me.UsrLast.WhatToSearch = (Sch_WhatToSearch_t) UnsignedNum;
+	 if (Gbl.Usrs.Me.UsrLast.WhatToSearch == Sch_SEARCH_UNKNOWN)
+	    Gbl.Usrs.Me.UsrLast.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
 
-      /* Get last hierarchy: scope (row[1]) and code (row[2]) */
-      Gbl.Usrs.Me.UsrLast.LastHie.HieLvl = Hie_GetLevelFromDBStr (row[1]);
-      switch (Gbl.Usrs.Me.UsrLast.LastHie.HieLvl)
-        {
-         case Hie_SYS:	// System
-            Gbl.Usrs.Me.UsrLast.LastHie.HieCod = -1L;
-            break;
-         case Hie_CTY:	// Country
-         case Hie_INS:	// Institution
-         case Hie_CTR:	// Center
-         case Hie_DEG:	// Degree
-         case Hie_CRS:	// Course
-            Gbl.Usrs.Me.UsrLast.LastHie.HieCod = Str_ConvertStrCodToLongCod (row[2]);
-            if (Gbl.Usrs.Me.UsrLast.LastHie.HieCod <= 0)
-              {
-               Gbl.Usrs.Me.UsrLast.LastHie.HieLvl = Hie_UNK;
-               Gbl.Usrs.Me.UsrLast.LastHie.HieCod = -1L;
-              }
-            break;
-         default:
-            Gbl.Usrs.Me.UsrLast.LastHie.HieLvl = Hie_UNK;
-            Gbl.Usrs.Me.UsrLast.LastHie.HieCod = -1L;
-            break;
-        }
+	 /* Get last hierarchy: scope (row[1]) and code (row[2]) */
+	 Gbl.Usrs.Me.UsrLast.LastHie.HieLvl = Hie_GetLevelFromDBStr (row[1]);
+	 switch (Gbl.Usrs.Me.UsrLast.LastHie.HieLvl)
+	   {
+	    case Hie_SYS:	// System
+	       Gbl.Usrs.Me.UsrLast.LastHie.HieCod = -1L;
+	       break;
+	    case Hie_CTY:	// Country
+	    case Hie_INS:	// Institution
+	    case Hie_CTR:	// Center
+	    case Hie_DEG:	// Degree
+	    case Hie_CRS:	// Course
+	       Gbl.Usrs.Me.UsrLast.LastHie.HieCod = Str_ConvertStrCodToLongCod (row[2]);
+	       if (Gbl.Usrs.Me.UsrLast.LastHie.HieCod <= 0)
+		 {
+		  Gbl.Usrs.Me.UsrLast.LastHie.HieLvl = Hie_UNK;
+		  Gbl.Usrs.Me.UsrLast.LastHie.HieCod = -1L;
+		 }
+	       break;
+	    default:
+	       Gbl.Usrs.Me.UsrLast.LastHie.HieLvl = Hie_UNK;
+	       Gbl.Usrs.Me.UsrLast.LastHie.HieCod = -1L;
+	       break;
+	   }
 
-      /* Get last action (row[3]) */
-      ActCod = Str_ConvertStrCodToLongCod (row[3]);
-      Gbl.Usrs.Me.UsrLast.LastAct = Act_GetActionFromActCod (ActCod);
+	 /* Get last action (row[3]) */
+	 ActCod = Str_ConvertStrCodToLongCod (row[3]);
+	 Gbl.Usrs.Me.UsrLast.LastAct = Act_GetActionFromActCod (ActCod);
 
-      /* Get last role (row[4]) */
-      Gbl.Usrs.Me.UsrLast.LastRole = Rol_ConvertUnsignedStrToRole (row[4]);
+	 /* Get last role (row[4]) */
+	 Gbl.Usrs.Me.UsrLast.LastRole = Rol_ConvertUnsignedStrToRole (row[4]);
 
-      /* Get last access to platform (row[5]) */
-      Gbl.Usrs.Me.UsrLast.LastTime = 0L;
-      if (row[5])
-         sscanf (row[5],"%ld",&(Gbl.Usrs.Me.UsrLast.LastTime));
+	 /* Get last access to platform (row[5]) */
+	 Gbl.Usrs.Me.UsrLast.LastTime = 0L;
+	 if (row[5])
+	    sscanf (row[5],"%ld",&Gbl.Usrs.Me.UsrLast.LastTime);
 
-      /* Get last access to notifications (row[6]) */
-      Gbl.Usrs.Me.UsrLast.LastAccNotif = 0L;
-      if (row[6])
-         sscanf (row[6],"%ld",&(Gbl.Usrs.Me.UsrLast.LastAccNotif));
-     }
-   else	// No user's last data found
-     {
-      /***** Create entry for me in table of user's last data *****/
-      Usr_ResetMyLastData ();
-      Usr_DB_InsertMyLastData ();
+	 /* Get last access to notifications (row[6]) */
+	 Gbl.Usrs.Me.UsrLast.LastAccNotif = 0L;
+	 if (row[6])
+	    sscanf (row[6],"%ld",&Gbl.Usrs.Me.UsrLast.LastAccNotif);
+	 break;
+      case Exi_DOES_NOT_EXIST:	// No user's last data found
+      default:
+	 /***** Create entry for me in table of user's last data *****/
+	 Usr_ResetMyLastData ();
+	 Usr_DB_InsertMyLastData ();
+	 break;
      }
 
    /***** Free structure that stores the query result *****/

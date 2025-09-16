@@ -2591,37 +2591,41 @@ void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print)
    MYSQL_ROW row;
 
    /***** Make database query *****/
-   if (Tst_DB_GetPrintDataByPrnCod (&mysql_res,Print->PrnCod) == 1)
+   switch (Tst_DB_GetPrintDataByPrnCod (&mysql_res,Print->PrnCod))
      {
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get user code (row[0]) */
-      Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+	 /* Get user code (row[0]) */
+	 Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get date-time (row[1] and row[2] hold UTC date-time) */
-      Print->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[1]);
-      Print->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[2]);
+	 /* Get date-time (row[1] and row[2] hold UTC date-time) */
+	 Print->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[1]);
+	 Print->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[2]);
 
-      /* Get number of questions (row[3])
-         and number of questions not blank (row[4]) */
-      if (sscanf (row[3],"%u",&Print->NumQsts.All     ) != 1)
-	 Print->NumQsts.All      = 0;
-      if (sscanf (row[4],"%u",&Print->NumQsts.NotBlank) != 1)
-	 Print->NumQsts.NotBlank = 0;
+	 /* Get number of questions (row[3])
+	    and number of questions not blank (row[4]) */
+	 if (sscanf (row[3],"%u",&Print->NumQsts.All     ) != 1)
+	    Print->NumQsts.All      = 0;
+	 if (sscanf (row[4],"%u",&Print->NumQsts.NotBlank) != 1)
+	    Print->NumQsts.NotBlank = 0;
 
-      /* Get if print has been sent (row[5])
-         and if teachers are allowed to see this test print (row[6]) */
-      Print->Sent          = (row[5][0] == 'Y');
-      Print->VisibleByTchs = HidVis_GetVisibleFromYN (row[6][0]);
+	 /* Get if print has been sent (row[5])
+	    and if teachers are allowed to see this test print (row[6]) */
+	 Print->Sent          = (row[5][0] == 'Y');
+	 Print->VisibleByTchs = HidVis_GetVisibleFromYN (row[6][0]);
 
-      /* Get score (row[7]) */
-      Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[7],"%lf",&Print->Score) != 1)
-	 Print->Score = 0.0;
-      Str_SetDecimalPointToLocal ();	// Return to local system
+	 /* Get score (row[7]) */
+	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
+	 if (sscanf (row[7],"%lf",&Print->Score) != 1)
+	    Print->Score = 0.0;
+	 Str_SetDecimalPointToLocal ();	// Return to local system
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 TstPrn_ResetPrintExceptPrnCod (Print);
+	 break;
      }
-   else
-      TstPrn_ResetPrintExceptPrnCod (Print);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

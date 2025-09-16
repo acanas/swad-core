@@ -59,15 +59,14 @@ static const char *Med_DB_GetStringType (Med_Type_t Type);
 Exi_Exist_t Med_DB_GetMediaDataByCod (MYSQL_RES **mysql_res,long MedCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get media",
-		   "SELECT Type,"	// row[0]
-			  "Name,"	// row[1]
-			  "URL,"	// row[2]
-			  "Title"	// row[3]
-		    " FROM med_media"
-		   " WHERE MedCod=%ld",
-		   MedCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get media",
+			 "SELECT Type,"	// row[0]
+				"Name,"	// row[1]
+				"URL,"	// row[2]
+				"Title"	// row[3]
+			  " FROM med_media"
+			 " WHERE MedCod=%ld",
+			 MedCod);
   }
 
 /*****************************************************************************/

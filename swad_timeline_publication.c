@@ -354,18 +354,22 @@ static struct TmlPub_Publication *TmlPub_SelectTheMostRecentPub (const struct Tm
    struct TmlPub_Publication *Pub;
 
    /***** Select the most recent publication from database *****/
-   if (Tml_DB_SelectTheMostRecentPub (&mysql_res,SubQueries) == 1)
+   switch (Tml_DB_SelectTheMostRecentPub (&mysql_res,SubQueries))
      {
-      /* Allocate space for publication */
-      if ((Pub = malloc (sizeof (*Pub))) == NULL)
-         Err_NotEnoughMemoryExit ();
+      case Exi_EXISTS:
+	 /* Allocate space for publication */
+	 if ((Pub = malloc (sizeof (*Pub))) == NULL)
+	    Err_NotEnoughMemoryExit ();
 
-      /* Get data of publication */
-      TmlPub_GetPubDataFromRow (mysql_res,Pub);
-      Pub->Next = NULL;
+	 /* Get data of publication */
+	 TmlPub_GetPubDataFromRow (mysql_res,Pub);
+	 Pub->Next = NULL;
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Pub = NULL;
+	 break;
      }
-   else
-      Pub = NULL;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

@@ -140,14 +140,13 @@ Exi_Exist_t Inf_DB_GetInfoSrc (MYSQL_RES **mysql_res,
                                long CrsCod,Inf_Type_t InfoType)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get info source",
-		   "SELECT InfoSrc"	// row[0]
-		    " FROM crs_info_src"
-		   " WHERE CrsCod=%ld"
-		     " AND InfoType='%s'",
-		   CrsCod,
-		   Inf_DB_NamesForInfoType[InfoType]) ? Exi_EXISTS :
-						        Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get info source",
+			 "SELECT InfoSrc"	// row[0]
+			  " FROM crs_info_src"
+			 " WHERE CrsCod=%ld"
+			   " AND InfoType='%s'",
+			 CrsCod,
+			 Inf_DB_NamesForInfoType[InfoType]);
   }
 
 /*****************************************************************************/
@@ -158,15 +157,14 @@ Exi_Exist_t Inf_DB_GetInfoSrcAndMustBeRead (MYSQL_RES **mysql_res,
                                             long CrsCod,Inf_Type_t InfoType)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get info source",
-		   "SELECT InfoSrc,"	// row[0]
-			  "MustBeRead"	// row[1]
-		    " FROM crs_info_src"
-		   " WHERE CrsCod=%ld"
-		     " AND InfoType='%s'",
-		   CrsCod,
-		   Inf_DB_NamesForInfoType[InfoType]) ? Exi_EXISTS :
-						        Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get info source",
+			 "SELECT InfoSrc,"	// row[0]
+				"MustBeRead"	// row[1]
+			  " FROM crs_info_src"
+			 " WHERE CrsCod=%ld"
+			   " AND InfoType='%s'",
+			 CrsCod,
+			 Inf_DB_NamesForInfoType[InfoType]);
   }
 
 /*****************************************************************************/
@@ -213,15 +211,14 @@ Exi_Exist_t Inf_DB_GetInfoTxt (MYSQL_RES **mysql_res,
                                long CrsCod,Inf_Type_t InfoType)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get info text",
-		   "SELECT InfoTxtHTML,"	// row[0]
-			  "InfoTxtMD"		// row[1]
-		    " FROM crs_info_txt"
-		   " WHERE CrsCod=%ld"
-		     " AND InfoType='%s'",
-		   CrsCod,
-		   Inf_DB_NamesForInfoType[InfoType]) ? Exi_EXISTS :
-						        Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get info text",
+			 "SELECT InfoTxtHTML,"	// row[0]
+				"InfoTxtMD"	// row[1]
+			  " FROM crs_info_txt"
+			 " WHERE CrsCod=%ld"
+			   " AND InfoType='%s'",
+			 CrsCod,
+			 Inf_DB_NamesForInfoType[InfoType]);
   }
 
 /*****************************************************************************/

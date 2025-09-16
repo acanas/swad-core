@@ -4217,6 +4217,26 @@ unsigned long DB_QuerySELECT (MYSQL_RES **mysql_res,const char *MsgError,
    return DB_QuerySELECTusingQueryStr (Query,mysql_res,MsgError);
   }
 
+
+Exi_Exist_t DB_QuerySELECTunique (MYSQL_RES **mysql_res,const char *MsgError,
+                                  const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Query;
+
+   /***** Create query string *****/
+   va_start (ap,fmt);
+   NumBytesPrinted = vasprintf (&Query,fmt,ap);
+   va_end (ap);
+   if (NumBytesPrinted < 0)	// -1 if no memory or any other error
+      Err_NotEnoughMemoryExit ();
+
+   /***** Do SELECT query *****/
+   return DB_QuerySELECTusingQueryStr (Query,mysql_res,MsgError) ? Exi_EXISTS :
+								   Exi_DOES_NOT_EXIST;
+  }
+
 /*****************************************************************************/
 /*** Make a SELECT query for a unique row with one long code from database ***/
 /*****************************************************************************/

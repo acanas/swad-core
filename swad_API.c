@@ -308,7 +308,7 @@ static void API_GetLocationData (struct soap *soap,
                                  struct swad__location *location,
                                  time_t *CheckInTime,
                                  MYSQL_RES **mysql_res,
-				 unsigned NumLocs);
+				 Exi_Exist_t LocationExists);
 static void API_ResetLocation (struct soap *soap,
                                struct swad__location *location);
 
@@ -744,7 +744,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
    Gbl.WebService.Function = API_loginByUserPasswordKey;
 
    /***** Allocate space for strings *****/
-   loginByUserPasswordKeyOut->wsKey         = soap_malloc (soap,API_BYTES_KEY                   + 1);
+   loginByUserPasswordKeyOut->wsKey         = soap_malloc (soap,API_BYTES_KEY                      + 1);
    loginByUserPasswordKeyOut->userNickname  = soap_malloc (soap,Nck_MAX_BYTES_NICK_WITHOUT_ARROBA  + 1);
    loginByUserPasswordKeyOut->userID        = soap_malloc (soap,ID_MAX_BYTES_USR_ID                + 1);
    loginByUserPasswordKeyOut->userFirstname = soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
@@ -925,31 +925,35 @@ int swad__loginBySessionKey (struct soap *soap,
 
    // Now, we know that sessionID is a valid session identifier
    /***** Query data of the session from database *****/
-   if (Ses_DB_GetSomeSessionData (&mysql_res,sessionID))	// Session found in table of sessions
+   switch (Ses_DB_GetSomeSessionData (&mysql_res,sessionID))
      {
-      row = mysql_fetch_row (mysql_res);
+      case Exi_EXISTS:	// Session found in table of sessions
+	 row = mysql_fetch_row (mysql_res);
 
-      /***** Get course (row[2]) *****/
-      Gbl.Hierarchy.Node[Hie_CRS].HieCod = Str_ConvertStrCodToLongCod (row[2]);
-      SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Gbl.Hierarchy.Node[Hie_CRS]);
-      loginBySessionKeyOut->courseCode = (int) Gbl.Hierarchy.Node[Hie_CRS].HieCod;
-      Str_Copy (loginBySessionKeyOut->courseName,Gbl.Hierarchy.Node[Hie_CRS].FullName,
-                Nam_MAX_BYTES_FULL_NAME);
+	 /***** Get course (row[2]) *****/
+	 Gbl.Hierarchy.Node[Hie_CRS].HieCod = Str_ConvertStrCodToLongCod (row[2]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Gbl.Hierarchy.Node[Hie_CRS]);
+	 loginBySessionKeyOut->courseCode = (int) Gbl.Hierarchy.Node[Hie_CRS].HieCod;
+	 Str_Copy (loginBySessionKeyOut->courseName,Gbl.Hierarchy.Node[Hie_CRS].FullName,
+		   Nam_MAX_BYTES_FULL_NAME);
 
-      /***** Get user code (row[0]) *****/
-      Gbl.Usrs.Me.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-      UsrExists = API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
-					        Gbl.Hierarchy.Node[Hie_CRS].HieCod);	// Get some user's data from database
+	 /***** Get user code (row[0]) *****/
+	 Gbl.Usrs.Me.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+	 UsrExists = API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+						   Gbl.Hierarchy.Node[Hie_CRS].HieCod);	// Get some user's data from database
 
-      /***** Get degree (row[1]) *****/
-      Gbl.Hierarchy.Node[Hie_DEG].HieCod = Str_ConvertStrCodToLongCod (row[1]);
-      SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Gbl.Hierarchy.Node[Hie_DEG]);
-      loginBySessionKeyOut->degreeCode = (int) Gbl.Hierarchy.Node[Hie_DEG].HieCod;
-      Str_Copy (loginBySessionKeyOut->degreeName,Gbl.Hierarchy.Node[Hie_DEG].FullName,
-                Nam_MAX_BYTES_FULL_NAME);
+	 /***** Get degree (row[1]) *****/
+	 Gbl.Hierarchy.Node[Hie_DEG].HieCod = Str_ConvertStrCodToLongCod (row[1]);
+	 SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Gbl.Hierarchy.Node[Hie_DEG]);
+	 loginBySessionKeyOut->degreeCode = (int) Gbl.Hierarchy.Node[Hie_DEG].HieCod;
+	 Str_Copy (loginBySessionKeyOut->degreeName,Gbl.Hierarchy.Node[Hie_DEG].FullName,
+		   Nam_MAX_BYTES_FULL_NAME);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 UsrExists = Exi_DOES_NOT_EXIST;
+	 break;
      }
-   else
-      UsrExists = Exi_DOES_NOT_EXIST;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -5227,7 +5231,7 @@ int swad__getLocation (struct soap *soap,
    int ReturnCode;
    unsigned long long MACnum;
    MYSQL_RES *mysql_res;
-   unsigned NumLocs;
+   Exi_Exist_t LocationExists;
 
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
@@ -5257,12 +5261,12 @@ int swad__getLocation (struct soap *soap,
 	                          "MAC address format should be 12 hexadecimal digits");
 
    /***** Get location *****/
-   NumLocs = Roo_DB_GetLocationByMAC (&mysql_res,MACnum);
+   LocationExists = Roo_DB_GetLocationByMAC (&mysql_res,MACnum);
 
    API_GetLocationData (soap,
-                          &(getLocationOut->location),
-                          NULL,	// Don't get check in time
-                          &mysql_res,NumLocs);
+                        &(getLocationOut->location),
+                        NULL,	// Don't get check in time
+                        &mysql_res,LocationExists);
 
    return SOAP_OK;
   }
@@ -5322,7 +5326,7 @@ int swad__getLastLocation (struct soap *soap,
   {
    int ReturnCode;
    MYSQL_RES *mysql_res;
-   unsigned NumLocs;
+   Exi_Exist_t LocationExists;
 
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
@@ -5347,11 +5351,11 @@ int swad__getLastLocation (struct soap *soap,
      {
       case Usr_CAN:
 	 /***** Get list of locations *****/
-	 NumLocs = Roo_DB_GetUsrLastLocation (&mysql_res,(long) userCode);
+	 LocationExists = Roo_DB_GetUsrLastLocation (&mysql_res,(long) userCode);
 	 API_GetLocationData (soap,
-				&(getLastLocationOut->location),
-				&(getLastLocationOut->checkinTime),	// Get check in time
-				&mysql_res,NumLocs);
+			      &(getLastLocationOut->location),
+			      &(getLastLocationOut->checkinTime),	// Get check in time
+			      &mysql_res,LocationExists);
 	 break;
       case Usr_CAN_NOT:
       default:
@@ -5372,103 +5376,105 @@ static void API_GetLocationData (struct soap *soap,
                                  struct swad__location *location,
                                  time_t *CheckInTime,
                                  MYSQL_RES **mysql_res,
-				 unsigned NumLocs)
+				 Exi_Exist_t LocationExists)
   {
    MYSQL_ROW row;
    size_t Length;
 
    /***** Get data of location from database *****/
-   if (NumLocs)		// Rooms found
+   switch (LocationExists)
      {
-      /* Get row */
-      row = mysql_fetch_row (*mysql_res);
-      /*
-      ins_instits.InsCod			// row[ 0]
-      ins_instits.ShortName			// row[ 1]
-      ins_instits.FullName			// row[ 2]
-      ctr_centers.CtrCod			// row[ 3]
-      ctr_centers.ShortName			// row[ 4]
-      ctr_centers.FullName			// row[ 5]
-      bld_buildings.BldCod			// row[ 6]
-      bld_buildings.ShortName			// row[ 7]
-      bld_buildings.FullName			// row[ 8]
-      roo_rooms.Floor				// row[ 9]
-      roo_rooms.RooCod				// row[10]
-      roo_rooms.ShortName			// row[11]
-      roo_rooms.FullName			// row[12]
-      UNIX_TIMESTAMP(roo_check_in.CheckInTime)	// row[13] (optional)
-      */
+      case Exi_EXISTS:
+	 /* Get row */
+	 row = mysql_fetch_row (*mysql_res);
+	 /*
+	 ins_instits.InsCod				// row[ 0]
+	 ins_instits.ShortName				// row[ 1]
+	 ins_instits.FullName				// row[ 2]
+	 ctr_centers.CtrCod				// row[ 3]
+	 ctr_centers.ShortName				// row[ 4]
+	 ctr_centers.FullName				// row[ 5]
+	 bld_buildings.BldCod				// row[ 6]
+	 bld_buildings.ShortName			// row[ 7]
+	 bld_buildings.FullName				// row[ 8]
+	 roo_rooms.Floor				// row[ 9]
+	 roo_rooms.RooCod				// row[10]
+	 roo_rooms.ShortName				// row[11]
+	 roo_rooms.FullName				// row[12]
+	 UNIX_TIMESTAMP(roo_check_in.CheckInTime)	// row[13] (optional)
+	 */
 
-      /* Get institution code (row[0]) */
-      location->institutionCode = (int) Str_ConvertStrCodToLongCod (row[0]);
+	 /* Get institution code (row[0]) */
+	 location->institutionCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get institution short name (row[1]) */
-      Length = strlen (row[1]);
-      location->institutionShortName = soap_malloc (soap,Length + 1);
-      Str_Copy (location->institutionShortName,row[1],Length);
+	 /* Get institution short name (row[1]) */
+	 Length = strlen (row[1]);
+	 location->institutionShortName = soap_malloc (soap,Length + 1);
+	 Str_Copy (location->institutionShortName,row[1],Length);
 
-      /* Get institution full name (row[2]) */
-      Length = strlen (row[2]);
-      location->institutionFullName = soap_malloc (soap,Length + 1);
-      Str_Copy (location->institutionFullName,row[2],Length);
+	 /* Get institution full name (row[2]) */
+	 Length = strlen (row[2]);
+	 location->institutionFullName = soap_malloc (soap,Length + 1);
+	 Str_Copy (location->institutionFullName,row[2],Length);
 
-      /* Get center code (row[3]) */
-      location->centerCode = (int) Str_ConvertStrCodToLongCod (row[3]);
+	 /* Get center code (row[3]) */
+	 location->centerCode = (int) Str_ConvertStrCodToLongCod (row[3]);
 
-      /* Get center short name (row[4]) */
-      Length = strlen (row[4]);
-      location->centerShortName = soap_malloc (soap,Length + 1);
-      Str_Copy (location->centerShortName,row[4],Length);
+	 /* Get center short name (row[4]) */
+	 Length = strlen (row[4]);
+	 location->centerShortName = soap_malloc (soap,Length + 1);
+	 Str_Copy (location->centerShortName,row[4],Length);
 
-      /* Get center full name (row[5]) */
-      Length = strlen (row[5]);
-      location->centerFullName = soap_malloc (soap,Length + 1);
-      Str_Copy (location->centerFullName,row[5],Length);
+	 /* Get center full name (row[5]) */
+	 Length = strlen (row[5]);
+	 location->centerFullName = soap_malloc (soap,Length + 1);
+	 Str_Copy (location->centerFullName,row[5],Length);
 
-      /* Get building code (row[6]) */
-      location->buildingCode = (int) Str_ConvertStrCodToLongCod (row[6]);
+	 /* Get building code (row[6]) */
+	 location->buildingCode = (int) Str_ConvertStrCodToLongCod (row[6]);
 
-      /* Get building short name (row[7]) */
-      Length = strlen (row[7]);
-      location->buildingShortName = soap_malloc (soap,Length + 1);
-      Str_Copy (location->buildingShortName,row[7],Length);
+	 /* Get building short name (row[7]) */
+	 Length = strlen (row[7]);
+	 location->buildingShortName = soap_malloc (soap,Length + 1);
+	 Str_Copy (location->buildingShortName,row[7],Length);
 
-      /* Get building full name (row[8]) */
-      Length = strlen (row[8]);
-      location->buildingFullName = soap_malloc (soap,Length + 1);
-      Str_Copy (location->buildingFullName,row[8],Length);
+	 /* Get building full name (row[8]) */
+	 Length = strlen (row[8]);
+	 location->buildingFullName = soap_malloc (soap,Length + 1);
+	 Str_Copy (location->buildingFullName,row[8],Length);
 
-      /* Get floor (row[9]) */
-      location->floor = (int) Str_ConvertStrCodToLongCod (row[9]);
+	 /* Get floor (row[9]) */
+	 location->floor = (int) Str_ConvertStrCodToLongCod (row[9]);
 
-      /* Get room code (row[10]) */
-      location->roomCode = (int) Str_ConvertStrCodToLongCod (row[10]);
+	 /* Get room code (row[10]) */
+	 location->roomCode = (int) Str_ConvertStrCodToLongCod (row[10]);
 
-      /* Get room short name (row[11]) */
-      Length = strlen (row[11]);
-      location->roomShortName = soap_malloc (soap,Length + 1);
-      Str_Copy (location->roomShortName,row[11],Length);
+	 /* Get room short name (row[11]) */
+	 Length = strlen (row[11]);
+	 location->roomShortName = soap_malloc (soap,Length + 1);
+	 Str_Copy (location->roomShortName,row[11],Length);
 
-      /* Get room full name (row[12]) */
-      Length = strlen (row[12]);
-      location->roomFullName = soap_malloc (soap,Length + 1);
-      Str_Copy (location->roomFullName,row[12],Length);
+	 /* Get room full name (row[12]) */
+	 Length = strlen (row[12]);
+	 location->roomFullName = soap_malloc (soap,Length + 1);
+	 Str_Copy (location->roomFullName,row[12],Length);
 
-      /* Get check in time (row[13]) */
-      if (CheckInTime)
-	{
-	 *CheckInTime = 0L;
-	 if (row[13])
-	    sscanf (row[13],"%ld",CheckInTime);
-	}
-     }
-   else
-     {
-      /* No room found ==> reset output */
-      API_ResetLocation (soap,location);
+	 /* Get check in time (row[13]) */
+	 if (CheckInTime)
+	   {
+	    *CheckInTime = 0L;
+	    if (row[13])
+	       sscanf (row[13],"%ld",CheckInTime);
+	   }
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 /* No room found ==> reset output */
+	 API_ResetLocation (soap,location);
 
-      if (CheckInTime)
-         *CheckInTime = 0L;
+	 if (CheckInTime)
+	    *CheckInTime = 0L;
+	 break;
      }
 
    /***** Free structure that stores the query result *****/

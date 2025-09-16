@@ -101,23 +101,22 @@ Exi_Exist_t FAQ_DB_GetQaADataByCod (MYSQL_RES **mysql_res,long ItmCod)
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    return
-   DB_QuerySELECT (mysql_res,"can not get node question & answer data",
-		   "SELECT faq_questions.NodCod,"	// row[0]
-			  "faq_questions.ItmCod,"	// row[1]
-                          "faq_questions.ItmInd,"	// row[2]
-			  "faq_questions.Hidden,"	// row[3]
-			  "faq_questions.Question,"	// row[4]
-			  "faq_questions.Answer"	// row[5]
-		    " FROM faq_questions,"
-		          "tre_nodes"
-		   " WHERE faq_questions.ItmCod=%ld"
-		     " AND faq_questions.NodCod=tre_nodes.NodCod"
-		     " AND tre_nodes.CrsCod=%ld"	// Extra check
-		     " AND tre_nodes.Type='%s'",	// Extra check
-		   ItmCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Inf_FAQ]) ? Exi_EXISTS :
-					    Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get node question & answer data",
+			 "SELECT faq_questions.NodCod,"		// row[0]
+				"faq_questions.ItmCod,"		// row[1]
+				"faq_questions.ItmInd,"		// row[2]
+				"faq_questions.Hidden,"		// row[3]
+				"faq_questions.Question,"	// row[4]
+				"faq_questions.Answer"		// row[5]
+			  " FROM faq_questions,"
+				"tre_nodes"
+			 " WHERE faq_questions.ItmCod=%ld"
+			   " AND faq_questions.NodCod=tre_nodes.NodCod"
+			   " AND tre_nodes.CrsCod=%ld"	// Extra check
+			   " AND tre_nodes.Type='%s'",	// Extra check
+			 ItmCod,
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			 Tre_DB_Types[Inf_FAQ]);
   }
 
 /*****************************************************************************/

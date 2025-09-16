@@ -1518,7 +1518,7 @@ Pho_ShowPhotos_t Pho_GetMyPrefAboutListWithPhotosFromDB (void)
    if (Gbl.Usrs.Me.Logged && Gbl.Hierarchy.Node[Hie_CRS].HieCod)
      {
       /***** Get if listing of users must show photos from database *****/
-      if (Set_DB_GetMyPrefAboutListWithPhotosPhoto (&mysql_res))
+      if (Set_DB_GetMyPrefAboutListWithPhotosPhoto (&mysql_res) == Exi_EXISTS)
         {
          /* Get number of columns in class photo */
          row = mysql_fetch_row (mysql_res);

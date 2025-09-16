@@ -102,15 +102,14 @@ unsigned Bld_DB_GetListBuildings (MYSQL_RES **mysql_res,
 Exi_Exist_t Bld_DB_GetBuildingDataByCod (MYSQL_RES **mysql_res,long BldCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get data of a building",
-		   "SELECT BldCod,"		// row[0]
-			  "ShortName,"		// row[1]
-			  "FullName,"		// row[2]
-			  "Location"		// row[3]
-		    " FROM bld_buildings"
-		   " WHERE BldCod=%ld",
-		   BldCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get data of a building",
+			 "SELECT BldCod,"		// row[0]
+				"ShortName,"		// row[1]
+				"FullName,"		// row[2]
+				"Location"		// row[3]
+			  " FROM bld_buildings"
+			 " WHERE BldCod=%ld",
+			 BldCod);
   }
 
 /*****************************************************************************/

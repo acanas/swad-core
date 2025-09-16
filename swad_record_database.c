@@ -156,18 +156,18 @@ unsigned Rec_DB_GetAllFieldsInCrs (MYSQL_RES **mysql_res,long CrsCod)
 /************** Get the data of a field of records from its code *************/
 /*****************************************************************************/
 
-unsigned Rec_DB_GetFieldByCod (MYSQL_RES **mysql_res,long CrsCod,long FldCod)
+Exi_Exist_t Rec_DB_GetFieldByCod (MYSQL_RES **mysql_res,long CrsCod,long FldCod)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get a field of a record in a course",
-		   "SELECT FieldName,"	// row[0]
-			  "NumLines,"	// row[1]
-			  "Visibility"	// row[2]
-		    " FROM crs_record_fields"
-		   " WHERE CrsCod=%ld"
-		     " AND FieldCod=%ld",
-		   CrsCod,
-		   FldCod);
+   return
+   DB_QuerySELECTunique (mysql_res,"can not get a field of a record in a course",
+			 "SELECT FieldName,"	// row[0]
+				"NumLines,"	// row[1]
+				"Visibility"	// row[2]
+			  " FROM crs_record_fields"
+			 " WHERE CrsCod=%ld"
+			   " AND FieldCod=%ld",
+			 CrsCod,
+			 FldCod);
   }
 
 /*****************************************************************************/
@@ -178,15 +178,13 @@ Exi_Exist_t Rec_DB_GetFieldTxtFromUsrRecord (MYSQL_RES **mysql_res,
                                              long FldCod,long UsrCod)
   {
    return
-   DB_QuerySELECT (mysql_res,"can not get the text"
-			     " of a field of a record",
-		   "SELECT Txt"		// row[0]
-		    " FROM crs_records"
-		   " WHERE FieldCod=%ld"
-		     " AND UsrCod=%ld",
-		   FldCod,
-		   UsrCod) ? Exi_EXISTS :
-			     Exi_DOES_NOT_EXIST;
+   DB_QuerySELECTunique (mysql_res,"can not get the text of a field of a record",
+			 "SELECT Txt"		// row[0]
+			  " FROM crs_records"
+			 " WHERE FieldCod=%ld"
+			   " AND UsrCod=%ld",
+			 FldCod,
+			 UsrCod);
   }
 
 /*****************************************************************************/

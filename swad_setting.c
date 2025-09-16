@@ -130,7 +130,7 @@ void Set_GetSettingsFromIP (void)
    if (IP[0])
      {
       /***** Get settings from database *****/
-      if (Set_DB_GetSettingsFromIP (&mysql_res))
+      if (Set_DB_GetSettingsFromIP (&mysql_res) == Exi_EXISTS)
 	{
 	 row = mysql_fetch_row (mysql_res);
 
@@ -327,25 +327,30 @@ static void Set_GetMyUsrListTypeFromDB (void)
    Set_ShowUsrsType_t ListType;
 
    /***** Get type of listing of users from database *****/
-   if (Set_DB_GetMyUsrListType (&mysql_res))		// Should be one only row
+   switch (Set_DB_GetMyUsrListType (&mysql_res))
      {
-      /* Get type of users' listing used to select some of them */
-      Gbl.Usrs.Me.ListType = Set_SHOW_USRS_TYPE_DEFAULT;
-      row = mysql_fetch_row (mysql_res);
-      if (row[0])
-         for (ListType  = (Set_ShowUsrsType_t) 0;
-              ListType <= (Set_ShowUsrsType_t) (Set_NUM_USR_LIST_TYPES - 1);
-              ListType++)
-            if (!strcasecmp (row[0],Set_DB_StringsUsrListTypes[ListType]))
-              {
-               Gbl.Usrs.Me.ListType = ListType;
-               break;
-              }
+      case Exi_EXISTS:
+	 /* Get type of users' listing used to select some of them */
+	 Gbl.Usrs.Me.ListType = Set_SHOW_USRS_TYPE_DEFAULT;
+	 row = mysql_fetch_row (mysql_res);
+	 if (row[0])
+	    for (ListType  = (Set_ShowUsrsType_t) 0;
+		 ListType <= (Set_ShowUsrsType_t) (Set_NUM_USR_LIST_TYPES - 1);
+		 ListType++)
+	       if (!strcasecmp (row[0],Set_DB_StringsUsrListTypes[ListType]))
+		 {
+		  Gbl.Usrs.Me.ListType = ListType;
+		  break;
+		 }
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 /* If I am an administrator or superuser
+	    and I don't belong to current course,
+	    then the result will be the default */
+	 Gbl.Usrs.Me.ListType = Set_SHOW_USRS_TYPE_DEFAULT;
+	 break;
      }
-   else		// If I am an administrator or superuser
-		// and I don't belong to current course,
-		// then the result will be the default
-      Gbl.Usrs.Me.ListType = Set_SHOW_USRS_TYPE_DEFAULT;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

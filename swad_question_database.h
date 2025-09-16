@@ -60,8 +60,8 @@ unsigned Qst_DB_GetRecentAnswers (MYSQL_RES **mysql_res,
 Exi_Exist_t Qst_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod);
 Qst_AnswerType_t Qst_DB_GetQstAnswerType (long QstCod);
 long Qst_DB_GetQstMedCod (long CrsCod,long QstCod);
-unsigned Qst_DB_GetQstCodFromTypeAnsStem (MYSQL_RES **mysql_res,
-                                          const struct Qst_Question *Question);
+unsigned Qst_DB_GetQstCodsFromTypeAnsStem (MYSQL_RES **mysql_res,
+                                           const struct Qst_Question *Question);
 
 unsigned Qst_DB_GetNumAnswersQst (long QstCod);
 unsigned Qst_DB_GetAnswersData (MYSQL_RES **mysql_res,long QstCod,

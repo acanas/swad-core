@@ -228,12 +228,12 @@ void Set_DB_UpdateMySettingsAboutNotifyEvents (void)
 
 Exi_Exist_t Set_DB_GetMyLanguage (MYSQL_RES **mysql_res)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get user's language",
-		   "SELECT Language"	// row[0]
-		    " FROM usr_data"
-		   " WHERE UsrCod=%ld",
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+   return
+   DB_QuerySELECTunique (mysql_res,"can not get user's language",
+			 "SELECT Language"	// row[0]
+			  " FROM usr_data"
+			 " WHERE UsrCod=%ld",
+			 Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -318,33 +318,33 @@ void Set_DB_UpdateMyPrefAboutListWithPhotosPhoto (Pho_ShowPhotos_t ShowPhotos)
 /*************** Get my type of listing of users from database ***************/
 /*****************************************************************************/
 
-unsigned Set_DB_GetMyUsrListType (MYSQL_RES **mysql_res)
+Exi_Exist_t Set_DB_GetMyUsrListType (MYSQL_RES **mysql_res)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get type of listing of users",
-		   "SELECT UsrListType"	// row[0]
-		    " FROM crs_user_settings"
-		   " WHERE UsrCod=%ld"
-		     " AND CrsCod=%ld",
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+   return
+   DB_QuerySELECTunique (mysql_res,"can not get type of listing of users",
+			 "SELECT UsrListType"	// row[0]
+			  " FROM crs_user_settings"
+			 " WHERE UsrCod=%ld"
+			   " AND CrsCod=%ld",
+			 Gbl.Usrs.Me.UsrDat.UsrCod,
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
 /********* Get my preference about listing with photos from database *********/
 /*****************************************************************************/
 
-unsigned Set_DB_GetMyPrefAboutListWithPhotosPhoto (MYSQL_RES **mysql_res)
+Exi_Exist_t Set_DB_GetMyPrefAboutListWithPhotosPhoto (MYSQL_RES **mysql_res)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not check if listing of users"
-			     " should show photos",
-		   "SELECT ListWithPhotos"	// row[0]
-		    " FROM crs_user_settings"
-		   " WHERE UsrCod=%ld"
-		     " AND CrsCod=%ld",
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+   return
+   DB_QuerySELECTunique (mysql_res,"can not check if listing of users"
+				   " should show photos",
+			 "SELECT ListWithPhotos"	// row[0]
+			  " FROM crs_user_settings"
+			 " WHERE UsrCod=%ld"
+			   " AND CrsCod=%ld",
+			 Gbl.Usrs.Me.UsrDat.UsrCod,
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -445,20 +445,20 @@ void Set_DB_UpdateMyIPSettingsForAllMyIPs (void)
 /******************** Get settings changed from current IP *******************/
 /*****************************************************************************/
 
-unsigned Set_DB_GetSettingsFromIP (MYSQL_RES **mysql_res)
+Exi_Exist_t Set_DB_GetSettingsFromIP (MYSQL_RES **mysql_res)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get settings",
-		   "SELECT FirstDayOfWeek,"	// row[0]
-			  "DateFormat,"		// row[1]
-			  "Theme,"		// row[2]
-			  "IconSet,"		// row[3]
-			  "Menu,"		// row[4]
-			  "SideCols,"		// row[5]
-			  "PhotoShape"		// row[6]
-		    " FROM set_ip_settings"
-		   " WHERE IP='%s'",
-		   Par_GetIP ());
+   return
+   DB_QuerySELECTunique (mysql_res,"can not get settings",
+			 "SELECT FirstDayOfWeek,"	// row[0]
+				"DateFormat,"		// row[1]
+				"Theme,"		// row[2]
+				"IconSet,"		// row[3]
+				"Menu,"			// row[4]
+				"SideCols,"		// row[5]
+				"PhotoShape"		// row[6]
+			  " FROM set_ip_settings"
+			 " WHERE IP='%s'",
+			 Par_GetIP ());
   }
 
 /*****************************************************************************/
