@@ -1326,7 +1326,8 @@ void Msg_DB_RemoveRcvMsg (long MsgCod,long UsrCod)
 			   "Content,"
 			   "MedCod"
 		    " FROM msg_content"
-		   " WHERE MsgCod IN"
+		   " WHERE MsgCod=%ld"
+		     " AND MsgCod IN"
 			 " (SELECT MsgCod"
 			    " FROM (SELECT MsgCod,"
 					  "COUNT(*) AS N"
@@ -1338,12 +1339,14 @@ void Msg_DB_RemoveRcvMsg (long MsgCod,long UsrCod)
 		     " AND MsgCod NOT IN"
 			 " (SELECT MsgCod"
 			    " FROM msg_snt)",
+		   MsgCod,
                    MsgCod,UsrCod);
 
    /* Delete message from msg_content */
    DB_QueryDELETE ("can not remove the content of a message",
 		   "DELETE FROM msg_content"
-		   " WHERE MsgCod IN"
+		   " WHERE MsgCod=%ld"
+		     " AND MsgCod IN"
 			 " (SELECT MsgCod"
 			    " FROM (SELECT MsgCod,"
 					  "COUNT(*) AS N"
@@ -1355,6 +1358,7 @@ void Msg_DB_RemoveRcvMsg (long MsgCod,long UsrCod)
 		     " AND MsgCod NOT IN"
 			 " (SELECT MsgCod"
 			    " FROM msg_snt)",
+		   MsgCod,
                    MsgCod,UsrCod);
 
    /***** Step 2: Move message from msg_rcv to msg_rcv_deleted *****/
