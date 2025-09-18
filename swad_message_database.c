@@ -209,45 +209,6 @@ void Msg_DB_SetRcvMsgAsOpen (long MsgCod,long UsrCod)
   }
 
 /*****************************************************************************/
-/******************* Insert received message into deleted ********************/
-/*****************************************************************************/
-
-void Msg_DB_CopyRcvMsgToDeleted (long MsgCod,long UsrCod)
-  {
-   DB_QueryINSERT ("can not remove a received message",
-		   "INSERT IGNORE INTO msg_rcv_deleted"
-		   " (MsgCod,UsrCod,Notified,Open,Replied)"
-		   " SELECT MsgCod,"
-		           "UsrCod,"
-		           "Notified,"
-		           "Open,"
-		           "Replied"
-		     " FROM msg_rcv"
-		    " WHERE MsgCod=%ld"
-		      " AND UsrCod=%ld",
-                   MsgCod,
-                   UsrCod);
-  }
-
-/*****************************************************************************/
-/******************* Insert received message into deleted ********************/
-/*****************************************************************************/
-
-void Msg_DB_CopySntMsgToDeleted (long MsgCod)
-  {
-   DB_QueryINSERT ("can not remove a sent message",
-		   "INSERT IGNORE INTO msg_snt_deleted"
-		   " (MsgCod,CrsCod,UsrCod,CreatTime)"
-		   " SELECT MsgCod,"
-		           "CrsCod,"
-		           "UsrCod,"
-		           "CreatTime"
-		     " FROM msg_snt"
-		    " WHERE MsgCod=%ld",
-                   MsgCod);
-  }
-
-/*****************************************************************************/
 /*************** Get dictinct courses in my received messages ****************/
 /*****************************************************************************/
 
@@ -759,40 +720,6 @@ void Msg_DB_GetStatusOfRcvMsg (long MsgCod,CloOpe_ClosedOrOpen_t *Open,
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/******************** Check if a sent message is deleted *********************/
-/*****************************************************************************/
-
-bool Msg_DB_CheckIfSntMsgIsDeleted (long MsgCod)
-  {
-   return
-   DB_QueryEXISTS ("can not check if a sent message is deleted",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM msg_snt"
-		    " WHERE MsgCod=%ld)",
-		   MsgCod) == Exi_DOES_NOT_EXIST;	// The message has been deleted
-							// by its author when it is not present
-							// in table of sent messages undeleted
-  }
-
-/*****************************************************************************/
-/***** Check if a received message has been deleted by all its recipients ****/
-/*****************************************************************************/
-
-bool Msg_DB_CheckIfRcvMsgIsDeletedForAllItsRecipients (long MsgCod)
-  {
-   return
-   DB_QueryEXISTS ("can not check if a received message is deleted by all recipients",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM msg_rcv"
-		    " WHERE MsgCod=%ld)",
-		   MsgCod) == Exi_DOES_NOT_EXIST;	// The message has been deleted
-							// by all its recipients when it is not present
-							// in table of received messages undeleted
   }
 
 /*****************************************************************************/
@@ -1375,6 +1302,78 @@ unsigned Msg_DB_GetNumMsgsSentByUsr (long UsrCod)
 
 void Msg_DB_RemoveRcvMsg (long MsgCod,long UsrCod)
   {
+   /***** Step 1: Move message content from msg_content to msg_content_deleted
+		  if pointed only by one unique recipient and none sender *****/
+   /*
+                                                 msg_rcv
+                       msg_content              ________
+     msg_snt          ______________   Only    |________|
+    ________         |______________|  one     |________|
+   |________|        |______________|  message |________|
+   |________|  \ /   |______________|  received|________|
+   |________|---x--->|____MsgCod____|<-points--|_UsrCod_|
+   |________|  / \   |______________|  here    |________|
+   |________|        |______________|          |________|
+                     |______________|          |________|
+                                               |________|
+   */
+   /* Insert message content into msg_content_deleted */
+   DB_QueryINSERT ("can not remove the content of a message",
+		   "INSERT IGNORE INTO msg_content_deleted"
+		   " (MsgCod,Subject,Content,MedCod)"
+		   " SELECT MsgCod,"
+			   "Subject,"
+			   "Content,"
+			   "MedCod"
+		    " FROM msg_content"
+		   " WHERE MsgCod IN"
+			 " (SELECT MsgCod"
+			    " FROM (SELECT MsgCod,"
+					  "COUNT(*) AS N"
+				    " FROM msg_rcv"
+				   " WHERE MsgCod=%ld"
+				     " AND UsrCod=%ld"
+				" GROUP BY MsgCod"
+				  " HAVING N=1) AS msg_rcv_unique)"
+		     " AND MsgCod NOT IN"
+			 " (SELECT MsgCod"
+			    " FROM msg_snt)",
+                   MsgCod,UsrCod);
+
+   /* Delete message from msg_content */
+   DB_QueryDELETE ("can not remove the content of a message",
+		   "DELETE FROM msg_content"
+		   " WHERE MsgCod IN"
+			 " (SELECT MsgCod"
+			    " FROM (SELECT MsgCod,"
+					  "COUNT(*) AS N"
+				    " FROM msg_rcv"
+				   " WHERE MsgCod=%ld"
+				     " AND UsrCod=%ld"
+				" GROUP BY MsgCod"
+				  " HAVING N=1) AS msg_rcv_unique)"
+		     " AND MsgCod NOT IN"
+			 " (SELECT MsgCod"
+			    " FROM msg_snt)",
+                   MsgCod,UsrCod);
+
+   /***** Step 2: Move message from msg_rcv to msg_rcv_deleted *****/
+   /* Insert message into msg_rcv_deleted */
+   DB_QueryINSERT ("can not remove a received message",
+		   "INSERT IGNORE INTO msg_rcv_deleted"
+		   " (MsgCod,UsrCod,Notified,Open,Replied)"
+		   " SELECT MsgCod,"
+		           "UsrCod,"
+		           "Notified,"
+		           "Open,"
+		           "Replied"
+		     " FROM msg_rcv"
+		    " WHERE MsgCod=%ld"
+		      " AND UsrCod=%ld",
+                   MsgCod,
+                   UsrCod);
+
+   /* Delete message from msg_rcv */
    DB_QueryDELETE ("can not remove a received message",
 		   "DELETE FROM msg_rcv"
 		   " WHERE MsgCod=%ld"
@@ -1389,6 +1388,60 @@ void Msg_DB_RemoveRcvMsg (long MsgCod,long UsrCod)
 
 void Msg_DB_RemoveSntMsg (long MsgCod)
   {
+   /***** Step 1: Move message content from msg_content to msg_content_deleted
+		  if it is not in table of received *****/
+   /*
+                                                 msg_rcv
+                        msg_content             ________
+     msg_snt          ______________           |________|
+    ________   There |______________|          |________|
+   |________|  can   |______________|          |________|
+   |________|  never |______________|    \ /   |________|
+   |_UsrCod_|--be--->|____MsgCod____|<----x----|________|
+   |________|  more  |______________|    / \   |________|
+   |________|  than  |______________|          |________|
+               one   |______________|          |________|
+               here                            |________|
+
+   */
+   /* Insert message content into msg_content_deleted */
+   DB_QueryINSERT ("can not remove the content of a message",
+		   "INSERT IGNORE INTO msg_content_deleted"
+		   " (MsgCod,Subject,Content,MedCod)"
+		   " SELECT MsgCod,"
+			   "Subject,"
+			   "Content,"
+			   "MedCod"
+		    " FROM msg_content"
+		   " WHERE MsgCod=%ld"
+		     " AND MsgCod NOT IN"
+		         " (SELECT MsgCod"
+		            " FROM msg_rcv)",
+                   MsgCod);
+
+   /* Delete message from msg_content */
+   DB_QueryDELETE ("can not remove the content of a message",
+		   "DELETE FROM msg_content"
+		   " WHERE MsgCod=%ld"
+		     " AND MsgCod NOT IN"
+		         " (SELECT MsgCod"
+		            " FROM msg_rcv)",
+                   MsgCod);
+
+   /***** Step 2: Move message from msg_snt to msg_snt_deleted *****/
+   /* Insert message into msg_snt_deleted */
+   DB_QueryINSERT ("can not remove sent messages",
+		   "INSERT IGNORE INTO msg_snt_deleted"
+		   " (MsgCod,CrsCod,UsrCod,CreatTime)"
+		   " SELECT MsgCod,"
+		           "CrsCod,"
+		           "UsrCod,"
+		           "CreatTime"
+		     " FROM msg_snt"
+		    " WHERE MsgCod=%ld",
+                   MsgCod);
+
+   /* Delete message from msg_snt */
    DB_QueryDELETE ("can not remove a sent message",
 		   "DELETE FROM msg_snt"
 		   " WHERE MsgCod=%ld",
@@ -1401,7 +1454,7 @@ void Msg_DB_RemoveSntMsg (long MsgCod)
 
 void Msg_DB_RemoveAllRecAndSntMsgsUsr (long UsrCod)
   {
-   /***** Step 1.1: Move messages contents from msg_rcv to msg_rcv_deleted
+   /***** Step 1.1: Move messages contents from msg_content to msg_content_deleted
 		    for messages pointed only by one unique recipient and none sender *****/
    /*
                                                  msg_rcv
@@ -1441,7 +1494,7 @@ void Msg_DB_RemoveAllRecAndSntMsgsUsr (long UsrCod)
 			    " FROM msg_snt)",
                    UsrCod);
 
-   /* Delete messages from msg_content *****/
+   /* Delete messages from msg_content */
    DB_QueryDELETE ("can not remove the content of a message",
 		   "DELETE FROM msg_content"
 		   " WHERE MsgCod IN"
@@ -1474,7 +1527,7 @@ void Msg_DB_RemoveAllRecAndSntMsgsUsr (long UsrCod)
 		    " WHERE UsrCod=%ld",
                    UsrCod);
 
-   /* Delete messages from msg_rcv *****/
+   /* Delete messages from msg_rcv */
    DB_QueryDELETE ("can not remove received messages",
 		   "DELETE FROM msg_rcv"
 		   " WHERE UsrCod=%ld",
@@ -1514,7 +1567,7 @@ void Msg_DB_RemoveAllRecAndSntMsgsUsr (long UsrCod)
 		            " FROM msg_rcv)",
                    UsrCod);
 
-   /* Delete messages from msg_content *****/
+   /* Delete messages from msg_content */
    DB_QueryDELETE ("can not remove the content of a message",
 		   "DELETE FROM msg_content"
 		   " WHERE MsgCod IN"
@@ -1539,37 +1592,11 @@ void Msg_DB_RemoveAllRecAndSntMsgsUsr (long UsrCod)
 		    " WHERE UsrCod=%ld",
                    UsrCod);
 
-   /* Delete messages from msg_snt *****/
+   /* Delete messages from msg_snt */
    DB_QueryDELETE ("can not remove sent messages",
 		   "DELETE FROM msg_snt"
 		   " WHERE UsrCod=%ld",
 		   UsrCod);
-  }
-
-/*****************************************************************************/
-/*************** Delete the subject and content of a message *****************/
-/*****************************************************************************/
-
-void Msg_DB_MoveMsgContentToDeleted (long MsgCod)
-  {
-   /***** Move message from msg_content to msg_content_deleted *****/
-   /* Insert message content into msg_content_deleted */
-   DB_QueryINSERT ("can not remove the content of a message",
-		   "INSERT IGNORE INTO msg_content_deleted"
-		   " (MsgCod,Subject,Content,MedCod)"
-		   " SELECT MsgCod,"
-		           "Subject,"
-		           "Content,"
-		           "MedCod"
-		     " FROM msg_content"
-		    " WHERE MsgCod=%ld",
-                   MsgCod);
-
-   /* Delete message from msg_content *****/
-   DB_QueryDELETE ("can not remove the content of a message",
-		   "DELETE FROM msg_content"
-		   " WHERE MsgCod=%ld",
-		   MsgCod);
   }
 
 /*****************************************************************************/

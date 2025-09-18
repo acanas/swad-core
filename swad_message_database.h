@@ -51,8 +51,6 @@ void Msg_DB_ExpandRcvMsg (long MsgCod);
 void Msg_DB_ContractSntMsg (long MsgCod);
 void Msg_DB_ContractRcvMsg (long MsgCod);
 void Msg_DB_SetRcvMsgAsOpen (long MsgCod,long UsrCod);
-void Msg_DB_CopyRcvMsgToDeleted (long MsgCod,long UsrCod);
-void Msg_DB_CopySntMsgToDeleted (long MsgCod);
 
 unsigned Msg_DB_GetDistinctCrssInMyRcvMsgs (MYSQL_RES **mysql_res);
 unsigned Msg_DB_GetDistinctCrssInMySntMsgs (MYSQL_RES **mysql_res);
@@ -71,8 +69,6 @@ unsigned Msg_DB_GetMsgSntData (MYSQL_RES **mysql_res,long MsgCod,bool *Deleted);
 bool Msg_DB_GetStatusOfSntMsg (long MsgCod);
 void Msg_DB_GetStatusOfRcvMsg (long MsgCod,CloOpe_ClosedOrOpen_t *Open,
 			       bool *Replied,bool *Expanded);
-bool Msg_DB_CheckIfSntMsgIsDeleted (long MsgCod);
-bool Msg_DB_CheckIfRcvMsgIsDeletedForAllItsRecipients (long MsgCod);
 long Msg_DB_GetSender (long MsgCod);
 bool Msg_DB_CheckIfMsgHasBeenReceivedByMe (long MsgCod);
 unsigned Msg_DB_GetRecipientsCods (MYSQL_RES **mysql_res,
@@ -87,7 +83,6 @@ unsigned Msg_DB_GetNumMsgsSentByUsr (long UsrCod);
 void Msg_DB_RemoveRcvMsg (long MsgCod,long UsrCod);
 void Msg_DB_RemoveSntMsg (long MsgCod);
 void Msg_DB_RemoveAllRecAndSntMsgsUsr (long UsrCod);
-void Msg_DB_MoveMsgContentToDeleted (long MsgCod);
 
 //--------------------------- Users banned ------------------------------------
 void Msg_DB_CreateUsrsPairIntoBanned (long FromUsrCod,long ToUsrCod);

@@ -140,8 +140,7 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
 static unsigned long Msg_RemoveSomeRecOrSntMsgsUsr (const struct Msg_Messages *Messages,
                                                     long UsrCod,
                                                     const char *FilterFromToSubquery);
-static void Msg_MoveRcvMsgToDeleted (long MsgCod,long UsrCod);
-static void Msg_MoveSntMsgToDeleted (long MsgCod);
+static void Msg_RemoveRcvMsg (long MsgCod,long UsrCod);
 
 static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
                                time_t *CreatTimeUTC,
@@ -1143,11 +1142,10 @@ void Msg_DelSntMsg (void)
    MsgCod = ParCod_GetAndCheckPar (ParCod_Msg);
 
    /***** Delete the message *****/
-   /* Delete the sent message */
-   Msg_MoveSntMsgToDeleted (MsgCod);
+   Msg_DB_RemoveSntMsg (MsgCod);
    Ale_ShowAlert (Ale_SUCCESS,Txt_Message_deleted);
 
-   /* Show the remaining messages */
+   /***** Show the remaining messages *****/
    Msg_ShowSntMsgs ();
   }
 
@@ -1164,11 +1162,10 @@ void Msg_DelRecMsg (void)
    MsgCod = ParCod_GetAndCheckPar (ParCod_Msg);
 
    /***** Delete the message *****/
-   /* Delete the received message */
-   Msg_MoveRcvMsgToDeleted (MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Msg_RemoveRcvMsg (MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    Ale_ShowAlert (Ale_SUCCESS,Txt_Message_deleted);
 
-   /* Show the remaining messages */
+   /***** Show the remaining messages *****/
    Msg_ShowRecMsgs ();
   }
 
@@ -1306,10 +1303,10 @@ static unsigned long Msg_RemoveSomeRecOrSntMsgsUsr (const struct Msg_Messages *M
       switch (Messages->TypeOfMessages)
         {
          case Msg_RECEIVED:
-            Msg_MoveRcvMsgToDeleted (MsgCod,UsrCod);
+            Msg_RemoveRcvMsg (MsgCod,UsrCod);
             break;
          case Msg_SENT:
-            Msg_MoveSntMsgToDeleted (MsgCod);
+            Msg_DB_RemoveSntMsg (MsgCod);
             break;
          default:
             break;
@@ -1323,43 +1320,16 @@ static unsigned long Msg_RemoveSomeRecOrSntMsgsUsr (const struct Msg_Messages *M
   }
 
 /*****************************************************************************/
-/************ Delete a message from the received message table ***************/
+/************************* Remove a received message *************************/
 /*****************************************************************************/
 
-static void Msg_MoveRcvMsgToDeleted (long MsgCod,long UsrCod)
+static void Msg_RemoveRcvMsg (long MsgCod,long UsrCod)
   {
-   /***** Move message from msg_rcv to msg_rcv_deleted *****/
-   /* Insert message into msg_rcv_deleted */
-   Msg_DB_CopyRcvMsgToDeleted (MsgCod,UsrCod);
-
-   /* Delete message from msg_rcv *****/
+   /***** Delete message from msg_rcv *****/
    Msg_DB_RemoveRcvMsg (MsgCod,UsrCod);
-
-   /***** If message content is not longer necessary, move it to msg_content_deleted *****/
-   if (Msg_DB_CheckIfSntMsgIsDeleted (MsgCod))
-      if (Msg_DB_CheckIfRcvMsgIsDeletedForAllItsRecipients (MsgCod))
-         Msg_DB_MoveMsgContentToDeleted (MsgCod);
 
    /***** Mark possible notifications as removed *****/
    Ntf_DB_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_MESSAGE,MsgCod,UsrCod);
-  }
-
-/*****************************************************************************/
-/************** Delete a message from the sent message table *****************/
-/*****************************************************************************/
-
-static void Msg_MoveSntMsgToDeleted (long MsgCod)
-  {
-   /***** Move message from msg_snt to msg_snt_deleted *****/
-   /* Insert message into msg_snt_deleted */
-   Msg_DB_CopySntMsgToDeleted (MsgCod);
-
-   /* Delete message from msg_snt *****/
-   Msg_DB_RemoveSntMsg (MsgCod);
-
-   /***** If message content is not longer necessary, move it to msg_content_deleted *****/
-   if (Msg_DB_CheckIfRcvMsgIsDeletedForAllItsRecipients (MsgCod))
-      Msg_DB_MoveMsgContentToDeleted (MsgCod);
   }
 
 /*****************************************************************************/
