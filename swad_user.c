@@ -3063,7 +3063,19 @@ void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct Usr_SelectedUsrs 
   }
 
 /*****************************************************************************/
-/************* Write parameter with the list of users selected ***************/
+/* Write parameter with a list of selected users consisting of only one user */
+/*****************************************************************************/
+
+void Usr_PutParSelectedOtherUsrCod (void)
+  {
+   if (Gbl.Session.Status == Ses_OPEN)
+      Ses_InsertParInDB (Usr_ParUsrCod[Rol_UNK],Gbl.Usrs.Other.UsrDat.EnUsrCod);
+   else
+      Par_PutParString (NULL,Usr_ParUsrCod[Rol_UNK],Gbl.Usrs.Other.UsrDat.EnUsrCod);
+  }
+
+/*****************************************************************************/
+/*************** Write parameter with a list of users selected ***************/
 /*****************************************************************************/
 
 void Usr_PutParSelectedUsrsCods (const struct Usr_SelectedUsrs *SelectedUsrs)
@@ -3203,7 +3215,7 @@ Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool Wr
 					  Usr_GET_LIST_ALL_USRS);
    LengthSelectedUsrsCods = strlen (Gbl.Usrs.Selected.List[Rol_UNK]);
 
-   /***** Allocate memory for the lists of recipients written explicetely *****/
+   /***** Allocate memory for the lists of recipients written explicitely *****/
    Usr_AllocateListOtherRecipients ();
 
    /***** Get recipients written explicetely *****/

@@ -133,6 +133,7 @@ bool Usr_GetIfShowBigList (unsigned NumUsrs,
                            const char *OnSubmit);
 
 void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct Usr_SelectedUsrs *SelectedUsrs);
+void Usr_PutParSelectedOtherUsrCod (void);
 void Usr_PutParSelectedUsrsCods (const struct Usr_SelectedUsrs *SelectedUsrs);
 void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs,
 					    Usr_GetListAllUsrs_t GetListAllUsrs);

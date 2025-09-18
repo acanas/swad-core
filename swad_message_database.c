@@ -1401,27 +1401,66 @@ void Msg_DB_RemoveSntMsg (long MsgCod)
 
 void Msg_DB_RemoveAllRecAndSntMsgsUsr (long UsrCod)
   {
-   /***** Step 1: Check content of messages pointed only by 1 received and 0 sent *****/
+   /***** Step 1.1: Move messages contents from msg_rcv to msg_rcv_deleted
+		    for messages pointed only by one unique recipient and none sender *****/
    /*
-                                           msg_rcv
-                     msg_content          ________
-    msg_snt         ______________       |________|
-    ________       |______________|      |________|
-   |________|      |______________|      |________|
-   |________|      |______________|      |________|
-   |________|--x-->|____MsgCod____|<-----|_UsrCod_|
-   |________|      |______________|      |________|
-   |________|      |______________|      |________|
-                   |______________|      |________|
-                                         |________|
-SELECT MsgCod,Subject,Content,MedCod FROM msg_content WHERE MsgCod IN (SELECT MsgCod FROM (SELECT MsgCod,COUNT(*) AS N FROM msg_rcv WHERE UsrCod=1 GROUP BY MsgCod HAVING N=1) AS msg_rcv_unique WHERE MsgCod NOT IN (SELECT MsgCod FROM msg_snt));
-
-SELECT MsgCod,Subject,Content,MedCod FROM msg_content WHERE MsgCod IN (SELECT MsgCod FROM msg_snt WHERE UsrCod=1 AND MsgCod NOT IN (SELECT MsgCod FROM msg_rcv));
-
-
+                                                 msg_rcv
+                       msg_content              ________
+     msg_snt          ______________   Only    |________|
+    ________         |______________|  one     |________|
+   |________|        |______________|  message |________|
+   |________|  \ /   |______________|  received|________|
+   |________|---x--->|____MsgCod____|<-points--|_UsrCod_|
+   |________|  / \   |______________|  here    |________|
+   |________|        |______________|          |________|
+                     |______________|          |________|
+                                               |________|
    */
+   /* Insert messages contents into msg_content_deleted */
+   DB_QueryINSERT ("can not remove the content of a message",
+		   "INSERT IGNORE INTO msg_content_deleted"
+		   " (MsgCod,Subject,Content,MedCod)"
+		   " SELECT MsgCod,"
+			   "Subject,"
+			   "Content,"
+			   "MedCod"
+		    " FROM msg_content"
+		   " WHERE MsgCod IN"
+			 " (SELECT MsgCod"
+			    " FROM (SELECT MsgCod,"
+					  "COUNT(*) AS N"
+				    " FROM msg_rcv"
+				   " WHERE MsgCod IN"
+					 " (SELECT MsgCod"
+					    " FROM msg_rcv"
+					   " WHERE UsrCod=%ld)"
+				" GROUP BY MsgCod"
+				  " HAVING N=1) AS msg_rcv_unique)"
+		     " AND MsgCod NOT IN"
+			 " (SELECT MsgCod"
+			    " FROM msg_snt)",
+                   UsrCod);
 
-   /***** Move messages from msg_rcv to msg_rcv_deleted *****/
+   /* Delete messages from msg_content *****/
+   DB_QueryDELETE ("can not remove the content of a message",
+		   "DELETE FROM msg_content"
+		   " WHERE MsgCod IN"
+			 " (SELECT MsgCod"
+			    " FROM (SELECT MsgCod,"
+					  "COUNT(*) AS N"
+				    " FROM msg_rcv"
+				   " WHERE MsgCod IN"
+					 " (SELECT MsgCod"
+					    " FROM msg_rcv"
+					   " WHERE UsrCod=%ld)"
+				" GROUP BY MsgCod"
+				  " HAVING N=1) AS msg_rcv_unique)"
+		     " AND MsgCod NOT IN"
+			 " (SELECT MsgCod"
+			    " FROM msg_snt)",
+                   UsrCod);
+
+   /***** Step 1.2: Move messages from msg_rcv to msg_rcv_deleted *****/
    /* Insert messages into msg_rcv_deleted */
    DB_QueryINSERT ("can not remove received messages",
 		   "INSERT IGNORE INTO msg_rcv_deleted"
@@ -1441,8 +1480,54 @@ SELECT MsgCod,Subject,Content,MedCod FROM msg_content WHERE MsgCod IN (SELECT Ms
 		   " WHERE UsrCod=%ld",
 		   UsrCod);
 
-   /***** Move message from msg_snt to msg_snt_deleted *****/
-   /* Insert message into msg_snt_deleted */
+   /***** Step 2.1: Move message contents from msg_rcv to msg_rcv_deleted
+		    for messages pointed only by one unique sender and no recipient *****/
+   /*
+                                                 msg_rcv
+                        msg_content             ________
+     msg_snt          ______________           |________|
+    ________   There |______________|          |________|
+   |________|  can   |______________|          |________|
+   |________|  never |______________|    \ /   |________|
+   |_UsrCod_|--be--->|____MsgCod____|<----x----|________|
+   |________|  more  |______________|    / \   |________|
+   |________|  than  |______________|          |________|
+               one   |______________|          |________|
+               here                            |________|
+
+   */
+   /* Insert messages contents into msg_content_deleted */
+   DB_QueryINSERT ("can not remove the content of a message",
+		   "INSERT IGNORE INTO msg_content_deleted"
+		   " (MsgCod,Subject,Content,MedCod)"
+		   " SELECT MsgCod,"
+			   "Subject,"
+			   "Content,"
+			   "MedCod"
+		    " FROM msg_content"
+		   " WHERE MsgCod IN"
+			 " (SELECT MsgCod"
+			    " FROM msg_snt"
+			   " WHERE UsrCod=%ld)"
+		     " AND MsgCod NOT IN"
+		         " (SELECT MsgCod"
+		            " FROM msg_rcv)",
+                   UsrCod);
+
+   /* Delete messages from msg_content *****/
+   DB_QueryDELETE ("can not remove the content of a message",
+		   "DELETE FROM msg_content"
+		   " WHERE MsgCod IN"
+			 " (SELECT MsgCod"
+			    " FROM msg_snt"
+			   " WHERE UsrCod=%ld)"
+		     " AND MsgCod NOT IN"
+		         " (SELECT MsgCod"
+		            " FROM msg_rcv)",
+                   UsrCod);
+
+   /***** Step 2.2: Move messages from msg_snt to msg_snt_deleted *****/
+   /* Insert messages into msg_snt_deleted */
    DB_QueryINSERT ("can not remove sent messages",
 		   "INSERT IGNORE INTO msg_snt_deleted"
 		   " (MsgCod,CrsCod,UsrCod,CreatTime)"
@@ -1454,7 +1539,7 @@ SELECT MsgCod,Subject,Content,MedCod FROM msg_content WHERE MsgCod IN (SELECT Ms
 		    " WHERE UsrCod=%ld",
                    UsrCod);
 
-   /* Delete message from msg_snt *****/
+   /* Delete messages from msg_snt *****/
    DB_QueryDELETE ("can not remove sent messages",
 		   "DELETE FROM msg_snt"
 		   " WHERE UsrCod=%ld",
@@ -1480,59 +1565,12 @@ void Msg_DB_MoveMsgContentToDeleted (long MsgCod)
 		    " WHERE MsgCod=%ld",
                    MsgCod);
 
-   /* TODO: Messages in msg_content_deleted older than a certain time
-      should be deleted to ensure the protection of personal data */
-
    /* Delete message from msg_content *****/
    DB_QueryDELETE ("can not remove the content of a message",
 		   "DELETE FROM msg_content"
 		   " WHERE MsgCod=%ld",
 		   MsgCod);
   }
-
-/*****************************************************************************/
-/***** Delete the subject and content of all completely deleted messages *****/
-/*****************************************************************************/
-
-void Msg_DB_MoveUnusedMsgsContentToDeleted (void)
-  {
-   /***** Move messages from msg_content to msg_content_deleted *****/
-   /* Insert message content into msg_content_deleted */
-   DB_QueryINSERT ("can not remove the content of some messages",
-		   "INSERT IGNORE INTO msg_content_deleted"
-		   " (MsgCod,Subject,Content)"
-		   " SELECT MsgCod,"
-		           "Subject,"
-		           "Content"
-		     " FROM msg_content"
-		    " WHERE MsgCod NOT IN"
-		          " (SELECT MsgCod"
-		             " FROM msg_snt)"
-		      " AND MsgCod NOT IN"
-		          " (SELECT DISTINCT "
-		                   "MsgCod"
-		             " FROM msg_rcv)");
-
-   /* Messages in msg_content_deleted older than a certain time
-      should be deleted to ensure the protection of personal data */
-
-   /***** Delete message from msg_content *****/
-   DB_QueryDELETE ("can not remove the content of some messages",
-		   "DELETE FROM msg_content"
-		   " WHERE MsgCod NOT IN"
-		         " (SELECT MsgCod"
-		            " FROM msg_snt)"
-		     " AND MsgCod NOT IN"
-		         " (SELECT DISTINCT "
-		                  "MsgCod"
-		            " FROM msg_rcv)");
-  }
-
-/*
-
-SELECT MsgCod FROM msg_content WHERE MsgCod NOT IN (SELECT MsgCod FROM msg_snt) AND MsgCod NOT IN (SELECT DISTINCT MsgCod FROM msg_rcv);
-
- */
 
 /*****************************************************************************/
 /***** Insert pair (sender's code - my code) in table of banned senders ******/

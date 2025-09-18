@@ -88,7 +88,6 @@ void Msg_DB_RemoveRcvMsg (long MsgCod,long UsrCod);
 void Msg_DB_RemoveSntMsg (long MsgCod);
 void Msg_DB_RemoveAllRecAndSntMsgsUsr (long UsrCod);
 void Msg_DB_MoveMsgContentToDeleted (long MsgCod);
-void Msg_DB_MoveUnusedMsgsContentToDeleted (void);
 
 //--------------------------- Users banned ------------------------------------
 void Msg_DB_CreateUsrsPairIntoBanned (long FromUsrCod,long ToUsrCod);

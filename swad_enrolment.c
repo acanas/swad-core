@@ -120,7 +120,7 @@ static void Enr_PutUsrsClipboard (void);
 static void Enr_PutActionsEnrRemSeveralUsrs (void);
 
 static void Enr_ReceiveUsrsCrs (Rol_Role_t Role);
-static void Enr_initializeLstUsrsToBeRemoved (Rol_Role_t Role,
+static void Enr_InitializeLstUsrsToBeRemoved (Rol_Role_t Role,
 					      bool RemoveSpecifiedUsrs);
 static void Enr_UpdateLstUsrsToBeRemovedUsingTextarea (Rol_Role_t Role,
 						       bool RemoveSpecifiedUsrs,
@@ -778,30 +778,27 @@ void Enr_RemoveOldUsrs (void)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      /***** Remove users *****/
-      for (NumUsr = 0;
-           NumUsr < NumUsrs;
-           NumUsr++)
-        {
-         UsrDat.UsrCod = DB_GetNextCode (mysql_res);
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-                                                      Usr_DONT_GET_PREFS,
-                                                      Usr_DONT_GET_ROLE_IN_CRS))
-           {
-            // User's data exist...
-            Acc_CompletelyEliminateAccount (&UsrDat,Cns_QUIET);
-            NumUsrsEliminated++;
-           }
-        }
+	 /***** Remove users *****/
+	 for (NumUsr = 0;
+	      NumUsr < NumUsrs;
+	      NumUsr++)
+	   {
+	    UsrDat.UsrCod = DB_GetNextCode (mysql_res);
+	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+							 Usr_DONT_GET_PREFS,
+							 Usr_DONT_GET_ROLE_IN_CRS))
+	      {
+	       // User's data exist...
+	       Acc_CompletelyEliminateAccount (&UsrDat,Cns_QUIET);
+	       NumUsrsEliminated++;
+	      }
+	   }
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
-
-      /***** Move unused contents of messages to table of deleted contents of messages *****/
-      Msg_DB_MoveUnusedMsgsContentToDeleted ();
      }
 
    /***** Write end message *****/
@@ -1107,7 +1104,7 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
 	 if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
 	   {
 	    /* Loop 1: Initialize list of users to remove */
-	    Enr_initializeLstUsrsToBeRemoved (Role,WhatToDo.RemoveSpecifiedUsrs);
+	    Enr_InitializeLstUsrsToBeRemoved (Role,WhatToDo.RemoveSpecifiedUsrs);
 
 	    /* Loop 2: Go through form list setting if a user must be removed */
 	    /* 2.1: Update list of users to be removed
@@ -1127,10 +1124,6 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
 
 	 /* Free memory for users list */
 	 Usr_FreeUsrsList (Role);
-
-	 /* Move unused contents of messages to table of deleted contents of messages */
-	 if (WhatToDo.EliminateUsrs && NumUsrsRemoved)
-	    Msg_DB_MoveUnusedMsgsContentToDeleted ();
 
          /* Write messages */
 	 Enr_ShowMessageRemoved (NumUsrsRemoved,WhatToDo.EliminateUsrs);
@@ -1173,7 +1166,7 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
 /******************** Initialize list of users to remove *********************/
 /*****************************************************************************/
 
-static void Enr_initializeLstUsrsToBeRemoved (Rol_Role_t Role,
+static void Enr_InitializeLstUsrsToBeRemoved (Rol_Role_t Role,
 					      bool RemoveSpecifiedUsrs)
   {
    unsigned NumUsr;

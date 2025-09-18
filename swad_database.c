@@ -2305,6 +2305,8 @@ mysql> DESCRIBE msg_content;
 		   "INDEX(MedCod)) ENGINE = MYISAM");
 
    /***** Table msg_content_deleted *****/
+   /* TODO: Messages in msg_content_deleted older than a certain time
+      should be deleted to ensure the protection of personal data */
 /*
 mysql> DESCRIBE msg_content_deleted;
 +---------+----------+------+-----+---------+-------+

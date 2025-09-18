@@ -628,20 +628,16 @@ TODO: Emilce Barrera Mesa: Quiero preguntarte si es posible que me habilites la 
 TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita exportar en excel, cvs o pdf el listado de estudiantes y la nota optenida en el examen. Eso me ayudaría mucho a la hora de pegarlas en mi planilla de excel.
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
-TODO: Francisco Javier Fernández Baldomero: intento mandar un mensaje a un estudiante vacío sin nickname, que se debe haber creado hoy mismo otro usuario con DNI distinto y nickname
-Me sale este error, no sé si por no recordar yo la sintaxis apropiada para mandar a varios destinatarios. ¿No era así?
-"can npt create received message (duplicated entry '243218-2160773' for key 'UsrCod_MsgCod')
-
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 
 TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtube.com/shorts/fY6Oax_uJBc?si=G3UHqvSH3yEbxm1B
-
-TODO: OPTIMIZAR LA SEGUNDA CONSULTA en la función Msg_DB_MoveUnusedMsgsContentToDeleted
 */
-#define Log_PLATFORM_VERSION	"SWAD 25.1.1 (2025-09-18)"
+#define Log_PLATFORM_VERSION	"SWAD 25.2 (2025-09-18)"
 #define CSS_FILE		"swad24.98.2.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 25.2:     Sep 18, 2025  Important optimization for speed on deletion of message contents.
+					Fixed bug in messages. (348869 lines)
 	Version 25.1.1:   Sep 18, 2025  Fixed bug in messages. (348847 lines)
 	Version 25.1:     Sep 16, 2025  Code refactoring related to exists/does-not-exist. (348791 lines)
 	Version 25.0:     Sep 16, 2025  Code refactoring related to exists/does-not-exist. (348906 lines)

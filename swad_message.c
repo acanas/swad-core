@@ -124,7 +124,6 @@ static void Msg_ShowOneUniqueRecipient (void);
 static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool OtherRecipientsBefore);
 static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messages);
 
-static void Msg_PutParAnotherRecipient (const struct Usr_Data *UsrDat);
 static void Msg_PutParOtherRecipients (void);
 
 static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages);
@@ -258,9 +257,9 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
    else
       Messages->ShowOnlyOneRecipient = false;
 
-   GetUsrsInCrs = !Messages->ShowOnlyOneRecipient &&	// Show list of potential recipients
-	          (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG ||	// If there is a course selected and I belong to it
-	           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+   GetUsrsInCrs = !Messages->ShowOnlyOneRecipient &&				// Show list of potential recipients
+	          (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG ||	// If there is a course selected and I belong to it...
+	           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);			// ...or I am a system admin
    if (GetUsrsInCrs)
      {
       /***** Get and update type of list,
@@ -526,8 +525,9 @@ static void Msg_ShowOneUniqueRecipient (void)
       HTM_Txt (Gbl.Usrs.Other.UsrDat.FullName);
    HTM_DIV_End ();
 
-   /***** Hidden parameter with user's nickname *****/
-   Msg_PutParAnotherRecipient (&Gbl.Usrs.Other.UsrDat);
+   /***** Hidden parameter with list of selected users,
+          consisting of only user encrypted code *****/
+   Usr_PutParSelectedOtherUsrCod ();
   }
 
 /*****************************************************************************/
@@ -539,7 +539,6 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool OtherRecipientsBefo
    extern const char *Txt_Other_recipients;
    extern const char *Txt_Recipients;
    extern const char *Txt_nicks_emails_or_IDs_separated_by_commas;
-   char Nickname[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
 
    /***** Title *****/
    HTM_LABEL_Begin ("for=\"OtherRecipients\""
@@ -555,18 +554,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool OtherRecipientsBefo
 		       " placeholder=\"%s\"",
 		       The_GetSuffix (),
 		       Txt_nicks_emails_or_IDs_separated_by_commas);
-      if (Gbl.Usrs.ListOtherRecipients[0])
-	 HTM_Txt (Gbl.Usrs.ListOtherRecipients);
-      else if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)   // If there is a recipient
-						   // and there's no list of explicit recipients,
-						   // write @nickname of original sender
-	{
-	 Nck_DB_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Nickname);
-	 if (Nickname[0])
-	   {
-	    HTM_Arroba (); HTM_Txt (Nickname);
-	   }
-	}
+      HTM_Txt (Gbl.Usrs.ListOtherRecipients);
    HTM_TEXTAREA_End ();
   }
 
@@ -695,18 +683,6 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 /********* Put hidden parameter for another recipient (one nickname) *********/
 /*****************************************************************************/
 
-static void Msg_PutParAnotherRecipient (const struct Usr_Data *UsrDat)
-  {
-   char NickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
-
-   snprintf (NickWithArr,sizeof (NickWithArr),"@%s",UsrDat->Nickname);
-   Par_PutParString (NULL,"OtherRecipients",NickWithArr);
-  }
-
-/*****************************************************************************/
-/********* Put hidden parameter for another recipient (one nickname) *********/
-/*****************************************************************************/
-
 static void Msg_PutParOtherRecipients (void)
   {
    if (Gbl.Usrs.ListOtherRecipients)
@@ -758,7 +734,9 @@ void Msg_RecMsgFromUsr (void)
    SuccessOrError = Usr_GetListMsgRecipientsWrittenExplicitelyBySender (true);
 
    /***** Check number of recipients *****/
-   if ((Messages.Rcv.NumRecipients = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected)))
+   Messages.Rcv.NumRecipients = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
+
+   if (Messages.Rcv.NumRecipients)
      {
       if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&
           Messages.Rcv.NumRecipients > Cfg_MAX_RECIPIENTS)

@@ -784,12 +784,7 @@ void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove)
 	 break;
       case Acc_REMOVE_USR:		// Eliminate completely the user from the platform
 	 if (Pwd_GetConfirmationOnDangerousAction ())
-	   {
 	    Acc_CompletelyEliminateAccount (&Gbl.Usrs.Other.UsrDat,Cns_VERBOSE);
-
-	    /***** Move unused contents of messages to table of deleted contents of messages *****/
-	    Msg_DB_MoveUnusedMsgsContentToDeleted ();
-	   }
 	 else
 	    Acc_AskIfRemoveUsrAccount (MeOrOther);
 	 break;
@@ -900,12 +895,7 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
 void Acc_RemoveMyAccount (void)
   {
    if (Pwd_GetConfirmationOnDangerousAction ())
-     {
       Acc_CompletelyEliminateAccount (&Gbl.Usrs.Me.UsrDat,Cns_VERBOSE);
-
-      /***** Move unused contents of messages to table of deleted contents of messages *****/
-      Msg_DB_MoveUnusedMsgsContentToDeleted ();
-     }
    else
       Acc_AskIfRemoveUsrAccount (Usr_ME);
   }
