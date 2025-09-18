@@ -330,7 +330,8 @@ static void Att_ParsMyAllGrps (void *Events)
    if (Events)
      {
       Par_PutParOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
-      Pag_PutParPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
+      Pag_PutParPagNum (Pag_ATT_EVENTS,
+			((struct Att_Events *) Events)->CurrentPage);
      }
   }
 
@@ -401,7 +402,8 @@ static void Att_PutParsToCreateNewEvent (void *Events)
       Par_PutParOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
       MyAllGrps = Grp_GetParMyAllGrps ();
       Grp_PutParMyAllGrps (&MyAllGrps);
-      Pag_PutParPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
+      Pag_PutParPagNum (Pag_ATT_EVENTS,
+			((struct Att_Events *) Events)->CurrentPage);
      }
   }
 
@@ -418,7 +420,8 @@ static void Att_PutParsToListUsrsAttendance (void *Events)
       Par_PutParOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
       MyAllGrps = Grp_GetParMyAllGrps ();
       Grp_PutParMyAllGrps (&MyAllGrps);
-      Pag_PutParPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
+      Pag_PutParPagNum (Pag_ATT_EVENTS,
+			((struct Att_Events *) Events)->CurrentPage);
      }
   }
 
@@ -627,7 +630,8 @@ static void Att_PutPars (void *Events)
       Par_PutParOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
       MyAllGrps = Grp_GetParMyAllGrps ();
       Grp_PutParMyAllGrps (&MyAllGrps);
-      Pag_PutParPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
+      Pag_PutParPagNum (Pag_ATT_EVENTS,
+			((struct Att_Events *) Events)->CurrentPage);
      }
   }
 

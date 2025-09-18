@@ -173,7 +173,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_ASSIGNMENTS:
                Frm_BeginFormAnchor (ActSeeAllAsg,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,1);
-		  Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Asg_Assignments *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
@@ -188,14 +189,16 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,1);
-		  Par_PutParOrder ((unsigned) ((struct Exa_Exams *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Exa_Exams *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
             case Pag_GAMES:
                Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,1);
-		  Par_PutParOrder ((unsigned) ((struct Gam_Games *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Gam_Games *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
@@ -206,7 +209,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_ATT_EVENTS:
                Frm_BeginFormAnchor (ActSeeAllAtt,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,1);
-		  Par_PutParOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Att_Events *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
@@ -293,7 +297,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_ASSIGNMENTS:
                Frm_BeginFormAnchor (ActSeeAllAsg,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->LeftPage);
-		  Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Asg_Assignments *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
@@ -308,14 +313,16 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->LeftPage);
-		  Par_PutParOrder ((unsigned) ((struct Exa_Exams *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Exa_Exams *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
             case Pag_GAMES:
                Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->LeftPage);
-		  Par_PutParOrder ((unsigned) ((struct Gam_Games *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Gam_Games *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
@@ -326,7 +333,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_ATT_EVENTS:
                Frm_BeginFormAnchor (ActSeeAllAtt,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->LeftPage);
-		  Par_PutParOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Att_Events *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
@@ -365,7 +373,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_SURVEYS:
                Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->LeftPage);
-		  Par_PutParOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Svy_Surveys *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
@@ -415,7 +424,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	    case Pag_ASSIGNMENTS:
 	       Frm_BeginFormAnchor (ActSeeAllAsg,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,NumPage);
-		  Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Asg_Assignments *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
 	       break;
@@ -430,14 +440,16 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	    case Pag_EXAMS:
 	       Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,NumPage);
-		  Par_PutParOrder ((unsigned) ((struct Exa_Exams *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Exa_Exams *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
 	       break;
 	    case Pag_GAMES:
 	       Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,NumPage);
-		  Par_PutParOrder ((unsigned) ((struct Gam_Games *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Gam_Games *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
 	       break;
@@ -448,7 +460,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	    case Pag_ATT_EVENTS:
 	       Frm_BeginFormAnchor (ActSeeAllAtt,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,NumPage);
-		  Par_PutParOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Att_Events *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
 	       break;
@@ -545,7 +558,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_ASSIGNMENTS:
                Frm_BeginFormAnchor (ActSeeAllAsg,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->RightPage);
-		  Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Asg_Assignments *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
@@ -560,14 +574,16 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->RightPage);
-		  Par_PutParOrder ((unsigned) ((struct Exa_Exams *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Exa_Exams *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
             case Pag_GAMES:
                Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->RightPage);
-		  Par_PutParOrder ((unsigned) ((struct Gam_Games *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Gam_Games *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
@@ -578,7 +594,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_ATT_EVENTS:
                Frm_BeginFormAnchor (ActSeeAllAtt,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->RightPage);
-		  Par_PutParOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Att_Events *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
@@ -666,7 +683,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_ASSIGNMENTS:
                Frm_BeginFormAnchor (ActSeeAllAsg,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->NumPags);
-		  Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Asg_Assignments *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
@@ -681,14 +699,16 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->NumPags);
-		  Par_PutParOrder ((unsigned) ((struct Exa_Exams *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Exa_Exams *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
             case Pag_GAMES:
                Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->NumPags);
-		  Par_PutParOrder ((unsigned) ((struct Gam_Games *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Gam_Games *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
@@ -699,7 +719,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_ATT_EVENTS:
                Frm_BeginFormAnchor (ActSeeAllAtt,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->NumPags);
-		  Par_PutParOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
+		  Par_PutParOrder ((unsigned)
+				   ((struct Att_Events *) Context)->SelectedOrder);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;

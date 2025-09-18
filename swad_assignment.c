@@ -836,11 +836,14 @@ static void Asg_PutPars (void *Assignments)
 
    if (Assignments)
      {
-      ParCod_PutPar (ParCod_Asg,((struct Asg_Assignments *) Assignments)->Asg.AsgCod);
-      Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Assignments)->SelectedOrder);
+      ParCod_PutPar (ParCod_Asg,
+		     ((struct Asg_Assignments *) Assignments)->Asg.AsgCod);
+      Par_PutParOrder ((unsigned)
+		       ((struct Asg_Assignments *) Assignments)->SelectedOrder);
       MyAllGrps = Grp_GetParMyAllGrps ();
       Grp_PutParMyAllGrps (&MyAllGrps);
-      Pag_PutParPagNum (Pag_ASSIGNMENTS,((struct Asg_Assignments *) Assignments)->CurrentPage);
+      Pag_PutParPagNum (Pag_ASSIGNMENTS,
+			((struct Asg_Assignments *) Assignments)->CurrentPage);
      }
   }
 

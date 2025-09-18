@@ -1401,6 +1401,26 @@ void Msg_DB_RemoveSntMsg (long MsgCod)
 
 void Msg_DB_RemoveAllRecAndSntMsgsUsr (long UsrCod)
   {
+   /***** Step 1: Check content of messages pointed only by 1 received and 0 sent *****/
+   /*
+                                           msg_rcv
+                     msg_content          ________
+    msg_snt         ______________       |________|
+    ________       |______________|      |________|
+   |________|      |______________|      |________|
+   |________|      |______________|      |________|
+   |________|--x-->|____MsgCod____|<-----|_UsrCod_|
+   |________|      |______________|      |________|
+   |________|      |______________|      |________|
+                   |______________|      |________|
+                                         |________|
+SELECT MsgCod,Subject,Content,MedCod FROM msg_content WHERE MsgCod IN (SELECT MsgCod FROM (SELECT MsgCod,COUNT(*) AS N FROM msg_rcv WHERE UsrCod=1 GROUP BY MsgCod HAVING N=1) AS msg_rcv_unique WHERE MsgCod NOT IN (SELECT MsgCod FROM msg_snt));
+
+SELECT MsgCod,Subject,Content,MedCod FROM msg_content WHERE MsgCod IN (SELECT MsgCod FROM msg_snt WHERE UsrCod=1 AND MsgCod NOT IN (SELECT MsgCod FROM msg_rcv));
+
+
+   */
+
    /***** Move messages from msg_rcv to msg_rcv_deleted *****/
    /* Insert messages into msg_rcv_deleted */
    DB_QueryINSERT ("can not remove received messages",
@@ -1496,7 +1516,7 @@ void Msg_DB_MoveUnusedMsgsContentToDeleted (void)
    /* Messages in msg_content_deleted older than a certain time
       should be deleted to ensure the protection of personal data */
 
-   /* Delete message from msg_content *****/
+   /***** Delete message from msg_content *****/
    DB_QueryDELETE ("can not remove the content of some messages",
 		   "DELETE FROM msg_content"
 		   " WHERE MsgCod NOT IN"
@@ -1507,6 +1527,12 @@ void Msg_DB_MoveUnusedMsgsContentToDeleted (void)
 		                  "MsgCod"
 		            " FROM msg_rcv)");
   }
+
+/*
+
+SELECT MsgCod FROM msg_content WHERE MsgCod NOT IN (SELECT MsgCod FROM msg_snt) AND MsgCod NOT IN (SELECT DISTINCT MsgCod FROM msg_rcv);
+
+ */
 
 /*****************************************************************************/
 /***** Insert pair (sender's code - my code) in table of banned senders ******/

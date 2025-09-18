@@ -1753,7 +1753,7 @@ static void Msg_PutParsOneMsg (void *Messages)
    if (Messages)
      {
       Pag_PutParPagNum (Msg_WhatPaginate[((struct Msg_Messages *) Messages)->TypeOfMessages],
-				((struct Msg_Messages *) Messages)->CurrentPage);
+			((struct Msg_Messages *) Messages)->CurrentPage);
       ParCod_PutPar (ParCod_Msg,((struct Msg_Messages *) Messages)->MsgCod);
       Msg_PutParsMsgsFilters (Messages);
      }
@@ -1939,11 +1939,13 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
 
    /* Get number of rows */
    row = mysql_fetch_row (mysql_res);
-
-   /* Get location (row[0]) */
+   /*
+   row[0]: CrsCod
+   row[1]: UsrCod
+   row[2]: UNIX_TIMESTAMP(CreatTime)
+   */
+   /* Get course (row[0]) and author (row[1]) */
    *CrsCod = Str_ConvertStrCodToLongCod (row[0]);
-
-   /* Get author code (row[1]) */
    *UsrCod = Str_ConvertStrCodToLongCod (row[1]);
 
    /* Get creation time (row[2]) */
@@ -1968,12 +1970,15 @@ static void Msg_GetMsgContent (long MsgCod,
    MYSQL_ROW row;
 
    /***** Get content of message from database *****/
-   if (Msg_DB_GetMsgContent (&mysql_res,MsgCod) == Exi_EXISTS)
+   if (Msg_DB_GetMsgContent (&mysql_res,MsgCod) == Exi_DOES_NOT_EXIST)
       Err_WrongMessageExit ();
 
    /***** Get number of rows *****/
    row = mysql_fetch_row (mysql_res);
-
+   /*
+   row[0]: Content
+   row[1]: MedCod
+   */
    /****** Get content (row[0]) *****/
    Str_Copy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
 
@@ -2724,7 +2729,7 @@ static void Msg_PutFormToBanSender (struct Msg_Messages *Messages,
   {
    Frm_BeginForm (ActBanUsrMsg);
       Pag_PutParPagNum (Msg_WhatPaginate[Messages->TypeOfMessages],
-				Messages->CurrentPage);
+			Messages->CurrentPage);
       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
       Msg_PutParsMsgsFilters (Messages);
 	 Ico_PutIconLink ("unlock.svg",Ico_GREEN,ActBanUsrMsg);
@@ -2740,7 +2745,7 @@ static void Msg_PutFormToUnbanSender (struct Msg_Messages *Messages,
   {
    Frm_BeginForm (ActUnbUsrMsg);
       Pag_PutParPagNum (Msg_WhatPaginate[Messages->TypeOfMessages],
-				Messages->CurrentPage);
+			Messages->CurrentPage);
       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
       Msg_PutParsMsgsFilters (Messages);
 	 Ico_PutIconLink ("lock.svg",Ico_RED,ActUnbUsrMsg);
