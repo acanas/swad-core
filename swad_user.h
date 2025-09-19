@@ -94,12 +94,11 @@ void Usr_PutFormLogOut (void);
 void Usr_GetParUsrIdLogin (void);
 unsigned Usr_GetParOtherUsrIDNickOrEMailAndGetUsrCods (struct Usr_ListUsrCods *ListUsrCods);
 
-void Usr_PutParMyUsrCodEncrypted (void *EncryptedUsrCod);
 void Usr_PutParOtherUsrCodEncrypted (void *EncryptedUsrCod);
 void Usr_PutParUsrCodEncrypted (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
 void Usr_GetParOtherUsrCodEncrypted (struct Usr_Data *UsrDat);
 void Usr_GetParOtherUsrCodEncryptedAndGetListIDs (void);
-bool Usr_GetParOtherUsrCodEncryptedAndGetUsrData (void);
+Exi_Exist_t Usr_GetParOtherUsrCodEncryptedAndGetUsrData (void);
 
 void Usr_ChkUsrGetUsrDataAndAdjustAction (void);
 

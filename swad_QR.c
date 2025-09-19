@@ -97,25 +97,29 @@ void QR_PrintUsrQRCode (void)
   {
    char NewNickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
 
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
-      /***** Begin box *****/
-      Box_BoxBegin (Gbl.Usrs.Other.UsrDat.FullName,NULL,NULL,
-                    NULL,Box_NOT_CLOSABLE);
+      case Exi_EXISTS:
+	 /***** Begin box *****/
+	 Box_BoxBegin (Gbl.Usrs.Other.UsrDat.FullName,NULL,NULL,
+		       NULL,Box_NOT_CLOSABLE);
 
-	 /***** Show QR code *****/
-	 if (Gbl.Usrs.Other.UsrDat.Nickname[0])
-	   {
-	    snprintf (NewNickWithArr,sizeof (NewNickWithArr),"@%s",
-		      Gbl.Usrs.Other.UsrDat.Nickname);
-	    QR_ImageQRCode (NewNickWithArr);
-	   }
+	    /***** Show QR code *****/
+	    if (Gbl.Usrs.Other.UsrDat.Nickname[0])
+	      {
+	       snprintf (NewNickWithArr,sizeof (NewNickWithArr),"@%s",
+			 Gbl.Usrs.Other.UsrDat.Nickname);
+	       QR_ImageQRCode (NewNickWithArr);
+	      }
 
-      /***** End box *****/
-      Box_BoxEnd ();
+	 /***** End box *****/
+	 Box_BoxEnd ();
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/

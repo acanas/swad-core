@@ -2937,19 +2937,25 @@ void Enr_ReqRemMeFromCrs (void)
 void Enr_ReqRemUsrFromCrs (void)
   {
    /***** Get user to be removed *****/
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-      switch (Enr_CheckIfICanRemUsrFromCrs ())
-	{
-	 case Usr_CAN:
-	    Enr_AskIfRemoveUsrFromCrs (&Gbl.Usrs.Other.UsrDat);
-	    break;
-	 case Usr_CAN_NOT:
-	 default:
-	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	}
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      case Exi_EXISTS:
+	 switch (Enr_CheckIfICanRemUsrFromCrs ())
+	   {
+	    case Usr_CAN:
+	       Enr_AskIfRemoveUsrFromCrs (&Gbl.Usrs.Other.UsrDat);
+	       break;
+	    case Usr_CAN_NOT:
+	    default:
+	       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	   }
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+     }
   }
 
 /*****************************************************************************/
@@ -2959,25 +2965,29 @@ void Enr_ReqRemUsrFromCrs (void)
 void Enr_RemUsrFromCrs1 (void)
   {
    if (Pwd_GetConfirmationOnDangerousAction ())
-     {
       /***** Get user to be removed *****/
-      if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-	 switch (Enr_CheckIfICanRemUsrFromCrs ())
-	   {
-	    case Usr_CAN:
-	       Enr_EffectivelyRemUsrFromCrs (&Gbl.Usrs.Other.UsrDat,
-					     &Gbl.Hierarchy.Node[Hie_CRS],
-					     Enr_DO_NOT_REMOVE_USR_PRODUCTION,
-					     Cns_VERBOSE);
-	       break;
-	    case Usr_CAN_NOT:
-	    default:
-	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
-	       break;
-	   }
-      else
-	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
-     }
+      switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+	{
+	 case Exi_EXISTS:
+	    switch (Enr_CheckIfICanRemUsrFromCrs ())
+	      {
+	       case Usr_CAN:
+		  Enr_EffectivelyRemUsrFromCrs (&Gbl.Usrs.Other.UsrDat,
+						&Gbl.Hierarchy.Node[Hie_CRS],
+						Enr_DO_NOT_REMOVE_USR_PRODUCTION,
+						Cns_VERBOSE);
+		  break;
+	       case Usr_CAN_NOT:
+	       default:
+		  Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+		  break;
+	      }
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	    Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	    break;
+	}
   }
 
 void Enr_RemUsrFromCrs2 (void)
@@ -3173,141 +3183,145 @@ void Enr_ModifyUsr1 (void)
    Rol_Role_t NewRole;
 
    /***** Get user from form *****/
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
-      MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+      case Exi_EXISTS:
+	 MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
-      /***** Get the action to do *****/
-      EnrRemAction = (Enr_EnrRemOneUsrAction_t)
-		     Par_GetParUnsignedLong ("EnrRemAction",
-					     0,
-					     Enr_ENR_REM_ONE_USR_NUM_ACTIONS - 1,
-					     (unsigned long) Enr_ENR_REM_ONE_USR_UNKNOWN_ACTION);
-      Enr_SetEnrRemAction (EnrRemAction);
-      switch (EnrRemAction)
-	{
-	 case Enr_ENROL_MODIFY_ONE_USR_IN_CRS:
-	    if (MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
-	      {
-	       /***** Get user's name from record form *****/
-	       if (Usr_ICanChangeOtherUsrData (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
-		  Rec_GetUsrNameFromRecordForm (&Gbl.Usrs.Other.UsrDat);
-
-	       /***** Update user's data in database *****/
-	       Enr_UpdateUsrData (&Gbl.Usrs.Other.UsrDat);
-
-	       if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
+	 /***** Get the action to do *****/
+	 EnrRemAction = (Enr_EnrRemOneUsrAction_t)
+			Par_GetParUnsignedLong ("EnrRemAction",
+						0,
+						Enr_ENR_REM_ONE_USR_NUM_ACTIONS - 1,
+						(unsigned long) Enr_ENR_REM_ONE_USR_UNKNOWN_ACTION);
+	 Enr_SetEnrRemAction (EnrRemAction);
+	 switch (EnrRemAction)
+	   {
+	    case Enr_ENROL_MODIFY_ONE_USR_IN_CRS:
+	       if (MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
 		 {
-		  /***** Get new role from record form *****/
-		  NewRole = Rec_GetRoleFromRecordForm ();
+		  /***** Get user's name from record form *****/
+		  if (Usr_ICanChangeOtherUsrData (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
+		     Rec_GetUsrNameFromRecordForm (&Gbl.Usrs.Other.UsrDat);
 
-		  /***** Enrol user in current course in database *****/
-		  switch (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
+		  /***** Update user's data in database *****/
+		  Enr_UpdateUsrData (&Gbl.Usrs.Other.UsrDat);
+
+		  if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
 		    {
-		     case Usr_BELONG:
-			OldRole = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs;	// Remember old role before changing it
-			if (NewRole != OldRole)	// The role must be updated
-			  {
-			   /* Modify role */
-			   Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole);
+		     /***** Get new role from record form *****/
+		     NewRole = Rec_GetRoleFromRecordForm ();
+
+		     /***** Enrol user in current course in database *****/
+		     switch (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
+		       {
+			case Usr_BELONG:
+			   OldRole = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs;	// Remember old role before changing it
+			   if (NewRole != OldRole)	// The role must be updated
+			     {
+			      /* Modify role */
+			      Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole);
+
+			      /* Set success message */
+			      Ale_CreateAlert (Ale_SUCCESS,NULL,
+					       Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
+					       Gbl.Usrs.Other.UsrDat.FullName,
+					       Gbl.Hierarchy.Node[Hie_CRS].FullName,
+					       Txt_ROLES_SINGUL_abc[OldRole][Gbl.Usrs.Other.UsrDat.Sex],
+					       Txt_ROLES_SINGUL_abc[NewRole][Gbl.Usrs.Other.UsrDat.Sex]);
+			     }
+			   break;
+			case Usr_DONT_BELONG:	// User does not belong to current course
+			default:
+			   /* Enrol user */
+			   Enr_EnrolUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
+						     Enr_SET_ACCEPTED_TO_FALSE);
 
 			   /* Set success message */
 			   Ale_CreateAlert (Ale_SUCCESS,NULL,
-					    Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
+					    Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
 					    Gbl.Usrs.Other.UsrDat.FullName,
-					    Gbl.Hierarchy.Node[Hie_CRS].FullName,
-					    Txt_ROLES_SINGUL_abc[OldRole][Gbl.Usrs.Other.UsrDat.Sex],
-					    Txt_ROLES_SINGUL_abc[NewRole][Gbl.Usrs.Other.UsrDat.Sex]);
-			  }
-			break;
-		     case Usr_DONT_BELONG:	// User does not belong to current course
-		     default:
-			/* Enrol user */
-			Enr_EnrolUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
-						  Enr_SET_ACCEPTED_TO_FALSE);
+					    Gbl.Hierarchy.Node[Hie_CRS].FullName);
+			   break;
+		       }
 
-			/* Set success message */
-			Ale_CreateAlert (Ale_SUCCESS,NULL,
-					 Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
-					 Gbl.Usrs.Other.UsrDat.FullName,
-					 Gbl.Hierarchy.Node[Hie_CRS].FullName);
-			break;
+		     /***** Change user's groups *****/
+		     if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
+			Grp_ChangeUsrGrps (MeOrOther,Cns_VERBOSE);
+
+		     /***** If it's me, change my roles *****/
+		     if (MeOrOther == Usr_ME)
+		       {
+			Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs;
+			Gbl.Usrs.Me.UsrDat.Roles.InCrss = Gbl.Usrs.Other.UsrDat.Roles.InCrss;
+			Rol_SetMyRoles ();
+		       }
+
+		     /***** Change current action *****/
+		     if (!Action[NewRole])
+			Err_WrongRoleExit ();
+		     Gbl.Action.Act = Action[NewRole];
+		     Tab_SetCurrentTab ();
 		    }
-
-		  /***** Change user's groups *****/
-		  if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
-		     Grp_ChangeUsrGrps (MeOrOther,Cns_VERBOSE);
-
-		  /***** If it's me, change my roles *****/
-		  if (MeOrOther == Usr_ME)
-		    {
-		     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs;
-                     Gbl.Usrs.Me.UsrDat.Roles.InCrss = Gbl.Usrs.Other.UsrDat.Roles.InCrss;
-                     Rol_SetMyRoles ();
-		    }
-
-		  /***** Change current action *****/
-		  if (!Action[NewRole])
-		     Err_WrongRoleExit ();
-		  Gbl.Action.Act = Action[NewRole];
-		  Tab_SetCurrentTab ();
 		 }
-	      }
-	    else
+	       else
+		  Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	    case Enr_ENROL_ONE_DEG_ADMIN:
+	       if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
+		  Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	    case Enr_ENROL_ONE_CTR_ADMIN:
+	       if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
+		  Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	    case Enr_ENROL_ONE_INS_ADMIN:
+	       if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
+		  Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	    case Enr_ADD_TO_CLIPBOARD_OTH:
+	    case Enr_ADD_TO_CLIPBOARD_STD:
+	    case Enr_ADD_TO_CLIPBOARD_TCH:
+	    case Enr_OVERWRITE_CLIPBOARD_OTH:
+	    case Enr_OVERWRITE_CLIPBOARD_STD:
+	    case Enr_OVERWRITE_CLIPBOARD_TCH:
+	       if (Gbl.Usrs.Me.Role.Logged < Rol_GST)
+		  Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	    case Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE:
+	       if (MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged < Rol_TCH)
+		  Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	    case Enr_REMOVE_ONE_USR_FROM_CRS:
+	       if (MeOrOther == Usr_OTHER && Gbl.Usrs.Me.Role.Logged < Rol_TCH)
+		  Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	    case Enr_REMOVE_ONE_DEG_ADMIN:
+	       if (MeOrOther == Usr_OTHER && Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
+		  Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	    case Enr_REMOVE_ONE_CTR_ADMIN:
+	       if (MeOrOther == Usr_OTHER && Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
+		  Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	    case Enr_REMOVE_ONE_INS_ADMIN:
+	       if (MeOrOther == Usr_OTHER && Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
+		  Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	    case Enr_ELIMINATE_ONE_USR_FROM_PLATFORM:
+	       if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_CAN_NOT)
+		  Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	    default:
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	 case Enr_ENROL_ONE_DEG_ADMIN:
-	    if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	 case Enr_ENROL_ONE_CTR_ADMIN:
-	    if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	 case Enr_ENROL_ONE_INS_ADMIN:
-	    if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
-	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	 case Enr_ADD_TO_CLIPBOARD_OTH:
-	 case Enr_ADD_TO_CLIPBOARD_STD:
-	 case Enr_ADD_TO_CLIPBOARD_TCH:
-	 case Enr_OVERWRITE_CLIPBOARD_OTH:
-	 case Enr_OVERWRITE_CLIPBOARD_STD:
-	 case Enr_OVERWRITE_CLIPBOARD_TCH:
-	    if (Gbl.Usrs.Me.Role.Logged < Rol_GST)
-	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	 case Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE:
-	    if (MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	 case Enr_REMOVE_ONE_USR_FROM_CRS:
-	    if (MeOrOther == Usr_OTHER && Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	 case Enr_REMOVE_ONE_DEG_ADMIN:
-	    if (MeOrOther == Usr_OTHER && Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	 case Enr_REMOVE_ONE_CTR_ADMIN:
-	    if (MeOrOther == Usr_OTHER && Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	 case Enr_REMOVE_ONE_INS_ADMIN:
-	    if (MeOrOther == Usr_OTHER && Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
-	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	 case Enr_ELIMINATE_ONE_USR_FROM_PLATFORM:
-	    if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_CAN_NOT)
-	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	 default:
-	    Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	}
+	       break;
+	   }
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else
-      Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 void Enr_ModifyUsr2 (void)

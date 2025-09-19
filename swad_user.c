@@ -1528,11 +1528,6 @@ unsigned Usr_GetParOtherUsrIDNickOrEMailAndGetUsrCods (struct Usr_ListUsrCods *L
 /********* Put hidden parameter encrypted user's code of other user **********/
 /*****************************************************************************/
 
-void Usr_PutParMyUsrCodEncrypted (void *EncryptedUsrCod)
-  {
-   Usr_PutParUsrCodEncrypted ((const char *) EncryptedUsrCod);
-  }
-
 void Usr_PutParOtherUsrCodEncrypted (void *EncryptedUsrCod)
   {
    Usr_PutParUsrCodEncrypted ((const char *) EncryptedUsrCod);
@@ -1581,9 +1576,9 @@ void Usr_GetParOtherUsrCodEncryptedAndGetListIDs (void)
 /*****************************************************************************/
 /*** Get parameter encrypted user's code of other user and get user's data ***/
 /*****************************************************************************/
-// Return true if user exists
+// Return if user exists
 
-bool Usr_GetParOtherUsrCodEncryptedAndGetUsrData (void)
+Exi_Exist_t Usr_GetParOtherUsrCodEncryptedAndGetUsrData (void)
   {
    /***** Get parameter with encrypted user's code *****/
    Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
@@ -1593,9 +1588,9 @@ bool Usr_GetParOtherUsrCodEncryptedAndGetUsrData (void)
                                                 Usr_DONT_GET_PREFS,
                                                 Usr_GET_ROLE_IN_CRS))
       // Existing user
-      return true;
+      return Exi_EXISTS;
 
-   return false;
+   return Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

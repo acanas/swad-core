@@ -350,8 +350,8 @@ void Tml_RefreshOldTimelineUsr (void)
    struct Tml_Timeline Timeline;
 
    /***** Get user whom profile is displayed *****/
-   if (!Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())	// If user does not exist...
-      return;							// ...do not write anything
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData () == Exi_DOES_NOT_EXIST)	// If user does not exist...
+      return;									// ...do not write anything
 
    /***** Reset timeline context *****/
    Tml_ResetTimeline (&Timeline);

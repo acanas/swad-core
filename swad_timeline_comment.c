@@ -353,8 +353,10 @@ void TmlCom_WriteCommsInNote (const struct Tml_Timeline *Timeline,
 
 void TmlCom_ShowHiddenCommsUsr (void)
   {
+   __attribute__((unused)) Exi_Exist_t UsrExists;
+
    /***** Get user whom profile is displayed *****/
-   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
+   UsrExists = Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show hidden comments *****/
    TmlCom_ShowHiddenCommsGbl ();
@@ -720,13 +722,14 @@ static void TmlCom_PutFormToRemoveComm (const struct Tml_Timeline *Timeline,
 void TmlCom_ReceiveCommUsr (void)
   {
    struct Tml_Timeline Timeline;
+   __attribute__((unused)) Exi_Exist_t UsrExists;
    long NotCod;
 
    /***** Reset timeline context *****/
    Tml_ResetTimeline (&Timeline);
 
    /***** Get user whom profile is displayed *****/
-   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
+   UsrExists = Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
    Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat);
@@ -833,12 +836,13 @@ static long TmlCom_ReceiveComm (void)
 void TmlCom_ReqRemComUsr (void)
   {
    struct Tml_Timeline Timeline;
+   __attribute__((unused)) Exi_Exist_t UsrExists;
 
    /***** Reset timeline context *****/
    Tml_ResetTimeline (&Timeline);
 
    /***** Get user whom profile is displayed *****/
-   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
+   UsrExists = Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
    Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat);
@@ -939,12 +943,13 @@ static void TmlCom_PutParsRemoveComm (void *Timeline)
 void TmlCom_RemoveComUsr (void)
   {
    struct Tml_Timeline Timeline;
+   __attribute__((unused)) Exi_Exist_t UsrExists;
 
    /***** Reset timeline context *****/
    Tml_ResetTimeline (&Timeline);
 
    /***** Get user whom profile is displayed *****/
-   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
+   UsrExists = Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
    Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat);

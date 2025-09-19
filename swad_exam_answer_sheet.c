@@ -1328,7 +1328,7 @@ void ExaAnsShe_ReceiveAnswer (void)
    Print.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
 
    /***** Get student's code *****/
-   if (!Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData () == Exi_DOES_NOT_EXIST)
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
    /***** Get print data *****/

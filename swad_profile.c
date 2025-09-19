@@ -151,7 +151,7 @@ void Prf_PutLinkMyPublicProfile (void)
    extern const char *Txt_My_public_profile;
 
    Lay_PutContextualLinkIconText (ActSeeOthPubPrf,NULL,
-				  Usr_PutParMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod,
+				  Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod,
 				  "circle-user.svg",Ico_BLACK,
 				  Txt_My_public_profile,NULL);
   }

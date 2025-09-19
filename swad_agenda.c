@@ -404,38 +404,45 @@ void Agd_ShowUsrAgenda (void)
      };
 
    /***** Get user *****/
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-      switch (Agd_CheckIfICanViewUsrAgenda (&Gbl.Usrs.Other.UsrDat))
-	{
-	 case Usr_CAN:
-	    /***** Reset agenda context *****/
-	    Agd_ResetAgenda (&Agenda);
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      case Exi_EXISTS:
+	 switch (Agd_CheckIfICanViewUsrAgenda (&Gbl.Usrs.Other.UsrDat))
+	   {
+	    case Usr_CAN:
+	       /***** Reset agenda context *****/
+	       Agd_ResetAgenda (&Agenda);
 
-	    /***** Begin box *****/
-	    MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	    if (asprintf (&Title,Txt_Public_agenda_USER,Usr_UsrDat[MeOrOther]->FullName) < 0)
-	       Err_NotEnoughMemoryExit ();
-	    Box_BoxBegin (Title,
-			  FuncPutIcons[MeOrOther],Usr_UsrDat[MeOrOther]->EnUsrCod,
-			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
-	    free (Title);
+	       /***** Begin box *****/
+	       MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+	       if (asprintf (&Title,Txt_Public_agenda_USER,
+			     Usr_UsrDat[MeOrOther]->FullName) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       Box_BoxBegin (Title,
+			     FuncPutIcons[MeOrOther],Usr_UsrDat[MeOrOther]->EnUsrCod,
+			     Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
+	       free (Title);
 
-	       /***** Show the current events in the user's agenda *****/
-	       Agd_ShowEventsToday (&Agenda,Agd_ANOTHER_AGENDA_TODAY);
+		  /***** Show the current events in the user's agenda *****/
+		  Agd_ShowEventsToday (&Agenda,Agd_ANOTHER_AGENDA_TODAY);
 
-	       /***** Show all visible events in the user's agenda *****/
-	       Agd_ShowEvents (&Agenda,Agd_ANOTHER_AGENDA);
+		  /***** Show all visible events in the user's agenda *****/
+		  Agd_ShowEvents (&Agenda,Agd_ANOTHER_AGENDA);
 
-	    /***** End box *****/
-	    Box_BoxEnd ();
-	    break;
-         case Usr_CAN_NOT:
-         default:
-            Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-            break;
-	}
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       /***** End box *****/
+	       Box_BoxEnd ();
+	       break;
+	    case Usr_CAN_NOT:
+	    default:
+	       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	   }
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+     }
   }
 
 /*****************************************************************************/

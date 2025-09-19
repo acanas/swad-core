@@ -3191,36 +3191,42 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
    Prj_GetProjectDataByCod (&Projects->Prj);
 
    /***** Get user to be removed *****/
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-      switch (Prj_CheckIfICanEditProject (&Projects->Prj))
-	{
-	 case Usr_CAN:
-	    /***** Show question and button to remove user as a role from project *****/
-	    /* Begin alert */
-	    Ale_ShowAlertAndButtonBegin (Ale_QUESTION,
-					 Question[Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod)],
-				         Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex],
-				         Projects->Prj.Title);
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      case Exi_EXISTS:
+	 switch (Prj_CheckIfICanEditProject (&Projects->Prj))
+	   {
+	    case Usr_CAN:
+	       /***** Show question and button to remove user as a role from project *****/
+	       /* Begin alert */
+	       Ale_ShowAlertAndButtonBegin (Ale_QUESTION,
+					    Question[Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod)],
+					    Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex],
+					    Projects->Prj.Title);
 
-	       /* Show user's record */
-	       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+		  /* Show user's record */
+		  Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
-	       /* Show form to request confirmation */
-	       Frm_BeginForm (ActionRemUsr[RoleInPrj]);
-		  Prj_PutCurrentPars (Projects);
-		  Btn_PutButton (Btn_REMOVE,NULL);
-	       Frm_EndForm ();
+		  /* Show form to request confirmation */
+		  Frm_BeginForm (ActionRemUsr[RoleInPrj]);
+		     Prj_PutCurrentPars (Projects);
+		     Btn_PutButton (Btn_REMOVE,NULL);
+		  Frm_EndForm ();
 
-	    /* End alert */
-	    Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
-	    break;
-	 case Usr_CAN_NOT:
-	 default:
-	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	}
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       /* End alert */
+	       Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
+	       break;
+	    case Usr_CAN_NOT:
+	    default:
+	       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	   }
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+     }
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Projects->Prj);
@@ -3268,30 +3274,37 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj)
    Prj_GetProjectDataByCod (&Projects.Prj);
 
    /***** Get user to be removed *****/
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-      switch (Prj_CheckIfICanEditProject (&Projects.Prj))
-	{
-	 case Usr_CAN:
-	    /***** Remove user from the table of project-users *****/
-	    Prj_DB_RemoveUsrFromPrj (Projects.Prj.PrjCod,RoleInPrj,Gbl.Usrs.Other.UsrDat.UsrCod);
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      case Exi_EXISTS:
+	 switch (Prj_CheckIfICanEditProject (&Projects.Prj))
+	   {
+	    case Usr_CAN:
+	       /***** Remove user from the table of project-users *****/
+	       Prj_DB_RemoveUsrFromPrj (Projects.Prj.PrjCod,
+					RoleInPrj,Gbl.Usrs.Other.UsrDat.UsrCod);
 
-	    /***** Flush cache *****/
-	    if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME)
-	       Prj_FlushCacheMyRolesInProject ();
+	       /***** Flush cache *****/
+	       if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME)
+		  Prj_FlushCacheMyRolesInProject ();
 
-	    /***** Show success alert *****/
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z,
-			   Gbl.Usrs.Other.UsrDat.FullName,
-			   Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex],
-			   Projects.Prj.Title);
-	    break;
-	 case Usr_CAN_NOT:
-	 default:
-	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	}
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       /***** Show success alert *****/
+	       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z,
+			      Gbl.Usrs.Other.UsrDat.FullName,
+			      Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex],
+			      Projects.Prj.Title);
+	       break;
+	    case Usr_CAN_NOT:
+	    default:
+	       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	   }
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+     }
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Projects.Prj);

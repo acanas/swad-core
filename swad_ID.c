@@ -691,27 +691,33 @@ void ID_RemoveMyUsrID (void)
 void ID_RemoveOtherUsrID (void)
   {
    /***** Get other user's code from form and get user's data *****/
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-      switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
-	{
-	 case Usr_CAN:
-	    /***** Remove user's ID *****/
-	    ID_RemoveUsrID (&Gbl.Usrs.Other.UsrDat,
-			    Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      case Exi_EXISTS:
+	 switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+	   {
+	    case Usr_CAN:
+	       /***** Remove user's ID *****/
+	       ID_RemoveUsrID (&Gbl.Usrs.Other.UsrDat,
+			       Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
 
-	    /***** Update list of IDs *****/
-	    ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+	       /***** Update list of IDs *****/
+	       ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
-	    /***** Show form again *****/
-	    Acc_ShowFormChgOtherUsrAccount ();
-	    break;
-	 case Usr_CAN_NOT:
-	 default:
-	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	}
-   else		// User not found
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       /***** Show form again *****/
+	       Acc_ShowFormChgOtherUsrAccount ();
+	       break;
+	    case Usr_CAN_NOT:
+	    default:
+	       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	   }
+	 break;
+      case Exi_DOES_NOT_EXIST:	// User not found
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+     }
   }
 
 /*****************************************************************************/
@@ -794,27 +800,33 @@ void ID_NewMyUsrID (void)
 void ID_ChangeOtherUsrID (void)
   {
    /***** Get other user's code from form and get user's data *****/
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-      switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
-	{
-	 case Usr_CAN:
-	    /***** Change user's ID *****/
-	    ID_ChangeUsrID (&Gbl.Usrs.Other.UsrDat,
-			    Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      case Exi_EXISTS:
+	 switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+	   {
+	    case Usr_CAN:
+	       /***** Change user's ID *****/
+	       ID_ChangeUsrID (&Gbl.Usrs.Other.UsrDat,
+			       Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
 
-	    /***** Update list of IDs *****/
-	    ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+	       /***** Update list of IDs *****/
+	       ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
-	    /***** Show form again *****/
-	    Acc_ShowFormChgOtherUsrAccount ();
-	    break;
-	 case Usr_CAN_NOT:
-	 default:
-	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	}
-   else		// User not found
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       /***** Show form again *****/
+	       Acc_ShowFormChgOtherUsrAccount ();
+	       break;
+	    case Usr_CAN_NOT:
+	    default:
+	       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	   }
+	 break;
+      case Exi_DOES_NOT_EXIST:	// User not found
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+     }
   }
 
 /*****************************************************************************/
@@ -920,7 +932,7 @@ void ID_ConfirmOtherUsrID (void)
 
    /***** Get other user's code from form and get user's data *****/
    ICanConfirm = Usr_CAN_NOT;
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData () == Exi_EXISTS)
       if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_OTHER)	// Not me
         {
 	 /* If user is a student in current course,

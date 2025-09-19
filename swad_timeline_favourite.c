@@ -57,8 +57,10 @@ static void TmlFav_UnfComm (struct TmlCom_Comment *Com);
 
 void TmlFav_ShowAllFaversNoteUsr (void)
   {
+   __attribute__((unused)) Exi_Exist_t UsrExists;
+
    /***** Get user whom profile is displayed *****/
-   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
+   UsrExists = Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show all favers *****/
    TmlFav_ShowAllFaversNoteGbl ();
@@ -84,8 +86,10 @@ void TmlFav_ShowAllFaversNoteGbl (void)
 
 void TmlFav_FavNoteUsr (void)
   {
+   __attribute__((unused)) Exi_Exist_t UsrExists;
+
    /***** Get user whom profile is displayed *****/
-   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
+   UsrExists = Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Mark note as favourite *****/
    TmlFav_FavNoteGbl ();
@@ -106,8 +110,10 @@ void TmlFav_FavNoteGbl (void)
 
 void TmlFav_UnfNoteUsr (void)
   {
+   __attribute__((unused)) Exi_Exist_t UsrExists;
+
    /***** Get user whom profile is displayed *****/
-   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
+   UsrExists = Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Unfav a note previously marked as favourite *****/
    TmlFav_UnfNoteGbl ();
@@ -191,8 +197,10 @@ static void TmlFav_UnfNote (struct TmlNot_Note *Not)
 
 void TmlFav_ShowAllFaversComUsr (void)
   {
+   __attribute__((unused)) Exi_Exist_t UsrExists;
+
    /***** Get user whom profile is displayed *****/
-   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
+   UsrExists = Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show all favers *****/
    TmlFav_ShowAllFaversComGbl ();
@@ -220,8 +228,10 @@ void TmlFav_ShowAllFaversComGbl (void)
 
 void TmlFav_FavCommUsr (void)
   {
+   __attribute__((unused)) Exi_Exist_t UsrExists;
+
    /***** Get user whom profile is displayed *****/
-   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
+   UsrExists = Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Mark comment as favourite *****/
    TmlFav_FavCommGbl ();
@@ -242,8 +252,10 @@ void TmlFav_FavCommGbl (void)
 
 void TmlFav_UnfCommUsr (void)
   {
+   __attribute__((unused)) Exi_Exist_t UsrExists;
+
    /***** Get user whom profile is displayed *****/
-   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
+   UsrExists = Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Unfav a comment previously marked as favourite *****/
    TmlFav_UnfCommGbl ();

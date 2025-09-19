@@ -88,11 +88,17 @@ static void UsrClp_AddUsrToClipboard (void)
    Usr_DB_RemoveExpiredClipboards ();   // Someone must do this work. Let's do it whenever a user click in copy
 
     /***** Get user to be copied *****/
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-      /***** Add user to clipboard *****/
-      Usr_DB_CopyToClipboard (Gbl.Usrs.Other.UsrDat.UsrCod);
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      case Exi_EXISTS:
+	 /***** Add user to clipboard *****/
+	 Usr_DB_CopyToClipboard (Gbl.Usrs.Other.UsrDat.UsrCod);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+     }
   }
 
 /*****************************************************************************/

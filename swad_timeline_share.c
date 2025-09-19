@@ -54,8 +54,10 @@ static void TmlSha_UnsNote (struct TmlNot_Note *Not);
 
 void TmlSha_ShowAllSharersNoteUsr (void)
   {
+   __attribute__((unused)) Exi_Exist_t UsrExists;
+
    /***** Get user whom profile is displayed *****/
-   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
+   UsrExists = Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show all sharers *****/
    TmlSha_ShowAllSharersNoteGbl ();
@@ -81,8 +83,10 @@ void TmlSha_ShowAllSharersNoteGbl (void)
 
 void TmlSha_ShaNoteUsr (void)
   {
+   __attribute__((unused)) Exi_Exist_t UsrExists;
+
    /***** Get user whom profile is displayed *****/
-   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
+   UsrExists = Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Share note *****/
    TmlSha_ShaNoteGbl ();
@@ -140,8 +144,10 @@ static void TmlSha_ShaNote (struct TmlNot_Note *Not)
 
 void TmlSha_UnsNoteUsr (void)
   {
+   __attribute__((unused)) Exi_Exist_t UsrExists;
+
    /***** Get user whom profile is displayed *****/
-   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
+   UsrExists = Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Unshare note *****/
    TmlSha_UnsNoteGbl ();

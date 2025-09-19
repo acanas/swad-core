@@ -265,13 +265,14 @@ void TmlPst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
 void TmlPst_ReceivePostUsr (void)
   {
    struct Tml_Timeline Timeline;
+   __attribute__((unused)) Exi_Exist_t UsrExists;
    long NotCod;
 
    /***** Reset timeline context *****/
    Tml_ResetTimeline (&Timeline);
 
    /***** Get user whom profile is displayed *****/
-   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
+   UsrExists = Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
    Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat);

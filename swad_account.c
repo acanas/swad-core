@@ -473,44 +473,50 @@ void Acc_ShowFormChgMyAccount (void)
 void Acc_ShowFormChgOtherUsrAccount (void)
   {
    /***** Get user whose account must be changed *****/
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-      switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
-        {
-         case Usr_CAN:
-	    /***** Get user's nickname and email address
-		   It's necessary because nickname or email could be just updated *****/
-	    Nck_DB_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.Nickname);
-	    Mai_GetEmailFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      case Exi_EXISTS:
+	 switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+	   {
+	    case Usr_CAN:
+	       /***** Get user's nickname and email address
+		      It's necessary because nickname or email could be just updated *****/
+	       Nck_DB_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.Nickname);
+	       Mai_GetEmailFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
-	    /***** Show user's record *****/
-	    Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
-				     &Gbl.Usrs.Other.UsrDat,NULL);
+	       /***** Show user's record *****/
+	       Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
+					&Gbl.Usrs.Other.UsrDat,NULL);
 
-	    /***** Begin container for this user *****/
-	    HTM_DIV_Begin ("class=\"REC_USR\"");
+	       /***** Begin container for this user *****/
+	       HTM_DIV_Begin ("class=\"REC_USR\"");
 
-	       /***** Show form to change password and nickname *****/
-	       HTM_DIV_Begin ("class=\"REC_LEFT\"");
-		  Pwd_ShowFormChgOtherUsrPwd ();
-		  Nck_ShowFormChangeOtherUsrNickname ();
+		  /***** Show form to change password and nickname *****/
+		  HTM_DIV_Begin ("class=\"REC_LEFT\"");
+		     Pwd_ShowFormChgOtherUsrPwd ();
+		     Nck_ShowFormChangeOtherUsrNickname ();
+		  HTM_DIV_End ();
+
+		  /***** Show form to change email and ID *****/
+		  HTM_DIV_Begin ("class=\"REC_RIGHT\"");
+		     Mai_ShowFormChangeOtherUsrEmail ();
+		     ID_ShowFormChangeOtherUsrID ();
+		  HTM_DIV_End ();
+
+	       /***** End container for this user *****/
 	       HTM_DIV_End ();
-
-	       /***** Show form to change email and ID *****/
-	       HTM_DIV_Begin ("class=\"REC_RIGHT\"");
-		  Mai_ShowFormChangeOtherUsrEmail ();
-		  ID_ShowFormChangeOtherUsrID ();
-	       HTM_DIV_End ();
-
-	    /***** End container for this user *****/
-	    HTM_DIV_End ();
-	    break;
-         case Usr_CAN_NOT:
-         default:
-	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	}
-   else		// User not found
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	    case Usr_CAN_NOT:
+	    default:
+	       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	   }
+	 break;
+      case Exi_DOES_NOT_EXIST:	// User not found
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+     }
   }
 
 /*****************************************************************************/
@@ -527,7 +533,7 @@ void Acc_PutLinkToRemoveMyAccount (__attribute__((unused)) void *Args)
 
 static void Acc_PutParsToRemoveMyAccount (void *EncryptedUsrCod)
   {
-   Usr_PutParMyUsrCodEncrypted (EncryptedUsrCod);
+   Usr_PutParOtherUsrCodEncrypted (EncryptedUsrCod);
    Par_PutParUnsigned (NULL,"EnrRemAction",
                        (unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
   }
@@ -758,7 +764,7 @@ void Acc_GetUsrCodAndRemUsrGbl (void)
   {
    Err_SuccessOrError_t SuccessOrError = Err_ERROR;
 
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData () == Exi_EXISTS)
       if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_CAN)
         {
          Acc_ReqRemAccountOrRemAccount (Acc_REMOVE_USR);

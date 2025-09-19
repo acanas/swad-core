@@ -1286,23 +1286,29 @@ void Mai_RemoveMyUsrEmail (void)
 void Mai_RemoveOtherUsrEmail (void)
   {
    /***** Get other user's code from form and get user's data *****/
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-      switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
-	{
-	 case Usr_CAN:
-	    /***** Remove user's email *****/
-	    Mai_RemoveEmail (&Gbl.Usrs.Other.UsrDat);
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      case Exi_EXISTS:
+	 switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+	   {
+	    case Usr_CAN:
+	       /***** Remove user's email *****/
+	       Mai_RemoveEmail (&Gbl.Usrs.Other.UsrDat);
 
-	    /***** Show form again *****/
-	    Acc_ShowFormChgOtherUsrAccount ();
-	    break;
-	 case Usr_CAN_NOT:
-	 default:
-	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	}
-   else		// User not found
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       /***** Show form again *****/
+	       Acc_ShowFormChgOtherUsrAccount ();
+	       break;
+	    case Usr_CAN_NOT:
+	    default:
+	       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	   }
+	 break;
+      case Exi_DOES_NOT_EXIST:	// User not found
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+     }
   }
 
 /*****************************************************************************/
@@ -1358,24 +1364,30 @@ void May_NewMyUsrEmail (void)
 void Mai_ChangeOtherUsrEmail (void)
   {
    /***** Get other user's code from form and get user's data *****/
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-      switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
-	{
-	 case Usr_CAN:
-	    /***** Change user's ID *****/
-	    Mai_ChangeUsrEmail (&Gbl.Usrs.Other.UsrDat,
-				Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      case Exi_EXISTS:
+	 switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+	   {
+	    case Usr_CAN:
+	       /***** Change user's ID *****/
+	       Mai_ChangeUsrEmail (&Gbl.Usrs.Other.UsrDat,
+				   Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
 
-	    /***** Show form again *****/
-	    Acc_ShowFormChgOtherUsrAccount ();
-	    break;
-	 case Usr_CAN_NOT:
-	 default:
-	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	}
-   else		// User not found
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       /***** Show form again *****/
+	       Acc_ShowFormChgOtherUsrAccount ();
+	       break;
+	    case Usr_CAN_NOT:
+	    default:
+	       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	   }
+	 break;
+      case Exi_DOES_NOT_EXIST:	// User not found
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+     }
   }
 
 /*****************************************************************************/

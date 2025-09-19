@@ -92,50 +92,52 @@ void Adm_ReqAddAdm (Hie_Level_t HieLvl)
    Usr_Can_t ICanRegister;
 
    if (Gbl.Hierarchy.Node[HieLvl].HieCod > 0)
-     {
       /***** Get user's identificator of the user to register as admin *****/
-      if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-        {
-         /* Check if I am allowed to register user as administrator in institution/center/degree */
-	 ICanRegister = ((HieLvl == Hie_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
-                         (HieLvl == Hie_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
-                         (HieLvl == Hie_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
-											 Usr_CAN_NOT;
-         switch (ICanRegister)
-           {
-            case Usr_CAN:
-	       if (Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,HieLvl))        // User is already an administrator of current institution/center/degree
-		 {
-		  Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_already_an_administrator_of_Y,
-				 Gbl.Usrs.Other.UsrDat.FullName,
-				 Gbl.Hierarchy.Node[HieLvl].FullName);
-		  Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
-		 }
-	       else
-		 {
-		  /***** Show question and button to register user as administrator *****/
-		  /* Begin alert */
-		  Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_enrol_the_following_user_as_an_administrator_of_X,
-					       Gbl.Hierarchy.Node[HieLvl].FullName);
+      switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+	{
+	 case Exi_EXISTS:
+	    /* Check if I am allowed to register user as administrator in institution/center/degree */
+	    ICanRegister = ((HieLvl == Hie_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
+			    (HieLvl == Hie_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
+			    (HieLvl == Hie_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
+											     Usr_CAN_NOT;
+	    switch (ICanRegister)
+	      {
+	       case Usr_CAN:
+		  if (Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,HieLvl))        // User is already an administrator of current institution/center/degree
+		    {
+		     Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_already_an_administrator_of_Y,
+				    Gbl.Usrs.Other.UsrDat.FullName,
+				    Gbl.Hierarchy.Node[HieLvl].FullName);
+		     Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+		    }
+		  else
+		    {
+		     /***** Show question and button to register user as administrator *****/
+		     /* Begin alert */
+		     Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_enrol_the_following_user_as_an_administrator_of_X,
+						  Gbl.Hierarchy.Node[HieLvl].FullName);
 
-		  /* Show user's record */
-		  Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+		     /* Show user's record */
+		     Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
-		  /* End alert */
-		  Ale_ShowAlertAndButtonEnd (Actions[HieLvl],NULL,NULL,
-					     Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-					     Btn_ENROL);
-		 }
-               break;
-            case Usr_CAN_NOT:
-            default:
-               Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-               break;
-           }
-        }
-      else
-         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-     }
+		     /* End alert */
+		     Ale_ShowAlertAndButtonEnd (Actions[HieLvl],NULL,NULL,
+						Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+						Btn_ENROL);
+		    }
+		  break;
+	       case Usr_CAN_NOT:
+	       default:
+		  Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+		  break;
+	      }
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	    break;
+	}
   }
 
 /*****************************************************************************/
@@ -192,33 +194,35 @@ static void Adm_AddAdm (Hie_Level_t HieLvl)
    Usr_Can_t ICanRegister;
 
    if (Gbl.Hierarchy.Node[HieLvl].HieCod > 0)
-     {
       /***** Get plain user's ID of the user to add/modify *****/
-      if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-        {
-         /* Check if I am allowed to register user as administrator in institution/center/degree */
-	 ICanRegister = ((HieLvl == Hie_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
-                         (HieLvl == Hie_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
-                         (HieLvl == Hie_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
-											 Usr_CAN_NOT;
-         switch (ICanRegister)
-           {
-	    case Usr_CAN:
-	       /***** Register administrator in current institution/center/degree in database *****/
-	       Adm_RegisterAdmin (&Gbl.Usrs.Other.UsrDat,HieLvl);
+      switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+	{
+	 case Exi_EXISTS:
+	    /* Check if I am allowed to register user as administrator in institution/center/degree */
+	    ICanRegister = ((HieLvl == Hie_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
+			    (HieLvl == Hie_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
+			    (HieLvl == Hie_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
+											     Usr_CAN_NOT;
+	    switch (ICanRegister)
+	      {
+	       case Usr_CAN:
+		  /***** Register administrator in current institution/center/degree in database *****/
+		  Adm_RegisterAdmin (&Gbl.Usrs.Other.UsrDat,HieLvl);
 
-	       /***** Show user's record *****/
-	       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
-	       break;
-            case Usr_CAN_NOT:
-            default:
-               Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-               break;
-          }
-        }
-      else
-         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-     }
+		  /***** Show user's record *****/
+		  Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+		  break;
+	       case Usr_CAN_NOT:
+	       default:
+		  Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+		  break;
+	     }
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	    break;
+	}
   }
 
 /*****************************************************************************/
@@ -310,47 +314,49 @@ static void Adm_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,
    Usr_Can_t ICanRemove;
 
    if (Gbl.Hierarchy.Node[HieLvl].HieCod > 0)
-     {
       /***** Get user to be removed *****/
-      if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-        {
-         /* Check if it's forbidden to remove an administrator */
-         MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-         ICanRemove = (MeOrOther == Usr_ME ||
-                       (HieLvl == Hie_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
-                       (HieLvl == Hie_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
-                       (HieLvl == Hie_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
-										       Usr_CAN_NOT;
-         switch (ICanRemove)
-           {
-            case Usr_CAN:
-	       /* Check if the other user is an admin of the current institution/center/degree */
-	       if (Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,HieLvl))
-		 {                // The other user is an administrator of current institution/center/degree ==> ask for removing or remove her/him
-		  switch (ReqDelOrDelUsr)
-		    {
-		     case Enr_REQUEST_REMOVE_USR:     // Ask if remove administrator from current institution
-			Adm_AskIfRemAdm (MeOrOther,HieLvl);
-			break;
-		     case Enr_REMOVE_USR:             // Remove administrator from current institution
-			Adm_EffectivelyRemAdm (&Gbl.Usrs.Other.UsrDat,HieLvl);
-			break;
+      switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+	{
+	 case Exi_EXISTS:
+	    /* Check if it's forbidden to remove an administrator */
+	    MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+	    ICanRemove = (MeOrOther == Usr_ME ||
+			  (HieLvl == Hie_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
+			  (HieLvl == Hie_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
+			  (HieLvl == Hie_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
+											   Usr_CAN_NOT;
+	    switch (ICanRemove)
+	      {
+	       case Usr_CAN:
+		  /* Check if the other user is an admin of the current institution/center/degree */
+		  if (Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,HieLvl))
+		    {                // The other user is an administrator of current institution/center/degree ==> ask for removing or remove her/him
+		     switch (ReqDelOrDelUsr)
+		       {
+			case Enr_REQUEST_REMOVE_USR:     // Ask if remove administrator from current institution
+			   Adm_AskIfRemAdm (MeOrOther,HieLvl);
+			   break;
+			case Enr_REMOVE_USR:             // Remove administrator from current institution
+			   Adm_EffectivelyRemAdm (&Gbl.Usrs.Other.UsrDat,HieLvl);
+			   break;
+		       }
 		    }
-		 }
-	       else        // The other user is not an administrator of current institution
-		  Ale_ShowAlert (Ale_WARNING,Txt_THE_USER_X_is_not_an_administrator_of_Y,
-				 Gbl.Usrs.Other.UsrDat.FullName,
-				 Gbl.Hierarchy.Node[HieLvl].FullName);
-	       break;
-            case Usr_CAN_NOT:
-            default:
-               Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-               break;
-           }
-        }
-      else
-         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-     }
+		  else        // The other user is not an administrator of current institution
+		     Ale_ShowAlert (Ale_WARNING,Txt_THE_USER_X_is_not_an_administrator_of_Y,
+				    Gbl.Usrs.Other.UsrDat.FullName,
+				    Gbl.Hierarchy.Node[HieLvl].FullName);
+		  break;
+	       case Usr_CAN_NOT:
+	       default:
+		  Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+		  break;
+	      }
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	    break;
+	}
   }
 
 /*****************************************************************************/

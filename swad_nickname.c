@@ -414,32 +414,38 @@ void Nck_RemoveOtherUsrNick (void)
    char NickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
 
    /***** Get user whose nick must be removed *****/
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-      switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
-	{
-	 case Usr_CAN:
-	    /***** Get nickname from form *****/
-	    Par_GetParText ("Nick",NickWithoutArr,
-			      Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      case Exi_EXISTS:
+	 switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+	   {
+	    case Usr_CAN:
+	       /***** Get nickname from form *****/
+	       Par_GetParText ("Nick",NickWithoutArr,
+			       Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
 
-	    /***** Remove one of the old nicknames *****/
-	    Nck_DB_RemoveNickname (Gbl.Usrs.Other.UsrDat.UsrCod,NickWithoutArr);
+	       /***** Remove one of the old nicknames *****/
+	       Nck_DB_RemoveNickname (Gbl.Usrs.Other.UsrDat.UsrCod,NickWithoutArr);
 
-	    /***** Show message *****/
-	    Ale_CreateAlert (Ale_SUCCESS,Nck_NICKNAME_SECTION_ID,
-			     Txt_Nickname_X_removed,
-			     NickWithoutArr);
+	       /***** Show message *****/
+	       Ale_CreateAlert (Ale_SUCCESS,Nck_NICKNAME_SECTION_ID,
+				Txt_Nickname_X_removed,
+				NickWithoutArr);
 
-	    /***** Show user's account again *****/
-	    Acc_ShowFormChgOtherUsrAccount ();
-	    break;
-	 case Usr_CAN_NOT:
-	 default:
-	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	}
-   else		// User not found
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       /***** Show user's account again *****/
+	       Acc_ShowFormChgOtherUsrAccount ();
+	       break;
+	    case Usr_CAN_NOT:
+	    default:
+	       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	   }
+	 break;
+      case Exi_DOES_NOT_EXIST:	// User not found
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+     }
   }
 
 /*****************************************************************************/
@@ -462,23 +468,29 @@ void Nck_UpdateMyNick (void)
 void Nck_ChangeOtherUsrNick (void)
   {
    /***** Get user whose nick must be changed *****/
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-      switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
-	{
-	 case Usr_CAN:
-	    /***** Update user's nickname *****/
-	    Nck_ChangeUsrNick (&Gbl.Usrs.Other.UsrDat);
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      case Exi_EXISTS:
+	 switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+	   {
+	    case Usr_CAN:
+	       /***** Update user's nickname *****/
+	       Nck_ChangeUsrNick (&Gbl.Usrs.Other.UsrDat);
 
-	    /***** Show user's account again *****/
-	    Acc_ShowFormChgOtherUsrAccount ();
-	    break;
-	 case Usr_CAN_NOT:
-	 default:
-	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	}
-   else		// User not found
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       /***** Show user's account again *****/
+	       Acc_ShowFormChgOtherUsrAccount ();
+	       break;
+	    case Usr_CAN_NOT:
+	    default:
+	       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	   }
+	 break;
+      case Exi_DOES_NOT_EXIST:	// User not found
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+     }
   }
 
 /*****************************************************************************/

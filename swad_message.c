@@ -248,13 +248,19 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
       Messages->Reply.OriginalMsgCod = ParCod_GetAndCheckPar (ParCod_Msg);
 
    /***** Get user's code of possible preselected recipient *****/
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())	// There is a preselected recipient
-      /* Get who to show as potential recipients:
-         - only the selected recipient
-         - any user (default) */
-      Messages->ShowOnlyOneRecipient = Par_GetParBool ("ShowOnlyOneRecipient");
-   else
-      Messages->ShowOnlyOneRecipient = false;
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      case Exi_EXISTS:	// There is a preselected recipient
+	 /* Get who to show as potential recipients:
+	    - only the selected recipient
+	    - any user (default) */
+	 Messages->ShowOnlyOneRecipient = Par_GetParBool ("ShowOnlyOneRecipient");
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Messages->ShowOnlyOneRecipient = false;
+	 break;
+     }
 
    GetUsrsInCrs = !Messages->ShowOnlyOneRecipient &&				// Show list of potential recipients
 	          (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG ||	// If there is a course selected and I belong to it...

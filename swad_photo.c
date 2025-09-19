@@ -361,7 +361,7 @@ static void Pho_ReqPhoto (const struct Usr_Data *UsrDat)
 void Pho_ReqPhotoUsr (void)
   {
    /***** Get user whose photo must be sent or removed *****/
-   if (!Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData () == Exi_DOES_NOT_EXIST)
      {	// User not found
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
       return;
@@ -880,10 +880,16 @@ void Pho_UpdateMyPhoto2 (void)
 void Pho_ChangeUsrPhoto1 (void)
   {
    /***** Get user's code from form and user's data *****/
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-      Pho_ChangePhoto1 (&Gbl.Usrs.Other.UsrDat);
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      case Exi_EXISTS:
+	 Pho_ChangePhoto1 (&Gbl.Usrs.Other.UsrDat);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+     }
   }
 
 void Pho_ChangeUsrPhoto2 (void)

@@ -974,12 +974,13 @@ void TmlNot_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
 void TmlNot_ReqRemNoteUsr (void)
   {
    struct Tml_Timeline Timeline;
+   __attribute__((unused)) Exi_Exist_t UsrExists;
 
    /***** Reset timeline context *****/
    Tml_ResetTimeline (&Timeline);
 
    /***** Get user whom profile is displayed *****/
-   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
+   UsrExists = Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
    Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat);
@@ -1068,12 +1069,13 @@ static void TmlNot_PutParsRemoveNote (void *Timeline)
 void TmlNot_RemoveNoteUsr (void)
   {
    struct Tml_Timeline Timeline;
+   __attribute__((unused)) Exi_Exist_t UsrExists;
 
    /***** Reset timeline context *****/
    Tml_ResetTimeline (&Timeline);
 
    /***** Get user whom profile is displayed *****/
-   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
+   UsrExists = Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
    Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat);

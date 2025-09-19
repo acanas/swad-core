@@ -732,17 +732,21 @@ static void Fol_PutIconToUnfollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTE
 void Fol_FollowUsr1 (void)
   {
    /***** Get user to be followed *****/
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
-      // Follow only if I do not follow him/her
-      if (!Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-				        Gbl.Usrs.Other.UsrDat.UsrCod))
-	 Fol_FollowUsr (&Gbl.Usrs.Other.UsrDat);
+      case Exi_EXISTS:
+	 // Follow only if I do not follow him/her
+	 if (!Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+					   Gbl.Usrs.Other.UsrDat.UsrCod))
+	    Fol_FollowUsr (&Gbl.Usrs.Other.UsrDat);
 
-      Ale_CreateAlert (Ale_SUCCESS,NULL,"");	// Txt not used
+	 Ale_CreateAlert (Ale_SUCCESS,NULL,"");	// Txt not used
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else
-      Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 void Fol_FollowUsr2 (void)
@@ -767,17 +771,21 @@ void Fol_FollowUsr2 (void)
 void Fol_UnfollowUsr1 (void)
   {
    /***** Get user to be unfollowed *****/
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
-      // Unfollow only if I follow him/her
-      if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-                                       Gbl.Usrs.Other.UsrDat.UsrCod))
-	 Fol_UnfollowUsr (&Gbl.Usrs.Other.UsrDat);
+      case Exi_EXISTS:
+	 // Unfollow only if I follow him/her
+	 if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+					  Gbl.Usrs.Other.UsrDat.UsrCod))
+	    Fol_UnfollowUsr (&Gbl.Usrs.Other.UsrDat);
 
-      Ale_CreateAlert (Ale_SUCCESS,NULL,"");	// Txt not used
+	 Ale_CreateAlert (Ale_SUCCESS,NULL,"");	// Txt not used
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else
-      Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 void Fol_UnfollowUsr2 (void)

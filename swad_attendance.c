@@ -372,7 +372,7 @@ static void Att_PutIconsInListOfEvents (void *Events)
 
       /***** Put icon to print my QR code *****/
       QR_PutLinkToPrintQRCode (ActPrnUsrQR,
-			       Usr_PutParMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
+			       Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
 
       /***** Put icon to get resource link *****/
       Ico_PutContextualIconToGetLink (ActReqLnkAtt,NULL,Att_PutPars,Events);
@@ -2520,7 +2520,7 @@ static void Att_PutIconsMyAttList (void *Events)
 
       /***** Put icon to print my QR code *****/
       QR_PutLinkToPrintQRCode (ActPrnUsrQR,
-			       Usr_PutParMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
+			       Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
      }
   }
 
@@ -2550,7 +2550,7 @@ static void Att_PutIconsStdsAttList (void *Events)
 
       /***** Put icon to print my QR code *****/
       QR_PutLinkToPrintQRCode (ActPrnUsrQR,
-			       Usr_PutParMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
+			       Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
      }
   }
 

@@ -69,23 +69,29 @@ void Dup_ReportUsrAsPossibleDuplicate (void)
    extern const char *Txt_Thank_you_for_reporting_a_possible_duplicate_user;
 
    /***** Get user to be reported as possible duplicate *****/
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
-      /* Check if it's allowed to me to report users as possible duplicatedr */
-      if (Gbl.Usrs.Me.Role.Logged >= Rol_TCH &&
-	  Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_OTHER)
-	{
-	 /***** Insert possible duplicate into database *****/
-         Dup_DB_AddUsrToDuplicated (Gbl.Usrs.Other.UsrDat.UsrCod);
+      case Exi_EXISTS:
+	 /***** Check if it's allowed to me
+	        to report users as possible duplicate *****/
+	 if (Gbl.Usrs.Me.Role.Logged >= Rol_TCH &&
+	     Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_OTHER)
+	   {
+	    /***** Insert possible duplicate into database *****/
+	    Dup_DB_AddUsrToDuplicated (Gbl.Usrs.Other.UsrDat.UsrCod);
 
-         /***** Show feedback message *****/
-         Ale_ShowAlert (Ale_SUCCESS,Txt_Thank_you_for_reporting_a_possible_duplicate_user);
-	}
-      else
-         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	    /***** Show feedback message *****/
+	    Ale_ShowAlert (Ale_SUCCESS,
+			   Txt_Thank_you_for_reporting_a_possible_duplicate_user);
+	   }
+	 else
+	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -220,10 +226,16 @@ void Dup_ListDuplicateUsrs (void)
 void Dup_GetUsrCodAndListSimilarUsrs (void)
   {
    /***** Get user to be removed from list of possible duplicates *****/
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-      Dup_ListSimilarUsrs ();
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      case Exi_EXISTS:
+	 Dup_ListSimilarUsrs ();
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+     }
   }
 
 static void Dup_ListSimilarUsrs (void)
@@ -379,14 +391,18 @@ static void Dup_PutButtonToRemoveFromListOfDupUsrs (const struct Usr_Data *UsrDa
 void Dup_RemoveUsrFromListDupUsrs (void)
   {
    /***** Get user to be removed from list of possible duplicates *****/
-   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
-      /* Remove entry from database */
-      Dup_DB_RemoveUsrFromDuplicated (Gbl.Usrs.Other.UsrDat.UsrCod);
+      case Exi_EXISTS:
+	 /* Remove entry from database */
+	 Dup_DB_RemoveUsrFromDuplicated (Gbl.Usrs.Other.UsrDat.UsrCod);
 
-      /* Show list of possible duplicated users again */
-      Dup_ListDuplicateUsrs ();
+	 /* Show list of possible duplicates again */
+	 Dup_ListDuplicateUsrs ();
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
