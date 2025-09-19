@@ -884,6 +884,7 @@ static void Ins_ListInstitutionsForEdition (void)
    unsigned NumUsrsIns;
    unsigned NumUsrsInCrssOfIns;
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
+   __attribute__((unused)) Exi_Exist_t UsrExists;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -986,9 +987,9 @@ static void Ins_ListInstitutionsForEdition (void)
 	    /* Institution requester */
 	    HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",The_GetSuffix ());
 	       UsrDat.UsrCod = Ins->RequesterUsrCod;
-	       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-							Usr_DONT_GET_PREFS,
-							Usr_DONT_GET_ROLE_IN_CRS);
+	       UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+								    Usr_DONT_GET_PREFS,
+								    Usr_DONT_GET_ROLE_IN_CRS);
 	       Usr_WriteAuthor (&UsrDat,For_ENABLED);
 	    HTM_TD_End ();
 
@@ -1510,8 +1511,8 @@ unsigned Ins_GetCachedNumInssWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role)
    long HieCod = Hie_GetHieCod (HieLvl);
 
    /***** Get number of institutions with users from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureInss[Role],HieLvl,HieCod,
-				   FigCch_UNSIGNED,&NumInssWithUsrs))
+   if (FigCch_GetFigureFromCache (FigureInss[Role],HieLvl,HieCod,
+				  FigCch_UNSIGNED,&NumInssWithUsrs) == Exi_DOES_NOT_EXIST)
      {
       /***** Get current number of institutions with users from database and update cache *****/
       NumInssWithUsrs = Ins_DB_GetNumInnsWithUsrs (HieLvl,HieCod,Role);

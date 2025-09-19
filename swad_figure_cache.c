@@ -63,11 +63,11 @@ void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
 /*****************************************************************************/
 /************************** Get figure from cache ****************************/
 /*****************************************************************************/
-// Return true is figure is found (if figure is cached and recently updated)
+// Return Exi_EXISTS is figure is found (if figure is cached and recently updated)
 
-bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
-                                Hie_Level_t HieLvl,long HieCod,
-                                FigCch_Type_t Type,void *ValuePtr)
+Exi_Exist_t FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
+				       Hie_Level_t HieLvl,long HieCod,
+				       FigCch_Type_t Type,void *ValuePtr)
   {
    /* The higher the level, the longer a value remains cached */
    time_t TimeCached[Hie_NUM_LEVELS] =	// Time in seconds
@@ -82,7 +82,7 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   bool Found = false;
+   Exi_Exist_t FigureExists = Exi_DOES_NOT_EXIST;
 
    /***** Set default value when not found *****/
    switch (Type)
@@ -98,7 +98,7 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
    /***** Trivial check *****/
    if (Figure == FigCch_UNKNOWN ||	// Unknown figure
        HieLvl == Hie_UNK)		// Unknown scope
-      return false;
+      return Exi_DOES_NOT_EXIST;
 
    /***** Get figure's value if cached and recent *****/
    if (Fig_DB_GetFigureFromCache (&mysql_res,Figure,HieLvl,HieCod,
@@ -114,12 +114,12 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
 	   {
 	    case FigCch_UNSIGNED:
 	       if (sscanf (row[0],"%u",(unsigned *) ValuePtr) == 1)
-		  Found = true;
+		  FigureExists = Exi_EXISTS;
 	       break;
 	    case FigCch_DOUBLE:
                Str_SetDecimalPointToUS ();	// To write the decimal point as a dot
 	       if (sscanf (row[0],"%lf",(double *) ValuePtr) == 1)
-		  Found = true;
+		  FigureExists = Exi_EXISTS;
                Str_SetDecimalPointToLocal ();	// Return to local system
 	       break;
 	   }
@@ -129,5 +129,5 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return Found;
+   return FigureExists;
   }

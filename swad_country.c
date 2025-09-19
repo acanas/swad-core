@@ -1600,8 +1600,8 @@ unsigned Cty_GetCachedNumCtysWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role)
    long HieCod = Hie_GetHieCod (HieLvl);
 
    /***** Get number of countries with users from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureCtys[Role],HieLvl,HieCod,
-				   FigCch_UNSIGNED,&NumCtysWithUsrs))
+   if (FigCch_GetFigureFromCache (FigureCtys[Role],HieLvl,HieCod,
+				  FigCch_UNSIGNED,&NumCtysWithUsrs) == Exi_DOES_NOT_EXIST)
      {
       /***** Get current number of countries with users from database and update cache *****/
       NumCtysWithUsrs = Cty_DB_GetNumCtysWithUsrs (HieLvl,HieCod,Role);
@@ -1725,8 +1725,8 @@ unsigned Cty_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty (void)
    unsigned NumUsrs;
 
    /***** Get number of user who don't claim to belong to any country from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,Hie_CTY,-1L,
-				   FigCch_UNSIGNED,&NumUsrs))
+   if (FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,Hie_CTY,-1L,
+				  FigCch_UNSIGNED,&NumUsrs) == Exi_DOES_NOT_EXIST)
       /***** Get current number of user who don't claim to belong to any country from database and update cache *****/
       NumUsrs = Cty_GetNumUsrsWhoDontClaimToBelongToAnyCty ();
 
@@ -1762,8 +1762,8 @@ unsigned Cty_GetCachedNumUsrsWhoClaimToBelongToAnotherCty (void)
    unsigned NumUsrsCty;
 
    /***** Get number of users who claim to belong to another country form cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,Hie_CTY,0,
-                                   FigCch_UNSIGNED,&NumUsrsCty))
+   if (FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,Hie_CTY,0,
+                                  FigCch_UNSIGNED,&NumUsrsCty) == Exi_DOES_NOT_EXIST)
       /***** Get current number of users who claim to belong to another country from database and update cache *****/
       NumUsrsCty = Cty_GetNumUsrsWhoClaimToBelongToAnotherCty ();
 

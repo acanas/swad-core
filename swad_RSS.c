@@ -147,6 +147,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Hie_Node *Crs)
    struct Usr_Data UsrDat;
    struct tm *tm;
    time_t CreatTimeUTC;
+   __attribute__((unused)) Exi_Exist_t UsrExists;
    long NotCod;
    unsigned NumNotices;
    unsigned NumNot;
@@ -175,9 +176,9 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Hie_Node *Crs)
 
          /* Get author (row[2]) */
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[2]);
-         Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get author's data from database
-                                                  Usr_DONT_GET_PREFS,
-                                                  Usr_DONT_GET_ROLE_IN_CRS);
+         UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get author's data from database
+							      Usr_DONT_GET_PREFS,
+							      Usr_DONT_GET_ROLE_IN_CRS);
 
          /***** Write item with notice *****/
          fprintf (FileRSS,"<item>\n");

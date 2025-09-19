@@ -155,8 +155,8 @@ unsigned Crs_GetCachedNumCrssWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role)
    long HieCod = Hie_GetHieCod (HieLvl);
 
    /***** Get number of courses with users from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureCrss[Role],HieLvl,HieCod,
-				   FigCch_UNSIGNED,&NumNodesWithUsrs))
+   if (FigCch_GetFigureFromCache (FigureCrss[Role],HieLvl,HieCod,
+				  FigCch_UNSIGNED,&NumNodesWithUsrs) == Exi_DOES_NOT_EXIST)
      {
       /***** Get current number of courses with users from database and update cache *****/
       NumNodesWithUsrs = Crs_DB_GetNumCrssWithUsrs (HieLvl,HieCod,Role);
@@ -657,6 +657,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
    Usr_Can_t ICanEdit;
    unsigned NumUsrs[Rol_NUM_ROLES];
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
+   __attribute__((unused)) Exi_Exist_t UsrExists;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -766,9 +767,9 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 
 	    /* Course requester */
 	    UsrDat.UsrCod = Crs->RequesterUsrCod;
-	    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-						     Usr_DONT_GET_PREFS,
-						     Usr_DONT_GET_ROLE_IN_CRS);
+	    UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+								 Usr_DONT_GET_PREFS,
+								 Usr_DONT_GET_ROLE_IN_CRS);
 	    HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
 	                  The_GetSuffix ());
 	       Usr_WriteAuthor (&UsrDat,For_ENABLED);

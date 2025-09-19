@@ -564,13 +564,14 @@ static void TmlCom_WriteComm (const struct Tml_Timeline *Timeline,
 	                      struct TmlCom_Comment *Com)
   {
    struct Usr_Data UsrDat;	// Author of the comment
+   __attribute__((unused)) Exi_Exist_t UsrExists;
 
    /***** Get author's data *****/
    Usr_UsrDataConstructor (&UsrDat);
    UsrDat.UsrCod = Com->UsrCod;
-   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-                                            Usr_DONT_GET_PREFS,
-                                            Usr_DONT_GET_ROLE_IN_CRS);
+   UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+							Usr_DONT_GET_PREFS,
+							Usr_DONT_GET_ROLE_IN_CRS);
 
    /***** Left: author's photo *****/
    TmlCom_ShowAuthorPhoto (&UsrDat);

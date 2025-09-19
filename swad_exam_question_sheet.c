@@ -249,7 +249,7 @@ static void ExaQstShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 	 UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,		// Get from the database the data of the student
 						      Usr_DONT_GET_PREFS,
-						      Usr_GET_ROLE_IN_CRS))
+						      Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	   {
 	    /***** Show exam print *****/
 	    HTM_DIV_Begin (ViewType == Vie_PRINT &&

@@ -179,7 +179,7 @@ static void UsrClp_AddUsrsToClipboard (void)
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get student's data from database
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_GET_ROLE_IN_CRS))
+                                                   Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	 /* Add user to clipboard */
 	 Usr_DB_CopyToClipboard (UsrDat.UsrCod);
      }

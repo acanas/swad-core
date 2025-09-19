@@ -219,7 +219,7 @@ int Tre_WriteTreeIntoHTMLBuffer (Inf_Type_t InfoType)
 /*****************************************************************************/
 /**************************** List all tree nodes ****************************/
 /*****************************************************************************/
-// Return number of ndes in tree
+// Return number of nodes in tree
 
 unsigned Tre_ShowTree (Inf_Type_t InfoType)
   {

@@ -1098,6 +1098,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
    unsigned NumRow;
    unsigned FirstRow;	// First row to show
    unsigned LastRow;	// Last rows to show
+   __attribute__((unused)) Exi_Exist_t UsrExists;
    unsigned NumPagesBefore;
    unsigned NumPagesAfter;
    unsigned NumPagsTotal;
@@ -1239,9 +1240,9 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 
       /* Get user's data of the database */
       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-                                               Usr_DONT_GET_PREFS,
-                                               Usr_DONT_GET_ROLE_IN_CRS);
+      UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+							   Usr_DONT_GET_PREFS,
+							   Usr_DONT_GET_ROLE_IN_CRS);
 
       /* Get logged role */
       if (sscanf (row[2],"%u",&RoleFromLog) != 1)
@@ -1354,6 +1355,7 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
    MYSQL_ROW row;
    unsigned NumHit;
    struct Sta_Hits Hits;
+   __attribute__((unused)) Exi_Exist_t UsrExists;
    unsigned BarWidth;
    struct Usr_Data UsrDat;
 
@@ -1379,9 +1381,9 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
 
       /* Get user's data from the database */
       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
-                                               Usr_DONT_GET_PREFS,
-                                               Usr_DONT_GET_ROLE_IN_CRS);
+      UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
+							   Usr_DONT_GET_PREFS,
+							   Usr_DONT_GET_ROLE_IN_CRS);
 
       HTM_TR_Begin (NULL);
 

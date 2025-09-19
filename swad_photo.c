@@ -414,32 +414,36 @@ void Pho_RecOtherUsrPhotoDetFaces (void)
    Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
-                                                Usr_DONT_GET_PREFS,
-                                                Usr_DONT_GET_ROLE_IN_CRS))
+   switch (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+						    Usr_DONT_GET_PREFS,
+						    Usr_DONT_GET_ROLE_IN_CRS))
      {
-      /***** Receive photo *****/
-      if (Pho_ReceivePhotoAndDetectFaces (Usr_OTHER,&Gbl.Usrs.Other.UsrDat))
-        {
-	 if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_OTHER)
+      case Exi_EXISTS:
+	 /***** Receive photo *****/
+	 if (Pho_ReceivePhotoAndDetectFaces (Usr_OTHER,&Gbl.Usrs.Other.UsrDat))
 	   {
-	    /* Change the visibility of the other user's photo to minimum.
-	       The reason is that the other user is not aware of the change. */
-	    Gbl.Usrs.Other.UsrDat.PhotoVisibility = Pri_VISIBILITY_USER;
-	    Set_DB_UpdateUsrSettingsAboutPhotoVisibility (&Gbl.Usrs.Other.UsrDat);
+	    if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_OTHER)
+	      {
+	       /* Change the visibility of the other user's photo to minimum.
+		  The reason is that the other user is not aware of the change. */
+	       Gbl.Usrs.Other.UsrDat.PhotoVisibility = Pri_VISIBILITY_USER;
+	       Set_DB_UpdateUsrSettingsAboutPhotoVisibility (&Gbl.Usrs.Other.UsrDat);
+	      }
 	   }
-        }
-      else
-        {
-         Pho_ReqPhoto (&Gbl.Usrs.Other.UsrDat);	// Request user's photograph again
-         HTM_BR ();
-        }
+	 else
+	   {
+	    Pho_ReqPhoto (&Gbl.Usrs.Other.UsrDat);	// Request user's photograph again
+	    HTM_BR ();
+	   }
 
-      /***** Show another user's record card *****/
-      Rec_ShowPublicSharedRecordOtherUsr ();
+	 /***** Show another user's record card *****/
+	 Rec_ShowPublicSharedRecordOtherUsr ();
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -545,44 +549,50 @@ void Pho_ReqRemUsrPhoto (void)
    Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
-                                                Usr_DONT_GET_PREFS,
-                                                Usr_GET_ROLE_IN_CRS))
-      switch (Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
-	{
-	 case Usr_CAN:
-	    /***** Show current photo and help message *****/
-	    switch (Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL))
-	      {
-	       case Exi_EXISTS:
-		  /***** Show question and button to remove user's photo *****/
-		  /* Begin alert */
-		  Ale_ShowAlertAndButtonBegin (Ale_QUESTION,
-					       Txt_Do_you_really_want_to_remove_the_photo_of_X,
-					       Gbl.Usrs.Other.UsrDat.FullName);
+   switch (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+						    Usr_DONT_GET_PREFS,
+						    Usr_GET_ROLE_IN_CRS))
+     {
+      case Exi_EXISTS:
+	 switch (Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
+	   {
+	    case Usr_CAN:
+	       /***** Show current photo and help message *****/
+	       switch (Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL))
+		 {
+		  case Exi_EXISTS:
+		     /***** Show question and button to remove user's photo *****/
+		     /* Begin alert */
+		     Ale_ShowAlertAndButtonBegin (Ale_QUESTION,
+						  Txt_Do_you_really_want_to_remove_the_photo_of_X,
+						  Gbl.Usrs.Other.UsrDat.FullName);
 
-		  /* Show current photo */
-		  Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,
-				    ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM);
+		     /* Show current photo */
+		     Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,
+				       ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM);
 
-		  /* End alert */
-		  Ale_ShowAlertAndButtonEnd (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,NULL,
-					     Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-					     Btn_REMOVE);
-		  break;
-	       case Exi_DOES_NOT_EXIST:
-	       default:
-		  Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
-		  break;
-	      }
-	    break;
-	 case Usr_CAN_NOT:
-	 default:
-	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-	    break;
-	}
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+		     /* End alert */
+		     Ale_ShowAlertAndButtonEnd (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,NULL,
+						Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+						Btn_REMOVE);
+		     break;
+		  case Exi_DOES_NOT_EXIST:
+		  default:
+		     Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
+		     break;
+		 }
+	       break;
+	    case Usr_CAN_NOT:
+	    default:
+	       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	   }
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+     }
 
    /***** Show another user's record card *****/
    Rec_ShowPublicSharedRecordOtherUsr ();
@@ -598,16 +608,20 @@ void Pho_RemoveUsrPhoto (void)
    Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
-                                                Usr_DONT_GET_PREFS,
-                                                Usr_DONT_GET_ROLE_IN_CRS))
+   switch (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+						    Usr_DONT_GET_PREFS,
+						    Usr_DONT_GET_ROLE_IN_CRS))
      {
-      /***** Remove photo *****/
-      if (Pho_RemovePhoto (&Gbl.Usrs.Other.UsrDat))
-         Ale_ShowAlerts (NULL);
+      case Exi_EXISTS:
+	 /***** Remove photo *****/
+	 if (Pho_RemovePhoto (&Gbl.Usrs.Other.UsrDat))
+	    Ale_ShowAlerts (NULL);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
    /***** Show another user's record card *****/
    Rec_ShowPublicSharedRecordOtherUsr ();
@@ -1131,7 +1145,7 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
    extern const char *Txt_Followers;
    unsigned NumFollowing;
    unsigned NumFollowers;
-   bool PhotoExists;
+   Exi_Exist_t PhotoExists;
    Act_BrowserTab_t BrowserTab = Act_GetBrowserTab (Gbl.Action.Act);
    bool BrowserTabIs1stTab = (BrowserTab == Act_1ST ||
 	                      BrowserTab == Act_AJA ||
@@ -1280,46 +1294,46 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
      }
 
    /***** Image zoom *****/
-   PhotoExists = false;
+   PhotoExists = Exi_DOES_NOT_EXIST;
    if (PhotoURL)
       if (PhotoURL[0])
-	 PhotoExists = true;
+	 PhotoExists = Exi_EXISTS;
    if (PutZoomCode)
-     {
-      if (PhotoExists)
+      switch (PhotoExists)
 	{
-	 if (asprintf (ImgStr,"<img src=\"%s\" alt=\"\" title=\"%s\" class=\"%s\""
-			      " onmouseover=\"zoom(this,'%s','%s');\""
-			      " onmouseout=\"noZoom();\">",
-		       PhotoURL,UsrDat->FullName,ClassPhoto,
-		       PhotoURL,IdCaption) < 0)
-	    Err_NotEnoughMemoryExit ();
+	 case Exi_EXISTS:
+	    if (asprintf (ImgStr,"<img src=\"%s\" alt=\"\" title=\"%s\" class=\"%s\""
+				 " onmouseover=\"zoom(this,'%s','%s');\""
+				 " onmouseout=\"noZoom();\">",
+			  PhotoURL,UsrDat->FullName,ClassPhoto,
+			  PhotoURL,IdCaption) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	    if (asprintf (ImgStr,"<img src=\"%s/usr_bl.jpg\" alt=\"\" title=\"%s\" class=\"%s\""
+				 " onmouseover=\"zoom(this,'%s/usr_bl.jpg','%s');\""
+				 " onmouseout=\"noZoom();\">",
+			  Cfg_URL_ICON_PUBLIC,UsrDat->FullName,ClassPhoto,
+			  Cfg_URL_ICON_PUBLIC,IdCaption) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    break;
 	}
-      else
-	{
-	 if (asprintf (ImgStr,"<img src=\"%s/usr_bl.jpg\" alt=\"\" title=\"%s\" class=\"%s\""
-			      " onmouseover=\"zoom(this,'%s/usr_bl.jpg','%s');\""
-			      " onmouseout=\"noZoom();\">",
-		       Cfg_URL_ICON_PUBLIC,UsrDat->FullName,ClassPhoto,
-		       Cfg_URL_ICON_PUBLIC,IdCaption) < 0)
-	    Err_NotEnoughMemoryExit ();
-	}
-     }
    else
-     {
-      if (PhotoExists)
+      switch (PhotoExists)
 	{
-	 if (asprintf (ImgStr,"<img src=\"%s\" alt=\"\" title=\"%s\" class=\"%s\">",
-		       PhotoURL,UsrDat->FullName,ClassPhoto) < 0)
-	    Err_NotEnoughMemoryExit ();
+	 case Exi_EXISTS:
+	    if (asprintf (ImgStr,"<img src=\"%s\" alt=\"\" title=\"%s\" class=\"%s\">",
+			  PhotoURL,UsrDat->FullName,ClassPhoto) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	    if (asprintf (ImgStr,"<img src=\"%s/usr_bl.jpg\" alt=\"\" title=\"%s\" class=\"%s\">",
+			  Cfg_URL_ICON_PUBLIC,UsrDat->FullName,ClassPhoto) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    break;
 	}
-      else
-	{
-	 if (asprintf (ImgStr,"<img src=\"%s/usr_bl.jpg\" alt=\"\" title=\"%s\" class=\"%s\">",
-		       Cfg_URL_ICON_PUBLIC,UsrDat->FullName,ClassPhoto) < 0)
-	    Err_NotEnoughMemoryExit ();
-	}
-     }
   }
 
 /*****************************************************************************/

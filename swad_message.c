@@ -847,63 +847,65 @@ static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages)
 	    Par_GetNextStrUntilSeparParMult (&Ptr,UsrDstData.EnUsrCod,
 					     Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	    Usr_GetUsrCodFromEncryptedUsrCod (&UsrDstData);
-	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDstData,	// Get recipient's data from database
-							 Usr_DONT_GET_PREFS,
-							 Usr_DONT_GET_ROLE_IN_CRS))
+	    switch (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDstData,	// Get recipient's data from database
+							     Usr_DONT_GET_PREFS,
+							     Usr_DONT_GET_ROLE_IN_CRS))
 	      {
-	       /***** Check if recipient has banned me *****/
-	       if (Msg_DB_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDstData.UsrCod))
-		  /***** Show an alert indicating that the message has not been sent successfully *****/
-		  Ale_ShowAlert (Ale_WARNING,Txt_message_not_sent_to_X,UsrDstData.FullName);
-	       else
-		 {
-		  /***** Create message *****/
-		  if (!MsgAlreadyInserted)
+	       case Exi_EXISTS:
+		  /***** Check if recipient has banned me *****/
+		  if (Msg_DB_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDstData.UsrCod))
+		     /***** Show an alert indicating that the message has not been sent successfully *****/
+		     Ale_ShowAlert (Ale_WARNING,Txt_message_not_sent_to_X,UsrDstData.FullName);
+		  else
 		    {
-		     // The message is inserted only once in the table of messages sent
-		     NewMsgCod = Msg_InsertNewMsg (Messages->Subject,Messages->Content,&Media);
-		     MsgAlreadyInserted = true;
+		     /***** Create message *****/
+		     if (!MsgAlreadyInserted)
+		       {
+			// The message is inserted only once in the table of messages sent
+			NewMsgCod = Msg_InsertNewMsg (Messages->Subject,Messages->Content,&Media);
+			MsgAlreadyInserted = true;
+		       }
+
+		     /***** If this recipient is the original sender of a message been replied, set Replied to true *****/
+		     Messages->Reply.Replied = (Messages->Reply.IsReply &&
+						UsrDstData.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+
+		     /***** This received message must be notified by email? *****/
+		     CreateNotif = (UsrDstData.NtfEvents.CreateNotif & (1 << Ntf_EVENT_MESSAGE));
+		     NotifyByEmail = CreateNotif &&
+				     (UsrDstData.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod) &&
+				     (UsrDstData.NtfEvents.SendEmail & (1 << Ntf_EVENT_MESSAGE));
+
+		     /***** Create the received message for this recipient
+			    and increment number of new messages received by this recipient *****/
+		     Msg_DB_CreateRcvMsg (NewMsgCod,UsrDstData.UsrCod,NotifyByEmail);
+
+		     /***** Create notification for this recipient.
+			    If this recipient wants to receive notifications by -mail,
+			    activate the sending of a notification *****/
+		     if (CreateNotif)
+			Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_MESSAGE,UsrDstData.UsrCod,NewMsgCod,
+						      (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
+										      0),
+						      Gbl.Hierarchy.Node[Hie_INS].HieCod,
+						      Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+						      Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+						      Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+
+		     /***** Show an alert indicating that the message has been sent successfully *****/
+		     Ale_ShowAlert (Ale_SUCCESS,NotifyByEmail ? Txt_message_sent_to_X_notified_by_email :
+								Txt_message_sent_to_X_not_notified_by_email,
+				    UsrDstData.FullName);
+
+		     /***** Increment number of recipients *****/
+		     Messages->Rcv.NumRecipients++;
 		    }
-
-		  /***** If this recipient is the original sender of a message been replied, set Replied to true *****/
-		  Messages->Reply.Replied = (Messages->Reply.IsReply &&
-					     UsrDstData.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-
-		  /***** This received message must be notified by email? *****/
-		  CreateNotif = (UsrDstData.NtfEvents.CreateNotif & (1 << Ntf_EVENT_MESSAGE));
-		  NotifyByEmail = CreateNotif &&
-				  (UsrDstData.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod) &&
-				  (UsrDstData.NtfEvents.SendEmail & (1 << Ntf_EVENT_MESSAGE));
-
-		  /***** Create the received message for this recipient
-			 and increment number of new messages received by this recipient *****/
-		  Msg_DB_CreateRcvMsg (NewMsgCod,UsrDstData.UsrCod,NotifyByEmail);
-
-		  /***** Create notification for this recipient.
-			 If this recipient wants to receive notifications by -mail,
-			 activate the sending of a notification *****/
-		  if (CreateNotif)
-		     Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_MESSAGE,UsrDstData.UsrCod,NewMsgCod,
-						   (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-										   0),
-						   Gbl.Hierarchy.Node[Hie_INS].HieCod,
-						   Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-						   Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-						   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
-
-		  /***** Show an alert indicating that the message has been sent successfully *****/
-		  Ale_ShowAlert (Ale_SUCCESS,NotifyByEmail ? Txt_message_sent_to_X_notified_by_email :
-							     Txt_message_sent_to_X_not_notified_by_email,
-				 UsrDstData.FullName);
-
-		  /***** Increment number of recipients *****/
-		  Messages->Rcv.NumRecipients++;
-		 }
-	      }
-	    else
-	      {
-	       Ale_ShowAlert (Ale_ERROR,Txt_Error_getting_data_from_a_recipient);
-	       Messages->Rcv.NumErrors++;
+		  break;
+	       case Exi_DOES_NOT_EXIST:
+	       default:
+		  Ale_ShowAlert (Ale_ERROR,Txt_Error_getting_data_from_a_recipient);
+		  Messages->Rcv.NumErrors++;
+		  break;
 	      }
 	   }
 
@@ -2002,6 +2004,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
       [CloOpe_OPEN  ] = "MSG_BG",
      };
    struct Usr_Data UsrDat;
+   __attribute__((unused)) Exi_Exist_t UsrExists;
    bool FromThisCrs = false;	// Initialized to avoid warning
    time_t CreatTimeUTC;		// Creation time of a message
    long CrsCod;
@@ -2060,9 +2063,9 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
       HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
                     ClassAuthor[ClosedOrOpen],The_GetSuffix (),
                     ClassBg[ClosedOrOpen],The_GetSuffix ());
-	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-						  Usr_DONT_GET_PREFS,
-						  Usr_DONT_GET_ROLE_IN_CRS);
+	 UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+							      Usr_DONT_GET_PREFS,
+							      Usr_DONT_GET_ROLE_IN_CRS);
 	 Usr_WriteAuthor (&UsrDat,For_ENABLED);
       HTM_TD_End ();
 
@@ -2477,7 +2480,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
    struct Usr_Data UsrDat;
    bool Deleted;
    bool OpenByDst;
-   bool UsrValid;
+   Exi_Exist_t UsrExists;
    Pho_ShowPhotos_t ShowPhotos;
    const char *Title;
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
@@ -2520,9 +2523,9 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 	    OpenByDst = (row[2][0] == 'Y');
 
 	    /* Get user's data */
-	    UsrValid = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-								Usr_DONT_GET_PREFS,
-								Usr_DONT_GET_ROLE_IN_CRS);
+	    UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+								 Usr_DONT_GET_PREFS,
+								 Usr_DONT_GET_ROLE_IN_CRS);
 
 	    /* Put an icon to show if user has read the message */
 	    Title = OpenByDst ? (Deleted ? Txt_MSG_Open_and_deleted :
@@ -2544,8 +2547,8 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 
 	       /* Put user's photo */
 	       HTM_TD_Begin ("class=\"CT\" style=\"width:30px;\"");
-		  ShowPhotos = (UsrValid ? Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL) :
-					   Pho_PHOTOS_DONT_SHOW);
+		  ShowPhotos = (UsrExists == Exi_EXISTS ? Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL) :
+							  Pho_PHOTOS_DONT_SHOW);
 		  Pho_ShowUsrPhoto (&UsrDat,ShowPhotos == Pho_PHOTOS_SHOW ? PhotoURL :
 									    NULL,
 				    ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
@@ -2554,15 +2557,18 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 	       /* Write user's name */
 	       HTM_TD_Begin ("class=\"LM %s_%s\"",
 	                     OpenByDst ? "MSG_AUT" :
-				         "MSG_AUT_NEW",
-			     The_GetSuffix ());
-		  if (UsrValid)
-		     HTM_Txt (UsrDat.FullName);
-		  else
+				         "MSG_AUT_NEW",The_GetSuffix ());
+		  switch (UsrExists)
 		    {
-		     HTM_OpenBracket ();
-		        HTM_Txt (Txt_unknown_recipient);	// User not found, likely a user who has been removed
-		     HTM_CloseBracket ();
+		     case Exi_EXISTS:
+			HTM_Txt (UsrDat.FullName);
+			break;
+		     case Exi_DOES_NOT_EXIST:
+		     default:
+			HTM_OpenBracket ();
+			   HTM_Txt (Txt_unknown_recipient);	// User not found, likely a user who has been removed
+			HTM_CloseBracket ();
+			break;
 		    }
 	       HTM_TD_End ();
 
@@ -2718,9 +2724,9 @@ void Msg_BanSenderWhenShowingMsgs (void)
    Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
-   if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
-                                                 Usr_DONT_GET_PREFS,
-                                                 Usr_DONT_GET_ROLE_IN_CRS))
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                Usr_DONT_GET_PREFS,
+                                                Usr_DONT_GET_ROLE_IN_CRS) == Exi_DOES_NOT_EXIST)
       Err_WrongUserExit ();
 
    /***** Insert pair (sender's code - my code) in table of banned senders if not inserted *****/
@@ -2773,9 +2779,9 @@ static void Msg_UnbanSender (void)
    Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
-   if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
-                                                 Usr_DONT_GET_PREFS,
-                                                 Usr_DONT_GET_ROLE_IN_CRS))
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                Usr_DONT_GET_PREFS,
+                                                Usr_DONT_GET_ROLE_IN_CRS) == Exi_DOES_NOT_EXIST)
       Err_WrongUserExit ();
 
    /***** Remove pair (sender's code - my code) from table of banned senders *****/
@@ -2813,47 +2819,47 @@ void Msg_ListBannedUsrs (void)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      /***** Begin box and table *****/
-      Box_BoxTableBegin (Txt_Banned_users,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
+	 /***** Begin box and table *****/
+	 Box_BoxTableBegin (Txt_Banned_users,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
 
-	 /***** List users *****/
-	 for (NumUsr  = 1;
-	      NumUsr <= NumUsrs;
-	      NumUsr++)
-	   {
-	    /* Get user's code */
-	    UsrDat.UsrCod = DB_GetNextCode (mysql_res);
-
-	    /* Get user's data from database */
-	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-							 Usr_DONT_GET_PREFS,
-							 Usr_DONT_GET_ROLE_IN_CRS))
+	    /***** List users *****/
+	    for (NumUsr  = 1;
+		 NumUsr <= NumUsrs;
+		 NumUsr++)
 	      {
-	       HTM_TR_Begin (NULL);
+	       /* Get user's code */
+	       UsrDat.UsrCod = DB_GetNextCode (mysql_res);
 
-		  /* Put form to unban user */
-		  HTM_TD_Begin ("class=\"BM\"");
-		     Frm_BeginForm (ActUnbUsrLst);
-			Usr_PutParUsrCodEncrypted (UsrDat.EnUsrCod);
-			Ico_PutIconLink ("lock.svg",Ico_RED,ActUnbUsrLst);
-		     Frm_EndForm ();
-		  HTM_TD_End ();
+	       /* Get user's data from database */
+	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+							    Usr_DONT_GET_PREFS,
+							    Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
+		 {
+		  HTM_TR_Begin (NULL);
 
-		  /* Show photo */
-		  HTM_TD_Begin ("class=\"LM\" style=\"width:30px;\"");
-		     Pho_ShowUsrPhotoIfAllowed (&UsrDat,
-		                                ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
-		  HTM_TD_End ();
+		     /* Put form to unban user */
+		     HTM_TD_Begin ("class=\"BM\"");
+			Frm_BeginForm (ActUnbUsrLst);
+			   Usr_PutParUsrCodEncrypted (UsrDat.EnUsrCod);
+			   Ico_PutIconLink ("lock.svg",Ico_RED,ActUnbUsrLst);
+			Frm_EndForm ();
+		     HTM_TD_End ();
 
-		  /* Write user's full name */
-		  HTM_TD_Txt_Left (UsrDat.FullName);
+		     /* Show photo */
+		     HTM_TD_Begin ("class=\"LM\" style=\"width:30px;\"");
+			Pho_ShowUsrPhotoIfAllowed (&UsrDat,
+						   ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
+		     HTM_TD_End ();
 
-	       HTM_TR_End ();
+		     /* Write user's full name */
+		     HTM_TD_Txt_Left (UsrDat.FullName);
+
+		  HTM_TR_End ();
+		 }
 	      }
-	   }
 
-      /***** End table and box *****/
-      Box_BoxTableEnd ();
+	 /***** End table and box *****/
+	 Box_BoxTableEnd ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);

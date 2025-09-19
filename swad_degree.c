@@ -326,6 +326,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
    unsigned NumCrss;
    unsigned NumUsrsInCrssOfDeg;
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
+   __attribute__((unused)) Exi_Exist_t UsrExists;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -459,9 +460,9 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 
 	    /* Degree requester */
 	    UsrDat.UsrCod = Deg->RequesterUsrCod;
-	    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-						     Usr_DONT_GET_PREFS,
-						     Usr_DONT_GET_ROLE_IN_CRS);
+	    UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+								 Usr_DONT_GET_PREFS,
+								 Usr_DONT_GET_ROLE_IN_CRS);
 	    HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
 	                  The_GetSuffix ());
 	       Usr_WriteAuthor (&UsrDat,For_ENABLED);
@@ -750,7 +751,7 @@ static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
 
    /***** Get data of type of degree of this degree *****/
    DegTyp.DegTypCod = Deg->Specific.TypCod;
-   if (!DegTyp_GetDegTypeDataByCod (&DegTyp))
+   if (DegTyp_GetDegTypeDataByCod (&DegTyp) == Err_ERROR)
       Err_WrongDegTypExit ();
 
    if (Deg->Status & Hie_STATUS_BIT_PENDING)
@@ -764,7 +765,7 @@ static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
       TxtClassStrong = "DAT_STRONG";
      }
    BgColor = (Deg->HieCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod) ? "BG_HIGHLIGHT" :
-							        The_GetColorRows ();
+							           The_GetColorRows ();
 
    /***** Begin table row *****/
    HTM_TR_Begin (NULL);
@@ -1482,8 +1483,8 @@ unsigned Deg_GetCachedNumDegsWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role)
    long HieCod = Hie_GetHieCod (HieLvl);
 
    /***** Get number of degrees with users from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureDegs[Role],HieLvl,HieCod,
-				   FigCch_UNSIGNED,&NumNodesWithUsrs))
+   if (FigCch_GetFigureFromCache (FigureDegs[Role],HieLvl,HieCod,
+				  FigCch_UNSIGNED,&NumNodesWithUsrs) == Exi_DOES_NOT_EXIST)
      {
       /***** Get current number of degrees with users from database and update cache *****/
       NumNodesWithUsrs = Deg_DB_GetNumDegsWithUsrs (HieLvl,HieCod,Role);

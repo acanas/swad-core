@@ -938,6 +938,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
    For_Disabled_t Disabled;
    char *Title;
    Act_Action_t NextAction;
+   __attribute__((unused)) Exi_Exist_t UsrExists;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -1049,9 +1050,9 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
       /***** Write author *****/
       HTM_TD_Begin ("colspan=\"2\" class=\"LT MSG_AUT_%s\" style=\"width:150px;\"",
                     The_GetSuffix ());
-	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-						  Usr_DONT_GET_PREFS,
-						  Usr_DONT_GET_ROLE_IN_CRS);
+	 UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+							      Usr_DONT_GET_PREFS,
+							      Usr_DONT_GET_ROLE_IN_CRS);
          Usr_WriteAuthor (&UsrDat,Disabled);
 	 if (Disabled == For_ENABLED)
 	    /* Write number of posts from this user */
@@ -2267,6 +2268,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
    struct Pag_Pagination PaginationPsts;
    const char *Class;
    long ThreadInMyClipboard = -1L;
+   __attribute__((unused)) Exi_Exist_t UsrExists;
    unsigned Column;
    const char *BgColor;
    Usr_Can_t ICanMoveThreads = For_CheckIfICanMoveThreads ();
@@ -2375,9 +2377,9 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	      {
 	       /* Write the author of first or last message */
 	       UsrDat.UsrCod = Thr.UsrCod[Order];
-	       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-							Usr_DONT_GET_PREFS,
-							Usr_DONT_GET_ROLE_IN_CRS);
+	       UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+								    Usr_DONT_GET_PREFS,
+								    Usr_DONT_GET_ROLE_IN_CRS);
 	       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
 	                     Class,The_GetSuffix (),BgColor);
 		  Usr_WriteAuthor (&UsrDat,Thr.Disabled[Order]);

@@ -677,7 +677,7 @@ void DegTyp_RemoveDegTyp (void)
    DegTyp_EditingDegTyp->DegTypCod = ParCod_GetAndCheckPar (ParCod_OthDegTyp);
 
    /***** Get data of the degree type from database *****/
-   if (!DegTyp_GetDegTypeDataByCod (DegTyp_EditingDegTyp))
+   if (DegTyp_GetDegTypeDataByCod (DegTyp_EditingDegTyp) == Err_ERROR)
       Err_WrongDegTypExit ();
 
    /***** Check if this degree type has degrees *****/
@@ -710,28 +710,24 @@ static void DegTyp_PutParOtherDegTypCod (void *DegTypCod)
 /****************** Get data of a degree type from its code ******************/
 /*****************************************************************************/
 
-bool DegTyp_GetDegTypeDataByCod (struct DegTyp_DegType *DegTyp)
+Err_SuccessOrError_t DegTyp_GetDegTypeDataByCod (struct DegTyp_DegType *DegTyp)
   {
-   /***** Trivial check: code of degree type should be >= 0 *****/
-   if (DegTyp->DegTypCod <= 0)
+   /***** Trivial check: code of degree type should be > 0 *****/
+   if (DegTyp->DegTypCod > 0)
      {
-      DegTyp->DegTypName[0] = '\0';
-      DegTyp->NumDegs = 0;
-      return false;
-     }
-
-   /***** Get the name of a type of degree from database *****/
-   Deg_DB_GetDegTypeNameByCod (DegTyp);
-   if (DegTyp->DegTypName[0])
-     {
-      /* Count number of degrees of this type */
-      DegTyp->NumDegs = Deg_DB_GetNumDegsOfType (DegTyp->DegTypCod);
-      return true;
+      /***** Get the name of a type of degree from database *****/
+      Deg_DB_GetDegTypeNameByCod (DegTyp);
+      if (DegTyp->DegTypName[0])
+	{
+	 /* Count number of degrees of this type */
+	 DegTyp->NumDegs = Deg_DB_GetNumDegsOfType (DegTyp->DegTypCod);
+	 return Err_SUCCESS;
+	}
      }
 
    DegTyp->DegTypName[0] = '\0';
    DegTyp->NumDegs = 0;
-   return false;
+   return Err_ERROR;
   }
 
 /*****************************************************************************/
@@ -790,7 +786,7 @@ void DegTyp_RenameDegTyp (void)
    Par_GetParText ("DegTypName",NewNameDegTyp,DegTyp_MAX_BYTES_DEGREE_TYPE_NAME);
 
    /***** Get from the database the old name of the degree type *****/
-   if (!DegTyp_GetDegTypeDataByCod (DegTyp_EditingDegTyp))
+   if (DegTyp_GetDegTypeDataByCod (DegTyp_EditingDegTyp) == Err_ERROR)
       Err_WrongDegTypExit ();
 
    /***** Check if new name is empty *****/

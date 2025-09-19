@@ -33,7 +33,7 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define PrjCfg_NET_CAN_CREATE_DEFAULT true
+#define PrjCfg_NET_CAN_CREATE_DEFAULT Usr_CAN
 
 #define PrjCfg_NUM_RUBRIC_TYPES 4
 typedef enum
@@ -46,7 +46,7 @@ typedef enum
 
 struct PrjCfg_Config
   {
-   bool NETCanCreate;
+   Usr_Can_t NETCanCreate;
   };
 
 struct PrgCfg_ListRubCods

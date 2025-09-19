@@ -82,7 +82,7 @@ void DegTyp_ReceiveNewDegTyp (void);
 
 void DegTyp_RemoveDegTyp (void);
 
-bool DegTyp_GetDegTypeDataByCod (struct DegTyp_DegType *DegTyp);
+Err_SuccessOrError_t DegTyp_GetDegTypeDataByCod (struct DegTyp_DegType *DegTyp);
 void DegTyp_RenameDegTyp (void);
 
 void DegTyp_ContEditAfterChgDegTyp (void);

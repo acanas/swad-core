@@ -233,7 +233,7 @@ void Prf_GetUsrDatAndShowUserProfile (void)
    /***** Show profile and timeline *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                 Usr_DONT_GET_PREFS,
-                                                Usr_GET_ROLE_IN_CRS))
+                                                Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
       /* Show profile */
       if (Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat))
 	{
@@ -1008,10 +1008,16 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Update first click time in user's figures *****/
-      if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
-	 Prf_DB_UpdateFirstClickTimeUsr (UsrCod,UsrFigures.FirstClickTimeUTC);
-      else			// User entry does not exist
-	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,Usr_OTHER);
+      switch (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
+	{
+	 case Exi_EXISTS:
+	    Prf_DB_UpdateFirstClickTimeUsr (UsrCod,UsrFigures.FirstClickTimeUTC);
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	    Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,Usr_OTHER);
+	    break;
+	}
      }
   }
 
@@ -1032,10 +1038,16 @@ static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
       UsrFigures.NumClicks = (int) Log_DB_GetUsrNumClicks (UsrCod);
 
       /***** Update number of clicks in user's figures *****/
-      if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
-	 Prf_DB_UpdateNumClicksUsr (UsrCod,UsrFigures.NumClicks);
-      else			// User entry does not exist
-	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,Usr_OTHER);
+      switch (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
+	{
+	 case Exi_EXISTS:
+	    Prf_DB_UpdateNumClicksUsr (UsrCod,UsrFigures.NumClicks);
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	    Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,Usr_OTHER);
+	    break;
+	}
      }
   }
 
@@ -1056,10 +1068,16 @@ static void Prf_GetNumTimelinePubsAndStoreAsUsrFigure (long UsrCod)
       UsrFigures.NumTimelinePubs = (int) Tml_DB_GetNumPubsUsr (UsrCod);
 
       /***** Update number of timeline publications in user's figures *****/
-      if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
-	 Prf_DB_UpdateNumTimelinePubsUsr (UsrCod,UsrFigures.NumTimelinePubs);
-      else			// User entry does not exist
-	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,Usr_OTHER);
+      switch (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
+	{
+	 case Exi_EXISTS:
+	    Prf_DB_UpdateNumTimelinePubsUsr (UsrCod,UsrFigures.NumTimelinePubs);
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	    Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,Usr_OTHER);
+	    break;
+	}
      }
   }
 
@@ -1080,10 +1098,16 @@ static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod)
       UsrFigures.NumFileViews = (long) Brw_DB_GetNumFileViewsUsr (UsrCod);
 
       /***** Update number of file views in user's figures *****/
-      if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
-	 Prf_DB_UpdateNumFileViewsUsr (UsrCod,UsrFigures.NumFileViews);
-      else			// User entry does not exist
-	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,Usr_OTHER);
+      switch (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
+	{
+	 case Exi_EXISTS:
+	    Prf_DB_UpdateNumFileViewsUsr (UsrCod,UsrFigures.NumFileViews);
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	    Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,Usr_OTHER);
+	    break;
+	}
      }
   }
 
@@ -1104,10 +1128,16 @@ static void Prf_GetNumForumPostsAndStoreAsUsrFigure (long UsrCod)
       UsrFigures.NumForumPosts = For_DB_GetNumPostsUsr (UsrCod);
 
       /***** Update number of forum posts in user's figures *****/
-      if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
-	 Prf_DB_UpdateNumForumPostsUsr (UsrCod,UsrFigures.NumForumPosts);
-      else			// User entry does not exist
-	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,Usr_OTHER);
+      switch (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
+	{
+	 case Exi_EXISTS:
+	    Prf_DB_UpdateNumForumPostsUsr (UsrCod,UsrFigures.NumForumPosts);
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	    Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,Usr_OTHER);
+	    break;
+	}
      }
   }
 
@@ -1128,10 +1158,16 @@ static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod)
       UsrFigures.NumMessagesSent = (int) Msg_DB_GetNumMsgsSentByUsr (UsrCod);
 
       /***** Update number of messages sent in user's figures *****/
-      if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
-	 Prf_DB_UpdateNumMessagesSentUsr (UsrCod,UsrFigures.NumMessagesSent);
-      else			// User entry does not exist
-	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,Usr_OTHER);
+      switch (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
+	{
+	 case Exi_EXISTS:
+	    Prf_DB_UpdateNumMessagesSentUsr (UsrCod,UsrFigures.NumMessagesSent);
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	    Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,Usr_OTHER);
+	    break;
+	}
      }
   }
 

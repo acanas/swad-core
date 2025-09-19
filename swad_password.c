@@ -582,7 +582,8 @@ void Pwd_ShowFormChgMyPwd (void)
    extern const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_;
    extern const char *Txt_Password;
    extern const char *Txt_Current_password;
-   bool IHaveAPasswordInDB = (bool) Gbl.Usrs.Me.UsrDat.Password[0];
+   Exi_Exist_t MyPasswordInDBExists = Gbl.Usrs.Me.UsrDat.Password[0] ? Exi_EXISTS :
+								       Exi_DOES_NOT_EXIST;
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Pwd_PASSWORD_SECTION_ID);
@@ -598,19 +599,24 @@ void Pwd_ShowFormChgMyPwd (void)
 	    Ale_ShowAlerts (Pwd_PASSWORD_SECTION_ID);
 
 	    /***** Help message *****/
-	    if (!IHaveAPasswordInDB) // If I don't have a password in database...
-	       Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_create_your_password);
-	    else if (Gbl.Usrs.Me.LoginPlainPassword[0])
+	    switch (MyPasswordInDBExists)
 	      {
-	       if (!Pwd_FastCheckIfPasswordSeemsGood (Gbl.Usrs.Me.LoginPlainPassword))
-		  Ale_ShowAlert (Ale_WARNING,Txt_Your_password_is_not_secure_enough);
+	       case Exi_EXISTS:
+		  if (Gbl.Usrs.Me.LoginPlainPassword[0])
+		     if (!Pwd_FastCheckIfPasswordSeemsGood (Gbl.Usrs.Me.LoginPlainPassword))
+			Ale_ShowAlert (Ale_WARNING,Txt_Your_password_is_not_secure_enough);
+		  break;
+	       case Exi_DOES_NOT_EXIST:	// If I don't have a password in database...
+	       default:
+		  Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_create_your_password);
+		  break;
 	      }
 
 	    /***** Begin table *****/
 	    HTM_TABLE_BeginWidePadding (2);
 
 	    /***** Current password *****/
-	    if (IHaveAPasswordInDB) // If I have a password in database...
+	    if (MyPasswordInDBExists == Exi_EXISTS) // If I have a password in database...
 	      {
 	       HTM_TR_Begin (NULL);
 
@@ -641,8 +647,8 @@ void Pwd_ShowFormChgMyPwd (void)
 	    Pwd_PutFormToGetNewPasswordTwice ();
 
 	 /***** End table, send button and end box *****/
-	 Box_BoxTableWithButtonEnd (IHaveAPasswordInDB ? Btn_SAVE_CHANGES :
-							 Btn_CREATE);
+	 Box_BoxTableWithButtonEnd (MyPasswordInDBExists == Exi_EXISTS ? Btn_SAVE_CHANGES :
+									 Btn_CREATE);
 
       /***** End form *****/
       Frm_EndForm ();

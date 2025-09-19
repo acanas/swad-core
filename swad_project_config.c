@@ -61,7 +61,7 @@ static void PrjCfg_GetConfigDataFromRow (MYSQL_RES *mysql_res,
 				         struct PrjCfg_Config *Config);
 static void PrjCfg_GetListRubCods (const struct Rub_Rubrics *Rubrics,
                                    struct PrgCfg_ListRubCods *ListRubCods);
-static bool PrjCfg_GetIfNETCanCreateFromForm (void);
+static Usr_Can_t PrjCfg_GetIfNETCanCreateFromForm (void);
 
 /*****************************************************************************/
 /************** Get configuration of projects for current course *************/
@@ -273,7 +273,8 @@ static void PrjCfg_GetConfigDataFromRow (MYSQL_RES *mysql_res,
    row[0]	NETCanCreate
    */
    /***** Get whether non-editing teachers can create new projects or not (row[0]) *****/
-   Config->NETCanCreate = (row[0][0] == 'Y');
+   Config->NETCanCreate = (row[0][0] == 'Y') ? Usr_CAN :
+					       Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -305,8 +306,8 @@ static void PrjCfg_ShowFormNETCanCreate (const struct PrjCfg_Config *Config)
 
    HTM_LABEL_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
       HTM_INPUT_CHECKBOX ("NETCanCreate",
-			  (Config->NETCanCreate ? HTM_CHECKED :
-						  HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
+			  (Config->NETCanCreate == Usr_CAN ? HTM_CHECKED :
+							     HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
 			  "id=\"NETCanCreate\" value=\"Y\"");
       HTM_Txt (Txt_Non_editing_teachers_can_create_new_projects);
    HTM_LABEL_End ();
@@ -431,7 +432,8 @@ static void PrjCfg_GetListRubCods (const struct Rub_Rubrics *Rubrics,
 /****** Get if projects are creatable by non-editing teachers from form *******/
 /*****************************************************************************/
 
-static bool PrjCfg_GetIfNETCanCreateFromForm (void)
+static Usr_Can_t PrjCfg_GetIfNETCanCreateFromForm (void)
   {
-   return Par_GetParBool ("NETCanCreate");
+   return Par_GetParBool ("NETCanCreate") ? Usr_CAN :
+					    Usr_CAN_NOT;
   }

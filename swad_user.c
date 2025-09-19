@@ -207,7 +207,7 @@ static Usr_Sex_t Usr_GetSexFromStr (const char *Str);
 static void Usr_GetParOtherUsrIDNickOrEMail (void);
 
 static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void);
-static bool Usr_ChkUsrAndGetUsrDataFromSession (void);
+static Exi_Exist_t Usr_ChkUsrAndGetUsrDataFromSession (void);
 static void Usr_ShowAlertUsrDoesNotExistsOrWrongPassword (void);
 static void Usr_ShowAlertThereAreMoreThanOneUsr (void);
 
@@ -297,7 +297,6 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
 				Usr_ClassPhotoType_t ClassPhotoType,
 				bool PutCheckBoxToSelectUsr,
 				Pho_ShowPhotos_t ShowPhotos);
-// static void Usr_PutSelectorNumColsClassPhoto (void);
 
 static void Usr_GetAndShowNumUsrsInCrss (Hie_Level_t HieLvl,Rol_Role_t Role);
 static void Usr_GetAndShowNumUsrsNotBelongingToAnyCrs (void);
@@ -1584,13 +1583,9 @@ Exi_Exist_t Usr_GetParOtherUsrCodEncryptedAndGetUsrData (void)
    Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Check if user exists and get her/his data *****/
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
-                                                Usr_DONT_GET_PREFS,
-                                                Usr_GET_ROLE_IN_CRS))
-      // Existing user
-      return Exi_EXISTS;
-
-   return Exi_DOES_NOT_EXIST;
+   return Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+						   Usr_DONT_GET_PREFS,
+						   Usr_GET_ROLE_IN_CRS);
   }
 
 /*****************************************************************************/
@@ -1648,25 +1643,27 @@ void Usr_ChkUsrGetUsrDataAndAdjustAction (void)
         {
 	 /***** Check user and get user's data *****/
 	 if (Gbl.Session.Status == Ses_OPEN)
-	   {
-	    if (Usr_ChkUsrAndGetUsrDataFromSession ())		// User logged in
+	    switch (Usr_ChkUsrAndGetUsrDataFromSession ())
 	      {
-	       Gbl.Usrs.Me.Logged = true;
+	       case Exi_EXISTS:	// User logged in
+		  Gbl.Usrs.Me.Logged = true;
 
-	       Usr_SetMyPrefsAndRoles ();
+		  Usr_SetMyPrefsAndRoles ();
 
-	       if (Gbl.Action.IsAJAXAutoRefresh)	// If refreshing ==> don't refresh LastTime in session
-		  Ses_DB_UpdateSessionLastRefresh ();
-	       else
-		 {
-		  Act_AdjustCurrentAction ();
-		  Ses_DB_UpdateSession ();
-		  Con_DB_UpdateMeInConnectedList ();
-		 }
+		  if (Gbl.Action.IsAJAXAutoRefresh)	// If refreshing ==> don't refresh LastTime in session
+		     Ses_DB_UpdateSessionLastRefresh ();
+		  else
+		    {
+		     Act_AdjustCurrentAction ();
+		     Ses_DB_UpdateSession ();
+		     Con_DB_UpdateMeInConnectedList ();
+		    }
+		  break;
+	       case Exi_DOES_NOT_EXIST:
+	       default:
+		  FormLogin.PutForm = Frm_PUT_FORM;
+		  break;
 	      }
-	    else
-	       FormLogin.PutForm = Frm_PUT_FORM;
-	   }
 	 else	// Session is not open
 	    switch (Gbl.Action.Act)
 	      {
@@ -1698,21 +1695,24 @@ void Usr_ChkUsrGetUsrDataAndAdjustAction (void)
 		  /***** Get user's data *****/
 		  Usr_GetParOtherUsrCodEncrypted (&Gbl.Usrs.Me.UsrDat);
 		  Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Me.UsrDat);
-		  if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
-							       Usr_GET_PREFS,
-							       Usr_GET_ROLE_IN_CRS))
+		  switch (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+							           Usr_GET_PREFS,
+							           Usr_GET_ROLE_IN_CRS))
 		    {
-		     // User logged in
-		     Gbl.Usrs.Me.Logged = true;
-		     Usr_SetMyPrefsAndRoles ();
+		     case Exi_EXISTS:	// User logged in
+			Gbl.Usrs.Me.Logged = true;
+			Usr_SetMyPrefsAndRoles ();
 
-		     Act_AdjustCurrentAction ();
-		     Ses_CreateSession ();
+			Act_AdjustCurrentAction ();
+			Ses_CreateSession ();
 
-		     Set_SetSettingsFromIP ();	// Set settings from current IP
+			Set_SetSettingsFromIP ();	// Set settings from current IP
+			break;
+		     case Exi_DOES_NOT_EXIST:
+		     default:
+			FormLogin.PutForm = Frm_PUT_FORM;
+			break;
 		    }
-		  else
-		     FormLogin.PutForm = Frm_PUT_FORM;
 		  break;
 	       default:
 		  break;
@@ -1888,18 +1888,18 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 /******** Check user and get user's data when the session is open ************/
 /*****************************************************************************/
 
-static bool Usr_ChkUsrAndGetUsrDataFromSession (void)
+static Exi_Exist_t Usr_ChkUsrAndGetUsrDataFromSession (void)
   {
    /***** Session is open and user's code is get from session *****/
    Gbl.Usrs.Me.UsrDat.UsrCod = Gbl.Session.UsrCod;
 
    /* Check if user exists in database, and get his/her data */
-   if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
-                                                 Usr_GET_PREFS,
-                                                 Usr_GET_ROLE_IN_CRS))
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+                                                Usr_GET_PREFS,
+                                                Usr_GET_ROLE_IN_CRS) == Exi_DOES_NOT_EXIST)
      {
       Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
-      return false;
+      return Exi_DOES_NOT_EXIST;
      }
 
    /* Check user's password:
@@ -1908,10 +1908,10 @@ static bool Usr_ChkUsrAndGetUsrDataFromSession (void)
    if (!Pwd_CheckCurrentPassword ())	// If my password is not correct...
      {
       Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
-      return false;
+      return Exi_DOES_NOT_EXIST;
      }
 
-   return true;
+   return Exi_EXISTS;
   }
 
 /*****************************************************************************/
@@ -2100,25 +2100,25 @@ static void Usr_PutLinkToLogOut (__attribute__((unused)) void *Args)
 /******* Check a user's code and get all user's data from user's code ********/
 /*****************************************************************************/
 // Input: UsrDat->UsrCod must hold a valid user code
-// Output: When true ==> UsrDat will hold all user's data
-//         When false ==> UsrDat is reset, except user's code
+// Output: When Exi_EXISTS ==> UsrDat will hold all user's data
+//         When Exi_DOES_NOT_EXIST ==> UsrDat is reset, except user's code
 
-bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct Usr_Data *UsrDat,
-                                              Usr_GetPrefs_t GetPrefs,
-                                              Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs)
+Exi_Exist_t Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct Usr_Data *UsrDat,
+						     Usr_GetPrefs_t GetPrefs,
+						     Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs)
   {
    /***** Check if a user exists having this user's code *****/
    if (Usr_DB_ChkIfUsrCodExists (UsrDat->UsrCod) == Exi_EXISTS)
      {
       /* Get user's data */
       Usr_GetAllUsrDataFromUsrCod (UsrDat,GetPrefs,GetRoleInCurrentCrs);
-      return true;
+      return Exi_EXISTS;
      }
 
    /***** No user's code found *****/
    UsrDat->UsrIDNickOrEmail[0] = '\0';
    Usr_ResetUsrDataExceptUsrCodAndIDs (UsrDat);
-   return false;
+   return Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -4010,11 +4010,6 @@ static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role)
 
 unsigned Usr_GetColumnsForSelectUsrs (Pho_ShowPhotos_t ShowPhotos)
   {
-   /*
-   return (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO) ? Set_GetColsClassPhoto () :
-                                                                  (ShowPhotos == Pho_PHOTOS_SHOW ? 1 + Usr_NUM_MAIN_FIELDS_DATA_USR :
-												       Usr_NUM_MAIN_FIELDS_DATA_USR);
-   */
    return (ShowPhotos == Pho_PHOTOS_SHOW ? 1 + Usr_NUM_MAIN_FIELDS_DATA_USR :
 					       Usr_NUM_MAIN_FIELDS_DATA_USR);
   }
@@ -4341,7 +4336,7 @@ void Usr_ListAllDataGsts (void)
 	    UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_GST].Lst[NumUsr].UsrCod;
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							 Usr_DONT_GET_PREFS,
-							 Usr_DONT_GET_ROLE_IN_CRS))
+							 Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	      {
 	       UsrDat.Roles.InCurrentCrs = Rol_GST;	// We know the user's role.
 							// It is not necessary to retrieve
@@ -4555,7 +4550,7 @@ void Usr_ListAllDataStds (void)
 	    UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod;
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							 Usr_DONT_GET_PREFS,
-							 Usr_DONT_GET_ROLE_IN_CRS))
+							 Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	      {
 	       UsrDat.Roles.InCurrentCrs = Rol_STD;	// We know the user's role.
 							// It is not necessary to retrieve
@@ -4718,7 +4713,7 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
       UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_DONT_GET_ROLE_IN_CRS))
+                                                   Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	{
 	 UsrDat.Roles.InCurrentCrs = Role;	// We know the user's role.
 						// It is not necessary to retrieve
@@ -4971,7 +4966,7 @@ void Usr_ListDataAdms (void)
 	       UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_DEG_ADM].Lst[NumUsr].UsrCod;
 	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							    Usr_DONT_GET_PREFS,
-							    Usr_DONT_GET_ROLE_IN_CRS))
+							    Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 		 {
 		  UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_DEG_ADM].Lst[NumUsr].Accepted;
 		  Usr_WriteRowAdmData (++NumUsr,&UsrDat,ShowPhotos);
@@ -6304,42 +6299,6 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
   }
 
 /*****************************************************************************/
-/***************** Write selector of columns in class photo ******************/
-/*****************************************************************************/
-/*
-static void Usr_PutSelectorNumColsClassPhoto (void)
-  {
-   extern const char *Txt_columns;
-   unsigned Cols = Set_GetColsClassPhoto ();
-   unsigned NumCols;
-
-   ***** Begin label *****
-   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-
-      ***** Begin selector *****
-      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
-			"name=\"ColsClassPhoto\" class=\"INPUT_%s\"",
-			The_GetSuffix ());
-
-	 ***** Put a row in selector for every number of columns *****
-	 for (NumCols  = 1;
-	      NumCols <= Usr_CLASS_PHOTO_COLS_MAX;
-	      NumCols++)
-	    HTM_OPTION (HTM_Type_UNSIGNED,&NumCols,
-			(NumCols == Cols) ? HTM_SELECTED :
-	                		    HTM_NO_ATTR,
-			"%u",NumCols);
-
-      ***** End selector *****
-      HTM_SELECT_End ();
-
-      HTM_Txt (Txt_columns);
-
-   ***** End label *****
-   HTM_LABEL_End ();
-  }
-*/
-/*****************************************************************************/
 /********** Build the relative path of a user from his user's code ***********/
 /*****************************************************************************/
 
@@ -6505,7 +6464,7 @@ void Usr_WriteAuthor1Line (long UsrCod,HidVis_HiddenOrVisible_t HiddenOrVisible)
    UsrDat.UsrCod = UsrCod;
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
                                                 Usr_DONT_GET_PREFS,
-                                                Usr_DONT_GET_ROLE_IN_CRS))
+                                                Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
       ShowPhotos = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 
    /***** Show photo *****/

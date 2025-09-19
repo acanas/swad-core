@@ -1066,8 +1066,8 @@ void Prj_DB_UpdateNETCanCreate (const struct Prj_Projects *Projects)
                     " VALUES"
                     " (%ld,'%c')",
 		    Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		    Projects->Config.NETCanCreate ? 'Y' :
-			                            'N');
+		    Projects->Config.NETCanCreate == Usr_CAN ? 'Y' :
+							       'N');
   }
 
 /*****************************************************************************/

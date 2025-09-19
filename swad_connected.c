@@ -762,9 +762,9 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Hie_Level_t 
 
          /* Get user's data */
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Existing user
+         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
                                                       Usr_DONT_GET_PREFS,
-                                                      Usr_DONT_GET_ROLE_IN_CRS))
+                                                      Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
            {
 	    /* Get course code (row[1]) */
 	    ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) == Gbl.Hierarchy.Node[Hie_CRS].HieCod);

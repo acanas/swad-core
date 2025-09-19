@@ -151,55 +151,60 @@ void Dup_ListDuplicateUsrs (void)
 
 	       /* Get user code (row[0]) */
 	       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-							    Usr_DONT_GET_PREFS,
-							    Usr_DONT_GET_ROLE_IN_CRS))
+	       switch (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+								Usr_DONT_GET_PREFS,
+								Usr_DONT_GET_ROLE_IN_CRS))
 		 {
-		  /* Get if user has accepted all his/her courses */
-		  if (Enr_DB_GetNumCrssOfUsr (UsrDat.UsrCod))
-		     UsrDat.Accepted = (Enr_DB_GetNumCrssOfUsrNotAccepted (UsrDat.UsrCod) == 0);
-		  else
-		     UsrDat.Accepted = false;
+		  case Exi_EXISTS:
+		     /* Get if user has accepted all his/her courses */
+		     if (Enr_DB_GetNumCrssOfUsr (UsrDat.UsrCod))
+			UsrDat.Accepted = (Enr_DB_GetNumCrssOfUsrNotAccepted (UsrDat.UsrCod) == 0);
+		     else
+			UsrDat.Accepted = false;
 
-		  /* Write data of this user */
-		  Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK,
-					   &Gbl.Usrs.Selected,
-					   Pho_PHOTOS_SHOW);	// Show photo
+		     /* Write data of this user */
+		     Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK,
+					      &Gbl.Usrs.Selected,
+					      Pho_PHOTOS_SHOW);	// Show photo
 
-		  HTM_TR_Begin (NULL);
+		     HTM_TR_Begin (NULL);
 
-		     HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",
-		                   The_GetColorRows ());
-		     HTM_TD_End ();
+			HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",
+				      The_GetColorRows ());
+			HTM_TD_End ();
 
-		     HTM_TD_Begin ("colspan=\"%u\" class=\"LM DAT_%s %s\"",
-				   Usr_NUM_MAIN_FIELDS_DATA_USR - 2,
-				   The_GetSuffix (),The_GetColorRows ());
+			HTM_TD_Begin ("colspan=\"%u\" class=\"LM DAT_%s %s\"",
+				      Usr_NUM_MAIN_FIELDS_DATA_USR - 2,
+				      The_GetSuffix (),The_GetColorRows ());
 
-			/* Write number of informants (row[1]) if greater than 1 */
-			if (sscanf (row[1],"%u",&NumInformants) != 1)
-			   Err_ShowErrorAndExit ("Wrong number of informants.");
-			if (NumInformants > 1)
-			  {
-			   HTM_Txt (Txt_Informants); HTM_Colon (); HTM_NBSP ();
-			   HTM_Unsigned (NumInformants); HTM_BR ();
-			  }
+			   /* Write number of informants (row[1]) if greater than 1 */
+			   if (sscanf (row[1],"%u",&NumInformants) != 1)
+			      Err_ShowErrorAndExit ("Wrong number of informants.");
+			   if (NumInformants > 1)
+			     {
+			      HTM_Txt (Txt_Informants); HTM_Colon (); HTM_NBSP ();
+			      HTM_Unsigned (NumInformants); HTM_BR ();
+			     }
 
-			/* Button to view users similar to this */
-			Dup_PutButtonToViewSimilarUsrs (&UsrDat);
+			   /* Button to view users similar to this */
+			   Dup_PutButtonToViewSimilarUsrs (&UsrDat);
 
-			/* Button to remove from list of possible duplicate users */
-			Dup_PutButtonToRemoveFromListOfDupUsrs (&UsrDat);
+			   /* Button to remove from list of possible duplicate users */
+			   Dup_PutButtonToRemoveFromListOfDupUsrs (&UsrDat);
 
-		     HTM_TD_End ();
+			HTM_TD_End ();
 
-		  HTM_TR_End ();
+		     HTM_TR_End ();
 
-		  The_ChangeRowColor ();
+		     The_ChangeRowColor ();
+		     break;
+		  case Exi_DOES_NOT_EXIST:
+		  default:
+		     /* User does not exists ==>
+		        remove user from table of possible duplicate users */
+		     Dup_DB_RemoveUsrFromDuplicated (UsrDat.UsrCod);
+		     break;
 		 }
-	       else        // User does not exists ==>
-			   // remove user from table of possible duplicate users
-		  Dup_DB_RemoveUsrFromDuplicated (UsrDat.UsrCod);
 	      }
 
 	 /***** End table *****/
@@ -273,7 +278,7 @@ static void Dup_ListSimilarUsrs (void)
 	    UsrDat.UsrCod = DB_GetNextCode (mysql_res);
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							 Usr_DONT_GET_PREFS,
-							 Usr_DONT_GET_ROLE_IN_CRS))
+							 Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	      {
 	       /* Get if user has accepted all his/her courses */
 	       if (Enr_DB_GetNumCrssOfUsr (UsrDat.UsrCod))

@@ -468,37 +468,40 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
    if (Gbl.Usrs.Me.Logged)
      {
       if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Txt_Current_CGI_SWAD_Language)
-        {
 	 /***** Get user *****/
 	 /* If nickname is correct, user code is already got from nickname */
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,        // Existing user
-	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CRS))
+	 switch (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+	                                                  Usr_DONT_GET_PREFS,
+	                                                  Usr_DONT_GET_ROLE_IN_CRS))
 	   {
-	    /***** Reset agenda context *****/
-	    Agd_ResetAgenda (&Agenda);
+	    case Exi_EXISTS:	// Existing user
+	       /***** Reset agenda context *****/
+	       Agd_ResetAgenda (&Agenda);
 
-	    /***** Begin box *****/
-	    MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	    if (asprintf (&Title,Txt_Public_agenda_USER,Usr_UsrDat[MeOrOther]->FullName) < 0)
-	       Err_NotEnoughMemoryExit ();
-	    Box_BoxBegin (Title,
-	                  FuncPutIcons[MeOrOther],Usr_UsrDat[MeOrOther]->EnUsrCod,
-			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
-            free (Title);
+	       /***** Begin box *****/
+	       MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+	       if (asprintf (&Title,Txt_Public_agenda_USER,
+			     Usr_UsrDat[MeOrOther]->FullName) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       Box_BoxBegin (Title,
+			     FuncPutIcons[MeOrOther],Usr_UsrDat[MeOrOther]->EnUsrCod,
+			     Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
+	       free (Title);
 
-	       /***** Show the current events in the user's agenda *****/
-	       Agd_ShowEventsToday (&Agenda,Agd_ANOTHER_AGENDA_TODAY);
+		  /***** Show the current events in the user's agenda *****/
+		  Agd_ShowEventsToday (&Agenda,Agd_ANOTHER_AGENDA_TODAY);
 
-	       /***** Show all visible events in the user's agenda *****/
-	       Agd_ShowEvents (&Agenda,Agd_ANOTHER_AGENDA);
+		  /***** Show all visible events in the user's agenda *****/
+		  Agd_ShowEvents (&Agenda,Agd_ANOTHER_AGENDA);
 
-	    /***** End box *****/
-	    Box_BoxEnd ();
-           }
-	 else
-	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-       }
+	       /***** End box *****/
+	       Box_BoxEnd ();
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	   }
       else
 	 /* The current language is not my preferred language
 	    ==> change automatically to my language */

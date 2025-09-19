@@ -152,7 +152,7 @@ void ZIP_CreateZIPAsgWrk (void)
 
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_DONT_GET_ROLE_IN_CRS))
+                                                   Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	 if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
 	    ZIP_CreateDirCompressionUsr (&UsrDat);
      }

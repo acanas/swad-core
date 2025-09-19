@@ -239,7 +239,7 @@ static void TmlNot_WriteTopMessage (Tml_TopMessage_t TopMessage,long PublisherCo
    PublisherDat.UsrCod = PublisherCod;
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherDat,	// Really we only need EncryptedUsrCod and FullName
                                                 Usr_DONT_GET_PREFS,
-                                                Usr_DONT_GET_ROLE_IN_CRS))
+                                                Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
      {
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"Tml_TOP_CONT Tml_TOP_PUBLISHER Tml_WIDTH\"");
@@ -267,13 +267,14 @@ static void TmlNot_WriteNote (const struct Tml_Timeline *Timeline,
                               const struct TmlNot_Note *Not)
   {
    struct Usr_Data UsrDat;	// Author of the note
+   __attribute__((unused)) Exi_Exist_t UsrExists;
 
    /***** Get author data *****/
    Usr_UsrDataConstructor (&UsrDat);
    UsrDat.UsrCod = Not->UsrCod;
-   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-                                            Usr_DONT_GET_PREFS,
-                                            Usr_DONT_GET_ROLE_IN_CRS);
+   UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+							Usr_DONT_GET_PREFS,
+							Usr_DONT_GET_ROLE_IN_CRS);
 
    /***** Left top: author's photo *****/
    TmlNot_ShowAuthorPhoto (&UsrDat);

@@ -304,7 +304,7 @@ static void MchRes_ListAllMchResultsInSelectedGames (struct Gam_Games *Games)
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_GET_ROLE_IN_CRS))
+                                                   Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	   {
 	    /***** Show matches results *****/
@@ -395,7 +395,7 @@ static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games)
       if ((Gbl.Usrs.Other.UsrDat.UsrCod = DB_GetNextCode (mysql_res)) > 0)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_GET_ROLE_IN_CRS))
+	                                              Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	      {
 	       /***** Show matches results *****/
@@ -467,7 +467,7 @@ static void MchRes_ListAllMchResultsInMch (struct Gam_Games *Games,long MchCod)
       if ((Gbl.Usrs.Other.UsrDat.UsrCod = DB_GetNextCode (mysql_res)) > 0)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_GET_ROLE_IN_CRS))
+	                                              Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	      {
 	       /***** Show matches results *****/
@@ -1108,9 +1108,9 @@ void MchRes_ShowOneMchResult (void)
 
 	 /***** User *****/
 	 /* Get data of the user who answer the match */
-	 if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,
-						       Usr_DONT_GET_PREFS,
-						       Usr_GET_ROLE_IN_CRS))
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,
+						      Usr_DONT_GET_PREFS,
+						      Usr_GET_ROLE_IN_CRS) == Exi_DOES_NOT_EXIST)
 	    Err_WrongUserExit ();
 	 if (Usr_CheckIfICanViewTstExaMchResult (UsrDat) == Usr_CAN_NOT)
 	    Err_NoPermissionExit ();

@@ -37,9 +37,6 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-/***** Configuration *****/
-#define PrjCfg_NET_CAN_CREATE_DEFAULT true
-
 /***** User roles in a project *****/
 // Don't change these numbers! They are used in database
 #define Prj_NUM_ROLES_IN_PROJECT 4

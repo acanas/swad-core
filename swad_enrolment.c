@@ -477,6 +477,7 @@ void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    struct Usr_Data UsrDat;
    Rol_Role_t Role;
+   __attribute__((unused)) Exi_Exist_t UsrExists;
 
    /***** Get user's role in course from database *****/
    Role = Rol_GetRoleUsrInCrs (UsrCod,CrsCod);
@@ -485,15 +486,15 @@ void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    /* Initialize structure with user's data */
    Usr_UsrDataConstructor (&UsrDat);
 
-   /* Get user's data */
-   UsrDat.UsrCod = UsrCod;
-   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-					    Usr_DONT_GET_PREFS,
-					    Usr_DONT_GET_ROLE_IN_CRS);
+      /* Get user's data */
+      UsrDat.UsrCod = UsrCod;
+      UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+							   Usr_DONT_GET_PREFS,
+							   Usr_DONT_GET_ROLE_IN_CRS);
 
-   /* Set summary string depending on role and sex */
-   Str_Copy (SummaryStr,Txt_ROLES_SINGUL_Abc[Role][UsrDat.Sex],
-	     Ntf_MAX_BYTES_SUMMARY);
+      /* Set summary string depending on role and sex */
+      Str_Copy (SummaryStr,Txt_ROLES_SINGUL_Abc[Role][UsrDat.Sex],
+		Ntf_MAX_BYTES_SUMMARY);
 
    /* Free memory used for user's data */
    Usr_UsrDataDestructor (&UsrDat);
@@ -786,7 +787,7 @@ void Enr_RemoveOldUsrs (void)
 	    UsrDat.UsrCod = DB_GetNextCode (mysql_res);
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							 Usr_DONT_GET_PREFS,
-							 Usr_DONT_GET_ROLE_IN_CRS))
+							 Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	      {
 	       // User's data exist...
 	       Acc_CompletelyEliminateAccount (&UsrDat,Cns_QUIET);
@@ -1316,7 +1317,7 @@ static void Enr_RemoveUsrsMarkedToBeRemoved (Rol_Role_t Role,
 	 UsrDat->UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,
 						      Usr_DONT_GET_PREFS,
-						      Usr_DONT_GET_ROLE_IN_CRS))
+						      Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	   {	// User's data exist...
 	    if (EliminateUsrs)			// Eliminate user completely from the platform
 	      {
@@ -2158,6 +2159,7 @@ void Enr_GetNotifEnrolmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct Usr_Data UsrDat;
+   __attribute__((unused)) Exi_Exist_t UsrExists;
    Rol_Role_t DesiredRole;
 
    SummaryStr[0] = '\0';        // Return nothing on error
@@ -2173,9 +2175,9 @@ void Enr_GetNotifEnrolmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
       /* User's code (row[0]) */
       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-                                               Usr_DONT_GET_PREFS,
-                                               Usr_DONT_GET_ROLE_IN_CRS);
+      UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+							   Usr_DONT_GET_PREFS,
+							   Usr_DONT_GET_ROLE_IN_CRS);
 
       /* Role (row[1]) */
       DesiredRole = Rol_ConvertUnsignedStrToRole (row[1]);
@@ -2205,58 +2207,63 @@ void Enr_AskIfRejectSignUp (void)
    extern const char *Txt_THE_USER_X_is_already_enroled_in_the_course_Y;
    extern const char *Txt_Do_you_really_want_to_reject_the_enrolment_request_;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-
    Rol_Role_t Role;
 
    /***** Get user's code *****/
    Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+   switch (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                 Usr_DONT_GET_PREFS,
                                                 Usr_DONT_GET_ROLE_IN_CRS))
-      // User's data exist...
-      switch (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
-	{
-	 case Usr_BELONG:
-	    /* User already belongs to this course */
-	    Ale_ShowAlert (Ale_WARNING,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
-			   Gbl.Usrs.Other.UsrDat.FullName,
-			   Gbl.Hierarchy.Node[Hie_CRS].FullName);
-	    Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
-
-	    /* Remove inscription request because it has not sense */
-	    Enr_RemUsrEnrolmentRequestInCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
-					     Gbl.Hierarchy.Node[Hie_CRS].HieCod);
-	    break;
-	 case Usr_DONT_BELONG:        // User does not belong to this course
-	 default:
-	    Role = Rol_DB_GetRequestedRole (Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-					    Gbl.Usrs.Other.UsrDat.UsrCod);
-	    if (Role == Rol_STD ||
-		Role == Rol_NET ||
-		Role == Rol_TCH)
-	      {
-	       /***** Show question and button to reject user's enrolment request *****/
-	       /* Begin alert */
-	       Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_reject_the_enrolment_request_,
-					    Gbl.Usrs.Other.UsrDat.FullName,
-					    Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Other.UsrDat.Sex],
-					    Gbl.Hierarchy.Node[Hie_CRS].FullName);
-
-	       /* Show user's record */
+     {
+      case Exi_EXISTS:
+	 // User's data exist...
+	 switch (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
+	   {
+	    case Usr_BELONG:
+	       /* User already belongs to this course */
+	       Ale_ShowAlert (Ale_WARNING,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
+			      Gbl.Usrs.Other.UsrDat.FullName,
+			      Gbl.Hierarchy.Node[Hie_CRS].FullName);
 	       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
-	       /* End alert */
-	       Ale_ShowAlertAndButtonEnd (ActRejSignUp,NULL,NULL,
-					  Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-					  Btn_REJECT);
-	      }
-	    else
-	       Err_WrongRoleExit ();
-	    break;
-        }
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       /* Remove inscription request because it has not sense */
+	       Enr_RemUsrEnrolmentRequestInCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
+						Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+	       break;
+	    case Usr_DONT_BELONG:        // User does not belong to this course
+	    default:
+	       Role = Rol_DB_GetRequestedRole (Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+					       Gbl.Usrs.Other.UsrDat.UsrCod);
+	       if (Role == Rol_STD ||
+		   Role == Rol_NET ||
+		   Role == Rol_TCH)
+		 {
+		  /***** Show question and button to reject user's enrolment request *****/
+		  /* Begin alert */
+		  Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_reject_the_enrolment_request_,
+					       Gbl.Usrs.Other.UsrDat.FullName,
+					       Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Other.UsrDat.Sex],
+					       Gbl.Hierarchy.Node[Hie_CRS].FullName);
+
+		     /* Show user's record */
+		     Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+
+		  /* End alert */
+		  Ale_ShowAlertAndButtonEnd (ActRejSignUp,NULL,NULL,
+					     Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+					     Btn_REJECT);
+		 }
+	       else
+		  Err_WrongRoleExit ();
+	       break;
+	   }
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+     }
   }
 
 /*****************************************************************************/
@@ -2271,30 +2278,34 @@ void Enr_RejectSignUp (void)
    /***** Get user's code *****/
    Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
-                                                Usr_DONT_GET_PREFS,
-                                                Usr_DONT_GET_ROLE_IN_CRS))
+   switch (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                    Usr_DONT_GET_PREFS,
+                                                    Usr_DONT_GET_ROLE_IN_CRS))
      {
-      // User's data exist...
-      if (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat) == Usr_BELONG)
-        {
-         /* User already belongs to this course */
-         Ale_ShowAlert (Ale_WARNING,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
-                        Gbl.Usrs.Other.UsrDat.FullName,
-                        Gbl.Hierarchy.Node[Hie_CRS].FullName);
-         Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
-        }
+      case Exi_EXISTS:
+	 // User's data exist...
+	 if (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat) == Usr_BELONG)
+	   {
+	    /* User already belongs to this course */
+	    Ale_ShowAlert (Ale_WARNING,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
+			   Gbl.Usrs.Other.UsrDat.FullName,
+			   Gbl.Hierarchy.Node[Hie_CRS].FullName);
+	    Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+	   }
 
-      /* Remove inscription request */
-      Enr_RemUsrEnrolmentRequestInCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
-				       Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+	 /* Remove inscription request */
+	 Enr_RemUsrEnrolmentRequestInCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
+					  Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
-      /* Confirmation message */
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Enrolment_of_X_rejected,
-                     Gbl.Usrs.Other.UsrDat.FullName);
+	 /* Confirmation message */
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_Enrolment_of_X_rejected,
+			Gbl.Usrs.Other.UsrDat.FullName);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
    /* Show again the rest of enrolment requests */
    Enr_ShowEnrolmentRequests ();
@@ -2378,7 +2389,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    struct Hie_Node Crs;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    struct Usr_Data UsrDat;
-   bool UsrExists;
+   Exi_Exist_t UsrExists;
    Usr_Belong_t UsrBelongsToCrs;
    Rol_Role_t DesiredRole;
    static Act_Action_t NextAction[Rol_NUM_ROLES] =
@@ -2484,15 +2495,21 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 	       /***** Get requested role (row[3]) *****/
 	       DesiredRole = Rol_ConvertUnsignedStrToRole (row[3]);
 
-	       if (UsrExists)
-		  UsrBelongsToCrs = Hie_CheckIfUsrBelongsTo (Hie_CRS,
-							     UsrDat.UsrCod,
-							     Crs.HieCod,
-							     false);
-	       else
-		  UsrBelongsToCrs = Usr_DONT_BELONG;
+	       switch (UsrExists)
+		 {
+		  case Exi_EXISTS:
+		     UsrBelongsToCrs = Hie_CheckIfUsrBelongsTo (Hie_CRS,
+								UsrDat.UsrCod,
+								Crs.HieCod,
+								false);
+		     break;
+		  case Exi_DOES_NOT_EXIST:
+		  default:
+		     UsrBelongsToCrs = Usr_DONT_BELONG;
+		     break;
+		 }
 
-	       if (UsrExists &&
+	       if (UsrExists == Exi_EXISTS &&
 		   UsrBelongsToCrs == Usr_DONT_BELONG &&
 		   (DesiredRole == Rol_STD ||
 		    DesiredRole == Rol_NET ||
@@ -3718,8 +3735,8 @@ unsigned Enr_GetCachedNumUsrsInCrss (Hie_Level_t HieLvl,long HieCod,unsigned Rol
    unsigned NumUsrsInCrss;
 
    /***** Get number of users in courses from cache *****/
-   if (!FigCch_GetFigureFromCache (Enr_GetFigureNumUsrsInCrss (Roles),HieLvl,HieCod,
-                                   FigCch_UNSIGNED,&NumUsrsInCrss))
+   if (FigCch_GetFigureFromCache (Enr_GetFigureNumUsrsInCrss (Roles),HieLvl,HieCod,
+                                  FigCch_UNSIGNED,&NumUsrsInCrss) == Exi_DOES_NOT_EXIST)
       /***** Get current number of users in courses from database and update cache *****/
       NumUsrsInCrss = Enr_GetNumUsrsInCrss (HieLvl,HieCod,Roles);
 
@@ -3758,8 +3775,8 @@ unsigned Enr_GetCachedNumUsrsNotBelongingToAnyCrs (void)
    unsigned NumGsts;
 
    /***** Get number of guests from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_GSTS,Hie_SYS,-1L,
-                                   FigCch_UNSIGNED,&NumGsts))
+   if (FigCch_GetFigureFromCache (FigCch_NUM_GSTS,Hie_SYS,-1L,
+                                  FigCch_UNSIGNED,&NumGsts) == Exi_DOES_NOT_EXIST)
      {
       /***** Get current number of guests from database and update cache *****/
       NumGsts = Enr_DB_GetNumUsrsNotBelongingToAnyCrs ();
@@ -3786,8 +3803,8 @@ double Enr_GetCachedAverageNumUsrsPerCrs (Hie_Level_t HieLvl,long HieCod,Rol_Rol
    double AverageNumUsrsPerCrs;
 
    /***** Get number of users per course from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureNumUsrsPerCrs[Role],HieLvl,HieCod,
-                                   FigCch_DOUBLE,&AverageNumUsrsPerCrs))
+   if (FigCch_GetFigureFromCache (FigureNumUsrsPerCrs[Role],HieLvl,HieCod,
+                                  FigCch_DOUBLE,&AverageNumUsrsPerCrs) == Exi_DOES_NOT_EXIST)
      {
       /***** Get current number of users per course from database and update cache *****/
       AverageNumUsrsPerCrs = Enr_DB_GetAverageNumUsrsPerCrs (HieLvl,HieCod,Role);
@@ -3814,8 +3831,8 @@ double Enr_GetCachedAverageNumCrssPerUsr (Hie_Level_t HieLvl,long HieCod,Rol_Rol
    double AverageNumCrssPerUsr;
 
    /***** Get number of courses per user from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureNumCrssPerUsr[Role],HieLvl,HieCod,
-                                   FigCch_DOUBLE,&AverageNumCrssPerUsr))
+   if (FigCch_GetFigureFromCache (FigureNumCrssPerUsr[Role],HieLvl,HieCod,
+                                  FigCch_DOUBLE,&AverageNumCrssPerUsr) == Exi_DOES_NOT_EXIST)
      {
       /***** Get current number of courses per user from database and update cache *****/
       AverageNumCrssPerUsr = Enr_DB_GetAverageNumCrssPerUsr (HieLvl,HieCod,Role);

@@ -49,27 +49,35 @@ void UsrRsc_GetLinkToTch (void)
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
       /***** Copy link to one teacher and show teacher's record *****/
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,	// Get teacher's data from database
-						   Usr_DONT_GET_PREFS,
-						   Usr_GET_ROLE_IN_CRS))
-        {
-	 if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
-	   {
-	    /* Copy link to teacher into resource clipboard */
-	    Rsc_DB_CopyToClipboard (Rsc_TEACHER,Gbl.Usrs.Other.UsrDat.UsrCod);
+      switch (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,	// Get teacher's data from database
+						       Usr_DONT_GET_PREFS,
+						       Usr_GET_ROLE_IN_CRS))
+	{
+	 case Exi_EXISTS:
+	    switch (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat))
+	      {
+	       case Usr_CAN:
+		  /* Copy link to teacher into resource clipboard */
+		  Rsc_DB_CopyToClipboard (Rsc_TEACHER,Gbl.Usrs.Other.UsrDat.UsrCod);
 
-	    /* Write success message */
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-			   Gbl.Usrs.Other.UsrDat.FullName);
+		  /* Write success message */
+		  Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
+				 Gbl.Usrs.Other.UsrDat.FullName);
 
-	    /* Show teacher's record */
-	    Rec_ShowRecordOneTchCrs ();
-	    }
-	 else
+		  /* Show teacher's record */
+		  Rec_ShowRecordOneTchCrs ();
+		  break;
+	       case Usr_CAN_NOT:
+	       default:
+		  Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+		  break;
+	      }
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
 	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-        }
-      else
-	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	    break;
+	}
      }
    else
      {

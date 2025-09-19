@@ -736,6 +736,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
    unsigned NumUsrsCtr;
    unsigned NumUsrsInCrssOfCtr;
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
+   __attribute__((unused)) Exi_Exist_t UsrExists;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -873,9 +874,9 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 
 	    /* Center requester */
 	    UsrDat.UsrCod = Ctr->RequesterUsrCod;
-	    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-						     Usr_DONT_GET_PREFS,
-						     Usr_DONT_GET_ROLE_IN_CRS);
+	    UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+								 Usr_DONT_GET_PREFS,
+								 Usr_DONT_GET_ROLE_IN_CRS);
 	    HTM_TD_Begin ("class=\"DAT_%s INPUT_REQUESTER LT\"",The_GetSuffix ());
 	       Usr_WriteAuthor (&UsrDat,For_ENABLED);
 	    HTM_TD_End ();
@@ -1488,8 +1489,8 @@ unsigned Ctr_GetCachedNumCtrsWithMapInSys (void)
    unsigned NumCtrsWithMap;
 
    /***** Get number of centers with map from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_SYS,-1L,
-                                   FigCch_UNSIGNED,&NumCtrsWithMap))
+   if (FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_SYS,-1L,
+                                  FigCch_UNSIGNED,&NumCtrsWithMap) == Exi_DOES_NOT_EXIST)
      {
       /***** Get current number of centers with map from database and update cache *****/
       /* Ccoordinates 0, 0 means not set ==> don't show map */
@@ -1510,8 +1511,8 @@ unsigned Ctr_GetCachedNumCtrsWithMapInCty (long CtyCod)
    unsigned NumCtrsWithMap;
 
    /***** Get number of centers with map from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_CTY,CtyCod,
-                                   FigCch_UNSIGNED,&NumCtrsWithMap))
+   if (FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_CTY,CtyCod,
+                                  FigCch_UNSIGNED,&NumCtrsWithMap) == Exi_DOES_NOT_EXIST)
      {
       /***** Get current number of centers with map from database and update cache *****/
       /* Ccoordinates 0, 0 means not set ==> don't show map */
@@ -1532,8 +1533,8 @@ unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod)
    unsigned NumCtrsWithMap;
 
    /***** Get number of centers with map from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_INS,InsCod,
-                                   FigCch_UNSIGNED,&NumCtrsWithMap))
+   if (FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_INS,InsCod,
+                                  FigCch_UNSIGNED,&NumCtrsWithMap) == Exi_DOES_NOT_EXIST)
      {
       /***** Get current number of centers with map from database and update cache *****/
       /* Ccoordinates 0, 0 means not set ==> don't show map */
@@ -1561,8 +1562,8 @@ unsigned Ctr_GetCachedNumCtrsWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role)
    long HieCod = Hie_GetHieCod (HieLvl);
 
    /***** Get number of centers with users from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureCtrs[Role],HieLvl,HieCod,
-				   FigCch_UNSIGNED,&NumNodesWithUsrs))
+   if (FigCch_GetFigureFromCache (FigureCtrs[Role],HieLvl,HieCod,
+				  FigCch_UNSIGNED,&NumNodesWithUsrs) == Exi_DOES_NOT_EXIST)
      {
       /***** Get current number of centers with users from database and update cache *****/
       NumNodesWithUsrs = Ctr_DB_GetNumCtrsWithUsrs (HieLvl,HieCod,Role);

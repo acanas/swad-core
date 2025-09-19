@@ -3299,7 +3299,7 @@ int swad__sendMessage (struct soap *soap,
 	    /* Get recipient data */
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 							 Usr_DONT_GET_PREFS,
-							 Usr_DONT_GET_ROLE_IN_CRS))
+							 Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	      {
 	       /* This received message must be notified by email? */
 	       NotifyByEmail = (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_OTHER &&
@@ -4887,6 +4887,7 @@ static bool API_WriteRowFileBrowser (FILE *XML,unsigned Level,
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
    struct Brw_FileMetadata FileMetadata;
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
+   __attribute__((unused)) Exi_Exist_t UsrExists;
    __attribute__((unused)) Exi_Exist_t PhotoExists;
 
    /***** Is this row hidden or visible? *****/
@@ -4917,9 +4918,9 @@ static bool API_WriteRowFileBrowser (FILE *XML,unsigned Level,
 	                                        PriPub_PRIVATE,Brw_LICENSE_DEFAULT);
 
       Gbl.Usrs.Other.UsrDat.UsrCod = FileMetadata.PublisherUsrCod;
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
-                                               Usr_DONT_GET_PREFS,
-                                               Usr_DONT_GET_ROLE_IN_CRS);
+      UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+							   Usr_DONT_GET_PREFS,
+							   Usr_DONT_GET_ROLE_IN_CRS);
       PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
 
       fprintf (XML,"<file name=\"%s\">"
@@ -5106,7 +5107,7 @@ int swad__getFile (struct soap *soap,
       /* Get publisher's data */
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_DONT_GET_ROLE_IN_CRS))
+                                                   Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	{
 	 /* Copy publisher's data into output structure */
 	 Str_Copy (getFileOut->publisherName,Gbl.Usrs.Other.UsrDat.FullName,

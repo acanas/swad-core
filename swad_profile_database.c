@@ -625,13 +625,15 @@ unsigned Prf_DB_GetNumUsrsWithNumClicksPerDay (void)
 /*** Check if it exists an entry for this user in table of user's figures ****/
 /*****************************************************************************/
 
-bool Prf_DB_CheckIfUsrFiguresExists (long UsrCod)
+Exi_Exist_t Prf_DB_CheckIfUsrFiguresExists (long UsrCod)
   {
-   return (DB_QueryCOUNT ("can not get user's first click",
-			  "SELECT COUNT(*)"
-			   " FROM usr_figures"
-			  " WHERE UsrCod=%ld",
-			  UsrCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if user's figures exist",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM usr_figures"
+		    " WHERE UsrCod=%ld)",
+		   UsrCod);
   }
 
 /*****************************************************************************/

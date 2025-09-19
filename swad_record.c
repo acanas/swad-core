@@ -907,7 +907,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get guest's data from database
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_GET_ROLE_IN_CRS))
+                                                   Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	{
          /* Begin container for this user */
 	 snprintf (RecordSectionId,sizeof (RecordSectionId),"record_%u",NumUsr);
@@ -956,7 +956,7 @@ void Rec_GetUsrAndShowRecOneStdCrs (void)
 
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,	// Get student's data from database
                                                 Usr_DONT_GET_PREFS,
-                                                Usr_GET_ROLE_IN_CRS))
+                                                Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
       if (Usr_CheckIfICanViewRecordStd (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	 Rec_ShowRecordOneStdCrs ();
   }
@@ -1105,7 +1105,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get student's data from database
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_GET_ROLE_IN_CRS))
+                                                   Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
          if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
            {
             /* Check if this user has accepted
@@ -1175,17 +1175,27 @@ void Rec_GetUsrAndShowRecOneTchCrs (void)
    Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Show the record *****/
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,	// Get teacher's data from database
-                                                Usr_DONT_GET_PREFS,
-                                                Usr_GET_ROLE_IN_CRS))
+   switch (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,	// Get teacher's data from database
+                                                    Usr_DONT_GET_PREFS,
+                                                    Usr_GET_ROLE_IN_CRS))
      {
-      if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
-	 Rec_ShowRecordOneTchCrs ();
-      else
+      case Exi_EXISTS:
+	 switch (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat))
+	   {
+	    case Usr_CAN:
+	       Rec_ShowRecordOneTchCrs ();
+	       break;
+	    case Usr_CAN_NOT:
+	    default:
+	       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	   }
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
 	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -1322,7 +1332,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get teacher's data from database
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_GET_ROLE_IN_CRS))
+                                                   Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
          if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
            {
             /* Check if this user has accepted
@@ -1521,15 +1531,16 @@ void Rec_UpdateAndShowMyCrsRecord (void)
 void Rec_UpdateAndShowOtherCrsRecord (void)
   {
    extern const char *Txt_Student_record_card_in_this_course_has_been_updated;
+   __attribute__((unused)) Exi_Exist_t UsrExists;
 
    /***** Get where we came from *****/
    Gbl.Action.Original = Act_GetActionFromActCod (ParCod_GetPar (ParCod_OrgAct));
 
    /***** Get the user whose record we want to modify *****/
    Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
-   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
-                                            Usr_DONT_GET_PREFS,
-                                            Usr_GET_ROLE_IN_CRS);
+   UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+							Usr_DONT_GET_PREFS,
+							Usr_GET_ROLE_IN_CRS);
 
    /***** Get list of fields of records in current course *****/
    Rec_GetListRecordFieldsInCurrentCrs ();

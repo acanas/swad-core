@@ -151,7 +151,7 @@ void Fol_SuggestUsrsToFollowOnMainZone (void)
 	    /***** Show user *****/
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							 Usr_DONT_GET_PREFS,
-							 Usr_DONT_GET_ROLE_IN_CRS))
+							 Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	       Fol_ShowFollowedOrFollower (&UsrDat);
 	   }
 
@@ -208,7 +208,7 @@ void Fol_SuggestUsrsToFollowOnRightColumn (void)
 	       /***** Show user *****/
 	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							    Usr_DONT_GET_PREFS,
-							    Usr_DONT_GET_ROLE_IN_CRS))
+							    Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 		  Fol_WriteRowUsrToFollowOnRightColumn (&UsrDat);
 	      }
 
@@ -418,15 +418,19 @@ void Fol_ListFollowing (void)
    Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
-                                                   Usr_DONT_GET_PREFS,
-                                                   Usr_DONT_GET_ROLE_IN_CRS))
-	 Fol_ListFollowingUsr (&Gbl.Usrs.Other.UsrDat);
-      else
-         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-     }
-   else				// If user not specified, view my profile
+      switch (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                       Usr_DONT_GET_PREFS,
+                                                       Usr_DONT_GET_ROLE_IN_CRS))
+	{
+	 case Exi_EXISTS:
+	    Fol_ListFollowingUsr (&Gbl.Usrs.Other.UsrDat);
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	    break;
+	}
+   else	// If user not specified, view my profile
       Fol_ListFollowingUsr (&Gbl.Usrs.Me.UsrDat);
   }
 
@@ -462,7 +466,7 @@ static void Fol_ListFollowingUsr (struct Usr_Data *UsrDat)
 	       /***** Show user *****/
 	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FollowingUsrDat,
 							    Usr_DONT_GET_PREFS,
-							    Usr_DONT_GET_ROLE_IN_CRS))
+							    Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 		  Fol_ShowFollowedOrFollower (&FollowingUsrDat);
 	      }
 
@@ -490,15 +494,19 @@ void Fol_ListFollowers (void)
    Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
-                                                   Usr_DONT_GET_PREFS,
-                                                   Usr_DONT_GET_ROLE_IN_CRS))
-	 Fol_ListFollowersUsr (&Gbl.Usrs.Other.UsrDat);
-      else
-         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-     }
-   else				// If user not specified, view my profile
+      switch (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                       Usr_DONT_GET_PREFS,
+                                                       Usr_DONT_GET_ROLE_IN_CRS))
+	{
+	 case Exi_EXISTS:
+	    Fol_ListFollowersUsr (&Gbl.Usrs.Other.UsrDat);
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	    break;
+	}
+   else	// If user not specified, view my profile
       Fol_ListFollowersUsr (&Gbl.Usrs.Me.UsrDat);
   }
 
@@ -532,7 +540,7 @@ static void Fol_ListFollowersUsr (struct Usr_Data *UsrDat)
 	       /***** Show user *****/
 	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FollowerUsrDat,
 							    Usr_DONT_GET_PREFS,
-							    Usr_DONT_GET_ROLE_IN_CRS))
+							    Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 		  Fol_ShowFollowedOrFollower (&FollowerUsrDat);
 	      }
 
@@ -926,7 +934,7 @@ static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
       if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CRS))	// Get from the database the data of the student
+	                                              Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)	// Get from the database the data of the student
 	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
 	      {
 	       /* Check if I follow this user, and update number of users */
@@ -976,7 +984,7 @@ void Fol_FollowUsrs ()
       if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
 	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CRS))
+	                                              Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
 	       /* If I don't follow this user ==> follow him/her */
 	       if (!Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -1027,7 +1035,7 @@ void Fol_UnfollowUsrs (void)
       if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
 	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CRS))
+	                                              Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
 	       /* If I follow this user ==> unfollow him/her */
 	       if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,

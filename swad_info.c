@@ -213,11 +213,11 @@ static void Inf_PutIconsWhenViewing (void *Info);
 static void Inf_PutIconsWhenEditing (void *Info);
 static void Inf_PutIconsWhenConfiguring (void *Info);
 
-static bool Inf_CheckPage (Inf_Type_t InfoType);
-static bool Inf_CheckAndShowPage (Inf_Type_t InfoType);
+static Exi_Exist_t Inf_CheckPage (Inf_Type_t InfoType);
+static Exi_Exist_t Inf_CheckAndShowPage (Inf_Type_t InfoType);
 
-static bool Inf_CheckURL (Inf_Type_t InfoType);
-static bool Inf_CheckAndShowURL (Inf_Type_t InfoType);
+static Exi_Exist_t Inf_CheckURL (Inf_Type_t InfoType);
+static Exi_Exist_t Inf_CheckAndShowURL (Inf_Type_t InfoType);
 static void Inf_BuildPathURL (long CrsCod,Inf_Type_t InfoType,
                               char PathFile[PATH_MAX + 1]);
 
@@ -234,16 +234,16 @@ static bool Inf_GetIfIHaveReadFromForm (void);
 //-----------------------------------------------------------------------------
 static void Inf_ConfigInfoSource (struct Inf_Info *Info);
 
-static bool Inf_CheckIfInfoAvailable (Inf_Type_t InfoType,Inf_Src_t InfoSrc);
+static Exi_Exist_t Inf_CheckIfInfoAvailable (Inf_Type_t InfoType,Inf_Src_t InfoSrc);
 
 static void Inf_FormToEnterEditor (Inf_Type_t InfoType,Inf_Src_t InfoSrc);
 static void Inf_FormToEnterPageUploader (Inf_Type_t InfoType,Inf_Src_t InfoSrc);
 
-static bool Inf_CheckPlainTxt (Inf_Type_t InfoType);
-static bool Inf_CheckAndShowPlainTxt (Inf_Type_t InfoType);
+static Exi_Exist_t Inf_CheckPlainTxt (Inf_Type_t InfoType);
+static Exi_Exist_t Inf_CheckAndShowPlainTxt (Inf_Type_t InfoType);
 
-static bool Inf_CheckRichTxt (Inf_Type_t InfoType);
-static bool Inf_CheckAndShowRichTxt (Inf_Type_t InfoType);
+static Exi_Exist_t Inf_CheckRichTxt (Inf_Type_t InfoType);
+static Exi_Exist_t Inf_CheckAndShowRichTxt (Inf_Type_t InfoType);
 
 /*****************************************************************************/
 /*************************** Before and after tree ***************************/
@@ -392,7 +392,7 @@ void Inf_ShowInfo (void)
 	       case Inf_FAQ:
 	       case Inf_LINKS:
 	       case Inf_ASSESSMENT:
-		  ShowWarningNoInfo = !Tre_ShowTree (Info.Type);
+		  ShowWarningNoInfo = (Tre_ShowTree (Info.Type) == 0);
 		  break;
 	       case Inf_UNKNOWN_TYPE:
 	       case Inf_PROGRAM:
@@ -402,18 +402,18 @@ void Inf_ShowInfo (void)
 	      }
 	    break;
 	 case Inf_PLAIN_TEXT:
-	    ShowWarningNoInfo = !Inf_CheckAndShowPlainTxt (Info.Type);
+	    ShowWarningNoInfo = (Inf_CheckAndShowPlainTxt (Info.Type) == Exi_DOES_NOT_EXIST);
 	    break;
 	 case Inf_RICH_TEXT:
-	    ShowWarningNoInfo = !Inf_CheckAndShowRichTxt (Info.Type);
+	    ShowWarningNoInfo = (Inf_CheckAndShowRichTxt (Info.Type) == Exi_DOES_NOT_EXIST);
 	    break;
 	 case Inf_PAGE:
 	    /***** Open file with web page *****/
-	    ShowWarningNoInfo = !Inf_CheckAndShowPage (Info.Type);
+	    ShowWarningNoInfo = (Inf_CheckAndShowPage (Info.Type) == Exi_DOES_NOT_EXIST);
 	    break;
 	 case Inf_URL:
 	    /***** Check if file with URL exists *****/
-	    ShowWarningNoInfo = !Inf_CheckAndShowURL (Info.Type);
+	    ShowWarningNoInfo = (Inf_CheckAndShowURL (Info.Type) == Exi_DOES_NOT_EXIST);
 	    break;
 	}
 
@@ -846,9 +846,9 @@ static void Inf_PutIconsWhenConfiguring (void *Info)
 /*****************************************************************************/
 /************************** Check if exists a page ***************************/
 /*****************************************************************************/
-// Return true if info available
+// Return Exi_EXISTS if info available
 
-static bool Inf_CheckPage (Inf_Type_t InfoType)
+static Exi_Exist_t Inf_CheckPage (Inf_Type_t InfoType)
   {
    char PathRelDirHTML[PATH_MAX + 1];
    char PathRelFileHTML[PATH_MAX + 1 + 10 + 1];
@@ -865,23 +865,23 @@ static bool Inf_CheckPage (Inf_Type_t InfoType)
    snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
 	     PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML) == Exi_EXISTS)	// TODO: Check if not empty?
-      return true;
+      return Exi_EXISTS;
 
    /* 2. If index.html does not exist, try index.htm */
    snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.htm",
 	     PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML) == Exi_EXISTS)	// TODO: Check if not empty?
-      return true;
+      return Exi_EXISTS;
 
-   return false;
+   return Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /**************** Check if exists and show link to a page ********************/
 /*****************************************************************************/
-// Return true if info available
+// Return Exi_EXISTS if info available
 
-static bool Inf_CheckAndShowPage (Inf_Type_t InfoType)
+static Exi_Exist_t Inf_CheckAndShowPage (Inf_Type_t InfoType)
   {
    char PathRelDirHTML[PATH_MAX + 1];
    char PathRelFileHTML[PATH_MAX + 1 + 10 + 1];
@@ -905,7 +905,7 @@ static bool Inf_CheckAndShowPage (Inf_Type_t InfoType)
 	        Inf_FileNamesForInfoType[InfoType]);
       Inf_ShowPage (URL);
 
-      return true;
+      return Exi_EXISTS;
      }
 
    /* 2. If index.html does not exist, try index.htm */
@@ -918,10 +918,10 @@ static bool Inf_CheckAndShowPage (Inf_Type_t InfoType)
 	        Inf_FileNamesForInfoType[InfoType]);
       Inf_ShowPage (URL);
 
-      return true;
+      return Exi_EXISTS;
      }
 
-   return false;
+   return Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -937,9 +937,9 @@ void Inf_BuildPathPage (long CrsCod,Inf_Type_t InfoType,char PathDir[PATH_MAX + 
 /*****************************************************************************/
 /********************* Check if exists link to a page ************************/
 /*****************************************************************************/
-// Return true if info available
+// Return Exi_EXISTS if info available
 
-static bool Inf_CheckURL (Inf_Type_t InfoType)
+static Exi_Exist_t Inf_CheckURL (Inf_Type_t InfoType)
   {
    char URL[WWW_MAX_BYTES_WWW + 1];
    char PathFile[PATH_MAX + 1];
@@ -957,18 +957,18 @@ static bool Inf_CheckURL (Inf_Type_t InfoType)
       fclose (FileURL);
 
       if (URL[0])
-         return true;
+         return Exi_EXISTS;
      }
 
-   return false;
+   return Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /**************** Check if exists and show link to a page ********************/
 /*****************************************************************************/
-// Return true if info available
+// Return Exi_EXISTS if info available
 
-static bool Inf_CheckAndShowURL (Inf_Type_t InfoType)
+static Exi_Exist_t Inf_CheckAndShowURL (Inf_Type_t InfoType)
   {
    char URL[WWW_MAX_BYTES_WWW + 1];
    char PathFile[PATH_MAX + 1];
@@ -988,11 +988,11 @@ static bool Inf_CheckAndShowURL (Inf_Type_t InfoType)
       if (URL[0])
 	{
 	 Inf_ShowPage (URL);
-         return true;
+         return Exi_EXISTS;
 	}
      }
 
-   return false;
+   return Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -1468,14 +1468,15 @@ static void Inf_ConfigInfoSource (struct Inf_Info *Info)
 /* Check if there is info available for current info type and a given source */
 /*****************************************************************************/
 
-static bool Inf_CheckIfInfoAvailable (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
+static Exi_Exist_t Inf_CheckIfInfoAvailable (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
   {
    switch (InfoSrc)
      {
       case Inf_SRC_NONE:
-	 return false;
+	 return Exi_DOES_NOT_EXIST;
       case Inf_EDITOR:
-         return (Tre_DB_GetNumNodes (InfoType,Hie_CRS) != 0);
+         return (Tre_DB_GetNumNodes (InfoType,Hie_CRS) != 0) ? Exi_EXISTS :
+							       Exi_DOES_NOT_EXIST;
       case Inf_PLAIN_TEXT:
          return Inf_CheckPlainTxt (InfoType);
       case Inf_RICH_TEXT:
@@ -1486,7 +1487,7 @@ static bool Inf_CheckIfInfoAvailable (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
 	 return Inf_CheckURL (InfoType);
      }
 
-   return false;	// Not reached
+   return Exi_DOES_NOT_EXIST;	// Not reached
   }
 
 /*****************************************************************************/
@@ -1702,24 +1703,25 @@ void Inf_GetInfoTxtFromDB (long CrsCod,Inf_Type_t InfoType,
 /*****************************************************************************/
 /********************* Check information about the course ********************/
 /*****************************************************************************/
-// Return true if info available
+// Return Exi_EXISTS if info available
 
-static bool Inf_CheckPlainTxt (Inf_Type_t InfoType)
+static Exi_Exist_t Inf_CheckPlainTxt (Inf_Type_t InfoType)
   {
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
 
    /***** Get info text from database *****/
    Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,TxtHTML,NULL);
 
-   return (TxtHTML[0] != '\0');
+   return (TxtHTML[0] != '\0') ? Exi_EXISTS :
+			         Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /********************* Show information about the course *********************/
 /*****************************************************************************/
-// Return true if info available
+// Return Exi_EXISTS if info available
 
-static bool Inf_CheckAndShowPlainTxt (Inf_Type_t InfoType)
+static Exi_Exist_t Inf_CheckAndShowPlainTxt (Inf_Type_t InfoType)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
@@ -1753,18 +1755,18 @@ static bool Inf_CheckAndShowPlainTxt (Inf_Type_t InfoType)
 
       HTM_DIV_End ();
 
-      return true;
+      return Exi_EXISTS;
      }
 
-   return false;
+   return Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /********************* Show information about the course *********************/
 /*****************************************************************************/
-// Return true if info available
+// Return Exi_EXISTS if info available
 
-static bool Inf_CheckRichTxt (Inf_Type_t InfoType)
+static Exi_Exist_t Inf_CheckRichTxt (Inf_Type_t InfoType)
   {
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
    char TxtMD[Cns_MAX_BYTES_LONG_TEXT + 1];
@@ -1773,15 +1775,16 @@ static bool Inf_CheckRichTxt (Inf_Type_t InfoType)
    Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,
                          TxtHTML,TxtMD);
 
-   return (TxtMD[0] != '\0');
+   return (TxtMD[0] != '\0') ? Exi_EXISTS :
+			       Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
 /********************* Show information about the course *********************/
 /*****************************************************************************/
-// Return true if info available
+// Return Exi_EXISTS if info available
 
-static bool Inf_CheckAndShowRichTxt (Inf_Type_t InfoType)
+static Exi_Exist_t Inf_CheckAndShowRichTxt (Inf_Type_t InfoType)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
@@ -1886,10 +1889,10 @@ static bool Inf_CheckAndShowRichTxt (Inf_Type_t InfoType)
 
       HTM_DIV_End ();
 
-      return true;
+      return Exi_EXISTS;
      }
 
-   return false;
+   return Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

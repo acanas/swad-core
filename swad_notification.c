@@ -485,6 +485,7 @@ static void Ntf_GetNotif (MYSQL_RES *mysql_res,
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    MYSQL_ROW row;
+   __attribute__((unused)) Exi_Exist_t UsrExists;
    Hie_Level_t HieLvl;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    unsigned Col;
@@ -497,9 +498,9 @@ static void Ntf_GetNotif (MYSQL_RES *mysql_res,
 
    /***** Get (from) user code (row[1]) *****/
    UsrDat->UsrCod = Str_ConvertStrCodToLongCod (row[1]);
-   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,	// Get user's data from database
-					    Usr_DONT_GET_PREFS,
-					    Usr_DONT_GET_ROLE_IN_CRS);
+   UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,	// Get user's data from database
+							Usr_DONT_GET_PREFS,
+							Usr_DONT_GET_ROLE_IN_CRS);
 
    /***** Get institution code, center code, degree code and course code
           (row[2], row[3], row[4] and row[5]) *****/
@@ -1231,7 +1232,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
 	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CRS))
+	                                              Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
             if ((UsrDat.NtfEvents.CreateNotif & NotifyEventMask))	// Create notification
               {
 	       if ((UsrDat.NtfEvents.SendEmail & NotifyEventMask))	// Send notification by email
@@ -1290,7 +1291,7 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
          /* Get user's data */
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&ToUsrDat,	// Get user's data from database
 	                                              Usr_GET_PREFS,	// User's language necessary to write email
-	                                              Usr_DONT_GET_ROLE_IN_CRS))
+	                                              Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
            {
             /* Send one email to this user */
             Ntf_SendPendingNotifByEMailToOneUsr (&ToUsrDat,&NumNotif,&NumMails);
@@ -1334,10 +1335,11 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
    unsigned NumNtfs;
    unsigned NumNtf;
    Lan_Language_t ToUsrLanguage;
-   struct Usr_Data FromUsrDat;
    Ntf_NotifyEvent_t NotifyEvent = (Ntf_NotifyEvent_t) 0;	// Initialized to avoid warning
-   struct Hie_Node Hie[Hie_NUM_LEVELS];
+   struct Usr_Data FromUsrDat;
+   __attribute__((unused)) Exi_Exist_t UsrExists;
    Hie_Level_t HieLvl;
+   struct Hie_Node Hie[Hie_NUM_LEVELS];
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    unsigned Col;
    long Cod;
@@ -1398,9 +1400,9 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
 
 	    /* Get origin user code (row[1]) */
 	    FromUsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
-	    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FromUsrDat,	// Get origin user's data from database
-	                                             Usr_DONT_GET_PREFS,
-	                                             Usr_DONT_GET_ROLE_IN_CRS);
+	    UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FromUsrDat,	// Get origin user's data from database
+								 Usr_DONT_GET_PREFS,
+								 Usr_DONT_GET_ROLE_IN_CRS);
 
 	    /* Get data of institution, center, degree and course
 	       (row[2], row[3], row[4], row[5]) */

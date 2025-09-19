@@ -1191,7 +1191,7 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
 
 static void Brw_PutIconHideUnhide (const char *Anchor,
                                    HidVis_HiddenOrVisible_t HiddenOrVisible);
-static bool Brw_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel);
+static HidVis_HiddenOrVisible_t Brw_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel);
 
 static void Brw_PutIconFolder (unsigned Level,
                                const char *FileBrowserId,const char *RowId,
@@ -1244,8 +1244,8 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow);
 static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow);
 static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow);
 static void Brw_PutFormToCreateALink (const char *FileNameToShow);
-static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
-                                  Brw_UploadType_t UploadType);
+static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
+						  Brw_UploadType_t UploadType);
 static bool Brw_CheckIfUploadIsAllowed (const char *FileType);
 
 static void Brw_PutIconToGetLinkToFile (void *FileMetadata);
@@ -2831,7 +2831,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 						      Usr_DONT_GET_PREFS,
-						      Usr_GET_ROLE_IN_CRS))
+						      Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	    if (Usr_CheckIfICanViewAsgWrk (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	      {
 	       Gbl.Usrs.Other.UsrDat.Accepted =
@@ -3943,7 +3943,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 	 switch (HiddenOrVisible)
 	   {
 	    case HidVis_VISIBLE:	// this row is not marked as hidden
-               LightStyle = Brw_CheckIfAnyHigherLevelIsHidden (Level);
+               LightStyle = Brw_CheckIfAnyHigherLevelIsHidden (Level) == HidVis_HIDDEN;
 	       break;
 	    case HidVis_HIDDEN:		// this row is marked as hidden
 	    default:
@@ -4494,7 +4494,7 @@ static void Brw_PutIconHideUnhide (const char *Anchor,
 /********* Check if any level higher than the current one is hidden **********/
 /*****************************************************************************/
 
-static bool Brw_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel)
+static HidVis_HiddenOrVisible_t Brw_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel)
   {
    unsigned Level;
 
@@ -4502,9 +4502,9 @@ static bool Brw_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel)
 	Level < CurrentLevel;
 	Level++)
       if (Gbl.FileBrowser.HiddenLevels[Level])	// Hidden
-         return true;
+         return HidVis_HIDDEN;
 
-   return false;	// None is hidden. All are visible.
+   return HidVis_VISIBLE;	// None is hidden. All are visible.
   }
 
 /*****************************************************************************/
@@ -4929,9 +4929,9 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod)
 
       /***** Get data of file/folder publisher *****/
       UsrDat.UsrCod = UsrCod;
-      ShowUsr = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-                                                         Usr_DONT_GET_PREFS,
-                                                         Usr_DONT_GET_ROLE_IN_CRS);
+      ShowUsr = (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+                                                          Usr_DONT_GET_PREFS,
+                                                          Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS);
      }
 
    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
@@ -6807,7 +6807,7 @@ void Brw_RenFolder (void)
 
 void Brw_RcvFileDZ (void)
   {
-   bool UploadSucessful;
+   Err_SuccessOrError_t UploadSucessful;
    struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
 
    /***** Receive file *****/
@@ -6824,12 +6824,18 @@ void Brw_RcvFileDZ (void)
    fprintf (stdout,"Content-type: text/plain; charset=windows-1252\n");
 
    /* Status code and message */
-   if (UploadSucessful)
-      fprintf (stdout,"Status: 200\r\n\r\n");
-   else
-      fprintf (stdout,"Status: 501 Not Implemented\r\n\r\n"
-		      "%s\n",
-	       Ale_GetTextOfLastAlert ());
+   switch (UploadSucessful)
+     {
+      case Err_SUCCESS:
+	 fprintf (stdout,"Status: 200\r\n\r\n");
+	 break;
+      case Err_ERROR:
+      default:
+	 fprintf (stdout,"Status: 501 Not Implemented\r\n\r\n"
+			 "%s\n",
+		  Ale_GetTextOfLastAlert ());
+	 break;
+     }
   }
 
 /*****************************************************************************/
@@ -6839,9 +6845,10 @@ void Brw_RcvFileDZ (void)
 void Brw_RcvFileClassic (void)
   {
    struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
+   __attribute__((unused)) Err_SuccessOrError_t UploadSucessful;
 
    /***** Receive file and show feedback message *****/
-   Brw_RcvFileInFileBrw (Size,Brw_CLASSIC_UPLOAD);
+   UploadSucessful = Brw_RcvFileInFileBrw (Size,Brw_CLASSIC_UPLOAD);
 
    /***** Show possible alert *****/
    Ale_ShowAlerts (NULL);
@@ -6854,8 +6861,8 @@ void Brw_RcvFileClassic (void)
 /****************** Receive a new file in a file browser *********************/
 /*****************************************************************************/
 
-static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
-                                  Brw_UploadType_t UploadType)
+static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
+						  Brw_UploadType_t UploadType)
   {
    extern const char *Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML;
    extern const char *Txt_UPLOAD_FILE_could_not_create_file_NO_HTML;
@@ -6882,7 +6889,7 @@ static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
    struct Brw_FileMetadata FileMetadata;
    struct Mrk_Properties Marks;
    char FileNameToShow[NAME_MAX + 1];
-   bool UploadSucessful = false;
+   Err_SuccessOrError_t UploadSucessful = Err_ERROR;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -6993,7 +7000,7 @@ static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
 						     Gbl.FileBrowser.NewFilFolLnkName,
 						     FileNameToShow);
 				   }
-				 UploadSucessful = true;
+				 UploadSucessful = Err_SUCCESS;
 
 				 FileMetadata.FilCod = FilCod;
 				 Brw_GetFileMetadataByCod (&FileMetadata);
@@ -7428,7 +7435,7 @@ void Brw_ShowFileMetadata (void)
    Usr_Can_t ICanEdit;
    Usr_Can_t ICanChangePublic = Usr_CAN_NOT;
    PriPub_PrivateOrPublic_t PrivateOrPublic;
-   bool FileHasPublisher;
+   Exi_Exist_t PublisherExists;
    Brw_License_t License;
    unsigned LicenseUnsigned;
 
@@ -7495,12 +7502,12 @@ void Brw_ShowFileMetadata (void)
 	       Usr_UsrDataConstructor (&PublisherUsrDat);
 
 	       PublisherUsrDat.UsrCod = FileMetadata.PublisherUsrCod;
-	       FileHasPublisher = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat,
-									   Usr_DONT_GET_PREFS,
-									   Usr_DONT_GET_ROLE_IN_CRS);
+	       PublisherExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat,
+									  Usr_DONT_GET_PREFS,
+									  Usr_DONT_GET_ROLE_IN_CRS);
 	      }
 	    else
-	       FileHasPublisher = false;	// Get user's data from database
+	       PublisherExists = Exi_DOES_NOT_EXIST;
 
 	    /***** Get link to download the file *****/
 	    if (Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type])
@@ -7584,19 +7591,23 @@ void Brw_ShowFileMetadata (void)
 		  Frm_LabelColumn ("RT",NULL,Txt_Uploaded_by);
 
 		  HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
-		     if (FileHasPublisher)
+		     switch (PublisherExists)
 		       {
-			/* Show photo */
-			Pho_ShowUsrPhotoIfAllowed (&PublisherUsrDat,
-						   ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
+			case Exi_EXISTS:
+			   /* Show photo */
+			   Pho_ShowUsrPhotoIfAllowed (&PublisherUsrDat,
+						      ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 
-			/* Write name */
-			HTM_NBSP ();
-			HTM_Txt (PublisherUsrDat.FullName);
+			   /* Write name */
+			   HTM_NBSP ();
+			   HTM_Txt (PublisherUsrDat.FullName);
+			   break;
+			case Exi_DOES_NOT_EXIST:
+			default:
+			   /* Unknown publisher */
+			   HTM_Txt (Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]);
+			   break;
 		       }
-		     else
-			/* Unknown publisher */
-			HTM_Txt (Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]);
 		  HTM_TD_End ();
 
 	       HTM_TR_End ();
@@ -9215,7 +9226,7 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    extern const char *Txt_Uploaded_by;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    struct Brw_FileMetadata FileMetadata;
-   bool FileHasPublisher;
+   Exi_Exist_t PublisherExists;
    struct Usr_Data PublisherUsrDat;
 
    /***** Return nothing on error *****/
@@ -9239,13 +9250,13 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 /* Initialize structure with publisher's data */
 	 Usr_UsrDataConstructor (&PublisherUsrDat);
 	 PublisherUsrDat.UsrCod = FileMetadata.PublisherUsrCod;
-	 FileHasPublisher = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat,
-	                                                             Usr_DONT_GET_PREFS,
-	                                                             Usr_DONT_GET_ROLE_IN_CRS);
+	 PublisherExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat,
+	                                                            Usr_DONT_GET_PREFS,
+	                                                            Usr_DONT_GET_ROLE_IN_CRS);
 	}
       else
 	 /* Unknown publisher */
-	 FileHasPublisher = false;
+	 PublisherExists = Exi_DOES_NOT_EXIST;
 
       if (asprintf (ContentStr,"%s: %s<br>"	// File name
 			       "%s: %s<br>"	// File path
@@ -9253,8 +9264,8 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 		    Txt_Filename,FileMetadata.FilFolLnk.Name,
 		    Txt_Folder,FileMetadata.FilFolLnk.Path,	// TODO: Fix bug: do not write internal name (for example "comun")
 		    Txt_Uploaded_by,
-		    FileHasPublisher ? PublisherUsrDat.FullName :
-				       Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]) < 0)
+		    PublisherExists == Exi_EXISTS ? PublisherUsrDat.FullName :
+						    Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]) < 0)
 	 Err_NotEnoughMemoryExit ();
 
       /* Free memory used for publisher's data */

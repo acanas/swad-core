@@ -1344,8 +1344,8 @@ unsigned Hie_GetCachedNumNodesInHieLvl (Hie_Level_t HieLvlChild,
    unsigned NumNodes;
 
    /***** Get number of nodes from cache *****/
-   if (!FigCch_GetFigureFromCache (Hie_FiguresCached[HieLvlChild],HieLvlParent,HieCod,
-				   FigCch_UNSIGNED,&NumNodes))
+   if (FigCch_GetFigureFromCache (Hie_FiguresCached[HieLvlChild],HieLvlParent,HieCod,
+				  FigCch_UNSIGNED,&NumNodes) == Exi_DOES_NOT_EXIST)
       /***** Get current number of nodes from database and update cache *****/
       NumNodes = Hie_GetNumNodesInHieLvl (HieLvlChild,HieLvlParent,HieCod);
 
@@ -1444,9 +1444,9 @@ unsigned Hie_GetCachedNumNodesInHieLvlWith (Hie_Level_t HieLvlChild,
    unsigned NumNodes;
 
    /***** Get number of centers with degrees from cache *****/
-   if (!FigCch_GetFigureFromCache (Figure[HieLvlChild][HavingNodesOfLevel],
-				   HieLvlParent,Gbl.Hierarchy.Node[HieLvlParent].HieCod,
-				   FigCch_UNSIGNED,&NumNodes))
+   if (FigCch_GetFigureFromCache (Figure[HieLvlChild][HavingNodesOfLevel],
+				  HieLvlParent,Gbl.Hierarchy.Node[HieLvlParent].HieCod,
+				  FigCch_UNSIGNED,&NumNodes) == Exi_DOES_NOT_EXIST)
      {
       /***** Get current number of nodes with degrees from database and update cache *****/
       NumNodes = FunctionGetFigure[HieLvlChild][HavingNodesOfLevel] (HieLvlParent,
@@ -1480,8 +1480,8 @@ unsigned Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_Level_t HieLvl,
    unsigned NumUsrs;
 
    /***** Get number of users who claim to belong to hierarchy node from cache *****/
-   if (!FigCch_GetFigureFromCache (Figure[HieLvl],HieLvl,Node->HieCod,
-                                   FigCch_UNSIGNED,&NumUsrs))
+   if (FigCch_GetFigureFromCache (Figure[HieLvl],HieLvl,Node->HieCod,
+                                  FigCch_UNSIGNED,&NumUsrs) == Exi_DOES_NOT_EXIST)
       /***** Get current number of users who claim to belong to hierarchy node
              from database and update cache *****/
       NumUsrs = Hie_GetNumUsrsWhoClaimToBelongTo (HieLvl,Node);
