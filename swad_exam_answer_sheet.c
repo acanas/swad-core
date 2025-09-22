@@ -888,7 +888,7 @@ static void ExaAnsShe_WriteOnlineFltAns (struct Qst_Question *Question,
 					 unsigned QstInd)
   {
    double AnsUsr = 0.0;
-   bool Valid;
+   Err_SuccessOrError_t SuccessOrError;
 
    /***** Check if number of rows is correct *****/
    if (Question->Answer.NumOptions != 2)
@@ -897,16 +897,16 @@ static void ExaAnsShe_WriteOnlineFltAns (struct Qst_Question *Question,
    /***** Write online answer *****/
    if (Print->Qsts[QstInd].Answer.Str[0])	// If the question has been answered
      {
-      Valid = Str_GetDoubleFromStr (Print->Qsts[QstInd].Answer.Str,
-			            &AnsUsr);
+      SuccessOrError = Str_GetDoubleFromStr (Print->Qsts[QstInd].Answer.Str,
+					     &AnsUsr);
       // A bad formatted floating point answer will interpreted as 0.0
       HTM_TD_Begin ("class=\"Exa_ANSWER_FLOAT %s_%s\"",
-		    Valid ? ((AnsUsr >= Question->Answer.FloatingPoint[0] &&
-		              AnsUsr <= Question->Answer.FloatingPoint[1]) ? "Qst_ANS_OK" :	// Correct
-									     "Qst_ANS_BAD") :	// Wrong
-			     "Qst_ANS_0",							// Blank answer
+		    SuccessOrError == Err_SUCCESS ? ((AnsUsr >= Question->Answer.FloatingPoint[0] &&
+						      AnsUsr <= Question->Answer.FloatingPoint[1]) ? "Qst_ANS_OK" :	// Correct
+												     "Qst_ANS_BAD") :	// Wrong
+						     "Qst_ANS_0",							// Blank answer
 		    The_GetSuffix ());
-         if (Valid)
+         if (SuccessOrError == Err_SUCCESS)
 	    HTM_Double (AnsUsr);
       HTM_TD_End ();
      }
@@ -1100,7 +1100,7 @@ static void ExaAnsShe_WritePaperFltAns (struct Qst_Question *Question,
 					unsigned QstInd)
   {
    double AnsUsr;
-   bool Valid;
+   Err_SuccessOrError_t SuccessOrError;
    Qst_WrongOrCorrect_t WrongOrCorrect = Qst_BLANK;
    char Id[3 + 1 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1 + Cns_MAX_DIGITS_UINT + 1];	// "Ans_encryptedusercode_xx...x"
 
@@ -1111,12 +1111,12 @@ static void ExaAnsShe_WritePaperFltAns (struct Qst_Question *Question,
    /***** Write paper answer *****/
    if (Print->Qsts[QstInd].Answer.Str[0])	// If the question has been answered
      {
-      Valid = Str_GetDoubleFromStr (Print->Qsts[QstInd].Answer.Str,&AnsUsr);
+      SuccessOrError = Str_GetDoubleFromStr (Print->Qsts[QstInd].Answer.Str,&AnsUsr);
       // A bad formatted floating point answer will interpreted as 0.0
-      WrongOrCorrect = Valid ? ((AnsUsr >= Question->Answer.FloatingPoint[0] &&
-				 AnsUsr <= Question->Answer.FloatingPoint[1]) ? Qst_CORRECT :
-										Qst_WRONG) :
-			        Qst_BLANK;
+      WrongOrCorrect = SuccessOrError == Err_SUCCESS ? ((AnsUsr >= Question->Answer.FloatingPoint[0] &&
+							 AnsUsr <= Question->Answer.FloatingPoint[1]) ? Qst_CORRECT :
+													Qst_WRONG) :
+							Qst_BLANK;
      }
 
    HTM_TD_Begin ("class=\"Exa_ANSWER_FLOAT\"");

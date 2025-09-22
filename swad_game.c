@@ -990,7 +990,7 @@ void Gam_GetGameDataByCod (struct Gam_Game *Game)
 	 Game->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
 	 /* Get maximum grade (row[4]) */
-	 if (Str_GetDoubleFromStr (row[4],&Game->MaxGrade))
+	 if (Str_GetDoubleFromStr (row[4],&Game->MaxGrade) == Err_SUCCESS)
 	    if (Game->MaxGrade < 0.0)	// Only positive values allowed
 	       Game->MaxGrade = 0.0;
 
@@ -1496,7 +1496,7 @@ static void Gam_ReceiveGameFieldsFromForm (struct Gam_Game *Game,
 
    /***** Get maximum grade *****/
    Par_GetParText ("MaxGrade",MaxGradeStr,sizeof (MaxGradeStr) - 1);
-   if (Str_GetDoubleFromStr (MaxGradeStr,&Game->MaxGrade))
+   if (Str_GetDoubleFromStr (MaxGradeStr,&Game->MaxGrade) == Err_SUCCESS)
       if (Game->MaxGrade < 0.0)	// Only positive values allowed
 	 Game->MaxGrade = 0.0;
 

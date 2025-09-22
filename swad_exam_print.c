@@ -1215,7 +1215,7 @@ static void ExaPrn_GetCorrectFltAnswerFromDB (struct Qst_Question *Question)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumOpt;
-   bool Valid;
+   Err_SuccessOrError_t SuccessOrError;
    double Tmp;
 
    /***** Query database *****/
@@ -1226,14 +1226,14 @@ static void ExaPrn_GetCorrectFltAnswerFromDB (struct Qst_Question *Question)
       Err_WrongAnswerExit ();
 
    /***** Get float range *****/
-   for (Valid = true, NumOpt = 0;
-	Valid && NumOpt < 2;
+   for (SuccessOrError = Err_SUCCESS, NumOpt = 0;
+	SuccessOrError == Err_SUCCESS && NumOpt < 2;
 	NumOpt++)
      {
       row = mysql_fetch_row (mysql_res);
-      Valid = Str_GetDoubleFromStr (row[0],&Question->Answer.FloatingPoint[NumOpt]);
+      SuccessOrError = Str_GetDoubleFromStr (row[0],&Question->Answer.FloatingPoint[NumOpt]);
      }
-   if (Valid)
+   if (SuccessOrError == Err_SUCCESS)
       if (Question->Answer.FloatingPoint[0] >
 	  Question->Answer.FloatingPoint[1]) 	// The maximum and the minimum are swapped
        {

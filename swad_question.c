@@ -1568,7 +1568,7 @@ void Qst_GetCorrectFltAnswerFromDB (struct Qst_Question *Question)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumOpt;
-   bool Valid;
+   Err_SuccessOrError_t SuccessOrError;
    double Tmp;
 
    /***** Query database *****/
@@ -1579,14 +1579,14 @@ void Qst_GetCorrectFltAnswerFromDB (struct Qst_Question *Question)
       Err_WrongAnswerExit ();
 
    /***** Get float range *****/
-   for (Valid = true, NumOpt = 0;
-	Valid && NumOpt < 2;
+   for (SuccessOrError = Err_SUCCESS, NumOpt = 0;
+	SuccessOrError == Err_SUCCESS && NumOpt < 2;
 	NumOpt++)
      {
       row = mysql_fetch_row (mysql_res);
-      Valid = Str_GetDoubleFromStr (row[0],&Question->Answer.FloatingPoint[NumOpt]);
+      SuccessOrError = Str_GetDoubleFromStr (row[0],&Question->Answer.FloatingPoint[NumOpt]);
      }
-   if (Valid)
+   if (SuccessOrError == Err_SUCCESS)
       if (Question->Answer.FloatingPoint[0] >
 	  Question->Answer.FloatingPoint[1]) 	// The maximum and the minimum are swapped
        {
@@ -2597,8 +2597,8 @@ Exi_Exist_t Qst_GetQstDataByCod (struct Qst_Question *Question)
 	    case Qst_ANS_FLOAT:
 	       if (Question->Answer.NumOptions != 2)
 		  Err_WrongAnswerExit ();
-	       if (!Str_GetDoubleFromStr (row[1],
-					  &Question->Answer.FloatingPoint[NumOpt]))
+	       if (Str_GetDoubleFromStr (row[1],
+					 &Question->Answer.FloatingPoint[NumOpt]) == Err_ERROR)
 		  Err_WrongAnswerExit ();
 	       break;
 	    case Qst_ANS_TRUE_FALSE:
@@ -2963,7 +2963,7 @@ Err_SuccessOrError_t Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst
    extern const char *Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to_the_upper_limit;
    unsigned NumOpt;
    unsigned NumLastOpt;
-   bool Valid;
+   Err_SuccessOrError_t SuccessOrError;
    bool ThereIsEndOfAnswers;
 
    /***** This function also counts the number of options. Initialize this number to 0. *****/
@@ -3018,25 +3018,26 @@ Err_SuccessOrError_t Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst
            }
 
          /* Lower limit should be <= upper limit */
-         for (Valid = true, NumOpt = 0;
-              Valid && NumOpt < 2;
+         for (SuccessOrError = Err_SUCCESS, NumOpt = 0;
+              SuccessOrError == Err_SUCCESS && NumOpt < 2;
               NumOpt++)
-            Valid = Str_GetDoubleFromStr (Question->Answer.Options[NumOpt].Text,
-        				  &Question->Answer.FloatingPoint[NumOpt]);
-         if (Valid)
-           {
-	    if (Question->Answer.FloatingPoint[0] >
-		Question->Answer.FloatingPoint[1])
-	      {
-	       Ale_ShowAlert (Ale_WARNING,Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to_the_upper_limit);
+            SuccessOrError = Str_GetDoubleFromStr (Question->Answer.Options[NumOpt].Text,
+        					   &Question->Answer.FloatingPoint[NumOpt]);
+	 switch (SuccessOrError)
+	   {
+	    case Err_SUCCESS:
+	       if (Question->Answer.FloatingPoint[0] >
+		   Question->Answer.FloatingPoint[1])
+		 {
+		  Ale_ShowAlert (Ale_WARNING,Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to_the_upper_limit);
+		  return Err_ERROR;
+		 }
+	       break;
+	    case Err_ERROR:
+	    default:
+	       Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer);
 	       return Err_ERROR;
-	      }
-           }
-         else
-           {
-            Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer);
-            return Err_ERROR;
-           }
+	   }
 
          Question->Answer.NumOptions = 2;
          break;
@@ -3183,10 +3184,16 @@ Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question)
                     NumOpt++)
                  {
                   row = mysql_fetch_row (mysql_res_ans);
-                  if (Str_GetDoubleFromStr (row[0],&DoubleNum))
-                     IdenticalAnswers = (DoubleNum == Question->Answer.FloatingPoint[NumOpt]);
-                  else
-                     IdenticalAnswers = false;
+		  switch (Str_GetDoubleFromStr (row[0],&DoubleNum))
+		    {
+		     case Err_SUCCESS:
+			IdenticalAnswers = (DoubleNum == Question->Answer.FloatingPoint[NumOpt]);
+			break;
+		     case Err_ERROR:
+		     default:
+			IdenticalAnswers = false;
+			break;
+		    }
                  }
                IdenticalQuestionFound = IdenticalAnswers;
                break;

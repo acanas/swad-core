@@ -928,7 +928,7 @@ void Exa_GetExamDataByCod (struct Exa_Exam *Exam)
 	 Exam->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
 	 /* Get maximum grade (row[4]) */
-	 if (Str_GetDoubleFromStr (row[4],&Exam->MaxGrade))
+	 if (Str_GetDoubleFromStr (row[4],&Exam->MaxGrade) == Err_SUCCESS)
 	    if (Exam->MaxGrade < 0.0)	// Only positive values allowed
 	       Exam->MaxGrade = 0.0;
 
@@ -1493,7 +1493,7 @@ static void Exa_ReceiveExamFieldsFromForm (struct Exa_Exam *Exam,
 
    /***** Get maximum grade *****/
    Par_GetParText ("MaxGrade",MaxGradeStr,sizeof (MaxGradeStr) - 1);
-   if (Str_GetDoubleFromStr (MaxGradeStr,&Exam->MaxGrade))
+   if (Str_GetDoubleFromStr (MaxGradeStr,&Exam->MaxGrade) == Err_SUCCESS)
       if (Exam->MaxGrade < 0.0)	// Only positive values allowed
 	 Exam->MaxGrade = 0.0;
 

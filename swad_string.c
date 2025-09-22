@@ -615,13 +615,13 @@ void Str_ConvertStrFloatCommaToStrFloatPoint (char *Str)
 /*****************************************************************************/
 /************************ Get a double from a string *************************/
 /*****************************************************************************/
-// If Str contains a valid value, return true and Value will be a double number
-// If Str does not contain a valid value, return false and Value is undefined
+// If Str contains a valid value, return Err_SUCCESS and Value will be a double number
+// If Str does not contain a valid value, return Err_ERROR and Value is undefined
 
-bool Str_GetDoubleFromStr (const char *Str,double *Value)
+Err_SuccessOrError_t Str_GetDoubleFromStr (const char *Str,double *Value)
   {
    char *StrPoint;
-   bool Valid = false;
+   Err_SuccessOrError_t SuccessOrError = Err_ERROR;
 
    /***** Trivial check *****/
    if (Str)
@@ -635,14 +635,14 @@ bool Str_GetDoubleFromStr (const char *Str,double *Value)
       Str_ConvertStrFloatCommaToStrFloatPoint (StrPoint);
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
 	 if (sscanf (StrPoint,"%lf",Value) == 1)	// If the string hold a valid number...
-	    Valid = true;
+	    SuccessOrError = Err_SUCCESS;
       Str_SetDecimalPointToLocal ();	// Return to local system
 
       /***** Free temporary string *****/
       free (StrPoint);
      }
 
-   return Valid;
+   return SuccessOrError;
   }
 
 /*****************************************************************************/

@@ -1355,7 +1355,7 @@ void Prf_GetAndShowRankingClicksPerDay (Hie_Level_t HieLvl)
 					 Usr_DONT_GET_ROLE_IN_CRS);
 
 	    /* Get average number of clicks per day (row[1]) */
-	    if (Str_GetDoubleFromStr (row[1],&NumClicksPerDay))
+	    if (Str_GetDoubleFromStr (row[1],&NumClicksPerDay) == Err_SUCCESS)
 	       if (NumClicksPerDay < NumClicksPerDayHigh)
 		 {
 		  Rank = NumUsr;

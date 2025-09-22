@@ -165,7 +165,7 @@ void Map_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom,
 	 /* Get latitude (row[0]), longitude (row[1]) and maximum distance (row[2]) */
 	 Coord->Latitude  = Map_GetLatitudeFromStr (row[0]);
 	 Coord->Longitude = Map_GetLongitudeFromStr (row[1]);
-	 if (!Str_GetDoubleFromStr (row[2],&MaxDistance))
+	 if (Str_GetDoubleFromStr (row[2],&MaxDistance) == Err_ERROR)
 	    MaxDistance = 0.0;
 	 break;
       case Exi_DOES_NOT_EXIST:
@@ -192,7 +192,7 @@ double Map_GetLatitudeFromStr (char *Str)
   {
    double Latitude;
 
-   if (Str_GetDoubleFromStr (Str,&Latitude))
+   if (Str_GetDoubleFromStr (Str,&Latitude) == Err_SUCCESS)
      {
       if (Latitude < -90.0)
 	 return -90.0;	// South Pole
@@ -212,7 +212,7 @@ double Map_GetLongitudeFromStr (char *Str)
   {
    double Longitude;
 
-   if (Str_GetDoubleFromStr (Str,&Longitude))
+   if (Str_GetDoubleFromStr (Str,&Longitude) == Err_SUCCESS)
      {
       if (Longitude < -180.0)
 	 return -180.0;	// West
@@ -232,7 +232,7 @@ double Map_GetAltitudeFromStr (char *Str)
   {
    double Altitude;
 
-   if (Str_GetDoubleFromStr (Str,&Altitude))
+   if (Str_GetDoubleFromStr (Str,&Altitude) == Err_SUCCESS)
      {
       if (Altitude < -413.0)
 	 return -413.0;	// Dead Sea shore

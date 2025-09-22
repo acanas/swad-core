@@ -891,7 +891,7 @@ void TstPrn_ComputeFltAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
    if (PrintedQuestion->Answer.Str[0])	// If user has answered the answer
      {
       PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
-      if (Str_GetDoubleFromStr (PrintedQuestion->Answer.Str,&AnsUsr))
+      if (Str_GetDoubleFromStr (PrintedQuestion->Answer.Str,&AnsUsr) == Err_SUCCESS)
 	 if (AnsUsr >= Question->Answer.FloatingPoint[0] &&
 	     AnsUsr <= Question->Answer.FloatingPoint[1])
 	   {
@@ -1283,7 +1283,7 @@ static void TstPrn_WriteFltAnsPrint (struct Usr_Data *UsrDat,
 				     __attribute__((unused)) const char *ClassFeedback)
   {
    double AnsUsr;
-   bool Valid;
+   Err_SuccessOrError_t SuccessOrError;
 
    /***** Check if number of rows is correct *****/
    if (Question->Answer.NumOptions != 2)
@@ -1302,17 +1302,18 @@ static void TstPrn_WriteFltAnsPrint (struct Usr_Data *UsrDat,
 	 /***** Write the user answer *****/
 	 if (PrintedQuestion->Answer.Str[0])	// If user has answered the question
 	   {
-	    Valid = Str_GetDoubleFromStr (PrintedQuestion->Answer.Str,&AnsUsr);
+	    SuccessOrError = Str_GetDoubleFromStr (PrintedQuestion->Answer.Str,&AnsUsr);
 
 	    // A bad formatted floating point answer will interpreted as 0.0
 	    HTM_TD_Begin ("class=\"CM %s_%s\"",
-			  ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_CAN && Valid ?
+			  ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_CAN &&
+			  SuccessOrError == Err_SUCCESS ?
 			     ((AnsUsr >= Question->Answer.FloatingPoint[0] &&
 			       AnsUsr <= Question->Answer.FloatingPoint[1]) ? "Qst_ANS_OK" :	// Correct
 									      "Qst_ANS_BAD") :	// Wrong
 									      "Qst_ANS_0",	// Blank answer
 			  The_GetSuffix ());
-	       if (Valid)
+	       if (SuccessOrError == Err_SUCCESS)
 	          HTM_Double (AnsUsr);
 	    HTM_TD_End ();
 	   }

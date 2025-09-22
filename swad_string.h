@@ -30,6 +30,8 @@
 #include <limits.h>		// For NAME_MAX and PATH_MAX
 #include <stdio.h>		// For FILE
 
+#include "swad_error.h"
+
 /*****************************************************************************/
 /******************************* Public types *******************************/
 /*****************************************************************************/
@@ -60,7 +62,6 @@ typedef enum
    Str_REMOVE_SPACES,
   } Str_RemoveSpaces_t;
 
-
 /*****************************************************************************/
 /***************************** Public prototypes ****************************/
 /*****************************************************************************/
@@ -83,7 +84,7 @@ char Str_ConvertToLowerLetter (char Ch);
 void Str_DoubleNumToStr (char **Str,double Number);
 void Str_DoubleNumToStrFewDigits (char **Str,double Number);
 void Str_ConvertStrFloatCommaToStrFloatPoint (char *Str);
-bool Str_GetDoubleFromStr (const char *Str,double *Value);
+Err_SuccessOrError_t Str_GetDoubleFromStr (const char *Str,double *Value);
 void Str_SetDecimalPointToUS (void);
 void Str_SetDecimalPointToLocal (void);
 

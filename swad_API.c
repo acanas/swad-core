@@ -4198,14 +4198,18 @@ int swad__getGames (struct soap *soap,
          getGamesOut->gamesArray.__ptr[NumGame].endTime = EndTime;
 
 	 /* Get maximum grade (row[4]) */
-	 if (Str_GetDoubleFromStr (row[4],&DoubleNum))
+	 switch (Str_GetDoubleFromStr (row[4],&DoubleNum))
 	   {
-	    getGamesOut->gamesArray.__ptr[NumGame].maxGrade = (float) DoubleNum;
-	    if (getGamesOut->gamesArray.__ptr[NumGame].maxGrade < 0.0)	// Only positive values allowed
+	    case Err_SUCCESS:
+	       getGamesOut->gamesArray.__ptr[NumGame].maxGrade = (float) DoubleNum;
+	       if (getGamesOut->gamesArray.__ptr[NumGame].maxGrade < 0.0)	// Only positive values allowed
+		  getGamesOut->gamesArray.__ptr[NumGame].maxGrade = 0.0;
+	       break;
+	    case Err_ERROR:
+	    default:
 	       getGamesOut->gamesArray.__ptr[NumGame].maxGrade = 0.0;
+	       break;
 	   }
-	 else
-	    getGamesOut->gamesArray.__ptr[NumGame].maxGrade = 0.0;
 
 	 /* Get visibility (row[5]) */
          getGamesOut->gamesArray.__ptr[NumGame].visibility = TstVis_GetVisibilityFromStr (row[5]);

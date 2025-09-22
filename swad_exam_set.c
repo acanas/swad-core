@@ -979,8 +979,8 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
 	    case Qst_ANS_FLOAT:
 	       if (Question->Answer.NumOptions != 2)
 		  Err_WrongAnswerExit ();
-	       if (!Str_GetDoubleFromStr (row[1],
-					  &Question->Answer.FloatingPoint[NumOpt]))
+	       if (Str_GetDoubleFromStr (row[1],
+					 &Question->Answer.FloatingPoint[NumOpt]) == Err_ERROR)
 		  Err_WrongAnswerExit ();
 	       break;
 	    case Qst_ANS_TRUE_FALSE:
