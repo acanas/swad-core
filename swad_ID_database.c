@@ -106,7 +106,7 @@ bool ID_DB_CheckIfConfirmed (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1])
 /********************** Check if a string is a user's ID *********************/
 /*****************************************************************************/
 
-bool ID_DB_FindStrInUsrsIDs (const char *Str)
+Exi_Exist_t ID_DB_FindStrInUsrsIDs (const char *Str)
   {
    return
    DB_QueryEXISTS ("can not check if a string matches any user's ID",
@@ -114,7 +114,7 @@ bool ID_DB_FindStrInUsrsIDs (const char *Str)
 		   "(SELECT *"
 		     " FROM usr_ids"
 		    " WHERE UsrID='%s')",
-		   Str) == Exi_EXISTS;
+		   Str);
   }
 
 /*****************************************************************************/

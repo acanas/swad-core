@@ -132,8 +132,8 @@ static unsigned Att_GetNumUsrsFromAListWhoAreInEvent (long AttCod,
 						      unsigned NumUsrsInList);
 static Att_AbsentOrPresent_t Att_CheckIfUsrIsPresentInEvent (long AttCod,long UsrCod);
 static Att_AbsentOrPresent_t Att_CheckIfUsrIsPresentInEventAndGetComments (long AttCod,long UsrCod,
-								   char CommentStd[Cns_MAX_BYTES_TEXT + 1],
-								   char CommentTch[Cns_MAX_BYTES_TEXT + 1]);
+									   char CommentStd[Cns_MAX_BYTES_TEXT + 1],
+									   char CommentTch[Cns_MAX_BYTES_TEXT + 1]);
 
 static void Att_ReqListOrPrintUsrsAttendanceCrs (__attribute__((unused)) void *Args);
 static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView);
@@ -2102,8 +2102,9 @@ static unsigned Att_GetNumUsrsFromAListWhoAreInEvent (long AttCod,
 static Att_AbsentOrPresent_t Att_CheckIfUsrIsPresentInEvent (long AttCod,long UsrCod)
   {
    Att_AbsentOrPresent_t Present;
+   __attribute__((unused)) Exi_Exist_t UsrExists;
 
-   Att_DB_CheckIfUsrIsInTableAttUsr (AttCod,UsrCod,&Present);
+   UsrExists = Att_DB_CheckIfUsrExistsInTableAttUsr (AttCod,UsrCod,&Present);
 
    return Present;
   }
@@ -2113,8 +2114,8 @@ static Att_AbsentOrPresent_t Att_CheckIfUsrIsPresentInEvent (long AttCod,long Us
 /*****************************************************************************/
 
 static Att_AbsentOrPresent_t Att_CheckIfUsrIsPresentInEventAndGetComments (long AttCod,long UsrCod,
-								   char CommentStd[Cns_MAX_BYTES_TEXT + 1],
-								   char CommentTch[Cns_MAX_BYTES_TEXT + 1])
+									   char CommentStd[Cns_MAX_BYTES_TEXT + 1],
+									   char CommentTch[Cns_MAX_BYTES_TEXT + 1])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

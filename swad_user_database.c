@@ -339,7 +339,7 @@ void Usr_DB_GetUsrName (long UsrCod,char *Title,size_t TitleSize)
 /****** Check if a string is found in first name or surnames of anybody ******/
 /*****************************************************************************/
 
-bool Usr_DB_FindStrInUsrsNames (const char *Str)
+Exi_Exist_t Usr_DB_FindStrInUsrsNames (const char *Str)
   {
    return
    DB_QueryEXISTS ("can not check if a string matches a first name or a surname",
@@ -351,7 +351,7 @@ bool Usr_DB_FindStrInUsrsNames (const char *Str)
 		       " OR Surname2='%s')",
 		   Str,
 		   Str,
-		   Str) == Exi_EXISTS;
+		   Str);
   }
 
 /*****************************************************************************/

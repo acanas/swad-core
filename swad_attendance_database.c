@@ -448,8 +448,8 @@ unsigned Att_DB_GetNumStdsFromListWhoAreInEvent (long AttCod,const char *SubQuer
 /*****************************************************************************/
 // Return if user is in table
 
-bool Att_DB_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,
-				       Att_AbsentOrPresent_t *Present)
+Exi_Exist_t Att_DB_CheckIfUsrExistsInTableAttUsr (long AttCod,long UsrCod,
+					          Att_AbsentOrPresent_t *Present)
   {
    char StrPresent[1 + 1];
 
@@ -465,10 +465,11 @@ bool Att_DB_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,
    if (StrPresent[0])
      {
       *Present = Att_GetPresentFromYN (StrPresent[0]);
-      return true;	// User is in table
+      return Exi_EXISTS;	// User is in table
      }
+
    *Present = Att_ABSENT;
-   return false;	// User is not in table
+   return Exi_DOES_NOT_EXIST;	// User is not in table
   }
 
 /*****************************************************************************/
@@ -665,16 +666,20 @@ void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,bool SetOthersAsA
 	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
 	      {
 	       /* Mark user as present */
-	       if (Att_DB_CheckIfUsrIsInTableAttUsr (AttCod,UsrDat.UsrCod,&Present))	// User is in table att_users
+	       switch (Att_DB_CheckIfUsrExistsInTableAttUsr (AttCod,UsrDat.UsrCod,&Present))
 		 {
-		  if (Present == Att_ABSENT)	// If already present ==> nothing to do
-		     /***** If user is in database as absent ==>
-		            set user as present in database *****/
-		     Att_DB_SetUsrAsPresent (AttCod,UsrDat.UsrCod);
+		  case Exi_EXISTS:		// User is in table att_users
+		     if (Present == Att_ABSENT)	// If already present ==> nothing to do
+			/***** If user is in database as absent ==>
+			       set user as present in database *****/
+			Att_DB_SetUsrAsPresent (AttCod,UsrDat.UsrCod);
+		     break;
+		  case Exi_DOES_NOT_EXIST:	// User is not in table att_users
+		  default:
+		     Att_DB_RegUsrInEventChangingComments (AttCod,UsrDat.UsrCod,
+							   Att_PRESENT,"","");
+		     break;
 		 }
-	       else									// User is not in table att_users
-		  Att_DB_RegUsrInEventChangingComments (AttCod,UsrDat.UsrCod,
-							Att_PRESENT,"","");
 
 	       /* Add this user to query used to mark not present users as absent */
 	       if (SetOthersAsAbsent)

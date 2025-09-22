@@ -79,7 +79,7 @@ static void Pwd_PutLinkToSendNewPasswdPars (void *UsrIdLogin);
 
 static void Pwd_CreateANewPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1]);
 
-static bool Pwd_CheckIfPasswdIsUsrIDorName (const char *PlainPassword);
+static Exi_Exist_t Pwd_CheckIfPasswdExistsAsUsrIDorName (const char *PlainPassword);
 
 /*****************************************************************************/
 /************* Get parameter with my plain password from a form **************/
@@ -492,7 +492,7 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char PlainPassword[Pwd_MAX_BYTES_PLAIN
       return false;
 
    /***** Check if password is found in user's ID, first name or surnames of anybody *****/
-   if (Pwd_CheckIfPasswdIsUsrIDorName (PlainPassword))        // PlainPassword is a user's ID, name or surname
+   if (Pwd_CheckIfPasswdExistsAsUsrIDorName (PlainPassword) == Exi_EXISTS)        // PlainPassword is a user's ID, name or surname
      {
       Ale_CreateAlert (Ale_WARNING,Pwd_PASSWORD_SECTION_ID,
 	               Txt_The_password_is_too_trivial_);
@@ -515,11 +515,11 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char PlainPassword[Pwd_MAX_BYTES_PLAIN
 /***** Check if a password is a user's ID, a first name or a surname *********/
 /*****************************************************************************/
 
-static bool Pwd_CheckIfPasswdIsUsrIDorName (const char *PlainPassword)
+static Exi_Exist_t Pwd_CheckIfPasswdExistsAsUsrIDorName (const char *PlainPassword)
   {
    /***** Check if password is found in user's ID *****/
-   if (ID_DB_FindStrInUsrsIDs (PlainPassword))
-      return true;	// Found
+   if (ID_DB_FindStrInUsrsIDs (PlainPassword) == Exi_EXISTS)
+      return Exi_EXISTS;	// Found
 
    /***** Check if password is found in first name or surnames of anybody *****/
    return Usr_DB_FindStrInUsrsNames (PlainPassword);

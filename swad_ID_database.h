@@ -34,7 +34,7 @@ void ID_DB_ConfirmUsrID (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1]);
 
 unsigned ID_DB_GetIDsFromUsrCod (MYSQL_RES **mysql_res,long UsrCod);
 bool ID_DB_CheckIfConfirmed (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1]);
-bool ID_DB_FindStrInUsrsIDs (const char *Str);
+Exi_Exist_t ID_DB_FindStrInUsrsIDs (const char *Str);
 unsigned ID_DB_GetUsrCodsFromUsrID (MYSQL_RES **mysql_res,
                                     const struct Usr_Data *UsrDat,
                                     const char *EncryptedPassword,

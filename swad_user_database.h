@@ -55,7 +55,7 @@ Exi_Exist_t Usr_DB_GetUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod,
                                          Usr_GetPrefs_t GetPrefs);
 Exi_Exist_t Usr_DB_GetSomeUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod);
 void Usr_DB_GetUsrName (long UsrCod,char *Title,size_t TitleSize);
-bool Usr_DB_FindStrInUsrsNames (const char *Str);
+Exi_Exist_t Usr_DB_FindStrInUsrsNames (const char *Str);
 void Usr_DB_BuildQueryToGetUsrsLst (Hie_Level_t HieLvl,Rol_Role_t Role,
 				    char **Query);
 void Usr_DB_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role);
