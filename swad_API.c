@@ -3513,16 +3513,16 @@ int swad__getTestConfig (struct soap *soap,
 
    /* Convert from visibility to old feedback */
    /* TODO: Remove these lines in 2021 */
-   if (!TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()))
+   if (TstVis_StudentsCanViewTotalScore (TstCfg_GetConfigVisibility ()) == Usr_CAN_NOT)
       Str_Copy (getTestConfigOut->feedback,"nothing",
 		TstPrn_MAX_BYTES_FEEDBACK_TYPE);
-   else if (!TstVis_IsVisibleEachQstScore (TstCfg_GetConfigVisibility ()))
+   else if (TstVis_StudentsCanViewEachQstScore (TstCfg_GetConfigVisibility ()) == Usr_CAN_NOT)
       Str_Copy (getTestConfigOut->feedback,"totalResult",
 		TstPrn_MAX_BYTES_FEEDBACK_TYPE);
-   else if (!TstVis_IsVisibleCorrectAns (TstCfg_GetConfigVisibility ()))
+   else if (TstVis_StudentsCanViewCorrectAns (TstCfg_GetConfigVisibility ()) == Usr_CAN_NOT)
       Str_Copy (getTestConfigOut->feedback,"eachResult",
 		TstPrn_MAX_BYTES_FEEDBACK_TYPE);
-   else if (!TstVis_IsVisibleFeedbackTxt (TstCfg_GetConfigVisibility ()))
+   else if (TstVis_StudentsCanViewFeedbackTxt (TstCfg_GetConfigVisibility ()) == Usr_CAN_NOT)
       Str_Copy (getTestConfigOut->feedback,"eachGoodBad",
 		TstPrn_MAX_BYTES_FEEDBACK_TYPE);
    else

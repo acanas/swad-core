@@ -187,27 +187,32 @@ unsigned TstVis_GetVisibilityFromStr (const char *Str)
 /***************************** Get visibility items **************************/
 /*****************************************************************************/
 
-bool TstVis_IsVisibleQstAndAnsTxt (unsigned Visibility)
+Usr_Can_t TstVis_StudentsCanViewQstAndAnsTxt (unsigned Visibility)
   {
-   return (Visibility & (1 << TstVis_VISIBLE_QST_ANS_TXT)) != 0;
+   return (Visibility & (1 << TstVis_VISIBLE_QST_ANS_TXT)) != 0 ? Usr_CAN:
+								  Usr_CAN_NOT;
   }
 
-bool TstVis_IsVisibleFeedbackTxt (unsigned Visibility)
+Usr_Can_t TstVis_StudentsCanViewFeedbackTxt (unsigned Visibility)
   {
-   return (Visibility & (1 << TstVis_VISIBLE_FEEDBACK_TXT)) != 0;
+   return (Visibility & (1 << TstVis_VISIBLE_FEEDBACK_TXT)) != 0 ? Usr_CAN:
+								   Usr_CAN_NOT;
   }
 
-bool TstVis_IsVisibleCorrectAns (unsigned Visibility)
+Usr_Can_t TstVis_StudentsCanViewCorrectAns (unsigned Visibility)
   {
-   return (Visibility & (1 << TstVis_VISIBLE_CORRECT_ANSWER)) != 0;
+   return (Visibility & (1 << TstVis_VISIBLE_CORRECT_ANSWER)) != 0 ? Usr_CAN:
+								     Usr_CAN_NOT;
   }
 
-bool TstVis_IsVisibleEachQstScore (unsigned Visibility)
+Usr_Can_t TstVis_StudentsCanViewEachQstScore (unsigned Visibility)
   {
-   return (Visibility & (1 << TstVis_VISIBLE_EACH_QST_SCORE)) != 0;
+   return (Visibility & (1 << TstVis_VISIBLE_EACH_QST_SCORE)) != 0 ? Usr_CAN:
+								     Usr_CAN_NOT;
   }
 
-bool TstVis_IsVisibleTotalScore (unsigned Visibility)
+Usr_Can_t TstVis_StudentsCanViewTotalScore (unsigned Visibility)
   {
-   return (Visibility & (1 << TstVis_VISIBLE_TOTAL_SCORE)) != 0;
+   return (Visibility & (1 << TstVis_VISIBLE_TOTAL_SCORE)) != 0 ? Usr_CAN:
+								  Usr_CAN_NOT;
   }

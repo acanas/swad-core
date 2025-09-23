@@ -1303,8 +1303,7 @@ static void MchRes_CheckIfICanViewMatchResult (const struct Gam_Game *Game,
 	   {
 	    case Usr_CAN:
 	       // Depends on 5 visibility icons associated to game
-	       ICanView->Score = TstVis_IsVisibleTotalScore (Game->Visibility) ? Usr_CAN :
-										 Usr_CAN_NOT;
+	       ICanView->Score = TstVis_StudentsCanViewTotalScore (Game->Visibility);
 	       break;
 	    case Usr_CAN_NOT:
 	    default:

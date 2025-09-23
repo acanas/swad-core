@@ -611,14 +611,10 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-	 ICanView[TstVis_VISIBLE_QST_ANS_TXT   ] = TstVis_IsVisibleQstAndAnsTxt (Visibility) ? Usr_CAN :
-											       Usr_CAN_NOT;
-	 ICanView[TstVis_VISIBLE_FEEDBACK_TXT  ] = TstVis_IsVisibleFeedbackTxt  (Visibility) ? Usr_CAN :
-											       Usr_CAN_NOT;
-	 ICanView[TstVis_VISIBLE_CORRECT_ANSWER] = TstVis_IsVisibleCorrectAns   (Visibility) ? Usr_CAN :
-											       Usr_CAN_NOT;
-	 ICanView[TstVis_VISIBLE_EACH_QST_SCORE] = TstVis_IsVisibleEachQstScore (Visibility) ? Usr_CAN :
-											       Usr_CAN_NOT;
+	 ICanView[TstVis_VISIBLE_QST_ANS_TXT   ] = TstVis_StudentsCanViewQstAndAnsTxt (Visibility);
+	 ICanView[TstVis_VISIBLE_FEEDBACK_TXT  ] = TstVis_StudentsCanViewFeedbackTxt  (Visibility);
+	 ICanView[TstVis_VISIBLE_CORRECT_ANSWER] = TstVis_StudentsCanViewCorrectAns   (Visibility);
+	 ICanView[TstVis_VISIBLE_EACH_QST_SCORE] = TstVis_StudentsCanViewEachQstScore (Visibility);
 	 break;
       case Rol_NET:
       case Rol_TCH:
@@ -2157,18 +2153,33 @@ static void TstPrn_ShowPrintsSummaryRow (Usr_MeOrOther_t MeOrOther,
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-	 ICanViewTotalScore = (MeOrOther == Usr_ME &&
-		               TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ())) ? Usr_CAN :
-		        								     Usr_CAN_NOT;
+	 switch (MeOrOther)
+	   {
+	    case Usr_ME:
+	       ICanViewTotalScore = TstVis_StudentsCanViewTotalScore (TstCfg_GetConfigVisibility ());
+	       break;
+	    case Usr_OTHER:
+	    default:
+	       ICanViewTotalScore = Usr_CAN_NOT;
+	       break;
+	   }
 	 break;
       case Rol_NET:
       case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
-	 ICanViewTotalScore = (MeOrOther == Usr_ME ||
-			       NumPrints) ? Usr_CAN :
-		        		    Usr_CAN_NOT;
+	 switch (MeOrOther)
+	   {
+	    case Usr_ME:
+	       ICanViewTotalScore = Usr_CAN;
+	       break;
+	    case Usr_OTHER:
+	    default:
+	       ICanViewTotalScore = NumPrints ? Usr_CAN :
+		        		        Usr_CAN_NOT;
+	       break;
+	   }
 	 break;
       case Rol_SYS_ADM:
 	 ICanViewTotalScore = Usr_CAN;
@@ -2494,8 +2505,7 @@ static void TstRes_CheckIfICanSeePrintResult (const struct TstPrn_Print *Print,
 	   {
 	    case Usr_CAN:
 	       // Depends on 5 visibility icons associated to tests
-	       ICanView->Score = TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()) ? Usr_CAN :
-											      Usr_CAN_NOT;
+	       ICanView->Score = TstVis_StudentsCanViewTotalScore (TstCfg_GetConfigVisibility ());
 	       break;
 	    case Usr_CAN_NOT:
 	    default:

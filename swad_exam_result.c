@@ -1392,8 +1392,7 @@ static void ExaRes_CheckIfICanViewResult (const struct Exa_Exam *Exam,
 	   {
 	    case Usr_CAN:
 	       // Depends on 5 visibility icons associated to exam
-	       ICanView->Score = TstVis_IsVisibleTotalScore (Exam->Visibility) ? Usr_CAN :
-										 Usr_CAN_NOT;
+	       ICanView->Score = TstVis_StudentsCanViewTotalScore (Exam->Visibility);
 	       break;
 	    case Usr_CAN_NOT:
 	    default:
@@ -1866,14 +1865,10 @@ static void ExaRes_WriteQstAndAns (struct Usr_Data *UsrDat,
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-	 ICanView[TstVis_VISIBLE_QST_ANS_TXT   ] = TstVis_IsVisibleQstAndAnsTxt (Visibility) ? Usr_CAN:
-											       Usr_CAN_NOT;
-	 ICanView[TstVis_VISIBLE_FEEDBACK_TXT  ] = TstVis_IsVisibleFeedbackTxt  (Visibility) ? Usr_CAN:
-											       Usr_CAN_NOT;
-	 ICanView[TstVis_VISIBLE_CORRECT_ANSWER] = TstVis_IsVisibleCorrectAns   (Visibility) ? Usr_CAN:
-											       Usr_CAN_NOT;
-	 ICanView[TstVis_VISIBLE_EACH_QST_SCORE] = TstVis_IsVisibleEachQstScore (Visibility) ? Usr_CAN:
-											       Usr_CAN_NOT;
+	 ICanView[TstVis_VISIBLE_QST_ANS_TXT   ] = TstVis_StudentsCanViewQstAndAnsTxt (Visibility);
+	 ICanView[TstVis_VISIBLE_FEEDBACK_TXT  ] = TstVis_StudentsCanViewFeedbackTxt  (Visibility);
+	 ICanView[TstVis_VISIBLE_CORRECT_ANSWER] = TstVis_StudentsCanViewCorrectAns   (Visibility);
+	 ICanView[TstVis_VISIBLE_EACH_QST_SCORE] = TstVis_StudentsCanViewEachQstScore (Visibility);
 	 break;
       case Rol_NET:
       case Rol_TCH:

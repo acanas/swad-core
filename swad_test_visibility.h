@@ -56,10 +56,10 @@ void TstVis_PutVisibilityCheckboxes (unsigned SelectedVisibility);
 unsigned TstVis_GetVisibilityFromForm (void);
 unsigned TstVis_GetVisibilityFromStr (const char *Str);
 
-bool TstVis_IsVisibleQstAndAnsTxt (unsigned Visibility);
-bool TstVis_IsVisibleFeedbackTxt (unsigned Visibility);
-bool TstVis_IsVisibleCorrectAns (unsigned Visibility);
-bool TstVis_IsVisibleEachQstScore (unsigned Visibility);
-bool TstVis_IsVisibleTotalScore (unsigned Visibility);
+Usr_Can_t TstVis_StudentsCanViewQstAndAnsTxt (unsigned Visibility);
+Usr_Can_t TstVis_StudentsCanViewFeedbackTxt (unsigned Visibility);
+Usr_Can_t TstVis_StudentsCanViewCorrectAns (unsigned Visibility);
+Usr_Can_t TstVis_StudentsCanViewEachQstScore (unsigned Visibility);
+Usr_Can_t TstVis_StudentsCanViewTotalScore (unsigned Visibility);
 
 #endif

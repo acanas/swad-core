@@ -636,6 +636,7 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 #define CSS_FILE		"swad24.98.2.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 25.3.10:  Sep 23, 2025  Code refactoring in test and exam visibility. (349231 lines)
 	Version 25.3.9:   Sep 23, 2025  Code refactoring in user's IDs. (349221 lines)
 	Version 25.3.8:   Sep 23, 2025  New header file swad_mail_type.h. (349197 lines)
 	Version 25.3.7:   Sep 22, 2025  Code refactoring related to success/error. (349160 lines)

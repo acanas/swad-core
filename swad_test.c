@@ -387,7 +387,7 @@ void Tst_AssessTest (void)
 	 TstPrn_ShowPrintAfterAssess (&Print);
 
 	 /***** Write total score and grade *****/
-	 if (TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()))
+	 if (TstVis_StudentsCanViewTotalScore (TstCfg_GetConfigVisibility ()) == Usr_CAN)
 	   {
 	    HTM_DIV_Begin ("class=\"CM DAT_STRONG_%s BOLD\"",The_GetSuffix ());
 	       HTM_Txt (Txt_Score); HTM_Colon (); HTM_NBSP ();
