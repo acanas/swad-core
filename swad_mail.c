@@ -1100,7 +1100,7 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
    MYSQL_ROW row;
    unsigned NumEmails;
    unsigned NumEmail;
-   bool Confirmed;
+   Mai_Confirmed_t Confirmed;
    char *Icon;
    static struct
      {
@@ -1158,7 +1158,8 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
 	{
 	 /* Get email */
 	 row = mysql_fetch_row (mysql_res);
-	 Confirmed = (row[1][0] == 'Y');
+	 Confirmed = (row[1][0] == 'Y') ? Mai_CONFIRMED :
+					  Mai_NOT_CONFIRMED;
 
 	 if (NumEmail == 1)
 	   {
@@ -1190,7 +1191,7 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
 	 HTM_Txt (row[0]);
 
 	 /* Email confirmed? */
-	 if (Confirmed)
+	 if (Confirmed == Mai_CONFIRMED)
 	   {
 	    if (asprintf (&Icon,Txt_Email_X_confirmed,row[0]) < 0)
 	       Err_NotEnoughMemoryExit ();
@@ -1199,7 +1200,7 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
 	   }
 
 	 /* Form to change user's email */
-	 if (NumEmail > 1 || (MeOrOther == Usr_ME && !Confirmed))
+	 if (NumEmail > 1 || (MeOrOther == Usr_ME && Confirmed == Mai_NOT_CONFIRMED))
 	   {
 	    HTM_BR ();
 	    Frm_BeginFormAnchor (ActMail[MeOrOther].Change,Mai_EMAIL_SECTION_ID);

@@ -59,6 +59,12 @@ extern struct Globals Gbl;
 
 #define ID_MAX_IDS_PER_USER	3	// Maximum number of IDs per user
 
+static const char *ID_Class[ID_NUM_CONFIRMED] =
+  {
+   [ID_NOT_CONFIRMED] = "USR_ID_NC",
+   [ID_CONFIRMED    ] = "USR_ID_C",
+  };
+
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
@@ -118,7 +124,8 @@ void ID_GetListIDsFromUsrCod (struct Usr_Data *UsrDat)
                       sizeof (UsrDat->IDs.List[NumID].ID) - 1);
 
             /* Get if ID is confirmed from row[1] */
-            UsrDat->IDs.List[NumID].Confirmed = (row[1][0] == 'Y');
+            UsrDat->IDs.List[NumID].Confirmed = (row[1][0] == 'Y') ? ID_CONFIRMED :
+        							     ID_NOT_CONFIRMED;
 	   }
         }
 
@@ -239,7 +246,7 @@ void ID_GetParOtherUsrIDPlain (void)
    Str_RemoveLeadingZeros (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
    Str_ConvertToUpperText (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
 
-   Gbl.Usrs.Other.UsrDat.IDs.List[0].Confirmed = true;
+   Gbl.Usrs.Other.UsrDat.IDs.List[0].Confirmed = ID_CONFIRMED;
   }
 
 /*****************************************************************************/
@@ -312,7 +319,7 @@ void ID_WriteUsrIDs (const struct Usr_Data *UsrDat,const char *Anchor)
 				  Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER &&			// Not me
 				  !Frm_CheckIfInside () &&					// Not inside another form
 				  Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST) ? Usr_CAN :	// Only in main browser tab
-										       Usr_CAN_NOT;
+										   Usr_CAN_NOT;
 
    for (NumID = 0;
 	NumID < UsrDat->IDs.Num;
@@ -324,9 +331,8 @@ void ID_WriteUsrIDs (const struct Usr_Data *UsrDat,const char *Anchor)
 
       /* Write this ID */
       HTM_SPAN_Begin ("class=\"%s_%s\"",
-	              UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
-						          "USR_ID_NC",
-		      The_GetSuffix ());
+	              *ID_Class[UsrDat->IDs.List[NumID].Confirmed],
+	              The_GetSuffix ());
 	 switch (ICanSeeUsrID)
 	   {
 	    case Usr_CAN:
@@ -341,7 +347,7 @@ void ID_WriteUsrIDs (const struct Usr_Data *UsrDat,const char *Anchor)
 
       /* Put link to confirm ID? */
       if (ICanConfirmUsrID == Usr_CAN &&
-	  !UsrDat->IDs.List[NumID].Confirmed)
+	  UsrDat->IDs.List[NumID].Confirmed == ID_NOT_CONFIRMED)
 	 ID_PutLinkToConfirmID (UsrDat,NumID,Anchor);
      }
   }
@@ -546,6 +552,11 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
       [Usr_OTHER] = {.Remove = NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs].Remove,
 	             .Change = NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs].Change}
      };
+    static const char **TitleFmt[ID_NUM_CONFIRMED] =
+     {
+      [ID_NOT_CONFIRMED] = &Txt_ID_X_not_confirmed,
+      [ID_CONFIRMED    ] = &Txt_ID_X_confirmed,
+     };
 
    /***** Show possible alerts *****/
    Ale_ShowAlerts (ID_ID_SECTION_ID);
@@ -578,7 +589,7 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 	 if (Usr_UsrDat[MeOrOther]->IDs.Num > 1)	// I have two or more IDs
 	   {
 	    if (MeOrOther == Usr_ME &&
-		Usr_UsrDat[MeOrOther]->IDs.List[NumID].Confirmed)	// I can not remove my confirmed IDs
+		Usr_UsrDat[MeOrOther]->IDs.List[NumID].Confirmed == ID_CONFIRMED)	// I can not remove my confirmed IDs
 	       /* Put disabled icon to remove user's ID */
 	       Ico_PutIconRemovalNotAllowed ();
 	    else						// I can remove
@@ -590,18 +601,16 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 
 	    /* User's ID */
 	    if (asprintf (&Title,
-		          Usr_UsrDat[MeOrOther]->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
-								             Txt_ID_X_not_confirmed,
+		          *TitleFmt[Usr_UsrDat[MeOrOther]->IDs.List[NumID].Confirmed],
 			  Usr_UsrDat[MeOrOther]->IDs.List[NumID].ID) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_SPAN_Begin ("class=\"%s\" title=\"%s\"",
-			    Usr_UsrDat[MeOrOther]->IDs.List[NumID].Confirmed ? "USR_ID_C" :
-								               "USR_ID_NC",
+			    *ID_Class[Usr_UsrDat[MeOrOther]->IDs.List[NumID].Confirmed],
 			    Title);
 	    free (Title);
 	       HTM_Txt (Usr_UsrDat[MeOrOther]->IDs.List[NumID].ID);
-	       HTM_Txt (Usr_UsrDat[MeOrOther]->IDs.List[NumID].Confirmed ? "&check;" :
-							                   "");
+	       if (Usr_UsrDat[MeOrOther]->IDs.List[NumID].Confirmed == ID_CONFIRMED)
+	          HTM_Txt ("&check;");
 	    HTM_SPAN_End ();
 
 	 if (NumID == Usr_UsrDat[MeOrOther]->IDs.Num - 1)
@@ -869,11 +878,11 @@ static void ID_ChangeUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOt
 	    switch (AlreadyExists)
 	      {
 	       case Exi_EXISTS:
-		  if (MeOrOther == Usr_ME || UsrDat->IDs.List[NumIDFound].Confirmed)
+		  if (MeOrOther == Usr_ME || UsrDat->IDs.List[NumIDFound].Confirmed == ID_CONFIRMED)
 		     Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
 				      Txt_The_ID_X_matches_one_of_the_existing,
 				      NewID);
-		  else	// It's not me && !Confirmed
+		  else	// It's not me && ID is not confirmed
 		    {
 		     /***** Mark this ID as confirmed *****/
 		     ID_DB_ConfirmUsrID (UsrDat->UsrCod,NewID);
@@ -891,9 +900,9 @@ static void ID_ChangeUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOt
 		  else	// OK ==> add this new ID to my list of IDs
 		    {
 		     /***** Save this new ID *****/
-		     // It's me ==> ID not confirmed
-		     // Not me  ==> ID confirmed
-		     ID_DB_InsertANewUsrID (UsrDat->UsrCod,NewID,MeOrOther == Usr_OTHER);
+		     ID_DB_InsertANewUsrID (UsrDat->UsrCod,NewID,
+					    MeOrOther == Usr_ME ? ID_NOT_CONFIRMED :	// It's me ==> ID not confirmed
+								  ID_CONFIRMED);	// Not me  ==> ID confirmed
 
 		     Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
 				      Txt_The_ID_X_has_been_registered_successfully,
@@ -966,22 +975,26 @@ void ID_ConfirmOtherUsrID (void)
 	 switch (IDExists)
 	   {
 	    case Exi_EXISTS:
-	       if (Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed)
-		  /***** ID found and already confirmed *****/
-		  Ale_CreateAlert (Ale_INFO,ID_ID_SECTION_ID,
-				   Txt_ID_X_had_already_been_confirmed,
-				   Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
-	       else
+	       switch (Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed)
 		 {
-		  /***** Mark this ID as confirmed *****/
-		  ID_DB_ConfirmUsrID (Gbl.Usrs.Other.UsrDat.UsrCod,
+		  case ID_CONFIRMED:
+		     /***** ID found and already confirmed *****/
+		     Ale_CreateAlert (Ale_INFO,ID_ID_SECTION_ID,
+				      Txt_ID_X_had_already_been_confirmed,
 				      Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
-		  Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed = true;
+		     break;
+		  case ID_NOT_CONFIRMED:
+		  default:
+		     /***** Mark this ID as confirmed *****/
+		     ID_DB_ConfirmUsrID (Gbl.Usrs.Other.UsrDat.UsrCod,
+					 Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
+		     Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed = ID_CONFIRMED;
 
-		  /***** Write success message *****/
-		  Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
-				   Txt_The_ID_X_has_been_confirmed,
-				   Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
+		     /***** Write success message *****/
+		     Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
+				      Txt_The_ID_X_has_been_confirmed,
+				      Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
+		     break;
 		 }
 	       break;
 	    case Exi_DOES_NOT_EXIST:	// User's ID not found

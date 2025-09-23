@@ -29,7 +29,7 @@
 
 void ID_DB_InsertANewUsrID (long UsrCod,
 		            const char ID[ID_MAX_BYTES_USR_ID + 1],
-		            bool Confirmed);
+		            ID_Confirmed_t Confirmed);
 void ID_DB_ConfirmUsrID (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1]);
 
 unsigned ID_DB_GetIDsFromUsrCod (MYSQL_RES **mysql_res,long UsrCod);

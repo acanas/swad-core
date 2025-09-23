@@ -441,7 +441,7 @@ void Acc_ShowFormChgMyAccount (void)
 	 else
 	   {
 	    IShouldConfirmMyEmailNow = (Gbl.Usrs.Me.UsrDat.EmailConfirmed == Mai_NOT_CONFIRMED &&	// Email not yet confirmed
-	                                !Gbl.Usrs.Me.ConfirmEmailJustSent);		// Do not ask for email confirmation when confirmation email is just sent
+	                                !Gbl.Usrs.Me.ConfirmEmailJustSent);				// Do not ask for email confirmation when confirmation email is just sent
             IShouldFillInMyIDNow = (Gbl.Usrs.Me.UsrDat.IDs.Num == 0);
 	   }
         }

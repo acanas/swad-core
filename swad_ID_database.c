@@ -38,8 +38,14 @@
 
 void ID_DB_InsertANewUsrID (long UsrCod,
 		            const char ID[ID_MAX_BYTES_USR_ID + 1],
-		            bool Confirmed)
+		            ID_Confirmed_t Confirmed)
   {
+   static char YN[ID_NUM_CONFIRMED] =
+     {
+      [ID_NOT_CONFIRMED] = 'N',
+      [ID_CONFIRMED    ] = 'Y',
+     };
+
    DB_QueryINSERT ("can not create user's ID",
 		   "INSERT INTO usr_ids"
 		   " (UsrCod,UsrID,CreatTime,Confirmed)"
@@ -47,8 +53,7 @@ void ID_DB_InsertANewUsrID (long UsrCod,
 		   " (%ld,'%s',NOW(),'%c')",
 		   UsrCod,
 		   ID,
-		   Confirmed ? 'Y' :
-			       'N');
+		   YN[Confirmed]);
   }
 
 /*****************************************************************************/

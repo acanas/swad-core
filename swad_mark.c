@@ -424,7 +424,7 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct Usr_Data *UsrDat,
 	       for (NumID = 0;
 		    NumID < UsrDat->IDs.Num && !UsrIDFound;
 		    NumID++)
-		  if (UsrDat->IDs.List[NumID].Confirmed)
+		  if (UsrDat->IDs.List[NumID].Confirmed == ID_CONFIRMED)
 		     if (!strcasecmp (UsrDat->IDs.List[NumID].ID,UsrIDFromTable))
 			UsrIDFound = true;
 	   }
@@ -473,7 +473,7 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct Usr_Data *UsrDat,
 		  for (NumID = 0;
 		       NumID < UsrDat->IDs.Num && !UsrIDFound;
 		       NumID++)
-		     if (UsrDat->IDs.List[NumID].Confirmed)
+		     if (UsrDat->IDs.List[NumID].Confirmed == ID_CONFIRMED)
 			if (!strcasecmp (UsrDat->IDs.List[NumID].ID,UsrIDFromTable))
 			   UsrIDFound = true;
 	      }

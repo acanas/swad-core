@@ -45,9 +45,16 @@
 
 #define ID_MAX_BYTES_LIST_USRS_IDS	(ID_MAX_BYTES_USR_ID * Cfg_MAX_USRS_IN_LIST * 10)
 
+#define ID_NUM_CONFIRMED 2
+typedef enum
+  {
+   ID_NOT_CONFIRMED	= 0,
+   ID_CONFIRMED		= 1,
+  } ID_Confirmed_t;
+
 struct ListIDs
   {
-   bool Confirmed;
+   ID_Confirmed_t Confirmed;
    char ID[ID_MAX_BYTES_USR_ID + 1];
   };
 

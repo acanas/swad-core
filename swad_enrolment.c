@@ -1924,7 +1924,7 @@ static void Enr_EnrolUsr (struct Usr_Data *UsrDat,Rol_Role_t Role,
       Usr_ResetUsrDataExceptUsrCodAndIDs (UsrDat);	// It's necessary, because the same struct UsrDat was used for former user
 
       /* User does not exist in database; list of IDs is initialized */
-      UsrDat->IDs.List[0].Confirmed = true;	// If he/she is a new user ==> his/her ID will be stored as confirmed in database
+      UsrDat->IDs.List[0].Confirmed = ID_CONFIRMED;	// If he/she is a new user ==> his/her ID will be stored as confirmed in database
       Acc_CreateNewUsr (UsrDat,Usr_OTHER);
      }
 
@@ -3098,7 +3098,7 @@ void Enr_CreateNewUsr1 (void)
       Rec_GetUsrNameFromRecordForm (&Gbl.Usrs.Other.UsrDat);
 
       /***** Create user *****/
-      Gbl.Usrs.Other.UsrDat.IDs.List[0].Confirmed = true;	// User's ID will be stored as confirmed
+      Gbl.Usrs.Other.UsrDat.IDs.List[0].Confirmed = ID_CONFIRMED;	// User's ID will be stored as confirmed
       Acc_CreateNewUsr (&Gbl.Usrs.Other.UsrDat,Usr_OTHER);
 
       /***** Enrol user in current course in database *****/
