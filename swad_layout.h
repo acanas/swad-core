@@ -41,12 +41,12 @@
 #define Lay_SHOW_LEFT_COLUMN	2						// 10
 #define Lay_SHOW_BOTH_COLUMNS (Lay_SHOW_LEFT_COLUMN | Lay_SHOW_RIGHT_COLUMN)	// 11
 
-#define Lay_NUM_LAST_ITEM 2
+#define Lay_NUM_LAST 2
 typedef enum
   {
-   Lay_NO_LAST_ITEM,
-   Lay_LAST_ITEM,
-  } Lay_LastItem_t;
+   Lay_NO_LAST,
+   Lay_LAST,
+  } Lay_Last_t;
 
 #define Lay_NUM_HORIZONTAL_LINE_AT_RIGHT 2
 typedef enum
@@ -101,7 +101,7 @@ void Lay_WriteHeaderClassPhoto (Hie_Level_t HieLvl,Vie_ViewType_t ViewType);
 void Lay_AdvertisementMobile (void);
 
 void Lay_IndentDependingOnLevel (unsigned Level,
-				 const Lay_LastItem_t *IsLastItemInLevel,
+				 const Lay_Last_t *IsLastItemInLevel,
 				 Lay_HorizontalLineAtRight_t HorizontalLineAtRight);
 
 void Lay_HelpPlainEditor (void);

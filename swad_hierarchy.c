@@ -135,12 +135,12 @@ static void Hie_ShowHierarchyCell (const char *ClassTxt,int Num);
 static void Hie_WriteListMyHierarchyToSelectNode (void);
 static void Hie_PutIconToSearchCourses (__attribute__((unused)) void *Args);
 static void Hie_WriteMyHierarchyNodes (struct Hie_Node Hie[Hie_NUM_LEVELS],
-			               Lay_LastItem_t IsLastItemInLevel[1 + 6],
+			               Lay_Last_t IsLastItemInLevel[1 + 6],
 			               Hie_Level_t HieLvl);
 static void Hie_WriteRowMyHierarchy (Hie_Level_t HieLvl,
 				     const struct Hie_Node Hie[Hie_NUM_LEVELS],
 				     Lay_Highlight_t Highlight,
-				     Lay_LastItem_t IsLastItemInLevel[1 + 6]);
+				     Lay_Last_t IsLastItemInLevel[1 + 6]);
 
 /*****************************************************************************/
 /***************** Get hierarchy level from database string ******************/
@@ -1636,7 +1636,7 @@ static void Hie_WriteListMyHierarchyToSelectNode (void)
    extern const char *Hlp_PROFILE_Courses;
    extern const char *Txt_My_courses;
    struct Hie_Node Hie[Hie_NUM_LEVELS];
-   Lay_LastItem_t IsLastItemInLevel[1 + 6];
+   Lay_Last_t IsLastItemInLevel[1 + 6];
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_My_courses,Hie_PutIconToSearchCourses,NULL,
@@ -1671,7 +1671,7 @@ static void Hie_PutIconToSearchCourses (__attribute__((unused)) void *Args)
 /*****************************************************************************/
 
 static void Hie_WriteMyHierarchyNodes (struct Hie_Node Hie[Hie_NUM_LEVELS],
-			               Lay_LastItem_t IsLastItemInLevel[1 + 6],
+			               Lay_Last_t IsLastItemInLevel[1 + 6],
 			               Hie_Level_t HieLvl)
   {
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
@@ -1716,8 +1716,8 @@ static void Hie_WriteMyHierarchyNodes (struct Hie_Node Hie[Hie_NUM_LEVELS],
 	 Highlight = (Gbl.Hierarchy.Node[HieLvl].HieCod == Hie[HieLvl].HieCod) ? Lay_HIGHLIGHT :
 									         Lay_NO_HIGHLIGHT;
 
-      IsLastItemInLevel[HieLvl] = (NumNode == NumNodes - 1) ? Lay_LAST_ITEM :
-							      Lay_NO_LAST_ITEM;
+      IsLastItemInLevel[HieLvl] = (NumNode == NumNodes - 1) ? Lay_LAST :
+							      Lay_NO_LAST;
       Hie_WriteRowMyHierarchy (HieLvl,Hie,Highlight,IsLastItemInLevel);
 
       /***** Write subnodes recursively ******/
@@ -1737,7 +1737,7 @@ static void Hie_WriteMyHierarchyNodes (struct Hie_Node Hie[Hie_NUM_LEVELS],
 static void Hie_WriteRowMyHierarchy (Hie_Level_t HieLvl,
 				     const struct Hie_Node Hie[Hie_NUM_LEVELS],
 				     Lay_Highlight_t Highlight,
-				     Lay_LastItem_t IsLastItemInLevel[1 + 6])
+				     Lay_Last_t IsLastItemInLevel[1 + 6])
   {
    extern const char *Lay_HighlightClass[Lay_NUM_HIGHLIGHT];
    static Act_Action_t Actions[Hie_NUM_LEVELS] =

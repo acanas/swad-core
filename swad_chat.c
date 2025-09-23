@@ -72,7 +72,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShrtName,const char *RoomFullName,
-                                  unsigned Level,Lay_LastItem_t IsLastItemInLevel[1 + Cht_CHAT_MAX_LEVELS]);
+                                  unsigned Level,Lay_Last_t IsLastItemInLevel[1 + Cht_CHAT_MAX_LEVELS]);
 static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName);
 
 /*****************************************************************************/
@@ -112,7 +112,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
-   Lay_LastItem_t IsLastItemInLevel[1 + Cht_CHAT_MAX_LEVELS];
+   Lay_Last_t IsLastItemInLevel[1 + Cht_CHAT_MAX_LEVELS];
    unsigned NumMyDeg;
    struct Hie_Node Deg;
    struct Hie_Node Crs;
@@ -136,8 +136,8 @@ void Cht_ShowListOfAvailableChatRooms (void)
 
 	 /***** Link to chat available for all users *****/
 	 IsLastItemInLevel[1] = (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG ||
-				 Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num) ? Lay_NO_LAST_ITEM :
-								       Lay_LAST_ITEM;
+				 Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num) ? Lay_NO_LAST :
+								       Lay_LAST;
 	 snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s (%s)",
 		   Txt_General,Txt_SEX_PLURAL_abc[Usr_SEX_ALL]);
 	 Cht_WriteLinkToChat1 ("GBL_USR",Txt_SEX_PLURAL_Abc[Usr_SEX_ALL],
@@ -145,8 +145,8 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	    Ico_PutIcon ("comments.svg",Ico_BLACK,ThisRoomFullName,"ICO16x16");
 	 Cht_WriteLinkToChat2 ("GBL_USR",ThisRoomFullName);
 
-	 IsLastItemInLevel[1] = Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num ? Lay_NO_LAST_ITEM :
-								     Lay_LAST_ITEM;
+	 IsLastItemInLevel[1] = Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num ? Lay_NO_LAST :
+								     Lay_LAST;
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_STD:
@@ -181,8 +181,8 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	       Err_WrongDegreeExit ();
 
 	    /* Link to the room of this degree */
-	    IsLastItemInLevel[1] = (NumMyDeg == Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num - 1) ? Lay_LAST_ITEM :
-											  Lay_NO_LAST_ITEM;
+	    IsLastItemInLevel[1] = (NumMyDeg == Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num - 1) ? Lay_LAST :
+											  Lay_NO_LAST;
 	    snprintf (ThisRoomCode,sizeof (ThisRoomCode),"DEG_%ld",Deg.HieCod);
 	    snprintf (ThisRoomShrtName,sizeof (ThisRoomShrtName),"%s",
 		      Deg.ShrtName);
@@ -211,8 +211,8 @@ void Cht_ShowListOfAvailableChatRooms (void)
 		  SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Crs);
 
 		  /* Link to the room of this course */
-		  IsLastItemInLevel[2] = (NumCrs == NumCrss - 1) ? Lay_LAST_ITEM :
-								   Lay_NO_LAST_ITEM;
+		  IsLastItemInLevel[2] = (NumCrs == NumCrss - 1) ? Lay_LAST :
+								   Lay_NO_LAST;
 		  snprintf (ThisRoomCode,sizeof (ThisRoomCode),"CRS_%ld",
 			    Crs.HieCod);
 		  snprintf (ThisRoomShrtName,sizeof (ThisRoomShrtName),"%s",
@@ -292,7 +292,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 /*****************************************************************************/
 
 static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShrtName,const char *RoomFullName,
-                                  unsigned Level,Lay_LastItem_t IsLastItemInLevel[1 + Cht_CHAT_MAX_LEVELS])
+                                  unsigned Level,Lay_Last_t IsLastItemInLevel[1 + Cht_CHAT_MAX_LEVELS])
   {
    /***** Begin list item *****/
    HTM_LI_Begin (NULL);

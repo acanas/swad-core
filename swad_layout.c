@@ -1590,15 +1590,15 @@ void Lay_AdvertisementMobile (void)
 // IsLastItemInLevel is a vector with at least 1 + Level elements
 
 void Lay_IndentDependingOnLevel (unsigned Level,
-				 const Lay_LastItem_t *IsLastItemInLevel,
+				 const Lay_Last_t *IsLastItemInLevel,
 				 Lay_HorizontalLineAtRight_t HorizontalLineAtRight)
   {
-   static const char *Icons[Lay_NUM_HORIZONTAL_LINE_AT_RIGHT][Lay_NUM_LAST_ITEM] =
+   static const char *Icons[Lay_NUM_HORIZONTAL_LINE_AT_RIGHT][Lay_NUM_LAST] =
      {
-      [Lay_NO_HORIZONTAL_LINE_AT_RIGHT][Lay_NO_LAST_ITEM] = "subleft20x20.gif",
-      [Lay_NO_HORIZONTAL_LINE_AT_RIGHT][Lay_LAST_ITEM   ] = "tr20x20.gif",
-      [Lay_HORIZONTAL_LINE_AT_RIGHT   ][Lay_NO_LAST_ITEM] = "submid20x20.gif",
-      [Lay_HORIZONTAL_LINE_AT_RIGHT   ][Lay_LAST_ITEM   ] = "subend20x20.gif",
+      [Lay_NO_HORIZONTAL_LINE_AT_RIGHT][Lay_NO_LAST] = "subleft20x20.gif",
+      [Lay_NO_HORIZONTAL_LINE_AT_RIGHT][Lay_LAST   ] = "tr20x20.gif",
+      [Lay_HORIZONTAL_LINE_AT_RIGHT   ][Lay_NO_LAST] = "submid20x20.gif",
+      [Lay_HORIZONTAL_LINE_AT_RIGHT   ][Lay_LAST   ] = "subend20x20.gif",
      };
    unsigned L;
 
