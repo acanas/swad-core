@@ -440,7 +440,7 @@ void Acc_ShowFormChgMyAccount (void)
 	    Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address);
 	 else
 	   {
-	    IShouldConfirmMyEmailNow = (!Gbl.Usrs.Me.UsrDat.EmailConfirmed &&	// Email not yet confirmed
+	    IShouldConfirmMyEmailNow = (Gbl.Usrs.Me.UsrDat.EmailConfirmed == Mai_NOT_CONFIRMED &&	// Email not yet confirmed
 	                                !Gbl.Usrs.Me.ConfirmEmailJustSent);		// Do not ask for email confirmation when confirmation email is just sent
             IShouldFillInMyIDNow = (Gbl.Usrs.Me.UsrDat.IDs.Num == 0);
 	   }
@@ -574,7 +574,7 @@ Err_SuccessOrError_t Acc_CreateMyNewAccountAndLogIn (void)
 	    Str_Copy (Gbl.Usrs.Me.UsrDat.Email,NewEmail,
 		      sizeof (Gbl.Usrs.Me.UsrDat.Email) - 1);
 
-	    Gbl.Usrs.Me.UsrDat.EmailConfirmed = false;
+	    Gbl.Usrs.Me.UsrDat.EmailConfirmed = Mai_NOT_CONFIRMED;
 	   }
 
 	 return Err_SUCCESS;

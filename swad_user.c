@@ -360,7 +360,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct Usr_Data *UsrDat)
    UsrDat->FullName[0]  = '\0';
 
    UsrDat->Email[0] = '\0';
-   UsrDat->EmailConfirmed = false;
+   UsrDat->EmailConfirmed = Mai_NOT_CONFIRMED;
 
    UsrDat->Photo[0] = '\0';
    UsrDat->PhotoVisibility = Pri_PHOTO_VIS_DEFAULT;
@@ -1293,8 +1293,8 @@ void Usr_WelcomeUsr (void)
                  }
 
 	    /***** Alert with button to check email address *****/
-	    if ( Gbl.Usrs.Me.UsrDat.Email[0] &&
-		!Gbl.Usrs.Me.UsrDat.EmailConfirmed)	// Email needs to be confirmed
+	    if (Gbl.Usrs.Me.UsrDat.Email[0] &&
+		Gbl.Usrs.Me.UsrDat.EmailConfirmed == Mai_NOT_CONFIRMED)	// Email needs to be confirmed
 	       Ale_ShowAlertAndButton (ActFrmMyAcc,NULL,NULL,
 	                               NULL,NULL,
 				       Btn_CHECK,

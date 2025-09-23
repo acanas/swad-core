@@ -307,7 +307,7 @@ bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct Usr_Data *UsrDat)
       return false;
 
    /***** Check #2: is email address confirmed? *****/
-   if (!UsrDat->EmailConfirmed)
+   if (UsrDat->EmailConfirmed == Mai_NOT_CONFIRMED)
       return false;
 
    /***** Check #3: check if there is mail domain *****/
@@ -984,12 +984,13 @@ void Mai_GetEmailFromUsrCod (struct Usr_Data *UsrDat)
 	 /* Get email */
 	 row = mysql_fetch_row (mysql_res);
 	 Str_Copy (UsrDat->Email,row[0],sizeof (UsrDat->Email) - 1);
-	 UsrDat->EmailConfirmed = (row[1][0] == 'Y');
+	 UsrDat->EmailConfirmed = (row[1][0] == 'Y') ? Mai_CONFIRMED :
+						       Mai_NOT_CONFIRMED;
 	 break;
       case Exi_DOES_NOT_EXIST:
       default:
 	 UsrDat->Email[0] = '\0';
-	 UsrDat->EmailConfirmed = false;
+	 UsrDat->EmailConfirmed = Mai_NOT_CONFIRMED;
 	 break;
      }
 
@@ -1411,7 +1412,7 @@ static void Mai_ChangeUsrEmail (struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOthe
 	 if (Mai_CheckIfEmailIsValid (NewEmail))	// New email is valid
 	   {
 	    /***** Check if new email exists in database *****/
-	    if (UsrDat->EmailConfirmed &&
+	    if (UsrDat->EmailConfirmed == Mai_CONFIRMED &&
 		!strcmp (UsrDat->Email,NewEmail)) // User's current confirmed email match exactly the new email
 	       Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
 				Txt_The_email_address_X_matches_one_previously_registered,

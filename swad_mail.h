@@ -27,34 +27,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_constant.h"
+#include "swad_mail_type.h"
 #include "swad_user.h"
-
-/*****************************************************************************/
-/************************** Public types and constants ***********************/
-/*****************************************************************************/
-
-#define Mai_MAX_CHARS_MAIL_INFO		(128 - 1)	// 127
-#define Mai_MAX_BYTES_MAIL_INFO		((Mai_MAX_CHARS_MAIL_INFO + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
-
-#define Mai_LENGTH_EMAIL_CONFIRM_KEY	Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
-
-#define Mai_NUM_ORDERS 3
-typedef enum
-  {
-   Mai_ORDER_BY_DOMAIN = 0,
-   Mai_ORDER_BY_INFO   = 1,
-   Mai_ORDER_BY_USERS  = 2,
-  } Mai_DomainsOrder_t;
-#define Mai_ORDER_DEFAULT Mai_ORDER_BY_USERS
-
-struct Mail
-  {
-   long MaiCod;
-   char Domain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
-   char Info[Mai_MAX_BYTES_MAIL_INFO + 1];
-   unsigned NumUsrs;
-  };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

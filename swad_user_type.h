@@ -33,6 +33,7 @@
 #include "swad_date.h"
 #include "swad_icon.h"
 #include "swad_language.h"
+#include "swad_mail_type.h"
 #include "swad_menu.h"
 #include "swad_nickname.h"
 #include "swad_password.h"
@@ -203,7 +204,7 @@ struct Usr_Data
    char FullName[Usr_MAX_BYTES_FULL_NAME + 1];
    Usr_Sex_t Sex;
    char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
-   bool EmailConfirmed;
+   Mai_Confirmed_t EmailConfirmed;
    char Photo[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Name of public link to photo
    Pri_Visibility_t PhotoVisibility;	// Who can see user's photo
    Pri_Visibility_t BaPrfVisibility;	// Who can see user's basic public profile (minimal record card)

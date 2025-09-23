@@ -923,7 +923,7 @@ void ID_ConfirmOtherUsrID (void)
    extern const char *Txt_The_ID_X_has_been_confirmed;
    char UsrID[ID_MAX_BYTES_USR_ID + 1];
    Usr_Can_t ICanConfirm;
-   bool Found;
+   Exi_Exist_t IDExists;
    unsigned NumID;
    unsigned NumIDFound = 0;	// Initialized to avoid warning
 
@@ -954,37 +954,41 @@ void ID_ConfirmOtherUsrID (void)
 	 Str_RemoveLeadingZeros (UsrID);
 	 Str_ConvertToUpperText (UsrID);
 
-	 for (NumID = 0, Found = false;
-	      NumID < Gbl.Usrs.Other.UsrDat.IDs.Num && !Found;
+	 for (NumID = 0, IDExists = Exi_DOES_NOT_EXIST;
+	      NumID < Gbl.Usrs.Other.UsrDat.IDs.Num && IDExists == Exi_DOES_NOT_EXIST;
 	      NumID++)
 	    if (!strcasecmp (UsrID,Gbl.Usrs.Other.UsrDat.IDs.List[NumID].ID))
 	      {
-	       Found = true;
+	       IDExists = Exi_EXISTS;
 	       NumIDFound = NumID;
 	      }
 
-	 if (Found)	// Found
+	 switch (IDExists)
 	   {
-	    if (Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed)
-	       /***** ID found and already confirmed *****/
-	       Ale_CreateAlert (Ale_INFO,ID_ID_SECTION_ID,
-				Txt_ID_X_had_already_been_confirmed,
-				Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
-	    else
-	      {
-	       /***** Mark this ID as confirmed *****/
-	       ID_DB_ConfirmUsrID (Gbl.Usrs.Other.UsrDat.UsrCod,
+	    case Exi_EXISTS:
+	       if (Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed)
+		  /***** ID found and already confirmed *****/
+		  Ale_CreateAlert (Ale_INFO,ID_ID_SECTION_ID,
+				   Txt_ID_X_had_already_been_confirmed,
 				   Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
-	       Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed = true;
+	       else
+		 {
+		  /***** Mark this ID as confirmed *****/
+		  ID_DB_ConfirmUsrID (Gbl.Usrs.Other.UsrDat.UsrCod,
+				      Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
+		  Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed = true;
 
-	       /***** Write success message *****/
-	       Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
-				Txt_The_ID_X_has_been_confirmed,
-				Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
-	      }
+		  /***** Write success message *****/
+		  Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
+				   Txt_The_ID_X_has_been_confirmed,
+				   Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
+		 }
+	       break;
+	    case Exi_DOES_NOT_EXIST:	// User's ID not found
+	    default:
+	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
 	   }
-	 else	// User's ID not found
-	    Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	 break;
       case Usr_CAN_NOT:
       default:

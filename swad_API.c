@@ -662,7 +662,7 @@ int swad__createAccount (struct soap *soap,
       /* Email updated sucessfully */
       Str_Copy (Gbl.Usrs.Me.UsrDat.Email,userEmail,
                 sizeof (Gbl.Usrs.Me.UsrDat.Email) - 1);
-      Gbl.Usrs.Me.UsrDat.EmailConfirmed = false;
+      Gbl.Usrs.Me.UsrDat.EmailConfirmed = Mai_NOT_CONFIRMED;
      }
 
    /***** Copy new user's code *****/
