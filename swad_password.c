@@ -98,14 +98,19 @@ void Pwd_GetParUsrPwdLogin (void)
 /*****************************************************************************/
 /**** Check if login password is the same as current password in database ****/
 /*****************************************************************************/
-// Returns true if there's no current password in database, or if login password is the same
-// Returns false if there's a current password in database and is not the same as the login password
+// Returns Err_SUCCESS if there's no current password in database, or if login password is the same
+// Returns Err_ERROR if there's a current password in database and is not the same as the login password
 
-bool Pwd_CheckCurrentPassword (void)
+Err_SuccessOrError_t Pwd_CheckCurrentPassword (void)
   {
-   return (Gbl.Usrs.Me.UsrDat.Password[0] ?
-           !strcmp (Gbl.Usrs.Me.LoginEncryptedPassword,Gbl.Usrs.Me.UsrDat.Password) :
-           true);
+   /***** If there's no current password in database *****/
+   if (!Gbl.Usrs.Me.UsrDat.Password[0])
+      return Err_SUCCESS;
+
+   /***** Check is passwords are the same *****/
+   return strcmp (Gbl.Usrs.Me.LoginEncryptedPassword,
+		  Gbl.Usrs.Me.UsrDat.Password) ? Err_ERROR :
+						 Err_SUCCESS;
   }
 
 /*****************************************************************************/
@@ -158,12 +163,18 @@ void Pwd_UpdateMyPwd (void)
    Cry_EncryptSHA512Base64 (PlainPassword,Gbl.Usrs.Me.LoginEncryptedPassword);
 
    /***** Check current password *****/
-   if (Pwd_CheckCurrentPassword ())
-      /***** Check and update new password *****/
-      Pwd_CheckAndUpdateNewPwd (&Gbl.Usrs.Me.UsrDat);
-   else
-      Ale_CreateAlert (Ale_WARNING,Pwd_PASSWORD_SECTION_ID,
-		       Txt_You_have_not_entered_your_password_correctly);
+   switch (Pwd_CheckCurrentPassword ())
+     {
+      case Err_SUCCESS:
+	 /***** Check and update new password *****/
+	 Pwd_CheckAndUpdateNewPwd (&Gbl.Usrs.Me.UsrDat);
+	 break;
+      case Err_ERROR:
+      default:
+	 Ale_CreateAlert (Ale_WARNING,Pwd_PASSWORD_SECTION_ID,
+			  Txt_You_have_not_entered_your_password_correctly);
+	 break;
+     }
   }
 
 /*****************************************************************************/

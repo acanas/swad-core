@@ -41,7 +41,7 @@
 
 void Pwd_GetParUsrPwdLogin (void);
 
-bool Pwd_CheckCurrentPassword (void);
+Err_SuccessOrError_t Pwd_CheckCurrentPassword (void);
 bool Pwd_CheckPendingPassword (void);
 void Pwd_AssignMyPendingPasswordToMyCurrentPassword (void);
 

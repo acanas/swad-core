@@ -206,8 +206,8 @@ static Usr_Sex_t Usr_GetSexFromStr (const char *Str);
 
 static void Usr_GetParOtherUsrIDNickOrEMail (void);
 
-static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void);
-static Exi_Exist_t Usr_ChkUsrAndGetUsrDataFromSession (void);
+static Err_SuccessOrError_t Usr_ChkUsrAndGetUsrDataFromDirectLogin (void);
+static Err_SuccessOrError_t Usr_ChkUsrAndGetUsrDataFromSession (void);
 static void Usr_ShowAlertUsrDoesNotExistsOrWrongPassword (void);
 static void Usr_ShowAlertThereAreMoreThanOneUsr (void);
 
@@ -1654,7 +1654,7 @@ void Usr_ChkUsrGetUsrDataAndAdjustAction (void)
 	 if (Gbl.Session.Status == Ses_OPEN)
 	    switch (Usr_ChkUsrAndGetUsrDataFromSession ())
 	      {
-	       case Exi_EXISTS:	// User logged in
+	       case Err_SUCCESS:	// User logged in
 		  Gbl.Usrs.Me.Logged = true;
 
 		  Usr_SetMyPrefsAndRoles ();
@@ -1668,7 +1668,7 @@ void Usr_ChkUsrGetUsrDataAndAdjustAction (void)
 		     Con_DB_UpdateMeInConnectedList ();
 		    }
 		  break;
-	       case Exi_DOES_NOT_EXIST:
+	       case Err_ERROR:
 	       default:
 		  FormLogin.PutForm = Frm_PUT_FORM;
 		  break;
@@ -1679,24 +1679,26 @@ void Usr_ChkUsrGetUsrDataAndAdjustAction (void)
 	       case ActLogIn:
 	       case ActLogInUsrAgd:
 		  // Login using @nickname, email or ID from form
-		  if (Usr_ChkUsrAndGetUsrDataFromDirectLogin ())	// User logged in
+		  switch (Usr_ChkUsrAndGetUsrDataFromDirectLogin ())
 		    {
-		     Gbl.Usrs.Me.Logged = true;
-		     Usr_SetMyPrefsAndRoles ();
+		     case Err_SUCCESS:	// User logged in
+			Gbl.Usrs.Me.Logged = true;
+			Usr_SetMyPrefsAndRoles ();
 
-		     Act_AdjustCurrentAction ();
-		     Ses_CreateSession ();
+			Act_AdjustCurrentAction ();
+			Ses_CreateSession ();
 
-		     Set_SetSettingsFromIP ();	// Set settings from current IP
-		    }
-		  else
-		    {
-		     FormLogin.PutForm = Frm_PUT_FORM;
-		     if (Gbl.Action.Act == ActLogInUsrAgd)
-		       {
-			FormLogin.Action = ActLogInUsrAgd;
-			FormLogin.FuncPars = Agd_PutParAgd;
-		       }
+			Set_SetSettingsFromIP ();	// Set settings from current IP
+			break;
+		     case Err_ERROR:
+		     default:
+			FormLogin.PutForm = Frm_PUT_FORM;
+			if (Gbl.Action.Act == ActLogInUsrAgd)
+			  {
+			   FormLogin.Action = ActLogInUsrAgd;
+			   FormLogin.FuncPars = Agd_PutParAgd;
+			  }
+			break;
 		    }
 		  break;
 	       case ActLogInNew:
@@ -1757,19 +1759,19 @@ void Usr_ChkUsrGetUsrDataAndAdjustAction (void)
 /*****************************************************************************/
 /************** Check user and get user's data when direct login *************/
 /*****************************************************************************/
-// Returns true if user logged in successfully
-// Returns false if user not logged in
+// Returns Err_SUCCESS if user logged in successfully
+// Returns Err_ERROR if user not logged in
 
-static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
+static Err_SuccessOrError_t Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
   {
    struct Usr_ListUsrCods ListUsrCods;
-   bool PasswordCorrect = false;
+   Err_SuccessOrError_t PasswordCorrect = Err_ERROR;
 
    /***** Check if user typed anything *****/
    if (!Gbl.Usrs.Me.UsrIdLogin[0])
      {
       Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
-      return false;
+      return Err_ERROR;
      }
 
    /***** Check if user has typed his user's ID, his nickname or his email address *****/
@@ -1780,7 +1782,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 	 if ((Gbl.Usrs.Me.UsrDat.UsrCod = Nck_GetUsrCodFromNickname (Gbl.Usrs.Me.UsrIdLogin)) <= 0)
 	   {
 	    Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
-	    return false;
+	    return Err_ERROR;
 	   }
 	 break;
       case Err_ERROR:
@@ -1792,7 +1794,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 	       if ((Gbl.Usrs.Me.UsrDat.UsrCod = Mai_DB_GetUsrCodFromEmail (Gbl.Usrs.Me.UsrIdLogin)) <= 0)
 		 {
 		  Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
-		  return false;
+		  return Err_ERROR;
 		 }
 	       break;
 	    case Err_ERROR:	// 3: It's not a nickname nor email
@@ -1819,7 +1821,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 			   /* Free memory used for list of users' codes found for this ID */
 			   Usr_FreeListUsrCods (&ListUsrCods);
 
-			   PasswordCorrect = true;
+			   PasswordCorrect = Err_SUCCESS;
 			  }
 			else	// ListUsrCods.NumUsrs > 1
 			  {
@@ -1827,7 +1829,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 			   Usr_FreeListUsrCods (&ListUsrCods);
 
 			   Usr_ShowAlertThereAreMoreThanOneUsr ();
-			   return false;
+			   return Err_ERROR;
 			  }
 		       }
 		     else if (ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,
@@ -1842,12 +1844,12 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 			   if (Pwd_CheckPendingPassword ())
 			     {
 			      Pwd_AssignMyPendingPasswordToMyCurrentPassword ();
-			      PasswordCorrect = true;
+			      PasswordCorrect = Err_SUCCESS;
 			     }
 			   else
 			     {
 			      Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
-			      return false;
+			      return Err_ERROR;
 			     }
 			  }
 			else	// ListUsrCods.NumUsrs > 1
@@ -1856,19 +1858,19 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 			   Usr_FreeListUsrCods (&ListUsrCods);
 
 			   Usr_ShowAlertThereAreMoreThanOneUsr ();
-			   return false;
+			   return Err_ERROR;
 			  }
 		       }
 		     else	// No users found for this ID
 		       {
 			Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
-			return false;
+			return Err_ERROR;
 		       }
 		     break;
 		  case Err_ERROR:	// String is not a valid user's nickname, email or ID
 		  default:
 		     Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
-		     return false;
+		     return Err_ERROR;
 		 }
 	       break;
 	   }
@@ -1884,28 +1886,28 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
    /* Check user's password:
       is the encrypted password typed by user or coming from the session
       the same as that stored in database? */
-   if (!PasswordCorrect)
+   if (PasswordCorrect == Err_ERROR)
       PasswordCorrect = Pwd_CheckCurrentPassword ();
 
-   if (!PasswordCorrect)	// If my password is not correct...
+   if (PasswordCorrect == Err_ERROR)	// If my password is not correct...
      {
       if (Pwd_CheckPendingPassword ())
 	 Pwd_AssignMyPendingPasswordToMyCurrentPassword ();
       else
 	{
 	 Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
-	 return false;
+	 return Err_ERROR;
 	}
      }
 
-   return true;
+   return Err_SUCCESS;
   }
 
 /*****************************************************************************/
 /******** Check user and get user's data when the session is open ************/
 /*****************************************************************************/
 
-static Exi_Exist_t Usr_ChkUsrAndGetUsrDataFromSession (void)
+static Err_SuccessOrError_t Usr_ChkUsrAndGetUsrDataFromSession (void)
   {
    /***** Session is open and user's code is get from session *****/
    Gbl.Usrs.Me.UsrDat.UsrCod = Gbl.Session.UsrCod;
@@ -1916,19 +1918,19 @@ static Exi_Exist_t Usr_ChkUsrAndGetUsrDataFromSession (void)
                                                 Usr_GET_ROLE_IN_CRS) == Exi_DOES_NOT_EXIST)
      {
       Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
-      return Exi_DOES_NOT_EXIST;
+      return Err_ERROR;
      }
 
    /* Check user's password:
       the encrypted password typed by user or coming from the session
       is the same as the stored in database? */
-   if (!Pwd_CheckCurrentPassword ())	// If my password is not correct...
+   if (Pwd_CheckCurrentPassword () == Err_ERROR)	// If my password is not correct...
      {
       Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
-      return Exi_DOES_NOT_EXIST;
+      return Err_ERROR;
      }
 
-   return Exi_EXISTS;
+   return Err_SUCCESS;
   }
 
 /*****************************************************************************/
