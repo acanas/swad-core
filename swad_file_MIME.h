@@ -27,12 +27,12 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stdbool.h>	// For boolean type
+#include "swad_error.h"
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-bool MIM_CheckIfMIMETypeIsAllowed (const char *MIMEType);
+Err_SuccessOrError_t MIM_CheckIfMIMETypeIsAllowed (const char *MIMEType);
 
 #endif

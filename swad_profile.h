@@ -59,7 +59,7 @@ void Prf_PutLinkReqAnotherUsrProfile (void);
 void Prf_ReqUserProfile (void);
 void Prf_GetUsrDatAndShowUserProfile (void);
 
-bool Prf_ShowUsrProfile (struct Usr_Data *UsrDat);
+Err_SuccessOrError_t Prf_ShowUsrProfile (struct Usr_Data *UsrDat);
 void Prf_ChangeBasicProfileVis (void);
 void Prf_ChangeExtendedProfileVis (void);
 

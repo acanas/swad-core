@@ -2430,17 +2430,17 @@ int Str_ReadFileUntilBoundaryStr (FILE *FileSrc,char *StrDst,
 /*****************************************************************************/
 /****** Convert invalid characters in a file name to valid characters ********/
 /*****************************************************************************/
-// Return true if the name of the file o folder is valid
+// Return Err_SUCCESS if the name of the file o folder is valid
 // If the name is not valid, an alert will contain feedback text
 // File names with heading and trailing spaces are allowed
 
-bool Str_ConvertFilFolLnkNameToValid (char *FileName)
+Err_SuccessOrError_t Str_ConvertFilFolLnkNameToValid (char *FileName)
   {
    char *Ptr;
    unsigned NumAlfanum = 0;
    unsigned NumSpaces  = 0;
    unsigned NumPoints  = 0;
-   bool FileNameIsOK = false;
+   Err_SuccessOrError_t FileNameIsOK = Err_ERROR;
 
    Ptr = FileName;
    if (*Ptr)	// FileName is not empty
@@ -2516,7 +2516,7 @@ bool Str_ConvertFilFolLnkNameToValid (char *FileName)
 	   }
 	}
       if (NumAlfanum)
-         FileNameIsOK = true;
+         FileNameIsOK = Err_SUCCESS;
      }
 
    return FileNameIsOK;

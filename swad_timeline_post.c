@@ -266,6 +266,7 @@ void TmlPst_ReceivePostUsr (void)
   {
    struct Tml_Timeline Timeline;
    __attribute__((unused)) Exi_Exist_t UsrExists;
+   __attribute__((unused)) Err_SuccessOrError_t ProfileShown;
    long NotCod;
 
    /***** Reset timeline context *****/
@@ -275,7 +276,7 @@ void TmlPst_ReceivePostUsr (void)
    UsrExists = Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
-   Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat);
+   ProfileShown = Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Tml_TIMELINE_SECTION_ID);

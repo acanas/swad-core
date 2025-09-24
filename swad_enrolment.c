@@ -1239,7 +1239,7 @@ static void Enr_UpdateLstUsrsToBeRemovedUsingTextarea (Rol_Role_t Role,
 	       default:
 		  // Users' IDs are always stored internally in capitals and without leading zeros
 		  Str_RemoveLeadingZeros (UsrDat->UsrIDNickOrEmail);
-		  if (ID_CheckIfUsrIDSeemsAValidID (UsrDat->UsrIDNickOrEmail))
+		  if (ID_CheckIfUsrIDSeemsAValidID (UsrDat->UsrIDNickOrEmail) == Err_SUCCESS)
 		    {
 		     /***** Find users for this user's ID *****/
 		     ID_ReallocateListIDs (UsrDat,1);	// Only one user's ID
@@ -1423,7 +1423,7 @@ static void Enr_EnrolUsrsFoundInTextarea (Rol_Role_t Role,
 	       default:
 		  // Users' IDs are always stored internally in capitals and without leading zeros
 		  Str_RemoveLeadingZeros (UsrDat->UsrIDNickOrEmail);
-		  if (ID_CheckIfUsrIDSeemsAValidID (UsrDat->UsrIDNickOrEmail))
+		  if (ID_CheckIfUsrIDSeemsAValidID (UsrDat->UsrIDNickOrEmail) == Err_SUCCESS)
 		    {
 		     ItLooksLikeAUsrID = true;
 

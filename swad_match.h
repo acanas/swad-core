@@ -128,7 +128,7 @@ void Mch_ForwardMatch (void);
 
 Usr_Can_t Mch_CheckIfICanPlayThisMatchBasedOnGrps (const struct Mch_Match *Match);
 
-bool Mch_RegisterMeAsPlayerInMatch (struct Mch_Match *Match);
+Err_SuccessOrError_t Mch_RegisterMeAsPlayerInMatch (struct Mch_Match *Match);
 
 void Mch_GetMatchBeingPlayed (void);
 void Mch_JoinMatchAsStd (void);

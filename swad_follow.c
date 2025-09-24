@@ -443,45 +443,49 @@ static void Fol_ListFollowingUsr (struct Usr_Data *UsrDat)
    struct Usr_Data FollowingUsrDat;
 
    /***** Show user's profile *****/
-   if (Prf_ShowUsrProfile (UsrDat))
+   switch (Prf_ShowUsrProfile (UsrDat))
      {
-      /***** Get list of following *****/
-      NumUsrs = Fol_DB_GetListFollowing (&mysql_res,UsrDat->UsrCod);
+      case Err_SUCCESS:
+	 /***** Get list of following *****/
+	 NumUsrs = Fol_DB_GetListFollowing (&mysql_res,UsrDat->UsrCod);
 
-      if (NumUsrs)
-	{
-	 /***** Initialize structure with user's data *****/
-	 Usr_UsrDataConstructor (&FollowingUsrDat);
+	 if (NumUsrs)
+	   {
+	    /***** Initialize structure with user's data *****/
+	    Usr_UsrDataConstructor (&FollowingUsrDat);
 
-         /***** Begin box *****/
-	 Box_BoxBegin (Txt_Following,NULL,NULL,NULL,Box_NOT_CLOSABLE);
+	    /***** Begin box *****/
+	    Box_BoxBegin (Txt_Following,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
-	    for (NumUsr = 0;
-		 NumUsr < NumUsrs;
-		 NumUsr++)
-	      {
-	       /***** Get user's code *****/
-	       FollowingUsrDat.UsrCod = DB_GetNextCode (mysql_res);
+	       for (NumUsr = 0;
+		    NumUsr < NumUsrs;
+		    NumUsr++)
+		 {
+		  /***** Get user's code *****/
+		  FollowingUsrDat.UsrCod = DB_GetNextCode (mysql_res);
 
-	       /***** Show user *****/
-	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FollowingUsrDat,
-							    Usr_DONT_GET_PREFS,
-							    Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
-		  Fol_ShowFollowedOrFollower (&FollowingUsrDat);
-	      }
+		  /***** Show user *****/
+		  if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FollowingUsrDat,
+							       Usr_DONT_GET_PREFS,
+							       Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
+		     Fol_ShowFollowedOrFollower (&FollowingUsrDat);
+		 }
 
-         /***** End box *****/
-	 Box_BoxEnd ();
+	    /***** End box *****/
+	    Box_BoxEnd ();
 
-	 /***** Free memory used for user's data *****/
-	 Usr_UsrDataDestructor (&FollowingUsrDat);
-	}
+	    /***** Free memory used for user's data *****/
+	    Usr_UsrDataDestructor (&FollowingUsrDat);
+	   }
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
+	 break;
+      case Err_ERROR:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -519,47 +523,51 @@ static void Fol_ListFollowersUsr (struct Usr_Data *UsrDat)
    struct Usr_Data FollowerUsrDat;
 
    /***** Show user's profile *****/
-   if (Prf_ShowUsrProfile (UsrDat))
+   switch (Prf_ShowUsrProfile (UsrDat))
      {
-      /***** Get list of followers *****/
-      if ((NumUsrs = Fol_DB_GetListFollowers (&mysql_res,UsrDat->UsrCod)))
-	{
-	 /***** Initialize structure with user's data *****/
-	 Usr_UsrDataConstructor (&FollowerUsrDat);
+      case Err_SUCCESS:
+	 /***** Get list of followers *****/
+	 if ((NumUsrs = Fol_DB_GetListFollowers (&mysql_res,UsrDat->UsrCod)))
+	   {
+	    /***** Initialize structure with user's data *****/
+	    Usr_UsrDataConstructor (&FollowerUsrDat);
 
-         /***** Begin box and table *****/
-	 Box_BoxBegin (Txt_Followers,NULL,NULL,NULL,Box_NOT_CLOSABLE);
+	    /***** Begin box and table *****/
+	    Box_BoxBegin (Txt_Followers,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
-	    for (NumUsr = 0;
-		 NumUsr < NumUsrs;
-		 NumUsr++)
-	      {
-	       /***** Get user's code *****/
-	       FollowerUsrDat.UsrCod = DB_GetNextCode (mysql_res);
+	       for (NumUsr = 0;
+		    NumUsr < NumUsrs;
+		    NumUsr++)
+		 {
+		  /***** Get user's code *****/
+		  FollowerUsrDat.UsrCod = DB_GetNextCode (mysql_res);
 
-	       /***** Show user *****/
-	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FollowerUsrDat,
-							    Usr_DONT_GET_PREFS,
-							    Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
-		  Fol_ShowFollowedOrFollower (&FollowerUsrDat);
-	      }
+		  /***** Show user *****/
+		  if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FollowerUsrDat,
+							       Usr_DONT_GET_PREFS,
+							       Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
+		     Fol_ShowFollowedOrFollower (&FollowerUsrDat);
+		 }
 
-         /***** End box *****/
-	 Box_BoxEnd ();
+	    /***** End box *****/
+	    Box_BoxEnd ();
 
-	 /***** Free memory used for user's data *****/
-	 Usr_UsrDataDestructor (&FollowerUsrDat);
-	}
+	    /***** Free memory used for user's data *****/
+	    Usr_UsrDataDestructor (&FollowerUsrDat);
+	   }
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
 
-      /***** If it's me, mark possible notification as seen *****/
-      if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-	 Ntf_DB_MarkNotifsAsSeen (Ntf_EVENT_FOLLOWER);
+	 /***** If it's me, mark possible notification as seen *****/
+	 if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
+	    Ntf_DB_MarkNotifsAsSeen (Ntf_EVENT_FOLLOWER);
+	 break;
+      case Err_ERROR:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -762,7 +770,7 @@ void Fol_FollowUsr2 (void)
    if (Ale_GetTypeOfLastAlert () == Ale_SUCCESS)
      {
       /***** Show user's profile again *****/
-      if (!Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat))
+      if (Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat) == Err_ERROR)
 	 /* 1) I had permission to follow the user and I've just follow him/her
 	    2) User restricted permission, so now I can not view his/her profile
 	    3) Now I can not view his/her profile ==> show users I follow */
@@ -802,7 +810,7 @@ void Fol_UnfollowUsr2 (void)
    if (Ale_GetTypeOfLastAlert () == Ale_SUCCESS)
      {
       /***** Show user's profile again *****/
-      if (!Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat))	// I can not view user's profile
+      if (Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat) == Err_ERROR)	// I can not view user's profile
 	 /* 1) I followed a user when I had permission
 	    2) User restricted permission, so now I can not view his/her profile
 	    3) Now I can not view his/her profile ==> show users I follow */

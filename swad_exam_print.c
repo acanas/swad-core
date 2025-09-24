@@ -1307,7 +1307,7 @@ static void ExaPrn_GetCorrectTxtAnswerFromDB (struct Qst_Question *Question)
       row = mysql_fetch_row (mysql_res);
 
       /***** Allocate memory for text in this choice answer *****/
-      if (!Qst_AllocateTextChoiceAnswer (Question,NumOpt))
+      if (Qst_AllocateTextChoiceAnswer (Question,NumOpt) == Err_ERROR)
 	 /* Abort on error */
 	 Ale_ShowAlertsAndExit ();
 

@@ -677,8 +677,7 @@ int swad__createAccount (struct soap *soap,
 /*****************************************************************************/
 /************* Get parameters for the creation of a new account **************/
 /*****************************************************************************/
-// Return false on error
-//char *userNickname,char *userEmail,char *userID,char *userPassword
+
 static int API_CheckParsNewAccount (char *NewNickWithArr,		// Input
                                     char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],	// Output
                                     char *NewEmail,			// Input-output
@@ -1756,26 +1755,30 @@ int swad__findUsers (struct soap *soap,
    if (Search.Str[0])	// Search some users
      {
       HieLvl = (Gbl.Hierarchy.HieLvl == Hie_CRS) ? Hie_CRS :
-						 Hie_SYS;
-      if (Sch_BuildSearchQuery (SearchQuery,&Search,
-				"CONCAT_WS(' ',FirstName,Surname1,Surname2)",
-				NULL,NULL))
+						   Hie_SYS;
+      switch (Sch_BuildSearchQuery (SearchQuery,&Search,
+				    "CONCAT_WS(' ',FirstName,Surname1,Surname2)",
+				    NULL,NULL))
 	{
-	 /***** Create temporary table with candidate users *****/
-	 // Search is faster (aproximately x2) using temporary tables
-	 Usr_DB_CreateTmpTableAndSearchCandidateUsrs (SearchQuery);
+	 case Err_SUCCESS:
+	    /***** Create temporary table with candidate users *****/
+	    // Search is faster (aproximately x2) using temporary tables
+	    Usr_DB_CreateTmpTableAndSearchCandidateUsrs (SearchQuery);
 
-	 /***** Search for users *****/
-	 Usr_SearchListUsrs (HieLvl,Role);
-	 API_CopyListUsers (soap,
-			    Role,getUsersOut);
-	 Usr_FreeUsrsList (Role);
+	    /***** Search for users *****/
+	    Usr_SearchListUsrs (HieLvl,Role);
+	    API_CopyListUsers (soap,
+			       Role,getUsersOut);
+	    Usr_FreeUsrsList (Role);
 
-	 /***** Drop temporary table with candidate users *****/
-	 Usr_DB_DropTmpTableWithCandidateUsrs ();
-        }
-      else
-	 FilterTooShort = true;
+	    /***** Drop temporary table with candidate users *****/
+	    Usr_DB_DropTmpTableWithCandidateUsrs ();
+	    break;
+	 case Err_ERROR:
+	 default:
+	    FilterTooShort = true;
+	    break;
+	}
      }
    else
       FilterTooShort = true;
@@ -4527,7 +4530,7 @@ int swad__getMatchStatus (struct soap *soap,
        Match.Status.Showing != Mch_END)	// Unfinished
       /***** Join match *****/
       /* Update players */
-      if (Mch_RegisterMeAsPlayerInMatch (&Match))
+      if (Mch_RegisterMeAsPlayerInMatch (&Match) == Err_SUCCESS)
 	 if (Match.Status.Showing == Mch_ANSWERS)	// Showing the question stem and the answers
 	    getMatchStatusOut->matchCode = (int) Match.MchCod;	// > 0 ==> student is allowed to answer the question
 

@@ -214,7 +214,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question);
 void Qst_QstConstructor (struct Qst_Question *Question);
 void Qst_QstDestructor (struct Qst_Question *Question);
 
-bool Qst_AllocateTextChoiceAnswer (struct Qst_Question *Question,unsigned NumOpt);
+Err_SuccessOrError_t Qst_AllocateTextChoiceAnswer (struct Qst_Question *Question,unsigned NumOpt);
 void Qst_FreeTextChoiceAnswers (struct Qst_Question *Question);
 void Qst_FreeTextChoiceAnswer (struct Qst_Question *Question,unsigned NumOpt);
 

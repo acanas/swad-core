@@ -110,7 +110,8 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
                                     struct Svy_Question *SvyQst,
                                     char Stem[Cns_MAX_BYTES_TEXT + 1]);
 static void Svy_InitQst (struct Svy_Question *SvyQst);
-static bool Svy_AllocateTextChoiceAnswer (struct Svy_Question *SvyQst,unsigned NumAns);
+static Err_SuccessOrError_t Svy_AllocateTextChoiceAnswer (struct Svy_Question *SvyQst,
+							  unsigned NumAns);
 static void Svy_FreeTextChoiceAnswers (struct Svy_Question *SvyQst,unsigned NumAnswers);
 static void Svy_FreeTextChoiceAnswer (struct Svy_Question *SvyQst,unsigned NumAns);
 
@@ -2233,7 +2234,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 
             if (NumAnswers > Svy_MAX_ANSWERS_PER_QUESTION)
                Err_WrongAnswerExit ();
-            if (!Svy_AllocateTextChoiceAnswer (SvyQst,NumAns))
+            if (Svy_AllocateTextChoiceAnswer (SvyQst,NumAns) == Err_ERROR)
 	       /* Abort on error */
 	       Ale_ShowAlertsAndExit ();
 
@@ -2399,18 +2400,18 @@ static void Svy_InitQst (struct Svy_Question *SvyQst)
 /******************* Allocate memory for a choice answer *********************/
 /*****************************************************************************/
 
-static bool Svy_AllocateTextChoiceAnswer (struct Svy_Question *SvyQst,
-                                          unsigned NumAns)
+static Err_SuccessOrError_t Svy_AllocateTextChoiceAnswer (struct Svy_Question *SvyQst,
+							  unsigned NumAns)
   {
    Svy_FreeTextChoiceAnswer (SvyQst,NumAns);
    if ((SvyQst->AnsChoice[NumAns].Text = malloc (Svy_MAX_BYTES_ANSWER + 1)) == NULL)
      {
       Ale_CreateAlert (Ale_ERROR,NULL,
 	               "Not enough memory to store answer.");
-      return false;
+      return Err_ERROR;
      }
    SvyQst->AnsChoice[NumAns].Text[0] = '\0';
-   return true;
+   return Err_SUCCESS;
   }
 
 /*****************************************************************************/
@@ -2485,7 +2486,7 @@ void Svy_ReceiveQst (void)
 	NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
 	NumAns++)
      {
-      if (!Svy_AllocateTextChoiceAnswer (&SvyQst,NumAns))
+      if (Svy_AllocateTextChoiceAnswer (&SvyQst,NumAns) == Err_ERROR)
 	 /* Abort on error */
 	 Ale_ShowAlertsAndExit ();
       snprintf (AnsStr,sizeof (AnsStr),"AnsStr%u",NumAns);
@@ -2849,7 +2850,7 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 	       Err_ShowErrorAndExit ("Error when getting number of users who have marked an answer.");
 
 	    /* Convert the answer (row[2]), that is in HTML, to rigorous HTML */
-	    if (!Svy_AllocateTextChoiceAnswer (SvyQst,NumAns))
+	    if (Svy_AllocateTextChoiceAnswer (SvyQst,NumAns) == Err_ERROR)
 	       /* Abort on error */
 	       Ale_ShowAlertsAndExit ();
 

@@ -1663,7 +1663,7 @@ void Qst_GetCorrectTxtAnswerFromDB (struct Qst_Question *Question)
       row = mysql_fetch_row (mysql_res);
 
       /***** Allocate memory for text in this choice answer *****/
-      if (!Qst_AllocateTextChoiceAnswer (Question,NumOpt))
+      if (Qst_AllocateTextChoiceAnswer (Question,NumOpt) == Err_ERROR)
 	 /* Abort on error */
 	 Ale_ShowAlertsAndExit ();
 
@@ -2414,28 +2414,28 @@ void Qst_QstDestructor (struct Qst_Question *Question)
 /*****************************************************************************/
 /******************* Allocate memory for a choice answer *********************/
 /*****************************************************************************/
-// Return false on error
+// Return Err_ERROR on error
 
-bool Qst_AllocateTextChoiceAnswer (struct Qst_Question *Question,unsigned NumOpt)
+Err_SuccessOrError_t Qst_AllocateTextChoiceAnswer (struct Qst_Question *Question,unsigned NumOpt)
   {
    if ((Question->Answer.Options[NumOpt].Text =
 	malloc (Qst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
       Ale_CreateAlert (Ale_ERROR,NULL,
 		       "Not enough memory to store answer.");
-      return false;
+      return Err_ERROR;
      }
    if ((Question->Answer.Options[NumOpt].Feedback =
 	malloc (Qst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
       Ale_CreateAlert (Ale_ERROR,NULL,
 		       "Not enough memory to store feedback.");
-      return false;
+      return Err_ERROR;
      }
 
    Question->Answer.Options[NumOpt].Text[0] =
    Question->Answer.Options[NumOpt].Feedback[0] = '\0';
-   return true;
+   return Err_SUCCESS;
   }
 
 /*****************************************************************************/
@@ -2613,7 +2613,7 @@ Exi_Exist_t Qst_GetQstDataByCod (struct Qst_Question *Question)
 		  Err_WrongAnswerExit ();
 
 	       /*  Allocate space for text and feedback */
-	       if (!Qst_AllocateTextChoiceAnswer (Question,NumOpt))
+	       if (Qst_AllocateTextChoiceAnswer (Question,NumOpt) == Err_ERROR)
 		  /* Abort on error */
 		  Ale_ShowAlertsAndExit ();
 
@@ -2827,7 +2827,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
    switch (Question->Answer.Type)
      {
       case Qst_ANS_INT:
-         if (!Qst_AllocateTextChoiceAnswer (Question,0))
+         if (Qst_AllocateTextChoiceAnswer (Question,0) == Err_ERROR)
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
@@ -2835,14 +2835,14 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
 			 Cns_MAX_DIGITS_LONG);
 	 break;
       case Qst_ANS_FLOAT:
-         if (!Qst_AllocateTextChoiceAnswer (Question,0))
+         if (Qst_AllocateTextChoiceAnswer (Question,0) == Err_ERROR)
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
 	 Par_GetParText ("AnsFloatMin",Question->Answer.Options[0].Text,
 	                 Qst_MAX_BYTES_FLOAT_ANSWER);
 
-         if (!Qst_AllocateTextChoiceAnswer (Question,1))
+         if (Qst_AllocateTextChoiceAnswer (Question,1) == Err_ERROR)
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
@@ -2865,7 +2865,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
               NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
               NumOpt++)
            {
-            if (!Qst_AllocateTextChoiceAnswer (Question,NumOpt))
+            if (Qst_AllocateTextChoiceAnswer (Question,NumOpt) == Err_ERROR)
 	       /* Abort on error */
 	       Ale_ShowAlertsAndExit ();
 

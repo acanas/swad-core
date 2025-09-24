@@ -995,7 +995,7 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
 		  Err_WrongAnswerExit ();
 
 	       /*  Allocate space for text and feedback */
-	       if (!Qst_AllocateTextChoiceAnswer (Question,NumOpt))
+	       if (Qst_AllocateTextChoiceAnswer (Question,NumOpt) == Err_ERROR)
 		  /* Abort on error */
 		  Ale_ShowAlertsAndExit ();
 

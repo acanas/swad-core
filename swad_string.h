@@ -28,6 +28,7 @@
 /*****************************************************************************/
 
 #include <limits.h>		// For NAME_MAX and PATH_MAX
+#include <stdbool.h>		// For boolean type
 #include <stdio.h>		// For FILE
 
 #include "swad_error.h"
@@ -123,7 +124,7 @@ int Str_ReadFileUntilBoundaryStr (FILE *FileSrc,char *StrDst,
                                   const char *BoundaryStr,
                                   unsigned LengthBoundaryStr,
                                   unsigned long long MaxLength);
-bool Str_ConvertFilFolLnkNameToValid (char *FileName);
+Err_SuccessOrError_t Str_ConvertFilFolLnkNameToValid (char *FileName);
 void Str_ConvertToValidFileName (char *Str);
 
 void Str_CreateRandomAlphanumStr (char *Str,size_t Length);

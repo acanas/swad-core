@@ -243,7 +243,7 @@ const char *MIM_MIMETypesAllowed[MIM_NUM_MIME_TYPES_ALLOWED] =
 /*********************** Check if MIME type is allowed ***********************/
 /*****************************************************************************/
 
-bool MIM_CheckIfMIMETypeIsAllowed (const char *MIMEType)
+Err_SuccessOrError_t MIM_CheckIfMIMETypeIsAllowed (const char *MIMEType)
   {
    unsigned Type;
 
@@ -252,7 +252,7 @@ bool MIM_CheckIfMIMETypeIsAllowed (const char *MIMEType)
 	Type < MIM_NUM_MIME_TYPES_ALLOWED;
 	Type++)
       if (!strcmp (MIMEType,MIM_MIMETypesAllowed[Type]))
-	 return true;
+	 return Err_SUCCESS;
 
-   return false;
+   return Err_ERROR;
   }

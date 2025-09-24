@@ -84,8 +84,8 @@ static void TreSpc_WriteRowNewItem (struct Tre_Node *Node,unsigned NumItems);
 static void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
 				       unsigned NumItem,unsigned NumItems);
 
-static bool TreSpc_ExchangeItems (const struct Tre_Node *Node,
-				  const struct Tre_SpcItem *Item2);
+static Err_SuccessOrError_t TreSpc_ExchangeItems (const struct Tre_Node *Node,
+						  const struct Tre_SpcItem *Item2);
 
 /*****************************************************************************/
 /************************ Reset specific list item ***************************/
@@ -989,7 +989,7 @@ void TreSpc_MoveUpDownItem (Inf_Type_t InfoType,TreSpc_UpDown_t UpDown)
    extern const char *Txt_Movement_not_allowed;
    struct Tre_Node Node;
    struct Tre_SpcItem Item2;
-   bool Success = false;
+   Err_SuccessOrError_t SuccessOrError = Err_ERROR;
    static unsigned (*GetOtherInd[TreSpc_NUM_UP_DOWN])(const struct Tre_Node *Node) =
      {
       [TreSpc_UP  ] = Tre_DB_GetItmIndBefore,
@@ -1012,9 +1012,9 @@ void TreSpc_MoveUpDownItem (Inf_Type_t InfoType,TreSpc_UpDown_t UpDown)
       Item2.Cod = Tre_DB_GetItmCodFromItmInd (&Node,Item2.Ind);
 
       /* Exchange items */
-      Success = TreSpc_ExchangeItems (&Node,&Item2);
+      SuccessOrError = TreSpc_ExchangeItems (&Node,&Item2);
      }
-   if (!Success)
+   if (SuccessOrError == Err_ERROR)
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show current tree nodes, if any *****/
@@ -1027,10 +1027,10 @@ void TreSpc_MoveUpDownItem (Inf_Type_t InfoType,TreSpc_UpDown_t UpDown)
 /*****************************************************************************/
 /********** Exchange the order of two consecutive questions & answers **********/
 /*****************************************************************************/
-// Return true if success
+// Return Err_SUCCESS if success
 
-static bool TreSpc_ExchangeItems (const struct Tre_Node *Node,
-				  const struct Tre_SpcItem *Item2)
+static Err_SuccessOrError_t TreSpc_ExchangeItems (const struct Tre_Node *Node,
+						  const struct Tre_SpcItem *Item2)
   {
    const struct Tre_SpcItem *Item1 = &Node->Item;
 
@@ -1067,8 +1067,8 @@ static bool TreSpc_ExchangeItems (const struct Tre_Node *Node,
       /***** Unlock tables *****/
       DB_UnlockTables ();
 
-      return true;	// Success
+      return Err_SUCCESS;	// Success
      }
 
-   return false;	// No success
+   return Err_ERROR;		// No success
   }

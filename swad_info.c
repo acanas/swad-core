@@ -2201,7 +2201,7 @@ void Inf_ReceivePagInfo (void)
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    char StrUnzip[128 + PATH_MAX + 1 + NAME_MAX + 1 + PATH_MAX + 1];
    Err_SuccessOrError_t SuccessOrError;
-   bool FileIsOK = false;
+   Err_SuccessOrError_t FileIsOK = Err_ERROR;
 
    /***** Set info type *****/
    InfoType = Inf_AsignInfoType ();
@@ -2239,7 +2239,7 @@ void Inf_ReceivePagInfo (void)
 	    if (Fil_EndReceptionOfFile (PathRelFileHTML,Par))
 	      {
 	       Ale_ShowAlert (Ale_SUCCESS,Txt_The_HTML_file_has_been_received_successfully);
-	       FileIsOK = true;
+	       FileIsOK = Err_SUCCESS;
 	      }
 	    else
 	       Ale_ShowAlert (Ale_ERROR,"Error uploading file.");
@@ -2269,7 +2269,7 @@ void Inf_ReceivePagInfo (void)
 		     case Exi_EXISTS:
 			Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);
 			Ale_ShowAlert (Ale_SUCCESS,Txt_Found_an_index_html_file);
-			FileIsOK = true;
+			FileIsOK = Err_SUCCESS;
 			break;
 		     case Exi_DOES_NOT_EXIST:
 		     default:
@@ -2280,7 +2280,7 @@ void Inf_ReceivePagInfo (void)
 			   case Exi_EXISTS:
 			      Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);
 			      Ale_ShowAlert (Ale_SUCCESS,Txt_Found_an_index_html_file);
-			      FileIsOK = true;
+			      FileIsOK = Err_SUCCESS;
 			      break;
 			   case Exi_DOES_NOT_EXIST:
 			   default:
@@ -2306,21 +2306,23 @@ void Inf_ReceivePagInfo (void)
 	 break;
      }
 
-   if (FileIsOK)
+   switch (FileIsOK)
      {
-      /***** Change info source to page in database *****/
-      Inf_DB_SetInfoSrc (InfoType,Inf_PAGE);
+      case Err_SUCCESS:
+	 /***** Change info source to page in database *****/
+	 Inf_DB_SetInfoSrc (InfoType,Inf_PAGE);
 
-      /***** Show the updated info *****/
-      Inf_ShowInfo ();
-     }
-   else
-     {
-      /***** Change info source to none in database *****/
-      Inf_DB_SetInfoSrc (InfoType,Inf_SRC_NONE);
+	 /***** Show the updated info *****/
+	 Inf_ShowInfo ();
+	 break;
+      case Err_ERROR:
+      default:
+	 /***** Change info source to none in database *****/
+	 Inf_DB_SetInfoSrc (InfoType,Inf_SRC_NONE);
 
-      /***** Show again the form to select and send course info *****/
-      Inf_ConfigInfo ();
+	 /***** Show again the form to select and send course info *****/
+	 Inf_ConfigInfo ();
+	 break;
      }
   }
 
@@ -2397,7 +2399,7 @@ void Inf_ReceiveURLInfo (void)
    char URL[WWW_MAX_BYTES_WWW + 1];
    char PathFile[PATH_MAX + 1];
    FILE *FileURL;
-   bool URLIsOK = false;
+   Err_SuccessOrError_t URLIsOK = Err_ERROR;
 
    /***** Set info type *****/
    Info.Type = Inf_AsignInfoType ();
@@ -2420,25 +2422,27 @@ void Inf_ReceiveURLInfo (void)
 
       /***** Write message *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_URL_X_has_been_updated,URL);
-      URLIsOK = true;
+      URLIsOK = Err_SUCCESS;
      }
    else
       Ale_ShowAlert (Ale_ERROR,"Error when saving URL to file.");
 
-   if (URLIsOK)
+   switch (URLIsOK)
      {
-      /***** Change info source to URL in database *****/
-      Inf_DB_SetInfoSrc (Info.Type,Inf_URL);
+      case Err_SUCCESS:
+	 /***** Change info source to URL in database *****/
+	 Inf_DB_SetInfoSrc (Info.Type,Inf_URL);
 
-      /***** Show the updated info *****/
-      Inf_ShowInfo ();
-     }
-   else
-     {
-      /***** Change info source to none in database *****/
-      Inf_DB_SetInfoSrc (Info.Type,Inf_SRC_NONE);
+	 /***** Show the updated info *****/
+	 Inf_ShowInfo ();
+	 break;
+      case Err_ERROR:
+      default:
+	 /***** Change info source to none in database *****/
+	 Inf_DB_SetInfoSrc (Info.Type,Inf_SRC_NONE);
 
-      /***** Show again the form to select and send course info *****/
-      Inf_ConfigInfo ();
+	 /***** Show again the form to select and send course info *****/
+	 Inf_ConfigInfo ();
+	 break;
      }
   }

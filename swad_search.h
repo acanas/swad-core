@@ -89,10 +89,10 @@ void Sch_GetParWhatToSearch (void);
 void Sch_GetParsSearch (void);
 void Sch_SysSearch (void);
 
-bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
-                           const struct Sch_Search *Search,
-                           const char *FldName,
-                           const char *CharSet,const char *Collate);
+Err_SuccessOrError_t Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
+					   const struct Sch_Search *Search,
+					   const char *FldName,
+					   const char *CharSet,const char *Collate);
 
 void Sch_PutLinkToSearchCoursesPars (__attribute__((unused)) void *Args);
 

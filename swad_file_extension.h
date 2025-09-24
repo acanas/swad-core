@@ -28,7 +28,8 @@
 /*****************************************************************************/
 
 #include <linux/limits.h>	// For NAME_MAX
-#include <stdbool.h>		// For boolean type
+
+#include "swad_error.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -40,6 +41,6 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-bool Ext_CheckIfFileExtensionIsAllowed (const char FilFolLnkName[NAME_MAX + 1]);
+Err_SuccessOrError_t Ext_CheckIfFileExtensionIsAllowed (const char FilFolLnkName[NAME_MAX + 1]);
 
 #endif

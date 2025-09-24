@@ -1233,12 +1233,12 @@ static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (const char P
 
 static void Brw_PasteClipboard (struct BrwSiz_BrowserSize *Size);
 static unsigned Brw_NumLevelsInPath (const char Path[PATH_MAX + 1]);
-static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
-                                     unsigned LevelOrg,
-                                     const char PathOrg[PATH_MAX + 1],
-                                     const char PathDstInTree[PATH_MAX + 1],
-                                     struct Brw_NumObjects *Pasted,
-                                     long *FirstFilCod);
+static Err_SuccessOrError_t Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
+						     unsigned LevelOrg,
+						     const char PathOrg[PATH_MAX + 1],
+						     const char PathDstInTree[PATH_MAX + 1],
+						     struct Brw_NumObjects *Pasted,
+						     long *FirstFilCod);
 static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1]);
 static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow);
 static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow);
@@ -1246,7 +1246,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow);
 static void Brw_PutFormToCreateALink (const char *FileNameToShow);
 static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
 						  Brw_UploadType_t UploadType);
-static bool Brw_CheckIfUploadIsAllowed (const char *FileType);
+static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (const char *FileType);
 
 static void Brw_PutIconToGetLinkToFile (void *FileMetadata);
 static void Brw_PutParsToGetLinkToFile (void *FileMetadata);
@@ -6005,7 +6005,7 @@ static void Brw_PasteClipboard (struct BrwSiz_BrowserSize *Size)
 				      PathOrg,
 				      Gbl.FileBrowser.FilFolLnk.Full,
 				      &Pasted,
-				      &FirstFilCod))
+				      &FirstFilCod) == Err_SUCCESS)
 	   {
 	    /***** Write message of success *****/
 	    Ale_ShowAlert (Ale_SUCCESS,"%s<br>"
@@ -6079,14 +6079,14 @@ static unsigned Brw_NumLevelsInPath (const char Path[PATH_MAX + 1])
 /*****************************************************************************/
 /********** Copy a source file or tree in the destination folder *************/
 /*****************************************************************************/
-// Return true if the copy has been made successfully, and false if not
+// Return Err_SUCCESS if the copy has been made successfully, and Err_ERROR if not
 
-static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
-                                     unsigned LevelOrg,
-                                     const char PathOrg[PATH_MAX + 1],
-                                     const char PathDstInTree[PATH_MAX + 1],
-                                     struct Brw_NumObjects *Pasted,
-                                     long *FirstFilCod)
+static Err_SuccessOrError_t Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
+						     unsigned LevelOrg,
+						     const char PathOrg[PATH_MAX + 1],
+						     const char PathDstInTree[PATH_MAX + 1],
+						     struct Brw_NumObjects *Pasted,
+						     long *FirstFilCod)
   {
    extern const char *Txt_The_copy_has_stopped_when_trying_to_paste_X_because_it_would_exceed_the_disk_quota;
    extern const char *Txt_The_copy_has_stopped_when_trying_to_paste_X_because_it_would_exceed_the_maximum_allowed_number_of_levels;
@@ -6107,7 +6107,7 @@ static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
    unsigned NumLevls;
    long FilCod;	// File code of the file pasted
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
-   bool CopyIsGoingSuccessful = true;
+   Err_SuccessOrError_t CopyIsGoingSuccessful = Err_SUCCESS;
 
    /***** Get the name (only the name) of the origin file or folder *****/
    Str_SplitFullPathIntoPathAndFileName (PathOrg,
@@ -6149,147 +6149,155 @@ static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
    if ((NumLevls = Brw_NumLevelsInPath (PathDstInTreeWithFile)) > Size->NumLevls)
       Size->NumLevls = NumLevls;
 
-   if (BrwSiz_CheckIfQuotaExceded (Size))
+   switch (BrwSiz_CheckQuota (Size))
      {
-      Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_X_because_it_would_exceed_the_maximum_allowed_number_of_levels,
-		     FileNameToShow);
-      CopyIsGoingSuccessful = false;
-     }
-   else	// Quota not exceeded
-     {
-      /***** Copy file or folder *****/
-      switch (FileType)
-        {
-         case Brw_IS_FILE:
-         case Brw_IS_LINK:	// It's a regular file
-	    /***** Check if exists the destination file */
-	    switch (Fil_CheckIfPathExists (PathDstWithFile))
-	      {
-	       case Exi_EXISTS:
-		  Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_X_because_there_is_already_an_object_with_that_name,
-				 FileNameToShow);
-		  CopyIsGoingSuccessful = false;
-		  break;
-	       case Exi_DOES_NOT_EXIST:	// Destination file does not exist
-	       default:
-		  /***** If the target file browser is that of marks, only HTML files are allowed *****/
-		  if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
-		    {
-		     /* Check extension of the file */
-		     if (Str_FileIsHTML (FileNameOrg))
-			SuccessOrError = Mrk_CheckFileOfMarks (PathOrg,&Marks);
-		     else
-		       {
-			Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_X_because_you_can_not_paste_a_file_here_of_a_type_other_than_HTML,
-				       FileNameToShow);
-			CopyIsGoingSuccessful = false;
-		       }
-		    }
-
-		  if (CopyIsGoingSuccessful)
-		    {
-		     /***** Update and check the quota before copying the file *****/
-		     Size->NumFiles++;
-		     Size->TotalSiz += (unsigned long long) FileStatus.st_size;
-		     if (BrwSiz_CheckIfQuotaExceded (Size))
-		       {
-			Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_X_because_it_would_exceed_the_disk_quota,
-				       FileNameToShow);
-			CopyIsGoingSuccessful = false;
-		       }
-		     else	// Quota not exceeded
-		       {
-			/***** Quota will not be exceeded ==> copy the origin file to the destination file *****/
-			Fil_FastCopyOfFiles (PathOrg,PathDstWithFile);
-
-			/***** Add entry to the table of files/folders *****/
-			FilCod = Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,FileType,
-						 PathDstInTreeWithFile,
-						 PriPub_PRIVATE,Brw_LICENSE_DEFAULT);
-			if (*FirstFilCod <= 0)
-			   *FirstFilCod = FilCod;
-
-			/* Add a new entry of marks into database */
-			if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
-			   Mrk_DB_AddMarks (FilCod,&Marks);
-
-			if (FileType == Brw_IS_FILE)
-			   (Pasted->NumFiles)++;
-			else // FileType == Brw_IS_LINK
-			   (Pasted->NumLinks)++;
-		       }
-		    }
-		  break;
-	      }
- 	    break;
-	 case Brw_IS_FOLDER:	// It's a directory
-	    /***** Scan the source directory *****/
-	    if ((NumFiles = scandir (PathOrg,&FileList,NULL,alphasort)) >= 0)	// No error
-	      {
-	       /***** Create the folder in the destination *****/
-	       // If the directory already exists ==> don't overwrite.
-	       // If the directory does not exist ==> create it.
-	       if (Fil_CheckIfPathExists (PathDstWithFile) == Exi_DOES_NOT_EXIST)
+      case Err_SUCCESS:	// Quota not exceeded
+	 /***** Copy file or folder *****/
+	 switch (FileType)
+	   {
+	    case Brw_IS_FILE:
+	    case Brw_IS_LINK:	// It's a regular file
+	       /***** Check if exists the destination file */
+	       switch (Fil_CheckIfPathExists (PathDstWithFile))
 		 {
-		  /* First, update and check the quota */
-		  Size->NumFolds++;
-		  Size->TotalSiz += (unsigned long long) FileStatus.st_size;
-		  if (BrwSiz_CheckIfQuotaExceded (Size))
-		    {
-		     Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_X_because_it_would_exceed_the_disk_quota,
+		  case Exi_EXISTS:
+		     Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_X_because_there_is_already_an_object_with_that_name,
 				    FileNameToShow);
-		     CopyIsGoingSuccessful = false;
-		    }
-		  else	// Quota not exceded
-		    {
-		     /* Create directory */
-		     if (mkdir (PathDstWithFile,(mode_t) 0xFFF))
-			Err_ShowErrorAndExit ("Can not create folder.");
+		     CopyIsGoingSuccessful = Err_ERROR;
+		     break;
+		  case Exi_DOES_NOT_EXIST:	// Destination file does not exist
+		  default:
+		     /***** If the target file browser is that of marks, only HTML files are allowed *****/
+		     if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
+		       {
+			/* Check extension of the file */
+			if (Str_FileIsHTML (FileNameOrg))
+			   SuccessOrError = Mrk_CheckFileOfMarks (PathOrg,&Marks);
+			else
+			  {
+			   Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_X_because_you_can_not_paste_a_file_here_of_a_type_other_than_HTML,
+					  FileNameToShow);
+			   CopyIsGoingSuccessful = Err_ERROR;
+			  }
+		       }
 
-		     /* Add entry to the table of files/folders */
-		     Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,FileType,
-				     PathDstInTreeWithFile,
-				     PriPub_PRIVATE,Brw_LICENSE_DEFAULT);
-		    }
+		     if (CopyIsGoingSuccessful == Err_SUCCESS)
+		       {
+			/***** Update and check the quota before copying the file *****/
+			Size->NumFiles++;
+			Size->TotalSiz += (unsigned long long) FileStatus.st_size;
+			switch (BrwSiz_CheckQuota (Size))
+			  {
+			   case Err_SUCCESS:	// Quota not exceeded
+			      /***** Quota will not be exceeded ==> copy the origin file to the destination file *****/
+			      Fil_FastCopyOfFiles (PathOrg,PathDstWithFile);
+
+			      /***** Add entry to the table of files/folders *****/
+			      FilCod = Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,FileType,
+						       PathDstInTreeWithFile,
+						       PriPub_PRIVATE,Brw_LICENSE_DEFAULT);
+			      if (*FirstFilCod <= 0)
+				 *FirstFilCod = FilCod;
+
+			      /* Add a new entry of marks into database */
+			      if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
+				 Mrk_DB_AddMarks (FilCod,&Marks);
+
+			      if (FileType == Brw_IS_FILE)
+				 (Pasted->NumFiles)++;
+			      else // FileType == Brw_IS_LINK
+				 (Pasted->NumLinks)++;
+			      break;
+			   case Err_ERROR:	// Quota exceeded
+			   default:
+			      Ale_ShowAlert (Ale_WARNING,
+					     Txt_The_copy_has_stopped_when_trying_to_paste_X_because_it_would_exceed_the_disk_quota,
+					     FileNameToShow);
+			      CopyIsGoingSuccessful = Err_ERROR;
+			      break;
+			  }
+		       }
+		     break;
 		 }
-
-	       /***** Copy each of the files and folders from the origin to the destination *****/
-	       for (NumFile = 0;
-		    NumFile < NumFiles;
-		    NumFile++)
+	       break;
+	    case Brw_IS_FOLDER:	// It's a directory
+	       /***** Scan the source directory *****/
+	       if ((NumFiles = scandir (PathOrg,&FileList,NULL,alphasort)) >= 0)	// No error
 		 {
-		  if (CopyIsGoingSuccessful &&
-		      strcmp (FileList[NumFile]->d_name,".") &&
-		      strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
+		  /***** Create the folder in the destination *****/
+		  // If the directory already exists ==> don't overwrite.
+		  // If the directory does not exist ==> create it.
+		  if (Fil_CheckIfPathExists (PathDstWithFile) == Exi_DOES_NOT_EXIST)
 		    {
-		     snprintf (PathInFolderOrg,sizeof (PathInFolderOrg),"%s/%s",
-			       PathOrg,FileList[NumFile]->d_name);
-		     /* Recursive call to this function */
-		     if (!Brw_PasteTreeIntoFolder (Size,
-						   LevelOrg + 1,
-						   PathInFolderOrg,
-						   PathDstInTreeWithFile,
-						   Pasted,
-						   FirstFilCod))
-			CopyIsGoingSuccessful = false;
-		    }
-		  free (FileList[NumFile]);
-		 }
-	       free (FileList);
-	      }
-	    else
-	       Err_ShowErrorAndExit ("Error while scanning directory.");
+		     /* First, update and check the quota */
+		     Size->NumFolds++;
+		     Size->TotalSiz += (unsigned long long) FileStatus.st_size;
+		     switch (BrwSiz_CheckQuota (Size))
+		       {
+			case Err_SUCCESS:	// Quota not exceded
+			   /* Create directory */
+			   if (mkdir (PathDstWithFile,(mode_t) 0xFFF))
+			      Err_ShowErrorAndExit ("Can not create folder.");
 
-	    if (CopyIsGoingSuccessful &&
-		LevelOrg)	// When copying all files inside root folder,
-				// do not count the root folder itself
-	       (Pasted->NumFolds)++;
-	    break;
-	 case Brw_IS_UNKNOWN:
-	 default:
-	    Err_WrongTypeExit ();
-	    break;
-	}
+			   /* Add entry to the table of files/folders */
+			   Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,FileType,
+					   PathDstInTreeWithFile,
+					   PriPub_PRIVATE,Brw_LICENSE_DEFAULT);
+			   break;
+			case Err_ERROR:		// Quota exceeded
+			default:
+			   Ale_ShowAlert (Ale_WARNING,
+					  Txt_The_copy_has_stopped_when_trying_to_paste_X_because_it_would_exceed_the_disk_quota,
+					  FileNameToShow);
+			   CopyIsGoingSuccessful = Err_ERROR;
+			   break;
+		       }
+		    }
+
+		  /***** Copy each of the files and folders from the origin to the destination *****/
+		  for (NumFile = 0;
+		       NumFile < NumFiles;
+		       NumFile++)
+		    {
+		     if (CopyIsGoingSuccessful == Err_SUCCESS &&
+			 strcmp (FileList[NumFile]->d_name,".") &&
+			 strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
+		       {
+			snprintf (PathInFolderOrg,sizeof (PathInFolderOrg),"%s/%s",
+				  PathOrg,FileList[NumFile]->d_name);
+			/* Recursive call to this function */
+			if (Brw_PasteTreeIntoFolder (Size,
+						     LevelOrg + 1,
+						     PathInFolderOrg,
+						     PathDstInTreeWithFile,
+						     Pasted,
+						     FirstFilCod) == Err_ERROR)
+			   CopyIsGoingSuccessful = Err_ERROR;
+		       }
+		     free (FileList[NumFile]);
+		    }
+		  free (FileList);
+		 }
+	       else
+		  Err_ShowErrorAndExit ("Error while scanning directory.");
+
+	       if (CopyIsGoingSuccessful == Err_SUCCESS &&
+		   LevelOrg)	// When copying all files inside root folder,
+				   // do not count the root folder itself
+		  (Pasted->NumFolds)++;
+	       break;
+	    case Brw_IS_UNKNOWN:
+	    default:
+	       Err_WrongTypeExit ();
+	       break;
+	   }
+	 break;
+      case Err_ERROR:	// Quota exceeded
+      default:
+	 Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_X_because_it_would_exceed_the_maximum_allowed_number_of_levels,
+			FileNameToShow);
+	 CopyIsGoingSuccessful = Err_ERROR;
+	 break;
      }
 
    return CopyIsGoingSuccessful;
@@ -6599,79 +6607,85 @@ void Brw_CreateFolder (void)
    switch (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Lvl))
      {
       case Usr_CAN:
-	 if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
+	 switch (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
 	   {
-	    /* In Gbl.FileBrowser.NewFilFolLnkName is the name of the new folder */
-	    snprintf (Path,sizeof (Path),"%s/%s",
-		      Gbl.FileBrowser.Path.AboveRootFolder,
-		      Gbl.FileBrowser.FilFolLnk.Full);
+	    case Err_SUCCESS:
+	       /* In Gbl.FileBrowser.NewFilFolLnkName is the name of the new folder */
+	       snprintf (Path,sizeof (Path),"%s/%s",
+			 Gbl.FileBrowser.Path.AboveRootFolder,
+			 Gbl.FileBrowser.FilFolLnk.Full);
 
-	    if (strlen (Path) + 1 + strlen (Gbl.FileBrowser.NewFilFolLnkName) > PATH_MAX)
-	       Err_ShowErrorAndExit ("Path is too long.");
-	    Str_Concat (Path,"/",sizeof (Path) - 1);
-	    Str_Concat (Path,Gbl.FileBrowser.NewFilFolLnkName,sizeof (Path) - 1);
+	       if (strlen (Path) + 1 + strlen (Gbl.FileBrowser.NewFilFolLnkName) > PATH_MAX)
+		  Err_ShowErrorAndExit ("Path is too long.");
+	       Str_Concat (Path,"/",sizeof (Path) - 1);
+	       Str_Concat (Path,Gbl.FileBrowser.NewFilFolLnkName,sizeof (Path) - 1);
 
-	    /* Create the new directory */
-	    if (mkdir (Path,(mode_t) 0xFFF) == 0)
-	      {
-	       /* Check if quota has been exceeded */
-	       BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
-	       BrwSiz_SetMaxQuota (Size);
-	       if (BrwSiz_CheckIfQuotaExceded (Size))
+	       /* Create the new directory */
+	       if (mkdir (Path,(mode_t) 0xFFF) == 0)
 		 {
-		  Fil_RemoveTree (Path);
-		  Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quota,
-				 Gbl.FileBrowser.NewFilFolLnkName);
+		  /* Check if quota has been exceeded */
+		  BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
+		  BrwSiz_SetMaxQuota (Size);
+		  switch (BrwSiz_CheckQuota (Size))
+		    {
+		     case Err_SUCCESS:	// Quota not exceeded
+			/* Remove affected clipboards */
+			Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+							 Gbl.Usrs.Me.UsrDat.UsrCod,
+							 Gbl.Usrs.Other.UsrDat.UsrCod);
+
+			/* Add path where new file is created to table of expanded folders */
+			Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
+
+			/* Add entry to the table of files/folders */
+			snprintf (PathCompleteInTreeIncludingFolder,
+				  sizeof (PathCompleteInTreeIncludingFolder),
+				  "%s/%s",
+				  Gbl.FileBrowser.FilFolLnk.Full,
+				  Gbl.FileBrowser.NewFilFolLnkName);
+			Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_FOLDER,
+					PathCompleteInTreeIncludingFolder,
+					PriPub_PRIVATE,Brw_LICENSE_DEFAULT);
+
+			/* The folder has been created sucessfully */
+			Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
+							       Gbl.FileBrowser.Lvl,
+							       Brw_IS_FOLDER,
+							       Gbl.FileBrowser.FilFolLnk.Name,
+							       FileNameToShow);
+			Ale_ShowAlert (Ale_SUCCESS,Txt_The_folder_X_has_been_created_inside_the_folder_Y,
+				       Gbl.FileBrowser.NewFilFolLnkName,FileNameToShow);
+			break;
+		     case Err_ERROR:	// Quota excedeed
+		     default:
+			Fil_RemoveTree (Path);
+			Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quota,
+				       Gbl.FileBrowser.NewFilFolLnkName);
+			break;
+		    }
 		 }
 	       else
 		 {
-		  /* Remove affected clipboards */
-		  Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-						   Gbl.Usrs.Me.UsrDat.UsrCod,
-						   Gbl.Usrs.Other.UsrDat.UsrCod);
-
-		  /* Add path where new file is created to table of expanded folders */
-		  Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
-
-		  /* Add entry to the table of files/folders */
-		  snprintf (PathCompleteInTreeIncludingFolder,
-			    sizeof (PathCompleteInTreeIncludingFolder),
-			    "%s/%s",
-			    Gbl.FileBrowser.FilFolLnk.Full,
-			    Gbl.FileBrowser.NewFilFolLnkName);
-		  Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_FOLDER,
-				  PathCompleteInTreeIncludingFolder,
-				  PriPub_PRIVATE,Brw_LICENSE_DEFAULT);
-
-		  /* The folder has been created sucessfully */
-		  Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
-							 Gbl.FileBrowser.Lvl,
-							 Brw_IS_FOLDER,
-							 Gbl.FileBrowser.FilFolLnk.Name,
-							 FileNameToShow);
-		  Ale_ShowAlert (Ale_SUCCESS,Txt_The_folder_X_has_been_created_inside_the_folder_Y,
-				 Gbl.FileBrowser.NewFilFolLnkName,FileNameToShow);
+		  switch (errno)
+		    {
+		     case EEXIST:
+			Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_folder_X_because_there_is_already_a_folder_or_a_file_with_that_name,
+				       Gbl.FileBrowser.NewFilFolLnkName);
+			break;
+		     case EACCES:
+			Err_ShowErrorAndExit ("Write forbidden.");
+			break;
+		     default:
+			Err_ShowErrorAndExit ("Can not create folder.");
+			break;
+		    }
 		 }
-	      }
-	    else
-	      {
-	       switch (errno)
-		 {
-		  case EEXIST:
-		     Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_folder_X_because_there_is_already_a_folder_or_a_file_with_that_name,
-				    Gbl.FileBrowser.NewFilFolLnkName);
-		     break;
-		  case EACCES:
-		     Err_ShowErrorAndExit ("Write forbidden.");
-		     break;
-		  default:
-		     Err_ShowErrorAndExit ("Can not create folder.");
-		     break;
-		 }
-	      }
+	       break;
+	    case Err_ERROR:	// Folder name not valid
+	    default:
+	       Ale_ShowAlert (Ale_WARNING,Txt_UPLOAD_FILE_Invalid_name);
+	       break;
 	   }
-	 else	// Folder name not valid
-	    Ale_ShowAlert (Ale_WARNING,Txt_UPLOAD_FILE_Invalid_name);
 	 break;
       case Usr_CAN_NOT:
       default:
@@ -6706,90 +6720,94 @@ void Brw_RenFolder (void)
    switch (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Lvl))	// Can I rename this folder?
      {
       case Usr_CAN:
-	 if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
+	 switch (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
 	   {
-	    if (strcmp (Gbl.FileBrowser.FilFolLnk.Name,
-			Gbl.FileBrowser.NewFilFolLnkName))	// The name has changed
-	      {
-	       /* Gbl.FileBrowser.FilFolLnk.Name holds the new name of the folder */
-	       snprintf (OldPathInTree,sizeof (OldPathInTree),"%s/%s",
-			 Gbl.FileBrowser.FilFolLnk.Path,
-			 Gbl.FileBrowser.FilFolLnk.Name);
-	       snprintf (OldPath,sizeof (OldPath),"%s/%s",
-			 Gbl.FileBrowser.Path.AboveRootFolder,OldPathInTree);
-
-	       /* Gbl.FileBrowser.NewFilFolLnkName holds the new name of the folder */
-	       if (strlen (Gbl.FileBrowser.Path.AboveRootFolder) + 1 +
-		   strlen (Gbl.FileBrowser.FilFolLnk.Path) + 1 +
-		   strlen (Gbl.FileBrowser.NewFilFolLnkName) > PATH_MAX)
-		  Err_ShowErrorAndExit ("Path is too long.");
-	       snprintf (NewPathInTree,sizeof (NewPathInTree),"%s/%s",
-			 Gbl.FileBrowser.FilFolLnk.Path,
-			 Gbl.FileBrowser.NewFilFolLnkName);
-	       snprintf (NewPath,sizeof (NewPath),"%s/%s",
-			 Gbl.FileBrowser.Path.AboveRootFolder,NewPathInTree);
-
-	       /* We should check here that a folder with the same name does not exist.
-		  but we leave this work to the system */
-
-	       /* Rename the directory. If a empty folder existed with the name new, overwrite it! */
-	       if (rename (OldPath,NewPath))	// Fail
+	    case Err_SUCCESS:
+	       if (strcmp (Gbl.FileBrowser.FilFolLnk.Name,
+			   Gbl.FileBrowser.NewFilFolLnkName))	// The name has changed
 		 {
-		  switch (errno)
+		  /* Gbl.FileBrowser.FilFolLnk.Name holds the new name of the folder */
+		  snprintf (OldPathInTree,sizeof (OldPathInTree),"%s/%s",
+			    Gbl.FileBrowser.FilFolLnk.Path,
+			    Gbl.FileBrowser.FilFolLnk.Name);
+		  snprintf (OldPath,sizeof (OldPath),"%s/%s",
+			    Gbl.FileBrowser.Path.AboveRootFolder,OldPathInTree);
+
+		  /* Gbl.FileBrowser.NewFilFolLnkName holds the new name of the folder */
+		  if (strlen (Gbl.FileBrowser.Path.AboveRootFolder) + 1 +
+		      strlen (Gbl.FileBrowser.FilFolLnk.Path) + 1 +
+		      strlen (Gbl.FileBrowser.NewFilFolLnkName) > PATH_MAX)
+		     Err_ShowErrorAndExit ("Path is too long.");
+		  snprintf (NewPathInTree,sizeof (NewPathInTree),"%s/%s",
+			    Gbl.FileBrowser.FilFolLnk.Path,
+			    Gbl.FileBrowser.NewFilFolLnkName);
+		  snprintf (NewPath,sizeof (NewPath),"%s/%s",
+			    Gbl.FileBrowser.Path.AboveRootFolder,NewPathInTree);
+
+		  /* We should check here that a folder with the same name does not exist.
+		     but we leave this work to the system */
+
+		  /* Rename the directory. If a empty folder existed with the name new, overwrite it! */
+		  if (rename (OldPath,NewPath))	// Fail
 		    {
-		     case ENOTEMPTY:
-		     case EEXIST:
-		     case ENOTDIR:
-			Ale_ShowAlert (Ale_WARNING,
-				       Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y,
-				       Gbl.FileBrowser.FilFolLnk.Name,
-				       Gbl.FileBrowser.NewFilFolLnkName);
-			break;
-		     case EACCES:
-			Err_ShowErrorAndExit ("Write forbidden.");
-			break;
-		     default:
-			Err_ShowErrorAndExit ("Can not rename folder.");
-			break;
+		     switch (errno)
+		       {
+			case ENOTEMPTY:
+			case EEXIST:
+			case ENOTDIR:
+			   Ale_ShowAlert (Ale_WARNING,
+					  Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y,
+					  Gbl.FileBrowser.FilFolLnk.Name,
+					  Gbl.FileBrowser.NewFilFolLnkName);
+			   break;
+			case EACCES:
+			   Err_ShowErrorAndExit ("Write forbidden.");
+			   break;
+			default:
+			   Err_ShowErrorAndExit ("Can not rename folder.");
+			   break;
+		       }
 		    }
+		  else				// Success
+		    {
+		     /* If a folder is renamed,
+			it is necessary to rename all entries in the tables of files
+			that belong to the subtree starting at that folder */
+		     Brw_DB_RenameOneFolder (OldPathInTree,
+					     NewPathInTree);
+		     Brw_DB_RenameChildrenFilesOrFolders (OldPathInTree,
+							  NewPathInTree);
+
+		     /* Remove affected clipboards */
+		     Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+						      Gbl.Usrs.Me.UsrDat.UsrCod,
+						      Gbl.Usrs.Other.UsrDat.UsrCod);
+
+		     /* Remove affected expanded folders */
+		     Brw_DB_RenameAffectedExpandedFolders (Gbl.FileBrowser.Type,
+							   Gbl.Usrs.Me.UsrDat.UsrCod,
+							   Gbl.Usrs.Other.UsrDat.UsrCod,
+							   OldPathInTree,
+							   NewPathInTree);
+
+		     /* Write message of confirmation */
+		     Ale_ShowAlert (Ale_SUCCESS,Txt_The_folder_X_has_been_renamed_as_Y,
+				    Gbl.FileBrowser.FilFolLnk.Name,
+				    Gbl.FileBrowser.NewFilFolLnkName);
+		    }
+
 		 }
-	       else				// Success
-		 {
-		  /* If a folder is renamed,
-		     it is necessary to rename all entries in the tables of files
-		     that belong to the subtree starting at that folder */
-		  Brw_DB_RenameOneFolder (OldPathInTree,
-					  NewPathInTree);
-		  Brw_DB_RenameChildrenFilesOrFolders (OldPathInTree,
-						       NewPathInTree);
-
-		  /* Remove affected clipboards */
-		  Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-						   Gbl.Usrs.Me.UsrDat.UsrCod,
-						   Gbl.Usrs.Other.UsrDat.UsrCod);
-
-		  /* Remove affected expanded folders */
-		  Brw_DB_RenameAffectedExpandedFolders (Gbl.FileBrowser.Type,
-							Gbl.Usrs.Me.UsrDat.UsrCod,
-							Gbl.Usrs.Other.UsrDat.UsrCod,
-							OldPathInTree,
-							NewPathInTree);
-
-		  /* Write message of confirmation */
-		  Ale_ShowAlert (Ale_SUCCESS,Txt_The_folder_X_has_been_renamed_as_Y,
-				 Gbl.FileBrowser.FilFolLnk.Name,
-				 Gbl.FileBrowser.NewFilFolLnkName);
-		 }
-
-	      }
-	    else	// Names are equal.
-		   // This may happens if we have press...
-		   // ...INTRO without changing the name
-	       Ale_ShowAlert (Ale_INFO,Txt_The_name_X_has_not_changed,
-			      Gbl.FileBrowser.FilFolLnk.Name);
+	       else	// Names are equal.
+		      // This may happens if we have press...
+		      // ...INTRO without changing the name
+		  Ale_ShowAlert (Ale_INFO,Txt_The_name_X_has_not_changed,
+				 Gbl.FileBrowser.FilFolLnk.Name);
+	       break;
+	    case Err_ERROR:	// Folder name not valid
+	    default:
+	       Ale_ShowAlert (Ale_WARNING,Txt_UPLOAD_FILE_Invalid_name);
+	       break;
 	   }
-	 else	// Folder name not valid
-	    Ale_ShowAlert (Ale_WARNING,Txt_UPLOAD_FILE_Invalid_name);
 	 break;
       case Usr_CAN_NOT:
       default:
@@ -6910,139 +6928,143 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Siz
 	 if (Gbl.FileBrowser.NewFilFolLnkName[0])
 	   {
 	    /***** Check if uploading this kind of file is allowed *****/
-	    if (Brw_CheckIfUploadIsAllowed (MIMEType))
-	      {
-	       if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
+	    if (Brw_CheckIfUploadIsAllowed (MIMEType) == Err_SUCCESS)
+	       switch (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
 		 {
-		  /* Gbl.FileBrowser.NewFilFolLnkName holds the name of the new file */
-		  snprintf (Path,sizeof (Path),"%s/%s",
-			    Gbl.FileBrowser.Path.AboveRootFolder,
-			    Gbl.FileBrowser.FilFolLnk.Full);
-		  if (strlen (Path) + 1 +
-		      strlen (Gbl.FileBrowser.NewFilFolLnkName) +
-		      strlen (".tmp") > PATH_MAX)
-		     Err_ShowErrorAndExit ("Path is too long.");
-		  Str_Concat (Path,"/",sizeof (Path) - 1);
-		  Str_Concat (Path,Gbl.FileBrowser.NewFilFolLnkName,sizeof (Path) - 1);
+		  case Err_SUCCESS:
+		     /* Gbl.FileBrowser.NewFilFolLnkName holds the name of the new file */
+		     snprintf (Path,sizeof (Path),"%s/%s",
+			       Gbl.FileBrowser.Path.AboveRootFolder,
+			       Gbl.FileBrowser.FilFolLnk.Full);
+		     if (strlen (Path) + 1 +
+			 strlen (Gbl.FileBrowser.NewFilFolLnkName) +
+			 strlen (".tmp") > PATH_MAX)
+			Err_ShowErrorAndExit ("Path is too long.");
+		     Str_Concat (Path,"/",sizeof (Path) - 1);
+		     Str_Concat (Path,Gbl.FileBrowser.NewFilFolLnkName,sizeof (Path) - 1);
 
-		  /* Check if the destination file exists */
-		  switch (Fil_CheckIfPathExists (Path))
-		    {
-		     case Exi_EXISTS:
-			Ale_CreateAlert (Ale_WARNING,NULL,
-					 Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML,
-					 Gbl.FileBrowser.NewFilFolLnkName);
-			break;
-		     case Exi_DOES_NOT_EXIST:
-		     default:
-			/* End receiving the file */
-			snprintf (PathTmp,sizeof (PathTmp),"%s.tmp",Path);
-			FileIsValid = Fil_EndReceptionOfFile (PathTmp,Par);
+		     /* Check if the destination file exists */
+		     switch (Fil_CheckIfPathExists (Path))
+		       {
+			case Exi_EXISTS:
+			   Ale_CreateAlert (Ale_WARNING,NULL,
+					    Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML,
+					    Gbl.FileBrowser.NewFilFolLnkName);
+			   break;
+			case Exi_DOES_NOT_EXIST:
+			default:
+			   /* End receiving the file */
+			   snprintf (PathTmp,sizeof (PathTmp),"%s.tmp",Path);
+			   FileIsValid = Fil_EndReceptionOfFile (PathTmp,Par);
 
-			/* Check if the content of the file of marks is valid */
-			if (FileIsValid)
-			   if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
-			      if (Mrk_CheckFileOfMarks (PathTmp,&Marks) == Err_ERROR)
-				 FileIsValid = false;
+			   /* Check if the content of the file of marks is valid */
+			   if (FileIsValid)
+			      if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
+				 if (Mrk_CheckFileOfMarks (PathTmp,&Marks) == Err_ERROR)
+				    FileIsValid = false;
 
-			if (FileIsValid)
-			  {
-			   /* Rename the temporary */
-			   if (rename (PathTmp,Path))	// Fail
+			   if (FileIsValid)
 			     {
-			      Fil_RemoveTree (PathTmp);
-			      Ale_CreateAlert (Ale_WARNING,NULL,
-					       Txt_UPLOAD_FILE_could_not_create_file_NO_HTML,
-					       Gbl.FileBrowser.NewFilFolLnkName);
-			     }
-			   else			// Success
-			     {
-			      /* Check if quota has been exceeded */
-			      BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
-			      BrwSiz_SetMaxQuota (Size);
-			      if (BrwSiz_CheckIfQuotaExceded (Size))
+			      /* Rename the temporary */
+			      if (rename (PathTmp,Path))	// Fail
 				{
-				 Fil_RemoveTree (Path);
+				 Fil_RemoveTree (PathTmp);
 				 Ale_CreateAlert (Ale_WARNING,NULL,
-						  Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML,
+						  Txt_UPLOAD_FILE_could_not_create_file_NO_HTML,
 						  Gbl.FileBrowser.NewFilFolLnkName);
 				}
-			      else
+			      else			// Success
 				{
-				 /* Remove affected clipboards */
-				 Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-								  Gbl.Usrs.Me.UsrDat.UsrCod,
-								  Gbl.Usrs.Other.UsrDat.UsrCod);
-
-				 /* Add path where new file is created to table of expanded folders */
-				 Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
-
-				 /* Add entry to the table of files/folders */
-				 snprintf (PathCompleteInTreeIncludingFile,
-					   sizeof (PathCompleteInTreeIncludingFile),
-					   "%s/%s",
-					   Gbl.FileBrowser.FilFolLnk.Full,
-					   Gbl.FileBrowser.NewFilFolLnkName);
-				 FilCod = Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_FILE,
-							  PathCompleteInTreeIncludingFile,
-							  PriPub_PRIVATE,Brw_LICENSE_DEFAULT);
-
-				 /* Show message of confirmation */
-				 if (UploadType == Brw_CLASSIC_UPLOAD)
+				 /* Check if quota has been exceeded */
+				 BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
+				 BrwSiz_SetMaxQuota (Size);
+				 switch (BrwSiz_CheckQuota (Size))
 				   {
-				    Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
-									   Gbl.FileBrowser.Lvl,
-									   Brw_IS_FOLDER,
-									   Gbl.FileBrowser.FilFolLnk.Name,
-									   FileNameToShow);	// Folder name
-				    Ale_CreateAlert (Ale_SUCCESS,NULL,
-						     Txt_The_file_X_has_been_placed_inside_the_folder_Y,
-						     Gbl.FileBrowser.NewFilFolLnkName,
-						     FileNameToShow);
+				    case Err_SUCCESS:	// Quota not exceeded
+				       /* Remove affected clipboards */
+				       Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+									Gbl.Usrs.Me.UsrDat.UsrCod,
+									Gbl.Usrs.Other.UsrDat.UsrCod);
+
+				       /* Add path where new file is created to table of expanded folders */
+				       Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
+
+				       /* Add entry to the table of files/folders */
+				       snprintf (PathCompleteInTreeIncludingFile,
+						 sizeof (PathCompleteInTreeIncludingFile),
+						 "%s/%s",
+						 Gbl.FileBrowser.FilFolLnk.Full,
+						 Gbl.FileBrowser.NewFilFolLnkName);
+				       FilCod = Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_FILE,
+								PathCompleteInTreeIncludingFile,
+								PriPub_PRIVATE,Brw_LICENSE_DEFAULT);
+
+				       /* Show message of confirmation */
+				       if (UploadType == Brw_CLASSIC_UPLOAD)
+					 {
+					  Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
+										 Gbl.FileBrowser.Lvl,
+										 Brw_IS_FOLDER,
+										 Gbl.FileBrowser.FilFolLnk.Name,
+										 FileNameToShow);	// Folder name
+					  Ale_CreateAlert (Ale_SUCCESS,NULL,
+							   Txt_The_file_X_has_been_placed_inside_the_folder_Y,
+							   Gbl.FileBrowser.NewFilFolLnkName,
+							   FileNameToShow);
+					 }
+				       UploadSucessful = Err_SUCCESS;
+
+				       FileMetadata.FilCod = FilCod;
+				       Brw_GetFileMetadataByCod (&FileMetadata);
+
+				       /* Add a new entry of marks into database */
+				       if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
+					  Mrk_DB_AddMarks (FileMetadata.FilCod,&Marks);
+
+				       /* Notify new file */
+				       if (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE)
+					  switch (Gbl.FileBrowser.Type)
+					    {
+					     case Brw_ADMI_DOC_CRS:
+					     case Brw_ADMI_DOC_GRP:
+						Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FilCod);
+						break;
+					     case Brw_ADMI_TCH_CRS:
+					     case Brw_ADMI_TCH_GRP:
+						Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FilCod);
+						break;
+					     case Brw_ADMI_SHR_CRS:
+					     case Brw_ADMI_SHR_GRP:
+						Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FilCod);
+						break;
+					     case Brw_ADMI_MRK_CRS:
+					     case Brw_ADMI_MRK_GRP:
+						Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FilCod);
+						break;
+					     default:
+						break;
+					    }
+				       break;
+				    case Err_ERROR:	// Qupta exceeded
+				    default:
+				       Fil_RemoveTree (Path);
+				       Ale_CreateAlert (Ale_WARNING,NULL,
+							Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML,
+							Gbl.FileBrowser.NewFilFolLnkName);
+				       break;
 				   }
-				 UploadSucessful = Err_SUCCESS;
-
-				 FileMetadata.FilCod = FilCod;
-				 Brw_GetFileMetadataByCod (&FileMetadata);
-
-				 /* Add a new entry of marks into database */
-				 if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
-				    Mrk_DB_AddMarks (FileMetadata.FilCod,&Marks);
-
-				 /* Notify new file */
-				 if (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE)
-				    switch (Gbl.FileBrowser.Type)
-				      {
-				       case Brw_ADMI_DOC_CRS:
-				       case Brw_ADMI_DOC_GRP:
-					  Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FilCod);
-					  break;
-				       case Brw_ADMI_TCH_CRS:
-				       case Brw_ADMI_TCH_GRP:
-					  Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FilCod);
-					  break;
-				       case Brw_ADMI_SHR_CRS:
-				       case Brw_ADMI_SHR_GRP:
-					  Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FilCod);
-					  break;
-				       case Brw_ADMI_MRK_CRS:
-				       case Brw_ADMI_MRK_GRP:
-					  Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FilCod);
-					  break;
-				       default:
-					  break;
-				      }
 				}
 			     }
-			  }
-			else	// Error in file reception. File probably too big
-			   Fil_RemoveTree (PathTmp);
-			break;
-		    }
+			   else	// Error in file reception. File probably too big
+			      Fil_RemoveTree (PathTmp);
+			   break;
+		       }
+		     break;
+		  case Err_ERROR:
+		  default:
+		     Ale_CreateAlert (Ale_WARNING,NULL,*InvalidName[UploadType]);
+		     break;
 		 }
-	       else
-		  Ale_CreateAlert (Ale_WARNING,NULL,*InvalidName[UploadType]);
-	      }
 	   }
 	 else	// Empty filename
 	    Ale_CreateAlert (Ale_WARNING,NULL,
@@ -7124,106 +7146,112 @@ void Brw_CreateLink (void)
 						  FileName);
 
 	    /* Convert the last name in URL to a valid filename */
-	    if (Str_ConvertFilFolLnkNameToValid (FileName))
+	    switch (Str_ConvertFilFolLnkNameToValid (FileName))
 	      {
-	       /* The name of the file with the link will be the FileName.url */
-	       snprintf (Path,sizeof (Path),"%s/%s",
-			 Gbl.FileBrowser.Path.AboveRootFolder,
-			 Gbl.FileBrowser.FilFolLnk.Full);
-	       if (strlen (Path) + 1 + strlen (FileName) + strlen (".url") > PATH_MAX)
-		  Err_ShowErrorAndExit ("Path is too long.");
-	       Str_Concat (Path,"/",sizeof (Path) - 1);
-	       Str_Concat (Path,FileName,sizeof (Path) - 1);
-	       Str_Concat (Path,".url",sizeof (Path) - 1);
+	       case Err_SUCCESS:
+		  /* The name of the file with the link will be the FileName.url */
+		  snprintf (Path,sizeof (Path),"%s/%s",
+			    Gbl.FileBrowser.Path.AboveRootFolder,
+			    Gbl.FileBrowser.FilFolLnk.Full);
+		  if (strlen (Path) + 1 + strlen (FileName) + strlen (".url") > PATH_MAX)
+		     Err_ShowErrorAndExit ("Path is too long.");
+		  Str_Concat (Path,"/",sizeof (Path) - 1);
+		  Str_Concat (Path,FileName,sizeof (Path) - 1);
+		  Str_Concat (Path,".url",sizeof (Path) - 1);
 
-	       /* Check if the URL file exists */
-	       switch (Fil_CheckIfPathExists (Path))
-		 {
-		  case Exi_EXISTS:
-		     Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_link_X_because_there_is_already_a_folder_or_a_link_with_that_name,
-				    FileName);
-		     break;
-		  case Exi_DOES_NOT_EXIST:
-		  default:
-		     /***** Create the new file with the URL *****/
-		     if ((FileURL = fopen (Path,"wb")) != NULL)
-		       {
-			/* Write URL */
-			fprintf (FileURL,"%s",URL);
-
-			/* Close file */
-			fclose (FileURL);
-
-			/* Check if quota has been exceeded */
-			BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
-			BrwSiz_SetMaxQuota (Size);
-			if (BrwSiz_CheckIfQuotaExceded (Size))
+		  /* Check if the URL file exists */
+		  switch (Fil_CheckIfPathExists (Path))
+		    {
+		     case Exi_EXISTS:
+			Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_link_X_because_there_is_already_a_folder_or_a_link_with_that_name,
+				       FileName);
+			break;
+		     case Exi_DOES_NOT_EXIST:
+		     default:
+			/***** Create the new file with the URL *****/
+			if ((FileURL = fopen (Path,"wb")) != NULL)
 			  {
-			   Fil_RemoveTree (Path);
-			   Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_link_X_because_it_would_exceed_the_disk_quota,
-					  FileName);
+			   /* Write URL */
+			   fprintf (FileURL,"%s",URL);
+
+			   /* Close file */
+			   fclose (FileURL);
+
+			   /* Check if quota has been exceeded */
+			   BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
+			   BrwSiz_SetMaxQuota (Size);
+			   switch (BrwSiz_CheckQuota (Size))
+			     {
+			      case Err_SUCCESS:	// Quota not exceeded
+				 /* Remove affected clipboards */
+				 Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+								  Gbl.Usrs.Me.UsrDat.UsrCod,
+								  Gbl.Usrs.Other.UsrDat.UsrCod);
+
+				 /* Add path where new file is created to table of expanded folders */
+				 Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
+
+				 /* Add entry to the table of files/folders */
+				 snprintf (PathCompleteInTreeIncludingFile,
+					   sizeof (PathCompleteInTreeIncludingFile),
+					   "%s/%s.url",
+					   Gbl.FileBrowser.FilFolLnk.Full,FileName);
+				 FilCod = Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_LINK,
+							  PathCompleteInTreeIncludingFile,
+							  PriPub_PRIVATE,Brw_LICENSE_DEFAULT);
+
+				 /* Show message of confirmation */
+				 Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
+									Gbl.FileBrowser.Lvl,
+									Brw_IS_FOLDER,
+									Gbl.FileBrowser.FilFolLnk.Name,
+									FileNameToShow);	// Folder name
+				 Ale_ShowAlert (Ale_SUCCESS,Txt_The_link_X_has_been_placed_inside_the_folder_Y,
+						FileName,FileNameToShow);
+
+				 FileMetadata.FilCod = FilCod;
+				 Brw_GetFileMetadataByCod (&FileMetadata);
+
+				 /* Notify new file */
+				 if (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE)
+				    switch (Gbl.FileBrowser.Type)
+				      {
+				       case Brw_ADMI_DOC_CRS:
+				       case Brw_ADMI_DOC_GRP:
+					  Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FilCod);
+					  break;
+				       case Brw_ADMI_TCH_CRS:
+				       case Brw_ADMI_TCH_GRP:
+					  Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FilCod);
+					  break;
+				       case Brw_ADMI_SHR_CRS:
+				       case Brw_ADMI_SHR_GRP:
+					  Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FilCod);
+					  break;
+				       case Brw_ADMI_MRK_CRS:
+				       case Brw_ADMI_MRK_GRP:
+					  Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FilCod);
+					  break;
+				       default:
+					  break;
+				      }
+				 break;
+			      case Err_ERROR:	// Quota exceeded
+			      default:
+				 Fil_RemoveTree (Path);
+				 Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_link_X_because_it_would_exceed_the_disk_quota,
+						FileName);
+				 break;
+			     }
 			  }
-			else
-			  {
-			   /* Remove affected clipboards */
-			   Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-							    Gbl.Usrs.Me.UsrDat.UsrCod,
-							    Gbl.Usrs.Other.UsrDat.UsrCod);
-
-			   /* Add path where new file is created to table of expanded folders */
-			   Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
-
-			   /* Add entry to the table of files/folders */
-			   snprintf (PathCompleteInTreeIncludingFile,
-				     sizeof (PathCompleteInTreeIncludingFile),
-				     "%s/%s.url",
-				     Gbl.FileBrowser.FilFolLnk.Full,FileName);
-			   FilCod = Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_LINK,
-						    PathCompleteInTreeIncludingFile,
-						    PriPub_PRIVATE,Brw_LICENSE_DEFAULT);
-
-			   /* Show message of confirmation */
-			   Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
-								  Gbl.FileBrowser.Lvl,
-								  Brw_IS_FOLDER,
-								  Gbl.FileBrowser.FilFolLnk.Name,
-								  FileNameToShow);	// Folder name
-			   Ale_ShowAlert (Ale_SUCCESS,Txt_The_link_X_has_been_placed_inside_the_folder_Y,
-					  FileName,FileNameToShow);
-
-			   FileMetadata.FilCod = FilCod;
-			   Brw_GetFileMetadataByCod (&FileMetadata);
-
-			   /* Notify new file */
-			   if (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE)
-			      switch (Gbl.FileBrowser.Type)
-				{
-				 case Brw_ADMI_DOC_CRS:
-				 case Brw_ADMI_DOC_GRP:
-				    Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FilCod);
-				    break;
-				 case Brw_ADMI_TCH_CRS:
-				 case Brw_ADMI_TCH_GRP:
-				    Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FilCod);
-				    break;
-				 case Brw_ADMI_SHR_CRS:
-				 case Brw_ADMI_SHR_GRP:
-				    Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FilCod);
-				    break;
-				 case Brw_ADMI_MRK_CRS:
-				 case Brw_ADMI_MRK_GRP:
-				    Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FilCod);
-				    break;
-				 default:
-				    break;
-				}
-			  }
-		       }
-		     break;
-		 }
+			break;
+		    }
+		  break;
+	       case Err_ERROR:	// Link URL not valid
+	       default:
+		  Ale_ShowAlert (Ale_WARNING,Txt_UPLOAD_FILE_Invalid_link);
+		  break;
 	      }
-	    else	// Link URL not valid
-	       Ale_ShowAlert (Ale_WARNING,Txt_UPLOAD_FILE_Invalid_link);
 	   }
 	 else	// Link URL not valid
 	    Ale_ShowAlert (Ale_WARNING,Txt_UPLOAD_FILE_Invalid_link);
@@ -7242,11 +7270,11 @@ void Brw_CreateLink (void)
 /*****************************************************************************/
 /****************** Check if it is allowed to upload a file ******************/
 /*****************************************************************************/
-// Returns true if file type is allowed
-// Returns false if MIME type or extension are not allowed
+// Returns Err_SUCCESS if file type is allowed
+// Returns Err_ERROR if MIME type or extension are not allowed
 // On error, delayed alerts will contain feedback text
 
-static bool Brw_CheckIfUploadIsAllowed (const char *MIMEType)
+static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (const char *MIMEType)
   {
    extern const char *Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML;
    extern const char *Txt_UPLOAD_FILE_X_not_HTML_NO_HTML;
@@ -7262,7 +7290,7 @@ static bool Brw_CheckIfUploadIsAllowed (const char *MIMEType)
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 		             Txt_UPLOAD_FILE_X_not_HTML_NO_HTML,
 		             Gbl.FileBrowser.NewFilFolLnkName);
-	    return false;
+	    return Err_ERROR;
 	   }
 
 	 /* Check MIME type*/
@@ -7275,31 +7303,31 @@ static bool Brw_CheckIfUploadIsAllowed (const char *MIMEType)
 			Ale_CreateAlert (Ale_WARNING,NULL,
 		                         Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML,
 				         Gbl.FileBrowser.NewFilFolLnkName,MIMEType);
-			return false;
+			return Err_ERROR;
 		       }
 	 break;
       default:
 	 /* Check file extension */
-	 if (!Ext_CheckIfFileExtensionIsAllowed (Gbl.FileBrowser.NewFilFolLnkName))
+	 if (Ext_CheckIfFileExtensionIsAllowed (Gbl.FileBrowser.NewFilFolLnkName) == Err_ERROR)
 	   {
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 			     Txt_UPLOAD_FILE_X_extension_not_allowed_NO_HTML,
 		             Gbl.FileBrowser.NewFilFolLnkName);
-	    return false;
+	    return Err_ERROR;
 	   }
 
 	 /* Check MIME type*/
-	 if (!MIM_CheckIfMIMETypeIsAllowed (MIMEType))
+	 if (MIM_CheckIfMIMETypeIsAllowed (MIMEType) == Err_ERROR)
 	   {
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 			     Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML,
 		             Gbl.FileBrowser.NewFilFolLnkName,MIMEType);
-	    return false;
+	    return Err_ERROR;
 	   }
 	 break;
      }
 
-   return true;
+   return Err_SUCCESS;
   }
 
 /*****************************************************************************/

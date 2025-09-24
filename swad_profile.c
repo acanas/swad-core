@@ -224,7 +224,7 @@ void Prf_ReqUserProfile (void)
 void Prf_GetUsrDatAndShowUserProfile (void)
   {
    struct Tml_Timeline Timeline;
-   bool ProfileShown = false;
+   Err_SuccessOrError_t ProfileShown = Err_ERROR;
 
    /***** Get user's data *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
@@ -234,11 +234,10 @@ void Prf_GetUsrDatAndShowUserProfile (void)
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                 Usr_DONT_GET_PREFS,
                                                 Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
+     {
       /* Show profile */
-      if (Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat))
-	{
-	 ProfileShown = true;
-
+      ProfileShown = Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat);
+      if (ProfileShown == Err_SUCCESS)
 	 if (Gbl.Usrs.Me.Logged)	// Timeline visible only by logged users
 	   {
 	    /* Reset timeline context */
@@ -249,10 +248,10 @@ void Prf_GetUsrDatAndShowUserProfile (void)
 	       Tml_ShowTimelineUsr (&Timeline);
 	    HTM_SECTION_End ();
 	   }
-	}
+     }
 
    /***** If profile could not be shown... *****/
-   if (!ProfileShown)
+   if (ProfileShown == Err_ERROR)
      {
       /* Show error message */
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
@@ -270,9 +269,9 @@ void Prf_GetUsrDatAndShowUserProfile (void)
 /*****************************************************************************/
 /*************************** Show a user's profile ***************************/
 /*****************************************************************************/
-// Return false on error
+// Return Err_ERROR on error
 
-bool Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
+Err_SuccessOrError_t Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
   {
    static void (*PutLinkToUsrProfile[Usr_NUM_ME_OR_OTHER]) (void) =
      {
@@ -335,9 +334,9 @@ bool Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
 					UsrFollowsMe,IFollowUsr);
         }
 
-      return true;
+      return Err_SUCCESS;
      }
-   return false;
+   return Err_ERROR;
   }
 
 /*****************************************************************************/

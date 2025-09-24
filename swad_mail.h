@@ -66,7 +66,7 @@ void Mai_ChangeOtherUsrEmail (void);
 Err_SuccessOrError_t Mai_UpdateEmailInDB (const struct Usr_Data *UsrDat,
 					  const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
-bool Mai_SendMailMsgToConfirmEmail (void);
+void Mai_SendMailMsgToConfirmEmail (void);
 void Mai_ConfirmEmail (void);
 
 void Mai_CreateFileNameMail (char FileNameMail[PATH_MAX + 1],FILE **FileMail);

@@ -66,7 +66,7 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
 void Pho_ShowUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
                        const char *ClassPhoto,Pho_Zoom_t Zoom);
 
-bool Pho_RemovePhoto (struct Usr_Data *UsrDat);
+Err_SuccessOrError_t Pho_RemovePhoto (struct Usr_Data *UsrDat);
 void Pho_UpdatePhotoName (struct Usr_Data *UsrDat);
 
 void Pho_ChangePhotoVisibility (void);

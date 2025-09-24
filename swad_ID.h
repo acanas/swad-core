@@ -74,7 +74,7 @@ void ID_PutParOtherUsrIDPlain (void);
 void ID_GetParOtherUsrIDPlain (void);
 
 Err_SuccessOrError_t ID_CheckIfUsrIDIsValid (const char *UsrID);
-bool ID_CheckIfUsrIDSeemsAValidID (const char *UsrID);
+Err_SuccessOrError_t ID_CheckIfUsrIDSeemsAValidID (const char *UsrID);
 
 void ID_WriteUsrIDs (const struct Usr_Data *UsrDat,const char *Anchor);
 Usr_Can_t ID_ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat);

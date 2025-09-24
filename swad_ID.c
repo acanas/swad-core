@@ -75,7 +75,8 @@ const char *ID_ID_SECTION_ID = "id_section";
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned MinDigits);
+static Err_SuccessOrError_t ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,
+								  unsigned MinDigits);
 
 static void ID_PutLinkToConfirmID (const struct Usr_Data *UsrDat,unsigned NumID,
                                    const char *Anchor);
@@ -263,23 +264,23 @@ Err_SuccessOrError_t ID_CheckIfUsrIDIsValid (const char *UsrID)
   {
    if (UsrID)
       if (UsrID[0])
-         return ID_CheckIfUsrIDIsValidUsingMinDigits (UsrID,ID_MIN_DIGITS_USR_ID) ? Err_SUCCESS :
-										    Err_ERROR;
+         return ID_CheckIfUsrIDIsValidUsingMinDigits (UsrID,ID_MIN_DIGITS_USR_ID);
 
    return Err_ERROR;
   }
 
 // Wrapper function to avoid passing extra parameters
-bool ID_CheckIfUsrIDSeemsAValidID (const char *UsrID)
+Err_SuccessOrError_t ID_CheckIfUsrIDSeemsAValidID (const char *UsrID)
   {
    if (UsrID)
       if (UsrID[0])
          return ID_CheckIfUsrIDIsValidUsingMinDigits (UsrID,ID_MIN_DIGITS_AUTOMATIC_DETECT_USR_ID);
 
-   return false;
+   return Err_ERROR;
   }
 
-static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned MinDigits)
+static Err_SuccessOrError_t ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,
+								  unsigned MinDigits)
   {
    const char *Ptr;
    unsigned NumDigits = 0;
@@ -287,25 +288,26 @@ static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned Min
 
    /***** Check length *****/
    if (!UsrID)
-      return false;
+      return Err_ERROR;
    if (!UsrID[0])
-      return false;
+      return Err_ERROR;
    Length = strlen (UsrID);
    if (Length < ID_MIN_BYTES_USR_ID ||
        Length > ID_MAX_BYTES_USR_ID)
-      return false;			// 1. Must be ID_MIN_BYTES_USR_ID <= characters <= ID_MAX_BYTES_USR_ID
+      return Err_ERROR;					// 1. Must be ID_MIN_BYTES_USR_ID <= characters <= ID_MAX_BYTES_USR_ID
 
    /**** Loop through user's ID *****/
    for (Ptr = UsrID;
         *Ptr;
         Ptr++)
-      if (isdigit ((int) *Ptr))                        // If character is digit
+      if (isdigit ((int) *Ptr))			// If character is digit
          NumDigits++;
       else if (!((*Ptr >= 'A' && *Ptr <= 'Z') ||
-                 (*Ptr >= 'a' && *Ptr <= 'z')))        // If character is not alpha
-         return false;			// 2. All characters must be digits or letters
+                 (*Ptr >= 'a' && *Ptr <= 'z')))	// If character is not alpha
+         return Err_ERROR;				// 2. All characters must be digits or letters
 
-   return (NumDigits >= MinDigits);	// 3. Must have MinDigits digits at least
+   return (NumDigits >= MinDigits) ? Err_SUCCESS :	// 3. Must have MinDigits digits at least
+				     Err_ERROR;
   }
 
 /*****************************************************************************/

@@ -155,7 +155,7 @@ const char *Ext_FileExtAllowed[Ext_NUM_FILE_EXT_ALLOWED] =
 /******************* Check if file extension is allowed **********************/
 /*****************************************************************************/
 
-bool Ext_CheckIfFileExtensionIsAllowed (const char FilFolLnkName[NAME_MAX + 1])
+Err_SuccessOrError_t Ext_CheckIfFileExtensionIsAllowed (const char FilFolLnkName[NAME_MAX + 1])
   {
    unsigned Type;
 
@@ -163,7 +163,7 @@ bool Ext_CheckIfFileExtensionIsAllowed (const char FilFolLnkName[NAME_MAX + 1])
 	Type < Ext_NUM_FILE_EXT_ALLOWED;
 	Type++)
       if (Str_FileIs (FilFolLnkName,Ext_FileExtAllowed[Type]))
-	 return true;
+	 return Err_SUCCESS;
 
-   return false;
+   return Err_ERROR;
   }

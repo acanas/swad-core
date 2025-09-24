@@ -141,9 +141,9 @@ static void Med_GetAndProcessYouTubeFromForm (const char *ParURL,
 static void Med_GetAndProcessEmbedFromForm (const char *ParURL,
                                             struct Med_Media *Media);
 
-static bool Med_MoveTmpFileToDefDir (struct Med_Media *Media,
-				     const char PathMedPriv[PATH_MAX + 1],
-				     const char *Extension);
+static Err_SuccessOrError_t Med_MoveTmpFileToDefDir (struct Med_Media *Media,
+						     const char PathMedPriv[PATH_MAX + 1],
+						     const char *Extension);
 
 static void Med_ShowMediaFile (const struct Med_Media *Media,const char *ClassMedia);
 static void Med_ShowJPG (const struct Med_Media *Media,
@@ -1347,16 +1347,16 @@ void Med_MoveMediaToDefinitiveDir (struct Med_Media *Media)
 	       case Med_JPG:
 		  /* Move JPG */
 		  if (Med_MoveTmpFileToDefDir (Media,PathMedPriv,
-					       Med_Extensions[Med_JPG]))
+					       Med_Extensions[Med_JPG]) == Err_SUCCESS)
 		     Media->Status = Med_MOVED;	// Success
 		  break;
 	       case Med_GIF:
 		  /* Move PNG */
 		  if (Med_MoveTmpFileToDefDir (Media,PathMedPriv,
-					       "png"))
+					       "png") == Err_SUCCESS)
 		     /* Move GIF */
 		     if (Med_MoveTmpFileToDefDir (Media,PathMedPriv,
-						  Med_Extensions[Med_GIF]))
+						  Med_Extensions[Med_GIF]) == Err_SUCCESS)
 			Media->Status = Med_MOVED;	// Success
 		  break;
 	       case Med_MP4:
@@ -1364,7 +1364,7 @@ void Med_MoveMediaToDefinitiveDir (struct Med_Media *Media)
 	       case Med_OGG:
 		  /* Move MP4 or WEBM or OGG */
 		  if (Med_MoveTmpFileToDefDir (Media,PathMedPriv,
-					       Med_Extensions[Media->Type]))
+					       Med_Extensions[Media->Type]) == Err_SUCCESS)
 		     Media->Status = Med_MOVED;	// Success
 		  break;
 	       default:
@@ -1389,12 +1389,12 @@ void Med_MoveMediaToDefinitiveDir (struct Med_Media *Media)
 /*****************************************************************************/
 /******* Move temporary processed file to definitive private directory *******/
 /*****************************************************************************/
-// Return true on success
-// Return false on error
+// Return Err_SUCCESS on success
+// Return Err_ERROR on error
 
-static bool Med_MoveTmpFileToDefDir (struct Med_Media *Media,
-				     const char PathMedPriv[PATH_MAX + 1],
-				     const char *Extension)
+static Err_SuccessOrError_t Med_MoveTmpFileToDefDir (struct Med_Media *Media,
+						     const char PathMedPriv[PATH_MAX + 1],
+						     const char *Extension)
   {
    char PathFileTmp[PATH_MAX + 1];	// Full name of temporary processed file
    char PathFile[PATH_MAX + 1];		// Full name of definitive processed file
@@ -1411,10 +1411,10 @@ static bool Med_MoveTmpFileToDefDir (struct Med_Media *Media,
    if (rename (PathFileTmp,PathFile))	// Fail
      {
       Med_ErrorProcessingMediaFile ();
-      return false;
+      return Err_ERROR;
      }
 
-   return true;				// Success
+   return Err_SUCCESS;				// Success
   }
 
 /*****************************************************************************/

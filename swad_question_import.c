@@ -617,7 +617,7 @@ static void QstImp_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 				    if (!strcmp (Attribute->AttributeName,"shuffle"))
 				      {
 				       Question.Answer.Shuffle = XML_GetAttributteYesNoFromXMLTree (Attribute) ? Qst_SHUFFLE :
-														      Qst_DONT_SHUFFLE;
+														 Qst_DONT_SHUFFLE;
 				       break;	// Only first attribute "shuffle"
 				      }
 			      break;	// Only first element "answer"
@@ -705,7 +705,7 @@ static void QstImp_GetAnswerFromXML (struct XMLElement *AnswerElem,
    switch (Question->Answer.Type)
      {
       case Qst_ANS_INT:
-         if (!Qst_AllocateTextChoiceAnswer (Question,0))
+         if (Qst_AllocateTextChoiceAnswer (Question,0) == Err_ERROR)
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
@@ -714,10 +714,10 @@ static void QstImp_GetAnswerFromXML (struct XMLElement *AnswerElem,
                       Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
          break;
       case Qst_ANS_FLOAT:
-         if (!Qst_AllocateTextChoiceAnswer (Question,0))
+         if (Qst_AllocateTextChoiceAnswer (Question,0) == Err_ERROR)
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
-         if (!Qst_AllocateTextChoiceAnswer (Question,1))
+         if (Qst_AllocateTextChoiceAnswer (Question,1) == Err_ERROR)
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
@@ -770,7 +770,7 @@ static void QstImp_GetAnswerFromXML (struct XMLElement *AnswerElem,
               OptionElem = OptionElem->NextBrother, NumOpt++)
             if (!strcmp (OptionElem->TagName,"option"))
               {
-               if (!Qst_AllocateTextChoiceAnswer (Question,NumOpt))
+               if (Qst_AllocateTextChoiceAnswer (Question,NumOpt) == Err_ERROR)
 		  /* Abort on error */
 		  Ale_ShowAlertsAndExit ();
 

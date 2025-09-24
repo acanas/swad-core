@@ -64,7 +64,7 @@ struct BrwSiz_BrowserSize *BrwSiz_GetSize (void);
 void BrwSiz_SetAndCheckQuota (struct BrwSiz_BrowserSize *Size);
 void BrwSiz_SetMaxQuota (struct BrwSiz_BrowserSize *Size);
 
-bool BrwSiz_CheckIfQuotaExceded (const struct BrwSiz_BrowserSize *Size);
+Err_SuccessOrError_t BrwSiz_CheckQuota (const struct BrwSiz_BrowserSize *Size);
 
 void BrwSiz_ResetFileBrowserSize (struct BrwSiz_BrowserSize *Size);
 void BrwSiz_CalcSizeOfDir (struct BrwSiz_BrowserSize *Size,char *Path);

@@ -165,7 +165,7 @@ void BrwSiz_SetAndCheckQuota (struct BrwSiz_BrowserSize *Size)
    /***** Check the quota *****/
    BrwSiz_SetMaxQuota (Size);
    BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
-   if (BrwSiz_CheckIfQuotaExceded (Size))
+   if (BrwSiz_CheckQuota (Size) == Err_ERROR)
       Ale_ShowAlert (Ale_WARNING,Txt_Quota_exceeded);
   }
 
@@ -290,12 +290,13 @@ void BrwSiz_SetMaxQuota (struct BrwSiz_BrowserSize *Size)
 /********************** Check if quota has been exceeded *********************/
 /*****************************************************************************/
 
-bool BrwSiz_CheckIfQuotaExceded (const struct BrwSiz_BrowserSize *Size)
+Err_SuccessOrError_t BrwSiz_CheckQuota (const struct BrwSiz_BrowserSize *Size)
   {
    return (Size->NumLevls > BrwSiz_MAX_DIR_LEVELS ||
            Size->NumFolds > Size->MaxFolds ||
            Size->NumFiles > Size->MaxFiles ||
-           Size->TotalSiz > Size->MaxQuota);
+           Size->TotalSiz > Size->MaxQuota) ? Err_ERROR :	// Quota exceeded
+        				      Err_SUCCESS;	// Quota not exceeded
   }
 
 /*****************************************************************************/

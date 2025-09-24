@@ -2406,14 +2406,18 @@ static void Mch_ShowRightColumnStd (struct Mch_Match *Match,
 	    HTM_DIV_Begin ("class=\"MCH_BOTTOM\"");
 
 	       /***** Update players ******/
-	       if (Mch_RegisterMeAsPlayerInMatch (Match))
+	       switch (Mch_RegisterMeAsPlayerInMatch (Match))
 		 {
-		  if (Match->Status.Showing == Mch_ANSWERS)	// Teacher's screen is showing question answers
-		     /* Show current question and possible answers */
-		     Mch_ShowQuestionAndAnswersStd (Match,UsrAnswer,Update);
+		  case Err_SUCCESS:
+		     if (Match->Status.Showing == Mch_ANSWERS)	// Teacher's screen is showing question answers
+			/* Show current question and possible answers */
+			Mch_ShowQuestionAndAnswersStd (Match,UsrAnswer,Update);
+		     break;
+		  case Err_ERROR:
+		  default:
+		     Ale_ShowAlert (Ale_ERROR,"You can not join this match.");
+		     break;
 		 }
-	       else
-		  Ale_ShowAlert (Ale_ERROR,"You can not join this match.");
 
 	    HTM_DIV_End ();
 	   }
@@ -3260,29 +3264,29 @@ static void Mch_ShowWaitImage (const char *Txt)
 /*****************************************************************************/
 /******************* Register me as a player in a match **********************/
 /*****************************************************************************/
-// Return true on success
+// Return Err_SUCCESS on success
 
-bool Mch_RegisterMeAsPlayerInMatch (struct Mch_Match *Match)
+Err_SuccessOrError_t Mch_RegisterMeAsPlayerInMatch (struct Mch_Match *Match)
   {
    /***** Trivial check: match code must be > 0 *****/
    if (Match->MchCod <= 0)
-      return false;
+      return Err_ERROR;
 
    /***** Trivial check: match must be being played *****/
    if (!Match->Status.Playing)				// Match is paused, not being played
-      return false;
+      return Err_ERROR;
 
    /***** Trivial check: match must not be over *****/
    if (Match->Status.Showing == Mch_END)		// Match over
-      return false;
+      return Err_ERROR;
 
    /***** Trivial check: only a student can join a match *****/
    if (Gbl.Usrs.Me.Role.Logged != Rol_STD)		// I am not logged as student
-      return false;
+      return Err_ERROR;
 
    /***** Insert me as match player *****/
    Mch_DB_RegisterMeAsPlayerInMatch (Match->MchCod);
-   return true;
+   return Err_SUCCESS;
   }
 
 /*****************************************************************************/

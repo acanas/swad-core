@@ -591,7 +591,7 @@ Err_SuccessOrError_t Acc_CreateMyNewAccountAndLogIn (void)
 /*****************************************************************************/
 /************* Get parameters for the creation of a new account **************/
 /*****************************************************************************/
-// Return false on error
+// Return Err_ERROR on error
 
 static Err_SuccessOrError_t Acc_GetParsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],
 						   char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
@@ -920,7 +920,7 @@ void Acc_CompletelyEliminateAccount (struct Usr_Data *UsrDat,
    extern const char *Txt_Briefcase_of_THE_USER_X_has_been_removed;
    extern const char *Txt_Photo_of_THE_USER_X_has_been_removed;
    extern const char *Txt_Record_card_of_THE_USER_X_has_been_removed;
-   bool PhotoRemoved = false;
+   Err_SuccessOrError_t PhotoRemoved;
 
    /***** Remove the works zones of the user in all courses *****/
    Brw_RemoveUsrWorksInAllCrss (UsrDat);        // Make this before of removing the user from the courses
@@ -1021,7 +1021,7 @@ void Acc_CompletelyEliminateAccount (struct Usr_Data *UsrDat,
 
    /***** Remove user's photo *****/
    PhotoRemoved = Pho_RemovePhoto (UsrDat);
-   if (PhotoRemoved && Verbose == Cns_VERBOSE)
+   if (PhotoRemoved == Err_SUCCESS && Verbose == Cns_VERBOSE)
       Ale_ShowAlert (Ale_SUCCESS,Txt_Photo_of_THE_USER_X_has_been_removed,
                      UsrDat->FullName);
 

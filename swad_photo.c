@@ -496,8 +496,10 @@ void Pho_ReqRemMyPhoto (void)
 
 void Pho_RemoveMyPhoto1 (void)
   {
+   __attribute__((unused)) Err_SuccessOrError_t PhotoRemoved;
+
    /***** Remove photo *****/
-   Pho_RemovePhoto (&Gbl.Usrs.Me.UsrDat);
+   PhotoRemoved = Pho_RemovePhoto (&Gbl.Usrs.Me.UsrDat);
 
    /***** The link to my photo is not valid now,
           so build it again before writing the web page *****/
@@ -614,7 +616,7 @@ void Pho_RemoveUsrPhoto (void)
      {
       case Exi_EXISTS:
 	 /***** Remove photo *****/
-	 if (Pho_RemovePhoto (&Gbl.Usrs.Other.UsrDat))
+	 if (Pho_RemovePhoto (&Gbl.Usrs.Other.UsrDat) == Err_SUCCESS)
 	    Ale_ShowAlerts (NULL);
 	 break;
       case Exi_DOES_NOT_EXIST:
@@ -1382,9 +1384,8 @@ void Pho_ShowUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
 /*****************************************************************************/
 /************************** Remove a user's photo ****************************/
 /*****************************************************************************/
-// Returns true on success, false on error
 
-bool Pho_RemovePhoto (struct Usr_Data *UsrDat)
+Err_SuccessOrError_t Pho_RemovePhoto (struct Usr_Data *UsrDat)
   {
    extern const char *Txt_Photo_removed;
    char PathPrivRelPhoto[PATH_MAX + 1];
@@ -1408,10 +1409,8 @@ bool Pho_RemovePhoto (struct Usr_Data *UsrDat)
                 Cfg_PATH_PHOTO_PRIVATE,
                 (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
       if (Fil_CheckIfPathExists (PathPrivRelPhoto) == Exi_EXISTS)	// Photo exists
-        {
          if (unlink (PathPrivRelPhoto))                        		// Remove photo
             NumErrors++;
-        }
 
       /***** Remove original photo *****/
       snprintf (PathPrivRelPhoto,sizeof (PathPrivRelPhoto),
@@ -1428,15 +1427,13 @@ bool Pho_RemovePhoto (struct Usr_Data *UsrDat)
 
    if (NumErrors)
      {
-      Ale_CreateAlert (Ale_ERROR,NULL,
-		       "Error removing photo.");
-      return false;
+      Ale_CreateAlert (Ale_ERROR,NULL,"Error removing photo.");
+      return Err_ERROR;
      }
    else
      {
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_Photo_removed);
-      return true;
+      Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Photo_removed);
+      return Err_SUCCESS;
      }
   }
 

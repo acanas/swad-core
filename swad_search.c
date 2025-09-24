@@ -500,7 +500,7 @@ static unsigned Sch_SearchCountrsInDB (Hie_Level_t HieLvl,const char *RangeQuery
 	 snprintf (FldName,sizeof (FldName),"Name_%s",
 		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 	 if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
-	                           FldName,NULL,NULL))
+	                           FldName,NULL,NULL) == Err_SUCCESS)
 	   {
 	    /***** Query database and list countries found *****/
 	    NumCtys = Cty_DB_SearchCtys (&mysql_res,SearchQuery,RangeQuery);
@@ -532,7 +532,7 @@ static unsigned Sch_SearchInstitsInDB (Hie_Level_t HieLvl,const char *RangeQuery
       if (Sch_CheckIfICanSearch (Sch_SEARCH_INSTITS) == Usr_CAN)
 	 /***** Split institutions string into words *****/
 	 if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
-	                           "ins_instits.FullName",NULL,NULL))
+	                           "ins_instits.FullName",NULL,NULL) == Err_SUCCESS)
 	   {
 	    /***** Query database and list institutions found *****/
 	    NumInss = Ins_DB_SearchInss (&mysql_res,SearchQuery,RangeQuery);
@@ -561,7 +561,7 @@ static unsigned Sch_SearchCentersInDB (Hie_Level_t HieLvl,const char *RangeQuery
       if (Sch_CheckIfICanSearch (Sch_SEARCH_CENTERS) == Usr_CAN)
 	 /***** Split center string into words *****/
 	 if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
-	                           "ctr_centers.FullName",NULL,NULL))
+	                           "ctr_centers.FullName",NULL,NULL) == Err_SUCCESS)
 	   {
 	    /***** Query database and list centers found *****/
 	    NumCtrs = Ctr_DB_SearchCtrs (&mysql_res,SearchQuery,RangeQuery);
@@ -589,7 +589,7 @@ static unsigned Sch_SearchDegreesInDB (Hie_Level_t HieLvl,const char *RangeQuery
       if (Sch_CheckIfICanSearch (Sch_SEARCH_DEGREES) == Usr_CAN)
 	 /***** Split degree string into words *****/
 	 if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
-	                           "deg_degrees.FullName",NULL,NULL))
+	                           "deg_degrees.FullName",NULL,NULL) == Err_SUCCESS)
 	   {
 	    /***** Query database and list degrees found *****/
 	    NumDegs = Deg_DB_SearchDegs (&mysql_res,SearchQuery,RangeQuery);
@@ -615,7 +615,7 @@ static unsigned Sch_SearchCoursesInDB (const char *RangeQuery)
    if (Sch_CheckIfICanSearch (Sch_SEARCH_COURSES) == Usr_CAN)
       /***** Split course string into words *****/
       if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
-                                "crs_courses.FullName",NULL,NULL))
+                                "crs_courses.FullName",NULL,NULL) == Err_SUCCESS)
 	{
 	 /***** Query database and list courses found *****/
 	 NumCrss = Crs_DB_SearchCrss (&mysql_res,SearchQuery,RangeQuery);
@@ -638,18 +638,23 @@ static unsigned Sch_SearchUsrsInDB (Hie_Level_t HieLvl,Rol_Role_t Role)
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
 
    /***** Split user string into words *****/
-   if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
-			     "CONCAT_WS(' ',FirstName,Surname1,Surname2)",
-			     NULL,NULL))
-      /***** Query database and list users found *****/
-      return Usr_ListUsrsFound (HieLvl,Role,SearchQuery);
-   else
-      // Too short
-      if (!WarningMessageWritten)	// To avoid repetitions
-	{
-         Ale_ShowAlert (Ale_WARNING,Txt_The_search_text_must_be_longer);
-         WarningMessageWritten = true;
-	}
+   switch (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
+				 "CONCAT_WS(' ',FirstName,Surname1,Surname2)",
+				 NULL,NULL))
+     {
+      case Err_SUCCESS:
+	 /***** Query database and list users found *****/
+	 return Usr_ListUsrsFound (HieLvl,Role,SearchQuery);
+	 break;
+      case Err_ERROR:	// Too short
+      default:
+	 if (!WarningMessageWritten)	// To avoid repetitions
+	   {
+	    Ale_ShowAlert (Ale_WARNING,Txt_The_search_text_must_be_longer);
+	    WarningMessageWritten = true;
+	   }
+	 break;
+     }
 
    return 0;
   }
@@ -672,7 +677,7 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
       /***** Split document string into words *****/
       if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
                                 "SUBSTRING_INDEX(brw_files.Path,'/',-1)",
-				"_latin1 "," COLLATE latin1_general_ci"))
+				"_latin1 "," COLLATE latin1_general_ci") == Err_SUCCESS)
 	{
 	 /***** Query database *****/
 	 NumDocs = Brw_DB_SearchPublicFiles (&mysql_res,RangeQuery,SearchQuery);
@@ -705,7 +710,7 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
       /***** Split document string into words *****/
       if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
                                 "SUBSTRING_INDEX(brw_files.Path,'/',-1)",
-				"_latin1 "," COLLATE latin1_general_ci"))
+				"_latin1 "," COLLATE latin1_general_ci") == Err_SUCCESS)
 	{
 	 /***** Query database *****/
 	 NumDocs = Brw_DB_SearchFilesInMyCrss (&mysql_res,RangeQuery,SearchQuery);
@@ -738,7 +743,7 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
       /***** Split document string into words *****/
       if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
                                 "SUBSTRING_INDEX(brw_files.Path,'/',-1)",
-				"_latin1 "," COLLATE latin1_general_ci"))
+				"_latin1 "," COLLATE latin1_general_ci") == Err_SUCCESS)
 	{
 	 /***** Query database *****/
 	 NumDocs = Brw_DB_SearchMyFiles (&mysql_res,RangeQuery,SearchQuery);
@@ -760,10 +765,10 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 // Returns true if a valid search query is built
 // Returns false when no valid search query
 
-bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
-                           const struct Sch_Search *Search,
-                           const char *FldName,
-                           const char *CharSet,const char *Collate)
+Err_SuccessOrError_t Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
+					   const struct Sch_Search *Search,
+					   const char *FldName,
+					   const char *CharSet,const char *Collate)
   {
    const char *Ptr;
    unsigned NumWords;
@@ -772,7 +777,7 @@ bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
    size_t LengthTotal = 0;
    size_t MaxLengthWord = 0;
    char SearchWords[Sch_MAX_WORDS_IN_SEARCH][Sch_MAX_BYTES_SEARCH_WORD + 1];
-   bool SearchWordIsValid = true;
+   Err_SuccessOrError_t SearchWordIsValid;
 
    if (Search->Str[0])
      {
@@ -794,19 +799,19 @@ bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
 	       SearchWordIsValid = Str_ConvertFilFolLnkNameToValid (SearchWords[NumWords]);
 	       break;
 	    default:
-	       SearchWordIsValid = true;
+	       SearchWordIsValid = Err_SUCCESS;
 	       break;
 	   }
 
 	 /* Check if this word is repeated (case insensitive) */
 	 for (NumWord = 0;
-	      SearchWordIsValid && NumWord < NumWords;
+	      SearchWordIsValid == Err_SUCCESS && NumWord < NumWords;
 	      NumWord++)
 	    if (!strcasecmp (SearchWords[NumWord],SearchWords[NumWords]))
-	       SearchWordIsValid = false;
+	       SearchWordIsValid = Err_ERROR;
 
 	 /* Concatenate word to search string */
-	 if (SearchWordIsValid)
+	 if (SearchWordIsValid == Err_SUCCESS)
 	   {
 	    LengthWord = strlen (SearchWords[NumWords]);
 	    LengthTotal += LengthWord;
@@ -834,12 +839,12 @@ bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
       /***** If search string valid? *****/
       if (LengthTotal < Sch_MIN_LENGTH_TOTAL ||
 	  MaxLengthWord < Sch_MIN_LENGTH_LONGEST_WORD)
-	 return false;
+	 return Err_ERROR;
 
-      return true;
+      return Err_SUCCESS;
      }
 
-   return false;
+   return Err_ERROR;
   }
 
 /*****************************************************************************/

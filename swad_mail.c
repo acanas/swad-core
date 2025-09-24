@@ -1486,10 +1486,8 @@ Err_SuccessOrError_t Mai_UpdateEmailInDB (const struct Usr_Data *UsrDat,
 /*****************************************************************************/
 /************** Send mail message to confirm my email address ****************/
 /*****************************************************************************/
-// Return true on success
-// Return false on error
 
-bool Mai_SendMailMsgToConfirmEmail (void)
+void Mai_SendMailMsgToConfirmEmail (void)
   {
    extern const char *Txt_If_you_just_requested_from_X_the_confirmation_of_your_email_Y_NO_HTML;
    extern const char *Txt_Confirmation_of_your_email_NO_HTML;
@@ -1544,17 +1542,17 @@ bool Mai_SendMailMsgToConfirmEmail (void)
 	 Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
 	                  Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address,
 	   	          Gbl.Usrs.Me.UsrDat.Email);
-         return true;
+         break;
       case 1:
 	 Ale_CreateAlert (Ale_ERROR,Mai_EMAIL_SECTION_ID,
 	                  Txt_There_was_a_problem_sending_an_email_automatically);
-         return false;
+         break;
       default:
 	 Ale_CreateAlert (Ale_ERROR,Mai_EMAIL_SECTION_ID,
 	                  "Internal error: an email message has not been sent successfully."
 			  " Error code returned by the script: %d",
 			  ReturnCode);
-         return false;
+         break;
      }
   }
 
