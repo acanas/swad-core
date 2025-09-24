@@ -802,7 +802,7 @@ unsigned Msg_DB_GetRecipientsCods (MYSQL_RES **mysql_res,
       Str_GetNextStringUntilComma (&Ptr,Nick,sizeof (Nick) - 1);	// With leading arrobas
 
       /* Check if string is a valid nickname */
-      if (Nck_CheckIfNickWithArrIsValid (Nick))	// String is a nickname (with leading arrobas)?
+      if (Nck_CheckIfNickWithArrIsValid (Nick) == Err_SUCCESS)	// String is a nickname (with leading arrobas)?
 	{
          Str_RemoveLeadingArrobas (Nick);
 

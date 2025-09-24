@@ -319,45 +319,52 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 
    /***** Check if user exists *****/
    /* Check if user has typed his user's ID or his nickname */
-   if (Nck_CheckIfNickWithArrIsValid (Gbl.Usrs.Me.UsrIdLogin))	// 1: It's a nickname
+   switch (Nck_CheckIfNickWithArrIsValid (Gbl.Usrs.Me.UsrIdLogin))
      {
-      if ((Gbl.Usrs.Me.UsrDat.UsrCod = Nck_GetUsrCodFromNickname (Gbl.Usrs.Me.UsrIdLogin)) > 0)
-	{
-         /* Get user's data */
-	 ListUsrCods.NumUsrs = 1;
-	 Usr_AllocateListUsrCods (&ListUsrCods);
-	 ListUsrCods.Lst[0] = Gbl.Usrs.Me.UsrDat.UsrCod;
-	}
-     }
-   else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))		// 2: It's an email
-     {
-      if ((Gbl.Usrs.Me.UsrDat.UsrCod = Mai_DB_GetUsrCodFromEmail (Gbl.Usrs.Me.UsrIdLogin)) > 0)
-	{
-         /* Get user's data */
-	 ListUsrCods.NumUsrs = 1;
-	 Usr_AllocateListUsrCods (&ListUsrCods);
-	 ListUsrCods.Lst[0] = Gbl.Usrs.Me.UsrDat.UsrCod;
-        }
-     }
-   else									// 3: It's not a nickname nor email
-     {
-      // Users' IDs are always stored internally in capitals and without leading zeros
-      Str_RemoveLeadingZeros (Gbl.Usrs.Me.UsrIdLogin);
-      if (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Me.UsrIdLogin))
-	{
-	 /***** Allocate space for the list *****/
-	 ID_ReallocateListIDs (&Gbl.Usrs.Me.UsrDat,1);
+      case Err_SUCCESS:	// 1: It's a nickname
+	 if ((Gbl.Usrs.Me.UsrDat.UsrCod = Nck_GetUsrCodFromNickname (Gbl.Usrs.Me.UsrIdLogin)) > 0)
+	   {
+	    /* Get user's data */
+	    ListUsrCods.NumUsrs = 1;
+	    Usr_AllocateListUsrCods (&ListUsrCods);
+	    ListUsrCods.Lst[0] = Gbl.Usrs.Me.UsrDat.UsrCod;
+	   }
+	 break;
+      case Err_ERROR:
+      default:
+	 switch (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))
+	   {
+	    case Err_SUCCESS:	// 2: It's an email
+	       if ((Gbl.Usrs.Me.UsrDat.UsrCod = Mai_DB_GetUsrCodFromEmail (Gbl.Usrs.Me.UsrIdLogin)) > 0)
+		 {
+		  /* Get user's data */
+		  ListUsrCods.NumUsrs = 1;
+		  Usr_AllocateListUsrCods (&ListUsrCods);
+		  ListUsrCods.Lst[0] = Gbl.Usrs.Me.UsrDat.UsrCod;
+		 }
+	       break;
+	    case Err_ERROR:	// 3: It's not a nickname nor email
+	    default:
+	       // Users' IDs are always stored internally in capitals and without leading zeros
+	       Str_RemoveLeadingZeros (Gbl.Usrs.Me.UsrIdLogin);
+	       if (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Me.UsrIdLogin) == Err_SUCCESS)
+		 {
+		  /***** Allocate space for the list *****/
+		  ID_ReallocateListIDs (&Gbl.Usrs.Me.UsrDat,1);
 
-	 // User has typed a user's ID
-	 Str_Copy (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,Gbl.Usrs.Me.UsrIdLogin,
-	           sizeof (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID) - 1);
-         Str_ConvertToUpperText (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID);
+		  // User has typed a user's ID
+		  Str_Copy (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,Gbl.Usrs.Me.UsrIdLogin,
+			    sizeof (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID) - 1);
+		  Str_ConvertToUpperText (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID);
 
-	 /* Get users' codes for this ID */
-	 if (!ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,NULL,&ListUsrCods,true))	// Only confirmed IDs
-	    // If no users found with confirmed IDs, try to get all users (confirmed or not)
-	    ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,NULL,&ListUsrCods,false);	// All users (confirmed or not)
-	}
+		  /* Get users' codes for this ID */
+		  if (!ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,NULL,&ListUsrCods,true))	// Only confirmed IDs
+		     // If no users found with confirmed IDs, try to get all users (confirmed or not)
+		     ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,NULL,&ListUsrCods,false);	// All users (confirmed or not)
+		 }
+	       break;
+	   }
+	 break;
      }
 
    /***** Send a new password via email when user exists *****/

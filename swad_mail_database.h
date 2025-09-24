@@ -42,7 +42,8 @@ Exi_Exist_t Mai_DB_GetEmailFromUsrCod (MYSQL_RES **mysql_res,long UsrCod);
 long Mai_DB_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 char Mai_DB_CheckIfEmailIsConfirmed (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 Exi_Exist_t Mai_DB_CheckIfEmailExistsConfirmed (const char *Email);
-bool Mai_DB_CheckIfEmailBelongToAnotherUsr (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
+Exi_Exist_t Mai_DB_CheckIfEmailBelongToAnotherUsr (long UsrCod,
+						   const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
 void Mai_DB_RemoveNotConfirmedEmailForOtherUsrs (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 void Mai_DB_RemoveEmail (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);

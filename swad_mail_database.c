@@ -163,7 +163,8 @@ Exi_Exist_t Mai_DB_CheckIfEmailExistsConfirmed (const char *Email)
 /**** Check if an email matches any of the confirmed emails of other users ***/
 /*****************************************************************************/
 
-bool Mai_DB_CheckIfEmailBelongToAnotherUsr (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
+Exi_Exist_t Mai_DB_CheckIfEmailBelongToAnotherUsr (long UsrCod,
+						   const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
    return
    DB_QueryEXISTS ("can not check if email already existed",
@@ -174,7 +175,7 @@ bool Mai_DB_CheckIfEmailBelongToAnotherUsr (long UsrCod,const char Email[Cns_MAX
 		      " AND Confirmed='Y'"
 		      " AND UsrCod<>%ld)",
 		   Email,
-		   UsrCod) == Exi_EXISTS;
+		   UsrCod);
   }
 
 /*****************************************************************************/

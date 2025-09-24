@@ -67,7 +67,7 @@ static void Nck_ChangeUsrNick (struct Usr_Data *UsrDat);
 /********* Check whether a nickname (with initial arroba) if valid ***********/
 /*****************************************************************************/
 
-bool Nck_CheckIfNickWithArrIsValid (const char *NickWithArr)
+Err_SuccessOrError_t Nck_CheckIfNickWithArrIsValid (const char *NickWithArr)
   {
    char CopyOfNick[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
    unsigned Length;
@@ -75,7 +75,7 @@ bool Nck_CheckIfNickWithArrIsValid (const char *NickWithArr)
 
    /***** A nickname must start by '@' *****/
    if (NickWithArr[0] != '@')        // It's not a nickname
-      return false;
+      return Err_ERROR;
 
    /***** Make a copy of nickname *****/
    Str_Copy (CopyOfNick,NickWithArr,sizeof (CopyOfNick) - 1);
@@ -86,16 +86,16 @@ bool Nck_CheckIfNickWithArrIsValid (const char *NickWithArr)
           Nck_MIN_CHARS_NICK_WITHOUT_ARROBA <= Length <= Nck_MAX_CHARS_NICK_WITHOUT_ARROBA *****/
    if (Length < Nck_MIN_CHARS_NICK_WITHOUT_ARROBA ||
        Length > Nck_MAX_CHARS_NICK_WITHOUT_ARROBA)
-      return false;
+      return Err_ERROR;
 
    /***** A nick can have digits, letters and '_'  *****/
    for (Ptr = CopyOfNick;		// Leading arrobas already removed
         *Ptr;
         Ptr++)
       if (!Str_ChIsAlphaNum (*Ptr))
-         return false;
+         return Err_ERROR;
 
-   return true;
+   return Err_SUCCESS;
   }
 
 /*****************************************************************************/
@@ -508,38 +508,42 @@ static void Nck_ChangeUsrNick (struct Usr_Data *UsrDat)
    /***** Get new nickname from form *****/
    Par_GetParText ("NewNick",NewNick,sizeof (NewNick) - 1);
 
-   if (Nck_CheckIfNickWithArrIsValid (NewNick))        // If new nickname is valid
+   switch (Nck_CheckIfNickWithArrIsValid (NewNick))
      {
-      /***** Remove arrobas at the beginning *****/
-      Str_RemoveLeadingArrobas (NewNick);
+      case Err_SUCCESS:	// If new nickname is valid
+	 /***** Remove arrobas at the beginning *****/
+	 Str_RemoveLeadingArrobas (NewNick);
 
-      /***** Check if new nickname exists in database *****/
-      if (!strcmp (UsrDat->Nickname,NewNick))		// User's nickname match exactly the new nickname
-         Ale_CreateAlert (Ale_WARNING,Nck_NICKNAME_SECTION_ID,
-                          Txt_The_nickname_matches_the_one_you_had_previously_registered);
-      else if (strcasecmp (UsrDat->Nickname,NewNick))	// User's nickname does not match, not even case insensitive, the new nickname
-        {
-         /***** Check if the new nickname matches any of my old nicknames *****/
-         if (!Nck_DB_CheckIfNickMatchesAnyUsrNick (UsrDat->UsrCod,NewNick))		// No matches
-            /***** Check if the new nickname matches any of the nicknames of other users *****/
-            if (Nck_DB_CheckIfNickMatchesAnyOtherUsrsNicks (UsrDat->UsrCod,NewNick))	// A nickname of another user is the same that user's nickname
-               Ale_CreateAlert (Ale_WARNING,Nck_NICKNAME_SECTION_ID,
-        	                Txt_The_nickname_had_been_registered_by_another_user);
-        }
-      if (Ale_GetNumAlerts () == 0)	// No problems
-        {
-         // Now we know the new nickname is not already in database
-	 // and is diffent to the current one
-         Nck_DB_UpdateNick (UsrDat->UsrCod,NewNick);	// Leading arrobas already removed
-         Str_Copy (UsrDat->Nickname,NewNick,sizeof (UsrDat->Nickname) - 1);
+	 /***** Check if new nickname exists in database *****/
+	 if (!strcmp (UsrDat->Nickname,NewNick))		// User's nickname match exactly the new nickname
+	    Ale_CreateAlert (Ale_WARNING,Nck_NICKNAME_SECTION_ID,
+			     Txt_The_nickname_matches_the_one_you_had_previously_registered);
+	 else if (strcasecmp (UsrDat->Nickname,NewNick))	// User's nickname does not match, not even case insensitive, the new nickname
+	   {
+	    /***** Check if the new nickname matches any of my old nicknames *****/
+	    if (!Nck_DB_CheckIfNickMatchesAnyUsrNick (UsrDat->UsrCod,NewNick))		// No matches
+	       /***** Check if the new nickname matches any of the nicknames of other users *****/
+	       if (Nck_DB_CheckIfNickMatchesAnyOtherUsrsNicks (UsrDat->UsrCod,NewNick))	// A nickname of another user is the same that user's nickname
+		  Ale_CreateAlert (Ale_WARNING,Nck_NICKNAME_SECTION_ID,
+				   Txt_The_nickname_had_been_registered_by_another_user);
+	   }
+	 if (Ale_GetNumAlerts () == 0)	// No problems
+	   {
+	    // Now we know the new nickname is not already in database
+	    // and is diffent to the current one
+	    Nck_DB_UpdateNick (UsrDat->UsrCod,NewNick);	// Leading arrobas already removed
+	    Str_Copy (UsrDat->Nickname,NewNick,sizeof (UsrDat->Nickname) - 1);
 
-         Ale_CreateAlert (Ale_SUCCESS,Nck_NICKNAME_SECTION_ID,
-                          Txt_The_nickname_has_been_registered_successfully);
-        }
+	    Ale_CreateAlert (Ale_SUCCESS,Nck_NICKNAME_SECTION_ID,
+			     Txt_The_nickname_has_been_registered_successfully);
+	   }
+	 break;
+      case Err_ERROR:	// New nickname is not valid
+      default:
+	 Ale_CreateAlert (Ale_WARNING,Nck_NICKNAME_SECTION_ID,
+			  Txt_The_nickname_is_not_valid_,
+			  Nck_MIN_CHARS_NICK_WITHOUT_ARROBA,
+			  Nck_MAX_CHARS_NICK_WITHOUT_ARROBA);
+	 break;
      }
-   else        // New nickname is not valid
-      Ale_CreateAlert (Ale_WARNING,Nck_NICKNAME_SECTION_ID,
-	               Txt_The_nickname_is_not_valid_,
-		       Nck_MIN_CHARS_NICK_WITHOUT_ARROBA,
-		       Nck_MAX_CHARS_NICK_WITHOUT_ARROBA);
   }

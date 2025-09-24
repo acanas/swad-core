@@ -210,59 +210,61 @@ void Acc_CheckIfEmptyAccountExists (void)
    Str_ConvertToUpperText (ID);
 
    /***** Check if there are users with this user's ID *****/
-   if (ID_CheckIfUsrIDIsValid (ID))
+   switch (ID_CheckIfUsrIDIsValid (ID))
      {
-      if ((NumUsrs = Acc_DB_GetUsrsWithID (&mysql_res,ID)))
-	{
-         /***** Begin box and table *****/
-	 Box_BoxTableBegin (NumUsrs == 1 ? Txt_Do_you_think_you_are_this_user :
-					   Txt_Do_you_think_you_are_one_of_these_users,
-			    NULL,NULL,
-			    NULL,Box_CLOSABLE,5);
-
-	 /***** Initialize structure with user's data *****/
-	 Usr_UsrDataConstructor (&UsrDat);
-
-	 /***** List users found *****/
-	 for (NumUsr  = 1, The_ResetRowColor ();
-	      NumUsr <= NumUsrs;
-	      NumUsr++, The_ChangeRowColor ())
+      case Err_SUCCESS:
+	 if ((NumUsrs = Acc_DB_GetUsrsWithID (&mysql_res,ID)))
 	   {
-	    /***** Get user's data from query result *****/
-	    /* Get user's code */
-	    UsrDat.UsrCod = DB_GetNextCode (mysql_res);
+	    /***** Begin box and table *****/
+	    Box_BoxTableBegin (NumUsrs == 1 ? Txt_Do_you_think_you_are_this_user :
+					      Txt_Do_you_think_you_are_one_of_these_users,
+			       NULL,NULL,
+			       NULL,Box_CLOSABLE,5);
 
-	    /* Get user's data */
-            Usr_GetAllUsrDataFromUsrCod (&UsrDat,
-                                         Usr_DONT_GET_PREFS,
-                                         Usr_DONT_GET_ROLE_IN_CRS);
+	    /***** Initialize structure with user's data *****/
+	    Usr_UsrDataConstructor (&UsrDat);
 
-            /***** Write row with data of empty account *****/
-            Acc_WriteRowEmptyAccount (NumUsr,ID,&UsrDat);
+	    /***** List users found *****/
+	    for (NumUsr  = 1, The_ResetRowColor ();
+		 NumUsr <= NumUsrs;
+		 NumUsr++, The_ChangeRowColor ())
+	      {
+	       /***** Get user's data from query result *****/
+	       /* Get user's code */
+	       UsrDat.UsrCod = DB_GetNextCode (mysql_res);
+
+	       /* Get user's data */
+	       Usr_GetAllUsrDataFromUsrCod (&UsrDat,
+					    Usr_DONT_GET_PREFS,
+					    Usr_DONT_GET_ROLE_IN_CRS);
+
+	       /***** Write row with data of empty account *****/
+	       Acc_WriteRowEmptyAccount (NumUsr,ID,&UsrDat);
+	      }
+
+	    /***** Free memory used for user's data *****/
+	    Usr_UsrDataDestructor (&UsrDat);
+
+	    /***** End table and box *****/
+	    Box_BoxTableEnd ();
 	   }
+	 else
+	    Ale_ShowAlert (Ale_INFO,Txt_There_is_no_empty_account_associated_with_your_ID_X,
+			   ID);
 
-	 /***** Free memory used for user's data *****/
-	 Usr_UsrDataDestructor (&UsrDat);
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
 
-	 /***** End table and box *****/
-	 Box_BoxTableEnd ();
-	}
-      else
-	 Ale_ShowAlert (Ale_INFO,Txt_There_is_no_empty_account_associated_with_your_ID_X,
-		        ID);
+	 /**** Show form to check if I have an account *****/
+	 Acc_ShowFormCheckIfIHaveAccount (Txt_Check_another_ID);
+	 break;
+      case Err_ERROR:	// ID not valid
+      default:
+	 /**** Show again form to check if I have an account *****/
+	 Ale_ShowAlert (Ale_WARNING,Txt_Please_enter_your_ID);
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-
-      /**** Show form to check if I have an account *****/
-      Acc_ShowFormCheckIfIHaveAccount (Txt_Check_another_ID);
-     }
-   else	// ID not valid
-     {
-      /**** Show again form to check if I have an account *****/
-      Ale_ShowAlert (Ale_WARNING,Txt_Please_enter_your_ID);
-
-      Acc_ShowFormCheckIfIHaveAccount (Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered);
+	 Acc_ShowFormCheckIfIHaveAccount (Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered);
+	 break;
      }
   }
 
@@ -568,7 +570,7 @@ Err_SuccessOrError_t Acc_CreateMyNewAccountAndLogIn (void)
 		   sizeof (Gbl.Usrs.Me.UsrDat.Nickname) - 1);
 
 	 /***** Save email *****/
-	 if (Mai_UpdateEmailInDB (&Gbl.Usrs.Me.UsrDat,NewEmail))
+	 if (Mai_UpdateEmailInDB (&Gbl.Usrs.Me.UsrDat,NewEmail) == Err_SUCCESS)
 	   {
 	    /* Email updated sucessfully */
 	    Str_Copy (Gbl.Usrs.Me.UsrDat.Email,NewEmail,
@@ -613,46 +615,49 @@ static Err_SuccessOrError_t Acc_GetParsNewAccount (char NewNickWithoutArr[Nck_MA
    /* Create a new version of the nickname with arroba */
    snprintf (NewNick,sizeof (NewNick),"@%s",NewNickWithoutArr);
 
-   if (Nck_CheckIfNickWithArrIsValid (NewNick))        // If new nickname is valid
+   switch (Nck_CheckIfNickWithArrIsValid (NewNick))
      {
-      /* Check if the new nickname
-         matches any of the nicknames of other users */
-      if (Acc_DB_CheckIfNicknameAlreadyExists (NewNickWithoutArr) == Exi_EXISTS)
-	{
+      case Err_SUCCESS:	// If new nickname is valid
+	 /* Check if the new nickname
+	    matches any of the nicknames of other users */
+	 if (Acc_DB_CheckIfNicknameAlreadyExists (NewNickWithoutArr) == Exi_EXISTS)
+	   {
+	    SuccessOrError = Err_ERROR;
+	    Ale_ShowAlert (Ale_WARNING,
+			   Txt_The_nickname_had_been_registered_by_another_user);
+	   }
+	 break;
+      case Err_ERROR:	// New nickname is not valid
+      default:
 	 SuccessOrError = Err_ERROR;
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_nickname_had_been_registered_by_another_user);
-	}
-     }
-   else        // New nickname is not valid
-     {
-      SuccessOrError = Err_ERROR;
-      Ale_ShowAlert (Ale_WARNING,Txt_The_nickname_is_not_valid_,
-		     Nck_MIN_CHARS_NICK_WITHOUT_ARROBA,
-		     Nck_MAX_CHARS_NICK_WITHOUT_ARROBA);
+	 Ale_ShowAlert (Ale_WARNING,Txt_The_nickname_is_not_valid_,
+			Nck_MIN_CHARS_NICK_WITHOUT_ARROBA,
+			Nck_MAX_CHARS_NICK_WITHOUT_ARROBA);
+	 break;
      }
 
    /***** Step 2/3: Get new email from form *****/
    Par_GetParText ("NewEmail",NewEmail,Cns_MAX_BYTES_EMAIL_ADDRESS);
-
-   if (Mai_CheckIfEmailIsValid (NewEmail))	// New email is valid
+   switch (Mai_CheckIfEmailIsValid (NewEmail))
      {
-      /* Check if the new email matches
-         any of the confirmed emails of other users */
-      if (Acc_DB_CheckIfEmailAlreadyExists (NewEmail) == Exi_EXISTS)
-	{
-	 // An email of another user is the same that my email
+      case Err_SUCCESS:	// New email is valid
+	 /* Check if the new email matches
+	    any of the confirmed emails of other users */
+	 if (Acc_DB_CheckIfEmailAlreadyExists (NewEmail) == Exi_EXISTS)
+	   {
+	    // An email of another user is the same that my email
+	    SuccessOrError = Err_ERROR;
+	    Ale_ShowAlert (Ale_WARNING,
+			   Txt_The_email_address_X_had_been_registered_by_another_user,
+			   NewEmail);
+	   }
+	 break;
+      case Err_ERROR:	// New email is not valid
+      default:
 	 SuccessOrError = Err_ERROR;
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_email_address_X_had_been_registered_by_another_user,
-		        NewEmail);
-	}
-     }
-   else	// New email is not valid
-     {
-      SuccessOrError = Err_ERROR;
-      Ale_ShowAlert (Ale_WARNING,Txt_The_email_address_entered_X_is_not_valid,
-                     NewEmail);
+	 Ale_ShowAlert (Ale_WARNING,Txt_The_email_address_entered_X_is_not_valid,
+			NewEmail);
+	 break;
      }
 
    /***** Step 3/3: Get new password from form *****/

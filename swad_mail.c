@@ -924,7 +924,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
 /**************** Check whether an email address if valid ********************/
 /*****************************************************************************/
 
-bool Mai_CheckIfEmailIsValid (const char *Email)
+Err_SuccessOrError_t Mai_CheckIfEmailIsValid (const char *Email)
   {
    unsigned Length = strlen (Email);
    unsigned LastPosArroba = Length - 4;
@@ -936,7 +936,7 @@ bool Mai_CheckIfEmailIsValid (const char *Email)
           5 <= Length <= Cns_MAX_BYTES_EMAIL_ADDRESS *****/
    if (Length < 5 ||
        Length > Cns_MAX_BYTES_EMAIL_ADDRESS)
-      return false;
+      return Err_ERROR;
 
    /***** An email address can have digits, letters, '.', '-' and '_';
           and must have one and only '@' (not in any position) *****/
@@ -953,19 +953,20 @@ bool Mai_CheckIfEmailIsValid (const char *Email)
       else if (*Ptr == '@')
 	{
 	 if (ArrobaFound)
-	    return false;
+	    return Err_ERROR;
 	 /* Example: a@b.c
 	             01234
 	             Length = 5
 	             LastPosArroba = 5 - 4 = 1 */
 	 if (Pos == 0 || Pos > LastPosArroba)
-	    return false;
+	    return Err_ERROR;
 	 ArrobaFound = true;
 	}
       else
-         return false;
+         return Err_ERROR;
 
-   return ArrobaFound;
+   return ArrobaFound ? Err_SUCCESS :
+			Err_ERROR;
   }
 
 /*****************************************************************************/
@@ -1410,41 +1411,47 @@ static void Mai_ChangeUsrEmail (struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOthe
 	 /***** Get new email from form *****/
 	 Par_GetParText ("NewEmail",NewEmail,Cns_MAX_BYTES_EMAIL_ADDRESS);
 
-	 if (Mai_CheckIfEmailIsValid (NewEmail))	// New email is valid
+	 switch (Mai_CheckIfEmailIsValid (NewEmail))
 	   {
-	    /***** Check if new email exists in database *****/
-	    if (UsrDat->EmailConfirmed == Mai_CONFIRMED &&
-		!strcmp (UsrDat->Email,NewEmail)) // User's current confirmed email match exactly the new email
-	       Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
-				Txt_The_email_address_X_matches_one_previously_registered,
-				NewEmail);
-	    else
-	      {
-	       if (Mai_UpdateEmailInDB (UsrDat,NewEmail))
-		 {
-		  /***** Email updated sucessfully *****/
-		  Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
-				   Txt_The_email_address_X_has_been_registered_successfully,
-				   NewEmail);
-
-		  /***** Update list of emails *****/
-		  Mai_GetEmailFromUsrCod (UsrDat);
-
-		  /***** Send message via email
-			 to confirm the new email address *****/
-		  if (MeOrOther == Usr_ME)
-		     Mai_SendMailMsgToConfirmEmail ();
-		 }
-	       else
+	    case Err_SUCCESS:	// New email is valid
+	       /***** Check if new email exists in database *****/
+	       if (UsrDat->EmailConfirmed == Mai_CONFIRMED &&
+		   !strcmp (UsrDat->Email,NewEmail)) // User's current confirmed email match exactly the new email
 		  Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
-				   Txt_The_email_address_X_had_been_registered_by_another_user,
+				   Txt_The_email_address_X_matches_one_previously_registered,
 				   NewEmail);
-	      }
+	       else
+		  switch (Mai_UpdateEmailInDB (UsrDat,NewEmail))
+		    {
+		     case Err_SUCCESS:
+			/***** Email updated sucessfully *****/
+			Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
+					 Txt_The_email_address_X_has_been_registered_successfully,
+					 NewEmail);
+
+			/***** Update list of emails *****/
+			Mai_GetEmailFromUsrCod (UsrDat);
+
+			/***** Send message via email
+			       to confirm the new email address *****/
+			if (MeOrOther == Usr_ME)
+			   Mai_SendMailMsgToConfirmEmail ();
+			break;
+		     case Err_ERROR:
+		     default:
+			Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
+					 Txt_The_email_address_X_had_been_registered_by_another_user,
+					 NewEmail);
+			break;
+		    }
+	       break;
+	    case Err_ERROR:	// New email is not valid
+	    default:
+	       Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
+				Txt_The_email_address_entered_X_is_not_valid,
+				NewEmail);
+	       break;
 	   }
-	 else	// New email is not valid
-	    Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
-			     Txt_The_email_address_entered_X_is_not_valid,
-			     NewEmail);
 	 break;
       case Usr_CAN_NOT:
       default:
@@ -1456,14 +1463,15 @@ static void Mai_ChangeUsrEmail (struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOthe
 /*****************************************************************************/
 /************************ Update email in database ***************************/
 /*****************************************************************************/
-// Return true if email is successfully updated
-// Return false if email can not be updated beacuse it is registered by another user
+// Return Err_SUCCESS if email is successfully updated
+// Return Err_ERROR if email can not be updated beacuse it is registered by another user
 
-bool Mai_UpdateEmailInDB (const struct Usr_Data *UsrDat,const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
+Err_SuccessOrError_t Mai_UpdateEmailInDB (const struct Usr_Data *UsrDat,
+					  const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
    /***** Check if the new email matches any of the confirmed emails of other users *****/
-   if (Mai_DB_CheckIfEmailBelongToAnotherUsr (UsrDat->UsrCod,NewEmail))	// An email of another user is the same that my email
-      return false;	// Don't update
+   if (Mai_DB_CheckIfEmailBelongToAnotherUsr (UsrDat->UsrCod,NewEmail) == Exi_EXISTS)	// An email of another user is the same that my email
+      return Err_ERROR;	// Don't update
 
    /***** Delete email (not confirmed) for other users *****/
    Mai_DB_RemovePendingEmailForOtherUsrs (UsrDat->UsrCod,NewEmail);
@@ -1472,7 +1480,7 @@ bool Mai_UpdateEmailInDB (const struct Usr_Data *UsrDat,const char NewEmail[Cns_
    /***** Update email in database *****/
    Mai_DB_UpdateEmail (UsrDat->UsrCod,NewEmail);
 
-   return true;	// Successfully updated
+   return Err_SUCCESS;	// Successfully updated
   }
 
 /*****************************************************************************/

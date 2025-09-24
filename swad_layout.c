@@ -1560,25 +1560,25 @@ void Lay_AdvertisementMobile (void)
      {
       HTM_DIV_Begin ("style=\"margin-top:25px;\"");
 
-      /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,NULL,NULL,NULL,Box_NOT_CLOSABLE,8);
+	 /***** Begin box and table *****/
+	 Box_BoxTableBegin (NULL,NULL,NULL,NULL,Box_NOT_CLOSABLE,8);
 
-	 /***** Show advertisement *****/
-	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
-	       HTM_A_Begin ("href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
-			    " class=\"DAT_%s\"",The_GetSuffix ());
-		  HTM_Txt (Txt_Stay_connected_with_SWADroid);
-		  HTM_BR ();
-		  HTM_BR ();
-		  HTM_IMG (Cfg_URL_ICON_PUBLIC,Cfg_SWADROID_ICO,Txt_Stay_connected_with_SWADroid,
-		           "class=\"SWADROID\"");
-	       HTM_A_End ();
-	    HTM_TD_End ();
-	 HTM_TR_End ();
+	    /***** Show advertisement *****/
+	    HTM_TR_Begin (NULL);
+	       HTM_TD_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
+		  HTM_A_Begin ("href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
+			       " class=\"DAT_%s\"",The_GetSuffix ());
+		     HTM_Txt (Txt_Stay_connected_with_SWADroid);
+		     HTM_BR ();
+		     HTM_BR ();
+		     HTM_IMG (Cfg_URL_ICON_PUBLIC,Cfg_SWADROID_ICO,Txt_Stay_connected_with_SWADroid,
+			      "class=\"SWADROID\"");
+		  HTM_A_End ();
+	       HTM_TD_End ();
+	    HTM_TR_End ();
 
-      /***** End table and box *****/
-      Box_BoxTableEnd ();
+	 /***** End table and box *****/
+	 Box_BoxTableEnd ();
 
       HTM_DIV_End ();
      }

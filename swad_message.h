@@ -66,6 +66,13 @@ struct Msg_Course
    char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1];
   };	// Distinct courses in my messages sent or received
 
+#define Msg_NUM_REPLY 2
+typedef enum
+  {
+   Msg_IS_NOT_REPLY,
+   Msg_IS_REPLY,
+  } Msg_Reply_t;
+
 struct Msg_Messages
   {
    Msg_TypeOfMessages_t TypeOfMessages;
@@ -80,7 +87,7 @@ struct Msg_Messages
    long ExpandedMsgCod;	// The current expanded message code
    struct
      {
-      bool IsReply;			// Is the message I am editing a reply?
+      Msg_Reply_t IsReply;		// Is the message I am editing a reply?
       bool Replied;			// If the message has been replied
       long OriginalMsgCod;		// Original message code when I am editing a reply
      } Reply;

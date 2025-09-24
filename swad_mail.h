@@ -50,7 +50,7 @@ void Mai_ReceiveNewMailDom (void);
 void Mai_ReqUsrsToListEmails (void);
 void Mai_GetSelUsrsAndListEmails (void);
 
-bool Mai_CheckIfEmailIsValid (const char *Email);
+Err_SuccessOrError_t Mai_CheckIfEmailIsValid (const char *Email);
 void Mai_GetEmailFromUsrCod (struct Usr_Data *UsrDat);
 
 void Mai_PutFormToGetNewEmail (const char *NewEmail);
@@ -63,8 +63,8 @@ void Mai_RemoveOtherUsrEmail (void);
 
 void May_NewMyUsrEmail (void);
 void Mai_ChangeOtherUsrEmail (void);
-bool Mai_UpdateEmailInDB (const struct Usr_Data *UsrDat,const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
-
+Err_SuccessOrError_t Mai_UpdateEmailInDB (const struct Usr_Data *UsrDat,
+					  const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
 bool Mai_SendMailMsgToConfirmEmail (void);
 void Mai_ConfirmEmail (void);

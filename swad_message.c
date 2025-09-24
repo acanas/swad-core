@@ -184,7 +184,7 @@ static void Msg_ResetMessages (struct Msg_Messages *Messages)
    Messages->FilterContent[0]     = '\0';
    Messages->ShowOnlyUnreadMsgs   = false;
    Messages->ExpandedMsgCod       = -1L;
-   Messages->Reply.IsReply        = false;
+   Messages->Reply.IsReply          = Msg_IS_NOT_REPLY;
    Messages->Reply.Replied        = false;
    Messages->Reply.OriginalMsgCod = -1L;
    Messages->Rcv.NumRecipients    = 0;
@@ -242,8 +242,11 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
    Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs =
    Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs = 0;
 
-   /***** Get parameter that indicates if the message is a reply to another message *****/
-   if ((Messages->Reply.IsReply = Par_GetParBool ("IsReply")))
+   /***** Get parameter that indicates if the message
+          is a reply to another message *****/
+   Messages->Reply.IsReply = Par_GetParBool ("IsReply") ? Msg_IS_REPLY :
+							Msg_IS_NOT_REPLY;
+   if (Messages->Reply.IsReply == Msg_IS_REPLY)
       /* Get original message code */
       Messages->Reply.OriginalMsgCod = ParCod_GetAndCheckPar (ParCod_Msg);
 
@@ -335,7 +338,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
       /***** Begin form to select recipients and write the message *****/
       Frm_BeginFormId (ActRcvMsgUsr,Usr_FORM_TO_SELECT_USRS_ID);
 
-	 if (Messages->Reply.IsReply)
+	 if (Messages->Reply.IsReply == Msg_IS_REPLY)
 	   {
 	    Par_PutParChar ("IsReply",'Y');
 	    ParCod_PutPar (ParCod_Msg,Messages->Reply.OriginalMsgCod);
@@ -445,7 +448,7 @@ static void Msg_PutParsShowMorePotentialRecipients (void *Messages)
   {
    if (Messages)
      {
-      if (((struct Msg_Messages *) Messages)->Reply.IsReply)
+      if (((struct Msg_Messages *) Messages)->Reply.IsReply == Msg_IS_REPLY)
 	{
 	 Par_PutParChar ("IsReply",'Y');
 	 ParCod_PutPar (ParCod_Msg,((struct Msg_Messages *) Messages)->Reply.OriginalMsgCod);
@@ -469,7 +472,7 @@ static void Msg_PutParsWriteMsg (void *Messages)
       Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
       Msg_PutParOtherRecipients ();
       Msg_PutParsSubjectAndContent ();
-      if (((struct Msg_Messages *) Messages)->Reply.IsReply)
+      if (((struct Msg_Messages *) Messages)->Reply.IsReply == Msg_IS_REPLY)
 	{
 	 Par_PutParChar ("IsReply",'Y');
 	 ParCod_PutPar (ParCod_Msg,((struct Msg_Messages *) Messages)->Reply.OriginalMsgCod);
@@ -723,8 +726,11 @@ void Msg_RecMsgFromUsr (void)
    Par_GetParAndChangeFormat ("Content",Messages.Content,Cns_MAX_BYTES_LONG_TEXT,
                               Str_DONT_CHANGE,Str_DONT_REMOVE_SPACES);
 
-   /* Get parameter that indicates if the message is a reply to a previous message */
-   if ((Messages.Reply.IsReply = Par_GetParBool ("IsReply")))
+   /* Get parameter that indicates if the message
+      is a reply to a previous message */
+   Messages.Reply.IsReply = Par_GetParBool ("IsReply") ? Msg_IS_REPLY :
+							Msg_IS_NOT_REPLY;
+   if (Messages.Reply.IsReply == Msg_IS_REPLY)
       /* Get original message code */
       Messages.Reply.OriginalMsgCod = ParCod_GetAndCheckPar (ParCod_Msg);
 
@@ -867,7 +873,7 @@ static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages)
 		       }
 
 		     /***** If this recipient is the original sender of a message been replied, set Replied to true *****/
-		     Messages->Reply.Replied = (Messages->Reply.IsReply &&
+		     Messages->Reply.Replied = (Messages->Reply.IsReply == Msg_IS_REPLY &&
 						UsrDstData.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
 
 		     /***** This received message must be notified by email? *****/

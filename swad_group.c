@@ -774,7 +774,7 @@ void Grp_ChangeUsrGrps (Usr_MeOrOther_t MeOrOther,Cns_Verbose_t Verbose)
    extern const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_enroled_in_more_than_one_group;
    extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    struct ListCodGrps LstGrpsUsrWants;
-   bool SelectionIsValid = true;
+   Err_SuccessOrError_t SelectionIsValid = Err_SUCCESS;
    bool ChangesMade;
 
    /***** Can I change another user's groups? *****/
@@ -811,22 +811,27 @@ void Grp_ChangeUsrGrps (Usr_MeOrOther_t MeOrOther,Cns_Verbose_t Verbose)
    Grp_FreeListGrpTypesAndGrps ();
 
    /***** Enrol user in the selected groups *****/
-   if (SelectionIsValid)
+   switch (SelectionIsValid)
      {
-      ChangesMade = Grp_ChangeGrpsAtomically (MeOrOther,&LstGrpsUsrWants);
-      if (Verbose == Cns_VERBOSE)
-	{
-	 if (ChangesMade)
-	    Ale_CreateAlert (Ale_SUCCESS,NULL,
-			     Txt_The_requested_group_changes_were_successful);
-	 else
+      case Err_SUCCESS:
+	 ChangesMade = Grp_ChangeGrpsAtomically (MeOrOther,&LstGrpsUsrWants);
+	 if (Verbose == Cns_VERBOSE)
+	   {
+	    if (ChangesMade)
+	       Ale_CreateAlert (Ale_SUCCESS,NULL,
+				Txt_The_requested_group_changes_were_successful);
+	    else
+	       Ale_CreateAlert (Ale_WARNING,NULL,
+				Txt_There_has_been_no_change_in_groups);
+	   }
+	 break;
+      case Err_ERROR:
+      default:
+         if (Verbose == Cns_VERBOSE)
 	    Ale_CreateAlert (Ale_WARNING,NULL,
-			     Txt_There_has_been_no_change_in_groups);
-	}
+			     Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_enroled_in_more_than_one_group);
+         break;
      }
-   else if (Verbose == Cns_VERBOSE)
-      Ale_CreateAlert (Ale_WARNING,NULL,
-		       Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_enroled_in_more_than_one_group);
 
    /***** Free memory with the list of groups to/from which enrol/remove users *****/
    Grp_FreeListCodGrp (&LstGrpsUsrWants);
@@ -1029,17 +1034,17 @@ static void Grp_EnrolUsrInGrps (Usr_MeOrOther_t MeOrOther,
 /*****************************************************************************/
 /******* Check if at most one single-enrolment group has been selected *******/
 /*****************************************************************************/
- // Return true if the selection of groups is valid
+ // Return Err_SUCCESS if the selection of groups is valid
 
-bool Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (struct ListCodGrps *LstGrps,
-						       bool CheckClosedGroupsIBelong)
+Err_SuccessOrError_t Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (struct ListCodGrps *LstGrps,
+								       bool CheckClosedGroupsIBelong)
   {
    struct ListCodGrps LstClosedGrpsIBelong;
    struct ListGrpsAlreadySelec *AlreadyExistsGroupOfType;
    unsigned NumCodGrp;
    unsigned NumGrpTyp;
    long GrpTypCod;
-   bool SelectionIsValid = true;
+   Err_SuccessOrError_t SelectionIsValid = Err_SUCCESS;
 
    /***** Create and initialize list of groups already selected *****/
    Grp_ConstructorListGrpAlreadySelec (&AlreadyExistsGroupOfType);
@@ -1056,7 +1061,7 @@ bool Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (struct ListCodGrps *LstGr
 				   &LstClosedGrpsIBelong,
 				   Grp_ONLY_CLOSED_GROUPS);
       for (NumCodGrp = 0;
-	   NumCodGrp < LstClosedGrpsIBelong.NumGrps && SelectionIsValid;
+	   NumCodGrp < LstClosedGrpsIBelong.NumGrps && SelectionIsValid == Err_SUCCESS;
 	   NumCodGrp++)
 	{
 	 GrpTypCod = Grp_DB_GetGrpTypeFromGrp (LstClosedGrpsIBelong.GrpCods[NumCodGrp]);
@@ -1068,7 +1073,7 @@ bool Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (struct ListCodGrps *LstGr
 	       if (GrpTypCod == AlreadyExistsGroupOfType[NumGrpTyp].GrpTypCod)
 		 {
 		  if (AlreadyExistsGroupOfType[NumGrpTyp].AlreadySelected)
-		     SelectionIsValid = false;
+		     SelectionIsValid = Err_ERROR;
 		  else
 		     AlreadyExistsGroupOfType[NumGrpTyp].AlreadySelected = true;
 		  break;
@@ -1081,7 +1086,7 @@ bool Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (struct ListCodGrps *LstGr
 
    /* Step 2: Check the list of groups selected received from form */
    for (NumCodGrp = 0;
-	NumCodGrp < LstGrps->NumGrps && SelectionIsValid;
+	NumCodGrp < LstGrps->NumGrps && SelectionIsValid == Err_SUCCESS;
 	NumCodGrp++)
      {
       GrpTypCod = Grp_DB_GetGrpTypeFromGrp (LstGrps->GrpCods[NumCodGrp]);
@@ -1093,7 +1098,7 @@ bool Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (struct ListCodGrps *LstGr
 	    if (GrpTypCod == AlreadyExistsGroupOfType[NumGrpTyp].GrpTypCod)
 	      {
 	       if (AlreadyExistsGroupOfType[NumGrpTyp].AlreadySelected)
-		  SelectionIsValid = false;
+		  SelectionIsValid = Err_ERROR;
 	       else
 		  AlreadyExistsGroupOfType[NumGrpTyp].AlreadySelected = true;
 	       break;

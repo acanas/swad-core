@@ -349,12 +349,16 @@ static bool Mrk_CheckIfCellContainsOnlyIDs (const char *CellContent)
       Str_RemoveLeadingZeros (UsrIDFromTable);
       Str_ConvertToUpperText (UsrIDFromTable);
       if (UsrIDFromTable[0])	// Something found
-	{
-	 if (ID_CheckIfUsrIDIsValid (UsrIDFromTable))
-	    UsrIDFound = true;
-	 else
-	    StuffNotUsrIDFound = true;
-	}
+	 switch (ID_CheckIfUsrIDIsValid (UsrIDFromTable))
+	   {
+	    case Err_SUCCESS:
+	       UsrIDFound = true;
+	       break;
+	    case Err_ERROR:
+	    default:
+	       StuffNotUsrIDFound = true;
+	       break;
+	   }
      }
 
    /***** Check if only user's IDs
@@ -418,7 +422,7 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct Usr_Data *UsrDat,
 	    Str_RemoveLeadingZeros (UsrIDFromTable);
 	    Str_ConvertToUpperText (UsrIDFromTable);
 
-	    if (ID_CheckIfUsrIDIsValid (UsrIDFromTable))
+	    if (ID_CheckIfUsrIDIsValid (UsrIDFromTable) == Err_SUCCESS)
 	       // A valid user's ID is found in the first column of table, and stored in UsrIDFromTable.
 	       // Compare UsrIDFromTable with all confirmed user's IDs in list
 	       for (NumID = 0;
@@ -467,7 +471,7 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct Usr_Data *UsrDat,
 	       // Users' IDs are always stored internally in capitals and without leading zeros
 	       Str_RemoveLeadingZeros (UsrIDFromTable);
 	       Str_ConvertToUpperText (UsrIDFromTable);
-	       if (ID_CheckIfUsrIDIsValid (UsrIDFromTable))
+	       if (ID_CheckIfUsrIDIsValid (UsrIDFromTable) == Err_SUCCESS)
 		  // A valid user's ID is found in the first column of table, and stored in UsrIDFromTable.
 		  // Compare UsrIDFromTable with all confirmed user's IDs in list
 		  for (NumID = 0;

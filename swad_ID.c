@@ -252,20 +252,21 @@ void ID_GetParOtherUsrIDPlain (void)
 /*****************************************************************************/
 /****** Check whether a user's ID without the ending letter is valid *********/
 /*****************************************************************************/
-// Returns true if the user's ID string is valid, or false if not
+// Returns Err_success if the user's ID string is valid, or Err_ERROR if not
 // A valid user's ID must...:
 // 1. Must be ID_MIN_BYTES_USR_ID <= characters <= ID_MAX_BYTES_USR_ID.
 // 2. All characters must be digits or letters
 // 3. Must have a minimum number of digits
 
 // Wrapper function to avoid passing extra parameters
-bool ID_CheckIfUsrIDIsValid (const char *UsrID)
+Err_SuccessOrError_t ID_CheckIfUsrIDIsValid (const char *UsrID)
   {
    if (UsrID)
       if (UsrID[0])
-         return ID_CheckIfUsrIDIsValidUsingMinDigits (UsrID,ID_MIN_DIGITS_USR_ID);
+         return ID_CheckIfUsrIDIsValidUsingMinDigits (UsrID,ID_MIN_DIGITS_USR_ID) ? Err_SUCCESS :
+										    Err_ERROR;
 
-   return false;
+   return Err_ERROR;
   }
 
 // Wrapper function to avoid passing extra parameters
@@ -331,7 +332,7 @@ void ID_WriteUsrIDs (const struct Usr_Data *UsrDat,const char *Anchor)
 
       /* Write this ID */
       HTM_SPAN_Begin ("class=\"%s_%s\"",
-	              *ID_Class[UsrDat->IDs.List[NumID].Confirmed],
+	              ID_Class[UsrDat->IDs.List[NumID].Confirmed],
 	              The_GetSuffix ());
 	 switch (ICanSeeUsrID)
 	   {
@@ -605,7 +606,7 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 			  Usr_UsrDat[MeOrOther]->IDs.List[NumID].ID) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_SPAN_Begin ("class=\"%s\" title=\"%s\"",
-			    *ID_Class[Usr_UsrDat[MeOrOther]->IDs.List[NumID].Confirmed],
+			    ID_Class[Usr_UsrDat[MeOrOther]->IDs.List[NumID].Confirmed],
 			    Title);
 	    free (Title);
 	       HTM_Txt (Usr_UsrDat[MeOrOther]->IDs.List[NumID].ID);
@@ -863,57 +864,61 @@ static void ID_ChangeUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOt
 	 Str_RemoveLeadingZeros (NewID);
 	 Str_ConvertToUpperText (NewID);
 
-	 if (ID_CheckIfUsrIDIsValid (NewID))        // If new ID is valid
+	 switch (ID_CheckIfUsrIDIsValid (NewID))
 	   {
-	    /***** Check if the new ID matches any of the old IDs *****/
-	    for (NumID = 0, AlreadyExists = Exi_DOES_NOT_EXIST;
-		 NumID < UsrDat->IDs.Num && AlreadyExists == Exi_DOES_NOT_EXIST;
-		 NumID++)
-	       if (!strcasecmp (UsrDat->IDs.List[NumID].ID,NewID))
+	    case Err_SUCCESS:	// If new ID is valid
+	       /***** Check if the new ID matches any of the old IDs *****/
+	       for (NumID = 0, AlreadyExists = Exi_DOES_NOT_EXIST;
+		    NumID < UsrDat->IDs.Num && AlreadyExists == Exi_DOES_NOT_EXIST;
+		    NumID++)
+		  if (!strcasecmp (UsrDat->IDs.List[NumID].ID,NewID))
+		    {
+		     AlreadyExists = Exi_EXISTS;
+		     NumIDFound = NumID;
+		    }
+
+	       switch (AlreadyExists)
 		 {
-		  AlreadyExists = Exi_EXISTS;
-		  NumIDFound = NumID;
+		  case Exi_EXISTS:
+		     if (MeOrOther == Usr_ME || UsrDat->IDs.List[NumIDFound].Confirmed == ID_CONFIRMED)
+			Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
+					 Txt_The_ID_X_matches_one_of_the_existing,
+					 NewID);
+		     else	// It's not me && ID is not confirmed
+		       {
+			/***** Mark this ID as confirmed *****/
+			ID_DB_ConfirmUsrID (UsrDat->UsrCod,NewID);
+
+			Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
+					 Txt_The_ID_X_has_been_confirmed,NewID);
+		       }
+		     break;
+		  case Exi_DOES_NOT_EXIST:
+		  default:
+		     if (UsrDat->IDs.Num >= ID_MAX_IDS_PER_USER)
+			Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
+					 Txt_A_user_can_not_have_more_than_X_IDs,
+					 ID_MAX_IDS_PER_USER);
+		     else	// OK ==> add this new ID to my list of IDs
+		       {
+			/***** Save this new ID *****/
+			ID_DB_InsertANewUsrID (UsrDat->UsrCod,NewID,
+					       MeOrOther == Usr_ME ? ID_NOT_CONFIRMED :	// It's me ==> ID not confirmed
+								     ID_CONFIRMED);	// Not me  ==> ID confirmed
+
+			Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
+					 Txt_The_ID_X_has_been_registered_successfully,
+					 NewID);
+		       }
+		     break;
 		 }
-
-	    switch (AlreadyExists)
-	      {
-	       case Exi_EXISTS:
-		  if (MeOrOther == Usr_ME || UsrDat->IDs.List[NumIDFound].Confirmed == ID_CONFIRMED)
-		     Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
-				      Txt_The_ID_X_matches_one_of_the_existing,
-				      NewID);
-		  else	// It's not me && ID is not confirmed
-		    {
-		     /***** Mark this ID as confirmed *****/
-		     ID_DB_ConfirmUsrID (UsrDat->UsrCod,NewID);
-
-		     Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
-				      Txt_The_ID_X_has_been_confirmed,NewID);
-		    }
-		  break;
-	       case Exi_DOES_NOT_EXIST:
-	       default:
-		  if (UsrDat->IDs.Num >= ID_MAX_IDS_PER_USER)
-		     Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
-				      Txt_A_user_can_not_have_more_than_X_IDs,
-				      ID_MAX_IDS_PER_USER);
-		  else	// OK ==> add this new ID to my list of IDs
-		    {
-		     /***** Save this new ID *****/
-		     ID_DB_InsertANewUsrID (UsrDat->UsrCod,NewID,
-					    MeOrOther == Usr_ME ? ID_NOT_CONFIRMED :	// It's me ==> ID not confirmed
-								  ID_CONFIRMED);	// Not me  ==> ID confirmed
-
-		     Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
-				      Txt_The_ID_X_has_been_registered_successfully,
-				      NewID);
-		    }
-		  break;
-	      }
+	       break;
+	    case Err_ERROR:	// New ID is not valid
+	    default:
+	       Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
+				Txt_The_ID_X_is_not_valid,NewID);
+	       break;
 	   }
-	 else        // New ID is not valid
-	    Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
-			     Txt_The_ID_X_is_not_valid,NewID);
 	 break;
       case Usr_CAN_NOT:
       default:

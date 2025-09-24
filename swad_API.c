@@ -657,7 +657,7 @@ int swad__createAccount (struct soap *soap,
              sizeof (Gbl.Usrs.Me.UsrDat.Nickname) - 1);
 
    /***** Save email *****/
-   if (Mai_UpdateEmailInDB (&Gbl.Usrs.Me.UsrDat,userEmail))
+   if (Mai_UpdateEmailInDB (&Gbl.Usrs.Me.UsrDat,userEmail) == Err_SUCCESS)
      {
       /* Email updated sucessfully */
       Str_Copy (Gbl.Usrs.Me.UsrDat.Email,userEmail,
@@ -689,33 +689,39 @@ static int API_CheckParsNewAccount (char *NewNickWithArr,		// Input
 
    /***** Step 1/3: Check new nickname *****/
    /* Make a copy without possible starting arrobas */
-   if (Nck_CheckIfNickWithArrIsValid (NewNickWithArr))	// If new nickname is valid
+   switch (Nck_CheckIfNickWithArrIsValid (NewNickWithArr))
      {
-      /***** Remove leading arrobas *****/
-      Str_Copy (CopyOfNewNick,NewNickWithArr,sizeof (CopyOfNewNick) - 1);
-      Str_RemoveLeadingArrobas (CopyOfNewNick);
+      case Err_SUCCESS:	// If new nickname is valid
+	 /***** Remove leading arrobas *****/
+	 Str_Copy (CopyOfNewNick,NewNickWithArr,sizeof (CopyOfNewNick) - 1);
+	 Str_RemoveLeadingArrobas (CopyOfNewNick);
 
-      /***** Check if the new nickname matches any of the nicknames of other users *****/
-      if (Nck_DB_CheckIfNickMatchesAnyNick (CopyOfNewNick))	// Already without leading arrobas
-	 return API_CHECK_NEW_ACCOUNT_NICKNAME_REGISTERED_BY_ANOTHER_USER;
+	 /***** Check if the new nickname matches any of the nicknames of other users *****/
+	 if (Nck_DB_CheckIfNickMatchesAnyNick (CopyOfNewNick))	// Already without leading arrobas
+	    return API_CHECK_NEW_ACCOUNT_NICKNAME_REGISTERED_BY_ANOTHER_USER;
 
-      /***** Output value of nickname without leading arrobas *****/
-      Str_Copy (NewNickWithoutArr,CopyOfNewNick,Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
+	 /***** Output value of nickname without leading arrobas *****/
+	 Str_Copy (NewNickWithoutArr,CopyOfNewNick,Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
+	 break;
+      case Err_ERROR:	// New nickname is not valid
+      default:
+	 return API_CHECK_NEW_ACCOUNT_NICKNAME_NOT_VALID;
      }
-   else        						// New nickname is not valid
-      return API_CHECK_NEW_ACCOUNT_NICKNAME_NOT_VALID;
 
    /***** Step 2/3: Check new email *****/
-   if (Mai_CheckIfEmailIsValid (NewEmail))	// New email is valid
+   switch (Mai_CheckIfEmailIsValid (NewEmail))
      {
-      /***** Check if the new email matches
-	     any of the confirmed emails of other users *****/
-      if (Mai_DB_CheckIfEmailExistsConfirmed (NewEmail) == Exi_EXISTS)
-	 // An email of another user is the same that my email
-	 return API_CHECK_NEW_ACCOUNT_EMAIL_REGISTERED_BY_ANOTHER_USER;
+      case Err_SUCCESS:	// New email is valid
+	 /***** Check if the new email matches
+		any of the confirmed emails of other users *****/
+	 if (Mai_DB_CheckIfEmailExistsConfirmed (NewEmail) == Exi_EXISTS)
+	    // An email of another user is the same that my email
+	    return API_CHECK_NEW_ACCOUNT_EMAIL_REGISTERED_BY_ANOTHER_USER;
+	 break;
+      case Err_ERROR:	// New email is not valid
+      default:
+	 return API_CHECK_NEW_ACCOUNT_EMAIL_NOT_VALID;
      }
-   else						// New email is not valid
-      return API_CHECK_NEW_ACCOUNT_EMAIL_NOT_VALID;
 
    /***** Step 3/3: Check new password *****/
    Cry_EncryptSHA512Base64 (NewPlainPassword,NewEncryptedPassword);
@@ -771,32 +777,46 @@ int swad__loginByUserPasswordKey (struct soap *soap,
 
    /***** Check if user's email, @nickname or ID are valid *****/
    Str_Copy (UsrIDNickOrEmail,userID,sizeof (UsrIDNickOrEmail) - 1);
-   if (Nck_CheckIfNickWithArrIsValid (UsrIDNickOrEmail))		// 1: It's a nickname
+   switch (Nck_CheckIfNickWithArrIsValid (UsrIDNickOrEmail))
      {
-      Str_RemoveLeadingArrobas (UsrIDNickOrEmail);
+      case Err_SUCCESS:		// 1: It's a nickname
+	 Str_RemoveLeadingArrobas (UsrIDNickOrEmail);
 
-      /* User has typed a nickname */
-      Gbl.Usrs.Me.UsrDat.UsrCod = Usr_DB_GetUsrCodFromNickPwd (UsrIDNickOrEmail,
-                                                               userPassword);
-     }
-   else if (Mai_CheckIfEmailIsValid (UsrIDNickOrEmail))		// 2: It's an email
-      /* User has typed an email */
-      // TODO: Get only if email confirmed?
-      Gbl.Usrs.Me.UsrDat.UsrCod = Usr_DB_GetUsrCodFromEmailPwd (UsrIDNickOrEmail,
-                                                                userPassword);
-   else									// 3: It's not a nickname nor email
-     {
-      // Users' IDs are always stored internally in capitals and without leading zeros
-      Str_RemoveLeadingZeros (UsrIDNickOrEmail);
-      Str_ConvertToUpperText (UsrIDNickOrEmail);
-      if (ID_CheckIfUsrIDIsValid (UsrIDNickOrEmail))
-	 /* User has typed a valid user's ID (existing or not) */
-	 Gbl.Usrs.Me.UsrDat.UsrCod = Usr_DB_GetUsrCodFromIDPwd (UsrIDNickOrEmail,
-	                                                        userPassword);
-      else	// String is not a valid user's nickname, email or ID
-	 return soap_receiver_fault (soap,
-				     "Bad log in",
-				     "User's ID or nickname don't exist or password is wrong");
+	 /* User has typed a nickname */
+	 Gbl.Usrs.Me.UsrDat.UsrCod = Usr_DB_GetUsrCodFromNickPwd (UsrIDNickOrEmail,
+								  userPassword);
+	 break;
+      case Err_ERROR:
+      default:
+	 switch (Mai_CheckIfEmailIsValid (UsrIDNickOrEmail))
+	   {
+	    case Err_SUCCESS:	// 2: It's an email
+	       /* User has typed an email */
+	       // TODO: Get only if email confirmed?
+	       Gbl.Usrs.Me.UsrDat.UsrCod = Usr_DB_GetUsrCodFromEmailPwd (UsrIDNickOrEmail,
+									 userPassword);
+	       break;
+	    case Err_ERROR:	// 3: It's not a nickname nor email
+	    default:
+	       // Users' IDs are always stored internally in capitals and without leading zeros
+	       Str_RemoveLeadingZeros (UsrIDNickOrEmail);
+	       Str_ConvertToUpperText (UsrIDNickOrEmail);
+	       switch (ID_CheckIfUsrIDIsValid (UsrIDNickOrEmail))
+		 {
+		  case Err_SUCCESS:
+		     /* User has typed a valid user's ID (existing or not) */
+		     Gbl.Usrs.Me.UsrDat.UsrCod = Usr_DB_GetUsrCodFromIDPwd (UsrIDNickOrEmail,
+									    userPassword);
+		     break;
+		  case Err_ERROR:	// String is not a valid user's nickname, email or ID
+		  default:
+		     return soap_receiver_fault (soap,
+						 "Bad log in",
+						 "User's ID or nickname don't exist or password is wrong");
+		 }
+	       break;
+	   }
+	 break;
      }
 
    /***** Get user's data from database *****/
@@ -1079,28 +1099,42 @@ int swad__getNewPassword (struct soap *soap,
 
    /***** Check if user's email, @nickname or ID are valid *****/
    Str_Copy (UsrIDNickOrEmail,userID,sizeof (UsrIDNickOrEmail) - 1);
-   if (Nck_CheckIfNickWithArrIsValid (UsrIDNickOrEmail))		// 1: It's a nickname
+   switch (Nck_CheckIfNickWithArrIsValid (UsrIDNickOrEmail))
      {
-      Str_RemoveLeadingArrobas (UsrIDNickOrEmail);
+      case Err_SUCCESS:		// 1: It's a nickname
+	 Str_RemoveLeadingArrobas (UsrIDNickOrEmail);
 
-      /* User has typed a nickname */
-      Gbl.Usrs.Me.UsrDat.UsrCod = Usr_DB_GetUsrCodFromNick (UsrIDNickOrEmail);
-     }
-   else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))		// 2: It's an email
-      /* User has typed an email */
-      Gbl.Usrs.Me.UsrDat.UsrCod = Usr_DB_GetUsrCodFromEmail (UsrIDNickOrEmail);
-   else									// 3: It's not a nickname nor email
-     {
-      // Users' IDs are always stored internally in capitals and without leading zeros
-      Str_RemoveLeadingZeros (UsrIDNickOrEmail);
-      Str_ConvertToUpperText (UsrIDNickOrEmail);
-      if (ID_CheckIfUsrIDIsValid (UsrIDNickOrEmail))
-	 /* User has typed a valid user's ID (existing or not) */
-	 Gbl.Usrs.Me.UsrDat.UsrCod = Usr_DB_GetUsrCodFromID (UsrIDNickOrEmail);
-      else	// String is not a valid user's nickname, email or ID
-	 return soap_receiver_fault (soap,
-				     "Bad log in",
-				     "User's email, nickname or ID don't exist");
+	 /* User has typed a nickname */
+	 Gbl.Usrs.Me.UsrDat.UsrCod = Usr_DB_GetUsrCodFromNick (UsrIDNickOrEmail);
+	 break;
+      case Err_ERROR:
+      default:
+	 switch (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))
+	   {
+	    case Err_SUCCESS:	// 2: It's an email
+	    /* User has typed an email */
+	    Gbl.Usrs.Me.UsrDat.UsrCod = Usr_DB_GetUsrCodFromEmail (UsrIDNickOrEmail);
+	       break;
+	    case Err_ERROR:	// 3: It's not a nickname nor email
+	    default:
+	       // Users' IDs are always stored internally in capitals and without leading zeros
+	       Str_RemoveLeadingZeros (UsrIDNickOrEmail);
+	       Str_ConvertToUpperText (UsrIDNickOrEmail);
+	       switch (ID_CheckIfUsrIDIsValid (UsrIDNickOrEmail))
+		 {
+		  case Err_SUCCESS:
+		     /* User has typed a valid user's ID (existing or not) */
+		     Gbl.Usrs.Me.UsrDat.UsrCod = Usr_DB_GetUsrCodFromID (UsrIDNickOrEmail);
+		     break;
+		  case Err_ERROR:	// String is not a valid user's nickname, email or ID
+		  default:
+		     return soap_receiver_fault (soap,
+						 "Bad log in",
+						 "User's email, nickname or ID don't exist");
+		 }
+	       break;
+	   }
+	 break;
      }
 
    /***** Get user's data from database *****/

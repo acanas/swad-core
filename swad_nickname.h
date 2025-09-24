@@ -38,7 +38,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-bool Nck_CheckIfNickWithArrIsValid (const char *NickWithArr);
+Err_SuccessOrError_t Nck_CheckIfNickWithArrIsValid (const char *NickWithArr);
 
 long Nck_GetUsrCodFromNickname (const char *NickWithArr);
 

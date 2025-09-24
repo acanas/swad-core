@@ -971,7 +971,7 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
    struct ListCodGrps LstGrps;
    struct Usr_Data UsrDat;
    Enr_EnrRemUsrsAction_t EnrRemUsrsAction;
-   bool SelectionIsValid = true;
+   Err_SuccessOrError_t SelectionIsValid = Err_SUCCESS;
 
    /***** Check the role of users to enrol/remove *****/
    switch (Role)
@@ -1082,79 +1082,83 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
         }
      }
 
-   if (SelectionIsValid)
+   switch (SelectionIsValid)
      {
-      /***** Get list of users' IDs *****/
-      if ((ListUsrsIDs = malloc (ID_MAX_BYTES_LIST_USRS_IDS + 1)) == NULL)
-	 Err_NotEnoughMemoryExit ();
-      Par_GetParText ("UsrsIDs",ListUsrsIDs,ID_MAX_BYTES_LIST_USRS_IDS);
+      case Err_SUCCESS:
+	 /***** Get list of users' IDs *****/
+	 if ((ListUsrsIDs = malloc (ID_MAX_BYTES_LIST_USRS_IDS + 1)) == NULL)
+	    Err_NotEnoughMemoryExit ();
+	 Par_GetParText ("UsrsIDs",ListUsrsIDs,ID_MAX_BYTES_LIST_USRS_IDS);
 
-      /***** Get list of selected users if not already got *****/
-      Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
-					     Usr_GET_LIST_ALL_USRS);
+	 /***** Get list of selected users if not already got *****/
+	 Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
+						Usr_GET_LIST_ALL_USRS);
 
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
+	 /***** Initialize structure with user's data *****/
+	 Usr_UsrDataConstructor (&UsrDat);
 
-      /***** Remove users *****/
-      if (WhatToDo.RemoveUsrs)
-	{
-	 /* Get list of users in current course */
-	 Usr_GetListUsrs (Hie_CRS,Role);
-
-	 if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
+	 /***** Remove users *****/
+	 if (WhatToDo.RemoveUsrs)
 	   {
-	    /* Loop 1: Initialize list of users to remove */
-	    Enr_InitializeLstUsrsToBeRemoved (Role,WhatToDo.RemoveSpecifiedUsrs);
+	    /* Get list of users in current course */
+	    Usr_GetListUsrs (Hie_CRS,Role);
 
-	    /* Loop 2: Go through form list setting if a user must be removed */
-	    /* 2.1: Update list of users to be removed
-		    using the form with IDs, nicks and emails */
-	    Enr_UpdateLstUsrsToBeRemovedUsingTextarea (Role,WhatToDo.RemoveSpecifiedUsrs,
-						       &UsrDat,ListUsrsIDs);
+	    if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
+	      {
+	       /* Loop 1: Initialize list of users to remove */
+	       Enr_InitializeLstUsrsToBeRemoved (Role,WhatToDo.RemoveSpecifiedUsrs);
 
-	    /* 2.2: Update list of users to be removed
-		    using list of users selected from clipboard */
-	    Enr_UpdateLstUsrsToBeRemovedUsingSelectedUsrs (Role,WhatToDo.RemoveSpecifiedUsrs,
-							   &UsrDat);
+	       /* Loop 2: Go through form list setting if a user must be removed */
+	       /* 2.1: Update list of users to be removed
+		       using the form with IDs, nicks and emails */
+	       Enr_UpdateLstUsrsToBeRemovedUsingTextarea (Role,WhatToDo.RemoveSpecifiedUsrs,
+							  &UsrDat,ListUsrsIDs);
 
-	    /* Loop 3: Go through list removing users */
-	    Enr_RemoveUsrsMarkedToBeRemoved (Role,WhatToDo.EliminateUsrs,
-					     &UsrDat,&LstGrps,&NumUsrsRemoved);
+	       /* 2.2: Update list of users to be removed
+		       using list of users selected from clipboard */
+	       Enr_UpdateLstUsrsToBeRemovedUsingSelectedUsrs (Role,WhatToDo.RemoveSpecifiedUsrs,
+							      &UsrDat);
+
+	       /* Loop 3: Go through list removing users */
+	       Enr_RemoveUsrsMarkedToBeRemoved (Role,WhatToDo.EliminateUsrs,
+						&UsrDat,&LstGrps,&NumUsrsRemoved);
+	      }
+
+	    /* Free memory for users list */
+	    Usr_FreeUsrsList (Role);
+
+	    /* Write messages */
+	    Enr_ShowMessageRemoved (NumUsrsRemoved,WhatToDo.EliminateUsrs);
 	   }
 
-	 /* Free memory for users list */
-	 Usr_FreeUsrsList (Role);
+	 /***** Enrol users *****/
+	 if (WhatToDo.EnrolUsrs)	// TODO: !!!!! NO CAMBIAR EL ROL DE LOS USUARIOS QUE YA ESTÉN EN LA ASIGNATURA SI HAY MÁS DE UN USUARIO ENCONTRADO PARA EL MISMO DNI !!!!!!
+	   {
+	    /* Enrol users found in the form with IDs, nicks and emails */
+	    Enr_EnrolUsrsFoundInTextarea (Role,ListUsrsIDs,&UsrDat,&LstGrps,&NumUsrsEnroled);
 
-         /* Write messages */
-	 Enr_ShowMessageRemoved (NumUsrsRemoved,WhatToDo.EliminateUsrs);
-	}
+	    /* Enrol users selected from clipboard */
+	    Enr_EnrolSelectedUsrs (Role,&UsrDat,&LstGrps,&NumUsrsEnroled);
 
-      /***** Enrol users *****/
-      if (WhatToDo.EnrolUsrs)	// TODO: !!!!! NO CAMBIAR EL ROL DE LOS USUARIOS QUE YA ESTÉN EN LA ASIGNATURA SI HAY MÁS DE UN USUARIO ENCONTRADO PARA EL MISMO DNI !!!!!!
-	{
-	 /* Enrol users found in the form with IDs, nicks and emails */
-	 Enr_EnrolUsrsFoundInTextarea (Role,ListUsrsIDs,&UsrDat,&LstGrps,&NumUsrsEnroled);
+	    /* Write messages */
+	    Enr_ShowMessageEnroled (NumUsrsEnroled);
+	   }
 
-	 /* Enrol users selected from clipboard */
-	 Enr_EnrolSelectedUsrs (Role,&UsrDat,&LstGrps,&NumUsrsEnroled);
+	 /***** Free memory used for user's data *****/
+	 Usr_UsrDataDestructor (&UsrDat);
 
-	 /* Write messages */
-	 Enr_ShowMessageEnroled (NumUsrsEnroled);
-	}
+	 /***** Free memory used by list of selected users' codes *****/
+	 Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
-
-      /***** Free memory used by list of selected users' codes *****/
-      Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
-
-      /***** Free memory used by the list of user's IDs *****/
-      free (ListUsrsIDs);
+	 /***** Free memory used by the list of user's IDs *****/
+	 free (ListUsrsIDs);
+	 break;
+      case Err_ERROR:	// Selection of groups not valid
+      default:
+	 Ale_ShowAlert (Ale_WARNING,
+			Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_enroled_in_more_than_one_group);
+	 break;
      }
-   else	// Selection of groups not valid
-      Ale_ShowAlert (Ale_WARNING,
-		     Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_enroled_in_more_than_one_group);
 
    /***** Free memory with the list of groups to/from which remove/enrol users *****/
    Grp_FreeListCodGrp (&LstGrps);
@@ -1209,37 +1213,44 @@ static void Enr_UpdateLstUsrsToBeRemovedUsingTextarea (Rol_Role_t Role,
       ListUsrCods.Lst = NULL;
 
       /* Check if string is a user's ID, user's nickname or user's email address */
-      if (Nck_CheckIfNickWithArrIsValid (UsrDat->UsrIDNickOrEmail))	// 1: It's a nickname
+      switch (Nck_CheckIfNickWithArrIsValid (UsrDat->UsrIDNickOrEmail))
 	{
-	 if ((UsrDat->UsrCod = Nck_GetUsrCodFromNickname (UsrDat->UsrIDNickOrEmail)) > 0)
-	   {
-	    ListUsrCods.NumUsrs = 1;
-	    Usr_AllocateListUsrCods (&ListUsrCods);
-	    ListUsrCods.Lst[0] = UsrDat->UsrCod;
-	   }
-	}
-      else if (Mai_CheckIfEmailIsValid (UsrDat->UsrIDNickOrEmail))	// 2: It's an email
-	{
-	 if ((UsrDat->UsrCod = Mai_DB_GetUsrCodFromEmail (UsrDat->UsrIDNickOrEmail)) > 0)
-	   {
-	    ListUsrCods.NumUsrs = 1;
-	    Usr_AllocateListUsrCods (&ListUsrCods);
-	    ListUsrCods.Lst[0] = UsrDat->UsrCod;
-	   }
-	}
-      else								// 3: It looks like a user's ID
-	{
-	 // Users' IDs are always stored internally in capitals and without leading zeros
-	 Str_RemoveLeadingZeros (UsrDat->UsrIDNickOrEmail);
-	 if (ID_CheckIfUsrIDSeemsAValidID (UsrDat->UsrIDNickOrEmail))
-	   {
-	    /***** Find users for this user's ID *****/
-	    ID_ReallocateListIDs (UsrDat,1);	// Only one user's ID
-	    Str_Copy (UsrDat->IDs.List[0].ID,UsrDat->UsrIDNickOrEmail,
-		      sizeof (UsrDat->IDs.List[0].ID) - 1);
-	    Str_ConvertToUpperText (UsrDat->IDs.List[0].ID);
-	    ID_GetListUsrCodsFromUsrID (UsrDat,NULL,&ListUsrCods,false);
-	   }
+	 case Err_SUCCESS:		// 1: It's a nickname
+	    if ((UsrDat->UsrCod = Nck_GetUsrCodFromNickname (UsrDat->UsrIDNickOrEmail)) > 0)
+	      {
+	       ListUsrCods.NumUsrs = 1;
+	       Usr_AllocateListUsrCods (&ListUsrCods);
+	       ListUsrCods.Lst[0] = UsrDat->UsrCod;
+	      }
+	    break;
+	 case Err_ERROR:
+	 default:
+	    switch (Mai_CheckIfEmailIsValid (UsrDat->UsrIDNickOrEmail))
+	      {
+	       case Err_SUCCESS:	// 2: It's an email
+		  if ((UsrDat->UsrCod = Mai_DB_GetUsrCodFromEmail (UsrDat->UsrIDNickOrEmail)) > 0)
+		    {
+		     ListUsrCods.NumUsrs = 1;
+		     Usr_AllocateListUsrCods (&ListUsrCods);
+		     ListUsrCods.Lst[0] = UsrDat->UsrCod;
+		    }
+		  break;
+	       case Err_ERROR:	// 3: It looks like a user's ID
+	       default:
+		  // Users' IDs are always stored internally in capitals and without leading zeros
+		  Str_RemoveLeadingZeros (UsrDat->UsrIDNickOrEmail);
+		  if (ID_CheckIfUsrIDSeemsAValidID (UsrDat->UsrIDNickOrEmail))
+		    {
+		     /***** Find users for this user's ID *****/
+		     ID_ReallocateListIDs (UsrDat,1);	// Only one user's ID
+		     Str_Copy (UsrDat->IDs.List[0].ID,UsrDat->UsrIDNickOrEmail,
+			       sizeof (UsrDat->IDs.List[0].ID) - 1);
+		     Str_ConvertToUpperText (UsrDat->IDs.List[0].ID);
+		     ID_GetListUsrCodsFromUsrID (UsrDat,NULL,&ListUsrCods,false);
+		    }
+		  break;
+	      }
+	    break;
 	}
 
       if (RemoveSpecifiedUsrs)	// Remove the specified users (of the role)
@@ -1386,39 +1397,46 @@ static void Enr_EnrolUsrsFoundInTextarea (Rol_Role_t Role,
       ListUsrCods.Lst = NULL;
 
       /* Check if the string is a user's ID, a user's nickname or a user's email address */
-      if (Nck_CheckIfNickWithArrIsValid (UsrDat->UsrIDNickOrEmail))	// 1: It's a nickname
+      switch (Nck_CheckIfNickWithArrIsValid (UsrDat->UsrIDNickOrEmail))
 	{
-	 if ((UsrDat->UsrCod = Nck_GetUsrCodFromNickname (UsrDat->UsrIDNickOrEmail)) > 0)
-	   {
-	    ListUsrCods.NumUsrs = 1;
-	    Usr_AllocateListUsrCods (&ListUsrCods);
-	    ListUsrCods.Lst[0] = UsrDat->UsrCod;
-	   }
-	}
-      else if (Mai_CheckIfEmailIsValid (UsrDat->UsrIDNickOrEmail))	// 2: It's an email
-	{
-	 if ((UsrDat->UsrCod = Mai_DB_GetUsrCodFromEmail (UsrDat->UsrIDNickOrEmail)) > 0)
-	   {
-	    ListUsrCods.NumUsrs = 1;
-	    Usr_AllocateListUsrCods (&ListUsrCods);
-	    ListUsrCods.Lst[0] = UsrDat->UsrCod;
-	   }
-	}
-      else								// 3: It looks like a user's ID
-	{
-	 // Users' IDs are always stored internally in capitals and without leading zeros
-	 Str_RemoveLeadingZeros (UsrDat->UsrIDNickOrEmail);
-	 if (ID_CheckIfUsrIDSeemsAValidID (UsrDat->UsrIDNickOrEmail))
-	   {
-	    ItLooksLikeAUsrID = true;
+	 case Err_SUCCESS:		// 1: It's a nickname
+	    if ((UsrDat->UsrCod = Nck_GetUsrCodFromNickname (UsrDat->UsrIDNickOrEmail)) > 0)
+	      {
+	       ListUsrCods.NumUsrs = 1;
+	       Usr_AllocateListUsrCods (&ListUsrCods);
+	       ListUsrCods.Lst[0] = UsrDat->UsrCod;
+	      }
+	    break;
+	 case Err_ERROR:
+	 default:
+	    switch (Mai_CheckIfEmailIsValid (UsrDat->UsrIDNickOrEmail))
+	      {
+	       case Err_SUCCESS:	// 2: It's an email
+		  if ((UsrDat->UsrCod = Mai_DB_GetUsrCodFromEmail (UsrDat->UsrIDNickOrEmail)) > 0)
+		    {
+		     ListUsrCods.NumUsrs = 1;
+		     Usr_AllocateListUsrCods (&ListUsrCods);
+		     ListUsrCods.Lst[0] = UsrDat->UsrCod;
+		    }
+		  break;
+	       case Err_ERROR:		// 3: It looks like a user's ID
+	       default:
+		  // Users' IDs are always stored internally in capitals and without leading zeros
+		  Str_RemoveLeadingZeros (UsrDat->UsrIDNickOrEmail);
+		  if (ID_CheckIfUsrIDSeemsAValidID (UsrDat->UsrIDNickOrEmail))
+		    {
+		     ItLooksLikeAUsrID = true;
 
-	    /* Find users for this user's ID */
-	    ID_ReallocateListIDs (UsrDat,1);	// Only one user's ID
-	    Str_Copy (UsrDat->IDs.List[0].ID,UsrDat->UsrIDNickOrEmail,
-		      sizeof (UsrDat->IDs.List[0].ID) - 1);
-	    Str_ConvertToUpperText (UsrDat->IDs.List[0].ID);
-	    ID_GetListUsrCodsFromUsrID (UsrDat,NULL,&ListUsrCods,false);
-	   }
+		     /* Find users for this user's ID */
+		     ID_ReallocateListIDs (UsrDat,1);	// Only one user's ID
+		     Str_Copy (UsrDat->IDs.List[0].ID,UsrDat->UsrIDNickOrEmail,
+			       sizeof (UsrDat->IDs.List[0].ID) - 1);
+		     Str_ConvertToUpperText (UsrDat->IDs.List[0].ID);
+		     ID_GetListUsrCodsFromUsrID (UsrDat,NULL,&ListUsrCods,false);
+		    }
+		  break;
+	      }
+	    break;
 	}
 
       /* Enrol user(s) */
@@ -2859,7 +2877,7 @@ static void Enr_AskIfEnrRemUsr (struct Usr_ListUsrCods *ListUsrCods,Rol_Role_t R
       /***** If UsrCod is not present in parameters from form,
 	     use user's ID to identify the user to be enroled *****/
       if (Gbl.Usrs.Other.UsrDat.IDs.List)
-         UsrIDValid = ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);	// Check the first element of the list
+         UsrIDValid = (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID) == Err_SUCCESS);	// Check the first element of the list
       else
 	 UsrIDValid = false;
 
@@ -3087,71 +3105,75 @@ void Enr_CreateNewUsr1 (void)
    /***** Get user's ID from form *****/
    ID_GetParOtherUsrIDPlain ();	// User's ID was already modified and passed as a hidden parameter
 
-   if (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID))        // User's ID valid
+   switch (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID))
      {
-      Gbl.Usrs.Other.UsrDat.UsrCod = -1L;
+      case Err_SUCCESS:	// User's ID valid
+	 Gbl.Usrs.Other.UsrDat.UsrCod = -1L;
 
-      /***** Get new role *****/
-      NewRole = Rec_GetRoleFromRecordForm ();
+	 /***** Get new role *****/
+	 NewRole = Rec_GetRoleFromRecordForm ();
 
-      /***** Get user's name from form *****/
-      Rec_GetUsrNameFromRecordForm (&Gbl.Usrs.Other.UsrDat);
+	 /***** Get user's name from form *****/
+	 Rec_GetUsrNameFromRecordForm (&Gbl.Usrs.Other.UsrDat);
 
-      /***** Create user *****/
-      Gbl.Usrs.Other.UsrDat.IDs.List[0].Confirmed = ID_CONFIRMED;	// User's ID will be stored as confirmed
-      Acc_CreateNewUsr (&Gbl.Usrs.Other.UsrDat,Usr_OTHER);
+	 /***** Create user *****/
+	 Gbl.Usrs.Other.UsrDat.IDs.List[0].Confirmed = ID_CONFIRMED;	// User's ID will be stored as confirmed
+	 Acc_CreateNewUsr (&Gbl.Usrs.Other.UsrDat,Usr_OTHER);
 
-      /***** Enrol user in current course in database *****/
-      if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
-	{
-	 switch (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
+	 /***** Enrol user in current course in database *****/
+	 if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
 	   {
-	    case Usr_BELONG:
-	       OldRole = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs;	// Remember old role before changing it
-	       if (NewRole != OldRole)	// The role must be updated
-		 {
-		  /* Modify role */
-		  Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole);
+	    switch (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
+	      {
+	       case Usr_BELONG:
+		  OldRole = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs;	// Remember old role before changing it
+		  if (NewRole != OldRole)	// The role must be updated
+		    {
+		     /* Modify role */
+		     Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole);
+
+		     /* Success message */
+		     Ale_CreateAlert (Ale_SUCCESS,NULL,
+				      Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
+				      Gbl.Usrs.Other.UsrDat.FullName,
+				      Gbl.Hierarchy.Node[Hie_CRS].FullName,
+				      Txt_ROLES_SINGUL_abc[OldRole][Gbl.Usrs.Other.UsrDat.Sex],
+				      Txt_ROLES_SINGUL_abc[NewRole][Gbl.Usrs.Other.UsrDat.Sex]);
+		    }
+		  break;
+	       case Usr_DONT_BELONG:	// User does not belong to current course
+	       default:
+		  /* Enrol user */
+		  Enr_EnrolUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
+					    Enr_SET_ACCEPTED_TO_FALSE);
 
 		  /* Success message */
 		  Ale_CreateAlert (Ale_SUCCESS,NULL,
-				   Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
+				   Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
 				   Gbl.Usrs.Other.UsrDat.FullName,
-				   Gbl.Hierarchy.Node[Hie_CRS].FullName,
-				   Txt_ROLES_SINGUL_abc[OldRole][Gbl.Usrs.Other.UsrDat.Sex],
-				   Txt_ROLES_SINGUL_abc[NewRole][Gbl.Usrs.Other.UsrDat.Sex]);
-		 }
-	       break;
-	    case Usr_DONT_BELONG:	// User does not belong to current course
-	    default:
-	       /* Enrol user */
-	       Enr_EnrolUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
-					 Enr_SET_ACCEPTED_TO_FALSE);
+				   Gbl.Hierarchy.Node[Hie_CRS].FullName);
+		  break;
+	      }
 
-	       /* Success message */
-	       Ale_CreateAlert (Ale_SUCCESS,NULL,
-				Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
-				Gbl.Usrs.Other.UsrDat.FullName,
-				Gbl.Hierarchy.Node[Hie_CRS].FullName);
-	       break;
+	    /***** Change user's groups *****/
+	    if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
+	       Grp_ChangeUsrGrps (Usr_OTHER,Cns_QUIET);
 	   }
 
-	 /***** Change user's groups *****/
-	 if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
-	    Grp_ChangeUsrGrps (Usr_OTHER,Cns_QUIET);
-	}
-
-      /***** Change current action *****/
-      if (!Action[NewRole])
-	 Err_WrongRoleExit ();
-      Gbl.Action.Act = Action[NewRole];
-      Tab_SetCurrentTab ();
+	 /***** Change current action *****/
+	 if (!Action[NewRole])
+	    Err_WrongRoleExit ();
+	 Gbl.Action.Act = Action[NewRole];
+	 Tab_SetCurrentTab ();
+	 break;
+      case Err_ERROR:	// User's ID not valid
+      default:
+	 /***** Error message *****/
+	 Ale_CreateAlert (Ale_ERROR,NULL,
+			  Txt_The_ID_X_is_not_valid,
+			  Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
+	 break;
      }
-   else        // User's ID not valid
-      /***** Error message *****/
-      Ale_CreateAlert (Ale_ERROR,NULL,
-	               Txt_The_ID_X_is_not_valid,
-                       Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
   }
 
 void Enr_CreateNewUsr2 (void)

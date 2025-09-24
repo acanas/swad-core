@@ -73,7 +73,7 @@ unsigned ID_GetListUsrCodsFromUsrID (struct Usr_Data *UsrDat,
 void ID_PutParOtherUsrIDPlain (void);
 void ID_GetParOtherUsrIDPlain (void);
 
-bool ID_CheckIfUsrIDIsValid (const char *UsrID);
+Err_SuccessOrError_t ID_CheckIfUsrIDIsValid (const char *UsrID);
 bool ID_CheckIfUsrIDSeemsAValidID (const char *UsrID);
 
 void ID_WriteUsrIDs (const struct Usr_Data *UsrDat,const char *Anchor);

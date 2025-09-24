@@ -299,6 +299,13 @@ struct For_FiguresForum
    unsigned NumUsrsToBeNotifiedByEMail;
   };
 
+#define For_NUM_FIRST_OR_REPLY 2
+typedef enum
+  {
+   For_FIRST_POST_IN_THREAD,
+   For_REPLY_TO_ANOTHER_POST,
+  } For_FirstOrReply_t;
+
 /*****************************************************************************/
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
@@ -377,7 +384,8 @@ static void For_SetForumType (struct For_Forums *Forums);
 static void For_RestrictAccess (const struct For_Forums *Forums);
 
 static void For_WriteFormForumPst (struct For_Forums *Forums,
-                                   bool IsReply,const char *Subject);
+                                   For_FirstOrReply_t FirstOrReply,
+                                   const char *Subject);
 
 static void For_PutParsRemThread (void *Forums);
 
@@ -2867,7 +2875,8 @@ static void For_RestrictAccess (const struct For_Forums *Forums)
 /*****************************************************************************/
 
 static void For_WriteFormForumPst (struct For_Forums *Forums,
-                                   bool IsReply,const char *Subject)
+                                   For_FirstOrReply_t FirstOrReply,
+                                   const char *Subject)
   {
    extern const char *Hlp_COMMUNICATION_Forums_new_post;
    extern const char *Hlp_COMMUNICATION_Forums_new_thread;
@@ -2875,29 +2884,35 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
    extern const char *Txt_Thread;
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Content;
+   static const char **Title[For_NUM_FIRST_OR_REPLY] =
+     {
+      [For_FIRST_POST_IN_THREAD ] = &Txt_Thread,
+      [For_REPLY_TO_ANOTHER_POST] = &Txt_Post,
+     };
+   static const char **HelpLink[For_NUM_FIRST_OR_REPLY] =
+     {
+      [For_FIRST_POST_IN_THREAD ] = &Hlp_COMMUNICATION_Forums_new_thread,
+      [For_REPLY_TO_ANOTHER_POST] = &Hlp_COMMUNICATION_Forums_new_post,
+     };
+   static Act_Action_t *NextActions[For_NUM_FIRST_OR_REPLY] =
+     {
+      [For_FIRST_POST_IN_THREAD ] = For_ActionsRecThrFor,	// Write the first post of a new thread
+      [For_REPLY_TO_ANOTHER_POST] = For_ActionsRecRepFor,	// Write a reply to a post of an existing thread
+     };
+   static void (*PutPars [For_NUM_FIRST_OR_REPLY]) (void *Forums) =
+     {
+      [For_FIRST_POST_IN_THREAD ] = For_PutParsNewThread,
+      [For_REPLY_TO_ANOTHER_POST] = For_PutParsNewPost,
+     };
    char *ClassInput;
 
    /***** Begin box *****/
-   Box_BoxBegin (IsReply ? Txt_Post :
-			   Txt_Thread,
-		 NULL,NULL,
-		 IsReply ? Hlp_COMMUNICATION_Forums_new_post :
-			   Hlp_COMMUNICATION_Forums_new_thread,
-		 Box_NOT_CLOSABLE);
+   Box_BoxBegin (*Title[FirstOrReply],NULL,NULL,*HelpLink[FirstOrReply],Box_NOT_CLOSABLE);
 
       /***** Begin form *****/
-      if (IsReply)	// Form to write a reply to a post of an existing thread
-	{
-	 Frm_BeginFormAnchor (For_ActionsRecRepFor[Forums->Forum.Type],
-			      For_FORUM_POSTS_SECTION_ID);
-	    For_PutParsNewPost (Forums);
-	}
-      else		// Form to write the first post of a new thread
-	{
-	 Frm_BeginFormAnchor (For_ActionsRecThrFor[Forums->Forum.Type],
-			      For_FORUM_POSTS_SECTION_ID);
-	    For_PutParsNewThread (Forums);
-	}
+      Frm_BeginFormAnchor (NextActions[FirstOrReply][Forums->Forum.Type],
+			   For_FORUM_POSTS_SECTION_ID);
+	 PutPars[FirstOrReply] (Forums);
 
 	 /***** Subject and content *****/
 	 HTM_TABLE_BeginCenterPadding (2);
@@ -2912,8 +2927,8 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 	       /* Data */
 	       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 		  HTM_INPUT_TEXT ("Subject",Cns_MAX_CHARS_SUBJECT,
-				  IsReply ? Subject :
-					    "",
+				  FirstOrReply == For_REPLY_TO_ANOTHER_POST ? Subject :
+							  "",
 				  HTM_REQUIRED,
 				  "id=\"Subject\""
 				  " class=\"Frm_C2_INPUT INPUT_%s\"",
@@ -2969,7 +2984,7 @@ void For_ReceiveForumPost (void)
   {
    extern const char *Txt_FORUM_Post_sent;
    struct For_Forums Forums;
-   bool IsReply = false;
+   For_FirstOrReply_t FirstOrReply = For_FIRST_POST_IN_THREAD;
    long PstCod = 0;
    unsigned NumUsrsToBeNotifiedByEMail;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
@@ -2989,7 +3004,7 @@ void For_ReceiveForumPost (void)
        Gbl.Action.Act == ActRcvRepForInsUsr || Gbl.Action.Act == ActRcvRepForInsTch ||
        Gbl.Action.Act == ActRcvRepForGenUsr || Gbl.Action.Act == ActRcvRepForGenTch ||
        Gbl.Action.Act == ActRcvRepForSWAUsr || Gbl.Action.Act == ActRcvRepForSWATch)
-      IsReply = true;
+      FirstOrReply = For_REPLY_TO_ANOTHER_POST;
 
    /***** Get message subject *****/
    Par_GetParHTML ("Subject",Subject,Cns_MAX_BYTES_SUBJECT);
@@ -3009,29 +3024,31 @@ void For_ReceiveForumPost (void)
 	                 For_FORUM_POSTS_SECTION_ID);	// Alerts will be shown later in posts section
 
    /***** Create a new message *****/
-   if (IsReply)	// This post is a reply to another posts in the thread
+   switch (FirstOrReply)
      {
-      // Forums.ThrCod has been received from form
+      case For_REPLY_TO_ANOTHER_POST:	// This post is a reply to another posts in the thread
+	 // Forums.ThrCod has been received from form
 
-      /***** Create last message of the thread *****/
-      PstCod = For_InsertForumPst (Forums.Thread.Current,Gbl.Usrs.Me.UsrDat.UsrCod,
-                                   Subject,Content,&Media);
+	 /***** Create last message of the thread *****/
+	 PstCod = For_InsertForumPst (Forums.Thread.Current,Gbl.Usrs.Me.UsrDat.UsrCod,
+				      Subject,Content,&Media);
 
-      /***** Modify last message of the thread *****/
-      For_DB_UpdateThrLastPst (Forums.Thread.Current,PstCod);
-     }
-   else			// This post is the first of a new thread
-     {
-      /***** Create new thread with unknown first and last message codes *****/
-      Forums.Thread.Current  =
-      Forums.Thread.Selected = For_DB_InsertForumThread (&Forums,-1L);
+	 /***** Modify last message of the thread *****/
+	 For_DB_UpdateThrLastPst (Forums.Thread.Current,PstCod);
+	 break;
+      case For_FIRST_POST_IN_THREAD:	// This post is the first of a new thread
+      default:
+	 /***** Create new thread with unknown first and last message codes *****/
+	 Forums.Thread.Current  =
+	 Forums.Thread.Selected = For_DB_InsertForumThread (&Forums,-1L);
 
-      /***** Create first (and last) message of the thread *****/
-      PstCod = For_InsertForumPst (Forums.Thread.Current,Gbl.Usrs.Me.UsrDat.UsrCod,
-                                   Subject,Content,&Media);
+	 /***** Create first (and last) message of the thread *****/
+	 PstCod = For_InsertForumPst (Forums.Thread.Current,Gbl.Usrs.Me.UsrDat.UsrCod,
+				      Subject,Content,&Media);
 
-      /***** Update first and last posts of new thread *****/
-      For_DB_UpdateThrFirstAndLastPst (Forums.Thread.Current,PstCod,PstCod);
+	 /***** Update first and last posts of new thread *****/
+	 For_DB_UpdateThrFirstAndLastPst (Forums.Thread.Current,PstCod,PstCod);
+	 break;
      }
 
    /***** Free media *****/
@@ -3053,7 +3070,7 @@ void For_ReceiveForumPost (void)
      }
 
    /***** Notify the new post to previous writers in this thread *****/
-   if (IsReply)
+   if (FirstOrReply == For_REPLY_TO_ANOTHER_POST)
       if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_FORUM_REPLY,PstCod)))
          For_DB_UpdateNumUsrsNotifiedByEMailAboutPost (PstCod,NumUsrsToBeNotifiedByEMail);
 

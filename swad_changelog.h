@@ -632,10 +632,12 @@ TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de t
 
 TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtube.com/shorts/fY6Oax_uJBc?si=G3UHqvSH3yEbxm1B
 */
-#define Log_PLATFORM_VERSION	"SWAD 25.3.9 (2025-09-23)"
+#define Log_PLATFORM_VERSION	"SWAD 25.4 (2025-09-24)"
 #define CSS_FILE		"swad24.98.2.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 25.4:     Sep 24, 2025  Code refactoring in forums.
+					Code refactoring related to success/error. (349381 lines)
 	Version 25.3.11:  Sep 23, 2025  Code refactoring in forums. (349228 lines)
 	Version 25.3.10:  Sep 23, 2025  Code refactoring in test and exam visibility. (349231 lines)
 	Version 25.3.9:   Sep 23, 2025  Code refactoring in user's IDs. (349221 lines)
