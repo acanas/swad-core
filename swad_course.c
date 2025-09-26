@@ -1775,6 +1775,16 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
    extern const char *Txt_Enrolment_confirmed;
    extern const char *Txt_Enrolment_not_confirmed;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
+   static const char **Txt[Usr_NUM_ACCEPTED] =
+     {
+      [Usr_HAS_NOT_ACCEPTED] = &Txt_Enrolment_not_confirmed,
+      [Usr_HAS_ACCEPTED    ] = &Txt_Enrolment_confirmed,
+     };
+   static const char *Icon[Usr_NUM_ACCEPTED] =
+     {
+      [Usr_HAS_NOT_ACCEPTED] = "&cross;",
+      [Usr_HAS_ACCEPTED    ] = "&check;",
+     };
    struct Hie_Node Deg;
    long CrsCod;
    unsigned NumStds;
@@ -1783,7 +1793,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
    unsigned NumUsrs;
    const char *ClassTxt;
    const char *BgColor;
-   bool Accepted;
+   Usr_Accepted_t HasAccepted;
    /*
    row[0]: deg_degrees.DegCod
    row[1]: crs_courses.CrsCod
@@ -1822,13 +1832,10 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
 	     to this course/to any course in degree/to any course? *****/
       if (WriteColumnAccepted == Crs_WRITE_COL_ACCEPTED)
 	{
-	 Accepted = (row[7][0] == 'Y');
-	 HTM_TD_Begin ("class=\"BT %s\" title=\"%s\"",
-		       BgColor,
-		       Accepted ? Txt_Enrolment_confirmed :
-				  Txt_Enrolment_not_confirmed);
-	    HTM_Txt (Accepted ? "&check;" :
-				"&cross;");
+	 HasAccepted = (row[7][0] == 'Y') ? Usr_HAS_ACCEPTED :
+					    Usr_HAS_NOT_ACCEPTED;
+	 HTM_TD_Begin ("class=\"BT %s\" title=\"%s\"",BgColor,*Txt[HasAccepted]);
+	    HTM_Txt (Icon[HasAccepted]);
 	 HTM_TD_End ();
 	}
 
