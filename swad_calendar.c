@@ -218,9 +218,9 @@ void Cal_DrawCurrentMonth (void)
 		Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod,
 		The_GetSuffix (),
 		Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language]);
-      Frm_SetParsForm (ParsStr,ActSeeCal,true);
+      Frm_SetParsForm (ParsStr,ActSeeCal,Frm_PUT_PAR_LOCATION_IF_NO_SESSION);
       HTM_TxtF ("'%s',",ParsStr);
-      Frm_SetParsForm (ParsStr,ActSeeDatCfe,true);
+      Frm_SetParsForm (ParsStr,ActSeeDatCfe,Frm_PUT_PAR_LOCATION_IF_NO_SESSION);
       HTM_TxtF ("'%s');",ParsStr);
    HTM_SCRIPT_End ();
   }
@@ -302,9 +302,9 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 		   Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod,
 		   Print[ViewType],The_GetSuffix (),
 		   Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language]);
-	 Frm_SetParsForm (ParsStr,ActionSeeCalendar,true);
+	 Frm_SetParsForm (ParsStr,ActionSeeCalendar,Frm_PUT_PAR_LOCATION_IF_NO_SESSION);
 	 HTM_TxtF ("'%s',",ParsStr);
-	 Frm_SetParsForm (ParsStr,ActSeeDatCfe,true);
+	 Frm_SetParsForm (ParsStr,ActSeeDatCfe,Frm_PUT_PAR_LOCATION_IF_NO_SESSION);
 	 HTM_TxtF ("'%s');",ParsStr);
       HTM_SCRIPT_End ();
 

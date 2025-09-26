@@ -1498,7 +1498,7 @@ static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
       row = mysql_fetch_row (mysql_res);
 
       /* Get year, month and day (row[0] holds the date in YYYYMMDD format) */
-      if (!(Dat_GetDateFromYYYYMMDD (&ReadDate,row[0])))
+      if (Dat_GetDateFromYYYYMMDD (&ReadDate,row[0]) == Err_ERROR)
 	 Err_WrongDateExit ();
 
       /* Get number of pages generated (in row[1]) */
@@ -1721,7 +1721,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
       row = mysql_fetch_row (mysql_res);
 
       /* Get year, month and day (row[0] holds the date in YYYYMMDD format) */
-      if (!(Dat_GetDateFromYYYYMMDD (&CurrentReadDate,row[0])))
+      if (Dat_GetDateFromYYYYMMDD (&CurrentReadDate,row[0]) == Err_ERROR)
 	 Err_WrongDateExit ();
 
       /* Get the hour (in row[1] is the hour in formato HH) */

@@ -101,8 +101,8 @@ static void Grp_PutIconsEditingGroups (__attribute__((unused)) void *Args);
 
 static void Grp_PutCheckboxAllGrps (void);
 
-static bool Grp_CheckIfNotClosedOrFull (struct ListCodGrps *LstGrpsWant,
-				        struct ListCodGrps *LstGrpsBelong);
+static Err_SuccessOrError_t Grp_CheckIfNotClosedOrFull (struct ListCodGrps *LstGrpsWant,
+						        struct ListCodGrps *LstGrpsBelong);
 static void Grp_RemoveUsrFromGrps (Usr_MeOrOther_t MeOrOther,
 				   struct ListCodGrps *LstGrpsWant,
 				   struct ListCodGrps *LstGrpsBelong);
@@ -775,7 +775,7 @@ void Grp_ChangeUsrGrps (Usr_MeOrOther_t MeOrOther,Cns_Verbose_t Verbose)
    extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    struct ListCodGrps LstGrpsUsrWants;
    Err_SuccessOrError_t SelectionIsValid = Err_SUCCESS;
-   bool ChangesMade;
+   Err_SuccessOrError_t ChangesMade;
 
    /***** Can I change another user's groups? *****/
    if (Grp_CheckIfICanChangeGrps () == Usr_CAN_NOT)
@@ -816,14 +816,18 @@ void Grp_ChangeUsrGrps (Usr_MeOrOther_t MeOrOther,Cns_Verbose_t Verbose)
       case Err_SUCCESS:
 	 ChangesMade = Grp_ChangeGrpsAtomically (MeOrOther,&LstGrpsUsrWants);
 	 if (Verbose == Cns_VERBOSE)
-	   {
-	    if (ChangesMade)
-	       Ale_CreateAlert (Ale_SUCCESS,NULL,
-				Txt_The_requested_group_changes_were_successful);
-	    else
-	       Ale_CreateAlert (Ale_WARNING,NULL,
-				Txt_There_has_been_no_change_in_groups);
-	   }
+	    switch (ChangesMade)
+	      {
+	       case Err_SUCCESS:
+		  Ale_CreateAlert (Ale_SUCCESS,NULL,
+				   Txt_The_requested_group_changes_were_successful);
+		  break;
+	       case Err_ERROR:
+	       default:
+		  Ale_CreateAlert (Ale_WARNING,NULL,
+				   Txt_There_has_been_no_change_in_groups);
+		  break;
+	      }
 	 break;
       case Err_ERROR:
       default:
@@ -840,14 +844,14 @@ void Grp_ChangeUsrGrps (Usr_MeOrOther_t MeOrOther,Cns_Verbose_t Verbose)
 /*****************************************************************************/
 /***************** Change another user's groups atomically *******************/
 /*****************************************************************************/
-// Return true if desired changes are made
+// Return Err_SUCCESS if desired changes are made
 
-bool Grp_ChangeGrpsAtomically (Usr_MeOrOther_t MeOrOther,
-			       struct ListCodGrps *LstGrpsUsrWants)
+Err_SuccessOrError_t Grp_ChangeGrpsAtomically (Usr_MeOrOther_t MeOrOther,
+					       struct ListCodGrps *LstGrpsUsrWants)
   {
    extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    struct ListCodGrps LstGrpsUsrBelongs;
-   bool SelectionIsValid;
+   Err_SuccessOrError_t SelectionIsValid;
 
    /***** Lock tables to make the enrolment atomic *****/
    if (Usr_UsrDat[MeOrOther]->Roles.InCurrentCrs == Rol_STD)
@@ -862,13 +866,13 @@ bool Grp_ChangeGrpsAtomically (Usr_MeOrOther_t MeOrOther,
                                 Grp_CLOSED_AND_OPEN_GROUPS);
 
    /***** Check if selection of groups is valid *****/
-   SelectionIsValid = true;
+   SelectionIsValid = Err_SUCCESS;
    if (MeOrOther == Usr_ME && Gbl.Usrs.Me.Role.Logged == Rol_STD)	// It's me, a student, trying to changing my groups
       /* Go across the received list of groups which I want to belong
 	 and check that they are not closed or full */
       SelectionIsValid = Grp_CheckIfNotClosedOrFull (LstGrpsUsrWants,&LstGrpsUsrBelongs);
 
-   if (SelectionIsValid)
+   if (SelectionIsValid == Err_SUCCESS)
      {
       /***** Go across the list of groups user belongs to,
 	     removing her/him from those groups not wanted *****/
@@ -897,10 +901,10 @@ bool Grp_ChangeGrpsAtomically (Usr_MeOrOther_t MeOrOther,
 /********* removing me from those open groups that are not present ***********/
 /********* in the received list of groups I want to enrol in       ***********/
 /*****************************************************************************/
-// Return true is selection is valid
+// Return Err_SUCCESS is selection is valid
 
-static bool Grp_CheckIfNotClosedOrFull (struct ListCodGrps *LstGrpsWant,
-				        struct ListCodGrps *LstGrpsBelong)
+static Err_SuccessOrError_t Grp_CheckIfNotClosedOrFull (struct ListCodGrps *LstGrpsWant,
+						        struct ListCodGrps *LstGrpsBelong)
   {
    unsigned NumGrpWant;
    long GrpCodWant;
@@ -935,17 +939,17 @@ static bool Grp_CheckIfNotClosedOrFull (struct ListCodGrps *LstGrpsWant,
 		 {
 		  /* Check if the group is closed */
 		  if (Grp->Open == CloOpe_CLOSED)
-		     return false;	// Selection is not valid
+		     return Err_ERROR;	// Selection is not valid
 
 		  /* Check if the group is full */
 		  if (Grp->NumUsrs[Rol_STD] >= Grp->MaxStds)
-		     return false;	// Selection is not valid
+		     return Err_ERROR;	// Selection is not valid
 		 }
 	      }
 	   }
      }
 
-   return true;	// Selection is valid
+   return Err_SUCCESS;	// Selection is valid
   }
 
 /*****************************************************************************/

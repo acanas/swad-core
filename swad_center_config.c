@@ -899,7 +899,7 @@ void CtrCfg_ReceivePhoto (void)
    /* End the reception of image in a temporary file */
    snprintf (PathFileImgTmp,sizeof (PathFileImgTmp),"%s/%s.%s",
              Cfg_PATH_MEDIA_TMP_PRIVATE,Cry_GetUniqueNameEncrypted (),PtrExtension);
-   if (!Fil_EndReceptionOfFile (PathFileImgTmp,Par))
+   if (Fil_EndReceptionOfFile (PathFileImgTmp,Par) == Err_ERROR)
      {
       Ale_ShowAlert (Ale_WARNING,"Error copying file.");
       return;

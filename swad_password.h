@@ -54,10 +54,10 @@ void Pwd_ChkIdLoginAndSendNewPwd (void);
 int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1]);
 void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1]);
 
-bool Pwd_SlowCheckIfPasswordIsGood (const char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1],
-                                    const char EncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1],
-                                    long UsrCod);
-bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword);
+Err_SuccessOrError_t Pwd_SlowCheckIfPasswordIsGood (const char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1],
+						    const char EncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1],
+						    long UsrCod);
+Err_SuccessOrError_t Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword);
 
 void Pwd_ShowFormChgMyPwd (void);
 void Pwd_PutFormToGetNewPasswordOnce (void);
@@ -65,6 +65,6 @@ void Pwd_PutFormToGetNewPasswordTwice (void);
 void Pwd_ShowFormChgOtherUsrPwd (void);
 
 void Pwd_AskForConfirmationOnDangerousAction (void);
-bool Pwd_GetConfirmationOnDangerousAction (void);
+Err_SuccessOrError_t Pwd_GetConfirmationOnDangerousAction (void);
 
 #endif

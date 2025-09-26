@@ -406,7 +406,7 @@ static void Hld_GetHolidayDataFromRow (MYSQL_RES *mysql_res,
    Hld->HldTyp = Hld_GetTypeOfHoliday (row[3]);
 
    /***** Get start date (row[4] holds the date in YYYYMMDD format) *****/
-   if (!(Dat_GetDateFromYYYYMMDD (&(Hld->StartDate),row[4])))
+   if (Dat_GetDateFromYYYYMMDD (&(Hld->StartDate),row[4]) == Err_ERROR)
       Err_WrongDateExit ();
 
    /***** Set / get end date *****/
@@ -418,7 +418,7 @@ static void Hld_GetHolidayDataFromRow (MYSQL_RES *mysql_res,
 	 break;
       case Hld_NON_SCHOOL_PERIOD:	// One or more days
 	 /* Get end date (row[5] holds the date in YYYYMMDD format) */
-	 if (!(Dat_GetDateFromYYYYMMDD (&(Hld->EndDate),row[5])))
+	 if (Dat_GetDateFromYYYYMMDD (&(Hld->EndDate),row[5]) == Err_ERROR)
 	    Err_WrongDateExit ();
 	 break;
      }

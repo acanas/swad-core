@@ -276,7 +276,7 @@ Exi_Exist_t Tre_DB_GetNodeDataByCod (const struct Tre_Node *Node,
 /************************* Check if a node has text **************************/
 /*****************************************************************************/
 
-bool Tre_DB_CheckIfNodeHasTxt (const struct Tre_Node *Node)
+Exi_Exist_t Tre_DB_CheckIfNodeHasTxt (const struct Tre_Node *Node)
   {
    return
    DB_QueryEXISTS ("can not check if a tree node has text",
@@ -289,7 +289,7 @@ bool Tre_DB_CheckIfNodeHasTxt (const struct Tre_Node *Node)
 		      " AND Txt<>'')",
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Node->InfoType]) == Exi_EXISTS;
+		   Tre_DB_Types[Node->InfoType]);
   }
 
 /*****************************************************************************/
@@ -573,7 +573,8 @@ void Tre_DB_RemoveNodeFromExpandedNodes (long NodCod)
 /**************** Check list of node resources from database *****************/
 /*****************************************************************************/
 
-bool Tre_DB_CheckListItems (const struct Tre_Node *Node,bool ShowHiddenResources)
+Exi_Exist_t Tre_DB_CheckListItems (const struct Tre_Node *Node,
+				   bool ShowHiddenResources)
   {
    const char *Table = Tre_DB_TablesItems[Node->InfoType];
    char *HiddenSubQuery;
@@ -581,7 +582,7 @@ bool Tre_DB_CheckListItems (const struct Tre_Node *Node,bool ShowHiddenResources
 
    /***** Trivial check: are there items for this info type? *****/
    if (!Table)
-      return false;
+      return Exi_DOES_NOT_EXIST;
 
    /***** Create subquery *****/
    if (ShowHiddenResources)
@@ -617,7 +618,7 @@ bool Tre_DB_CheckListItems (const struct Tre_Node *Node,bool ShowHiddenResources
    /***** Free subquery *****/
    free (HiddenSubQuery);
 
-   return Exists == Exi_EXISTS;
+   return Exists;
   }
 
 /*****************************************************************************/

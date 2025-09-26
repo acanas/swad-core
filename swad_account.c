@@ -663,7 +663,8 @@ static Err_SuccessOrError_t Acc_GetParsNewAccount (char NewNickWithoutArr[Nck_MA
    /***** Step 3/3: Get new password from form *****/
    Par_GetParText ("Paswd",NewPlainPassword,Pwd_MAX_BYTES_PLAIN_PASSWORD);
    Cry_EncryptSHA512Base64 (NewPlainPassword,NewEncryptedPassword);
-   if (!Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword,NewEncryptedPassword,-1L))        // New password is good?
+   if (Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword,
+				      NewEncryptedPassword,-1L) == Err_ERROR)        // New password is good?
      {
       SuccessOrError = Err_ERROR;
       Ale_ShowAlerts (NULL);	// Error message is set in Pwd_SlowCheckIfPasswordIsGood
@@ -794,10 +795,16 @@ void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove)
 	 Acc_AskIfRemoveUsrAccount (MeOrOther);
 	 break;
       case Acc_REMOVE_USR:		// Eliminate completely the user from the platform
-	 if (Pwd_GetConfirmationOnDangerousAction ())
-	    Acc_CompletelyEliminateAccount (&Gbl.Usrs.Other.UsrDat,Cns_VERBOSE);
-	 else
-	    Acc_AskIfRemoveUsrAccount (MeOrOther);
+	 switch (Pwd_GetConfirmationOnDangerousAction ())
+	   {
+	    case Err_SUCCESS:
+	       Acc_CompletelyEliminateAccount (&Gbl.Usrs.Other.UsrDat,Cns_VERBOSE);
+	       break;
+	    case Err_ERROR:
+	    default:
+	       Acc_AskIfRemoveUsrAccount (MeOrOther);
+	       break;
+	   }
 	 break;
      }
   }
@@ -905,10 +912,16 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
 
 void Acc_RemoveMyAccount (void)
   {
-   if (Pwd_GetConfirmationOnDangerousAction ())
-      Acc_CompletelyEliminateAccount (&Gbl.Usrs.Me.UsrDat,Cns_VERBOSE);
-   else
-      Acc_AskIfRemoveUsrAccount (Usr_ME);
+   switch (Pwd_GetConfirmationOnDangerousAction ())
+     {
+      case Err_SUCCESS:
+	 Acc_CompletelyEliminateAccount (&Gbl.Usrs.Me.UsrDat,Cns_VERBOSE);
+	 break;
+      case Err_ERROR:
+      default:
+	 Acc_AskIfRemoveUsrAccount (Usr_ME);
+	 break;
+     }
   }
 
 void Acc_CompletelyEliminateAccount (struct Usr_Data *UsrDat,

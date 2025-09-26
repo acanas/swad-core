@@ -68,6 +68,13 @@ typedef enum
    Lay_SHOWING_SEVERAL
   } Lay_ShowingOneOrSeveral_t;
 
+#define Lay_NUM_SPACES 2
+typedef enum
+  {
+   Lay_NORMAL_SPACES,
+   Lay_NON_BR_SPACES,
+  } Lay_Spaces_t;
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/

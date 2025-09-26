@@ -75,6 +75,16 @@
 #include "swad_test_database.h"
 
 /*****************************************************************************/
+/******************************* Private types *******************************/
+/*****************************************************************************/
+
+typedef enum
+  {
+   Crs_DONT_WRITE_COL_ACCEPTED,
+   Crs_WRITE_COL_ACCEPTED,
+  } Crs_WriteColumnAccepted_t;
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -113,10 +123,11 @@ static void Crs_GetCourseDataFromRow (MYSQL_RES *mysql_res,
 static void Crs_EmptyCourseCompletely (long HieCod);
 
 static void Crs_PutParCrsCod (void *CrsCod);
-// static void Crs_PutButtonToGoToCrs (void);
 static void Crs_PutButtonToRegisterInCrs (void);
 
-static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnAccepted);
+static void Crs_WriteHeadCrss (Crs_WriteColumnAccepted_t WriteColumnAccepted);
+static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
+				 Crs_WriteColumnAccepted_t WriteColumnAccepted);
 
 static void Crs_EditingCourseConstructor (void);
 static void Crs_EditingCourseDestructor (void);
@@ -1629,9 +1640,6 @@ void Crs_GetAndWriteCrssOfAUsr (const struct Usr_Data *UsrDat,Rol_Role_t Role)
    extern const char *Txt_USER_in_COURSE;
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
-   extern const char *Txt_Year_OF_A_DEGREE;
-   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCrss;
@@ -1661,18 +1669,8 @@ void Crs_GetAndWriteCrssOfAUsr (const struct Usr_Data *UsrDat,Rol_Role_t Role)
 
 	 HTM_TR_End ();
 
-	 HTM_TR_Begin (NULL);
-
-            HTM_TH_Span (NULL                               ,HTM_HEAD_CENTER,1,1,"BT");
-            HTM_TH_Span (NULL                               ,HTM_HEAD_CENTER,1,1,"BT");
-	    HTM_TH      (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]         ,HTM_HEAD_LEFT  );
-	    HTM_TH      (Txt_Year_OF_A_DEGREE               ,HTM_HEAD_CENTER);
-	    HTM_TH      (Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]         ,HTM_HEAD_LEFT  );
-	    HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],HTM_HEAD_RIGHT );
-	    HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NET],HTM_HEAD_RIGHT );
-	    HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],HTM_HEAD_RIGHT );
-
-	 HTM_TR_End ();
+	 /* Heading row */
+	 Crs_WriteHeadCrss (Crs_WRITE_COL_ACCEPTED);
 
 	 /* Write courses */
 	 for (NumCrs  = 1;
@@ -1683,7 +1681,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct Usr_Data *UsrDat,Rol_Role_t Role)
 	    row = mysql_fetch_row (mysql_res);
 
 	    /* Write data of this course */
-	    Crs_WriteRowCrsData (NumCrs,row,true);
+	    Crs_WriteRowCrsData (NumCrs,row,Crs_WRITE_COL_ACCEPTED);
 	   }
 
       /* End table and box */
@@ -1702,9 +1700,6 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
   {
    extern const char *Txt_HIERARCHY_SINGUL_abc[Hie_NUM_LEVELS];
    extern const char *Txt_HIERARCHY_PLURAL_abc[Hie_NUM_LEVELS];
-   extern const char *Txt_Year_OF_A_DEGREE;
-   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
-   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    char *Title;
    MYSQL_ROW row;
    unsigned NumCrs;
@@ -1722,20 +1717,10 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
       free (Title);
 
 	 /***** Heading row *****/
-	 HTM_TR_Begin (NULL);
-
-            HTM_TH_Span (NULL                          ,HTM_HEAD_CENTER,1,1,"BT");
-	    HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]         ,HTM_HEAD_LEFT  );
-	    HTM_TH (Txt_Year_OF_A_DEGREE               ,HTM_HEAD_CENTER);
-	    HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]         ,HTM_HEAD_LEFT  );
-	    HTM_TH (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],HTM_HEAD_RIGHT );
-	    HTM_TH (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NET],HTM_HEAD_RIGHT );
-	    HTM_TH (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],HTM_HEAD_RIGHT );
-
-	 HTM_TR_End ();
+	 Crs_WriteHeadCrss (Crs_DONT_WRITE_COL_ACCEPTED);
 
 	 /***** Write courses *****/
-	 for (NumCrs = 1;
+	 for (NumCrs  = 1;
 	      NumCrs <= NumCrss;
 	      NumCrs++)
 	   {
@@ -1743,7 +1728,7 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
 	    row = mysql_fetch_row (*mysql_res);
 
 	    /* Write data of this course */
-	    Crs_WriteRowCrsData (NumCrs,row,false);
+	    Crs_WriteRowCrsData (NumCrs,row,Crs_DONT_WRITE_COL_ACCEPTED);
 	   }
 
       /***** End table and box *****/
@@ -1755,10 +1740,36 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
   }
 
 /*****************************************************************************/
+/*** Write heading for list of courses found in a search or user's courses ***/
+/*****************************************************************************/
+
+static void Crs_WriteHeadCrss (Crs_WriteColumnAccepted_t WriteColumnAccepted)
+  {
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
+   extern const char *Txt_Year_OF_A_DEGREE;
+   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
+
+   HTM_TR_Begin (NULL);
+
+      if (WriteColumnAccepted == Crs_WRITE_COL_ACCEPTED)
+         HTM_TH_Span (NULL                       ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH_Span (NULL                          ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]  ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Year_OF_A_DEGREE               ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]  ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],HTM_HEAD_RIGHT );
+      HTM_TH (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NET],HTM_HEAD_RIGHT );
+      HTM_TH (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],HTM_HEAD_RIGHT );
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
 /************** Write the data of a course (result of a query) ***************/
 /*****************************************************************************/
 
-static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnAccepted)
+static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
+				 Crs_WriteColumnAccepted_t WriteColumnAccepted)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_Enrolment_confirmed;
@@ -1807,8 +1818,9 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
-      /***** User has accepted joining to this course/to any course in degree/to any course? *****/
-      if (WriteColumnAccepted)
+      /***** User has accepted joining
+	     to this course/to any course in degree/to any course? *****/
+      if (WriteColumnAccepted == Crs_WRITE_COL_ACCEPTED)
 	{
 	 Accepted = (row[7][0] == 'Y');
 	 HTM_TD_Begin ("class=\"BT %s\" title=\"%s\"",

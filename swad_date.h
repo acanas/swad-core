@@ -163,7 +163,8 @@ Dat_Format_t Dat_GetDateFormatFromStr (const char *Str);
 void Dat_GetAndConvertCurrentDateTime (void);
 
 time_t Dat_GetUNIXTimeFromStr (const char *Str);
-bool Dat_GetDateFromYYYYMMDD (struct Dat_Date *Date,const char *YYYYMMDDString);
+Err_SuccessOrError_t Dat_GetDateFromYYYYMMDD (struct Dat_Date *Date,
+					      const char *YYYYMMDD);
 
 void Dat_ShowClientLocalTime (void);
 

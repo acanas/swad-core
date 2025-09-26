@@ -32,6 +32,7 @@
 #include <stdio.h>		// For FILE
 
 #include "swad_error.h"
+#include "swad_exist.h"
 
 /*****************************************************************************/
 /******************************* Public types *******************************/
@@ -97,9 +98,12 @@ void Str_RemoveLeadingSpacesHTML (char *Str);
 void Str_RemoveTrailingSpacesHTML (char *Str);
 void Str_RemoveLeadingZeros (char *Str);
 void Str_RemoveLeadingArrobas (char *Str);
-bool Str_FindStrInFile (FILE *FileSrc,const char *Str,Str_SkipHTMLComments_t SkipHTMLComments);
-bool Str_FindStrInFileBack (FILE *FileSrc,const char *Str,Str_SkipHTMLComments_t SkipHTMLComments);
-bool Str_WriteUntilStrFoundInFileIncludingStr (FILE *FileTgt,FILE *FileSrc,const char *Str,Str_SkipHTMLComments_t SkipHTMLComments);
+Exi_Exist_t Str_FindStrInFile (FILE *FileSrc,const char *Str,
+			       Str_SkipHTMLComments_t SkipHTMLComments);
+Exi_Exist_t Str_FindStrInFileBack (FILE *FileSrc,const char *Str,
+				   Str_SkipHTMLComments_t SkipHTMLComments);
+bool Str_WriteUntilStrFoundInFileIncludingStr (FILE *FileTgt,FILE *FileSrc,const char *Str,
+					       Str_SkipHTMLComments_t SkipHTMLComments);
 char *Str_GetCellFromHTMLTableSkipComments (FILE *FileSrc,char *Str,int MaxLength);
 char *Str_GetNextStrFromFileConvertingToLower (FILE *FileSrc,char *Str, int N);
 void Str_GetNextStringUntilSpace (const char **StrSrc,char *StrDst,size_t MaxLength);

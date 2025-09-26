@@ -260,7 +260,7 @@ void RubCri_ReceiveCriterion (void)
    Rub_GetRubricDataByCod (&Rubrics.Rubric);
 
    /***** Check if rubric is editable *****/
-   if (!Rub_CheckIfEditable ())
+   if (Rub_CheckIfEditable () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** If I can edit rubrics ==> receive criterion from form *****/
@@ -287,7 +287,7 @@ static void RubCri_ReceiveCriterionFieldsFromForm (struct RubCri_Criterion *Crit
    Par_GetParText ("Title",Criterion->Title,RubCri_MAX_BYTES_TITLE);
 
    /***** Get criterion link to resource *****/
-   if (Rsc_GetParLink (&Criterion->Link))
+   if (Rsc_GetParLink (&Criterion->Link) == Err_SUCCESS)
       /***** Remove link from clipboard *****/
       Rsc_DB_RemoveLinkFromClipboard (&Criterion->Link);
 
@@ -356,7 +356,7 @@ void RubCri_ChangeTitle (void)
    RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
-   if (!Rub_CheckIfEditable ())
+   if (Rub_CheckIfEditable () == Usr_CAN_NOT)
      Err_NoPermissionExit ();
 
    /***** Receive new title from form *****/
@@ -412,7 +412,7 @@ static void RubCri_ChangeValueCriterion (RubCri_ValueRange_t ValueRange)
    RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
-   if (!Rub_CheckIfEditable ())
+   if (Rub_CheckIfEditable () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Receive new value from form *****/
@@ -455,7 +455,7 @@ void RubCri_ChangeWeight (void)
    RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
-   if (!Rub_CheckIfEditable ())
+   if (Rub_CheckIfEditable () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Receive new weight from form *****/
@@ -1063,7 +1063,7 @@ static bool RubCri_ComputeRubricScore (Rsc_Type_t RscType,long RscCod,long UsrCo
    *RubricScore = 0.0;
 
    /***** Check that rubric is not yet in the stack *****/
-   RecursiveTree = Rub_FindRubCodInStack (*TOS,RubCod);
+   RecursiveTree = Rub_FindRubCodInStack (*TOS,RubCod) == Exi_EXISTS;
 
    if (!RecursiveTree)
      {
@@ -1148,19 +1148,19 @@ void Rub_PopRubCod (struct Rub_Node **TOS)
 /*****************************************************************************/
 /************************ Find rubric code in stack **************************/
 /*****************************************************************************/
-// Return true if found
+// Return Exi_EXISTS if found
 
-bool Rub_FindRubCodInStack (const struct Rub_Node *TOS,long RubCod)
+Exi_Exist_t Rub_FindRubCodInStack (const struct Rub_Node *TOS,long RubCod)
   {
    while (TOS)
      {
       if (TOS->RubCod == RubCod)
-	 return true;
+	 return Exi_EXISTS;
 
       TOS = TOS->Prev;
      }
 
-   return false;
+   return Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -1365,7 +1365,7 @@ void RubCri_ReqRemCriterion (void)
    RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
-   if (!Rub_CheckIfEditable ())
+   if (Rub_CheckIfEditable () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Show question and button to remove question *****/
@@ -1399,7 +1399,7 @@ void RubCri_RemoveCriterion (void)
    RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
-   if (!Rub_CheckIfEditable ())
+   if (Rub_CheckIfEditable () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Remove the criterion from all tables *****/
@@ -1442,7 +1442,7 @@ void RubCri_MoveUpCriterion (void)
    RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
-   if (!Rub_CheckIfEditable ())
+   if (Rub_CheckIfEditable () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get criterion index *****/
@@ -1490,7 +1490,7 @@ void RubCri_MoveDownCriterion (void)
    RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
-   if (!Rub_CheckIfEditable ())
+   if (Rub_CheckIfEditable () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get criterion index *****/
@@ -1603,11 +1603,11 @@ void RubCri_ChangeLink (void)
    RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
-   if (!Rub_CheckIfEditable ())
+   if (Rub_CheckIfEditable () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get link type and code *****/
-   if (Rsc_GetParLink (&Rubrics.Criterion.Link))
+   if (Rsc_GetParLink (&Rubrics.Criterion.Link) == Err_SUCCESS)
      {
       /***** Update link to resource in criterion *****/
       Rub_DB_UpdateCriterionLink (&Rubrics.Criterion);

@@ -132,7 +132,7 @@ void Fil_CloseAndRemoveFileForHTMLOutput (void)
 /********** Open temporary file and write on it reading from stdin ***********/
 /*****************************************************************************/
 
-bool Fil_ReadStdinIntoTmpFile (void)
+Err_SuccessOrError_t Fil_ReadStdinIntoTmpFile (void)
   {
    extern const char *Txt_UPLOAD_FILE_File_too_large_maximum_X_MiB_NO_HTML;
    extern const char *Txt_UPLOAD_FILE_Upload_time_too_long_maximum_X_minutes_NO_HTML;
@@ -179,11 +179,11 @@ bool Fil_ReadStdinIntoTmpFile (void)
       Gbl.Layout.DivsEndWritten   =
       Gbl.Layout.HTMLEndWritten   = true;
 
-      return false;
+      return Err_ERROR;
      }
    rewind (Fil_QueryFile);
 
-   return true;
+   return Err_SUCCESS;
   }
 
 /*****************************************************************************/
@@ -289,7 +289,8 @@ struct Par_Param *Fil_StartReceptionOfFile (const char *ParFile,
 /****************** End the reception of data of a file **********************/
 /*****************************************************************************/
 
-bool Fil_EndReceptionOfFile (char *FileNameDataTmp,struct Par_Param *Param)
+Err_SuccessOrError_t Fil_EndReceptionOfFile (char *FileNameDataTmp,
+					     struct Par_Param *Param)
   {
    FILE *FileDataTmp;
    unsigned char Bytes[Fil_NUM_BYTES_PER_CHUNK];
@@ -317,19 +318,19 @@ bool Fil_EndReceptionOfFile (char *FileNameDataTmp,struct Par_Param *Param)
       if (fread (Bytes,1,BytesToCopy,QueryFile) != BytesToCopy)
 	{
          fclose (FileDataTmp);
-	 return false;
+	 return Err_ERROR;
 	}
       if (fwrite (Bytes,sizeof (Bytes[0]),BytesToCopy,FileDataTmp) != BytesToCopy)
 	{
          fclose (FileDataTmp);
-	 return false;
+	 return Err_ERROR;
 	}
      }
 
    /***** Close destination file *****/
    fclose (FileDataTmp);
 
-   return true;
+   return Err_SUCCESS;
   }
 
 /*****************************************************************************/

@@ -2236,13 +2236,18 @@ void Inf_ReceivePagInfo (void)
 	    Fil_CreateDirIfNotExists (PathRelDirHTML);
 	    snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
 		      PathRelDirHTML);
-	    if (Fil_EndReceptionOfFile (PathRelFileHTML,Par))
+	    switch (Fil_EndReceptionOfFile (PathRelFileHTML,Par))
 	      {
-	       Ale_ShowAlert (Ale_SUCCESS,Txt_The_HTML_file_has_been_received_successfully);
-	       FileIsOK = Err_SUCCESS;
+	       case Err_SUCCESS:
+		  Ale_ShowAlert (Ale_SUCCESS,
+				 Txt_The_HTML_file_has_been_received_successfully);
+		  FileIsOK = Err_SUCCESS;
+		  break;
+	       case Err_ERROR:
+	       default:
+		  Ale_ShowAlert (Ale_ERROR,"Error uploading file.");
+		  break;
 	      }
-	    else
-	       Ale_ShowAlert (Ale_ERROR,"Error uploading file.");
 	   }
 	 else if (Str_FileIs (SourceFileName,"zip")) // .zip file
 	   {
@@ -2252,49 +2257,58 @@ void Inf_ReceivePagInfo (void)
 		      Gbl.Crs.Path.AbsPriv,
 		      Inf_FileNamesForInfoType[InfoType]);
 
-	    if (Fil_EndReceptionOfFile (PathRelFileZIP,Par))
+	    switch (Fil_EndReceptionOfFile (PathRelFileZIP,Par))
 	      {
-	       Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_received_successfully);
+	       case Err_SUCCESS:
+		  Ale_ShowAlert (Ale_SUCCESS,
+				 Txt_The_ZIP_file_has_been_received_successfully);
 
-	       /* Uncompress ZIP */
-	       snprintf (StrUnzip,sizeof (StrUnzip),"unzip -qq -o %s -d %s",
-			 PathRelFileZIP,PathRelDirHTML);
-	       if (system (StrUnzip) == 0)
-		 {
-		  /* Check if uploaded file is index.html or index.htm */
-		  snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
-			    "%s/index.html",PathRelDirHTML);
-		  switch (Fil_CheckIfPathExists (PathRelFileHTML))
+		  /* Uncompress ZIP */
+		  snprintf (StrUnzip,sizeof (StrUnzip),"unzip -qq -o %s -d %s",
+			    PathRelFileZIP,PathRelDirHTML);
+		  if (system (StrUnzip) == 0)
 		    {
-		     case Exi_EXISTS:
-			Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);
-			Ale_ShowAlert (Ale_SUCCESS,Txt_Found_an_index_html_file);
-			FileIsOK = Err_SUCCESS;
-			break;
-		     case Exi_DOES_NOT_EXIST:
-		     default:
-			snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
-				  "%s/index.htm",PathRelDirHTML);
-			switch (Fil_CheckIfPathExists (PathRelFileHTML))
-			  {
-			   case Exi_EXISTS:
-			      Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);
-			      Ale_ShowAlert (Ale_SUCCESS,Txt_Found_an_index_html_file);
-			      FileIsOK = Err_SUCCESS;
-			      break;
-			   case Exi_DOES_NOT_EXIST:
-			   default:
-			      Ale_ShowAlert (Ale_WARNING,Txt_No_file_index_html_found_within_the_ZIP_file);
-			      break;
-			  }
-			break;
+		     /* Check if uploaded file is index.html or index.htm */
+		     snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
+			       "%s/index.html",PathRelDirHTML);
+		     switch (Fil_CheckIfPathExists (PathRelFileHTML))
+		       {
+			case Exi_EXISTS:
+			   Ale_ShowAlert (Ale_SUCCESS,
+					  Txt_The_ZIP_file_has_been_unzipped_successfully);
+			   Ale_ShowAlert (Ale_SUCCESS,Txt_Found_an_index_html_file);
+			   FileIsOK = Err_SUCCESS;
+			   break;
+			case Exi_DOES_NOT_EXIST:
+			default:
+			   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
+				     "%s/index.htm",PathRelDirHTML);
+			   switch (Fil_CheckIfPathExists (PathRelFileHTML))
+			     {
+			      case Exi_EXISTS:
+				 Ale_ShowAlert (Ale_SUCCESS,
+						Txt_The_ZIP_file_has_been_unzipped_successfully);
+				 Ale_ShowAlert (Ale_SUCCESS,
+						Txt_Found_an_index_html_file);
+				 FileIsOK = Err_SUCCESS;
+				 break;
+			      case Exi_DOES_NOT_EXIST:
+			      default:
+				 Ale_ShowAlert (Ale_WARNING,
+						Txt_No_file_index_html_found_within_the_ZIP_file);
+				 break;
+			     }
+			   break;
+		       }
 		    }
-		 }
-	       else
-		  Err_ShowErrorAndExit ("Can not unzip file.");
+		  else
+		     Err_ShowErrorAndExit ("Can not unzip file.");
+		  break;
+	       case Err_ERROR:
+	       default:
+		  Ale_ShowAlert (Ale_ERROR,"Error uploading file.");
+		  break;
 	      }
-	    else
-	       Ale_ShowAlert (Ale_ERROR,"Error uploading file.");
 	   }
 	 else
 	    Ale_ShowAlert (Ale_WARNING,Txt_The_file_type_should_be_HTML_or_ZIP);

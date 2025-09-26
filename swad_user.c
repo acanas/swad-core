@@ -229,7 +229,7 @@ static void Usr_WriteUsrSurnamesAndName (struct Usr_Data *UsrDat,
 static void Usr_WriteEmail (struct Usr_Data *UsrDat,const char *BgColor);
 static void Usr_WriteUsrData (const char *BgColor,
                               const char *Data,const char *Link,
-                              bool NonBreak,bool Accepted);
+                              Lay_Spaces_t Spaces,bool Accepted);
 
 static void Usr_GetGstsLst (Hie_Level_t HieLvl);
 static void Usr_AllocateUsrsList (Rol_Role_t Role);
@@ -502,6 +502,7 @@ void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Get user's data from database *****/
    switch (Usr_DB_GetUsrDataFromUsrCod (&mysql_res,UsrDat->UsrCod,GetPrefs))
@@ -568,7 +569,7 @@ void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
 	 Str_Copy (UsrDat->Phone[1],row[18],sizeof (UsrDat->Phone[1]) - 1);
 
 	 /* Get birthday (row[19]) */
-	 Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[19]);
+	 SuccessOrError = Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[19]);
 	 Dat_ConvDateToDateStr (&(UsrDat->Birthday),UsrDat->StrBirthday);
 
 	 /* Get comments (row[20]) */
@@ -2303,7 +2304,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
       Usr_WriteUsrData (The_GetColorRows (),
 			Ins.FullName,
-			NULL,true,false);
+			NULL,Lay_NON_BR_SPACES,false);
 
       /***** Write the rest of the data of the guest *****/
       if (UsrDat->Tch.CtrCod > 0)
@@ -2314,7 +2315,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Tch.CtrCod > 0 ? Ctr.FullName :
 						 NULL,
-			NULL,true,false);
+			NULL,Lay_NON_BR_SPACES,false);
       if (UsrDat->Tch.DptCod > 0)
 	{
 	 Dpt.DptCod = UsrDat->Tch.DptCod;
@@ -2323,27 +2324,27 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Tch.DptCod > 0 ? Dpt.FullName :
 						 NULL,
-			NULL,true,false);
+			NULL,Lay_NON_BR_SPACES,false);
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Tch.Office[0] ? UsrDat->Tch.Office :
 						NULL,
-			NULL,true,false);
+			NULL,Lay_NON_BR_SPACES,false);
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Tch.OfficePhone[0] ? UsrDat->Tch.OfficePhone :
 						     NULL,
-			NULL,true,false);
+			NULL,Lay_NON_BR_SPACES,false);
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Phone[0][0] ? UsrDat->Phone[0] :
 					      NULL,
-			NULL,true,false);
+			NULL,Lay_NON_BR_SPACES,false);
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Phone[1][0] ? UsrDat->Phone[1] :
 					      NULL,
-			NULL,true,false);
+			NULL,Lay_NON_BR_SPACES,false);
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->StrBirthday[0] ? UsrDat->StrBirthday :
 						 NULL,
-			NULL,true,false);
+			NULL,Lay_NON_BR_SPACES,false);
 
    /***** End row *****/
    HTM_TR_End ();
@@ -2404,24 +2405,24 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
       Usr_WriteUsrData (The_GetColorRows (),
 			Ins.FullName,
-			NULL,true,UsrDat->Accepted);
+			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
 
       /***** Write the rest of the data of the student *****/
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Phone[0][0] ? (ShowData ? UsrDat->Phone[0] :
 							  "********") :
 					      NULL,
-			NULL,true,UsrDat->Accepted);
+			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Phone[1][0] ? (ShowData ? UsrDat->Phone[1] :
 							  "********") :
 					      NULL,
-			NULL,true,UsrDat->Accepted);
+			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->StrBirthday[0] ? (ShowData ? UsrDat->StrBirthday :
 							     "********") :
 						 NULL,
-			NULL,true,UsrDat->Accepted);
+			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
 
       if (HieLvl == Hie_CRS)
 	{
@@ -2435,11 +2436,12 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
 	    if (GrpTyp->NumGrps)         // If current course tiene groups of este type
 	      {
 	       Grp_GetNamesGrpsUsrBelongsTo (UsrDat->UsrCod,GrpTyp->GrpTypCod,GroupNames);
-	       Usr_WriteUsrData (The_GetColorRows (),GroupNames,NULL,true,UsrDat->Accepted);
+	       Usr_WriteUsrData (The_GetColorRows (),GroupNames,NULL,
+				 Lay_NON_BR_SPACES,UsrDat->Accepted);
 	      }
 	   }
 
-	 /***** Fields of the record dependientes of the course *****/
+	 /***** Fields of the record depending on the course *****/
 	 for (NumField = 0;
 	      NumField < Gbl.Crs.Records.LstFields.Num;
 	      NumField++)
@@ -2461,7 +2463,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
 		  break;
 	      }
 
-	    Usr_WriteUsrData (The_GetColorRows (),Text,NULL,false,UsrDat->Accepted);
+	    Usr_WriteUsrData (The_GetColorRows (),Text,NULL,Lay_NORMAL_SPACES,UsrDat->Accepted);
 
 	    /* Free structure that stores the query result */
 	    DB_FreeMySQLResult (&mysql_res);
@@ -2522,7 +2524,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
       Usr_WriteUsrData (The_GetColorRows (),
 			Ins.FullName,NULL,
-			true,UsrDat->Accepted);
+			Lay_NON_BR_SPACES,UsrDat->Accepted);
 
       /***** Write the rest of teacher's data *****/
       if (ShowData && UsrDat->Tch.CtrCod > 0)
@@ -2533,7 +2535,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
       Usr_WriteUsrData (The_GetColorRows (),
 			(ShowData && UsrDat->Tch.CtrCod > 0) ? Ctr.FullName :
 							       NULL,
-			NULL,true,UsrDat->Accepted);
+			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
       if (ShowData && UsrDat->Tch.DptCod > 0)
 	{
 	 Dpt.DptCod = UsrDat->Tch.DptCod;
@@ -2542,15 +2544,15 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
       Usr_WriteUsrData (The_GetColorRows (),
 			(ShowData && UsrDat->Tch.DptCod > 0) ? Dpt.FullName :
 							       NULL,
-			NULL,true,UsrDat->Accepted);
+			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
       Usr_WriteUsrData (The_GetColorRows (),
 			(ShowData && UsrDat->Tch.Office[0]) ? UsrDat->Tch.Office :
 							      NULL,
-			NULL,true,UsrDat->Accepted);
+			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
       Usr_WriteUsrData (The_GetColorRows (),
 			(ShowData && UsrDat->Tch.OfficePhone[0]) ? UsrDat->Tch.OfficePhone :
 								   NULL,
-			NULL,true,UsrDat->Accepted);
+			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
 
    HTM_TR_End ();
   }
@@ -2627,15 +2629,15 @@ static void Usr_WriteUsrSurnamesAndName (struct Usr_Data *UsrDat,
    Usr_WriteUsrData (BgColor,
                      UsrDat->Surname1[0] ? UsrDat->Surname1 :
                 	                   NULL,
-                     NULL,true,UsrDat->Accepted);
+                     NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
    Usr_WriteUsrData (BgColor,
                      UsrDat->Surname2[0] ? UsrDat->Surname2 :
                 	                   NULL,
-                     NULL,true,UsrDat->Accepted);
+                     NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
    Usr_WriteUsrData (BgColor,
                      UsrDat->FrstName[0] ? UsrDat->FrstName :
                 	                   NULL,
-                     NULL,true,UsrDat->Accepted);
+                     NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
   }
 
 /*****************************************************************************/
@@ -2670,25 +2672,26 @@ static void Usr_WriteEmail (struct Usr_Data *UsrDat,const char *BgColor)
 
 static void Usr_WriteUsrData (const char *BgColor,
                               const char *Data,const char *Link,
-                              bool NonBreak,bool Accepted)
+                              Lay_Spaces_t Spaces,bool Accepted)
   {
+   static const char *Class[2][Lay_NUM_SPACES] =
+     {
+      [false][Lay_NORMAL_SPACES] = "DAT_SMALL",
+      [false][Lay_NON_BR_SPACES] = "DAT_SMALL_NOBR",
+      [true ][Lay_NORMAL_SPACES] = "DAT_SMALL_STRONG",
+      [true ][Lay_NON_BR_SPACES] = "DAT_SMALL_NOBR_STRONG",
+     };
    /***** Begin table cell *****/
    HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-		 Accepted ? (NonBreak ? "DAT_SMALL_NOBR_STRONG" :
-				        "DAT_SMALL_STRONG") :
-			    (NonBreak ? "DAT_SMALL_NOBR" :
-				        "DAT_SMALL"),
-		 The_GetSuffix (),BgColor);
+		 Class[Accepted][Spaces],The_GetSuffix (),BgColor);
 
       /***** Container to limit length *****/
       HTM_DIV_Begin ("class=\"USR_DAT\"");
 
 	 /***** Begin link *****/
 	 if (Link)
-	    HTM_A_Begin ("href=\"%s\" class=\"%s_%s\" target=\"_blank\"",
-			 Link,Accepted ? "DAT_SMALL_NOBR_STRONG" :
-					 "DAT_SMALL_NOBR",
-			 The_GetSuffix ());
+	    HTM_A_Begin ("href=\"%s\" class=\"%s_%s\" target=\"_blank\"",Link,
+			 Class[Accepted][Lay_NON_BR_SPACES],The_GetSuffix ());
 
 	 /***** Write data *****/
 	 HTM_Txt (Data);
@@ -3347,7 +3350,8 @@ Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool Wr
 	                                 Usr_DONT_GET_ROLE_IN_CRS);
 
                /* Find if encrypted user's code is already in list */
-               if (!Usr_FindEncUsrCodInListOfSelectedEncUsrCods (UsrDat.EnUsrCod,&Gbl.Usrs.Selected))        // If not in list ==> add it
+               if (Usr_FindEncUsrCodInListOfSelectedEncUsrCods (UsrDat.EnUsrCod,
+        							&Gbl.Usrs.Selected) == Exi_DOES_NOT_EXIST)        // If not in list ==> add it
                  {
                   LengthUsrCod = strlen (UsrDat.EnUsrCod);
 
@@ -3397,10 +3401,10 @@ Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool Wr
 /*****************************************************************************/
 /************** Find if encrypted user's code is yet in list *****************/
 /*****************************************************************************/
-// Returns true if EncryptedUsrCodToFind is in list
+// Returns Err_EXISTS if EncryptedUsrCodToFind is in list
 
-bool Usr_FindEncUsrCodInListOfSelectedEncUsrCods (const char *EncryptedUsrCodToFind,
-						  struct Usr_SelectedUsrs *SelectedUsrs)
+Exi_Exist_t Usr_FindEncUsrCodInListOfSelectedEncUsrCods (const char *EncryptedUsrCodToFind,
+						         struct Usr_SelectedUsrs *SelectedUsrs)
   {
    const char *Ptr;
    char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
@@ -3413,16 +3417,16 @@ bool Usr_FindEncUsrCodInListOfSelectedEncUsrCods (const char *EncryptedUsrCodToF
 	 Par_GetNextStrUntilSeparParMult (&Ptr,EncryptedUsrCod,
 	                                  Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 if (!strcmp (EncryptedUsrCodToFind,EncryptedUsrCod))
-	    return true;        // Found!
+	    return Exi_EXISTS;        // Found!
 	}
-   return false;        // List not allocated or user not found
+   return Exi_DOES_NOT_EXIST;        // List not allocated or user not found
   }
 
 /*****************************************************************************/
 /******* Check if there are valid users in list of encrypted user codes ******/
 /*****************************************************************************/
 
-bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs)
+Exi_Exist_t Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs)
   {
    const char *Ptr;
    struct Usr_Data UsrDat;
@@ -3436,9 +3440,9 @@ bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct Usr_Selecte
                                        Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (UsrDat.UsrCod > 0)
-         return true;
+         return Exi_EXISTS;
      }
-   return false;
+   return Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -3829,19 +3833,21 @@ void Usr_GetSelectedUsrsAndGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 					  Usr_GET_LIST_ALL_USRS);
 
    /***** Check number of users *****/
-   if (Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (SelectedUsrs))	// If some users are selected...
+   switch (Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (SelectedUsrs))
      {
-      if (FuncWhenUsrsSelected)
-         FuncWhenUsrsSelected (ArgsSelected);
-     }
-   else	// If no users are selected...
-     {
-      // ...write warning alert
-      Ale_CreateAlert (Ale_WARNING,Usr_USER_LIST_SECTION_ID,
-		       Txt_You_must_select_one_ore_more_users);
-      // ...and show again the form
-      if (FuncWhenNoUsrsSelected)
-         FuncWhenNoUsrsSelected (ArgsNoSelected);
+      case Exi_EXISTS:		// If some users are selected...
+	 if (FuncWhenUsrsSelected)
+	    FuncWhenUsrsSelected (ArgsSelected);
+	 break;
+      case Exi_DOES_NOT_EXIST:	// If no users are selected...
+      default:
+	 // ...write warning alert
+	 Ale_CreateAlert (Ale_WARNING,Usr_USER_LIST_SECTION_ID,
+			  Txt_You_must_select_one_ore_more_users);
+	 // ...and show again the form
+	 if (FuncWhenNoUsrsSelected)
+	    FuncWhenNoUsrsSelected (ArgsNoSelected);
+	 break;
      }
 
    /***** Free memory used by list of selected users' codes *****/
@@ -4060,8 +4066,9 @@ void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 	 Attributes = HTM_CHECKED;
       else
 	 /* Check if user is in lists of selected users */
-	 Attributes = Usr_FindEncUsrCodInListOfSelectedEncUsrCods (EncryptedUsrCod,SelectedUsrs) ? HTM_CHECKED :
-												   HTM_NO_ATTR;
+	 Attributes = Usr_FindEncUsrCodInListOfSelectedEncUsrCods (EncryptedUsrCod,
+								   SelectedUsrs) == Exi_EXISTS ? HTM_CHECKED :
+												 HTM_NO_ATTR;
 
       /***** Check box *****/
       Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
@@ -5718,175 +5725,179 @@ void Usr_DoActionOnUsrs1 (void)
 					  Usr_DONT_GET_LIST_ALL_USRS);
 
    /* Check if there are selected users */
-   if (Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected))
+   switch (Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected))
      {
-      /* Get the action to do */
-      Gbl.Usrs.Selected.Action = Usr_GetListUsrsAction (Usr_ACT_UNKNOWN);
+      case Exi_EXISTS:
+	 /* Get the action to do */
+	 Gbl.Usrs.Selected.Action = Usr_GetListUsrsAction (Usr_ACT_UNKNOWN);
 
-      /***** Change action depending on my selection *****/
-      Gbl.Action.Original = Gbl.Action.Act;	// To check if action changes
+	 /***** Change action depending on my selection *****/
+	 Gbl.Action.Original = Gbl.Action.Act;	// To check if action changes
 
-      switch (Gbl.Usrs.Selected.Action)
-	{
-	 case Usr_ACT_RECORDS:
-	    switch (Gbl.Action.Act)
-	      {
-	       case Act_DoAct_OnSevGst:
-		  Gbl.Action.Act = ActSeeRecSevGst;
-		  break;
-	       case Act_DoAct_OnSevStd:
-		  Gbl.Action.Act = ActSeeRecSevStd;
-		  break;
-	       case Act_DoAct_OnSevTch:
-		  Gbl.Action.Act = ActSeeRecSevTch;
-		  break;
-	       default:
-		  break;
-	      }
-	    break;
-	 case Usr_ACT_ADD_TO_CLIPBOARD:
-	    switch (Gbl.Action.Act)
-	      {
-	       case Act_DoAct_OnSevGst:
-		  Gbl.Action.Act = ActAddClpSevGst;
-		  break;
-	       case Act_DoAct_OnSevStd:
-		  Gbl.Action.Act = ActAddClpSevStd;
-		  break;
-	       case Act_DoAct_OnSevTch:
-		  Gbl.Action.Act = ActAddClpSevTch;
-		  break;
-	       default:
-		  break;
-	      }
-	    break;
-	 case Usr_ACT_OVERWRITE_CLIPBOARD:
-	    switch (Gbl.Action.Act)
-	      {
-	       case Act_DoAct_OnSevGst:
-		  Gbl.Action.Act = ActOwrClpSevGst;
-		  break;
-	       case Act_DoAct_OnSevStd:
-		  Gbl.Action.Act = ActOwrClpSevStd;
-		  break;
-	       case Act_DoAct_OnSevTch:
-		  Gbl.Action.Act = ActOwrClpSevTch;
-		  break;
-	       default:
-		  break;
-	      }
-	    break;
-	 case Usr_ACT_HOMEWORK:
-	    switch (Gbl.Action.Act)
-	      {
-	       case Act_DoAct_OnSevStd:
-	       case Act_DoAct_OnSevTch:
-		  Gbl.Action.Act = ActAdmAsgWrkCrs;
-		  break;
-	       default:
-		  break;
-	      }
-	    break;
-	 case Usr_ACT_ATTENDANCE:
-	    switch (Gbl.Action.Act)
-	      {
-	       case Act_DoAct_OnSevStd:
-		  Gbl.Action.Act = ActSeeLstUsrAtt;
-		  break;
-	       default:
-		  break;
-	      }
-	    break;
-	 case Usr_ACT_MESSAGE:
-	    switch (Gbl.Action.Act)
-	      {
-	       case Act_DoAct_OnSevStd:
-	       case Act_DoAct_OnSevTch:
-		  Gbl.Action.Act = ActReqMsgUsr;
-		  break;
-	       default:
-		  break;
-	      }
-	    break;
-	 case Usr_ACT_EMAIL:
-	    switch (Gbl.Action.Act)
-	      {
-	       case Act_DoAct_OnSevStd:
-	       case Act_DoAct_OnSevTch:
-		  Gbl.Action.Act = ActMaiUsr;
-		  break;
-	       default:
-		  break;
-	      }
-	    break;
-	 case Usr_ACT_FOLLOW:
-	    switch (Gbl.Action.Act)
-	      {
-	       case Act_DoAct_OnSevStd:
-		  Gbl.Action.Act = ActReqFolSevStd;
-		  break;
-	       case Act_DoAct_OnSevTch:
-		  Gbl.Action.Act = ActReqFolSevTch;
-		  break;
-	       default:
-		  break;
-	      }
-	    break;
-	 case Usr_ACT_UNFOLLOW:
-	    switch (Gbl.Action.Act)
-	      {
-	       case Act_DoAct_OnSevStd:
-		  Gbl.Action.Act = ActReqUnfSevStd;
-		  break;
-	       case Act_DoAct_OnSevTch:
-		  Gbl.Action.Act = ActReqUnfSevTch;
-		  break;
-	       default:
-		  break;
-	      }
-	    break;
-	 case Usr_ACT_EXAMS_QST_SHEETS:
-	    switch (Gbl.Action.Act)
-	      {
-	       case Act_DoAct_ExaSes:
-		  Gbl.Action.Act = ActSeeExaQstShe;
-		  break;
-	       default:
-		  break;
-	      }
-	    break;
-	 case Usr_ACT_BLANK_EXAMS_ANS_SHEETS:
-	    switch (Gbl.Action.Act)
-	      {
-	       case Act_DoAct_ExaSes:
-		  Gbl.Action.Act = ActSeeBlkExaAnsShe;
-		  break;
-	       default:
-		  break;
-	      }
-	    break;
-	 case Usr_ACT_SOLVD_EXAMS_ANS_SHEETS:
-	    switch (Gbl.Action.Act)
-	      {
-	       case Act_DoAct_ExaSes:
-		  Gbl.Action.Act = ActSeeSolExaAnsShe;
-		  break;
-	       default:
-		  break;
-	      }
-	    break;
-	 default:
-	    break;
-	}
+	 switch (Gbl.Usrs.Selected.Action)
+	   {
+	    case Usr_ACT_RECORDS:
+	       switch (Gbl.Action.Act)
+		 {
+		  case Act_DoAct_OnSevGst:
+		     Gbl.Action.Act = ActSeeRecSevGst;
+		     break;
+		  case Act_DoAct_OnSevStd:
+		     Gbl.Action.Act = ActSeeRecSevStd;
+		     break;
+		  case Act_DoAct_OnSevTch:
+		     Gbl.Action.Act = ActSeeRecSevTch;
+		     break;
+		  default:
+		     break;
+		 }
+	       break;
+	    case Usr_ACT_ADD_TO_CLIPBOARD:
+	       switch (Gbl.Action.Act)
+		 {
+		  case Act_DoAct_OnSevGst:
+		     Gbl.Action.Act = ActAddClpSevGst;
+		     break;
+		  case Act_DoAct_OnSevStd:
+		     Gbl.Action.Act = ActAddClpSevStd;
+		     break;
+		  case Act_DoAct_OnSevTch:
+		     Gbl.Action.Act = ActAddClpSevTch;
+		     break;
+		  default:
+		     break;
+		 }
+	       break;
+	    case Usr_ACT_OVERWRITE_CLIPBOARD:
+	       switch (Gbl.Action.Act)
+		 {
+		  case Act_DoAct_OnSevGst:
+		     Gbl.Action.Act = ActOwrClpSevGst;
+		     break;
+		  case Act_DoAct_OnSevStd:
+		     Gbl.Action.Act = ActOwrClpSevStd;
+		     break;
+		  case Act_DoAct_OnSevTch:
+		     Gbl.Action.Act = ActOwrClpSevTch;
+		     break;
+		  default:
+		     break;
+		 }
+	       break;
+	    case Usr_ACT_HOMEWORK:
+	       switch (Gbl.Action.Act)
+		 {
+		  case Act_DoAct_OnSevStd:
+		  case Act_DoAct_OnSevTch:
+		     Gbl.Action.Act = ActAdmAsgWrkCrs;
+		     break;
+		  default:
+		     break;
+		 }
+	       break;
+	    case Usr_ACT_ATTENDANCE:
+	       switch (Gbl.Action.Act)
+		 {
+		  case Act_DoAct_OnSevStd:
+		     Gbl.Action.Act = ActSeeLstUsrAtt;
+		     break;
+		  default:
+		     break;
+		 }
+	       break;
+	    case Usr_ACT_MESSAGE:
+	       switch (Gbl.Action.Act)
+		 {
+		  case Act_DoAct_OnSevStd:
+		  case Act_DoAct_OnSevTch:
+		     Gbl.Action.Act = ActReqMsgUsr;
+		     break;
+		  default:
+		     break;
+		 }
+	       break;
+	    case Usr_ACT_EMAIL:
+	       switch (Gbl.Action.Act)
+		 {
+		  case Act_DoAct_OnSevStd:
+		  case Act_DoAct_OnSevTch:
+		     Gbl.Action.Act = ActMaiUsr;
+		     break;
+		  default:
+		     break;
+		 }
+	       break;
+	    case Usr_ACT_FOLLOW:
+	       switch (Gbl.Action.Act)
+		 {
+		  case Act_DoAct_OnSevStd:
+		     Gbl.Action.Act = ActReqFolSevStd;
+		     break;
+		  case Act_DoAct_OnSevTch:
+		     Gbl.Action.Act = ActReqFolSevTch;
+		     break;
+		  default:
+		     break;
+		 }
+	       break;
+	    case Usr_ACT_UNFOLLOW:
+	       switch (Gbl.Action.Act)
+		 {
+		  case Act_DoAct_OnSevStd:
+		     Gbl.Action.Act = ActReqUnfSevStd;
+		     break;
+		  case Act_DoAct_OnSevTch:
+		     Gbl.Action.Act = ActReqUnfSevTch;
+		     break;
+		  default:
+		     break;
+		 }
+	       break;
+	    case Usr_ACT_EXAMS_QST_SHEETS:
+	       switch (Gbl.Action.Act)
+		 {
+		  case Act_DoAct_ExaSes:
+		     Gbl.Action.Act = ActSeeExaQstShe;
+		     break;
+		  default:
+		     break;
+		 }
+	       break;
+	    case Usr_ACT_BLANK_EXAMS_ANS_SHEETS:
+	       switch (Gbl.Action.Act)
+		 {
+		  case Act_DoAct_ExaSes:
+		     Gbl.Action.Act = ActSeeBlkExaAnsShe;
+		     break;
+		  default:
+		     break;
+		 }
+	       break;
+	    case Usr_ACT_SOLVD_EXAMS_ANS_SHEETS:
+	       switch (Gbl.Action.Act)
+		 {
+		  case Act_DoAct_ExaSes:
+		     Gbl.Action.Act = ActSeeSolExaAnsShe;
+		     break;
+		  default:
+		     break;
+		 }
+	       break;
+	    default:
+	       break;
+	   }
 
-      if (Gbl.Action.Act == Gbl.Action.Original)		// Fail, no change in action
-	 Ale_CreateAlert (Ale_ERROR,Usr_USER_LIST_SECTION_ID,"Wrong action.");
-      else							// Success, action has changed
-	 Tab_SetCurrentTab ();
+	 if (Gbl.Action.Act == Gbl.Action.Original)		// Fail, no change in action
+	    Ale_CreateAlert (Ale_ERROR,Usr_USER_LIST_SECTION_ID,"Wrong action.");
+	 else							// Success, action has changed
+	    Tab_SetCurrentTab ();
+	 break;
+      case Exi_DOES_NOT_EXIST:	// If no users selected...
+      default:			// ...write warning notice
+	 Ale_CreateAlert (Ale_WARNING,Usr_USER_LIST_SECTION_ID,
+			  Txt_You_must_select_one_ore_more_users);
+	 break;
      }
-   else								// If no users selected...
-      Ale_CreateAlert (Ale_WARNING,Usr_USER_LIST_SECTION_ID,	// ...write warning notice
-	               Txt_You_must_select_one_ore_more_users);
   }
 
 void Usr_DoActionOnUsrs2 (void)

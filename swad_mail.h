@@ -37,7 +37,7 @@
 void Mai_SeeMailDomains (void);
 void Mai_EditMailDomains (void);
 
-bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct Usr_Data *UsrDat);
+Usr_Can_t Mai_CheckIfUsrCanReceiveEmailNotif (const struct Usr_Data *UsrDat);
 void Mai_WriteWarningEmailNotifications (void);
 
 void Mai_GetMailDomainDataByCod (struct Mail *Plc);

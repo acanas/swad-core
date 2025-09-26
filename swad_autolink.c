@@ -541,7 +541,8 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
 		     (*Link)->NickAnchor[2].Str = NULL;
 
 		     /***** Store first part of anchor *****/
-		     Frm_SetParsForm (ParsStr,ActSeeOthPubPrf,true);
+		     Frm_SetParsForm (ParsStr,ActSeeOthPubPrf,
+				      Frm_PUT_PAR_LOCATION_IF_NO_SESSION);
 		     if (asprintf (&(*Link)->NickAnchor[0].Str,
 				   "<form method=\"post\" action=\"%s/%s\">"
 				   "%s"	// Parameters

@@ -306,7 +306,7 @@ void Act_AdjustCurrentAction (void)
           the only action possible
           is to show a form to change my account *****/
    if (Gbl.Action.Act == ActLogIn)
-      if (!Pwd_FastCheckIfPasswordSeemsGood (Gbl.Usrs.Me.LoginPlainPassword))
+      if (Pwd_FastCheckIfPasswordSeemsGood (Gbl.Usrs.Me.LoginPlainPassword) == Err_ERROR)
         {
          Gbl.Action.Act = ActFrmMyAcc;
          Tab_SetCurrentTab ();

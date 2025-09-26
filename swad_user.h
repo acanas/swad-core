@@ -139,9 +139,9 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsr
 
 Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs);
 
-bool Usr_FindEncUsrCodInListOfSelectedEncUsrCods (const char *EncryptedUsrCodToFind,
-						  struct Usr_SelectedUsrs *SelectedUsrs);
-bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs);
+Exi_Exist_t Usr_FindEncUsrCodInListOfSelectedEncUsrCods (const char *EncryptedUsrCodToFind,
+						         struct Usr_SelectedUsrs *SelectedUsrs);
+Exi_Exist_t Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs);
 unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs);
 void Usr_FreeListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs);
 

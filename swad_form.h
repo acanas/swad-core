@@ -53,6 +53,12 @@ typedef enum
    Frm_PUT_FORM,
   } Frm_PutForm_t;
 
+typedef enum
+  {
+   Frm_DONT_PUT_PAR_LOCATION_IF_NO_SESSION,
+   Frm_PUT_PAR_LOCATION_IF_NO_SESSION,
+  } Frm_PutParLocation_t;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -69,7 +75,7 @@ void Frm_BeginFormIdAnchor (Act_Action_t NextAction,const char *Id,const char *A
 void Frm_BeginFormNoAction (void);
 void Frm_SetParsForm (char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1],
 		      Act_Action_t NextAction,
-                      bool PutParLocationIfNoSession);
+                      Frm_PutParLocation_t PutParLocation);
 void Frm_EndForm (void);
 
 void Frm_BeginFormTable (Act_Action_t NextAction,const char *Anchor,

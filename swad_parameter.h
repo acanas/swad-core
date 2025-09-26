@@ -69,7 +69,7 @@ typedef enum
 
 Act_Content_t Par_GetContentReceivedByCGI (void);
 
-bool Par_GetQueryString (void);
+Err_SuccessOrError_t Par_GetQueryString (void);
 Par_Method_t Par_GetMethod (void);
 void Par_CreateListOfPars (void);
 void Par_FreePars (void);

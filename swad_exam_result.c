@@ -73,6 +73,12 @@ struct ExaRes_ICanView
    Usr_Can_t Score;
   };
 
+typedef enum
+  {
+   ExaRes_DONT_LIST_EXAMS_TO_SELECT,
+   ExaRes_LIST_EXAMS_TO_SELECT,
+  } ExaRes_ListExamsToSelect_t;
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -88,7 +94,8 @@ static void ExaRes_ListAllResultsInExa (struct Exa_Exams *Exams);
 static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams);
 
 static void ExaRes_ShowResultsBegin (struct Exa_Exams *Exams,
-                                     const char *Title,bool ListExamsToSelect);
+                                     const char *Title,
+                                     ExaRes_ListExamsToSelect_t ListExamsToSelect);
 static void ExaRes_ShowResultsEnd (void);
 
 static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams);
@@ -155,7 +162,7 @@ void ExaRes_ShowMyResultsInCrs (void)
    Exa_GetListSelectedExaCods (&Exams);
 
    /***** List my sessions results in the current course *****/
-   ExaRes_ShowResultsBegin (&Exams,Txt_Results,true);	// List exams to select
+   ExaRes_ShowResultsBegin (&Exams,Txt_Results,ExaRes_LIST_EXAMS_TO_SELECT);
       ExaRes_ListMyResultsInCrs (&Exams);
    ExaRes_ShowResultsEnd ();
 
@@ -204,7 +211,7 @@ void ExaRes_ShowMyResultsInExa (void)
       /***** List my sessions results in exam *****/
       if (asprintf (&Title,Txt_Results_of_exam_X,Exams.Exam.Title) < 0)
 	 Err_NotEnoughMemoryExit ();
-      ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
+      ExaRes_ShowResultsBegin (&Exams,Title,ExaRes_DONT_LIST_EXAMS_TO_SELECT);
       free (Title);
 	 ExaRes_ListMyResultsInExa (&Exams);
       ExaRes_ShowResultsEnd ();
@@ -252,7 +259,7 @@ void ExaRes_ShowMyResultsInSes (void)
       /***** List my sessions results in session *****/
       if (asprintf (&Title,Txt_Results_of_session_X,Session.Title) < 0)
 	 Err_NotEnoughMemoryExit ();
-      ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
+      ExaRes_ShowResultsBegin (&Exams,Title,ExaRes_DONT_LIST_EXAMS_TO_SELECT);
       free (Title);
 	 ExaRes_ListMyResultsInSes (&Exams);
       ExaRes_ShowResultsEnd ();
@@ -330,8 +337,7 @@ static void ExaRes_ShowAllResultsInSelectedExams (void *Exams)
 
    /***** List the sessions results of the selected users *****/
    ExaRes_ShowResultsBegin ((struct Exa_Exams *) Exams,
-                            Txt_Results,
-                            true);	// List exams to select
+                            Txt_Results,ExaRes_LIST_EXAMS_TO_SELECT);
       ExaRes_ListAllResultsInSelectedExams ((struct Exa_Exams *) Exams);
    ExaRes_ShowResultsEnd ();
 
@@ -396,7 +402,7 @@ void ExaRes_ShowAllResultsInExa (void)
       /***** List sessions results in exam *****/
       if (asprintf (&Title,Txt_Results_of_exam_X,Exams.Exam.Title) < 0)
 	 Err_NotEnoughMemoryExit ();
-      ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
+      ExaRes_ShowResultsBegin (&Exams,Title,ExaRes_DONT_LIST_EXAMS_TO_SELECT);
       free (Title);
 	 ExaRes_ListAllResultsInExa (&Exams);
       ExaRes_ShowResultsEnd ();
@@ -468,7 +474,7 @@ void ExaRes_ShowAllResultsInSes (void)
       /***** List sessions results in session *****/
       if (asprintf (&Title,Txt_Results_of_session_X,Session.Title) < 0)
 	 Err_NotEnoughMemoryExit ();
-      ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
+      ExaRes_ShowResultsBegin (&Exams,Title,ExaRes_DONT_LIST_EXAMS_TO_SELECT);
       free (Title);
 	 ExaRes_ListAllResultsInSes (&Exams);
       ExaRes_ShowResultsEnd ();
@@ -514,7 +520,8 @@ static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams)
 /*****************************************************************************/
 
 static void ExaRes_ShowResultsBegin (struct Exa_Exams *Exams,
-                                     const char *Title,bool ListExamsToSelect)
+                                     const char *Title,
+                                     ExaRes_ListExamsToSelect_t ListExamsToSelect)
   {
    extern const char *Hlp_ASSESSMENT_Exams_results;
 
@@ -525,7 +532,7 @@ static void ExaRes_ShowResultsBegin (struct Exa_Exams *Exams,
       Box_BoxBegin (Title,NULL,NULL,Hlp_ASSESSMENT_Exams_results,Box_NOT_CLOSABLE);
 
 	 /***** List exams to select *****/
-	 if (ListExamsToSelect)
+	 if (ListExamsToSelect == ExaRes_LIST_EXAMS_TO_SELECT)
 	    ExaRes_ListExamsToSelect (Exams);
 
 	 /***** Begin session results section *****/
@@ -551,7 +558,7 @@ static void ExaRes_ShowResultsEnd (void)
   }
 
 /*****************************************************************************/
-/********** Write list of those attendance sessions that have students *********/
+/**************** Write list of exams to select some of them *****************/
 /*****************************************************************************/
 
 static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)

@@ -802,7 +802,7 @@ static void Med_GetAndProcessFileFromForm (const char *ParFile,
    snprintf (PathFileOrg,sizeof (PathFileOrg),"%s/%s_original.%s",
 	     Cfg_PATH_MEDIA_TMP_PRIVATE,Media->Name,PtrExtension);
 
-   if (Fil_EndReceptionOfFile (PathFileOrg,Par))	// Success
+   if (Fil_EndReceptionOfFile (PathFileOrg,Par) == Err_SUCCESS)
      {
       /***** Detect if animated GIF *****/
       if (Media->Type == Med_GIF)

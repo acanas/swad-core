@@ -51,7 +51,7 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo);
 void Rsc_GetLinkDataFromRow (MYSQL_RES *mysql_res,struct Rsc_Link *Link);
 Rsc_Type_t Rsc_GetTypeFromString (const char *Str);
 
-bool Rsc_GetParLink (struct Rsc_Link *Link);
+Err_SuccessOrError_t Rsc_GetParLink (struct Rsc_Link *Link);
 
 Usr_Can_t Rsc_CheckIfICanGetLink (void);
 

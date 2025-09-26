@@ -351,7 +351,7 @@ void Lgo_ReceiveLogo (Hie_Level_t HieLvl)
 		   (unsigned) (HieCod % 100),
 		   (unsigned)  HieCod,
 		   (unsigned)  HieCod);
-	 if (!Fil_EndReceptionOfFile (FileNameLogo,Par))
+	 if (Fil_EndReceptionOfFile (FileNameLogo,Par) == Err_ERROR)
 	    Ale_ShowAlert (Ale_ERROR,"Error copying file.");
          break;
       case Err_ERROR:

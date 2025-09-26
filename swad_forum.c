@@ -864,7 +864,7 @@ void For_ShowPostsOfAThread (struct For_Forums *Forums,
 
 	 /***** Form to write a new post in the thread *****/
 	 HTM_SECTION_Begin (For_NEW_POST_SECTION_ID);
-	    For_WriteFormForumPst (Forums,true,LastSubject);
+	    For_WriteFormForumPst (Forums,For_REPLY_TO_ANOTHER_POST,LastSubject);
 	 HTM_SECTION_End ();
 
       /***** End box *****/
@@ -2201,7 +2201,7 @@ void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,
 
 	 /***** Put a form to write the first post of a new thread *****/
 	 HTM_SECTION_Begin (For_NEW_THREAD_SECTION_ID);
-	    For_WriteFormForumPst (Forums,false,NULL);
+	    For_WriteFormForumPst (Forums,For_FIRST_POST_IN_THREAD,NULL);
 	 HTM_SECTION_End ();
 
       /***** End box with threads of this forum ****/

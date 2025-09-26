@@ -1353,7 +1353,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
    *NumNotif =
    *NumMails = 0;
 
-   if (Mai_CheckIfUsrCanReceiveEmailNotif (ToUsrDat))
+   if (Mai_CheckIfUsrCanReceiveEmailNotif (ToUsrDat) == Usr_CAN)
      {
       /***** Get pending notifications of this user from database ******/
       if ((NumNtfs = Ntf_DB_GetPendingNtfsToUsr (&mysql_res,ToUsrDat->UsrCod))) // Notifications found
@@ -1616,7 +1616,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 	 Frm_BeginForm (ActChgNtfPrf);
 
 	    /***** Warning if I can not receive email notifications *****/
-	    if (!Mai_CheckIfUsrCanReceiveEmailNotif (&Gbl.Usrs.Me.UsrDat))
+	    if (Mai_CheckIfUsrCanReceiveEmailNotif (&Gbl.Usrs.Me.UsrDat) == Usr_CAN_NOT)
 	       Mai_WriteWarningEmailNotifications ();
 
 	    /***** List of notifications *****/

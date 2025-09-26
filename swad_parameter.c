@@ -107,7 +107,7 @@ static void Par_CreateListOfParsFromTmpFile (void);
 static int Par_ReadTmpFileUntilQuote (FILE *QueryFile);
 static int Par_ReadTmpFileUntilReturn (FILE *QueryFile);
 
-static bool Par_CheckIsParCanBeUsedInGETMethod (const char *ParName);
+static bool Par_CheckIfParCanBeUsedInGETMethod (const char *ParName);
 
 /*****************************************************************************/
 /********************** Type of content received by CGI **********************/
@@ -130,7 +130,7 @@ Act_Content_t Par_GetContentReceivedByCGI (void)
 #define Par_MAX_BYTES_METHOD		(128 - 1)
 #define Par_MAX_BYTES_CONTENT_TYPE	(128 - 1)
 
-bool Par_GetQueryString (void)
+Err_SuccessOrError_t Par_GetQueryString (void)
   {
    char Method[Par_MAX_BYTES_METHOD + 1];
    char ContentType[Par_MAX_BYTES_CONTENT_TYPE + 1];
@@ -150,7 +150,7 @@ bool Par_GetQueryString (void)
 
       /* Allocate memory for query string */
       if ((Par_Pars.QueryString = malloc (Par_Pars.ContentLength + 1)) == NULL)
-	 return false;
+	 return Err_ERROR;
 
       /* Copy query string from environment variable */
       Str_Copy (Par_Pars.QueryString,getenv ("QUERY_STRING"),
@@ -167,17 +167,17 @@ bool Par_GetQueryString (void)
          Str_Copy (UnsignedLongStr,getenv ("CONTENT_LENGTH"),
                    sizeof (UnsignedLongStr) - 1);
          if (sscanf (UnsignedLongStr,"%lu",&UnsignedLong) != 1)
-            return false;
+            return Err_ERROR;
          Par_Pars.ContentLength = (size_t) UnsignedLong;
 	}
       else
-         return false;
+         return Err_ERROR;
 
       /* If data are received ==> the environment variable CONTENT_TYPE will hold:
       multipart/form-data; boundary=---------------------------7d13ca2e948
       */
       if (getenv ("CONTENT_TYPE") == NULL)
-         return false;
+         return Err_ERROR;
 
       Str_Copy (ContentType,getenv ("CONTENT_TYPE"),sizeof (ContentType) - 1);
 
@@ -197,20 +197,20 @@ bool Par_GetQueryString (void)
 
 	 /* Allocate memory for query string */
 	 if ((Par_Pars.QueryString = malloc (Par_Pars.ContentLength + 1)) == NULL)
-	    return false;
+	    return Err_ERROR;
 
 	 /* Copy query string from stdin */
          if (fread (Par_Pars.QueryString,sizeof (char),
                     Par_Pars.ContentLength,stdin) != Par_Pars.ContentLength)
            {
             Par_Pars.QueryString[0] = '\0';
-            return false;
+            return Err_ERROR;
            }
 	 Par_Pars.QueryString[Par_Pars.ContentLength] = '\0';
         }
      }
 
-   return true;
+   return Err_SUCCESS;
   }
 
 Par_Method_t Par_GetMethod (void)
@@ -562,7 +562,7 @@ unsigned Par_GetPar (Par_ParamType_t ParType,const char *ParName,
 
    /***** Only some selected parameters can be passed by GET method *****/
    if (Par_GetMethod () == Par_METHOD_GET)
-      if (!Par_CheckIsParCanBeUsedInGETMethod (ParName))
+      if (!Par_CheckIfParCanBeUsedInGETMethod (ParName))
 	 return 0;	// Return no-parameters-found
 
    /***** Initializations *****/
@@ -682,7 +682,7 @@ unsigned Par_GetPar (Par_ParamType_t ParType,const char *ParName,
 /*************** Check if parameter can be used in GET method ****************/
 /*****************************************************************************/
 
-static bool Par_CheckIsParCanBeUsedInGETMethod (const char *ParName)
+static bool Par_CheckIfParCanBeUsedInGETMethod (const char *ParName)
   {
 #define NUM_VALID_PARAMS 10
    static const char *ValidParsInGETMethod[NUM_VALID_PARAMS] =

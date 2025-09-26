@@ -1504,11 +1504,12 @@ void Str_RemoveLeadingArrobas (char *Str)
 /*****************************************************************************/
 /*
 Search (case insensitive) the string Str in HTML file FileSrc, skipping comments.
-Returns true if found.
-Returns false if not found.
+Returns Exi_EXISTS if found.
+Returns Exi_DOES_NOT_EXIST if not found.
 */
 
-bool Str_FindStrInFile (FILE *FileSrc,const char *Str,Str_SkipHTMLComments_t SkipHTMLComments)
+Exi_Exist_t Str_FindStrInFile (FILE *FileSrc,const char *Str,
+			       Str_SkipHTMLComments_t SkipHTMLComments)
   {
    int i;
    int Length = strlen (Str);
@@ -1519,7 +1520,7 @@ bool Str_FindStrInFile (FILE *FileSrc,const char *Str,Str_SkipHTMLComments_t Ski
      {
       /* Skip possible comments */
       if ((Ch = Str_ReadCharAndSkipComments (FileSrc,SkipHTMLComments)) == EOF)	// Set pointer to '<' if not comment, or to first character after comment if comment
-	 return false;
+	 return Exi_DOES_NOT_EXIST;
       CurPos = ftell (FileSrc);
 
       if (Str_ConvertToLowerLetter ((char) Ch) == Str_ConvertToLowerLetter (Str[0]))  // First char found
@@ -1530,29 +1531,30 @@ bool Str_FindStrInFile (FILE *FileSrc,const char *Str,Str_SkipHTMLComments_t Ski
 	   {
             /* Skip possible comments */
  	    if ((Ch = Str_ReadCharAndSkipComments (FileSrc,SkipHTMLComments)) == EOF)	// Set pointer to '<' if not comment, or to first character after comment if comment
-	       return false;
+	       return Exi_DOES_NOT_EXIST;
 	    if (Str_ConvertToLowerLetter ((char) Ch) != Str_ConvertToLowerLetter (Str[i]))
 	       break;
 	   }
 	 if (i == Length) // Found!
-	    return true;
+	    return Exi_EXISTS;
          else	// Not found, continue on next character
             fseek (FileSrc,CurPos,SEEK_SET);
 	}
      }
 
-   return false;	// Not reached
+   return Exi_DOES_NOT_EXIST;	// Not reached
   }
 
 /*****************************************************************************/
 /******************* Search a string in a file backward **********************/
 /*****************************************************************************/
 
-/* The file queda posicionado in:
+/* The file will be positioned in:
    If found --> in the character anterior to the first of the string
-   If no found --> to the principio of the file */
+   If no found --> to the start of the file */
 
-bool Str_FindStrInFileBack (FILE *FileSrc,const char *Str,Str_SkipHTMLComments_t SkipHTMLComments)
+Exi_Exist_t Str_FindStrInFileBack (FILE *FileSrc,const char *Str,
+				   Str_SkipHTMLComments_t SkipHTMLComments)
   {
    int i;
    int Length = strlen (Str);
@@ -1562,39 +1564,39 @@ bool Str_FindStrInFileBack (FILE *FileSrc,const char *Str,Str_SkipHTMLComments_t
 
    ChFinal = Str_ConvertToLowerLetter (Str[Length-1]);
    if (fseek (FileSrc,-1L,SEEK_CUR))	// Go to the previous character
-      return false;
+      return Exi_DOES_NOT_EXIST;
    for (;;)
      {
       if ((Ch = Str_ReadCharAndSkipCommentsBackward (FileSrc,SkipHTMLComments)) == EOF)	// Set pointer to '>' if not comment, or to character before start of comment if comment
-         return false;
+         return Exi_DOES_NOT_EXIST;
       CurPos = ftell (FileSrc);
 
       if (Str_ConvertToLowerLetter ((char) Ch) == (char) ChFinal)
 	{
-	 for (i = Length - 2;
+	 for (i  = Length - 2;
 	      i >= 0;
 	      i--)
 	   {
 	    if (fseek (FileSrc,-2L,SEEK_CUR))
-	       return false;
+	       return Exi_DOES_NOT_EXIST;
             if ((Ch = Str_ReadCharAndSkipCommentsBackward (FileSrc,SkipHTMLComments)) == EOF)	// Set pointer to '>' if not comment, or to character before start of comment if comment
-               return false;
+               return Exi_DOES_NOT_EXIST;
 	    if (Str_ConvertToLowerLetter ((char) Ch) != Str_ConvertToLowerLetter (Str[i]))
 	       break;
 	   }
-	 if (i<0)	// Found!
+	 if (i < 0)	// Found!
 	   {
 	    fseek (FileSrc,-1L,SEEK_CUR);	// Move to start of found string in FileSrc
-	    return true;
+	    return Exi_EXISTS;
 	   }
          else	// Not found, continue on next character
             fseek (FileSrc,CurPos,SEEK_SET);
 	}
       if (fseek (FileSrc,-2L,SEEK_CUR))	// Move to previous character
-	 return false;
+	 return Exi_DOES_NOT_EXIST;
      }
 
-   return false;	// Not reached
+   return Exi_DOES_NOT_EXIST;	// Not reached
   }
 
 /*****************************************************************************/
@@ -1605,7 +1607,8 @@ Search in the file FileSrc the string Str without distinguish uppercase from
 lowercase. Write in FileTgt what is read from the file FileSrc.
 */
 
-bool Str_WriteUntilStrFoundInFileIncludingStr (FILE *FileTgt,FILE *FileSrc,const char *Str,Str_SkipHTMLComments_t SkipHTMLComments)
+bool Str_WriteUntilStrFoundInFileIncludingStr (FILE *FileTgt,FILE *FileSrc,const char *Str,
+					       Str_SkipHTMLComments_t SkipHTMLComments)
   {
    int i;
    int StrLength = strlen (Str);
@@ -1660,6 +1663,7 @@ bool Str_WriteUntilStrFoundInFileIncludingStr (FILE *FileTgt,FILE *FileSrc,const
 static int Str_ReadCharAndSkipComments (FILE *FileSrc,Str_SkipHTMLComments_t SkipHTMLComments)
   {
    int Ch;
+   __attribute__((unused)) Exi_Exist_t StrFound;
    char StrAux[1 + 1];  /* To check "!--" string */
 
    Ch = fgetc (FileSrc);
@@ -1670,22 +1674,22 @@ static int Str_ReadCharAndSkipComments (FILE *FileSrc,Str_SkipHTMLComments_t Ski
          /***** Check if "<!--" *****/
          if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"!"))
            {
-            Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);	// Not a comment. Return to start of directive
+            StrFound = Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);	// Not a comment. Return to start of directive
             return fgetc (FileSrc);
            }
          if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"-"))
            {
-            Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);	// Not a comment. Return to start of directive
+            StrFound = Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);	// Not a comment. Return to start of directive
             return fgetc (FileSrc);
            }
          if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"-"))
            {
-            Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);	// Not a comment. Return to start of directive
+            StrFound = Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);	// Not a comment. Return to start of directive
             return fgetc (FileSrc);
            }
 
          /***** It's a comment ==> skip comment *****/
-         Str_FindStrInFile (FileSrc,"-->",Str_NO_SKIP_HTML_COMMENTS);
+         StrFound = Str_FindStrInFile (FileSrc,"-->",Str_NO_SKIP_HTML_COMMENTS);
 
          /***** Get next character *****/
          Ch = fgetc (FileSrc);
@@ -1703,6 +1707,7 @@ static int Str_ReadCharAndSkipComments (FILE *FileSrc,Str_SkipHTMLComments_t Ski
 static int Str_ReadCharAndSkipCommentsWriting (FILE *FileSrc,FILE *FileTgt,Str_SkipHTMLComments_t SkipHTMLComments)
   {
    int Ch;
+   __attribute__((unused)) Exi_Exist_t StrFound;
    char StrAux[1 + 1];  /* To check "!--" string */
 
    Ch = fgetc (FileSrc);
@@ -1713,22 +1718,22 @@ static int Str_ReadCharAndSkipCommentsWriting (FILE *FileSrc,FILE *FileTgt,Str_S
          /***** Check if "<!--" *****/
          if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"!"))
            {
-            Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);	// Not a comment. Return to start of directive
+            StrFound = Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);	// Not a comment. Return to start of directive
             return fgetc (FileSrc);
            }
          if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"-"))
            {
-            Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);	// Not a comment. Return to start of directive
+            StrFound = Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);	// Not a comment. Return to start of directive
             return fgetc (FileSrc);
            }
          if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"-"))
            {
-            Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);	// Not a comment. Return to start of directive
+            StrFound = Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);	// Not a comment. Return to start of directive
             return fgetc (FileSrc);
            }
 
          /***** It's a comment ==> skip comment *****/
-         Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);	// Return to start of comment
+         StrFound = Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);	// Return to start of comment
          Str_WriteUntilStrFoundInFileIncludingStr (FileTgt,FileSrc,"-->",Str_NO_SKIP_HTML_COMMENTS);	// Skip comment in search, and write it to FileTgt
 
          /***** Get next character *****/
@@ -1747,6 +1752,7 @@ static int Str_ReadCharAndSkipCommentsWriting (FILE *FileSrc,FILE *FileTgt,Str_S
 static int Str_ReadCharAndSkipCommentsBackward (FILE *FileSrc,Str_SkipHTMLComments_t SkipHTMLComments)
   {
    int Ch;
+   __attribute__((unused)) Exi_Exist_t StrFound;
    char StrAux[3 + 1];  /* To check "--" string */
 
    Ch = fgetc (FileSrc);
@@ -1766,7 +1772,7 @@ static int Str_ReadCharAndSkipCommentsBackward (FILE *FileSrc,Str_SkipHTMLCommen
             return '>';
 
          /***** It's a comment end *****/
-         Str_FindStrInFileBack (FileSrc,"<!--",Str_NO_SKIP_HTML_COMMENTS);	// Skip comment backwards
+         StrFound = Str_FindStrInFileBack (FileSrc,"<!--",Str_NO_SKIP_HTML_COMMENTS);	// Skip comment backwards
          if (fseek (FileSrc,-1L,SEEK_CUR))		// Return to character previous to '<'
             return EOF;
 
@@ -1786,6 +1792,7 @@ static int Str_ReadCharAndSkipCommentsBackward (FILE *FileSrc,Str_SkipHTMLCommen
 char *Str_GetCellFromHTMLTableSkipComments (FILE *FileSrc,char *Str,int MaxLength)
   {
    long CurPos;
+   __attribute__((unused)) Exi_Exist_t StrFound;
    long PosNextTR;
    long PosTD;
    int i = 0;
@@ -1800,11 +1807,11 @@ char *Str_GetCellFromHTMLTableSkipComments (FILE *FileSrc,char *Str,int MaxLengt
    /***** Find next <td ...> inside current row (before next <tr) *****/
    CurPos = ftell (FileSrc);
 
-   Str_FindStrInFile (FileSrc,"<tr",Str_NO_SKIP_HTML_COMMENTS);
+   StrFound = Str_FindStrInFile (FileSrc,"<tr",Str_NO_SKIP_HTML_COMMENTS);
    PosNextTR = ftell (FileSrc) - 3;
 
    fseek (FileSrc,CurPos,SEEK_SET);
-   Str_FindStrInFile (FileSrc,"<td",Str_NO_SKIP_HTML_COMMENTS);
+   StrFound = Str_FindStrInFile (FileSrc,"<td",Str_NO_SKIP_HTML_COMMENTS);
    PosTD = ftell (FileSrc);
 
    if (PosTD > PosNextTR)
@@ -1814,7 +1821,7 @@ char *Str_GetCellFromHTMLTableSkipComments (FILE *FileSrc,char *Str,int MaxLengt
       return Str;
      }
 
-   Str_FindStrInFile (FileSrc,">",Str_NO_SKIP_HTML_COMMENTS);
+   StrFound = Str_FindStrInFile (FileSrc,">",Str_NO_SKIP_HTML_COMMENTS);
 
    for (EndCellFound = false;
 	!EndCellFound;
@@ -1838,8 +1845,8 @@ char *Str_GetCellFromHTMLTableSkipComments (FILE *FileSrc,char *Str,int MaxLengt
 	 if (!EndCellFound)
 	   {
 	    /* Skip directive */
-	    Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);
-	    Str_FindStrInFile (FileSrc,">",Str_NO_SKIP_HTML_COMMENTS);
+	    StrFound = Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);
+	    StrFound = Str_FindStrInFile (FileSrc,">",Str_NO_SKIP_HTML_COMMENTS);
 	   }
 	}
 
@@ -1857,28 +1864,28 @@ char *Str_GetCellFromHTMLTableSkipComments (FILE *FileSrc,char *Str,int MaxLengt
 	       /* Check for &nbsp; (case insensitive) */
 	       if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"n"))
 		 {	// It's not &n
-		  Str_FindStrInFileBack (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);	// Back until &
-		  Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
+		  StrFound = Str_FindStrInFileBack (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);	// Back until &
+		  StrFound = Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
 		 }
 	       else if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"b"))
 		 {	// It's not &nb
-		  Str_FindStrInFileBack (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);	// Back until &
-		  Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
+		  StrFound = Str_FindStrInFileBack (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);	// Back until &
+		  StrFound = Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
 		 }
 	       else if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"s"))
 		 {	// It's not &nbs
-		  Str_FindStrInFileBack (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);	// Back until &
-		  Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
+		  StrFound = Str_FindStrInFileBack (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);	// Back until &
+		  StrFound = Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
 		 }
 	       else if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"p"))
 		 {	// It's not &nbsp
-		  Str_FindStrInFileBack (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);	// Back until &
-		  Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
+		  StrFound = Str_FindStrInFileBack (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);	// Back until &
+		  StrFound = Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
 		 }
 	       else if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),";"))
 		 {	// It's not &nbsp;
-		  Str_FindStrInFileBack (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);	// Back until &
-		  Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
+		  StrFound = Str_FindStrInFileBack (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);	// Back until &
+		  StrFound = Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
 		 }
 	       else	// It's &nbsp;
 		  SpaceFound = true;

@@ -585,7 +585,7 @@ Rsc_Type_t Rsc_GetTypeFromString (const char *Str)
 /***************************** Get link parameter ****************************/
 /*****************************************************************************/
 
-bool Rsc_GetParLink (struct Rsc_Link *Link)
+Err_SuccessOrError_t Rsc_GetParLink (struct Rsc_Link *Link)
   {
    char TypeCod[3 + 1 + Cns_MAX_DIGITS_LONG + 1];
    char TypeStr[3 + 1];
@@ -598,13 +598,13 @@ bool Rsc_GetParLink (struct Rsc_Link *Link)
       /* Correct link found */
       Link->Type = Rsc_GetTypeFromString (TypeStr);
       Link->Cod  = Cod;
-      return true;
+      return Err_SUCCESS;
      }
 
    /* No link found */
    Link->Type = Rsc_NONE;
    Link->Cod  = -1L;
-   return false;
+   return Err_ERROR;
   }
 
 /*****************************************************************************/

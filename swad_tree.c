@@ -130,7 +130,7 @@ static void Tre_FreeTitleClass (char *TitleClass);
 static void Tre_SetMaxNodeLevel (unsigned Level);
 static unsigned Tre_GetMaxNodeLevel (void);
 static unsigned Tre_CalculateMaxNodeLevel (void);
-static bool Tre_GetIfNodeHasChildren (unsigned NumNode);
+static Exi_Exist_t Tre_GetIfNodeHasChildren (unsigned NumNode);
 static void Tre_CreateLevels (void);
 static void Tre_FreeLevels (void);
 static void Tre_IncreaseNumberInLevel (unsigned Level);
@@ -160,8 +160,8 @@ static void Tre_GetNodeDataFromRow (MYSQL_RES **mysql_res,
                                     struct Tre_Node *Node,
                                     Exi_Exist_t NodeExists);
 
-static bool Tre_ExchangeNodeRanges (Inf_Type_t InfoType,
-				    int NumNodeTop,int NumNodeBottom);
+static Err_SuccessOrError_t Tre_ExchangeNodeRanges (Inf_Type_t InfoType,
+						    int NumNodeTop,int NumNodeBottom);
 static int Tre_GetPrevBrother (int NumNode);
 static int Tre_GetNextBrother (int NumNode);
 
@@ -460,10 +460,14 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
    bool HighlightNode;
 
    /***** Check if icon expand/contract is necessary *****/
-   if (!(PutIconExpandContract = Tre_GetIfNodeHasChildren (NumNode)))
-      if (!(PutIconExpandContract = Tre_DB_CheckIfNodeHasTxt (Node)))
-	 PutIconExpandContract = Tre_DB_CheckListItems (Node,
-							ViewingOrEditingProgram[ListingType] == Vie_EDIT);
+   PutIconExpandContract = (Tre_GetIfNodeHasChildren (NumNode) == Exi_EXISTS);
+   if (!PutIconExpandContract)
+     {
+      PutIconExpandContract = (Tre_DB_CheckIfNodeHasTxt (Node) == Exi_EXISTS);
+      if (!PutIconExpandContract)
+	 PutIconExpandContract = (Tre_DB_CheckListItems (Node,
+							 ViewingOrEditingProgram[ListingType] == Vie_EDIT) == Exi_EXISTS);
+     }
 
    /***** Check if this node should be shown as hidden *****/
    Tre_SetHiddenLevel (Node->Hierarchy.Level,Node->Hierarchy.Hidden);
@@ -851,14 +855,15 @@ static unsigned Tre_CalculateMaxNodeLevel (void)
 /************************* Get if a node has children ************************/
 /*****************************************************************************/
 
-static bool Tre_GetIfNodeHasChildren (unsigned NumNode)
+static Exi_Exist_t Tre_GetIfNodeHasChildren (unsigned NumNode)
   {
    /***** Check 1. If node is the last in list ==> node has no children *****/
    if (NumNode == Tre_Gbl.List.NumNodes - 1)
-      return false;
+      return Exi_DOES_NOT_EXIST;
 
    /***** Check 2. If next node is in next level ==> node has children *****/
-   return (Tre_GetLevelFromNumNode (NumNode + 1) > Tre_GetLevelFromNumNode (NumNode));
+   return (Tre_GetLevelFromNumNode (NumNode + 1) > Tre_GetLevelFromNumNode (NumNode)) ? Exi_EXISTS :
+										        Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -2074,7 +2079,7 @@ void Tre_MoveUpDownNode (Inf_Type_t InfoType,Tre_MoveUpDown_t UpDown)
    extern const char *Txt_Movement_not_allowed;
    struct Tre_Node Node;
    unsigned NumNode;
-   bool Success = false;
+   Err_SuccessOrError_t SuccessOrError = Err_ERROR;
    static bool (*CheckIfAllowed[Tre_NUM_MOVEMENTS_UP_DOWN])(unsigned NumNode) =
      {
       [Tre_MOVE_UP  ] = Tre_CheckIfMoveUpIsAllowed,
@@ -2098,23 +2103,25 @@ void Tre_MoveUpDownNode (Inf_Type_t InfoType,Tre_MoveUpDown_t UpDown)
       switch (UpDown)
         {
 	 case Tre_MOVE_UP:
-            Success = Tre_ExchangeNodeRanges (InfoType,Tre_GetPrevBrother (NumNode),NumNode);
+            SuccessOrError = Tre_ExchangeNodeRanges (InfoType,Tre_GetPrevBrother (NumNode),NumNode);
             break;
 	 case Tre_MOVE_DOWN:
-            Success = Tre_ExchangeNodeRanges (InfoType,NumNode,Tre_GetNextBrother (NumNode));
+            SuccessOrError = Tre_ExchangeNodeRanges (InfoType,NumNode,Tre_GetNextBrother (NumNode));
             break;
         }
      }
-   if (Success)
+   switch (SuccessOrError)
      {
-      /* Update list of tree nodes */
-      Tre_FreeListNodes ();
-      Tre_GetListNodes (InfoType);
-     }
-   else
-     {
-      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
-      Node.Hierarchy.NodCod = -1L;
+      case Err_SUCCESS:
+	 /* Update list of tree nodes */
+	 Tre_FreeListNodes ();
+	 Tre_GetListNodes (InfoType);
+	 break;
+      case Err_ERROR:
+      default:
+	 Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+	 Node.Hierarchy.NodCod = -1L;
+	 break;
      }
    Node.Item.Cod = -1L;
    Tre_ShowAllNodes (Tre_EDIT_NODES,&Node);
@@ -2126,10 +2133,9 @@ void Tre_MoveUpDownNode (Inf_Type_t InfoType,Tre_MoveUpDown_t UpDown)
 /*****************************************************************************/
 /**** Exchange the order of two consecutive subtrees in a course program *****/
 /*****************************************************************************/
-// Return true if success
 
-static bool Tre_ExchangeNodeRanges (Inf_Type_t InfoType,
-				    int NumNodeTop,int NumNodeBottom)
+static Err_SuccessOrError_t Tre_ExchangeNodeRanges (Inf_Type_t InfoType,
+						    int NumNodeTop,int NumNodeBottom)
   {
    struct Tre_NodeRange Top;
    struct Tre_NodeRange Bottom;
@@ -2193,10 +2199,10 @@ Bottom.End:   |    49|   222|-->|-->-49|   222|   |   -49|   222|-->|--> 26|   2
       /***** Unlock table *****/
       DB_UnlockTables ();
 
-      return true;	// Success
+      return Err_SUCCESS;
      }
 
-   return false;	// No success
+   return Err_ERROR;
   }
 
 /*****************************************************************************/

@@ -76,9 +76,10 @@ static const char *Mrk_HeadOrFootStr[2] =	// Names of fields in forms
 static void Mrk_GetNumRowsHeaderAndFooter (struct Mrk_Properties *Marks);
 static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter);
 static bool Mrk_CheckIfCellContainsOnlyIDs (const char *CellContent);
-static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct Usr_Data *UsrDat,
-                             const char *PathFileAllMarks,
-                             struct Mrk_Properties *Marks);
+static Err_SuccessOrError_t Mrk_GetUsrMarks (FILE *FileUsrMarks,
+					     struct Usr_Data *UsrDat,
+					     const char *PathFileAllMarks,
+					     struct Mrk_Properties *Marks);
 
 /*****************************************************************************/
 /********* Write number of header and footer rows of a file of marks *********/
@@ -234,6 +235,7 @@ Err_SuccessOrError_t Mrk_CheckFileOfMarks (const char *Path,struct Mrk_Propertie
    extern const char *Txt_Table_not_found_in_the_file_of_marks;
    char CellContent[Mrk_MAX_BYTES_IN_CELL_CONTENT + 1];
    FILE *FileAllMarks;
+   __attribute__((unused)) Exi_Exist_t StrFound;
    bool EndOfHead = false;
    bool EndOfTable = false;
    Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
@@ -245,73 +247,87 @@ Err_SuccessOrError_t Mrk_CheckFileOfMarks (const char *Path,struct Mrk_Propertie
    if ((FileAllMarks = fopen (Path,"rb")))
      {
       /***** Check if there is a table in the received file ******/
-      if (Str_FindStrInFile (FileAllMarks,"<table",Str_NO_SKIP_HTML_COMMENTS))
+      if (Str_FindStrInFile (FileAllMarks,"<table",
+			     Str_NO_SKIP_HTML_COMMENTS) == Exi_EXISTS)
         {
          // There is a table
-         Str_FindStrInFile (FileAllMarks,">",Str_NO_SKIP_HTML_COMMENTS);
+         StrFound = Str_FindStrInFile (FileAllMarks,">",Str_NO_SKIP_HTML_COMMENTS);
 
          // Only one table is allowed
-         if (Str_FindStrInFile (FileAllMarks,"<table",Str_NO_SKIP_HTML_COMMENTS))
-           {
-            Ale_CreateAlert (Ale_WARNING,NULL,
-        		     Txt_There_are_more_than_one_table_in_the_file_of_marks);
-            SuccessOrError = Err_ERROR;
-           }
-         else
-           {
-            /* Return to table start */
-            rewind (FileAllMarks);
-            Str_FindStrInFile (FileAllMarks,"<table",Str_NO_SKIP_HTML_COMMENTS);
-            Str_FindStrInFile (FileAllMarks,">",Str_NO_SKIP_HTML_COMMENTS);
+	 switch (Str_FindStrInFile (FileAllMarks,"<table",
+				    Str_NO_SKIP_HTML_COMMENTS))
+	   {
+	    case Exi_EXISTS:
+	       Ale_CreateAlert (Ale_WARNING,NULL,
+				Txt_There_are_more_than_one_table_in_the_file_of_marks);
+	       SuccessOrError = Err_ERROR;
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       /* Return to table start */
+	       rewind (FileAllMarks);
+	       StrFound = Str_FindStrInFile (FileAllMarks,"<table",Str_NO_SKIP_HTML_COMMENTS);
+	       StrFound = Str_FindStrInFile (FileAllMarks,">",Str_NO_SKIP_HTML_COMMENTS);
 
-            /* We assume that the structure of the table has several rows of header until the first row of students is found,
-	       then it has a number of rows of students, including some dummy rows without students,
-               and finally it has several rows of footer from the last row of students until the end of the table */
+	       /* We assume that the structure of the table has several rows of header until the first row of students is found,
+		  then it has a number of rows of students, including some dummy rows without students,
+		  and finally it has several rows of footer from the last row of students until the end of the table */
 
-            /***** Count rows of header *****/
-            while (!EndOfHead)
-               if (Str_FindStrInFile (FileAllMarks,"<tr",Str_NO_SKIP_HTML_COMMENTS))   // Go to the next row
-                 {
-        	  // All user's IDs must be in the first column of the row
-		  Str_GetCellFromHTMLTableSkipComments (FileAllMarks,CellContent,Mrk_MAX_BYTES_IN_CELL_CONTENT);
-
-		  /* Check if only user's IDs
-		     or other stuff found in this table cell */
-		  if (Mrk_CheckIfCellContainsOnlyIDs (CellContent))
+	       /***** Count rows of header *****/
+	       while (!EndOfHead)
+		  switch (Str_FindStrInFile (FileAllMarks,"<tr",
+					     Str_NO_SKIP_HTML_COMMENTS))	// Go to the next row
 		    {
-		     // Only user's IDs found in this cell
-		     EndOfHead = true;
-		     NumRowsStds++;
+		     case Exi_EXISTS:
+			// All user's IDs must be in the first column of the row
+			Str_GetCellFromHTMLTableSkipComments (FileAllMarks,CellContent,Mrk_MAX_BYTES_IN_CELL_CONTENT);
+
+			/* Check if only user's IDs
+			   or other stuff found in this table cell */
+			if (Mrk_CheckIfCellContainsOnlyIDs (CellContent))
+			  {
+			   // Only user's IDs found in this cell
+			   EndOfHead = true;
+			   NumRowsStds++;
+			  }
+			else
+			   // Other stuff found ==> continue in header
+			   Marks->Header++;
+			break;
+		     case Exi_DOES_NOT_EXIST:
+		     default:
+			EndOfHead = true;	// No more rows
+			break;
 		    }
-		  else
-		     // Other stuff found ==> continue in header
-		     Marks->Header++;
-                 }
-               else
-	          EndOfHead = true;	// No more rows
 
-            /***** Count rows of students and rows of footer *****/
-            while (!EndOfTable)
-               if (Str_FindStrInFile (FileAllMarks,"<tr",Str_NO_SKIP_HTML_COMMENTS))   // Go to the next row
-                 {
-        	  // All user's IDs must be in the first column of the row
-		  Str_GetCellFromHTMLTableSkipComments (FileAllMarks,CellContent,Mrk_MAX_BYTES_IN_CELL_CONTENT);
-
-		  /* Check if only user's IDs
-		     or other stuff found in this table cell */
-		  if (Mrk_CheckIfCellContainsOnlyIDs (CellContent))
+	       /***** Count rows of students and rows of footer *****/
+	       while (!EndOfTable)
+		  switch (Str_FindStrInFile (FileAllMarks,"<tr",
+					     Str_NO_SKIP_HTML_COMMENTS))	// Go to the next row
 		    {
-		     // Only user's IDs found in this cell
-                     NumRowsStds++;
-                     Marks->Footer = 0;
+		     case Exi_EXISTS:
+			// All user's IDs must be in the first column of the row
+			Str_GetCellFromHTMLTableSkipComments (FileAllMarks,CellContent,Mrk_MAX_BYTES_IN_CELL_CONTENT);
+
+			/* Check if only user's IDs
+			   or other stuff found in this table cell */
+			if (Mrk_CheckIfCellContainsOnlyIDs (CellContent))
+			  {
+			   // Only user's IDs found in this cell
+			   NumRowsStds++;
+			   Marks->Footer = 0;
+			  }
+			else
+			   // Other stuff found ==> continue in header
+			   Marks->Footer++;
+			break;
+		     case Exi_DOES_NOT_EXIST:
+		     default:
+			EndOfTable = true;	// No more rows
+			break;
 		    }
-		  else
-		     // Other stuff found ==> continue in header
-                     Marks->Footer++;
-                 }
-               else
-	          EndOfTable = true;	// No more rows
-           }
+	       break;
+	   }
         }
       else
         {
@@ -335,7 +351,7 @@ static bool Mrk_CheckIfCellContainsOnlyIDs (const char *CellContent)
   {
    char UsrIDFromTable[ID_MAX_BYTES_USR_ID + 1];
    const char *Ptr = CellContent;
-   bool UsrIDFound = false;
+   Exi_Exist_t UsrIDFound = Exi_DOES_NOT_EXIST;
    bool StuffNotUsrIDFound = false;
 
    /***** Get strings in this table cell
@@ -352,7 +368,7 @@ static bool Mrk_CheckIfCellContainsOnlyIDs (const char *CellContent)
 	 switch (ID_CheckIfUsrIDIsValid (UsrIDFromTable))
 	   {
 	    case Err_SUCCESS:
-	       UsrIDFound = true;
+	       UsrIDFound = Exi_EXISTS;
 	       break;
 	    case Err_ERROR:
 	    default:
@@ -363,16 +379,17 @@ static bool Mrk_CheckIfCellContainsOnlyIDs (const char *CellContent)
 
    /***** Check if only user's IDs
           or other stuff found in this table cell *****/
-   return (UsrIDFound && !StuffNotUsrIDFound);
+   return (UsrIDFound == Exi_EXISTS && !StuffNotUsrIDFound);
   }
 
 /*****************************************************************************/
 /*************************** Show the marks of a user ************************/
 /*****************************************************************************/
 
-static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct Usr_Data *UsrDat,
-                             const char *PathFileAllMarks,
-                             struct Mrk_Properties *Marks)
+static Err_SuccessOrError_t Mrk_GetUsrMarks (FILE *FileUsrMarks,
+					     struct Usr_Data *UsrDat,
+					     const char *PathFileAllMarks,
+					     struct Mrk_Properties *Marks)
   {
    extern const char *Txt_THE_USER_X_is_not_found_in_the_file_of_marks;
    unsigned Row;
@@ -381,7 +398,8 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct Usr_Data *UsrDat,
    char UsrIDFromTable[ID_MAX_BYTES_USR_ID + 1];
    FILE *FileAllMarks;
    unsigned NumID;
-   bool UsrIDFound;
+   Exi_Exist_t UsrIDFound;
+   __attribute__((unused)) Exi_Exist_t StrFound;
    bool EndOfTable;
 
    /***** Open HTML file with the table of marks *****/
@@ -389,54 +407,60 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct Usr_Data *UsrDat,
      {  // Can't open the file with the table of marks
       Ale_CreateAlert (Ale_ERROR,NULL,
 		       "Can not open file of marks.");
-      return false;
+      return Err_ERROR;
      }
 
    /***** Check if it exists a user's ID in the first column of the table of marks *****/
    /* Jump to table start */
-   Str_FindStrInFile (FileAllMarks,"<table",Str_NO_SKIP_HTML_COMMENTS);
-   Str_FindStrInFile (FileAllMarks,">",Str_NO_SKIP_HTML_COMMENTS);
+   StrFound = Str_FindStrInFile (FileAllMarks,"<table",Str_NO_SKIP_HTML_COMMENTS);
+   StrFound = Str_FindStrInFile (FileAllMarks,">",Str_NO_SKIP_HTML_COMMENTS);
 
    /* Skip header */
    for (Row = 1;
 	Row <= Marks->Header;
 	Row++)
-      Str_FindStrInFile (FileAllMarks,"<tr",Str_NO_SKIP_HTML_COMMENTS);   // Go to the next row
+      StrFound = Str_FindStrInFile (FileAllMarks,"<tr",Str_NO_SKIP_HTML_COMMENTS);   // Go to the next row
 
    /* Get user's IDs from table row by row until footer */
-   UsrIDFound = EndOfTable = false;
-   while (!UsrIDFound && !EndOfTable)
-      if (Str_FindStrInFile (FileAllMarks,"<tr",Str_NO_SKIP_HTML_COMMENTS))   // Go to the next row
-        {
-         // All user's IDs must be in the first column of the row
-	 Str_GetCellFromHTMLTableSkipComments (FileAllMarks,CellContent,Mrk_MAX_BYTES_IN_CELL_CONTENT);
+   UsrIDFound = Exi_DOES_NOT_EXIST;
+   EndOfTable = false;
+   while (UsrIDFound == Exi_DOES_NOT_EXIST && !EndOfTable)
+      switch (Str_FindStrInFile (FileAllMarks,"<tr",
+				 Str_NO_SKIP_HTML_COMMENTS))	// Go to the next row
+	{
+	 case Exi_EXISTS:
+	    // All user's IDs must be in the first column of the row
+	    Str_GetCellFromHTMLTableSkipComments (FileAllMarks,CellContent,Mrk_MAX_BYTES_IN_CELL_CONTENT);
 
-	 /* Get user's IDs */
-         Ptr = CellContent;
-	 while (*Ptr && !UsrIDFound)
-	   {
-	    /* Find next string in text until separator (leading and trailing spaces are removed) */
-            Str_GetNextStringUntilSeparator (&Ptr,UsrIDFromTable,ID_MAX_BYTES_USR_ID);
+	    /* Get user's IDs */
+	    Ptr = CellContent;
+	    while (*Ptr && UsrIDFound == Exi_DOES_NOT_EXIST)
+	      {
+	       /* Find next string in text until separator (leading and trailing spaces are removed) */
+	       Str_GetNextStringUntilSeparator (&Ptr,UsrIDFromTable,ID_MAX_BYTES_USR_ID);
 
-	    // Users' IDs are always stored internally in capitals and without leading zeros
-	    Str_RemoveLeadingZeros (UsrIDFromTable);
-	    Str_ConvertToUpperText (UsrIDFromTable);
+	       // Users' IDs are always stored internally in capitals and without leading zeros
+	       Str_RemoveLeadingZeros (UsrIDFromTable);
+	       Str_ConvertToUpperText (UsrIDFromTable);
 
-	    if (ID_CheckIfUsrIDIsValid (UsrIDFromTable) == Err_SUCCESS)
-	       // A valid user's ID is found in the first column of table, and stored in UsrIDFromTable.
-	       // Compare UsrIDFromTable with all confirmed user's IDs in list
-	       for (NumID = 0;
-		    NumID < UsrDat->IDs.Num && !UsrIDFound;
-		    NumID++)
-		  if (UsrDat->IDs.List[NumID].Confirmed == ID_CONFIRMED)
-		     if (!strcasecmp (UsrDat->IDs.List[NumID].ID,UsrIDFromTable))
-			UsrIDFound = true;
-	   }
-        }
-      else
-         EndOfTable = true;	// No more rows
+	       if (ID_CheckIfUsrIDIsValid (UsrIDFromTable) == Err_SUCCESS)
+		  // A valid user's ID is found in the first column of table, and stored in UsrIDFromTable.
+		  // Compare UsrIDFromTable with all confirmed user's IDs in list
+		  for (NumID = 0;
+		       NumID < UsrDat->IDs.Num && UsrIDFound == Exi_DOES_NOT_EXIST;
+		       NumID++)
+		     if (UsrDat->IDs.List[NumID].Confirmed == ID_CONFIRMED)
+			if (!strcasecmp (UsrDat->IDs.List[NumID].ID,UsrIDFromTable))
+			   UsrIDFound = Exi_EXISTS;
+	      }
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	    EndOfTable = true;	// No more rows
+	    break;
+	}
 
-   if (UsrIDFound)
+   if (UsrIDFound == Exi_EXISTS)
      {
       /***** Write all until the header (included) *****/
       /* Go to start of file */
@@ -454,54 +478,60 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct Usr_Data *UsrDat,
 
       /****** Write the row corresponding to the student *****/
       /* Find user's ID */
-      UsrIDFound = EndOfTable = false;
-      while (!UsrIDFound && !EndOfTable)
-	 if (Str_FindStrInFile (FileAllMarks,"<tr",Str_NO_SKIP_HTML_COMMENTS))   // Go to the next row
+      UsrIDFound = Exi_DOES_NOT_EXIST;
+      EndOfTable = false;
+      while (UsrIDFound == Exi_DOES_NOT_EXIST && !EndOfTable)
+	 switch (Str_FindStrInFile (FileAllMarks,"<tr",
+				    Str_NO_SKIP_HTML_COMMENTS))	// Go to the next row
 	   {
-	    // All user's IDs must be in the first column of the row
-	    Str_GetCellFromHTMLTableSkipComments (FileAllMarks,CellContent,Mrk_MAX_BYTES_IN_CELL_CONTENT);
+	    case Exi_EXISTS:
+	       // All user's IDs must be in the first column of the row
+	       Str_GetCellFromHTMLTableSkipComments (FileAllMarks,CellContent,Mrk_MAX_BYTES_IN_CELL_CONTENT);
 
-	    /* Get user's IDs */
-	    Ptr = CellContent;
-	    while (*Ptr && !UsrIDFound)
-	      {
-	       /* Find next string in text until comma or semicolon (leading and trailing spaces are removed) */
-	       Str_GetNextStringUntilSeparator (&Ptr,UsrIDFromTable,ID_MAX_BYTES_USR_ID);
+	       /* Get user's IDs */
+	       Ptr = CellContent;
+	       while (*Ptr && UsrIDFound == Exi_DOES_NOT_EXIST)
+		 {
+		  /* Find next string in text until comma or semicolon (leading and trailing spaces are removed) */
+		  Str_GetNextStringUntilSeparator (&Ptr,UsrIDFromTable,ID_MAX_BYTES_USR_ID);
 
-	       // Users' IDs are always stored internally in capitals and without leading zeros
-	       Str_RemoveLeadingZeros (UsrIDFromTable);
-	       Str_ConvertToUpperText (UsrIDFromTable);
-	       if (ID_CheckIfUsrIDIsValid (UsrIDFromTable) == Err_SUCCESS)
-		  // A valid user's ID is found in the first column of table, and stored in UsrIDFromTable.
-		  // Compare UsrIDFromTable with all confirmed user's IDs in list
-		  for (NumID = 0;
-		       NumID < UsrDat->IDs.Num && !UsrIDFound;
-		       NumID++)
-		     if (UsrDat->IDs.List[NumID].Confirmed == ID_CONFIRMED)
-			if (!strcasecmp (UsrDat->IDs.List[NumID].ID,UsrIDFromTable))
-			   UsrIDFound = true;
-	      }
+		  // Users' IDs are always stored internally in capitals and without leading zeros
+		  Str_RemoveLeadingZeros (UsrIDFromTable);
+		  Str_ConvertToUpperText (UsrIDFromTable);
+		  if (ID_CheckIfUsrIDIsValid (UsrIDFromTable) == Err_SUCCESS)
+		     // A valid user's ID is found in the first column of table, and stored in UsrIDFromTable.
+		     // Compare UsrIDFromTable with all confirmed user's IDs in list
+		     for (NumID = 0;
+			  NumID < UsrDat->IDs.Num && UsrIDFound == Exi_DOES_NOT_EXIST;
+			  NumID++)
+			if (UsrDat->IDs.List[NumID].Confirmed == ID_CONFIRMED)
+			   if (!strcasecmp (UsrDat->IDs.List[NumID].ID,UsrIDFromTable))
+			      UsrIDFound = Exi_EXISTS;
+		 }
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       EndOfTable = true;	// No more rows
+	       break;
 	   }
-	 else
-	    EndOfTable = true;	// No more rows
 
-      if (UsrIDFound)	// This should happen always, because the check was already made
+      if (UsrIDFound == Exi_EXISTS)	// This should happen always, because the check was already made
 	{
 	 /* Find backward until "<tr" */
-	 Str_FindStrInFileBack (FileAllMarks,"<tr",Str_NO_SKIP_HTML_COMMENTS);
+	 StrFound = Str_FindStrInFileBack (FileAllMarks,"<tr",Str_NO_SKIP_HTML_COMMENTS);
 
 	 /* Write until "</tr>" */
 	 Str_WriteUntilStrFoundInFileIncludingStr (FileUsrMarks,FileAllMarks,"</tr>",Str_NO_SKIP_HTML_COMMENTS);
 
 	 /***** Write the footer and all until the end *****/
 	 /* Find the footer of the table */
-	 Str_FindStrInFile (FileAllMarks,"</table>",Str_NO_SKIP_HTML_COMMENTS);
-	 Str_FindStrInFileBack (FileAllMarks,"</table>",Str_NO_SKIP_HTML_COMMENTS);
+	 StrFound = Str_FindStrInFile (FileAllMarks,"</table>",Str_NO_SKIP_HTML_COMMENTS);
+	 StrFound = Str_FindStrInFileBack (FileAllMarks,"</table>",Str_NO_SKIP_HTML_COMMENTS);
 
 	 for (Row = 1;
 	      Row <= Marks->Footer;
 	      Row++)
-	    Str_FindStrInFileBack (FileAllMarks,"<tr",Str_NO_SKIP_HTML_COMMENTS);
+	    StrFound = Str_FindStrInFileBack (FileAllMarks,"<tr",Str_NO_SKIP_HTML_COMMENTS);
 
 	 /* Write the footer of the table */
 	 for (Row = 1;
@@ -510,14 +540,14 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct Usr_Data *UsrDat,
 	    Str_WriteUntilStrFoundInFileIncludingStr (FileUsrMarks,FileAllMarks,"</tr>",Str_NO_SKIP_HTML_COMMENTS);
 
 	 /* Write the end */
-	 Str_FindStrInFile (FileAllMarks,"</table>",Str_NO_SKIP_HTML_COMMENTS);
-	 Str_FindStrInFileBack (FileAllMarks,"</table>",Str_NO_SKIP_HTML_COMMENTS);
+	 StrFound = Str_FindStrInFile (FileAllMarks,"</table>",Str_NO_SKIP_HTML_COMMENTS);
+	 StrFound = Str_FindStrInFileBack (FileAllMarks,"</table>",Str_NO_SKIP_HTML_COMMENTS);
 	 Fil_FastCopyOfOpenFiles (FileAllMarks,FileUsrMarks);
 
 	 /***** The file of marks is no longer needed. Close it. *****/
 	 fclose (FileAllMarks);
 
-	 return true;
+	 return Err_SUCCESS;
 	}
      }
 
@@ -526,7 +556,7 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct Usr_Data *UsrDat,
    Ale_CreateAlert (Ale_WARNING,NULL,
 		    Txt_THE_USER_X_is_not_found_in_the_file_of_marks,
 		    UsrDat->FullName);
-   return false;
+   return Err_ERROR;
   }
 
 /*****************************************************************************/
@@ -542,7 +572,7 @@ void Mrk_ShowMyMarks (void)
 		    PATH_MAX + 1];
    long CurrentGrpCod;
    struct Usr_Data *UsrDat;
-   bool UsrIsOK = true;
+   Exi_Exist_t UsrExists = Exi_EXISTS;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -572,7 +602,7 @@ void Mrk_ShowMyMarks (void)
             UsrDat = &Gbl.Usrs.Other.UsrDat;
            }
          else
-            UsrIsOK = false;
+            UsrExists = Exi_DOES_NOT_EXIST;
         }
       else		// Course zone
         {
@@ -583,59 +613,65 @@ void Mrk_ShowMyMarks (void)
             UsrDat = &Gbl.Usrs.Other.UsrDat;
            }
          else
-            UsrIsOK = false;
+            UsrExists = Exi_DOES_NOT_EXIST;
         }
      }
 
-   if (UsrIsOK)
+   switch (UsrExists)
      {
-      /***** Get list of user's IDs *****/
-      Usr_GetAllUsrDataFromUsrCod (UsrDat,
-                                   Usr_DONT_GET_PREFS,
-                                   Usr_DONT_GET_ROLE_IN_CRS);
+      case Exi_EXISTS:
+	 /***** Get list of user's IDs *****/
+	 Usr_GetAllUsrDataFromUsrCod (UsrDat,
+				      Usr_DONT_GET_PREFS,
+				      Usr_DONT_GET_ROLE_IN_CRS);
 
-      /***** Create temporal file to store my marks (in HTML) *****/
-      /* If the private directory does not exist, create it */
-      Fil_CreateDirIfNotExists (Cfg_PATH_MARK_PRIVATE);
+	 /***** Create temporal file to store my marks (in HTML) *****/
+	 /* If the private directory does not exist, create it */
+	 Fil_CreateDirIfNotExists (Cfg_PATH_MARK_PRIVATE);
 
-      /* Create a new temporary file *****/
-      snprintf (FileNameUsrMarks,sizeof (FileNameUsrMarks),"%s/%s.html",
-		Cfg_PATH_MARK_PRIVATE,Cry_GetUniqueNameEncrypted ());
-      if ((FileUsrMarks = fopen (FileNameUsrMarks,"wb")) == NULL)
-         Err_ShowErrorAndExit ("Can not open file for my marks.");
+	 /* Create a new temporary file *****/
+	 snprintf (FileNameUsrMarks,sizeof (FileNameUsrMarks),"%s/%s.html",
+		   Cfg_PATH_MARK_PRIVATE,Cry_GetUniqueNameEncrypted ());
+	 if ((FileUsrMarks = fopen (FileNameUsrMarks,"wb")) == NULL)
+	    Err_ShowErrorAndExit ("Can not open file for my marks.");
 
-      /***** Show my marks *****/
-      if (Mrk_GetUsrMarks (FileUsrMarks,UsrDat,PathPrivate,&Marks))
-        {
-         fclose (FileUsrMarks);
-         if ((FileUsrMarks = fopen (FileNameUsrMarks,"rb")) == NULL)
-            Err_ShowErrorAndExit ("Can not open file with my marks.");
+	 /***** Show my marks *****/
+	 switch (Mrk_GetUsrMarks (FileUsrMarks,UsrDat,PathPrivate,&Marks))
+	   {
+	    case Err_SUCCESS:
+	       fclose (FileUsrMarks);
+	       if ((FileUsrMarks = fopen (FileNameUsrMarks,"rb")) == NULL)
+		  Err_ShowErrorAndExit ("Can not open file with my marks.");
 
-         /* Begin HTML output */
-         /*  Do not write charset here.
-             Instead, delegate to the meta directive
-             (example: <meta http-equiv=Content-Type content="text/html; charset=utf-8">)
-             that is typically included in the HTML document header. */
-         HTM_Txt ("Content-type: text/html\r\n\r\n"); // Two \r\n are necessary
-         Gbl.Layout.HTMLStartWritten = true;
+	       /* Begin HTML output */
+	       /*  Do not write charset here.
+		   Instead, delegate to the meta directive
+		   (example: <meta http-equiv=Content-Type content="text/html; charset=utf-8">)
+		   that is typically included in the HTML document header. */
+	       HTM_Txt ("Content-type: text/html\r\n\r\n"); // Two \r\n are necessary
+	       Gbl.Layout.HTMLStartWritten = true;
 
-         /* Copy HTML to output file */
-         Fil_FastCopyOfOpenFiles (FileUsrMarks,Fil_GetOutputFile ());
-         fclose (FileUsrMarks);
+	       /* Copy HTML to output file */
+	       Fil_FastCopyOfOpenFiles (FileUsrMarks,Fil_GetOutputFile ());
+	       fclose (FileUsrMarks);
 
-         Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
-        }
-      else	// Problems in table of marks or user's ID not found
-        {
-         fclose (FileUsrMarks);
-	 Ale_ShowAlerts (NULL);
-        }
+	       Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
+	       break;
+	    case Err_ERROR:	// Problems in table of marks or user's ID not found
+	    default:
+	       fclose (FileUsrMarks);
+	       Ale_ShowAlerts (NULL);
+	       break;
+	   }
 
-      unlink (FileNameUsrMarks);	// File with marks is no longer necessary
+	 unlink (FileNameUsrMarks);	// File with marks is no longer necessary
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 /***** Show warning indicating no students found *****/
+	 Usr_ShowWarningNoUsersFound (Rol_STD);
+	 break;
      }
-   else
-      /***** Show warning indicating no students found *****/
-      Usr_ShowWarningNoUsersFound (Rol_STD);
   }
 
 /*****************************************************************************/

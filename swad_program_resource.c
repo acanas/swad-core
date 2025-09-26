@@ -342,7 +342,7 @@ void PrgRsc_ChangeResourceLink (void)
 void PrgRsc_GetParsRsc (struct Tre_Node *Node)
   {
    Par_GetParText ("Title",Node->Item.Rsc.Title,Rsc_MAX_BYTES_RESOURCE_TITLE);
-   if (Rsc_GetParLink (&Node->Item.Rsc.Link))
+   if (Rsc_GetParLink (&Node->Item.Rsc.Link) == Err_SUCCESS)
       /* Remove link from clipboard */
       Rsc_DB_RemoveLinkFromClipboard (&Node->Item.Rsc.Link);
   }

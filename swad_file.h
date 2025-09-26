@@ -55,11 +55,12 @@ FILE *Fil_GetOutputFile (void);
 
 void Fil_CreateFileForHTMLOutput (void);
 void Fil_CloseAndRemoveFileForHTMLOutput (void);
-bool Fil_ReadStdinIntoTmpFile (void);
+Err_SuccessOrError_t Fil_ReadStdinIntoTmpFile (void);
 void Fil_EndOfReadingStdin (void);
 struct Par_Param *Fil_StartReceptionOfFile (const char *ParFile,
                                             char *FileName,char *MIMEType);
-bool Fil_EndReceptionOfFile (char *FileNameDataTmp,struct Par_Param *Par);
+Err_SuccessOrError_t Fil_EndReceptionOfFile (char *FileNameDataTmp,
+					     struct Par_Param *Param);
 void Fil_CreateUpdateFile (const char CurrentName[PATH_MAX + 1],
                            const char *ExtensionOldName,
                            char OldName[PATH_MAX + 1],

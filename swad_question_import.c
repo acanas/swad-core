@@ -410,11 +410,17 @@ void QstImp_ImpQstsFromXML (void)
 	 /* End the reception of XML in a temporary file */
 	 snprintf (FileNameXMLTmp,sizeof (FileNameXMLTmp),"%s/%s.xml",
 		   Cfg_PATH_TEST_PRIVATE,Cry_GetUniqueNameEncrypted ());
-	 if (Fil_EndReceptionOfFile (FileNameXMLTmp,Par))
-	    /***** Get questions from XML file and store them in database *****/
-	    QstImp_ReadQuestionsFromXMLFileAndStoreInDB (FileNameXMLTmp);
-	 else
-	    Ale_ShowAlert (Ale_WARNING,"Error copying file.");
+	 switch (Fil_EndReceptionOfFile (FileNameXMLTmp,Par))
+	   {
+	    case Err_SUCCESS:
+	       /***** Get questions from XML file and store them in database *****/
+	       QstImp_ReadQuestionsFromXMLFileAndStoreInDB (FileNameXMLTmp);
+	       break;
+	    case Err_ERROR:
+	    default:
+	       Ale_ShowAlert (Ale_WARNING,"Error copying file.");
+	       break;
+	   }
 	 break;
       case Err_ERROR:
       default:

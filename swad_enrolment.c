@@ -993,7 +993,7 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
      }
 
    /***** Get confirmation *****/
-   if (!Pwd_GetConfirmationOnDangerousAction ())
+   if (Pwd_GetConfirmationOnDangerousAction () == Err_ERROR)
       return;
 
    /***** Get the action to do *****/
@@ -2038,7 +2038,7 @@ void Enr_RemAllStdsThisCrs (void)
    extern const char *Txt_The_X_students_who_belonged_to_the_course_Y_have_been_removed_from_it;
    unsigned NumStdsInCrs;
 
-   if (Pwd_GetConfirmationOnDangerousAction ())
+   if (Pwd_GetConfirmationOnDangerousAction () == Err_SUCCESS)
      {
       if ((NumStdsInCrs = Enr_RemAllStdsInCrs (&Gbl.Hierarchy.Node[Hie_CRS])))
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_X_students_who_belonged_to_the_course_Y_have_been_removed_from_it,
@@ -2999,7 +2999,7 @@ void Enr_ReqRemUsrFromCrs (void)
 
 void Enr_RemUsrFromCrs1 (void)
   {
-   if (Pwd_GetConfirmationOnDangerousAction ())
+   if (Pwd_GetConfirmationOnDangerousAction () == Err_SUCCESS)
       /***** Get user to be removed *****/
       switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
 	{

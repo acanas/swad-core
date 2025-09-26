@@ -78,7 +78,7 @@ static Err_SuccessOrError_t Rub_CheckRubricFieldsReceivedFromForm (const struct 
 static void Rub_CreateRubric (struct Rub_Rubric *Rubric);
 static void Rub_UpdateRubric (struct Rub_Rubric *Rubric);
 
-static bool Rub_CheckIfRecursiveTree (long RubCod,struct Rub_Node **TOS);
+static Err_SuccessOrError_t Rub_CheckIfRecursiveTree (long RubCod,struct Rub_Node **TOS);
 
 /*****************************************************************************/
 /*************************** Reset rubrics context ***************************/
@@ -238,7 +238,7 @@ Usr_Can_t Rub_CheckIfICanEditRubrics (void)
 /*********************** Check if edition is possible ************************/
 /*****************************************************************************/
 
-bool Rub_CheckIfEditable (void)
+Usr_Can_t Rub_CheckIfEditable (void)
   {
    if (Rub_CheckIfICanEditRubrics () == Usr_CAN)
      {
@@ -248,10 +248,10 @@ bool Rub_CheckIfEditable (void)
       return Rubric->NumCriteria == 0 ||
 	     Rubric->NumCriteria != 0;
       */
-      return true;
+      return Usr_CAN;
      }
 
-   return false;	// Questions are not editable
+   return Usr_CAN_NOT;	// Questions are not editable
   }
 
 /*****************************************************************************/
@@ -345,7 +345,7 @@ void Rub_ShowOnlyOneRubric (struct Rub_Rubrics *Rubrics)
 		              true);	// Show only this rubric
 
       /***** Check if rubric tree is correct *****/
-      if (Rub_CheckIfRecursiveTree (Rubrics->Rubric.RubCod,&TOS))
+      if (Rub_CheckIfRecursiveTree (Rubrics->Rubric.RubCod,&TOS) == Err_ERROR)
 	 Err_RecursiveRubric ();
 
       /***** Write criteria of this rubric *****/
@@ -776,7 +776,7 @@ void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
       Rub_PutFormEditionRubric (Rubrics,OldNewRubric);
 
       /***** Check if rubric tree is correct *****/
-      if (Rub_CheckIfRecursiveTree (Rubrics->Rubric.RubCod,&TOS))
+      if (Rub_CheckIfRecursiveTree (Rubrics->Rubric.RubCod,&TOS) == Err_ERROR)
 	 Err_RecursiveRubric ();
 
       /***** Show list of criteria inside box *****/
@@ -1023,18 +1023,19 @@ Handwritten    Handwritten |_______| Handwritten
                          /     |     \
               Handwritten Handwritten Handwritten
 */
-static bool Rub_CheckIfRecursiveTree (long RubCod,struct Rub_Node **TOS)
+static Err_SuccessOrError_t Rub_CheckIfRecursiveTree (long RubCod,struct Rub_Node **TOS)
   {
-   bool RecursiveTree;
+   Err_SuccessOrError_t RecursiveTree;
    MYSQL_RES *mysql_res;
    unsigned NumCriteria;
    unsigned NumCriterion;
    struct RubCri_Criterion Criterion;
 
    /***** Check that rubric is not yet in the stack *****/
-   RecursiveTree = Rub_FindRubCodInStack (*TOS,RubCod);
+   RecursiveTree = (Rub_FindRubCodInStack (*TOS,RubCod) == Exi_EXISTS) ? Err_ERROR :
+									 Err_SUCCESS;
 
-   if (!RecursiveTree)
+   if (RecursiveTree == Err_SUCCESS)
      {
       /***** Push rubric code in stack *****/
       Rub_PushRubCod (TOS,RubCod);
@@ -1049,9 +1050,9 @@ static bool Rub_CheckIfRecursiveTree (long RubCod,struct Rub_Node **TOS)
 	 RubCri_GetCriterionDataFromRow (mysql_res,&Criterion);
 
 	 if (Criterion.Link.Type == Rsc_RUBRIC)
-	    if (Rub_CheckIfRecursiveTree (Criterion.Link.Cod,TOS))
+	    if (Rub_CheckIfRecursiveTree (Criterion.Link.Cod,TOS) == Err_ERROR)
 	      {
-	       RecursiveTree = true;
+	       RecursiveTree = Err_ERROR;
 	       break;
 	      }
 	}

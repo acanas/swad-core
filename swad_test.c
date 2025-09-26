@@ -78,7 +78,7 @@ extern struct Globals Gbl;
 static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions);
 static void Tst_ShowFormNumQsts (void);
 
-static bool Tst_CheckIfNextTstAllowed (void);
+static Err_SuccessOrError_t Tst_CheckIfNextTstAllowed (void);
 
 static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
                                               struct TstPrn_Print *Print);
@@ -140,7 +140,7 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
                                                                Gbl.Hierarchy.Node[Hie_CRS].HieCod)))
 	{
 	 /***** Check if minimum date-time of next access to test is older than now *****/
-	 if (Tst_CheckIfNextTstAllowed ())
+	 if (Tst_CheckIfNextTstAllowed () == Err_SUCCESS)
 	   {
 	    Frm_BeginForm (ActSeeTst);
 	       if (Questions->Tags.PreselectedTagCod > 0)	// Only one preselected tag
@@ -224,7 +224,7 @@ void Tst_ShowNewTest (void)
       /***** Read test configuration from database *****/
       TstCfg_GetConfig ();
 
-      if (Tst_CheckIfNextTstAllowed ())
+      if (Tst_CheckIfNextTstAllowed () == Err_SUCCESS)
 	 /***** Check that all parameters used to generate a test are valid *****/
 	 switch (Tst_GetParsTst (&Questions,Tst_SHOW_TEST_TO_ANSWER))	// Get parameters from form
 	   {
@@ -406,9 +406,9 @@ void Tst_AssessTest (void)
 /*****************************************************************************/
 /************** Check minimum date-time of next access to test ***************/
 /*****************************************************************************/
-// Return true if allowed date-time of next access to test is older than now
+// Return Err_SUCCESS if allowed date-time of next access to test is older than now
 
-static bool Tst_CheckIfNextTstAllowed (void)
+static Err_SuccessOrError_t Tst_CheckIfNextTstAllowed (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_You_can_not_take_a_new_test_until;
@@ -420,7 +420,7 @@ static bool Tst_CheckIfNextTstAllowed (void)
    /***** Teachers and superusers are allowed to do all tests they want *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
        Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      return true;
+      return Err_SUCCESS;
 
    /***** Get date of next allowed access to test from database *****/
    switch (Tst_DB_GetDateNextTstAllowed (&mysql_res))
@@ -462,9 +462,9 @@ static bool Tst_CheckIfNextTstAllowed (void)
 				 Dat_WRITE_HOUR |
 				 Dat_WRITE_MINUTE |
 				 Dat_WRITE_SECOND));
-      return false;
+      return Err_ERROR;
      }
-   return true;
+   return Err_SUCCESS;
   }
 
 /*****************************************************************************/

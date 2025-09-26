@@ -459,19 +459,20 @@ time_t Dat_GetUNIXTimeFromStr (const char *Str)
 /*********** Get a struct Date from a string in YYYYMMDD format **************/
 /*****************************************************************************/
 
-bool Dat_GetDateFromYYYYMMDD (struct Dat_Date *Date,const char *YYYYMMDD)
+Err_SuccessOrError_t Dat_GetDateFromYYYYMMDD (struct Dat_Date *Date,
+					      const char *YYYYMMDD)
   {
    if (YYYYMMDD)
       if (YYYYMMDD[0])
 	 if (sscanf (YYYYMMDD,"%04u%02u%02u",&(Date->Year),&(Date->Month),&(Date->Day)) == 3)
 	   {
 	    Str_Copy (Date->YYYYMMDD,YYYYMMDD,sizeof (Date->YYYYMMDD) - 1);
-	    return true;
+	    return Err_SUCCESS;
 	   }
 
    Date->Year = Date->Month = Date->Day = 0;
    Date->YYYYMMDD[0] = '\0';
-   return false;
+   return Err_ERROR;
   }
 
 /*****************************************************************************/

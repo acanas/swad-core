@@ -500,7 +500,7 @@ static void Msg_PutParsSubjectAndContent (void)
   }
 
 /*****************************************************************************/
-/************ Put parameters to show more potential recipients ***************/
+/******************** Show only one user as recipient ************************/
 /*****************************************************************************/
 
 static void Msg_ShowOneUniqueRecipient (void)

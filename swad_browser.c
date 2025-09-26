@@ -1151,7 +1151,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void);
 static void Brw_ShowFileBrowsersAsgWrkUsr (void);
 
 static void Brw_FormToChangeCrsGrpZone (void);
-static bool Brw_CheckIfIHaveAccessToGrpFilezone (long GrpCod);
+static Usr_Can_t Brw_CheckIfICanAccessToGrpFilezone (long GrpCod);
 static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat);
 static void Brw_ShowFileBrowserOrWorksInternal (__attribute__((unused)) void *Args);
 static void Brw_ShowFileBrowser (void);
@@ -1173,9 +1173,10 @@ static void Brw_ListDir (unsigned Level,const char *RowId,
                          bool TreeContracted,
                          const char Path[PATH_MAX + 1],
                          const char PathInTree[PATH_MAX + 1]);
-static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
-                                     bool TreeContracted,
-                                     Brw_IconTree_t IconThisRow);
+static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
+							 const char *RowId,
+							 bool TreeContracted,
+							 Brw_IconTree_t IconThisRow);
 static Usr_Can_t Brw_CheckIfCanPasteIn (unsigned Level);
 static void Brw_PutIconRemove (void);
 static void Brw_PutIconCopy (void);
@@ -2115,7 +2116,7 @@ static long Brw_GetGrpSettings (void)
    if (GrpCod > 0)
       /***** ...check if group file zones are enabled,
 	     and check if I belongs to the selected group *****/
-      if (!Brw_CheckIfIHaveAccessToGrpFilezone (GrpCod))
+      if (Brw_CheckIfICanAccessToGrpFilezone (GrpCod) == Usr_CAN_NOT)
 	 switch (Gbl.Action.Act)
 	   {
 	    case ActSeeAdmDocCrsGrp:	// Access to see/admin a documents zone from menu
@@ -2992,17 +2993,17 @@ static void Brw_FormToChangeCrsGrpZone (void)
 /*********** Check if group has file zones and I belong to group *************/
 /*****************************************************************************/
 // GrpCod should be > 0
-// Return true if group has file zones and I belong to group
+// Return Usr_CAN if group has file zones and I belong to group
 
-static bool Brw_CheckIfIHaveAccessToGrpFilezone (long GrpCod)
+static Usr_Can_t Brw_CheckIfICanAccessToGrpFilezone (long GrpCod)
   {
    /***** Check if group file zones are enabled,
 	  and check if I belongs to the group *****/
    if (Grp_GetFileZones (GrpCod) == Grp_HAS_FILEZONES)
       if (Grp_GetIfIBelongToGrp (GrpCod) == Usr_BELONG)
-	 return true;
+	 return Usr_CAN;
 
-   return false;
+   return Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -3263,7 +3264,7 @@ static void Brw_ShowFileBrowser (void)
 	 Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_FOLDER;
 	 if (Brw_WriteRowFileBrowser (0,"1",
 				      false,	// Tree not contracted
-				      Brw_ICON_TREE_NOTHING))
+				      Brw_ICON_TREE_NOTHING) == HidVis_VISIBLE)
 	    Brw_ListDir (1,"1",
 			 false,	// Tree not contracted
 			 Gbl.FileBrowser.Path.RootFolder,
@@ -3807,6 +3808,7 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
    char PathFileInExplTree[PATH_MAX + 1];
    struct stat FileStatus;
    Brw_IconTree_t IconSubtree = Brw_ICON_TREE_NOTHING;	// Initialized to avoid warning
+   __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible;
 
    /***** Scan directory *****/
    if ((NumFiles = scandir (Path,&FileList,NULL,alphasort)) >= 0)	// No error
@@ -3869,7 +3871,7 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 	       /***** Write a row for the subdirectory *****/
 	       if (Brw_WriteRowFileBrowser (Level,RowId,
 	                                    TreeContracted,
-	                                    IconSubtree))
+	                                    IconSubtree) == HidVis_VISIBLE)
 		  if (Level < BrwSiz_MAX_DIR_LEVELS)
 		     /* List subtree starting at this this directory */
 		     Brw_ListDir (Level + 1,RowId,
@@ -3881,9 +3883,9 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 	      {
 	       Gbl.FileBrowser.FilFolLnk.Type = Str_FileIs (Gbl.FileBrowser.FilFolLnk.Name,"url") ? Brw_IS_LINK :
 					                                                            Brw_IS_FILE;
-	       Brw_WriteRowFileBrowser (Level,RowId,
-	                                TreeContracted,
-	                                Brw_ICON_TREE_NOTHING);
+	       HiddenOrVisible = Brw_WriteRowFileBrowser (Level,RowId,
+							  TreeContracted,
+							  Brw_ICON_TREE_NOTHING);
 	      }
 	   }
 	 free (FileList[NumFile]);
@@ -3899,11 +3901,12 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 /*****************************************************************************/
 // If it is the first row (root folder), always show it
 // If it is not the first row, it is shown or not depending on whether it is hidden or not
-// If the row is visible, return true. If it is hidden, return false
+// Return if the row is visible or hidden
 
-static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
-                                     bool TreeContracted,
-                                     Brw_IconTree_t IconThisRow)
+static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
+							 const char *RowId,
+							 bool TreeContracted,
+							 Brw_IconTree_t IconThisRow)
   {
    char *Anchor;
    HidVis_HiddenOrVisible_t HiddenOrVisible = HidVis_VISIBLE;
@@ -3911,6 +3914,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    bool LightStyle = false;
    bool IsRecent = false;
    struct Brw_FileMetadata FileMetadata;
+   __attribute__((unused)) Exi_Exist_t FileExists;
    char FileBrowserId[32];
    char TxtStyle[64];
    char *InputStyle;
@@ -3933,7 +3937,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 	  (Brw_TypeIsSeeDoc[Gbl.FileBrowser.Type] ||
 	   Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type]) &&
 	  Level)	// Don't return on level 0
-         return false;
+         return HidVis_HIDDEN;
 
       if (Brw_TypeIsAdmDoc[Gbl.FileBrowser.Type] ||
 	  Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
@@ -3955,7 +3959,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 
    /***** Get file metadata *****/
    Brw_GetFileMetadataByPath (&FileMetadata);
-   Brw_GetFileTypeSizeAndDate (&FileMetadata);
+   FileExists = Brw_GetFileTypeSizeAndDate (&FileMetadata);
    if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
       /* Add entry to the table of files/folders */
       FileMetadata.FilCod = Brw_DB_AddPath (-1L,FileMetadata.FilFolLnk.Type,
@@ -3970,7 +3974,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
       RowSetAsPublic = (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER) ? Brw_DB_GetIfFolderHasPublicFiles (Gbl.FileBrowser.FilFolLnk.Full) :
 	                                                                   (FileMetadata.Public == PriPub_PUBLIC);
       if (Gbl.FileBrowser.ShowOnlyPublicFiles && !RowSetAsPublic)
-         return false;
+         return HidVis_HIDDEN;
      }
 
    /***** Check if is a recent file or folder *****/
@@ -4143,8 +4147,8 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    if (HiddenOrVisible == HidVis_HIDDEN &&
        (Brw_TypeIsSeeDoc[Gbl.FileBrowser.Type] ||
 	Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type]))
-      return false;
-   return true;
+      return HidVis_HIDDEN;
+   return HidVis_VISIBLE;
   }
 
 /*****************************************************************************/
@@ -5752,7 +5756,7 @@ void Brw_Paste (void)
         {
 	 if (Gbl.FileBrowser.Clipboard.HieCod > 0)	// Group code of source zone specified
 	   {
-	    if (!Brw_CheckIfIHaveAccessToGrpFilezone (Gbl.FileBrowser.Clipboard.HieCod))
+	    if (Brw_CheckIfICanAccessToGrpFilezone (Gbl.FileBrowser.Clipboard.HieCod) == Usr_CAN_NOT)
 	       Err_NoPermissionExit ();
 	   }
 	 else						// No group code of source zone specified
@@ -6902,7 +6906,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Siz
    char PathTmp[PATH_MAX + 1 + PATH_MAX + 4 + 1];
    char PathCompleteInTreeIncludingFile[PATH_MAX + 1 + NAME_MAX + 1];
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
-   bool FileIsValid = true;
+   Err_SuccessOrError_t FileIsValid = Err_SUCCESS;
    long FilCod = -1L;	// Code of new file in database
    struct Brw_FileMetadata FileMetadata;
    struct Mrk_Properties Marks;
@@ -6958,105 +6962,109 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Siz
 			   FileIsValid = Fil_EndReceptionOfFile (PathTmp,Par);
 
 			   /* Check if the content of the file of marks is valid */
-			   if (FileIsValid)
+			   if (FileIsValid == Err_SUCCESS)
 			      if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
 				 if (Mrk_CheckFileOfMarks (PathTmp,&Marks) == Err_ERROR)
-				    FileIsValid = false;
+				    FileIsValid = Err_ERROR;
 
-			   if (FileIsValid)
+			   switch (FileIsValid)
 			     {
-			      /* Rename the temporary */
-			      if (rename (PathTmp,Path))	// Fail
-				{
-				 Fil_RemoveTree (PathTmp);
-				 Ale_CreateAlert (Ale_WARNING,NULL,
-						  Txt_UPLOAD_FILE_could_not_create_file_NO_HTML,
-						  Gbl.FileBrowser.NewFilFolLnkName);
-				}
-			      else			// Success
-				{
-				 /* Check if quota has been exceeded */
-				 BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
-				 BrwSiz_SetMaxQuota (Size);
-				 switch (BrwSiz_CheckQuota (Size))
+			      case Err_SUCCESS:
+				 /* Rename the temporary */
+				 if (rename (PathTmp,Path))	// Fail
 				   {
-				    case Err_SUCCESS:	// Quota not exceeded
-				       /* Remove affected clipboards */
-				       Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-									Gbl.Usrs.Me.UsrDat.UsrCod,
-									Gbl.Usrs.Other.UsrDat.UsrCod);
-
-				       /* Add path where new file is created to table of expanded folders */
-				       Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
-
-				       /* Add entry to the table of files/folders */
-				       snprintf (PathCompleteInTreeIncludingFile,
-						 sizeof (PathCompleteInTreeIncludingFile),
-						 "%s/%s",
-						 Gbl.FileBrowser.FilFolLnk.Full,
-						 Gbl.FileBrowser.NewFilFolLnkName);
-				       FilCod = Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_FILE,
-								PathCompleteInTreeIncludingFile,
-								PriPub_PRIVATE,Brw_LICENSE_DEFAULT);
-
-				       /* Show message of confirmation */
-				       if (UploadType == Brw_CLASSIC_UPLOAD)
-					 {
-					  Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
-										 Gbl.FileBrowser.Lvl,
-										 Brw_IS_FOLDER,
-										 Gbl.FileBrowser.FilFolLnk.Name,
-										 FileNameToShow);	// Folder name
-					  Ale_CreateAlert (Ale_SUCCESS,NULL,
-							   Txt_The_file_X_has_been_placed_inside_the_folder_Y,
-							   Gbl.FileBrowser.NewFilFolLnkName,
-							   FileNameToShow);
-					 }
-				       UploadSucessful = Err_SUCCESS;
-
-				       FileMetadata.FilCod = FilCod;
-				       Brw_GetFileMetadataByCod (&FileMetadata);
-
-				       /* Add a new entry of marks into database */
-				       if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
-					  Mrk_DB_AddMarks (FileMetadata.FilCod,&Marks);
-
-				       /* Notify new file */
-				       if (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE)
-					  switch (Gbl.FileBrowser.Type)
-					    {
-					     case Brw_ADMI_DOC_CRS:
-					     case Brw_ADMI_DOC_GRP:
-						Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FilCod);
-						break;
-					     case Brw_ADMI_TCH_CRS:
-					     case Brw_ADMI_TCH_GRP:
-						Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FilCod);
-						break;
-					     case Brw_ADMI_SHR_CRS:
-					     case Brw_ADMI_SHR_GRP:
-						Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FilCod);
-						break;
-					     case Brw_ADMI_MRK_CRS:
-					     case Brw_ADMI_MRK_GRP:
-						Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FilCod);
-						break;
-					     default:
-						break;
-					    }
-				       break;
-				    case Err_ERROR:	// Qupta exceeded
-				    default:
-				       Fil_RemoveTree (Path);
-				       Ale_CreateAlert (Ale_WARNING,NULL,
-							Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML,
-							Gbl.FileBrowser.NewFilFolLnkName);
-				       break;
+				    Fil_RemoveTree (PathTmp);
+				    Ale_CreateAlert (Ale_WARNING,NULL,
+						     Txt_UPLOAD_FILE_could_not_create_file_NO_HTML,
+						     Gbl.FileBrowser.NewFilFolLnkName);
 				   }
-				}
+				 else			// Success
+				   {
+				    /* Check if quota has been exceeded */
+				    BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
+				    BrwSiz_SetMaxQuota (Size);
+				    switch (BrwSiz_CheckQuota (Size))
+				      {
+				       case Err_SUCCESS:	// Quota not exceeded
+					  /* Remove affected clipboards */
+					  Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+									   Gbl.Usrs.Me.UsrDat.UsrCod,
+									   Gbl.Usrs.Other.UsrDat.UsrCod);
+
+					  /* Add path where new file is created to table of expanded folders */
+					  Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
+
+					  /* Add entry to the table of files/folders */
+					  snprintf (PathCompleteInTreeIncludingFile,
+						    sizeof (PathCompleteInTreeIncludingFile),
+						    "%s/%s",
+						    Gbl.FileBrowser.FilFolLnk.Full,
+						    Gbl.FileBrowser.NewFilFolLnkName);
+					  FilCod = Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_FILE,
+								   PathCompleteInTreeIncludingFile,
+								   PriPub_PRIVATE,Brw_LICENSE_DEFAULT);
+
+					  /* Show message of confirmation */
+					  if (UploadType == Brw_CLASSIC_UPLOAD)
+					    {
+					     Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
+										    Gbl.FileBrowser.Lvl,
+										    Brw_IS_FOLDER,
+										    Gbl.FileBrowser.FilFolLnk.Name,
+										    FileNameToShow);	// Folder name
+					     Ale_CreateAlert (Ale_SUCCESS,NULL,
+							      Txt_The_file_X_has_been_placed_inside_the_folder_Y,
+							      Gbl.FileBrowser.NewFilFolLnkName,
+							      FileNameToShow);
+					    }
+					  UploadSucessful = Err_SUCCESS;
+
+					  FileMetadata.FilCod = FilCod;
+					  Brw_GetFileMetadataByCod (&FileMetadata);
+
+					  /* Add a new entry of marks into database */
+					  if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
+					     Mrk_DB_AddMarks (FileMetadata.FilCod,&Marks);
+
+					  /* Notify new file */
+					  if (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE)
+					     switch (Gbl.FileBrowser.Type)
+					       {
+						case Brw_ADMI_DOC_CRS:
+						case Brw_ADMI_DOC_GRP:
+						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FilCod);
+						   break;
+						case Brw_ADMI_TCH_CRS:
+						case Brw_ADMI_TCH_GRP:
+						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FilCod);
+						   break;
+						case Brw_ADMI_SHR_CRS:
+						case Brw_ADMI_SHR_GRP:
+						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FilCod);
+						   break;
+						case Brw_ADMI_MRK_CRS:
+						case Brw_ADMI_MRK_GRP:
+						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FilCod);
+						   break;
+						default:
+						   break;
+					       }
+					  break;
+				       case Err_ERROR:	// Qupta exceeded
+				       default:
+					  Fil_RemoveTree (Path);
+					  Ale_CreateAlert (Ale_WARNING,NULL,
+							   Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML,
+							   Gbl.FileBrowser.NewFilFolLnkName);
+					  break;
+				      }
+				   }
+				 break;
+			      case Err_ERROR:	// Error in file reception. File probably too big
+			      default:
+				 Fil_RemoveTree (PathTmp);
+				 break;
 			     }
-			   else	// Error in file reception. File probably too big
-			      Fil_RemoveTree (PathTmp);
 			   break;
 		       }
 		     break;
@@ -7457,7 +7465,6 @@ void Brw_ShowFileMetadata (void)
    char FileNameToShow[NAME_MAX + 1];
    char URL[PATH_MAX + 1];
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   bool Found;
    Usr_Can_t ICanView = Usr_CAN_NOT;
    bool IAmTheOwner;
    Usr_Can_t ICanEdit;
@@ -7473,9 +7480,7 @@ void Brw_ShowFileMetadata (void)
    /***** Get file metadata *****/
    FileMetadata.FilCod = ParCod_GetAndCheckPar (ParCod_Fil);
    Brw_GetFileMetadataByCod (&FileMetadata);
-   Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
-
-   if (Found)
+   if (Brw_GetFileTypeSizeAndDate (&FileMetadata) == Exi_EXISTS)
      {
       if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
 	 /* Add entry to the table of files/folders */
@@ -7936,7 +7941,6 @@ void Brw_DownloadFile (void)
    extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct Brw_FileMetadata FileMetadata;
    char URL[PATH_MAX + 1];
-   bool Found;
    Usr_Can_t ICanView = Usr_CAN_NOT;
 
    /***** Get parameters related to file browser *****/
@@ -7944,9 +7948,7 @@ void Brw_DownloadFile (void)
 
    /***** Get file metadata *****/
    Brw_GetFileMetadataByPath (&FileMetadata);
-   Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
-
-   if (Found)
+   if (Brw_GetFileTypeSizeAndDate (&FileMetadata) == Exi_EXISTS)
      {
       if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
 	 /* Add entry to the table of files/folders */
@@ -8269,7 +8271,6 @@ void Brw_ChgFileMetadata (void)
   {
    extern const char *Txt_The_properties_of_file_X_have_been_saved;
    struct Brw_FileMetadata FileMetadata;
-   bool Found;
    bool IAmTheOwner;
    PriPub_PrivateOrPublic_t PrivateOrPublicFileBeforeEdition;
    PriPub_PrivateOrPublic_t PrivateOrPublicFileAfterEdition;
@@ -8281,9 +8282,7 @@ void Brw_ChgFileMetadata (void)
    /***** Get file metadata *****/
    FileMetadata.FilCod = ParCod_GetAndCheckPar (ParCod_Fil);
    Brw_GetFileMetadataByCod (&FileMetadata);
-   Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
-
-   if (Found)
+   if (Brw_GetFileTypeSizeAndDate (&FileMetadata) == Exi_EXISTS)
      {
       /***** Check if I can change file metadata *****/
       IAmTheOwner = Brw_CheckIfIAmOwnerOfFile (FileMetadata.PublisherUsrCod);
@@ -8573,9 +8572,9 @@ static void Brw_GetFileMetadataFromRow (MYSQL_RES *mysql_res,
 /*****************************************************************************/
 /********************** Get file type, size and date *************************/
 /*****************************************************************************/
-// Return true if file exists
+// Return if file exists
 
-bool Brw_GetFileTypeSizeAndDate (struct Brw_FileMetadata *FileMetadata)
+Exi_Exist_t Brw_GetFileTypeSizeAndDate (struct Brw_FileMetadata *FileMetadata)
   {
    char Path[PATH_MAX + 1 + PATH_MAX + 1];
    struct stat FileStatus;
@@ -8589,7 +8588,7 @@ bool Brw_GetFileTypeSizeAndDate (struct Brw_FileMetadata *FileMetadata)
       FileMetadata->FilFolLnk.Type = Brw_IS_UNKNOWN;
       FileMetadata->Size = (off_t) 0;
       FileMetadata->Time = (time_t) 0;
-      return false;
+      return Exi_DOES_NOT_EXIST;
      }
    else
      {
@@ -8602,7 +8601,7 @@ bool Brw_GetFileTypeSizeAndDate (struct Brw_FileMetadata *FileMetadata)
 	 FileMetadata->FilFolLnk.Type = Brw_IS_UNKNOWN;
       FileMetadata->Size = FileStatus.st_size;
       FileMetadata->Time = FileStatus.st_mtime;
-      return true;
+      return Exi_EXISTS;
      }
   }
 
@@ -8925,7 +8924,7 @@ static Usr_Can_t Brw_CheckIfICanEditFileOrFolder (unsigned Level)
          return Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type) ? Usr_CAN :
 									  Usr_CAN_NOT;
      }
-   return false;
+   return Usr_CAN_NOT;
   }
 
 /*****************************************************************************/

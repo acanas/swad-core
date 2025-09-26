@@ -298,25 +298,26 @@ static void Mai_GetListMailDomainsAllowedForNotif (struct Mai_Mails *Mails)
 /************ Check if user can receive notifications via email **************/
 /*****************************************************************************/
 
-bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct Usr_Data *UsrDat)
+Usr_Can_t Mai_CheckIfUsrCanReceiveEmailNotif (const struct Usr_Data *UsrDat)
   {
    char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
 
    /***** Check #1: is email empty or filled? *****/
    if (!UsrDat->Email[0])
-      return false;
+      return Usr_CAN_NOT;
 
    /***** Check #2: is email address confirmed? *****/
    if (UsrDat->EmailConfirmed == Mai_NOT_CONFIRMED)
-      return false;
+      return Usr_CAN_NOT;
 
    /***** Check #3: check if there is mail domain *****/
    Mai_GetMailDomain (UsrDat->Email,MailDomain);
    if (!MailDomain[0])
-      return false;
+      return Usr_CAN_NOT;
 
    /***** Check #4: is mail domain allowed? *****/
-   return Mai_DB_CheckIfMailDomainIsAllowedForNotif (MailDomain);
+   return Mai_DB_CheckIfMailDomainIsAllowedForNotif (MailDomain) ? Usr_CAN :
+								   Usr_CAN_NOT;
   }
 
 /*****************************************************************************/

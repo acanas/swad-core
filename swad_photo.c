@@ -102,8 +102,8 @@ static void Pho_ReqOtherUsrPhoto (void);
 
 static void Pho_ReqPhoto (const struct Usr_Data *UsrDat);
 
-static bool Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
-                                            const struct Usr_Data *UsrDat);
+static Exi_Exist_t Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
+                                                   const struct Usr_Data *UsrDat);
 
 static void Pho_SetFileNamePhoto (const char FileNamePhoto[NAME_MAX + 1]);
 static const char *Pho_GetFileNamePhoto (void);
@@ -394,7 +394,7 @@ void Pho_ReqPhotoUsr (void)
 void Pho_RecMyPhotoDetFaces (void)
   {
    /***** Receive my photo and detect faces on it *****/
-   if (!Pho_ReceivePhotoAndDetectFaces (Usr_ME,&Gbl.Usrs.Me.UsrDat))
+   if (Pho_ReceivePhotoAndDetectFaces (Usr_ME,&Gbl.Usrs.Me.UsrDat) == Exi_DOES_NOT_EXIST)
      {
       Pho_ReqPhoto (&Gbl.Usrs.Me.UsrDat);	// Request my photograph again
       HTM_BR ();
@@ -420,20 +420,22 @@ void Pho_RecOtherUsrPhotoDetFaces (void)
      {
       case Exi_EXISTS:
 	 /***** Receive photo *****/
-	 if (Pho_ReceivePhotoAndDetectFaces (Usr_OTHER,&Gbl.Usrs.Other.UsrDat))
+	 switch (Pho_ReceivePhotoAndDetectFaces (Usr_OTHER,&Gbl.Usrs.Other.UsrDat))
 	   {
-	    if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_OTHER)
-	      {
-	       /* Change the visibility of the other user's photo to minimum.
-		  The reason is that the other user is not aware of the change. */
-	       Gbl.Usrs.Other.UsrDat.PhotoVisibility = Pri_VISIBILITY_USER;
-	       Set_DB_UpdateUsrSettingsAboutPhotoVisibility (&Gbl.Usrs.Other.UsrDat);
-	      }
-	   }
-	 else
-	   {
-	    Pho_ReqPhoto (&Gbl.Usrs.Other.UsrDat);	// Request user's photograph again
-	    HTM_BR ();
+	    case Exi_EXISTS:
+	       if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_OTHER)
+		 {
+		  /* Change the visibility of the other user's photo to minimum.
+		     The reason is that the other user is not aware of the change. */
+		  Gbl.Usrs.Other.UsrDat.PhotoVisibility = Pri_VISIBILITY_USER;
+		  Set_DB_UpdateUsrSettingsAboutPhotoVisibility (&Gbl.Usrs.Other.UsrDat);
+		 }
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       Pho_ReqPhoto (&Gbl.Usrs.Other.UsrDat);	// Request user's photograph again
+	       HTM_BR ();
+	       break;
 	   }
 
 	 /***** Show another user's record card *****/
@@ -632,10 +634,10 @@ void Pho_RemoveUsrPhoto (void)
 /*****************************************************************************/
 /***************** Receive a photo and detect faces on it ********************/
 /*****************************************************************************/
-// Return false if no "green" faces detected
+// Return Exi_DOES_NOT_EXIST if no "green" faces detected
 
-static bool Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
-                                            const struct Usr_Data *UsrDat)
+static Exi_Exist_t Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
+                                                   const struct Usr_Data *UsrDat)
   {
    extern const char *Txt_The_file_is_not_X;
    extern const char *Txt_Could_not_detect_any_face_in_front_position_;
@@ -721,16 +723,16 @@ static bool Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
    if (SuccessOrError == Err_ERROR)
      {
       Ale_ShowAlert (Ale_WARNING,Txt_The_file_is_not_X,"jpg");
-      return false;
+      return Exi_DOES_NOT_EXIST;
      }
 
    /* End the reception of photo in a temporary file */
    snprintf (FileNamePhotoTmp,sizeof (FileNamePhotoTmp),"%s/%s.jpg",
              Cfg_PATH_PHOTO_TMP_PUBLIC,UniqueNameEncrypted);
-   if (!Fil_EndReceptionOfFile (FileNamePhotoTmp,Par))
+   if (Fil_EndReceptionOfFile (FileNamePhotoTmp,Par) == Err_ERROR)
      {
       Ale_ShowAlert (Ale_ERROR,"Error copying file.");
-      return false;
+      return Exi_DOES_NOT_EXIST;
      }
 
    /* Copy the original photo received to private directory.
@@ -863,8 +865,9 @@ static bool Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
    /***** End alert *****/
    Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
 
-   /***** Button to send another photo *****/
-   return (NumFaces.Green != 0);
+   /***** "Green" faces detected? *****/
+   return NumFaces.Green ? Exi_EXISTS :
+			   Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

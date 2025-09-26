@@ -101,7 +101,7 @@ int main (void)
    DB_OpenDBConnection ();
 
    /***** Read parameters *****/
-   if (Par_GetQueryString ())
+   if (Par_GetQueryString () == Err_SUCCESS)
      {
       /***** Get parameters *****/
       Par_CreateListOfPars ();

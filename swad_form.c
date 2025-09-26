@@ -55,7 +55,8 @@ static bool Frm_Inside = false;
 
 static inline void Frm_SetInside (bool Inside);
 
-static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParLocationIfNoSesion,
+static void Frm_BeginFormInternal (Act_Action_t NextAction,
+				   Frm_PutParLocation_t PutParLocation,
                                    const char *Id,const char *Anchor,const char *OnSubmit);
 
 /*****************************************************************************/
@@ -78,40 +79,48 @@ bool Frm_CheckIfInside (void)
 
 void Frm_BeginFormGoTo (Act_Action_t NextAction)
   {
-   Frm_BeginFormInternal (NextAction,false,NULL,NULL,NULL);	// Do not put now parameter location
+   Frm_BeginFormInternal (NextAction,Frm_DONT_PUT_PAR_LOCATION_IF_NO_SESSION,
+			  NULL,NULL,NULL);
   }
 
 void Frm_BeginForm (Act_Action_t NextAction)
   {
-   Frm_BeginFormInternal (NextAction,true,NULL,NULL,NULL);	// Do put now parameter location (if no open session)
+   Frm_BeginFormInternal (NextAction,Frm_PUT_PAR_LOCATION_IF_NO_SESSION,
+			  NULL,NULL,NULL);
   }
 
 void Frm_BeginFormAnchor (Act_Action_t NextAction,const char *Anchor)
   {
-   Frm_BeginFormInternal (NextAction,true,NULL,Anchor,NULL);	// Do put now parameter location (if no open session)
+   Frm_BeginFormInternal (NextAction,Frm_PUT_PAR_LOCATION_IF_NO_SESSION,
+			  NULL,Anchor,NULL);
   }
 
 void Frm_BeginFormOnSubmit (Act_Action_t NextAction,const char *OnSubmit)
   {
-   Frm_BeginFormInternal (NextAction,true,NULL,NULL,OnSubmit);	// Do put now parameter location (if no open session)
+   Frm_BeginFormInternal (NextAction,Frm_PUT_PAR_LOCATION_IF_NO_SESSION,
+			  NULL,NULL,OnSubmit);
   }
 
 void Frm_BeginFormAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit)
   {
-   Frm_BeginFormInternal (NextAction,true,NULL,Anchor,OnSubmit);// Do put now parameter location (if no open session)
+   Frm_BeginFormInternal (NextAction,Frm_PUT_PAR_LOCATION_IF_NO_SESSION,
+			  NULL,Anchor,OnSubmit);
   }
 
 void Frm_BeginFormId (Act_Action_t NextAction,const char *Id)
   {
-   Frm_BeginFormInternal (NextAction,true,Id,NULL,NULL);	// Do put now parameter location (if no open session)
+   Frm_BeginFormInternal (NextAction,Frm_PUT_PAR_LOCATION_IF_NO_SESSION,
+			  Id,NULL,NULL);
   }
 
 void Frm_BeginFormIdAnchor (Act_Action_t NextAction,const char *Id,const char *Anchor)
   {
-   Frm_BeginFormInternal (NextAction,true,Id,Anchor,NULL);	// Do put now parameter location (if no open session)
+   Frm_BeginFormInternal (NextAction,Frm_PUT_PAR_LOCATION_IF_NO_SESSION,
+			  Id,Anchor,NULL);
   }
 
-static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParLocationIfNoSesion,
+static void Frm_BeginFormInternal (Act_Action_t NextAction,
+				   Frm_PutParLocation_t PutParLocation,
                                    const char *Id,const char *Anchor,const char *OnSubmit)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
@@ -152,7 +161,7 @@ static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParLocationIf
       HTM_Txt (" accept-charset=\"windows-1252\">");
 
       /* Put basic form parameters */
-      Frm_SetParsForm (ParsStr,NextAction,PutParLocationIfNoSesion);
+      Frm_SetParsForm (ParsStr,NextAction,PutParLocation);
       HTM_Txt (ParsStr);
 
       Frm_SetInside (true);
@@ -180,7 +189,7 @@ void Frm_BeginFormNoAction (void)
 
 void Frm_SetParsForm (char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1],
 		      Act_Action_t NextAction,
-                      bool PutParLocationIfNoSession)
+                      Frm_PutParLocation_t PutParLocation)
   {
    static const char *ParName[Hie_NUM_LEVELS] =
      {
@@ -208,7 +217,7 @@ void Frm_SetParsForm (char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1],
 	 snprintf (ParSession,sizeof (ParSession),
 		   "<input type=\"hidden\" name=\"ses\" value=\"%s\">",
 		   Gbl.Session.Id);
-      else if (PutParLocationIfNoSession &&
+      else if (PutParLocation == Frm_PUT_PAR_LOCATION_IF_NO_SESSION &&
 	       Gbl.Hierarchy.Node[Gbl.Hierarchy.HieLvl].HieCod > 0)
 	 // Extra parameters necessary when there's no open session
 	 /* If session is open, course/degree/... code will be get from session data,

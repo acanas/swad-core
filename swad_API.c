@@ -299,9 +299,9 @@ static void API_GetListGrpsInMatchFromDB (struct soap *soap,
 					  long MchCod,char **ListGroups);
 
 static void API_ListDir (FILE *XML,unsigned Level,const char *Path,const char *PathInTree);
-static bool API_WriteRowFileBrowser (FILE *XML,unsigned Level,
-                                     Brw_FileType_t FileType,
-                                     const char *FileName);
+static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (FILE *XML,unsigned Level,
+							 Brw_FileType_t FileType,
+							 const char *FileName);
 static void API_IndentXMLLine (FILE *XML,unsigned Level);
 
 static void API_GetLocationData (struct soap *soap,
@@ -551,6 +551,7 @@ static Exi_Exist_t API_GetSomeUsrDataFromUsrCod (struct Usr_Data *UsrDat,
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Exi_Exist_t UsrExists;
+   __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Check if user's code is valid *****/
    if (UsrDat->UsrCod <= 0)
@@ -570,7 +571,7 @@ static Exi_Exist_t API_GetSomeUsrDataFromUsrCod (struct Usr_Data *UsrDat,
       Str_Copy (UsrDat->Photo   ,row[3],sizeof (UsrDat->Photo   ) - 1);
 
       /* Get user's brithday (row[4]) */
-      Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[4]);
+      SuccessOrError = Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[4]);
 
       /***** Get list of user's IDs *****/
       ID_GetListIDsFromUsrCod (UsrDat);
@@ -724,7 +725,8 @@ static int API_CheckParsNewAccount (char *NewNickWithArr,		// Input
 
    /***** Step 3/3: Check new password *****/
    Cry_EncryptSHA512Base64 (NewPlainPassword,NewEncryptedPassword);
-   if (!Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword,NewEncryptedPassword,-1L))        // New password is good?
+   if (Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword,
+				      NewEncryptedPassword,-1L) == Err_ERROR)        // New password is good?
       return API_CHECK_NEW_ACCOUNT_PASSWORD_NOT_VALID;
 
    return API_CHECK_NEW_ACCOUNT_OK;
@@ -2178,7 +2180,8 @@ int swad__sendMyGroups (struct soap *soap,
      }
 
    /***** Change my groups *****/
-   SendMyGroupsOut->success = Grp_ChangeGrpsAtomically (Usr_ME,&LstGrpsIWant);
+   SendMyGroupsOut->success = (Grp_ChangeGrpsAtomically (Usr_ME,&LstGrpsIWant) == Err_SUCCESS) ? 1 :
+											         0;
 
    /***** Free memory with the list of groups which I want to belong to *****/
    Grp_FreeListCodGrp (&LstGrpsIWant);
@@ -4856,6 +4859,7 @@ static void API_ListDir (FILE *XML,unsigned Level,
    char PathFileRel[PATH_MAX + 1 + NAME_MAX + 1];
    char PathFileInExplTree[PATH_MAX + 1 + NAME_MAX + 1];
    struct stat FileStatus;
+   __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible;
 
    /***** Scan directory *****/
    if ((NumFiles = scandir (Path,&FileList,NULL,alphasort)) >= 0)	// No error
@@ -4888,7 +4892,7 @@ static void API_ListDir (FILE *XML,unsigned Level,
 		  /***** Write a row for the subdirectory *****/
 		  if (API_WriteRowFileBrowser (XML,Level,
 		                               Brw_IS_FOLDER,
-		                               FileList[NumFile]->d_name))
+		                               FileList[NumFile]->d_name) == HidVis_VISIBLE)
 		    {
 		     /* List subtree starting at this this directory */
 		     API_ListDir (XML,Level + 1,
@@ -4900,10 +4904,10 @@ static void API_ListDir (FILE *XML,unsigned Level,
 		    }
 		 }
 	       else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
-		  API_WriteRowFileBrowser (XML,Level,
-					   Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :
-											  Brw_IS_FILE,
-					   FileList[NumFile]->d_name);
+		  HiddenOrVisible = API_WriteRowFileBrowser (XML,Level,
+							     Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :
+													    Brw_IS_FILE,
+							     FileList[NumFile]->d_name);
 	      }
 	   }
 
@@ -4918,16 +4922,17 @@ static void API_ListDir (FILE *XML,unsigned Level,
 /*****************************************************************************/
 // If it is the first row (root folder), always show it
 // If it is not the first row, it is shown or not depending on whether it is hidden or not
-// If the row is visible, return true. If it is hidden, return false
+// Return if the row is visible or hidden
 
-static bool API_WriteRowFileBrowser (FILE *XML,unsigned Level,
-                                     Brw_FileType_t FileType,
-                                     const char *FileName)
+static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (FILE *XML,unsigned Level,
+							 Brw_FileType_t FileType,
+							 const char *FileName)
   {
    extern const char *Txt_NEW_LINE;
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
    struct Brw_FileMetadata FileMetadata;
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
+   __attribute__((unused)) Exi_Exist_t FileExists;
    __attribute__((unused)) Exi_Exist_t UsrExists;
    __attribute__((unused)) Exi_Exist_t PhotoExists;
 
@@ -4935,8 +4940,8 @@ static bool API_WriteRowFileBrowser (FILE *XML,unsigned Level,
    if (Gbl.FileBrowser.Type == Brw_SHOW_DOC_CRS ||
        Gbl.FileBrowser.Type == Brw_SHOW_DOC_GRP)
       if (Brw_CheckIfFileOrFolderIsHidden (FileType,
-                                                    Gbl.FileBrowser.FilFolLnk.Full) == HidVis_HIDDEN)
-	 return false;
+                                           Gbl.FileBrowser.FilFolLnk.Full) == HidVis_HIDDEN)
+	 return HidVis_HIDDEN;
 
    /***** XML row *****/
    /* Indent */
@@ -4944,13 +4949,12 @@ static bool API_WriteRowFileBrowser (FILE *XML,unsigned Level,
 
    /* Write file or folder data */
    if (FileType == Brw_IS_FOLDER)
-      fprintf (XML,"<dir name=\"%s\">%s",
-	       FileName,Txt_NEW_LINE);
+      fprintf (XML,"<dir name=\"%s\">%s",FileName,Txt_NEW_LINE);
    else	// File or link
      {
       /* Get file metadata */
       Brw_GetFileMetadataByPath (&FileMetadata);
-      Brw_GetFileTypeSizeAndDate (&FileMetadata);
+      FileExists = Brw_GetFileTypeSizeAndDate (&FileMetadata);
 
       if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
 	 /* Add entry to the table of files/folders */
@@ -4982,7 +4986,7 @@ static bool API_WriteRowFileBrowser (FILE *XML,unsigned Level,
 	       Txt_NEW_LINE);
      }
 
-   return true;
+   return HidVis_VISIBLE;
   }
 
 /*****************************************************************************/
@@ -5011,6 +5015,7 @@ int swad__getFile (struct soap *soap,
    long GrpCod;
    char URL[WWW_MAX_BYTES_WWW + 1];
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
+   __attribute__((unused)) Exi_Exist_t FileExists;
    __attribute__((unused)) Exi_Exist_t PhotoExists;
 
    /***** Initializations *****/
@@ -5126,7 +5131,7 @@ int swad__getFile (struct soap *soap,
    Brw_SetFullPathInTree ();
 
    /***** Get file size and date *****/
-   Brw_GetFileTypeSizeAndDate (&FileMetadata);
+   FileExists = Brw_GetFileTypeSizeAndDate (&FileMetadata);
 
    /***** Update number of views *****/
    Brw_GetAndUpdateFileViews (&FileMetadata);

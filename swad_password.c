@@ -231,7 +231,7 @@ static void Pwd_CheckAndUpdateNewPwd (struct Usr_Data *UsrDat)
       Cry_EncryptSHA512Base64 (NewPlainPassword[0],NewEncryptedPassword);
       if (Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword[0],
 					 NewEncryptedPassword,
-					 UsrDat->UsrCod))        // New password is good?
+					 UsrDat->UsrCod) == Err_SUCCESS)        // New password is good?
 	{
          /* Update user's data */
 	 Str_Copy (UsrDat->Password,NewEncryptedPassword,
@@ -499,22 +499,22 @@ void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD +
 /************************ Check if a password is good ************************/
 /*****************************************************************************/
 
-bool Pwd_SlowCheckIfPasswordIsGood (const char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1],
-                                    const char EncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1],
-                                    long UsrCod)
+Err_SuccessOrError_t Pwd_SlowCheckIfPasswordIsGood (const char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1],
+						    const char EncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1],
+						    long UsrCod)
   {
    extern const char *Txt_The_password_is_too_trivial_;
 
    /***** Check if password seems good by making fast checks *****/
-   if (!Pwd_FastCheckIfPasswordSeemsGood (PlainPassword))
-      return false;
+   if (Pwd_FastCheckIfPasswordSeemsGood (PlainPassword) == Err_ERROR)
+      return Err_ERROR;
 
    /***** Check if password is found in user's ID, first name or surnames of anybody *****/
    if (Pwd_CheckIfPasswdExistsAsUsrIDorName (PlainPassword) == Exi_EXISTS)        // PlainPassword is a user's ID, name or surname
      {
       Ale_CreateAlert (Ale_WARNING,Pwd_PASSWORD_SECTION_ID,
 	               Txt_The_password_is_too_trivial_);
-      return false;
+      return Err_ERROR;
      }
 
    /***** Check if password is used by too many other users *****/
@@ -523,10 +523,10 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char PlainPassword[Pwd_MAX_BYTES_PLAIN
      {
       Ale_CreateAlert (Ale_WARNING,Pwd_PASSWORD_SECTION_ID,
 		       Txt_The_password_is_too_trivial_);
-      return false;
+      return Err_ERROR;
      }
 
-   return true;
+   return Err_SUCCESS;
   }
 
 /*****************************************************************************/
@@ -547,7 +547,7 @@ static Exi_Exist_t Pwd_CheckIfPasswdExistsAsUsrIDorName (const char *PlainPasswo
 /********************** Check if a password seems good ***********************/
 /*****************************************************************************/
 
-bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
+Err_SuccessOrError_t Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
   {
    extern const char *Txt_The_password_must_be_at_least_X_characters;
    extern const char *Txt_The_password_can_not_contain_spaces;
@@ -561,7 +561,7 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
       Ale_CreateAlert (Ale_WARNING,Pwd_PASSWORD_SECTION_ID,
 		       Txt_The_password_must_be_at_least_X_characters,
 		       Pwd_MIN_CHARS_PLAIN_PASSWORD);
-      return false;
+      return Err_ERROR;
      }
 
    /***** Check spaces in password *****/
@@ -569,7 +569,7 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
      {
       Ale_CreateAlert (Ale_WARNING,Pwd_PASSWORD_SECTION_ID,
 	               Txt_The_password_can_not_contain_spaces);
-      return false;
+      return Err_ERROR;
      }
 
    /***** Check if password is a number *****/
@@ -582,10 +582,10 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
      {
       Ale_CreateAlert (Ale_WARNING,Pwd_PASSWORD_SECTION_ID,
 		       Txt_The_password_can_not_consist_only_of_digits);
-      return false;
+      return Err_ERROR;
      }
 
-   return true;
+   return Err_SUCCESS;
   }
 
 /*****************************************************************************/
@@ -621,7 +621,7 @@ void Pwd_ShowFormChgMyPwd (void)
 	      {
 	       case Exi_EXISTS:
 		  if (Gbl.Usrs.Me.LoginPlainPassword[0])
-		     if (!Pwd_FastCheckIfPasswordSeemsGood (Gbl.Usrs.Me.LoginPlainPassword))
+		     if (Pwd_FastCheckIfPasswordSeemsGood (Gbl.Usrs.Me.LoginPlainPassword) == Err_ERROR)
 			Ale_ShowAlert (Ale_WARNING,Txt_Your_password_is_not_secure_enough);
 		  break;
 	       case Exi_DOES_NOT_EXIST:	// If I don't have a password in database...
@@ -833,9 +833,9 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
 /*****************************************************************************/
 /******************** Get confirmation on dangerous actions ******************/
 /*****************************************************************************/
-// Returns true if consent have been checked and my password is correct
+// Returns Err_SUCCESS if consent have been checked and my password is correct
 
-bool Pwd_GetConfirmationOnDangerousAction (void)
+Err_SuccessOrError_t Pwd_GetConfirmationOnDangerousAction (void)
   {
    extern const char *Txt_You_have_not_confirmed_the_action;
    extern const char *Txt_You_have_not_entered_your_password_correctly;
@@ -846,7 +846,7 @@ bool Pwd_GetConfirmationOnDangerousAction (void)
    if (!Par_GetParBool ("Consent"))
      {
       Ale_ShowAlert (Ale_WARNING,Txt_You_have_not_confirmed_the_action);
-      return false;
+      return Err_ERROR;
      }
 
    /***** Get my password *****/
@@ -860,8 +860,8 @@ bool Pwd_GetConfirmationOnDangerousAction (void)
    if (strcmp (Gbl.Usrs.Me.LoginEncryptedPassword,EncryptedPassword))
      {
       Ale_ShowAlert (Ale_WARNING,Txt_You_have_not_entered_your_password_correctly);
-      return false;
+      return Err_ERROR;
      }
 
-   return true;
+   return Err_SUCCESS;
   }
