@@ -857,7 +857,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
 	       /* Check if users has accepted inscription in current course */
 	       UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 
-	       if (UsrDat.Accepted) // If student has email and has accepted
+	       if (UsrDat.Accepted == Usr_HAS_ACCEPTED) // If student has email and has accepted
 		 {
 		  if (NumAcceptedUsrsWithEmail > 0)
 		    {
@@ -1702,17 +1702,17 @@ Usr_Can_t Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat)
       case Rol_STD:
 	 /* If I am a student in the current course,
 	    I can see the email of confirmed teachers */
-	 return ((UsrDat->Roles.InCurrentCrs == Rol_NET ||	// A non-editing teacher
-	          UsrDat->Roles.InCurrentCrs == Rol_TCH) &&	// or a teacher
-	          UsrDat->Accepted) ? Usr_CAN :		// who accepted registration
-	        		      Usr_CAN_NOT;
+	 return ((UsrDat->Roles.InCurrentCrs == Rol_NET ||			// A non-editing teacher...
+	          UsrDat->Roles.InCurrentCrs == Rol_TCH) &&			// ...or a teacher...
+	          UsrDat->Accepted == Usr_HAS_ACCEPTED) ? Usr_CAN :		// ...who accepted registration
+	        					  Usr_CAN_NOT;
       case Rol_NET:
       case Rol_TCH:
 	 /* If I am a teacher in the current course,
 	    I can see the email of confirmed students and teachers */
-         return (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat) == Usr_BELONG &&	// A user belonging to the current course
-	         UsrDat->Accepted) ? Usr_CAN :					// who accepted registration
-				     Usr_CAN_NOT;
+         return (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat) == Usr_BELONG &&	// A user belonging to the current course...
+	         UsrDat->Accepted == Usr_HAS_ACCEPTED) ? Usr_CAN :		// ...who accepted registration
+							 Usr_CAN_NOT;
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can see the user's email of users from current degree */

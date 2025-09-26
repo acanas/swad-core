@@ -158,9 +158,10 @@ void Dup_ListDuplicateUsrs (void)
 		  case Exi_EXISTS:
 		     /* Get if user has accepted all his/her courses */
 		     if (Enr_DB_GetNumCrssOfUsr (UsrDat.UsrCod))
-			UsrDat.Accepted = (Enr_DB_GetNumCrssOfUsrNotAccepted (UsrDat.UsrCod) == 0);
+			UsrDat.Accepted = Enr_DB_GetNumCrssOfUsrNotAccepted (UsrDat.UsrCod) ? Usr_HAS_NOT_ACCEPTED :
+											      Usr_HAS_ACCEPTED;
 		     else
-			UsrDat.Accepted = false;
+			UsrDat.Accepted = Usr_HAS_NOT_ACCEPTED;
 
 		     /* Write data of this user */
 		     Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK,
@@ -282,9 +283,10 @@ static void Dup_ListSimilarUsrs (void)
 	      {
 	       /* Get if user has accepted all his/her courses */
 	       if (Enr_DB_GetNumCrssOfUsr (UsrDat.UsrCod))
-		  UsrDat.Accepted = (Enr_DB_GetNumCrssOfUsrNotAccepted (UsrDat.UsrCod) == 0);
+		  UsrDat.Accepted = Enr_DB_GetNumCrssOfUsrNotAccepted (UsrDat.UsrCod) ? Usr_HAS_NOT_ACCEPTED :
+										        Usr_HAS_ACCEPTED;
 	       else
-		  UsrDat.Accepted = false;
+		  UsrDat.Accepted = Usr_HAS_NOT_ACCEPTED;
 
 	       /***** Write data of this user *****/
 	       Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK,

@@ -505,6 +505,7 @@ static void Msg_PutParsSubjectAndContent (void)
 
 static void Msg_ShowOneUniqueRecipient (void)
   {
+   extern const char *Usr_ClassData[Usr_NUM_ACCEPTED];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -519,17 +520,13 @@ static void Msg_ShowOneUniqueRecipient (void)
 
    /****** Write user's IDs ******/
    HTM_DIV_Begin ("class=\"MSG_TO_ONE_RCP %s_%s\"",
-		  Gbl.Usrs.Other.UsrDat.Accepted ? "DAT_SMALL_NOBR_STRONG" :
-			                           "DAT_SMALL_NOBR",
-		  The_GetSuffix ());
+		  Usr_ClassData[Gbl.Usrs.Other.UsrDat.Accepted],The_GetSuffix ());
       ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
    HTM_DIV_End ();
 
    /***** Write user's name *****/
    HTM_DIV_Begin ("class=\"MSG_TO_ONE_RCP %s_%s\"",
-		  Gbl.Usrs.Other.UsrDat.Accepted ? "DAT_SMALL_NOBR_STRONG" :
-			                           "DAT_SMALL_NOBR",
-		  The_GetSuffix ());
+		  Usr_ClassData[Gbl.Usrs.Other.UsrDat.Accepted],The_GetSuffix ());
       HTM_Txt (Gbl.Usrs.Other.UsrDat.FullName);
    HTM_DIV_End ();
 

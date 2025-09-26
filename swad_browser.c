@@ -2835,8 +2835,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 						      Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	    if (Usr_CheckIfICanViewAsgWrk (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	      {
-	       Gbl.Usrs.Other.UsrDat.Accepted =
-	       Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
 	       /***** Owner of the works *****/
 	       Brw_ShowDataOwnerAsgWrk (&Gbl.Usrs.Other.UsrDat);

@@ -893,9 +893,9 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
-   UsrDat.Accepted = false;	// Guests have no courses,...
-				// ...so they have not accepted...
-				// ...inscription in any course
+   UsrDat.Accepted = Usr_HAS_NOT_ACCEPTED;	// Guests have no courses,...
+						// ...so they have not accepted...
+						// ...inscription in any course
 
    /***** List the records *****/
    for (Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
@@ -2066,7 +2066,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    CountryForm = (TypeOfView == Rec_SHA_MY_RECORD_FORM);
    ShowData = (MeOrOther == Usr_ME ||
 	       Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ||
-	       UsrDat->Accepted);
+	       UsrDat->Accepted == Usr_HAS_ACCEPTED);
    ShowIDRows = (TypeOfView != Rec_SHA_RECORD_PUBLIC);
 
    StudentInCurrentCrs = UsrDat->Roles.InCurrentCrs == Rol_STD;

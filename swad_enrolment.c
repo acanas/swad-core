@@ -2908,6 +2908,11 @@ static void Enr_ShowFormToEditOtherUsr (void)
    extern const char *Txt_THE_USER_X_is_in_the_course_Y_but_has_not_yet_accepted_the_enrolment;
    extern const char *Txt_THE_USER_X_exists_in_Y_but_is_not_enroled_in_the_course_Z;
    extern const char *Txt_THE_USER_X_already_exists_in_Y;
+   static const char **Usr_AcceptedTxt[Usr_NUM_ACCEPTED] =
+     {
+      [Usr_HAS_NOT_ACCEPTED] = &Txt_THE_USER_X_is_in_the_course_Y_but_has_not_yet_accepted_the_enrolment,
+      [Usr_HAS_ACCEPTED    ] = &Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
+     };
 
    /***** If user exists... *****/
    switch (Usr_DB_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
@@ -2920,16 +2925,9 @@ static void Enr_ShowFormToEditOtherUsr (void)
 	      {
 	       case Usr_BELONG:
 		  Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-		  if (Gbl.Usrs.Other.UsrDat.Accepted)
-		     Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
-				    Gbl.Usrs.Other.UsrDat.FullName,
-				    Gbl.Hierarchy.Node[Hie_CRS].FullName);
-		  else        // Enrolment not yet accepted
-		     Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_in_the_course_Y_but_has_not_yet_accepted_the_enrolment,
-				    Gbl.Usrs.Other.UsrDat.FullName,
-				    Gbl.Hierarchy.Node[Hie_CRS].FullName);
-
-		  Rec_ShowOtherSharedRecordEditable ();
+		  Ale_ShowAlert (Ale_INFO,*Usr_AcceptedTxt[Gbl.Usrs.Other.UsrDat.Accepted],
+				 Gbl.Usrs.Other.UsrDat.FullName,
+				 Gbl.Hierarchy.Node[Hie_CRS].FullName);
 		  break;
 	       case Usr_DONT_BELONG:	// User does not belong to the current course
 	       default:
@@ -2937,17 +2935,12 @@ static void Enr_ShowFormToEditOtherUsr (void)
 				 Gbl.Usrs.Other.UsrDat.FullName,
 				 Cfg_PLATFORM_SHORT_NAME,
 				 Gbl.Hierarchy.Node[Hie_CRS].FullName);
-
-		  Rec_ShowOtherSharedRecordEditable ();
 		  break;
 	      }
 	 else	// No course selected
-	   {
 	    Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_already_exists_in_Y,
 			   Gbl.Usrs.Other.UsrDat.FullName,Cfg_PLATFORM_SHORT_NAME);
-
-	    Rec_ShowOtherSharedRecordEditable ();
-	   }
+	 Rec_ShowOtherSharedRecordEditable ();
 	 break;
       case Exi_DOES_NOT_EXIST:
       default:
@@ -3545,7 +3538,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
 	    case Usr_ME:
 	       /* Now I don't belong to current course */
 	       Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] = Usr_DONT_BELONG;
-	       Gbl.Usrs.Me.UsrDat.Accepted           = false;
+	       Gbl.Usrs.Me.UsrDat.Accepted           = Usr_HAS_NOT_ACCEPTED;
 
 	       /* Fill the list with the courses I belong to */
 	       Gbl.Usrs.Me.Hierarchy[Hie_CRS].Filled = false;
@@ -3565,7 +3558,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
 	       break;
 	    case Usr_OTHER:
 	       /* Now he/she does not belong to current course */
-	       UsrDat->Accepted           = false;
+	       UsrDat->Accepted           = Usr_HAS_NOT_ACCEPTED;
 	       UsrDat->Roles.InCurrentCrs = Rol_USR;
 	       break;
 	   }
@@ -3636,12 +3629,12 @@ void Enr_FlushCacheUsrHasAcceptedInCurrentCrs (void)
    Gbl.Cache.UsrHasAcceptedInCurrentCrs.Valid = false;
   }
 
-bool Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *UsrDat)
+Usr_Accepted_t Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Trivial cases *****/
    if (UsrDat->UsrCod <= 0 ||
        Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
-      return false;
+      return Usr_HAS_NOT_ACCEPTED;
 
    /***** 2. Fast check: If cached... *****/
    if (Gbl.Cache.UsrHasAcceptedInCurrentCrs.Valid &&
@@ -3653,7 +3646,8 @@ bool Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *UsrDat)
    Gbl.Cache.UsrHasAcceptedInCurrentCrs.UsrCod = UsrDat->UsrCod;
    Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted = (Hie_CheckIfUsrBelongsTo (Hie_CRS,UsrDat->UsrCod,
 						                             Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-						                             true) == Usr_BELONG);
+						                             true) == Usr_BELONG) ? Usr_HAS_ACCEPTED :
+												    Usr_HAS_NOT_ACCEPTED;
    Gbl.Cache.UsrHasAcceptedInCurrentCrs.Valid = true;
    return Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted;
   }

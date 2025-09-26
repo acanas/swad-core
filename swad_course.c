@@ -1772,19 +1772,9 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
 				 Crs_WriteColumnAccepted_t WriteColumnAccepted)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
-   extern const char *Txt_Enrolment_confirmed;
-   extern const char *Txt_Enrolment_not_confirmed;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
-   static const char **Txt[Usr_NUM_ACCEPTED] =
-     {
-      [Usr_HAS_NOT_ACCEPTED] = &Txt_Enrolment_not_confirmed,
-      [Usr_HAS_ACCEPTED    ] = &Txt_Enrolment_confirmed,
-     };
-   static const char *Icon[Usr_NUM_ACCEPTED] =
-     {
-      [Usr_HAS_NOT_ACCEPTED] = "&cross;",
-      [Usr_HAS_ACCEPTED    ] = "&check;",
-     };
+   extern const char **Usr_AcceptedTxt[Usr_NUM_ACCEPTED];
+   extern const char *Usr_AcceptedIcon[Usr_NUM_ACCEPTED];
    struct Hie_Node Deg;
    long CrsCod;
    unsigned NumStds;
@@ -1793,7 +1783,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
    unsigned NumUsrs;
    const char *ClassTxt;
    const char *BgColor;
-   Usr_Accepted_t HasAccepted;
+   Usr_Accepted_t Accepted;
    /*
    row[0]: deg_degrees.DegCod
    row[1]: crs_courses.CrsCod
@@ -1832,10 +1822,11 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
 	     to this course/to any course in degree/to any course? *****/
       if (WriteColumnAccepted == Crs_WRITE_COL_ACCEPTED)
 	{
-	 HasAccepted = (row[7][0] == 'Y') ? Usr_HAS_ACCEPTED :
-					    Usr_HAS_NOT_ACCEPTED;
-	 HTM_TD_Begin ("class=\"BT %s\" title=\"%s\"",BgColor,*Txt[HasAccepted]);
-	    HTM_Txt (Icon[HasAccepted]);
+	 Accepted = (row[7][0] == 'Y') ? Usr_HAS_ACCEPTED :
+					 Usr_HAS_NOT_ACCEPTED;
+	 HTM_TD_Begin ("class=\"BT %s\" title=\"%s\"",
+		       BgColor,*Usr_AcceptedTxt[Accepted]);
+	    HTM_Txt (Usr_AcceptedIcon[Accepted]);
 	 HTM_TD_End ();
 	}
 

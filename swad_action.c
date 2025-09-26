@@ -379,7 +379,7 @@ void Act_AdjustCurrentAction (void)
              If I have not accepted my enrolment in the current course,
              the only action possible
              is to show a form to ask for enrolment *****/
-      if (!Gbl.Usrs.Me.UsrDat.Accepted)
+      if (Gbl.Usrs.Me.UsrDat.Accepted == Usr_HAS_NOT_ACCEPTED)
 	{
 	 switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs)
 	   {

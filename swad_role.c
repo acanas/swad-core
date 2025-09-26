@@ -135,14 +135,14 @@ void Rol_SetMyRoles (void)
 	    break;
 	 case Usr_DONT_BELONG:
 	 default:
-	    Gbl.Usrs.Me.UsrDat.Accepted = false;
+	    Gbl.Usrs.Me.UsrDat.Accepted = Usr_HAS_NOT_ACCEPTED;
 	    break;
 	}
      }
    else					// No course selected
      {
       Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] = Usr_DONT_BELONG;
-      Gbl.Usrs.Me.UsrDat.Accepted = false;
+      Gbl.Usrs.Me.UsrDat.Accepted = Usr_HAS_NOT_ACCEPTED;
      }
 
    /***** Check if I belong to current degree *****/

@@ -42,7 +42,7 @@ void Tag_DB_DropTmpTableQuestionsWithTag (void);
 void Tag_DB_ComplexRenameTag (long TagCodOldTxt,long ExistingTagCodNewTxt);
 void Tag_DB_SimplexRenameTag (const char OldTagTxt[Tag_MAX_BYTES_TAG + 1],
                               const char NewTagTxt[Tag_MAX_BYTES_TAG + 1]);
-void Tag_DB_EnableOrDisableTag (long TagCod,bool TagHidden);
+void Tag_DB_EnableOrDisableTag (long TagCod,HidVis_HiddenOrVisible_t TagHidden);
 
 unsigned Tag_DB_GetTagsQst (MYSQL_RES **mysql_res,long QstCod);
 unsigned Tag_DB_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res);

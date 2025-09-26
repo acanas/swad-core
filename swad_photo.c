@@ -173,8 +173,9 @@ Usr_Can_t Pho_ICanChangeOtherUsrPhoto (struct Usr_Data *UsrDat)
 
 	 /* It's a student in this course,
 	    check if he/she has accepted registration */
-         return ((UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat))) ? Usr_CAN :
-										        Usr_CAN_NOT;
+	 UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
+         return (UsrDat->Accepted == Usr_HAS_ACCEPTED) ? Usr_CAN :
+							 Usr_CAN_NOT;
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:

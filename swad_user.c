@@ -104,7 +104,33 @@ const char *Usr_StringsSexDB[Usr_NUM_SEXS] =
    [Usr_SEX_FEMALE ] = "female",
    [Usr_SEX_MALE   ] = "male",
    [Usr_SEX_ALL    ] = "all",
-   };
+  };
+
+extern const char *Txt_Enrolment_confirmed;
+extern const char *Txt_Enrolment_not_confirmed;
+const char **Usr_AcceptedTxt[Usr_NUM_ACCEPTED] =
+  {
+   [Usr_HAS_NOT_ACCEPTED] = &Txt_Enrolment_not_confirmed,
+   [Usr_HAS_ACCEPTED    ] = &Txt_Enrolment_confirmed,
+  };
+
+const char *Usr_AcceptedIcon[Usr_NUM_ACCEPTED] =
+  {
+   [Usr_HAS_NOT_ACCEPTED] = "&cross;",
+   [Usr_HAS_ACCEPTED    ] = "&check;",
+  };
+
+const char *Usr_ClassNum[Usr_NUM_ACCEPTED] =
+  {
+   [Usr_HAS_NOT_ACCEPTED] = "USR_LIST_NUM",
+   [Usr_HAS_ACCEPTED    ] = "USR_LIST_NUM_N",
+  };
+
+const char *Usr_ClassData[Usr_NUM_ACCEPTED] =
+  {
+   [Usr_HAS_NOT_ACCEPTED] = "DAT_SMALL",
+   [Usr_HAS_ACCEPTED    ] = "DAT_SMALL_STRONG",
+  };
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/
@@ -123,12 +149,6 @@ static const char *Usr_ClassPhoto21x28[PhoSha_NUM_SHAPES] =
    [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
    [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
    [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
-  };
-
-static const char *Usr_ClassID[Usr_NUM_ACCEPTED] =
-  {
-   [Usr_HAS_NOT_ACCEPTED] = "DAT_SMALL",
-   [Usr_HAS_ACCEPTED    ] = "DAT_SMALL_STRONG",
   };
 
 #define Usr_NUM_MAIN_FIELDS_DATA_ADM	 7
@@ -243,7 +263,7 @@ static void Usr_WriteUsrSurnamesAndName (struct Usr_Data *UsrDat,
 static void Usr_WriteEmail (struct Usr_Data *UsrDat,const char *BgColor);
 static void Usr_WriteUsrData (const char *BgColor,
                               const char *Data,const char *Link,
-                              Lay_Spaces_t Spaces,Usr_Accepted_t HasAccepted);
+                              Lay_Spaces_t Spaces,Usr_Accepted_t Accepted);
 
 static void Usr_GetGstsLst (Hie_Level_t HieLvl);
 static void Usr_AllocateUsrsList (Rol_Role_t Role);
@@ -365,7 +385,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct Usr_Data *UsrDat)
    UsrDat->Password[0] = '\0';
    UsrDat->Roles.InCurrentCrs = Rol_UNK;// not yet got from database
    UsrDat->Roles.InCrss = -1;		// not yet got from database
-   UsrDat->HasAccepted = Usr_HAS_NOT_ACCEPTED;
+   UsrDat->Accepted = Usr_HAS_NOT_ACCEPTED;
 
    UsrDat->Sex = Usr_SEX_UNKNOWN;
    UsrDat->Surname1[0]  = '\0';
@@ -2175,23 +2195,6 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
 			      Pho_ShowPhotos_t ShowPhotos)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
-   extern const char *Txt_Enrolment_confirmed;
-   extern const char *Txt_Enrolment_not_confirmed;
-   static const char *ClassNum[Usr_NUM_ACCEPTED] =
-     {
-      [Usr_HAS_NOT_ACCEPTED] = "USR_LIST_NUM",
-      [Usr_HAS_ACCEPTED    ] = "USR_LIST_NUM_N",
-     };
-   static const char **Txt[Usr_NUM_ACCEPTED] =
-     {
-      [Usr_HAS_NOT_ACCEPTED] = &Txt_Enrolment_not_confirmed,
-      [Usr_HAS_ACCEPTED    ] = &Txt_Enrolment_confirmed,
-     };
-   static const char *Icon[Usr_NUM_ACCEPTED] =
-     {
-      [Usr_HAS_NOT_ACCEPTED] = "&cross;",
-      [Usr_HAS_ACCEPTED    ] = "&check;",
-     };
    char BgColor[Usr_MAX_BYTES_BG_COLOR + 1];
    bool UsrIsTheMsgSender = PutCheckBoxToSelectUsr &&
 	                    (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
@@ -2219,18 +2222,18 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
       /***** User has accepted enrolment? *****/
       if (UsrIsTheMsgSender)
 	 HTM_TD_Begin ("class=\"BM_SEL %s_%s\" title=\"%s\"",
-		       ClassNum[UsrDat->HasAccepted],The_GetSuffix (),
-		       *Txt[UsrDat->HasAccepted]);
+		       Usr_ClassNum[UsrDat->Accepted],The_GetSuffix (),
+		       *Usr_AcceptedTxt[UsrDat->Accepted]);
       else
 	 HTM_TD_Begin ("class=\"BM %s_%s %s\" title=\"%s\"",
-		       ClassNum[UsrDat->HasAccepted],The_GetSuffix (),BgColor,
-		       *Txt[UsrDat->HasAccepted]);
-      HTM_Txt (Icon[UsrDat->HasAccepted]);
+		       Usr_ClassNum[UsrDat->Accepted],The_GetSuffix (),BgColor,
+		       *Usr_AcceptedTxt[UsrDat->Accepted]);
+      HTM_Txt (Usr_AcceptedIcon[UsrDat->Accepted]);
       HTM_TD_End ();
 
       /***** Write number of user in the list *****/
       HTM_TD_Begin ("class=\"%s_%s RM %s\"",
-		    ClassNum[UsrDat->HasAccepted],The_GetSuffix (),BgColor);
+		    Usr_ClassNum[UsrDat->Accepted],The_GetSuffix (),BgColor);
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
 
@@ -2245,7 +2248,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
 
       /****** Write user's IDs ******/
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-		    Usr_ClassID[UsrDat->HasAccepted],The_GetSuffix (),BgColor);
+		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),BgColor);
 	 ID_WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
 
@@ -2364,7 +2367,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
    char Text[Cns_MAX_BYTES_TEXT + 1];
    struct Hie_Node Ins;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
-   bool ShowData = (Gbl.Usrs.Me.Role.Logged == Rol_TCH && UsrDat->HasAccepted == Usr_HAS_ACCEPTED) ||
+   bool ShowData = (Gbl.Usrs.Me.Role.Logged == Rol_TCH && UsrDat->Accepted == Usr_HAS_ACCEPTED) ||
                     Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM;
 
    /***** Begin row *****/
@@ -2381,7 +2384,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
 
       /****** Write user's ID ******/
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-		    Usr_ClassID[UsrDat->HasAccepted],The_GetSuffix (),
+		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
 		    The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
@@ -2394,24 +2397,24 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
       Usr_WriteUsrData (The_GetColorRows (),
 			Ins.FullName,
-			NULL,Lay_NON_BR_SPACES,UsrDat->HasAccepted);
+			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
 
       /***** Write the rest of the data of the student *****/
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Phone[0][0] ? (ShowData ? UsrDat->Phone[0] :
 							  "********") :
 					      NULL,
-			NULL,Lay_NON_BR_SPACES,UsrDat->HasAccepted);
+			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Phone[1][0] ? (ShowData ? UsrDat->Phone[1] :
 							  "********") :
 					      NULL,
-			NULL,Lay_NON_BR_SPACES,UsrDat->HasAccepted);
+			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->StrBirthday[0] ? (ShowData ? UsrDat->StrBirthday :
 							     "********") :
 						 NULL,
-			NULL,Lay_NON_BR_SPACES,UsrDat->HasAccepted);
+			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
 
       if (HieLvl == Hie_CRS)
 	{
@@ -2426,7 +2429,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
 	      {
 	       Grp_GetNamesGrpsUsrBelongsTo (UsrDat->UsrCod,GrpTyp->GrpTypCod,GroupNames);
 	       Usr_WriteUsrData (The_GetColorRows (),GroupNames,NULL,
-				 Lay_NON_BR_SPACES,UsrDat->HasAccepted);
+				 Lay_NON_BR_SPACES,UsrDat->Accepted);
 	      }
 	   }
 
@@ -2453,7 +2456,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
 	      }
 
 	    Usr_WriteUsrData (The_GetColorRows (),Text,NULL,
-			      Lay_NORMAL_SPACES,UsrDat->HasAccepted);
+			      Lay_NORMAL_SPACES,UsrDat->Accepted);
 
 	    /* Free structure that stores the query result */
 	    DB_FreeMySQLResult (&mysql_res);
@@ -2477,7 +2480,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
    struct Dpt_Department Dpt;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    bool ShowData = (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME ||
-	            UsrDat->HasAccepted == Usr_HAS_ACCEPTED ||
+	            UsrDat->Accepted == Usr_HAS_ACCEPTED ||
                     Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM ||
                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 
@@ -2494,7 +2497,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
 
       /****** Write the user's ID ******/
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-	            Usr_ClassID[UsrDat->HasAccepted],The_GetSuffix (),
+	            Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
 	            The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
@@ -2507,7 +2510,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
       Usr_WriteUsrData (The_GetColorRows (),
 			Ins.FullName,NULL,
-			Lay_NON_BR_SPACES,UsrDat->HasAccepted);
+			Lay_NON_BR_SPACES,UsrDat->Accepted);
 
       /***** Write the rest of teacher's data *****/
       if (ShowData && UsrDat->Tch.CtrCod > 0)
@@ -2518,7 +2521,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
       Usr_WriteUsrData (The_GetColorRows (),
 			(ShowData && UsrDat->Tch.CtrCod > 0) ? Ctr.FullName :
 							       NULL,
-			NULL,Lay_NON_BR_SPACES,UsrDat->HasAccepted);
+			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
       if (ShowData && UsrDat->Tch.DptCod > 0)
 	{
 	 Dpt.DptCod = UsrDat->Tch.DptCod;
@@ -2527,15 +2530,15 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
       Usr_WriteUsrData (The_GetColorRows (),
 			(ShowData && UsrDat->Tch.DptCod > 0) ? Dpt.FullName :
 							       NULL,
-			NULL,Lay_NON_BR_SPACES,UsrDat->HasAccepted);
+			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
       Usr_WriteUsrData (The_GetColorRows (),
 			(ShowData && UsrDat->Tch.Office[0]) ? UsrDat->Tch.Office :
 							      NULL,
-			NULL,Lay_NON_BR_SPACES,UsrDat->HasAccepted);
+			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
       Usr_WriteUsrData (The_GetColorRows (),
 			(ShowData && UsrDat->Tch.OfficePhone[0]) ? UsrDat->Tch.OfficePhone :
 								   NULL,
-			NULL,Lay_NON_BR_SPACES,UsrDat->HasAccepted);
+			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
 
    HTM_TR_End ();
   }
@@ -2571,7 +2574,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat,
 
       /****** Write the user's ID ******/
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-		    Usr_ClassID[UsrDat->HasAccepted],The_GetSuffix (),
+		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
 		    The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
@@ -2604,15 +2607,15 @@ static void Usr_WriteUsrSurnamesAndName (struct Usr_Data *UsrDat,
    Usr_WriteUsrData (BgColor,
                      UsrDat->Surname1[0] ? UsrDat->Surname1 :
                 	                   NULL,
-                     NULL,Lay_NON_BR_SPACES,UsrDat->HasAccepted);
+                     NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
    Usr_WriteUsrData (BgColor,
                      UsrDat->Surname2[0] ? UsrDat->Surname2 :
                 	                   NULL,
-                     NULL,Lay_NON_BR_SPACES,UsrDat->HasAccepted);
+                     NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
    Usr_WriteUsrData (BgColor,
                      UsrDat->FrstName[0] ? UsrDat->FrstName :
                 	                   NULL,
-                     NULL,Lay_NON_BR_SPACES,UsrDat->HasAccepted);
+                     NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
   }
 
 /*****************************************************************************/
@@ -2638,7 +2641,7 @@ static void Usr_WriteEmail (struct Usr_Data *UsrDat,const char *BgColor)
                 	                NULL,
                      ShowEmail == Usr_CAN ? MailLink :
                 			    NULL,
-                     true,UsrDat->HasAccepted);
+                     true,UsrDat->Accepted);
   }
 
 /*****************************************************************************/
@@ -2647,7 +2650,7 @@ static void Usr_WriteEmail (struct Usr_Data *UsrDat,const char *BgColor)
 
 static void Usr_WriteUsrData (const char *BgColor,
                               const char *Data,const char *Link,
-                              Lay_Spaces_t Spaces,Usr_Accepted_t HasAccepted)
+                              Lay_Spaces_t Spaces,Usr_Accepted_t Accepted)
   {
    static const char *Class[Usr_NUM_ACCEPTED][Lay_NUM_SPACES] =
      {
@@ -2659,7 +2662,7 @@ static void Usr_WriteUsrData (const char *BgColor,
 
    /***** Begin table cell *****/
    HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-		 Class[HasAccepted][Spaces],The_GetSuffix (),BgColor);
+		 Class[Accepted][Spaces],The_GetSuffix (),BgColor);
 
       /***** Container to limit length *****/
       HTM_DIV_Begin ("class=\"USR_DAT\"");
@@ -2667,7 +2670,7 @@ static void Usr_WriteUsrData (const char *BgColor,
 	 /***** Begin link *****/
 	 if (Link)
 	    HTM_A_Begin ("href=\"%s\" class=\"%s_%s\" target=\"_blank\"",Link,
-			 Class[HasAccepted][Lay_NON_BR_SPACES],The_GetSuffix ());
+			 Class[Accepted][Lay_NON_BR_SPACES],The_GetSuffix ());
 
 	 /***** Write data *****/
 	 HTM_Txt (Data);
@@ -2864,10 +2867,10 @@ void Usr_GetListUsrsFromQuery (char *Query,Hie_Level_t HieLvl,Rol_Role_t Role)
 			// Query result has not a column with the acceptation
 			UsrInList->RoleInCurrentCrsDB = Rol_UNK;
 			if (Enr_DB_GetNumCrssOfUsr (UsrInList->UsrCod))
-			   UsrInList->HasAccepted = (Enr_DB_GetNumCrssOfUsrNotAccepted (UsrInList->UsrCod) == 0) ? Usr_HAS_ACCEPTED :
-													           Usr_HAS_NOT_ACCEPTED;
+			   UsrInList->Accepted = (Enr_DB_GetNumCrssOfUsrNotAccepted (UsrInList->UsrCod) == 0) ? Usr_HAS_ACCEPTED :
+													        Usr_HAS_NOT_ACCEPTED;
 			else
-			   UsrInList->HasAccepted = Usr_HAS_NOT_ACCEPTED;
+			   UsrInList->Accepted = Usr_HAS_NOT_ACCEPTED;
 			break;
 		     case Hie_CTY:	// Country
 		     case Hie_INS:	// Institution
@@ -2875,14 +2878,14 @@ void Usr_GetListUsrsFromQuery (char *Query,Hie_Level_t HieLvl,Rol_Role_t Role)
 		     case Hie_DEG:	// Degree
 			// Query result has not a column with the acceptation
 			UsrInList->RoleInCurrentCrsDB = Rol_UNK;
-			UsrInList->HasAccepted = (Enr_DB_GetNumCrssOfUsrNotAccepted (UsrInList->UsrCod) == 0) ? Usr_HAS_ACCEPTED :
-													        Usr_HAS_NOT_ACCEPTED;
+			UsrInList->Accepted = (Enr_DB_GetNumCrssOfUsrNotAccepted (UsrInList->UsrCod) == 0) ? Usr_HAS_ACCEPTED :
+													     Usr_HAS_NOT_ACCEPTED;
 			break;
 		     case Hie_CRS:	// Course
 			// Query result has a column with the acceptation
 			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[11]);
-			UsrInList->HasAccepted = (row[12][0] == 'Y') ? Usr_HAS_ACCEPTED :
-								       Usr_HAS_NOT_ACCEPTED;
+			UsrInList->Accepted = (row[12][0] == 'Y') ? Usr_HAS_ACCEPTED :
+								    Usr_HAS_NOT_ACCEPTED;
 			break;
 		    }
         	  break;
@@ -2891,7 +2894,7 @@ void Usr_GetListUsrsFromQuery (char *Query,Hie_Level_t HieLvl,Rol_Role_t Role)
 					// ...inscription in any course
                case Rol_DEG_ADM:	// Any admin (degree, center, institution or system)
 	          UsrInList->RoleInCurrentCrsDB = Rol_UNK;
-	          UsrInList->HasAccepted = Usr_HAS_NOT_ACCEPTED;
+	          UsrInList->Accepted = Usr_HAS_NOT_ACCEPTED;
 	          break;
                case Rol_STD:
                case Rol_NET:
@@ -2908,15 +2911,15 @@ void Usr_GetListUsrsFromQuery (char *Query,Hie_Level_t HieLvl,Rol_Role_t Role)
 		     case Hie_DEG:	// Degree
 			// Query result has not a column with the acceptation
 	                UsrInList->RoleInCurrentCrsDB = Rol_UNK;
-			UsrInList->HasAccepted = Enr_DB_GetNumCrssOfUsrWithARoleNotAccepted (UsrInList->UsrCod,
-											     Role) ? Usr_HAS_NOT_ACCEPTED :
-												     Usr_HAS_ACCEPTED;
+			UsrInList->Accepted = Enr_DB_GetNumCrssOfUsrWithARoleNotAccepted (UsrInList->UsrCod,
+											  Role) ? Usr_HAS_NOT_ACCEPTED :
+												  Usr_HAS_ACCEPTED;
 			break;
 		     case Hie_CRS:	// Course
 			// Query result has a column with the acceptation
 			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[11]);
-			UsrInList->HasAccepted = (row[12][0] == 'Y') ? Usr_HAS_ACCEPTED :
-								       Usr_HAS_NOT_ACCEPTED;
+			UsrInList->Accepted = (row[12][0] == 'Y') ? Usr_HAS_ACCEPTED :
+								    Usr_HAS_NOT_ACCEPTED;
 			break;
 		    }
         	  break;
@@ -2956,7 +2959,7 @@ void Usr_CopyBasicUsrDataFromList (struct Usr_Data *UsrDat,
    UsrDat->CtyCod             = UsrInList->CtyCod;
    UsrDat->InsCod             = UsrInList->InsCod;
    UsrDat->Roles.InCurrentCrs = UsrInList->RoleInCurrentCrsDB;
-   UsrDat->HasAccepted        = UsrInList->HasAccepted;
+   UsrDat->Accepted           = UsrInList->Accepted;
   }
 
 /*****************************************************************************/
@@ -4357,9 +4360,9 @@ void Usr_ListAllDataGsts (void)
 	       UsrDat.Roles.InCurrentCrs = Rol_GST;	// We know the user's role.
 							// It is not necessary to retrieve
 							// his/her role from database.
-	       UsrDat.HasAccepted = Usr_HAS_NOT_ACCEPTED;	// Guests have no courses,...
-								// ...so they have not accepted...
-								// ...enrolment in any course
+	       UsrDat.Accepted = Usr_HAS_NOT_ACCEPTED;	// Guests have no courses,...
+							// ...so they have not accepted...
+							// ...enrolment in any course
 	       NumUsr++;
 	       Usr_WriteRowGstAllData (&UsrDat,ShowPhotos);
 
@@ -4571,7 +4574,7 @@ void Usr_ListAllDataStds (void)
 	       UsrDat.Roles.InCurrentCrs = Rol_STD;	// We know the user's role.
 							// It is not necessary to retrieve
 							// his/her role from database.
-	       UsrDat.HasAccepted = Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].HasAccepted;
+	       UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].Accepted;
 	       NumUsr++;
 	       Usr_WriteRowStdAllData (&UsrDat,GroupNames,ShowPhotos,HieLvl);
 
@@ -4734,7 +4737,7 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
 	 UsrDat.Roles.InCurrentCrs = Role;	// We know the user's role.
 						// It is not necessary to retrieve
 						// his/her role from database.
-	 UsrDat.HasAccepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].HasAccepted;
+	 UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
 	 NumUsr++;
 	 Usr_WriteRowTchAllData (&UsrDat,ShowPhotos);
 
@@ -4984,7 +4987,7 @@ void Usr_ListDataAdms (void)
 							    Usr_DONT_GET_PREFS,
 							    Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 		 {
-		  UsrDat.HasAccepted = Gbl.Usrs.LstUsrs[Rol_DEG_ADM].Lst[NumUsr].HasAccepted;
+		  UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_DEG_ADM].Lst[NumUsr].Accepted;
 		  Usr_WriteRowAdmData (++NumUsr,&UsrDat,ShowPhotos);
 
 		  The_ChangeRowColor ();

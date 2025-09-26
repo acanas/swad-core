@@ -1684,6 +1684,8 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
                                           struct Att_Event *Event,
                                           Pho_ShowPhotos_t ShowPhotos)
   {
+   extern const char *Usr_ClassNum[Usr_NUM_ACCEPTED];
+   extern const char *Usr_ClassData[Usr_NUM_ACCEPTED];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
@@ -1754,9 +1756,8 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 
       /***** Write number of student in the list *****/
       HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-		    UsrDat->Accepted ? "DAT_STRONG" :
-				       "DAT",
-		    The_GetSuffix (),The_GetColorRows ());
+		    Usr_ClassNum[UsrDat->Accepted],The_GetSuffix (),
+		    The_GetColorRows ());
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
 
@@ -1771,17 +1772,15 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 
       /***** Write user's ID ******/
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
-				       "DAT_SMALL",
-		    The_GetSuffix (),The_GetColorRows ());
+		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
+		    The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
 
       /***** Write student's name *****/
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
-				       "DAT_SMALL",
-		    The_GetSuffix (),The_GetColorRows ());
+		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
+		    The_GetColorRows ());
 	 HTM_Txt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
 	   {
@@ -1795,9 +1794,8 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 
       /***** Student's comment: write form or text */
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
-				       "DAT_SMALL",
-		    The_GetSuffix (),The_GetColorRows ());
+		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
+		    The_GetColorRows ());
 	 switch (ICanEditStdComment)
 	   {
 	    case Usr_CAN:	// Show with form
@@ -1819,9 +1817,8 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 
       /***** Teacher's comment: write form, text or nothing */
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
-				       "DAT_SMALL",
-		    The_GetSuffix (),The_GetColorRows ());
+		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
+		    The_GetColorRows ());
 	 switch (ICanEditTchComment)
 	   {
 	    case Usr_CAN:			// Show with form
@@ -2868,6 +2865,8 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
                                              unsigned NumUsr,struct Usr_Data *UsrDat,
                                              Pho_ShowPhotos_t ShowPhotos)
   {
+   extern const char *Usr_ClassNum[Usr_NUM_ACCEPTED];
+   extern const char *Usr_ClassData[Usr_NUM_ACCEPTED];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2883,9 +2882,8 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
    HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-		    UsrDat->Accepted ? "DAT_STRONG" :
-				       "DAT",
-		    The_GetSuffix (),The_GetColorRows ());
+		    Usr_ClassNum[UsrDat->Accepted],The_GetSuffix (),
+		    The_GetColorRows ());
 	 HTM_Unsigned (NumUsr + 1);
       HTM_TD_End ();
 
@@ -2900,17 +2898,15 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
 
       /***** Write user's ID ******/
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
-				       "DAT_SMALL",
-		    The_GetSuffix (),The_GetColorRows ());
+		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
+		    The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
 
       /***** Write user's name *****/
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
-				       "DAT_SMALL",
-		    The_GetSuffix (),The_GetColorRows ());
+		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
+		    The_GetColorRows ());
 	 HTM_Txt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
 	   {
@@ -3047,6 +3043,8 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
   {
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
+   extern const char *Usr_ClassNum[Usr_NUM_ACCEPTED];
+   extern const char *Usr_ClassData[Usr_NUM_ACCEPTED];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -3073,15 +3071,13 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
    HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-		    UsrDat->Accepted ? "DAT_STRONG" :
-				       "DAT",
-		    The_GetSuffix (),The_GetColorRows ());
+		    Usr_ClassNum[UsrDat->Accepted],The_GetSuffix (),
+		    The_GetColorRows ());
 	 HTM_Unsigned (NumUsr); HTM_Colon ();
       HTM_TD_End ();
 
       /***** Show student's photo *****/
-      HTM_TD_Begin ("colspan=\"2\" class=\"RM %s\"",
-                    The_GetColorRows ());
+      HTM_TD_Begin ("colspan=\"2\" class=\"RM %s\"",The_GetColorRows ());
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
       HTM_TD_End ();
@@ -3093,17 +3089,13 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 
 	       /***** Write user's ID ******/
 	       HTM_TD_Begin ("class=\"LM %s_%s\"",
-			     UsrDat->Accepted ? "DAT_SMALL_STRONG" :
-						"DAT_SMALL",
-			     The_GetSuffix ());
+			     Usr_ClassData[UsrDat->Accepted],The_GetSuffix ());
 		  ID_WriteUsrIDs (UsrDat,NULL);
 	       HTM_TD_End ();
 
 	       /***** Write student's name *****/
 	       HTM_TD_Begin ("class=\"LM %s_%s\"",
-			     UsrDat->Accepted ? "DAT_SMALL_STRONG" :
-						"DAT_SMALL",
-			     The_GetSuffix ());
+			     Usr_ClassData[UsrDat->Accepted],The_GetSuffix ());
 		  HTM_Txt (UsrDat->Surname1);
 		  if (UsrDat->Surname2[0])
 		    {

@@ -107,7 +107,7 @@ void Tag_EnableTag (void)
    long TagCod = ParCod_GetAndCheckPar (ParCod_Tag);
 
    /***** Change tag status to enabled *****/
-   Tag_DB_EnableOrDisableTag (TagCod,false);
+   Tag_DB_EnableOrDisableTag (TagCod,HidVis_VISIBLE);
 
    /***** Show again the form to edit tags *****/
    Tag_ShowFormEditTags ();
@@ -122,7 +122,7 @@ void Tag_DisableTag (void)
    long TagCod = ParCod_GetAndCheckPar (ParCod_Tag);
 
    /***** Change tag status to disabled *****/
-   Tag_DB_EnableOrDisableTag (TagCod,true);
+   Tag_DB_EnableOrDisableTag (TagCod,HidVis_HIDDEN);
 
    /***** Show again the form to edit tags *****/
    Tag_ShowFormEditTags ();

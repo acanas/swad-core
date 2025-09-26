@@ -204,7 +204,7 @@ struct Usr_Data
 			// >=0 ==> filled/calculated
 			//  <0 ==> not yet filled/calculated
      } Roles;
-   Usr_Accepted_t HasAccepted;	// User has accepted joining to current course?
+   Usr_Accepted_t Accepted;	// User has accepted joining to current course?
    char Surname1[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
    char Surname2[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
    char FrstName[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
@@ -277,7 +277,7 @@ struct Usr_InList
    long CtyCod;		// Country
    long InsCod;		// Institution
    Rol_Role_t RoleInCurrentCrsDB;	// Role in current course in database
-   Usr_Accepted_t HasAccepted;	// User has accepted joining to one/all courses?
+   Usr_Accepted_t Accepted;	// User has accepted joining to one/all courses?
    bool Remove;		// A boolean associated with each user that indicates if it must be removed
   };
 

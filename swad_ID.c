@@ -375,8 +375,8 @@ Usr_Can_t ID_ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat)
             return Usr_CAN;
 
 	 /* Check 2: I can see the IDs of confirmed students */
-         if (UsrDat->Roles.InCurrentCrs == Rol_STD &&	// A student
-	     UsrDat->Accepted)				// who accepted registration
+         if (UsrDat->Roles.InCurrentCrs == Rol_STD &&	// A student...
+	     UsrDat->Accepted == Usr_HAS_ACCEPTED)	// ...who accepted registration
             return Usr_CAN;
 
          /* Check 3: I can see the IDs of users with user's data empty */

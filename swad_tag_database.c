@@ -146,8 +146,10 @@ void Tag_DB_SimplexRenameTag (const char OldTagTxt[Tag_MAX_BYTES_TAG + 1],
 /********** Change visibility of an existing tag into tst_tags table *********/
 /*****************************************************************************/
 
-void Tag_DB_EnableOrDisableTag (long TagCod,bool TagHidden)
+void Tag_DB_EnableOrDisableTag (long TagCod,HidVis_HiddenOrVisible_t TagHidden)
   {
+   extern const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE];
+
    /***** Insert new tag into tst_tags table *****/
    DB_QueryUPDATE ("can not update the visibility of a tag",
 		   "UPDATE tst_tags"
@@ -155,8 +157,7 @@ void Tag_DB_EnableOrDisableTag (long TagCod,bool TagHidden)
 		          "ChangeTime=NOW()"
                    " WHERE TagCod=%ld"
                      " AND CrsCod=%ld",
-		   TagHidden ? 'Y' :
-			       'N',
+		   HidVis_Hidden_YN[TagHidden],
 		   TagCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }

@@ -273,7 +273,7 @@ struct Globals
       struct
 	{
 	 long UsrCod;
-	 Usr_Accepted_t HasAccepted;
+	 Usr_Accepted_t Accepted;
 	 bool Valid;
 	} UsrHasAcceptedInCurrentCrs;
       struct
