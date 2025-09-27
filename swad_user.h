@@ -111,8 +111,9 @@ void Usr_UpdateMyLastData (void);
 void Usr_InsertMyLastCrsTabAndTime (void);
 
 void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
-                              bool PutCheckBoxToSelectUsr,Rol_Role_t Role,
-			      struct Usr_SelectedUsrs *SelectedUsrs,
+                              Usr_PutCheckBox_t PutCheckBoxToSelectUsr,
+                              Rol_Role_t Role,
+                              struct Usr_SelectedUsrs *SelectedUsrs,
 			      Pho_ShowPhotos_t ShowPhotos);
 
 void Usr_GetListUsrs (Hie_Level_t HieLvl,Rol_Role_t Role);
@@ -165,7 +166,7 @@ void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 				  const char *EncryptedUsrCod,
 				  bool UsrIsTheMsgSender,
 				  struct Usr_SelectedUsrs *SelectedUsrs);
-void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr,
+void Usr_WriteHeaderFieldsUsrDat (Usr_PutCheckBox_t PutCheckBoxToSelectUsr,
 				  Pho_ShowPhotos_t ShowPhotos);
 
 void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,

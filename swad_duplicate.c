@@ -139,8 +139,7 @@ void Dup_ListDuplicateUsrs (void)
 	 HTM_TABLE_BeginCenterPadding (2);
 
 	    /***** Heading row with column names *****/
-	    Usr_WriteHeaderFieldsUsrDat (false,			// Columns for the data
-					 Pho_PHOTOS_SHOW);	// Show photos
+	    Usr_WriteHeaderFieldsUsrDat (Usr_DONT_PUT_CHECKBOX,Pho_PHOTOS_SHOW);
 
 	    /***** List users *****/
 	    for (NumUsr = 0, The_ResetRowColor ();
@@ -164,9 +163,9 @@ void Dup_ListDuplicateUsrs (void)
 			UsrDat.Accepted = Usr_HAS_NOT_ACCEPTED;
 
 		     /* Write data of this user */
-		     Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK,
-					      &Gbl.Usrs.Selected,
-					      Pho_PHOTOS_SHOW);	// Show photo
+		     Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,
+					      Usr_DONT_PUT_CHECKBOX,Rol_UNK,
+					      &Gbl.Usrs.Selected,Pho_PHOTOS_SHOW);
 
 		     HTM_TR_Begin (NULL);
 
@@ -267,8 +266,7 @@ static void Dup_ListSimilarUsrs (void)
       HTM_TABLE_BeginCenterPadding (5);
 
 	 /***** Heading row with column names *****/
-	 Usr_WriteHeaderFieldsUsrDat (false,		// Columns for the data
-				      Pho_PHOTOS_SHOW);	// Show photos
+	 Usr_WriteHeaderFieldsUsrDat (Usr_DONT_PUT_CHECKBOX,Pho_PHOTOS_SHOW);
 
 	 /***** List users *****/
 	 for (NumUsr = 0, The_ResetRowColor ();
@@ -289,9 +287,9 @@ static void Dup_ListSimilarUsrs (void)
 		  UsrDat.Accepted = Usr_HAS_NOT_ACCEPTED;
 
 	       /***** Write data of this user *****/
-	       Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK,
-					&Gbl.Usrs.Selected,
-					Pho_PHOTOS_SHOW);	// Show photo
+	       Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,
+				        Usr_DONT_PUT_CHECKBOX,Rol_UNK,
+					&Gbl.Usrs.Selected,Pho_PHOTOS_SHOW);
 
 	       /***** Write user's profile and user's courses *****/
 	       HTM_TR_Begin (NULL);
