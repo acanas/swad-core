@@ -1537,7 +1537,8 @@ unsigned Usr_GetParOtherUsrIDNickOrEMailAndGetUsrCods (struct Usr_ListUsrCods *L
 			Str_ConvertToUpperText (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
 
 			/* Check if user's ID exists in database */
-			ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Other.UsrDat,NULL,ListUsrCods,false);
+			ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Other.UsrDat,NULL,
+						    ListUsrCods,ID_ANY);
 			break;
 		     case Err_ERROR:	// Not a valid user's nickname, email or ID
 		     default:
@@ -1841,7 +1842,7 @@ static Err_SuccessOrError_t Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 		     /* Check if user's ID exists in database, and get user's data */
 		     if (ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,
 						     Gbl.Usrs.Me.LoginEncryptedPassword,	// Check password
-						     &ListUsrCods,false))
+						     &ListUsrCods,ID_ANY))
 		       {
 			if (ListUsrCods.NumUsrs == 1)
 			  {
@@ -1861,7 +1862,7 @@ static Err_SuccessOrError_t Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 		       }
 		     else if (ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,
 							  NULL,				// Don't check password
-							  &ListUsrCods,false))
+							  &ListUsrCods,ID_ANY))
 		       {
 			if (ListUsrCods.NumUsrs == 1)
 			  {
@@ -3295,7 +3296,8 @@ Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool Wr
 					sizeof (UsrDat.IDs.List[0].ID) - 1);
 
 			      /***** Check if a user exists having this user's ID *****/
-			      if (ID_GetListUsrCodsFromUsrID (&UsrDat,NULL,&ListUsrCods,false))
+			      if (ID_GetListUsrCodsFromUsrID (&UsrDat,NULL,
+							      &ListUsrCods,ID_ANY))
 				{
 				 if (ListUsrCods.NumUsrs > 1)	// Two or more user share the same user's ID
 				   {// TODO: Consider forbid IDs here

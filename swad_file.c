@@ -506,7 +506,7 @@ void Fil_RemoveTree (const char *Path)
 /*****************************************************************************/
 
 void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,
-                            bool RemoveDirectory)
+                            Fil_RemoveDirectory_t RemoveDirectory)
   {
    struct dirent **FileList;
    int NumFile;
@@ -536,7 +536,7 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,
 		 {
 		  snprintf (Path2,sizeof (Path2),"%s/%s",
 			    Path,FileList[NumFile]->d_name);
-		  Fil_RemoveOldTmpFiles (Path2,TimeToRemove,true);	// Recursive call
+		  Fil_RemoveOldTmpFiles (Path2,TimeToRemove,Fil_REMOVE_DIRECTORY);	// Recursive call
 		 }
 	       free (FileList[NumFile]);
 	      }

@@ -1246,7 +1246,7 @@ static void Enr_UpdateLstUsrsToBeRemovedUsingTextarea (Rol_Role_t Role,
 		     Str_Copy (UsrDat->IDs.List[0].ID,UsrDat->UsrIDNickOrEmail,
 			       sizeof (UsrDat->IDs.List[0].ID) - 1);
 		     Str_ConvertToUpperText (UsrDat->IDs.List[0].ID);
-		     ID_GetListUsrCodsFromUsrID (UsrDat,NULL,&ListUsrCods,false);
+		     ID_GetListUsrCodsFromUsrID (UsrDat,NULL,&ListUsrCods,ID_ANY);
 		    }
 		  break;
 	      }
@@ -1432,7 +1432,7 @@ static void Enr_EnrolUsrsFoundInTextarea (Rol_Role_t Role,
 		     Str_Copy (UsrDat->IDs.List[0].ID,UsrDat->UsrIDNickOrEmail,
 			       sizeof (UsrDat->IDs.List[0].ID) - 1);
 		     Str_ConvertToUpperText (UsrDat->IDs.List[0].ID);
-		     ID_GetListUsrCodsFromUsrID (UsrDat,NULL,&ListUsrCods,false);
+		     ID_GetListUsrCodsFromUsrID (UsrDat,NULL,&ListUsrCods,ID_ANY);
 		    }
 		  break;
 	      }

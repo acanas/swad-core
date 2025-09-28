@@ -38,7 +38,7 @@ Exi_Exist_t ID_DB_FindStrInUsrsIDs (const char *Str);
 unsigned ID_DB_GetUsrCodsFromUsrID (MYSQL_RES **mysql_res,
                                     const struct Usr_Data *UsrDat,
                                     const char *EncryptedPassword,
-                                    bool OnlyConfirmedIDs);
+                                    ID_OnlyConfirmed_t OnlyConfirmedIDs);
 
 void ID_DB_RemoveUsrID (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1]);
 void ID_DB_RemoveUsrIDs (long UsrCod);

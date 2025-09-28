@@ -285,7 +285,7 @@ struct Usr_InList
    long InsCod;		// Institution
    Rol_Role_t RoleInCurrentCrsDB;	// Role in current course in database
    Usr_Accepted_t Accepted;	// User has accepted joining to one/all courses?
-   bool Remove;		// A boolean associated with each user that indicates if it must be removed
+   bool Remove;		// A boolean associated with each user that indicates if he/she must be removed
   };
 
 struct Usr_ListUsrs

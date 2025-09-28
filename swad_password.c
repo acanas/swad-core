@@ -369,9 +369,11 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 		  Str_ConvertToUpperText (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID);
 
 		  /* Get users' codes for this ID */
-		  if (!ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,NULL,&ListUsrCods,true))	// Only confirmed IDs
+		  if (!ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,NULL,
+						   &ListUsrCods,ID_ONLY_CONFIRMED))	// Only confirmed IDs
 		     // If no users found with confirmed IDs, try to get all users (confirmed or not)
-		     ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,NULL,&ListUsrCods,false);	// All users (confirmed or not)
+		     ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,NULL,
+						 &ListUsrCods,ID_ANY);	// All users (confirmed or not)
 		 }
 	       break;
 	   }

@@ -45,6 +45,12 @@
 
 #define Fil_MAX_BYTES_FILE_SIZE_STRING (32 - 1)
 
+typedef enum
+  {
+   Fil_DONT_REMOVE_DIRECTORY,
+   Fil_REMOVE_DIRECTORY,
+  } Fil_RemoveDirectory_t;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -76,7 +82,7 @@ void Fil_CreateDirIfNotExists (const char *Path);
 void Fil_RemoveTree (const char *Path);
 
 void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,
-                            bool RemoveDirectory);
+                            Fil_RemoveDirectory_t RemoveDirectory);
 void Fil_FastCopyOfFiles (const char *PathSrc,const char *PathTgt);
 void Fil_FastCopyOfOpenFiles (FILE *FileSrc,FILE *FileTgt);
 

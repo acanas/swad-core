@@ -48,9 +48,16 @@
 #define ID_NUM_CONFIRMED 2
 typedef enum
   {
-   ID_NOT_CONFIRMED	= 0,
-   ID_CONFIRMED		= 1,
+   ID_NOT_CONFIRMED,
+   ID_CONFIRMED,
   } ID_Confirmed_t;
+
+#define ID_NUM_ONLY_CONFIRMED 2
+typedef enum
+  {
+   ID_ANY,
+   ID_ONLY_CONFIRMED,
+  } ID_OnlyConfirmed_t;
 
 struct ListIDs
   {
@@ -68,7 +75,7 @@ void ID_FreeListIDs (struct Usr_Data *UsrDat);
 unsigned ID_GetListUsrCodsFromUsrID (struct Usr_Data *UsrDat,
                                      const char *EncryptedPassword,	// If NULL or empty ==> do not check password
                                      struct Usr_ListUsrCods *ListUsrCods,
-                                     bool OnlyConfirmedIDs);
+                                     ID_OnlyConfirmed_t OnlyConfirmedIDs);
 
 void ID_PutParOtherUsrIDPlain (void);
 void ID_GetParOtherUsrIDPlain (void);

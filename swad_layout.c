@@ -1382,8 +1382,10 @@ void Lay_RefreshRightColumn (void)
    else if (!(PID %  19))
       Fir_DB_PurgeFirewallLog ();		// Remove old clicks from firewall
    else if (!(PID %  23))
+      // Remove the oldest temporary public directories used for downloading
       Fil_RemoveOldTmpFiles (Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
-                             Cfg_TIME_TO_DELETE_BROWSER_TMP_FILES,false);	// Remove the oldest temporary public directories used for downloading
+                             Cfg_TIME_TO_DELETE_BROWSER_TMP_FILES,
+                             Fil_DONT_REMOVE_DIRECTORY);
    else if (!(PID % 101))
       Brw_DB_RemoveExpiredExpandedFolders ();	// Remove old expanded folders (from all users)
    else if (!(PID % 103))
@@ -1392,25 +1394,32 @@ void Lay_RefreshRightColumn (void)
       Log_DB_RemoveOldEntriesRecentLog ();	// Remove old entries in recent log table, it's a slow query
    else if (!(PID % 109))
       Fil_RemoveOldTmpFiles (Cfg_PATH_OUT_PRIVATE,
-                             Cfg_TIME_TO_DELETE_HTML_OUTPUT      ,false);
+                             Cfg_TIME_TO_DELETE_HTML_OUTPUT,
+                             Fil_DONT_REMOVE_DIRECTORY);
    else if (!(PID % 113))
       Fil_RemoveOldTmpFiles (Cfg_PATH_PHOTO_TMP_PUBLIC,
-                             Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES ,false);
+                             Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES,
+                             Fil_DONT_REMOVE_DIRECTORY);
    else if (!(PID % 127))
       Fil_RemoveOldTmpFiles (Cfg_PATH_PHOTO_TMP_PRIVATE,
-                             Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES ,false);
+                             Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES,
+                             Fil_DONT_REMOVE_DIRECTORY);
    else if (!(PID % 131))
       Fil_RemoveOldTmpFiles (Cfg_PATH_MEDIA_TMP_PRIVATE,
-                             Cfg_TIME_TO_DELETE_MEDIA_TMP_FILES	 ,false);
+                             Cfg_TIME_TO_DELETE_MEDIA_TMP_FILES,
+                             Fil_DONT_REMOVE_DIRECTORY);
    else if (!(PID % 137))
       Fil_RemoveOldTmpFiles (Cfg_PATH_ZIP_PRIVATE,
-                             Cfg_TIME_TO_DELETE_BROWSER_ZIP_FILES,false);
+                             Cfg_TIME_TO_DELETE_BROWSER_ZIP_FILES,
+                             Fil_DONT_REMOVE_DIRECTORY);
    else if (!(PID % 139))
       Fil_RemoveOldTmpFiles (Cfg_PATH_MARK_PRIVATE,
-                             Cfg_TIME_TO_DELETE_MARKS_TMP_FILES	 ,false);
+                             Cfg_TIME_TO_DELETE_MARKS_TMP_FILES,
+                             Fil_DONT_REMOVE_DIRECTORY);
    else if (!(PID % 149))
       Fil_RemoveOldTmpFiles (Cfg_PATH_TEST_PRIVATE,
-                             Cfg_TIME_TO_DELETE_TEST_TMP_FILES	 ,false);
+                             Cfg_TIME_TO_DELETE_TEST_TMP_FILES,
+                             Fil_DONT_REMOVE_DIRECTORY);
 
    Con_RefreshConnected ();
   }

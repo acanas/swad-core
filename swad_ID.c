@@ -176,7 +176,7 @@ void ID_FreeListIDs (struct Usr_Data *UsrDat)
 unsigned ID_GetListUsrCodsFromUsrID (struct Usr_Data *UsrDat,
                                      const char *EncryptedPassword,	// If NULL or empty ==> do not check password
                                      struct Usr_ListUsrCods *ListUsrCods,
-                                     bool OnlyConfirmedIDs)
+                                     ID_OnlyConfirmed_t OnlyConfirmedIDs)
   {
    MYSQL_RES *mysql_res;
    unsigned NumUsr;

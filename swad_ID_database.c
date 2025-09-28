@@ -130,8 +130,13 @@ Exi_Exist_t ID_DB_FindStrInUsrsIDs (const char *Str)
 unsigned ID_DB_GetUsrCodsFromUsrID (MYSQL_RES **mysql_res,
                                     const struct Usr_Data *UsrDat,
                                     const char *EncryptedPassword,	// If NULL or empty ==> do not check password
-                                    bool OnlyConfirmedIDs)
+                                    ID_OnlyConfirmed_t OnlyConfirmedIDs)
   {
+   static const char *SubqueryConfirmedIDs[ID_NUM_ONLY_CONFIRMED] =
+     {
+      [ID_ANY           ] = "",
+      [ID_ONLY_CONFIRMED] = " AND usr_ids.Confirmed='Y'",
+     };
    char *SubQueryAllUsrs = NULL;
    char SubQueryOneUsr[1 + ID_MAX_BYTES_USR_ID + 1 + 1];
    size_t MaxLength;
@@ -177,8 +182,7 @@ unsigned ID_DB_GetUsrCodsFromUsrID (MYSQL_RES **mysql_res,
 			" AND (usr_data.Password='%s'"
 			  " OR usr_data.Password='')",
 		      SubQueryAllUsrs,
-		      OnlyConfirmedIDs ? " AND usr_ids.Confirmed='Y'" :
-					 "",
+		      SubqueryConfirmedIDs[OnlyConfirmedIDs],
 		      EncryptedPassword);
      }
    else
@@ -190,8 +194,7 @@ unsigned ID_DB_GetUsrCodsFromUsrID (MYSQL_RES **mysql_res,
 		      " WHERE UsrID IN (%s)"
 			  "%s",
 		      SubQueryAllUsrs,
-		      OnlyConfirmedIDs ? " AND Confirmed='Y'" :
-					 "");
+		      SubqueryConfirmedIDs[OnlyConfirmedIDs]);
 
    /***** Free memory for subquery string *****/
    free (SubQueryAllUsrs);
