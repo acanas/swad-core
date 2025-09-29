@@ -1139,10 +1139,10 @@ void Hie_FlushCacheUsrBelongsTo (Hie_Level_t HieLvl)
 /*****************************************************************************/
 
 Usr_Belong_t Hie_CheckIfUsrBelongsTo (Hie_Level_t HieLvl,long UsrCod,long HieCod,
-				      bool CountOnlyAcceptedCourses)
+				      Hie_DB_CountOnlyAcceptedCrss_t CountOnlyAcceptedCourses)
   {
    static Usr_Belong_t (*FunctionToGetIfUsrBelongsToFromDB[Hie_NUM_LEVELS]) (long UsrCod,long HieCod,
-									     bool CountOnlyAcceptedCourses) =
+									     Hie_DB_CountOnlyAcceptedCrss_t CountOnlyAcceptedCourses) =
      {
       [Hie_INS] = Ins_DB_CheckIfUsrBelongsToIns,
       [Hie_CTR] = Ctr_DB_CheckIfUsrBelongsToCtr,
@@ -1171,7 +1171,7 @@ Usr_Belong_t Hie_CheckIfUsrBelongsTo (Hie_Level_t HieLvl,long UsrCod,long HieCod
    Gbl.Cache.UsrBelongsTo[HieLvl].HieCod = HieCod;
    Gbl.Cache.UsrBelongsTo[HieLvl].CountOnlyAcceptedCourses = CountOnlyAcceptedCourses;
    Gbl.Cache.UsrBelongsTo[HieLvl].Belongs = FunctionToGetIfUsrBelongsToFromDB[HieLvl] (UsrCod,HieCod,
-										     CountOnlyAcceptedCourses);
+										       CountOnlyAcceptedCourses);
    Gbl.Cache.UsrBelongsTo[HieLvl].Valid = true;
    return Gbl.Cache.UsrBelongsTo[HieLvl].Belongs;
   }

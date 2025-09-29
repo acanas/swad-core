@@ -31,6 +31,7 @@
 
 #include "swad_degree.h"
 #include "swad_degree_type.h"
+#include "swad_hierarchy_database.h"
 #include "swad_search.h"
 
 /*****************************************************************************/
@@ -83,7 +84,7 @@ void Deg_DB_UpdateDegStatus (long DegCod,Hie_Status_t NewStatus);
 unsigned Deg_DB_GetMyDegs (MYSQL_RES **mysql_res,long HieCod);
 Exi_Exist_t Deg_DB_GetUsrMainDeg (MYSQL_RES **mysql_res,long UsrCod);
 Usr_Belong_t Deg_DB_CheckIfUsrBelongsToDeg (long UsrCod,long HieCod,
-					    bool CountOnlyAcceptedCourses);
+					    Hie_DB_CountOnlyAcceptedCrss_t CountOnlyAcceptedCourses);
 
 void Deg_DB_RemoveDegTyp (long DegTypCod);
 void Deg_DB_RemoveDeg (long DegCod);

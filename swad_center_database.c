@@ -767,10 +767,9 @@ unsigned Ctr_DB_GetMyCtrs (MYSQL_RES **mysql_res,long PrtCod)
 /*****************************************************************************/
 
 Usr_Belong_t Ctr_DB_CheckIfUsrBelongsToCtr (long UsrCod,long HieCod,
-					    bool CountOnlyAcceptedCourses)
+					    Hie_DB_CountOnlyAcceptedCrss_t CountOnlyAcceptedCourses)
   {
-   const char *SubQuery = (CountOnlyAcceptedCourses ? " AND crs_users.Accepted='Y'" :	// Only if user accepted
-                                                      "");
+   extern const char *Hie_DB_SubQueryOnlyAcceptedCourses[Hie_DB_NUM_COUNT_ONLY_ACCEPTED_CRSS];
 
    return DB_QueryCOUNT ("can not check if a user belongs to a center",
 			 "SELECT COUNT(DISTINCT deg_degrees.CtrCod)"
@@ -783,7 +782,7 @@ Usr_Belong_t Ctr_DB_CheckIfUsrBelongsToCtr (long UsrCod,long HieCod,
 			   " AND crs_courses.DegCod=deg_degrees.DegCod"
 			   " AND deg_degrees.CtrCod=%ld",
 			 UsrCod,
-			 SubQuery,
+			 Hie_DB_SubQueryOnlyAcceptedCourses[CountOnlyAcceptedCourses],
 			 HieCod) ? Usr_BELONG :
 				   Usr_DONT_BELONG;
   }

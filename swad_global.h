@@ -260,7 +260,7 @@ struct Globals
 	{
 	 long UsrCod;
 	 long HieCod;
-	 bool CountOnlyAcceptedCourses;
+	 Hie_DB_CountOnlyAcceptedCrss_t CountOnlyAcceptedCourses;
 	 Usr_Belong_t Belongs;
 	 bool Valid;
 	} UsrBelongsTo[Hie_NUM_LEVELS];

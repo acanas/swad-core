@@ -81,7 +81,7 @@ unsigned Ins_DB_GetNumInnsWithUsrs (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Ro
 
 unsigned Ins_DB_GetMyInss (MYSQL_RES **mysql_res,long HieCod);
 Usr_Belong_t Ins_DB_CheckIfUsrBelongsToIns (long UsrCod,long HieCod,
-					    bool CountOnlyAcceptedCourses);
+					    Hie_DB_CountOnlyAcceptedCrss_t CountOnlyAcceptedCourses);
 unsigned Ins_DB_GetNumUsrsWhoClaimToBelongToIns (long HieCod);
 
 void Ins_DB_RemoveInstitution (long HieCod);

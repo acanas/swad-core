@@ -5532,7 +5532,7 @@ void Usr_ListTeachers (void)
 /*****************************************************************************/
 /**************** Set allowed options to do with several users ***************/
 /*****************************************************************************/
-// Returns true if any option is allowed
+// Returns Frm_PUT_FORM if any option is allowed
 
 static Frm_PutForm_t Usr_SetAllowedListUsrsActions (Hie_Level_t HieLvl,Rol_Role_t UsrsRole,
                                                     Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])

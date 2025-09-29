@@ -807,10 +807,9 @@ unsigned Ins_DB_GetMyInss (MYSQL_RES **mysql_res,long PrtCod)
 /*****************************************************************************/
 
 Usr_Belong_t Ins_DB_CheckIfUsrBelongsToIns (long UsrCod,long HieCod,
-					    bool CountOnlyAcceptedCourses)
+					    Hie_DB_CountOnlyAcceptedCrss_t CountOnlyAcceptedCourses)
   {
-   const char *SubQuery = (CountOnlyAcceptedCourses ? " AND crs_users.Accepted='Y'" :	// Only if user accepted
-                                                      "");
+   extern const char *Hie_DB_SubQueryOnlyAcceptedCourses[Hie_DB_NUM_COUNT_ONLY_ACCEPTED_CRSS];
 
    return DB_QueryCOUNT ("can not check if a user belongs to an institution",
 			 "SELECT COUNT(DISTINCT ctr_centers.InsCod)"
@@ -825,7 +824,7 @@ Usr_Belong_t Ins_DB_CheckIfUsrBelongsToIns (long UsrCod,long HieCod,
 			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			   " AND ctr_centers.InsCod=%ld",
 			 UsrCod,
-			 SubQuery,
+			 Hie_DB_SubQueryOnlyAcceptedCourses[CountOnlyAcceptedCourses],
 			 HieCod) ? Usr_BELONG :
 				   Usr_DONT_BELONG;
   }

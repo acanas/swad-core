@@ -31,6 +31,7 @@
 #include "swad_country.h"
 #include "swad_course.h"
 #include "swad_degree.h"
+#include "swad_hierarchy_database.h"
 #include "swad_institution.h"
 
 /*****************************************************************************/
@@ -76,7 +77,7 @@ Usr_Belong_t Hie_CheckIfIBelongTo (Hie_Level_t HieLvl,long HieCod);
 
 void Hie_FlushCacheUsrBelongsTo (Hie_Level_t HieLvl);
 Usr_Belong_t Hie_CheckIfUsrBelongsTo (Hie_Level_t HieLvl,long UsrCod,long HieCod,
-				      bool CountOnlyAcceptedCourses);
+				      Hie_DB_CountOnlyAcceptedCrss_t CountOnlyAcceptedCourses);
 
 //-------------------------------- Figures ------------------------------------
 void Hie_GetAndShowHierarchyStats (Hie_Level_t HieLvl);

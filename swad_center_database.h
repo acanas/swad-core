@@ -31,6 +31,7 @@
 
 #include "swad_center.h"
 #include "swad_constant.h"
+#include "swad_hierarchy_database.h"
 #include "swad_media.h"
 #include "swad_search.h"
 
@@ -88,7 +89,7 @@ unsigned Ctr_DB_GetCtrsWithCoordsInCurrentIns (MYSQL_RES **mysql_res);
 
 unsigned Ctr_DB_GetMyCtrs (MYSQL_RES **mysql_res,long PrtCod);
 Usr_Belong_t Ctr_DB_CheckIfUsrBelongsToCtr (long UsrCod,long HieCod,
-					    bool CountOnlyAcceptedCourses);
+					    Hie_DB_CountOnlyAcceptedCrss_t CountOnlyAcceptedCourses);
 unsigned Ctr_DB_GetNumUsrsWhoClaimToBelongToCtr (long HieCod);
 
 void Ctr_DB_RemoveCenter (long HieCod);

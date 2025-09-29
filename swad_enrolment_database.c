@@ -159,10 +159,9 @@ unsigned Enr_DB_GetMyCoursesNames (MYSQL_RES **mysql_res)
 /*****************************************************************************/
 
 Usr_Belong_t Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long HieCod,
-					    bool CountOnlyAcceptedCourses)
+					    Hie_DB_CountOnlyAcceptedCrss_t CountOnlyAcceptedCourses)
   {
-   const char *SubQuery = (CountOnlyAcceptedCourses ? " AND crs_users.Accepted='Y'" :	// Only if user accepted
-	                                              "");
+   extern const char *Hie_DB_SubQueryOnlyAcceptedCourses[Hie_DB_NUM_COUNT_ONLY_ACCEPTED_CRSS];
 
    return
    DB_QueryEXISTS ("can not check if a user belongs to a course",
@@ -174,8 +173,8 @@ Usr_Belong_t Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long HieCod,
 			"%s)",
 		   HieCod,
 		   UsrCod,
-		   SubQuery) == Exi_EXISTS ? Usr_BELONG :
-					     Usr_DONT_BELONG;
+		   Hie_DB_SubQueryOnlyAcceptedCourses[CountOnlyAcceptedCourses]) == Exi_EXISTS ? Usr_BELONG :
+												 Usr_DONT_BELONG;
   }
 
 /*****************************************************************************/

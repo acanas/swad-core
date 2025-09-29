@@ -104,7 +104,7 @@ static void Crs_GetListCrssInCurrentDeg (void);
 static void Crs_ListCourses (void);
 static void Crs_PutIconsListCourses (__attribute__((unused)) void *Args);
 static void Crs_PutIconToEditCourses (void);
-static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year);
+static Exi_Exist_t Crs_ListCoursesOfAYearForSeeing (unsigned Year);
 
 static void Crs_EditCoursesInternal (void);
 static void Crs_PutIconsEditingCourses (__attribute__((unused)) void *Args);
@@ -385,6 +385,7 @@ static void Crs_ListCourses (void)
    extern const char *Txt_No_courses;
    char *Title;
    unsigned Year;
+   Exi_Exist_t YearWithCourses;
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Courses_of_DEGREE_X,Gbl.Hierarchy.Node[Hie_DEG].ShrtName) < 0)
@@ -405,9 +406,12 @@ static void Crs_ListCourses (void)
 	    for (Year  = 1;
 		 Year <= Deg_MAX_YEARS_PER_DEGREE;
 		 Year++)
-	       if (Crs_ListCoursesOfAYearForSeeing (Year))	// If this year has courses ==>
-		  The_ChangeRowColor ();	// ==> change color for the next year
-	    Crs_ListCoursesOfAYearForSeeing (0);		// Courses without a year selected
+	      {
+	       YearWithCourses = Crs_ListCoursesOfAYearForSeeing (Year);
+	       if (YearWithCourses == Exi_EXISTS)	// If this year has courses ==>
+		  The_ChangeRowColor ();		// ==> change color for the next year
+	      }
+	    YearWithCourses = Crs_ListCoursesOfAYearForSeeing (0);	// Courses without a year selected
 
 	 /***** End table *****/
 	 HTM_TABLE_End ();
@@ -445,9 +449,9 @@ static void Crs_PutIconToEditCourses (void)
 /*****************************************************************************/
 /********************* List courses of a year for seeing *********************/
 /*****************************************************************************/
-// Return true if this year has courses
+// Return Exi_EXISTS if this year has courses
 
-static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
+static Exi_Exist_t Crs_ListCoursesOfAYearForSeeing (unsigned Year)
   {
    extern const char *Txt_COURSE_With_users;
    extern const char *Txt_COURSE_Without_users;
@@ -458,7 +462,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
-   bool ThisYearHasCourses = false;
+   Exi_Exist_t ThisYearHasCourses = Exi_DOES_NOT_EXIST;
    unsigned NumUsrs[Rol_NUM_ROLES];
 
    /***** Write all courses of this year *****/
@@ -469,7 +473,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
       Crs = &(Gbl.Hierarchy.List[Hie_DEG].Lst[NumCrs]);
       if (Crs->Specific.Year == Year)	// The year of the course is this?
 	{
-	 ThisYearHasCourses = true;
+	 ThisYearHasCourses = Exi_EXISTS;
 	 if (Crs->Status & Hie_STATUS_BIT_PENDING)
 	   {
 	    TxtClassNormal =

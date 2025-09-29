@@ -156,7 +156,7 @@ typedef enum
   {
    Usr_HAS_NOT_ACCEPTED,
    Usr_HAS_ACCEPTED,
-   } Usr_Accepted_t;
+  } Usr_Accepted_t;
 
 #define Usr_NUM_ME_OR_OTHER 2
 typedef enum

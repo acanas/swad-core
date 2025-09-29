@@ -828,10 +828,9 @@ Exi_Exist_t Deg_DB_GetUsrMainDeg (MYSQL_RES **mysql_res,long UsrCod)
 /*****************************************************************************/
 
 Usr_Belong_t Deg_DB_CheckIfUsrBelongsToDeg (long UsrCod,long HieCod,
-					    bool CountOnlyAcceptedCourses)
+					    Hie_DB_CountOnlyAcceptedCrss_t CountOnlyAcceptedCourses)
   {
-   const char *SubQuery = (CountOnlyAcceptedCourses ? " AND crs_users.Accepted='Y'" :	// Only if user accepted
-                                                      "");
+   extern const char *Hie_DB_SubQueryOnlyAcceptedCourses[Hie_DB_NUM_COUNT_ONLY_ACCEPTED_CRSS];
 
    return
    DB_QueryEXISTS ("can not check if a user belongs to a degree",
@@ -844,7 +843,7 @@ Usr_Belong_t Deg_DB_CheckIfUsrBelongsToDeg (long UsrCod,long HieCod,
 		      " AND crs_users.CrsCod=crs_courses.CrsCod"
 		      " AND crs_courses.DegCod=%ld)",
 		   UsrCod,
-		   SubQuery,
+		   Hie_DB_SubQueryOnlyAcceptedCourses[CountOnlyAcceptedCourses],
 		   HieCod) == Exi_EXISTS ? Usr_BELONG :
 					   Usr_DONT_BELONG;
   }
