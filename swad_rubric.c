@@ -195,8 +195,7 @@ void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics)
 	       Rub_GetRubricDataByCod (&Rubrics->Rubric);
 
 	       /***** Show main data of this rubric *****/
-	       Rub_ShowRubricMainData (Rubrics,
-	                               false);	// Do not show only this rubric
+	       Rub_ShowRubricMainData (Rubrics,Lay_SHOWING_SEVERAL);
 
 	       /***** Free memory used for rubric *****/
 	       Rub_RubricDestructor (&Rubrics->Rubric);
@@ -341,8 +340,7 @@ void Rub_ShowOnlyOneRubric (struct Rub_Rubrics *Rubrics)
 		 Hlp_ASSESSMENT_Rubrics,Box_NOT_CLOSABLE);
 
       /***** Show main data of this rubric *****/
-      Rub_ShowRubricMainData (Rubrics,
-		              true);	// Show only this rubric
+      Rub_ShowRubricMainData (Rubrics,Lay_SHOWING_ONLY_ONE);
 
       /***** Check if rubric tree is correct *****/
       if (Rub_CheckIfRecursiveTree (Rubrics->Rubric.RubCod,&TOS) == Err_ERROR)
@@ -360,19 +358,19 @@ void Rub_ShowOnlyOneRubric (struct Rub_Rubrics *Rubrics)
 /*****************************************************************************/
 
 void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
-                             bool ShowOnlyThisRubric)
+                             Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral)
   {
    extern const char *Txt_Number_of_criteria;
 
    /***** Begin box and table *****/
-   if (ShowOnlyThisRubric)
+   if (ShowingOneOrSeveral == Lay_SHOWING_ONLY_ONE)
       HTM_TABLE_BeginWidePadding (2);
 
    /***** Begin first row of this rubric *****/
    HTM_TR_Begin (NULL);
 
       /***** Icons related to this rubric *****/
-      if (!ShowOnlyThisRubric)
+      if (ShowingOneOrSeveral == Lay_SHOWING_SEVERAL)
 	{
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
 		       The_GetColorRows ());
@@ -381,10 +379,15 @@ void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
 	}
 
       /***** Rubric title and main data *****/
-      if (ShowOnlyThisRubric)
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-      else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+	    break;
+	}
 
       /* Rubric title */
       Frm_BeginForm (ActSeeOneRub);
@@ -411,18 +414,28 @@ void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
    HTM_TR_Begin (NULL);
 
       /***** Author of the rubric *****/
-      if (ShowOnlyThisRubric)
-	 HTM_TD_Begin ("class=\"LT\"");
-      else
-	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("class=\"LT\"");
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+	    break;
+	}
       Rub_WriteAuthor (&Rubrics->Rubric);
       HTM_TD_End ();
 
       /***** Text of the rubric *****/
-      if (ShowOnlyThisRubric)
-	 HTM_TD_Begin ("class=\"LT\"");
-      else
-	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("class=\"LT\"");
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+	    break;
+	}
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Rubrics->Rubric.Txt,Cns_MAX_BYTES_TEXT,
 			Str_DONT_REMOVE_SPACES);
@@ -436,10 +449,15 @@ void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
    HTM_TR_End ();
 
    /***** End table *****/
-   if (ShowOnlyThisRubric)
-      HTM_TABLE_End ();
-   else
-      The_ChangeRowColor ();
+   switch (ShowingOneOrSeveral)
+     {
+      case Lay_SHOWING_ONLY_ONE:
+	 HTM_TABLE_End ();
+	 break;
+      case Lay_SHOWING_SEVERAL:
+	 The_ChangeRowColor ();
+	 break;
+     }
   }
 
 /*****************************************************************************/

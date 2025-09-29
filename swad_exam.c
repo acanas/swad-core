@@ -197,7 +197,7 @@ void Exa_ResetExam (struct Exa_Exam *Exam)
 /***************************** List all exams ********************************/
 /*****************************************************************************/
 
-void Exa_ShoeAllExams (void)
+void Exa_ShowAllExams (void)
   {
    struct Exa_Exams Exams;
 

@@ -82,7 +82,7 @@ static void Svy_PutIconToCreateNewSvy (struct Svy_Surveys *Surveys);
 static void Svy_PutParsToCreateNewSvy (void *Surveys);
 static void Svy_ParsMyAllGrps (void *Surveys);
 static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
-                               bool ShowOnlyThisSvyComplete);
+                               Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral);
 static void Svy_PutIconsOneSvy (void *Surveys);
 static void Svy_WriteAuthor (struct Svy_Survey *Svy);
 static void Svy_WriteStatus (struct Svy_Survey *Svy);
@@ -261,7 +261,7 @@ void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 		 NumSvy++)
 	      {
 	       Surveys->Svy.SvyCod = Surveys->LstSvyCods[NumSvy - 1];
-	       Svy_ShowOneSurvey (Surveys,false);
+	       Svy_ShowOneSurvey (Surveys,Lay_SHOWING_SEVERAL);
 	      }
 
 	 /***** End table *****/
@@ -376,7 +376,7 @@ void Svy_SeeOneSurvey (void)
    Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /***** Show survey *****/
-   Svy_ShowOneSurvey (&Surveys,true);
+   Svy_ShowOneSurvey (&Surveys,Lay_SHOWING_ONLY_ONE);
   }
 
 /*****************************************************************************/
@@ -384,7 +384,7 @@ void Svy_SeeOneSurvey (void)
 /*****************************************************************************/
 
 static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
-                               bool ShowOnlyThisSvyComplete)
+                               Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral)
   {
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
@@ -409,7 +409,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       Err_WrongHierarchyLevelExit ();
 
    /***** Begin box *****/
-   if (ShowOnlyThisSvyComplete)
+   if (ShowingOneOrSeveral == Lay_SHOWING_ONLY_ONE)
       Box_BoxBegin (Surveys->Svy.Title[0] ? Surveys->Svy.Title :
 					    Txt_Survey,
                     Svy_PutIconsOneSvy,Surveys,
@@ -419,14 +419,14 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    Frm_SetAnchorStr (Surveys->Svy.SvyCod,&Anchor);
 
    /***** Begin table *****/
-   if (ShowOnlyThisSvyComplete)
+   if (ShowingOneOrSeveral == Lay_SHOWING_ONLY_ONE)
       HTM_TABLE_BeginWidePadding (2);
 
    /***** Write first row of data of this assignment *****/
    HTM_TR_Begin (NULL);
 
       /* Forms to remove/edit this assignment */
-      if (!ShowOnlyThisSvyComplete)
+      if (ShowingOneOrSeveral == Lay_SHOWING_SEVERAL)
 	{
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
 	               The_GetColorRows ());
@@ -440,16 +440,21 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       UniqueId++;
       if (asprintf (&Id,"svy_date_start_%u",UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
-      if (ShowOnlyThisSvyComplete)
-	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
-		       Id,
-		       CloOpe_Class[Surveys->Svy.Status.ClosedOrOpen][Surveys->Svy.Status.Hidden],
-		       The_GetSuffix ());
-      else
-	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-		       Id,
-		       CloOpe_Class[Surveys->Svy.Status.ClosedOrOpen][Surveys->Svy.Status.Hidden],
-		       The_GetSuffix (),The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
+			  Id,
+			  CloOpe_Class[Surveys->Svy.Status.ClosedOrOpen][Surveys->Svy.Status.Hidden],
+			  The_GetSuffix ());
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
+			  Id,
+			  CloOpe_Class[Surveys->Svy.Status.ClosedOrOpen][Surveys->Svy.Status.Hidden],
+			  The_GetSuffix (),The_GetColorRows ());
+	    break;
+	}
       Dat_WriteLocalDateHMSFromUTC (Id,Surveys->Svy.TimeUTC[Dat_STR_TIME],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    Dat_WRITE_TODAY |
@@ -464,17 +469,22 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       /* End date/time */
       if (asprintf (&Id,"svy_date_end_%u",UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
-      if (ShowOnlyThisSvyComplete)
-	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
-		       Id,
-		       CloOpe_Class[Surveys->Svy.Status.ClosedOrOpen][Surveys->Svy.Status.Hidden],
-		       The_GetSuffix ());
-      else
-	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-		       Id,
-		       CloOpe_Class[Surveys->Svy.Status.ClosedOrOpen][Surveys->Svy.Status.Hidden],
-		       The_GetSuffix (),
-		       The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
+			  Id,
+			  CloOpe_Class[Surveys->Svy.Status.ClosedOrOpen][Surveys->Svy.Status.Hidden],
+			  The_GetSuffix ());
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
+			  Id,
+			  CloOpe_Class[Surveys->Svy.Status.ClosedOrOpen][Surveys->Svy.Status.Hidden],
+			  The_GetSuffix (),
+			  The_GetColorRows ());
+	    break;
+	}
       Dat_WriteLocalDateHMSFromUTC (Id,Surveys->Svy.TimeUTC[Dat_END_TIME],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    Dat_WRITE_TODAY |
@@ -486,10 +496,15 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       free (Id);
 
       /* Survey title */
-      if (ShowOnlyThisSvyComplete)
-	 HTM_TD_Begin ("class=\"LT\"");
-      else
-	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("class=\"LT\"");
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+	    break;
+	}
 
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeOneSvy);
@@ -525,15 +540,18 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       HTM_TD_End ();
 
       /* Status of the survey */
-      if (ShowOnlyThisSvyComplete)
-	 HTM_TD_Begin ("rowspan=\"2\" class=\"LT\"");
-      else
-	 HTM_TD_Begin ("rowspan=\"2\" class=\"LT %s\"",
-	               The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("rowspan=\"2\" class=\"LT\"");
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("rowspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+	    break;
+	}
       Svy_WriteStatus (&Surveys->Svy);
 
-      if (!ShowOnlyThisSvyComplete)
-	{
+      if (ShowingOneOrSeveral == Lay_SHOWING_SEVERAL)
 	 /* Possible button to answer this survey */
 	 switch (Surveys->Svy.Status.ICanAnswer)
 	   {
@@ -571,7 +589,6 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 		 }
 	    break;
 	   }
-	}
 
       HTM_TD_End ();
    HTM_TR_End ();
@@ -580,19 +597,28 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    HTM_TR_Begin (NULL);
 
       /* 1st column: Author of the survey */
-      if (ShowOnlyThisSvyComplete)
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-      else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-	               The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+	    break;
+	}
       Svy_WriteAuthor (&Surveys->Svy);
       HTM_TD_End ();
 
       /* 2nd column: Scope, Users, Groups and Text */
-      if (ShowOnlyThisSvyComplete)
-	 HTM_TD_Begin ("class=\"LT\"");
-      else
-	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("class=\"LT\"");
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+	    break;
+	}
 
       /* Scope of the survey */
       HTM_DIV_Begin ("class=\"%s_%s\"",
@@ -635,7 +661,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    HTM_TR_End ();
 
    /***** Write questions of this survey *****/
-   if (ShowOnlyThisSvyComplete)
+   if (ShowingOneOrSeveral == Lay_SHOWING_ONLY_ONE)
      {
       HTM_TR_Begin (NULL);
 	 HTM_TD_Begin ("colspan=\"5\"");
@@ -650,7 +676,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    if (Surveys->Svy.HieLvl == Hie_CRS)	// Only course surveys are notified
       Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_SURVEY,Surveys->Svy.HieCod);
 
-   if (ShowOnlyThisSvyComplete)
+   if (ShowingOneOrSeveral == Lay_SHOWING_ONLY_ONE)
      {
 	 /***** End table *****/
 	 HTM_TABLE_End ();
@@ -2163,7 +2189,7 @@ void Svy_ReqEditQuestion (void)
    Svy_ShowFormEditOneQst (&Surveys,&SvyQst,Stem);
 
    /***** Show current survey *****/
-   Svy_ShowOneSurvey (&Surveys,true);
+   Svy_ShowOneSurvey (&Surveys,Lay_SHOWING_ONLY_ONE);
   }
 
 /*****************************************************************************/
@@ -2570,7 +2596,7 @@ void Svy_ReceiveQst (void)
    Svy_FreeTextChoiceAnswers (&SvyQst,Svy_MAX_ANSWERS_PER_QUESTION);
 
    /***** Show current survey *****/
-   Svy_ShowOneSurvey (&Surveys,true);
+   Svy_ShowOneSurvey (&Surveys,Lay_SHOWING_ONLY_ONE);
   }
 
 /*****************************************************************************/
@@ -3109,7 +3135,7 @@ void Svy_ReqRemQst (void)
 	                StrQstInd);
 
    /***** Show current survey *****/
-   Svy_ShowOneSurvey (&Surveys,true);
+   Svy_ShowOneSurvey (&Surveys,Lay_SHOWING_ONLY_ONE);
   }
 
 /*****************************************************************************/
@@ -3153,7 +3179,7 @@ void Svy_RemoveQst (void)
    Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
 
    /***** Show current survey *****/
-   Svy_ShowOneSurvey (&Surveys,true);
+   Svy_ShowOneSurvey (&Surveys,Lay_SHOWING_ONLY_ONE);
   }
 
 /*****************************************************************************/
@@ -3186,7 +3212,7 @@ void Svy_ReceiveSurveyAnswers (void)
      }
 
    /***** Show current survey *****/
-   Svy_ShowOneSurvey (&Surveys,true);
+   Svy_ShowOneSurvey (&Surveys,Lay_SHOWING_ONLY_ONE);
   }
 
 /*****************************************************************************/

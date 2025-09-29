@@ -94,7 +94,7 @@ static void Att_PutParsToCreateNewEvent (void *Events);
 static void Att_PutParsToListUsrsAttendance (void *Events);
 
 static void Att_ShowOneEventRow (struct Att_Events *Events,
-                                 bool ShowOnlyThisAttEventComplete);
+                                 Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral);
 static void Att_WriteEventAuthor (struct Att_Event *Event);
 static Dat_StartEndTime_t Att_GetParAttOrder (void);
 
@@ -300,8 +300,7 @@ static void Att_ShowAllEvents (struct Att_Events *Events)
 	       Events->Event.NumStdsTotal = Att_DB_GetNumStdsTotalWhoAreInEvent (Events->Event.AttCod);
 
 	       /***** Show one attendance event *****/
-	       Att_ShowOneEventRow (Events,
-				    false);	// Don't show only this event
+	       Att_ShowOneEventRow (Events,Lay_SHOWING_SEVERAL);
 	      }
 
 	 /***** End table *****/
@@ -431,7 +430,7 @@ static void Att_PutParsToListUsrsAttendance (void *Events)
 // Only Event->AttCod must be filled
 
 static void Att_ShowOneEventRow (struct Att_Events *Events,
-                                 bool ShowOnlyThisAttEventComplete)
+                                 Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral)
   {
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
@@ -449,7 +448,7 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
    /* Forms to remove/edit this attendance event */
    HTM_TR_Begin (NULL);
 
-      if (!ShowOnlyThisAttEventComplete)
+      if (ShowingOneOrSeveral == Lay_SHOWING_SEVERAL)
 	{
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
 	               The_GetColorRows ());
@@ -465,16 +464,21 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
 	{
 	 if (asprintf (&Id,"att_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 if (ShowOnlyThisAttEventComplete)
-	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
-			  Id,
-			  CloOpe_Class[Events->Event.ClosedOrOpen][Events->Event.Hidden],
-			  The_GetSuffix ());
-	 else
-	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-			  Id,
-			  CloOpe_Class[Events->Event.ClosedOrOpen][Events->Event.Hidden],
-			  The_GetSuffix (),The_GetColorRows ());
+	 switch (ShowingOneOrSeveral)
+	   {
+	    case Lay_SHOWING_ONLY_ONE:
+	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
+			     Id,
+			     CloOpe_Class[Events->Event.ClosedOrOpen][Events->Event.Hidden],
+			     The_GetSuffix ());
+	       break;
+	    case Lay_SHOWING_SEVERAL:
+	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
+			     Id,
+			     CloOpe_Class[Events->Event.ClosedOrOpen][Events->Event.Hidden],
+			     The_GetSuffix (),The_GetColorRows ());
+	       break;
+	   }
 	 Dat_WriteLocalDateHMSFromUTC (Id,Events->Event.TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       Dat_WRITE_TODAY |
@@ -488,10 +492,15 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
 	}
 
       /* Attendance event title */
-      if (ShowOnlyThisAttEventComplete)
-	 HTM_TD_Begin ("class=\"LT\"");
-      else
-	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("class=\"LT\"");
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+	    break;
+	}
       HTM_ARTICLE_Begin (Anchor);
 	 Att_PutLinkEvent (&Events->Event,Act_GetActionText (ActSeeOneAtt),
 			   Events->Event.Title);
@@ -499,10 +508,15 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
       HTM_TD_End ();
 
       /* Number of students in this event */
-      if (ShowOnlyThisAttEventComplete)
-	 HTM_TD_Begin ("class=\"RT\"");
-      else
-	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("class=\"RT\"");
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+	    break;
+	}
       HTM_SPAN_Begin ("class=\"%s_%s\"",
 		       HidVis_TitleClass[Events->Event.Hidden],The_GetSuffix ());
          HTM_Unsigned (Events->Event.NumStdsTotal);
@@ -515,10 +529,15 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
    HTM_TR_Begin (NULL);
 
       /* Author of the attendance event */
-      if (ShowOnlyThisAttEventComplete)
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-      else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+	    break;
+	}
       Att_WriteEventAuthor (&Events->Event);
       HTM_TD_End ();
 
@@ -527,10 +546,15 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Description,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
       ALn_InsertLinks (Description,Cns_MAX_BYTES_TEXT,60);	// Insert links
-      if (ShowOnlyThisAttEventComplete)
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-      else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+      switch (ShowingOneOrSeveral)
+	{
+	 case Lay_SHOWING_ONLY_ONE:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	    break;
+	 case Lay_SHOWING_SEVERAL:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+	    break;
+	}
       if (Gbl.Crs.Grps.NumGrps)
 	 Att_GetAndWriteNamesOfGrpsAssociatedToEvent (&Events->Event);
 
@@ -1429,8 +1453,7 @@ static void Att_ShowEvent (struct Att_Events *Events)
 					       Txt_Event,
                       Att_PutIconsOneEvent,Events,
                       Hlp_USERS_Attendance,Box_NOT_CLOSABLE,2);
-      Att_ShowOneEventRow (Events,
-			   true);	// Show only this event
+      Att_ShowOneEventRow (Events,Lay_SHOWING_ONLY_ONE);
    Box_BoxTableEnd ();
    HTM_BR ();
 

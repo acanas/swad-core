@@ -59,7 +59,7 @@ Usr_Can_t Rub_CheckIfEditable (void);
 void Rub_SeeOneRubric (void);
 void Rub_ShowOnlyOneRubric (struct Rub_Rubrics *Rubrics);
 void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
-                             bool ShowOnlyThisRubric);
+                             Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral);
 
 void Rub_SetCurrentRubCod (long GamCod);
 void Rub_PutPars (void *Rubrics);

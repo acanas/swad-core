@@ -911,7 +911,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActReqLnkTst	] = {1990, 4,TabAss,NULL			,TstRsc_GetLinkToTest		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Exams
-   [ActSeeAllExa	] = {1848, 5,TabAss,NULL			,Exa_ShoeAllExams		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActSeeAllExa	] = {1848, 5,TabAss,NULL			,Exa_ShowAllExams		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActSeeOneExa	] = {1849, 5,TabAss,NULL			,Exa_ShowOneExam		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActFrmNewExa	] = {1877, 5,TabAss,NULL			,Exa_ReqCreatOrEditExam		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActEdiOneExa	] = {1878, 5,TabAss,NULL			,Exa_ReqCreatOrEditExam		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},

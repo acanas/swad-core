@@ -38,7 +38,7 @@
 void Exa_ResetExams (struct Exa_Exams *Exams);
 void Exa_ResetExam (struct Exa_Exam *Exam);
 
-void Exa_ShoeAllExams (void);
+void Exa_ShowAllExams (void);
 void Exa_ListAllExams (struct Exa_Exams *Exams);
 
 Usr_Can_t Exa_CheckIfICanEditExams (void);
