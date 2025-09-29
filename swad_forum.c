@@ -35,6 +35,7 @@
 
 #include "swad_action.h"
 #include "swad_action_list.h"
+#include "swad_autolink.h"
 #include "swad_box.h"
 #include "swad_center_database.h"
 #include "swad_config.h"
@@ -1075,7 +1076,8 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
                break;
             case For_ENABLED:
 	       Str_Copy (Content,OriginalContent,sizeof (Content) - 1);
-	       Msg_WriteMsgContent (Content,true,false);
+	       ALn_InsertLinks (Content,Cns_MAX_BYTES_LONG_TEXT,60);
+	       HTM_Txt (Content);
    	       Med_ShowMedia (&Media,"FOR_IMG_CONT","FOR_IMG");
                break;
            }

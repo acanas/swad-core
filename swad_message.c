@@ -645,7 +645,8 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 		  if (!SubjectAndContentComeFromForm)
 		     HTM_TxtF ("\n\n----- %s -----\n",Txt_Original_message);
 
-		  Msg_WriteMsgContent (Messages->Content,false,true);
+		  Str_FilePrintStrChangingBRToRetAndNBSPToSpace (Fil_GetOutputFile (),
+								 Messages->Content);
       	}
       else	// It's not a reply
 	{
@@ -2149,7 +2150,10 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 	 /***** Show content and media *****/
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT MSG_TXT_%s\"",The_GetSuffix ());
 	    if (Content[0])
-	       Msg_WriteMsgContent (Content,true,false);
+	      {
+	       ALn_InsertLinks (Content,Cns_MAX_BYTES_LONG_TEXT,60);
+	       HTM_Txt (Content);
+	      }
 	    Med_ShowMedia (&Media,"MSG_IMG_CONT","MSG_IMG");
 	 HTM_TD_End ();
 
@@ -2663,24 +2667,6 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassTxt,const char *ClassBg)
    HTM_TD_End ();
 
    free (Id);
-  }
-
-/*****************************************************************************/
-/********************* Write the text (content) of a message *****************/
-/*****************************************************************************/
-
-void Msg_WriteMsgContent (char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
-                          bool InsertLinks,bool ChangeBRToRet)
-  {
-   /***** Insert links in URLs *****/
-   if (InsertLinks)
-      ALn_InsertLinks (Content,Cns_MAX_BYTES_LONG_TEXT,60);
-
-   /***** Write message to file *****/
-   if (ChangeBRToRet)
-      Str_FilePrintStrChangingBRToRetAndNBSPToSpace (Fil_GetOutputFile (),Content);
-   else
-      HTM_Txt (Content);
   }
 
 /*****************************************************************************/

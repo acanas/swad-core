@@ -31,11 +31,11 @@
 #include <stdlib.h>		// For free
 
 #include "swad_action_list.h"
+#include "swad_autolink.h"
 #include "swad_box.h"
 #include "swad_error.h"
 #include "swad_forum.h"
 #include "swad_global.h"
-#include "swad_message.h"
 #include "swad_notification_database.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
@@ -650,7 +650,8 @@ static void TmlCom_WriteContent (struct TmlCom_Comment *Com)
    if (Com->Content.Txt[0])
      {
       HTM_DIV_Begin ("class=\"Tml_TXT Tml_TXT_%s\"",The_GetSuffix ());
-	 Msg_WriteMsgContent (Com->Content.Txt,true,false);
+	 ALn_InsertLinks (Com->Content.Txt,Cns_MAX_BYTES_LONG_TEXT,60);
+	 HTM_Txt (Com->Content.Txt);
       HTM_DIV_End ();
      }
 

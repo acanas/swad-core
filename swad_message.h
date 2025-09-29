@@ -128,8 +128,6 @@ void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg);
 void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassTxt,const char *ClassBg);
-void Msg_WriteMsgContent (char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
-                          bool InsertLinks,bool ChangeBRToRet);
 
 void Msg_BanSenderWhenShowingMsgs (void);
 void Msg_UnbanSenderWhenShowingMsgs (void);

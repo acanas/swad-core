@@ -30,12 +30,12 @@
 #include <stdlib.h>		// For free
 
 #include "swad_alert.h"
+#include "swad_autolink.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_info.h"
 #include "swad_media.h"
-#include "swad_message.h"
 #include "swad_parameter.h"
 #include "swad_profile.h"
 #include "swad_timeline.h"
@@ -141,7 +141,8 @@ static void TmlPst_ShowPostContent (struct TmlPst_Content *Content)
    if (Content->Txt[0])
      {
       HTM_DIV_Begin ("class=\"Tml_TXT Tml_TXT_%s\"",The_GetSuffix ());
-	 Msg_WriteMsgContent (Content->Txt,true,false);
+	 ALn_InsertLinks (Content->Txt,Cns_MAX_BYTES_LONG_TEXT,60);
+	 HTM_Txt (Content->Txt);
       HTM_DIV_End ();
      }
 
