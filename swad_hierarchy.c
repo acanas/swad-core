@@ -1131,7 +1131,7 @@ Usr_Belong_t Hie_CheckIfIBelongTo (Hie_Level_t HieLvl,long HieCod)
 
 void Hie_FlushCacheUsrBelongsTo (Hie_Level_t HieLvl)
   {
-   Gbl.Cache.UsrBelongsTo[HieLvl].Valid = false;
+   Gbl.Cache.UsrBelongsTo[HieLvl].Status = Cac_INVALID;
   }
 
 /*****************************************************************************/
@@ -1160,7 +1160,7 @@ Usr_Belong_t Hie_CheckIfUsrBelongsTo (Hie_Level_t HieLvl,long UsrCod,long HieCod
       return Usr_DONT_BELONG;
 
    /***** 2. Fast check: If cached... *****/
-   if (Gbl.Cache.UsrBelongsTo[HieLvl].Valid &&
+   if (Gbl.Cache.UsrBelongsTo[HieLvl].Status == Cac_VALID &&
        UsrCod == Gbl.Cache.UsrBelongsTo[HieLvl].UsrCod &&
        HieCod == Gbl.Cache.UsrBelongsTo[HieLvl].HieCod &&
        CountOnlyAcceptedCourses == Gbl.Cache.UsrBelongsTo[HieLvl].CountOnlyAcceptedCourses)
@@ -1172,7 +1172,7 @@ Usr_Belong_t Hie_CheckIfUsrBelongsTo (Hie_Level_t HieLvl,long UsrCod,long HieCod
    Gbl.Cache.UsrBelongsTo[HieLvl].CountOnlyAcceptedCourses = CountOnlyAcceptedCourses;
    Gbl.Cache.UsrBelongsTo[HieLvl].Belongs = FunctionToGetIfUsrBelongsToFromDB[HieLvl] (UsrCod,HieCod,
 										       CountOnlyAcceptedCourses);
-   Gbl.Cache.UsrBelongsTo[HieLvl].Valid = true;
+   Gbl.Cache.UsrBelongsTo[HieLvl].Status = Cac_VALID;
    return Gbl.Cache.UsrBelongsTo[HieLvl].Belongs;
   }
 
@@ -1335,7 +1335,7 @@ static void Hie_GetAndShowHierarchyTotal (Hie_Level_t HieLvl)
 void Hie_FlushCachedNumNodesInHieLvl (Hie_Level_t HieLvlChild,
 		      		      Hie_Level_t HieLvlParent)
   {
-   Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].Valid = false;
+   Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].Status = Cac_INVALID;
   }
 
 unsigned Hie_GetCachedNumNodesInHieLvl (Hie_Level_t HieLvlChild,
@@ -1380,14 +1380,14 @@ unsigned Hie_GetNumNodesInHieLvl (Hie_Level_t HieLvlChild,
      };
 
    /***** 1. Fast check: If cached... *****/
-   if (Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].Valid &&
+   if (Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].Status == Cac_VALID &&
        HieCod == Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].HieCod)
       return Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].Num;
 
    /***** 2. Slow: number of institutions in a country from database *****/
    Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].HieCod = HieCod;
    Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].Num    = FunctionGetFigure[HieLvlChild][HieLvlParent] (HieCod);
-   Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].Valid  = true;
+   Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].Status = Cac_VALID;
    FigCch_UpdateFigureIntoCache (Hie_FiguresCached[HieLvlChild],HieLvlParent,
 				 Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].HieCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumNodesInHieLvl[HieLvlChild][HieLvlParent].Num);
@@ -1465,7 +1465,7 @@ unsigned Hie_GetCachedNumNodesInHieLvlWith (Hie_Level_t HieLvlChild,
 
 void Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_Level_t HieLvl)
   {
-   Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].Valid = false;
+   Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].Status = Cac_INVALID;
   }
 
 unsigned Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_Level_t HieLvl,
@@ -1510,15 +1510,15 @@ unsigned Hie_GetNumUsrsWhoClaimToBelongTo (Hie_Level_t HieLvl,
       return 0;
 
    /***** 2. Fast check: If already got... *****/
-   if (Node->NumUsrsWhoClaimToBelong.Valid)
+   if (Node->NumUsrsWhoClaimToBelong.Status == Cac_VALID)
       return Node->NumUsrsWhoClaimToBelong.NumUsrs;
 
    /***** 3. Fast check: If cached... *****/
-   if (Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].Valid &&
+   if (Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].Status == Cac_VALID &&
        Node->HieCod == Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].HieCod)
      {
       Node->NumUsrsWhoClaimToBelong.NumUsrs = Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].NumUsrs;
-      Node->NumUsrsWhoClaimToBelong.Valid = true;
+      Node->NumUsrsWhoClaimToBelong.Status = Cac_VALID;
       return Node->NumUsrsWhoClaimToBelong.NumUsrs;
      }
 
@@ -1527,8 +1527,8 @@ unsigned Hie_GetNumUsrsWhoClaimToBelongTo (Hie_Level_t HieLvl,
    Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].HieCod  = Node->HieCod;
    Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].NumUsrs =
    Node->NumUsrsWhoClaimToBelong.NumUsrs = FunctionToGetNumUsrsWhoClaimToBelongToFromDB[HieLvl] (Node->HieCod);
-   Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].Valid =
-   Node->NumUsrsWhoClaimToBelong.Valid = true;
+   Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].Status = Cac_VALID;
+   Node->NumUsrsWhoClaimToBelong.Status = Cac_VALID;
    FigCch_UpdateFigureIntoCache (Figure[HieLvl],HieLvl,Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].HieCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].NumUsrs);
    return Node->NumUsrsWhoClaimToBelong.NumUsrs;

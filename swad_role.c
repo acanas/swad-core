@@ -303,7 +303,7 @@ Rol_Role_t Rol_GetMyMaxRoleIn (Hie_Level_t HieLvl,long HieCod)
 
 void Rol_FlushCacheMyRoleInCurrentCrs (void)
   {
-   Gbl.Cache.MyRoleInCurrentCrs.Valid = false;
+   Gbl.Cache.MyRoleInCurrentCrs.Status = Cac_INVALID;
   }
 
 Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod)
@@ -315,7 +315,7 @@ Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod)
       return Rol_UNK;
 
    /***** 2. Fast check: is my role in current course already calculated? *****/
-   if (Gbl.Cache.MyRoleInCurrentCrs.Valid &&
+   if (Gbl.Cache.MyRoleInCurrentCrs.Status == Cac_VALID &&
        CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod)
       return Gbl.Cache.MyRoleInCurrentCrs.Role;
 
@@ -325,8 +325,8 @@ Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod)
    /* Update my role in current course */
    if (CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod)
      {
-      Gbl.Cache.MyRoleInCurrentCrs.Role  = Role;
-      Gbl.Cache.MyRoleInCurrentCrs.Valid = true;
+      Gbl.Cache.MyRoleInCurrentCrs.Role   = Role;
+      Gbl.Cache.MyRoleInCurrentCrs.Status = Cac_VALID;
      }
 
    return Role;
@@ -338,7 +338,7 @@ Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod)
 
 void Rol_FlushCacheRoleUsrInCrs (void)
   {
-   Gbl.Cache.RoleUsrInCrs.Valid = false;
+   Gbl.Cache.RoleUsrInCrs.Status = Cac_INVALID;
   }
 
 Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long CrsCod)
@@ -349,7 +349,7 @@ Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long CrsCod)
       return Rol_UNK;
 
    /***** 2. Fast check: Is role in course already calculated? *****/
-   if (Gbl.Cache.RoleUsrInCrs.Valid &&
+   if (Gbl.Cache.RoleUsrInCrs.Status == Cac_VALID &&
        UsrCod == Gbl.Cache.RoleUsrInCrs.UsrCod &&
        CrsCod == Gbl.Cache.RoleUsrInCrs.CrsCod)
       return Gbl.Cache.RoleUsrInCrs.Role;
@@ -364,7 +364,7 @@ Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long CrsCod)
    else
       /* Get role of the user in course from database */
       Gbl.Cache.RoleUsrInCrs.Role = Rol_DB_GetRoleUsrInCrs (UsrCod,CrsCod);
-   Gbl.Cache.RoleUsrInCrs.Valid = true;
+   Gbl.Cache.RoleUsrInCrs.Status = Cac_VALID;
    return Gbl.Cache.RoleUsrInCrs.Role;
   }
 

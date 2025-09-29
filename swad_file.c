@@ -669,7 +669,6 @@ void Fil_AddPublicDirToCache (const char *FullPathPriv,
 Exi_Exist_t Fil_GetPublicDirFromCache (const char *FullPathPriv,
 				       char TmpPubDir[PATH_MAX + 1])
   {
-   bool Cached;
    Exi_Exist_t TmpPubDirExists;
    char FullPathTmpPubDir[PATH_MAX + 1];
 
@@ -682,10 +681,9 @@ Exi_Exist_t Fil_GetPublicDirFromCache (const char *FullPathPriv,
 
    /***** Get temporary directory from cache *****/
    Fil_DB_GetPublicDirFromCache (FullPathPriv,TmpPubDir);
-   Cached = (TmpPubDir[0] != '\0');
 
    /***** Check if temporary public directory exists *****/
-   if (Cached)
+   if ((TmpPubDir[0] != '\0'))	// Cached
      {
       /* If not exists (it could be deleted if its lifetime has expired)
 	 ==> remove from cache */

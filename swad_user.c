@@ -832,7 +832,7 @@ void Usr_FlushCachesUsr (void)
 
 void Usr_FlushCacheUsrIsSuperuser (void)
   {
-   Gbl.Cache.UsrIsSuperuser.Valid = false;
+   Gbl.Cache.UsrIsSuperuser.Status = Cac_INVALID;
   }
 
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
@@ -842,14 +842,14 @@ bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
       return false;
 
    /***** 2. Fast check: If cached... *****/
-   if (Gbl.Cache.UsrIsSuperuser.Valid &&
+   if (Gbl.Cache.UsrIsSuperuser.Status == Cac_VALID &&
        UsrCod == Gbl.Cache.UsrIsSuperuser.UsrCod)
       return Gbl.Cache.UsrIsSuperuser.IsSuperuser;
 
    /***** 3. Slow check: If not cached, get if a user is superuser from database *****/
    Gbl.Cache.UsrIsSuperuser.UsrCod = UsrCod;
    Gbl.Cache.UsrIsSuperuser.IsSuperuser = Adm_DB_CheckIfUsrIsSuperuser (UsrCod);
-   Gbl.Cache.UsrIsSuperuser.Valid = true;
+   Gbl.Cache.UsrIsSuperuser.Status = Cac_VALID;
    return Gbl.Cache.UsrIsSuperuser.IsSuperuser;
   }
 

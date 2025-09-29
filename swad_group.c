@@ -3415,7 +3415,7 @@ static Grp_HasFileZones_t Grp_GetHasFileZonesFromYN (char Ch)
 
 void Grp_FlushCacheIBelongToGrp (void)
   {
-   Gbl.Cache.IBelongToGrp.Valid = false;
+   Gbl.Cache.IBelongToGrp.Status = Cac_INVALID;
   }
 
 Usr_Belong_t Grp_GetIfIBelongToGrp (long GrpCod)
@@ -3425,14 +3425,14 @@ Usr_Belong_t Grp_GetIfIBelongToGrp (long GrpCod)
       return Usr_DONT_BELONG;
 
    /***** 2. Fast check: Is already calculated if I belong to group? *****/
-   if (Gbl.Cache.IBelongToGrp.Valid &&
+   if (Gbl.Cache.IBelongToGrp.Status == Cac_VALID &&
        GrpCod == Gbl.Cache.IBelongToGrp.GrpCod)
       return Gbl.Cache.IBelongToGrp.IBelong;
 
    /***** 3. Slow check: Get if I belong to a group from database *****/
    Gbl.Cache.IBelongToGrp.GrpCod = GrpCod;
    Gbl.Cache.IBelongToGrp.IBelong = Grp_DB_CheckIfIBelongToGrp (GrpCod);
-   Gbl.Cache.IBelongToGrp.Valid = true;
+   Gbl.Cache.IBelongToGrp.Status = Cac_VALID;
    return Gbl.Cache.IBelongToGrp.IBelong;
   }
 
@@ -3442,7 +3442,7 @@ Usr_Belong_t Grp_GetIfIBelongToGrp (long GrpCod)
 
 void Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs (void)
   {
-   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Valid = false;
+   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Status = Cac_INVALID;
   }
 
 bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
@@ -3469,7 +3469,7 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
 
    /***** 6. Fast check: Is already calculated if user shares
                          any group in the current course with me? *****/
-   if (Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Valid &&
+   if (Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Status == Cac_VALID &&
        UsrDat->UsrCod == Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod)
       return Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares;
 
@@ -3478,7 +3478,7 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
      {
       Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = UsrDat->UsrCod;
       Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = false;
-      Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Valid = true;
+      Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Status = Cac_VALID;
       return false;
      }
 
@@ -3487,7 +3487,7 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
      {
       Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = UsrDat->UsrCod;
       Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = true;
-      Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Valid = true;
+      Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Status = Cac_VALID;
       return true;
      }
 
@@ -3497,7 +3497,7 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
    /* Check if user shares any group with me */
    Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = UsrDat->UsrCod;
    Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat->UsrCod);
-   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Valid = true;
+   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Status = Cac_VALID;
    return Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares;
   }
 

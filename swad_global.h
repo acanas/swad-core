@@ -35,6 +35,7 @@
 #include "swad_API.h"
 #include "swad_assignment.h"
 #include "swad_browser.h"
+#include "swad_cache.h"
 #include "swad_connected.h"
 #include "swad_config.h"
 #include "swad_course.h"
@@ -213,48 +214,48 @@ struct Globals
 	 long HieCod;
 	 Lan_Language_t Language;
 	 char CtyName[Cty_MAX_BYTES_NAME + 1];
-         bool Valid;
+         Cac_Status_t Status;
 	} CountryName;
       struct
 	{
 	 long HieCod;
 	 char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1];
 	 char CtyName[Nam_MAX_BYTES_FULL_NAME + 1];
-         bool Valid;
+         Cac_Status_t Status;
 	} InstitutionShrtNameAndCty;
       struct
         {
 	 long HieCod;
 	 unsigned NumDpts;
-          bool Valid;
-       } NumDptsInIns;
+         Cac_Status_t Status;
+        } NumDptsInIns;
       struct
         {
 	 long HieCod;
 	 unsigned Num;
-         bool Valid;
+         Cac_Status_t Status;
         } NumNodesInHieLvl[Hie_NUM_LEVELS][Hie_NUM_LEVELS];
       struct
         {
 	 unsigned NumUsrs;
-	 bool Valid;
+	 Cac_Status_t Status;
         } NumUsrsWhoDontClaimToBelongToAnyCty;
       struct
         {
 	 unsigned NumUsrs;
-	 bool Valid;
+	 Cac_Status_t Status;
         } NumUsrsWhoClaimToBelongToAnotherCty;
       struct
         {
 	 long HieCod;
 	 unsigned NumUsrs;
-	 bool Valid;
+	 Cac_Status_t Status;
         } NumUsrsWhoClaimToBelongTo[Hie_NUM_LEVELS];
       struct
 	{
 	 long UsrCod;
 	 bool IsSuperuser;
-	 bool Valid;
+	 Cac_Status_t Status;
 	} UsrIsSuperuser;
       struct
 	{
@@ -262,62 +263,62 @@ struct Globals
 	 long HieCod;
 	 Hie_DB_CountOnlyAcceptedCrss_t CountOnlyAcceptedCourses;
 	 Usr_Belong_t Belongs;
-	 bool Valid;
+	 Cac_Status_t Status;
 	} UsrBelongsTo[Hie_NUM_LEVELS];
       struct
 	{
 	 long UsrCod;
 	 Usr_Belong_t Belongs;
-	 bool Valid;
+	 Cac_Status_t Status;
 	} UsrBelongsToCurrentCrs;
       struct
 	{
 	 long UsrCod;
 	 Usr_Accepted_t Accepted;
-	 bool Valid;
+	 Cac_Status_t Status;
 	} UsrHasAcceptedInCurrentCrs;
       struct
 	{
 	 long UsrCod;
 	 bool SharesAnyOfMyCrs;
-	 bool Valid;
+	 Cac_Status_t Status;
 	} UsrSharesAnyOfMyCrs;
       struct
 	{
 	 long GrpCod;
 	 Usr_Belong_t IBelong;
-	 bool Valid;
+	 Cac_Status_t Status;
 	} IBelongToGrp;
       struct
 	{
 	 long UsrCod;
 	 bool Shares;
-	 bool Valid;
+	 Cac_Status_t Status;
 	} UsrSharesAnyOfMyGrpsInCurrentCrs;
       struct
 	{
 	 long UsrCod;
 	 long CrsCod;
 	 Rol_Role_t Role;
-	 bool Valid;
+	 Cac_Status_t Status;
 	} RoleUsrInCrs;
       struct
 	{
 	 Rol_Role_t Role;
-	 bool Valid;
+	 Cac_Status_t Status;
 	} MyRoleInCurrentCrs;
       struct
 	{
 	 long PrjCod;
 	 unsigned RolesInProject;
-	 bool Valid;
+	 Cac_Status_t Status;
 	} MyRolesInProject;
       struct
         {
 	 long UsrCod;
 	 unsigned NumFollowing;
 	 unsigned NumFollowers;
- 	 bool Valid;
+ 	 Cac_Status_t Status;
        } Follow;
      } Cache;
   };

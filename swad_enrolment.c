@@ -3583,7 +3583,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
 
 void Enr_FlushCacheUsrBelongsToCurrentCrs (void)
   {
-   Gbl.Cache.UsrBelongsToCurrentCrs.Valid = false;
+   Gbl.Cache.UsrBelongsToCurrentCrs.Status = Cac_INVALID;
   }
 
 Usr_Belong_t Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat)
@@ -3594,7 +3594,7 @@ Usr_Belong_t Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat)
       return Usr_DONT_BELONG;
 
    /***** 2. Fast check: If cached... *****/
-   if (Gbl.Cache.UsrBelongsToCurrentCrs.Valid &&
+   if (Gbl.Cache.UsrBelongsToCurrentCrs.Status == Cac_VALID &&
        UsrDat->UsrCod == Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod)
       return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
 
@@ -3606,7 +3606,7 @@ Usr_Belong_t Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat)
 	                                          UsrDat->Roles.InCurrentCrs == Rol_NET ||
 	                                          UsrDat->Roles.InCurrentCrs == Rol_TCH) ? Usr_BELONG :
 	                                        					   Usr_DONT_BELONG;
-      Gbl.Cache.UsrBelongsToCurrentCrs.Valid = true;
+      Gbl.Cache.UsrBelongsToCurrentCrs.Status = Cac_VALID;
       return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
      }
 
@@ -3615,7 +3615,7 @@ Usr_Belong_t Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat)
    Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = Hie_CheckIfUsrBelongsTo (Hie_CRS,UsrDat->UsrCod,
 						                       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 						                       false);
-   Gbl.Cache.UsrBelongsToCurrentCrs.Valid = true;
+   Gbl.Cache.UsrBelongsToCurrentCrs.Status = Cac_VALID;
    return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
   }
 
@@ -3626,7 +3626,7 @@ Usr_Belong_t Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat)
 
 void Enr_FlushCacheUsrHasAcceptedInCurrentCrs (void)
   {
-   Gbl.Cache.UsrHasAcceptedInCurrentCrs.Valid = false;
+   Gbl.Cache.UsrHasAcceptedInCurrentCrs.Status = Cac_INVALID;
   }
 
 Usr_Accepted_t Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *UsrDat)
@@ -3637,7 +3637,7 @@ Usr_Accepted_t Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *Usr
       return Usr_HAS_NOT_ACCEPTED;
 
    /***** 2. Fast check: If cached... *****/
-   if (Gbl.Cache.UsrHasAcceptedInCurrentCrs.Valid &&
+   if (Gbl.Cache.UsrHasAcceptedInCurrentCrs.Status == Cac_VALID &&
        UsrDat->UsrCod == Gbl.Cache.UsrHasAcceptedInCurrentCrs.UsrCod)
       return Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted;
 
@@ -3648,7 +3648,7 @@ Usr_Accepted_t Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *Usr
 						                             Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 						                             true) == Usr_BELONG) ? Usr_HAS_ACCEPTED :
 												    Usr_HAS_NOT_ACCEPTED;
-   Gbl.Cache.UsrHasAcceptedInCurrentCrs.Valid = true;
+   Gbl.Cache.UsrHasAcceptedInCurrentCrs.Status = Cac_VALID;
    return Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted;
   }
 
@@ -3658,7 +3658,7 @@ Usr_Accepted_t Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *Usr
 
 void Enr_FlushCacheUsrSharesAnyOfMyCrs (void)
   {
-   Gbl.Cache.UsrSharesAnyOfMyCrs.Valid = false;
+   Gbl.Cache.UsrSharesAnyOfMyCrs.Status = Cac_INVALID;
   }
 
 bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat)
@@ -3676,7 +3676,7 @@ bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat)
       return true;
 
    /***** 4. Fast check: Is already calculated if user shares any course with me? *****/
-   if (Gbl.Cache.UsrSharesAnyOfMyCrs.Valid &&
+   if (Gbl.Cache.UsrSharesAnyOfMyCrs.Status == Cac_VALID &&
        UsrDat->UsrCod == Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod)
       return Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs;
 
@@ -3686,7 +3686,7 @@ bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat)
         {
          Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod = UsrDat->UsrCod;
          Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs = true;
-         Gbl.Cache.UsrSharesAnyOfMyCrs.Valid = true;
+         Gbl.Cache.UsrSharesAnyOfMyCrs.Status = Cac_VALID;
          return true;
         }
 
@@ -3698,7 +3698,7 @@ bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat)
      {
       Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod = UsrDat->UsrCod;
       Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs = false;
-      Gbl.Cache.UsrSharesAnyOfMyCrs.Valid = true;
+      Gbl.Cache.UsrSharesAnyOfMyCrs.Status = Cac_VALID;
       return false;
      }
 

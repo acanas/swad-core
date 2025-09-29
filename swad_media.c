@@ -1519,7 +1519,6 @@ static void Med_ShowJPG (const struct Med_Media *Media,
    char TmpPubDir[PATH_MAX + 1];
    char *FullPathJPGPriv;
    char *URL;
-   bool Cached;
 
    /***** Build private path to JPG *****/
    snprintf (FileNameJPG,sizeof (FileNameJPG),"%s.%s",
@@ -1532,9 +1531,7 @@ static void Med_ShowJPG (const struct Med_Media *Media,
      {
       case Exi_EXISTS:
 	 /***** Get cached public link to private file *****/
-	 Cached = (Fil_GetPublicDirFromCache (FullPathJPGPriv,TmpPubDir) == Exi_EXISTS);
-
-	 if (!Cached)
+	 if (Fil_GetPublicDirFromCache (FullPathJPGPriv,TmpPubDir) == Exi_DOES_NOT_EXIST)
 	   {
 	    /***** Create symbolic link from temporary public directory to private file
 		   in order to gain access to it for showing/downloading *****/
@@ -1579,7 +1576,6 @@ static void Med_ShowGIF (const struct Med_Media *Media,
    char *URL;
    char *URL_GIF;
    char *URL_PNG;
-   bool Cached;
 
    /***** Build private path to animated GIF image *****/
    snprintf (FileNameGIF,sizeof (FileNameGIF),"%s.%s",
@@ -1597,9 +1593,7 @@ static void Med_ShowGIF (const struct Med_Media *Media,
      {
       case Exi_EXISTS:
 	 /***** Get cached public link to private file *****/
-	 Cached = (Fil_GetPublicDirFromCache (FullPathGIFPriv,TmpPubDir) == Exi_EXISTS);
-
-	 if (!Cached)
+	 if (Fil_GetPublicDirFromCache (FullPathGIFPriv,TmpPubDir) == Exi_DOES_NOT_EXIST)
 	   {
 	    /***** Create symbolic link from temporary public directory to private file
 		   in order to gain access to it for showing/downloading *****/
@@ -1674,7 +1668,6 @@ static void Med_ShowVideo (const struct Med_Media *Media,
    char TmpPubDir[PATH_MAX + 1];
    char *FullPathVideoPriv;
    char *URL;
-   bool Cached;
 
    /***** Build private path to video *****/
    snprintf (FileNameVideo,sizeof (FileNameVideo),"%s.%s",
@@ -1687,9 +1680,7 @@ static void Med_ShowVideo (const struct Med_Media *Media,
      {
       case Exi_EXISTS:
 	 /***** Get cached public link to private file *****/
-	 Cached = (Fil_GetPublicDirFromCache (FullPathVideoPriv,TmpPubDir) == Exi_EXISTS);
-
-	 if (!Cached)
+	 if (Fil_GetPublicDirFromCache (FullPathVideoPriv,TmpPubDir) == Exi_DOES_NOT_EXIST)
 	   {
 	    /***** Create symbolic link from temporary public directory to private file
 		   in order to gain access to it for showing/downloading *****/

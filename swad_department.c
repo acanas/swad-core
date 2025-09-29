@@ -903,7 +903,7 @@ void Dpt_ReceiveNewDpt (void)
 
 void Dpt_FlushCacheNumDptsInIns (void)
   {
-   Gbl.Cache.NumDptsInIns.Valid = false;
+   Gbl.Cache.NumDptsInIns.Status = Cac_INVALID;
   }
 
 unsigned Dpt_GetNumDptsInIns (long InsCod)
@@ -913,14 +913,14 @@ unsigned Dpt_GetNumDptsInIns (long InsCod)
       return 0;
 
    /***** 2. Fast check: If cached... *****/
-   if (Gbl.Cache.NumDptsInIns.Valid &&
+   if (Gbl.Cache.NumDptsInIns.Status == Cac_VALID &&
        InsCod == Gbl.Cache.NumDptsInIns.HieCod)
       return Gbl.Cache.NumDptsInIns.NumDpts;
 
    /***** 3. Slow: number of departments of an institution from database *****/
    Gbl.Cache.NumDptsInIns.HieCod  = InsCod;
    Gbl.Cache.NumDptsInIns.NumDpts = Dpt_DB_GetNumDepartmentsInInstitution (InsCod);
-   Gbl.Cache.NumDptsInIns.Valid = true;
+   Gbl.Cache.NumDptsInIns.Status = Cac_VALID;
    return Gbl.Cache.NumDptsInIns.NumDpts;
   }
 

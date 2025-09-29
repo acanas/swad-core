@@ -257,7 +257,7 @@ static void Fol_PutIconToUpdateWhoToFollow (void)
 
 void Fol_FlushCacheFollow (void)
   {
-   Gbl.Cache.Follow.Valid = false;
+   Gbl.Cache.Follow.Status = Cac_INVALID;
   }
 
 void Fol_GetNumFollow (long UsrCod,
@@ -271,7 +271,7 @@ void Fol_GetNumFollow (long UsrCod,
      }
 
    /***** 2. Fast check: Is number of following already calculated? *****/
-   if (Gbl.Cache.Follow.Valid &&
+   if (Gbl.Cache.Follow.Status == Cac_VALID &&
        UsrCod == Gbl.Cache.Follow.UsrCod)
      {
       *NumFollowing = Gbl.Cache.Follow.NumFollowing;
@@ -283,7 +283,7 @@ void Fol_GetNumFollow (long UsrCod,
    Gbl.Cache.Follow.UsrCod = UsrCod;
    *NumFollowing = Gbl.Cache.Follow.NumFollowing = Fol_DB_GetNumFollowing (UsrCod);
    *NumFollowers = Gbl.Cache.Follow.NumFollowers = Fol_DB_GetNumFollowers (UsrCod);
-   Gbl.Cache.Follow.Valid = true;
+   Gbl.Cache.Follow.Status = Cac_VALID;
   }
 
 /*****************************************************************************/

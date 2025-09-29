@@ -699,7 +699,7 @@ void Cty_GetBasicListOfCountries (void)
 	 Str_Copy (Cty->FullName,row[1],sizeof (Cty->FullName) - 1);
 
 	 /* Reset number of users who claim to belong to country */
-	 Cty->NumUsrsWhoClaimToBelong.Valid = false;
+	 Cty->NumUsrsWhoClaimToBelong.Status = Cac_INVALID;
         }
      }
 
@@ -753,10 +753,10 @@ static void Cty_GetFullListOfCountries (void)
 	 Str_Copy (Cty->WWW     ,row[3],sizeof (Cty->WWW     ) - 1);
 
 	 /* Get number of users who claim to belong to this country */
-	 Cty->NumUsrsWhoClaimToBelong.Valid = false;
+	 Cty->NumUsrsWhoClaimToBelong.Status = Cac_INVALID;
 	 if (sscanf (row[4],"%u",
 		     &(Cty->NumUsrsWhoClaimToBelong.NumUsrs)) == 1)
-	    Cty->NumUsrsWhoClaimToBelong.Valid = true;
+	    Cty->NumUsrsWhoClaimToBelong.Status = Cac_VALID;
         }
      }
 
@@ -864,7 +864,7 @@ Err_SuccessOrError_t Cty_GetCountrDataByCod (struct Hie_Node *Node)
    Node->ShrtName[0] = '\0';
    Node->FullName[0] = '\0';
    Node->WWW[0]      = '\0';
-   Node->NumUsrsWhoClaimToBelong.Valid = false;
+   Node->NumUsrsWhoClaimToBelong.Status = Cac_INVALID;
 
    /***** If another country *****/
    if (Node->HieCod == 0)
@@ -953,7 +953,7 @@ void Cty_GetNamesAndWWWsByCod (struct Hie_Node *Cty,
 
 void Cty_FlushCacheCountryName (void)
   {
-   Gbl.Cache.CountryName.Valid = false;
+   Gbl.Cache.CountryName.Status = Cac_INVALID;
   }
 
 void Cty_GetCountryNameInLanguage (long CtyCod,Lan_Language_t Language,
@@ -967,7 +967,7 @@ void Cty_GetCountryNameInLanguage (long CtyCod,Lan_Language_t Language,
      }
 
    /***** 2. Fast check: If cached... *****/
-   if (Gbl.Cache.CountryName.Valid &&
+   if (Gbl.Cache.CountryName.Status == Cac_VALID &&
        CtyCod   == Gbl.Cache.CountryName.HieCod &&
        Language == Gbl.Cache.CountryName.Language)
      {
@@ -980,7 +980,7 @@ void Cty_GetCountryNameInLanguage (long CtyCod,Lan_Language_t Language,
    Gbl.Cache.CountryName.HieCod   = CtyCod;
    Gbl.Cache.CountryName.Language = Language;
    Str_Copy (Gbl.Cache.CountryName.CtyName,CtyName,Cty_MAX_BYTES_NAME);
-   Gbl.Cache.CountryName.Valid = true;
+   Gbl.Cache.CountryName.Status = Cac_VALID;
   }
 
 /*****************************************************************************/
@@ -1683,7 +1683,7 @@ static void Cty_EditingCountryConstructor (void)
    Cty_EditingCty->ShrtName[0] = '\0';
    Cty_EditingCty->FullName[0] = '\0';
    Cty_EditingCty->WWW[0]      = '\0';
-   Cty_EditingCty->NumUsrsWhoClaimToBelong.Valid = false;
+   Cty_EditingCty->NumUsrsWhoClaimToBelong.Status = Cac_INVALID;
   }
 
 static void Cty_EditingCountryDestructor (void)
@@ -1717,7 +1717,7 @@ static void Cty_FormToGoToMap (struct Hie_Node *Cty)
 
 void Cty_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty (void)
   {
-   Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.Valid = false;
+   Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.Status = Cac_INVALID;
   }
 
 unsigned Cty_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty (void)
@@ -1736,13 +1736,13 @@ unsigned Cty_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty (void)
 unsigned Cty_GetNumUsrsWhoDontClaimToBelongToAnyCty (void)
   {
    /***** 1. Fast check: If cached... *****/
-   if (Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.Valid)
+   if (Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.Status == Cac_VALID)
       return Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs;
 
    /***** 2. Slow: number of users who don't claim to belong to any country
                    from database *****/
    Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs = Cty_DB_GetNumUsrsWhoDontClaimToBelongToAnyCty ();
-   Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.Valid = true;
+   Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.Status = Cac_VALID;
    FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,Hie_CTY,-1L,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs);
    return Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs;
@@ -1754,7 +1754,7 @@ unsigned Cty_GetNumUsrsWhoDontClaimToBelongToAnyCty (void)
 
 void Cty_FlushCacheNumUsrsWhoClaimToBelongToAnotherCty (void)
   {
-   Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.Valid = false;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.Status = Cac_INVALID;
   }
 
 unsigned Cty_GetCachedNumUsrsWhoClaimToBelongToAnotherCty (void)
@@ -1773,13 +1773,13 @@ unsigned Cty_GetCachedNumUsrsWhoClaimToBelongToAnotherCty (void)
 unsigned Cty_GetNumUsrsWhoClaimToBelongToAnotherCty (void)
   {
    /***** 1. Fast check: If cached... *****/
-   if (Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.Valid)
+   if (Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.Status == Cac_VALID)
       return Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs;
 
    /***** 2. Slow: number of users who claim to belong to another country
                    from database *****/
    Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs = Cty_DB_GetNumUsrsWhoClaimToBelongToAnotherCty ();
-   Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.Valid = true;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.Status = Cac_VALID;
    FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,Hie_CTY,0,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs);
    return Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs;

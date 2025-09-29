@@ -659,7 +659,7 @@ Err_SuccessOrError_t Ins_GetInstitDataByCod (struct Hie_Node *Node)
    Node->ShrtName[0]     =
    Node->FullName[0]     =
    Node->WWW[0]          = '\0';
-   Node->NumUsrsWhoClaimToBelong.Valid = false;
+   Node->NumUsrsWhoClaimToBelong.Status = Cac_INVALID;
 
    /***** Check if institution code is correct *****/
    if (Node->HieCod > 0)
@@ -726,10 +726,10 @@ static void Ins_GetInstitDataFromRow (MYSQL_RES *mysql_res,
    Str_Copy (Ins->WWW     ,row[6],sizeof (Ins->WWW     ) - 1);
 
    /***** Get number of users who claim to belong to this institution (row[7]) *****/
-   Ins->NumUsrsWhoClaimToBelong.Valid = false;
+   Ins->NumUsrsWhoClaimToBelong.Status = Cac_INVALID;
    if (GetNumUsrsWhoClaimToBelongToIns)
       if (sscanf (row[7],"%u",&(Ins->NumUsrsWhoClaimToBelong.NumUsrs)) == 1)
-	 Ins->NumUsrsWhoClaimToBelong.Valid = true;
+	 Ins->NumUsrsWhoClaimToBelong.Status = Cac_VALID;
   }
 
 /*****************************************************************************/
@@ -738,7 +738,7 @@ static void Ins_GetInstitDataFromRow (MYSQL_RES *mysql_res,
 
 void Ins_FlushCacheFullNameAndCtyOfInstitution (void)
   {
-   Gbl.Cache.InstitutionShrtNameAndCty.Valid = false;
+   Gbl.Cache.InstitutionShrtNameAndCty.Status = Cac_INVALID;
   }
 
 void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
@@ -756,7 +756,7 @@ void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
      }
 
    /***** 2. Fast check: If cached... *****/
-   if (Gbl.Cache.InstitutionShrtNameAndCty.Valid &&
+   if (Gbl.Cache.InstitutionShrtNameAndCty.Status == Cac_VALID &&
        Ins->HieCod == Gbl.Cache.InstitutionShrtNameAndCty.HieCod)
      {
       Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtNameAndCty.ShrtName,
@@ -795,7 +795,7 @@ void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
 	     sizeof (Ins->ShrtName) - 1);
    Str_Copy (CtyName      ,Gbl.Cache.InstitutionShrtNameAndCty.CtyName ,
 	     Nam_MAX_BYTES_FULL_NAME);
-   Gbl.Cache.InstitutionShrtNameAndCty.Valid = true;
+   Gbl.Cache.InstitutionShrtNameAndCty.Status = Cac_VALID;
   }
 
 /*****************************************************************************/

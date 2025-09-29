@@ -2869,7 +2869,7 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *
 
 void Prj_FlushCacheMyRolesInProject (void)
   {
-   Gbl.Cache.MyRolesInProject.Valid = false;
+   Gbl.Cache.MyRolesInProject.Status = Cac_INVALID;
   }
 
 unsigned Prj_GetMyRolesInProject (long PrjCod)
@@ -2886,7 +2886,7 @@ unsigned Prj_GetMyRolesInProject (long PrjCod)
       return 0;
 
    /***** 2. Fast check: Is my role in project already calculated *****/
-   if (Gbl.Cache.MyRolesInProject.Valid &&
+   if (Gbl.Cache.MyRolesInProject.Status == Cac_VALID &&
        PrjCod == Gbl.Cache.MyRolesInProject.PrjCod)
       return Gbl.Cache.MyRolesInProject.RolesInProject;
 
@@ -2905,7 +2905,7 @@ unsigned Prj_GetMyRolesInProject (long PrjCod)
 	 Gbl.Cache.MyRolesInProject.RolesInProject |= (1 << RoleInPrj);
      }
    DB_FreeMySQLResult (&mysql_res);
-   Gbl.Cache.MyRolesInProject.Valid = true;
+   Gbl.Cache.MyRolesInProject.Status = Cac_VALID;
 
    return Gbl.Cache.MyRolesInProject.RolesInProject;
   }

@@ -27,6 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_cache.h"
 #include "swad_name.h"
 #include "swad_role_type.h"
 #include "swad_string.h"
@@ -98,7 +99,7 @@ struct Hie_Node
    char WWW[WWW_MAX_BYTES_WWW + 1];
    struct
      {
-      bool Valid;
+      Cac_Status_t Status;
       unsigned NumUsrs;
      } NumUsrsWhoClaimToBelong;
   };

@@ -540,7 +540,7 @@ Err_SuccessOrError_t Ctr_GetCenterDataByCod (struct Hie_Node *Node)
    Node->ShrtName[0]     = '\0';
    Node->FullName[0]     = '\0';
    Node->WWW[0]          = '\0';
-   Node->NumUsrsWhoClaimToBelong.Valid = false;
+   Node->NumUsrsWhoClaimToBelong.Status = Cac_INVALID;
 
    /***** Check if center code is correct *****/
    if (Node->HieCod > 0)
@@ -625,10 +625,10 @@ static void Ctr_GetCenterDataFromRow (MYSQL_RES *mysql_res,
    Str_Copy (Ctr->WWW     ,row[7],sizeof (Ctr->WWW     ) - 1);
 
    /* Get number of users who claim to belong to this center (row[8]) */
-   Ctr->NumUsrsWhoClaimToBelong.Valid = false;
+   Ctr->NumUsrsWhoClaimToBelong.Status = Cac_INVALID;
    if (GetNumUsrsWhoClaimToBelongToCtr)
       if (sscanf (row[8],"%u",&(Ctr->NumUsrsWhoClaimToBelong.NumUsrs)) == 1)
-	 Ctr->NumUsrsWhoClaimToBelong.Valid = true;
+	 Ctr->NumUsrsWhoClaimToBelong.Status = Cac_VALID;
   }
 
 /*****************************************************************************/
