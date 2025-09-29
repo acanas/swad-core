@@ -96,6 +96,13 @@ typedef enum
    Brw_DROPZONE_UPLOAD,
   } Brw_UploadType_t;
 
+#define Brw_NUM_ONLY_PUBLIC_FILES 2
+typedef enum
+  {
+   Brw_ANY_FILE,
+   Brw_ONLY_PUBLIC_FILES,
+  } Brw_OnlyPublicFiles_t;
+
 #define Brw_NUM_LICENSES 8
 typedef enum	// Don't change these values! They are stored in database as numbers
   {

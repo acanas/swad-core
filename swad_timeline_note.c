@@ -474,7 +474,8 @@ static void TmlNot_GetLocationInHierarchy (const struct TmlNot_Note *Not,
 	 For_GetThreadForumTypeAndHieCodOfAPost (Not->Cod,Forum);
 
 	 /* Set forum name in recipient's language */
-	 For_SetForumName (Forum,ForumName,Gbl.Prefs.Language,false);
+	 For_SetForumName (Forum,ForumName,
+			   Gbl.Prefs.Language,For_DONT_USE_HTML_ENTITIES);
 	 break;
       default:
 	 break;
@@ -948,7 +949,7 @@ void TmlNot_MarkNoteOneFileAsUnavailable (const char *Path)
    if (TmlNot_NoteType[FileBrowser])
       /***** Get file code *****/
       if ((FilCod = Brw_DB_GetFilCodByPath (Path,
-                                            true)) > 0)	// Only public files
+                                            Brw_ONLY_PUBLIC_FILES)) > 0)	// Only public files
 	 /***** Mark possible note as unavailable *****/
 	 Tml_DB_MarkNoteAsUnavailable (TmlNot_NoteType[FileBrowser],FilCod);
   }

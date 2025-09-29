@@ -502,7 +502,8 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 			Err_ShowErrorAndExit ("Can not create temporary link for compression.");
 
 		     /***** Update number of my views of this file *****/
-		     Brw_UpdateMyFileViews (Brw_DB_GetFilCodByPath (PathFileInTree,false));	// Any file, public or not
+		     Brw_UpdateMyFileViews (Brw_DB_GetFilCodByPath (PathFileInTree,
+								    Brw_ANY_FILE));	// Any file, public or not
 		     break;
 		  default:
 		     break;

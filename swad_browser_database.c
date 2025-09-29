@@ -240,8 +240,14 @@ void Brw_DB_RenameChildrenFilesOrFolders (const char OldPath[PATH_MAX + 1],
 // Path is the full path in tree
 // Example: descarga/folder/file.pdf
 
-long Brw_DB_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
+long Brw_DB_GetFilCodByPath (const char *Path,Brw_OnlyPublicFiles_t OnlyIfPublic)
   {
+   static const char *SubQuery[Brw_NUM_ONLY_PUBLIC_FILES] =
+     {
+      [Brw_ANY_FILE         ] = "",
+      [Brw_ONLY_PUBLIC_FILES] = " AND Public='Y'",
+     };
+
    return DB_QuerySELECTCode ("can not get file code",
 			      "SELECT FilCod"
 			       " FROM brw_files"
@@ -256,8 +262,7 @@ long Brw_DB_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
 			      Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
 			      Brw_GetZoneUsrCodForFileBrowser (),
 			      Path,
-			      OnlyIfPublic ? " AND Public='Y'" :
-					     "");
+			      SubQuery[OnlyIfPublic]);
   }
 
 /*****************************************************************************/

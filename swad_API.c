@@ -3091,8 +3091,8 @@ int swad__getNotifications (struct soap *soap,
 	     NotifyEvent == Ntf_EVENT_FORUM_REPLY)
 	   {
 	    For_GetThreadForumTypeAndHieCodOfAPost (Cod,&ForumSelected);
-            For_SetForumName (&ForumSelected,
-        	              ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
+            For_SetForumName (&ForumSelected,ForumName,
+        	              Gbl.Prefs.Language,For_DONT_USE_HTML_ENTITIES);	// Set forum name in recipient's language
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
                      Txt_Forum,ForumName);
            }
@@ -4820,9 +4820,9 @@ int swad__getDirectoryTree (struct soap *soap,
 	                          "Can not create temporary XML file");
 
    /* Get directory tree into XML file */
-   XML_WriteStartFile (XML,"tree",false);
+   XML_WriteStartFile (XML,"tree");
    if (Brw_CheckIfFileOrFolderIsHidden (Brw_IS_FOLDER,
-                                                 Gbl.FileBrowser.FilFolLnk.Full) == HidVis_VISIBLE)
+                                        Gbl.FileBrowser.FilFolLnk.Full) == HidVis_VISIBLE)
       API_ListDir (XML,1,
                    Gbl.FileBrowser.Path.RootFolder,
                    Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);

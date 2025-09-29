@@ -51,6 +51,13 @@ typedef enum
   } For_ForumSet_t;	// Which set of forums I want to see: all my forums or only the forums of current institution/degree/course.
 #define For_DEFAULT_FORUM_SET For_ONLY_CURRENT_FORUMS
 
+#define For_NUM_USE_HTML_ENTITIES 2
+typedef enum
+  {
+   For_DONT_USE_HTML_ENTITIES,
+   For_USE_HTML_ENTITIES,
+  } For_UseHTMLEntities_t;
+
 #define For_NUM_TYPES_FORUM 13
 typedef enum
   {
@@ -152,7 +159,7 @@ void For_ShowForumList (struct For_Forums *Forums);
 
 void For_SetForumName (const struct For_Forum *Forum,
                        char ForumName[For_MAX_BYTES_FORUM_NAME + 1],
-                       Lan_Language_t Language,bool UseHTMLEntities);
+                       Lan_Language_t Language,For_UseHTMLEntities_t UseHTMLEntities);
 
 void For_ShowForumTheads (void);
 void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,

@@ -59,7 +59,7 @@ struct XMLElement
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void XML_WriteStartFile (FILE *FileTgt,const char *Type,bool Credits);
+void XML_WriteStartFile (FILE *FileTgt,const char *Type);
 void XML_WriteEndFile (FILE *FileTgt,const char *Type);
 
 void XML_GetTree (const char *XMLBuffer,struct XMLElement **XMLRootElem);

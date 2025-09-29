@@ -60,7 +60,7 @@ static void XML_SkipSpaces (void);
 /****** Write the start of an XML file with author and date of creation ******/
 /*****************************************************************************/
 
-void XML_WriteStartFile (FILE *FileTgt,const char *Type,bool Credits)
+void XML_WriteStartFile (FILE *FileTgt,const char *Type)
   {
    extern const char *Txt_NEW_LINE;
 
@@ -68,13 +68,6 @@ void XML_WriteStartFile (FILE *FileTgt,const char *Type,bool Credits)
                     "<%s>%s",
             Txt_NEW_LINE,
             Type,Txt_NEW_LINE);
-   if (Credits)
-      fprintf (FileTgt,"<generator>%s</generator>%s"
-                       "<author>%s</author>%s"
-                       "<date>%ld</date>%s",
-               Log_PLATFORM_VERSION,Txt_NEW_LINE,
-               Gbl.Usrs.Me.UsrDat.FullName,Txt_NEW_LINE,
-               time (NULL),Txt_NEW_LINE);
   }
 
 /*****************************************************************************/

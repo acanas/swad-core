@@ -46,7 +46,7 @@ void Brw_DB_RenameOneFolder (const char OldPath[PATH_MAX + 1],
                              const char NewPath[PATH_MAX + 1]);
 void Brw_DB_RenameChildrenFilesOrFolders (const char OldPath[PATH_MAX + 1],
                                           const char NewPath[PATH_MAX + 1]);
-long Brw_DB_GetFilCodByPath (const char *Path,bool OnlyIfPublic);
+long Brw_DB_GetFilCodByPath (const char *Path,Brw_OnlyPublicFiles_t OnlyIfPublic);
 Exi_Exist_t Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,const char *Path);
 Exi_Exist_t Brw_DB_GetFileMetadataByCod (MYSQL_RES **mysql_res,long FilCod);
 void Brw_DB_GetPathByCod (long FilCod,char *Title,size_t TitleSize);

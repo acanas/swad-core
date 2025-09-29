@@ -663,7 +663,8 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	    /* Get forum type of the post */
 	    For_ResetForums (&Forums);
 	    For_GetThreadForumTypeAndHieCodOfAPost (Cod,&Forums.Forum);
-	    For_SetForumName (&Forums.Forum,ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
+	    For_SetForumName (&Forums.Forum,ForumName,
+			      Gbl.Prefs.Language,For_DONT_USE_HTML_ENTITIES);	// Set forum name in recipient's language
 	    HTM_Txt (Txt_Forum); HTM_Colon (); HTM_SP (); HTM_Txt (ForumName);
 	    switch (PutForm)
 	      {
@@ -1057,7 +1058,7 @@ void Ntf_MarkNotifOneFileAsRemoved (const char *Path)
    if (NotifyEvent[FileBrowser])
      {
       /***** Get file code *****/
-      FilCod = Brw_DB_GetFilCodByPath (Path,false);	// Any file, public or not
+      FilCod = Brw_DB_GetFilCodByPath (Path,Brw_ANY_FILE);	// Any file, public or not
       if (FilCod > 0)
 	 /***** Set notification as removed *****/
 	 Ntf_DB_MarkNotifAsRemoved (NotifyEvent[FileBrowser],FilCod);
@@ -1457,8 +1458,8 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
 		  break;
 	       case Ntf_EVENT_FORUM_POST_COURSE:
 	       case Ntf_EVENT_FORUM_REPLY:
-		  For_SetForumName (&ForumSelected,
-				    ForumName,ToUsrLanguage,false);	// Set forum name in recipient's language
+		  For_SetForumName (&ForumSelected,ForumName,
+				    ToUsrLanguage,For_DONT_USE_HTML_ENTITIES);	// Set forum name in recipient's language
 		  fprintf (FileMail,"%s: %s\n",
 			   Txt_Forum_NO_HTML[ToUsrLanguage],
 			   ForumName);

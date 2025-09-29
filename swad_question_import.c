@@ -182,7 +182,7 @@ void QstImp_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
       Err_ShowErrorAndExit ("Can not open target file.");
 
    /***** Begin XML file *****/
-   XML_WriteStartFile (FileXML,"test",false);
+   XML_WriteStartFile (FileXML,"test");
    fprintf (FileXML,"%s",Txt_NEW_LINE);
 
    /***** Write rows *****/

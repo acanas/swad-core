@@ -67,6 +67,12 @@ struct MchRes_ICanView
    Usr_Can_t Score;
   };
 
+typedef enum
+  {
+   MchRes_DONT_LIST_GAMES_TO_SELECT,
+   MchRes_LIST_GAMES_TO_SELECT,
+  } MchRes_ListGamesToSelect_t;
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -82,7 +88,7 @@ static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games);
 static void MchRes_ListAllMchResultsInMch (struct Gam_Games *Games,long MchCod);
 
 static void MchRes_ShowResultsBegin (struct Gam_Games *Games,
-                                     const char *Title,bool ListGamesToSelect);
+                                     const char *Title,MchRes_ListGamesToSelect_t ListGamesToSelect);
 static void MchRes_ShowResultsEnd (void);
 
 static void MchRes_ListGamesToSelect (struct Gam_Games *Games);
@@ -122,7 +128,7 @@ void MchRes_ShowMyMchResultsInCrs (void)
    Gam_GetListSelectedGamCods (&Games);
 
    /***** List my matches results in the current course *****/
-   MchRes_ShowResultsBegin (&Games,Txt_Results,true);	// List games to select
+   MchRes_ShowResultsBegin (&Games,Txt_Results,MchRes_LIST_GAMES_TO_SELECT);
       MchRes_ListMyMchResultsInCrs (&Games);
    MchRes_ShowResultsEnd ();
 
@@ -172,7 +178,7 @@ void MchRes_ShowMyMchResultsInGam (void)
    /***** List my matches results in game *****/
    if (asprintf (&Title,Txt_Results_of_game_X,Games.Game.Title) < 0)
       Err_NotEnoughMemoryExit ();
-   MchRes_ShowResultsBegin (&Games,Title,false);	// Do not list games to select
+   MchRes_ShowResultsBegin (&Games,Title,MchRes_DONT_LIST_GAMES_TO_SELECT);
    free (Title);
       MchRes_ListMyMchResultsInGam (&Games);
    MchRes_ShowResultsEnd ();
@@ -222,7 +228,7 @@ void MchRes_ShowMyMchResultsInMch (void)
    /***** List my matches results in match *****/
    if (asprintf (&Title,Txt_Results_of_match_X,Match.Title) < 0)
       Err_NotEnoughMemoryExit ();
-   MchRes_ShowResultsBegin (&Games,Title,false);	// Do not list games to select
+   MchRes_ShowResultsBegin (&Games,Title,MchRes_DONT_LIST_GAMES_TO_SELECT);
    free (Title);
       MchRes_ListMyMchResultsInMch (&Games,Match.MchCod);
    MchRes_ShowResultsEnd ();
@@ -275,8 +281,7 @@ static void MchRes_ShowAllMchResultsInSelectedGames (void *Games)
 
    /***** List the matches results of the selected users *****/
    MchRes_ShowResultsBegin ((struct Gam_Games *) Games,
-                            Txt_Results,
-                            true);	// List games to select
+                            Txt_Results,MchRes_LIST_GAMES_TO_SELECT);
       MchRes_ListAllMchResultsInSelectedGames ((struct Gam_Games *) Games);
    MchRes_ShowResultsEnd ();
 
@@ -366,7 +371,7 @@ void MchRes_ShowAllMchResultsInGam (void)
    /***** List matches results in game *****/
    if (asprintf (&Title,Txt_Results_of_game_X,Games.Game.Title) < 0)
       Err_NotEnoughMemoryExit ();
-   MchRes_ShowResultsBegin (&Games,Title,false);	// Do not list games to select
+   MchRes_ShowResultsBegin (&Games,Title,MchRes_DONT_LIST_GAMES_TO_SELECT);
    free (Title);
       MchRes_ListAllMchResultsInGam (&Games);
    MchRes_ShowResultsEnd ();
@@ -438,7 +443,7 @@ void MchRes_ShowAllMchResultsInMch (void)
    /***** List matches results in match *****/
    if (asprintf (&Title,Txt_Results_of_match_X,Match.Title) < 0)
       Err_NotEnoughMemoryExit ();
-   MchRes_ShowResultsBegin (&Games,Title,false);	// Do not list games to select
+   MchRes_ShowResultsBegin (&Games,Title,MchRes_DONT_LIST_GAMES_TO_SELECT);
    free (Title);
       MchRes_ListAllMchResultsInMch (&Games,Match.MchCod);
    MchRes_ShowResultsEnd ();
@@ -484,7 +489,8 @@ static void MchRes_ListAllMchResultsInMch (struct Gam_Games *Games,long MchCod)
 /*****************************************************************************/
 
 static void MchRes_ShowResultsBegin (struct Gam_Games *Games,
-                                     const char *Title,bool ListGamesToSelect)
+                                     const char *Title,
+                                     MchRes_ListGamesToSelect_t ListGamesToSelect)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
 
@@ -494,7 +500,7 @@ static void MchRes_ShowResultsBegin (struct Gam_Games *Games,
 		    Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
 
 	 /***** List games to select *****/
-	 if (ListGamesToSelect)
+	 if (ListGamesToSelect == MchRes_LIST_GAMES_TO_SELECT)
 	    MchRes_ListGamesToSelect (Games);
 
 	 /***** Begin match results table *****/

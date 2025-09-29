@@ -1837,7 +1837,8 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 	                                                "class=\"BT_LINK FORM_IN_%s\"",
 	                          The_GetSuffix ());
 
-	    For_SetForumName (Forum,ForumName,Gbl.Prefs.Language,true);
+	    For_SetForumName (Forum,ForumName,
+			      Gbl.Prefs.Language,For_USE_HTML_ENTITIES);
 	    switch (Forum->Type)
 	      {
 	       case For_FORUM_GLOBAL_USRS:
@@ -1892,7 +1893,7 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 
 void For_SetForumName (const struct For_Forum *Forum,
                        char ForumName[For_MAX_BYTES_FORUM_NAME + 1],
-                       Lan_Language_t Language,bool UseHTMLEntities)
+                       Lan_Language_t Language,For_UseHTMLEntities_t UseHTMLEntities)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_General;
@@ -1900,30 +1901,34 @@ void For_SetForumName (const struct For_Forum *Forum,
    extern const char *Txt_only_teachers;
    extern const char *Txt_only_teachers_NO_HTML[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Unknown_FORUM;
+   const char *TxtGeneral[For_NUM_USE_HTML_ENTITIES] =
+     {
+      [For_DONT_USE_HTML_ENTITIES] = Txt_General_NO_HTML[Language],
+      [For_USE_HTML_ENTITIES     ] = Txt_General,
+     };
+   const char *TxtOnlyTeachers[For_NUM_USE_HTML_ENTITIES] =
+     {
+      [For_DONT_USE_HTML_ENTITIES] = Txt_only_teachers_NO_HTML[Language],
+      [For_USE_HTML_ENTITIES     ] = Txt_only_teachers,
+     };
+
    struct Hie_Node Hie[Hie_NUM_LEVELS];
 
    switch (Forum->Type)
      {
       case For_FORUM_GLOBAL_USRS:
-         Str_Copy (ForumName,UseHTMLEntities ? Txt_General :
-                                               Txt_General_NO_HTML[Language],
-                   For_MAX_BYTES_FORUM_NAME);
+         Str_Copy (ForumName,TxtGeneral[UseHTMLEntities],For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_GLOBAL_TCHS:
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
-                   UseHTMLEntities ? Txt_General :
-                                     Txt_General_NO_HTML[Language],
-                   UseHTMLEntities ? Txt_only_teachers :
-                                     Txt_only_teachers_NO_HTML[Language]);
+                   TxtGeneral[UseHTMLEntities],TxtOnlyTeachers[UseHTMLEntities]);
          break;
       case For_FORUM__SWAD__USRS:
          Str_Copy (ForumName,Cfg_PLATFORM_SHORT_NAME,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM__SWAD__TCHS:
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
-                   Cfg_PLATFORM_SHORT_NAME,
-                   UseHTMLEntities ? Txt_only_teachers :
-                                     Txt_only_teachers_NO_HTML[Language]);
+                   Cfg_PLATFORM_SHORT_NAME,TxtOnlyTeachers[UseHTMLEntities]);
          break;
       case For_FORUM_INSTIT_USRS:
 	 Hie[Hie_INS].HieCod = Forum->HieCod;
@@ -1936,9 +1941,7 @@ void For_SetForumName (const struct For_Forum *Forum,
 	 if (Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]) == Err_ERROR)
 	    Err_WrongInstitExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
-		   Hie[Hie_INS].ShrtName,
-                   UseHTMLEntities ? Txt_only_teachers :
-                                     Txt_only_teachers_NO_HTML[Language]);
+		   Hie[Hie_INS].ShrtName,TxtOnlyTeachers[UseHTMLEntities]);
          break;
       case For_FORUM_CENTER_USRS:
 	 Hie[Hie_CTR].HieCod = Forum->HieCod;
@@ -1951,9 +1954,7 @@ void For_SetForumName (const struct For_Forum *Forum,
 	 if (Hie_GetDataByCod[Hie_CTR] (&Hie[Hie_CTR]) == Err_ERROR)
 	    Err_WrongCenterExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
-		   Hie[Hie_CTR].ShrtName,
-                   UseHTMLEntities ? Txt_only_teachers :
-                                     Txt_only_teachers_NO_HTML[Language]);
+		   Hie[Hie_CTR].ShrtName,TxtOnlyTeachers[UseHTMLEntities]);
          break;
       case For_FORUM_DEGREE_USRS:
 	 Hie[Hie_DEG].HieCod = Forum->HieCod;
@@ -1966,9 +1967,7 @@ void For_SetForumName (const struct For_Forum *Forum,
 	 if (Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]) == Err_ERROR)
 	    Err_WrongDegreeExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
-		   Hie[Hie_DEG].ShrtName,
-                   UseHTMLEntities ? Txt_only_teachers :
-                                     Txt_only_teachers_NO_HTML[Language]);
+		   Hie[Hie_DEG].ShrtName,TxtOnlyTeachers[UseHTMLEntities]);
          break;
       case For_FORUM_COURSE_USRS:
 	 Hie[Hie_CRS].HieCod = Forum->HieCod;
@@ -1981,9 +1980,7 @@ void For_SetForumName (const struct For_Forum *Forum,
 	 if (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]) == Err_ERROR)
 	    Err_WrongCourseExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
-		   Hie[Hie_CRS].ShrtName,
-                   UseHTMLEntities ? Txt_only_teachers :
-                                     Txt_only_teachers_NO_HTML[Language]);
+		   Hie[Hie_CRS].ShrtName,TxtOnlyTeachers[UseHTMLEntities]);
          break;
       default:
          Str_Copy (ForumName,Txt_Unknown_FORUM,For_MAX_BYTES_FORUM_NAME);
@@ -2103,8 +2100,8 @@ void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,
    struct Pag_Pagination PaginationThrs;
 
    /***** Set forum name *****/
-   For_SetForumName (&Forums->Forum,
-	             ForumName,Gbl.Prefs.Language,true);
+   For_SetForumName (&Forums->Forum,ForumName,
+		     Gbl.Prefs.Language,For_USE_HTML_ENTITIES);
 
    /***** Get threads of a forum from database *****/
    NumThrs = For_DB_GetForumThreads (&mysql_res,Forums);
