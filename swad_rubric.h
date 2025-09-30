@@ -79,6 +79,10 @@ void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
 
 void Rub_ReceiveRubric (void);
 
+void Rub_PushRubCod (struct Rub_Node **TOS,long RubCod);
+void Rub_PopRubCod (struct Rub_Node **TOS);
+Exi_Exist_t Rub_FindRubCodInStack (const struct Rub_Node *TOS,long RubCod);
+
 void Rub_ShowRubricsToFill (Rsc_Type_t RscType,long RscCod,Usr_Can_t ICanFill,
 			    Act_Action_t NextAction,
                             void (*FuncPars) (void *Args),void *Args,

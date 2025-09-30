@@ -762,8 +762,8 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 /*****************************************************************************/
 /****** Build a search query by splitting a string to search into words ******/
 /*****************************************************************************/
-// Returns true if a valid search query is built
-// Returns false when no valid search query
+// Returns Err_SUCCESS if a valid search query is built
+// Returns Err_ERROR when no valid search query
 
 Err_SuccessOrError_t Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
 					   const struct Sch_Search *Search,

@@ -49,10 +49,6 @@ void RubCri_ListCriteriaToFill (Rsc_Type_t RscType,long RscCod,Usr_Can_t ICanFil
                                 void (*FuncPars) (void *Args),void *Args,
                                 long RubCod);
 
-void Rub_PushRubCod (struct Rub_Node **TOS,long RubCod);
-void Rub_PopRubCod (struct Rub_Node **TOS);
-Exi_Exist_t Rub_FindRubCodInStack (const struct Rub_Node *TOS,long RubCod);
-
 double RubCri_GetParScore (void);
 
 void RubCri_GetCriterionDataFromRow (MYSQL_RES *mysql_res,

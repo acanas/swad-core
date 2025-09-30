@@ -177,8 +177,8 @@ void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics)
 	    /***** Table head *****/
 	    HTM_TR_Begin (NULL);
 
-               HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");	// Column for contextual icons
-	       HTM_TH_Span (Txt_Rubric,HTM_HEAD_LEFT,1,2,NULL);
+               HTM_TH_Span (NULL	,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");	// Column for contextual icons
+	       HTM_TH_Span (Txt_Rubric	,HTM_HEAD_LEFT	,1,2,NULL);
 
 	       // HTM_TH (Txt_Criteria,HTM_HEAD_RIGHT);
 
@@ -1006,7 +1006,7 @@ static void Rub_UpdateRubric (struct Rub_Rubric *Rubric)
 /*****************************************************************************/
 /********** Recursive function to compute the score of a criterion ***********/
 /*****************************************************************************/
-// Return true if rubric tree is recursive
+// Return Err_ERROR if rubric tree is recursive
 /*                 Tree                                 Stack
                   _______                               ______
                  | Rub 1 |      TOS (Top Of Stack)____\|___5__|
@@ -1083,6 +1083,60 @@ static Err_SuccessOrError_t Rub_CheckIfRecursiveTree (long RubCod,struct Rub_Nod
      }
 
    return RecursiveTree;
+  }
+
+
+/*****************************************************************************/
+/********************** Push/pop rubric code in stack ************************/
+/*****************************************************************************/
+
+void Rub_PushRubCod (struct Rub_Node **TOS,long RubCod)
+  {
+   struct Rub_Node *Node;
+
+   /***** Save current top of stack *****/
+   Node = *TOS;
+
+   /***** Create top of stack node *****/
+   if ((*TOS = malloc (sizeof (struct Rub_Node))) == NULL)
+      Err_NotEnoughMemoryExit ();
+   (*TOS)->RubCod = RubCod;
+   (*TOS)->Prev = Node;		// Link to previous top of stack
+  }
+
+void Rub_PopRubCod (struct Rub_Node **TOS)
+  {
+   struct Rub_Node *Node;
+
+   if (*TOS)
+     {
+      /***** Save current top of stack *****/
+      Node = (*TOS)->Prev;
+
+      /***** Free current top of stack node *****/
+      free (*TOS);
+
+      /***** Assign new top of stack *****/
+      *TOS = Node;
+     }
+  }
+
+/*****************************************************************************/
+/************************ Find rubric code in stack **************************/
+/*****************************************************************************/
+// Return Exi_EXISTS if found
+
+Exi_Exist_t Rub_FindRubCodInStack (const struct Rub_Node *TOS,long RubCod)
+  {
+   while (TOS)
+     {
+      if (TOS->RubCod == RubCod)
+	 return Exi_EXISTS;
+
+      TOS = TOS->Prev;
+     }
+
+   return Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

@@ -108,9 +108,9 @@ static void RubCri_WriteTotalLabel (unsigned ColSpan);
 static void RubCri_WriteTotalEmpty (void);
 static void RubCri_WriteTotalValue (double Total);
 
-static bool RubCri_ComputeRubricScore (Rsc_Type_t RscType,long RscCod,long UsrCod,
-                                       struct Rub_Node **TOS,long RubCod,
-                                       double *RubricScore);
+static Err_SuccessOrError_t RubCri_ComputeRubricScore (Rsc_Type_t RscType,long RscCod,long UsrCod,
+						       struct Rub_Node **TOS,long RubCod,
+						       double *RubricScore);
 
 static void RubCri_PutTableHeadingForSeeing (void);
 static void RubCri_PutTableHeadingForEdition (void);
@@ -882,15 +882,19 @@ static void RubCri_ListOneOrMoreCriteriaToFill (Rsc_Type_t RscType,long RscCod,U
 		    }
 		  break;
 	       case Rsc_RUBRIC:
-		  if (RubCri_ComputeRubricScore (RscType,RscCod,-1L,
-						 TOS,Criterion.Link.Cod,
-						 &CriterionScore))
-		     Err_RecursiveRubric ();
-		  else
+		  switch (RubCri_ComputeRubricScore (RscType,RscCod,-1L,
+						     TOS,Criterion.Link.Cod,
+						     &CriterionScore))
 		    {
-		     HTM_SPAN_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-			HTM_Double2Decimals (CriterionScore);
-		     HTM_SPAN_End ();
+		     case Err_SUCCESS:
+			HTM_SPAN_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
+			   HTM_Double2Decimals (CriterionScore);
+			HTM_SPAN_End ();
+			break;
+		     case Err_ERROR:
+		     default:
+			Err_RecursiveRubric ();
+			break;
 		    }
 		  break;
 	       default:
@@ -1046,13 +1050,13 @@ static void RubCri_WriteTotalValue (double Total)
 /*****************************************************************************/
 /********** Recursive function to compute the score of a criterion ***********/
 /*****************************************************************************/
-// Return true if rubric tree is recursive
+// Return Err_ERROR if rubric tree is recursive
 
-static bool RubCri_ComputeRubricScore (Rsc_Type_t RscType,long RscCod,long UsrCod,
-                                       struct Rub_Node **TOS,long RubCod,
-                                       double *RubricScore)
+static Err_SuccessOrError_t RubCri_ComputeRubricScore (Rsc_Type_t RscType,long RscCod,long UsrCod,
+						       struct Rub_Node **TOS,long RubCod,
+						       double *RubricScore)
   {
-   bool RecursiveTree;
+   Err_SuccessOrError_t RecursiveTree;
    MYSQL_RES *mysql_res;
    unsigned NumCriteria;
    unsigned NumCriterion;
@@ -1063,9 +1067,10 @@ static bool RubCri_ComputeRubricScore (Rsc_Type_t RscType,long RscCod,long UsrCo
    *RubricScore = 0.0;
 
    /***** Check that rubric is not yet in the stack *****/
-   RecursiveTree = Rub_FindRubCodInStack (*TOS,RubCod) == Exi_EXISTS;
+   RecursiveTree = (Rub_FindRubCodInStack (*TOS,RubCod) == Exi_EXISTS) ? Err_ERROR :
+									 Err_SUCCESS;
 
-   if (!RecursiveTree)
+   if (RecursiveTree == Err_SUCCESS)
      {
       /***** Push rubric code in stack *****/
       Rub_PushRubCod (TOS,RubCod);
@@ -1089,8 +1094,8 @@ static bool RubCri_ComputeRubricScore (Rsc_Type_t RscType,long RscCod,long UsrCo
 	    case Rsc_RUBRIC:
 	       if (RubCri_ComputeRubricScore (RscType,RscCod,UsrCod,
 					      TOS,Criterion.Link.Cod,
-					      &CriterionScore))
-		  RecursiveTree = true;
+					      &CriterionScore) == Err_ERROR)
+		  RecursiveTree = Err_ERROR;
 	       break;
 	    default:
 	       break;
@@ -1108,59 +1113,6 @@ static bool RubCri_ComputeRubricScore (Rsc_Type_t RscType,long RscCod,long UsrCo
      }
 
    return RecursiveTree;
-  }
-
-/*****************************************************************************/
-/********************** Push/pop rubric code in stack ************************/
-/*****************************************************************************/
-
-void Rub_PushRubCod (struct Rub_Node **TOS,long RubCod)
-  {
-   struct Rub_Node *Node;
-
-   /***** Save current top of stack *****/
-   Node = *TOS;
-
-   /***** Create top of stack node *****/
-   if ((*TOS = malloc (sizeof (struct Rub_Node))) == NULL)
-      Err_NotEnoughMemoryExit ();
-   (*TOS)->RubCod = RubCod;
-   (*TOS)->Prev = Node;		// Link to previous top of stack
-  }
-
-void Rub_PopRubCod (struct Rub_Node **TOS)
-  {
-   struct Rub_Node *Node;
-
-   if (*TOS)
-     {
-      /***** Save current top of stack *****/
-      Node = (*TOS)->Prev;
-
-      /***** Free current top of stack node *****/
-      free (*TOS);
-
-      /***** Assign new top of stack *****/
-      *TOS = Node;
-     }
-  }
-
-/*****************************************************************************/
-/************************ Find rubric code in stack **************************/
-/*****************************************************************************/
-// Return Exi_EXISTS if found
-
-Exi_Exist_t Rub_FindRubCodInStack (const struct Rub_Node *TOS,long RubCod)
-  {
-   while (TOS)
-     {
-      if (TOS->RubCod == RubCod)
-	 return Exi_EXISTS;
-
-      TOS = TOS->Prev;
-     }
-
-   return Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
