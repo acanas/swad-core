@@ -78,7 +78,7 @@ static void Ins_ListInstitutions (void);
 static void Ins_PutIconsListingInstitutions (__attribute__((unused)) void *Args);
 static void Ins_PutIconToEditInstitutions (void);
 static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIns);
-static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
+static void Ins_PutHeadInstitutionsForSeeing (Hie_OrderSelectable_t OrderSelectable);
 
 static void Ins_EditInstitutionsInternal (void);
 static void Ins_PutIconsEditingInstitutions (__attribute__((unused)) void *Args);
@@ -316,7 +316,7 @@ static void Ins_ListInstitutions (void)
 	 HTM_TABLE_Begin ("TBL_SCROLL");
 
 	    /***** Heading *****/
-	    Ins_PutHeadInstitutionsForSeeing (true);	// Order selectable
+	    Ins_PutHeadInstitutionsForSeeing (Hie_ORDER_SELECTABLE);
 
 	    /***** Write all institutions and their nuber of users *****/
 	    for (NumIns = 0, The_ResetRowColor ();
@@ -331,6 +331,7 @@ static void Ins_ListInstitutions (void)
       else	// No insrtitutions created in the current country
 	 Ale_ShowAlert (Ale_INFO,Txt_No_institutions);
 
+   /***** End box *****/
    Box_BoxEnd ();
   }
 
@@ -443,7 +444,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIn
 /**************** Write header with fields of an institution *****************/
 /*****************************************************************************/
 
-static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
+static void Ins_PutHeadInstitutionsForSeeing (Hie_OrderSelectable_t OrderSelectable)
   {
    extern const char *Txt_INSTITUTIONS_HELP_ORDER[2];
    extern const char *Txt_INSTITUTIONS_ORDER[2];
@@ -466,7 +467,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	   Order++)
 	{
          HTM_TH_Begin (Align[Order]);
-	    if (OrderSelectable)
+	    if (OrderSelectable == Hie_ORDER_SELECTABLE)
 	      {
 	       Frm_BeginForm (ActSeeIns);
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
@@ -476,7 +477,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 			HTM_U_Begin ();
 	      }
 	    HTM_Txt (Txt_INSTITUTIONS_ORDER[Order]);
-	    if (OrderSelectable)
+	    if (OrderSelectable == Hie_ORDER_SELECTABLE)
 	      {
 		     if (Order == Gbl.Hierarchy.List[Hie_CTY].SelectedOrder)
 			HTM_U_End ();
@@ -1550,7 +1551,7 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
       free (Title);
 
       /***** Write heading *****/
-      Ins_PutHeadInstitutionsForSeeing (false);	// Order not selectable
+      Ins_PutHeadInstitutionsForSeeing (Hie_ORDER_NOT_SELECTABLE);
 
       /***** List the institutions (one row per institution) *****/
       for (NumIns  = 1, The_ResetRowColor ();

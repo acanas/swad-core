@@ -911,12 +911,12 @@ static void Crs_PutHeadCoursesForSeeing (void)
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH_Span (NULL                               ,HTM_HEAD_CENTER,1,1,"BT");
-      HTM_TH      (Txt_Year_OF_A_DEGREE               ,HTM_HEAD_CENTER);
-      HTM_TH      (Txt_Institutional_BR_code          ,HTM_HEAD_CENTER);
-      HTM_TH      (Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]         ,HTM_HEAD_LEFT  );
-      HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],HTM_HEAD_RIGHT );
-      HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],HTM_HEAD_RIGHT );
+      HTM_TH_Span (NULL					,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH      (Txt_Year_OF_A_DEGREE			,HTM_HEAD_CENTER);
+      HTM_TH      (Txt_Institutional_BR_code		,HTM_HEAD_CENTER);
+      HTM_TH      (Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]	,HTM_HEAD_LEFT  );
+      HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]	,HTM_HEAD_RIGHT );
+      HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]	,HTM_HEAD_RIGHT );
       HTM_TH_Empty (1);
 
    HTM_TR_End ();
@@ -939,19 +939,19 @@ static void Crs_PutHeadCoursesForEdition (void)
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH_Span (NULL                               ,HTM_HEAD_CENTER,1,1,"BT");
-      HTM_TH      (Txt_Code                           ,HTM_HEAD_RIGHT );
-      HTM_TH      (Txt_Year_OF_A_DEGREE               ,HTM_HEAD_CENTER);
+      HTM_TH_Span (NULL					,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH      (Txt_Code				,HTM_HEAD_RIGHT );
+      HTM_TH      (Txt_Year_OF_A_DEGREE			,HTM_HEAD_CENTER);
       HTM_TH_Begin (HTM_HEAD_LEFT);
 	 HTM_Txt (Txt_Institutional_code);
  	 HTM_NBSP ();
 	 HTM_ParTxtPar (Txt_optional);
       HTM_TH_End ();
-      HTM_TH      (Txt_Short_name_of_the_course       ,HTM_HEAD_LEFT  );
-      HTM_TH      (Txt_Full_name_of_the_course        ,HTM_HEAD_LEFT  );
-      HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],HTM_HEAD_RIGHT );
-      HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],HTM_HEAD_RIGHT );
-      HTM_TH      (Txt_Requester                      ,HTM_HEAD_LEFT  );
+      HTM_TH      (Txt_Short_name_of_the_course		,HTM_HEAD_LEFT  );
+      HTM_TH      (Txt_Full_name_of_the_course		,HTM_HEAD_LEFT  );
+      HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]	,HTM_HEAD_RIGHT );
+      HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]	,HTM_HEAD_RIGHT );
+      HTM_TH      (Txt_Requester			,HTM_HEAD_LEFT  );
       HTM_TH_Empty (1);
 
    HTM_TR_End ();

@@ -67,7 +67,7 @@ long Cty_CurrentCtyCod = -1L;	// Used as parameter in contextual links
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable);
+static void Cty_PutHeadCountriesForSeeing (Hie_OrderSelectable_t OrderSelectable);
 static void Cty_ListOneCountryForSeeing (struct Hie_Node *Cty,unsigned NumCty);
 
 static void Cty_PutIconsListingCountries (__attribute__((unused)) void *Args);
@@ -230,7 +230,7 @@ void Cty_ListCountries2 (void)
       HTM_TABLE_Begin ("TBL_SCROLL");
 
 	 /***** Heading *****/
-	 Cty_PutHeadCountriesForSeeing (true);	// Order selectable
+	 Cty_PutHeadCountriesForSeeing (Hie_ORDER_SELECTABLE);
 
 	 /***** Write all countries and their number of users and institutions *****/
 	 for (NumCty = 0;
@@ -304,7 +304,7 @@ void Cty_ListCountries2 (void)
 /******************* Write header with fields of a country *******************/
 /*****************************************************************************/
 
-static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
+static void Cty_PutHeadCountriesForSeeing (Hie_OrderSelectable_t OrderSelectable)
   {
    extern const char *Txt_COUNTRIES_HELP_ORDER[2];
    extern const char *Txt_COUNTRIES_ORDER[2];
@@ -327,7 +327,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 	   Order++)
 	{
          HTM_TH_Begin (Align[Order]);
-	    if (OrderSelectable)
+	    if (OrderSelectable == Hie_ORDER_SELECTABLE)
 	      {
 	       Frm_BeginForm (ActSeeCty);
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
@@ -337,7 +337,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 			HTM_U_Begin ();
 	      }
 	    HTM_Txt (Txt_COUNTRIES_ORDER[Order]);
-	    if (OrderSelectable)
+	    if (OrderSelectable == Hie_ORDER_SELECTABLE)
 	      {
 		     if (Order == Gbl.Hierarchy.List[Hie_SYS].SelectedOrder)
 			HTM_U_End ();
@@ -1639,7 +1639,7 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
       free (Title);
 
 	 /***** Write heading *****/
-	 Cty_PutHeadCountriesForSeeing (false);	// Order not selectable
+	 Cty_PutHeadCountriesForSeeing (Hie_ORDER_NOT_SELECTABLE);
 
 	 /***** List the countries (one row per country) *****/
 	 for (NumCty  = 1, The_ResetRowColor ();

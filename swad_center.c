@@ -94,7 +94,7 @@ static Usr_Can_t Ctr_CheckIfICanEditACenter (struct Hie_Node *Ctr);
 static void Ctr_ShowAlertAndButtonToGoToCtr (void);
 
 static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places);
-static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable);
+static void Ctr_PutHeadCentersForSeeing (Hie_OrderSelectable_t OrderSelectable);
 static void Ctr_PutHeadCentersForEdition (void);
 static void Ctr_ReceiveRequestOrCreateCtr (Hie_Status_t Status);
 
@@ -263,7 +263,7 @@ static void Ctr_ListCenters (void)
 	 HTM_TABLE_Begin ("TBL_SCROLL");
 
 	    /***** Heading *****/
-	    Ctr_PutHeadCentersForSeeing (true);	// Order selectable
+	    Ctr_PutHeadCentersForSeeing (Hie_ORDER_SELECTABLE);
 
 	    /***** Write all centers and their nuber of teachers *****/
 	    for (NumCtr = 0;
@@ -1321,7 +1321,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 /******************** Write header with fields of a degree *******************/
 /*****************************************************************************/
 
-static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
+static void Ctr_PutHeadCentersForSeeing (Hie_OrderSelectable_t OrderSelectable)
   {
    extern const char *Txt_CENTERS_HELP_ORDER[2];
    extern const char *Txt_CENTERS_ORDER[2];
@@ -1344,7 +1344,7 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
 	   Order++)
 	{
          HTM_TH_Begin (Align[Order]);
-	    if (OrderSelectable)
+	    if (OrderSelectable == Hie_ORDER_SELECTABLE)
 	      {
 	       Frm_BeginForm (ActSeeCtr);
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
@@ -1354,7 +1354,7 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
 			HTM_U_Begin ();
 	      }
 	    HTM_Txt (Txt_CENTERS_ORDER[Order]);
-	    if (OrderSelectable)
+	    if (OrderSelectable == Hie_ORDER_SELECTABLE)
 	      {
 		     if (Order == Gbl.Hierarchy.List[Hie_INS].SelectedOrder)
 			HTM_U_End ();
@@ -1601,7 +1601,7 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
       free (Title);
 
 	 /***** Write heading *****/
-	 Ctr_PutHeadCentersForSeeing (false);	// Order not selectable
+	 Ctr_PutHeadCentersForSeeing (Hie_ORDER_NOT_SELECTABLE);
 
 	 /***** List the centers (one row per center) *****/
 	 for (NumCtr  = 1, The_ResetRowColor ();

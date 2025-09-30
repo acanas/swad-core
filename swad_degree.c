@@ -602,11 +602,11 @@ static void Deg_PutHeadDegreesForSeeing (void)
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH_Span (NULL                 ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH_Span (NULL				,HTM_HEAD_CENTER,1,1,"BT");
       HTM_TH_Empty (1);
-      HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG],HTM_HEAD_LEFT  );
-      HTM_TH (Txt_Type                  ,HTM_HEAD_LEFT  );
-      HTM_TH (Txt_Courses_ABBREVIATION  ,HTM_HEAD_RIGHT );
+      HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]	,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Type				,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Courses_ABBREVIATION		,HTM_HEAD_RIGHT );
       Usr_THTchsPlusStds ();
       HTM_TH_Empty (1);
 

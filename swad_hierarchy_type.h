@@ -120,4 +120,10 @@ struct Hie_List
    Hie_Order_t SelectedOrder;	// Listing order
   };
 
+typedef enum
+  {
+   Hie_ORDER_NOT_SELECTABLE,
+   Hie_ORDER_SELECTABLE,
+  } Hie_OrderSelectable_t;
+
 #endif
