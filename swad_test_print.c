@@ -102,7 +102,7 @@ static void TstPrn_WriteTxtAnsToFill (const struct Qst_PrintedQuestion *PrintedQ
                                       __attribute__((unused)) struct Qst_Question *Question);
 //-----------------------------------------------------------------------------
 
-static void TstPrn_PutCheckBoxAllowTeachers (bool AllowTeachers);
+static void TstPrn_PutCheckBoxAllowTeachers (DenAll_DenyOrAllow_t DenyOrAllowTeachers);
 
 static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 				       struct Qst_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST],
@@ -191,7 +191,7 @@ static void TstPrn_ResetPrintExceptPrnCod (struct TstPrn_Print *Print)
    Print->NumQsts.All      =
    Print->NumQsts.NotBlank = 0;
    Print->Sent             = false;		// After creating an exam, it's not sent
-   Print->VisibleByTchs    = HidVis_HIDDEN;	// Teachers can't see the exam if student don't allow it
+   Print->DenyOrAllowTchs  = DenAll_DENY;	// Teachers can't see the exam if student don't allow it
    Print->Score            = 0.0;
   }
 
@@ -260,7 +260,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
 	       break;
 	    case TstPrn_CONFIRM:
 	       /* Will the test be visible by teachers? */
-	       TstPrn_PutCheckBoxAllowTeachers (true);
+	       TstPrn_PutCheckBoxAllowTeachers (DenAll_ALLOW);
 
 	       /* Send button */
 	       Btn_PutButton (Btn_SEND,NULL);
@@ -516,16 +516,19 @@ static void TstPrn_WriteTxtAnsToFill (const struct Qst_PrintedQuestion *PrintedQ
 /**************** Put checkbox to allow teachers to see test *****************/
 /*****************************************************************************/
 
-static void TstPrn_PutCheckBoxAllowTeachers (bool AllowTeachers)
+static void TstPrn_PutCheckBoxAllowTeachers (DenAll_DenyOrAllow_t DenyOrAllowTeachers)
   {
    extern const char *Txt_Allow_teachers_to_consult_this_test;
+   HTM_Attributes_t Attributes[DenAll_NUM_DENY_ALLOW] =
+     {
+      [DenAll_DENY ] = HTM_NO_ATTR,
+      [DenAll_ALLOW] = HTM_CHECKED,	// Teachers can see test exam
+     };
 
    /***** Test exam will be available for teachers? *****/
    HTM_DIV_Begin ("class=\"CM\"");
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	 HTM_INPUT_CHECKBOX ("AllowTchs",
-			     AllowTeachers ? HTM_CHECKED :	// Teachers can see test exam
-					     HTM_NO_ATTR,
+	 HTM_INPUT_CHECKBOX ("AllowTchs",Attributes[DenyOrAllowTeachers],
 			     "value=\"Y\"");
 	 HTM_Txt (Txt_Allow_teachers_to_consult_this_test);
       HTM_LABEL_End ();
@@ -688,8 +691,8 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 			HTM_SPAN_Begin ("class=\"%s_%s\"",
 					PrintedQuestions[QstInd].Answer.Str[0] ?
 					(PrintedQuestions[QstInd].Answer.Score > 0 ? "Qst_ANS_OK" :	// Correct
-											     "Qst_ANS_BAD") :	// Wrong
-											     "Qst_ANS_0",		// Blank answer
+										     "Qst_ANS_BAD") :	// Wrong
+										     "Qst_ANS_0",	// Blank answer
 					The_GetSuffix ());
 			   HTM_Double2Decimals (PrintedQuestions[QstInd].Answer.Score);
 			HTM_SPAN_End ();
@@ -977,8 +980,7 @@ void TstPrn_ComputeChoAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
             else if (NumAnsGood == 0 && NumAnsBad == 1)
               {
                PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_NEGATIVE;
-               PrintedQuestion->Answer.Score = -1.0 /
-        					       (double) (NumOptTotInQst - 1);
+               PrintedQuestion->Answer.Score = -1.0 / (double) (NumOptTotInQst - 1);
               }
             // other case should be impossible
            }
@@ -998,7 +1000,7 @@ void TstPrn_ComputeChoAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 	       if (NumOptCorrInQst < NumOptTotInQst)	// If there are correct options and wrong options (typical case)
 		 {
 		  PrintedQuestion->Answer.Score = (double) NumAnsGood / (double) NumOptCorrInQst -
-							  (double) NumAnsBad  / (double) (NumOptTotInQst - NumOptCorrInQst);
+						  (double) NumAnsBad  / (double) (NumOptTotInQst - NumOptCorrInQst);
 		  if (PrintedQuestion->Answer.Score > 0.000001)
 		     PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_POSITIVE;
 		  else if (PrintedQuestion->Answer.Score < -0.000001)
@@ -1419,7 +1421,7 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
       [Qst_CORRECT] = {.Class = "Qst_ANS_OK" ,.Str = "&check;"}
      };
    static struct Answer AnsNotVisible =
-                         {.Class = "Qst_ANS_0"  ,.Str = "&bull;" };
+                      {.Class = "Qst_ANS_0"  ,.Str = "&bull;" };
    unsigned NumOpt;
    Qst_WrongOrCorrect_t OptionWrongOrCorrect;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
@@ -1904,10 +1906,10 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
    double TotalScore;
    unsigned NumPrintsVisibleByTchs = 0;
    struct TstRes_ICanView ICanView;
-   static const char *ClassDat[HidVis_NUM_HIDDEN_VISIBLE] =
+   static const char *ClassDat[DenAll_NUM_DENY_ALLOW] =
      {
-      [HidVis_HIDDEN ] = "DAT_LIGHT",
-      [HidVis_VISIBLE] = "DAT"
+      [DenAll_DENY ] = "DAT_LIGHT",
+      [DenAll_ALLOW] = "DAT"
      };
 
    /***** Reset total number of questions and total score *****/
@@ -1952,7 +1954,8 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	       if (asprintf (&Id,"tst_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-			     Id,ClassDat[Print.VisibleByTchs],The_GetSuffix (),The_GetColorRows ());
+			     Id,ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
+			     The_GetColorRows ());
 		  Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
 						Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 						Dat_WRITE_TODAY |
@@ -1974,7 +1977,8 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 
 	    /* Write number of questions */
 	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
-	                  ClassDat[Print.VisibleByTchs],The_GetSuffix (),The_GetColorRows ());
+	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
+	                  The_GetColorRows ());
 	       switch (ICanView.Result)
 		 {
 		  case Usr_CAN:
@@ -1989,7 +1993,8 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 
 	    /* Write number of non-blank answers */
 	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
-	                  ClassDat[Print.VisibleByTchs],The_GetSuffix (),The_GetColorRows ());
+	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
+	                  The_GetColorRows ());
 	       switch (ICanView.Result)
 		 {
 		  case Usr_CAN:
@@ -2004,7 +2009,8 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 
 	    /* Write number of blank answers */
 	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-	                  ClassDat[Print.VisibleByTchs],The_GetSuffix (),The_GetColorRows ());
+	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
+	                  The_GetColorRows ());
 	       switch (ICanView.Result)
 		 {
 		  case Usr_CAN:
@@ -2020,7 +2026,8 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 
 	    /* Write score */
 	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
-	                  ClassDat[Print.VisibleByTchs],The_GetSuffix (),The_GetColorRows ());
+	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
+	                  The_GetColorRows ());
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
@@ -2035,7 +2042,8 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 
 	    /* Write average score per question */
 	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-	                  ClassDat[Print.VisibleByTchs],The_GetSuffix (),The_GetColorRows ());
+	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
+	                  The_GetColorRows ());
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
@@ -2052,7 +2060,8 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 
 	    /* Write grade */
 	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
-	                  ClassDat[Print.VisibleByTchs],The_GetSuffix (),The_GetColorRows ());
+	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
+	                  The_GetColorRows ());
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
@@ -2088,7 +2097,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 
 	    HTM_TR_End ();
 
-	    if (Print.VisibleByTchs == HidVis_VISIBLE)
+	    if (Print.DenyOrAllowTchs == DenAll_ALLOW)
 	       NumPrintsVisibleByTchs++;
 	   }
 
@@ -2523,7 +2532,7 @@ static void TstRes_CheckIfICanSeePrintResult (const struct TstPrn_Print *Print,
 	 // if teachers are not allowed ==> I can not view results (except if the print is mine)
 	 ICanView->Result =
 	 ICanView->Score  = Print->Sent &&
-	                    (Print->VisibleByTchs == HidVis_VISIBLE ||
+	                    (Print->DenyOrAllowTchs == DenAll_ALLOW ||
 	                     Usr_ItsMe (UsrCod) == Usr_ME) ? Usr_CAN :
 							     Usr_CAN_NOT;
 	 break;
@@ -2623,8 +2632,8 @@ void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print)
 
 	 /* Get if print has been sent (row[5])
 	    and if teachers are allowed to see this test print (row[6]) */
-	 Print->Sent          = (row[5][0] == 'Y');
-	 Print->VisibleByTchs = HidVis_GetVisibleFromYN (row[6][0]);
+	 Print->Sent            = (row[5][0] == 'Y');
+	 Print->DenyOrAllowTchs = DenAll_GetAllowFromYN (row[6][0]);
 
 	 /* Get score (row[7]) */
 	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot

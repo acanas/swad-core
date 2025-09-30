@@ -138,7 +138,7 @@ void Usr_PutParSelectedUsrsCods (const struct Usr_SelectedUsrs *SelectedUsrs);
 void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs,
 					    Usr_GetListAllUsrs_t GetListAllUsrs);
 
-Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs);
+Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (Cns_Verbose_t Verbose);
 
 Exi_Exist_t Usr_FindEncUsrCodInListOfSelectedEncUsrCods (const char *EncryptedUsrCodToFind,
 						         struct Usr_SelectedUsrs *SelectedUsrs);

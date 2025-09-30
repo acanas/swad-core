@@ -3195,7 +3195,7 @@ static void Usr_BuildParName (char **ParName,
 /*** Get list of recipients of a message written explicitely by the sender ***/
 /*****************************************************************************/
 
-Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
+Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (Cns_Verbose_t Verbose)
   {
    extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
    extern const char *Txt_There_is_no_user_with_nickname_X;
@@ -3256,7 +3256,7 @@ Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool Wr
 		    }
 		  else
 		    {
-		     if (WriteErrorMsgs)
+		     if (Verbose == Cns_VERBOSE)
 			Ale_ShowAlert (Ale_WARNING,Txt_There_is_no_user_with_nickname_X,
 				       UsrIDNickOrEmail);
 		     SuccessOrError = Err_ERROR;
@@ -3275,7 +3275,7 @@ Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool Wr
 			  }
 			else
 			  {
-			   if (WriteErrorMsgs)
+			   if (Verbose == Cns_VERBOSE)
 			      Ale_ShowAlert (Ale_WARNING,Txt_There_is_no_user_with_email_X,
 					     UsrIDNickOrEmail);
 			   SuccessOrError = Err_ERROR;
@@ -3301,7 +3301,7 @@ Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool Wr
 				{
 				 if (ListUsrCods.NumUsrs > 1)	// Two or more user share the same user's ID
 				   {// TODO: Consider forbid IDs here
-				    if (WriteErrorMsgs)
+				    if (Verbose == Cns_VERBOSE)
 				       Ale_ShowAlert (Ale_ERROR,Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
 						      UsrIDNickOrEmail);
 				    SuccessOrError = Err_ERROR;
@@ -3309,7 +3309,7 @@ Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool Wr
 				}
 			      else	// No users found
 				{
-				 if (WriteErrorMsgs)
+				 if (Verbose == Cns_VERBOSE)
 				    Ale_ShowAlert (Ale_ERROR,Txt_There_is_no_user_with_ID_nick_or_email_X,
 						   UsrIDNickOrEmail);
 				 SuccessOrError = Err_ERROR;
@@ -3317,7 +3317,7 @@ Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool Wr
 			      break;
 			   case Err_ERROR:	// String is not a valid user's nickname, email or ID
 			   default:
-			      if (WriteErrorMsgs)
+			      if (Verbose == Cns_VERBOSE)
 				 Ale_ShowAlert (Ale_WARNING,Txt_The_ID_nickname_or_email_X_is_not_valid,
 						UsrIDNickOrEmail);
 			      SuccessOrError = Err_ERROR;

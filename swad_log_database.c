@@ -284,11 +284,11 @@ unsigned Log_DB_GetMyCrssAndHitsPerCrs (MYSQL_RES **mysql_res,Rol_Role_t Role)
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get courses of a user",
 		   "SELECT my_courses.CrsCod,"		// row[0]
-			  "COUNT(*) AS N"			// row[1]
+			  "COUNT(*) AS N"		// row[1]
 		    " FROM (SELECT CrsCod"
 			    " FROM crs_users"
 			   " WHERE UsrCod=%ld"
-			     " AND Role=%u) AS my_courses"	// It's imperative to use a derived table to not block crs_usr!
+			     " AND Role=%u) AS my_courses"	// It's imperative to use a derived table to not block crs_users!
 		    " LEFT JOIN log"
 		      " ON my_courses.CrsCod=log.CrsCod"
 		   " WHERE log.UsrCod=%ld"
@@ -326,17 +326,20 @@ unsigned Log_DB_GetMyHistoricCrss (MYSQL_RES **mysql_res,
 /*****************************************************************************/
 /********************** Write my hits grouped by years ***********************/
 /*****************************************************************************/
+// CrsCod = -1 ==> hits with no course
+// CrsCod =  0 ==> hits in any course
+// CrsCod >  0 ==> hits in a given course
 
 unsigned Log_DB_GetMyHitsPerYear (MYSQL_RES **mysql_res,
-                                  bool AnyCourse,long CrsCod,Rol_Role_t Role,
+                                  long CrsCod,Rol_Role_t Role,
                                   time_t FirstClickTimeUTC)
   {
    char SubQueryCrs[128];
    char SubQueryRol[128];
 
-   if (AnyCourse)
+   if (CrsCod == 0)	// Here 0 means any course
       SubQueryCrs[0] = '\0';
-   else
+   else			// -1 ==> no course, > 0 ==> a given course
       sprintf (SubQueryCrs," AND CrsCod=%ld",CrsCod);
 
    if (Role == Rol_UNK)	// Here Rol_UNK means any role

@@ -55,7 +55,7 @@ struct ExaPrn_NumQuestions
 
 struct ExaPrn_Score
   {
-   double All;	// Total score of the exam print (counting valid and invalid questions)
+   double All;		// Total score of the exam print (counting valid and invalid questions)
    double Valid;	// Total score of the exam print (counting only valid questions)
   };
 

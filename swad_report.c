@@ -107,7 +107,7 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
                                  struct Rep_Report *Report,
                                  bool WriteNumUsrs);
 
-static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
+static void Rep_ShowMyHitsPerYear (long CrsCod,Rol_Role_t Role,
                                    struct Rep_Report *Report);
 static void Rep_ComputeMaxAndTotalHits (struct Rep_Hits *Hits,
                                         unsigned NumHits,
@@ -695,7 +695,7 @@ static void Rep_WriteSectionGlobalHits (struct Rep_Report *Report)
 
    /***** Global (in any course) hits per year *****/
    Report->MaxHitsPerYear = 0;	// MaxHitsPerYear not passed as an argument but computed inside the function
-   Rep_ShowMyHitsPerYear (true,-1L,	// Any course
+   Rep_ShowMyHitsPerYear (0,		// Any course
                           Rol_UNK,	// Any role
                           Report);
 
@@ -907,11 +907,11 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
      {
       fprintf (Rep_File," (%u %s / %u %s):",
 	       Enr_DB_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,
-		                           (1 << Rol_NET) |
-		                           (1 << Rol_TCH)),
+		                              (1 << Rol_NET) |
+		                              (1 << Rol_TCH)),
 	       Txt_teachers_ABBREVIATION,
 	       Enr_DB_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,
-					   (1 << Rol_STD)),
+					      (1 << Rol_STD)),
 	       Txt_students_ABBREVIATION);
 
       /***** Get and list my courses (one row per course) *****/
@@ -961,7 +961,7 @@ static void Rep_GetAndWriteMyHistoricClicsWithoutCrs (struct Rep_Report *Report)
 	    Txt_Hits_without_course_selected);
 
    /***** Historic clicks *****/
-   Rep_WriteRowCrsData (-1L,
+   Rep_WriteRowCrsData (-1L,		// Hits without course (CrsCod == -1L)
                         Rol_UNK,	// Role does not matter
 			Report,
 			false);	// Do not write number of users in course
@@ -1077,12 +1077,14 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
       else
          fprintf (Rep_File,"(%s)",Txt_unknown_removed_course);
      }
-   else	// CrsCod <= 0 in log ==> no course selected
+   else	if (CrsCod == -1L)	// CrsCod == -1L in log ==> no course selected
       fprintf (Rep_File,"(%s)",Txt_no_course_selected);
+   else
+      Err_WrongCourseExit ();
 
    /***** Write hits per year for this course *****/
    fprintf (Rep_File,"<br>");
-   Rep_ShowMyHitsPerYear (false,CrsCod,Role,Report);
+   Rep_ShowMyHitsPerYear (CrsCod,Role,Report);
 
    fprintf (Rep_File,"</li>");
   }
@@ -1091,7 +1093,7 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 /********************** Write my hits grouped by years ***********************/
 /*****************************************************************************/
 
-static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
+static void Rep_ShowMyHitsPerYear (long CrsCod,Rol_Role_t Role,
                                    struct Rep_Report *Report)
   {
    MYSQL_RES *mysql_res;
@@ -1104,7 +1106,7 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
    unsigned Year;
 
    /***** Make the query *****/
-   NumHits = Log_DB_GetMyHitsPerYear (&mysql_res,AnyCourse,CrsCod,Role,
+   NumHits = Log_DB_GetMyHitsPerYear (&mysql_res,CrsCod,Role,
                                       Report->UsrFigures.FirstClickTimeUTC);
 
    /***** Initialize first year *****/

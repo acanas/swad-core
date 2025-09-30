@@ -27,6 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_deny_allow.h"
 #include "swad_question.h"
 #include "swad_question_type.h"
 #include "swad_test.h"
@@ -51,7 +52,7 @@ struct TstPrn_Print
    struct TstPrn_NumQuestions NumQsts;	// Number of questions
    bool Sent;				// This test print has been sent or not?
 					// "Sent" means that user has clicked "Send" button after finishing
-   HidVis_HiddenOrVisible_t VisibleByTchs;	// Are teachers allowed to see this test result?
+   DenAll_DenyOrAllow_t DenyOrAllowTchs;	// Are teachers allowed to see this test result?
    double Score;			// Total score of the test print
    struct Qst_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST];
   };

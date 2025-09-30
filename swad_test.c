@@ -361,9 +361,9 @@ void Tst_AssessTest (void)
       TstPrn_GetAnswersFromForm (&Print);
 
       /***** Get if test print will be visible by teachers *****/
-      Print.Sent          = true;	// The exam has been finished and sent by student
-      Print.VisibleByTchs = Par_GetParBool ("AllowTchs") ? HidVis_VISIBLE :
-							   HidVis_HIDDEN;
+      Print.Sent            = true;	// The exam has been finished and sent by student
+      Print.DenyOrAllowTchs = Par_GetParBool ("AllowTchs") ? DenAll_ALLOW :
+							     DenAll_DENY;
 
       /***** Update test print in database *****/
       TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
@@ -586,8 +586,8 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
      }
 
    /***** Get if test print will be visible by teachers *****/
-   Print->VisibleByTchs = Par_GetParBool ("AllowTchs") ? HidVis_VISIBLE :
-							 HidVis_HIDDEN;
+   Print->DenyOrAllowTchs = Par_GetParBool ("AllowTchs") ? DenAll_ALLOW :
+							   DenAll_DENY;
   }
 
 /*****************************************************************************/

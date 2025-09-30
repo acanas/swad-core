@@ -332,7 +332,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
 	   }
 
 	 /***** Get list of users' IDs or nicknames written explicitely *****/
-	 SuccessOrError = Usr_GetListMsgRecipientsWrittenExplicitelyBySender (false);
+	 SuccessOrError = Usr_GetListMsgRecipientsWrittenExplicitelyBySender (Cns_QUIET);
 	}
 
       /***** Begin form to select recipients and write the message *****/
@@ -727,7 +727,7 @@ void Msg_RecMsgFromUsr (void)
    /* Get parameter that indicates if the message
       is a reply to a previous message */
    Messages.Reply.IsReply = Par_GetParBool ("IsReply") ? Msg_IS_REPLY :
-							Msg_IS_NOT_REPLY;
+							 Msg_IS_NOT_REPLY;
    if (Messages.Reply.IsReply == Msg_IS_REPLY)
       /* Get original message code */
       Messages.Reply.OriginalMsgCod = ParCod_GetAndCheckPar (ParCod_Msg);
@@ -740,7 +740,7 @@ void Msg_RecMsgFromUsr (void)
 					  Usr_GET_LIST_ALL_USRS);
 
    /* Get list of users' IDs or nicknames written explicitely */
-   SuccessOrError = Usr_GetListMsgRecipientsWrittenExplicitelyBySender (true);
+   SuccessOrError = Usr_GetListMsgRecipientsWrittenExplicitelyBySender (Cns_VERBOSE);
 
    /***** Check number of recipients *****/
    Messages.Rcv.NumRecipients = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
