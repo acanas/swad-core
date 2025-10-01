@@ -151,32 +151,23 @@ Exi_Exist_t Not_DB_ContentNotice (MYSQL_RES **mysql_res,long NotCod)
   }
 
 /*****************************************************************************/
-/******************************* Get all notices *****************************/
-/*****************************************************************************/
-
-unsigned Not_DB_GetAllNotices (MYSQL_RES **mysql_res)
-  {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get notices from database",
-		   "SELECT NotCod,"				// row[0]
-			  "UNIX_TIMESTAMP(CreatTime) AS F,"	// row[1]
-			  "UsrCod,"				// row[2]
-			  "Content,"				// row[3]
-			  "Public,"				// row[4]
-			  "Status"				// row[5]
-		    " FROM not_notices"
-		   " WHERE CrsCod=%ld"
-		" ORDER BY CreatTime DESC",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
-  }
-
-/*****************************************************************************/
 /***************************** Get active notices ****************************/
 /*****************************************************************************/
 
-unsigned Not_DB_GetActiveNotices (MYSQL_RES **mysql_res,long CrsCod)
+unsigned Not_DB_GetNotices (MYSQL_RES **mysql_res,long CrsCod,
+			    Not_Listing_t TypeNoticesListing)
   {
    extern const unsigned HidVis_Hidden_01[HidVis_NUM_HIDDEN_VISIBLE];
+   static const char *Not_DB_SubQueryVisible[Not_NUM_TYPES_LISTING] =
+     {
+      [Not_LIST_BRIEF_NOTICES] = " AND Status=0",	// Only visible notices
+      [Not_LIST_FULL_NOTICES ] = "",			// All notices
+     };
+   static const char *Not_DB_SubQueryPublic[Usr_NUM_BELONG] =
+     {
+      [Usr_DONT_BELONG] = " AND Public='Y'",	// Only public notices
+      [Usr_BELONG     ] = "",			// All notices
+     };
 
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get notices from database",
@@ -188,10 +179,12 @@ unsigned Not_DB_GetActiveNotices (MYSQL_RES **mysql_res,long CrsCod)
 			  "Status"			// row[5]
 		    " FROM not_notices"
 		   " WHERE CrsCod=%ld"
-		     " AND Status=%u"			// 0: Visible, 1: Hidden
+		       "%s"
+	               "%s"
 		" ORDER BY CreatTime DESC",
 		   CrsCod,
-		   HidVis_Hidden_01[HidVis_VISIBLE]);
+		   Not_DB_SubQueryVisible[TypeNoticesListing],
+		   Not_DB_SubQueryPublic[Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS]]);
   }
 
 /*****************************************************************************/

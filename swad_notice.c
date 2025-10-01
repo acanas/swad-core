@@ -419,23 +419,16 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    if (Gbl.Hierarchy.HieLvl != Hie_CRS)	// No course selected
       return;
 
-   switch (TypeNoticesListing)
+   /***** Get notices from database *****/
+   NumNotices = Not_DB_GetNotices (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+				   TypeNoticesListing);
+   if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
      {
-      case Not_LIST_BRIEF_NOTICES:
-	 /***** Get notices from database *****/
-	 NumNotices = Not_DB_GetActiveNotices (&mysql_res,
-					       Gbl.Hierarchy.Node[Hie_CRS].HieCod);
-	 break;
-      case Not_LIST_FULL_NOTICES:
-	 /***** Get notices from database *****/
-	 NumNotices = Not_DB_GetAllNotices (&mysql_res);
-
-	 /***** Begin box *****/
-	 Box_BoxBegin (Txt_Notices,Not_PutIconsListNotices,NULL,
-		       Hlp_COMMUNICATION_Notices,Box_NOT_CLOSABLE);
-	    if (!NumNotices)
-	       Ale_ShowAlert (Ale_INFO,Txt_No_notices);
-	 break;
+      /***** Begin box *****/
+      Box_BoxBegin (Txt_Notices,Not_PutIconsListNotices,NULL,
+		    Hlp_COMMUNICATION_Notices,Box_NOT_CLOSABLE);
+	 if (!NumNotices)
+	    Ale_ShowAlert (Ale_INFO,Txt_No_notices);
      }
 
    /***** Show notices *****/
@@ -599,10 +592,10 @@ static void Not_GetNoticeDataFromRow (MYSQL_RES *mysql_res,
      }
 
    /***** Get whether the notice is public or not (row[4]) *****/
-   Notice->PrivateOrPublic = PriPub_GetPublicFromYN (row[1][0]);
+   Notice->PrivateOrPublic = PriPub_GetPublicFromYN (row[4][0]);
 
    /***** Get status of the notice (row[5]) *****/
-   Notice->HiddenOrVisible = HidVis_GetHiddenFrom01 (row[4][0]);	// 1 ==> hidden
+   Notice->HiddenOrVisible = HidVis_GetHiddenFrom01 (row[5][0]);	// 1 ==> hidden
   }
 
 /*****************************************************************************/

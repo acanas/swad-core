@@ -154,69 +154,70 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Hie_Node *Crs)
    char Content[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Write items with active notices *****/
-   if ((NumNotices = Not_DB_GetActiveNotices (&mysql_res,Crs->HieCod)))
+   if ((NumNotices = Not_DB_GetNotices (&mysql_res,Crs->HieCod,
+				        Not_LIST_BRIEF_NOTICES)))
      {
       Usr_UsrDataConstructor (&UsrDat);
 
-      for (NumNot = 0;
-	   NumNot < NumNotices;
-	   NumNot++)
-        {
-         /***** Get data of the notice *****/
-         row = mysql_fetch_row (mysql_res);
+	 for (NumNot = 0;
+	      NumNot < NumNotices;
+	      NumNot++)
+	   {
+	    /***** Get data of the notice *****/
+	    row = mysql_fetch_row (mysql_res);
 
-         /* Get notice code (row[0]) */
-         if (sscanf (row[0],"%ld",&NotCod) != 1)
-            Err_WrongNoticeExit ();
+	    /* Get notice code (row[0]) */
+	    if (sscanf (row[0],"%ld",&NotCod) != 1)
+	       Err_WrongNoticeExit ();
 
-         /* Get UTC date-time of publication (row[1]) */
-         CreatTimeUTC = 0L;
-         if (row[1])
-            sscanf (row[1],"%ld",&CreatTimeUTC);
+	    /* Get UTC date-time of publication (row[1]) */
+	    CreatTimeUTC = 0L;
+	    if (row[1])
+	       sscanf (row[1],"%ld",&CreatTimeUTC);
 
-         /* Get author (row[2]) */
-         UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[2]);
-         UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get author's data from database
-							      Usr_DONT_GET_PREFS,
-							      Usr_DONT_GET_ROLE_IN_CRS);
+	    /* Get author (row[2]) */
+	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[2]);
+	    UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get author's data from database
+								 Usr_DONT_GET_PREFS,
+								 Usr_DONT_GET_ROLE_IN_CRS);
 
-         /***** Write item with notice *****/
-         fprintf (FileRSS,"<item>\n");
+	    /***** Write item with notice *****/
+	    fprintf (FileRSS,"<item>\n");
 
-         /* Write title (first characters) of the notice */
-         Str_Copy (Content,row[3],sizeof (Content) - 1);
-         Str_LimitLengthHTMLStr (Content,40);	// Remove when notice has a Subject
-         fprintf (FileRSS,"<title>%s: ",Txt_Notice);
-         Str_FilePrintStrChangingBRToRetAndNBSPToSpace (FileRSS,Content);
-         fprintf (FileRSS,"</title>\n");
+	    /* Write title (first characters) of the notice */
+	    Str_Copy (Content,row[3],sizeof (Content) - 1);
+	    Str_LimitLengthHTMLStr (Content,40);	// Remove when notice has a Subject
+	    fprintf (FileRSS,"<title>%s: ",Txt_Notice);
+	    Str_FilePrintStrChangingBRToRetAndNBSPToSpace (FileRSS,Content);
+	    fprintf (FileRSS,"</title>\n");
 
-         /* Write link to the notice */
-         fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",
-                  Cfg_URL_SWAD_CGI,Crs->HieCod);
+	    /* Write link to the notice */
+	    fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",
+		     Cfg_URL_SWAD_CGI,Crs->HieCod);
 
-         /* Write full content of the notice */
-         Str_Copy (Content,row[3],sizeof (Content) - 1);
-         ALn_InsertLinks (Content,Cns_MAX_BYTES_TEXT,40);
-         fprintf (FileRSS,"<description><![CDATA[<p><em>%s %s %s:</em></p><p>%s</p>]]></description>\n",
-                  UsrDat.FrstName,UsrDat.Surname1,UsrDat.Surname2,Content);
+	    /* Write full content of the notice */
+	    Str_Copy (Content,row[3],sizeof (Content) - 1);
+	    ALn_InsertLinks (Content,Cns_MAX_BYTES_TEXT,40);
+	    fprintf (FileRSS,"<description><![CDATA[<p><em>%s %s %s:</em></p><p>%s</p>]]></description>\n",
+		     UsrDat.FrstName,UsrDat.Surname1,UsrDat.Surname2,Content);
 
-         /* Write author */
-         if (UsrDat.Email[0])
-            fprintf (FileRSS,"<author>%s (%s %s %s)</author>\n",
-                     UsrDat.Email,UsrDat.FrstName,UsrDat.Surname1,UsrDat.Surname2);
+	    /* Write author */
+	    if (UsrDat.Email[0])
+	       fprintf (FileRSS,"<author>%s (%s %s %s)</author>\n",
+			UsrDat.Email,UsrDat.FrstName,UsrDat.Surname1,UsrDat.Surname2);
 
-         /* Write unique string for this item */
-         fprintf (FileRSS,"<guid isPermaLink=\"false\">%s, course #%ld, notice #%ld</guid>\n",
-                  Cfg_URL_SWAD_CGI,Crs->HieCod,NotCod);
+	    /* Write unique string for this item */
+	    fprintf (FileRSS,"<guid isPermaLink=\"false\">%s, course #%ld, notice #%ld</guid>\n",
+		     Cfg_URL_SWAD_CGI,Crs->HieCod,NotCod);
 
-         /* Write publication date */
-         fprintf (FileRSS,"<pubDate>");	
-         tm = gmtime (&CreatTimeUTC);
-         Dat_WriteRFC822DateFromTM (FileRSS,tm);
-         fprintf (FileRSS,"</pubDate>\n");
+	    /* Write publication date */
+	    fprintf (FileRSS,"<pubDate>");
+	    tm = gmtime (&CreatTimeUTC);
+	    Dat_WriteRFC822DateFromTM (FileRSS,tm);
+	    fprintf (FileRSS,"</pubDate>\n");
 
-         fprintf (FileRSS,"</item>\n");
-        }
+	    fprintf (FileRSS,"</item>\n");
+	   }
 
       Usr_UsrDataDestructor (&UsrDat);
      }
