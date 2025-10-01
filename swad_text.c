@@ -32626,6 +32626,29 @@ const char *Txt_Proposal =
 	"Proposal";	// Çeviri lazim!
 #endif
 
+const char *Txt_Public_VISIBILITY =
+#if   L==1	// ca
+	"P&uacute;blica";
+#elif L==2	// de
+	"&Ouml;ffentliche";
+#elif L==3	// en
+	"Public";
+#elif L==4	// es
+	"P&uacute;blica";
+#elif L==5	// fr
+	"Publique";
+#elif L==6	// gn
+	"P&uacute;blica";	// Okoteve traducción
+#elif L==7	// it
+	"Pubblica";
+#elif L==8	// pl
+	"Publiczna";
+#elif L==9	// pt
+	"P&uacute;blica";
+#elif L==10	// tr
+	"Kamu";
+#endif
+
 const char *Txt_Public_agenda_USER =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Agenda p&uacute;blica de %s";

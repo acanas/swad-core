@@ -632,10 +632,15 @@ TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de t
 
 TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtube.com/shorts/fY6Oax_uJBc?si=G3UHqvSH3yEbxm1B
 */
-#define Log_PLATFORM_VERSION	"SWAD 25.6.3 (2025-09-30)"
+#define Log_PLATFORM_VERSION	"SWAD 25.7 (2025-10-01)"
 #define CSS_FILE		"swad24.98.2.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 25.7:     Oct 01, 2025  Notices can be private to course. Not finished. (349872 lines)
+					2 changes necessary in database:
+ALTER TABLE not_notices ADD COLUMN Public ENUM('N','Y') NOT NULL DEFAULT 'Y' AFTER Content;
+ALTER TABLE not_deleted ADD COLUMN Public ENUM('N','Y') NOT NULL DEFAULT 'Y' AFTER Content;
+
 	Version 25.6.3:   Sep 30, 2025  Code refactoring in rubrics. (349765 lines)
 	Version 25.6.2:   Sep 30, 2025  Code refactoring in hierarchy. (349759 lines)
 	Version 25.6.1:   Sep 30, 2025  Code refactoring in report. (349752 lines)

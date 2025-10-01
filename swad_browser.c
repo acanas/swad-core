@@ -1260,7 +1260,6 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 	                                      struct Brw_FileMetadata *FileMetadata,
                                               const char *FileNameToShow);
-static PriPub_PrivateOrPublic_t Brw_GetParPublicFile (void);
 static Brw_License_t Brw_GetParLicense (void);
 
 static void Brw_ResetFileMetadata (struct Brw_FileMetadata *FileMetadata);
@@ -7683,7 +7682,7 @@ void Brw_ShowFileMetadata (void)
 	       HTM_TR_Begin (NULL);
 
 		  /* Label */
-		  Frm_LabelColumn ("RT",ICanChangePublic == Usr_CAN ? "PublicFile" :
+		  Frm_LabelColumn ("RT",ICanChangePublic == Usr_CAN ? "Public" :
 								      NULL,
 				   Txt_Availability);
 
@@ -7692,7 +7691,7 @@ void Brw_ShowFileMetadata (void)
 		     if (ICanChangePublic == Usr_CAN)	// I can change file to public
 		       {
 			HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
-					  "id=\"PublicFile\" name=\"PublicFile\""
+					  "id=\"Public\" name=\"Public\""
 					  " class=\"PUBLIC_FILE\"");
 			   for (PrivateOrPublic  = (PriPub_PrivateOrPublic_t) 0;
 				PrivateOrPublic <= (PriPub_PrivateOrPublic_t) (PriPub_NUM_PRIVATE_PUBLIC - 1);
@@ -8302,7 +8301,7 @@ void Brw_ChgFileMetadata (void)
 	 case Brw_ADMI_SHR_DEG:
 	 case Brw_ADMI_DOC_CRS:
 	 case Brw_ADMI_SHR_CRS:
-	    PrivateOrPublicFileAfterEdition = Brw_GetParPublicFile ();
+	    PrivateOrPublicFileAfterEdition = PriPub_GetParPublic ();
 	    License = Brw_GetParLicense ();
 	    break;
 	 case Brw_ADMI_DOC_GRP:
@@ -8377,17 +8376,7 @@ void Brw_ChgFileMetadata (void)
   }
 
 /*****************************************************************************/
-/*********** Get parameter with public / private file from form *************/
-/*****************************************************************************/
-
-static PriPub_PrivateOrPublic_t Brw_GetParPublicFile (void)
-  {
-   return Par_GetParBool ("PublicFile") ? PriPub_PUBLIC :
-					  PriPub_PRIVATE;
-  }
-
-/*****************************************************************************/
-/******************** Get parameter with file license ***********************/
+/********************* Get parameter with file license ***********************/
 /*****************************************************************************/
 
 static Brw_License_t Brw_GetParLicense (void)

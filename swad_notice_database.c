@@ -41,19 +41,21 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 // Return the code of the new inserted notice
 
-long Not_DB_InsertNotice (const char *Content)
+long Not_DB_InsertNotice (const char *Content,PriPub_PrivateOrPublic_t PrivateOrPublic)
   {
+   extern const char PriPub_Public_YN[PriPub_NUM_PRIVATE_PUBLIC];
    extern const unsigned HidVis_Hidden_01[HidVis_NUM_HIDDEN_VISIBLE];
 
    return
    DB_QueryINSERTandReturnCode ("can not create notice",
 				"INSERT INTO not_notices"
-				" (CrsCod,UsrCod,CreatTime,Content,Status)"
+				" (CrsCod,UsrCod,CreatTime,Content,Public,Status)"
 				" VALUES"
-				" (%ld,%ld,NOW(),'%s',%u)",
+				" (%ld,%ld,NOW(),'%s','%c',%u)",
 				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Content,
+				PriPub_Public_YN[PrivateOrPublic],
 				HidVis_Hidden_01[HidVis_VISIBLE]);	// 0: Visible, 1: Hidden
   }
 
@@ -83,12 +85,13 @@ void Not_DB_CopyNoticeToDeleted (long NotCod)
   {
    DB_QueryINSERT ("can not remove notice",
 		   "INSERT IGNORE INTO not_deleted"
-		   " (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
+		   " (NotCod,CrsCod,UsrCod,CreatTime,Content,Public,NumNotif)"
 		   " SELECT NotCod,"
 		           "CrsCod,"
 		           "UsrCod,"
 		           "CreatTime,"
 		           "Content,"
+			   "Public,"
 		           "NumNotif"
 		     " FROM not_notices"
 		    " WHERE NotCod=%ld"
@@ -124,7 +127,8 @@ Exi_Exist_t Not_DB_GetNoticeData (MYSQL_RES **mysql_res,long NotCod)
 				"UNIX_TIMESTAMP(CreatTime) AS F,"	// row[1]
 				"UsrCod,"				// row[2]
 				"Content,"				// row[3]
-				"Status"				// row[4]
+				"Public,"				// row[4]
+				"Status"				// row[5]
 			  " FROM not_notices"
 			 " WHERE NotCod=%ld"
 			   " AND CrsCod=%ld",	// Extra check
@@ -158,7 +162,8 @@ unsigned Not_DB_GetAllNotices (MYSQL_RES **mysql_res)
 			  "UNIX_TIMESTAMP(CreatTime) AS F,"	// row[1]
 			  "UsrCod,"				// row[2]
 			  "Content,"				// row[3]
-			  "Status"				// row[4]
+			  "Public,"				// row[4]
+			  "Status"				// row[5]
 		    " FROM not_notices"
 		   " WHERE CrsCod=%ld"
 		" ORDER BY CreatTime DESC",
@@ -179,7 +184,8 @@ unsigned Not_DB_GetActiveNotices (MYSQL_RES **mysql_res,long CrsCod)
 			  "UNIX_TIMESTAMP(CreatTime),"	// row[1]
 			  "UsrCod,"			// row[2]
 			  "Content,"			// row[3]
-			  "Status"			// row[4]
+			  "Public,"			// row[4]
+			  "Status"			// row[5]
 		    " FROM not_notices"
 		   " WHERE CrsCod=%ld"
 		     " AND Status=%u"			// 0: Visible, 1: Hidden
@@ -386,12 +392,13 @@ void Not_DB_RemoveCrsNotices (long HieCod)
    /***** Copy all notices from the course to table of deleted notices *****/
    DB_QueryINSERT ("can not remove notices in a course",
 		   "INSERT INTO not_deleted"
-		   " (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
+		   " (NotCod,CrsCod,UsrCod,CreatTime,Content,Public,NumNotif)"
 		   " SELECT NotCod,"
 			   "CrsCod,"
 			   "UsrCod,"
 			   "CreatTime,"
 			   "Content,"
+			   "Public,"
 			   "NumNotif"
 		    " FROM not_notices"
 		   " WHERE CrsCod=%ld",

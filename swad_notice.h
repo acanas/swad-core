@@ -46,6 +46,7 @@ struct Not_Notice
    long NotCod;
    long UsrCod;
    time_t CreatTime;
+   PriPub_PrivateOrPublic_t PrivateOrPublic;
    HidVis_HiddenOrVisible_t HiddenOrVisible;
    // TODO: char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char Content[Cns_MAX_BYTES_TEXT + 1];

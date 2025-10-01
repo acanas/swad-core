@@ -33,7 +33,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-long Not_DB_InsertNotice (const char *Content);
+long Not_DB_InsertNotice (const char *Content,PriPub_PrivateOrPublic_t PrivateOrPublic);
 void Not_DB_ChangeNoticeStatus (long NotCod,HidVis_HiddenOrVisible_t HiddenOrVisible);
 void Not_DB_CopyNoticeToDeleted (long NotCod);
 void Not_DB_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,

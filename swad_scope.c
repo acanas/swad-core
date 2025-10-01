@@ -87,7 +87,7 @@ void Sco_PutSelectorScope (const char *ParName,HTM_Attributes_t Attributes,
 	       ScopeUnsigned = (unsigned) L;
 	       HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
 			   (L == HieLvl) ? HTM_SELECTED :
-					      HTM_NO_ATTR,
+					   HTM_NO_ATTR,
 			   "%s: %s",
 			   Txt_HIERARCHY_SINGUL_Abc[L],
 			   Gbl.Hierarchy.Node[L].ShrtName);

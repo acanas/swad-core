@@ -3468,7 +3468,7 @@ int swad__sendNotice (struct soap *soap,
 
    /***** Insert notice in the database *****/
    /* Get the code of the inserted item */
-   NotCod = Not_DB_InsertNotice (body);
+   NotCod = Not_DB_InsertNotice (body,PriPub_PUBLIC);
 
    /***** Create notifications *****/
    // TODO: create notifications

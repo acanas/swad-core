@@ -86,6 +86,9 @@ static long Not_HighlightNotCod = -1L;	// No notice highlighted
 static void Not_SetHighlightNotCod (long NotCod);
 static long Not_GetHighlightNotCod (void);
 
+static void Not_PutContent (void);
+static void Not_PutVisibility (void);
+
 static void Not_HideUnhideNotice (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 static void Not_PutLinkToRSSFile (void);
@@ -134,18 +137,18 @@ void Not_ShowFormNotice (void)
    /***** Begin form *****/
    Frm_BeginForm (ActNewNot);
 
-      /***** Begin box *****/
-      Box_BoxBegin (Txt_Notice,NULL,NULL,
-		    Hlp_COMMUNICATION_Notices,Box_NOT_CLOSABLE);
+      /***** Begin box and table *****/
+      Box_BoxTableBegin (Txt_Notice,NULL,NULL,
+			 Hlp_COMMUNICATION_Notices,Box_NOT_CLOSABLE,2);
 
 	 /***** Message body *****/
-	 HTM_TEXTAREA_Begin (HTM_REQUIRED | HTM_AUTOFOCUS,
-			     "name=\"Content\" cols=\"30\" rows=\"10\""
-			     " class=\"INPUT_%s\"",The_GetSuffix ());
-	 HTM_TEXTAREA_End ();
+	 Not_PutContent ();
 
-      /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CREATE);
+	 /***** Visibility: course (private) / platform (public) *****/
+	 Not_PutVisibility ();
+
+      /***** End table, send button and end box *****/
+      Box_BoxTableWithButtonEnd (Btn_CREATE);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -154,6 +157,82 @@ void Not_ShowFormNotice (void)
    HTM_BR ();
    Not_ShowNotices (Not_LIST_FULL_NOTICES,
 	            -1L);	// No notice highlighted
+  }
+
+/*****************************************************************************/
+/********************** Put form field for notice content ********************/
+/*****************************************************************************/
+
+static void Not_PutContent (void)
+  {
+   extern const char *Txt_MSG_Content;
+
+   /***** Content *****/
+   HTM_TR_Begin (NULL);
+
+      /* Label */
+      Frm_LabelColumn ("RT","Content",Txt_MSG_Content);
+
+      /* Data */
+      HTM_TD_Begin ("class=\"LT\"");
+	 HTM_TEXTAREA_Begin (HTM_REQUIRED | HTM_AUTOFOCUS,
+			     "id=\"Content\" name=\"Content\""
+			     " cols=\"30\" rows=\"10\""
+		             " class=\"INPUT_%s\"",The_GetSuffix ());
+	 HTM_TEXTAREA_End ();
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/********************** Put form field for notice scope *********************/
+/*****************************************************************************/
+
+static void Not_PutVisibility (void)
+  {
+   extern const char PriPub_Public_YN[PriPub_NUM_PRIVATE_PUBLIC];
+   extern const char *Txt_Visibility;
+   extern const char *Txt_Public_VISIBILITY;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
+
+   /***** Scope: course (private) / platform (public) *****/
+   HTM_TR_Begin (NULL);
+
+      HTM_TD_TxtColon (Txt_Visibility);
+
+      HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
+
+	 /***** Begin list of options *****/
+	 HTM_UL_Begin ("class=\"LIST_LEFT FORM_IN_%s\"",The_GetSuffix ());
+
+	    /* Private (visible only by users from course) */
+	    HTM_LI_Begin (NULL);
+	       HTM_LABEL_Begin (NULL);
+		  HTM_INPUT_RADIO ("Public",HTM_NO_ATTR,
+				   " value=\"%c\"",
+				   PriPub_Public_YN[PriPub_PRIVATE]);
+		  HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]); HTM_Colon ();
+		  HTM_SP (); HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+	       HTM_LABEL_End ();
+	    HTM_LI_End ();
+
+	    /* Public (visible by any user) */
+	    HTM_LI_Begin (NULL);
+	       HTM_LABEL_Begin (NULL);
+		  HTM_INPUT_RADIO ("Public",HTM_CHECKED,	// Public by default
+				   " value=\"%c\"",
+				   PriPub_Public_YN[PriPub_PUBLIC]);
+		  HTM_Txt (Txt_Public_VISIBILITY);
+	       HTM_LABEL_End ();
+	    HTM_LI_End ();
+
+	 /***** End list of options *****/
+	 HTM_UL_End ();
+
+      HTM_TD_End ();
+
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -166,13 +245,18 @@ void Not_ReceiveNotice (void)
    long NotCod;
    unsigned NumUsrsToBeNotifiedByEMail;
    char Content[Cns_MAX_BYTES_TEXT + 1];
+   PriPub_PrivateOrPublic_t PrivateOrPublic;
 
-   /***** Get the text of the notice *****/
+   /***** Get parameters *****/
+   /* Get the text of the notice */
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_TEXT,
                               Str_TO_RIGOROUS_HTML,Str_REMOVE_SPACES);
 
+   /* Get the visibility (private/public) */
+   PrivateOrPublic = PriPub_GetParPublic ();
+
    /***** Create a new notice in database *****/
-   NotCod = Not_DB_InsertNotice (Content);
+   NotCod = Not_DB_InsertNotice (Content,PrivateOrPublic);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
@@ -185,7 +269,8 @@ void Not_ReceiveNotice (void)
       Not_DB_UpdateNumUsrsNotifiedByEMailAboutNotice (NotCod,NumUsrsToBeNotifiedByEMail);
 
    /***** Create a new social note about the new notice *****/
-   TmlNot_StoreAndPublishNote (TmlNot_NOTICE,NotCod);
+   if (PrivateOrPublic == PriPub_PUBLIC)
+      TmlNot_StoreAndPublishNote (TmlNot_NOTICE,NotCod);
 
    /***** Set notice to be highlighted *****/
    Not_SetHighlightNotCod (NotCod);
@@ -484,7 +569,8 @@ static void Not_GetNoticeDataFromRow (MYSQL_RES *mysql_res,
    UNIX_TIMESTAMP(CreatTime) AS F	row[1]
    UsrCod				row[2]
    Content				row[3]
-   Status				row[4]
+   Public				row[4]
+   Status				row[5]
    */
    /***** Get notice code (row[0]) *****/
    if (sscanf (row[0],"%ld",&Notice->NotCod) != 1)
@@ -512,7 +598,10 @@ static void Not_GetNoticeDataFromRow (MYSQL_RES *mysql_res,
 	 break;
      }
 
-   /***** Get status of the notice (row[4]) *****/
+   /***** Get whether the notice is public or not (row[4]) *****/
+   Notice->PrivateOrPublic = PriPub_GetPublicFromYN (row[1][0]);
+
+   /***** Get status of the notice (row[5]) *****/
    Notice->HiddenOrVisible = HidVis_GetHiddenFrom01 (row[4][0]);	// 1 ==> hidden
   }
 

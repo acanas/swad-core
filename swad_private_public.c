@@ -25,6 +25,7 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#include "swad_parameter.h"
 #include "swad_private_public.h"
 
 /*****************************************************************************/
@@ -46,4 +47,14 @@ PriPub_PrivateOrPublic_t PriPub_GetPublicFromYN (char Ch)
   {
    return (Ch == 'Y') ? PriPub_PUBLIC :
 			PriPub_PRIVATE;
+  }
+
+/*****************************************************************************/
+/************** Get parameter with public / private from form ****************/
+/*****************************************************************************/
+
+PriPub_PrivateOrPublic_t PriPub_GetParPublic (void)
+  {
+   return Par_GetParBool ("Public") ? PriPub_PUBLIC :
+				      PriPub_PRIVATE;
   }

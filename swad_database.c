@@ -2427,17 +2427,18 @@ mysql> DESCRIBE msg_snt_deleted;
    /***** Table not_deleted *****/
 /*
 mysql> DESCRIBE not_deleted;
-+-----------+----------+------+-----+---------+-------+
-| Field     | Type     | Null | Key | Default | Extra |
-+-----------+----------+------+-----+---------+-------+
-| NotCod    | int(11)  | NO   | PRI | NULL    |       |
-| CrsCod    | int(11)  | NO   | MUL | -1      |       |
-| UsrCod    | int(11)  | NO   | MUL | NULL    |       |
-| CreatTime | datetime | NO   | MUL | NULL    |       |
-| Content   | text     | NO   |     | NULL    |       |
-| NumNotif  | int(11)  | NO   |     | 0       |       |
-+-----------+----------+------+-----+---------+-------+
-6 rows in set (0.01 sec)
++-----------+---------------+------+-----+---------+-------+
+| Field     | Type          | Null | Key | Default | Extra |
++-----------+---------------+------+-----+---------+-------+
+| NotCod    | int           | NO   | PRI | NULL    |       |
+| CrsCod    | int           | NO   | MUL | -1      |       |
+| UsrCod    | int           | NO   | MUL | NULL    |       |
+| CreatTime | datetime      | NO   | MUL | NULL    |       |
+| Content   | text          | NO   |     | NULL    |       |
+| Public    | enum('N','Y') | NO   |     | Y       |       |
+| NumNotif  | int           | NO   |     | 0       |       |
++-----------+---------------+------+-----+---------+-------+
+7 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS not_deleted ("
 			"NotCod INT NOT NULL,"
@@ -2445,6 +2446,7 @@ mysql> DESCRIBE not_deleted;
 			"UsrCod INT NOT NULL,"
 			"CreatTime DATETIME NOT NULL,"
 			"Content TEXT NOT NULL,"
+			"Public ENUM('N','Y') NOT NULL DEFAULT 'Y',"
 			"NumNotif INT NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(NotCod),"
 		   "INDEX(CrsCod),"
@@ -2454,18 +2456,19 @@ mysql> DESCRIBE not_deleted;
    /***** Table not_notices *****/
 /*
 mysql> DESCRIBE not_notices;
-+-----------+------------+------+-----+---------+----------------+
-| Field     | Type       | Null | Key | Default | Extra          |
-+-----------+------------+------+-----+---------+----------------+
-| NotCod    | int(11)    | NO   | PRI | NULL    | auto_increment |
-| CrsCod    | int(11)    | NO   | MUL | -1      |                |
-| UsrCod    | int(11)    | NO   | MUL | NULL    |                |
-| CreatTime | datetime   | NO   | MUL | NULL    |                |
-| Content   | text       | NO   |     | NULL    |                |
-| Status    | tinyint(4) | NO   | MUL | 0       |                |
-| NumNotif  | int(11)    | NO   |     | 0       |                |
-+-----------+------------+------+-----+---------+----------------+
-7 rows in set (0.00 sec)
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| NotCod    | int           | NO   | PRI | NULL    | auto_increment |
+| CrsCod    | int           | NO   | MUL | -1      |                |
+| UsrCod    | int           | NO   | MUL | NULL    |                |
+| CreatTime | datetime      | NO   | MUL | NULL    |                |
+| Content   | text          | NO   |     | NULL    |                |
+| Public    | enum('N','Y') | NO   |     | Y       |                |
+| Status    | tinyint       | NO   | MUL | 0       |                |
+| NumNotif  | int           | NO   |     | 0       |                |
++-----------+---------------+------+-----+---------+----------------+
+8 rows in set (0,01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS not_notices ("
 			"NotCod INT NOT NULL AUTO_INCREMENT,"
@@ -2475,6 +2478,7 @@ mysql> DESCRIBE not_notices;
 			// TODO: "Subject TEXT NOT NULL,"	// Cns_MAX_BYTES_SUBJECT
 			// TODO: "Content TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 			"Content TEXT NOT NULL,"
+			"Public ENUM('N','Y') NOT NULL DEFAULT 'Y',"
 			"Status TINYINT NOT NULL DEFAULT 0,"
 			"NumNotif INT NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(NotCod),"

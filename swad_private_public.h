@@ -45,5 +45,6 @@ typedef enum
 /*****************************************************************************/
 
 PriPub_PrivateOrPublic_t PriPub_GetPublicFromYN (char Ch);
+PriPub_PrivateOrPublic_t PriPub_GetParPublic (void);
 
 #endif
