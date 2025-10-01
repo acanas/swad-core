@@ -107,20 +107,20 @@ void Rol_SetMyRoles (void)
    if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
      {
       /* Check if I am and administrator of current institution */
-      ICanBeAdm[Hie_INS] = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-						   Hie_INS) ? Usr_CAN :
-							      Usr_CAN_NOT;
+      ICanBeAdm[Hie_INS] = (Adm_DB_CheckIfUsrExistsAsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
+							  Hie_INS) == Exi_EXISTS) ? Usr_CAN :
+										    Usr_CAN_NOT;
       if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
 	{
 	 /* Check if I am and administrator of current center */
-	 ICanBeAdm[Hie_CTR] = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-						      Hie_CTR) ? Usr_CAN :
-							         Usr_CAN_NOT;
+	 ICanBeAdm[Hie_CTR] = (Adm_DB_CheckIfUsrExistsAsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
+							     Hie_CTR) == Exi_EXISTS) ? Usr_CAN :
+										       Usr_CAN_NOT;
 	 if (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
 	    /* Check if I am and administrator of current degree */
-	    ICanBeAdm[Hie_DEG] = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-							 Hie_DEG) ? Usr_CAN :
-							            Usr_CAN_NOT;
+	    ICanBeAdm[Hie_DEG] = (Adm_DB_CheckIfUsrExistsAsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
+								Hie_DEG) == Exi_EXISTS) ? Usr_CAN :
+											  Usr_CAN_NOT;
 	}
      }
 

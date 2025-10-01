@@ -1556,19 +1556,19 @@ bool Enr_PutActionsEnrRemOneUsr (Usr_MeOrOther_t MeOrOther)
    if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
      {
       /***** Check if the other user is administrator of the current institution *****/
-      UsrIsInsAdmin = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
-					      Hie_INS);
+      UsrIsInsAdmin = (Adm_DB_CheckIfUsrExistsAsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+					             Hie_INS) == Exi_EXISTS);
 
       if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
 	{
 	 /***** Check if the other user is administrator of the current center *****/
-	 UsrIsCtrAdmin = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
-						 Hie_CTR);
+	 UsrIsCtrAdmin = (Adm_DB_CheckIfUsrExistsAsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+						        Hie_CTR) == Exi_EXISTS);
 
 	 if (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
 	    /***** Check if the other user is administrator of the current degree *****/
-	    UsrIsDegAdmin = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
-						    Hie_DEG);
+	    UsrIsDegAdmin = (Adm_DB_CheckIfUsrExistsAsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+						           Hie_DEG) == Exi_EXISTS);
 	}
      }
 

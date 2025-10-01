@@ -80,7 +80,7 @@ unsigned Adm_DB_GetAdmsCurrentScopeExceptMe (MYSQL_RES **mysql_res)
 /***** Check if a user is an administrator of a degree/center/institution ****/
 /*****************************************************************************/
 
-bool Adm_DB_CheckIfUsrIsAdm (long UsrCod,Hie_Level_t HieLvl)
+Exi_Exist_t Adm_DB_CheckIfUsrExistsAsAdm (long UsrCod,Hie_Level_t HieLvl)
   {
    return
    DB_QueryEXISTS ("can not check if a user is administrator",
@@ -92,7 +92,7 @@ bool Adm_DB_CheckIfUsrIsAdm (long UsrCod,Hie_Level_t HieLvl)
 		      " AND Cod=%ld)",
 		   UsrCod,
 		   Hie_GetDBStrFromLevel (HieLvl),
-		   Gbl.Hierarchy.Node[HieLvl].HieCod) == Exi_EXISTS;
+		   Gbl.Hierarchy.Node[HieLvl].HieCod);
   }
 
 /*****************************************************************************/
