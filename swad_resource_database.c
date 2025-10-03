@@ -177,13 +177,13 @@ long Rsc_DB_CreateRsc (const struct Tre_Node *Node)
 /*****************************************************************************/
 
 unsigned Rsc_DB_GetListRscs (MYSQL_RES **mysql_res,long NodCod,
-                                  bool ShowHiddenResources)
+                             Sho_Show_t ShowHiddenResources)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
-   static const char *HiddenSubQuery[2] =
+   static const char *HiddenSubQuery[Sho_NUM_SHOW] =
      {
-      [false] = " AND prg_resources.Hidden='N'",
-      [true ] = "",
+      [Sho_DONT_SHOW] = " AND prg_resources.Hidden='N'",
+      [Sho_SHOW     ] = "",
      };
 
    return (unsigned)

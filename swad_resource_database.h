@@ -27,6 +27,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include <mysql/mysql.h>	// To access MySQL databases
+
+#include "swad_resource_type.h"
+#include "swad_show.h"
 #include "swad_tree.h"
 
 /*****************************************************************************/
@@ -47,7 +51,7 @@ long Rsc_DB_CreateRsc (const struct Tre_Node *Node);
 
 bool Rsc_DB_CheckListResources (long NodCod,bool ShowHiddenResources);
 unsigned Rsc_DB_GetListRscs (MYSQL_RES **mysql_res,long NodCod,
-                                  bool ShowHiddenResources);
+                             Sho_Show_t ShowHiddenResources);
 Exi_Exist_t Rsc_DB_GetRscDataByCod (MYSQL_RES **mysql_res,long ItmCod);
 
 void Rsc_DB_UpdateRsc (const struct Tre_Node *Node);

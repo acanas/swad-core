@@ -4223,8 +4223,8 @@ void Prj_ReceiveProject (void)
    Projects.Prj.DptCod = ParCod_GetPar (ParCod_Dpt);
 
    /* Get whether the project is assigned */
-   Projects.Prj.Assigned = (Par_GetParBool ("Assigned")) ? Prj_ASSIGNED :
-							   Prj_NONASSIG;
+   Projects.Prj.Assigned = Par_GetParBool ("Assigned") ? Prj_ASSIGNED :
+							 Prj_NONASSIG;
 
    /* Get number of students */
    Projects.Prj.NumStds = (unsigned)

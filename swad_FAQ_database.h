@@ -29,8 +29,7 @@
 
 #include <mysql/mysql.h>	// To access MySQL databases
 
-#include "swad_FAQ_type.h"
-#include "swad_hidden_visible.h"
+#include "swad_show.h"
 #include "swad_tree.h"
 
 /*****************************************************************************/
@@ -39,7 +38,7 @@
 
 long FAQ_DB_CreateQaA (const struct Tre_Node *Node);
 unsigned FAQ_DB_GetListQaAs (MYSQL_RES **mysql_res,long NodCod,
-                             bool ShowHiddenQaAs);
+                             Sho_Show_t ShowHiddenQaAs);
 Exi_Exist_t FAQ_DB_GetQaADataByCod (MYSQL_RES **mysql_res,long ItmCod);
 
 void FAQ_DB_UpdateQaA (const struct Tre_Node *Node);

@@ -245,7 +245,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
    /***** Get parameter that indicates if the message
           is a reply to another message *****/
    Messages->Reply.IsReply = Par_GetParBool ("IsReply") ? Msg_IS_REPLY :
-							Msg_IS_NOT_REPLY;
+							  Msg_IS_NOT_REPLY;
    if (Messages->Reply.IsReply == Msg_IS_REPLY)
       /* Get original message code */
       Messages->Reply.OriginalMsgCod = ParCod_GetAndCheckPar (ParCod_Msg);

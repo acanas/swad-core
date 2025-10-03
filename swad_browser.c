@@ -4921,7 +4921,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod)
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO15x20B",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR15x20B",
      };
-   bool ShowUsr = false;
+   Exi_Exist_t UsrExists = Exi_DOES_NOT_EXIST;
    struct Usr_Data UsrDat;
 
    if (Level && UsrCod > 0)
@@ -4931,21 +4931,25 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod)
 
       /***** Get data of file/folder publisher *****/
       UsrDat.UsrCod = UsrCod;
-      ShowUsr = (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-                                                          Usr_DONT_GET_PREFS,
-                                                          Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS);
+      UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+							   Usr_DONT_GET_PREFS,
+							   Usr_DONT_GET_ROLE_IN_CRS);
      }
 
    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
-
-      if (ShowUsr)
-	 /***** Show photo *****/
-	 Pho_ShowUsrPhotoIfAllowed (&UsrDat,
-	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
-      else
-	 Ico_PutIcon ("usr_bl.jpg",Ico_UNCHANGED,Txt_Unknown_or_without_photo,
-	              ClassPhoto[Gbl.Prefs.PhotoShape]);
-
+      switch (UsrExists)
+	{
+	 case Exi_EXISTS:
+	    /***** Show photo *****/
+	    Pho_ShowUsrPhotoIfAllowed (&UsrDat,
+				       ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	    Ico_PutIcon ("usr_bl.jpg",Ico_UNCHANGED,Txt_Unknown_or_without_photo,
+			 ClassPhoto[Gbl.Prefs.PhotoShape]);
+	    break;
+	}
    HTM_TD_End ();
 
    if (Level && UsrCod > 0)

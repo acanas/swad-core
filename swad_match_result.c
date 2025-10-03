@@ -1298,9 +1298,9 @@ static void MchRes_CheckIfICanViewMatchResult (const struct Gam_Game *Game,
      {
       case Rol_STD:
 	 // Depends on visibility of game and result (eye icons)
-	 ICanView->Result = (Game->Hidden == HidVis_VISIBLE &&	// The game is visible
-			     Match->Status.ShowUsrResults &&		// The results of the match are visible to users
-			     Usr_ItsMe (UsrCod) == Usr_ME) ? Usr_CAN :	// The result is mine
+	 ICanView->Result = (Game->Hidden == HidVis_VISIBLE &&			// The game is visible
+			     Match->Status.Show.UsrResults == Sho_SHOW &&	// The results of the match are visible to users
+			     Usr_ItsMe (UsrCod) == Usr_ME) ? Usr_CAN :		// The result is mine
 							     Usr_CAN_NOT;
 	 // Whether I belong or not to groups of match is not checked here...
 	 // ...because I should be able to see old matches made in old groups to which I belonged

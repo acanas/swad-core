@@ -92,7 +92,7 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_action_list.o \
        swad_RSS.o swad_rubric.o swad_rubric_criteria.o swad_rubric_database.o \
        swad_rubric_resource.o \
        swad_scope.o swad_search.o swad_session.o swad_session_database.o \
-       swad_setting.o swad_setting_database.o swad_statistic.o \
+       swad_setting.o swad_setting_database.o swad_show.o swad_statistic.o \
        swad_statistic_database.o swad_string.o swad_survey.o \
        swad_survey_database.o swad_survey_resource.o swad_system_config.o \
        swad_system_link.o swad_system_link_database.o \

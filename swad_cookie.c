@@ -140,7 +140,7 @@ void Coo_ChangeMyPrefsCookies (void)
   {
    /***** Get param with preference about third party cookies *****/
    Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies = Par_GetParBool ("cookies") ? Coo_ACCEPT :
-									       Coo_REFUSE;
+									 Coo_REFUSE;
 
    /***** Store preference in database *****/
    if (Gbl.Usrs.Me.Logged)

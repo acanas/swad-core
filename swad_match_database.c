@@ -34,6 +34,7 @@
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_match_database.h"
+#include "swad_show.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -92,6 +93,7 @@ long Mch_DB_CreateMatch (long GamCod,char Title[Mch_MAX_BYTES_TITLE + 1])
 
 void Mch_DB_UpdateMatchStatus (const struct Mch_Match *Match)
   {
+   extern const char Sho_Show_YN[Sho_NUM_SHOW];
    char *MchSubQuery;
 
    /***** Update end time only if match is currently being played *****/
@@ -127,10 +129,8 @@ void Mch_DB_UpdateMatchStatus (const struct Mch_Match *Match)
 		   Mch_ShowingStringsDB[Match->Status.Showing],
 		   Match->Status.Countdown,
 		   Match->Status.NumCols,
-		   Match->Status.ShowQstResults ? 'Y' :
-			                          'N',
-		   Match->Status.ShowUsrResults ? 'Y' :
-			                          'N',
+		   Sho_Show_YN[Match->Status.Show.QstResults],
+		   Sho_Show_YN[Match->Status.Show.UsrResults],
 		   Match->MchCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
    free (MchSubQuery);
