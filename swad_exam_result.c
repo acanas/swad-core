@@ -1388,10 +1388,10 @@ static void ExaRes_CheckIfICanViewResult (const struct Exa_Exam *Exam,
       case Rol_STD:
 	 // Depends on visibility of exam, session and result (eye icons)
 	 ICanView->Result = (Usr_ItsMe (UsrCod) == Usr_ME &&		// The result is mine
-			     Exam->Hidden == HidVis_VISIBLE &&	// The exam is visible
+			     Exam->Hidden == HidVis_VISIBLE &&		// The exam is visible
 			     Session->Hidden == HidVis_VISIBLE &&	// The session is visible
-			     Session->ShowUsrResults) ? Usr_CAN :		// The results of the session are visible to users
-							Usr_CAN_NOT;
+			     Session->Show_UsrResults == Sho_SHOW) ? Usr_CAN :	// The results of the session are visible to users
+							             Usr_CAN_NOT;
 	 // Whether I belong or not to groups of session is not checked here...
 	 // ...because I should be able to see old exams made in old groups to which I belonged
 

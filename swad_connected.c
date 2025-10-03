@@ -47,6 +47,7 @@
 #include "swad_photo.h"
 #include "swad_role.h"
 #include "swad_scope.h"
+#include "swad_show.h"
 #include "swad_string.h"
 #include "swad_user.h"
 
@@ -135,8 +136,9 @@ static unsigned long Con_GetTimeToRefresh (void)
 void Con_RefreshConnected (void)
   {
    unsigned NumUsr;
-   bool ShowConnected = (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&
-                        Gbl.Hierarchy.HieLvl == Hie_CRS;	// Right column visible && There is a course selected
+   Sho_Show_t ShowConnected = ((Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) != 0 &&	// Right column visible
+                               Gbl.Hierarchy.HieLvl == Hie_CRS) ? Sho_SHOW :		// There is a course selected
+                        					  Sho_DONT_SHOW;
 
    /***** Refresh time *****/
    HTM_TxtF ("%lu|",Con_GetTimeToRefresh ());
@@ -151,17 +153,17 @@ void Con_RefreshConnected (void)
    HTM_Char ('|');
 
    /***** Number of course connected users *****/
-   if (ShowConnected)
+   if (ShowConnected == Sho_SHOW)
       Con_ShowConnectedUsrsBelongingToCurrentCrs ();
    HTM_Char ('|');
 
    /***** Number of users to list *****/
-   if (ShowConnected)
+   if (ShowConnected == Sho_SHOW)
       HTM_Unsigned (Con_Connected.NumUsrsToList);
    HTM_Char ('|');
 
    /***** Time differences *****/
-   if (ShowConnected)
+   if (ShowConnected == Sho_SHOW)
       for (NumUsr = 0;
 	   NumUsr < Con_Connected.NumUsrsToList;
 	   NumUsr++)

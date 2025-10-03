@@ -849,6 +849,7 @@ static void Mch_ListOneOrMoreMatchesResultStd (struct Gam_Games *Games,
      }
   }
 
+// TODO: this function is similar to ExaSes_ListOneOrMoreSessionsResultTch
 static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
                                                const struct Mch_Match *Match)
   {

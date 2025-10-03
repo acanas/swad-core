@@ -636,6 +636,7 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 #define CSS_FILE		"swad24.98.2.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 25.8.3:   Oct 03, 2025  Code refactoring related to don't show/show. (350043 lines)
 	Version 25.8.2:   Oct 03, 2025  Code refactoring related to don't show/show. (350017 lines)
 	Version 25.8.1:   Oct 02, 2025  Code refactoring related to booleans. (349880 lines)
 	Version 25.8:     Oct 01, 2025  Notices can be private to course. (349863 lines)
