@@ -197,7 +197,7 @@ void Brw_GetSelectedUsrsAndShowWorks (void);
 void Brw_ShowFileBrowserOrWorks (void);
 void Brw_ShowAgainFileBrowserOrWorks (void);
 
-void Brw_PutParFullTreeIfSelected (void *FullTree);
+void Brw_PutParFullTreeIfSelected (void *ShowFullTree);
 
 void Brw_CreateDirDownloadTmp (void);
 

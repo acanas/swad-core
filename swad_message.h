@@ -83,7 +83,7 @@ struct Msg_Messages
    char FilterCrsShrtName[Nam_MAX_BYTES_SHRT_NAME + 1];
    char FilterFromTo[Usr_MAX_BYTES_FULL_NAME + 1];		// Show only messages from/to these users
    char FilterContent[Msg_MAX_BYTES_FILTER_CONTENT + 1];	// Show only messages that match this content
-   bool ShowOnlyUnreadMsgs;	// Show only unread messages (this option is applicable only for received messages)
+   bool OnlyUnreadMsgs;	// Show only unread messages (this option is applicable only for received messages)
    long ExpandedMsgCod;	// The current expanded message code
    struct
      {
@@ -96,7 +96,7 @@ struct Msg_Messages
       unsigned NumRecipients;
       unsigned NumErrors;
      } Rcv;
-   bool ShowOnlyOneRecipient;	// Shown only a selected recipient or also other potential recipients?
+   bool OnlyOneRecipient;	// Shown only a selected recipient or also other potential recipients?
    unsigned CurrentPage;
    long MsgCod;	// Used as parameter with message to be removed
   };

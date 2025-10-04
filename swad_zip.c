@@ -95,7 +95,7 @@ void ZIP_PutLinkToCreateZIPAsgWrk (void)
 static void ZIP_PutLinkToCreateZIPAsgWrkPars (__attribute__((unused)) void *Args)
   {
    Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
-   Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
+   Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.ShowFullTree);
    Par_PutParChar ("CreateZIP",'Y');
   }
 

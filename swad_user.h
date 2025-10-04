@@ -30,6 +30,7 @@
 
 #include "swad_error.h"
 #include "swad_forum.h"
+#include "swad_show.h"
 #include "swad_user_type.h"
 
 /*****************************************************************************/
@@ -128,9 +129,9 @@ void Usr_CopyBasicUsrDataFromList (struct Usr_Data *UsrDat,
                                    const struct Usr_InList *UsrInList);
 void Usr_FreeUsrsList (Rol_Role_t Role);
 
-bool Usr_GetIfShowBigList (unsigned NumUsrs,
-                           void (*FuncPars) (void *Args),void *Args,
-                           const char *OnSubmit);
+Sho_Show_t Usr_GetIfShowBigList (unsigned NumUsrs,
+				 void (*FuncPars) (void *Args),void *Args,
+				 const char *OnSubmit);
 
 void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct Usr_SelectedUsrs *SelectedUsrs);
 void Usr_PutParSelectedOtherUsrCod (void);

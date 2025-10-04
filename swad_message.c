@@ -182,14 +182,14 @@ static void Msg_ResetMessages (struct Msg_Messages *Messages)
    Messages->FilterCrsShrtName[0] = '\0';
    Messages->FilterFromTo[0]      = '\0';
    Messages->FilterContent[0]     = '\0';
-   Messages->ShowOnlyUnreadMsgs   = false;
+   Messages->OnlyUnreadMsgs   = false;
    Messages->ExpandedMsgCod       = -1L;
    Messages->Reply.IsReply          = Msg_IS_NOT_REPLY;
    Messages->Reply.Replied        = false;
    Messages->Reply.OriginalMsgCod = -1L;
    Messages->Rcv.NumRecipients    = 0;
    Messages->Rcv.NumErrors        = 0;
-   Messages->ShowOnlyOneRecipient = false;
+   Messages->OnlyOneRecipient = false;
    Messages->CurrentPage          = 0;
    Messages->MsgCod               = -1L;
   }
@@ -231,7 +231,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
    extern const char *Txt_Message;
    extern const char *Txt_MSG_To;
    unsigned NumUsrsInCrs = 0;	// Initialized to avoid warning
-   bool ShowUsrsInCrs = false;
+   Sho_Show_t ShowUsrsInCrs = Sho_DONT_SHOW;
    bool GetUsrsInCrs;
    bool OtherRecipientsBefore = false;
    char *ClassInput;
@@ -257,15 +257,15 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
 	 /* Get who to show as potential recipients:
 	    - only the selected recipient
 	    - any user (default) */
-	 Messages->ShowOnlyOneRecipient = Par_GetParBool ("ShowOnlyOneRecipient");
+	 Messages->OnlyOneRecipient = Par_GetParBool ("ShowOnlyOneRecipient");
 	 break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Messages->ShowOnlyOneRecipient = false;
+	 Messages->OnlyOneRecipient = false;
 	 break;
      }
 
-   GetUsrsInCrs = !Messages->ShowOnlyOneRecipient &&				// Show list of potential recipients
+   GetUsrsInCrs = !Messages->OnlyOneRecipient &&				// Show list of potential recipients
 	          (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG ||	// If there is a course selected and I belong to it...
 	           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);			// ...or I am a system admin
    if (GetUsrsInCrs)
@@ -291,7 +291,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
    Box_BoxBegin (Txt_Message,Msg_PutIconsListMsgs,Messages,
 		 Hlp_COMMUNICATION_Messages_write,Box_NOT_CLOSABLE);
 
-      if (Messages->ShowOnlyOneRecipient)
+      if (Messages->OnlyOneRecipient)
 	 /***** Form to show several potential recipients *****/
 	 Msg_PutLinkToShowMorePotentialRecipients (Messages);
       else
@@ -321,7 +321,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
 							Msg_PutParsWriteMsg,Messages,
 							"CopyMessageToHiddenFields();");
 
-		  if (ShowUsrsInCrs)
+		  if (ShowUsrsInCrs == Sho_SHOW)
 		     /***** Get lists of selected users *****/
 		     Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
 							    Usr_GET_LIST_ALL_USRS);
@@ -346,7 +346,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	   {
 	    Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-	    if (Messages->ShowOnlyOneRecipient)
+	    if (Messages->OnlyOneRecipient)
 	       Par_PutParChar ("ShowOnlyOneRecipient",'Y');
 	   }
 
@@ -360,19 +360,19 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-		  if (Messages->ShowOnlyOneRecipient)
+		  if (Messages->OnlyOneRecipient)
 		     /***** Show only one user as recipient *****/
 		     Msg_ShowOneUniqueRecipient ();
 		  else
 		    {
-		     if (ShowUsrsInCrs)
+		     if (ShowUsrsInCrs == Sho_SHOW)
 		       {
 			/***** Show potential recipients *****/
 			Usr_ListUsersToSelect (&Gbl.Usrs.Selected,ShowPhotos);
 			OtherRecipientsBefore = true;
 		       }
 		     UsrClp_ListUsrsInMyClipboard (Frm_PUT_FORM,
-						   false);		// Don't show if empty
+						   Sho_DONT_SHOW);	// Don't show if empty
 		     if (!OtherRecipientsBefore)
 		        OtherRecipientsBefore = (Gbl.Usrs.LstUsrs[Rol_UNK].NumUsrs != 0);
 		     Msg_WriteFormUsrsIDsOrNicksOtherRecipients (OtherRecipientsBefore);	// Other users (nicknames)
@@ -480,7 +480,7 @@ static void Msg_PutParsWriteMsg (void *Messages)
       if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	{
 	 Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-	 if (((struct Msg_Messages *) Messages)->ShowOnlyOneRecipient)
+	 if (((struct Msg_Messages *) Messages)->OnlyOneRecipient)
 	    Par_PutParChar ("ShowOnlyOneRecipient",'Y');
 	}
      }
@@ -940,13 +940,13 @@ void Msg_ReqDelAllRecMsgs (void)
    Msg_GetParMsgsCrsCod (&Messages);
    Msg_GetParFilterFromTo (&Messages);
    Msg_GetParFilterContent (&Messages);
-   Messages.ShowOnlyUnreadMsgs = Msg_GetParOnlyUnreadMsgs ();
+   Messages.OnlyUnreadMsgs = Msg_GetParOnlyUnreadMsgs ();
 
    /***** Show question and button to remove messages received *****/
    /* Begin alert */
    if (Messages.FilterContent[0])
      {
-      if (Messages.ShowOnlyUnreadMsgs)
+      if (Messages.OnlyUnreadMsgs)
          Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
 				      Messages.FilterFromTo[0] ? Messages.FilterFromTo :
 								 Txt_any_user,
@@ -959,7 +959,7 @@ void Msg_ReqDelAllRecMsgs (void)
      }
    else
      {
-      if (Messages.ShowOnlyUnreadMsgs)
+      if (Messages.OnlyUnreadMsgs)
          Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y,
 				      Messages.FilterFromTo[0] ? Messages.FilterFromTo :
 								 Txt_any_user,
@@ -1040,7 +1040,7 @@ void Msg_DelAllRecMsgs (void)
    Msg_GetParMsgsCrsCod (&Messages);
    Msg_GetParFilterFromTo (&Messages);
    Msg_GetParFilterContent (&Messages);
-   Messages.ShowOnlyUnreadMsgs = Msg_GetParOnlyUnreadMsgs ();
+   Messages.OnlyUnreadMsgs = Msg_GetParOnlyUnreadMsgs ();
    Msg_DB_MakeFilterFromToSubquery (&Messages,FilterFromToSubquery);
 
    /***** Delete messages *****/
@@ -1434,7 +1434,7 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
    switch (Messages->TypeOfMessages)
      {
       case Msg_RECEIVED:
-         Messages->ShowOnlyUnreadMsgs = Msg_GetParOnlyUnreadMsgs ();
+         Messages->OnlyUnreadMsgs = Msg_GetParOnlyUnreadMsgs ();
          NumUnreadMsgs = Msg_DB_GetNumUnreadMsgs (Messages,
                                                   FilterFromToSubquery);
          break;
@@ -1736,7 +1736,7 @@ void Msg_PutParsMsgsFilters (void *Messages)
       if (((struct Msg_Messages *) Messages)->FilterContent[0])
 	 Par_PutParString (NULL,"FilterContent",((struct Msg_Messages *) Messages)->FilterContent);
 
-      if (((struct Msg_Messages *) Messages)->ShowOnlyUnreadMsgs)
+      if (((struct Msg_Messages *) Messages)->OnlyUnreadMsgs)
 	 Par_PutParChar ("OnlyUnreadMsgs",'Y');
      }
   }
@@ -1862,7 +1862,7 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (const struct Msg_Messages *Mes
       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",
-				Messages->ShowOnlyUnreadMsgs ? HTM_CHECKED :
+				Messages->OnlyUnreadMsgs ? HTM_CHECKED :
 							       HTM_NO_ATTR,
 				"value=\"Y\"");
 	    HTM_Txt (Txt_only_unopened_messages);

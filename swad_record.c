@@ -83,7 +83,7 @@ extern struct Globals Gbl;
 #define Rec_USR_MIN_AGE  12	// years old
 #define Rec_USR_MAX_AGE 120	// years old
 
-#define Rec_SHOW_OFFICE_HOURS_DEFAULT	true
+#define Rec_SHOW_OFFICE_HOURS_DEFAULT	Sho_SHOW
 
 #define Rec_MY_INS_CTR_DPT_ID	"my_ins_ctr_dpt_section"
 
@@ -121,11 +121,11 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView);
 static void Rec_ShowLinkToPrintPreviewOfRecords (void);
 static void Rec_ShowSelectorRecsPerPag (unsigned RecsPerPag);
 static unsigned Rec_GetParRecordsPerPage (void);
-static void Rec_WriteFormShowOfficeHoursOneTch (bool ShowOfficeHours);
-static void Rec_WriteFormShowOfficeHoursSeveralTchs (bool ShowOfficeHours);
+static void Rec_WriteFormShowOfficeHoursOneTch (Sho_Show_t ShowOfficeHours);
+static void Rec_WriteFormShowOfficeHoursSeveralTchs (Sho_Show_t ShowOfficeHours);
 static void Rec_PutParsShowOfficeHoursOneTch (__attribute__((unused)) void *Args);
 static void Rec_PutParsShowOfficeHoursSeveralTchs (__attribute__((unused)) void *Args);
-static bool Rec_GetParShowOfficeHours (void);
+static Sho_Show_t Rec_GetParShowOfficeHours (void);
 static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                                struct Usr_Data *UsrDat,const char *Anchor);
 static void Rec_ShowMyCrsRecordUpdated (void);
@@ -143,7 +143,7 @@ static void Rec_ShowPhoto (struct Usr_Data *UsrDat);
 static void Rec_ShowFullName (struct Usr_Data *UsrDat);
 static void Rec_ShowNickname (struct Usr_Data *UsrDat,
 			      Frm_PutForm_t PutFormLinks);
-static void Rec_ShowCountryInHead (struct Usr_Data *UsrDat,bool ShowData);
+static void Rec_ShowCountryInHead (struct Usr_Data *UsrDat,Sho_Show_t ShowData);
 static void Rec_ShowWebsAndSocialNets (struct Usr_Data *UsrDat,
                                        Rec_SharedRecordViewType_t TypeOfView);
 static void Rec_ShowEmail (struct Usr_Data *UsrDat);
@@ -155,19 +155,19 @@ static void Rec_ShowSurname1 (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType);
 static void Rec_ShowSurname2 (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType);
 static void Rec_ShowFirstName (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType);
 static void Rec_ShowCountry (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType);
-static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,bool ShowData,
+static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,Sho_Show_t ShowData,
 				 Vie_ViewType_t ViewType);
-static void Rec_ShowPhone (struct Usr_Data *UsrDat,bool ShowData,
+static void Rec_ShowPhone (struct Usr_Data *UsrDat,Sho_Show_t ShowData,
 			   Vie_ViewType_t ViewType,unsigned NumPhone);
-static void Rec_ShowComments (struct Usr_Data *UsrDat,bool ShowData,
+static void Rec_ShowComments (struct Usr_Data *UsrDat,Sho_Show_t ShowData,
 			      Vie_ViewType_t ViewType);
 static void Rec_ShowTeacherRows (struct Usr_Data *UsrDat,struct Hie_Node *Ins,
-                                 bool ShowData);
-static void Rec_ShowInstitution (struct Hie_Node *Ins,bool ShowData);
-static void Rec_ShowCenter (struct Usr_Data *UsrDat,bool ShowData);
-static void Rec_ShowDepartment (struct Usr_Data *UsrDat,bool ShowData);
-static void Rec_ShowOffice (struct Usr_Data *UsrDat,bool ShowData);
-static void Rec_ShowOfficePhone (struct Usr_Data *UsrDat,bool ShowData);
+                                 Sho_Show_t ShowData);
+static void Rec_ShowInstitution (struct Hie_Node *Ins,Sho_Show_t ShowData);
+static void Rec_ShowCenter (struct Usr_Data *UsrDat,Sho_Show_t ShowData);
+static void Rec_ShowDepartment (struct Usr_Data *UsrDat,Sho_Show_t ShowData);
+static void Rec_ShowOffice (struct Usr_Data *UsrDat,Sho_Show_t ShowData);
+static void Rec_ShowOfficePhone (struct Usr_Data *UsrDat,Sho_Show_t ShowData);
 
 static void Rec_WriteLinkToDataProtectionClause (void);
 
@@ -1206,8 +1206,9 @@ void Rec_ShowRecordOneTchCrs (void)
   {
    extern const char *Hlp_USERS_Teachers_timetable;
    extern const char *Txt_TIMETABLE_TYPES[Tmt_NUM_TIMETABLE_TYPES];
+   extern const char Sho_Show_YN[Sho_NUM_SHOW];
    struct Tmt_Timetable Timetable;
-   bool ShowOfficeHours;
+   Sho_Show_t ShowOfficeHours;
 
    /***** Get if teacher has accepted enrolment in current course *****/
    Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
@@ -1227,8 +1228,7 @@ void Rec_ShowRecordOneTchCrs (void)
 	 Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	 Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 	 Par_PutParChar ("ParamOfficeHours",'Y');
-	 Par_PutParChar ("ShowOfficeHours",ShowOfficeHours ? 'Y' :
-							     'N');
+	 Par_PutParChar ("ShowOfficeHours",Sho_Show_YN[ShowOfficeHours]);
 	 Rec_ShowLinkToPrintPreviewOfRecords ();
       Frm_EndForm ();
 
@@ -1244,7 +1244,7 @@ void Rec_ShowRecordOneTchCrs (void)
       HTM_DIV_End ();
 
       /***** Office hours *****/
-      if (ShowOfficeHours)
+      if (ShowOfficeHours == Sho_SHOW)
 	{
 	 HTM_DIV_Begin ("class=\"REC_RIGHT\"");
 	    Timetable.Type = Tmt_TUTORING_TIMETABLE;
@@ -1279,12 +1279,13 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
   {
    extern const char *Hlp_USERS_Teachers_timetable;
    extern const char *Txt_TIMETABLE_TYPES[Tmt_NUM_TIMETABLE_TYPES];
+   extern const char Sho_Show_YN[Sho_NUM_SHOW];
    struct Tmt_Timetable Timetable;
    unsigned NumUsr = 0;
    const char *Ptr;
    struct Usr_Data UsrDat;
    char RecordSectionId[32];
-   bool ShowOfficeHours;
+   Sho_Show_t ShowOfficeHours;
    unsigned RecsPerPag = Rec_DEF_RECORDS_PER_PAGE;
 
    /***** Get list of selected users if not already got *****/
@@ -1310,8 +1311,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 	 Frm_BeginForm (ActPrnRecSevTch);
 	    Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	    Par_PutParChar ("ParamOfficeHours",'Y');
-	    Par_PutParChar ("ShowOfficeHours",ShowOfficeHours ? 'Y' :
-						                'N');
+	    Par_PutParChar ("ShowOfficeHours",Sho_Show_YN[ShowOfficeHours]);
 	    Rec_ShowLinkToPrintPreviewOfRecords ();
 	    Rec_ShowSelectorRecsPerPag (RecsPerPag);
 	 Frm_EndForm ();
@@ -1360,7 +1360,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 	       HTM_DIV_End ();
 
 	       /* Office hours */
-	       if (ShowOfficeHours)
+	       if (ShowOfficeHours == Sho_SHOW)
 		 {
 		  HTM_DIV_Begin ("class=\"REC_RIGHT\"");
 		     Timetable.Type = Tmt_TUTORING_TIMETABLE;
@@ -1448,28 +1448,28 @@ static unsigned Rec_GetParRecordsPerPage (void)
 /*********** Write a form to select whether show all office hours ************/
 /*****************************************************************************/
 
-static void Rec_WriteFormShowOfficeHoursOneTch (bool ShowOfficeHours)
+static void Rec_WriteFormShowOfficeHoursOneTch (Sho_Show_t ShowOfficeHours)
   {
    extern const char *Txt_Show_tutoring_hours;
 
    Lay_PutContextualCheckbox (ActSeeRecOneTch,
                               Rec_PutParsShowOfficeHoursOneTch,NULL,
                               "ShowOfficeHours",
-                              (ShowOfficeHours ? HTM_CHECKED :
-						 HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
+                              (ShowOfficeHours == Sho_SHOW ? HTM_CHECKED :
+                        				     HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
                               Txt_Show_tutoring_hours,
                               Txt_Show_tutoring_hours);
   }
 
-static void Rec_WriteFormShowOfficeHoursSeveralTchs (bool ShowOfficeHours)
+static void Rec_WriteFormShowOfficeHoursSeveralTchs (Sho_Show_t ShowOfficeHours)
   {
    extern const char *Txt_Show_tutoring_hours;
 
    Lay_PutContextualCheckbox (ActSeeRecSevTch,
                               Rec_PutParsShowOfficeHoursSeveralTchs,NULL,
                               "ShowOfficeHours",
-                              (ShowOfficeHours ? HTM_CHECKED :
-						 HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
+                              (ShowOfficeHours == Sho_SHOW ? HTM_CHECKED :
+                        				     HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
                               Txt_Show_tutoring_hours,
                               Txt_Show_tutoring_hours);
   }
@@ -1491,10 +1491,10 @@ static void Rec_PutParsShowOfficeHoursSeveralTchs (__attribute__((unused)) void 
 /*****************************************************************************/
 // Returns true if office hours must be shown
 
-static bool Rec_GetParShowOfficeHours (void)
+static Sho_Show_t Rec_GetParShowOfficeHours (void)
   {
    if (Par_GetParBool ("ParamOfficeHours"))
-      return Par_GetParBool ("ShowOfficeHours");
+      return Sho_GetParShow ("ShowOfficeHours");
 
    return Rec_SHOW_OFFICE_HOURS_DEFAULT;
   }
@@ -1596,7 +1596,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    unsigned NumField;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row = NULL; // Initialized to avoid warning
-   bool ShowField;
+   Sho_Show_t ShowField;
    Exi_Exist_t ThisFieldWithTextExists;
    Usr_Can_t ICanEditThisField;
    char Text[Cns_MAX_BYTES_TEXT + 1];
@@ -1688,11 +1688,12 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	   NumField < Gbl.Crs.Records.LstFields.Num;
 	   NumField++, The_ChangeRowColor ())
 	{
-	 ShowField = !(TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM ||
-		       TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_CHECK) ||
-		     Gbl.Crs.Records.LstFields.Lst[NumField].Visibility != Rec_HIDDEN_FIELD;
+	 ShowField = (!(TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM ||
+		        TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_CHECK) ||
+		      Gbl.Crs.Records.LstFields.Lst[NumField].Visibility != Rec_HIDDEN_FIELD) ? Sho_SHOW :
+												Sho_DONT_SHOW;
 	 // If the field must be shown...
-	 if (ShowField)
+	 if (ShowField == Sho_SHOW)
 	   {
 	    /* Can I edit this field? */
 	    switch (Gbl.Usrs.Me.Role.Logged)
@@ -2048,12 +2049,12 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    bool CountryForm;
    Vie_ViewType_t ViewType;
    Frm_PutForm_t PutFormLinks;	// Put links (forms) inside record card
-   bool ShowData;
-   bool ShowIDRows;
-   bool ShowAddressRows;
+   Sho_Show_t ShowData;
+   Sho_Show_t ShowIDRows;
+   Sho_Show_t ShowAddressRows;
    bool StudentInCurrentCrs;
    bool TeacherInCurrentCrs;
-   bool ShowTeacherRows;
+   Sho_Show_t ShowTeacherRows;
    struct Hie_Node Ins;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    Act_Action_t NextAction;
@@ -2066,8 +2067,10 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    CountryForm = (TypeOfView == Rec_SHA_MY_RECORD_FORM);
    ShowData = (MeOrOther == Usr_ME ||
 	       Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ||
-	       UsrDat->Accepted == Usr_HAS_ACCEPTED);
-   ShowIDRows = (TypeOfView != Rec_SHA_RECORD_PUBLIC);
+	       UsrDat->Accepted == Usr_HAS_ACCEPTED) ? Sho_SHOW :
+						       Sho_DONT_SHOW;
+   ShowIDRows = (TypeOfView != Rec_SHA_RECORD_PUBLIC) ? Sho_SHOW :
+						        Sho_DONT_SHOW;
 
    StudentInCurrentCrs = UsrDat->Roles.InCurrentCrs == Rol_STD;
    TeacherInCurrentCrs = UsrDat->Roles.InCurrentCrs == Rol_NET ||
@@ -2077,11 +2080,13 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 		      ((TypeOfView == Rec_SHA_RECORD_LIST   ||
 		        TypeOfView == Rec_SHA_RECORD_PRINT) &&
 		       IAmLoggedAsTeacherOrSysAdm &&
-		       StudentInCurrentCrs));			// He/she is a student in the current course
+		       StudentInCurrentCrs)) ? Sho_SHOW :
+					       Sho_DONT_SHOW;			// He/she is a student in the current course
    Rol_GetRolesInAllCrss (UsrDat);	// Get user's roles if not got
    ShowTeacherRows = (TypeOfView == Rec_SHA_RECORD_LIST ||
 		      TypeOfView == Rec_SHA_RECORD_PRINT) &&
-		     TeacherInCurrentCrs;			// He/she is a teacher in the current course
+		     TeacherInCurrentCrs ? Sho_SHOW :
+					   Sho_DONT_SHOW;			// He/she is a teacher in the current course
 
    /* Data form = I can edit fields like surnames and name */
    switch (TypeOfView)
@@ -2139,16 +2144,16 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	 Rec_ShowWebsAndSocialNets (UsrDat,TypeOfView);
       HTM_TR_End ();
 
-      if (ShowIDRows ||
-	  ShowAddressRows ||
-	  ShowTeacherRows)
+      if (ShowIDRows == Sho_SHOW ||
+	  ShowAddressRows == Sho_SHOW ||
+	  ShowTeacherRows == Sho_SHOW)
 	{
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("colspan=\"3\"");
 
 	       /***** Show email and user's IDs *****/
-	       if (ShowIDRows)
+	       if (ShowIDRows == Sho_SHOW)
 		 {
 		  HTM_TABLE_BeginWidePadding (2);
 
@@ -2214,7 +2219,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
 	       HTM_TABLE_BeginWidePadding (2);
 
-		  if (ShowIDRows)
+		  if (ShowIDRows == Sho_SHOW)
 		    {
 		     /***** Role or sex *****/
 		     Rec_ShowRole (UsrDat,TypeOfView);
@@ -2230,7 +2235,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 		    }
 
 		  /***** Address rows *****/
-		  if (ShowAddressRows)
+		  if (ShowAddressRows == Sho_SHOW)
 		    {
 		     /***** Date of birth *****/
 		     Rec_ShowDateOfBirth (UsrDat,ShowData,ViewType);
@@ -2244,7 +2249,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 		    }
 
 		  /***** Teacher's rows *****/
-		  if (ShowTeacherRows)
+		  if (ShowTeacherRows == Sho_SHOW)
 		     Rec_ShowTeacherRows (UsrDat,&Ins,ShowData);
 
 	       HTM_TABLE_End ();
@@ -2524,8 +2529,8 @@ static void Rec_PutParsWorks (__attribute__((unused)) void *Args)
   {
    Rec_PutParsStudent (NULL);
    Par_PutParChar ("FullTree",'Y');	// By default, show all files
-   Gbl.FileBrowser.FullTree = true;
-   Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
+   Gbl.FileBrowser.ShowFullTree = true;
+   Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.ShowFullTree);
   }
 
 static void Rec_PutParsStudent (__attribute__((unused)) void *Args)
@@ -2668,12 +2673,12 @@ static void Rec_ShowNickname (struct Usr_Data *UsrDat,
 /**************************** Show user's country ****************************/
 /*****************************************************************************/
 
-static void Rec_ShowCountryInHead (struct Usr_Data *UsrDat,bool ShowData)
+static void Rec_ShowCountryInHead (struct Usr_Data *UsrDat,Sho_Show_t ShowData)
   {
 
 
    HTM_TD_Begin ("class=\"REC_C2_MID LT DAT_STRONG_%s\"",The_GetSuffix ());
-      if (ShowData && UsrDat->CtyCod > 0)
+      if (ShowData == Sho_SHOW && UsrDat->CtyCod > 0)
 	 /* Link to see country information */
 	 Cty_WriteCountryName (UsrDat->CtyCod);	// Put link to country
    HTM_TD_End ();
@@ -3266,7 +3271,7 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
 /************************ Show user's date of birth **************************/
 /*****************************************************************************/
 
-static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,bool ShowData,
+static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,Sho_Show_t ShowData,
 				 Vie_ViewType_t ViewType)
   {
    extern const char *Txt_Date_of_birth;
@@ -3282,7 +3287,7 @@ static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,bool ShowData,
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",The_GetSuffix ());
-	 if (ShowData)
+	 if (ShowData == Sho_SHOW)
 	    switch (ViewType)
 	      {
 	       case Vie_VIEW:
@@ -3310,7 +3315,7 @@ static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,bool ShowData,
 /*****************************************************************************/
 // NumPhone can be 0 or 1
 
-static void Rec_ShowPhone (struct Usr_Data *UsrDat,bool ShowData,
+static void Rec_ShowPhone (struct Usr_Data *UsrDat,Sho_Show_t ShowData,
 			   Vie_ViewType_t ViewType,unsigned NumPhone)
   {
    extern const char *Txt_Phone;
@@ -3335,7 +3340,7 @@ static void Rec_ShowPhone (struct Usr_Data *UsrDat,bool ShowData,
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",The_GetSuffix ());
-	 if (ShowData)
+	 if (ShowData == Sho_SHOW)
 	    switch (ViewType)
 	      {
 	       case Vie_VIEW:
@@ -3372,7 +3377,7 @@ static void Rec_ShowPhone (struct Usr_Data *UsrDat,bool ShowData,
 /************************** Show user's comments *****************************/
 /*****************************************************************************/
 
-static void Rec_ShowComments (struct Usr_Data *UsrDat,bool ShowData,
+static void Rec_ShowComments (struct Usr_Data *UsrDat,Sho_Show_t ShowData,
 			      Vie_ViewType_t ViewType)
   {
    extern const char *Txt_USER_comments;
@@ -3387,7 +3392,7 @@ static void Rec_ShowComments (struct Usr_Data *UsrDat,bool ShowData,
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",The_GetSuffix ());
-	 if (ShowData)
+	 if (ShowData == Sho_SHOW)
 	    switch (ViewType)
 	      {
 	       case Vie_VIEW:
@@ -3422,7 +3427,7 @@ static void Rec_ShowComments (struct Usr_Data *UsrDat,bool ShowData,
 /*****************************************************************************/
 
 static void Rec_ShowTeacherRows (struct Usr_Data *UsrDat,struct Hie_Node *Ins,
-                                 bool ShowData)
+                                 Sho_Show_t ShowData)
   {
    /***** Institution *****/
    Rec_ShowInstitution (Ins,ShowData);
@@ -3444,7 +3449,7 @@ static void Rec_ShowTeacherRows (struct Usr_Data *UsrDat,struct Hie_Node *Ins,
 /************************** Show user's institution **************************/
 /*****************************************************************************/
 
-static void Rec_ShowInstitution (struct Hie_Node *Ins,bool ShowData)
+static void Rec_ShowInstitution (struct Hie_Node *Ins,Sho_Show_t ShowData)
   {
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
 
@@ -3456,7 +3461,7 @@ static void Rec_ShowInstitution (struct Hie_Node *Ins,bool ShowData)
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",The_GetSuffix ());
-	 if (ShowData)
+	 if (ShowData == Sho_SHOW)
 	    if (Ins->HieCod > 0)
 	      {
 	       if (Ins->WWW[0])
@@ -3476,7 +3481,7 @@ static void Rec_ShowInstitution (struct Hie_Node *Ins,bool ShowData)
 /*************************** Show user's center ******************************/
 /*****************************************************************************/
 
-static void Rec_ShowCenter (struct Usr_Data *UsrDat,bool ShowData)
+static void Rec_ShowCenter (struct Usr_Data *UsrDat,Sho_Show_t ShowData)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
@@ -3491,8 +3496,7 @@ static void Rec_ShowCenter (struct Usr_Data *UsrDat,bool ShowData)
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",The_GetSuffix ());
-	 if (ShowData)
-	   {
+	 if (ShowData == Sho_SHOW)
 	    if (UsrDat->Tch.CtrCod > 0)
 	      {
 	       Ctr.HieCod = UsrDat->Tch.CtrCod;
@@ -3505,7 +3509,6 @@ static void Rec_ShowCenter (struct Usr_Data *UsrDat,bool ShowData)
 	       if (Ctr.WWW[0])
 		  HTM_A_End ();
 	      }
-	   }
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3515,7 +3518,7 @@ static void Rec_ShowCenter (struct Usr_Data *UsrDat,bool ShowData)
 /************************* Show user's department ****************************/
 /*****************************************************************************/
 
-static void Rec_ShowDepartment (struct Usr_Data *UsrDat,bool ShowData)
+static void Rec_ShowDepartment (struct Usr_Data *UsrDat,Sho_Show_t ShowData)
   {
    extern const char *Txt_Department;
    struct Dpt_Department Dpt;
@@ -3528,8 +3531,7 @@ static void Rec_ShowDepartment (struct Usr_Data *UsrDat,bool ShowData)
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",The_GetSuffix ());
-	 if (ShowData)
-	   {
+	 if (ShowData == Sho_SHOW)
 	    if (UsrDat->Tch.DptCod > 0)
 	      {
 	       Dpt.DptCod = UsrDat->Tch.DptCod;
@@ -3542,7 +3544,6 @@ static void Rec_ShowDepartment (struct Usr_Data *UsrDat,bool ShowData)
 	       if (Dpt.WWW[0])
 		  HTM_A_End ();
 	      }
-	   }
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3552,7 +3553,7 @@ static void Rec_ShowDepartment (struct Usr_Data *UsrDat,bool ShowData)
 /*************************** Show user's office ******************************/
 /*****************************************************************************/
 
-static void Rec_ShowOffice (struct Usr_Data *UsrDat,bool ShowData)
+static void Rec_ShowOffice (struct Usr_Data *UsrDat,Sho_Show_t ShowData)
   {
    extern const char *Txt_Office;
 
@@ -3564,7 +3565,7 @@ static void Rec_ShowOffice (struct Usr_Data *UsrDat,bool ShowData)
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",The_GetSuffix ());
-	 if (ShowData)
+	 if (ShowData == Sho_SHOW)
 	    HTM_Txt (UsrDat->Tch.Office);
       HTM_TD_End ();
 
@@ -3575,7 +3576,7 @@ static void Rec_ShowOffice (struct Usr_Data *UsrDat,bool ShowData)
 /************************ Show user's office phone ***************************/
 /*****************************************************************************/
 
-static void Rec_ShowOfficePhone (struct Usr_Data *UsrDat,bool ShowData)
+static void Rec_ShowOfficePhone (struct Usr_Data *UsrDat,Sho_Show_t ShowData)
   {
    extern const char *Txt_Phone;
 
@@ -3587,7 +3588,7 @@ static void Rec_ShowOfficePhone (struct Usr_Data *UsrDat,bool ShowData)
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",The_GetSuffix ());
-	 if (ShowData)
+	 if (ShowData == Sho_SHOW)
 	   {
 	    HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_STRONG_%s\"",
 			 UsrDat->Tch.OfficePhone,The_GetSuffix ());

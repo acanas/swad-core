@@ -1164,7 +1164,6 @@ static void Brw_InitHiddenLevels (void);
 
 static void Brw_PutCheckboxFullTree (void);
 static void Brw_PutParsFullTree (__attribute__((unused)) void *Args);
-static bool Brw_GetFullTreeFromForm (void);
 
 static void Brw_GetAndUpdateDateLastAccFileBrowser (void);
 static long Brw_GetGrpLastAccZone (const char *FieldNameDB);
@@ -2035,39 +2034,39 @@ void Brw_GetParAndInitFileBrowser (void)
    /***** Get whether to show full tree *****/
    // If I belong to the current course or I am superuser, or file browser is briefcase ==> get whether show full tree from form
    // Else ==> show full tree (only public files)
-   Gbl.FileBrowser.ShowOnlyPublicFiles = false;
+   Gbl.FileBrowser.OnlyPublicFiles = false;
    if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
       switch (Gbl.FileBrowser.Type)
 	{
 	 case Brw_SHOW_DOC_INS:
 	 case Brw_ADMI_DOC_INS:
 	 case Brw_ADMI_SHR_INS:
-	    Gbl.FileBrowser.ShowOnlyPublicFiles =
+	    Gbl.FileBrowser.OnlyPublicFiles =
 	    (Gbl.Usrs.Me.IBelongToCurrent[Hie_INS] == Usr_DONT_BELONG);
 	    break;
 	 case Brw_SHOW_DOC_CTR:
 	 case Brw_ADMI_DOC_CTR:
 	 case Brw_ADMI_SHR_CTR:
-	    Gbl.FileBrowser.ShowOnlyPublicFiles =
+	    Gbl.FileBrowser.OnlyPublicFiles =
 	    (Gbl.Usrs.Me.IBelongToCurrent[Hie_CTR] == Usr_DONT_BELONG);
 	    break;
 	 case Brw_SHOW_DOC_DEG:
 	 case Brw_ADMI_DOC_DEG:
 	 case Brw_ADMI_SHR_DEG:
-	    Gbl.FileBrowser.ShowOnlyPublicFiles =
+	    Gbl.FileBrowser.OnlyPublicFiles =
 	    (Gbl.Usrs.Me.IBelongToCurrent[Hie_DEG] == Usr_DONT_BELONG);
 	    break;
 	 case Brw_SHOW_DOC_CRS:
 	 case Brw_ADMI_DOC_CRS:
 	 case Brw_ADMI_SHR_CRS:
-	    Gbl.FileBrowser.ShowOnlyPublicFiles =
+	    Gbl.FileBrowser.OnlyPublicFiles =
 	    (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_DONT_BELONG);
 	    break;
 	 default:
 	    break;
 	}
-   Gbl.FileBrowser.FullTree = Gbl.FileBrowser.ShowOnlyPublicFiles ? true :
-	                                                            Brw_GetFullTreeFromForm ();
+   Gbl.FileBrowser.ShowFullTree = Gbl.FileBrowser.OnlyPublicFiles ? Sho_SHOW :
+									Sho_GetParShow ("FullTree");
 
    /***** Initialize file browser *****/
    Brw_SetGrpCod (GrpCod);
@@ -2180,7 +2179,7 @@ void Brw_PutParsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
      }
 
    /***** If full tree selected? *****/
-   Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
+   Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.ShowFullTree);
 
    /***** Path and file *****/
    if (PathInTree)
@@ -2924,7 +2923,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 
    /***** Begin form *****/
    Frm_BeginForm (Brw_ActChgZone[Gbl.FileBrowser.Type]);
-      Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
+      Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.ShowFullTree);
 
       /***** List start *****/
       HTM_UL_Begin ("class=\"LIST_LEFT\"");
@@ -3357,11 +3356,11 @@ static void Brw_PutIconsFileBrowser (__attribute__((unused)) void *Args)
 	 break;
       case Brw_ICON_VIEW:
 	 Ico_PutContextualIconToView (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type],NULL,
-				      Brw_PutParFullTreeIfSelected,&Gbl.FileBrowser.FullTree);
+				      Brw_PutParFullTreeIfSelected,&Gbl.FileBrowser.ShowFullTree);
 	 break;
       case Brw_ICON_EDIT:
 	 Ico_PutContextualIconToEdit (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type],NULL,
-				      Brw_PutParFullTreeIfSelected,&Gbl.FileBrowser.FullTree);
+				      Brw_PutParFullTreeIfSelected,&Gbl.FileBrowser.ShowFullTree);
 	 break;
      }
 
@@ -3622,8 +3621,8 @@ static void Brw_PutCheckboxFullTree (void)
    Lay_PutContextualCheckbox (Brw_ActSeeAdm[Gbl.FileBrowser.Type],
                               Brw_PutParsFullTree,NULL,
                               "FullTree",
-                              (Gbl.FileBrowser.FullTree ? HTM_CHECKED :
-                        				  HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
+                              (Gbl.FileBrowser.ShowFullTree == Sho_SHOW ? HTM_CHECKED :
+                        						  HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
                               Txt_Show_all_files,Txt_Show_all_files);
   }
 
@@ -3641,20 +3640,11 @@ static void Brw_PutParsFullTree (__attribute__((unused)) void *Args)
 /********* Put hidden parameter "full tree" if full tree is selected *********/
 /*****************************************************************************/
 
-void Brw_PutParFullTreeIfSelected (void *FullTree)
+void Brw_PutParFullTreeIfSelected (void *ShowFullTree)
   {
-   if (FullTree)
-      if (*((bool *) FullTree))	// Put hidden parameter only if full tree selected
+   if (ShowFullTree)
+      if (*((Sho_Show_t *) ShowFullTree) == Sho_SHOW)	// Put hidden parameter only if full tree selected
 	 Par_PutParChar ("FullTree",'Y');
-  }
-
-/*****************************************************************************/
-/******************* Get whether to show full tree from form *****************/
-/*****************************************************************************/
-
-static bool Brw_GetFullTreeFromForm (void)
-  {
-   return Par_GetParBool ("FullTree");
   }
 
 /*****************************************************************************/
@@ -3842,28 +3832,32 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 	      {
 	       Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_FOLDER;
 
-	       if (Gbl.FileBrowser.FullTree)
-		  IconSubtree = Brw_ICON_TREE_NOTHING;
-	       else
+	       switch (Gbl.FileBrowser.ShowFullTree)
 		 {
-		  /***** Check if this subdirectory has files or folders in it *****/
-		  if ((NumFilesInSubdir = scandir (PathFileRel,&SubdirFileList,NULL,NULL)) >= 0)	// No error
-		    {
-		     if (NumFilesInSubdir <= 2)
-			IconSubtree = Brw_ICON_TREE_NOTHING;
+		  case Sho_SHOW:
+		     IconSubtree = Brw_ICON_TREE_NOTHING;
+		     break;
+		  case Sho_DONT_SHOW:
+		  default:
+		     /***** Check if this subdirectory has files or folders in it *****/
+		     if ((NumFilesInSubdir = scandir (PathFileRel,&SubdirFileList,NULL,NULL)) >= 0)	// No error
+		       {
+			if (NumFilesInSubdir <= 2)
+			   IconSubtree = Brw_ICON_TREE_NOTHING;
+			else
+			   /***** Check if the tree starting at this subdirectory must be expanded *****/
+			   IconSubtree = Brw_DB_GetIfContractedOrExpandedFolder (Gbl.FileBrowser.FilFolLnk.Full)
+					 == ConExp_EXPANDED ? Brw_ICON_TREE_CONTRACT :
+							      Brw_ICON_TREE_EXPAND;
+			for (NumFileInSubdir = 0;
+			     NumFileInSubdir < NumFilesInSubdir;
+			     NumFileInSubdir++)
+			   free (SubdirFileList[NumFileInSubdir]);
+			free (SubdirFileList);
+		       }
 		     else
-			/***** Check if the tree starting at this subdirectory must be expanded *****/
-			IconSubtree = Brw_DB_GetIfContractedOrExpandedFolder (Gbl.FileBrowser.FilFolLnk.Full)
-			              == ConExp_EXPANDED ? Brw_ICON_TREE_CONTRACT :
-							   Brw_ICON_TREE_EXPAND;
-		     for (NumFileInSubdir = 0;
-			  NumFileInSubdir < NumFilesInSubdir;
-			  NumFileInSubdir++)
-			free (SubdirFileList[NumFileInSubdir]);
-		     free (SubdirFileList);
-		    }
-		  else
-		     Err_ShowErrorAndExit ("Error while scanning directory.");
+			Err_ShowErrorAndExit ("Error while scanning directory.");
+		     break;
 		 }
 
 	       /***** Write a row for the subdirectory *****/
@@ -3971,7 +3965,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
      {
       RowSetAsPublic = (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER) ? Brw_DB_GetIfFolderHasPublicFiles (Gbl.FileBrowser.FilFolLnk.Full) :
 	                                                                   (FileMetadata.Public == PriPub_PUBLIC);
-      if (Gbl.FileBrowser.ShowOnlyPublicFiles && !RowSetAsPublic)
+      if (Gbl.FileBrowser.OnlyPublicFiles && !RowSetAsPublic)
          return HidVis_HIDDEN;
      }
 
@@ -4042,7 +4036,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
    /****** If current action allows file administration... ******/
    Brw_SetIfICanEditFileOrFolder (Usr_CAN_NOT);
    if (Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type) &&
-       !Gbl.FileBrowser.ShowOnlyPublicFiles)
+       !Gbl.FileBrowser.OnlyPublicFiles)
      {
       if (Gbl.FileBrowser.Clipboard.IsThisTree &&
 	  Level)	// Never copy root folder
@@ -9646,7 +9640,7 @@ static void Brw_PutLinkToAskRemOldFiles (void)
    extern const char *Txt_Remove_old_files;
 
    Lay_PutContextualLinkIconText (ActReqRemOldBrf,NULL,
-				  Brw_PutParFullTreeIfSelected,&Gbl.FileBrowser.FullTree,
+				  Brw_PutParFullTreeIfSelected,&Gbl.FileBrowser.ShowFullTree,
 				  "trash.svg",Ico_RED,
 				  Txt_Remove_old_files,NULL);
   }
@@ -9667,7 +9661,7 @@ void Brw_AskRemoveOldFilesBriefcase (void)
 
    /***** Begin form *****/
    Frm_BeginForm (ActRemOldBrf);
-      Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
+      Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.ShowFullTree);
 
       /***** Begin box *****/
       Box_BoxBegin (Txt_Remove_old_files,NULL,NULL,NULL,Box_NOT_CLOSABLE);

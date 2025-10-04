@@ -284,7 +284,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 	    /***** Form to select type of list used for select several users *****/
 	    Usr_ShowFormsToSelectUsrListType (NULL,NULL,NULL,ShowPhotos);
 
-	    if (Usr_GetIfShowBigList (NumUsrs,NULL,NULL,NULL))
+	    if (Usr_GetIfShowBigList (NumUsrs,NULL,NULL,NULL) == Sho_SHOW)
 	      {
 	       /***** Put link to register students *****/
 	       Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs ();

@@ -466,7 +466,8 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
       PutIconExpandContract = (Tre_DB_CheckIfNodeHasTxt (Node) == Exi_EXISTS);
       if (!PutIconExpandContract)
 	 PutIconExpandContract = (Tre_DB_CheckListItems (Node,
-							 ViewingOrEditingProgram[ListingType] == Vie_EDIT) == Exi_EXISTS);
+							 (ViewingOrEditingProgram[ListingType] == Vie_EDIT) ? Sho_SHOW :
+													      Sho_DONT_SHOW) == Exi_EXISTS);
      }
 
    /***** Check if this node should be shown as hidden *****/

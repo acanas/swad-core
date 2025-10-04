@@ -389,7 +389,7 @@ unsigned Msg_DB_GetSntOrRcvMsgs (MYSQL_RES **mysql_res,
       switch (Messages->TypeOfMessages)
         {
          case Msg_RECEIVED:
-            StrUnreadMsg = (Messages->ShowOnlyUnreadMsgs ? " AND msg_rcv.Open='N'" :
+            StrUnreadMsg = (Messages->OnlyUnreadMsgs ? " AND msg_rcv.Open='N'" :
         	                                           "");
             if (FilterFromToSubquery[0])
               {
@@ -483,7 +483,7 @@ unsigned Msg_DB_GetSntOrRcvMsgs (MYSQL_RES **mysql_res,
          case Msg_RECEIVED:
             if (FilterFromToSubquery[0])
               {
-               StrUnreadMsg = (Messages->ShowOnlyUnreadMsgs ? " AND msg_rcv.Open='N'" :
+               StrUnreadMsg = (Messages->OnlyUnreadMsgs ? " AND msg_rcv.Open='N'" :
         	                                              "");
                if (asprintf (&SubQuery,"(SELECT msg_rcv.MsgCod"
 				         " FROM msg_rcv,"
@@ -510,7 +510,7 @@ unsigned Msg_DB_GetSntOrRcvMsgs (MYSQL_RES **mysql_res,
               }
             else
               {
-               StrUnreadMsg = (Messages->ShowOnlyUnreadMsgs ? " AND Open='N'" :
+               StrUnreadMsg = (Messages->OnlyUnreadMsgs ? " AND Open='N'" :
         	                                              "");
                if (asprintf (&SubQuery,"SELECT MsgCod"
 				        " FROM msg_rcv"

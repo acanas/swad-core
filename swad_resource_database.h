@@ -49,7 +49,6 @@ void Rsc_DB_RemoveLinkFromClipboard (struct Rsc_Link *Link);
 //------------------------ Resources in program -------------------------------
 long Rsc_DB_CreateRsc (const struct Tre_Node *Node);
 
-bool Rsc_DB_CheckListResources (long NodCod,bool ShowHiddenResources);
 unsigned Rsc_DB_GetListRscs (MYSQL_RES **mysql_res,long NodCod,
                              Sho_Show_t ShowHiddenResources);
 Exi_Exist_t Rsc_DB_GetRscDataByCod (MYSQL_RES **mysql_res,long ItmCod);

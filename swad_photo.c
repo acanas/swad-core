@@ -2522,7 +2522,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
    char PathRelAvgPhoto[PATH_MAX + 1];
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    char PhotoCaption[1024 + Nam_MAX_BYTES_SHRT_NAME];
-   bool ShowDegPhoto;
+   Sho_Show_t ShowDegPhoto;
    char IdCaption[Frm_MAX_BYTES_ID + 1];
 
    /***** Initializations *****/
@@ -2547,12 +2547,14 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
 
    /***** Check if photo of degree can be shown *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      ShowDegPhoto = (NumStds > 0);
+      ShowDegPhoto = (NumStds > 0) ? Sho_SHOW :
+				     Sho_DONT_SHOW;
    else
       ShowDegPhoto = (NumStds > 0 &&
-		      NumStdsWithPhoto >= Cfg_MIN_PHOTOS_TO_SHOW_AVERAGE);
+		      NumStdsWithPhoto >= Cfg_MIN_PHOTOS_TO_SHOW_AVERAGE) ? Sho_SHOW :
+									    Sho_DONT_SHOW;
 
-   if (ShowDegPhoto)
+   if (ShowDegPhoto == Sho_SHOW)
      {
       snprintf (PathRelAvgPhoto,sizeof (PathRelAvgPhoto),"%s/%s/%ld_%s.jpg",
 	        Cfg_PATH_PHOTO_PUBLIC,

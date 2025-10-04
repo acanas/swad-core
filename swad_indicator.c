@@ -77,8 +77,8 @@ typedef enum
 static void Ind_GetParsIndicators (struct Ind_Indicators *Indicators,
 				   unsigned AllowedLvls);
 static void Ind_GetParNumIndicators (struct Ind_Indicators *Indicators);
-static bool Ind_GetIfShowBigList (struct Ind_Indicators *Indicators,
-                                  unsigned NumCrss);
+static Sho_Show_t Ind_GetIfShowBigList (struct Ind_Indicators *Indicators,
+					unsigned NumCrss);
 static void Ind_PutButtonToConfirmIWantToSeeBigList (struct Ind_Indicators *Indicators,
                                                      unsigned NumCrss);
 static void Ind_PutParsConfirmIWantToSeeBigList (void *Indicators);
@@ -224,10 +224,11 @@ void Ind_ReqIndicatorsCourses (void)
 	   Ind++)
 	 if (Indicators.Checked[Ind] == HTM_CHECKED)
 	    NumCrssToList += NumCrssWithIndicatorYes[Ind];
-      if (Ind_GetIfShowBigList (&Indicators,NumCrssToList))
+      if (Ind_GetIfShowBigList (&Indicators,NumCrssToList) == Sho_SHOW)
 	{
 	 /* Show table */
-	 Ind_ShowTableOfCoursesWithIndicators (&Indicators,Ind_INDICATORS_BRIEF,NumCrss,mysql_res);
+	 Ind_ShowTableOfCoursesWithIndicators (&Indicators,Ind_INDICATORS_BRIEF,
+					       NumCrss,mysql_res);
 
 	 /* Button to show more details */
 	 Frm_BeginForm (ActSeeAllStaCrs);
@@ -302,7 +303,8 @@ void Ind_ShowIndicatorsCourses (void)
 				     Frm_DONT_PUT_FORM);
 
    /***** Show the stats of courses *****/
-   Ind_ShowTableOfCoursesWithIndicators (&Indicators,Ind_INDICATORS_FULL,NumCrss,mysql_res);
+   Ind_ShowTableOfCoursesWithIndicators (&Indicators,Ind_INDICATORS_FULL,
+				         NumCrss,mysql_res);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -360,17 +362,17 @@ static void Ind_GetParNumIndicators (struct Ind_Indicators *Indicators)
 /******* Show form to confirm that I want to see a big list of courses *******/
 /*****************************************************************************/
 
-static bool Ind_GetIfShowBigList (struct Ind_Indicators *Indicators,
-                                  unsigned NumCrss)
+static Sho_Show_t Ind_GetIfShowBigList (struct Ind_Indicators *Indicators,
+					unsigned NumCrss)
   {
-   bool ShowBigList;
+   Sho_Show_t ShowBigList;
 
    /***** If list of courses is too big... *****/
    if (NumCrss <= Cfg_MIN_NUM_COURSES_TO_CONFIRM_SHOW_BIG_LIST)
-      return true;	// List is not too big ==> show it
+      return Sho_SHOW;	// List is not too big ==> show it
 
    /***** Get parameter with user's confirmation to see a big list of courses *****/
-   if (!(ShowBigList = Par_GetParBool ("ShowBigList")))
+   if ((ShowBigList = Sho_GetParShow ("ShowBigList")) == Sho_DONT_SHOW)
       Ind_PutButtonToConfirmIWantToSeeBigList (Indicators,NumCrss);
 
    return ShowBigList;

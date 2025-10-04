@@ -155,14 +155,15 @@ void Mch_DB_UpdateMatchTitle (long MchCod,
 /******************** Toggle visibility of match results *********************/
 /*****************************************************************************/
 
-void Mch_DB_UpdateVisResultsMchUsr (long MchCod,bool ShowUsrResults)
+void Mch_DB_UpdateVisResultsMchUsr (long MchCod,Sho_Show_t ShowUsrResults)
   {
+   extern const char Sho_Show_YN[Sho_NUM_SHOW];
+
    DB_QueryUPDATE ("can not toggle visibility of match results",
 		   "UPDATE mch_matches"
 		     " SET ShowUsrResults='%c'"
 		   " WHERE MchCod=%ld",
-		   ShowUsrResults ? 'Y' :
-			            'N',
+		   Sho_Show_YN[ShowUsrResults],
 		   MchCod);
   }
 
