@@ -203,13 +203,19 @@ void Tre_DB_MoveDownNodes (Inf_Type_t InfoType,unsigned Index)
 
 void Tre_DB_MoveLeftRightNodeRange (Inf_Type_t InfoType,
 				    const struct Tre_NodeRange *ToMove,
-                                    Tre_MoveLeftRight_t LeftRight)
+                                    Tre_Movement_t Movement)
   {
-   static char IncDec[Tre_NUM_MOVEMENTS_LEFT_RIGHT] =
+   static char IncDec[Tre_NUM_MOVEMENTS] =
      {
+      [Tre_MOVE_UP   ] = '\0',
+      [Tre_MOVE_DOWN ] = '\0',
       [Tre_MOVE_LEFT ] = '-',
       [Tre_MOVE_RIGHT] = '+',
      };
+
+   /***** Trivial check *****/
+   if (!IncDec[Movement])
+      Err_WrongTypeExit ();
 
    DB_QueryUPDATE ("can not move tree nodes",
 		   "UPDATE tre_nodes"
@@ -218,7 +224,7 @@ void Tre_DB_MoveLeftRightNodeRange (Inf_Type_t InfoType,
 		     " AND Type='%s'"
 		     " AND NodInd>=%u"
 		     " AND NodInd<=%u",
-		   IncDec[LeftRight],
+		   IncDec[Movement],
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[InfoType],
 		   ToMove->Begin,

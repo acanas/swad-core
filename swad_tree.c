@@ -37,6 +37,7 @@
 #include "swad_box.h"
 #include "swad_contracted_expanded.h"
 #include "swad_database.h"
+#include "swad_deny_allow.h"
 #include "swad_error.h"
 #include "swad_FAQ.h"
 #include "swad_figure.h"
@@ -150,10 +151,18 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
                                           unsigned NumNode,
                                           struct Tre_Node *Node,
                                           bool HighlightNode);
-static bool Tre_CheckIfMoveUpIsAllowed (unsigned NumNode);
-static bool Tre_CheckIfMoveDownIsAllowed (unsigned NumNode);
-static bool Tre_CheckIfMoveLeftIsAllowed (unsigned NumNode);
-static bool Tre_CheckIfMoveRightIsAllowed (unsigned NumNode);
+
+static DenAll_DenyOrAllow_t Tre_CheckIfMoveUpIsAllowed (unsigned NumNode);
+static DenAll_DenyOrAllow_t Tre_CheckIfMoveDownIsAllowed (unsigned NumNode);
+static DenAll_DenyOrAllow_t Tre_CheckIfMoveLeftIsAllowed (unsigned NumNode);
+static DenAll_DenyOrAllow_t Tre_CheckIfMoveRightIsAllowed (unsigned NumNode);
+static DenAll_DenyOrAllow_t (*Tre_CheckIfAllowed[Tre_NUM_MOVEMENTS]) (unsigned NumNode) =
+  {
+   [Tre_MOVE_UP   ] = Tre_CheckIfMoveUpIsAllowed,
+   [Tre_MOVE_DOWN ] = Tre_CheckIfMoveDownIsAllowed,
+   [Tre_MOVE_LEFT ] = Tre_CheckIfMoveLeftIsAllowed,
+   [Tre_MOVE_RIGHT] = Tre_CheckIfMoveRightIsAllowed,
+  };
 
 static void Tre_GetNodeDataByCod (struct Tre_Node *Node);
 static void Tre_GetNodeDataFromRow (MYSQL_RES **mysql_res,
@@ -1094,58 +1103,60 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
       [Inf_LINKS	] = ActFrmNewTreNodLnk,
       [Inf_ASSESSMENT	] = ActFrmNewTreNodAss,
      };
-   static Act_Action_t ActionsUp_[Inf_NUM_TYPES] =
+   static Act_Action_t ActionsMove[Tre_NUM_MOVEMENTS][Inf_NUM_TYPES] =
      {
-      [Inf_UNKNOWN_TYPE	] = ActUnk,
-      [Inf_INFORMATION	] = ActUp_TreNodInf,
-      [Inf_PROGRAM	] = ActUp_TreNodPrg,
-      [Inf_TEACH_GUIDE	] = ActUp_TreNodGui,
-      [Inf_SYLLABUS_LEC	] = ActUp_TreNodSyl,
-      [Inf_SYLLABUS_PRA	] = ActUp_TreNodSyl,
-      [Inf_BIBLIOGRAPHY	] = ActUp_TreNodBib,
-      [Inf_FAQ		] = ActUp_TreNodFAQ,
-      [Inf_LINKS	] = ActUp_TreNodLnk,
-      [Inf_ASSESSMENT	] = ActUp_TreNodAss,
+      [Tre_MOVE_UP	][Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Tre_MOVE_UP	][Inf_INFORMATION	] = ActUp_TreNodInf,
+      [Tre_MOVE_UP	][Inf_PROGRAM		] = ActUp_TreNodPrg,
+      [Tre_MOVE_UP	][Inf_TEACH_GUIDE	] = ActUp_TreNodGui,
+      [Tre_MOVE_UP	][Inf_SYLLABUS_LEC	] = ActUp_TreNodSyl,
+      [Tre_MOVE_UP	][Inf_SYLLABUS_PRA	] = ActUp_TreNodSyl,
+      [Tre_MOVE_UP	][Inf_BIBLIOGRAPHY	] = ActUp_TreNodBib,
+      [Tre_MOVE_UP	][Inf_FAQ		] = ActUp_TreNodFAQ,
+      [Tre_MOVE_UP	][Inf_LINKS		] = ActUp_TreNodLnk,
+      [Tre_MOVE_UP	][Inf_ASSESSMENT	] = ActUp_TreNodAss,
+
+      [Tre_MOVE_DOWN	][Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Tre_MOVE_DOWN	][Inf_INFORMATION	] = ActDwnTreNodInf,
+      [Tre_MOVE_DOWN	][Inf_PROGRAM		] = ActDwnTreNodPrg,
+      [Tre_MOVE_DOWN	][Inf_TEACH_GUIDE	] = ActDwnTreNodGui,
+      [Tre_MOVE_DOWN	][Inf_SYLLABUS_LEC	] = ActDwnTreNodSyl,
+      [Tre_MOVE_DOWN	][Inf_SYLLABUS_PRA	] = ActDwnTreNodSyl,
+      [Tre_MOVE_DOWN	][Inf_BIBLIOGRAPHY	] = ActDwnTreNodBib,
+      [Tre_MOVE_DOWN	][Inf_FAQ		] = ActDwnTreNodFAQ,
+      [Tre_MOVE_DOWN	][Inf_LINKS		] = ActDwnTreNodLnk,
+      [Tre_MOVE_DOWN	][Inf_ASSESSMENT	] = ActDwnTreNodAss,
+
+      [Tre_MOVE_LEFT	][Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Tre_MOVE_LEFT	][Inf_INFORMATION	] = ActLftTreNodInf,
+      [Tre_MOVE_LEFT	][Inf_PROGRAM		] = ActLftTreNodPrg,
+      [Tre_MOVE_LEFT	][Inf_TEACH_GUIDE	] = ActLftTreNodGui,
+      [Tre_MOVE_LEFT	][Inf_SYLLABUS_LEC	] = ActLftTreNodSyl,
+      [Tre_MOVE_LEFT	][Inf_SYLLABUS_PRA	] = ActLftTreNodSyl,
+      [Tre_MOVE_LEFT	][Inf_BIBLIOGRAPHY	] = ActLftTreNodBib,
+      [Tre_MOVE_LEFT	][Inf_FAQ		] = ActLftTreNodFAQ,
+      [Tre_MOVE_LEFT	][Inf_LINKS		] = ActLftTreNodLnk,
+      [Tre_MOVE_LEFT	][Inf_ASSESSMENT	] = ActLftTreNodAss,
+
+      [Tre_MOVE_RIGHT	][Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Tre_MOVE_RIGHT	][Inf_INFORMATION	] = ActRgtTreNodInf,
+      [Tre_MOVE_RIGHT	][Inf_PROGRAM		] = ActRgtTreNodPrg,
+      [Tre_MOVE_RIGHT	][Inf_TEACH_GUIDE	] = ActRgtTreNodGui,
+      [Tre_MOVE_RIGHT	][Inf_SYLLABUS_LEC	] = ActRgtTreNodSyl,
+      [Tre_MOVE_RIGHT	][Inf_SYLLABUS_PRA	] = ActRgtTreNodSyl,
+      [Tre_MOVE_RIGHT	][Inf_BIBLIOGRAPHY	] = ActRgtTreNodBib,
+      [Tre_MOVE_RIGHT	][Inf_FAQ		] = ActRgtTreNodFAQ,
+      [Tre_MOVE_RIGHT	][Inf_LINKS		] = ActRgtTreNodLnk,
+      [Tre_MOVE_RIGHT	][Inf_ASSESSMENT	] = ActRgtTreNodAss,
      };
-   static Act_Action_t ActionsDwn[Inf_NUM_TYPES] =
+   static const char *IconsMove[Tre_NUM_MOVEMENTS] =
      {
-      [Inf_UNKNOWN_TYPE	] = ActUnk,
-      [Inf_INFORMATION	] = ActDwnTreNodInf,
-      [Inf_PROGRAM	] = ActDwnTreNodPrg,
-      [Inf_TEACH_GUIDE	] = ActDwnTreNodGui,
-      [Inf_SYLLABUS_LEC	] = ActDwnTreNodSyl,
-      [Inf_SYLLABUS_PRA	] = ActDwnTreNodSyl,
-      [Inf_BIBLIOGRAPHY	] = ActDwnTreNodBib,
-      [Inf_FAQ		] = ActDwnTreNodFAQ,
-      [Inf_LINKS	] = ActDwnTreNodLnk,
-      [Inf_ASSESSMENT	] = ActDwnTreNodAss,
+      [Tre_MOVE_UP   ] = "arrow-up.svg",
+      [Tre_MOVE_DOWN ] = "arrow-down.svg",
+      [Tre_MOVE_LEFT ] = "arrow-left.svg",
+      [Tre_MOVE_RIGHT] = "arrow-right.svg",
      };
-   static Act_Action_t ActionsLft[Inf_NUM_TYPES] =
-     {
-      [Inf_UNKNOWN_TYPE	] = ActUnk,
-      [Inf_INFORMATION	] = ActLftTreNodInf,
-      [Inf_PROGRAM	] = ActLftTreNodPrg,
-      [Inf_TEACH_GUIDE	] = ActLftTreNodGui,
-      [Inf_SYLLABUS_LEC	] = ActLftTreNodSyl,
-      [Inf_SYLLABUS_PRA	] = ActLftTreNodSyl,
-      [Inf_BIBLIOGRAPHY	] = ActLftTreNodBib,
-      [Inf_FAQ		] = ActLftTreNodFAQ,
-      [Inf_LINKS	] = ActLftTreNodLnk,
-      [Inf_ASSESSMENT	] = ActLftTreNodAss,
-     };
-   static Act_Action_t ActionsRgt[Inf_NUM_TYPES] =
-     {
-      [Inf_UNKNOWN_TYPE	] = ActUnk,
-      [Inf_INFORMATION	] = ActRgtTreNodInf,
-      [Inf_PROGRAM	] = ActRgtTreNodPrg,
-      [Inf_TEACH_GUIDE	] = ActRgtTreNodGui,
-      [Inf_SYLLABUS_LEC	] = ActRgtTreNodSyl,
-      [Inf_SYLLABUS_PRA	] = ActRgtTreNodSyl,
-      [Inf_BIBLIOGRAPHY	] = ActRgtTreNodBib,
-      [Inf_FAQ		] = ActRgtTreNodFAQ,
-      [Inf_LINKS	] = ActRgtTreNodLnk,
-      [Inf_ASSESSMENT	] = ActRgtTreNodAss,
-     };
+   Tre_Movement_t Movement;
    char StrItemIndex[Cns_MAX_DIGITS_UINT + 1];
 
    /***** Initialize node index string *****/
@@ -1156,59 +1167,45 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /***** Icon to remove tree node *****/
-	 Ico_PutContextualIconToRemove (ActionsReqRem[Node->InfoType],NULL,
-	                                Tre_PutPars,Node);
+	 Ico_PutContextualIconToRemove (ActionsReqRem[Node->InfoType],
+				        NULL,Tre_PutPars,Node);
 
 	 /***** Icon to hide/unhide tree node *****/
-	 Ico_PutContextualIconToHideUnhide (ActionsHideUnhide[Node->InfoType],Tre_NODE_SECTION_ID,
-					    Tre_PutPars,Node,
+	 Ico_PutContextualIconToHideUnhide (ActionsHideUnhide[Node->InfoType],
+					    Tre_NODE_SECTION_ID,Tre_PutPars,Node,
 					    Node->Hierarchy.Hidden);
 
 	 /***** Icon to edit tree node *****/
 	 if (ListingType == Tre_FORM_EDIT_NODE && HighlightNode)
-	    Ico_PutContextualIconToView (ActionsSee[Node->InfoType],Tre_NODE_SECTION_ID,
-					 Tre_PutPars,Node);
+	    Ico_PutContextualIconToView (ActionsSee[Node->InfoType],
+					 Tre_NODE_SECTION_ID,Tre_PutPars,Node);
 	 else
-	    Ico_PutContextualIconToEdit (ActionsFrmChg[Node->InfoType],Tre_NODE_SECTION_ID,
-					 Tre_PutPars,Node);
+	    Ico_PutContextualIconToEdit (ActionsFrmChg[Node->InfoType],
+					 Tre_NODE_SECTION_ID,Tre_PutPars,Node);
 
 	 /***** Icon to add a new child node inside this node *****/
-	 Ico_PutContextualIconToAdd (ActionsFrmNew[Node->InfoType],Tre_NODE_SECTION_ID,
-	                             Tre_PutPars,Node);
+	 Ico_PutContextualIconToAdd (ActionsFrmNew[Node->InfoType],
+				     Tre_NODE_SECTION_ID,Tre_PutPars,Node);
 
 	 HTM_BR ();
 
-	 /***** Icon to move up the node *****/
-	 if (Tre_CheckIfMoveUpIsAllowed (NumNode))
-	    Lay_PutContextualLinkOnlyIcon (ActionsUp_[Node->InfoType],Tre_NODE_SECTION_ID,
-	                                   Tre_PutPars,Node,
-					   "arrow-up.svg",Ico_BLACK);
-	 else
-	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
-
-	 /***** Icon to move down the node *****/
-	 if (Tre_CheckIfMoveDownIsAllowed (NumNode))
-	    Lay_PutContextualLinkOnlyIcon (ActionsDwn[Node->InfoType],Tre_NODE_SECTION_ID,
-	                                   Tre_PutPars,Node,
-					   "arrow-down.svg",Ico_BLACK);
-	 else
-	    Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,Txt_Movement_not_allowed);
-
-	 /***** Icon to move left node (increase level) *****/
-	 if (Tre_CheckIfMoveLeftIsAllowed (NumNode))
-	    Lay_PutContextualLinkOnlyIcon (ActionsLft[Node->InfoType],Tre_NODE_SECTION_ID,
-	                                   Tre_PutPars,Node,
-					   "arrow-left.svg",Ico_BLACK);
-	 else
-            Ico_PutIconOff ("arrow-left.svg",Ico_BLACK,Txt_Movement_not_allowed);
-
-	 /***** Icon to move right node (indent, decrease level) *****/
-	 if (Tre_CheckIfMoveRightIsAllowed (NumNode))
-	    Lay_PutContextualLinkOnlyIcon (ActionsRgt[Node->InfoType],Tre_NODE_SECTION_ID,
-	                                   Tre_PutPars,Node,
-					   "arrow-right.svg",Ico_BLACK);
-	 else
-            Ico_PutIconOff ("arrow-right.svg",Ico_BLACK,Txt_Movement_not_allowed);
+	 /***** Icons to move up/down/left/right the node *****/
+	 for (Movement = (Tre_Movement_t) 0;
+	      Movement < (Tre_Movement_t) (Tre_NUM_MOVEMENTS - 1);
+	      Movement++)
+	    switch (Tre_CheckIfAllowed[Movement] (NumNode))
+	      {
+	       case DenAll_ALLOW:
+		  Lay_PutContextualLinkOnlyIcon (ActionsMove[Movement][Node->InfoType],
+						 Tre_NODE_SECTION_ID,Tre_PutPars,Node,
+						 IconsMove[Movement],Ico_BLACK);
+		  break;
+	       case DenAll_DENY:
+	       default:
+		  Ico_PutIconOff (IconsMove[Movement],Ico_BLACK,
+				  Txt_Movement_not_allowed);
+		  break;
+	      }
 	 break;
       case Rol_STD:
       case Rol_NET:
@@ -1222,70 +1219,73 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
 /*********************** Check if node can be moved up ***********************/
 /*****************************************************************************/
 
-static bool Tre_CheckIfMoveUpIsAllowed (unsigned NumNode)
+static DenAll_DenyOrAllow_t Tre_CheckIfMoveUpIsAllowed (unsigned NumNode)
   {
    /***** Trivial check: if node is the first one, move up is not allowed *****/
    if (NumNode == 0)
-      return false;
+      return DenAll_DENY;
 
    /***** Move up is allowed if the node has brothers before it *****/
-   // NumItem >= 1
+   // NumNode >= 1
    return Tre_GetLevelFromNumNode (NumNode - 1) >=
-	  Tre_GetLevelFromNumNode (NumNode    );
+	  Tre_GetLevelFromNumNode (NumNode    ) ? DenAll_ALLOW :
+						  DenAll_DENY;
   }
 
 /*****************************************************************************/
 /********************** Check if node can be moved down **********************/
 /*****************************************************************************/
 
-static bool Tre_CheckIfMoveDownIsAllowed (unsigned NumNode)
+static DenAll_DenyOrAllow_t Tre_CheckIfMoveDownIsAllowed (unsigned NumNode)
   {
    unsigned i;
    unsigned Level;
 
    /***** Trivial check: if node is the last one, move up is not allowed *****/
    if (NumNode >= Tre_Gbl.List.NumNodes - 1)
-      return false;
+      return DenAll_DENY;
 
    /***** Move down is allowed if the node has brothers after it *****/
-   // NumItem + 1 < Prg_Gbl.List.NumItems
+   // NumNode + 1 < Tre_Gbl.List.NumNodes
    Level = Tre_GetLevelFromNumNode (NumNode);
    for (i = NumNode + 1;
 	i < Tre_Gbl.List.NumNodes;
 	i++)
      {
       if (Tre_GetLevelFromNumNode (i) == Level)
-	 return true;	// Next brother found
+	 return DenAll_ALLOW;	// Next brother found
       if (Tre_GetLevelFromNumNode (i) < Level)
-	 return false;	// Next lower level found ==> there are no more brothers
+	 return DenAll_DENY;	// Next lower level found ==> there are no more brothers
      }
-   return false;	// End reached ==> there are no more brothers
+   return DenAll_DENY;	// End reached ==> there are no more brothers
   }
 
 /*****************************************************************************/
 /******************* Check if node can be moved to the left ******************/
 /*****************************************************************************/
 
-static bool Tre_CheckIfMoveLeftIsAllowed (unsigned NumNode)
+static DenAll_DenyOrAllow_t Tre_CheckIfMoveLeftIsAllowed (unsigned NumNode)
   {
    /***** Move left is allowed if the node has parent *****/
-   return Tre_GetLevelFromNumNode (NumNode) > 1;
+   return Tre_GetLevelFromNumNode (NumNode) > 1 ? DenAll_ALLOW :
+						  DenAll_DENY;
   }
 
 /*****************************************************************************/
 /****************** Check if node can be moved to the right ******************/
 /*****************************************************************************/
 
-static bool Tre_CheckIfMoveRightIsAllowed (unsigned NumNode)
+static DenAll_DenyOrAllow_t Tre_CheckIfMoveRightIsAllowed (unsigned NumNode)
   {
    /***** If node is the first, move right is not allowed *****/
    if (NumNode == 0)
-      return false;
+      return DenAll_DENY;
 
    /***** Move right is allowed if the node has brothers before it *****/
-   // NumItem >= 2
+   // NumNode >= 2
    return Tre_GetLevelFromNumNode (NumNode - 1) >=
-	  Tre_GetLevelFromNumNode (NumNode    );
+	  Tre_GetLevelFromNumNode (NumNode    ) ? DenAll_ALLOW :
+						  DenAll_DENY;
   }
 
 /*****************************************************************************/
@@ -2075,17 +2075,12 @@ void Tre_HideOrUnhideNode (Inf_Type_t InfoType,
 /*********** Move up/down position of a subtree in a course tree *************/
 /*****************************************************************************/
 
-void Tre_MoveUpDownNode (Inf_Type_t InfoType,Tre_MoveUpDown_t UpDown)
+void Tre_MoveUpDownNode (Inf_Type_t InfoType,Tre_Movement_t Movement)
   {
    extern const char *Txt_Movement_not_allowed;
    struct Tre_Node Node;
    unsigned NumNode;
    Err_SuccessOrError_t SuccessOrError = Err_ERROR;
-   static bool (*CheckIfAllowed[Tre_NUM_MOVEMENTS_UP_DOWN])(unsigned NumNode) =
-     {
-      [Tre_MOVE_UP  ] = Tre_CheckIfMoveUpIsAllowed,
-      [Tre_MOVE_DOWN] = Tre_CheckIfMoveDownIsAllowed,
-     };
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (InfoType);
@@ -2098,10 +2093,9 @@ void Tre_MoveUpDownNode (Inf_Type_t InfoType,Tre_MoveUpDown_t UpDown)
 
    /***** Move up/down node *****/
    NumNode = Tre_GetNumNodeFromNodCod (Node.Hierarchy.NodCod);
-   if (CheckIfAllowed[UpDown] (NumNode))
-     {
+   if (Tre_CheckIfAllowed[Movement] (NumNode) == DenAll_ALLOW)
       /* Exchange subtrees */
-      switch (UpDown)
+      switch (Movement)
         {
 	 case Tre_MOVE_UP:
             SuccessOrError = Tre_ExchangeNodeRanges (InfoType,Tre_GetPrevBrother (NumNode),NumNode);
@@ -2109,8 +2103,10 @@ void Tre_MoveUpDownNode (Inf_Type_t InfoType,Tre_MoveUpDown_t UpDown)
 	 case Tre_MOVE_DOWN:
             SuccessOrError = Tre_ExchangeNodeRanges (InfoType,NumNode,Tre_GetNextBrother (NumNode));
             break;
+	 default:
+	    Err_WrongTypeExit ();
+	    break;
         }
-     }
    switch (SuccessOrError)
      {
       case Err_SUCCESS:
@@ -2270,17 +2266,12 @@ static int Tre_GetNextBrother (int NumNode)
 /************** Move a subtree to left/right in a course program *************/
 /*****************************************************************************/
 
-void Tre_MoveLeftRightNode (Inf_Type_t InfoType,Tre_MoveLeftRight_t LeftRight)
+void Tre_MoveLeftRightNode (Inf_Type_t InfoType,Tre_Movement_t Movement)
   {
    extern const char *Txt_Movement_not_allowed;
    struct Tre_Node Node;
    unsigned NumNode;
    struct Tre_NodeRange ToMove;
-   static bool (*CheckIfAllowed[Tre_NUM_MOVEMENTS_LEFT_RIGHT])(unsigned NumNode) =
-     {
-      [Tre_MOVE_LEFT ] = Tre_CheckIfMoveLeftIsAllowed,
-      [Tre_MOVE_RIGHT] = Tre_CheckIfMoveRightIsAllowed,
-     };
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (InfoType);
@@ -2293,23 +2284,25 @@ void Tre_MoveLeftRightNode (Inf_Type_t InfoType,Tre_MoveLeftRight_t LeftRight)
 
    /***** Move up/down node *****/
    NumNode = Tre_GetNumNodeFromNodCod (Node.Hierarchy.NodCod);
-   if (CheckIfAllowed[LeftRight](NumNode))
+   switch (Tre_CheckIfAllowed[Movement](NumNode))
      {
-      /* Indexes of items */
-      Tre_SetNodeRangeWithAllChildren (NumNode,&ToMove);
+      case DenAll_ALLOW:
+	 /* Indexes of items */
+	 Tre_SetNodeRangeWithAllChildren (NumNode,&ToMove);
 
-      /* Move node and its children to left or right */
-      Tre_DB_MoveLeftRightNodeRange (InfoType,&ToMove,LeftRight);
+	 /* Move node and its children to left or right */
+	 Tre_DB_MoveLeftRightNodeRange (InfoType,&ToMove,Movement);
 
-      /* Update list of tree nodes */
-      Tre_FreeListNodes ();
-      Tre_GetListNodes (InfoType);
-     }
-   else
-     {
-      /* Show course program without highlighting any node */
-      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
-      Node.Hierarchy.NodCod = -1L;
+	 /* Update list of tree nodes */
+	 Tre_FreeListNodes ();
+	 Tre_GetListNodes (InfoType);
+	 break;
+      case DenAll_DENY:
+      default:
+	 /* Show course program without highlighting any node */
+	 Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+	 Node.Hierarchy.NodCod = -1L;
+	 break;
      }
    Node.Item.Cod = -1L;
    Tre_ShowAllNodes (Tre_EDIT_NODES,&Node);

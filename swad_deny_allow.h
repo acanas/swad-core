@@ -36,8 +36,8 @@
 
 typedef enum
   {
-   DenAll_DENY  = 0,
-   DenAll_ALLOW = 1,
+   DenAll_DENY,
+   DenAll_ALLOW,
   } DenAll_DenyOrAllow_t;
 
 /*****************************************************************************/

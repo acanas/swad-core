@@ -83,19 +83,14 @@ struct Tre_NodeRange
    unsigned End;	// Index of the last node in the subtree
   };
 
-#define Tre_NUM_MOVEMENTS_LEFT_RIGHT 2
-typedef enum
-  {
-   Tre_MOVE_LEFT,
-   Tre_MOVE_RIGHT,
-  } Tre_MoveLeftRight_t;
-
-#define Tre_NUM_MOVEMENTS_UP_DOWN 2
+#define Tre_NUM_MOVEMENTS 4
 typedef enum
   {
    Tre_MOVE_UP,
    Tre_MOVE_DOWN,
-  } Tre_MoveUpDown_t;
+   Tre_MOVE_LEFT,
+   Tre_MOVE_RIGHT
+  } Tre_Movement_t;
 
 #define Tre_NUM_MOVEMENTS_EXPAND_CONTRACT 2
 typedef enum
@@ -162,8 +157,8 @@ void Tre_ReqRemNode (Inf_Type_t InfoType);
 void Tre_RemoveNode (Inf_Type_t InfoType);
 void Tre_HideOrUnhideNode (Inf_Type_t InfoType,
 			   HidVis_HiddenOrVisible_t HiddenOrVisible);
-void Tre_MoveUpDownNode (Inf_Type_t InfoType,Tre_MoveUpDown_t UpDown);
-void Tre_MoveLeftRightNode (Inf_Type_t InfoType,Tre_MoveLeftRight_t LeftRight);
+void Tre_MoveUpDownNode (Inf_Type_t InfoType,Tre_Movement_t Movement);
+void Tre_MoveLeftRightNode (Inf_Type_t InfoType,Tre_Movement_t Movement);
 void Tre_ExpandContractNode (Inf_Type_t InfoType,
 			     Tre_ExpandContract_t ExpandContract,
 			     Tre_ListingType_t ListingType);

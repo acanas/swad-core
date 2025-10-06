@@ -2151,15 +2151,13 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Projects,
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   bool WriteRow;
    unsigned NumUsr;
    unsigned NumUsrs;
 
    /***** Get users in project from database *****/
    NumUsrs = Prj_DB_GetUsrsInPrj (&mysql_res,Projects->Prj.PrjCod,RoleInPrj);
-   WriteRow = (NumUsrs || Projects->View == Prj_EDIT_ONE_PROJECT);
 
-   if (WriteRow)
+   if (NumUsrs || Projects->View == Prj_EDIT_ONE_PROJECT)	// Show row
      {
       /***** Begin row with label and listing of users *****/
       HTM_TR_Begin (NULL);

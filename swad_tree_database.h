@@ -46,7 +46,7 @@ void Tre_DB_LockTableNodes (void);
 void Tre_DB_MoveDownNodes (Inf_Type_t InfoType,unsigned Index);
 void Tre_DB_MoveLeftRightNodeRange (Inf_Type_t InfoType,
 				    const struct Tre_NodeRange *ToMove,
-                                    Tre_MoveLeftRight_t LeftRight);
+                                    Tre_Movement_t Movement);
 
 unsigned Tre_DB_GetListNodes (Inf_Type_t InfoType,MYSQL_RES **mysql_res);
 Exi_Exist_t Tre_DB_GetNodeDataByCod (const struct Tre_Node *Node,
