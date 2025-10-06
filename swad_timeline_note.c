@@ -401,14 +401,14 @@ static void TmlNot_GetAndWriteNoPost (const struct TmlNot_Note *Not)
    For_ResetForums (&Forums);
 
    /***** Get location in hierarchy *****/
-   if (!Not->Unavailable)
+   if (Not->Exists == Exi_EXISTS)
       TmlNot_GetLocationInHierarchy (Not,Hie,&Forums.Forum,ForumName);
 
    /***** Write note type *****/
    TmlNot_PutFormGoToAction (Not,&Forums);
 
    /***** Write location in hierarchy *****/
-   if (!Not->Unavailable)
+   if (Not->Exists == Exi_EXISTS)
       TmlNot_WriteLocationInHierarchy (Not,Hie,ForumName);
 
    /***** Get and write note summary *****/
@@ -602,7 +602,7 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
       /* Profile tab */
      };
 
-   if (Not->Unavailable ||	// File/notice... pointed by this note is unavailable
+   if (Not->Exists == Exi_DOES_NOT_EXIST ||	// File/notice... pointed by this note is unavailable
        Frm_CheckIfInside ())	// Inside another form
      {
       /***** Do not put form *****/
@@ -611,7 +611,7 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 
          /* Text ("not available") */
 	 HTM_Txt (Txt_TIMELINE_NOTE[Not->Type]);
-	 if (Not->Unavailable)
+	 if (Not->Exists == Exi_DOES_NOT_EXIST)
 	   {
 	    HTM_NBSP ();
 	    HTM_ParTxtPar (Txt_not_available);
@@ -792,7 +792,7 @@ static void TmlNot_WriteButtonToAddAComm (const struct Tml_Timeline *Timeline,
    HTM_DIV_Begin ("class=\"Tml_BOTTOM_LEFT\"");
 
       /***** Button to add a comment *****/
-      if (!Not->Unavailable &&			// Only available notes can be commented
+      if (Not->Exists == Exi_EXISTS &&	// Only available notes can be commented
 	  Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)	// I can post only if I am enroled in any course
 	 TmlCom_PutIconToToggleComm (Timeline,IdNewComm);
       else
@@ -1239,7 +1239,8 @@ static void TmlNot_GetNoteDataFromRow (MYSQL_RES *mysql_res,
    Not->HieCod      = Str_ConvertStrCodToLongCod (row[4]);
 
    /***** File/post... unavailable (row[5]) *****/
-   Not->Unavailable = (row[5][0] == 'Y');
+   Not->Exists = (row[5][0] == 'Y') ? Exi_DOES_NOT_EXIST :
+				      Exi_EXISTS;
 
    /***** Get time of the note (row[6]) *****/
    Not->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[6]);
@@ -1276,7 +1277,7 @@ static void TmlNot_ResetNote (struct TmlNot_Note *Not)
    Not->UsrCod      = -1L;
    Not->HieCod      = -1L;
    Not->Cod         = -1L;
-   Not->Unavailable = false;
+   Not->Exists      = Exi_EXISTS;
    Not->DateTimeUTC = (time_t) 0;
    Not->NumShared   = 0;
   }

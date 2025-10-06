@@ -2311,7 +2311,7 @@ void TstPrn_ShowOnePrint (void)
       Err_NoPermissionExit ();
 
    /***** Get questions and user's answers of the test from database *****/
-   if (!TstPrn_GetPrintQuestionsFromDB (&Print))
+   if (TstPrn_GetPrintQuestionsFromDB (&Print) == Err_ERROR)
       Err_WrongExamExit ();
 
    /***** Begin box *****/
@@ -2655,7 +2655,7 @@ void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print)
 /************* Get the questions of a test print from database ***************/
 /*****************************************************************************/
 
-bool TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
+Err_SuccessOrError_t TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2694,7 +2694,8 @@ bool TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return (NumQsts == Print->NumQsts.All);
+   return (NumQsts == Print->NumQsts.All) ? Err_SUCCESS :
+					    Err_ERROR;
   }
 
 /*****************************************************************************/

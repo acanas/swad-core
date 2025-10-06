@@ -114,10 +114,10 @@ Exi_Exist_t Tml_DB_GetNoteDataByCod (long NotCod,MYSQL_RES **mysql_res)
    DB_QuerySELECTunique (mysql_res,"can not get data of note",
 			 "SELECT NotCod,"			// row[0]
 				"NoteType,"			// row[1]
-				"Cod,"			// row[2]
+				"Cod,"				// row[2]
 				"UsrCod,"			// row[3]
 				"HieCod,"			// row[4]
-				"Unavailable,"		// row[5]
+				"Unavailable,"			// row[5]
 				"UNIX_TIMESTAMP(TimeNote)"	// row[6]
 			  " FROM tml_notes"
 			 " WHERE NotCod=%ld",

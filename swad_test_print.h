@@ -129,7 +129,7 @@ void TstPrn_ShowPrintAnswers (struct Usr_Data *UsrDat,
 			      unsigned Visibility);
 void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print);
 
-bool TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print);
+Err_SuccessOrError_t TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print);
 void TstPrn_RemovePrintsMadeByUsrInAllCrss (long UsrCod);
 void TstPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod);
 void TstPrn_RemoveCrsPrints (long CrsCod);

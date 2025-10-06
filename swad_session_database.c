@@ -279,9 +279,9 @@ void Ses_DB_InsertPar (const char *ParName,const char *ParValue)
 /*****************************************************************************/
 /************** Check if a session parameter existed in database *************/
 /*****************************************************************************/
-// Return true if the parameter already existed in database
+// Return if the parameter already existed in database
 
-bool Ses_DB_CheckIfParIsAlreadyStored (const char *ParName)
+Exi_Exist_t Ses_DB_CheckIfParIsAlreadyStored (const char *ParName)
   {
    return
    DB_QueryEXISTS ("can not check if a session parameter is already in database",
@@ -291,7 +291,7 @@ bool Ses_DB_CheckIfParIsAlreadyStored (const char *ParName)
 		    " WHERE SessionId='%s'"
 		      " AND ParamName='%s')",
 		   Gbl.Session.Id,
-		   ParName) == Exi_EXISTS;
+		   ParName);
   }
 
 /*****************************************************************************/

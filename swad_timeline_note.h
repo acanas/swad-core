@@ -73,8 +73,8 @@ struct TmlNot_Note
 			// (institution/center/degree/course)
    long Cod;		// Code of file, forum post,
 			// notice, timeline post...
-   bool Unavailable;	// File, forum post, notice...
-			// unavailable (removed)
+   Exi_Exist_t Exists;	// File, forum post, notice...
+			// exists (not removed)
    time_t DateTimeUTC;	// Date-time of publication in UTC time
    unsigned NumShared;	// Number of times (users)
 			// this note has been shared

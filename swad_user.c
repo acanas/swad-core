@@ -2175,12 +2175,18 @@ Exi_Exist_t Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct Usr_Data *UsrDat,
 void Usr_UpdateMyLastData (void)
   {
    /***** Check if it exists an entry for me *****/
-   if (Usr_DB_CheckMyLastData ())
-      /***** Update my last accessed course, tab and time of click in database *****/
-      // WhatToSearch, LastAccNotif remain unchanged
-      Usr_DB_UpdateMyLastData ();
-   else
-      Usr_DB_InsertMyLastData ();
+   switch (Usr_DB_CheckMyLastData ())
+     {
+      case Exi_EXISTS:
+	 /***** Update my last accessed course, tab and time of click in database *****/
+	 // WhatToSearch, LastAccNotif remain unchanged
+	 Usr_DB_UpdateMyLastData ();
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Usr_DB_InsertMyLastData ();
+	 break;
+     }
   }
 
 /*****************************************************************************/
@@ -6432,7 +6438,9 @@ void Usr_WriteAuthor (struct Usr_Data *UsrDat,For_Disabled_t Disabled)
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO30x40",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR30x40",
      };
-   bool WriteAuthor = (Disabled == For_ENABLED && UsrDat->UsrCod > 0);
+   Sho_Show_t ShowAuthor = (Disabled == For_ENABLED &&
+			    UsrDat->UsrCod > 0) ? Sho_SHOW :
+						  Sho_DONT_SHOW;
 
    /***** Begin table and row *****/
    HTM_TABLE_BeginPadding (2);
@@ -6441,25 +6449,37 @@ void Usr_WriteAuthor (struct Usr_Data *UsrDat,For_Disabled_t Disabled)
 	 /***** Begin first column with author's photo
 		(if author has a web page, put a link to it) *****/
 	 HTM_TD_Begin ("class=\"CT\" style=\"width:30px;\"");
-	    if (WriteAuthor)
-	       Pho_ShowUsrPhotoIfAllowed (UsrDat,
-					  ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
-	    else
-	       Ico_PutIcon ("usr_bl.jpg",Ico_UNCHANGED,Txt_Unknown_or_without_photo,
-			    ClassPhoto[Gbl.Prefs.PhotoShape]);
+	    switch (ShowAuthor)
+	      {
+	       case Sho_SHOW:
+		  Pho_ShowUsrPhotoIfAllowed (UsrDat,
+					     ClassPhoto[Gbl.Prefs.PhotoShape],
+					     Pho_ZOOM);
+		  break;
+	       case Sho_DONT_SHOW:
+	       default:
+		  Ico_PutIcon ("usr_bl.jpg",Ico_UNCHANGED,
+			       Txt_Unknown_or_without_photo,
+			       ClassPhoto[Gbl.Prefs.PhotoShape]);
+		  break;
+	      }
 	 HTM_TD_End ();
 
 	 /***** Second column with user name
 	        (if author has a web page, put a link to it) *****/
-	 if (WriteAuthor)
+	 switch (ShowAuthor)
 	   {
-	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_DIV_Begin ("class=\"AUTHOR_2_LINES\"");	// Limited width
-		  Usr_WriteFirstNameBRSurnames (UsrDat);
-	       HTM_DIV_End ();
+	    case Sho_SHOW:
+	       HTM_TD_Begin ("class=\"LT\"");
+		  HTM_DIV_Begin ("class=\"AUTHOR_2_LINES\"");	// Limited width
+		     Usr_WriteFirstNameBRSurnames (UsrDat);
+		  HTM_DIV_End ();
+	       break;
+	    case Sho_DONT_SHOW:
+	    default:
+	       HTM_TD_Begin ("class=\"LM\"");
+	       break;
 	   }
-	 else
-	    HTM_TD_Begin ("class=\"LM\"");
 	 HTM_TD_End ();
 
       /***** End row and table *****/

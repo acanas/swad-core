@@ -215,7 +215,7 @@ void Ses_InsertParInDB (const char *ParName,const char *ParValue)
           don't insert a parameter more than one time *****/
    if (ParName && ParValue)
       if (ParName[0] && ParValue[0])
-         if (!Ses_DB_CheckIfParIsAlreadyStored (ParName))
+         if (Ses_DB_CheckIfParIsAlreadyStored (ParName) == Exi_DOES_NOT_EXIST)
 	   {
 	    /***** Insert session parameter in the database *****/
 	    Ses_DB_InsertPar (ParName,ParValue);

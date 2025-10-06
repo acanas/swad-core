@@ -1543,7 +1543,7 @@ void Usr_DB_UpdateMyLastWhatToSearch (Sch_WhatToSearch_t WhatToSearch)
 /************** Check if it exists an entry for me in last data **************/
 /*****************************************************************************/
 
-bool Usr_DB_CheckMyLastData (void)
+Exi_Exist_t Usr_DB_CheckMyLastData (void)
   {
    return
    DB_QueryEXISTS ("can not check last user's data",
@@ -1551,7 +1551,7 @@ bool Usr_DB_CheckMyLastData (void)
 		   "(SELECT *"
 		     " FROM usr_last"
 		    " WHERE UsrCod=%ld)",
-		   Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS;
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

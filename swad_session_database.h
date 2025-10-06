@@ -51,7 +51,7 @@ void Ses_SB_RemoveCurrentSession (void);
 //---------------------------- Session parameters -----------------------------
 void Ses_DB_InsertPar (const char *ParName,const char *ParValue);
 
-bool Ses_DB_CheckIfParIsAlreadyStored (const char *ParName);
+Exi_Exist_t Ses_DB_CheckIfParIsAlreadyStored (const char *ParName);
 void Ses_DB_GetPar (const char *ParName,char *ParValue,size_t StrSize);
 
 void Ses_DB_RemovePar (void);
