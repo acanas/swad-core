@@ -359,7 +359,7 @@ void Sch_SysSearch (void)
    if (Search->Str[0])
      {
       /***** Activate logging search in database *****/
-      Log_SetLogSearch (true);
+      Log_SetLogSearch (Log_SEARCH);
 
       /***** Show search form again *****/
       HieLvl = Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_SYS);

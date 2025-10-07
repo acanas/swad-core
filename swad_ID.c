@@ -320,7 +320,7 @@ void ID_WriteUsrIDs (const struct Usr_Data *UsrDat,const char *Anchor)
    Usr_Can_t ICanSeeUsrID = ID_ICanSeeOtherUsrIDs (UsrDat);
    Usr_Can_t ICanConfirmUsrID = (ICanSeeUsrID == Usr_CAN &&
 				  Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER &&			// Not me
-				  !Frm_CheckIfInside () &&					// Not inside another form
+				  Frm_CheckIfInside () == Frm_OUTSIDE_FORM &&			// Not inside another form
 				  Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST) ? Usr_CAN :	// Only in main browser tab
 										   Usr_CAN_NOT;
 

@@ -591,18 +591,19 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	 if (PutForm == Frm_PUT_FORM)
 	   {
 	    Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,&Forums);
-	    PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
-					     Frm_DONT_PUT_FORM;
+	    PutForm = Frm_CheckIfInside () == Frm_INSIDE_FORM ? Frm_PUT_FORM :
+								Frm_DONT_PUT_FORM;
 	   }
 	 switch (PutForm)
 	   {
-	    case Frm_DONT_PUT_FORM:
-	       Ico_PutIconOff (Ntf_Icons[NotifyEvent],Ico_BLACK,
-			       Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
-	       break;
 	    case Frm_PUT_FORM:
 	       Ico_PutIconLink (Ntf_Icons[NotifyEvent],Ico_BLACK,Action);
 	       Frm_EndForm ();
+	       break;
+	    case Frm_DONT_PUT_FORM:
+	    default:
+	       Ico_PutIconOff (Ntf_Icons[NotifyEvent],Ico_BLACK,
+			       Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
 	       break;
 	   }
       HTM_TD_End ();
@@ -611,21 +612,22 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
       HTM_TD_Begin ("class=\"LT %s_%s\"",Class.Bg,The_GetSuffix ());
 	 switch (PutForm)
 	   {
-	    case Frm_DONT_PUT_FORM:
-	       HTM_SPAN_Begin ("class=\"Ntf_TYPE %s\"",Class.Txt);
-		  HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
-	       HTM_SPAN_End ();
-	       break;
 	    case Frm_PUT_FORM:
 	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,&Forums);
-	       PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
-						Frm_DONT_PUT_FORM;
+	       PutForm = Frm_CheckIfInside () == Frm_INSIDE_FORM ? Frm_PUT_FORM :
+								   Frm_DONT_PUT_FORM;
 		  HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],NULL,
 					   "class=\"Ntf_TYPE LT %s_%s\"",
 					   Class.Link,The_GetSuffix ());
 		     HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();
+	       break;
+	    case Frm_DONT_PUT_FORM:
+	    default:
+	       HTM_SPAN_Begin ("class=\"Ntf_TYPE %s\"",Class.Txt);
+		  HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+	       HTM_SPAN_End ();
 	       break;
 	   }
       HTM_TD_End ();
@@ -644,20 +646,21 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	    if (PutForm == Frm_PUT_FORM)
 	      {
 	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,&Forums);
-	       PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
-						Frm_DONT_PUT_FORM;
+	       PutForm = Frm_CheckIfInside () == Frm_INSIDE_FORM ? Frm_PUT_FORM :
+								   Frm_DONT_PUT_FORM;
 	      }
 
 	    switch (PutForm)
 	      {
-	       case Frm_DONT_PUT_FORM:
-		  HTM_DIV_Begin ("class=\"Ntf_LOCATION %s_%s\"",
-				  Class.Txt,The_GetSuffix ());
-		  break;
 	       case Frm_PUT_FORM:
 		  HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],NULL,
 					   "class=\"Ntf_LOCATION %s_%s\"",
 					   Class.Link,The_GetSuffix ());
+		  break;
+	       case Frm_DONT_PUT_FORM:
+	       default:
+		  HTM_DIV_Begin ("class=\"Ntf_LOCATION %s_%s\"",
+				  Class.Txt,The_GetSuffix ());
 		  break;
 	      }
 	    /* Get forum type of the post */
@@ -668,12 +671,13 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	    HTM_Txt (Txt_Forum); HTM_Colon (); HTM_SP (); HTM_Txt (ForumName);
 	    switch (PutForm)
 	      {
-	       case Frm_DONT_PUT_FORM:
-		  HTM_DIV_End ();
-		  break;
 	       case Frm_PUT_FORM:
 		  HTM_BUTTON_End ();
 		  Frm_EndForm ();
+		  break;
+	       case Frm_DONT_PUT_FORM:
+	       default:
+		  HTM_DIV_End ();
 		  break;
 	      }
 	   }
@@ -682,8 +686,8 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	    if (PutForm == Frm_PUT_FORM)
 	      {
 	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,&Forums);
-	       PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
-						Frm_DONT_PUT_FORM;
+	       PutForm = Frm_CheckIfInside () == Frm_INSIDE_FORM ? Frm_PUT_FORM :
+								   Frm_DONT_PUT_FORM;
 	      }
 
 	    switch (PutForm)
@@ -713,12 +717,13 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 
 	    switch (PutForm)
 	      {
-	       case Frm_DONT_PUT_FORM:
-		  HTM_DIV_End ();
-		  break;
 	       case Frm_PUT_FORM:
 		  HTM_BUTTON_End ();
 		  Frm_EndForm ();
+		  break;
+	       case Frm_DONT_PUT_FORM:
+	       default:
+		  HTM_DIV_End ();
 		  break;
 	      }
 	   }
@@ -899,7 +904,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
      }
 
    /***** Parameter to go to another course/degree/center/institution *****/
-   if (Frm_CheckIfInside ())
+   if (Frm_CheckIfInside () == Frm_INSIDE_FORM)
      {
       if (CrsCod > 0)					// Course specified
 	{

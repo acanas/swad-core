@@ -602,25 +602,8 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
       /* Profile tab */
      };
 
-   if (Not->Exists == Exi_DOES_NOT_EXIST ||	// File/notice... pointed by this note is unavailable
-       Frm_CheckIfInside ())	// Inside another form
-     {
-      /***** Do not put form *****/
-      /* Begin container */
-      HTM_DIV_Begin ("class=\"Tml_FORM_OFF\"");
-
-         /* Text ("not available") */
-	 HTM_Txt (Txt_TIMELINE_NOTE[Not->Type]);
-	 if (Not->Exists == Exi_DOES_NOT_EXIST)
-	   {
-	    HTM_NBSP ();
-	    HTM_ParTxtPar (Txt_not_available);
-	   }
-
-      /* End container */
-      HTM_DIV_End ();
-     }
-   else			// Not inside another form
+   if (Not->Exists == Exi_EXISTS &&			// File/notice... pointed by this note is available...
+       Frm_CheckIfInside () == Frm_OUTSIDE_FORM)	// ...and outside another form
      {
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"Tml_FORM\"");
@@ -710,6 +693,23 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	 Frm_EndForm ();
 
       /***** End container *****/
+      HTM_DIV_End ();
+     }
+   else		// File/notice... pointed by this note is unavailable...
+     {		// ...or inside another form
+      /***** Do not put form *****/
+      /* Begin container */
+      HTM_DIV_Begin ("class=\"Tml_FORM_OFF\"");
+
+         /* Text ("not available") */
+	 HTM_Txt (Txt_TIMELINE_NOTE[Not->Type]);
+	 if (Not->Exists == Exi_DOES_NOT_EXIST)
+	   {
+	    HTM_NBSP ();
+	    HTM_ParTxtPar (Txt_not_available);
+	   }
+
+      /* End container */
       HTM_DIV_End ();
      }
   }

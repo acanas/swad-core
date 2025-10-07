@@ -47,13 +47,13 @@ extern struct Globals Gbl;
 /************************* Private global variables **************************/
 /*****************************************************************************/
 
-static bool Frm_Inside = false;
+static Frm_Inside_t Frm_Inside = false;
 
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static inline void Frm_SetInside (bool Inside);
+static inline void Frm_SetInside (Frm_Inside_t Inside);
 
 static void Frm_BeginFormInternal (Act_Action_t NextAction,
 				   Frm_PutParLocation_t PutParLocation,
@@ -63,12 +63,12 @@ static void Frm_BeginFormInternal (Act_Action_t NextAction,
 /************** Set to true inside a form to avoid nested forms **************/
 /*****************************************************************************/
 
-static inline void Frm_SetInside (bool Inside)
+static inline void Frm_SetInside (Frm_Inside_t Inside)
   {
    Frm_Inside = Inside;
   }
 
-bool Frm_CheckIfInside (void)
+Frm_Inside_t Frm_CheckIfInside (void)
   {
    return Frm_Inside;
   }
@@ -126,7 +126,7 @@ static void Frm_BeginFormInternal (Act_Action_t NextAction,
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1];
 
-   if (!Frm_CheckIfInside ())
+   if (Frm_CheckIfInside () == Frm_OUTSIDE_FORM)
      {
       /* Begin form */
       HTM_TxtF ("<form method=\"post\" action=\"%s/%s",
@@ -164,7 +164,7 @@ static void Frm_BeginFormInternal (Act_Action_t NextAction,
       Frm_SetParsForm (ParsStr,NextAction,PutParLocation);
       HTM_Txt (ParsStr);
 
-      Frm_SetInside (true);
+      Frm_SetInside (Frm_INSIDE_FORM);
      }
   }
 
@@ -177,13 +177,13 @@ static void Frm_BeginFormInternal (Act_Action_t NextAction,
 */
 void Frm_BeginFormNoAction (void)
   {
-   if (!Frm_CheckIfInside ())
+   if (Frm_CheckIfInside () == Frm_OUTSIDE_FORM)
      {
       /* Begin form */
       HTM_Txt ("<form accept-charset=\"UTF-8\""
 	       " onsubmit=\"return false;\">");	// Form that can not be submitted, to avoid enter key to send it
 
-      Frm_SetInside (true);
+      Frm_SetInside (Frm_INSIDE_FORM);
      }
   }
 
@@ -235,10 +235,10 @@ void Frm_SetParsForm (char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1],
 
 void Frm_EndForm (void)
   {
-   if (Frm_CheckIfInside ())
+   if (Frm_CheckIfInside () == Frm_INSIDE_FORM)
      {
       HTM_Txt ("</form>");
-      Frm_SetInside (false);
+      Frm_SetInside (Frm_OUTSIDE_FORM);
      }
   }
 

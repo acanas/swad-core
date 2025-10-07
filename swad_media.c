@@ -1824,7 +1824,7 @@ static void Med_AlertThirdPartyCookies (void)
 				Txt_To_watch_multimedia_content_from_another_website_you_have_to_accept_third_party_cookies_in_your_personal_settings);
 
    /* Put form to change cookies preferences */
-   if (!Frm_CheckIfInside ())
+   if (Frm_CheckIfInside () == Frm_OUTSIDE_FORM)
       Lay_PutContextualLinkIconText (ActReqEdiSet,Coo_COOKIES_ID,
                                      NULL,NULL,
 				     "cog.svg",Ico_BLACK,

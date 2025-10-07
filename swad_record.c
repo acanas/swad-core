@@ -2106,9 +2106,9 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
    Rec_RecordHelp[Rec_SHA_RECORD_LIST] = Rec_RecordListHelp[UsrDat->Roles.InCurrentCrs];
 
-   PutFormLinks = (!Frm_CheckIfInside () &&							// Only if not inside another form
+   PutFormLinks = (Frm_CheckIfInside () == Frm_OUTSIDE_FORM &&				// Only if not inside another form
                    Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST) ? Frm_PUT_FORM :	// Only in main browser tab
-                							    Frm_DONT_PUT_FORM;
+                						    Frm_DONT_PUT_FORM;
 
    Ins.HieCod = UsrDat->InsCod;
    if (Ins.HieCod > 0)
@@ -2377,9 +2377,9 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
       [Usr_OTHER] = Rec_PutParsStudent,
      };
 
-   if (!Frm_CheckIfInside () &&					// Only if not inside another form
+   if (Frm_CheckIfInside () == Frm_OUTSIDE_FORM &&	// Only if not inside another form
        Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST &&	// Only in main browser tab
-       Gbl.Usrs.Me.Logged)					// Only if I am logged
+       Gbl.Usrs.Me.Logged)				// Only if I am logged
      {
       ICanViewUsrProfile = Pri_CheckIfICanView (Rec_Record.UsrDat->BaPrfVisibility,
 						Rec_Record.UsrDat);

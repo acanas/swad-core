@@ -1353,8 +1353,8 @@ void Pho_ShowUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
    bool BrowserTabIs1stTab = (BrowserTab == Act_1ST ||
 	                      BrowserTab == Act_AJA ||
 			      BrowserTab == Act_REF);
-   Frm_PutForm_t PutFormPublicProfile = (!Frm_CheckIfInside () &&		// Only if not inside another form
-                                         BrowserTabIs1stTab) ? Frm_PUT_FORM :	// Only in main browser tab (or AJAX)
+   Frm_PutForm_t PutFormPublicProfile = (Frm_CheckIfInside () == Frm_OUTSIDE_FORM &&	// Only if not inside another form
+                                         BrowserTabIs1stTab) ? Frm_PUT_FORM :		// Only in main browser tab (or AJAX)
 							       Frm_DONT_PUT_FORM;
    char *CaptionStr;
    char *ImgStr;

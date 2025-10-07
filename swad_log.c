@@ -58,24 +58,24 @@ extern struct Globals Gbl;
 /************************* Private global variables **************************/
 /*****************************************************************************/
 
-static bool Log_Search = false;	// Log search in database?
+static Log_Search_t Log_Search = Log_NOT_SEARCH;	// Log search in database?
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static bool Log_GetLogSearch (void);
+static Log_Search_t Log_GetLogSearch (void);
 
 /*****************************************************************************/
 /******************** Set/get logging search in database *********************/
 /*****************************************************************************/
 
-void Log_SetLogSearch (bool Search)
+void Log_SetLogSearch (Log_Search_t Search)
   {
    Log_Search = Search;
   }
 
-static bool Log_GetLogSearch (void)
+static Log_Search_t Log_GetLogSearch (void)
   {
    return Log_Search;
   }
@@ -119,7 +119,7 @@ void Log_LogAccess (const char *Comments)
      }
 
    /* Log search string */
-   if (Log_GetLogSearch ())
+   if (Log_GetLogSearch () == Log_SEARCH)
       Log_DB_LogSearchString (LogCod,Sch_GetSearch ());
 
    if (Gbl.WebService.IsWebService)

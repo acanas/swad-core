@@ -820,7 +820,7 @@ void Cty_WriteSelectorOfCountry (void)
 void Cty_WriteCountryName (long CtyCod)
   {
    char CtyName[Cty_MAX_BYTES_NAME + 1];
-   Frm_PutForm_t PutForm = (!Frm_CheckIfInside () &&						// Only if not inside another form
+   Frm_PutForm_t PutForm = (Frm_CheckIfInside () == Frm_OUTSIDE_FORM &&						// Only if not inside another form
                             Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST) ? Frm_PUT_FORM :	// Only in main browser tab
                         						     Frm_DONT_PUT_FORM;
 

@@ -213,8 +213,8 @@ void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,
 				      Pho_ShowPhotos_t ShowPhotos,
 				      const char *IconClass)
   {
-   Hie_PutLink_t PutLink = Frm_CheckIfInside () ? Hie_DONT_PUT_LINK :	// Don't put link to institution if already inside a form
-						  Hie_PUT_LINK;
+   Hie_PutLink_t PutLink = Frm_CheckIfInside () == Frm_INSIDE_FORM ? Hie_DONT_PUT_LINK :	// Don't put link to institution if already inside a form
+								     Hie_PUT_LINK;
 
    if (PutLink == Hie_PUT_LINK)
      {

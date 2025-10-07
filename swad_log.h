@@ -30,10 +30,20 @@
 #define Log_SECONDS_IN_RECENT_LOG ((time_t) (Cfg_DAYS_IN_RECENT_LOG * 24UL * 60UL * 60UL))	// Remove entries in recent log oldest than this time
 
 /*****************************************************************************/
+/******************************* Public types ********************************/
+/*****************************************************************************/
+
+typedef enum
+  {
+   Log_NOT_SEARCH,
+   Log_SEARCH,
+  } Log_Search_t;
+
+/*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Log_SetLogSearch (bool Search);
+void Log_SetLogSearch (Log_Search_t Search);
 
 void Log_LogAccess (const char *Comments);
 

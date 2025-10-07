@@ -59,11 +59,17 @@ typedef enum
    Frm_PUT_PAR_LOCATION_IF_NO_SESSION,
   } Frm_PutParLocation_t;
 
+typedef enum
+  {
+   Frm_OUTSIDE_FORM,
+   Frm_INSIDE_FORM,
+  } Frm_Inside_t;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-bool Frm_CheckIfInside (void);
+Frm_Inside_t Frm_CheckIfInside (void);
 
 void Frm_BeginFormGoTo (Act_Action_t NextAction);
 void Frm_BeginForm (Act_Action_t NextAction);

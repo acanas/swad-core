@@ -1894,8 +1894,8 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
    extern const char *Txt_No_groups_have_been_created_in_the_course_X;
    unsigned NumGrpTyp;
    struct GroupType *GrpTyp;
-   Frm_PutForm_t PutFormToChangeGrps = Frm_CheckIfInside () ? Frm_DONT_PUT_FORM :	// Inside another form (record card)?
-							      Frm_PUT_FORM;
+   Frm_PutForm_t PutFormToChangeGrps = Frm_CheckIfInside () == Frm_INSIDE_FORM ? Frm_DONT_PUT_FORM :	// Inside another form (record card)?
+										 Frm_PUT_FORM;
    Usr_Can_t ICanChangeMyGrps = Usr_CAN_NOT;
    long SelectedGrpTypCod = ParCod_GetPar (ParCod_GrpTyp);
 
@@ -1961,7 +1961,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 
 static void Grp_PutIconsMyGroups (__attribute__((unused)) void *Args)
   {
-   Usr_Can_t ICanEdit = (!Frm_CheckIfInside () &&
+   Usr_Can_t ICanEdit = (Frm_CheckIfInside () == Frm_OUTSIDE_FORM &&
 			 (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 			  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
 								     Usr_CAN_NOT;
