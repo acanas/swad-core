@@ -164,8 +164,7 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncPars) (void *Args),void *Args,
 				       Pho_ShowPhotos_t ShowPhotos);
 unsigned Usr_GetColumnsForSelectUsrs (Pho_ShowPhotos_t ShowPhotos);
 void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
-				  const char *EncryptedUsrCod,
-				  bool UsrIsTheMsgSender,
+				  const struct Usr_Data *UsrDat,
 				  struct Usr_SelectedUsrs *SelectedUsrs);
 void Usr_WriteHeaderFieldsUsrDat (Usr_PutCheckBox_t PutCheckBoxToSelectUsr,
 				  Pho_ShowPhotos_t ShowPhotos);

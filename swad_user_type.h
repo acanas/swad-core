@@ -109,8 +109,8 @@ typedef enum
 #define Usr_NUM_CLASS_PHOTO_TYPE 3
 typedef enum
   {
-   Usr_CLASS_PHOTO_SEL,		// Only for selection of users
-   Usr_CLASS_PHOTO_SEL_SEE,	// Selecting and seeing users
+   Usr_CLASS_PHOTO_SEL_SMALL,	// Only for selection of users
+   Usr_CLASS_PHOTO_SEL_BIG,	// Selecting and seeing users
    Usr_CLASS_PHOTO_PRN,		// Only print users
   } Usr_ClassPhotoType_t;
 

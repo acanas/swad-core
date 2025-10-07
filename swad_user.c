@@ -2203,8 +2203,6 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    char BgColor[Usr_MAX_BYTES_BG_COLOR + 1];
-   bool UsrIsTheMsgSender = PutCheckBoxToSelectUsr == Usr_PUT_CHECKBOX &&
-	                    (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
    struct Hie_Node Ins;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
@@ -2213,7 +2211,8 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
 
       /***** Checkbox to select user *****/
       // Two colors are used alternatively to better distinguish the rows
-      if (UsrIsTheMsgSender)
+      if (PutCheckBoxToSelectUsr == Usr_PUT_CHECKBOX &&
+	  UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
 	 Str_Copy (BgColor,"LIGHT_GREEN",sizeof (BgColor) - 1);
       else
 	 snprintf (BgColor,sizeof (BgColor),"%s",The_GetColorRows ());
@@ -2221,13 +2220,13 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
       if (PutCheckBoxToSelectUsr == Usr_PUT_CHECKBOX)
 	{
 	 HTM_TD_Begin ("class=\"CM %s\"",BgColor);
-	    Usr_PutCheckboxToSelectUser (Role,UsrDat->EnUsrCod,UsrIsTheMsgSender,
-					 SelectedUsrs);
+	    Usr_PutCheckboxToSelectUser (Role,UsrDat,SelectedUsrs);
 	 HTM_TD_End ();
 	}
 
       /***** User has accepted enrolment? *****/
-      if (UsrIsTheMsgSender)
+      if (PutCheckBoxToSelectUsr == Usr_PUT_CHECKBOX &&
+	  UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
 	 HTM_TD_Begin ("class=\"BM_SEL %s_%s\" title=\"%s\"",
 		       Usr_ClassNum[UsrDat->Accepted],The_GetSuffix (),
 		       *Usr_AcceptedTxt[UsrDat->Accepted]);
@@ -3904,7 +3903,7 @@ static void Usr_ListUsersByRoleToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
    switch (Gbl.Usrs.Me.ListType)
      {
       case Set_USR_LIST_AS_CLASS_PHOTO:
-	 Usr_DrawClassPhoto (SelectedUsrs,Role,Usr_CLASS_PHOTO_SEL,
+	 Usr_DrawClassPhoto (SelectedUsrs,Role,Usr_CLASS_PHOTO_SEL_SMALL,
 			     Usr_PUT_CHECKBOX,ShowPhotos);
          break;
       case Set_USR_LIST_AS_LISTING:
@@ -4050,8 +4049,7 @@ unsigned Usr_GetColumnsForSelectUsrs (Pho_ShowPhotos_t ShowPhotos)
 /*****************************************************************************/
 
 void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
-				  const char *EncryptedUsrCod,
-				  bool UsrIsTheMsgSender,
+				  const struct Usr_Data *UsrDat,
 				  struct Usr_SelectedUsrs *SelectedUsrs)
   {
    HTM_Attributes_t Attributes;
@@ -4060,11 +4058,11 @@ void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
    if (Usr_NameSelUnsel[Role] && Usr_ParUsrCod[Role])
      {
       /***** Check box must be checked? *****/
-      if (UsrIsTheMsgSender)
+      if (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
 	 Attributes = HTM_CHECKED;
       else
 	 /* Check if user is in lists of selected users */
-	 Attributes = Usr_FindEncUsrCodInListOfSelectedEncUsrCods (EncryptedUsrCod,
+	 Attributes = Usr_FindEncUsrCodInListOfSelectedEncUsrCods (UsrDat->EnUsrCod,
 								   SelectedUsrs) == Exi_EXISTS ? HTM_CHECKED :
 												 HTM_NO_ATTR;
 
@@ -4074,7 +4072,7 @@ void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 			  Attributes,
 			  "value=\"%s\" form=\"%s\""
 			  " onclick=\"checkParent(this,'%s')\"",
-			  EncryptedUsrCod,Usr_FORM_TO_SELECT_USRS_ID,
+			  UsrDat->EnUsrCod,Usr_FORM_TO_SELECT_USRS_ID,
 			  Usr_NameSelUnsel[Role]);
       free (ParName);
      }
@@ -5140,7 +5138,7 @@ void Usr_ListGuests (void)
 		  case Set_USR_LIST_AS_CLASS_PHOTO:
 		     HTM_DIV_Begin ("class=\"CLASSPHOTO_CONT\"");
 			Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_GST,
-					    Usr_CLASS_PHOTO_SEL_SEE,
+					    Usr_CLASS_PHOTO_SEL_BIG,
 					    PutCheckBoxToSelectUsr,
 					    ListingPars.ShowPhotos);
 		     HTM_DIV_End ();
@@ -5311,7 +5309,7 @@ void Usr_ListStudents (void)
 		     /* Draw classphoto of students */
 		     HTM_DIV_Begin ("class=\"CLASSPHOTO_CONT\"");
 			Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_STD,
-					    Usr_CLASS_PHOTO_SEL_SEE,
+					    Usr_CLASS_PHOTO_SEL_BIG,
 					    PutCheckBoxToSelectUsr,
 					    ListingPars.ShowPhotos);
 		     HTM_DIV_End ();
@@ -5492,11 +5490,11 @@ void Usr_ListTeachers (void)
 		     /* Class photo of teachers and non-editing teachers */
 		     HTM_DIV_Begin ("class=\"CLASSPHOTO_CONT\"");
 			Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_TCH,
-					    Usr_CLASS_PHOTO_SEL_SEE,
+					    Usr_CLASS_PHOTO_SEL_BIG,
 					    PutCheckBoxToSelectUsr,
 					    ListingPars.ShowPhotos);
 			Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_NET,
-					    Usr_CLASS_PHOTO_SEL_SEE,
+					    Usr_CLASS_PHOTO_SEL_BIG,
 					    PutCheckBoxToSelectUsr,
 					    ListingPars.ShowPhotos);
 		     HTM_DIV_End ();
@@ -6242,21 +6240,20 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
   {
    static const char *ClassPhoto[Usr_NUM_CLASS_PHOTO_TYPE][PhoSha_NUM_SHAPES] =
      {
-      [Usr_CLASS_PHOTO_SEL    ][PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
-      [Usr_CLASS_PHOTO_SEL    ][PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
-      [Usr_CLASS_PHOTO_SEL    ][PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
-      [Usr_CLASS_PHOTO_SEL    ][PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
-      [Usr_CLASS_PHOTO_SEL_SEE][PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
-      [Usr_CLASS_PHOTO_SEL_SEE][PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
-      [Usr_CLASS_PHOTO_SEL_SEE][PhoSha_SHAPE_OVAL     ] = "PHOTOO45x60",
-      [Usr_CLASS_PHOTO_SEL_SEE][PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
+      [Usr_CLASS_PHOTO_SEL_SMALL    ][PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [Usr_CLASS_PHOTO_SEL_SMALL    ][PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [Usr_CLASS_PHOTO_SEL_SMALL    ][PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [Usr_CLASS_PHOTO_SEL_SMALL    ][PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
+      [Usr_CLASS_PHOTO_SEL_BIG][PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
+      [Usr_CLASS_PHOTO_SEL_BIG][PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
+      [Usr_CLASS_PHOTO_SEL_BIG][PhoSha_SHAPE_OVAL     ] = "PHOTOO45x60",
+      [Usr_CLASS_PHOTO_SEL_BIG][PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
       [Usr_CLASS_PHOTO_PRN    ][PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
       [Usr_CLASS_PHOTO_PRN    ][PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
       [Usr_CLASS_PHOTO_PRN    ][PhoSha_SHAPE_OVAL     ] = "PHOTOO45x60",
       [Usr_CLASS_PHOTO_PRN    ][PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
    unsigned NumUsr;
-   bool UsrIsTheMsgSender;
    struct Usr_Data UsrDat;
 
    if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
@@ -6279,21 +6276,20 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
 	   {
 	    /* Copy user's basic data from list */
 	    Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
-	    UsrIsTheMsgSender = (ClassPhotoType == Usr_CLASS_PHOTO_SEL &&
-				 UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	    /* Get list of user's IDs */
 	    ID_GetListIDsFromUsrCod (&UsrDat);
 
 	    /***** Begin user's cell *****/
 	    HTM_DIV_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s CB%s\"",
-			   The_GetSuffix (),UsrIsTheMsgSender ? " LIGHT_GREEN" :
-								"");
+			   The_GetSuffix (),
+			   PutCheckBoxToSelectUsr == Usr_PUT_CHECKBOX &&
+			   UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod ? " LIGHT_GREEN" :
+									   "");
 
 	       /***** Checkbox to select this user *****/
 	       if (PutCheckBoxToSelectUsr == Usr_PUT_CHECKBOX)
-		  Usr_PutCheckboxToSelectUser (Role,UsrDat.EnUsrCod,UsrIsTheMsgSender,
-					       SelectedUsrs);
+		  Usr_PutCheckboxToSelectUser (Role,&UsrDat,SelectedUsrs);
 
 	       /***** Show photo *****/
 	       if (ShowPhotos == Pho_PHOTOS_SHOW)

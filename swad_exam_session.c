@@ -579,8 +579,7 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 
       /***** Checkbox to select user *****/
       HTM_TD_Begin ("class=\"CM LINE_BOTTOM %s\"",The_GetColorRows ());
-	 Usr_PutCheckboxToSelectUser (Rol_STD,UsrDat->EnUsrCod,false,
-				      &Gbl.Usrs.Selected);
+	 Usr_PutCheckboxToSelectUser (Rol_STD,UsrDat,&Gbl.Usrs.Selected);
       HTM_TD_End ();
 
       /***** Write number of user in the list *****/
