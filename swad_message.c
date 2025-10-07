@@ -68,6 +68,16 @@
 #include "swad_user_clipboard.h"
 
 /*****************************************************************************/
+/***************************** Public constants ******************************/
+/*****************************************************************************/
+
+struct Msg_Class Msg_Class[CloOpe_NUM_CLOSED_OPEN] =
+  {
+   [CloOpe_CLOSED] = {.Title="MSG_TIT_NEW"	,.Background="MSG_BG_NEW"	},
+   [CloOpe_OPEN  ] = {.Title="MSG_TIT"		,.Background="MSG_BG"		},
+  };
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -2061,7 +2071,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
       HTM_TD_End ();
 
       /***** Number *****/
-      Msg_WriteMsgNumber (MsgNum,ClosedOrOpen == CloOpe_CLOSED);
+      Msg_WriteMsgNumber (MsgNum,ClosedOrOpen);
 
       /***** Author *****/
       HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
@@ -2074,7 +2084,8 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
       HTM_TD_End ();
 
       /***** Subject *****/
-      Msg_WriteSentOrReceivedMsgSubject (Messages,MsgCod,Subject,ClosedOrOpen,Expanded);
+      Msg_WriteSentOrReceivedMsgSubject (Messages,MsgCod,Subject,
+					 ClosedOrOpen,Expanded);
 
       /***** Date-time *****/
       Msg_WriteMsgDate (CreatTimeUTC,
@@ -2215,13 +2226,11 @@ void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 /************************** Write number of message **************************/
 /*****************************************************************************/
 
-void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg)
+void Msg_WriteMsgNumber (unsigned long MsgNum,CloOpe_ClosedOrOpen_t ClosedOrOpen)
   {
    HTM_TD_Begin ("class=\"CT %s_%s %s_%s\" style=\"width:45px;\"",
-		 NewMsg ? "MSG_TIT_NEW" :
-			  "MSG_TIT",The_GetSuffix (),
-		 NewMsg ? "MSG_BG_NEW" :
-			  "MSG_BG" ,The_GetSuffix ());
+		 Msg_Class[ClosedOrOpen].Title     ,The_GetSuffix (),
+		 Msg_Class[ClosedOrOpen].Background,The_GetSuffix ());
       HTM_UnsignedLong (MsgNum); HTM_Colon ();
    HTM_TD_End ();
   }
@@ -2238,16 +2247,6 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
    extern const char *Txt_See_message;
    extern const char *Txt_Hide_message;
    extern const char *Txt_no_subject;
-   static const char *ClassSubject[CloOpe_NUM_CLOSED_OPEN] =
-     {
-      [CloOpe_CLOSED] = "MSG_TIT_NEW",
-      [CloOpe_OPEN  ] = "MSG_TIT",
-     };
-   static const char *ClassBg[CloOpe_NUM_CLOSED_OPEN] =
-     {
-      [CloOpe_CLOSED] = "MSG_BG_NEW",
-      [CloOpe_OPEN  ] = "MSG_BG",
-     };
    static Act_Action_t Action[Msg_NUM_TYPES_OF_MSGS][2] =
      {
       [Msg_WRITING ][false] = ActUnk,
@@ -2265,8 +2264,8 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 
    /***** Begin cell *****/
    HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
-                 ClassSubject[ClosedOrOpen],The_GetSuffix (),
-                 ClassBg[ClosedOrOpen],The_GetSuffix ());
+                 Msg_Class[ClosedOrOpen].Title     ,The_GetSuffix (),
+                 Msg_Class[ClosedOrOpen].Background,The_GetSuffix ());
 
       /***** Begin form to expand/contract the message *****/
       Frm_BeginForm (Action[Messages->TypeOfMessages][Expanded]);
@@ -2474,6 +2473,28 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
+   static const char *Icon[CloOpe_NUM_CLOSED_OPEN] =
+     {
+      [CloOpe_CLOSED] = "envelope.svg",
+      [CloOpe_OPEN  ] = "envelope-open-text.svg",
+     };
+   static Ico_Color_t Color[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Ico_RED,
+      [Exi_EXISTS        ] = Ico_BLACK,
+     };
+   static const char **Title[CloOpe_NUM_CLOSED_OPEN][Exi_NUM_EXIST] =
+     {
+      [CloOpe_CLOSED][Exi_DOES_NOT_EXIST] = &Txt_MSG_Deleted_without_opening,
+      [CloOpe_CLOSED][Exi_EXISTS        ] = &Txt_MSG_Unopened,
+      [CloOpe_OPEN  ][Exi_DOES_NOT_EXIST] = &Txt_MSG_Open_and_deleted,
+      [CloOpe_OPEN  ][Exi_EXISTS        ] = &Txt_MSG_Open,
+     };
+   static const char *ClassAuthor[CloOpe_NUM_CLOSED_OPEN] =
+     {
+      [CloOpe_CLOSED] = "MSG_AUT_NEW",
+      [CloOpe_OPEN  ] = "MSG_AUT",
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRcp;
@@ -2485,11 +2506,10 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
       unsigned ToShow;
      } NumRecipients;
    struct Usr_Data UsrDat;
-   bool Deleted;
-   bool OpenByDst;
+   Exi_Exist_t DeletedOrExistsByDst;
+   CloOpe_ClosedOrOpen_t ClosedOrOpenByDst;
    Exi_Exist_t UsrExists;
    Pho_ShowPhotos_t ShowPhotos;
-   const char *Title;
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
 
    /***** Get number of recipients of a message from database *****/
@@ -2497,7 +2517,14 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 
    /***** Get recipients of a message from database *****/
    NumRecipients.Known = Msg_DB_GetKnownRecipients (&mysql_res,MsgCod);
-
+   /*
+   row[0]: UsrCod
+   row[1]: Deleted
+   row[2]: Open
+   row[3]: Surname1
+   row[4]: Surname2
+   row[5]: FirstName
+   */
    /***** Check number of recipients *****/
    if (NumRecipients.Total)
      {
@@ -2525,9 +2552,11 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 	    /* Get user's code (row[0]) */
 	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-	    /* Get if message has been deleted (row[1]) and read (row[2]) by recipient */
-	    Deleted   = (row[1][0] == 'Y');
-	    OpenByDst = (row[2][0] == 'Y');
+	    /* Get if message has been deleted (row[1])
+	       and open (row[2]) by recipient */
+	    DeletedOrExistsByDst = (row[1][0] == 'Y') ? Exi_DOES_NOT_EXIST :	// Deleted by recipient
+						        Exi_EXISTS;		// Not deleted by recipient
+	    ClosedOrOpenByDst = CloOpe_GetOpenFromYN (row[2][0]);
 
 	    /* Get user's data */
 	    UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
@@ -2535,21 +2564,15 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 								 Usr_DONT_GET_ROLE_IN_CRS);
 
 	    /* Put an icon to show if user has read the message */
-	    Title = OpenByDst ? (Deleted ? Txt_MSG_Open_and_deleted :
-					   Txt_MSG_Open) :
-				(Deleted ? Txt_MSG_Deleted_without_opening :
-					   Txt_MSG_Unopened);
+
+
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
-	          if (OpenByDst)
-	             Ico_PutIcon ("envelope-open-text.svg",Deleted ? Ico_RED :
-				                                     Ico_BLACK,
-				  Title,"ICO16x16");
-	          else
-		     Ico_PutIcon ("envelope.svg"          ,Deleted ? Ico_RED :
-			                                             Ico_BLACK,
-				  Title,"ICO16x16");
+		  Ico_PutIcon (Icon[ClosedOrOpenByDst],
+			       Color[DeletedOrExistsByDst],
+			       *Title[ClosedOrOpenByDst][DeletedOrExistsByDst],
+			       "ICO16x16");
 	       HTM_TD_End ();
 
 	       /* Put user's photo */
@@ -2563,8 +2586,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 
 	       /* Write user's name */
 	       HTM_TD_Begin ("class=\"LM %s_%s\"",
-	                     OpenByDst ? "MSG_AUT" :
-				         "MSG_AUT_NEW",The_GetSuffix ());
+	                     ClassAuthor[ClosedOrOpenByDst],The_GetSuffix ());
 		  switch (UsrExists)
 		    {
 		     case Exi_EXISTS:

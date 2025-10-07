@@ -132,24 +132,24 @@ void Qst_DB_UpdateQst (const struct Qst_Question *Question)
 /*********************** Update the score of a question **********************/
 /*****************************************************************************/
 
-void Qst_DB_UpdateQstScore (long QstCod,bool AnswerIsNotBlank,double Score)
+void Qst_DB_UpdateQstScore (const struct TstPrn_Print *Print,unsigned QstInd)
   {
    Str_SetDecimalPointToUS ();		// To print the floating point as a dot
-   if (AnswerIsNotBlank)		// User's answer is not blank
-      DB_QueryUPDATE ("can not update the score of a question",
-		      "UPDATE tst_questions"
-	                " SET NumHits=NumHits+1,"
-	                     "NumHitsNotBlank=NumHitsNotBlank+1,"
-	                     "Score=Score+(%.15lg)"
-                      " WHERE QstCod=%ld",
-		      Score,
-		      QstCod);
-   else					// User's answer is blank
-      DB_QueryUPDATE ("can not update the score of a question",
-		      "UPDATE tst_questions"
-	                " SET NumHits=NumHits+1"
-                      " WHERE QstCod=%ld",
-		      QstCod);
+      if (Print->PrintedQuestions[QstInd].Answer.Str[0] != '\0')		// User's answer is not blank
+	 DB_QueryUPDATE ("can not update the score of a question",
+			 "UPDATE tst_questions"
+			   " SET NumHits=NumHits+1,"
+				"NumHitsNotBlank=NumHitsNotBlank+1,"
+				"Score=Score+(%.15lg)"
+			 " WHERE QstCod=%ld",
+			 Print->PrintedQuestions[QstInd].Answer.Score,
+			 Print->PrintedQuestions[QstInd].QstCod);
+      else					// User's answer is blank
+	 DB_QueryUPDATE ("can not update the score of a question",
+			 "UPDATE tst_questions"
+			   " SET NumHits=NumHits+1"
+			 " WHERE QstCod=%ld",
+			 Print->PrintedQuestions[QstInd].QstCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 

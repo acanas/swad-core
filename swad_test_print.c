@@ -580,9 +580,7 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
 
 	    /***** Update the number of accesses and the score of this question *****/
 	    if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
-	       Qst_DB_UpdateQstScore (Print->PrintedQuestions[QstInd].QstCod,
-				      Print->PrintedQuestions[QstInd].Answer.Str[0] != '\0',
-				      Print->PrintedQuestions[QstInd].Answer.Score);
+	       Qst_DB_UpdateQstScore (Print,QstInd);
 
 	 /***** Destroy test question *****/
 	 Qst_QstDestructor (&Question);
@@ -778,9 +776,7 @@ void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
 
       /* Update the number of hits and the score of this question in tests database */
       if (UpdateQstScore)
-	 Qst_DB_UpdateQstScore (Print->PrintedQuestions[QstInd].QstCod,
-				Print->PrintedQuestions[QstInd].Answer.Str[0] != '\0',
-				Print->PrintedQuestions[QstInd].Answer.Score);
+	 Qst_DB_UpdateQstScore (Print,QstInd);
      }
   }
 

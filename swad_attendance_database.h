@@ -69,8 +69,7 @@ Exi_Exist_t Att_DB_CheckIfUsrExistsInTableAttUsr (long AttCod,long UsrCod,
 					          Att_AbsentOrPresent_t *Present);
 Exi_Exist_t Att_DB_GetPresentAndComments (MYSQL_RES **mysql_res,
 					  long AttCod,long UsrCod);
-unsigned Att_DB_GetListUsrsInEvent (MYSQL_RES **mysql_res,
-                                    long AttCod,bool AttEventIsAsociatedToGrps);
+unsigned Att_DB_GetListUsrsInEvent (MYSQL_RES **mysql_res,long AttCod);
 void Att_DB_RegUsrInEventChangingComments (long AttCod,long UsrCod,
                                            Att_AbsentOrPresent_t Present,
                                            const char *CommentStd,

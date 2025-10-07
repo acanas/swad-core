@@ -24,12 +24,18 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
+/********************************* Headers ***********************************/
+/*****************************************************************************/
+
+#include "swad_test_print.h"
+
+/*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 long Qst_DB_CreateQst (const struct Qst_Question *Question);
 void Qst_DB_UpdateQst (const struct Qst_Question *Question);
-void Qst_DB_UpdateQstScore (long QstCod,bool AnswerIsNotBlank,double Score);
+void Qst_DB_UpdateQstScore (const struct TstPrn_Print *Print,unsigned QstInd);
 void Qst_DB_UpdateQstShuffle (long QstCod,Qst_Shuffle_t Shuffle);
 //-----------------------------------------------------------------------------
 void Qst_DB_CreateIntAnswer (struct Qst_Question *Question);

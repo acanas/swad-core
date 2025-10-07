@@ -2726,7 +2726,6 @@ int swad__getAttendanceUsers (struct soap *soap,
    int ReturnCode;
    struct Att_Event Event;
    __attribute__((unused)) Exi_Exist_t AttExists;
-   bool AttEventIsAsociatedToGrps;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
@@ -2768,11 +2767,7 @@ int swad__getAttendanceUsers (struct soap *soap,
 	                          "Requester must be a teacher");
 
    /***** Query list of attendance users *****/
-   AttEventIsAsociatedToGrps = Grp_DB_CheckIfAssociatedToGrps ("att_groups",
-                                                               "AttCod",
-                                                               Event.AttCod);
-
-   NumUsrs = Att_DB_GetListUsrsInEvent (&mysql_res,Event.AttCod,AttEventIsAsociatedToGrps);
+   NumUsrs = Att_DB_GetListUsrsInEvent (&mysql_res,Event.AttCod);
 
    getAttendanceUsersOut->numUsers          =
    getAttendanceUsersOut->usersArray.__size = (int) NumUsrs;

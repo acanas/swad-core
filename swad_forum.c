@@ -329,7 +329,8 @@ static void For_PutParsNewPost (void *Forums);
 static void For_ShowAForumPost (struct For_Forums *Forums,
 	                        unsigned PstNum,
                                 bool LastPst,char LastSubject[Cns_MAX_BYTES_SUBJECT + 1],
-                                bool NewPst,Usr_Can_t ICanModerateForum);
+                                CloOpe_ClosedOrOpen_t ClosedOrOpenPst,
+                                Usr_Can_t ICanModerateForum);
 static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
                             char Subject[Cns_MAX_BYTES_SUBJECT   + 1],
                             char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
@@ -723,7 +724,7 @@ void For_ShowPostsOfAThread (struct For_Forums *Forums,
    time_t ReadTimeUTC;		// Read time of thread for the current user
    time_t CreatTimeUTC;		// Creation time of post
    struct Pag_Pagination PaginationPsts;
-   bool NewPst = false;
+   CloOpe_ClosedOrOpen_t ClosedOrOpenPst = CloOpe_OPEN;
    Usr_Can_t ICanModerateForum = Usr_CAN_NOT;
 
    /***** Get data of the thread *****/
@@ -820,9 +821,11 @@ void For_ShowPostsOfAThread (struct For_Forums *Forums,
 		  CreatTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
 
 		  NumPst = NumRow;
-		  NewPst = (CreatTimeUTC > ReadTimeUTC);
+		  ClosedOrOpenPst = (CreatTimeUTC > ReadTimeUTC) ? CloOpe_CLOSED :	// New post
+								   CloOpe_OPEN;		// Old post
 
-		  if (NewPst && NumRow == PaginationPsts.LastItemVisible)
+		  if (ClosedOrOpenPst == CloOpe_CLOSED &&
+		      NumRow == PaginationPsts.LastItemVisible)
 		     /* Update for_read table indicating that this thread page and previous ones
 			have been read and have no new posts for the current user
 			(even if any previous pages have been no read actually).
@@ -834,7 +837,7 @@ void For_ShowPostsOfAThread (struct For_Forums *Forums,
 		  /* Show post */
 		  For_ShowAForumPost (Forums,NumPst,
 				      (NumRow == NumPsts),LastSubject,
-				      NewPst,ICanModerateForum);
+				      ClosedOrOpenPst,ICanModerateForum);
 
 		  /* Mark possible notification as seen */
 		  switch (Forums->Forum.Type)
@@ -913,8 +916,10 @@ static void For_PutParsNewPost (void *Forums)
 static void For_ShowAForumPost (struct For_Forums *Forums,
 	                        unsigned PstNum,
                                 bool LastPst,char LastSubject[Cns_MAX_BYTES_SUBJECT + 1],
-                                bool NewPst,Usr_Can_t ICanModerateForum)
+                                CloOpe_ClosedOrOpen_t ClosedOrOpenPst,
+                                Usr_Can_t ICanModerateForum)
   {
+   extern struct Msg_Class Msg_Class[CloOpe_NUM_CLOSED_OPEN];
    extern const char *Txt_MSG_New;
    extern const char *Txt_MSG_Open;
    extern const char *Txt_no_subject;
@@ -969,34 +974,26 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 
       /***** Put an icon with post status *****/
       HTM_TD_Begin ("class=\"CONTEXT_COL %s_%s\"",
-		    NewPst ? "MSG_BG_NEW" :
-			     "MSG_BG",
-		    The_GetSuffix ());
-	 Ico_PutIcon (NewPst ? "envelope.svg" :
-			       "envelope-open-text.svg",
+	            Msg_Class[ClosedOrOpenPst].Background,The_GetSuffix ());
+	 Ico_PutIcon (ClosedOrOpenPst == CloOpe_CLOSED ? "envelope.svg" :
+							 "envelope-open-text.svg",
 		      Ico_BLACK,
-		      NewPst ? Txt_MSG_New :
-			       Txt_MSG_Open,
+		      ClosedOrOpenPst == CloOpe_CLOSED ? Txt_MSG_New :
+							 Txt_MSG_Open,
 		      "ICO16x16");
       HTM_TD_End ();
 
       /***** Write post number *****/
-      Msg_WriteMsgNumber ((unsigned long) PstNum,NewPst);
+      Msg_WriteMsgNumber ((unsigned long) PstNum,ClosedOrOpenPst);
 
       /***** Write date *****/
       Msg_WriteMsgDate (CreatTimeUTC,
-                        NewPst ? "MSG_TIT_NEW" :
-				 "MSG_TIT",
-                        NewPst ? "MSG_BG_NEW" :
-				 "MSG_BG");
+                        Msg_Class[ClosedOrOpenPst].Title,
+                        Msg_Class[ClosedOrOpenPst].Background);
       /***** Write subject *****/
       HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
-		    NewPst ? "MSG_TIT_NEW" :
-			     "MSG_TIT",
-	  	    The_GetSuffix (),
-                    NewPst ? "MSG_BG_NEW" :
-	  	             "MSG_BG",
-	  	    The_GetSuffix ());
+		    Msg_Class[ClosedOrOpenPst].Title,The_GetSuffix (),
+                    Msg_Class[ClosedOrOpenPst].Background,The_GetSuffix ());
          switch (Disabled)
            {
             case For_DISABLED:

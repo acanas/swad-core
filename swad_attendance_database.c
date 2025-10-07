@@ -35,6 +35,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_global.h"
+#include "swad_group_database.h"
 #include "swad_hierarchy_type.h"
 #include "swad_user_database.h"
 
@@ -496,14 +497,13 @@ Exi_Exist_t Att_DB_GetPresentAndComments (MYSQL_RES **mysql_res,
 /*********** Return a list with the users in an attendance event *************/
 /*****************************************************************************/
 
-unsigned Att_DB_GetListUsrsInEvent (MYSQL_RES **mysql_res,
-                                    long AttCod,bool AttEventIsAsociatedToGrps)
+unsigned Att_DB_GetListUsrsInEvent (MYSQL_RES **mysql_res,long AttCod)
   {
    char *SubQuery;
    unsigned NumUsrs;
 
    /***** Query list of attendance users *****/
-   if (AttEventIsAsociatedToGrps)
+   if (Grp_DB_CheckIfAssociatedToGrps ("att_groups","AttCod",AttCod))
      {
       // Event for one or more groups
       // Subquery: list of users in groups of this attendance event...
