@@ -146,8 +146,8 @@ void Cty_SeeCtyWithPendingInss (void)
 
 	    /* Get country code (row[0]) */
 	    Cty.HieCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = (Cty.HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod) ? "BG_HIGHLIGHT" :
-									The_GetColorRows ();
+	    BgColor = Cty.HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod ? "BG_HIGHLIGHT" :
+									 The_GetColorRows ();
 
 	    /* Get data of country */
 	    SuccessOrError = Hie_GetDataByCod[Hie_CTY] (&Cty);
@@ -364,8 +364,8 @@ static void Cty_ListOneCountryForSeeing (struct Hie_Node *Cty,unsigned NumCty)
    const char *BgColor;
    Hie_Level_t HieLvl;
 
-   BgColor = (Cty->HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod) ? "BG_HIGHLIGHT" :
-							           The_GetColorRows ();
+   BgColor = Cty->HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod ? "BG_HIGHLIGHT" :
+							         The_GetColorRows ();
 
    HTM_TR_Begin (NULL);
 
@@ -429,8 +429,8 @@ static void Cty_PutIconsListingCountries (__attribute__((unused)) void *Args)
 
 Usr_Can_t Cty_CheckIfICanEditCountries (void)
   {
-   return (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
-						     Usr_CAN_NOT;
+   return Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :
+						   Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -787,8 +787,8 @@ void Cty_WriteSelectorOfCountry (void)
 
          /***** Initial disabled option *****/
 	 HTM_OPTION (HTM_Type_STRING,"",
-	             ((Gbl.Hierarchy.Node[Hie_CTY].HieCod < 0) ? HTM_SELECTED :
-	        					         HTM_NO_ATTR) | HTM_DISABLED,
+	             (Gbl.Hierarchy.Node[Hie_CTY].HieCod < 0 ? HTM_SELECTED :
+	        					       HTM_NO_ATTR) | HTM_DISABLED,
 		     "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]);
 
 	 /***** List countries *****/
@@ -798,8 +798,8 @@ void Cty_WriteSelectorOfCountry (void)
 	   {
 	    Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
 	    HTM_OPTION (HTM_Type_LONG,&Cty->HieCod,
-			(Cty->HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod) ? HTM_SELECTED :
-									      HTM_NO_ATTR,
+			Cty->HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod ? HTM_SELECTED :
+									    HTM_NO_ATTR,
 			"%s",Cty->FullName);
 	   }
 
@@ -820,9 +820,9 @@ void Cty_WriteSelectorOfCountry (void)
 void Cty_WriteCountryName (long CtyCod)
   {
    char CtyName[Cty_MAX_BYTES_NAME + 1];
-   Frm_PutForm_t PutForm = (Frm_CheckIfInside () == Frm_OUTSIDE_FORM &&						// Only if not inside another form
-                            Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST) ? Frm_PUT_FORM :	// Only in main browser tab
-                        						     Frm_DONT_PUT_FORM;
+   Frm_PutForm_t PutForm = Frm_CheckIfInside () == Frm_OUTSIDE_FORM &&				// Only if not inside another form
+                           Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST ? Frm_PUT_FORM :	// Only in main browser tab
+                        						   Frm_DONT_PUT_FORM;
 
    /***** Get country name *****/
    Cty_GetCountryNameInLanguage (CtyCod,Gbl.Prefs.Language,CtyName);

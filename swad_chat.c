@@ -135,9 +135,9 @@ void Cht_ShowListOfAvailableChatRooms (void)
       HTM_UL_Begin ("class=\"LIST_TREE\"");
 
 	 /***** Link to chat available for all users *****/
-	 IsLastItemInLevel[1] = (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG ||
-				 Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num) ? Lay_NO_LAST :
-								       Lay_LAST;
+	 IsLastItemInLevel[1] = Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG ||
+				Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num ? Lay_NO_LAST :
+								     Lay_LAST;
 	 snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s (%s)",
 		   Txt_General,Txt_SEX_PLURAL_abc[Usr_SEX_ALL]);
 	 Cht_WriteLinkToChat1 ("GBL_USR",Txt_SEX_PLURAL_Abc[Usr_SEX_ALL],
@@ -181,8 +181,8 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	       Err_WrongDegreeExit ();
 
 	    /* Link to the room of this degree */
-	    IsLastItemInLevel[1] = (NumMyDeg == Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num - 1) ? Lay_LAST :
-											  Lay_NO_LAST;
+	    IsLastItemInLevel[1] = NumMyDeg == Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num - 1 ? Lay_LAST :
+											Lay_NO_LAST;
 	    snprintf (ThisRoomCode,sizeof (ThisRoomCode),"DEG_%ld",Deg.HieCod);
 	    snprintf (ThisRoomShrtName,sizeof (ThisRoomShrtName),"%s",
 		      Deg.ShrtName);
@@ -211,8 +211,8 @@ void Cht_ShowListOfAvailableChatRooms (void)
 		  SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Crs);
 
 		  /* Link to the room of this course */
-		  IsLastItemInLevel[2] = (NumCrs == NumCrss - 1) ? Lay_LAST :
-								   Lay_NO_LAST;
+		  IsLastItemInLevel[2] = NumCrs == NumCrss - 1 ? Lay_LAST :
+								 Lay_NO_LAST;
 		  snprintf (ThisRoomCode,sizeof (ThisRoomCode),"CRS_%ld",
 			    Crs.HieCod);
 		  snprintf (ThisRoomShrtName,sizeof (ThisRoomShrtName),"%s",

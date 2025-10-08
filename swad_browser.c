@@ -5028,8 +5028,9 @@ void Brw_RemFile (void)
 	 else if (S_ISREG (FileStatus.st_mode))		// It's a file or a link
 	   {
 	    /* Name of the file/link to be shown */
-	    Brw_GetFileNameToShow (Str_FileIs (Gbl.FileBrowser.FilFolLnk.Name,"url") ? Brw_IS_LINK :
-										       Brw_IS_FILE,
+	    Brw_GetFileNameToShow (Str_FileIs (Gbl.FileBrowser.FilFolLnk.Name,
+					       "url") ? Brw_IS_LINK :
+						        Brw_IS_FILE,
 				   Gbl.FileBrowser.FilFolLnk.Name,FileNameToShow);
 
 	    /* Remove file/link from disk and database */
@@ -7502,24 +7503,24 @@ void Brw_ShowFileMetadata (void)
 	{
 	 case Brw_SHOW_DOC_INS:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-	       ICanView = (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE) ? Usr_CAN :
-															 Usr_CAN_NOT;
+	       ICanView = Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE ? Usr_CAN :
+														       Usr_CAN_NOT;
             break;
 	 case Brw_SHOW_DOC_CTR:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-	       ICanView = (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE) ? Usr_CAN :
-															 Usr_CAN_NOT;
+	       ICanView = Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE ? Usr_CAN :
+														       Usr_CAN_NOT;
             break;
 	 case Brw_SHOW_DOC_DEG:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)
-	       ICanView = (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE) ? Usr_CAN :
-															 Usr_CAN_NOT;
+	       ICanView = Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE ? Usr_CAN :
+														       Usr_CAN_NOT;
             break;
 	 case Brw_SHOW_DOC_CRS:
 	 case Brw_SHOW_DOC_GRP:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-               ICanView = (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE) ? Usr_CAN :
-        														 Usr_CAN_NOT;
+               ICanView = Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE ? Usr_CAN :
+        													       Usr_CAN_NOT;
 	    break;
 	 default:
 	    break;
@@ -7970,24 +7971,24 @@ void Brw_DownloadFile (void)
 	{
 	 case Brw_SHOW_DOC_INS:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-	       ICanView = (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE) ? Usr_CAN :
-															 Usr_CAN_NOT;
+	       ICanView = Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE ? Usr_CAN :
+														       Usr_CAN_NOT;
             break;
 	 case Brw_SHOW_DOC_CTR:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-	       ICanView = (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE) ? Usr_CAN :
-															 Usr_CAN_NOT;
+	       ICanView = Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE ? Usr_CAN :
+														       Usr_CAN_NOT;
             break;
 	 case Brw_SHOW_DOC_DEG:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)
-	       ICanView = (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE) ? Usr_CAN :
-															 Usr_CAN_NOT;
+	       ICanView = Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE ? Usr_CAN :
+														       Usr_CAN_NOT;
             break;
 	 case Brw_SHOW_DOC_CRS:
 	 case Brw_SHOW_DOC_GRP:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-               ICanView = (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE) ? Usr_CAN :
-        														 Usr_CAN_NOT;
+               ICanView = Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE ? Usr_CAN :
+        													       Usr_CAN_NOT;
 	    break;
 	 default:
 	    break;
@@ -8205,8 +8206,8 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
      }
    else
      {
-      Title = (FileMetadata->FilFolLnk.Type == Brw_IS_LINK) ? URL :	// If it's a link, show full URL in title
-                                                              Txt_Download;
+      Title = FileMetadata->FilFolLnk.Type == Brw_IS_LINK ? URL :	// If it's a link, show full URL in title
+                                                            Txt_Download;
 
       /* Put anchor and filename */
       HTM_A_Begin ("href=\"%s\" title=\"%s\" target=\"_blank\""
@@ -8592,8 +8593,9 @@ Exi_Exist_t Brw_GetFileTypeSizeAndDate (struct Brw_FileMetadata *FileMetadata)
       if (S_ISDIR (FileStatus.st_mode))
 	 FileMetadata->FilFolLnk.Type = Brw_IS_FOLDER;
       else if (S_ISREG (FileStatus.st_mode))
-         FileMetadata->FilFolLnk.Type = Str_FileIs (FileMetadata->FilFolLnk.Full,"url") ? Brw_IS_LINK :
-                                                                                          Brw_IS_FILE;
+         FileMetadata->FilFolLnk.Type = Str_FileIs (FileMetadata->FilFolLnk.Full,
+						    "url") ? Brw_IS_LINK :
+                                                             Brw_IS_FILE;
       else
 	 FileMetadata->FilFolLnk.Type = Brw_IS_UNKNOWN;
       FileMetadata->Size = FileStatus.st_size;
@@ -8888,16 +8890,16 @@ static Usr_Can_t Brw_CheckIfICanEditFileOrFolder (unsigned Level)
    switch (Gbl.FileBrowser.Type)
      {
       case Brw_ADMI_DOC_CRS:
-         return (Gbl.Usrs.Me.Role.Logged >= Rol_TCH) ? Usr_CAN :
-						       Usr_CAN_NOT;
+         return Gbl.Usrs.Me.Role.Logged >= Rol_TCH ? Usr_CAN :
+						     Usr_CAN_NOT;
       case Brw_ADMI_DOC_GRP:
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// A teacher...
 							// ...can edit only if he/she belongs to group
-	    return (Grp_GetIfIBelongToGrp (Brw_GetGrpCod ()) == Usr_BELONG) ? Usr_CAN :
-								              Usr_CAN_NOT;
+	    return Grp_GetIfIBelongToGrp (Brw_GetGrpCod ()) == Usr_BELONG ? Usr_CAN :
+								            Usr_CAN_NOT;
 	 // An administrator can edit
-         return (Gbl.Usrs.Me.Role.Logged > Rol_TCH) ? Usr_CAN :
-						      Usr_CAN_NOT;
+         return Gbl.Usrs.Me.Role.Logged > Rol_TCH ? Usr_CAN :
+						    Usr_CAN_NOT;
       case Brw_ADMI_TCH_CRS:
       case Brw_ADMI_TCH_GRP:
          // Check if I am the publisher of the file/folder
@@ -8946,40 +8948,40 @@ static Usr_Can_t Brw_CheckIfICanCreateIntoFolder (unsigned Level)
    switch (Gbl.FileBrowser.Type)
      {
       case Brw_ADMI_DOC_CRS:
-         return (Gbl.Usrs.Me.Role.Logged >= Rol_TCH) ? Usr_CAN :
-						       Usr_CAN_NOT;
+         return Gbl.Usrs.Me.Role.Logged >= Rol_TCH ? Usr_CAN :
+						     Usr_CAN_NOT;
       case Brw_ADMI_DOC_GRP:
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// A teacher
 							// ...can create/paste only if he/she belongs to group
-	    return (Grp_GetIfIBelongToGrp (Brw_GetGrpCod ()) == Usr_BELONG) ? Usr_CAN :
-									      Usr_CAN_NOT;
+	    return Grp_GetIfIBelongToGrp (Brw_GetGrpCod ()) == Usr_BELONG ? Usr_CAN :
+									    Usr_CAN_NOT;
 	 // An administrator can create/paste
-         return (Gbl.Usrs.Me.Role.Logged > Rol_TCH) ? Usr_CAN :
-						      Usr_CAN_NOT;
+         return Gbl.Usrs.Me.Role.Logged > Rol_TCH ? Usr_CAN :
+						    Usr_CAN_NOT;
       case Brw_ADMI_TCH_CRS:
-         return (Gbl.Usrs.Me.Role.Logged >= Rol_NET) ? Usr_CAN :
-						       Usr_CAN_NOT;
+         return Gbl.Usrs.Me.Role.Logged >= Rol_NET ? Usr_CAN :
+						     Usr_CAN_NOT;
       case Brw_ADMI_TCH_GRP:
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_NET ||	// A non-editing teacher...
 	     Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// ...or a teacher
 							// ...can create/paste only if he/she belongs to group
-	    return (Grp_GetIfIBelongToGrp (Brw_GetGrpCod ()) == Usr_BELONG) ? Usr_CAN :
-									      Usr_CAN_NOT;
+	    return Grp_GetIfIBelongToGrp (Brw_GetGrpCod ()) == Usr_BELONG ? Usr_CAN :
+									    Usr_CAN_NOT;
 	 // An administrator can create/paste
-         return (Gbl.Usrs.Me.Role.Logged > Rol_TCH) ? Usr_CAN :
-						      Usr_CAN_NOT;
+         return Gbl.Usrs.Me.Role.Logged > Rol_TCH ? Usr_CAN :
+						    Usr_CAN_NOT;
       case Brw_ADMI_SHR_CRS:
-         return (Gbl.Usrs.Me.Role.Logged >= Rol_STD) ? Usr_CAN :
-						       Usr_CAN_NOT;
+         return Gbl.Usrs.Me.Role.Logged >= Rol_STD ? Usr_CAN :
+						     Usr_CAN_NOT;
       case Brw_ADMI_SHR_GRP:
 	 if (Gbl.Usrs.Me.Role.Logged >= Rol_STD &&	// A student, non-editing teacher...
 	     Gbl.Usrs.Me.Role.Logged <= Rol_TCH)	// ...or a teacher
 							// ...can create/paste only if he/she belongs to group
-	    return (Grp_GetIfIBelongToGrp (Brw_GetGrpCod ()) == Usr_BELONG) ? Usr_CAN :
-									      Usr_CAN_NOT;
+	    return Grp_GetIfIBelongToGrp (Brw_GetGrpCod ()) == Usr_BELONG ? Usr_CAN :
+									    Usr_CAN_NOT;
 	 // An administrator can create/paste
-         return (Gbl.Usrs.Me.Role.Logged >= Rol_STD) ? Usr_CAN :
-						       Usr_CAN_NOT;
+         return Gbl.Usrs.Me.Role.Logged >= Rol_STD ? Usr_CAN :
+						     Usr_CAN_NOT;
       case Brw_ADMI_ASG_USR:
       case Brw_ADMI_ASG_CRS:
 	 if (Level == 0)	// If root folder
@@ -9048,8 +9050,9 @@ static Usr_Can_t Brw_CheckIfICanModifySharedFileOrFolder (void)
      {
       case Rol_STD:	// If I am a student or a non-editing teacher...
       case Rol_NET:	// ...I can modify the file/folder if I am the publisher
-         return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full) ? Usr_CAN :
-													      Usr_CAN_NOT);	// Am I the publisher of subtree?
+         return Gbl.Usrs.Me.UsrDat.UsrCod ==							// Am I...
+                Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full) ? Usr_CAN :	// ...the publisher of subtree?
+										Usr_CAN_NOT;
       case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
@@ -9067,8 +9070,9 @@ static Usr_Can_t Brw_CheckIfICanModifyPrivateFileOrFolder (void)
      {
       case Rol_NET:	// If I am a student or a non-editing teacher...
 			// ...I can modify the file/folder if I am the publisher
-         return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full) ? Usr_CAN :
-													      Usr_CAN_NOT);	// Am I the publisher of subtree?
+         return Gbl.Usrs.Me.UsrDat.UsrCod ==							// Am I...
+                Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full) ? Usr_CAN :	// ...the publisher of subtree?
+									        Usr_CAN_NOT;
       case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
@@ -9095,8 +9099,9 @@ static Usr_Can_t Brw_CheckIfICanModifyPrjDocFileOrFolder (void)
       case Rol_STD:
       case Rol_NET:
 	 if (Prj_GetMyRolesInProject (Prj_GetPrjCod ()))	// I am a member
-            return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full) ? Usr_CAN :
-        													 Usr_CAN_NOT);	// Am I the publisher of subtree?
+            return Gbl.Usrs.Me.UsrDat.UsrCod ==							// Am I...
+        	   Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full) ? Usr_CAN :	// ...the publisher of subtree?
+        									   Usr_CAN_NOT;
 	 return Usr_CAN_NOT;
       case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
@@ -9122,8 +9127,9 @@ static Usr_Can_t Brw_CheckIfICanModifyPrjAssFileOrFolder (void)
       case Rol_NET:
 	 if ((Prj_GetMyRolesInProject (Prj_GetPrjCod ()) & (1 << Prj_ROLE_TUT |		// Tutor...
 	                                                    1 << Prj_ROLE_EVL)))	// ...or evaluator
-            return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full) ? Usr_CAN :
-        													 Usr_CAN_NOT);	// Am I the publisher of subtree?
+            return Gbl.Usrs.Me.UsrDat.UsrCod ==							// Am I...
+        	   Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full) ? Usr_CAN :	// ...the publisher of subtree?
+        									   Usr_CAN_NOT;
 	 return Usr_CAN_NOT;
       case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
@@ -9438,9 +9444,9 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    GrpCod = Str_ConvertStrCodToLongCod (row[10]);
 
    /***** Set row color *****/
-   BgColor = (Hie[Hie_CRS].HieCod > 0 &&
-	      Hie[Hie_CRS].HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? "BG_HIGHLIGHT" :
-									   The_GetColorRows ();
+   BgColor = Hie[Hie_CRS].HieCod > 0 &&
+	     Hie[Hie_CRS].HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod ? "BG_HIGHLIGHT" :
+									 The_GetColorRows ();
 
    HTM_TR_Begin (NULL);
 
@@ -9688,8 +9694,8 @@ void Brw_AskRemoveOldFilesBriefcase (void)
 		    Months <= Brw_MAX_MONTHS_IN_BRIEFCASE;
 		    Months++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Months,
-			      (Months == Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES) ? HTM_SELECTED :
-									       HTM_NO_ATTR,
+			      Months == Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES ? HTM_SELECTED :
+									     HTM_NO_ATTR,
 			      "%u",Months);
 	    HTM_SELECT_End ();
 	    HTM_NBSP ();
@@ -10114,8 +10120,8 @@ static void Brw_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
    char StrNumGrps[Cns_MAX_DIGITS_UINT + 1];
    char StrNumUsrs[Cns_MAX_DIGITS_UINT + 1];
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   const char *Class = (FileZone == Brw_UNKNOWN) ? "LINE_TOP DAT_STRONG" :
-	                                           "DAT";
+   const char *Class = FileZone == Brw_UNKNOWN ? "LINE_TOP DAT_STRONG" :
+	                                         "DAT";
 
    Fil_WriteFileSizeFull ((double) SizeOfFileZone->Size,FileSizeStr);
 
@@ -10181,8 +10187,8 @@ static void Brw_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
    char StrNumFoldersPerCrs[Cns_MAX_DIGITS_UINT + 1];
    char StrNumFilesPerCrs[Cns_MAX_DIGITS_UINT + 1];
    char FileSizePerCrsStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   const char *Class = (FileZone == Brw_UNKNOWN) ? "LINE_TOP DAT_STRONG" :
-						   "DAT";
+   const char *Class = FileZone == Brw_UNKNOWN ? "LINE_TOP DAT_STRONG" :
+						 "DAT";
 
    if (SizeOfFileZone->NumCrss == -1)	// Not applicable
      {
@@ -10234,8 +10240,8 @@ static void Brw_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
    char StrNumFoldersPerUsr[Cns_MAX_DIGITS_UINT + 1];
    char StrNumFilesPerUsr[Cns_MAX_DIGITS_UINT + 1];
    char FileSizePerUsrStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   const char *Class = (FileZone == Brw_UNKNOWN) ? "LINE_TOP DAT_STRONG" :
-						   "DAT";
+   const char *Class = FileZone == Brw_UNKNOWN ? "LINE_TOP DAT_STRONG" :
+						 "DAT";
 
    if (SizeOfFileZone->NumUsrs == -1)	// Not applicable
      {

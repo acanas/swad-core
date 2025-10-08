@@ -141,21 +141,21 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
    Ctr_GetCoordByCod (Gbl.Hierarchy.Node[Hie_CTR].HieCod,&Coord);
 
    /***** Initializations *****/
-   PutLink      = (ViewType == Vie_VIEW &&
-		   Gbl.Hierarchy.Node[Hie_CTR].WWW[0]) ? Hie_PUT_LINK :
-							 Hie_DONT_PUT_LINK;
-   PutFormIns   = (ViewType == Vie_VIEW &&
-		   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Frm_PUT_FORM :
-	        					     Frm_DONT_PUT_FORM;
-   PutFormName  = (ViewType == Vie_VIEW &&
-		   Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ? Frm_PUT_FORM :
-	        					     Frm_DONT_PUT_FORM;
+   PutLink      = ViewType == Vie_VIEW &&
+		  Gbl.Hierarchy.Node[Hie_CTR].WWW[0] ? Hie_PUT_LINK :
+						       Hie_DONT_PUT_LINK;
+   PutFormIns   = ViewType == Vie_VIEW &&
+		  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Frm_PUT_FORM :
+	        					   Frm_DONT_PUT_FORM;
+   PutFormName  = ViewType == Vie_VIEW &&
+		  Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ? Frm_PUT_FORM :
+	        					   Frm_DONT_PUT_FORM;
    PutFormPlc   =
    PutFormCoor  =
    PutFormWWW   =
-   PutFormPhoto = (ViewType == Vie_VIEW &&
-	           Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ? Frm_PUT_FORM :
-	        					     Frm_DONT_PUT_FORM;
+   PutFormPhoto = ViewType == Vie_VIEW &&
+	          Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ? Frm_PUT_FORM :
+	        					   Frm_DONT_PUT_FORM;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,
@@ -596,8 +596,8 @@ static void CtrCfg_Institution (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 		       {
 			Ins = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
 			HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
-				    (Ins->HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod) ? HTM_SELECTED :
-											  HTM_NO_ATTR,
+				    Ins->HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod ? HTM_SELECTED :
+											HTM_NO_ATTR,
 				    "%s",Ins->ShrtName);
 		       }
 		  HTM_SELECT_End ();
@@ -662,16 +662,16 @@ static void CtrCfg_Place (Frm_PutForm_t PutForm)
 				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"0",
-				 (Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod == 0) ? HTM_SELECTED :
-										      HTM_NO_ATTR,
+				 Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod == 0 ? HTM_SELECTED :
+										    HTM_NO_ATTR,
 				 "%s",Txt_Another_place);
 		     for (NumPlc = 0;
 			  NumPlc < Places.Num;
 			  NumPlc++)
 			HTM_OPTION (HTM_Type_LONG,&Places.Lst[NumPlc].PlcCod,
-				    (Places.Lst[NumPlc].PlcCod ==
-				     Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod) ? HTM_SELECTED :
-										    HTM_NO_ATTR,
+				    Places.Lst[NumPlc].PlcCod ==
+				    Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod ? HTM_SELECTED :
+										  HTM_NO_ATTR,
 				    "%s",Places.Lst[NumPlc].ShrtName);
 		  HTM_SELECT_End ();
 	       Frm_EndForm ();

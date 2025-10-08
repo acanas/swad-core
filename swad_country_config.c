@@ -110,9 +110,9 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
       return;
 
    /***** Initializations *****/
-   PutLink = (ViewType == Vie_VIEW &&
-	      Gbl.Hierarchy.Node[Hie_CTY].WWW[0]) ? Hie_PUT_LINK :
-						    Hie_DONT_PUT_LINK;
+   PutLink = ViewType == Vie_VIEW &&
+	     Gbl.Hierarchy.Node[Hie_CTY].WWW[0] ? Hie_PUT_LINK :
+						  Hie_DONT_PUT_LINK;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,

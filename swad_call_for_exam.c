@@ -327,8 +327,8 @@ void Cfe_ReceiveCallForExam1 (void)
 
    /***** Get parameters of the call for exam *****/
    ExaCod = Cfe_GetParsCallsForExams (CallsForExams);
-   OldNewCFE = (ExaCod > 0) ? OldNew_OLD :
-			      OldNew_NEW;
+   OldNewCFE = ExaCod > 0 ? OldNew_OLD :
+			    OldNew_NEW;
 
    /***** Add the call for exam to the database and read it again from the database *****/
    switch (OldNewCFE)
@@ -927,8 +927,8 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
       [Vie_PRINT	][Cfe_HIDDEN_CALL_FOR_EXAM ] = "CALL_FOR_EXAM_VISIBLE",
       [Vie_PRINT	][Cfe_DELETED_CALL_FOR_EXAM] = NULL,	// Not applicable here
      };
-   OldNew_OldNew_t OldNewCFE = (ExaCod > 0) ? OldNew_OLD :
-					      OldNew_NEW;
+   OldNew_OldNew_t OldNewCFE = ExaCod > 0 ? OldNew_OLD :
+					    OldNew_NEW;
 
    /***** Build anchor string *****/
    Frm_SetAnchorStr (ExaCod,&Anchor);
@@ -942,8 +942,8 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
    CallsForExams->ExaCod = ExaCod;	// Used to put contextual icons
    FunctionToDrawContextualIcons = ViewType == Vie_VIEW ? Cfe_PutIconsCallForExam :
 							  NULL;
-   HelpLink = (ViewType == Vie_EDIT) ? *Forms[OldNewCFE].Help :
-				       NULL;
+   HelpLink = ViewType == Vie_EDIT ? *Forms[OldNewCFE].Help :
+				     NULL;
    if (HighLight)
      {
       /* Show pending alerts */
@@ -1055,8 +1055,8 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			  Year <= Deg_MAX_YEARS_PER_DEGREE;
 			  Year++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-				    (Year == CallsForExams->CallForExam.Year) ? HTM_SELECTED :
-									        HTM_NO_ATTR,
+				    Year == CallsForExams->CallForExam.Year ? HTM_SELECTED :
+									      HTM_NO_ATTR,
 				    "%s",Txt_YEAR_OF_DEGREE[Year]);
 		  HTM_SELECT_End ();
 		 }
@@ -1136,15 +1136,15 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 				    "id=\"ExamHour\" name=\"ExamHour\""
 				    " class=\"INPUT_%s\"",The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"0",
-				 (CallsForExams->CallForExam.StartTime.Hour == 0) ? HTM_SELECTED :
-										    HTM_NO_ATTR,
+				 CallsForExams->CallForExam.StartTime.Hour == 0 ? HTM_SELECTED :
+										  HTM_NO_ATTR,
 				 "-");
 		     for (Hour  = 7;
 			  Hour <= 22;
 			  Hour++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
-				    (Hour == CallsForExams->CallForExam.StartTime.Hour) ? HTM_SELECTED :
-											  HTM_NO_ATTR,
+				    Hour == CallsForExams->CallForExam.StartTime.Hour ? HTM_SELECTED :
+											HTM_NO_ATTR,
 				    "%02u %s",Hour,Txt_hours_ABBREVIATION);
 		  HTM_SELECT_End ();
 
@@ -1155,8 +1155,8 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			  Minute <= 59;
 			  Minute++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
-				    (Minute == CallsForExams->CallForExam.StartTime.Minute) ? HTM_SELECTED :
-											      HTM_NO_ATTR,
+				    Minute == CallsForExams->CallForExam.StartTime.Minute ? HTM_SELECTED :
+											    HTM_NO_ATTR,
 				    "%02u &prime;",Minute);
 		  HTM_SELECT_End ();
 		 }
@@ -1190,8 +1190,8 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			  Hour <= 8;
 			  Hour++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
-				    (Hour == CallsForExams->CallForExam.Duration.Hour) ? HTM_SELECTED :
-										         HTM_NO_ATTR,
+				    Hour == CallsForExams->CallForExam.Duration.Hour ? HTM_SELECTED :
+										       HTM_NO_ATTR,
 				    "%02u %s",Hour,Txt_hours_ABBREVIATION);
 		  HTM_SELECT_End ();
 
@@ -1202,8 +1202,8 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			  Minute <= 59;
 			  Minute++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
-				    (Minute == CallsForExams->CallForExam.Duration.Minute) ? HTM_SELECTED :
-											     HTM_NO_ATTR,
+				    Minute == CallsForExams->CallForExam.Duration.Minute ? HTM_SELECTED :
+											   HTM_NO_ATTR,
 				    "%02u &prime;",Minute);
 		  HTM_SELECT_End ();
 		 }

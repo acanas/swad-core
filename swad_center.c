@@ -148,8 +148,8 @@ void Ctr_SeeCtrWithPendingDegs (void)
 
 	    /* Get center code (row[0]) */
 	    Ctr.HieCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = (Ctr.HieCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod) ? "BG_HIGHLIGHT" :
-									The_GetColorRows ();
+	    BgColor = Ctr.HieCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod ? "BG_HIGHLIGHT" :
+									 The_GetColorRows ();
 
 	    /* Get data of center */
 	    SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
@@ -327,8 +327,8 @@ static void Ctr_ListOneCenterForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
       TxtClassNormal = "DAT";
       TxtClassStrong = "DAT_STRONG";
      }
-   BgColor = (Ctr->HieCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod) ? "BG_HIGHLIGHT" :
-								   The_GetColorRows ();
+   BgColor = Ctr->HieCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod ? "BG_HIGHLIGHT" :
+								 The_GetColorRows ();
 
    HTM_TR_Begin (NULL);
 
@@ -666,16 +666,16 @@ void Ctr_WriteSelectorOfCenter (void)
    Frm_BeginFormGoTo (ActSeeDeg);
 
       /***** Begin selector *****/
-      HTM_SELECT_Begin ((Gbl.Hierarchy.Node[Hie_INS].HieCod > 0) ? HTM_SUBMIT_ON_CHANGE :
-								   HTM_DISABLED,
+      HTM_SELECT_Begin (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0 ? HTM_SUBMIT_ON_CHANGE :
+								 HTM_DISABLED,
 			NULL,
 			"id=\"ctr\" name=\"ctr\" class=\"HIE_SEL INPUT_%s\"",
 			The_GetSuffix ());
 
 	 /***** Initial disabled option *****/
 	 HTM_OPTION (HTM_Type_STRING,"",
-		     ((Gbl.Hierarchy.Node[Hie_CTR].HieCod < 0) ? HTM_SELECTED :
-							         HTM_NO_ATTR) | HTM_DISABLED,
+		     (Gbl.Hierarchy.Node[Hie_CTR].HieCod < 0 ? HTM_SELECTED :
+							       HTM_NO_ATTR) | HTM_DISABLED,
 		     "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]);
 
 	 if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
@@ -696,8 +696,8 @@ void Ctr_WriteSelectorOfCenter (void)
 	       /* Write option */
 	       HTM_OPTION (HTM_Type_LONG,&CtrCod,
 			   Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0 &&
-			   (CtrCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod) ? HTM_SELECTED :
-									    HTM_NO_ATTR,
+			   CtrCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod ? HTM_SELECTED :
+									  HTM_NO_ATTR,
 			   "%s",row[1]);
 	      }
 
@@ -800,8 +800,8 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 					  " class=\"PLC_SEL INPUT_%s\"",
 					  The_GetSuffix ());
 			   HTM_OPTION (HTM_Type_STRING,"0",
-				       (Ctr->Specific.PlcCod == 0) ? HTM_SELECTED :
-								     HTM_NO_ATTR,
+				       Ctr->Specific.PlcCod == 0 ? HTM_SELECTED :
+								   HTM_NO_ATTR,
 				       "%s",Txt_Another_place);
 			   for (NumPlc = 0;
 				NumPlc < Places->Num;
@@ -809,8 +809,8 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 			     {
 			      Plc = &Places->Lst[NumPlc];
 			      HTM_OPTION (HTM_Type_LONG,&Plc->PlcCod,
-					  (Plc->PlcCod == Ctr->Specific.PlcCod) ? HTM_SELECTED :
-										  HTM_NO_ATTR,
+					  Plc->PlcCod == Ctr->Specific.PlcCod ? HTM_SELECTED :
+										HTM_NO_ATTR,
 					  "%s",Plc->ShrtName);
 			     }
 			HTM_SELECT_End ();
@@ -903,7 +903,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 
 static Usr_Can_t Ctr_CheckIfICanEditACenter (struct Hie_Node *Ctr)
   {
-   return (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ||		// I am an institution administrator or higher
+   return (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ||	// I am an institution administrator or higher
            ((Ctr->Status & Hie_STATUS_BIT_PENDING) &&	// Center is not yet activated
             Gbl.Usrs.Me.UsrDat.UsrCod == Ctr->RequesterUsrCod)) ? Usr_CAN :	// I am the requester
         							  Usr_CAN_NOT;
@@ -1268,8 +1268,8 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 			      "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
 			      The_GetSuffix ());
 	       HTM_OPTION (HTM_Type_STRING,"0",
-			   (Ctr_EditingCtr->Specific.PlcCod == 0) ? HTM_SELECTED :
-							            HTM_NO_ATTR,
+			   Ctr_EditingCtr->Specific.PlcCod == 0 ? HTM_SELECTED :
+							          HTM_NO_ATTR,
 			   "%s",Txt_Another_place);
 	       for (NumPlc = 0;
 		    NumPlc < Places->Num;
@@ -1277,8 +1277,8 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 		 {
 		  Plc = &Places->Lst[NumPlc];
 		  HTM_OPTION (HTM_Type_LONG,&Plc->PlcCod,
-			      (Plc->PlcCod == Ctr_EditingCtr->Specific.PlcCod) ? HTM_SELECTED :
-									         HTM_NO_ATTR,
+			      Plc->PlcCod == Ctr_EditingCtr->Specific.PlcCod ? HTM_SELECTED :
+									       HTM_NO_ATTR,
 			      "%s",Plc->ShrtName);
 		 }
 	    HTM_SELECT_End ();

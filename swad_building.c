@@ -198,8 +198,8 @@ static Bld_Order_t Bld_GetParBuildingOrder (void)
 
 static Usr_Can_t Bld_CheckIfICanCreateBuildings (void)
   {
-   return (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ? Usr_CAN :
-						     Usr_CAN_NOT;
+   return Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ? Usr_CAN :
+						   Usr_CAN_NOT;
   }
 
 /*****************************************************************************/

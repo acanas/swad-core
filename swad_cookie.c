@@ -62,8 +62,8 @@ static void Coo_PutIconsCookies (__attribute__((unused)) void *Args);
 
 Coo_RefuseAccept_t Coo_GetAcceptFromYN (char Ch)
   {
-   return (Ch == 'Y') ? Coo_ACCEPT :
-		        Coo_REFUSE;
+   return Ch == 'Y' ? Coo_ACCEPT :
+		      Coo_REFUSE;
   }
 
 /*****************************************************************************/
@@ -103,8 +103,8 @@ void Coo_EditMyPrefsOnCookies (void)
 	    /* Check box */
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_CHECKBOX ("cookies",
-				   ((Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies == Coo_ACCEPT) ? HTM_CHECKED :
-											           HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
+				   (Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies == Coo_ACCEPT ? HTM_CHECKED :
+											   HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
 				   "value=\"Y\"");
 	       HTM_Txt (Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites);
 	    HTM_LABEL_End ();

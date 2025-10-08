@@ -136,9 +136,9 @@ static unsigned long Con_GetTimeToRefresh (void)
 void Con_RefreshConnected (void)
   {
    unsigned NumUsr;
-   Sho_Show_t ShowConnected = ((Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) != 0 &&	// Right column visible
-                               Gbl.Hierarchy.HieLvl == Hie_CRS) ? Sho_SHOW :		// There is a course selected
-                        					  Sho_DONT_SHOW;
+   Sho_Show_t ShowConnected = (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) != 0 &&	// Right column visible
+                              Gbl.Hierarchy.HieLvl == Hie_CRS ? Sho_SHOW :		// There is a course selected
+                        					Sho_DONT_SHOW;
 
    /***** Refresh time *****/
    HTM_TxtF ("%lu|",Con_GetTimeToRefresh ());
@@ -672,8 +672,8 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role,unsigned NumU
       HTM_TD_End ();
 
       /***** Write full name and link *****/
-      ClassTxt = (Con_Connected.Lst[NumUsr].ThisCrs) ? "CON_NAME_NARROW CON_CRS" :
-						       "CON_NAME_NARROW CON_NO_CRS";
+      ClassTxt = Con_Connected.Lst[NumUsr].ThisCrs ? "CON_NAME_NARROW CON_CRS" :
+						     "CON_NAME_NARROW CON_NO_CRS";
       HTM_TD_Begin ("class=\"%s %s\"",ClassTxt,The_GetColorRows ());
          if (!NextAction[Role])
 	    Err_WrongRoleExit ();
@@ -742,12 +742,12 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Hie_Level_t 
    time_t TimeDiff;
    const char *ClassTxt;
    struct Usr_Data UsrDat;
-   Frm_PutForm_t PutFormRecord = (Gbl.Hierarchy.HieLvl == Hie_CRS &&	// Course selected
-	                          HieLvl == Hie_CRS &&			// Scope is current course
-	                          (Role == Rol_STD ||			// Role is student,...
-	                           Role == Rol_NET ||			// ...non-editing teacher...
-	                           Role == Rol_TCH)) ? Frm_PUT_FORM :	// ...or teacher
-	                        		       Frm_DONT_PUT_FORM;
+   Frm_PutForm_t PutFormRecord = Gbl.Hierarchy.HieLvl == Hie_CRS &&	// Course selected
+	                         HieLvl == Hie_CRS &&			// Scope is current course
+	                         (Role == Rol_STD ||			// Role is student,...
+	                          Role == Rol_NET ||			// ...non-editing teacher...
+	                          Role == Rol_TCH) ? Frm_PUT_FORM :	// ...or teacher
+	                        		     Frm_DONT_PUT_FORM;
 
    /***** Get connected users who belong to current location from database *****/
    if ((NumUsrs = Con_DB_GetConnectedFromScope (&mysql_res,HieLvl,Role)))

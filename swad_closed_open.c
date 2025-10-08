@@ -52,8 +52,8 @@ const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE] =
 
 CloOpe_ClosedOrOpen_t CloOpe_GetClosedOrOpenFrom01 (char Ch)
   {
-   return (Ch == '1') ? CloOpe_OPEN :
-		        CloOpe_CLOSED;
+   return Ch == '1' ? CloOpe_OPEN :
+		      CloOpe_CLOSED;
   }
 
 /*****************************************************************************/
@@ -62,6 +62,6 @@ CloOpe_ClosedOrOpen_t CloOpe_GetClosedOrOpenFrom01 (char Ch)
 
 CloOpe_ClosedOrOpen_t CloOpe_GetOpenFromYN (char Ch)
   {
-   return (Ch == 'Y') ? CloOpe_OPEN :
-		        CloOpe_CLOSED;
+   return Ch == 'Y' ? CloOpe_OPEN :
+		      CloOpe_CLOSED;
   }
