@@ -1114,9 +1114,9 @@ static void Agd_GetventDataByCod (struct Agd_Event *AgdEvent)
 	 AgdEvent->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
 
 	 /* Get whether the event is past, present or future (row(5), row[6]) */
-	 AgdEvent->TimeStatus = ((row[5][0] == '1') ? Dat_PAST :
+	 AgdEvent->TimeStatus =  (row[5][0] == '1') ? Dat_PAST :
 				((row[6][0] == '1') ? Dat_FUTURE :
-						      Dat_PRESENT));
+						      Dat_PRESENT);
 
 	 /* Get the event (row[7]) and its location (row[8]) */
 	 Str_Copy (AgdEvent->Title   ,row[7],sizeof (AgdEvent->Title   ) - 1);
@@ -1358,8 +1358,8 @@ void Agd_ReqCreatOrEditEvent (void)
    Agd_GetPars (&Agenda,Agd_MY_AGENDA);
 
    /***** Get the code of the event *****/
-   OldNewEvent = ((AgdEvent.AgdCod = ParCod_GetPar (ParCod_Agd)) > 0) ? OldNew_OLD :
-									OldNew_NEW;
+   OldNewEvent = (AgdEvent.AgdCod = ParCod_GetPar (ParCod_Agd)) > 0 ? OldNew_OLD :
+								      OldNew_NEW;
 
    /***** Get from the database the data of the event *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1502,8 +1502,8 @@ void Agd_ReceiveEvent (void)
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 
    /***** Get the code of the event *****/
-   OldNewEvent = ((AgdEvent.AgdCod = ParCod_GetPar (ParCod_Agd)) > 0) ? OldNew_OLD :
-									OldNew_NEW;
+   OldNewEvent = (AgdEvent.AgdCod = ParCod_GetPar (ParCod_Agd)) > 0 ? OldNew_OLD :
+								      OldNew_NEW;
 
    /***** Get start/end date-times *****/
    AgdEvent.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);

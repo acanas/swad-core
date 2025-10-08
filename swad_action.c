@@ -114,9 +114,9 @@ Usr_Can_t Act_CheckIfICanExecuteAction (Act_Action_t Action)
    if (Gbl.Hierarchy.HieLvl == Hie_UNK)
       return Usr_CAN_NOT;
 
-   return ((ActLst_Actions[Action].Permission[Gbl.Hierarchy.HieLvl][Gbl.Usrs.Me.IBelongToCurrent[Gbl.Hierarchy.HieLvl]]
-           & (1 << Gbl.Usrs.Me.Role.Logged))) ? Usr_CAN :
-						Usr_CAN_NOT;
+   return (ActLst_Actions[Action].Permission[Gbl.Hierarchy.HieLvl][Gbl.Usrs.Me.IBelongToCurrent[Gbl.Hierarchy.HieLvl]]
+           & (1 << Gbl.Usrs.Me.Role.Logged)) != 0 ? Usr_CAN :
+						    Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -250,15 +250,15 @@ void Act_AdjustActionWhenClickOnMenu (void)
 	  - the first option allowed *****/
 
    /* Get my last action in current tab */
-   Action = (Gbl.Usrs.Me.Logged) ? MFU_GetMyLastActionInCurrentTab () :
-				   ActUnk;
+   Action = Gbl.Usrs.Me.Logged ? MFU_GetMyLastActionInCurrentTab () :
+				 ActUnk;
    if (Action == ActUnk)
       /* Get the first option allowed */
       Action = Mnu_GetFirstActionAvailableInCurrentTab ();
 
-   Gbl.Action.Act = (Action == ActUnk) ? (Gbl.Usrs.Me.Logged ? ActSeeGblTL :	// Default action if logged
-							       ActFrmLogIn) :	// Default action if not logged
-					 Action;
+   Gbl.Action.Act = Action == ActUnk ? (Gbl.Usrs.Me.Logged ? ActSeeGblTL :	// Default action if logged
+							     ActFrmLogIn) :	// Default action if not logged
+				       Action;
    Tab_SetCurrentTab ();
   }
 

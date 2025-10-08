@@ -97,10 +97,10 @@ void Adm_ReqAddAdm (Hie_Level_t HieLvl)
 	{
 	 case Exi_EXISTS:
 	    /* Check if I am allowed to register user as administrator in institution/center/degree */
-	    ICanRegister = ((HieLvl == Hie_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
-			    (HieLvl == Hie_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
-			    (HieLvl == Hie_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
-											     Usr_CAN_NOT;
+	    ICanRegister = (HieLvl == Hie_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
+			   (HieLvl == Hie_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
+			   (HieLvl == Hie_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+											   Usr_CAN_NOT;
 	    switch (ICanRegister)
 	      {
 	       case Usr_CAN:
@@ -201,10 +201,10 @@ static void Adm_AddAdm (Hie_Level_t HieLvl)
 	{
 	 case Exi_EXISTS:
 	    /* Check if I am allowed to register user as administrator in institution/center/degree */
-	    ICanRegister = ((HieLvl == Hie_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
-			    (HieLvl == Hie_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
-			    (HieLvl == Hie_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
-											     Usr_CAN_NOT;
+	    ICanRegister = (HieLvl == Hie_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
+			   (HieLvl == Hie_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
+			   (HieLvl == Hie_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+											   Usr_CAN_NOT;
 	    switch (ICanRegister)
 	      {
 	       case Usr_CAN:
@@ -326,11 +326,11 @@ static void Adm_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,
 	 case Exi_EXISTS:
 	    /* Check if it's forbidden to remove an administrator */
 	    MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	    ICanRemove = (MeOrOther == Usr_ME ||
-			  (HieLvl == Hie_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
-			  (HieLvl == Hie_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
-			  (HieLvl == Hie_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
-											   Usr_CAN_NOT;
+	    ICanRemove = MeOrOther == Usr_ME ||
+			 (HieLvl == Hie_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
+			 (HieLvl == Hie_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
+			 (HieLvl == Hie_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+											 Usr_CAN_NOT;
 	    switch (ICanRemove)
 	      {
 	       case Usr_CAN:

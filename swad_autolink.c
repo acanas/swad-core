@@ -247,8 +247,8 @@ void ALn_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
                            (it's mandatory to do the copy in reverse order
                             to avoid overwriting source) *****/
 
-	    PtrSrc = (Link == LastLink) ? Txt + TxtLength :
-					  Link->Next->URLorNick.Str - 1;
+	    PtrSrc = Link == LastLink ? Txt + TxtLength :
+					Link->Next->URLorNick.Str - 1;
 	    PtrDst = PtrSrc + Link->LengthAddedUpToHere;
 	    Length = PtrSrc - (Link->URLorNick.Str + Link->URLorNick.Len - 1);
             for (i = 0;

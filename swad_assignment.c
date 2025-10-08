@@ -328,9 +328,9 @@ static void Asg_PutHead (struct Asg_Assignments *Assignments,
 
 static Usr_Can_t Asg_CheckIfICanCreateAssignments (void)
   {
-   return (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
-        					     Usr_CAN_NOT;
+   return Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+          Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :
+        					   Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -704,10 +704,10 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
       [Usr_CAN    ] = {.Icon = "folder-open.svg"	,.Color = Ico_GREEN	},
      };
    Act_Action_t NextAction;
-   Usr_Can_t ICanSendFiles = (Asg->Hidden == HidVis_VISIBLE &&		// It's visible (not hidden)
-			      Asg->ClosedOrOpen == CloOpe_OPEN &&	// It's open (inside dates)
-			      Asg->ICanDo == Usr_CAN) ? Usr_CAN :	// I can do (I belong to course/group)
-							Usr_CAN_NOT;
+   Usr_Can_t ICanSendFiles = Asg->Hidden == HidVis_VISIBLE &&		// It's visible (not hidden)
+			     Asg->ClosedOrOpen == CloOpe_OPEN &&	// It's open (inside dates)
+			     Asg->ICanDo == Usr_CAN ? Usr_CAN :		// I can do (I belong to course/group)
+						      Usr_CAN_NOT;
 
    /***** Folder icon *****/
    if (ViewType == Vie_VIEW &&		// Not print view
@@ -1206,8 +1206,8 @@ void Asg_ReqCreatOrEditAsg (void)
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
-   OldNewAsg = ((Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) > 0) ? OldNew_OLD :
-									     OldNew_NEW;
+   OldNewAsg = (Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) > 0 ? OldNew_OLD :
+									   OldNew_NEW;
 
    /***** Get from the database the data of the assignment *****/
    switch (OldNewAsg)
@@ -1267,8 +1267,8 @@ static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Assignments,
       [Dat_STR_TIME] = Dat_HMS_TO_000000,
       [Dat_END_TIME] = Dat_HMS_TO_235959
      };
-   OldNew_OldNew_t OldNewAsg = (Assignments->Asg.AsgCod > 0) ? OldNew_OLD :
-							       OldNew_NEW;
+   OldNew_OldNew_t OldNewAsg = Assignments->Asg.AsgCod > 0 ? OldNew_OLD :
+							     OldNew_NEW;
 
    /***** Begin form *****/
    Frm_BeginForm (Actions[OldNewAsg]);
@@ -1398,8 +1398,8 @@ static void Asg_EditRubrics (long AsgRubCod)
 	       /* One option for each rubric in this course */
 	       Rub_DB_GetRubricTitle (RubCod,Title,Rub_MAX_BYTES_TITLE);
 	       HTM_OPTION (HTM_Type_LONG,&RubCod,
-			   (RubCod == AsgRubCod) ? HTM_SELECTED :
-						   HTM_NO_ATTR,
+			   RubCod == AsgRubCod ? HTM_SELECTED :
+						 HTM_NO_ATTR,
 			   "%s",Title);
 	      }
 
@@ -1489,8 +1489,8 @@ void Asg_ReceiveAssignment (void)
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /* Get the code of the assignment */
-   OldNewAsg = ((Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) > 0) ? OldNew_OLD :
-									     OldNew_NEW;
+   OldNewAsg = (Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) > 0 ? OldNew_OLD :
+									   OldNew_NEW;
 
    switch (OldNewAsg)
      {

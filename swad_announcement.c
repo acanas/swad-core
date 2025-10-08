@@ -79,8 +79,8 @@ void Ann_ShowAllAnnouncements (void)
    struct Ann_Announcement Announcement;
    unsigned NumAnnouncements;
    unsigned NumAnn;
-   Usr_Can_t ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
-								   Usr_CAN_NOT;
+   Usr_Can_t ICanEdit = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :
+								 Usr_CAN_NOT;
 
    /***** Get announcements from database *****/
    if (ICanEdit)

@@ -346,9 +346,9 @@ static void Att_PutIconsInListOfEvents (void *Events)
    if (Events)
      {
       /***** Put icon to create a new attendance event *****/
-      ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-		  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
-							    Usr_CAN_NOT;
+      ICanEdit = Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+		 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :
+							  Usr_CAN_NOT;
       if (ICanEdit == Usr_CAN)
 	 Att_PutIconToCreateNewEvent ((struct Att_Events *) Events);
 
@@ -973,8 +973,8 @@ void Att_ReqCreatOrEditEvent (void)
    Events.CurrentPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get the code of the attendance event *****/
-   OldNewEvent = ((Events.Event.AttCod = ParCod_GetPar (ParCod_Att)) > 0) ? OldNew_OLD :
-									    OldNew_NEW;
+   OldNewEvent = (Events.Event.AttCod = ParCod_GetPar (ParCod_Att)) > 0 ? OldNew_OLD :
+									  OldNew_NEW;
 
    /***** Get from the database the data of the attendance event *****/
    switch (OldNewEvent)
@@ -1164,8 +1164,8 @@ void Att_ReceiveEvent (void)
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the code of the attendance event *****/
-   OldNewEvent = ((ReceivedAtt.AttCod = ParCod_GetPar (ParCod_Att)) > 0) ? OldNew_OLD :
-									   OldNew_NEW;
+   OldNewEvent = (ReceivedAtt.AttCod = ParCod_GetPar (ParCod_Att)) > 0 ? OldNew_OLD :
+									 OldNew_NEW;
 
    if (OldNewEvent == OldNew_OLD)
      {
@@ -1732,8 +1732,8 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	 if (Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER)
 	    Err_ShowErrorAndExit ("Wrong call.");
 	 ICanChangeStdAttendance = Usr_CAN_NOT;
-	 ICanEditStdComment	 = (Event->ClosedOrOpen == CloOpe_OPEN) ? Usr_CAN :	// Attendance event is open
-									  Usr_CAN_NOT;
+	 ICanEditStdComment	 = Event->ClosedOrOpen == CloOpe_OPEN ? Usr_CAN :	// Attendance event is open
+									Usr_CAN_NOT;
 	 ICanEditTchComment	 = Usr_CAN_NOT;
 	 break;
       case Rol_TCH:
@@ -1770,10 +1770,10 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       /***** Checkbox to select user *****/
       HTM_TD_Begin ("class=\"CT %s\"",The_GetColorRows ());
 	 HTM_INPUT_CHECKBOX ("UsrCodStd",
-			     ((Present == Att_PRESENT) ? HTM_CHECKED :
-					                 HTM_NO_ATTR) |
-			     ((ICanChangeStdAttendance == Usr_CAN) ? HTM_NO_ATTR :
-								     HTM_DISABLED),
+			     (Present == Att_PRESENT ? HTM_CHECKED :
+					               HTM_NO_ATTR) |
+			     (ICanChangeStdAttendance == Usr_CAN ? HTM_NO_ATTR :
+								   HTM_DISABLED),
 			     "id=\"Std%u\" value=\"%s\"",
 			     NumUsr,UsrDat->EnUsrCod);
       HTM_TD_End ();
@@ -2176,8 +2176,8 @@ static Att_AbsentOrPresent_t Att_CheckIfUsrIsPresentInEventAndGetComments (long 
 
 Att_AbsentOrPresent_t Att_GetPresentFromYN (char Ch)
   {
-   return (Ch == 'Y') ? Att_PRESENT :
-			Att_ABSENT;
+   return Ch == 'Y' ? Att_PRESENT :
+		      Att_ABSENT;
   }
 
 /*****************************************************************************/
@@ -3157,10 +3157,10 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 								 CommentStd,CommentTch);
          ShowComment.Std = CommentStd[0] ? Sho_SHOW :
 					   Sho_DONT_SHOW;
-	 ShowComment.Tch = (CommentTch[0] &&
-	                    (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-	                     Events->Event.CommentTchVisible == HidVis_VISIBLE)) ? Sho_SHOW :
-	                							   Sho_DONT_SHOW;
+	 ShowComment.Tch = CommentTch[0] &&
+	                   (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+	                    Events->Event.CommentTchVisible == HidVis_VISIBLE) ? Sho_SHOW :
+	                							 Sho_DONT_SHOW;
 
 	 /***** Write a row for this event *****/
 	 HTM_TR_Begin (NULL);

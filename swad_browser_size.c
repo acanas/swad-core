@@ -292,11 +292,11 @@ void BrwSiz_SetMaxQuota (struct BrwSiz_BrowserSize *Size)
 
 Err_SuccessOrError_t BrwSiz_CheckQuota (const struct BrwSiz_BrowserSize *Size)
   {
-   return (Size->NumLevls > BrwSiz_MAX_DIR_LEVELS ||
-           Size->NumFolds > Size->MaxFolds ||
-           Size->NumFiles > Size->MaxFiles ||
-           Size->TotalSiz > Size->MaxQuota) ? Err_ERROR :	// Quota exceeded
-        				      Err_SUCCESS;	// Quota not exceeded
+   return Size->NumLevls > BrwSiz_MAX_DIR_LEVELS ||
+          Size->NumFolds > Size->MaxFolds ||
+          Size->NumFiles > Size->MaxFiles ||
+          Size->TotalSiz > Size->MaxQuota ? Err_ERROR :		// Quota exceeded
+        				    Err_SUCCESS;	// Quota not exceeded
   }
 
 /*****************************************************************************/

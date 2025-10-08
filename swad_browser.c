@@ -1520,8 +1520,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActSeeAdmDocCrsGrp:	// Access to a documents zone from menu
       case ActChgToSeeDocCrs:	// Access to see a documents zone
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (GrpCod > 0) ? Brw_SHOW_DOC_GRP :
-                                               Brw_SHOW_DOC_CRS;
+         Gbl.FileBrowser.Type = GrpCod > 0 ? Brw_SHOW_DOC_GRP :
+                                             Brw_SHOW_DOC_CRS;
          break;
       case ActSeeDocCrs:
       case ActExpSeeDocCrs:
@@ -1542,8 +1542,8 @@ void Brw_GetParAndInitFileBrowser (void)
          break;
       case ActChgToAdmDocCrs:	// Access to admin a documents zone
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (GrpCod > 0) ? Brw_ADMI_DOC_GRP :
-                                               Brw_ADMI_DOC_CRS;
+         Gbl.FileBrowser.Type = GrpCod > 0 ? Brw_ADMI_DOC_GRP :
+                                             Brw_ADMI_DOC_CRS;
          break;
       case ActAdmDocCrs:
       case ActReqRemFilDocCrs:
@@ -1597,8 +1597,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActAdmTchCrsGrp:
       case ActChgToAdmTch:	// Access to a teachers zone from menu
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (GrpCod > 0) ? Brw_ADMI_TCH_GRP :
-                                               Brw_ADMI_TCH_CRS;
+         Gbl.FileBrowser.Type = GrpCod > 0 ? Brw_ADMI_TCH_GRP :
+                                             Brw_ADMI_TCH_CRS;
          break;
       case ActAdmTchCrs:
       case ActReqRemFilTchCrs:
@@ -1647,8 +1647,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActAdmShaCrsGrp:
       case ActChgToAdmSha:	// Access to a shared zone from menu
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (GrpCod > 0) ? Brw_ADMI_SHR_GRP :
-                                               Brw_ADMI_SHR_CRS;
+         Gbl.FileBrowser.Type = GrpCod > 0 ? Brw_ADMI_SHR_GRP :
+                                             Brw_ADMI_SHR_CRS;
          break;
       case ActAdmShaCrs:
       case ActReqRemFilShaCrs:
@@ -1838,13 +1838,13 @@ void Brw_GetParAndInitFileBrowser (void)
 	   {
 	    case Rol_STD:
 	    case Rol_NET:
-	       Gbl.FileBrowser.Type = (GrpCod > 0) ? Brw_SHOW_MRK_GRP :
-						     Brw_SHOW_MRK_CRS;
+	       Gbl.FileBrowser.Type = GrpCod > 0 ? Brw_SHOW_MRK_GRP :
+						   Brw_SHOW_MRK_CRS;
 	       break;
 	    case Rol_TCH:
 	    case Rol_SYS_ADM:
-	       Gbl.FileBrowser.Type = (GrpCod > 0) ? Brw_ADMI_MRK_GRP :
-						     Brw_ADMI_MRK_CRS;
+	       Gbl.FileBrowser.Type = GrpCod > 0 ? Brw_ADMI_MRK_GRP :
+						   Brw_ADMI_MRK_CRS;
 	       break;
 	    default:
 	       Err_WrongRoleExit ();
@@ -1853,8 +1853,8 @@ void Brw_GetParAndInitFileBrowser (void)
          break;
       case ActChgToSeeMrk:	// Access to see a marks zone
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (GrpCod > 0) ? Brw_SHOW_MRK_GRP :
-                                               Brw_SHOW_MRK_CRS;
+         Gbl.FileBrowser.Type = GrpCod > 0 ? Brw_SHOW_MRK_GRP :
+                                             Brw_SHOW_MRK_CRS;
          break;
       case ActSeeMrkCrs:
       case ActExpSeeMrkCrs:
@@ -1873,8 +1873,8 @@ void Brw_GetParAndInitFileBrowser (void)
          break;
       case ActChgToAdmMrk:	// Access to admin a marks zone
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (GrpCod > 0) ? Brw_ADMI_MRK_GRP :
-                                               Brw_ADMI_MRK_CRS;
+         Gbl.FileBrowser.Type = GrpCod > 0 ? Brw_ADMI_MRK_GRP :
+                                             Brw_ADMI_MRK_CRS;
          break;
       case ActAdmMrkCrs:
       case ActReqRemFilMrkCrs:
@@ -2956,9 +2956,9 @@ static void Brw_FormToChangeCrsGrpZone (void)
 
 	       /* Select this group */
 	       HTM_LI_Begin ("class=\"%s\"",
-			     (Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type] &&
-			      Grp.GrpCod == CurrentGrpCod) ? "BROWSER_TITLE" :
-							     "BROWSER_TITLE_LIGHT");
+			     Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type] &&
+			     Grp.GrpCod == CurrentGrpCod ? "BROWSER_TITLE" :
+							   "BROWSER_TITLE_LIGHT");
 		  HTM_IMG (Cfg_URL_ICON_PUBLIC,
 			   NumGrp < LstMyGrps.NumGrps - 1 ? "submid20x20.gif" :
 							    "subend20x20.gif",
@@ -2966,9 +2966,9 @@ static void Brw_FormToChangeCrsGrpZone (void)
 			   "class=\"ICO25x25\" style=\"margin-left:6px;\"");
 		  HTM_LABEL_Begin (NULL);
 		     HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],
-				      ((Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type] &&
-				        Grp.GrpCod == CurrentGrpCod) ? HTM_CHECKED :
-								       HTM_NO_ATTR) | HTM_SUBMIT_ON_CLICK,
+				      (Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type] &&
+				       Grp.GrpCod == CurrentGrpCod ? HTM_CHECKED :
+								     HTM_NO_ATTR) | HTM_SUBMIT_ON_CLICK,
 				      "value=\"%ld\"",Grp.GrpCod);
 		     HTM_Txt (GrpTyp.Name);
 		     HTM_NBSP ();
@@ -3873,8 +3873,9 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 	      }
 	    else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
 	      {
-	       Gbl.FileBrowser.FilFolLnk.Type = Str_FileIs (Gbl.FileBrowser.FilFolLnk.Name,"url") ? Brw_IS_LINK :
-					                                                            Brw_IS_FILE;
+	       Gbl.FileBrowser.FilFolLnk.Type = Str_FileIs (Gbl.FileBrowser.FilFolLnk.Name,
+							    "url") ? Brw_IS_LINK :
+								     Brw_IS_FILE;
 	       HiddenOrVisible = Brw_WriteRowFileBrowser (Level,RowId,
 							  TreeContracted,
 							  Brw_ICON_TREE_NOTHING);
@@ -3900,16 +3901,36 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
 							 bool TreeContracted,
 							 Brw_IconTree_t IconThisRow)
   {
+   static const char *ClassTxtOld[HidVis_NUM_HIDDEN_VISIBLE] =
+     {
+      [HidVis_HIDDEN ] = "LST_HID",
+      [HidVis_VISIBLE] = "LST",
+     };
+   static const char *ClassTxtNew[HidVis_NUM_HIDDEN_VISIBLE] =
+     {
+      [HidVis_HIDDEN ] = "LST_REC_HID",
+      [HidVis_VISIBLE] = "LST_REC",
+     };
+   static const char *ClassInputOld[HidVis_NUM_HIDDEN_VISIBLE] =
+     {
+      [HidVis_HIDDEN ] = "LST_EDIT_HID",
+      [HidVis_VISIBLE] = "LST_EDIT",
+     };
+   static const char *ClassInputNew[HidVis_NUM_HIDDEN_VISIBLE] =
+     {
+      [HidVis_HIDDEN ] = "LST_EDIT_REC_HID",
+      [HidVis_VISIBLE] = "LST_EDIT_REC",
+     };
    char *Anchor;
-   HidVis_HiddenOrVisible_t HiddenOrVisible = HidVis_VISIBLE;
-   bool RowSetAsPublic = false;
-   bool LightStyle = false;
+   HidVis_HiddenOrVisible_t ThisHiddenOrVisible = HidVis_VISIBLE;
+   HidVis_HiddenOrVisible_t ThisOrAncestorHiddenOrVisible = HidVis_VISIBLE;
+   PriPub_PrivateOrPublic_t RowPublicOrPrivate;
    bool IsRecent = false;
    struct Brw_FileMetadata FileMetadata;
    __attribute__((unused)) Exi_Exist_t FileExists;
    char FileBrowserId[32];
    char TxtStyle[64];
-   char *InputStyle;
+   const char *InputStyle;
    char Folder[Brw_MAX_BYTES_FOLDER + 1];
 
    /***** Initializations *****/
@@ -3923,9 +3944,9 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
        Brw_TypeIsAdmDoc[Gbl.FileBrowser.Type] ||
        Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
      {
-      HiddenOrVisible = Brw_CheckIfFileOrFolderIsHidden (Gbl.FileBrowser.FilFolLnk.Type,
-                                                                  Gbl.FileBrowser.FilFolLnk.Full);
-      if (HiddenOrVisible == HidVis_HIDDEN &&
+      ThisHiddenOrVisible = Brw_CheckIfFileOrFolderIsHidden (Gbl.FileBrowser.FilFolLnk.Type,
+                                                             Gbl.FileBrowser.FilFolLnk.Full);
+      if (ThisHiddenOrVisible == HidVis_HIDDEN &&
 	  (Brw_TypeIsSeeDoc[Gbl.FileBrowser.Type] ||
 	   Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type]) &&
 	  Level)	// Don't return on level 0
@@ -3935,15 +3956,15 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
 	  Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
         {
 	 if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
-	    Gbl.FileBrowser.HiddenLevels[Level] = (HiddenOrVisible == HidVis_HIDDEN);
-	 switch (HiddenOrVisible)
+	    Gbl.FileBrowser.HiddenLevels[Level] = (ThisHiddenOrVisible == HidVis_HIDDEN);
+	 switch (ThisHiddenOrVisible)
 	   {
 	    case HidVis_VISIBLE:	// this row is not marked as hidden
-               LightStyle = Brw_CheckIfAnyHigherLevelIsHidden (Level) == HidVis_HIDDEN;
+               ThisOrAncestorHiddenOrVisible = Brw_CheckIfAnyHigherLevelIsHidden (Level);
 	       break;
 	    case HidVis_HIDDEN:		// this row is marked as hidden
 	    default:
-               LightStyle = true;
+               ThisOrAncestorHiddenOrVisible = HidVis_HIDDEN;
 	       break;
 	   }
         }
@@ -3963,9 +3984,10 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
        Brw_TypeIsAdmDoc[Gbl.FileBrowser.Type] ||
        Brw_TypeIsAdmSha[Gbl.FileBrowser.Type])
      {
-      RowSetAsPublic = (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER) ? Brw_DB_GetIfFolderHasPublicFiles (Gbl.FileBrowser.FilFolLnk.Full) :
-	                                                                   (FileMetadata.Public == PriPub_PUBLIC);
-      if (Gbl.FileBrowser.OnlyPublicFiles && !RowSetAsPublic)
+      RowPublicOrPrivate = Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER ? Brw_DB_GetIfFolderHasPublicFiles (Gbl.FileBrowser.FilFolLnk.Full) :
+	                                                                     FileMetadata.Public;
+      if (Gbl.FileBrowser.OnlyPublicFiles &&
+	  RowPublicOrPrivate == PriPub_PRIVATE)
          return HidVis_HIDDEN;
      }
 
@@ -3974,20 +3996,15 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
    if (Dat_GetStartExecutionTimeUTC () < FileMetadata.Time + (7L * 24L * 60L * 60L))
       IsRecent = true;
 
-   /* Style of the text in this row */
    snprintf (TxtStyle,sizeof (TxtStyle),
              "%s_%s",
              Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER ||
-             !IsRecent ? (LightStyle ? "LST_HID" :
-        			       "LST") :
-        	         (LightStyle ? "LST_REC_HID" :
-        	        	       "LST_REC"),
+             !IsRecent ? ClassTxtOld[ThisOrAncestorHiddenOrVisible] :
+        	         ClassTxtNew[ThisOrAncestorHiddenOrVisible],
 	     The_GetSuffix ());
-   InputStyle = (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER ||
-	         !IsRecent) ? (LightStyle ? "LST_EDIT_HID" :
-					    "LST_EDIT") :
-			      (LightStyle ? "LST_EDIT_REC_HID" :
-					    "LST_EDIT_REC");
+   InputStyle = Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER ||
+	        !IsRecent ? ClassInputOld[ThisOrAncestorHiddenOrVisible] :
+			    ClassInputNew[ThisOrAncestorHiddenOrVisible];
 
    /***** Get data of assignment using the name of the folder *****/
    if (Brw_TypeIsAdmAsg[Gbl.FileBrowser.Type] && Level == 1)	// Main folder of the assignment
@@ -4006,30 +4023,23 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
      {
       case Brw_ICON_TREE_NOTHING:
 	 if (TreeContracted)	// This row is inside a contracted subtree
-            HTM_TR_Begin ("id=\"%s\""
-        	          " style=\"display:none;\"",
-        	          Anchor);
+            HTM_TR_Begin ("id=\"%s\" style=\"display:none;\"",Anchor);
 	 else
-            HTM_TR_Begin ("id=\"%s\"",
-                          Anchor);
+            HTM_TR_Begin ("id=\"%s\"",Anchor);
 	 break;
       case Brw_ICON_TREE_EXPAND:
 	 if (TreeContracted)	// This row is inside a contracted subtree
             HTM_TR_Begin ("id=\"%s\" data-folder=\"contracted\""
-        	          " style=\"display:none;\"",
-        	          Anchor);
+        	          " style=\"display:none;\"",Anchor);
 	 else
-            HTM_TR_Begin ("id=\"%s\" data-folder=\"contracted\"",
-                          Anchor);
+            HTM_TR_Begin ("id=\"%s\" data-folder=\"contracted\"",Anchor);
 	 break;
       case Brw_ICON_TREE_CONTRACT:
 	 if (TreeContracted)	// This row is inside a contracted subtree
             HTM_TR_Begin ("id=\"%s\" data-folder=\"expanded\""
-        	          " style=\"display:none;\"",
-        	          Anchor);
+        	          " style=\"display:none;\"",Anchor);
 	 else
-            HTM_TR_Begin ("id=\"%s\" data-folder=\"expanded\"",
-                          Anchor);
+            HTM_TR_Begin ("id=\"%s\" data-folder=\"expanded\"",Anchor);
 	 break;
      }
 
@@ -4073,7 +4083,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
 	    /* Put icon to hide/unhide file or folder */
 	    if (Brw_TypeIsAdmDoc[Gbl.FileBrowser.Type] ||
 		Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
-	       Brw_PutIconHideUnhide (Anchor,HiddenOrVisible);
+	       Brw_PutIconHideUnhide (Anchor,ThisHiddenOrVisible);
 
 	    /***** File or folder icon *****/
 	    switch (Gbl.FileBrowser.FilFolLnk.Type)
@@ -4122,7 +4132,8 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
       HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 	 if (Gbl.Usrs.Me.Role.Logged >= Rol_STD &&	// Only ZIP folders if I am student, teacher...
 	     !Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type] &&	// Do not ZIP folders when showing marks
-	     !(Brw_TypeIsSeeDoc[Gbl.FileBrowser.Type] && HiddenOrVisible == HidVis_HIDDEN))	// When seeing docs, if folder is not hidden (this could happen for Level == 0)
+	     !(Brw_TypeIsSeeDoc[Gbl.FileBrowser.Type] &&
+	       ThisHiddenOrVisible == HidVis_HIDDEN))	// When seeing docs, if folder is not hidden (this could happen for Level == 0)
 	    Brw_PutButtonToDownloadZIPOfAFolder ();
       HTM_TD_End ();
      }
@@ -4136,7 +4147,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
 
    The_ChangeRowColor ();
 
-   if (HiddenOrVisible == HidVis_HIDDEN &&
+   if (ThisHiddenOrVisible == HidVis_HIDDEN &&
        (Brw_TypeIsSeeDoc[Gbl.FileBrowser.Type] ||
 	Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type]))
       return HidVis_HIDDEN;

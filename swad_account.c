@@ -823,8 +823,8 @@ Usr_Can_t Acc_CheckIfICanEliminateAccount (long UsrCod)
      {
       case Usr_ME:
 	 // A system admin can not eliminate him/herself
-	 return ((Gbl.Usrs.Me.Role.Available & (1 << Rol_SYS_ADM)) == 0) ? Usr_CAN :
-									   Usr_CAN_NOT;
+	 return (Gbl.Usrs.Me.Role.Available & (1 << Rol_SYS_ADM)) == 0 ? Usr_CAN :
+									 Usr_CAN_NOT;
       case Usr_OTHER:
 	 // Only a system admin can eliminate other's account
 	 return Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :

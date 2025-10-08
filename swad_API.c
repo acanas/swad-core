@@ -1618,8 +1618,8 @@ int swad__getUsers (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getUsers;
-   Gbl.Hierarchy.Node[Hie_CRS].HieCod = (courseCode > 0) ? (long) courseCode :
-							   -1L;
+   Gbl.Hierarchy.Node[Hie_CRS].HieCod = courseCode > 0 ? (long) courseCode :
+							 -1L;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
@@ -1701,8 +1701,8 @@ int swad__findUsers (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_findUsers;
-   Gbl.Hierarchy.Node[Hie_CRS].HieCod = (courseCode > 0) ? (long) courseCode :
-							   -1L;
+   Gbl.Hierarchy.Node[Hie_CRS].HieCod = courseCode > 0 ? (long) courseCode :
+							 -1L;
    Hie_InitHierarchy ();
 
    /***** Check web service key *****/
@@ -1756,8 +1756,8 @@ int swad__findUsers (struct soap *soap,
 
    if (Search.Str[0])	// Search some users
      {
-      HieLvl = (Gbl.Hierarchy.HieLvl == Hie_CRS) ? Hie_CRS :
-						   Hie_SYS;
+      HieLvl = Gbl.Hierarchy.HieLvl == Hie_CRS ? Hie_CRS :
+						 Hie_SYS;
       switch (Sch_BuildSearchQuery (SearchQuery,&Search,
 				    "CONCAT_WS(' ',FirstName,Surname1,Surname2)",
 				    NULL,NULL))
@@ -1942,12 +1942,12 @@ int swad__getGroupTypes (struct soap *soap,
 	           row[1],Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
          /* Get whether enrolment is mandatory ('Y') or voluntary ('N') (row[2]) */
-         getGroupTypesOut->groupTypesArray.__ptr[NumGrpTyp].mandatory = (row[2][0] == 'Y') ? 1 :
-                                                                                             0;
+         getGroupTypesOut->groupTypesArray.__ptr[NumGrpTyp].mandatory = row[2][0] == 'Y' ? 1 :
+                                                                                           0;
 
          /* Get whether user can enrol in multiple groups ('Y') or only in one group ('N') (row[3]) */
-         getGroupTypesOut->groupTypesArray.__ptr[NumGrpTyp].multiple = (row[3][0] == 'Y') ? 1 :
-                                                                                            0;
+         getGroupTypesOut->groupTypesArray.__ptr[NumGrpTyp].multiple = row[3][0] == 'Y' ? 1 :
+                                                                                          0;
 
          // Whether groups of this type must be opened (row[4]) ignored here
 
@@ -2068,23 +2068,23 @@ int swad__getGroups (struct soap *soap,
 
          /* Get max number of students of group (row[4]) and number of current students */
          MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[4]);
-         getGroupsOut->groupsArray.__ptr[NumGrp].maxStudents = (MaxStudents > Grp_MAX_STUDENTS_IN_A_GROUP) ? -1 :
-                                                                                                             (int) MaxStudents;
+         getGroupsOut->groupsArray.__ptr[NumGrp].maxStudents = MaxStudents > Grp_MAX_STUDENTS_IN_A_GROUP ? -1 :
+                                                                                                           (int) MaxStudents;
 
          /* Get number of current students */
          getGroupsOut->groupsArray.__ptr[NumGrp].numStudents = (int) Grp_DB_CountNumUsrsInGrp (Rol_STD,GrpCod);
 
          /* Get whether group is open ('Y') or closed ('N') (row[5]) */
-         getGroupsOut->groupsArray.__ptr[NumGrp].open = (row[5][0] == 'Y') ? 1 :
-                                                                             0;
+         getGroupsOut->groupsArray.__ptr[NumGrp].open = row[5][0] == 'Y' ? 1 :
+                                                                           0;
 
          /* Get whether group have file zones ('Y') or not ('N') (row[6]) */
-         getGroupsOut->groupsArray.__ptr[NumGrp].fileZones = (row[6][0] == 'Y') ? 1 :
-                                                                                  0;
+         getGroupsOut->groupsArray.__ptr[NumGrp].fileZones = row[6][0] == 'Y' ? 1 :
+                                                                                0;
 
          /* Get whether I belong to this group or not */
-         getGroupsOut->groupsArray.__ptr[NumGrp].member = (Grp_GetIfIBelongToGrp (GrpCod) == Usr_BELONG) ? 1 :
-													   0;
+         getGroupsOut->groupsArray.__ptr[NumGrp].member = Grp_GetIfIBelongToGrp (GrpCod) == Usr_BELONG ? 1 :
+													 0;
 	}
      }
 
@@ -2180,8 +2180,8 @@ int swad__sendMyGroups (struct soap *soap,
      }
 
    /***** Change my groups *****/
-   SendMyGroupsOut->success = (Grp_ChangeGrpsAtomically (Usr_ME,&LstGrpsIWant) == Err_SUCCESS) ? 1 :
-											         0;
+   SendMyGroupsOut->success = Grp_ChangeGrpsAtomically (Usr_ME,&LstGrpsIWant) == Err_SUCCESS ? 1 :
+											       0;
 
    /***** Free memory with the list of groups which I want to belong to *****/
    Grp_FreeListCodGrp (&LstGrpsIWant);
@@ -2228,22 +2228,22 @@ int swad__sendMyGroups (struct soap *soap,
 
          /* Get max number of students of group (row[4]) and number of current students */
          MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[4]);
-         SendMyGroupsOut->groupsArray.__ptr[NumGrp].maxStudents = (MaxStudents > Grp_MAX_STUDENTS_IN_A_GROUP) ? -1 :
-                                                                                                                (int) MaxStudents;
+         SendMyGroupsOut->groupsArray.__ptr[NumGrp].maxStudents = MaxStudents > Grp_MAX_STUDENTS_IN_A_GROUP ? -1 :
+                                                                                                              (int) MaxStudents;
 
          /* Get number of current students */
          SendMyGroupsOut->groupsArray.__ptr[NumGrp].numStudents = (int) Grp_DB_CountNumUsrsInGrp (Rol_STD,GrpCod);
 
          /* Get whether group is open ('Y') or closed ('N') (row[5])
             and whether group have file zones ('Y') or not ('N') (row[6]) */
-         SendMyGroupsOut->groupsArray.__ptr[NumGrp].open      = (row[5][0] == 'Y') ? 1 :
-                                                                                     0;
-         SendMyGroupsOut->groupsArray.__ptr[NumGrp].fileZones = (row[6][0] == 'Y') ? 1 :
-                                                                                     0;
+         SendMyGroupsOut->groupsArray.__ptr[NumGrp].open      = row[5][0] == 'Y' ? 1 :
+                                                                                   0;
+         SendMyGroupsOut->groupsArray.__ptr[NumGrp].fileZones = row[6][0] == 'Y' ? 1 :
+                                                                                   0;
 
          /* Get whether I belong to this group or not */
-         SendMyGroupsOut->groupsArray.__ptr[NumGrp].member = (Grp_GetIfIBelongToGrp (GrpCod) == Usr_BELONG) ? 1 :
-													      0;
+         SendMyGroupsOut->groupsArray.__ptr[NumGrp].member = Grp_GetIfIBelongToGrp (GrpCod) == Usr_BELONG ? 1 :
+													    0;
 	}
      }
 
@@ -2382,8 +2382,8 @@ int swad__getAttendanceEvents (struct soap *soap,
 	 Att_GetEventDataFromRow (row,&Event);
 
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].attendanceEventCode = (int) Event.AttCod;
-         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].hidden = (Event.Hidden == HidVis_HIDDEN) ? 1 :
-										                                    0;
+         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].hidden = Event.Hidden == HidVis_HIDDEN ? 1 :
+										                         0;
          Gbl.Usrs.Other.UsrDat.UsrCod = Event.UsrCod;
 	 switch (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 					       Gbl.Hierarchy.Node[Hie_CRS].HieCod))	// Get some user's data from database
@@ -2425,8 +2425,8 @@ int swad__getAttendanceEvents (struct soap *soap,
 
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].startTime = (int) Event.TimeUTC[Dat_STR_TIME];
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].endTime   = (int) Event.TimeUTC[Dat_END_TIME];
-         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].commentsTeachersVisible = (Event.ClosedOrOpen == CloOpe_OPEN) ? 1 :
-															        0;
+         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].commentsTeachersVisible = Event.ClosedOrOpen == CloOpe_OPEN ? 1 :
+															      0;
          Length = strlen (Event.Title);
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].title =
             soap_malloc (soap,Length + 1);
@@ -2552,8 +2552,8 @@ int swad__sendAttendanceEvent (struct soap *soap,
    Event.AttCod = (long) attendanceEventCode;
 
    /* Course code */
-   OldNewEvent = (Event.AttCod > 0) ? OldNew_OLD :	// The event already exists
-				      OldNew_NEW;
+   OldNewEvent = Event.AttCod > 0 ? OldNew_OLD :	// The event already exists
+				    OldNew_NEW;
    switch (OldNewEvent)
      {
       case OldNew_OLD:
@@ -2851,8 +2851,8 @@ int swad__getAttendanceUsers (struct soap *soap,
 	   }
 
 	 /* Get if user is present or not (row[1]) */
-	 getAttendanceUsersOut->usersArray.__ptr[NumUsr].present = (row[1][0] == 'Y') ? 1 :
-											0;
+	 getAttendanceUsersOut->usersArray.__ptr[NumUsr].present = row[1][0] == 'Y' ? 1 :
+										      0;
 	}
      }
    else
@@ -3539,8 +3539,8 @@ int swad__getTestConfig (struct soap *soap,
 
    /***** Get test configuration *****/
    TstCfg_GetConfig ();
-   getTestConfigOut->pluggable = (TstCfg_GetConfigPluggable () == TstCfg_PLUGGABLE_YES) ? 1 :
-	                                                                                  0;
+   getTestConfigOut->pluggable = TstCfg_GetConfigPluggable () == TstCfg_PLUGGABLE_YES ? 1 :
+	                                                                                0;
    getTestConfigOut->minQuestions = (int) TstCfg_GetConfigMin ();
    getTestConfigOut->defQuestions = (int) TstCfg_GetConfigDef ();
    getTestConfigOut->maxQuestions = (int) TstCfg_GetConfigMax ();
@@ -3755,8 +3755,8 @@ static int API_GetTstQuestions (struct soap *soap,
 	           Qst_MAX_BYTES_ANSWER_TYPE);
 
          /* Get shuffle (row[2]) */
-         getTestsOut->questionsArray.__ptr[NumQst].shuffle = (row[2][0] == 'Y') ? 1 :
-                                                                                  0;
+         getTestsOut->questionsArray.__ptr[NumQst].shuffle = row[2][0] == 'Y' ? 1 :
+                                                                                0;
 
          /* Get question stem (row[3]) */
          getTestsOut->questionsArray.__ptr[NumQst].stem =
@@ -3823,8 +3823,8 @@ static int API_GetTstAnswers (struct soap *soap,
             getTestsOut->answersArray.__ptr[NumAns].answerIndex = 0;	// error
 
          /* Get correct (row[2]) */
-         getTestsOut->answersArray.__ptr[NumAns].correct = (row[2][0] == 'Y') ? 1 :
-                                                                                0;
+         getTestsOut->answersArray.__ptr[NumAns].correct = row[2][0] == 'Y' ? 1 :
+                                                                              0;
 
          /* Get answer (row[3]) */
          getTestsOut->answersArray.__ptr[NumAns].answerText =
@@ -4005,8 +4005,8 @@ int swad__getTrivialQuestion (struct soap *soap,
                 Qst_StrAnswerTypesXML[AnswerType],Qst_MAX_BYTES_ANSWER_TYPE);
 
       /* Get shuffle (row[2]) */
-      getTrivialQuestionOut->question.shuffle = (row[2][0] == 'Y') ? 1 :
-							             0;
+      getTrivialQuestionOut->question.shuffle = row[2][0] == 'Y' ? 1 :
+							           0;
 
       /* Get question stem (row[3]) */
       getTrivialQuestionOut->question.stem =
@@ -4089,8 +4089,8 @@ int swad__getTrivialQuestion (struct soap *soap,
 	    // Media code (row[3]) ignored here
 
 	    /* Get correct (row[4]) */
-	    getTrivialQuestionOut->answersArray.__ptr[NumAns].correct = (row[4][0] == 'Y') ? 1 :
-										             0;
+	    getTrivialQuestionOut->answersArray.__ptr[NumAns].correct = row[4][0] == 'Y' ? 1 :
+										           0;
 	   }
 	}
 
@@ -4706,10 +4706,10 @@ int swad__getDirectoryTree (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getDirectoryTree;
-   Gbl.Hierarchy.Node[Hie_CRS].HieCod = (courseCode > 0) ? (long) courseCode :
-	                                                   -1L;
-   GrpCod = ((groupCode > 0) ? (long) groupCode :
-	                       -1L);
+   Gbl.Hierarchy.Node[Hie_CRS].HieCod = courseCode > 0 ? (long) courseCode :
+	                                                 -1L;
+   GrpCod = groupCode > 0 ? (long) groupCode :
+	                    -1L;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
@@ -5353,7 +5353,8 @@ int swad__sendMyLocation (struct soap *soap,
    ChkCod = Roo_DB_CheckIn (roomCode);
 
    /***** Return notification code *****/
-   sendMyLocationOut->success = (ChkCod > 0) ? 1 : 0;
+   sendMyLocationOut->success = ChkCod > 0 ? 1 :
+					     0;
 
    return SOAP_OK;
   }

@@ -1427,7 +1427,7 @@ void Brw_DB_ChangeFilePublic (const struct Brw_FileMetadata *FileMetadata,
 /*********** Check if a folder contains file(s) marked as public *************/
 /*****************************************************************************/
 
-bool Brw_DB_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1])
+PriPub_PrivateOrPublic_t Brw_DB_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1])
   {
    return
    DB_QueryEXISTS ("can not check if a folder contains public files",
@@ -1442,7 +1442,8 @@ bool Brw_DB_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1])
 		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		   Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
 		   Brw_GetZoneUsrCodForFileBrowser (),
-		   Path) == Exi_EXISTS;
+		   Path) == Exi_EXISTS ? PriPub_PUBLIC :	// Has any public files
+					 PriPub_PRIVATE;	// All files are private
   }
 
 /*****************************************************************************/

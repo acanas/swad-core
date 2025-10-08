@@ -71,7 +71,7 @@ void Brw_DB_RemoveUsrFiles (long UsrCod);
 //------------------------------ Public files ---------------------------------
 void Brw_DB_ChangeFilePublic (const struct Brw_FileMetadata *FileMetadata,
                               PriPub_PrivateOrPublic_t PrivateOrPublic,Brw_License_t License);
-bool Brw_DB_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1]);
+PriPub_PrivateOrPublic_t Brw_DB_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1]);
 unsigned Brw_DB_GetNumPublicFilesUsr (long UsrCod);
 unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,
 				        Hie_Level_t HieLvl,Brw_License_t License);
