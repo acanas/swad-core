@@ -115,8 +115,8 @@ void DegTyp_WriteSelectorDegTypes (long SelectedDegTypCod)
 		     "id=\"OthDegTypCod\" name=\"OthDegTypCod\""
 		     " class=\"Frm_C2_INPUT INPUT_%s\"",The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"-1",
-		  (SelectedDegTypCod <= 0) ? HTM_SELECTED :
-					     HTM_NO_ATTR,
+		  SelectedDegTypCod <= 0 ? HTM_SELECTED :
+					   HTM_NO_ATTR,
 		  "%s",Txt_Any_type_of_degree);
       for (NumDegTyp = 0;
 	   NumDegTyp < DegTypes.Num;
@@ -124,8 +124,8 @@ void DegTyp_WriteSelectorDegTypes (long SelectedDegTypCod)
 	{
 	 DegTyp = &DegTypes.Lst[NumDegTyp];
 	 HTM_OPTION (HTM_Type_LONG,&DegTyp->DegTypCod,
-		     (DegTyp->DegTypCod == SelectedDegTypCod) ? HTM_SELECTED :
-							        HTM_NO_ATTR,
+		     DegTyp->DegTypCod == SelectedDegTypCod ? HTM_SELECTED :
+							      HTM_NO_ATTR,
 		     "%s",DegTyp->DegTypName);
 	}
    HTM_SELECT_End ();
@@ -316,9 +316,9 @@ static void DegTyp_ListDegTypesForSeeing (const struct DegTyp_DegTypes *DegTypes
 	NumDegTyp < DegTypes->Num;
 	NumDegTyp++, The_ChangeRowColor ())
      {
-      BgColor = (DegTypes->Lst[NumDegTyp].DegTypCod ==
-	         Gbl.Hierarchy.Node[Hie_DEG].Specific.TypCod) ? "BG_HIGHLIGHT" :
-								The_GetColorRows ();
+      BgColor = DegTypes->Lst[NumDegTyp].DegTypCod ==
+	        Gbl.Hierarchy.Node[Hie_DEG].Specific.TypCod ? "BG_HIGHLIGHT" :
+							      The_GetColorRows ();
 
       /* Begin table row */
       HTM_TR_Begin (NULL);
@@ -436,8 +436,8 @@ static void DegTyp_ListDegTypesForEdition (const struct DegTyp_DegTypes *DegType
 
 Usr_Can_t DegTyp_CheckIfICanCreateDegTypes (void)
   {
-   return (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
-						     Usr_CAN_NOT;
+   return Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :
+						   Usr_CAN_NOT;
   }
 
 /*****************************************************************************/

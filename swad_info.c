@@ -350,8 +350,8 @@ static void Inf_PutFormWhichSyllabus (Inf_Type_t InfoType,Vie_ViewType_t ViewTyp
 	       HTM_LI_Begin (NULL);
 		  HTM_LABEL_Begin (NULL);
 		     HTM_INPUT_RADIO ("WhichSyllabus",
-				      ((Type == InfoType) ? HTM_CHECKED :
-							    HTM_NO_ATTR) | HTM_SUBMIT_ON_CLICK,
+				      (Type == InfoType ? HTM_CHECKED :
+							  HTM_NO_ATTR) | HTM_SUBMIT_ON_CLICK,
 				      "value=\"%u\"",(unsigned) Type);
 		     HTM_Txt (Txt_INFO_TITLE[Type]);
 		  HTM_LABEL_End ();
@@ -392,8 +392,8 @@ void Inf_ShowInfo (void)
 	       case Inf_FAQ:
 	       case Inf_LINKS:
 	       case Inf_ASSESSMENT:
-		  ShowWarningNoInfo = (Tre_ShowTree (Info.Type) == 0) ? Sho_SHOW :
-									Sho_DONT_SHOW;
+		  ShowWarningNoInfo = Tre_ShowTree (Info.Type) == 0 ? Sho_SHOW :
+								      Sho_DONT_SHOW;
 		  break;
 	       case Inf_UNKNOWN_TYPE:
 	       case Inf_PROGRAM:
@@ -403,22 +403,22 @@ void Inf_ShowInfo (void)
 	      }
 	    break;
 	 case Inf_PLAIN_TEXT:
-	    ShowWarningNoInfo = (Inf_CheckAndShowPlainTxt (Info.Type) == Exi_DOES_NOT_EXIST) ? Sho_SHOW :
-											       Sho_DONT_SHOW;
+	    ShowWarningNoInfo = Inf_CheckAndShowPlainTxt (Info.Type) == Exi_DOES_NOT_EXIST ? Sho_SHOW :
+											     Sho_DONT_SHOW;
 	    break;
 	 case Inf_RICH_TEXT:
-	    ShowWarningNoInfo = (Inf_CheckAndShowRichTxt (Info.Type) == Exi_DOES_NOT_EXIST) ? Sho_SHOW :
-											      Sho_DONT_SHOW;
+	    ShowWarningNoInfo = Inf_CheckAndShowRichTxt (Info.Type) == Exi_DOES_NOT_EXIST ? Sho_SHOW :
+											    Sho_DONT_SHOW;
 	    break;
 	 case Inf_PAGE:
 	    /***** Open file with web page *****/
-	    ShowWarningNoInfo = (Inf_CheckAndShowPage (Info.Type) == Exi_DOES_NOT_EXIST) ? Sho_SHOW :
-											   Sho_DONT_SHOW;
+	    ShowWarningNoInfo = Inf_CheckAndShowPage (Info.Type) == Exi_DOES_NOT_EXIST ? Sho_SHOW :
+											 Sho_DONT_SHOW;
 	    break;
 	 case Inf_URL:
 	    /***** Check if file with URL exists *****/
-	    ShowWarningNoInfo = (Inf_CheckAndShowURL (Info.Type) == Exi_DOES_NOT_EXIST) ? Sho_SHOW :
-											  Sho_DONT_SHOW;
+	    ShowWarningNoInfo = Inf_CheckAndShowURL (Info.Type) == Exi_DOES_NOT_EXIST ? Sho_SHOW :
+											Sho_DONT_SHOW;
 	    break;
 	}
 
@@ -1110,8 +1110,8 @@ static void Inf_ConfigInfoReading (const struct Inf_Info *Info)
 	 Mnu_ContextMenuBegin ();
 	    // Non-editing teachers can not change the status of checkbox
 	    Inf_PutCheckboxForceStdsToReadInfo (Info,
-						(Gbl.Usrs.Me.Role.Logged == Rol_NET) ? HTM_DISABLED :
-										       HTM_NO_ATTR);
+						Gbl.Usrs.Me.Role.Logged == Rol_NET ? HTM_DISABLED :
+										     HTM_NO_ATTR);
 	 Mnu_ContextMenuEnd ();
    HTM_FIELDSET_End ();
   }
@@ -1221,8 +1221,8 @@ void Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   Inf_InfoMustBeRead.ShowMsgMustBeRead = (NumInfos != 0) ? Sho_SHOW :
-							    Sho_DONT_SHOW;
+   Inf_InfoMustBeRead.ShowMsgMustBeRead = NumInfos != 0 ? Sho_SHOW :
+							  Sho_DONT_SHOW;
   }
 
 /*****************************************************************************/
@@ -1430,14 +1430,14 @@ static void Inf_ConfigInfoSource (struct Inf_Info *Info)
 		  Frm_BeginForm (Actions[Info->Type]);
 		     Inf_PutParInfoType (&Info->Type);
 		     HTM_INPUT_RADIO ("InfoSrc",
-				      ((InfoSrc == Info->FromDB.Src) ? HTM_CHECKED :
-								       HTM_NO_ATTR) |
-				      ((InfoSrc == Inf_SRC_NONE ||
-				       InfoAvailable[InfoSrc]) ? HTM_NO_ATTR :
-								 HTM_DISABLED) |
-				      ((InfoSrc != Info->FromDB.Src &&
+				      (InfoSrc == Info->FromDB.Src ? HTM_CHECKED :
+								     HTM_NO_ATTR) |
+				      (InfoSrc == Inf_SRC_NONE ||
+				       InfoAvailable[InfoSrc] ? HTM_NO_ATTR :
+								HTM_DISABLED) |
+				      (InfoSrc != Info->FromDB.Src &&
 				       (InfoSrc == Inf_SRC_NONE ||
-				       InfoAvailable[InfoSrc])) ? HTM_SUBMIT_ON_CLICK :
+				        InfoAvailable[InfoSrc]) ? HTM_SUBMIT_ON_CLICK :
 								  HTM_NO_ATTR),
 				      "id=\"InfoSrc%u\" value=\"%u\"",
 				      (unsigned) InfoSrc,(unsigned) InfoSrc);
@@ -1481,8 +1481,8 @@ static Exi_Exist_t Inf_CheckIfInfoAvailable (Inf_Type_t InfoType,Inf_Src_t InfoS
       case Inf_SRC_NONE:
 	 return Exi_DOES_NOT_EXIST;
       case Inf_EDITOR:
-         return (Tre_DB_GetNumNodes (InfoType,Hie_CRS) != 0) ? Exi_EXISTS :
-							       Exi_DOES_NOT_EXIST;
+         return Tre_DB_GetNumNodes (InfoType,Hie_CRS) != 0 ? Exi_EXISTS :
+							     Exi_DOES_NOT_EXIST;
       case Inf_PLAIN_TEXT:
          return Inf_CheckPlainTxt (InfoType);
       case Inf_RICH_TEXT:
@@ -1718,8 +1718,8 @@ static Exi_Exist_t Inf_CheckPlainTxt (Inf_Type_t InfoType)
    /***** Get info text from database *****/
    Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,TxtHTML,NULL);
 
-   return (TxtHTML[0] != '\0') ? Exi_EXISTS :
-			         Exi_DOES_NOT_EXIST;
+   return TxtHTML[0] != '\0' ? Exi_EXISTS :
+			       Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -1781,8 +1781,8 @@ static Exi_Exist_t Inf_CheckRichTxt (Inf_Type_t InfoType)
    Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,
                          TxtHTML,TxtMD);
 
-   return (TxtMD[0] != '\0') ? Exi_EXISTS :
-			       Exi_DOES_NOT_EXIST;
+   return TxtMD[0] != '\0' ? Exi_EXISTS :
+			     Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

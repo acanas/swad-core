@@ -879,20 +879,20 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
    extern const char *Txt_TST_Answer_given_by_the_teachers;
    static unsigned NumQst = 0;
    static unsigned NumNonExistingQst = 0;
-   const char *Stem = (StemElem != NULL) ? StemElem->Content :
-	                                   "";
-   const char *Feedback = (FeedbackElem != NULL) ? FeedbackElem->Content :
-	                                           "";
+   const char *Stem = StemElem != NULL ? StemElem->Content :
+	                                 "";
+   const char *Feedback = FeedbackElem != NULL ? FeedbackElem->Content :
+	                                         "";
    unsigned NumTag;
    unsigned NumOpt;
    char *AnswerText;
    size_t AnswerTextLength;
    char *AnswerFeedback;
    size_t AnswerFeedbackLength;
-   const char *ClassData = (QuestionExists == Exi_EXISTS) ? "DAT_SMALL_LIGHT" :
-	                                                    "DAT_SMALL";
-   const char *ClassStem = (QuestionExists == Exi_EXISTS) ? "Qst_TXT_LIGHT" :
-							    "Qst_TXT";
+   const char *ClassData = QuestionExists == Exi_EXISTS ? "DAT_SMALL_LIGHT" :	// TODO: Use a static vector
+	                                                  "DAT_SMALL";
+   const char *ClassStem = QuestionExists == Exi_EXISTS ? "Qst_TXT_LIGHT" :	// TODO: Use a static vector
+							  "Qst_TXT";
 
    NumQst++;
 

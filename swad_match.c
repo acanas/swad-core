@@ -391,8 +391,8 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 
 	 if (Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match) == Usr_CAN)
 	   {
-	    BgColor = (Match.MchCod == Games->MchCod.Sel) ? "BG_HIGHLIGHT" :
-							    The_GetColorRows ();
+	    BgColor = Match.MchCod == Games->MchCod.Sel ? "BG_HIGHLIGHT" :
+							  The_GetColorRows ();
 
 	    /***** Build anchor string *****/
 	    if (asprintf (&Anchor,"mch_%ld",Match.MchCod) < 0)
@@ -529,8 +529,8 @@ static Usr_Can_t Mch_CheckIfICanEditThisMatch (const struct Mch_Match *Match)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return (Match->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_CAN :	// Only if I am the creator
-							       Usr_CAN_NOT;
+	 return Match->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod ? Usr_CAN :	// Only if I am the creator
+							     Usr_CAN_NOT;
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 return Usr_CAN;
@@ -926,8 +926,8 @@ void Mch_ToggleVisResultsMchUsr (void)
       Err_NoPermissionExit ();
 
    /***** Toggle visibility of match results *****/
-   Match.Status.Show.UsrResults = (Match.Status.Show.UsrResults == Sho_SHOW) ? Sho_DONT_SHOW :
-									       Sho_SHOW;
+   Match.Status.Show.UsrResults = Match.Status.Show.UsrResults == Sho_SHOW ? Sho_DONT_SHOW :
+									     Sho_SHOW;
    Mch_DB_UpdateVisResultsMchUsr (Match.MchCod,Match.Status.Show.UsrResults);
 
    /***** Show current game *****/
@@ -1002,9 +1002,9 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 
    /* Get number of columns (row[10]) */
    LongNum = Str_ConvertStrCodToLongCod (row[10]);
-   Match->Status.NumCols =  (LongNum <= 1           ) ? 1 :
-                           ((LongNum >= Mch_MAX_COLS) ? Mch_MAX_COLS :
-                        	                        (unsigned) LongNum);
+   Match->Status.NumCols =  LongNum <= 1            ? 1 :
+                           (LongNum >= Mch_MAX_COLS ? Mch_MAX_COLS :
+                        	                      (unsigned) LongNum);
 
    /* Get whether to show question results or not (row(11)) */
    Match->Status.Show.QstResults = Sho_GetShowFromYN (row[11][0]);
@@ -1234,8 +1234,8 @@ static void Mch_PutFormMatch (struct Mch_Match *Match)
       [OldNew_OLD] = {ActChgMch,Btn_SAVE_CHANGES},
       [OldNew_NEW] = {ActNewMch,Btn_CREATE      }
      };
-   OldNew_OldNew_t OldNewMatch = (Match->MchCod > 0) ? OldNew_OLD :
-						       OldNew_NEW;;
+   OldNew_OldNew_t OldNewMatch = Match->MchCod > 0 ? OldNew_OLD :
+						     OldNew_NEW;;
 
    /***** Begin section for match *****/
    HTM_SECTION_Begin (Mch_NEW_MATCH_SECTION_ID);
@@ -1795,8 +1795,8 @@ void Mch_ToggleVisResultsMchQst (void)
    Mch_GetMatchDataByCod (&Match);
 
    /***** Update status *****/
-   Match.Status.Show.QstResults = (Match.Status.Show.QstResults == Sho_SHOW) ? Sho_DONT_SHOW :	// Toggle display
-									       Sho_SHOW;
+   Match.Status.Show.QstResults = Match.Status.Show.QstResults == Sho_SHOW ? Sho_DONT_SHOW :	// Toggle display
+									     Sho_SHOW;
    if (Match.Status.Showing == Mch_RESULTS &&
        Match.Status.Show.QstResults == Sho_DONT_SHOW)
      Match.Status.Showing = Mch_ANSWERS;	// Hide results
@@ -1916,8 +1916,8 @@ static void Mch_SetMatchStatusToPrevQst (struct Mch_Match *Match)
      {
       Match->Status.QstCod = Gam_DB_GetQstCodFromQstInd (Match->GamCod,
 						         Match->Status.QstInd);
-      Match->Status.Showing = (Match->Status.Show.QstResults == Sho_SHOW) ? Mch_RESULTS :
-									    Mch_ANSWERS;
+      Match->Status.Showing = Match->Status.Show.QstResults == Sho_SHOW ? Mch_RESULTS :
+									  Mch_ANSWERS;
      }
    else					// Start of questions reached
       Mch_SetMatchStatusToStart (Match);
@@ -2058,8 +2058,8 @@ Usr_Can_t Mch_CheckIfICanPlayThisMatchBasedOnGrps (const struct Mch_Match *Match
 	 return Mch_DB_CheckIfICanPlayThisMatchBasedOnGrps (Match->MchCod);
       case Rol_NET:
 	 /***** Only if I am the creator *****/
-	 return (Match->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_CAN :
-							       Usr_CAN_NOT;
+	 return Match->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod ? Usr_CAN :
+							     Usr_CAN_NOT;
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 return Usr_CAN;
@@ -2302,8 +2302,8 @@ static void Mch_PutFormCountdown (struct Mch_Match *Match,long Seconds,const cha
       [Frm_PUT_FORM     ] = "class=\"BT_LINK MCH_BUTTON_ON\"",
      };
    char *OnSubmit;
-   Frm_PutForm_t PutForm = (Match->Status.Showing != Mch_END) ? Frm_PUT_FORM :
-								Frm_DONT_PUT_FORM;
+   Frm_PutForm_t PutForm = Match->Status.Showing != Mch_END ? Frm_PUT_FORM :
+							      Frm_DONT_PUT_FORM;
    const char *Title[Frm_NUM_PUT_FORM] =
      {
       [Frm_DONT_PUT_FORM] = NULL,
@@ -2597,8 +2597,8 @@ static void Mch_ShowFormColumns (const struct Mch_Match *Match)
 	{
 	 /* Begin container for this option */
 	 HTM_DIV_Begin ("class=\"%s\"",
-			(Match->Status.NumCols == NumCols) ? "MCH_NUM_COL_ON" :
-							     "MCH_NUM_COL_OFF");
+			Match->Status.NumCols == NumCols ? "MCH_NUM_COL_ON" :
+							   "MCH_NUM_COL_OFF");
 
 	    /* Begin form */
 	    Frm_BeginForm (ActChgNumColMch);
@@ -3734,8 +3734,8 @@ void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,
 		 i++)
 	      {
 	       HTM_TD_Begin ("class=\"%s\"",
-			     (i < BarWidth) ? WroCor_Class[WrongOrCorrect] :
-					      "MCH_RES_VOID");
+			     i < BarWidth ? WroCor_Class[WrongOrCorrect] :
+					    "MCH_RES_VOID");
 	       HTM_TD_End ();
 	      }
 	 HTM_TR_End ();

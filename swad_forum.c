@@ -765,28 +765,28 @@ void For_ShowPostsOfAThread (struct For_Forums *Forums,
 	       case For_FORUM_GLOBAL_TCHS:
 	       case For_FORUM__SWAD__USRS:
 	       case For_FORUM__SWAD__TCHS:
-		  ICanModerateForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
-										 Usr_CAN_NOT;
+		  ICanModerateForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :
+									       Usr_CAN_NOT;
 		  break;
 	       case For_FORUM_INSTIT_USRS:
 	       case For_FORUM_INSTIT_TCHS:
-		  ICanModerateForum = (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ? Usr_CAN :
-										 Usr_CAN_NOT;
+		  ICanModerateForum = Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ? Usr_CAN :
+									       Usr_CAN_NOT;
 		  break;
 	       case For_FORUM_CENTER_USRS:
 	       case For_FORUM_CENTER_TCHS:
-		  ICanModerateForum = (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ? Usr_CAN :
-										 Usr_CAN_NOT;
+		  ICanModerateForum = Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ? Usr_CAN :
+									       Usr_CAN_NOT;
 		  break;
 	       case For_FORUM_DEGREE_USRS:
 	       case For_FORUM_DEGREE_TCHS:
 	       case For_FORUM_COURSE_TCHS:
-		  ICanModerateForum = (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM) ? Usr_CAN :
-										 Usr_CAN_NOT;
+		  ICanModerateForum = Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ? Usr_CAN :
+									       Usr_CAN_NOT;
 		  break;
 	       case For_FORUM_COURSE_USRS:
-		  ICanModerateForum = (Gbl.Usrs.Me.Role.Logged >= Rol_TCH) ? Usr_CAN :
-									     Usr_CAN_NOT;
+		  ICanModerateForum = Gbl.Usrs.Me.Role.Logged >= Rol_TCH ? Usr_CAN :
+									   Usr_CAN_NOT;
 		  break;
 	       default:
 		  ICanModerateForum = Usr_CAN_NOT;
@@ -821,8 +821,8 @@ void For_ShowPostsOfAThread (struct For_Forums *Forums,
 		  CreatTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
 
 		  NumPst = NumRow;
-		  ClosedOrOpenPst = (CreatTimeUTC > ReadTimeUTC) ? CloOpe_CLOSED :	// New post
-								   CloOpe_OPEN;		// Old post
+		  ClosedOrOpenPst = CreatTimeUTC > ReadTimeUTC ? CloOpe_CLOSED :	// New post
+								 CloOpe_OPEN;		// Old post
 
 		  if (ClosedOrOpenPst == CloOpe_CLOSED &&
 		      NumRow == PaginationPsts.LastItemVisible)
@@ -1024,8 +1024,8 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 	 switch (ICanModerateForum)
 	   {
 	    case Usr_CAN:
-	       NextAction = (Disabled == For_ENABLED) ? For_ActionsDisPstFor[Forums->Forum.Type] :
-							For_ActionsEnbPstFor[Forums->Forum.Type];
+	       NextAction = Disabled == For_ENABLED ? For_ActionsDisPstFor[Forums->Forum.Type] :
+						      For_ActionsEnbPstFor[Forums->Forum.Type];
 	       Frm_BeginFormAnchor (NextAction,For_FORUM_POSTS_SECTION_ID);
 		  For_PutParsForum (Forums);
 		  Ico_PutIconLink (Icon[Disabled],Color[Disabled],NextAction);
@@ -1281,10 +1281,10 @@ void For_ShowForumList (struct For_Forums *Forums)
 		  if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 		     ICanSeeInsForum = Usr_CAN;
 		  else
-		     ICanSeeInsForum = (Hie_CheckIfIBelongTo (Hie_INS,
+		     ICanSeeInsForum = Hie_CheckIfIBelongTo (Hie_INS,
 							      Gbl.Hierarchy.Node[Hie_INS].HieCod)
-				        == Usr_BELONG) ? Usr_CAN :
-							 Usr_CAN_NOT;
+				       == Usr_BELONG ? Usr_CAN :
+						       Usr_CAN_NOT;
 		 }
 	       else
 		  ICanSeeInsForum = Usr_CAN_NOT;
@@ -1297,10 +1297,10 @@ void For_ShowForumList (struct For_Forums *Forums)
 		  if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 		     ICanSeeCtrForum = Usr_CAN;
 		  else
-		     ICanSeeCtrForum = (Hie_CheckIfIBelongTo (Hie_CTR,
+		     ICanSeeCtrForum = Hie_CheckIfIBelongTo (Hie_CTR,
 							      Gbl.Hierarchy.Node[Hie_CTR].HieCod)
-				        == Usr_BELONG) ? Usr_CAN :
-							 Usr_CAN_NOT;
+				       == Usr_BELONG ? Usr_CAN :
+						       Usr_CAN_NOT;
 
 		  /***** Links to forums of current institution *****/
 		  if (For_WriteLinksToInsForums (Forums,
@@ -1311,10 +1311,10 @@ void For_ShowForumList (struct For_Forums *Forums)
 			if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 			   ICanSeeDegForum = Usr_CAN;
 			else
-			   ICanSeeDegForum = (Hie_CheckIfIBelongTo (Hie_DEG,
+			   ICanSeeDegForum = Hie_CheckIfIBelongTo (Hie_DEG,
 								    Gbl.Hierarchy.Node[Hie_DEG].HieCod)
-				              == Usr_BELONG) ? Usr_CAN :
-							       Usr_CAN_NOT;
+				             == Usr_BELONG ? Usr_CAN :
+							     Usr_CAN_NOT;
 
 			/***** Links to forums of current center *****/
 			if (For_WriteLinksToCtrForums (Forums,
@@ -1349,8 +1349,8 @@ void For_ShowForumList (struct For_Forums *Forums)
 		  /* Links to forums of this institution */
 		  For_WriteLinksToInsForums (Forums,
 					     InsCod,
-					     (NumIns == NumInss - 1) ? Lay_LAST :			// Last institution
-								       Lay_NO_LAST,
+					     NumIns == NumInss - 1 ? Lay_LAST :			// Last institution
+								     Lay_NO_LAST,
 					     IsLastItemInLevel);
 
 		  /* Get my centers in this institution from database */
@@ -1366,8 +1366,8 @@ void For_ShowForumList (struct For_Forums *Forums)
 		     /* Links to forums of this center */
 		     if (For_WriteLinksToCtrForums (Forums,
 						    CtrCod,
-						    (NumCtr == NumCtrs - 1) ? Lay_LAST :		// Last center
-									      Lay_NO_LAST,
+						    NumCtr == NumCtrs - 1 ? Lay_LAST :		// Last center
+									    Lay_NO_LAST,
 						    IsLastItemInLevel) > 0)
 		       {
 			/* Get my degrees in this institution from database */
@@ -1383,8 +1383,8 @@ void For_ShowForumList (struct For_Forums *Forums)
 			   /* Links to forums of this degree */
 			   if (For_WriteLinksToDegForums (Forums,
 							  DegCod,
-							  (NumDeg == NumDegs - 1) ? Lay_LAST :		// Last degree
-										    Lay_NO_LAST,
+							  NumDeg == NumDegs - 1 ? Lay_LAST :		// Last degree
+										  Lay_NO_LAST,
 							  IsLastItemInLevel) > 0)
 			     {
 			      /* Get my courses in this degree from database */
@@ -1402,8 +1402,8 @@ void For_ShowForumList (struct For_Forums *Forums)
 				 /* Links to forums of this course */
 				 For_WriteLinksToCrsForums (Forums,
 							    CrsCod,
-							    (NumCrs == NumCrss - 1) ? Lay_LAST :	// Last course
-										      Lay_NO_LAST,
+							    NumCrs == NumCrss - 1 ? Lay_LAST :	// Last course
+										    Lay_NO_LAST,
 							    IsLastItemInLevel);
 				}
 
@@ -1466,8 +1466,8 @@ static void For_PutFormWhichForums (const struct For_Forums *Forums)
 	       HTM_LI_Begin (NULL);
 		  HTM_LABEL_Begin (NULL);
 		     HTM_INPUT_RADIO ("ForumSet",
-				      ((ForumSet == Forums->ForumSet) ? HTM_CHECKED :
-								        HTM_NO_ATTR) |
+				      (ForumSet == Forums->ForumSet ? HTM_CHECKED :
+								      HTM_NO_ATTR) |
 				      HTM_SUBMIT_ON_CLICK,
 				      "value=\"%u\"",(unsigned) ForumSet);
 		     HTM_Txt (Txt_FORUM_WHICH_FORUM[ForumSet]);
@@ -1493,16 +1493,16 @@ static void For_WriteLinksToGblForums (const struct For_Forums *Forums,
 
    /***** Can I see teachers's forums? *****/
    Rol_GetRolesInAllCrss (&Gbl.Usrs.Me.UsrDat);
-   ICanSeeTeacherForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-	                  (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |
-	                                                      (1 << Rol_TCH)))) ? Usr_CAN :
-	                                                			  Usr_CAN_NOT;
+   ICanSeeTeacherForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
+	                 (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |
+	                                                     (1 << Rol_TCH))) ? Usr_CAN :
+	                                                			Usr_CAN_NOT;
 
    /***** Link to forum global *****/
    Forum.Type = For_FORUM_GLOBAL_USRS;
    Forum.HieCod = -1L;
-   Highlight = (Forums->Forum.Type == For_FORUM_GLOBAL_USRS) ? Lay_HIGHLIGHT :
-							       Lay_NO_HIGHLIGHT;
+   Highlight = Forums->Forum.Type == For_FORUM_GLOBAL_USRS ? Lay_HIGHLIGHT :
+							     Lay_NO_HIGHLIGHT;
    IsLastItemInLevel[1] = Lay_NO_LAST;
    For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
 
@@ -1512,8 +1512,8 @@ static void For_WriteLinksToGblForums (const struct For_Forums *Forums,
      {
       Forum.Type = For_FORUM_GLOBAL_TCHS;
       Forum.HieCod = -1L;
-      Highlight = (Forums->Forum.Type == For_FORUM_GLOBAL_TCHS) ? Lay_HIGHLIGHT :
-								  Lay_NO_HIGHLIGHT;
+      Highlight = Forums->Forum.Type == For_FORUM_GLOBAL_TCHS ? Lay_HIGHLIGHT :
+								Lay_NO_HIGHLIGHT;
       IsLastItemInLevel[1] = Lay_NO_LAST;
       For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
      }
@@ -1532,16 +1532,16 @@ static void For_WriteLinksToPlatformForums (const struct For_Forums *Forums,
 
    /***** Can I see teachers's forums? *****/
    Rol_GetRolesInAllCrss (&Gbl.Usrs.Me.UsrDat);
-   ICanSeeTeacherForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-	                  (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |
-	                                                      (1 << Rol_TCH)))) ? Usr_CAN :
-	                                                			  Usr_CAN_NOT;
+   ICanSeeTeacherForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
+	                 (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |
+	                                                     (1 << Rol_TCH))) ? Usr_CAN :
+	                                                			Usr_CAN_NOT;
 
    /***** Link to forum of users about the platform *****/
    Forum.Type = For_FORUM__SWAD__USRS;
    Forum.HieCod = -1L;
-   Highlight = (Forums->Forum.Type == For_FORUM__SWAD__USRS) ? Lay_HIGHLIGHT :
-							       Lay_NO_HIGHLIGHT;
+   Highlight = Forums->Forum.Type == For_FORUM__SWAD__USRS ? Lay_HIGHLIGHT :
+							     Lay_NO_HIGHLIGHT;
    IsLastItemInLevel[1] = ICanSeeTeacherForum == Usr_CAN_NOT ? Lay_LAST :
 							       Lay_NO_LAST;
    For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
@@ -1551,8 +1551,8 @@ static void For_WriteLinksToPlatformForums (const struct For_Forums *Forums,
      {
       Forum.Type = For_FORUM__SWAD__TCHS;
       Forum.HieCod = -1L;
-      Highlight = (Forums->Forum.Type == For_FORUM__SWAD__TCHS) ? Lay_HIGHLIGHT :
-								  Lay_NO_HIGHLIGHT;
+      Highlight = Forums->Forum.Type == For_FORUM__SWAD__TCHS ? Lay_HIGHLIGHT :
+								Lay_NO_HIGHLIGHT;
       IsLastItemInLevel[1] = Lay_LAST;
       For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
      }
@@ -1575,20 +1575,20 @@ static long For_WriteLinksToInsForums (const struct For_Forums *Forums,
    if (InsCod > 0)
      {
       MaxRoleInIns = Rol_GetMyMaxRoleIn (Hie_INS,InsCod);
-      ICanSeeTeacherForum = ((Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-	                      MaxRoleInIns == Rol_NET ||
-	                      MaxRoleInIns == Rol_TCH)) ? Usr_CAN :
-	                				  Usr_CAN_NOT;
+      ICanSeeTeacherForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
+	                     MaxRoleInIns == Rol_NET ||
+	                     MaxRoleInIns == Rol_TCH) ? Usr_CAN :
+	                				Usr_CAN_NOT;
 
       /***** Link to the forum of users from this institution *****/
       Forum.Type = For_FORUM_INSTIT_USRS;
       Forum.HieCod = InsCod;
-      Highlight = (Forums->Forum.Type == For_FORUM_INSTIT_USRS &&
-	           Forums->Forum.HieCod == InsCod) ? Lay_HIGHLIGHT :
-						     Lay_NO_HIGHLIGHT;
-      IsLastItemInLevel[2] = (IsLastIns == Lay_LAST &&
-			      ICanSeeTeacherForum == Usr_CAN_NOT) ? Lay_LAST :
-								    Lay_NO_LAST;
+      Highlight = Forums->Forum.Type == For_FORUM_INSTIT_USRS &&
+	          Forums->Forum.HieCod == InsCod ? Lay_HIGHLIGHT :
+						   Lay_NO_HIGHLIGHT;
+      IsLastItemInLevel[2] = IsLastIns == Lay_LAST &&
+			     ICanSeeTeacherForum == Usr_CAN_NOT ? Lay_LAST :
+								  Lay_NO_LAST;
       For_WriteLinkToForum (Forums,&Forum,Highlight,2,IsLastItemInLevel);
 
       /***** Link to forum of teachers from this institution *****/
@@ -1596,9 +1596,9 @@ static long For_WriteLinksToInsForums (const struct For_Forums *Forums,
         {
 	 Forum.Type = For_FORUM_INSTIT_TCHS;
 	 Forum.HieCod = InsCod;
-	 Highlight = (Forums->Forum.Type == For_FORUM_INSTIT_TCHS &&
-		      Forums->Forum.HieCod == InsCod) ? Lay_HIGHLIGHT :
-							Lay_NO_HIGHLIGHT;
+	 Highlight = Forums->Forum.Type == For_FORUM_INSTIT_TCHS &&
+		     Forums->Forum.HieCod == InsCod ? Lay_HIGHLIGHT :
+						      Lay_NO_HIGHLIGHT;
          IsLastItemInLevel[2] = IsLastIns;
          For_WriteLinkToForum (Forums,&Forum,Highlight,2,IsLastItemInLevel);
         }
@@ -1623,20 +1623,20 @@ static long For_WriteLinksToCtrForums (const struct For_Forums *Forums,
    if (CtrCod > 0)
      {
       MaxRoleInCtr = Rol_GetMyMaxRoleIn (Hie_CTR,CtrCod);
-      ICanSeeTeacherForum = ((Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-	                      MaxRoleInCtr == Rol_NET ||
-	                      MaxRoleInCtr == Rol_TCH)) ? Usr_CAN :
-	                				  Usr_CAN_NOT;
+      ICanSeeTeacherForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
+	                    MaxRoleInCtr == Rol_NET ||
+	                    MaxRoleInCtr == Rol_TCH ? Usr_CAN :
+	                			      Usr_CAN_NOT;
 
       /***** Link to the forum of users from this center *****/
       Forum.Type = For_FORUM_CENTER_USRS;
       Forum.HieCod = CtrCod;
-      Highlight = (Forums->Forum.Type == For_FORUM_CENTER_USRS &&
-	           Forums->Forum.HieCod == CtrCod) ? Lay_HIGHLIGHT :
-						     Lay_NO_HIGHLIGHT;
-      IsLastItemInLevel[3] = (IsLastCtr == Lay_LAST &&
-			      ICanSeeTeacherForum == Usr_CAN_NOT) ? Lay_LAST :
-								    Lay_NO_LAST;
+      Highlight = Forums->Forum.Type == For_FORUM_CENTER_USRS &&
+	          Forums->Forum.HieCod == CtrCod ? Lay_HIGHLIGHT :
+						   Lay_NO_HIGHLIGHT;
+      IsLastItemInLevel[3] = IsLastCtr == Lay_LAST &&
+			     ICanSeeTeacherForum == Usr_CAN_NOT ? Lay_LAST :
+								  Lay_NO_LAST;
       For_WriteLinkToForum (Forums,&Forum,Highlight,3,IsLastItemInLevel);
 
       /***** Link to forum of teachers from this center *****/
@@ -1644,9 +1644,9 @@ static long For_WriteLinksToCtrForums (const struct For_Forums *Forums,
         {
 	 Forum.Type = For_FORUM_CENTER_TCHS;
 	 Forum.HieCod = CtrCod;
-	 Highlight = (Forums->Forum.Type == For_FORUM_CENTER_TCHS &&
-		      Forums->Forum.HieCod == CtrCod) ? Lay_HIGHLIGHT :
-							Lay_NO_HIGHLIGHT;
+	 Highlight = Forums->Forum.Type == For_FORUM_CENTER_TCHS &&
+		     Forums->Forum.HieCod == CtrCod ? Lay_HIGHLIGHT :
+						      Lay_NO_HIGHLIGHT;
          IsLastItemInLevel[3] = IsLastCtr;
          For_WriteLinkToForum (Forums,&Forum,Highlight,3,IsLastItemInLevel);
         }
@@ -1671,20 +1671,20 @@ static long For_WriteLinksToDegForums (const struct For_Forums *Forums,
    if (DegCod > 0)
      {
       MaxRoleInDeg = Rol_GetMyMaxRoleIn (Hie_DEG,DegCod);
-      ICanSeeTeacherForum = ((Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-	                      MaxRoleInDeg == Rol_NET ||
-	                      MaxRoleInDeg == Rol_TCH)) ? Usr_CAN :
-	                				  Usr_CAN_NOT;
+      ICanSeeTeacherForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
+	                    MaxRoleInDeg == Rol_NET ||
+	                    MaxRoleInDeg == Rol_TCH ? Usr_CAN :
+	                			      Usr_CAN_NOT;
 
       /***** Link to the forum of users from this degree *****/
       Forum.Type = For_FORUM_DEGREE_USRS;
       Forum.HieCod = DegCod;
-      Highlight = (Forums->Forum.Type == For_FORUM_DEGREE_USRS &&
-	           Forums->Forum.HieCod == DegCod) ? Lay_HIGHLIGHT :
-						     Lay_NO_HIGHLIGHT;
-      IsLastItemInLevel[4] = (IsLastDeg == Lay_LAST &&
-			      ICanSeeTeacherForum == Usr_CAN_NOT) ? Lay_LAST :
-								    Lay_NO_LAST;
+      Highlight = Forums->Forum.Type == For_FORUM_DEGREE_USRS &&
+	          Forums->Forum.HieCod == DegCod ? Lay_HIGHLIGHT :
+						   Lay_NO_HIGHLIGHT;
+      IsLastItemInLevel[4] = IsLastDeg == Lay_LAST &&
+			     ICanSeeTeacherForum == Usr_CAN_NOT ? Lay_LAST :
+								  Lay_NO_LAST;
       For_WriteLinkToForum (Forums,&Forum,Highlight,4,IsLastItemInLevel);
 
       /***** Link to forum of teachers from this degree *****/
@@ -1692,9 +1692,9 @@ static long For_WriteLinksToDegForums (const struct For_Forums *Forums,
         {
 	 Forum.Type = For_FORUM_DEGREE_TCHS;
 	 Forum.HieCod = DegCod;
-	 Highlight = (Forums->Forum.Type == For_FORUM_DEGREE_TCHS &&
-		      Forums->Forum.HieCod == DegCod) ? Lay_HIGHLIGHT :
-							Lay_NO_HIGHLIGHT;
+	 Highlight = Forums->Forum.Type == For_FORUM_DEGREE_TCHS &&
+		     Forums->Forum.HieCod == DegCod ? Lay_HIGHLIGHT :
+						      Lay_NO_HIGHLIGHT;
 	 IsLastItemInLevel[4] = IsLastDeg;
          For_WriteLinkToForum (Forums,&Forum,Highlight,4,IsLastItemInLevel);
         }
@@ -1719,20 +1719,20 @@ static long For_WriteLinksToCrsForums (const struct For_Forums *Forums,
    if (CrsCod > 0)
      {
       MyRoleInCrs = Rol_GetMyRoleInCrs (CrsCod);
-      ICanSeeTeacherForum = ((Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-	                      MyRoleInCrs == Rol_NET ||
-	                      MyRoleInCrs == Rol_TCH)) ? Usr_CAN :
-	                				 Usr_CAN_NOT;
+      ICanSeeTeacherForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
+	                    MyRoleInCrs == Rol_NET ||
+	                    MyRoleInCrs == Rol_TCH ? Usr_CAN :
+	                			     Usr_CAN_NOT;
 
       /***** Link to the forum of users from this course *****/
       Forum.Type = For_FORUM_COURSE_USRS;
       Forum.HieCod = CrsCod;
-      Highlight = (Forums->Forum.Type == For_FORUM_COURSE_USRS &&
-	           Forums->Forum.HieCod == CrsCod) ? Lay_HIGHLIGHT :
-						     Lay_NO_HIGHLIGHT;
-      IsLastItemInLevel[5] = (IsLastCrs == Lay_LAST &&
-			      ICanSeeTeacherForum == Usr_CAN_NOT) ? Lay_LAST :
-								    Lay_NO_LAST;
+      Highlight = Forums->Forum.Type == For_FORUM_COURSE_USRS &&
+	          Forums->Forum.HieCod == CrsCod ? Lay_HIGHLIGHT :
+						   Lay_NO_HIGHLIGHT;
+      IsLastItemInLevel[5] = IsLastCrs == Lay_LAST &&
+			     ICanSeeTeacherForum == Usr_CAN_NOT ? Lay_LAST :
+								  Lay_NO_LAST;
       For_WriteLinkToForum (Forums,&Forum,Highlight,5,IsLastItemInLevel);
 
       /***** Link to forum of teachers from this course *****/
@@ -1740,9 +1740,9 @@ static long For_WriteLinksToCrsForums (const struct For_Forums *Forums,
         {
 	 Forum.Type = For_FORUM_COURSE_TCHS;
 	 Forum.HieCod = CrsCod;
-	 Highlight = (Forums->Forum.Type == For_FORUM_COURSE_TCHS &&
-		      Forums->Forum.HieCod == CrsCod) ? Lay_HIGHLIGHT :
-							Lay_NO_HIGHLIGHT;
+	 Highlight = Forums->Forum.Type == For_FORUM_COURSE_TCHS &&
+		     Forums->Forum.HieCod == CrsCod ? Lay_HIGHLIGHT :
+						      Lay_NO_HIGHLIGHT;
          IsLastItemInLevel[5] = IsLastCrs;
          For_WriteLinkToForum (Forums,&Forum,Highlight,5,IsLastItemInLevel);
         }
@@ -2291,9 +2291,9 @@ static void For_ListForumThrs (struct For_Forums *Forums,
       Forums->Thread.Current = Thr.ThrCod;
       Class = (Thr.NumUnreadPosts ? "MSG_AUT_NEW" :
 	                            "MSG_AUT");
-      BgColor =  (Thr.ThrCod == ThreadInMyClipboard) ? "LIGHT_GREEN" :
-	        ((Thr.ThrCod == ThrCodHighlighted)   ? "BG_HIGHLIGHT" :
-                                                       The_GetColorRows ());
+      BgColor =  Thr.ThrCod == ThreadInMyClipboard ? "LIGHT_GREEN" :
+	        (Thr.ThrCod == ThrCodHighlighted   ? "BG_HIGHLIGHT" :
+                                                     The_GetColorRows ());
 
       HTM_TR_Begin (NULL);
 
@@ -2351,8 +2351,8 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	    /* Calculate pagination */
 	    PaginationPsts.NumItems = Thr.NumPosts;
 	    PaginationPsts.CurrentPage =
-	       (Thr.ThrCod == Forums->Thread.Selected) ? Forums->CurrentPagePsts :	// Current page
-						         0;				// No page is shown
+	       Thr.ThrCod == Forums->Thread.Selected ? Forums->CurrentPagePsts :	// Current page
+						       0;				// No page is shown
 	    Pag_CalculatePagination (&PaginationPsts);
 	    PaginationPsts.Anchor = For_FORUM_POSTS_SECTION_ID;
 
@@ -2800,63 +2800,63 @@ static void For_RestrictAccess (const struct For_Forums *Forums)
          break;
       case For_FORUM_INSTIT_USRS:
 	 MaxRole = Rol_GetMyMaxRoleIn (Hie_INS,Forums->Forum.HieCod);
-         ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-                         MaxRole == Rol_STD ||
-                         MaxRole == Rol_NET ||
-                         MaxRole == Rol_TCH) ? Usr_CAN :
-                                               Usr_CAN_NOT;
+         ICanSeeForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
+                        MaxRole == Rol_STD ||
+                        MaxRole == Rol_NET ||
+                        MaxRole == Rol_TCH ? Usr_CAN :
+                                             Usr_CAN_NOT;
          break;
       case For_FORUM_INSTIT_TCHS:
 	 MaxRole = Rol_GetMyMaxRoleIn (Hie_INS,Forums->Forum.HieCod);
-         ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-                         MaxRole == Rol_NET ||
-                         MaxRole == Rol_TCH) ? Usr_CAN :
-                                               Usr_CAN_NOT;
+         ICanSeeForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
+                        MaxRole == Rol_NET ||
+                        MaxRole == Rol_TCH ? Usr_CAN :
+                                             Usr_CAN_NOT;
          break;
       case For_FORUM_CENTER_USRS:
 	 MaxRole = Rol_GetMyMaxRoleIn (Hie_CTR,Forums->Forum.HieCod);
-         ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-                         MaxRole >= Rol_STD ||
-                         MaxRole == Rol_NET ||
-                         MaxRole == Rol_TCH) ? Usr_CAN :
-                                               Usr_CAN_NOT;
+         ICanSeeForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
+                        MaxRole >= Rol_STD ||
+                        MaxRole == Rol_NET ||
+                        MaxRole == Rol_TCH ? Usr_CAN :
+                                             Usr_CAN_NOT;
          break;
       case For_FORUM_CENTER_TCHS:
 	 MaxRole = Rol_GetMyMaxRoleIn (Hie_CTR,Forums->Forum.HieCod);
-         ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-                         MaxRole == Rol_NET ||
-                         MaxRole == Rol_TCH) ? Usr_CAN :
-                                               Usr_CAN_NOT;
+         ICanSeeForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
+                        MaxRole == Rol_NET ||
+                        MaxRole == Rol_TCH ? Usr_CAN :
+                                             Usr_CAN_NOT;
          break;
       case For_FORUM_DEGREE_USRS:
 	 MaxRole = Rol_GetMyMaxRoleIn (Hie_DEG,Forums->Forum.HieCod);
-         ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-                         MaxRole >= Rol_STD ||
-                         MaxRole == Rol_NET ||
-                         MaxRole == Rol_TCH) ? Usr_CAN :
-                                               Usr_CAN_NOT;
+         ICanSeeForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
+                        MaxRole >= Rol_STD ||
+                        MaxRole == Rol_NET ||
+                        MaxRole == Rol_TCH ? Usr_CAN :
+                                             Usr_CAN_NOT;
          break;
       case For_FORUM_DEGREE_TCHS:
 	 MaxRole = Rol_GetMyMaxRoleIn (Hie_DEG,Forums->Forum.HieCod);
-         ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-                         MaxRole == Rol_NET ||
-                         MaxRole == Rol_TCH) ? Usr_CAN :
-                                               Usr_CAN_NOT;
+         ICanSeeForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
+                        MaxRole == Rol_NET ||
+                        MaxRole == Rol_TCH ? Usr_CAN :
+                                             Usr_CAN_NOT;
          break;
       case For_FORUM_COURSE_USRS:
 	 MaxRole = Rol_GetMyRoleInCrs (Forums->Forum.HieCod);
-         ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-                         MaxRole >= Rol_STD ||
-                         MaxRole == Rol_NET ||
-                         MaxRole == Rol_TCH) ? Usr_CAN :
-                                               Usr_CAN_NOT;
+         ICanSeeForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
+                        MaxRole >= Rol_STD ||
+                        MaxRole == Rol_NET ||
+                        MaxRole == Rol_TCH ? Usr_CAN :
+                                             Usr_CAN_NOT;
          break;
       case For_FORUM_COURSE_TCHS:
 	 MaxRole = Rol_GetMyRoleInCrs (Forums->Forum.HieCod);
-         ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-                         MaxRole == Rol_NET ||
-                         MaxRole == Rol_TCH) ? Usr_CAN :
-                                               Usr_CAN_NOT;
+         ICanSeeForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
+                        MaxRole == Rol_NET ||
+                        MaxRole == Rol_TCH ? Usr_CAN :
+                                             Usr_CAN_NOT;
          break;
       default:
 	 ICanSeeForum = Usr_CAN_NOT;
@@ -3366,8 +3366,8 @@ void For_PasteThread (void)
 
 static Usr_Can_t For_CheckIfICanMoveThreads (void)
   {
-   return (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :	// If I have permission to move threads...
-						     Usr_CAN_NOT;
+   return Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :	// If I have permission to move threads...
+						   Usr_CAN_NOT;
   }
 
 /*****************************************************************************/

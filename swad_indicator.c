@@ -259,12 +259,12 @@ static void Ind_GetParsIndicators (struct Ind_Indicators *Indicators,
    Indicators->HieLvl = Sco_GetScope ("ScopeInd",Hie_CRS,AllowedLvls);
 
    /***** Get degree type code *****/
-   Indicators->DegTypCod = (Indicators->HieLvl == Hie_SYS) ?
-	                   ParCod_GetPar (ParCod_OthDegTyp) :	// -1L (any degree type) is allowed here
-                           -1L;
+   Indicators->DegTypCod = Indicators->HieLvl == Hie_SYS ?
+	                      ParCod_GetPar (ParCod_OthDegTyp) :	// -1L (any degree type) is allowed here
+                              -1L;
 
    /***** Get department code *****/
-   Indicators->DptCod = ParCod_GetPar (ParCod_Dpt);		// -1L (any department) is allowed here
+   Indicators->DptCod = ParCod_GetPar (ParCod_Dpt);			// -1L (any department) is allowed here
 
    /***** Get number of indicators *****/
    Ind_GetParNumIndicators (Indicators);
@@ -482,8 +482,8 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 	   Ind <= Ind_NUM_INDICATORS;
 	   Ind++)
 	{
-	 Class = (Indicators->Checked[Ind] == HTM_CHECKED) ? ClassHighlight :
-							      ClassNormal;
+	 Class = Indicators->Checked[Ind] == HTM_CHECKED ? ClassHighlight :
+							   ClassNormal;
 	 HTM_TR_Begin (NULL);
 
 	    if (PutForm == Frm_PUT_FORM)
@@ -903,22 +903,22 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-				      (IndicatorsCrs.SyllabusLecSrc != Inf_SRC_NONE) ? "DAT_SMALL_GREEN" :
-										       "DAT_SMALL_RED",
+				      IndicatorsCrs.SyllabusLecSrc != Inf_SRC_NONE ? "DAT_SMALL_GREEN" :
+										     "DAT_SMALL_RED",
 				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.SyllabusLecSrc]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-				      (IndicatorsCrs.SyllabusPraSrc != Inf_SRC_NONE) ? "DAT_SMALL_GREEN" :
-										       "DAT_SMALL_RED",
+				      IndicatorsCrs.SyllabusPraSrc != Inf_SRC_NONE ? "DAT_SMALL_GREEN" :
+										     "DAT_SMALL_RED",
 				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.SyllabusPraSrc]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-				      (IndicatorsCrs.TeachingGuideSrc != Inf_SRC_NONE) ? "DAT_SMALL_GREEN" :
-										         "DAT_SMALL_RED",
+				      IndicatorsCrs.TeachingGuideSrc != Inf_SRC_NONE ? "DAT_SMALL_GREEN" :
+										       "DAT_SMALL_RED",
 				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.TeachingGuideSrc]);
 			HTM_TD_End ();
@@ -1028,15 +1028,15 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-				      (IndicatorsCrs.AssessmentSrc != Inf_SRC_NONE) ? "DAT_SMALL_GREEN" :
-										      "DAT_SMALL_RED",
+				      IndicatorsCrs.AssessmentSrc != Inf_SRC_NONE ? "DAT_SMALL_GREEN" :
+										    "DAT_SMALL_RED",
 				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.AssessmentSrc]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-				      (IndicatorsCrs.TeachingGuideSrc != Inf_SRC_NONE) ? "DAT_SMALL_GREEN" :
-											 "DAT_SMALL_RED",
+				      IndicatorsCrs.TeachingGuideSrc != Inf_SRC_NONE ? "DAT_SMALL_GREEN" :
+										       "DAT_SMALL_RED",
 				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.TeachingGuideSrc]);
 			HTM_TD_End ();

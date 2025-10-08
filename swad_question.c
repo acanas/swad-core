@@ -1813,8 +1813,8 @@ void Qst_ShowFormEditOneQst (void)
       if (Question.QstCod <= 0)	// New question
 	 PutFormToEditQuestion = Frm_PUT_FORM;
       else
-	 PutFormToEditQuestion = (Qst_GetQstDataByCod (&Question) == Exi_EXISTS) ? Frm_PUT_FORM :
-										   Frm_DONT_PUT_FORM;
+	 PutFormToEditQuestion = Qst_GetQstDataByCod (&Question) == Exi_EXISTS ? Frm_PUT_FORM :
+										 Frm_DONT_PUT_FORM;
 
       /***** Put form to edit question *****/
       switch (PutFormToEditQuestion)
@@ -1891,8 +1891,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
    char StrTagTxt[6 + Cns_MAX_DIGITS_UINT + 1];
    char *Title;
    char *FuncOnChange;
-   OldNew_OldNew_t OldNewQst = (Question->QstCod > 0) ? OldNew_OLD :
-						        OldNew_NEW;
+   OldNew_OldNew_t OldNewQst = Question->QstCod > 0 ? OldNew_OLD :
+						      OldNew_NEW;
    HTM_Attributes_t Checked;
    HTM_Attributes_t RadioDisabled;
    HTM_Attributes_t CheckboxDisabled;
@@ -2063,8 +2063,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		 {
 		  HTM_LABEL_Begin (NULL);
 		     HTM_INPUT_RADIO ("AnswerType",
-				      (AnsType == Question->Answer.Type) ? HTM_CHECKED :
-								           HTM_NO_ATTR,
+				      AnsType == Question->Answer.Type ? HTM_CHECKED :
+								         HTM_NO_ATTR,
 				      "value=\"%u\""
 				      " onclick=\"enableDisableAns(this.form);\"",
 				      (unsigned) AnsType);
@@ -2114,9 +2114,9 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 		  HTM_INPUT_CHECKBOX ("Shuffle",
 				      AttributesShuffleChecked[Question->Answer.Shuffle] |
-	        		      ((Question->Answer.Type != Qst_ANS_UNIQUE_CHOICE &&
-			                Question->Answer.Type != Qst_ANS_MULTIPLE_CHOICE) ? HTM_DISABLED :
-										            HTM_NO_ATTR),
+	        		      (Question->Answer.Type != Qst_ANS_UNIQUE_CHOICE &&
+			               Question->Answer.Type != Qst_ANS_MULTIPLE_CHOICE ? HTM_DISABLED :
+										          HTM_NO_ATTR),
 				      "value=\"Y\"");
 		  HTM_Txt (Txt_Shuffle);
 	       HTM_LABEL_End ();
@@ -2129,14 +2129,14 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_TABLE_BeginWidePadding (2);	// Table with choice answers
 
-	       RadioDisabled = (Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE) ? HTM_NO_ATTR :
-										  HTM_DISABLED;
-	       CheckboxDisabled = (Question->Answer.Type == Qst_ANS_MULTIPLE_CHOICE) ? HTM_NO_ATTR :
-									               HTM_DISABLED;
-	       ChoiceDisabled = (Question->Answer.Type != Qst_ANS_UNIQUE_CHOICE &&
-			         Question->Answer.Type != Qst_ANS_MULTIPLE_CHOICE &&
-			         Question->Answer.Type != Qst_ANS_TEXT) ? HTM_DISABLED :
-								          HTM_NO_ATTR;
+	       RadioDisabled = Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE ? HTM_NO_ATTR :
+										HTM_DISABLED;
+	       CheckboxDisabled = Question->Answer.Type == Qst_ANS_MULTIPLE_CHOICE ? HTM_NO_ATTR :
+									             HTM_DISABLED;
+	       ChoiceDisabled = Question->Answer.Type != Qst_ANS_UNIQUE_CHOICE &&
+			        Question->Answer.Type != Qst_ANS_MULTIPLE_CHOICE &&
+			        Question->Answer.Type != Qst_ANS_TEXT ? HTM_DISABLED :
+								        HTM_NO_ATTR;
 	       for (NumOpt = 0, The_ResetRowColor ();
 		    NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
 		    NumOpt++, The_ChangeRowColor ())
@@ -2160,8 +2160,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 			/* Radio selector for unique choice answers */
 			HTM_INPUT_RADIO ("AnsUni",
 					 Checked | RadioDisabled |
-				         ((NumOpt < 2) ? HTM_REQUIRED :  // First or second options required
-						         HTM_NO_ATTR),
+				         (NumOpt < 2 ? HTM_REQUIRED :  // First or second options required
+						       HTM_NO_ATTR),
 					 "value=\"%u\""
 					 " onclick=\"enableDisableAns(this.form);\"",
 					 NumOpt);
@@ -2277,8 +2277,8 @@ static void Qst_PutIntInputField (const struct Qst_Question *Question)
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_Txt (Txt_Integer_number); HTM_Colon (); HTM_NBSP ();
       HTM_INPUT_LONG ("AnsInt",(long) INT_MIN,(long) INT_MAX,Question->Answer.Integer,
-	              (Question->Answer.Type == Qst_ANS_INT) ? HTM_NO_ATTR :
-							       HTM_DISABLED | HTM_REQUIRED,
+	              Question->Answer.Type == Qst_ANS_INT ? HTM_NO_ATTR :
+							     HTM_DISABLED | HTM_REQUIRED,
 		      "class=\"Exa_ANSWER_INPUT_INT INPUT_%s\"",
 		      The_GetSuffix ());
    HTM_LABEL_End ();
@@ -2302,8 +2302,8 @@ static void Qst_PutFloatInputField (const struct Qst_Question *Question,
       HTM_Txt (Txt_Real_number_between_A_and_B[Index]); HTM_NBSP ();
       HTM_INPUT_FLOAT (Fields[Index],-DBL_MAX,DBL_MAX,
 		       0,Question->Answer.FloatingPoint[Index],
-		       ((Question->Answer.Type == Qst_ANS_FLOAT) ? HTM_NO_ATTR :
-								   HTM_DISABLED) | HTM_REQUIRED,
+		       (Question->Answer.Type == Qst_ANS_FLOAT ? HTM_NO_ATTR :
+								 HTM_DISABLED) | HTM_REQUIRED,
 		       "class=\"Exa_ANSWER_INPUT_FLOAT INPUT_%s\"",The_GetSuffix ());
    HTM_LABEL_End ();
   }
@@ -2324,11 +2324,11 @@ static void Qst_PutTFInputField (const struct Qst_Question *Question,
 
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_INPUT_RADIO ("AnsTF",
-		       ((Question->Answer.TF == Values[Index]) ? HTM_CHECKED :
-							         HTM_NO_ATTR) |
+		       (Question->Answer.TF == Values[Index] ? HTM_CHECKED :
+							       HTM_NO_ATTR) |
 		       HTM_REQUIRED |
-		       ((Question->Answer.Type == Qst_ANS_TRUE_FALSE) ? HTM_NO_ATTR :
-								        HTM_DISABLED),
+		       (Question->Answer.Type == Qst_ANS_TRUE_FALSE ? HTM_NO_ATTR :
+								      HTM_DISABLED),
 		       "value=\"%c\"",Values[Index]);
       HTM_Txt (Txt_TF_QST[Index]);
    HTM_LABEL_End ();
@@ -2648,8 +2648,8 @@ Exi_Exist_t Qst_GetQstDataByCod (struct Qst_Question *Question)
 
 Qst_Shuffle_t Qst_GetShuffleFromYN (char Ch)
   {
-   return (Ch == 'Y') ? Qst_SHUFFLE :
-		        Qst_DONT_SHUFFLE;
+   return Ch == 'Y' ? Qst_SHUFFLE :
+		      Qst_DONT_SHUFFLE;
   }
 
 /*****************************************************************************/
@@ -2668,8 +2668,8 @@ static Qst_Shuffle_t Qst_GetParShuffle (void)
 
 Qst_WrongOrCorrect_t Qst_GetCorrectFromYN (char Ch)
   {
-   return (Ch == 'Y') ? Qst_CORRECT :
-		        Qst_WRONG;
+   return Ch == 'Y' ? Qst_CORRECT :
+		      Qst_WRONG;
   }
 
 /*****************************************************************************/

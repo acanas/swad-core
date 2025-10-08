@@ -83,19 +83,19 @@ void CrsCfg_Configuration (Vie_ViewType_t ViewType)
       return;
 
    /***** Initializations *****/
-   PutLink       = (ViewType == Vie_VIEW &&
-		    Gbl.Hierarchy.Node[Hie_DEG].WWW[0]) ? Hie_PUT_LINK :
-							  Hie_DONT_PUT_LINK;
-   PutFormDeg    = (ViewType == Vie_VIEW &&
-	            Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ? Frm_PUT_FORM :
-							      Frm_DONT_PUT_FORM;
-   PutFormName   = (ViewType == Vie_VIEW &&
-		    Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM) ? Frm_PUT_FORM :
-							      Frm_DONT_PUT_FORM;
+   PutLink       = ViewType == Vie_VIEW &&
+		   Gbl.Hierarchy.Node[Hie_DEG].WWW[0] ? Hie_PUT_LINK :
+							Hie_DONT_PUT_LINK;
+   PutFormDeg    = ViewType == Vie_VIEW &&
+	           Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ? Frm_PUT_FORM :
+							    Frm_DONT_PUT_FORM;
+   PutFormName   = ViewType == Vie_VIEW &&
+		   Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ? Frm_PUT_FORM :
+							    Frm_DONT_PUT_FORM;
    PutFormYear   =
-   PutFormInsCod = (ViewType == Vie_VIEW &&
-		    Gbl.Usrs.Me.Role.Logged >= Rol_TCH) ? Frm_PUT_FORM :
-							  Frm_DONT_PUT_FORM;
+   PutFormInsCod = ViewType == Vie_VIEW &&
+		   Gbl.Usrs.Me.Role.Logged >= Rol_TCH ? Frm_PUT_FORM :
+							Frm_DONT_PUT_FORM;
 
    /***** Contextual menu *****/
    if (ViewType == Vie_VIEW &&
@@ -254,8 +254,8 @@ static void CrsCfg_Degree (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 		       {
 			Deg = &Gbl.Hierarchy.List[Hie_CTR].Lst[NumDeg];
 			HTM_OPTION (HTM_Type_LONG,&Deg->HieCod,
-				    (Deg->HieCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod) ? HTM_SELECTED :
-											  HTM_NO_ATTR,
+				    Deg->HieCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod ? HTM_SELECTED :
+											HTM_NO_ATTR,
 				    "%s",Deg->ShrtName);
 		       }
 		  HTM_SELECT_End ();
@@ -310,8 +310,8 @@ static void CrsCfg_Year (Frm_PutForm_t PutForm)
 			  Year <= Deg_MAX_YEARS_PER_DEGREE;
 			  Year++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-				    (Year == Gbl.Hierarchy.Node[Hie_CRS].Specific.Year) ? HTM_SELECTED :
-											  HTM_NO_ATTR,
+				    Year == Gbl.Hierarchy.Node[Hie_CRS].Specific.Year ? HTM_SELECTED :
+											HTM_NO_ATTR,
 				    "%s",Txt_YEAR_OF_DEGREE[Year]);
 		  HTM_SELECT_End ();
 	       Frm_EndForm ();

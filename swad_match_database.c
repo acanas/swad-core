@@ -1216,8 +1216,8 @@ unsigned Mch_DB_GetUsrMchResults (MYSQL_RES **mysql_res,
 		     "%s"	// Hidden games subquery
 		     " AND gam_games.CrsCod=%ld"	// Extra check
 		" ORDER BY mch_matches.Title",
-		   (MeOrOther == Usr_ME) ? Gbl.Usrs.Me.UsrDat.UsrCod :
-				           Gbl.Usrs.Other.UsrDat.UsrCod,
+		   MeOrOther == Usr_ME ? Gbl.Usrs.Me.UsrDat.UsrCod :
+				         Gbl.Usrs.Other.UsrDat.UsrCod,
 		   MchSubQuery,
 		   GamSubQuery,
 		   HidGamSubQuery,

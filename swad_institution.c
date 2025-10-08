@@ -174,8 +174,8 @@ void Ins_SeeInsWithPendingCtrs (void)
 
 	    /* Get institution code (row[0]) */
 	    Ins.HieCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = (Ins.HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod) ? "BG_HIGHLIGHT" :
-								           The_GetColorRows ();
+	    BgColor = Ins.HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod ? "BG_HIGHLIGHT" :
+								         The_GetColorRows ();
 
 	    /* Get data of institution */
 	    SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
@@ -379,8 +379,8 @@ static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIn
       TxtClassNormal = "DAT";
       TxtClassStrong = "DAT_STRONG";
      }
-   BgColor = (Ins->HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod) ? "BG_HIGHLIGHT" :
-							           The_GetColorRows ();
+   BgColor = Ins->HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod ? "BG_HIGHLIGHT" :
+							         The_GetColorRows ();
 
    HTM_TR_Begin (NULL);
 
@@ -816,16 +816,16 @@ void Ins_WriteSelectorOfInstitution (void)
    Frm_BeginFormGoTo (ActSeeCtr);
 
       /***** Begin selector *****/
-      HTM_SELECT_Begin ((Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0) ? HTM_SUBMIT_ON_CHANGE :
-								   HTM_DISABLED,
+      HTM_SELECT_Begin (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0 ? HTM_SUBMIT_ON_CHANGE :
+								 HTM_DISABLED,
 			NULL,
 			"id=\"ins\" name=\"ins\" class=\"HIE_SEL INPUT_%s\"",
 			The_GetSuffix ());
 
 	 /***** Initial disabled option *****/
 	 HTM_OPTION (HTM_Type_STRING,"",
-		     ((Gbl.Hierarchy.Node[Hie_INS].HieCod < 0) ? HTM_SELECTED :
-							         HTM_NO_ATTR) | HTM_DISABLED,
+		     (Gbl.Hierarchy.Node[Hie_INS].HieCod < 0 ? HTM_SELECTED :
+							       HTM_NO_ATTR) | HTM_DISABLED,
 		     "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_INS]);
 
 	 if (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0)
@@ -847,9 +847,9 @@ void Ins_WriteSelectorOfInstitution (void)
 
 	       /* Write option */
 	       HTM_OPTION (HTM_Type_LONG,&InsCod,
-			   (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0 &&
-			   InsCod == Gbl.Hierarchy.Node[Hie_INS].HieCod) ? HTM_SELECTED :
-									   HTM_NO_ATTR,
+			   Gbl.Hierarchy.Node[Hie_INS].HieCod > 0 &&
+			   InsCod == Gbl.Hierarchy.Node[Hie_INS].HieCod ? HTM_SELECTED :
+									  HTM_NO_ATTR,
 			   "%s",row[1]);
 	      }
 
@@ -1016,10 +1016,10 @@ static void Ins_ListInstitutionsForEdition (void)
 
 static Usr_Can_t Ins_CheckIfICanEdit (struct Hie_Node *Ins)
   {
-   return (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||		// I am a superuser
-           ((Ins->Status & Hie_STATUS_BIT_PENDING) &&	// Institution is not yet activated
-           Gbl.Usrs.Me.UsrDat.UsrCod == Ins->RequesterUsrCod)) ? Usr_CAN :	// I am the requester
-        							 Usr_CAN_NOT;
+   return Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||	// I am a superuser
+          ((Ins->Status & Hie_STATUS_BIT_PENDING) &&	// Institution is not yet activated
+           Gbl.Usrs.Me.UsrDat.UsrCod == Ins->RequesterUsrCod) ? Usr_CAN :	// I am the requester
+        							Usr_CAN_NOT;
   }
 
 /*****************************************************************************/

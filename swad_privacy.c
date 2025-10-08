@@ -191,10 +191,10 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 		                   The_GetSuffix ());
 		  HTM_LABEL_Begin (NULL);
 		     HTM_INPUT_RADIO (ParName,
-				      ((Visibility == CurrentVisibilityInDB) ? HTM_CHECKED :
-								               HTM_NO_ATTR) |
-				      ((Action == ActUnk) ? HTM_DISABLED :
-						            HTM_SUBMIT_ON_CLICK),
+				      (Visibility == CurrentVisibilityInDB ? HTM_CHECKED :
+								             HTM_NO_ATTR) |
+				      (Action == ActUnk ? HTM_DISABLED :
+						          HTM_SUBMIT_ON_CLICK),
 				      "value=\"%u\"",(unsigned) Visibility);
 		     HTM_Txt (Txt_PRIVACY_OPTIONS[Visibility]);
 		  HTM_LABEL_End ();

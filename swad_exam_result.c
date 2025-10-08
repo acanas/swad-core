@@ -772,8 +772,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
    TotalScore.Valid = 0.0;
 
    /***** Set user *****/
-   UsrDat = (MeOrOther == Usr_ME) ? &Gbl.Usrs.Me.UsrDat :
-				    &Gbl.Usrs.Other.UsrDat;
+   UsrDat = MeOrOther == Usr_ME ? &Gbl.Usrs.Me.UsrDat :
+				  &Gbl.Usrs.Other.UsrDat;
 
    /***** Make database query *****/
    // Do not filter by groups, because a student who has changed groups
@@ -1269,8 +1269,8 @@ void ExaRes_ShowOneExaResult (void)
    ExaSes_GetAndCheckPars (&Exams,&Session);
 
    /***** Pointer to user's data *****/
-   MeOrOther = (Gbl.Action.Act == ActSeeOneExaResMe) ? Usr_ME :
-	                                               Usr_OTHER;
+   MeOrOther = Gbl.Action.Act == ActSeeOneExaResMe ? Usr_ME :
+	                                             Usr_OTHER;
    switch (MeOrOther)
      {
       case Usr_ME:
@@ -1387,11 +1387,11 @@ static void ExaRes_CheckIfICanViewResult (const struct Exa_Exam *Exam,
      {
       case Rol_STD:
 	 // Depends on visibility of exam, session and result (eye icons)
-	 ICanView->Result = (Usr_ItsMe (UsrCod) == Usr_ME &&		// The result is mine
-			     Exam->Hidden == HidVis_VISIBLE &&		// The exam is visible
-			     Session->Hidden == HidVis_VISIBLE &&	// The session is visible
-			     Session->Show_UsrResults == Sho_SHOW) ? Usr_CAN :	// The results of the session are visible to users
-							             Usr_CAN_NOT;
+	 ICanView->Result = Usr_ItsMe (UsrCod) == Usr_ME &&		// The result is mine
+			    Exam->Hidden == HidVis_VISIBLE &&		// The exam is visible
+			    Session->Hidden == HidVis_VISIBLE &&	// The session is visible
+			    Session->Show_UsrResults == Sho_SHOW ? Usr_CAN :	// The results of the session are visible to users
+							           Usr_CAN_NOT;
 	 // Whether I belong or not to groups of session is not checked here...
 	 // ...because I should be able to see old exams made in old groups to which I belonged
 

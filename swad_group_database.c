@@ -758,8 +758,8 @@ void Grp_DB_ChangeOptionalMandatory (const struct GroupType *GrpTyp)
 		   "UPDATE grp_types"
 		     " SET Mandatory='%c'"
 		   " WHERE GrpTypCod=%ld",
-		   (GrpTyp->Enrolment.OptionalMandatory == Grp_MANDATORY) ? 'Y' :
-									    'N',
+		   GrpTyp->Enrolment.OptionalMandatory == Grp_MANDATORY ? 'Y' :
+									  'N',
 		   GrpTyp->GrpTypCod);
   }
 
@@ -773,8 +773,8 @@ void Grp_DB_ChangeSingleMultiple (const struct GroupType *GrpTyp)
 		   "UPDATE grp_types"
 		     " SET Multiple='%c'"
 		   " WHERE GrpTypCod=%ld",
-		   (GrpTyp->Enrolment.SingleMultiple == Grp_MULTIPLE) ? 'Y' :
-									'N',
+		   GrpTyp->Enrolment.SingleMultiple == Grp_MULTIPLE ? 'Y' :
+								      'N',
 		   GrpTyp->GrpTypCod);
   }
 

@@ -1259,8 +1259,8 @@ void Exa_ReqCreatOrEditExam (void)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_DONT_CHECK_EXA_COD);
-   OldNewExam = (Exams.Exam.ExaCod > 0) ? OldNew_OLD :
-					  OldNew_NEW;
+   OldNewExam = Exams.Exam.ExaCod > 0 ? OldNew_OLD :
+					OldNew_NEW;
 
    /***** Get exam data from database *****/
    if (OldNewExam == OldNew_OLD)
@@ -1451,8 +1451,8 @@ void Exa_ReceiveExam (void)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_DONT_CHECK_EXA_COD);
-   OldNewExam = (Exams.Exam.ExaCod > 0) ? OldNew_OLD :
-					  OldNew_NEW;
+   OldNewExam = Exams.Exam.ExaCod > 0 ? OldNew_OLD :
+					OldNew_NEW;
 
    /***** Get all current exam data from database *****/
    // Some data, not received from form,

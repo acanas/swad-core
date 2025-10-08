@@ -726,8 +726,8 @@ void Enr_AskRemoveOldUsrs (void)
 		    Months <= Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
 		    Months++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Months,
-			      (Months == Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS) ? HTM_SELECTED :
-											     HTM_NO_ATTR,
+			      Months == Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS ? HTM_SELECTED :
+											   HTM_NO_ATTR,
 			      "%u",Months);
 	    HTM_SELECT_End ();
 	    HTM_NBSP ();
@@ -2519,7 +2519,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		     UsrBelongsToCrs = Hie_CheckIfUsrBelongsTo (Hie_CRS,
 								UsrDat.UsrCod,
 								Crs.HieCod,
-								false);
+								Hie_DB_ANY_COURSE);
 		     break;
 		  case Exi_DOES_NOT_EXIST:
 		  default:
@@ -3038,8 +3038,8 @@ static Usr_Can_t Enr_CheckIfICanRemUsrFromCrs (void)
       case Rol_STD:
       case Rol_NET:
 	 // A student or non-editing teacher can remove herself/himself
-	 return (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME) ? Usr_CAN :
-								       Usr_CAN_NOT;
+	 return Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME ? Usr_CAN :
+								     Usr_CAN_NOT;
       case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
@@ -3602,10 +3602,10 @@ Usr_Belong_t Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat)
    if (UsrDat->Roles.InCurrentCrs != Rol_UNK)
      {
       Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod  = UsrDat->UsrCod;
-      Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = (UsrDat->Roles.InCurrentCrs == Rol_STD ||
-	                                          UsrDat->Roles.InCurrentCrs == Rol_NET ||
-	                                          UsrDat->Roles.InCurrentCrs == Rol_TCH) ? Usr_BELONG :
-	                                        					   Usr_DONT_BELONG;
+      Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = UsrDat->Roles.InCurrentCrs == Rol_STD ||
+	                                         UsrDat->Roles.InCurrentCrs == Rol_NET ||
+	                                         UsrDat->Roles.InCurrentCrs == Rol_TCH ? Usr_BELONG :
+	                                        					 Usr_DONT_BELONG;
       Gbl.Cache.UsrBelongsToCurrentCrs.Status = Cac_VALID;
       return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
      }
@@ -3614,7 +3614,7 @@ Usr_Belong_t Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat)
    Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod  = UsrDat->UsrCod;
    Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = Hie_CheckIfUsrBelongsTo (Hie_CRS,UsrDat->UsrCod,
 						                       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-						                       false);
+						                       Hie_DB_ANY_COURSE);
    Gbl.Cache.UsrBelongsToCurrentCrs.Status = Cac_VALID;
    return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
   }
@@ -3644,10 +3644,10 @@ Usr_Accepted_t Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *Usr
    /***** 3. Fast / slow check: Get if user belongs to current course
                                 and has accepted *****/
    Gbl.Cache.UsrHasAcceptedInCurrentCrs.UsrCod = UsrDat->UsrCod;
-   Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted = (Hie_CheckIfUsrBelongsTo (Hie_CRS,UsrDat->UsrCod,
-						                             Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-						                             true) == Usr_BELONG) ? Usr_HAS_ACCEPTED :
-												    Usr_HAS_NOT_ACCEPTED;
+   Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted = Hie_CheckIfUsrBelongsTo (Hie_CRS,UsrDat->UsrCod,
+						                            Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+						                            Hie_DB_ONLY_ACCEPTED_COURSES) == Usr_BELONG ? Usr_HAS_ACCEPTED :
+															  Usr_HAS_NOT_ACCEPTED;
    Gbl.Cache.UsrHasAcceptedInCurrentCrs.Status = Cac_VALID;
    return Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted;
   }

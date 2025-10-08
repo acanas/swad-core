@@ -151,8 +151,8 @@ void Deg_SeeDegWithPendingCrss (void)
 
 	    /* Get degree code (row[0]) */
 	    Deg.HieCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = (Deg.HieCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod) ? "BG_HIGHLIGHT" :
-								        The_GetColorRows ();
+	    BgColor = Deg.HieCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod ? "BG_HIGHLIGHT" :
+								         The_GetColorRows ();
 
 	    /* Get data of degree */
 	    SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Deg);
@@ -231,16 +231,16 @@ void Deg_WriteSelectorOfDegree (void)
    Frm_BeginFormGoTo (ActSeeCrs);
 
       /***** Begin selector of degree *****/
-      HTM_SELECT_Begin ((Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0) ? HTM_SUBMIT_ON_CHANGE :
-								   HTM_DISABLED,
+      HTM_SELECT_Begin (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0 ? HTM_SUBMIT_ON_CHANGE :
+								 HTM_DISABLED,
 			NULL,
 			"id=\"deg\" name=\"deg\" class=\"HIE_SEL INPUT_%s\"",
 			The_GetSuffix ());
 
 	 /***** Initial disabled option *****/
 	 HTM_OPTION (HTM_Type_STRING,"",
-		     ((Gbl.Hierarchy.Node[Hie_DEG].HieCod <= 0) ? HTM_SELECTED :
-							         HTM_NO_ATTR) | HTM_DISABLED,
+		     (Gbl.Hierarchy.Node[Hie_DEG].HieCod <= 0 ? HTM_SELECTED :
+							        HTM_NO_ATTR) | HTM_DISABLED,
 		     "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]);
 
 	 if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
@@ -263,8 +263,8 @@ void Deg_WriteSelectorOfDegree (void)
 	       /* Write option */
 	       HTM_OPTION (HTM_Type_LONG,&DegCod,
 			   Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0 &&
-			   (DegCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod) ? HTM_SELECTED :
-									    HTM_NO_ATTR,
+			   DegCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod ? HTM_SELECTED :
+									  HTM_NO_ATTR,
 			   "%s",row[1]);
 	      }
 
@@ -402,8 +402,8 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 			     {
 			      DegTyp = &DegTypes->Lst[NumDegTyp];
 			      HTM_OPTION (HTM_Type_LONG,&DegTyp->DegTypCod,
-					  (DegTyp->DegTypCod == Deg->Specific.TypCod) ? HTM_SELECTED :
-										        HTM_NO_ATTR,
+					  DegTyp->DegTypCod == Deg->Specific.TypCod ? HTM_SELECTED :
+										      HTM_NO_ATTR,
 					  "%s",DegTyp->DegTypName);
 			     }
 			HTM_SELECT_End ();
@@ -490,10 +490,10 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 
 static Usr_Can_t Deg_CheckIfICanEditADegree (struct Hie_Node *Deg)
   {
-   return (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ||		// I am a center administrator or higher
-           ((Deg->Status & Hie_STATUS_BIT_PENDING) &&	// Degree is not yet activated
-           Gbl.Usrs.Me.UsrDat.UsrCod == Deg->RequesterUsrCod)) ? Usr_CAN :	// I am the requester
-        							 Usr_CAN_NOT;
+   return Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ||	// I am a center administrator or higher
+          ((Deg->Status & Hie_STATUS_BIT_PENDING) &&	// Degree is not yet activated
+          Gbl.Usrs.Me.UsrDat.UsrCod == Deg->RequesterUsrCod) ? Usr_CAN :	// I am the requester
+        						       Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -556,8 +556,8 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 		 {
 		  DegTyp = &DegTypes->Lst[NumDegTyp];
 		  HTM_OPTION (HTM_Type_LONG,&DegTyp->DegTypCod,
-			      (DegTyp->DegTypCod == Deg_EditingDeg->Specific.TypCod) ? HTM_SELECTED :
-										       HTM_NO_ATTR,
+			      DegTyp->DegTypCod == Deg_EditingDeg->Specific.TypCod ? HTM_SELECTED :
+										     HTM_NO_ATTR,
 			      "%s",DegTyp->DegTypName);
 		 }
 	    HTM_SELECT_End ();
@@ -764,8 +764,8 @@ static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
       TxtClassNormal = "DAT";
       TxtClassStrong = "DAT_STRONG";
      }
-   BgColor = (Deg->HieCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod) ? "BG_HIGHLIGHT" :
-							           The_GetColorRows ();
+   BgColor = Deg->HieCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod ? "BG_HIGHLIGHT" :
+							         The_GetColorRows ();
 
    /***** Begin table row *****/
    HTM_TR_Begin (NULL);

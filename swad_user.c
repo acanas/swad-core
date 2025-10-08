@@ -903,7 +903,7 @@ Usr_Can_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat)
 	    I only can edit users from current degree who have accepted */
 	 if (Hie_CheckIfUsrBelongsTo (Hie_DEG,UsrDat->UsrCod,
 				      Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-				      true) == Usr_BELONG)	// count only accepted courses
+				      Hie_DB_ONLY_ACCEPTED_COURSES) == Usr_BELONG)	// count only accepted courses
 	    // Degree admins can't edit superusers' data
 	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
 	       return Usr_CAN;
@@ -913,7 +913,7 @@ Usr_Can_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat)
 	    I only can edit from current center who have accepted */
 	 if (Hie_CheckIfUsrBelongsTo (Hie_CTR,UsrDat->UsrCod,
 				      Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-				      true) == Usr_BELONG)	// count only accepted courses
+				      Hie_DB_ONLY_ACCEPTED_COURSES) == Usr_BELONG)	// count only accepted courses
 	    // Center admins can't edit superusers' data
 	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
 	       return Usr_CAN;
@@ -923,7 +923,7 @@ Usr_Can_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat)
 	    I only can edit from current institution who have accepted */
 	 if (Hie_CheckIfUsrBelongsTo (Hie_INS,UsrDat->UsrCod,
 				      Gbl.Hierarchy.Node[Hie_INS].HieCod,
-				      true) == Usr_BELONG)	// count only accepted courses
+				      Hie_DB_ONLY_ACCEPTED_COURSES) == Usr_BELONG)	// count only accepted courses
 	    // Institution admins can't edit superusers' data
 	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
 	       return Usr_CAN;

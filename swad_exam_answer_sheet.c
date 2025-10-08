@@ -901,9 +901,9 @@ static void ExaAnsShe_WriteOnlineFltAns (struct Qst_Question *Question,
 					     &AnsUsr);
       // A bad formatted floating point answer will interpreted as 0.0
       HTM_TD_Begin ("class=\"Exa_ANSWER_FLOAT %s_%s\"",
-		    SuccessOrError == Err_SUCCESS ? ((AnsUsr >= Question->Answer.FloatingPoint[0] &&
-						      AnsUsr <= Question->Answer.FloatingPoint[1]) ? "Qst_ANS_OK" :	// Correct
-												     "Qst_ANS_BAD") :	// Wrong
+		    SuccessOrError == Err_SUCCESS ? (AnsUsr >= Question->Answer.FloatingPoint[0] &&
+						     AnsUsr <= Question->Answer.FloatingPoint[1] ? "Qst_ANS_OK" :	// Correct
+												   "Qst_ANS_BAD") :	// Wrong
 						     "Qst_ANS_0",							// Blank answer
 		    The_GetSuffix ());
          if (SuccessOrError == Err_SUCCESS)
@@ -1072,8 +1072,8 @@ static void ExaAnsShe_WritePaperIntAns (struct Qst_Question *Question,
    /***** Write paper answer *****/
    if (Print->Qsts[QstInd].Answer.Str[0])	// If the question has been answered
       if (sscanf (Print->Qsts[QstInd].Answer.Str,"%ld",&AnsUsr) == 1)
-	 WrongOrCorrect = (AnsUsr == Question->Answer.Integer) ? Qst_CORRECT :
-								 Qst_WRONG;
+	 WrongOrCorrect = AnsUsr == Question->Answer.Integer ? Qst_CORRECT :
+							       Qst_WRONG;
 
    HTM_TD_Begin ("class=\"Exa_ANSWER_INT\"");
 
@@ -1113,9 +1113,9 @@ static void ExaAnsShe_WritePaperFltAns (struct Qst_Question *Question,
      {
       SuccessOrError = Str_GetDoubleFromStr (Print->Qsts[QstInd].Answer.Str,&AnsUsr);
       // A bad formatted floating point answer will interpreted as 0.0
-      WrongOrCorrect = SuccessOrError == Err_SUCCESS ? ((AnsUsr >= Question->Answer.FloatingPoint[0] &&
-							 AnsUsr <= Question->Answer.FloatingPoint[1]) ? Qst_CORRECT :
-													Qst_WRONG) :
+      WrongOrCorrect = SuccessOrError == Err_SUCCESS ? (AnsUsr >= Question->Answer.FloatingPoint[0] &&
+							AnsUsr <= Question->Answer.FloatingPoint[1] ? Qst_CORRECT :
+												      Qst_WRONG) :
 							Qst_BLANK;
      }
 
@@ -1165,14 +1165,14 @@ static void ExaAnsShe_WritePaperTF_Ans (struct Qst_Question *Question,
 		Id,ExaAnsShe_Class[WrongOrCorrect],The_GetSuffix ());
       ExaAnsShe_WriteJSToUpdateSheet (Print,QstInd,Id,-1);
       HTM_ElementEnd ();
-	 HTM_OPTION (HTM_Type_STRING,"" ,(AnsUsr == '\0') ? HTM_SELECTED :
-							    HTM_NO_ATTR,
+	 HTM_OPTION (HTM_Type_STRING,"" ,AnsUsr == '\0' ? HTM_SELECTED :
+							  HTM_NO_ATTR,
 		     Txt_NBSP);
-	 HTM_OPTION (HTM_Type_STRING,"T",(AnsUsr == 'T' ) ? HTM_SELECTED :
-							    HTM_NO_ATTR,
+	 HTM_OPTION (HTM_Type_STRING,"T",AnsUsr == 'T'  ? HTM_SELECTED :
+							  HTM_NO_ATTR,
 		     Txt_TF_QST[0]);
-	 HTM_OPTION (HTM_Type_STRING,"F",(AnsUsr == 'F' ) ? HTM_SELECTED :
-							    HTM_NO_ATTR,
+	 HTM_OPTION (HTM_Type_STRING,"F",AnsUsr == 'F'  ? HTM_SELECTED :
+							  HTM_NO_ATTR,
 		     Txt_TF_QST[1]);
       HTM_Txt ("</select>");
 

@@ -45,8 +45,8 @@ const char PriPub_Public_YN[PriPub_NUM_PRIVATE_PUBLIC] =
 
 PriPub_PrivateOrPublic_t PriPub_GetPublicFromYN (char Ch)
   {
-   return (Ch == 'Y') ? PriPub_PUBLIC :
-			PriPub_PRIVATE;
+   return Ch == 'Y' ? PriPub_PUBLIC :
+		      PriPub_PRIVATE;
   }
 
 /*****************************************************************************/

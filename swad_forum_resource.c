@@ -79,8 +79,8 @@ void ForRsc_GetLinkToThread (void)
 
 void ForRsc_SetAnchorStr (long ThrCod,char **Anchor)
   {
-   *Anchor = (ThrCod > 0) ? For_FORUM_POSTS_SECTION_ID :
-			    For_FORUM_THREADS_SECTION_ID;
+   *Anchor = ThrCod > 0 ? For_FORUM_POSTS_SECTION_ID :
+			  For_FORUM_THREADS_SECTION_ID;
   }
 
 void ForRsc_FreeAnchorStr (char **Anchor)

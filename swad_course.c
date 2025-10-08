@@ -195,16 +195,16 @@ void Crs_WriteSelectorOfCourse (void)
    Frm_BeginFormGoTo (ActSeeCrsInf);
 
       /***** Begin selector of course *****/
-      HTM_SELECT_Begin ((Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0) ? HTM_SUBMIT_ON_CHANGE :
-								   HTM_DISABLED,
+      HTM_SELECT_Begin (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0 ? HTM_SUBMIT_ON_CHANGE :
+								 HTM_DISABLED,
 			NULL,
 			"id=\"crs\" name=\"crs\" class=\"HIE_SEL INPUT_%s\"",
 			The_GetSuffix ());
 
 	 /***** Initial disabled option *****/
 	 HTM_OPTION (HTM_Type_STRING,"",
-		     ((Gbl.Hierarchy.Node[Hie_CRS].HieCod < 0) ? HTM_SELECTED :
-							         HTM_NO_ATTR) | HTM_DISABLED,
+		     (Gbl.Hierarchy.Node[Hie_CRS].HieCod < 0 ? HTM_SELECTED :
+							       HTM_NO_ATTR) | HTM_DISABLED,
 		     "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]);
 
 	 if (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
@@ -225,8 +225,8 @@ void Crs_WriteSelectorOfCourse (void)
 	       /* Write option */
 	       HTM_OPTION (HTM_Type_LONG,&CrsCod,
 			   Gbl.Hierarchy.HieLvl == Hie_CRS &&	// Course selected
-			   (CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? HTM_SELECTED :
-									    HTM_NO_ATTR,
+			   CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod ? HTM_SELECTED :
+									  HTM_NO_ATTR,
 			   "%s",row[1]);	// Short name (row[1])
 	      }
 
@@ -350,8 +350,8 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 		 }
 
 	       HTM_OPTION (HTM_Type_LONG,&CrsCod,
-			   (CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? HTM_SELECTED :
-									    HTM_NO_ATTR,
+			   CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod ? HTM_SELECTED :
+									  HTM_NO_ATTR,
 			   "%s",CrsShortName);
 	      }
 
@@ -486,8 +486,8 @@ static Exi_Exist_t Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	   }
 
 	 /* Check if this course is one of my courses */
-	 BgColor = (Hie_CheckIfIBelongTo (Hie_CRS,Crs->HieCod) == Usr_BELONG) ? "BG_HIGHLIGHT" :
-										The_GetColorRows ();
+	 BgColor = Hie_CheckIfIBelongTo (Hie_CRS,Crs->HieCod) == Usr_BELONG ? "BG_HIGHLIGHT" :
+									      The_GetColorRows ();
 
 	 HTM_TR_Begin (NULL);
 
@@ -727,11 +727,11 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 			   for (YearAux  = 0;
 				YearAux <= Deg_MAX_YEARS_PER_DEGREE;
 				YearAux++)	// All the years are permitted
-					      // because it's possible to move this course
-					      // to another degree (with other active years)
+						// because it's possible to move this course
+						// to another degree (with other active years)
 			      HTM_OPTION (HTM_Type_UNSIGNED,&YearAux,
-					  (YearAux == Crs->Specific.Year) ? HTM_SELECTED :
-									    HTM_NO_ATTR,
+					  YearAux == Crs->Specific.Year ? HTM_SELECTED :
+									  HTM_NO_ATTR,
 					  "%s",Txt_YEAR_OF_DEGREE[YearAux]);
 			HTM_SELECT_End ();
 		     Frm_EndForm ();
@@ -810,10 +810,10 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 
 static Usr_Can_t Crs_CheckIfICanEdit (struct Hie_Node *Crs)
   {
-   return (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ||	// I am a degree administrator or higher
-           ((Crs->Status & Hie_STATUS_BIT_PENDING) &&	// Course is not yet activated
-           Gbl.Usrs.Me.UsrDat.UsrCod == Crs->RequesterUsrCod)) ? Usr_CAN :	// I am the requester
-        						         Usr_CAN_NOT;
+   return Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ||	// I am a degree administrator or higher
+          ((Crs->Status & Hie_STATUS_BIT_PENDING) &&	// Course is not yet activated
+           Gbl.Usrs.Me.UsrDat.UsrCod == Crs->RequesterUsrCod) ? Usr_CAN :	// I am the requester
+        						        Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -861,8 +861,8 @@ static void Crs_PutFormToCreateCourse (void)
 		    Year <= Deg_MAX_YEARS_PER_DEGREE;
 		    Year++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-			      (Year == Crs_EditingCrs->Specific.Year) ? HTM_SELECTED :
-								        HTM_NO_ATTR,
+			      Year == Crs_EditingCrs->Specific.Year ? HTM_SELECTED :
+								      HTM_NO_ATTR,
 			      "%s",Txt_YEAR_OF_DEGREE[Year]);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
@@ -1564,21 +1564,21 @@ void Crs_ContEditAfterChgCrs (void)
 	 ShowButtonToRequestRegistration = Sho_SHOW;
 	 break;
       case Rol_USR:
-	 ShowButtonToRequestRegistration = (Hie_CheckIfUsrBelongsTo (Hie_CRS,
-								     Gbl.Usrs.Me.UsrDat.UsrCod,
-								     Crs_EditingCrs->HieCod,
-								     false) == Usr_DONT_BELONG) ? Sho_SHOW :
-												  Sho_DONT_SHOW;
+	 ShowButtonToRequestRegistration = Hie_CheckIfUsrBelongsTo (Hie_CRS,
+								    Gbl.Usrs.Me.UsrDat.UsrCod,
+								    Crs_EditingCrs->HieCod,
+								    Hie_DB_ANY_COURSE) == Usr_DONT_BELONG ? Sho_SHOW :
+													    Sho_DONT_SHOW;
 	 break;
       case Rol_STD:
       case Rol_NET:
       case Rol_TCH:
 	 if (Crs_EditingCrs->HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
-	    ShowButtonToRequestRegistration = (Hie_CheckIfUsrBelongsTo (Hie_CRS,
-								        Gbl.Usrs.Me.UsrDat.UsrCod,
-								        Crs_EditingCrs->HieCod,
-								        false) == Usr_DONT_BELONG) ? Sho_SHOW :
-												     Sho_DONT_SHOW;
+	    ShowButtonToRequestRegistration = Hie_CheckIfUsrBelongsTo (Hie_CRS,
+								       Gbl.Usrs.Me.UsrDat.UsrCod,
+								       Crs_EditingCrs->HieCod,
+								       Hie_DB_ANY_COURSE) == Usr_DONT_BELONG ? Sho_SHOW :
+													       Sho_DONT_SHOW;
 	 break;
       default:
 	 break;
@@ -1818,8 +1818,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
    NumUsrs = NumStds + NumNETs + NumTchs;
    ClassTxt = NumUsrs ? "DAT_STRONG" :
 	                "DAT";
-   BgColor = (CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? "BG_HIGHLIGHT" :
-							      The_GetColorRows ();
+   BgColor = CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod ? "BG_HIGHLIGHT" :
+							    The_GetColorRows ();
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -1828,8 +1828,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
 	     to this course/to any course in degree/to any course? *****/
       if (WriteColumnAccepted == Crs_WRITE_COL_ACCEPTED)
 	{
-	 Accepted = (row[7][0] == 'Y') ? Usr_HAS_ACCEPTED :
-					 Usr_HAS_NOT_ACCEPTED;
+	 Accepted = row[7][0] == 'Y' ? Usr_HAS_ACCEPTED :
+				       Usr_HAS_NOT_ACCEPTED;
 	 HTM_TD_Begin ("class=\"BT %s\" title=\"%s\"",
 		       BgColor,*Usr_AcceptedTxt[Accepted]);
 	    HTM_Txt (Usr_AcceptedIcon[Accepted]);
@@ -1952,8 +1952,8 @@ void Crs_AskRemoveOldCrss (void)
 		 i <= Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
 		 i++)
 	       HTM_OPTION (HTM_Type_UNSIGNED,&i,
-			   (i == MonthsWithoutAccess) ? HTM_SELECTED :
-						        HTM_NO_ATTR,
+			   i == MonthsWithoutAccess ? HTM_SELECTED :
+						      HTM_NO_ATTR,
 			   "%u",i);
 	 HTM_SELECT_End ();
 	 HTM_NBSP ();

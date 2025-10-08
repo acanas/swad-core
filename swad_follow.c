@@ -367,8 +367,8 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct Usr_Data *UsrDat,
   {
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"FOLLOW_BOX %s\"",
-                  (Gbl.Action.Act == Action) ? "FOLLOW_NUM_B" :
-					       "FOLLOW_NUM");
+                  Gbl.Action.Act == Action ? "FOLLOW_NUM_B" :
+					     "FOLLOW_NUM");
 
       /***** Number *****/
       if (NumUsrs)
@@ -387,8 +387,8 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct Usr_Data *UsrDat,
 
       /***** Text *****/
       HTM_DIV_Begin ("class=\"FORM_OUT_%s%s\"",The_GetSuffix (),
-		     (Gbl.Action.Act == Action) ? " BOLD" :
-						  "");
+		     Gbl.Action.Act == Action ? " BOLD" :
+						"");
 	 if (NumUsrs)
 	   {
 	    /* Form to list users */

@@ -313,8 +313,8 @@ Err_SuccessOrError_t Fil_EndReceptionOfFile (char *FileNameDataTmp,
 	RemainingBytesToCopy;
 	RemainingBytesToCopy -= BytesToCopy)
      {
-      BytesToCopy = (RemainingBytesToCopy >= Fil_NUM_BYTES_PER_CHUNK) ? Fil_NUM_BYTES_PER_CHUNK :
-	                                                                RemainingBytesToCopy;
+      BytesToCopy = RemainingBytesToCopy >= Fil_NUM_BYTES_PER_CHUNK ? Fil_NUM_BYTES_PER_CHUNK :
+	                                                              RemainingBytesToCopy;
       if (fread (Bytes,1,BytesToCopy,QueryFile) != BytesToCopy)
 	{
          fclose (FileDataTmp);

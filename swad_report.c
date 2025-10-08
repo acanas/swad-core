@@ -571,8 +571,8 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
       if (Report->UsrFigures.NumDays > 0)
 	 fprintf (Rep_File," (%d %s)",
 		  Report->UsrFigures.NumDays,
-		  (Report->UsrFigures.NumDays == 1) ? Txt_day :
-						      Txt_days);
+		  Report->UsrFigures.NumDays == 1 ? Txt_day :
+						    Txt_days);
      }
    else	// Time of first click is unknown
      {
@@ -611,8 +611,8 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
 		     "</li>",
 	    Txt_Files_uploaded,
 	    NumFiles,
-	    (NumFiles == 1) ? Txt_file :
-		              Txt_files,
+	    NumFiles == 1 ? Txt_file :
+		            Txt_files,
 	    NumPublicFiles,Txt_public_FILES);
 
    /***** Number of file views *****/
@@ -621,8 +621,8 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
      {
       fprintf (Rep_File,"%d %s",
                Report->UsrFigures.NumFileViews,
-	       (Report->UsrFigures.NumFileViews == 1) ? Txt_download :
-						        Txt_downloads);
+	       Report->UsrFigures.NumFileViews == 1 ? Txt_download :
+						      Txt_downloads);
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Rep_File," (");
@@ -641,8 +641,8 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
      {
       fprintf (Rep_File,"%d %s",
 	       Report->UsrFigures.NumForumPosts,
-	       (Report->UsrFigures.NumForumPosts == 1) ? Txt_FORUM_post :
-					             Txt_FORUM_posts);
+	       Report->UsrFigures.NumForumPosts == 1 ? Txt_FORUM_post :
+					               Txt_FORUM_posts);
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Rep_File," (");
@@ -661,8 +661,8 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
      {
       fprintf (Rep_File,"%d %s",
 	       Report->UsrFigures.NumMessagesSent,
-	       (Report->UsrFigures.NumMessagesSent == 1) ? Txt_message :
-					             Txt_messages);
+	       Report->UsrFigures.NumMessagesSent == 1 ? Txt_message :
+					                 Txt_messages);
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Rep_File," (");

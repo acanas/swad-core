@@ -214,8 +214,8 @@ static void PrjCfg_ShowFormsRubricsOfType (const struct Rub_Rubrics *Rubrics,
 		    {
 		     Rub_DB_GetRubricTitle (Rubrics->Lst[NumRubThisCrs],Title,Rub_MAX_BYTES_TITLE);
 		     HTM_OPTION (HTM_Type_LONG,&Rubrics->Lst[NumRubThisCrs],
-				 (Rubrics->Lst[NumRubThisCrs] == RubCodThisType) ? HTM_SELECTED :
-										   HTM_NO_ATTR,
+				 Rubrics->Lst[NumRubThisCrs] == RubCodThisType ? HTM_SELECTED :
+										 HTM_NO_ATTR,
 				 "%s",Title);
 		    }
 
@@ -273,8 +273,8 @@ static void PrjCfg_GetConfigDataFromRow (MYSQL_RES *mysql_res,
    row[0]	NETCanCreate
    */
    /***** Get whether non-editing teachers can create new projects or not (row[0]) *****/
-   Config->NETCanCreate = (row[0][0] == 'Y') ? Usr_CAN :
-					       Usr_CAN_NOT;
+   Config->NETCanCreate = row[0][0] == 'Y' ? Usr_CAN :
+					     Usr_CAN_NOT;
   }
 
 /*****************************************************************************/

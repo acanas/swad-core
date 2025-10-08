@@ -1825,8 +1825,8 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
 	 PutForm = Frm_DONT_PUT_FORM;
 	 break;
       default:
-	 PutForm = (Prj_CheckIfICanReviewProjects () == Usr_CAN) ? Frm_PUT_FORM :
-								     Frm_DONT_PUT_FORM;
+	 PutForm = Prj_CheckIfICanReviewProjects () == Usr_CAN ? Frm_PUT_FORM :
+								 Frm_DONT_PUT_FORM;
 	 break;
      }
 
@@ -1982,8 +1982,8 @@ static void Prj_PutSelectorReviewStatus (struct Prj_Projects *Projects)
 	{
 	 ReviewStatusUnsigned = (unsigned) ReviewStatus;
 	 HTM_OPTION (HTM_Type_UNSIGNED,&ReviewStatusUnsigned,
-		     (ReviewStatus == Projects->Prj.Review.Status) ? HTM_SELECTED :
-								     HTM_NO_ATTR,
+		     ReviewStatus == Projects->Prj.Review.Status ? HTM_SELECTED :
+								   HTM_NO_ATTR,
 		     "%s",Txt_PROJECT_REVIEW_SINGUL[ReviewStatus]);
 	}
    HTM_SELECT_End ();
@@ -3603,8 +3603,8 @@ void Prj_GetProjectDataByCod (struct Prj_Project *Prj)
 
 static Prj_Locked_t Prj_GetLockedFromYN (char Ch)
   {
-   return (Ch == 'Y') ? Prj_LOCKED :
-			Prj_UNLOCKED;
+   return Ch == 'Y' ? Prj_LOCKED :
+		      Prj_UNLOCKED;
   }
 
 /*****************************************************************************/
@@ -3613,8 +3613,8 @@ static Prj_Locked_t Prj_GetLockedFromYN (char Ch)
 
 static Prj_Assigned_t Prj_GetAssignedFromYN (char Ch)
   {
-   return (Ch == 'Y') ? Prj_ASSIGNED :
-			Prj_NONASSIG;
+   return Ch == 'Y' ? Prj_ASSIGNED :
+		      Prj_NONASSIG;
   }
 
 /*****************************************************************************/
@@ -3841,8 +3841,8 @@ void Prj_ReqEditPrj (void)
 
 static void Prj_ReqCreatOrEditPrj (struct Prj_Projects *Projects)
   {
-   OldNew_OldNew_t OldNewPrj = (Projects->Prj.PrjCod > 0) ? OldNew_OLD :
-							    OldNew_NEW;
+   OldNew_OldNew_t OldNewPrj = Projects->Prj.PrjCod > 0 ? OldNew_OLD :
+							  OldNew_NEW;
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Projects->Prj);
@@ -3997,8 +3997,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 			     Assign <= (Prj_Assigned_t) (Prj_NUM_ASSIGNED - 1);
 			     Assign++)
 			   HTM_OPTION (HTM_Type_STRING,Prj_Assigned[Assign].YN,
-				       (Assign == Projects->Prj.Assigned) ? HTM_SELECTED :
-									    HTM_NO_ATTR,
+				       Assign == Projects->Prj.Assigned ? HTM_SELECTED :
+									  HTM_NO_ATTR,
 				       "%s",*Prj_Assigned[Assign].Txt);
 		     HTM_SELECT_End ();
 		  HTM_TD_End ();
@@ -4040,8 +4040,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 			  {
 			   ProposalUnsigned = (unsigned) Proposal;
 			   HTM_OPTION (HTM_Type_UNSIGNED,&ProposalUnsigned,
-				       (Projects->Prj.Proposal == Proposal) ? HTM_SELECTED :
-									      HTM_NO_ATTR,
+				       Projects->Prj.Proposal == Proposal ? HTM_SELECTED :
+									    HTM_NO_ATTR,
 				       "%s",Txt_PROJECT_STATUS[Proposal]);
 			  }
 		     HTM_SELECT_End ();
@@ -4191,8 +4191,8 @@ void Prj_ReceiveProject (void)
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
-   OldNewPrj = ((Projects.Prj.PrjCod = ParCod_GetPar (ParCod_Prj)) > 0) ? OldNew_OLD :
-									  OldNew_NEW;
+   OldNewPrj = (Projects.Prj.PrjCod = ParCod_GetPar (ParCod_Prj)) > 0 ? OldNew_OLD :
+									OldNew_NEW;
    switch (OldNewPrj)
      {
       case OldNew_OLD:

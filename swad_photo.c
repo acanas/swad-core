@@ -174,8 +174,8 @@ Usr_Can_t Pho_ICanChangeOtherUsrPhoto (struct Usr_Data *UsrDat)
 	 /* It's a student in this course,
 	    check if he/she has accepted registration */
 	 UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
-         return (UsrDat->Accepted == Usr_HAS_ACCEPTED) ? Usr_CAN :
-							 Usr_CAN_NOT;
+         return UsrDat->Accepted == Usr_HAS_ACCEPTED ? Usr_CAN :
+						       Usr_CAN_NOT;
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
@@ -1353,9 +1353,9 @@ void Pho_ShowUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
    bool BrowserTabIs1stTab = (BrowserTab == Act_1ST ||
 	                      BrowserTab == Act_AJA ||
 			      BrowserTab == Act_REF);
-   Frm_PutForm_t PutFormPublicProfile = (Frm_CheckIfInside () == Frm_OUTSIDE_FORM &&	// Only if not inside another form
-                                         BrowserTabIs1stTab) ? Frm_PUT_FORM :		// Only in main browser tab (or AJAX)
-							       Frm_DONT_PUT_FORM;
+   Frm_PutForm_t PutFormPublicProfile = Frm_CheckIfInside () == Frm_OUTSIDE_FORM &&	// Only if not inside another form
+                                        BrowserTabIs1stTab ? Frm_PUT_FORM :		// Only in main browser tab (or AJAX)
+							     Frm_DONT_PUT_FORM;
    char *CaptionStr;
    char *ImgStr;
 
@@ -1543,8 +1543,8 @@ Pho_ShowPhotos_t Pho_GetMyPrefAboutListWithPhotosFromDB (void)
         {
          /* Get number of columns in class photo */
          row = mysql_fetch_row (mysql_res);
-         ShowPhotos = (row[0][0] == 'Y') ? Pho_PHOTOS_SHOW :
-					   Pho_PHOTOS_DONT_SHOW;
+         ShowPhotos = row[0][0] == 'Y' ? Pho_PHOTOS_SHOW :
+					 Pho_PHOTOS_DONT_SHOW;
         }
 
       /***** Free structure that stores the query result *****/
@@ -1952,8 +1952,8 @@ static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
 		 {
 		  TypeOfAvgUnsigned = (unsigned) TypeOfAvg;
 		  HTM_OPTION (HTM_Type_UNSIGNED,&TypeOfAvgUnsigned,
-			      (TypeOfAvg == DegPhotos->TypeOfAverage) ? HTM_SELECTED :
-								        HTM_NO_ATTR,
+			      TypeOfAvg == DegPhotos->TypeOfAverage ? HTM_SELECTED :
+								      HTM_NO_ATTR,
 			      "%s",Txt_AVERAGE_PHOTO_TYPES[TypeOfAvg]);
 		 }
 	    HTM_SELECT_End ();
@@ -2018,8 +2018,8 @@ static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *D
 		 {
 		  PhoSiUnsigned = (unsigned) PhoSi;
 		  HTM_OPTION (HTM_Type_UNSIGNED,&PhoSiUnsigned,
-			      (PhoSi == DegPhotos->HowComputePhotoSize) ? HTM_SELECTED :
-								          HTM_NO_ATTR,
+			      PhoSi == DegPhotos->HowComputePhotoSize ? HTM_SELECTED :
+								        HTM_NO_ATTR,
 			      "%s",Txt_STAT_DEGREE_PHOTO_SIZE[PhoSi]);
 		 }
 	    HTM_SELECT_End ();
@@ -2084,8 +2084,8 @@ static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPh
 		 {
 		  OrderUnsigned = (unsigned) Order;
 		  HTM_OPTION (HTM_Type_UNSIGNED,&OrderUnsigned,
-			      (Order == DegPhotos->HowOrderDegrees) ? HTM_SELECTED :
-								      HTM_NO_ATTR,
+			      Order == DegPhotos->HowOrderDegrees ? HTM_SELECTED :
+								    HTM_NO_ATTR,
 			      "%s",Txt_STAT_DEGREE_PHOTO_ORDER[Order]);
 		 }
 	    HTM_SELECT_End ();
@@ -2200,9 +2200,9 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 		     Attributes = HTM_SELECTED;
 		  else
 		     // Too recently computed?
-		     Attributes = (Pho_GetTimeAvgPhotoWasComputed (Degs.Lst[NumDeg].HieCod) >=
-				   Dat_GetStartExecutionTimeUTC () - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO) ? HTM_DISABLED :
-					                                                                    HTM_NO_ATTR;
+		     Attributes = Pho_GetTimeAvgPhotoWasComputed (Degs.Lst[NumDeg].HieCod) >=
+				  Dat_GetStartExecutionTimeUTC () - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO ? HTM_DISABLED :
+					                                                                  HTM_NO_ATTR;
 
 		  HTM_OPTION (HTM_Type_LONG,&Degs.Lst[NumDeg].HieCod,
 		              Attributes,
@@ -2547,12 +2547,12 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
 
    /***** Check if photo of degree can be shown *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      ShowDegPhoto = (NumStds > 0) ? Sho_SHOW :
-				     Sho_DONT_SHOW;
+      ShowDegPhoto = NumStds > 0 ? Sho_SHOW :
+				   Sho_DONT_SHOW;
    else
-      ShowDegPhoto = (NumStds > 0 &&
-		      NumStdsWithPhoto >= Cfg_MIN_PHOTOS_TO_SHOW_AVERAGE) ? Sho_SHOW :
-									    Sho_DONT_SHOW;
+      ShowDegPhoto = NumStds > 0 &&
+		     NumStdsWithPhoto >= Cfg_MIN_PHOTOS_TO_SHOW_AVERAGE ? Sho_SHOW :
+									  Sho_DONT_SHOW;
 
    if (ShowDegPhoto == Sho_SHOW)
      {

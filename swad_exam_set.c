@@ -1032,8 +1032,8 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
 
 ExaSet_Validity_t ExaSet_GetInvalidFromYN (char Ch)
   {
-   return (Ch == 'Y') ? ExaSet_INVALID_QUESTION :
-			ExaSet_VALID_QUESTION;
+   return Ch == 'Y' ? ExaSet_INVALID_QUESTION :
+		      ExaSet_VALID_QUESTION;
   }
 
 /*****************************************************************************/
@@ -1423,8 +1423,8 @@ static Usr_Can_t ExaSet_CheckIfICanEditExamSets (const struct Exa_Exam *Exam)
      {
       case Usr_CAN:
 	 /***** Questions are editable only if exam has no sessions *****/
-	 return (Exam->NumSess == 0) ? Usr_CAN :	// Exams with sessions should not be edited
-				       Usr_CAN_NOT;
+	 return Exam->NumSess == 0 ? Usr_CAN :	// Exams with sessions should not be edited
+				     Usr_CAN_NOT;
 	 break;
       case Usr_CAN_NOT:
       default:

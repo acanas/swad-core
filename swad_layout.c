@@ -1473,12 +1473,12 @@ void Lay_WriteHeaderClassPhoto (Hie_Level_t HieLvl,Vie_ViewType_t ViewType)
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Initialize institution, degree and course to show in header *****/
-   Hie[Hie_INS].HieCod = (HieLvl >= Hie_INS) ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
-					       -1L;
-   Hie[Hie_DEG].HieCod = (HieLvl >= Hie_DEG) ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
-					       -1L;
-   Hie[Hie_CRS].HieCod = (HieLvl == Hie_CRS) ? Gbl.Hierarchy.Node[Hie_CRS].HieCod :
-					       -1L;
+   Hie[Hie_INS].HieCod = HieLvl >= Hie_INS ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
+					     -1L;
+   Hie[Hie_DEG].HieCod = HieLvl >= Hie_DEG ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
+					     -1L;
+   Hie[Hie_CRS].HieCod = HieLvl == Hie_CRS ? Gbl.Hierarchy.Node[Hie_CRS].HieCod :
+					     -1L;
 
    /***** Get data of institution, degree and course *****/
    SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]);

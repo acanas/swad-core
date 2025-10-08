@@ -389,8 +389,8 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
 	 break;
       case Frm_PUT_FORM:
 	 /* Begin form to go to resource */
-	 NextAction = (Link->Cod > 0) ? NextActions[Link->Type].IfCod.NextAction :	// Resource specified
-					NextActions[Link->Type].IfNotCod.NextAction;	// All resources of this type
+	 NextAction = Link->Cod > 0 ? NextActions[Link->Type].IfCod.NextAction :	// Resource specified
+				      NextActions[Link->Type].IfNotCod.NextAction;	// All resources of this type
 	 if (FuncsAnchor[Link->Type].Set)
 	   {
 	    FuncsAnchor[Link->Type].Set (Link->Cod,&Anchor);

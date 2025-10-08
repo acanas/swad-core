@@ -91,8 +91,8 @@ void Log_LogAccess (const char *Comments)
    size_t MaxLength;
    char *CommentsDB;
    long BanCodClicked;
-   Rol_Role_t RoleToStore = (Gbl.Action.Act == ActLogOut) ? Gbl.Usrs.Me.Role.LoggedBeforeCloseSession :
-                                                            Gbl.Usrs.Me.Role.Logged;
+   Rol_Role_t RoleToStore = Gbl.Action.Act == ActLogOut ? Gbl.Usrs.Me.Role.LoggedBeforeCloseSession :
+                                                          Gbl.Usrs.Me.Role.Logged;
 
    /***** Insert access into database *****/
    /* Log access in historical log */
@@ -232,12 +232,12 @@ void Log_GetAndShowLastClicks (void)
 	 Action = Act_GetActionFromActCod (ActCod);
 
 	 /* Use a special color for this row depending on the action */
-	 ClassRow = (Act_GetBrowserTab (Action) == Act_DWN) ? "DAT_SMALL_YELLOW" :
+	 ClassRow = Act_GetBrowserTab (Action) == Act_DWN ? "DAT_SMALL_YELLOW" :
 		    (ActCod == Act_GetActCod (ActLogIn   ) ||
-		     ActCod == Act_GetActCod (ActLogInNew)) ? "DAT_SMALL_GREEN" :
-		    (ActCod == Act_GetActCod (ActLogOut  )) ? "DAT_SMALL_RED" :
-		    (ActCod == Act_GetActCod (ActWebSvc  )) ? "DAT_SMALL_BLUE" :
-							      "DAT_SMALL";
+		     ActCod == Act_GetActCod (ActLogInNew) ? "DAT_SMALL_GREEN" :
+		    (ActCod == Act_GetActCod (ActLogOut  ) ? "DAT_SMALL_RED" :
+		    (ActCod == Act_GetActCod (ActWebSvc  ) ? "DAT_SMALL_BLUE" :
+							     "DAT_SMALL")));
 
 	 /* Compute elapsed time from last access */
 	 if (sscanf (row[2],"%ld",&TimeDiff) != 1)

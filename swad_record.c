@@ -335,8 +335,8 @@ static void Rec_ListFieldsRecordsForEdition (void)
 		       {
 			VisUnsigned = (unsigned) Vis;
 			HTM_OPTION (HTM_Type_UNSIGNED,&VisUnsigned,
-				    (Vis == Fld->Visibility) ? HTM_SELECTED :
-							       HTM_NO_ATTR,
+				    Vis == Fld->Visibility ? HTM_SELECTED :
+							     HTM_NO_ATTR,
 				    "%s",Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
 		       }
 		  HTM_SELECT_End ();
@@ -400,8 +400,8 @@ void Rec_ShowFormCreateRecordField (void)
 		 {
 		  VisUnsigned = (unsigned) Vis;
 		  HTM_OPTION (HTM_Type_UNSIGNED,&VisUnsigned,
-			      (Vis == Gbl.Crs.Records.Field.Visibility) ? HTM_SELECTED :
-									  HTM_NO_ATTR,
+			      Vis == Gbl.Crs.Records.Field.Visibility ? HTM_SELECTED :
+									HTM_NO_ATTR,
 			      "%s",Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
 		 }
 	    HTM_SELECT_End ();
@@ -648,8 +648,8 @@ static void Rec_GetFieldByCod (long FldCod,char Name[Rec_MAX_BYTES_NAME_FIELD + 
    /* Visible or editable by students? (row[2]) */
    if (sscanf (row[2],"%u",&Vis) != 1)
       Err_WrongRecordFieldExit ();
-   *Visibility = (Vis < Rec_NUM_TYPES_VISIBILITY) ? (Rec_VisibilityRecordFields_t) Vis :
-						    Rec_VISIBILITY_DEFAULT;
+   *Visibility = Vis < Rec_NUM_TYPES_VISIBILITY ? (Rec_VisibilityRecordFields_t) Vis :
+						  Rec_VISIBILITY_DEFAULT;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1422,8 +1422,8 @@ static void Rec_ShowSelectorRecsPerPag (unsigned RecsPerPag)
 		 i <= Rec_MAX_RECORDS_PER_PAGE;
 		 i++)
 	       HTM_OPTION (HTM_Type_UNSIGNED,&i,
-			   (i == RecsPerPag) ? HTM_SELECTED :
-					       HTM_NO_ATTR,
+			   i == RecsPerPag ? HTM_SELECTED :
+					     HTM_NO_ATTR,
 			   "%u",i);
 	 HTM_SELECT_End ();
 	 HTM_SP ();
@@ -1688,10 +1688,10 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	   NumField < Gbl.Crs.Records.LstFields.Num;
 	   NumField++, The_ChangeRowColor ())
 	{
-	 ShowField = (!(TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM ||
-		        TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_CHECK) ||
-		      Gbl.Crs.Records.LstFields.Lst[NumField].Visibility != Rec_HIDDEN_FIELD) ? Sho_SHOW :
-												Sho_DONT_SHOW;
+	 ShowField = !(TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM ||
+		       TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_CHECK) ||
+		     Gbl.Crs.Records.LstFields.Lst[NumField].Visibility != Rec_HIDDEN_FIELD ? Sho_SHOW :
+											      Sho_DONT_SHOW;
 	 // If the field must be shown...
 	 if (ShowField == Sho_SHOW)
 	   {
@@ -1699,15 +1699,15 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	    switch (Gbl.Usrs.Me.Role.Logged)
 	      {
 	       case Rol_STD:
-		  ICanEditThisField = (TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM &&
-				       Gbl.Crs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD) ? Usr_CAN :
-														   Usr_CAN_NOT;
+		  ICanEditThisField = TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM &&
+				      Gbl.Crs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD ? Usr_CAN :
+														 Usr_CAN_NOT;
 		  break;
 	       case Rol_TCH:
 	       case Rol_SYS_ADM:
-		  ICanEditThisField = (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
-				       TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS) ? Usr_CAN :
-										     Usr_CAN_NOT;
+		  ICanEditThisField = TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
+				      TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS ? Usr_CAN :
+										   Usr_CAN_NOT;
 		  break;
 	       default:
 		  ICanEditThisField = Usr_CAN_NOT;
@@ -1930,11 +1930,11 @@ void Rec_FreeMemFieldsRecordsCrs (void)
 static Usr_Can_t Rec_CheckIfICanEditField (Rec_VisibilityRecordFields_t Visibility)
   {
    // Non-editing teachers can not edit fields
-   return ( Gbl.Usrs.Me.Role.Logged == Rol_TCH     ||
-	    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-	   (Gbl.Usrs.Me.Role.Logged == Rol_STD &&
-	    Visibility == Rec_EDITABLE_FIELD)) ? Usr_CAN :
-						 Usr_CAN_NOT;
+   return  Gbl.Usrs.Me.Role.Logged == Rol_TCH     ||
+	   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
+	  (Gbl.Usrs.Me.Role.Logged == Rol_STD &&
+	   Visibility == Rec_EDITABLE_FIELD) ? Usr_CAN :
+					       Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -1958,8 +1958,8 @@ void Rec_ShowFormOtherNewSharedRecord (struct Usr_Data *UsrDat,Rol_Role_t Defaul
    /* In this case UsrDat->Roles.InCurrentCrs
       is not the current role in current course.
       Instead it is initialized with the preferred role. */
-   UsrDat->Roles.InCurrentCrs = (Gbl.Hierarchy.HieLvl == Hie_CRS) ? DefaultRole :	// Course selected
-	                                                           Rol_UNK;		// No course selected
+   UsrDat->Roles.InCurrentCrs = Gbl.Hierarchy.HieLvl == Hie_CRS ? DefaultRole :	// Course selected
+	                                                          Rol_UNK;	// No course selected
    Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_NEW_USR_FORM,UsrDat,NULL);
   }
 
@@ -2065,23 +2065,23 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	                         Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// My current role is teacher
                                  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);	// My current role is system admin
    CountryForm = (TypeOfView == Rec_SHA_MY_RECORD_FORM);
-   ShowData = (MeOrOther == Usr_ME ||
-	       Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ||
-	       UsrDat->Accepted == Usr_HAS_ACCEPTED) ? Sho_SHOW :
-						       Sho_DONT_SHOW;
-   ShowIDRows = (TypeOfView != Rec_SHA_RECORD_PUBLIC) ? Sho_SHOW :
-						        Sho_DONT_SHOW;
+   ShowData = MeOrOther == Usr_ME ||
+	      Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ||
+	      UsrDat->Accepted == Usr_HAS_ACCEPTED ? Sho_SHOW :
+						     Sho_DONT_SHOW;
+   ShowIDRows = TypeOfView != Rec_SHA_RECORD_PUBLIC ? Sho_SHOW :
+						      Sho_DONT_SHOW;
 
    StudentInCurrentCrs = UsrDat->Roles.InCurrentCrs == Rol_STD;
    TeacherInCurrentCrs = UsrDat->Roles.InCurrentCrs == Rol_NET ||
 	                 UsrDat->Roles.InCurrentCrs == Rol_TCH;
 
-   ShowAddressRows = (TypeOfView == Rec_SHA_MY_RECORD_FORM  ||
-		      ((TypeOfView == Rec_SHA_RECORD_LIST   ||
-		        TypeOfView == Rec_SHA_RECORD_PRINT) &&
-		       IAmLoggedAsTeacherOrSysAdm &&
-		       StudentInCurrentCrs)) ? Sho_SHOW :
-					       Sho_DONT_SHOW;			// He/she is a student in the current course
+   ShowAddressRows = TypeOfView == Rec_SHA_MY_RECORD_FORM  ||
+		     ((TypeOfView == Rec_SHA_RECORD_LIST   ||
+		       TypeOfView == Rec_SHA_RECORD_PRINT) &&
+		      IAmLoggedAsTeacherOrSysAdm &&
+		      StudentInCurrentCrs) ? Sho_SHOW :
+					     Sho_DONT_SHOW;			// He/she is a student in the current course
    Rol_GetRolesInAllCrss (UsrDat);	// Get user's roles if not got
    ShowTeacherRows = (TypeOfView == Rec_SHA_RECORD_LIST ||
 		      TypeOfView == Rec_SHA_RECORD_PRINT) &&
@@ -2096,8 +2096,8 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	 ViewType = Vie_EDIT;
 	 break;
       case Rec_SHA_OTHER_EXISTING_USR_FORM:
-	 ViewType = (Usr_ICanChangeOtherUsrData (UsrDat) == Usr_CAN) ? Vie_EDIT :
-							                 Vie_VIEW;
+	 ViewType = Usr_ICanChangeOtherUsrData (UsrDat) == Usr_CAN ? Vie_EDIT :
+							             Vie_VIEW;
 	 break;
       default:	// In other options, I can not edit user's data
 	 ViewType = Vie_VIEW;
@@ -2106,9 +2106,9 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
    Rec_RecordHelp[Rec_SHA_RECORD_LIST] = Rec_RecordListHelp[UsrDat->Roles.InCurrentCrs];
 
-   PutFormLinks = (Frm_CheckIfInside () == Frm_OUTSIDE_FORM &&				// Only if not inside another form
-                   Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST) ? Frm_PUT_FORM :	// Only in main browser tab
-                						    Frm_DONT_PUT_FORM;
+   PutFormLinks = Frm_CheckIfInside () == Frm_OUTSIDE_FORM &&				// Only if not inside another form
+                  Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST ? Frm_PUT_FORM :	// Only in main browser tab
+                						  Frm_DONT_PUT_FORM;
 
    Ins.HieCod = UsrDat->InsCod;
    if (Ins.HieCod > 0)
@@ -2808,8 +2808,8 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 		       {
 			RoleUnsigned = (unsigned) Role;
 			HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-				    (Role == DefaultRoleInForm) ? HTM_SELECTED :
-								  HTM_NO_ATTR,
+				    Role == DefaultRoleInForm ? HTM_SELECTED :
+								HTM_NO_ATTR,
 				    "%s",Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
 		       }
 		  HTM_SELECT_End ();
@@ -2888,8 +2888,8 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 				{
 				 RoleUnsigned = (unsigned) Role;
 				 HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-					     (Role == DefaultRoleInForm) ? HTM_SELECTED :
-									   HTM_NO_ATTR,
+					     Role == DefaultRoleInForm ? HTM_SELECTED :
+									 HTM_NO_ATTR,
 					     "%s",Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
 				}
 			      break;
@@ -2954,8 +2954,8 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 				{
 				 RoleUnsigned = (unsigned) Role;
 				 HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-					     (Role == DefaultRoleInForm) ? HTM_SELECTED :
-								           HTM_NO_ATTR,
+					     Role == DefaultRoleInForm ? HTM_SELECTED :
+								         HTM_NO_ATTR,
 					     "%s",Txt_ROLES_SINGUL_Abc[Role][Usr_SEX_UNKNOWN]);
 				}
 			   HTM_SELECT_End ();
@@ -3034,8 +3034,8 @@ static void Rec_ShowFormSex (struct Usr_Data *UsrDat,Usr_Sex_t Sex)
 
    HTM_LABEL_Begin ("class=\"DAT_STRONG_%s\"",The_GetSuffix ());
       HTM_INPUT_RADIO ("Sex",
-		       ((Sex == UsrDat->Sex) ? HTM_CHECKED :
-					       HTM_NO_ATTR) | HTM_REQUIRED,
+		       (Sex == UsrDat->Sex ? HTM_CHECKED :
+					     HTM_NO_ATTR) | HTM_REQUIRED,
 		       "value=\"%u\"",(unsigned) Sex);
       HTM_NBSP ();
       HTM_Txt (StringsSexIcons[Sex]);
@@ -3246,8 +3246,8 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
 	                HTM_NO_ATTR,
 			"%s",Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]);
 	    HTM_OPTION (HTM_Type_STRING,"0",
-	                (UsrDat->CtyCod == 0) ? HTM_SELECTED :
-	                		        HTM_NO_ATTR,
+	                UsrDat->CtyCod == 0 ? HTM_SELECTED :
+	                		      HTM_NO_ATTR,
 			"%s",Txt_Another_country);
 	    for (NumCty = 0;
 		 NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
@@ -3255,8 +3255,8 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
 	      {
 	       Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
 	       HTM_OPTION (HTM_Type_LONG,&Cty->HieCod,
-			   (Cty->HieCod == UsrDat->CtyCod) ? HTM_SELECTED :
-							     HTM_NO_ATTR,
+			   Cty->HieCod == UsrDat->CtyCod ? HTM_SELECTED :
+							   HTM_NO_ATTR,
 			   "%s",Cty->FullName);
 	      }
 	 HTM_SELECT_End ();
@@ -3907,8 +3907,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"-1",
-				 ((Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0) ? HTM_SELECTED :
-								        HTM_NO_ATTR) | HTM_DISABLED,
+				 (Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0 ? HTM_SELECTED :
+								      HTM_NO_ATTR) | HTM_DISABLED,
 				 NULL);
 		     for (NumCty = 0;
 			  NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
@@ -3916,8 +3916,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		       {
 			Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
 			HTM_OPTION (HTM_Type_LONG,&Cty->HieCod,
-				    (Cty->HieCod == Gbl.Usrs.Me.UsrDat.InsCtyCod) ? HTM_SELECTED :
-										    HTM_NO_ATTR,
+				    Cty->HieCod == Gbl.Usrs.Me.UsrDat.InsCtyCod ? HTM_SELECTED :
+										  HTM_NO_ATTR,
 				    "%s",Cty->FullName);
 		       }
 		  HTM_SELECT_End ();
@@ -3951,12 +3951,12 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"-1",
-				 ((Gbl.Usrs.Me.UsrDat.InsCod < 0) ? HTM_SELECTED :
-								    HTM_NO_ATTR) | HTM_DISABLED,
+				 (Gbl.Usrs.Me.UsrDat.InsCod < 0 ? HTM_SELECTED :
+								  HTM_NO_ATTR) | HTM_DISABLED,
 				 NULL);
 		     HTM_OPTION (HTM_Type_STRING,"0",
-				 (Gbl.Usrs.Me.UsrDat.InsCod == 0) ? HTM_SELECTED :
-								    HTM_NO_ATTR,
+				 Gbl.Usrs.Me.UsrDat.InsCod == 0 ? HTM_SELECTED :
+								  HTM_NO_ATTR,
 				 "%s",Txt_Another_institution);
 		     for (NumIns = 0;
 			  NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
@@ -3964,8 +3964,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		       {
 			Ins = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
 			HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
-				    (Ins->HieCod == Gbl.Usrs.Me.UsrDat.InsCod) ? HTM_SELECTED :
-									         HTM_NO_ATTR,
+				    Ins->HieCod == Gbl.Usrs.Me.UsrDat.InsCod ? HTM_SELECTED :
+									       HTM_NO_ATTR,
 				    "%s",Ins->FullName);
 		       }
 		  HTM_SELECT_End ();
@@ -4000,12 +4000,12 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 				       " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 				       The_GetSuffix ());
 			HTM_OPTION (HTM_Type_STRING,"-1",
-				    ((Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0) ? HTM_SELECTED :
-									   HTM_NO_ATTR) | HTM_DISABLED,
+				    (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0 ? HTM_SELECTED :
+									 HTM_NO_ATTR) | HTM_DISABLED,
 				    NULL);
 			HTM_OPTION (HTM_Type_STRING,"0",
-				    (Gbl.Usrs.Me.UsrDat.Tch.CtrCod == 0) ? HTM_SELECTED :
-									   HTM_NO_ATTR,
+				    Gbl.Usrs.Me.UsrDat.Tch.CtrCod == 0 ? HTM_SELECTED :
+									 HTM_NO_ATTR,
 				    Txt_Another_center);
 			for (NumCtr = 0;
 			     NumCtr < Gbl.Hierarchy.List[Hie_INS].Num;
@@ -4013,8 +4013,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 			  {
 			   Ctr = &Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr];
 			   HTM_OPTION (HTM_Type_LONG,&Ctr->HieCod,
-				       (Ctr->HieCod == Gbl.Usrs.Me.UsrDat.Tch.CtrCod) ? HTM_SELECTED :
-										        HTM_NO_ATTR,
+				       Ctr->HieCod == Gbl.Usrs.Me.UsrDat.Tch.CtrCod ? HTM_SELECTED :
+										      HTM_NO_ATTR,
 				       Ctr->FullName);
 			  }
 		     HTM_SELECT_End ();

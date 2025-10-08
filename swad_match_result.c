@@ -716,8 +716,8 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
    TotalGrade = 0.0;
 
    /***** Set user *****/
-   UsrDat = (MeOrOther == Usr_ME) ? &Gbl.Usrs.Me.UsrDat :
-				    &Gbl.Usrs.Other.UsrDat;
+   UsrDat = MeOrOther == Usr_ME ? &Gbl.Usrs.Me.UsrDat :
+				  &Gbl.Usrs.Other.UsrDat;
 
    /***** Make database query *****/
    NumResults = Mch_DB_GetUsrMchResults (&mysql_res,MeOrOther,MchCod,GamCod,GamesSelectedCommas);
@@ -1078,8 +1078,8 @@ void MchRes_ShowOneMchResult (void)
    Mch_GetAndCheckPars (&Games,&Match);
 
    /***** Pointer to user's data *****/
-   MeOrOther = (Gbl.Action.Act == ActSeeOneMchResMe) ? Usr_ME :
-	                                               Usr_OTHER;
+   MeOrOther = Gbl.Action.Act == ActSeeOneMchResMe ? Usr_ME :
+	                                             Usr_OTHER;
    switch (MeOrOther)
      {
       case Usr_ME:
@@ -1298,10 +1298,10 @@ static void MchRes_CheckIfICanViewMatchResult (const struct Gam_Game *Game,
      {
       case Rol_STD:
 	 // Depends on visibility of game and result (eye icons)
-	 ICanView->Result = (Game->Hidden == HidVis_VISIBLE &&			// The game is visible
-			     Match->Status.Show.UsrResults == Sho_SHOW &&	// The results of the match are visible to users
-			     Usr_ItsMe (UsrCod) == Usr_ME) ? Usr_CAN :		// The result is mine
-							     Usr_CAN_NOT;
+	 ICanView->Result = Game->Hidden == HidVis_VISIBLE &&			// The game is visible
+			    Match->Status.Show.UsrResults == Sho_SHOW &&	// The results of the match are visible to users
+			    Usr_ItsMe (UsrCod) == Usr_ME ? Usr_CAN :		// The result is mine
+							   Usr_CAN_NOT;
 	 // Whether I belong or not to groups of match is not checked here...
 	 // ...because I should be able to see old matches made in old groups to which I belonged
 

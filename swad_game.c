@@ -510,8 +510,8 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
    static unsigned UniqueId = 0;
    char *Id;
    Dat_StartEndTime_t StartEndTime;
-   CloOpe_ClosedOrOpen_t ClosedOrOpen = (Games->Game.NumUnfinishedMchs) ? CloOpe_OPEN :
-									  CloOpe_CLOSED;
+   CloOpe_ClosedOrOpen_t ClosedOrOpen = Games->Game.NumUnfinishedMchs ? CloOpe_OPEN :
+									CloOpe_CLOSED;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Set anchor string *****/
@@ -1253,8 +1253,8 @@ void Gam_ReqCreatOrEditGame (void)
 
    /***** Get parameters *****/
    Games.Game.GamCod = Gam_GetPars (&Games);
-   OldNewGame = (Games.Game.GamCod > 0) ? OldNew_OLD :
-					  OldNew_NEW;
+   OldNewGame = Games.Game.GamCod > 0 ? OldNew_OLD :
+					OldNew_NEW;
 
    /***** Get game data *****/
    switch (OldNewGame)
@@ -1460,8 +1460,8 @@ void Gam_ReceiveGame (void)
 
    /***** Get parameters *****/
    Games.Game.GamCod = Gam_GetPars (&Games);
-   OldNewGame = (Games.Game.GamCod > 0) ? OldNew_OLD :
-					  OldNew_NEW;
+   OldNewGame = Games.Game.GamCod > 0 ? OldNew_OLD :
+					OldNew_NEW;
 
    /***** Receive game from form *****/
    Gam_ReceiveGameFieldsFromForm (&Games.Game,Txt);

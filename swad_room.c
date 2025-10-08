@@ -372,8 +372,8 @@ static Roo_Order_t Roo_GetParRoomOrder (void)
 
 static Usr_Can_t Roo_CheckIfICanCreateRooms (void)
   {
-   return (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ? Usr_CAN :
-						     Usr_CAN_NOT;
+   return Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ? Usr_CAN :
+						   Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -751,14 +751,14 @@ static void Roo_PutSelectorBuilding (long BldCod,
 
       /***** Option for no assigned building *****/
       HTM_OPTION (HTM_Type_STRING,"-1",
-		  (BldCod < 0) ? HTM_SELECTED :
-			         HTM_NO_ATTR,
+		  BldCod < 0 ? HTM_SELECTED :
+			       HTM_NO_ATTR,
 		  "%s",Txt_No_assigned_building);
 
       /***** Option for another room *****/
       HTM_OPTION (HTM_Type_STRING,"0",
-		  (BldCod == 0) ? HTM_SELECTED :
-			          HTM_NO_ATTR,
+		  BldCod == 0 ? HTM_SELECTED :
+			        HTM_NO_ATTR,
 		  "%s",Txt_Another_building);
 
       /***** Options for buildings *****/
@@ -768,8 +768,8 @@ static void Roo_PutSelectorBuilding (long BldCod,
 	{
 	 Bld = &Buildings->Lst[NumBld];
 	 HTM_OPTION (HTM_Type_LONG,&Bld->BldCod,
-		     (BldCod == Bld->BldCod) ? HTM_SELECTED :
-					       HTM_NO_ATTR,
+		     BldCod == Bld->BldCod ? HTM_SELECTED :
+					     HTM_NO_ATTR,
 		     "%s",Bld->ShrtName);
 	}
 
@@ -797,8 +797,8 @@ static void Roo_PutSelectorType (Roo_RoomType_t RoomType,
 	   Type <= (Roo_RoomType_t) (Roo_NUM_TYPES - 1);
 	   Type++)
 	 HTM_OPTION (HTM_Type_UNSIGNED,&Type,
-		     (Type == RoomType) ? HTM_SELECTED :
-					  HTM_NO_ATTR,
+		     Type == RoomType ? HTM_SELECTED :
+					HTM_NO_ATTR,
 		     "%s",Txt_ROOM_TYPES[Type]);
 
    /***** End selector *****/

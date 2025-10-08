@@ -98,8 +98,8 @@ const char *HidVis_ShownStyle[HidVis_NUM_HIDDEN_VISIBLE] =
 
 HidVis_HiddenOrVisible_t HidVis_GetHiddenFromYN (char Ch)
   {
-   return (Ch == 'Y') ? HidVis_HIDDEN :
-		        HidVis_VISIBLE;
+   return Ch == 'Y' ? HidVis_HIDDEN :
+		      HidVis_VISIBLE;
   }
 
 /*****************************************************************************/
@@ -108,8 +108,8 @@ HidVis_HiddenOrVisible_t HidVis_GetHiddenFromYN (char Ch)
 
 HidVis_HiddenOrVisible_t HidVis_GetHiddenFrom01 (char Ch)
   {
-   return (Ch == '1') ? HidVis_HIDDEN :
-		        HidVis_VISIBLE;
+   return Ch == '1' ? HidVis_HIDDEN :
+		      HidVis_VISIBLE;
   }
 
 /*****************************************************************************/
@@ -118,6 +118,6 @@ HidVis_HiddenOrVisible_t HidVis_GetHiddenFrom01 (char Ch)
 
 HidVis_HiddenOrVisible_t HidVis_GetVisibleFromYN (char Ch)
   {
-   return (Ch == 'Y') ? HidVis_VISIBLE :
-			HidVis_HIDDEN;
+   return Ch == 'Y' ? HidVis_VISIBLE :
+		      HidVis_HIDDEN;
   }

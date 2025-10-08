@@ -828,16 +828,16 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_ElementEnd ();
       HTM_OPTION (HTM_Type_STRING,"" ,
-                  (Print->Qsts[QstInd].Answer.Str[0] == '\0') ? HTM_SELECTED :
-                								    HTM_NO_ATTR,
+                  Print->Qsts[QstInd].Answer.Str[0] == '\0' ? HTM_SELECTED :
+                					      HTM_NO_ATTR,
                   Txt_NBSP);
       HTM_OPTION (HTM_Type_STRING,"T",
-                  (Print->Qsts[QstInd].Answer.Str[0] == 'T') ? HTM_SELECTED :
-                								   HTM_NO_ATTR,
+                  Print->Qsts[QstInd].Answer.Str[0] == 'T'  ? HTM_SELECTED :
+                					      HTM_NO_ATTR,
                   Txt_TF_QST[0]);
       HTM_OPTION (HTM_Type_STRING,"F",
-                  (Print->Qsts[QstInd].Answer.Str[0] == 'F') ? HTM_SELECTED :
-                								   HTM_NO_ATTR,
+                  Print->Qsts[QstInd].Answer.Str[0] == 'F'  ? HTM_SELECTED :
+                					      HTM_NO_ATTR,
                   Txt_TF_QST[1]);
    HTM_Txt ("</select>");
   }

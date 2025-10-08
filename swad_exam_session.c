@@ -862,8 +862,8 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 
 	 if (ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session.SesCod) == Usr_CAN)
 	   {
-	    BgColor = (Session.SesCod == Exams->SesCod.Sel) ? "BG_HIGHLIGHT" :
-							      The_GetColorRows ();
+	    BgColor = Session.SesCod == Exams->SesCod.Sel ? "BG_HIGHLIGHT" :
+							    The_GetColorRows ();
 
 	    /***** Build anchor string *****/
 	    if (asprintf (&Anchor,"evt_%ld_%ld",Exams->Exam.ExaCod,Session.SesCod) < 0)
@@ -886,8 +886,8 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	       if (ICanEditSessions == Usr_CAN)
 	         {
 		  NumPrints = Exa_DB_GetNumPrintsInSes (Session.SesCod);
-		  ICanChangeModality = (NumPrints == 0) ? Usr_CAN : // Only if there are no exam prints yet
-							  Usr_CAN_NOT;
+		  ICanChangeModality = NumPrints == 0 ? Usr_CAN : // Only if there are no exam prints yet
+							Usr_CAN_NOT;
 	          ExaSes_ListOneOrMoreSessionsPrints (&Session,NumPrints,BgColor);
 	         }
 
@@ -998,8 +998,8 @@ static Usr_Can_t ExaSes_CheckIfICanEditThisSession (long UsrCod)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_CAN :	// Only if I am the creator
-						        Usr_CAN_NOT;
+	 return UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod ? Usr_CAN :	// Only if I am the creator
+						      Usr_CAN_NOT;
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 return Usr_CAN;
@@ -1496,8 +1496,8 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
       Session->NumCols = ExaSes_NUM_COLS_DEFAULT;
 
    /* Get whether to display users' photos */
-   Session->ShowPhotos = (row[11][0] == 'Y') ? Pho_PHOTOS_SHOW :
-					       Pho_PHOTOS_DONT_SHOW;
+   Session->ShowPhotos = row[11][0] == 'Y' ? Pho_PHOTOS_SHOW :
+					     Pho_PHOTOS_DONT_SHOW;
   }
 
 /*****************************************************************************/
@@ -1681,8 +1681,8 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session,
       [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
       [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
      };
-   OldNew_OldNew_t OldNewSession = (Session->SesCod > 0) ? OldNew_OLD :
-							   OldNew_NEW;
+   OldNew_OldNew_t OldNewSession = Session->SesCod > 0 ? OldNew_OLD :
+							 OldNew_NEW;
 
    /***** Begin section for exam session *****/
    HTM_SECTION_Begin (ExaSes_NEW_SESSION_SECTION_ID);
@@ -1866,8 +1866,8 @@ static void ExaSes_PutSessionNumCols (const struct ExaSes_Session *Session)
 
 	    /* Checkbox with icon */
 	    HTM_INPUT_RADIO ("NumCols",
-			     (NumCols == Session->NumCols) ? HTM_CHECKED :
-							     HTM_NO_ATTR,
+			     NumCols == Session->NumCols ? HTM_CHECKED :
+							   HTM_NO_ATTR,
 			     "value=\"%u\"",NumCols);
 	    Ico_PutIconOn (ExaSes_NumColsIcon[NumCols],Ico_BLACK,Title);
 	    HTM_Unsigned (NumCols);
@@ -1955,8 +1955,8 @@ void ExaSes_ReceiveSession (void)
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
    Grp_GetParMyAllGrps ();
    Session.SesCod = ParCod_GetPar (ParCod_Ses);
-   OldNewSession = (Session.SesCod > 0) ? OldNew_OLD :
-					  OldNew_NEW;
+   OldNewSession = Session.SesCod > 0 ? OldNew_OLD :
+					OldNew_NEW;
 
    /***** Get exam data from database *****/
    Exa_GetExamDataByCod (&Exams.Exam);
@@ -1971,8 +1971,8 @@ void ExaSes_ReceiveSession (void)
 	 ExaSes_GetSessionDataByCod (&Session);
 	 if (Session.ExaCod != Exams.Exam.ExaCod)
 	    Err_WrongExamSessionExit ();
-	 ICanChangeModality = (Exa_DB_GetNumPrintsInSes (Session.SesCod) == 0) ? Usr_CAN :	// Only if there are no exam prints yet
-										 Usr_CAN_NOT;
+	 ICanChangeModality = Exa_DB_GetNumPrintsInSes (Session.SesCod) == 0 ? Usr_CAN :	// Only if there are no exam prints yet
+									       Usr_CAN_NOT;
 	 break;
       case OldNew_NEW:
       default:

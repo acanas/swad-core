@@ -125,8 +125,8 @@ void ID_GetListIDsFromUsrCod (struct Usr_Data *UsrDat)
                       sizeof (UsrDat->IDs.List[NumID].ID) - 1);
 
             /* Get if ID is confirmed from row[1] */
-            UsrDat->IDs.List[NumID].Confirmed = (row[1][0] == 'Y') ? ID_CONFIRMED :
-        							     ID_NOT_CONFIRMED;
+            UsrDat->IDs.List[NumID].Confirmed = row[1][0] == 'Y' ? ID_CONFIRMED :
+        							   ID_NOT_CONFIRMED;
 	   }
         }
 
@@ -226,9 +226,9 @@ unsigned ID_GetListUsrCodsFromUsrID (struct Usr_Data *UsrDat,
 void ID_PutParOtherUsrIDPlain (void)
   {
    Par_PutParString (NULL,"OtherUsrID",
-	             (Gbl.Usrs.Other.UsrDat.IDs.Num &&
-	             Gbl.Usrs.Other.UsrDat.IDs.List) ? Gbl.Usrs.Other.UsrDat.IDs.List[0].ID :
-	                                               "");
+	             Gbl.Usrs.Other.UsrDat.IDs.Num &&
+	             Gbl.Usrs.Other.UsrDat.IDs.List ? Gbl.Usrs.Other.UsrDat.IDs.List[0].ID :
+	                                              "");
   }
 
 /*****************************************************************************/
@@ -306,8 +306,8 @@ static Err_SuccessOrError_t ID_CheckIfUsrIDIsValidUsingMinDigits (const char *Us
                  (*Ptr >= 'a' && *Ptr <= 'z')))	// If character is not alpha
          return Err_ERROR;				// 2. All characters must be digits or letters
 
-   return (NumDigits >= MinDigits) ? Err_SUCCESS :	// 3. Must have MinDigits digits at least
-				     Err_ERROR;
+   return NumDigits >= MinDigits ? Err_SUCCESS :	// 3. Must have MinDigits digits at least
+				   Err_ERROR;
   }
 
 /*****************************************************************************/
@@ -318,11 +318,11 @@ void ID_WriteUsrIDs (const struct Usr_Data *UsrDat,const char *Anchor)
   {
    unsigned NumID;
    Usr_Can_t ICanSeeUsrID = ID_ICanSeeOtherUsrIDs (UsrDat);
-   Usr_Can_t ICanConfirmUsrID = (ICanSeeUsrID == Usr_CAN &&
-				  Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER &&			// Not me
-				  Frm_CheckIfInside () == Frm_OUTSIDE_FORM &&			// Not inside another form
-				  Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST) ? Usr_CAN :	// Only in main browser tab
-										   Usr_CAN_NOT;
+   Usr_Can_t ICanConfirmUsrID = ICanSeeUsrID == Usr_CAN &&
+				Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER &&			// Not me
+				Frm_CheckIfInside () == Frm_OUTSIDE_FORM &&			// Not inside another form
+				Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST ? Usr_CAN :	// Only in main browser tab
+										Usr_CAN_NOT;
 
    for (NumID = 0;
 	NumID < UsrDat->IDs.Num;

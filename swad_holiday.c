@@ -536,8 +536,8 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 					  "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
 					  The_GetSuffix ());
 			   HTM_OPTION (HTM_Type_STRING,"-1",
-				       (Hld->PlcCod <= 0) ? HTM_SELECTED :
-							    HTM_NO_ATTR,
+				       Hld->PlcCod <= 0 ? HTM_SELECTED :
+							  HTM_NO_ATTR,
 				       "%s",Txt_All_places);
 			   for (NumPlc = 0;
 				NumPlc < Places->Num;
@@ -545,8 +545,8 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 			     {
 			      Plc = &Places->Lst[NumPlc];
 			      HTM_OPTION (HTM_Type_LONG,&Plc->PlcCod,
-					  (Plc->PlcCod == Hld->PlcCod) ? HTM_SELECTED :
-								         HTM_NO_ATTR,
+					  Plc->PlcCod == Hld->PlcCod ? HTM_SELECTED :
+								       HTM_NO_ATTR,
 					  "%s",Plc->ShrtName);
 			     }
 			HTM_SELECT_End ();
@@ -567,8 +567,8 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 			     {
 			      HolidayTypeUnsigned = (unsigned) HolidayType;
 			      HTM_OPTION (HTM_Type_UNSIGNED,&HolidayTypeUnsigned,
-					  (HolidayType == Hld->HldTyp) ? HTM_SELECTED :
-								         HTM_NO_ATTR,
+					  HolidayType == Hld->HldTyp ? HTM_SELECTED :
+								       HTM_NO_ATTR,
 					  "%s",Txt_HOLIDAY_TYPES[HolidayType]);
 			     }
 			HTM_SELECT_End ();
@@ -595,8 +595,8 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 					   CurrentYear + 1,
 					   "End",
 					   &(Holidays->Lst[NumHld].EndDate),
-					   ((Hld->HldTyp == Hld_HOLIDAY) ? HTM_DISABLED :
-									   HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE);
+					   (Hld->HldTyp == Hld_HOLIDAY ? HTM_DISABLED :
+									 HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE);
 		     Frm_EndForm ();
 		  HTM_TD_End ();
 
@@ -907,8 +907,8 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 			      "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
 			      The_GetSuffix ());
 	       HTM_OPTION (HTM_Type_STRING,"-1",
-			   (Hld_EditingHld->PlcCod <= 0) ? HTM_SELECTED :
-							   HTM_NO_ATTR,
+			   Hld_EditingHld->PlcCod <= 0 ? HTM_SELECTED :
+							 HTM_NO_ATTR,
 			   "%s",Txt_All_places);
 	       for (NumPlc = 0;
 		    NumPlc < Places->Num;
@@ -916,8 +916,8 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 		 {
 		  Plc = &Places->Lst[NumPlc];
 		  HTM_OPTION (HTM_Type_LONG,&Plc->PlcCod,
-			      (Plc->PlcCod == Hld_EditingHld->PlcCod) ? HTM_SELECTED :
-								        HTM_NO_ATTR,
+			      Plc->PlcCod == Hld_EditingHld->PlcCod ? HTM_SELECTED :
+								      HTM_NO_ATTR,
 			      "%s",Plc->ShrtName);
 		 }
 	    HTM_SELECT_End ();
@@ -935,8 +935,8 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 		 {
 		  HolidayTypeUnsigned = (unsigned) HolidayType;
 		  HTM_OPTION (HTM_Type_UNSIGNED,&HolidayTypeUnsigned,
-			      (HolidayType == Hld_EditingHld->HldTyp) ? HTM_SELECTED :
-								        HTM_NO_ATTR,
+			      HolidayType == Hld_EditingHld->HldTyp ? HTM_SELECTED :
+								      HTM_NO_ATTR,
 			      "%s",Txt_HOLIDAY_TYPES[HolidayType]);
 		 }
 	    HTM_SELECT_End ();

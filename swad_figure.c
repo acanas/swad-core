@@ -141,8 +141,8 @@ static Hie_Level_t Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 		       {
 			FigureTypeUnsigned = (unsigned) FigType;
 			HTM_OPTION (HTM_Type_UNSIGNED,&FigureTypeUnsigned,
-				    (FigType == SelectedFigureType) ? HTM_SELECTED :
-								      HTM_NO_ATTR,
+				    FigType == SelectedFigureType ? HTM_SELECTED :
+								    HTM_NO_ATTR,
 				    "%s",Txt_FIGURE_TYPES[FigType]);
 		       }
 		  HTM_SELECT_End ();

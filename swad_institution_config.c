@@ -108,16 +108,16 @@ static void InsCfg_Configuration (Vie_ViewType_t ViewType)
       return;
 
    /***** Initializations *****/
-   PutLink     = (ViewType == Vie_VIEW &&
-		  Gbl.Hierarchy.Node[Hie_INS].WWW[0]) ? Hie_PUT_LINK :
-							Hie_DONT_PUT_LINK;
+   PutLink     = ViewType == Vie_VIEW &&
+		 Gbl.Hierarchy.Node[Hie_INS].WWW[0] ? Hie_PUT_LINK :
+						      Hie_DONT_PUT_LINK;
    PutFormCty  =
-   PutFormName = (ViewType == Vie_VIEW &&
-		  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Frm_PUT_FORM :
-							    Frm_DONT_PUT_FORM;
-   PutFormWWW  = (ViewType == Vie_VIEW &&
-		  Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ? Frm_PUT_FORM :
-							    Frm_DONT_PUT_FORM;
+   PutFormName = ViewType == Vie_VIEW &&
+		 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Frm_PUT_FORM :
+							  Frm_DONT_PUT_FORM;
+   PutFormWWW  = ViewType == Vie_VIEW &&
+		 Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ? Frm_PUT_FORM :
+							  Frm_DONT_PUT_FORM;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,
@@ -351,8 +351,8 @@ static void InsCfg_Country (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 		       {
 			Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
 			HTM_OPTION (HTM_Type_LONG,&Cty->HieCod,
-				    (Cty->HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod) ? HTM_SELECTED :
-											  HTM_NO_ATTR,
+				    Cty->HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod ? HTM_SELECTED :
+											HTM_NO_ATTR,
 				    "%s",Cty->FullName);
 		       }
 		  HTM_SELECT_End ();

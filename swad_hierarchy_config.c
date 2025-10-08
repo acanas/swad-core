@@ -51,8 +51,8 @@ extern struct Globals Gbl;
 
 void HieCfg_Title (Hie_PutLink_t PutLink,Hie_Level_t HieLvl)
   {
-   Hie_Level_t HieLvlLogo = (HieLvl == Hie_CRS) ? Hie_DEG :
-						  HieLvl;
+   Hie_Level_t HieLvlLogo = HieLvl == Hie_CRS ? Hie_DEG :
+						HieLvl;
 
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG FRAME_TITLE_%s\"",

@@ -536,7 +536,7 @@ void RubCri_ListCriteriaForEdition (struct Rub_Rubrics *Rubrics)
    unsigned MaxCriInd;
    unsigned NumCriteria;
    Usr_Can_t ICanEditCriteria = Rub_CheckIfEditable () ? Usr_CAN :
-							  Usr_CAN_NOT;
+							 Usr_CAN_NOT;
 
    /***** Get maximum criterion index *****/
    MaxCriInd = Rub_DB_GetMaxCriterionIndexInRubric (Rubrics->Rubric.RubCod);
@@ -1067,8 +1067,8 @@ static Err_SuccessOrError_t RubCri_ComputeRubricScore (Rsc_Type_t RscType,long R
    *RubricScore = 0.0;
 
    /***** Check that rubric is not yet in the stack *****/
-   RecursiveTree = (Rub_FindRubCodInStack (*TOS,RubCod) == Exi_EXISTS) ? Err_ERROR :
-									 Err_SUCCESS;
+   RecursiveTree = Rub_FindRubCodInStack (*TOS,RubCod) == Exi_EXISTS ? Err_ERROR :
+								       Err_SUCCESS;
 
    if (RecursiveTree == Err_SUCCESS)
      {

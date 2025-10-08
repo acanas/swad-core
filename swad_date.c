@@ -313,8 +313,8 @@ void Dat_PutBoxToSelectDateFormat (void)
 		                The_GetSuffix ());
 	       HTM_LABEL_Begin (NULL);
 		  HTM_INPUT_RADIO ("DateFormat",
-				   ((Format == Gbl.Prefs.DateFormat) ? HTM_CHECKED :
-								       HTM_NO_ATTR) | HTM_SUBMIT_ON_CLICK,
+				   (Format == Gbl.Prefs.DateFormat ? HTM_CHECKED :
+								     HTM_NO_ATTR) | HTM_SUBMIT_ON_CLICK,
 				   " value=\"%u\"",(unsigned) Format);
 		  Dat_PutSpanDateFormat (Format);
 		  Dat_PutScriptDateFormat (Format);
@@ -991,8 +991,8 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	   Year <= LastYear;
 	   Year++)
 	 HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-		     (Year == DateSelected->Year) ? HTM_SELECTED :
-						    HTM_NO_ATTR,
+		     Year == DateSelected->Year ? HTM_SELECTED :
+						  HTM_NO_ATTR,
 		     "%u",Year);
    HTM_SELECT_End ();
 
@@ -1000,15 +1000,13 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    HTM_SELECT_Begin (Attributes,FuncOnChange,
 		     "id=\"%sMonth\" name=\"%sMonth\" class=\"INPUT_%s\"",
 		     Id,Id,The_GetSuffix ());
-      HTM_OPTION (HTM_Type_STRING,"0",
-		  HTM_NO_ATTR,
-		  "-");
+      HTM_OPTION (HTM_Type_STRING,"0",HTM_NO_ATTR,"-");
       for (Month  =  1;
 	   Month <= 12;
 	   Month++)
 	 HTM_OPTION (HTM_Type_UNSIGNED,&Month,
-		     (Month == DateSelected->Month) ? HTM_SELECTED :
-						      HTM_NO_ATTR,
+		     Month == DateSelected->Month ? HTM_SELECTED :
+						    HTM_NO_ATTR,
 		     "%s",Txt_MONTHS_SMALL[Month - 1]);
    HTM_SELECT_End ();
 
@@ -1021,15 +1019,15 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	 HTM_OPTION (HTM_Type_STRING,"0",
 		     HTM_NO_ATTR,
 		     "-");
-	 NumDaysSelectedMonth = (DateSelected->Month == 0) ? 31 :
-							     ((DateSelected->Month == 2) ? Dat_GetNumDaysFebruary (DateSelected->Year) :
-											   Dat_NumDaysMonth[DateSelected->Month]);
+	 NumDaysSelectedMonth = DateSelected->Month == 0 ? 31 :
+							   (DateSelected->Month == 2 ? Dat_GetNumDaysFebruary (DateSelected->Year) :
+										       Dat_NumDaysMonth[DateSelected->Month]);
 	 for (Day  = 1;
 	      Day <= NumDaysSelectedMonth;
 	      Day++)
 	    HTM_OPTION (HTM_Type_UNSIGNED,&Day,
-			(Day == DateSelected->Day) ? HTM_SELECTED :
-						     HTM_NO_ATTR,
+			Day == DateSelected->Day ? HTM_SELECTED :
+						   HTM_NO_ATTR,
 			"%u",Day);
    HTM_SELECT_End ();
   }
@@ -1186,8 +1184,8 @@ void Dat_WriteRFC822DateFromTM (FILE *File,struct tm *tm_ptr)
 
 void Dat_GetDateAfter (struct Dat_Date *Date,struct Dat_Date *SubsequentDate)
   {
-   unsigned NumDaysInMonth = (Date->Month == 2) ? Dat_GetNumDaysFebruary (Date->Year) :
-	                                          Dat_NumDaysMonth[Date->Month];
+   unsigned NumDaysInMonth = Date->Month == 2 ? Dat_GetNumDaysFebruary (Date->Year) :
+	                                        Dat_NumDaysMonth[Date->Month];
 
    if (Date->Day == NumDaysInMonth)
      {
@@ -1230,8 +1228,8 @@ void Dat_GetDateBefore (struct Dat_Date *Date,struct Dat_Date *PrecedingDate)
         {
          PrecedingDate->Year  = Date->Year;
          PrecedingDate->Month = Date->Month - 1;
-         PrecedingDate->Day   = (PrecedingDate->Month == 2) ? Dat_GetNumDaysFebruary (PrecedingDate->Year) :
-                                                              Dat_NumDaysMonth[PrecedingDate->Month];
+         PrecedingDate->Day   = PrecedingDate->Month == 2 ? Dat_GetNumDaysFebruary (PrecedingDate->Year) :
+                                                            Dat_NumDaysMonth[PrecedingDate->Month];
         }
      }
    else
@@ -1311,8 +1309,8 @@ unsigned Dat_GetNumDaysBetweenDates (struct Dat_Date *DateStr,
 	Year < DateEnd->Year;
 	Year++)
       DiffDays += (int) Dat_GetNumDaysInYear (Year);
-   return (DiffDays > 0) ? (unsigned) DiffDays :
-	                   0;
+   return DiffDays > 0 ? (unsigned) DiffDays :
+	                 0;
   }
 
 /*****************************************************************************/
@@ -1338,8 +1336,8 @@ unsigned Dat_GetNumWeeksBetweenDates (struct Dat_Date *DateStr,
 	Year < DateEnd->Year;
 	Year++)
       DiffWeeks += (int) Dat_GetNumWeeksInYear (Year);
-   return (DiffWeeks > 0) ? (unsigned) DiffWeeks :
-	                    0;
+   return DiffWeeks > 0 ? (unsigned) DiffWeeks :
+	                  0;
   }
 
 /*****************************************************************************/
@@ -1355,8 +1353,8 @@ unsigned Dat_GetNumMonthsBetweenDates (struct Dat_Date *DateStr,
    /***** Compute the difference in months *****/
    DiffMonths = ((int) DateEnd->Year  - (int) DateStr->Year) * 12 +
 	         (int) DateEnd->Month - (int) DateStr->Month + 1;
-   return (DiffMonths > 0) ? (unsigned) DiffMonths :
-	                     0;
+   return DiffMonths > 0 ? (unsigned) DiffMonths :
+	                   0;
   }
 
 /*****************************************************************************/
@@ -1371,8 +1369,8 @@ unsigned Dat_GetNumYearsBetweenDates (struct Dat_Date *DateStr,
 
    /***** Compute the difference in years *****/
    DiffYears = (int) DateEnd->Year - (int) DateStr->Year + 1;
-   return (DiffYears > 0) ? (unsigned) DiffYears :
-	                    0;
+   return DiffYears > 0 ? (unsigned) DiffYears :
+	                  0;
   }
 
 /*****************************************************************************/
@@ -1392,8 +1390,8 @@ unsigned Dat_GetNumDaysInYear (unsigned Year)
 
 unsigned Dat_GetNumDaysFebruary (unsigned Year)
   {
-   return (Dat_GetIfLeapYear (Year) ? 29 :
-	                              28);
+   return Dat_GetIfLeapYear (Year) ? 29 :
+	                             28;
   }
 
 /*****************************************************************************/
@@ -1602,8 +1600,8 @@ unsigned Dat_GetDayOfYear (struct Dat_Date *Date)
    for (Month = 1, DayYear = 0;
 	Month < Date->Month;
 	Month++)
-      DayYear += (Month == 2) ? Dat_GetNumDaysFebruary (Date->Year) :
-	                        Dat_NumDaysMonth[Month];
+      DayYear += Month == 2 ? Dat_GetNumDaysFebruary (Date->Year) :
+	                      Dat_NumDaysMonth[Month];
    DayYear += Date->Day;
 
    return DayYear;

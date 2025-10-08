@@ -441,8 +441,8 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 
       /* Draw notice */
       Not_DrawANotice (TypeNoticesListing,&Notice,
-		       (Notice.NotCod == HighlightNotCod) ? Lay_HIGHLIGHT :
-							    Lay_NO_HIGHLIGHT);
+		       Notice.NotCod == HighlightNotCod ? Lay_HIGHLIGHT :
+							  Lay_NO_HIGHLIGHT);
      }
 
    switch (TypeNoticesListing)
@@ -495,9 +495,9 @@ static void Not_PutLinkToRSSFile (void)
 
 static Usr_Can_t Not_CheckIfICanEditNotices (void)
   {
-   return (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-	   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
-						     Usr_CAN_NOT;
+   return Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :
+						   Usr_CAN_NOT;
   }
 
 /*****************************************************************************/

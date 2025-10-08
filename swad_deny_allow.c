@@ -44,6 +44,6 @@ const char DenAll_Allow_YN[DenAll_NUM_DENY_ALLOW] =
 
 DenAll_DenyOrAllow_t DenAll_GetAllowFromYN (char Ch)
   {
-   return (Ch == 'Y') ? DenAll_ALLOW :
-			DenAll_DENY;
+   return Ch == 'Y' ? DenAll_ALLOW :
+		      DenAll_DENY;
   }

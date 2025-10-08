@@ -99,18 +99,18 @@ static void DegCfg_Configuration (Vie_ViewType_t ViewType)
       return;
 
    /***** Initializations *****/
-   PutLink     = (ViewType == Vie_VIEW &&
-		  Gbl.Hierarchy.Node[Hie_DEG].WWW[0]) ? Hie_PUT_LINK :
-							Hie_DONT_PUT_LINK;
-   PutFormCtr  = (ViewType == Vie_VIEW &&
-		  Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ? Frm_PUT_FORM :
-							    Frm_DONT_PUT_FORM;
-   PutFormName = (ViewType == Vie_VIEW &&
-		  Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ? Frm_PUT_FORM :
-							    Frm_DONT_PUT_FORM;
-   PutFormWWW  = (ViewType == Vie_VIEW &&
-		  Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM) ? Frm_PUT_FORM :
-							    Frm_DONT_PUT_FORM;
+   PutLink     = ViewType == Vie_VIEW &&
+		 Gbl.Hierarchy.Node[Hie_DEG].WWW[0] ? Hie_PUT_LINK :
+						      Hie_DONT_PUT_LINK;
+   PutFormCtr  = ViewType == Vie_VIEW &&
+		 Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ? Frm_PUT_FORM :
+							  Frm_DONT_PUT_FORM;
+   PutFormName = ViewType == Vie_VIEW &&
+		 Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ? Frm_PUT_FORM :
+							  Frm_DONT_PUT_FORM;
+   PutFormWWW  = ViewType == Vie_VIEW &&
+		 Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ? Frm_PUT_FORM :
+							  Frm_DONT_PUT_FORM;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,
@@ -247,8 +247,8 @@ static void DegCfg_Center (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 		       {
 			Ctr = &Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr];
 			HTM_OPTION (HTM_Type_LONG,&Ctr->HieCod,
-				    (Ctr->HieCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod) ? HTM_SELECTED :
-											  HTM_NO_ATTR,
+				    Ctr->HieCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod ? HTM_SELECTED :
+											HTM_NO_ATTR,
 				    "%s",Ctr->ShrtName);
 		       }
 		  HTM_SELECT_End ();
