@@ -152,16 +152,15 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
                                           struct Tre_Node *Node,
                                           bool HighlightNode);
 
-static DenAll_DenyOrAllow_t Tre_CheckIfMoveUpIsAllowed (unsigned NumNode);
+static DenAll_DenyOrAllow_t Tre_CheckIfMoveUpRightIsAllowed (unsigned NumNode);
 static DenAll_DenyOrAllow_t Tre_CheckIfMoveDownIsAllowed (unsigned NumNode);
 static DenAll_DenyOrAllow_t Tre_CheckIfMoveLeftIsAllowed (unsigned NumNode);
-static DenAll_DenyOrAllow_t Tre_CheckIfMoveRightIsAllowed (unsigned NumNode);
 static DenAll_DenyOrAllow_t (*Tre_CheckIfAllowed[Tre_NUM_MOVEMENTS]) (unsigned NumNode) =
   {
-   [Tre_MOVE_UP   ] = Tre_CheckIfMoveUpIsAllowed,
+   [Tre_MOVE_UP   ] = Tre_CheckIfMoveUpRightIsAllowed,
    [Tre_MOVE_DOWN ] = Tre_CheckIfMoveDownIsAllowed,
    [Tre_MOVE_LEFT ] = Tre_CheckIfMoveLeftIsAllowed,
-   [Tre_MOVE_RIGHT] = Tre_CheckIfMoveRightIsAllowed,
+   [Tre_MOVE_RIGHT] = Tre_CheckIfMoveUpRightIsAllowed,
   };
 
 static void Tre_GetNodeDataByCod (struct Tre_Node *Node);
@@ -354,9 +353,9 @@ void Tre_ShowAllNodes (Tre_ListingType_t ListingType,
 
 Usr_Can_t Tre_CheckIfICanEditTree (void)
   {
-   return (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
-        					     Usr_CAN_NOT;
+   return Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+          Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :
+        					   Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -379,8 +378,7 @@ void Tre_PutIconToEditTree (struct Tre_Node *Node)
       [Inf_ASSESSMENT	] = ActEdiTreAss,
      };
 
-   Ico_PutContextualIconToEdit (Actions[Node->InfoType],NULL,
-				Tre_PutPars,Node);
+   Ico_PutContextualIconToEdit (Actions[Node->InfoType],NULL,Tre_PutPars,Node);
   }
 
 /*****************************************************************************/
@@ -403,8 +401,7 @@ void Tre_PutIconToViewTree (struct Tre_Node *Node)
       [Inf_ASSESSMENT	] = ActSeeAss,
      };
 
-   Ico_PutContextualIconToView (Actions[Node->InfoType],NULL,
-				Tre_PutPars,Node);
+   Ico_PutContextualIconToView (Actions[Node->InfoType],NULL,Tre_PutPars,Node);
   }
 
 /*****************************************************************************/
@@ -469,17 +466,17 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
    bool HighlightNode;
 
    /***** Check if icon expand/contract is necessary *****/
-   ShowIconExpandContract = (Tre_GetIfNodeHasChildren (NumNode) == Exi_EXISTS) ? Sho_SHOW :
-										 Sho_DONT_SHOW;
+   ShowIconExpandContract = Tre_GetIfNodeHasChildren (NumNode) == Exi_EXISTS ? Sho_SHOW :
+									       Sho_DONT_SHOW;
    if (ShowIconExpandContract == Sho_DONT_SHOW)
      {
-      ShowIconExpandContract = (Tre_DB_CheckIfNodeHasTxt (Node) == Exi_EXISTS) ? Sho_SHOW :
-										 Sho_DONT_SHOW;
+      ShowIconExpandContract = Tre_DB_CheckIfNodeHasTxt (Node) == Exi_EXISTS ? Sho_SHOW :
+									       Sho_DONT_SHOW;
       if (ShowIconExpandContract == Sho_DONT_SHOW)
-	 ShowIconExpandContract = (Tre_DB_CheckListItems (Node,
-							  (ViewingOrEditingProgram[ListingType] == Vie_EDIT) ? Sho_SHOW :
-													       Sho_DONT_SHOW) == Exi_EXISTS) ? Sho_SHOW :
-																	       Sho_DONT_SHOW;
+	 ShowIconExpandContract = Tre_DB_CheckListItems (Node,
+							 ViewingOrEditingProgram[ListingType] == Vie_EDIT ? Sho_SHOW :
+													    Sho_DONT_SHOW) == Exi_EXISTS ? Sho_SHOW :
+																	   Sho_DONT_SHOW;
      }
 
    /***** Check if this node should be shown as hidden *****/
@@ -1193,8 +1190,8 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
 	 HTM_BR ();
 
 	 /***** Icons to move up/down/left/right the node *****/
-	 for (Movement = (Tre_Movement_t) 0;
-	      Movement < (Tre_Movement_t) (Tre_NUM_MOVEMENTS - 1);
+	 for (Movement  = (Tre_Movement_t) 0;
+	      Movement <= (Tre_Movement_t) (Tre_NUM_MOVEMENTS - 1);
 	      Movement++)
 	    switch (Tre_CheckIfAllowed[Movement] (NumNode))
 	      {
@@ -1219,16 +1216,16 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
   }
 
 /*****************************************************************************/
-/*********************** Check if node can be moved up ***********************/
+/******************** Check if node can be moved up/right ********************/
 /*****************************************************************************/
 
-static DenAll_DenyOrAllow_t Tre_CheckIfMoveUpIsAllowed (unsigned NumNode)
+static DenAll_DenyOrAllow_t Tre_CheckIfMoveUpRightIsAllowed (unsigned NumNode)
   {
-   /***** Trivial check: if node is the first one, move up is not allowed *****/
+   /***** Trivial check: if node is the first one, move up/right is not allowed *****/
    if (NumNode == 0)
       return DenAll_DENY;
 
-   /***** Move up is allowed if the node has brothers before it *****/
+   /***** Move up/right is allowed if the node has brothers before it *****/
    // NumNode >= 1
    return Tre_GetLevelFromNumNode (NumNode - 1) >=
 	  Tre_GetLevelFromNumNode (NumNode    ) ? DenAll_ALLOW :
@@ -1271,23 +1268,6 @@ static DenAll_DenyOrAllow_t Tre_CheckIfMoveLeftIsAllowed (unsigned NumNode)
   {
    /***** Move left is allowed if the node has parent *****/
    return Tre_GetLevelFromNumNode (NumNode) > 1 ? DenAll_ALLOW :
-						  DenAll_DENY;
-  }
-
-/*****************************************************************************/
-/****************** Check if node can be moved to the right ******************/
-/*****************************************************************************/
-
-static DenAll_DenyOrAllow_t Tre_CheckIfMoveRightIsAllowed (unsigned NumNode)
-  {
-   /***** If node is the first, move right is not allowed *****/
-   if (NumNode == 0)
-      return DenAll_DENY;
-
-   /***** Move right is allowed if the node has brothers before it *****/
-   // NumNode >= 2
-   return Tre_GetLevelFromNumNode (NumNode - 1) >=
-	  Tre_GetLevelFromNumNode (NumNode    ) ? DenAll_ALLOW :
 						  DenAll_DENY;
   }
 

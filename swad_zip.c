@@ -475,10 +475,10 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 	       FileType = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :	// It's a link (URL inside a .url file)
 									 Brw_IS_FILE;	// It's a file
 
-	    HiddenOrVisible = (Brw_TypeIsSeeDoc[Gbl.FileBrowser.Type] ||
-		               Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type]) ? Brw_CheckIfFileOrFolderIsHidden (FileType,
-		                                                         PathFileInTree) :
-					   HidVis_VISIBLE;
+	    HiddenOrVisible = Brw_TypeIsSeeDoc[Gbl.FileBrowser.Type] ||
+		              Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type] ? Brw_CheckIfFileOrFolderIsHidden (FileType,
+		        										PathFileInTree) :
+		        					       HidVis_VISIBLE;
 
 	    if (HiddenOrVisible == HidVis_VISIBLE)	// If file/folder is visible
 	       switch (FileType)

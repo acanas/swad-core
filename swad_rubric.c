@@ -748,8 +748,8 @@ void Rub_ReqCreatOrEditRubric (void)
    /***** Get parameters *****/
    Rub_GetPars (&Rubrics,Rub_DONT_CHECK_RUB_COD);
    Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
-   OldNewRubric = (Rubrics.Rubric.RubCod > 0) ? OldNew_OLD :
-						OldNew_NEW;
+   OldNewRubric = Rubrics.Rubric.RubCod > 0 ? OldNew_OLD :
+					      OldNew_NEW;
 
    /***** Get rubric data from database *****/
    if (OldNewRubric == OldNew_OLD)
@@ -903,8 +903,8 @@ void Rub_ReceiveRubric (void)
    /***** Get parameters *****/
    Rub_GetPars (&Rubrics,Rub_DONT_CHECK_RUB_COD);
    Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
-   OldNewRubric = (Rubrics.Rubric.RubCod > 0) ? OldNew_OLD :
-						OldNew_NEW;
+   OldNewRubric = Rubrics.Rubric.RubCod > 0 ? OldNew_OLD :
+					      OldNew_NEW;
 
    /***** Get all current rubric data from database *****/
    // Some data, not received from form,
@@ -1050,8 +1050,8 @@ static Err_SuccessOrError_t Rub_CheckIfRecursiveTree (long RubCod,struct Rub_Nod
    struct RubCri_Criterion Criterion;
 
    /***** Check that rubric is not yet in the stack *****/
-   RecursiveTree = (Rub_FindRubCodInStack (*TOS,RubCod) == Exi_EXISTS) ? Err_ERROR :
-									 Err_SUCCESS;
+   RecursiveTree = Rub_FindRubCodInStack (*TOS,RubCod) == Exi_EXISTS ? Err_ERROR :
+								       Err_SUCCESS;
 
    if (RecursiveTree == Err_SUCCESS)
      {

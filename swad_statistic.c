@@ -344,8 +344,8 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			   /***** Option a) Graphic of clicks in this course *****/
 			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 			      HTM_INPUT_RADIO ("GroupedOrDetailed",
-					       (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? HTM_NO_ATTR :
-													  HTM_CHECKED,
+					       Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? HTM_NO_ATTR :
+													HTM_CHECKED,
 					       "value=\"%u\""
 					       " onclick=\"disableDetailedClicks();\"",
 					       (unsigned) Sta_CLICKS_GROUPED);
@@ -371,8 +371,8 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 				   {
 				    ClicksGroupedByUnsigned = (unsigned) ClicksGroupedBy;
 				    HTM_OPTION (HTM_Type_UNSIGNED,&ClicksGroupedByUnsigned,
-						(ClicksGroupedBy == Stats->ClicksGroupedBy) ? HTM_SELECTED :
-											      HTM_NO_ATTR,
+						ClicksGroupedBy == Stats->ClicksGroupedBy ? HTM_SELECTED :
+											    HTM_NO_ATTR,
 						"%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
 				   }
 			      HTM_SELECT_End ();
@@ -384,8 +384,8 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			   /***** Option b) Listing of detailed clicks to this course *****/
 			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 			      HTM_INPUT_RADIO ("GroupedOrDetailed",
-					       (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? HTM_CHECKED :
-													  HTM_NO_ATTR,
+					       Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? HTM_CHECKED :
+													HTM_NO_ATTR,
 					       "value=\"%u\" onclick=\"enableDetailedClicks();\"",
 					       (unsigned) Sta_CLICKS_DETAILED);
 			      HTM_Txt (Txt_STAT_CLICKS_GROUPED_BY[Sta_CLICKS_CRS_DETAILED_LIST]);
@@ -399,16 +399,16 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 			      HTM_CloseParenthesis ();
 				 HTM_Txt (Txt_results_per_page); HTM_Colon (); HTM_NBSP ();
-				 HTM_SELECT_Begin ((Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? HTM_NO_ATTR :
-													      HTM_DISABLED,
+				 HTM_SELECT_Begin (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? HTM_NO_ATTR :
+													    HTM_DISABLED,
 						   NULL,
 						   "id=\"RowsPage\" name=\"RowsPage\"");
 				    for (i = 0;
 					 i < NUM_OPTIONS_ROWS_PER_PAGE;
 					 i++)
 				       HTM_OPTION (HTM_Type_UNSIGNED,&RowsPerPage[i],
-						   (RowsPerPage[i] == Stats->RowsPerPage) ? HTM_SELECTED :
-											    HTM_NO_ATTR,
+						   RowsPerPage[i] == Stats->RowsPerPage ? HTM_SELECTED :
+											  HTM_NO_ATTR,
 						   "%u",RowsPerPage[i]);
 				 HTM_SELECT_End ();
 			      HTM_CloseParenthesis ();
@@ -533,8 +533,8 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 		       {
 			ClicksGroupedByUnsigned = (unsigned) ClicksGroupedBy;
 			HTM_OPTION (HTM_Type_UNSIGNED,&ClicksGroupedByUnsigned,
-				    (ClicksGroupedBy == Stats->ClicksGroupedBy) ? HTM_SELECTED :
-										  HTM_NO_ATTR,
+				    ClicksGroupedBy == Stats->ClicksGroupedBy ? HTM_SELECTED :
+										HTM_NO_ATTR,
 				    "%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
 		       }
 		  HTM_SELECT_End ();
@@ -622,8 +622,8 @@ static void Sta_WriteSelectorRoles (const struct Sta_Stats *Stats)
 	      {
 	       RoleStatUnsigned = (unsigned) RoleStat;
 	       HTM_OPTION (HTM_Type_UNSIGNED,&RoleStatUnsigned,
-			   (RoleStat == Stats->Role) ? HTM_SELECTED :
-						       HTM_NO_ATTR,
+			   RoleStat == Stats->Role ? HTM_SELECTED :
+						     HTM_NO_ATTR,
 			   "%s",Txt_ROLE_STATS[RoleStat]);
 	      }
 	 HTM_SELECT_End ();
@@ -656,8 +656,8 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
 			   " class=\"Frm_C2_INPUT INPUT_%s\"",
 			   The_GetSuffix ());
 	    HTM_OPTION (HTM_Type_STRING,"0",
-	                (Stats->NumAction == 0) ? HTM_SELECTED :
-	                			  HTM_NO_ATTR,
+	                Stats->NumAction == 0 ? HTM_SELECTED :
+	                			HTM_NO_ATTR,
 			"%s",Txt_Any_action);
 	    for (Action  = (Act_Action_t) 1;
 		 Action <= (Act_Action_t) (ActLst_NUM_ACTIONS - 1);
@@ -667,14 +667,14 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
 	       Tab = Act_GetTab (Action);
 	       if (Tab == TabUnk)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&ActionUnsigned,
-			      (Action == Stats->NumAction) ? HTM_SELECTED :
-							     HTM_NO_ATTR,
+			      Action == Stats->NumAction ? HTM_SELECTED :
+							   HTM_NO_ATTR,
 			      "%04u: %s",
 			      (unsigned) Action,Act_GetActionText (Action));
 	       else
 		  HTM_OPTION (HTM_Type_UNSIGNED,&ActionUnsigned,
-			      (Action == Stats->NumAction) ? HTM_SELECTED :
-							     HTM_NO_ATTR,
+			      Action == Stats->NumAction ? HTM_SELECTED :
+							   HTM_NO_ATTR,
 			      "%04u: %s &gt; %s &gt; %s",
 			      (unsigned) Action,Tab_GetTxt (Tab),
 			      Act_GetTitleAction (Action),
@@ -737,8 +737,8 @@ static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats)
 	{
 	 StatCountTypeUnsigned = (unsigned) StatCountType;
 	 HTM_OPTION (HTM_Type_UNSIGNED,&StatCountTypeUnsigned,
-		     (StatCountType == Stats->CountType) ? HTM_SELECTED :
-							   HTM_NO_ATTR,
+		     StatCountType == Stats->CountType ? HTM_SELECTED :
+							 HTM_NO_ATTR,
 		     "%s",Txt_STAT_TYPE_COUNT_SMALL[StatCountType]);
 	}
    HTM_SELECT_End ();
@@ -799,10 +799,10 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    /***** Set table where to find depending on initial date *****/
    /* If initial day is older than current day minus Cfg_DAYS_IN_RECENT_LOG,
       then use recent log table, else use historic log table */
-   LogTable = (Dat_GetNumDaysBetweenDates (Dat_GetRangeDate (Dat_STR_TIME),
+   LogTable = Dat_GetNumDaysBetweenDates (Dat_GetRangeDate (Dat_STR_TIME),
                                            Dat_GetCurrentDate ())
-	       <= Cfg_DAYS_IN_RECENT_LOG) ? "log_recent" :
-	                                    "log";
+	      <= Cfg_DAYS_IN_RECENT_LOG ? "log_recent" :
+	                                  "log";
 
    /***** Get the type of stat of clicks ******/
    DetailedOrGrouped = (Sta_ClicksDetailedOrGrouped_t)
@@ -926,19 +926,19 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    /***** Check if range of dates is forbidden for me *****/
    NumDays = Dat_GetNumDaysBetweenDates (Dat_GetRangeDate (Dat_STR_TIME),
                                          Dat_GetRangeDate (Dat_END_TIME));
-   ICanQueryWholeRange = ((Gbl.Usrs.Me.Role.Logged >= Rol_TCH && Stats.GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES) ||
-			  (Gbl.Usrs.Me.Role.Logged == Rol_TCH     &&  HieLvl == Hie_CRS)  ||
-			  (Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM && (HieLvl == Hie_DEG   ||
-			                                              HieLvl == Hie_CRS)) ||
-			  (Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM && (HieLvl == Hie_CTR   ||
-			                                              HieLvl == Hie_DEG   ||
-			                                              HieLvl == Hie_CRS)) ||
-			  (Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM && (HieLvl == Hie_INS   ||
-			                                              HieLvl == Hie_CTR   ||
-			                                              HieLvl == Hie_DEG   ||
-			                                              HieLvl == Hie_CRS)) ||
-			   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
-								     Usr_CAN_NOT;
+   ICanQueryWholeRange = (Gbl.Usrs.Me.Role.Logged >= Rol_TCH && Stats.GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES) ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_TCH     &&  HieLvl == Hie_CRS)  ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM && (HieLvl == Hie_DEG   ||
+			                                             HieLvl == Hie_CRS)) ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM && (HieLvl == Hie_CTR   ||
+			                                             HieLvl == Hie_DEG   ||
+			                                             HieLvl == Hie_CRS)) ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM && (HieLvl == Hie_INS   ||
+			                                             HieLvl == Hie_CTR   ||
+			                                             HieLvl == Hie_DEG   ||
+			                                             HieLvl == Hie_CRS)) ||
+			  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :
+								   Usr_CAN_NOT;
    if (ICanQueryWholeRange == Usr_CAN_NOT &&
        NumDays > Cfg_DAYS_IN_RECENT_LOG)
      {
@@ -1664,8 +1664,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 		    {
 		     ColorTypeUnsigned = (unsigned) ColorType;
 		     HTM_OPTION (HTM_Type_UNSIGNED,&ColorTypeUnsigned,
-				 (ColorType == SelectedColorType) ? HTM_SELECTED :
-	                					    HTM_NO_ATTR,
+				 ColorType == SelectedColorType ? HTM_SELECTED :
+	                					  HTM_NO_ATTR,
 				 "%s",Txt_STAT_COLOR_TYPES[ColorType]);
 		    }
 	       HTM_SELECT_End ();
@@ -2400,8 +2400,8 @@ static void Sta_ShowNumHitsPerHour (unsigned NumHits,
 
       /***** Compute width of columns (one for each hour) *****/
       /* Maximum number of dígits. If less than 4, set it to 4 to ensure a minimum width */
-      NumDigits = (Hits.Max >= 1000) ? (unsigned) floor (log10 ((double) Hits.Max)) + 1 :
-	                               4;
+      NumDigits = Hits.Max >= 1000 ? (unsigned) floor (log10 ((double) Hits.Max)) + 1 :
+	                             4;
       ColumnWidth = NumDigits * DIGIT_WIDTH + 2;
 
       /***** Draw the graphic *****/

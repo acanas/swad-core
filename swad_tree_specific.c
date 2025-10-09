@@ -305,9 +305,9 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
 	}
 
       /***** Begin box *****/
-      ViewingOrEditingListItemsOfThisNode = (ViewingOrEditingItem[ListingType] == Vie_EDIT &&
-				            Node->Hierarchy.NodCod == SelectedNodCod) ? Vie_EDIT :
-										        Vie_VIEW;
+      ViewingOrEditingListItemsOfThisNode = ViewingOrEditingItem[ListingType] == Vie_EDIT &&
+				            Node->Hierarchy.NodCod == SelectedNodCod ? Vie_EDIT :
+										       Vie_VIEW;
       switch (ViewingOrEditing[ListingType])
         {
          case Vie_VIEW:
@@ -342,9 +342,9 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
 		     break;
 		  case Vie_EDIT:
 		     TreSpc_WriteRowEditItem (Node,NumItem,NumItems,
-					      (ListingType == Tre_EDIT_SPC_ITEM &&
-					       Node->Item.Cod == SelectedItmCod) ? Vie_EDIT :
-										      Vie_VIEW,
+					      ListingType == Tre_EDIT_SPC_ITEM &&
+					      Node->Item.Cod == SelectedItmCod ? Vie_EDIT :
+										 Vie_VIEW,
 					      HiddenOrVisible);
 		     break;
 		  default:

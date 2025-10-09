@@ -324,9 +324,9 @@ void Tmt_ShowCrsTimeTable (void)
       [Tmt_TUTORING_TIMETABLE] = ActUnk,
      };
    struct Tmt_Timetable Timetable;
-   Vie_ViewType_t ViewType = (Gbl.Action.Act == ActPrnCrsTT ||
-	                      Gbl.Action.Act == ActPrnMyTT) ? Vie_PRINT :
-	                				      Vie_VIEW;
+   Vie_ViewType_t ViewType = Gbl.Action.Act == ActPrnCrsTT ||
+	                     Gbl.Action.Act == ActPrnMyTT ? Vie_PRINT :
+	                				    Vie_VIEW;
    Grp_MyAllGrps_t MyAllGrps;
    Sho_Show_t ShowContextualIcons;
 
@@ -362,11 +362,11 @@ void Tmt_ShowCrsTimeTable (void)
    Grp_GetParMyAllGrps ();
 
    /***** Begin box *****/
-   ShowContextualIcons = (Timetable.ContextualIcons.PutIconEditCrsTT ||
-			  Timetable.ContextualIcons.PutIconEditOfficeHours ||
-			  Timetable.ContextualIcons.PutIconGetLink ||
-			  Timetable.ContextualIcons.PutIconPrint) ? Sho_SHOW :
-								    Sho_DONT_SHOW;
+   ShowContextualIcons = Timetable.ContextualIcons.PutIconEditCrsTT ||
+			 Timetable.ContextualIcons.PutIconEditOfficeHours ||
+			 Timetable.ContextualIcons.PutIconGetLink ||
+			 Timetable.ContextualIcons.PutIconPrint ? Sho_SHOW :
+								  Sho_DONT_SHOW;
    Box_BoxBegin (Txt_TIMETABLE_TYPES[Timetable.Type],
 		 ShowContextualIcons == Sho_SHOW ? Tmt_PutContextualIcons :
 						   NULL,
@@ -1547,8 +1547,8 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 		((Timetable->Type == Tmt_COURSE_TIMETABLE  ) && (CT == Tmt_LECTURE || CT == Tmt_PRACTICAL)) ||
 		((Timetable->Type == Tmt_TUTORING_TIMETABLE) && (CT == Tmt_TUTORING)))
 	       HTM_OPTION (HTM_Type_STRING,Tmt_DB_ClassType[CT],
-			   (CT == ClassType) ? HTM_SELECTED :
-	                		       HTM_NO_ATTR,
+			   CT == ClassType ? HTM_SELECTED :
+	                		     HTM_NO_ATTR,
 			   "%s",Txt_TIMETABLE_CLASS_TYPES[CT]);
       HTM_SELECT_End ();
 
@@ -1560,8 +1560,8 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 	   if (Tmt_TimeTable[WhichCell->Weekday][i].NumColumns == Tmt_MAX_COLUMNS_PER_CELL)
 	       break;
 	 MaxDuration = i - WhichCell->Interval;
-	 Dur = (MaxDuration >= Timetable->Config.IntervalsPerHour) ? Timetable->Config.IntervalsPerHour :	// MaxDuration >= 1h ==> Dur = 1h
-								     MaxDuration;				// MaxDuration  < 1h ==> Dur = MaxDuration
+	 Dur = MaxDuration >= Timetable->Config.IntervalsPerHour ? Timetable->Config.IntervalsPerHour :	// MaxDuration >= 1h ==> Dur = 1h
+								   MaxDuration;				// MaxDuration  < 1h ==> Dur = MaxDuration
 	 if (asprintf (&TTDur,"%u:%02u",
 		       (Dur / Timetable->Config.IntervalsPerHour),	// Hours
 		       (Dur % Timetable->Config.IntervalsPerHour) *
@@ -1595,8 +1595,8 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 			     Timetable->Config.Range.MinutesPerInterval) < 0)	// Minutes
 		  Err_NotEnoughMemoryExit ();
 	       HTM_OPTION (HTM_Type_STRING,TTDur,
-			   (Dur == DurationNumIntervals) ? HTM_SELECTED :
-	                				   HTM_NO_ATTR,
+			   Dur == DurationNumIntervals ? HTM_SELECTED :
+	                				 HTM_NO_ATTR,
 			   "%s",TTDur);
 	       free (TTDur);
 	      }
@@ -1621,8 +1621,8 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 			      " class=\"Tmt_GRP INPUT_%s\"",
 			      CellStr,Par_CodeStr[ParCod_Grp],The_GetSuffix ());
 	       HTM_OPTION (HTM_Type_STRING,"-1",
-	                   (GrpCod <= 0) ? HTM_SELECTED :
-	                		   HTM_NO_ATTR,
+	                   GrpCod <= 0 ? HTM_SELECTED :
+	                		 HTM_NO_ATTR,
 			   "%s",Txt_All_groups);
 	       for (NumGrpTyp = 0;
 		    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
@@ -1646,8 +1646,8 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 			   Err_NotEnoughMemoryExit ();
 		       }
 		     HTM_OPTION (HTM_Type_LONG,&Grp->GrpCod,
-				 (GrpCod == Grp->GrpCod) ? HTM_SELECTED :
-	                				   HTM_NO_ATTR,
+				 GrpCod == Grp->GrpCod ? HTM_SELECTED :
+	                				 HTM_NO_ATTR,
 				 "%s %s%s",
 				 GrpTyp->Name,Grp->Name,Room);
 		     free (Room);

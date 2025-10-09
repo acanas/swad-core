@@ -505,9 +505,9 @@ void Usr_FreeListUsrCods (struct Usr_ListUsrCods *ListUsrCods)
 
 Usr_MeOrOther_t Usr_ItsMe (long UsrCod)
   {
-   return (Gbl.Usrs.Me.Logged &&
-	   UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_ME :
-		                                  Usr_OTHER;
+   return Gbl.Usrs.Me.Logged &&
+	  UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod ? Usr_ME :
+		                                Usr_OTHER;
   }
 
 /*****************************************************************************/
@@ -1009,9 +1009,9 @@ Usr_Can_t Usr_CheckIfICanViewRecordTch (struct Usr_Data *UsrDat)
       return Usr_CAN_NOT;
 
    /***** 4. Fast check: Is he/she a non-editing teacher or a teacher? *****/
-   return (UsrDat->Roles.InCurrentCrs == Rol_NET ||
-           UsrDat->Roles.InCurrentCrs == Rol_TCH) ? Usr_CAN :
-						    Usr_CAN_NOT;
+   return UsrDat->Roles.InCurrentCrs == Rol_NET ||
+          UsrDat->Roles.InCurrentCrs == Rol_TCH ? Usr_CAN :
+						  Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -2373,10 +2373,10 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
    char Text[Cns_MAX_BYTES_TEXT + 1];
    struct Hie_Node Ins;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
-   Sho_Show_t ShowData = ((Gbl.Usrs.Me.Role.Logged == Rol_TCH &&
-			   UsrDat->Accepted == Usr_HAS_ACCEPTED) ||
-			   Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM) ? Sho_SHOW :
-								     Sho_DONT_SHOW;
+   Sho_Show_t ShowData = (Gbl.Usrs.Me.Role.Logged == Rol_TCH &&
+			  UsrDat->Accepted == Usr_HAS_ACCEPTED) ||
+			  Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ? Sho_SHOW :
+								   Sho_DONT_SHOW;
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -2487,11 +2487,11 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
    struct Hie_Node Ctr;
    struct Dpt_Department Dpt;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
-   Sho_Show_t ShowData = (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME ||
-			  UsrDat->Accepted == Usr_HAS_ACCEPTED ||
-			  Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM ||
-			  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Sho_SHOW :
-								    Sho_DONT_SHOW;
+   Sho_Show_t ShowData = Usr_ItsMe (UsrDat->UsrCod) == Usr_ME ||
+			 UsrDat->Accepted == Usr_HAS_ACCEPTED ||
+			 Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM ||
+			 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Sho_SHOW :
+								  Sho_DONT_SHOW;
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -2528,9 +2528,9 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	}
       Usr_WriteUsrData (The_GetColorRows (),
-			(ShowData == Sho_SHOW &&
-			 UsrDat->Tch.CtrCod > 0) ? Ctr.FullName :
-						   NULL,
+			ShowData == Sho_SHOW &&
+			UsrDat->Tch.CtrCod > 0 ? Ctr.FullName :
+						 NULL,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
       if (ShowData == Sho_SHOW && UsrDat->Tch.DptCod > 0)
 	{
@@ -2538,19 +2538,19 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
 	 Dpt_GetDepartmentDataByCod (&Dpt);
 	}
       Usr_WriteUsrData (The_GetColorRows (),
-			(ShowData == Sho_SHOW &&
-			 UsrDat->Tch.DptCod > 0) ? Dpt.FullName :
-						   NULL,
+			ShowData == Sho_SHOW &&
+			UsrDat->Tch.DptCod > 0 ? Dpt.FullName :
+						 NULL,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
       Usr_WriteUsrData (The_GetColorRows (),
-			(ShowData == Sho_SHOW &&
-			 UsrDat->Tch.Office[0]) ? UsrDat->Tch.Office :
-						  NULL,
+			ShowData == Sho_SHOW &&
+			UsrDat->Tch.Office[0] ? UsrDat->Tch.Office :
+						NULL,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
       Usr_WriteUsrData (The_GetColorRows (),
-			(ShowData == Sho_SHOW &&
-			 UsrDat->Tch.OfficePhone[0]) ? UsrDat->Tch.OfficePhone :
-						       NULL,
+			ShowData == Sho_SHOW &&
+			UsrDat->Tch.OfficePhone[0] ? UsrDat->Tch.OfficePhone :
+						     NULL,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
 
    HTM_TR_End ();
@@ -2880,8 +2880,8 @@ void Usr_GetListUsrsFromQuery (char *Query,Hie_Level_t HieLvl,Rol_Role_t Role)
 			// Query result has not a column with the acceptation
 			UsrInList->RoleInCurrentCrsDB = Rol_UNK;
 			if (Enr_DB_GetNumCrssOfUsr (UsrInList->UsrCod))
-			   UsrInList->Accepted = (Enr_DB_GetNumCrssOfUsrNotAccepted (UsrInList->UsrCod) == 0) ? Usr_HAS_ACCEPTED :
-													        Usr_HAS_NOT_ACCEPTED;
+			   UsrInList->Accepted = Enr_DB_GetNumCrssOfUsrNotAccepted (UsrInList->UsrCod) == 0 ? Usr_HAS_ACCEPTED :
+													      Usr_HAS_NOT_ACCEPTED;
 			else
 			   UsrInList->Accepted = Usr_HAS_NOT_ACCEPTED;
 			break;
@@ -2891,14 +2891,14 @@ void Usr_GetListUsrsFromQuery (char *Query,Hie_Level_t HieLvl,Rol_Role_t Role)
 		     case Hie_DEG:	// Degree
 			// Query result has not a column with the acceptation
 			UsrInList->RoleInCurrentCrsDB = Rol_UNK;
-			UsrInList->Accepted = (Enr_DB_GetNumCrssOfUsrNotAccepted (UsrInList->UsrCod) == 0) ? Usr_HAS_ACCEPTED :
-													     Usr_HAS_NOT_ACCEPTED;
+			UsrInList->Accepted = Enr_DB_GetNumCrssOfUsrNotAccepted (UsrInList->UsrCod) == 0 ? Usr_HAS_ACCEPTED :
+													   Usr_HAS_NOT_ACCEPTED;
 			break;
 		     case Hie_CRS:	// Course
 			// Query result has a column with the acceptation
 			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[11]);
-			UsrInList->Accepted = (row[12][0] == 'Y') ? Usr_HAS_ACCEPTED :
-								    Usr_HAS_NOT_ACCEPTED;
+			UsrInList->Accepted = row[12][0] == 'Y' ? Usr_HAS_ACCEPTED :
+								  Usr_HAS_NOT_ACCEPTED;
 			break;
 		    }
         	  break;
@@ -2931,8 +2931,8 @@ void Usr_GetListUsrsFromQuery (char *Query,Hie_Level_t HieLvl,Rol_Role_t Role)
 		     case Hie_CRS:	// Course
 			// Query result has a column with the acceptation
 			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[11]);
-			UsrInList->Accepted = (row[12][0] == 'Y') ? Usr_HAS_ACCEPTED :
-								    Usr_HAS_NOT_ACCEPTED;
+			UsrInList->Accepted = row[12][0] == 'Y' ? Usr_HAS_ACCEPTED :
+								  Usr_HAS_NOT_ACCEPTED;
 			break;
 		    }
         	  break;
@@ -4504,8 +4504,8 @@ void Usr_ListAllDataStds (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* 1. Columns for the data */
-	    for (NumCol = (ShowPhotos == Pho_PHOTOS_SHOW) ? 0 :
-							    1;
+	    for (NumCol = ShowPhotos == Pho_PHOTOS_SHOW ? 0 :
+							  1;
 		 NumCol < NumColsCommonRecord;
 		 NumCol++)
 	       HTM_TH_Span (FieldNames[NumCol],HTM_HEAD_LEFT,1,1,"BG_HIGHLIGHT");
@@ -4721,8 +4721,8 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
    /***** Heading row *****/
    HTM_TR_Begin (NULL);
 
-      for (NumCol = (ShowPhotos == Pho_PHOTOS_SHOW) ? 0 :
-						      1;
+      for (NumCol = ShowPhotos == Pho_PHOTOS_SHOW ? 0 :
+						    1;
 	   NumCol < NumColumns;
 	   NumCol++)
 	 HTM_TH_Span (FieldNames[NumCol],HTM_HEAD_LEFT,1,1,"BG_HIGHLIGHT");
@@ -4787,10 +4787,10 @@ unsigned Usr_ListUsrsFound (Hie_Level_t HieLvl,Rol_Role_t Role,
       Sex = Usr_GetSexOfUsrsLst (Role);
       if (asprintf (&Title,"%u %s",
 		    NumUsrs,
-		    (Role == Rol_UNK) ? (NumUsrs == 1 ? Txt_user[Sex] :
-							Txt_users[Sex]) :
-					(NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Role][Sex] :
-							Txt_ROLES_PLURAL_abc[Role][Sex])) < 0)
+		    Role == Rol_UNK ? (NumUsrs == 1 ? Txt_user[Sex] :
+						      Txt_users[Sex]) :
+				      (NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Role][Sex] :
+						      Txt_ROLES_PLURAL_abc[Role][Sex])) < 0)
 	 Err_NotEnoughMemoryExit ();
       Box_BoxBegin (Title,NULL,NULL,NULL,Box_NOT_CLOSABLE);
       free (Title);
@@ -5124,8 +5124,8 @@ void Usr_ListGuests (void)
 	       PutForm = Usr_SetAllowedListUsrsActions (ListingPars.HieLvl,Rol_GST,
 							ICanChooseOption) ? Frm_PUT_FORM :
 									    Frm_DONT_PUT_FORM;
-	       PutCheckBoxToSelectUsr = (PutForm == Frm_PUT_FORM) ? Usr_PUT_CHECKBOX :
-								    Usr_DONT_PUT_CHECKBOX;
+	       PutCheckBoxToSelectUsr = PutForm == Frm_PUT_FORM ? Usr_PUT_CHECKBOX :
+								  Usr_DONT_PUT_CHECKBOX;
 
 	       /* Begin form */
 	       if (PutForm == Frm_PUT_FORM)
@@ -5291,8 +5291,8 @@ void Usr_ListStudents (void)
 	       PutForm = Usr_SetAllowedListUsrsActions (ListingPars.HieLvl,Rol_STD,
 						        ICanChooseOption) ? Frm_PUT_FORM :
 									    Frm_DONT_PUT_FORM;
-	       PutCheckBoxToSelectUsr = (PutForm == Frm_PUT_FORM) ? Usr_PUT_CHECKBOX :
-								    Usr_DONT_PUT_CHECKBOX;
+	       PutCheckBoxToSelectUsr = PutForm == Frm_PUT_FORM ? Usr_PUT_CHECKBOX :
+								  Usr_DONT_PUT_CHECKBOX;
 
 	       /* Begin form */
 	       if (PutForm == Frm_PUT_FORM)
@@ -5472,8 +5472,8 @@ void Usr_ListTeachers (void)
 	       PutForm = Usr_SetAllowedListUsrsActions (ListingPars.HieLvl,Rol_TCH,
 							ICanChooseOption) ? Frm_PUT_FORM :
 									    Frm_DONT_PUT_FORM;
-	       PutCheckBoxToSelectUsr = (PutForm == Frm_PUT_FORM) ? Usr_PUT_CHECKBOX :
-								    Usr_DONT_PUT_CHECKBOX;
+	       PutCheckBoxToSelectUsr = PutForm == Frm_PUT_FORM ? Usr_PUT_CHECKBOX :
+								  Usr_DONT_PUT_CHECKBOX;
 
 	       /* Begin form */
 	       if (PutForm == Frm_PUT_FORM)
@@ -5563,8 +5563,8 @@ static Frm_PutForm_t Usr_SetAllowedListUsrsActions (Hie_Level_t HieLvl,Rol_Role_
       case Rol_GST:
 	 ICanChooseOption[Usr_ACT_RECORDS		] =
 	 ICanChooseOption[Usr_ACT_ADD_TO_CLIPBOARD	] =
-	 ICanChooseOption[Usr_ACT_OVERWRITE_CLIPBOARD	] = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
-												       Usr_CAN_NOT;
+	 ICanChooseOption[Usr_ACT_OVERWRITE_CLIPBOARD	] = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :
+												     Usr_CAN_NOT;
 	 break;
       case Rol_STD:
 	 ICanChooseOption[Usr_ACT_RECORDS		] =
@@ -5572,20 +5572,20 @@ static Frm_PutForm_t Usr_SetAllowedListUsrsActions (Hie_Level_t HieLvl,Rol_Role_
 	 ICanChooseOption[Usr_ACT_OVERWRITE_CLIPBOARD	] =
 	 ICanChooseOption[Usr_ACT_MESSAGE		] =
 	 ICanChooseOption[Usr_ACT_FOLLOW 		] =
-	 ICanChooseOption[Usr_ACT_UNFOLLOW		] = (HieLvl == Hie_CRS &&
-							     (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
-							      Gbl.Usrs.Me.Role.Logged == Rol_NET ||
-							      Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-							      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
-													 Usr_CAN_NOT;
+	 ICanChooseOption[Usr_ACT_UNFOLLOW		] = HieLvl == Hie_CRS &&
+							    (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
+							     Gbl.Usrs.Me.Role.Logged == Rol_NET ||
+							     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+							     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+												       Usr_CAN_NOT;
 
          ICanChooseOption[Usr_ACT_HOMEWORK		] =
          ICanChooseOption[Usr_ACT_ATTENDANCE		] =
-         ICanChooseOption[Usr_ACT_EMAIL			] = (HieLvl == Hie_CRS &&
-							     (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
-							      Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-							      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
-													 Usr_CAN_NOT;
+         ICanChooseOption[Usr_ACT_EMAIL			] = HieLvl == Hie_CRS &&
+							    (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
+							     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+							     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+												       Usr_CAN_NOT;
 	 break;
       case Rol_TCH:
 	 ICanChooseOption[Usr_ACT_RECORDS		] =
@@ -5594,17 +5594,17 @@ static Frm_PutForm_t Usr_SetAllowedListUsrsActions (Hie_Level_t HieLvl,Rol_Role_
 	 ICanChooseOption[Usr_ACT_MESSAGE		] =
 	 ICanChooseOption[Usr_ACT_EMAIL			] =
 	 ICanChooseOption[Usr_ACT_FOLLOW		] =
-	 ICanChooseOption[Usr_ACT_UNFOLLOW		] = (HieLvl == Hie_CRS &&
-							     (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
-							      Gbl.Usrs.Me.Role.Logged == Rol_NET ||
-							      Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-							      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
-													 Usr_CAN_NOT;
-         ICanChooseOption[Usr_ACT_HOMEWORK		] = (HieLvl == Hie_CRS &&
-							     (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
-							      Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-							      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
-													 Usr_CAN_NOT;
+	 ICanChooseOption[Usr_ACT_UNFOLLOW		] = HieLvl == Hie_CRS &&
+							    (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
+							     Gbl.Usrs.Me.Role.Logged == Rol_NET ||
+							     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+							     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+												       Usr_CAN_NOT;
+         ICanChooseOption[Usr_ACT_HOMEWORK		] = HieLvl == Hie_CRS &&
+							    (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
+							     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+							     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+												       Usr_CAN_NOT;
 	 break;
       default:
 	 return Frm_DONT_PUT_FORM;
@@ -5704,8 +5704,8 @@ static void Usr_ShowOneListUsrsAction (Usr_ListUsrsAction_t ListUsrsAction,
    HTM_LI_Begin (NULL);
       HTM_LABEL_Begin (NULL);
 	 HTM_INPUT_RADIO ("ListUsrsAction",
-			  (ListUsrsAction == Gbl.Usrs.Selected.Action) ? HTM_CHECKED :
-								         HTM_NO_ATTR,
+			  ListUsrsAction == Gbl.Usrs.Selected.Action ? HTM_CHECKED :
+								       HTM_NO_ATTR,
 			  "value=\"%u\" form=\"%s\"",
 			  (unsigned) ListUsrsAction,Usr_FORM_TO_SELECT_USRS_ID);
 	 HTM_Txt (Label);
@@ -6434,9 +6434,9 @@ void Usr_WriteAuthor (struct Usr_Data *UsrDat,For_Disabled_t Disabled)
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO30x40",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR30x40",
      };
-   Sho_Show_t ShowAuthor = (Disabled == For_ENABLED &&
-			    UsrDat->UsrCod > 0) ? Sho_SHOW :
-						  Sho_DONT_SHOW;
+   Sho_Show_t ShowAuthor = Disabled == For_ENABLED &&
+			   UsrDat->UsrCod > 0 ? Sho_SHOW :
+						Sho_DONT_SHOW;
 
    /***** Begin table and row *****/
    HTM_TABLE_BeginPadding (2);
@@ -6760,8 +6760,8 @@ static void Usr_GetAndShowNumUsrsInCrss (Hie_Level_t HieLvl,Rol_Role_t Role)
    HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s_%s\"",Class,The_GetSuffix ());
-	 HTM_Txt ((Role == Rol_UNK) ? Txt_Total :
-				      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+	 HTM_Txt (Role == Rol_UNK ? Txt_Total :
+				    Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
       HTM_TD_End ();
 
       /* Number of users in courses */

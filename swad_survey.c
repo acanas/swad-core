@@ -768,8 +768,8 @@ static void Svy_WriteStatus (struct Svy_Survey *Svy)
      };
    CloOpe_ClosedOrOpen_t ClosedOrOpenDependingOnMyRole = Svy->Status.IAmLoggedWithAValidRoleToAnswer ? CloOpe_OPEN :
 												       CloOpe_CLOSED;
-   CloOpe_ClosedOrOpen_t ClosedOrOpenDependingOnScope = (Svy->Status.IBelongToScope == Usr_BELONG) ? CloOpe_OPEN :
-												       CloOpe_CLOSED;
+   CloOpe_ClosedOrOpen_t ClosedOrOpenDependingOnScope = Svy->Status.IBelongToScope == Usr_BELONG ? CloOpe_OPEN :
+												   CloOpe_CLOSED;
    CloOpe_ClosedOrOpen_t ClosedOrOpenDependingOnAlreadyAnswered = Svy->Status.IHaveAnswered ? CloOpe_CLOSED :
 											      CloOpe_OPEN;
 
@@ -1168,9 +1168,9 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
 	       Svy->Status.IBelongToScope = Hie_CheckIfIBelongTo (Svy->HieLvl,Svy->HieCod);
 	       break;
 	    case Hie_CRS:	// Course
-	       Svy->Status.IBelongToScope = (Hie_CheckIfIBelongTo (Svy->HieLvl,Svy->HieCod) == Usr_BELONG &&
-					     Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (Svy->SvyCod) == Usr_CAN) ? Usr_BELONG :
-														   Usr_DONT_BELONG;
+	       Svy->Status.IBelongToScope = Hie_CheckIfIBelongTo (Svy->HieLvl,Svy->HieCod) == Usr_BELONG &&
+					    Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (Svy->SvyCod) == Usr_CAN ? Usr_BELONG :
+														 Usr_DONT_BELONG;
 	       break;
 	    default:	// Unknown
 	       Err_WrongHierarchyLevelExit ();
@@ -1181,100 +1181,100 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
 	 Svy->Status.IHaveAnswered = Svy_DB_CheckIfIHaveAnsweredSvy (Svy->SvyCod);
 
 	 /* Can I answer survey? */
-	 Svy->Status.ICanAnswer = ( Svy->NumQsts &&
-				    Svy->Status.Hidden == HidVis_VISIBLE &&
-				    Svy->Status.ClosedOrOpen == CloOpe_OPEN &&
-				    Svy->Status.IAmLoggedWithAValidRoleToAnswer &&
-				    Svy->Status.IBelongToScope == Usr_BELONG &&
-				   !Svy->Status.IHaveAnswered) ? Usr_CAN :
-								 Usr_CAN_NOT;
+	 Svy->Status.ICanAnswer =  Svy->NumQsts &&
+				   Svy->Status.Hidden == HidVis_VISIBLE &&
+				   Svy->Status.ClosedOrOpen == CloOpe_OPEN &&
+				   Svy->Status.IAmLoggedWithAValidRoleToAnswer &&
+				   Svy->Status.IBelongToScope == Usr_BELONG &&
+				  !Svy->Status.IHaveAnswered ? Usr_CAN :
+							       Usr_CAN_NOT;
 
 	 /* Can I view results of the survey?
 	    Can I edit survey? */
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_STD:
-	       Svy->Status.ICanViewResults  = ((Svy->HieLvl == Hie_CRS ||
-						Svy->HieLvl == Hie_DEG ||
-						Svy->HieLvl == Hie_CTR ||
-						Svy->HieLvl == Hie_INS ||
-						Svy->HieLvl == Hie_CTY ||
-						Svy->HieLvl == Hie_SYS) &&
-						Svy->NumQsts &&
-						Svy->Status.Hidden == HidVis_VISIBLE &&
-						Svy->Status.ClosedOrOpen == CloOpe_OPEN &&
-						Svy->Status.IAmLoggedWithAValidRoleToAnswer &&
-						Svy->Status.IBelongToScope == Usr_BELONG &&
-						Svy->Status.IHaveAnswered) ? Usr_CAN :
-									     Usr_CAN_NOT;
+	       Svy->Status.ICanViewResults  = (Svy->HieLvl == Hie_CRS ||
+					       Svy->HieLvl == Hie_DEG ||
+					       Svy->HieLvl == Hie_CTR ||
+					       Svy->HieLvl == Hie_INS ||
+					       Svy->HieLvl == Hie_CTY ||
+					       Svy->HieLvl == Hie_SYS) &&
+					       Svy->NumQsts &&
+					       Svy->Status.Hidden == HidVis_VISIBLE &&
+					       Svy->Status.ClosedOrOpen == CloOpe_OPEN &&
+					       Svy->Status.IAmLoggedWithAValidRoleToAnswer &&
+					       Svy->Status.IBelongToScope == Usr_BELONG &&
+					       Svy->Status.IHaveAnswered ? Usr_CAN :
+									   Usr_CAN_NOT;
 	       Svy->Status.ICanViewComments = Usr_CAN_NOT;
 	       Svy->Status.ICanEdit         = Usr_CAN_NOT;
 	       break;
 	    case Rol_NET:
 	       Svy->Status.ICanViewResults  =
-	       Svy->Status.ICanViewComments = ((Svy->HieLvl == Hie_CRS ||
-						Svy->HieLvl == Hie_DEG ||
-						Svy->HieLvl == Hie_CTR ||
-						Svy->HieLvl == Hie_INS ||
-						Svy->HieLvl == Hie_CTY ||
-						Svy->HieLvl == Hie_SYS) &&
-						Svy->NumQsts &&
-						Svy->Status.ICanAnswer == Usr_CAN_NOT) ? Usr_CAN :
-											 Usr_CAN_NOT;
-	       Svy->Status.ICanEdit        = Usr_CAN_NOT;
+	       Svy->Status.ICanViewComments = (Svy->HieLvl == Hie_CRS ||
+					       Svy->HieLvl == Hie_DEG ||
+					       Svy->HieLvl == Hie_CTR ||
+					       Svy->HieLvl == Hie_INS ||
+					       Svy->HieLvl == Hie_CTY ||
+					       Svy->HieLvl == Hie_SYS) &&
+					       Svy->NumQsts &&
+					       Svy->Status.ICanAnswer == Usr_CAN_NOT ? Usr_CAN :
+										       Usr_CAN_NOT;
+	       Svy->Status.ICanEdit         = Usr_CAN_NOT;
 	       break;
 	    case Rol_TCH:
 	       Svy->Status.ICanViewResults  =
-	       Svy->Status.ICanViewComments = ((Svy->HieLvl == Hie_CRS ||
-						Svy->HieLvl == Hie_DEG ||
-						Svy->HieLvl == Hie_CTR ||
-						Svy->HieLvl == Hie_INS ||
-						Svy->HieLvl == Hie_CTY ||
-						Svy->HieLvl == Hie_SYS) &&
-						Svy->NumQsts &&
-						Svy->Status.ICanAnswer == Usr_CAN_NOT) ? Usr_CAN :
-											 Usr_CAN_NOT;
-	       Svy->Status.ICanEdit        =   (Svy->HieLvl == Hie_CRS) ? Usr_CAN :
-									  Usr_CAN_NOT;
+	       Svy->Status.ICanViewComments = (Svy->HieLvl == Hie_CRS ||
+					       Svy->HieLvl == Hie_DEG ||
+					       Svy->HieLvl == Hie_CTR ||
+					       Svy->HieLvl == Hie_INS ||
+					       Svy->HieLvl == Hie_CTY ||
+					       Svy->HieLvl == Hie_SYS) &&
+					       Svy->NumQsts &&
+					       Svy->Status.ICanAnswer == Usr_CAN_NOT ? Usr_CAN :
+										       Usr_CAN_NOT;
+	       Svy->Status.ICanEdit         =  Svy->HieLvl == Hie_CRS ? Usr_CAN :
+									Usr_CAN_NOT;
 	       break;
 	    case Rol_DEG_ADM:
 	       Svy->Status.ICanViewResults  =
-	       Svy->Status.ICanViewComments = ((Svy->HieLvl == Hie_DEG ||
-						Svy->HieLvl == Hie_CTR ||
-						Svy->HieLvl == Hie_INS ||
-						Svy->HieLvl == Hie_CTY ||
-						Svy->HieLvl == Hie_SYS) &&
-						Svy->NumQsts &&
-						Svy->Status.ICanAnswer == Usr_CAN_NOT) ? Usr_CAN :
-											 Usr_CAN_NOT;
-	       Svy->Status.ICanEdit         =  (Svy->HieLvl == Hie_DEG &&
-						Svy->Status.IBelongToScope == Usr_BELONG) ? Usr_CAN :
-											    Usr_CAN_NOT;
+	       Svy->Status.ICanViewComments = (Svy->HieLvl == Hie_DEG ||
+					       Svy->HieLvl == Hie_CTR ||
+					       Svy->HieLvl == Hie_INS ||
+					       Svy->HieLvl == Hie_CTY ||
+					       Svy->HieLvl == Hie_SYS) &&
+					       Svy->NumQsts &&
+					       Svy->Status.ICanAnswer == Usr_CAN_NOT ? Usr_CAN :
+										       Usr_CAN_NOT;
+	       Svy->Status.ICanEdit         =  Svy->HieLvl == Hie_DEG &&
+					       Svy->Status.IBelongToScope == Usr_BELONG ? Usr_CAN :
+											  Usr_CAN_NOT;
 	       break;
 	    case Rol_CTR_ADM:
 	       Svy->Status.ICanViewResults  =
-	       Svy->Status.ICanViewComments = ((Svy->HieLvl == Hie_CTR ||
-						Svy->HieLvl == Hie_INS ||
-						Svy->HieLvl == Hie_CTY ||
-						Svy->HieLvl == Hie_SYS) &&
-						Svy->NumQsts &&
-						Svy->Status.ICanAnswer == Usr_CAN_NOT) ? Usr_CAN :
-											 Usr_CAN_NOT;
-	       Svy->Status.ICanEdit         =  (Svy->HieLvl == Hie_CTR &&
-						Svy->Status.IBelongToScope == Usr_BELONG) ? Usr_CAN :
-											    Usr_CAN_NOT;
+	       Svy->Status.ICanViewComments = (Svy->HieLvl == Hie_CTR ||
+					       Svy->HieLvl == Hie_INS ||
+					       Svy->HieLvl == Hie_CTY ||
+					       Svy->HieLvl == Hie_SYS) &&
+					       Svy->NumQsts &&
+					       Svy->Status.ICanAnswer == Usr_CAN_NOT ? Usr_CAN :
+										       Usr_CAN_NOT;
+	       Svy->Status.ICanEdit         =  Svy->HieLvl == Hie_CTR &&
+					       Svy->Status.IBelongToScope == Usr_BELONG ? Usr_CAN :
+											  Usr_CAN_NOT;
 	       break;
 	    case Rol_INS_ADM:
 	       Svy->Status.ICanViewResults  =
-	       Svy->Status.ICanViewComments = ((Svy->HieLvl == Hie_INS ||
-						Svy->HieLvl == Hie_CTY ||
-						Svy->HieLvl == Hie_SYS) &&
-						Svy->NumQsts &&
-						Svy->Status.ICanAnswer == Usr_CAN_NOT) ? Usr_CAN :
-											 Usr_CAN_NOT;
-	       Svy->Status.ICanEdit         =  (Svy->HieLvl == Hie_INS &&
-						Svy->Status.IBelongToScope == Usr_BELONG) ? Usr_CAN :
-											    Usr_CAN_NOT;
+	       Svy->Status.ICanViewComments = (Svy->HieLvl == Hie_INS ||
+					       Svy->HieLvl == Hie_CTY ||
+					       Svy->HieLvl == Hie_SYS) &&
+					       Svy->NumQsts &&
+					       Svy->Status.ICanAnswer == Usr_CAN_NOT ? Usr_CAN :
+										       Usr_CAN_NOT;
+	       Svy->Status.ICanEdit         =  Svy->HieLvl == Hie_INS &&
+					       Svy->Status.IBelongToScope == Usr_BELONG ? Usr_CAN :
+											  Usr_CAN_NOT;
 	       break;
 	    case Rol_SYS_ADM:
 	       Svy->Status.ICanViewResults  =
@@ -1612,8 +1612,8 @@ void Svy_ReqCreatOrEditSvy (void)
    Surveys.CurrentPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get the code of the survey *****/
-   OldNewSvy = ((Surveys.Svy.SvyCod = ParCod_GetPar (ParCod_Svy)) > 0) ? OldNew_OLD :
-									 OldNew_NEW;
+   OldNewSvy = (Surveys.Svy.SvyCod = ParCod_GetPar (ParCod_Svy)) > 0 ? OldNew_OLD :
+								       OldNew_NEW;
 
    /***** Get from the database the data of the survey *****/
    switch (OldNewSvy)
@@ -1810,8 +1810,8 @@ static unsigned Svy_SetAllowedScopes (struct Svy_Survey *Svy)
          break;
       case Rol_SYS_ADM:// System admins can edit any survey
 	 if (Svy->HieLvl == Hie_UNK)	// Scope not defined
-	    Svy->HieLvl = (Gbl.Hierarchy.HieLvl < Hie_NUM_LEVELS &&
-		          Gbl.Hierarchy.HieLvl != Hie_UNK) ? Gbl.Hierarchy.HieLvl :
+	    Svy->HieLvl = Gbl.Hierarchy.HieLvl < Hie_NUM_LEVELS &&
+		          Gbl.Hierarchy.HieLvl != Hie_UNK ? Gbl.Hierarchy.HieLvl :
 		        	                            Hie_SYS;
          AllowedLvls = 1 << Hie_SYS |
 		       1 << Hie_CTY |
@@ -1907,8 +1907,8 @@ void Svy_ReceiveSurvey (void)
    Surveys.CurrentPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get the code of the survey *****/
-   OldNewSvy = ((NewSvy.SvyCod = ParCod_GetPar (ParCod_Svy)) > 0) ? OldNew_OLD :
-								    OldNew_NEW;
+   OldNewSvy = (NewSvy.SvyCod = ParCod_GetPar (ParCod_Svy)) > 0 ? OldNew_OLD :
+								  OldNew_NEW;
 
    switch (OldNewSvy)
      {
@@ -2228,8 +2228,8 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
    unsigned NumAnswers = 0;
    char *Title;
    Svy_AnswerType_t AnsType;
-   OldNew_OldNew_t OldNewQst = (SvyQst->QstCod > 0) ? OldNew_OLD :
-						      OldNew_NEW;
+   OldNew_OldNew_t OldNewQst = SvyQst->QstCod > 0 ? OldNew_OLD :
+						    OldNew_NEW;
 
    if (Gbl.Action.Act == ActEdiOneSvyQst) // If no receiving the question, but editing a new or existing question
       if (OldNewQst == OldNew_OLD)
@@ -2326,8 +2326,8 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 		 {
 		  HTM_LABEL_Begin (NULL);
 		     HTM_INPUT_RADIO ("AnswerType",
-				      ((AnsType == SvyQst->AnswerType) ? HTM_CHECKED :
-									 HTM_NO_ATTR),
+				      AnsType == SvyQst->AnswerType ? HTM_CHECKED :
+								      HTM_NO_ATTR,
 				      "value=\"%u\"",(unsigned) AnsType);
 		     HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[AnsType]);
 		  HTM_LABEL_End ();
@@ -2649,16 +2649,16 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
 	           Gbl.Action.Act == ActEdiOneSvyQst ||
 	           Gbl.Action.Act == ActNewSvyQst    ||
 	           Gbl.Action.Act == ActChgSvyQst);
-   Frm_PutForm_t PutFormAnswerSurvey = (Surveys->Svy.Status.ICanAnswer == Usr_CAN &&
-			                !Editing) ? Frm_PUT_FORM :
-					            Frm_DONT_PUT_FORM;
+   Frm_PutForm_t PutFormAnswerSurvey = Surveys->Svy.Status.ICanAnswer == Usr_CAN &&
+			               !Editing ? Frm_PUT_FORM :
+					          Frm_DONT_PUT_FORM;
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Questions,
-		 (Surveys->Svy.Status.ICanEdit == Usr_CAN) ? Svy_PutIconToAddNewQuestion :
-							       NULL,
-		 (Surveys->Svy.Status.ICanEdit == Usr_CAN) ? Surveys :
-							       NULL,
+		 Surveys->Svy.Status.ICanEdit == Usr_CAN ? Svy_PutIconToAddNewQuestion :
+							   NULL,
+		 Surveys->Svy.Status.ICanEdit == Usr_CAN ? Surveys :
+							   NULL,
 		 Hlp_ANALYTICS_Surveys_questions,Box_NOT_CLOSABLE);
 
       /***** Get data of questions from database *****/

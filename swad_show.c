@@ -45,8 +45,8 @@ const char Sho_Show_YN[Sho_NUM_SHOW] =
 
 Sho_Show_t Sho_GetShowFromYN (char Ch)
   {
-   return (Ch == 'Y') ? Sho_SHOW :
-		        Sho_DONT_SHOW;
+   return Ch == 'Y' ? Sho_SHOW :
+		      Sho_DONT_SHOW;
   }
 
 /*****************************************************************************/

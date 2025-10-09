@@ -391,16 +391,16 @@ static void TstPrn_WriteTF_AnsToFill (const struct Qst_PrintedQuestion *PrintedQ
 		     "name=\"Ans%010u\" class=\"INPUT_%s\"",
 		     QstInd,The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"" ,
-                  (PrintedQuestion->Answer.Str[0] == '\0') ? HTM_SELECTED :
-	                					     HTM_NO_ATTR,
+                  PrintedQuestion->Answer.Str[0] == '\0' ? HTM_SELECTED :
+	                				   HTM_NO_ATTR,
                   Txt_NBSP);
       HTM_OPTION (HTM_Type_STRING,"T",
-                  (PrintedQuestion->Answer.Str[0] == 'T') ? HTM_SELECTED :
-	                					    HTM_NO_ATTR,
+                  PrintedQuestion->Answer.Str[0] == 'T' ? HTM_SELECTED :
+	                				  HTM_NO_ATTR,
                   Txt_TF_QST[0]);
       HTM_OPTION (HTM_Type_STRING,"F",
-                  (PrintedQuestion->Answer.Str[0] == 'F') ? HTM_SELECTED :
-	                					    HTM_NO_ATTR,
+                  PrintedQuestion->Answer.Str[0] == 'F' ? HTM_SELECTED :
+	                				  HTM_NO_ATTR,
                   Txt_TF_QST[1]);
    HTM_SELECT_End ();
   }
@@ -1302,10 +1302,10 @@ static void TstPrn_WriteFltAnsPrint (struct Usr_Data *UsrDat,
 	    HTM_TD_Begin ("class=\"CM %s_%s\"",
 			  ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_CAN &&
 			  SuccessOrError == Err_SUCCESS ?
-			     ((AnsUsr >= Question->Answer.FloatingPoint[0] &&
-			       AnsUsr <= Question->Answer.FloatingPoint[1]) ? "Qst_ANS_OK" :	// Correct
-									      "Qst_ANS_BAD") :	// Wrong
-									      "Qst_ANS_0",	// Blank answer
+			     (AnsUsr >= Question->Answer.FloatingPoint[0] &&
+			      AnsUsr <= Question->Answer.FloatingPoint[1] ? "Qst_ANS_OK" :	// Correct
+									    "Qst_ANS_BAD") :	// Wrong
+									    "Qst_ANS_0",	// Blank answer
 			  The_GetSuffix ());
 	       if (SuccessOrError == Err_SUCCESS)
 	          HTM_Double (AnsUsr);
@@ -2504,8 +2504,8 @@ static void TstRes_CheckIfICanSeePrintResult (const struct TstPrn_Print *Print,
       case Rol_STD:
 	 // Depends on whether the print is sent or not
 	 // if the print is not sent ==> I can not view results
-	 ICanView->Result = (Print->Sent && Usr_ItsMe (UsrCod) == Usr_ME) ? Usr_CAN :
-									    Usr_CAN_NOT;
+	 ICanView->Result = Print->Sent && Usr_ItsMe (UsrCod) == Usr_ME ? Usr_CAN :
+									  Usr_CAN_NOT;
 	 switch (ICanView->Result)
 	   {
 	    case Usr_CAN:
@@ -2690,8 +2690,8 @@ Err_SuccessOrError_t TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return (NumQsts == Print->NumQsts.All) ? Err_SUCCESS :
-					    Err_ERROR;
+   return NumQsts == Print->NumQsts.All ? Err_SUCCESS :
+					  Err_ERROR;
   }
 
 /*****************************************************************************/

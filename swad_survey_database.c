@@ -204,7 +204,7 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
 					"",
 		       Hie_GetDBStrFromLevel (Hie_CRS),Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		       (HiddenAllowed & 1 << Hie_CRS) ? "" :
-							   " AND Hidden='N'",
+							" AND Hidden='N'",
 		       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
 	    Err_NotEnoughMemoryExit ();
         }
@@ -215,7 +215,7 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
 					"",
 		       Hie_GetDBStrFromLevel (Hie_CRS),Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		       (HiddenAllowed & 1 << Hie_CRS) ? "" :
-							   " AND Hidden='N'") < 0)
+							" AND Hidden='N'") < 0)
 	    Err_NotEnoughMemoryExit ();
         }
       SubQueryFilled = true;

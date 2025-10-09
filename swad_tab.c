@@ -138,31 +138,31 @@ static Usr_Can_t Tab_CheckIfICanViewTab (Tab_Tab_t Tab)
       case TabUnk:
 	 return Usr_CAN_NOT;
       case TabSys:
-	 return (Gbl.Hierarchy.HieLvl == Hie_SYS) ? Usr_CAN :	// Institution selected
-						   Usr_CAN_NOT;
+	 return Gbl.Hierarchy.HieLvl == Hie_SYS ? Usr_CAN :	// System selected
+						  Usr_CAN_NOT;
       case TabCty:
-	 return (Gbl.Hierarchy.HieLvl == Hie_CTY) ? Usr_CAN :	// Institution selected
-						   Usr_CAN_NOT;
+	 return Gbl.Hierarchy.HieLvl == Hie_CTY ? Usr_CAN :	// Contry selected
+						  Usr_CAN_NOT;
       case TabIns:
-	 return (Gbl.Hierarchy.HieLvl == Hie_INS) ? Usr_CAN :	// Institution selected
-						   Usr_CAN_NOT;
+	 return Gbl.Hierarchy.HieLvl == Hie_INS ? Usr_CAN :	// Institution selected
+						  Usr_CAN_NOT;
       case TabCtr:
-	 return (Gbl.Hierarchy.HieLvl == Hie_CTR) ? Usr_CAN :	// Center selected
-						   Usr_CAN_NOT;
+	 return Gbl.Hierarchy.HieLvl == Hie_CTR ? Usr_CAN :	// Center selected
+						  Usr_CAN_NOT;
       case TabDeg:
-	 return (Gbl.Hierarchy.HieLvl == Hie_DEG) ? Usr_CAN :	// Degree selected
-						   Usr_CAN_NOT;
+	 return Gbl.Hierarchy.HieLvl == Hie_DEG ? Usr_CAN :	// Degree selected
+						  Usr_CAN_NOT;
       case TabCrs:
-	 return (Gbl.Hierarchy.HieLvl == Hie_CRS) ? Usr_CAN :	// Course selected
-						   Usr_CAN_NOT;
+	 return Gbl.Hierarchy.HieLvl == Hie_CRS ? Usr_CAN :	// Course selected
+						  Usr_CAN_NOT;
       case TabAss:
-	 return (Gbl.Hierarchy.HieLvl == Hie_CRS &&		// Course selected
-	         Gbl.Usrs.Me.Role.Logged >= Rol_STD) ? Usr_CAN :	// I belong to course or I am an admin
-						       Usr_CAN_NOT;
+	 return Gbl.Hierarchy.HieLvl == Hie_CRS &&		// Course selected
+	        Gbl.Usrs.Me.Role.Logged >= Rol_STD ? Usr_CAN :	// I belong to course or I am an admin
+						     Usr_CAN_NOT;
       case TabFil:
-      	 return (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0 ||	// Institution selected
-	         Gbl.Usrs.Me.Logged) ? Usr_CAN :		// I'm logged
-				       Usr_CAN_NOT;
+      	 return Gbl.Hierarchy.Node[Hie_INS].HieCod > 0 ||	// Institution selected
+	        Gbl.Usrs.Me.Logged ? Usr_CAN :			// I'm logged
+				     Usr_CAN_NOT;
       default:
 	 return Usr_CAN;
      }

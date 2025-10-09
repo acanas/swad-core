@@ -274,8 +274,8 @@ static unsigned Str_FindHTMLEntity (const char *Ptr)
 	  (Ch >= 'A' && Ch <= 'Z'));
 
    /***** An HTML entity must end by ';' *****/
-   return (Ptr[Length] == ';') ? Length + 1 :	// HTML entity found (return Length including the final ';')
-	                         0;		// No HTML entity found
+   return Ptr[Length] == ';' ? Length + 1 :	// HTML entity found (return Length including the final ';')
+	                       0;		// No HTML entity found
   }
 
 /*****************************************************************************/
@@ -1136,10 +1136,10 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                   break;
                default: /* The rest of special chars are stored as special code */
                   snprintf (StrSpecialChar,sizeof (StrSpecialChar),
-                            (SpecialChar < 256 &&
-                             (ChangeTo == Str_TO_TEXT ||
-                              ChangeTo == Str_TO_MARKDOWN)) ? "%c" :
-                        	                              "&#%u;",
+                            SpecialChar < 256 &&
+                            (ChangeTo == Str_TO_TEXT ||
+                             ChangeTo == Str_TO_MARKDOWN) ? "%c" :
+                        	                            "&#%u;",
                 	    SpecialChar);
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
@@ -2144,9 +2144,9 @@ unsigned Str_ConvertStrToUnsigned (const char *UnsignedStr)
   {
    long LongNum = Str_ConvertStrCodToLongCod (UnsignedStr);
 
-   return (LongNum >= 0 &&
-	   LongNum <= UINT_MAX) ? (unsigned) LongNum :
-	                          0;
+   return LongNum >= 0 &&
+	  LongNum <= UINT_MAX ? (unsigned) LongNum :
+	                        0;
   }
 
 /*****************************************************************************/

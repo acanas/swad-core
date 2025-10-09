@@ -139,7 +139,7 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
 	 /* With %x%v the weeks are counted from monday to sunday.
 	    With %X%V the weeks are counted from sunday to saturday. */
 	 snprintf (Query,Sta_DB_MAX_BYTES_QUERY + 1,
-   	           (Gbl.Prefs.FirstDayOfWeek == 0) ?
+   	           Gbl.Prefs.FirstDayOfWeek == 0 ?
 	           "SELECT SQL_NO_CACHE DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%x%%v') AS Week,"// Weeks start on monday
 		                       "%s"
 		    " FROM %s" :
