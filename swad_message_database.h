@@ -43,7 +43,7 @@
 /*****************************************************************************/
 
 long Msg_DB_CreateNewMsg (const char *Subject,const char *Content,long MedCod);
-void Msg_DB_CreateSntMsg (long MsgCod,long CrsCod);
+void Msg_DB_CreateSntMsg (long MsgCod,long HieCod);
 void Msg_DB_CreateRcvMsg (long MsgCod,long UsrCod,bool NotifyByEmail);
 void Msg_DB_SetRcvMsgAsReplied (long MsgCod);
 void Msg_DB_ExpandSntMsg (long MsgCod);
@@ -77,7 +77,7 @@ unsigned Msg_DB_GetNumRecipients (long MsgCod);
 unsigned Msg_DB_GetKnownRecipients (MYSQL_RES **mysql_res,long MsgCod);
 unsigned Msg_DB_GetNumSntMsgs (Hie_Level_t HieLvl,Msg_Status_t MsgStatus);
 unsigned Msg_DB_GetNumRcvMsgs (Hie_Level_t HieLvl,Msg_Status_t MsgStatus);
-unsigned Msg_DB_GetNumMsgsSentByTchsCrs (long CrsCod);
+unsigned Msg_DB_GetNumMsgsSentByTchsCrs (long HieCod);
 unsigned Msg_DB_GetNumMsgsSentByUsr (long UsrCod);
 
 void Msg_DB_RemoveRcvMsg (long MsgCod,long UsrCod);

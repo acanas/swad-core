@@ -80,7 +80,7 @@ typedef enum
 /*****************************************************************************/
 
 void Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs (void);
-void Enr_PutButtonInlineToEnrolStds (long CrsCod,
+void Enr_PutButtonInlineToEnrolStds (long HieCod,
 				     unsigned Scope,const Lay_Last_t *IsLastItemInLevel,
 				     Lay_Highlight_t Highlight);
 
@@ -94,7 +94,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncPars) (v
 
 void Enr_ReqAcceptEnrolmentInCrs (void);
 void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                            long CrsCod,long UsrCod);
+                            long HieCod,long UsrCod);
 void Enr_UpdateUsrData (struct Usr_Data *UsrDat);
 
 void Enr_ReqAdminStds (void);

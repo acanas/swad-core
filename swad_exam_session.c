@@ -1646,7 +1646,7 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
 
    /***** Get exam data from database *****/
    Exa_GetExamDataByCod (&Exams->Exam);
-   if (Exams->Exam.CrsCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
+   if (Exams->Exam.HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
       Err_WrongExamExit ();
 
    /***** Get set data from database *****/
@@ -1902,7 +1902,7 @@ void ExaSes_ReqCreatOrEditSes (void)
 
    /***** Get exam data from database *****/
    Exa_GetExamDataByCod (&Exams.Exam);
-   if (Exams.Exam.CrsCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
+   if (Exams.Exam.HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
       Err_WrongExamExit ();
 
    /***** Get session data *****/
@@ -1960,7 +1960,7 @@ void ExaSes_ReceiveSession (void)
 
    /***** Get exam data from database *****/
    Exa_GetExamDataByCod (&Exams.Exam);
-   if (Exams.Exam.CrsCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
+   if (Exams.Exam.HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
       Err_WrongExamExit ();
 
    /***** Get session data from database *****/

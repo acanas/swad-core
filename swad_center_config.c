@@ -85,7 +85,7 @@ static void CtrCfg_Altitude (double Altitude);
 static void CtrCfg_Photo (Vie_ViewType_t ViewType,
 			  Frm_PutForm_t PutForm,Hie_PutLink_t PutLink,
 			  const char PathPhoto[PATH_MAX + 1]);
-static void CtrCfg_GetPhotoAttr (long CtrCod,char **PhotoAttribution);
+static void CtrCfg_GetPhotoAttr (long HieCod,char **PhotoAttribution);
 static void CtrCfg_FreePhotoAttr (char **PhotoAttribution);
 static void CtrCfg_Institution (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
 static void CtrCfg_Place (Frm_PutForm_t PutForm);
@@ -491,7 +491,7 @@ static void CtrCfg_Photo (Vie_ViewType_t ViewType,
 /******************* Get photo attribution from database *********************/
 /*****************************************************************************/
 
-static void CtrCfg_GetPhotoAttr (long CtrCod,char **PhotoAttribution)
+static void CtrCfg_GetPhotoAttr (long HieCod,char **PhotoAttribution)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -501,7 +501,7 @@ static void CtrCfg_GetPhotoAttr (long CtrCod,char **PhotoAttribution)
    CtrCfg_FreePhotoAttr (PhotoAttribution);
 
    /***** Get photo attribution from database *****/
-   if (Ctr_DB_GetPhotoAttribution (&mysql_res,CtrCod))
+   if (Ctr_DB_GetPhotoAttribution (&mysql_res,HieCod))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);

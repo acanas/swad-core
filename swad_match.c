@@ -1106,19 +1106,19 @@ void Mch_RemoveMatchesInGameFromAllTables (long GamCod)
 /******************* Remove match in course from all tables ******************/
 /*****************************************************************************/
 
-void Mch_RemoveMatchesInCourseFromAllTables (long CrsCod)
+void Mch_RemoveMatchesInCourseFromAllTables (long HieCod)
   {
    /***** Remove matches from secondary tables *****/
-   Mch_DB_RemoveMatchesInCrsFromOtherTable (CrsCod,"mch_players");
-   Mch_DB_RemoveMatchesInCrsFromOtherTable (CrsCod,"mch_playing");
-   Mch_DB_RemoveMatchesInCrsFromOtherTable (CrsCod,"mch_results");
-   Mch_DB_RemoveMatchesInCrsFromOtherTable (CrsCod,"mch_answers");
-   Mch_DB_RemoveMatchesInCrsFromOtherTable (CrsCod,"mch_times");
-   Mch_DB_RemoveMatchesInCrsFromOtherTable (CrsCod,"mch_groups");
-   Mch_DB_RemoveMatchesInCrsFromOtherTable (CrsCod,"mch_indexes");
+   Mch_DB_RemoveMatchesInCrsFromOtherTable (HieCod,"mch_players");
+   Mch_DB_RemoveMatchesInCrsFromOtherTable (HieCod,"mch_playing");
+   Mch_DB_RemoveMatchesInCrsFromOtherTable (HieCod,"mch_results");
+   Mch_DB_RemoveMatchesInCrsFromOtherTable (HieCod,"mch_answers");
+   Mch_DB_RemoveMatchesInCrsFromOtherTable (HieCod,"mch_times"  );
+   Mch_DB_RemoveMatchesInCrsFromOtherTable (HieCod,"mch_groups" );
+   Mch_DB_RemoveMatchesInCrsFromOtherTable (HieCod,"mch_indexes");
 
    /***** Remove matches in course from main table *****/
-   Mch_DB_RemoveMatchesInCrsFromMainTable (CrsCod);
+   Mch_DB_RemoveMatchesInCrsFromMainTable (HieCod);
   }
 
 /*****************************************************************************/
@@ -1137,12 +1137,12 @@ void Mch_RemoveMatchesMadeByUsrInAllCrss (long UsrCod)
 /***************** Remove matches made by user in a course *******************/
 /*****************************************************************************/
 
-void Mch_RemoveMatchesMadeByUsrInCrs (long UsrCod,long CrsCod)
+void Mch_RemoveMatchesMadeByUsrInCrs (long UsrCod,long HieCod)
   {
    /***** Remove student from secondary tables *****/
-   Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (UsrCod,CrsCod,"mch_players");
-   Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (UsrCod,CrsCod,"mch_results");
-   Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (UsrCod,CrsCod,"mch_answers");
+   Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (UsrCod,HieCod,"mch_players");
+   Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (UsrCod,HieCod,"mch_results");
+   Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (UsrCod,HieCod,"mch_answers");
   }
 
 /*****************************************************************************/
@@ -1198,7 +1198,7 @@ void Mch_GetAndCheckPars (struct Gam_Games *Games,
       Err_WrongGameExit ();
    Grp_GetParMyAllGrps ();
    Gam_GetGameDataByCod (&Games->Game);
-   if (Games->Game.CrsCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
+   if (Games->Game.HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
       Err_WrongGameExit ();
 
    /* Get match code */

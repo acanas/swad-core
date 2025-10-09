@@ -73,7 +73,7 @@ long Ctr_DB_CreateCenter (const struct Hie_Node *Ctr,Hie_Status_t Status)
 /************ Get basic list of centers ordered by name of center ************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetListOfCtrsInCurrentIns (MYSQL_RES **mysql_res)
+unsigned Ctr_DB_GetBasicListOfCtrsInCurrentIns (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get centers",
@@ -90,7 +90,7 @@ unsigned Ctr_DB_GetListOfCtrsInCurrentIns (MYSQL_RES **mysql_res)
 /************ Get full list of centers ordered by name of center ************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetListOfCtrsFull (MYSQL_RES **mysql_res,long InsCod)
+unsigned Ctr_DB_GetFullListOfCtrsInIns (MYSQL_RES **mysql_res,long HieCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get centers",
@@ -105,7 +105,7 @@ unsigned Ctr_DB_GetListOfCtrsFull (MYSQL_RES **mysql_res,long InsCod)
 		    " FROM ctr_centers"
 		   " WHERE InsCod=%ld"
 		" ORDER BY FullName",
-		   InsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -113,12 +113,11 @@ unsigned Ctr_DB_GetListOfCtrsFull (MYSQL_RES **mysql_res,long InsCod)
 /************* with number of users who claim to belong to them **************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetListOfCtrsFullWithNumUsrs (MYSQL_RES **mysql_res,
-                                              long InsCod,Hie_Order_t SelectedOrder)
+unsigned Ctr_DB_GetFullListOfCtrsInCurrentInsWithNumUsrs (MYSQL_RES **mysql_res)
   {
    static const char *OrderBySubQuery[Hie_NUM_ORDERS] =
      {
-      [Hie_ORDER_BY_NAME  ] = "FullName",
+      [Hie_ORDER_BY_NAME    ] = "FullName",
       [Hie_ORDER_BY_NUM_USRS] = "NumUsrs DESC,"
 	                        "FullName",
      };
@@ -155,9 +154,9 @@ unsigned Ctr_DB_GetListOfCtrsFullWithNumUsrs (MYSQL_RES **mysql_res,
 		                  "CtrCod"
 			    " FROM usr_data))"
 		" ORDER BY %s",
-		   InsCod,
-		   InsCod,
-		   OrderBySubQuery[SelectedOrder]);
+		   Gbl.Hierarchy.Node[Hie_INS].HieCod,
+		   Gbl.Hierarchy.Node[Hie_INS].HieCod,
+		   OrderBySubQuery[Gbl.Hierarchy.List[Hie_INS].SelectedOrder]);
   }
 
 /*****************************************************************************/
@@ -283,14 +282,14 @@ void Ctr_DB_GetCtrShrtName (long HieCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 
 /******************** Get photo attribution from database ********************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetPhotoAttribution (MYSQL_RES **mysql_res,long CtrCod)
+unsigned Ctr_DB_GetPhotoAttribution (MYSQL_RES **mysql_res,long HieCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get photo attribution",
 		   "SELECT PhotoAttribution"	// row[0]
 		    " FROM ctr_centers"
 		   " WHERE CtrCod=%ld",
-		   CtrCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -564,14 +563,14 @@ void Ctr_DB_UpdateCtrName (long HieCod,
 /**************** Update database changing old WWW by new WWW ****************/
 /*****************************************************************************/
 
-void Ctr_DB_UpdateCtrWWW (long CtrCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1])
+void Ctr_DB_UpdateCtrWWW (long HieCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1])
   {
    DB_QueryUPDATE ("can not update the web of a center",
 		   "UPDATE ctr_centers"
 		     " SET WWW='%s'"
 		   " WHERE CtrCod=%ld",
 	           NewWWW,
-	           CtrCod);
+	           HieCod);
   }
 
 /*****************************************************************************/

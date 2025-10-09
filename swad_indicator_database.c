@@ -42,7 +42,7 @@ extern struct Globals Gbl;
 /************ Store number of indicators of a course in database *************/
 /*****************************************************************************/
 
-void Ind_DB_StoreIndicatorsCrs (long CrsCod,unsigned NumIndicators)
+void Ind_DB_StoreIndicatorsCrs (long HieCod,unsigned NumIndicators)
   {
    /***** Store number of indicators of a course in database *****/
    DB_QueryUPDATE ("can not store number of indicators of a course",
@@ -50,21 +50,21 @@ void Ind_DB_StoreIndicatorsCrs (long CrsCod,unsigned NumIndicators)
 		     " SET NumIndicators=%u"
 		   " WHERE CrsCod=%ld",
                    NumIndicators,
-                   CrsCod);
+                   HieCod);
   }
 
 /*****************************************************************************/
 /************ Get number of indicators of a course from database *************/
 /*****************************************************************************/
 
-Exi_Exist_t Ind_DB_GetNumIndicatorsCrs (MYSQL_RES **mysql_res,long CrsCod)
+Exi_Exist_t Ind_DB_GetNumIndicatorsCrs (MYSQL_RES **mysql_res,long HieCod)
   {
    return
    DB_QuerySELECTunique (mysql_res,"can not get number of indicators",
 			 "SELECT NumIndicators"	// row[0]
 			  " FROM crs_courses"
 			 " WHERE CrsCod=%ld",
-			 CrsCod);
+			 HieCod);
   }
 
 /*****************************************************************************/

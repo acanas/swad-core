@@ -1242,7 +1242,7 @@ unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
 /*****************************************************************************/
 
 unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
-					       long HieCod[Hie_NUM_LEVELS])
+					       long HieCods[Hie_NUM_LEVELS])
   {
    /***** Get total number of threads in forums of this type from database *****/
    switch (ForumType)
@@ -1260,7 +1260,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 		        (unsigned) ForumType);
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
-         if (HieCod[Hie_INS] > 0)	// Number of threads in institution forums for an institution
+         if (HieCods[Hie_INS] > 0)	// Number of threads in institution forums for an institution
             return (unsigned)
             DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 			   "SELECT COUNT(*)"
@@ -1268,9 +1268,9 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			   " WHERE ForumType=%u"
 			     " AND HieCod=%ld",
 			   (unsigned) ForumType,
-			   HieCod[Hie_INS]);
+			   HieCods[Hie_INS]);
 
-         if (HieCod[Hie_CTY] > 0)	// Number of threads in institution forums for a country
+         if (HieCods[Hie_CTY] > 0)	// Number of threads in institution forums for a country
 	    return (unsigned)
 	    DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 			   "SELECT COUNT(*)"
@@ -1280,7 +1280,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			     " AND for_threads.HieCod=ins_instits.InsCod"
 			     " AND ins_instits.CtyCod=%ld",
 			   (unsigned) ForumType,
-			   HieCod[Hie_CTY]);
+			   HieCods[Hie_CTY]);
 
          				// Number of threads in institution forums for the whole platform
          return (unsigned)
@@ -1291,7 +1291,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 		        (unsigned) ForumType);
       case For_FORUM_CENTER_USRS:
       case For_FORUM_CENTER_TCHS:
-         if (HieCod[Hie_CTR] > 0)	// Number of threads in center forums for a center <= 1
+         if (HieCods[Hie_CTR] > 0)	// Number of threads in center forums for a center <= 1
             return (unsigned)
             DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 			   "SELECT COUNT(*)"
@@ -1299,9 +1299,9 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			   " WHERE ForumType=%u"
 			     " AND HieCod=%ld",
 			   (unsigned) ForumType,
-			   HieCod[Hie_CTR]);
+			   HieCods[Hie_CTR]);
 
-         if (HieCod[Hie_INS] > 0)	// Number of threads in center forums for an institution
+         if (HieCods[Hie_INS] > 0)	// Number of threads in center forums for an institution
             return (unsigned)
             DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 			   "SELECT COUNT(*)"
@@ -1311,9 +1311,9 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			     " AND for_threads.HieCod=ctr_centers.CtrCod"
 			     " AND ctr_centers.InsCod=%ld",
 			   (unsigned) ForumType,
-			   HieCod[Hie_INS]);
+			   HieCods[Hie_INS]);
 
-         if (HieCod[Hie_CTY] > 0)	// Number of threads in center forums for a country
+         if (HieCods[Hie_CTY] > 0)	// Number of threads in center forums for a country
 	    return (unsigned)
 	    DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 			   "SELECT COUNT(*)"
@@ -1325,7 +1325,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			     " AND ctr_centers.InsCod=ins_instits.InsCod"
 			     " AND ins_instits.CtyCod=%ld",
 			   (unsigned) ForumType,
-			   HieCod[Hie_CTY]);
+			   HieCods[Hie_CTY]);
 
          				// Number of threads in center forums for the whole platform
          return (unsigned)
@@ -1336,7 +1336,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 		        (unsigned) ForumType);
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
-         if (HieCod[Hie_DEG] > 0)	// Number of threads in degree forums for a degree
+         if (HieCods[Hie_DEG] > 0)	// Number of threads in degree forums for a degree
             return (unsigned)
             DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 			   "SELECT COUNT(*)"
@@ -1344,9 +1344,9 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			   " WHERE ForumType=%u"
 			     " AND HieCod=%ld",
 			   (unsigned) ForumType,
-			   HieCod[Hie_DEG]);
+			   HieCods[Hie_DEG]);
 
-         if (HieCod[Hie_CTR] > 0)	// Number of threads in degree forums for a center
+         if (HieCods[Hie_CTR] > 0)	// Number of threads in degree forums for a center
             return (unsigned)
             DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 			   "SELECT COUNT(*)"
@@ -1356,9 +1356,9 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			     " AND for_threads.HieCod=deg_degrees.DegCod"
 			     " AND deg_degrees.CtrCod=%ld",
 			   (unsigned) ForumType,
-			   HieCod[Hie_CTR]);
+			   HieCods[Hie_CTR]);
 
-         if (HieCod[Hie_INS] > 0)	// Number of threads in degree forums for an institution
+         if (HieCods[Hie_INS] > 0)	// Number of threads in degree forums for an institution
             return (unsigned)
             DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 			  "SELECT COUNT(*)"
@@ -1370,9 +1370,9 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			    " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			    " AND ctr_centers.InsCod=%ld",
 			  (unsigned) ForumType,
-			  HieCod[Hie_INS]);
+			  HieCods[Hie_INS]);
 
-         if (HieCod[Hie_CTY] > 0)	// Number of threads in degree forums for a country
+         if (HieCods[Hie_CTY] > 0)	// Number of threads in degree forums for a country
 	    return (unsigned)
 	    DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 			   "SELECT COUNT(*)"
@@ -1386,7 +1386,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			     " AND ctr_centers.InsCod=ins_instits.InsCod"
 			     " AND ins_instits.CtyCod=%ld",
 			   (unsigned) ForumType,
-			   HieCod[Hie_CTY]);
+			   HieCods[Hie_CTY]);
 
          				// Number of threads in degree forums for the whole platform
          return (unsigned)
@@ -1397,7 +1397,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 		        (unsigned) ForumType);
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
-         if (HieCod[Hie_CRS] > 0)	// Number of threads in course forums for a course
+         if (HieCods[Hie_CRS] > 0)	// Number of threads in course forums for a course
             return (unsigned)
             DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 			   "SELECT COUNT(*)"
@@ -1405,9 +1405,9 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			   " WHERE ForumType=%u"
 			     " AND HieCod=%ld",
 			   (unsigned) ForumType,
-			   HieCod[Hie_CRS]);
+			   HieCods[Hie_CRS]);
 
-         if (HieCod[Hie_DEG] > 0)	// Number of threads in course forums for a degree
+         if (HieCods[Hie_DEG] > 0)	// Number of threads in course forums for a degree
 	    return (unsigned)
             DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 			   "SELECT COUNT(*)"
@@ -1417,9 +1417,9 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			     " AND for_threads.HieCod=crs_courses.CrsCod"
 			     " AND crs_courses.DegCod=%ld",
 			   (unsigned) ForumType,
-			   HieCod[Hie_DEG]);
+			   HieCods[Hie_DEG]);
 
-         if (HieCod[Hie_CTR] > 0)	// Number of threads in course forums for a center
+         if (HieCods[Hie_CTR] > 0)	// Number of threads in course forums for a center
 	    return (unsigned)
 	    DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 			   "SELECT COUNT(*)"
@@ -1431,9 +1431,9 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			     " AND crs_courses.DegCod=deg_degrees.DegCod"
 			     " AND deg_degrees.CtrCod=%ld",
 			   (unsigned) ForumType,
-			   HieCod[Hie_CTR]);
+			   HieCods[Hie_CTR]);
 
-         if (HieCod[Hie_INS] > 0)	// Number of threads in course forums for an institution
+         if (HieCods[Hie_INS] > 0)	// Number of threads in course forums for an institution
             return (unsigned)
             DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 			   "SELECT COUNT(*)"
@@ -1447,9 +1447,9 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			     " AND ctr_centers.InsCod=%ld",
 			   (unsigned) ForumType,
-			   HieCod[Hie_INS]);
+			   HieCods[Hie_INS]);
 
-         if (HieCod[Hie_CTY] > 0)	// Number of threads in course forums for a country
+         if (HieCods[Hie_CTY] > 0)	// Number of threads in course forums for a country
 	    return (unsigned)
 	    DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 			   "SELECT COUNT(*)"
@@ -1465,7 +1465,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			     " AND ctr_centers.InsCod=ins_instits.InsCod"
 			     " AND ins_instits.CtyCod=%ld",
 			   (unsigned) ForumType,
-			   HieCod[Hie_CTY]);
+			   HieCods[Hie_CTY]);
 
          				// Number of threads in course forums for the whole platform
 	 return (unsigned)
@@ -1484,7 +1484,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 /*****************************************************************************/
 
 unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
-					       long HieCod[Hie_NUM_LEVELS],
+					       long HieCods[Hie_NUM_LEVELS],
                                                unsigned *NumUsrsToBeNotifiedByEMail)
   {
    MYSQL_RES *mysql_res;
@@ -1510,7 +1510,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
                          (unsigned) ForumType);
          break;
       case For_FORUM_INSTIT_USRS:	case For_FORUM_INSTIT_TCHS:
-         if (HieCod[Hie_INS] > 0)	// Number of posts in institutions forums for an institution
+         if (HieCods[Hie_INS] > 0)	// Number of posts in institutions forums for an institution
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),"			// row[0]
@@ -1521,8 +1521,8 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			      " AND for_threads.HieCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
                             (unsigned) ForumType,
-                            HieCod[Hie_INS]);
-         else if (HieCod[Hie_CTY] > 0)	// Number of posts in institutions forums for a country
+                            HieCods[Hie_INS]);
+         else if (HieCods[Hie_CTY] > 0)	// Number of posts in institutions forums for a country
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),"			// row[0]
@@ -1535,7 +1535,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			      " AND ins_instits.CtyCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
                             (unsigned) ForumType,
-                            HieCod[Hie_CTY]);
+                            HieCods[Hie_CTY]);
          else				// Number of posts in institution forums for the whole platform
 	    DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
@@ -1549,7 +1549,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
          break;
       case For_FORUM_CENTER_USRS:
       case For_FORUM_CENTER_TCHS:
-         if (HieCod[Hie_CTR] > 0)	// Number of posts in center forums for a center
+         if (HieCods[Hie_CTR] > 0)	// Number of posts in center forums for a center
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),"			// row[0]
@@ -1560,8 +1560,8 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			      " AND for_threads.HieCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
                             (unsigned) ForumType,
-                            HieCod[Hie_CTR]);
-         else if (HieCod[Hie_INS] > 0)	// Number of posts in center forums for an institution
+                            HieCods[Hie_CTR]);
+         else if (HieCods[Hie_INS] > 0)	// Number of posts in center forums for an institution
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),"			// row[0]
@@ -1574,8 +1574,8 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			      " AND ctr_centers.InsCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
                             (unsigned) ForumType,
-                            HieCod[Hie_INS]);
-         else if (HieCod[Hie_CTY] > 0)	// Number of posts in center forums for a country
+                            HieCods[Hie_INS]);
+         else if (HieCods[Hie_CTY] > 0)	// Number of posts in center forums for a country
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),"			// row[0]
@@ -1590,7 +1590,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			      " AND ins_instits.CtyCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
                             (unsigned) ForumType,
-                            HieCod[Hie_CTY]);
+                            HieCods[Hie_CTY]);
          else				// Number of posts in center forums for the whole platform
 	    DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
@@ -1604,7 +1604,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
-         if (HieCod[Hie_DEG] > 0)	// Number of posts in degree forums for a degree
+         if (HieCods[Hie_DEG] > 0)	// Number of posts in degree forums for a degree
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),"			// row[0]
@@ -1615,8 +1615,8 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			      " AND for_threads.HieCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
                             (unsigned) ForumType,
-                            HieCod[Hie_DEG]);
-         else if (HieCod[Hie_CTR] > 0)	// Number of posts in degree forums for a center
+                            HieCods[Hie_DEG]);
+         else if (HieCods[Hie_CTR] > 0)	// Number of posts in degree forums for a center
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),"			// row[0]
@@ -1629,8 +1629,8 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			      " AND deg_degrees.CtrCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
                             (unsigned) ForumType,
-                            HieCod[Hie_CTR]);
-         else if (HieCod[Hie_INS] > 0)	// Number of posts in degree forums for an institution
+                            HieCods[Hie_CTR]);
+         else if (HieCods[Hie_INS] > 0)	// Number of posts in degree forums for an institution
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),"			// row[0]
@@ -1645,8 +1645,8 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			      " AND ctr_centers.InsCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
                             (unsigned) ForumType,
-                            HieCod[Hie_INS]);
-         else if (HieCod[Hie_CTY] > 0)	// Number of posts in degree forums for a country
+                            HieCods[Hie_INS]);
+         else if (HieCods[Hie_CTY] > 0)	// Number of posts in degree forums for a country
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),"			// row[0]
@@ -1663,7 +1663,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			      " AND ins_instits.CtyCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
                             (unsigned) ForumType,
-                            HieCod[Hie_CTY]);
+                            HieCods[Hie_CTY]);
          else				// Number of posts in degree forums for the whole platform
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
@@ -1677,7 +1677,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
-         if (HieCod[Hie_CRS] > 0)	// Number of posts in course forums for a course
+         if (HieCods[Hie_CRS] > 0)	// Number of posts in course forums for a course
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),"			// row[0]
@@ -1688,8 +1688,8 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			      " AND for_threads.HieCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
                             (unsigned) ForumType,
-                            HieCod[Hie_CRS]);
-         else if (HieCod[Hie_DEG] > 0)	// Number of posts in course forums for a degree
+                            HieCods[Hie_CRS]);
+         else if (HieCods[Hie_DEG] > 0)	// Number of posts in course forums for a degree
 	    DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),"			// row[0]
@@ -1702,8 +1702,8 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			      " AND crs_courses.DegCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
 		            (unsigned) ForumType,
-		            HieCod[Hie_DEG]);
-         else if (HieCod[Hie_CTR] > 0)	// Number of posts in course forums for a center
+		            HieCods[Hie_DEG]);
+         else if (HieCods[Hie_CTR] > 0)	// Number of posts in course forums for a center
 	    DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),"			// row[0]
@@ -1718,8 +1718,8 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			      " AND deg_degrees.CtrCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
 		            (unsigned) ForumType,
-		            HieCod[Hie_CTR]);
-         else if (HieCod[Hie_INS] > 0)	// Number of posts in course forums for an institution
+		            HieCods[Hie_CTR]);
+         else if (HieCods[Hie_INS] > 0)	// Number of posts in course forums for an institution
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),"			// row[0]
@@ -1736,8 +1736,8 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			      " AND ctr_centers.InsCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
                             (unsigned) ForumType,
-                            HieCod[Hie_INS]);
-         else if (HieCod[Hie_CTY] > 0)	// Number of posts in course forums for a country
+                            HieCods[Hie_INS]);
+         else if (HieCods[Hie_CTY] > 0)	// Number of posts in course forums for a country
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),"			// row[0]
@@ -1756,7 +1756,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			      " AND ins_instits.CtyCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
                             (unsigned) ForumType,
-                            HieCod[Hie_CTY]);
+                            HieCods[Hie_CTY]);
          else				// Number of posts in course forums for the whole platform
 	    DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",

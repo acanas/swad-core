@@ -497,7 +497,7 @@ void Asg_DB_RemoveGrpsAssociatedToAnAssignment (long AsgCod)
 /*********** Remove groups associated to assignments in a course *************/
 /*****************************************************************************/
 
-void Asg_DB_RemoveGrpsAssociatedToAsgsInCrs (long CrsCod)
+void Asg_DB_RemoveGrpsAssociatedToAsgsInCrs (long HieCod)
   {
    DB_QueryDELETE ("can not remove groups associated to assignments in a course",
 		   "DELETE FROM asg_groups"
@@ -505,19 +505,19 @@ void Asg_DB_RemoveGrpsAssociatedToAsgsInCrs (long CrsCod)
 		          "asg_groups"
 		   " WHERE asg_assignments.CrsCod=%ld"
 		     " AND asg_assignments.AsgCod=asg_groups.AsgCod",
-                   CrsCod);
+                   HieCod);
   }
 
 /*****************************************************************************/
 /******************** Remove all assignments in a course *********************/
 /*****************************************************************************/
 
-void Asg_DB_RemoveCrsAssignments (long CrsCod)
+void Asg_DB_RemoveCrsAssignments (long HieCod)
   {
    DB_QueryDELETE ("can not remove all assignments in a course",
 		   "DELETE FROM asg_assignments"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -734,7 +734,7 @@ Exi_Exist_t Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 /****************** Get number of assignments in a course ********************/
 /*****************************************************************************/
 
-unsigned Asg_DB_GetNumAssignmentsInCrs (long CrsCod)
+unsigned Asg_DB_GetNumAssignmentsInCrs (long HieCod)
   {
    /***** Get number of assignments in a course from database *****/
    return (unsigned)
@@ -742,5 +742,5 @@ unsigned Asg_DB_GetNumAssignmentsInCrs (long CrsCod)
 		  "SELECT COUNT(*)"
 		   " FROM asg_assignments"
 		  " WHERE CrsCod=%ld",
-		  CrsCod);
+		  HieCod);
   }

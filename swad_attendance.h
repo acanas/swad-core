@@ -52,7 +52,7 @@ struct Att_Event
   {
    /* Fields stored in database */
    long AttCod;
-   long CrsCod;
+   long HieCod;
    HidVis_HiddenOrVisible_t Hidden;
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];

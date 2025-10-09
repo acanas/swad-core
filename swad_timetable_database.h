@@ -35,7 +35,7 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Tmt_DB_InsertHourInCrsTimeTable (long CrsCod,
+void Tmt_DB_InsertHourInCrsTimeTable (long HieCod,
                                       const struct Tmt_Column *Column,
                                       unsigned Weekday,unsigned Hour,unsigned Min,
                                       unsigned SecondsPerInterval);
@@ -50,7 +50,7 @@ unsigned Tmt_DB_GetTimeTable (MYSQL_RES **mysql_res,
 void Tmt_DB_OrphanAllGrpsOfATypeInCrsTimeTable (long GrpTypCod);
 void Tmt_DB_OrphanGrpInCrsTimeTable (long GrpCod);
 
-void Tmt_DB_RemoveCrsTimeTable (long CrsCod);
+void Tmt_DB_RemoveCrsTimeTable (long HieCod);
 void Tmt_DB_RemoveUsrTimeTable (long UsrCod);
 
 #endif

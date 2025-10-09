@@ -302,8 +302,8 @@ static void RSS_WriteCallsForExams (FILE *FileRSS,struct Hie_Node *Crs)
 /********* Write URL to RSS archive with active notices in a course **********/
 /*****************************************************************************/
 
-void RSS_BuildRSSLink (char RSSLink[WWW_MAX_BYTES_WWW + 1],long CrsCod)
+void RSS_BuildRSSLink (char RSSLink[WWW_MAX_BYTES_WWW + 1],long HieCod)
   {
    snprintf (RSSLink,WWW_MAX_BYTES_WWW + 1,"%s/%ld/%s/%s",
-             Cfg_URL_CRS_PUBLIC,CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
+             Cfg_URL_CRS_PUBLIC,HieCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
   }

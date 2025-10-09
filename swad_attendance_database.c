@@ -145,7 +145,7 @@ unsigned Att_DB_GetListEventsAllGrps (MYSQL_RES **mysql_res,
 /********************* Get list of all attendance events *********************/
 /*****************************************************************************/
 
-unsigned Att_DB_GetAllEventsData (MYSQL_RES **mysql_res,long CrsCod)
+unsigned Att_DB_GetAllEventsData (MYSQL_RES **mysql_res,long HieCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get attendance events",
@@ -164,7 +164,7 @@ unsigned Att_DB_GetAllEventsData (MYSQL_RES **mysql_res,long CrsCod)
 		" ORDER BY ST DESC,"
 			  "ET DESC,"
 			  "Title DESC",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -779,7 +779,7 @@ void Att_DB_RemoveUsrFromAllEvents (long UsrCod)
 /************* Remove one student from all attendance events *****************/
 /*****************************************************************************/
 
-void Att_DB_RemoveUsrFromCrsEvents (long UsrCod,long CrsCod)
+void Att_DB_RemoveUsrFromCrsEvents (long UsrCod,long HieCod)
   {
    DB_QueryDELETE ("can not remove user from attendance events of a course",
 		   "DELETE FROM att_users"
@@ -788,7 +788,7 @@ void Att_DB_RemoveUsrFromCrsEvents (long UsrCod,long CrsCod)
 		   " WHERE att_events.CrsCod=%ld"
 		     " AND att_events.AttCod=att_users.AttCod"
 		     " AND att_users.UsrCod=%ld",
-                   CrsCod,UsrCod);
+                   HieCod,UsrCod);
   }
 
 /*****************************************************************************/

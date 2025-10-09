@@ -118,7 +118,7 @@ static void Tmt_PutIconToViewCrsTT (__attribute__((unused)) void *Args);
 static void Tmt_PutIconToViewMyTT (__attribute__((unused)) void *Args);
 
 static void Tmt_WriteCrsTimeTableIntoDB (const struct Tmt_Timetable *Timetable,
-                                         long CrsCod);
+                                         long HieCod);
 static void Tmt_WriteUsrTimeTableIntoDB (const struct Tmt_Timetable *Timetable,
                                          long UsrCod);
 static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
@@ -139,11 +139,11 @@ static unsigned Tmt_CalculateColsToDrawInCell (const struct Tmt_Timetable *Timet
 static void Tmt_DrawCellAlignTimeTable (void);
 static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
 				   const struct Tmt_WhichCell *WhichCell,unsigned ColSpan,
-                                   long CrsCod,long GrpCod,
+                                   long HieCod,long GrpCod,
                                    Tmt_IntervalType_t IntervalType,Tmt_ClassType_t ClassType,
                                    unsigned DurationNumIntervals,const char *Info);
 static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
-                                       long CrsCod,long GrpCod,
+                                       long HieCod,long GrpCod,
                                        Tmt_ClassType_t ClassType,
                                        unsigned DurationNumIntervals,
                                        const char *Info);
@@ -607,7 +607,7 @@ void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,long UsrCod)
 /*****************************************************************************/
 
 static void Tmt_WriteCrsTimeTableIntoDB (const struct Tmt_Timetable *Timetable,
-                                         long CrsCod)
+                                         long HieCod)
   {
    unsigned Weekday;
    unsigned Interval;
@@ -616,7 +616,7 @@ static void Tmt_WriteCrsTimeTableIntoDB (const struct Tmt_Timetable *Timetable,
    unsigned Column;
 
    /***** Remove former timetable *****/
-   Tmt_DB_RemoveCrsTimeTable (CrsCod);
+   Tmt_DB_RemoveCrsTimeTable (HieCod);
 
    /***** Go across the timetable inserting classes into database *****/
    for (Weekday = 0;
@@ -632,7 +632,7 @@ static void Tmt_WriteCrsTimeTableIntoDB (const struct Tmt_Timetable *Timetable,
               Column++)
 	    if (Tmt_TimeTable[Weekday][Interval].Columns[Column].IntervalType == Tmt_FIRST_INTERVAL &&
                 Tmt_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals)
-	       Tmt_DB_InsertHourInCrsTimeTable (CrsCod,
+	       Tmt_DB_InsertHourInCrsTimeTable (HieCod,
 	                                        &Tmt_TimeTable[Weekday][Interval].Columns[Column],
                                                 Weekday,Hour,Min,
                                                 Timetable->Config.SecondsPerInterval);
@@ -1332,7 +1332,7 @@ static void Tmt_DrawCellAlignTimeTable (void)
 
 static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
 				   const struct Tmt_WhichCell *WhichCell,unsigned ColSpan,
-                                   long CrsCod,long GrpCod,
+                                   long HieCod,long GrpCod,
                                    Tmt_IntervalType_t IntervalType,Tmt_ClassType_t ClassType,
                                    unsigned DurationNumIntervals,const char *Info)
   {
@@ -1421,7 +1421,7 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
       else				// Viewing or printing
 	 if (IntervalType != Tmt_FREE_INTERVAL) // If cell is not empty...
 	    Tmt_TimeTableDrawCellView (Timetable,
-				       CrsCod,GrpCod,
+				       HieCod,GrpCod,
 				       ClassType,
 				       DurationNumIntervals,
 				       Info);
@@ -1431,7 +1431,7 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
   }
 
 static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
-                                       long CrsCod,long GrpCod,
+                                       long HieCod,long GrpCod,
                                        Tmt_ClassType_t ClassType,
                                        unsigned DurationNumIntervals,
                                        const char *Info)
@@ -1453,7 +1453,7 @@ static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
 	  (ClassType == Tmt_LECTURE ||
 	   ClassType == Tmt_PRACTICAL))
 	{
-	 Crs.HieCod = CrsCod;
+	 Crs.HieCod = HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Crs);
 	 HTM_Txt (Crs.ShrtName[0] ? Crs.ShrtName :
 				    Txt_unknown_removed_course);

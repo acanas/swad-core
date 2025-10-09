@@ -84,14 +84,14 @@ unsigned Crs_DB_GetAllCrss (MYSQL_RES **mysql_res)
 /******************* Get courses of a degree from database *******************/
 /*****************************************************************************/
 
-unsigned Crs_DB_GetCrssInDeg (MYSQL_RES **mysql_res,long DegCod)
+unsigned Crs_DB_GetCrssInDeg (MYSQL_RES **mysql_res,long HieCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get courses of a degree",
 		   "SELECT CrsCod"
 		    " FROM crs_courses"
 		   " WHERE DegCod=%ld",
-		   DegCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -139,7 +139,7 @@ unsigned Crs_DB_GetCrssInCurrentDegFull (MYSQL_RES **mysql_res)
 /********************* Get data of a course from its code ********************/
 /*****************************************************************************/
 
-Exi_Exist_t Crs_DB_GetCourseDataByCod (MYSQL_RES **mysql_res,long CrsCod)
+Exi_Exist_t Crs_DB_GetCourseDataByCod (MYSQL_RES **mysql_res,long HieCod)
   {
    return
    DB_QuerySELECTunique (mysql_res,"can not get data of a course",
@@ -153,17 +153,17 @@ Exi_Exist_t Crs_DB_GetCourseDataByCod (MYSQL_RES **mysql_res,long CrsCod)
 				"FullName"		// row[7]
 			  " FROM crs_courses"
 			 " WHERE CrsCod=%ld",
-			 CrsCod);
+			 HieCod);
   }
 
 /*****************************************************************************/
 /************* Get the degree code of a course from its code *****************/
 /*****************************************************************************/
 
-long Crs_DB_GetDegCodOfCourseByCod (long CrsCod)
+long Crs_DB_GetDegCodOfCourseByCod (long HieCod)
   {
    /***** Trivial check: course code should be > 0 *****/
-   if (CrsCod <= 0)
+   if (HieCod <= 0)
       return -1L;
 
    /***** Get the degree code of a course from database *****/
@@ -171,14 +171,14 @@ long Crs_DB_GetDegCodOfCourseByCod (long CrsCod)
 			      "SELECT DegCod"
 			       " FROM crs_courses"
 			      " WHERE CrsCod=%ld",
-			      CrsCod);
+			      HieCod);
   }
 
 /*****************************************************************************/
 /******* Get the short names of degree and course from a course code *********/
 /*****************************************************************************/
 
-void Crs_DB_GetShortNamesByCod (long CrsCod,
+void Crs_DB_GetShortNamesByCod (long HieCod,
                                 char CrsShortName[Nam_MAX_BYTES_SHRT_NAME + 1],
                                 char DegShortName[Nam_MAX_BYTES_SHRT_NAME + 1])
   {
@@ -188,7 +188,7 @@ void Crs_DB_GetShortNamesByCod (long CrsCod,
    DegShortName[0] = CrsShortName[0] = '\0';
 
    /***** Trivial check: course code should be > 0 *****/
-   if (CrsCod <= 0)
+   if (HieCod <= 0)
       return;
 
    /***** Get the short name of a degree from database *****/
@@ -199,7 +199,7 @@ void Crs_DB_GetShortNamesByCod (long CrsCod,
 				    "deg_degrees"
 			     " WHERE crs_courses.CrsCod=%ld"
 			       " AND crs_courses.DegCod=deg_degrees.DegCod",
-			     CrsCod) == Exi_EXISTS)
+			     HieCod) == Exi_EXISTS)
      {
       /***** Get the course short name and degree short name *****/
       row = mysql_fetch_row (mysql_res);
@@ -215,7 +215,7 @@ void Crs_DB_GetShortNamesByCod (long CrsCod,
 /************** Check if course code exists in existing courses **************/
 /*****************************************************************************/
 
-Exi_Exist_t Crs_DB_CheckIfCrsCodExists (long CrsCod)
+Exi_Exist_t Crs_DB_CheckIfCrsCodExists (long HieCod)
   {
    return
    DB_QueryEXISTS ("can not check if a course already existed",
@@ -223,7 +223,7 @@ Exi_Exist_t Crs_DB_CheckIfCrsCodExists (long CrsCod)
 		   "(SELECT *"
 		     " FROM crs_courses"
 		    " WHERE CrsCod=%ld)",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -356,7 +356,7 @@ unsigned Crs_DB_SearchCrss (MYSQL_RES **mysql_res,
 /********************** Get number of courses in system **********************/
 /*****************************************************************************/
 
-unsigned Crs_DB_GetNumCrssInSys (__attribute__((unused)) long SysCod)
+unsigned Crs_DB_GetNumCrssInSys (__attribute__((unused)) long HieCod)
   {
    return (unsigned) DB_GetNumRowsTable ("crs_courses");
   }
@@ -365,7 +365,7 @@ unsigned Crs_DB_GetNumCrssInSys (__attribute__((unused)) long SysCod)
 /******************** Get number of courses in a country *********************/
 /*****************************************************************************/
 
-unsigned Crs_DB_GetNumCrssInCty (long CtyCod)
+unsigned Crs_DB_GetNumCrssInCty (long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get the number of courses in a country",
@@ -378,14 +378,14 @@ unsigned Crs_DB_GetNumCrssInCty (long CtyCod)
 		    " AND ins_instits.InsCod=ctr_centers.InsCod"
 		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		    " AND deg_degrees.DegCod=crs_courses.DegCod",
-		  CtyCod);
+		  HieCod);
   }
 
 /*****************************************************************************/
 /****************** Get number of courses in an institution ******************/
 /*****************************************************************************/
 
-unsigned Crs_DB_GetNumCrssInIns (long InsCod)
+unsigned Crs_DB_GetNumCrssInIns (long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get the number of courses in an institution",
@@ -396,14 +396,14 @@ unsigned Crs_DB_GetNumCrssInIns (long InsCod)
 		  " WHERE ctr_centers.InsCod=%ld"
 		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		    " AND deg_degrees.DegCod=crs_courses.DegCod",
-		  InsCod);
+		  HieCod);
   }
 
 /*****************************************************************************/
 /********************* Get number of courses in a center *********************/
 /*****************************************************************************/
 
-unsigned Crs_DB_GetNumCrssInCtr (long CtrCod)
+unsigned Crs_DB_GetNumCrssInCtr (long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get the number of courses in a center",
@@ -412,21 +412,21 @@ unsigned Crs_DB_GetNumCrssInCtr (long CtrCod)
 		         "crs_courses"
 		  " WHERE deg_degrees.CtrCod=%ld"
 		    " AND deg_degrees.DegCod=crs_courses.DegCod",
-		  CtrCod);
+		  HieCod);
   }
 
 /*****************************************************************************/
 /********************* Get number of courses in a degree *********************/
 /*****************************************************************************/
 
-unsigned Crs_DB_GetNumCrssInDeg (long DegCod)
+unsigned Crs_DB_GetNumCrssInDeg (long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get the number of courses in a degree",
 		  "SELECT COUNT(*)"
 		   " FROM crs_courses"
 		  " WHERE DegCod=%ld",
-		  DegCod);
+		  HieCod);
   }
 
 /*****************************************************************************/
@@ -499,35 +499,35 @@ unsigned Crs_DB_GetCrssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long PrtCod)
 /************* Change the institutional course code of a course **************/
 /*****************************************************************************/
 
-void Crs_DB_UpdateInstitutionalCrsCod (long CrsCod,const char *NewInstitutionalCrsCod)
+void Crs_DB_UpdateInstitutionalCrsCod (long HieCod,const char *NewInstitutionalCrsCod)
   {
    DB_QueryUPDATE ("can not update the institutional code of a course",
 		   "UPDATE crs_courses"
 		     " SET InsCrsCod='%s'"
 		   " WHERE CrsCod=%ld",
                    NewInstitutionalCrsCod,
-                   CrsCod);
+                   HieCod);
   }
 
 /*****************************************************************************/
 /****************** Change the year/semester of a course *********************/
 /*****************************************************************************/
 
-void Crs_DB_UpdateCrsYear (long CrsCod,unsigned NewYear)
+void Crs_DB_UpdateCrsYear (long HieCod,unsigned NewYear)
   {
    DB_QueryUPDATE ("can not update the year of a course",
 		   "UPDATE crs_courses"
 		     " SET Year=%u"
 		   " WHERE CrsCod=%ld",
 	           NewYear,
-	           CrsCod);
+	           HieCod);
   }
 
 /*****************************************************************************/
 /***************** Update course name in table of courses ********************/
 /*****************************************************************************/
 
-void Crs_DB_UpdateCrsName (long CrsCod,
+void Crs_DB_UpdateCrsName (long HieCod,
 			   const char *FldName,const char *NewCrsName)
   {
    DB_QueryUPDATE ("can not update the name of a course",
@@ -535,35 +535,35 @@ void Crs_DB_UpdateCrsName (long CrsCod,
 		     " SET %s='%s'"
 		   " WHERE CrsCod=%ld",
 	           FldName,NewCrsName,
-	           CrsCod);
+	           HieCod);
   }
 
 /*****************************************************************************/
 /********************** Update degree in table of courses ********************/
 /*****************************************************************************/
 
-void Crs_DB_UpdateCrsDeg (long CrsCod,long DegCod)
+void Crs_DB_UpdateDegOfCurrentCrs (long HieCod)
   {
    DB_QueryUPDATE ("can not move course to another degree",
 		   "UPDATE crs_courses"
 		     " SET DegCod=%ld"
 		   " WHERE CrsCod=%ld",
-	           DegCod,
-	           CrsCod);
+	           HieCod,
+	           Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
 /********************** Change the status of a course ************************/
 /*****************************************************************************/
 
-void Crs_DB_UpdateCrsStatus (long CrsCod,Hie_Status_t Status)
+void Crs_DB_UpdateCrsStatus (long HieCod,Hie_Status_t Status)
   {
    DB_QueryUPDATE ("can not update the status of a course",
 		   "UPDATE crs_courses"
 		     " SET Status=%u"
 		   " WHERE CrsCod=%ld",
                    (unsigned) Status,
-                   CrsCod);
+                   HieCod);
   }
 
 /*****************************************************************************/
@@ -585,53 +585,53 @@ void Crs_DB_UpdateCrsLastClick (void)
 /******************** Remove information about a course **********************/
 /*****************************************************************************/
 
-void Crs_DB_RemoveCrsInfo (long CrsCod)
+void Crs_DB_RemoveCrsInfo (long HieCod)
   {
    /* Remove information source of the course */
    DB_QueryDELETE ("can not remove info sources of a course",
 		   "DELETE FROM crs_info_src"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
 
    /* Remove information text of the course */
    DB_QueryDELETE ("can not remove info of a course",
 		   "DELETE FROM crs_info_txt"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /********************** Remove timetable of a course *************************/
 /*****************************************************************************/
 
-void Crs_DB_RemoveCrsTimetable (long CrsCod)
+void Crs_DB_RemoveCrsTimetable (long HieCod)
   {
    DB_QueryDELETE ("can not remove the timetable of a course",
 		   "DELETE FROM tmt_courses"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /***** Remove course from table of last accesses to courses in database ******/
 /*****************************************************************************/
 
-void Crs_DB_RemoveCrsLast (long CrsCod)
+void Crs_DB_RemoveCrsLast (long HieCod)
   {
    DB_QueryDELETE ("can not remove a course",
 		   "DELETE FROM crs_last"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /************* Remove course from table of courses in database ***************/
 /*****************************************************************************/
 
-void Crs_DB_RemoveCrs (long CrsCod)
+void Crs_DB_RemoveCrs (long HieCod)
   {
    DB_QueryDELETE ("can not remove a course",
 		   "DELETE FROM crs_courses"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }

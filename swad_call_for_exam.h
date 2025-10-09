@@ -50,7 +50,7 @@ typedef enum
 
 struct Cfe_CallForExam
   {
-   long CrsCod;
+   long HieCod;	// Course code
    Cfe_Status_t Status;
    char CrsFullName[Nam_MAX_BYTES_FULL_NAME + 1];
    unsigned Year; // Number of year (0 (N.A.), 1, 2, 3, 4, 5, 6) in the degree

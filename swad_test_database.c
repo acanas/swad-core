@@ -150,7 +150,7 @@ void Tst_DB_SaveConfig (void)
 /***************** Get configuration of test in a course *********************/
 /*****************************************************************************/
 
-Exi_Exist_t Tst_DB_GetConfig (MYSQL_RES **mysql_res,long CrsCod)
+Exi_Exist_t Tst_DB_GetConfig (MYSQL_RES **mysql_res,long HieCod)
   {
    return
    DB_QuerySELECTunique (mysql_res,"can not get configuration of test",
@@ -162,7 +162,7 @@ Exi_Exist_t Tst_DB_GetConfig (MYSQL_RES **mysql_res,long CrsCod)
 				"Visibility"		// row[5]
 			  " FROM tst_config"
 			 " WHERE CrsCod=%ld",
-			 CrsCod);
+			 HieCod);
   }
 
 /*****************************************************************************/
@@ -184,12 +184,12 @@ Exi_Exist_t Tst_DB_GetPluggableFromConfig (MYSQL_RES **mysql_res)
 /****************** Remove test configuration in a course ********************/
 /*****************************************************************************/
 
-void Tst_DB_RemoveTstConfig (long CrsCod)
+void Tst_DB_RemoveTstConfig (long HieCod)
   {
    DB_QueryDELETE ("can not remove configuration of tests of a course",
 		   "DELETE FROM tst_config"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -334,13 +334,13 @@ void Tst_DB_RemovePrintsMadeByUsrInAllCrss (long UsrCod)
 /************** Remove test prints made by a user in a course ****************/
 /*****************************************************************************/
 
-void Tst_DB_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod)
+void Tst_DB_RemovePrintsMadeByUsrInCrs (long UsrCod,long HieCod)
   {
    DB_QueryDELETE ("can not remove tests made by a user in a course",
 		   "DELETE FROM tst_exams"
 	           " WHERE CrsCod=%ld"
 	             " AND UsrCod=%ld",
-		   CrsCod,
+		   HieCod,
 		   UsrCod);
   }
 
@@ -348,12 +348,12 @@ void Tst_DB_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod)
 /****************** Remove all test prints made in a course ******************/
 /*****************************************************************************/
 
-void Tst_DB_RemovePrintsMadeByInCrs (long CrsCod)
+void Tst_DB_RemovePrintsMadeByInCrs (long HieCod)
   {
    DB_QueryDELETE ("can not remove tests made in a course",
 		   "DELETE FROM tst_exams"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -436,7 +436,7 @@ void Tst_DB_RemovePrintQuestionsMadeByUsrInAllCrss (long UsrCod)
 /********* Remove test prints questions made by a user in a course ***********/
 /*****************************************************************************/
 
-void Tst_DB_RemovePrintQuestionsMadeByUsrInCrs (long UsrCod,long CrsCod)
+void Tst_DB_RemovePrintQuestionsMadeByUsrInCrs (long UsrCod,long HieCod)
   {
    DB_QueryDELETE ("can not remove tests made by a user in a course",
 		   "DELETE FROM tst_exam_questions"
@@ -445,7 +445,7 @@ void Tst_DB_RemovePrintQuestionsMadeByUsrInCrs (long UsrCod,long CrsCod)
                    " WHERE tst_exams.CrsCod=%ld"
                      " AND tst_exams.UsrCod=%ld"
                      " AND tst_exams.ExaCod=tst_exam_questions.ExaCod",
-		   CrsCod,
+		   HieCod,
 		   UsrCod);
   }
 
@@ -453,7 +453,7 @@ void Tst_DB_RemovePrintQuestionsMadeByUsrInCrs (long UsrCod,long CrsCod)
 /******* Remove all test prints questions made by any user in a course *******/
 /*****************************************************************************/
 
-void Tst_DB_RemovePrintQuestionsMadeInCrs (long CrsCod)
+void Tst_DB_RemovePrintQuestionsMadeInCrs (long HieCod)
   {
    DB_QueryDELETE ("can not remove tests made in a course",
 		   "DELETE FROM tst_exam_questions"
@@ -461,5 +461,5 @@ void Tst_DB_RemovePrintQuestionsMadeInCrs (long CrsCod)
 	                  "tst_exam_questions"
                    " WHERE tst_exams.CrsCod=%ld"
                      " AND tst_exams.ExaCod=tst_exam_questions.ExaCod",
-		   CrsCod);
+		   HieCod);
   }

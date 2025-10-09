@@ -298,7 +298,7 @@ struct Globals
       struct
 	{
 	 long UsrCod;
-	 long CrsCod;
+	 long HieCod;
 	 Rol_Role_t Role;
 	 Cac_Status_t Status;
 	} RoleUsrInCrs;

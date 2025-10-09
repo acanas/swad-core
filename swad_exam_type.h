@@ -70,7 +70,7 @@ struct Exa_ExamSelected
 struct Exa_Exam
   {
    long ExaCod;			// Exam code
-   long CrsCod;			// Course code
+   long HieCod;			// Course code
    long UsrCod;			// Author code
    double MaxGrade;		// Score range [0...max.score]
 				// will be converted to

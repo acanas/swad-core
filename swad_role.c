@@ -306,24 +306,24 @@ void Rol_FlushCacheMyRoleInCurrentCrs (void)
    Gbl.Cache.MyRoleInCurrentCrs.Status = Cac_INVALID;
   }
 
-Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod)
+Rol_Role_t Rol_GetMyRoleInCrs (long HieCod)
   {
    Rol_Role_t Role;
 
    /***** 1. Fast check: trivial cases *****/
-   if (CrsCod <= 0)
+   if (HieCod <= 0)
       return Rol_UNK;
 
    /***** 2. Fast check: is my role in current course already calculated? *****/
    if (Gbl.Cache.MyRoleInCurrentCrs.Status == Cac_VALID &&
-       CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod)
+       HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod)
       return Gbl.Cache.MyRoleInCurrentCrs.Role;
 
    /***** 3. Slow check: get my role from list of my courses *****/
-   Role = Rol_GetMyMaxRoleIn (Hie_CRS,CrsCod);
+   Role = Rol_GetMyMaxRoleIn (Hie_CRS,HieCod);
 
    /* Update my role in current course */
-   if (CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod)
+   if (HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod)
      {
       Gbl.Cache.MyRoleInCurrentCrs.Role   = Role;
       Gbl.Cache.MyRoleInCurrentCrs.Status = Cac_VALID;
@@ -341,29 +341,29 @@ void Rol_FlushCacheRoleUsrInCrs (void)
    Gbl.Cache.RoleUsrInCrs.Status = Cac_INVALID;
   }
 
-Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long CrsCod)
+Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long HieCod)
   {
    /***** 1. Fast check: trivial cases *****/
    if (UsrCod <= 0 ||
-       CrsCod <= 0)
+       HieCod <= 0)
       return Rol_UNK;
 
    /***** 2. Fast check: Is role in course already calculated? *****/
    if (Gbl.Cache.RoleUsrInCrs.Status == Cac_VALID &&
        UsrCod == Gbl.Cache.RoleUsrInCrs.UsrCod &&
-       CrsCod == Gbl.Cache.RoleUsrInCrs.CrsCod)
+       HieCod == Gbl.Cache.RoleUsrInCrs.HieCod)
       return Gbl.Cache.RoleUsrInCrs.Role;
 
    /***** 3. Slow check: Get role of a user in a course from database.
 			 The result of the query will have one row or none *****/
    Gbl.Cache.RoleUsrInCrs.UsrCod = UsrCod;
-   Gbl.Cache.RoleUsrInCrs.CrsCod = CrsCod;
+   Gbl.Cache.RoleUsrInCrs.HieCod = HieCod;
    if (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       /* Get my role in course */
-      Gbl.Cache.RoleUsrInCrs.Role = Rol_GetMyRoleInCrs (CrsCod);
+      Gbl.Cache.RoleUsrInCrs.Role = Rol_GetMyRoleInCrs (HieCod);
    else
       /* Get role of the user in course from database */
-      Gbl.Cache.RoleUsrInCrs.Role = Rol_DB_GetRoleUsrInCrs (UsrCod,CrsCod);
+      Gbl.Cache.RoleUsrInCrs.Role = Rol_DB_GetRoleUsrInCrs (UsrCod,HieCod);
    Gbl.Cache.RoleUsrInCrs.Status = Cac_VALID;
    return Gbl.Cache.RoleUsrInCrs.Role;
   }

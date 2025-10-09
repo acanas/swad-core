@@ -71,7 +71,7 @@ typedef enum
 struct Roo_Room
   {
    long RooCod;						// Room code
-   long CtrCod;						// Center code
+   long HieCod;						// Center code
    long BldCod;						// Building code
    char BldShrtName[Nam_MAX_BYTES_SHRT_NAME + 1];	// Building short name
    int  Floor;						// Room floor

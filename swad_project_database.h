@@ -60,11 +60,11 @@ unsigned Prj_DB_GetNumProjects (Hie_Level_t HieLvl);
 void Prj_DB_RemoveUsrFromPrj (long PrjCod,Prj_RoleInProject_t RoleInPrj,long UsrCod);
 void Prj_DB_RemoveUsrFromProjects (long UsrCod);
 void Prj_DB_RemoveUsrsFromPrj (long PrjCod);
-void Prj_DB_RemoveUsrsFromCrsPrjs (long CrsCod);
-void Prj_DB_RemoveConfigOfCrsPrjs (long CrsCod);
-void Prj_DB_RemoveRubricsOfCrsPrjs (long CrsCod);
+void Prj_DB_RemoveUsrsFromCrsPrjs (long HieCod);
+void Prj_DB_RemoveConfigOfCrsPrjs (long HieCod);
+void Prj_DB_RemoveRubricsOfCrsPrjs (long HieCod);
 void Prj_DB_RemovePrj (long PrjCod);
-void Prj_DB_RemoveCrsPrjs (long CrsCod);
+void Prj_DB_RemoveCrsPrjs (long HieCod);
 
 //----------------------------- Configuration ---------------------------------
 

@@ -61,7 +61,7 @@ void Exa_FreeListExams (struct Exa_Exams *Exams);
 
 void Exa_AskRemExam (void);
 void Exa_RemoveExam (void);
-void Exa_RemoveCrsExams (long CrsCod);
+void Exa_RemoveCrsExams (long HieCod);
 
 void Exa_HideExam (void);
 void Exa_UnhideExam (void);

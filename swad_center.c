@@ -82,6 +82,7 @@ static void Ctr_ListOneCenterForSeeing (struct Hie_Node *Ctr,unsigned NumCtr);
 static void Ctr_EditCentersInternal (void);
 static void Ctr_PutIconsEditingCenters (__attribute__((unused)) void *Args);
 
+static void Ctr_GetFullListOfCentersInCurrentIns (void);
 static void Ctr_GetCenterDataFromRow (MYSQL_RES *mysql_res,
 				      struct Hie_Node *Ctr,
                                       bool GetNumUsrsWhoClaimToBelongToCtr);
@@ -224,8 +225,7 @@ void Ctr_ShowCtrsOfCurrentIns (void)
    Gbl.Hierarchy.List[Hie_INS].SelectedOrder = Hie_GetParHieOrder ();
 
    /***** Get list of centers *****/
-   Ctr_GetFullListOfCenters (Gbl.Hierarchy.Node[Hie_INS].HieCod,
-                             Gbl.Hierarchy.List[Hie_INS].SelectedOrder);
+   Ctr_GetFullListOfCentersInCurrentIns ();
 
    /***** Write menu to select country and institution *****/
    Hie_WriteMenuHierarchy ();
@@ -414,8 +414,7 @@ static void Ctr_EditCentersInternal (void)
 
    /***** Get list of centers *****/
    Gbl.Hierarchy.List[Hie_INS].SelectedOrder = Hie_ORDER_BY_NAME;
-   Ctr_GetFullListOfCenters (Gbl.Hierarchy.Node[Hie_INS].HieCod,
-                             Gbl.Hierarchy.List[Hie_INS].SelectedOrder);
+   Ctr_GetFullListOfCentersInCurrentIns ();
 
    /***** Write menu to select country and institution *****/
    Hie_WriteMenuHierarchy ();
@@ -462,19 +461,19 @@ static void Ctr_PutIconsEditingCenters (__attribute__((unused)) void *Args)
 /************ Get basic list of centers ordered by name of center ************/
 /*****************************************************************************/
 
-void Ctr_GetBasicListOfCenters (long InsCod)
+void Ctr_GetBasicListOfCentersInIns (long HieCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumCtr;
 
    /***** Get centers from database *****/
-   Gbl.Hierarchy.List[Hie_INS].Num = Ctr_DB_GetListOfCtrsFull (&mysql_res,InsCod);
+   Gbl.Hierarchy.List[Hie_INS].Num = Ctr_DB_GetFullListOfCtrsInIns (&mysql_res,HieCod);
 
    if (Gbl.Hierarchy.List[Hie_INS].Num) // Centers found...
      {
       /***** Create list with centers in institution *****/
       if ((Gbl.Hierarchy.List[Hie_INS].Lst = calloc ((size_t) Gbl.Hierarchy.List[Hie_INS].Num,
-							sizeof (*Gbl.Hierarchy.List[Hie_INS].Lst))) == NULL)
+						     sizeof (*Gbl.Hierarchy.List[Hie_INS].Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the centers *****/
@@ -495,19 +494,19 @@ void Ctr_GetBasicListOfCenters (long InsCod)
 /************* with number of users who claim to belong to them **************/
 /*****************************************************************************/
 
-void Ctr_GetFullListOfCenters (long InsCod,Hie_Order_t SelectedOrder)
+static void Ctr_GetFullListOfCentersInCurrentIns (void)
   {
    MYSQL_RES *mysql_res;
    unsigned NumCtr;
 
    /***** Get centers from database *****/
-   Gbl.Hierarchy.List[Hie_INS].Num = Ctr_DB_GetListOfCtrsFullWithNumUsrs (&mysql_res,InsCod,SelectedOrder);
+   Gbl.Hierarchy.List[Hie_INS].Num = Ctr_DB_GetFullListOfCtrsInCurrentInsWithNumUsrs (&mysql_res);
 
    if (Gbl.Hierarchy.List[Hie_INS].Num) // Centers found...
      {
       /***** Create list with courses in degree *****/
       if ((Gbl.Hierarchy.List[Hie_INS].Lst = calloc ((size_t) Gbl.Hierarchy.List[Hie_INS].Num,
-							sizeof (*Gbl.Hierarchy.List[Hie_INS].Lst))) == NULL)
+						     sizeof (*Gbl.Hierarchy.List[Hie_INS].Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the centers *****/
@@ -568,12 +567,12 @@ Err_SuccessOrError_t Ctr_GetCenterDataByCod (struct Hie_Node *Node)
 /******************** Get coordinates of center by code **********************/
 /*****************************************************************************/
 
-void Ctr_GetCoordByCod (long CtrCod,struct Map_Coordinates *Coord)
+void Ctr_GetCoordByCod (long HieCod,struct Map_Coordinates *Coord)
   {
    MYSQL_RES *mysql_res;
 
    /***** Get coordinates of a center from database *****/
-   switch (Ctr_DB_GetCoordByCod (&mysql_res,CtrCod))
+   switch (Ctr_DB_GetCoordByCod (&mysql_res,HieCod))
      {
       case Exi_EXISTS:
 	 Ctr_GetCoordFromRow (mysql_res,Coord);
@@ -660,7 +659,7 @@ void Ctr_WriteSelectorOfCenter (void)
    MYSQL_ROW row;
    unsigned NumCtrs;
    unsigned NumCtr;
-   long CtrCod;
+   long HieCod;
 
    /***** Begin form *****/
    Frm_BeginFormGoTo (ActSeeDeg);
@@ -681,7 +680,7 @@ void Ctr_WriteSelectorOfCenter (void)
 	 if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
 	   {
 	    /***** Get centers in current institution from database *****/
-	    NumCtrs = Ctr_DB_GetListOfCtrsInCurrentIns (&mysql_res);
+	    NumCtrs = Ctr_DB_GetBasicListOfCtrsInCurrentIns (&mysql_res);
 	    for (NumCtr = 0;
 		 NumCtr < NumCtrs;
 		 NumCtr++)
@@ -690,13 +689,13 @@ void Ctr_WriteSelectorOfCenter (void)
 	       row = mysql_fetch_row (mysql_res);
 
 	       /* Get center code (row[0]) */
-	       if ((CtrCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	       if ((HieCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 		  Err_WrongCenterExit ();
 
 	       /* Write option */
-	       HTM_OPTION (HTM_Type_LONG,&CtrCod,
+	       HTM_OPTION (HTM_Type_LONG,&HieCod,
 			   Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0 &&
-			   CtrCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod ? HTM_SELECTED :
+			   HieCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod ? HTM_SELECTED :
 									  HTM_NO_ATTR,
 			   "%s",row[1]);
 	      }
@@ -1506,18 +1505,18 @@ unsigned Ctr_GetCachedNumCtrsWithMapInSys (void)
 /************** Get number of centers with map in a country ******************/
 /*****************************************************************************/
 
-unsigned Ctr_GetCachedNumCtrsWithMapInCty (long CtyCod)
+unsigned Ctr_GetCachedNumCtrsWithMapInCty (long HieCod)
   {
    unsigned NumCtrsWithMap;
 
    /***** Get number of centers with map from cache *****/
-   if (FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_CTY,CtyCod,
+   if (FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_CTY,HieCod,
                                   FigCch_UNSIGNED,&NumCtrsWithMap) == Exi_DOES_NOT_EXIST)
      {
       /***** Get current number of centers with map from database and update cache *****/
       /* Ccoordinates 0, 0 means not set ==> don't show map */
-      NumCtrsWithMap = Ctr_DB_GetNumCtrsWithMapInCty (CtyCod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_CTY,CtyCod,
+      NumCtrsWithMap = Ctr_DB_GetNumCtrsWithMapInCty (HieCod);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_CTY,HieCod,
                                     FigCch_UNSIGNED,&NumCtrsWithMap);
      }
 
@@ -1528,18 +1527,18 @@ unsigned Ctr_GetCachedNumCtrsWithMapInCty (long CtyCod)
 /************* Get number of centers with map in an institution **************/
 /*****************************************************************************/
 
-unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod)
+unsigned Ctr_GetCachedNumCtrsWithMapInIns (long HieCod)
   {
    unsigned NumCtrsWithMap;
 
    /***** Get number of centers with map from cache *****/
-   if (FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_INS,InsCod,
+   if (FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_INS,HieCod,
                                   FigCch_UNSIGNED,&NumCtrsWithMap) == Exi_DOES_NOT_EXIST)
      {
       /***** Get current number of centers with map from database and update cache *****/
       /* Ccoordinates 0, 0 means not set ==> don't show map */
-      NumCtrsWithMap = Ctr_DB_GetNumCtrsWithMapInIns (InsCod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_INS,InsCod,
+      NumCtrsWithMap = Ctr_DB_GetNumCtrsWithMapInIns (HieCod);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_INS,HieCod,
                                     FigCch_UNSIGNED,&NumCtrsWithMap);
      }
 

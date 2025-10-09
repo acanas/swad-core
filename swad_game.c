@@ -192,7 +192,7 @@ void Gam_ResetGame (struct Gam_Game *Game)
   {
    /***** Initialize to empty game *****/
    Game->GamCod                  = -1L;
-   Game->CrsCod                  = -1L;
+   Game->HieCod                  = -1L;
    Game->UsrCod                  = -1L;
    Game->MaxGrade                = Gam_MAX_GRADE_DEFAULT;
    Game->Visibility              = TstVis_VISIBILITY_DEFAULT;
@@ -981,7 +981,7 @@ void Gam_GetGameDataByCod (struct Gam_Game *Game)
 	 Game->GamCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	 /* Get code of the course (row[1]) */
-	 Game->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
+	 Game->HieCod = Str_ConvertStrCodToLongCod (row[1]);
 
 	 /* Get whether the game is hidden (row[2]) */
 	 Game->Hidden = HidVis_GetHiddenFromYN (row[2][0]);
@@ -1146,16 +1146,16 @@ static void Gam_RemoveGameFromAllTables (long GamCod)
 /*********************** Remove all games of a course ************************/
 /*****************************************************************************/
 
-void Gam_RemoveCrsGames (long CrsCod)
+void Gam_RemoveCrsGames (long HieCod)
   {
    /***** Remove all matches in this course *****/
-   Mch_RemoveMatchesInCourseFromAllTables (CrsCod);
+   Mch_RemoveMatchesInCourseFromAllTables (HieCod);
 
    /***** Remove the questions in games *****/
-   Gam_DB_RemoveCrsGameQsts (CrsCod);
+   Gam_DB_RemoveCrsGameQsts (HieCod);
 
    /***** Remove the games *****/
-   Gam_DB_RemoveCrsGames (CrsCod);
+   Gam_DB_RemoveCrsGames (HieCod);
   }
 
 /*****************************************************************************/

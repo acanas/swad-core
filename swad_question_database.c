@@ -555,7 +555,7 @@ unsigned Qst_DB_GetTrivialQst (MYSQL_RES **mysql_res,
 /** Get number of visible test questions from database giving a course code **/
 /*****************************************************************************/
 
-unsigned Qst_DB_GetNumQstsInCrs (long CrsCod)
+unsigned Qst_DB_GetNumQstsInCrs (long HieCod)
   {
    /***** Get number of questions *****/
    // Reject questions with any tag hidden
@@ -577,9 +577,9 @@ unsigned Qst_DB_GetNumQstsInCrs (long CrsCod)
 		    " AND tst_questions.QstCod=tst_question_tags.QstCod"
 		    " AND tst_question_tags.TagCod=tst_tags.TagCod"
 		    " AND tst_tags.CrsCod=%ld",
-		  CrsCod,
-		  CrsCod,
-		  CrsCod);
+		  HieCod,
+		  HieCod,
+		  HieCod);
   }
 
 /*****************************************************************************/
@@ -1130,7 +1130,7 @@ unsigned Qst_DB_GetNumCrssWithPluggableQsts (Hie_Level_t HieLvl,
 /*****************************************************************************/
 
 unsigned Qst_DB_GetRecentQuestions (MYSQL_RES **mysql_res,
-                                    long CrsCod,time_t BeginTime)
+                                    long HieCod,time_t BeginTime)
   {
    // DISTINCT is necessary to not repeat questions
    return (unsigned)
@@ -1159,9 +1159,9 @@ unsigned Qst_DB_GetRecentQuestions (MYSQL_RES **mysql_res,
 			   " OR "
 			   "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld))"
 		" ORDER BY QstCod",
-		   CrsCod,
-		   CrsCod,
-		   CrsCod,
+		   HieCod,
+		   HieCod,
+		   HieCod,
 		   (long) BeginTime,
 		   (long) BeginTime);
   }
@@ -1171,7 +1171,7 @@ unsigned Qst_DB_GetRecentQuestions (MYSQL_RES **mysql_res,
 /*****************************************************************************/
 
 unsigned Qst_DB_GetRecentAnswers (MYSQL_RES **mysql_res,
-                                  long CrsCod,time_t BeginTime)
+                                  long HieCod,time_t BeginTime)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get test answers",
@@ -1202,9 +1202,9 @@ unsigned Qst_DB_GetRecentAnswers (MYSQL_RES **mysql_res,
 				  "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)))"
 		" ORDER BY QstCod,"
 			  "AnsInd",
-		   CrsCod,
-		   CrsCod,
-		   CrsCod,
+		   HieCod,
+		   HieCod,
+		   HieCod,
 		   (long) BeginTime,
 		   (long) BeginTime);
   }
@@ -1255,7 +1255,7 @@ Qst_AnswerType_t Qst_DB_GetQstAnswerType (long QstCod)
 /******** Get media code associated with the stem of a test question *********/
 /*****************************************************************************/
 
-long Qst_DB_GetQstMedCod (long CrsCod,long QstCod)
+long Qst_DB_GetQstMedCod (long HieCod,long QstCod)
   {
    return DB_QuerySELECTCode ("can not get media",
 			      "SELECT MedCod"
@@ -1263,7 +1263,7 @@ long Qst_DB_GetQstMedCod (long CrsCod,long QstCod)
 			      " WHERE QstCod=%ld"
 				" AND CrsCod=%ld",	// Extra check
 			      QstCod,
-			      CrsCod);
+			      HieCod);
   }
 
 /*****************************************************************************/
@@ -1384,21 +1384,21 @@ unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
 /****** Get media codes associated to stems of test questions in course ******/
 /*****************************************************************************/
 
-unsigned Qst_DB_GetMedCodsFromStemsOfQstsInCrs (MYSQL_RES **mysql_res,long CrsCod)
+unsigned Qst_DB_GetMedCodsFromStemsOfQstsInCrs (MYSQL_RES **mysql_res,long HieCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get media",
 		   "SELECT MedCod"	// row[0]
 		    " FROM tst_questions"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /***** Get media codes associated to answers of test questions in course *****/
 /*****************************************************************************/
 
-unsigned Qst_DB_GetMedCodsFromAnssOfQstsInCrs (MYSQL_RES **mysql_res,long CrsCod)
+unsigned Qst_DB_GetMedCodsFromAnssOfQstsInCrs (MYSQL_RES **mysql_res,long HieCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get media",
@@ -1407,14 +1407,14 @@ unsigned Qst_DB_GetMedCodsFromAnssOfQstsInCrs (MYSQL_RES **mysql_res,long CrsCod
 			  "tst_answers"
 		   " WHERE tst_questions.CrsCod=%ld"
 		     " AND tst_questions.QstCod=tst_answers.QstCod",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /************** Get media code associated to stem of a question **************/
 /*****************************************************************************/
 
-unsigned Qst_DB_GetMedCodFromStemOfQst (MYSQL_RES **mysql_res,long CrsCod,long QstCod)
+unsigned Qst_DB_GetMedCodFromStemOfQst (MYSQL_RES **mysql_res,long HieCod,long QstCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get media",
@@ -1423,14 +1423,14 @@ unsigned Qst_DB_GetMedCodFromStemOfQst (MYSQL_RES **mysql_res,long CrsCod,long Q
 		   " WHERE QstCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
 		   QstCod,
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /************** Get media code associated to stem of a question **************/
 /*****************************************************************************/
 
-unsigned Qst_DB_GetMedCodsFromAnssOfQst (MYSQL_RES **mysql_res,long CrsCod,long QstCod)
+unsigned Qst_DB_GetMedCodsFromAnssOfQst (MYSQL_RES **mysql_res,long HieCod,long QstCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get media",
@@ -1442,7 +1442,7 @@ unsigned Qst_DB_GetMedCodsFromAnssOfQst (MYSQL_RES **mysql_res,long CrsCod,long 
 		     " AND tst_questions.CrsCod=%ld"	// Extra check
 		     " AND tst_questions.QstCod=%ld",	// Extra check
 		   QstCod,
-		   CrsCod,
+		   HieCod,
 		   QstCod);
   }
 
@@ -1465,33 +1465,33 @@ long Qst_DB_GetMedCodFromAnsOfQst (long QstCod,unsigned AnsInd)
 /********************* Remove all questions in a course **********************/
 /*****************************************************************************/
 
-void Qst_DB_RemoveQstsInCrs (long CrsCod)
+void Qst_DB_RemoveQstsInCrs (long HieCod)
   {
    DB_QueryDELETE ("can not remove questions in a course",
 		   "DELETE FROM tst_questions"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /********************** Remove a question from database **********************/
 /*****************************************************************************/
 
-void Qst_DB_RemoveQst (long CrsCod,long QstCod)
+void Qst_DB_RemoveQst (long HieCod,long QstCod)
   {
    DB_QueryDELETE ("can not remove a question",
 		   "DELETE FROM tst_questions"
 		   " WHERE QstCod=%ld"
 		     " AND CrsCod=%ld",
 		   QstCod,
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /*************** Remove answers from all questions in a course ****************/
 /*****************************************************************************/
 
-void Qst_DB_RemAnssFromQstsInCrs (long CrsCod)
+void Qst_DB_RemAnssFromQstsInCrs (long HieCod)
   {
    DB_QueryDELETE ("can not remove answers of tests of a course",
 		   "DELETE FROM tst_answers"
@@ -1499,7 +1499,7 @@ void Qst_DB_RemAnssFromQstsInCrs (long CrsCod)
 		          "tst_answers"
                    " WHERE tst_questions.CrsCod=%ld"
                      " AND tst_questions.QstCod=tst_answers.QstCod",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/

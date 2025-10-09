@@ -158,19 +158,19 @@ static void Sta_ShowNumHitsPerBanner (Sta_CountType_t CountType,
 static void Sta_ShowNumHitsPerCountry (Sta_CountType_t CountType,
                                        unsigned NumHits,
                                        MYSQL_RES *mysql_res);
-static void Sta_WriteCountry (long CtyCod);
+static void Sta_WriteCountry (long HieCod);
 static void Sta_ShowNumHitsPerInstitution (Sta_CountType_t CountType,
                                            unsigned NumHits,
                                            MYSQL_RES *mysql_res);
-static void Sta_WriteInstit (long InsCod);
+static void Sta_WriteInstit (long HieCod);
 static void Sta_ShowNumHitsPerCenter (Sta_CountType_t CountType,
                                       unsigned NumHits,
                                       MYSQL_RES *mysql_res);
-static void Sta_WriteCenter (long CtrCod);
+static void Sta_WriteCenter (long HieCod);
 static void Sta_ShowNumHitsPerDegree (Sta_CountType_t CountType,
                                       unsigned NumHits,
                                       MYSQL_RES *mysql_res);
-static void Sta_WriteDegree (long DegCod);
+static void Sta_WriteDegree (long HieCod);
 static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
                                       unsigned NumHits,
                                       MYSQL_RES *mysql_res);
@@ -3017,7 +3017,7 @@ static void Sta_ShowNumHitsPerCountry (Sta_CountType_t CountType,
 /************************ Write country with an icon *************************/
 /*****************************************************************************/
 
-static void Sta_WriteCountry (long CtyCod)
+static void Sta_WriteCountry (long HieCod)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Cty;
@@ -3026,10 +3026,10 @@ static void Sta_WriteCountry (long CtyCod)
    /***** Begin cell *****/
    HTM_TD_Begin ("class=\"LM LOG_%s\"",The_GetSuffix ());
 
-      if (CtyCod > 0)	// Hit with a country selected
+      if (HieCod > 0)	// Hit with a country selected
 	{
 	 /***** Get data of country *****/
-	 Cty.HieCod = CtyCod;
+	 Cty.HieCod = HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTY] (&Cty);
 
 	 /***** Form to go to country *****/
@@ -3064,7 +3064,7 @@ static void Sta_ShowNumHitsPerInstitution (Sta_CountType_t CountType,
    unsigned Ranking;
    struct Sta_Hits Hits;
    MYSQL_ROW row;
-   long InsCod;
+   long HieCod;
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
@@ -3084,19 +3084,19 @@ static void Sta_ShowNumHitsPerInstitution (Sta_CountType_t CountType,
      {
       /* Get institution code */
       row = mysql_fetch_row (mysql_res);
-      InsCod = Str_ConvertStrCodToLongCod (row[0]);
+      HieCod = Str_ConvertStrCodToLongCod (row[0]);
 
       HTM_TR_Begin (NULL);
 
 	 /* Write ranking of this institution */
 	 HTM_TD_Begin ("class=\"RT LOG_%s\"",The_GetSuffix ());
-	    if (InsCod > 0)
+	    if (HieCod > 0)
 	       HTM_Unsigned (++Ranking);
 	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write institution */
-	 Sta_WriteInstit (InsCod);
+	 Sta_WriteInstit (HieCod);
 
 	 /* Draw bar proportional to number of hits */
 	 if (Str_GetDoubleFromStr (row[1],&Hits.Num) == Err_ERROR)
@@ -3112,22 +3112,22 @@ static void Sta_ShowNumHitsPerInstitution (Sta_CountType_t CountType,
 /********************** Write institution with an icon ***********************/
 /*****************************************************************************/
 
-static void Sta_WriteInstit (long InsCod)
+static void Sta_WriteInstit (long HieCod)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Ins;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Begin cell *****/
-   if (InsCod > 0)	// Hit with an institution selected
+   if (HieCod > 0)	// Hit with an institution selected
      {
       /***** Get data of institution *****/
-      Ins.HieCod = InsCod;
+      Ins.HieCod = HieCod;
       SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
 
       /***** Title in cell *****/
       HTM_TD_Begin ("class=\"LM LOG_%s\" title=\"%s\"",
-                    The_GetSuffix (),Ins.FullName);
+	            The_GetSuffix (),Ins.FullName);
 
 	 /***** Form to go to institution *****/
 	 Ins_DrawInstitLogoAndNameWithLink (&Ins,ActSeeInsInf,"CT ICO16x16");
@@ -3160,7 +3160,7 @@ static void Sta_ShowNumHitsPerCenter (Sta_CountType_t CountType,
    unsigned Ranking;
    struct Sta_Hits Hits;
    MYSQL_ROW row;
-   long CtrCod;
+   long HieCod;
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
@@ -3180,19 +3180,19 @@ static void Sta_ShowNumHitsPerCenter (Sta_CountType_t CountType,
      {
       /* Get center code */
       row = mysql_fetch_row (mysql_res);
-      CtrCod = Str_ConvertStrCodToLongCod (row[0]);
+      HieCod = Str_ConvertStrCodToLongCod (row[0]);
 
       HTM_TR_Begin (NULL);
 
 	 /* Write ranking of this center */
 	 HTM_TD_Begin ("class=\"RT LOG_%s\"",The_GetSuffix ());
-	    if (CtrCod > 0)
+	    if (HieCod > 0)
 	       HTM_Unsigned (++Ranking);
 	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write center */
-	 Sta_WriteCenter (CtrCod);
+	 Sta_WriteCenter (HieCod);
 
 	 /* Draw bar proportional to number of hits */
 	 if (Str_GetDoubleFromStr (row[1],&Hits.Num) == Err_ERROR)
@@ -3208,17 +3208,17 @@ static void Sta_ShowNumHitsPerCenter (Sta_CountType_t CountType,
 /************************* Write center with an icon *************************/
 /*****************************************************************************/
 
-static void Sta_WriteCenter (long CtrCod)
+static void Sta_WriteCenter (long HieCod)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Ctr;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Begin cell *****/
-   if (CtrCod > 0)	// Hit with a center selected
+   if (HieCod > 0)	// Hit with a center selected
      {
       /***** Get data of center *****/
-      Ctr.HieCod = CtrCod;
+      Ctr.HieCod = HieCod;
       SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 
       /***** Title in cell *****/
@@ -3256,7 +3256,7 @@ static void Sta_ShowNumHitsPerDegree (Sta_CountType_t CountType,
    unsigned Ranking;
    struct Sta_Hits Hits;
    MYSQL_ROW row;
-   long DegCod;
+   long HieCod;
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
@@ -3276,19 +3276,19 @@ static void Sta_ShowNumHitsPerDegree (Sta_CountType_t CountType,
      {
       /* Get degree code */
       row = mysql_fetch_row (mysql_res);
-      DegCod = Str_ConvertStrCodToLongCod (row[0]);
+      HieCod = Str_ConvertStrCodToLongCod (row[0]);
 
       HTM_TR_Begin (NULL);
 
 	 /* Write ranking of this degree */
 	 HTM_TD_Begin ("class=\"RT LOG_%s\"",The_GetSuffix ());
-	    if (DegCod > 0)
+	    if (HieCod > 0)
 	       HTM_Unsigned (++Ranking);
 	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write degree */
-	 Sta_WriteDegree (DegCod);
+	 Sta_WriteDegree (HieCod);
 
 	 /* Draw bar proportional to number of hits */
 	 if (Str_GetDoubleFromStr (row[1],&Hits.Num) == Err_ERROR)
@@ -3304,17 +3304,17 @@ static void Sta_ShowNumHitsPerDegree (Sta_CountType_t CountType,
 /************************* Write degree with an icon *************************/
 /*****************************************************************************/
 
-static void Sta_WriteDegree (long DegCod)
+static void Sta_WriteDegree (long HieCod)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Deg;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Begin cell *****/
-   if (DegCod > 0)	// Hit with a degree selected
+   if (HieCod > 0)	// Hit with a degree selected
      {
       /***** Get data of degree *****/
-      Deg.HieCod = DegCod;
+      Deg.HieCod = HieCod;
       SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Deg);
 
       /***** Title in cell *****/

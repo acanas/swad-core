@@ -35,7 +35,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-long Tag_DB_CreateNewTag (long CrsCod,const char *TagTxt);
+long Tag_DB_CreateNewTag (long HieCod,const char *TagTxt);
 void Tag_DB_AddTagToQst (long QstCod,long TagCod,unsigned TagInd);
 void Tag_DB_CreateTmpTableQuestionsWithTag (long TagCod);
 void Tag_DB_DropTmpTableQuestionsWithTag (void);
@@ -47,18 +47,18 @@ void Tag_DB_EnableOrDisableTag (long TagCod,HidVis_HiddenOrVisible_t TagHidden);
 unsigned Tag_DB_GetTagsQst (MYSQL_RES **mysql_res,long QstCod);
 unsigned Tag_DB_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res);
 unsigned Tag_DB_GetEnabledTagsFromCrs (MYSQL_RES **mysql_res,
-				       long TagCod,long CrsCod);
+				       long TagCod,long HieCod);
 Exi_Exist_t Tag_DB_CheckIfTagsExistInCurrentCrs (void);
 long Tag_DB_GetTagCodFromTagTxt (const char *TagTxt);
 void Tag_DB_GetTagTitle (long TagCod,char *Title,size_t TitleSize);
 
 unsigned Tag_DB_GetRecentTags (MYSQL_RES **mysql_res,
-		               long CrsCod,time_t BeginTime);
+		               long HieCod,time_t BeginTime);
 
-void Tag_DB_RemTagsInQstsInCrs (long CrsCod);
-void Tag_DB_RemTagsInCrs (long CrsCod);
+void Tag_DB_RemTagsInQstsInCrs (long HieCod);
+void Tag_DB_RemTagsInCrs (long HieCod);
 void Tag_DB_RemTagsFromQst (long QstCod);
 void Tag_DB_RemoveTag (long TagCod);
-void Tag_DB_RemoveUnusedTagsFromCrs (long CrsCod);
+void Tag_DB_RemoveUnusedTagsFromCrs (long HieCod);
 
 #endif

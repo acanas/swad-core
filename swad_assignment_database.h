@@ -73,8 +73,8 @@ void Asg_DB_RemoveGroup (long GrpCod);
 void Asg_DB_RemoveGroupsOfType (long GrpTypCod);
 void Asg_DB_RemoveGrpsAssociatedToAnAssignment (long AsgCod);
 
-void Asg_DB_RemoveGrpsAssociatedToAsgsInCrs (long CrsCod);
-void Asg_DB_RemoveCrsAssignments (long CrsCod);
+void Asg_DB_RemoveGrpsAssociatedToAsgsInCrs (long HieCod);
+void Asg_DB_RemoveCrsAssignments (long HieCod);
 
 void Asg_DB_UpdateNumUsrsNotifiedByEMailAboutAssignment (long AsgCod,
                                                          unsigned NumUsrsToBeNotifiedByEMail);
@@ -84,6 +84,6 @@ unsigned Asg_DB_GetNumCoursesWithAssignments (Hie_Level_t HieLvl);
 
 Exi_Exist_t Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Level_t HieLvl);
 
-unsigned Asg_DB_GetNumAssignmentsInCrs (long CrsCod);
+unsigned Asg_DB_GetNumAssignmentsInCrs (long HieCod);
 
 #endif

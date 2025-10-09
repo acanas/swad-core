@@ -111,7 +111,7 @@ void Cfe_ResetCallsForExams (struct Cfe_CallsForExams *CallsForExams)
    CallsForExams->ExaCod            = -1L;
    CallsForExams->Anchor            = NULL;
 
-   CallsForExams->CallForExam.CrsCod = -1L;
+   CallsForExams->CallForExam.HieCod = -1L;
    CallsForExams->CallForExam.Status = Cfe_STATUS_DEFAULT;
    CallsForExams->CallForExam.CrsFullName[0] = '\0';
    CallsForExams->CallForExam.Year = 0;
@@ -790,7 +790,7 @@ void Cfe_GetCallForExamDataByCod (struct Cfe_CallsForExams *CallsForExams,
    row = mysql_fetch_row (mysql_res);
 
    /* Code of the course in which the call for exam is inserted (row[0]) */
-   CallsForExams->CallForExam.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
+   CallsForExams->CallForExam.HieCod = Str_ConvertStrCodToLongCod (row[0]);
 
    /* Status of the call for exam (row[1]) */
    if (sscanf (row[1],"%u",&UnsignedNum) != 1)
@@ -1618,7 +1618,7 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Get data of course *****/
-   Hie[Hie_CRS].HieCod = CallsForExams->CallForExam.CrsCod;
+   Hie[Hie_CRS].HieCod = CallsForExams->CallForExam.HieCod;
    SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
 
    /***** Get data of degree *****/

@@ -42,10 +42,10 @@ unsigned Tst_DB_GetNumPrintsGeneratedByMe (MYSQL_RES **mysql_res);
 
 //--------------------------- Test configuration ------------------------------
 void Tst_DB_SaveConfig (void);
-Exi_Exist_t Tst_DB_GetConfig (MYSQL_RES **mysql_res,long CrsCod);
+Exi_Exist_t Tst_DB_GetConfig (MYSQL_RES **mysql_res,long HieCod);
 Exi_Exist_t Tst_DB_GetPluggableFromConfig (MYSQL_RES **mysql_res);
 
-void Tst_DB_RemoveTstConfig (long CrsCod);
+void Tst_DB_RemoveTstConfig (long HieCod);
 
 //------------------------------- Test prints ---------------------------------
 long Tst_DB_CreatePrint (unsigned NumQsts);
@@ -58,8 +58,8 @@ unsigned Tst_DB_GetUsrPrintsInCurrentCrs (MYSQL_RES **mysql_res,long UsrCod);
 Exi_Exist_t Tst_DB_GetPrintDataByPrnCod (MYSQL_RES **mysql_res,long PrnCod);
 
 void Tst_DB_RemovePrintsMadeByUsrInAllCrss (long UsrCod);
-void Tst_DB_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod);
-void Tst_DB_RemovePrintsMadeByInCrs (long CrsCod);
+void Tst_DB_RemovePrintsMadeByUsrInCrs (long UsrCod,long HieCod);
+void Tst_DB_RemovePrintsMadeByInCrs (long HieCod);
 
 //-------------------------- Test print questions -----------------------------
 void Tst_DB_StoreOneQstOfPrint (const struct TstPrn_Print *Print,unsigned QstInd);
@@ -68,7 +68,7 @@ unsigned Tst_DB_GetTagsPresentInAPrint (MYSQL_RES **mysql_res,long PrnCod);
 unsigned Tst_DB_GetPrintQuestions (MYSQL_RES **mysql_res,long PrnCod);
 
 void Tst_DB_RemovePrintQuestionsMadeByUsrInAllCrss (long UsrCod);
-void Tst_DB_RemovePrintQuestionsMadeByUsrInCrs (long UsrCod,long CrsCod);
-void Tst_DB_RemovePrintQuestionsMadeInCrs (long CrsCod);
+void Tst_DB_RemovePrintQuestionsMadeByUsrInCrs (long UsrCod,long HieCod);
+void Tst_DB_RemovePrintQuestionsMadeInCrs (long HieCod);
 
 #endif

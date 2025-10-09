@@ -92,7 +92,7 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *Indicators,
 	                                          Ind_IndicatorsLayout_t IndicatorsLayout,
                                                   unsigned NumCrss,MYSQL_RES *mysql_res);
-static unsigned Ind_GetAndUpdateNumIndicatorsCrs (long CrsCod);
+static unsigned Ind_GetAndUpdateNumIndicatorsCrs (long HieCod);
 
 /*****************************************************************************/
 /******************* Request showing statistics of courses *******************/
@@ -417,7 +417,7 @@ static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1 
   {
    MYSQL_ROW row;
    unsigned NumCrs;
-   long CrsCod;
+   long HieCod;
    unsigned Ind;
    unsigned NumIndicators;
 
@@ -436,11 +436,11 @@ static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1 
       row = mysql_fetch_row (mysql_res);
 
       /* Get course code (row[2]) */
-      if ((CrsCod = Str_ConvertStrCodToLongCod (row[2])) <= 0)
+      if ((HieCod = Str_ConvertStrCodToLongCod (row[2])) <= 0)
          Err_WrongCourseExit ();
 
       /* Get stored number of indicators of this course */
-      NumIndicators = Ind_GetAndUpdateNumIndicatorsCrs (CrsCod);
+      NumIndicators = Ind_GetAndUpdateNumIndicatorsCrs (HieCod);
       NumCrssWithIndicatorYes[NumIndicators]++;
      }
   }
@@ -574,7 +574,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
    extern const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_SOURCES];
    MYSQL_ROW row;
    unsigned NumCrs;
-   long CrsCod;
+   long HieCod;	// Course code
    unsigned NumTchs;
    unsigned NumStds;
    unsigned NumIndicators;
@@ -701,15 +701,15 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get course code (row[2]) */
-	 if ((CrsCod = Str_ConvertStrCodToLongCod (row[2])) <= 0)
+	 if ((HieCod = Str_ConvertStrCodToLongCod (row[2])) <= 0)
 	    Err_WrongCourseExit ();
 
 	 /* Get stored number of indicators of this course */
-	 NumIndicators = Ind_GetAndUpdateNumIndicatorsCrs (CrsCod);
+	 NumIndicators = Ind_GetAndUpdateNumIndicatorsCrs (HieCod);
 	 if (Indicators->Checked[NumIndicators] == HTM_CHECKED)
 	   {
 	    /* Compute and store indicators */
-	    Ind_ComputeAndStoreIndicatorsCrs (CrsCod,(int) NumIndicators,&IndicatorsCrs);
+	    Ind_ComputeAndStoreIndicatorsCrs (HieCod,(int) NumIndicators,&IndicatorsCrs);
 
 	    /* The number of indicators may have changed */
 	    if (Indicators->Checked[IndicatorsCrs.NumIndicators] == HTM_CHECKED)
@@ -749,9 +749,9 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_Begin ("class=\"LM DAT_SMALL_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_A_Begin ("href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\"",
-					Cfg_URL_SWAD_CGI,CrsCod,ActCod);
+					Cfg_URL_SWAD_CGI,HieCod,ActCod);
 			      HTM_TxtF ("%s/?crs=%ld&amp;act=%ld",
-					Cfg_URL_SWAD_CGI,CrsCod,ActCod);
+					Cfg_URL_SWAD_CGI,HieCod,ActCod);
 			   HTM_A_End ();
 			HTM_TD_End ();
 
@@ -827,10 +827,10 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 		     break;
 		  case Ind_INDICATORS_FULL:
 		     /* Get number of users */
-		     NumTchs = Enr_GetNumUsrsInCrss (Hie_CRS,CrsCod,
+		     NumTchs = Enr_GetNumUsrsInCrss (Hie_CRS,HieCod,
 						     1 << Rol_NET |	// Non-editing teachers
 						     1 << Rol_TCH);	// Teachers
-		     NumStds = Enr_GetNumUsrsInCrss (Hie_CRS,CrsCod,
+		     NumStds = Enr_GetNumUsrsInCrss (Hie_CRS,HieCod,
 						     1 << Rol_STD);	// Students
 
 		     HTM_TR_Begin (NULL);
@@ -862,9 +862,9 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_Begin ("class=\"LM DAT_SMALL_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_A_Begin ("href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\"",
-					Cfg_URL_SWAD_CGI,CrsCod,ActCod);
+					Cfg_URL_SWAD_CGI,HieCod,ActCod);
 			      HTM_TxtF ("%s/?crs=%ld&amp;act=%ld",
-					Cfg_URL_SWAD_CGI,CrsCod,ActCod);
+					Cfg_URL_SWAD_CGI,HieCod,ActCod);
 			   HTM_A_End ();
 			HTM_TD_End ();
 
@@ -1057,11 +1057,11 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 /************ If not stored ==> compute and store it             *************/
 /*****************************************************************************/
 
-static unsigned Ind_GetAndUpdateNumIndicatorsCrs (long CrsCod)
+static unsigned Ind_GetAndUpdateNumIndicatorsCrs (long HieCod)
   {
    unsigned NumIndicators;
    struct Ind_IndicatorsCrs IndicatorsCrs;
-   int NumIndicatorsFromDB = Ind_GetNumIndicatorsCrsFromDB (CrsCod);
+   int NumIndicatorsFromDB = Ind_GetNumIndicatorsCrsFromDB (HieCod);
 
    /***** If number of indicators is not already computed ==> compute it! *****/
    if (NumIndicatorsFromDB >= 0)
@@ -1069,7 +1069,7 @@ static unsigned Ind_GetAndUpdateNumIndicatorsCrs (long CrsCod)
    else	// Number of indicators is not already computed
      {
       /***** Compute and store number of indicators *****/
-      Ind_ComputeAndStoreIndicatorsCrs (CrsCod,NumIndicatorsFromDB,&IndicatorsCrs);
+      Ind_ComputeAndStoreIndicatorsCrs (HieCod,NumIndicatorsFromDB,&IndicatorsCrs);
       NumIndicators = IndicatorsCrs.NumIndicators;
      }
    return NumIndicators;
@@ -1080,14 +1080,14 @@ static unsigned Ind_GetAndUpdateNumIndicatorsCrs (long CrsCod)
 /*****************************************************************************/
 // This function returns -1 if number of indicators is not yet calculated
 
-int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
+int Ind_GetNumIndicatorsCrsFromDB (long HieCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    int NumIndicatorsFromDB = -1;	// -1 means not yet calculated
 
    /***** Get number of indicators of a course from database *****/
-   if (Ind_DB_GetNumIndicatorsCrs (&mysql_res,CrsCod) == Exi_EXISTS)
+   if (Ind_DB_GetNumIndicatorsCrs (&mysql_res,HieCod) == Exi_EXISTS)
      {
       /***** Get row *****/
       row = mysql_fetch_row (mysql_res);
@@ -1111,10 +1111,10 @@ int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
    If NumIndicatorsFromDB is different from number of indicators just computed
    ==> update it into database */
 
-void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
+void Ind_ComputeAndStoreIndicatorsCrs (long HieCod,int NumIndicatorsFromDB,
                                        struct Ind_IndicatorsCrs *IndicatorsCrs)
   {
-   long HieCod[Hie_NUM_LEVELS] =
+   long HieCods[Hie_NUM_LEVELS] =
      {
       [Hie_UNK] = -1L,
       [Hie_SYS] = -1L,
@@ -1122,20 +1122,20 @@ void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
       [Hie_INS] = -1L,
       [Hie_CTR] = -1L,
       [Hie_DEG] = -1L,
-      [Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+      [Hie_CRS] = HieCod,
      };
 
    /***** Initialize number of indicators *****/
    IndicatorsCrs->NumIndicators = 0;
 
    /***** Get whether download zones are empty or not *****/
-   IndicatorsCrs->NumFilesInDocumentZones = Brw_DB_GetNumFilesInDocumZonesOfCrs (CrsCod);
-   IndicatorsCrs->NumFilesInSharedZones   = Brw_DB_GetNumFilesInShareZonesOfCrs (CrsCod);
+   IndicatorsCrs->NumFilesInDocumentZones = Brw_DB_GetNumFilesInDocumZonesOfCrs (HieCod);
+   IndicatorsCrs->NumFilesInSharedZones   = Brw_DB_GetNumFilesInShareZonesOfCrs (HieCod);
 
    /***** Indicator #1: information about syllabus *****/
-   IndicatorsCrs->SyllabusLecSrc   = Inf_GetInfoSrcFromDB (CrsCod,Inf_SYLLABUS_LEC);
-   IndicatorsCrs->SyllabusPraSrc   = Inf_GetInfoSrcFromDB (CrsCod,Inf_SYLLABUS_PRA);
-   IndicatorsCrs->TeachingGuideSrc = Inf_GetInfoSrcFromDB (CrsCod,Inf_TEACH_GUIDE);
+   IndicatorsCrs->SyllabusLecSrc   = Inf_GetInfoSrcFromDB (HieCod,Inf_SYLLABUS_LEC);
+   IndicatorsCrs->SyllabusPraSrc   = Inf_GetInfoSrcFromDB (HieCod,Inf_SYLLABUS_PRA);
+   IndicatorsCrs->TeachingGuideSrc = Inf_GetInfoSrcFromDB (HieCod,Inf_TEACH_GUIDE);
    IndicatorsCrs->ThereIsSyllabus = (IndicatorsCrs->SyllabusLecSrc   != Inf_SRC_NONE) ||
                                     (IndicatorsCrs->SyllabusPraSrc   != Inf_SRC_NONE) ||
                                     (IndicatorsCrs->TeachingGuideSrc != Inf_SRC_NONE);
@@ -1143,9 +1143,9 @@ void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
       IndicatorsCrs->NumIndicators++;
 
    /***** Indicator #2: information about assignments *****/
-   IndicatorsCrs->NumAssignments      = Asg_DB_GetNumAssignmentsInCrs (CrsCod);
-   IndicatorsCrs->NumFilesAssignments = Brw_DB_GetNumFilesInAssigZonesOfCrs (CrsCod);
-   IndicatorsCrs->NumFilesWorks       = Brw_DB_GetNumFilesInWorksZonesOfCrs (CrsCod);
+   IndicatorsCrs->NumAssignments      = Asg_DB_GetNumAssignmentsInCrs (HieCod);
+   IndicatorsCrs->NumFilesAssignments = Brw_DB_GetNumFilesInAssigZonesOfCrs (HieCod);
+   IndicatorsCrs->NumFilesWorks       = Brw_DB_GetNumFilesInWorksZonesOfCrs (HieCod);
    IndicatorsCrs->ThereAreAssignments = IndicatorsCrs->NumAssignments ||
                                         IndicatorsCrs->NumFilesAssignments ||
                                         IndicatorsCrs->NumFilesWorks;
@@ -1153,9 +1153,9 @@ void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
       IndicatorsCrs->NumIndicators++;
 
    /***** Indicator #3: information about online tutoring *****/
-   IndicatorsCrs->NumThreads = For_DB_GetNumTotalThrsInForumsOfType (For_FORUM_COURSE_USRS,HieCod);
-   IndicatorsCrs->NumPosts   = For_DB_GetNumTotalPstsInForumsOfType (For_FORUM_COURSE_USRS,HieCod,&(IndicatorsCrs->NumUsrsToBeNotifiedByEMail));
-   IndicatorsCrs->NumMsgsSentByTchs = Msg_DB_GetNumMsgsSentByTchsCrs (CrsCod);
+   IndicatorsCrs->NumThreads = For_DB_GetNumTotalThrsInForumsOfType (For_FORUM_COURSE_USRS,HieCods);
+   IndicatorsCrs->NumPosts   = For_DB_GetNumTotalPstsInForumsOfType (For_FORUM_COURSE_USRS,HieCods,&(IndicatorsCrs->NumUsrsToBeNotifiedByEMail));
+   IndicatorsCrs->NumMsgsSentByTchs = Msg_DB_GetNumMsgsSentByTchsCrs (HieCod);
    IndicatorsCrs->ThereIsOnlineTutoring = IndicatorsCrs->NumThreads ||
 	                                  IndicatorsCrs->NumPosts ||
 	                                  IndicatorsCrs->NumMsgsSentByTchs;
@@ -1169,7 +1169,7 @@ void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
       IndicatorsCrs->NumIndicators++;
 
    /***** Indicator #5: information about assessment *****/
-   IndicatorsCrs->AssessmentSrc = Inf_GetInfoSrcFromDB (CrsCod,Inf_ASSESSMENT);
+   IndicatorsCrs->AssessmentSrc = Inf_GetInfoSrcFromDB (HieCod,Inf_ASSESSMENT);
    IndicatorsCrs->ThereIsAssessment = (IndicatorsCrs->AssessmentSrc    != Inf_SRC_NONE) ||
                                       (IndicatorsCrs->TeachingGuideSrc != Inf_SRC_NONE);
    if (IndicatorsCrs->ThereIsAssessment)
@@ -1177,11 +1177,11 @@ void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
 
    /***** All the indicators are OK? *****/
    IndicatorsCrs->CoursePartiallyOK = IndicatorsCrs->NumIndicators >= 1 &&
-	                              IndicatorsCrs->NumIndicators < Ind_NUM_INDICATORS;
+	                              IndicatorsCrs->NumIndicators  < Ind_NUM_INDICATORS;
    IndicatorsCrs->CourseAllOK       = IndicatorsCrs->NumIndicators == Ind_NUM_INDICATORS;
 
    /***** Update number of indicators into database
           if different to the stored one *****/
    if (NumIndicatorsFromDB != (int) IndicatorsCrs->NumIndicators)
-      Ind_DB_StoreIndicatorsCrs (CrsCod,IndicatorsCrs->NumIndicators);
+      Ind_DB_StoreIndicatorsCrs (HieCod,IndicatorsCrs->NumIndicators);
   }

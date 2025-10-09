@@ -222,7 +222,7 @@ void Ntf_DB_MarkNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,l
 // However, notifications about new messages should not be removed
 // because the messages will remain available
 
-void Ntf_DB_MarkNotifInCrsAsRemoved (long ToUsrCod,long CrsCod)
+void Ntf_DB_MarkNotifInCrsAsRemoved (long ToUsrCod,long HieCod)
   {
    /***** Set all notifications from the course as removed,
           except notifications about new messages *****/
@@ -235,7 +235,7 @@ void Ntf_DB_MarkNotifInCrsAsRemoved (long ToUsrCod,long CrsCod)
 		        " AND NotifyEvent<>%u",	// messages will remain available
 	              (unsigned) Ntf_STATUS_BIT_REMOVED,
 	              ToUsrCod,
-	              CrsCod,
+	              HieCod,
 	              (unsigned) Ntf_EVENT_MESSAGE);
    else			// User code not specified ==> any user
       DB_QueryUPDATE ("can not set notification(s) as removed",
@@ -244,7 +244,7 @@ void Ntf_DB_MarkNotifInCrsAsRemoved (long ToUsrCod,long CrsCod)
 		      " WHERE CrsCod=%ld"
 		        " AND NotifyEvent<>%u",	// messages will remain available
 	              (unsigned) Ntf_STATUS_BIT_REMOVED,
-	              CrsCod,
+	              HieCod,
 	              (unsigned) Ntf_EVENT_MESSAGE);
   }
 

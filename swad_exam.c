@@ -134,9 +134,9 @@ static Exa_Order_t Exa_GetParOrder (void);
 static void Exa_RemoveExamFromAllTables (long ExaCod);
 
 static void Exa_RemoveAllMedFilesFromStemOfAllQstsFromExam (long ExaCod);
-static void Exa_RemoveAllMedFilesFromStemOfAllQstsFromCrs (long CrsCod);
+static void Exa_RemoveAllMedFilesFromStemOfAllQstsFromCrs (long HieCod);
 static void Exa_RemoveAllMedFilesFromAnsOfAllQstsFromExam (long ExaCod);
-static void Exa_RemoveAllMedFilesFromAnsOfAllQstsFromCrs (long CrsCod);
+static void Exa_RemoveAllMedFilesFromAnsOfAllQstsFromCrs (long HieCod);
 
 static void Exa_HideUnhideExam (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
@@ -179,7 +179,7 @@ void Exa_ResetExam (struct Exa_Exam *Exam)
   {
    /***** Initialize to empty exam *****/
    Exam->ExaCod			= -1L;
-   Exam->CrsCod			= -1L;
+   Exam->HieCod			= -1L;
    Exam->UsrCod			= -1L;
    Exam->MaxGrade		= Exa_MAX_GRADE_DEFAULT;
    Exam->Visibility		= TstVis_VISIBILITY_DEFAULT;
@@ -919,7 +919,7 @@ void Exa_GetExamDataByCod (struct Exa_Exam *Exam)
 	 /* Get code of the exam (row[0])
 	    and code of the course (row[1]) */
 	 Exam->ExaCod = Str_ConvertStrCodToLongCod (row[0]);
-	 Exam->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
+	 Exam->HieCod = Str_ConvertStrCodToLongCod (row[1]);
 
 	 /* Get whether the exam is hidden (row[2]) */
 	 Exam->Hidden = HidVis_GetHiddenFromYN (row[2][0]);
@@ -1098,31 +1098,31 @@ static void Exa_RemoveExamFromAllTables (long ExaCod)
 /*********************** Remove all exams of a course ************************/
 /*****************************************************************************/
 
-void Exa_RemoveCrsExams (long CrsCod)
+void Exa_RemoveCrsExams (long HieCod)
   {
    /***** Remove questions of exams prints, and exam prints,
           made in the given course *****/
    // TODO: DO NOT REMOVE EXAMS PRINTS. Instead move them to tables of deleted prints
-   Exa_DB_RemovePrintQstsFromCrs (CrsCod);
-   Exa_DB_RemoveAllPrintsFromCrs (CrsCod);
+   Exa_DB_RemovePrintQstsFromCrs (HieCod);
+   Exa_DB_RemoveAllPrintsFromCrs (HieCod);
 
    /***** Remove groups associated to sessions, and sessions, in this course *****/
-   Exa_DB_RemoveAllGrpsFromCrs (CrsCod);
-   Exa_DB_RemoveAllSessionsFromCrs (CrsCod);
+   Exa_DB_RemoveAllGrpsFromCrs (HieCod);
+   Exa_DB_RemoveAllSessionsFromCrs (HieCod);
 
    /***** Remove media associated to test questions in the course *****/
-   Exa_RemoveAllMedFilesFromStemOfAllQstsFromCrs (CrsCod);
-   Exa_RemoveAllMedFilesFromAnsOfAllQstsFromCrs (CrsCod);
+   Exa_RemoveAllMedFilesFromStemOfAllQstsFromCrs (HieCod);
+   Exa_RemoveAllMedFilesFromAnsOfAllQstsFromCrs (HieCod);
 
    /***** Remove the answers and the questions in sets of questions *****/
-   Exa_DB_RemoveAllSetAnswersFromCrs (CrsCod);
-   Exa_DB_RemoveAllSetQuestionsFromCrs (CrsCod);
+   Exa_DB_RemoveAllSetAnswersFromCrs (HieCod);
+   Exa_DB_RemoveAllSetQuestionsFromCrs (HieCod);
 
    /***** Remove the sets of questions in exams *****/
-   Exa_DB_RemoveAllSetsFromCrs (CrsCod);
+   Exa_DB_RemoveAllSetsFromCrs (HieCod);
 
    /***** Remove the exams *****/
-   Exa_DB_RemoveAllExamsFromCrs (CrsCod);
+   Exa_DB_RemoveAllExamsFromCrs (HieCod);
   }
 
 /*****************************************************************************/
@@ -1148,13 +1148,13 @@ static void Exa_RemoveAllMedFilesFromStemOfAllQstsFromExam (long ExaCod)
 /** Remove all media associated to stems of all exam questions in a course ***/
 /*****************************************************************************/
 
-static void Exa_RemoveAllMedFilesFromStemOfAllQstsFromCrs (long CrsCod)
+static void Exa_RemoveAllMedFilesFromStemOfAllQstsFromCrs (long HieCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
 
    /***** Get media codes associated to stems of exam questions from database *****/
-   NumMedia = Exa_DB_GetAllMediaFomStemOfAllQstsFromCrs (&mysql_res,CrsCod);
+   NumMedia = Exa_DB_GetAllMediaFomStemOfAllQstsFromCrs (&mysql_res,HieCod);
 
    /***** Go over result removing media files *****/
    Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
@@ -1186,13 +1186,13 @@ static void Exa_RemoveAllMedFilesFromAnsOfAllQstsFromExam (long ExaCod)
 /* Remove media associated to all answers of all exam questions in a course **/
 /*****************************************************************************/
 
-static void Exa_RemoveAllMedFilesFromAnsOfAllQstsFromCrs (long CrsCod)
+static void Exa_RemoveAllMedFilesFromAnsOfAllQstsFromCrs (long HieCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
 
    /***** Get names of media files associated to answers of exam questions from database *****/
-   NumMedia = Exa_DB_GetAllMediaFromAnsOfAllQstsFromCrs (&mysql_res,CrsCod);
+   NumMedia = Exa_DB_GetAllMediaFromAnsOfAllQstsFromCrs (&mysql_res,HieCod);
 
    /***** Go over result removing media files *****/
    Med_RemoveMediaFromAllRows (NumMedia,mysql_res);

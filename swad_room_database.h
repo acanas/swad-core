@@ -27,7 +27,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-long Roo_DB_CreateRoom (long CtrCod,const struct Roo_Room *Room);
+long Roo_DB_CreateRoom (long HieCod,const struct Roo_Room *Room);
 void Roo_DB_CreateMACAddress (long RooCod,unsigned long long MACnum);
 void Roo_DB_UpdateMACAddress (long RooCod,unsigned long long NewMACnum);
 void Roo_DB_UpdateRoomBuilding (long RooCod,long NewBldCod);
@@ -38,7 +38,7 @@ void Roo_DB_UpdateRoomName (long RooCod,
 void Roo_DB_UpdateRoomCapacity (long RooCod,unsigned NewCapacity);
 
 unsigned Roo_DB_GetListRooms (MYSQL_RES **mysql_res,
-                              long CtrCod,
+                              long HieCod,
                               Roo_WhichData_t WhichData,
                               Roo_Order_t SelectedOrder);
 Exi_Exist_t Roo_DB_CheckIfRoomNameExists (const char *FldName,const char *Name,
@@ -50,7 +50,7 @@ unsigned Roo_DB_GetMACAddresses (MYSQL_RES **mysql_res,long RooCod);
 void Roo_DB_RemoveRoom (long RooCod);
 void Roo_DB_RemoveMACAddress (long RooCod,unsigned long long MACnum);
 void Roo_DB_RemoveBuildingFromRooms (long BldCod);
-void Roo_DB_RemoveAllRoomsInCtr (long CtrCod);
+void Roo_DB_RemoveAllRoomsInCtr (long HieCod);
 
 //--------------------------------- Check in ----------------------------------
 long Roo_DB_CheckIn (long RooCod);

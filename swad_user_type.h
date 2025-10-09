@@ -232,8 +232,8 @@ struct Usr_Data
    long InsCod;		// Institution
    struct
      {
-      long CtrCod;	// Center
-      long DptCod;	// Department
+      long HieCod;	// Center code
+      long DptCod;	// Department code
       char Office[Usr_MAX_BYTES_ADDRESS + 1];
       char OfficePhone[Usr_MAX_BYTES_PHONE  + 1];
      } Tch;

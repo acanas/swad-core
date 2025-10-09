@@ -82,7 +82,8 @@ static void Dpt_PutIconToEditDpts (__attribute__((unused)) void *Args);
 static void Dpt_PutIconToViewDpts (__attribute__((unused)) void *Args);
 static void Dpt_EditDepartmentsInternal (void);
 
-static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long InsCod);
+static void Dpt_GetListDepartmentsInIns (struct Dpt_Departments *Departments,
+					 long HieCod);
 
 static void Dpt_GetDepartmentDataFromRow (MYSQL_RES *mysql_res,
                                           struct Dpt_Department *Dpt);
@@ -142,7 +143,7 @@ void Dpt_SeeAllDepts (void)
    Departments.SelectedOrder = Dpt_GetParDptOrder ();
 
    /***** Get list of departments *****/
-   Dpt_GetListDepartments (&Departments,Gbl.Hierarchy.Node[Hie_INS].HieCod);
+   Dpt_GetListDepartmentsInIns (&Departments,Gbl.Hierarchy.Node[Hie_INS].HieCod);
 
    /***** Begin box and table *****/
    if (asprintf (&Title,Txt_Departments_of_INSTITUTION_X,
@@ -287,7 +288,7 @@ static void Dpt_EditDepartmentsInternal (void)
    Ins_GetBasicListOfInstitutions (Gbl.Hierarchy.Node[Hie_CTY].HieCod);
 
    /***** Get list of departments *****/
-   Dpt_GetListDepartments (&Departments,Gbl.Hierarchy.Node[Hie_INS].HieCod);
+   Dpt_GetListDepartmentsInIns (&Departments,Gbl.Hierarchy.Node[Hie_INS].HieCod);
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Departments_of_INSTITUTION_X,
@@ -320,7 +321,8 @@ static void Dpt_EditDepartmentsInternal (void)
 // If InsCod  > 0 ==> get departments of an institution
 // If InsCod <= 0 ==> an empty list is returned
 
-static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long InsCod)
+static void Dpt_GetListDepartmentsInIns (struct Dpt_Departments *Departments,
+					 long HieCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumDpt;
@@ -328,10 +330,10 @@ static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long Ins
    /***** Free list of departments *****/
    Dpt_FreeListDepartments (Departments);	// List is initialized to empty
 
-   if (InsCod > 0)	// Institution specified
+   if (HieCod > 0)	// Institution specified
      {
       /***** Get departments from database *****/
-      Departments->Num = Dpt_DB_GetListDepartments (&mysql_res,InsCod,
+      Departments->Num = Dpt_DB_GetListDepartmentsInIns (&mysql_res,HieCod,
                                                     Departments->SelectedOrder);
       if (Departments->Num) // Departments found...
 	{
@@ -362,7 +364,7 @@ void Dpt_GetDepartmentDataByCod (struct Dpt_Department *Dpt)
    MYSQL_RES *mysql_res;
 
    /***** Clear data *****/
-   Dpt->InsCod = -1L;
+   Dpt->HieCod = -1L;
    Dpt->ShrtName[0] = Dpt->FullName[0] = Dpt->WWW[0] = '\0';
    Dpt->NumTchs = 0;
 
@@ -414,7 +416,7 @@ static void Dpt_GetDepartmentDataFromRow (MYSQL_RES *mysql_res,
       Err_WrongDepartmentExit ();
 
    /***** Get institution code (row[1]) *****/
-   if ((Dpt->InsCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
+   if ((Dpt->HieCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
       Err_WrongInstitExit ();
 
    /***** Get short name (row[2]), full name (row[3])
@@ -486,7 +488,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 				    " class=\"HIE_SEL_NARROW INPUT_%s\"",
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"0",
-		                 Dpt->InsCod == 0 ? HTM_SELECTED :
+		                 Dpt->HieCod == 0 ? HTM_SELECTED :
 						    HTM_NO_ATTR,
 				 "%s",Txt_Another_institution);
 		     for (NumIns = 0;
@@ -495,7 +497,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 		       {
 			Ins = &Gbl.Hierarchy.List[Hie_INS].Lst[NumIns];
 			HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
-				    Ins->HieCod == Dpt->InsCod ? HTM_SELECTED :
+				    Ins->HieCod == Dpt->HieCod ? HTM_SELECTED :
 								 HTM_NO_ATTR,
 				    "%s",Ins->ShrtName);
 		       }
@@ -788,7 +790,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 			      " class=\"HIE_SEL_NARROW INPUT_%s\"",
 			      The_GetSuffix ());
 	       HTM_OPTION (HTM_Type_STRING,"0",
-			   Dpt_EditingDpt->InsCod == 0 ? HTM_SELECTED :
+			   Dpt_EditingDpt->HieCod == 0 ? HTM_SELECTED :
 							 HTM_NO_ATTR,
 			   "%s",Txt_Another_institution);
 	       for (NumIns = 0;
@@ -797,7 +799,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 		 {
 		  Ins = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
 		  HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
-			      Ins->HieCod == Dpt_EditingDpt->InsCod ? HTM_SELECTED :
+			      Ins->HieCod == Dpt_EditingDpt->HieCod ? HTM_SELECTED :
 								      HTM_NO_ATTR,
 			      "%s",Ins->ShrtName);
 		 }
@@ -863,7 +865,7 @@ void Dpt_ReceiveNewDpt (void)
 
    /***** Get parameters from form *****/
    /* Get institution */
-   Dpt_EditingDpt->InsCod = ParCod_GetAndCheckPar (ParCod_OthIns);
+   Dpt_EditingDpt->HieCod = ParCod_GetAndCheckPar (ParCod_OthIns);
 
    /* Get department short name and full name */
    Names[Nam_SHRT_NAME] = Dpt_EditingDpt->ShrtName;
@@ -906,20 +908,20 @@ void Dpt_FlushCacheNumDptsInIns (void)
    Gbl.Cache.NumDptsInIns.Status = Cac_INVALID;
   }
 
-unsigned Dpt_GetNumDptsInIns (long InsCod)
+unsigned Dpt_GetNumDptsInIns (long HieCod)
   {
    /***** 1. Fast check: Trivial case *****/
-   if (InsCod <= 0)
+   if (HieCod <= 0)
       return 0;
 
    /***** 2. Fast check: If cached... *****/
    if (Gbl.Cache.NumDptsInIns.Status == Cac_VALID &&
-       InsCod == Gbl.Cache.NumDptsInIns.HieCod)
+       HieCod == Gbl.Cache.NumDptsInIns.HieCod)
       return Gbl.Cache.NumDptsInIns.NumDpts;
 
    /***** 3. Slow: number of departments of an institution from database *****/
-   Gbl.Cache.NumDptsInIns.HieCod  = InsCod;
-   Gbl.Cache.NumDptsInIns.NumDpts = Dpt_DB_GetNumDepartmentsInInstitution (InsCod);
+   Gbl.Cache.NumDptsInIns.HieCod  = HieCod;
+   Gbl.Cache.NumDptsInIns.NumDpts = Dpt_DB_GetNumDepartmentsInIns (HieCod);
    Gbl.Cache.NumDptsInIns.Status = Cac_VALID;
    return Gbl.Cache.NumDptsInIns.NumDpts;
   }
@@ -928,7 +930,7 @@ unsigned Dpt_GetNumDptsInIns (long InsCod)
 /*********************** Put selector for department *************************/
 /*****************************************************************************/
 
-void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
+void Dpt_WriteSelectorDepartment (long HieCod,long DptCod,
                                   const char *ParName,
 		                  const char *SelectClass,
                                   long FirstOption,
@@ -945,7 +947,7 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
    Dpt_ResetDepartments (&Departments);
 
    /***** Get list of departments *****/
-   Dpt_GetListDepartments (&Departments,InsCod);
+   Dpt_GetListDepartmentsInIns (&Departments,HieCod);
 
    /***** Selector to select department *****/
    /* Begin selector */
@@ -1013,7 +1015,7 @@ static void Dpt_EditingDepartmentConstructor (void)
 
    /***** Reset department *****/
    Dpt_EditingDpt->DptCod      = -1L;
-   Dpt_EditingDpt->InsCod      = -1L;
+   Dpt_EditingDpt->HieCod      = -1L;
    Dpt_EditingDpt->ShrtName[0] = '\0';
    Dpt_EditingDpt->FullName[0] = '\0';
    Dpt_EditingDpt->WWW[0]      = '\0';

@@ -717,14 +717,14 @@ void Deg_DB_UpdateDegCtr (long HieCod,long NewCtrCod)
 /*********************** Update the type of a degree *************************/
 /*****************************************************************************/
 
-void Deg_DB_UpdateDegTyp (long DegCod,long NewDegTypCod)
+void Deg_DB_UpdateDegTyp (long HieCod,long NewDegTypCod)
   {
    DB_QueryUPDATE ("can not update the type of a degree",
 		   "UPDATE deg_degrees"
 		     " SET DegTypCod=%ld"
 		   " WHERE DegCod=%ld",
 	           NewDegTypCod,
-	           DegCod);
+	           HieCod);
   }
 
 /*****************************************************************************/
@@ -745,14 +745,14 @@ void Deg_DB_UpdateDegWWW (long HieCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1])
 /*********************** Update the status of a degree ***********************/
 /*****************************************************************************/
 
-void Deg_DB_UpdateDegStatus (long DegCod,Hie_Status_t NewStatus)
+void Deg_DB_UpdateDegStatus (long HieCod,Hie_Status_t NewStatus)
   {
    DB_QueryUPDATE ("can not update the status of a degree",
 		   "UPDATE deg_degrees"
 		     " SET Status=%u"
 		   " WHERE DegCod=%ld",
                    (unsigned) NewStatus,
-                   DegCod);
+                   HieCod);
   }
 
 /*****************************************************************************/
@@ -864,10 +864,10 @@ void Deg_DB_RemoveDegTyp (long DegTypCod)
 /****************************** Remove a degree ******************************/
 /*****************************************************************************/
 
-void Deg_DB_RemoveDeg (long DegCod)
+void Deg_DB_RemoveDeg (long HieCod)
   {
    DB_QueryDELETE ("can not remove a degree",
 		   "DELETE FROM deg_degrees"
 		   " WHERE DegCod=%ld",
-		   DegCod);
+		   HieCod);
   }

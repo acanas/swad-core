@@ -44,7 +44,7 @@ unsigned Att_DB_GetListEventsMyGrps (MYSQL_RES **mysql_res,
 unsigned Att_DB_GetListEventsAllGrps (MYSQL_RES **mysql_res,
                                       Dat_StartEndTime_t SelectedOrder,
                                       Att_OrderNewestOldest_t OrderNewestOldest);
-unsigned Att_DB_GetAllEventsData (MYSQL_RES **mysql_res,long CrsCod);
+unsigned Att_DB_GetAllEventsData (MYSQL_RES **mysql_res,long HieCod);
 Exi_Exist_t Att_DB_GetEventDataByCod (MYSQL_RES **mysql_res,long AttCod);
 void Att_DB_GetEventTitle (long AttCod,char *Title,size_t TitleSize);
 void Att_DB_GetEventDescription (long AttCod,char Description[Cns_MAX_BYTES_TEXT + 1]);
@@ -81,7 +81,7 @@ void Att_DB_RemoveUsrsAbsentWithoutCommentsFromEvent (long AttCod);
 
 void Att_DB_RemoveAllUsrsFromAnEvent (long AttCod);
 void Att_DB_RemoveUsrFromAllEvents (long UsrCod);
-void Att_DB_RemoveUsrFromCrsEvents (long UsrCod,long CrsCod);
+void Att_DB_RemoveUsrFromCrsEvents (long UsrCod,long HieCod);
 void Att_DB_RemoveEventFromCurrentCrs (long AttCod);
 
 void Att_DB_RemoveUsrsFromCrsEvents (long HieCod);

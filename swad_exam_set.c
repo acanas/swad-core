@@ -1596,7 +1596,7 @@ static void ExaSet_GetAndCheckPars (struct Exa_Exams *Exams,
 
    /***** Get exam data from database *****/
    Exa_GetExamDataByCod (&Exams->Exam);
-   if (Exams->Exam.CrsCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
+   if (Exams->Exam.HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
       Err_WrongExamExit ();
 
    /***** Get set data from database *****/

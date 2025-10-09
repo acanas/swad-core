@@ -71,7 +71,7 @@ void Rub_FreeListRubrics (struct Rub_Rubrics *Rubrics);
 
 void Rub_AskRemRubric (void);
 void Rub_RemoveRubric (void);
-void Rub_RemoveCrsRubrics (long CrsCod);
+void Rub_RemoveCrsRubrics (long HieCod);
 
 void Rub_ReqCreatOrEditRubric (void);
 void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,

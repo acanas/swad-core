@@ -292,12 +292,12 @@ void Cfe_DB_MarkACallForExamAsDeleted (long ExaCod)
 /*********** Mark all exam announcements in the course as deleted ************/
 /*****************************************************************************/
 
-void Cfe_DB_MarkCallForExamsInCrsAsDeleted (long CrsCod)
+void Cfe_DB_MarkCallForExamsInCrsAsDeleted (long HieCod)
   {
    DB_QueryUPDATE ("can not remove calls for exams of a course",
 		   "UPDATE cfe_exams"
 		     " SET Status=%u"
 		   " WHERE CrsCod=%ld",
 		   (unsigned) Cfe_DELETED_CALL_FOR_EXAM,
-		   CrsCod);
+		   HieCod);
   }

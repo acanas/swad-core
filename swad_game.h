@@ -66,7 +66,7 @@ struct Gam_GameSelected
 struct Gam_Game
   {
    long GamCod;			// Game code
-   long CrsCod;			// Course code
+   long HieCod;			// Course code
    long UsrCod;			// Author code
    double MaxGrade;		// Score range [0...max.score]
 				// will be converted to
@@ -129,7 +129,7 @@ void Gam_FreeListGames (struct Gam_Games *Games);
 
 void Gam_AskRemGame (void);
 void Gam_RemoveGame (void);
-void Gam_RemoveCrsGames (long CrsCod);
+void Gam_RemoveCrsGames (long HieCod);
 
 void Gam_HideGame (void);
 void Gam_UnhideGame (void);

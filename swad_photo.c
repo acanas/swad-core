@@ -114,11 +114,13 @@ static Exi_Exist_t Pho_CheckIfPrivPhotoExists (long UsrCod,
 					       char PathPrivRelPhoto[PATH_MAX + 1]);
 
 static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void);
-static long Pho_GetTimeAvgPhotoWasComputed (long DegCod);
-static long Pho_GetTimeToComputeAvgPhoto (long DegCod);
-static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
-                                     Pho_AvgPhotoTypeOfAverage_t TypeOfAverage,const char *DirAvgPhotosRelPath,
-                                     unsigned *NumStds,unsigned *NumStdsWithPhoto,long *TimeToComputeAvgPhotoInMicroseconds);
+static long Pho_GetTimeAvgPhotoWasComputed (long HieCod);
+static long Pho_GetTimeToComputeAvgPhoto (long HieCod);
+static void Pho_ComputeAveragePhoto (long HieCod,Usr_Sex_t Sex,Rol_Role_t Role,
+                                     Pho_AvgPhotoTypeOfAverage_t TypeOfAverage,
+                                     const char *DirAvgPhotosRelPath,
+                                     unsigned *NumStds,unsigned *NumStdsWithPhoto,
+                                     long *TimeToComputeAvgPhotoInMicroseconds);
 static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
 static void Pho_PutParsDegPhoto (void *DegPhotos);
 static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos);
@@ -136,7 +138,7 @@ static void Pho_GetMaxStdsPerDegree (struct Pho_DegPhotos *DegPhotos);
 static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
                                               Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
                                               Pho_ShowPhotos_t ShowPhotos);
-static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,
+static void Pho_GetNumStdsInDegree (long HieCod,Usr_Sex_t Sex,
                                     int *NumStds,int *NumStdsWithPhoto);
 static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
                                         Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
@@ -1561,9 +1563,10 @@ Pho_ShowPhotos_t Pho_GetMyPrefAboutListWithPhotosFromDB (void)
 void Pho_CalcPhotoDegree (void)
   {
    Pho_AvgPhotoTypeOfAverage_t TypeOfAverage;
-   long DegCod = -1L;
+   long HieCod = -1L;
    char DirAvgPhotosRelPath[Pho_NUM_AVERAGE_PHOTO_TYPES][PATH_MAX + 1];
-   unsigned NumStds,NumStdsWithPhoto;
+   unsigned NumStds;
+   unsigned NumStdsWithPhoto;
    Usr_Sex_t Sex;
    long TotalTimeToComputeAvgPhotoInMicroseconds,PartialTimeToComputeAvgPhotoInMicroseconds;
 
@@ -1583,15 +1586,15 @@ void Pho_CalcPhotoDegree (void)
    Fil_CreateDirIfNotExists (Cfg_PATH_PHOTO_TMP_PRIVATE);
 
    /***** Get the degree which photo will be computed *****/
-   if ((DegCod = ParCod_GetPar (ParCod_OthDeg)) > 0)	// Parameter may be omitted
+   if ((HieCod = ParCod_GetPar (ParCod_OthDeg)) > 0)	// Parameter may be omitted
      {							// (when selecting classphoto/list)
       /***** Prevent the computing of an average photo too recently updated *****/
-      if (Pho_GetTimeAvgPhotoWasComputed (DegCod) >=
+      if (Pho_GetTimeAvgPhotoWasComputed (HieCod) >=
 	  Dat_GetStartExecutionTimeUTC () - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO)
 	 Err_ShowErrorAndExit ("Average photo has been computed recently.");
 
       /***** Get list of students in this degree *****/
-      Usr_GetUnorderedStdsCodesInDeg (DegCod);
+      Usr_GetUnorderedStdsCodesInDeg (HieCod);
 
       for (Sex  = (Usr_Sex_t) 0;
 	   Sex <= (Usr_Sex_t) (Usr_NUM_SEXS - 1);
@@ -1603,14 +1606,14 @@ void Pho_CalcPhotoDegree (void)
 	      TypeOfAverage++)
 	   {
 	    /***** Compute average photos of students belonging this degree *****/
-	    Pho_ComputeAveragePhoto (DegCod,Sex,Rol_STD,
+	    Pho_ComputeAveragePhoto (HieCod,Sex,Rol_STD,
 				     TypeOfAverage,DirAvgPhotosRelPath[TypeOfAverage],
 				     &NumStds,&NumStdsWithPhoto,&PartialTimeToComputeAvgPhotoInMicroseconds);
 	    TotalTimeToComputeAvgPhotoInMicroseconds += PartialTimeToComputeAvgPhotoInMicroseconds;
 	   }
 
 	 /***** Store stats in database *****/
-	 Pho_DB_UpdateDegStats (DegCod,Sex,NumStds,NumStdsWithPhoto,TotalTimeToComputeAvgPhotoInMicroseconds);
+	 Pho_DB_UpdateDegStats (HieCod,Sex,NumStds,NumStdsWithPhoto,TotalTimeToComputeAvgPhotoInMicroseconds);
 	}
 
       /***** Free memory for students list *****/
@@ -1628,15 +1631,15 @@ void Pho_CalcPhotoDegree (void)
 
 static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
   {
-   long DegCod;
+   long HieCod;
 
    /***** Delete all degrees in sta_degrees table not present in degrees table *****/
    Pho_DB_RemoveObsoleteStatDegrees ();
 
    /***** 1. If a degree is not in table of computed degrees,
              choose it as least recently updated *****/
-   if ((DegCod = Pho_DB_GetADegWithStdsNotInTableOfComputedDegs ()) > 0)
-      return DegCod;
+   if ((HieCod = Pho_DB_GetADegWithStdsNotInTableOfComputedDegs ()) > 0)
+      return HieCod;
 
    /***** 2. If all degrees are in table,
 	     choose the least recently updated that has students *****/
@@ -1647,14 +1650,14 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
 /***************** Get time when average photo was computed ******************/
 /*****************************************************************************/
 
-static long Pho_GetTimeAvgPhotoWasComputed (long DegCod)
+static long Pho_GetTimeAvgPhotoWasComputed (long HieCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long TimeAvgPhotoWasComputed = 0L;
 
    /***** Get last time an average photo was computed from database *****/
-   if (Pho_DB_GetTimeAvgPhotoWasComputed (&mysql_res,DegCod) == Exi_EXISTS)
+   if (Pho_DB_GetTimeAvgPhotoWasComputed (&mysql_res,HieCod) == Exi_EXISTS)
      {
       /***** Get row *****/
       row = mysql_fetch_row (mysql_res);
@@ -1674,7 +1677,7 @@ static long Pho_GetTimeAvgPhotoWasComputed (long DegCod)
 /********************* Get time to compute average photo *********************/
 /*****************************************************************************/
 
-static long Pho_GetTimeToComputeAvgPhoto (long DegCod)
+static long Pho_GetTimeToComputeAvgPhoto (long HieCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1683,7 +1686,7 @@ static long Pho_GetTimeToComputeAvgPhoto (long DegCod)
    long TotalTimeToComputeAvgPhoto = -1L;
 
    /***** Get time to compute average photo from database *****/
-   if (Pho_DB_GetTimeToComputeAvgPhoto (&mysql_res,DegCod) == Usr_NUM_SEXS)
+   if (Pho_DB_GetTimeToComputeAvgPhoto (&mysql_res,HieCod) == Usr_NUM_SEXS)
      {
       TotalTimeToComputeAvgPhoto = 0L;
       for (Sex  = (Usr_Sex_t) 0;
@@ -1718,9 +1721,11 @@ static long Pho_GetTimeToComputeAvgPhoto (long DegCod)
 /*****************************************************************************/
 // Returns number of users in list with photo
 
-static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
-                                     Pho_AvgPhotoTypeOfAverage_t TypeOfAverage,const char *DirAvgPhotosRelPath,
-                                     unsigned *NumStds,unsigned *NumStdsWithPhoto,long *TimeToComputeAvgPhotoInMicroseconds)
+static void Pho_ComputeAveragePhoto (long HieCod,Usr_Sex_t Sex,Rol_Role_t Role,
+                                     Pho_AvgPhotoTypeOfAverage_t TypeOfAverage,
+                                     const char *DirAvgPhotosRelPath,
+                                     unsigned *NumStds,unsigned *NumStdsWithPhoto,
+                                     long *TimeToComputeAvgPhotoInMicroseconds)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    unsigned NumUsr;
@@ -1743,7 +1748,7 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
 
    /***** Build name for file with average photo *****/
    if (asprintf (&PathRelAvgPhoto,"%s/%ld_%s.jpg",
-                 DirAvgPhotosRelPath,DegCod,Usr_StringsSexDB[Sex]) < 0)
+                 DirAvgPhotosRelPath,HieCod,Usr_StringsSexDB[Sex]) < 0)
       Err_NotEnoughMemoryExit ();
 
    /***** Remove old file if exists *****/
@@ -1752,7 +1757,7 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
 
    /***** Build names for text file with photo paths *****/
    if (asprintf (&FileNamePhotoNames,"%s/%ld.txt",
-	         Cfg_PATH_PHOTO_TMP_PRIVATE,DegCod) < 0)
+	         Cfg_PATH_PHOTO_TMP_PRIVATE,HieCod) < 0)
       Err_NotEnoughMemoryExit ();
    if ((FilePhotoNames = fopen (FileNamePhotoNames,"wb")) == NULL)
       Err_ShowErrorAndExit ("Can not open file to compute average photo.");
@@ -2444,14 +2449,14 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 /*** Get number of students and number of students with photo in a degree ****/
 /*****************************************************************************/
 
-static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,
+static void Pho_GetNumStdsInDegree (long HieCod,Usr_Sex_t Sex,
                                     int *NumStds,int *NumStdsWithPhoto)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Get the number of students in a degree from database *****/
-   switch (Pho_DB_GetNumStdsInDegree (&mysql_res,DegCod,Sex))
+   switch (Pho_DB_GetNumStdsInDegree (&mysql_res,HieCod,Sex))
      {
       case Exi_EXISTS:
 	 row = mysql_fetch_row (mysql_res);

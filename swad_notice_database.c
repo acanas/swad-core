@@ -154,7 +154,7 @@ Exi_Exist_t Not_DB_ContentNotice (MYSQL_RES **mysql_res,long NotCod)
 /***************************** Get active notices ****************************/
 /*****************************************************************************/
 
-unsigned Not_DB_GetNotices (MYSQL_RES **mysql_res,long CrsCod,
+unsigned Not_DB_GetNotices (MYSQL_RES **mysql_res,long HieCod,
 			    Not_Listing_t TypeNoticesListing)
   {
    extern const unsigned HidVis_Hidden_01[HidVis_NUM_HIDDEN_VISIBLE];
@@ -182,7 +182,7 @@ unsigned Not_DB_GetNotices (MYSQL_RES **mysql_res,long CrsCod,
 		       "%s"
 	               "%s"
 		" ORDER BY CreatTime DESC",
-		   CrsCod,
+		   HieCod,
 		   Not_DB_SubQueryVisible[TypeNoticesListing],
 		   Not_DB_SubQueryPublic[Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS]]);
   }

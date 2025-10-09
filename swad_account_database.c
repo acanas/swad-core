@@ -207,7 +207,7 @@ void Acc_DB_UpdateMyInstitutionCenterDepartment (void)
 		   " WHERE UsrCod=%ld",
 	           Gbl.Usrs.Me.UsrDat.InsCtyCod,
 	           Gbl.Usrs.Me.UsrDat.InsCod,
-	           Gbl.Usrs.Me.UsrDat.Tch.CtrCod,
+	           Gbl.Usrs.Me.UsrDat.Tch.HieCod,
 	           Gbl.Usrs.Me.UsrDat.Tch.DptCod,
 	           Gbl.Usrs.Me.UsrDat.UsrCod);
   }

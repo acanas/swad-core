@@ -49,6 +49,6 @@ void Bld_DB_UpdateBuildingField (long BldCod,
 				 const char *FldName,const char *Value);
 
 void Bld_DB_RemoveBuilding (long BldCod);
-void Bld_DB_RemoveAllBuildingsInCtr (long CtrCod);
+void Bld_DB_RemoveAllBuildingsInCtr (long HieCod);
 
 #endif

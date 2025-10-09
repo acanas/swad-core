@@ -49,10 +49,9 @@ void Ctr_DrawCenterLogoAndNameWithLink (struct Hie_Node *Ctr,Act_Action_t Action
 void Ctr_ShowCtrsOfCurrentIns (void);
 void Ctr_EditCenters (void);
 
-void Ctr_GetBasicListOfCenters (long InsCod);
-void Ctr_GetFullListOfCenters (long InsCod,Hie_Order_t SelectedOrder);
+void Ctr_GetBasicListOfCentersInIns (long HieCod);
 Err_SuccessOrError_t Ctr_GetCenterDataByCod (struct Hie_Node *Node);
-void Ctr_GetCoordByCod (long CtrCod,struct Map_Coordinates *Coord);
+void Ctr_GetCoordByCod (long HieCod,struct Map_Coordinates *Coord);
 void Ctr_WriteSelectorOfCenter (void);
 void Ctr_RemoveCenter (void);
 void Ctr_ChangeCtrPlc (void);
@@ -67,8 +66,8 @@ void Ctr_ReceiveReqCtr (void);
 void Ctr_ReceiveNewCtr (void);
 
 unsigned Ctr_GetCachedNumCtrsWithMapInSys (void);
-unsigned Ctr_GetCachedNumCtrsWithMapInCty (long CtyCod);
-unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod);
+unsigned Ctr_GetCachedNumCtrsWithMapInCty (long HieCod);
+unsigned Ctr_GetCachedNumCtrsWithMapInIns (long HieCod);
 
 unsigned Ctr_GetCachedNumCtrsWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role);
 

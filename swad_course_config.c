@@ -465,7 +465,7 @@ void CrsCfg_ChangeCrsDeg (void)
 				 Gbl.Hierarchy.Node[Hie_CRS].Specific.Year) == Exi_DOES_NOT_EXIST)
 	{
 	 /***** Update degree in table of courses *****/
-	 Crs_DB_UpdateCrsDeg (Gbl.Hierarchy.Node[Hie_CRS].HieCod,NewDeg.HieCod);
+	 Crs_DB_UpdateDegOfCurrentCrs (NewDeg.HieCod);
 	 Gbl.Hierarchy.Node[Hie_CRS].PrtCod =
 	 Gbl.Hierarchy.Node[Hie_DEG].HieCod = NewDeg.HieCod;
 

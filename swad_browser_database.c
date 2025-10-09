@@ -380,7 +380,7 @@ unsigned Brw_DB_GetNumFilesUsr (long UsrCod)
 /*********** Get the number of files in document zones of a course ***********/
 /*****************************************************************************/
 
-unsigned Brw_DB_GetNumFilesInDocumZonesOfCrs (long CrsCod)
+unsigned Brw_DB_GetNumFilesInDocumZonesOfCrs (long HieCod)
   {
    extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
 
@@ -399,8 +399,8 @@ unsigned Brw_DB_GetNumFilesInDocumZonesOfCrs (long CrsCod)
 				      " AND brw_sizes.FileBrowser=%u"
 				      " AND brw_sizes.Cod=grp_groups.GrpCod)",
 				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_DOC_CRS],
-				  CrsCod,
-				  CrsCod,
+				  HieCod,
+				  HieCod,
 				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_DOC_GRP]);
   }
 
@@ -408,7 +408,7 @@ unsigned Brw_DB_GetNumFilesInDocumZonesOfCrs (long CrsCod)
 /*********** Get the number of files in shared zones of a course ***********/
 /*****************************************************************************/
 
-unsigned Brw_DB_GetNumFilesInShareZonesOfCrs (long CrsCod)
+unsigned Brw_DB_GetNumFilesInShareZonesOfCrs (long HieCod)
   {
    extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
 
@@ -427,8 +427,8 @@ unsigned Brw_DB_GetNumFilesInShareZonesOfCrs (long CrsCod)
 				      " AND brw_sizes.FileBrowser=%u"
 				      " AND brw_sizes.Cod=grp_groups.GrpCod)",
 				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_SHR_CRS],
-				  CrsCod,
-				  CrsCod,
+				  HieCod,
+				  HieCod,
 				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_SHR_GRP]);
   }
 
@@ -436,7 +436,7 @@ unsigned Brw_DB_GetNumFilesInShareZonesOfCrs (long CrsCod)
 /********* Get the number of files in assignment zones of a course ***********/
 /*****************************************************************************/
 
-unsigned Brw_DB_GetNumFilesInAssigZonesOfCrs (long CrsCod)
+unsigned Brw_DB_GetNumFilesInAssigZonesOfCrs (long HieCod)
   {
    extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
 
@@ -447,14 +447,14 @@ unsigned Brw_DB_GetNumFilesInAssigZonesOfCrs (long CrsCod)
 				  " WHERE FileBrowser=%u"
 				    " AND Cod=%ld",
 				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_ASG_USR],
-				  CrsCod);
+				  HieCod);
   }
 
 /*****************************************************************************/
 /************* Get the number of files in works zones of a course ************/
 /*****************************************************************************/
 
-unsigned Brw_DB_GetNumFilesInWorksZonesOfCrs (long CrsCod)
+unsigned Brw_DB_GetNumFilesInWorksZonesOfCrs (long HieCod)
   {
    extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
 
@@ -465,7 +465,7 @@ unsigned Brw_DB_GetNumFilesInWorksZonesOfCrs (long CrsCod)
 				  " WHERE FileBrowser=%u"
 				    " AND Cod=%ld",
 				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_WRK_USR],
-				  CrsCod);
+				  HieCod);
   }
 
 /*****************************************************************************/
@@ -578,7 +578,7 @@ void Brw_DB_RemoveChildrenOfFolder (const char Path[PATH_MAX + 1])
 /******** Remove files related to an institution from the database ***********/
 /*****************************************************************************/
 
-void Brw_DB_RemoveInsFiles (long InsCod)
+void Brw_DB_RemoveInsFiles (long HieCod)
   {
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views to files of an institution",
@@ -590,7 +590,7 @@ void Brw_DB_RemoveInsFiles (long InsCod)
 		     " AND brw_files.FilCod=brw_views.FilCod",
 	           (unsigned) Brw_ADMI_DOC_INS,
 	           (unsigned) Brw_ADMI_SHR_INS,
-	           InsCod);
+	           HieCod);
 
    /***** Remove from database expanded folders *****/
    DB_QueryDELETE ("can not remove expanded folders of an institution",
@@ -599,7 +599,7 @@ void Brw_DB_RemoveInsFiles (long InsCod)
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_INS,
 	           (unsigned) Brw_ADMI_SHR_INS,
-	           InsCod);
+	           HieCod);
 
    /***** Remove from database the entries that store clipboards *****/
    DB_QueryDELETE ("can not remove clipboards"
@@ -609,7 +609,7 @@ void Brw_DB_RemoveInsFiles (long InsCod)
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_INS,
 	           (unsigned) Brw_ADMI_SHR_INS,
-	           InsCod);
+	           HieCod);
 
    /***** Remove from database the entries that store
           the last time users visited file zones *****/
@@ -620,7 +620,7 @@ void Brw_DB_RemoveInsFiles (long InsCod)
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_INS,
 	           (unsigned) Brw_ADMI_SHR_INS,
-	           InsCod);
+	           HieCod);
 
    /***** Remove from database the entries that store
           the sizes of the file zones *****/
@@ -630,7 +630,7 @@ void Brw_DB_RemoveInsFiles (long InsCod)
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_INS,
 	           (unsigned) Brw_ADMI_SHR_INS,
-	           InsCod);
+	           HieCod);
 
    /***** Remove from database the entries that store the data files *****/
    DB_QueryDELETE ("can not remove files of an institution",
@@ -639,14 +639,14 @@ void Brw_DB_RemoveInsFiles (long InsCod)
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_INS,
 	           (unsigned) Brw_ADMI_SHR_INS,
-	           InsCod);
+	           HieCod);
   }
 
 /*****************************************************************************/
 /************ Remove files related to a center from the database *************/
 /*****************************************************************************/
 
-void Brw_DB_RemoveCtrFiles (long CtrCod)
+void Brw_DB_RemoveCtrFiles (long HieCod)
   {
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views to files of a center",
@@ -658,7 +658,7 @@ void Brw_DB_RemoveCtrFiles (long CtrCod)
 		     " AND brw_files.FilCod=brw_views.FilCod",
 	           (unsigned) Brw_ADMI_DOC_CTR,
 	           (unsigned) Brw_ADMI_SHR_CTR,
-	           CtrCod);
+	           HieCod);
 
    /***** Remove from database expanded folders *****/
    DB_QueryDELETE ("can not remove expanded folders of a center",
@@ -667,7 +667,7 @@ void Brw_DB_RemoveCtrFiles (long CtrCod)
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_CTR,
 	           (unsigned) Brw_ADMI_SHR_CTR,
-	           CtrCod);
+	           HieCod);
 
    /***** Remove from database the entries that store clipboards *****/
    DB_QueryDELETE ("can not remove clipboards related to files of a center",
@@ -676,7 +676,7 @@ void Brw_DB_RemoveCtrFiles (long CtrCod)
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_CTR,
 	           (unsigned) Brw_ADMI_SHR_CTR,
-	           CtrCod);
+	           HieCod);
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
    DB_QueryDELETE ("can not remove file last visits to files of a center",
@@ -685,7 +685,7 @@ void Brw_DB_RemoveCtrFiles (long CtrCod)
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_CTR,
 	           (unsigned) Brw_ADMI_SHR_CTR,
-	           CtrCod);
+	           HieCod);
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
    DB_QueryDELETE ("can not remove sizes of file zones of a center",
@@ -694,7 +694,7 @@ void Brw_DB_RemoveCtrFiles (long CtrCod)
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_CTR,
 	           (unsigned) Brw_ADMI_SHR_CTR,
-	           CtrCod);
+	           HieCod);
 
    /***** Remove from database the entries that store the data files *****/
    DB_QueryDELETE ("can not remove files of a center",
@@ -703,14 +703,14 @@ void Brw_DB_RemoveCtrFiles (long CtrCod)
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_CTR,
 	           (unsigned) Brw_ADMI_SHR_CTR,
-	           CtrCod);
+	           HieCod);
   }
 
 /*****************************************************************************/
 /************ Remove files related to a degree from the database *************/
 /*****************************************************************************/
 
-void Brw_DB_RemoveDegFiles (long DegCod)
+void Brw_DB_RemoveDegFiles (long HieCod)
   {
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views to files of a degree",
@@ -722,7 +722,7 @@ void Brw_DB_RemoveDegFiles (long DegCod)
 		     " AND brw_files.FilCod=brw_views.FilCod",
 	           (unsigned) Brw_ADMI_DOC_DEG,
 	           (unsigned) Brw_ADMI_SHR_DEG,
-	           DegCod);
+	           HieCod);
 
    /***** Remove from database expanded folders *****/
    DB_QueryDELETE ("can not remove expanded folders of a degree",
@@ -731,7 +731,7 @@ void Brw_DB_RemoveDegFiles (long DegCod)
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_DEG,
 	           (unsigned) Brw_ADMI_SHR_DEG,
-	           DegCod);
+	           HieCod);
 
    /***** Remove from database the entries that store clipboards *****/
    DB_QueryDELETE ("can not remove clipboards related to files of a degree",
@@ -740,7 +740,7 @@ void Brw_DB_RemoveDegFiles (long DegCod)
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_DEG,
 	           (unsigned) Brw_ADMI_SHR_DEG,
-	           DegCod);
+	           HieCod);
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
    DB_QueryDELETE ("can not remove file last visits to files of a degree",
@@ -749,7 +749,7 @@ void Brw_DB_RemoveDegFiles (long DegCod)
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_DEG,
 	           (unsigned) Brw_ADMI_SHR_DEG,
-	           DegCod);
+	           HieCod);
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
    DB_QueryDELETE ("can not remove sizes of file zones of a degree",
@@ -758,7 +758,7 @@ void Brw_DB_RemoveDegFiles (long DegCod)
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_DEG,
 	           (unsigned) Brw_ADMI_SHR_DEG,
-	           DegCod);
+	           HieCod);
 
    /***** Remove from database the entries that store the data files *****/
    DB_QueryDELETE ("can not remove files of a degree",
@@ -767,7 +767,7 @@ void Brw_DB_RemoveDegFiles (long DegCod)
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_DEG,
 	           (unsigned) Brw_ADMI_SHR_DEG,
-	           DegCod);
+	           HieCod);
   }
 
 /*****************************************************************************/
@@ -778,7 +778,7 @@ void Brw_DB_RemoveDegFiles (long DegCod)
    so this function must be called
    before removing groups and projects */
 
-void Brw_DB_RemoveCrsFiles (long CrsCod)
+void Brw_DB_RemoveCrsFiles (long HieCod)
   {
    char SubqueryGrp[256];
    char SubqueryPrj[128];
@@ -789,13 +789,13 @@ void Brw_DB_RemoveCrsFiles (long CrsCod)
 	                        "grp_groups"
 		         " WHERE grp_types.CrsCod=%ld"
 		           " AND grp_types.GrpTypCod=grp_groups.GrpTypCod)",
-            CrsCod);
+            HieCod);
 
    /***** Build subquery for projects *****/
    sprintf (SubqueryPrj,"(SELECT PrjCod"
 	                  " FROM prj_projects"
 	                 " WHERE CrsCod=%ld)",
-            CrsCod);
+            HieCod);
 
    /***** Remove format of files of marks *****/
    DB_QueryDELETE ("can not remove the properties of marks"
@@ -807,7 +807,7 @@ void Brw_DB_RemoveCrsFiles (long CrsCod)
 		     " AND brw_files.Cod=%ld"
 		     " AND brw_files.FilCod=mrk_marks.FilCod",
 	           (unsigned) Brw_ADMI_MRK_CRS,
-	           CrsCod);
+	           HieCod);
 
    /***** Remove from database the entries that store the file views *****/
    /* Remove from course file zones */
@@ -824,7 +824,7 @@ void Brw_DB_RemoveCrsFiles (long CrsCod)
 	           (unsigned) Brw_ADMI_ASG_USR,
 	           (unsigned) Brw_ADMI_WRK_USR,
 	           (unsigned) Brw_ADMI_MRK_CRS,
-	           CrsCod);
+	           HieCod);
 
    /* Remove from group file zones */
    DB_QueryDELETE ("can not remove file views to files of a course",
@@ -866,7 +866,7 @@ void Brw_DB_RemoveCrsFiles (long CrsCod)
 	           (unsigned) Brw_ADMI_WRK_USR,
 	           (unsigned) Brw_ADMI_WRK_CRS,
 	           (unsigned) Brw_ADMI_MRK_CRS,
-	           CrsCod);
+	           HieCod);
 
    /* Remove from group file zones */
    DB_QueryDELETE ("can not remove expanded folders of a course",
@@ -902,7 +902,7 @@ void Brw_DB_RemoveCrsFiles (long CrsCod)
 	           (unsigned) Brw_ADMI_WRK_USR,
 	           (unsigned) Brw_ADMI_WRK_CRS,
 	           (unsigned) Brw_ADMI_MRK_CRS,
-	           CrsCod);
+	           HieCod);
 
    /* Remove from group file zones */
    DB_QueryDELETE ("can not remove clipboards related to files of a course",
@@ -937,7 +937,7 @@ void Brw_DB_RemoveCrsFiles (long CrsCod)
 	           (unsigned) Brw_ADMI_SHR_CRS,
 	           (unsigned) Brw_ADMI_ASG_USR,
 	           (unsigned) Brw_ADMI_MRK_CRS,
-	           CrsCod);
+	           HieCod);
 
    /* Remove from group file zones */
     DB_QueryDELETE ("can not remove file last visits to files of a course",
@@ -971,7 +971,7 @@ void Brw_DB_RemoveCrsFiles (long CrsCod)
 	           (unsigned) Brw_ADMI_ASG_USR,
 	           (unsigned) Brw_ADMI_WRK_USR,
 	           (unsigned) Brw_ADMI_MRK_CRS,
-	           CrsCod);
+	           HieCod);
 
    /* Remove from group file zones */
    DB_QueryDELETE ("can not remove sizes of file zones of a course",
@@ -1005,7 +1005,7 @@ void Brw_DB_RemoveCrsFiles (long CrsCod)
 	           (unsigned) Brw_ADMI_ASG_USR,
 	           (unsigned) Brw_ADMI_WRK_USR,
 	           (unsigned) Brw_ADMI_MRK_CRS,
-	           CrsCod);
+	           HieCod);
 
    /* Remove from group file zones */
    DB_QueryDELETE ("can not remove files of a course",
@@ -1184,7 +1184,7 @@ void Brw_DB_RemovePrjFiles (long PrjCod)
 /* Remove some info about files related to a course and a user from database */
 /*****************************************************************************/
 
-void Brw_DB_RemoveSomeInfoAboutCrsUsrFiles (long UsrCod,long CrsCod)
+void Brw_DB_RemoveSomeInfoAboutCrsUsrFiles (long UsrCod,long HieCod)
   {
    /***** Remove from database expanded folders *****/
    DB_QueryDELETE ("can not remove expanded folders for a user in a course",
@@ -1211,12 +1211,12 @@ void Brw_DB_RemoveSomeInfoAboutCrsUsrFiles (long UsrCod,long CrsCod)
 	           (unsigned) Brw_ADMI_WRK_USR,
 	           (unsigned) Brw_ADMI_WRK_CRS,
 	           (unsigned) Brw_ADMI_MRK_CRS,
-	           CrsCod,
+	           HieCod,
 	           (unsigned) Brw_ADMI_DOC_GRP,
 	           (unsigned) Brw_ADMI_TCH_GRP,
 	           (unsigned) Brw_ADMI_SHR_GRP,
 	           (unsigned) Brw_ADMI_MRK_GRP,
-	           CrsCod);
+	           HieCod);
 
    /***** Remove from database the entries that store clipboards *****/
    DB_QueryDELETE ("can not remove source of copy for a user in a course",
@@ -1243,12 +1243,12 @@ void Brw_DB_RemoveSomeInfoAboutCrsUsrFiles (long UsrCod,long CrsCod)
 	           (unsigned) Brw_ADMI_WRK_USR,
 	           (unsigned) Brw_ADMI_WRK_CRS,
 	           (unsigned) Brw_ADMI_MRK_CRS,
-	           CrsCod,
+	           HieCod,
 	           (unsigned) Brw_ADMI_DOC_GRP,
 	           (unsigned) Brw_ADMI_TCH_GRP,
 	           (unsigned) Brw_ADMI_SHR_GRP,
 	           (unsigned) Brw_ADMI_MRK_GRP,
-	           CrsCod);
+	           HieCod);
 
    /***** Remove from database the entries that store the last time user visited file zones *****/
    // Assignments and works are stored as one in brw_last...
@@ -1275,19 +1275,19 @@ void Brw_DB_RemoveSomeInfoAboutCrsUsrFiles (long UsrCod,long CrsCod)
 	           (unsigned) Brw_ADMI_SHR_CRS,
 	           (unsigned) Brw_ADMI_ASG_USR,
 	           (unsigned) Brw_ADMI_MRK_CRS,
-	           CrsCod,
+	           HieCod,
 	           (unsigned) Brw_ADMI_DOC_GRP,
 	           (unsigned) Brw_ADMI_TCH_GRP,
 	           (unsigned) Brw_ADMI_SHR_GRP,
 	           (unsigned) Brw_ADMI_MRK_GRP,
-	           CrsCod);
+	           HieCod);
   }
 
 /*****************************************************************************/
 /*************** Remove user's works in a course from database ***************/
 /*****************************************************************************/
 
-void Brw_DB_RemoveWrkFiles (long CrsCod,long UsrCod)
+void Brw_DB_RemoveWrkFiles (long HieCod,long UsrCod)
   {
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views",
@@ -1300,7 +1300,7 @@ void Brw_DB_RemoveWrkFiles (long CrsCod,long UsrCod)
 		     " AND brw_files.FilCod=brw_views.FilCod",
 	           (unsigned) Brw_ADMI_ASG_USR,
 	           (unsigned) Brw_ADMI_WRK_USR,
-	           CrsCod,UsrCod);
+	           HieCod,UsrCod);
 
    /***** Remove from database expanded folders *****/
    DB_QueryDELETE ("can not remove expanded folders of a group",
@@ -1310,7 +1310,7 @@ void Brw_DB_RemoveWrkFiles (long CrsCod,long UsrCod)
 		     " AND WorksUsrCod=%ld",
 	           (unsigned) Brw_ADMI_ASG_CRS,
 	           (unsigned) Brw_ADMI_WRK_CRS,
-	           CrsCod,UsrCod);
+	           HieCod,UsrCod);
 
    /***** Remove from database the entries that store clipboards *****/
    DB_QueryDELETE ("can not remove clipboards",
@@ -1320,7 +1320,7 @@ void Brw_DB_RemoveWrkFiles (long CrsCod,long UsrCod)
 		     " AND WorksUsrCod=%ld",
 	           (unsigned) Brw_ADMI_ASG_CRS,
 	           (unsigned) Brw_ADMI_WRK_CRS,
-	           CrsCod,UsrCod);
+	           HieCod,UsrCod);
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
    DB_QueryDELETE ("can not remove file browser sizes",
@@ -1330,7 +1330,7 @@ void Brw_DB_RemoveWrkFiles (long CrsCod,long UsrCod)
 		     " AND ZoneUsrCod=%ld",
 	           (unsigned) Brw_ADMI_ASG_USR,
 	           (unsigned) Brw_ADMI_WRK_USR,
-	           CrsCod,UsrCod);
+	           HieCod,UsrCod);
 
    /***** Remove from database the entries that store the data files *****/
    DB_QueryDELETE ("can not remove files",
@@ -1340,7 +1340,7 @@ void Brw_DB_RemoveWrkFiles (long CrsCod,long UsrCod)
 		     " AND ZoneUsrCod=%ld",
 	           (unsigned) Brw_ADMI_ASG_USR,
 	           (unsigned) Brw_ADMI_WRK_USR,
-	           CrsCod,UsrCod);
+	           HieCod,UsrCod);
   }
 
 /*****************************************************************************/

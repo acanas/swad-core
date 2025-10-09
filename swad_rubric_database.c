@@ -336,12 +336,12 @@ void Rub_DB_RemoveRubric (long RubCod)
 /********************** Remove the rubrics of a course ***********************/
 /*****************************************************************************/
 
-void Rub_DB_RemoveCrsRubrics (long CrsCod)
+void Rub_DB_RemoveCrsRubrics (long HieCod)
   {
    DB_QueryDELETE ("can not remove course rubrics",
 		   "DELETE FROM rub_rubrics"
 		   " WHERE CrsCod=%ld",
-                   CrsCod);
+                   HieCod);
   }
 
 /*****************************************************************************/
@@ -813,7 +813,7 @@ void Rub_DB_RemoveRubricCriteria (long RubCod)
 /**************** Remove the criteria in rubrics of a course *****************/
 /*****************************************************************************/
 
-void Rub_DB_RemoveCrsRubricCriteria (long CrsCod)
+void Rub_DB_RemoveCrsRubricCriteria (long HieCod)
   {
    DB_QueryDELETE ("can not remove criteria in course rubrics",
 		   "DELETE FROM rub_criteria"
@@ -821,7 +821,7 @@ void Rub_DB_RemoveCrsRubricCriteria (long CrsCod)
 		          "rub_criteria"
 		   " WHERE rub_rubrics.CrsCod=%ld"
 		     " AND rub_rubrics.RubCod=rub_criteria.RubCod",
-                   CrsCod);
+                   HieCod);
   }
 
 /*****************************************************************************/

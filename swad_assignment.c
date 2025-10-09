@@ -1755,13 +1755,13 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
 /******************** Remove all assignments from a course *******************/
 /*****************************************************************************/
 
-void Asg_RemoveCrsAssignments (long CrsCod)
+void Asg_RemoveCrsAssignments (long HieCod)
   {
    /***** Remove groups associated to assignments in course *****/
-   Asg_DB_RemoveGrpsAssociatedToAsgsInCrs (CrsCod);
+   Asg_DB_RemoveGrpsAssociatedToAsgsInCrs (HieCod);
 
    /***** Remove assignments *****/
-   Asg_DB_RemoveCrsAssignments (CrsCod);
+   Asg_DB_RemoveCrsAssignments (HieCod);
   }
 
 /*****************************************************************************/

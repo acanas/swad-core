@@ -32,14 +32,14 @@
 /************************* Create a field of record **************************/
 /*****************************************************************************/
 
-void Rec_DB_CreateField (long CrsCod,const struct RecordField *Field)
+void Rec_DB_CreateField (long HieCod,const struct RecordField *Field)
   {
    DB_QueryINSERT ("can not create field of record",
 		   "INSERT INTO crs_record_fields"
 		   " (CrsCod,FieldName,NumLines,Visibility)"
 		   " VALUES"
 		   " (%ld,'%s',%u,%u)",
-	           CrsCod,
+	           HieCod,
 	           Field->Name,
 	           Field->NumLines,
 	           (unsigned) Field->Visibility);
@@ -138,7 +138,7 @@ unsigned Rec_DB_CountNumRecordsWithFieldContent (long FldCod)
 /******* Get the fields of records already present in current course *********/
 /*****************************************************************************/
 
-unsigned Rec_DB_GetAllFieldsInCrs (MYSQL_RES **mysql_res,long CrsCod)
+unsigned Rec_DB_GetAllFieldsInCrs (MYSQL_RES **mysql_res,long HieCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get fields of records in a course",
@@ -149,14 +149,14 @@ unsigned Rec_DB_GetAllFieldsInCrs (MYSQL_RES **mysql_res,long CrsCod)
 		    " FROM crs_record_fields"
 		   " WHERE CrsCod=%ld"
 		" ORDER BY FieldName",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /************** Get the data of a field of records from its code *************/
 /*****************************************************************************/
 
-Exi_Exist_t Rec_DB_GetFieldByCod (MYSQL_RES **mysql_res,long CrsCod,long FldCod)
+Exi_Exist_t Rec_DB_GetFieldByCod (MYSQL_RES **mysql_res,long HieCod,long FldCod)
   {
    return
    DB_QuerySELECTunique (mysql_res,"can not get a field of a record in a course",
@@ -166,7 +166,7 @@ Exi_Exist_t Rec_DB_GetFieldByCod (MYSQL_RES **mysql_res,long CrsCod,long FldCod)
 			  " FROM crs_record_fields"
 			 " WHERE CrsCod=%ld"
 			   " AND FieldCod=%ld",
-			 CrsCod,
+			 HieCod,
 			 FldCod);
   }
 
@@ -217,7 +217,7 @@ void Rec_DB_RemoveFieldContentFromUsrRecord (long FldCod,long UsrCod)
 /************ Remove fields of record of a user in current course ************/
 /*****************************************************************************/
 
-void Rec_DB_RemoveAllFieldContentsFromUsrRecordInCrs (long UsrCod,long CrsCod)
+void Rec_DB_RemoveAllFieldContentsFromUsrRecordInCrs (long UsrCod,long HieCod)
   {
    DB_QueryDELETE ("can not remove user's record in a course",
 		   "DELETE FROM crs_records"
@@ -227,7 +227,7 @@ void Rec_DB_RemoveAllFieldContentsFromUsrRecordInCrs (long UsrCod,long CrsCod)
 		            " FROM crs_record_fields"
 		           " WHERE CrsCod=%ld)",
                    UsrCod,
-                   CrsCod);
+                   HieCod);
   }
 
 /*****************************************************************************/
@@ -246,7 +246,7 @@ void Rec_DB_RemoveAllFieldContentsFromUsrRecords (long UsrCod)
 /******************** Remove content of course record cards ******************/
 /*****************************************************************************/
 
-void Rec_DB_RemoveAllFieldContentsInCrs (long CrsCod)
+void Rec_DB_RemoveAllFieldContentsInCrs (long HieCod)
   {
    DB_QueryDELETE ("can not remove content of cards in a course",
 		   "DELETE FROM crs_records"
@@ -254,7 +254,7 @@ void Rec_DB_RemoveAllFieldContentsInCrs (long CrsCod)
 			  "crs_records"
 		   " WHERE crs_record_fields.CrsCod=%ld"
 		     " AND crs_record_fields.FieldCod=crs_records.FieldCod",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -273,10 +273,10 @@ void Rec_DB_RemoveField (long FldCod)
 /************ Remove definition of fields in course record cards *************/
 /*****************************************************************************/
 
-void Rec_DB_RemoveAllFieldsInCrs (long CrsCod)
+void Rec_DB_RemoveAllFieldsInCrs (long HieCod)
   {
    DB_QueryDELETE ("can not remove fields of cards in a course",
 		   "DELETE FROM crs_record_fields"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }

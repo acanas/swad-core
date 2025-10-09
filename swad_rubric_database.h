@@ -50,7 +50,7 @@ unsigned Rub_DB_GetNumCoursesWithRubrics (Hie_Level_t HieLvl);
 unsigned Rub_DB_GetNumRubrics (Hie_Level_t HieLvl);
 
 void Rub_DB_RemoveRubric (long RubCod);
-void Rub_DB_RemoveCrsRubrics (long CrsCod);
+void Rub_DB_RemoveCrsRubrics (long HieCod);
 
 //---------------------------- Rubric criteria --------------------------------
 long Rub_DB_CreateCriterion (const struct RubCri_Criterion *Criterion);
@@ -79,7 +79,7 @@ double Rub_DB_GetNumCriteriaPerRubric (Hie_Level_t HieLvl);
 
 void Rub_DB_RemoveCriterionFromRubric (const struct RubCri_Criterion *Criterion);
 void Rub_DB_RemoveRubricCriteria (long RubCod);
-void Rub_DB_RemoveCrsRubricCriteria (long CrsCod);
+void Rub_DB_RemoveCrsRubricCriteria (long HieCod);
 
 //----------------------------- Rubric scores ---------------------------------
 void Rub_DB_UpdateScore (Rsc_Type_t RscType,long RscCod,long UsrCod,long CriCod,

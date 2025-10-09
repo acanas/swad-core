@@ -554,8 +554,8 @@ static void Med_PutHiddenFormTypeMediaUploader (const char UniqueId[Frm_MAX_BYTE
 // If NumMedia  < 0, params have no suffix
 // If NumMedia >= 0, the number is a suffix of the params
 
-void Med_GetMediaFromForm (long CrsCod,long QstCod,int NumMedia,struct Med_Media *Media,
-                           void (*GetMediaFromDB) (long CrsCod,long QstCod,int NumMedia,struct Med_Media *Media),
+void Med_GetMediaFromForm (long HieCod,long QstCod,int NumMedia,struct Med_Media *Media,
+                           void (*GetMediaFromDB) (long HieCod,long QstCod,int NumMedia,struct Med_Media *Media),
 			   const char *SectionForAlerts)
   {
    extern const char *Txt_Error_sending_or_processing_image_video;
@@ -628,7 +628,7 @@ void Med_GetMediaFromForm (long CrsCod,long QstCod,int NumMedia,struct Med_Media
 
 	 /***** Get media name *****/
 	 if (GetMediaFromDB != NULL)
-	    GetMediaFromDB (CrsCod,QstCod,NumMedia,Media);
+	    GetMediaFromDB (HieCod,QstCod,NumMedia,Media);
 	 break;
       default:	// Unknown action
 	 Media->Action = Med_ACTION_NO_MEDIA;

@@ -146,8 +146,8 @@ void Med_ResetMedia (struct Med_Media *Media);
 void Med_GetMediaDataByCod (struct Med_Media *Media);
 
 void Med_PutMediaUploader (int NumMedia,const char *ClassInput);
-void Med_GetMediaFromForm (long CrsCod,long QstCod,int NumMedia,struct Med_Media *Media,
-                           void (*GetMediaFromDB) (long CrsCod,long QstCod,int NumMedia,struct Med_Media *Media),
+void Med_GetMediaFromForm (long HieCod,long QstCod,int NumMedia,struct Med_Media *Media,
+                           void (*GetMediaFromDB) (long HieCod,long QstCod,int NumMedia,struct Med_Media *Media),
 			   const char *SectionForAlerts);
 void Med_SetParsNames (struct Med_ParUpload *ParUpl,int NumMedia);
 

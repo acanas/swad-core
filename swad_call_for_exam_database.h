@@ -49,6 +49,6 @@ void Cfe_DB_HideCallForExam (long ExaCod);
 void Cfe_DB_UnhideCallForExam (long ExaCod);
 
 void Cfe_DB_MarkACallForExamAsDeleted (long ExaCod);
-void Cfe_DB_MarkCallForExamsInCrsAsDeleted (long CrsCod);
+void Cfe_DB_MarkCallForExamsInCrsAsDeleted (long HieCod);
 
 #endif

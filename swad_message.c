@@ -165,9 +165,9 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
                                                CloOpe_ClosedOrOpen_t ClosedOrOpen,
                                                bool Expanded);
 
-static bool Msg_WriteCrsOrgMsg (long CrsCod);
+static bool Msg_WriteCrsOrgMsg (long HieCod);
 
-static void Msg_WriteFormToReply (long MsgCod,long CrsCod,bool FromThisCrs,
+static void Msg_WriteFormToReply (long MsgCod,long HieCod,bool FromThisCrs,
                                   const struct Usr_Data *UsrDat);
 static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
                               struct Usr_Data *UsrDat,bool Deleted);
@@ -1769,7 +1769,7 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
    MYSQL_ROW row;
    unsigned NumCrss = 0;	// Initialized to avoid warning
    unsigned NumCrs;
-   long CrsCod;
+   long HieCod;	// Course code
 
    /***** Get distinct courses in my messages *****/
    if (GetDistinctCrssInMyRcvMsgs[Messages->TypeOfMessages])
@@ -1798,9 +1798,9 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
 		  /* Get next course */
 		  row = mysql_fetch_row (mysql_res);
 
-		  if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-		     HTM_OPTION (HTM_Type_LONG,&CrsCod,
-				 (CrsCod == Messages->FilterCrsCod) ? HTM_SELECTED :
+		  if ((HieCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+		     HTM_OPTION (HTM_Type_LONG,&HieCod,
+				 (HieCod == Messages->FilterCrsCod) ? HTM_SELECTED :
 								      HTM_NO_ATTR,
 				 "%s",row[1]);	// Course short name
 		 }
@@ -2021,7 +2021,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
    __attribute__((unused)) Exi_Exist_t UsrExists;
    bool FromThisCrs = false;	// Initialized to avoid warning
    time_t CreatTimeUTC;		// Creation time of a message
-   long CrsCod;
+   long HieCod;			// Course code
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Med_Media Media;
@@ -2034,7 +2034,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Get data of message *****/
-   Msg_GetMsgSntData (MsgCod,&CrsCod,&UsrDat.UsrCod,&CreatTimeUTC,Subject,&Deleted);
+   Msg_GetMsgSntData (MsgCod,&HieCod,&UsrDat.UsrCod,&CreatTimeUTC,Subject,&Deleted);
    switch (Messages->TypeOfMessages)
      {
       case Msg_RECEIVED:
@@ -2104,7 +2104,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 	       /***** Write course origin of message *****/
 	       HTM_TR_Begin (NULL);
 		  HTM_TD_Begin ("class=\"LM\"");
-		     FromThisCrs = Msg_WriteCrsOrgMsg (CrsCod);
+		     FromThisCrs = Msg_WriteCrsOrgMsg (HieCod);
 		  HTM_TD_End ();
 	       HTM_TR_End ();
 
@@ -2114,7 +2114,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 		     if (Messages->TypeOfMessages == Msg_RECEIVED &&
 			 Gbl.Usrs.Me.Role.Logged >= Rol_USR)
 			// Guests (users without courses) can read messages but not reply them
-			Msg_WriteFormToReply (MsgCod,CrsCod,FromThisCrs,&UsrDat);
+			Msg_WriteFormToReply (MsgCod,HieCod,FromThisCrs,&UsrDat);
 		  HTM_TD_End ();
 	       HTM_TR_End ();
 
@@ -2298,7 +2298,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 /*****************************************************************************/
 // Returns true if the origin course is the current course
 
-static bool Msg_WriteCrsOrgMsg (long CrsCod)
+static bool Msg_WriteCrsOrgMsg (long HieCod)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_from_this_course;
@@ -2307,16 +2307,16 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
    bool FromThisCrs = true;
    bool ThereIsOrgCrs = false;
 
-   if (CrsCod > 0)
+   if (HieCod > 0)
      {
       /* Get new course code from old course code */
-      Crs.HieCod = CrsCod;
+      Crs.HieCod = HieCod;
 
       /* Get data of current degree */
       if (Hie_GetDataByCod[Hie_CRS] (&Crs) == Err_SUCCESS)
         {
          ThereIsOrgCrs = true;
-         if ((FromThisCrs = (CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod)))	// Message sent from current course
+         if ((FromThisCrs = (HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod)))	// Message sent from current course
            {
             HTM_DIV_Begin ("class=\"MSG_AUT_%s\"",The_GetSuffix ());
 	       HTM_ParTxtPar (Txt_from_this_course);
@@ -2354,7 +2354,7 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
 /************************* Write form to reply a message *********************/
 /*****************************************************************************/
 
-static void Msg_WriteFormToReply (long MsgCod,long CrsCod,bool FromThisCrs,
+static void Msg_WriteFormToReply (long MsgCod,long HieCod,bool FromThisCrs,
                                   const struct Usr_Data *UsrDat)
   {
    /***** Begin form and parameters *****/
@@ -2363,7 +2363,7 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,bool FromThisCrs,
    else	// Not the current course ==> go to another course
      {
       Frm_BeginFormGoTo (ActReqMsgUsr);
-	 ParCod_PutPar (ParCod_Crs,CrsCod);
+	 ParCod_PutPar (ParCod_Crs,HieCod);
      }
       Grp_PutParAllGroups ();
       Par_PutParChar ("IsReply",'Y');

@@ -2912,7 +2912,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
    long CurrentGrpCod;
    struct ListCodGrps LstMyGrps;
    unsigned NumGrp;
-   long CrsCod;
+   long HieCod;
    struct GroupType GrpTyp;
    struct Group Grp;
 
@@ -2951,7 +2951,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 	      {
 	       /* Get next group */
 	       Grp.GrpCod = LstMyGrps.GrpCods[NumGrp];
-	       Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+	       Grp_GetGroupDataByCod (&HieCod,&GrpTyp.GrpTypCod,&Grp);
 	       Grp_GetGroupTypeDataByCod (&GrpTyp);
 
 	       /* Select this group */
@@ -5253,7 +5253,7 @@ static void Brw_WriteCurrentClipboard (void)
    extern const char *Txt_all_files_inside_the_root_folder;
    struct Hie_Node Hie[Hie_NUM_LEVELS];
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
-   long CrsCod;
+   long HieCod;
    struct GroupType GrpTyp;
    struct Group Grp;
    struct Prj_Project Prj;
@@ -5333,9 +5333,9 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_DOC_GRP:
          Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
-         Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+         Grp_GetGroupDataByCod (&HieCod,&GrpTyp.GrpTypCod,&Grp);
          Grp_GetGroupTypeDataByCod (&GrpTyp);
-         Hie[Hie_CRS].HieCod = CrsCod;
+         Hie[Hie_CRS].HieCod = HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
@@ -5353,9 +5353,9 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_TCH_GRP:
          Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
-         Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+         Grp_GetGroupDataByCod (&HieCod,&GrpTyp.GrpTypCod,&Grp);
 	 Grp_GetGroupTypeDataByCod (&GrpTyp);
-         Hie[Hie_CRS].HieCod = CrsCod;
+         Hie[Hie_CRS].HieCod = HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
@@ -5373,9 +5373,9 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_SHR_GRP:
          Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
-         Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+         Grp_GetGroupDataByCod (&HieCod,&GrpTyp.GrpTypCod,&Grp);
 	 Grp_GetGroupTypeDataByCod (&GrpTyp);
-         Hie[Hie_CRS].HieCod = CrsCod;
+         Hie[Hie_CRS].HieCod = HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
@@ -5456,9 +5456,9 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_MRK_GRP:
          Grp.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
-         Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+         Grp_GetGroupDataByCod (&HieCod,&GrpTyp.GrpTypCod,&Grp);
 	 Grp_GetGroupTypeDataByCod (&GrpTyp);
-         Hie[Hie_CRS].HieCod = CrsCod;
+         Hie[Hie_CRS].HieCod = HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
@@ -9171,7 +9171,7 @@ void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod)
 /*********************** Remove file zones of a group ************************/
 /*****************************************************************************/
 
-void Brw_RemoveGrpZones (long CrsCod,long GrpCod)
+void Brw_RemoveGrpZones (long HieCod,long GrpCod)
   {
    char PathGrpFileZones[PATH_MAX + 1];
 
@@ -9183,7 +9183,7 @@ void Brw_RemoveGrpZones (long CrsCod,long GrpCod)
 
    /***** Remove group zones *****/
    snprintf (PathGrpFileZones,sizeof (PathGrpFileZones),"%s/%ld/grp/%ld",
-             Cfg_PATH_CRS_PRIVATE,CrsCod,GrpCod);
+             Cfg_PATH_CRS_PRIVATE,HieCod,GrpCod);
    Fil_RemoveTree (PathGrpFileZones);
   }
 

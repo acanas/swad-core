@@ -72,7 +72,7 @@ const char *Roo_TypesDB[Roo_NUM_TYPES] =
 /**************************** Create a new room ******************************/
 /*****************************************************************************/
 
-long Roo_DB_CreateRoom (long CtrCod,const struct Roo_Room *Room)
+long Roo_DB_CreateRoom (long HieCod,const struct Roo_Room *Room)
   {
    return
    DB_QueryINSERTandReturnCode ("can not create room",
@@ -82,7 +82,7 @@ long Roo_DB_CreateRoom (long CtrCod,const struct Roo_Room *Room)
 			        " VALUES"
 			        " (%ld,%ld,%d,'%s',"
 			          "'%s','%s',%u)",
-			        CtrCod,
+			        HieCod,
 			        Room->BldCod,
 			        Room->Floor,
 			        Roo_TypesDB[Room->Type],
@@ -197,7 +197,7 @@ void Roo_DB_UpdateRoomCapacity (long RooCod,unsigned NewCapacity)
 /*****************************************************************************/
 
 unsigned Roo_DB_GetListRooms (MYSQL_RES **mysql_res,
-                              long CtrCod,
+                              long HieCod,
                               Roo_WhichData_t WhichData,
                               Roo_Order_t SelectedOrder)
   {
@@ -242,7 +242,7 @@ unsigned Roo_DB_GetListRooms (MYSQL_RES **mysql_res,
 			    " ON roo_rooms.BldCod=bld_buildings.BldCod"
 		         " WHERE roo_rooms.CtrCod=%ld"
 		      " ORDER BY %s",
-		         CtrCod,
+		         HieCod,
 		         OrderBySubQuery[SelectedOrder]);
       case Roo_ONLY_SHRT_NAME:
       default:
@@ -254,7 +254,7 @@ unsigned Roo_DB_GetListRooms (MYSQL_RES **mysql_res,
 			    " ON roo_rooms.BldCod=bld_buildings.BldCod"
 		         " WHERE roo_rooms.CtrCod=%ld"
 		      " ORDER BY %s",
-		         CtrCod,
+		         HieCod,
 		         OrderBySubQuery[Roo_ORDER_DEFAULT]);
      }
   }
@@ -361,13 +361,13 @@ void Roo_DB_RemoveBuildingFromRooms (long BldCod)
 /********************** Remove all rooms in a center *************************/
 /*****************************************************************************/
 
-void Roo_DB_RemoveAllRoomsInCtr (long CtrCod)
+void Roo_DB_RemoveAllRoomsInCtr (long HieCod)
   {
    /***** Remove all rooms in center *****/
    DB_QueryDELETE ("can not remove rooms",
 		   "DELETE FROM roo_rooms"
                    " WHERE CtrCod=%ld",
-		   CtrCod);
+		   HieCod);
   }
 
 

@@ -120,7 +120,7 @@ void Usr_GetListUsrs (Hie_Level_t HieLvl,Rol_Role_t Role);
 
 void Usr_SearchListUsrs (Hie_Level_t HieLvl,Rol_Role_t Role);
 
-void Usr_GetUnorderedStdsCodesInDeg (long DegCod);
+void Usr_GetUnorderedStdsCodesInDeg (long HieCod);
 
 void Usr_GetListUsrsFromQuery (char *Query,Hie_Level_t HieLvl,Rol_Role_t Role);
 

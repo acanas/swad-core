@@ -47,12 +47,12 @@ Exi_Exist_t Exa_DB_GetExamDataByCod (MYSQL_RES **mysql_res,long ExaCod);
 Exi_Exist_t Exa_DB_GetExamStartEnd (MYSQL_RES **mysql_res,long ExaCod);
 void Exa_DB_GetExamTitle (long ExaCod,char *Title,size_t TitleSize);
 void Exa_DB_GetExamTxt (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
-Exi_Exist_t Exa_DB_CheckIfSimilarExamExists (long CrsCod,long ExaCod,const char *Title);
+Exi_Exist_t Exa_DB_CheckIfSimilarExamExists (long HieCod,long ExaCod,const char *Title);
 unsigned Exa_DB_GetNumCoursesWithExams (Hie_Level_t HieLvl);
 unsigned Exa_DB_GetNumExams (Hie_Level_t HieLvl);
 double Exa_DB_GetNumQstsPerCrsExam (Hie_Level_t HieLvl);
 void Exa_DB_RemoveExam (long ExaCod);
-void Exa_DB_RemoveAllExamsFromCrs (long CrsCod);
+void Exa_DB_RemoveAllExamsFromCrs (long HieCod);
 
 //--------------------------------- Sets --------------------------------------
 long Exa_DB_CreateSet (const struct ExaSet_Set *Set);
@@ -75,11 +75,11 @@ unsigned Exa_DB_GetPrevSetIndexInExam (long ExaCod,unsigned SetInd);
 unsigned Exa_DB_GetNextSetIndexInExam (long ExaCod,unsigned SetInd);
 void Exa_DB_RemoveSetFromExam (const struct ExaSet_Set *Set);
 void Exa_DB_RemoveAllSetsFromExam (long ExaCod);
-void Exa_DB_RemoveAllSetsFromCrs (long CrsCod);
+void Exa_DB_RemoveAllSetsFromCrs (long HieCod);
 
 //------------------------------ Set questions --------------------------------
 long Exa_DB_AddQuestionToSet (long SetCod,const struct Qst_Question *Question,long MedCod);
-void Exa_DB_ChangeValidityQst (long QstCod,long SetCod,long ExaCod,long CrsCod,
+void Exa_DB_ChangeValidityQst (long QstCod,long SetCod,long ExaCod,long HieCod,
                                ExaSet_Validity_t Validity);
 unsigned Exa_DB_GetNumQstsInSet (long SetCod);
 unsigned Exa_DB_GetQstsFromSet (MYSQL_RES **mysql_res,long SetCod);
@@ -90,11 +90,11 @@ Exi_Exist_t Exa_DB_GetValidityAndAnswerType (MYSQL_RES **mysql_res,long QstCod);
 Exi_Exist_t Exa_DB_GetAnswerType (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetMediaFromStemOfQst (MYSQL_RES **mysql_res,long QstCod,long SetCod);
 unsigned Exa_DB_GetAllMediaFomStemOfAllQstsFromExam (MYSQL_RES **mysql_res,long ExaCod);
-unsigned Exa_DB_GetAllMediaFomStemOfAllQstsFromCrs (MYSQL_RES **mysql_res,long CrsCod);
+unsigned Exa_DB_GetAllMediaFomStemOfAllQstsFromCrs (MYSQL_RES **mysql_res,long HieCod);
 void Exa_DB_RemoveSetQuestion (long QstCod,long SetCod);
 void Exa_DB_RemoveAllSetQuestionsFromSet (const struct ExaSet_Set *Set);
 void Exa_DB_RemoveAllSetQuestionsFromExam (long ExaCod);
-void Exa_DB_RemoveAllSetQuestionsFromCrs (long CrsCod);
+void Exa_DB_RemoveAllSetQuestionsFromCrs (long HieCod);
 
 //--------------------------- Set question answers ----------------------------
 void Exa_DB_AddAnsToQstInSet (long QstCod,unsigned AnsInd,
@@ -106,9 +106,9 @@ unsigned Exa_DB_GetQstAnswersTextFromSet (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetQstAnswersCorrFromSet (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetMediaFromAllAnsOfQst (MYSQL_RES **mysql_res,long QstCod,long SetCod);
 unsigned Exa_DB_GetAllMediaFromAnsOfAllQstsFromExam (MYSQL_RES **mysql_res,long ExaCod);
-unsigned Exa_DB_GetAllMediaFromAnsOfAllQstsFromCrs (MYSQL_RES **mysql_res,long CrsCod);
+unsigned Exa_DB_GetAllMediaFromAnsOfAllQstsFromCrs (MYSQL_RES **mysql_res,long HieCod);
 void Exa_DB_RemoveAllSetAnswersFromExam (long ExaCod);
-void Exa_DB_RemoveAllSetAnswersFromCrs (long CrsCod);
+void Exa_DB_RemoveAllSetAnswersFromCrs (long HieCod);
 
 //-------------------------------- Sessions -----------------------------------
 long Exa_DB_CreateSession (const struct ExaSes_Session *Session);
@@ -125,8 +125,8 @@ void Exa_DB_UpdateNumCols (const struct ExaSes_Session *Session);
 void Exa_DB_UpdateShowPhotos (const struct ExaSes_Session *Session);
 void Exa_DB_RemoveSessionFromAllTables (long SesCod);
 void Exa_DB_RemoveAllSessionsFromExam (long ExaCod);
-void Exa_DB_RemoveAllSessionsFromCrs (long CrsCod);
-void Exa_DB_RemoveUsrFromSessionTablesInCrs (long UsrCod,long CrsCod);
+void Exa_DB_RemoveAllSessionsFromCrs (long HieCod);
+void Exa_DB_RemoveUsrFromSessionTablesInCrs (long UsrCod,long HieCod);
 
 //--------------------------------- Groups ------------------------------------
 void Exa_DB_CreateGrpAssociatedToSes (long SesCod,long GrpCod);
@@ -134,7 +134,7 @@ unsigned Exa_DB_GetGrpCodsAssociatedToSes (MYSQL_RES **mysql_res,long SesCod);
 unsigned Exa_DB_GetGrpsAssociatedToSes (MYSQL_RES **mysql_res,long SesCod);
 Usr_Can_t Exa_DB_CheckIfICanListThisSessionBasedOnGrps (long SesCod);
 void Exa_DB_RemoveAllGrpsFromExa (long ExaCod);
-void Exa_DB_RemoveAllGrpsFromCrs (long CrsCod);
+void Exa_DB_RemoveAllGrpsFromCrs (long HieCod);
 void Exa_DB_RemoveAllGrpsFromSes (long SesCod);
 void Exa_DB_RemoveAllGrpsOfType (long GrpTypCod);
 void Exa_DB_RemoveGroup (long GrpCod);
@@ -147,10 +147,10 @@ Exi_Exist_t Exa_DB_GetPrintDataByPrnCod (MYSQL_RES **mysql_res,long PrnCod);
 Exi_Exist_t Exa_DB_GetPrintDataBySesCodAndUsrCod (MYSQL_RES **mysql_res,
                                                   long SesCod,long UsrCod);
 void Exa_DB_RemoveAllPrintsMadeByUsrInAllCrss (long UsrCod);
-void Exa_DB_RemoveAllPrintsMadeByUsrInCrs (long UsrCod,long CrsCod);
+void Exa_DB_RemoveAllPrintsMadeByUsrInCrs (long UsrCod,long HieCod);
 void Exa_DB_RemoveAllPrintsFromSes (long SesCod);
 void Exa_DB_RemoveAllPrintsFromExa (long ExaCod);
-void Exa_DB_RemoveAllPrintsFromCrs (long CrsCod);
+void Exa_DB_RemoveAllPrintsFromCrs (long HieCod);
 
 //------------------------------- Print questions -----------------------------
 void Exa_DB_StoreOneQstOfPrint (const struct ExaPrn_Print *Print,
@@ -161,10 +161,10 @@ void Exa_DB_GetAnswersFromQstInPrint (long PrnCod,long QstCod,
 unsigned Exa_DB_GetNumQstsNotBlankInPrint (long PrnCod);
 double Exa_DB_ComputeTotalScoreOfPrint (long PrnCod);
 void Exa_DB_RemovePrintQstsMadeByUsrInAllCrss (long UsrCod);
-void Exa_DB_RemovePrintQstsMadeByUsrInCrs (long UsrCod,long CrsCod);
+void Exa_DB_RemovePrintQstsMadeByUsrInCrs (long UsrCod,long HieCod);
 void Exa_DB_RemovePrintQstsFromSes (long SesCod);
 void Exa_DB_RemovePrintQstsFromExa (long ExaCod);
-void Exa_DB_RemovePrintQstsFromCrs (long CrsCod);
+void Exa_DB_RemovePrintQstsFromCrs (long HieCod);
 
 //---------------------------------- Logs -------------------------------------
 bool Exa_DB_CheckIfSessionIsTheSameAsTheLast (long PrnCod);

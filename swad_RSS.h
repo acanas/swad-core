@@ -28,6 +28,6 @@
 /*****************************************************************************/
 
 void RSS_UpdateRSSFileForACrs (struct Hie_Node *Crs);
-void RSS_BuildRSSLink (char RSSLink[WWW_MAX_BYTES_WWW + 1],long CrsCod);
+void RSS_BuildRSSLink (char RSSLink[WWW_MAX_BYTES_WWW + 1],long HieCod);
 
 #endif

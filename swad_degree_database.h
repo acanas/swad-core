@@ -79,7 +79,7 @@ void Deg_DB_UpdateDegNameDB (long HieCod,
 void Deg_DB_UpdateDegCtr (long HieCod,long NewCtrCod);
 void Deg_DB_UpdateDegTyp (long HieCod,long NewDegTypCod);
 void Deg_DB_UpdateDegWWW (long HieCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1]);
-void Deg_DB_UpdateDegStatus (long DegCod,Hie_Status_t NewStatus);
+void Deg_DB_UpdateDegStatus (long HieCod,Hie_Status_t NewStatus);
 
 unsigned Deg_DB_GetMyDegs (MYSQL_RES **mysql_res,long HieCod);
 Exi_Exist_t Deg_DB_GetUsrMainDeg (MYSQL_RES **mysql_res,long UsrCod);
@@ -87,6 +87,6 @@ Usr_Belong_t Deg_DB_CheckIfUsrBelongsToDeg (long UsrCod,long HieCod,
 					    Hie_DB_CountOnlyAcceptedCrss_t CountOnlyAcceptedCourses);
 
 void Deg_DB_RemoveDegTyp (long DegTypCod);
-void Deg_DB_RemoveDeg (long DegCod);
+void Deg_DB_RemoveDeg (long HieCod);
 
 #endif

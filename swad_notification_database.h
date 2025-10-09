@@ -45,7 +45,7 @@ void Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_NotifyEvent_t NotifyEvent,long Cod);
 void Ntf_DB_MarkNotifsInCrsAsSeen (Ntf_NotifyEvent_t NotifyEvent);
 void Ntf_DB_MarkNotifsAsSeen (Ntf_NotifyEvent_t NotifyEvent);
 void Ntf_DB_MarkNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,long ToUsrCod);
-void Ntf_DB_MarkNotifInCrsAsRemoved (long ToUsrCod,long CrsCod);
+void Ntf_DB_MarkNotifInCrsAsRemoved (long ToUsrCod,long HieCod);
 void Ntf_DB_MarkNotifAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod);
 void Ntf_DB_MarkNotifFilesInGroupAsRemoved (long GrpCod);
 void Ntf_DB_MarkNotifChildrenOfFolderAsRemoved (Ntf_NotifyEvent_t NotifyEvent,

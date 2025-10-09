@@ -41,7 +41,7 @@ void Not_DB_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,
 
 Exi_Exist_t Not_DB_GetNoticeData (MYSQL_RES **mysql_res,long NotCod);
 Exi_Exist_t Not_DB_ContentNotice (MYSQL_RES **mysql_res,long NotCod);
-unsigned Not_DB_GetNotices (MYSQL_RES **mysql_res,long CrsCod,
+unsigned Not_DB_GetNotices (MYSQL_RES **mysql_res,long HieCod,
 			    Not_Listing_t TypeNoticesListing);
 unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			       Hie_Level_t HieLvl,HidVis_HiddenOrVisible_t HiddenOrVisible);

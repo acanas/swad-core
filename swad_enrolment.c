@@ -178,7 +178,7 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void);
 
 static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected);
 
-static void Enr_RemUsrEnrolmentRequestInCrs (long UsrCod,long CrsCod);
+static void Enr_RemUsrEnrolmentRequestInCrs (long UsrCod,long HieCod);
 
 static void Enr_ReqEnrRemUsr (Rol_Role_t Role);
 static void Enr_ReqAnotherUsrIDToEnrolRemove (Rol_Role_t Role);
@@ -218,21 +218,21 @@ void Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs (void)
 /******************** Put inline button to enrol students ********************/
 /*****************************************************************************/
 
-void Enr_PutButtonInlineToEnrolStds (long CrsCod,
+void Enr_PutButtonInlineToEnrolStds (long HieCod,
 				     unsigned Level,const Lay_Last_t *IsLastItemInLevel,
 				     Lay_Highlight_t Highlight)
   {
    extern const char *Lay_HighlightClass[Lay_NUM_HIGHLIGHT];
 
-   if (Rol_GetMyRoleInCrs (CrsCod) == Rol_TCH)	// I am a teacher in the given course
-      if (!Enr_GetNumUsrsInCrss (Hie_CRS,CrsCod,
+   if (Rol_GetMyRoleInCrs (HieCod) == Rol_TCH)	// I am a teacher in the given course
+      if (!Enr_GetNumUsrsInCrss (Hie_CRS,HieCod,
 				 1 << Rol_STD))	// No students in course
 	{
 	 HTM_LI_Begin (Lay_HighlightClass[Highlight]);
 	    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel,
 					Lay_NO_HORIZONTAL_LINE_AT_RIGHT);
 	    Frm_BeginForm (ActReqEnrSevStd);
-	       ParCod_PutPar (ParCod_Crs,CrsCod);
+	       ParCod_PutPar (ParCod_Crs,HieCod);
 	       Btn_PutButtonInline (Btn_ENROL);
 	    Frm_EndForm ();
 	 HTM_LI_End ();
@@ -317,8 +317,7 @@ void Enr_EnrolUsrInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole,
      }
 
    /***** Enrol user in current course in database *****/
-   Enr_DB_InsertUsrInCurrentCrs (UsrDat->UsrCod,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-                                 NewRole,KeepOrSetAccepted);
+   Enr_DB_InsertUsrInCurrentCrs (UsrDat->UsrCod,NewRole,KeepOrSetAccepted);
 
    /***** Create last prefs in current course in database *****/
    Set_DB_InsertUsrInCrsSettings (UsrDat->UsrCod,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
@@ -472,7 +471,7 @@ void Enr_ReqAcceptEnrolmentInCrs (void)
 /*****************************************************************************/
 
 void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                            long CrsCod,long UsrCod)
+                            long HieCod,long UsrCod)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    struct Usr_Data UsrDat;
@@ -480,7 +479,7 @@ void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    __attribute__((unused)) Exi_Exist_t UsrExists;
 
    /***** Get user's role in course from database *****/
-   Role = Rol_GetRoleUsrInCrs (UsrCod,CrsCod);
+   Role = Rol_GetRoleUsrInCrs (UsrCod,HieCod);
 
    /***** Set summary string *****/
    /* Initialize structure with user's data */
@@ -2636,12 +2635,12 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 /********************* Remove a request for enrolment ***********************/
 /*****************************************************************************/
 
-static void Enr_RemUsrEnrolmentRequestInCrs (long UsrCod,long CrsCod)
+static void Enr_RemUsrEnrolmentRequestInCrs (long UsrCod,long HieCod)
   {
    long ReqCod;
 
    /***** Get request code *****/
-   ReqCod = Enr_DB_GetUsrEnrolmentRequestInCrs (UsrCod,CrsCod);
+   ReqCod = Enr_DB_GetUsrEnrolmentRequestInCrs (UsrCod,HieCod);
 
    if (ReqCod > 0)
      {

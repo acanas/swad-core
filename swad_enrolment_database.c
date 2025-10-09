@@ -41,7 +41,7 @@ extern struct Globals Gbl;
 /*************** Register user in current course in database *****************/
 /*****************************************************************************/
 
-void Enr_DB_InsertUsrInCurrentCrs (long UsrCod,long CrsCod,Rol_Role_t NewRole,
+void Enr_DB_InsertUsrInCurrentCrs (long UsrCod,Rol_Role_t NewRole,
                                    Enr_KeepOrSetAccepted_t KeepOrSetAccepted)
   {
    DB_QueryINSERT ("can not register user in course",
@@ -49,7 +49,7 @@ void Enr_DB_InsertUsrInCurrentCrs (long UsrCod,long CrsCod,Rol_Role_t NewRole,
 		   " (CrsCod,UsrCod,Role,Accepted)"
 		   " VALUES"
 		   " (%ld,%ld,%u,'%c')",
-	           CrsCod,
+	           Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 	           UsrCod,
 	           (unsigned) NewRole,
 	           KeepOrSetAccepted == Enr_SET_ACCEPTED_TO_TRUE ? 'Y' :

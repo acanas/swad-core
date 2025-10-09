@@ -739,7 +739,7 @@ static void DegTyp_RemoveDegTypeCompletely (long DegTypCod)
    MYSQL_RES *mysql_res;
    unsigned NumDegs;
    unsigned NumDeg;
-   long DegCod;
+   long HieCod;
 
    /***** Get degrees of a type from database *****/
    NumDegs = Deg_DB_GetDegsOfType (&mysql_res,DegTypCod);
@@ -750,11 +750,11 @@ static void DegTyp_RemoveDegTypeCompletely (long DegTypCod)
 	NumDeg++)
      {
       /* Get next degree */
-      if ((DegCod = DB_GetNextCode (mysql_res)) < 0)
+      if ((HieCod = DB_GetNextCode (mysql_res)) < 0)
          Err_WrongDegreeExit ();
 
       /* Remove degree */
-      Deg_RemoveDegreeCompletely (DegCod);
+      Deg_RemoveDegreeCompletely (HieCod);
      }
 
    /* Free structure that stores the query result */

@@ -35,7 +35,7 @@
 /*****************************************************************************/
 
 //------------------------------ Users in courses -----------------------------
-void Enr_DB_InsertUsrInCurrentCrs (long UsrCod,long CrsCod,Rol_Role_t NewRole,
+void Enr_DB_InsertUsrInCurrentCrs (long UsrCod,Rol_Role_t NewRole,
                                    Enr_KeepOrSetAccepted_t KeepOrSetAccepted);
 void Enr_DB_AcceptUsrInCrs (long UsrCod,long CrsCod);
 

@@ -4835,22 +4835,22 @@ void Prj_ChangeCriterionScore (void)
 /********************** Remove all projects in a course **********************/
 /*****************************************************************************/
 
-void Prj_RemoveCrsProjects (long CrsCod)
+void Prj_RemoveCrsProjects (long HieCod)
   {
    /***** Remove users in projects of the course *****/
-   Prj_DB_RemoveUsrsFromCrsPrjs (CrsCod);
+   Prj_DB_RemoveUsrsFromCrsPrjs (HieCod);
 
    /***** Flush cache *****/
    Prj_FlushCacheMyRolesInProject ();
 
    /***** Remove configuration of projects in the course *****/
-   Prj_DB_RemoveConfigOfCrsPrjs (CrsCod);
+   Prj_DB_RemoveConfigOfCrsPrjs (HieCod);
 
    /***** Remove associations of rubrics to projects in the course *****/
-   Prj_DB_RemoveRubricsOfCrsPrjs (CrsCod);
+   Prj_DB_RemoveRubricsOfCrsPrjs (HieCod);
 
    /***** Remove projects *****/
-   Prj_DB_RemoveCrsPrjs (CrsCod);
+   Prj_DB_RemoveCrsPrjs (HieCod);
   }
 
 /*****************************************************************************/

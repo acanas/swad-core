@@ -242,12 +242,12 @@ static int API_CheckIdSession (struct soap *soap,
 static int API_CheckAPIKey (char APIKey[API_BYTES_KEY + 1]);
 
 static int API_CheckCourseAndGroupCodes (struct soap *soap,
-					 long CrsCod,long GrpCod);
+					 long HieCod,long GrpCod);
 static int API_GenerateNewAPIKey (struct soap *soap,
                                   long UsrCod,
                                   char APIKey[API_BYTES_KEY + 1]);
 static Exi_Exist_t API_GetSomeUsrDataFromUsrCod (struct Usr_Data *UsrDat,
-						 long CrsCod);
+						 long HieCod);
 
 static int API_CheckParsNewAccount (char *NewNickWithArr,		// Input
                                     char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],	// Output
@@ -284,15 +284,15 @@ static int API_SendMessageToUsr (long OriginalMsgCod,
                                  const char *Subject,const char *Content);
 
 static int API_GetTstTags (struct soap *soap,
-			   long CrsCod,struct swad__getTestsOutput *getTestsOut);
+			   long HieCod,struct swad__getTestsOutput *getTestsOut);
 static int API_GetTstQuestions (struct soap *soap,
-				long CrsCod,time_t BeginTime,
+				long HieCod,time_t BeginTime,
 				struct swad__getTestsOutput *getTestsOut);
 static int API_GetTstAnswers (struct soap *soap,
-		              long CrsCod,time_t BeginTime,
+		              long HieCod,time_t BeginTime,
 			      struct swad__getTestsOutput *getTestsOut);
 static int API_GetTstQuestionTags (struct soap *soap,
-		                   long CrsCod,time_t BeginTime,
+		                   long HieCod,time_t BeginTime,
 				   struct swad__getTestsOutput *getTestsOut);
 
 static void API_GetListGrpsInMatchFromDB (struct soap *soap,
@@ -488,16 +488,16 @@ static int API_CheckAPIKey (char APIKey[API_BYTES_KEY + 1])
 /*****************************************************************************/
 
 static int API_CheckCourseAndGroupCodes (struct soap *soap,
-					 long CrsCod,long GrpCod)
+					 long HieCod,long GrpCod)
   {
    /***** Check if course code is correct *****/
-   if (CrsCod <= 0)
+   if (HieCod <= 0)
       return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
    /***** Query if course code already exists in database *****/
-   if (Crs_DB_CheckIfCrsCodExists (CrsCod) == Exi_DOES_NOT_EXIST)
+   if (Crs_DB_CheckIfCrsCodExists (HieCod) == Exi_DOES_NOT_EXIST)
       return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code does not exist in database");
@@ -505,7 +505,7 @@ static int API_CheckCourseAndGroupCodes (struct soap *soap,
    /***** Course code exists in database,
           so check if group code exists in database and belongs to course *****/
    if (GrpCod > 0)	// <= 0 means "the whole course"
-      if (Grp_DB_CheckIfGrpExistsInCrs (GrpCod,CrsCod) == Exi_DOES_NOT_EXIST)
+      if (Grp_DB_CheckIfGrpExistsInCrs (GrpCod,HieCod) == Exi_DOES_NOT_EXIST)
          return soap_sender_fault (soap,
                                    "Bad group code",
                                    "Group code does not exist in database"
@@ -546,7 +546,7 @@ static int API_GenerateNewAPIKey (struct soap *soap,
 // Return if UsrDat->UsrCod exists in database
 
 static Exi_Exist_t API_GetSomeUsrDataFromUsrCod (struct Usr_Data *UsrDat,
-						 long CrsCod)
+						 long HieCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -580,9 +580,9 @@ static Exi_Exist_t API_GetSomeUsrDataFromUsrCod (struct Usr_Data *UsrDat,
       Nck_DB_GetNicknameFromUsrCod (UsrDat->UsrCod,UsrDat->Nickname);
 
       /***** Get user's role *****/
-      if (CrsCod > 0)
+      if (HieCod > 0)
 	 /* Get the role in the given course */
-	 UsrDat->Roles.InCurrentCrs = Rol_DB_GetRoleUsrInCrs (UsrDat->UsrCod,CrsCod);
+	 UsrDat->Roles.InCurrentCrs = Rol_DB_GetRoleUsrInCrs (UsrDat->UsrCod,HieCod);
       else
 	 /* Get the maximum role in any course */
 	 UsrDat->Roles.InCurrentCrs = Rol_DB_GetMaxRoleUsrInCrss (UsrDat->UsrCod);
@@ -2558,14 +2558,14 @@ int swad__sendAttendanceEvent (struct soap *soap,
      {
       case OldNew_OLD:
 	 AttExists = Att_GetEventDataByCod (&Event);
-	 if (Event.CrsCod != (long) courseCode)
+	 if (Event.HieCod != (long) courseCode)
 	    return soap_receiver_fault (soap,
 					"Request forbidden",
 					"Attendance event does not belong to course");
 	 break;
       case OldNew_NEW:
       default:
-	 Event.CrsCod = (long) courseCode;
+	 Event.HieCod = (long) courseCode;
 	 break;
      }
 
@@ -2638,7 +2638,7 @@ int swad__removeAttendanceEvent (struct soap *soap,
    if (Event.AttCod > 0)	// The event already exists
      {
       AttExists = Att_GetEventDataByCod (&Event);
-      Gbl.Hierarchy.Node[Hie_CRS].HieCod = Event.CrsCod;
+      Gbl.Hierarchy.Node[Hie_CRS].HieCod = Event.HieCod;
      }
    else
       return soap_receiver_fault (soap,
@@ -2749,7 +2749,7 @@ int swad__getAttendanceUsers (struct soap *soap,
    /***** Get course of this attendance event *****/
    Event.AttCod = (long) attendanceEventCode;
    AttExists = Att_GetEventDataByCod (&Event);
-   Gbl.Hierarchy.Node[Hie_CRS].HieCod = Event.CrsCod;
+   Gbl.Hierarchy.Node[Hie_CRS].HieCod = Event.HieCod;
 
    /***** Get some of my data *****/
    if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
@@ -2896,7 +2896,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
    Event.AttCod = (long) attendanceEventCode;
    if (Att_GetEventDataByCod (&Event) == Exi_DOES_NOT_EXIST)
       return SOAP_OK;	// return with success = 0
-   Gbl.Hierarchy.Node[Hie_CRS].HieCod = Event.CrsCod;
+   Gbl.Hierarchy.Node[Hie_CRS].HieCod = Event.HieCod;
 
    /***** Get some of my data *****/
    if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
@@ -3663,7 +3663,7 @@ int swad__getTests (struct soap *soap,
 /*****************************************************************************/
 
 static int API_GetTstTags (struct soap *soap,
-			   long CrsCod,struct swad__getTestsOutput *getTestsOut)
+			   long HieCod,struct swad__getTestsOutput *getTestsOut)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3671,7 +3671,7 @@ static int API_GetTstTags (struct soap *soap,
    unsigned NumTag;
 
    /***** Get available tags from database *****/
-   NumTags = Tag_DB_GetEnabledTagsFromCrs (&mysql_res,-1L,CrsCod);
+   NumTags = Tag_DB_GetEnabledTagsFromCrs (&mysql_res,-1L,HieCod);
 
    getTestsOut->tagsArray.__size = (int) NumTags;
 
@@ -3712,7 +3712,7 @@ static int API_GetTstTags (struct soap *soap,
 /*****************************************************************************/
 
 static int API_GetTstQuestions (struct soap *soap,
-				long CrsCod,time_t BeginTime,
+				long HieCod,time_t BeginTime,
 				struct swad__getTestsOutput *getTestsOut)
   {
    extern const char *Qst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
@@ -3724,7 +3724,7 @@ static int API_GetTstQuestions (struct soap *soap,
 
    /***** Get recent test questions from database *****/
    // DISTINCT is necessary to not repeat questions
-   NumQsts = Qst_DB_GetRecentQuestions (&mysql_res,CrsCod,BeginTime);
+   NumQsts = Qst_DB_GetRecentQuestions (&mysql_res,HieCod,BeginTime);
 
    getTestsOut->questionsArray.__size = (int) NumQsts;
 
@@ -3783,7 +3783,7 @@ static int API_GetTstQuestions (struct soap *soap,
 /*****************************************************************************/
 
 static int API_GetTstAnswers (struct soap *soap,
-		              long CrsCod,time_t BeginTime,
+		              long HieCod,time_t BeginTime,
 			      struct swad__getTestsOutput *getTestsOut)
   {
    extern const char *Qst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
@@ -3794,7 +3794,7 @@ static int API_GetTstAnswers (struct soap *soap,
    unsigned Index;
 
    /***** Get answers to recent test questions from database *****/
-   NumAnss = Qst_DB_GetRecentAnswers (&mysql_res,CrsCod,BeginTime);
+   NumAnss = Qst_DB_GetRecentAnswers (&mysql_res,HieCod,BeginTime);
 
    getTestsOut->answersArray.__size = (int) NumAnss;
 
@@ -3851,7 +3851,7 @@ static int API_GetTstAnswers (struct soap *soap,
 /*****************************************************************************/
 
 static int API_GetTstQuestionTags (struct soap *soap,
-		                   long CrsCod,time_t BeginTime,
+		                   long HieCod,time_t BeginTime,
 				   struct swad__getTestsOutput *getTestsOut)
   {
    extern const char *Qst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
@@ -3862,7 +3862,7 @@ static int API_GetTstQuestionTags (struct soap *soap,
    unsigned Index;
 
    /***** Get recent test questions from database *****/
-   NumQstTags = Tag_DB_GetRecentTags (&mysql_res,CrsCod,BeginTime);
+   NumQstTags = Tag_DB_GetRecentTags (&mysql_res,HieCod,BeginTime);
 
    getTestsOut->questionTagsArray.__size = (int) NumQstTags;
 
@@ -3916,7 +3916,7 @@ int swad__getTrivialQuestion (struct soap *soap,
    char DegreesStr[API_MAX_BYTES_DEGREES_STR + 1];
    char DegStr[ 1 + 1 + Cns_MAX_DIGITS_LONG + 1 + 1];
    //   DegStr=",   '   - number '  \0"
-   long DegCod;
+   long HieCod;	// Degree code
    bool FirstDegree = true;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3957,18 +3957,18 @@ int swad__getTrivialQuestion (struct soap *soap,
       Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
 
       /* Check if degree code from string is a valid code */
-      if (sscanf (LongStr,"%ld",&DegCod) == 1)	// Degree code
-	 if (DegCod > 0)
+      if (sscanf (LongStr,"%ld",&HieCod) == 1)	// Degree code
+	 if (HieCod > 0)
 	   {
 	    /* Add this degree to query */
 	    if (FirstDegree)
 	      {
-	       snprintf (DegreesStr,sizeof (DegreesStr),"%ld",DegCod);
+	       snprintf (DegreesStr,sizeof (DegreesStr),"%ld",HieCod);
 	       FirstDegree = false;
 	      }
 	    else
 	      {
-	       snprintf (DegStr,sizeof (DegStr),",%ld",DegCod);
+	       snprintf (DegStr,sizeof (DegStr),",%ld",HieCod);
 	       Str_Concat (DegreesStr,DegStr,sizeof (DegreesStr) - 1);
 	      }
 	   }

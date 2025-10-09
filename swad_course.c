@@ -189,7 +189,7 @@ void Crs_WriteSelectorOfCourse (void)
    MYSQL_ROW row;
    unsigned NumCrss;
    unsigned NumCrs;
-   long CrsCod;
+   long HieCod;
 
    /***** Begin form *****/
    Frm_BeginFormGoTo (ActSeeCrsInf);
@@ -219,13 +219,13 @@ void Crs_WriteSelectorOfCourse (void)
 	       row = mysql_fetch_row (mysql_res);
 
 	       /* Get course code (row[0]) */
-	       if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	       if ((HieCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
 		  Err_WrongCourseExit ();
 
 	       /* Write option */
-	       HTM_OPTION (HTM_Type_LONG,&CrsCod,
+	       HTM_OPTION (HTM_Type_LONG,&HieCod,
 			   Gbl.Hierarchy.HieLvl == Hie_CRS &&	// Course selected
-			   CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod ? HTM_SELECTED :
+			   HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod ? HTM_SELECTED :
 									  HTM_NO_ATTR,
 			   "%s",row[1]);	// Short name (row[1])
 	      }
@@ -1782,7 +1782,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
    extern const char **Usr_AcceptedTxt[Usr_NUM_ACCEPTED];
    extern const char *Usr_AcceptedIcon[Usr_NUM_ACCEPTED];
    struct Hie_Node Deg;
-   long CrsCod;
+   long HieCod;	// Course code
    unsigned NumStds;
    unsigned NumNETs;
    unsigned NumTchs;
@@ -1808,17 +1808,17 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
       Err_WrongDegreeExit ();
 
    /***** Get course code (row[1]) *****/
-   if ((CrsCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
+   if ((HieCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
       Err_WrongCourseExit ();
 
    /***** Get number of teachers and students in this course *****/
-   NumStds = Enr_GetNumUsrsInCrss (Hie_CRS,CrsCod,1 << Rol_STD);
-   NumNETs = Enr_GetNumUsrsInCrss (Hie_CRS,CrsCod,1 << Rol_NET);
-   NumTchs = Enr_GetNumUsrsInCrss (Hie_CRS,CrsCod,1 << Rol_TCH);
+   NumStds = Enr_GetNumUsrsInCrss (Hie_CRS,HieCod,1 << Rol_STD);
+   NumNETs = Enr_GetNumUsrsInCrss (Hie_CRS,HieCod,1 << Rol_NET);
+   NumTchs = Enr_GetNumUsrsInCrss (Hie_CRS,HieCod,1 << Rol_TCH);
    NumUsrs = NumStds + NumNETs + NumTchs;
    ClassTxt = NumUsrs ? "DAT_STRONG" :
 	                "DAT";
-   BgColor = CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod ? "BG_HIGHLIGHT" :
+   BgColor = HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod ? "BG_HIGHLIGHT" :
 							    The_GetColorRows ();
 
    /***** Begin row *****/
@@ -1865,7 +1865,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
       /***** Write course full name (row[5]) *****/
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",ClassTxt,The_GetSuffix (),BgColor);
 	 Frm_BeginFormGoTo (ActSeeCrsInf);
-	    ParCod_PutPar (ParCod_Crs,CrsCod);
+	    ParCod_PutPar (ParCod_Crs,HieCod);
 	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[5]),NULL,
 	                             "class=\"LT BT_LINK\"");
             Str_FreeGoToTitle ();
@@ -1982,7 +1982,7 @@ void Crs_RemoveOldCrss (void)
    unsigned NumCrss;
    unsigned NumCrs;
    unsigned NumCrssRemoved = 0;
-   long CrsCod;
+   long HieCod;
 
    /***** Get parameter with number of months without access *****/
    MonthsWithoutAccess = (unsigned)
@@ -2008,8 +2008,8 @@ void Crs_RemoveOldCrss (void)
            NumCrs < NumCrss;
            NumCrs++)
         {
-         CrsCod = DB_GetNextCode (mysql_res);
-         Crs_RemoveCourseCompletely (CrsCod);
+         HieCod = DB_GetNextCode (mysql_res);
+         Crs_RemoveCourseCompletely (HieCod);
          NumCrssRemoved++;
         }
 

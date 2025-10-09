@@ -436,12 +436,12 @@ void Gam_DB_RemoveGame (long GamCod)
 /*********************** Remove the games of a course ************************/
 /*****************************************************************************/
 
-void Gam_DB_RemoveCrsGames (long CrsCod)
+void Gam_DB_RemoveCrsGames (long HieCod)
   {
    DB_QueryDELETE ("can not remove course games",
 		   "DELETE FROM gam_games"
 		   " WHERE CrsCod=%ld",
-                   CrsCod);
+                   HieCod);
   }
 
 /*****************************************************************************/
@@ -814,7 +814,7 @@ void Gam_DB_RemoveGameQsts (long GamCod)
 /***************** Remove the questions in games of a course *****************/
 /*****************************************************************************/
 
-void Gam_DB_RemoveCrsGameQsts (long CrsCod)
+void Gam_DB_RemoveCrsGameQsts (long HieCod)
   {
    DB_QueryDELETE ("can not remove questions in course games",
 		   "DELETE FROM gam_questions"
@@ -822,5 +822,5 @@ void Gam_DB_RemoveCrsGameQsts (long CrsCod)
 		          "gam_questions"
 		   " WHERE gam_games.CrsCod=%ld"
 		     " AND gam_games.GamCod=gam_questions.GamCod",
-                   CrsCod);
+                   HieCod);
   }

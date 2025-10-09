@@ -993,7 +993,7 @@ void Prj_DB_RemoveUsrsFromPrj (long PrjCod)
 /************** Remove all users from all projects in a course ***************/
 /*****************************************************************************/
 
-void Prj_DB_RemoveUsrsFromCrsPrjs (long CrsCod)
+void Prj_DB_RemoveUsrsFromCrsPrjs (long HieCod)
   {
    DB_QueryDELETE ("can not remove all projects in a course",
 		   "DELETE FROM prj_users"
@@ -1001,31 +1001,31 @@ void Prj_DB_RemoveUsrsFromCrsPrjs (long CrsCod)
 		          "prj_users"
 		   " WHERE prj_projects.CrsCod=%ld"
 		     " AND prj_projects.PrjCod=prj_users.PrjCod",
-                   CrsCod);
+                   HieCod);
   }
 
 /*****************************************************************************/
 /*************** Remove configuration of projects in the course **************/
 /*****************************************************************************/
 
-void Prj_DB_RemoveConfigOfCrsPrjs (long CrsCod)
+void Prj_DB_RemoveConfigOfCrsPrjs (long HieCod)
   {
    DB_QueryDELETE ("can not remove configuration of projects in a course",
 		   "DELETE FROM prj_config"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /********** Remove associations of rubrics to projects in the course *********/
 /*****************************************************************************/
 
-void Prj_DB_RemoveRubricsOfCrsPrjs (long CrsCod)
+void Prj_DB_RemoveRubricsOfCrsPrjs (long HieCod)
   {
    DB_QueryDELETE ("can not remove rubrics of projects in a course",
 		   "DELETE FROM prj_rubrics"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -1046,12 +1046,12 @@ void Prj_DB_RemovePrj (long PrjCod)
 /********************* Remove all projects in a course ***********************/
 /*****************************************************************************/
 
-void Prj_DB_RemoveCrsPrjs (long CrsCod)
+void Prj_DB_RemoveCrsPrjs (long HieCod)
   {
    DB_QueryDELETE ("can not remove all projects of a course",
 		   "DELETE FROM prj_projects"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/

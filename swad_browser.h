@@ -267,7 +267,7 @@ void Brw_PutParsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
                              Brw_FileType_t FileType,long FilCod);
 
 void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod);
-void Brw_RemoveGrpZones (long CrsCod,long GrpCod);
+void Brw_RemoveGrpZones (long HieCod,long GrpCod);
 
 void Brw_RemoveUsrWorksInCrs (struct Usr_Data *UsrDat,struct Hie_Node *Crs);
 void Brw_RemoveUsrWorksInAllCrss (struct Usr_Data *UsrDat);

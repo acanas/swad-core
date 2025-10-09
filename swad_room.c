@@ -1359,7 +1359,7 @@ static void Roo_EditingRoomConstructor (void)
 
    /***** Reset room *****/
    Roo_EditingRoom->RooCod         = -1L;
-   Roo_EditingRoom->CtrCod         = -1L;
+   Roo_EditingRoom->HieCod         = -1L;
    Roo_EditingRoom->BldCod         = -1L;
    Roo_EditingRoom->BldShrtName[0] = '\0';
    Roo_EditingRoom->Floor          = 0;

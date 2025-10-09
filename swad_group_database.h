@@ -49,7 +49,7 @@ Exi_Exist_t Grp_DB_GetFileZones (MYSQL_RES **mysql_res,long GrpCod);
 Exi_Exist_t Grp_DB_GetGroupDataByCod (MYSQL_RES **mysql_res,long GrpCod);
 
 Exi_Exist_t Grp_DB_CheckIfGrpExists (long GrpCod);
-Exi_Exist_t Grp_DB_CheckIfGrpExistsInCrs (long GrpCod,long CrsCod);
+Exi_Exist_t Grp_DB_CheckIfGrpExistsInCrs (long GrpCod,long HieCod);
 
 Exi_Exist_t Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (const char *GrpTypName,long GrpTypCod);
 Exi_Exist_t Grp_DB_CheckIfGrpNameExistsForGrpTyp (long GrpTypCod,const char *GrpName,long GrpCod);
@@ -64,13 +64,13 @@ Usr_Belong_t Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod);
 Usr_Belong_t Grp_DB_CheckIfIBelongToGrp (long GrpCod);
 bool Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (long UsrCod);
 
-unsigned Grp_DB_GetGrpTypesWithGrpsInCrs (MYSQL_RES **mysql_res,long CrsCod);
-unsigned Grp_DB_GetAllGrpTypesInCrs (MYSQL_RES **mysql_res,long CrsCod);
+unsigned Grp_DB_GetGrpTypesWithGrpsInCrs (MYSQL_RES **mysql_res,long HieCod);
+unsigned Grp_DB_GetAllGrpTypesInCrs (MYSQL_RES **mysql_res,long HieCod);
 
 unsigned Grp_DB_GetGrpTypesInCurrentCrsToBeOpened (MYSQL_RES **mysql_res);
 
 unsigned Grp_DB_CountNumGrpsInCurrentCrs (void);
-unsigned Grp_DB_GetGrpsInCrs (MYSQL_RES **mysql_res,long CrsCod);
+unsigned Grp_DB_GetGrpsInCrs (MYSQL_RES **mysql_res,long HieCod);
 unsigned Grp_DB_GetGrpsOfType (MYSQL_RES **mysql_res,long GrpTypCod);
 
 unsigned Grp_DB_GetLstCodGrpsInAllCrssUsrBelongs (MYSQL_RES **mysql_res,long UsrCod);
@@ -113,7 +113,7 @@ void Grp_DB_RenameGrp (long GrpCod,
 void Grp_DB_AddUsrToGrp (long UsrCod,long GrpCod);
 
 void Grp_DB_RemoveUsrFromGrp (long UsrCod,long GrpCod);
-void Grp_DB_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod);
+void Grp_DB_RemUsrFromAllGrpsInCrs (long UsrCod,long HieCod);
 void Grp_DB_RemUsrFromAllGrps (long UsrCod);
 
 void Grp_DB_RemoveUsrsFromGrpsOfCrs (long HieCod);
@@ -123,7 +123,7 @@ void Grp_DB_RemoveUsrsFromGrp (long GrpCod);
 void Grp_DB_RemoveGrpTypesInCrs (long HieCod);
 void Grp_DB_RemoveGrpType (long GrpTypCod);
 
-void Grp_DB_RemoveGrpsInCrs (long CrsCod);
+void Grp_DB_RemoveGrpsInCrs (long HieCod);
 void Grp_DB_RemoveGrpsOfType (long GrpTypCod);
 void Grp_DB_RemoveGrp (long GrpCod);
 

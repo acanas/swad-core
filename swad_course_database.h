@@ -38,15 +38,15 @@
 void Crs_DB_CreateCourse (struct Hie_Node *Crs,Hie_Status_t Status);
 
 unsigned Crs_DB_GetAllCrss (MYSQL_RES **mysql_res);
-unsigned Crs_DB_GetCrssInDeg (MYSQL_RES **mysql_res,long DegCod);
+unsigned Crs_DB_GetCrssInDeg (MYSQL_RES **mysql_res,long HieCod);
 unsigned Crs_DB_GetCrssInCurrentDegBasic (MYSQL_RES **mysql_res);
 unsigned Crs_DB_GetCrssInCurrentDegFull (MYSQL_RES **mysql_res);
-Exi_Exist_t Crs_DB_GetCourseDataByCod (MYSQL_RES **mysql_res,long CrsCod);
-long Crs_DB_GetDegCodOfCourseByCod (long CrsCod);
-void Crs_DB_GetShortNamesByCod (long CrsCod,
+Exi_Exist_t Crs_DB_GetCourseDataByCod (MYSQL_RES **mysql_res,long HieCod);
+long Crs_DB_GetDegCodOfCourseByCod (long HieCod);
+void Crs_DB_GetShortNamesByCod (long HieCod,
                                 char CrsShortName[Nam_MAX_BYTES_SHRT_NAME + 1],
                                 char DegShortName[Nam_MAX_BYTES_SHRT_NAME + 1]);
-Exi_Exist_t Crs_DB_CheckIfCrsCodExists (long CrsCod);
+Exi_Exist_t Crs_DB_CheckIfCrsCodExists (long HieCod);
 Exi_Exist_t Crs_DB_CheckIfCrsNameExistsInYearOfDeg (const char *FldName,const char *Name,
 						    long Cod,long PrtCod,unsigned Year);
 unsigned Crs_DB_GetCrssOfAUsr (MYSQL_RES **mysql_res,long UsrCod,Rol_Role_t Role);
@@ -56,27 +56,27 @@ unsigned Crs_DB_SearchCrss (MYSQL_RES **mysql_res,
                             const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
                             const char *RangeQuery);
 
-unsigned Crs_DB_GetNumCrssInSys (__attribute__((unused)) long SysCod);
-unsigned Crs_DB_GetNumCrssInCty (long CtyCod);
-unsigned Crs_DB_GetNumCrssInIns (long InsCod);
-unsigned Crs_DB_GetNumCrssInCtr (long CtrCod);
-unsigned Crs_DB_GetNumCrssInDeg (long DegCod);
+unsigned Crs_DB_GetNumCrssInSys (__attribute__((unused)) long HieCod);
+unsigned Crs_DB_GetNumCrssInCty (long HieCod);
+unsigned Crs_DB_GetNumCrssInIns (long HieCod);
+unsigned Crs_DB_GetNumCrssInCtr (long HieCod);
+unsigned Crs_DB_GetNumCrssInDeg (long HieCod);
 unsigned Crs_DB_GetNumCrssWithUsrs (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Role);
 
 unsigned Crs_DB_GetCrssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long PrtCod);
 
-void Crs_DB_UpdateInstitutionalCrsCod (long CrsCod,const char *NewInstitutionalCrsCod);
-void Crs_DB_UpdateCrsYear (long CrsCod,unsigned NewYear);
-void Crs_DB_UpdateCrsName (long CrsCod,
+void Crs_DB_UpdateInstitutionalCrsCod (long HieCod,const char *NewInstitutionalCrsCod);
+void Crs_DB_UpdateCrsYear (long HieCod,unsigned NewYear);
+void Crs_DB_UpdateCrsName (long HieCod,
 			   const char *FldName,const char *NewCrsName);
-void Crs_DB_UpdateCrsDeg (long CrsCod,long DegCod);
-void Crs_DB_UpdateCrsStatus (long CrsCod,Hie_Status_t Status);
+void Crs_DB_UpdateDegOfCurrentCrs (long HieCod);
+void Crs_DB_UpdateCrsStatus (long HieCod,Hie_Status_t Status);
 
 void Crs_DB_UpdateCrsLastClick (void);
 
-void Crs_DB_RemoveCrsInfo (long CrsCod);
-void Crs_DB_RemoveCrsTimetable (long CrsCod);
-void Crs_DB_RemoveCrsLast (long CrsCod);
-void Crs_DB_RemoveCrs (long CrsCod);
+void Crs_DB_RemoveCrsInfo (long HieCod);
+void Crs_DB_RemoveCrsTimetable (long HieCod);
+void Crs_DB_RemoveCrsLast (long HieCod);
+void Crs_DB_RemoveCrs (long HieCod);
 
 #endif

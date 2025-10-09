@@ -31,7 +31,7 @@
 /************* Update the role of a user in the current course ***************/
 /*****************************************************************************/
 
-void Rol_DB_UpdateUsrRoleInCrs (long CrsCod,long UsrCod,Rol_Role_t NewRole)
+void Rol_DB_UpdateUsrRoleInCrs (long HieCod,long UsrCod,Rol_Role_t NewRole)
   {
    DB_QueryUPDATE ("can not modify user's role in course",
 		   "UPDATE crs_users"
@@ -39,7 +39,7 @@ void Rol_DB_UpdateUsrRoleInCrs (long CrsCod,long UsrCod,Rol_Role_t NewRole)
 		   " WHERE CrsCod=%ld"
 		     " AND UsrCod=%ld",
 	           (unsigned) NewRole,
-	           CrsCod,
+	           HieCod,
 	           UsrCod);
   }
 
@@ -47,7 +47,7 @@ void Rol_DB_UpdateUsrRoleInCrs (long CrsCod,long UsrCod,Rol_Role_t NewRole)
 /********************** Get role of a user in a course ***********************/
 /*****************************************************************************/
 
-Rol_Role_t Rol_DB_GetRoleUsrInCrs (long UsrCod,long CrsCod)
+Rol_Role_t Rol_DB_GetRoleUsrInCrs (long UsrCod,long HieCod)
   {
    return
    DB_QuerySELECTRole ("can not get user's role",
@@ -55,7 +55,7 @@ Rol_Role_t Rol_DB_GetRoleUsrInCrs (long UsrCod,long CrsCod)
 			" FROM crs_users"
 		       " WHERE CrsCod=%ld"
 			 " AND UsrCod=%ld",
-		       CrsCod,
+		       HieCod,
 		       UsrCod);
   }
 
@@ -91,13 +91,13 @@ unsigned Rol_DB_GetRolesInAllCrss (MYSQL_RES **mysql_res,long UsrCod)
 /************ Get requested role of a user in current course *****************/
 /*****************************************************************************/
 
-Rol_Role_t Rol_DB_GetRequestedRole (long CrsCod,long UsrCod)
+Rol_Role_t Rol_DB_GetRequestedRole (long HieCod,long UsrCod)
   {
    return DB_QuerySELECTRole ("can not get requested role",
 			      "SELECT Role"
 			       " FROM crs_requests"
 			      " WHERE CrsCod=%ld"
 			        " AND UsrCod=%ld",
-			      CrsCod,
+			      HieCod,
 			      UsrCod);
   }

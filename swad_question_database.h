@@ -51,7 +51,7 @@ unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
 unsigned Qst_DB_GetTrivialQst (MYSQL_RES **mysql_res,
                                char DegreesStr[API_MAX_BYTES_DEGREES_STR + 1],
                                float lowerScore,float upperScore);
-unsigned Qst_DB_GetNumQstsInCrs (long CrsCod);
+unsigned Qst_DB_GetNumQstsInCrs (long HieCod);
 unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
                             Hie_Level_t HieLvl,Qst_AnswerType_t AnsType);
 unsigned Qst_DB_GetNumCrssWithQsts (Hie_Level_t HieLvl,Qst_AnswerType_t AnsType);
@@ -59,13 +59,13 @@ unsigned Qst_DB_GetNumCrssWithPluggableQsts (Hie_Level_t HieLvl,
                                              Qst_AnswerType_t AnsType);
 
 unsigned Qst_DB_GetRecentQuestions (MYSQL_RES **mysql_res,
-                                    long CrsCod,time_t BeginTime);
+                                    long HieCod,time_t BeginTime);
 unsigned Qst_DB_GetRecentAnswers (MYSQL_RES **mysql_res,
-                                  long CrsCod,time_t BeginTime);
+                                  long HieCod,time_t BeginTime);
 
 Exi_Exist_t Qst_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod);
 Qst_AnswerType_t Qst_DB_GetQstAnswerType (long QstCod);
-long Qst_DB_GetQstMedCod (long CrsCod,long QstCod);
+long Qst_DB_GetQstMedCod (long HieCod,long QstCod);
 unsigned Qst_DB_GetQstCodsFromTypeAnsStem (MYSQL_RES **mysql_res,
                                            const struct Qst_Question *Question);
 
@@ -76,15 +76,15 @@ unsigned Qst_DB_GetTextOfAnswers (MYSQL_RES **mysql_res,long QstCod);
 unsigned Qst_DB_GetQstAnswersCorr (MYSQL_RES **mysql_res,long QstCod);
 unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
                                            const struct Qst_Question *Question);
-unsigned Qst_DB_GetMedCodsFromStemsOfQstsInCrs (MYSQL_RES **mysql_res,long CrsCod);
-unsigned Qst_DB_GetMedCodsFromAnssOfQstsInCrs (MYSQL_RES **mysql_res,long CrsCod);
-unsigned Qst_DB_GetMedCodFromStemOfQst (MYSQL_RES **mysql_res,long CrsCod,long QstCod);
-unsigned Qst_DB_GetMedCodsFromAnssOfQst (MYSQL_RES **mysql_res,long CrsCod,long QstCod);
+unsigned Qst_DB_GetMedCodsFromStemsOfQstsInCrs (MYSQL_RES **mysql_res,long HieCod);
+unsigned Qst_DB_GetMedCodsFromAnssOfQstsInCrs (MYSQL_RES **mysql_res,long HieCod);
+unsigned Qst_DB_GetMedCodFromStemOfQst (MYSQL_RES **mysql_res,long HieCod,long QstCod);
+unsigned Qst_DB_GetMedCodsFromAnssOfQst (MYSQL_RES **mysql_res,long HieCod,long QstCod);
 long Qst_DB_GetMedCodFromAnsOfQst (long QstCod,unsigned AnsInd);
 
-void Qst_DB_RemoveQstsInCrs (long CrsCod);
-void Qst_DB_RemoveQst (long CrsCod,long QstCod);
-void Qst_DB_RemAnssFromQstsInCrs (long CrsCod);
+void Qst_DB_RemoveQstsInCrs (long HieCod);
+void Qst_DB_RemoveQst (long HieCod,long QstCod);
+void Qst_DB_RemAnssFromQstsInCrs (long HieCod);
 void Qst_DB_RemAnsFromQst (long QstCod);
 
 #endif

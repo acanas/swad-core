@@ -48,18 +48,18 @@ void Dpt_DB_CreateDepartment (const struct Dpt_Department *Dpt)
 		   " (InsCod,ShortName,FullName,WWW)"
 		   " VALUES"
 		   " (%ld,'%s','%s','%s')",
-                   Dpt->InsCod,
+                   Dpt->HieCod,
                    Dpt->ShrtName,
                    Dpt->FullName,
                    Dpt->WWW);
   }
 
 /*****************************************************************************/
-/************************** Get list of departments **************************/
+/************** Get list of departments in a given institution ***************/
 /*****************************************************************************/
 
-unsigned Dpt_DB_GetListDepartments (MYSQL_RES **mysql_res,
-                                    long InsCod,Dpt_Order_t SelectedOrder)
+unsigned Dpt_DB_GetListDepartmentsInIns (MYSQL_RES **mysql_res,
+                                         long HieCod,Dpt_Order_t SelectedOrder)
   {
    static const char *OrderBySubQuery[Dpt_NUM_ORDERS] =
      {
@@ -100,8 +100,8 @@ unsigned Dpt_DB_GetListDepartments (MYSQL_RES **mysql_res,
 		  	    " WHERE crs_users.Role IN (%u,%u)"
 			      " AND crs_users.UsrCod=usr_data.UsrCod))"
 	         " ORDER BY %s",
-		   InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
-		   InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
+		   HieCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
+		   HieCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
 		   OrderBySubQuery[SelectedOrder]);
   }
 
@@ -176,17 +176,17 @@ unsigned Dpt_DB_GetTotalNumberOfDepartments (void)
   }
 
 /*****************************************************************************/
-/************** Get number of departments in an institution ******************/
+/********+*** Get number of departments in a given institution ***************/
 /*****************************************************************************/
 
-unsigned Dpt_DB_GetNumDepartmentsInInstitution (long InsCod)
+unsigned Dpt_DB_GetNumDepartmentsInIns (long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of departments in an institution",
 		  "SELECT COUNT(*)"
 		   " FROM dpt_departments"
 		  " WHERE InsCod=%ld",
-		  InsCod);
+		  HieCod);
   }
 
 /*****************************************************************************/

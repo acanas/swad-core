@@ -233,7 +233,7 @@ static void DegCfg_Center (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 	       break;
             case Frm_PUT_FORM:
 	       /* Get list of centers of the current institution */
-	       Ctr_GetBasicListOfCenters (Gbl.Hierarchy.Node[Hie_INS].HieCod);
+	       Ctr_GetBasicListOfCentersInIns (Gbl.Hierarchy.Node[Hie_INS].HieCod);
 
 	       /* Put form to select center */
 	       Frm_BeginForm (ActChgDegCtrCfg);

@@ -41,16 +41,15 @@
 
 long Ctr_DB_CreateCenter (const struct Hie_Node *Ctr,Hie_Status_t Status);
 
-unsigned Ctr_DB_GetListOfCtrsInCurrentIns (MYSQL_RES **mysql_res);
-unsigned Ctr_DB_GetListOfCtrsFull (MYSQL_RES **mysql_res,long InsCod);
-unsigned Ctr_DB_GetListOfCtrsFullWithNumUsrs (MYSQL_RES **mysql_res,
-                                   long InsCod,Hie_Order_t SelectedOrder);
+unsigned Ctr_DB_GetBasicListOfCtrsInCurrentIns (MYSQL_RES **mysql_res);
+unsigned Ctr_DB_GetFullListOfCtrsInIns (MYSQL_RES **mysql_res,long HieCod);
+unsigned Ctr_DB_GetFullListOfCtrsInCurrentInsWithNumUsrs (MYSQL_RES **mysql_res);
 unsigned Ctr_DB_GetCtrsWithPendingDegs (MYSQL_RES **mysql_res);
 Exi_Exist_t Ctr_DB_GetCenterDataByCod (MYSQL_RES **mysql_res,long HieCod);
 Exi_Exist_t Ctr_DB_GetCoordByCod (MYSQL_RES **mysql_res,long HieCod);
 long Ctr_DB_GetInsCodOfCenterByCod (long HieCod);
 void Ctr_DB_GetCtrShrtName (long HieCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1]);
-unsigned Ctr_DB_GetPhotoAttribution (MYSQL_RES **mysql_res,long CtrCod);
+unsigned Ctr_DB_GetPhotoAttribution (MYSQL_RES **mysql_res,long HieCod);
 Exi_Exist_t Ctr_DB_CheckIfCtrNameExistsInIns (const char *FldName,const char *Name,
 					      long Cod,long PrtCod,
 					      __attribute__((unused)) unsigned Year);

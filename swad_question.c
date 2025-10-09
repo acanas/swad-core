@@ -2678,7 +2678,7 @@ Qst_WrongOrCorrect_t Qst_GetCorrectFromYN (char Ch)
 // NumOpt <  0 ==> media associated to stem
 // NumOpt >= 0 ==> media associated to answer
 
-long Qst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt)
+long Qst_GetMedCodFromDB (long HieCod,long QstCod,int NumOpt)
   {
    /***** Trivial check: question code should be > 0 *****/
    if (QstCod <= 0)
@@ -2687,7 +2687,7 @@ long Qst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt)
    /***** Query depending on NumOpt *****/
    if (NumOpt < 0)
       // Get media associated to stem
-      return Qst_DB_GetQstMedCod (CrsCod,QstCod);
+      return Qst_DB_GetQstMedCod (HieCod,QstCod);
    else
       // Get media associated to answer
       return Qst_DB_GetMedCodFromAnsOfQst (QstCod,(unsigned) NumOpt);
@@ -2699,11 +2699,11 @@ long Qst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt)
 // NumOpt <  0 ==> media associated to stem
 // NumOpt >= 0 ==> media associated to an answer option
 
-void Qst_GetMediaFromDB (long CrsCod,long QstCod,int NumOpt,
+void Qst_GetMediaFromDB (long HieCod,long QstCod,int NumOpt,
                          struct Med_Media *Media)
   {
    /***** Get media *****/
-   Media->MedCod = Qst_GetMedCodFromDB (CrsCod,QstCod,NumOpt);
+   Media->MedCod = Qst_GetMedCodFromDB (HieCod,QstCod,NumOpt);
    Med_GetMediaDataByCod (Media);
   }
 
@@ -3476,20 +3476,20 @@ void Qst_RemoveOneQst (void)
 /********************** Remove a question from database **********************/
 /*****************************************************************************/
 
-void Qst_RemoveOneQstFromDB (long CrsCod,long QstCod)
+void Qst_RemoveOneQstFromDB (long HieCod,long QstCod)
   {
    /***** Remove media associated to question *****/
-   Qst_RemoveMediaFromStemOfQst (CrsCod,QstCod);
-   Qst_RemoveMediaFromAllAnsOfQst (CrsCod,QstCod);
+   Qst_RemoveMediaFromStemOfQst (HieCod,QstCod);
+   Qst_RemoveMediaFromAllAnsOfQst (HieCod,QstCod);
 
    /***** Remove the question from all tables *****/
    /* Remove answers and tags from this test question */
    Qst_DB_RemAnsFromQst (QstCod);
    Tag_DB_RemTagsFromQst (QstCod);
-   Tag_DB_RemoveUnusedTagsFromCrs (CrsCod);
+   Tag_DB_RemoveUnusedTagsFromCrs (HieCod);
 
    /* Remove the question itself */
-   Qst_DB_RemoveQst (CrsCod,QstCod);
+   Qst_DB_RemoveQst (HieCod,QstCod);
   }
 
 /*****************************************************************************/
@@ -3637,36 +3637,36 @@ unsigned Qst_CountNumAnswerTypesInList (const struct Qst_AnswerTypes *AnswerType
 /********************* Remove all questions in a course **********************/
 /*****************************************************************************/
 
-void Qst_RemoveCrsQsts (long CrsCod)
+void Qst_RemoveCrsQsts (long HieCod)
   {
    /***** Remove associations between questions and tags in the course *****/
-   Tag_DB_RemTagsInQstsInCrs (CrsCod);
+   Tag_DB_RemTagsInQstsInCrs (HieCod);
 
    /***** Remove test tags in the course *****/
-   Tag_DB_RemTagsInCrs (CrsCod);
+   Tag_DB_RemTagsInCrs (HieCod);
 
    /***** Remove media associated to test questions in the course *****/
-   Qst_RemoveAllMedFilesFromStemOfAllQstsInCrs (CrsCod);
-   Qst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (CrsCod);
+   Qst_RemoveAllMedFilesFromStemOfAllQstsInCrs (HieCod);
+   Qst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (HieCod);
 
    /***** Remove test answers in the course *****/
-   Qst_DB_RemAnssFromQstsInCrs (CrsCod);
+   Qst_DB_RemAnssFromQstsInCrs (HieCod);
 
    /***** Remove test questions in the course *****/
-   Qst_DB_RemoveQstsInCrs (CrsCod);
+   Qst_DB_RemoveQstsInCrs (HieCod);
   }
 
 /*****************************************************************************/
 /************ Remove media associated to stem of a test question *************/
 /*****************************************************************************/
 
-void Qst_RemoveMediaFromStemOfQst (long CrsCod,long QstCod)
+void Qst_RemoveMediaFromStemOfQst (long HieCod,long QstCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
 
    /***** Get media code associated to stem of test question from database *****/
-   NumMedia = Qst_DB_GetMedCodFromStemOfQst (&mysql_res,CrsCod,QstCod);
+   NumMedia = Qst_DB_GetMedCodFromStemOfQst (&mysql_res,HieCod,QstCod);
 
    /***** Go over result removing media *****/
    Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
@@ -3679,13 +3679,13 @@ void Qst_RemoveMediaFromStemOfQst (long CrsCod,long QstCod)
 /******* Remove all media associated to all answers of a test question *******/
 /*****************************************************************************/
 
-void Qst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod)
+void Qst_RemoveMediaFromAllAnsOfQst (long HieCod,long QstCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
 
    /***** Get media codes associated to answers of test questions from database *****/
-   NumMedia = Qst_DB_GetMedCodsFromAnssOfQst (&mysql_res,CrsCod,QstCod);
+   NumMedia = Qst_DB_GetMedCodsFromAnssOfQst (&mysql_res,HieCod,QstCod);
 
    /***** Go over result removing media *****/
    Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
@@ -3698,13 +3698,13 @@ void Qst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod)
 /** Remove all media associated to stems of all test questions in a course ***/
 /*****************************************************************************/
 
-void Qst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod)
+void Qst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long HieCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
 
    /***** Get media codes associated to stems of test questions from database *****/
-   NumMedia = Qst_DB_GetMedCodsFromStemsOfQstsInCrs (&mysql_res,CrsCod);
+   NumMedia = Qst_DB_GetMedCodsFromStemsOfQstsInCrs (&mysql_res,HieCod);
 
    /***** Go over result removing media files *****/
    Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
@@ -3717,13 +3717,13 @@ void Qst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod)
 /* Remove media associated to all answers of all test questions in a course **/
 /*****************************************************************************/
 
-void Qst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod)
+void Qst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long HieCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
 
    /***** Get names of media files associated to answers of test questions from database *****/
-   NumMedia = Qst_DB_GetMedCodsFromAnssOfQstsInCrs (&mysql_res,CrsCod);
+   NumMedia = Qst_DB_GetMedCodsFromAnssOfQstsInCrs (&mysql_res,HieCod);
 
    /***** Go over result removing media files *****/
    Med_RemoveMediaFromAllRows (NumMedia,mysql_res);

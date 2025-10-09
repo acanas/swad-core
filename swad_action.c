@@ -349,7 +349,7 @@ void Act_AdjustCurrentAction (void)
        !Gbl.Usrs.Me.UsrDat.Surname1 [0]           ||
         Gbl.Usrs.Me.UsrDat.CtyCod <= 0            ||
 	Gbl.Usrs.Me.UsrDat.InsCod < 0             ||
-       (IAmATeacherInAnyCrs && (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0 ||
+       (IAmATeacherInAnyCrs && (Gbl.Usrs.Me.UsrDat.Tch.HieCod < 0 ||
                                 Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)))
      {
       Gbl.Action.Act = ActReqEdiRecSha;

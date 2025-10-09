@@ -2711,26 +2711,26 @@ void TstPrn_RemovePrintsMadeByUsrInAllCrss (long UsrCod)
 /************** Remove test prints made by a user in a course ****************/
 /*****************************************************************************/
 
-void TstPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod)
+void TstPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long HieCod)
   {
    /***** Remove test prints questions for the given user *****/
-   Tst_DB_RemovePrintQuestionsMadeByUsrInCrs (UsrCod,CrsCod);
+   Tst_DB_RemovePrintQuestionsMadeByUsrInCrs (UsrCod,HieCod);
 
    /***** Remove test prints made by the given user *****/
-   Tst_DB_RemovePrintsMadeByUsrInCrs (UsrCod,CrsCod);
+   Tst_DB_RemovePrintsMadeByUsrInCrs (UsrCod,HieCod);
   }
 
 /*****************************************************************************/
 /****************** Remove all test prints made in a course ******************/
 /*****************************************************************************/
 
-void TstPrn_RemoveCrsPrints (long CrsCod)
+void TstPrn_RemoveCrsPrints (long HieCod)
   {
    /***** Remove questions of tests made in the course *****/
-   Tst_DB_RemovePrintQuestionsMadeInCrs (CrsCod);
+   Tst_DB_RemovePrintQuestionsMadeInCrs (HieCod);
 
    /***** Remove tests made in the course *****/
-   Tst_DB_RemovePrintsMadeByInCrs (CrsCod);
+   Tst_DB_RemovePrintsMadeByInCrs (HieCod);
   }
 
 /*****************************************************************************/

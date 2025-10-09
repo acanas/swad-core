@@ -766,7 +766,7 @@ static void Bld_EditingBuildingConstructor (void)
 
    /***** Reset building *****/
    Bld_EditingBuilding->BldCod      = -1L;
-   Bld_EditingBuilding->InsCod      = -1L;
+   Bld_EditingBuilding->HieCod      = -1L;
    Bld_EditingBuilding->ShrtName[0] = '\0';
    Bld_EditingBuilding->FullName[0] = '\0';
    Bld_EditingBuilding->Location[0] = '\0';

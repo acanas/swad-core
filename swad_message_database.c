@@ -65,7 +65,7 @@ long Msg_DB_CreateNewMsg (const char *Subject,const char *Content,long MedCod)
 /************* Insert a message in the table of sent messages ****************/
 /*****************************************************************************/
 
-void Msg_DB_CreateSntMsg (long MsgCod,long CrsCod)
+void Msg_DB_CreateSntMsg (long MsgCod,long HieCod)
   {
    DB_QueryINSERT ("can not create sent message",
 		   "INSERT INTO msg_snt"
@@ -73,7 +73,7 @@ void Msg_DB_CreateSntMsg (long MsgCod,long CrsCod)
 		   " VALUES"
 		   " (%ld,%ld,%ld,'N',NOW())",
 	           MsgCod,
-	           CrsCod,
+	           HieCod,
 	           Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -1259,7 +1259,7 @@ unsigned Msg_DB_GetNumRcvMsgs (Hie_Level_t HieLvl,Msg_Status_t MsgStatus)
 /**** Get the number of unique messages sent by any teacher from a course ****/
 /*****************************************************************************/
 
-unsigned Msg_DB_GetNumMsgsSentByTchsCrs (long CrsCod)
+unsigned Msg_DB_GetNumMsgsSentByTchsCrs (long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get the number of messages sent by teachers",
@@ -1270,8 +1270,8 @@ unsigned Msg_DB_GetNumMsgsSentByTchsCrs (long CrsCod)
 		    " AND crs_users.CrsCod=%ld"
 		    " AND crs_users.Role IN (%u,%u)"
 		    " AND msg_snt.UsrCod=crs_users.UsrCod",
-		  CrsCod,
-		  CrsCod,
+		  HieCod,
+		  HieCod,
 		  (unsigned) Rol_NET,	// Non-editing teacher
 		  (unsigned) Rol_TCH);	// Teacher
   }

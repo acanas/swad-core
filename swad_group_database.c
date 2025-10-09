@@ -210,7 +210,7 @@ Exi_Exist_t Grp_DB_CheckIfGrpExists (long GrpCod)
 /******************* Check if a group belongs to a course ********************/
 /*****************************************************************************/
 
-Exi_Exist_t Grp_DB_CheckIfGrpExistsInCrs (long GrpCod,long CrsCod)
+Exi_Exist_t Grp_DB_CheckIfGrpExistsInCrs (long GrpCod,long HieCod)
   {
    return
    DB_QueryEXISTS ("can not check if a group belongs to a course",
@@ -221,7 +221,8 @@ Exi_Exist_t Grp_DB_CheckIfGrpExistsInCrs (long GrpCod,long CrsCod)
 		    " WHERE grp_groups.GrpCod=%ld"
 		      " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
 		      " AND grp_types.CrsCod=%ld)",
-		   GrpCod,CrsCod) == Exi_EXISTS;
+		   GrpCod,
+		   HieCod) == Exi_EXISTS;
   }
 
 /*****************************************************************************/
@@ -440,7 +441,7 @@ bool Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (long UsrCod)
 /***************** Get group types with groups in a course *******************/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetGrpTypesWithGrpsInCrs (MYSQL_RES **mysql_res,long CrsCod)
+unsigned Grp_DB_GetGrpTypesWithGrpsInCrs (MYSQL_RES **mysql_res,long HieCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get types of group of a course",
@@ -457,14 +458,14 @@ unsigned Grp_DB_GetGrpTypesWithGrpsInCrs (MYSQL_RES **mysql_res,long CrsCod)
 		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
 		" GROUP BY grp_types.GrpTypCod"
 		" ORDER BY grp_types.GrpTypName",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /************ Get group types with or without groups in a course *************/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetAllGrpTypesInCrs (MYSQL_RES **mysql_res,long CrsCod)
+unsigned Grp_DB_GetAllGrpTypesInCrs (MYSQL_RES **mysql_res,long HieCod)
   {
    // The tables in the second part of the UNION requires ALIAS in order to LOCK TABLES when registering in groups
    return (unsigned)
@@ -495,8 +496,8 @@ unsigned Grp_DB_GetAllGrpTypesInCrs (MYSQL_RES **mysql_res,long CrsCod)
 			  " (SELECT GrpTypCod"
 			     " FROM grp_groups))"
 		 " ORDER BY GrpTypName",
-		   CrsCod,
-		   CrsCod);
+		   HieCod,
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -535,7 +536,7 @@ unsigned Grp_DB_CountNumGrpsInCurrentCrs (void)
 /*********************** Get groups in a given course ************************/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetGrpsInCrs (MYSQL_RES **mysql_res,long CrsCod)
+unsigned Grp_DB_GetGrpsInCrs (MYSQL_RES **mysql_res,long HieCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get user's groups",
@@ -552,7 +553,7 @@ unsigned Grp_DB_GetGrpsInCrs (MYSQL_RES **mysql_res,long CrsCod)
 		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
 		" ORDER BY grp_types.GrpTypName,"
 			  "grp_groups.GrpName",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -1092,7 +1093,7 @@ void Grp_DB_RemoveUsrFromGrp (long UsrCod,long GrpCod)
 /***************** Remove a user of all groups of a course *******************/
 /*****************************************************************************/
 
-void Grp_DB_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod)
+void Grp_DB_RemUsrFromAllGrpsInCrs (long UsrCod,long HieCod)
   {
    DB_QueryDELETE ("can not remove a user from all groups of a course",
 		   "DELETE FROM grp_users"
@@ -1104,7 +1105,7 @@ void Grp_DB_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod)
 		           " WHERE grp_types.CrsCod=%ld"
 		             " AND grp_types.GrpTypCod=grp_groups.GrpTypCod)",
                    UsrCod,
-                   CrsCod);
+                   HieCod);
   }
 
 /*****************************************************************************/
@@ -1191,7 +1192,7 @@ void Grp_DB_RemoveGrpType (long GrpTypCod)
 /*********************** Remove all groups in a course ***********************/
 /*****************************************************************************/
 
-void Grp_DB_RemoveGrpsInCrs (long CrsCod)
+void Grp_DB_RemoveGrpsInCrs (long HieCod)
   {
    DB_QueryDELETE ("can not remove groups of a course",
 		   "DELETE FROM grp_groups"
@@ -1199,7 +1200,7 @@ void Grp_DB_RemoveGrpsInCrs (long CrsCod)
 			  "grp_groups"
 		   " WHERE grp_types.CrsCod=%ld"
 		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/

@@ -516,12 +516,12 @@ void Tre_DB_RemoveNodeRange (Inf_Type_t InfoType,
 /********************* Remove all tree nodes in a course *********************/
 /*****************************************************************************/
 
-void Tre_DB_RemoveCrsNodes (long CrsCod)
+void Tre_DB_RemoveCrsNodes (long HieCod)
   {
    DB_QueryDELETE ("can not remove all tree nodes in a course",
 		   "DELETE FROM tre_nodes"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/

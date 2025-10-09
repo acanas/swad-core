@@ -52,7 +52,7 @@ unsigned Gam_DB_GetNumCoursesWithGames (Hie_Level_t HieLvl);
 unsigned Gam_DB_GetNumGames (Hie_Level_t HieLvl);
 
 void Gam_DB_RemoveGame (long GamCod);
-void Gam_DB_RemoveCrsGames (long CrsCod);
+void Gam_DB_RemoveCrsGames (long HieCod);
 
 //---------------------------- Game questions ---------------------------------
 void Gam_DB_InsertQstInGame (long GamCod,unsigned QstInd,long QstCod);
@@ -74,6 +74,6 @@ unsigned Gam_DB_GetNumAnswersOfQstsInGame (MYSQL_RES **mysql_res,long GamCod);
 
 void Gam_DB_RemoveQstFromGame (long GamCod,unsigned QstInd);
 void Gam_DB_RemoveGameQsts (long GamCod);
-void Gam_DB_RemoveCrsGameQsts (long CrsCod);
+void Gam_DB_RemoveCrsGameQsts (long HieCod);
 
 #endif

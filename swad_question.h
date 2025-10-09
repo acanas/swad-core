@@ -224,8 +224,8 @@ void Qst_FreeMediaOfQuestion (struct Qst_Question *Question);
 Exi_Exist_t Qst_GetQstDataByCod (struct Qst_Question *Question);
 Qst_Shuffle_t Qst_GetShuffleFromYN (char Ch);
 Qst_WrongOrCorrect_t Qst_GetCorrectFromYN (char Ch);
-long Qst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt);
-void Qst_GetMediaFromDB (long CrsCod,long QstCod,int NumOpt,
+long Qst_GetMedCodFromDB (long HieCod,long QstCod,int NumOpt);
+void Qst_GetMediaFromDB (long HieCod,long QstCod,int NumOpt,
                          struct Med_Media *Media);
 void Qst_ReceiveQst (void);
 void Qst_GetQstFromForm (struct Qst_Question *Question);
@@ -243,7 +243,7 @@ void Qst_PutIconToRemoveOneQst (void *QstCod);
 void Qst_ReqRemOneQst (void);
 void Qst_PutParsRemoveOnlyThisQst (void *QstCod);
 void Qst_RemoveOneQst (void);
-void Qst_RemoveOneQstFromDB (long CrsCod,long QstCod);
+void Qst_RemoveOneQstFromDB (long HieCod,long QstCod);
 
 void Qst_ChangeShuffleQst (void);
 
@@ -255,11 +255,11 @@ void Qst_InsertAnswersIntoDB (struct Qst_Question *Question);
 
 unsigned Qst_CountNumAnswerTypesInList (const struct Qst_AnswerTypes *AnswerTypes);
 
-void Qst_RemoveCrsQsts (long CrsCod);
-void Qst_RemoveMediaFromStemOfQst (long CrsCod,long QstCod);
-void Qst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod);
-void Qst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod);
-void Qst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod);
+void Qst_RemoveCrsQsts (long HieCod);
+void Qst_RemoveMediaFromStemOfQst (long HieCod,long QstCod);
+void Qst_RemoveMediaFromAllAnsOfQst (long HieCod,long QstCod);
+void Qst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long HieCod);
+void Qst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long HieCod);
 
 unsigned Qst_GetNumQuestions (Hie_Level_t HieLvl,Qst_AnswerType_t AnsType,
                               struct Qst_Stats *Stats);

@@ -90,7 +90,7 @@ static void Ins_GetInstitDataFromRow (MYSQL_RES *mysql_res,
 static void Ins_ListInstitutionsForEdition (void);
 static Usr_Can_t Ins_CheckIfICanEdit (struct Hie_Node *Ins);
 
-static void Ins_UpdateInsNameDB (long InsCod,const char *FldName,const char *NewName);
+static void Ins_UpdateInsNameDB (long HieCod,const char *FldName,const char *NewName);
 
 static void Ins_ShowAlertAndButtonToGoToIns (void);
 
@@ -629,13 +629,13 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
 /*****************************************************************************/
 // If ClassLink == NULL ==> do not put link
 
-void Ins_WriteInstitutionNameAndCty (long InsCod)
+void Ins_WriteInstitutionNameAndCty (long HieCod)
   {
    struct Hie_Node Ins;
    char CtyName[Nam_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get institution short name and country name *****/
-   Ins.HieCod = InsCod;
+   Ins.HieCod = HieCod;
    Ins_GetShrtNameAndCtyOfInstitution (&Ins,CtyName);
 
    /***** Write institution short name and country name *****/
@@ -810,7 +810,7 @@ void Ins_WriteSelectorOfInstitution (void)
    MYSQL_ROW row;
    unsigned NumInss;
    unsigned NumIns;
-   long InsCod;
+   long HieCod;
 
    /***** Begin form *****/
    Frm_BeginFormGoTo (ActSeeCtr);
@@ -842,13 +842,13 @@ void Ins_WriteSelectorOfInstitution (void)
 	       row = mysql_fetch_row (mysql_res);
 
 	       /* Get institution code (row[0]) */
-	       if ((InsCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	       if ((HieCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
 		  Err_WrongInstitExit ();
 
 	       /* Write option */
-	       HTM_OPTION (HTM_Type_LONG,&InsCod,
+	       HTM_OPTION (HTM_Type_LONG,&HieCod,
 			   Gbl.Hierarchy.Node[Hie_INS].HieCod > 0 &&
-			   InsCod == Gbl.Hierarchy.Node[Hie_INS].HieCod ? HTM_SELECTED :
+			   HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod ? HTM_SELECTED :
 									  HTM_NO_ATTR,
 			   "%s",row[1]);
 	      }
@@ -1198,10 +1198,10 @@ void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFull
 /************ Update institution name in table of institutions ***************/
 /*****************************************************************************/
 
-static void Ins_UpdateInsNameDB (long InsCod,const char *FldName,const char *NewName)
+static void Ins_UpdateInsNameDB (long HieCod,const char *FldName,const char *NewName)
   {
    /***** Update institution changing old name by new name */
-   Ins_DB_UpdateInsName (InsCod,FldName,NewName);
+   Ins_DB_UpdateInsName (HieCod,FldName,NewName);
 
    /***** Flush caches *****/
    Ins_FlushCacheFullNameAndCtyOfInstitution ();

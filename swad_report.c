@@ -103,11 +103,11 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
 static void Rep_GetAndWriteMyHistoricClicsWithoutCrs (struct Rep_Report *Report);
 static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
                                            struct Rep_Report *Report);
-static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
+static void Rep_WriteRowCrsData (long HieCod,Rol_Role_t Role,
                                  struct Rep_Report *Report,
                                  Lay_Show_t ShowNumUsrs);
 
-static void Rep_ShowMyHitsPerYear (long CrsCod,Rol_Role_t Role,
+static void Rep_ShowMyHitsPerYear (long HieCod,Rol_Role_t Role,
                                    struct Rep_Report *Report);
 static void Rep_ComputeMaxAndTotalHits (struct Rep_Hits *Hits,
                                         unsigned NumHits,
@@ -892,7 +892,7 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
    MYSQL_ROW row;
    unsigned NumCrss;
    unsigned NumCrs;
-   long CrsCod;
+   long HieCod;	// Course code
 
    NumCrss = Enr_DB_GetNumCrssOfUsrWithARole (Gbl.Usrs.Me.UsrDat.UsrCod,Role);
    fprintf (Rep_File,"<li>");
@@ -929,10 +929,10 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
 	    row = mysql_fetch_row (mysql_res);
 
 	    /* Get course code (row[0]) */
-	    CrsCod = Str_ConvertStrCodToLongCod (row[0]);
+	    HieCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	    /* Write data of this course */
-	    Rep_WriteRowCrsData (CrsCod,Role,Report,
+	    Rep_WriteRowCrsData (HieCod,Role,Report,
 				 Lay_SHOW);	// Write number of users in course
 	   }
 
@@ -984,7 +984,7 @@ static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
    MYSQL_ROW row;
    unsigned NumCrss;
    unsigned NumCrs;
-   long CrsCod;
+   long HieCod;	// Course code
 
    /***** Get and list historic courses of a user from log (one row per course) *****/
    if ((NumCrss = Log_DB_GetMyHistoricCrss (&mysql_res,Role,Rep_MIN_CLICKS_CRS)))
@@ -1004,10 +1004,10 @@ static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
          row = mysql_fetch_row (mysql_res);
 
 	 /* Get course code (row[0]) */
-	 CrsCod = Str_ConvertStrCodToLongCod (row[0]);
+	 HieCod = Str_ConvertStrCodToLongCod (row[0]);
 
          /* Write data of this course */
-         Rep_WriteRowCrsData (CrsCod,Role,Report,
+         Rep_WriteRowCrsData (HieCod,Role,Report,
 			      Lay_DONT_SHOW);	// Do not write number of users in course
 	}
 
@@ -1024,7 +1024,7 @@ static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
 /************** Write the data of a course (result of a query) ***************/
 /*****************************************************************************/
 
-static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
+static void Rep_WriteRowCrsData (long HieCod,Rol_Role_t Role,
                                  struct Rep_Report *Report,
                                  Lay_Show_t ShowNumUsrs)
   {
@@ -1039,7 +1039,7 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Get course data *****/
-   Crs.HieCod = CrsCod;
+   Crs.HieCod = HieCod;
    SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Crs);
 
    /***** Get degree data *****/
@@ -1049,7 +1049,7 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
    /***** Begin row *****/
    fprintf (Rep_File,"<li>");
 
-   if (CrsCod > 0)	// CrsCod > 0 in log ==> course selected
+   if (HieCod > 0)	// CrsCod > 0 in log ==> course selected
      {
       if (Crs.HieCod > 0)	// Course exists
 	{
@@ -1077,14 +1077,14 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
       else
          fprintf (Rep_File,"(%s)",Txt_unknown_removed_course);
      }
-   else	if (CrsCod == -1L)	// CrsCod == -1L in log ==> no course selected
+   else	if (HieCod == -1L)	// CrsCod == -1L in log ==> no course selected
       fprintf (Rep_File,"(%s)",Txt_no_course_selected);
    else
       Err_WrongCourseExit ();
 
    /***** Write hits per year for this course *****/
    fprintf (Rep_File,"<br>");
-   Rep_ShowMyHitsPerYear (CrsCod,Role,Report);
+   Rep_ShowMyHitsPerYear (HieCod,Role,Report);
 
    fprintf (Rep_File,"</li>");
   }
@@ -1093,7 +1093,7 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 /********************** Write my hits grouped by years ***********************/
 /*****************************************************************************/
 
-static void Rep_ShowMyHitsPerYear (long CrsCod,Rol_Role_t Role,
+static void Rep_ShowMyHitsPerYear (long HieCod,Rol_Role_t Role,
                                    struct Rep_Report *Report)
   {
    MYSQL_RES *mysql_res;
@@ -1106,7 +1106,7 @@ static void Rep_ShowMyHitsPerYear (long CrsCod,Rol_Role_t Role,
    unsigned Year;
 
    /***** Make the query *****/
-   NumHits = Log_DB_GetMyHitsPerYear (&mysql_res,CrsCod,Role,
+   NumHits = Log_DB_GetMyHitsPerYear (&mysql_res,HieCod,Role,
                                       Report->UsrFigures.FirstClickTimeUTC);
 
    /***** Initialize first year *****/

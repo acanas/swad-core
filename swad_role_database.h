@@ -33,11 +33,11 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Rol_DB_UpdateUsrRoleInCrs (long CrsCod,long UsrCod,Rol_Role_t NewRole);
+void Rol_DB_UpdateUsrRoleInCrs (long HieCod,long UsrCod,Rol_Role_t NewRole);
 
-Rol_Role_t Rol_DB_GetRoleUsrInCrs (long UsrCod,long CrsCod);
+Rol_Role_t Rol_DB_GetRoleUsrInCrs (long UsrCod,long HieCod);
 Rol_Role_t Rol_DB_GetMaxRoleUsrInCrss (long UsrCod);
 unsigned Rol_DB_GetRolesInAllCrss (MYSQL_RES **mysql_res,long UsrCod);
-Rol_Role_t Rol_DB_GetRequestedRole (long CrsCod,long UsrCod);
+Rol_Role_t Rol_DB_GetRequestedRole (long HieCod,long UsrCod);
 
 #endif

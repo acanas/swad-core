@@ -107,9 +107,9 @@ void Mch_ReqRemMatch (void);
 void Mch_RemoveMatch (void);
 
 void Mch_RemoveMatchesInGameFromAllTables (long GamCod);
-void Mch_RemoveMatchesInCourseFromAllTables (long CrsCod);
+void Mch_RemoveMatchesInCourseFromAllTables (long HieCod);
 void Mch_RemoveMatchesMadeByUsrInAllCrss (long UsrCod);
-void Mch_RemoveMatchesMadeByUsrInCrs (long UsrCod,long CrsCod);
+void Mch_RemoveMatchesMadeByUsrInCrs (long UsrCod,long HieCod);
 
 void Mch_ReqCreatOrEditMatch (void);
 

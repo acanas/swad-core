@@ -33,7 +33,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Rec_DB_CreateField (long CrsCod,const struct RecordField *Field);
+void Rec_DB_CreateField (long HieCod,const struct RecordField *Field);
 void Rec_DB_CreateFieldContent (long FldCod,long UsrCod,const char *Text);
 void Rec_DB_UpdateFieldTxt (long FldCod,long UsrCod,const char *Text);
 void Rec_DB_UpdateFieldName (long FldCod,const char NewFieldName[Rec_MAX_BYTES_NAME_FIELD + 1]);
@@ -41,17 +41,17 @@ void Rec_DB_UpdateFieldNumLines (long FldCod,unsigned NewNumLines);
 void Rec_DB_UpdateFieldVisibility (long FldCod,Rec_VisibilityRecordFields_t NewVisibility);
 
 unsigned Rec_DB_CountNumRecordsWithFieldContent (long FldCod);
-unsigned Rec_DB_GetAllFieldsInCrs (MYSQL_RES **mysql_res,long CrsCod);
-Exi_Exist_t Rec_DB_GetFieldByCod (MYSQL_RES **mysql_res,long CrsCod,long FldCod);
+unsigned Rec_DB_GetAllFieldsInCrs (MYSQL_RES **mysql_res,long HieCod);
+Exi_Exist_t Rec_DB_GetFieldByCod (MYSQL_RES **mysql_res,long HieCod,long FldCod);
 Exi_Exist_t Rec_DB_GetFieldTxtFromUsrRecord (MYSQL_RES **mysql_res,
                                              long FldCod,long UsrCod);
 
 void Rec_DB_RemoveFieldContentFromAllUsrsRecords (long FldCod);
 void Rec_DB_RemoveFieldContentFromUsrRecord (long FldCod,long UsrCod);
-void Rec_DB_RemoveAllFieldContentsFromUsrRecordInCrs (long UsrCod,long CrsCod);
+void Rec_DB_RemoveAllFieldContentsFromUsrRecordInCrs (long UsrCod,long HieCod);
 void Rec_DB_RemoveAllFieldContentsFromUsrRecords (long UsrCod);
-void Rec_DB_RemoveAllFieldContentsInCrs (long CrsCod);
+void Rec_DB_RemoveAllFieldContentsInCrs (long HieCod);
 void Rec_DB_RemoveField (long FldCod);
-void Rec_DB_RemoveAllFieldsInCrs (long CrsCod);
+void Rec_DB_RemoveAllFieldsInCrs (long HieCod);
 
 #endif

@@ -131,7 +131,7 @@ void Pho_DB_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod)
 /*********************** Update statistics of a degree ***********************/
 /*****************************************************************************/
 
-void Pho_DB_UpdateDegStats (long DegCod,Usr_Sex_t Sex,
+void Pho_DB_UpdateDegStats (long HieCod,Usr_Sex_t Sex,
 			    unsigned NumStds,unsigned NumStdsWithPhoto,
 			    long TimeToComputeAvgPhotoInMicroseconds)
   {
@@ -143,7 +143,7 @@ void Pho_DB_UpdateDegStats (long DegCod,Usr_Sex_t Sex,
 		    "TimeAvgPhoto,TimeToComputeAvgPhoto)"
 		    " VALUES"
 		    " (%ld,'%s',%u,%u,NOW(),%ld)",
-	            DegCod,
+	            HieCod,
 	            Usr_StringsSexDB[Sex],
 	            NumStds,
 	            NumStdsWithPhoto,
@@ -273,7 +273,7 @@ Exi_Exist_t Pho_DB_GetMaxStdsPerDegree (MYSQL_RES **mysql_res)
 /*** Get number of students and number of students with photo in a degree ****/
 /*****************************************************************************/
 
-Exi_Exist_t Pho_DB_GetNumStdsInDegree (MYSQL_RES **mysql_res,long DegCod,Usr_Sex_t Sex)
+Exi_Exist_t Pho_DB_GetNumStdsInDegree (MYSQL_RES **mysql_res,long HieCod,Usr_Sex_t Sex)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
 
@@ -284,7 +284,7 @@ Exi_Exist_t Pho_DB_GetNumStdsInDegree (MYSQL_RES **mysql_res,long DegCod,Usr_Sex
 			  " FROM sta_degrees"
 			 " WHERE DegCod=%ld"
 			   " AND Sex='%s'",
-			 DegCod,
+			 HieCod,
 			 Usr_StringsSexDB[Sex]);
   }
 
@@ -292,7 +292,7 @@ Exi_Exist_t Pho_DB_GetNumStdsInDegree (MYSQL_RES **mysql_res,long DegCod,Usr_Sex
 /********* Get last time an average photo was computed from database *********/
 /*****************************************************************************/
 
-Exi_Exist_t Pho_DB_GetTimeAvgPhotoWasComputed (MYSQL_RES **mysql_res,long DegCod)
+Exi_Exist_t Pho_DB_GetTimeAvgPhotoWasComputed (MYSQL_RES **mysql_res,long HieCod)
   {
    return
    DB_QuerySELECTunique (mysql_res,"can not get last time"
@@ -300,21 +300,21 @@ Exi_Exist_t Pho_DB_GetTimeAvgPhotoWasComputed (MYSQL_RES **mysql_res,long DegCod
 			 "SELECT COALESCE(MIN(UNIX_TIMESTAMP(TimeAvgPhoto)),0)"	// row[0]
 			  " FROM sta_degrees"
 			 " WHERE DegCod=%ld",
-			 DegCod);
+			 HieCod);
   }
 
 /*****************************************************************************/
 /********************* Get time to compute average photo *********************/
 /*****************************************************************************/
 
-unsigned Pho_DB_GetTimeToComputeAvgPhoto (MYSQL_RES **mysql_res,long DegCod)
+unsigned Pho_DB_GetTimeToComputeAvgPhoto (MYSQL_RES **mysql_res,long HieCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get time to compute average photo",
 		   "SELECT TimeToComputeAvgPhoto"	// row[0]
 		    " FROM sta_degrees"
 		   " WHERE DegCod=%ld",
-		   DegCod);
+		   HieCod);
   }
 
 /*****************************************************************************/

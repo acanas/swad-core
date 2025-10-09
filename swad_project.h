@@ -274,7 +274,7 @@ void Prj_ChangeReviewStatus (void);
 
 void Prj_ChangeCriterionScore (void);
 
-void Prj_RemoveCrsProjects (long CrsCod);
+void Prj_RemoveCrsProjects (long HieCod);
 void Prj_RemoveUsrFromProjects (long UsrCod);
 
 //-------------------------------- Figures ------------------------------------

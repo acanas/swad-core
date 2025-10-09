@@ -225,7 +225,7 @@ void Deg_WriteSelectorOfDegree (void)
    MYSQL_ROW row;
    unsigned NumDegs;
    unsigned NumDeg;
-   long DegCod;
+   long HieCod;
 
    /***** Begin form *****/
    Frm_BeginFormGoTo (ActSeeCrs);
@@ -257,13 +257,13 @@ void Deg_WriteSelectorOfDegree (void)
 	       row = mysql_fetch_row (mysql_res);
 
 	       /* Get degree code (row[0]) */
-	       if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	       if ((HieCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
 		  Err_WrongDegreeExit ();
 
 	       /* Write option */
-	       HTM_OPTION (HTM_Type_LONG,&DegCod,
+	       HTM_OPTION (HTM_Type_LONG,&HieCod,
 			   Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0 &&
-			   DegCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod ? HTM_SELECTED :
+			   HieCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod ? HTM_SELECTED :
 									  HTM_NO_ATTR,
 			   "%s",row[1]);
 	      }
@@ -290,7 +290,7 @@ void Deg_ShowDegsOfCurrentCtr (void)
       return;
 
    /***** Get list of centers and degrees *****/
-   Ctr_GetBasicListOfCenters (Gbl.Hierarchy.Node[Hie_INS].HieCod);
+   Ctr_GetBasicListOfCentersInIns (Gbl.Hierarchy.Node[Hie_INS].HieCod);
    Deg_GetListDegsInCurrentCtr ();
 
    /***** Write menu to select country, institution and center *****/

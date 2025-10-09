@@ -412,7 +412,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct Usr_Data *UsrDat)
 
    UsrDat->InsCtyCod  = -1L;
    UsrDat->InsCod     = -1L;
-   UsrDat->Tch.CtrCod = -1L;
+   UsrDat->Tch.HieCod = -1L;
    UsrDat->Tch.DptCod = -1L;
    UsrDat->Tch.Office[0]      = '\0';
    UsrDat->Tch.OfficePhone[0] = '\0';
@@ -591,7 +591,7 @@ void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
 	 UsrDat->InsCtyCod  = Str_ConvertStrCodToLongCod (row[11]);
 	 UsrDat->InsCod     = Str_ConvertStrCodToLongCod (row[12]);
 	 UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[13]);
-	 UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[14]);
+	 UsrDat->Tch.HieCod = Str_ConvertStrCodToLongCod (row[14]);
 
 	 /* Get office (row[15]) and office phone (row[16]) */
 	 Str_Copy (UsrDat->Tch.Office     ,row[15],sizeof (UsrDat->Tch.Office     ) - 1);
@@ -2313,13 +2313,13 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,
 			NULL,Lay_NON_BR_SPACES,Usr_HAS_NOT_ACCEPTED);
 
       /***** Write the rest of the data of the guest *****/
-      if (UsrDat->Tch.CtrCod > 0)
+      if (UsrDat->Tch.HieCod > 0)
 	{
-	 Ctr.HieCod = UsrDat->Tch.CtrCod;
+	 Ctr.HieCod = UsrDat->Tch.HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	}
       Usr_WriteUsrData (The_GetColorRows (),
-			UsrDat->Tch.CtrCod > 0 ? Ctr.FullName :
+			UsrDat->Tch.HieCod > 0 ? Ctr.FullName :
 						 NULL,
 			NULL,Lay_NON_BR_SPACES,Usr_HAS_NOT_ACCEPTED);
       if (UsrDat->Tch.DptCod > 0)
@@ -2522,14 +2522,14 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
 			Lay_NON_BR_SPACES,UsrDat->Accepted);
 
       /***** Write the rest of teacher's data *****/
-      if (ShowData == Lay_SHOW && UsrDat->Tch.CtrCod > 0)
+      if (ShowData == Lay_SHOW && UsrDat->Tch.HieCod > 0)
 	{
-	 Ctr.HieCod = UsrDat->Tch.CtrCod;
+	 Ctr.HieCod = UsrDat->Tch.HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	}
       Usr_WriteUsrData (The_GetColorRows (),
 			ShowData == Lay_SHOW &&
-			UsrDat->Tch.CtrCod > 0 ? Ctr.FullName :
+			UsrDat->Tch.HieCod > 0 ? Ctr.FullName :
 						 NULL,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
       if (ShowData == Lay_SHOW && UsrDat->Tch.DptCod > 0)
@@ -2761,12 +2761,12 @@ static void Usr_GetGstsLst (Hie_Level_t HieLvl)
 /************** Get the user's codes of all students of a degree *************/
 /*****************************************************************************/
 
-void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
+void Usr_GetUnorderedStdsCodesInDeg (long HieCod)
   {
    char *Query = NULL;
 
    /***** Build query string *****/
-   Usr_DB_BuildQueryToGetUnorderedStdsCodesInDeg (DegCod,&Query);
+   Usr_DB_BuildQueryToGetUnorderedStdsCodesInDeg (HieCod,&Query);
 
    /***** Get list of students *****/
    Usr_GetListUsrsFromQuery (Query,Hie_DEG,Rol_STD);

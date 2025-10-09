@@ -164,11 +164,11 @@ void Bld_DB_RemoveBuilding (long BldCod)
 /******************** Remove all buildings in a center ***********************/
 /*****************************************************************************/
 
-void Bld_DB_RemoveAllBuildingsInCtr (long CtrCod)
+void Bld_DB_RemoveAllBuildingsInCtr (long HieCod)
   {
    /***** Remove all buildings in center *****/
    DB_QueryDELETE ("can not remove buildings",
 		   "DELETE FROM bld_buildings"
                    " WHERE CtrCod=%ld",
-		   CtrCod);
+		   HieCod);
   }

@@ -35,8 +35,8 @@
 
 struct Dpt_Department
   {
-   long DptCod;
-   long InsCod;
+   long DptCod;	// Department code
+   long HieCod;	// Institution code
    char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1];
    char FullName[Nam_MAX_BYTES_FULL_NAME + 1];
    char WWW[WWW_MAX_BYTES_WWW + 1];
@@ -75,9 +75,9 @@ void Dpt_ContEditAfterChgDpt (void);
 
 void Dpt_ReceiveNewDpt (void);
 void Dpt_FlushCacheNumDptsInIns (void);
-unsigned Dpt_GetNumDptsInIns (long InsCod);
+unsigned Dpt_GetNumDptsInIns (long HieCod);
 
-void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
+void Dpt_WriteSelectorDepartment (long HieCod,long DptCod,
                                   const char *ParName,
 		                  const char *SelectClass,
                                   long FirstOption,

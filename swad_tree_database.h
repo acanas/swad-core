@@ -60,7 +60,7 @@ unsigned Tre_DB_GetNumNodes (Inf_Type_t InfoType,Hie_Level_t HieLvl);
 
 void Tre_DB_RemoveNodeRange (Inf_Type_t InfoType,
 			     const struct Tre_NodeRange *ToRemove);
-void Tre_DB_RemoveCrsNodes (long CrsCod);
+void Tre_DB_RemoveCrsNodes (long HieCod);
 
 //--------------------------- Expanded tree nodes -----------------------------
 void Tre_DB_InsertNodeInExpandedNodes (long NodCod);

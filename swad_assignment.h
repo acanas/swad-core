@@ -107,7 +107,7 @@ void Asg_RemoveAssignment (void);
 void Asg_HideAssignment (void);
 void Asg_UnhideAssignment (void);
 void Asg_ReceiveAssignment (void);
-void Asg_RemoveCrsAssignments (long CrsCod);
+void Asg_RemoveCrsAssignments (long HieCod);
 
 void Asg_WriteDatesAssignment (void);
 Usr_Can_t Asg_CheckIfICanCreateIntoAssigment (void);

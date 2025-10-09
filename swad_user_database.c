@@ -1293,7 +1293,7 @@ void Usr_DB_BuildQueryToSearchListUsrs (Hie_Level_t HieLvl,Rol_Role_t Role,
 /****** Build query to get the user's codes of all students of a degree ******/
 /*****************************************************************************/
 
-void Usr_DB_BuildQueryToGetUnorderedStdsCodesInDeg (long DegCod,char **Query)
+void Usr_DB_BuildQueryToGetUnorderedStdsCodesInDeg (long HieCod,char **Query)
   {
    DB_BuildQuery (Query,
 		  "SELECT DISTINCT "
@@ -1315,7 +1315,7 @@ void Usr_DB_BuildQueryToGetUnorderedStdsCodesInDeg (long DegCod,char **Query)
 		    " AND crs_courses.CrsCod=crs_users.CrsCod"
 		    " AND crs_users.Role=%u"
 		    " AND crs_users.UsrCod=usr_data.UsrCod",
-		  DegCod,
+		  HieCod,
 		  (unsigned) Rol_STD);
   }
 

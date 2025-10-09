@@ -40,7 +40,7 @@ extern struct Globals Gbl;
 /********************* Insert new tag into tst_tags table ********************/
 /*****************************************************************************/
 
-long Tag_DB_CreateNewTag (long CrsCod,const char *TagTxt)
+long Tag_DB_CreateNewTag (long HieCod,const char *TagTxt)
   {
    /***** Insert new tag into tst_tags table *****/
    return
@@ -49,7 +49,7 @@ long Tag_DB_CreateNewTag (long CrsCod,const char *TagTxt)
 				" (CrsCod,ChangeTime,TagTxt,TagHidden)"
 				" VALUES"
 				" (%ld,NOW(),'%s','Y')",	// Hidden by default
-				CrsCod,
+				HieCod,
 				TagTxt);
   }
 
@@ -208,7 +208,7 @@ unsigned Tag_DB_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res)
 // Return the number of rows of the result
 
 unsigned Tag_DB_GetEnabledTagsFromCrs (MYSQL_RES **mysql_res,
-				       long TagCod,long CrsCod)
+				       long TagCod,long HieCod)
   {
    /***** Get available not hidden tags from database *****/
    return (unsigned)
@@ -220,7 +220,7 @@ unsigned Tag_DB_GetEnabledTagsFromCrs (MYSQL_RES **mysql_res,
 				  " AND CrsCod=%ld"	// Extra check
 				  " AND TagHidden='N'",
 				TagCod,
-				CrsCod) :
+				HieCod) :
 		DB_QuerySELECT (mysql_res,"can not get available enabled tags",
 				"SELECT TagCod,"	// row[0]
 				       "TagTxt"		// row[1]
@@ -228,7 +228,7 @@ unsigned Tag_DB_GetEnabledTagsFromCrs (MYSQL_RES **mysql_res,
 				" WHERE CrsCod=%ld"
 				  " AND TagHidden='N'"
 			     " ORDER BY TagTxt",
-				CrsCod);
+				HieCod);
   }
 
 /*****************************************************************************/
@@ -283,7 +283,7 @@ void Tag_DB_GetTagTitle (long TagCod,char *Title,size_t TitleSize)
 /*****************************************************************************/
 
 unsigned Tag_DB_GetRecentTags (MYSQL_RES **mysql_res,
-		               long CrsCod,time_t BeginTime)
+		               long HieCod,time_t BeginTime)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get question tags",
@@ -312,9 +312,9 @@ unsigned Tag_DB_GetRecentTags (MYSQL_RES **mysql_res,
 				   "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)))"
 		" ORDER BY QstCod,"
 			  "TagInd",
-		   CrsCod,
-		   CrsCod,
-		   CrsCod,
+		   HieCod,
+		   HieCod,
+		   HieCod,
 		   (long) BeginTime,
 		   (long) BeginTime);
   }
@@ -323,7 +323,7 @@ unsigned Tag_DB_GetRecentTags (MYSQL_RES **mysql_res,
 /******** Remove associations between questions and tags in a course *********/
 /*****************************************************************************/
 
-void Tag_DB_RemTagsInQstsInCrs (long CrsCod)
+void Tag_DB_RemTagsInQstsInCrs (long HieCod)
   {
    DB_QueryDELETE ("can not remove tags associated"
 		   " to questions in a course",
@@ -332,19 +332,19 @@ void Tag_DB_RemTagsInQstsInCrs (long CrsCod)
 	                  "tst_question_tags"
                    " WHERE tst_questions.CrsCod=%ld"
                      " AND tst_questions.QstCod=tst_question_tags.QstCod",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /**************************** Remove tags in a course ************************/
 /*****************************************************************************/
 
-void Tag_DB_RemTagsInCrs (long CrsCod)
+void Tag_DB_RemTagsInCrs (long HieCod)
   {
    DB_QueryDELETE ("can not remove tags of questions in a course",
 		   "DELETE FROM tst_tags"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -375,7 +375,7 @@ void Tag_DB_RemoveTag (long TagCod)
 /********************** Remove unused tags in a course ***********************/
 /*****************************************************************************/
 
-void Tag_DB_RemoveUnusedTagsFromCrs (long CrsCod)
+void Tag_DB_RemoveUnusedTagsFromCrs (long HieCod)
   {
    /***** Remove unused tags from tst_tags *****/
    DB_QueryDELETE ("can not remove unused tags",
@@ -388,6 +388,6 @@ void Tag_DB_RemoveUnusedTagsFromCrs (long CrsCod)
 			          "tst_question_tags"
 			   " WHERE tst_questions.CrsCod=%ld"
 			     " AND tst_questions.QstCod=tst_question_tags.QstCod)",
-		   CrsCod,
-		   CrsCod);
+		   HieCod,
+		   HieCod);
   }

@@ -718,13 +718,13 @@ static void Rub_RemoveRubricFromAllTables (long RubCod)
 /********************** Remove all rubrics of a course ***********************/
 /*****************************************************************************/
 
-void Rub_RemoveCrsRubrics (long CrsCod)
+void Rub_RemoveCrsRubrics (long HieCod)
   {
    /***** Remove the criteria in rubrics *****/
-   Rub_DB_RemoveCrsRubricCriteria (CrsCod);
+   Rub_DB_RemoveCrsRubricCriteria (HieCod);
 
    /***** Remove the rubrics *****/
-   Rub_DB_RemoveCrsRubrics (CrsCod);
+   Rub_DB_RemoveCrsRubrics (HieCod);
   }
 
 /*****************************************************************************/

@@ -52,7 +52,7 @@ const char *Tmt_DB_ClassType[Tmt_NUM_CLASS_TYPES] =
 /********************* Insert class in course timetable **********************/
 /*****************************************************************************/
 
-void Tmt_DB_InsertHourInCrsTimeTable (long CrsCod,
+void Tmt_DB_InsertHourInCrsTimeTable (long HieCod,
                                       const struct Tmt_Column *Column,
                                       unsigned Weekday,unsigned Hour,unsigned Min,
                                       unsigned SecondsPerInterval)
@@ -64,7 +64,7 @@ void Tmt_DB_InsertHourInCrsTimeTable (long CrsCod,
 		   " VALUES"
 		   " (%ld,%ld,%u,'%02u:%02u:00',SEC_TO_TIME(%u),"
 		   "'%s','%s')",
-                   CrsCod,
+                   HieCod,
 	           Column->GrpCod,
 	           Weekday,Hour,Min,
 	           Column->DurationIntervals * SecondsPerInterval,
@@ -294,12 +294,12 @@ void Tmt_DB_OrphanGrpInCrsTimeTable (long GrpCod)
 /*************************** Remove course timetable *************************/
 /*****************************************************************************/
 
-void Tmt_DB_RemoveCrsTimeTable (long CrsCod)
+void Tmt_DB_RemoveCrsTimeTable (long HieCod)
   {
    DB_QueryDELETE ("can not remove timetable",
 		   "DELETE FROM tmt_courses"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/

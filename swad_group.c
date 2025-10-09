@@ -234,7 +234,7 @@ void Grp_WriteNamesOfSelectedGrps (void)
    extern const char *Txt_users_with_no_group;
    long GrpCod;
    unsigned NumGrpSel;
-   long CrsCod;
+   long HieCod;	// Course code
    struct GroupType GrpTyp;
    struct Group Grp;
 
@@ -249,7 +249,7 @@ void Grp_WriteNamesOfSelectedGrps (void)
       if ((GrpCod = Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]) >= 0)
         {
          Grp.GrpCod = GrpCod;
-         Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+         Grp_GetGroupDataByCod (&HieCod,&GrpTyp.GrpTypCod,&Grp);
 	 Grp_GetGroupTypeDataByCod (&GrpTyp);
          HTM_Txt (GrpTyp.Name);
 	 HTM_SP ();
@@ -1305,10 +1305,10 @@ unsigned Grp_RemoveUsrFromGroups (struct Usr_Data *UsrDat,struct ListCodGrps *Ls
 /***************** Remove a user of all groups of a course *******************/
 /*****************************************************************************/
 
-void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod)
+void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long HieCod)
   {
    /***** Remove user from all groups in the given course *****/
-   Grp_DB_RemUsrFromAllGrpsInCrs (UsrCod,CrsCod);
+   Grp_DB_RemUsrFromAllGrpsInCrs (UsrCod,HieCod);
 
    /***** Flush caches *****/
    Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
@@ -3830,13 +3830,13 @@ void Grp_ReqRemGroup (void)
 static void Grp_AskConfirmRemGrp (long GrpCod)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_group_X;
-   long CrsCod;
+   long HieCod;	// Course code
    struct GroupType GrpTyp;
    struct Group Grp;
 
    /***** Get name of the group from database *****/
    Grp.GrpCod = GrpCod;
-   Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+   Grp_GetGroupDataByCod (&HieCod,&GrpTyp.GrpTypCod,&Grp);
    Grp_GetGroupTypeDataByCod (&GrpTyp);
 
    /***** Show the form to edit group types again *****/
@@ -3887,7 +3887,7 @@ void Grp_RemoveGroupType (void)
 void Grp_RemoveGroup (void)
   {
    extern const char *Txt_Group_X_removed;
-   long CrsCod;
+   long HieCod;	// Course code
    struct GroupType GrpTyp;
    struct Group Grp;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
@@ -3896,7 +3896,7 @@ void Grp_RemoveGroup (void)
    Grp.GrpCod = ParCod_GetAndCheckPar (ParCod_Grp);
 
    /***** Get name and type of the group from database *****/
-   Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+   Grp_GetGroupDataByCod (&HieCod,&GrpTyp.GrpTypCod,&Grp);
    Grp_GetGroupTypeDataByCod (&GrpTyp);
 
    /***** Remove group *****/
@@ -3987,7 +3987,7 @@ static void Grp_RemoveGroupCompletely (long GrpCod)
 void Grp_OpenGroup (void)
   {
    extern const char *Txt_The_group_X_is_now_open;
-   long CrsCod;
+   long HieCod;	// Course code
    struct GroupType GrpTyp;
    struct Group Grp;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
@@ -3996,7 +3996,7 @@ void Grp_OpenGroup (void)
    Grp.GrpCod = ParCod_GetAndCheckPar (ParCod_Grp);
 
    /***** Get name and type of the group from database *****/
-   Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+   Grp_GetGroupDataByCod (&HieCod,&GrpTyp.GrpTypCod,&Grp);
    Grp_GetGroupTypeDataByCod (&GrpTyp);
 
    /***** Update the table of groups changing open/close status *****/
@@ -4017,7 +4017,7 @@ void Grp_OpenGroup (void)
 void Grp_CloseGroup (void)
   {
    extern const char *Txt_The_group_X_is_now_closed;
-   long CrsCod;
+   long HieCod;	// Course code
    struct GroupType GrpTyp;
    struct Group Grp;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
@@ -4026,7 +4026,7 @@ void Grp_CloseGroup (void)
    Grp.GrpCod = ParCod_GetAndCheckPar (ParCod_Grp);
 
    /***** Get name and type of the group from database *****/
-   Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+   Grp_GetGroupDataByCod (&HieCod,&GrpTyp.GrpTypCod,&Grp);
    Grp_GetGroupTypeDataByCod (&GrpTyp);
 
    /***** Update the table of groups changing open/close status *****/
@@ -4047,7 +4047,7 @@ void Grp_CloseGroup (void)
 void Grp_EnableFileZonesGrp (void)
   {
    extern const char *Txt_File_zones_of_the_group_X_are_now_enabled;
-   long CrsCod;
+   long HieCod;	// Course code
    struct GroupType GrpTyp;
    struct Group Grp;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
@@ -4056,7 +4056,7 @@ void Grp_EnableFileZonesGrp (void)
    Grp.GrpCod = ParCod_GetAndCheckPar (ParCod_Grp);
 
    /***** Get name and type of the group from database *****/
-   Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+   Grp_GetGroupDataByCod (&HieCod,&GrpTyp.GrpTypCod,&Grp);
    Grp_GetGroupTypeDataByCod (&GrpTyp);
 
    /***** Update the table of groups changing file zones status *****/
@@ -4078,7 +4078,7 @@ void Grp_EnableFileZonesGrp (void)
 void Grp_DisableFileZonesGrp (void)
   {
    extern const char *Txt_File_zones_of_the_group_X_are_now_disabled;
-   long CrsCod;
+   long HieCod;	// Course code
    struct GroupType GrpTyp;
    struct Group Grp;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
@@ -4087,7 +4087,7 @@ void Grp_DisableFileZonesGrp (void)
    Grp.GrpCod = ParCod_GetAndCheckPar (ParCod_Grp);
 
    /***** Get name and type of the group from database *****/
-   Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+   Grp_GetGroupDataByCod (&HieCod,&GrpTyp.GrpTypCod,&Grp);
    Grp_GetGroupTypeDataByCod (&GrpTyp);
 
    /***** Update the table of groups changing file zones status *****/
@@ -4110,7 +4110,7 @@ void Grp_ChangeGroupType (void)
   {
    extern const char *Txt_The_group_X_already_exists;
    extern const char *Txt_The_type_of_group_of_the_group_X_has_changed;
-   long CrsCod;
+   long HieCod;	// Course code
    struct GroupType GrpTyp;
    struct Group Grp;
    long NewGrpTypCod;
@@ -4125,7 +4125,7 @@ void Grp_ChangeGroupType (void)
    NewGrpTypCod = ParCod_GetAndCheckPar (ParCod_GrpTyp);
 
    /* Get from the database the type and the name of the group */
-   Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+   Grp_GetGroupDataByCod (&HieCod,&GrpTyp.GrpTypCod,&Grp);
    Grp_GetGroupTypeDataByCod (&GrpTyp);
 
    /***** If group was in database... *****/
@@ -4161,7 +4161,7 @@ void Grp_ChangeGroupType (void)
 void Grp_ChangeGroupRoom (void)
   {
    extern const char *Txt_The_room_assigned_to_the_group_X_has_changed;
-   long CrsCod;
+   long HieCod;	// Course code
    struct GroupType GrpTyp;
    struct Group Grp;
    long NewRooCod;
@@ -4176,7 +4176,7 @@ void Grp_ChangeGroupRoom (void)
    NewRooCod = ParCod_GetPar (ParCod_Roo);
 
    /* Get from the database the name of the group */
-   Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+   Grp_GetGroupDataByCod (&HieCod,&GrpTyp.GrpTypCod,&Grp);
    Grp_GetGroupTypeDataByCod (&GrpTyp);
 
    /***** Update the table of groups changing old room by new room *****/
@@ -4343,7 +4343,7 @@ void Grp_ChangeMaxStdsGrp (void)
    extern const char *Txt_The_maximum_number_of_students_in_group_X_has_not_changed;
    extern const char *Txt_The_group_X_does_not_have_a_student_limit_now;
    extern const char *Txt_The_maximum_number_of_students_in_group_X_is_now_Y;
-   long CrsCod;
+   long HieCod;	// Course code
    struct GroupType GrpTyp;
    struct Group Grp;
    unsigned NewMaxStds;
@@ -4362,7 +4362,7 @@ void Grp_ChangeMaxStdsGrp (void)
                                         Grp_NUM_STUDENTS_NOT_LIMITED);
 
    /* Get from the database the type, name, and old maximum of students of the group */
-   Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+   Grp_GetGroupDataByCod (&HieCod,&GrpTyp.GrpTypCod,&Grp);
    Grp_GetGroupTypeDataByCod (&GrpTyp);
 
    /***** Check if the old maximum of students equals the new one
@@ -4504,7 +4504,7 @@ void Grp_RenameGroup (void)
    extern const char *Txt_The_group_X_already_exists;
    extern const char *Txt_The_group_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   long CrsCod;
+   long HieCod;	// Course code
    struct GroupType GrpTyp;
    struct Group Grp;
    char NewGrpName[Grp_MAX_BYTES_GROUP_NAME + 1];
@@ -4519,7 +4519,7 @@ void Grp_RenameGroup (void)
    Par_GetParText ("GrpName",NewGrpName,Grp_MAX_BYTES_GROUP_NAME);
 
    /***** Get from the database the type and the old name of the group *****/
-   Grp_GetGroupDataByCod (&CrsCod,&GrpTyp.GrpTypCod,&Grp);
+   Grp_GetGroupDataByCod (&HieCod,&GrpTyp.GrpTypCod,&Grp);
    Grp_GetGroupTypeDataByCod (&GrpTyp);
 
    /***** Check if new name is empty *****/
