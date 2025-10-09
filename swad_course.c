@@ -1798,7 +1798,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
    row[4]: crs_courses.Year
    row[5]: crs_courses.FullName
    row[6]: ctr_centers.ShortName
-   row[7]: crs_users.Accepted (only if WriteColumnAccepted == true)
+   row[7]: crs_users.Accepted (only if write column accepted)
    */
 
    /***** Get degree code (row[0]) *****/

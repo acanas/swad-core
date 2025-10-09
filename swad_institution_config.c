@@ -282,7 +282,7 @@ static void InsCfg_Map (void)
 
       /* Add popup */
       Map_AddPopup (Ctr.ShrtName,Gbl.Hierarchy.Node[Hie_INS].ShrtName,
-		    false);	// Closed
+		    CloOpe_CLOSED);
      }
 
    /* Free structure that stores the query result */

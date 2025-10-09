@@ -306,8 +306,7 @@ static void CtyCfg_Map (void)
 	 Map_AddMarker (&Coord);
 
 	 /* Add popup */
-	 Map_AddPopup (Ctr.ShrtName,Ins.ShrtName,
-		       false);	// Closed
+	 Map_AddPopup (Ctr.ShrtName,Ins.ShrtName,CloOpe_CLOSED);
 	}
 
       /* Free structure that stores the query result */

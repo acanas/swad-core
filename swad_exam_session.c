@@ -934,7 +934,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	 HTM_TR_Begin (NULL);
 	    HTM_TD_Begin ("colspan=\"6\" class=\"LT %s\"",The_GetColorRows ());
 	       ExaSes_PutFormSession (&Session,
-				      true);	// Modality can be changed
+				      Usr_CAN);	// Modality can be changed
 	    HTM_TD_End ();
 	 HTM_TR_End ();
 	}
