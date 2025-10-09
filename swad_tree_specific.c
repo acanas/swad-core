@@ -182,7 +182,7 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
    unsigned NumItems;
    Vie_ViewType_t ViewingOrEditingListItemsOfThisNode;
    static unsigned (*GetListItems[Inf_NUM_TYPES]) (MYSQL_RES **mysql_res,long NodCod,
-						   Sho_Show_t ShowHiddenItems) =
+						   Lay_Show_t ShowHiddenItems) =
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = NULL,
@@ -280,8 +280,8 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
 
    /***** Get list of node questions & answers from database *****/
    NumItems = (*GetListItems[Node->InfoType]) (&mysql_res,Node->Hierarchy.NodCod,
-					       ViewingOrEditingItem[ListingType] == Vie_EDIT ? Sho_SHOW :	// Show hidden items
-											       Sho_DONT_SHOW);	// Don't show hidden items
+					       ViewingOrEditingItem[ListingType] == Vie_EDIT ? Lay_SHOW :	// Show hidden items
+											       Lay_DONT_SHOW);	// Don't show hidden items
 
    if (NumItems || ViewingOrEditing[ListingType] == Vie_EDIT)
      {

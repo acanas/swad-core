@@ -62,13 +62,13 @@ long Lnk_DB_CreateLnk (const struct Tre_Node *Node)
 /*****************************************************************************/
 
 unsigned Lnk_DB_GetListLnks (MYSQL_RES **mysql_res,long NodCod,
-                             Sho_Show_t ShowHiddenCrsLinks)
+                             Lay_Show_t ShowHiddenCrsLinks)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
-   static const char *HiddenSubQuery[Sho_NUM_SHOW] =
+   static const char *HiddenSubQuery[Lay_NUM_SHOW] =
      {
-      [Sho_DONT_SHOW] = " AND crs_links.Hidden='N'",
-      [Sho_SHOW     ] = "",
+      [Lay_DONT_SHOW] = " AND crs_links.Hidden='N'",
+      [Lay_SHOW     ] = "",
      };
 
    return (unsigned)

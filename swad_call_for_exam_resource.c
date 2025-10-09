@@ -73,7 +73,7 @@ void CfeRsc_GetLinkToCallForExam (void)
 					      Txt_Calls_for_exams);
 
    /***** Set exam to be highlighted *****/
-   CallsForExams->HighlightExaCod = CallsForExams->ExaCod;
+   CallsForExams->Highlight.ExaCod = CallsForExams->ExaCod;
 
    /***** Show again the list of calls for exams *****/
    Cfe_ListCallsForExamsEdit ();

@@ -105,7 +105,7 @@ static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
                                            struct Rep_Report *Report);
 static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
                                  struct Rep_Report *Report,
-                                 Sho_Show_t ShowNumUsrs);
+                                 Lay_Show_t ShowNumUsrs);
 
 static void Rep_ShowMyHitsPerYear (long CrsCod,Rol_Role_t Role,
                                    struct Rep_Report *Report);
@@ -933,7 +933,7 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
 
 	    /* Write data of this course */
 	    Rep_WriteRowCrsData (CrsCod,Role,Report,
-				 Sho_SHOW);	// Write number of users in course
+				 Lay_SHOW);	// Write number of users in course
 	   }
 
 	 /* End table */
@@ -964,7 +964,7 @@ static void Rep_GetAndWriteMyHistoricClicsWithoutCrs (struct Rep_Report *Report)
    Rep_WriteRowCrsData (-1L,		// Hits without course (CrsCod == -1L)
                         Rol_UNK,	// Role does not matter
 			Report,
-			Sho_DONT_SHOW);	// Do not write number of users in course
+			Lay_DONT_SHOW);	// Do not write number of users in course
 
    /***** End list *****/
    fprintf (Rep_File,"</ol>"
@@ -1008,7 +1008,7 @@ static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
 
          /* Write data of this course */
          Rep_WriteRowCrsData (CrsCod,Role,Report,
-			      Sho_DONT_SHOW);	// Do not write number of users in course
+			      Lay_DONT_SHOW);	// Do not write number of users in course
 	}
 
       /* End list */
@@ -1026,7 +1026,7 @@ static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
 
 static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
                                  struct Rep_Report *Report,
-                                 Sho_Show_t ShowNumUsrs)
+                                 Lay_Show_t ShowNumUsrs)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
@@ -1064,7 +1064,7 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 	 fprintf (Rep_File," %s",Deg.FullName);
 
 	 /***** Write number of teachers / students in course *****/
-	 if (ShowNumUsrs == Sho_SHOW)
+	 if (ShowNumUsrs == Lay_SHOW)
 	    fprintf (Rep_File," (%u %s / %u %s)",
 		     Enr_GetCachedNumUsrsInCrss (Hie_CRS,Crs.HieCod,
 				                 1 << Rol_NET |

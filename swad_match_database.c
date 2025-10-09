@@ -34,7 +34,6 @@
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_match_database.h"
-#include "swad_show.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -93,7 +92,7 @@ long Mch_DB_CreateMatch (long GamCod,char Title[Mch_MAX_BYTES_TITLE + 1])
 
 void Mch_DB_UpdateMatchStatus (const struct Mch_Match *Match)
   {
-   extern const char Sho_Show_YN[Sho_NUM_SHOW];
+   extern const char Lay_Show_YN[Lay_NUM_SHOW];
    char *MchSubQuery;
 
    /***** Update end time only if match is currently being played *****/
@@ -129,8 +128,8 @@ void Mch_DB_UpdateMatchStatus (const struct Mch_Match *Match)
 		   Mch_ShowingStringsDB[Match->Status.Showing],
 		   Match->Status.Countdown,
 		   Match->Status.NumCols,
-		   Sho_Show_YN[Match->Status.Show.QstResults],
-		   Sho_Show_YN[Match->Status.Show.UsrResults],
+		   Lay_Show_YN[Match->Status.Show.QstResults],
+		   Lay_Show_YN[Match->Status.Show.UsrResults],
 		   Match->MchCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
    free (MchSubQuery);
@@ -155,15 +154,15 @@ void Mch_DB_UpdateMatchTitle (long MchCod,
 /******************** Toggle visibility of match results *********************/
 /*****************************************************************************/
 
-void Mch_DB_UpdateVisResultsMchUsr (long MchCod,Sho_Show_t ShowUsrResults)
+void Mch_DB_UpdateVisResultsMchUsr (long MchCod,Lay_Show_t ShowUsrResults)
   {
-   extern const char Sho_Show_YN[Sho_NUM_SHOW];
+   extern const char Lay_Show_YN[Lay_NUM_SHOW];
 
    DB_QueryUPDATE ("can not toggle visibility of match results",
 		   "UPDATE mch_matches"
 		     " SET ShowUsrResults='%c'"
 		   " WHERE MchCod=%ld",
-		   Sho_Show_YN[ShowUsrResults],
+		   Lay_Show_YN[ShowUsrResults],
 		   MchCod);
   }
 

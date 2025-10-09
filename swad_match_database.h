@@ -38,7 +38,7 @@ long Mch_DB_CreateMatch (long GamCod,char Title[Mch_MAX_BYTES_TITLE + 1]);
 void Mch_DB_UpdateMatchStatus (const struct Mch_Match *Match);
 void Mch_DB_UpdateMatchTitle (long MchCod,
                               const char Title[Gam_MAX_BYTES_TITLE + 1]);
-void Mch_DB_UpdateVisResultsMchUsr (long MchCod,Sho_Show_t ShowUsrResults);
+void Mch_DB_UpdateVisResultsMchUsr (long MchCod,Lay_Show_t ShowUsrResults);
 
 Exi_Exist_t Mch_DB_GetMatchDataByCod (MYSQL_RES **mysql_res,long MchCod);
 Exi_Exist_t Mch_DB_GetStartEndMatchesInGame (MYSQL_RES **mysql_res,long GamCod);

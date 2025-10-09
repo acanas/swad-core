@@ -68,13 +68,13 @@ long Bib_DB_CreateRef (const struct Tre_Node *Node)
 /*****************************************************************************/
 
 unsigned Bib_DB_GetListRefs (MYSQL_RES **mysql_res,long NodCod,
-			     Sho_Show_t ShowHiddenBibRefs)
+			     Lay_Show_t ShowHiddenBibRefs)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
-   static const char *HiddenSubQuery[Sho_NUM_SHOW] =
+   static const char *HiddenSubQuery[Lay_NUM_SHOW] =
      {
-      [Sho_DONT_SHOW] = " AND crs_bibliography.Hidden='N'",
-      [Sho_SHOW     ] = "",
+      [Lay_DONT_SHOW] = " AND crs_bibliography.Hidden='N'",
+      [Lay_SHOW     ] = "",
      };
 
    return (unsigned)

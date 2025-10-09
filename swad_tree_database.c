@@ -580,7 +580,7 @@ void Tre_DB_RemoveNodeFromExpandedNodes (long NodCod)
 /*****************************************************************************/
 
 Exi_Exist_t Tre_DB_CheckListItems (const struct Tre_Node *Node,
-				   Sho_Show_t ShowHiddenResources)
+				   Lay_Show_t ShowHiddenResources)
   {
    const char *Table = Tre_DB_TablesItems[Node->InfoType];
    char *HiddenSubQuery;
@@ -593,11 +593,11 @@ Exi_Exist_t Tre_DB_CheckListItems (const struct Tre_Node *Node,
    /***** Create subquery *****/
    switch (ShowHiddenResources)
      {
-      case Sho_SHOW:
+      case Lay_SHOW:
 	 if (asprintf (&HiddenSubQuery,"%s","") < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
-      case Sho_DONT_SHOW:
+      case Lay_DONT_SHOW:
       default:
 	 if (asprintf (&HiddenSubQuery," AND %s.Hidden='N'",Table) < 0)
 	    Err_NotEnoughMemoryExit ();

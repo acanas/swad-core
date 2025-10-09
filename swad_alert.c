@@ -39,7 +39,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
-#include "swad_show.h"
+// #include "swad_show.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -225,7 +225,7 @@ void Ale_ShowAlerts (const char *Section)
   {
    size_t NumAlerts = Ale_GetNumAlerts ();
    size_t NumAlert;
-   Sho_Show_t ShowAlert;
+   Lay_Show_t ShowAlert;
 
    for (NumAlert = 0;
 	NumAlert < NumAlerts;
@@ -233,12 +233,12 @@ void Ale_ShowAlerts (const char *Section)
       if (Ale_Alerts.List[NumAlert].Type != Ale_NONE)
         {
 	 if (Section)
-	    ShowAlert = strcmp (Ale_Alerts.List[NumAlert].Section,Section) ? Sho_DONT_SHOW :
-									     Sho_SHOW;
+	    ShowAlert = strcmp (Ale_Alerts.List[NumAlert].Section,Section) ? Lay_DONT_SHOW :
+									     Lay_SHOW;
 	 else
-	    ShowAlert = Sho_SHOW;
+	    ShowAlert = Lay_SHOW;
 
-	 if (ShowAlert == Sho_SHOW)
+	 if (ShowAlert == Lay_SHOW)
 	   {
 	    Ale_ShowFixAlert (Ale_Alerts.List[NumAlert].Type,
 			      Ale_Alerts.List[NumAlert].Text);

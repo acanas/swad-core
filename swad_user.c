@@ -2373,10 +2373,10 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
    char Text[Cns_MAX_BYTES_TEXT + 1];
    struct Hie_Node Ins;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
-   Sho_Show_t ShowData = (Gbl.Usrs.Me.Role.Logged == Rol_TCH &&
+   Lay_Show_t ShowData = (Gbl.Usrs.Me.Role.Logged == Rol_TCH &&
 			  UsrDat->Accepted == Usr_HAS_ACCEPTED) ||
-			  Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ? Sho_SHOW :
-								   Sho_DONT_SHOW;
+			  Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ? Lay_SHOW :
+								   Lay_DONT_SHOW;
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -2409,17 +2409,17 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
 
       /***** Write the rest of the data of the student *****/
       Usr_WriteUsrData (The_GetColorRows (),
-			UsrDat->Phone[0][0] ? (ShowData == Sho_SHOW ? UsrDat->Phone[0] :
+			UsrDat->Phone[0][0] ? (ShowData == Lay_SHOW ? UsrDat->Phone[0] :
 								      "********") :
 					      NULL,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
       Usr_WriteUsrData (The_GetColorRows (),
-			UsrDat->Phone[1][0] ? (ShowData == Sho_SHOW ? UsrDat->Phone[1] :
+			UsrDat->Phone[1][0] ? (ShowData == Lay_SHOW ? UsrDat->Phone[1] :
 								      "********") :
 					      NULL,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
       Usr_WriteUsrData (The_GetColorRows (),
-			UsrDat->StrBirthday[0] ? (ShowData == Sho_SHOW ? UsrDat->StrBirthday :
+			UsrDat->StrBirthday[0] ? (ShowData == Lay_SHOW ? UsrDat->StrBirthday :
 									 "********") :
 						 NULL,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
@@ -2487,11 +2487,11 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
    struct Hie_Node Ctr;
    struct Dpt_Department Dpt;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
-   Sho_Show_t ShowData = Usr_ItsMe (UsrDat->UsrCod) == Usr_ME ||
+   Lay_Show_t ShowData = Usr_ItsMe (UsrDat->UsrCod) == Usr_ME ||
 			 UsrDat->Accepted == Usr_HAS_ACCEPTED ||
 			 Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM ||
-			 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Sho_SHOW :
-								  Sho_DONT_SHOW;
+			 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Lay_SHOW :
+								  Lay_DONT_SHOW;
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -2522,33 +2522,33 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
 			Lay_NON_BR_SPACES,UsrDat->Accepted);
 
       /***** Write the rest of teacher's data *****/
-      if (ShowData == Sho_SHOW && UsrDat->Tch.CtrCod > 0)
+      if (ShowData == Lay_SHOW && UsrDat->Tch.CtrCod > 0)
 	{
 	 Ctr.HieCod = UsrDat->Tch.CtrCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	}
       Usr_WriteUsrData (The_GetColorRows (),
-			ShowData == Sho_SHOW &&
+			ShowData == Lay_SHOW &&
 			UsrDat->Tch.CtrCod > 0 ? Ctr.FullName :
 						 NULL,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
-      if (ShowData == Sho_SHOW && UsrDat->Tch.DptCod > 0)
+      if (ShowData == Lay_SHOW && UsrDat->Tch.DptCod > 0)
 	{
 	 Dpt.DptCod = UsrDat->Tch.DptCod;
 	 Dpt_GetDepartmentDataByCod (&Dpt);
 	}
       Usr_WriteUsrData (The_GetColorRows (),
-			ShowData == Sho_SHOW &&
+			ShowData == Lay_SHOW &&
 			UsrDat->Tch.DptCod > 0 ? Dpt.FullName :
 						 NULL,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
       Usr_WriteUsrData (The_GetColorRows (),
-			ShowData == Sho_SHOW &&
+			ShowData == Lay_SHOW &&
 			UsrDat->Tch.Office[0] ? UsrDat->Tch.Office :
 						NULL,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
       Usr_WriteUsrData (The_GetColorRows (),
-			ShowData == Sho_SHOW &&
+			ShowData == Lay_SHOW &&
 			UsrDat->Tch.OfficePhone[0] ? UsrDat->Tch.OfficePhone :
 						     NULL,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
@@ -3011,24 +3011,24 @@ void Usr_FreeUsrsList (Rol_Role_t Role)
 /******** Show form to confirm that I want to see a big list of users ********/
 /*****************************************************************************/
 
-Sho_Show_t Usr_GetIfShowBigList (unsigned NumUsrs,
+Lay_Show_t Usr_GetIfShowBigList (unsigned NumUsrs,
 				 void (*FuncPars) (void *Args),void *Args,
 				 const char *OnSubmit)
   {
-   Sho_Show_t ShowBigList;
+   Lay_Show_t ShowBigList;
 
    /***** If list of users is too big... *****/
    if (NumUsrs > Cfg_MIN_NUM_USERS_TO_CONFIRM_SHOW_BIG_LIST)
      {
       /***** Get parameter with user's confirmation
              to see a big list of users *****/
-      if ((ShowBigList = Sho_GetParShow ("ShowBigList")) == Sho_DONT_SHOW)
+      if ((ShowBigList = Lay_GetParShow ("ShowBigList")) == Lay_DONT_SHOW)
 	 Usr_PutButtonToConfirmIWantToSeeBigList (NumUsrs,FuncPars,Args,OnSubmit);
 
       return ShowBigList;
      }
    else
-      return Sho_SHOW;        // List is not too big ==> show it
+      return Lay_SHOW;        // List is not too big ==> show it
   }
 
 /*****************************************************************************/
@@ -3755,7 +3755,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 	    Usr_ShowFormsToSelectUsrListType (FuncPars,Args,NULL,
 					      ShowPhotos);
 
-	    if (Usr_GetIfShowBigList (NumUsrs,FuncPars,Args,NULL) == Sho_SHOW)
+	    if (Usr_GetIfShowBigList (NumUsrs,FuncPars,Args,NULL) == Lay_SHOW)
 	      {
 	       /***** Link to register students *****/
 	       Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs ();
@@ -5117,7 +5117,7 @@ void Usr_ListGuests (void)
 
 	    if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs,
 				      Sco_PutParCurrentScope,&ListingPars.HieLvl,
-				      NULL) == Sho_SHOW)
+				      NULL) == Lay_SHOW)
 	      {
 	       /***** Draw a class photo with guests *****/
 	       /* Set options allowed */
@@ -5282,7 +5282,7 @@ void Usr_ListStudents (void)
 
 	    if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,
 				      Sco_PutParCurrentScope,&ListingPars.HieLvl,
-				      NULL) == Sho_SHOW)
+				      NULL) == Lay_SHOW)
 	      {
 	       /***** Draw a class photo with students of the course *****/
 	       Lay_WriteHeaderClassPhoto (ListingPars.HieLvl,Vie_VIEW);
@@ -5463,7 +5463,7 @@ void Usr_ListTeachers (void)
 
 	    if (Usr_GetIfShowBigList (NumUsrs,
 				      Sco_PutParCurrentScope,&ListingPars.HieLvl,
-				      NULL) == Sho_SHOW)
+				      NULL) == Lay_SHOW)
 	      {
 	       /***** Draw a class photo with teachers of the course *****/
 	       Lay_WriteHeaderClassPhoto (ListingPars.HieLvl,Vie_VIEW);
@@ -6434,9 +6434,9 @@ void Usr_WriteAuthor (struct Usr_Data *UsrDat,For_Disabled_t Disabled)
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO30x40",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR30x40",
      };
-   Sho_Show_t ShowAuthor = Disabled == For_ENABLED &&
-			   UsrDat->UsrCod > 0 ? Sho_SHOW :
-						Sho_DONT_SHOW;
+   Lay_Show_t ShowAuthor = Disabled == For_ENABLED &&
+			   UsrDat->UsrCod > 0 ? Lay_SHOW :
+						Lay_DONT_SHOW;
 
    /***** Begin table and row *****/
    HTM_TABLE_BeginPadding (2);
@@ -6447,12 +6447,12 @@ void Usr_WriteAuthor (struct Usr_Data *UsrDat,For_Disabled_t Disabled)
 	 HTM_TD_Begin ("class=\"CT\" style=\"width:30px;\"");
 	    switch (ShowAuthor)
 	      {
-	       case Sho_SHOW:
+	       case Lay_SHOW:
 		  Pho_ShowUsrPhotoIfAllowed (UsrDat,
 					     ClassPhoto[Gbl.Prefs.PhotoShape],
 					     Pho_ZOOM);
 		  break;
-	       case Sho_DONT_SHOW:
+	       case Lay_DONT_SHOW:
 	       default:
 		  Ico_PutIcon ("usr_bl.jpg",Ico_UNCHANGED,
 			       Txt_Unknown_or_without_photo,
@@ -6465,13 +6465,13 @@ void Usr_WriteAuthor (struct Usr_Data *UsrDat,For_Disabled_t Disabled)
 	        (if author has a web page, put a link to it) *****/
 	 switch (ShowAuthor)
 	   {
-	    case Sho_SHOW:
+	    case Lay_SHOW:
 	       HTM_TD_Begin ("class=\"LT\"");
 		  HTM_DIV_Begin ("class=\"AUTHOR_2_LINES\"");	// Limited width
 		     Usr_WriteFirstNameBRSurnames (UsrDat);
 		  HTM_DIV_End ();
 	       break;
-	    case Sho_DONT_SHOW:
+	    case Lay_DONT_SHOW:
 	    default:
 	       HTM_TD_Begin ("class=\"LM\"");
 	       break;

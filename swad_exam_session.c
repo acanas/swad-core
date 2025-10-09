@@ -187,7 +187,7 @@ void ExaSes_ResetSession (struct ExaSes_Session *Session)
    Session->Title[0]		= '\0';
    Session->Hidden		= HidVis_VISIBLE;
    Session->Open		= CloOpe_CLOSED;
-   Session->Show_UsrResults	= Sho_DONT_SHOW;
+   Session->Show_UsrResults	= Lay_DONT_SHOW;
    Session->NumCols		= ExaSes_NUM_COLS_DEFAULT;
    Session->ShowPhotos		= ExaSes_SHOW_PHOTOS_DEFAULT;
   };
@@ -1014,7 +1014,7 @@ static Usr_Can_t ExaSes_CheckIfICanEditThisSession (long UsrCod)
 
 static Usr_Can_t ExaSes_CheckIfICanChangeVisibilityOfResults (const struct ExaSes_Session *Session)
   {
-   if (Session->Show_UsrResults == Sho_SHOW ||					// Results are currently visible
+   if (Session->Show_UsrResults == Lay_SHOW ||					// Results are currently visible
        Session->TimeUTC[Dat_END_TIME] < Dat_GetStartExecutionTimeUTC ())	// End of time is in the past
       return ExaSes_CheckIfICanEditThisSession (Session->UsrCod);
 
@@ -1326,7 +1326,7 @@ static void ExaSes_ListOneOrMoreSessionsResultStd (struct Exa_Exams *Exams,
    /***** Is exam session result visible or hidden? *****/
    switch (Session->Show_UsrResults)
      {
-      case Sho_SHOW:
+      case Lay_SHOW:
 	 /* Result is visible by me */
 	 Exams->Exam.ExaCod = Session->ExaCod;
 	 Exams->SesCod.Par  = Session->SesCod;
@@ -1334,7 +1334,7 @@ static void ExaSes_ListOneOrMoreSessionsResultStd (struct Exa_Exams *Exams,
 					Exa_PutPars,Exams,
 					"trophy.svg",Ico_BLACK);
 	 break;
-      case Sho_DONT_SHOW:
+      case Lay_DONT_SHOW:
       default:
 	 /* Result is forbidden to me */
 	 Ico_PutIconNotVisible ();
@@ -1353,15 +1353,15 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
       const char *Icon;
       Ico_Color_t Color;
       const char **Title;
-     } IconPars[Sho_NUM_SHOW] =
+     } IconPars[Lay_NUM_SHOW] =
      {
-      [Sho_DONT_SHOW] =	// Don't show user's results
+      [Lay_DONT_SHOW] =	// Don't show user's results
         {
          .Icon  = "eye-slash.svg",
          .Color = Ico_RED,
          .Title = &Txt_Hidden_results
         },
-      [Sho_SHOW] =	// Show user's results
+      [Lay_SHOW] =	// Show user's results
         {
          .Icon  = "eye.svg",
          .Color = Ico_GREEN,
@@ -1421,8 +1421,8 @@ void ExaSes_ToggleVisResultsSesUsr (void)
       Err_NoPermissionExit ();
 
    /***** Toggle visibility of exam session results *****/
-   Session.Show_UsrResults = Session.Show_UsrResults == Sho_SHOW ? Sho_DONT_SHOW :
-								   Sho_SHOW;
+   Session.Show_UsrResults = Session.Show_UsrResults == Lay_SHOW ? Lay_DONT_SHOW :
+								   Lay_SHOW;
    Exa_DB_ToggleVisResultsSesUsr (&Session);
 
    /***** Show current exam *****/
@@ -1487,7 +1487,7 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
    Str_Copy (Session->Title,row[8],sizeof (Session->Title) - 1);
 
    /* Get whether to show user results or not (row(9)) */
-   Session->Show_UsrResults = Sho_GetShowFromYN (row[9][0]);
+   Session->Show_UsrResults = Lay_GetShowFromYN (row[9][0]);
 
    /* Get number of columns (row[10]) */
    Session->NumCols = Str_ConvertStrToUnsigned (row[10]);
@@ -2014,7 +2014,7 @@ void ExaSes_ReceiveSession (void)
      {
       case OldNew_OLD:
 	 if (Session.TimeUTC[Dat_END_TIME] >= Dat_GetStartExecutionTimeUTC ())	// End of time is in the future
-	    Session.Show_UsrResults = Sho_DONT_SHOW;	// Force results to be hidden
+	    Session.Show_UsrResults = Lay_DONT_SHOW;	// Force results to be hidden
 	 ExaSes_UpdateSession (&Session);
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_session_has_been_modified);
 	 break;

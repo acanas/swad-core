@@ -30,7 +30,6 @@
 #include <mysql/mysql.h>	// To access MySQL databases
 
 #include "swad_resource_type.h"
-#include "swad_show.h"
 #include "swad_tree.h"
 
 /*****************************************************************************/
@@ -50,7 +49,7 @@ void Rsc_DB_RemoveLinkFromClipboard (struct Rsc_Link *Link);
 long Rsc_DB_CreateRsc (const struct Tre_Node *Node);
 
 unsigned Rsc_DB_GetListRscs (MYSQL_RES **mysql_res,long NodCod,
-                             Sho_Show_t ShowHiddenResources);
+                             Lay_Show_t ShowHiddenResources);
 Exi_Exist_t Rsc_DB_GetRscDataByCod (MYSQL_RES **mysql_res,long ItmCod);
 
 void Rsc_DB_UpdateRsc (const struct Tre_Node *Node);

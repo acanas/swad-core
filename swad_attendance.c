@@ -53,7 +53,6 @@
 #include "swad_photo.h"
 #include "swad_QR.h"
 #include "swad_setting.h"
-#include "swad_show.h"
 
 /*****************************************************************************/
 /*************** External global variables from others modules ***************/
@@ -180,7 +179,7 @@ static void Att_ResetEvents (struct Att_Events *Events)
    Events->Lst                = NULL;		// List of attendance events
    Events->SelectedOrder      = Att_ORDER_DEFAULT;
    Events->Event.AttCod       = -1L;
-   Events->ShowDetails        = Sho_DONT_SHOW;
+   Events->ShowDetails        = Lay_DONT_SHOW;
    Events->StrAttCodsSelected = NULL;
    Events->CurrentPage        = 0;
   }
@@ -2246,7 +2245,7 @@ static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 	 Att_GetListEvents (&Events,Att_OLDEST_FIRST);
 
 	 /***** Get boolean parameter that indicates if details must be shown *****/
-	 Events.ShowDetails = Sho_GetParShow ("ShowDetails");
+	 Events.ShowDetails = Lay_GetParShow ("ShowDetails");
 
 	 /***** Get list of groups selected ******/
 	 Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -2285,7 +2284,7 @@ static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 	 Att_ListUsrsAttendanceTable (&Events,TypeOfView,1,&Gbl.Usrs.Me.UsrDat.UsrCod);
 
 	 /***** Show details or put button to show details *****/
-	 if (Events.ShowDetails == Sho_SHOW)
+	 if (Events.ShowDetails == Lay_SHOW)
 	    Att_ListStdsWithAttEventsDetails (&Events,1,&Gbl.Usrs.Me.UsrDat.UsrCod);
 
 	 /***** End box *****/
@@ -2345,7 +2344,7 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
 
 	 /***** Get parameters *****/
 	 /* Get boolean parameter that indicates if details must be shown */
-	 Events.ShowDetails = Sho_GetParShow ("ShowDetails");
+	 Events.ShowDetails = Lay_GetParShow ("ShowDetails");
 
 	 /* Get list of groups selected */
 	 Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -2397,7 +2396,7 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
 	                                 NumUsrsInList,LstSelectedUsrCods);
 
 	    /***** Show details or put button to show details *****/
-	    if (Events.ShowDetails == Sho_SHOW)
+	    if (Events.ShowDetails == Lay_SHOW)
 	       Att_ListStdsWithAttEventsDetails (&Events,NumUsrsInList,LstSelectedUsrCods);
 
 	    /***** End box *****/
@@ -2550,7 +2549,7 @@ static void Att_PutFormToPrintMyListPars (void *Events)
   {
    if (Events)
      {
-      if (((struct Att_Events *) Events)->ShowDetails == Sho_SHOW)
+      if (((struct Att_Events *) Events)->ShowDetails == Lay_SHOW)
 	 Par_PutParChar ("ShowDetails",'Y');
       if (((struct Att_Events *) Events)->StrAttCodsSelected)
 	 if (((struct Att_Events *) Events)->StrAttCodsSelected[0])
@@ -2580,7 +2579,7 @@ static void Att_PutParsToPrintStdsList (void *Events)
   {
    if (Events)
      {
-      if (((struct Att_Events *) Events)->ShowDetails == Sho_SHOW)
+      if (((struct Att_Events *) Events)->ShowDetails == Lay_SHOW)
 	 Par_PutParChar ("ShowDetails",'Y');
       Grp_PutParsCodGrps ();
       Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
@@ -2769,7 +2768,7 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
    Pho_ShowPhotos_t ShowPhotos;
    bool PutButtonShowDetails = (TypeOfView == Att_VIEW_ONLY_ME ||
 	                        TypeOfView == Att_VIEW_SEL_USR) &&
-	                        Events->ShowDetails == Sho_DONT_SHOW;
+	                        Events->ShowDetails == Lay_DONT_SHOW;
 
    /***** Get my preference about photos in users' list for current course *****/
    ShowPhotos = Pho_GetMyPrefAboutListWithPhotosFromDB ();
@@ -3087,8 +3086,8 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
    Att_AbsentOrPresent_t Present;
    struct
      {
-      Sho_Show_t Std;
-      Sho_Show_t Tch;
+      Lay_Show_t Std;
+      Lay_Show_t Tch;
      } ShowComment;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
@@ -3155,12 +3154,12 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 	 /***** Get comments for this student *****/
 	 Present = Att_CheckIfUsrIsPresentInEventAndGetComments (Events->Event.AttCod,UsrDat->UsrCod,
 								 CommentStd,CommentTch);
-         ShowComment.Std = CommentStd[0] ? Sho_SHOW :
-					   Sho_DONT_SHOW;
+         ShowComment.Std = CommentStd[0] ? Lay_SHOW :
+					   Lay_DONT_SHOW;
 	 ShowComment.Tch = CommentTch[0] &&
 	                   (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-	                    Events->Event.CommentTchVisible == HidVis_VISIBLE) ? Sho_SHOW :
-	                							 Sho_DONT_SHOW;
+	                    Events->Event.CommentTchVisible == HidVis_VISIBLE) ? Lay_SHOW :
+	                							 Lay_DONT_SHOW;
 
 	 /***** Write a row for this event *****/
 	 HTM_TR_Begin (NULL);
@@ -3198,8 +3197,8 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 	 HTM_TR_End ();
 
 	 /***** Write comments for this student *****/
-	 if (ShowComment.Std == Sho_SHOW ||
-	     ShowComment.Tch == Sho_SHOW)
+	 if (ShowComment.Std == Lay_SHOW ||
+	     ShowComment.Tch == Lay_SHOW)
 	   {
 	    HTM_TR_Begin (NULL);
 
@@ -3212,7 +3211,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 	                     The_GetSuffix (),The_GetColorRows ());
 
 		  HTM_DL_Begin ();
-		     if (ShowComment.Std == Sho_SHOW)
+		     if (ShowComment.Std == Lay_SHOW)
 		       {
 			Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 					  CommentStd,Cns_MAX_BYTES_TEXT,
@@ -3224,7 +3223,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 			   HTM_Txt (CommentStd);
 			HTM_DD_End ();
 		       }
-		     if (ShowComment.Tch == Sho_SHOW)
+		     if (ShowComment.Tch == Lay_SHOW)
 		       {
 			Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 					  CommentTch,Cns_MAX_BYTES_TEXT,

@@ -714,7 +714,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
        ICanSendFiles == Usr_CAN)	// I can send files to this assignment folder
      {
       /* Form to create a new file or folder */
-      Gbl.FileBrowser.ShowFullTree = Sho_SHOW;	// By default, show all files
+      Gbl.FileBrowser.ShowFullTree = Lay_SHOW;	// By default, show all files
       switch (Gbl.Usrs.Me.Role.Logged)
         {
 	 case Rol_STD:

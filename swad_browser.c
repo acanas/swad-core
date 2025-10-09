@@ -2065,8 +2065,8 @@ void Brw_GetParAndInitFileBrowser (void)
 	 default:
 	    break;
 	}
-   Gbl.FileBrowser.ShowFullTree = Gbl.FileBrowser.OnlyPublicFiles ? Sho_SHOW :
-									Sho_GetParShow ("FullTree");
+   Gbl.FileBrowser.ShowFullTree = Gbl.FileBrowser.OnlyPublicFiles ? Lay_SHOW :
+									Lay_GetParShow ("FullTree");
 
    /***** Initialize file browser *****/
    Brw_SetGrpCod (GrpCod);
@@ -3621,7 +3621,7 @@ static void Brw_PutCheckboxFullTree (void)
    Lay_PutContextualCheckbox (Brw_ActSeeAdm[Gbl.FileBrowser.Type],
                               Brw_PutParsFullTree,NULL,
                               "FullTree",
-                              (Gbl.FileBrowser.ShowFullTree == Sho_SHOW ? HTM_CHECKED :
+                              (Gbl.FileBrowser.ShowFullTree == Lay_SHOW ? HTM_CHECKED :
                         						  HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
                               Txt_Show_all_files,Txt_Show_all_files);
   }
@@ -3643,7 +3643,7 @@ static void Brw_PutParsFullTree (__attribute__((unused)) void *Args)
 void Brw_PutParFullTreeIfSelected (void *ShowFullTree)
   {
    if (ShowFullTree)
-      if (*((Sho_Show_t *) ShowFullTree) == Sho_SHOW)	// Put hidden parameter only if full tree selected
+      if (*((Lay_Show_t *) ShowFullTree) == Lay_SHOW)	// Put hidden parameter only if full tree selected
 	 Par_PutParChar ("FullTree",'Y');
   }
 
@@ -3834,10 +3834,10 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 
 	       switch (Gbl.FileBrowser.ShowFullTree)
 		 {
-		  case Sho_SHOW:
+		  case Lay_SHOW:
 		     IconSubtree = Brw_ICON_TREE_NOTHING;
 		     break;
-		  case Sho_DONT_SHOW:
+		  case Lay_DONT_SHOW:
 		  default:
 		     /***** Check if this subdirectory has files or folders in it *****/
 		     if ((NumFilesInSubdir = scandir (PathFileRel,&SubdirFileList,NULL,NULL)) >= 0)	// No error

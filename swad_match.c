@@ -51,7 +51,6 @@
 #include "swad_question_database.h"
 #include "swad_role.h"
 #include "swad_setting.h"
-#include "swad_show.h"
 #include "swad_test.h"
 
 /*****************************************************************************/
@@ -205,10 +204,10 @@ static void Mch_PutIconToRemoveMyAnswer (const struct Mch_Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match);
 static void Mch_WriteAnswersMatchResult (const struct Mch_Match *Match,
                                          struct Qst_Question *Question,
-                                         const char *Class,Sho_Show_t ShowResult);
+                                         const char *Class,Lay_Show_t ShowResult);
 static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
                                          struct Qst_Question *Question,
-                                         const char *Class,Sho_Show_t ShowResult);
+                                         const char *Class,Lay_Show_t ShowResult);
 static void Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 					   const struct Mch_UsrAnswer *UsrAnswer,
 					   Mch_Update_t Update);
@@ -265,8 +264,8 @@ void Mch_ResetMatch (struct Mch_Match *Match)
    Match->Status.Showing         = Mch_SHOWING_DEFAULT;
    Match->Status.Countdown       = 0;
    Match->Status.NumCols         = 1;
-   Match->Status.Show.QstResults = Sho_DONT_SHOW;
-   Match->Status.Show.UsrResults = Sho_DONT_SHOW;
+   Match->Status.Show.QstResults = Lay_DONT_SHOW;
+   Match->Status.Show.UsrResults = Lay_DONT_SHOW;
    Match->Status.Playing         = false;
    Match->Status.NumPlayers      = 0;
   };
@@ -545,7 +544,7 @@ static Usr_Can_t Mch_CheckIfICanEditThisMatch (const struct Mch_Match *Match)
 
 static Usr_Can_t Mch_CheckIfICanChangeVisibilityOfResults (const struct Mch_Match *Match)
   {
-   if (Match->Status.Show.UsrResults == Sho_SHOW ||	// Results are currently visible
+   if (Match->Status.Show.UsrResults == Lay_SHOW ||	// Results are currently visible
        Match->Status.Showing == Mch_END)		// Match has finished
       return Mch_CheckIfICanEditThisMatch (Match);
 
@@ -835,13 +834,13 @@ static void Mch_ListOneOrMoreMatchesResultStd (struct Gam_Games *Games,
    /***** Is match result visible or hidden? *****/
    switch (Match->Status.Show.UsrResults)
      {
-      case Sho_SHOW:
+      case Lay_SHOW:
 	 /* Result is visible by me */
 	 Lay_PutContextualLinkOnlyIcon (ActSeeMyMchResMch,MchRes_RESULTS_BOX_ID,
 					Mch_PutParsEdit,Games,
 					"trophy.svg",Ico_BLACK);
 	 break;
-      case Sho_DONT_SHOW:
+      case Lay_DONT_SHOW:
       default:
 	 /* Result is forbidden to me */
 	 Ico_PutIconNotVisible ();
@@ -860,15 +859,15 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
       const char *Icon;
       Ico_Color_t Color;
       const char **Title;
-     } IconPars[Sho_NUM_SHOW] =
+     } IconPars[Lay_NUM_SHOW] =
      {
-      [Sho_DONT_SHOW] =	// Don't show user's results
+      [Lay_DONT_SHOW] =	// Don't show user's results
         {
          .Icon  = "eye-slash.svg",
          .Color = Ico_RED,
          .Title = &Txt_Hidden_results
         },
-      [Sho_SHOW] =	// Show user's results
+      [Lay_SHOW] =	// Show user's results
         {
          .Icon  = "eye.svg",
          .Color = Ico_GREEN,
@@ -926,8 +925,8 @@ void Mch_ToggleVisResultsMchUsr (void)
       Err_NoPermissionExit ();
 
    /***** Toggle visibility of match results *****/
-   Match.Status.Show.UsrResults = Match.Status.Show.UsrResults == Sho_SHOW ? Sho_DONT_SHOW :
-									     Sho_SHOW;
+   Match.Status.Show.UsrResults = Match.Status.Show.UsrResults == Lay_SHOW ? Lay_DONT_SHOW :
+									     Lay_SHOW;
    Mch_DB_UpdateVisResultsMchUsr (Match.MchCod,Match.Status.Show.UsrResults);
 
    /***** Show current game *****/
@@ -1007,10 +1006,10 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
                         	                      (unsigned) LongNum);
 
    /* Get whether to show question results or not (row(11)) */
-   Match->Status.Show.QstResults = Sho_GetShowFromYN (row[11][0]);
+   Match->Status.Show.QstResults = Lay_GetShowFromYN (row[11][0]);
 
    /* Get whether to show user results or not (row(12)) */
-   Match->Status.Show.UsrResults = Sho_GetShowFromYN (row[12][0]);
+   Match->Status.Show.UsrResults = Lay_GetShowFromYN (row[12][0]);
 
    /***** Get whether the match is being played or not *****/
    if (Match->Status.Showing == Mch_END)	// Match over
@@ -1795,10 +1794,10 @@ void Mch_ToggleVisResultsMchQst (void)
    Mch_GetMatchDataByCod (&Match);
 
    /***** Update status *****/
-   Match.Status.Show.QstResults = Match.Status.Show.QstResults == Sho_SHOW ? Sho_DONT_SHOW :	// Toggle display
-									     Sho_SHOW;
+   Match.Status.Show.QstResults = Match.Status.Show.QstResults == Lay_SHOW ? Lay_DONT_SHOW :	// Toggle display
+									     Lay_SHOW;
    if (Match.Status.Showing == Mch_RESULTS &&
-       Match.Status.Show.QstResults == Sho_DONT_SHOW)
+       Match.Status.Show.QstResults == Lay_DONT_SHOW)
      Match.Status.Showing = Mch_ANSWERS;	// Hide results
 
    /***** Update match status in database *****/
@@ -1900,7 +1899,7 @@ static void Mch_SetMatchStatusToPrev (struct Mch_Match *Match)
    Match->Status.Countdown = -1L;		// No countdown
 
    /***** Force showing results to false when match is not at the end *****/
-   Match->Status.Show.UsrResults = Sho_DONT_SHOW;	// Force results to be hidden
+   Match->Status.Show.UsrResults = Lay_DONT_SHOW;	// Force results to be hidden
   }
 
 /*****************************************************************************/
@@ -1916,7 +1915,7 @@ static void Mch_SetMatchStatusToPrevQst (struct Mch_Match *Match)
      {
       Match->Status.QstCod = Gam_DB_GetQstCodFromQstInd (Match->GamCod,
 						         Match->Status.QstInd);
-      Match->Status.Showing = Match->Status.Show.QstResults == Sho_SHOW ? Mch_RESULTS :
+      Match->Status.Showing = Match->Status.Show.QstResults == Lay_SHOW ? Mch_RESULTS :
 									  Mch_ANSWERS;
      }
    else					// Start of questions reached
@@ -1953,10 +1952,10 @@ static void Mch_SetMatchStatusToNext (struct Mch_Match *Match)
       case Mch_ANSWERS:
 	 switch (Match->Status.Show.QstResults)
 	   {
-	    case Sho_SHOW:
+	    case Lay_SHOW:
 	       Match->Status.Showing = Mch_RESULTS;
 	       break;
-	    case Sho_DONT_SHOW:
+	    case Lay_DONT_SHOW:
 	    default:
 	       Mch_SetMatchStatusToNextQst (Match);
 	       break;
@@ -2638,10 +2637,10 @@ static void Mch_PutParNumCols (unsigned NumCols)	// Number of columns
 static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
   {
    extern const char *Txt_View_results;
-   static const char *Class[Sho_NUM_SHOW] =
+   static const char *Class[Lay_NUM_SHOW] =
      {
-      [Sho_DONT_SHOW] = "fas fa-toggle-off",
-      [Sho_SHOW     ] = "fas fa-toggle-on",
+      [Lay_DONT_SHOW] = "fas fa-toggle-off",
+      [Lay_SHOW     ] = "fas fa-toggle-on",
      };
 
    /***** Begin container *****/
@@ -2824,7 +2823,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
 			Mch_WriteAnswersMatchResult (Match,
 						     &Question,
 						     "MCH_TCH_ANS",
-						     Sho_DONT_SHOW);	// Don't show result
+						     Lay_DONT_SHOW);	// Don't show result
 		     else				// Match is paused, not being played
 			Mch_ShowWaitImage (Txt_MATCH_Paused);
 		     break;
@@ -2833,7 +2832,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
 		     Mch_WriteAnswersMatchResult (Match,
 						  &Question,
 						  "MCH_TCH_ANS",
-						  Sho_SHOW);	// Show result
+						  Lay_SHOW);	// Show result
 		     break;
 		  default:
 		     /* Don't write anything */
@@ -2859,7 +2858,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
 
 static void Mch_WriteAnswersMatchResult (const struct Mch_Match *Match,
                                          struct Qst_Question *Question,
-                                         const char *Class,Sho_Show_t ShowResult)
+                                         const char *Class,Lay_Show_t ShowResult)
   {
    /***** Write answer depending on type *****/
    if (Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE)
@@ -2876,7 +2875,7 @@ static void Mch_WriteAnswersMatchResult (const struct Mch_Match *Match,
 
 static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
                                          struct Qst_Question *Question,
-                                         const char *Class,Sho_Show_t ShowResult)
+                                         const char *Class,Lay_Show_t ShowResult)
   {
    unsigned NumOpt;
    bool RowIsOpen = false;
@@ -2926,7 +2925,7 @@ static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
 	       /* Show result (number of users who answered? */
 	       switch (ShowResult)
 		 {
-		  case Sho_SHOW:
+		  case Lay_SHOW:
 		     /* Get number of users who selected this answer */
 		     NumRespondersAns = Mch_DB_GetNumUsrsWhoHaveChosenAns (Match->MchCod,Match->Status.QstInd,Indexes[NumOpt]);
 
@@ -2934,7 +2933,7 @@ static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
 		     Mch_DrawBarNumUsrs (NumRespondersAns,NumRespondersQst,
 					 Question->Answer.Options[Indexes[NumOpt]].Correct);
 		     break;
-		  case Sho_DONT_SHOW:
+		  case Lay_DONT_SHOW:
 		  default:
 		     /* Draw empty bar for this answer
 			in order to show the same layout that the one shown with results */

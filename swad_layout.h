@@ -55,18 +55,25 @@ typedef enum
    Lay_HORIZONTAL_LINE_AT_RIGHT,
   } Lay_HorizontalLineAtRight_t;
 
-#define Lay_NUM_HIGHLIGHT 2
+#define Lay_NUM_SHOW 2
 typedef enum
   {
-   Lay_DONT_HIGHLIGHT,
-   Lay_HIGHLIGHT,
-  } Lay_Highlight_t;
+   Lay_DONT_SHOW,
+   Lay_SHOW,
+  } Lay_Show_t;
 
 typedef enum
   {
    Lay_SHOWING_ONLY_ONE,
    Lay_SHOWING_SEVERAL
   } Lay_ShowingOneOrSeveral_t;
+
+#define Lay_NUM_HIGHLIGHT 2
+typedef enum
+  {
+   Lay_DONT_HIGHLIGHT,
+   Lay_HIGHLIGHT,
+  } Lay_Highlight_t;
 
 #define Lay_NUM_SPACES 2
 typedef enum
@@ -118,6 +125,10 @@ void Lay_BeginHTMLFile (FILE *File,const char *Title);
 
 void Lay_WriteIndex (unsigned Index,const char *Class);
 void Lay_WriteLinkToUpdate (const char *Txt,const char *OnSubmit);
+
+//--------------------------- Show / don't show -------------------------------
+Lay_Show_t Lay_GetShowFromYN (char Ch);
+Lay_Show_t Lay_GetParShow (const char *ParName);
 
 //-------------------------------- Figures ------------------------------------
 void Lay_GetAndShowNumUsrsPerSideColumns (Hie_Level_t HieLvl);

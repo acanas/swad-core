@@ -61,13 +61,13 @@ long FAQ_DB_CreateQaA (const struct Tre_Node *Node)
 /*****************************************************************************/
 
 unsigned FAQ_DB_GetListQaAs (MYSQL_RES **mysql_res,long NodCod,
-                             Sho_Show_t ShowHiddenQaAs)
+                             Lay_Show_t ShowHiddenQaAs)
   {
    extern const char *Tre_DB_Types[Inf_NUM_TYPES];
-   static const char *HiddenSubQuery[Sho_NUM_SHOW] =
+   static const char *HiddenSubQuery[Lay_NUM_SHOW] =
      {
-      [Sho_DONT_SHOW] = " AND faq_questions.Hidden='N'",
-      [Sho_SHOW     ] = "",
+      [Lay_DONT_SHOW] = " AND faq_questions.Hidden='N'",
+      [Lay_SHOW     ] = "",
      };
 
    return (unsigned)

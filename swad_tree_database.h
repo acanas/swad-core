@@ -69,7 +69,7 @@ void Tre_DB_RemoveNodeFromExpandedNodes (long NodCod);
 
 //----------------------------- Specific items --------------------------------
 Exi_Exist_t Tre_DB_CheckListItems (const struct Tre_Node *Node,
-				   Sho_Show_t ShowHiddenResources);
+				   Lay_Show_t ShowHiddenResources);
 long Tre_DB_GetItmCodFromItmInd (const struct Tre_Node *Node,unsigned ItmInd);
 unsigned Tre_DB_GetItmIndBefore (const struct Tre_Node *Node);
 unsigned Tre_DB_GetItmIndAfter (const struct Tre_Node *Node);

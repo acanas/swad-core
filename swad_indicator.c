@@ -77,7 +77,7 @@ typedef enum
 static void Ind_GetParsIndicators (struct Ind_Indicators *Indicators,
 				   unsigned AllowedLvls);
 static void Ind_GetParNumIndicators (struct Ind_Indicators *Indicators);
-static Sho_Show_t Ind_GetIfShowBigList (struct Ind_Indicators *Indicators,
+static Lay_Show_t Ind_GetIfShowBigList (struct Ind_Indicators *Indicators,
 					unsigned NumCrss);
 static void Ind_PutButtonToConfirmIWantToSeeBigList (struct Ind_Indicators *Indicators,
                                                      unsigned NumCrss);
@@ -224,7 +224,7 @@ void Ind_ReqIndicatorsCourses (void)
 	   Ind++)
 	 if (Indicators.Checked[Ind] == HTM_CHECKED)
 	    NumCrssToList += NumCrssWithIndicatorYes[Ind];
-      if (Ind_GetIfShowBigList (&Indicators,NumCrssToList) == Sho_SHOW)
+      if (Ind_GetIfShowBigList (&Indicators,NumCrssToList) == Lay_SHOW)
 	{
 	 /* Show table */
 	 Ind_ShowTableOfCoursesWithIndicators (&Indicators,Ind_INDICATORS_BRIEF,
@@ -362,17 +362,17 @@ static void Ind_GetParNumIndicators (struct Ind_Indicators *Indicators)
 /******* Show form to confirm that I want to see a big list of courses *******/
 /*****************************************************************************/
 
-static Sho_Show_t Ind_GetIfShowBigList (struct Ind_Indicators *Indicators,
+static Lay_Show_t Ind_GetIfShowBigList (struct Ind_Indicators *Indicators,
 					unsigned NumCrss)
   {
-   Sho_Show_t ShowBigList;
+   Lay_Show_t ShowBigList;
 
    /***** If list of courses is too big... *****/
    if (NumCrss <= Cfg_MIN_NUM_COURSES_TO_CONFIRM_SHOW_BIG_LIST)
-      return Sho_SHOW;	// List is not too big ==> show it
+      return Lay_SHOW;	// List is not too big ==> show it
 
    /***** Get parameter with user's confirmation to see a big list of courses *****/
-   if ((ShowBigList = Sho_GetParShow ("ShowBigList")) == Sho_DONT_SHOW)
+   if ((ShowBigList = Lay_GetParShow ("ShowBigList")) == Lay_DONT_SHOW)
       Ind_PutButtonToConfirmIWantToSeeBigList (Indicators,NumCrss);
 
    return ShowBigList;

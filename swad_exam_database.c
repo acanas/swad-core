@@ -1340,7 +1340,7 @@ void Exa_DB_UpdateSession (const struct ExaSes_Session *Session)
   {
    extern const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char Pho_DB_ShowPhotos[Pho_NUM_PHOTOS];
-   extern const char Sho_Show_YN[Sho_NUM_SHOW];
+   extern const char Lay_Show_YN[Lay_NUM_SHOW];
 
    /***** Insert this new exam session into database *****/
    DB_QueryUPDATE ("can not update exam session",
@@ -1363,7 +1363,7 @@ void Exa_DB_UpdateSession (const struct ExaSes_Session *Session)
 	           Session->TimeUTC[Dat_STR_TIME],		// Start time
 		   Session->TimeUTC[Dat_END_TIME],		// End time
 		   Session->Title,				// Title
-		   Sho_Show_YN[Session->Show_UsrResults],	// Show user's results?
+		   Lay_Show_YN[Session->Show_UsrResults],	// Show user's results?
 		   Session->NumCols,				// Number of columns
 		   Pho_DB_ShowPhotos[Session->ShowPhotos],	// Show users' photos?
 		   Session->SesCod,
@@ -1544,7 +1544,7 @@ void Exa_DB_GetSessionTitle (long SesCod,char Title[ExaSes_MAX_BYTES_TITLE + 1])
 
 void Exa_DB_ToggleVisResultsSesUsr (const struct ExaSes_Session *Session)
   {
-   extern const char Sho_Show_YN[Sho_NUM_SHOW];
+   extern const char Lay_Show_YN[Lay_NUM_SHOW];
 
    /***** Toggle visibility of exam session results *****/
    DB_QueryUPDATE ("can not toggle visibility of session results",
@@ -1555,7 +1555,7 @@ void Exa_DB_ToggleVisResultsSesUsr (const struct ExaSes_Session *Session)
 		     " AND exa_sessions.ExaCod=%ld"	// Extra check
 		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
 		     " AND exa_exams.CrsCod=%ld",	// Extra check
-		   Sho_Show_YN[Session->Show_UsrResults],
+		   Lay_Show_YN[Session->Show_UsrResults],
 		   Session->SesCod,
 		   Session->ExaCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);

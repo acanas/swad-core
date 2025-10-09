@@ -197,7 +197,7 @@ static Act_Action_t Inf_ActionsReqLnk[Inf_NUM_TYPES] =
 static struct
   {
    bool MustBeRead[Inf_NUM_TYPES];	// Students must read info?
-   Sho_Show_t ShowMsgMustBeRead;
+   Lay_Show_t ShowMsgMustBeRead;
   } Inf_InfoMustBeRead;
 
 /*****************************************************************************/
@@ -371,7 +371,7 @@ void Inf_ShowInfo (void)
   {
    extern const char *Txt_No_information;
    struct Inf_Info Info;
-   Sho_Show_t ShowWarningNoInfo = Sho_DONT_SHOW;
+   Lay_Show_t ShowWarningNoInfo = Lay_DONT_SHOW;
 
    /***** Begin box *****/
    Inf_BeforeTree (&Info,Vie_VIEW,Inf_SRC_NONE);
@@ -379,7 +379,7 @@ void Inf_ShowInfo (void)
       switch (Info.FromDB.Src)
 	{
 	 case Inf_SRC_NONE:
-	    ShowWarningNoInfo = Sho_SHOW;
+	    ShowWarningNoInfo = Lay_SHOW;
 	    break;
 	 case Inf_EDITOR:
 	    switch (Info.Type)
@@ -392,8 +392,8 @@ void Inf_ShowInfo (void)
 	       case Inf_FAQ:
 	       case Inf_LINKS:
 	       case Inf_ASSESSMENT:
-		  ShowWarningNoInfo = Tre_ShowTree (Info.Type) == 0 ? Sho_SHOW :
-								      Sho_DONT_SHOW;
+		  ShowWarningNoInfo = Tre_ShowTree (Info.Type) == 0 ? Lay_SHOW :
+								      Lay_DONT_SHOW;
 		  break;
 	       case Inf_UNKNOWN_TYPE:
 	       case Inf_PROGRAM:
@@ -403,26 +403,26 @@ void Inf_ShowInfo (void)
 	      }
 	    break;
 	 case Inf_PLAIN_TEXT:
-	    ShowWarningNoInfo = Inf_CheckAndShowPlainTxt (Info.Type) == Exi_DOES_NOT_EXIST ? Sho_SHOW :
-											     Sho_DONT_SHOW;
+	    ShowWarningNoInfo = Inf_CheckAndShowPlainTxt (Info.Type) == Exi_DOES_NOT_EXIST ? Lay_SHOW :
+											     Lay_DONT_SHOW;
 	    break;
 	 case Inf_RICH_TEXT:
-	    ShowWarningNoInfo = Inf_CheckAndShowRichTxt (Info.Type) == Exi_DOES_NOT_EXIST ? Sho_SHOW :
-											    Sho_DONT_SHOW;
+	    ShowWarningNoInfo = Inf_CheckAndShowRichTxt (Info.Type) == Exi_DOES_NOT_EXIST ? Lay_SHOW :
+											    Lay_DONT_SHOW;
 	    break;
 	 case Inf_PAGE:
 	    /***** Open file with web page *****/
-	    ShowWarningNoInfo = Inf_CheckAndShowPage (Info.Type) == Exi_DOES_NOT_EXIST ? Sho_SHOW :
-											 Sho_DONT_SHOW;
+	    ShowWarningNoInfo = Inf_CheckAndShowPage (Info.Type) == Exi_DOES_NOT_EXIST ? Lay_SHOW :
+											 Lay_DONT_SHOW;
 	    break;
 	 case Inf_URL:
 	    /***** Check if file with URL exists *****/
-	    ShowWarningNoInfo = Inf_CheckAndShowURL (Info.Type) == Exi_DOES_NOT_EXIST ? Sho_SHOW :
-											Sho_DONT_SHOW;
+	    ShowWarningNoInfo = Inf_CheckAndShowURL (Info.Type) == Exi_DOES_NOT_EXIST ? Lay_SHOW :
+											Lay_DONT_SHOW;
 	    break;
 	}
 
-      if (ShowWarningNoInfo == Sho_SHOW)
+      if (ShowWarningNoInfo == Lay_SHOW)
 	 Ale_ShowAlert (Ale_INFO,Txt_No_information);
 
    /***** End box *****/
@@ -1221,8 +1221,8 @@ void Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   Inf_InfoMustBeRead.ShowMsgMustBeRead = NumInfos != 0 ? Sho_SHOW :
-							  Sho_DONT_SHOW;
+   Inf_InfoMustBeRead.ShowMsgMustBeRead = NumInfos != 0 ? Lay_SHOW :
+							  Lay_DONT_SHOW;
   }
 
 /*****************************************************************************/
@@ -1249,7 +1249,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
    Inf_Type_t InfoType;
    const char *TitleAction;
 
-   if (Inf_InfoMustBeRead.ShowMsgMustBeRead == Sho_SHOW)
+   if (Inf_InfoMustBeRead.ShowMsgMustBeRead == Lay_SHOW)
      {
       /***** Begin box *****/
       Box_BoxBegin (Txt_Required_reading,NULL,NULL,NULL,Box_CLOSABLE);

@@ -853,7 +853,7 @@ static void Enr_PutUsrsClipboard (void)
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LB\"");
 	 UsrClp_ListUsrsInMyClipboard (Frm_PUT_FORM,
-				       Sho_SHOW);	// Show even if empty
+				       Lay_SHOW);	// Show even if empty
       HTM_TD_End ();
 
    HTM_TR_End ();

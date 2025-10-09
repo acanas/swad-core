@@ -328,7 +328,7 @@ void Tmt_ShowCrsTimeTable (void)
 	                     Gbl.Action.Act == ActPrnMyTT ? Vie_PRINT :
 	                				    Vie_VIEW;
    Grp_MyAllGrps_t MyAllGrps;
-   Sho_Show_t ShowContextualIcons;
+   Lay_Show_t ShowContextualIcons;
 
    /***** Initializations *****/
    switch (Gbl.Action.Act)
@@ -365,14 +365,14 @@ void Tmt_ShowCrsTimeTable (void)
    ShowContextualIcons = Timetable.ContextualIcons.PutIconEditCrsTT ||
 			 Timetable.ContextualIcons.PutIconEditOfficeHours ||
 			 Timetable.ContextualIcons.PutIconGetLink ||
-			 Timetable.ContextualIcons.PutIconPrint ? Sho_SHOW :
-								  Sho_DONT_SHOW;
+			 Timetable.ContextualIcons.PutIconPrint ? Lay_SHOW :
+								  Lay_DONT_SHOW;
    Box_BoxBegin (Txt_TIMETABLE_TYPES[Timetable.Type],
-		 ShowContextualIcons == Sho_SHOW ? Tmt_PutContextualIcons :
+		 ShowContextualIcons == Lay_SHOW ? Tmt_PutContextualIcons :
 						   NULL,
-		 ShowContextualIcons == Sho_SHOW ? &Timetable :
+		 ShowContextualIcons == Lay_SHOW ? &Timetable :
 						   NULL,
-		 ShowContextualIcons == Sho_SHOW ? Help[Timetable.Type] :
+		 ShowContextualIcons == Lay_SHOW ? Help[Timetable.Type] :
 						   NULL,
 		 Box_NOT_CLOSABLE);
 

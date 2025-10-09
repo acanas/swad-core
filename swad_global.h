@@ -47,7 +47,6 @@
 #include "swad_record.h"
 #include "swad_session.h"
 #include "swad_setting.h"
-#include "swad_show.h"
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -174,7 +173,7 @@ struct Globals
      {
       unsigned Id;		// Each file browser in the page has a unique identifier
       Brw_FileBrowser_t Type;
-      Sho_Show_t ShowFullTree;	// Show full tree?
+      Lay_Show_t ShowFullTree;	// Show full tree?
       bool OnlyPublicFiles;	// Show only public files?
       struct
 	{

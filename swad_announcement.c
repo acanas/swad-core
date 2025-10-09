@@ -40,7 +40,6 @@
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
 #include "swad_role.h"
-#include "swad_show.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -58,7 +57,7 @@ static void Ann_GetAnnouncementDataFromRow (MYSQL_RES *mysql_res,
                                             struct Ann_Announcement *Announcement);
 
 static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
-                                    Sho_Show_t ShowAll,
+                                    Lay_Show_t ShowAll,
                                     Usr_Can_t ICanEdit);
 static void Ann_PutParAnnCod (void *AnnCod);
 static void Ann_PutSubjectMessage (const char *Field,const char *Label,
@@ -112,7 +111,7 @@ void Ann_ShowAllAnnouncements (void)
 
 	 /* Show the announcement */
 	 Ann_DrawAnAnnouncement (&Announcement,
-	                         Sho_SHOW,	// Show all announcements
+	                         Lay_SHOW,	// Show all announcements
 	                         ICanEdit);
 	}
 
@@ -161,7 +160,7 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 
 	    /* Show the announcement */
 	    Ann_DrawAnAnnouncement (&Announcement,
-	                            Sho_DONT_SHOW,	// Don't show all announcements
+	                            Lay_DONT_SHOW,	// Don't show all announcements
 	                            Usr_CAN_NOT);	// I can not edit
 	   }
 
@@ -206,7 +205,7 @@ static void Ann_GetAnnouncementDataFromRow (MYSQL_RES *mysql_res,
 /*****************************************************************************/
 
 static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
-                                    Sho_Show_t ShowAll,
+                                    Lay_Show_t ShowAll,
                                     Usr_Can_t ICanEdit)
   {
    extern const char *Txt_Users;
@@ -259,7 +258,7 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
 
 	    switch (ShowAll)
 	      {
-	       case Sho_SHOW:
+	       case Lay_SHOW:
 		  /* Users' roles who can view this announcement */
 		  HTM_Txt (Txt_Users); HTM_Colon ();
 		  for (Role  = Rol_UNK, SomeRolesAreSelected = false;
@@ -274,7 +273,7 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
 			HTM_Txt (Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
 		       }
 		  break;
-	       case Sho_DONT_SHOW:
+	       case Lay_DONT_SHOW:
 	       default:
 		  /***** Put form to mark announcement as seen *****/
 		  Lay_PutContextualLinkIconText (ActAnnSee,NULL,

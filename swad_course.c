@@ -1550,25 +1550,25 @@ void Crs_ChangeCrsStatus (void)
 void Crs_ContEditAfterChgCrs (void)
   {
    extern const char *Txt_Go_to_X_QUESTION;
-   Sho_Show_t ShowButtonToRequestRegistration;
+   Lay_Show_t ShowButtonToRequestRegistration;
    char *Title;
 
    /***** Begin alert *****/
    Ale_ShowLastAlertAndButtonBegin ();
 
    /***** Put button to request my registration in course *****/
-   ShowButtonToRequestRegistration = Sho_DONT_SHOW;
+   ShowButtonToRequestRegistration = Lay_DONT_SHOW;
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_GST:	// I do not belong to any course
-	 ShowButtonToRequestRegistration = Sho_SHOW;
+	 ShowButtonToRequestRegistration = Lay_SHOW;
 	 break;
       case Rol_USR:
 	 ShowButtonToRequestRegistration = Hie_CheckIfUsrBelongsTo (Hie_CRS,
 								    Gbl.Usrs.Me.UsrDat.UsrCod,
 								    Crs_EditingCrs->HieCod,
-								    Hie_DB_ANY_COURSE) == Usr_DONT_BELONG ? Sho_SHOW :
-													    Sho_DONT_SHOW;
+								    Hie_DB_ANY_COURSE) == Usr_DONT_BELONG ? Lay_SHOW :
+													    Lay_DONT_SHOW;
 	 break;
       case Rol_STD:
       case Rol_NET:
@@ -1577,14 +1577,14 @@ void Crs_ContEditAfterChgCrs (void)
 	    ShowButtonToRequestRegistration = Hie_CheckIfUsrBelongsTo (Hie_CRS,
 								       Gbl.Usrs.Me.UsrDat.UsrCod,
 								       Crs_EditingCrs->HieCod,
-								       Hie_DB_ANY_COURSE) == Usr_DONT_BELONG ? Sho_SHOW :
-													       Sho_DONT_SHOW;
+								       Hie_DB_ANY_COURSE) == Usr_DONT_BELONG ? Lay_SHOW :
+													       Lay_DONT_SHOW;
 	 break;
       default:
 	 break;
 
      }
-   if (ShowButtonToRequestRegistration == Sho_SHOW)
+   if (ShowButtonToRequestRegistration == Lay_SHOW)
       Crs_PutButtonToRegisterInCrs ();
 
    /***** Show question "Go to ... ?" *****/

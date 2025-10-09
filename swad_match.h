@@ -30,7 +30,6 @@
 #include "swad_game.h"
 #include "swad_match_print.h"
 #include "swad_scope.h"
-#include "swad_show.h"
 #include "swad_test.h"
 
 /*****************************************************************************/
@@ -77,8 +76,8 @@ struct Mch_Match
       unsigned NumCols;		// Number of columns for answers on teacher's screen
       struct
         {
-         Sho_Show_t QstResults;	// Show global results of current question while playing
-         Sho_Show_t UsrResults;	// Show exam with results of all questions for the student
+         Lay_Show_t QstResults;	// Show global results of current question while playing
+         Lay_Show_t UsrResults;	// Show exam with results of all questions for the student
         } Show;
       bool Playing;		// Is being played now?
       unsigned NumPlayers;

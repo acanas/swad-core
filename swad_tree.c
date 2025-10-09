@@ -456,7 +456,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
       [Tre_CHG_SPC_ITEM			] = Vie_EDIT,
       [Tre_END_EDIT_SPC_LIST_ITEMS	] = Vie_EDIT,
      };
-   Sho_Show_t ShowIconExpandContract;
+   Lay_Show_t ShowIconExpandContract;
    HidVis_HiddenOrVisible_t HiddenOrVisible;
    char *Id;
    unsigned ColSpan;
@@ -466,17 +466,17 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
    bool HighlightNode;
 
    /***** Check if icon expand/contract is necessary *****/
-   ShowIconExpandContract = Tre_GetIfNodeHasChildren (NumNode) == Exi_EXISTS ? Sho_SHOW :
-									       Sho_DONT_SHOW;
-   if (ShowIconExpandContract == Sho_DONT_SHOW)
+   ShowIconExpandContract = Tre_GetIfNodeHasChildren (NumNode) == Exi_EXISTS ? Lay_SHOW :
+									       Lay_DONT_SHOW;
+   if (ShowIconExpandContract == Lay_DONT_SHOW)
      {
-      ShowIconExpandContract = Tre_DB_CheckIfNodeHasTxt (Node) == Exi_EXISTS ? Sho_SHOW :
-									       Sho_DONT_SHOW;
-      if (ShowIconExpandContract == Sho_DONT_SHOW)
+      ShowIconExpandContract = Tre_DB_CheckIfNodeHasTxt (Node) == Exi_EXISTS ? Lay_SHOW :
+									       Lay_DONT_SHOW;
+      if (ShowIconExpandContract == Lay_DONT_SHOW)
 	 ShowIconExpandContract = Tre_DB_CheckListItems (Node,
-							 ViewingOrEditingProgram[ListingType] == Vie_EDIT ? Sho_SHOW :
-													    Sho_DONT_SHOW) == Exi_EXISTS ? Sho_SHOW :
-																	   Sho_DONT_SHOW;
+							 ViewingOrEditingProgram[ListingType] == Vie_EDIT ? Lay_SHOW :
+													    Lay_DONT_SHOW) == Exi_EXISTS ? Lay_SHOW :
+																	   Lay_DONT_SHOW;
      }
 
    /***** Check if this node should be shown as hidden *****/
@@ -518,7 +518,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 
 	 /* Expand/contract this tree node */
 	 HTM_TD_Begin ("class=\"TRE_COL1 RT %s\" rowspan=\"2\"",The_GetColorRows ());
-	    if (ShowIconExpandContract == Sho_SHOW)
+	    if (ShowIconExpandContract == Lay_SHOW)
 	       Tre_PutIconToContractOrExpandNode (Node,ContractedOrExpanded,
 						  ViewingOrEditingProgram[ListingType]);
 	 HTM_TD_End ();

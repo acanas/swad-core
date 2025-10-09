@@ -74,6 +74,17 @@
 #include "swad_user_database.h"
 
 /*****************************************************************************/
+/****************************** Public constants *****************************/
+/*****************************************************************************/
+
+/* Show in database fields */
+const char Lay_Show_YN[Lay_NUM_SHOW] =
+  {
+   [Lay_DONT_SHOW] = 'N',
+   [Lay_SHOW     ] = 'Y',
+  };
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -1719,6 +1730,26 @@ void Lay_WriteLinkToUpdate (const char *Txt,const char *OnSubmit)
       Ico_PutIconTextUpdate (Txt);
       HTM_BUTTON_End ();
    HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/******************* Get if show from a 'Y'/'N' character ********************/
+/*****************************************************************************/
+
+Lay_Show_t Lay_GetShowFromYN (char Ch)
+  {
+   return Ch == 'Y' ? Lay_SHOW :
+		      Lay_DONT_SHOW;
+  }
+
+/*****************************************************************************/
+/************* Get parameter don't show/show from a Y/N parameter ************/
+/*****************************************************************************/
+
+Lay_Show_t Lay_GetParShow (const char *ParName)
+  {
+   return Par_GetParBool (ParName) ? Lay_SHOW :
+				     Lay_DONT_SHOW;
   }
 
 /*****************************************************************************/

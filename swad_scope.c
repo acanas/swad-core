@@ -50,7 +50,7 @@ void Sco_PutSelectorScope (const char *ParName,HTM_Attributes_t Attributes,
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    Hie_Level_t L;
    unsigned ScopeUnsigned;
-   Sho_Show_t ShowScope;
+   Lay_Show_t ShowScope;
 
    HTM_SELECT_Begin (Attributes,NULL,
 		     "id=\"%s\" name=\"%s\""
@@ -63,11 +63,11 @@ void Sco_PutSelectorScope (const char *ParName,HTM_Attributes_t Attributes,
 	 if ((AllowedLvls & (1 << L)))
 	   {
 	    /* Don't put forbidden options in selectable list */
-	    ShowScope = Sho_DONT_SHOW;
+	    ShowScope = Lay_DONT_SHOW;
 	    switch (L)
 	      {
 	       case Hie_SYS:
-		  ShowScope = Sho_SHOW;
+		  ShowScope = Lay_SHOW;
 		  break;
 	       case Hie_CTY:
 	       case Hie_INS:
@@ -75,13 +75,13 @@ void Sco_PutSelectorScope (const char *ParName,HTM_Attributes_t Attributes,
 	       case Hie_DEG:
 	       case Hie_CRS:
 		  if (Gbl.Hierarchy.Node[L].HieCod > 0)
-		     ShowScope = Sho_SHOW;
+		     ShowScope = Lay_SHOW;
 		  break;
 	       default:
 		  break;
 	      }
 
-	    if (ShowScope == Sho_SHOW)
+	    if (ShowScope == Lay_SHOW)
 	      {
 	       /***** Write allowed option *****/
 	       ScopeUnsigned = (unsigned) L;

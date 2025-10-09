@@ -29,7 +29,6 @@
 
 #include <mysql/mysql.h>	// To access MySQL databases
 
-#include "swad_show.h"
 #include "swad_tree.h"
 
 /*****************************************************************************/
@@ -38,7 +37,7 @@
 
 long Bib_DB_CreateRef (const struct Tre_Node *Node);
 unsigned Bib_DB_GetListRefs (MYSQL_RES **mysql_res,long NodCod,
-			     Sho_Show_t ShowHiddenBibRefs);
+			     Lay_Show_t ShowHiddenBibRefs);
 Exi_Exist_t Bib_DB_GetRefDataByCod (MYSQL_RES **mysql_res,long ItmCod);
 
 void Bib_DB_UpdateRef (const struct Tre_Node *Node);

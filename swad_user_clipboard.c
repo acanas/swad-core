@@ -252,7 +252,7 @@ static void UsrClp_ShowClipboard (Rol_Role_t Role)
    Box_BoxBegin (Txt_Clipboard,UsrClp_PutIconsClipboard,&Role,
 		 Hlp_USERS_Clipboard,Box_CLOSABLE);
       UsrClp_ListUsrsInMyClipboard (Frm_DONT_PUT_FORM,
-				    Sho_SHOW);	// Show even if empty
+				    Lay_SHOW);	// Show even if empty
    Box_BoxEnd ();
   }
 
@@ -292,7 +292,7 @@ static void UsrClp_PutIconsClipboard (void *Args)
 /************************* Show users in my clipboard ************************/
 /*****************************************************************************/
 
-void UsrClp_ListUsrsInMyClipboard (Frm_PutForm_t PutForm,Sho_Show_t ShowWhenEmpty)
+void UsrClp_ListUsrsInMyClipboard (Frm_PutForm_t PutForm,Lay_Show_t ShowWhenEmpty)
   {
    extern const char *Usr_NameSelUnsel[Rol_NUM_ROLES];
    extern const char *Usr_ParUsrCod[Rol_NUM_ROLES];
@@ -310,7 +310,7 @@ void UsrClp_ListUsrsInMyClipboard (Frm_PutForm_t PutForm,Sho_Show_t ShowWhenEmpt
    UsrClp_GetUsrsLst ();
 
    /***** Checkbox to selected/unselect all users *****/
-   if (ShowWhenEmpty == Sho_SHOW || Gbl.Usrs.LstUsrs[Rol_UNK].NumUsrs)
+   if (ShowWhenEmpty == Lay_SHOW || Gbl.Usrs.LstUsrs[Rol_UNK].NumUsrs)
      {
       if (PutForm == Frm_PUT_FORM && Gbl.Usrs.LstUsrs[Rol_UNK].NumUsrs)
         {

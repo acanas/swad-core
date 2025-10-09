@@ -31,7 +31,6 @@
 #include "swad_date.h"
 #include "swad_hierarchy_type.h"
 #include "swad_photo.h"
-#include "swad_show.h"
 #include "swad_string.h"
 
 /*****************************************************************************/
@@ -163,7 +162,7 @@ struct ExaSes_Session
    char Title[ExaSes_MAX_BYTES_TITLE + 1];
    HidVis_HiddenOrVisible_t Hidden;
    CloOpe_ClosedOrOpen_t Open;	// If now is between start and end dates
-   Sho_Show_t Show_UsrResults;		// Show exam with results of all questions for the student
+   Lay_Show_t Show_UsrResults;		// Show exam with results of all questions for the student
    unsigned NumCols;		// Number of columns in exam sheets
    Pho_ShowPhotos_t ShowPhotos;	// Whether to display users' photos
   };

@@ -241,7 +241,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
    extern const char *Txt_Message;
    extern const char *Txt_MSG_To;
    unsigned NumUsrsInCrs = 0;	// Initialized to avoid warning
-   Sho_Show_t ShowUsrsInCrs = Sho_DONT_SHOW;
+   Lay_Show_t ShowUsrsInCrs = Lay_DONT_SHOW;
    bool GetUsrsInCrs;
    bool OtherRecipientsBefore = false;
    char *ClassInput;
@@ -331,7 +331,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
 							Msg_PutParsWriteMsg,Messages,
 							"CopyMessageToHiddenFields();");
 
-		  if (ShowUsrsInCrs == Sho_SHOW)
+		  if (ShowUsrsInCrs == Lay_SHOW)
 		     /***** Get lists of selected users *****/
 		     Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
 							    Usr_GET_LIST_ALL_USRS);
@@ -375,14 +375,14 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
 		     Msg_ShowOneUniqueRecipient ();
 		  else
 		    {
-		     if (ShowUsrsInCrs == Sho_SHOW)
+		     if (ShowUsrsInCrs == Lay_SHOW)
 		       {
 			/***** Show potential recipients *****/
 			Usr_ListUsersToSelect (&Gbl.Usrs.Selected,ShowPhotos);
 			OtherRecipientsBefore = true;
 		       }
 		     UsrClp_ListUsrsInMyClipboard (Frm_PUT_FORM,
-						   Sho_DONT_SHOW);	// Don't show if empty
+						   Lay_DONT_SHOW);	// Don't show if empty
 		     if (!OtherRecipientsBefore)
 		        OtherRecipientsBefore = (Gbl.Usrs.LstUsrs[Rol_UNK].NumUsrs != 0);
 		     Msg_WriteFormUsrsIDsOrNicksOtherRecipients (OtherRecipientsBefore);	// Other users (nicknames)

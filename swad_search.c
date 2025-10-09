@@ -634,7 +634,7 @@ static unsigned Sch_SearchCoursesInDB (const char *RangeQuery)
 static unsigned Sch_SearchUsrsInDB (Hie_Level_t HieLvl,Rol_Role_t Role)
   {
    extern const char *Txt_The_search_text_must_be_longer;
-   static Sho_Show_t ShowWarningMessageWritten = Sho_SHOW;
+   static Lay_Show_t ShowWarningMessageWritten = Lay_SHOW;
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
 
    /***** Split user string into words *****/
@@ -648,10 +648,10 @@ static unsigned Sch_SearchUsrsInDB (Hie_Level_t HieLvl,Rol_Role_t Role)
 	 break;
       case Err_ERROR:	// Too short
       default:
-	 if (ShowWarningMessageWritten == Sho_SHOW)	// To avoid repetitions
+	 if (ShowWarningMessageWritten == Lay_SHOW)	// To avoid repetitions
 	   {
 	    Ale_ShowAlert (Ale_WARNING,Txt_The_search_text_must_be_longer);
-	    ShowWarningMessageWritten = Sho_DONT_SHOW;
+	    ShowWarningMessageWritten = Lay_DONT_SHOW;
 	   }
 	 break;
      }

@@ -29,9 +29,6 @@
 
 #include <mysql/mysql.h>	// To access MySQL databases
 
-// #include "swad_link_type.h"
-// #include "swad_hidden_visible.h"
-#include "swad_show.h"
 #include "swad_tree.h"
 
 /*****************************************************************************/
@@ -40,7 +37,7 @@
 
 long Lnk_DB_CreateLnk (const struct Tre_Node *Node);
 unsigned Lnk_DB_GetListLnks (MYSQL_RES **mysql_res,long NodCod,
-                             Sho_Show_t ShowHiddenCrsLinks);
+                             Lay_Show_t ShowHiddenCrsLinks);
 Exi_Exist_t Lnk_DB_GetLnkDataByCod (MYSQL_RES **mysql_res,long ItmCod);
 
 void Lnk_DB_UpdateLnk (const struct Tre_Node *Node);
