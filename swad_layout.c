@@ -81,7 +81,7 @@ extern struct Globals Gbl;
 
 const char *Lay_HighlightClass[Lay_NUM_HIGHLIGHT] =
   {
-   [Lay_NO_HIGHLIGHT] = NULL,
+   [Lay_DONT_HIGHLIGHT] = NULL,
    [Lay_HIGHLIGHT   ] = "class=\"BG_HIGHLIGHT\"",
   };
 

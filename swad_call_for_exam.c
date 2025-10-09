@@ -78,7 +78,7 @@ static void Cfe_PutIconsCallsForExams (__attribute__((unused)) void *Args);
 static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
                                  long ExaCod,
 			         Vie_ViewType_t ViewType,
-			         bool HighLight);
+			         Lay_Highlight_t Highlight);
 static void Cfe_PutIconsCallForExam (void *CallsForExams);
 
 static void Cfe_PutParExaCod (void *ExaCod);
@@ -103,13 +103,13 @@ struct Cfe_CallsForExams *Cfe_GetGlobalCallsForExams (void)
 
 void Cfe_ResetCallsForExams (struct Cfe_CallsForExams *CallsForExams)
   {
-   CallsForExams->NumCallsForExams = 0;
-   CallsForExams->Lst              = NULL;
-   CallsForExams->NewExaCod        = -1L;
-   CallsForExams->HighlightExaCod  = -1L;
-   CallsForExams->HighlightDate[0] = '\0';	// No calls for exams highlighted
-   CallsForExams->ExaCod           = -1L;
-   CallsForExams->Anchor           = NULL;
+   CallsForExams->NumCallsForExams  = 0;
+   CallsForExams->Lst               = NULL;
+   CallsForExams->NewExaCod         = -1L;
+   CallsForExams->Highlight.ExaCod  = -1L;
+   CallsForExams->Highlight.Date[0] = '\0';	// No calls for exams highlighted
+   CallsForExams->ExaCod            = -1L;
+   CallsForExams->Anchor            = NULL;
 
    CallsForExams->CallForExam.CrsCod = -1L;
    CallsForExams->CallForExam.Status = Cfe_STATUS_DEFAULT;
@@ -152,8 +152,7 @@ void Cfe_PutFrmEditACallForExam (void)
       Cfe_GetCallForExamDataByCod (&CallsForExams,ExaCod);
 
    /***** Show call for exam *****/
-   Cfe_ShowCallForExam (&CallsForExams,ExaCod,Vie_EDIT,
-		        false);	// Don't highlight
+   Cfe_ShowCallForExam (&CallsForExams,ExaCod,Vie_EDIT,Lay_DONT_HIGHLIGHT);
 
    /***** Free memory of the call for exam *****/
    Cfe_FreeMemCallForExam (&CallsForExams);
@@ -351,7 +350,7 @@ void Cfe_ReceiveCallForExam1 (void)
    Frm_FreeAnchorStr (&Anchor);
 
    /***** Set exam to be highlighted *****/
-   CallsForExams->HighlightExaCod = ExaCod;
+   CallsForExams->Highlight.ExaCod = ExaCod;
   }
 
 void Cfe_ReceiveCallForExam2 (void)
@@ -360,11 +359,13 @@ void Cfe_ReceiveCallForExam2 (void)
    unsigned NumUsrsToBeNotifiedByEMail;
 
    /***** Notify by email about the new call for exam *****/
-   if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_CALL_FOR_EXAM,CallsForExams->HighlightExaCod)))
-      Cfe_DB_UpdateNumUsrsNotifiedByEMailAboutCallForExam (CallsForExams->HighlightExaCod,NumUsrsToBeNotifiedByEMail);
+   if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_CALL_FOR_EXAM,
+								     CallsForExams->Highlight.ExaCod)))
+      Cfe_DB_UpdateNumUsrsNotifiedByEMailAboutCallForExam (CallsForExams->Highlight.ExaCod,
+							   NumUsrsToBeNotifiedByEMail);
 
    /***** Create a new social note about the new call for exam *****/
-   TmlNot_StoreAndPublishNote (TmlNot_CALL_FOR_EXAM,CallsForExams->HighlightExaCod);
+   TmlNot_StoreAndPublishNote (TmlNot_CALL_FOR_EXAM,CallsForExams->Highlight.ExaCod);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
@@ -395,8 +396,7 @@ void Cfe_PrintCallForExam (void)
    Cfe_GetCallForExamDataByCod (&CallsForExams,ExaCod);
 
    /***** Show call for exam *****/
-   Cfe_ShowCallForExam (&CallsForExams,ExaCod,Vie_PRINT,
-			false);	// Don't highlight
+   Cfe_ShowCallForExam (&CallsForExams,ExaCod,Vie_PRINT,Lay_DONT_HIGHLIGHT);
 
    /***** Free memory of the call for exam *****/
    Cfe_FreeMemCallForExam (&CallsForExams);
@@ -426,8 +426,7 @@ void Cfe_ReqRemCallForExam (void)
       /* Show call for exam */
       Cfe_AllocMemCallForExam (&CallsForExams);
       Cfe_GetCallForExamDataByCod (&CallsForExams,ExaCod);
-      Cfe_ShowCallForExam (&CallsForExams,ExaCod,Vie_VIEW,
-			   false);	// Don't highlight
+      Cfe_ShowCallForExam (&CallsForExams,ExaCod,Vie_VIEW,Lay_DONT_HIGHLIGHT);
       Cfe_FreeMemCallForExam (&CallsForExams);
 
    /* End alert */
@@ -498,7 +497,7 @@ void Cfe_HideCallForExam (void)
    Cfe_DB_HideCallForExam (ExaCod);
 
    /***** Set exam to be highlighted *****/
-   CallsForExams->HighlightExaCod = ExaCod;
+   CallsForExams->Highlight.ExaCod = ExaCod;
   }
 
 /*****************************************************************************/
@@ -522,7 +521,7 @@ void Cfe_UnhideCallForExam (void)
    Cfe_DB_UnhideCallForExam (ExaCod);
 
    /***** Set exam to be highlighted *****/
-   CallsForExams->HighlightExaCod = ExaCod;
+   CallsForExams->Highlight.ExaCod = ExaCod;
   }
 
 /*****************************************************************************/
@@ -573,7 +572,7 @@ void Cfe_ListCallsForExamsCod (void)
 
    /***** Mark possible notification as seen *****/
    Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_CALL_FOR_EXAM,
-				   CallsForExams.HighlightExaCod);
+				   CallsForExams.Highlight.ExaCod);
   }
 
 /*****************************************************************************/
@@ -607,7 +606,7 @@ static void Cfe_GetExaCodToHighlight (struct Cfe_CallsForExams *CallsForExams)
   {
    /***** Get the call for exam code
           of the call for exam to highlight *****/
-   CallsForExams->HighlightExaCod = ParCod_GetPar (ParCod_Exa);
+   CallsForExams->Highlight.ExaCod = ParCod_GetPar (ParCod_Exa);
   }
 
 /*****************************************************************************/
@@ -618,7 +617,7 @@ static void Cfe_GetDateToHighlight (struct Cfe_CallsForExams *CallsForExams)
   {
    /***** Get the date (in YYYYMMDD format)
           of the calls for exams to highlight *****/
-   Par_GetParText ("Date",CallsForExams->HighlightDate,4 + 2 + 2);
+   Par_GetParText ("Date",CallsForExams->Highlight.Date,4 + 2 + 2);
   }
 
 /*****************************************************************************/
@@ -635,7 +634,7 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
    unsigned NumCalls;
    unsigned NumCall;
    long ExaCod;
-   bool HighLight;
+   Lay_Highlight_t Highlight;
 
    /***** Get calls for exams (the most recent first)
           in current course from database *****/
@@ -662,16 +661,15 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
 	    Cfe_GetCallForExamDataByCod (CallsForExams,ExaCod);
 
 	    /***** Show call for exam *****/
-	    HighLight = false;
-	    if (ExaCod == CallsForExams->HighlightExaCod)
-	       HighLight = true;
-	    else if (CallsForExams->HighlightDate[0])
-	      {
-	       if (!strcmp (CallsForExams->CallForExam.ExamDate.YYYYMMDD,
-			    CallsForExams->HighlightDate))
-		  HighLight = true;
-	      }
-	    Cfe_ShowCallForExam (CallsForExams,ExaCod,ViewType,HighLight);
+	    if (ExaCod == CallsForExams->Highlight.ExaCod)
+	       Highlight = Lay_HIGHLIGHT;
+	    else if (CallsForExams->Highlight.Date[0])
+	       Highlight = strcmp (CallsForExams->CallForExam.ExamDate.YYYYMMDD,
+				   CallsForExams->Highlight.Date) ? Lay_DONT_HIGHLIGHT :
+								    Lay_HIGHLIGHT;
+	    else
+	       Highlight = Lay_DONT_HIGHLIGHT;
+	    Cfe_ShowCallForExam (CallsForExams,ExaCod,ViewType,Highlight);
 
 	    /***** Free memory of the call for exam *****/
 	    Cfe_FreeMemCallForExam (CallsForExams);
@@ -867,7 +865,7 @@ void Cfe_GetCallForExamDataByCod (struct Cfe_CallsForExams *CallsForExams,
 static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
                                  long ExaCod,
 				 Vie_ViewType_t ViewType,
-				 bool HighLight)
+				 Lay_Highlight_t Highlight)
   {
    extern unsigned Nam_MaxChars[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Hlp_ASSESSMENT_Calls_for_exams_new_call;
@@ -944,19 +942,23 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 							  NULL;
    HelpLink = ViewType == Vie_EDIT ? *Forms[OldNewCFE].Help :
 				     NULL;
-   if (HighLight)
+   switch (Highlight)
      {
-      /* Show pending alerts */
-      Ale_ShowAlerts (Anchor);
+      case Lay_HIGHLIGHT:
+	 /* Show pending alerts */
+	 Ale_ShowAlerts (Anchor);
 
-      /* Begin highlighted box */
-      Box_BoxShadowBegin (NULL,FunctionToDrawContextualIcons,CallsForExams,
-                          HelpLink);
+	 /* Begin highlighted box */
+	 Box_BoxShadowBegin (NULL,FunctionToDrawContextualIcons,CallsForExams,
+			     HelpLink);
+	 break;
+      case Lay_DONT_HIGHLIGHT:
+      default:
+	 /* Begin normal box */
+	 Box_BoxBegin (NULL,FunctionToDrawContextualIcons,CallsForExams,
+		       HelpLink,Box_NOT_CLOSABLE);
+	 break;
      }
-   else	// Don't highlight
-      /* Begin normal box */
-      Box_BoxBegin (NULL,FunctionToDrawContextualIcons,CallsForExams,
-                    HelpLink,Box_NOT_CLOSABLE);
 
    if (ViewType == Vie_EDIT)
      {

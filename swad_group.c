@@ -1870,7 +1870,7 @@ static void Grp_ListGrpsOfATypeToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp
 	       HTM_TD_End ();
 
 	       Grp_WriteRowGrp (Grp,IBelongToThisGroup == Usr_BELONG ? Lay_HIGHLIGHT :
-								       Lay_NO_HIGHLIGHT);
+								       Lay_DONT_HIGHLIGHT);
 
 	    HTM_TR_End ();
 	   }
@@ -2056,16 +2056,22 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 
       /***** Highlight this group type? *****/
       Highlight = GrpTyp->GrpTypCod == SelectedGrpTypCod ? Lay_HIGHLIGHT :
-							   Lay_NO_HIGHLIGHT;
+							   Lay_DONT_HIGHLIGHT;
      }
    else
-      Highlight = Lay_NO_HIGHLIGHT;
+      Highlight = Lay_DONT_HIGHLIGHT;
 
    /***** Begin fieldset *****/
-   if (Highlight == Lay_HIGHLIGHT)
-      HTM_FIELDSET_Begin ("class=\"HIGHLIGHT_%s\"",The_GetSuffix ());
-   else
-      HTM_FIELDSET_Begin (NULL);
+   switch (Highlight)
+     {
+      case Lay_HIGHLIGHT:
+	 HTM_FIELDSET_Begin ("class=\"HIGHLIGHT_%s\"",The_GetSuffix ());
+	 break;
+      case Lay_DONT_HIGHLIGHT:
+      default:
+	 HTM_FIELDSET_Begin (NULL);
+	 break;
+     }
    HTM_LEGEND (GrpTyp->Name);
 
       /***** Alert with groups opening date *****/
@@ -2260,7 +2266,7 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 	       HTM_TD_End ();
 
 	       Grp_WriteRowGrp (Grp,IBelongToThisGroup == Usr_BELONG ? Lay_HIGHLIGHT :
-								       Lay_NO_HIGHLIGHT);
+								       Lay_DONT_HIGHLIGHT);
 
 	    HTM_TR_End ();
 	   }
@@ -2386,7 +2392,7 @@ static void Grp_ListGrpsToAddOrRemUsrs (const struct GroupType *GrpTyp,long UsrC
 
 	       /* Write cell for group */
 	       Grp_WriteRowGrp (Grp,UsrBelongsToThisGroup == Usr_BELONG ? Lay_HIGHLIGHT :
-									  Lay_NO_HIGHLIGHT);
+									  Lay_DONT_HIGHLIGHT);
 
 	    /* End row */
 	    HTM_TR_End ();
@@ -2483,7 +2489,7 @@ static void Grp_ListGrpsForMultipleSelection (const struct GroupType *GrpTyp)
 	       HTM_TD_End ();
 
 	       Grp_WriteRowGrp (Grp,IBelongToThisGroup == Usr_BELONG ? Lay_HIGHLIGHT :
-								       Lay_NO_HIGHLIGHT);
+								       Lay_DONT_HIGHLIGHT);
 
 	    HTM_TR_End ();
 	   }
@@ -2635,7 +2641,7 @@ static void Grp_WriteRowGrp (const struct Group *Grp,Lay_Highlight_t Highlight)
    char StrMaxStudents[Cns_MAX_DIGITS_UINT + 1];
    static const char *HighlightClass[Lay_NUM_HIGHLIGHT] =
      {
-      [Lay_NO_HIGHLIGHT] = "",
+      [Lay_DONT_HIGHLIGHT] = "",
       [Lay_HIGHLIGHT   ] = " BG_HIGHLIGHT",
      };
    static const char **TitleFormat[CloOpe_NUM_CLOSED_OPEN] =

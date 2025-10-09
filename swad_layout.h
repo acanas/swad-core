@@ -58,7 +58,7 @@ typedef enum
 #define Lay_NUM_HIGHLIGHT 2
 typedef enum
   {
-   Lay_NO_HIGHLIGHT,
+   Lay_DONT_HIGHLIGHT,
    Lay_HIGHLIGHT,
   } Lay_Highlight_t;
 

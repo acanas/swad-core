@@ -442,7 +442,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
       /* Draw notice */
       Not_DrawANotice (TypeNoticesListing,&Notice,
 		       Notice.NotCod == HighlightNotCod ? Lay_HIGHLIGHT :
-							  Lay_NO_HIGHLIGHT);
+							  Lay_DONT_HIGHLIGHT);
      }
 
    switch (TypeNoticesListing)
@@ -538,7 +538,7 @@ static void Not_GetDataAndShowNotice (long NotCod)
       Not_GetNoticeDataFromRow (mysql_res,&Notice,Not_LIST_FULL_NOTICES);
 
       /***** Draw the notice *****/
-      Not_DrawANotice (Not_LIST_FULL_NOTICES,&Notice,Lay_NO_HIGHLIGHT);
+      Not_DrawANotice (Not_LIST_FULL_NOTICES,&Notice,Lay_DONT_HIGHLIGHT);
      }
 
    /***** Free structure that stores the query result *****/
@@ -624,7 +624,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
      };
    static const char *ContainerHighLightClass[Lay_NUM_HIGHLIGHT] =
      {
-      [Lay_NO_HIGHLIGHT] = "",
+      [Lay_DONT_HIGHLIGHT] = "",
       [Lay_HIGHLIGHT   ] = " NOTICE_HIGHLIGHT",
      };
    static unsigned UniqueId = 0;

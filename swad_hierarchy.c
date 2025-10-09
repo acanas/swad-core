@@ -1711,10 +1711,10 @@ static void Hie_WriteMyHierarchyNodes (struct Hie_Node Hie[Hie_NUM_LEVELS],
       if (HieLvl < Hie_CRS)
 	 Highlight = Gbl.Hierarchy.Node[HieLvl + 1].HieCod <= 0 &&
 		     Gbl.Hierarchy.Node[HieLvl].HieCod == Hie[HieLvl].HieCod ? Lay_HIGHLIGHT :
-									       Lay_NO_HIGHLIGHT;
+									       Lay_DONT_HIGHLIGHT;
       else
 	 Highlight = Gbl.Hierarchy.Node[HieLvl].HieCod == Hie[HieLvl].HieCod ? Lay_HIGHLIGHT :
-									       Lay_NO_HIGHLIGHT;
+									       Lay_DONT_HIGHLIGHT;
 
       IsLastItemInLevel[HieLvl] = NumNode == NumNodes - 1 ? Lay_LAST :
 							    Lay_NO_LAST;

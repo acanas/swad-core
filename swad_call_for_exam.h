@@ -79,8 +79,11 @@ struct Cfe_CallsForExams
    unsigned NumCallsForExams;		// Number of calls for exams in the list
    struct Cfe_ExamCodeAndDate *Lst;	// List of calls for exams
    long NewExaCod;			// New call for exam just created
-   long HighlightExaCod;		// Call for exam to be highlighted
-   char HighlightDate[4 + 2 + 2 + 1];	// Date with calls for exams to be highlighted (in YYYYMMDD format)
+   struct
+     {
+      long ExaCod;			// Call for exam to be highlighted
+      char Date[4 + 2 + 2 + 1];		// Date with calls for exams to be highlighted (in YYYYMMDD format)
+     } Highlight;
    long ExaCod;				// Used to put contextual icons
    const char *Anchor;			// Used to put contextual icons
    struct Cfe_CallForExam CallForExam;
