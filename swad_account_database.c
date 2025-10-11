@@ -142,7 +142,7 @@ long Acc_DB_CreateNewUsr (const struct Usr_Data *UsrDat)
 				Pri_VisibilityDB[UsrDat->PhotoVisibility],
 				Pri_VisibilityDB[UsrDat->BaPrfVisibility],
 				Pri_VisibilityDB[UsrDat->ExPrfVisibility],
-				UsrDat->CtyCod,
+				UsrDat->HieCods[Hie_CTY],
 				UsrDat->Phone[0],
 				UsrDat->Phone[1],
 				BirthdayStrDB,
@@ -183,7 +183,7 @@ void Acc_DB_UpdateUsrData (const struct Usr_Data *UsrDat)
 	           UsrDat->Surname2,
 	           UsrDat->FrstName,
 	           Usr_StringsSexDB[UsrDat->Sex],
-	           UsrDat->CtyCod,
+	           UsrDat->HieCods[Hie_CTY],
 	           UsrDat->Phone[0],
 	           UsrDat->Phone[1],
 	           BirthdayStrDB,
@@ -206,8 +206,8 @@ void Acc_DB_UpdateMyInstitutionCenterDepartment (void)
 		          "DptCod=%ld"
 		   " WHERE UsrCod=%ld",
 	           Gbl.Usrs.Me.UsrDat.InsCtyCod,
-	           Gbl.Usrs.Me.UsrDat.InsCod,
-	           Gbl.Usrs.Me.UsrDat.Tch.HieCod,
+	           Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS],
+	           Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR],
 	           Gbl.Usrs.Me.UsrDat.Tch.DptCod,
 	           Gbl.Usrs.Me.UsrDat.UsrCod);
   }

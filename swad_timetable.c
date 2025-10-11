@@ -761,7 +761,7 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
 		 Column < Tmt_MAX_COLUMNS_PER_CELL;
 		 Column++)
 	      {
-	       Tmt_TimeTable[Weekday][Interval].Columns[Column].CrsCod            = -1L;
+	       Tmt_TimeTable[Weekday][Interval].Columns[Column].HieCod            = -1L;
 	       Tmt_TimeTable[Weekday][Interval].Columns[Column].GrpCod            = -1L;
 	       Tmt_TimeTable[Weekday][Interval].Columns[Column].IntervalType      = Tmt_FREE_INTERVAL;
 	       Tmt_TimeTable[Weekday][Interval].Columns[Column].ClassType         = Tmt_FREE;
@@ -877,7 +877,7 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
 			      Tmt_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].GrpCod = -1;
 
 			/* Course code (row[6]) */
-			Tmt_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].CrsCod =
+			Tmt_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].HieCod =
 			   (Timetable->Type == Tmt_MY_TIMETABLE ? Str_ConvertStrCodToLongCod (row[6]) :
 								  Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 			/* falls through */
@@ -1114,7 +1114,7 @@ static void Tmt_DrawTimeTable (const struct Tmt_Timetable *Timetable)
 					    &WhichCell,
 					    Tmt_NUM_MINICOLUMNS_PER_DAY /
 					    ColumnsToDrawIncludingExtraColumn,
-					    Tmt_TimeTable[WhichCell.Weekday][WhichCell.Interval].Columns[WhichCell.Column].CrsCod,
+					    Tmt_TimeTable[WhichCell.Weekday][WhichCell.Interval].Columns[WhichCell.Column].HieCod,
 					    Tmt_TimeTable[WhichCell.Weekday][WhichCell.Interval].Columns[WhichCell.Column].GrpCod,
 					    Tmt_TimeTable[WhichCell.Weekday][WhichCell.Interval].Columns[WhichCell.Column].IntervalType,
 					    Tmt_TimeTable[WhichCell.Weekday][WhichCell.Interval].Columns[WhichCell.Column].ClassType,

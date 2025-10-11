@@ -47,8 +47,8 @@ void Ins_DrawInstitLogoAndNameWithLink (struct Hie_Node *Ins,Act_Action_t Action
 
 void Ins_ShowInssOfCurrentCty (void);
 void Ins_EditInstitutions (void);
-void Ins_GetBasicListOfInstitutions (long CtyCod);
-void Ins_GetFullListOfInstitutions (long CtyCod);
+void Ins_GetBasicListOfInstitutions (long HieCod);
+void Ins_GetFullListOfInstitutions (long HieCod);
 
 void Ins_WriteInstitutionNameAndCty (long HieCod);
 Err_SuccessOrError_t Ins_GetInstitDataByCod (struct Hie_Node *Node);

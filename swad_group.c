@@ -3317,13 +3317,13 @@ Grp_HasFileZones_t Grp_GetFileZones (long GrpCod)
 /********************** Get data of a group from its code ********************/
 /*****************************************************************************/
 
-void Grp_GetGroupDataByCod (long *CrsCod,long *GrpTypCod,struct Group *Grp)
+void Grp_GetGroupDataByCod (long *HieCod,long *GrpTypCod,struct Group *Grp)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Reset values *****/
-   *CrsCod               = -1L;
+   *HieCod               = -1L;
    *GrpTypCod            = -1L;
    Grp->Name[0]          = '\0';
    Grp->Room.RooCod      = -1L;
@@ -3353,7 +3353,7 @@ void Grp_GetGroupDataByCod (long *CrsCod,long *GrpTypCod,struct Group *Grp)
 	    Err_WrongGrpTypExit ();
 
 	 /* Get the code of the course (row[1]) */
-	 if ((*CrsCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
+	 if ((*HieCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
 	    Err_WrongCourseExit ();
 
 	 /* Get the name of the group (row[2]) */

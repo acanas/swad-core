@@ -122,7 +122,7 @@ static void Crs_GetCourseDataFromRow (MYSQL_RES *mysql_res,
 
 static void Crs_EmptyCourseCompletely (long HieCod);
 
-static void Crs_PutParCrsCod (void *CrsCod);
+static void Crs_PutParCrsCod (void *HieCod);
 static void Crs_PutButtonToRegisterInCrs (void);
 
 static void Crs_WriteHeadCrss (Crs_WriteColumnAccepted_t WriteColumnAccepted);
@@ -304,8 +304,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
   {
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    unsigned NumMyCrs;
-   long CrsCod;
-   long DegCod;
+   long HieCods[Hie_NUM_LEVELS];
    long LastDegCod;
    char CrsShortName[Nam_MAX_BYTES_SHRT_NAME + 1];
    char DegShortName[Nam_MAX_BYTES_SHRT_NAME + 1];
@@ -336,22 +335,22 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 		 NumMyCrs < Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num;
 		 NumMyCrs++)
 	      {
-	       CrsCod = Gbl.Usrs.Me.Hierarchy[Hie_CRS].Nodes[NumMyCrs].HieCod;
-	       DegCod = Gbl.Usrs.Me.Hierarchy[Hie_CRS].Nodes[NumMyCrs].PrtCod;
+	       HieCods[Hie_CRS] = Gbl.Usrs.Me.Hierarchy[Hie_CRS].Nodes[NumMyCrs].HieCod;
+	       HieCods[Hie_DEG] = Gbl.Usrs.Me.Hierarchy[Hie_CRS].Nodes[NumMyCrs].PrtCod;
 
-	       Crs_DB_GetShortNamesByCod (CrsCod,CrsShortName,DegShortName);
+	       Crs_DB_GetShortNamesByCod (HieCods[Hie_CRS],CrsShortName,DegShortName);
 
-	       if (DegCod != LastDegCod)
+	       if (HieCods[Hie_DEG] != LastDegCod)
 		 {
 		  if (LastDegCod > 0)
 		     HTM_OPTGROUP_End ();
 		  HTM_OPTGROUP_Begin (DegShortName);
-		  LastDegCod = DegCod;
+		  LastDegCod = HieCods[Hie_DEG];
 		 }
 
-	       HTM_OPTION (HTM_Type_LONG,&CrsCod,
-			   CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod ? HTM_SELECTED :
-									  HTM_NO_ATTR,
+	       HTM_OPTION (HTM_Type_LONG,&HieCods[Hie_CRS],
+			   HieCods[Hie_CRS] == Gbl.Hierarchy.Node[Hie_CRS].HieCod ? HTM_SELECTED :
+										    HTM_NO_ATTR,
 			   "%s",CrsShortName);
 	      }
 
@@ -1614,10 +1613,10 @@ void Crs_ContEditAfterChgCrs (void)
 /******************** Write parameter with code of degree ********************/
 /*****************************************************************************/
 
-static void Crs_PutParCrsCod (void *CrsCod)
+static void Crs_PutParCrsCod (void *HieCod)
   {
-   if (CrsCod)
-      ParCod_PutPar (ParCod_Crs,*((long *) CrsCod));
+   if (HieCod)
+      ParCod_PutPar (ParCod_Crs,*((long *) HieCod));
   }
 
 /*****************************************************************************/

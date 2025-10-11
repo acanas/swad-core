@@ -79,12 +79,12 @@ static void Cty_PutIconsEditingCountries (__attribute__((unused)) void *Args);
 static void Cty_GetFullListOfCountries (void);
 
 static void Cty_ListCountriesForEdition (void);
-static void Cty_PutParOthCtyCod (void *CtyCod);
+static void Cty_PutParOthCtyCod (void *HieCod);
 
-static void Cty_UpdateCtyName (long CtyCod,const char *FldName,const char *NewCtyName);
+static void Cty_UpdateCtyName (long HieCod,const char *FldName,const char *NewCtyName);
 
 static void Cty_ShowAlertAndButtonToGoToCty (void);
-static void Cty_PutParGoToCty (void *CtyCod);
+static void Cty_PutParGoToCty (void *HieCod);
 
 static void Cty_PutFormToCreateCountry (void);
 static void Cty_PutHeadCountriesForEdition (void);
@@ -817,7 +817,7 @@ void Cty_WriteSelectorOfCountry (void)
 /*****************************************************************************/
 // If ClassLink == NULL ==> do not put link
 
-void Cty_WriteCountryName (long CtyCod)
+void Cty_WriteCountryName (long HieCod)
   {
    char CtyName[Cty_MAX_BYTES_NAME + 1];
    Frm_PutForm_t PutForm = Frm_CheckIfInside () == Frm_OUTSIDE_FORM &&				// Only if not inside another form
@@ -825,7 +825,7 @@ void Cty_WriteCountryName (long CtyCod)
                         						   Frm_DONT_PUT_FORM;
 
    /***** Get country name *****/
-   Cty_GetCountryNameInLanguage (CtyCod,Gbl.Prefs.Language,CtyName);
+   Cty_GetCountryNameInLanguage (HieCod,Gbl.Prefs.Language,CtyName);
 
    switch (PutForm)
      {
@@ -836,7 +836,7 @@ void Cty_WriteCountryName (long CtyCod)
       case Frm_PUT_FORM:
 	 /***** Write country name with link to country information *****/
 	 Frm_BeginForm (ActSeeCtyInf);
-	    ParCod_PutPar (ParCod_Cty,CtyCod);
+	    ParCod_PutPar (ParCod_Cty,HieCod);
 	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtyInf),NULL,
 				     "class=\"BT_LINK\"");
 	       HTM_Txt (CtyName);
@@ -956,11 +956,11 @@ void Cty_FlushCacheCountryName (void)
    Gbl.Cache.CountryName.Status = Cac_INVALID;
   }
 
-void Cty_GetCountryNameInLanguage (long CtyCod,Lan_Language_t Language,
+void Cty_GetCountryNameInLanguage (long HieCod,Lan_Language_t Language,
 				   char CtyName[Cty_MAX_BYTES_NAME + 1])
   {
    /***** 1. Fast check: Trivial case *****/
-   if (CtyCod <= 0)
+   if (HieCod <= 0)
      {
       CtyName[0] = '\0';	// Empty name
       return;
@@ -968,7 +968,7 @@ void Cty_GetCountryNameInLanguage (long CtyCod,Lan_Language_t Language,
 
    /***** 2. Fast check: If cached... *****/
    if (Gbl.Cache.CountryName.Status == Cac_VALID &&
-       CtyCod   == Gbl.Cache.CountryName.HieCod &&
+       HieCod   == Gbl.Cache.CountryName.HieCod &&
        Language == Gbl.Cache.CountryName.Language)
      {
       Str_Copy (CtyName,Gbl.Cache.CountryName.CtyName,Cty_MAX_BYTES_NAME);
@@ -976,8 +976,8 @@ void Cty_GetCountryNameInLanguage (long CtyCod,Lan_Language_t Language,
      }
 
    /***** 3. Slow: get country name from database *****/
-   Cty_DB_GetCountryName (CtyCod,Language,CtyName);
-   Gbl.Cache.CountryName.HieCod   = CtyCod;
+   Cty_DB_GetCountryName (HieCod,Language,CtyName);
+   Gbl.Cache.CountryName.HieCod   = HieCod;
    Gbl.Cache.CountryName.Language = Language;
    Str_Copy (Gbl.Cache.CountryName.CtyName,CtyName,Cty_MAX_BYTES_NAME);
    Gbl.Cache.CountryName.Status = Cac_VALID;
@@ -1113,10 +1113,10 @@ static void Cty_ListCountriesForEdition (void)
 /******************** Write parameter with code of country *******************/
 /*****************************************************************************/
 
-static void Cty_PutParOthCtyCod (void *CtyCod)
+static void Cty_PutParOthCtyCod (void *HieCod)
   {
-   if (CtyCod)
-      ParCod_PutPar (ParCod_OthCty,*((long *) CtyCod));
+   if (HieCod)
+      ParCod_PutPar (ParCod_OthCty,*((long *) HieCod));
   }
 
 /*****************************************************************************/
@@ -1252,10 +1252,10 @@ void Cty_RenameCountry (void)
 /************ Update institution name in table of institutions ***************/
 /*****************************************************************************/
 
-static void Cty_UpdateCtyName (long CtyCod,const char *FldName,const char *NewCtyName)
+static void Cty_UpdateCtyName (long HieCod,const char *FldName,const char *NewCtyName)
   {
    /***** Update country changing old name by new name */
-   Cty_DB_UpdateCtyField (CtyCod,FldName,NewCtyName);
+   Cty_DB_UpdateCtyField (HieCod,FldName,NewCtyName);
 
    /***** Flush cache *****/
    Cty_FlushCacheCountryName ();
@@ -1336,10 +1336,10 @@ static void Cty_ShowAlertAndButtonToGoToCty (void)
       Ale_ShowAlerts (NULL);
   }
 
-static void Cty_PutParGoToCty (void *CtyCod)
+static void Cty_PutParGoToCty (void *HieCod)
   {
-   if (CtyCod)
-      ParCod_PutPar (ParCod_Cty,*((long *) CtyCod));
+   if (HieCod)
+      ParCod_PutPar (ParCod_Cty,*((long *) HieCod));
   }
 
 /*****************************************************************************/

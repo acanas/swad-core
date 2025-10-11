@@ -2969,13 +2969,13 @@ static void Sta_ShowNumHitsPerCountry (Sta_CountType_t CountType,
    unsigned Ranking;
    struct Sta_Hits Hits;
    MYSQL_ROW row;
-   long CtyCod;
+   long HieCod;	// Country code
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (Txt_No_INDEX                  ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]    ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_STAT_COUNT_TYPE[CountType],HTM_HEAD_LEFT  );
+      HTM_TH (Txt_No_INDEX                     ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_CTY],HTM_HEAD_CENTER);
+      HTM_TH (Txt_STAT_COUNT_TYPE[CountType]   ,HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
    /***** Compute maximum number of hits per country *****/
@@ -2989,19 +2989,19 @@ static void Sta_ShowNumHitsPerCountry (Sta_CountType_t CountType,
      {
       /* Get country code */
       row = mysql_fetch_row (mysql_res);
-      CtyCod = Str_ConvertStrCodToLongCod (row[0]);
+      HieCod = Str_ConvertStrCodToLongCod (row[0]);
 
       HTM_TR_Begin (NULL);
 
 	 /* Write ranking of this country */
 	 HTM_TD_Begin ("class=\"RM LOG_%s\"",The_GetSuffix ());
-	    if (CtyCod > 0)
+	    if (HieCod > 0)
 	       HTM_Unsigned (++Ranking);
 	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write country */
-	 Sta_WriteCountry (CtyCod);
+	 Sta_WriteCountry (HieCod);
 
 	 /* Draw bar proportional to number of hits */
 	 if (Str_GetDoubleFromStr (row[1],&Hits.Num) == Err_ERROR)

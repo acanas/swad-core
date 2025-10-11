@@ -351,6 +351,7 @@ static void Enr_NotifyAfterEnrolment (const struct Usr_Data *UsrDat,
      };
    bool CreateNotif;
    bool NotifyByEmail;
+   long HieCods[Hie_NUM_LEVELS];
 
    /***** Check if user's role is allowed *****/
    if (!NotifyEvent[NewRole])
@@ -369,13 +370,16 @@ static void Enr_NotifyAfterEnrolment (const struct Usr_Data *UsrDat,
    NotifyByEmail = CreateNotif && Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER &&
 		   (UsrDat->NtfEvents.SendEmail & (1 << NotifyEvent[NewRole]));
    if (CreateNotif)
+     {
+      HieCods[Hie_INS] = Gbl.Hierarchy.Node[Hie_INS].HieCod;
+      HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
+      HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod;
+      HieCods[Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod;
       Ntf_DB_StoreNotifyEventToUsr (NotifyEvent[NewRole],UsrDat->UsrCod,-1L,
 				    (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
 					                            0),
-				    Gbl.Hierarchy.Node[Hie_INS].HieCod,
-				    Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-				    Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-				    Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+				    HieCods);
+     }
   }
 
 /*****************************************************************************/

@@ -38,7 +38,7 @@
 /*****************************************************************************/
 
 long Ins_DB_CreateInstitution (const struct Hie_Node *Ins,Hie_Status_t Status);
-void Ins_DB_UpdateInsCty (long HieCod,long CtyCod);
+void Ins_DB_UpdateInsCty (long HieCods[Hie_NUM_LEVELS]);
 void Ins_DB_UpdateInsStatus (long HieCod,Hie_Status_t Status);
 void Ins_DB_UpdateInsName (long HieCod,const char *FldName,const char *NewName);
 void Ins_DB_UpdateInsWWW (long HieCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1]);
@@ -72,7 +72,7 @@ unsigned Ins_DB_SearchInss (MYSQL_RES **mysql_res,
                             const char *RangeQuery);
 
 unsigned Ins_DB_GetNumInssInSys (__attribute__((unused)) long HieCod);
-unsigned Ins_DB_GetNumInssInCty (long CtyCod);
+unsigned Ins_DB_GetNumInssInCty (long HieCod);
 
 unsigned Ins_DB_GetNumInssWithCtrs (Hie_Level_t HieLvl,long HieCod);
 unsigned Ins_DB_GetNumInssWithDegs (Hie_Level_t HieLvl,long HieCod);

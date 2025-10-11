@@ -66,13 +66,13 @@ void Cty_PutParCtyOrder (void);
 void Cty_EditCountries (void);
 void Cty_GetBasicListOfCountries (void);
 void Cty_WriteSelectorOfCountry (void);
-void Cty_WriteCountryName (long CtyCod);
+void Cty_WriteCountryName (long HieCod);
 Err_SuccessOrError_t Cty_GetCountrDataByCod (struct Hie_Node *Node);
 void Cty_GetNamesAndWWWsByCod (struct Hie_Node *Cty,
 			       char NameInSeveralLanguages[1 + Lan_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1],
 			       char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][WWW_MAX_BYTES_WWW + 1]);
 void Cty_FlushCacheCountryName (void);
-void Cty_GetCountryNameInLanguage (long CtyCod,Lan_Language_t Language,
+void Cty_GetCountryNameInLanguage (long HieCod,Lan_Language_t Language,
 				   char CtyName[Cty_MAX_BYTES_NAME + 1]);
 void Cty_RemoveCountry (void);
 void Cty_RenameCountry (void);

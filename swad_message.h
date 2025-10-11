@@ -60,12 +60,6 @@ typedef enum
    Msg_STATUS_NOTIFIED,
   } Msg_Status_t;
 
-struct Msg_Course
-  {
-   long CrsCod;
-   char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1];
-  };	// Distinct courses in my messages sent or received
-
 #define Msg_NUM_REPLY 2
 typedef enum
   {

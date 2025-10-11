@@ -1178,52 +1178,54 @@ static void Deg_GetDegreeDataFromRow (MYSQL_RES *mysql_res,
 /***************************** Remove a degree *******************************/
 /*****************************************************************************/
 
-void Deg_RemoveDegreeCompletely (long DegCod)
+void Deg_RemoveDegreeCompletely (long HieCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumCrss;
    unsigned NumCrs;
-   long CrsCod;
+   long HieCods[Hie_NUM_LEVELS];
    char PathDeg[PATH_MAX + 1];
 
+   HieCods[Hie_DEG] = HieCod;
+
    /***** Get courses of a degree and remove them *****/
-   NumCrss = Crs_DB_GetCrssInDeg (&mysql_res,DegCod);
+   NumCrss = Crs_DB_GetCrssInDeg (&mysql_res,HieCods[Hie_DEG]);
    for (NumCrs = 0;
 	NumCrs < NumCrss;
 	NumCrs++)
      {
       /* Get next course */
-      if ((CrsCod = DB_GetNextCode (mysql_res)) < 0)
+      if ((HieCods[Hie_CRS] = DB_GetNextCode (mysql_res)) < 0)
          Err_WrongCourseExit ();
 
       /* Remove course */
-      Crs_RemoveCourseCompletely (CrsCod);
+      Crs_RemoveCourseCompletely (HieCods[Hie_CRS]);
      }
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Remove all threads and posts in forums of the degree *****/
-   For_DB_RemoveForums (Hie_DEG,DegCod);
+   For_DB_RemoveForums (Hie_DEG,HieCods[Hie_DEG]);
 
    /***** Remove surveys of the degree *****/
-   Svy_RemoveSurveys (Hie_DEG,DegCod);
+   Svy_RemoveSurveys (Hie_DEG,HieCods[Hie_DEG]);
 
    /***** Remove information related to files in degree *****/
-   Brw_DB_RemoveDegFiles (DegCod);
+   Brw_DB_RemoveDegFiles (HieCods[Hie_DEG]);
 
    /***** Remove directories of the degree *****/
    snprintf (PathDeg,sizeof (PathDeg),"%s/%02u/%u",
 	     Cfg_PATH_DEG_PUBLIC,
-	     (unsigned) (DegCod % 100),
-	     (unsigned)  DegCod);
+	     (unsigned) (HieCods[Hie_DEG] % 100),
+	     (unsigned)  HieCods[Hie_DEG]);
    Fil_RemoveTree (PathDeg);
 
    /***** Remove administrators of this degree *****/
-   Adm_DB_RemAdmins (Hie_DEG,DegCod);
+   Adm_DB_RemAdmins (Hie_DEG,HieCods[Hie_DEG]);
 
    /***** Remove the degree *****/
-   Deg_DB_RemoveDeg (DegCod);
+   Deg_DB_RemoveDeg (HieCods[Hie_DEG]);
 
    /***** Flush caches *****/
    Hie_FlushCachedNumNodesInHieLvl (Hie_CRS,Hie_DEG);	// Number of courses in degree

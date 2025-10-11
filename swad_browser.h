@@ -240,11 +240,7 @@ void Brw_UpdateMyFileViews (long FilCod);
 
 long Brw_GetZoneUsrCodForFileBrowser (void);
 void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
-                                    long *InsCod,
-                                    long *CtrCod,
-                                    long *DegCod,
-                                    long *CrsCod,
-                                    long *GrpCod);
+                                    long HieCods[Hie_NUM_LEVELS],long *GrpCod);
 
 bool Brw_CheckIfFileBrowserIsEditable (Brw_FileBrowser_t FileBrowser);
 

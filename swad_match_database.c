@@ -447,7 +447,7 @@ void Mch_DB_RemoveMatchesInGameFromOtherTable (long GamCod,const char *TableName
 /***************** Remove matches in course from main table ******************/
 /*****************************************************************************/
 
-void Mch_DB_RemoveMatchesInCrsFromMainTable (long CrsCod)
+void Mch_DB_RemoveMatchesInCrsFromMainTable (long HieCod)
   {
    DB_QueryDELETE ("can not remove matches of a course",
 		   "DELETE FROM mch_matches"
@@ -455,14 +455,14 @@ void Mch_DB_RemoveMatchesInCrsFromMainTable (long CrsCod)
 		          "mch_matches"
 		   " WHERE gam_games.CrsCod=%ld"
 		     " AND gam_games.GamCod=mch_matches.GamCod",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /*************** Remove matches in course from secondary table ***************/
 /*****************************************************************************/
 
-void Mch_DB_RemoveMatchesInCrsFromOtherTable (long CrsCod,const char *TableName)
+void Mch_DB_RemoveMatchesInCrsFromOtherTable (long HieCod,const char *TableName)
   {
    DB_QueryDELETE ("can not remove matches of a course from table",
 		   "DELETE FROM %s"
@@ -474,7 +474,7 @@ void Mch_DB_RemoveMatchesInCrsFromOtherTable (long CrsCod,const char *TableName)
 		     " AND mch_matches.MchCod=%s.MchCod",
 		   TableName,
 		   TableName,
-		   CrsCod,
+		   HieCod,
 		   TableName);
   }
 
@@ -495,7 +495,7 @@ void Mch_DB_RemoveMatchesMadeByUsrFromTable (long UsrCod,const char *TableName)
 /******* Remove matches made by a user in a course from secondary table ******/
 /*****************************************************************************/
 
-void Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (long UsrCod,long CrsCod,
+void Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (long UsrCod,long HieCod,
                                                   const char *TableName)
   {
    DB_QueryDELETE ("can not remove matches of a user from table",
@@ -509,7 +509,7 @@ void Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (long UsrCod,long CrsCod,
 		     " AND %s.UsrCod=%ld",
 		   TableName,
 		   TableName,
-		   CrsCod,
+		   HieCod,
 		   TableName,
 		   TableName,
 		   UsrCod);

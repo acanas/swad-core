@@ -115,7 +115,7 @@ void Inf_ChangeForceReadInfo (void);
 void Inf_ChangeIHaveReadInfo (void);
 
 //-----------------------------------------------------------------------------
-void Inf_BuildPathPage (long CrsCod,Inf_Type_t InfoType,char PathDir[PATH_MAX + 1]);
+void Inf_BuildPathPage (long HieCod,Inf_Type_t InfoType,char PathDir[PATH_MAX + 1]);
 void Inf_WriteURLIntoTxtBuffer (Inf_Type_t InfoType,
 				char TxtBuffer[WWW_MAX_BYTES_WWW + 1]);
 void Inf_SetInfoSrc (void);
@@ -124,10 +124,10 @@ Inf_Type_t Inf_AsignInfoType (void);
 Inf_Type_t Inf_GetParInfoType (void);
 void Inf_PutParInfoType (void *InfoType);
 Inf_Src_t Inf_GetInfoSrcFromForm (void);
-Inf_Src_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_Type_t InfoType);
+Inf_Src_t Inf_GetInfoSrcFromDB (long HieCod,Inf_Type_t InfoType);
 void Inf_GetAndCheckInfoSrcFromDB (struct Inf_Info *Info);
 
-void Inf_GetInfoTxtFromDB (long CrsCod,Inf_Type_t InfoType,
+void Inf_GetInfoTxtFromDB (long HieCod,Inf_Type_t InfoType,
                            char InfoTxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1],
                            char InfoTxtMD  [Cns_MAX_BYTES_LONG_TEXT + 1]);
 

@@ -42,7 +42,7 @@ extern struct Globals Gbl;
 
 void Ntf_DB_StoreNotifyEventToUsr (Ntf_NotifyEvent_t NotifyEvent,
                                    long ToUsrCod,long Cod,Ntf_Status_t Status,
-                                   long InsCod,long CtrCod,long DegCod,long CrsCod)
+                                   long HieCods[Hie_NUM_LEVELS])
   {
    DB_QueryINSERT ("can not create new notification event",
 		   "INSERT INTO ntf_notifications"
@@ -54,10 +54,10 @@ void Ntf_DB_StoreNotifyEventToUsr (Ntf_NotifyEvent_t NotifyEvent,
 	           (unsigned) NotifyEvent,
 		   ToUsrCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-	           InsCod,
-	           CtrCod,
-	           DegCod,
-	           CrsCod,
+	           HieCods[Hie_INS],
+	           HieCods[Hie_CTR],
+	           HieCods[Hie_DEG],
+	           HieCods[Hie_CRS],
 	           Cod,
 	           (unsigned) Status);
   }
@@ -320,7 +320,7 @@ void Ntf_DB_MarkNotifChildrenOfFolderAsRemoved (Ntf_NotifyEvent_t NotifyEvent,
 /******************** Update number of notify emails sent ********************/
 /*****************************************************************************/
 
-void Ntf_DB_UpdateNumNotifSent (long DegCod,long CrsCod,
+void Ntf_DB_UpdateNumNotifSent (const struct Hie_Node Hie[Hie_NUM_LEVELS],
                                 Ntf_NotifyEvent_t NotifyEvent,
                                 unsigned NumEvents,unsigned NumMails)
   {
@@ -329,8 +329,8 @@ void Ntf_DB_UpdateNumNotifSent (long DegCod,long CrsCod,
 		    " (DegCod,CrsCod,NotifyEvent,NumEvents,NumMails)"
 		    " VALUES"
 		    " (%ld,%ld,%u,%u,%u)",
-	            DegCod,
-	            CrsCod,
+	            Hie[Hie_DEG].HieCod,
+	            Hie[Hie_CRS].HieCod,
 	            (unsigned) NotifyEvent,
 	            NumEvents,
 	            NumMails);
@@ -340,7 +340,7 @@ void Ntf_DB_UpdateNumNotifSent (long DegCod,long CrsCod,
 /*****************************************************************************/
 
 unsigned Ntf_DB_GetNumNotifSent (MYSQL_RES **mysql_res,
-                                 long DegCod,long CrsCod,
+                                 const struct Hie_Node Hie[Hie_NUM_LEVELS],
                                  Ntf_NotifyEvent_t NotifyEvent)
   {
    return (unsigned)
@@ -352,8 +352,8 @@ unsigned Ntf_DB_GetNumNotifSent (MYSQL_RES **mysql_res,
 		   " WHERE DegCod=%ld"
 		     " AND CrsCod=%ld"
 		     " AND NotifyEvent=%u",
-		   DegCod,
-		   CrsCod,
+		   Hie[Hie_DEG].HieCod,
+		   Hie[Hie_CRS].HieCod,
 		   (unsigned) NotifyEvent);
   }
 

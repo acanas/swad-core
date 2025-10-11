@@ -60,7 +60,7 @@ void Enr_DB_InsertUsrInCurrentCrs (long UsrCod,Rol_Role_t NewRole,
 /********* Set a user's acceptation to true in the current course ************/
 /*****************************************************************************/
 
-void Enr_DB_AcceptUsrInCrs (long UsrCod,long CrsCod)
+void Enr_DB_AcceptUsrInCrs (long UsrCod,long HieCod)
   {
    /***** Set enrolment of a user to "accepted" in the current course *****/
    DB_QueryUPDATE ("can not confirm user's enrolment",
@@ -68,7 +68,7 @@ void Enr_DB_AcceptUsrInCrs (long UsrCod,long CrsCod)
 		     " SET Accepted='Y'"
 		   " WHERE CrsCod=%ld"
 		     " AND UsrCod=%ld",
-                   CrsCod,
+                   HieCod,
                    UsrCod);
   }
 
@@ -281,7 +281,7 @@ unsigned Enr_DB_GetUsrsFromCurrentCrs (MYSQL_RES **mysql_res)
 /******* Get all user codes belonging to the current course, except me *******/
 /*****************************************************************************/
 
-unsigned Enr_DB_GetUsrsFromCrsExceptMe (MYSQL_RES **mysql_res,long CrsCod)
+unsigned Enr_DB_GetUsrsFromCrsExceptMe (MYSQL_RES **mysql_res,long HieCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get users from current course",
@@ -289,7 +289,7 @@ unsigned Enr_DB_GetUsrsFromCrsExceptMe (MYSQL_RES **mysql_res,long CrsCod)
 		    " FROM crs_users"
 		   " WHERE CrsCod=%ld"
 		     " AND UsrCod<>%ld",
-		   CrsCod,
+		   HieCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -297,7 +297,7 @@ unsigned Enr_DB_GetUsrsFromCrsExceptMe (MYSQL_RES **mysql_res,long CrsCod)
 /***** Get all teachers codes belonging to the current course, except me *****/
 /*****************************************************************************/
 
-unsigned Enr_DB_GetTchsFromCrsExceptMe (MYSQL_RES **mysql_res,long CrsCod)
+unsigned Enr_DB_GetTchsFromCrsExceptMe (MYSQL_RES **mysql_res,long HieCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get teachers from current course",
@@ -306,7 +306,7 @@ unsigned Enr_DB_GetTchsFromCrsExceptMe (MYSQL_RES **mysql_res,long CrsCod)
 		   " WHERE CrsCod=%ld"
 		     " AND UsrCod<>%ld"
 		     " AND Role=%u",	// Teachers only
-		   CrsCod,
+		   HieCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) Rol_TCH);
   }

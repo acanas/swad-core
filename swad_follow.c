@@ -1076,6 +1076,7 @@ static void Fol_FollowUsr (const struct Usr_Data *UsrDat)
   {
    bool CreateNotif;
    bool NotifyByEmail;
+   long HieCods[Hie_NUM_LEVELS];
 
    /***** Avoid wrong cases *****/
    if (Gbl.Usrs.Me.UsrDat.UsrCod <= 0 ||
@@ -1098,13 +1099,16 @@ static void Fol_FollowUsr (const struct Usr_Data *UsrDat)
 	  If this followed wants to receive notifications by email,
 	  activate the sending of a notification *****/
    if (CreateNotif)
+     {
+      HieCods[Hie_INS] = Gbl.Hierarchy.Node[Hie_INS].HieCod;
+      HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
+      HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod;
+      HieCods[Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod;
       Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_FOLLOWER,UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
 				    (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
 								    0),
-				    Gbl.Hierarchy.Node[Hie_INS].HieCod,
-				    Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-				    Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-				    Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+				    HieCods);
+     }
   }
 
 /*****************************************************************************/

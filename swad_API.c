@@ -3378,6 +3378,7 @@ static int API_SendMessageToUsr (long OriginalMsgCod,
   {
    static bool MsgAlreadyInserted = false;
    static long MsgCod;
+   long HieCods[Hie_NUM_LEVELS];
 
    /***** Create message *****/
    if (!MsgAlreadyInserted)      // The message is inserted only once in the table of messages sent
@@ -3400,10 +3401,14 @@ static int API_SendMessageToUsr (long OriginalMsgCod,
    /***** Create notification for this recipient.
           If this recipient wants to receive notifications by email,
           activate the sending of a notification *****/
+   HieCods[Hie_INS] =
+   HieCods[Hie_CTR] =
+   HieCods[Hie_DEG] =
+   HieCods[Hie_CRS] = -1L;
    Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_MESSAGE,RecipientUsrCod,MsgCod,
 				 (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
 								 0),
-				 -1L,-1L,-1L,-1L);
+				 HieCods);
 
    /***** If this recipient is the original sender of a message been replied... *****/
    if (RecipientUsrCod == ReplyUsrCod)
@@ -5007,6 +5012,7 @@ int swad__getFile (struct soap *soap,
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
    int ReturnCode;
    struct Brw_FileMetadata FileMetadata;
+   long HieCods[Hie_NUM_LEVELS];
    long GrpCod;
    char URL[WWW_MAX_BYTES_WWW + 1];
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
@@ -5055,12 +5061,16 @@ int swad__getFile (struct soap *soap,
 	                        "The file requested does not exists");
 
    /***** Set course and group codes *****/
+   HieCods[Hie_INS] = Gbl.Hierarchy.Node[Hie_INS].HieCod,
+   HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+   HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+   HieCods[Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod,
    Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,
-                                  &Gbl.Hierarchy.Node[Hie_INS].HieCod,
-                                  &Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-                                  &Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-                                  &Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-                                  &GrpCod);
+                                  HieCods,&GrpCod);
+   Gbl.Hierarchy.Node[Hie_INS].HieCod = HieCods[Hie_INS];
+   Gbl.Hierarchy.Node[Hie_CTR].HieCod = HieCods[Hie_CTR];
+   Gbl.Hierarchy.Node[Hie_DEG].HieCod = HieCods[Hie_DEG];
+   Gbl.Hierarchy.Node[Hie_CRS].HieCod = HieCods[Hie_CRS];
    Hie_InitHierarchy ();
 
    /***** Get some of my data *****/
@@ -5171,6 +5181,7 @@ int swad__getMarks (struct soap *soap,
   {
    int ReturnCode;
    struct Brw_FileMetadata FileMetadata;
+   long HieCods[Hie_NUM_LEVELS];
    long GrpCod;
    char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];	// Not used
    char *ContentStr;
@@ -5202,12 +5213,16 @@ int swad__getMarks (struct soap *soap,
 	                          "You can not get marks from this file");
 
    /***** Set course and group codes *****/
+   HieCods[Hie_INS] = Gbl.Hierarchy.Node[Hie_INS].HieCod,
+   HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+   HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+   HieCods[Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod,
    Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,
-                                  &Gbl.Hierarchy.Node[Hie_INS].HieCod,
-                                  &Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-                                  &Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-                                  &Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-                                  &GrpCod);
+                                  HieCods,&GrpCod);
+   Gbl.Hierarchy.Node[Hie_INS].HieCod = HieCods[Hie_INS];
+   Gbl.Hierarchy.Node[Hie_CTR].HieCod = HieCods[Hie_CTR];
+   Gbl.Hierarchy.Node[Hie_DEG].HieCod = HieCods[Hie_DEG];
+   Gbl.Hierarchy.Node[Hie_CRS].HieCod = HieCods[Hie_CRS];
 
    /***** Check course and group codes *****/
    if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,

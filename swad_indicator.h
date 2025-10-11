@@ -77,7 +77,7 @@ struct Ind_Indicators
 void Ind_ReqIndicatorsCourses (void);
 void Ind_ShowIndicatorsCourses (void);
 int Ind_GetNumIndicatorsCrsFromDB (long HieCod);
-void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
+void Ind_ComputeAndStoreIndicatorsCrs (long HieCod,int NumIndicatorsFromDB,
                                        struct Ind_IndicatorsCrs *IndicatorsCrs);
 
 #endif

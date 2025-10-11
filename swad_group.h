@@ -221,7 +221,7 @@ void Grp_GetGroupTypeDataByCod (struct GroupType *GrpTyp);
 void Grp_OpenGroupsAutomatically (void);
 void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGrpTypes_t WhichGrpTypes);
 Grp_HasFileZones_t Grp_GetFileZones (long GrpCod);
-void Grp_GetGroupDataByCod (long *CrsCod,long *GrpTypCod,struct Group *Grp);
+void Grp_GetGroupDataByCod (long *HieCod,long *GrpTypCod,struct Group *Grp);
 
 void Grp_FlushCacheIBelongToGrp (void);
 Usr_Belong_t Grp_GetIfIBelongToGrp (long GrpCod);

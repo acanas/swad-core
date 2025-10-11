@@ -55,10 +55,10 @@ void Mch_DB_RemoveMatchFromAllTables (long MchCod);
 void Mch_DB_RemoveMatchFromTable (long MchCod,const char *TableName);
 void Mch_DB_RemoveMatchesInGameFromMainTable (long GamCod);
 void Mch_DB_RemoveMatchesInGameFromOtherTable (long GamCod,const char *TableName);
-void Mch_DB_RemoveMatchesInCrsFromMainTable (long CrsCod);
-void Mch_DB_RemoveMatchesInCrsFromOtherTable (long CrsCod,const char *TableName);
+void Mch_DB_RemoveMatchesInCrsFromMainTable (long HieCod);
+void Mch_DB_RemoveMatchesInCrsFromOtherTable (long HieCod,const char *TableName);
 void Mch_DB_RemoveMatchesMadeByUsrFromTable (long UsrCod,const char *TableName);
-void Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (long UsrCod,long CrsCod,
+void Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (long UsrCod,long HieCod,
                                                   const char *TableName);
 
 //---------------------------------Groups -------------------------------------

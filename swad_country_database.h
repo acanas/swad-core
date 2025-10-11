@@ -45,9 +45,9 @@ void Cty_DB_CreateCountry (const struct Hie_Node *Cty,
 unsigned Cty_DB_GetCtysBasic (MYSQL_RES **mysql_res);
 unsigned Cty_DB_GetCtysWithPendingInss (MYSQL_RES **mysql_res);
 unsigned Cty_DB_GetCtysFull (MYSQL_RES **mysql_res);
-Exi_Exist_t Cty_DB_GetBasicCountryDataByCod (MYSQL_RES **mysql_res,long CtyCod);
-unsigned Cty_DB_GetNamesAndWWWsByCod (MYSQL_RES **mysql_res,long CtyCod);
-void Cty_DB_GetCountryName (long CtyCod,Lan_Language_t Language,
+Exi_Exist_t Cty_DB_GetBasicCountryDataByCod (MYSQL_RES **mysql_res,long HieCod);
+unsigned Cty_DB_GetNamesAndWWWsByCod (MYSQL_RES **mysql_res,long HieCod);
+void Cty_DB_GetCountryName (long HieCod,Lan_Language_t Language,
 			    char CtyName[Cty_MAX_BYTES_NAME + 1]);
 
 unsigned Cty_DB_GetNumCtysInSys (__attribute__((unused)) long SysCod);
@@ -58,9 +58,10 @@ unsigned Cty_DB_GetNumCtysWithDegs (Hie_Level_t HieLvl,long HieCod);
 unsigned Cty_DB_GetNumCtysWithCrss (Hie_Level_t HieLvl,long HieCod);
 unsigned Cty_DB_GetNumCtysWithUsrs (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Role);
 
-Exi_Exist_t Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod);
+Exi_Exist_t Cty_DB_CheckIfNumericCountryCodeExists (long HieCod);
 Exi_Exist_t Cty_DB_CheckIfAlpha2CountryCodeExists (const char *Alpha2);
-Exi_Exist_t Cty_DB_CheckIfCountryNameExists (Lan_Language_t Language,const char *Name,long CtyCod);
+Exi_Exist_t Cty_DB_CheckIfCountryNameExists (Lan_Language_t Language,
+					     const char *Name,long HieCod);
 
 unsigned Cty_DB_SearchCtys (MYSQL_RES **mysql_res,
                             const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
@@ -68,18 +69,18 @@ unsigned Cty_DB_SearchCtys (MYSQL_RES **mysql_res,
 
 void Cty_DB_GetAvgCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom);
 unsigned Cty_DB_GetCtrsWithCoordsInCurrentCty (MYSQL_RES **mysql_res);
-unsigned Cty_DB_GetMapAttr (MYSQL_RES **mysql_res,long CtyCod);
-Exi_Exist_t Cty_DB_CheckIfMapExists (long CtyCod);
+unsigned Cty_DB_GetMapAttr (MYSQL_RES **mysql_res,long HieCod);
+Exi_Exist_t Cty_DB_CheckIfMapExists (long HieCod);
 
-void Cty_DB_UpdateCtyField (long CtyCod,const char *FldName,const char *FldValue);
+void Cty_DB_UpdateCtyField (long HieCod,const char *FldName,const char *FldValue);
 void Cty_DB_UpdateCtyMapAttr (const char NewMapAttribution[Med_MAX_BYTES_ATTRIBUTION + 1]);
 
 unsigned Cty_DB_GetMyCtys (MYSQL_RES **mysql_res,
 			   __attribute__((unused)) long PrtCod);
 unsigned Cty_DB_GetNumUsrsWhoDontClaimToBelongToAnyCty (void);
 unsigned Cty_DB_GetNumUsrsWhoClaimToBelongToAnotherCty (void);
-unsigned Cty_DB_GetNumUsrsWhoClaimToBelongToCty (long CtyCod);
+unsigned Cty_DB_GetNumUsrsWhoClaimToBelongToCty (long HieCod);
 
-void Cty_DB_RemoveCty (long CtyCod);
+void Cty_DB_RemoveCty (long HieCod);
 
 #endif

@@ -37,7 +37,7 @@
 //------------------------------ Users in courses -----------------------------
 void Enr_DB_InsertUsrInCurrentCrs (long UsrCod,Rol_Role_t NewRole,
                                    Enr_KeepOrSetAccepted_t KeepOrSetAccepted);
-void Enr_DB_AcceptUsrInCrs (long UsrCod,long CrsCod);
+void Enr_DB_AcceptUsrInCrs (long UsrCod,long HieCod);
 
 void Enr_DB_CreateTmpTableMyCourses (void);
 unsigned Enr_DB_GetMyCrss (MYSQL_RES **mysql_res,long PrtCod);
@@ -50,8 +50,8 @@ bool Enr_DB_CheckIfUsrSharesAnyOfMyCrs (long UsrCod);
 bool Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod);
 long Enr_DB_GetRamdomStdFromCrs (long HieCod);
 unsigned Enr_DB_GetUsrsFromCurrentCrs (MYSQL_RES **mysql_res);
-unsigned Enr_DB_GetUsrsFromCrsExceptMe (MYSQL_RES **mysql_res,long CrsCod);
-unsigned Enr_DB_GetTchsFromCrsExceptMe (MYSQL_RES **mysql_res,long CrsCod);
+unsigned Enr_DB_GetUsrsFromCrsExceptMe (MYSQL_RES **mysql_res,long HieCod);
+unsigned Enr_DB_GetTchsFromCrsExceptMe (MYSQL_RES **mysql_res,long HieCod);
 unsigned Enr_DB_GetNumCrssOfUsr (long UsrCod);
 unsigned Enr_DB_GetNumCrssOfUsrNotAccepted (long UsrCod);
 unsigned Enr_DB_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role);

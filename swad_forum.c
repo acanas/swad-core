@@ -1238,10 +1238,7 @@ void For_ShowForumList (struct For_Forums *Forums)
    MYSQL_RES *mysql_resDeg;
    MYSQL_RES *mysql_resCrs;
    MYSQL_ROW row;
-   long InsCod;
-   long CtrCod;
-   long DegCod;
-   long CrsCod;
+   long HieCods[Hie_NUM_LEVELS];
    unsigned NumIns;
    unsigned NumInss;
    unsigned NumCtr;
@@ -1282,7 +1279,7 @@ void For_ShowForumList (struct For_Forums *Forums)
 		     ICanSeeInsForum = Usr_CAN;
 		  else
 		     ICanSeeInsForum = Hie_CheckIfIBelongTo (Hie_INS,
-							      Gbl.Hierarchy.Node[Hie_INS].HieCod)
+							     Gbl.Hierarchy.Node[Hie_INS].HieCod)
 				       == Usr_BELONG ? Usr_CAN :
 						       Usr_CAN_NOT;
 		 }
@@ -1298,7 +1295,7 @@ void For_ShowForumList (struct For_Forums *Forums)
 		     ICanSeeCtrForum = Usr_CAN;
 		  else
 		     ICanSeeCtrForum = Hie_CheckIfIBelongTo (Hie_CTR,
-							      Gbl.Hierarchy.Node[Hie_CTR].HieCod)
+							     Gbl.Hierarchy.Node[Hie_CTR].HieCod)
 				       == Usr_BELONG ? Usr_CAN :
 						       Usr_CAN_NOT;
 
@@ -1312,7 +1309,7 @@ void For_ShowForumList (struct For_Forums *Forums)
 			   ICanSeeDegForum = Usr_CAN;
 			else
 			   ICanSeeDegForum = Hie_CheckIfIBelongTo (Hie_DEG,
-								    Gbl.Hierarchy.Node[Hie_DEG].HieCod)
+								   Gbl.Hierarchy.Node[Hie_DEG].HieCod)
 				             == Usr_BELONG ? Usr_CAN :
 							     Usr_CAN_NOT;
 
@@ -1344,45 +1341,45 @@ void For_ShowForumList (struct For_Forums *Forums)
 		    NumIns < NumInss;
 		    NumIns++)
 		 {
-		  InsCod = Gbl.Usrs.Me.Hierarchy[Hie_INS].Nodes[NumIns].HieCod;
+		  HieCods[Hie_INS] = Gbl.Usrs.Me.Hierarchy[Hie_INS].Nodes[NumIns].HieCod;
 
 		  /* Links to forums of this institution */
 		  For_WriteLinksToInsForums (Forums,
-					     InsCod,
+					     HieCods[Hie_INS],
 					     NumIns == NumInss - 1 ? Lay_LAST :			// Last institution
 								     Lay_NO_LAST,
 					     IsLastItemInLevel);
 
 		  /* Get my centers in this institution from database */
-		  NumCtrs = Ctr_DB_GetMyCtrs (&mysql_resCtr,InsCod);
+		  NumCtrs = Ctr_DB_GetMyCtrs (&mysql_resCtr,HieCods[Hie_INS]);
 		  for (NumCtr = 0;
 		       NumCtr < NumCtrs;
 		       NumCtr++)
 		    {
 		     /* Get next center */
 		     row = mysql_fetch_row (mysql_resCtr);
-		     CtrCod = Str_ConvertStrCodToLongCod (row[0]);
+		     HieCods[Hie_CTR] = Str_ConvertStrCodToLongCod (row[0]);
 
 		     /* Links to forums of this center */
 		     if (For_WriteLinksToCtrForums (Forums,
-						    CtrCod,
+						    HieCods[Hie_CTR],
 						    NumCtr == NumCtrs - 1 ? Lay_LAST :		// Last center
 									    Lay_NO_LAST,
 						    IsLastItemInLevel) > 0)
 		       {
 			/* Get my degrees in this institution from database */
-			NumDegs = Deg_DB_GetMyDegs (&mysql_resDeg,CtrCod);
+			NumDegs = Deg_DB_GetMyDegs (&mysql_resDeg,HieCods[Hie_CTR]);
 			for (NumDeg = 0;
 			     NumDeg < NumDegs;
 			     NumDeg++)
 			  {
 			   /* Get next degree */
 			   row = mysql_fetch_row (mysql_resDeg);
-			   DegCod = Str_ConvertStrCodToLongCod (row[0]);
+			   HieCods[Hie_DEG] = Str_ConvertStrCodToLongCod (row[0]);
 
 			   /* Links to forums of this degree */
 			   if (For_WriteLinksToDegForums (Forums,
-							  DegCod,
+							  HieCods[Hie_DEG],
 							  NumDeg == NumDegs - 1 ? Lay_LAST :		// Last degree
 										  Lay_NO_LAST,
 							  IsLastItemInLevel) > 0)
@@ -1390,18 +1387,18 @@ void For_ShowForumList (struct For_Forums *Forums)
 			      /* Get my courses in this degree from database */
 			      NumCrss = Crs_DB_GetCrssFromUsr (&mysql_resCrs,
 							       Gbl.Usrs.Me.UsrDat.UsrCod,
-							       DegCod);
+							       HieCods[Hie_DEG]);
 			      for (NumCrs = 0;
 				   NumCrs < NumCrss;
 				   NumCrs++)
 				{
 				 /* Get next course */
 				 row = mysql_fetch_row (mysql_resCrs);
-				 CrsCod = Str_ConvertStrCodToLongCod (row[0]);
+				 HieCods[Hie_CRS] = Str_ConvertStrCodToLongCod (row[0]);
 
 				 /* Links to forums of this course */
 				 For_WriteLinksToCrsForums (Forums,
-							    CrsCod,
+							    HieCods[Hie_CRS],
 							    NumCrs == NumCrss - 1 ? Lay_LAST :	// Last course
 										    Lay_NO_LAST,
 							    IsLastItemInLevel);

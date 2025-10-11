@@ -746,7 +746,7 @@ static void Plc_EditingPlaceConstructor (void)
 
    /***** Reset place *****/
    Plc_EditingPlc->PlcCod      = -1L;
-   Plc_EditingPlc->InsCod      = -1L;
+   Plc_EditingPlc->HieCod      = -1L;
    Plc_EditingPlc->ShrtName[0] = '\0';
    Plc_EditingPlc->FullName[0] = '\0';
    Plc_EditingPlc->NumCtrs     = 0;

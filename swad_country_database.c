@@ -209,7 +209,7 @@ unsigned Cty_DB_GetCtysFull (MYSQL_RES **mysql_res)
 /***************** Get basic data of country given its code ******************/
 /*****************************************************************************/
 
-Exi_Exist_t Cty_DB_GetBasicCountryDataByCod (MYSQL_RES **mysql_res,long CtyCod)
+Exi_Exist_t Cty_DB_GetBasicCountryDataByCod (MYSQL_RES **mysql_res,long HieCod)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
@@ -222,14 +222,14 @@ Exi_Exist_t Cty_DB_GetBasicCountryDataByCod (MYSQL_RES **mysql_res,long CtyCod)
 			 " WHERE CtyCod='%03ld'",
 			 Lan_STR_LANG_ID[Gbl.Prefs.Language],
 			 Lan_STR_LANG_ID[Gbl.Prefs.Language],
-			 CtyCod);
+			 HieCod);
   }
 
 /*****************************************************************************/
 /*********** Get all names and WWWs of a country given its code **************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetNamesAndWWWsByCod (MYSQL_RES **mysql_res,long CtyCod)
+unsigned Cty_DB_GetNamesAndWWWsByCod (MYSQL_RES **mysql_res,long HieCod)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char StrField[32];
@@ -262,14 +262,14 @@ unsigned Cty_DB_GetNamesAndWWWsByCod (MYSQL_RES **mysql_res,long CtyCod)
 		    " FROM cty_countrs"
 	           " WHERE CtyCod='%03ld'",
 		   SubQueryNam,SubQueryWWW,
-		   CtyCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /******************* Get name of a country in a language *********************/
 /*****************************************************************************/
 
-void Cty_DB_GetCountryName (long CtyCod,Lan_Language_t Language,
+void Cty_DB_GetCountryName (long HieCod,Lan_Language_t Language,
 			    char CtyName[Cty_MAX_BYTES_NAME + 1])
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
@@ -280,7 +280,7 @@ void Cty_DB_GetCountryName (long CtyCod,Lan_Language_t Language,
 		          " FROM cty_countrs"
 		         " WHERE CtyCod='%03ld'",
 	                 Lan_STR_LANG_ID[Language],
-	                 CtyCod);
+	                 HieCod);
   }
 
 /*****************************************************************************/
@@ -417,7 +417,7 @@ unsigned Cty_DB_GetNumCtysWithUsrs (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Ro
 /******************* Check if a numeric country code exists ******************/
 /*****************************************************************************/
 
-Exi_Exist_t Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod)
+Exi_Exist_t Cty_DB_CheckIfNumericCountryCodeExists (long HieCod)
   {
    return
    DB_QueryEXISTS ("can not check if the numeric code of a country already existed",
@@ -425,7 +425,7 @@ Exi_Exist_t Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod)
 		   "(SELECT *"
 		     " FROM cty_countrs"
 		    " WHERE CtyCod='%03ld')",
-		   CtyCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -447,7 +447,8 @@ Exi_Exist_t Cty_DB_CheckIfAlpha2CountryCodeExists (const char *Alpha2)
 /******************** Check if the name of country exists ********************/
 /*****************************************************************************/
 
-Exi_Exist_t Cty_DB_CheckIfCountryNameExists (Lan_Language_t Language,const char *Name,long CtyCod)
+Exi_Exist_t Cty_DB_CheckIfCountryNameExists (Lan_Language_t Language,
+					     const char *Name,long HieCod)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
@@ -459,7 +460,7 @@ Exi_Exist_t Cty_DB_CheckIfCountryNameExists (Lan_Language_t Language,const char 
 		    " WHERE Name_%s='%s'"
 		      " AND CtyCod<>'%03ld')",
 		   Lan_STR_LANG_ID[Language],Name,
-		   CtyCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -535,21 +536,21 @@ unsigned Cty_DB_GetCtrsWithCoordsInCurrentCty (MYSQL_RES **mysql_res)
 /******************** Get map attribution from database **********************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetMapAttr (MYSQL_RES **mysql_res,long CtyCod)
+unsigned Cty_DB_GetMapAttr (MYSQL_RES **mysql_res,long HieCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get map attribution",
 		   "SELECT MapAttribution"	// row[0]
 		    " FROM cty_countrs"
 		   " WHERE CtyCod=%ld",
-		   CtyCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /************ Check if any of the centers in a country has map ***************/
 /*****************************************************************************/
 
-Exi_Exist_t Cty_DB_CheckIfMapExists (long CtyCod)
+Exi_Exist_t Cty_DB_CheckIfMapExists (long HieCod)
   {
    /***** Check if any center in current country has a coordinate set
           (coordinates 0, 0 means not set ==> don't show map) *****/
@@ -563,21 +564,21 @@ Exi_Exist_t Cty_DB_CheckIfMapExists (long CtyCod)
 		     " AND ins_instits.InsCod=ctr_centers.InsCod"
 		     " AND (ctr_centers.Latitude<>0"
 		       " OR ctr_centers.Longitude<>0))",
-		   CtyCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /******** Update country changing old field value by new field value *********/
 /*****************************************************************************/
 
-void Cty_DB_UpdateCtyField (long CtyCod,const char *FldName,const char *FldValue)
+void Cty_DB_UpdateCtyField (long HieCod,const char *FldName,const char *FldValue)
   {
    DB_QueryUPDATE ("can not update a field value of a country",
 		   "UPDATE cty_countrs"
 		     " SET %s='%s'"
 		   " WHERE CtyCod='%03ld'",
 	           FldName,FldValue,
-	           CtyCod);
+	           HieCod);
   }
 
 /*****************************************************************************/
@@ -656,24 +657,24 @@ unsigned Cty_DB_GetNumUsrsWhoClaimToBelongToAnotherCty (void)
 /*********** Get number of users who claim to belong to a country ************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetNumUsrsWhoClaimToBelongToCty (long CtyCod)
+unsigned Cty_DB_GetNumUsrsWhoClaimToBelongToCty (long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of users",
 		  "SELECT COUNT(UsrCod)"
 		   " FROM usr_data"
 		  " WHERE CtyCod=%ld",
-		  CtyCod);
+		  HieCod);
   }
 
 /*****************************************************************************/
 /******************************* Remove a country ****************************/
 /*****************************************************************************/
 
-void Cty_DB_RemoveCty (long CtyCod)
+void Cty_DB_RemoveCty (long HieCod)
   {
    DB_QueryDELETE ("can not remove a country",
 		   "DELETE FROM cty_countrs"
 		   " WHERE CtyCod='%03ld'",
-		   CtyCod);
+		   HieCod);
   }

@@ -128,7 +128,7 @@ Ntf_StatusTxt_t Ntf_GetStatusTxtFromStatusBits (Ntf_Status_t Status);
 void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                     char **ContentStr,
                                     Ntf_NotifyEvent_t NotifyEvent,
-                                    long Cod,long CrsCod,long UsrCod,
+                                    long Cod,long HieCod,long UsrCod,
                                     Ntf_GetContent_t GetContent);
 
 void Ntf_MarkNotifOneFileAsRemoved (const char *Path);

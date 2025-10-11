@@ -52,6 +52,7 @@ void TmlNtf_CreateNotifToAuthor (long AuthorCod,long PubCod,
    struct Usr_Data UsrDat;
    bool CreateNotif;
    bool NotifyByEmail;
+   long HieCods[Hie_NUM_LEVELS];
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -70,13 +71,16 @@ void TmlNtf_CreateNotifToAuthor (long AuthorCod,long PubCod,
 	     If this author wants to receive notifications by email,
 	     activate the sending of a notification *****/
       if (CreateNotif)
+	{
+	 HieCods[Hie_INS] = Gbl.Hierarchy.Node[Hie_INS].HieCod;
+	 HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
+	 HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod;
+	 HieCods[Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod;
 	 Ntf_DB_StoreNotifyEventToUsr (NotifyEvent,UsrDat.UsrCod,PubCod,
 				       (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
 								       0),
-				       Gbl.Hierarchy.Node[Hie_INS].HieCod,
-				       Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-				       Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-				       Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+				       HieCods);
+	}
      }
 
    /***** Free memory used for user's data *****/

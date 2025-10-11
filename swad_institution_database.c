@@ -67,14 +67,14 @@ long Ins_DB_CreateInstitution (const struct Hie_Node *Ins,Hie_Status_t Status)
 /****************** Update country in table of institutions ******************/
 /*****************************************************************************/
 
-void Ins_DB_UpdateInsCty (long HieCod,long CtyCod)
+void Ins_DB_UpdateInsCty (long HieCods[Hie_NUM_LEVELS])
   {
    DB_QueryUPDATE ("can not update the country of an institution",
 		   "UPDATE ins_instits"
 		     " SET CtyCod=%ld"
 		   " WHERE InsCod=%ld",
-                   CtyCod,
-                   HieCod);
+                   HieCods[Hie_CTY],
+                   HieCods[Hie_INS]);
   }
 
 /*****************************************************************************/
@@ -652,14 +652,14 @@ unsigned Ins_DB_GetNumInssInSys (__attribute__((unused)) long HieCod)
 /**************** Get number of institutions in a country ********************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetNumInssInCty (long CtyCod)
+unsigned Ins_DB_GetNumInssInCty (long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get the number of institutions in a country",
 		  "SELECT COUNT(*)"
 		   " FROM ins_instits"
 		  " WHERE CtyCod=%ld",
-		  CtyCod);
+		  HieCod);
   }
 
 /*****************************************************************************/

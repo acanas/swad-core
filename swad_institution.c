@@ -563,13 +563,13 @@ static void Ins_PutIconsEditingInstitutions (__attribute__((unused)) void *Args)
 /******* Get basic list of institutions ordered by name of institution *******/
 /*****************************************************************************/
 
-void Ins_GetBasicListOfInstitutions (long CtyCod)
+void Ins_GetBasicListOfInstitutions (long HieCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumIns;
 
    /***** Get institutions from database *****/
-   if ((Gbl.Hierarchy.List[Hie_CTY].Num = Ins_DB_GetInssInCtyOrderedByFullName (&mysql_res,CtyCod))) // Institutions found...
+   if ((Gbl.Hierarchy.List[Hie_CTY].Num = Ins_DB_GetInssInCtyOrderedByFullName (&mysql_res,HieCod))) // Institutions found...
      {
       /***** Create list with institutions *****/
       if ((Gbl.Hierarchy.List[Hie_CTY].Lst = calloc ((size_t) Gbl.Hierarchy.List[Hie_CTY].Num,
@@ -596,13 +596,13 @@ void Ins_GetBasicListOfInstitutions (long CtyCod)
 /************* with number of users who claim to belong to them **************/
 /*****************************************************************************/
 
-void Ins_GetFullListOfInstitutions (long CtyCod)
+void Ins_GetFullListOfInstitutions (long HieCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumIns;
 
    /***** Get institutions from database *****/
-   if ((Gbl.Hierarchy.List[Hie_CTY].Num = Ins_DB_GetFullListOfInssInCty (&mysql_res,CtyCod))) // Institutions found...
+   if ((Gbl.Hierarchy.List[Hie_CTY].Num = Ins_DB_GetFullListOfInssInCty (&mysql_res,HieCod))) // Institutions found...
      {
       /***** Create list with institutions *****/
       if ((Gbl.Hierarchy.List[Hie_CTY].Lst = calloc ((size_t) Gbl.Hierarchy.List[Hie_CTY].Num,

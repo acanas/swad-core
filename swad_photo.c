@@ -1205,10 +1205,10 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
 	 Err_NotEnoughMemoryExit ();
 
       /* Institution full name and institution country */
-      if (UsrDat->InsCod > 0)
+      if (UsrDat->HieCods[Hie_INS] > 0)
 	{
 	 /* Get institution short name and country name */
-	 Ins.HieCod = UsrDat->InsCod;
+	 Ins.HieCod = UsrDat->HieCods[Hie_INS];
 	 Ins_GetShrtNameAndCtyOfInstitution (&Ins,CtyName);
 
 	 /* Write institution short name and country name */
@@ -1219,10 +1219,11 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
 		       Ins.ShrtName,CtyName) < 0)
 	    Err_NotEnoughMemoryExit ();
 	}
-      else if (UsrDat->CtyCod > 0)
+      else if (UsrDat->HieCods[Hie_CTY] > 0)
 	{
 	 /* Get country name */
-	 Cty_GetCountryNameInLanguage (UsrDat->CtyCod,Gbl.Prefs.Language,CtyName);
+	 Cty_GetCountryNameInLanguage (UsrDat->HieCods[Hie_CTY],
+				       Gbl.Prefs.Language,CtyName);
 
 	 /* Write country name */
 	 if (asprintf (&Caption.InsCty,"<div class=\"ZOOM_TXT DAT_SMALL_%s\">"

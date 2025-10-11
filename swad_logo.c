@@ -81,11 +81,8 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
    const char *Folder = NULL;	// To avoid warning
    char PathLogo[PATH_MAX + 1];
    Exi_Exist_t LogoExists = Exi_DOES_NOT_EXIST;
+   long HieCods[Hie_NUM_LEVELS];
    long HieCod;
-   long InsCod;
-   long CtrCod;
-   long DegCod;
-   long CrsCod;
    char *URL;
    char *Icon;
 
@@ -104,10 +101,10 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 	 if (Node->HieCod > 0)	// Institution, center, degree or course exists
 	   {
 	    HieCod =
-	    InsCod =
-	    CtrCod =
-	    DegCod =
-	    CrsCod = Node->HieCod;
+	    HieCods[Hie_INS] =
+	    HieCods[Hie_CTR] =
+	    HieCods[Hie_DEG] =
+	    HieCods[Hie_CRS] = Node->HieCod;
 
 	    /* Course */
 
@@ -116,14 +113,14 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 	      {
 	       Folder = Cfg_FOLDER_DEG;
 	       if (HieLvl >= Hie_CRS)
-		  DegCod = Crs_DB_GetDegCodOfCourseByCod (CrsCod);
+		  HieCods[Hie_DEG] = Crs_DB_GetDegCodOfCourseByCod (HieCods[Hie_CRS]);
 	       snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
 			 Cfg_PATH_DEG_PUBLIC,
-			 (unsigned) (DegCod % 100),
-			 (unsigned)  DegCod,
-			 (unsigned)  DegCod);
+			 (unsigned) (HieCods[Hie_DEG] % 100),
+			 (unsigned)  HieCods[Hie_DEG],
+			 (unsigned)  HieCods[Hie_DEG]);
 	       if ((LogoExists = Fil_CheckIfPathExists (PathLogo)) == Exi_EXISTS)
-		  HieCod = DegCod;
+		  HieCod = HieCods[Hie_DEG];
 	      }
 
 	    /* Center */
@@ -131,16 +128,16 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 	      {
 	       Folder = Cfg_FOLDER_CTR;
 	       if (HieLvl >= Hie_DEG)
-		  CtrCod = Deg_DB_GetCtrCodOfDegreeByCod (DegCod);
+		  HieCods[Hie_CTR] = Deg_DB_GetCtrCodOfDegreeByCod (HieCods[Hie_DEG]);
 	       else
-		  CtrCod = HieCod;
+		  HieCods[Hie_CTR] = HieCod;
 	       snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
 			 Cfg_PATH_CTR_PUBLIC,
-			 (unsigned) (CtrCod % 100),
-			 (unsigned)  CtrCod,
-			 (unsigned)  CtrCod);
+			 (unsigned) (HieCods[Hie_CTR] % 100),
+			 (unsigned)  HieCods[Hie_CTR],
+			 (unsigned)  HieCods[Hie_CTR]);
 	       if ((LogoExists = Fil_CheckIfPathExists (PathLogo)) == Exi_EXISTS)
-		  HieCod = CtrCod;
+		  HieCod = HieCods[Hie_CTR];
 	      }
 
 	    /* Institution */
@@ -148,14 +145,14 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 	      {
 	       Folder = Cfg_FOLDER_INS;
 	       if (HieLvl >= Hie_CTR)
-		  InsCod = Ctr_DB_GetInsCodOfCenterByCod (CtrCod);
+		  HieCods[Hie_INS] = Ctr_DB_GetInsCodOfCenterByCod (HieCods[Hie_CTR]);
 	       snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
 			 Cfg_PATH_INS_PUBLIC,
-			 (unsigned) (InsCod % 100),
-			 (unsigned)  InsCod,
-			 (unsigned)  InsCod);
+			 (unsigned) (HieCods[Hie_INS] % 100),
+			 (unsigned)  HieCods[Hie_INS],
+			 (unsigned)  HieCods[Hie_INS]);
 	       if ((LogoExists = Fil_CheckIfPathExists (PathLogo)) == Exi_EXISTS)
-		  HieCod = InsCod;
+		  HieCod = HieCods[Hie_INS];
 	      }
 
 	    /***** Draw logo *****/

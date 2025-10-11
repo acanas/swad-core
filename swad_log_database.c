@@ -326,21 +326,21 @@ unsigned Log_DB_GetMyHistoricCrss (MYSQL_RES **mysql_res,
 /*****************************************************************************/
 /********************** Write my hits grouped by years ***********************/
 /*****************************************************************************/
-// CrsCod = -1 ==> hits with no course
-// CrsCod =  0 ==> hits in any course
-// CrsCod >  0 ==> hits in a given course
+// HieCod = -1 ==> hits with no course
+// HieCod =  0 ==> hits in any course
+// HieCod >  0 ==> hits in a given course
 
 unsigned Log_DB_GetMyHitsPerYear (MYSQL_RES **mysql_res,
-                                  long CrsCod,Rol_Role_t Role,
+                                  long HieCod,Rol_Role_t Role,
                                   time_t FirstClickTimeUTC)
   {
    char SubQueryCrs[128];
    char SubQueryRol[128];
 
-   if (CrsCod == 0)	// Here 0 means any course
+   if (HieCod == 0)	// Here 0 means any course
       SubQueryCrs[0] = '\0';
    else			// -1 ==> no course, > 0 ==> a given course
-      sprintf (SubQueryCrs," AND CrsCod=%ld",CrsCod);
+      sprintf (SubQueryCrs," AND CrsCod=%ld",HieCod);
 
    if (Role == Rol_UNK)	// Here Rol_UNK means any role
       SubQueryRol[0] = '\0';

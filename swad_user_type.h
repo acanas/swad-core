@@ -223,16 +223,14 @@ struct Usr_Data
    Pri_Visibility_t PhotoVisibility;	// Who can see user's photo
    Pri_Visibility_t BaPrfVisibility;	// Who can see user's basic public profile (minimal record card)
    Pri_Visibility_t ExPrfVisibility;	// Who can see user's extended public profile (figures, follow)
-   long CtyCod;		// Country
+   long HieCods[Hie_NUM_LEVELS];
    struct Dat_Date Birthday;
    char StrBirthday[Cns_MAX_BYTES_DATE + 1];
    char Phone[2][Usr_MAX_BYTES_PHONE + 1];
    char *Comments;
    long InsCtyCod;	// Country of the institution
-   long InsCod;		// Institution
    struct
      {
-      long HieCod;	// Center code
       long DptCod;	// Department code
       char Office[Usr_MAX_BYTES_ADDRESS + 1];
       char OfficePhone[Usr_MAX_BYTES_PHONE  + 1];
@@ -281,8 +279,7 @@ struct Usr_InList
    Usr_Sex_t Sex;
    char Photo[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Name of public link to photo
    Pri_Visibility_t PhotoVisibility;				// Who can see user's photo
-   long CtyCod;		// Country
-   long InsCod;		// Institution
+   long HieCods[Hie_NUM_LEVELS];
    Rol_Role_t RoleInCurrentCrsDB;	// Role in current course in database
    Usr_Accepted_t Accepted;	// User has accepted joining to one/all courses?
    bool Remove;		// A boolean associated with each user that indicates if he/she must be removed

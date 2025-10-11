@@ -100,7 +100,7 @@ struct Tmt_Timetable
 
 struct Tmt_Column
   {
-   long CrsCod;		// Course code (-1 if no course selected)
+   long HieCod;		// Course code (-1 if no course selected)
    long GrpCod;		// Group code (-1 if no group selected)
    Tmt_IntervalType_t IntervalType;
    Tmt_ClassType_t ClassType;

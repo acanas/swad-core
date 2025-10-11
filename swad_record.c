@@ -2110,7 +2110,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
                   Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST ? Frm_PUT_FORM :	// Only in main browser tab
                 						  Frm_DONT_PUT_FORM;
 
-   Ins.HieCod = UsrDat->InsCod;
+   Ins.HieCod = UsrDat->HieCods[Hie_INS];
    if (Ins.HieCod > 0)
       SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
 
@@ -2678,9 +2678,9 @@ static void Rec_ShowCountryInHead (struct Usr_Data *UsrDat,Lay_Show_t ShowData)
 
 
    HTM_TD_Begin ("class=\"REC_C2_MID LT DAT_STRONG_%s\"",The_GetSuffix ());
-      if (ShowData == Lay_SHOW && UsrDat->CtyCod > 0)
+      if (ShowData == Lay_SHOW && UsrDat->HieCods[Hie_CTY] > 0)
 	 /* Link to see country information */
-	 Cty_WriteCountryName (UsrDat->CtyCod);	// Put link to country
+	 Cty_WriteCountryName (UsrDat->HieCods[Hie_CTY]);	// Put link to country
    HTM_TD_End ();
   }
 
@@ -3246,8 +3246,8 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
 	                HTM_NO_ATTR,
 			"%s",Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]);
 	    HTM_OPTION (HTM_Type_STRING,"0",
-	                UsrDat->CtyCod == 0 ? HTM_SELECTED :
-	                		      HTM_NO_ATTR,
+	                UsrDat->HieCods[Hie_CTY] == 0 ? HTM_SELECTED :
+	                		                HTM_NO_ATTR,
 			"%s",Txt_Another_country);
 	    for (NumCty = 0;
 		 NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
@@ -3255,8 +3255,8 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
 	      {
 	       Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
 	       HTM_OPTION (HTM_Type_LONG,&Cty->HieCod,
-			   Cty->HieCod == UsrDat->CtyCod ? HTM_SELECTED :
-							   HTM_NO_ATTR,
+			   Cty->HieCod == UsrDat->HieCods[Hie_CTY] ? HTM_SELECTED :
+							             HTM_NO_ATTR,
 			   "%s",Cty->FullName);
 	      }
 	 HTM_SELECT_End ();
@@ -3497,9 +3497,9 @@ static void Rec_ShowCenter (struct Usr_Data *UsrDat,Lay_Show_t ShowData)
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",The_GetSuffix ());
 	 if (ShowData == Lay_SHOW)
-	    if (UsrDat->Tch.HieCod > 0)
+	    if (UsrDat->HieCods[Hie_CTR] > 0)
 	      {
-	       Ctr.HieCod = UsrDat->Tch.HieCod;
+	       Ctr.HieCod = UsrDat->HieCods[Hie_CTR];
 	       SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	       if (Ctr.WWW[0])
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
@@ -3723,7 +3723,7 @@ static void Rec_GetUsrExtraDataFromRecordForm (struct Usr_Data *UsrDat)
                                          (unsigned long) Usr_SEX_UNKNOWN);
 
    /***** Get country code *****/
-   UsrDat->CtyCod = ParCod_GetAndCheckParMin (ParCod_OthCty,0);	// 0 (another country) is allowed here
+   UsrDat->HieCods[Hie_CTY] = ParCod_GetAndCheckParMin (ParCod_OthCty,0);	// 0 (another country) is allowed here
 
    Dat_GetDateFromForm ("BirthDay","BirthMonth","BirthYear",
                         &(UsrDat->Birthday.Day  ),
@@ -3828,7 +3828,7 @@ static void Rec_ShowAlertsIfNotFilled (bool IAmATeacher)
       RecordFilled = false;
      }
 
-   if (Gbl.Usrs.Me.UsrDat.CtyCod < 0)			// 3. No country
+   if (Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTY] < 0)			// 3. No country
      {
       Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_country_nationality);
       RecordFilled = false;
@@ -3840,11 +3840,11 @@ static void Rec_ShowAlertsIfNotFilled (bool IAmATeacher)
      {
       if (Gbl.Usrs.Me.UsrDat.InsCtyCod < 0)		// 4. No institution country
 	 Ale_ShowAlert (Ale_WARNING,Txt_Please_select_the_country_of_your_institution);
-      else if (Gbl.Usrs.Me.UsrDat.InsCod < 0)		// 5. No institution
+      else if (Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] < 0)	// 5. No institution
 	 Ale_ShowAlert (Ale_WARNING,Txt_Please_select_your_institution);
       else if (IAmATeacher)
 	{
-	 if (Gbl.Usrs.Me.UsrDat.Tch.HieCod < 0)		// 6. No center
+	 if (Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] < 0)	// 6. No center
 	    Ale_ShowAlert (Ale_WARNING,Txt_Please_select_your_center);
 	 else if (Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)	// 7. No deparment
 	    Ale_ShowAlert (Ale_WARNING,Txt_Please_select_your_department);
@@ -3951,12 +3951,12 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"-1",
-				 (Gbl.Usrs.Me.UsrDat.InsCod < 0 ? HTM_SELECTED :
-								  HTM_NO_ATTR) | HTM_DISABLED,
+				 (Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] < 0 ? HTM_SELECTED :
+								            HTM_NO_ATTR) | HTM_DISABLED,
 				 NULL);
 		     HTM_OPTION (HTM_Type_STRING,"0",
-				 Gbl.Usrs.Me.UsrDat.InsCod == 0 ? HTM_SELECTED :
-								  HTM_NO_ATTR,
+				 Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] == 0 ? HTM_SELECTED :
+								            HTM_NO_ATTR,
 				 "%s",Txt_Another_institution);
 		     for (NumIns = 0;
 			  NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
@@ -3964,8 +3964,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		       {
 			Ins = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
 			HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
-				    Ins->HieCod == Gbl.Usrs.Me.UsrDat.InsCod ? HTM_SELECTED :
-									       HTM_NO_ATTR,
+				    Ins->HieCod == Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] ? HTM_SELECTED :
+									                 HTM_NO_ATTR,
 				    "%s",Ins->FullName);
 		       }
 		  HTM_SELECT_End ();
@@ -3990,8 +3990,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
 		  /* Get list of centers in this institution */
 		  Hie_FreeList (Hie_INS);
-		  if (Gbl.Usrs.Me.UsrDat.InsCod > 0)
-		     Ctr_GetBasicListOfCentersInIns (Gbl.Usrs.Me.UsrDat.InsCod);
+		  if (Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] > 0)
+		     Ctr_GetBasicListOfCentersInIns (Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS]);
 
 		  /* Begin form to select center */
 		  Frm_BeginFormAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
@@ -4000,12 +4000,12 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 				       " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 				       The_GetSuffix ());
 			HTM_OPTION (HTM_Type_STRING,"-1",
-				    (Gbl.Usrs.Me.UsrDat.Tch.HieCod < 0 ? HTM_SELECTED :
-									 HTM_NO_ATTR) | HTM_DISABLED,
+				    (Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] < 0 ? HTM_SELECTED :
+									       HTM_NO_ATTR) | HTM_DISABLED,
 				    NULL);
 			HTM_OPTION (HTM_Type_STRING,"0",
-				    Gbl.Usrs.Me.UsrDat.Tch.HieCod == 0 ? HTM_SELECTED :
-									 HTM_NO_ATTR,
+				    Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] == 0 ? HTM_SELECTED :
+									       HTM_NO_ATTR,
 				    Txt_Another_center);
 			for (NumCtr = 0;
 			     NumCtr < Gbl.Hierarchy.List[Hie_INS].Num;
@@ -4013,8 +4013,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 			  {
 			   Ctr = &Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr];
 			   HTM_OPTION (HTM_Type_LONG,&Ctr->HieCod,
-				       Ctr->HieCod == Gbl.Usrs.Me.UsrDat.Tch.HieCod ? HTM_SELECTED :
-										      HTM_NO_ATTR,
+				       Ctr->HieCod == Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] ? HTM_SELECTED :
+										            HTM_NO_ATTR,
 				       Ctr->FullName);
 			  }
 		     HTM_SELECT_End ();
@@ -4038,7 +4038,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		     if (asprintf (&SelectClass,"REC_C2_BOT_INPUT INPUT_%s",
 				   The_GetSuffix ()) < 0)
 			Err_NotEnoughMemoryExit ();
-		     Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.InsCod,		// Departments in my institution
+		     Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS],	// Departments in my institution
 						  Gbl.Usrs.Me.UsrDat.Tch.DptCod,	// Selected department
 						  Par_CodeStr[ParCod_Dpt],		// Parameter name
 						  SelectClass,				// Selector class
@@ -4116,14 +4116,14 @@ void Rec_ChgCountryOfMyInstitution (void)
 				      Gbl.Usrs.Me.UsrDat.InsCtyCod);
    if (NumInss)
      {
-      Gbl.Usrs.Me.UsrDat.InsCod     = -1L;
-      Gbl.Usrs.Me.UsrDat.Tch.HieCod = -1L;
+      Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] = -1L;
+      Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] = -1L;
       Gbl.Usrs.Me.UsrDat.Tch.DptCod = -1L;
      }
    else	// Country has no institutions
      {
-      Gbl.Usrs.Me.UsrDat.InsCod     = 0;	// Another institution
-      Gbl.Usrs.Me.UsrDat.Tch.HieCod = 0;	// Another center
+      Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] = 0;	// Another institution
+      Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] = 0;	// Another center
       Gbl.Usrs.Me.UsrDat.Tch.DptCod = 0;	// Another department
     }
 
@@ -4159,15 +4159,17 @@ void Rec_UpdateMyInstitution (void)
      }
 
    /* Set institution code */
-   Gbl.Usrs.Me.UsrDat.InsCod = Ins.HieCod;
+   Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] = Ins.HieCod;
 
    /***** When institution changes, the center and department must be reset *****/
    NumCtrs = Hie_GetNumNodesInHieLvl (Hie_CTR,	// Number of centers...
 				      Hie_INS,	// ...in institution
-				      Gbl.Usrs.Me.UsrDat.InsCod);
-   NumDpts = Dpt_GetNumDptsInIns (Gbl.Usrs.Me.UsrDat.InsCod);
-   Gbl.Usrs.Me.UsrDat.Tch.HieCod = (NumCtrs ? -1L : 0);
-   Gbl.Usrs.Me.UsrDat.Tch.DptCod = (NumDpts ? -1L : 0);
+				      Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS]);
+   NumDpts = Dpt_GetNumDptsInIns (Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS]);
+   Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] = NumCtrs ? -1L :
+						    0;
+   Gbl.Usrs.Me.UsrDat.Tch.DptCod       = NumDpts ? -1L :
+						    0;
 
    /***** Update institution, center and department *****/
    Acc_DB_UpdateMyInstitutionCenterDepartment ();
@@ -4194,15 +4196,15 @@ void Rec_UpdateMyCenter (void)
    if (Ctr.HieCod > 0)
      {
       SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
-      if (Gbl.Usrs.Me.UsrDat.InsCod != Ctr.PrtCod)
+      if (Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] != Ctr.PrtCod)
 	{
-	 Gbl.Usrs.Me.UsrDat.InsCod = Ctr.PrtCod;
+	 Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] = Ctr.PrtCod;
 	 Gbl.Usrs.Me.UsrDat.Tch.DptCod = -1L;
 	}
      }
 
    /* Set center code */
-   Gbl.Usrs.Me.UsrDat.Tch.HieCod = Ctr.HieCod;
+   Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] = Ctr.HieCod;
 
    /***** Update institution, center and department *****/
    Acc_DB_UpdateMyInstitutionCenterDepartment ();
@@ -4227,10 +4229,10 @@ void Rec_UpdateMyDepartment (void)
    if (Dpt.DptCod > 0)
      {
       Dpt_GetDepartmentDataByCod (&Dpt);
-      if (Gbl.Usrs.Me.UsrDat.InsCod != Dpt.HieCod)
+      if (Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] != Dpt.HieCod)
 	{
-	 Gbl.Usrs.Me.UsrDat.InsCod = Dpt.HieCod;
-	 Gbl.Usrs.Me.UsrDat.Tch.HieCod = -1L;
+	 Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] = Dpt.HieCod;
+	 Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] = -1L;
 	}
      }
 

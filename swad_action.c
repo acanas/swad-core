@@ -345,11 +345,11 @@ void Act_AdjustCurrentAction (void)
           the only action possible
           is to show a form to change my shared record card *****/
    if ( Gbl.Usrs.Me.UsrDat.Sex == Usr_SEX_UNKNOWN ||
-       !Gbl.Usrs.Me.UsrDat.FrstName[0]           ||
+       !Gbl.Usrs.Me.UsrDat.FrstName[0]            ||
        !Gbl.Usrs.Me.UsrDat.Surname1 [0]           ||
-        Gbl.Usrs.Me.UsrDat.CtyCod <= 0            ||
-	Gbl.Usrs.Me.UsrDat.InsCod < 0             ||
-       (IAmATeacherInAnyCrs && (Gbl.Usrs.Me.UsrDat.Tch.HieCod < 0 ||
+        Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTY] <= 0  ||
+	Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS]  < 0  ||
+       (IAmATeacherInAnyCrs && (Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] < 0 ||
                                 Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)))
      {
       Gbl.Action.Act = ActReqEdiRecSha;

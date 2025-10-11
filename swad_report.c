@@ -503,12 +503,13 @@ static void Rep_WriteSectionUsrInfo (void)
             Gbl.Usrs.Me.UsrDat.Email);
 
    /***** User's country *****/
-   Cty_GetCountryNameInLanguage (Gbl.Usrs.Me.UsrDat.CtyCod,Gbl.Prefs.Language,CtyName);
+   Cty_GetCountryNameInLanguage (Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTY],
+				 Gbl.Prefs.Language,CtyName);
    fprintf (Rep_File,"<li>%s: %s</li>",
             Txt_HIERARCHY_SINGUL_Abc[Hie_CTY],CtyName);
 
    /***** User's institution *****/
-   Ins.HieCod = Gbl.Usrs.Me.UsrDat.InsCod;
+   Ins.HieCod = Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS];
    SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
    fprintf (Rep_File,"<li>%s: %s</li>",
             Txt_HIERARCHY_SINGUL_Abc[Hie_INS],Ins.FullName);

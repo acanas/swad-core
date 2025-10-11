@@ -72,7 +72,7 @@ void Deg_ReceiveNewDeg (void);
 void Deg_RemoveDeg (void);
 
 Err_SuccessOrError_t Deg_GetDegreeDataByCod (struct Hie_Node *Node);
-void Deg_RemoveDegreeCompletely (long DegCod);
+void Deg_RemoveDegreeCompletely (long HieCod);
 void Deg_RenameDegShrt (void);
 void Deg_RenameDegFull (void);
 void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFull);

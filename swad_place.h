@@ -36,7 +36,7 @@
 struct Plc_Place
   {
    long PlcCod;
-   long InsCod;
+   long HieCod;	// Institution code
    char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1];
    char FullName[Nam_MAX_BYTES_FULL_NAME + 1];
    unsigned NumCtrs;

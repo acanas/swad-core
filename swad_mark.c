@@ -688,10 +688,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    unsigned UnsignedNum;
    Brw_FileBrowser_t FileBrowser;
    long Cod;
-   long InsCod;	// Not applicable here
-   long CtrCod;	// Not applicable here
-   long DegCod;	// Not applicable here
-   long CrsCod;
+   long HieCods[Hie_NUM_LEVELS];
    long GrpCod;
    struct Mrk_Properties Marks;
    char FullPathInTreeFromDBMarksTable[PATH_MAX + 1];
@@ -728,8 +725,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
       /* Course/group code (row[1]) */
       Cod = Str_ConvertStrCodToLongCod (row[1]);
-      Brw_GetCrsGrpFromFileMetadata (FileBrowser,Cod,
-				     &InsCod,&CtrCod,&DegCod,&CrsCod,&GrpCod);
+      Brw_GetCrsGrpFromFileMetadata (FileBrowser,Cod,HieCods,&GrpCod);
 
       /* Path (row[2]) */
       Str_Copy (FullPathInTreeFromDBMarksTable,row[2],
@@ -753,11 +749,11 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	   {
 	    if (GrpCod > 0)
 	       snprintf (PathMarks,sizeof (PathMarks),"%s/%ld/grp/%ld/%s",
-			 Cfg_PATH_CRS_PRIVATE,CrsCod,GrpCod,
+			 Cfg_PATH_CRS_PRIVATE,HieCods[Hie_CRS],GrpCod,
 			 FullPathInTreeFromDBMarksTable);
 	    else
 	       snprintf (PathMarks,sizeof (PathMarks),"%s/%ld/%s",
-			 Cfg_PATH_CRS_PRIVATE,CrsCod,
+			 Cfg_PATH_CRS_PRIVATE,HieCods[Hie_CRS],
 			 FullPathInTreeFromDBMarksTable);
 
 	    /***** Create temporal file to store my marks (in HTML) *****/

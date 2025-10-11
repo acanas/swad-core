@@ -8729,11 +8729,7 @@ static unsigned Brw_GetFileViewsFromMe (long FilCod)
 /*****************************************************************************/
 
 void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
-                                    long *InsCod,
-                                    long *CtrCod,
-                                    long *DegCod,
-                                    long *CrsCod,
-                                    long *GrpCod)
+                                    long HieCods[Hie_NUM_LEVELS],long *GrpCod)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Ctr;
@@ -8749,31 +8745,31 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
       case Brw_ADMI_SHR_INS:
 	 /* Cod stores the institution code */
 	 *GrpCod =
-	 *CrsCod =
-	 *DegCod =
-	 *CtrCod = -1L;
-	 *InsCod = Cod;
+	 HieCods[Hie_CRS] =
+	 HieCods[Hie_DEG] =
+	 HieCods[Hie_CTR] = -1L;
+	 HieCods[Hie_INS] = Cod;
          break;
       case Brw_ADMI_DOC_CTR:
       case Brw_ADMI_SHR_CTR:
 	 /* Cod stores the center code */
 	 *GrpCod =
-	 *CrsCod =
-	 *DegCod = -1L;
-	 *CtrCod = Ctr.HieCod = Cod;
+	 HieCods[Hie_CRS] =
+	 HieCods[Hie_DEG] = -1L;
+	 HieCods[Hie_CTR] = Ctr.HieCod = Cod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
-	 *InsCod = Ctr.PrtCod;
+	 HieCods[Hie_INS] = Ctr.PrtCod;
          break;
       case Brw_ADMI_DOC_DEG:
       case Brw_ADMI_SHR_DEG:
 	 /* Cod stores the degree code */
 	 *GrpCod =
-	 *CrsCod = -1L;
-	 *DegCod = Deg.HieCod = Cod;
+	 HieCods[Hie_CRS] = -1L;
+	 HieCods[Hie_DEG] = Deg.HieCod = Cod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Deg);
-	 *CtrCod = Ctr.HieCod = Deg.PrtCod;
+	 HieCods[Hie_CTR] = Ctr.HieCod = Deg.PrtCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
-	 *InsCod = Ctr.PrtCod;
+	 HieCods[Hie_INS] = Ctr.PrtCod;
          break;
       case Brw_ADMI_DOC_CRS:
       case Brw_ADMI_TCH_CRS:
@@ -8783,13 +8779,13 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
       case Brw_ADMI_MRK_CRS:
 	 /* Cod stores the course code */
 	 *GrpCod = -1L;
-	 *CrsCod = Crs.HieCod = Cod;
+	 HieCods[Hie_CRS] = Crs.HieCod = Cod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Crs);
-	 *DegCod = Deg.HieCod = Crs.PrtCod;
+	 HieCods[Hie_DEG] = Deg.HieCod = Crs.PrtCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Deg);
-	 *CtrCod = Ctr.HieCod = Deg.PrtCod;
+	 HieCods[Hie_CTR] = Ctr.HieCod = Deg.PrtCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
-	 *InsCod = Ctr.PrtCod;
+	 HieCods[Hie_INS] = Ctr.PrtCod;
 	 break;
       case Brw_ADMI_DOC_GRP:
       case Brw_ADMI_TCH_GRP:
@@ -8798,32 +8794,32 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
 	 /* Cod stores the group code */
 	 *GrpCod = Grp.GrpCod = Cod;
 	 Grp_GetGroupDataByCod (&Crs.HieCod,&GrpTyp.GrpTypCod,&Grp);
-	 *CrsCod = Crs.HieCod;
+	 HieCods[Hie_CRS] = Crs.HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Crs);
-	 *DegCod = Deg.HieCod = Crs.PrtCod;
+	 HieCods[Hie_DEG] = Deg.HieCod = Crs.PrtCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Deg);
-	 *CtrCod = Ctr.HieCod = Deg.PrtCod;
+	 HieCods[Hie_CTR] = Ctr.HieCod = Deg.PrtCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
-	 *InsCod = Ctr.PrtCod;
+	 HieCods[Hie_INS] = Ctr.PrtCod;
 	 break;
       case Brw_ADMI_DOC_PRJ:
       case Brw_ADMI_ASS_PRJ:
 	 /* Cod stores the project code */
 	 *GrpCod = -1L;
-	 *CrsCod = Crs.HieCod = Prj_DB_GetCrsOfPrj (Cod);
+	 HieCods[Hie_CRS] = Crs.HieCod = Prj_DB_GetCrsOfPrj (Cod);
 	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Crs);
-	 *DegCod = Deg.HieCod = Crs.PrtCod;
+	 HieCods[Hie_DEG] = Deg.HieCod = Crs.PrtCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Deg);
-	 *CtrCod = Ctr.HieCod = Deg.PrtCod;
+	 HieCods[Hie_CTR] = Ctr.HieCod = Deg.PrtCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
-	 *InsCod = Ctr.PrtCod;
+	 HieCods[Hie_INS] = Ctr.PrtCod;
 	 break;
       default:
 	 *GrpCod =
-	 *CrsCod =
-	 *DegCod =
-	 *CtrCod =
-	 *InsCod = -1L;
+	 HieCods[Hie_CRS] =
+	 HieCods[Hie_DEG] =
+	 HieCods[Hie_CTR] =
+	 HieCods[Hie_INS] = -1L;
 	 break;
      }
   }

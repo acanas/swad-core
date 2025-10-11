@@ -400,7 +400,6 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct Usr_Data *UsrDat)
    UsrDat->BaPrfVisibility = Pri_BASIC_PROFILE_VIS_DEFAULT;
    UsrDat->ExPrfVisibility = Pri_EXTENDED_PROFILE_VIS_DEFAULT;
 
-   UsrDat->CtyCod = -1L;
    UsrDat->StrBirthday[0] = '\0';
    UsrDat->Birthday.Day   = 0;
    UsrDat->Birthday.Month = 0;
@@ -410,10 +409,11 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct Usr_Data *UsrDat)
    if (UsrDat->Comments)
       UsrDat->Comments[0] = '\0';
 
-   UsrDat->InsCtyCod  = -1L;
-   UsrDat->InsCod     = -1L;
-   UsrDat->Tch.HieCod = -1L;
-   UsrDat->Tch.DptCod = -1L;
+   UsrDat->HieCods[Hie_CTY]   = -1L;
+   UsrDat->HieCods[Hie_INS]   = -1L;
+   UsrDat->HieCods[Hie_CTR]   = -1L;
+   UsrDat->InsCtyCod          = -1L;
+   UsrDat->Tch.DptCod         = -1L;
    UsrDat->Tch.Office[0]      = '\0';
    UsrDat->Tch.OfficePhone[0] = '\0';
 
@@ -587,11 +587,11 @@ void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
 
 	 /* Get country (row[10]), institution country (row[11]),
 		institution (row[12]), department (row[13]) and center (row[14]) */
-	 UsrDat->CtyCod     = Str_ConvertStrCodToLongCod (row[10]);
-	 UsrDat->InsCtyCod  = Str_ConvertStrCodToLongCod (row[11]);
-	 UsrDat->InsCod     = Str_ConvertStrCodToLongCod (row[12]);
-	 UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[13]);
-	 UsrDat->Tch.HieCod = Str_ConvertStrCodToLongCod (row[14]);
+	 UsrDat->HieCods[Hie_CTY] = Str_ConvertStrCodToLongCod (row[10]);
+	 UsrDat->InsCtyCod        = Str_ConvertStrCodToLongCod (row[11]);
+	 UsrDat->HieCods[Hie_INS] = Str_ConvertStrCodToLongCod (row[12]);
+	 UsrDat->Tch.DptCod       = Str_ConvertStrCodToLongCod (row[13]);
+	 UsrDat->HieCods[Hie_CTR] = Str_ConvertStrCodToLongCod (row[14]);
 
 	 /* Get office (row[15]) and office phone (row[16]) */
 	 Str_Copy (UsrDat->Tch.Office     ,row[15],sizeof (UsrDat->Tch.Office     ) - 1);
@@ -2259,7 +2259,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
       HTM_TD_End ();
 
       /***** Write rest of main user's data *****/
-      Ins.HieCod = UsrDat->InsCod;
+      Ins.HieCod = UsrDat->HieCods[Hie_INS];
       SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
       Usr_WriteUsrSurnamesAndName (UsrDat,BgColor);
 
@@ -2304,7 +2304,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,
       HTM_TD_End ();
 
       /***** Write rest of guest's main data *****/
-      Ins.HieCod = UsrDat->InsCod;
+      Ins.HieCod = UsrDat->HieCods[Hie_INS];
       SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
       Usr_WriteUsrSurnamesAndName (UsrDat,The_GetColorRows ());
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
@@ -2313,14 +2313,14 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,
 			NULL,Lay_NON_BR_SPACES,Usr_HAS_NOT_ACCEPTED);
 
       /***** Write the rest of the data of the guest *****/
-      if (UsrDat->Tch.HieCod > 0)
+      if (UsrDat->HieCods[Hie_CTR] > 0)
 	{
-	 Ctr.HieCod = UsrDat->Tch.HieCod;
+	 Ctr.HieCod = UsrDat->HieCods[Hie_CTR];
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	}
       Usr_WriteUsrData (The_GetColorRows (),
-			UsrDat->Tch.HieCod > 0 ? Ctr.FullName :
-						 NULL,
+			UsrDat->HieCods[Hie_CTR] > 0 ? Ctr.FullName :
+						       NULL,
 			NULL,Lay_NON_BR_SPACES,Usr_HAS_NOT_ACCEPTED);
       if (UsrDat->Tch.DptCod > 0)
 	{
@@ -2399,7 +2399,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
       HTM_TD_End ();
 
       /***** Write rest of main student's data *****/
-      Ins.HieCod = UsrDat->InsCod;
+      Ins.HieCod = UsrDat->HieCods[Hie_INS];
       SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
       Usr_WriteUsrSurnamesAndName (UsrDat,The_GetColorRows ());
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
@@ -2513,7 +2513,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
       HTM_TD_End ();
 
       /***** Write rest of main teacher's data *****/
-      Ins.HieCod = UsrDat->InsCod;
+      Ins.HieCod = UsrDat->HieCods[Hie_INS];
       SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
       Usr_WriteUsrSurnamesAndName (UsrDat,The_GetColorRows ());
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
@@ -2522,15 +2522,15 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
 			Lay_NON_BR_SPACES,UsrDat->Accepted);
 
       /***** Write the rest of teacher's data *****/
-      if (ShowData == Lay_SHOW && UsrDat->Tch.HieCod > 0)
+      if (ShowData == Lay_SHOW && UsrDat->HieCods[Hie_CTR] > 0)
 	{
-	 Ctr.HieCod = UsrDat->Tch.HieCod;
+	 Ctr.HieCod = UsrDat->HieCods[Hie_CTR];
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	}
       Usr_WriteUsrData (The_GetColorRows (),
 			ShowData == Lay_SHOW &&
-			UsrDat->Tch.HieCod > 0 ? Ctr.FullName :
-						 NULL,
+			UsrDat->HieCods[Hie_CTR] > 0 ? Ctr.FullName :
+						       NULL,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
       if (ShowData == Lay_SHOW && UsrDat->Tch.DptCod > 0)
 	{
@@ -2594,7 +2594,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat,
       HTM_TD_End ();
 
       /***** Write rest of main administrator's data *****/
-      Ins.HieCod = UsrDat->InsCod;
+      Ins.HieCod = UsrDat->HieCods[Hie_INS];
       SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
       Usr_WriteUsrSurnamesAndName (UsrDat,The_GetColorRows ());
 
@@ -2863,8 +2863,8 @@ void Usr_GetListUsrsFromQuery (char *Query,Hie_Level_t HieLvl,Rol_Role_t Role)
 
             /* Get user's country code (row[9])
                and user's institution code (row[10]) */
-	    UsrInList->CtyCod = Str_ConvertStrCodToLongCod (row[ 9]);
-	    UsrInList->InsCod = Str_ConvertStrCodToLongCod (row[10]);
+	    UsrInList->HieCods[Hie_CTY] = Str_ConvertStrCodToLongCod (row[ 9]);
+	    UsrInList->HieCods[Hie_INS] = Str_ConvertStrCodToLongCod (row[10]);
 
             /* Get user's role and acceptance of enrolment in course(s)
                (row[11], row[12] if Scope == Hie_CRS) */
@@ -2969,8 +2969,8 @@ void Usr_CopyBasicUsrDataFromList (struct Usr_Data *UsrDat,
    UsrDat->Sex                = UsrInList->Sex;
    Str_Copy (UsrDat->Photo   ,UsrInList->Photo   ,sizeof (UsrDat->Photo   ) - 1);
    UsrDat->PhotoVisibility    = UsrInList->PhotoVisibility;
-   UsrDat->CtyCod             = UsrInList->CtyCod;
-   UsrDat->InsCod             = UsrInList->InsCod;
+   UsrDat->HieCods[Hie_CTY]   = UsrInList->HieCods[Hie_CTY];
+   UsrDat->HieCods[Hie_INS]   = UsrInList->HieCods[Hie_INS];
    UsrDat->Roles.InCurrentCrs = UsrInList->RoleInCurrentCrsDB;
    UsrDat->Accepted           = UsrInList->Accepted;
   }

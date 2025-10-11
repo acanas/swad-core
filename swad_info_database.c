@@ -137,7 +137,7 @@ void Inf_DB_SetInfoSrc (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
 /*****************************************************************************/
 
 Exi_Exist_t Inf_DB_GetInfoSrc (MYSQL_RES **mysql_res,
-                               long CrsCod,Inf_Type_t InfoType)
+                               long HieCod,Inf_Type_t InfoType)
   {
    return
    DB_QuerySELECTunique (mysql_res,"can not get info source",
@@ -145,7 +145,7 @@ Exi_Exist_t Inf_DB_GetInfoSrc (MYSQL_RES **mysql_res,
 			  " FROM crs_info_src"
 			 " WHERE CrsCod=%ld"
 			   " AND InfoType='%s'",
-			 CrsCod,
+			 HieCod,
 			 Inf_DB_NamesForInfoType[InfoType]);
   }
 
@@ -154,7 +154,7 @@ Exi_Exist_t Inf_DB_GetInfoSrc (MYSQL_RES **mysql_res,
 /*****************************************************************************/
 
 Exi_Exist_t Inf_DB_GetInfoSrcAndMustBeRead (MYSQL_RES **mysql_res,
-                                            long CrsCod,Inf_Type_t InfoType)
+                                            long HieCod,Inf_Type_t InfoType)
   {
    return
    DB_QuerySELECTunique (mysql_res,"can not get info source",
@@ -163,7 +163,7 @@ Exi_Exist_t Inf_DB_GetInfoSrcAndMustBeRead (MYSQL_RES **mysql_res,
 			  " FROM crs_info_src"
 			 " WHERE CrsCod=%ld"
 			   " AND InfoType='%s'",
-			 CrsCod,
+			 HieCod,
 			 Inf_DB_NamesForInfoType[InfoType]);
   }
 
@@ -208,7 +208,7 @@ void Inf_DB_SetInfoTxt (Inf_Type_t InfoType,
 /*****************************************************************************/
 
 Exi_Exist_t Inf_DB_GetInfoTxt (MYSQL_RES **mysql_res,
-                               long CrsCod,Inf_Type_t InfoType)
+                               long HieCod,Inf_Type_t InfoType)
   {
    return
    DB_QuerySELECTunique (mysql_res,"can not get info text",
@@ -217,7 +217,7 @@ Exi_Exist_t Inf_DB_GetInfoTxt (MYSQL_RES **mysql_res,
 			  " FROM crs_info_txt"
 			 " WHERE CrsCod=%ld"
 			   " AND InfoType='%s'",
-			 CrsCod,
+			 HieCod,
 			 Inf_DB_NamesForInfoType[InfoType]);
   }
 
@@ -311,11 +311,11 @@ unsigned Inf_DB_GetInfoTypesfIMustReadInfo (MYSQL_RES **mysql_res)
 /********* Remove user's status about reading of course information **********/
 /*****************************************************************************/
 
-void Inf_DB_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod)
+void Inf_DB_RemoveUsrFromCrsInfoRead (long UsrCod,long HieCod)
   {
    DB_QueryDELETE ("can not set that I have not read course info",
 		   "DELETE FROM crs_info_read"
 		   " WHERE UsrCod=%ld"
 		     " AND CrsCod=%ld",
-                   UsrCod,CrsCod);
+                   UsrCod,HieCod);
   }

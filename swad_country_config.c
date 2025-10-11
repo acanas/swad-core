@@ -69,7 +69,7 @@ static void CtyCfg_NumInss (void);
 static void CtyCfg_NumDegs (void);
 static void CtyCfg_NumCrss (void);
 
-static void CtyCfg_GetMapAttr (long CtyCod,char **MapAttribution);
+static void CtyCfg_GetMapAttr (long HieCod,char **MapAttribution);
 static void CtyCfg_FreeMapAttr (char **MapAttribution);
 
 /*****************************************************************************/
@@ -537,7 +537,7 @@ static void CtyCfg_NumCrss (void)
 /******************** Get map attribution from database **********************/
 /*****************************************************************************/
 
-static void CtyCfg_GetMapAttr (long CtyCod,char **MapAttribution)
+static void CtyCfg_GetMapAttr (long HieCod,char **MapAttribution)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -547,7 +547,7 @@ static void CtyCfg_GetMapAttr (long CtyCod,char **MapAttribution)
    CtyCfg_FreeMapAttr (MapAttribution);
 
    /***** Get map attribution from database *****/
-   if (Cty_DB_GetMapAttr (&mysql_res,CtyCod))
+   if (Cty_DB_GetMapAttr (&mysql_res,HieCod))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);

@@ -495,6 +495,7 @@ void InsCfg_ChangeInsCty (void)
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_country_of_the_institution_X_has_changed_to_Y;
    struct Hie_Node NewCty;
+   long HieCods[Hie_NUM_LEVELS];
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
@@ -517,7 +518,9 @@ void InsCfg_ChangeInsCty (void)
 				 0) == Exi_DOES_NOT_EXIST)	// Unused
 	{
 	 /***** Update the table changing the country of the institution *****/
-	 Ins_DB_UpdateInsCty (Gbl.Hierarchy.Node[Hie_INS].HieCod,NewCty.HieCod);
+	 HieCods[Hie_CTY] = NewCty.HieCod;
+	 HieCods[Hie_INS] = Gbl.Hierarchy.Node[Hie_INS].HieCod;
+	 Ins_DB_UpdateInsCty (HieCods);
          Gbl.Hierarchy.Node[Hie_INS].PrtCod =
          Gbl.Hierarchy.Node[Hie_CTY].HieCod = NewCty.HieCod;
 

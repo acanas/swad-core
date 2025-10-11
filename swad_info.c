@@ -218,7 +218,7 @@ static Exi_Exist_t Inf_CheckAndShowPage (Inf_Type_t InfoType);
 
 static Exi_Exist_t Inf_CheckURL (Inf_Type_t InfoType);
 static Exi_Exist_t Inf_CheckAndShowURL (Inf_Type_t InfoType);
-static void Inf_BuildPathURL (long CrsCod,Inf_Type_t InfoType,
+static void Inf_BuildPathURL (long HieCod,Inf_Type_t InfoType,
                               char PathFile[PATH_MAX + 1]);
 
 static void Inf_ShowPage (const char *URL);
@@ -933,10 +933,10 @@ static Exi_Exist_t Inf_CheckAndShowPage (Inf_Type_t InfoType)
 /* Build path inside a course for a given a info type to store web page file */
 /*****************************************************************************/
 
-void Inf_BuildPathPage (long CrsCod,Inf_Type_t InfoType,char PathDir[PATH_MAX + 1])
+void Inf_BuildPathPage (long HieCod,Inf_Type_t InfoType,char PathDir[PATH_MAX + 1])
   {
    snprintf (PathDir,PATH_MAX + 1,"%s/%ld/%s",
-             Cfg_PATH_CRS_PUBLIC,CrsCod,Inf_FileNamesForInfoType[InfoType]);
+             Cfg_PATH_CRS_PUBLIC,HieCod,Inf_FileNamesForInfoType[InfoType]);
   }
 
 /*****************************************************************************/
@@ -1004,11 +1004,11 @@ static Exi_Exist_t Inf_CheckAndShowURL (Inf_Type_t InfoType)
 /*** Build path inside a course for a given a info type to store URL file ****/
 /*****************************************************************************/
 
-static void Inf_BuildPathURL (long CrsCod,Inf_Type_t InfoType,
+static void Inf_BuildPathURL (long HieCod,Inf_Type_t InfoType,
                               char PathFile[PATH_MAX + 1])
   {
    snprintf (PathFile,PATH_MAX + 1,"%s/%ld/%s.url",
-	     Cfg_PATH_CRS_PRIVATE,CrsCod,Inf_FileNamesForInfoType[InfoType]);
+	     Cfg_PATH_CRS_PRIVATE,HieCod,Inf_FileNamesForInfoType[InfoType]);
   }
 
 /*****************************************************************************/
@@ -1608,14 +1608,14 @@ Inf_Src_t Inf_GetInfoSrcFromForm (void)
 /***** Get and check info source for a type of course info from database *****/
 /*****************************************************************************/
 
-Inf_Src_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_Type_t InfoType)
+Inf_Src_t Inf_GetInfoSrcFromDB (long HieCod,Inf_Type_t InfoType)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Inf_Src_t InfoSrc;
 
    /***** Get info source for a specific type of info from database *****/
-   switch (Inf_DB_GetInfoSrc (&mysql_res,CrsCod,InfoType))
+   switch (Inf_DB_GetInfoSrc (&mysql_res,HieCod,InfoType))
      {
       case Exi_EXISTS:
 	 /* Get row */
@@ -1670,7 +1670,7 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Inf_Info *Info)
 /********** Get info text for a type of course info from database ************/
 /*****************************************************************************/
 
-void Inf_GetInfoTxtFromDB (long CrsCod,Inf_Type_t InfoType,
+void Inf_GetInfoTxtFromDB (long HieCod,Inf_Type_t InfoType,
                            char InfoTxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1],
                            char InfoTxtMD  [Cns_MAX_BYTES_LONG_TEXT + 1])
   {
@@ -1679,7 +1679,7 @@ void Inf_GetInfoTxtFromDB (long CrsCod,Inf_Type_t InfoType,
 
    /***** Get info source for a specific type of course information
           (bibliography, FAQ, links or assessment) from database *****/
-   switch (Inf_DB_GetInfoTxt (&mysql_res,CrsCod,InfoType))
+   switch (Inf_DB_GetInfoTxt (&mysql_res,HieCod,InfoType))
      {
       case Exi_EXISTS:
 	 /* Get info text */

@@ -152,7 +152,7 @@ static unsigned long Msg_RemoveSomeRecOrSntMsgsUsr (const struct Msg_Messages *M
                                                     const char *FilterFromToSubquery);
 static void Msg_RemoveRcvMsg (long MsgCod,long UsrCod);
 
-static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
+static void Msg_GetMsgSntData (long MsgCod,long *HieCod,long *UsrCod,
                                time_t *CreatTimeUTC,
                                char Subject[Cns_MAX_BYTES_SUBJECT + 1],
                                bool *Deleted);
@@ -836,6 +836,7 @@ static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages)
    long NewMsgCod = -1L;	// Initiliazed to avoid warning
    bool CreateNotif;
    bool NotifyByEmail;
+   long HieCods[Hie_NUM_LEVELS];
 
    /***** Initialize and get media from form *****/
    Med_MediaConstructor (&Media);
@@ -898,13 +899,16 @@ static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages)
 			    If this recipient wants to receive notifications by -mail,
 			    activate the sending of a notification *****/
 		     if (CreateNotif)
+		       {
+			HieCods[Hie_INS] = Gbl.Hierarchy.Node[Hie_INS].HieCod;
+			HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
+			HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod;
+			HieCods[Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod;
 			Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_MESSAGE,UsrDstData.UsrCod,NewMsgCod,
 						      (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
 										      0),
-						      Gbl.Hierarchy.Node[Hie_INS].HieCod,
-						      Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-						      Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-						      Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+						      HieCods);
+		       }
 
 		     /***** Show an alert indicating that the message has been sent successfully *****/
 		     Ale_ShowAlert (Ale_SUCCESS,NotifyByEmail ? Txt_message_sent_to_X_notified_by_email :
@@ -1894,7 +1898,7 @@ static bool Msg_GetParOnlyUnreadMsgs (void)
 /***************************** Get data of a message *************************/
 /*****************************************************************************/
 
-static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
+static void Msg_GetMsgSntData (long MsgCod,long *HieCod,long *UsrCod,
                                time_t *CreatTimeUTC,
                                char Subject[Cns_MAX_BYTES_SUBJECT + 1],
                                bool *Deleted)
@@ -1915,7 +1919,7 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
    row[2]: UNIX_TIMESTAMP(CreatTime)
    */
    /* Get course (row[0]) and author (row[1]) */
-   *CrsCod = Str_ConvertStrCodToLongCod (row[0]);
+   *HieCod = Str_ConvertStrCodToLongCod (row[0]);
    *UsrCod = Str_ConvertStrCodToLongCod (row[1]);
 
    /* Get creation time (row[2]) */
