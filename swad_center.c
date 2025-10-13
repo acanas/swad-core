@@ -85,7 +85,7 @@ static void Ctr_PutIconsEditingCenters (__attribute__((unused)) void *Args);
 static void Ctr_GetFullListOfCentersInCurrentIns (void);
 static void Ctr_GetCenterDataFromRow (MYSQL_RES *mysql_res,
 				      struct Hie_Node *Ctr,
-                                      bool GetNumUsrsWhoClaimToBelongToCtr);
+                                      Usr_GetNumUsrs_t GetNumUsrsWhoClaimToBelongToCtr);
 static void Ctr_GetCoordFromRow (MYSQL_RES *mysql_res,
 				 struct Map_Coordinates *Coord);
 
@@ -482,7 +482,8 @@ void Ctr_GetBasicListOfCentersInIns (long HieCod)
 	   NumCtr++)
          /* Get center data */
          Ctr_GetCenterDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr],
-                                   false);	// Don't get number of users who claim to belong to this center
+                                   Usr_DONT_GET_NUM_USRS);	// Don't get number of users
+								// who claim to belong to this center
      }
 
    /***** Free structure that stores the query result *****/
@@ -515,7 +516,8 @@ static void Ctr_GetFullListOfCentersInCurrentIns (void)
 	   NumCtr++)
          /* Get center data */
          Ctr_GetCenterDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr],
-                                   true);	// Get number of users who claim to belong to this center
+                                   Usr_GET_NUM_USRS);	// Get number of users
+							// who claim to belong to this center
      }
 
    /***** Free structure that stores the query result *****/
@@ -549,8 +551,8 @@ Err_SuccessOrError_t Ctr_GetCenterDataByCod (struct Hie_Node *Node)
         {
          /* Get center data */
          Ctr_GetCenterDataFromRow (mysql_res,Node,
-                                   false);	// Don't get number of users
-						// who claim to belong to this center
+                                   Usr_DONT_GET_NUM_USRS);	// Don't get number of users
+								// who claim to belong to this center
 
          /* Set return value */
          SuccessOrError = Err_SUCCESS;
@@ -593,7 +595,7 @@ void Ctr_GetCoordByCod (long HieCod,struct Map_Coordinates *Coord)
 
 static void Ctr_GetCenterDataFromRow (MYSQL_RES *mysql_res,
 				      struct Hie_Node *Ctr,
-                                      bool GetNumUsrsWhoClaimToBelongToCtr)
+                                      Usr_GetNumUsrs_t GetNumUsrsWhoClaimToBelongToCtr)
   {
    MYSQL_ROW row;
 
@@ -625,7 +627,7 @@ static void Ctr_GetCenterDataFromRow (MYSQL_RES *mysql_res,
 
    /* Get number of users who claim to belong to this center (row[8]) */
    Ctr->NumUsrsWhoClaimToBelong.Status = Cac_INVALID;
-   if (GetNumUsrsWhoClaimToBelongToCtr)
+   if (GetNumUsrsWhoClaimToBelongToCtr == Usr_GET_NUM_USRS)
       if (sscanf (row[8],"%u",&(Ctr->NumUsrsWhoClaimToBelong.NumUsrs)) == 1)
 	 Ctr->NumUsrsWhoClaimToBelong.Status = Cac_VALID;
   }

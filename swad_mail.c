@@ -85,7 +85,7 @@ static void Mai_GetMailDomain (const char *Email,
                                char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 static void Mai_GetMailDomainDataFromRow (MYSQL_RES *mysql_res,
                                           struct Mail *Mai,
-                                          bool GetNumUsrs);
+                                          Usr_GetNumUsrs_t GetNumUsrs);
 static void Mai_FreeListMailDomains (struct Mai_Mails *Mails);
 
 static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails);
@@ -284,7 +284,7 @@ static void Mai_GetListMailDomainsAllowedForNotif (struct Mai_Mails *Mails)
 	   NumMai < Mails->Num;
 	   NumMai++)
          Mai_GetMailDomainDataFromRow (mysql_res,&Mails->Lst[NumMai],
-	                               true);	// Get number of users
+	                               Usr_GET_NUM_USRS);	// Get number of users
      }
 
    /***** Free structure that stores the query result *****/
@@ -372,7 +372,7 @@ void Mai_GetMailDomainDataByCod (struct Mail *Mai)
       /***** Get data of a mail domain from database *****/
       if (Mai_DB_GetMailDomainDataByCod (&mysql_res,Mai->MaiCod) == Exi_EXISTS) // Mail found...
 	 Mai_GetMailDomainDataFromRow (mysql_res,Mai,
-	                               false);	// Don't get number of users
+	                               Usr_DONT_GET_NUM_USRS);	// Don't get number of users
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -385,7 +385,7 @@ void Mai_GetMailDomainDataByCod (struct Mail *Mai)
 
 static void Mai_GetMailDomainDataFromRow (MYSQL_RES *mysql_res,
                                           struct Mail *Mai,
-                                          bool GetNumUsrs)
+                                          Usr_GetNumUsrs_t GetNumUsrs)
   {
    MYSQL_ROW row;
 
@@ -401,13 +401,17 @@ static void Mai_GetMailDomainDataFromRow (MYSQL_RES *mysql_res,
    Str_Copy (Mai->Info  ,row[2],sizeof (Mai->Info  ) - 1);
 
    /***** Get number of users (row[3]) *****/
-   if (GetNumUsrs)
+   switch (GetNumUsrs)
      {
-      if (sscanf (row[3],"%u",&(Mai->NumUsrs)) != 1)
-	 Mai->NumUsrs = 0;
+      case Usr_GET_NUM_USRS:
+	 if (sscanf (row[3],"%u",&(Mai->NumUsrs)) != 1)
+	    Mai->NumUsrs = 0;
+	 break;
+      case Usr_DONT_GET_NUM_USRS:
+      default:
+         Mai->NumUsrs = 0;
+         break;
      }
-   else
-      Mai->NumUsrs = 0;
   }
 
 /*****************************************************************************/

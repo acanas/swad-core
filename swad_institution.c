@@ -85,7 +85,7 @@ static void Ins_PutIconsEditingInstitutions (__attribute__((unused)) void *Args)
 
 static void Ins_GetInstitDataFromRow (MYSQL_RES *mysql_res,
                                       struct Hie_Node *Ins,
-                                      bool GetNumUsrsWhoClaimToBelongToIns);
+                                      Usr_GetNumUsrs_t GetNumUsrsWhoClaimToBelongToIns);
 
 static void Ins_ListInstitutionsForEdition (void);
 static Usr_Can_t Ins_CheckIfICanEdit (struct Hie_Node *Ins);
@@ -582,7 +582,7 @@ void Ins_GetBasicListOfInstitutions (long HieCod)
 	   NumIns++)
          /* Get institution data */
          Ins_GetInstitDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns],
-                                   false);	// Don't get number of users who claim to belong to this institution
+                                   Usr_DONT_GET_NUM_USRS);	// Don't get number of users who claim to belong to this institution
      }
    else
       Gbl.Hierarchy.List[Hie_CTY].Lst = NULL;
@@ -615,7 +615,7 @@ void Ins_GetFullListOfInstitutions (long HieCod)
 	   NumIns++)
          /* Get institution data */
          Ins_GetInstitDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns],
-                                   true);	// Get number of users who claim to belong to this institution
+                                   Usr_GET_NUM_USRS);	// Get number of users who claim to belong to this institution
      }
    else
       Gbl.Hierarchy.List[Hie_CTY].Lst = NULL;
@@ -670,8 +670,8 @@ Err_SuccessOrError_t Ins_GetInstitDataByCod (struct Hie_Node *Node)
 	{
          /* Get institution data */
          Ins_GetInstitDataFromRow (mysql_res,Node,
-                                   false);	// Don't get number of users
-						// who claim to belong to this institution
+                                   Usr_DONT_GET_NUM_USRS);	// Don't get number of users
+								// who claim to belong to this institution
 
          /* Set return value */
 	 SuccessOrError = Err_SUCCESS;
@@ -690,7 +690,7 @@ Err_SuccessOrError_t Ins_GetInstitDataByCod (struct Hie_Node *Node)
 
 static void Ins_GetInstitDataFromRow (MYSQL_RES *mysql_res,
                                       struct Hie_Node *Ins,
-                                      bool GetNumUsrsWhoClaimToBelongToIns)
+                                      Usr_GetNumUsrs_t GetNumUsrsWhoClaimToBelongToIns)
   {
    MYSQL_ROW row;
 
@@ -728,7 +728,7 @@ static void Ins_GetInstitDataFromRow (MYSQL_RES *mysql_res,
 
    /***** Get number of users who claim to belong to this institution (row[7]) *****/
    Ins->NumUsrsWhoClaimToBelong.Status = Cac_INVALID;
-   if (GetNumUsrsWhoClaimToBelongToIns)
+   if (GetNumUsrsWhoClaimToBelongToIns == Usr_GET_NUM_USRS)
       if (sscanf (row[7],"%u",&(Ins->NumUsrsWhoClaimToBelong.NumUsrs)) == 1)
 	 Ins->NumUsrsWhoClaimToBelong.Status = Cac_VALID;
   }

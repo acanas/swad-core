@@ -743,8 +743,7 @@ void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print)
 /*********** Compute score of each question and store in database ************/
 /*****************************************************************************/
 
-void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
-                                                   bool UpdateQstScore)
+void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print)
   {
    unsigned QstInd;
    struct Qst_Question Question;
@@ -775,7 +774,8 @@ void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
 	 Print->NumQsts.NotBlank++;
 
       /* Update the number of hits and the score of this question in tests database */
-      if (UpdateQstScore)
+      if (Print->Sent &&			// Print just sent to be assessed
+	  Gbl.Usrs.Me.Role.Logged == Rol_STD)	// I am a student
 	 Qst_DB_UpdateQstScore (Print,QstInd);
      }
   }

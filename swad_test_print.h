@@ -52,7 +52,7 @@ struct TstPrn_Print
    struct TstPrn_NumQuestions NumQsts;	// Number of questions
    bool Sent;				// This test print has been sent or not?
 					// "Sent" means that user has clicked "Send" button after finishing
-   DenAll_DenyOrAllow_t DenyOrAllowTchs;	// Are teachers allowed to see this test result?
+   DenAll_DenyOrAllow_t DenyOrAllowTchs;// Are teachers allowed to see this test result?
    double Score;			// Total score of the test print
    struct Qst_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST];
   };
@@ -78,8 +78,7 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print);
 
 void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print);
 
-void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
-                                                   bool UpdateQstScore);
+void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print);
 void TstPrn_ComputeAnswerScore (struct Qst_PrintedQuestion *PrintedQuestion,
 				struct Qst_Question *Question);
 

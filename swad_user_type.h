@@ -165,12 +165,17 @@ typedef enum
    Usr_OTHER,
   } Usr_MeOrOther_t;
 
-// #define Usr_NUM_PUT_CHECKBOX 2
 typedef enum
   {
    Usr_DONT_PUT_CHECKBOX,
    Usr_PUT_CHECKBOX,
    } Usr_PutCheckBox_t;
+
+typedef enum
+  {
+   Usr_DONT_GET_NUM_USRS,
+   Usr_GET_NUM_USRS,
+   } Usr_GetNumUsrs_t;
 
 #define Usr_NUM_WHO 6
 typedef enum

@@ -1869,15 +1869,16 @@ static Err_SuccessOrError_t Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 			   /* Free memory used for list of users' codes found for this ID */
 			   Usr_FreeListUsrCods (&ListUsrCods);
 
-			   if (Pwd_CheckPendingPassword ())
+			   switch (Pwd_CheckPendingPassword ())
 			     {
-			      Pwd_AssignMyPendingPasswordToMyCurrentPassword ();
-			      PasswordCorrect = Err_SUCCESS;
-			     }
-			   else
-			     {
-			      Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
-			      return Err_ERROR;
+			      case Err_SUCCESS:
+				 Pwd_AssignMyPendingPasswordToMyCurrentPassword ();
+				 PasswordCorrect = Err_SUCCESS;
+				 break;
+			      case Err_ERROR:
+			      default:
+				 Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
+				 return Err_ERROR;
 			     }
 			  }
 			else	// ListUsrCods.NumUsrs > 1
@@ -1918,15 +1919,16 @@ static Err_SuccessOrError_t Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
       PasswordCorrect = Pwd_CheckCurrentPassword ();
 
    if (PasswordCorrect == Err_ERROR)	// If my password is not correct...
-     {
-      if (Pwd_CheckPendingPassword ())
-	 Pwd_AssignMyPendingPasswordToMyCurrentPassword ();
-      else
+      switch (Pwd_CheckPendingPassword ())
 	{
-	 Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
-	 return Err_ERROR;
+	 case Err_SUCCESS:
+	    Pwd_AssignMyPendingPasswordToMyCurrentPassword ();
+	    break;
+	 case Err_ERROR:
+	 default:
+	    Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
+	    return Err_ERROR;
 	}
-     }
 
    return Err_SUCCESS;
   }

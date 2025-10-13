@@ -116,17 +116,20 @@ Err_SuccessOrError_t Pwd_CheckCurrentPassword (void)
 /*****************************************************************************/
 /**** Check if login password is the same as current password in database ****/
 /*****************************************************************************/
-// Returns true if there's pending password in database and login password is the same
-// Returns false if there's no a pending password in database, or if pending password is not the same as the login password
+// Returns Err_SUCCESS if there's pending password in database and login password is the same
+// Returns Err_ERROR   if there's no a pending password in database,
+//		       or if pending password is not the same as the login password
 
-bool Pwd_CheckPendingPassword (void)
+Err_SuccessOrError_t Pwd_CheckPendingPassword (void)
   {
    /***** Get pending password from database *****/
    Pwd_DB_GetPendingPassword ();
 
-   return (Gbl.Usrs.Me.PendingPassword[0] ?
-           !strcmp (Gbl.Usrs.Me.LoginEncryptedPassword,Gbl.Usrs.Me.PendingPassword) :
-           false);
+   if (Gbl.Usrs.Me.PendingPassword[0])
+      if (!strcmp (Gbl.Usrs.Me.LoginEncryptedPassword,Gbl.Usrs.Me.PendingPassword))
+	 return Err_SUCCESS;
+
+   return Err_ERROR;
   }
 
 /*****************************************************************************/

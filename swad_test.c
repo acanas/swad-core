@@ -99,11 +99,11 @@ void Tst_ReqTest (void)
    /***** Create questions *****/
    Qst_Constructor (&Questions);
 
-   /***** Get if one tag is preselected *****/
-   Questions.Tags.PreselectedTagCod = ParCod_GetPar (ParCod_Tag);
+      /***** Get if one tag is preselected *****/
+      Questions.Tags.PreselectedTagCod = ParCod_GetPar (ParCod_Tag);
 
-   /***** Show form to generate a self-assessment test *****/
-   Tst_ShowFormRequestTest (&Questions);
+      /***** Show form to generate a self-assessment test *****/
+      Tst_ShowFormRequestTest (&Questions);
 
    /***** Destroy questions *****/
    Qst_Destructor (&Questions);
@@ -240,8 +240,7 @@ void Tst_ShowNewTest (void)
 
 		  /***** Create new test print in database *****/
 		  Print.PrnCod = Tst_DB_CreatePrint (Print.NumQsts.All);
-		  TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
-								false);	// Don't update question score
+		  TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print);
 
 		  /***** Show test print to be answered *****/
 		  TstPrn_ShowTestPrintToFillIt (&Print,NumPrintsGeneratedByMe,TstPrn_REQUEST);
@@ -305,8 +304,7 @@ void Tst_ReceiveTestDraft (void)
       TstPrn_GetAnswersFromForm (&Print);
 
       /***** Update test print in database *****/
-      TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
-						    false);	// Don't update question score
+      TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print);
       Tst_DB_UpdatePrint (&Print);
 
       /***** Show question and button to send the test *****/
@@ -366,8 +364,7 @@ void Tst_AssessTest (void)
 							     DenAll_DENY;
 
       /***** Update test print in database *****/
-      TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
-						    Gbl.Usrs.Me.Role.Logged == Rol_STD);	// Update question score?
+      TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print);
       Tst_DB_UpdatePrint (&Print);
 
       /***** Begin box *****/
