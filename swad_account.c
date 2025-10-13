@@ -419,7 +419,6 @@ void Acc_ShowFormChgMyAccount (void)
    bool IMustCreateMyNicknameNow = false;
    bool IMustFillInMyEmailNow    = false;
    bool IShouldConfirmMyEmailNow = false;
-   bool IShouldFillInMyIDNow     = false;
 
    /***** Get current user's nickname and email address
           It's necessary because current nickname or email could be just updated *****/
@@ -441,11 +440,8 @@ void Acc_ShowFormChgMyAccount (void)
 	 if (IMustFillInMyEmailNow)
 	    Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address);
 	 else
-	   {
 	    IShouldConfirmMyEmailNow = (Gbl.Usrs.Me.UsrDat.EmailConfirmed == Mai_NOT_CONFIRMED &&	// Email not yet confirmed
 	                                !Gbl.Usrs.Me.ConfirmEmailJustSent);				// Do not ask for email confirmation when confirmation email is just sent
-            IShouldFillInMyIDNow = (Gbl.Usrs.Me.UsrDat.IDs.Num == 0);
-	   }
         }
      }
 
@@ -461,7 +457,7 @@ void Acc_ShowFormChgMyAccount (void)
       /***** Show form to change my email and my ID *****/
       HTM_DIV_Begin ("class=\"REC_RIGHT\"");
 	 Mai_ShowFormChangeMyEmail (IMustFillInMyEmailNow,IShouldConfirmMyEmailNow);
-	 ID_ShowFormChangeMyID (IShouldFillInMyIDNow);
+	 ID_ShowFormChangeMyID ();
       HTM_DIV_End ();
 
    /***** Begin container for this user *****/

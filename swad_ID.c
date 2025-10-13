@@ -81,7 +81,7 @@ static Err_SuccessOrError_t ID_CheckIfUsrIDIsValidUsingMinDigits (const char *Us
 static void ID_PutLinkToConfirmID (const struct Usr_Data *UsrDat,unsigned NumID,
                                    const char *Anchor);
 
-static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillInID);
+static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther);
 
 static void ID_PutParsRemoveMyID (void *ID);
 static void ID_PutParsRemoveOtherID (void *ID);
@@ -457,7 +457,7 @@ static void ID_PutLinkToConfirmID (const struct Usr_Data *UsrDat,unsigned NumID,
 /*********************** Show form to change my user's ID ********************/
 /*****************************************************************************/
 
-void ID_ShowFormChangeMyID (bool IShouldFillInID)
+void ID_ShowFormChangeMyID (void)
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *Txt_ID_identity_number;
@@ -470,7 +470,7 @@ void ID_ShowFormChangeMyID (bool IShouldFillInID)
 		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
 	 /***** Show form to change ID *****/
-	 ID_ShowFormChangeUsrID (Usr_ME,IShouldFillInID);
+	 ID_ShowFormChangeUsrID (Usr_ME);
 
       /***** End box *****/
       Box_BoxEnd ();
@@ -496,8 +496,7 @@ void ID_ShowFormChangeOtherUsrID (void)
 		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
 	 /***** Show form to change ID *****/
-	 ID_ShowFormChangeUsrID (Usr_OTHER,
-				 false);	// IShouldFillInID
+	 ID_ShowFormChangeUsrID (Usr_OTHER);
 
       /***** End box *****/
       Box_BoxEnd ();
@@ -510,7 +509,7 @@ void ID_ShowFormChangeOtherUsrID (void)
 /*********************** Show form to change my user's ID ********************/
 /*****************************************************************************/
 
-static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillInID)
+static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *Txt_Please_fill_in_your_ID;
@@ -565,7 +564,7 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
    Ale_ShowAlerts (ID_ID_SECTION_ID);
 
    /***** Help message *****/
-   if (IShouldFillInID)
+   if (MeOrOther == Usr_ME && Gbl.Usrs.Me.UsrDat.IDs.Num == 0)
       Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_ID);
 
    /***** Begin table *****/
