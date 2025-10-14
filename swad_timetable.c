@@ -102,6 +102,12 @@ static unsigned Tmt_MinutesPerInterval[Tmt_NUM_RESOLUTIONS] =
    30,	// 30 minutes
   };
 
+typedef enum
+  {
+   Tmt_RECURSIVE_CALL,
+   Tmt_TOP_CALL,
+   } Tmt_TopOrRecursiveCall_t;
+
 /*****************************************************************************/
 /***************************** Private prototypes ***************************/
 /*****************************************************************************/
@@ -134,7 +140,7 @@ static void Tmt_TimeTableDrawAdjustRow (void);
 static void Tmt_TimeTableDrawDaysCells (void);
 static void Tmt_DrawHourCell (unsigned Hour,unsigned Min,const char *Align);
 static unsigned Tmt_CalculateColsToDrawInCell (const struct Tmt_Timetable *Timetable,
-					       bool TopCall,
+					       Tmt_TopOrRecursiveCall_t TopOrRecursiveCall,
                                                unsigned Weekday,unsigned Interval);
 static void Tmt_DrawCellAlignTimeTable (void);
 static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
@@ -1080,8 +1086,9 @@ static void Tmt_DrawTimeTable (const struct Tmt_Timetable *Timetable)
 		  For each item (class) in this hour from left to right,
 		  we must check the maximum of columns */
 	       ColumnsToDraw = Tmt_CalculateColsToDrawInCell (Timetable,
-							      true,	// Top call, non recursive
-							      WhichCell.Weekday,WhichCell.Interval);
+							      Tmt_TOP_CALL,	// Top call, non recursive
+							      WhichCell.Weekday,
+							      WhichCell.Interval);
 	       if (ColumnsToDraw == 0 &&
 		   Timetable->View != Vie_EDIT)
 		  ColumnsToDraw = 1;
@@ -1242,7 +1249,7 @@ static void Tmt_DrawHourCell (unsigned Hour,unsigned Min,const char *Align)
 /*****************************************************************************/
 
 static unsigned Tmt_CalculateColsToDrawInCell (const struct Tmt_Timetable *Timetable,
-					       bool TopCall,
+					       Tmt_TopOrRecursiveCall_t TopOrRecursiveCall,
                                                unsigned Weekday,unsigned Interval)
   {
    unsigned ColumnsToDraw;
@@ -1252,7 +1259,7 @@ static unsigned Tmt_CalculateColsToDrawInCell (const struct Tmt_Timetable *Timet
    unsigned Cols;
    static bool *Tmt_IntervalsChecked;
 
-   if (TopCall)	// Top call, non recursive call
+   if (TopOrRecursiveCall == Tmt_TOP_CALL)	// Top call, non recursive call
       /****** Allocate space to store list of intervals already checked
               and initialize to false by using calloc *****/
       if ((Tmt_IntervalsChecked = calloc (Timetable->Config.IntervalsPerDay,
@@ -1280,8 +1287,8 @@ static unsigned Tmt_CalculateColsToDrawInCell (const struct Tmt_Timetable *Timet
                   if (!Tmt_IntervalsChecked[i])
                     {
                      Cols = Tmt_CalculateColsToDrawInCell (Timetable,
-                                                          false,	// Recursive call
-                                                          Weekday,i);
+                                                           Tmt_RECURSIVE_CALL,	// Recursive call
+                                                           Weekday,i);
                      if (Cols > ColumnsToDraw)
                         ColumnsToDraw = Cols;
                     }
@@ -1300,8 +1307,8 @@ static unsigned Tmt_CalculateColsToDrawInCell (const struct Tmt_Timetable *Timet
                   if (!Tmt_IntervalsChecked[i])
                     {
                      Cols = Tmt_CalculateColsToDrawInCell (Timetable,
-                                                          false,	// Recursive call
-                                                          Weekday,i);
+                                                           Tmt_RECURSIVE_CALL,	// Recursive call
+                                                           Weekday,i);
                      if (Cols > ColumnsToDraw)
                         ColumnsToDraw = Cols;
                     }
@@ -1309,7 +1316,7 @@ static unsigned Tmt_CalculateColsToDrawInCell (const struct Tmt_Timetable *Timet
            }
      }
 
-   if (TopCall)	// Top call, non recursive call
+   if (TopOrRecursiveCall == Tmt_TOP_CALL)	// Top call, non recursive call
       /****** Free space used by list of intervals already checked *****/
       free (Tmt_IntervalsChecked);
 

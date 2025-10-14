@@ -454,15 +454,15 @@ void Gam_ShowOneGame (void)
 /*****************************************************************************/
 
 void Gam_ShowOnlyOneGame (struct Gam_Games *Games,
-			  bool ListGameQuestions,
+			  Lay_Show_t ShowGameQuestions,
 			  Frm_PutForm_t PutFormNewMatch)
   {
-   Gam_ShowOnlyOneGameBegin (Games,ListGameQuestions,PutFormNewMatch);
+   Gam_ShowOnlyOneGameBegin (Games,ShowGameQuestions,PutFormNewMatch);
    Gam_ShowOnlyOneGameEnd ();
   }
 
 void Gam_ShowOnlyOneGameBegin (struct Gam_Games *Games,
-			       bool ListGameQuestions,
+			       Lay_Show_t ShowGameQuestions,
 			       Frm_PutForm_t PutFormNewMatch)
   {
    extern const char *Hlp_ASSESSMENT_Games;
@@ -477,12 +477,18 @@ void Gam_ShowOnlyOneGameBegin (struct Gam_Games *Games,
       /***** Show main data of this game *****/
       Gam_ShowGameMainData (Games,Lay_SHOWING_ONLY_ONE);
 
-      if (ListGameQuestions)
-	 /***** Write questions of this game *****/
-	 Gam_ListGameQuestions (Games);
-      else
-	 /***** List matches *****/
-	 Mch_ListMatches (Games,PutFormNewMatch);
+      switch (ShowGameQuestions)
+	{
+	 case Lay_SHOW:
+	    /***** Write questions of this game *****/
+	    Gam_ListGameQuestions (Games);
+	    break;
+	 case Lay_DONT_SHOW:
+	 default:
+	    /***** List matches *****/
+	    Mch_ListMatches (Games,PutFormNewMatch);
+	    break;
+	}
   }
 
 void Gam_ShowOnlyOneGameEnd (void)
@@ -1227,7 +1233,7 @@ void Gam_ListGame (void)
 
    /***** Show game *****/
    Gam_ShowOnlyOneGame (&Games,
-                        true,	// List game questions
+                        Lay_SHOW,		// Show game questions
 	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
   }
 
@@ -1591,7 +1597,7 @@ void Gam_ReqSelectQstsToAddToGame (void)
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
-                        true,	// List game questions
+                        Lay_SHOW,		// Show game questions
 	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
   }
 
@@ -1909,7 +1915,7 @@ void Gam_AddQstsToGame (void)
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
-                        true,	// List game questions
+                        Lay_SHOW,		// Show game questions
 	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
   }
 
@@ -1979,7 +1985,7 @@ void Gam_ReqRemQstFromGame (void)
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
-                        true,	// List game questions
+                        Lay_SHOW,		// Show game questions
 	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
   }
 
@@ -2027,7 +2033,7 @@ void Gam_RemoveQstFromGame (void)
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
-                        true,	// List game questions
+                        Lay_SHOW,		// Show game questions
 	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
   }
 
@@ -2076,7 +2082,7 @@ void Gam_MoveUpQst (void)
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
-                        true,	// List game questions
+                        Lay_SHOW,		// Show game questions
 	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
   }
 
@@ -2129,7 +2135,7 @@ void Gam_MoveDownQst (void)
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
-                        true,	// List game questions
+                        Lay_SHOW,		// Show game questions
 	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
   }
 

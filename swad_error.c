@@ -614,11 +614,8 @@ void Err_ShowErrorAndExit (const char *Txt)
       Dat_ComputeTimeToGeneratePage ();
 
    if (Gbl.WebService.IsWebService)		// Serving a plugin request
-     {
       /***** Log access *****/
-      // Gbl.TimeSendInMicroseconds = 0L;
       Log_LogAccess (Txt);
-     }
    else
      {
       /***** Send page.

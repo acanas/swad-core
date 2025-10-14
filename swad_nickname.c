@@ -56,8 +56,7 @@ const char *Nck_NICKNAME_SECTION_ID = "nickname_section";
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
-                                           bool IMustFillNickname);
+static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther);
 static void Nck_PutParsRemoveMyNick (void *Nick);
 static void Nck_PutParsRemoveOtherNick (void *Nick);
 
@@ -162,10 +161,9 @@ void Nck_PutFormToGetNewNickname (const char *NewNickWithoutArr)
 /*********************** Show form to change my nickname *********************/
 /*****************************************************************************/
 
-void Nck_ShowFormChangeMyNickname (bool IMustFillNickname)
+void Nck_ShowFormChangeMyNickname (void)
   {
-   Nck_ShowFormChangeUsrNickname (Usr_ME,
-				  IMustFillNickname);
+   Nck_ShowFormChangeUsrNickname (Usr_ME);
   }
 
 /*****************************************************************************/
@@ -174,16 +172,14 @@ void Nck_ShowFormChangeMyNickname (bool IMustFillNickname)
 
 void Nck_ShowFormChangeOtherUsrNickname (void)
   {
-   Nck_ShowFormChangeUsrNickname (Usr_OTHER,
-				  false);	// IMustFillNickname
+   Nck_ShowFormChangeUsrNickname (Usr_OTHER);
   }
 
 /*****************************************************************************/
 /*********************** Show form to change my nickname *********************/
 /*****************************************************************************/
 
-static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
-                                           bool IMustFillNickname)
+static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *Txt_Nickname;
@@ -245,7 +241,8 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
 	 Ale_ShowAlerts (Nck_NICKNAME_SECTION_ID);
 
 	 /***** Help message *****/
-	 if (IMustFillNickname)
+         if (MeOrOther == Usr_ME &&
+             Gbl.Usrs.Me.UsrDat.Nickname[0] == '\0')	// I must fill my nickname
 	    Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
 
 	 /***** Begin table *****/

@@ -2656,7 +2656,7 @@ static void Usr_WriteEmail (struct Usr_Data *UsrDat,const char *BgColor)
                 	                NULL,
                      ShowEmail == Usr_CAN ? MailLink :
                 			    NULL,
-                     true,UsrDat->Accepted);
+                     Lay_NON_BR_SPACES,UsrDat->Accepted);
   }
 
 /*****************************************************************************/

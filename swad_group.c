@@ -794,8 +794,8 @@ void Grp_ChangeUsrGrps (Usr_MeOrOther_t MeOrOther,Cns_Verbose_t Verbose)
    switch (Usr_UsrDat[MeOrOther]->Roles.InCurrentCrs)
      {
       case Rol_STD:
-	 SelectionIsValid = Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (&LstGrpsUsrWants,
-									      MeOrOther == Usr_ME);	// Check closed groups?
+	 SelectionIsValid = Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (MeOrOther,
+									      &LstGrpsUsrWants);
          break;
       case Rol_NET:
       case Rol_TCH:
@@ -1040,8 +1040,8 @@ static void Grp_EnrolUsrInGrps (Usr_MeOrOther_t MeOrOther,
 /*****************************************************************************/
  // Return Err_SUCCESS if the selection of groups is valid
 
-Err_SuccessOrError_t Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (struct ListCodGrps *LstGrps,
-								       bool CheckClosedGroupsIBelong)
+Err_SuccessOrError_t Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (Usr_MeOrOther_t MeOrOther,
+								       struct ListCodGrps *LstGrps)
   {
    struct ListCodGrps LstClosedGrpsIBelong;
    struct ListGrpsAlreadySelec *AlreadyExistsGroupOfType;
@@ -1053,12 +1053,12 @@ Err_SuccessOrError_t Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (struct Li
    /***** Create and initialize list of groups already selected *****/
    Grp_ConstructorListGrpAlreadySelec (&AlreadyExistsGroupOfType);
 
-   /***** Go across the list of closed groups to which i belong
+   /***** Go across the list of closed groups to which I belong
 	  checking if a group of the same type is already selected *****/
    /* Step 1 (only if I am a student selecting groups):
       check the closed groups I belong
       because these groups are disabled in form, an so not received */
-   if (CheckClosedGroupsIBelong)
+   if (MeOrOther == Usr_ME && Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs == Rol_STD)
      {
       /* Query in the database the closed group codes which I belong to */
       Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,

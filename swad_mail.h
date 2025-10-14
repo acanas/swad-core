@@ -55,7 +55,7 @@ void Mai_GetEmailFromUsrCod (struct Usr_Data *UsrDat);
 
 void Mai_PutFormToGetNewEmail (const char *NewEmail);
 
-void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail);
+void Mai_ShowFormChangeMyEmail (void);
 void Mai_ShowFormChangeOtherUsrEmail (void);
 
 void Mai_RemoveMyUsrEmail (void);

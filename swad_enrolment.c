@@ -1072,8 +1072,8 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
 	   {
 	    case Rol_STD:
 	       /* Check if I have selected more than one group of single enrolment */
-	       SelectionIsValid = Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (&LstGrps,
-							                            false);	// Don't check closed groups
+	       SelectionIsValid = Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (Usr_OTHER,
+										    &LstGrps);
 	       break;
 	    case Rol_NET:
 	    case Rol_TCH:

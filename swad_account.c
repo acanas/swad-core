@@ -415,35 +415,19 @@ void Acc_ShowFormChgMyAccount (void)
    extern const char *Txt_Before_going_to_any_other_option_you_must_create_your_password;
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address;
-   bool IMustCreateMyPasswordNow = false;
-   bool IMustCreateMyNicknameNow = false;
-   bool IMustFillInMyEmailNow    = false;
-   bool IShouldConfirmMyEmailNow = false;
 
    /***** Get current user's nickname and email address
           It's necessary because current nickname or email could be just updated *****/
    Nck_DB_GetNicknameFromUsrCod (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.Nickname);
    Mai_GetEmailFromUsrCod (&Gbl.Usrs.Me.UsrDat);
 
-   /***** Check nickname, email and ID *****/
-   IMustCreateMyPasswordNow = (Gbl.Usrs.Me.UsrDat.Password[0] == '\0');
-   if (IMustCreateMyPasswordNow)
+   /***** Check password, nickname and email *****/
+   if (Gbl.Usrs.Me.UsrDat.Password[0] == '\0')	// I must create my passoword
       Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_create_your_password);
-   else
-     {
-      IMustCreateMyNicknameNow = (Gbl.Usrs.Me.UsrDat.Nickname[0] == '\0');
-      if (IMustCreateMyNicknameNow)
-	 Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
-      else
-        {
-	 IMustFillInMyEmailNow = (Gbl.Usrs.Me.UsrDat.Email[0] == '\0');
-	 if (IMustFillInMyEmailNow)
-	    Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address);
-	 else
-	    IShouldConfirmMyEmailNow = (Gbl.Usrs.Me.UsrDat.EmailConfirmed == Mai_NOT_CONFIRMED &&	// Email not yet confirmed
-	                                !Gbl.Usrs.Me.ConfirmEmailJustSent);				// Do not ask for email confirmation when confirmation email is just sent
-        }
-     }
+   if (Gbl.Usrs.Me.UsrDat.Nickname[0] == '\0')	// I must fill my nickname
+      Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
+   if (Gbl.Usrs.Me.UsrDat.Email[0] == '\0')	// I must fill my email
+      Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address);
 
    /***** Begin container for this user *****/
    HTM_DIV_Begin ("class=\"REC_USR\"");
@@ -451,12 +435,12 @@ void Acc_ShowFormChgMyAccount (void)
       /***** Show form to change my password and my nickname ****/
       HTM_DIV_Begin ("class=\"REC_LEFT\"");
 	 Pwd_ShowFormChgMyPwd ();
-	 Nck_ShowFormChangeMyNickname (IMustCreateMyNicknameNow);
+	 Nck_ShowFormChangeMyNickname ();
       HTM_DIV_End ();
 
       /***** Show form to change my email and my ID *****/
       HTM_DIV_Begin ("class=\"REC_RIGHT\"");
-	 Mai_ShowFormChangeMyEmail (IMustFillInMyEmailNow,IShouldConfirmMyEmailNow);
+	 Mai_ShowFormChangeMyEmail ();
 	 ID_ShowFormChangeMyID ();
       HTM_DIV_End ();
 

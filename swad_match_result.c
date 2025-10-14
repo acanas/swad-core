@@ -172,16 +172,16 @@ void MchRes_ShowMyMchResultsInGam (void)
 
    /***** Game begin *****/
    Gam_ShowOnlyOneGameBegin (&Games,
-                             false,	// Do not list game questions
+                             Lay_DONT_SHOW,	// Do not show game questions
 			     Frm_DONT_PUT_FORM);
 
-   /***** List my matches results in game *****/
-   if (asprintf (&Title,Txt_Results_of_game_X,Games.Game.Title) < 0)
-      Err_NotEnoughMemoryExit ();
-   MchRes_ShowResultsBegin (&Games,Title,MchRes_DONT_LIST_GAMES_TO_SELECT);
-   free (Title);
-      MchRes_ListMyMchResultsInGam (&Games);
-   MchRes_ShowResultsEnd ();
+      /***** List my matches results in game *****/
+      if (asprintf (&Title,Txt_Results_of_game_X,Games.Game.Title) < 0)
+	 Err_NotEnoughMemoryExit ();
+      MchRes_ShowResultsBegin (&Games,Title,MchRes_DONT_LIST_GAMES_TO_SELECT);
+      free (Title);
+	 MchRes_ListMyMchResultsInGam (&Games);
+      MchRes_ShowResultsEnd ();
 
    /***** Game end *****/
    Gam_ShowOnlyOneGameEnd ();
@@ -222,16 +222,16 @@ void MchRes_ShowMyMchResultsInMch (void)
 
    /***** Game begin *****/
    Gam_ShowOnlyOneGameBegin (&Games,
-                             false,	// Do not list game questions
+                             Lay_DONT_SHOW,	// Do not show game questions
 			     Frm_DONT_PUT_FORM);
 
-   /***** List my matches results in match *****/
-   if (asprintf (&Title,Txt_Results_of_match_X,Match.Title) < 0)
-      Err_NotEnoughMemoryExit ();
-   MchRes_ShowResultsBegin (&Games,Title,MchRes_DONT_LIST_GAMES_TO_SELECT);
-   free (Title);
-      MchRes_ListMyMchResultsInMch (&Games,Match.MchCod);
-   MchRes_ShowResultsEnd ();
+      /***** List my matches results in match *****/
+      if (asprintf (&Title,Txt_Results_of_match_X,Match.Title) < 0)
+	 Err_NotEnoughMemoryExit ();
+      MchRes_ShowResultsBegin (&Games,Title,MchRes_DONT_LIST_GAMES_TO_SELECT);
+      free (Title);
+	 MchRes_ListMyMchResultsInMch (&Games,Match.MchCod);
+      MchRes_ShowResultsEnd ();
 
    /***** Game end *****/
    Gam_ShowOnlyOneGameEnd ();
@@ -365,16 +365,16 @@ void MchRes_ShowAllMchResultsInGam (void)
 
    /***** Game begin *****/
    Gam_ShowOnlyOneGameBegin (&Games,
-                             false,	// Do not list game questions
+                             Lay_DONT_SHOW,	// Do not show game questions
 			     Frm_DONT_PUT_FORM);
 
-   /***** List matches results in game *****/
-   if (asprintf (&Title,Txt_Results_of_game_X,Games.Game.Title) < 0)
-      Err_NotEnoughMemoryExit ();
-   MchRes_ShowResultsBegin (&Games,Title,MchRes_DONT_LIST_GAMES_TO_SELECT);
-   free (Title);
-      MchRes_ListAllMchResultsInGam (&Games);
-   MchRes_ShowResultsEnd ();
+      /***** List matches results in game *****/
+      if (asprintf (&Title,Txt_Results_of_game_X,Games.Game.Title) < 0)
+	 Err_NotEnoughMemoryExit ();
+      MchRes_ShowResultsBegin (&Games,Title,MchRes_DONT_LIST_GAMES_TO_SELECT);
+      free (Title);
+	 MchRes_ListAllMchResultsInGam (&Games);
+      MchRes_ShowResultsEnd ();
 
    /***** Game end *****/
    Gam_ShowOnlyOneGameEnd ();
@@ -437,16 +437,16 @@ void MchRes_ShowAllMchResultsInMch (void)
 
    /***** Game begin *****/
    Gam_ShowOnlyOneGameBegin (&Games,
-                             false,	// Do not list game questions
+                             Lay_DONT_SHOW,	// Do not show game questions
 			     Frm_DONT_PUT_FORM);
 
-   /***** List matches results in match *****/
-   if (asprintf (&Title,Txt_Results_of_match_X,Match.Title) < 0)
-      Err_NotEnoughMemoryExit ();
-   MchRes_ShowResultsBegin (&Games,Title,MchRes_DONT_LIST_GAMES_TO_SELECT);
-   free (Title);
-      MchRes_ListAllMchResultsInMch (&Games,Match.MchCod);
-   MchRes_ShowResultsEnd ();
+      /***** List matches results in match *****/
+      if (asprintf (&Title,Txt_Results_of_match_X,Match.Title) < 0)
+	 Err_NotEnoughMemoryExit ();
+      MchRes_ShowResultsBegin (&Games,Title,MchRes_DONT_LIST_GAMES_TO_SELECT);
+      free (Title);
+	 MchRes_ListAllMchResultsInMch (&Games,Match.MchCod);
+      MchRes_ShowResultsEnd ();
 
    /***** Game end *****/
    Gam_ShowOnlyOneGameEnd ();

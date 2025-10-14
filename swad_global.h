@@ -101,7 +101,8 @@ struct Globals
 
    struct
      {
-      bool IsWebService;	// Must generate HTML output (IsWebService==false) or SOAP-XML output (IsWebService==true)?
+      bool IsWebService;	// Generate HTML output (if not a web service)
+				// or SOAP-XML output (if web service)
       long PlgCod;
       API_Function_t Function;
      } WebService;

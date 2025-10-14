@@ -188,9 +188,7 @@ Err_SuccessOrError_t Par_GetQueryString (void)
          return Fil_ReadStdinIntoTmpFile ();
         }
       else if (!strncmp (ContentType,"text/xml",strlen ("text/xml")))
-        {
          Gbl.WebService.IsWebService = true;
-        }
       else
         {
          Par_SetContentReceivedByCGI (Act_NORM);

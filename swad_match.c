@@ -931,7 +931,7 @@ void Mch_ToggleVisResultsMchUsr (void)
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
-                        false,	// Do not list game questions
+                        Lay_DONT_SHOW,		// Do not show game questions
                         Frm_DONT_PUT_FORM);
   }
 
@@ -1044,7 +1044,7 @@ void Mch_ReqRemMatch (void)
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
-                        false,	// Do not list game questions
+                        Lay_DONT_SHOW,		// Do not show game questions
 			Frm_DONT_PUT_FORM);
   }
 
@@ -1168,7 +1168,7 @@ void Mch_ReqCreatOrEditMatch (void)
 
    /***** Show game *****/
    Gam_ShowOnlyOneGame (&Games,
-                        false,	// Do not list game questions
+                        Lay_DONT_SHOW,	// Do not show game questions
                         Frm_PUT_FORM);
   }
 
@@ -1382,7 +1382,7 @@ void Mch_ChangeMatch (void)
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
-                        false,	// Do not list game questions
+                        Lay_DONT_SHOW,		// Do not show game questions
 			Frm_DONT_PUT_FORM);
   }
 
