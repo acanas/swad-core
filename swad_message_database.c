@@ -81,8 +81,14 @@ void Msg_DB_CreateSntMsg (long MsgCod,long HieCod)
 /*********** Insert a message in the table of received messages **************/
 /*****************************************************************************/
 
-void Msg_DB_CreateRcvMsg (long MsgCod,long UsrCod,bool NotifyByEmail)
+void Msg_DB_CreateRcvMsg (long MsgCod,long UsrCod,Ntf_NotifyByEmail_t NotifyByEmail)
   {
+   static const char NotifyByEmail_YN[Ntf_NUM_NOTIFY_BY_EMAIL] =
+     {
+      [Ntf_DONT_NOTIFY_BY_EMAIL] = 'N',
+      [Ntf_NOTIFY_BY_EMAIL     ] = 'Y',
+     };
+
    DB_QueryINSERT ("can not create received message",
 		   "INSERT INTO msg_rcv"
 		   " (MsgCod,UsrCod,Notified,Open,Replied,Expanded)"
@@ -90,8 +96,7 @@ void Msg_DB_CreateRcvMsg (long MsgCod,long UsrCod,bool NotifyByEmail)
 		   " (%ld,%ld,'%c','N','N','N')",
 	           MsgCod,
 	           UsrCod,
-	           NotifyByEmail ? 'Y' :
-			           'N');
+	           NotifyByEmail_YN[NotifyByEmail]);
   }
 
 /*****************************************************************************/

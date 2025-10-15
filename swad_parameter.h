@@ -93,9 +93,9 @@ unsigned Par_GetParAndChangeFormat (const char *ParName,char *ParValue,size_t Ma
                                     Str_ChangeTo_t ChangeTo,
                                     Str_RemoveSpaces_t RemoveLeadingAndTrailingSpaces);
 
-bool Par_GetNextStrUntilSeparParMult (const char **StrSrc,char *StrDst,
+void Par_GetNextStrUntilSeparParMult (const char **StrSrc,char *StrDst,
 				      size_t LongMax);
-bool Par_GetNextStrUntilComma (const char **StrSrc,char *StrDst,size_t LongMax);
+void Par_GetNextStrUntilComma (const char **StrSrc,char *StrDst,size_t LongMax);
 void Par_ReplaceSeparatorMultipleByComma (char *Str);
 
 //------------------------------ List of codes --------------------------------

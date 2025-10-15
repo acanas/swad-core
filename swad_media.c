@@ -1231,7 +1231,7 @@ static void Med_GetAndProcessEmbedFromForm (const char *ParURL,
   {
    extern const char Str_BIN_TO_BASE64URL[64 + 1];
    char *PtrHost = NULL;
-   bool URLFound = false;
+   Err_SuccessOrError_t URLFound = Err_ERROR;
 
    /***** Set media status *****/
    Media->Status = Med_STATUS_NONE;
@@ -1257,19 +1257,23 @@ static void Med_GetAndProcessEmbedFromForm (const char *ParURL,
 	 /***** Check if a URL is found *****/
 	 if (PtrHost)
 	    if (PtrHost[0])
-	       URLFound = true;	// Success!
+	       URLFound = Err_SUCCESS;
 	}
 
    /***** Set or reset media *****/
-   if (URLFound)
+   switch (URLFound)
      {
-      /* Set media type and status */
-      Media->Type   = Med_EMBED;
-      Media->Status = Med_PROCESSED;
+      case Err_SUCCESS:
+	 /* Set media type and status */
+	 Media->Type   = Med_EMBED;
+	 Media->Status = Med_PROCESSED;
+	 break;
+      case Err_ERROR:
+      default:
+	 /* Reset media */
+	 Med_ResetMedia (Media);
+	 break;
      }
-   else
-      /* Reset media */
-      Med_ResetMedia (Media);
   }
 
 /*****************************************************************************/

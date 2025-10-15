@@ -289,6 +289,7 @@ static unsigned Str_FindHTMLEntity (const char *Ptr)
 */
 void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *Txt)
   {
+   extern Ntf_Status_t Ntf_Status[Ntf_NUM_NOTIFY_BY_EMAIL];
    const char *Ptr;
    bool IsNickname;
    struct
@@ -299,7 +300,7 @@ void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *T
      } Nickname;
    struct Usr_Data UsrDat;
    bool CreateNotif;
-   bool NotifyByEmail;
+   Ntf_NotifyByEmail_t NotifyByEmail;
    long HieCods[Hie_NUM_LEVELS];
 
    /***** Initialize structure with user's data *****/
@@ -352,14 +353,15 @@ void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *T
 		  CreateNotif = (UsrDat.NtfEvents.CreateNotif & (1 << Ntf_EVENT_TML_MENTION));
 		  if (CreateNotif)
 		    {
-		     NotifyByEmail = (UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_TML_MENTION));
+		     NotifyByEmail = (UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_TML_MENTION)) ? Ntf_NOTIFY_BY_EMAIL :
+												   Ntf_DONT_NOTIFY_BY_EMAIL;
 		     HieCods[Hie_INS] = Gbl.Hierarchy.Node[Hie_INS].HieCod;
 		     HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
 		     HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod;
 		     HieCods[Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod;
-		     Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_TML_MENTION,UsrDat.UsrCod,PubCod,
-						   (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-										   0),
+		     Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_TML_MENTION,
+						   UsrDat.UsrCod,PubCod,
+						   Ntf_Status[NotifyByEmail],
 						   HieCods);
 		    }
 		 }

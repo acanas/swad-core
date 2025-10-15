@@ -49,9 +49,10 @@ extern struct Globals Gbl;
 void TmlNtf_CreateNotifToAuthor (long AuthorCod,long PubCod,
                                  Ntf_NotifyEvent_t NotifyEvent)
   {
+   extern Ntf_Status_t Ntf_Status[Ntf_NUM_NOTIFY_BY_EMAIL];
    struct Usr_Data UsrDat;
    bool CreateNotif;
-   bool NotifyByEmail;
+   Ntf_NotifyByEmail_t NotifyByEmail;
    long HieCods[Hie_NUM_LEVELS];
 
    /***** Initialize structure with user's data *****/
@@ -65,7 +66,8 @@ void TmlNtf_CreateNotifToAuthor (long AuthorCod,long PubCod,
       /***** This fav must be notified by email? *****/
       CreateNotif = (UsrDat.NtfEvents.CreateNotif & (1 << NotifyEvent));
       NotifyByEmail = CreateNotif &&
-		      (UsrDat.NtfEvents.SendEmail & (1 << NotifyEvent));
+		      (UsrDat.NtfEvents.SendEmail & (1 << NotifyEvent)) ? Ntf_NOTIFY_BY_EMAIL :
+									  Ntf_DONT_NOTIFY_BY_EMAIL;;
 
       /***** Create notification for the author of the post.
 	     If this author wants to receive notifications by email,
@@ -77,9 +79,7 @@ void TmlNtf_CreateNotifToAuthor (long AuthorCod,long PubCod,
 	 HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod;
 	 HieCods[Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod;
 	 Ntf_DB_StoreNotifyEventToUsr (NotifyEvent,UsrDat.UsrCod,PubCod,
-				       (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-								       0),
-				       HieCods);
+				       Ntf_Status[NotifyByEmail],HieCods);
 	}
      }
 

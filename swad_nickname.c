@@ -101,7 +101,7 @@ Err_SuccessOrError_t Nck_CheckIfNickWithArrIsValid (const char *NickWithArr)
 /************** Get user's code of a user from his/her nickname **************/
 /*****************************************************************************/
 // Nickname may have leading '@'
-// Returns true if nickname found in database
+// Returns user's code if nickname found in database
 
 long Nck_GetUsrCodFromNickname (const char *NickWithArr)
   {

@@ -161,6 +161,12 @@ static Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    /* Profile tab */
   };
 
+Ntf_Status_t Ntf_Status[Ntf_NUM_NOTIFY_BY_EMAIL] =
+  {
+   [Ntf_DONT_NOTIFY_BY_EMAIL] = 0,
+   [Ntf_NOTIFY_BY_EMAIL     ] = Ntf_STATUS_BIT_EMAIL,
+  };
+
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/

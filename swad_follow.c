@@ -1074,8 +1074,9 @@ void Fol_UnfollowUsrs (void)
 
 static void Fol_FollowUsr (const struct Usr_Data *UsrDat)
   {
+   extern Ntf_Status_t Ntf_Status[Ntf_NUM_NOTIFY_BY_EMAIL];
    bool CreateNotif;
-   bool NotifyByEmail;
+   Ntf_NotifyByEmail_t NotifyByEmail;
    long HieCods[Hie_NUM_LEVELS];
 
    /***** Avoid wrong cases *****/
@@ -1093,7 +1094,8 @@ static void Fol_FollowUsr (const struct Usr_Data *UsrDat)
    /***** This follow must be notified by email? *****/
    CreateNotif = (UsrDat->NtfEvents.CreateNotif & (1 << Ntf_EVENT_FOLLOWER));
    NotifyByEmail = CreateNotif &&
-		   (UsrDat->NtfEvents.SendEmail & (1 << Ntf_EVENT_FOLLOWER));
+		   (UsrDat->NtfEvents.SendEmail & (1 << Ntf_EVENT_FOLLOWER)) ? Ntf_NOTIFY_BY_EMAIL :
+									       Ntf_DONT_NOTIFY_BY_EMAIL;
 
    /***** Create notification for this followed.
 	  If this followed wants to receive notifications by email,
@@ -1105,9 +1107,7 @@ static void Fol_FollowUsr (const struct Usr_Data *UsrDat)
       HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod;
       HieCods[Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod;
       Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_FOLLOWER,UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-				    (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-								    0),
-				    HieCods);
+				    Ntf_Status[NotifyByEmail],HieCods);
      }
   }
 

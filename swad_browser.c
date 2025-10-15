@@ -2935,7 +2935,8 @@ static void Brw_FormToChangeCrsGrpZone (void)
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],
 			        (Brw_TypeIsCrsBrw[Gbl.FileBrowser.Type] ? HTM_CHECKED :
-								          HTM_NO_ATTR) | HTM_SUBMIT_ON_CLICK,
+								          HTM_NO_ATTR) |
+				HTM_SUBMIT_ON_CLICK,
 				"value=\"-1\"");
 	       HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].FullName);
 	    HTM_LABEL_End ();
@@ -2968,7 +2969,8 @@ static void Brw_FormToChangeCrsGrpZone (void)
 		     HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],
 				      (Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type] &&
 				       Grp.GrpCod == CurrentGrpCod ? HTM_CHECKED :
-								     HTM_NO_ATTR) | HTM_SUBMIT_ON_CLICK,
+								     HTM_NO_ATTR) |
+				      HTM_SUBMIT_ON_CLICK,
 				      "value=\"%ld\"",Grp.GrpCod);
 		     HTM_Txt (GrpTyp.Name);
 		     HTM_NBSP ();

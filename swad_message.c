@@ -825,17 +825,23 @@ void Msg_RecMsgFromUsr (void)
 
 static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages)
   {
+   extern Ntf_Status_t Ntf_Status[Ntf_NUM_NOTIFY_BY_EMAIL];
    extern const char *Txt_message_not_sent_to_X;
    extern const char *Txt_message_sent_to_X_notified_by_email;
    extern const char *Txt_message_sent_to_X_not_notified_by_email;
    extern const char *Txt_Error_getting_data_from_a_recipient;
+   static const char **Msg[Ntf_NUM_NOTIFY_BY_EMAIL] =
+     {
+      [Ntf_DONT_NOTIFY_BY_EMAIL] = &Txt_message_sent_to_X_not_notified_by_email,
+      [Ntf_NOTIFY_BY_EMAIL     ] = &Txt_message_sent_to_X_notified_by_email,
+     };
    struct Med_Media Media;
    struct Usr_Data UsrDstData;
    const char *Ptr;
    bool MsgAlreadyInserted = false;
    long NewMsgCod = -1L;	// Initiliazed to avoid warning
    bool CreateNotif;
-   bool NotifyByEmail;
+   Ntf_NotifyByEmail_t NotifyByEmail;
    long HieCods[Hie_NUM_LEVELS];
 
    /***** Initialize and get media from form *****/
@@ -888,8 +894,9 @@ static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages)
 		     /***** This received message must be notified by email? *****/
 		     CreateNotif = (UsrDstData.NtfEvents.CreateNotif & (1 << Ntf_EVENT_MESSAGE));
 		     NotifyByEmail = CreateNotif &&
-				     (UsrDstData.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod) &&
-				     (UsrDstData.NtfEvents.SendEmail & (1 << Ntf_EVENT_MESSAGE));
+				     UsrDstData.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod &&
+				     (UsrDstData.NtfEvents.SendEmail & (1 << Ntf_EVENT_MESSAGE)) ? Ntf_NOTIFY_BY_EMAIL :
+												   Ntf_DONT_NOTIFY_BY_EMAIL;
 
 		     /***** Create the received message for this recipient
 			    and increment number of new messages received by this recipient *****/
@@ -904,16 +911,14 @@ static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages)
 			HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
 			HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod;
 			HieCods[Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod;
-			Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_MESSAGE,UsrDstData.UsrCod,NewMsgCod,
-						      (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-										      0),
+			Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_MESSAGE,
+						      UsrDstData.UsrCod,NewMsgCod,
+						      Ntf_Status[NotifyByEmail],
 						      HieCods);
 		       }
 
 		     /***** Show an alert indicating that the message has been sent successfully *****/
-		     Ale_ShowAlert (Ale_SUCCESS,NotifyByEmail ? Txt_message_sent_to_X_notified_by_email :
-								Txt_message_sent_to_X_not_notified_by_email,
-				    UsrDstData.FullName);
+		     Ale_ShowAlert (Ale_SUCCESS,*Msg[NotifyByEmail],UsrDstData.FullName);
 
 		     /***** Increment number of recipients *****/
 		     Messages->Rcv.NumRecipients++;

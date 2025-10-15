@@ -44,7 +44,7 @@
 
 long Msg_DB_CreateNewMsg (const char *Subject,const char *Content,long MedCod);
 void Msg_DB_CreateSntMsg (long MsgCod,long HieCod);
-void Msg_DB_CreateRcvMsg (long MsgCod,long UsrCod,bool NotifyByEmail);
+void Msg_DB_CreateRcvMsg (long MsgCod,long UsrCod,Ntf_NotifyByEmail_t NotifyByEmail);
 void Msg_DB_SetRcvMsgAsReplied (long MsgCod);
 void Msg_DB_ExpandSntMsg (long MsgCod);
 void Msg_DB_ExpandRcvMsg (long MsgCod);

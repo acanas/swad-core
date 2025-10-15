@@ -990,14 +990,12 @@ unsigned Par_GetParAndChangeFormat (const char *ParName,char *ParValue,size_t Ma
 /*****************************************************************************/
 // Modifies *StrSrc
 // When StrDst is NULL, nothing is stored
-// Return true if characters found
 
-bool Par_GetNextStrUntilSeparParMult (const char **StrSrc,char *StrDst,
+void Par_GetNextStrUntilSeparParMult (const char **StrSrc,char *StrDst,
 				      size_t LongMax)
   {
    size_t i = 0;
    unsigned char Ch;	// Must be unsigned to work with characters > 127
-   bool CharsFound = false;
 
    do
       if ((Ch = (unsigned char) **StrSrc))
@@ -1008,7 +1006,6 @@ bool Par_GetNextStrUntilSeparParMult (const char **StrSrc,char *StrDst,
 
    while (Ch >= 32)		// Until special character or end
      {
-      CharsFound = true;
       if (i < LongMax)
          if (StrDst)
             StrDst[i++] = (char) Ch;
@@ -1018,8 +1015,6 @@ bool Par_GetNextStrUntilSeparParMult (const char **StrSrc,char *StrDst,
 
    if (StrDst)
       StrDst[i] = '\0';
-
-   return CharsFound;
   }
 
 /*****************************************************************************/
@@ -1027,13 +1022,11 @@ bool Par_GetNextStrUntilSeparParMult (const char **StrSrc,char *StrDst,
 /*****************************************************************************/
 // Modifies *StrSrc
 // When StrDst is NULL, nothing is stored
-// Return true if characters found
 
-bool Par_GetNextStrUntilComma (const char **StrSrc,char *StrDst,size_t LongMax)
+void Par_GetNextStrUntilComma (const char **StrSrc,char *StrDst,size_t LongMax)
   {
    size_t i = 0;
    unsigned char Ch;	// Must be unsigned to work with characters > 127
-   bool CharsFound = false;
 
    do
       if ((Ch = (unsigned char) **StrSrc))
@@ -1042,7 +1035,6 @@ bool Par_GetNextStrUntilComma (const char **StrSrc,char *StrDst,size_t LongMax)
 
    while (Ch && Ch != ',')		// Until special character or end
      {
-      CharsFound = true;
       if (i < LongMax)
          if (StrDst)
             StrDst[i++] = (char) Ch;
@@ -1052,8 +1044,6 @@ bool Par_GetNextStrUntilComma (const char **StrSrc,char *StrDst,size_t LongMax)
 
    if (StrDst)
       StrDst[i] = '\0';
-
-   return CharsFound;
   }
 
 /*****************************************************************************/

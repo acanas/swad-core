@@ -280,7 +280,7 @@ static int API_GetMyLanguage (struct soap *soap);
 
 static int API_SendMessageToUsr (long OriginalMsgCod,
                                  long ReplyUsrCod,long RecipientUsrCod,
-                                 bool NotifyByEmail,
+                                 Ntf_NotifyByEmail_t NotifyByEmail,
                                  const char *Subject,const char *Content);
 
 static int API_GetTstTags (struct soap *soap,
@@ -3268,7 +3268,7 @@ int swad__sendMessage (struct soap *soap,
    MYSQL_ROW row;
    unsigned NumUsrs;
    unsigned NumUsr;
-   bool NotifyByEmail;
+   Ntf_NotifyByEmail_t NotifyByEmail;
 
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
@@ -3337,8 +3337,9 @@ int swad__sendMessage (struct soap *soap,
 							 Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	      {
 	       /* This received message must be notified by email? */
-	       NotifyByEmail = (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_OTHER &&
-				(Gbl.Usrs.Other.UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_MESSAGE)));
+	       NotifyByEmail = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_OTHER &&
+			       (Gbl.Usrs.Other.UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_MESSAGE)) ? Ntf_NOTIFY_BY_EMAIL :
+													Ntf_DONT_NOTIFY_BY_EMAIL;
 
 	       /* Send message to this user */
 	       if ((ReturnCode = API_SendMessageToUsr ((long) messageCode,
@@ -3373,9 +3374,10 @@ int swad__sendMessage (struct soap *soap,
 
 static int API_SendMessageToUsr (long OriginalMsgCod,
                                  long ReplyUsrCod,long RecipientUsrCod,
-                                 bool NotifyByEmail,
+                                 Ntf_NotifyByEmail_t NotifyByEmail,
                                  const char *Subject,const char *Content)
   {
+   extern Ntf_Status_t Ntf_Status[Ntf_NUM_NOTIFY_BY_EMAIL];
    static bool MsgAlreadyInserted = false;
    static long MsgCod;
    long HieCods[Hie_NUM_LEVELS];
@@ -3406,9 +3408,7 @@ static int API_SendMessageToUsr (long OriginalMsgCod,
    HieCods[Hie_DEG] =
    HieCods[Hie_CRS] = -1L;
    Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_MESSAGE,RecipientUsrCod,MsgCod,
-				 (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-								 0),
-				 HieCods);
+				 Ntf_Status[NotifyByEmail],HieCods);
 
    /***** If this recipient is the original sender of a message been replied... *****/
    if (RecipientUsrCod == ReplyUsrCod)

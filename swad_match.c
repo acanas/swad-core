@@ -1079,7 +1079,7 @@ void Mch_RemoveMatch (void)
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
-                        false,	// Do not list game questions
+                        Lay_DONT_SHOW,	// Do not list game questions
 			Frm_DONT_PUT_FORM);
   }
 
