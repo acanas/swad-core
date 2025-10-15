@@ -1169,12 +1169,12 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void);
 static long Brw_GetGrpLastAccZone (const char *FieldNameDB);
 
 static void Brw_ListDir (unsigned Level,const char *RowId,
-                         bool TreeContracted,
+                         ConExp_ContractedOrExpanded_t TreeContractedOrExpanded,
                          const char Path[PATH_MAX + 1],
                          const char PathInTree[PATH_MAX + 1]);
 static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
 							 const char *RowId,
-							 bool TreeContracted,
+							 ConExp_ContractedOrExpanded_t TreeContractedOrExpanded,
 							 Brw_IconTree_t IconThisRow);
 static Usr_Can_t Brw_CheckIfCanPasteIn (unsigned Level);
 static void Brw_PutIconRemove (void);
@@ -3260,10 +3260,10 @@ static void Brw_ShowFileBrowser (void)
 	 Brw_SetFullPathInTree ();
 	 Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_FOLDER;
 	 if (Brw_WriteRowFileBrowser (0,"1",
-				      false,	// Tree not contracted
+				      ConExp_EXPANDED,	// Tree not contracted
 				      Brw_ICON_TREE_NOTHING) == HidVis_VISIBLE)
 	    Brw_ListDir (1,"1",
-			 false,	// Tree not contracted
+			 ConExp_EXPANDED,	// Tree not contracted
 			 Gbl.FileBrowser.Path.RootFolder,
 			 Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
       HTM_TABLE_End ();
@@ -3780,7 +3780,7 @@ long Brw_GetGrpLastAccZone (const char *FieldNameDB)
 /*****************************************************************************/
 
 static void Brw_ListDir (unsigned Level,const char *ParentRowId,
-                         bool TreeContracted,
+                         ConExp_ContractedOrExpanded_t TreeContractedOrExpanded,
                          const char Path[PATH_MAX + 1],
                          const char PathInTree[PATH_MAX + 1])
   {
@@ -3795,6 +3795,7 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
    char PathFileRel[PATH_MAX + 1];
    char PathFileInExplTree[PATH_MAX + 1];
    struct stat FileStatus;
+   ConExp_ContractedOrExpanded_t ContractedOrExpandedSubtree;
    Brw_IconTree_t IconSubtree = Brw_ICON_TREE_NOTHING;	// Initialized to avoid warning
    __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible;
 
@@ -3831,24 +3832,25 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 	    else if (S_ISDIR (FileStatus.st_mode))	// It's a directory
 	      {
 	       Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_FOLDER;
-
+	       IconSubtree = Brw_ICON_TREE_NOTHING;
 	       switch (Gbl.FileBrowser.ShowFullTree)
-		 {
+	         {
 		  case Lay_SHOW:
-		     IconSubtree = Brw_ICON_TREE_NOTHING;
+	             ContractedOrExpandedSubtree = ConExp_EXPANDED;
 		     break;
 		  case Lay_DONT_SHOW:
 		  default:
+		     ContractedOrExpandedSubtree = ConExp_CONTRACTED;
 		     /***** Check if this subdirectory has files or folders in it *****/
 		     if ((NumFilesInSubdir = scandir (PathFileRel,&SubdirFileList,NULL,NULL)) >= 0)	// No error
 		       {
-			if (NumFilesInSubdir <= 2)
-			   IconSubtree = Brw_ICON_TREE_NOTHING;
-			else
+			if (NumFilesInSubdir > 2)
+			  {
 			   /***** Check if the tree starting at this subdirectory must be expanded *****/
-			   IconSubtree = Brw_DB_GetIfContractedOrExpandedFolder (Gbl.FileBrowser.FilFolLnk.Full)
-					 == ConExp_EXPANDED ? Brw_ICON_TREE_CONTRACT :
-							      Brw_ICON_TREE_EXPAND;
+			   ContractedOrExpandedSubtree = Brw_DB_GetIfContractedOrExpandedFolder (Gbl.FileBrowser.FilFolLnk.Full);
+			   IconSubtree = ContractedOrExpandedSubtree == ConExp_EXPANDED ? Brw_ICON_TREE_CONTRACT :
+											  Brw_ICON_TREE_EXPAND;
+			  }
 			for (NumFileInSubdir = 0;
 			     NumFileInSubdir < NumFilesInSubdir;
 			     NumFileInSubdir++)
@@ -3858,17 +3860,17 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 		     else
 			Err_ShowErrorAndExit ("Error while scanning directory.");
 		     break;
-		 }
+	         }
 
 	       /***** Write a row for the subdirectory *****/
 	       if (Brw_WriteRowFileBrowser (Level,RowId,
-	                                    TreeContracted,
+	                                    TreeContractedOrExpanded,
 	                                    IconSubtree) == HidVis_VISIBLE)
 		  if (Level < BrwSiz_MAX_DIR_LEVELS)
 		     /* List subtree starting at this this directory */
 		     Brw_ListDir (Level + 1,RowId,
-		                  TreeContracted ||
-		                  IconSubtree == Brw_ICON_TREE_EXPAND,
+		                  ContractedOrExpandedSubtree == ConExp_CONTRACTED ? ConExp_CONTRACTED :
+		                						     TreeContractedOrExpanded,
 				  PathFileRel,PathFileInExplTree);
 	      }
 	    else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
@@ -3877,7 +3879,7 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 							    "url") ? Brw_IS_LINK :
 								     Brw_IS_FILE;
 	       HiddenOrVisible = Brw_WriteRowFileBrowser (Level,RowId,
-							  TreeContracted,
+							  TreeContractedOrExpanded,
 							  Brw_ICON_TREE_NOTHING);
 	      }
 	   }
@@ -3898,7 +3900,7 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 
 static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
 							 const char *RowId,
-							 bool TreeContracted,
+							 ConExp_ContractedOrExpanded_t TreeContractedOrExpanded,
 							 Brw_IconTree_t IconThisRow)
   {
    static const char *ClassTxtOld[HidVis_NUM_HIDDEN_VISIBLE] =
@@ -3992,12 +3994,12 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
      }
 
    /***** Check if is a recent file or folder *****/
-   // If less than a week since last modify ==> indicate the file is recent by writting its name in green
+   // If less than a week since last modify ==>
+   // ==> indicate the file is recent by writting its name in green
    if (Dat_GetStartExecutionTimeUTC () < FileMetadata.Time + (7L * 24L * 60L * 60L))
       IsRecent = true;
 
-   snprintf (TxtStyle,sizeof (TxtStyle),
-             "%s_%s",
+   snprintf (TxtStyle,sizeof (TxtStyle),"%s_%s",
              Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER ||
              !IsRecent ? ClassTxtOld[ThisOrAncestorHiddenOrVisible] :
         	         ClassTxtNew[ThisOrAncestorHiddenOrVisible],
@@ -4022,24 +4024,39 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
    switch (IconThisRow)
      {
       case Brw_ICON_TREE_NOTHING:
-	 if (TreeContracted)	// This row is inside a contracted subtree
-            HTM_TR_Begin ("id=\"%s\" style=\"display:none;\"",Anchor);
-	 else
-            HTM_TR_Begin ("id=\"%s\"",Anchor);
+	 switch (TreeContractedOrExpanded)
+	   {
+	    case ConExp_CONTRACTED:	// This row is inside a contracted subtree
+	       HTM_TR_Begin ("id=\"%s\" style=\"display:none;\"",Anchor);
+	       break;
+	    case ConExp_EXPANDED:
+	       HTM_TR_Begin ("id=\"%s\"",Anchor);
+	       break;
+	   }
 	 break;
       case Brw_ICON_TREE_EXPAND:
-	 if (TreeContracted)	// This row is inside a contracted subtree
-            HTM_TR_Begin ("id=\"%s\" data-folder=\"contracted\""
-        	          " style=\"display:none;\"",Anchor);
-	 else
-            HTM_TR_Begin ("id=\"%s\" data-folder=\"contracted\"",Anchor);
+	 switch (TreeContractedOrExpanded)
+	   {
+	    case ConExp_CONTRACTED:	// This row is inside a contracted subtree
+	       HTM_TR_Begin ("id=\"%s\" data-folder=\"contracted\""
+			     " style=\"display:none;\"",Anchor);
+	       break;
+	    case ConExp_EXPANDED:
+	       HTM_TR_Begin ("id=\"%s\" data-folder=\"contracted\"",Anchor);
+	       break;
+	   }
 	 break;
       case Brw_ICON_TREE_CONTRACT:
-	 if (TreeContracted)	// This row is inside a contracted subtree
-            HTM_TR_Begin ("id=\"%s\" data-folder=\"expanded\""
-        	          " style=\"display:none;\"",Anchor);
-	 else
-            HTM_TR_Begin ("id=\"%s\" data-folder=\"expanded\"",Anchor);
+	 switch (TreeContractedOrExpanded)
+	   {
+	    case ConExp_CONTRACTED:	// This row is inside a contracted subtree
+	       HTM_TR_Begin ("id=\"%s\" data-folder=\"expanded\""
+			     " style=\"display:none;\"",Anchor);
+	       break;
+	    case ConExp_EXPANDED:
+	       HTM_TR_Begin ("id=\"%s\" data-folder=\"expanded\"",Anchor);
+	       break;
+	   }
 	 break;
      }
 
@@ -4538,7 +4555,6 @@ static void Brw_PutIconFolder (unsigned Level,
       [Brw_ICON_TREE_CONTRACT][CloOpe_CLOSED] = HidVis_HIDDEN,
       [Brw_ICON_TREE_CONTRACT][CloOpe_OPEN  ] = HidVis_VISIBLE,
      };
-   CloOpe_ClosedOrOpen_t ClosedOrOpen;
    Usr_Can_t ICanCreateIntoFolder = Brw_CheckIfICanCreateIntoFolder (Level);
 
    /***** Begin cell *****/
@@ -4546,11 +4562,11 @@ static void Brw_PutIconFolder (unsigned Level,
 
       /* Put two folder icons:	· 1st closed	(hidden or visible)
 				· 2nd open	(hidden or visible) */
-      for (ClosedOrOpen  = CloOpe_CLOSED;
-	   ClosedOrOpen <= CloOpe_OPEN;
-	   ClosedOrOpen++)
-	 PutIcon[ICanCreateIntoFolder] (FileBrowserId,RowId,ClosedOrOpen,
-					HiddenOrVisible[IconSubtree][ClosedOrOpen]);
+      if (Level)	// In top level, it's not necessary to put closed folder
+	 PutIcon[ICanCreateIntoFolder] (FileBrowserId,RowId,CloOpe_CLOSED,
+					HiddenOrVisible[IconSubtree][CloOpe_CLOSED]);
+      PutIcon[ICanCreateIntoFolder] (FileBrowserId,RowId,CloOpe_OPEN,
+				     HiddenOrVisible[IconSubtree][CloOpe_OPEN]);
 
    /***** End cell *****/
    HTM_TD_End ();
