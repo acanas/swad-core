@@ -672,7 +672,7 @@ unsigned Msg_DB_GetMsgSntData (MYSQL_RES **mysql_res,long MsgCod,bool *Deleted)
 /********************** Get if a sent message is expanded ********************/
 /*****************************************************************************/
 
-bool Msg_DB_GetStatusOfSntMsg (long MsgCod)
+ConExp_ContractedOrExpanded_t Msg_DB_GetStatusOfSntMsg (long MsgCod)
   {
    char StrExpanded[1 + 1];
 
@@ -687,7 +687,8 @@ bool Msg_DB_GetStatusOfSntMsg (long MsgCod)
 		         Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Get if message is expanded *****/
-   return (StrExpanded[0] == 'Y');
+   return StrExpanded[0] == 'Y' ? ConExp_EXPANDED :
+				  ConExp_CONTRACTED;
   }
 
 /*****************************************************************************/
@@ -695,7 +696,7 @@ bool Msg_DB_GetStatusOfSntMsg (long MsgCod)
 /*****************************************************************************/
 
 void Msg_DB_GetStatusOfRcvMsg (long MsgCod,CloOpe_ClosedOrOpen_t *Open,
-			       bool *Replied,bool *Expanded)
+			       bool *Replied,ConExp_ContractedOrExpanded_t *ContractedOrExpanded)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -721,7 +722,8 @@ void Msg_DB_GetStatusOfRcvMsg (long MsgCod,CloOpe_ClosedOrOpen_t *Open,
               if message is expanded (row[2]) *****/
    *Open     = CloOpe_GetOpenFromYN (row[0][0]);
    *Replied  = (row[1][0] == 'Y');
-   *Expanded = (row[2][0] == 'Y');
+   *ContractedOrExpanded = row[2][0] == 'Y' ? ConExp_EXPANDED :
+					      ConExp_CONTRACTED;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

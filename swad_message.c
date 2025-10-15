@@ -38,6 +38,7 @@
 #include "swad_autolink.h"
 #include "swad_box.h"
 #include "swad_config.h"
+#include "swad_contracted_expanded.h"
 #include "swad_course.h"
 #include "swad_database.h"
 #include "swad_error.h"
@@ -163,7 +164,7 @@ static void Msg_GetMsgContent (long MsgCod,
 static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 					       long MsgCod,const char *Subject,
                                                CloOpe_ClosedOrOpen_t ClosedOrOpen,
-                                               bool Expanded);
+                                               ConExp_ContractedOrExpanded_t ContractedOrExpanded);
 
 static bool Msg_WriteCrsOrgMsg (long HieCod);
 
@@ -192,14 +193,14 @@ static void Msg_ResetMessages (struct Msg_Messages *Messages)
    Messages->FilterCrsShrtName[0] = '\0';
    Messages->FilterFromTo[0]      = '\0';
    Messages->FilterContent[0]     = '\0';
-   Messages->OnlyUnreadMsgs   = false;
+   Messages->OnlyUnreadMsgs       = false;
    Messages->ExpandedMsgCod       = -1L;
-   Messages->Reply.IsReply          = Msg_IS_NOT_REPLY;
-   Messages->Reply.Replied        = false;
+   Messages->Reply.IsReply        = Msg_IS_NOT_REPLY;
+   Messages->Reply.Replied        = Msg_NOT_REPLIED;
    Messages->Reply.OriginalMsgCod = -1L;
    Messages->Rcv.NumRecipients    = 0;
    Messages->Rcv.NumErrors        = 0;
-   Messages->OnlyOneRecipient = false;
+   Messages->OnlyOneRecipient     = false;
    Messages->CurrentPage          = 0;
    Messages->MsgCod               = -1L;
   }
@@ -782,7 +783,7 @@ void Msg_RecMsgFromUsr (void)
 	 Msg_CreateRcvMsgForEachRecipient (&Messages);
 
 	 /***** Update received message setting Replied field to true *****/
-	 if (Messages.Reply.Replied)
+	 if (Messages.Reply.Replied == Msg_REPLIED)
 	    Msg_DB_SetRcvMsgAsReplied (Messages.Reply.OriginalMsgCod);
 
 	 /***** Write final message *****/
@@ -888,8 +889,9 @@ static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages)
 		       }
 
 		     /***** If this recipient is the original sender of a message been replied, set Replied to true *****/
-		     Messages->Reply.Replied = (Messages->Reply.IsReply == Msg_IS_REPLY &&
-						UsrDstData.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+		     Messages->Reply.Replied = Messages->Reply.IsReply == Msg_IS_REPLY &&
+					       UsrDstData.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod ? Msg_REPLIED :
+												   Msg_NOT_REPLIED;
 
 		     /***** This received message must be notified by email? *****/
 		     CreateNotif = (UsrDstData.NtfEvents.CreateNotif & (1 << Ntf_EVENT_MESSAGE));
@@ -2037,7 +2039,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
    bool Deleted;
    CloOpe_ClosedOrOpen_t ClosedOrOpen = CloOpe_OPEN;
    bool Replied = false;	// Initialized to avoid warning
-   bool Expanded = false;
+   ConExp_ContractedOrExpanded_t ContractedOrExpanded = ConExp_CONTRACTED;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -2047,10 +2049,10 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
    switch (Messages->TypeOfMessages)
      {
       case Msg_RECEIVED:
-         Msg_DB_GetStatusOfRcvMsg (MsgCod,&ClosedOrOpen,&Replied,&Expanded);
+         Msg_DB_GetStatusOfRcvMsg (MsgCod,&ClosedOrOpen,&Replied,&ContractedOrExpanded);
          break;
       case Msg_SENT:
-         Expanded = Msg_DB_GetStatusOfSntMsg (MsgCod);
+         ContractedOrExpanded = Msg_DB_GetStatusOfSntMsg (MsgCod);
          break;
       default:
 	 Err_WrongMessageExit ();
@@ -2094,7 +2096,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 
       /***** Subject *****/
       Msg_WriteSentOrReceivedMsgSubject (Messages,MsgCod,Subject,
-					 ClosedOrOpen,Expanded);
+					 ClosedOrOpen,ContractedOrExpanded);
 
       /***** Date-time *****/
       Msg_WriteMsgDate (CreatTimeUTC,
@@ -2103,7 +2105,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 
    HTM_TR_End ();
 
-   if (Expanded)
+   if (ContractedOrExpanded == ConExp_EXPANDED)
      {
       HTM_TR_Begin (NULL);
 
@@ -2251,24 +2253,24 @@ void Msg_WriteMsgNumber (unsigned long MsgNum,CloOpe_ClosedOrOpen_t ClosedOrOpen
 static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 					       long MsgCod,const char *Subject,
                                                CloOpe_ClosedOrOpen_t ClosedOrOpen,
-                                               bool Expanded)
+                                               ConExp_ContractedOrExpanded_t ContractedOrExpanded)
   {
    extern const char *Txt_See_message;
    extern const char *Txt_Hide_message;
    extern const char *Txt_no_subject;
-   static Act_Action_t Action[Msg_NUM_TYPES_OF_MSGS][2] =
+   static Act_Action_t Action[Msg_NUM_TYPES_OF_MSGS][ConExp_NUM_CONTRACTED_EXPANDED] =
      {
-      [Msg_WRITING ][false] = ActUnk,
-      [Msg_WRITING ][true ] = ActUnk,
-      [Msg_RECEIVED][false] = ActExpRcvMsg,
-      [Msg_RECEIVED][true ] = ActConRcvMsg,
-      [Msg_SENT    ][false] = ActExpSntMsg,
-      [Msg_SENT    ][true ] = ActConSntMsg,
+      [Msg_WRITING ][ConExp_CONTRACTED] = ActUnk,
+      [Msg_WRITING ][ConExp_EXPANDED  ] = ActUnk,
+      [Msg_RECEIVED][ConExp_CONTRACTED] = ActExpRcvMsg,
+      [Msg_RECEIVED][ConExp_EXPANDED  ] = ActConRcvMsg,
+      [Msg_SENT    ][ConExp_CONTRACTED] = ActExpSntMsg,
+      [Msg_SENT    ][ConExp_EXPANDED  ] = ActConSntMsg,
      };
-   static const char **Title[2] =
+   static const char **Title[ConExp_NUM_CONTRACTED_EXPANDED] =
      {
-      [false] = &Txt_See_message,
-      [true ] = &Txt_Hide_message,
+      [ConExp_CONTRACTED] = &Txt_See_message,
+      [ConExp_EXPANDED  ] = &Txt_Hide_message,
      };
 
    /***** Begin cell *****/
@@ -2277,11 +2279,11 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
                  Msg_Class[ClosedOrOpen].Background,The_GetSuffix ());
 
       /***** Begin form to expand/contract the message *****/
-      Frm_BeginForm (Action[Messages->TypeOfMessages][Expanded]);
+      Frm_BeginForm (Action[Messages->TypeOfMessages][ContractedOrExpanded]);
 	 Messages->MsgCod = MsgCod;	// Message to be contracted/expanded
 	 Msg_PutParsOneMsg (Messages);
 
-	 HTM_BUTTON_Submit_Begin (*Title[Expanded],NULL,"class=\"LT BT_LINK\"");
+	 HTM_BUTTON_Submit_Begin (*Title[ContractedOrExpanded],NULL,"class=\"LT BT_LINK\"");
 
 	    /***** Write subject *****/
 	    if (Subject[0])

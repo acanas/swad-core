@@ -66,6 +66,11 @@ typedef enum
    Msg_IS_NOT_REPLY,
    Msg_IS_REPLY,
   } Msg_Reply_t;
+typedef enum
+  {
+   Msg_NOT_REPLIED,
+   Msg_REPLIED,
+  } Msg_Replied_t;
 
 struct Msg_Messages
   {
@@ -82,7 +87,7 @@ struct Msg_Messages
    struct
      {
       Msg_Reply_t IsReply;		// Is the message I am editing a reply?
-      bool Replied;			// If the message has been replied
+      Msg_Replied_t Replied;		// If the message has been replied
       long OriginalMsgCod;		// Original message code when I am editing a reply
      } Reply;
    struct
