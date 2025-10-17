@@ -1129,7 +1129,7 @@ void Tml_DB_RemoveAllPubsPublishedBy (long UsrCod)
 /****************** Check if a user has favourited a note ********************/
 /*****************************************************************************/
 
-bool Tml_DB_CheckIfFavedByUsr (TmlUsr_FavSha_t FavSha,long Cod,long UsrCod)
+Exi_Exist_t Tml_DB_CheckIfFavedByUsr (TmlUsr_FavSha_t FavSha,long Cod,long UsrCod)
   {
    return
    DB_QueryEXISTS ("can not check if a user has favourited",
@@ -1139,7 +1139,7 @@ bool Tml_DB_CheckIfFavedByUsr (TmlUsr_FavSha_t FavSha,long Cod,long UsrCod)
 		    " WHERE %s=%ld"
 		      " AND UsrCod=%ld)",
 		   Tml_DB_TableFav[FavSha],
-		   Tml_DB_FieldFav[FavSha],Cod,UsrCod) == Exi_EXISTS;
+		   Tml_DB_FieldFav[FavSha],Cod,UsrCod);
   }
 
 /*****************************************************************************/
@@ -1270,7 +1270,7 @@ void Tml_DB_RemoveAllFavsToAllCommsInAllNotesBy (long UsrCod)
 /****************** Check if a user has published a note *********************/
 /*****************************************************************************/
 
-bool Tml_DB_CheckIfSharedByUsr (long NotCod,long UsrCod)
+Exi_Exist_t Tml_DB_CheckIfSharedByUsr (long NotCod,long UsrCod)
   {
    return
    DB_QueryEXISTS ("can not check if a user has shared a note",
@@ -1282,7 +1282,7 @@ bool Tml_DB_CheckIfSharedByUsr (long NotCod,long UsrCod)
 		      " AND PubType=%u)",
 		   NotCod,
 		   UsrCod,
-		   (unsigned) TmlPub_SHARED_NOTE) == Exi_EXISTS;
+		   (unsigned) TmlPub_SHARED_NOTE);
   }
 
 /*****************************************************************************/

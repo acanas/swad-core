@@ -40,7 +40,7 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-static const char *Mrk_DB_HeadOrFootStr[2] =	// Names of columns in database, so don't change!
+static const char *Mrk_DB_HeadOrFootStr[Brw_NUM_HEAD_FOOT] =	// Names of columns in database, so don't change!
   {
    "Header",
    "Footer",

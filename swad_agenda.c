@@ -267,7 +267,7 @@ static void Agd_ShowFormToSelPast__FutureEvents (const struct Agd_Agenda *Agenda
 
 static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda)
   {
-   extern const char *Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[2];
+   extern const char *Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[Agd_NUM_PRIVAT_PUBLIC_EVENTS];
    Agd_PrivatPublicEvents_t PrvPub;
    static struct
      {

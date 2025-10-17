@@ -242,7 +242,8 @@ static void TmlUsr_ListSharersOrFavers (MYSQL_RES **mysql_res,
 /************* Check if a user has faved/shared a note/comment ***************/
 /*****************************************************************************/
 
-bool TmlUsr_CheckIfFavedSharedByUsr (TmlUsr_FavSha_t FavSha,long Cod,long UsrCod)
+Exi_Exist_t TmlUsr_CheckIfFavedSharedByUsr (TmlUsr_FavSha_t FavSha,
+					    long Cod,long UsrCod)
   {
    switch (FavSha)
      {
@@ -255,7 +256,7 @@ bool TmlUsr_CheckIfFavedSharedByUsr (TmlUsr_FavSha_t FavSha,long Cod,long UsrCod
          Err_ShowErrorAndExit ("Wrong fav/share action.");
      }
 
-   return false;	// Not reached
+   return Exi_DOES_NOT_EXIST;	// Not reached
   }
 
 /*****************************************************************************/

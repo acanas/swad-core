@@ -69,7 +69,8 @@ typedef enum
 
 void TmlUsr_RemoveUsrContent (long UsrCod);
 
-bool TmlUsr_CheckIfFavedSharedByUsr (TmlUsr_FavSha_t FavSha,long Cod,long UsrCod);
+Exi_Exist_t TmlUsr_CheckIfFavedSharedByUsr (TmlUsr_FavSha_t FavSha,
+					    long Cod,long UsrCod);
 
 void TmlUsr_PutIconFavSha (TmlUsr_FavSha_t FavSha,
                            long Cod,long UsrCod,unsigned NumUsrs,

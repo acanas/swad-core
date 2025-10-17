@@ -117,6 +117,7 @@ typedef enum	// Don't change these values! They are stored in database as number
   } Brw_License_t;
 #define Brw_LICENSE_DEFAULT Brw_LICENSE_ALL_RIGHTS_RESERVED
 
+#define Brw_NUM_HEAD_FOOT 2
 typedef enum
   {
    Brw_HEADER = 0,

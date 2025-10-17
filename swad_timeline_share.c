@@ -120,7 +120,7 @@ static void TmlSha_ShaNote (struct TmlNot_Note *Not)
 
    /***** Trivial check: Is note already shared by me? *****/
    if (TmlUsr_CheckIfFavedSharedByUsr (TmlUsr_SHA_UNS_NOTE,Not->NotCod,
-                                        Gbl.Usrs.Me.UsrDat.UsrCod))
+                                       Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS)
       return;
 
    /***** Share (publish note in timeline) *****/

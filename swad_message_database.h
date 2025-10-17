@@ -68,8 +68,7 @@ void Msg_DB_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
 Exi_Exist_t Msg_DB_GetMsgContent (MYSQL_RES **mysql_res,long MsgCod);
 unsigned Msg_DB_GetMsgSntData (MYSQL_RES **mysql_res,long MsgCod,bool *Deleted);
 ConExp_ContractedOrExpanded_t Msg_DB_GetStatusOfSntMsg (long MsgCod);
-void Msg_DB_GetStatusOfRcvMsg (long MsgCod,CloOpe_ClosedOrOpen_t *Open,
-			       bool *Replied,ConExp_ContractedOrExpanded_t *ContractedOrExpanded);
+void Msg_DB_GetStatusOfRcvMsg (long MsgCod,struct Msg_Status *Status);
 long Msg_DB_GetSender (long MsgCod);
 bool Msg_DB_CheckIfMsgHasBeenReceivedByMe (long MsgCod);
 unsigned Msg_DB_GetRecipientsCods (MYSQL_RES **mysql_res,

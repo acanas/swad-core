@@ -163,8 +163,7 @@ static void Msg_GetMsgContent (long MsgCod,
 
 static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 					       long MsgCod,const char *Subject,
-                                               CloOpe_ClosedOrOpen_t ClosedOrOpen,
-                                               ConExp_ContractedOrExpanded_t ContractedOrExpanded);
+                                               const struct Msg_Status *Status);
 
 static bool Msg_WriteCrsOrgMsg (long HieCod);
 
@@ -2002,16 +2001,16 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
      {
       const char *Icon;
       const char **Title;
-     } Icons[Msg_NUM_TYPES_OF_MSGS][CloOpe_NUM_CLOSED_OPEN][2] =
+     } Icons[Msg_NUM_TYPES_OF_MSGS][CloOpe_NUM_CLOSED_OPEN][Msg_NUM_REPLIED] =
      {
-      [Msg_RECEIVED][CloOpe_CLOSED][false] = {"envelope.svg"	      ,&Txt_MSG_Unopened   },
-      [Msg_RECEIVED][CloOpe_CLOSED][true ] = {"envelope.svg"	      ,&Txt_MSG_Unopened   },
-      [Msg_RECEIVED][CloOpe_OPEN  ][false] = {"envelope-open-text.svg",&Txt_MSG_Not_replied},
-      [Msg_RECEIVED][CloOpe_OPEN  ][true ] = {"reply.svg"	      ,&Txt_MSG_Replied    },
-      [Msg_SENT    ][CloOpe_CLOSED][false] = {"share.svg"	      ,&Txt_MSG_Sent       },
-      [Msg_SENT    ][CloOpe_CLOSED][true ] = {"share.svg"	      ,&Txt_MSG_Sent       },
-      [Msg_SENT    ][CloOpe_OPEN  ][false] = {"share.svg"	      ,&Txt_MSG_Sent       },
-      [Msg_SENT    ][CloOpe_OPEN  ][true ] = {"share.svg"	      ,&Txt_MSG_Sent       },
+      [Msg_RECEIVED][CloOpe_CLOSED][Msg_NOT_REPLIED] = {"envelope.svg"		,&Txt_MSG_Unopened   },
+      [Msg_RECEIVED][CloOpe_CLOSED][Msg_REPLIED    ] = {"envelope.svg"		,&Txt_MSG_Unopened   },
+      [Msg_RECEIVED][CloOpe_OPEN  ][Msg_NOT_REPLIED] = {"envelope-open-text.svg",&Txt_MSG_Not_replied},
+      [Msg_RECEIVED][CloOpe_OPEN  ][Msg_REPLIED    ] = {"reply.svg"		,&Txt_MSG_Replied    },
+      [Msg_SENT    ][CloOpe_CLOSED][Msg_NOT_REPLIED] = {"share.svg"		,&Txt_MSG_Sent       },
+      [Msg_SENT    ][CloOpe_CLOSED][Msg_REPLIED    ] = {"share.svg"		,&Txt_MSG_Sent       },
+      [Msg_SENT    ][CloOpe_OPEN  ][Msg_NOT_REPLIED] = {"share.svg"		,&Txt_MSG_Sent       },
+      [Msg_SENT    ][CloOpe_OPEN  ][Msg_REPLIED    ] = {"share.svg"		,&Txt_MSG_Sent       },
      };
    static const char *ClassAuthor[CloOpe_NUM_CLOSED_OPEN] =
      {
@@ -2037,9 +2036,12 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Med_Media Media;
    bool Deleted;
-   CloOpe_ClosedOrOpen_t ClosedOrOpen = CloOpe_OPEN;
-   bool Replied = false;	// Initialized to avoid warning
-   ConExp_ContractedOrExpanded_t ContractedOrExpanded = ConExp_CONTRACTED;
+   struct Msg_Status Status =
+     {
+      .ClosedOrOpen	    = CloOpe_OPEN,
+      .Replied		    = Msg_NOT_REPLIED,
+      .ContractedOrExpanded = ConExp_CONTRACTED
+     };
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -2049,10 +2051,10 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
    switch (Messages->TypeOfMessages)
      {
       case Msg_RECEIVED:
-         Msg_DB_GetStatusOfRcvMsg (MsgCod,&ClosedOrOpen,&Replied,&ContractedOrExpanded);
+         Msg_DB_GetStatusOfRcvMsg (MsgCod,&Status);
          break;
       case Msg_SENT:
-         ContractedOrExpanded = Msg_DB_GetStatusOfSntMsg (MsgCod);
+         Status.ContractedOrExpanded = Msg_DB_GetStatusOfSntMsg (MsgCod);
          break;
       default:
 	 Err_WrongMessageExit ();
@@ -2064,13 +2066,13 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 
       /***** Icons *****/
       HTM_TD_Begin ("class=\"CONTEXT_COL %s_%s\"",
-		    Class[Messages->TypeOfMessages][ClosedOrOpen],
+		    Class[Messages->TypeOfMessages][Status.ClosedOrOpen],
 		    The_GetSuffix ());
 
          /* Type of message icon (envelope, reply...) */
-	 Ico_PutIcon (Icons[Messages->TypeOfMessages][ClosedOrOpen][Replied].Icon,
+	 Ico_PutIcon (Icons[Messages->TypeOfMessages][Status.ClosedOrOpen][Status.Replied].Icon,
 		      Ico_BLACK,
-		      *Icons[Messages->TypeOfMessages][ClosedOrOpen][Replied].Title,
+		      *Icons[Messages->TypeOfMessages][Status.ClosedOrOpen][Status.Replied].Title,
 		      "ICO16x16");
 
 	 HTM_BR ();
@@ -2082,12 +2084,12 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
       HTM_TD_End ();
 
       /***** Number *****/
-      Msg_WriteMsgNumber (MsgNum,ClosedOrOpen);
+      Msg_WriteMsgNumber (MsgNum,Status.ClosedOrOpen);
 
       /***** Author *****/
       HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
-                    ClassAuthor[ClosedOrOpen],The_GetSuffix (),
-                    ClassBg[ClosedOrOpen],The_GetSuffix ());
+                    ClassAuthor[Status.ClosedOrOpen],The_GetSuffix (),
+                    ClassBg[Status.ClosedOrOpen],The_GetSuffix ());
 	 UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							      Usr_DONT_GET_PREFS,
 							      Usr_DONT_GET_ROLE_IN_CRS);
@@ -2095,17 +2097,16 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
       HTM_TD_End ();
 
       /***** Subject *****/
-      Msg_WriteSentOrReceivedMsgSubject (Messages,MsgCod,Subject,
-					 ClosedOrOpen,ContractedOrExpanded);
+      Msg_WriteSentOrReceivedMsgSubject (Messages,MsgCod,Subject,&Status);
 
       /***** Date-time *****/
       Msg_WriteMsgDate (CreatTimeUTC,
-                        ClassDateTime[ClosedOrOpen],
-                        ClassBg[ClosedOrOpen]);
+                        ClassDateTime[Status.ClosedOrOpen],
+                        ClassBg[Status.ClosedOrOpen]);
 
    HTM_TR_End ();
 
-   if (ContractedOrExpanded == ConExp_EXPANDED)
+   if (Status.ContractedOrExpanded == ConExp_EXPANDED)
      {
       HTM_TR_Begin (NULL);
 
@@ -2252,8 +2253,7 @@ void Msg_WriteMsgNumber (unsigned long MsgNum,CloOpe_ClosedOrOpen_t ClosedOrOpen
 
 static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 					       long MsgCod,const char *Subject,
-                                               CloOpe_ClosedOrOpen_t ClosedOrOpen,
-                                               ConExp_ContractedOrExpanded_t ContractedOrExpanded)
+                                               const struct Msg_Status *Status)
   {
    extern const char *Txt_See_message;
    extern const char *Txt_Hide_message;
@@ -2275,15 +2275,16 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 
    /***** Begin cell *****/
    HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
-                 Msg_Class[ClosedOrOpen].Title     ,The_GetSuffix (),
-                 Msg_Class[ClosedOrOpen].Background,The_GetSuffix ());
+                 Msg_Class[Status->ClosedOrOpen].Title     ,The_GetSuffix (),
+                 Msg_Class[Status->ClosedOrOpen].Background,The_GetSuffix ());
 
       /***** Begin form to expand/contract the message *****/
-      Frm_BeginForm (Action[Messages->TypeOfMessages][ContractedOrExpanded]);
+      Frm_BeginForm (Action[Messages->TypeOfMessages][Status->ContractedOrExpanded]);
 	 Messages->MsgCod = MsgCod;	// Message to be contracted/expanded
 	 Msg_PutParsOneMsg (Messages);
 
-	 HTM_BUTTON_Submit_Begin (*Title[ContractedOrExpanded],NULL,"class=\"LT BT_LINK\"");
+	 HTM_BUTTON_Submit_Begin (*Title[Status->ContractedOrExpanded],NULL,
+				  "class=\"LT BT_LINK\"");
 
 	    /***** Write subject *****/
 	    if (Subject[0])

@@ -146,7 +146,7 @@ static void TmlFav_FavNote (struct TmlNot_Note *Not)
 
    /***** Trivial check: Have I faved this note? *****/
    if (TmlUsr_CheckIfFavedSharedByUsr (TmlUsr_FAV_UNF_NOTE,Not->NotCod,
-                                       Gbl.Usrs.Me.UsrDat.UsrCod))
+                                       Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS)
       return;
 
    /***** Mark note as favourite in database *****/
@@ -175,8 +175,8 @@ static void TmlFav_UnfNote (struct TmlNot_Note *Not)
       return;
 
    /***** Trivial check: Have I faved this note? *****/
-   if (!TmlUsr_CheckIfFavedSharedByUsr (TmlUsr_FAV_UNF_NOTE,Not->NotCod,
-                                         Gbl.Usrs.Me.UsrDat.UsrCod))
+   if (TmlUsr_CheckIfFavedSharedByUsr (TmlUsr_FAV_UNF_NOTE,Not->NotCod,
+                                       Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_DOES_NOT_EXIST)
       return;
 
    /***** Delete the mark as favourite from database *****/
@@ -292,7 +292,7 @@ static void TmlFav_FavComm (struct TmlCom_Comment *Com)
 
    /***** Trivial check: Have I faved this comment? *****/
    if (TmlUsr_CheckIfFavedSharedByUsr (TmlUsr_FAV_UNF_COMM,Com->PubCod,
-				        Gbl.Usrs.Me.UsrDat.UsrCod))
+				       Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS)
      {
       Med_MediaDestructor (&Com->Content.Media);
       return;
@@ -330,8 +330,8 @@ static void TmlFav_UnfComm (struct TmlCom_Comment *Com)
      }
 
    /***** Trivial check: Have I faved this comment? *****/
-   if (!TmlUsr_CheckIfFavedSharedByUsr (TmlUsr_FAV_UNF_COMM,Com->PubCod,
-				        Gbl.Usrs.Me.UsrDat.UsrCod))
+   if (TmlUsr_CheckIfFavedSharedByUsr (TmlUsr_FAV_UNF_COMM,Com->PubCod,
+				       Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_DOES_NOT_EXIST)
      {
       Med_MediaDestructor (&Com->Content.Media);
       return;

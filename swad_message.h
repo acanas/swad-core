@@ -27,6 +27,7 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_contracted_expanded.h"
 #include "swad_course.h"
 #include "swad_notification.h"
 #include "swad_statistic.h"
@@ -66,6 +67,8 @@ typedef enum
    Msg_IS_NOT_REPLY,
    Msg_IS_REPLY,
   } Msg_Reply_t;
+
+#define Msg_NUM_REPLIED 2
 typedef enum
   {
    Msg_NOT_REPLIED,
@@ -86,9 +89,9 @@ struct Msg_Messages
    long ExpandedMsgCod;	// The current expanded message code
    struct
      {
-      Msg_Reply_t IsReply;		// Is the message I am editing a reply?
-      Msg_Replied_t Replied;		// If the message has been replied
-      long OriginalMsgCod;		// Original message code when I am editing a reply
+      Msg_Reply_t IsReply;	// Is the message I am editing a reply?
+      Msg_Replied_t Replied;	// If the message has been replied
+      long OriginalMsgCod;	// Original message code when I am editing a reply
      } Reply;
    struct
      {
@@ -98,6 +101,13 @@ struct Msg_Messages
    bool OnlyOneRecipient;	// Shown only a selected recipient or also other potential recipients?
    unsigned CurrentPage;
    long MsgCod;	// Used as parameter with message to be removed
+  };
+
+struct Msg_Status
+  {
+   CloOpe_ClosedOrOpen_t ClosedOrOpen;
+   Msg_Replied_t Replied;
+   ConExp_ContractedOrExpanded_t ContractedOrExpanded;
   };
 
 struct Msg_Class

@@ -1346,7 +1346,7 @@ const char *Txt_AGENDA_PAST___FUTURE_EVENTS[Agd_NUM_PAST_FUTURE_EVENTS] =
 #endif
 	};
 
-const char *Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[2] =
+const char *Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[Agd_NUM_PRIVAT_PUBLIC_EVENTS] =
 	{
 	// Agd_PRIVAT_EVENTS
 #if   L==1	// ca
@@ -15687,8 +15687,9 @@ const char *Txt_Group_X_removed =	// Warning: it is very important to include %s
 	"Group <strong>%s</strong> removed.";	// Çeviri lazim!
 #endif
 
-const char *Txt_GROUP_WHICH_GROUPS[2] =
+const char *Txt_GROUP_WHICH_GROUPS[Grp_NUM_MY_ALL_GROUPS] =
 	{
+	// Grp_MY_GROUPS
 #if   L==1	// ca
 	"Nom&eacute;s els meus grups"
 #elif L==2	// de
@@ -15711,6 +15712,7 @@ const char *Txt_GROUP_WHICH_GROUPS[2] =
 	"Only my groups"	// Çeviri lazim!
 #endif
 	,
+	// Grp_ALL_GROUPS
 #if   L==1	// ca
 	"Tots els grups"
 #elif L==2	// de

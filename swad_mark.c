@@ -61,7 +61,7 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-static const char *Mrk_HeadOrFootStr[2] =	// Names of fields in forms
+static const char *Mrk_HeadOrFootStr[Brw_NUM_HEAD_FOOT] =	// Names of fields in forms
   {
    "Header",
    "Footer",

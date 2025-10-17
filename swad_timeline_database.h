@@ -114,7 +114,7 @@ void Tml_DB_RemoveAllPubsPublishedByAnyUsrOfNotesAuthoredBy (long UsrCod);
 void Tml_DB_RemoveAllPubsPublishedBy (long UsrCod);
 
 /****************************** Favourites ***********************************/
-bool Tml_DB_CheckIfFavedByUsr (TmlUsr_FavSha_t FavSha,long Cod,long UsrCod);
+Exi_Exist_t Tml_DB_CheckIfFavedByUsr (TmlUsr_FavSha_t FavSha,long Cod,long UsrCod);
 unsigned Tml_DB_GetNumFavers (TmlUsr_FavSha_t FavSha,long Cod,long UsrCod);
 unsigned Tml_DB_GetFavers (TmlUsr_FavSha_t FavSha,
                            long Cod,long UsrCod,unsigned MaxUsrs,
@@ -126,7 +126,7 @@ void Tml_DB_RemoveAllFavsToPubsBy (TmlUsr_FavSha_t FavSha,long UsrCod);
 void Tml_DB_RemoveAllFavsToAllCommsInAllNotesBy (long UsrCod);
 
 /******************************** Shared *************************************/
-bool Tml_DB_CheckIfSharedByUsr (long NotCod,long UsrCod);
+Exi_Exist_t Tml_DB_CheckIfSharedByUsr (long NotCod,long UsrCod);
 unsigned Tml_DB_GetNumSharers (long NotCod,long UsrCod);
 unsigned Tml_DB_GetSharers (long NotCod,long UsrCod,unsigned MaxUsrs,
                             MYSQL_RES **mysql_res);

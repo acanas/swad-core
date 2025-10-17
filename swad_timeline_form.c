@@ -94,67 +94,58 @@ extern struct Globals Gbl;
 
 void TmlFrm_PutFormToFavUnfShaUns (TmlUsr_FavSha_t FavSha,long Cod)
   {
-   struct Tml_Form Form[TmlUsr_NUM_FAV_SHA][2] =
+   struct Tml_Form Form[TmlUsr_NUM_FAV_SHA][Exi_NUM_EXIST] =
      {
-      [TmlUsr_FAV_UNF_NOTE] =
+      [TmlUsr_FAV_UNF_NOTE][Exi_DOES_NOT_EXIST] =	// I have not faved ==> fav
 	{
-	 [false] = // I have not faved ==> fav
-	   {
-	    .Action    = TmlFrm_FAV_NOTE,
-	    .ParFormat = "NotCod=%ld",
-	    .ParCod    = Cod,
-	    .Icon      = TmlFav_ICON_FAV,
-	    .Color     = Ico_BLACK,
-	   },
-	 [true] = // I have faved ==> unfav
-	   {
-	    .Action    = TmlFrm_UNF_NOTE,
-	    .ParFormat = "NotCod=%ld",
-	    .ParCod    = Cod,
-	    .Icon      = TmlFav_ICON_FAV,
-	    .Color     = Ico_RED,
-	   },
+	 .Action    = TmlFrm_FAV_NOTE,
+	 .ParFormat = "NotCod=%ld",
+	 .ParCod    = Cod,
+	 .Icon      = TmlFav_ICON_FAV,
+	 .Color     = Ico_BLACK,
 	},
-      [TmlUsr_FAV_UNF_COMM] =
+      [TmlUsr_FAV_UNF_NOTE][Exi_EXISTS        ] =	// I have faved ==> unfav
 	{
-	 [false] = // I have not faved ==> fav
-	   {
-	    .Action    = TmlFrm_FAV_COMM,
-	    .ParFormat = "PubCod=%ld",
-	    .ParCod    = Cod,
-	    .Icon      = TmlFav_ICON_FAV,
-	    .Color     = Ico_BLACK,
-	   },
-	 [true] = // I have faved ==> unfav
-	   {
-	    .Action    = TmlFrm_UNF_COMM,
-	    .ParFormat = "PubCod=%ld",
-	    .ParCod    = Cod,
-	    .Icon      = TmlFav_ICON_FAV,
-	    .Color     = Ico_RED,
-	   },
+	 .Action    = TmlFrm_UNF_NOTE,
+	 .ParFormat = "NotCod=%ld",
+	 .ParCod    = Cod,
+	 .Icon      = TmlFav_ICON_FAV,
+	 .Color     = Ico_RED,
 	},
-      [TmlUsr_SHA_UNS_NOTE] =
+      [TmlUsr_FAV_UNF_COMM][Exi_DOES_NOT_EXIST] =	// I have not faved ==> fav
 	{
-	 [false] = // I have not shared ==> share
-	   {
-	    .Action    = TmlFrm_SHA_NOTE,
-	    .ParFormat = "NotCod=%ld",
-	    .ParCod    = Cod,
-	    .Icon      = TmlSha_ICON_SHARE,
-	    .Color     = Ico_BLACK,
-	   },
-	 [true] = // I have shared ==> unshare
-	   {
-	    .Action    = TmlFrm_UNS_NOTE,
-	    .ParFormat = "NotCod=%ld",
-	    .ParCod    = Cod,
-	    .Icon      = TmlSha_ICON_SHARE,
-	    .Color     = Ico_GREEN,
-	   },
+	 .Action    = TmlFrm_FAV_COMM,
+	 .ParFormat = "PubCod=%ld",
+	 .ParCod    = Cod,
+	 .Icon      = TmlFav_ICON_FAV,
+	 .Color     = Ico_BLACK,
+	},
+      [TmlUsr_FAV_UNF_COMM][Exi_EXISTS        ] =	// I have faved ==> unfav
+	{
+	 .Action    = TmlFrm_UNF_COMM,
+	 .ParFormat = "PubCod=%ld",
+	 .ParCod    = Cod,
+	 .Icon      = TmlFav_ICON_FAV,
+	 .Color     = Ico_RED,
+	},
+      [TmlUsr_SHA_UNS_NOTE][Exi_DOES_NOT_EXIST] =	// I have not shared ==> share
+	{
+	 .Action    = TmlFrm_SHA_NOTE,
+	 .ParFormat = "NotCod=%ld",
+	 .ParCod    = Cod,
+	 .Icon      = TmlSha_ICON_SHARE,
+	 .Color     = Ico_BLACK,
+	},
+      [TmlUsr_SHA_UNS_NOTE][Exi_EXISTS        ] =	// I have shared ==> unshare
+	{
+	 .Action    = TmlFrm_UNS_NOTE,
+	 .ParFormat = "NotCod=%ld",
+	 .ParCod    = Cod,
+	 .Icon      = TmlSha_ICON_SHARE,
+	 .Color     = Ico_GREEN,
 	},
      };
-   bool FavedShared;
+   Exi_Exist_t FavedShared;
 
    /***** Form and icon to fav/unfav note *****/
    FavedShared = TmlUsr_CheckIfFavedSharedByUsr (FavSha,Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
