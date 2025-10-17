@@ -44,6 +44,12 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/***************************** Private prototypes ****************************/
+/*****************************************************************************/
+
+static Msg_Replied_t Msg_DB_GetRepliedFromYN (char Ch);
+
+/*****************************************************************************/
 /************* Insert message subject and content in the database ************/
 /*****************************************************************************/
 // Return the code of the new inserted message
@@ -720,13 +726,21 @@ void Msg_DB_GetStatusOfRcvMsg (long MsgCod,struct Msg_Status *Status)
               if message has been replied (row[1]), and
               if message is expanded (row[2]) *****/
    Status->ClosedOrOpen		= CloOpe_GetOpenFromYN (row[0][0]);
-   Status->Replied		= row[1][0] == 'Y' ? Msg_REPLIED :
-						     Msg_NOT_REPLIED;
-   Status->ContractedOrExpanded = row[2][0] == 'Y' ? ConExp_EXPANDED :
-						     ConExp_CONTRACTED;
+   Status->Replied		= Msg_DB_GetRepliedFromYN (row[1][0]);
+   Status->ContractedOrExpanded = CloOpe_GetExpandedFromYN (row[2][0]);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/******************** Get if replied from a 'Y'/'N' character ****************/
+/*****************************************************************************/
+
+static Msg_Replied_t Msg_DB_GetRepliedFromYN (char Ch)
+  {
+   return Ch == 'Y' ? Msg_REPLIED :
+		      Msg_NOT_REPLIED;
   }
 
 /*****************************************************************************/

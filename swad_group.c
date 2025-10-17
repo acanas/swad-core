@@ -3179,7 +3179,7 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGrpTypes_t WhichGrpTypes)
 
                /* Get whether group is open ('Y') or closed ('N') (row[5]),
                   and whether group have file zones ('Y') or not ('N') (row[6]) */
-               Grp->Open = CloOpe_GetOpenFromYN (row[5][0]);
+               Grp->Open         = CloOpe_GetOpenFromYN (row[5][0]);
                Grp->HasFileZones = Grp_GetHasFileZonesFromYN (row[6][0]);
               }
            }
@@ -3367,7 +3367,7 @@ void Grp_GetGroupDataByCod (long *HieCod,long *GrpTypCod,struct Group *Grp)
 
 	 /* Get whether group is open or closed (row[5]),
 	    and whether group has file zones (row[6]) */
-	 Grp->Open = CloOpe_GetOpenFromYN (row[5][0]);
+	 Grp->Open         = CloOpe_GetOpenFromYN (row[5][0]);
 	 Grp->HasFileZones = Grp_GetHasFileZonesFromYN (row[6][0]);
 
 	 /* Get the name of the room (row[7]) */

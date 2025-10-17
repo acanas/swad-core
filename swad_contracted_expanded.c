@@ -1,9 +1,7 @@
-// swad_contracted_expanded.h: types and constants related to contracted/expanded
+// swad_contracted_expanded.c: types and constants related to contracted/expanded
 
-#ifndef _SWAD_CON_EXP
-#define _SWAD_CON_EXP
 /*
-    SWAD (Shared Workspace At a Distance in Spanish),
+    SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
     and used to support university teaching.
 
@@ -11,7 +9,7 @@
     Copyright (C) 1999-2025 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
+    it under the terms of the GNU Affero General 3 License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
@@ -23,27 +21,18 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 /*****************************************************************************/
-/***************************** Public constants ******************************/
-/*****************************************************************************/
-
-#define ConExp_NUM_CONTRACTED_EXPANDED 2
-
-/*****************************************************************************/
-/******************************* Public types ********************************/
+/*********************************** Headers *********************************/
 /*****************************************************************************/
 
-typedef enum
+#include "swad_contracted_expanded.h"
+
+/*****************************************************************************/
+/********** Get if expanded or contracted from a 'Y'/'N' character ***********/
+/*****************************************************************************/
+
+ConExp_ContractedOrExpanded_t CloOpe_GetExpandedFromYN (char Ch)
   {
-   ConExp_CONTRACTED = 0,
-   ConExp_EXPANDED   = 1,
-  } ConExp_ContractedOrExpanded_t;
-
-/*****************************************************************************/
-/***************************** Public prototypes *****************************/
-/*****************************************************************************/
-
-ConExp_ContractedOrExpanded_t CloOpe_GetExpandedFromYN (char Ch);
-
-#endif
+   return Ch == 'Y' ? ConExp_EXPANDED :
+		      ConExp_CONTRACTED;
+  }
