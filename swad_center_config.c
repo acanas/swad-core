@@ -129,7 +129,7 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
    Frm_PutForm_t PutFormCoor;
    Frm_PutForm_t PutFormWWW;
    Frm_PutForm_t PutFormPhoto;
-   bool MapIsAvailable;
+   Exi_Exist_t MapExists;
    char PathPhoto[PATH_MAX + 1];
    Exi_Exist_t PhotoExists;
 
@@ -230,7 +230,7 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
 
       /**************************** Right part **********************************/
       /***** Check map *****/
-      MapIsAvailable = Map_CheckIfCoordAreAvailable (&Coord);
+      MapExists = Map_CheckIfCoordsExist (&Coord);
 
       /***** Check photo *****/
       snprintf (PathPhoto,sizeof (PathPhoto),"%s/%02u/%u/%u.jpg",
@@ -240,12 +240,13 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
 		(unsigned)  Gbl.Hierarchy.Node[Hie_CTR].HieCod);
       PhotoExists = Fil_CheckIfPathExists (PathPhoto);
 
-      if (MapIsAvailable || PhotoExists == Exi_EXISTS)
+      if (MapExists   == Exi_EXISTS ||
+	  PhotoExists == Exi_EXISTS)
 	{
 	 HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT\"");
 
 	    /***** Center map *****/
-	    if (MapIsAvailable)
+	    if (MapExists == Exi_EXISTS)
 	       CtrCfg_Map (&Coord);
 
 	    /***** Center photo *****/

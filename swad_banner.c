@@ -966,9 +966,9 @@ void Ban_ClickOnBanner (void)
    // TODO: Put headers Content-type and Content-disposition:
    // See: http://stackoverflow.com/questions/381954/how-do-i-fix-firefox-trying-to-save-image-as-htm
    // http://elouai.com/force-download.php
-   Gbl.Layout.HTMLStartWritten =
-   Gbl.Layout.DivsEndWritten   =
-   Gbl.Layout.HTMLEndWritten   = true;	// Don't write HTML at all
+
+   /***** Don't write HTML at all *****/
+   Lay_SetLayoutStatus (Lay_HTML_END_WRITTEN);
   }
 
 static void Ban_SetBanCodClicked (long BanCod)

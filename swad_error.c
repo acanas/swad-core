@@ -594,7 +594,7 @@ void Err_ShowErrorAndExit (const char *Txt)
    if (!Gbl.WebService.IsWebService)
      {
       /****** If start of page is not written yet, do it now ******/
-      if (!Gbl.Layout.HTMLStartWritten)
+      if (Lay_GetLayoutStatus () < Lay_HTML_START_WRITTEN)
 	 Lay_WriteStartOfPage ();
 
       /***** Write possible error message *****/
@@ -643,14 +643,14 @@ void Err_ShowErrorAndExit (const char *Txt)
 	   }
 
 	 /***** End the output *****/
-	 if (!Gbl.Layout.HTMLEndWritten)
+	 if (Lay_GetLayoutStatus () < Lay_HTML_END_WRITTEN)
 	   {
 	    if (Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST)
 	       Lay_WriteAboutZone ();
 
 	    HTM_Txt ("</body>\n"
 		     "</html>\n");
-	    Gbl.Layout.HTMLEndWritten = true;
+	    Lay_SetLayoutStatus (Lay_HTML_END_WRITTEN);
 	   }
 	}
      }

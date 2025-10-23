@@ -518,9 +518,9 @@ static void Nck_ChangeUsrNick (struct Usr_Data *UsrDat)
 	 else if (strcasecmp (UsrDat->Nickname,NewNick))	// User's nickname does not match, not even case insensitive, the new nickname
 	   {
 	    /***** Check if the new nickname matches any of my old nicknames *****/
-	    if (!Nck_DB_CheckIfNickMatchesAnyUsrNick (UsrDat->UsrCod,NewNick))		// No matches
+	    if (Nck_DB_CheckIfNickMatchesAnyUsrNick (UsrDat->UsrCod,NewNick) == Exi_DOES_NOT_EXIST)	// No matches
 	       /***** Check if the new nickname matches any of the nicknames of other users *****/
-	       if (Nck_DB_CheckIfNickMatchesAnyOtherUsrsNicks (UsrDat->UsrCod,NewNick))	// A nickname of another user is the same that user's nickname
+	       if (Nck_DB_CheckIfNickMatchesAnyOtherUsrsNicks (UsrDat->UsrCod,NewNick) == Exi_EXISTS)	// A nickname of another user is the same that user's nickname
 		  Ale_CreateAlert (Ale_WARNING,Nck_NICKNAME_SECTION_ID,
 				   Txt_The_nickname_had_been_registered_by_another_user);
 	   }

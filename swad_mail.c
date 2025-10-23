@@ -933,7 +933,7 @@ Err_SuccessOrError_t Mai_CheckIfEmailIsValid (const char *Email)
    unsigned LastPosArroba = Length - 4;
    const char *Ptr;
    unsigned Pos;
-   bool ArrobaFound = false;
+   Err_SuccessOrError_t ArrobaFound = Err_ERROR;
 
    /***** An email address must have a number of characters
           5 <= Length <= Cns_MAX_BYTES_EMAIL_ADDRESS *****/
@@ -955,7 +955,7 @@ Err_SuccessOrError_t Mai_CheckIfEmailIsValid (const char *Email)
 	 Pos++;
       else if (*Ptr == '@')
 	{
-	 if (ArrobaFound)
+	 if (ArrobaFound == Err_SUCCESS)	// Another was found before
 	    return Err_ERROR;
 	 /* Example: a@b.c
 	             01234
@@ -963,13 +963,12 @@ Err_SuccessOrError_t Mai_CheckIfEmailIsValid (const char *Email)
 	             LastPosArroba = 5 - 4 = 1 */
 	 if (Pos == 0 || Pos > LastPosArroba)
 	    return Err_ERROR;
-	 ArrobaFound = true;
+	 ArrobaFound = Err_SUCCESS;
 	}
       else
          return Err_ERROR;
 
-   return ArrobaFound ? Err_SUCCESS :
-			Err_ERROR;
+   return ArrobaFound;
   }
 
 /*****************************************************************************/

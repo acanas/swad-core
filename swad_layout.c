@@ -97,6 +97,12 @@ const char *Lay_HighlightClass[Lay_NUM_HIGHLIGHT] =
   };
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+Lay_LayoutStatus_t Lay_LayoutStatus = Lay_NOTHING_WRITTEN;
+
+/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
@@ -122,6 +128,20 @@ static void Lay_WriteFootFromHTMLFile (void);
 static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const char *Equation);
 
 /*****************************************************************************/
+/*************************** Set/get layout status ***************************/
+/*****************************************************************************/
+
+void Lay_SetLayoutStatus (Lay_LayoutStatus_t LayoutStatus)
+  {
+   Lay_LayoutStatus = LayoutStatus;
+  }
+
+Lay_LayoutStatus_t Lay_GetLayoutStatus (void)
+  {
+   return Lay_LayoutStatus;
+  }
+
+/*****************************************************************************/
 /*********************** Write the start of the page *************************/
 /*****************************************************************************/
 
@@ -138,8 +158,7 @@ void Lay_WriteStartOfPage (void)
 
    /***** If, when this function is called, the head is being written
           or the head is already written ==> don't do anything *****/
-   if (Gbl.Layout.WritingHTMLStart ||
-       Gbl.Layout.HTMLStartWritten)
+   if (Lay_GetLayoutStatus () >= Lay_WRITING_HTML_START)
       return;
 
    /***** Compute connected users to be displayed in right column *****/
@@ -150,20 +169,18 @@ void Lay_WriteStartOfPage (void)
      // Don't generate a full HTML page, only the content of a DIV or similar
      {
       HTM_Txt ("Content-Type: text/html; charset=windows-1252\r\n\r\n");
-      Gbl.Layout.WritingHTMLStart = false;
-      Gbl.Layout.HTMLStartWritten = Gbl.Layout.DivsEndWritten = true;
+      Lay_SetLayoutStatus (Lay_DIVS_END_WRITTEN);
       return;
      }
 
    /***** If serving a web service ==> don't do anything *****/
    if (Gbl.WebService.IsWebService)
      {
-      Gbl.Layout.WritingHTMLStart = false;
-      Gbl.Layout.HTMLStartWritten = Gbl.Layout.DivsEndWritten = true;
+      Lay_SetLayoutStatus (Lay_DIVS_END_WRITTEN);
       return;
      }
 
-   Gbl.Layout.WritingHTMLStart = true;
+   Lay_SetLayoutStatus (Lay_WRITING_HTML_START);
 
    /***** Get browser tab associated to current action *****/
    BrowserTab = Act_GetBrowserTab (Gbl.Action.Act);
@@ -322,15 +339,11 @@ void Lay_WriteStartOfPage (void)
 	       break;
            }
 	 HTM_Txt (">\n");
-         Gbl.Layout.WritingHTMLStart = false;
-	 Gbl.Layout.HTMLStartWritten =
-	 Gbl.Layout.DivsEndWritten   = true;
+         Lay_SetLayoutStatus (Lay_DIVS_END_WRITTEN);
 	 return;
       default:
 	 HTM_Txt ("<body>\n");
-	 Gbl.Layout.WritingHTMLStart = false;
-	 Gbl.Layout.HTMLStartWritten =
-	 Gbl.Layout.DivsEndWritten   = true;
+         Lay_SetLayoutStatus (Lay_DIVS_END_WRITTEN);
 	 return;
      }
 
@@ -397,8 +410,7 @@ void Lay_WriteStartOfPage (void)
 		     /* If it is mandatory to read any information about course */
 		     Inf_WriteMsgYouMustReadInfo ();
 
-		     Gbl.Layout.WritingHTMLStart = false;
-		     Gbl.Layout.HTMLStartWritten = true;
+		     Lay_SetLayoutStatus (Lay_HTML_START_WRITTEN);
 
 		     /* Write message indicating number of clicks allowed before sending my photo */
 		     Usr_InformAboutNumClicksBeforePhoto ();
@@ -412,9 +424,7 @@ void Lay_WriteHTTPStatus204NoContent (void)
   {
    /***** The HTTP response is a code status *****/
    /* Don't write HTML at all */
-   Gbl.Layout.HTMLStartWritten =
-   Gbl.Layout.DivsEndWritten   =
-   Gbl.Layout.HTMLEndWritten   = true;
+   Lay_SetLayoutStatus (Lay_HTML_END_WRITTEN);
 
    /* Begin HTTP response */
    fprintf (stdout,"Content-type: text/plain; charset=windows-1252\n");
@@ -432,7 +442,7 @@ void Lay_WriteHTTPStatus204NoContent (void)
 
 void Lay_WriteEndOfPage (void)
   {
-   if (!Gbl.Layout.DivsEndWritten)
+   if (Lay_GetLayoutStatus () < Lay_DIVS_END_WRITTEN)
      {
 		     /***** End of central part of main zone *****/
 		     HTM_MAIN_End ();	// Canvas (main zone to output content of the current action)
@@ -448,7 +458,7 @@ void Lay_WriteEndOfPage (void)
 	 HTM_DIV_End ();		// main_zone
       HTM_DIV_End ();			// whole_page_* (box that contains the whole page except the foot)
 
-      Gbl.Layout.DivsEndWritten = true;
+      Lay_SetLayoutStatus (Lay_DIVS_END_WRITTEN);
      }
   }
 

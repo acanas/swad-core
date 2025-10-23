@@ -56,14 +56,6 @@ struct Globals
   {
    struct
      {
-      bool WritingHTMLStart;	// Used to avoid writing the HTML head when aborting program on error
-      bool HTMLStartWritten;	// Used to avoid writing more than once the HTML head
-      bool DivsEndWritten;	// Used to avoid writing more than once the HTML end
-      bool HTMLEndWritten;	// Used to avoid writing more than once the HTML end
-     } Layout;
-
-   struct
-     {
       Lan_Language_t Language;
       unsigned FirstDayOfWeek;
       Dat_Format_t DateFormat;
@@ -137,7 +129,7 @@ struct Globals
            {
             struct Hie_MyNode *Nodes;	// List of courses/degrees/centers/institutions/countries
             unsigned Num;		// Number of courses/degrees/centers/institutions/countries
-            bool Filled;		// List is already filled?
+            Cac_Status_t Status;	// List is already filled?
            } Hierarchy[Hie_NUM_LEVELS];	// My hierarchy
          Usr_Belong_t IBelongToCurrent[Hie_NUM_LEVELS];
 	 Set_ShowUsrsType_t ListType;	// My preference about user's list type
@@ -199,7 +191,7 @@ struct Globals
          char L[2 + 1];		// Left directory: 2 first chars
          char R[NAME_MAX + 1];	// Right directory: rest of chars
         } TmpPubDir;
-      bool HiddenLevels[1 + BrwSiz_MAX_DIR_LEVELS];
+      HidVis_HiddenOrVisible_t HiddenLevels[1 + BrwSiz_MAX_DIR_LEVELS];
       struct
         {
 	 bool CreateZIP;

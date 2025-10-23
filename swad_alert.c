@@ -436,7 +436,7 @@ static void Ale_ShowFixAlertAndButtonBegin (Ale_AlertType_t AlertType,const char
      };
 
    /****** If start of page is not written yet, do it now ******/
-   if (!Gbl.Layout.HTMLStartWritten)
+   if (Lay_GetLayoutStatus () < Lay_HTML_START_WRITTEN)
       Lay_WriteStartOfPage ();
 
    /***** Begin container *****/

@@ -1372,7 +1372,7 @@ static void Inf_ConfigInfoSource (struct Inf_Info *Info)
    extern const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES];
    extern const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES];
    Inf_Src_t InfoSrc;
-   bool InfoAvailable[Inf_NUM_SOURCES];
+   Exi_Exist_t InfoAvailable[Inf_NUM_SOURCES];
    static Act_Action_t Actions[Inf_NUM_TYPES] =
      {
       [Inf_UNKNOWN_TYPE	] = ActUnk,
@@ -1406,7 +1406,7 @@ static void Inf_ConfigInfoSource (struct Inf_Info *Info)
    /***** Set info source to none
 	  when no info available for the current source *****/
    if (Info->FromDB.Src != Inf_SRC_NONE &&
-       !InfoAvailable[Info->FromDB.Src])
+       InfoAvailable[Info->FromDB.Src] == Exi_DOES_NOT_EXIST)
      {
       Info->FromDB.Src = Inf_SRC_NONE;
       Inf_DB_SetInfoSrc (Info->Type,Inf_SRC_NONE);
@@ -1433,12 +1433,12 @@ static void Inf_ConfigInfoSource (struct Inf_Info *Info)
 				      (InfoSrc == Info->FromDB.Src ? HTM_CHECKED :
 								     HTM_NO_ATTR) |
 				      (InfoSrc == Inf_SRC_NONE ||
-				       InfoAvailable[InfoSrc] ? HTM_NO_ATTR :
-								HTM_DISABLED) |
+				       InfoAvailable[InfoSrc] == Exi_EXISTS ? HTM_NO_ATTR :
+									      HTM_DISABLED) |
 				      (InfoSrc != Info->FromDB.Src &&
 				       (InfoSrc == Inf_SRC_NONE ||
-				        InfoAvailable[InfoSrc]) ? HTM_SUBMIT_ON_CLICK :
-								  HTM_NO_ATTR),
+				        InfoAvailable[InfoSrc] == Exi_EXISTS) ? HTM_SUBMIT_ON_CLICK :
+									        HTM_NO_ATTR),
 				      "id=\"InfoSrc%u\" value=\"%u\"",
 				      (unsigned) InfoSrc,(unsigned) InfoSrc);
 		  Frm_EndForm ();

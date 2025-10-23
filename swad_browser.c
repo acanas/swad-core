@@ -3599,7 +3599,7 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
   }
 
 /*****************************************************************************/
-/************ Initialize hidden levels of file browser to false **************/
+/*********** Initialize hidden levels of file browser to visible *************/
 /*****************************************************************************/
 
 static void Brw_InitHiddenLevels (void)
@@ -3609,7 +3609,7 @@ static void Brw_InitHiddenLevels (void)
    for (Level  = 0;
 	Level <= BrwSiz_MAX_DIR_LEVELS;
 	Level++)
-      Gbl.FileBrowser.HiddenLevels[Level] = false;
+      Gbl.FileBrowser.HiddenLevels[Level] = HidVis_VISIBLE;
   }
 
 /*****************************************************************************/
@@ -3960,7 +3960,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
 	  Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
         {
 	 if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
-	    Gbl.FileBrowser.HiddenLevels[Level] = (ThisHiddenOrVisible == HidVis_HIDDEN);
+	    Gbl.FileBrowser.HiddenLevels[Level] = ThisHiddenOrVisible;
 	 switch (ThisHiddenOrVisible)
 	   {
 	    case HidVis_VISIBLE:	// this row is not marked as hidden
@@ -4527,7 +4527,7 @@ static HidVis_HiddenOrVisible_t Brw_CheckIfAnyHigherLevelIsHidden (unsigned Curr
    for (Level = 0;
 	Level < CurrentLevel;
 	Level++)
-      if (Gbl.FileBrowser.HiddenLevels[Level])	// Hidden
+      if (Gbl.FileBrowser.HiddenLevels[Level] == HidVis_HIDDEN)
          return HidVis_HIDDEN;
 
    return HidVis_VISIBLE;	// None is hidden. All are visible.
@@ -4689,12 +4689,12 @@ void Brw_PutIconFile (const char *FileName,
    char *Icon;
    char *Title;
    unsigned DocType;
-   bool NotFound;
+   Exi_Exist_t TypeExists;
 
    if (asprintf (&URL,"%s32x32",CfG_URL_ICON_FILEXT_PUBLIC) < 0)
       Err_NotEnoughMemoryExit ();
-   for (DocType = 0, NotFound = true;
-	DocType < Ext_NUM_FILE_EXT_ALLOWED && NotFound;
+   for (DocType = 0, TypeExists = Exi_DOES_NOT_EXIST;
+	DocType < Ext_NUM_FILE_EXT_ALLOWED && TypeExists == Exi_DOES_NOT_EXIST;
 	DocType++)
       if (Str_FileIs (FileName,Ext_FileExtAllowed[DocType]))
 	{
@@ -4702,9 +4702,9 @@ void Brw_PutIconFile (const char *FileName,
 	    Err_NotEnoughMemoryExit ();
 	 if (asprintf (&Title,Txt_X_file,Ext_FileExtAllowed[DocType]) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 NotFound = false;
+	 TypeExists = Exi_EXISTS;
 	}
-   if (NotFound)
+   if (TypeExists == Exi_DOES_NOT_EXIST)
      {
       if (asprintf (&Icon,"xxx32x32.gif") < 0)
 	 Err_NotEnoughMemoryExit ();
@@ -6864,9 +6864,7 @@ void Brw_RcvFileDZ (void)
    /***** When a file is uploaded, the HTTP response
 	  is a code status and a message for Dropzone.js *****/
    /* Don't write HTML at all */
-   Gbl.Layout.HTMLStartWritten =
-   Gbl.Layout.DivsEndWritten   =
-   Gbl.Layout.HTMLEndWritten   = true;
+   Lay_SetLayoutStatus (Lay_HTML_END_WRITTEN);
 
    /* Begin HTTP response */
    fprintf (stdout,"Content-type: text/plain; charset=windows-1252\n");
@@ -8070,9 +8068,9 @@ void Brw_DownloadFile (void)
 	 // TODO: Put headers Content-type and Content-disposition:
 	 // See: http://stackoverflow.com/questions/381954/how-do-i-fix-firefox-trying-to-save-image-as-htm
 	 // http://elouai.com/force-download.php
-	 Gbl.Layout.HTMLStartWritten =
-	 Gbl.Layout.DivsEndWritten   =
-	 Gbl.Layout.HTMLEndWritten   = true;	// Don't write HTML at all
+
+	 /***** Don't write HTML at all *****/
+	 Lay_SetLayoutStatus (Lay_HTML_END_WRITTEN);
 	 break;
       case Usr_CAN_NOT:
       default:

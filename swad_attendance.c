@@ -2766,9 +2766,10 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
    unsigned NumAttEvent;
    unsigned Total;
    Pho_ShowPhotos_t ShowPhotos;
-   bool PutButtonShowDetails = (TypeOfView == Att_VIEW_ONLY_ME ||
-	                        TypeOfView == Att_VIEW_SEL_USR) &&
-	                        Events->ShowDetails == Lay_DONT_SHOW;
+   Lay_Show_t PutButtonShowDetails = (TypeOfView == Att_VIEW_ONLY_ME ||
+				      TypeOfView == Att_VIEW_SEL_USR) &&
+				     Events->ShowDetails == Lay_DONT_SHOW ? Lay_SHOW :
+									    Lay_DONT_SHOW;
 
    /***** Get my preference about photos in users' list for current course *****/
    ShowPhotos = Pho_GetMyPrefAboutListWithPhotosFromDB ();
@@ -2831,7 +2832,7 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
       HTM_TABLE_End ();
 
       /***** Button to show more details *****/
-      if (PutButtonShowDetails)
+      if (PutButtonShowDetails == Lay_SHOW)
 	 Att_PutButtonToShowDetails (Events);
 
    /***** End section with attendance table *****/

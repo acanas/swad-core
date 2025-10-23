@@ -1673,7 +1673,7 @@ static void Ctr_FormToGoToMap (struct Hie_Node *Ctr)
    /***** Get coordinates of center *****/
    Ctr_GetCoordByCod (Ctr->HieCod,&Coord);
 
-   if (Map_CheckIfCoordAreAvailable (&Coord))
+   if (Map_CheckIfCoordsExist (&Coord) == Exi_EXISTS)
      {
       Ctr_EditingCtr = Ctr;	// Used to pass parameter with the code of the center
       Lay_PutContextualLinkOnlyIcon (ActSeeCtrInf,NULL,

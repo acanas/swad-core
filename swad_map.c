@@ -259,12 +259,13 @@ static unsigned Map_GetZoomFromDistance (double MaxDistance)
   }
 
 /*****************************************************************************/
-/********************* Check if coordinates are avilable *********************/
+/******************** Check if coordinates are available *********************/
 /*****************************************************************************/
 
-bool Map_CheckIfCoordAreAvailable (const struct Map_Coordinates *Coord)
+Exi_Exist_t Map_CheckIfCoordsExist (const struct Map_Coordinates *Coord)
   {
    /***** Coordinates 0, 0 means not set ==> don't show map *****/
-   return Coord->Latitude ||
-          Coord->Longitude;
+   return Coord->Latitude  != 0 ||
+          Coord->Longitude != 0 ? Exi_EXISTS :
+        			  Exi_DOES_NOT_EXIST;
   }

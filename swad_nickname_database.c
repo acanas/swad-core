@@ -95,7 +95,7 @@ unsigned Nck_DB_GetUsrNicknames (MYSQL_RES **mysql_res,long UsrCod)
 /*************** Check if nickname matches any of the nicknames **************/
 /*****************************************************************************/
 
-bool Nck_DB_CheckIfNickMatchesAnyNick (const char *NickWithoutArr)
+Exi_Exist_t Nck_DB_CheckIfNickMatchesAnyNick (const char *NickWithoutArr)
   {
    return
    DB_QueryEXISTS ("can not check if nickname already existed",
@@ -103,14 +103,14 @@ bool Nck_DB_CheckIfNickMatchesAnyNick (const char *NickWithoutArr)
 		   "(SELECT *"
 		     " FROM usr_nicknames"
 		    " WHERE Nickname='%s')",
-		   NickWithoutArr) == Exi_EXISTS;
+		   NickWithoutArr);
   }
 
 /*****************************************************************************/
 /************ Check if nickname matches any of a user's nicknames ************/
 /*****************************************************************************/
 
-bool Nck_DB_CheckIfNickMatchesAnyUsrNick (long UsrCod,const char *NickWithoutArr)
+Exi_Exist_t Nck_DB_CheckIfNickMatchesAnyUsrNick (long UsrCod,const char *NickWithoutArr)
   {
    return
    DB_QueryEXISTS ("can not check if nickname already existed",
@@ -120,14 +120,14 @@ bool Nck_DB_CheckIfNickMatchesAnyUsrNick (long UsrCod,const char *NickWithoutArr
 		    " WHERE UsrCod=%ld"
 		      " AND Nickname='%s')",
 		   UsrCod,
-		   NickWithoutArr) == Exi_EXISTS;
+		   NickWithoutArr);
   }
 
 /*****************************************************************************/
 /********* Check if nickname matches any of other user's nicknames ***********/
 /*****************************************************************************/
 
-bool Nck_DB_CheckIfNickMatchesAnyOtherUsrsNicks (long UsrCod,const char *NickWithoutArr)
+Exi_Exist_t Nck_DB_CheckIfNickMatchesAnyOtherUsrsNicks (long UsrCod,const char *NickWithoutArr)
   {
    return
    DB_QueryEXISTS ("can not check if nickname already existed",
@@ -137,7 +137,7 @@ bool Nck_DB_CheckIfNickMatchesAnyOtherUsrsNicks (long UsrCod,const char *NickWit
 		    " WHERE Nickname='%s'"
 		      " AND UsrCod<>%ld)",
 		   NickWithoutArr,
-		   UsrCod) == Exi_EXISTS;	// A nickname of another user is the same that user's nickname
+		   UsrCod);	// A nickname of another user is the same that user's nickname
   }
 
 /*****************************************************************************/

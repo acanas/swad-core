@@ -656,7 +656,7 @@ Err_SuccessOrError_t Str_GetDoubleFromStr (const char *Str,double *Value)
 void Str_SetDecimalPointToUS (void)
   {
    if (!setlocale (LC_NUMERIC,"en_US.utf8"))	// To get/print the floating point as a dot
-      if (Gbl.Layout.HTMLStartWritten)
+      if (Lay_GetLayoutStatus () >= Lay_HTML_START_WRITTEN)
          Ale_ShowAlert (Ale_ERROR,"Can not set locale to en_US.");
   }
 
@@ -668,7 +668,7 @@ void Str_SetDecimalPointToLocal (void)
   {
    // TODO: this should be internationalized!!!!!!!
    if (!setlocale (LC_NUMERIC,"es_ES.utf8"))	// Return to local system
-      if (Gbl.Layout.HTMLStartWritten)
+      if (Lay_GetLayoutStatus () >= Lay_HTML_START_WRITTEN)
          Ale_ShowAlert (Ale_ERROR,"Can not set locale to es_ES.");
   }
 

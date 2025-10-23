@@ -549,7 +549,7 @@ unsigned Par_GetPar (Par_ParamType_t ParType,const char *ParName,
    struct Par_Param *Par;
    char *PtrDst;
    unsigned NumTimes;
-   bool ParFound = false;
+   Exi_Exist_t ParExists;
    unsigned ParNameLength;
    bool FindMoreThanOneOcurrence;
    char ErrorTxt[256];
@@ -574,8 +574,8 @@ unsigned Par_GetPar (Par_ParamType_t ParType,const char *ParName,
 	Par != NULL && (FindMoreThanOneOcurrence || NumTimes == 0);
 	)
       /***** Find next ocurrence of parameter in list of parameters *****/
-      for (ParFound = false;
-	   Par != NULL && !ParFound;
+      for (ParExists = Exi_DOES_NOT_EXIST;
+	   Par != NULL && ParExists == Exi_DOES_NOT_EXIST;
 	   Par = Par->Next)
 	{
 	 if (Par->Name.Length == ParNameLength)
@@ -585,20 +585,21 @@ unsigned Par_GetPar (Par_ParamType_t ParType,const char *ParName,
 	    switch (Par_GetContentReceivedByCGI ())
 	      {
 	       case Act_NORM:
-		  ParFound = !strncmp (ParName,&Par_Pars.QueryString[Par->Name.Start],
-				       Par->Name.Length);
+		  ParExists = strncmp (ParName,&Par_Pars.QueryString[Par->Name.Start],
+				       Par->Name.Length) ? Exi_DOES_NOT_EXIST :
+							   Exi_EXISTS;
 		  break;
 	       case Act_DATA:
 		  fseek (QueryFile,Par->Name.Start,SEEK_SET);
-		  for (i = 0, ParFound = true;
-		       i < Par->Name.Length && ParFound;
+		  for (i = 0, ParExists = Exi_EXISTS;
+		       i < Par->Name.Length && ParExists == Exi_EXISTS;
 		       i++)
 		     if (ParName[i] != (char) fgetc (QueryFile))
-			ParFound = false;
+			ParExists = Exi_DOES_NOT_EXIST;
 		  break;
 	      }
 
-	    if (ParFound)
+	    if (ParExists == Exi_EXISTS)
 	      {
 	       NumTimes++;
 	       if (NumTimes == 1)	// NumTimes == 1 ==> the first ocurrence of this parameter

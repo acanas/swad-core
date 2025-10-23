@@ -78,11 +78,6 @@ void Gbl_InitializeGlobals (void)
    Hie_Level_t HieLvlParent;
    Hie_Level_t HieLvlChild;
 
-   Gbl.Layout.WritingHTMLStart =
-   Gbl.Layout.HTMLStartWritten =
-   Gbl.Layout.DivsEndWritten   =
-   Gbl.Layout.HTMLEndWritten   = false;
-
    if (!setlocale (LC_ALL,"es_ES.utf8"))   // TODO: this should be internationalized!!!!!!!
       exit (1);
 

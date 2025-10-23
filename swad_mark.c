@@ -649,13 +649,13 @@ void Mrk_ShowMyMarks (void)
 		   (example: <meta http-equiv=Content-Type content="text/html; charset=utf-8">)
 		   that is typically included in the HTML document header. */
 	       HTM_Txt ("Content-type: text/html\r\n\r\n"); // Two \r\n are necessary
-	       Gbl.Layout.HTMLStartWritten = true;
+	       Lay_SetLayoutStatus (Lay_HTML_START_WRITTEN);
 
 	       /* Copy HTML to output file */
 	       Fil_FastCopyOfOpenFiles (FileUsrMarks,Fil_GetOutputFile ());
 	       fclose (FileUsrMarks);
 
-	       Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
+	       Lay_SetLayoutStatus (Lay_HTML_END_WRITTEN);
 	       break;
 	    case Err_ERROR:	// Problems in table of marks or user's ID not found
 	    default:

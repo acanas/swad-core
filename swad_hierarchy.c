@@ -1006,7 +1006,7 @@ void Hie_ResetMyHierarchy (void)
      {
       Gbl.Usrs.Me.Hierarchy[HieLvl].Nodes = NULL;
       Gbl.Usrs.Me.Hierarchy[HieLvl].Num = 0;
-      Gbl.Usrs.Me.Hierarchy[HieLvl].Filled = false;
+      Gbl.Usrs.Me.Hierarchy[HieLvl].Status = Cac_INVALID;
       Gbl.Usrs.Me.IBelongToCurrent[HieLvl] = Usr_DONT_BELONG;
      }
   }
@@ -1020,7 +1020,7 @@ void Hie_FreeMyHierarchy (void)
    Hie_Level_t HieLvl;
 
    /***** Remove temporary table with my courses *****/
-   if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Filled)
+   if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Status == Cac_VALID)
       Enr_DB_DropTmpTableMyCourses ();
 
    /***** Free allocated memory
@@ -1028,7 +1028,7 @@ void Hie_FreeMyHierarchy (void)
    for (HieLvl  = Hie_CTY;
 	HieLvl <= Hie_CRS;
 	HieLvl++)
-      if (Gbl.Usrs.Me.Hierarchy[HieLvl].Filled &&
+      if (Gbl.Usrs.Me.Hierarchy[HieLvl].Status == Cac_VALID &&
 	  Gbl.Usrs.Me.Hierarchy[HieLvl].Num &&
 	  Gbl.Usrs.Me.Hierarchy[HieLvl].Nodes)
          free (Gbl.Usrs.Me.Hierarchy[HieLvl].Nodes);
@@ -1050,7 +1050,7 @@ void Hie_GetMyHierarchy (Hie_Level_t HieLvl)
    long HieCod;
 
    /***** Trivial check 1: if list of nodes is already filled, there's nothing to do *****/
-   if (Gbl.Usrs.Me.Hierarchy[HieLvl].Filled)
+   if (Gbl.Usrs.Me.Hierarchy[HieLvl].Status == Cac_VALID)
       return;
 
    /***** Trivial check 2: if user's code is not set, don't query database *****/
@@ -1102,7 +1102,7 @@ void Hie_GetMyHierarchy (Hie_Level_t HieLvl)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Set boolean that indicates that my institutions are yet filled *****/
-   Gbl.Usrs.Me.Hierarchy[HieLvl].Filled = true;
+   Gbl.Usrs.Me.Hierarchy[HieLvl].Status = Cac_VALID;
   }
 
 /*****************************************************************************/

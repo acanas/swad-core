@@ -41,6 +41,17 @@
 #define Lay_SHOW_LEFT_COLUMN	2						// 10
 #define Lay_SHOW_BOTH_COLUMNS (Lay_SHOW_LEFT_COLUMN | Lay_SHOW_RIGHT_COLUMN)	// 11
 
+// Used to avoid writing more than once the HTML head or end when aborting program on error
+// Respect the order, because from one state you move to the next
+typedef enum
+  {
+   Lay_NOTHING_WRITTEN,
+   Lay_WRITING_HTML_START,
+   Lay_HTML_START_WRITTEN,
+   Lay_DIVS_END_WRITTEN,
+   Lay_HTML_END_WRITTEN,
+  } Lay_LayoutStatus_t;
+
 #define Lay_NUM_LAST 2
 typedef enum
   {
@@ -85,6 +96,9 @@ typedef enum
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
+
+void Lay_SetLayoutStatus (Lay_LayoutStatus_t LayoutStatus);
+Lay_LayoutStatus_t Lay_GetLayoutStatus (void);
 
 void Lay_WriteStartOfPage (void);
 

@@ -175,9 +175,7 @@ Err_SuccessOrError_t Fil_ReadStdinIntoTmpFile (void)
       fprintf (stdout,"\n");
 
       /* Don't write HTML at all */
-      Gbl.Layout.HTMLStartWritten =
-      Gbl.Layout.DivsEndWritten   =
-      Gbl.Layout.HTMLEndWritten   = true;
+      Lay_SetLayoutStatus (Lay_HTML_END_WRITTEN);
 
       return Err_ERROR;
      }

@@ -415,23 +415,29 @@ static void Tml_ShowTimeline (struct Tml_Timeline *Timeline,
                               long NotCodToHighlight,const char *Title)
   {
    extern const char *Hlp_START_Timeline;
-   bool GlobalTimeline = (Gbl.Usrs.Other.UsrDat.UsrCod <= 0);
+   enum
+     {
+      USER_TIMELINE,
+      GLOBAL_TIMELINE
+     } UsrOrGblTimeline = (Gbl.Usrs.Other.UsrDat.UsrCod > 0) ? USER_TIMELINE :
+							       GLOBAL_TIMELINE;
 
    /***** Begin box *****/
    Box_BoxBegin (Title,Tml_PutIconsTimeline,NULL,
                  Hlp_START_Timeline,Box_NOT_CLOSABLE);
 
       /***** Put form to select users whom public activity is displayed *****/
-      if (GlobalTimeline)
+      if (UsrOrGblTimeline == GLOBAL_TIMELINE)
 	 TmlWho_PutFormWho (Timeline);
 
       /***** Form to write a new post *****/
-      if (GlobalTimeline || Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME)
+      if (UsrOrGblTimeline == GLOBAL_TIMELINE ||
+	  Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME)
 	 if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)	// I can post only if I am enroled in any course
 	    TmlPst_PutPhotoAndFormToWriteNewPost (Timeline);
 
       /***** New publications refreshed dynamically via AJAX *****/
-      if (GlobalTimeline)
+      if (UsrOrGblTimeline == GLOBAL_TIMELINE)
 	{
 	 /* Hidden lists to insert publications received via AJAX:
 	    1. just received (not visible) publications

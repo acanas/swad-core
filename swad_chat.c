@@ -526,7 +526,7 @@ void Cht_OpenChatWindow (void)
 
    /***** Begin writing the index.html file to the output *****/
    HTM_Txt ("Content-type: text/html; charset=windows-1252\n\n");	// Two carriage returns at the end of the line are mandatory!
-   Gbl.Layout.HTMLStartWritten = true;
+   Lay_SetLayoutStatus (Lay_HTML_START_WRITTEN);
 
    /***** Copy index.html file until the end of the applet code *****/
    Str_WriteUntilStrFoundInFileIncludingStr (FileOut,FileChat,"<applet",
@@ -553,5 +553,5 @@ void Cht_OpenChatWindow (void)
    /***** Close index.html file *****/
    fclose (FileChat);
 
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
+   Lay_SetLayoutStatus (Lay_HTML_END_WRITTEN);
   }

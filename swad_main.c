@@ -192,8 +192,7 @@ int main (void)
          case Act_REF:
          case Act_SVC:
 	    /* All the output is made, so don't write anymore */
-	    Gbl.Layout.DivsEndWritten =
-            Gbl.Layout.HTMLEndWritten = true;
+	    Lay_SetLayoutStatus (Lay_HTML_END_WRITTEN);
 	    break;
          default:
             break;

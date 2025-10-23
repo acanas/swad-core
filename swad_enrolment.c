@@ -2848,7 +2848,7 @@ static void Enr_AskIfEnrRemUsr (struct Usr_ListUsrCods *ListUsrCods,Rol_Role_t R
    extern const char *Txt_The_user_is_new_not_yet_in_X;
    extern const char *Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID;
    unsigned NumUsr;
-   bool UsrIDValid;
+   Err_SuccessOrError_t UsrIDValid;
 
    if (ListUsrCods->NumUsrs)	// User(s) found with the ID
      {
@@ -2880,23 +2880,25 @@ static void Enr_AskIfEnrRemUsr (struct Usr_ListUsrCods *ListUsrCods,Rol_Role_t R
       /***** If UsrCod is not present in parameters from form,
 	     use user's ID to identify the user to be enroled *****/
       if (Gbl.Usrs.Other.UsrDat.IDs.List)
-         UsrIDValid = (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID) == Err_SUCCESS);	// Check the first element of the list
+         UsrIDValid = ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);	// Check the first element of the list
       else
-	 UsrIDValid = false;
+	 UsrIDValid = Err_ERROR;
 
-      if (UsrIDValid)
+      switch (UsrIDValid)
 	{
-	 /***** Show form to enter the data of a new user *****/
-	 Ale_ShowAlert (Ale_INFO,Txt_The_user_is_new_not_yet_in_X,
-		        Cfg_PLATFORM_SHORT_NAME);
-	 Rec_ShowFormOtherNewSharedRecord (&Gbl.Usrs.Other.UsrDat,Role);
-	}
-      else        // User's ID is not valid
-	{
-	 /* Write message and request a new user's ID */
-	 Ale_ShowAlert (Ale_WARNING,Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID,
-		        Cfg_PLATFORM_SHORT_NAME);
-	 Enr_ReqEnrRemUsr (Role);
+         case Err_SUCCESS:
+	    /***** Show form to enter the data of a new user *****/
+	    Ale_ShowAlert (Ale_INFO,Txt_The_user_is_new_not_yet_in_X,
+			   Cfg_PLATFORM_SHORT_NAME);
+	    Rec_ShowFormOtherNewSharedRecord (&Gbl.Usrs.Other.UsrDat,Role);
+	    break;
+         case Err_ERROR:	// User's ID is not valid
+         default:
+	    /* Write message and request a new user's ID */
+	    Ale_ShowAlert (Ale_WARNING,Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID,
+			   Cfg_PLATFORM_SHORT_NAME);
+	    Enr_ReqEnrRemUsr (Role);
+	    break;
 	}
      }
   }
@@ -3544,7 +3546,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
 	       Gbl.Usrs.Me.UsrDat.Accepted           = Usr_HAS_NOT_ACCEPTED;
 
 	       /* Fill the list with the courses I belong to */
-	       Gbl.Usrs.Me.Hierarchy[Hie_CRS].Filled = false;
+	       Gbl.Usrs.Me.Hierarchy[Hie_CRS].Status = Cac_INVALID;
 	       Hie_GetMyHierarchy (Hie_CRS);
 
 	       /* Set my roles */

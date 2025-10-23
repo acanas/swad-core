@@ -1071,8 +1071,8 @@ static void Med_GetAndProcessYouTubeFromForm (const char *ParURL,
       FULL,	// www.youtube.com/watch?
       EMBED,	// www.youtube.com/embed/
      } YouTube = WRONG;
-
-   bool CodeFound = false;
+   Exi_Exist_t CodeExists = Exi_DOES_NOT_EXIST;
+   // bool CodeFound = false;
 
    /***** Set media status *****/
    Media->Status = Med_STATUS_NONE;
@@ -1199,7 +1199,7 @@ static void Med_GetAndProcessYouTubeFromForm (const char *ParURL,
 		     CodeLength = strspn (PtrCode,Str_BIN_TO_BASE64URL);
 		     if (CodeLength > 0 &&
 			 CodeLength <= Med_BYTES_NAME)
-			CodeFound = true;	// Success!
+			CodeExists = Exi_EXISTS;	// Success!
 		    }
 		 }
 	      }
@@ -1207,19 +1207,23 @@ static void Med_GetAndProcessYouTubeFromForm (const char *ParURL,
 	}
 
    /***** Set or reset media *****/
-   if (CodeFound)
+   switch (CodeExists)
      {
-      /* Copy code */
-      strncpy (Media->Name,PtrCode,CodeLength);
-      Media->Name[CodeLength] = '\0';
+      case Exi_EXISTS:
+	 /* Copy code */
+	 strncpy (Media->Name,PtrCode,CodeLength);
+	 Media->Name[CodeLength] = '\0';
 
-      /* Set media type and status */
-      Media->Type   = Med_YOUTUBE;
-      Media->Status = Med_PROCESSED;
+	 /* Set media type and status */
+	 Media->Type   = Med_YOUTUBE;
+	 Media->Status = Med_PROCESSED;
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 /* Reset media */
+	 Med_ResetMedia (Media);
+	 break;
      }
-   else
-      /* Reset media */
-      Med_ResetMedia (Media);
   }
 
 /*****************************************************************************/

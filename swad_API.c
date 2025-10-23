@@ -697,7 +697,7 @@ static int API_CheckParsNewAccount (char *NewNickWithArr,		// Input
 	 Str_RemoveLeadingArrobas (CopyOfNewNick);
 
 	 /***** Check if the new nickname matches any of the nicknames of other users *****/
-	 if (Nck_DB_CheckIfNickMatchesAnyNick (CopyOfNewNick))	// Already without leading arrobas
+	 if (Nck_DB_CheckIfNickMatchesAnyNick (CopyOfNewNick) == Exi_EXISTS)	// Already without leading arrobas
 	    return API_CHECK_NEW_ACCOUNT_NICKNAME_REGISTERED_BY_ANOTHER_USER;
 
 	 /***** Output value of nickname without leading arrobas *****/
