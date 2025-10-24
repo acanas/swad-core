@@ -137,8 +137,8 @@ Err_SuccessOrError_t Fil_ReadStdinIntoTmpFile (void)
    extern const char *Txt_UPLOAD_FILE_File_too_large_maximum_X_MiB_NO_HTML;
    extern const char *Txt_UPLOAD_FILE_Upload_time_too_long_maximum_X_minutes_NO_HTML;
    unsigned long long TmpFileSize;
-   bool FileIsTooBig = false;
-   bool TimeExceeded = false;
+   Err_SuccessOrError_t ErrorTooBigFile   = Err_SUCCESS;
+   Err_SuccessOrError_t ErrorTimeExceeded = Err_SUCCESS;
 
    if ((Fil_QueryFile = tmpfile ()) == NULL)
      {
@@ -146,18 +146,21 @@ Err_SuccessOrError_t Fil_ReadStdinIntoTmpFile (void)
       Err_ShowErrorAndExit ("Can not create temporary file.");
      }
    for (TmpFileSize = 0;
-	!feof (stdin) && !FileIsTooBig && !TimeExceeded;
+	!feof (stdin) &&
+	ErrorTooBigFile   == Err_SUCCESS &&
+	ErrorTimeExceeded == Err_SUCCESS;
 	TmpFileSize++)
       if (TmpFileSize < Fil_MAX_FILE_SIZE)
         {
          if (!(TmpFileSize % (64ULL * 1024ULL)))	// Check timeout from time to time
             if (time (NULL) - Dat_GetStartExecutionTimeUTC () >= Cfg_TIME_TO_ABORT_FILE_UPLOAD)
-               TimeExceeded = true;
+               ErrorTimeExceeded = Err_ERROR;
          fputc (fgetc (stdin),Fil_QueryFile);
         }
       else
-         FileIsTooBig = true;
-   if (FileIsTooBig || TimeExceeded)
+         ErrorTooBigFile = Err_ERROR;
+   if (ErrorTooBigFile   == Err_ERROR ||
+       ErrorTimeExceeded == Err_ERROR)
      {
       Fil_EndOfReadingStdin ();  // If stdin were not fully read, there will be problems with buffers
 
@@ -166,12 +169,18 @@ Err_SuccessOrError_t Fil_ReadStdinIntoTmpFile (void)
 
       /* Status code and message */
       fprintf (stdout,"Status: 501 Not Implemented\r\n\r\n");
-      if (FileIsTooBig)
-         fprintf (stdout,Txt_UPLOAD_FILE_File_too_large_maximum_X_MiB_NO_HTML,
-                  (unsigned long) (Fil_MAX_FILE_SIZE / (1024ULL * 1024ULL)));
-      else
-         fprintf (stdout,Txt_UPLOAD_FILE_Upload_time_too_long_maximum_X_minutes_NO_HTML,
-                  (unsigned long) (Cfg_TIME_TO_ABORT_FILE_UPLOAD / 60UL));
+      switch (ErrorTooBigFile)
+        {
+	 case Err_SUCCESS:
+	    fprintf (stdout,Txt_UPLOAD_FILE_Upload_time_too_long_maximum_X_minutes_NO_HTML,
+		     (unsigned long) (Cfg_TIME_TO_ABORT_FILE_UPLOAD / 60UL));
+	    break;
+	 case Err_ERROR:
+	 default:
+	    fprintf (stdout,Txt_UPLOAD_FILE_File_too_large_maximum_X_MiB_NO_HTML,
+		     (unsigned long) (Fil_MAX_FILE_SIZE / (1024ULL * 1024ULL)));
+	    break;
+        }
       fprintf (stdout,"\n");
 
       /* Don't write HTML at all */
