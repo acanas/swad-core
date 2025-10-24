@@ -835,22 +835,22 @@ void Usr_FlushCacheUsrIsSuperuser (void)
    Gbl.Cache.UsrIsSuperuser.Status = Cac_INVALID;
   }
 
-bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
+Exi_Exist_t Usr_CheckIfUsrExistsAsSuperuser (long UsrCod)
   {
    /***** 1. Fast check: Trivial case *****/
    if (UsrCod <= 0)
-      return false;
+      return Exi_DOES_NOT_EXIST;
 
    /***** 2. Fast check: If cached... *****/
    if (Gbl.Cache.UsrIsSuperuser.Status == Cac_VALID &&
        UsrCod == Gbl.Cache.UsrIsSuperuser.UsrCod)
-      return Gbl.Cache.UsrIsSuperuser.IsSuperuser;
+      return Gbl.Cache.UsrIsSuperuser.ExistsAsSuperuser;
 
    /***** 3. Slow check: If not cached, get if a user is superuser from database *****/
-   Gbl.Cache.UsrIsSuperuser.UsrCod = UsrCod;
-   Gbl.Cache.UsrIsSuperuser.IsSuperuser = Adm_DB_CheckIfUsrIsSuperuser (UsrCod);
-   Gbl.Cache.UsrIsSuperuser.Status = Cac_VALID;
-   return Gbl.Cache.UsrIsSuperuser.IsSuperuser;
+   Gbl.Cache.UsrIsSuperuser.UsrCod            = UsrCod;
+   Gbl.Cache.UsrIsSuperuser.ExistsAsSuperuser = Adm_DB_CheckIfUsrExistsAsSuperuser (UsrCod);
+   Gbl.Cache.UsrIsSuperuser.Status            = Cac_VALID;
+   return Gbl.Cache.UsrIsSuperuser.ExistsAsSuperuser;
   }
 
 /*****************************************************************************/
@@ -905,7 +905,7 @@ Usr_Can_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat)
 				      Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 				      Hie_DB_ONLY_ACCEPTED_COURSES) == Usr_BELONG)	// count only accepted courses
 	    // Degree admins can't edit superusers' data
-	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
+	    if (Usr_CheckIfUsrExistsAsSuperuser (UsrDat->UsrCod) == Exi_DOES_NOT_EXIST)
 	       return Usr_CAN;
 	 return Usr_CAN_NOT;
       case Rol_CTR_ADM:
@@ -915,7 +915,7 @@ Usr_Can_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat)
 				      Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 				      Hie_DB_ONLY_ACCEPTED_COURSES) == Usr_BELONG)	// count only accepted courses
 	    // Center admins can't edit superusers' data
-	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
+	    if (Usr_CheckIfUsrExistsAsSuperuser (UsrDat->UsrCod) == Exi_DOES_NOT_EXIST)
 	       return Usr_CAN;
 	 return Usr_CAN_NOT;
       case Rol_INS_ADM:
@@ -925,7 +925,7 @@ Usr_Can_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat)
 				      Gbl.Hierarchy.Node[Hie_INS].HieCod,
 				      Hie_DB_ONLY_ACCEPTED_COURSES) == Usr_BELONG)	// count only accepted courses
 	    // Institution admins can't edit superusers' data
-	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
+	    if (Usr_CheckIfUsrExistsAsSuperuser (UsrDat->UsrCod) == Exi_DOES_NOT_EXIST)
 	       return Usr_CAN;
 	 return Usr_CAN_NOT;
       case Rol_SYS_ADM:

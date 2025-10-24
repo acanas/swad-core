@@ -78,7 +78,7 @@ typedef enum
 
 struct Agd_Agenda
   {
-   bool LstIsRead;	// Is the list already read from database, or it needs to be read?
+   Cac_Status_t LstReadStatus;	// Is the list already read from database, or it needs to be read?
    unsigned Num;	// Number of events
    long *LstAgdCods;	// List of agenda codes
    unsigned Past__FutureEvents;

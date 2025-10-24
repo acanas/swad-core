@@ -186,7 +186,7 @@ struct Prj_Projects
    Prj_ProjectView_t View;
    struct PrjCfg_Config Config;
    struct Prj_Filter Filter;
-   bool LstIsRead;		// Is the list already read from database, or it needs to be read?
+   Cac_Status_t LstReadStatus;	// Is the list already read from database, or it needs to be read?
    unsigned Num;		// Number of projects
    long *LstPrjCods;		// List of project codes
    Prj_Order_t SelectedOrder;

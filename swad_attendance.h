@@ -66,7 +66,7 @@ struct Att_Event
 
 struct Att_Events
   {
-   bool LstIsRead;		// Is the list already read from database, or it needs to be read?
+   Cac_Status_t LstReadStatus;	// Is the list already read from database, or it needs to be read?
    unsigned Num;		// Number of attendance events
    struct
      {

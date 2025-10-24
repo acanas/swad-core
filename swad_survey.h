@@ -68,7 +68,8 @@ struct Svy_Survey
 
 struct Svy_Surveys
   {
-   bool LstIsRead;		// Is the list already read from database, or it needs to be read?
+   Cac_Status_t LstReadStatus;	// Is the list already read from database...
+				// ...or it needs to be read?
    unsigned Num;		// Number of surveys
    long *LstSvyCods;		// List of survey codes
    Dat_StartEndTime_t SelectedOrder;

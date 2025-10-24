@@ -142,7 +142,8 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod);
 
 void Svy_ResetSurveys (struct Svy_Surveys *Surveys)
   {
-   Surveys->LstIsRead     = false;	// Is the list already read from database, or it needs to be read?
+   Surveys->LstReadStatus = Cac_INVALID;// Is the list already read from database...
+					// ...or it needs to be read?
    Surveys->Num           = 0;		// Number of surveys
    Surveys->LstSvyCods    = NULL;	// List of survey codes
    Surveys->SelectedOrder = Svy_ORDER_DEFAULT;
@@ -901,7 +902,7 @@ static void Svy_GetListSurveys (struct Svy_Surveys *Surveys)
    unsigned HiddenAllowed = 0;
 
    /***** Free list of surveys *****/
-   if (Surveys->LstIsRead)
+   if (Surveys->LstReadStatus == Cac_VALID)
       Svy_FreeListSurveys (Surveys);
 
    /***** Set allowed and hidden scopes to get list depending on my user's role *****/
@@ -930,7 +931,7 @@ static void Svy_GetListSurveys (struct Svy_Surveys *Surveys)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   Surveys->LstIsRead = true;
+   Surveys->LstReadStatus = Cac_VALID;
   }
 
 /*****************************************************************************/
@@ -1323,13 +1324,13 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
 
 void Svy_FreeListSurveys (struct Svy_Surveys *Surveys)
   {
-   if (Surveys->LstIsRead && Surveys->LstSvyCods)
+   if (Surveys->LstReadStatus == Cac_VALID && Surveys->LstSvyCods)
      {
       /***** Free memory used by the list of surveys *****/
       free (Surveys->LstSvyCods);
-      Surveys->LstSvyCods = NULL;
-      Surveys->Num = 0;
-      Surveys->LstIsRead = false;
+      Surveys->LstSvyCods    = NULL;
+      Surveys->Num           = 0;
+      Surveys->LstReadStatus = Cac_INVALID;
      }
   }
 

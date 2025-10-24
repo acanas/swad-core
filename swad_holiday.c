@@ -106,7 +106,7 @@ static Usr_Can_t Hld_CheckIfICanEditHlds (void)
 
 void Hld_ResetHolidays (struct Hld_Holidays *Holidays)
   {
-   Holidays->LstIsRead     = false;	// List is not read
+   Holidays->LstReadStatus = Cac_INVALID;	// List is not read
    Holidays->Num           = 0;
    Holidays->Lst           = NULL;
    Holidays->SelectedOrder = Hld_DEFAULT_ORDER_TYPE;
@@ -322,7 +322,7 @@ void Hld_GetListHolidays (struct Hld_Holidays *Holidays)
 
    if (DB_CheckIfDatabaseIsOpen () == CloOpe_OPEN)
      {
-      if (Holidays->LstIsRead)
+      if (Holidays->LstReadStatus == Cac_VALID)
 	 Hld_FreeListHolidays (Holidays);
 
       /***** Get holidays from database *****/
@@ -343,7 +343,7 @@ void Hld_GetListHolidays (struct Hld_Holidays *Holidays)
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
 
-      Holidays->LstIsRead = true;
+      Holidays->LstReadStatus = Cac_VALID;
      }
   }
 
@@ -463,13 +463,13 @@ static Hld_HolidayType_t Hld_GetTypeOfHoliday (const char *UnsignedStr)
 
 void Hld_FreeListHolidays (struct Hld_Holidays *Holidays)
   {
-   if (Holidays->LstIsRead && Holidays->Lst)
+   if (Holidays->LstReadStatus == Cac_VALID && Holidays->Lst)
      {
       /***** Free memory used by the list of courses in degree *****/
       free (Holidays->Lst);
-      Holidays->Lst = NULL;
-      Holidays->Num = 0;
-      Holidays->LstIsRead = false;
+      Holidays->Lst           = NULL;
+      Holidays->Num           = 0;
+      Holidays->LstReadStatus = Cac_INVALID;
      }
   }
 

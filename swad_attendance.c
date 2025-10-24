@@ -174,7 +174,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 
 static void Att_ResetEvents (struct Att_Events *Events)
   {
-   Events->LstIsRead          = false;		// List is not read from database
+   Events->LstReadStatus      = Cac_INVALID;	// List is not read from database
    Events->Num                = 0;		// Number of attendance events
    Events->Lst                = NULL;		// List of attendance events
    Events->SelectedOrder      = Att_ORDER_DEFAULT;
@@ -672,7 +672,7 @@ static void Att_GetListEvents (struct Att_Events *Events,
    MYSQL_RES *mysql_res;
    unsigned NumAttEvent;
 
-   if (Events->LstIsRead)
+   if (Events->LstReadStatus == Cac_VALID)
       Att_FreeListEvents (Events);
 
    /***** Get list of attendance events from database *****/
@@ -700,7 +700,7 @@ static void Att_GetListEvents (struct Att_Events *Events,
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   Events->LstIsRead = true;
+   Events->LstReadStatus = Cac_VALID;
   }
 
 /*****************************************************************************/
@@ -816,13 +816,13 @@ void Att_GetEventDataFromRow (MYSQL_ROW row,struct Att_Event *Event)
 
 static void Att_FreeListEvents (struct Att_Events *Events)
   {
-   if (Events->LstIsRead && Events->Lst)
+   if (Events->LstReadStatus == Cac_VALID && Events->Lst)
      {
       /***** Free memory used by the list of attendance events *****/
       free (Events->Lst);
-      Events->Lst       = NULL;
-      Events->Num       = 0;
-      Events->LstIsRead = false;
+      Events->Lst           = NULL;
+      Events->Num           = 0;
+      Events->LstReadStatus = Cac_INVALID;
      }
   }
 

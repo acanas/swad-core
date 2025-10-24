@@ -82,7 +82,7 @@ struct Gam_Game
 
 struct Gam_Games
   {
-   bool LstIsRead;		// Is the list already read from database...
+   Cac_Status_t LstReadStatus;	// Is the list already read from database...
 				// ...or it needs to be read?
    unsigned Num;		// Total number of games
    unsigned NumSelected;	// Number of games selected

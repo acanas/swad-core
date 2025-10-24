@@ -153,7 +153,7 @@ const struct Asg_Assignment *Asg_GetAssigment (void)
 
 void Asg_ResetAssignments (struct Asg_Assignments *Assignments)
   {
-   Assignments->LstIsRead     = false;	// List is not read
+   Assignments->LstReadStatus = Cac_INVALID;	// List is not read
    Assignments->Num           = 0;
    Assignments->LstAsgCods    = NULL;
    Assignments->SelectedOrder = Asg_ORDER_DEFAULT;
@@ -858,7 +858,7 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
    MYSQL_RES *mysql_res;
    unsigned NumAsg;
 
-   if (Assignments->LstIsRead)
+   if (Assignments->LstReadStatus == Cac_VALID)
       Asg_FreeListAssignments (Assignments);
 
    /***** Get list of assignments from database *****/
@@ -882,7 +882,7 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   Assignments->LstIsRead = true;
+   Assignments->LstReadStatus = Cac_VALID;
   }
 
 /*****************************************************************************/
@@ -1022,14 +1022,13 @@ static void Asg_ResetAssignment (struct Asg_Assignment *Asg)
 
 static void Asg_FreeListAssignments (struct Asg_Assignments *Assignments)
   {
-   if (Assignments->LstIsRead &&
-       Assignments->LstAsgCods)
+   if (Assignments->LstReadStatus == Cac_VALID && Assignments->LstAsgCods)
      {
       /***** Free memory used by the list of assignments *****/
       free (Assignments->LstAsgCods);
-      Assignments->LstAsgCods = NULL;
-      Assignments->Num        = 0;
-      Assignments->LstIsRead  = false;
+      Assignments->LstAsgCods    = NULL;
+      Assignments->Num           = 0;
+      Assignments->LstReadStatus = Cac_INVALID;
      }
   }
 

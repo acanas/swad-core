@@ -71,7 +71,7 @@ struct RubCri_Criterion
 
 struct Rub_Rubrics
   {
-   bool LstIsRead;		// Is the list already read from database...
+   Cac_Status_t LstReadStatus;	// Is the list already read from database...
 				// ...or it needs to be read?
    unsigned Num;		// Total number of rubrics
    long *Lst;			// List of rubric codes

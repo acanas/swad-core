@@ -109,7 +109,7 @@ void Enr_ReceiveAdminStds (void);
 void Enr_ReceiveAdminNETs (void);
 void Enr_ReceiveAdminTchs (void);
 
-bool Enr_PutActionsEnrRemOneUsr (Usr_MeOrOther_t MeOrOther);
+void Enr_PutActionsEnrRemOneUsr (Usr_MeOrOther_t MeOrOther);
 
 void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role);
 void Enr_AskRemAllStdsThisCrs (void);

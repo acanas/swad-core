@@ -151,7 +151,7 @@ Usr_Can_t Agd_CheckIfICanViewUsrAgenda (struct Usr_Data *UsrDat)
 
 static void Agd_ResetAgenda (struct Agd_Agenda *Agenda)
   {
-   Agenda->LstIsRead          = false;
+   Agenda->LstReadStatus      = Cac_INVALID;
    Agenda->Num                = 0;
    Agenda->LstAgdCods         = NULL;
    Agenda->Past__FutureEvents = Agd_DEFAULT_PAST___EVENTS |
@@ -1006,16 +1006,16 @@ void Agd_PutParEventsOrder (Dat_StartEndTime_t SelectedOrder)
 
 static void Agd_GetParEventOrder (struct Agd_Agenda *Agenda)
   {
-   static bool AlreadyGot = false;
+   static Cac_Status_t Status = Cac_INVALID;
 
-   if (!AlreadyGot)
+   if (Status == Cac_INVALID)
      {
       Agenda->SelectedOrder = (Dat_StartEndTime_t)
 			      Par_GetParUnsignedLong ("Order",
 						      0,
 						      Dat_NUM_START_END_TIME - 1,
 						      (unsigned long) Agd_ORDER_DEFAULT);
-      AlreadyGot = true;
+      Status = Cac_VALID;
      }
   }
 
@@ -1044,7 +1044,7 @@ static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
              Agenda->HiddenVisiblEvents == 0)	// All selectors are off
 	   {
 	    // Nothing to get from database
-	    Agenda->LstIsRead = true;
+	    Agenda->LstReadStatus = Cac_VALID;
 	    return;
 	   }
 	 break;
@@ -1072,7 +1072,7 @@ static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   Agenda->LstIsRead = true;
+   Agenda->LstReadStatus = Cac_VALID;
   }
 
 /*****************************************************************************/
@@ -1146,13 +1146,13 @@ static void Agd_GetventDataByCod (struct Agd_Event *AgdEvent)
 
 static void Agd_FreeListEvents (struct Agd_Agenda *Agenda)
   {
-   if (Agenda->LstIsRead && Agenda->LstAgdCods)
+   if (Agenda->LstReadStatus == Cac_VALID && Agenda->LstAgdCods)
      {
       /***** Free memory used by the list of events *****/
       free (Agenda->LstAgdCods);
       Agenda->LstAgdCods = NULL;
       Agenda->Num = 0;
-      Agenda->LstIsRead = false;
+      Agenda->LstReadStatus = Cac_INVALID;
      }
   }
 

@@ -86,7 +86,7 @@ static Err_SuccessOrError_t Rub_CheckIfRecursiveTree (long RubCod,struct Rub_Nod
 
 void Rub_ResetRubrics (struct Rub_Rubrics *Rubrics)
   {
-   Rubrics->LstIsRead     = false;	// List not read from database...
+   Rubrics->LstReadStatus = Cac_INVALID;// List not read from database
    Rubrics->Num           = 0;		// Total number of rubrics
    Rubrics->Lst           = NULL;	// List of rubrics
    Rubrics->CurrentPage   = 0;
@@ -545,7 +545,7 @@ void Rub_GetListRubrics (struct Rub_Rubrics *Rubrics)
    unsigned NumRubric;
 
    /***** Free list of rubrics *****/
-   if (Rubrics->LstIsRead)
+   if (Rubrics->LstReadStatus == Cac_VALID)
       Rub_FreeListRubrics (Rubrics);
 
    /***** Get list of rubrics from database *****/
@@ -572,7 +572,7 @@ void Rub_GetListRubrics (struct Rub_Rubrics *Rubrics)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   Rubrics->LstIsRead = true;
+   Rubrics->LstReadStatus = Cac_VALID;
   }
 
 /*****************************************************************************/
@@ -623,13 +623,13 @@ void Rub_GetRubricDataByCod (struct Rub_Rubric *Rubric)
 
 void Rub_FreeListRubrics (struct Rub_Rubrics *Rubrics)
   {
-   if (Rubrics->LstIsRead && Rubrics->Lst)
+   if (Rubrics->LstReadStatus == Cac_VALID && Rubrics->Lst)
      {
       /***** Free memory used by the list of rubrics *****/
       free (Rubrics->Lst);
-      Rubrics->Lst       = NULL;
-      Rubrics->Num       = 0;
-      Rubrics->LstIsRead = false;
+      Rubrics->Lst           = NULL;
+      Rubrics->Num           = 0;
+      Rubrics->LstReadStatus = Cac_INVALID;
      }
   }
 

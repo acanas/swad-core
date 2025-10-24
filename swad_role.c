@@ -217,7 +217,7 @@ void Rol_SetMyRoles (void)
       Gbl.Usrs.Me.Role.Available |= (1 << Rol_CTR_ADM);
    if (ICanBeAdm[Hie_DEG] == Usr_CAN)
       Gbl.Usrs.Me.Role.Available |= (1 << Rol_DEG_ADM);
-   if (Usr_CheckIfUsrIsSuperuser (Gbl.Usrs.Me.UsrDat.UsrCod))
+   if (Usr_CheckIfUsrExistsAsSuperuser (Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS)
       Gbl.Usrs.Me.Role.Available |= (1 << Rol_SYS_ADM);
 
    /***** Check if the role I am logged is now available for me (it's not forbidden) *****/

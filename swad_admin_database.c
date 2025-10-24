@@ -99,7 +99,7 @@ Exi_Exist_t Adm_DB_CheckIfUsrExistsAsAdm (long UsrCod,Hie_Level_t HieLvl)
 /************** Check if a user is a superuser (global admin) ****************/
 /*****************************************************************************/
 
-bool Adm_DB_CheckIfUsrIsSuperuser (long UsrCod)
+Exi_Exist_t Adm_DB_CheckIfUsrExistsAsSuperuser (long UsrCod)
   {
    return
    DB_QueryEXISTS ("can not check if a user is superuser",
@@ -109,7 +109,7 @@ bool Adm_DB_CheckIfUsrIsSuperuser (long UsrCod)
 		    " WHERE UsrCod=%ld"
 		      " AND Scope='%s')",
 		   UsrCod,
-		   Hie_GetDBStrFromLevel (Hie_SYS)) == Exi_EXISTS;
+		   Hie_GetDBStrFromLevel (Hie_SYS));
    }
 
 /*****************************************************************************/

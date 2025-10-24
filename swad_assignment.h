@@ -65,7 +65,7 @@ struct Asg_Assignment
 
 struct Asg_Assignments
   {
-   bool LstIsRead;		// Is the list already read from database...
+   Cac_Status_t LstReadStatus;	// Is the list already read from database...
 				// ...or it needs to be read?
    unsigned Num;		// Number of assignments
    long *LstAsgCods;		// List of assigment codes

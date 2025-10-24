@@ -1541,16 +1541,20 @@ static void Enr_ShowMessageEnroled (unsigned NumUsrsEnroled)
 /*****************************************************************************/
 /***** Put different actions to enrol/remove users to/from current course ****/
 /*****************************************************************************/
-// Returns true if at least one action can be shown
 
-bool Enr_PutActionsEnrRemOneUsr (Usr_MeOrOther_t MeOrOther)
+void Enr_PutActionsEnrRemOneUsr (Usr_MeOrOther_t MeOrOther)
   {
-   bool OptionsShown = false;
+   Lay_Show_t OptionsShown = Lay_DONT_SHOW;
    Usr_Belong_t UsrBelongsToCrs = Usr_DONT_BELONG;
-   bool UsrIsDegAdmin = false;
-   bool UsrIsCtrAdmin = false;
-   bool UsrIsInsAdmin = false;
+   Exi_Exist_t UsrExistsAsAdmin[Hie_NUM_LEVELS];
+   Hie_Level_t HieLvl;
    HTM_Attributes_t Attributes = HTM_NO_ATTR;
+
+   /***** Initialize defaults *****/
+   for (HieLvl  = Hie_INS;
+	HieLvl <= Hie_DEG;
+	HieLvl++)
+     UsrExistsAsAdmin[HieLvl] = Exi_DOES_NOT_EXIST;
 
    /***** Check if the other user belongs to the current course *****/
    if (Gbl.Hierarchy.HieLvl == Hie_CRS)
@@ -1559,19 +1563,19 @@ bool Enr_PutActionsEnrRemOneUsr (Usr_MeOrOther_t MeOrOther)
    if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
      {
       /***** Check if the other user is administrator of the current institution *****/
-      UsrIsInsAdmin = (Adm_DB_CheckIfUsrExistsAsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
-					             Hie_INS) == Exi_EXISTS);
+      UsrExistsAsAdmin[Hie_INS] = Adm_DB_CheckIfUsrExistsAsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+					                        Hie_INS);
 
       if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
 	{
 	 /***** Check if the other user is administrator of the current center *****/
-	 UsrIsCtrAdmin = (Adm_DB_CheckIfUsrExistsAsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
-						        Hie_CTR) == Exi_EXISTS);
+	 UsrExistsAsAdmin[Hie_CTR] = Adm_DB_CheckIfUsrExistsAsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+						                   Hie_CTR);
 
 	 if (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
 	    /***** Check if the other user is administrator of the current degree *****/
-	    UsrIsDegAdmin = (Adm_DB_CheckIfUsrExistsAsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
-						           Hie_DEG) == Exi_EXISTS);
+	    UsrExistsAsAdmin[Hie_DEG] = Adm_DB_CheckIfUsrExistsAsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+						                      Hie_DEG);
 	}
      }
 
@@ -1582,7 +1586,7 @@ bool Enr_PutActionsEnrRemOneUsr (Usr_MeOrOther_t MeOrOther)
       if (Gbl.Hierarchy.HieLvl == Hie_CRS && Gbl.Usrs.Me.Role.Logged >= Rol_STD)
 	{
 	 Enr_PutActionModifyOneUsr (&Attributes,UsrBelongsToCrs,MeOrOther);
-	 OptionsShown = true;
+	 OptionsShown = Lay_SHOW;
 	}
 
       if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
@@ -1591,25 +1595,28 @@ bool Enr_PutActionsEnrRemOneUsr (Usr_MeOrOther_t MeOrOther)
 	   {
 	    if (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
 	       /***** Enrol user as administrator of degree *****/
-	       if (!UsrIsDegAdmin && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+	       if (UsrExistsAsAdmin[Hie_DEG] == Exi_DOES_NOT_EXIST &&
+		   Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
 		 {
 		  Enr_PutActionEnrOneDegAdm (&Attributes);
-		  OptionsShown = true;
+		  OptionsShown = Lay_SHOW;
 		 }
 
 	    /***** Enrol user as administrator of center *****/
-	    if (!UsrIsCtrAdmin && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+	    if (UsrExistsAsAdmin[Hie_CTR] == Exi_DOES_NOT_EXIST &&
+		Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
 	      {
 	       Enr_PutActionEnrOneCtrAdm (&Attributes);
-	       OptionsShown = true;
+	       OptionsShown = Lay_SHOW;
 	      }
 	   }
 
 	 /***** Enrol user as administrator of institution *****/
-	 if (!UsrIsInsAdmin && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+	 if (UsrExistsAsAdmin[Hie_INS] == Exi_DOES_NOT_EXIST &&
+	     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	   {
 	    Enr_PutActionEnrOneInsAdm (&Attributes);
-	    OptionsShown = true;
+	    OptionsShown = Lay_SHOW;
 	   }
 	}
 
@@ -1632,21 +1639,21 @@ bool Enr_PutActionsEnrRemOneUsr (Usr_MeOrOther_t MeOrOther)
 	       Enr_PutActionOverwriteClipboard (Enr_OVERWRITE_CLIPBOARD_OTH,&Attributes);
 	       break;
 	   }
-	 OptionsShown = true;
+	 OptionsShown = Lay_SHOW;
 	}
 
       /***** Report user as possible duplicate *****/
       if (MeOrOther == Usr_OTHER && Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
 	{
 	 Enr_PutActionRepUsrAsDup (&Attributes);
-	 OptionsShown = true;
+	 OptionsShown = Lay_SHOW;
 	}
 
       /***** Remove user from the course *****/
       if (UsrBelongsToCrs == Usr_BELONG)
 	{
 	 Enr_PutActionRemUsrFromCrs (&Attributes,MeOrOther);
-	 OptionsShown = true;
+	 OptionsShown = Lay_SHOW;
 	}
 
       if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
@@ -1655,28 +1662,28 @@ bool Enr_PutActionsEnrRemOneUsr (Usr_MeOrOther_t MeOrOther)
 	   {
 	    if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
 	       /***** Remove user as an administrator of the degree *****/
-	       if (UsrIsDegAdmin &&
+	       if (UsrExistsAsAdmin[Hie_DEG] == Exi_EXISTS &&
 	           (MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM))
 		 {
 		  Enr_PutActionRemUsrAsDegAdm (&Attributes,MeOrOther);
-		  OptionsShown = true;
+		  OptionsShown = Lay_SHOW;
 		 }
 
 	    /***** Remove user as an administrator of the center *****/
-	    if (UsrIsCtrAdmin &&
+	    if (UsrExistsAsAdmin[Hie_CTR] == Exi_EXISTS &&
 		(MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM))
 	      {
 	       Enr_PutActionRemUsrAsCtrAdm (&Attributes,MeOrOther);
-	       OptionsShown = true;
+	       OptionsShown = Lay_SHOW;
 	      }
 	   }
 
 	 /***** Remove user as an administrator of the institution *****/
-	 if (UsrIsInsAdmin &&
+	 if (UsrExistsAsAdmin[Hie_INS] == Exi_EXISTS &&
 	     (MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
 	   {
 	    Enr_PutActionRemUsrAsInsAdm (&Attributes,MeOrOther);
-	    OptionsShown = true;
+	    OptionsShown = Lay_SHOW;
 	   }
 	}
 
@@ -1684,13 +1691,14 @@ bool Enr_PutActionsEnrRemOneUsr (Usr_MeOrOther_t MeOrOther)
       if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_CAN)
 	{
 	 Enr_PutActionRemUsrAcc (&Attributes,MeOrOther);
-	 OptionsShown = true;
+	 OptionsShown = Lay_SHOW;
 	}
 
    /***** End list of options *****/
    HTM_UL_End ();
 
-   return OptionsShown;
+   if (OptionsShown == Lay_SHOW)
+      Btn_PutButton (Btn_CONFIRM,NULL);
   }
 
 /*****************************************************************************/

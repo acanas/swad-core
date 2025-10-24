@@ -179,13 +179,13 @@ static struct
 
 struct Prj_Faults
   {
-   Err_SuccessOrError_t PrjIsFaulty;
-   Err_SuccessOrError_t WrongTitle;
-   Err_SuccessOrError_t WrongDescription;
-   Err_SuccessOrError_t WrongNumStds;
-   Err_SuccessOrError_t WrongAssigned;
-   Err_SuccessOrError_t WrongReviewStatus;
-   Err_SuccessOrError_t WrongModifTime;
+   Err_SuccessOrError_t Prj;
+   Err_SuccessOrError_t Title;
+   Err_SuccessOrError_t Description;
+   Err_SuccessOrError_t NumStds;
+   Err_SuccessOrError_t Assigned;
+   Err_SuccessOrError_t ReviewStatus;
+   Err_SuccessOrError_t ModifTime;
   };
 
 /*****************************************************************************/
@@ -388,7 +388,7 @@ void Prj_ResetPrjsAndReadConfig (struct Prj_Projects *Projects)
    Projects->Filter.DptCod = Prj_FILTER_DPT_DEFAULT;
 
    /***** Project list *****/
-   Projects->LstIsRead     = false;	// List is not read
+   Projects->LstReadStatus = Cac_INVALID;	// List is not read
    Projects->Num           = 0;
    Projects->LstPrjCods    = NULL;
    Projects->SelectedOrder = Prj_ORDER_DEFAULT;
@@ -1592,8 +1592,8 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects)
 		     HidVis_DataClass[Projects->Prj.Hidden],"prj_dsc_",UniqueId,
                      Txt_Description,		// Description of the project
                      Projects->Prj.Description,
-                     Faults.WrongDescription == Err_ERROR ? Prj_PUT_WARNING :
-                					    Prj_DONT_PUT_WARNING);
+                     Faults.Description == Err_ERROR ? Prj_PUT_WARNING :
+                				       Prj_DONT_PUT_WARNING);
    Prj_ShowTxtField (Projects,
 		     HidVis_LabelClass[Projects->Prj.Hidden],
 		     HidVis_DataClass[Projects->Prj.Hidden],"prj_knw_",UniqueId,
@@ -1644,7 +1644,7 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Projects,
 	    HTM_TD_Begin ("rowspan=\"4\" class=\"RT BIG_INDEX_%s %s\"",
 	                  The_GetSuffix (),The_GetColorRows ());
 	       HTM_Unsigned (Projects->NumIndex);
-	       if (Faults->PrjIsFaulty == Err_ERROR)
+	       if (Faults->Prj == Err_ERROR)
 		 {
 		  HTM_BR ();
 		  Prj_PutWarningIcon ();
@@ -1749,7 +1749,7 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Projects,
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();
 	      }
-	    if (Faults->WrongTitle == Err_ERROR)
+	    if (Faults->Title == Err_ERROR)
 	       Prj_PutWarningIcon ();
 	 HTM_ARTICLE_End ();
       HTM_TD_End ();
@@ -1879,7 +1879,7 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
 		      Txt_PROJECT_REVIEW_SINGUL[Projects->Prj.Review.Status]);
 
       /***** Show warning icon depending on review status *****/
-      if (Faults->WrongReviewStatus == Err_ERROR)
+      if (Faults->ReviewStatus == Err_ERROR)
 	 Prj_PutWarningIcon ();
 
       if (Projects->Prj.Review.Status != Prj_UNREVIEWED)
@@ -1901,7 +1901,7 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
 	}
 
       /***** Show warning icon depending on modify time *****/
-      if (Faults->WrongModifTime == Err_ERROR)
+      if (Faults->ModifTime == Err_ERROR)
 	 Prj_PutWarningIcon ();
 
       /***** Revision text *****/
@@ -2048,7 +2048,7 @@ static void Prj_ShowAssigned (const struct Prj_Projects *Projects,
 	 Ico_PutIconOff (AssignedNonassigIcon[Projects->Prj.Assigned],Ico_BLACK,
 			 Txt_PROJECT_NONASSIGNED_ASSIGNED_SINGUL[Projects->Prj.Assigned]);
 
-	 if (Faults->WrongAssigned == Err_ERROR)
+	 if (Faults->Assigned == Err_ERROR)
 	    Prj_PutWarningIcon ();
 
       HTM_TD_End ();
@@ -2095,7 +2095,7 @@ static void Prj_ShowNumStds (const struct Prj_Projects *Projects,
 	    break;
 	}
 	 HTM_Unsigned (Projects->Prj.NumStds);
-	 if (Faults->WrongNumStds == Err_ERROR)
+	 if (Faults->NumStds == Err_ERROR)
 	    Prj_PutWarningIcon ();
       HTM_TD_End ();
 
@@ -2538,10 +2538,10 @@ static void Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
    unsigned NumStdsRegisteredInPrj;
 
    /***** Reset faults *****/
-   Faults->WrongTitle       =
-   Faults->WrongDescription =
-   Faults->WrongNumStds     =
-   Faults->WrongAssigned    = Err_SUCCESS;
+   Faults->Title       =
+   Faults->Description =
+   Faults->NumStds     =
+   Faults->Assigned    = Err_SUCCESS;
 
    /***** Get some project date and check faults ****/
    if (PrjCod > 0)
@@ -2572,49 +2572,49 @@ static void Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
 
 	 /***** Check faults *****/
 	 /* 1. Check title */
-	 Faults->WrongTitle = HasTitle ? Err_SUCCESS :
-					 Err_ERROR;
+	 Faults->Title = HasTitle ? Err_SUCCESS :
+				    Err_ERROR;
 
 	 /* 2. Check description */
-	 Faults->WrongDescription = HasDescription ? Err_SUCCESS :
-					             Err_ERROR;
+	 Faults->Description = HasDescription ? Err_SUCCESS :
+					        Err_ERROR;
 
 	 /* 3. Check number of students */
 	 if (NumProposedStds == 0)
 	    // The number of proposed students should be > 0
-	    Faults->WrongNumStds = Err_ERROR;
+	    Faults->NumStds = Err_ERROR;
 	 else
 	   {
 	    NumStdsRegisteredInPrj = Prj_DB_GetNumUsrsInPrj (PrjCod,Prj_ROLE_STD);
 	    if (IsAssigned)		// Assigned
 	       // In an assigned project the number of proposed students...
 	       // ...should match the number of students registered in it
-	       Faults->WrongNumStds = NumProposedStds == NumStdsRegisteredInPrj ? Err_SUCCESS :
-										  Err_ERROR;
+	       Faults->NumStds = NumProposedStds == NumStdsRegisteredInPrj ? Err_SUCCESS :
+									     Err_ERROR;
 	    else			// Not assigned
 	       // A non assigned project should not have students registered in it
-	       Faults->WrongAssigned = NumStdsRegisteredInPrj == 0 ? Err_SUCCESS :
-								     Err_ERROR;
+	       Faults->Assigned = NumStdsRegisteredInPrj == 0 ? Err_SUCCESS :
+								Err_ERROR;
 	   }
 
 	 /* 4. Check review status */
-	 Faults->WrongReviewStatus = IsUnapproved ? Err_ERROR :
-						    Err_SUCCESS;
-	 Faults->WrongModifTime    = ModifiedAfterReview? Err_ERROR :
-						          Err_SUCCESS;
+	 Faults->ReviewStatus = IsUnapproved ? Err_ERROR :
+					       Err_SUCCESS;
+	 Faults->ModifTime    = ModifiedAfterReview? Err_ERROR :
+						     Err_SUCCESS;
 	}
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
 
-   Faults->PrjIsFaulty = Faults->WrongTitle        == Err_ERROR ||
-	                 Faults->WrongDescription  == Err_ERROR ||
-	                 Faults->WrongNumStds      == Err_ERROR ||
-	                 Faults->WrongAssigned     == Err_ERROR ||
-	                 Faults->WrongReviewStatus == Err_ERROR ||
-	                 Faults->WrongModifTime    == Err_ERROR ? Err_ERROR :
-								  Err_SUCCESS;
+   Faults->Prj = Faults->Title        == Err_ERROR ||
+	         Faults->Description  == Err_ERROR ||
+	         Faults->NumStds      == Err_ERROR ||
+	         Faults->Assigned     == Err_ERROR ||
+	         Faults->ReviewStatus == Err_ERROR ||
+	         Faults->ModifTime    == Err_ERROR ? Err_ERROR :
+						     Err_SUCCESS;
   }
 
 /*****************************************************************************/
@@ -3428,7 +3428,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
    long PrjCod;
 
    /***** Get list of projects from database *****/
-   if (Projects->LstIsRead)
+   if (Projects->LstReadStatus == Cac_VALID)
       Prj_FreeListProjects (Projects);
 
    if (Projects->Filter.RolPrj &&	// Any selector is on
@@ -3490,12 +3490,12 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	      {
 	       case (1 << Prj_FAULTY):		// Faulty projects
 		  Prj_CheckIfPrjIsFaulty (PrjCod,&Faults);
-		  if (Faults.PrjIsFaulty == Err_ERROR)
+		  if (Faults.Prj == Err_ERROR)
 		     Projects->LstPrjCods[NumPrjsAfterFilter++] = PrjCod;
 		  break;
 	       case (1 << Prj_FAULTLESS):	// Faultless projects
 		  Prj_CheckIfPrjIsFaulty (PrjCod,&Faults);
-		  if (Faults.PrjIsFaulty == Err_SUCCESS)
+		  if (Faults.Prj == Err_SUCCESS)
 		     Projects->LstPrjCods[NumPrjsAfterFilter++] = PrjCod;
 		  break;
 	       default:				// All projects
@@ -3510,7 +3510,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
      }
 
    Projects->Num = NumPrjsAfterFilter;
-   Projects->LstIsRead = true;
+   Projects->LstReadStatus = Cac_VALID;
   }
 
 /*****************************************************************************/
@@ -3658,13 +3658,13 @@ static void Prj_ResetProject (struct Prj_Project *Prj)
 
 void Prj_FreeListProjects (struct Prj_Projects *Projects)
   {
-   if (Projects->LstIsRead && Projects->LstPrjCods)
+   if (Projects->LstReadStatus == Cac_VALID && Projects->LstPrjCods)
      {
       /***** Free memory used by the list of projects *****/
       free (Projects->LstPrjCods);
-      Projects->LstPrjCods = NULL;
-      Projects->Num = 0;
-      Projects->LstIsRead = false;
+      Projects->LstPrjCods    = NULL;
+      Projects->Num           = 0;
+      Projects->LstReadStatus = Cac_INVALID;
      }
   }
 

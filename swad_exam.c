@@ -156,7 +156,7 @@ static void Exa_UpdateExam (struct Exa_Exam *Exam,const char *Txt);
 
 void Exa_ResetExams (struct Exa_Exams *Exams)
   {
-   Exams->LstIsRead		= false;	// List not read from database...
+   Exams->LstReadStatus		= Cac_INVALID;	// List not read from database
    Exams->Num			= 0;	// Total number of exams
    Exams->NumSelected		= 0;	// Number of exams selected
    Exams->Lst			= NULL;	// List of exams
@@ -799,7 +799,7 @@ void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder)
    unsigned NumExam;
 
    /***** Free list of exams *****/
-   if (Exams->LstIsRead)
+   if (Exams->LstReadStatus == Cac_VALID)
       Exa_FreeListExams (Exams);
 
    /***** Get list of exams from database *****/
@@ -825,7 +825,7 @@ void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   Exams->LstIsRead = true;
+   Exams->LstReadStatus = Cac_VALID;
   }
 
 /*****************************************************************************/
@@ -987,13 +987,13 @@ void Exa_GetExamDataByCod (struct Exa_Exam *Exam)
 
 void Exa_FreeListExams (struct Exa_Exams *Exams)
   {
-   if (Exams->LstIsRead && Exams->Lst)
+   if (Exams->LstReadStatus == Cac_VALID && Exams->Lst)
      {
       /***** Free memory used by the list of exams *****/
       free (Exams->Lst);
-      Exams->Lst       = NULL;
-      Exams->Num       = 0;
-      Exams->LstIsRead = false;
+      Exams->Lst           = NULL;
+      Exams->Num           = 0;
+      Exams->LstReadStatus = Cac_INVALID;
      }
   }
 

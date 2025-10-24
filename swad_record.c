@@ -2286,9 +2286,8 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 			      break;
 			  }
 
-		     /***** Which action, register or removing? *****/
-		     if (Enr_PutActionsEnrRemOneUsr (MeOrOther))
-			Btn_PutButton (Btn_CONFIRM,NULL);
+		     /***** Which action (enroling, removing...)? *****/
+		     Enr_PutActionsEnrRemOneUsr (MeOrOther);
 
 		     Frm_EndForm ();
 		     break;

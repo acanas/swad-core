@@ -72,7 +72,7 @@ typedef enum
 
 struct Hld_Holidays
   {
-   bool LstIsRead;		// Is the list already read from database, or it needs to be read?
+   Cac_Status_t LstReadStatus;	// Is the list already read from database, or it needs to be read?
    unsigned Num;		// Number of holidays
    struct Hld_Holiday *Lst;	// List of holidays
    Hld_Order_t SelectedOrder;

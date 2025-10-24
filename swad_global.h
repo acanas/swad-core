@@ -247,7 +247,7 @@ struct Globals
       struct
 	{
 	 long UsrCod;
-	 bool IsSuperuser;
+	 Exi_Exist_t ExistsAsSuperuser;
 	 Cac_Status_t Status;
 	} UsrIsSuperuser;
       struct

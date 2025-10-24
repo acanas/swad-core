@@ -88,7 +88,7 @@ struct Exa_Exam
 /* Exams context */
 struct Exa_Exams
   {
-   bool LstIsRead;		// Is the list already read from database...
+   Cac_Status_t LstReadStatus;	// Is the list already read from database...
 				// ...or it needs to be read?
    unsigned Num;		// Total number of exams
    unsigned NumSelected;	// Number of exams selected

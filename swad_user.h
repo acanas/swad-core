@@ -66,7 +66,7 @@ void Usr_WriteFirstNameBRSurnames (const struct Usr_Data *UsrDat);
 void Usr_FlushCachesUsr (void);
 
 void Usr_FlushCacheUsrIsSuperuser (void);
-bool Usr_CheckIfUsrIsSuperuser (long UsrCod);
+Exi_Exist_t Usr_CheckIfUsrExistsAsSuperuser (long UsrCod);
 
 Usr_Can_t Usr_ICanChangeOtherUsrData (const struct Usr_Data *UsrDat);
 Usr_Can_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat);

@@ -37,7 +37,7 @@ void Adm_DB_InsertAdmin (long UsrCod,Hie_Level_t HieLvl);
 
 unsigned Adm_DB_GetAdmsCurrentScopeExceptMe (MYSQL_RES **mysql_res);
 Exi_Exist_t Adm_DB_CheckIfUsrExistsAsAdm (long UsrCod,Hie_Level_t HieLvl);
-bool Adm_DB_CheckIfUsrIsSuperuser (long UsrCod);
+Exi_Exist_t Adm_DB_CheckIfUsrExistsAsSuperuser (long UsrCod);
 
 void Adm_DB_RemAdmin (long UsrCod,Hie_Level_t HieLvl);
 void Adm_DB_RemUsrAsAdmin (long UsrCod);

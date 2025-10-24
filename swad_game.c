@@ -170,7 +170,7 @@ static Usr_Can_t Gam_CheckIfICanEditGame (const struct Gam_Game *Game);
 
 void Gam_ResetGames (struct Gam_Games *Games)
   {
-   Games->LstIsRead		= false;	// List not read from database...
+   Games->LstReadStatus		= Cac_INVALID;	// List not read from database
    Games->Num			= 0;		// Total number of games
    Games->NumSelected		= 0;		// Number of games selected
    Games->Lst			= NULL;	// List of games
@@ -868,7 +868,7 @@ void Gam_GetListGames (struct Gam_Games *Games,Gam_Order_t SelectedOrder)
    unsigned NumGame;
 
    /***** Free list of games *****/
-   if (Games->LstIsRead)
+   if (Games->LstReadStatus == Cac_VALID)
       Gam_FreeListGames (Games);
 
    /***** Get list of games from database *****/
@@ -894,7 +894,7 @@ void Gam_GetListGames (struct Gam_Games *Games,Gam_Order_t SelectedOrder)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   Games->LstIsRead = true;
+   Games->LstReadStatus = Cac_VALID;
   }
 
 /*****************************************************************************/
@@ -1055,13 +1055,13 @@ void Gam_GetGameDataByCod (struct Gam_Game *Game)
 
 void Gam_FreeListGames (struct Gam_Games *Games)
   {
-   if (Games->LstIsRead && Games->Lst)
+   if (Games->LstReadStatus == Cac_VALID && Games->Lst)
      {
       /***** Free memory used by the list of games *****/
       free (Games->Lst);
-      Games->Lst       = NULL;
-      Games->Num       = 0;
-      Games->LstIsRead = false;
+      Games->Lst           = NULL;
+      Games->Num           = 0;
+      Games->LstReadStatus = Cac_INVALID;
      }
   }
 
