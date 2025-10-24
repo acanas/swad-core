@@ -765,61 +765,61 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_GREEN_%s %s\"",
 			              The_GetSuffix (),The_GetColorRows ());
-			   if (IndicatorsCrs.ThereIsSyllabus)
+			   if (IndicatorsCrs.Exist.Syllabus == Exi_EXISTS)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_RED_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
-			   if (!IndicatorsCrs.ThereIsSyllabus)
+			   if (IndicatorsCrs.Exist.Syllabus == Exi_DOES_NOT_EXIST)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_GREEN_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
-			   if (IndicatorsCrs.ThereAreAssignments)
+			   if (IndicatorsCrs.Exist.Assignment == Exi_EXISTS)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_RED_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
-			   if (!IndicatorsCrs.ThereAreAssignments)
+			   if (IndicatorsCrs.Exist.Assignment == Exi_DOES_NOT_EXIST)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_GREEN_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
-			   if (IndicatorsCrs.ThereIsOnlineTutoring)
+			   if (IndicatorsCrs.Exist.OnlineTutoring == Exi_EXISTS)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_RED_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
-			   if (!IndicatorsCrs.ThereIsOnlineTutoring)
+			   if (IndicatorsCrs.Exist.OnlineTutoring == Exi_DOES_NOT_EXIST)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_GREEN_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
-			   if (IndicatorsCrs.ThereAreMaterials)
+			   if (IndicatorsCrs.Exist.Material == Exi_EXISTS)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_RED_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
-			   if (!IndicatorsCrs.ThereAreMaterials)
+			   if (IndicatorsCrs.Exist.Material == Exi_DOES_NOT_EXIST)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_GREEN_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
-			   if (IndicatorsCrs.ThereIsAssessment)
+			   if (IndicatorsCrs.Exist.Assessment == Exi_EXISTS)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_RED_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
-			   if (!IndicatorsCrs.ThereIsAssessment)
+			   if (IndicatorsCrs.Exist.Assessment == Exi_DOES_NOT_EXIST)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
@@ -892,13 +892,13 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_GREEN_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
-			   if (IndicatorsCrs.ThereIsSyllabus)
+			   if (IndicatorsCrs.Exist.Syllabus == Exi_EXISTS)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_RED_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
-			   if (!IndicatorsCrs.ThereIsSyllabus)
+			   if (IndicatorsCrs.Exist.Syllabus == Exi_DOES_NOT_EXIST)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
@@ -925,13 +925,13 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_GREEN_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
-			   if (IndicatorsCrs.ThereAreAssignments)
+			   if (IndicatorsCrs.Exist.Assignment == Exi_EXISTS)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_RED_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
-			   if (!IndicatorsCrs.ThereAreAssignments)
+			   if (IndicatorsCrs.Exist.Assignment == Exi_DOES_NOT_EXIST)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
@@ -958,13 +958,13 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_GREEN_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
-			   if (IndicatorsCrs.ThereIsOnlineTutoring)
+			   if (IndicatorsCrs.Exist.OnlineTutoring == Exi_EXISTS)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_RED_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
-			   if (!IndicatorsCrs.ThereIsOnlineTutoring)
+			   if (IndicatorsCrs.Exist.OnlineTutoring == Exi_DOES_NOT_EXIST)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
@@ -991,13 +991,13 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_GREEN_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
-			   if (IndicatorsCrs.ThereAreMaterials)
+			   if (IndicatorsCrs.Exist.Material == Exi_EXISTS)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_RED_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
-			   if (!IndicatorsCrs.ThereAreMaterials)
+			   if (IndicatorsCrs.Exist.Material == Exi_DOES_NOT_EXIST)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
@@ -1017,13 +1017,13 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_GREEN_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
-			   if (IndicatorsCrs.ThereIsAssessment)
+			   if (IndicatorsCrs.Exist.Assessment == Exi_EXISTS)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_RED_%s %s\"",
 				      The_GetSuffix (),The_GetColorRows ());
-			   if (!IndicatorsCrs.ThereIsAssessment)
+			   if (IndicatorsCrs.Exist.Assessment == Exi_DOES_NOT_EXIST)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
@@ -1136,43 +1136,48 @@ void Ind_ComputeAndStoreIndicatorsCrs (long HieCod,int NumIndicatorsFromDB,
    IndicatorsCrs->SyllabusLecSrc   = Inf_GetInfoSrcFromDB (HieCod,Inf_SYLLABUS_LEC);
    IndicatorsCrs->SyllabusPraSrc   = Inf_GetInfoSrcFromDB (HieCod,Inf_SYLLABUS_PRA);
    IndicatorsCrs->TeachingGuideSrc = Inf_GetInfoSrcFromDB (HieCod,Inf_TEACH_GUIDE);
-   IndicatorsCrs->ThereIsSyllabus = (IndicatorsCrs->SyllabusLecSrc   != Inf_SRC_NONE) ||
-                                    (IndicatorsCrs->SyllabusPraSrc   != Inf_SRC_NONE) ||
-                                    (IndicatorsCrs->TeachingGuideSrc != Inf_SRC_NONE);
-   if (IndicatorsCrs->ThereIsSyllabus)
+   IndicatorsCrs->Exist.Syllabus = IndicatorsCrs->SyllabusLecSrc   != Inf_SRC_NONE ||
+                                   IndicatorsCrs->SyllabusPraSrc   != Inf_SRC_NONE ||
+                                   IndicatorsCrs->TeachingGuideSrc != Inf_SRC_NONE ? Exi_EXISTS :
+                                						     Exi_DOES_NOT_EXIST;
+   if (IndicatorsCrs->Exist.Syllabus == Exi_EXISTS)
       IndicatorsCrs->NumIndicators++;
 
    /***** Indicator #2: information about assignments *****/
    IndicatorsCrs->NumAssignments      = Asg_DB_GetNumAssignmentsInCrs (HieCod);
    IndicatorsCrs->NumFilesAssignments = Brw_DB_GetNumFilesInAssigZonesOfCrs (HieCod);
    IndicatorsCrs->NumFilesWorks       = Brw_DB_GetNumFilesInWorksZonesOfCrs (HieCod);
-   IndicatorsCrs->ThereAreAssignments = IndicatorsCrs->NumAssignments ||
-                                        IndicatorsCrs->NumFilesAssignments ||
-                                        IndicatorsCrs->NumFilesWorks;
-   if (IndicatorsCrs->ThereAreAssignments)
+   IndicatorsCrs->Exist.Assignment = IndicatorsCrs->NumAssignments ||
+                                     IndicatorsCrs->NumFilesAssignments ||
+                                     IndicatorsCrs->NumFilesWorks ? Exi_EXISTS :
+                                				    Exi_DOES_NOT_EXIST;
+   if (IndicatorsCrs->Exist.Assignment == Exi_EXISTS)
       IndicatorsCrs->NumIndicators++;
 
    /***** Indicator #3: information about online tutoring *****/
    IndicatorsCrs->NumThreads = For_DB_GetNumTotalThrsInForumsOfType (For_FORUM_COURSE_USRS,HieCods);
    IndicatorsCrs->NumPosts   = For_DB_GetNumTotalPstsInForumsOfType (For_FORUM_COURSE_USRS,HieCods,&(IndicatorsCrs->NumUsrsToBeNotifiedByEMail));
    IndicatorsCrs->NumMsgsSentByTchs = Msg_DB_GetNumMsgsSentByTchsCrs (HieCod);
-   IndicatorsCrs->ThereIsOnlineTutoring = IndicatorsCrs->NumThreads ||
-	                                  IndicatorsCrs->NumPosts ||
-	                                  IndicatorsCrs->NumMsgsSentByTchs;
-   if (IndicatorsCrs->ThereIsOnlineTutoring)
+   IndicatorsCrs->Exist.OnlineTutoring = IndicatorsCrs->NumThreads ||
+	                                 IndicatorsCrs->NumPosts ||
+	                                 IndicatorsCrs->NumMsgsSentByTchs ? Exi_EXISTS :
+									    Exi_DOES_NOT_EXIST;
+   if (IndicatorsCrs->Exist.OnlineTutoring == Exi_EXISTS)
       IndicatorsCrs->NumIndicators++;
 
    /***** Indicator #4: information about materials *****/
-   IndicatorsCrs->ThereAreMaterials = IndicatorsCrs->NumFilesInDocumentZones ||
-                                      IndicatorsCrs->NumFilesInSharedZones;
-   if (IndicatorsCrs->ThereAreMaterials)
+   IndicatorsCrs->Exist.Material = IndicatorsCrs->NumFilesInDocumentZones ||
+                                   IndicatorsCrs->NumFilesInSharedZones ? Exi_EXISTS :
+                                					  Exi_DOES_NOT_EXIST;
+   if (IndicatorsCrs->Exist.Material == Exi_EXISTS)
       IndicatorsCrs->NumIndicators++;
 
    /***** Indicator #5: information about assessment *****/
    IndicatorsCrs->AssessmentSrc = Inf_GetInfoSrcFromDB (HieCod,Inf_ASSESSMENT);
-   IndicatorsCrs->ThereIsAssessment = (IndicatorsCrs->AssessmentSrc    != Inf_SRC_NONE) ||
-                                      (IndicatorsCrs->TeachingGuideSrc != Inf_SRC_NONE);
-   if (IndicatorsCrs->ThereIsAssessment)
+   IndicatorsCrs->Exist.Assessment = IndicatorsCrs->AssessmentSrc    != Inf_SRC_NONE ||
+                                     IndicatorsCrs->TeachingGuideSrc != Inf_SRC_NONE ? Exi_EXISTS :
+                                						       Exi_DOES_NOT_EXIST;
+   if (IndicatorsCrs->Exist.Assessment == Exi_EXISTS)
       IndicatorsCrs->NumIndicators++;
 
    /***** All the indicators are OK? *****/

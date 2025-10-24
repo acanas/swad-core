@@ -38,24 +38,33 @@
 
 struct Ind_IndicatorsCrs
   {
-   unsigned NumFilesInDocumentZones;
-   unsigned NumFilesInSharedZones;
-   bool ThereIsSyllabus;
+   struct
+     {
+      Exi_Exist_t Syllabus;
+      Exi_Exist_t Assignment;
+      Exi_Exist_t OnlineTutoring;
+      Exi_Exist_t Material;
+      Exi_Exist_t Assessment;
+     } Exist;
+
    Inf_Src_t TeachingGuideSrc;
    Inf_Src_t SyllabusLecSrc;
    Inf_Src_t SyllabusPraSrc;
-   bool ThereAreAssignments;
+
    unsigned NumAssignments;
    unsigned NumFilesAssignments;
    unsigned NumFilesWorks;
-   bool ThereIsOnlineTutoring;
+
    unsigned NumThreads;
    unsigned NumPosts;
    unsigned NumUsrsToBeNotifiedByEMail;
    unsigned NumMsgsSentByTchs;
-   bool ThereAreMaterials;
-   bool ThereIsAssessment;
+
+   unsigned NumFilesInDocumentZones;
+   unsigned NumFilesInSharedZones;
+
    Inf_Src_t AssessmentSrc;
+
    unsigned NumIndicators;
    bool CoursePartiallyOK;
    bool CourseAllOK;
