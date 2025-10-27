@@ -706,7 +706,7 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
    Tmt_ClassType_t ClassType = Tmt_FREE;	// Initialized to avoid warning
    bool TimeTableIsIncomplete = false;
    bool TimeTableHasSpaceForThisClass;
-   bool Found;
+   Exi_Exist_t TypeExists;
 
    /***** Get timetable from database *****/
    NumRows = Tmt_DB_GetTimeTable (&mysql_res,Timetable->Type,UsrCod);
@@ -811,15 +811,15 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
 	   {
 	    case Tmt_COURSE_TIMETABLE:
 	    case Tmt_MY_TIMETABLE:
-	       for (ClassType  = Tmt_LECTURE, Found = false;
+	       for (ClassType  = Tmt_LECTURE, TypeExists = Exi_DOES_NOT_EXIST;
 		    ClassType <= Tmt_TUTORING;
 		    ClassType++)
 		  if (!strcmp (row[4],Tmt_DB_ClassType[ClassType]))
 		    {
-		     Found = true;
+		     TypeExists = Exi_EXISTS;
 		     break;
 		    }
-	       if (!Found)
+	       if (TypeExists == Exi_DOES_NOT_EXIST)
 		  Err_ShowErrorAndExit ("Wrong type of class in timetable.");
 	       break;
 	    case Tmt_TUTORING_TIMETABLE:

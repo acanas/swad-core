@@ -3147,8 +3147,8 @@ Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question)
    MYSQL_RES *mysql_res_qst;
    MYSQL_RES *mysql_res_ans;
    MYSQL_ROW row;
-   bool IdenticalQuestionFound = false;
-   bool IdenticalAnswers;
+   Exi_Exist_t IdenticalQuestionExists = Exi_DOES_NOT_EXIST;
+   Exi_Exist_t IdenticalAnswersExist;
    unsigned NumQst;
    unsigned NumQstsWithThisStem;
    unsigned NumOpt;
@@ -3162,7 +3162,8 @@ Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question)
       /***** Check if the answer exists in any of the questions with the same stem *****/
       /* For each question with the same stem */
       for (NumQst = 0;
-           !IdenticalQuestionFound && NumQst < NumQstsWithThisStem;
+           IdenticalQuestionExists == Exi_DOES_NOT_EXIST &&
+           NumQst < NumQstsWithThisStem;
            NumQst++)
         {
 	 /* Get question code */
@@ -3176,49 +3177,56 @@ Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question)
            {
             case Qst_ANS_INT:
                row = mysql_fetch_row (mysql_res_ans);
-               IdenticalQuestionFound = (Qst_GetIntAnsFromStr (row[0]) == Question->Answer.Integer);
+               IdenticalQuestionExists = Qst_GetIntAnsFromStr (row[0]) ==
+        				 Question->Answer.Integer ? Exi_EXISTS :
+        							    Exi_DOES_NOT_EXIST;
                break;
             case Qst_ANS_FLOAT:
-               for (IdenticalAnswers = true, NumOpt = 0;
-                    IdenticalAnswers && NumOpt < 2;
+               for (IdenticalAnswersExist = Exi_EXISTS, NumOpt = 0;
+                    IdenticalAnswersExist == Exi_EXISTS && NumOpt < 2;
                     NumOpt++)
                  {
                   row = mysql_fetch_row (mysql_res_ans);
 		  switch (Str_GetDoubleFromStr (row[0],&DoubleNum))
 		    {
 		     case Err_SUCCESS:
-			IdenticalAnswers = (DoubleNum == Question->Answer.FloatingPoint[NumOpt]);
+			IdenticalAnswersExist = DoubleNum ==
+						Question->Answer.FloatingPoint[NumOpt] ? Exi_EXISTS :
+											 Exi_DOES_NOT_EXIST;
 			break;
 		     case Err_ERROR:
 		     default:
-			IdenticalAnswers = false;
+			IdenticalAnswersExist = Exi_DOES_NOT_EXIST;
 			break;
 		    }
                  }
-               IdenticalQuestionFound = IdenticalAnswers;
+               IdenticalQuestionExists = IdenticalAnswersExist;
                break;
             case Qst_ANS_TRUE_FALSE:
                row = mysql_fetch_row (mysql_res_ans);
-               IdenticalQuestionFound = (Str_ConvertToUpperLetter (row[0][0]) == Question->Answer.TF);
+               IdenticalQuestionExists = Str_ConvertToUpperLetter (row[0][0]) ==
+        				 Question->Answer.TF ? Exi_EXISTS :
+							       Exi_DOES_NOT_EXIST;
                break;
             case Qst_ANS_UNIQUE_CHOICE:
             case Qst_ANS_MULTIPLE_CHOICE:
             case Qst_ANS_TEXT:
                if (NumOptsExistingQstInDB == Question->Answer.NumOptions)
                  {
-                  for (IdenticalAnswers = true, NumOpt = 0;
-                       IdenticalAnswers && NumOpt < NumOptsExistingQstInDB;
+                  for (IdenticalAnswersExist = Exi_EXISTS, NumOpt = 0;
+                       IdenticalAnswersExist == Exi_EXISTS &&
+                       NumOpt < NumOptsExistingQstInDB;
                        NumOpt++)
                     {
                      row = mysql_fetch_row (mysql_res_ans);
 
                      if (strcasecmp (row[0],Question->Answer.Options[NumOpt].Text))
-                        IdenticalAnswers = false;
+                        IdenticalAnswersExist = Exi_DOES_NOT_EXIST;
                     }
                  }
                else	// Different number of answers (options)
-                  IdenticalAnswers = false;
-               IdenticalQuestionFound = IdenticalAnswers;
+                  IdenticalAnswersExist = Exi_DOES_NOT_EXIST;
+               IdenticalQuestionExists = IdenticalAnswersExist;
                break;
             default:
                break;
@@ -3229,13 +3237,12 @@ Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question)
         }
      }
    else	// Stem does not exist
-      IdenticalQuestionFound = false;
+      IdenticalQuestionExists = Exi_DOES_NOT_EXIST;
 
    /* Free structure that stores the query result for questions */
    DB_FreeMySQLResult (&mysql_res_qst);
 
-   return IdenticalQuestionFound ? Exi_EXISTS :
-				   Exi_DOES_NOT_EXIST;
+   return IdenticalQuestionExists;
   }
 
 /*****************************************************************************/

@@ -1072,7 +1072,6 @@ static void Med_GetAndProcessYouTubeFromForm (const char *ParURL,
       EMBED,	// www.youtube.com/embed/
      } YouTube = WRONG;
    Exi_Exist_t CodeExists = Exi_DOES_NOT_EXIST;
-   // bool CodeFound = false;
 
    /***** Set media status *****/
    Media->Status = Med_STATUS_NONE;

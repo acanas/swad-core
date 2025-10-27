@@ -4744,10 +4744,10 @@ void Grp_ShowFormToSelMyAllGrps (Act_Action_t Action,
 
 Grp_MyAllGrps_t Grp_GetParMyAllGrps (void)
   {
-   static bool AlreadyGot = false;
+   static Cac_Status_t Status = Cac_INVALID;
    Grp_MyAllGrps_t MyAllGrpsDefault;
 
-   if (!AlreadyGot)
+   if (Status == Cac_INVALID)
      {
       /***** Get which groups (my groups or all groups) *****/
       /* Set default */
@@ -4787,7 +4787,7 @@ Grp_MyAllGrps_t Grp_GetParMyAllGrps (void)
 	                                               Grp_NUM_MY_ALL_GROUPS - 1,
 	                                               (unsigned long) MyAllGrpsDefault);
 
-      AlreadyGot = true;
+      Status = Cac_VALID;
      }
 
    return Gbl.Crs.Grps.MyAllGrps;
