@@ -3674,19 +3674,19 @@ void Enr_FlushCacheUsrSharesAnyOfMyCrs (void)
    Gbl.Cache.UsrSharesAnyOfMyCrs.Status = Cac_INVALID;
   }
 
-bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat)
+Usr_Share_t Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
-      return false;
+      return Usr_DONT_SHARE;
 
    /***** 2. Fast check: It is a valid user code? *****/
    if (UsrDat->UsrCod <= 0)
-      return false;
+      return Usr_DONT_SHARE;
 
    /***** 3. Fast check: It's me? *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return true;
+      return Usr_SHARE;
 
    /***** 4. Fast check: Is already calculated if user shares any course with me? *****/
    if (Gbl.Cache.UsrSharesAnyOfMyCrs.Status == Cac_VALID &&
@@ -3698,9 +3698,9 @@ bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat)
       if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat) == Usr_BELONG)	// Course selected and we both belong to it
         {
          Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod = UsrDat->UsrCod;
-         Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs = true;
+         Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs = Usr_SHARE;
          Gbl.Cache.UsrSharesAnyOfMyCrs.Status = Cac_VALID;
-         return true;
+         return Usr_SHARE;
         }
 
    /***** 6. Fast/slow check: Does he/she belong to any course? *****/
@@ -3710,9 +3710,9 @@ bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat)
 			         (1 << Rol_TCH))))	// or teacher?
      {
       Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod = UsrDat->UsrCod;
-      Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs = false;
+      Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs = Usr_DONT_SHARE;
       Gbl.Cache.UsrSharesAnyOfMyCrs.Status = Cac_VALID;
-      return false;
+      return Usr_DONT_SHARE;
      }
 
    /***** 7. Slow check: Get if user shares any course with me from database *****/

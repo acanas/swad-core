@@ -181,7 +181,7 @@ Usr_Belong_t Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long HieCod,
 /*************** Check if a user belongs to any of my courses ****************/
 /*****************************************************************************/
 
-bool Enr_DB_CheckIfUsrSharesAnyOfMyCrs (long UsrCod)
+Usr_Share_t Enr_DB_CheckIfUsrSharesAnyOfMyCrs (long UsrCod)
   {
    /***** Fill the list with the courses I belong to (if not already filled) *****/
    Hie_GetMyHierarchy (Hie_CRS);
@@ -196,20 +196,21 @@ bool Enr_DB_CheckIfUsrSharesAnyOfMyCrs (long UsrCod)
 		      " AND CrsCod IN"
 			  " (SELECT CrsCod"
 			     " FROM my_courses_tmp))",
-		   UsrCod) == Exi_EXISTS;
+		   UsrCod) == Exi_EXISTS ? Usr_SHARE :
+					   Usr_DONT_SHARE;
   }
 
 /*****************************************************************************/
 /*** Check if a user belongs to any of my courses but has a different role ***/
 /*****************************************************************************/
 
-bool Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
+Usr_Share_t Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
   {
-   bool UsrSharesAnyOfMyCrsWithDifferentRole;
+   Usr_Share_t UsrSharesAnyOfMyCrsWithDifferentRole;
 
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
-      return false;
+      return Usr_DONT_SHARE;
 
    /***** 2. Slow check: Get if user shares any course with me
                          with a different role, from database *****/
@@ -237,7 +238,8 @@ bool Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
 			" FROM my_courses_tmp,"
 			      "usr_courses_tmp"
 		       " WHERE my_courses_tmp.CrsCod=usr_courses_tmp.CrsCod"
-			 " AND my_courses_tmp.Role<>usr_courses_tmp.Role)") == Exi_EXISTS;
+			 " AND my_courses_tmp.Role<>usr_courses_tmp.Role)") == Exi_EXISTS ? Usr_SHARE :
+											    Usr_DONT_SHARE;
 
    /* Remove temporary table if exists */
    DB_DropTmpTable ("usr_courses_tmp");

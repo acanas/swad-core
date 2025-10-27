@@ -62,7 +62,7 @@ unsigned Grp_DB_GetTchsFromGrpExceptMe (MYSQL_RES **mysql_res,long GrpCod);
 
 Usr_Belong_t Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod);
 Usr_Belong_t Grp_DB_CheckIfIBelongToGrp (long GrpCod);
-bool Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (long UsrCod);
+Usr_Share_t Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (long UsrCod);
 
 unsigned Grp_DB_GetGrpTypesWithGrpsInCrs (MYSQL_RES **mysql_res,long HieCod);
 unsigned Grp_DB_GetAllGrpTypesInCrs (MYSQL_RES **mysql_res,long HieCod);

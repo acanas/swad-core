@@ -46,8 +46,8 @@ unsigned Enr_DB_GetMyCoursesNames (MYSQL_RES **mysql_res);
 
 Usr_Belong_t Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long HieCod,
 					    Hie_DB_CountOnlyAcceptedCrss_t CountOnlyAcceptedCourses);
-bool Enr_DB_CheckIfUsrSharesAnyOfMyCrs (long UsrCod);
-bool Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod);
+Usr_Share_t Enr_DB_CheckIfUsrSharesAnyOfMyCrs (long UsrCod);
+Usr_Share_t Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod);
 long Enr_DB_GetRamdomStdFromCrs (long HieCod);
 unsigned Enr_DB_GetUsrsFromCurrentCrs (MYSQL_RES **mysql_res);
 unsigned Enr_DB_GetUsrsFromCrsExceptMe (MYSQL_RES **mysql_res,long HieCod);

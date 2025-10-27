@@ -226,7 +226,7 @@ void Grp_GetGroupDataByCod (long *HieCod,long *GrpTypCod,struct Group *Grp);
 void Grp_FlushCacheIBelongToGrp (void);
 Usr_Belong_t Grp_GetIfIBelongToGrp (long GrpCod);
 void Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs (void);
-bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat);
+Usr_Share_t Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat);
 
 void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps);
 void Grp_GetNamesGrpsUsrBelongsTo (long UsrCod,long GrpTypCod,char *GroupNames);

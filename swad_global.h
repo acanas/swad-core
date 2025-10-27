@@ -273,7 +273,7 @@ struct Globals
       struct
 	{
 	 long UsrCod;
-	 bool SharesAnyOfMyCrs;
+	 Usr_Share_t SharesAnyOfMyCrs;
 	 Cac_Status_t Status;
 	} UsrSharesAnyOfMyCrs;
       struct
@@ -285,7 +285,7 @@ struct Globals
       struct
 	{
 	 long UsrCod;
-	 bool Shares;
+	 Usr_Share_t Shares;
 	 Cac_Status_t Status;
 	} UsrSharesAnyOfMyGrpsInCurrentCrs;
       struct

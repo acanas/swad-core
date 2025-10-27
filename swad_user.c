@@ -978,8 +978,8 @@ Usr_Can_t Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat)
      {
       case Rol_STD:
       case Rol_NET:
-	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) ? Usr_CAN :
-								       Usr_CAN_NOT;
+	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) == Usr_SHARE ? Usr_CAN :
+										    Usr_CAN_NOT;
       case Rol_TCH:
 	 return Usr_CAN;
       default:
@@ -1052,8 +1052,8 @@ Usr_Can_t Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) ? Usr_CAN :
-								       Usr_CAN_NOT;
+	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) == Usr_SHARE ? Usr_CAN :
+										    Usr_CAN_NOT;
       case Rol_TCH:
 	 return Usr_CAN;
       default:
@@ -1100,8 +1100,8 @@ Usr_Can_t Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) ? Usr_CAN :
-								       Usr_CAN_NOT;
+	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) == Usr_SHARE ? Usr_CAN :
+										    Usr_CAN_NOT;
       case Rol_TCH:
 	 return Usr_CAN;
       default:
@@ -1143,8 +1143,8 @@ Usr_Can_t Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) ? Usr_CAN :
-								       Usr_CAN_NOT;
+	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) == Usr_SHARE ? Usr_CAN :
+										    Usr_CAN_NOT;
       case Rol_TCH:
 	 return Usr_CAN;
       default:

@@ -3456,27 +3456,27 @@ void Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs (void)
    Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Status = Cac_INVALID;
   }
 
-bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
+Usr_Share_t Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
-      return false;
+      return Usr_DONT_SHARE;
 
    /***** 2. Fast check: Is it a valid user code? *****/
    if (UsrDat->UsrCod <= 0)
-      return false;
+      return Usr_DONT_SHARE;
 
    /***** 3. Fast check: Is it a course selected? *****/
    if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
-      return false;
+      return Usr_DONT_SHARE;
 
    /***** 4. Fast check: Do I belong to the current course? *****/
    if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_DONT_BELONG)
-      return false;
+      return Usr_DONT_SHARE;
 
    /***** 5. Fast check: It's me? *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return true;
+      return Usr_SHARE;
 
    /***** 6. Fast check: Is already calculated if user shares
                          any group in the current course with me? *****/
@@ -3488,18 +3488,18 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
    if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat) == Usr_DONT_BELONG)
      {
       Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = UsrDat->UsrCod;
-      Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = false;
+      Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = Usr_DONT_SHARE;
       Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Status = Cac_VALID;
-      return false;
+      return Usr_DONT_SHARE;
      }
 
    /***** 8. Fast check: Course has groups? *****/
    if (!Gbl.Crs.Grps.NumGrps)
      {
       Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = UsrDat->UsrCod;
-      Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = true;
+      Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = Usr_SHARE;
       Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Status = Cac_VALID;
-      return true;
+      return Usr_SHARE;
      }
 
    // Course has groups

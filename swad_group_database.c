@@ -415,7 +415,7 @@ Usr_Belong_t Grp_DB_CheckIfIBelongToGrp (long GrpCod)
 /***** Check if a user belongs to any of my groups in the current course *****/
 /*****************************************************************************/
 
-bool Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (long UsrCod)
+Usr_Share_t Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (long UsrCod)
   {
    return
    DB_QueryEXISTS ("can not check if a user shares any group in the current course with you",
@@ -434,7 +434,8 @@ bool Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (long UsrCod)
 			      " AND grp_types.CrsCod=%ld))",
 		   UsrCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_EXISTS;
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_EXISTS ? Usr_SHARE :
+								       Usr_DONT_SHARE;
   }
 
 /*****************************************************************************/

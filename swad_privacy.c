@@ -268,12 +268,12 @@ Usr_Can_t Pri_CheckIfICanView (Pri_Visibility_t Visibility,
 					// by me and my teachers if I am a student
 					// or me and my students if I am a teacher
          // Do both users share the same course but whit different role?
-	 return Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (UsrDat->UsrCod) ? Usr_CAN :
-										      Usr_CAN_NOT;
+	 return Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (UsrDat->UsrCod) == Usr_SHARE ? Usr_CAN :
+												   Usr_CAN_NOT;
       case Pri_VISIBILITY_COURSE:	// Visible by users sharing courses with me
 	 // Do both users share the same course?
-         return Enr_CheckIfUsrSharesAnyOfMyCrs (UsrDat) ? Usr_CAN :
-							  Usr_CAN_NOT;
+         return Enr_CheckIfUsrSharesAnyOfMyCrs (UsrDat) == Usr_SHARE ? Usr_CAN :
+								       Usr_CAN_NOT;
       case Pri_VISIBILITY_SYSTEM:	// Visible by any user logged in platform
          return Gbl.Usrs.Me.Logged ? Usr_CAN :
 				     Usr_CAN_NOT;

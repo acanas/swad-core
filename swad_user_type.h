@@ -140,16 +140,23 @@ typedef enum
 #define Usr_NUM_CAN 2
 typedef enum
   {
-   Usr_CAN_NOT = 0,
-   Usr_CAN     = 1,
+   Usr_CAN_NOT,
+   Usr_CAN,
   } Usr_Can_t;
 
 #define Usr_NUM_BELONG 2
 typedef enum
   {
-   Usr_DONT_BELONG = 0,
-   Usr_BELONG      = 1,
+   Usr_DONT_BELONG,
+   Usr_BELONG,
   } Usr_Belong_t;
+
+#define Usr_NUM_SHARE 2
+typedef enum
+  {
+   Usr_DONT_SHARE,
+   Usr_SHARE,
+  } Usr_Share_t;
 
 #define Usr_NUM_ACCEPTED 2
 typedef enum

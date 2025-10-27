@@ -150,7 +150,7 @@ Usr_Belong_t Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat);
 void Enr_FlushCacheUsrHasAcceptedInCurrentCrs (void);
 Usr_Accepted_t Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *UsrDat);
 void Enr_FlushCacheUsrSharesAnyOfMyCrs (void);
-bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat);
+Usr_Share_t Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat);
 
 unsigned Enr_GetNumUsrsInCrss (Hie_Level_t HieLvl,long HieCod,unsigned Roles);
 unsigned Enr_GetCachedNumUsrsInCrss (Hie_Level_t HieLvl,long HieCod,unsigned Roles);
