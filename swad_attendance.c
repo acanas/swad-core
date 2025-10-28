@@ -2633,8 +2633,8 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
    unsigned UniqueId;
    char *Id;
    unsigned NumAttEvent;
-   bool NormalView = (TypeOfView == Att_VIEW_ONLY_ME ||
-                      TypeOfView == Att_VIEW_SEL_USR);
+   Frm_PutForm_t PutForm = (TypeOfView == Att_VIEW_ONLY_ME ||
+			    TypeOfView == Att_VIEW_SEL_USR);
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Events,FunctionToDrawContextualIcons[TypeOfView],NULL,
@@ -2642,7 +2642,7 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
 
       /***** Begin form to update the attendance
 	     depending on the events selected *****/
-      if (NormalView)
+      if (PutForm == Frm_PUT_FORM)
 	{
 	 Frm_BeginFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_TABLE_ID);
 	    Grp_PutParsCodGrps ();
@@ -2721,13 +2721,12 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
       /***** End table *****/
       HTM_TABLE_End ();
 
-      /***** Put button to refresh *****/
-      if (NormalView)
+      /***** Put button to refresh and end form *****/
+      if (PutForm == Frm_PUT_FORM)
+        {
 	 Lay_WriteLinkToUpdate (Txt_Update_attendance,NULL);
-
-      /***** End form *****/
-      if (NormalView)
 	 Frm_EndForm ();
+        }
 
    /***** End box *****/
    Box_BoxEnd ();

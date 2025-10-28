@@ -150,7 +150,7 @@ static HidVis_HiddenOrVisible_t Tre_CheckIfAnyHigherLevelIsHidden (unsigned Curr
 static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
                                           unsigned NumNode,
                                           struct Tre_Node *Node,
-                                          bool HighlightNode);
+                                          Lay_Highlight_t HighlightNode);
 
 static DenAll_DenyOrAllow_t Tre_CheckIfMoveUpRightIsAllowed (unsigned NumNode);
 static DenAll_DenyOrAllow_t Tre_CheckIfMoveDownIsAllowed (unsigned NumNode);
@@ -463,7 +463,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
    unsigned NumCol;
    char *TitleClass;
    Dat_StartEndTime_t StartEndTime;
-   bool HighlightNode;
+   Lay_Highlight_t HighlightNode;
 
    /***** Check if icon expand/contract is necessary *****/
    ShowIconExpandContract = Tre_GetIfNodeHasChildren (NumNode) == Exi_EXISTS ? Lay_SHOW :
@@ -499,7 +499,8 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
       Tre_IncreaseNumberInLevel (Node->Hierarchy.Level);
 
       /***** Is this the node selected? *****/
-      HighlightNode = (Node->Hierarchy.NodCod == SelectedNodCod);
+      HighlightNode = Node->Hierarchy.NodCod == SelectedNodCod ? Lay_HIGHLIGHT :
+								 Lay_DONT_HIGHLIGHT;
 
       /***** First row (title and dates) *****/
       HTM_TR_Begin (NULL);
@@ -570,13 +571,13 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	       break;
 	   }
 
-	    if (HighlightNode)
+	    if (HighlightNode == Lay_HIGHLIGHT)
 	       HTM_ARTICLE_Begin (Tre_NODE_SECTION_ID);
 	    HTM_DIV_Begin ("class=\"LT %s%s\"",
 			   TitleClass,HidVis_TreeClass[HiddenOrVisible]);
 	       HTM_Txt (Node->Title);
 	    HTM_DIV_End ();
-	    if (HighlightNode)
+	    if (HighlightNode == Lay_HIGHLIGHT)
 	       HTM_ARTICLE_End ();
 	 HTM_TD_End ();
 
@@ -642,7 +643,8 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	 if (ContractedOrExpanded == ConExp_EXPANDED)
 	   {
 	    /* Item text / form */
-	    if (ListingType == Tre_FORM_EDIT_NODE && HighlightNode)
+	    if (ListingType == Tre_FORM_EDIT_NODE &&
+		HighlightNode == Lay_HIGHLIGHT)
 	       /* Form to change node title, dates and text */
 	       Tre_ShowFormToChangeNode (Node);
 	    else
@@ -1025,7 +1027,7 @@ static HidVis_HiddenOrVisible_t Tre_CheckIfAnyHigherLevelIsHidden (unsigned Curr
 static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
                                           unsigned NumNode,
                                           struct Tre_Node *Node,
-                                          bool HighlightNode)
+                                          Lay_Highlight_t HighlightNode)
   {
    extern const char *Txt_Movement_not_allowed;
    static Act_Action_t ActionsReqRem[Inf_NUM_TYPES] =
@@ -1176,7 +1178,8 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
 					    Node->Hierarchy.Hidden);
 
 	 /***** Icon to edit tree node *****/
-	 if (ListingType == Tre_FORM_EDIT_NODE && HighlightNode)
+	 if (ListingType == Tre_FORM_EDIT_NODE &&
+	     HighlightNode == Lay_HIGHLIGHT)
 	    Ico_PutContextualIconToView (ActionsSee[Node->InfoType],
 					 Tre_NODE_SECTION_ID,Tre_PutPars,Node);
 	 else

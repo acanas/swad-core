@@ -2201,7 +2201,7 @@ void Exa_DB_RemovePrintQstsFromCrs (long HieCod)
 /******** Check if the current session id is the same as the last one ********/
 /*****************************************************************************/
 
-bool Exa_DB_CheckIfSessionIsTheSameAsTheLast (long PrnCod)
+Exi_Exist_t Exa_DB_CheckIfSessionExistsAsTheLast (long PrnCod)
   {
    return
    DB_QueryEXISTS ("can not check session",
@@ -2214,14 +2214,15 @@ bool Exa_DB_CheckIfSessionIsTheSameAsTheLast (long PrnCod)
 			    " WHERE PrnCod=%ld)"
 		      " AND SessionId='%s')",
 		   PrnCod,
-		   Gbl.Session.Id) == Exi_EXISTS;
+		   Gbl.Session.Id);
   }
 
 /*****************************************************************************/
 /******** Check if the current user agent is the same as the last one ********/
 /*****************************************************************************/
 
-bool Exa_DB_CheckIfUserAgentIsTheSameAsTheLast (long PrnCod,const char *UserAgentDB)
+Exi_Exist_t Exa_DB_CheckIfUserAgentExistsAsTheLast (long PrnCod,
+						    const char *UserAgentDB)
   {
    return
    DB_QueryEXISTS ("can not check user agent",
@@ -2234,7 +2235,7 @@ bool Exa_DB_CheckIfUserAgentIsTheSameAsTheLast (long PrnCod,const char *UserAgen
 			    " WHERE PrnCod=%ld)"
 		      " AND UserAgent='%s')",
 		   PrnCod,
-		   UserAgentDB) == Exi_EXISTS;
+		   UserAgentDB);
   }
 
 /*****************************************************************************/

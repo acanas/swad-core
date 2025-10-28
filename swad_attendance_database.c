@@ -620,7 +620,8 @@ void Att_DB_SetUsrAsPresent (long AttCod,long UsrCod)
 /**************** Set users as present in an attendance event ****************/
 /*****************************************************************************/
 
-void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,bool SetOthersAsAbsent)
+void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,
+			      Att_SetOthersAsAbsent_t SetOthersAsAbsent)
   {
    const char *Ptr;
    char LongStr[Cns_MAX_DIGITS_LONG + 1];
@@ -636,7 +637,7 @@ void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,bool SetOthersAsA
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Build list of present users *****/
-   if (SetOthersAsAbsent)
+   if (SetOthersAsAbsent == Att_SET_OTHERS_AS_ABSENT)
      {
       /***** Count number of codes in list *****/
       for (Ptr = ListUsrs, NumCodsInList = 0;
@@ -682,7 +683,7 @@ void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,bool SetOthersAsA
 		 }
 
 	       /* Add this user to query used to mark not present users as absent */
-	       if (SetOthersAsAbsent)
+	       if (SetOthersAsAbsent == Att_SET_OTHERS_AS_ABSENT)
 		 {
 		  if (!NumUsrsPresent)	// Begin building subquery
 		     snprintf (SubQueryAllUsrs,Length," AND UsrCod NOT IN (%ld",
@@ -703,7 +704,7 @@ void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,bool SetOthersAsA
       Str_Concat (SubQueryAllUsrs,")",Length);
 
    /***** Mark not present users as absent in table of users *****/
-   if (SetOthersAsAbsent)
+   if (SetOthersAsAbsent == Att_SET_OTHERS_AS_ABSENT)
      {
       DB_QueryUPDATE ("can not set other users as absent",
       		      "UPDATE att_users"

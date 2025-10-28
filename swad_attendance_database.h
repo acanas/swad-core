@@ -35,6 +35,16 @@
 #include "swad_group.h"
 
 /*****************************************************************************/
+/******************************** Public types *******************************/
+/*****************************************************************************/
+
+typedef enum
+  {
+   Att_DONT_SET_OTHERS_AS_ABSENT,
+   Att_SET_OTHERS_AS_ABSENT,
+   } Att_SetOthersAsAbsent_t;
+
+/*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
@@ -75,7 +85,8 @@ void Att_DB_RegUsrInEventChangingComments (long AttCod,long UsrCod,
                                            const char *CommentStd,
                                            const char *CommentTch);
 void Att_DB_SetUsrAsPresent (long AttCod,long UsrCod);
-void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,bool SetOthersAsAbsent);
+void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,
+			      Att_SetOthersAsAbsent_t SetOthersAsAbsent);
 void Att_DB_RemoveUsrFromEvent (long AttCod,long UsrCod);
 void Att_DB_RemoveUsrsAbsentWithoutCommentsFromEvent (long AttCod);
 

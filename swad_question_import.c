@@ -489,7 +489,7 @@ static void QstImp_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
    struct XMLAttribute *Attribute;
    struct Qst_Question Question;
    Exi_Exist_t QuestionExists;
-   bool AnswerTypeFound;
+   Err_SuccessOrError_t AnswerTypeFound;
 
    /***** Allocate and get XML tree *****/
    XML_GetTree (XMLBuffer,&RootElem);
@@ -536,124 +536,128 @@ static void QstImp_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		  Qst_QstConstructor (&Question);
 
 		     /* Get answer type (in mandatory attribute "type") */
-		     AnswerTypeFound = false;
+		     AnswerTypeFound = Err_ERROR;
 		     for (Attribute  = QuestionElem->FirstAttribute;
 			  Attribute != NULL;
 			  Attribute  = Attribute->Next)
 			if (!strcmp (Attribute->AttributeName,"type"))
 			  {
 			   Question.Answer.Type = QstImp_ConvertFromStrAnsTypXMLToAnsTyp (Attribute->Content);
-			   AnswerTypeFound = true;
+			   AnswerTypeFound = Err_SUCCESS;
 			   break;	// Only first attribute "type"
 			  }
 
-		     if (AnswerTypeFound)
+		     switch (AnswerTypeFound)
 		       {
-			/* Get tags */
-			for (TagsElem  = QuestionElem->FirstChild, Question.Tags.Num = 0;
-			     TagsElem != NULL;
-			     TagsElem  = TagsElem->NextBrother)
-			   if (!strcmp (TagsElem->TagName,"tags"))
-			     {
-			      for (TagElem = TagsElem->FirstChild;
-				   TagElem != NULL && Question.Tags.Num < Tag_MAX_TAGS_PER_QUESTION;
-				   TagElem = TagElem->NextBrother)
-				 if (!strcmp (TagElem->TagName,"tag"))
+		        case Err_SUCCESS:
+			   /* Get tags */
+			   for (TagsElem  = QuestionElem->FirstChild, Question.Tags.Num = 0;
+				TagsElem != NULL;
+				TagsElem  = TagsElem->NextBrother)
+			      if (!strcmp (TagsElem->TagName,"tags"))
+				{
+				 for (TagElem = TagsElem->FirstChild;
+				      TagElem != NULL && Question.Tags.Num < Tag_MAX_TAGS_PER_QUESTION;
+				      TagElem = TagElem->NextBrother)
+				    if (!strcmp (TagElem->TagName,"tag"))
+				      {
+				       if (TagElem->Content)
+					 {
+					  Str_Copy (Question.Tags.Txt[Question.Tags.Num],
+						    TagElem->Content,
+						    sizeof (Question.Tags.Txt[Question.Tags.Num]) - 1);
+					  Question.Tags.Num++;
+					 }
+				      }
+				 break;	// Only first element "tags"
+				}
+
+			   /* Get stem (mandatory) */
+			   for (StemElem  = QuestionElem->FirstChild;
+				StemElem != NULL;
+				StemElem  = StemElem->NextBrother)
+			      if (!strcmp (StemElem->TagName,"stem"))
+				{
+				 if (StemElem->Content)
 				   {
-				    if (TagElem->Content)
-				      {
-				       Str_Copy (Question.Tags.Txt[Question.Tags.Num],
-						 TagElem->Content,
-						 sizeof (Question.Tags.Txt[Question.Tags.Num]) - 1);
-				       Question.Tags.Num++;
-				      }
+				    /* Convert stem from text to HTML (in database stem is stored in HTML) */
+				    Str_Copy (Question.Stem,StemElem->Content,
+					      Cns_MAX_BYTES_TEXT);
+				    Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
+						      Question.Stem,Cns_MAX_BYTES_TEXT,
+						      Str_REMOVE_SPACES);
 				   }
-			      break;	// Only first element "tags"
-			     }
-
-			/* Get stem (mandatory) */
-			for (StemElem  = QuestionElem->FirstChild;
-			     StemElem != NULL;
-			     StemElem  = StemElem->NextBrother)
-			   if (!strcmp (StemElem->TagName,"stem"))
-			     {
-			      if (StemElem->Content)
-				{
-				 /* Convert stem from text to HTML (in database stem is stored in HTML) */
-				 Str_Copy (Question.Stem,StemElem->Content,
-					   Cns_MAX_BYTES_TEXT);
-				 Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
-						   Question.Stem,Cns_MAX_BYTES_TEXT,
-						   Str_REMOVE_SPACES);
+				 break;	// Only first element "stem"
 				}
-			      break;	// Only first element "stem"
-			     }
 
-			/* Get feedback (optional) */
-			for (FeedbackElem  = QuestionElem->FirstChild;
-			     FeedbackElem != NULL;
-			     FeedbackElem  = FeedbackElem->NextBrother)
-			   if (!strcmp (FeedbackElem->TagName,"feedback"))
-			     {
-			      if (FeedbackElem->Content)
+			   /* Get feedback (optional) */
+			   for (FeedbackElem  = QuestionElem->FirstChild;
+				FeedbackElem != NULL;
+				FeedbackElem  = FeedbackElem->NextBrother)
+			      if (!strcmp (FeedbackElem->TagName,"feedback"))
 				{
-				 /* Convert feedback from text to HTML (in database feedback is stored in HTML) */
-				 Str_Copy (Question.Feedback,FeedbackElem->Content,
-					   Cns_MAX_BYTES_TEXT);
-				 Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
-						   Question.Feedback,Cns_MAX_BYTES_TEXT,
-						   Str_REMOVE_SPACES);
+				 if (FeedbackElem->Content)
+				   {
+				    /* Convert feedback from text to HTML (in database feedback is stored in HTML) */
+				    Str_Copy (Question.Feedback,FeedbackElem->Content,
+					      Cns_MAX_BYTES_TEXT);
+				    Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
+						      Question.Feedback,Cns_MAX_BYTES_TEXT,
+						      Str_REMOVE_SPACES);
+				   }
+				 break;	// Only first element "feedback"
 				}
-			      break;	// Only first element "feedback"
-			     }
 
-			/* Get shuffle. By default, shuffle is false. */
-			Question.Answer.Shuffle = Qst_DONT_SHUFFLE;
-			for (AnswerElem  = QuestionElem->FirstChild;
-			     AnswerElem != NULL;
-			     AnswerElem  = AnswerElem->NextBrother)
-			   if (!strcmp (AnswerElem->TagName,"answer"))
+			   /* Get shuffle. By default, shuffle is false. */
+			   Question.Answer.Shuffle = Qst_DONT_SHUFFLE;
+			   for (AnswerElem  = QuestionElem->FirstChild;
+				AnswerElem != NULL;
+				AnswerElem  = AnswerElem->NextBrother)
+			      if (!strcmp (AnswerElem->TagName,"answer"))
+				{
+				 if (Question.Answer.Type == Qst_ANS_UNIQUE_CHOICE ||
+				     Question.Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
+				    /* Get whether shuffle answers (in attribute "shuffle") */
+				    for (Attribute  = AnswerElem->FirstAttribute;
+					 Attribute != NULL;
+					 Attribute  = Attribute->Next)
+				       if (!strcmp (Attribute->AttributeName,"shuffle"))
+					 {
+					  Question.Answer.Shuffle = XML_GetAttributteYesNoFromXMLTree (Attribute) ? Qst_SHUFFLE :
+														    Qst_DONT_SHUFFLE;
+					  break;	// Only first attribute "shuffle"
+					 }
+				 break;	// Only first element "answer"
+				}
+
+			   /* Get answer (mandatory) */
+			   QstImp_GetAnswerFromXML (AnswerElem,&Question);
+
+			   /* Make sure that tags, text and answer are not empty */
+			   if (Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question) == Err_SUCCESS)
 			     {
-			      if (Question.Answer.Type == Qst_ANS_UNIQUE_CHOICE ||
-				  Question.Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
-				 /* Get whether shuffle answers (in attribute "shuffle") */
-				 for (Attribute  = AnswerElem->FirstAttribute;
-				      Attribute != NULL;
-				      Attribute  = Attribute->Next)
-				    if (!strcmp (Attribute->AttributeName,"shuffle"))
-				      {
-				       Question.Answer.Shuffle = XML_GetAttributteYesNoFromXMLTree (Attribute) ? Qst_SHUFFLE :
-														 Qst_DONT_SHUFFLE;
-				       break;	// Only first attribute "shuffle"
-				      }
-			      break;	// Only first element "answer"
+			      /* Check if question already exists in database */
+			      QuestionExists = Qst_CheckIfQuestionExistsInDB (&Question);
+
+			      /* Write row with this imported question */
+			      QstImp_WriteRowImportedQst (StemElem,FeedbackElem,
+							  &Question,QuestionExists);
+
+			      /***** If a new question ==> insert question, tags and answer in the database *****/
+			      if (QuestionExists == Exi_DOES_NOT_EXIST)
+				{
+				 Question.QstCod = -1L;
+				 Qst_InsertOrUpdateQstTagsAnsIntoDB (&Question);
+				 if (Question.QstCod <= 0)
+				    Err_ShowErrorAndExit ("Can not create question.");
+				}
 			     }
-
-			/* Get answer (mandatory) */
-			QstImp_GetAnswerFromXML (AnswerElem,&Question);
-
-			/* Make sure that tags, text and answer are not empty */
-			if (Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question) == Err_SUCCESS)
-			  {
-			   /* Check if question already exists in database */
-			   QuestionExists = Qst_CheckIfQuestionExistsInDB (&Question);
-
-			   /* Write row with this imported question */
-			   QstImp_WriteRowImportedQst (StemElem,FeedbackElem,
-						       &Question,QuestionExists);
-
-			   /***** If a new question ==> insert question, tags and answer in the database *****/
-			   if (QuestionExists == Exi_DOES_NOT_EXIST)
-			     {
-			      Question.QstCod = -1L;
-			      Qst_InsertOrUpdateQstTagsAnsIntoDB (&Question);
-			      if (Question.QstCod <= 0)
-				 Err_ShowErrorAndExit ("Can not create question.");
-			     }
-			  }
+			   break;
+		        case Err_ERROR:	// Answer type not found
+		        default:
+			   Err_WrongAnswerExit ();
+		           break;
 		       }
-		     else	// Answer type not found
-			Err_WrongAnswerExit ();
 
 		  /***** Destroy test question *****/
 		  Qst_QstDestructor (&Question);

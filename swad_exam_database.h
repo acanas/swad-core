@@ -167,8 +167,9 @@ void Exa_DB_RemovePrintQstsFromExa (long ExaCod);
 void Exa_DB_RemovePrintQstsFromCrs (long HieCod);
 
 //---------------------------------- Logs -------------------------------------
-bool Exa_DB_CheckIfSessionIsTheSameAsTheLast (long PrnCod);
-bool Exa_DB_CheckIfUserAgentIsTheSameAsTheLast (long PrnCod,const char *UserAgentDB);
+Exi_Exist_t Exa_DB_CheckIfSessionExistsAsTheLast (long PrnCod);
+Exi_Exist_t Exa_DB_CheckIfUserAgentExistsAsTheLast (long PrnCod,
+						    const char *UserAgentDB);
 void Exa_DB_LogAccess (long LogCod,long PrnCod,ExaLog_Action_t Action);
 void Exa_DB_LogSession (long LogCod,long PrnCod);
 void Exa_DB_LogUserAgent (long LogCod,long PrnCod,const char *UserAgentDB);

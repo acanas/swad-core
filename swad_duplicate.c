@@ -325,7 +325,7 @@ static void Dup_ListSimilarUsrs (void)
 		     if (Acc_CheckIfICanEliminateAccount (UsrDat.UsrCod) == Usr_CAN)
 			Dup_PutButtonToEliminateUsrAccount (&UsrDat);
 		     /* Button to remove from list of possible duplicate users */
-		     if (Dup_DB_CheckIfUsrIsDup (UsrDat.UsrCod))
+		     if (Dup_DB_CheckIfUsrExistsAsDup (UsrDat.UsrCod) == Exi_EXISTS)
 			Dup_PutButtonToRemoveFromListOfDupUsrs (&UsrDat);
 		  HTM_TD_End ();
 

@@ -129,6 +129,8 @@ static const char *Dat_ParTimeUTCName[Dat_NUM_START_END_TIME] =
 static void Dat_PutIconsDateFormat (__attribute__((unused)) void *Args);
 static Dat_Format_t Dat_GetParDateFormat (void);
 
+static bool Dat_GetIfLeapYear (unsigned Year);
+
 /*****************************************************************************/
 /*********************** Set/get start execution time ************************/
 /*****************************************************************************/
@@ -897,7 +899,7 @@ void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   bool TZNameIsUsable = false;
+   Err_SuccessOrError_t TZNameIsUsable = Err_ERROR;
    char IntStr[Cns_MAX_DIGITS_INT + 1];
    int ClientUTCMinusLocal;	// Time difference between UTC time and client local time, in minutes
 
@@ -921,14 +923,14 @@ void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1])
 	{
          row = mysql_fetch_row (mysql_res);
          if (row[0] != NULL)
-            TZNameIsUsable = true;
+            TZNameIsUsable = Err_SUCCESS;
 	}
 
       /* Free structure that stores the query result */
       DB_FreeMySQLResult (&mysql_res);
      }
 
-   if (!TZNameIsUsable)
+   if (TZNameIsUsable == Err_ERROR)
      {
       /***** 2. Get client time zone difference *****/
       // We get client TZ difference using JavaScript getTimezoneOffset() method
@@ -1395,15 +1397,6 @@ unsigned Dat_GetNumDaysFebruary (unsigned Year)
   }
 
 /*****************************************************************************/
-/************************* Return true if year is leap ***********************/
-/*****************************************************************************/
-
-bool Dat_GetIfLeapYear (unsigned Year)
-  {
-   return (Year % 4 == 0) && ((Year % 100 != 0) || (Year % 400 == 0));
-  }
-
-/*****************************************************************************/
 /******* Compute the number of weeks starting in monday of a given year ******/
 /*****************************************************************************/
 // A week starting on monday is considered belonging to a year only if it has most of its days (4 to 7) belonging to that year
@@ -1419,6 +1412,15 @@ unsigned Dat_GetNumWeeksInYear (unsigned Year)
       if (Dat_GetIfLeapYear (Year))
          return 53;
    return 52;
+  }
+
+/*****************************************************************************/
+/************************* Return true if year is leap ***********************/
+/*****************************************************************************/
+
+static bool Dat_GetIfLeapYear (unsigned Year)
+  {
+   return (Year % 4 == 0) && ((Year % 100 != 0) || (Year % 400 == 0));
   }
 
 /*****************************************************************************/

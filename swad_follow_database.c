@@ -224,10 +224,10 @@ unsigned Fol_DB_GetUsrsToFollow (unsigned MaxUsrsToShow,
 /*************** Check if a user is a follower of another user ***************/
 /*****************************************************************************/
 
-bool Fol_DB_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod)
+Fol_Follower_t Fol_DB_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod)
   {
    if (FollowerCod == FollowedCod)
-      return false;
+      return Fol_NOT_FOLLOWER;
 
    /***** Check if a user is a follower of another user *****/
    return
@@ -238,7 +238,8 @@ bool Fol_DB_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod)
 		    " WHERE FollowerCod=%ld"
 		      " AND FollowedCod=%ld)",
 		   FollowerCod,
-		   FollowedCod) == Exi_EXISTS;
+		   FollowedCod) == Exi_EXISTS ? Fol_FOLLOWER :
+						Fol_NOT_FOLLOWER;
   }
 
 /*****************************************************************************/

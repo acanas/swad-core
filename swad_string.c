@@ -299,7 +299,7 @@ void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *T
       size_t Length;		// Length of the nickname
      } Nickname;
    struct Usr_Data UsrDat;
-   bool CreateNotif;
+   Ntf_CreateNotif_t CreateNotif;
    Ntf_NotifyByEmail_t NotifyByEmail;
    long HieCods[Hie_NUM_LEVELS];
 
@@ -350,8 +350,9 @@ void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *T
 		                               Usr_DONT_GET_ROLE_IN_CRS);
 
 		  /* Create notification for the mentioned user *****/
-		  CreateNotif = (UsrDat.NtfEvents.CreateNotif & (1 << Ntf_EVENT_TML_MENTION));
-		  if (CreateNotif)
+		  CreateNotif = (UsrDat.NtfEvents.CreateNotif & (1 << Ntf_EVENT_TML_MENTION)) ? Ntf_CREATE_NOTIF :
+												Ntf_DONT_CREATE_NOTIF;
+		  if (CreateNotif == Ntf_CREATE_NOTIF)
 		    {
 		     NotifyByEmail = (UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_TML_MENTION)) ? Ntf_NOTIFY_BY_EMAIL :
 												   Ntf_DONT_NOTIFY_BY_EMAIL;

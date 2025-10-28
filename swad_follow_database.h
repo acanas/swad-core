@@ -39,7 +39,7 @@ unsigned Fol_DB_GetUsrsToFollow (unsigned MaxUsrsToShow,
 				 Fol_WhichUsersSuggestToFollowThem_t WhichUsersSuggestToFollowThem,
 				 MYSQL_RES **mysql_res);
 
-bool Fol_DB_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod);
+Fol_Follower_t Fol_DB_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod);
 
 unsigned Fol_DB_GetNumFollowing (long UsrCod);
 unsigned Fol_DB_GetNumFollowers (long UsrCod);

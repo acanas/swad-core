@@ -1225,7 +1225,7 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (void);
 
 static void Brw_WriteCurrentClipboard (void);
 
-static bool Brw_GetMyClipboard (void);
+static Exi_Exist_t Brw_GetMyClipboard (void);
 static bool Brw_CheckIfClipboardIsInThisTree (void);
 
 static void Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (const char Path[PATH_MAX + 1]);
@@ -1251,8 +1251,7 @@ static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (const char *FileType);
 static void Brw_PutIconToGetLinkToFile (void *FileMetadata);
 static void Brw_PutParsToGetLinkToFile (void *FileMetadata);
 
-static Usr_Can_t Brw_CheckIfICanEditFileMetadata (bool IAmTheOwner);
-static bool Brw_CheckIfIAmOwnerOfFile (long PublisherUsrCod);
+static Usr_Can_t Brw_CheckIfICanEditFileMetadata (long PublisherUsrCod);
 static void Brw_WriteBigLinkToDownloadFile (const char *URL,
                                             struct Brw_FileMetadata *FileMetadata,
                                             const char *FileNameToShow);
@@ -3232,7 +3231,7 @@ static void Brw_ShowFileBrowser (void)
                                    &Removed);	// Not used here
 
    /***** Check if the maximum quota has been exceeded *****/
-   if (Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type))
+   if (Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type) == Usr_CAN)
       BrwSiz_SetAndCheckQuota (Size);
 
    /***** Check if the clipboard is in this tree *****/
@@ -3440,8 +3439,8 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
      }
 
    /***** If browser is editable, get and write current clipboard *****/
-   if (Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type))
-      if (Brw_GetMyClipboard ())
+   if (Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type) == Usr_CAN)
+      if (Brw_GetMyClipboard () == Exi_EXISTS)
 	 Brw_WriteCurrentClipboard ();
   }
 
@@ -4064,7 +4063,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
 
    /****** If current action allows file administration... ******/
    Brw_SetIfICanEditFileOrFolder (Usr_CAN_NOT);
-   if (Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type) &&
+   if (Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type) == Usr_CAN &&
        !Gbl.FileBrowser.OnlyPublicFiles)
      {
       if (Gbl.FileBrowser.Clipboard.IsThisTree &&
@@ -5234,10 +5233,16 @@ void Brw_Copy (void)
    Brw_DB_RemoveExpiredClipboards ();   // Someone must do this work. Let's do it whenever a user click in a copy button
 
    /***** Put the path in the clipboard *****/
-   if (Brw_GetMyClipboard ())
-      Brw_DB_UpdatePathInClipboard ();
-   else
-      Brw_DB_AddPathToClipboards ();
+   switch (Brw_GetMyClipboard ())
+     {
+      case Exi_EXISTS:
+	 Brw_DB_UpdatePathInClipboard ();
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Brw_DB_AddPathToClipboards ();
+	 break;
+     }
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -5518,10 +5523,10 @@ static void Brw_WriteCurrentClipboard (void)
 /*****************************************************************************/
 /********************** Get data of my current clipboard *********************/
 /*****************************************************************************/
-// Returns true if something found
-// Returns false and void data if nothing found
+// Returns Exi_EXISTS if something found
+// Returns Exi_DOES_NOT_EXIST and void data if nothing found
 
-static bool Brw_GetMyClipboard (void)
+static Exi_Exist_t Brw_GetMyClipboard (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -5579,7 +5584,8 @@ static bool Brw_GetMyClipboard (void)
    if (NumRows > 1)
       Err_WrongCopySrcExit ();
 
-   return NumRows == 1;
+   return NumRows == 1 ? Exi_EXISTS :
+			 Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -5589,58 +5595,49 @@ static bool Brw_GetMyClipboard (void)
 static bool Brw_CheckIfClipboardIsInThisTree (void)
   {
    if (Gbl.FileBrowser.Clipboard.FileBrowser == Brw_FileBrowserForDB_clipboard[Gbl.FileBrowser.Type])
-     {
       switch (Gbl.FileBrowser.Clipboard.FileBrowser)
         {
 	 case Brw_ADMI_DOC_INS:
          case Brw_ADMI_SHR_INS:
-            if (Gbl.FileBrowser.Clipboard.HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod)
-               return true;		// I am in the institution of the clipboard
-            break;
+            // Am I in the institution of the clipboard?
+            return Gbl.FileBrowser.Clipboard.HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod;
 	 case Brw_ADMI_DOC_CTR:
          case Brw_ADMI_SHR_CTR:
-            if (Gbl.FileBrowser.Clipboard.HieCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod)
-               return true;		// I am in the center of the clipboard
-            break;
+            // Am I in the center of the clipboard?
+            return Gbl.FileBrowser.Clipboard.HieCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod;
 	 case Brw_ADMI_DOC_DEG:
          case Brw_ADMI_SHR_DEG:
-            if (Gbl.FileBrowser.Clipboard.HieCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod)
-               return true;		// I am in the degree of the clipboard
-            break;
+            // Am I in the degree of the clipboard?
+            return Gbl.FileBrowser.Clipboard.HieCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod;
          case Brw_ADMI_DOC_CRS:
          case Brw_ADMI_TCH_CRS:
          case Brw_ADMI_SHR_CRS:
          case Brw_ADMI_MRK_CRS:
          case Brw_ADMI_ASG_USR:
          case Brw_ADMI_WRK_USR:
-            if (Gbl.FileBrowser.Clipboard.HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod)
-               return true;		// I am in the course of the clipboard
-            break;
+            // Am I in the course of the clipboard?
+            return Gbl.FileBrowser.Clipboard.HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod;
 	 case Brw_ADMI_ASG_CRS:
 	 case Brw_ADMI_WRK_CRS:
-            if (Gbl.FileBrowser.Clipboard.HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod &&
-	        Gbl.FileBrowser.Clipboard.WorksUsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
-               return true;		// I am in the course of the clipboard
-					// I am in the student's works of the clipboard
-	    break;
+	    // Am I in the course of the clipboard and...
+	    // ...am I in the student's works of the clipboard?
+            return Gbl.FileBrowser.Clipboard.HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod &&
+	           Gbl.FileBrowser.Clipboard.WorksUsrCod == Gbl.Usrs.Other.UsrDat.UsrCod;
 	 case Brw_ADMI_DOC_GRP:
 	 case Brw_ADMI_TCH_GRP:
 	 case Brw_ADMI_SHR_GRP:
 	 case Brw_ADMI_MRK_GRP:
-            if (Gbl.FileBrowser.Clipboard.HieCod == Brw_GetGrpCod ())
-               return true;		// I am in the group of the clipboard
-            break;
+	    // Am I in the group of the clipboard?
+            return Gbl.FileBrowser.Clipboard.HieCod == Brw_GetGrpCod ();
 	 case Brw_ADMI_DOC_PRJ:
 	 case Brw_ADMI_ASS_PRJ:
-            if (Gbl.FileBrowser.Clipboard.HieCod == Prj_GetPrjCod ())
-               return true;		// I am in the project of the clipboard
-	    break;
+	    // Am I in the project of the clipboard?
+            return Gbl.FileBrowser.Clipboard.HieCod == Prj_GetPrjCod ();
 	 case Brw_ADMI_BRF_USR:
 	    return true;
 	 default:
 	    break;
 	}
-     }
    return false;
   }
 
@@ -5773,33 +5770,37 @@ void Brw_Paste (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
-   if (Brw_GetMyClipboard ())
+   switch (Brw_GetMyClipboard ())
      {
-      /***** I source is in a group zone,
-             check if group file zones are enabled,
-             and check if I belongs to the group *****/
-      if (Brw_TypeIsGrpBrw[Gbl.FileBrowser.Clipboard.FileBrowser])	// If copying from group zone
-        {
-	 if (Gbl.FileBrowser.Clipboard.HieCod > 0)	// Group code of source zone specified
+      case Exi_EXISTS:
+	 /***** I source is in a group zone,
+		check if group file zones are enabled,
+		and check if I belongs to the group *****/
+	 if (Brw_TypeIsGrpBrw[Gbl.FileBrowser.Clipboard.FileBrowser])	// If copying from group zone
 	   {
-	    if (Brw_CheckIfICanAccessToGrpFilezone (Gbl.FileBrowser.Clipboard.HieCod) == Usr_CAN_NOT)
+	    if (Gbl.FileBrowser.Clipboard.HieCod > 0)	// Group code of source zone specified
+	      {
+	       if (Brw_CheckIfICanAccessToGrpFilezone (Gbl.FileBrowser.Clipboard.HieCod) == Usr_CAN_NOT)
+		  Err_NoPermissionExit ();
+	      }
+	    else						// No group code of source zone specified
 	       Err_NoPermissionExit ();
 	   }
-	 else						// No group code of source zone specified
-	    Err_NoPermissionExit ();
-        }
 
-      /***** Copy files recursively *****/
-      Brw_PasteClipboard (Size);
+	 /***** Copy files recursively *****/
+	 Brw_PasteClipboard (Size);
 
-      /***** Remove the affected clipboards *****/
-      Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-				       Gbl.Usrs.Me.UsrDat.UsrCod,
-				       Gbl.Usrs.Other.UsrDat.UsrCod);
+	 /***** Remove the affected clipboards *****/
+	 Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+					  Gbl.Usrs.Me.UsrDat.UsrCod,
+					  Gbl.Usrs.Other.UsrDat.UsrCod);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 /***** Write message ******/
+	 Ale_ShowAlert (Ale_WARNING,Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_);
+	 break;
      }
-   else
-      /***** Write message ******/
-      Ale_ShowAlert (Ale_WARNING,Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_);
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -6366,7 +6367,7 @@ void Brw_ShowFormFileBrowser (void)
 	 Brw_PutFormToUploadOneFileClassic (FileNameToShow);
 
 	 /***** 4. Form to paste the content of the clipboard *****/
-	 if (Brw_GetMyClipboard ())
+	 if (Brw_GetMyClipboard () == Exi_EXISTS)
 	   {
 	    /***** Check if we can paste in this folder *****/
 	    Gbl.FileBrowser.Clipboard.IsThisTree = Brw_CheckIfClipboardIsInThisTree ();
@@ -7490,7 +7491,6 @@ void Brw_ShowFileMetadata (void)
    char URL[PATH_MAX + 1];
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
    Usr_Can_t ICanView = Usr_CAN_NOT;
-   bool IAmTheOwner;
    Usr_Can_t ICanEdit;
    Usr_Can_t ICanChangePublic = Usr_CAN_NOT;
    PriPub_PrivateOrPublic_t PrivateOrPublic;
@@ -7575,8 +7575,7 @@ void Brw_ShowFileMetadata (void)
 					  URL);
 
 	    /***** Can I edit the properties of the file? *****/
-	    IAmTheOwner = Brw_CheckIfIAmOwnerOfFile (FileMetadata.PublisherUsrCod);
-	    ICanEdit = Brw_CheckIfICanEditFileMetadata (IAmTheOwner);
+	    ICanEdit = Brw_CheckIfICanEditFileMetadata (FileMetadata.PublisherUsrCod);
 
 	    /***** Name of the file/link to be shown *****/
 	    Brw_GetFileNameToShow (FileMetadata.FilFolLnk.Type,
@@ -8111,8 +8110,10 @@ void Brw_DownloadFile (void)
 /*********** Check if I have permission to change file metadata **************/
 /*****************************************************************************/
 
-static Usr_Can_t Brw_CheckIfICanEditFileMetadata (bool IAmTheOwner)
+static Usr_Can_t Brw_CheckIfICanEditFileMetadata (long PublisherUsrCod)
   {
+   long ZoneUsrCod;
+
    switch (Gbl.Action.Act)	// Only in actions where edition is allowed
      {
       case ActReqDatAdmDocIns:		case ActChgDatAdmDocIns:
@@ -8140,33 +8141,27 @@ static Usr_Can_t Brw_CheckIfICanEditFileMetadata (bool IAmTheOwner)
       case ActReqDatWrkUsr:		case ActChgDatWrkUsr:
 
       case ActReqDatBrf:		case ActChgDatBrf:
-	 return IAmTheOwner ? Usr_CAN :
-			      Usr_CAN_NOT;
+	 if (Gbl.Usrs.Me.Logged)							// I am logged
+	   {
+	    if (PublisherUsrCod > 0)							// The file has publisher
+	      {
+	       if (PublisherUsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)			// I am the publisher
+		  return Usr_CAN;
+	      }
+	    else									// The file has no publisher
+	      {
+	       ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
+	       if ((ZoneUsrCod <= 0 && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ||	// It's a zone without owner and I am a superuser (I may be the future owner)
+		   ZoneUsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)				// I am the owner
+		  return Usr_CAN;
+	      }
+	   }
+	 break;
       default:
-         return Usr_CAN_NOT;
+	 break;
      }
-  }
 
-static bool Brw_CheckIfIAmOwnerOfFile (long PublisherUsrCod)
-  {
-   long ZoneUsrCod;
-
-   if (Gbl.Usrs.Me.Logged)							// I am logged
-     {
-      if (PublisherUsrCod > 0)							// The file has publisher
-	{
-	 if (PublisherUsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)			// I am the publisher
-	    return true;
-	}
-      else									// The file has no publisher
-	{
-	 ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
-	 if ((ZoneUsrCod <= 0 && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ||	// It's a zone without owner and I am a superuser (I may be the future owner)
-	     ZoneUsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)				// I am the owner
-	    return true;
-	}
-     }
-   return false;
+   return Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -8295,7 +8290,6 @@ void Brw_ChgFileMetadata (void)
   {
    extern const char *Txt_The_properties_of_file_X_have_been_saved;
    struct Brw_FileMetadata FileMetadata;
-   bool IAmTheOwner;
    PriPub_PrivateOrPublic_t PrivateOrPublicFileBeforeEdition;
    PriPub_PrivateOrPublic_t PrivateOrPublicFileAfterEdition;
    Brw_License_t License;
@@ -8309,8 +8303,7 @@ void Brw_ChgFileMetadata (void)
    if (Brw_GetFileTypeSizeAndDate (&FileMetadata) == Exi_EXISTS)
      {
       /***** Check if I can change file metadata *****/
-      IAmTheOwner = Brw_CheckIfIAmOwnerOfFile (FileMetadata.PublisherUsrCod);
-      if (Brw_CheckIfICanEditFileMetadata (IAmTheOwner) == Usr_CAN_NOT)
+      if (Brw_CheckIfICanEditFileMetadata (FileMetadata.PublisherUsrCod) == Usr_CAN_NOT)
 	 Err_NoPermissionExit ();
 
       /***** Check if the file was public before the edition *****/
@@ -8932,8 +8925,7 @@ static Usr_Can_t Brw_CheckIfICanEditFileOrFolder (unsigned Level)
       case Brw_ADMI_ASS_PRJ:
          return Brw_CheckIfICanModifyPrjAssFileOrFolder ();
       default:
-         return Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type) ? Usr_CAN :
-									  Usr_CAN_NOT;
+         return Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type);
      }
    return Usr_CAN_NOT;
   }
@@ -9001,8 +8993,7 @@ static Usr_Can_t Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 				// can only be created automatically
 	 return Asg_CheckIfICanCreateIntoAssigment ();
       default:
-         return Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type) ? Usr_CAN :
-									  Usr_CAN_NOT;
+         return Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type);
      }
   }
 
@@ -9010,39 +9001,39 @@ static Usr_Can_t Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 /********************* Check if file browser is editable *********************/
 /*****************************************************************************/
 
-bool Brw_CheckIfFileBrowserIsEditable (Brw_FileBrowser_t FileBrowser)
+Usr_Can_t Brw_CheckIfFileBrowserIsEditable (Brw_FileBrowser_t FileBrowser)
   {
-   static bool Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
+   static Usr_Can_t Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
      {
-      [Brw_UNKNOWN     ] = false,
-      [Brw_SHOW_DOC_CRS] = false,
-      [Brw_SHOW_MRK_CRS] = false,
-      [Brw_ADMI_DOC_CRS] = true,
-      [Brw_ADMI_SHR_CRS] = true,
-      [Brw_ADMI_SHR_GRP] = true,
-      [Brw_ADMI_WRK_USR] = true,
-      [Brw_ADMI_WRK_CRS] = true,
-      [Brw_ADMI_MRK_CRS] = true,
-      [Brw_ADMI_BRF_USR] = true,
-      [Brw_SHOW_DOC_GRP] = false,
-      [Brw_ADMI_DOC_GRP] = true,
-      [Brw_SHOW_MRK_GRP] = false,
-      [Brw_ADMI_MRK_GRP] = true,
-      [Brw_ADMI_ASG_USR] = true,
-      [Brw_ADMI_ASG_CRS] = true,
-      [Brw_SHOW_DOC_DEG] = false,
-      [Brw_ADMI_DOC_DEG] = true,
-      [Brw_SHOW_DOC_CTR] = false,
-      [Brw_ADMI_DOC_CTR] = true,
-      [Brw_SHOW_DOC_INS] = false,
-      [Brw_ADMI_DOC_INS] = true,
-      [Brw_ADMI_SHR_DEG] = true,
-      [Brw_ADMI_SHR_CTR] = true,
-      [Brw_ADMI_SHR_INS] = true,
-      [Brw_ADMI_TCH_CRS] = true,
-      [Brw_ADMI_TCH_GRP] = true,
-      [Brw_ADMI_DOC_PRJ] = true,
-      [Brw_ADMI_ASS_PRJ] = true,
+      [Brw_UNKNOWN     ] = Usr_CAN_NOT,
+      [Brw_SHOW_DOC_CRS] = Usr_CAN_NOT,
+      [Brw_SHOW_MRK_CRS] = Usr_CAN_NOT,
+      [Brw_ADMI_DOC_CRS] = Usr_CAN,
+      [Brw_ADMI_SHR_CRS] = Usr_CAN,
+      [Brw_ADMI_SHR_GRP] = Usr_CAN,
+      [Brw_ADMI_WRK_USR] = Usr_CAN,
+      [Brw_ADMI_WRK_CRS] = Usr_CAN,
+      [Brw_ADMI_MRK_CRS] = Usr_CAN,
+      [Brw_ADMI_BRF_USR] = Usr_CAN,
+      [Brw_SHOW_DOC_GRP] = Usr_CAN_NOT,
+      [Brw_ADMI_DOC_GRP] = Usr_CAN,
+      [Brw_SHOW_MRK_GRP] = Usr_CAN_NOT,
+      [Brw_ADMI_MRK_GRP] = Usr_CAN,
+      [Brw_ADMI_ASG_USR] = Usr_CAN,
+      [Brw_ADMI_ASG_CRS] = Usr_CAN,
+      [Brw_SHOW_DOC_DEG] = Usr_CAN_NOT,
+      [Brw_ADMI_DOC_DEG] = Usr_CAN,
+      [Brw_SHOW_DOC_CTR] = Usr_CAN_NOT,
+      [Brw_ADMI_DOC_CTR] = Usr_CAN,
+      [Brw_SHOW_DOC_INS] = Usr_CAN_NOT,
+      [Brw_ADMI_DOC_INS] = Usr_CAN,
+      [Brw_ADMI_SHR_DEG] = Usr_CAN,
+      [Brw_ADMI_SHR_CTR] = Usr_CAN,
+      [Brw_ADMI_SHR_INS] = Usr_CAN,
+      [Brw_ADMI_TCH_CRS] = Usr_CAN,
+      [Brw_ADMI_TCH_GRP] = Usr_CAN,
+      [Brw_ADMI_DOC_PRJ] = Usr_CAN,
+      [Brw_ADMI_ASS_PRJ] = Usr_CAN,
      };
 
    return Brw_FileBrowserIsEditable[FileBrowser];

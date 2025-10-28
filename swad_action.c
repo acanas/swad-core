@@ -268,7 +268,6 @@ void Act_AdjustActionWhenClickOnMenu (void)
 
 void Act_AdjustCurrentAction (void)
   {
-   bool IAmATeacherInAnyCrs;
    bool JustAfterLogin = Gbl.Action.Act == ActLogIn    ||
 	                 Gbl.Action.Act == ActLogInLan ||
 	                 Gbl.Action.Act == ActLogInNew ||
@@ -326,10 +325,8 @@ void Act_AdjustCurrentAction (void)
       return;
      }
 
-   /***** Check if I am a teacher in any course *****/
+   /***** Get my roles to check if I am a teacher in any course *****/
    Rol_GetRolesInAllCrss (&Gbl.Usrs.Me.UsrDat);
-   IAmATeacherInAnyCrs = (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |	// I am a non-editing teacher...
-	                                                     (1 << Rol_TCH)));	// ...or a teacher in any course
 
    /***** Adjustment 4:
           -------------
@@ -344,13 +341,15 @@ void Act_AdjustCurrentAction (void)
              - my department,
           the only action possible
           is to show a form to change my shared record card *****/
-   if ( Gbl.Usrs.Me.UsrDat.Sex == Usr_SEX_UNKNOWN ||
-       !Gbl.Usrs.Me.UsrDat.FrstName[0]            ||
-       !Gbl.Usrs.Me.UsrDat.Surname1 [0]           ||
-        Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTY] <= 0  ||
-	Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS]  < 0  ||
-       (IAmATeacherInAnyCrs && (Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] < 0 ||
-                                Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)))
+   if (  Gbl.Usrs.Me.UsrDat.Sex == Usr_SEX_UNKNOWN ||
+         Gbl.Usrs.Me.UsrDat.FrstName[0] == '\0'    ||
+         Gbl.Usrs.Me.UsrDat.Surname1[0] == '\0'    ||
+         Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTY] <= 0  ||
+	 Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS]  < 0  ||
+       ((Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |	// I am a non-editing teacher...
+	                                    (1 << Rol_TCH))) &&	// ...or a teacher in any course
+        (Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] < 0 ||
+         Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)))
      {
       Gbl.Action.Act = ActReqEdiRecSha;
       Tab_SetCurrentTab ();
@@ -440,8 +439,6 @@ void Act_AdjustCurrentAction (void)
             /***** Check if it is mandatory to read any information about course *****/
             if (Gbl.Action.Act == ActMnu)	// Do the following check sometimes, for example when the user changes the current tab
                Inf_GetIfIMustReadAnyCrsInfoInThisCrs ();
-            break;
-         case Rol_NET:
             break;
          case Rol_TCH:
 	    /***** Adjustment 9:

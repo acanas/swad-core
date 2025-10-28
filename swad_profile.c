@@ -319,12 +319,12 @@ Err_SuccessOrError_t Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
 	 Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
 	 if (NumFollowing)
 	    UsrFollowsMe = Fol_DB_CheckUsrIsFollowerOf (UsrDat->UsrCod,
-						        Gbl.Usrs.Me.UsrDat.UsrCod);
+						        Gbl.Usrs.Me.UsrDat.UsrCod) == Fol_FOLLOWER;
 	 else
 	    UsrFollowsMe = false;
 	 if (NumFollowers)
 	    IFollowUsr   = Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-						        UsrDat->UsrCod);
+						        UsrDat->UsrCod) == Fol_FOLLOWER;
 	 else
 	    IFollowUsr   = false;
 

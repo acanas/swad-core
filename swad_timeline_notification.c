@@ -51,7 +51,7 @@ void TmlNtf_CreateNotifToAuthor (long AuthorCod,long PubCod,
   {
    extern Ntf_Status_t Ntf_Status[Ntf_NUM_NOTIFY_BY_EMAIL];
    struct Usr_Data UsrDat;
-   bool CreateNotif;
+   Ntf_CreateNotif_t CreateNotif;
    Ntf_NotifyByEmail_t NotifyByEmail;
    long HieCods[Hie_NUM_LEVELS];
 
@@ -63,17 +63,15 @@ void TmlNtf_CreateNotifToAuthor (long AuthorCod,long PubCod,
                                                 Usr_DONT_GET_PREFS,
                                                 Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
      {
-      /***** This fav must be notified by email? *****/
-      CreateNotif = (UsrDat.NtfEvents.CreateNotif & (1 << NotifyEvent));
-      NotifyByEmail = CreateNotif &&
-		      (UsrDat.NtfEvents.SendEmail & (1 << NotifyEvent)) ? Ntf_NOTIFY_BY_EMAIL :
-									  Ntf_DONT_NOTIFY_BY_EMAIL;;
-
       /***** Create notification for the author of the post.
 	     If this author wants to receive notifications by email,
 	     activate the sending of a notification *****/
-      if (CreateNotif)
+      CreateNotif = (UsrDat.NtfEvents.CreateNotif & (1 << NotifyEvent)) ? Ntf_CREATE_NOTIF :
+									  Ntf_DONT_CREATE_NOTIF;
+      if (CreateNotif == Ntf_CREATE_NOTIF)
 	{
+	 NotifyByEmail = (UsrDat.NtfEvents.SendEmail & (1 << NotifyEvent)) ? Ntf_NOTIFY_BY_EMAIL :
+									     Ntf_DONT_NOTIFY_BY_EMAIL;;
 	 HieCods[Hie_INS] = Gbl.Hierarchy.Node[Hie_INS].HieCod;
 	 HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
 	 HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod;

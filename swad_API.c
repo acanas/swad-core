@@ -1671,8 +1671,7 @@ int swad__getUsers (struct soap *soap,
 
    /***** Get list of users *****/
    Usr_GetListUsrs (Hie_CRS,Role);
-   API_CopyListUsers (soap,
-		      Role,getUsersOut);
+   API_CopyListUsers (soap,Role,getUsersOut);
    Usr_FreeUsrsList (Role);
 
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
@@ -1696,7 +1695,7 @@ int swad__findUsers (struct soap *soap,
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
    Rol_Role_t Role;
    Hie_Level_t HieLvl;
-   bool FilterTooShort = false;
+   Err_SuccessOrError_t FilterTooShort = Err_SUCCESS;
 
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
@@ -1769,8 +1768,7 @@ int swad__findUsers (struct soap *soap,
 
 	    /***** Search for users *****/
 	    Usr_SearchListUsrs (HieLvl,Role);
-	    API_CopyListUsers (soap,
-			       Role,getUsersOut);
+	    API_CopyListUsers (soap,Role,getUsersOut);
 	    Usr_FreeUsrsList (Role);
 
 	    /***** Drop temporary table with candidate users *****/
@@ -1778,19 +1776,19 @@ int swad__findUsers (struct soap *soap,
 	    break;
 	 case Err_ERROR:
 	 default:
-	    FilterTooShort = true;
+	    FilterTooShort = Err_ERROR;
 	    break;
 	}
      }
    else
-      FilterTooShort = true;
+      FilterTooShort = Err_ERROR;
 
    /***** Return error in filter? *****/
-   if (FilterTooShort)
+   if (FilterTooShort == Err_ERROR)
      {
-      getUsersOut->numUsers = -1;	// < 0 ==> filter too short
+      getUsersOut->numUsers          = -1;	// < 0 ==> filter too short
       getUsersOut->usersArray.__size = 0;
-      getUsersOut->usersArray.__ptr = NULL;
+      getUsersOut->usersArray.__ptr  = NULL;
      }
 
    return SOAP_OK;
@@ -2875,6 +2873,8 @@ int swad__sendAttendanceUsers (struct soap *soap,
   {
    int ReturnCode;
    struct Att_Event Event;
+   Att_SetOthersAsAbsent_t SetOthersAsAbsent = setOthersAsAbsent ? Att_SET_OTHERS_AS_ABSENT :
+								   Att_DONT_SET_OTHERS_AS_ABSENT;
 
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
@@ -2914,10 +2914,10 @@ int swad__sendAttendanceUsers (struct soap *soap,
 	                          "Requester must be a teacher");
 
    /***** Set users as present *****/
-   Att_DB_SetUsrsAsPresent (Event.AttCod,users,setOthersAsAbsent);
+   Att_DB_SetUsrsAsPresent (Event.AttCod,users,SetOthersAsAbsent);
 
    /***** Purge absent users without comments from table *****/
-   if (setOthersAsAbsent)
+   if (SetOthersAsAbsent == Att_SET_OTHERS_AS_ABSENT)
       Att_DB_RemoveUsrsAbsentWithoutCommentsFromEvent (Event.AttCod);
 
    sendAttendanceUsersOut->success = 1;
@@ -3922,7 +3922,7 @@ int swad__getTrivialQuestion (struct soap *soap,
    char DegStr[ 1 + 1 + Cns_MAX_DIGITS_LONG + 1 + 1];
    //   DegStr=",   '   - number '  \0"
    long HieCod;	// Degree code
-   bool FirstDegree = true;
+   bool FirstDegree;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumAnss;
@@ -3954,7 +3954,7 @@ int swad__getTrivialQuestion (struct soap *soap,
 
    /***** Loop over recipients' nicknames building query *****/
    DegreesStr[0] = '\0';
-   for (Ptr = degrees;
+   for (Ptr = degrees, FirstDegree = true;
         *Ptr;
        )
      {

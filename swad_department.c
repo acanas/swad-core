@@ -941,7 +941,7 @@ void Dpt_WriteSelectorDepartment (long HieCod,long DptCod,
    struct Dpt_Departments Departments;
    unsigned NumDpt;
    const struct Dpt_Department *Dpt;
-   bool NoDptSelectable;
+   Exi_Exist_t NoDptSelectable;
 
    /***** Reset departments context *****/
    Dpt_ResetDepartments (&Departments);
@@ -960,16 +960,16 @@ void Dpt_WriteSelectorDepartment (long HieCod,long DptCod,
 	 /* Option when no department selected */
 	 if (FirstOption < 0)
 	   {
-	    NoDptSelectable = false;
+	    NoDptSelectable = Exi_DOES_NOT_EXIST;
 	    if (TextWhenNoDptSelected)
 	       if (TextWhenNoDptSelected[0])
-		  NoDptSelectable = true;
+		  NoDptSelectable = Exi_EXISTS;
 
 	    HTM_OPTION (HTM_Type_STRING,"-1",
 	                (DptCod < 0 ? HTM_SELECTED :
 	                	      HTM_NO_ATTR) |
-	                (NoDptSelectable ? HTM_NO_ATTR :
-	                		   HTM_DISABLED),
+	                (NoDptSelectable == Exi_EXISTS ? HTM_NO_ATTR :
+	                				 HTM_DISABLED),
 			"%s",TextWhenNoDptSelected);
 	   }
 

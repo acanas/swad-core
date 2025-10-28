@@ -194,13 +194,14 @@ static void Ale_ResetAlert (size_t NumAlert)
    /***** Set number of alerts to 0
           if there are no more alerts
           pending to be shown *****/
-   NoMoreAlertsPending = true;
-   for (i = 0;
-	NoMoreAlertsPending && i < Ale_Alerts.Num;
+   for (i = 0, NoMoreAlertsPending = true;
+	i < Ale_Alerts.Num;
 	i++)
       if (Ale_Alerts.List[i].Type != Ale_NONE)
+        {
 	 NoMoreAlertsPending = false;
-
+	 break;
+        }
    if (NoMoreAlertsPending)
       Ale_Alerts.Num = 0;
   }

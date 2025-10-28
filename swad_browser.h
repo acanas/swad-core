@@ -243,7 +243,7 @@ long Brw_GetZoneUsrCodForFileBrowser (void);
 void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
                                     long HieCods[Hie_NUM_LEVELS],long *GrpCod);
 
-bool Brw_CheckIfFileBrowserIsEditable (Brw_FileBrowser_t FileBrowser);
+Usr_Can_t Brw_CheckIfFileBrowserIsEditable (Brw_FileBrowser_t FileBrowser);
 
 long Brw_GetCodForFileBrowser (Brw_FileBrowser_t FileBrowser);
 long Brw_GetZoneUsrCodForFileBrowser (void);

@@ -162,7 +162,7 @@ static void ExaLog_LogSession (long LogCod,long PrnCod)
   {
    /***** Insert session id into database
           only if it's not the same as the last one stored *****/
-   if (!Exa_DB_CheckIfSessionIsTheSameAsTheLast (PrnCod))
+   if (Exa_DB_CheckIfSessionExistsAsTheLast (PrnCod) == Exi_DOES_NOT_EXIST)
       Exa_DB_LogSession (LogCod,PrnCod);
   }
 
@@ -203,7 +203,8 @@ static void ExaLog_LogUsrAgent (long LogCod,long PrnCod)
 
    /***** Insert user agent into database
           only if it's not the same as the last one stored *****/
-   if (!Exa_DB_CheckIfUserAgentIsTheSameAsTheLast (PrnCod,UserAgentDB))
+   if (Exa_DB_CheckIfUserAgentExistsAsTheLast (PrnCod,
+					       UserAgentDB) == Exi_DOES_NOT_EXIST)
       Exa_DB_LogUserAgent (LogCod,PrnCod,UserAgentDB);
 
    /***** Free user agent *****/

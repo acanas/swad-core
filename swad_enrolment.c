@@ -350,7 +350,7 @@ static void Enr_NotifyAfterEnrolment (const struct Usr_Data *UsrDat,
       [Rol_NET] = Ntf_EVENT_ENROLMENT_NET,
       [Rol_TCH] = Ntf_EVENT_ENROLMENT_TCH,
      };
-   bool CreateNotif;
+   Ntf_CreateNotif_t CreateNotif;
    Ntf_NotifyByEmail_t NotifyByEmail;
    long HieCods[Hie_NUM_LEVELS];
 
@@ -367,12 +367,13 @@ static void Enr_NotifyAfterEnrolment (const struct Usr_Data *UsrDat,
    Ntf_DB_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_TCH,-1,UsrDat->UsrCod);
 
    /***** Create new notification ******/
-   CreateNotif = (UsrDat->NtfEvents.CreateNotif & (1 << NotifyEvent[NewRole]));
-   NotifyByEmail = CreateNotif && Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER &&
-		   (UsrDat->NtfEvents.SendEmail & (1 << NotifyEvent[NewRole])) ? Ntf_NOTIFY_BY_EMAIL :
-										 Ntf_DONT_NOTIFY_BY_EMAIL;
-   if (CreateNotif)
+   CreateNotif = (UsrDat->NtfEvents.CreateNotif & (1 << NotifyEvent[NewRole])) ? Ntf_CREATE_NOTIF :
+										 Ntf_DONT_CREATE_NOTIF;
+   if (CreateNotif == Ntf_CREATE_NOTIF)
      {
+      NotifyByEmail = Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER &&
+		      (UsrDat->NtfEvents.SendEmail & (1 << NotifyEvent[NewRole])) ? Ntf_NOTIFY_BY_EMAIL :
+										    Ntf_DONT_NOTIFY_BY_EMAIL;
       HieCods[Hie_INS] = Gbl.Hierarchy.Node[Hie_INS].HieCod;
       HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
       HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod;
@@ -3729,7 +3730,6 @@ Usr_Share_t Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat)
 
 unsigned Enr_GetNumUsrsInCrss (Hie_Level_t HieLvl,long HieCod,unsigned Roles)
   {
-   bool AnyUserInCourses;
    unsigned NumUsrs;
 
    /***** Reset roles that can not belong to courses.
@@ -3746,13 +3746,8 @@ unsigned Enr_GetNumUsrsInCrss (Hie_Level_t HieLvl,long HieCod,unsigned Roles)
    if (Roles == 0)
       return 0;
 
-   /***** Check if any user in courses is requested *****/
-   AnyUserInCourses = (Roles == ((1 << Rol_STD) |
-	                         (1 << Rol_NET) |
-	                         (1 << Rol_TCH)));
-
    /***** Get number of users from database *****/
-   NumUsrs = Enr_DB_GetNumUsrsInCrss (HieLvl,HieCod,Roles,AnyUserInCourses);
+   NumUsrs = Enr_DB_GetNumUsrsInCrss (HieLvl,HieCod,Roles);
 
    FigCch_UpdateFigureIntoCache (Enr_GetFigureNumUsrsInCrss (Roles),HieLvl,HieCod,
 				 FigCch_UNSIGNED,&NumUsrs);

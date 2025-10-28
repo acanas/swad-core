@@ -455,7 +455,7 @@ void BrwSiz_ShowAndStoreSizeOfFileBrowser (const struct BrwSiz_BrowserSize *Size
 
    HTM_DIV_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
 
-      if (Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type))
+      if (Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type) == Usr_CAN)
 	{
 	 Fil_WriteFileSizeFull ((double) Size->TotalSiz,FileSizeStr);
 	 HTM_UnsignedTxt (Size->NumLevls,Txt_level ,Txt_levels ); HTM_Semicolon (); HTM_SP ();

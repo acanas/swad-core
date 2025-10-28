@@ -840,7 +840,7 @@ static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages)
    const char *Ptr;
    bool MsgAlreadyInserted = false;
    long NewMsgCod = -1L;	// Initiliazed to avoid warning
-   bool CreateNotif;
+   Ntf_CreateNotif_t CreateNotif;
    Ntf_NotifyByEmail_t NotifyByEmail;
    long HieCods[Hie_NUM_LEVELS];
 
@@ -893,8 +893,9 @@ static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages)
 												   Msg_NOT_REPLIED;
 
 		     /***** This received message must be notified by email? *****/
-		     CreateNotif = (UsrDstData.NtfEvents.CreateNotif & (1 << Ntf_EVENT_MESSAGE));
-		     NotifyByEmail = CreateNotif &&
+		     CreateNotif = (UsrDstData.NtfEvents.CreateNotif & (1 << Ntf_EVENT_MESSAGE)) ? Ntf_CREATE_NOTIF :
+												   Ntf_DONT_CREATE_NOTIF;
+		     NotifyByEmail = CreateNotif == Ntf_CREATE_NOTIF &&
 				     UsrDstData.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod &&
 				     (UsrDstData.NtfEvents.SendEmail & (1 << Ntf_EVENT_MESSAGE)) ? Ntf_NOTIFY_BY_EMAIL :
 												   Ntf_DONT_NOTIFY_BY_EMAIL;
@@ -906,7 +907,7 @@ static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages)
 		     /***** Create notification for this recipient.
 			    If this recipient wants to receive notifications by -mail,
 			    activate the sending of a notification *****/
-		     if (CreateNotif)
+		     if (CreateNotif == Ntf_CREATE_NOTIF)
 		       {
 			HieCods[Hie_INS] = Gbl.Hierarchy.Node[Hie_INS].HieCod;
 			HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod;

@@ -58,8 +58,7 @@ unsigned Enr_DB_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role);
 unsigned Enr_DB_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role);
 unsigned Enr_DB_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
                                         unsigned OthersRoles);
-unsigned Enr_DB_GetNumUsrsInCrss (Hie_Level_t HieLvl,long HieCod,unsigned Roles,
-                                  bool AnyUserInCourses);
+unsigned Enr_DB_GetNumUsrsInCrss (Hie_Level_t HieLvl,long HieCod,unsigned Roles);
 unsigned Enr_DB_GetNumUsrsNotBelongingToAnyCrs (void);
 double Enr_DB_GetAverageNumUsrsPerCrs (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Role);
 double Enr_DB_GetAverageNumCrssPerUsr (Hie_Level_t HieLvl,long HieCod,Rol_Role_t Role);

@@ -354,25 +354,29 @@ void Tmt_ShowCrsTimeTable (void)
 	 Err_WrongActionExit ();
      }
 
-   Timetable.ContextualIcons.PutIconEditCrsTT = (Timetable.Type == Tmt_COURSE_TIMETABLE &&
-	                                         ViewType == Vie_VIEW &&
-                                                 Gbl.Usrs.Me.Role.Logged >= Rol_TCH);
-   Timetable.ContextualIcons.PutIconEditOfficeHours = (Timetable.Type == Tmt_MY_TIMETABLE &&
-	                                               ViewType == Vie_VIEW &&
-                                                       (Gbl.Usrs.Me.Role.Available & (1 << Rol_TCH |
-                                                		                      1 << Rol_NET)));
-   Timetable.ContextualIcons.PutIconGetLink = (Rsc_CheckIfICanGetLink () == Usr_CAN);
-   Timetable.ContextualIcons.PutIconPrint = (ViewType == Vie_VIEW);
+   Timetable.ShowIcons.EditCrsTT       = Timetable.Type == Tmt_COURSE_TIMETABLE &&
+	                                 ViewType == Vie_VIEW &&
+                                         Gbl.Usrs.Me.Role.Logged >= Rol_TCH ? Lay_SHOW :
+									      Lay_DONT_SHOW;
+   Timetable.ShowIcons.EditOfficeHours = Timetable.Type == Tmt_MY_TIMETABLE &&
+	                                 ViewType == Vie_VIEW &&
+                                         (Gbl.Usrs.Me.Role.Available & (1 << Rol_TCH |
+                                                		        1 << Rol_NET)) ? Lay_SHOW :
+                                                		                	 Lay_DONT_SHOW;
+   Timetable.ShowIcons.GetLink         = Rsc_CheckIfICanGetLink () == Usr_CAN ? Lay_SHOW :
+                                                		                Lay_DONT_SHOW;
+   Timetable.ShowIcons.Print           = ViewType == Vie_VIEW ? Lay_SHOW :
+                                                                Lay_DONT_SHOW;
 
    /***** Get whether to show only my groups or all groups *****/
    Grp_GetParMyAllGrps ();
 
    /***** Begin box *****/
-   ShowContextualIcons = Timetable.ContextualIcons.PutIconEditCrsTT ||
-			 Timetable.ContextualIcons.PutIconEditOfficeHours ||
-			 Timetable.ContextualIcons.PutIconGetLink ||
-			 Timetable.ContextualIcons.PutIconPrint ? Lay_SHOW :
-								  Lay_DONT_SHOW;
+   ShowContextualIcons = Timetable.ShowIcons.EditCrsTT       == Lay_SHOW ||
+			 Timetable.ShowIcons.EditOfficeHours == Lay_SHOW ||
+			 Timetable.ShowIcons.GetLink         == Lay_SHOW ||
+			 Timetable.ShowIcons.Print           == Lay_SHOW ? Lay_SHOW :
+									   Lay_DONT_SHOW;
    Box_BoxBegin (Txt_TIMETABLE_TYPES[Timetable.Type],
 		 ShowContextualIcons == Lay_SHOW ? Tmt_PutContextualIcons :
 						   NULL,
@@ -427,25 +431,30 @@ void Tmt_ShowCrsTimeTable (void)
 
 static void Tmt_PutContextualIcons (void *Timetable)
   {
+   static Act_Action_t NextAction[Tmt_NUM_TIMETABLE_TYPES] =
+     {
+      [Tmt_COURSE_TIMETABLE  ] = ActPrnCrsTT,
+      [Tmt_MY_TIMETABLE      ] = ActPrnMyTT,
+      [Tmt_TUTORING_TIMETABLE] = ActPrnMyTT,
+     };
    Grp_MyAllGrps_t MyAllGrps;
 
    if (Timetable)
      {
       MyAllGrps = Grp_GetParMyAllGrps ();
 
-      if (((struct Tmt_Timetable *) Timetable)->ContextualIcons.PutIconEditCrsTT)
+      if (((struct Tmt_Timetable *) Timetable)->ShowIcons.EditCrsTT       == Lay_SHOW)
 	 Ico_PutContextualIconToEdit (ActEdiCrsTT,NULL,
 				      Grp_PutParMyAllGrps,&MyAllGrps);
 
-      if (((struct Tmt_Timetable *) Timetable)->ContextualIcons.PutIconEditOfficeHours)
+      if (((struct Tmt_Timetable *) Timetable)->ShowIcons.EditOfficeHours == Lay_SHOW)
 	 Ico_PutContextualIconToEdit (ActEdiTut,NULL,NULL,NULL);
 
-      if (((struct Tmt_Timetable *) Timetable)->ContextualIcons.PutIconGetLink)
+      if (((struct Tmt_Timetable *) Timetable)->ShowIcons.GetLink         == Lay_SHOW)
 	 Ico_PutContextualIconToGetLink (ActReqLnkCrsTT,NULL,NULL,NULL);
 
-      if (((struct Tmt_Timetable *) Timetable)->ContextualIcons.PutIconPrint)
-	 Ico_PutContextualIconToPrint (((struct Tmt_Timetable *) Timetable)->Type == Tmt_COURSE_TIMETABLE ? ActPrnCrsTT :
-										                            ActPrnMyTT,
+      if (((struct Tmt_Timetable *) Timetable)->ShowIcons.Print           == Lay_SHOW)
+	 Ico_PutContextualIconToPrint (NextAction[((struct Tmt_Timetable *) Timetable)->Type],
 				       Grp_PutParMyAllGrps,&MyAllGrps);
      }
   }

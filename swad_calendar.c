@@ -56,15 +56,15 @@ extern struct Globals Gbl;
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-bool Cal_DayIsValidAsFirstDayOfWeek[7] =
+Err_SuccessOrError_t Cal_DayIsValidAsFirstDayOfWeek[7] =
   {
-   [0] = true,	// monday
-   [1] = false,	// tuesday
-   [2] = false,	// wednesday
-   [3] = false,	// thursday
-   [4] = false,	// friday
-   [5] = false,	// saturday
-   [6] = true,	// sunday
+   [0] = Err_SUCCESS,	// monday
+   [1] = Err_ERROR,	// tuesday
+   [2] = Err_ERROR,	// wednesday
+   [3] = Err_ERROR,	// thursday
+   [4] = Err_ERROR,	// friday
+   [5] = Err_ERROR,	// saturday
+   [6] = Err_SUCCESS,	// sunday
   };
 
 /*****************************************************************************/
@@ -125,7 +125,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
       for (FirstDayOfWeek  = 0;	// Monday
 	   FirstDayOfWeek <= 6;	// Sunday
 	   FirstDayOfWeek++)
-	 if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
+	 if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek] == Err_SUCCESS)
 	   {
 	    Set_BeginPref (FirstDayOfWeek == Gbl.Prefs.FirstDayOfWeek);
 	       Frm_BeginForm (Action);
@@ -174,7 +174,7 @@ static unsigned Cal_GetParFirstDayOfWeek (void)
                                             0,
                                             6,
                                             Cal_FIRST_DAY_OF_WEEK_DEFAULT);
-   if (!Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
+   if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek] == Err_ERROR)
       FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;
 
    return FirstDayOfWeek;
@@ -189,7 +189,7 @@ unsigned Cal_GetFirstDayOfWeekFromStr (const char *Str)
    unsigned UnsignedNum;
 
    if (sscanf (Str,"%u",&UnsignedNum) == 1)
-      if (Cal_DayIsValidAsFirstDayOfWeek[UnsignedNum])
+      if (Cal_DayIsValidAsFirstDayOfWeek[UnsignedNum] == Err_SUCCESS)
          return (Dat_Format_t) UnsignedNum;
 
    return Cal_FIRST_DAY_OF_WEEK_DEFAULT;
@@ -343,7 +343,6 @@ void Cal_PutIconToSeeCalendar (void)
 
 void Cal_GetAndShowNumUsrsPerFirstDayOfWeek (Hie_Level_t HieLvl)
   {
-   extern bool Cal_DayIsValidAsFirstDayOfWeek[7];
    extern const char *Hlp_ANALYTICS_Figures_calendar;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Calendar;
@@ -373,7 +372,7 @@ void Cal_GetAndShowNumUsrsPerFirstDayOfWeek (Hie_Level_t HieLvl)
       for (FirstDayOfWeek = 0;	// Monday
 	   FirstDayOfWeek <= 6;	// Sunday
 	   FirstDayOfWeek++)
-	 if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
+	 if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek] == Err_SUCCESS)
 	   {
 	    /* Get number of users who have chosen this first day of week from database */
 	    if (asprintf (&SubQuery,"usr_data.FirstDayOfWeek=%u",
@@ -390,7 +389,7 @@ void Cal_GetAndShowNumUsrsPerFirstDayOfWeek (Hie_Level_t HieLvl)
       for (FirstDayOfWeek = 0;	// Monday
 	   FirstDayOfWeek <= 6;	// Sunday
 	   FirstDayOfWeek++)
-	 if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
+	 if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek] == Err_SUCCESS)
 	   {
 	    HTM_TR_Begin (NULL);
 

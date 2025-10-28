@@ -786,21 +786,29 @@ static void Lay_WriteScriptMathJax (void)
 static void Lay_WriteScriptInit (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   bool RefreshConnected;
-   bool RefreshLastClicks   = false;
-   bool RefreshNewTimeline  = false;
-   bool RefreshOldTimeline  = false;
-   bool RefreshMatchStd     = false;
-   bool RefreshMatchTch     = false;
+   struct
+     {
+      bool Connected;
+      bool LastClicks;
+      bool NewTimeline;
+      bool OldTimeline;
+      bool MatchStd;
+      bool MatchTch;
+     } Refresh;
 
-   RefreshConnected = Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST &&
-	              (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN);	// Right column visible
+   Refresh.Connected   = Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST &&
+	                 (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN);	// Right column visible
+   Refresh.LastClicks  = false;
+   Refresh.NewTimeline = false;
+   Refresh.OldTimeline = false;
+   Refresh.MatchStd    = false;
+   Refresh.MatchTch    = false;
 
    switch (Gbl.Action.Act)
      {
       /* Last clicks */
       case ActLstClk:
-	 RefreshLastClicks = true;
+	 Refresh.LastClicks = true;
 	 break;
 
       /* Global timeline */
@@ -811,8 +819,8 @@ static void Lay_WriteScriptInit (void)
       case ActRemPubGblTL:
       case ActReqRemComGblTL:
       case ActRemComGblTL:
-	 RefreshNewTimeline = true;
-	 RefreshOldTimeline = true;
+	 Refresh.NewTimeline = true;
+	 Refresh.OldTimeline = true;
 	 break;
 
       /* User timeline */
@@ -823,7 +831,7 @@ static void Lay_WriteScriptInit (void)
       case ActRemPubUsrTL:
       case ActReqRemComUsrTL:
       case ActRemComUsrTL:
-	 RefreshOldTimeline = true;
+	 Refresh.OldTimeline = true;
 	 break;
 
       /* Match */
@@ -831,7 +839,7 @@ static void Lay_WriteScriptInit (void)
       case ActSeeMchAnsQstStd:
       case ActRemMchAnsQstStd:
       case ActAnsMchQstStd:
-	 RefreshMatchStd = true;
+	 Refresh.MatchStd = true;
 	 break;
       case ActNewMch:
       case ActResMch:
@@ -841,7 +849,7 @@ static void Lay_WriteScriptInit (void)
       case ActChgNumColMch:
       case ActChgVisResMchQst:
       case ActMchCntDwn:
-	 RefreshMatchTch = true;
+	 Refresh.MatchTch = true;
 	 break;
 
       default:
@@ -852,35 +860,35 @@ static void Lay_WriteScriptInit (void)
 
       Dat_WriteScriptMonths ();
 
-      if (RefreshNewTimeline)		// Refresh new timeline via AJAX
+      if (Refresh.NewTimeline)		// Refresh new timeline via AJAX
 	 HTM_TxtF ("\tvar delayNewTml = %lu;\n",Cfg_TIME_TO_REFRESH_TIMELINE);
-      else if (RefreshMatchStd)		// Refresh match via AJAX
+      else if (Refresh.MatchStd)	// Refresh match via AJAX
 	 HTM_TxtF ("\tconst delayMatch = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_STD);
-      else if (RefreshMatchTch)		// Refresh match via AJAX
+      else if (Refresh.MatchTch)	// Refresh match via AJAX
 	 HTM_TxtF ("\tconst delayMatch = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_TCH);
 
       /***** Function init () ******/
-      HTM_Txt ("function init() {\n");
+      HTM_TxtF ("function init() {\n"
+	        "\tactionAJAX = \"%s\";\n",Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 
-      HTM_TxtF ("\tactionAJAX = \"%s\";\n",Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+	 if (Refresh.Connected)		// Refresh connected users via AJAX
+	    Con_WriteScriptClockConnected ();
 
-      if (RefreshConnected)		// Refresh connected users via AJAX
-	 Con_WriteScriptClockConnected ();
-
-      if (RefreshLastClicks)		// Refresh last clicks via AJAX
-	 HTM_TxtF ("\tsetTimeout('refreshLastClicks()',%lu);\n",
-		   Cfg_TIME_TO_REFRESH_LAST_CLICKS);
-      else if (RefreshNewTimeline || RefreshOldTimeline)	// Refresh timeline via AJAX
-        {
-	 if (RefreshNewTimeline)
-	    HTM_Txt ("\tsetTimeout('refreshNewTimeline()',delayNewTml);\n");
-	 if (RefreshOldTimeline)
-	    HTM_Txt ("\twindow.addEventListener('scroll', handleInfiniteScroll);\n");
-        }
-      else if (RefreshMatchStd)		// Refresh match for a student via AJAX
-	 HTM_Txt ("\tsetTimeout('refreshMatchStd()',delayMatch);\n");
-      else if (RefreshMatchTch)		// Refresh match for a teacher via AJAX
-	 HTM_Txt ("\tsetTimeout('refreshMatchTch()',delayMatch);\n");
+	 if (Refresh.LastClicks)	// Refresh last clicks via AJAX
+	    HTM_TxtF ("\tsetTimeout('refreshLastClicks()',%lu);\n",
+		      Cfg_TIME_TO_REFRESH_LAST_CLICKS);
+	 else if (Refresh.NewTimeline ||
+	          Refresh.OldTimeline)	// Refresh timeline via AJAX
+	   {
+	    if (Refresh.NewTimeline)
+	       HTM_Txt ("\tsetTimeout('refreshNewTimeline()',delayNewTml);\n");
+	    if (Refresh.OldTimeline)
+	       HTM_Txt ("\twindow.addEventListener('scroll', handleInfiniteScroll);\n");
+	   }
+	 else if (Refresh.MatchStd)	// Refresh match for a student via AJAX
+	    HTM_Txt ("\tsetTimeout('refreshMatchStd()',delayMatch);\n");
+	 else if (Refresh.MatchTch)	// Refresh match for a teacher via AJAX
+	    HTM_Txt ("\tsetTimeout('refreshMatchTch()',delayMatch);\n");
 
       HTM_Txt ("}\n");
 

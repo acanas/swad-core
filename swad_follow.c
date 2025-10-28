@@ -617,16 +617,21 @@ static void Fol_ShowFollowedOrFollower (struct Usr_Data *UsrDat)
 	    /* Inactive icon to follow/unfollow */
 	    Fol_PutInactiveIconToFollowUnfollow ();
 	 else				// It's not me
-	   {
 	    /* Put form to follow / unfollow */
-	    if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-					     UsrDat->UsrCod))	// I follow user
-	       /* Form to unfollow */
-	       Fol_PutIconToUnfollow (UsrDat->EnUsrCod);
-	    else if (ICanView == Usr_CAN)	// I do not follow this user and I can follow
-	       /* Form to follow */
-	       Fol_PutIconToFollow (UsrDat->EnUsrCod);
-	   }
+	    switch (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+					         UsrDat->UsrCod))
+	      {
+	       case Fol_FOLLOWER:		// I follow user
+		  /* Form to unfollow */
+		  Fol_PutIconToUnfollow (UsrDat->EnUsrCod);
+		  break;
+	       case Fol_NOT_FOLLOWER:		// I do not follow this user
+	       default:
+		  if (ICanView == Usr_CAN)	// I can follow
+		     /* Form to follow */
+		     Fol_PutIconToFollow (UsrDat->EnUsrCod);
+		  break;
+	      }
 
       HTM_DIV_End ();
 
@@ -676,23 +681,26 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct Usr_Data *UsrDat)
       HTM_TD_End ();
 
       /***** Icon to follow *****/
-      HTM_TD_Begin ("class=\"CON_ICON_FOLLOW RM %s\"",
-                    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"CON_ICON_FOLLOW RM %s\"",The_GetColorRows ());
 	 if (!Gbl.Usrs.Me.Logged ||			// Not logged
 	     Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)	// It's me
 	    /* Inactive icon to follow/unfollow */
 	    Fol_PutInactiveIconToFollowUnfollow ();
 	 else				// It's not me
-	   {
-	    /* Put form to follow / unfollow */
-	    if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-					     UsrDat->UsrCod))	// I follow user
-	       /* Form to unfollow */
-	       Fol_PutIconToUnfollow (UsrDat->EnUsrCod);
-	    else if (ICanView == Usr_CAN)	// I do not follow this user and I can follow
-	       /* Form to follow */
-	       Fol_PutIconToFollow (UsrDat->EnUsrCod);
-	   }
+	    switch (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+					         UsrDat->UsrCod))
+	      {
+	       case Fol_FOLLOWER:		// I follow user
+		  /* Form to unfollow */
+		  Fol_PutIconToUnfollow (UsrDat->EnUsrCod);
+		  break;
+	       case Fol_NOT_FOLLOWER:		// I do not follow this user
+	       default:
+		  if (ICanView == Usr_CAN)	// I can follow
+		     /* Form to follow */
+	             Fol_PutIconToFollow (UsrDat->EnUsrCod);
+		  break;
+	      }
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -752,8 +760,8 @@ void Fol_FollowUsr1 (void)
      {
       case Exi_EXISTS:
 	 // Follow only if I do not follow him/her
-	 if (!Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-					   Gbl.Usrs.Other.UsrDat.UsrCod))
+	 if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+					  Gbl.Usrs.Other.UsrDat.UsrCod) == Fol_NOT_FOLLOWER)
 	    Fol_FollowUsr (&Gbl.Usrs.Other.UsrDat);
 
 	 Ale_CreateAlert (Ale_SUCCESS,NULL,"");	// Txt not used
@@ -792,7 +800,7 @@ void Fol_UnfollowUsr1 (void)
       case Exi_EXISTS:
 	 // Unfollow only if I follow him/her
 	 if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-					  Gbl.Usrs.Other.UsrDat.UsrCod))
+					  Gbl.Usrs.Other.UsrDat.UsrCod) == Fol_FOLLOWER)
 	    Fol_UnfollowUsr (&Gbl.Usrs.Other.UsrDat);
 
 	 Ale_CreateAlert (Ale_SUCCESS,NULL,"");	// Txt not used
@@ -947,7 +955,7 @@ static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
 	      {
 	       /* Check if I follow this user, and update number of users */
 	       if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-						UsrDat.UsrCod))	// I follow user
+						UsrDat.UsrCod) == Fol_FOLLOWER)	// I follow user
 		  (*NumFollowed)++;
 	       NumUsrs++;
 	      }
@@ -995,8 +1003,8 @@ void Fol_FollowUsrs ()
 	                                              Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
 	       /* If I don't follow this user ==> follow him/her */
-	       if (!Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-					         UsrDat.UsrCod))
+	       if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+					        UsrDat.UsrCod) == Fol_NOT_FOLLOWER)
 		 {
 		  Fol_FollowUsr (&UsrDat);
 		  NumFollowed++;
@@ -1047,7 +1055,7 @@ void Fol_UnfollowUsrs (void)
 	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
 	       /* If I follow this user ==> unfollow him/her */
 	       if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-					        UsrDat.UsrCod))
+					        UsrDat.UsrCod) == Fol_FOLLOWER)
 		 {
 		  Fol_UnfollowUsr (&UsrDat);
 		  NumUnfollowed++;
@@ -1075,7 +1083,7 @@ void Fol_UnfollowUsrs (void)
 static void Fol_FollowUsr (const struct Usr_Data *UsrDat)
   {
    extern Ntf_Status_t Ntf_Status[Ntf_NUM_NOTIFY_BY_EMAIL];
-   bool CreateNotif;
+   Ntf_CreateNotif_t CreateNotif;
    Ntf_NotifyByEmail_t NotifyByEmail;
    long HieCods[Hie_NUM_LEVELS];
 
@@ -1091,17 +1099,15 @@ static void Fol_FollowUsr (const struct Usr_Data *UsrDat)
    /***** Flush cache *****/
    Fol_FlushCacheFollow ();
 
-   /***** This follow must be notified by email? *****/
-   CreateNotif = (UsrDat->NtfEvents.CreateNotif & (1 << Ntf_EVENT_FOLLOWER));
-   NotifyByEmail = CreateNotif &&
-		   (UsrDat->NtfEvents.SendEmail & (1 << Ntf_EVENT_FOLLOWER)) ? Ntf_NOTIFY_BY_EMAIL :
-									       Ntf_DONT_NOTIFY_BY_EMAIL;
-
    /***** Create notification for this followed.
 	  If this followed wants to receive notifications by email,
 	  activate the sending of a notification *****/
-   if (CreateNotif)
+   CreateNotif = (UsrDat->NtfEvents.CreateNotif & (1 << Ntf_EVENT_FOLLOWER)) ? Ntf_CREATE_NOTIF :
+									       Ntf_DONT_CREATE_NOTIF;
+   if (CreateNotif == Ntf_CREATE_NOTIF)
      {
+      NotifyByEmail = (UsrDat->NtfEvents.SendEmail & (1 << Ntf_EVENT_FOLLOWER)) ? Ntf_NOTIFY_BY_EMAIL :
+										  Ntf_DONT_NOTIFY_BY_EMAIL;
       HieCods[Hie_INS] = Gbl.Hierarchy.Node[Hie_INS].HieCod;
       HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
       HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod;

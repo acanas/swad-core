@@ -221,7 +221,6 @@ unsigned Dat_GetNumYearsBetweenDates  (struct Dat_Date *DateStr,
                                        struct Dat_Date *DateEnd);
 unsigned Dat_GetNumDaysInYear (unsigned Year);
 unsigned Dat_GetNumDaysFebruary (unsigned Year);
-bool Dat_GetIfLeapYear (unsigned Year);
 unsigned Dat_GetNumWeeksInYear (unsigned Year);
 unsigned Dat_GetDayOfWeek (unsigned Year,unsigned Month,unsigned Day);
 unsigned Dat_GetDayOfYear (struct Dat_Date *Date);

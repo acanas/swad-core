@@ -40,6 +40,12 @@ typedef enum
    Fol_SUGGEST_ANY_USER,
   } Fol_WhichUsersSuggestToFollowThem_t;
 
+typedef enum
+  {
+   Fol_NOT_FOLLOWER,
+   Fol_FOLLOWER,
+  } Fol_Follower_t;
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/

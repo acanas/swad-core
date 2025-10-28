@@ -174,8 +174,8 @@ static void Rec_WriteLinkToDataProtectionClause (void);
 static void Rec_GetUsrExtraDataFromRecordForm (struct Usr_Data *UsrDat);
 static void Rec_GetUsrCommentsFromForm (struct Usr_Data *UsrDat);
 
-static void Rec_ShowAlertsIfNotFilled (bool IAmATeacher);
-static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher);
+static void Rec_ShowAlertsIfNotFilled (void);
+static void Rec_ShowFormMyInsCtrDpt (void);
 
 /*****************************************************************************/
 /*************** Create, edit and remove fields of records *******************/
@@ -2482,18 +2482,22 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 
 	 /***** Button to follow / unfollow *****/
 	 if (MeOrOther == Usr_OTHER)	// Not me
-	   {
-	    if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-					     Rec_Record.UsrDat->UsrCod))
-	       // I follow user
-	       Lay_PutContextualLinkOnlyIcon (ActUnfUsr,NULL,
-					      Rec_PutParUsrCodEncrypted,NULL,
-					      "user-check.svg",Ico_BLACK);	// Put button to unfollow, even if I can not view user's profile
-	    else if (ICanViewUsrProfile == Usr_CAN)
-	       Lay_PutContextualLinkOnlyIcon (ActFolUsr,NULL,
-					      Rec_PutParUsrCodEncrypted,NULL,
-					      "user-plus.svg",Ico_BLACK);	// Put button to follow
-	   }
+	    switch (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+					         Rec_Record.UsrDat->UsrCod))
+	      {
+	       case Fol_FOLLOWER:		// I follow user
+		  Lay_PutContextualLinkOnlyIcon (ActUnfUsr,NULL,
+						 Rec_PutParUsrCodEncrypted,NULL,
+						 "user-check.svg",Ico_BLACK);	// Put button to unfollow, even if I can not view user's profile
+		  break;
+	       case Fol_NOT_FOLLOWER:		// I do not follow this user
+	       default:
+		  if (ICanViewUsrProfile == Usr_CAN)
+		     Lay_PutContextualLinkOnlyIcon (ActFolUsr,NULL,
+						    Rec_PutParUsrCodEncrypted,NULL,
+						    "user-plus.svg",Ico_BLACK);	// Put button to follow
+		  break;
+	      }
 
 	 /***** Button to change user's photo *****/
 	 Pho_PutIconToChangeUsrPhoto (Rec_Record.UsrDat);
@@ -3756,17 +3760,11 @@ static void Rec_GetUsrCommentsFromForm (struct Usr_Data *UsrDat)
 
 void Rec_ShowMySharedRecordAndMore (void)
   {
-   bool IAmATeacher;
-
    /***** Get my roles if not yet got *****/
    Rol_GetRolesInAllCrss (&Gbl.Usrs.Me.UsrDat);
 
-   /***** Check if I am a teacher *****/
-   IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |	// I am a non-editing teacher...
-						     (1 << Rol_TCH)));	// ...or a teacher in any course
-
    /***** If user has no name and surname, sex... *****/
-   Rec_ShowAlertsIfNotFilled (IAmATeacher);
+   Rec_ShowAlertsIfNotFilled ();
 
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"REC_USR\"");
@@ -3784,7 +3782,7 @@ void Rec_ShowMySharedRecordAndMore (void)
       HTM_DIV_Begin ("class=\"REC_RIGHT\"");
 
 	 /* My institution, center and department */
-	 Rec_ShowFormMyInsCtrDpt (IAmATeacher);
+	 Rec_ShowFormMyInsCtrDpt ();
 
 	 /* My webs / social networks */
 	 Net_ShowFormMyWebsAndSocialNets ();
@@ -3802,7 +3800,7 @@ void Rec_ShowMySharedRecordAndMore (void)
 /***************** Show alerts if some fields are not filled *****************/
 /*****************************************************************************/
 
-static void Rec_ShowAlertsIfNotFilled (bool IAmATeacher)
+static void Rec_ShowAlertsIfNotFilled (void)
   {
    extern const char *Txt_Please_fill_in_your_record_card_including_your_name;
    extern const char *Txt_Please_fill_in_your_record_card_including_your_sex;
@@ -3811,6 +3809,8 @@ static void Rec_ShowAlertsIfNotFilled (bool IAmATeacher)
    extern const char *Txt_Please_select_your_institution;
    extern const char *Txt_Please_select_your_center;
    extern const char *Txt_Please_select_your_department;
+   bool IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |	// I am a non-editing teacher...
+							  (1 << Rol_TCH)));	// ...or a teacher in any course
    bool RecordFilled = true;
 
    /***** First check that all mandatory fields are filled *****/
@@ -3855,7 +3855,7 @@ static void Rec_ShowAlertsIfNotFilled (bool IAmATeacher)
 /********* Show form to edit my institution, center and department ***********/
 /*****************************************************************************/
 
-static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
+static void Rec_ShowFormMyInsCtrDpt (void)
   {
    extern const char *Hlp_PROFILE_Institution;
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
@@ -3874,6 +3874,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    const struct Hie_Node *Ctr;
    char *Label;
    char *SelectClass;
+   bool IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |	// I am a non-editing teacher...
+							  (1 << Rol_TCH)));	// ...or a teacher in any course
 
    /***** Get list of countries *****/
    Cty_GetBasicListOfCountries ();

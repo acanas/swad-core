@@ -91,11 +91,11 @@ struct Tmt_Timetable
    long GrpCod;		// Group code (-1 if no group selected)
    struct
      {
-      bool PutIconEditCrsTT;
-      bool PutIconEditOfficeHours;
-      bool PutIconGetLink;
-      bool PutIconPrint;
-     } ContextualIcons;
+      Lay_Show_t EditCrsTT;
+      Lay_Show_t EditOfficeHours;
+      Lay_Show_t GetLink;
+      Lay_Show_t Print;
+     } ShowIcons;
   };
 
 struct Tmt_Column

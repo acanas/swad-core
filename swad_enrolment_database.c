@@ -452,8 +452,7 @@ unsigned Enr_DB_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 
 #define Enr_DB_MAX_BYTES_SUBQUERY_ROLES (Rol_NUM_ROLES * (10 + 1) - 1)
 
-unsigned Enr_DB_GetNumUsrsInCrss (Hie_Level_t HieLvl,long HieCod,unsigned Roles,
-                                  bool AnyUserInCourses)
+unsigned Enr_DB_GetNumUsrsInCrss (Hie_Level_t HieLvl,long HieCod,unsigned Roles)
   {
    char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    char SubQueryRoles[Enr_DB_MAX_BYTES_SUBQUERY_ROLES + 1];
@@ -461,6 +460,9 @@ unsigned Enr_DB_GetNumUsrsInCrss (Hie_Level_t HieLvl,long HieCod,unsigned Roles,
    bool MoreThanOneRole;
    Rol_Role_t Role;
    Rol_Role_t FirstRoleRequested;
+   bool AnyUserInCourses = Roles == ((1 << Rol_STD) |
+	                             (1 << Rol_NET) |
+	                             (1 << Rol_TCH));
 
    /***** Get first role requested *****/
    FirstRoleRequested = Rol_UNK;

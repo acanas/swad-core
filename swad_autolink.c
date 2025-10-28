@@ -484,7 +484,6 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
    char *CaptionStr;
    char *ImgStr;
    char NickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
-   bool NickSeemsValid;
    ALn_LinkType_t Type = ALn_LINK_UNKNOWN;
 
    /***** Check if the next char is the start of a nickname *****/
@@ -514,10 +513,8 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
 	    /***** A nick (without arroba) must have a number of characters
 		   Nck_MIN_CHARS_NICK_WITHOUT_ARROBA <= Length <= Nck_MAX_CHARS_NICK_WITHOUT_ARROBA *****/
 	    Length = (*Link)->URLorNick.Len - 1;	// Do not count the initial @
-	    NickSeemsValid = Length >= Nck_MIN_CHARS_NICK_WITHOUT_ARROBA &&
-			     Length <= Nck_MAX_CHARS_NICK_WITHOUT_ARROBA;
-
-	    if (NickSeemsValid)
+	    if (Length >= Nck_MIN_CHARS_NICK_WITHOUT_ARROBA &&
+		Length <= Nck_MAX_CHARS_NICK_WITHOUT_ARROBA)	// Nick seems valid
 	      {
 	       /***** Create data for a user *****/
 	       Usr_UsrDataConstructor (&UsrDat);

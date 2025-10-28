@@ -116,6 +116,12 @@ typedef enum
    Ntf_GET_CONTENT      = 1,
   } Ntf_GetContent_t;
 
+typedef enum
+  {
+   Ntf_DONT_CREATE_NOTIF,
+   Ntf_CREATE_NOTIF,
+  } Ntf_CreateNotif_t;
+
 #define Ntf_NUM_NOTIFY_BY_EMAIL 2
 typedef enum
   {
