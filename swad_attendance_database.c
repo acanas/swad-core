@@ -503,55 +503,57 @@ unsigned Att_DB_GetListUsrsInEvent (MYSQL_RES **mysql_res,long AttCod)
    unsigned NumUsrs;
 
    /***** Query list of attendance users *****/
-   if (Grp_DB_CheckIfAssociatedToGrps ("att_groups","AttCod",AttCod))
+   switch (Grp_DB_CheckIfAssociatedToGrps ("att_groups","AttCod",AttCod))
      {
-      // Event for one or more groups
-      // Subquery: list of users in groups of this attendance event...
-      // ...who have no entry in attendance list of users
-      if (asprintf (&SubQuery,"SELECT DISTINCT "
-				     "grp_users.UsrCod AS UsrCod,"	// row[0]
-				     "'N' AS Present"			// row[1]
-			       " FROM att_groups,"
-				     "grp_groups,"
-				     "grp_types,"
-				     "crs_users,"
-				     "grp_users"
-			      " WHERE att_groups.AttCod=%ld"
-				" AND att_groups.GrpCod=grp_groups.GrpCod"
-				" AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-				" AND grp_types.CrsCod=crs_users.CrsCod"
-				" AND crs_users.Role=%u"
-				" AND crs_users.UsrCod=grp_users.UsrCod"
-				" AND grp_users.GrpCod=att_groups.GrpCod"
-				" AND grp_users.UsrCod NOT IN"
-				    " (SELECT UsrCod"
-				       " FROM att_users"
-				      " WHERE AttCod=%ld)",
-		     AttCod,
-		     (unsigned) Rol_STD,
-		     AttCod) < 0)
-	 Err_NotEnoughMemoryExit ();
-     }
-   else
-     {
-      // Event for the whole course
-      // Subquery: list of users in the course of this attendance event...
-      // ...who have no entry in attendance list of users
-      if (asprintf (&SubQuery,"SELECT crs_users.UsrCod AS UsrCod,"	// row[0]
-				     "'N' AS Present"			// row[1]
-			       " FROM att_events,"
-				     "crs_users"
-			      " WHERE att_events.AttCod=%ld"
-				" AND att_events.CrsCod=crs_users.CrsCod"
-				" AND crs_users.Role=%u"
-				" AND crs_users.UsrCod NOT IN"
-				    " (SELECT UsrCod"
-				       " FROM att_users"
-				      " WHERE AttCod=%ld)",
-		     AttCod,
-		     (unsigned) Rol_STD,
-		     AttCod) < 0)
-	 Err_NotEnoughMemoryExit ();
+      case Exi_EXISTS:
+	 // Event for one or more groups
+	 // Subquery: list of users in groups of this attendance event...
+	 // ...who have no entry in attendance list of users
+	 if (asprintf (&SubQuery,"SELECT DISTINCT "
+					"grp_users.UsrCod AS UsrCod,"	// row[0]
+					"'N' AS Present"		// row[1]
+				  " FROM att_groups,"
+					"grp_groups,"
+					"grp_types,"
+					"crs_users,"
+					"grp_users"
+				 " WHERE att_groups.AttCod=%ld"
+				   " AND att_groups.GrpCod=grp_groups.GrpCod"
+				   " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+				   " AND grp_types.CrsCod=crs_users.CrsCod"
+				   " AND crs_users.Role=%u"
+				   " AND crs_users.UsrCod=grp_users.UsrCod"
+				   " AND grp_users.GrpCod=att_groups.GrpCod"
+				   " AND grp_users.UsrCod NOT IN"
+				       " (SELECT UsrCod"
+					  " FROM att_users"
+					 " WHERE AttCod=%ld)",
+			AttCod,
+			(unsigned) Rol_STD,
+			AttCod) < 0)
+	    Err_NotEnoughMemoryExit ();
+         break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 // Event for the whole course
+	 // Subquery: list of users in the course of this attendance event...
+	 // ...who have no entry in attendance list of users
+	 if (asprintf (&SubQuery,"SELECT crs_users.UsrCod AS UsrCod,"	// row[0]
+					"'N' AS Present"			// row[1]
+				  " FROM att_events,"
+					"crs_users"
+				 " WHERE att_events.AttCod=%ld"
+				   " AND att_events.CrsCod=crs_users.CrsCod"
+				   " AND crs_users.Role=%u"
+				   " AND crs_users.UsrCod NOT IN"
+				       " (SELECT UsrCod"
+					  " FROM att_users"
+					 " WHERE AttCod=%ld)",
+			AttCod,
+			(unsigned) Rol_STD,
+			AttCod) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 break;
      }
 
    // Query: list of users in attendance list + rest of users (subquery)

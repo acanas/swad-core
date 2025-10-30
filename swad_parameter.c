@@ -312,7 +312,7 @@ static void Par_CreateListOfParsFromQueryString (void)
 	)
      {
       /* Allocate space for a new parameter initialized to 0 */
-      if ((NewPar = calloc (1,sizeof (*NewPar))) == NULL)
+      if ((NewPar = calloc ((size_t) 1,sizeof (*NewPar))) == NULL)
           Err_NotEnoughMemoryExit ();
 
       /* Link the previous element in list with the current element */
@@ -388,7 +388,7 @@ static void Par_CreateListOfParsFromTmpFile (void)
 	 if (!strcasecmp (StrAux,StringBeforePar)) // Start of a parameter
 	   {
 	    /* Allocate space for a new parameter initialized to 0 */
-	    if ((NewPar = calloc (1,sizeof (*NewPar))) == NULL)
+	    if ((NewPar = calloc ((size_t) 1,sizeof (*NewPar))) == NULL)
                Err_NotEnoughMemoryExit ();
 
 	    /* Link the previous element in list with the current element */

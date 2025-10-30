@@ -591,7 +591,7 @@ void Usr_DB_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
       Grp_GetListGrpTypesInCurrentCrs (Grp_GRP_TYPES_WITH_GROUPS);
 
       /***** Allocate memory for list of booleans AddStdsWithoutGroupOf *****/
-      if ((AddStdsWithoutGroupOf = calloc (Gbl.Crs.Grps.GrpTypes.NumGrpTypes,
+      if ((AddStdsWithoutGroupOf = calloc ((size_t) Gbl.Crs.Grps.GrpTypes.NumGrpTypes,
                                            sizeof (*AddStdsWithoutGroupOf))) == NULL)
          Err_NotEnoughMemoryExit ();
 

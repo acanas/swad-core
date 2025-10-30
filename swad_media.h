@@ -112,8 +112,6 @@ struct Med_Media
    Med_Status_t Status;
    char Name[Med_BYTES_NAME + 1];
    Med_Type_t Type;
-   bool URLIsAllocated;
-   bool TitleIsAllocated;
    char *URL;	// URL, i.e. link to original big photo or video
 		// (it must be initialized to NULL
 		// in order to not trying to free it when no memory allocated)

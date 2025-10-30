@@ -51,7 +51,6 @@ void TmlNtf_CreateNotifToAuthor (long AuthorCod,long PubCod,
   {
    extern Ntf_Status_t Ntf_Status[Ntf_NUM_NOTIFY_BY_EMAIL];
    struct Usr_Data UsrDat;
-   Ntf_CreateNotif_t CreateNotif;
    Ntf_NotifyByEmail_t NotifyByEmail;
    long HieCods[Hie_NUM_LEVELS];
 
@@ -62,13 +61,10 @@ void TmlNtf_CreateNotifToAuthor (long AuthorCod,long PubCod,
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
                                                 Usr_DONT_GET_PREFS,
                                                 Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
-     {
       /***** Create notification for the author of the post.
 	     If this author wants to receive notifications by email,
 	     activate the sending of a notification *****/
-      CreateNotif = (UsrDat.NtfEvents.CreateNotif & (1 << NotifyEvent)) ? Ntf_CREATE_NOTIF :
-									  Ntf_DONT_CREATE_NOTIF;
-      if (CreateNotif == Ntf_CREATE_NOTIF)
+      if ((UsrDat.NtfEvents.CreateNotif & (1 << NotifyEvent)))	// Create notification?
 	{
 	 NotifyByEmail = (UsrDat.NtfEvents.SendEmail & (1 << NotifyEvent)) ? Ntf_NOTIFY_BY_EMAIL :
 									     Ntf_DONT_NOTIFY_BY_EMAIL;;
@@ -79,7 +75,6 @@ void TmlNtf_CreateNotifToAuthor (long AuthorCod,long PubCod,
 	 Ntf_DB_StoreNotifyEventToUsr (NotifyEvent,UsrDat.UsrCod,PubCod,
 				       Ntf_Status[NotifyByEmail],HieCods);
 	}
-     }
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);

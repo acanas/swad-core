@@ -184,6 +184,12 @@ typedef enum
    Usr_GET_NUM_USRS,
    } Usr_GetNumUsrs_t;
 
+typedef enum
+  {
+   Usr_DONT_REMOVE_SPECIFIED_USRS,
+   Usr_REMOVE_SPECIFIED_USRS,
+   } Usr_RemoveSpecifiedUsrs_t;
+
 #define Usr_NUM_WHO 6
 typedef enum
   {

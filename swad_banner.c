@@ -269,7 +269,8 @@ static void Ban_GetListBanners (struct Ban_Banners *Banners,
    if (Banners->Num) // Banners found...
      {
       /***** Create list with banners *****/
-      if ((Banners->Lst = calloc ((size_t) Banners->Num,sizeof (*Banners->Lst))) == NULL)
+      if ((Banners->Lst = calloc ((size_t) Banners->Num,
+				  sizeof (*Banners->Lst))) == NULL)
 	 Err_NotEnoughMemoryExit ();
 
       /***** Get the banners *****/

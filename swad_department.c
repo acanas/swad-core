@@ -338,7 +338,7 @@ static void Dpt_GetListDepartmentsInIns (struct Dpt_Departments *Departments,
       if (Departments->Num) // Departments found...
 	{
 	 /***** Create list with courses in degree *****/
-	 if ((Departments->Lst = calloc (Departments->Num,
+	 if ((Departments->Lst = calloc ((size_t) Departments->Num,
 	                                 sizeof (*Departments->Lst))) == NULL)
 	    Err_NotEnoughMemoryExit ();
 

@@ -278,8 +278,8 @@ static void Crs_GetListCrssInCurrentDeg (void)
    if ((NumCrss = Crs_DB_GetCrssInCurrentDegFull (&mysql_res))) // Courses found...
      {
       /***** Create list with courses in degree *****/
-      if ((Gbl.Hierarchy.List[Hie_DEG].Lst = calloc (NumCrss,
-	                                                sizeof (*Gbl.Hierarchy.List[Hie_DEG].Lst))) == NULL)
+      if ((Gbl.Hierarchy.List[Hie_DEG].Lst = calloc ((size_t) NumCrss,
+	                                             sizeof (*Gbl.Hierarchy.List[Hie_DEG].Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the courses in degree *****/

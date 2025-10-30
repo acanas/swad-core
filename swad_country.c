@@ -678,7 +678,7 @@ void Cty_GetBasicListOfCountries (void)
      {
       /***** Create list with countries *****/
       if ((Gbl.Hierarchy.List[Hie_SYS].Lst = calloc ((size_t) Gbl.Hierarchy.List[Hie_SYS].Num,
-							sizeof (*Gbl.Hierarchy.List[Hie_SYS].Lst))) == NULL)
+						     sizeof (*Gbl.Hierarchy.List[Hie_SYS].Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the countries *****/
@@ -728,7 +728,7 @@ static void Cty_GetFullListOfCountries (void)
      {
       /***** Create list with countries *****/
       if ((Gbl.Hierarchy.List[Hie_SYS].Lst = calloc ((size_t) Gbl.Hierarchy.List[Hie_SYS].Num,
-							sizeof (*Gbl.Hierarchy.List[Hie_SYS].Lst))) == NULL)
+						     sizeof (*Gbl.Hierarchy.List[Hie_SYS].Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the countries *****/

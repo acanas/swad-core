@@ -707,13 +707,13 @@ long Grp_DB_GetGrpTypeFromGrp (long GrpCod)
 /*********** exam session or match is associated to a given group ************/
 /*****************************************************************************/
 
-bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
-                                    long Cod,long GrpCod)
+Exi_Exist_t Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
+                                           long Cod,long GrpCod)
   {
    /***** Trivial check: Cod <= 0 means
  			 new item, assignment, event, survey, exam event or match *****/
    if (Cod <= 0)
-      return false;
+      return Exi_DOES_NOT_EXIST;
 
    return
    DB_QueryEXISTS ("can not check if associated to a group",
@@ -724,7 +724,7 @@ bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
 		      " AND GrpCod=%ld)",
 		   Table,
 		   Field,Cod,
-		   GrpCod) == Exi_EXISTS;
+		   GrpCod);
   }
 
 /*****************************************************************************/
@@ -732,11 +732,12 @@ bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
 /************ exam session or match is associated to any group  **************/
 /*****************************************************************************/
 
-bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod)
+Exi_Exist_t Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,
+					    long Cod)
   {
    /***** Trivial check *****/
    if (Cod <= 0)	// Assignment, attendance event, survey, exam event or match code
-      return false;
+      return Exi_DOES_NOT_EXIST;
 
    /***** Check if an assignment, attendance event, survey,
           exam session or match is associated to any group *****/
@@ -747,7 +748,7 @@ bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Co
 		     " FROM %s"
 		    " WHERE %s=%ld)",
 		   Table,
-		   Field,Cod) == Exi_EXISTS;
+		   Field,Cod);
   }
 
 /*****************************************************************************/

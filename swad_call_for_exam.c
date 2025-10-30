@@ -723,7 +723,8 @@ void Cfe_CreateListCallsForExams (struct Cfe_CallsForExams *CallsForExams)
       if (NumExaAnns)
 	{
 	 /***** Allocate memory for the list *****/
-	 if ((CallsForExams->Lst = calloc (NumExaAnns,sizeof (*CallsForExams->Lst))) == NULL)
+	 if ((CallsForExams->Lst = calloc ((size_t) NumExaAnns,
+					   sizeof (*CallsForExams->Lst))) == NULL)
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Get the dates of the existing calls for exams *****/

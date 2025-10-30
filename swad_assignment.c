@@ -1440,8 +1440,8 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 	       HTM_INPUT_CHECKBOX ("WholeCrs",
 				   Grp_DB_CheckIfAssociatedToGrps ("asg_groups",
 								   "AsgCod",
-								   AsgCod) ? HTM_NO_ATTR :
-									     HTM_CHECKED,
+								   AsgCod) == Exi_EXISTS ? HTM_NO_ATTR :
+											   HTM_CHECKED,
 				   "id=\"WholeCrs\" value=\"Y\""
 				   " onclick=\"uncheckChildren(this,'GrpCods')\"");
 	       Grp_WriteTheWholeCourse ();

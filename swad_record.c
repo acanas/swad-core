@@ -229,7 +229,7 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
    if ((Gbl.Crs.Records.LstFields.Num = Rec_DB_GetAllFieldsInCrs (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod)))
      {
       /***** Create a list of fields *****/
-      if ((Gbl.Crs.Records.LstFields.Lst = calloc (Gbl.Crs.Records.LstFields.Num,
+      if ((Gbl.Crs.Records.LstFields.Lst = calloc ((size_t) Gbl.Crs.Records.LstFields.Num,
                                                    sizeof (*Gbl.Crs.Records.LstFields.Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
 

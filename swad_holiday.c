@@ -329,7 +329,7 @@ void Hld_GetListHolidays (struct Hld_Holidays *Holidays)
       if ((Holidays->Num = Hld_DB_GetListHolidays (&mysql_res,Holidays->SelectedOrder))) // Holidays found...
 	{
 	 /***** Create list of holidays *****/
-	 if ((Holidays->Lst = calloc (Holidays->Num,
+	 if ((Holidays->Lst = calloc ((size_t) Holidays->Num,
 	                              sizeof (*Holidays->Lst))) == NULL)
 	     Err_NotEnoughMemoryExit ();
 

@@ -1271,8 +1271,8 @@ static unsigned Tmt_CalculateColsToDrawInCell (const struct Tmt_Timetable *Timet
    if (TopOrRecursiveCall == Tmt_TOP_CALL)	// Top call, non recursive call
       /****** Allocate space to store list of intervals already checked
               and initialize to false by using calloc *****/
-      if ((Tmt_IntervalsChecked = calloc (Timetable->Config.IntervalsPerDay,
-                                         sizeof (*Tmt_IntervalsChecked))) == NULL)
+      if ((Tmt_IntervalsChecked = calloc ((size_t) Timetable->Config.IntervalsPerDay,
+                                          sizeof (*Tmt_IntervalsChecked))) == NULL)
          Err_NotEnoughMemoryExit ();
 
    ColumnsToDraw = Tmt_TimeTable[Weekday][Interval].NumColumns;

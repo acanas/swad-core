@@ -927,7 +927,8 @@ void Deg_GetListAllDegsWithStds (struct Hie_List *Degs)
    if ((Degs->Num = Deg_DB_GetDegsWithStds (&mysql_res))) // Degrees found...
      {
       /***** Create list with degrees *****/
-      if ((Degs->Lst = calloc (Degs->Num,sizeof (*Degs->Lst))) == NULL)
+      if ((Degs->Lst = calloc ((size_t) Degs->Num,
+			       sizeof (*Degs->Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the degrees *****/
@@ -960,7 +961,7 @@ void Deg_GetListDegsInCurrentCtr (void)
      {
       /***** Create list with degrees of this center *****/
       if ((Gbl.Hierarchy.List[Hie_CTR].Lst = calloc ((size_t) Gbl.Hierarchy.List[Hie_CTR].Num,
-                                                        sizeof (*Gbl.Hierarchy.List[Hie_CTR].Lst))) == NULL)
+                                                     sizeof (*Gbl.Hierarchy.List[Hie_CTR].Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the degrees of this center *****/

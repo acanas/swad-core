@@ -653,7 +653,7 @@ void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
       if (LstGrpsIBelong.NumGrps)
 	{
 	 /* Allocate space for list of selected groups */
-	 if ((Gbl.Crs.Grps.LstGrpsSel.GrpCods = calloc (LstGrpsIBelong.NumGrps,
+	 if ((Gbl.Crs.Grps.LstGrpsSel.GrpCods = calloc ((size_t) LstGrpsIBelong.NumGrps,
 	                                                sizeof (*Gbl.Crs.Grps.LstGrpsSel.GrpCods))) == NULL)
 	    Err_NotEnoughMemoryExit ();
 
@@ -713,7 +713,7 @@ void Grp_GetParCodsSeveralGrps (void)
 	 if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
 	   {
 	    /***** ...create a list of groups selected *****/
-	    if ((Gbl.Crs.Grps.LstGrpsSel.GrpCods = calloc (Gbl.Crs.Grps.LstGrpsSel.NumGrps,
+	    if ((Gbl.Crs.Grps.LstGrpsSel.GrpCods = calloc ((size_t) Gbl.Crs.Grps.LstGrpsSel.NumGrps,
 	                                                   sizeof (*Gbl.Crs.Grps.LstGrpsSel.GrpCods))) == NULL)
 	       Err_NotEnoughMemoryExit ();
 	    for (Ptr = ParLstCodGrps, NumGrp = 0;
@@ -1126,7 +1126,7 @@ static void Grp_ConstructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **Al
 
    /***** Allocate memory for a list of booleans
           that indicates if already a group of each type has been selected *****/
-   if ((*AlreadyExistsGroupOfType = calloc (Gbl.Crs.Grps.GrpTypes.NumGrpTypes,
+   if ((*AlreadyExistsGroupOfType = calloc ((size_t) Gbl.Crs.Grps.GrpTypes.NumGrpTypes,
                                             sizeof (**AlreadyExistsGroupOfType))) == NULL)
       Err_NotEnoughMemoryExit ();
 
@@ -1859,8 +1859,8 @@ static void Grp_ListGrpsOfATypeToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp
 		  HTM_INPUT_CHECKBOX ("GrpCods",
 				      (Grp_DB_CheckIfAssociatedToGrp (AssociationsToGrps[WhichIsAssociatedToGrp].Table,
 								      AssociationsToGrps[WhichIsAssociatedToGrp].Field,
-								      Cod,Grp->GrpCod) ? HTM_CHECKED :
-											 HTM_NO_ATTR) |
+								      Cod,Grp->GrpCod) == Exi_EXISTS ? HTM_CHECKED :
+												       HTM_NO_ATTR) |
 				      (IBelongToThisGroup == Usr_BELONG ||
 				       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? HTM_NO_ATTR :
 										HTM_DISABLED),
@@ -3015,7 +3015,7 @@ void Grp_GetListGrpTypesInCurrentCrs (Grp_WhichGrpTypes_t WhichGrpTypes)
    if (Gbl.Crs.Grps.GrpTypes.NumGrpTypes)
      {
       /***** Create a list of group types *****/
-      if ((Gbl.Crs.Grps.GrpTypes.LstGrpTypes = calloc (Gbl.Crs.Grps.GrpTypes.NumGrpTypes,
+      if ((Gbl.Crs.Grps.GrpTypes.LstGrpTypes = calloc ((size_t) Gbl.Crs.Grps.GrpTypes.NumGrpTypes,
                                                        sizeof (*Gbl.Crs.Grps.GrpTypes.LstGrpTypes))) == NULL)
          Err_NotEnoughMemoryExit ();
 
@@ -3535,7 +3535,7 @@ static void Grp_GetLstCodGrpsUsrBelongs (long UsrCod,long GrpTypCod,
    if (LstGrps->NumGrps)
      {
       /***** Create a list of groups the user belongs to *****/
-      if ((LstGrps->GrpCods = calloc (LstGrps->NumGrps,
+      if ((LstGrps->GrpCods = calloc ((size_t) LstGrps->NumGrps,
                                       sizeof (*LstGrps->GrpCods))) == NULL)
          Err_NotEnoughMemoryExit ();
       for (NumGrp = 0;
@@ -3566,7 +3566,7 @@ void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps)
    if (LstGrps->NumGrps)
      {
       /***** Create a list of groups I belong to *****/
-      if ((LstGrps->GrpCods = calloc (LstGrps->NumGrps,
+      if ((LstGrps->GrpCods = calloc ((size_t) LstGrps->NumGrps,
                                       sizeof (*LstGrps->GrpCods))) == NULL)
          Err_NotEnoughMemoryExit ();
       for (NumGrp = 0;
@@ -4601,7 +4601,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
    struct GroupType *GrpTyp;
 
    /***** Allocate memory for the strings with group codes in each type *****/
-   if ((LstStrCodGrps = calloc (Gbl.Crs.Grps.GrpTypes.NumGrpTypes,
+   if ((LstStrCodGrps = calloc ((size_t) Gbl.Crs.Grps.GrpTypes.NumGrpTypes,
                                 sizeof (*LstStrCodGrps))) == NULL)
       Err_NotEnoughMemoryExit ();
 
@@ -4640,7 +4640,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
           with all groups selected (of all the types) *****/
    if (LstGrpsWanted->NumGrps)
      {
-      if ((LstGrpsWanted->GrpCods = calloc (LstGrpsWanted->NumGrps,
+      if ((LstGrpsWanted->GrpCods = calloc ((size_t) LstGrpsWanted->NumGrps,
                                             sizeof (*LstGrpsWanted->GrpCods))) == NULL)
          Err_NotEnoughMemoryExit ();
 

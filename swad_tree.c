@@ -901,7 +901,7 @@ static void Tre_CreateLevels (void)
         4     1
         5     0	  <--- Used to create a new node
       */
-      if ((Tre_Gbl.Levels = calloc (1 + MaxLevel + 1,
+      if ((Tre_Gbl.Levels = calloc ((size_t) (1 + MaxLevel + 1),
                                     sizeof (*Tre_Gbl.Levels))) == NULL)
 	 Err_NotEnoughMemoryExit ();
      }
@@ -1336,7 +1336,7 @@ void Tre_GetListNodes (Inf_Type_t InfoType)
    if ((Tre_Gbl.List.NumNodes = Tre_DB_GetListNodes (InfoType,&mysql_res))) // Nodes found...
      {
       /***** Create list of tree nodes *****/
-      if ((Tre_Gbl.List.Nodes = calloc (Tre_Gbl.List.NumNodes,
+      if ((Tre_Gbl.List.Nodes = calloc ((size_t) Tre_Gbl.List.NumNodes,
 				        sizeof (*Tre_Gbl.List.Nodes))) == NULL)
          Err_NotEnoughMemoryExit ();
 

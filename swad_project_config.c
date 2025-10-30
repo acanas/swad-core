@@ -410,7 +410,7 @@ static void PrjCfg_GetListRubCods (const struct Rub_Rubrics *Rubrics,
 	 if (ListRubCods->NumRubrics)	// If rubrics specified...
 	   {
 	    /***** Create a list of rubric codes from ParLstRubCods *****/
-	    if ((ListRubCods->RubCods = calloc (ListRubCods->NumRubrics,
+	    if ((ListRubCods->RubCods = calloc ((size_t) ListRubCods->NumRubrics,
 	                                        sizeof (*ListRubCods->RubCods))) == NULL)
 	       Err_NotEnoughMemoryExit ();
 	    for (Ptr = ParLstRubCods, NumRub = 0;

@@ -2984,7 +2984,7 @@ void Usr_CopyBasicUsrDataFromList (struct Usr_Data *UsrDat,
 static void Usr_AllocateUsrsList (Rol_Role_t Role)
   {
    if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
-      if ((Gbl.Usrs.LstUsrs[Role].Lst = calloc (Gbl.Usrs.LstUsrs[Role].NumUsrs,
+      if ((Gbl.Usrs.LstUsrs[Role].Lst = calloc ((size_t) Gbl.Usrs.LstUsrs[Role].NumUsrs,
                                                 sizeof (*Gbl.Usrs.LstUsrs[Role].Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
   }
@@ -3527,7 +3527,7 @@ void Usr_GetListSelectedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs,
    struct Usr_Data UsrDat;
 
    /***** Create list of user codes *****/
-   if ((*LstSelectedUsrCods = calloc (NumUsrsInList,
+   if ((*LstSelectedUsrCods = calloc ((size_t) NumUsrsInList,
                                       sizeof (**LstSelectedUsrCods))) == NULL)
       Err_NotEnoughMemoryExit ();
 

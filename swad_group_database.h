@@ -85,9 +85,10 @@ unsigned Grp_DB_GetNamesGrpsUsrBelongsTo (MYSQL_RES **mysql_res,
 
 long Grp_DB_GetGrpTypeFromGrp (long GrpCod);
 
-bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
-                                    long Cod,long GrpCod);
-bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod);
+Exi_Exist_t Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
+                                           long Cod,long GrpCod);
+Exi_Exist_t Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,
+					    long Cod);
 
 void Grp_DB_ChangeOptionalMandatory (const struct GroupType *GrpTyp);
 void Grp_DB_ChangeSingleMultiple (const struct GroupType *GrpTyp);

@@ -87,6 +87,14 @@ typedef enum
    Enr_ELIMINATE_USRS_FROM_PLATFORM       = 5,
   } Enr_EnrRemUsrsAction_t;
 
+struct Enr_WhatToDo
+   {
+   bool RemoveUsrs;
+   bool RemoveSpecifiedUsrs;
+   bool EliminateUsrs;
+   bool EnrolUsrs;
+   };
+
 /* Remove important user production (works and match results)? */
 typedef enum
   {
@@ -121,16 +129,16 @@ static void Enr_PutActionsEnrRemSeveralUsrs (void);
 
 static void Enr_ReceiveUsrsCrs (Rol_Role_t Role);
 static void Enr_InitializeLstUsrsToBeRemoved (Rol_Role_t Role,
-					      bool RemoveSpecifiedUsrs);
+					      const struct Enr_WhatToDo *WhatToDo);
 static void Enr_UpdateLstUsrsToBeRemovedUsingTextarea (Rol_Role_t Role,
-						       bool RemoveSpecifiedUsrs,
+						       const struct Enr_WhatToDo *WhatToDo,
 						       struct Usr_Data *UsrDat,
 						       char *ListUsrsIDs);
 static void Enr_UpdateLstUsrsToBeRemovedUsingSelectedUsrs (Rol_Role_t Role,
-							   bool RemoveSpecifiedUsrs,
+							   const struct Enr_WhatToDo *WhatToDo,
 							   struct Usr_Data *UsrDat);
 static void Enr_RemoveUsrsMarkedToBeRemoved (Rol_Role_t Role,
-					     bool EliminateUsrs,
+					     const struct Enr_WhatToDo *WhatToDo,
 					     struct Usr_Data *UsrDat,
 					     struct ListCodGrps *LstGrps,
 					     unsigned *NumUsrsRemoved);
@@ -143,7 +151,8 @@ static void Enr_EnrolSelectedUsrs (Rol_Role_t Role,
 				   struct Usr_Data *UsrDat,
 				   struct ListCodGrps *LstGrps,
 				   unsigned *NumUsrsEnroled);
-static void Enr_ShowMessageRemoved (unsigned NumUsrsRemoved,bool EliminateUsrs);
+static void Enr_ShowMessageRemoved (unsigned NumUsrsRemoved,
+				    const struct Enr_WhatToDo *WhatToDo);
 static void Enr_ShowMessageEnroled (unsigned NumUsrsEnroled);
 
 static void Enr_PutActionModifyOneUsr (HTM_Attributes_t *Attributes,
@@ -350,7 +359,6 @@ static void Enr_NotifyAfterEnrolment (const struct Usr_Data *UsrDat,
       [Rol_NET] = Ntf_EVENT_ENROLMENT_NET,
       [Rol_TCH] = Ntf_EVENT_ENROLMENT_TCH,
      };
-   Ntf_CreateNotif_t CreateNotif;
    Ntf_NotifyByEmail_t NotifyByEmail;
    long HieCods[Hie_NUM_LEVELS];
 
@@ -367,9 +375,7 @@ static void Enr_NotifyAfterEnrolment (const struct Usr_Data *UsrDat,
    Ntf_DB_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_TCH,-1,UsrDat->UsrCod);
 
    /***** Create new notification ******/
-   CreateNotif = (UsrDat->NtfEvents.CreateNotif & (1 << NotifyEvent[NewRole])) ? Ntf_CREATE_NOTIF :
-										 Ntf_DONT_CREATE_NOTIF;
-   if (CreateNotif == Ntf_CREATE_NOTIF)
+   if ((UsrDat->NtfEvents.CreateNotif & (1 << NotifyEvent[NewRole])))	// Create notification?
      {
       NotifyByEmail = Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER &&
 		      (UsrDat->NtfEvents.SendEmail & (1 << NotifyEvent[NewRole])) ? Ntf_NOTIFY_BY_EMAIL :
@@ -434,9 +440,16 @@ void Enr_ReqAcceptEnrolmentInCrs (void)
       Ntf_NotifyEvent_t NotifyEvent;
      } WhatToDo[Rol_NUM_ROLES] =
      {
-      [Rol_STD] = {{ActAccEnrStd,ActRemMe_Std},Ntf_EVENT_ENROLMENT_STD},
-      [Rol_NET] = {{ActAccEnrNET,ActRemMe_NET},Ntf_EVENT_ENROLMENT_NET},
-      [Rol_TCH] = {{ActAccEnrTch,ActRemMe_Tch},Ntf_EVENT_ENROLMENT_TCH},
+      [Rol_UNK    ] = {{ActUnk		,ActUnk		},Ntf_EVENT_UNKNOWN		},
+      [Rol_GST    ] = {{ActUnk		,ActUnk		},Ntf_EVENT_UNKNOWN		},
+      [Rol_USR    ] = {{ActUnk		,ActUnk		},Ntf_EVENT_UNKNOWN		},
+      [Rol_STD    ] = {{ActAccEnrStd	,ActRemMe_Std	},Ntf_EVENT_ENROLMENT_STD	},
+      [Rol_NET    ] = {{ActAccEnrNET	,ActRemMe_NET	},Ntf_EVENT_ENROLMENT_NET	},
+      [Rol_TCH    ] = {{ActAccEnrTch	,ActRemMe_Tch	},Ntf_EVENT_ENROLMENT_TCH	},
+      [Rol_DEG_ADM] = {{ActUnk		,ActUnk		},Ntf_EVENT_UNKNOWN		},
+      [Rol_CTR_ADM] = {{ActUnk		,ActUnk		},Ntf_EVENT_UNKNOWN		},
+      [Rol_INS_ADM] = {{ActUnk		,ActUnk		},Ntf_EVENT_UNKNOWN		},
+      [Rol_SYS_ADM] = {{ActUnk		,ActUnk		},Ntf_EVENT_UNKNOWN		},
      };
 
    /***** Begin box *****/
@@ -449,14 +462,14 @@ void Enr_ReqAcceptEnrolmentInCrs (void)
 		     Gbl.Hierarchy.Node[Hie_CRS].FullName);
 
       /***** Send button to accept enrolment in the current course *****/
-      if (!WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Accept)
+      if (WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Accept == ActUnk)
 	 Err_WrongRoleExit ();
       Frm_BeginForm (WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Accept);
 	 Btn_PutButtonInline (Btn_CONFIRM);
       Frm_EndForm ();
 
       /***** Send button to refuse enrolment in the current course *****/
-      if (!WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Refuse)
+      if (WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Refuse == ActUnk)
 	 Err_WrongRoleExit ();
       Frm_BeginForm (WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Refuse);
 	 Btn_PutButtonInline (Btn_REMOVE);
@@ -466,7 +479,7 @@ void Enr_ReqAcceptEnrolmentInCrs (void)
    Box_BoxEnd ();
 
    /***** Mark possible notification as seen *****/
-   if (!WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NotifyEvent)
+   if (WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NotifyEvent == Ntf_EVENT_UNKNOWN)
       Err_WrongRoleExit ();
    Ntf_DB_MarkNotifsInCrsAsSeen (WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NotifyEvent);
   }
@@ -595,9 +608,16 @@ static void Enr_ShowFormEnrRemSeveralUsrs (Rol_Role_t Role)
       const char **Title;
      } WhatToDo[Rol_NUM_ROLES] =
      {
-      [Rol_STD] = {ActRcvFrmEnrSevStd,&Txt_Administer_multiple_students            },
-      [Rol_NET] = {ActRcvFrmEnrSevNET,&Txt_Administer_multiple_non_editing_teachers},
-      [Rol_TCH] = {ActRcvFrmEnrSevTch,&Txt_Administer_multiple_teachers            },
+      [Rol_UNK    ] = {ActUnk			,NULL						},
+      [Rol_GST    ] = {ActUnk			,NULL						},
+      [Rol_USR    ] = {ActUnk			,NULL						},
+      [Rol_STD    ] = {ActRcvFrmEnrSevStd	,&Txt_Administer_multiple_students		},
+      [Rol_NET    ] = {ActRcvFrmEnrSevNET	,&Txt_Administer_multiple_non_editing_teachers	},
+      [Rol_TCH    ] = {ActRcvFrmEnrSevTch	,&Txt_Administer_multiple_teachers		},
+      [Rol_DEG_ADM] = {ActUnk			,NULL						},
+      [Rol_CTR_ADM] = {ActUnk			,NULL						},
+      [Rol_INS_ADM] = {ActUnk			,NULL						},
+      [Rol_SYS_ADM] = {ActUnk			,NULL						},
      };
 
    /***** Contextual menu *****/
@@ -633,7 +653,7 @@ static void Enr_ShowFormEnrRemSeveralUsrs (Rol_Role_t Role)
      }
 
    /***** Form to send students to be enroled / removed *****/
-   if (!WhatToDo[Role].NextAction)
+   if (WhatToDo[Role].NextAction == ActUnk)
       Err_WrongRoleExit ();
    Frm_BeginForm (WhatToDo[Role].NextAction);
 
@@ -962,13 +982,7 @@ void Enr_ReceiveAdminTchs (void)
 static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
   {
    extern const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_enroled_in_more_than_one_group;
-   struct
-     {
-      bool RemoveUsrs;
-      bool RemoveSpecifiedUsrs;
-      bool EliminateUsrs;
-      bool EnrolUsrs;
-     } WhatToDo;
+   struct Enr_WhatToDo WhatToDo;
    char *ListUsrsIDs;
    unsigned NumUsrsEnroled = 0;
    unsigned NumUsrsRemoved = 0;
@@ -1110,21 +1124,21 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
 	    if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
 	      {
 	       /* Loop 1: Initialize list of users to remove */
-	       Enr_InitializeLstUsrsToBeRemoved (Role,WhatToDo.RemoveSpecifiedUsrs);
+	       Enr_InitializeLstUsrsToBeRemoved (Role,&WhatToDo);
 
 	       /* Loop 2: Go through form list setting if a user must be removed */
 	       /* 2.1: Update list of users to be removed
 		       using the form with IDs, nicks and emails */
-	       Enr_UpdateLstUsrsToBeRemovedUsingTextarea (Role,WhatToDo.RemoveSpecifiedUsrs,
+	       Enr_UpdateLstUsrsToBeRemovedUsingTextarea (Role,&WhatToDo,
 							  &UsrDat,ListUsrsIDs);
 
 	       /* 2.2: Update list of users to be removed
 		       using list of users selected from clipboard */
-	       Enr_UpdateLstUsrsToBeRemovedUsingSelectedUsrs (Role,WhatToDo.RemoveSpecifiedUsrs,
+	       Enr_UpdateLstUsrsToBeRemovedUsingSelectedUsrs (Role,&WhatToDo,
 							      &UsrDat);
 
 	       /* Loop 3: Go through list removing users */
-	       Enr_RemoveUsrsMarkedToBeRemoved (Role,WhatToDo.EliminateUsrs,
+	       Enr_RemoveUsrsMarkedToBeRemoved (Role,&WhatToDo,
 						&UsrDat,&LstGrps,&NumUsrsRemoved);
 	      }
 
@@ -1132,7 +1146,7 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
 	    Usr_FreeUsrsList (Role);
 
 	    /* Write messages */
-	    Enr_ShowMessageRemoved (NumUsrsRemoved,WhatToDo.EliminateUsrs);
+	    Enr_ShowMessageRemoved (NumUsrsRemoved,&WhatToDo);
 	   }
 
 	 /***** Enrol users *****/
@@ -1176,14 +1190,14 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
 /*****************************************************************************/
 
 static void Enr_InitializeLstUsrsToBeRemoved (Rol_Role_t Role,
-					      bool RemoveSpecifiedUsrs)
+					      const struct Enr_WhatToDo *WhatToDo)
   {
    unsigned NumUsr;
 
    for (NumUsr = 0;
 	NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
 	NumUsr++)
-      Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Remove = !RemoveSpecifiedUsrs;
+      Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Remove = !WhatToDo->RemoveSpecifiedUsrs;
   }
 
 /*****************************************************************************/
@@ -1192,7 +1206,7 @@ static void Enr_InitializeLstUsrsToBeRemoved (Rol_Role_t Role,
 /*****************************************************************************/
 
 static void Enr_UpdateLstUsrsToBeRemovedUsingTextarea (Rol_Role_t Role,
-						       bool RemoveSpecifiedUsrs,
+						       const struct Enr_WhatToDo *WhatToDo,
 						       struct Usr_Data *UsrDat,
 						       char *ListUsrsIDs)
   {
@@ -1257,7 +1271,7 @@ static void Enr_UpdateLstUsrsToBeRemovedUsingTextarea (Rol_Role_t Role,
 	    break;
 	}
 
-      if (RemoveSpecifiedUsrs)	// Remove the specified users (of the role)
+      if (WhatToDo->RemoveSpecifiedUsrs)	// Remove the specified users (of the role)
 	{
 	 if (ListUsrCods.NumUsrs == 1)		// If more than one user found ==> do not remove
 	    for (NumUsr = 0;
@@ -1289,7 +1303,7 @@ static void Enr_UpdateLstUsrsToBeRemovedUsingTextarea (Rol_Role_t Role,
 /*****************************************************************************/
 
 static void Enr_UpdateLstUsrsToBeRemovedUsingSelectedUsrs (Rol_Role_t Role,
-							   bool RemoveSpecifiedUsrs,
+							   const struct Enr_WhatToDo *WhatToDo,
 							   struct Usr_Data *UsrDat)
   {
    const char *Ptr;
@@ -1307,7 +1321,7 @@ static void Enr_UpdateLstUsrsToBeRemovedUsingSelectedUsrs (Rol_Role_t Role,
 	      NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
 	      NumUsr++)
 	    if (Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod == UsrDat->UsrCod)	// User found
-	       Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Remove = RemoveSpecifiedUsrs;
+	       Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Remove = WhatToDo->RemoveSpecifiedUsrs;
      }
   }
 
@@ -1316,7 +1330,7 @@ static void Enr_UpdateLstUsrsToBeRemovedUsingSelectedUsrs (Rol_Role_t Role,
 /*****************************************************************************/
 
 static void Enr_RemoveUsrsMarkedToBeRemoved (Rol_Role_t Role,
-					     bool EliminateUsrs,
+					     const struct Enr_WhatToDo *WhatToDo,
 					     struct Usr_Data *UsrDat,
 					     struct ListCodGrps *LstGrps,
 					     unsigned *NumUsrsRemoved)
@@ -1334,7 +1348,7 @@ static void Enr_RemoveUsrsMarkedToBeRemoved (Rol_Role_t Role,
 						      Usr_DONT_GET_PREFS,
 						      Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	   {	// User's data exist...
-	    if (EliminateUsrs)			// Eliminate user completely from the platform
+	    if (WhatToDo->EliminateUsrs)	// Eliminate user completely from the platform
 	      {
 	       Acc_CompletelyEliminateAccount (UsrDat,Cns_QUIET);	// Remove definitely the user from the platform
 	       (*NumUsrsRemoved)++;
@@ -1487,7 +1501,8 @@ static void Enr_EnrolSelectedUsrs (Rol_Role_t Role,
 /*********************** Write number of users removed ***********************/
 /*****************************************************************************/
 
-static void Enr_ShowMessageRemoved (unsigned NumUsrsRemoved,bool EliminateUsrs)
+static void Enr_ShowMessageRemoved (unsigned NumUsrsRemoved,
+				    const struct Enr_WhatToDo *WhatToDo)
   {
    extern const char *Txt_No_user_has_been_eliminated;
    extern const char *Txt_No_user_has_been_removed;
@@ -1499,16 +1514,16 @@ static void Enr_ShowMessageRemoved (unsigned NumUsrsRemoved,bool EliminateUsrs)
    switch (NumUsrsRemoved)
      {
       case 0:
-	 Ale_ShowAlert (Ale_INFO,EliminateUsrs ? Txt_No_user_has_been_eliminated :
-						 Txt_No_user_has_been_removed);
+	 Ale_ShowAlert (Ale_INFO,WhatToDo->EliminateUsrs ? Txt_No_user_has_been_eliminated :
+							   Txt_No_user_has_been_removed);
 	 break;
       case 1:
-	 Ale_ShowAlert (Ale_SUCCESS,EliminateUsrs ? Txt_One_user_has_been_eliminated :
-						    Txt_One_user_has_been_removed);
+	 Ale_ShowAlert (Ale_SUCCESS,WhatToDo->EliminateUsrs ? Txt_One_user_has_been_eliminated :
+							      Txt_One_user_has_been_removed);
 	 break;
       default:
-	 Ale_ShowAlert (Ale_SUCCESS,EliminateUsrs ? Txt_X_users_have_been_eliminated :
-						    Txt_X_users_have_been_removed,
+	 Ale_ShowAlert (Ale_SUCCESS,WhatToDo->EliminateUsrs ? Txt_X_users_have_been_eliminated :
+							      Txt_X_users_have_been_removed,
 			NumUsrsRemoved);
 	 break;
      }
@@ -2701,12 +2716,20 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
       const char **Title;
      } WhatToDo[Rol_NUM_ROLES] =
      {
-      [Rol_STD] = {ActReqEnrSevStd,&Txt_Administer_multiple_students            },
-      [Rol_NET] = {ActReqEnrSevNET,&Txt_Administer_multiple_non_editing_teachers},
-      [Rol_TCH] = {ActReqEnrSevTch,&Txt_Administer_multiple_teachers            },
+      [Rol_UNK    ] = {ActUnk		,NULL						},
+      [Rol_GST    ] = {ActUnk		,NULL						},
+      [Rol_USR    ] = {ActUnk		,NULL						},
+      [Rol_STD    ] = {ActReqEnrSevStd	,&Txt_Administer_multiple_students            	},
+      [Rol_NET    ] = {ActReqEnrSevNET	,&Txt_Administer_multiple_non_editing_teachers	},
+      [Rol_TCH    ] = {ActReqEnrSevTch	,&Txt_Administer_multiple_teachers            	},
+      [Rol_DEG_ADM] = {ActUnk		,NULL						},
+      [Rol_CTR_ADM] = {ActUnk		,NULL						},
+      [Rol_INS_ADM] = {ActUnk		,NULL						},
+      [Rol_SYS_ADM] = {ActUnk		,NULL						},
+
      };
 
-   if (!WhatToDo[Role].NextAction)
+   if (WhatToDo[Role].NextAction == ActUnk)
       Err_WrongRoleExit ();
    Lay_PutContextualLinkIconText (WhatToDo[Role].NextAction,NULL,
                                   NULL,NULL,

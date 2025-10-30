@@ -1302,8 +1302,8 @@ static void Mch_ShowLstGrpsToEditMatch (long MchCod)
 	       HTM_INPUT_CHECKBOX ("WholeCrs",
 				   Grp_DB_CheckIfAssociatedToGrps ("mch_groups",
 								   "MchCod",
-								   MchCod) ? HTM_NO_ATTR :
-									     HTM_CHECKED,
+								   MchCod) == Exi_EXISTS ? HTM_NO_ATTR :
+											   HTM_CHECKED,
 				   "id=\"WholeCrs\" value=\"Y\""
 				   " onclick=\"uncheckChildren(this,'GrpCods')\"");
 	       Grp_WriteTheWholeCourse ();

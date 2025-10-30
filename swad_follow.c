@@ -1083,7 +1083,6 @@ void Fol_UnfollowUsrs (void)
 static void Fol_FollowUsr (const struct Usr_Data *UsrDat)
   {
    extern Ntf_Status_t Ntf_Status[Ntf_NUM_NOTIFY_BY_EMAIL];
-   Ntf_CreateNotif_t CreateNotif;
    Ntf_NotifyByEmail_t NotifyByEmail;
    long HieCods[Hie_NUM_LEVELS];
 
@@ -1102,9 +1101,7 @@ static void Fol_FollowUsr (const struct Usr_Data *UsrDat)
    /***** Create notification for this followed.
 	  If this followed wants to receive notifications by email,
 	  activate the sending of a notification *****/
-   CreateNotif = (UsrDat->NtfEvents.CreateNotif & (1 << Ntf_EVENT_FOLLOWER)) ? Ntf_CREATE_NOTIF :
-									       Ntf_DONT_CREATE_NOTIF;
-   if (CreateNotif == Ntf_CREATE_NOTIF)
+   if ((UsrDat->NtfEvents.CreateNotif & (1 << Ntf_EVENT_FOLLOWER)))	// Create notification?
      {
       NotifyByEmail = (UsrDat->NtfEvents.SendEmail & (1 << Ntf_EVENT_FOLLOWER)) ? Ntf_NOTIFY_BY_EMAIL :
 										  Ntf_DONT_NOTIFY_BY_EMAIL;

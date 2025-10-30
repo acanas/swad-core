@@ -2163,7 +2163,7 @@ int swad__sendMyGroups (struct soap *soap,
       if (LstGrpsIWant.NumGrps)	// If I have selected groups...
         {
          /***** Create a list of groups selected from myGroups *****/
-         if ((LstGrpsIWant.GrpCods = calloc (LstGrpsIWant.NumGrps,
+         if ((LstGrpsIWant.GrpCods = calloc ((size_t) LstGrpsIWant.NumGrps,
                                              sizeof (*LstGrpsIWant.GrpCods))) == NULL)
 	    Err_NotEnoughMemoryExit ();
          for (NumGrp = 0, Ptr = myGroups;
@@ -2695,7 +2695,7 @@ static void API_GetLstGrpsSel (const char *Groups)
       // Here NestedCalls is always 0
       Gbl.Crs.Grps.LstGrpsSel.NestedCalls++;
       // Here NestedCalls is always 1
-      if ((Gbl.Crs.Grps.LstGrpsSel.GrpCods = calloc (Gbl.Crs.Grps.LstGrpsSel.NumGrps,
+      if ((Gbl.Crs.Grps.LstGrpsSel.GrpCods = calloc ((size_t) Gbl.Crs.Grps.LstGrpsSel.NumGrps,
                                                      sizeof (*Gbl.Crs.Grps.LstGrpsSel.GrpCods))) == NULL)
 	 Err_NotEnoughMemoryExit ();
 

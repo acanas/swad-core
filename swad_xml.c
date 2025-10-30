@@ -88,7 +88,7 @@ void XML_WriteEndFile (FILE *FileTgt,const char *Type)
 void XML_GetTree (const char *XMLBuffer,struct XMLElement **XMLRootElem)
   {
    /***** Allocate space for the root element *****/
-   if ((*XMLRootElem = calloc (1,sizeof (**XMLRootElem))) == NULL)
+   if ((*XMLRootElem = calloc ((size_t) 1,sizeof (**XMLRootElem))) == NULL)
       Err_NotEnoughMemoryExit ();
 
    XML_Ptr = XMLBuffer;
@@ -197,7 +197,7 @@ static void XML_GetElement (struct XMLElement *ParentElem)
                  XML_Ptr
          */
          /***** Allocate space for the child element *****/
-         if ((ChildElem = calloc (1,sizeof (*ChildElem))) == NULL)
+         if ((ChildElem = calloc ((size_t) 1,sizeof (*ChildElem))) == NULL)
             Err_NotEnoughMemoryExit ();
 
          /***** Adjust XML elements pointers *****/
@@ -318,7 +318,7 @@ static void XML_GetAttributes (struct XMLElement *Elem)
                        XML_Ptr
          */
          /***** Allocate space for the attribute *****/
-         if ((Attribute = calloc (1,sizeof (*Attribute))) == NULL)
+         if ((Attribute = calloc ((size_t) 1,sizeof (*Attribute))) == NULL)
             Err_NotEnoughMemoryExit ();
 
          /***** Adjust XML element and attribute pointers *****/

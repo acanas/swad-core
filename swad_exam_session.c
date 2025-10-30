@@ -1820,8 +1820,8 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
 	       HTM_INPUT_CHECKBOX ("WholeCrs",
 				   Grp_DB_CheckIfAssociatedToGrps ("exa_groups",
 								   "SesCod",
-								   SesCod) ? HTM_NO_ATTR :
-									     HTM_CHECKED,
+								   SesCod) == Exi_EXISTS ? HTM_NO_ATTR :
+											   HTM_CHECKED,
 				   "id=\"WholeCrs\" value=\"Y\""
 				   " onclick=\"uncheckChildren(this,'GrpCods')\"");
 	       Grp_WriteTheWholeCourse ();

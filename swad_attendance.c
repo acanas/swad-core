@@ -1129,8 +1129,8 @@ static void Att_ShowLstGrpsToEditEvent (long AttCod)
 	       HTM_INPUT_CHECKBOX ("WholeCrs",
 				   Grp_DB_CheckIfAssociatedToGrps ("att_groups",
 								   "AttCod",
-								   AttCod) ? HTM_NO_ATTR :
-									     HTM_CHECKED,
+								   AttCod) == Exi_EXISTS ? HTM_NO_ATTR :
+											   HTM_CHECKED,
 				   "id=\"WholeCrs\" value=\"Y\""
 				   " onclick=\"uncheckChildren(this,'GrpCods')\"");
 	       Grp_WriteTheWholeCourse ();

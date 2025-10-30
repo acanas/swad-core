@@ -840,7 +840,6 @@ static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages)
    const char *Ptr;
    bool MsgAlreadyInserted = false;
    long NewMsgCod = -1L;	// Initiliazed to avoid warning
-   Ntf_CreateNotif_t CreateNotif;
    Ntf_NotifyByEmail_t NotifyByEmail;
    long HieCods[Hie_NUM_LEVELS];
 
@@ -892,23 +891,19 @@ static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages)
 					       UsrDstData.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod ? Msg_REPLIED :
 												   Msg_NOT_REPLIED;
 
-		     /***** This received message must be notified by email? *****/
-		     CreateNotif = (UsrDstData.NtfEvents.CreateNotif & (1 << Ntf_EVENT_MESSAGE)) ? Ntf_CREATE_NOTIF :
-												   Ntf_DONT_CREATE_NOTIF;
-		     NotifyByEmail = CreateNotif == Ntf_CREATE_NOTIF &&
-				     UsrDstData.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod &&
-				     (UsrDstData.NtfEvents.SendEmail & (1 << Ntf_EVENT_MESSAGE)) ? Ntf_NOTIFY_BY_EMAIL :
-												   Ntf_DONT_NOTIFY_BY_EMAIL;
-
-		     /***** Create the received message for this recipient
-			    and increment number of new messages received by this recipient *****/
-		     Msg_DB_CreateRcvMsg (NewMsgCod,UsrDstData.UsrCod,NotifyByEmail);
-
-		     /***** Create notification for this recipient.
-			    If this recipient wants to receive notifications by -mail,
-			    activate the sending of a notification *****/
-		     if (CreateNotif == Ntf_CREATE_NOTIF)
+		     /***** Create received message and optional notification for this recipient *****/
+		     if ((UsrDstData.NtfEvents.CreateNotif & (1 << Ntf_EVENT_MESSAGE)))	// Create notification?
 		       {
+			NotifyByEmail = UsrDstData.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod &&
+					(UsrDstData.NtfEvents.SendEmail & (1 << Ntf_EVENT_MESSAGE)) ? Ntf_NOTIFY_BY_EMAIL :
+												      Ntf_DONT_NOTIFY_BY_EMAIL;
+
+			/* Create the received message for this recipient */
+			Msg_DB_CreateRcvMsg (NewMsgCod,UsrDstData.UsrCod,NotifyByEmail);
+
+			/* Create notification for this recipient.
+			   If this recipient wants to receive notifications by -mail,
+			   activate the sending of a notification */
 			HieCods[Hie_INS] = Gbl.Hierarchy.Node[Hie_INS].HieCod;
 			HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
 			HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod;
@@ -918,6 +913,10 @@ static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages)
 						      Ntf_Status[NotifyByEmail],
 						      HieCods);
 		       }
+		     else
+			/* Create the received message for this recipient */
+		        Msg_DB_CreateRcvMsg (NewMsgCod,UsrDstData.UsrCod,
+					     NotifyByEmail = Ntf_DONT_NOTIFY_BY_EMAIL);
 
 		     /***** Show an alert indicating that the message has been sent successfully *****/
 		     Ale_ShowAlert (Ale_SUCCESS,*Msg[NotifyByEmail],UsrDstData.FullName);
