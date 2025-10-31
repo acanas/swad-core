@@ -50,6 +50,7 @@
 #include "swad_parameter.h"
 #include "swad_string.h"
 #include "swad_theme.h"
+#include "swad_zip.h"
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/
@@ -65,12 +66,20 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+static ZIP_CreateZIP_t ZIP_CreateZIP = ZIP_DONT_CREATE_ZIP;
+static char ZIP_TmpDir[NAME_MAX + 1];
+
+/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
 static void ZIP_PutLinkToCreateZIPAsgWrkPars (__attribute__((unused)) void *Args);
 
 static void ZIP_CreateTmpDirForCompression (void);
+static const char *ZIP_GetTmpDir (void);
 static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat);
 
 static void ZIP_CompressFolderIntoZIP (void);
@@ -103,9 +112,15 @@ static void ZIP_PutLinkToCreateZIPAsgWrkPars (__attribute__((unused)) void *Args
 /****************** Get whether to create ZIP file from form *****************/
 /*****************************************************************************/
 
-bool ZIP_GetCreateZIPFromForm (void)
+void ZIP_SetCreateZIPFromForm (void)
   {
-   return Par_GetParBool ("CreateZIP");
+   ZIP_CreateZIP = Par_GetParBool ("CreateZIP") ? ZIP_CREATE_ZIP :
+						  ZIP_DONT_CREATE_ZIP;
+  }
+
+inline ZIP_CreateZIP_t ZIP_GetCreateZIP (void)
+  {
+   return ZIP_CreateZIP;
   }
 
 /*****************************************************************************/
@@ -165,8 +180,7 @@ void ZIP_CreateZIPAsgWrk (void)
    Brw_CreateDirDownloadTmp ();
 
    /***** Relative path of the directory with the works to compress *****/
-   snprintf (Path,sizeof (Path),"%s/%s",
-	     Cfg_PATH_ZIP_PRIVATE,Gbl.FileBrowser.ZIP.TmpDir);
+   snprintf (Path,sizeof (Path),"%s/%s",Cfg_PATH_ZIP_PRIVATE,ZIP_TmpDir);
 
    /***** Change to directory of the assignments and works
           in order to start the path in the zip file from there *****/
@@ -227,10 +241,9 @@ static void ZIP_CreateTmpDirForCompression (void)
    Fil_CreateDirIfNotExists (Cfg_PATH_ZIP_PRIVATE);
 
    /***** Create a new temporary directory *****/
-   Str_Copy (Gbl.FileBrowser.ZIP.TmpDir,Cry_GetUniqueNameEncrypted (),
-             sizeof (Gbl.FileBrowser.ZIP.TmpDir) - 1);
+   Str_Copy (ZIP_TmpDir,Cry_GetUniqueNameEncrypted (),sizeof (ZIP_TmpDir) - 1);
    snprintf (PathDirTmp,sizeof (PathDirTmp),"%s/%s",
-	     Cfg_PATH_ZIP_PRIVATE,Gbl.FileBrowser.ZIP.TmpDir);
+	     Cfg_PATH_ZIP_PRIVATE,ZIP_TmpDir);
    if (mkdir (PathDirTmp,(mode_t) 0xFFF))
       Err_ShowErrorAndExit ("Can not create temporary folder for compression.");
   }
@@ -278,7 +291,7 @@ static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat)
 	     "%s/usr/%02u/%ld",
 	     Gbl.Crs.Path.AbsPriv,(unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
    snprintf (LinkTmpUsr,sizeof (LinkTmpUsr),"%s/%s/%s",
-	     Cfg_PATH_ZIP_PRIVATE,Gbl.FileBrowser.ZIP.TmpDir,FullNameAndUsrID);
+	     Cfg_PATH_ZIP_PRIVATE,ZIP_TmpDir,FullNameAndUsrID);
 
    /* Try to create a link named LinkTmpUsr to PathFolderUsrInsideCrs */
    if (symlink (PathFolderUsrInsideCrs,LinkTmpUsr))
@@ -352,8 +365,7 @@ static void ZIP_CompressFolderIntoZIP (void)
 	     Gbl.FileBrowser.Path.AboveRootFolder,
 	     Gbl.FileBrowser.FilFolLnk.Full);
    snprintf (PathCompression,sizeof (PathCompression),"%s/%s",
-	     Cfg_PATH_ZIP_PRIVATE,
-	     Gbl.FileBrowser.ZIP.TmpDir);	// Example: /var/www/swad/zip/<temporary_dir>
+	     Cfg_PATH_ZIP_PRIVATE,ZIP_TmpDir);	// Example: /var/www/swad/zip/<temporary_dir>
 
    UncompressedSize = ZIP_CloneDir (Path,PathCompression,Gbl.FileBrowser.FilFolLnk.Full);
 

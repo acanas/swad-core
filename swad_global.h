@@ -192,11 +192,6 @@ struct Globals
          char R[NAME_MAX + 1];	// Right directory: rest of chars
         } TmpPubDir;
       HidVis_HiddenOrVisible_t HiddenLevels[1 + BrwSiz_MAX_DIR_LEVELS];
-      struct
-        {
-	 bool CreateZIP;
-         char TmpDir[NAME_MAX + 1];
-        } ZIP;
      } FileBrowser;	// Struct used for a file browser
 
    /* Cache */

@@ -1969,8 +1969,8 @@ void Brw_GetParAndInitFileBrowser (void)
 					     Usr_GET_LIST_ALL_USRS);
       /* Get user whose folder will be used to make any operation */
       Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
-      /* Get whether we must create the zip file or not */
-      Gbl.FileBrowser.ZIP.CreateZIP = ZIP_GetCreateZIPFromForm ();
+      /* Set whether we must create the zip file or not */
+      ZIP_SetCreateZIPFromForm ();
      }
 
    switch (Gbl.Action.Act)
@@ -2809,7 +2809,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
    const char *Ptr;
 
    /***** Create the zip file and put a link to download it *****/
-   if (Gbl.FileBrowser.ZIP.CreateZIP)
+   if (ZIP_GetCreateZIP () == ZIP_CREATE_ZIP)
       ZIP_CreateZIPAsgWrk ();
 
    /***** Write top before showing file browser *****/
@@ -3409,7 +3409,7 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
 	}
       else if (Brw_TypeIsAdmCrsAsgWrk[Gbl.FileBrowser.Type])
 	{
-	 if (!Gbl.FileBrowser.ZIP.CreateZIP)
+	 if (ZIP_GetCreateZIP () == ZIP_DONT_CREATE_ZIP)
 	    ZIP_PutLinkToCreateZIPAsgWrk ();	// Create a zip file with the...
 						//... works of the selected users
 	}

@@ -24,11 +24,24 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
+/******************************** Public types *******************************/
+/*****************************************************************************/
+
+typedef enum
+  {
+   ZIP_DONT_CREATE_ZIP,
+   ZIP_CREATE_ZIP,
+  } ZIP_CreateZIP_t;
+
+/*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 void ZIP_PutLinkToCreateZIPAsgWrk (void);
-bool ZIP_GetCreateZIPFromForm (void);
+
+void ZIP_SetCreateZIPFromForm (void);
+ZIP_CreateZIP_t ZIP_GetCreateZIP (void);
+
 void ZIP_CreateZIPAsgWrk (void);
 
 void ZIP_CompressFileTree (void);
