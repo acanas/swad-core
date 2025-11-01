@@ -2788,7 +2788,7 @@ void Usr_GetListUsrsFromQuery (char *Query,Hie_Level_t HieLvl,Rol_Role_t Role)
    MYSQL_ROW row;
    unsigned NumUsr;
    struct Usr_InList *UsrInList;
-   bool Abort = false;
+   Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
 
    if (Query == NULL)
      {
@@ -2812,7 +2812,7 @@ void Usr_GetListUsrsFromQuery (char *Query,Hie_Level_t HieLvl,Rol_Role_t Role)
         {
 	 Ale_ShowAlert (Ale_WARNING,Txt_The_list_of_X_users_is_too_large_to_be_displayed,
 		        Gbl.Usrs.LstUsrs[Role].NumUsrs);
-         Abort = true;
+         SuccessOrError = Err_ERROR;
         }
       else
         {
@@ -2952,7 +2952,7 @@ void Usr_GetListUsrsFromQuery (char *Query,Hie_Level_t HieLvl,Rol_Role_t Role)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   if (Abort)
+   if (SuccessOrError == Err_ERROR)
       Err_ShowErrorAndExit (NULL);
   }
 

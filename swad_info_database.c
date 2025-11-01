@@ -225,15 +225,20 @@ Exi_Exist_t Inf_DB_GetInfoTxt (MYSQL_RES **mysql_res,
 /***************** Set if students must read course info *********************/
 /*****************************************************************************/
 
-void Inf_DB_SetForceRead (Inf_Type_t InfoType,bool MustBeRead)
+void Inf_DB_SetForceRead (Inf_Type_t InfoType,Inf_MustBeRead_t MustBeRead)
   {
+   static char MustBeReadYN[Inf_NUM_MUST_BE_READ] =
+     {
+      [Inf_DONT_MUST_BE_READ] = 'N',
+      [Inf_MUST_BE_READ     ] = 'Y',
+     };
+
    DB_QueryUPDATE ("can not update if info must be read",
 		   "UPDATE crs_info_src"
 		     " SET MustBeRead='%c'"
 		   " WHERE CrsCod=%ld"
 		     " AND InfoType='%s'",
-                   MustBeRead ? 'Y' :
-        	                'N',
+                   MustBeReadYN[MustBeRead],
                    Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Inf_DB_NamesForInfoType[InfoType]);
   }
@@ -242,35 +247,41 @@ void Inf_DB_SetForceRead (Inf_Type_t InfoType,bool MustBeRead)
 /********************* Set if I have read course info ************************/
 /*****************************************************************************/
 
-void Inf_DB_SetIHaveRead (Inf_Type_t InfoType,bool IHaveRead)
+void Inf_DB_SetIHaveRead (Inf_Type_t InfoType,Inf_IHaveRead_t IHaveRead)
   {
-   if (IHaveRead)
-      /***** Insert I have read course information *****/
-      DB_QueryREPLACE ("can not set that I have read course info",
-		       "REPLACE INTO crs_info_read"
-		       " (UsrCod,CrsCod,InfoType)"
-		       " VALUES"
-		       " (%ld,%ld,'%s')",
-                       Gbl.Usrs.Me.UsrDat.UsrCod,
-                       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-                       Inf_DB_NamesForInfoType[InfoType]);
-   else
-      /***** Remove I have read course information *****/
-      DB_QueryDELETE ("can not set that I have not read course info",
-		      "DELETE FROM crs_info_read"
-		      " WHERE UsrCod=%ld"
-		        " AND CrsCod=%ld"
-		        " AND InfoType='%s'",
-		      Gbl.Usrs.Me.UsrDat.UsrCod,
-		      Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		      Inf_DB_NamesForInfoType[InfoType]);
+   switch (IHaveRead)
+     {
+      case Inf_I_HAVE_READ:
+	 /***** Insert I have read course information *****/
+	 DB_QueryREPLACE ("can not set that I have read course info",
+			  "REPLACE INTO crs_info_read"
+			  " (UsrCod,CrsCod,InfoType)"
+			  " VALUES"
+			  " (%ld,%ld,'%s')",
+			  Gbl.Usrs.Me.UsrDat.UsrCod,
+			  Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			  Inf_DB_NamesForInfoType[InfoType]);
+	 break;
+      case Inf_I_DONT_HAVE_READ:
+      default:
+	 /***** Remove I have read course information *****/
+	 DB_QueryDELETE ("can not set that I have not read course info",
+			 "DELETE FROM crs_info_read"
+			 " WHERE UsrCod=%ld"
+			   " AND CrsCod=%ld"
+			   " AND InfoType='%s'",
+			 Gbl.Usrs.Me.UsrDat.UsrCod,
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			 Inf_DB_NamesForInfoType[InfoType]);
+	 break;
+     }
   }
 
 /*****************************************************************************/
 /******************** Check I have read a course info ************************/
 /*****************************************************************************/
 
-bool Inf_DB_CheckIfIHaveReadInfo (Inf_Type_t InfoType)
+Inf_IHaveRead_t Inf_DB_CheckIfIHaveReadInfo (Inf_Type_t InfoType)
   {
    return
    DB_QueryEXISTS ("can not check if I have read course info",
@@ -282,7 +293,8 @@ bool Inf_DB_CheckIfIHaveReadInfo (Inf_Type_t InfoType)
 		      " AND InfoType='%s')",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Inf_DB_NamesForInfoType[InfoType]) == Exi_EXISTS;
+		   Inf_DB_NamesForInfoType[InfoType]) == Exi_EXISTS ? Inf_I_HAVE_READ :
+								      Inf_I_DONT_HAVE_READ;
   }
 
 /*****************************************************************************/

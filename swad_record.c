@@ -3640,7 +3640,7 @@ void Rec_UpdateMyRecord (void)
 Rol_Role_t Rec_GetRoleFromRecordForm (void)
   {
    Rol_Role_t Role;
-   bool RoleOK;
+   Err_SuccessOrError_t RoleOK;
 
    /***** Get role as a parameter from form *****/
    Role = (Rol_Role_t)
@@ -3652,14 +3652,14 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
    /***** Check if I can register a user
           with the received role in current course *****/
    /* Check for other possible errors */
-   RoleOK = false;
+   RoleOK = Err_ERROR;
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:		// I am logged as student
       case Rol_NET:		// I am logged as non-editing teacher
          /* A student or a non-editing teacher can only change his/her data, but not his/her role */
 	 Role = Gbl.Usrs.Me.Role.Logged;
-	 RoleOK = true;
+	 RoleOK = Err_SUCCESS;
 	 break;
       case Rol_TCH:		// I am logged as teacher
       case Rol_DEG_ADM:		// I am logged as degree admin
@@ -3668,19 +3668,19 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
 	 if (Role == Rol_STD ||
 	     Role == Rol_NET ||
 	     Role == Rol_TCH)
-	    RoleOK = true;
+	    RoleOK = Err_SUCCESS;
 	 break;
       case Rol_SYS_ADM:
 	 if ( Role == Rol_STD ||
 	      Role == Rol_NET ||
 	      Role == Rol_TCH ||
 	     (Role == Rol_GST && Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0))
-	    RoleOK = true;
+	    RoleOK = Err_SUCCESS;
 	 break;
       default:
 	 break;
      }
-   if (!RoleOK)
+   if (RoleOK == Err_ERROR)
       Err_WrongRoleExit ();
    return Role;
   }

@@ -54,10 +54,10 @@ Exi_Exist_t Inf_DB_GetInfoTxt (MYSQL_RES **mysql_res,
                                long HieCod,Inf_Type_t InfoType);
 
 //------------------------- Info read by students? ----------------------------
-void Inf_DB_SetForceRead (Inf_Type_t InfoType,bool MustBeRead);
-void Inf_DB_SetIHaveRead (Inf_Type_t InfoType,bool IHaveRead);
+void Inf_DB_SetForceRead (Inf_Type_t InfoType,Inf_MustBeRead_t MustBeRead);
+void Inf_DB_SetIHaveRead (Inf_Type_t InfoType,Inf_IHaveRead_t IHaveRead);
 
-bool Inf_DB_CheckIfIHaveReadInfo (Inf_Type_t InfoType);
+Inf_IHaveRead_t Inf_DB_CheckIfIHaveReadInfo (Inf_Type_t InfoType);
 unsigned Inf_DB_GetInfoTypesfIMustReadInfo (MYSQL_RES **mysql_res);
 
 void Inf_DB_RemoveUsrFromCrsInfoRead (long UsrCod,long HieCod);

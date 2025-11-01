@@ -61,13 +61,27 @@ typedef enum
    Inf_URL		= 5,
   } Inf_Src_t;
 
+#define Inf_NUM_MUST_BE_READ 2
+typedef enum
+  {
+   Inf_DONT_MUST_BE_READ,
+   Inf_MUST_BE_READ,
+  } Inf_MustBeRead_t;
+
+#define Inf_NUM_I_HAVE_READ 2
+typedef enum
+  {
+   Inf_I_DONT_HAVE_READ,
+   Inf_I_HAVE_READ,
+  } Inf_IHaveRead_t;
+
 struct Inf_Info
   {
    Inf_Type_t Type;
    struct Inf_FromDB
      {
-      Inf_Src_t Src;	// Info source
-      bool MustBeRead;	// Must be read by students?
+      Inf_Src_t Src;			// Info source
+      Inf_MustBeRead_t MustBeRead;	// Must be read by students?
      } FromDB;
   };
 

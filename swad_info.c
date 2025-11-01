@@ -196,7 +196,7 @@ static Act_Action_t Inf_ActionsReqLnk[Inf_NUM_TYPES] =
 
 static struct
   {
-   bool MustBeRead[Inf_NUM_TYPES];	// Students must read info?
+   Inf_MustBeRead_t MustBeRead[Inf_NUM_TYPES];	// Students must read info?
    Lay_Show_t ShowMsgMustBeRead;
   } Inf_InfoMustBeRead;
 
@@ -228,8 +228,8 @@ static void Inf_ConfigInfoReading (const struct Inf_Info *Info);
 static void Inf_PutCheckboxForceStdsToReadInfo (const struct Inf_Info *Info,
 						HTM_Attributes_t Attributes);
 static void Inf_PutCheckboxConfirmIHaveReadInfo (Inf_Type_t InfoType);
-static bool Inf_GetMustBeReadFromForm (void);
-static bool Inf_GetIfIHaveReadFromForm (void);
+static Inf_MustBeRead_t Inf_GetMustBeReadFromForm (void);
+static Inf_IHaveRead_t Inf_GetIfIHaveReadFromForm (void);
 
 //-----------------------------------------------------------------------------
 static void Inf_ConfigInfoSource (struct Inf_Info *Info);
@@ -300,7 +300,8 @@ static void Inf_BeforeTree (struct Inf_Info *Info,Vie_ViewType_t ViewType,Inf_Sr
       Inf_PutFormWhichSyllabus (Info->Type,ViewType);
 
       /***** Only for students: Have I read this information? ******/
-      if (Info->FromDB.MustBeRead && Gbl.Usrs.Me.Role.Logged == Rol_STD)
+      if (Info->FromDB.MustBeRead == Inf_MUST_BE_READ &&
+	  Gbl.Usrs.Me.Role.Logged == Rol_STD)
 	 Inf_PutCheckboxConfirmIHaveReadInfo (Info->Type);	// Checkbox to confirm that...
 								// ...I have read this couse info
 
@@ -1143,8 +1144,8 @@ static void Inf_PutCheckboxForceStdsToReadInfo (const struct Inf_Info *Info,
                               Actions[Info->Type].Args,
                               "MustBeRead",
                               Attributes |
-                              (Info->FromDB.MustBeRead ? HTM_CHECKED :
-                        				 HTM_NO_ATTR) |
+                              (Info->FromDB.MustBeRead == Inf_MUST_BE_READ ? HTM_CHECKED :
+                        						     HTM_NO_ATTR) |
                               HTM_SUBMIT_ON_CHANGE,
                               Txt_Force_students_to_read_this_information,
                               Txt_Force_students_to_read_this_information);
@@ -1170,15 +1171,16 @@ static void Inf_PutCheckboxConfirmIHaveReadInfo (Inf_Type_t InfoType)
       [Inf_LINKS	] = {ActChgHavReaCrsLnk	,NULL,NULL},
       [Inf_ASSESSMENT	] = {ActChgHavReaAss	,NULL,NULL},
      };
-   bool IHaveRead = Inf_DB_CheckIfIHaveReadInfo (InfoType);
+   Inf_IHaveRead_t IHaveRead = Inf_DB_CheckIfIHaveReadInfo (InfoType);
 
    Mnu_ContextMenuBegin ();
       Lay_PutContextualCheckbox (Actions[InfoType].NextAction,
 				 Actions[InfoType].FuncPars,
 				 Actions[InfoType].Args,
 				 "IHaveRead",
-				 (IHaveRead ? HTM_CHECKED :
-					      HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
+				 (IHaveRead == Inf_I_HAVE_READ ? HTM_CHECKED :
+							         HTM_NO_ATTR) |
+				 HTM_SUBMIT_ON_CHANGE,
 				 Txt_I_have_read_this_information,
 				 Txt_I_have_read_this_information);
    Mnu_ContextMenuEnd ();
@@ -1200,7 +1202,7 @@ void Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
    for (InfoType  = (Inf_Type_t) 0;
 	InfoType <= (Inf_Type_t) (Inf_NUM_TYPES - 1);
 	InfoType++)
-      Inf_InfoMustBeRead.MustBeRead[InfoType] = false;
+      Inf_InfoMustBeRead.MustBeRead[InfoType] = Inf_DONT_MUST_BE_READ;
 
    /***** Get info types where students must read info *****/
    NumInfos = Inf_DB_GetInfoTypesfIMustReadInfo (&mysql_res);
@@ -1215,7 +1217,7 @@ void Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
       /* Get info type (row[0]) */
       InfoType = Inf_DB_ConvertFromStrDBToInfoType (row[0]);
 
-      Inf_InfoMustBeRead.MustBeRead[InfoType] = true;
+      Inf_InfoMustBeRead.MustBeRead[InfoType] = Inf_MUST_BE_READ;
      }
 
    /***** Free structure that stores the query result *****/
@@ -1263,7 +1265,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
 	       for (InfoType  = (Inf_Type_t) 0;
 		    InfoType <= (Inf_Type_t) (Inf_NUM_TYPES - 1);
 		    InfoType++)
-		  if (Inf_InfoMustBeRead.MustBeRead[InfoType])
+		  if (Inf_InfoMustBeRead.MustBeRead[InfoType] == Inf_MUST_BE_READ)
 		    {
 		     HTM_LI_Begin (NULL);
 			Frm_BeginForm (Actions[InfoType].NextAction);
@@ -1292,10 +1294,15 @@ void Inf_WriteMsgYouMustReadInfo (void)
 
 void Inf_ChangeForceReadInfo (void)
   {
-   extern const char *Txt_Students_now_are_required_to_read_this_information;
    extern const char *Txt_Students_are_no_longer_obliged_to_read_this_information;
+   extern const char *Txt_Students_now_are_required_to_read_this_information;
+   static const char **AlertTxt[Inf_NUM_MUST_BE_READ] =
+     {
+      [Inf_DONT_MUST_BE_READ] = &Txt_Students_are_no_longer_obliged_to_read_this_information,
+      [Inf_MUST_BE_READ     ] = &Txt_Students_now_are_required_to_read_this_information,
+     };
    Inf_Type_t InfoType;
-   bool MustBeRead;
+   Inf_MustBeRead_t MustBeRead;
 
    /***** Set info type *****/
    InfoType = Inf_AsignInfoType ();
@@ -1307,9 +1314,7 @@ void Inf_ChangeForceReadInfo (void)
    Inf_DB_SetForceRead (InfoType,MustBeRead);
 
    /***** Write message of success *****/
-   Ale_ShowAlert (Ale_SUCCESS,
-                  MustBeRead ? Txt_Students_now_are_required_to_read_this_information :
-                               Txt_Students_are_no_longer_obliged_to_read_this_information);
+   Ale_ShowAlert (Ale_SUCCESS,*AlertTxt[MustBeRead]);
 
    /***** Show the selected info *****/
    Inf_ShowInfo ();
@@ -1321,10 +1326,15 @@ void Inf_ChangeForceReadInfo (void)
 
 void Inf_ChangeIHaveReadInfo (void)
   {
-   extern const char *Txt_You_have_confirmed_that_you_have_read_this_information;
    extern const char *Txt_You_have_eliminated_the_confirmation_that_you_have_read_this_information;
+   extern const char *Txt_You_have_confirmed_that_you_have_read_this_information;
+   static const char **AlertTxt[Inf_NUM_I_HAVE_READ] =
+     {
+      [Inf_I_DONT_HAVE_READ] = &Txt_You_have_eliminated_the_confirmation_that_you_have_read_this_information,
+      [Inf_I_HAVE_READ     ] = &Txt_You_have_confirmed_that_you_have_read_this_information,
+     };
    Inf_Type_t InfoType;
-   bool IHaveRead;
+   Inf_IHaveRead_t IHaveRead;
 
    /***** Set info type *****/
    InfoType = Inf_AsignInfoType ();
@@ -1336,9 +1346,7 @@ void Inf_ChangeIHaveReadInfo (void)
    Inf_DB_SetIHaveRead (InfoType,IHaveRead);
 
    /***** Write message of success *****/
-   Ale_ShowAlert (Ale_SUCCESS,
-                  IHaveRead ? Txt_You_have_confirmed_that_you_have_read_this_information :
-                              Txt_You_have_eliminated_the_confirmation_that_you_have_read_this_information);
+   Ale_ShowAlert (Ale_SUCCESS,*AlertTxt[IHaveRead]);
 
    /***** Show the selected info *****/
    Inf_ShowInfo ();
@@ -1348,18 +1356,20 @@ void Inf_ChangeIHaveReadInfo (void)
 /************* Get if info must be read by students from form ****************/
 /*****************************************************************************/
 
-static bool Inf_GetMustBeReadFromForm (void)
+static Inf_MustBeRead_t Inf_GetMustBeReadFromForm (void)
   {
-   return Par_GetParBool ("MustBeRead");
+   return Par_GetParBool ("MustBeRead") ? Inf_MUST_BE_READ :
+					  Inf_DONT_MUST_BE_READ;
   }
 
 /*****************************************************************************/
 /************* Get if info must be read by students from form ****************/
 /*****************************************************************************/
 
-static bool Inf_GetIfIHaveReadFromForm (void)
+static Inf_IHaveRead_t Inf_GetIfIHaveReadFromForm (void)
   {
-   return Par_GetParBool ("IHaveRead");
+   return Par_GetParBool ("IHaveRead") ? Inf_I_HAVE_READ :
+					 Inf_I_DONT_HAVE_READ;
   }
 
 /*****************************************************************************/
@@ -1647,7 +1657,7 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Inf_Info *Info)
 
    /***** Set default values *****/
    Info->FromDB.Src        = Inf_SRC_NONE;
-   Info->FromDB.MustBeRead = false;
+   Info->FromDB.MustBeRead = Inf_DONT_MUST_BE_READ;
 
    /***** Get info source for a specific type of info from database *****/
    if (Inf_DB_GetInfoSrcAndMustBeRead (&mysql_res,
@@ -1659,7 +1669,8 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Inf_Info *Info)
 
       /* Get info source (row[0]) and if students must read info (row[1]) */
       Info->FromDB.Src = Inf_DB_ConvertFromStrDBToInfoSrc (row[0]);
-      Info->FromDB.MustBeRead = (row[1][0] == 'Y');
+      Info->FromDB.MustBeRead = (row[1][0] == 'Y') ? Inf_MUST_BE_READ :
+						     Inf_DONT_MUST_BE_READ;
      }
 
    /***** Free structure that stores the query result *****/

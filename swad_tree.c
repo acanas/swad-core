@@ -144,7 +144,7 @@ static void Tre_SetHiddenLevel (unsigned Level,
 static ConExp_ContractedOrExpanded_t Tre_GetExpandedLevel (unsigned Level);
 static HidVis_HiddenOrVisible_t Tre_GetHiddenLevel (unsigned Level);
 
-static bool Tre_CheckIfAllHigherLevelsAreExpanded (unsigned CurrentLevel);
+static ConExp_ContractedOrExpanded_t Tre_CheckIfAllHigherLevelsAreExpanded (unsigned CurrentLevel);
 static HidVis_HiddenOrVisible_t Tre_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel);
 
 static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
@@ -319,7 +319,7 @@ void Tre_ShowAllNodes (Tre_ListingType_t ListingType,
 	 Tre_SetExpandedLevel (Node.Hierarchy.Level,ContractedOrExpanded);
 
 	 /* Show this row only if all higher levels are expanded */
-	 if (Tre_CheckIfAllHigherLevelsAreExpanded (Node.Hierarchy.Level))
+	 if (Tre_CheckIfAllHigherLevelsAreExpanded (Node.Hierarchy.Level) == ConExp_EXPANDED)
 	   {
 	    /* Write row with this node */
 	    Tre_WriteRowNode (ListingType,NumNode,&Node,ContractedOrExpanded,
@@ -994,7 +994,7 @@ static HidVis_HiddenOrVisible_t Tre_GetHiddenLevel (unsigned Level)
 /********* Check if any level higher than the current one is hidden **********/
 /*****************************************************************************/
 
-static bool Tre_CheckIfAllHigherLevelsAreExpanded (unsigned CurrentLevel)
+static ConExp_ContractedOrExpanded_t Tre_CheckIfAllHigherLevelsAreExpanded (unsigned CurrentLevel)
   {
    unsigned Level;
 
@@ -1002,9 +1002,9 @@ static bool Tre_CheckIfAllHigherLevelsAreExpanded (unsigned CurrentLevel)
 	Level < CurrentLevel;
 	Level++)
       if (Tre_GetExpandedLevel (Level) == ConExp_CONTRACTED)	// Contracted?
-         return false;	// A level is contracted. Not all are expanded
+         return ConExp_CONTRACTED;	// A level is contracted. Not all are expanded
 
-   return true;	// None is contracted. All are expanded
+   return ConExp_EXPANDED;	// None is contracted. All are expanded
   }
 
 static HidVis_HiddenOrVisible_t Tre_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel)
