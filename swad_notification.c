@@ -38,6 +38,7 @@
 #include "swad_admin_database.h"
 #include "swad_assignment_database.h"
 #include "swad_box.h"
+#include "swad_browser.h"
 #include "swad_browser_database.h"
 #include "swad_call_for_exam.h"
 #include "swad_config.h"
@@ -1116,7 +1117,7 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
 
 unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
   {
-   extern bool Brw_TypeIsGrpBrw[Brw_NUM_TYPES_FILE_BROWSER];
+   extern bool Brw_TypeIs[Brw_NUM_TYPES_FILE_BROWSER];
    static unsigned (*GetUsrsForum[For_NUM_TYPES_FORUM]) (MYSQL_RES **mysql_res,long CrsGrpCod) =
      {
       [For_FORUM_COURSE_USRS] = Enr_DB_GetUsrsFromCrsExceptMe,
@@ -1139,12 +1140,12 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_DOCUMENT_FILE:
       case Ntf_EVENT_SHARED_FILE:
       case Ntf_EVENT_MARKS_FILE:
-	 NumUsrs = Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type] ? Grp_DB_GetUsrsFromGrpExceptMe (&mysql_res,Brw_GetGrpCod ()) :
-							    Enr_DB_GetUsrsFromCrsExceptMe (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+	 NumUsrs = (Brw_TypeIs[Gbl.FileBrowser.Type] & Brw_IS_GRP_BRW) ? Grp_DB_GetUsrsFromGrpExceptMe (&mysql_res,Brw_GetGrpCod ()) :
+									      Enr_DB_GetUsrsFromCrsExceptMe (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 	 break;
       case Ntf_EVENT_TEACHERS_FILE:
-	 NumUsrs = Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type] ? Grp_DB_GetTchsFromGrpExceptMe (&mysql_res,Brw_GetGrpCod ()) :
-							    Enr_DB_GetTchsFromCrsExceptMe (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+	 NumUsrs = (Brw_TypeIs[Gbl.FileBrowser.Type] & Brw_IS_GRP_BRW) ? Grp_DB_GetTchsFromGrpExceptMe (&mysql_res,Brw_GetGrpCod ()) :
+									      Enr_DB_GetTchsFromCrsExceptMe (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 	 break;
       case Ntf_EVENT_ASSIGNMENT:
          NumUsrs = Asg_DB_GetUsrsFromAssignmentExceptMe (&mysql_res,Cod);

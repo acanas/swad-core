@@ -79,7 +79,6 @@ static char ZIP_TmpDir[NAME_MAX + 1];
 static void ZIP_PutLinkToCreateZIPAsgWrkPars (__attribute__((unused)) void *Args);
 
 static void ZIP_CreateTmpDirForCompression (void);
-static const char *ZIP_GetTmpDir (void);
 static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat);
 
 static void ZIP_CompressFolderIntoZIP (void);
@@ -448,8 +447,7 @@ static void ZIP_CompressFolderIntoZIP (void)
 
 static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,const char *PathInTree)
   {
-   extern bool Brw_TypeIsSeeDoc[Brw_NUM_TYPES_FILE_BROWSER];
-   extern bool Brw_TypeIsSeeMrk[Brw_NUM_TYPES_FILE_BROWSER];
+   extern unsigned Brw_TypeOf[Brw_NUM_TYPES_FILE_BROWSER];
    struct dirent **FileList;
    int NumFile;
    int NumFiles;
@@ -481,16 +479,16 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 	    FileType = Brw_IS_UNKNOWN;
 	    if (lstat (PathFile,&FileStatus))	// On success ==> 0 is returned
 	       Err_ShowErrorAndExit ("Can not get information about a file or folder.");
-	    else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
+	    else if (S_ISDIR (FileStatus.st_mode))	// It's a directory
 	       FileType = Brw_IS_FOLDER;
 	    else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
 	       FileType = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :	// It's a link (URL inside a .url file)
 									 Brw_IS_FILE;	// It's a file
 
-	    HiddenOrVisible = Brw_TypeIsSeeDoc[Gbl.FileBrowser.Type] ||
-		              Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type] ? Brw_CheckIfFileOrFolderIsHidden (FileType,
-		        										PathFileInTree) :
-		        					       HidVis_VISIBLE;
+	    HiddenOrVisible = (Brw_TypeOf[Gbl.FileBrowser.Type] & (Brw_IS_SEE_DOC |
+								   Brw_IS_SEE_MRK)) ? Brw_CheckIfFileOrFolderIsHidden (FileType,
+		        											       PathFileInTree) :
+										      HidVis_VISIBLE;
 
 	    if (HiddenOrVisible == HidVis_VISIBLE)	// If file/folder is visible
 	       switch (FileType)

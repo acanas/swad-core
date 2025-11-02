@@ -79,6 +79,22 @@ typedef enum
    Brw_ADMI_ASS_PRJ = 28,
   } Brw_FileBrowser_t;
 
+typedef enum
+  {
+   Brw_IS_CRS_BRW		= 1 <<  0,
+   Brw_IS_GRP_BRW		= 1 <<  1,
+   Brw_IS_SEE_DOC		= 1 <<  2,
+   Brw_IS_ADM_DOC		= 1 <<  3,
+   Brw_IS_ADM_SHA		= 1 <<  4,
+   Brw_IS_ADM_ASG		= 1 <<  5,
+   Brw_IS_ADM_USR_ASG_WRK	= 1 <<  6,
+   Brw_IS_ADM_CRS_ASG_WRK	= 1 <<  7,
+   Brw_IS_SEE_MRK		= 1 <<  8,
+   Brw_IS_ADM_MRK		= 1 <<  9,
+   Brw_IS_ADM_BRF		= 1 << 10,
+   Brw_IS_ADM_PRJ		= 1 << 11,
+  } Brw_FileBrowserType_t;
+
 // The following types are stored in files and clipboard tables as numeric fields, so don't change numbers!
 #define Brw_NUM_FILE_TYPES	4
 typedef enum
