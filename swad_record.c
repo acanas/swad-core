@@ -1489,7 +1489,7 @@ static void Rec_PutParsShowOfficeHoursSeveralTchs (__attribute__((unused)) void 
 /*****************************************************************************/
 /********** Get parameter to show (or not) teachers' office hours ************/
 /*****************************************************************************/
-// Returns true if office hours must be shown
+// Returns if office hours must be shown
 
 static Lay_Show_t Rec_GetParShowOfficeHours (void)
   {
@@ -2532,7 +2532,7 @@ static void Rec_PutParsWorks (__attribute__((unused)) void *Args)
   {
    Rec_PutParsStudent (NULL);
    Par_PutParChar ("FullTree",'Y');	// By default, show all files
-   Gbl.FileBrowser.ShowFullTree = true;
+   Gbl.FileBrowser.ShowFullTree = Lay_SHOW;
    Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.ShowFullTree);
   }
 

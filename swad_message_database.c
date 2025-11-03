@@ -641,12 +641,13 @@ Exi_Exist_t Msg_DB_GetMsgContent (MYSQL_RES **mysql_res,long MsgCod)
 /***************************** Get data of a message *************************/
 /*****************************************************************************/
 
-unsigned Msg_DB_GetMsgSntData (MYSQL_RES **mysql_res,long MsgCod,bool *Deleted)
+unsigned Msg_DB_GetMsgSntData (MYSQL_RES **mysql_res,long MsgCod,
+			       Msg_Deleted_t *Deleted)
   {
    unsigned NumRows;
 
    /***** Get data of message from table msg_snt *****/
-   *Deleted = false;
+   *Deleted = Msg_NOT_DELETED;
    NumRows = (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a message",
 		   "SELECT CrsCod,"				// row[0]
@@ -668,7 +669,7 @@ unsigned Msg_DB_GetMsgSntData (MYSQL_RES **mysql_res,long MsgCod,bool *Deleted)
 		      " WHERE MsgCod=%ld",
 		      MsgCod);
 
-      *Deleted = true;
+      *Deleted = Msg_DELETED;
      }
 
    return NumRows;

@@ -1106,7 +1106,7 @@ void Deg_RemoveDeg (void)
 /*****************************************************************************/
 /********************* Get data of a degree from its code ********************/
 /*****************************************************************************/
-// Returns true if degree found
+// Returns if degree found
 
 Err_SuccessOrError_t Deg_GetDegreeDataByCod (struct Hie_Node *Node)
   {

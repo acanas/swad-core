@@ -139,8 +139,7 @@ void Ses_DB_UpdateSessionLastRefresh (void)
 /*****************************************************************************/
 /*********** Check if the session already exists in the database *************/
 /*****************************************************************************/
-// Return true if session exists
-// Return false if session does not exist or error
+// Return if session exists
 
 Exi_Exist_t Ses_DB_CheckIfSessionExists (const char *IdSes)
   {

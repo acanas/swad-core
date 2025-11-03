@@ -75,6 +75,13 @@ typedef enum
    Msg_REPLIED,
   } Msg_Replied_t;
 
+#define Msg_NUM_DELETED 2
+typedef enum
+  {
+   Msg_NOT_DELETED,
+   Msg_DELETED,
+  } Msg_Deleted_t;
+
 struct Msg_Messages
   {
    Msg_TypeOfMessages_t TypeOfMessages;

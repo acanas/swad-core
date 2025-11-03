@@ -156,7 +156,7 @@ static void Msg_RemoveRcvMsg (long MsgCod,long UsrCod);
 static void Msg_GetMsgSntData (long MsgCod,long *HieCod,long *UsrCod,
                                time_t *CreatTimeUTC,
                                char Subject[Cns_MAX_BYTES_SUBJECT + 1],
-                               bool *Deleted);
+                               Msg_Deleted_t *Deleted);
 static void Msg_GetMsgContent (long MsgCod,
                                char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
                                struct Med_Media *Media);
@@ -170,7 +170,7 @@ static void Msg_WriteCrsOrgMsg (long HieCod);
 static void Msg_WriteFormToReply (long MsgCod,long HieCod,
 				  const struct Usr_Data *UsrDat);
 static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
-                              struct Usr_Data *UsrDat,bool Deleted);
+                              struct Usr_Data *UsrDat,Msg_Deleted_t Deleted);
 static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod);
 
 static void Msg_PutFormToBanSender (struct Msg_Messages *Messages,
@@ -886,7 +886,7 @@ static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages)
 			MsgAlreadyInserted = true;
 		       }
 
-		     /***** If this recipient is the original sender of a message been replied, set Replied to true *****/
+		     /***** If this recipient is the original sender of a message been replied, set Replied *****/
 		     Messages->Reply.Replied = Messages->Reply.IsReply == Msg_IS_REPLY &&
 					       UsrDstData.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod ? Msg_REPLIED :
 												   Msg_NOT_REPLIED;
@@ -1907,7 +1907,7 @@ static bool Msg_GetParOnlyUnreadMsgs (void)
 static void Msg_GetMsgSntData (long MsgCod,long *HieCod,long *UsrCod,
                                time_t *CreatTimeUTC,
                                char Subject[Cns_MAX_BYTES_SUBJECT + 1],
-                               bool *Deleted)
+                               Msg_Deleted_t *Deleted)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2034,7 +2034,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Med_Media Media;
-   bool Deleted;
+   Msg_Deleted_t Deleted;
    struct Msg_Status Status =
      {
       .ClosedOrOpen	    = CloOpe_OPEN,
@@ -2314,7 +2314,7 @@ static void Msg_WriteCrsOrgMsg (long HieCod)
    extern const char *Txt_from_this_course;
    extern const char *Txt_no_course_of_origin;
    struct Hie_Node Crs;
-   bool ThereIsOrgCrs = false;
+   Exi_Exist_t OrgCrsExists = Exi_DOES_NOT_EXIST;
 
    if (HieCod > 0)
      {
@@ -2324,7 +2324,7 @@ static void Msg_WriteCrsOrgMsg (long HieCod)
       /* Get data of current degree */
       if (Hie_GetDataByCod[Hie_CRS] (&Crs) == Err_SUCCESS)
         {
-         ThereIsOrgCrs = true;
+         OrgCrsExists = Exi_EXISTS;
          if (HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod)	// Message sent from current course
            {
             HTM_DIV_Begin ("class=\"MSG_AUT_%s\"",The_GetSuffix ());
@@ -2349,7 +2349,7 @@ static void Msg_WriteCrsOrgMsg (long HieCod)
            }
 	}
      }
-   if (!ThereIsOrgCrs)	// It's an old message without origin source specified, or is a message sent from none course
+   if (OrgCrsExists == Exi_DOES_NOT_EXIST)	// It's an old message without origin source specified, or is a message sent from none course
      {
       HTM_DIV_Begin ("class=\"MSG_AUT_%s\"",The_GetSuffix ());
 	 HTM_ParTxtPar (Txt_no_course_of_origin);
@@ -2390,11 +2390,20 @@ static void Msg_WriteFormToReply (long MsgCod,long HieCod,
 /*****************************************************************************/
 
 static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
-                              struct Usr_Data *UsrDat,bool Deleted)
+                              struct Usr_Data *UsrDat,Msg_Deleted_t Deleted)
   {
    extern const char *Txt_MSG_Sent;
    extern const char *Txt_MSG_Sent_and_deleted;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   static struct
+     {
+      Ico_Color_t Color;
+      const char **Title;
+     } Icons[Msg_NUM_DELETED] =
+     {
+      [Msg_NOT_DELETED] = {Ico_BLACK	,&Txt_MSG_Sent			},
+      [Msg_DELETED    ] = {Ico_RED	,&Txt_MSG_Sent_and_deleted	},
+     };
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2408,10 +2417,8 @@ static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
 
 	 /***** Put an icon to show if user has read the message *****/
 	 HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
-	    if (Deleted)
-	       Ico_PutIcon ("share.svg",Ico_RED  ,Txt_MSG_Sent_and_deleted,"ICO16x16");
-	    else
-	       Ico_PutIcon ("share.svg",Ico_BLACK,Txt_MSG_Sent            ,"ICO16x16");
+	    Ico_PutIcon ("share.svg",Icons[Deleted].Color,*Icons[Deleted].Title,
+		         "ICO16x16");
 	 HTM_TD_End ();
 
 	 /***** Put user's photo *****/
@@ -2428,7 +2435,8 @@ static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
 	       if (Act_GetSuperAction (Gbl.Action.Act) == ActSeeRcvMsg)
 		 {
 		  HTM_NBSP ();
-		  if (Msg_DB_CheckIfUsrIsBanned (UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod))
+		  if (Msg_DB_CheckIfUsrIsBanned (UsrDat->UsrCod,
+						 Gbl.Usrs.Me.UsrDat.UsrCod))
 		     // Sender is banned
 		     Msg_PutFormToUnbanSender (Messages,UsrDat);
 		  else

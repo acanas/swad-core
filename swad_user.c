@@ -3075,7 +3075,7 @@ void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct Usr_SelectedUsrs 
          Err_NotEnoughMemoryExit ();
       Str_Copy (SelectedUsrs->List[Rol_UNK],Gbl.Usrs.Other.UsrDat.EnUsrCod,
 		Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-      SelectedUsrs->Filled = true;
+      SelectedUsrs->Status = Cac_VALID;
      }
   }
 
@@ -3127,7 +3127,7 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsr
    unsigned Length;
    Rol_Role_t Role;
 
-   if (!SelectedUsrs->Filled)	// Get list only if not already got
+   if (SelectedUsrs->Status == Cac_INVALID)	// Get list only if not already got
      {
       /* Allocate memory for list of encrypted user codes */
       Usr_AllocateListSelectedEncryptedUsrCods (SelectedUsrs,Rol_UNK);
@@ -3183,7 +3183,7 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsr
 	   }
 
       /***** List is filled *****/
-      SelectedUsrs->Filled = true;
+      SelectedUsrs->Status = Cac_VALID;
      }
   }
 
@@ -3495,7 +3495,7 @@ void Usr_FreeListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUs
   {
    Rol_Role_t Role;
 
-   if (SelectedUsrs->Filled)	// Only if lists are filled
+   if (SelectedUsrs->Status == Cac_VALID)	// Only if lists are filled
      {
       /***** Free lists *****/
       for (Role  = (Rol_Role_t) 0;
@@ -3508,7 +3508,7 @@ void Usr_FreeListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUs
 	   }
 
       /***** Mark lists as empty *****/
-      SelectedUsrs->Filled = false;
+      SelectedUsrs->Status = Cac_INVALID;
       // Lists of encrypted codes of users selected from form
       // are now marked as not filled
      }
@@ -3771,7 +3771,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 		  Grp_PutParsCodGrps ();
 		  if (Gbl.Action.Act == ActAdmAsgWrkCrs)
 		    {
-		     Gbl.FileBrowser.ShowFullTree = true;	// By default, show all files
+		     Gbl.FileBrowser.ShowFullTree = Lay_SHOW;	// By default, show all files
 		     Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.ShowFullTree);
 		    }
 		  if (FuncPars)

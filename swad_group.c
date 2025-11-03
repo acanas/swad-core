@@ -2033,7 +2033,7 @@ static void Grp_ShowWarningToStdsToChangeGrps (void)
 /*****************************************************************************/
 /***************** List the groups of a type to enrol in *********************/
 /*****************************************************************************/
-// Returns true if I can change my selection
+// Returns if I can change my selection
 
 static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTyp,
 						   long SelectedGrpTypCod)
@@ -3427,13 +3427,13 @@ static Grp_HasFileZones_t Grp_GetHasFileZonesFromYN (char Ch)
 /*****************************************************************************/
 /************************ Check if I belong to a group ***********************/
 /*****************************************************************************/
-// Return true if I belong to group with code GrpCod
 
 void Grp_FlushCacheIBelongToGrp (void)
   {
    Gbl.Cache.IBelongToGrp.Status = Cac_INVALID;
   }
 
+// Return if I belong to group with code GrpCod
 Usr_Belong_t Grp_GetIfIBelongToGrp (long GrpCod)
   {
    /***** 1. Fast check: Trivial case *****/

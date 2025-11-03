@@ -160,7 +160,7 @@ static void Ale_ResetLastAlert (void)
 
 static void Ale_ResetAlert (size_t NumAlert)
   {
-   bool NoMoreAlertsPending;
+   Exi_Exist_t AlertPending;
    size_t i;
 
    if (NumAlert < Ale_Alerts.Num)
@@ -185,17 +185,16 @@ static void Ale_ResetAlert (size_t NumAlert)
 	}
 
    /***** Set number of alerts to 0
-          if there are no more alerts
-          pending to be shown *****/
-   for (i = 0, NoMoreAlertsPending = true;
+          if there are no more alerts pending to be shown *****/
+   for (i = 0, AlertPending = Exi_DOES_NOT_EXIST;
 	i < Ale_Alerts.Num;
 	i++)
       if (Ale_Alerts.List[i].Type != Ale_NONE)
         {
-	 NoMoreAlertsPending = false;
+	 AlertPending = Exi_EXISTS;
 	 break;
         }
-   if (NoMoreAlertsPending)
+   if (AlertPending == Exi_DOES_NOT_EXIST)
       Ale_Alerts.Num = 0;
   }
 

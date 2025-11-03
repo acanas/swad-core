@@ -88,7 +88,7 @@ static struct
   {
    struct
      {
-      bool IsRead;			// Is the list already read from database...
+      Cac_Status_t Status;			// Is the list already read from database...
 					// ...or it needs to be read?
       unsigned NumNodes;		// Number of nodes
       struct Tre_NodeHierarchy *Nodes;	// List of nodes
@@ -99,7 +99,7 @@ static struct
   {
    .List =
      {
-      .IsRead     = false,
+      .Status     = Cac_INVALID,
       .NumNodes   = 0,
       .Nodes      = NULL,
      },
@@ -1329,7 +1329,7 @@ void Tre_GetListNodes (Inf_Type_t InfoType)
    MYSQL_ROW row;
    unsigned NumItem;
 
-   if (Tre_Gbl.List.IsRead)
+   if (Tre_Gbl.List.Status == Cac_VALID)
       Tre_FreeListNodes ();
 
    /***** Get list of tree nodes from database *****/
@@ -1365,7 +1365,7 @@ void Tre_GetListNodes (Inf_Type_t InfoType)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   Tre_Gbl.List.IsRead = true;
+   Tre_Gbl.List.Status = Cac_VALID;
   }
 
 /*****************************************************************************/
@@ -1471,13 +1471,13 @@ static void Tre_GetNodeDataFromRow (MYSQL_RES **mysql_res,
 
 void Tre_FreeListNodes (void)
   {
-   if (Tre_Gbl.List.IsRead && Tre_Gbl.List.Nodes)
+   if (Tre_Gbl.List.Status == Cac_VALID && Tre_Gbl.List.Nodes)
      {
       /***** Free memory used by the list of tree nodes *****/
       free (Tre_Gbl.List.Nodes);
       Tre_Gbl.List.Nodes = NULL;
       Tre_Gbl.List.NumNodes = 0;
-      Tre_Gbl.List.IsRead = false;
+      Tre_Gbl.List.Status = Cac_INVALID;
      }
   }
 
@@ -1509,7 +1509,7 @@ unsigned Tre_GetNumNodeFromNodCod (long NodCod)
    unsigned NumNode;
 
    /***** List of nodes must be filled *****/
-   if (!Tre_Gbl.List.IsRead || Tre_Gbl.List.Nodes == NULL)
+   if (Tre_Gbl.List.Status == Cac_INVALID || Tre_Gbl.List.Nodes == NULL)
       Err_WrongItemsListExit ();
 
    /***** Find node code in list *****/
@@ -2338,7 +2338,7 @@ void Tre_ExpandContractNode (Inf_Type_t InfoType,
 static void Tre_SetNodeRangeWithAllChildren (unsigned NumNode,struct Tre_NodeRange *NodeRange)
   {
    /***** List of nodes must be filled *****/
-   if (!Tre_Gbl.List.IsRead)
+   if (Tre_Gbl.List.Status == Cac_INVALID)
       Err_WrongItemsListExit ();
 
    /***** Number of node must be in the correct range *****/

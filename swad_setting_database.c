@@ -257,8 +257,8 @@ void Set_DB_InsertUsrInCrsSettings (long UsrCod,long HieCod)
 	           HieCod,
 	           (long) (time_t) 0,	// The user never accessed to tests in this course
 	           Set_DB_StringsUsrListTypes[Set_SHOW_USRS_TYPE_DEFAULT],
-	           Usr_LIST_WITH_PHOTOS_DEF ? 'Y' :
-					      'N');
+	           Pho_PHOTOS_DEFAULT == Pho_PHOTOS_SHOW ? 'Y' :
+							   'N');
   }
 
 /*****************************************************************************/

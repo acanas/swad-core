@@ -149,7 +149,7 @@ struct Usr_SelectedUsrs Prj_MembersToAdd =
       NULL,	// Rol_INS_ADM
       NULL,	// Rol_SYS_ADM
      },
-   .Filled    = false,
+   .Status    = Cac_INVALID,
    .ParSuffix = "Member",
    .Action    = Usr_ACT_UNKNOWN,
   };

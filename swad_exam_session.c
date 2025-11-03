@@ -75,7 +75,7 @@ const char *ExaSes_ModalityIcon[ExaSes_NUM_MODALITIES] =
 #define ExaSes_MIN_COLS			1
 #define ExaSes_MAX_COLS			4
 #define ExaSes_NUM_COLS_DEFAULT		2
-#define ExaSes_SHOW_PHOTOS_DEFAULT	true
+#define ExaSes_SHOW_PHOTOS_DEFAULT	Pho_PHOTOS_SHOW
 
 #define ExaSes_SESSION_BOX_ID		"exases_box"
 
@@ -104,7 +104,7 @@ static void ExaSes_ShowFormShowPhotos (Pho_ShowPhotos_t ShowPhotos);
 static void ExaSes_ShowHeaderResults (void);
 static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 				         unsigned NumUsr,struct Usr_Data *UsrDat);
-static Frm_PutForm_t ExaSes_SetListUsrsAllowedActions (Usr_Can_t AllowedActions[Usr_LIST_USRS_NUM_OPTIONS]);
+static void ExaSes_SetListUsrsAllowedActions (Usr_Can_t AllowedActions[Usr_LIST_USRS_NUM_OPTIONS]);
 
 static void ExaSes_PutIconsInListOfSessions (void *Exams);
 static void ExaSes_PutIconToCreateNewSession (struct Exa_Exams *Exams);
@@ -745,9 +745,8 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 /*****************************************************************************/
 /**************** Set allowed options to do with several users ***************/
 /*****************************************************************************/
-// Returns true if any option is allowed
 
-static Frm_PutForm_t ExaSes_SetListUsrsAllowedActions (Usr_Can_t AllowedActions[Usr_LIST_USRS_NUM_OPTIONS])
+static void ExaSes_SetListUsrsAllowedActions (Usr_Can_t AllowedActions[Usr_LIST_USRS_NUM_OPTIONS])
   {
    Usr_ListUsrsAction_t Act;
 
@@ -759,11 +758,9 @@ static Frm_PutForm_t ExaSes_SetListUsrsAllowedActions (Usr_Can_t AllowedActions[
       AllowedActions[Act] = Usr_CAN_NOT;
 
    /* Activate some options */
-   AllowedActions[Usr_ACT_EXAMS_QST_SHEETS		] =
-   AllowedActions[Usr_ACT_BLANK_EXAMS_ANS_SHEETS	] =
-   AllowedActions[Usr_ACT_SOLVD_EXAMS_ANS_SHEETS	] = Usr_CAN;
-
-   return Frm_PUT_FORM;
+   AllowedActions[Usr_ACT_EXAMS_QST_SHEETS	] =
+   AllowedActions[Usr_ACT_BLANK_EXAMS_ANS_SHEETS] =
+   AllowedActions[Usr_ACT_SOLVD_EXAMS_ANS_SHEETS] = Usr_CAN;
   }
 
 /*****************************************************************************/
@@ -838,7 +835,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
    char *Anchor;
    unsigned NumPrints;
    Usr_Can_t ICanEditSessions = ExaSes_CheckIfICanEditSessions ();
-   Usr_Can_t ICanChangeModality = false;
+   Usr_Can_t ICanChangeModality = Usr_CAN_NOT;
 
    /***** Reset session *****/
    ExaSes_ResetSession (&Session);

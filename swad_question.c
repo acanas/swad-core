@@ -3110,7 +3110,7 @@ Err_SuccessOrError_t Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst
            }
 
 	 /* No option should be empty before a non-empty option */
-         for (NumOpt = 0, ThereIsEndOfAnswers=false;
+         for (NumOpt = 0, ThereIsEndOfAnswers = false;
               NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
               NumOpt++)
             if (Question->Answer.Options[NumOpt].Text)

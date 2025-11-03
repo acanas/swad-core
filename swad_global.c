@@ -137,7 +137,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Action.IsAJAXAutoRefresh = false;
    Gbl.Action.Tab = TabUnk;
 
-   Gbl.Usrs.Selected.Filled = false;	// Lists of encrypted codes of users selected from form are not filled
+   Gbl.Usrs.Selected.Status = Cac_INVALID;	// Lists of encrypted codes of users selected from form are not filled
    Gbl.Usrs.Selected.ParSuffix = NULL;	// Don't add suffix to param names
    Gbl.Usrs.Selected.Action = Usr_ACT_UNKNOWN;
    for (Role  = (Rol_Role_t) 0;

@@ -120,8 +120,8 @@ static void Usr_GetURLFromForm (const char *ParName,struct Med_Media *Media);
 static void Usr_GetTitleFromForm (const char *ParName,struct Med_Media *Media);
 static void Med_GetAndProcessFileFromForm (const char *ParFile,
                                            struct Med_Media *Media);
-static bool Med_DetectIfAnimated (struct Med_Media *Media,
-			          const char PathFileOrg[PATH_MAX + 1]);
+static Err_SuccessOrError_t Med_DetectIfAnimated (struct Med_Media *Media,
+						  const char PathFileOrg[PATH_MAX + 1]);
 
 static void Med_ProcessJPG (struct Med_Media *Media,
 			    const char PathFileOrg[PATH_MAX + 1]);
@@ -806,7 +806,7 @@ static void Med_GetAndProcessFileFromForm (const char *ParFile,
      {
       /***** Detect if animated GIF *****/
       if (Media->Type == Med_GIF)
-	 if (!Med_DetectIfAnimated (Media,PathFileOrg))
+	 if (Med_DetectIfAnimated (Media,PathFileOrg) == Err_ERROR)
             Media->Type = Med_JPG;
 
       /***** Process media depending on the media file extension *****/
@@ -822,11 +822,10 @@ static void Med_GetAndProcessFileFromForm (const char *ParFile,
 /*****************************************************************************/
 /********************* Detect if a GIF image is animated *********************/
 /*****************************************************************************/
-// Return true if animated
-// Return false if static or error
+// Return if animated
 
-static bool Med_DetectIfAnimated (struct Med_Media *Media,
-			          const char PathFileOrg[PATH_MAX + 1])
+static Err_SuccessOrError_t Med_DetectIfAnimated (struct Med_Media *Media,
+						  const char PathFileOrg[PATH_MAX + 1])
   {
    char PathFileTxtTmp[PATH_MAX + 1];
    char Command[128 + PATH_MAX * 2];
@@ -844,22 +843,23 @@ static bool Med_DetectIfAnimated (struct Med_Media *Media,
              PathFileOrg,PathFileTxtTmp);
    ReturnCode = system (Command);
    if (ReturnCode == -1)
-      return false;		// Error
+      return Err_ERROR;		// Error
    ReturnCode = WEXITSTATUS(ReturnCode);
    if (ReturnCode)
-      return false;		// Error
+      return Err_ERROR;		// Error
 
    /***** Read temporary file *****/
    if ((FileTxtTmp = fopen (PathFileTxtTmp,"rb")) == NULL)
-      return false;		// Error
+      return Err_ERROR;		// Error
    if (fscanf (FileTxtTmp,"%d",&NumFrames) != 1)
-      return false;		// Error
+      return Err_ERROR;		// Error
    fclose (FileTxtTmp);
 
    /***** Remove temporary file *****/
    unlink (PathFileTxtTmp);
 
-   return (NumFrames > 1);	// NumFrames > 1 ==> Animated
+   return NumFrames > 1 ? Err_SUCCESS :	// NumFrames > 1 ==> Animated
+			  Err_ERROR;
   }
 
 /*****************************************************************************/

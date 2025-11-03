@@ -1207,7 +1207,7 @@ void Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
    /***** Get info types where students must read info *****/
    NumInfos = Inf_DB_GetInfoTypesfIMustReadInfo (&mysql_res);
 
-   /***** Set must-be-read to true for each rown in result *****/
+   /***** Set must-be-read for each rown in result *****/
    for (NumInfo = 0;
 	NumInfo < NumInfos;
 	NumInfo++)

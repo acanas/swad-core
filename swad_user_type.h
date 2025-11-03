@@ -69,8 +69,6 @@
 #define Usr_MAX_CHARS_PHONE	16
 #define Usr_MAX_BYTES_PHONE	Usr_MAX_CHARS_PHONE
 
-#define Usr_LIST_WITH_PHOTOS_DEF	true
-
 #define Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS	(Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 * Cfg_MAX_USRS_IN_LIST)
 
 #define Usr_NUM_MAIN_FIELDS_DATA_USR	 8
@@ -318,7 +316,7 @@ typedef enum
 struct Usr_SelectedUsrs
   {
    char *List[Rol_NUM_ROLES];	// Lists of encrypted codes of users selected from a form
-   bool Filled;			// If lists are already filled/readed
+   Cac_Status_t Status;		// If lists are already filled/readed
    char *ParSuffix;
    Usr_ListUsrsAction_t Action;	// What action I have selected to do with these selected users
   };

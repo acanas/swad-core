@@ -47,7 +47,7 @@ extern struct Globals Gbl;
 /************************* Private global variables **************************/
 /*****************************************************************************/
 
-static Frm_Inside_t Frm_Inside = false;
+static Frm_Inside_t Frm_Inside = Frm_OUTSIDE_FORM;
 
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
@@ -60,7 +60,7 @@ static void Frm_BeginFormInternal (Act_Action_t NextAction,
                                    const char *Id,const char *Anchor,const char *OnSubmit);
 
 /*****************************************************************************/
-/************** Set to true inside a form to avoid nested forms **************/
+/***************************** Avoid nested forms ****************************/
 /*****************************************************************************/
 
 static inline void Frm_SetInside (Frm_Inside_t Inside)

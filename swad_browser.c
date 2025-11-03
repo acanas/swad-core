@@ -9002,7 +9002,7 @@ Usr_Can_t Brw_CheckIfFileBrowserIsEditable (Brw_FileBrowser_t FileBrowser)
 /********** Check if I have permission to modify a file or folder ************/
 /********** in the current shared or private zone                 ************/
 /*****************************************************************************/
-// Returns true if I can remove or rename Gbl.FileBrowser.FilFolLnk.Full, and false if I have not permission
+// Returns if I can remove or rename Gbl.FileBrowser.FilFolLnk.Full
 // I can remove or rename a file if I am the publisher
 // I can remove or rename a folder if I am the unique publisher of all files and folders in the subtree starting there
 
@@ -9050,7 +9050,7 @@ static Usr_Can_t Brw_CheckIfICanModifyPrivateFileOrFolder (void)
 /********** Check if I have permission to modify a file or folder ************/
 /********** in the current project documents zone                 ************/
 /*****************************************************************************/
-// Returns true if I can remove or rename Gbl.FileBrowser.FilFolLnk.Full, and false if I have not permission
+// Returns if I can remove or rename Gbl.FileBrowser.FilFolLnk.Full
 // I can remove or rename a file if I am the publisher
 // I can remove or rename a folder if I am the unique publisher of all files and folders in the subtree starting there
 
@@ -9077,7 +9077,7 @@ static Usr_Can_t Brw_CheckIfICanModifyPrjDocFileOrFolder (void)
 /********** Check if I have permission to modify a file or folder ************/
 /********** in the current project assessment zone                ************/
 /*****************************************************************************/
-// Returns true if I can remove or rename Gbl.FileBrowser.FilFolLnk.Full, and false if I have not permission
+// Returns if I can remove or rename Gbl.FileBrowser.FilFolLnk.Full
 // I can remove or rename a file if I am the publisher
 // I can remove or rename a folder if I am the unique publisher of all files and folders in the subtree starting there
 
