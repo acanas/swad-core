@@ -165,10 +165,10 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 					       long MsgCod,const char *Subject,
                                                const struct Msg_Status *Status);
 
-static bool Msg_WriteCrsOrgMsg (long HieCod);
+static void Msg_WriteCrsOrgMsg (long HieCod);
 
-static void Msg_WriteFormToReply (long MsgCod,long HieCod,bool FromThisCrs,
-                                  const struct Usr_Data *UsrDat);
+static void Msg_WriteFormToReply (long MsgCod,long HieCod,
+				  const struct Usr_Data *UsrDat);
 static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
                               struct Usr_Data *UsrDat,bool Deleted);
 static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod);
@@ -2029,7 +2029,6 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
      };
    struct Usr_Data UsrDat;
    __attribute__((unused)) Exi_Exist_t UsrExists;
-   bool FromThisCrs = false;	// Initialized to avoid warning
    time_t CreatTimeUTC;		// Creation time of a message
    long HieCod;			// Course code
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
@@ -2116,7 +2115,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 	       /***** Write course origin of message *****/
 	       HTM_TR_Begin (NULL);
 		  HTM_TD_Begin ("class=\"LM\"");
-		     FromThisCrs = Msg_WriteCrsOrgMsg (HieCod);
+		     Msg_WriteCrsOrgMsg (HieCod);
 		  HTM_TD_End ();
 	       HTM_TR_End ();
 
@@ -2126,7 +2125,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 		     if (Messages->TypeOfMessages == Msg_RECEIVED &&
 			 Gbl.Usrs.Me.Role.Logged >= Rol_USR)
 			// Guests (users without courses) can read messages but not reply them
-			Msg_WriteFormToReply (MsgCod,HieCod,FromThisCrs,&UsrDat);
+			Msg_WriteFormToReply (MsgCod,HieCod,&UsrDat);
 		  HTM_TD_End ();
 	       HTM_TR_End ();
 
@@ -2308,15 +2307,13 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 /*****************************************************************************/
 /********************* Write course origin of a message **********************/
 /*****************************************************************************/
-// Returns true if the origin course is the current course
 
-static bool Msg_WriteCrsOrgMsg (long HieCod)
+static void Msg_WriteCrsOrgMsg (long HieCod)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_from_this_course;
    extern const char *Txt_no_course_of_origin;
    struct Hie_Node Crs;
-   bool FromThisCrs = true;
    bool ThereIsOrgCrs = false;
 
    if (HieCod > 0)
@@ -2328,7 +2325,7 @@ static bool Msg_WriteCrsOrgMsg (long HieCod)
       if (Hie_GetDataByCod[Hie_CRS] (&Crs) == Err_SUCCESS)
         {
          ThereIsOrgCrs = true;
-         if ((FromThisCrs = (HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod)))	// Message sent from current course
+         if (HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod)	// Message sent from current course
            {
             HTM_DIV_Begin ("class=\"MSG_AUT_%s\"",The_GetSuffix ());
 	       HTM_ParTxtPar (Txt_from_this_course);
@@ -2358,19 +2355,17 @@ static bool Msg_WriteCrsOrgMsg (long HieCod)
 	 HTM_ParTxtPar (Txt_no_course_of_origin);
       HTM_DIV_End ();
      }
-
-   return FromThisCrs;
   }
 
 /*****************************************************************************/
 /************************* Write form to reply a message *********************/
 /*****************************************************************************/
 
-static void Msg_WriteFormToReply (long MsgCod,long HieCod,bool FromThisCrs,
-                                  const struct Usr_Data *UsrDat)
+static void Msg_WriteFormToReply (long MsgCod,long HieCod,
+				  const struct Usr_Data *UsrDat)
   {
    /***** Begin form and parameters *****/
-   if (FromThisCrs)
+   if (HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod)	// Message sent from current course
       Frm_BeginForm (ActReqMsgUsr);
    else	// Not the current course ==> go to another course
      {
