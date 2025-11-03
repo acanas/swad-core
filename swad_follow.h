@@ -40,6 +40,7 @@ typedef enum
    Fol_SUGGEST_ANY_USER,
   } Fol_WhichUsersSuggestToFollowThem_t;
 
+#define Fol_NUM_FOLLOWER 2
 typedef enum
   {
    Fol_NOT_FOLLOWER,
@@ -58,9 +59,7 @@ void Fol_FlushCacheFollow (void);
 void Fol_GetNumFollow (long UsrCod,
                        unsigned *NumFollowing,unsigned *NumFollowers);
 unsigned Fol_GetNumFollowers (long UsrCod);
-void Fol_ShowFollowingAndFollowers (const struct Usr_Data *UsrDat,
-                                    unsigned NumFollowing,unsigned NumFollowers,
-                                    bool UsrFollowsMe,bool IFollowUsr);
+void Fol_ShowFollowingAndFollowers (const struct Usr_Data *UsrDat);
 void Fol_ListFollowing (void);
 void Fol_ListFollowers (void);
 

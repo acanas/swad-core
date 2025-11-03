@@ -290,13 +290,37 @@ void Fol_GetNumFollow (long UsrCod,
 /**************** Show following and followers of a user *********************/
 /*****************************************************************************/
 
-void Fol_ShowFollowingAndFollowers (const struct Usr_Data *UsrDat,
-                                    unsigned NumFollowing,unsigned NumFollowers,
-                                    bool UsrFollowsMe,bool IFollowUsr)
+void Fol_ShowFollowingAndFollowers (const struct Usr_Data *UsrDat)
   {
    extern const char *Txt_FOLLOWS_YOU;
    extern const char *Txt_Following;
    extern const char *Txt_Followers;
+   static struct
+     {
+      Act_Action_t NextAction;
+      const char *Icon;
+     } Form[Fol_NUM_FOLLOWER] =
+     {
+      [Fol_NOT_FOLLOWER] = {ActFolUsr	,"user-plus.svg"	},
+      [Fol_FOLLOWER    ] = {ActUnfUsr	,"user-check.svg"	},
+     };
+   unsigned NumFollowing;
+   unsigned NumFollowers;
+   Fol_Follower_t UsrIsFollowerOfMe;
+   Fol_Follower_t IAmFollowerOfUsr;
+
+   /***** Count following and followers *****/
+   Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
+   if (NumFollowing)
+      UsrIsFollowerOfMe = Fol_DB_CheckUsrIsFollowerOf (UsrDat->UsrCod,
+						       Gbl.Usrs.Me.UsrDat.UsrCod);
+   else
+      UsrIsFollowerOfMe = Fol_NOT_FOLLOWER;
+   if (NumFollowers)
+      IAmFollowerOfUsr = Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+						      UsrDat->UsrCod);
+   else
+      IAmFollowerOfUsr = Fol_NOT_FOLLOWER;
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Fol_FOLLOW_SECTION_ID);
@@ -308,7 +332,7 @@ void Fol_ShowFollowingAndFollowers (const struct Usr_Data *UsrDat,
 	    /* User follows me? */
 	    HTM_DIV_Begin ("id=\"follows_me\" class=\"DAT_LIGHT_%s\"",
 	                   The_GetSuffix ());
-	       if (UsrFollowsMe)
+	       if (UsrIsFollowerOfMe == Fol_FOLLOWER)
 		  HTM_Txt (Txt_FOLLOWS_YOU);
 	    HTM_DIV_End ();
 
@@ -335,14 +359,11 @@ void Fol_ShowFollowingAndFollowers (const struct Usr_Data *UsrDat,
 	       if (Gbl.Usrs.Me.Logged &&			// Logged
 		   Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER)	// Not me!
 		 {
-		  Frm_BeginForm (IFollowUsr ? ActUnfUsr :
-					      ActFolUsr);
+		  Frm_BeginForm (Form[IAmFollowerOfUsr].NextAction);
 		     Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 		     HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,
-				      IFollowUsr ? "user-check.svg" :
-						   "user-plus.svg",
-				      Act_GetActionText (IFollowUsr ? ActUnfUsr :
-						                      ActFolUsr),
+				      Form[IAmFollowerOfUsr].Icon,
+				      Act_GetActionText (Form[IAmFollowerOfUsr].NextAction),
 				      "class=\"ICO_HIGHLIGHT ICO40x40\"");
 		  Frm_EndForm ();
 		 }

@@ -278,10 +278,6 @@ Err_SuccessOrError_t Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
       [Usr_ME   ] = Prf_PutLinkReqAnotherUsrProfile,	// Request another user's profile
       [Usr_OTHER] = Prf_PutLinkMyPublicProfile		// My public profile
      };
-   unsigned NumFollowing;
-   unsigned NumFollowers;
-   bool UsrFollowsMe;
-   bool IFollowUsr;
    Usr_MeOrOther_t MeOrOther = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Check if I can see the public profile *****/
@@ -315,23 +311,8 @@ Err_SuccessOrError_t Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
          /***** Show details of user's profile *****/
          Prf_ShowDetailsUserProfile (UsrDat);
 
-	 /***** Count following and followers *****/
-	 Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
-	 if (NumFollowing)
-	    UsrFollowsMe = Fol_DB_CheckUsrIsFollowerOf (UsrDat->UsrCod,
-						        Gbl.Usrs.Me.UsrDat.UsrCod) == Fol_FOLLOWER;
-	 else
-	    UsrFollowsMe = false;
-	 if (NumFollowers)
-	    IFollowUsr   = Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-						        UsrDat->UsrCod) == Fol_FOLLOWER;
-	 else
-	    IFollowUsr   = false;
-
 	 /***** Show following and followers *****/
-	 Fol_ShowFollowingAndFollowers (UsrDat,
-					NumFollowing,NumFollowers,
-					UsrFollowsMe,IFollowUsr);
+	 Fol_ShowFollowingAndFollowers (UsrDat);
         }
 
       return Err_SUCCESS;
