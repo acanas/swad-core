@@ -90,6 +90,13 @@ struct Mch_UsrAnswer
    int AnsInd;	// < 0 ==> no answer selected
   };
 
+#define Mch_NUM_ANS_ANSWERED 2
+typedef enum
+  {
+   Mch_ANS_NOT_ANSWERED,
+   Mch_ANS_ANSWERED,
+  } Mch_AnsAnswered_t;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/

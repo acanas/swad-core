@@ -199,7 +199,8 @@ static void Mch_ShowMatchTitleTch (const struct Mch_Match *Match);
 static void Mch_ShowMatchTitleStd (const struct Mch_Match *Match);
 
 static void Mch_PutCheckboxResult (const struct Mch_Match *Match);
-static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered);
+static void Mch_PutIfAnswered (const struct Mch_Match *Match,
+			       Mch_AnsAnswered_t Answered);
 static void Mch_PutIconToRemoveMyAnswer (const struct Mch_Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match);
 static void Mch_WriteAnswersMatchResult (const struct Mch_Match *Match,
@@ -2377,7 +2378,8 @@ static void Mch_ShowRightColumnTch (const struct Mch_Match *Match)
 static void Mch_ShowLeftColumnStd (const struct Mch_Match *Match,
 				   const struct Mch_UsrAnswer *UsrAnswer)
   {
-   bool Answered = UsrAnswer->NumOpt >= 0;
+   Mch_AnsAnswered_t Answered = UsrAnswer->NumOpt >= 0 ? Mch_ANS_ANSWERED :
+							 Mch_ANS_NOT_ANSWERED;
 
    /***** Begin left container *****/
    HTM_DIV_Begin ("class=\"MCH_LEFT_STD\"");
@@ -2400,7 +2402,7 @@ static void Mch_ShowLeftColumnStd (const struct Mch_Match *Match,
 
 	    if (Match->Status.Playing &&		// Match is being played
 		Match->Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing question answers
-		Answered)				// I have answered this question
+		Answered == Mch_ANS_ANSWERED)		// I have answered this question
 	       /***** Put icon to remove my answet *****/
 	       Mch_PutIconToRemoveMyAnswer (Match);
 	    break;
@@ -2670,10 +2672,21 @@ static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
 /***************** Put checkbox to select if show results ********************/
 /*****************************************************************************/
 
-static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
+static void Mch_PutIfAnswered (const struct Mch_Match *Match,
+			       Mch_AnsAnswered_t Answered)
   {
    extern const char *Txt_MATCH_QUESTION_Answered;
    extern const char *Txt_MATCH_QUESTION_Unanswered;
+   static struct
+     {
+      const char *ClassDiv;
+      const char *ClassI;
+      const char **Txt;
+     } Options[Mch_NUM_ANS_ANSWERED] =
+     {
+      [Mch_ANS_NOT_ANSWERED] = {"DAT_SMALL_RED"	 ,"fas fa-exclamation-circle",&Txt_MATCH_QUESTION_Unanswered},
+      [Mch_ANS_ANSWERED    ] = {"DAT_SMALL_GREEN","fas fa-check-circle"      ,&Txt_MATCH_QUESTION_Answered  },
+     };
 
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"MCH_SHOW_ANSWERED\"");
@@ -2681,7 +2694,7 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
       /***** Put icon with link *****/
       if (Match->Status.Playing &&			// Match is being played
 	  Match->Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing question answers
-	  Answered)				// I have answered this question
+	  Answered == Mch_ANS_ANSWERED)			// I have answered this question
 	{
 	 /* Begin form */
 	 Frm_BeginForm (ActSeeMchAnsQstStd);
@@ -2701,17 +2714,12 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
 	}
       else
 	{
-	 HTM_DIV_Begin ("class=\"%s_%s\"",Answered ? "DAT_SMALL_GREEN" :
-		                                     "DAT_SMALL_RED",
-			The_GetSuffix ());
+	 HTM_DIV_Begin ("class=\"%s_%s\"",
+	                Options[Answered].ClassDiv,The_GetSuffix ());
 	    HTM_TxtF ("<i class=\"%s\" title=\"%s\"></i>",
-		      Answered ? "fas fa-check-circle" :
-				 "fas fa-exclamation-circle",
-		      Answered ? Txt_MATCH_QUESTION_Answered :
-				 Txt_MATCH_QUESTION_Unanswered);
+		      Options[Answered].ClassI,*Options[Answered].Txt);
 	    HTM_NBSP ();
-	    HTM_Txt (Answered ? Txt_MATCH_QUESTION_Answered :
-				Txt_MATCH_QUESTION_Unanswered);
+	    HTM_Txt (*Options[Answered].Txt);
 	 HTM_DIV_End ();
 	}
 

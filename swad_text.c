@@ -20397,7 +20397,7 @@ const char *Txt_MATCH_QUESTION_Answered =
 #elif L==5	// fr
 	"R&eacute;pondue";
 #elif L==6	// gn
-	"Respondida";	// Okoteve traducción
+	"P&ntilde;embohov&aacute;i";
 #elif L==7	// it
 	"Risposta";
 #elif L==8	// pl
@@ -20405,7 +20405,7 @@ const char *Txt_MATCH_QUESTION_Answered =
 #elif L==9	// pt
 	"Respondida";
 #elif L==10	// tr
-	"Answered";	// Çeviri lazim!
+	"Cevapland&inodot;";
 #endif
 
 const char *Txt_MATCH_QUESTION_Unanswered =
@@ -20420,7 +20420,7 @@ const char *Txt_MATCH_QUESTION_Unanswered =
 #elif L==5	// fr
 	"Pas r&eacute;pondue";
 #elif L==6	// gn
-	"No respondida";	// Okoteve traducción
+	"O&ntilde;embohov&aacute;i'&ytilde;va";
 #elif L==7	// it
 	"Non risposta";
 #elif L==8	// pl
@@ -20428,7 +20428,7 @@ const char *Txt_MATCH_QUESTION_Unanswered =
 #elif L==9	// pt
 	"N&atilde;o respondida";
 #elif L==10	// tr
-	"Unanswered";		// Çeviri lazim!
+	"Cevaplanmam&inodot;&scedil;";
 #endif
 
 const char *Txt_MATCH_Start =

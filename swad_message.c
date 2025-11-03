@@ -132,7 +132,7 @@ static void Msg_PutParsShowMorePotentialRecipients (void *Messages);
 static void Msg_PutParsWriteMsg (void *Messages);
 static void Msg_PutParsSubjectAndContent (void);
 static void Msg_ShowOneUniqueRecipient (void);
-static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool OtherRecipientsBefore);
+static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (const char *Label);
 static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messages);
 
 static void Msg_PutParOtherRecipients (void);
@@ -240,6 +240,8 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
    extern const char *Hlp_COMMUNICATION_Messages_write;
    extern const char *Txt_Message;
    extern const char *Txt_MSG_To;
+   extern const char *Txt_Other_recipients;
+   extern const char *Txt_Recipients;
    unsigned NumUsrsInCrs = 0;	// Initialized to avoid warning
    Lay_Show_t ShowUsrsInCrs = Lay_DONT_SHOW;
    bool GetUsrsInCrs;
@@ -385,7 +387,8 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
 						   Lay_DONT_SHOW);	// Don't show if empty
 		     if (!OtherRecipientsBefore)
 		        OtherRecipientsBefore = (Gbl.Usrs.LstUsrs[Rol_UNK].NumUsrs != 0);
-		     Msg_WriteFormUsrsIDsOrNicksOtherRecipients (OtherRecipientsBefore);	// Other users (nicknames)
+		     Msg_WriteFormUsrsIDsOrNicksOtherRecipients (OtherRecipientsBefore ? Txt_Other_recipients :
+											 Txt_Recipients);
 		    }
 	       HTM_TD_End ();
 	    HTM_TR_End ();
@@ -549,17 +552,14 @@ static void Msg_ShowOneUniqueRecipient (void)
 /************** Nicknames of recipients of a message to users ****************/
 /*****************************************************************************/
 
-static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool OtherRecipientsBefore)
+static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (const char *Label)
   {
-   extern const char *Txt_Other_recipients;
-   extern const char *Txt_Recipients;
    extern const char *Txt_nicks_emails_or_IDs_separated_by_commas;
 
    /***** Title *****/
    HTM_LABEL_Begin ("for=\"OtherRecipients\""
 		    " class=\"FORM_IN_%s\"",The_GetSuffix ());
-      HTM_Txt (OtherRecipientsBefore ? Txt_Other_recipients :
-				       Txt_Recipients);
+      HTM_Txt (Label);
       HTM_Colon (); HTM_LABEL_End ();
 
    /***** Textarea with users' @nicknames, emails or IDs *****/
