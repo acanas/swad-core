@@ -293,7 +293,7 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Ntf_PutContextualLinks (bool AllNotifications,
+static void Ntf_PutContextualLinks (Lay_Show_t ShowAllNotifications,
 				    unsigned NumNotifications);
 static void Ntf_PutIconsNotif (__attribute__((unused)) void *Args);
 static void Ntf_WriteHeading (void);
@@ -309,7 +309,7 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 			    long Cod,time_t DateTimeUTC,
 			    Ntf_Status_t Status);
 
-static bool Ntf_GetAllNotificationsFromForm (void);
+static Lay_Show_t Ntf_GetAllNotificationsFromForm (void);
 
 static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
                                              long HieCod,	// Course code
@@ -339,10 +339,15 @@ void Ntf_ShowMyNotifications (void)
    extern const char *Txt_Notifications;
    extern const char *Txt_You_have_no_notifications;
    extern const char *Txt_You_have_no_unread_notifications;
+   static const char **AlertTxt[Lay_NUM_SHOW] =
+     {
+      [Lay_DONT_SHOW] = &Txt_You_have_no_notifications,
+      [Lay_SHOW     ] = &Txt_You_have_no_unread_notifications,
+     };
    MYSQL_RES *mysql_res;
    unsigned NumNotif;
    unsigned NumNotifications;
-   bool AllNotifications;
+   Lay_Show_t ShowAllNotifications;
    Ntf_NotifyEvent_t NotifyEvent = (Ntf_NotifyEvent_t) 0;	// Initialized to avoid warning
    struct Usr_Data UsrDat;
    struct Hie_Node Hie[Hie_NUM_LEVELS];
@@ -351,11 +356,11 @@ void Ntf_ShowMyNotifications (void)
    Ntf_Status_t Status;
 
    /***** Get my notifications from database *****/
-   AllNotifications = Ntf_GetAllNotificationsFromForm ();
-   NumNotifications = Ntf_DB_GetMyNotifications (&mysql_res,AllNotifications);
+   ShowAllNotifications = Ntf_GetAllNotificationsFromForm ();
+   NumNotifications = Ntf_DB_GetMyNotifications (&mysql_res,ShowAllNotifications);
 
    /***** Contextual menu *****/
-   Ntf_PutContextualLinks (AllNotifications,NumNotifications);
+   Ntf_PutContextualLinks (ShowAllNotifications,NumNotifications);
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Notifications,Ntf_PutIconsNotif,NULL,
@@ -393,8 +398,7 @@ void Ntf_ShowMyNotifications (void)
 	 Usr_UsrDataDestructor (&UsrDat);
 	}
       else
-	 Ale_ShowAlert (Ale_INFO,AllNotifications ? Txt_You_have_no_notifications :
-						    Txt_You_have_no_unread_notifications);
+	 Ale_ShowAlert (Ale_INFO,*AlertTxt[ShowAllNotifications]);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -410,7 +414,7 @@ void Ntf_ShowMyNotifications (void)
 /*************************** Put contextual links ****************************/
 /*****************************************************************************/
 
-static void Ntf_PutContextualLinks (bool AllNotifications,
+static void Ntf_PutContextualLinks (Lay_Show_t ShowAllNotifications,
 				    unsigned NumNotifications)
   {
    extern const char *Txt_Show_all_notifications;
@@ -424,8 +428,9 @@ static void Ntf_PutContextualLinks (bool AllNotifications,
       Lay_PutContextualCheckbox (ActSeeNtf,
 				 NULL,NULL,
 				 "All",
-				 (AllNotifications ? HTM_CHECKED :
-						     HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
+				 (ShowAllNotifications == Lay_SHOW ? HTM_CHECKED :
+								     HTM_NO_ATTR) |
+				 HTM_SUBMIT_ON_CHANGE,
 				 Txt_Show_all_notifications,
 				 Txt_Show_all_NOTIFICATIONS);
 
@@ -777,9 +782,10 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 /************* Get whether to show all notifications from form ***************/
 /*****************************************************************************/
 
-static bool Ntf_GetAllNotificationsFromForm (void)
+static Lay_Show_t Ntf_GetAllNotificationsFromForm (void)
   {
-   return Par_GetParBool ("All");
+   return Par_GetParBool ("All") ? Lay_SHOW :
+				   Lay_DONT_SHOW;
   }
 
 /*****************************************************************************/

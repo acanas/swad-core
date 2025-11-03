@@ -58,7 +58,8 @@ void Ntf_DB_UpdateNumNotifSent (const struct Hie_Node Hie[Hie_NUM_LEVELS],
 unsigned Ntf_DB_GetNumNotifSent (MYSQL_RES **mysql_res,
                                  const struct Hie_Node Hie[Hie_NUM_LEVELS],
                                  Ntf_NotifyEvent_t NotifyEvent);
-unsigned Ntf_DB_GetMyNotifications (MYSQL_RES **mysql_res,bool AllNotifications);
+unsigned Ntf_DB_GetMyNotifications (MYSQL_RES **mysql_res,
+				    Lay_Show_t ShowAllNotifications);
 unsigned Ntf_DB_GetMyRecentNotifications (MYSQL_RES **mysql_res,time_t BeginTime);
 unsigned Ntf_DB_GetPendingNtfsToUsr (MYSQL_RES **mysql_res,long ToUsrCod);
 unsigned Ntf_DB_GetNumAllMyUnseenNtfs (void);

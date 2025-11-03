@@ -361,17 +361,24 @@ unsigned Ntf_DB_GetNumNotifSent (MYSQL_RES **mysql_res,
 /*************************** Get my notifications ***************************/
 /*****************************************************************************/
 
-unsigned Ntf_DB_GetMyNotifications (MYSQL_RES **mysql_res,bool AllNotifications)
+unsigned Ntf_DB_GetMyNotifications (MYSQL_RES **mysql_res,
+				    Lay_Show_t ShowAllNotifications)
   {
    char SubQuery[128];
 
    /***** Get my notifications from database *****/
-   if (AllNotifications)
-      SubQuery[0] = '\0';
-   else
-      sprintf (SubQuery," AND (Status&%u)=0",
-               Ntf_STATUS_BIT_READ |
-               Ntf_STATUS_BIT_REMOVED);
+   switch (ShowAllNotifications)
+     {
+      case Lay_SHOW:
+	 SubQuery[0] = '\0';
+	 break;
+      case Lay_DONT_SHOW:
+      default:
+	 sprintf (SubQuery," AND (Status&%u)=0",
+		  Ntf_STATUS_BIT_READ |
+		  Ntf_STATUS_BIT_REMOVED);
+	 break;
+     }
 
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get your notifications",

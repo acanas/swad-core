@@ -154,7 +154,7 @@ static Grp_HasFileZones_t Grp_GetHasFileZonesFromYN (char Ch);
 static void Grp_GetLstCodGrpsUsrBelongs (long UsrCod,long GrpTypCod,
                                          struct ListCodGrps *LstGrps,
                                          Grp_ClosedOpenGrps_t ClosedOpenGroups);
-static bool Grp_CheckIfGrpIsInList (long GrpCod,struct ListCodGrps *LstGrps);
+static Exi_Exist_t Grp_CheckIfGrpExistsInList (long GrpCod,struct ListCodGrps *LstGrps);
 static bool Grp_CheckIfOpenTimeInTheFuture (time_t OpenTimeUTC);
 
 static void Grp_AskConfirmRemGrp (long GrpCod);
@@ -921,7 +921,8 @@ static Err_SuccessOrError_t Grp_CheckIfNotClosedOrFull (struct ListCodGrps *LstG
      {
       GrpCodWant = LstGrpsWant->GrpCods[NumGrpWant];
 
-      if (!Grp_CheckIfGrpIsInList (GrpCodWant,LstGrpsBelong))	// I want this group but I don't belong to it
+      if (Grp_CheckIfGrpExistsInList (GrpCodWant,
+				      LstGrpsBelong) == Exi_DOES_NOT_EXIST)	// I want this group but I don't belong to it
 	 /* Check if the group is closed or full */
 	 for (NumGrpTyp = 0;
 	      NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
@@ -977,7 +978,8 @@ static void Grp_RemoveUsrFromGrps (Usr_MeOrOther_t MeOrOther,
       GrpCodBelong = LstGrpsBelong->GrpCods[NumGrpBelong];
 
       /* Step 1: if user checked this group ==> don't remove */
-      RemoveUsrFromThisGrp = !Grp_CheckIfGrpIsInList (GrpCodBelong,LstGrpsWant);	// User belong to this group but he/she don't want it
+      RemoveUsrFromThisGrp = (Grp_CheckIfGrpExistsInList (GrpCodBelong,
+							  LstGrpsWant) == Exi_DOES_NOT_EXIST);	// User belong to this group but he/she don't want it
 
       /* Step 2 (only for a student changing its groups):
          cancel removing if the group is closed */
@@ -1030,7 +1032,8 @@ static void Grp_EnrolUsrInGrps (Usr_MeOrOther_t MeOrOther,
      {
       GrpCodWant = LstGrpsWant->GrpCods[NumGrpWant];
 
-      if (!Grp_CheckIfGrpIsInList (GrpCodWant,LstGrpsBelong))	// User wants this group but he/she don't belong to it
+      if (Grp_CheckIfGrpExistsInList (GrpCodWant,
+				      LstGrpsBelong) == Exi_DOES_NOT_EXIST)	// User wants this group but he/she don't belong to it
 	 Grp_DB_AddUsrToGrp (Usr_UsrDat[MeOrOther]->UsrCod,GrpCodWant);
      }
   }
@@ -1276,7 +1279,7 @@ unsigned Grp_RemoveUsrFromGroups (struct Usr_Data *UsrDat,struct ListCodGrps *Ls
       GrpCodSel = LstGrps->GrpCods[NumGrpSel];
 
       /* For each group to which the user belongs... */
-      if (Grp_CheckIfGrpIsInList (GrpCodSel,&LstGrpsBelong))
+      if (Grp_CheckIfGrpExistsInList (GrpCodSel,&LstGrpsBelong) == Exi_EXISTS)
 	{
          // If the user belongs to a selected group from which he/she must be removed
 	 Grp_RemoveUsrFromGroup (UsrDat->UsrCod,GrpCodSel);
@@ -1848,8 +1851,9 @@ static void Grp_ListGrpsOfATypeToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp
 	      NumGrpThisType++)
 	   {
 	    Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
-	    IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong) ? Usr_BELONG :
-											Usr_DONT_BELONG;
+	    IBelongToThisGroup = Grp_CheckIfGrpExistsInList (Grp->GrpCod,
+							     &LstGrpsIBelong) == Exi_EXISTS ? Usr_BELONG :
+											      Usr_DONT_BELONG;
 
 	    /* Put checkbox to select the group */
 	    HTM_TR_Begin (NULL);
@@ -2104,9 +2108,9 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 			Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
 			if (Grp->Open == CloOpe_OPEN)	// If group is open
 			  {
-			   IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,
-									&LstGrpsIBelong) ? Usr_BELONG :
-											   Usr_DONT_BELONG;
+			   IBelongToThisGroup = Grp_CheckIfGrpExistsInList (Grp->GrpCod,
+									    &LstGrpsIBelong) == Exi_EXISTS ? Usr_BELONG :
+													     Usr_DONT_BELONG;
 			   switch (IBelongToThisGroup)
 			     {
 			      case Usr_BELONG:
@@ -2131,9 +2135,9 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 			Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
 			if (Grp->Open == CloOpe_CLOSED)	// If group is closed
 			  {
-			   IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,
-									&LstGrpsIBelong) ? Usr_BELONG :
-											   Usr_DONT_BELONG;
+			   IBelongToThisGroup = Grp_CheckIfGrpExistsInList (Grp->GrpCod,
+									    &LstGrpsIBelong) == Exi_EXISTS ? Usr_BELONG :
+													     Usr_DONT_BELONG;
 			   if (IBelongToThisGroup == Usr_BELONG)
 			      IBelongToAClosedGroup = Usr_BELONG;	// I belong to a closed group
 			  }
@@ -2158,9 +2162,9 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 				    if (Grp->Open == CloOpe_OPEN &&		// If group is open...
 					Grp->NumUsrs[Rol_STD] < Grp->MaxStds)	// ...and not full
 				      {
-				       IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,
-										    &LstGrpsIBelong) ? Usr_BELONG :
-												       Usr_DONT_BELONG;
+				       IBelongToThisGroup = Grp_CheckIfGrpExistsInList (Grp->GrpCod,
+										        &LstGrpsIBelong) == Exi_EXISTS ? Usr_BELONG :
+															 Usr_DONT_BELONG;
 				       if (IBelongToThisGroup == Usr_DONT_BELONG)
 					  ICanChangeMySelectionForThisGrpTyp = Usr_CAN;// I can enrol into this group
 				      }
@@ -2191,9 +2195,9 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 	      NumGrpThisType++)
 	   {
 	    Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
-	    IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,
-							 &LstGrpsIBelong) ? Usr_BELONG :
-									    Usr_DONT_BELONG;
+	    IBelongToThisGroup = Grp_CheckIfGrpExistsInList (Grp->GrpCod,
+							      &LstGrpsIBelong) == Exi_EXISTS ? Usr_BELONG :
+											       Usr_DONT_BELONG;
 
 	    /* Selection disabled? */
 	    switch (ICanChangeMySelectionForThisGrpTyp)	// I can change my selection for this group type
@@ -2366,8 +2370,9 @@ static void Grp_ListGrpsToAddOrRemUsrs (const struct GroupType *GrpTyp,long UsrC
 	      NumGrpThisType++)
 	   {
 	    Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
-	    UsrBelongsToThisGroup = UsrCod > 0 ? (Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsUsrBelongs) ? Usr_BELONG :
-													    Usr_DONT_BELONG) :
+	    UsrBelongsToThisGroup = UsrCod > 0 ? (Grp_CheckIfGrpExistsInList (Grp->GrpCod,
+									      &LstGrpsUsrBelongs) == Exi_EXISTS ? Usr_BELONG :
+														  Usr_DONT_BELONG) :
 						 Usr_DONT_BELONG;
 
 	    /* Begin row */
@@ -2445,9 +2450,9 @@ static void Grp_ListGrpsForMultipleSelection (const struct GroupType *GrpTyp)
 	    Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
 
 	    /* Check if I belong to his group */
-	    IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,
-							 &LstGrpsIBelong) ? Usr_BELONG :
-									    Usr_DONT_BELONG;
+	    IBelongToThisGroup = Grp_CheckIfGrpExistsInList (Grp->GrpCod,
+							     &LstGrpsIBelong) == Exi_EXISTS ? Usr_BELONG :
+											      Usr_DONT_BELONG;
 
 	    /* Check if I can select / unselect this group */
 	    switch (IBelongToThisGroup)
@@ -3585,7 +3590,7 @@ void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps)
 /******** Check if a group is in a list of groups which I belong to **********/
 /*****************************************************************************/
 
-static bool Grp_CheckIfGrpIsInList (long GrpCod,struct ListCodGrps *LstGrps)
+static Exi_Exist_t Grp_CheckIfGrpExistsInList (long GrpCod,struct ListCodGrps *LstGrps)
   {
    unsigned NumGrp;
 
@@ -3593,9 +3598,9 @@ static bool Grp_CheckIfGrpIsInList (long GrpCod,struct ListCodGrps *LstGrps)
 	NumGrp < LstGrps->NumGrps;
 	NumGrp++)
       if (GrpCod == LstGrps->GrpCods[NumGrp])
-         return true;
+         return Exi_EXISTS;
 
-   return false;
+   return Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
