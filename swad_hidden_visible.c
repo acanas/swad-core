@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #include "swad_hidden_visible.h"
+#include "swad_parameter.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -120,4 +121,18 @@ HidVis_HiddenOrVisible_t HidVis_GetVisibleFromYN (char Ch)
   {
    return Ch == 'Y' ? HidVis_VISIBLE :
 		      HidVis_HIDDEN;
+  }
+
+/*****************************************************************************/
+/****************** Get if visible from a 'Y'/'N' parameter ******************/
+/*****************************************************************************/
+
+HidVis_HiddenOrVisible_t HidVis_GetParVisible (const char *ParName)
+  {
+   char YN[1 + 1];
+
+   /***** Get parameter "Y"/"N" and convert to boolean *****/
+   Par_GetParText (ParName,YN,1);
+   return Str_ConvertToUpperLetter (YN[0]) == 'Y' ? HidVis_VISIBLE :
+						    HidVis_HIDDEN;
   }

@@ -2568,8 +2568,8 @@ int swad__sendAttendanceEvent (struct soap *soap,
      }
 
    /* Is event hidden or visible? */
-   Event.Hidden = (hidden ? HidVis_HIDDEN :
-	                             HidVis_VISIBLE);
+   Event.Hidden = hidden ? HidVis_HIDDEN :
+	                   HidVis_VISIBLE;
 
    /* User's code (really not used) */
    Event.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -2579,8 +2579,8 @@ int swad__sendAttendanceEvent (struct soap *soap,
    Event.TimeUTC[Dat_END_TIME] = (time_t) endTime;
 
    /* Are teacher's comments hidden or visible? */
-   Event.CommentTchVisible = (commentsTeachersVisible ? HidVis_VISIBLE :
-	                                                HidVis_HIDDEN);
+   Event.CommentTchVisible = commentsTeachersVisible ? HidVis_VISIBLE :
+	                                               HidVis_HIDDEN;
 
    /* Title */
    if (!title[0])

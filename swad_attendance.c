@@ -67,6 +67,13 @@ extern struct Globals Gbl;
 #define Att_ATTENDANCE_TABLE_ID		"att_table"
 #define Att_ATTENDANCE_DETAILS_ID	"att_details"
 
+static unsigned Att_ColSpan[Pho_NUM_PHOTOS] =
+  {
+   [Pho_PHOTOS_UNKNOWN  ] = 3,
+   [Pho_PHOTOS_DONT_SHOW] = 3,
+   [Pho_PHOTOS_SHOW     ] = 4,
+  };
+
 /*****************************************************************************/
 /******************************** Private types ******************************/
 /*****************************************************************************/
@@ -340,15 +347,24 @@ static void Att_ParsMyAllGrps (void *Events)
 
 static void Att_PutIconsInListOfEvents (void *Events)
   {
-   Usr_Can_t ICanEdit;
+   static Usr_Can_t ICanEdit[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK    ] = Usr_CAN_NOT,
+      [Rol_GST    ] = Usr_CAN_NOT,
+      [Rol_USR    ] = Usr_CAN_NOT,
+      [Rol_STD    ] = Usr_CAN_NOT,
+      [Rol_NET    ] = Usr_CAN_NOT,
+      [Rol_TCH    ] = Usr_CAN,
+      [Rol_DEG_ADM] = Usr_CAN_NOT,
+      [Rol_CTR_ADM] = Usr_CAN_NOT,
+      [Rol_INS_ADM] = Usr_CAN_NOT,
+      [Rol_SYS_ADM] = Usr_CAN,
+     };
 
    if (Events)
      {
       /***** Put icon to create a new attendance event *****/
-      ICanEdit = Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-		 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :
-							  Usr_CAN_NOT;
-      if (ICanEdit == Usr_CAN)
+      if (ICanEdit[Gbl.Usrs.Me.Role.Logged] == Usr_CAN)
 	 Att_PutIconToCreateNewEvent ((struct Att_Events *) Events);
 
       /***** Put icon to show attendance list *****/
@@ -1109,6 +1125,11 @@ void Att_ReqCreatOrEditEvent (void)
 static void Att_ShowLstGrpsToEditEvent (long AttCod)
   {
    extern const char *Txt_Groups;
+   static HTM_Attributes_t Attributes[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = HTM_CHECKED,
+      [Exi_EXISTS        ] = HTM_NO_ATTR,
+     };
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
@@ -1127,10 +1148,9 @@ static void Att_ShowLstGrpsToEditEvent (long AttCod)
 	    /***** First row: checkbox to select the whole course *****/
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_CHECKBOX ("WholeCrs",
-				   Grp_DB_CheckIfAssociatedToGrps ("att_groups",
-								   "AttCod",
-								   AttCod) == Exi_EXISTS ? HTM_NO_ATTR :
-											   HTM_CHECKED,
+				   Attributes[Grp_DB_CheckIfAssociatedToGrps ("att_groups",
+									      "AttCod",
+									      AttCod)],
 				   "id=\"WholeCrs\" value=\"Y\""
 				   " onclick=\"uncheckChildren(this,'GrpCods')\"");
 	       Grp_WriteTheWholeCourse ();
@@ -1179,8 +1199,7 @@ void Att_ReceiveEvent (void)
    ReceivedAtt.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm (Dat_END_TIME);
 
    /***** Get boolean parameter that indicates if teacher's comments are visible by students *****/
-   ReceivedAtt.CommentTchVisible = Par_GetParBool ("ComTchVisible") ? HidVis_VISIBLE :
-								      HidVis_HIDDEN;
+   ReceivedAtt.CommentTchVisible = HidVis_GetParVisible ("ComTchVisible");
 
    /***** Get attendance event title *****/
    Par_GetParText ("Title",ReceivedAtt.Title,Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE);
@@ -1709,6 +1728,21 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
   {
    extern const char *Usr_ClassNum[Usr_NUM_ACCEPTED];
    extern const char *Usr_ClassData[Usr_NUM_ACCEPTED];
+   static Usr_Can_t ICanEditStdCom[CloOpe_NUM_CLOSED_OPEN] =
+     {
+      [CloOpe_CLOSED] = Usr_CAN_NOT,
+      [CloOpe_OPEN  ] = Usr_CAN,
+     };
+   static HTM_Attributes_t AttributesPresent[Att_NUM_PRESENT] =
+     {
+      [Att_ABSENT ] = HTM_NO_ATTR,
+      [Att_PRESENT] = HTM_CHECKED,
+     };
+   static HTM_Attributes_t AttributesICanChg[Usr_NUM_CAN] =
+     {
+      [Usr_CAN_NOT] = HTM_DISABLED,
+      [Usr_CAN    ] = HTM_NO_ATTR,
+     };
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
@@ -1731,8 +1765,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	 if (Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER)
 	    Err_ShowErrorAndExit ("Wrong call.");
 	 ICanChangeStdAttendance = Usr_CAN_NOT;
-	 ICanEditStdComment	 = Event->ClosedOrOpen == CloOpe_OPEN ? Usr_CAN :	// Attendance event is open
-									Usr_CAN_NOT;
+	 ICanEditStdComment	 = ICanEditStdCom[Event->ClosedOrOpen];
 	 ICanEditTchComment	 = Usr_CAN_NOT;
 	 break;
       case Rol_TCH:
@@ -1769,10 +1802,8 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       /***** Checkbox to select user *****/
       HTM_TD_Begin ("class=\"CT %s\"",The_GetColorRows ());
 	 HTM_INPUT_CHECKBOX ("UsrCodStd",
-			     (Present == Att_PRESENT ? HTM_CHECKED :
-					               HTM_NO_ATTR) |
-			     (ICanChangeStdAttendance == Usr_CAN ? HTM_NO_ATTR :
-								   HTM_DISABLED),
+			     AttributesPresent[Present] |
+			     AttributesICanChg[ICanChangeStdAttendance],
 			     "id=\"Std%u\" value=\"%s\"",
 			     NumUsr,UsrDat->EnUsrCod);
       HTM_TD_End ();
@@ -2807,9 +2838,7 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("colspan=\"%u\" class=\"RM DAT_STRONG_%s LINE_TOP\"",
-			     ShowPhotos == Pho_PHOTOS_SHOW ? 4 :
-							     3,
-			     The_GetSuffix ());
+			     Att_ColSpan[ShowPhotos],The_GetSuffix ());
 		  HTM_Txt (Txt_Number_of_users); HTM_Colon ();
 	       HTM_TD_End ();
 
@@ -2856,8 +2885,7 @@ static void Att_WriteTableHeadSeveralAttEvents (struct Att_Events *Events,
    HTM_TR_Begin (NULL);
 
       HTM_TH_Span (Txt_ROLES_SINGUL_Abc[Rol_USR][Usr_SEX_UNKNOWN],HTM_HEAD_LEFT,
-	           1,ShowPhotos == Pho_PHOTOS_SHOW ? 4 :
-	        				     3,NULL);
+	           1,Att_ColSpan[ShowPhotos],NULL);
 
       for (NumAttEvent = 0;
 	   NumAttEvent < Events->Num;

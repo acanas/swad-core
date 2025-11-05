@@ -510,8 +510,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    Names[Nam_FULL_NAME] = Dpt->FullName;
 	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_Dpt,Dpt->DptCod,
-				           Names,
-				           Frm_PUT_FORM);
+				           Names,Frm_PUT_FORM);
 
 	    /* Department WWW */
 	    HTM_TD_Begin ("class=\"LM\"");
@@ -938,6 +937,11 @@ void Dpt_WriteSelectorDepartment (long HieCod,long DptCod,
                                   HTM_Attributes_t Attributes)
   {
    extern const char *Txt_Another_department;
+   static HTM_Attributes_t AttributesNoDptSelectable[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = HTM_DISABLED,
+      [Exi_EXISTS        ] = HTM_NO_ATTR,
+     };
    struct Dpt_Departments Departments;
    unsigned NumDpt;
    const struct Dpt_Department *Dpt;
@@ -968,8 +972,7 @@ void Dpt_WriteSelectorDepartment (long HieCod,long DptCod,
 	    HTM_OPTION (HTM_Type_STRING,"-1",
 	                (DptCod < 0 ? HTM_SELECTED :
 	                	      HTM_NO_ATTR) |
-	                (NoDptSelectable == Exi_EXISTS ? HTM_NO_ATTR :
-	                				 HTM_DISABLED),
+	                AttributesNoDptSelectable[NoDptSelectable],
 			"%s",TextWhenNoDptSelected);
 	   }
 

@@ -89,6 +89,18 @@ void DegCfg_PrintConfiguration (void)
 static void DegCfg_Configuration (Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_DEGREE_Information;
+   extern const char *Txt_NULL;
+   static struct
+     {
+      void (*FunctionToDrawContextualIcons) (void *Args);
+      const char **HelpLink;
+     } BoxArgs[Vie_NUM_VIEW_TYPES] =
+     {
+      [Vie_VIEW  ] = {DegCfg_PutIconsToPrintAndUpload	,&Hlp_DEGREE_Information},
+      [Vie_EDIT  ] = {NULL				,&Txt_NULL		},
+      [Vie_CONFIG] = {NULL				,&Txt_NULL		},
+      [Vie_PRINT ] = {NULL				,&Txt_NULL		},
+     };
    Hie_PutLink_t PutLink;
    Frm_PutForm_t PutFormCtr;
    Frm_PutForm_t PutFormName;
@@ -113,11 +125,8 @@ static void DegCfg_Configuration (Vie_ViewType_t ViewType)
 							  Frm_DONT_PUT_FORM;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,
-		 ViewType == Vie_VIEW ? DegCfg_PutIconsToPrintAndUpload :
-					NULL,NULL,
-		 ViewType == Vie_VIEW ? Hlp_DEGREE_Information :
-					NULL,Box_NOT_CLOSABLE);
+   Box_BoxBegin (NULL,BoxArgs[ViewType].FunctionToDrawContextualIcons,NULL,
+		 *BoxArgs[ViewType].HelpLink,Box_NOT_CLOSABLE);
 
       /***** Title *****/
       HieCfg_Title (PutLink,Hie_DEG);

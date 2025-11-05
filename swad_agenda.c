@@ -128,6 +128,12 @@ static void Agd_HideUnhideEvent (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 Usr_Can_t Agd_CheckIfICanViewUsrAgenda (struct Usr_Data *UsrDat)
   {
+   static Usr_Can_t ICanViewAnotherAgenda[Usr_NUM_SHARE] =
+     {
+      [Usr_DONT_SHARE] = Usr_CAN_NOT,
+      [Usr_SHARE     ] = Usr_CAN,
+     };
+
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
       return Usr_CAN_NOT;
@@ -141,8 +147,7 @@ Usr_Can_t Agd_CheckIfICanViewUsrAgenda (struct Usr_Data *UsrDat)
       return Usr_CAN;
 
    /***** 4. Slow check: Get if user shares any course with me from database *****/
-   return Enr_CheckIfUsrSharesAnyOfMyCrs (UsrDat) == Usr_SHARE ? Usr_CAN :
-								 Usr_CAN_NOT;
+   return ICanViewAnotherAgenda[Enr_CheckIfUsrSharesAnyOfMyCrs (UsrDat)];
   }
 
 /*****************************************************************************/

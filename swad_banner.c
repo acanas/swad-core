@@ -443,8 +443,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    Names[Nam_FULL_NAME] = Ban->FullName;
 	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_Ban,Banners->BanCodToEdit,
-				           Names,
-				           Frm_PUT_FORM);
+				           Names,Frm_PUT_FORM);
 
 	    /* Banner image */
 	    HTM_TD_Begin ("class=\"LM\"");

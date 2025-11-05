@@ -440,8 +440,7 @@ static void SysLnk_ListLinksForEdition (const struct SysLnk_Links *Links)
 	    Names[Nam_FULL_NAME] = Lnk->FullName;
 	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_Lnk,Lnk->LnkCod,
-				           Names,
-				           Frm_PUT_FORM);
+				           Names,Frm_PUT_FORM);
 
 	    /* Link WWW */
 	    HTM_TD_Begin ("class=\"LM\"");

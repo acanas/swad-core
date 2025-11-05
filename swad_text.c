@@ -579,7 +579,7 @@ const char *Txt_Accept_third_party_cookies =
 #elif L==5	// fr
 	"Accepter les cookies de tiers";
 #elif L==6	// gn
-	"Emone&itilde; umi cookie mbohap&yacute;ha tapicha rehegua";
+	"Emone&#297; umi cookie mbohap&yacute;ha tapicha rehegua";
 #elif L==7	// it
 	"Accettare i cookie di terze parti";
 #elif L==8	// pl
@@ -908,7 +908,7 @@ const char *Txt_accessible_for_reading_and_writing_by_you_and_the_course_teacher
 #elif L==5	// fr
 	"accessible en lecture et en &eacute;criture par vous et les professeurs de la mati&egrave;re";
 #elif L==6	// gn
-	"accesible omo&ntilde;e'&etilde; ha ohai hagu&atilde; nde ha umi mbo'eh&aacute;ra asignatura rehegua";
+	"accesible omo&ntilde;e'&#7869; ha ohai hagu&atilde; nde ha umi mbo'eh&aacute;ra asignatura rehegua";
 #elif L==7	// it
 	"accessibile in lettura e scrittura da te e dai docenti del corso";
 #elif L==8	// pl
@@ -931,7 +931,7 @@ const char *Txt_accessible_only_for_reading_by_the_student_and_the_course_teache
 #elif L==5	// fr
 	"accessible uniquement &agrave; la lecture par l'&eacute;tudiant et les professeurs de la mati&egrave;re";
 #elif L==6	// gn
-	"ojeikekuaa omo&ntilde;e'&etilde; ha&gcirc;u&aacute;nte temimbo'e ha mbo'eh&aacute;ra asignatura rehegua";
+	"ojeikekuaa omo&ntilde;e'&#7869; ha&gcirc;u&aacute;nte temimbo'e ha mbo'eh&aacute;ra asignatura rehegua";
 #elif L==7	// it
 	"accessibile in sola lettura da parte dello studente e dei docenti del corso";
 #elif L==8	// pl
@@ -1125,7 +1125,7 @@ const char *Txt_add_rubric =
 #elif L==5	// fr
 	"ajouter rubrique";
 #elif L==6	// gn
-	"omo&itilde;ve r&uacute;brica";
+	"omo&#297;ve r&uacute;brica";
 #elif L==7	// it
 	"aggiungi rubrica";
 #elif L==8	// pl
@@ -1148,7 +1148,7 @@ const char *Txt_Add_to_clipboard =
 #elif L==5	// fr
 	"Ajouter au presse-papiers";
 #elif L==6	// gn
-	"O&ntilde;emo&itilde;ve portapapeles-pe";
+	"O&ntilde;emo&#297;ve portapapeles-pe";
 #elif L==7	// it
 	"Aggiungi agli appunti";
 #elif L==8	// pl
@@ -8757,7 +8757,7 @@ const char *Txt_Details =
 #elif L==5	// fr
 	"D&eacute;tails";
 #elif L==6	// gn
-	"Sa'&ytilde;ijo pete&itilde;te&itilde;";
+	"Sa'&ytilde;ijo pete&#297;te&#297;";
 #elif L==7	// it
 	"Dettagli";
 #elif L==8	// pl
@@ -17080,7 +17080,7 @@ const char *Txt_I_have_read_this_information =
 #elif L==5	// fr
 	"J'ai lu cette information";
 #elif L==6	// gn
-	"Amo&ntilde;e'&etilde;ma ko marandu";
+	"Amo&ntilde;e'&#7869;ma ko marandu";
 #elif L==7	// it
 	"Ho letto questa informazione";
 #elif L==8	// pl
@@ -20328,7 +20328,7 @@ const char *Txt_Match =		// of a game
 #elif L==5	// fr
 	"Match";
 #elif L==6	// gn
-	"&Ntilde;es&etilde;ha";
+	"&Ntilde;es&#7869;ha";
 #elif L==7	// it
 	"Partita";
 #elif L==8	// pl
@@ -27686,6 +27686,8 @@ const char *Txt_Now_each_student_can_only_belong_to_a_group_of_type_X =	// Warni
 	"Now each student can only belong to a group of type <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
+const char *Txt_NULL = NULL;
+
 const char *Txt_Number_of_criteria =
 #if   L==1	// ca
 	"Nombre de criteris";
@@ -33147,7 +33149,7 @@ const char *Txt_Reading =
 #elif L==5	// fr
 	"Lecture";
 #elif L==6	// gn
-	"Mo&ntilde;e'&etilde;r&atilde;";
+	"Mo&ntilde;e'&#7869;r&atilde;";
 #elif L==7	// it
 	"Lettura";
 #elif L==8	// pl
@@ -45115,7 +45117,7 @@ const char *Txt_Step_2_Select_an_action =
 #elif L==5	// fr
 	"&Eacute;tape 2: S&eacute;lectionnez une action";
 #elif L==6	// gn
-	"Paso 2: Eiporavo pete&itilde; tembiapo";
+	"Paso 2: Eiporavo pete&#297; tembiapo";
 #elif L==7	// it
 	"Passaggio 2: seleziona un'azione";
 #elif L==8	// pl
@@ -52084,7 +52086,7 @@ const char *Txt_There_is_already_a_file_named_X =	// Warning: it is very importa
 #elif L==5	// fr
 	"Il existe d&eacute;j&agrave; un fichier nomm&eacute; <strong>%s</strong>.";
 #elif L==6	// gn
-	"O&itilde;ma pete&itilde; vore h&eacute;rava <strong>%s</strong>.";
+	"O&#297;ma pete&#297; vore h&eacute;rava <strong>%s</strong>.";
 #elif L==7	// it
 	"C'&egrave; gi&agrave; un file chiamato <strong>%s</strong>.";
 #elif L==8	// pl
@@ -52107,7 +52109,7 @@ const char *Txt_There_is_already_a_non_empty_folder_named_X =	// Warning: it is 
 #elif L==5	// fr
 	"Il existe d&eacute;j&agrave; un dossier non vide nomm&eacute; <strong>%s</strong>.";
 #elif L==6	// gn
-	"O&itilde;ma pete&itilde; kundaha nandi'&ytilde;va h&eacute;rava <strong>%s</strong>.";
+	"O&#297;ma pete&#297; kundaha nandi'&ytilde;va h&eacute;rava <strong>%s</strong>.";
 #elif L==7	// it
 	"C'&egrave; gi&agrave; una cartella non vuota chiamata <strong>%s</strong>.";
 #elif L==8	// pl
@@ -56950,8 +56952,7 @@ const char *Txt_Where_s_USER =
 const char *Txt_WHO[Usr_NUM_WHO] =
 	{
 	[Usr_WHO_UNKNOWN] =
-	NULL
-	,
+	NULL,
 	[Usr_WHO_ME] =
 #if   L==1	// ca
 	"Jo"

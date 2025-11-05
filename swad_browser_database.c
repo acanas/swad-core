@@ -1429,21 +1429,27 @@ void Brw_DB_ChangeFilePublic (const struct Brw_FileMetadata *FileMetadata,
 
 PriPub_PrivateOrPublic_t Brw_DB_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1])
   {
-   return
-   DB_QueryEXISTS ("can not check if a folder contains public files",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM brw_files"
-		    " WHERE FileBrowser=%u"
-		      " AND Cod=%ld"
-		      " AND ZoneUsrCod=%ld"
-		      " AND Path LIKE '%s/%%'"
-		      " AND Public='Y')",
-		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-		   Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
-		   Brw_GetZoneUsrCodForFileBrowser (),
-		   Path) == Exi_EXISTS ? PriPub_PUBLIC :	// Has any public files
-					 PriPub_PRIVATE;	// All files are private
+   static PriPub_PrivateOrPublic_t FolderHasPublicFiles[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = PriPub_PRIVATE,	// All files are private
+      [Exi_EXISTS        ] = PriPub_PUBLIC,	// Has any public files
+     };
+   Exi_Exist_t Exists;
+
+   Exists = DB_QueryEXISTS ("can not check if a folder contains public files",
+			    "SELECT EXISTS"
+			    "(SELECT *"
+			      " FROM brw_files"
+			     " WHERE FileBrowser=%u"
+			       " AND Cod=%ld"
+			       " AND ZoneUsrCod=%ld"
+			       " AND Path LIKE '%s/%%'"
+			       " AND Public='Y')",
+			    (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+			    Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
+			    Brw_GetZoneUsrCodForFileBrowser (),
+			    Path);
+   return FolderHasPublicFiles[Exists];
   }
 
 /*****************************************************************************/
@@ -2292,21 +2298,27 @@ void Brw_DB_HideOrUnhideFileOrFolder (const char Path[PATH_MAX + 1],
 HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (MYSQL_RES **mysql_res,
 								               const char *Path)
   {
-   return
-   DB_QuerySELECTunique (mysql_res,"can not check if a file is hidden",
-			 "SELECT Hidden"	// row[0]
-			  " FROM brw_files"
-			 " WHERE FileBrowser=%u"
-			   " AND Cod=%ld"
-			   " AND ZoneUsrCod=%ld"
-			   " AND Path='%s'"
-		      " ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
-			 " LIMIT 1",		// Select the most recent entry.
-			 (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-			 Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
-			 Brw_GetZoneUsrCodForFileBrowser (),
-			 Path) == Exi_EXISTS ? HidVis_HIDDEN :
-					       HidVis_VISIBLE;
+   static HidVis_HiddenOrVisible_t Hidden[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = HidVis_VISIBLE,
+      [Exi_EXISTS        ] = HidVis_HIDDEN,
+     };
+   Exi_Exist_t Exists;
+
+   Exists = DB_QuerySELECTunique (mysql_res,"can not check if a file is hidden",
+				  "SELECT Hidden"	// row[0]
+				   " FROM brw_files"
+				  " WHERE FileBrowser=%u"
+				    " AND Cod=%ld"
+				    " AND ZoneUsrCod=%ld"
+				    " AND Path='%s'"
+			       " ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
+				  " LIMIT 1",		// Select the most recent entry.
+				  (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+				  Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
+				  Brw_GetZoneUsrCodForFileBrowser (),
+				  Path);
+   return Hidden[Exists];
   }
 
 /*****************************************************************************/
@@ -2315,6 +2327,13 @@ HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (M
 
 HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (const struct Brw_FileMetadata *FileMetadata)
   {
+   static HidVis_HiddenOrVisible_t Hidden[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = HidVis_VISIBLE,
+      [Exi_EXISTS        ] = HidVis_HIDDEN,
+     };
+   Exi_Exist_t Exists;
+
    /***** Get if a file or folder is under a hidden folder from database *****/
    /*
       The argument Path passed to this function is hidden if:
@@ -2322,24 +2341,23 @@ HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadat
          or
       2) the argument Path begins by 'x/', where x is a path stored in database
    */
-   return
-   DB_QueryEXISTS ("can not check if a file or folder is hidden",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM brw_files"
-		    " WHERE FileBrowser=%u"
-		      " AND Cod=%ld"
-		      " AND ZoneUsrCod=%ld"
-		      " AND Hidden='Y'"
-		      " AND (Path='%s'"
-			   " OR"
-			   " LOCATE(CONCAT(Path,'/'),'%s')=1))",
-		   FileMetadata->FileBrowser,
-		   FileMetadata->Cod,
-		   FileMetadata->ZoneUsrCod,
-		   FileMetadata->FilFolLnk.Full,
-		   FileMetadata->FilFolLnk.Full) == Exi_EXISTS ? HidVis_HIDDEN :
-								 HidVis_VISIBLE;
+   Exists = DB_QueryEXISTS ("can not check if a file or folder is hidden",
+			    "SELECT EXISTS"
+			    "(SELECT *"
+			      " FROM brw_files"
+			     " WHERE FileBrowser=%u"
+			       " AND Cod=%ld"
+			       " AND ZoneUsrCod=%ld"
+			       " AND Hidden='Y'"
+			       " AND (Path='%s'"
+				    " OR"
+				    " LOCATE(CONCAT(Path,'/'),'%s')=1))",
+			    FileMetadata->FileBrowser,
+			    FileMetadata->Cod,
+			    FileMetadata->ZoneUsrCod,
+			    FileMetadata->FilFolLnk.Full,
+			    FileMetadata->FilFolLnk.Full);
+   return Hidden[Exists];
   }
 
 /*****************************************************************************/
@@ -2412,58 +2430,60 @@ void Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders (void)
 
 ConExp_ContractedOrExpanded_t Brw_DB_GetIfContractedOrExpandedFolder (const char Path[PATH_MAX + 1])
   {
+   static ConExp_ContractedOrExpanded_t ContractedOrExpanded[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = ConExp_CONTRACTED,
+      [Exi_EXISTS        ] = ConExp_EXPANDED,
+     };
    long Cod = Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type);
    long WorksUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
    Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_DB_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
+   Exi_Exist_t Exists;
 
    if (Cod > 0)
      {
       if (WorksUsrCod > 0)
-	 return
-	 DB_QueryEXISTS ("can not check if a folder is expanded",
-			 "SELECT EXISTS"
-			 "(SELECT *"
-			   " FROM brw_expanded"
-			  " WHERE UsrCod=%ld"
-			    " AND FileBrowser=%u"
-			    " AND Cod=%ld"
-			    " AND WorksUsrCod=%ld"
-			    " AND Path='%s/')",
-			 Gbl.Usrs.Me.UsrDat.UsrCod,
-			 (unsigned) FileBrowserForExpandedFolders,
-			 Cod,
-			 WorksUsrCod,
-			 Path) == Exi_EXISTS ? ConExp_EXPANDED :
-					       ConExp_CONTRACTED;
+	 Exists = DB_QueryEXISTS ("can not check if a folder is expanded",
+				  "SELECT EXISTS"
+				  "(SELECT *"
+				    " FROM brw_expanded"
+				   " WHERE UsrCod=%ld"
+				     " AND FileBrowser=%u"
+				     " AND Cod=%ld"
+				     " AND WorksUsrCod=%ld"
+				     " AND Path='%s/')",
+				  Gbl.Usrs.Me.UsrDat.UsrCod,
+				  (unsigned) FileBrowserForExpandedFolders,
+				  Cod,
+				  WorksUsrCod,
+				  Path);
       else
-	 return
-	 DB_QueryEXISTS ("can not check if a folder is expanded",
-			 "SELECT EXISTS"
-			 "(SELECT *"
-			   " FROM brw_expanded"
-			  " WHERE UsrCod=%ld"
-			    " AND FileBrowser=%u"
-			    " AND Cod=%ld"
-			    " AND Path='%s/')",
-			 Gbl.Usrs.Me.UsrDat.UsrCod,
-			 (unsigned) FileBrowserForExpandedFolders,
-			 Cod,
-			 Path) == Exi_EXISTS ? ConExp_EXPANDED :
-					       ConExp_CONTRACTED;
+	 Exists = DB_QueryEXISTS ("can not check if a folder is expanded",
+				  "SELECT EXISTS"
+				  "(SELECT *"
+				    " FROM brw_expanded"
+				   " WHERE UsrCod=%ld"
+				     " AND FileBrowser=%u"
+				     " AND Cod=%ld"
+				     " AND Path='%s/')",
+				  Gbl.Usrs.Me.UsrDat.UsrCod,
+				  (unsigned) FileBrowserForExpandedFolders,
+				  Cod,
+				  Path);
      }
    else	// Briefcase
-      return
-      DB_QueryEXISTS ("can not check if a folder is expanded",
-		      "SELECT EXISTS"
-		      "(SELECT *"
-			" FROM brw_expanded"
-		       " WHERE UsrCod=%ld"
-			 " AND FileBrowser=%u"
-			 " AND Path='%s/')",
-		      Gbl.Usrs.Me.UsrDat.UsrCod,
-		      (unsigned) FileBrowserForExpandedFolders,
-		      Path) == Exi_EXISTS ? ConExp_EXPANDED :
-					    ConExp_CONTRACTED;
+      Exists = DB_QueryEXISTS ("can not check if a folder is expanded",
+			       "SELECT EXISTS"
+			       "(SELECT *"
+				 " FROM brw_expanded"
+				" WHERE UsrCod=%ld"
+				  " AND FileBrowser=%u"
+				  " AND Path='%s/')",
+			       Gbl.Usrs.Me.UsrDat.UsrCod,
+			       (unsigned) FileBrowserForExpandedFolders,
+			       Path);
+
+   return ContractedOrExpanded[Exists];
   }
 
 /*****************************************************************************/

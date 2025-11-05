@@ -47,5 +47,6 @@ typedef enum
 HidVis_HiddenOrVisible_t HidVis_GetHiddenFromYN (char Ch);
 HidVis_HiddenOrVisible_t HidVis_GetHiddenFrom01 (char Ch);
 HidVis_HiddenOrVisible_t HidVis_GetVisibleFromYN (char Ch);
+HidVis_HiddenOrVisible_t HidVis_GetParVisible (const char *ParName);
 
 #endif

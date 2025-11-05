@@ -100,6 +100,18 @@ void CtyCfg_PrintConfiguration (void)
 static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_COUNTRY_Information;
+   extern const char *Txt_NULL;
+   static struct
+     {
+      void (*FunctionToDrawContextualIcons) (void *Args);
+      const char **HelpLink;
+     } BoxArgs[Vie_NUM_VIEW_TYPES] =
+     {
+      [Vie_VIEW  ] = {CtyCfg_PutIconToPrint	,&Hlp_COUNTRY_Information	},
+      [Vie_EDIT  ] = {NULL			,&Txt_NULL			},
+      [Vie_CONFIG] = {NULL			,&Txt_NULL			},
+      [Vie_PRINT ] = {NULL			,&Txt_NULL			},
+     };
    Hie_PutLink_t PutLink;
    Exi_Exist_t MapImageExists;
    unsigned NumCtrs;
@@ -115,11 +127,8 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
 						  Hie_DONT_PUT_LINK;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,
-		 ViewType == Vie_VIEW ? CtyCfg_PutIconToPrint :
-					NULL,NULL,
-		 ViewType == Vie_VIEW ? Hlp_COUNTRY_Information :
-					NULL,Box_NOT_CLOSABLE);
+   Box_BoxBegin (NULL,BoxArgs[ViewType].FunctionToDrawContextualIcons,NULL,
+		 *BoxArgs[ViewType].HelpLink,Box_NOT_CLOSABLE);
 
       /***** Title *****/
       CtyCfg_Title (PutLink);
@@ -321,6 +330,13 @@ static void CtyCfg_Map (void)
 
 static void CtyCfg_MapImage (Vie_ViewType_t ViewType,Hie_PutLink_t PutLink)
   {
+   static const char *Class[Vie_NUM_VIEW_TYPES] =
+     {
+      [Vie_VIEW  ] = "COUNTRY_MAP_SHOW",
+      [Vie_EDIT  ] = NULL,
+      [Vie_CONFIG] = NULL,
+      [Vie_PRINT ] = "COUNTRY_MAP_PRINT",
+     };
    char *MapAttribution = NULL;
 
    /***** Get map attribution *****/
@@ -330,10 +346,8 @@ static void CtyCfg_MapImage (Vie_ViewType_t ViewType,Hie_PutLink_t PutLink)
    HTM_DIV_Begin ("class=\"CM\"");
       if (PutLink == Hie_PUT_LINK)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",
-		      Gbl.Hierarchy.Node[Hie_CTY].WWW);
-      Cty_DrawCountryMap (&Gbl.Hierarchy.Node[Hie_CTY],
-			  ViewType == Vie_VIEW ? "COUNTRY_MAP_SHOW" :
-						 "COUNTRY_MAP_PRINT");
+	              Gbl.Hierarchy.Node[Hie_CTY].WWW);
+      Cty_DrawCountryMap (&Gbl.Hierarchy.Node[Hie_CTY],Class[ViewType]);
       if (PutLink == Hie_PUT_LINK)
 	 HTM_A_End ();
    HTM_DIV_End ();

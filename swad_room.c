@@ -693,8 +693,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 	    Names[Nam_FULL_NAME] = Room->FullName;
 	    Nam_ExistingShortAndFullNames (ActionRename,
 					   ParCod_Roo,Room->RooCod,
-					   Names,
-					   Frm_PUT_FORM);
+					   Names,Frm_PUT_FORM);
 
 	    /* Seating capacity */
 	    HTM_TD_Begin ("class=\"LT\"");

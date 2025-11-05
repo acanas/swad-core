@@ -434,8 +434,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 	    Names[Nam_FULL_NAME] = Building->FullName;
 	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_Bld,Building->BldCod,
-				           Names,
-				           Frm_PUT_FORM);
+				           Names,Frm_PUT_FORM);
 
 	    /* Building location */
 	    HTM_TD_Begin ("class=\"LM\"");

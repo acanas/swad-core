@@ -328,9 +328,21 @@ static void Asg_PutHead (struct Asg_Assignments *Assignments,
 
 static Usr_Can_t Asg_CheckIfICanCreateAssignments (void)
   {
-   return Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-          Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :
-        					   Usr_CAN_NOT;
+   static Usr_Can_t ICanCreate[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK    ] = Usr_CAN_NOT,
+      [Rol_GST    ] = Usr_CAN_NOT,
+      [Rol_USR    ] = Usr_CAN_NOT,
+      [Rol_STD    ] = Usr_CAN_NOT,
+      [Rol_NET    ] = Usr_CAN_NOT,
+      [Rol_TCH    ] = Usr_CAN,
+      [Rol_DEG_ADM] = Usr_CAN_NOT,
+      [Rol_CTR_ADM] = Usr_CAN_NOT,
+      [Rol_INS_ADM] = Usr_CAN_NOT,
+      [Rol_SYS_ADM] = Usr_CAN,
+     };
+
+   return ICanCreate[Gbl.Usrs.Me.Role.Logged];
   }
 
 /*****************************************************************************/
@@ -1420,6 +1432,11 @@ static void Asg_EditRubrics (long AsgRubCod)
 static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
   {
    extern const char *Txt_Groups;
+   static HTM_Attributes_t Attributes[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = HTM_CHECKED,
+      [Exi_EXISTS        ] = HTM_NO_ATTR,
+     };
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
@@ -1438,10 +1455,9 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 	    /***** First row: checkbox to select the whole course *****/
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_CHECKBOX ("WholeCrs",
-				   Grp_DB_CheckIfAssociatedToGrps ("asg_groups",
-								   "AsgCod",
-								   AsgCod) == Exi_EXISTS ? HTM_NO_ATTR :
-											   HTM_CHECKED,
+				   Attributes[Grp_DB_CheckIfAssociatedToGrps ("asg_groups",
+									      "AsgCod",
+									      AsgCod)],
 				   "id=\"WholeCrs\" value=\"Y\""
 				   " onclick=\"uncheckChildren(this,'GrpCods')\"");
 	       Grp_WriteTheWholeCourse ();

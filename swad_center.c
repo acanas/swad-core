@@ -726,6 +726,11 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
       [Nam_SHRT_NAME] = ActRenCtrSho,
       [Nam_FULL_NAME] = ActRenCtrFul,
      };
+   static Frm_PutForm_t PutForm[Usr_NUM_CAN] =
+     {
+      [Usr_CAN_NOT] = Frm_DONT_PUT_FORM,
+      [Usr_CAN    ] = Frm_PUT_FORM,
+     };
    unsigned NumCtr;
    struct Hie_Node *Ctr;
    unsigned NumPlc;
@@ -833,9 +838,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    Names[Nam_FULL_NAME] = Ctr->FullName;
 	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_OthHie,Ctr->HieCod,
-				           Names,
-				           ICanEdit == Usr_CAN ? Frm_PUT_FORM :
-				        			   Frm_DONT_PUT_FORM);
+				           Names,PutForm[ICanEdit]);
 
 	    /* Center WWW */
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
@@ -904,10 +907,10 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 
 static Usr_Can_t Ctr_CheckIfICanEditACenter (struct Hie_Node *Ctr)
   {
-   return (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ||	// I am an institution administrator or higher
-           ((Ctr->Status & Hie_STATUS_BIT_PENDING) &&	// Center is not yet activated
-            Gbl.Usrs.Me.UsrDat.UsrCod == Ctr->RequesterUsrCod)) ? Usr_CAN :	// I am the requester
-        							  Usr_CAN_NOT;
+   return Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ||	// I am an institution administrator or higher
+          ((Ctr->Status & Hie_STATUS_BIT_PENDING) &&	// Center is not yet activated
+           Gbl.Usrs.Me.UsrDat.UsrCod == Ctr->RequesterUsrCod) ? Usr_CAN :	// I am the requester
+        							Usr_CAN_NOT;
   }
 
 /*****************************************************************************/

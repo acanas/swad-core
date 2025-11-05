@@ -876,6 +876,11 @@ static void Ins_ListInstitutionsForEdition (void)
       [Nam_SHRT_NAME] = ActRenInsSho,
       [Nam_FULL_NAME] = ActRenInsFul,
      };
+   static Frm_PutForm_t PutForm[Usr_NUM_CAN] =
+     {
+      [Usr_CAN_NOT] = Frm_DONT_PUT_FORM,
+      [Usr_CAN    ] = Frm_PUT_FORM,
+     };
    unsigned NumIns;
    struct Hie_Node *Ins;
    char WWW[WWW_MAX_BYTES_WWW + 1];
@@ -943,9 +948,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	    Names[Nam_FULL_NAME] = Ins->FullName;
 	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_OthHie,Ins->HieCod,
-				           Names,
-				           ICanEdit == Usr_CAN ? Frm_PUT_FORM :
-				        			   Frm_DONT_PUT_FORM);
+				           Names,PutForm[ICanEdit]);
 
 	    /* Institution WWW */
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());

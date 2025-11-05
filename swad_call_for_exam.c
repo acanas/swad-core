@@ -1480,6 +1480,12 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 static void Cfe_PutIconsCallForExam (void *CallsForExams)
   {
+   static HidVis_HiddenOrVisible_t HiddenOrVisible[Cfe_NUM_STATUS] =
+     {
+      [Cfe_VISIBLE_CALL_FOR_EXAM] = HidVis_VISIBLE,
+      [Cfe_HIDDEN_CALL_FOR_EXAM ] = HidVis_HIDDEN,
+      [Cfe_DELETED_CALL_FOR_EXAM] = HidVis_HIDDEN,
+     };
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhCfe,	// Hidden ==> action to unhide
@@ -1503,8 +1509,7 @@ static void Cfe_PutIconsCallForExam (void *CallsForExams)
 	       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,((struct Cfe_CallsForExams *) CallsForExams)->Anchor,
 					          Cfe_PutParExaCod,
 					          &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod,
-					          ((struct Cfe_CallsForExams *) CallsForExams)->CallForExam.Status == Cfe_HIDDEN_CALL_FOR_EXAM ? HidVis_HIDDEN :
-					        												 HidVis_VISIBLE);
+					          HiddenOrVisible[((struct Cfe_CallsForExams *) CallsForExams)->CallForExam.Status]);
 	       break;
 	    case Cfe_DELETED_CALL_FOR_EXAM:	// Not applicable here
 	       break;

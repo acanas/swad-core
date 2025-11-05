@@ -1083,6 +1083,12 @@ static Act_Action_t Brw_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActZIPAssPrj,
   };
 
+static Usr_Can_t Brw_ICanViewFileOrFolder[HidVis_NUM_HIDDEN_VISIBLE] =
+  {
+   [HidVis_HIDDEN ] = Usr_CAN_NOT,
+   [HidVis_VISIBLE] = Usr_CAN,
+  };
+
 /*****************************************************************************/
 /************************* Private global variables **************************/
 /*****************************************************************************/
@@ -2021,7 +2027,7 @@ void Brw_GetParAndInitFileBrowser (void)
 	    break;
 	}
    Gbl.FileBrowser.ShowFullTree = Gbl.FileBrowser.OnlyPublicFiles ? Lay_SHOW :
-									Lay_GetParShow ("FullTree");
+								    Lay_GetParShow ("FullTree");
 
    /***** Initialize file browser *****/
    Brw_SetGrpCod (GrpCod);
@@ -3532,20 +3538,6 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
      }
 
    /***** Write subtitle *****/
-   /*
-   Subtitle = NULL;
-   switch (Gbl.FileBrowser.Type)
-     {
-      case Brw_ADMI_WRK_CRS:
-      case Brw_ADMI_ASG_CRS:
-         Subtitle = Gbl.Usrs.Other.UsrDat.FullName;
-	 break;
-      default:
-	 if (Brw_SubtitleOfFileBrowser[Gbl.FileBrowser.Type])
-	    Subtitle = *Brw_SubtitleOfFileBrowser[Gbl.FileBrowser.Type];
-         break;
-     }
-   */
    if (Brw_SubtitleOfFileBrowser[Gbl.FileBrowser.Type])
      {
       HTM_DIV_Begin ("class=\"BROWSER_SUBTITLE\"");
@@ -3575,12 +3567,17 @@ static void Brw_InitHiddenLevels (void)
 static void Brw_PutCheckboxFullTree (void)
   {
    extern const char *Txt_Show_all_files;
+   static HTM_Attributes_t Attributes[Lay_NUM_SHOW] =
+     {
+      [Lay_DONT_SHOW] = HTM_NO_ATTR,
+      [Lay_SHOW     ] = HTM_CHECKED,
+     };
 
    Lay_PutContextualCheckbox (Brw_ActSeeAdm[Gbl.FileBrowser.Type],
                               Brw_PutParsFullTree,NULL,
                               "FullTree",
-                              (Gbl.FileBrowser.ShowFullTree == Lay_SHOW ? HTM_CHECKED :
-                        						  HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
+                              Attributes[Gbl.FileBrowser.ShowFullTree] |
+                              HTM_SUBMIT_ON_CHANGE,
                               Txt_Show_all_files,Txt_Show_all_files);
   }
 
@@ -3754,6 +3751,11 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
    char PathFileInExplTree[PATH_MAX + 1];
    struct stat FileStatus;
    ConExp_ContractedOrExpanded_t ContractedOrExpandedSubtree;
+   Brw_IconTree_t IconsSubtree[ConExp_NUM_CONTRACTED_EXPANDED] =
+     {
+      [ConExp_CONTRACTED] = Brw_ICON_TREE_EXPAND,
+      [ConExp_EXPANDED  ] = Brw_ICON_TREE_CONTRACT,
+     };
    Brw_IconTree_t IconSubtree = Brw_ICON_TREE_NOTHING;	// Initialized to avoid warning
    __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible;
 
@@ -3806,8 +3808,7 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 			  {
 			   /***** Check if the tree starting at this subdirectory must be expanded *****/
 			   ContractedOrExpandedSubtree = Brw_DB_GetIfContractedOrExpandedFolder (Gbl.FileBrowser.FilFolLnk.Full);
-			   IconSubtree = ContractedOrExpandedSubtree == ConExp_EXPANDED ? Brw_ICON_TREE_CONTRACT :
-											  Brw_ICON_TREE_EXPAND;
+			   IconSubtree = IconsSubtree[ContractedOrExpandedSubtree];
 			  }
 			for (NumFileInSubdir = 0;
 			     NumFileInSubdir < NumFilesInSubdir;
@@ -3959,12 +3960,12 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
 
    snprintf (TxtStyle,sizeof (TxtStyle),"%s_%s",
              Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER ||
-             !IsRecent ? ClassTxtOld[ThisOrAncestorHiddenOrVisible] :
-        	         ClassTxtNew[ThisOrAncestorHiddenOrVisible],
+             IsRecent ? ClassTxtNew[ThisOrAncestorHiddenOrVisible] :
+        		ClassTxtOld[ThisOrAncestorHiddenOrVisible],
 	     The_GetSuffix ());
    InputStyle = Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER ||
-	        !IsRecent ? ClassInputOld[ThisOrAncestorHiddenOrVisible] :
-			    ClassInputNew[ThisOrAncestorHiddenOrVisible];
+	        IsRecent ? ClassInputNew[ThisOrAncestorHiddenOrVisible] :
+			   ClassInputOld[ThisOrAncestorHiddenOrVisible];
 
    /***** Get data of assignment using the name of the folder *****/
    if (Level == 1 && (Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_ADM_ASG))	// Main folder of the assignment
@@ -7478,24 +7479,20 @@ void Brw_ShowFileMetadata (void)
 	{
 	 case Brw_SHOW_DOC_INS:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-	       ICanView = Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE ? Usr_CAN :
-														       Usr_CAN_NOT;
+	       ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata)];
             break;
 	 case Brw_SHOW_DOC_CTR:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-	       ICanView = Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE ? Usr_CAN :
-														       Usr_CAN_NOT;
+	       ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata)];
             break;
 	 case Brw_SHOW_DOC_DEG:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)
-	       ICanView = Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE ? Usr_CAN :
-														       Usr_CAN_NOT;
+	       ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata)];
             break;
 	 case Brw_SHOW_DOC_CRS:
 	 case Brw_SHOW_DOC_GRP:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-               ICanView = Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE ? Usr_CAN :
-        													       Usr_CAN_NOT;
+               ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata)];
 	    break;
 	 default:
 	    break;
@@ -7682,7 +7679,7 @@ void Brw_ShowFileMetadata (void)
 				PrivateOrPublic++)
 			      HTM_OPTION (HTM_Type_STRING,Public_YN[PrivateOrPublic],
 					  FileMetadata.Public == PrivateOrPublic ? HTM_SELECTED :
-										        HTM_NO_ATTR,
+										   HTM_NO_ATTR,
 					  "%s",*PrivatePublicLabel[PrivateOrPublic]);
 			HTM_SELECT_End ();
 		       }
@@ -7697,7 +7694,7 @@ void Brw_ShowFileMetadata (void)
 
 		  /* Label */
 		  Frm_LabelColumn ("RT",ICanEdit == Usr_CAN ? "License" :
-								NULL,
+							      NULL,
 				   Txt_License);
 
 		  /* Data */
@@ -7945,24 +7942,20 @@ void Brw_DownloadFile (void)
 	{
 	 case Brw_SHOW_DOC_INS:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-	       ICanView = Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE ? Usr_CAN :
-														       Usr_CAN_NOT;
+	       ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata)];
             break;
 	 case Brw_SHOW_DOC_CTR:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-	       ICanView = Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE ? Usr_CAN :
-														       Usr_CAN_NOT;
+	       ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata)];
             break;
 	 case Brw_SHOW_DOC_DEG:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)
-	       ICanView = Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE ? Usr_CAN :
-														       Usr_CAN_NOT;
+	       ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata)];
             break;
 	 case Brw_SHOW_DOC_CRS:
 	 case Brw_SHOW_DOC_GRP:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-               ICanView = Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE ? Usr_CAN :
-        													       Usr_CAN_NOT;
+               ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata)];
 	    break;
 	 default:
 	    break;
@@ -8895,6 +8888,12 @@ static Usr_Can_t Brw_CheckIfICanEditFileOrFolder (unsigned Level)
 
 static Usr_Can_t Brw_CheckIfICanCreateIntoFolder (unsigned Level)
   {
+   static Usr_Can_t ICanCreate[Usr_NUM_BELONG] =
+     {
+      [Usr_DONT_BELONG] = Usr_CAN_NOT,
+      [Usr_BELONG     ] = Usr_CAN,
+     };
+
    /***** If not in a folder... *****/
    if (Gbl.FileBrowser.FilFolLnk.Type != Brw_IS_FOLDER)
       return Usr_CAN_NOT;
@@ -8937,14 +8936,15 @@ static Usr_Can_t Brw_CheckIfICanCreateIntoFolder (unsigned Level)
          return Gbl.Usrs.Me.Role.Logged >= Rol_STD ? Usr_CAN :
 						     Usr_CAN_NOT;
       case Brw_ADMI_SHR_GRP:
-	 if (Gbl.Usrs.Me.Role.Logged >= Rol_STD &&	// A student, non-editing teacher...
-	     Gbl.Usrs.Me.Role.Logged <= Rol_TCH)	// ...or a teacher
+	 if (Gbl.Usrs.Me.Role.Logged == Rol_STD ||	// A student,...
+	     Gbl.Usrs.Me.Role.Logged == Rol_NET ||	// ..., a non-editing teacher...
+	     Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// ...or a teacher...
 							// ...can create/paste only if he/she belongs to group
-	    return Grp_GetIfIBelongToGrp (Brw_GetGrpCod ()) == Usr_BELONG ? Usr_CAN :
-									    Usr_CAN_NOT;
+
+	    return ICanCreate[Grp_GetIfIBelongToGrp (Brw_GetGrpCod ())];
 	 // An administrator can create/paste
-         return Gbl.Usrs.Me.Role.Logged >= Rol_STD ? Usr_CAN :
-						     Usr_CAN_NOT;
+         return Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ? Usr_CAN :
+						         Usr_CAN_NOT;
       case Brw_ADMI_ASG_USR:
       case Brw_ADMI_ASG_CRS:
 	 if (Level == 0)	// If root folder

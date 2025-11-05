@@ -664,6 +664,11 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
       [Nam_SHRT_NAME] = ActRenCrsSho,
       [Nam_FULL_NAME] = ActRenCrsFul,
      };
+   static Frm_PutForm_t PutForm[Usr_NUM_CAN] =
+     {
+      [Usr_CAN_NOT] = Frm_DONT_PUT_FORM,
+      [Usr_CAN    ] = Frm_PUT_FORM,
+     };
    struct Hie_Node *Crs;
    unsigned YearAux;
    unsigned NumCrs;
@@ -768,9 +773,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    Names[Nam_FULL_NAME] = Crs->FullName;
 	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_OthHie,Crs->HieCod,
-				           Names,
-				           ICanEdit == Usr_CAN ? Frm_PUT_FORM :
-				        			   Frm_DONT_PUT_FORM);
+				           Names,PutForm[ICanEdit]);
 
 	    /* Current number of teachers in this course */
 	    HTM_TD_Unsigned (NumUsrs[Rol_TCH] +
@@ -1549,6 +1552,11 @@ void Crs_ChangeCrsStatus (void)
 void Crs_ContEditAfterChgCrs (void)
   {
    extern const char *Txt_Go_to_X_QUESTION;
+   static Lay_Show_t Show[Usr_NUM_BELONG] =
+     {
+      [Usr_DONT_BELONG] = Lay_SHOW,
+      [Usr_BELONG     ] = Lay_DONT_SHOW,
+     };
    Lay_Show_t ShowButtonToRequestRegistration;
    char *Title;
 
@@ -1563,21 +1571,19 @@ void Crs_ContEditAfterChgCrs (void)
 	 ShowButtonToRequestRegistration = Lay_SHOW;
 	 break;
       case Rol_USR:
-	 ShowButtonToRequestRegistration = Hie_CheckIfUsrBelongsTo (Hie_CRS,
-								    Gbl.Usrs.Me.UsrDat.UsrCod,
-								    Crs_EditingCrs->HieCod,
-								    Hie_DB_ANY_COURSE) == Usr_DONT_BELONG ? Lay_SHOW :
-													    Lay_DONT_SHOW;
+	 ShowButtonToRequestRegistration = Show[Hie_CheckIfUsrBelongsTo (Hie_CRS,
+								         Gbl.Usrs.Me.UsrDat.UsrCod,
+								         Crs_EditingCrs->HieCod,
+								         Hie_DB_ANY_COURSE)];
 	 break;
       case Rol_STD:
       case Rol_NET:
       case Rol_TCH:
 	 if (Crs_EditingCrs->HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
-	    ShowButtonToRequestRegistration = Hie_CheckIfUsrBelongsTo (Hie_CRS,
-								       Gbl.Usrs.Me.UsrDat.UsrCod,
-								       Crs_EditingCrs->HieCod,
-								       Hie_DB_ANY_COURSE) == Usr_DONT_BELONG ? Lay_SHOW :
-													       Lay_DONT_SHOW;
+	    ShowButtonToRequestRegistration = Show[Hie_CheckIfUsrBelongsTo (Hie_CRS,
+									    Gbl.Usrs.Me.UsrDat.UsrCod,
+									    Crs_EditingCrs->HieCod,
+									    Hie_DB_ANY_COURSE)];
 	 break;
       default:
 	 break;
@@ -1714,9 +1720,10 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
      {
       /***** Begin box and table *****/
       /* Number of courses found */
-      if (asprintf (&Title,"%u %s",NumCrss,
-				   NumCrss == 1 ? Txt_HIERARCHY_SINGUL_abc[Hie_CRS] :
-						  Txt_HIERARCHY_PLURAL_abc[Hie_CRS]) < 0)
+      if (asprintf (&Title,"%u %s",
+	            NumCrss,
+		    NumCrss == 1 ? Txt_HIERARCHY_SINGUL_abc[Hie_CRS] :
+				   Txt_HIERARCHY_PLURAL_abc[Hie_CRS]) < 0)
 	 Err_NotEnoughMemoryExit ();
       Box_BoxTableBegin (Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
       free (Title);

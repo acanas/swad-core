@@ -72,6 +72,18 @@ static void CrsCfg_Indicators (void);
 void CrsCfg_Configuration (Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_COURSE_Information;
+   extern const char *Txt_NULL;
+   static struct
+     {
+      void (*FunctionToDrawContextualIcons) (void *Args);
+      const char **HelpLink;
+     } BoxArgs[Vie_NUM_VIEW_TYPES] =
+     {
+      [Vie_VIEW  ] = {CrsCfg_PutIconToPrint	,&Hlp_COURSE_Information	},
+      [Vie_EDIT  ] = {NULL			,&Txt_NULL			},
+      [Vie_CONFIG] = {NULL			,&Txt_NULL			},
+      [Vie_PRINT ] = {NULL			,&Txt_NULL			},
+     };
    Hie_PutLink_t PutLink;
    Frm_PutForm_t PutFormDeg;
    Frm_PutForm_t PutFormName;
@@ -108,11 +120,8 @@ void CrsCfg_Configuration (Vie_ViewType_t ViewType)
      }
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,
-		 ViewType == Vie_VIEW ? CrsCfg_PutIconToPrint :
-					NULL,NULL,
-		 ViewType == Vie_VIEW ? Hlp_COURSE_Information :
-					NULL,Box_NOT_CLOSABLE);
+   Box_BoxBegin (NULL,BoxArgs[ViewType].FunctionToDrawContextualIcons,NULL,
+		 *BoxArgs[ViewType].HelpLink,Box_NOT_CLOSABLE);
 
       /***** Title *****/
       HieCfg_Title (PutLink,Hie_CRS);

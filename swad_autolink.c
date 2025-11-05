@@ -560,8 +560,9 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
 
 		     /***** Store third part of anchor *****/
 		     ShowPhotos = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-		     Pho_BuildHTMLUsrPhoto (&UsrDat,ShowPhotos == Pho_PHOTOS_SHOW ? PhotoURL :
-										    NULL,
+		     Pho_BuildHTMLUsrPhoto (&UsrDat,
+					    ShowPhotos == Pho_PHOTOS_SHOW ? PhotoURL :
+									    NULL,
 					    ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 					    &CaptionStr,
 					    &ImgStr);

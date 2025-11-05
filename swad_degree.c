@@ -316,6 +316,11 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
       [Nam_SHRT_NAME] = ActRenDegSho,
       [Nam_FULL_NAME] = ActRenDegFul,
      };
+   static Frm_PutForm_t PutForm[Usr_NUM_CAN] =
+     {
+      [Usr_CAN_NOT] = Frm_DONT_PUT_FORM,
+      [Usr_CAN    ] = Frm_PUT_FORM,
+     };
    unsigned NumDeg;
    struct Hie_Node *Deg;
    unsigned NumDegTyp;
@@ -381,9 +386,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	    Names[Nam_FULL_NAME] = Deg->FullName;
 	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_OthHie,Deg->HieCod,
-				           Names,
-				           ICanEdit == Usr_CAN ? Frm_PUT_FORM :
-				        			   Frm_DONT_PUT_FORM);
+				           Names,PutForm[ICanEdit]);
 
 	    /* Degree type */
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());

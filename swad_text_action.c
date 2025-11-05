@@ -49,7 +49,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"N'importe quelle action"
 #elif L==6	// gn
-	"Oimera&etilde;va tembiapo"
+	"Oimera&#7869;va tembiapo"
 #elif L==7	// it
 	"Qualsiasi azione"
 #elif L==8	// pl
@@ -233,7 +233,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Changer de langue apr&egrave;s authentification"
 #elif L==6	// gn
-	"Emoambue &ntilde;e'&etilde; emoa&ntilde;ete rire"
+	"Emoambue &ntilde;e'&#7869; emoa&ntilde;ete rire"
 #elif L==7	// it
 	"Cambia lingua dopo l'autenticazione"
 #elif L==8	// pl
@@ -279,7 +279,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Demander l'envoi d'un nouveau mot de passe"
 #elif L==6	// gn
-	"Ejerure emondo hag&gbreve;ua pete&itilde; &ntilde;e'&etilde;&ntilde;emi pyahu"
+	"Ejerure emondo hag&gbreve;ua pete&#297; &ntilde;e'&#7869;&ntilde;emi pyahu"
 #elif L==7	// it
 	"Richiedi l'invio di una nuova password"
 #elif L==8	// pl
@@ -302,7 +302,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Envoyer un nouveau mot de passe"
 #elif L==6	// gn
-	"Emondo &ntilde;e'&etilde;&ntilde;emi pyahu"
+	"Emondo &ntilde;e'&#7869;&ntilde;emi pyahu"
 #elif L==7	// it
 	"Invia nuova password"
 #elif L==8	// pl
@@ -440,7 +440,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Afficher les publications pr&eacute;c&eacute;dentes dans la chronologie globale"
 #elif L==6	// gn
-	"Ehechauka umi kuatia&ntilde;e'&etilde; yma guare l&iacute;nea de tiempo global-pe"
+	"Ehechauka umi kuatia&ntilde;e'&#7869; yma guare l&iacute;nea de tiempo global-pe"
 #elif L==7	// it
 	"Mostra le pubblicazioni precedenti nella sequenza temporale globale"
 #elif L==8	// pl
@@ -6353,7 +6353,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Voir le presse-papiers des ressources dans le programme"
 #elif L==6	// gn
-	"Ehecha portapapeles umi recurso o&itilde;va programa-pe"
+	"Ehecha portapapeles umi recurso o&#297;va programa-pe"
 #elif L==7	// it
 	"Visualizza gli appunti delle risorse nel programma"
 #elif L==8	// pl
@@ -12747,7 +12747,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"S&eacute;lectionner les utilisateurs pour lister leurs projets"
 #elif L==6	// gn
-	"Eiporavo puruh&aacute;ra emo&itilde; ha&gtilde;ua iproyectoku&eacute;ra"
+	"Eiporavo puruh&aacute;ra emo&#297; ha&gtilde;ua iproyectoku&eacute;ra"
 #elif L==7	// it
 	"Seleziona gli utenti per elencare i loro progetti"
 #elif L==8	// pl
@@ -14725,7 +14725,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Exporter les questions de test vers un fichier XML"
 #elif L==6	// gn
-	"Eguerahauka porandu prueba rehegua pete&itilde; archivo XML-pe"
+	"Eguerahauka porandu prueba rehegua pete&#297; archivo XML-pe"
 #elif L==7	// it
 	"Esportare le domande de test in un file XML"
 #elif L==8	// pl
@@ -16358,7 +16358,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"R&eacute;pondre &agrave; une question de mon examen"
 #elif L==6	// gn
-	"Ambohov&aacute;i pete&itilde; porandu che ex&aacute;men-gui"
+	"Ambohov&aacute;i pete&#297; porandu che ex&aacute;men-gui"
 #elif L==7	// it
 	"Rispondi a una domanda del mio esame"
 #elif L==8	// pl
@@ -18037,7 +18037,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Supprimer crit&egrave;re de rubrique"
 #elif L==6	// gn
-	"Ojepe'a pete&itilde; criterio r&uacute;brica rehegua"
+	"Ojepe'a pete&#297; criterio r&uacute;brica rehegua"
 #elif L==7	// it
 	"Rimuovere criterio di rubrica"
 #elif L==8	// pl
@@ -26685,7 +26685,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"V&eacute;rifier les notes dans la mati&egrave;re"
 #elif L==6	// gn
-	"Ohecha umi nota o&itilde;va pe asignatura-pe"
+	"Ohecha umi nota o&#297;va pe asignatura-pe"
 #elif L==7	// it
 	"Consultare le valutazioni nella materia"
 #elif L==8	// pl

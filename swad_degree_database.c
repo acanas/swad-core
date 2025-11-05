@@ -831,21 +831,26 @@ Usr_Belong_t Deg_DB_CheckIfUsrBelongsToDeg (long UsrCod,long HieCod,
 					    Hie_DB_CountOnlyAcceptedCrss_t CountOnlyAcceptedCourses)
   {
    extern const char *Hie_DB_SubQueryOnlyAcceptedCourses[Hie_DB_NUM_COUNT_ONLY_ACCEPTED_CRSS];
+   static Usr_Belong_t UsrBelongs[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Usr_DONT_BELONG,
+      [Exi_EXISTS        ] = Usr_BELONG,
+     };
+   Exi_Exist_t Exists;
 
-   return
-   DB_QueryEXISTS ("can not check if a user belongs to a degree",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM crs_users,"
-			   "crs_courses"
-		    " WHERE crs_users.UsrCod=%ld"
-		        "%s"
-		      " AND crs_users.CrsCod=crs_courses.CrsCod"
-		      " AND crs_courses.DegCod=%ld)",
-		   UsrCod,
-		   Hie_DB_SubQueryOnlyAcceptedCourses[CountOnlyAcceptedCourses],
-		   HieCod) == Exi_EXISTS ? Usr_BELONG :
-					   Usr_DONT_BELONG;
+   Exists = DB_QueryEXISTS ("can not check if a user belongs to a degree",
+			    "SELECT EXISTS"
+			    "(SELECT *"
+			      " FROM crs_users,"
+				    "crs_courses"
+			     " WHERE crs_users.UsrCod=%ld"
+				 "%s"
+			       " AND crs_users.CrsCod=crs_courses.CrsCod"
+			       " AND crs_courses.DegCod=%ld)",
+			    UsrCod,
+			    Hie_DB_SubQueryOnlyAcceptedCourses[CountOnlyAcceptedCourses],
+			    HieCod);
+   return UsrBelongs[Exists];
   }
 
 /*****************************************************************************/

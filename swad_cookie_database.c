@@ -44,11 +44,16 @@ extern struct Globals Gbl;
 
 void Coo_DB_UpdateMyPrefsCookies (void)
   {
+   static char YN[Coo_NUM_REFUSE_ACCEPT] =
+     {
+      [Coo_REFUSE] = 'N',
+      [Coo_ACCEPT] = 'Y',
+     };
+
    DB_QueryUPDATE ("can not update your preference about cookies",
 		   "UPDATE usr_data"
 		     " SET ThirdPartyCookies='%c'"
 		   " WHERE UsrCod=%ld",
-		   Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies == Coo_ACCEPT ? 'Y' :
-							                        'N',
+		   YN[Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies],
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }

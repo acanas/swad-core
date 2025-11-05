@@ -75,6 +75,11 @@ void Coo_EditMyPrefsOnCookies (void)
    extern const char *Hlp_PROFILE_Settings_cookies;
    extern const char *Txt_Cookies;
    extern const char *Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites;
+   static HTM_Attributes_t Attributes[Coo_NUM_REFUSE_ACCEPT] =
+     {
+      [Coo_REFUSE] = HTM_NO_ATTR,
+      [Coo_ACCEPT] = HTM_CHECKED,
+     };
 
    /***** Begin section with preferences about cookies *****/
    HTM_SECTION_Begin (Coo_COOKIES_ID);
@@ -103,8 +108,8 @@ void Coo_EditMyPrefsOnCookies (void)
 	    /* Check box */
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_CHECKBOX ("cookies",
-				   (Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies == Coo_ACCEPT ? HTM_CHECKED :
-											   HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
+				   Attributes[Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies] |
+				   HTM_SUBMIT_ON_CHANGE,
 				   "value=\"Y\"");
 	       HTM_Txt (Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites);
 	    HTM_LABEL_End ();

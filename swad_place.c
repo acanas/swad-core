@@ -470,8 +470,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 	    Names[Nam_FULL_NAME] = Plc->FullName;
 	    Nam_ExistingShortAndFullNames (ActionRename,
 					   ParCod_Plc,Plc->PlcCod,
-					   Names,
-					   Frm_PUT_FORM);
+					   Names,Frm_PUT_FORM);
 
 	    /* Number of centers */
 	    HTM_TD_Unsigned (Plc->NumCtrs);

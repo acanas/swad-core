@@ -388,30 +388,36 @@ void Asg_DB_UpdateRubCod (long AsgCod,long RubCod)
 
 Usr_Can_t Asg_DB_CheckIfICanDoAsgBasedOnGroups (long AsgCod)
   {
+   static Usr_Can_t ICanDoAsg[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Usr_CAN_NOT,
+      [Exi_EXISTS        ] = Usr_CAN,
+     };
+   Exi_Exist_t Exists;
+
    // Students and teachers can do assignments depending on groups
-   return
-   DB_QueryEXISTS ("can not check if I can do an assignment",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM asg_assignments"
-		    " WHERE AsgCod=%ld"
-		      " AND ("
-			    // Assignment is for the whole course
-			    "AsgCod NOT IN"
-			    " (SELECT AsgCod"
-			       " FROM asg_groups)"
-			    " OR "
-			    // Assignment is for some of my groups
-			    "AsgCod IN"
-			    " (SELECT asg_groups.AsgCod"
-			       " FROM grp_users,"
-				     "asg_groups"
-			      " WHERE grp_users.UsrCod=%ld"
-				" AND asg_groups.GrpCod=grp_users.GrpCod)"
-			   "))",
-		   AsgCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS ? Usr_CAN :
-							      Usr_CAN_NOT;
+   Exists = DB_QueryEXISTS ("can not check if I can do an assignment",
+			    "SELECT EXISTS"
+			    "(SELECT *"
+			      " FROM asg_assignments"
+			     " WHERE AsgCod=%ld"
+			       " AND ("
+				     // Assignment is for the whole course
+				     "AsgCod NOT IN"
+				     " (SELECT AsgCod"
+				        " FROM asg_groups)"
+				     " OR "
+				     // Assignment is for some of my groups
+				     "AsgCod IN"
+				     " (SELECT asg_groups.AsgCod"
+				        " FROM grp_users,"
+					      "asg_groups"
+				       " WHERE grp_users.UsrCod=%ld"
+					 " AND asg_groups.GrpCod=grp_users.GrpCod)"
+				    "))",
+			    AsgCod,
+			    Gbl.Usrs.Me.UsrDat.UsrCod);
+   return ICanDoAsg[Exists];
   }
 
 /*****************************************************************************/
