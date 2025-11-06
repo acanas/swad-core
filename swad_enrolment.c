@@ -118,6 +118,8 @@ static Enr_EnrRemOneUsrAction_t Enr_EnrRemAction;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Enr_EnrolUsrInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole);
+
 static void Enr_NotifyAfterEnrolment (const struct Usr_Data *UsrDat,
                                       Rol_Role_t NewRole);
 
@@ -307,8 +309,7 @@ void Enr_ModifyRoleInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole)
 // Before calling this function, you must be sure that
 // the user does not belong to the current course
 
-void Enr_EnrolUsrInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole,
-                               Enr_KeepOrSetAccepted_t KeepOrSetAccepted)
+static void Enr_EnrolUsrInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole)
   {
    /***** Trivial check 1: current course code should be > 0 *****/
    if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
@@ -326,7 +327,7 @@ void Enr_EnrolUsrInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole,
      }
 
    /***** Enrol user in current course in database *****/
-   Enr_DB_InsertUsrInCurrentCrs (UsrDat->UsrCod,NewRole,KeepOrSetAccepted);
+   Enr_DB_InsertUsrInCurrentCrs (UsrDat->UsrCod,NewRole);
 
    /***** Create last prefs in current course in database *****/
    Set_DB_InsertUsrInCrsSettings (UsrDat->UsrCod,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
@@ -336,7 +337,7 @@ void Enr_EnrolUsrInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole,
 
    /***** Set roles *****/
    UsrDat->Roles.InCurrentCrs = NewRole;
-   UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
+   UsrDat->Roles.InCrss = -1;		// Force roles to be got from database
    Rol_GetRolesInAllCrss (UsrDat);	// Get roles
 
    /***** Create notification for this user.
@@ -1986,8 +1987,7 @@ static void Enr_EnrolUsr (struct Usr_Data *UsrDat,Rol_Role_t Role,
          case Usr_DONT_BELONG:	// User does not belong to this course
          default:
 	    /* Enrol user */
-	    Enr_EnrolUsrInCurrentCrs (UsrDat,Role,
-				      Enr_SET_ACCEPTED_TO_FALSE);
+	    Enr_EnrolUsrInCurrentCrs (UsrDat,Role);
 	    break;
 	}
 
@@ -3174,8 +3174,7 @@ void Enr_CreateNewUsr1 (void)
 	       case Usr_DONT_BELONG:	// User does not belong to current course
 	       default:
 		  /* Enrol user */
-		  Enr_EnrolUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
-					    Enr_SET_ACCEPTED_TO_FALSE);
+		  Enr_EnrolUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole);
 
 		  /* Success message */
 		  Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -3303,8 +3302,7 @@ void Enr_ModifyUsr1 (void)
 			case Usr_DONT_BELONG:	// User does not belong to current course
 			default:
 			   /* Enrol user */
-			   Enr_EnrolUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
-						     Enr_SET_ACCEPTED_TO_FALSE);
+			   Enr_EnrolUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole);
 
 			   /* Set success message */
 			   Ale_CreateAlert (Ale_SUCCESS,NULL,

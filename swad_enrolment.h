@@ -41,12 +41,6 @@ typedef enum
    Enr_INSERT_NEW_DATA,
    } Enr_ReplaceInsert_t;
 
-typedef enum
-  {
-   Enr_SET_ACCEPTED_TO_FALSE,
-   Enr_SET_ACCEPTED_TO_TRUE,
-  } Enr_KeepOrSetAccepted_t;
-
 #define Enr_ENR_REM_ONE_USR_NUM_ACTIONS 17
 typedef enum
   {
@@ -87,8 +81,6 @@ void Enr_PutButtonInlineToEnrolStds (long HieCod,
 void Enr_PutLinkToRequestSignUp (void);
 
 void Enr_ModifyRoleInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole);
-void Enr_EnrolUsrInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole,
-                               Enr_KeepOrSetAccepted_t KeepOrSetAccepted);
 
 void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncPars) (void));
 
