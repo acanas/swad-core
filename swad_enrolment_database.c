@@ -159,19 +159,24 @@ Usr_Belong_t Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long HieCod,
 					    Hie_DB_CountOnlyAcceptedCrss_t CountOnlyAcceptedCourses)
   {
    extern const char *Hie_DB_SubQueryOnlyAcceptedCourses[Hie_DB_NUM_COUNT_ONLY_ACCEPTED_CRSS];
+   static Usr_Belong_t UsrBelongs[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Usr_DONT_BELONG,
+      [Exi_EXISTS        ] = Usr_BELONG,
+     };
+   Exi_Exist_t Exists;
 
-   return
-   DB_QueryEXISTS ("can not check if a user belongs to a course",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM crs_users"
-		    " WHERE CrsCod=%ld"
-		      " AND UsrCod=%ld"
-			"%s)",
-		   HieCod,
-		   UsrCod,
-		   Hie_DB_SubQueryOnlyAcceptedCourses[CountOnlyAcceptedCourses]) == Exi_EXISTS ? Usr_BELONG :
-												 Usr_DONT_BELONG;
+   Exists = DB_QueryEXISTS ("can not check if a user belongs to a course",
+			    "SELECT EXISTS"
+			    "(SELECT *"
+			      " FROM crs_users"
+			     " WHERE CrsCod=%ld"
+			       " AND UsrCod=%ld"
+				 "%s)",
+			    HieCod,
+			    UsrCod,
+			    Hie_DB_SubQueryOnlyAcceptedCourses[CountOnlyAcceptedCourses]);
+   return UsrBelongs[Exists];
   }
 
 /*****************************************************************************/
@@ -180,21 +185,27 @@ Usr_Belong_t Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long HieCod,
 
 Usr_Share_t Enr_DB_CheckIfUsrSharesAnyOfMyCrs (long UsrCod)
   {
+   static Usr_Share_t UsrShares[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Usr_DONT_SHARE,
+      [Exi_EXISTS        ] = Usr_SHARE,
+     };
+   Exi_Exist_t Exists;
+
    /***** Fill the list with the courses I belong to (if not already filled) *****/
    Hie_GetMyHierarchy (Hie_CRS);
 
    /***** Check if user shares any course with me *****/
-   return
-   DB_QueryEXISTS ("can not check if a user shares any course with you",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM crs_users"
-		    " WHERE UsrCod=%ld"
-		      " AND CrsCod IN"
-			  " (SELECT CrsCod"
-			     " FROM my_courses_tmp))",
-		   UsrCod) == Exi_EXISTS ? Usr_SHARE :
-					   Usr_DONT_SHARE;
+   Exists = DB_QueryEXISTS ("can not check if a user shares any course with you",
+			    "SELECT EXISTS"
+			    "(SELECT *"
+			      " FROM crs_users"
+			     " WHERE UsrCod=%ld"
+			       " AND CrsCod IN"
+				   " (SELECT CrsCod"
+				      " FROM my_courses_tmp))",
+			    UsrCod);
+   return UsrShares[Exists];
   }
 
 /*****************************************************************************/
@@ -203,7 +214,12 @@ Usr_Share_t Enr_DB_CheckIfUsrSharesAnyOfMyCrs (long UsrCod)
 
 Usr_Share_t Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
   {
-   Usr_Share_t UsrSharesAnyOfMyCrsWithDifferentRole;
+   static Usr_Share_t UsrShares[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Usr_DONT_SHARE,
+      [Exi_EXISTS        ] = Usr_SHARE,
+     };
+   Exi_Exist_t Exists;
 
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
@@ -228,20 +244,18 @@ Usr_Share_t Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
 		      UsrCod);
 
    /* Get if a user shares any course with me from database */
-   UsrSharesAnyOfMyCrsWithDifferentRole =
-      DB_QueryEXISTS ("can not check if a user shares any course with you",
-		      "SELECT EXISTS"
-		      "(SELECT *"
-			" FROM my_courses_tmp,"
-			      "usr_courses_tmp"
-		       " WHERE my_courses_tmp.CrsCod=usr_courses_tmp.CrsCod"
-			 " AND my_courses_tmp.Role<>usr_courses_tmp.Role)") == Exi_EXISTS ? Usr_SHARE :
-											    Usr_DONT_SHARE;
+   Exists = DB_QueryEXISTS ("can not check if a user shares any course with you",
+			    "SELECT EXISTS"
+			    "(SELECT *"
+			      " FROM my_courses_tmp,"
+				    "usr_courses_tmp"
+			     " WHERE my_courses_tmp.CrsCod=usr_courses_tmp.CrsCod"
+			       " AND my_courses_tmp.Role<>usr_courses_tmp.Role)");
 
    /* Remove temporary table if exists */
    DB_DropTmpTable ("usr_courses_tmp");
 
-   return UsrSharesAnyOfMyCrsWithDifferentRole;
+   return UsrShares[Exists];
   }
 
 /*****************************************************************************/

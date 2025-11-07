@@ -850,6 +850,11 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
                                       unsigned QstInd,
                                       struct Qst_Question *Question)
   {
+   static const char *InputType[Qst_NUM_ANS_TYPES] =
+     {
+      [Qst_ANS_UNIQUE_CHOICE  ] = "radio",
+      [Qst_ANS_MULTIPLE_CHOICE] = "checkbox",
+     };
    unsigned NumOpt;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
@@ -880,8 +885,7 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
 	    HTM_TD_Begin ("class=\"LT\"");
 	       snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
 	       HTM_TxtF ("<input type=\"%s\" id=\"%s_%u\" name=\"Ans\" value=\"%u\"",
-			 Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE ? "radio" :
-									  "checkbox",
+			 InputType[Question->Answer.Type],
 			 Id,NumOpt,Indexes[NumOpt]);
 	       if ((UsrAnswers[Indexes[NumOpt]] & HTM_CHECKED))
 		  HTM_Txt (" checked");

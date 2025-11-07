@@ -571,7 +571,7 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
    /***** Make database query *****/
    // Do not filter by groups, because a student who has changed groups
    // must be able to access exams taken in other groups
-   NumResults = Exa_DB_GetResults (&mysql_res,Usr_OTHER,UsrDat->UsrCod,
+   NumResults = Exa_DB_GetResults (&mysql_res,Usr_OTHER,
 				   Exams->SesCod.Sel,-1L,NULL);
 
    /***** Begin table row *****/
@@ -1402,6 +1402,11 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
 
 void ExaSes_ToggleVisResultsSesUsr (void)
   {
+   static Lay_Show_t ToggleShow[Usr_NUM_BELONG] =
+     {
+      [Lay_DONT_SHOW] = Lay_SHOW,
+      [Lay_SHOW     ] = Lay_DONT_SHOW,
+     };
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;
 
@@ -1418,8 +1423,7 @@ void ExaSes_ToggleVisResultsSesUsr (void)
       Err_NoPermissionExit ();
 
    /***** Toggle visibility of exam session results *****/
-   Session.Show_UsrResults = Session.Show_UsrResults == Lay_SHOW ? Lay_DONT_SHOW :
-								   Lay_SHOW;
+   Session.Show_UsrResults = ToggleShow[Session.Show_UsrResults];
    Exa_DB_ToggleVisResultsSesUsr (&Session);
 
    /***** Show current exam *****/
@@ -1761,6 +1765,11 @@ static void ExaSes_PutSessionModalities (const struct ExaSes_Session *Session,
 					 Usr_Can_t ICanChangeModality)
   {
    extern const char *Txt_EXAM_SESSION_MODALITIES[ExaSes_NUM_MODALITIES];
+    static HTM_Attributes_t Attributes[Usr_NUM_CAN] =
+     {
+      [Usr_CAN_NOT] = HTM_DISABLED,
+      [Usr_CAN    ] = HTM_REQUIRED,
+     };
    ExaSes_Modality_t Modality;
 
    /***** Begin list of checkboxes *****/
@@ -1774,9 +1783,8 @@ static void ExaSes_PutSessionModalities (const struct ExaSes_Session *Session,
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_RADIO ("Modality",
-				(Modality == Session->Modality ? HTM_REQUIRED | HTM_CHECKED :
-				(ICanChangeModality == Usr_CAN ? HTM_REQUIRED :
-								 HTM_DISABLED)),
+				Modality == Session->Modality ? HTM_REQUIRED | HTM_CHECKED :
+							        Attributes[ICanChangeModality],
 				" value=\"%u\"",(unsigned) Modality);
 	       Ico_PutIconOn (ExaSes_ModalityIcon[Modality],Ico_BLACK,
 			      Txt_EXAM_SESSION_MODALITIES[Modality]);
@@ -1797,6 +1805,11 @@ static void ExaSes_PutSessionModalities (const struct ExaSes_Session *Session,
 static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
   {
    extern const char *Txt_Groups;
+   static HTM_Attributes_t Attributes[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = HTM_CHECKED,
+      [Exi_EXISTS        ] = HTM_NO_ATTR,
+     };
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
@@ -1815,10 +1828,9 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
 	    /***** First row: checkbox to select the whole course *****/
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_CHECKBOX ("WholeCrs",
-				   Grp_DB_CheckIfAssociatedToGrps ("exa_groups",
-								   "SesCod",
-								   SesCod) == Exi_EXISTS ? HTM_NO_ATTR :
-											   HTM_CHECKED,
+				   Attributes[Grp_DB_CheckIfAssociatedToGrps ("exa_groups",
+									      "SesCod",
+									      SesCod)],
 				   "id=\"WholeCrs\" value=\"Y\""
 				   " onclick=\"uncheckChildren(this,'GrpCods')\"");
 	       Grp_WriteTheWholeCourse ();

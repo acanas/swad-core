@@ -742,8 +742,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 				long ExaCod,	// <= 0 ==> any
 				const char *ExamsSelectedCommas)
   {
+   extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    MYSQL_RES *mysql_res;
-   struct Usr_Data *UsrDat;
    unsigned NumResults;
    unsigned NumResult;
    struct ExaRes_ICanView ICanView;
@@ -771,19 +771,15 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
    TotalScore.All   =
    TotalScore.Valid = 0.0;
 
-   /***** Set user *****/
-   UsrDat = MeOrOther == Usr_ME ? &Gbl.Usrs.Me.UsrDat :
-				  &Gbl.Usrs.Other.UsrDat;
-
    /***** Make database query *****/
    // Do not filter by groups, because a student who has changed groups
    // must be able to access exams taken in other groups
-   NumResults = Exa_DB_GetResults (&mysql_res,MeOrOther,UsrDat->UsrCod,
+   NumResults = Exa_DB_GetResults (&mysql_res,MeOrOther,
 				   SesCod,ExaCod,ExamsSelectedCommas);
 
    /***** Show user's data *****/
    HTM_TR_Begin (NULL);
-      Usr_ShowTableCellWithUsrData (UsrDat,NumResults + 1);
+      Usr_ShowTableCellWithUsrData (Usr_UsrDat[MeOrOther],NumResults + 1);
 
       /***** Get and print sessions results *****/
       if (NumResults)
@@ -798,7 +794,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 
 	    /* Get print data */
 	    ExaPrn_GetPrintDataByPrnCod (&Print);
-	    Str_Copy (Print.EnUsrCod,UsrDat->EnUsrCod,
+	    Str_Copy (Print.EnUsrCod,Usr_UsrDat[MeOrOther]->EnUsrCod,
 		      sizeof (Print.EnUsrCod) - 1);
 
 	    /* Get data of session and exam */
@@ -808,7 +804,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    Exa_GetExamDataByCod (&Exam);
 
 	    /* Check if I can view this print result and its score */
-	    ExaRes_CheckIfICanViewResult (&Exam,&Session,UsrDat->UsrCod,&ICanView);
+	    ExaRes_CheckIfICanViewResult (&Exam,&Session,
+					  Usr_UsrDat[MeOrOther]->UsrCod,&ICanView);
 
 	    if (NumResult)
 	       HTM_TR_Begin (NULL);
@@ -965,7 +962,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 
 	    /* Write number of blank questions */
 	    HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	                  The_GetSuffix (),The_GetColorRows ());
+			  The_GetSuffix (),The_GetColorRows ());
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
@@ -1851,7 +1848,11 @@ static void ExaRes_WriteQstAndAns (struct Usr_Data *UsrDat,
   {
    extern const char *Txt_Score;
    extern const char *Txt_Invalid_question;
-   Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY];
+   static HidVis_HiddenOrVisible_t HiddenOrVisible[Usr_NUM_CAN] =
+     {
+      [Usr_CAN_NOT] = HidVis_HIDDEN,
+      [Usr_CAN    ] = HidVis_VISIBLE,
+     };
    static const char *ClassNumQst[ExaSet_NUM_VALIDITIES] =
      {
       [ExaSet_INVALID_QUESTION] = "BIG_INDEX_RED",
@@ -1867,6 +1868,7 @@ static void ExaRes_WriteQstAndAns (struct Usr_Data *UsrDat,
       [ExaSet_INVALID_QUESTION] = "Qst_TXT_LIGHT_RED",
       [ExaSet_VALID_QUESTION  ] = "Qst_TXT_LIGHT",
      };
+   Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY];
 
    /***** Check if I can view each part of the question *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -1910,8 +1912,7 @@ static void ExaRes_WriteQstAndAns (struct Usr_Data *UsrDat,
 
 	 /* Stem */
 	 Qst_WriteQstStem (Question->Stem,ClassTxt[Question->Validity],
-			   ICanView[TstVis_VISIBLE_QST_ANS_TXT] == Usr_CAN ? HidVis_VISIBLE :
-									     HidVis_HIDDEN);
+			   HiddenOrVisible[ICanView[TstVis_VISIBLE_QST_ANS_TXT]]);
 
 	 /* Media */
 	 if (ICanView[TstVis_VISIBLE_QST_ANS_TXT] == Usr_CAN)
@@ -1932,8 +1933,8 @@ static void ExaRes_WriteQstAndAns (struct Usr_Data *UsrDat,
 	       HTM_SPAN_Begin ("class=\"%s_%s\"",
 			       Print->Qsts[QstInd].Answer.Str[0] ?
 			       (Print->Qsts[QstInd].Answer.Score > 0 ? "Qst_ANS_OK" :	// Correct
-											   "Qst_ANS_BAD") :	// Wrong
-											   "Qst_ANS_0",		// Blank answer
+								       "Qst_ANS_BAD") :	// Wrong
+								       "Qst_ANS_0",	// Blank answer
 			       The_GetSuffix ());
 		  HTM_Double2Decimals (Print->Qsts[QstInd].Answer.Score);
 		  if (Question->Validity == ExaSet_INVALID_QUESTION)

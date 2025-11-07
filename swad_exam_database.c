@@ -1758,24 +1758,30 @@ unsigned Exa_DB_GetGrpsAssociatedToSes (MYSQL_RES **mysql_res,long SesCod)
 
 Usr_Can_t Exa_DB_CheckIfICanListThisSessionBasedOnGrps (long SesCod)
   {
-   return
-   DB_QueryEXISTS ("can not check if I can play an exam session",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM exa_sessions"
-		    " WHERE SesCod=%ld"
-		      " AND (SesCod NOT IN"
-			   " (SELECT SesCod FROM exa_groups)"
-			       " OR"
-			   " SesCod IN"
-			   " (SELECT exa_groups.SesCod"
-			      " FROM exa_groups,"
-				    "grp_users"
-			     " WHERE grp_users.UsrCod=%ld"
-			       " AND grp_users.GrpCod=exa_groups.GrpCod)))",
-		   SesCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS ? Usr_CAN :
-							      Usr_CAN_NOT;
+   static Usr_Can_t ICanList[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Usr_CAN_NOT,
+      [Exi_EXISTS        ] = Usr_CAN,
+     };
+   Exi_Exist_t Exists;
+
+   Exists = DB_QueryEXISTS ("can not check if I can play an exam session",
+			    "SELECT EXISTS"
+			    "(SELECT *"
+			      " FROM exa_sessions"
+			     " WHERE SesCod=%ld"
+			       " AND (SesCod NOT IN"
+				    " (SELECT SesCod FROM exa_groups)"
+					" OR"
+				    " SesCod IN"
+				    " (SELECT exa_groups.SesCod"
+				       " FROM exa_groups,"
+					     "grp_users"
+				      " WHERE grp_users.UsrCod=%ld"
+					" AND grp_users.GrpCod=exa_groups.GrpCod)))",
+			    SesCod,
+			    Gbl.Usrs.Me.UsrDat.UsrCod);
+   return ICanList[Exists];
   }
 
 /*****************************************************************************/
@@ -2400,11 +2406,12 @@ unsigned Exa_DB_GetNumPrintsInSes (long SesCod)
 /*****************************************************************************/
 
 unsigned Exa_DB_GetResults (MYSQL_RES **mysql_res,
-			    Usr_MeOrOther_t MeOrOther,long UsrCod,
+			    Usr_MeOrOther_t MeOrOther,
 			    long SesCod,	// <= 0 ==> any
 			    long ExaCod,	// <= 0 ==> any
 			    const char *ExamsSelectedCommas)
   {
+   extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    char *SesSubQuery;
    char *HidSesSubQuery;
    char *HidExaSubQuery;
@@ -2499,7 +2506,7 @@ unsigned Exa_DB_GetResults (MYSQL_RES **mysql_res,
 		      "%s"	// Hidden exams subquery
 		     " AND exa_exams.CrsCod=%ld"		// Extra check
 		" ORDER BY exa_sessions.Title",
-		   UsrCod,
+		   Usr_UsrDat[MeOrOther]->UsrCod,
 		   SesSubQuery,
 		   HidSesSubQuery,
 		   ExaSubQuery,

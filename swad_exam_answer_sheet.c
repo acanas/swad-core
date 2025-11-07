@@ -1152,9 +1152,9 @@ static void ExaAnsShe_WritePaperTF_Ans (struct Qst_Question *Question,
 
    /***** Get answer true or false *****/
    AnsUsr = Print->Qsts[QstInd].Answer.Str[0];
-   WrongOrCorrect = AnsUsr ? (AnsUsr == Question->Answer.TF ? Qst_CORRECT :
-							      Qst_WRONG) :
-			     Qst_BLANK;
+   WrongOrCorrect = AnsUsr == '\0' ? Qst_BLANK :
+				     (AnsUsr == Question->Answer.TF ? Qst_CORRECT :
+							              Qst_WRONG);
 
    /***** Write paper answer *****/
    HTM_TD_Begin ("class=\"Exa_ANSWER_TF\"");
@@ -1187,6 +1187,11 @@ static void ExaAnsShe_WritePaperChoAns (struct Qst_Question *Question,
 					const struct ExaPrn_Print *Print,
 					unsigned QstInd)
   {
+   static const char *InputType[Qst_NUM_ANS_TYPES] =
+     {
+      [Qst_ANS_UNIQUE_CHOICE  ] = "radio",
+      [Qst_ANS_MULTIPLE_CHOICE] = "checkbox",
+     };
    unsigned NumOpt;
    char Id[3 + 1 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1 + Cns_MAX_DIGITS_UINT + 1];	// "Ans_encryptedusercode_xx...x"
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
@@ -1207,8 +1212,7 @@ static void ExaAnsShe_WritePaperChoAns (struct Qst_Question *Question,
 
          snprintf (Id,sizeof (Id),"Ans_%s_%010u",Print->EnUsrCod,QstInd);
 	 HTM_TxtF ("<input type=\"%s\" id=\"%s_%u\" name=\"Ans\" value=\"%u\"",
-		   Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE ? "radio" :
-								    "checkbox",
+		   InputType[Question->Answer.Type],
 		   Id,NumOpt,Indexes[NumOpt]);
 	 if ((UsrAnswers[Indexes[NumOpt]] & HTM_CHECKED))
 	    HTM_Txt (" checked");

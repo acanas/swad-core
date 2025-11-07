@@ -3070,13 +3070,18 @@ void Enr_RemUsrFromCrs2 (void)
 
 static Usr_Can_t Enr_CheckIfICanRemUsrFromCrs (void)
   {
+   static Usr_Can_t ICanRemove[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = Usr_CAN,
+      [Usr_OTHER] = Usr_CAN_NOT,
+     };
+
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
 	 // A student or non-editing teacher can remove herself/himself
-	 return Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME ? Usr_CAN :
-								     Usr_CAN_NOT;
+	 return ICanRemove[Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod)];
       case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
@@ -3666,6 +3671,12 @@ void Enr_FlushCacheUsrHasAcceptedInCurrentCrs (void)
 
 Usr_Accepted_t Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *UsrDat)
   {
+   static Usr_Accepted_t Accepted[Usr_NUM_BELONG] =
+     {
+      [Usr_DONT_BELONG] = Usr_HAS_NOT_ACCEPTED,
+      [Usr_BELONG     ] = Usr_HAS_ACCEPTED,
+     };
+
    /***** 1. Fast check: Trivial cases *****/
    if (UsrDat->UsrCod <= 0 ||
        Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
@@ -3679,10 +3690,9 @@ Usr_Accepted_t Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *Usr
    /***** 3. Fast / slow check: Get if user belongs to current course
                                 and has accepted *****/
    Gbl.Cache.UsrHasAcceptedInCurrentCrs.UsrCod = UsrDat->UsrCod;
-   Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted = Hie_CheckIfUsrBelongsTo (Hie_CRS,UsrDat->UsrCod,
-						                            Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-						                            Hie_DB_ONLY_ACCEPTED_COURSES) == Usr_BELONG ? Usr_HAS_ACCEPTED :
-															  Usr_HAS_NOT_ACCEPTED;
+   Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted = Accepted[Hie_CheckIfUsrBelongsTo (Hie_CRS,UsrDat->UsrCod,
+										     Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+										     Hie_DB_ONLY_ACCEPTED_COURSES)];
    Gbl.Cache.UsrHasAcceptedInCurrentCrs.Status = Cac_VALID;
    return Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted;
   }

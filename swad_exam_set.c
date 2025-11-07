@@ -521,9 +521,9 @@ static void ExaSet_ListSetQuestions (struct Exa_Exams *Exams,
    /***** Begin box *****/
    Box_BoxBegin (Txt_Questions,
 		 ICanEditQuestions == Usr_CAN ? ExaSet_PutIconToAddNewQuestions :
-						  NULL,
+						NULL,
 		 ICanEditQuestions == Usr_CAN ? Exams :
-						  NULL,
+						NULL,
 		 Hlp_ASSESSMENT_Exams_questions,Box_NOT_CLOSABLE);
 
       /***** Show table with questions *****/
