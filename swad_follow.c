@@ -301,13 +301,13 @@ void Fol_ShowFollowingAndFollowers (const struct Usr_Data *UsrDat)
       const char *Icon;
      } Form[Fol_NUM_FOLLOWER] =
      {
-      [Fol_NOT_FOLLOWER] = {ActFolUsr	,"user-plus.svg"	},
-      [Fol_FOLLOWER    ] = {ActUnfUsr	,"user-check.svg"	},
+      [Fol_IS_NOT_FOLLOWER] = {ActFolUsr	,"user-plus.svg"	},
+      [Fol_IS_FOLLOWER    ] = {ActUnfUsr	,"user-check.svg"	},
      };
    unsigned NumFollowing;
    unsigned NumFollowers;
-   Fol_Follower_t UsrIsFollowerOfMe;
-   Fol_Follower_t IAmFollowerOfUsr;
+   Fol_IsFollower_t UsrIsFollowerOfMe;
+   Fol_IsFollower_t IAmFollowerOfUsr;
 
    /***** Count following and followers *****/
    Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
@@ -315,12 +315,12 @@ void Fol_ShowFollowingAndFollowers (const struct Usr_Data *UsrDat)
       UsrIsFollowerOfMe = Fol_DB_CheckUsrIsFollowerOf (UsrDat->UsrCod,
 						       Gbl.Usrs.Me.UsrDat.UsrCod);
    else
-      UsrIsFollowerOfMe = Fol_NOT_FOLLOWER;
+      UsrIsFollowerOfMe = Fol_IS_NOT_FOLLOWER;
    if (NumFollowers)
       IAmFollowerOfUsr = Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
 						      UsrDat->UsrCod);
    else
-      IAmFollowerOfUsr = Fol_NOT_FOLLOWER;
+      IAmFollowerOfUsr = Fol_IS_NOT_FOLLOWER;
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Fol_FOLLOW_SECTION_ID);
@@ -332,7 +332,7 @@ void Fol_ShowFollowingAndFollowers (const struct Usr_Data *UsrDat)
 	    /* User follows me? */
 	    HTM_DIV_Begin ("id=\"follows_me\" class=\"DAT_LIGHT_%s\"",
 	                   The_GetSuffix ());
-	       if (UsrIsFollowerOfMe == Fol_FOLLOWER)
+	       if (UsrIsFollowerOfMe == Fol_IS_FOLLOWER)
 		  HTM_Txt (Txt_FOLLOWS_YOU);
 	    HTM_DIV_End ();
 
@@ -642,11 +642,11 @@ static void Fol_ShowFollowedOrFollower (struct Usr_Data *UsrDat)
 	    switch (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
 					         UsrDat->UsrCod))
 	      {
-	       case Fol_FOLLOWER:		// I follow user
+	       case Fol_IS_FOLLOWER:		// I follow user
 		  /* Form to unfollow */
 		  Fol_PutIconToUnfollow (UsrDat->EnUsrCod);
 		  break;
-	       case Fol_NOT_FOLLOWER:		// I do not follow this user
+	       case Fol_IS_NOT_FOLLOWER:		// I do not follow this user
 	       default:
 		  if (ICanView == Usr_CAN)	// I can follow
 		     /* Form to follow */
@@ -711,11 +711,11 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct Usr_Data *UsrDat)
 	    switch (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
 					         UsrDat->UsrCod))
 	      {
-	       case Fol_FOLLOWER:		// I follow user
+	       case Fol_IS_FOLLOWER:		// I follow user
 		  /* Form to unfollow */
 		  Fol_PutIconToUnfollow (UsrDat->EnUsrCod);
 		  break;
-	       case Fol_NOT_FOLLOWER:		// I do not follow this user
+	       case Fol_IS_NOT_FOLLOWER:		// I do not follow this user
 	       default:
 		  if (ICanView == Usr_CAN)	// I can follow
 		     /* Form to follow */
@@ -782,7 +782,7 @@ void Fol_FollowUsr1 (void)
       case Exi_EXISTS:
 	 // Follow only if I do not follow him/her
 	 if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-					  Gbl.Usrs.Other.UsrDat.UsrCod) == Fol_NOT_FOLLOWER)
+					  Gbl.Usrs.Other.UsrDat.UsrCod) == Fol_IS_NOT_FOLLOWER)
 	    Fol_FollowUsr (&Gbl.Usrs.Other.UsrDat);
 
 	 Ale_CreateAlert (Ale_SUCCESS,NULL,"");	// Txt not used
@@ -821,7 +821,7 @@ void Fol_UnfollowUsr1 (void)
       case Exi_EXISTS:
 	 // Unfollow only if I follow him/her
 	 if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-					  Gbl.Usrs.Other.UsrDat.UsrCod) == Fol_FOLLOWER)
+					  Gbl.Usrs.Other.UsrDat.UsrCod) == Fol_IS_FOLLOWER)
 	    Fol_UnfollowUsr (&Gbl.Usrs.Other.UsrDat);
 
 	 Ale_CreateAlert (Ale_SUCCESS,NULL,"");	// Txt not used
@@ -976,7 +976,7 @@ static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
 	      {
 	       /* Check if I follow this user, and update number of users */
 	       if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-						UsrDat.UsrCod) == Fol_FOLLOWER)	// I follow user
+						UsrDat.UsrCod) == Fol_IS_FOLLOWER)	// I follow user
 		  (*NumFollowed)++;
 	       NumUsrs++;
 	      }
@@ -1025,7 +1025,7 @@ void Fol_FollowUsrs ()
 	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
 	       /* If I don't follow this user ==> follow him/her */
 	       if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-					        UsrDat.UsrCod) == Fol_NOT_FOLLOWER)
+					        UsrDat.UsrCod) == Fol_IS_NOT_FOLLOWER)
 		 {
 		  Fol_FollowUsr (&UsrDat);
 		  NumFollowed++;
@@ -1076,7 +1076,7 @@ void Fol_UnfollowUsrs (void)
 	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
 	       /* If I follow this user ==> unfollow him/her */
 	       if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-					        UsrDat.UsrCod) == Fol_FOLLOWER)
+					        UsrDat.UsrCod) == Fol_IS_FOLLOWER)
 		 {
 		  Fol_UnfollowUsr (&UsrDat);
 		  NumUnfollowed++;
@@ -1209,8 +1209,13 @@ void Fol_GetAndShowFollowStats (Hie_Level_t HieLvl)
    extern const char *Txt_PERCENT_of_users;
    extern const char *Txt_Followed;
    extern const char *Txt_Followers;
-   extern const char *Txt_FollowPerFollow[2];
-   unsigned Fol;
+   extern const char *Txt_FollowPerFollow[Fol_NUM_FOLLOW];
+   static const char **Txt[Fol_NUM_FOLLOW] =
+     {
+      [Fol_FOLLOWED] = &Txt_Followed,
+      [Fol_FOLLOWER] = &Txt_Followers,
+     };
+   Fol_Follow_t Fol;
    unsigned NumUsrsTotal;
    unsigned NumUsrs;
    double Average;
@@ -1230,24 +1235,23 @@ void Fol_GetAndShowFollowStats (Hie_Level_t HieLvl)
       NumUsrsTotal = Usr_GetTotalNumberOfUsers (HieLvl);
 
       /***** Get total number of following/followers from database *****/
-      for (Fol = 0;
-	   Fol < 2;
+      for (Fol  = (Fol_Follow_t) 0;
+	   Fol <= (Fol_Follow_t) (Fol_NUM_FOLLOW - 1);
 	   Fol++)
 	{
 	 NumUsrs = Fol_DB_GetNumFollowinFollowers (HieLvl,Fol);
 
 	 /***** Write number of followed / followers *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_Txt_Left (Fol == 0 ? Txt_Followed :
-				        Txt_Followers);
+	    HTM_TD_Txt_Left (*Txt[Fol]);
 	    HTM_TD_Unsigned (NumUsrs);
 	    HTM_TD_Percentage (NumUsrs,NumUsrsTotal);
 	 HTM_TR_End ();
 	}
 
       /***** Write number of followed/followers per follower/followed *****/
-      for (Fol = 0;
-	   Fol < 2;
+      for (Fol  = (Fol_Follow_t) 0;
+	   Fol <= (Fol_Follow_t) (Fol_NUM_FOLLOW - 1);
 	   Fol++)
 	{
 	 Average = Fol_DB_GetNumFollowedPerFollower (HieLvl,Fol);

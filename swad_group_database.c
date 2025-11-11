@@ -63,6 +63,22 @@ void Grp_DB_LockTables (void)
 
 long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp)
   {
+   static const char OptionalMandatoryYN[Grp_NUM_OPTIONAL_MANDATORY] =
+     {
+      [Grp_OPTIONAL ] = 'N',
+      [Grp_MANDATORY] = 'Y',
+     };
+   static const char SingleMultipleYN[Grp_NUM_SINGLE_MULTIPLE] =
+     {
+      [Grp_SINGLE  ] = 'N',
+      [Grp_MULTIPLE] = 'Y',
+     };
+   static const char MustBeOpenedYN[Grp_NUM_MUST_BE_OPENED] =
+     {
+      [Grp_MUST_NOT_BE_OPENED] = 'N',
+      [Grp_MUST_BE_OPENED    ] = 'Y',
+     };
+
    /***** Create a new group type *****/
    return
    DB_QueryINSERTandReturnCode ("can not create type of group",
@@ -74,12 +90,9 @@ long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp)
 				  "'%c','%c','%c',FROM_UNIXTIME(%ld))",
 				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 				GrpTyp->Name,
-				GrpTyp->Enrolment.OptionalMandatory == Grp_MANDATORY ? 'Y' :
-										       'N',
-				GrpTyp->Enrolment.SingleMultiple == Grp_MULTIPLE ? 'Y' :
-										   'N',
-				GrpTyp->MustBeOpened == Grp_MUST_BE_OPENED ? 'Y' :
-						                             'N',
+				OptionalMandatoryYN[GrpTyp->Enrolment.OptionalMandatory],
+				SingleMultipleYN[GrpTyp->Enrolment.SingleMultiple],
+				MustBeOpenedYN[GrpTyp->MustBeOpened],
 				(long) GrpTyp->OpenTimeUTC);
   }
 
@@ -379,18 +392,24 @@ unsigned Grp_DB_GetTchsFromGrpExceptMe (MYSQL_RES **mysql_res,long GrpCod)
 
 Usr_Belong_t Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod)
   {
-   return
-   DB_QueryEXISTS ("can not check if you belong to a group type",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM grp_groups,"
-			   "grp_users"
-		    " WHERE grp_groups.GrpTypCod=%ld"
-		      " AND grp_groups.GrpCod=grp_users.GrpCod"
-		      " AND grp_users.UsrCod=%ld)",	// I belong
-		   GrpTypCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS ? Usr_BELONG :
-							      Usr_DONT_BELONG;
+   static Usr_Belong_t IBelong[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Usr_DONT_BELONG,
+      [Exi_EXISTS        ] = Usr_BELONG,
+     };
+   Exi_Exist_t Exists;
+
+   Exists = DB_QueryEXISTS ("can not check if you belong to a group type",
+			    "SELECT EXISTS"
+			    "(SELECT *"
+			      " FROM grp_groups,"
+				    "grp_users"
+			     " WHERE grp_groups.GrpTypCod=%ld"
+			       " AND grp_groups.GrpCod=grp_users.GrpCod"
+			       " AND grp_users.UsrCod=%ld)",	// I belong
+			    GrpTypCod,
+			    Gbl.Usrs.Me.UsrDat.UsrCod);
+   return IBelong[Exists];
   }
 
 /*****************************************************************************/
@@ -399,16 +418,22 @@ Usr_Belong_t Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod)
 
 Usr_Belong_t Grp_DB_CheckIfIBelongToGrp (long GrpCod)
   {
-   return
-   DB_QueryEXISTS ("can not check if you belong to a group",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM grp_users"
-		    " WHERE GrpCod=%ld"
-		      " AND UsrCod=%ld)",	// I belong
-		   GrpCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS ? Usr_BELONG :
-							       Usr_DONT_BELONG;
+   static Usr_Belong_t IBelong[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Usr_DONT_BELONG,
+      [Exi_EXISTS        ] = Usr_BELONG,
+     };
+   Exi_Exist_t Exists;
+
+   Exists = DB_QueryEXISTS ("can not check if you belong to a group",
+			    "SELECT EXISTS"
+			    "(SELECT *"
+			      " FROM grp_users"
+			     " WHERE GrpCod=%ld"
+			       " AND UsrCod=%ld)",	// I belong
+			    GrpCod,
+			    Gbl.Usrs.Me.UsrDat.UsrCod);
+   return IBelong[Exists];
   }
 
 /*****************************************************************************/
@@ -417,25 +442,32 @@ Usr_Belong_t Grp_DB_CheckIfIBelongToGrp (long GrpCod)
 
 Usr_Share_t Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (long UsrCod)
   {
-   return
-   DB_QueryEXISTS ("can not check if a user shares any group in the current course with you",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM grp_users"
-		    " WHERE UsrCod=%ld"
-		      " AND GrpCod IN"
-			  " (SELECT grp_users.GrpCod"
-			     " FROM grp_users,"
-				   "grp_groups,"
-				   "grp_types"
-			    " WHERE grp_users.UsrCod=%ld"
-			      " AND grp_users.GrpCod=grp_groups.GrpCod"
-			      " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-			      " AND grp_types.CrsCod=%ld))",
-		   UsrCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_EXISTS ? Usr_SHARE :
-								       Usr_DONT_SHARE;
+   static Usr_Share_t UsrShares[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Usr_DONT_SHARE,
+      [Exi_EXISTS        ] = Usr_SHARE,
+     };
+   Exi_Exist_t Exists;
+
+   Exists = DB_QueryEXISTS ("can not check if a user shares any group"
+			    " in the current course with you",
+			    "SELECT EXISTS"
+			    "(SELECT *"
+			      " FROM grp_users"
+			     " WHERE UsrCod=%ld"
+			       " AND GrpCod IN"
+				   " (SELECT grp_users.GrpCod"
+				      " FROM grp_users,"
+					    "grp_groups,"
+					    "grp_types"
+				     " WHERE grp_users.UsrCod=%ld"
+				       " AND grp_users.GrpCod=grp_groups.GrpCod"
+				       " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+				       " AND grp_types.CrsCod=%ld))",
+			    UsrCod,
+			    Gbl.Usrs.Me.UsrDat.UsrCod,
+			    Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+   return UsrShares[Exists];
   }
 
 /*****************************************************************************/
@@ -757,12 +789,17 @@ Exi_Exist_t Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,
 
 void Grp_DB_ChangeOptionalMandatory (const struct GroupType *GrpTyp)
   {
+   static const char OptionalMandatoryYN[Grp_NUM_OPTIONAL_MANDATORY] =
+     {
+      [Grp_OPTIONAL ] = 'N',
+      [Grp_MANDATORY] = 'Y',
+     };
+
    DB_QueryUPDATE ("can not update enrolment type of a type of group",
 		   "UPDATE grp_types"
 		     " SET Mandatory='%c'"
 		   " WHERE GrpTypCod=%ld",
-		   GrpTyp->Enrolment.OptionalMandatory == Grp_MANDATORY ? 'Y' :
-									  'N',
+		   OptionalMandatoryYN[GrpTyp->Enrolment.OptionalMandatory],
 		   GrpTyp->GrpTypCod);
   }
 
@@ -772,12 +809,17 @@ void Grp_DB_ChangeOptionalMandatory (const struct GroupType *GrpTyp)
 
 void Grp_DB_ChangeSingleMultiple (const struct GroupType *GrpTyp)
   {
+   static const char SingleMultipleYN[Grp_NUM_SINGLE_MULTIPLE] =
+     {
+      [Grp_SINGLE  ] = 'N',
+      [Grp_MULTIPLE] = 'Y',
+     };
+
    DB_QueryUPDATE ("can not update enrolment type of a type of group",
 		   "UPDATE grp_types"
 		     " SET Multiple='%c'"
 		   " WHERE GrpTypCod=%ld",
-		   GrpTyp->Enrolment.SingleMultiple == Grp_MULTIPLE ? 'Y' :
-								      'N',
+		   SingleMultipleYN[GrpTyp->Enrolment.SingleMultiple],
 		   GrpTyp->GrpTypCod);
   }
 
@@ -787,13 +829,18 @@ void Grp_DB_ChangeSingleMultiple (const struct GroupType *GrpTyp)
 
 void Grp_DB_ChangeOpeningTime (const struct GroupType *GrpTyp)
   {
+   static const char MustBeOpenedYN[Grp_NUM_MUST_BE_OPENED] =
+     {
+      [Grp_MUST_NOT_BE_OPENED] = 'N',
+      [Grp_MUST_BE_OPENED    ] = 'Y',
+     };
+
    DB_QueryUPDATE ("can not update enrolment type of a type of group",
 		   "UPDATE grp_types"
 		     " SET MustBeOpened='%c',"
 		          "OpenTime=FROM_UNIXTIME(%ld)"
 		   " WHERE GrpTypCod=%ld",
-                   GrpTyp->MustBeOpened == Grp_MUST_BE_OPENED ? 'Y' :
-                						'N',
+                   MustBeOpenedYN[GrpTyp->MustBeOpened],
                    (long) GrpTyp->OpenTimeUTC,
                    GrpTyp->GrpTypCod);
   }

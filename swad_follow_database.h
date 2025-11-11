@@ -39,7 +39,7 @@ unsigned Fol_DB_GetUsrsToFollow (unsigned MaxUsrsToShow,
 				 Fol_WhichUsersSuggestToFollowThem_t WhichUsersSuggestToFollowThem,
 				 MYSQL_RES **mysql_res);
 
-Fol_Follower_t Fol_DB_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod);
+Fol_IsFollower_t Fol_DB_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod);
 
 unsigned Fol_DB_GetNumFollowing (long UsrCod);
 unsigned Fol_DB_GetNumFollowers (long UsrCod);
@@ -47,8 +47,8 @@ unsigned Fol_DB_GetNumFollowers (long UsrCod);
 unsigned Fol_DB_GetListFollowing (MYSQL_RES **mysql_res,long UsrCod);
 unsigned Fol_DB_GetListFollowers (MYSQL_RES **mysql_res,long UsrCod);
 
-unsigned Fol_DB_GetNumFollowinFollowers (Hie_Level_t HieLvl,unsigned Fol);
-double Fol_DB_GetNumFollowedPerFollower (Hie_Level_t HieLvl,unsigned Fol);
+unsigned Fol_DB_GetNumFollowinFollowers (Hie_Level_t HieLvl,Fol_Follow_t Fol);
+double Fol_DB_GetNumFollowedPerFollower (Hie_Level_t HieLvl,Fol_Follow_t Fol);
 
 void Fol_DB_FollowUsr (long UsrCod);
 void Fol_DB_UnfollowUsr (long UsrCod);

@@ -1361,8 +1361,37 @@ static void Grp_ListGroupTypesForEdition (void)
    extern const char *Txt_A_student_can_only_belong_to_one_group;
    extern const char *Txt_The_groups_will_automatically_open;
    extern const char *Txt_The_groups_will_not_automatically_open;
+   static struct
+     {
+      const char *YN;
+      const char **Label;
+     } OptionalMandatory[Grp_NUM_OPTIONAL_MANDATORY] =
+     {
+      [Grp_OPTIONAL ] = {.YN = "N",.Label = &Txt_It_is_optional_to_choose_a_group },
+      [Grp_MANDATORY] = {.YN = "Y",.Label = &Txt_It_is_mandatory_to_choose_a_group}
+     };
+   static struct
+     {
+      const char *YN;
+      const char **Label;
+     } SingleMultiple[Grp_NUM_SINGLE_MULTIPLE] =
+     {
+      [Grp_SINGLE  ] = {.YN = "N",.Label = &Txt_A_student_can_only_belong_to_one_group },
+      [Grp_MULTIPLE] = {.YN = "Y",.Label = &Txt_A_student_can_belong_to_several_groups}
+     };
+    static struct
+     {
+      void (*PutIcon) (const char *Icon,Ico_Color_t Color,const char *Title);
+      const char **Label;
+     } MustBeOpened[Grp_NUM_MUST_BE_OPENED] =
+     {
+      [Grp_MUST_NOT_BE_OPENED] = {.PutIcon = Ico_PutIconOff,.Label = &Txt_The_groups_will_not_automatically_open },
+      [Grp_MUST_BE_OPENED    ] = {.PutIcon = Ico_PutIconOn ,.Label = &Txt_The_groups_will_automatically_open}
+     };
    unsigned NumGrpTyp;
    struct GroupType *GrpTyp;
+   Grp_OptionalOrMandatory_t OptMan;
+   Grp_SingleOrMultiple_t SinMul;
    unsigned CurrentYear = Dat_GetCurrentYear ();
    unsigned UniqueId;
    char Id[32];
@@ -1415,14 +1444,13 @@ static void Grp_ListGroupTypesForEdition (void)
 				    "name=\"OptionalMandatory\""
 		                    " class=\"INPUT_%s\" style=\"width:150px;\"",
 		                    The_GetSuffix ());
-		     HTM_OPTION (HTM_Type_STRING,"N",
-				 GrpTyp->Enrolment.OptionalMandatory == Grp_OPTIONAL  ? HTM_SELECTED :
-										        HTM_NO_ATTR,
-				 "%s",Txt_It_is_optional_to_choose_a_group);
-		     HTM_OPTION (HTM_Type_STRING,"Y",
-				 GrpTyp->Enrolment.OptionalMandatory == Grp_MANDATORY ? HTM_SELECTED :
-											HTM_NO_ATTR,
-				 "%s",Txt_It_is_mandatory_to_choose_a_group);
+		     for (OptMan  = (Grp_OptionalOrMandatory_t) 0;
+			  OptMan <= (Grp_OptionalOrMandatory_t) (Grp_NUM_OPTIONAL_MANDATORY - 1);
+			  OptMan++)
+			HTM_OPTION (HTM_Type_STRING,OptionalMandatory[OptMan].YN,
+				    GrpTyp->Enrolment.OptionalMandatory == OptMan ? HTM_SELECTED :
+										    HTM_NO_ATTR,
+				    "%s",*OptionalMandatory[OptMan].Label);
 		  HTM_SELECT_End ();
 	       Frm_EndForm ();
 	    HTM_TD_End ();
@@ -1435,14 +1463,13 @@ static void Grp_ListGroupTypesForEdition (void)
 				    "name=\"SingleMultiple\""
 				    " class=\"INPUT_%s\" style=\"width:150px;\"",
 				    The_GetSuffix ());
-		     HTM_OPTION (HTM_Type_STRING,"N",
-				 GrpTyp->Enrolment.SingleMultiple == Grp_SINGLE   ? HTM_SELECTED :
-										    HTM_NO_ATTR,
-				 "%s",Txt_A_student_can_only_belong_to_one_group);
-		     HTM_OPTION (HTM_Type_STRING,"Y",
-				 GrpTyp->Enrolment.SingleMultiple == Grp_MULTIPLE ? HTM_SELECTED :
-										    HTM_NO_ATTR,
-				 "%s",Txt_A_student_can_belong_to_several_groups);
+		     for (SinMul  = (Grp_SingleOrMultiple_t) 0;
+			  SinMul <= (Grp_SingleOrMultiple_t) (Grp_NUM_SINGLE_MULTIPLE - 1);
+			  SinMul++)
+			HTM_OPTION (HTM_Type_STRING,SingleMultiple[SinMul].YN,
+				    GrpTyp->Enrolment.SingleMultiple == SinMul ? HTM_SELECTED :
+										 HTM_NO_ATTR,
+				    "%s",*SingleMultiple[SinMul].Label);
 		  HTM_SELECT_End ();
 	       Frm_EndForm ();
 	    HTM_TD_End ();
@@ -1455,18 +1482,8 @@ static void Grp_ListGroupTypesForEdition (void)
 		     HTM_TR_Begin (NULL);
 
 			HTM_TD_Begin ("class=\"LM\" style=\"width:16px;\"");
-			   switch (GrpTyp->MustBeOpened)
-			     {
-			      case Grp_MUST_BE_OPENED:
-				 Ico_PutIconOn ("clock.svg",Ico_BLACK,
-						Txt_The_groups_will_automatically_open);
-				 break;
-			      case Grp_MUST_NOT_BE_OPENED:
-			      default:
-				 Ico_PutIconOff ("clock.svg",Ico_BLACK,
-						 Txt_The_groups_will_not_automatically_open);
-				 break;
-			     }
+			   MustBeOpened[GrpTyp->MustBeOpened].PutIcon ("clock.svg",Ico_BLACK,
+							               *MustBeOpened[GrpTyp->MustBeOpened].Label);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM\"");
@@ -1813,17 +1830,36 @@ static void Grp_ListGrpsOfATypeToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp
 						      long Cod,	// Assignment, attendance event, survey, exam event or match
 						      struct GroupType *GrpTyp)
   {
+   static Usr_Belong_t IBelong[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Usr_DONT_BELONG,
+      [Exi_EXISTS        ] = Usr_BELONG,
+     };
+   static struct
+     {
+      const char *Class;
+      Lay_Highlight_t Highlight;
+     } Layout[Usr_NUM_BELONG] =
+     {
+      [Usr_DONT_BELONG] = {.Class = "class=\"LM\""		,.Highlight = Lay_DONT_HIGHLIGHT},
+      [Usr_BELONG     ] = {.Class = "class=\"LM BG_HIGHLIGHT\""	,.Highlight = Lay_HIGHLIGHT     }
+     };
    static struct
      {
       const char *Table;
       const char *Field;
      } AssociationsToGrps[Grp_NUM_ASSOCIATIONS_TO_GROUPS] =
      {
-      [Grp_ASSIGNMENT] = {"asg_groups","AsgCod"},
-      [Grp_ATT_EVENT ] = {"att_groups","AttCod"},
-      [Grp_SURVEY    ] = {"svy_groups","SvyCod"},
-      [Grp_EXA_EVENT ] = {"exa_groups","SesCod"},
-      [Grp_MATCH     ] = {"mch_groups","MchCod"},
+      [Grp_ASSIGNMENT] = {.Table = "asg_groups",.Field = "AsgCod"},
+      [Grp_ATT_EVENT ] = {.Table = "att_groups",.Field = "AttCod"},
+      [Grp_SURVEY    ] = {.Table = "svy_groups",.Field = "SvyCod"},
+      [Grp_EXA_EVENT ] = {.Table = "exa_groups",.Field = "SesCod"},
+      [Grp_MATCH     ] = {.Table = "mch_groups",.Field = "MchCod"},
+     };
+   static HTM_Attributes_t Attributes[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = HTM_NO_ATTR,
+      [Exi_EXISTS        ] = HTM_CHECKED,
      };
    struct ListCodGrps LstGrpsIBelong;
    unsigned NumGrpThisType;
@@ -1851,20 +1887,16 @@ static void Grp_ListGrpsOfATypeToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp
 	      NumGrpThisType++)
 	   {
 	    Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
-	    IBelongToThisGroup = Grp_CheckIfGrpExistsInList (Grp->GrpCod,
-							     &LstGrpsIBelong) == Exi_EXISTS ? Usr_BELONG :
-											      Usr_DONT_BELONG;
+	    IBelongToThisGroup = IBelong[Grp_CheckIfGrpExistsInList (Grp->GrpCod,&LstGrpsIBelong)];
 
 	    /* Put checkbox to select the group */
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin (IBelongToThisGroup == Usr_BELONG ? "class=\"LM BG_HIGHLIGHT\"" :
-								"class=\"LM\"");
+	       HTM_TD_Begin (Layout[IBelongToThisGroup].Class);
 		  HTM_INPUT_CHECKBOX ("GrpCods",
-				      (Grp_DB_CheckIfAssociatedToGrp (AssociationsToGrps[WhichIsAssociatedToGrp].Table,
-								      AssociationsToGrps[WhichIsAssociatedToGrp].Field,
-								      Cod,Grp->GrpCod) == Exi_EXISTS ? HTM_CHECKED :
-												       HTM_NO_ATTR) |
+				      Attributes[Grp_DB_CheckIfAssociatedToGrp (AssociationsToGrps[WhichIsAssociatedToGrp].Table,
+								                AssociationsToGrps[WhichIsAssociatedToGrp].Field,
+								                Cod,Grp->GrpCod)] |
 				      (IBelongToThisGroup == Usr_BELONG ||
 				       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? HTM_NO_ATTR :
 										HTM_DISABLED),
@@ -1873,8 +1905,7 @@ static void Grp_ListGrpsOfATypeToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp
 				      Grp->GrpCod,Grp->GrpCod);
 	       HTM_TD_End ();
 
-	       Grp_WriteRowGrp (Grp,IBelongToThisGroup == Usr_BELONG ? Lay_HIGHLIGHT :
-								       Lay_DONT_HIGHLIGHT);
+	       Grp_WriteRowGrp (Grp,Layout[IBelongToThisGroup].Highlight);
 
 	    HTM_TR_End ();
 	   }

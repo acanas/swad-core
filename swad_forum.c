@@ -294,10 +294,10 @@ static unsigned PermissionThreadDeletion[For_NUM_TYPES_FORUM] =
 
 struct For_FiguresForum
   {
-   unsigned NumForums;
-   unsigned NumThreads;
-   unsigned NumPosts;
-   unsigned NumUsrsToBeNotifiedByEMail;
+   unsigned NumFors;
+   unsigned NumThrs;
+   unsigned NumPsts;
+   unsigned NumUsrsToBeNotifByEMail;
   };
 
 #define For_NUM_FIRST_OR_REPLY 2
@@ -927,20 +927,24 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
    extern const char *Txt_FORUM_Post_banned;
    extern const char *Txt_FORUM_Post_X_banned;
    extern const char *Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums;
-   static const char *Icon[For_NUM_DISABLED] =
+   static struct
      {
-      [For_DISABLED] = "eye-slash.svg",
-      [For_ENABLED ] = "eye.svg",
+      const char *Icon;
+      const char **Title;
+     } StatusIcons[CloOpe_NUM_CLOSED_OPEN] =
+     {
+      [CloOpe_CLOSED] = {"envelope.svg"			,&Txt_MSG_New	},
+      [CloOpe_OPEN  ] = {"envelope-open-text.svg"	,&Txt_MSG_Open	},
      };
-   static Ico_Color_t Color[For_NUM_DISABLED] =
+   static struct
      {
-      [For_DISABLED] = Ico_RED,
-      [For_ENABLED ] = Ico_GREEN,
-     };
-   static const char **TxtAllowedBanned[For_NUM_DISABLED] =
+      const char *Icon;
+      Ico_Color_t Color;
+      const char **TxtAllowedBanned;
+     } DisabledIcons[CloOpe_NUM_CLOSED_OPEN] =
      {
-      [For_DISABLED] = &Txt_FORUM_Post_X_banned,
-      [For_ENABLED ] = &Txt_FORUM_Post_X_allowed,
+      [For_DISABLED] = {"eye-slash.svg"	,Ico_RED	,&Txt_FORUM_Post_X_banned	},
+      [For_ENABLED ] = {"eye.svg"	,Ico_GREEN	,&Txt_FORUM_Post_X_allowed	},
      };
    struct Usr_Data UsrDat;
    time_t CreatTimeUTC;	// Creation time of a post
@@ -975,12 +979,8 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
       /***** Put an icon with post status *****/
       HTM_TD_Begin ("class=\"CONTEXT_COL %s_%s\"",
 	            Msg_Class[ClosedOrOpenPst].Background,The_GetSuffix ());
-	 Ico_PutIcon (ClosedOrOpenPst == CloOpe_CLOSED ? "envelope.svg" :
-							 "envelope-open-text.svg",
-		      Ico_BLACK,
-		      ClosedOrOpenPst == CloOpe_CLOSED ? Txt_MSG_New :
-							 Txt_MSG_Open,
-		      "ICO16x16");
+	 Ico_PutIcon (StatusIcons[ClosedOrOpenPst].Icon,Ico_BLACK,
+		      *StatusIcons[ClosedOrOpenPst].Title,"ICO16x16");
       HTM_TD_End ();
 
       /***** Write post number *****/
@@ -1028,15 +1028,16 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 						      For_ActionsEnbPstFor[Forums->Forum.Type];
 	       Frm_BeginFormAnchor (NextAction,For_FORUM_POSTS_SECTION_ID);
 		  For_PutParsForum (Forums);
-		  Ico_PutIconLink (Icon[Disabled],Color[Disabled],NextAction);
+		  Ico_PutIconLink (DisabledIcons[Disabled].Icon,
+				   DisabledIcons[Disabled].Color,NextAction);
 	       Frm_EndForm ();
 	       break;
 	    case Usr_CAN_NOT:
 	    default:
-	       if (asprintf (&Title,*TxtAllowedBanned[Disabled],PstNum) < 0)
+	       if (asprintf (&Title,*DisabledIcons[Disabled].TxtAllowedBanned,PstNum) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       Ico_PutIcon (Icon[Disabled],Color[Disabled],Title,
-			    "ICO_HIDDEN ICO16x16");
+	       Ico_PutIcon (DisabledIcons[Disabled].Icon,
+			    DisabledIcons[Disabled].Color,Title,"ICO_HIDDEN ICO16x16");
 	       free (Title);
 	       break;
 	   }
@@ -1233,6 +1234,11 @@ void For_ShowForumList (struct For_Forums *Forums)
   {
    extern const char *Hlp_COMMUNICATION_Forums;
    extern const char *Txt_Forums;
+   static Usr_Can_t ICanSee[Usr_NUM_BELONG] =
+     {
+      [Usr_DONT_BELONG] = Usr_CAN_NOT,
+      [Usr_BELONG     ] = Usr_CAN,
+     };
    Lay_Last_t IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS];
    MYSQL_RES *mysql_resCtr;
    MYSQL_RES *mysql_resDeg;
@@ -1278,10 +1284,8 @@ void For_ShowForumList (struct For_Forums *Forums)
 		  if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 		     ICanSeeInsForum = Usr_CAN;
 		  else
-		     ICanSeeInsForum = Hie_CheckIfIBelongTo (Hie_INS,
-							     Gbl.Hierarchy.Node[Hie_INS].HieCod)
-				       == Usr_BELONG ? Usr_CAN :
-						       Usr_CAN_NOT;
+		     ICanSeeInsForum = ICanSee[Hie_CheckIfIBelongTo (Hie_INS,
+								     Gbl.Hierarchy.Node[Hie_INS].HieCod)];
 		 }
 	       else
 		  ICanSeeInsForum = Usr_CAN_NOT;
@@ -1294,10 +1298,8 @@ void For_ShowForumList (struct For_Forums *Forums)
 		  if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 		     ICanSeeCtrForum = Usr_CAN;
 		  else
-		     ICanSeeCtrForum = Hie_CheckIfIBelongTo (Hie_CTR,
-							     Gbl.Hierarchy.Node[Hie_CTR].HieCod)
-				       == Usr_BELONG ? Usr_CAN :
-						       Usr_CAN_NOT;
+		     ICanSeeCtrForum = ICanSee[Hie_CheckIfIBelongTo (Hie_CTR,
+								     Gbl.Hierarchy.Node[Hie_CTR].HieCod)];
 
 		  /***** Links to forums of current institution *****/
 		  if (For_WriteLinksToInsForums (Forums,
@@ -1308,10 +1310,8 @@ void For_ShowForumList (struct For_Forums *Forums)
 			if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 			   ICanSeeDegForum = Usr_CAN;
 			else
-			   ICanSeeDegForum = Hie_CheckIfIBelongTo (Hie_DEG,
-								   Gbl.Hierarchy.Node[Hie_DEG].HieCod)
-				             == Usr_BELONG ? Usr_CAN :
-							     Usr_CAN_NOT;
+			   ICanSeeDegForum = ICanSee[Hie_CheckIfIBelongTo (Hie_DEG,
+									   Gbl.Hierarchy.Node[Hie_DEG].HieCod)];
 
 			/***** Links to forums of current center *****/
 			if (For_WriteLinksToCtrForums (Forums,
@@ -1380,7 +1380,7 @@ void For_ShowForumList (struct For_Forums *Forums)
 			   /* Links to forums of this degree */
 			   if (For_WriteLinksToDegForums (Forums,
 							  HieCods[Hie_DEG],
-							  NumDeg == NumDegs - 1 ? Lay_LAST :		// Last degree
+							  NumDeg == NumDegs - 1 ? Lay_LAST :	// Last degree
 										  Lay_NO_LAST,
 							  IsLastItemInLevel) > 0)
 			     {
@@ -1572,10 +1572,10 @@ static long For_WriteLinksToInsForums (const struct For_Forums *Forums,
    if (HieCod > 0)
      {
       MaxRoleInNode = Rol_GetMyMaxRoleIn (Hie_INS,HieCod);
-      ICanSeeTeacherForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-	                     MaxRoleInNode == Rol_NET ||
-	                     MaxRoleInNode == Rol_TCH) ? Usr_CAN :
-	                				 Usr_CAN_NOT;
+      ICanSeeTeacherForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
+	                    MaxRoleInNode == Rol_NET ||
+	                    MaxRoleInNode == Rol_TCH ? Usr_CAN :
+	                			       Usr_CAN_NOT;
 
       /***** Link to the forum of users from this institution *****/
       Forum.Type = For_FORUM_INSTIT_USRS;
@@ -2286,8 +2286,8 @@ static void For_ListForumThrs (struct For_Forums *Forums,
       Thr.ThrCod = ThrCods[NumThrInScreen];
       For_GetThreadData (&Thr);
       Forums->Thread.Current = Thr.ThrCod;
-      Class = (Thr.NumUnreadPosts ? "MSG_AUT_NEW" :
-	                            "MSG_AUT");
+      Class = Thr.NumUnreadPosts ? "MSG_AUT_NEW" :
+	                           "MSG_AUT";
       BgColor =  Thr.ThrCod == ThreadInMyClipboard ? "LIGHT_GREEN" :
 	        (Thr.ThrCod == ThrCodHighlighted   ? "BG_HIGHLIGHT" :
                                                      The_GetColorRows ());
@@ -2921,7 +2921,7 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 	       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 		  HTM_INPUT_TEXT ("Subject",Cns_MAX_CHARS_SUBJECT,
 				  FirstOrReply == For_REPLY_TO_ANOTHER_POST ? Subject :
-							  "",
+									      "",
 				  HTM_REQUIRED,
 				  "id=\"Subject\""
 				  " class=\"Frm_C2_INPUT INPUT_%s\"",
@@ -3412,10 +3412,10 @@ void For_GetAndShowForumStats (Hie_Level_t HieLvl)
    HieCod[HieLvl] = Gbl.Hierarchy.Node[HieLvl].HieCod;
 
    /***** Reset total stats *****/
-   FiguresForum.NumForums  = 0;
-   FiguresForum.NumThreads = 0;
-   FiguresForum.NumPosts   = 0;
-   FiguresForum.NumUsrsToBeNotifiedByEMail = 0;
+   FiguresForum.NumFors  = 0;
+   FiguresForum.NumThrs = 0;
+   FiguresForum.NumPsts   = 0;
+   FiguresForum.NumUsrsToBeNotifByEMail = 0;
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_FORUMS],NULL,NULL,
@@ -3527,9 +3527,9 @@ static void For_WriteForumTitleAndStats (For_ForumType_t ForumType,
                                          const char *Icon,struct For_FiguresForum *FiguresForum,
                                          const char *ForumName1,const char *ForumName2)
   {
-   unsigned NumForums;
-   unsigned NumThreads;
-   unsigned NumPosts;
+   unsigned NumFors;
+   unsigned NumThrs;
+   unsigned NumPsts;
    unsigned NumUsrsToBeNotifiedByEMail;
    double NumThrsPerForum;
    double NumPostsPerThread;
@@ -3537,23 +3537,23 @@ static void For_WriteForumTitleAndStats (For_ForumType_t ForumType,
    char *ForumName;
 
    /***** Compute number of forums, number of threads and number of posts *****/
-   NumForums  = For_DB_GetNumTotalForumsOfType       (ForumType,HieCod);
-   NumThreads = For_DB_GetNumTotalThrsInForumsOfType (ForumType,HieCod);
-   NumPosts   = For_DB_GetNumTotalPstsInForumsOfType (ForumType,HieCod,&NumUsrsToBeNotifiedByEMail);
+   NumFors = For_DB_GetNumTotalForumsOfType       (ForumType,HieCod);
+   NumThrs = For_DB_GetNumTotalThrsInForumsOfType (ForumType,HieCod);
+   NumPsts  = For_DB_GetNumTotalPstsInForumsOfType (ForumType,HieCod,&NumUsrsToBeNotifiedByEMail);
 
    /***** Compute number of threads per forum, number of posts per forum and number of posts per thread *****/
-   NumThrsPerForum = (NumForums ? (double) NumThreads / (double) NumForums :
-	                          0.0);
-   NumPostsPerThread = (NumThreads ? (double) NumPosts / (double) NumThreads :
-	                             0.0);
-   NumPostsPerForum = (NumForums ? (double) NumPosts / (double) NumForums :
-	                           0.0);
+   NumThrsPerForum   = NumFors ? (double) NumThrs / (double) NumFors :
+	                         0.0;
+   NumPostsPerThread = NumThrs ? (double) NumPsts / (double) NumThrs :
+	                         0.0;
+   NumPostsPerForum  = NumFors ? (double) NumPsts / (double) NumFors :
+	                         0.0;
 
    /***** Update total stats *****/
-   FiguresForum->NumForums                  += NumForums;
-   FiguresForum->NumThreads                 += NumThreads;
-   FiguresForum->NumPosts                   += NumPosts;
-   FiguresForum->NumUsrsToBeNotifiedByEMail += NumUsrsToBeNotifiedByEMail;
+   FiguresForum->NumFors += NumFors;
+   FiguresForum->NumThrs += NumThrs;
+   FiguresForum->NumPsts += NumPsts;
+   FiguresForum->NumUsrsToBeNotifByEMail += NumUsrsToBeNotifiedByEMail;
 
    /***** Write forum name and stats *****/
    HTM_TR_Begin (NULL);
@@ -3571,15 +3571,15 @@ static void For_WriteForumTitleAndStats (For_ForumType_t ForumType,
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (NumForums);
+	 HTM_Unsigned (NumFors);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (NumThreads);
+	 HTM_Unsigned (NumThrs);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (NumPosts);
+	 HTM_Unsigned (NumPsts);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
@@ -3608,20 +3608,20 @@ static void For_WriteForumTitleAndStats (For_ForumType_t ForumType,
 static void For_WriteForumTotalStats (struct For_FiguresForum *FiguresForum)
   {
    extern const char *Txt_Total;
-   double NumThrsPerForum;
-   double NumPostsPerThread;
-   double NumPostsPerForum;
+   double NumThrsPerFor;
+   double NumPstsPerThr;
+   double NumPstsPerFor;
 
    /***** Compute number of threads per forum, number of posts per forum and number of posts per thread *****/
-   NumThrsPerForum   = (FiguresForum->NumForums  ? (double) FiguresForum->NumThreads /
-	                                           (double) FiguresForum->NumForums :
-	                                           0.0);
-   NumPostsPerThread = (FiguresForum->NumThreads ? (double) FiguresForum->NumPosts /
-	                                           (double) FiguresForum->NumThreads :
-	                                           0.0);
-   NumPostsPerForum  = (FiguresForum->NumForums  ? (double) FiguresForum->NumPosts /
-	                                           (double) FiguresForum->NumForums :
-	                                           0.0);
+   NumThrsPerFor = FiguresForum->NumFors ? (double) FiguresForum->NumThrs /
+	                                   (double) FiguresForum->NumFors :
+	                                   0.0;
+   NumPstsPerThr = FiguresForum->NumThrs ? (double) FiguresForum->NumPsts /
+	                                   (double) FiguresForum->NumThrs :
+	                                   0.0;
+   NumPstsPerFor = FiguresForum->NumFors ? (double) FiguresForum->NumPsts /
+	                                   (double) FiguresForum->NumFors :
+	                                   0.0;
 
    /***** Write forum name and stats *****/
    HTM_TR_Begin (NULL);
@@ -3631,13 +3631,13 @@ static void For_WriteForumTotalStats (struct For_FiguresForum *FiguresForum)
       HTM_TD_End ();
 
       HTM_TD_LINE_TOP_Txt (Txt_Total);
-      HTM_TD_LINE_TOP_Unsigned (FiguresForum->NumForums);
-      HTM_TD_LINE_TOP_Unsigned (FiguresForum->NumThreads);
-      HTM_TD_LINE_TOP_Unsigned (FiguresForum->NumPosts);
-      HTM_TD_LINE_TOP_Unsigned (FiguresForum->NumUsrsToBeNotifiedByEMail);
-      HTM_TD_LINE_TOP_Double2Decimals (NumThrsPerForum);
-      HTM_TD_LINE_TOP_Double2Decimals (NumPostsPerThread);
-      HTM_TD_LINE_TOP_Double2Decimals (NumPostsPerForum);
+      HTM_TD_LINE_TOP_Unsigned (FiguresForum->NumFors);
+      HTM_TD_LINE_TOP_Unsigned (FiguresForum->NumThrs);
+      HTM_TD_LINE_TOP_Unsigned (FiguresForum->NumPsts);
+      HTM_TD_LINE_TOP_Unsigned (FiguresForum->NumUsrsToBeNotifByEMail);
+      HTM_TD_LINE_TOP_Double2Decimals (NumThrsPerFor);
+      HTM_TD_LINE_TOP_Double2Decimals (NumPstsPerThr);
+      HTM_TD_LINE_TOP_Double2Decimals (NumPstsPerFor);
 
    HTM_TR_End ();
   }

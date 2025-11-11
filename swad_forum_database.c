@@ -959,19 +959,25 @@ void For_DB_InsertPstIntoDisabled (long PstCod)
 
 For_Disabled_t For_DB_GetIfPstIsDisabled (long PstCod)
   {
+   static For_Disabled_t Disabled[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = For_ENABLED,	// Post is enabled if it does not appear in table of disabled posts
+      [Exi_EXISTS        ] = For_DISABLED,
+     };
+   Exi_Exist_t Exists;
+
    /***** Trivial check: post code should be > 0 *****/
    if (PstCod <= 0)
       return For_DISABLED;
 
    /***** Get if post is disabled from database *****/
-   return
-   DB_QueryEXISTS ("can not check if a post of a forum is disabled",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM for_disabled"
-		    " WHERE PstCod=%ld)",
-		   PstCod) == Exi_EXISTS ? For_DISABLED :
-					   For_ENABLED;	// Post is enabled if it does not appear in table of disabled posts
+   Exists = DB_QueryEXISTS ("can not check if a post of a forum is disabled",
+			    "SELECT EXISTS"
+			    "(SELECT *"
+			      " FROM for_disabled"
+			     " WHERE PstCod=%ld)",
+			    PstCod);
+   return Disabled[Exists];
   }
 
 /*****************************************************************************/

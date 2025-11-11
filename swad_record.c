@@ -2485,12 +2485,12 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	    switch (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
 					         Rec_Record.UsrDat->UsrCod))
 	      {
-	       case Fol_FOLLOWER:		// I follow user
+	       case Fol_IS_FOLLOWER:		// I follow user
 		  Lay_PutContextualLinkOnlyIcon (ActUnfUsr,NULL,
 						 Rec_PutParUsrCodEncrypted,NULL,
 						 "user-check.svg",Ico_BLACK);	// Put button to unfollow, even if I can not view user's profile
 		  break;
-	       case Fol_NOT_FOLLOWER:		// I do not follow this user
+	       case Fol_IS_NOT_FOLLOWER:		// I do not follow this user
 	       default:
 		  if (ICanViewUsrProfile == Usr_CAN)
 		     Lay_PutContextualLinkOnlyIcon (ActFolUsr,NULL,

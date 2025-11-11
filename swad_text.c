@@ -73,6 +73,7 @@
 #include "swad_exam_log.h"
 #include "swad_exam_session.h"
 #include "swad_figure.h"
+#include "swad_follow.h"
 #include "swad_forum.h"
 #include "swad_hidden_visible.h"
 #include "swad_hierarchy.h"
@@ -14041,8 +14042,9 @@ const char *Txt_Follow =
 	"Takip etmek";
 #endif
 
-const char *Txt_FollowPerFollow[2] =
+const char *Txt_FollowPerFollow[Fol_NUM_FOLLOW] =
    	{
+	[Fol_FOLLOWED] =
 #if   L==1	// ca
 	"Mitjana de seguits per cada seguidor"
 #elif L==2	// de
@@ -14065,6 +14067,7 @@ const char *Txt_FollowPerFollow[2] =
 	"Average followed per follower"			// Çeviri lazim!
 #endif
       ,
+	[Fol_FOLLOWER] =
 #if   L==1	// ca
 	"Mitjana de seguidors per cada seguit"
 #elif L==2	// de
