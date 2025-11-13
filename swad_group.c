@@ -155,7 +155,7 @@ static void Grp_GetLstCodGrpsUsrBelongs (long UsrCod,long GrpTypCod,
                                          struct ListCodGrps *LstGrps,
                                          Grp_ClosedOpenGrps_t ClosedOpenGroups);
 static Exi_Exist_t Grp_CheckIfGrpExistsInList (long GrpCod,struct ListCodGrps *LstGrps);
-static bool Grp_CheckIfOpenTimeInTheFuture (time_t OpenTimeUTC);
+static Grp_MustBeOpened_t Grp_CheckIfOpenTimeInTheFuture (time_t OpenTimeUTC);
 
 static void Grp_AskConfirmRemGrp (long GrpCod);
 static void Grp_RemoveGroupTypeCompletely (long GrpTypCod);
@@ -2821,6 +2821,35 @@ static void Grp_PutFormToCreateGroupType (const struct GroupType *GrpTyp)
    extern const char *Txt_A_student_can_only_belong_to_one_group;
    extern const char *Txt_The_groups_will_automatically_open;
    extern const char *Txt_The_groups_will_not_automatically_open;
+   static struct
+     {
+      const char *YN;
+      const char **Label;
+     } OptionalMandatory[Grp_NUM_OPTIONAL_MANDATORY] =
+     {
+      [Grp_OPTIONAL ] = {.YN = "N",.Label = &Txt_It_is_optional_to_choose_a_group },
+      [Grp_MANDATORY] = {.YN = "Y",.Label = &Txt_It_is_mandatory_to_choose_a_group}
+     };
+   static struct
+     {
+      const char *YN;
+      const char **Label;
+     } SingleMultiple[Grp_NUM_SINGLE_MULTIPLE] =
+     {
+      [Grp_SINGLE  ] = {.YN = "N",.Label = &Txt_A_student_can_only_belong_to_one_group },
+      [Grp_MULTIPLE] = {.YN = "Y",.Label = &Txt_A_student_can_belong_to_several_groups}
+     };
+    static struct
+     {
+      void (*PutIcon) (const char *Icon,Ico_Color_t Color,const char *Title);
+      const char **Label;
+     } MustBeOpened[Grp_NUM_MUST_BE_OPENED] =
+     {
+      [Grp_MUST_NOT_BE_OPENED] = {.PutIcon = Ico_PutIconOff,.Label = &Txt_The_groups_will_not_automatically_open },
+      [Grp_MUST_BE_OPENED    ] = {.PutIcon = Ico_PutIconOn ,.Label = &Txt_The_groups_will_automatically_open}
+     };
+   Grp_OptionalOrMandatory_t OptMan;
+   Grp_SingleOrMultiple_t SinMul;
    unsigned CurrentYear = Dat_GetCurrentYear ();
 
    /***** Begin section *****/
@@ -2857,14 +2886,13 @@ static void Grp_PutFormToCreateGroupType (const struct GroupType *GrpTyp)
 				 "name=\"OptionalMandatory\""
 				 " class=\"INPUT_%s\" style=\"width:150px;\"",
 				 The_GetSuffix ());
-		  HTM_OPTION (HTM_Type_STRING,"N",
-			      GrpTyp->Enrolment.OptionalMandatory == Grp_OPTIONAL  ? HTM_SELECTED :
-										     HTM_NO_ATTR,
-			      "%s",Txt_It_is_optional_to_choose_a_group);
-		  HTM_OPTION (HTM_Type_STRING,"Y",
-			      GrpTyp->Enrolment.OptionalMandatory == Grp_MANDATORY ? HTM_SELECTED :
-										     HTM_NO_ATTR,
-			      "%s",Txt_It_is_mandatory_to_choose_a_group);
+		  for (OptMan  = (Grp_OptionalOrMandatory_t) 0;
+		       OptMan <= (Grp_OptionalOrMandatory_t) (Grp_NUM_OPTIONAL_MANDATORY - 1);
+		       OptMan++)
+		     HTM_OPTION (HTM_Type_STRING,OptionalMandatory[OptMan].YN,
+				 GrpTyp->Enrolment.OptionalMandatory == OptMan ? HTM_SELECTED :
+										 HTM_NO_ATTR,
+				 "%s",*OptionalMandatory[OptMan].Label);
 	       HTM_SELECT_End ();
 	    HTM_TD_End ();
 
@@ -2874,14 +2902,13 @@ static void Grp_PutFormToCreateGroupType (const struct GroupType *GrpTyp)
 				 "name=\"SingleMultiple\""
 				 " class=\"INPUT_%s\" style=\"width:150px;\"",
 				 The_GetSuffix ());
-		  HTM_OPTION (HTM_Type_STRING,"N",
-			      GrpTyp->Enrolment.SingleMultiple == Grp_SINGLE   ? HTM_SELECTED :
-										 HTM_NO_ATTR,
-			      "%s",Txt_A_student_can_only_belong_to_one_group);
-		  HTM_OPTION (HTM_Type_STRING,"Y",
-			      GrpTyp->Enrolment.SingleMultiple == Grp_MULTIPLE ? HTM_SELECTED :
-										 HTM_NO_ATTR,
-			      "%s",Txt_A_student_can_belong_to_several_groups);
+		  for (SinMul  = (Grp_SingleOrMultiple_t) 0;
+		       SinMul <= (Grp_SingleOrMultiple_t) (Grp_NUM_SINGLE_MULTIPLE - 1);
+		       SinMul++)
+		     HTM_OPTION (HTM_Type_STRING,SingleMultiple[SinMul].YN,
+				 GrpTyp->Enrolment.SingleMultiple == SinMul ? HTM_SELECTED :
+									      HTM_NO_ATTR,
+				 "%s",*SingleMultiple[SinMul].Label);
 	       HTM_SELECT_End ();
 	    HTM_TD_End ();
 
@@ -2891,18 +2918,8 @@ static void Grp_PutFormToCreateGroupType (const struct GroupType *GrpTyp)
 		  HTM_TR_Begin (NULL);
 
 		     HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
-			switch (GrpTyp->MustBeOpened)
-			  {
-			   case Grp_MUST_BE_OPENED:
-			      Ico_PutIconOn ("clock.svg",Ico_BLACK,
-					     Txt_The_groups_will_automatically_open);
-			      break;
-			   case Grp_MUST_NOT_BE_OPENED:
-			   default:
-			      Ico_PutIconOff ("clock.svg",Ico_BLACK,
-					      Txt_The_groups_will_not_automatically_open);
-			      break;
-			  }
+			MustBeOpened[GrpTyp->MustBeOpened].PutIcon ("clock.svg",Ico_BLACK,
+								    *MustBeOpened[GrpTyp->MustBeOpened].Label);
 		     HTM_TD_End ();
 
 		     HTM_TD_Begin ("class=\"LM\"");
@@ -3151,8 +3168,7 @@ void Grp_GetListGrpTypesInCurrentCrs (Grp_WhichGrpTypes_t WhichGrpTypes)
          /* Get open time (row[5] holds the open time UTC) */
          GrpTyp->OpenTimeUTC = Dat_GetUNIXTimeFromStr (row[5]);
          if (GrpTyp->MustBeOpened == Grp_MUST_BE_OPENED)
-            GrpTyp->MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (GrpTyp->OpenTimeUTC) ? Grp_MUST_BE_OPENED :
-											  Grp_MUST_NOT_BE_OPENED;
+            GrpTyp->MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (GrpTyp->OpenTimeUTC);
 
          /* Number of groups of this type (row[6]) */
          if (sscanf (row[6],"%u",&GrpTyp->NumGrps) != 1)
@@ -3754,8 +3770,7 @@ void Grp_ReceiveNewGrpTyp (void)
 
    /* Get open time */
    GrpTyp.OpenTimeUTC = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
-   GrpTyp.MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (GrpTyp.OpenTimeUTC) ? Grp_MUST_BE_OPENED :
-									       Grp_MUST_NOT_BE_OPENED;
+   GrpTyp.MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (GrpTyp.OpenTimeUTC);
 
    if (GrpTyp.Name[0])	// If there's a group type name
       /***** If name of group type was in database... *****/
@@ -3790,14 +3805,15 @@ void Grp_ReceiveNewGrpTyp (void)
 /**************** Check if the open time if in the future ********************/
 /*****************************************************************************/
 
-static bool Grp_CheckIfOpenTimeInTheFuture (time_t OpenTimeUTC)
+static Grp_MustBeOpened_t Grp_CheckIfOpenTimeInTheFuture (time_t OpenTimeUTC)
   {
    /***** If open time is 0 ==> groups must no be opened *****/
    if (OpenTimeUTC == (time_t) 0)
-      return false;
+      return Grp_MUST_NOT_BE_OPENED;
 
    /***** Is open time in the future? *****/
-   return (OpenTimeUTC > Dat_GetStartExecutionTimeUTC ());
+   return (OpenTimeUTC > Dat_GetStartExecutionTimeUTC ()) ? Grp_MUST_BE_OPENED :
+							    Grp_MUST_NOT_BE_OPENED;
   }
 
 /*****************************************************************************/
@@ -4293,8 +4309,13 @@ void Grp_ChangeGroupRoom (void)
 void Grp_ChangeMandatGrpTyp (void)
   {
    extern const char *Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed;
-   extern const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_mandatory;
    extern const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_optional;
+   extern const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_mandatory;
+   static const char **Txt[Grp_NUM_OPTIONAL_MANDATORY] =
+     {
+      [Grp_OPTIONAL ] = &Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_optional,
+      [Grp_MANDATORY] = &Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_mandatory
+     };
    struct GroupType GrpTyp;
    struct Group Grp;
    Grp_OptionalOrMandatory_t NewOptionalMandatory;
@@ -4331,9 +4352,7 @@ void Grp_ChangeMandatGrpTyp (void)
       /***** Write message to show the change made *****/
       AlertType = Ale_SUCCESS;
       snprintf (AlertTxt,sizeof (AlertTxt),
-	        NewOptionalMandatory == Grp_MANDATORY ? Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_mandatory :
-							Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_optional,
-                GrpTyp.Name);
+	        *Txt[NewOptionalMandatory],GrpTyp.Name);
      }
 
    /***** Show the form again *****/
@@ -4348,8 +4367,13 @@ void Grp_ChangeMandatGrpTyp (void)
 void Grp_ChangeMultiGrpTyp (void)
   {
    extern const char *Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed;
-   extern const char *Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X;
    extern const char *Txt_Now_each_student_can_only_belong_to_a_group_of_type_X;
+   extern const char *Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X;
+   static const char **Txt[Grp_NUM_SINGLE_MULTIPLE] =
+     {
+      [Grp_SINGLE  ] = &Txt_Now_each_student_can_only_belong_to_a_group_of_type_X,
+      [Grp_MULTIPLE] = &Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X
+     };
    struct GroupType GrpTyp;
    struct Group Grp;
    Grp_SingleOrMultiple_t NewSingleMultiple;
@@ -4384,10 +4408,7 @@ void Grp_ChangeMultiGrpTyp (void)
 
       /***** Write message to show the change made *****/
       AlertType = Ale_SUCCESS;
-      snprintf (AlertTxt,sizeof (AlertTxt),
-	        NewSingleMultiple == Grp_MULTIPLE ? Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X :
-						    Txt_Now_each_student_can_only_belong_to_a_group_of_type_X,
-                GrpTyp.Name);
+      snprintf (AlertTxt,sizeof (AlertTxt),*Txt[NewSingleMultiple],GrpTyp.Name);
      }
 
    /***** Show the form again *****/
@@ -4413,8 +4434,7 @@ void Grp_ChangeOpenTimeGrpTyp (void)
 
    /***** Get open time *****/
    GrpTyp.OpenTimeUTC = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
-   GrpTyp.MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (GrpTyp.OpenTimeUTC) ? Grp_MUST_BE_OPENED :
-									       Grp_MUST_NOT_BE_OPENED;
+   GrpTyp.MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (GrpTyp.OpenTimeUTC);
 
    /***** Update the table of types of group
           changing the old opening time of enrolment by the new *****/
@@ -4811,6 +4831,11 @@ void Grp_ShowFormToSelMyAllGrps (Act_Action_t Action,
                                  void (*FuncPars) (void *Args),void *Args)
   {
    extern const char *Txt_GROUP_WHICH_GROUPS[2];
+   static const char *Icon[Grp_NUM_MY_ALL_GROUPS] =
+     {
+      [Grp_MY_GROUPS ] = "mysitemap.png",
+      [Grp_ALL_GROUPS] = "sitemap.svg"
+     };
    Grp_MyAllGrps_t MyAllGrps;
 
    Set_BeginOneSettingSelector ();
@@ -4823,9 +4848,8 @@ void Grp_ShowFormToSelMyAllGrps (Act_Action_t Action,
 	       Par_PutParUnsigned (NULL,"WhichGrps",(unsigned) MyAllGrps);
 	       if (FuncPars)	// Extra parameters depending on the action
 		  FuncPars (Args);
-	       Ico_PutSettingIconLink (MyAllGrps == Grp_MY_GROUPS ? "mysitemap.png" :
-								    "sitemap.svg",
-				       Ico_BLACK,Txt_GROUP_WHICH_GROUPS[MyAllGrps]);
+	       Ico_PutSettingIconLink (Icon[MyAllGrps],Ico_BLACK,
+				       Txt_GROUP_WHICH_GROUPS[MyAllGrps]);
 	    Frm_EndForm ();
 	 Set_EndPref ();
 	}
@@ -4839,6 +4863,11 @@ void Grp_ShowFormToSelMyAllGrps (Act_Action_t Action,
 Grp_MyAllGrps_t Grp_GetParMyAllGrps (void)
   {
    static Cac_Status_t Status = Cac_INVALID;
+   static Grp_MyAllGrps_t MyAllGrps[Usr_NUM_BELONG] =
+     {
+      [Usr_DONT_BELONG] = Grp_ALL_GROUPS,
+      [Usr_BELONG     ] = Grp_MY_GROUPS,
+     };
    Grp_MyAllGrps_t MyAllGrpsDefault;
 
    if (Status == Cac_INVALID)
@@ -4860,8 +4889,7 @@ Grp_MyAllGrps_t Grp_GetParMyAllGrps (void)
 	    If I belong       to this course ==> see only my groups
 	    If I don't belong to this course ==> see all groups
 	    */
-	    MyAllGrpsDefault = Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG ? Grp_MY_GROUPS :
-										     Grp_ALL_GROUPS;
+	    MyAllGrpsDefault = MyAllGrps[Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS]];
 	    break;
 	 case ActSeeMyTT:	// Show my timetable
 	 case ActPrnMyTT:	// Print my timetable
