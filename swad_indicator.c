@@ -903,22 +903,22 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-				      IndicatorsCrs.SyllabusLecSrc != Inf_SRC_NONE ? "DAT_SMALL_GREEN" :
-										     "DAT_SMALL_RED",
+				      IndicatorsCrs.SyllabusLecSrc == Inf_SRC_NONE ? "DAT_SMALL_RED" :
+										     "DAT_SMALL_GREEN",
 				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.SyllabusLecSrc]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-				      IndicatorsCrs.SyllabusPraSrc != Inf_SRC_NONE ? "DAT_SMALL_GREEN" :
-										     "DAT_SMALL_RED",
+				      IndicatorsCrs.SyllabusPraSrc == Inf_SRC_NONE ? "DAT_SMALL_RED" :
+										     "DAT_SMALL_GREEN",
 				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.SyllabusPraSrc]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-				      IndicatorsCrs.TeachingGuideSrc != Inf_SRC_NONE ? "DAT_SMALL_GREEN" :
-										       "DAT_SMALL_RED",
+				      IndicatorsCrs.TeachingGuideSrc == Inf_SRC_NONE ? "DAT_SMALL_RED" :
+										       "DAT_SMALL_GREEN",
 				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.TeachingGuideSrc]);
 			HTM_TD_End ();
@@ -1028,15 +1028,15 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-				      IndicatorsCrs.AssessmentSrc != Inf_SRC_NONE ? "DAT_SMALL_GREEN" :
-										    "DAT_SMALL_RED",
+				      IndicatorsCrs.AssessmentSrc == Inf_SRC_NONE ? "DAT_SMALL_RED" :
+										    "DAT_SMALL_GREEN",
 				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.AssessmentSrc]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-				      IndicatorsCrs.TeachingGuideSrc != Inf_SRC_NONE ? "DAT_SMALL_GREEN" :
-										       "DAT_SMALL_RED",
+				      IndicatorsCrs.TeachingGuideSrc == Inf_SRC_NONE ? "DAT_SMALL_RED" :
+										       "DAT_SMALL_GREEN",
 				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.TeachingGuideSrc]);
 			HTM_TD_End ();

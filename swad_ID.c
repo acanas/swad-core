@@ -851,6 +851,11 @@ static void ID_ChangeUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOt
    extern const char *Txt_A_user_can_not_have_more_than_X_IDs;
    extern const char *Txt_The_ID_X_has_been_registered_successfully;
    extern const char *Txt_The_ID_X_is_not_valid;
+   static ID_Confirmed_t Confirmed[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = ID_NOT_CONFIRMED,	// It's me ==> ID not confirmed
+      [Usr_OTHER] = ID_CONFIRMED,	// Not me  ==> ID confirmed
+     };
    char NewID[ID_MAX_BYTES_USR_ID + 1];
    unsigned NumID;
    Exi_Exist_t AlreadyExists;
@@ -904,8 +909,7 @@ static void ID_ChangeUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOt
 		       {
 			/***** Save this new ID *****/
 			ID_DB_InsertANewUsrID (UsrDat->UsrCod,NewID,
-					       MeOrOther == Usr_ME ? ID_NOT_CONFIRMED :	// It's me ==> ID not confirmed
-								     ID_CONFIRMED);	// Not me  ==> ID confirmed
+					       Confirmed[MeOrOther]);
 
 			Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
 					 Txt_The_ID_X_has_been_registered_successfully,

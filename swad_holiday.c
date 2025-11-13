@@ -484,6 +484,11 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
    extern const char *Txt_Holidays;
    extern const char *Txt_All_places;
    extern const char *Txt_HOLIDAY_TYPES[Hld_NUM_TYPES_HOLIDAY];
+   static HTM_Attributes_t Attributes[Hld_NUM_TYPES_HOLIDAY] =
+     {
+      [Hld_HOLIDAY          ] = HTM_DISABLED,
+      [Hld_NON_SCHOOL_PERIOD] = HTM_NO_ATTR,
+     };
    unsigned NumHld;
    struct Hld_Holiday *Hld;
    unsigned NumPlc;
@@ -595,8 +600,8 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 					   CurrentYear + 1,
 					   "End",
 					   &(Holidays->Lst[NumHld].EndDate),
-					   (Hld->HldTyp == Hld_HOLIDAY ? HTM_DISABLED :
-									 HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE);
+					   Attributes[Hld->HldTyp] |
+					   HTM_SUBMIT_ON_CHANGE);
 		     Frm_EndForm ();
 		  HTM_TD_End ();
 
