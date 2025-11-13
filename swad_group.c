@@ -1927,10 +1927,14 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
    extern const char *Hlp_USERS_Groups;
    extern const char *Txt_My_groups;
    extern const char *Txt_No_groups_have_been_created_in_the_course_X;
+   static Frm_PutForm_t PutForm[Frm_NUM_INSIDE] =
+     {
+      [Frm_OUTSIDE_FORM] = Frm_PUT_FORM,
+      [Frm_INSIDE_FORM ] = Frm_DONT_PUT_FORM,	// Inside another form (record card)
+     };
    unsigned NumGrpTyp;
    struct GroupType *GrpTyp;
-   Frm_PutForm_t PutFormToChangeGrps = Frm_CheckIfInside () == Frm_INSIDE_FORM ? Frm_DONT_PUT_FORM :	// Inside another form (record card)?
-										 Frm_PUT_FORM;
+   Frm_PutForm_t PutFormToChangeGrps = PutForm[Frm_CheckIfInside ()];
    Usr_Can_t ICanChangeMyGrps = Usr_CAN_NOT;
    long SelectedGrpTypCod = ParCod_GetPar (ParCod_GrpTyp);
 
@@ -2069,6 +2073,39 @@ static void Grp_ShowWarningToStdsToChangeGrps (void)
 static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTyp,
 						   long SelectedGrpTypCod)
   {
+   static Usr_Belong_t IBelong[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Usr_DONT_BELONG,
+      [Exi_EXISTS        ] = Usr_BELONG,
+     };
+   static struct
+     {
+      const char *Class;
+      const char *CheckedInitially;
+      HTM_Attributes_t AttributesBelong;
+      Lay_Highlight_t Highlight;
+     } Layout[Usr_NUM_BELONG] =
+     {
+      [Usr_DONT_BELONG] =
+	{
+	 .Class = "class=\"LM\"",
+	 .AttributesBelong = HTM_NO_ATTR,
+	 .CheckedInitially = "false",
+	 .Highlight = Lay_DONT_HIGHLIGHT
+	},
+      [Usr_BELONG] =
+        {
+         .Class = "class=\"LM BG_HIGHLIGHT\"",
+         .AttributesBelong = HTM_CHECKED,
+         .CheckedInitially = "true",
+         .Highlight = Lay_HIGHLIGHT
+        }
+     };
+   static HTM_Attributes_t AttributesICanChange[Usr_NUM_CAN] =
+     {
+      [Usr_CAN_NOT] = HTM_DISABLED,
+      [Usr_CAN    ] = HTM_NO_ATTR,
+     };
    struct ListCodGrps LstGrpsIBelong;
    unsigned NumGrpThisType;
    struct Group *Grp;
@@ -2139,10 +2176,8 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 			Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
 			if (Grp->Open == CloOpe_OPEN)	// If group is open
 			  {
-			   IBelongToThisGroup = Grp_CheckIfGrpExistsInList (Grp->GrpCod,
-									    &LstGrpsIBelong) == Exi_EXISTS ? Usr_BELONG :
-													     Usr_DONT_BELONG;
-			   switch (IBelongToThisGroup)
+			   switch (IBelong[Grp_CheckIfGrpExistsInList (Grp->GrpCod,
+								       &LstGrpsIBelong)])
 			     {
 			      case Usr_BELONG:
 				 ICanChangeMySelectionForThisGrpTyp = Usr_CAN;		// I can leave group
@@ -2165,13 +2200,9 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 		       {
 			Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
 			if (Grp->Open == CloOpe_CLOSED)	// If group is closed
-			  {
-			   IBelongToThisGroup = Grp_CheckIfGrpExistsInList (Grp->GrpCod,
-									    &LstGrpsIBelong) == Exi_EXISTS ? Usr_BELONG :
-													     Usr_DONT_BELONG;
-			   if (IBelongToThisGroup == Usr_BELONG)
+			   if (IBelong[Grp_CheckIfGrpExistsInList (Grp->GrpCod,
+								   &LstGrpsIBelong)] == Usr_BELONG)
 			      IBelongToAClosedGroup = Usr_BELONG;	// I belong to a closed group
-			  }
 		       }
 
 		     switch (IBelongToAClosedGroup)
@@ -2192,13 +2223,9 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 				    Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
 				    if (Grp->Open == CloOpe_OPEN &&		// If group is open...
 					Grp->NumUsrs[Rol_STD] < Grp->MaxStds)	// ...and not full
-				      {
-				       IBelongToThisGroup = Grp_CheckIfGrpExistsInList (Grp->GrpCod,
-										        &LstGrpsIBelong) == Exi_EXISTS ? Usr_BELONG :
-															 Usr_DONT_BELONG;
-				       if (IBelongToThisGroup == Usr_DONT_BELONG)
+				       if (IBelong[Grp_CheckIfGrpExistsInList (Grp->GrpCod,
+									       &LstGrpsIBelong)] == Usr_DONT_BELONG)
 					  ICanChangeMySelectionForThisGrpTyp = Usr_CAN;// I can enrol into this group
-				      }
 				   }
 				 break;
 			      case Grp_OPTIONAL:	// If enrolment is optional, I can leave
@@ -2226,9 +2253,8 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 	      NumGrpThisType++)
 	   {
 	    Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
-	    IBelongToThisGroup = Grp_CheckIfGrpExistsInList (Grp->GrpCod,
-							      &LstGrpsIBelong) == Exi_EXISTS ? Usr_BELONG :
-											       Usr_DONT_BELONG;
+	    IBelongToThisGroup = IBelong[Grp_CheckIfGrpExistsInList (Grp->GrpCod,
+							             &LstGrpsIBelong)];
 
 	    /* Selection disabled? */
 	    switch (ICanChangeMySelectionForThisGrpTyp)	// I can change my selection for this group type
@@ -2258,50 +2284,42 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 	    /* Put radio item or checkbox to select the group */
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin (IBelongToThisGroup == Usr_BELONG ? "class=\"LM BG_HIGHLIGHT\"" :
-								"class=\"LM\"");
-		  Attributes = (IBelongToThisGroup == Usr_BELONG ? HTM_CHECKED :
-								   HTM_NO_ATTR) |
-			       (ICanChangeMySelectionForThisGrp == Usr_CAN ? HTM_NO_ATTR :
-									     HTM_DISABLED);
+	       HTM_TD_Begin (Layout[IBelongToThisGroup].Class);
+		  Attributes = Layout[IBelongToThisGroup].AttributesBelong |
+			       AttributesICanChange[ICanChangeMySelectionForThisGrp];
 		  snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
-		  if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&			// If I am a student
+		  if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&		// If I am a student
 		      GrpTyp->Enrolment.SingleMultiple == Grp_SINGLE &&	// ...and the enrolment is single
-		      GrpTyp->NumGrps > 1)					// ...and there are more than one group
+		      GrpTyp->NumGrps > 1)				// ...and there are more than one group
 		    {
 		     /* Put a radio item */
 		     switch (GrpTyp->Enrolment.OptionalMandatory)
 		       {
 			case Grp_MANDATORY:
-			   HTM_INPUT_RADIO (StrGrpCod,
-					    Attributes,
+			   HTM_INPUT_RADIO (StrGrpCod,Attributes,
 					    "id=\"Grp%ld\" value=\"%ld\"",
 					    Grp->GrpCod,Grp->GrpCod);
 			   break;
 			case Grp_OPTIONAL:	// If the enrolment is optional, I can select no groups
 			default:
-			   HTM_INPUT_RADIO (StrGrpCod,
-					    Attributes,
+			   HTM_INPUT_RADIO (StrGrpCod,Attributes,
 					    "id=\"Grp%ld\" value=\"%ld\""
 					    " onclick=\"selectUnselectRadio(this,%s,this.form.GrpCod%ld,%u)\"",
 					    Grp->GrpCod,Grp->GrpCod,
-					    IBelongToThisGroup == Usr_BELONG ? "true" :	// initially checked
-									       "false",	// initially unchecked
+					    Layout[IBelongToThisGroup].CheckedInitially,
 					    GrpTyp->GrpTypCod,GrpTyp->NumGrps);
 			   break;
 		       }
 		    }
 		  else
 		     /* Put a checkbox item */
-		     HTM_INPUT_CHECKBOX (StrGrpCod,
-					 Attributes,
+		     HTM_INPUT_CHECKBOX (StrGrpCod,Attributes,
 					 "id=\"Grp%ld\" value=\"%ld\"",
 					 Grp->GrpCod,Grp->GrpCod);
 
 	       HTM_TD_End ();
 
-	       Grp_WriteRowGrp (Grp,IBelongToThisGroup == Usr_BELONG ? Lay_HIGHLIGHT :
-								       Lay_DONT_HIGHLIGHT);
+	       Grp_WriteRowGrp (Grp,Layout[IBelongToThisGroup].Highlight);
 
 	    HTM_TR_End ();
 	   }
@@ -2373,6 +2391,31 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
 
 static void Grp_ListGrpsToAddOrRemUsrs (const struct GroupType *GrpTyp,long UsrCod)
   {
+   static Usr_Belong_t UsrBelongs[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Usr_DONT_BELONG,
+      [Exi_EXISTS        ] = Usr_BELONG,
+     };
+   static struct
+     {
+      const char *Class;
+      HTM_Attributes_t AttributesBelong;
+      Lay_Highlight_t Highlight;
+     } Layout[Usr_NUM_BELONG] =
+     {
+      [Usr_DONT_BELONG] =
+	{
+	 .Class = "class=\"LM\"",
+	 .AttributesBelong = HTM_NO_ATTR,
+	 .Highlight = Lay_DONT_HIGHLIGHT
+	},
+      [Usr_BELONG] =
+        {
+         .Class = "class=\"LM BG_HIGHLIGHT\"",
+         .AttributesBelong = HTM_CHECKED,
+         .Highlight = Lay_HIGHLIGHT
+        }
+     };
    struct ListCodGrps LstGrpsUsrBelongs;
    unsigned NumGrpThisType;
    Usr_Belong_t UsrBelongsToThisGroup;
@@ -2401,25 +2444,22 @@ static void Grp_ListGrpsToAddOrRemUsrs (const struct GroupType *GrpTyp,long UsrC
 	      NumGrpThisType++)
 	   {
 	    Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
-	    UsrBelongsToThisGroup = UsrCod > 0 ? (Grp_CheckIfGrpExistsInList (Grp->GrpCod,
-									      &LstGrpsUsrBelongs) == Exi_EXISTS ? Usr_BELONG :
-														  Usr_DONT_BELONG) :
+	    UsrBelongsToThisGroup = UsrCod > 0 ? UsrBelongs[Grp_CheckIfGrpExistsInList (Grp->GrpCod,
+										        &LstGrpsUsrBelongs)] :
 						 Usr_DONT_BELONG;
 
 	    /* Begin row */
 	    HTM_TR_Begin (NULL);
 
 	       /* Begin cell for checkbox */
-	       HTM_TD_Begin (UsrBelongsToThisGroup == Usr_BELONG ? "class=\"LM BG_HIGHLIGHT\"" :
-								   "class=\"LM\"");
+	       HTM_TD_Begin (Layout[UsrBelongsToThisGroup].Class);
 
 		  /* Put checkbox to select the group */
 		  // Always checkbox, not radio, because the role in the form may be teacher,
 		  // so if he/she is enroled as teacher, he/she can belong to several groups
 		  snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
 		  HTM_INPUT_CHECKBOX (StrGrpCod,
-				      UsrBelongsToThisGroup == Usr_BELONG ? HTM_CHECKED :
-									    HTM_NO_ATTR,
+				      Layout[UsrBelongsToThisGroup].AttributesBelong,
 				      "id=\"Grp%ld\" value=\"%ld\"",
 				      Grp->GrpCod,Grp->GrpCod);
 
@@ -2427,8 +2467,7 @@ static void Grp_ListGrpsToAddOrRemUsrs (const struct GroupType *GrpTyp,long UsrC
 	       HTM_TD_End ();
 
 	       /* Write cell for group */
-	       Grp_WriteRowGrp (Grp,UsrBelongsToThisGroup == Usr_BELONG ? Lay_HIGHLIGHT :
-									  Lay_DONT_HIGHLIGHT);
+	       Grp_WriteRowGrp (Grp,Layout[UsrBelongsToThisGroup].Highlight);
 
 	    /* End row */
 	    HTM_TR_End ();
@@ -2451,6 +2490,30 @@ static void Grp_ListGrpsToAddOrRemUsrs (const struct GroupType *GrpTyp,long UsrC
 static void Grp_ListGrpsForMultipleSelection (const struct GroupType *GrpTyp)
   {
    extern const char *Txt_users_with_no_group;
+   static Usr_Belong_t IBelong[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Usr_DONT_BELONG,
+      [Exi_EXISTS        ] = Usr_BELONG,
+     };
+   static struct
+     {
+      const char *Class;
+      Lay_Highlight_t Highlight;
+     } LayoutIBelong[Usr_NUM_BELONG] =
+     {
+      [Usr_DONT_BELONG] = {.Class = "class=\"LM\""		,.Highlight = Lay_DONT_HIGHLIGHT},
+      [Usr_BELONG     ] = {.Class = "class=\"LM BG_HIGHLIGHT\""	,.Highlight = Lay_HIGHLIGHT     }
+     };
+    static struct
+     {
+      const char *OnClick;
+      HTM_Attributes_t Attributes;
+      Lay_Highlight_t Highlight;
+     } LayoutICanSel[Usr_NUM_BELONG] =
+     {
+      [Usr_CAN_NOT] = {.OnClick = ""						,.Attributes = HTM_DISABLED	},
+      [Usr_CAN    ] = {.OnClick = " onclick=\"checkParent(this,'AllGroups')\""	,.Attributes = HTM_NO_ATTR	}
+     };
    unsigned NumGrpThisType;
    struct ListCodGrps LstGrpsIBelong;
    Usr_Belong_t IBelongToThisGroup;
@@ -2481,9 +2544,8 @@ static void Grp_ListGrpsForMultipleSelection (const struct GroupType *GrpTyp)
 	    Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
 
 	    /* Check if I belong to his group */
-	    IBelongToThisGroup = Grp_CheckIfGrpExistsInList (Grp->GrpCod,
-							     &LstGrpsIBelong) == Exi_EXISTS ? Usr_BELONG :
-											      Usr_DONT_BELONG;
+	    IBelongToThisGroup = IBelong[Grp_CheckIfGrpExistsInList (Grp->GrpCod,
+								     &LstGrpsIBelong)];
 
 	    /* Check if I can select / unselect this group */
 	    switch (IBelongToThisGroup)
@@ -2512,20 +2574,16 @@ static void Grp_ListGrpsForMultipleSelection (const struct GroupType *GrpTyp)
 	    /* Put checkbox to select the group */
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin (IBelongToThisGroup == Usr_BELONG ? "class=\"LM BG_HIGHLIGHT\"" :
-								"class=\"LM\"");
+	       HTM_TD_Begin (LayoutIBelong[IBelongToThisGroup].Class);
 		  HTM_INPUT_CHECKBOX ("GrpCods",
 				      Grp_Checked (Grp->GrpCod) |
-				      (ICanSelUnselGroup == Usr_CAN ? HTM_NO_ATTR :
-								      HTM_DISABLED),
+				      LayoutICanSel[ICanSelUnselGroup].Attributes,
 				      "id=\"Grp%ld\" value=\"%ld\"%s",
 				      Grp->GrpCod,Grp->GrpCod,
-				      ICanSelUnselGroup == Usr_CAN ? " onclick=\"checkParent(this,'AllGroups')\"" :
-								     "");
+				      LayoutICanSel[ICanSelUnselGroup].OnClick);
 	       HTM_TD_End ();
 
-	       Grp_WriteRowGrp (Grp,IBelongToThisGroup == Usr_BELONG ? Lay_HIGHLIGHT :
-								       Lay_DONT_HIGHLIGHT);
+	       Grp_WriteRowGrp (Grp,LayoutIBelong[IBelongToThisGroup].Highlight);
 
 	    HTM_TR_End ();
 	   }

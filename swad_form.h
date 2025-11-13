@@ -59,6 +59,7 @@ typedef enum
    Frm_PUT_PAR_LOCATION_IF_NO_SESSION,
   } Frm_PutParLocation_t;
 
+#define Frm_NUM_INSIDE 2
 typedef enum
   {
    Frm_OUTSIDE_FORM,
