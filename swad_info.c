@@ -352,7 +352,8 @@ static void Inf_PutFormWhichSyllabus (Inf_Type_t InfoType,Vie_ViewType_t ViewTyp
 		  HTM_LABEL_Begin (NULL);
 		     HTM_INPUT_RADIO ("WhichSyllabus",
 				      (Type == InfoType ? HTM_CHECKED :
-							  HTM_NO_ATTR) | HTM_SUBMIT_ON_CLICK,
+							  HTM_NO_ATTR) |
+				      HTM_SUBMIT_ON_CLICK,
 				      "value=\"%u\"",(unsigned) Type);
 		     HTM_Txt (Txt_INFO_TITLE[Type]);
 		  HTM_LABEL_End ();
@@ -371,6 +372,20 @@ static void Inf_PutFormWhichSyllabus (Inf_Type_t InfoType,Vie_ViewType_t ViewTyp
 void Inf_ShowInfo (void)
   {
    extern const char *Txt_No_information;
+   static Lay_Show_t Show[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Lay_SHOW,
+      [Exi_EXISTS        ] = Lay_DONT_SHOW,
+     };
+   static Exi_Exist_t (*Inf_CheckAndShow[Inf_NUM_SOURCES]) (Inf_Type_t InfoType) =
+     {
+      [Inf_SRC_NONE  ] = NULL,
+      [Inf_EDITOR    ] = NULL,
+      [Inf_PLAIN_TEXT] = Inf_CheckAndShowPlainTxt,
+      [Inf_RICH_TEXT ] = Inf_CheckAndShowRichTxt,
+      [Inf_PAGE      ] = Inf_CheckAndShowPage,
+      [Inf_URL       ] = Inf_CheckAndShowURL,
+     };
    struct Inf_Info Info;
    Lay_Show_t ShowWarningNoInfo = Lay_DONT_SHOW;
 
@@ -379,9 +394,6 @@ void Inf_ShowInfo (void)
 
       switch (Info.FromDB.Src)
 	{
-	 case Inf_SRC_NONE:
-	    ShowWarningNoInfo = Lay_SHOW;
-	    break;
 	 case Inf_EDITOR:
 	    switch (Info.Type)
 	      {
@@ -404,22 +416,14 @@ void Inf_ShowInfo (void)
 	      }
 	    break;
 	 case Inf_PLAIN_TEXT:
-	    ShowWarningNoInfo = Inf_CheckAndShowPlainTxt (Info.Type) == Exi_DOES_NOT_EXIST ? Lay_SHOW :
-											     Lay_DONT_SHOW;
-	    break;
 	 case Inf_RICH_TEXT:
-	    ShowWarningNoInfo = Inf_CheckAndShowRichTxt (Info.Type) == Exi_DOES_NOT_EXIST ? Lay_SHOW :
-											    Lay_DONT_SHOW;
-	    break;
 	 case Inf_PAGE:
-	    /***** Open file with web page *****/
-	    ShowWarningNoInfo = Inf_CheckAndShowPage (Info.Type) == Exi_DOES_NOT_EXIST ? Lay_SHOW :
-											 Lay_DONT_SHOW;
-	    break;
 	 case Inf_URL:
-	    /***** Check if file with URL exists *****/
-	    ShowWarningNoInfo = Inf_CheckAndShowURL (Info.Type) == Exi_DOES_NOT_EXIST ? Lay_SHOW :
-											Lay_DONT_SHOW;
+	    ShowWarningNoInfo = Show[Inf_CheckAndShow[Info.FromDB.Src] (Info.Type)];
+	    break;
+	 case Inf_SRC_NONE:
+	 default:
+	    ShowWarningNoInfo = Lay_SHOW;
 	    break;
 	}
 

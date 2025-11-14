@@ -632,10 +632,11 @@ TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de t
 
 TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtube.com/shorts/fY6Oax_uJBc?si=G3UHqvSH3yEbxm1B
 */
-#define Log_PLATFORM_VERSION	"SWAD 25.17.6 (2025-11-13)"
+#define Log_PLATFORM_VERSION	"SWAD 25.17.7 (2025-11-14)"
 #define CSS_FILE		"swad24.98.2.css"
 #define JS_FILE			"swad24.75.js"
 /*Comprobar icono papelera cuando un alumno contesta un juego
+	Version 25.17.7:  Nov 14, 2025  Code refactoring related to conditional assignments. (350762 lines)
 	Version 25.17.6:  Nov 13, 2025  Code refactoring related to conditional assignments. (350752 lines)
 	Version 25.17.5:  Nov 13, 2025  Code refactoring related to conditional assignments. (350742 lines)
 	Version 25.17.4:  Nov 13, 2025  Code refactoring related to conditional assignments. (350713 lines)

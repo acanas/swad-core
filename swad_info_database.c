@@ -283,18 +283,24 @@ void Inf_DB_SetIHaveRead (Inf_Type_t InfoType,Inf_IHaveRead_t IHaveRead)
 
 Inf_IHaveRead_t Inf_DB_CheckIfIHaveReadInfo (Inf_Type_t InfoType)
   {
-   return
-   DB_QueryEXISTS ("can not check if I have read course info",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM crs_info_read"
-		    " WHERE UsrCod=%ld"
-		      " AND CrsCod=%ld"
-		      " AND InfoType='%s')",
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Inf_DB_NamesForInfoType[InfoType]) == Exi_EXISTS ? Inf_I_HAVE_READ :
-								      Inf_I_DONT_HAVE_READ;
+  static Inf_IHaveRead_t Read[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Inf_I_DONT_HAVE_READ,
+      [Exi_EXISTS        ] = Inf_I_HAVE_READ,
+     };
+   Exi_Exist_t Exists;
+
+   Exists = DB_QueryEXISTS ("can not check if I have read course info",
+			    "SELECT EXISTS"
+			    "(SELECT *"
+			      " FROM crs_info_read"
+			     " WHERE UsrCod=%ld"
+			       " AND CrsCod=%ld"
+			       " AND InfoType='%s')",
+			    Gbl.Usrs.Me.UsrDat.UsrCod,
+			    Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			    Inf_DB_NamesForInfoType[InfoType]);
+   return Read[Exists];
   }
 
 /*****************************************************************************/
