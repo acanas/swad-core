@@ -148,6 +148,7 @@ Lay_LayoutStatus_t Lay_GetLayoutStatus (void)
 void Lay_WriteStartOfPage (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   extern struct The_Theme The_Themes[The_NUM_THEMES];
    extern unsigned Txt_Current_CGI_SWAD_Language;
    static const char *LayoutMainZone[Mnu_NUM_MENUS] =
      {
@@ -204,11 +205,13 @@ void Lay_WriteStartOfPage (void)
    // in httpd.conf to enable meta tag
    HTM_TxtF ("<html lang=\"%s\" style=\"color-scheme:%s\">\n",
              Lan_STR_LANG_ID[Gbl.Prefs.Language],
-             Gbl.Prefs.Theme == The_THEME_DARK ? "dark" :
-        	                                 "light");
+             The_Themes[Gbl.Prefs.Theme].ColorScheme);
    HTM_Txt ("<head>\n"
-            "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=windows-1252\">\n"
-            "<meta name=\"description\" content=\"A free-software, educational, online tool for managing courses and students.\">\n"
+            "<meta http-equiv=\"Content-Type\""
+            " content=\"text/html;charset=windows-1252\">\n"
+            "<meta name=\"description\""
+            " content=\"A free-software, educational, online tool"
+            " for managing courses and students.\">\n"
             "<meta name=\"keywords\" content=\"");
    HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
    HTM_Txt (","

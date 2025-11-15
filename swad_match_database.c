@@ -571,25 +571,31 @@ unsigned Mch_DB_GetGrpNamesAssociatedToMatch (MYSQL_RES **mysql_res,long MchCod)
 
 Usr_Can_t Mch_DB_CheckIfICanPlayThisMatchBasedOnGrps (long MchCod)
   {
-   return
-   DB_QueryEXISTS ("can not check if I can play a match",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM mch_matches"
-		    " WHERE MchCod=%ld"
-		      " AND (MchCod NOT IN"
-			   " (SELECT MchCod"
-			      " FROM mch_groups)"
-			   " OR"
-			   " MchCod IN"
-			   " (SELECT mch_groups.MchCod"
-			      " FROM grp_users,"
-				    "mch_groups"
-			     " WHERE grp_users.UsrCod=%ld"
-			       " AND grp_users.GrpCod=mch_groups.GrpCod)))",
-		   MchCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS ? Usr_CAN :
-							      Usr_CAN_NOT;
+   static Usr_Can_t ICanPlay[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Usr_CAN_NOT,
+      [Exi_EXISTS        ] = Usr_CAN,
+     };
+   Exi_Exist_t Exists;
+
+   Exists = DB_QueryEXISTS ("can not check if I can play a match",
+			    "SELECT EXISTS"
+			    "(SELECT *"
+			      " FROM mch_matches"
+			     " WHERE MchCod=%ld"
+			       " AND (MchCod NOT IN"
+				    " (SELECT MchCod"
+				       " FROM mch_groups)"
+				    " OR"
+				    " MchCod IN"
+				    " (SELECT mch_groups.MchCod"
+				       " FROM grp_users,"
+					     "mch_groups"
+				      " WHERE grp_users.UsrCod=%ld"
+					" AND grp_users.GrpCod=mch_groups.GrpCod)))",
+			    MchCod,
+			    Gbl.Usrs.Me.UsrDat.UsrCod);
+   return ICanPlay[Exists];
   }
 
 /*****************************************************************************/
@@ -1141,6 +1147,7 @@ unsigned Mch_DB_GetUsrMchResults (MYSQL_RES **mysql_res,
 				  long GamCod,	// <= 0 ==> any
 				  const char *GamesSelectedCommas)
   {
+   extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    char *MchSubQuery;
    char *GamSubQuery;
    char *HidGamSubQuery;
@@ -1215,8 +1222,7 @@ unsigned Mch_DB_GetUsrMchResults (MYSQL_RES **mysql_res,
 		     "%s"	// Hidden games subquery
 		     " AND gam_games.CrsCod=%ld"	// Extra check
 		" ORDER BY mch_matches.Title",
-		   MeOrOther == Usr_ME ? Gbl.Usrs.Me.UsrDat.UsrCod :
-				         Gbl.Usrs.Other.UsrDat.UsrCod,
+		   Usr_UsrDat[MeOrOther]->UsrCod,
 		   MchSubQuery,
 		   GamSubQuery,
 		   HidGamSubQuery,

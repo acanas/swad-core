@@ -70,7 +70,7 @@ void Mai_DB_UpdateMailDomainName (long MaiCod,
 unsigned Mai_DB_GetMailDomains (MYSQL_RES **mysql_res,Mai_DomainsOrder_t SelectedOrder);
 Exi_Exist_t Mai_DB_GetMailDomainDataByCod (MYSQL_RES **mysql_res,long MaiCod);
 Exi_Exist_t Mai_DB_CheckIfMailDomainNameExists (const char *FldName,const char *Name,long MaiCod);
-bool Mai_DB_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
+Exi_Exist_t Mai_DB_CheckIfMailDomainExistsAsAllowedForNotif (const char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
 void Mai_DB_RemoveMailDomain (long MaiCod);
 void Mai_DB_RemoveTmpTables (void);

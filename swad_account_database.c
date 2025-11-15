@@ -97,10 +97,10 @@ Exi_Exist_t Acc_DB_CheckIfEmailAlreadyExists (const char NewEmail[Cns_MAX_BYTES_
 
 long Acc_DB_CreateNewUsr (const struct Usr_Data *UsrDat)
   {
-   extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
-   extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
+   extern struct The_Theme The_Themes[The_NUM_THEMES];
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1];
 
@@ -134,7 +134,7 @@ long Acc_DB_CreateNewUsr (const struct Usr_Data *UsrDat)
 				UsrDat->Surname2,
 				UsrDat->FrstName,
 				Usr_StringsSexDB[UsrDat->Sex],
-				The_ThemeId[UsrDat->Prefs.Theme],
+				The_Themes[UsrDat->Prefs.Theme].Id,
 				Ico_IconSetId[UsrDat->Prefs.IconSet],
 				Lan_STR_LANG_ID[UsrDat->Prefs.Language],
 				Cal_FIRST_DAY_OF_WEEK_DEFAULT,

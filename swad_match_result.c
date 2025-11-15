@@ -693,8 +693,8 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 				   long GamCod,	// <= 0 ==> any
 				   const char *GamesSelectedCommas)
   {
+   extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    MYSQL_RES *mysql_res;
-   struct Usr_Data *UsrDat;
    struct MchRes_ICanView ICanView;
    unsigned NumResults;
    unsigned NumResult;
@@ -715,16 +715,12 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
    TotalScore = 0.0;
    TotalGrade = 0.0;
 
-   /***** Set user *****/
-   UsrDat = MeOrOther == Usr_ME ? &Gbl.Usrs.Me.UsrDat :
-				  &Gbl.Usrs.Other.UsrDat;
-
    /***** Make database query *****/
    NumResults = Mch_DB_GetUsrMchResults (&mysql_res,MeOrOther,MchCod,GamCod,GamesSelectedCommas);
 
    /***** Show user's data *****/
    HTM_TR_Begin (NULL);
-   Usr_ShowTableCellWithUsrData (UsrDat,NumResults + 1);
+   Usr_ShowTableCellWithUsrData (Usr_UsrDat[MeOrOther],NumResults + 1);
 
    /***** Get and print matches results *****/
    if (NumResults)
@@ -739,7 +735,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	    Err_WrongMatchExit ();
 
 	 /* Get match result data */
-	 Print.UsrCod = UsrDat->UsrCod;
+	 Print.UsrCod = Usr_UsrDat[MeOrOther]->UsrCod;
 	 MchPrn_GetMatchPrintDataByMchCodAndUsrCod (&Print);
 
 	 /* Get data of match and game */
@@ -749,7 +745,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 Gam_GetGameDataByCod (&Games->Game);
 
 	 /* Check if I can view this match result and score */
-	 MchRes_CheckIfICanViewMatchResult (&Games->Game,&Match,UsrDat->UsrCod,&ICanView);
+	 MchRes_CheckIfICanViewMatchResult (&Games->Game,&Match,Usr_UsrDat[MeOrOther]->UsrCod,&ICanView);
 
 	 if (NumResult)
 	    HTM_TR_Begin (NULL);
@@ -1053,6 +1049,7 @@ void MchRes_ShowOneMchResult (void)
    extern const char *Txt_Score;
    extern const char *Txt_Grade;
    extern const char *Txt_Tags;
+   extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
@@ -1080,16 +1077,9 @@ void MchRes_ShowOneMchResult (void)
    /***** Pointer to user's data *****/
    MeOrOther = Gbl.Action.Act == ActSeeOneMchResMe ? Usr_ME :
 	                                             Usr_OTHER;
-   switch (MeOrOther)
-     {
-      case Usr_ME:
-	 UsrDat = &Gbl.Usrs.Me.UsrDat;
-	 break;
-      case Usr_OTHER:
-	 UsrDat = &Gbl.Usrs.Other.UsrDat;
-         Usr_GetParOtherUsrCodEncrypted (UsrDat);
-	 break;
-     }
+   UsrDat = Usr_UsrDat[MeOrOther];
+   if (MeOrOther == Usr_OTHER)
+      Usr_GetParOtherUsrCodEncrypted (UsrDat);
 
    /***** Get match result data *****/
    Print.MchCod = Match.MchCod;

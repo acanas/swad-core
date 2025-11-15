@@ -391,8 +391,8 @@ void Set_DB_RemAllUsrsFromCrsSettings (long HieCod)
 
 void Set_DB_UpdateMyIPSettingsForCurrentIP (void)
   {
-   extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
+   extern struct The_Theme The_Themes[The_NUM_THEMES];
 
    DB_QueryREPLACE ("can not store settings from current IP address",
 		    "REPLACE INTO set_ip_settings"
@@ -405,7 +405,7 @@ void Set_DB_UpdateMyIPSettingsForCurrentIP (void)
 	            Gbl.Usrs.Me.UsrDat.UsrCod,
 	            Gbl.Prefs.FirstDayOfWeek,
 	            (unsigned) Gbl.Prefs.DateFormat,
-	            The_ThemeId[Gbl.Prefs.Theme],
+	            The_Themes[Gbl.Prefs.Theme].Id,
 	            Ico_IconSetId[Gbl.Prefs.IconSet],
 	            (unsigned) Gbl.Prefs.Menu,
 	            Gbl.Prefs.SideCols,
@@ -418,8 +418,8 @@ void Set_DB_UpdateMyIPSettingsForCurrentIP (void)
 
 void Set_DB_UpdateMyIPSettingsForAllMyIPs (void)
   {
-   extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
+   extern struct The_Theme The_Themes[The_NUM_THEMES];
 
    DB_QueryUPDATE ("can not update your settings",
 		   "UPDATE set_ip_settings"
@@ -433,7 +433,7 @@ void Set_DB_UpdateMyIPSettingsForAllMyIPs (void)
 		   " WHERE UsrCod=%ld",
 		   Gbl.Prefs.FirstDayOfWeek,
 		   (unsigned) Gbl.Prefs.DateFormat,
-		   The_ThemeId[Gbl.Prefs.Theme],
+		   The_Themes[Gbl.Prefs.Theme].Id,
 		   Ico_IconSetId[Gbl.Prefs.IconSet],
 		   (unsigned) Gbl.Prefs.Menu,
 		   Gbl.Prefs.SideCols,

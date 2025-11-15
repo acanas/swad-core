@@ -302,8 +302,12 @@ static void Inf_BeforeTree (struct Inf_Info *Info,Vie_ViewType_t ViewType,Inf_Sr
       /***** Only for students: Have I read this information? ******/
       if (Info->FromDB.MustBeRead == Inf_MUST_BE_READ &&
 	  Gbl.Usrs.Me.Role.Logged == Rol_STD)
-	 Inf_PutCheckboxConfirmIHaveReadInfo (Info->Type);	// Checkbox to confirm that...
-								// ...I have read this couse info
+        {
+	 Mnu_ContextMenuBegin ();
+	    Inf_PutCheckboxConfirmIHaveReadInfo (Info->Type);	// Checkbox to confirm that...
+								   // ...I have read this couse info
+	 Mnu_ContextMenuEnd ();
+        }
 
   }
 
@@ -1142,14 +1146,18 @@ static void Inf_PutCheckboxForceStdsToReadInfo (const struct Inf_Info *Info,
       [Inf_LINKS	] = {ActChgFrcReaCrsLnk	,NULL,NULL},
       [Inf_ASSESSMENT	] = {ActChgFrcReaAss	,NULL,NULL},
      };
+   static HTM_Attributes_t AttributesRead[Inf_NUM_MUST_BE_READ] =
+     {
+      [Inf_DONT_MUST_BE_READ] = HTM_NO_ATTR,
+      [Inf_MUST_BE_READ     ] = HTM_CHECKED,
+     };
 
    Lay_PutContextualCheckbox (Actions[Info->Type].NextAction,
                               Actions[Info->Type].FuncPars,
                               Actions[Info->Type].Args,
                               "MustBeRead",
                               Attributes |
-                              (Info->FromDB.MustBeRead == Inf_MUST_BE_READ ? HTM_CHECKED :
-                        						     HTM_NO_ATTR) |
+                              AttributesRead[Info->FromDB.MustBeRead] |
                               HTM_SUBMIT_ON_CHANGE,
                               Txt_Force_students_to_read_this_information,
                               Txt_Force_students_to_read_this_information);
@@ -1175,19 +1183,21 @@ static void Inf_PutCheckboxConfirmIHaveReadInfo (Inf_Type_t InfoType)
       [Inf_LINKS	] = {ActChgHavReaCrsLnk	,NULL,NULL},
       [Inf_ASSESSMENT	] = {ActChgHavReaAss	,NULL,NULL},
      };
+   static HTM_Attributes_t AttributesRead[Inf_NUM_I_HAVE_READ] =
+     {
+      [Inf_I_DONT_HAVE_READ] = HTM_NO_ATTR,
+      [Inf_I_HAVE_READ     ] = HTM_CHECKED,
+     };
    Inf_IHaveRead_t IHaveRead = Inf_DB_CheckIfIHaveReadInfo (InfoType);
 
-   Mnu_ContextMenuBegin ();
-      Lay_PutContextualCheckbox (Actions[InfoType].NextAction,
-				 Actions[InfoType].FuncPars,
-				 Actions[InfoType].Args,
-				 "IHaveRead",
-				 (IHaveRead == Inf_I_HAVE_READ ? HTM_CHECKED :
-							         HTM_NO_ATTR) |
-				 HTM_SUBMIT_ON_CHANGE,
-				 Txt_I_have_read_this_information,
-				 Txt_I_have_read_this_information);
-   Mnu_ContextMenuEnd ();
+   Lay_PutContextualCheckbox (Actions[InfoType].NextAction,
+			      Actions[InfoType].FuncPars,
+			      Actions[InfoType].Args,
+			      "IHaveRead",
+			      AttributesRead[IHaveRead] |
+			      HTM_SUBMIT_ON_CHANGE,
+			      Txt_I_have_read_this_information,
+			      Txt_I_have_read_this_information);
   }
 
 /*****************************************************************************/
@@ -1673,8 +1683,8 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Inf_Info *Info)
 
       /* Get info source (row[0]) and if students must read info (row[1]) */
       Info->FromDB.Src = Inf_DB_ConvertFromStrDBToInfoSrc (row[0]);
-      Info->FromDB.MustBeRead = (row[1][0] == 'Y') ? Inf_MUST_BE_READ :
-						     Inf_DONT_MUST_BE_READ;
+      Info->FromDB.MustBeRead = row[1][0] == 'Y' ? Inf_MUST_BE_READ :
+						   Inf_DONT_MUST_BE_READ;
      }
 
    /***** Free structure that stores the query result *****/

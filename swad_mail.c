@@ -103,6 +103,8 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther);
 static void Mai_PutParsRemoveMyEmail (void *Email);
 static void Mai_PutParsRemoveOtherEmail (void *Email);
 
+static Mai_Confirmed_t Mai_GetConfirmedFromYN (char Ch);
+
 static void Mai_RemoveEmail (struct Usr_Data *UsrDat);
 static void Mai_ChangeUsrEmail (struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOther);
 static void Mai_InsertMailKey (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
@@ -298,6 +300,11 @@ static void Mai_GetListMailDomainsAllowedForNotif (struct Mai_Mails *Mails)
 
 Usr_Can_t Mai_CheckIfUsrCanReceiveEmailNotif (const struct Usr_Data *UsrDat)
   {
+   static Usr_Can_t UsrCanReceiveEmailNotif[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Usr_CAN_NOT,
+      [Exi_EXISTS        ] = Usr_CAN,
+     };
    char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
 
    /***** Check #1: is email empty or filled? *****/
@@ -314,8 +321,7 @@ Usr_Can_t Mai_CheckIfUsrCanReceiveEmailNotif (const struct Usr_Data *UsrDat)
       return Usr_CAN_NOT;
 
    /***** Check #4: is mail domain allowed? *****/
-   return Mai_DB_CheckIfMailDomainIsAllowedForNotif (MailDomain) ? Usr_CAN :
-								   Usr_CAN_NOT;
+   return UsrCanReceiveEmailNotif[Mai_DB_CheckIfMailDomainExistsAsAllowedForNotif (MailDomain)];
   }
 
 /*****************************************************************************/
@@ -987,8 +993,7 @@ void Mai_GetEmailFromUsrCod (struct Usr_Data *UsrDat)
 	 /* Get email */
 	 row = mysql_fetch_row (mysql_res);
 	 Str_Copy (UsrDat->Email,row[0],sizeof (UsrDat->Email) - 1);
-	 UsrDat->EmailConfirmed = row[1][0] == 'Y' ? Mai_CONFIRMED :
-						     Mai_NOT_CONFIRMED;
+	 UsrDat->EmailConfirmed = Mai_GetConfirmedFromYN (row[1][0]);
 	 break;
       case Exi_DOES_NOT_EXIST:
       default:
@@ -1159,29 +1164,30 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther)
 	{
 	 /* Get email */
 	 row = mysql_fetch_row (mysql_res);
-	 Confirmed = row[1][0] == 'Y' ? Mai_CONFIRMED :
-					Mai_NOT_CONFIRMED;
+	 Confirmed = Mai_GetConfirmedFromYN (row[1][0]);
 
-	 if (NumEmail == 1)
+	 switch (NumEmail)
 	   {
-	    HTM_TR_Begin (NULL);
+	    case 1:	// The first mail is the current one
+	       HTM_TR_Begin (NULL);
 
-	       /* The first mail is the current one */
-	       /* Label */
-	       Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_Current_email);
+		  /* Label */
+		  Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_Current_email);
 
-	       /* Data */
-	       HTM_TD_Begin ("class=\"Frm_C2 LT DAT_STRONG_%s\"",The_GetSuffix ());
-	   }
-	 else if (NumEmail == 2)
-	   {
-	    HTM_TR_Begin (NULL);
+		  /* Data */
+		  HTM_TD_Begin ("class=\"Frm_C2 LT DAT_STRONG_%s\"",The_GetSuffix ());
+	       break;
+	    case 2:
+	       HTM_TR_Begin (NULL);
 
-	       /* Label */
-	       Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_Other_emails);
+		  /* Label */
+		  Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_Other_emails);
 
-	       /* Data */
-	       HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",The_GetSuffix ());
+		  /* Data */
+		  HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",The_GetSuffix ());
+	       break;
+	    default:
+	       break;
 	   }
 
 	 /* Form to remove email */
@@ -1267,6 +1273,16 @@ static void Mai_PutParsRemoveOtherEmail (void *Email)
       Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       Par_PutParString (NULL,"Email",Email);
      }
+  }
+
+/*****************************************************************************/
+/************** Get if mail confirmed from a 'Y'/'N' character ***************/
+/*****************************************************************************/
+
+static Mai_Confirmed_t Mai_GetConfirmedFromYN (char Ch)
+  {
+   return Ch == 'Y' ? Mai_CONFIRMED :
+		      Mai_NOT_CONFIRMED;
   }
 
 /*****************************************************************************/
@@ -1691,6 +1707,14 @@ void Mai_WriteFootNoteEMail (FILE *FileMail,Lan_Language_t Language)
 
 Usr_Can_t Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat)
   {
+   extern Hie_Level_t Adm_LevelAdmin[Rol_NUM_ROLES];
+   static Usr_Can_t ICanSee[Usr_NUM_BELONG] =
+     {
+      [Usr_DONT_BELONG] = Usr_CAN_NOT,
+      [Usr_BELONG     ] = Usr_CAN,
+     };
+   Hie_Level_t Level;
+
    /***** I can see my email *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
       return Usr_CAN;
@@ -1713,26 +1737,14 @@ Usr_Can_t Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat)
 	        UsrDat->Accepted == Usr_HAS_ACCEPTED ? Usr_CAN :		// ...who accepted registration
 						       Usr_CAN_NOT;
       case Rol_DEG_ADM:
-	 /* If I am an administrator of current degree,
-	    I only can see the user's email of users from current degree */
-	 return Hie_CheckIfUsrBelongsTo (Hie_DEG,UsrDat->UsrCod,
-	                                 Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-	                                 Hie_DB_ONLY_ACCEPTED_COURSES) == Usr_BELONG ? Usr_CAN :	// count only accepted courses
-	                                					       Usr_CAN_NOT;
       case Rol_CTR_ADM:
-	 /* If I am an administrator of current center,
-	    I only can see the user's email of users from current center */
-	 return Hie_CheckIfUsrBelongsTo (Hie_CTR,UsrDat->UsrCod,
-	                                 Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-	                                 Hie_DB_ONLY_ACCEPTED_COURSES) == Usr_BELONG ? Usr_CAN :	// count only accepted courses
-	                                					       Usr_CAN_NOT;
       case Rol_INS_ADM:
-	 /* If I am an administrator of current institution,
-	    I only can see the user's email of users from current institution */
-	 return Hie_CheckIfUsrBelongsTo (Hie_INS,UsrDat->UsrCod,
-	                                 Gbl.Hierarchy.Node[Hie_INS].HieCod,
-	                                 Hie_DB_ONLY_ACCEPTED_COURSES) == Usr_BELONG ? Usr_CAN :	// count only accepted courses
-										       Usr_CAN_NOT;
+	 /* If I am an administrator,
+	    I only can see the user's email of users from current level */
+	 Level = Adm_LevelAdmin[Gbl.Usrs.Me.Role.Logged];
+	 return ICanSee[Hie_CheckIfUsrBelongsTo (Level,UsrDat->UsrCod,
+						 Gbl.Hierarchy.Node[Level].HieCod,
+						 Hie_DB_ONLY_ACCEPTED_COURSES)];	// count only accepted courses
       case Rol_SYS_ADM:
 	 return Usr_CAN;
       default:

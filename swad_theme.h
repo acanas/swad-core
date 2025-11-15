@@ -45,6 +45,13 @@ typedef enum
    } The_Theme_t;
 #define The_THEME_DEFAULT The_THEME_GREY
 
+struct The_Theme
+  {
+   const char *Id;
+   const char *Name;
+   const char *ColorScheme;
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/

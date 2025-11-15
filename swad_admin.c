@@ -35,6 +35,24 @@
 #include "swad_user_database.h"
 
 /*****************************************************************************/
+/***************************** Public constants ******************************/
+/*****************************************************************************/
+
+Hie_Level_t Adm_LevelAdmin[Rol_NUM_ROLES] =
+  {
+   [Rol_UNK	] = Hie_UNK,
+   [Rol_GST	] = Hie_UNK,
+   [Rol_USR	] = Hie_UNK,
+   [Rol_STD	] = Hie_UNK,
+   [Rol_NET	] = Hie_UNK,
+   [Rol_TCH	] = Hie_CRS,
+   [Rol_DEG_ADM	] = Hie_DEG,
+   [Rol_CTR_ADM	] = Hie_CTR,
+   [Rol_INS_ADM	] = Hie_INS,
+   [Rol_SYS_ADM	] = Hie_SYS,
+  };
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -58,17 +76,8 @@ static void Adm_EffectivelyRemAdm (struct Usr_Data *UsrDat,Hie_Level_t HieLvl);
 
 Usr_Can_t Adm_CheckIfICanAdminOtherUsrs (void)
   {
-   static Usr_Can_t Adm_ICanAdminOtherUsrs[Rol_NUM_ROLES] =
-     {
-      /* Users who can admin */
-      [Rol_TCH    ] = Usr_CAN,
-      [Rol_DEG_ADM] = Usr_CAN,
-      [Rol_CTR_ADM] = Usr_CAN,
-      [Rol_INS_ADM] = Usr_CAN,
-      [Rol_SYS_ADM] = Usr_CAN,
-     };
-
-   return Adm_ICanAdminOtherUsrs[Gbl.Usrs.Me.Role.Logged];
+   return Gbl.Usrs.Me.Role.Logged >= Rol_TCH ? Usr_CAN_NOT :
+					       Usr_CAN;
   }
 
 /*****************************************************************************/

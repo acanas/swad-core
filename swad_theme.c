@@ -58,26 +58,15 @@ extern struct Globals Gbl;
 
 #define The_MAX_BYTES_THEME_ID 16
 
-const char *The_ThemeId[The_NUM_THEMES] =
+struct The_Theme The_Themes[The_NUM_THEMES] =
   {
-   [The_THEME_WHITE ] = "white",
-   [The_THEME_GREY  ] = "grey",
-   [The_THEME_PURPLE] = "purple",
-   [The_THEME_BLUE  ] = "blue",
-   [The_THEME_YELLOW] = "yellow",
-   [The_THEME_PINK  ] = "pink",
-   [The_THEME_DARK  ] = "dark",
-  };
-
-const char *The_ThemeNames[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "White",
-   [The_THEME_GREY  ] = "Grey",
-   [The_THEME_PURPLE] = "Purple",
-   [The_THEME_BLUE  ] = "Blue",
-   [The_THEME_YELLOW] = "Yellow",
-   [The_THEME_PINK  ] = "Pink",
-   [The_THEME_DARK  ] = "Dark",
+   [The_THEME_WHITE ] = {.Id = "white"	,.Name = "White"	,.ColorScheme = "light"	},
+   [The_THEME_GREY  ] = {.Id = "grey"	,.Name = "Grey"		,.ColorScheme = "light"	},
+   [The_THEME_PURPLE] = {.Id = "purple"	,.Name = "Purple"	,.ColorScheme = "light"	},
+   [The_THEME_BLUE  ] = {.Id = "blue"	,.Name = "Blue"		,.ColorScheme = "light"	},
+   [The_THEME_YELLOW] = {.Id = "yellow"	,.Name = "Yellow"	,.ColorScheme = "light"	},
+   [The_THEME_PINK  ] = {.Id = "pink"	,.Name = "Pink"		,.ColorScheme = "light"	},
+   [The_THEME_DARK  ] = {.Id = "dark"	,.Name = "Dark"		,.ColorScheme = "dark"	}
   };
 
 /*****************************************************************************/
@@ -108,10 +97,11 @@ void The_PutIconsToSelectTheme (void)
 	      {
 	       Set_BeginPref (Theme == Gbl.Prefs.Theme);
 		  Frm_BeginForm (ActChgThe);
-		     Par_PutParString (NULL,"Theme",The_ThemeId[Theme]);
+		     Par_PutParString (NULL,"Theme",The_Themes[Theme].Id);
 		     snprintf (Icon,sizeof (Icon),"%s/%s/theme_32x20.gif",
-			       Cfg_ICON_FOLDER_THEMES,The_ThemeId[Theme]);
-		     Ico_PutSettingIconLink (Icon,Ico_UNCHANGED,The_ThemeNames[Theme]);
+			       Cfg_ICON_FOLDER_THEMES,The_Themes[Theme].Id);
+		     Ico_PutSettingIconLink (Icon,Ico_UNCHANGED,
+					     The_Themes[Theme].Name);
 		  Frm_EndForm ();
 	       Set_EndPref ();
 	      }
@@ -142,7 +132,7 @@ void The_ChangeTheme (void)
 
    /***** Store theme in database *****/
    if (Gbl.Usrs.Me.Logged)
-      Set_DB_UpdateMySettingsAboutTheme (The_ThemeId[Gbl.Prefs.Theme]);
+      Set_DB_UpdateMySettingsAboutTheme (The_Themes[Gbl.Prefs.Theme].Id);
 
    /***** Set settings from current IP *****/
    Set_SetSettingsFromIP ();
@@ -161,7 +151,7 @@ The_Theme_t The_GetParTheme (void)
    for (Theme  = (The_Theme_t) 0;
 	Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
 	Theme++)
-      if (!strcmp (ThemeId,The_ThemeId[Theme]))
+      if (!strcmp (ThemeId,The_Themes[Theme].Id))
          return Theme;
 
    return The_THEME_DEFAULT;
@@ -178,7 +168,7 @@ The_Theme_t The_GetThemeFromStr (const char *Str)
    for (Theme  = (The_Theme_t) 0;
 	Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
 	Theme++)
-      if (!strcasecmp (Str,The_ThemeId[Theme]))
+      if (!strcasecmp (Str,The_Themes[Theme].Id))
 	 return Theme;
 
    return The_THEME_DEFAULT;
@@ -271,8 +261,6 @@ void The_ChangeRowColor1 (unsigned Level)
 void The_GetAndShowNumUsrsPerTheme (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_theme;
-   extern const char *The_ThemeId[The_NUM_THEMES];
-   extern const char *The_ThemeNames[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Theme_SKIN;
    extern const char *Txt_Number_of_users;
@@ -300,7 +288,7 @@ void The_GetAndShowNumUsrsPerTheme (Hie_Level_t HieLvl)
 	   Theme++)
 	{
 	 /* Get number of users who have chosen this theme from database */
-	 if (asprintf (&SubQuery,"usr_data.Theme='%s'",The_ThemeId[Theme]) < 0)
+	 if (asprintf (&SubQuery,"usr_data.Theme='%s'",The_Themes[Theme].Id) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 NumUsrs[Theme] = Usr_DB_GetNumUsrsWhoChoseAnOption (HieLvl,SubQuery);
 	 free (SubQuery);
@@ -318,10 +306,10 @@ void The_GetAndShowNumUsrsPerTheme (Hie_Level_t HieLvl)
 
 	    HTM_TD_Begin ("class=\"CM\"");
 	       if (asprintf (&URL,"%s/%s",
-			     Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Theme]) < 0)
+			     Cfg_URL_ICON_THEMES_PUBLIC,The_Themes[Theme].Id) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       HTM_IMG (URL,"theme_32x20.gif",The_ThemeNames[Theme],
-			"style=\"width:40px;height:25px;\"");
+	       HTM_IMG (URL,"theme_32x20.gif",The_Themes[Theme].Name,
+			"style=\"width:40px; height:25px;\"");
 	       free (URL);
 	    HTM_TD_End ();
 

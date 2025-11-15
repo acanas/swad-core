@@ -4892,27 +4892,19 @@ void Usr_ListDataAdms (void)
    const char *FieldNames[Usr_NUM_MAIN_FIELDS_DATA_ADM];
 
    /***** Put contextual links *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
+   if (Adm_CheckIfICanAdminOtherUsrs () == Usr_CAN)
      {
-      case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-	 /***** Contextual menu *****/
-	 Mnu_ContextMenuBegin ();
-	    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-	      {
-	       Usr_PutLinkToSeeGuests ();		// List guests
-	       Dup_PutLinkToListDupUsrs ();		// List possible duplicate users
-	      }
-	    Enr_PutLinkToAdminOneUsr (ActReqID_MdfOth);	// Admin one user
-	    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-	       Enr_PutLinkToRemOldUsrs ();		// Remove old users
-	 Mnu_ContextMenuEnd ();
-	 break;
-      default:
-	 break;
+      /***** Contextual menu *****/
+      Mnu_ContextMenuBegin ();
+	 if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+	   {
+	    Usr_PutLinkToSeeGuests ();		// List guests
+	    Dup_PutLinkToListDupUsrs ();	// List possible duplicate users
+	   }
+	 Enr_PutLinkToAdminOneUsr (ActReqID_MdfOth);	// Admin one user
+	 if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+	    Enr_PutLinkToRemOldUsrs ();			// Remove old users
+      Mnu_ContextMenuEnd ();
      }
 
    /***** Initialize field names *****/

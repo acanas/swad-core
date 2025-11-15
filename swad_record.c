@@ -36,6 +36,7 @@
 #include "swad_account_database.h"
 #include "swad_action.h"
 #include "swad_action_list.h"
+#include "swad_admin.h"
 #include "swad_alert.h"
 #include "swad_agenda.h"
 #include "swad_box.h"
@@ -2885,7 +2886,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 			   case Rol_CTR_ADM:
 			   case Rol_INS_ADM:
 			   case Rol_SYS_ADM:
-			      for (Role = Rol_STD;
+			      for (Role  = Rol_STD;
 				   Role <= Rol_TCH;
 				   Role++)
 				{
@@ -2922,50 +2923,44 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 		  break;
 	       case Rec_SHA_OTHER_NEW_USR_FORM:	// The user does not exist in platform
 		  if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
-		     switch (Gbl.Usrs.Me.Role.Logged)
+		    {
+		     if (Adm_CheckIfICanAdminOtherUsrs () == Usr_CAN)
 		       {
-			case Rol_TCH:
-			case Rol_DEG_ADM:
-			case Rol_CTR_ADM:
-			case Rol_INS_ADM:
-			case Rol_SYS_ADM:
-			   /***** Set default role *****/
-			   switch (Gbl.Action.Act)
-			     {
-			      case ActReqMdfStd:
-				 DefaultRoleInForm = Rol_STD;
-				 break;
-			      case ActReqMdfNET:
-				 DefaultRoleInForm = Rol_NET;
-				 break;
-			      case ActReqMdfTch:
-				 DefaultRoleInForm = Rol_TCH;
-				 break;
-			      default:
-				 DefaultRoleInForm = Rol_STD;
-				 break;
-			     }
+			/***** Set default role *****/
+			switch (Gbl.Action.Act)
+			  {
+			   case ActReqMdfStd:
+			      DefaultRoleInForm = Rol_STD;
+			      break;
+			   case ActReqMdfNET:
+			      DefaultRoleInForm = Rol_NET;
+			      break;
+			   case ActReqMdfTch:
+			      DefaultRoleInForm = Rol_TCH;
+			      break;
+			   default:
+			      DefaultRoleInForm = Rol_STD;
+			      break;
+			  }
 
-			   /***** Selector of role *****/
-			   HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
-					     "id=\"Role\" name=\"Role\""
-					     " class=\"INPUT_%s\"",
-				             The_GetSuffix ());
-			      for (Role  = Rol_STD;
-				   Role <= Rol_TCH;
-				   Role++)
-				{
-				 RoleUnsigned = (unsigned) Role;
-				 HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-					     Role == DefaultRoleInForm ? HTM_SELECTED :
-								         HTM_NO_ATTR,
-					     "%s",Txt_ROLES_SINGUL_Abc[Role][Usr_SEX_UNKNOWN]);
-				}
-			   HTM_SELECT_End ();
-			   break;
-			default:	// The rest of users can not register other users
-			   break;
+			/***** Selector of role *****/
+			HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
+					  "id=\"Role\" name=\"Role\""
+					  " class=\"INPUT_%s\"",
+					  The_GetSuffix ());
+			   for (Role  = Rol_STD;
+				Role <= Rol_TCH;
+				Role++)
+			     {
+			      RoleUnsigned = (unsigned) Role;
+			      HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
+					  Role == DefaultRoleInForm ? HTM_SELECTED :
+								      HTM_NO_ATTR,
+					  "%s",Txt_ROLES_SINGUL_Abc[Role][Usr_SEX_UNKNOWN]);
+			     }
+			HTM_SELECT_End ();
 		       }
+		    }
 		  else				// No course selected
 		     switch (Gbl.Usrs.Me.Role.Logged)
 		       {

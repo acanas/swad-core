@@ -1839,6 +1839,11 @@ static unsigned Svy_SetAllowedScopes (struct Svy_Survey *Svy)
 static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
   {
    extern const char *Txt_Groups;
+   static HTM_Attributes_t Attributes[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = HTM_CHECKED,
+      [Exi_EXISTS        ] = HTM_NO_ATTR,
+     };
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
@@ -1857,10 +1862,9 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 	    /***** First row: checkbox to select the whole course *****/
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_CHECKBOX ("WholeCrs",
-				   Grp_DB_CheckIfAssociatedToGrps ("svy_groups",
-								   "SvyCod",
-								   SvyCod) == Exi_EXISTS ? HTM_NO_ATTR :
-											   HTM_CHECKED,
+				   Attributes[Grp_DB_CheckIfAssociatedToGrps ("svy_groups",
+									      "SvyCod",
+									      SvyCod)],
 				   "id=\"WholeCrs\" value=\"Y\""
 				   " onclick=\"uncheckChildren(this,'GrpCods')\"");
 	       Grp_WriteTheWholeCourse ();

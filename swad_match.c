@@ -910,6 +910,11 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
 
 void Mch_ToggleVisResultsMchUsr (void)
   {
+   static Lay_Show_t ToggleShow[Usr_NUM_BELONG] =
+     {
+      [Lay_DONT_SHOW] = Lay_SHOW,
+      [Lay_SHOW     ] = Lay_DONT_SHOW,
+     };
    struct Gam_Games Games;
    struct Mch_Match Match;
 
@@ -926,8 +931,7 @@ void Mch_ToggleVisResultsMchUsr (void)
       Err_NoPermissionExit ();
 
    /***** Toggle visibility of match results *****/
-   Match.Status.Show.UsrResults = Match.Status.Show.UsrResults == Lay_SHOW ? Lay_DONT_SHOW :
-									     Lay_SHOW;
+   Match.Status.Show.UsrResults = ToggleShow[Match.Status.Show.UsrResults];
    Mch_DB_UpdateVisResultsMchUsr (Match.MchCod,Match.Status.Show.UsrResults);
 
    /***** Show current game *****/
@@ -1284,6 +1288,11 @@ static void Mch_ParsFormMatch (void *Match)
 static void Mch_ShowLstGrpsToEditMatch (long MchCod)
   {
    extern const char *Txt_Groups;
+   static HTM_Attributes_t Attributes[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = HTM_CHECKED,
+      [Exi_EXISTS        ] = HTM_NO_ATTR,
+     };
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
@@ -1301,10 +1310,9 @@ static void Mch_ShowLstGrpsToEditMatch (long MchCod)
 	    /***** First row: checkbox to select the whole course *****/
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_CHECKBOX ("WholeCrs",
-				   Grp_DB_CheckIfAssociatedToGrps ("mch_groups",
-								   "MchCod",
-								   MchCod) == Exi_EXISTS ? HTM_NO_ATTR :
-											   HTM_CHECKED,
+				   Attributes[Grp_DB_CheckIfAssociatedToGrps ("mch_groups",
+									      "MchCod",
+									      MchCod)],
 				   "id=\"WholeCrs\" value=\"Y\""
 				   " onclick=\"uncheckChildren(this,'GrpCods')\"");
 	       Grp_WriteTheWholeCourse ();

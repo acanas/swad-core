@@ -33,6 +33,7 @@
 
 #include "swad_action.h"
 #include "swad_action_list.h"
+#include "swad_admin.h"
 #include "swad_alert.h"
 #include "swad_assignment_database.h"
 #include "swad_attendance_database.h"
@@ -488,21 +489,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncPars) (void *Args),void *Args
 static void Grp_PutCheckboxAllGrps (void)
   {
    extern const char *Txt_All_groups;
-   Usr_Can_t ICanSelUnselGroup;
-
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-	 ICanSelUnselGroup = Usr_CAN;
-	 break;
-      default:
-	 ICanSelUnselGroup = Usr_CAN_NOT;
-	 break;
-     }
+   Usr_Can_t ICanSelUnselGroup = Adm_CheckIfICanAdminOtherUsrs ();
 
    HTM_DIV_Begin ("class=\"CONTEXT_OPT\"");
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
@@ -2555,19 +2542,7 @@ static void Grp_ListGrpsForMultipleSelection (const struct GroupType *GrpTyp)
 		  break;
 	       case Usr_DONT_BELONG:
 	       default:
-		  switch (Gbl.Usrs.Me.Role.Logged)
-		    {
-		     case Rol_TCH:
-		     case Rol_DEG_ADM:
-		     case Rol_CTR_ADM:
-		     case Rol_INS_ADM:
-		     case Rol_SYS_ADM:
-			ICanSelUnselGroup = Usr_CAN;
-			break;
-		     default:
-			ICanSelUnselGroup = Usr_CAN_NOT;
-			break;
-		    }
+		  ICanSelUnselGroup = Adm_CheckIfICanAdminOtherUsrs ();
 		  break;
 	      }
 

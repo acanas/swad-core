@@ -213,8 +213,12 @@ void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,
 				      Pho_ShowPhotos_t ShowPhotos,
 				      const char *IconClass)
   {
-   Hie_PutLink_t PutLink = Frm_CheckIfInside () == Frm_INSIDE_FORM ? Hie_DONT_PUT_LINK :	// Don't put link to institution if already inside a form
-								     Hie_PUT_LINK;
+   static Hie_PutLink_t PutOrDontPutLink[Frm_NUM_INSIDE] =
+     {
+      [Frm_OUTSIDE_FORM] = Hie_PUT_LINK,
+      [Frm_INSIDE_FORM ] = Hie_DONT_PUT_LINK,	// Don't put link to institution if already inside a form
+     };
+   Hie_PutLink_t PutLink = PutOrDontPutLink[Frm_CheckIfInside ()];
 
    if (PutLink == Hie_PUT_LINK)
      {
@@ -223,10 +227,19 @@ void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,
 	 HTM_BUTTON_Submit_Begin (Ins->FullName,NULL,
 				  "class=\"CLASSPHOTO_CAPTION BT_LINK\"");
      }
-   if (ShowPhotos == Pho_PHOTOS_SHOW)
-      Lgo_DrawLogo (Hie_INS,Ins,IconClass);
-   else
-      HTM_Txt (Ins->ShrtName);
+
+   switch (ShowPhotos)
+     {
+      case Pho_PHOTOS_SHOW:
+	 Lgo_DrawLogo (Hie_INS,Ins,IconClass);
+	 break;
+      case Pho_PHOTOS_UNKNOWN:
+      case Pho_PHOTOS_DONT_SHOW:
+      default:
+	 HTM_Txt (Ins->ShrtName);
+	 break;
+     }
+
    if (PutLink == Hie_PUT_LINK)
      {
 	 HTM_BUTTON_End ();

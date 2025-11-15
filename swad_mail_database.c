@@ -428,7 +428,7 @@ Exi_Exist_t Mai_DB_CheckIfMailDomainNameExists (const char *FldName,const char *
 /************ Check if a mail domain is allowed for notifications ************/
 /*****************************************************************************/
 
-bool Mai_DB_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
+Exi_Exist_t Mai_DB_CheckIfMailDomainExistsAsAllowedForNotif (const char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
    return
    DB_QueryEXISTS ("can not check if a mail domain is allowed for notifications",
@@ -436,7 +436,7 @@ bool Mai_DB_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MAX_BY
 		   "(SELECT *"
 		     " FROM ntf_mail_domains"
 		    " WHERE Domain='%s')",
-		   MailDomain) == Exi_EXISTS;
+		   MailDomain);
   }
 
 /*****************************************************************************/
