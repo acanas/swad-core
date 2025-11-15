@@ -605,6 +605,11 @@ void Pwd_ShowFormChgMyPwd (void)
    extern const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_;
    extern const char *Txt_Password;
    extern const char *Txt_Current_password;
+   static Btn_Button_t Button[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Btn_CREATE,
+      [Exi_EXISTS        ] = Btn_SAVE_CHANGES,
+     };
    Exi_Exist_t MyPasswordInDBExists = Gbl.Usrs.Me.UsrDat.Password[0] ? Exi_EXISTS :
 								       Exi_DOES_NOT_EXIST;
 
@@ -670,8 +675,7 @@ void Pwd_ShowFormChgMyPwd (void)
 	    Pwd_PutFormToGetNewPasswordTwice ();
 
 	 /***** End table, send button and end box *****/
-	 Box_BoxTableWithButtonEnd (MyPasswordInDBExists == Exi_EXISTS ? Btn_SAVE_CHANGES :
-									 Btn_CREATE);
+	 Box_BoxTableWithButtonEnd (Button[MyPasswordInDBExists]);
 
       /***** End form *****/
       Frm_EndForm ();

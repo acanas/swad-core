@@ -1,9 +1,7 @@
-// swad_exist.h: types and constants related to existence of something
+// swad_exist.c: types and constants related to existence of something
 
-#ifndef _SWAD_EXI
-#define _SWAD_EXI
 /*
-    SWAD (Shared Workspace At a Distance in Spanish),
+    SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
     and used to support university teaching.
 
@@ -23,27 +21,18 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 /*****************************************************************************/
-/***************************** Public constants ******************************/
-/*****************************************************************************/
-
-#define Exi_NUM_EXIST 2
-
-/*****************************************************************************/
-/******************************* Public types ********************************/
+/********************************* Headers ***********************************/
 /*****************************************************************************/
 
-typedef enum
+#include "swad_exist.h"
+
+/*****************************************************************************/
+/***************** Get if not exist from a 'Y'/'N' character *****************/
+/*****************************************************************************/
+
+Exi_Exist_t Exi_GetNotExistFromYN (char Ch)
   {
-   Exi_DOES_NOT_EXIST  = 0,
-   Exi_EXISTS          = 1,
-  } Exi_Exist_t;
-
-/*****************************************************************************/
-/****************************** Public prototypes ****************************/
-/*****************************************************************************/
-
-Exi_Exist_t Exi_GetNotExistFromYN (char Ch);
-
-#endif
+   return Ch == 'Y' ? Exi_DOES_NOT_EXIST :
+		      Exi_EXISTS;
+  }

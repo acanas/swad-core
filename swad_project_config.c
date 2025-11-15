@@ -273,8 +273,7 @@ static void PrjCfg_GetConfigDataFromRow (MYSQL_RES *mysql_res,
    row[0]	NETCanCreate
    */
    /***** Get whether non-editing teachers can create new projects or not (row[0]) *****/
-   Config->NETCanCreate = row[0][0] == 'Y' ? Usr_CAN :
-					     Usr_CAN_NOT;
+   Config->NETCanCreate = Usr_GetCanFromYN (row[0][0]);
   }
 
 /*****************************************************************************/

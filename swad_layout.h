@@ -143,6 +143,7 @@ void Lay_WriteLinkToUpdate (const char *Txt,const char *OnSubmit);
 //--------------------------- Show / don't show -------------------------------
 Lay_Show_t Lay_GetShowFromYN (char Ch);
 Lay_Show_t Lay_GetParShow (const char *ParName);
+Lay_Show_t Lay_ToggleShow (Lay_Show_t Show);
 
 //-------------------------------- Figures ------------------------------------
 void Lay_GetAndShowNumUsrsPerSideColumns (Hie_Level_t HieLvl);

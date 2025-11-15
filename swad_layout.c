@@ -1774,6 +1774,21 @@ Lay_Show_t Lay_GetParShow (const char *ParName)
   }
 
 /*****************************************************************************/
+/***************************** Toggle visibility *****************************/
+/*****************************************************************************/
+
+Lay_Show_t Lay_ToggleShow (Lay_Show_t Show)
+  {
+   static Lay_Show_t ToggleShow[Lay_NUM_SHOW] =
+     {
+      [Lay_DONT_SHOW] = Lay_SHOW,
+      [Lay_SHOW     ] = Lay_DONT_SHOW,
+     };
+
+   return ToggleShow[Show];
+  }
+
+/*****************************************************************************/
 /***** Get and show number of users who have chosen a layout of columns ******/
 /*****************************************************************************/
 

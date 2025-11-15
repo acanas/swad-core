@@ -119,7 +119,6 @@ static void Att_HideUnhideEvent (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 static void Att_PutParAttCod (void *Events);
 
-static void Att_ShowLstGrpsToEditEvent (long AttCod);
 static void Att_CreateGroups (long AttCod);
 static void Att_GetAndWriteNamesOfGrpsAssociatedToEvent (struct Att_Event *Event);
 
@@ -1105,7 +1104,7 @@ void Att_ReqCreatOrEditEvent (void)
 	 HTM_TR_End ();
 
 	 /***** Groups *****/
-	 Att_ShowLstGrpsToEditEvent (Events.Event.AttCod);
+	 Grp_ShowLstGrpsToEditAssociated (Grp_ATT_EVENT,Events.Event.AttCod);
 
       /***** End table, send button and end box *****/
       Box_BoxTableWithButtonSaveCreateEnd (OldNewEvent);
@@ -1116,55 +1115,6 @@ void Att_ReqCreatOrEditEvent (void)
    /***** Show current attendance events *****/
    Att_GetListEvents (&Events,Att_NEWEST_FIRST);
    Att_ShowAllEvents (&Events);
-  }
-
-/*****************************************************************************/
-/************* Show list of groups to edit and attendance event **************/
-/*****************************************************************************/
-
-static void Att_ShowLstGrpsToEditEvent (long AttCod)
-  {
-   extern const char *Txt_Groups;
-   static HTM_Attributes_t Attributes[Exi_NUM_EXIST] =
-     {
-      [Exi_DOES_NOT_EXIST] = HTM_CHECKED,
-      [Exi_EXISTS        ] = HTM_NO_ATTR,
-     };
-
-   /***** Get list of groups types and groups in this course *****/
-   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
-
-   if (Gbl.Crs.Grps.GrpTypes.NumGrpTypes)
-     {
-      /***** Begin box and table *****/
-      HTM_TR_Begin (NULL);
-
-         /* Label */
-	 Frm_LabelColumn ("Frm_C1 RT","",Txt_Groups);
-
-	 /* Groups */
-	 HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-
-	    /***** First row: checkbox to select the whole course *****/
-	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_CHECKBOX ("WholeCrs",
-				   Attributes[Grp_DB_CheckIfAssociatedToGrps ("att_groups",
-									      "AttCod",
-									      AttCod)],
-				   "id=\"WholeCrs\" value=\"Y\""
-				   " onclick=\"uncheckChildren(this,'GrpCods')\"");
-	       Grp_WriteTheWholeCourse ();
-	    HTM_LABEL_End ();
-
-	    /***** List the groups for each group type *****/
-	    Grp_ListGrpsToEditAsgAttSvyEvtMch (Grp_ATT_EVENT,AttCod);
-
-	 HTM_TD_End ();
-      HTM_TR_End ();
-     }
-
-   /***** Free list of groups types and groups in this course *****/
-   Grp_FreeListGrpTypesAndGrps ();
   }
 
 /*****************************************************************************/

@@ -503,7 +503,7 @@ unsigned Att_DB_GetListUsrsInEvent (MYSQL_RES **mysql_res,long AttCod)
    unsigned NumUsrs;
 
    /***** Query list of attendance users *****/
-   switch (Grp_DB_CheckIfAssociatedToGrps ("att_groups","AttCod",AttCod))
+   switch (Grp_DB_CheckIfAssociatedToGrps (Grp_ATT_EVENT,AttCod))
      {
       case Exi_EXISTS:
 	 // Event for one or more groups

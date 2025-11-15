@@ -1239,8 +1239,7 @@ static void TmlNot_GetNoteDataFromRow (MYSQL_RES *mysql_res,
    Not->HieCod      = Str_ConvertStrCodToLongCod (row[4]);
 
    /***** File/post... unavailable (row[5]) *****/
-   Not->Exists = row[5][0] == 'Y' ? Exi_DOES_NOT_EXIST :
-				    Exi_EXISTS;
+   Not->Exists = Exi_GetNotExistFromYN (row[5][0]);
 
    /***** Get time of the note (row[6]) *****/
    Not->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[6]);

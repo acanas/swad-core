@@ -158,7 +158,6 @@ static void ExaSes_ParsFormSession (void *Session);
 
 static void ExaSes_PutSessionModalities (const struct ExaSes_Session *Session,
 					 Usr_Can_t ICanChangeModality);
-static void ExaSes_ShowLstGrpsToCreateSession (long SesCod);
 static void ExaSes_PutSessionNumCols (const struct ExaSes_Session *Session);
 
 static void ExaSes_CreateSession (struct ExaSes_Session *Session);
@@ -1402,11 +1401,6 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
 
 void ExaSes_ToggleVisResultsSesUsr (void)
   {
-   static Lay_Show_t ToggleShow[Usr_NUM_BELONG] =
-     {
-      [Lay_DONT_SHOW] = Lay_SHOW,
-      [Lay_SHOW     ] = Lay_DONT_SHOW,
-     };
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;
 
@@ -1423,7 +1417,7 @@ void ExaSes_ToggleVisResultsSesUsr (void)
       Err_NoPermissionExit ();
 
    /***** Toggle visibility of exam session results *****/
-   Session.Show_UsrResults = ToggleShow[Session.Show_UsrResults];
+   Session.Show_UsrResults = Lay_ToggleShow (Session.Show_UsrResults);
    Exa_DB_ToggleVisResultsSesUsr (&Session);
 
    /***** Show current exam *****/
@@ -1729,7 +1723,7 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session,
 						  SetHMS);
 
 	 /***** Groups *****/
-	 ExaSes_ShowLstGrpsToCreateSession (Session->SesCod);
+	 Grp_ShowLstGrpsToEditAssociated (Grp_EXA_SESSION,Session->SesCod);
 
 	 /***** Number of columns *****/
 	 HTM_TR_Begin (NULL);
@@ -1796,55 +1790,6 @@ static void ExaSes_PutSessionModalities (const struct ExaSes_Session *Session,
 
    /***** End list of checkboxes *****/
    HTM_UL_End ();
-  }
-
-/*****************************************************************************/
-/************* Show list of groups to create a new exam session **************/
-/*****************************************************************************/
-
-static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
-  {
-   extern const char *Txt_Groups;
-   static HTM_Attributes_t Attributes[Exi_NUM_EXIST] =
-     {
-      [Exi_DOES_NOT_EXIST] = HTM_CHECKED,
-      [Exi_EXISTS        ] = HTM_NO_ATTR,
-     };
-
-   /***** Get list of groups types and groups in this course *****/
-   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
-
-   if (Gbl.Crs.Grps.GrpTypes.NumGrpTypes)
-     {
-      /***** Begin row *****/
-      HTM_TR_Begin (NULL);
-
-         /* Label */
-	 Frm_LabelColumn ("Frm_C1 RT","",Txt_Groups);
-
-	 /* Groups */
-	 HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-
-	    /***** First row: checkbox to select the whole course *****/
-	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_CHECKBOX ("WholeCrs",
-				   Attributes[Grp_DB_CheckIfAssociatedToGrps ("exa_groups",
-									      "SesCod",
-									      SesCod)],
-				   "id=\"WholeCrs\" value=\"Y\""
-				   " onclick=\"uncheckChildren(this,'GrpCods')\"");
-	       Grp_WriteTheWholeCourse ();
-	    HTM_LABEL_End ();
-
-	    /***** List the groups for each group type *****/
-	    Grp_ListGrpsToEditAsgAttSvyEvtMch (Grp_EXA_EVENT,SesCod);
-
-	 HTM_TD_End ();
-      HTM_TR_End ();
-     }
-
-   /***** Free list of groups types and groups in this course *****/
-   Grp_FreeListGrpTypesAndGrps ();
   }
 
 /*****************************************************************************/

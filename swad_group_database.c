@@ -764,9 +764,22 @@ Exi_Exist_t Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
 /************ exam session or match is associated to any group  **************/
 /*****************************************************************************/
 
-Exi_Exist_t Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,
+Exi_Exist_t Grp_DB_CheckIfAssociatedToGrps (Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp,
 					    long Cod)
   {
+   static struct
+     {
+      const char *Table;
+      const char *Field;
+     } GrpsAssociations[Grp_NUM_ASSOCIATIONS_TO_GROUPS] =
+     {
+      [Grp_ASSIGNMENT ] = {.Table = "asg_groups",.Field = "AsgCod"},
+      [Grp_EXA_SESSION] = {.Table = "exa_groups",.Field = "SesCod"},
+      [Grp_MATCH      ] = {.Table = "mch_groups",.Field = "MchCod"},
+      [Grp_ATT_EVENT  ] = {.Table = "att_groups",.Field = "AttCod"},
+      [Grp_SURVEY     ] = {.Table = "svy_groups",.Field = "SvyCod"},
+     };
+
    /***** Trivial check *****/
    if (Cod <= 0)	// Assignment, attendance event, survey, exam event or match code
       return Exi_DOES_NOT_EXIST;
@@ -779,8 +792,8 @@ Exi_Exist_t Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,
 		   "(SELECT *"
 		     " FROM %s"
 		    " WHERE %s=%ld)",
-		   Table,
-		   Field,Cod);
+		   GrpsAssociations[WhichIsAssociatedToGrp].Table,
+		   GrpsAssociations[WhichIsAssociatedToGrp].Field,Cod);
   }
 
 /*****************************************************************************/

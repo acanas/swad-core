@@ -35,6 +35,16 @@
 #include "swad_project.h"
 
 /*****************************************************************************/
+/**************************** Private constants ******************************/
+/*****************************************************************************/
+
+static char Prj_DB_AssignedYN[Prj_NUM_ASSIGNED] =
+  {
+   [Prj_NONASSIG] = 'N',
+   [Prj_ASSIGNED] = 'Y',
+  };
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -121,8 +131,7 @@ long Prj_DB_CreateProject (const struct Prj_Project *Prj)
 				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 				Prj->DptCod,
 				HidVis_Hidden_YN[Prj->Hidden],
-				Prj->Assigned == Prj_ASSIGNED ? 'Y' :
-								'N',
+				Prj_DB_AssignedYN[Prj->Assigned],
 				Prj->NumStds,
 				Prj_DB_Proposal[Prj->Proposal],
 				Prj->CreatTime,
@@ -162,8 +171,7 @@ void Prj_DB_UpdateProject (const struct Prj_Project *Prj)
 		     " AND CrsCod=%ld",	// Extra check
 	           Prj->DptCod,
 	           HidVis_Hidden_YN[Prj->Hidden],
-	           Prj->Assigned == Prj_ASSIGNED ? 'Y' :
-						   'N',
+	           Prj_DB_AssignedYN[Prj->Assigned],
 	           Prj->NumStds,
 	           Prj_DB_Proposal[Prj->Proposal],
 	           Prj->ModifTime,
@@ -1060,14 +1068,15 @@ void Prj_DB_RemoveCrsPrjs (long HieCod)
 
 void Prj_DB_UpdateNETCanCreate (const struct Prj_Projects *Projects)
   {
+   extern char Usr_CanYN[Usr_NUM_CAN];
+
    DB_QueryREPLACE ("can not save configuration of projects",
 		    "REPLACE INTO prj_config"
 	            " (CrsCod,NETCanCreate)"
                     " VALUES"
                     " (%ld,'%c')",
 		    Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		    Projects->Config.NETCanCreate == Usr_CAN ? 'Y' :
-							       'N');
+		    Usr_CanYN[Projects->Config.NETCanCreate]);
   }
 
 /*****************************************************************************/

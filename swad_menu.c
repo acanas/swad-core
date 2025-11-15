@@ -248,8 +248,6 @@ void Mnu_WriteMenuThisTab (void)
      };
    unsigned NumOptInMenu;
    Act_Action_t Action;
-   const char *Title;
-   bool IsTheSelectedAction;
 
    /***** Begin container *****/
    HTM_Txt ("<nav class=\"MENU_LIST_CONT\">");
@@ -267,20 +265,17 @@ void Mnu_WriteMenuThisTab (void)
 	       break;
 	    if (Act_CheckIfICanExecuteAction (Action) == Usr_CAN)
 	      {
-	       IsTheSelectedAction = (Action == Act_GetSuperAction (Gbl.Action.Act));
-
-	       Title = Act_GetActionText (Action);
-
 	       /***** Begin option *****/
 	       HTM_LI_Begin ("class=\"MENU_LIST_ITEM %s\"",
-	                     IsTheSelectedAction ? "MENU_OPT_ON" :
-						   "MENU_OPT_OFF");
+	                     Action == Act_GetSuperAction (Gbl.Action.Act) ? "MENU_OPT_ON" :
+									     "MENU_OPT_OFF");
 
 		  /***** Begin form *****/
 		  Frm_BeginForm (Action);
 
 		     /***** Begin link *****/
-		     HTM_BUTTON_Submit_Begin (Title,NULL,"class=\"BT_LINK\"");
+		     HTM_BUTTON_Submit_Begin (Act_GetActionText (Action),NULL,
+					      "class=\"BT_LINK\"");
 
 			/***** Icon and text *****/
 			HTM_DIV_Begin ("class=\"MENU_ICO_TXT\"");

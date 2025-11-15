@@ -42,6 +42,8 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+Usr_Can_t Usr_GetCanFromYN (char Ch);
+
 void Usr_InformAboutNumClicksBeforePhoto (void);
 
 void Usr_UsrDataConstructor (struct Usr_Data *UsrDat);

@@ -1134,8 +1134,9 @@ static void Msg_GetParMsgsCrsCod (struct Msg_Messages *Messages)
       SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Crs);
      }
 
-   Str_Copy (Messages->FilterCrsShrtName,Messages->FilterCrsCod > 0 ? Crs.ShrtName :
-								      Txt_any_course,
+   Str_Copy (Messages->FilterCrsShrtName,
+	     Messages->FilterCrsCod > 0 ? Crs.ShrtName :
+					  Txt_any_course,
 	     sizeof (Messages->FilterCrsShrtName) - 1);
   }
 
@@ -1796,8 +1797,8 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
 
 	       /* Write a first option to select any course */
 	       HTM_OPTION (HTM_Type_STRING,"",
-			   (Messages->FilterCrsCod < 0) ? HTM_SELECTED :
-							  HTM_NO_ATTR,
+			   Messages->FilterCrsCod < 0 ? HTM_SELECTED :
+							HTM_NO_ATTR,
 			   "%s",Txt_any_course);
 
 	       /* Write an option for each origin course */
@@ -1810,8 +1811,8 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
 
 		  if ((HieCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 		     HTM_OPTION (HTM_Type_LONG,&HieCod,
-				 (HieCod == Messages->FilterCrsCod) ? HTM_SELECTED :
-								      HTM_NO_ATTR,
+				 HieCod == Messages->FilterCrsCod ? HTM_SELECTED :
+								    HTM_NO_ATTR,
 				 "%s",row[1]);	// Course short name
 		 }
 
@@ -1883,7 +1884,7 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (const struct Msg_Messages *Mes
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",
 				Messages->OnlyUnreadMsgs ? HTM_CHECKED :
-							       HTM_NO_ATTR,
+							   HTM_NO_ATTR,
 				"value=\"Y\"");
 	    HTM_Txt (Txt_only_unopened_messages);
 	 HTM_LABEL_End ();
@@ -2569,8 +2570,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 
 	    /* Get if message has been deleted (row[1])
 	       and open (row[2]) by recipient */
-	    DeletedOrExistsByDst = (row[1][0] == 'Y') ? Exi_DOES_NOT_EXIST :	// Deleted by recipient
-						        Exi_EXISTS;		// Not deleted by recipient
+	    DeletedOrExistsByDst = Exi_GetNotExistFromYN (row[1][0]);
 	    ClosedOrOpenByDst = CloOpe_GetOpenFromYN (row[2][0]);
 
 	    /* Get user's data */
@@ -2579,8 +2579,6 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 								 Usr_DONT_GET_ROLE_IN_CRS);
 
 	    /* Put an icon to show if user has read the message */
-
-
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
@@ -2592,8 +2590,8 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 
 	       /* Put user's photo */
 	       HTM_TD_Begin ("class=\"CT\" style=\"width:30px;\"");
-		  ShowPhotos = (UsrExists == Exi_EXISTS ? Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL) :
-							  Pho_PHOTOS_DONT_SHOW);
+		  ShowPhotos = UsrExists == Exi_EXISTS ? Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL) :
+							 Pho_PHOTOS_DONT_SHOW;
 		  Pho_ShowUsrPhoto (&UsrDat,ShowPhotos == Pho_PHOTOS_SHOW ? PhotoURL :
 									    NULL,
 				    ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);

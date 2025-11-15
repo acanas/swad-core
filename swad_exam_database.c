@@ -2250,11 +2250,7 @@ Exi_Exist_t Exa_DB_CheckIfUserAgentExistsAsTheLast (long PrnCod,
 
 void Exa_DB_LogAccess (long LogCod,long PrnCod,ExaLog_Action_t Action)
   {
-   static char YN[Usr_NUM_CAN] =
-     {
-      [Usr_CAN_NOT] = 'N',
-      [Usr_CAN    ] = 'Y',
-     };
+   extern char Usr_CanYN[Usr_NUM_CAN];
 
    /* Log access in exam log.
       Redundant data (also present in log table) are stored for speed */
@@ -2267,7 +2263,7 @@ void Exa_DB_LogAccess (long LogCod,long PrnCod,ExaLog_Action_t Action)
 		   PrnCod,
 		   (unsigned) Action,
 		   ExaLog_GetQstInd (),
-		   YN[ExaLog_GetIfCanAnswer ()],
+		   Usr_CanYN[ExaLog_GetIfCanAnswer ()],
 		   Par_GetIP ());
   }
 

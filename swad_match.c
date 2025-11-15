@@ -145,7 +145,6 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 
 static void Mch_PutFormMatch (struct Mch_Match *Match);
 static void Mch_ParsFormMatch (void *Match);
-static void Mch_ShowLstGrpsToEditMatch (long MchCod);
 static void Mch_UpdateMatchTitleAndGrps (const struct Mch_Match *Match);
 
 static long Mch_CreateMatch (long GamCod,char Title[Mch_MAX_BYTES_TITLE + 1]);
@@ -910,11 +909,6 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
 
 void Mch_ToggleVisResultsMchUsr (void)
   {
-   static Lay_Show_t ToggleShow[Usr_NUM_BELONG] =
-     {
-      [Lay_DONT_SHOW] = Lay_SHOW,
-      [Lay_SHOW     ] = Lay_DONT_SHOW,
-     };
    struct Gam_Games Games;
    struct Mch_Match Match;
 
@@ -931,7 +925,7 @@ void Mch_ToggleVisResultsMchUsr (void)
       Err_NoPermissionExit ();
 
    /***** Toggle visibility of match results *****/
-   Match.Status.Show.UsrResults = ToggleShow[Match.Status.Show.UsrResults];
+   Match.Status.Show.UsrResults = Lay_ToggleShow (Match.Status.Show.UsrResults);
    Mch_DB_UpdateVisResultsMchUsr (Match.MchCod,Match.Status.Show.UsrResults);
 
    /***** Show current game *****/
@@ -1266,7 +1260,7 @@ static void Mch_PutFormMatch (struct Mch_Match *Match)
 	 HTM_TR_End ();
 
 	 /***** Groups *****/
-	 Mch_ShowLstGrpsToEditMatch (Match->MchCod);
+	 Grp_ShowLstGrpsToEditAssociated (Grp_MATCH,Match->MchCod);
 
       /***** End form to create *****/
       Frm_EndFormTable (Forms[OldNewMatch].Button);
@@ -1279,54 +1273,6 @@ static void Mch_ParsFormMatch (void *Match)
   {
    ParCod_PutPar (ParCod_Gam,((struct Mch_Match *) Match)->GamCod);
    ParCod_PutPar (ParCod_Mch,((struct Mch_Match *) Match)->MchCod);
-  }
-
-/*****************************************************************************/
-/***************** Show list of groups to create a new match *****************/
-/*****************************************************************************/
-
-static void Mch_ShowLstGrpsToEditMatch (long MchCod)
-  {
-   extern const char *Txt_Groups;
-   static HTM_Attributes_t Attributes[Exi_NUM_EXIST] =
-     {
-      [Exi_DOES_NOT_EXIST] = HTM_CHECKED,
-      [Exi_EXISTS        ] = HTM_NO_ATTR,
-     };
-
-   /***** Get list of groups types and groups in this course *****/
-   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
-
-   if (Gbl.Crs.Grps.GrpTypes.NumGrpTypes)
-     {
-      HTM_TR_Begin (NULL);
-
-         /* Label */
-	 Frm_LabelColumn ("Frm_C1 RT","",Txt_Groups);
-
-	 /* Groups */
-	 HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-
-	    /***** First row: checkbox to select the whole course *****/
-	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_CHECKBOX ("WholeCrs",
-				   Attributes[Grp_DB_CheckIfAssociatedToGrps ("mch_groups",
-									      "MchCod",
-									      MchCod)],
-				   "id=\"WholeCrs\" value=\"Y\""
-				   " onclick=\"uncheckChildren(this,'GrpCods')\"");
-	       Grp_WriteTheWholeCourse ();
-	    HTM_LABEL_End ();
-
-	    /***** List the groups for each group type *****/
-	    Grp_ListGrpsToEditAsgAttSvyEvtMch (Grp_MATCH,MchCod);
-
-	 HTM_TD_End ();
-      HTM_TR_End ();
-     }
-
-   /***** Free list of groups types and groups in this course *****/
-   Grp_FreeListGrpTypesAndGrps ();
   }
 
 /*****************************************************************************/
@@ -1803,8 +1749,7 @@ void Mch_ToggleVisResultsMchQst (void)
    Mch_GetMatchDataByCod (&Match);
 
    /***** Update status *****/
-   Match.Status.Show.QstResults = Match.Status.Show.QstResults == Lay_SHOW ? Lay_DONT_SHOW :	// Toggle display
-									     Lay_SHOW;
+   Match.Status.Show.QstResults = Lay_ToggleShow (Match.Status.Show.QstResults);
    if (Match.Status.Showing == Mch_RESULTS &&
        Match.Status.Show.QstResults == Lay_DONT_SHOW)
      Match.Status.Showing = Mch_ANSWERS;	// Hide results
@@ -1917,6 +1862,12 @@ static void Mch_SetMatchStatusToPrev (struct Mch_Match *Match)
 
 static void Mch_SetMatchStatusToPrevQst (struct Mch_Match *Match)
   {
+   static Mch_Showing_t Showing[Lay_NUM_SHOW] =
+     {
+      [Lay_DONT_SHOW] = Mch_ANSWERS,
+      [Lay_SHOW     ] = Mch_RESULTS,
+     };
+
    /***** Get index of the previous question *****/
    Match->Status.QstInd = Gam_DB_GetPrevQuestionIndexInGame (Match->GamCod,
 							     Match->Status.QstInd);
@@ -1924,8 +1875,7 @@ static void Mch_SetMatchStatusToPrevQst (struct Mch_Match *Match)
      {
       Match->Status.QstCod = Gam_DB_GetQstCodFromQstInd (Match->GamCod,
 						         Match->Status.QstInd);
-      Match->Status.Showing = Match->Status.Show.QstResults == Lay_SHOW ? Mch_RESULTS :
-									  Mch_ANSWERS;
+      Match->Status.Showing = Showing[Match->Status.Show.QstResults];
      }
    else					// Start of questions reached
       Mch_SetMatchStatusToStart (Match);
@@ -2310,8 +2260,8 @@ static void Mch_PutFormCountdown (struct Mch_Match *Match,long Seconds,const cha
       [Frm_PUT_FORM     ] = "class=\"BT_LINK MCH_BUTTON_ON\"",
      };
    char *OnSubmit;
-   Frm_PutForm_t PutForm = Match->Status.Showing != Mch_END ? Frm_PUT_FORM :
-							      Frm_DONT_PUT_FORM;
+   Frm_PutForm_t PutForm = Match->Status.Showing == Mch_END ? Frm_DONT_PUT_FORM :
+							      Frm_PUT_FORM;
    const char *Title[Frm_NUM_PUT_FORM] =
      {
       [Frm_DONT_PUT_FORM] = NULL,

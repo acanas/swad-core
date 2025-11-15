@@ -161,6 +161,12 @@ static void Pho_ComputePhotoSize (const struct Pho_DegPhotos *DegPhotos,
 
 Usr_Can_t Pho_ICanChangeOtherUsrPhoto (struct Usr_Data *UsrDat)
   {
+   static Usr_Can_t ICanChange[Usr_NUM_ACCEPTED] =
+     {
+      [Usr_HAS_NOT_ACCEPTED] = Usr_CAN_NOT,
+      [Usr_HAS_ACCEPTED    ] = Usr_CAN,
+     };
+
    /***** I can change my photo *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
       return Usr_CAN;
@@ -176,8 +182,7 @@ Usr_Can_t Pho_ICanChangeOtherUsrPhoto (struct Usr_Data *UsrDat)
 	 /* It's a student in this course,
 	    check if he/she has accepted registration */
 	 UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
-         return UsrDat->Accepted == Usr_HAS_ACCEPTED ? Usr_CAN :
-						       Usr_CAN_NOT;
+         return ICanChange[UsrDat->Accepted];
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:

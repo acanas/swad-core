@@ -268,8 +268,8 @@ void Med_GetMediaDataByCod (struct Med_Media *Media)
 	 Media->Type = Med_DB_GetTypeFromStr (row[0]);
 
 	 /***** Set status of media file *****/
-	 Media->Status = Media->Type != Med_TYPE_NONE ? Med_STORED_IN_DB :
-							Med_STATUS_NONE;
+	 Media->Status = Media->Type == Med_TYPE_NONE ? Med_STATUS_NONE :
+							Med_STORED_IN_DB;
 
 	 /***** Copy media name (row[1]) to struct *****/
 	 Str_Copy (Media->Name,row[1],sizeof (Media->Name) - 1);

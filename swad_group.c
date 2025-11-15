@@ -1785,27 +1785,63 @@ void Grp_WriteTheWholeCourse (void)
 
 /*****************************************************************************/
 /***** List groups of a type to edit                                     *****/
-/***** assignments, attendance events, exam sessions, matches or surveys *****/
+/***** assignments, exam sessions, matches, attendance events or surveys *****/
 /*****************************************************************************/
 
-void Grp_ListGrpsToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp,
-                                        long Cod)	// Assignment, attendance event, survey, exam event or match
+void Grp_ShowLstGrpsToEditAssociated (Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp,
+				      long Cod)
   {
+   extern const char *Txt_Groups;
+   static HTM_Attributes_t Attributes[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = HTM_CHECKED,
+      [Exi_EXISTS        ] = HTM_NO_ATTR,
+     };
    unsigned NumGrpTyp;
    struct GroupType *GrpTyp;
 
-   /***** List the groups for each group type *****/
-   for (NumGrpTyp = 0;
-	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
-	NumGrpTyp++)
-     {
-      GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+   /***** Get list of groups types and groups in this course *****/
+   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
 
-      if (GrpTyp->NumGrps)
-	 Grp_ListGrpsOfATypeToEditAsgAttSvyEvtMch (WhichIsAssociatedToGrp,
-						   Cod,
-						   GrpTyp);
+   if (Gbl.Crs.Grps.GrpTypes.NumGrpTypes)
+     {
+      /***** Begin row *****/
+      HTM_TR_Begin (NULL);
+
+         /* Label */
+	 Frm_LabelColumn ("Frm_C1 RT","",Txt_Groups);
+
+	 /* Groups */
+	 HTM_TD_Begin ("class=\"Frm_C2 LT\"");
+
+	    /***** First row: checkbox to select the whole course *****/
+	    HTM_LABEL_Begin (NULL);
+	       HTM_INPUT_CHECKBOX ("WholeCrs",
+				   Attributes[Grp_DB_CheckIfAssociatedToGrps (WhichIsAssociatedToGrp,Cod)],
+				   "id=\"WholeCrs\" value=\"Y\""
+				   " onclick=\"uncheckChildren(this,'GrpCods')\"");
+	       Grp_WriteTheWholeCourse ();
+	    HTM_LABEL_End ();
+
+	    /***** List the groups for each group type *****/
+	    for (NumGrpTyp = 0;
+		 NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+		 NumGrpTyp++)
+	      {
+	       GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+
+	       if (GrpTyp->NumGrps)
+		  Grp_ListGrpsOfATypeToEditAsgAttSvyEvtMch (WhichIsAssociatedToGrp,
+							    Cod,
+							    GrpTyp);
+	      }
+
+	 HTM_TD_End ();
+      HTM_TR_End ();
      }
+
+   /***** Free list of groups types and groups in this course *****/
+   Grp_FreeListGrpTypesAndGrps ();
   }
 
 /*****************************************************************************/
@@ -1838,10 +1874,10 @@ static void Grp_ListGrpsOfATypeToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp
      } AssociationsToGrps[Grp_NUM_ASSOCIATIONS_TO_GROUPS] =
      {
       [Grp_ASSIGNMENT] = {.Table = "asg_groups",.Field = "AsgCod"},
+      [Grp_EXA_SESSION ] = {.Table = "exa_groups",.Field = "SesCod"},
+      [Grp_MATCH     ] = {.Table = "mch_groups",.Field = "MchCod"},
       [Grp_ATT_EVENT ] = {.Table = "att_groups",.Field = "AttCod"},
       [Grp_SURVEY    ] = {.Table = "svy_groups",.Field = "SvyCod"},
-      [Grp_EXA_EVENT ] = {.Table = "exa_groups",.Field = "SesCod"},
-      [Grp_MATCH     ] = {.Table = "mch_groups",.Field = "MchCod"},
      };
    static HTM_Attributes_t Attributes[Exi_NUM_EXIST] =
      {
@@ -2496,7 +2532,7 @@ static void Grp_ListGrpsForMultipleSelection (const struct GroupType *GrpTyp)
       const char *OnClick;
       HTM_Attributes_t Attributes;
       Lay_Highlight_t Highlight;
-     } LayoutICanSel[Usr_NUM_BELONG] =
+     } LayoutICanSel[Usr_NUM_CAN] =
      {
       [Usr_CAN_NOT] = {.OnClick = ""						,.Attributes = HTM_DISABLED	},
       [Usr_CAN    ] = {.OnClick = " onclick=\"checkParent(this,'AllGroups')\""	,.Attributes = HTM_NO_ATTR	}

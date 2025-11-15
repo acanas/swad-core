@@ -421,6 +421,11 @@ static void Ntf_PutContextualLinks (Lay_Show_t ShowAllNotifications,
    extern const char *Txt_Show_all_NOTIFICATIONS;
    extern const char *Txt_Mark_all_NOTIFICATIONS_as_read;
    extern const char *Txt_Domains;
+   static HTM_Attributes_t Attributes[Lay_NUM_SHOW] =
+     {
+      [Lay_DONT_SHOW] = HTM_NO_ATTR,
+      [Lay_SHOW     ] = HTM_CHECKED,
+     };
 
    Mnu_ContextMenuBegin ();
 
@@ -428,8 +433,7 @@ static void Ntf_PutContextualLinks (Lay_Show_t ShowAllNotifications,
       Lay_PutContextualCheckbox (ActSeeNtf,
 				 NULL,NULL,
 				 "All",
-				 (ShowAllNotifications == Lay_SHOW ? HTM_CHECKED :
-								     HTM_NO_ATTR) |
+				 Attributes[ShowAllNotifications] |
 				 HTM_SUBMIT_ON_CHANGE,
 				 Txt_Show_all_notifications,
 				 Txt_Show_all_NOTIFICATIONS);
@@ -552,6 +556,11 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_You_have_no_notifications;
    extern const char *Txt_You_have_no_unread_notifications;
+   static Frm_PutForm_t PutFormIfInside[Frm_NUM_INSIDE] =
+     {
+      [Frm_OUTSIDE_FORM] = Frm_DONT_PUT_FORM,
+      [Frm_INSIDE_FORM ] = Frm_PUT_FORM,
+     };
    char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
    char *ContentStr;
    struct
@@ -604,8 +613,7 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	 if (PutForm == Frm_PUT_FORM)
 	   {
 	    Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,&Forums);
-	    PutForm = Frm_CheckIfInside () == Frm_INSIDE_FORM ? Frm_PUT_FORM :
-								Frm_DONT_PUT_FORM;
+	    PutForm = PutFormIfInside[Frm_CheckIfInside ()];
 	   }
 	 switch (PutForm)
 	   {
@@ -627,8 +635,7 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	   {
 	    case Frm_PUT_FORM:
 	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,&Forums);
-	       PutForm = Frm_CheckIfInside () == Frm_INSIDE_FORM ? Frm_PUT_FORM :
-								   Frm_DONT_PUT_FORM;
+	       PutForm = PutFormIfInside[Frm_CheckIfInside ()];
 		  HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],NULL,
 					   "class=\"Ntf_TYPE LT %s_%s\"",
 					   Class.Link,The_GetSuffix ());
@@ -659,8 +666,7 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	    if (PutForm == Frm_PUT_FORM)
 	      {
 	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,&Forums);
-	       PutForm = Frm_CheckIfInside () == Frm_INSIDE_FORM ? Frm_PUT_FORM :
-								   Frm_DONT_PUT_FORM;
+	       PutForm = PutFormIfInside[Frm_CheckIfInside ()];
 	      }
 
 	    switch (PutForm)
@@ -699,8 +705,7 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	    if (PutForm == Frm_PUT_FORM)
 	      {
 	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,&Forums);
-	       PutForm = Frm_CheckIfInside () == Frm_INSIDE_FORM ? Frm_PUT_FORM :
-								   Frm_DONT_PUT_FORM;
+	       PutForm = PutFormIfInside[Frm_CheckIfInside ()];
 	      }
 
 	    switch (PutForm)
@@ -838,26 +843,26 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	    switch (NotifyEvent)
 	      {
 	       case Ntf_EVENT_DOCUMENT_FILE:
-		  Action = (GrpCod > 0 ? ActReqDatSeeDocGrp :
+		  Action = GrpCod > 0 ? ActReqDatSeeDocGrp :
 			   (HieCods[Hie_CRS] > 0 ? ActReqDatSeeDocCrs :
 			   (HieCods[Hie_DEG] > 0 ? ActReqDatSeeDocDeg :
 			   (HieCods[Hie_CTR] > 0 ? ActReqDatSeeDocCtr :
-						   ActReqDatSeeDocIns))));
+						   ActReqDatSeeDocIns)));
 		  break;
 	       case Ntf_EVENT_TEACHERS_FILE:
-		  Action = (GrpCod > 0 ? ActReqDatTchGrp :
-					 ActReqDatTchCrs);
+		  Action = GrpCod > 0 ? ActReqDatTchGrp :
+					ActReqDatTchCrs;
 		  break;
 	       case Ntf_EVENT_SHARED_FILE:
-		  Action = (GrpCod > 0 ? ActReqDatShaGrp :
+		  Action = GrpCod > 0 ? ActReqDatShaGrp :
 			   (HieCods[Hie_CRS] > 0 ? ActReqDatShaCrs :
 			   (HieCods[Hie_DEG] > 0 ? ActReqDatShaDeg :
 			   (HieCods[Hie_CTR] > 0 ? ActReqDatShaCtr :
-						   ActReqDatShaIns))));
+						   ActReqDatShaIns)));
 		  break;
 	       case Ntf_EVENT_MARKS_FILE:
-		  Action = (GrpCod > 0 ? ActReqDatSeeMrkGrp :
-					 ActReqDatSeeMrkCrs);
+		  Action = GrpCod > 0 ? ActReqDatSeeMrkGrp :
+					ActReqDatSeeMrkCrs;
 		  break;
 	       default:	// Not aplicable here
 		  break;
@@ -1147,11 +1152,11 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_SHARED_FILE:
       case Ntf_EVENT_MARKS_FILE:
 	 NumUsrs = (Brw_TypeIs[Gbl.FileBrowser.Type] & Brw_IS_GRP_BRW) ? Grp_DB_GetUsrsFromGrpExceptMe (&mysql_res,Brw_GetGrpCod ()) :
-									      Enr_DB_GetUsrsFromCrsExceptMe (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+									 Enr_DB_GetUsrsFromCrsExceptMe (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 	 break;
       case Ntf_EVENT_TEACHERS_FILE:
 	 NumUsrs = (Brw_TypeIs[Gbl.FileBrowser.Type] & Brw_IS_GRP_BRW) ? Grp_DB_GetTchsFromGrpExceptMe (&mysql_res,Brw_GetGrpCod ()) :
-									      Enr_DB_GetTchsFromCrsExceptMe (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+									 Enr_DB_GetTchsFromCrsExceptMe (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 	 break;
       case Ntf_EVENT_ASSIGNMENT:
          NumUsrs = Asg_DB_GetUsrsFromAssignmentExceptMe (&mysql_res,Cod);

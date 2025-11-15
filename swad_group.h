@@ -162,10 +162,10 @@ struct ListGrpsAlreadySelec
 typedef enum
   {
    Grp_ASSIGNMENT,
+   Grp_EXA_SESSION,
+   Grp_MATCH,
    Grp_ATT_EVENT,
    Grp_SURVEY,
-   Grp_EXA_EVENT,
-   Grp_MATCH,
   } Grp_WhichIsAssociatedToGrp_t;
 
 struct Grp_Groups
@@ -207,8 +207,8 @@ void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long HieCod);
 void Grp_RemUsrFromAllGrps (long UsrCod);
 
 void Grp_WriteTheWholeCourse (void);
-void Grp_ListGrpsToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp,
-                                        long Cod);
+void Grp_ShowLstGrpsToEditAssociated (Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp,
+				      long Cod);
 
 void Grp_ShowLstGrpsToChgMyGrps (void);
 void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod);

@@ -132,6 +132,12 @@ const char *Usr_ClassData[Usr_NUM_ACCEPTED] =
    [Usr_HAS_ACCEPTED    ] = "DAT_SMALL_STRONG",
   };
 
+char Usr_CanYN[Usr_NUM_CAN] =
+  {
+   [Usr_CAN_NOT] = 'N',
+   [Usr_CAN    ] = 'Y',
+  };
+
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
@@ -333,6 +339,16 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
 
 static void Usr_GetAndShowNumUsrsInCrss (Hie_Level_t HieLvl,Rol_Role_t Role);
 static void Usr_GetAndShowNumUsrsNotBelongingToAnyCrs (void);
+
+/*****************************************************************************/
+/************ Get if user can or can not from a 'Y'/'N' character ************/
+/*****************************************************************************/
+
+Usr_Can_t Usr_GetCanFromYN (char Ch)
+  {
+   return Ch == 'Y' ? Usr_CAN :
+		      Usr_CAN_NOT;
+  }
 
 /*****************************************************************************/
 /**** Show alert about number of clicks remaining before sending my photo ****/

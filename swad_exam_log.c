@@ -318,8 +318,7 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 	       QstInd = (int) Str_ConvertStrCodToLongCod (row[1]);
 
 	       /* Get if the user could answer (row[2]) */
-	       UsrCouldAnswer = row[2][0] == 'Y' ? Usr_CAN :
-						   Usr_CAN_NOT;
+	       UsrCouldAnswer = Usr_GetCanFromYN (row[2][0]);
 
 	       /* Get click time (row[3] holds the UTC time) */
 	       ClickTimeUTC = Dat_GetUNIXTimeFromStr (row[3]);

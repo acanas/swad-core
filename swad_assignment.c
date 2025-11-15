@@ -115,7 +115,6 @@ static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Assignments,
 				       const char *Description);
 
 static void Asg_EditRubrics (long AsgRubCod);
-static void Asg_ShowLstGrpsToEditAssignment (long AsgCod);
 
 static void Asg_CreateAssignment (struct Asg_Assignment *Asg,const char *Description);
 static void Asg_UpdateAssignment (struct Asg_Assignment *Asg,const char *Description);
@@ -1354,7 +1353,7 @@ static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Assignments,
 	    Asg_EditRubrics (Assignments->Asg.RubCod);
 
 	 /***** Groups *****/
-	 Asg_ShowLstGrpsToEditAssignment (Assignments->Asg.AsgCod);
+	 Grp_ShowLstGrpsToEditAssociated (Grp_ASSIGNMENT,Assignments->Asg.AsgCod);
 
       /***** End table, send button and end box *****/
       Box_BoxTableWithButtonSaveCreateEnd (OldNewAsg);
@@ -1423,55 +1422,6 @@ static void Asg_EditRubrics (long AsgRubCod)
 
    /***** End row *****/
    HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/**************** Show list of groups to edit and assignment *****************/
-/*****************************************************************************/
-
-static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
-  {
-   extern const char *Txt_Groups;
-   static HTM_Attributes_t Attributes[Exi_NUM_EXIST] =
-     {
-      [Exi_DOES_NOT_EXIST] = HTM_CHECKED,
-      [Exi_EXISTS        ] = HTM_NO_ATTR,
-     };
-
-   /***** Get list of groups types and groups in this course *****/
-   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
-
-   if (Gbl.Crs.Grps.GrpTypes.NumGrpTypes)
-     {
-      /***** Begin row *****/
-      HTM_TR_Begin (NULL);
-
-         /* Label */
-	 Frm_LabelColumn ("Frm_C1 RT","",Txt_Groups);
-
-	 /* Groups */
-	 HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-
-	    /***** First row: checkbox to select the whole course *****/
-	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_CHECKBOX ("WholeCrs",
-				   Attributes[Grp_DB_CheckIfAssociatedToGrps ("asg_groups",
-									      "AsgCod",
-									      AsgCod)],
-				   "id=\"WholeCrs\" value=\"Y\""
-				   " onclick=\"uncheckChildren(this,'GrpCods')\"");
-	       Grp_WriteTheWholeCourse ();
-	    HTM_LABEL_End ();
-
-	    /***** List the groups for each group type *****/
-	    Grp_ListGrpsToEditAsgAttSvyEvtMch (Grp_ASSIGNMENT,AsgCod);
-
-	 HTM_TD_End ();
-      HTM_TR_End ();
-     }
-
-   /***** Free list of groups types and groups in this course *****/
-   Grp_FreeListGrpTypesAndGrps ();
   }
 
 /*****************************************************************************/
