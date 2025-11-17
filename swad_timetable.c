@@ -723,7 +723,7 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
    struct Tmt_Range RangeCell;
    unsigned FirstFreeColumn;
    Tmt_ClassType_t ClassType = Tmt_FREE;	// Initialized to avoid warning
-   bool TimeTableIsIncomplete = false;
+   Err_SuccessOrError_t TimeTableIsComplete = Err_SUCCESS;
    bool TimeTableHasSpaceForThisClass;
    Exi_Exist_t TypeExists;
 
@@ -871,8 +871,8 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
 		    i < Timetable->Config.IntervalsPerDay;
 		    i++)
 		  if (Tmt_TimeTable[Weekday][i].Columns[FirstFreeColumn].IntervalType != Tmt_FREE_INTERVAL)
-		   {
-		     TimeTableIsIncomplete = true;
+		    {
+		     TimeTableIsComplete = Err_ERROR;
 		     TimeTableHasSpaceForThisClass = false;
 		     break;
 		    }
@@ -919,17 +919,17 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
 		 }
 	      }
 	    else
-	       TimeTableIsIncomplete = true;
+	       TimeTableIsComplete = Err_ERROR;
 	   }
 	 else
-	    TimeTableIsIncomplete = true;
+	    TimeTableIsComplete = Err_ERROR;
 	}
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   if (TimeTableIsIncomplete)
+   if (TimeTableIsComplete == Err_ERROR)
       Ale_ShowAlert (Ale_INFO,Txt_Incomplete_timetable_for_lack_of_space);
   }
 

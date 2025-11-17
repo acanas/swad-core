@@ -36,6 +36,14 @@
 #define Ind_NUM_INDICATORS 5
 #define Ind_MAX_SIZE_INDICATORS_CHECKED ((1 + Ind_NUM_INDICATORS) * (10 + 1))
 
+#define Ind_NUM_STATUS 3
+typedef enum
+  {
+   Ind_COURSE_NOTHING_OK,
+   Ind_COURSE_PARTIALLY_OK,
+   Ind_COURSE_ALL_OK,
+  } Ind_CrsStatus_t;
+
 struct Ind_IndicatorsCrs
   {
    struct
@@ -66,8 +74,7 @@ struct Ind_IndicatorsCrs
    Inf_Src_t AssessmentSrc;
 
    unsigned NumIndicators;
-   bool CoursePartiallyOK;
-   bool CourseAllOK;
+   Ind_CrsStatus_t CrsStatus;
   };
 
 struct Ind_Indicators

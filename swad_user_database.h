@@ -83,7 +83,7 @@ void Usr_DB_RemoveUsrLastData (long UsrCod);
 
 //------------------------------ Birthdays today ------------------------------
 void Usr_DB_MarkMyBirthdayAsCongratulated (void);
-bool Usr_DB_CheckIfMyBirthdayHasNotBeenCongratulated (void);
+Exi_Exist_t Usr_DB_CheckIfMyBirthdayExistsAsNotCongratulated (void);
 void Usr_DB_DeleteOldBirthdays (void);
 
 //----------------------------- User clipboard --------------------------------

@@ -572,6 +572,12 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
    extern const char *Txt_YES;
    extern const char *Txt_NO;
    extern const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_SOURCES];
+   static const char *ClassStatus[Ind_NUM_STATUS] =
+     {
+      [Ind_COURSE_NOTHING_OK  ] = "DAT_SMALL_RED",
+      [Ind_COURSE_PARTIALLY_OK] = "DAT_SMALL",
+      [Ind_COURSE_ALL_OK      ] = "DAT_SMALL_GREEN",
+     };
    MYSQL_ROW row;
    unsigned NumCrs;
    long HieCod;	// Course code
@@ -723,25 +729,19 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 		     HTM_TR_Begin (NULL);
 
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
-				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
-									 "DAT_SMALL_RED"),
+			              ClassStatus[IndicatorsCrs.CrsStatus],
 				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (row[0]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
-				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
-									 "DAT_SMALL_RED"),
+				      ClassStatus[IndicatorsCrs.CrsStatus],
 				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (row[1]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
-				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
-									 "DAT_SMALL_RED"),
+				      ClassStatus[IndicatorsCrs.CrsStatus],
 				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (row[3]);
 			HTM_TD_End ();
@@ -756,9 +756,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
-				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
-									 "DAT_SMALL_RED"),
+				      ClassStatus[IndicatorsCrs.CrsStatus],
 				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumIndicators);
 			HTM_TD_End ();
@@ -836,25 +834,19 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 		     HTM_TR_Begin (NULL);
 
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
-				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
-									 "DAT_SMALL_RED"),
+				      ClassStatus[IndicatorsCrs.CrsStatus],
 				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (row[0]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
-				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
-									 "DAT_SMALL_RED"),
+				      ClassStatus[IndicatorsCrs.CrsStatus],
 				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (row[1]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
-				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
-									 "DAT_SMALL_RED"),
+				      ClassStatus[IndicatorsCrs.CrsStatus],
 				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (row[3]);
 			HTM_TD_End ();
@@ -883,9 +875,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
-				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
-									 "DAT_SMALL_RED"),
+				      ClassStatus[IndicatorsCrs.CrsStatus],
 				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumIndicators);
 			HTM_TD_End ();
@@ -1181,9 +1171,9 @@ void Ind_ComputeAndStoreIndicatorsCrs (long HieCod,int NumIndicatorsFromDB,
       IndicatorsCrs->NumIndicators++;
 
    /***** All the indicators are OK? *****/
-   IndicatorsCrs->CoursePartiallyOK = IndicatorsCrs->NumIndicators >= 1 &&
-	                              IndicatorsCrs->NumIndicators  < Ind_NUM_INDICATORS;
-   IndicatorsCrs->CourseAllOK       = IndicatorsCrs->NumIndicators == Ind_NUM_INDICATORS;
+   IndicatorsCrs->CrsStatus =   IndicatorsCrs->NumIndicators == 0		   ? Ind_COURSE_NOTHING_OK :
+			      ((IndicatorsCrs->NumIndicators < Ind_NUM_INDICATORS) ? Ind_COURSE_PARTIALLY_OK :
+										     Ind_COURSE_ALL_OK);
 
    /***** Update number of indicators into database
           if different to the stored one *****/

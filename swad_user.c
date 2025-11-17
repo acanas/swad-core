@@ -1365,7 +1365,7 @@ void Usr_WelcomeUsr (void)
             /***** Birthday congratulation *****/
             if (Gbl.Usrs.Me.UsrDat.Birthday.Day   == CurrentDay &&
                 Gbl.Usrs.Me.UsrDat.Birthday.Month == CurrentMonth)
-               if (Usr_DB_CheckIfMyBirthdayHasNotBeenCongratulated ())
+               if (Usr_DB_CheckIfMyBirthdayExistsAsNotCongratulated () == Exi_EXISTS)
                  {
                   /* Mark my birthday as already congratulated */
         	  Usr_DB_DeleteOldBirthdays ();

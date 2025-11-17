@@ -1604,7 +1604,7 @@ void Usr_DB_MarkMyBirthdayAsCongratulated (void)
 /*************** Check if my birthday is already congratulated ***************/
 /*****************************************************************************/
 
-bool Usr_DB_CheckIfMyBirthdayHasNotBeenCongratulated (void)
+Exi_Exist_t Usr_DB_CheckIfMyBirthdayExistsAsNotCongratulated (void)
   {
    return
    DB_QueryEXISTS ("can not check if my birthday has been congratulated",
@@ -1612,7 +1612,7 @@ bool Usr_DB_CheckIfMyBirthdayHasNotBeenCongratulated (void)
 		   "(SELECT *"
 		     " FROM usr_birthdays_today"
 		    " WHERE UsrCod=%ld)",
-		   Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS;
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
