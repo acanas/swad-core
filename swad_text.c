@@ -8453,7 +8453,7 @@ const char *Txt_Delete_my_answer =
 #elif L==5	// fr
 	"Supprimer ma r&eacute;ponse";
 #elif L==6	// gn
-	"Eliminar mi respuesta";	// Okoteve traducción
+	"Embogue che &ntilde;embohov&aacute;i";
 #elif L==7	// it
 	"Elimina la mia risposta";
 #elif L==8	// pl
@@ -8461,7 +8461,7 @@ const char *Txt_Delete_my_answer =
 #elif L==9	// pt
 	"Excluir minha resposta";
 #elif L==10	// tr
-	"Delete my answer";		// Çeviri lazim!
+	"Cevab&inodot;m&inodot; sil";
 #endif
 
 const char *Txt_Department =

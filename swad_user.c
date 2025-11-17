@@ -186,6 +186,19 @@ static struct
      {&Txt_HIERARCHY_SINGUL_Abc[Hie_INS],HTM_HEAD_LEFT  },
   };
 
+static unsigned Usr_FirstCol[Pho_NUM_PHOTOS] =
+  {
+   [Pho_PHOTOS_UNKNOWN  ] = 1,
+   [Pho_PHOTOS_DONT_SHOW] = 1,
+   [Pho_PHOTOS_SHOW     ] = 0,
+  };
+
+static Usr_PutCheckBox_t Usr_PutCheckbox[Frm_NUM_PUT_FORM] =
+  {
+   [Frm_DONT_PUT_FORM] = Usr_DONT_PUT_CHECKBOX,
+   [Frm_PUT_FORM     ] = Usr_PUT_CHECKBOX,
+  };
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -348,6 +361,16 @@ Usr_Can_t Usr_GetCanFromYN (char Ch)
   {
    return Ch == 'Y' ? Usr_CAN :
 		      Usr_CAN_NOT;
+  }
+
+/*****************************************************************************/
+/********* Get if user has accepted or not from a 'Y'/'N' character **********/
+/*****************************************************************************/
+
+Usr_Accepted_t Usr_GetAcceptedFromYN (char Ch)
+  {
+   return Ch == 'Y' ? Usr_HAS_ACCEPTED :
+		      Usr_HAS_NOT_ACCEPTED;
   }
 
 /*****************************************************************************/
@@ -957,6 +980,12 @@ Usr_Can_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat)
 
 Usr_Can_t Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat)
   {
+   static Usr_Can_t ICanViewIfShare[Usr_NUM_SHARE] =
+     {
+      [Usr_DONT_SHARE] = Usr_CAN_NOT,
+      [Usr_SHARE     ] = Usr_CAN,
+     };
+
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
       return Usr_CAN_NOT;
@@ -994,8 +1023,7 @@ Usr_Can_t Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat)
      {
       case Rol_STD:
       case Rol_NET:
-	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) == Usr_SHARE ? Usr_CAN :
-										    Usr_CAN_NOT;
+	 return ICanViewIfShare[Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat)];
       case Rol_TCH:
 	 return Usr_CAN;
       default:
@@ -1036,6 +1064,12 @@ Usr_Can_t Usr_CheckIfICanViewRecordTch (struct Usr_Data *UsrDat)
 
 Usr_Can_t Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat)
   {
+   static Usr_Can_t ICanViewIfShare[Usr_NUM_SHARE] =
+     {
+      [Usr_DONT_SHARE] = Usr_CAN_NOT,
+      [Usr_SHARE     ] = Usr_CAN,
+     };
+
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
       return Usr_CAN_NOT;
@@ -1068,8 +1102,7 @@ Usr_Can_t Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) == Usr_SHARE ? Usr_CAN :
-										    Usr_CAN_NOT;
+	 return ICanViewIfShare[Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat)];
       case Rol_TCH:
 	 return Usr_CAN;
       default:
@@ -1083,6 +1116,12 @@ Usr_Can_t Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat)
 
 Usr_Can_t Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat)
   {
+   static Usr_Can_t ICanViewIfShare[Usr_NUM_SHARE] =
+     {
+      [Usr_DONT_SHARE] = Usr_CAN_NOT,
+      [Usr_SHARE     ] = Usr_CAN,
+     };
+
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
       return Usr_CAN_NOT;
@@ -1116,8 +1155,7 @@ Usr_Can_t Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) == Usr_SHARE ? Usr_CAN :
-										    Usr_CAN_NOT;
+	 return ICanViewIfShare[Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat)];
       case Rol_TCH:
 	 return Usr_CAN;
       default:
@@ -1131,6 +1169,12 @@ Usr_Can_t Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat)
 
 Usr_Can_t Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat)
   {
+   static Usr_Can_t ICanViewIfShare[Usr_NUM_SHARE] =
+     {
+      [Usr_DONT_SHARE] = Usr_CAN_NOT,
+      [Usr_SHARE     ] = Usr_CAN,
+     };
+
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
       return Usr_CAN_NOT;
@@ -1159,8 +1203,7 @@ Usr_Can_t Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) == Usr_SHARE ? Usr_CAN :
-										    Usr_CAN_NOT;
+	 return ICanViewIfShare[Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat)];
       case Rol_TCH:
 	 return Usr_CAN;
       default:
@@ -2582,6 +2625,12 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat,
 				 Pho_ShowPhotos_t ShowPhotos)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   static unsigned ColSpan[Pho_NUM_PHOTOS] =
+     {
+      [Pho_PHOTOS_UNKNOWN  ] = Usr_NUM_MAIN_FIELDS_DATA_ADM - 1,
+      [Pho_PHOTOS_DONT_SHOW] = Usr_NUM_MAIN_FIELDS_DATA_ADM - 1,
+      [Pho_PHOTOS_SHOW     ] = Usr_NUM_MAIN_FIELDS_DATA_ADM,
+     };
    struct Hie_Node Ins;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
@@ -2623,9 +2672,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat,
    HTM_TR_End ();
 
    /***** Write degrees which are administrated by this administrator *****/
-   Hie_GetAndWriteInsCtrDegAdminBy (UsrDat->UsrCod,
-                                    ShowPhotos == Pho_PHOTOS_SHOW ? Usr_NUM_MAIN_FIELDS_DATA_ADM :
-                                				    Usr_NUM_MAIN_FIELDS_DATA_ADM - 1);
+   Hie_GetAndWriteInsCtrDegAdminBy (UsrDat->UsrCod,ColSpan[ShowPhotos]);
   }
 
 /*****************************************************************************/
@@ -2915,8 +2962,7 @@ void Usr_GetListUsrsFromQuery (char *Query,Hie_Level_t HieLvl,Rol_Role_t Role)
 		     case Hie_CRS:	// Course
 			// Query result has a column with the acceptation
 			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[11]);
-			UsrInList->Accepted = row[12][0] == 'Y' ? Usr_HAS_ACCEPTED :
-								  Usr_HAS_NOT_ACCEPTED;
+			UsrInList->Accepted = Usr_GetAcceptedFromYN (row[12][0]);
 			break;
 		    }
         	  break;
@@ -2949,8 +2995,7 @@ void Usr_GetListUsrsFromQuery (char *Query,Hie_Level_t HieLvl,Rol_Role_t Role)
 		     case Hie_CRS:	// Course
 			// Query result has a column with the acceptation
 			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[11]);
-			UsrInList->Accepted = row[12][0] == 'Y' ? Usr_HAS_ACCEPTED :
-								  Usr_HAS_NOT_ACCEPTED;
+			UsrInList->Accepted = Usr_GetAcceptedFromYN (row[12][0]);
 			break;
 		    }
         	  break;
@@ -3366,8 +3411,7 @@ Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (Cns_Ver
 	                                 Usr_DONT_GET_ROLE_IN_CRS);
 
                /* Find if encrypted user's code is already in list */
-               if (Usr_FindEncUsrCodInListOfSelectedEncUsrCods (UsrDat.EnUsrCod,
-        							&Gbl.Usrs.Selected) == Exi_DOES_NOT_EXIST)        // If not in list ==> add it
+               if (Usr_FindEncUsrCodInList (UsrDat.EnUsrCod,&Gbl.Usrs.Selected) == Exi_DOES_NOT_EXIST)        // If not in list ==> add it
                  {
                   LengthUsrCod = strlen (UsrDat.EnUsrCod);
 
@@ -3419,8 +3463,8 @@ Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (Cns_Ver
 /*****************************************************************************/
 // Returns Err_EXISTS if EncryptedUsrCodToFind is in list
 
-Exi_Exist_t Usr_FindEncUsrCodInListOfSelectedEncUsrCods (const char *EncryptedUsrCodToFind,
-						         struct Usr_SelectedUsrs *SelectedUsrs)
+Exi_Exist_t Usr_FindEncUsrCodInList (const char *EncryptedUsrCodToFind,
+				     struct Usr_SelectedUsrs *SelectedUsrs)
   {
    const char *Ptr;
    char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
@@ -3433,9 +3477,9 @@ Exi_Exist_t Usr_FindEncUsrCodInListOfSelectedEncUsrCods (const char *EncryptedUs
 	 Par_GetNextStrUntilSeparParMult (&Ptr,EncryptedUsrCod,
 	                                  Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 if (!strcmp (EncryptedUsrCodToFind,EncryptedUsrCod))
-	    return Exi_EXISTS;        // Found!
+	    return Exi_EXISTS;	// Found!
 	}
-   return Exi_DOES_NOT_EXIST;        // List not allocated or user not found
+   return Exi_DOES_NOT_EXIST;	// List not allocated or user not found
   }
 
 /*****************************************************************************/
@@ -4058,8 +4102,14 @@ static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role)
 
 unsigned Usr_GetColumnsForSelectUsrs (Pho_ShowPhotos_t ShowPhotos)
   {
-   return (ShowPhotos == Pho_PHOTOS_SHOW ? 1 + Usr_NUM_MAIN_FIELDS_DATA_USR :
-					       Usr_NUM_MAIN_FIELDS_DATA_USR);
+   static unsigned Cols[Pho_NUM_PHOTOS] =
+     {
+      [Pho_PHOTOS_UNKNOWN  ] =     Usr_NUM_MAIN_FIELDS_DATA_USR,
+      [Pho_PHOTOS_DONT_SHOW] =     Usr_NUM_MAIN_FIELDS_DATA_USR,
+      [Pho_PHOTOS_SHOW     ] = 1 + Usr_NUM_MAIN_FIELDS_DATA_USR,
+     };
+
+   return Cols[ShowPhotos];
   }
 
 /*****************************************************************************/
@@ -4070,6 +4120,11 @@ void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 				  const struct Usr_Data *UsrDat,
 				  struct Usr_SelectedUsrs *SelectedUsrs)
   {
+   static HTM_Attributes_t AttributesIfExists[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = HTM_NO_ATTR,
+      [Exi_EXISTS        ] = HTM_CHECKED,
+     };
    HTM_Attributes_t Attributes;
    char *ParName;
 
@@ -4080,9 +4135,7 @@ void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 	 Attributes = HTM_CHECKED;
       else
 	 /* Check if user is in lists of selected users */
-	 Attributes = Usr_FindEncUsrCodInListOfSelectedEncUsrCods (UsrDat->EnUsrCod,
-								   SelectedUsrs) == Exi_EXISTS ? HTM_CHECKED :
-												 HTM_NO_ATTR;
+	 Attributes = AttributesIfExists[Usr_FindEncUsrCodInList (UsrDat->EnUsrCod,SelectedUsrs)];
 
       /***** Check box *****/
       Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
@@ -4357,17 +4410,12 @@ void Usr_ListAllDataGsts (void)
       /***** Begin table with list of guests *****/
       HTM_TABLE_BeginWide ();
 
-	 /* Begin row */
+	 /***** Columns for the data *****/
 	 HTM_TR_Begin (NULL);
-
-	    /* Columns for the data */
-	    for (NumCol = ShowPhotos == Pho_PHOTOS_SHOW ? 0 :
-							  1;
+	    for (NumCol = Usr_FirstCol[ShowPhotos];
 		 NumCol < NumColumnsCommonCard;
 		 NumCol++)
 	       HTM_TH_Span (FieldNames[NumCol],HTM_HEAD_LEFT,1,1,"BG_HIGHLIGHT");
-
-	 /* End row */
 	 HTM_TR_End ();
 
 	 /***** Initialize structure with user's data *****/
@@ -4522,8 +4570,7 @@ void Usr_ListAllDataStds (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* 1. Columns for the data */
-	    for (NumCol = ShowPhotos == Pho_PHOTOS_SHOW ? 0 :
-							  1;
+	    for (NumCol = Usr_FirstCol[ShowPhotos];
 		 NumCol < NumColsCommonRecord;
 		 NumCol++)
 	       HTM_TH_Span (FieldNames[NumCol],HTM_HEAD_LEFT,1,1,"BG_HIGHLIGHT");
@@ -4689,13 +4736,7 @@ void Usr_ListAllDataTchs (void)
       NumUsrs = Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
-      NumUsrs = Enr_GetNumUsrsInCrss (HieLvl,
-				     (HieLvl == Hie_CTY ? Gbl.Hierarchy.Node[Hie_CTY].HieCod :
-				     (HieLvl == Hie_INS ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
-				     (HieLvl == Hie_CTR ? Gbl.Hierarchy.Node[Hie_CTR].HieCod :
-				     (HieLvl == Hie_DEG ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
-				     (HieLvl == Hie_CRS ? Gbl.Hierarchy.Node[Hie_CRS].HieCod :
-							 -1L))))),
+      NumUsrs = Enr_GetNumUsrsInCrss (HieLvl,Gbl.Hierarchy.Node[HieLvl].HieCod,
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
 
@@ -4739,8 +4780,7 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
    /***** Heading row *****/
    HTM_TR_Begin (NULL);
 
-      for (NumCol = ShowPhotos == Pho_PHOTOS_SHOW ? 0 :
-						    1;
+      for (NumCol = Usr_FirstCol[ShowPhotos];
 	   NumCol < NumColumns;
 	   NumCol++)
 	 HTM_TH_Span (FieldNames[NumCol],HTM_HEAD_LEFT,1,1,"BG_HIGHLIGHT");
@@ -5132,10 +5172,8 @@ void Usr_ListGuests (void)
 	       /***** Draw a class photo with guests *****/
 	       /* Set options allowed */
 	       PutForm = Usr_SetAllowedListUsrsActions (ListingPars.HieLvl,Rol_GST,
-							ICanChooseOption) ? Frm_PUT_FORM :
-									    Frm_DONT_PUT_FORM;
-	       PutCheckBoxToSelectUsr = PutForm == Frm_PUT_FORM ? Usr_PUT_CHECKBOX :
-								  Usr_DONT_PUT_CHECKBOX;
+							ICanChooseOption);
+	       PutCheckBoxToSelectUsr = Usr_PutCheckbox[PutForm];
 
 	       /* Begin form */
 	       if (PutForm == Frm_PUT_FORM)
@@ -5156,8 +5194,7 @@ void Usr_ListGuests (void)
 		  case Set_USR_LIST_AS_LISTING:
 		     /* List the guests */
 		     HTM_TABLE_Begin ("TBL_SCROLL");
-			Usr_ListMainDataGsts (PutForm == Frm_PUT_FORM ? Usr_PUT_CHECKBOX :
-									Usr_DONT_PUT_CHECKBOX,
+			Usr_ListMainDataGsts (PutCheckBoxToSelectUsr,
 					      ListingPars.ShowPhotos);
 		     HTM_TABLE_End ();
 		     break;
@@ -5299,10 +5336,8 @@ void Usr_ListStudents (void)
 
 	       /* Set options allowed */
 	       PutForm = Usr_SetAllowedListUsrsActions (ListingPars.HieLvl,Rol_STD,
-						        ICanChooseOption) ? Frm_PUT_FORM :
-									    Frm_DONT_PUT_FORM;
-	       PutCheckBoxToSelectUsr = PutForm == Frm_PUT_FORM ? Usr_PUT_CHECKBOX :
-								  Usr_DONT_PUT_CHECKBOX;
+						        ICanChooseOption);
+	       PutCheckBoxToSelectUsr = Usr_PutCheckbox[PutForm];
 
 	       /* Begin form */
 	       if (PutForm == Frm_PUT_FORM)
@@ -5327,8 +5362,7 @@ void Usr_ListStudents (void)
 		  case Set_USR_LIST_AS_LISTING:
 		     /* List students */
 		     HTM_TABLE_Begin ("TBL_SCROLL");
-			Usr_ListMainDataStds (PutForm == Frm_PUT_FORM ? Usr_PUT_CHECKBOX :
-									Usr_DONT_PUT_CHECKBOX,
+			Usr_ListMainDataStds (PutCheckBoxToSelectUsr,
 					      ListingPars.ShowPhotos);
 		     HTM_TABLE_End ();
 		     break;
@@ -5428,12 +5462,7 @@ void Usr_ListTeachers (void)
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
       NumUsrs = Enr_GetNumUsrsInCrss (ListingPars.HieLvl,
-				     (ListingPars.HieLvl == Hie_CTY ? Gbl.Hierarchy.Node[Hie_CTY].HieCod :
-				     (ListingPars.HieLvl == Hie_INS ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
-				     (ListingPars.HieLvl == Hie_CTR ? Gbl.Hierarchy.Node[Hie_CTR].HieCod :
-				     (ListingPars.HieLvl == Hie_DEG ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
-				     (ListingPars.HieLvl == Hie_CRS ? Gbl.Hierarchy.Node[Hie_CRS].HieCod :
-								     -1L))))),
+				      Gbl.Hierarchy.Node[ListingPars.HieLvl].HieCod,
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
 
@@ -5480,10 +5509,8 @@ void Usr_ListTeachers (void)
 
 	       /* Set options allowed */
 	       PutForm = Usr_SetAllowedListUsrsActions (ListingPars.HieLvl,Rol_TCH,
-							ICanChooseOption) ? Frm_PUT_FORM :
-									    Frm_DONT_PUT_FORM;
-	       PutCheckBoxToSelectUsr = PutForm == Frm_PUT_FORM ? Usr_PUT_CHECKBOX :
-								  Usr_DONT_PUT_CHECKBOX;
+							ICanChooseOption);
+	       PutCheckBoxToSelectUsr = Usr_PutCheckbox[PutForm];
 
 	       /* Begin form */
 	       if (PutForm == Frm_PUT_FORM)
@@ -6204,12 +6231,7 @@ void Usr_SeeTchClassPhotoPrn (void)
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
       NumUsrs = Enr_GetNumUsrsInCrss (ListingPars.HieLvl,
-				     (ListingPars.HieLvl == Hie_CTY ? Gbl.Hierarchy.Node[Hie_CTY].HieCod :
-				     (ListingPars.HieLvl == Hie_INS ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
-				     (ListingPars.HieLvl == Hie_CTR ? Gbl.Hierarchy.Node[Hie_CTR].HieCod :
-				     (ListingPars.HieLvl == Hie_DEG ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
-				     (ListingPars.HieLvl == Hie_CRS ? Gbl.Hierarchy.Node[Hie_CRS].HieCod :
-								     -1L))))),
+				      Gbl.Hierarchy.Node[ListingPars.HieLvl].HieCod,
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
 
@@ -6414,11 +6436,7 @@ unsigned Usr_GetTotalNumberOfUsers (Hie_Level_t HieLvl)
       case Hie_CTR:
       case Hie_DEG:
       case Hie_CRS:
-         Cod = (HieLvl == Hie_CTY ? Gbl.Hierarchy.Node[Hie_CTY].HieCod :
-	       (HieLvl == Hie_INS ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
-	       (HieLvl == Hie_CTR ? Gbl.Hierarchy.Node[Hie_CTR].HieCod :
-	       (HieLvl == Hie_DEG ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
-	                           Gbl.Hierarchy.Node[Hie_CRS].HieCod))));
+         Cod = Gbl.Hierarchy.Node[HieLvl].HieCod;
          Roles = (1 << Rol_STD) |
 	         (1 << Rol_NET) |
 	         (1 << Rol_TCH);

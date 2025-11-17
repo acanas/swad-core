@@ -43,6 +43,7 @@
 /*****************************************************************************/
 
 Usr_Can_t Usr_GetCanFromYN (char Ch);
+Usr_Accepted_t Usr_GetAcceptedFromYN (char Ch);
 
 void Usr_InformAboutNumClicksBeforePhoto (void);
 
@@ -142,8 +143,8 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsr
 
 Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (Cns_Verbose_t Verbose);
 
-Exi_Exist_t Usr_FindEncUsrCodInListOfSelectedEncUsrCods (const char *EncryptedUsrCodToFind,
-						         struct Usr_SelectedUsrs *SelectedUsrs);
+Exi_Exist_t Usr_FindEncUsrCodInList (const char *EncryptedUsrCodToFind,
+				     struct Usr_SelectedUsrs *SelectedUsrs);
 Exi_Exist_t Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs);
 unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs);
 void Usr_FreeListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs);

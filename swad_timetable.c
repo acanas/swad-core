@@ -317,6 +317,18 @@ void Tmt_ShowCrsTimeTable (void)
    extern const char *Hlp_COURSE_Timetable;
    extern const char *Hlp_PROFILE_Timetable;
    extern const char *Txt_TIMETABLE_TYPES[Tmt_NUM_TIMETABLE_TYPES];
+   static Lay_Show_t ShowGetLink[Usr_NUM_CAN] =
+     {
+      [Usr_CAN_NOT] = Lay_DONT_SHOW,
+      [Usr_CAN    ] = Lay_SHOW,
+     };
+   static Lay_Show_t ShowPrint[Vie_NUM_VIEW_TYPES] =
+     {
+      [Vie_VIEW  ] = Lay_SHOW,
+      [Vie_EDIT  ] = Lay_DONT_SHOW,
+      [Vie_CONFIG] = Lay_DONT_SHOW,
+      [Vie_PRINT ] = Lay_DONT_SHOW,
+     };
    const char *Help[Tmt_NUM_TIMETABLE_TYPES] =
      {
       [Tmt_COURSE_TIMETABLE  ] = Hlp_COURSE_Timetable,
@@ -363,10 +375,8 @@ void Tmt_ShowCrsTimeTable (void)
                                          (Gbl.Usrs.Me.Role.Available & (1 << Rol_TCH |
                                                 		        1 << Rol_NET)) ? Lay_SHOW :
                                                 		                	 Lay_DONT_SHOW;
-   Timetable.ShowIcons.GetLink         = Rsc_CheckIfICanGetLink () == Usr_CAN ? Lay_SHOW :
-                                                		                Lay_DONT_SHOW;
-   Timetable.ShowIcons.Print           = ViewType == Vie_VIEW ? Lay_SHOW :
-                                                                Lay_DONT_SHOW;
+   Timetable.ShowIcons.GetLink         = ShowGetLink[Rsc_CheckIfICanGetLink ()];
+   Timetable.ShowIcons.Print           = ShowPrint[ViewType];
 
    /***** Get whether to show only my groups or all groups *****/
    Grp_GetParMyAllGrps ();

@@ -1834,8 +1834,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
 	     to this course/to any course in degree/to any course? *****/
       if (WriteColumnAccepted == Crs_WRITE_COL_ACCEPTED)
 	{
-	 Accepted = row[7][0] == 'Y' ? Usr_HAS_ACCEPTED :
-				       Usr_HAS_NOT_ACCEPTED;
+	 Accepted = Usr_GetAcceptedFromYN (row[7][0]);
 	 HTM_TD_Begin ("class=\"BT %s\" title=\"%s\"",
 		       BgColor,*Usr_AcceptedTxt[Accepted]);
 	    HTM_Txt (Usr_AcceptedIcon[Accepted]);

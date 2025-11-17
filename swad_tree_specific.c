@@ -279,9 +279,16 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
       return;
 
    /***** Get list of node questions & answers from database *****/
+   static Lay_Show_t ShowHiddenItems[Vie_NUM_VIEW_TYPES] =
+     {
+      [Vie_VIEW  ] = Lay_DONT_SHOW,
+      [Vie_EDIT  ] = Lay_SHOW,
+      [Vie_CONFIG] = Lay_DONT_SHOW,
+      [Vie_PRINT ] = Lay_DONT_SHOW,
+     };
+
    NumItems = (*GetListItems[Node->InfoType]) (&mysql_res,Node->Hierarchy.NodCod,
-					       ViewingOrEditingItem[ListingType] == Vie_EDIT ? Lay_SHOW :	// Show hidden items
-											       Lay_DONT_SHOW);	// Don't show hidden items
+					       ShowHiddenItems[ViewingOrEditingItem[ListingType]]);
 
    if (NumItems || ViewingOrEditing[ListingType] == Vie_EDIT)
      {

@@ -441,6 +441,11 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE];
    static unsigned UniqueId = 0;
+   static Lay_Show_t Show[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Lay_DONT_SHOW,
+      [Exi_EXISTS        ] = Lay_SHOW,
+     };
    static Vie_ViewType_t ViewingOrEditingProgram[Tre_NUM_LISTING_TYPES] =
      {
       [Tre_PRINT			] = Vie_VIEW,
@@ -464,19 +469,22 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
    char *TitleClass;
    Dat_StartEndTime_t StartEndTime;
    Lay_Highlight_t HighlightNode;
+   static Lay_Show_t ShowHiddenResources[Vie_NUM_VIEW_TYPES] =
+     {
+      [Vie_VIEW  ] = Lay_DONT_SHOW,
+      [Vie_EDIT  ] = Lay_SHOW,
+      [Vie_CONFIG] = Lay_DONT_SHOW,
+      [Vie_PRINT ] = Lay_DONT_SHOW,
+     };
 
    /***** Check if icon expand/contract is necessary *****/
-   ShowIconExpandContract = Tre_GetIfNodeHasChildren (NumNode) == Exi_EXISTS ? Lay_SHOW :
-									       Lay_DONT_SHOW;
+   ShowIconExpandContract = Show[Tre_GetIfNodeHasChildren (NumNode)];
    if (ShowIconExpandContract == Lay_DONT_SHOW)
      {
-      ShowIconExpandContract = Tre_DB_CheckIfNodeHasTxt (Node) == Exi_EXISTS ? Lay_SHOW :
-									       Lay_DONT_SHOW;
+      ShowIconExpandContract = Show[Tre_DB_CheckIfNodeHasTxt (Node)];
       if (ShowIconExpandContract == Lay_DONT_SHOW)
-	 ShowIconExpandContract = Tre_DB_CheckListItems (Node,
-							 ViewingOrEditingProgram[ListingType] == Vie_EDIT ? Lay_SHOW :
-													    Lay_DONT_SHOW) == Exi_EXISTS ? Lay_SHOW :
-																	   Lay_DONT_SHOW;
+	 ShowIconExpandContract = Show[Tre_DB_CheckListItems (Node,
+							      ShowHiddenResources[ViewingOrEditingProgram[ListingType]])];
      }
 
    /***** Check if this node should be shown as hidden *****/
@@ -874,8 +882,8 @@ static Exi_Exist_t Tre_GetIfNodeHasChildren (unsigned NumNode)
       return Exi_DOES_NOT_EXIST;
 
    /***** Check 2. If next node is in next level ==> node has children *****/
-   return (Tre_GetLevelFromNumNode (NumNode + 1) > Tre_GetLevelFromNumNode (NumNode)) ? Exi_EXISTS :
-										        Exi_DOES_NOT_EXIST;
+   return Tre_GetLevelFromNumNode (NumNode + 1) > Tre_GetLevelFromNumNode (NumNode) ? Exi_EXISTS :
+										      Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/

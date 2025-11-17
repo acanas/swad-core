@@ -2704,8 +2704,9 @@ static void Mch_PutIconToRemoveMyAnswer (const struct Mch_Match *Match)
 	 /***** Put icon with link *****/
 	 HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
 	    HTM_BUTTON_Submit_Begin (Txt_Delete_my_answer,NULL,
-	                             "BT_LINK MCH_BUTTON_ON ICO_DARKRED\""
-	                             " onmousedown=\"this.form.submit();return false;\"");
+	                             "class=\"BT_LINK MCH_BUTTON_ON ICO_RED_%s\""
+	                             " onmousedown=\"this.form.submit();return false;\"",
+	                             The_GetSuffix ());
 	       HTM_Txt ("<i class=\"fas fa-trash\"></i>");
 	    HTM_BUTTON_End ();
 	 HTM_DIV_End ();

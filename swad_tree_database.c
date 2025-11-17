@@ -546,19 +546,25 @@ void Tre_DB_InsertNodeInExpandedNodes (long NodCod)
 
 ConExp_ContractedOrExpanded_t Tre_DB_GetIfContractedOrExpandedNode (long NodCod)
   {
+   static ConExp_ContractedOrExpanded_t ConExp[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = ConExp_CONTRACTED,
+      [Exi_EXISTS        ] = ConExp_EXPANDED,
+     };
+   Exi_Exist_t Exists;
+
    if (NodCod <= 0)	// No nodes in tree
       return ConExp_EXPANDED;
 
-   return
-   DB_QueryEXISTS ("can not check if a tree node is expanded",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM tre_expanded"
-		    " WHERE UsrCod=%ld"
-		      " AND NodCod=%ld)",
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   NodCod) == Exi_EXISTS ? ConExp_EXPANDED :
-					   ConExp_CONTRACTED;
+   Exists = DB_QueryEXISTS ("can not check if a tree node is expanded",
+			    "SELECT EXISTS"
+			    "(SELECT *"
+			      " FROM tre_expanded"
+			     " WHERE UsrCod=%ld"
+			       " AND NodCod=%ld)",
+			    Gbl.Usrs.Me.UsrDat.UsrCod,
+			    NodCod);
+   return ConExp[Exists];
   }
 
 /*****************************************************************************/
