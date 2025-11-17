@@ -119,7 +119,7 @@ void Svy_DB_RemoveCommentsSvysIn (Hie_Level_t HieLvl,long HieCod);
 //--------------------- Users who have answered surveys -----------------------
 void Svy_DB_RegisterIHaveAnsweredSvy (long SvyCod);
 
-bool Svy_DB_CheckIfIHaveAnsweredSvy (long SvyCod);
+Svy_IHaveAnswered_t Svy_DB_CheckIfIHaveAnsweredSvy (long SvyCod);
 unsigned Svy_DB_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod);
 
 void Svy_DB_RemoveUsrsWhoHaveAnsweredSvy (long SvyCod);

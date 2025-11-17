@@ -745,25 +745,31 @@ unsigned Svy_DB_GetGrpNamesAssociatedToSvy (MYSQL_RES **mysql_res,long SvyCod)
 
 Usr_Can_t Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod)
   {
-   return
-   DB_QueryEXISTS ("can not check if I can do a survey",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM svy_surveys"
-		    " WHERE SvyCod=%ld"
-		      " AND (SvyCod NOT IN"
-			   " (SELECT SvyCod"
-			      " FROM svy_groups)"
-			   " OR"
-			   " SvyCod IN"
-			   " (SELECT svy_groups.SvyCod"
-			      " FROM grp_users,"
-				    "svy_groups"
-			     " WHERE grp_users.UsrCod=%ld"
-			       " AND grp_users.GrpCod=svy_groups.GrpCod)))",
-		   SvyCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS ? Usr_CAN :
-							      Usr_CAN_NOT;
+   static Usr_Can_t ICanDoSvy[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Usr_CAN_NOT,
+      [Exi_EXISTS        ] = Usr_CAN,
+     };
+   Exi_Exist_t Exists;
+
+   Exists = DB_QueryEXISTS ("can not check if I can do a survey",
+			    "SELECT EXISTS"
+			    "(SELECT *"
+			      " FROM svy_surveys"
+			     " WHERE SvyCod=%ld"
+			       " AND (SvyCod NOT IN"
+				    " (SELECT SvyCod"
+				       " FROM svy_groups)"
+				    " OR"
+				    " SvyCod IN"
+				    " (SELECT svy_groups.SvyCod"
+				       " FROM grp_users,"
+					     "svy_groups"
+				      " WHERE grp_users.UsrCod=%ld"
+					" AND grp_users.GrpCod=svy_groups.GrpCod)))",
+			    SvyCod,
+			    Gbl.Usrs.Me.UsrDat.UsrCod);
+   return ICanDoSvy[Exists];
   }
 
 /*****************************************************************************/
@@ -1300,17 +1306,24 @@ void Svy_DB_RegisterIHaveAnsweredSvy (long SvyCod)
 /**************** Check if I have answered a given survey ********************/
 /*****************************************************************************/
 
-bool Svy_DB_CheckIfIHaveAnsweredSvy (long SvyCod)
+Svy_IHaveAnswered_t Svy_DB_CheckIfIHaveAnsweredSvy (long SvyCod)
   {
-   return
-   DB_QueryEXISTS ("can not check if you have answered a survey",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM svy_users"
-		    " WHERE SvyCod=%ld"
-		      " AND UsrCod=%ld)",
-		   SvyCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod) == Exi_EXISTS;
+   static Svy_IHaveAnswered_t IHaveAnswered[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Svy_I_DONT_HAVE_ANSWERED,
+      [Exi_EXISTS        ] = Svy_I_HAVE_ANSWERED,
+     };
+   Exi_Exist_t Exists;
+
+   Exists = DB_QueryEXISTS ("can not check if you have answered a survey",
+			    "SELECT EXISTS"
+			    "(SELECT *"
+			      " FROM svy_users"
+			     " WHERE SvyCod=%ld"
+			       " AND UsrCod=%ld)",
+			    SvyCod,
+			    Gbl.Usrs.Me.UsrDat.UsrCod);
+   return IHaveAnswered[Exists];
   }
 
 /*****************************************************************************/

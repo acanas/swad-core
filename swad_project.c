@@ -1550,6 +1550,11 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects)
    extern const char *Txt_Description;
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
+   static Prj_Warning_t PutWarning[Err_NUM_SUCCESS_OR_ERROR] =
+     {
+      [Err_SUCCESS] = Prj_DONT_PUT_WARNING,
+      [Err_ERROR  ] = Prj_PUT_WARNING,
+     };
    struct Prj_Faults Faults;
    static unsigned UniqueId = 0;
    char *Anchor = NULL;
@@ -1592,8 +1597,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects)
 		     HidVis_DataClass[Projects->Prj.Hidden],"prj_dsc_",UniqueId,
                      Txt_Description,		// Description of the project
                      Projects->Prj.Description,
-                     Faults.Description == Err_ERROR ? Prj_PUT_WARNING :
-                				       Prj_DONT_PUT_WARNING);
+                     PutWarning[Faults.Description]);
    Prj_ShowTxtField (Projects,
 		     HidVis_LabelClass[Projects->Prj.Hidden],
 		     HidVis_DataClass[Projects->Prj.Hidden],"prj_knw_",UniqueId,
@@ -1814,6 +1818,11 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
    extern const char *Txt_Review;
    extern const char *Txt_PROJECT_REVIEW_SINGUL[Prj_NUM_REVIEW_STATUS];
    extern const char *Txt_Comments;
+   static Frm_PutForm_t PutFormIfICanReview[Usr_NUM_CAN] =
+     {
+      [Usr_CAN_NOT] = Frm_DONT_PUT_FORM,
+      [Usr_CAN    ] = Frm_PUT_FORM,
+     };
    Frm_PutForm_t PutForm;
    static unsigned UniqueId = 0;
    char *Id;
@@ -1825,8 +1834,7 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
 	 PutForm = Frm_DONT_PUT_FORM;
 	 break;
       default:
-	 PutForm = Prj_CheckIfICanReviewProjects () == Usr_CAN ? Frm_PUT_FORM :
-								 Frm_DONT_PUT_FORM;
+	 PutForm = PutFormIfICanReview[Prj_CheckIfICanReviewProjects ()];
 	 break;
      }
 

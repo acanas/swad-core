@@ -419,8 +419,8 @@ static void Tml_ShowTimeline (struct Tml_Timeline *Timeline,
      {
       USER_TIMELINE,
       GLOBAL_TIMELINE
-     } UsrOrGblTimeline = (Gbl.Usrs.Other.UsrDat.UsrCod > 0) ? USER_TIMELINE :
-							       GLOBAL_TIMELINE;
+     } UsrOrGblTimeline = Gbl.Usrs.Other.UsrDat.UsrCod > 0 ? USER_TIMELINE :
+							     GLOBAL_TIMELINE;
 
    /***** Begin box *****/
    Box_BoxBegin (Title,Tml_PutIconsTimeline,NULL,

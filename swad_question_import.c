@@ -333,9 +333,8 @@ static void QstImp_WriteAnswersOfAQstXML (const struct Qst_Question *Question,
                   Question->Answer.FloatingPoint[1],Txt_NEW_LINE);
          break;
       case Qst_ANS_TRUE_FALSE:
-         fprintf (FileXML,"%s",
-                  Question->Answer.TF == 'T' ? "true" :
-                	                       "false");
+         fprintf (FileXML,"%s",Question->Answer.TF == 'T' ? "true" :
+							    "false");
          break;
       case Qst_ANS_UNIQUE_CHOICE:
       case Qst_ANS_MULTIPLE_CHOICE:
@@ -876,13 +875,45 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
                                         const struct Qst_Question *Question,
                                         Exi_Exist_t QuestionExists)
   {
-   extern const char *Txt_Existing_question;
    extern const char *Txt_New_question;
+   extern const char *Txt_Existing_question;
    extern const char *Txt_no_tags;
    extern const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES];
    extern const char *Txt_TST_Answer_given_by_the_teachers;
    static unsigned NumQst = 0;
    static unsigned NumNonExistingQst = 0;
+   static struct
+     {
+      const char *Icon;
+      Ico_Color_t Color;
+      const char **Title;
+      const char *ClassData;
+      const char *ClassStem;
+      const char *ClassShuffle;
+      const char *ClassCorrect;
+     } Layout[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] =
+        {
+         .Icon		= "check-circle.svg",
+         .Color		= Ico_UNCHANGED,
+         .Title		= &Txt_New_question,
+         .ClassData	= "DAT_SMALL",
+         .ClassStem	= "Qst_TXT",
+         .ClassShuffle	= "ICO16x16",
+         .ClassCorrect	= "CONTEXT_ICO16x16",
+        },
+      [Exi_EXISTS] =
+        {
+         .Icon		= "tr16x16.gif",
+         .Color		= Ico_GREEN,
+         .Title		= &Txt_Existing_question,
+         .ClassData	= "DAT_SMALL_LIGHT",
+         .ClassStem	= "Qst_TXT_LIGHT",
+         .ClassShuffle	= "ICO_HIDDEN ICO16x16",
+         .ClassCorrect	= "ICO_HIDDEN CONTEXT_ICO16x16",
+        },
+     };
    const char *Stem = StemElem != NULL ? StemElem->Content :
 	                                 "";
    const char *Feedback = FeedbackElem != NULL ? FeedbackElem->Content :
@@ -893,10 +924,8 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
    size_t AnswerTextLength;
    char *AnswerFeedback;
    size_t AnswerFeedbackLength;
-   const char *ClassData = QuestionExists == Exi_EXISTS ? "DAT_SMALL_LIGHT" :	// TODO: Use a static vector
-	                                                  "DAT_SMALL";
-   const char *ClassStem = QuestionExists == Exi_EXISTS ? "Qst_TXT_LIGHT" :	// TODO: Use a static vector
-							  "Qst_TXT";
+   const char *ClassData = Layout[QuestionExists].ClassData;
+   const char *ClassStem = Layout[QuestionExists].ClassStem;
 
    NumQst++;
 
@@ -904,18 +933,9 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 
       /***** Put icon to indicate that a question does not exist in database *****/
       HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
-	 switch (QuestionExists)
-	   {
-	    case Exi_EXISTS:
-	       Ico_PutIcon ("tr16x16.gif"     ,Ico_UNCHANGED,
-			    Txt_Existing_question,"CONTEXT_ICO16x16");
-	       break;
-	    case Exi_DOES_NOT_EXIST:
-	    default:
-	       Ico_PutIcon ("check-circle.svg",Ico_GREEN    ,
-			    Txt_New_question     ,"CONTEXT_ICO16x16");
-	       break;
-	   }
+	 Ico_PutIcon ( Layout[QuestionExists].Icon,
+		       Layout[QuestionExists].Color,
+		      *Layout[QuestionExists].Title,"CONTEXT_ICO16x16");
       HTM_TD_End ();
 
       /***** Write number of question *****/
@@ -975,8 +995,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 	    if (Question->Answer.Shuffle == Qst_SHUFFLE)
 	       Ico_PutIcon ("check.svg",Ico_BLACK,
 	                    Txt_TST_Answer_given_by_the_teachers,
-			    QuestionExists == Exi_EXISTS ? "ICO_HIDDEN ICO16x16" :
-							   "ICO16x16");
+			    Layout[QuestionExists].ClassShuffle);
       HTM_TD_End ();
 
       /***** Write the stem and the answers *****/
@@ -1051,8 +1070,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 			   if (Question->Answer.Options[NumOpt].Correct == Qst_CORRECT)
 			      Ico_PutIcon ("check.svg",Ico_BLACK,
 			                   Txt_TST_Answer_given_by_the_teachers,
-					   QuestionExists == Exi_EXISTS ? "ICO_HIDDEN CONTEXT_ICO16x16" :
-									  "CONTEXT_ICO16x16");
+					   Layout[QuestionExists].ClassCorrect);
 			HTM_TD_End ();
 
 			/* Write the number of option */

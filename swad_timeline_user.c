@@ -121,6 +121,11 @@ static void TmlUsr_GetAndShowSharersOrFavers (TmlUsr_FavSha_t FavSha,
                                               long Cod,long UsrCod,unsigned NumUsrs,
 				              TmlUsr_HowManyUsrs_t HowManyUsrs)
   {
+   static unsigned MaxUsrs[TmlUsr_NUM_HOW_MANY_USRS] =
+     {
+      [TmlUsr_SHOW_FEW_USRS] = TmlUsr_DEF_USRS_SHOWN,
+      [TmlUsr_SHOW_ALL_USRS] = TmlUsr_MAX_USRS_SHOWN,
+     };
    static TmlFrm_Action_t Action[TmlUsr_NUM_FAV_SHA] =
      {
       [TmlUsr_FAV_UNF_NOTE] = TmlFrm_ALL_FAV_NOTE,
@@ -146,11 +151,9 @@ static void TmlUsr_GetAndShowSharersOrFavers (TmlUsr_FavSha_t FavSha,
 
    /***** Get users who have faved/shared *****/
    if (NumUsrs)
-      NumFirstUsrs =
-      TmlUsr_GetListFaversOrSharers (FavSha,Cod,UsrCod,
-                                      HowManyUsrs == TmlUsr_SHOW_FEW_USRS ? TmlUsr_DEF_USRS_SHOWN :
-				                                            TmlUsr_MAX_USRS_SHOWN,
-                                      &mysql_res);
+      NumFirstUsrs = TmlUsr_GetListFaversOrSharers (FavSha,Cod,UsrCod,
+						    MaxUsrs[HowManyUsrs],
+						    &mysql_res);
    else
       NumFirstUsrs = 0;
 

@@ -237,7 +237,7 @@ Usr_Can_t Rub_CheckIfICanEditRubrics (void)
 /*********************** Check if edition is possible ************************/
 /*****************************************************************************/
 
-Usr_Can_t Rub_CheckIfEditable (void)
+Usr_Can_t Rub_CheckIfICanEdit (void)
   {
    if (Rub_CheckIfICanEditRubrics () == Usr_CAN)
      {
@@ -1043,6 +1043,11 @@ Handwritten    Handwritten |_______| Handwritten
 */
 static Err_SuccessOrError_t Rub_CheckIfRecursiveTree (long RubCod,struct Rub_Node **TOS)
   {
+   static Err_SuccessOrError_t SuccessOrError[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Err_SUCCESS,
+      [Exi_EXISTS        ] = Err_ERROR,
+     };
    Err_SuccessOrError_t RecursiveTree;
    MYSQL_RES *mysql_res;
    unsigned NumCriteria;
@@ -1050,8 +1055,7 @@ static Err_SuccessOrError_t Rub_CheckIfRecursiveTree (long RubCod,struct Rub_Nod
    struct RubCri_Criterion Criterion;
 
    /***** Check that rubric is not yet in the stack *****/
-   RecursiveTree = Rub_FindRubCodInStack (*TOS,RubCod) == Exi_EXISTS ? Err_ERROR :
-								       Err_SUCCESS;
+   RecursiveTree = SuccessOrError[Rub_FindRubCodInStack (*TOS,RubCod)];
 
    if (RecursiveTree == Err_SUCCESS)
      {

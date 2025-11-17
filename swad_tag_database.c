@@ -212,23 +212,23 @@ unsigned Tag_DB_GetEnabledTagsFromCrs (MYSQL_RES **mysql_res,
   {
    /***** Get available not hidden tags from database *****/
    return (unsigned)
-   (TagCod > 0 ? DB_QuerySELECT (mysql_res,"can not get available enabled tags",
-				 "SELECT TagCod,"	// row[0]
-				        "TagTxt"		// row[1]
-				  " FROM tst_tags"
-				 " WHERE TagCod=%ld"
-				   " AND CrsCod=%ld"	// Extra check
-				   " AND TagHidden='N'",
-				 TagCod,
-				 HieCod) :
-		 DB_QuerySELECT (mysql_res,"can not get available enabled tags",
-				 "SELECT TagCod,"	// row[0]
-				        "TagTxt"		// row[1]
-				  " FROM tst_tags"
-				 " WHERE CrsCod=%ld"
-				   " AND TagHidden='N'"
-			      " ORDER BY TagTxt",
-				 HieCod));
+   TagCod > 0 ? DB_QuerySELECT (mysql_res,"can not get available enabled tags",
+				"SELECT TagCod,"	// row[0]
+				       "TagTxt"		// row[1]
+				 " FROM tst_tags"
+				" WHERE TagCod=%ld"
+				  " AND CrsCod=%ld"	// Extra check
+				  " AND TagHidden='N'",
+				TagCod,
+				HieCod) :
+		DB_QuerySELECT (mysql_res,"can not get available enabled tags",
+				"SELECT TagCod,"	// row[0]
+				       "TagTxt"		// row[1]
+				 " FROM tst_tags"
+				" WHERE CrsCod=%ld"
+				  " AND TagHidden='N'"
+			     " ORDER BY TagTxt",
+				HieCod);
   }
 
 /*****************************************************************************/

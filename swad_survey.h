@@ -41,6 +41,13 @@
 
 #define Svy_ORDER_DEFAULT Dat_STR_TIME
 
+#define Svy_NUM_I_HAVE_ANSWERED 2
+typedef enum
+  {
+   Svy_I_DONT_HAVE_ANSWERED,
+   Svy_I_HAVE_ANSWERED,
+  } Svy_IHaveAnswered_t;
+
 struct Svy_Survey
   {
    long SvyCod;
@@ -56,9 +63,9 @@ struct Svy_Survey
      {
       HidVis_HiddenOrVisible_t Hidden;	// Survey is hidden or visible?
       CloOpe_ClosedOrOpen_t ClosedOrOpen;	// Start date <= now <= end date
-      bool IAmLoggedWithAValidRoleToAnswer;	// I am logged with a valid role to answer this survey
+      Err_SuccessOrError_t ValidRoleToAnswer;	// I am logged with a valid role to answer this survey
       Usr_Belong_t IBelongToScope;		// I belong to the scope of this survey
-      bool IHaveAnswered;			// I have already answered this survey
+      Svy_IHaveAnswered_t IHaveAnswered;	// I have already answered this survey
       Usr_Can_t ICanAnswer;
       Usr_Can_t ICanViewResults;
       Usr_Can_t ICanViewComments;

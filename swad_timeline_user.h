@@ -49,6 +49,7 @@ typedef enum
    TmlUsr_TIMELINE_GBL,	// Show the timeline of the users follwed by me
   } TmlUsr_UsrOrGbl_t;
 
+#define TmlUsr_NUM_HOW_MANY_USRS 2
 typedef enum
   {
    TmlUsr_SHOW_FEW_USRS,	// Show a few first favers/sharers

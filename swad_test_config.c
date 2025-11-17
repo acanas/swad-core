@@ -177,8 +177,8 @@ static void TstCfg_ShowFormConfig (void)
 		    {
 		     HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
 			HTM_INPUT_RADIO ("Pluggable",
-					 ((Pluggable == TstCfg_GetConfigPluggable ()) ? HTM_CHECKED :
-										        HTM_NO_ATTR),
+					 (Pluggable == TstCfg_GetConfigPluggable () ? HTM_CHECKED :
+										      HTM_NO_ATTR),
 					 "value=\"%u\"",(unsigned) Pluggable);
 			HTM_Txt (Txt_TST_PLUGGABLE[Pluggable]);
 		     HTM_LABEL_End ();
@@ -327,20 +327,20 @@ static void TstCfg_GetConfigDataFromRow (MYSQL_RES *mysql_res)
 
    /***** Get number of questions *****/
    if (sscanf (row[1],"%d",&IntNum) == 1)
-      TstCfg_SetConfigMin ((IntNum < 1) ? 1 :
-	                                  (unsigned) IntNum);
+      TstCfg_SetConfigMin (IntNum < 1 ? 1 :
+	                                (unsigned) IntNum);
    else
       TstCfg_SetConfigMin (TstCfg_DEFAULT_MIN_QUESTIONS);
 
    if (sscanf (row[2],"%d",&IntNum) == 1)
-      TstCfg_SetConfigDef ((IntNum < 1) ? 1 :
-	                                  (unsigned) IntNum);
+      TstCfg_SetConfigDef (IntNum < 1 ? 1 :
+	                                (unsigned) IntNum);
    else
       TstCfg_SetConfigDef (TstCfg_DEFAULT_DEF_QUESTIONS);
 
    if (sscanf (row[3],"%d",&IntNum) == 1)
-      TstCfg_SetConfigMax ((IntNum < 1) ? 1 :
-	                                  (unsigned) IntNum);
+      TstCfg_SetConfigMax (IntNum < 1 ? 1 :
+	                                (unsigned) IntNum);
    else
       TstCfg_SetConfigMax (TstCfg_DEFAULT_MAX_QUESTIONS);
 
@@ -349,8 +349,8 @@ static void TstCfg_GetConfigDataFromRow (MYSQL_RES *mysql_res)
 
    /***** Get minimum time between consecutive tests, per question (row[4]) *****/
    if (sscanf (row[4],"%ld",&LongNum) == 1)
-      TstCfg_SetConfigMinTimeNxtTstPerQst ((LongNum < 1L) ? 0UL :
-	                                                    (unsigned long) LongNum);
+      TstCfg_SetConfigMinTimeNxtTstPerQst (LongNum < 1L ? 0UL :
+	                                                  (unsigned long) LongNum);
    else
       TstCfg_SetConfigMinTimeNxtTstPerQst (0UL);
 

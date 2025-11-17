@@ -260,7 +260,7 @@ void RubCri_ReceiveCriterion (void)
    Rub_GetRubricDataByCod (&Rubrics.Rubric);
 
    /***** Check if rubric is editable *****/
-   if (Rub_CheckIfEditable () == Usr_CAN_NOT)
+   if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** If I can edit rubrics ==> receive criterion from form *****/
@@ -356,7 +356,7 @@ void RubCri_ChangeTitle (void)
    RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
-   if (Rub_CheckIfEditable () == Usr_CAN_NOT)
+   if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
      Err_NoPermissionExit ();
 
    /***** Receive new title from form *****/
@@ -412,7 +412,7 @@ static void RubCri_ChangeValueCriterion (RubCri_ValueRange_t ValueRange)
    RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
-   if (Rub_CheckIfEditable () == Usr_CAN_NOT)
+   if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Receive new value from form *****/
@@ -455,7 +455,7 @@ void RubCri_ChangeWeight (void)
    RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
-   if (Rub_CheckIfEditable () == Usr_CAN_NOT)
+   if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Receive new weight from form *****/
@@ -535,8 +535,7 @@ void RubCri_ListCriteriaForEdition (struct Rub_Rubrics *Rubrics)
    MYSQL_RES *mysql_res;
    unsigned MaxCriInd;
    unsigned NumCriteria;
-   Usr_Can_t ICanEditCriteria = Rub_CheckIfEditable () ? Usr_CAN :
-							 Usr_CAN_NOT;
+   Usr_Can_t ICanEditCriteria = Rub_CheckIfICanEdit ();
 
    /***** Get maximum criterion index *****/
    MaxCriInd = Rub_DB_GetMaxCriterionIndexInRubric (Rubrics->Rubric.RubCod);
@@ -1056,6 +1055,11 @@ static Err_SuccessOrError_t RubCri_ComputeRubricScore (Rsc_Type_t RscType,long R
 						       struct Rub_Node **TOS,long RubCod,
 						       double *RubricScore)
   {
+   static Err_SuccessOrError_t SuccessOrError[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Err_SUCCESS,
+      [Exi_EXISTS        ] = Err_ERROR,
+     };
    Err_SuccessOrError_t RecursiveTree;
    MYSQL_RES *mysql_res;
    unsigned NumCriteria;
@@ -1067,8 +1071,7 @@ static Err_SuccessOrError_t RubCri_ComputeRubricScore (Rsc_Type_t RscType,long R
    *RubricScore = 0.0;
 
    /***** Check that rubric is not yet in the stack *****/
-   RecursiveTree = Rub_FindRubCodInStack (*TOS,RubCod) == Exi_EXISTS ? Err_ERROR :
-								       Err_SUCCESS;
+   RecursiveTree = SuccessOrError[Rub_FindRubCodInStack (*TOS,RubCod)];
 
    if (RecursiveTree == Err_SUCCESS)
      {
@@ -1317,7 +1320,7 @@ void RubCri_ReqRemCriterion (void)
    RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
-   if (Rub_CheckIfEditable () == Usr_CAN_NOT)
+   if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Show question and button to remove question *****/
@@ -1351,7 +1354,7 @@ void RubCri_RemoveCriterion (void)
    RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
-   if (Rub_CheckIfEditable () == Usr_CAN_NOT)
+   if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Remove the criterion from all tables *****/
@@ -1394,7 +1397,7 @@ void RubCri_MoveUpCriterion (void)
    RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
-   if (Rub_CheckIfEditable () == Usr_CAN_NOT)
+   if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get criterion index *****/
@@ -1442,7 +1445,7 @@ void RubCri_MoveDownCriterion (void)
    RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
-   if (Rub_CheckIfEditable () == Usr_CAN_NOT)
+   if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get criterion index *****/
@@ -1555,7 +1558,7 @@ void RubCri_ChangeLink (void)
    RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
-   if (Rub_CheckIfEditable () == Usr_CAN_NOT)
+   if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get link type and code *****/

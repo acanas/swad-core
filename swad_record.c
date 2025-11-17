@@ -55,6 +55,7 @@
 #include "swad_message.h"
 #include "swad_message_database.h"
 #include "swad_network.h"
+#include "swad_one_several.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_privacy.h"
@@ -122,8 +123,8 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView);
 static void Rec_ShowLinkToPrintPreviewOfRecords (void);
 static void Rec_ShowSelectorRecsPerPag (unsigned RecsPerPag);
 static unsigned Rec_GetParRecordsPerPage (void);
-static void Rec_WriteFormShowOfficeHoursOneTch (Lay_Show_t ShowOfficeHours);
-static void Rec_WriteFormShowOfficeHoursSeveralTchs (Lay_Show_t ShowOfficeHours);
+static void Rec_WriteFormShowOfficeHours (OneSev_OneOrSeveral_t OneOrMultiple,
+					  Lay_Show_t ShowOfficeHours);
 static void Rec_PutParsShowOfficeHoursOneTch (__attribute__((unused)) void *Args);
 static void Rec_PutParsShowOfficeHoursSeveralTchs (__attribute__((unused)) void *Args);
 static Lay_Show_t Rec_GetParShowOfficeHours (void);
@@ -1221,7 +1222,7 @@ void Rec_ShowRecordOneTchCrs (void)
    Mnu_ContextMenuBegin ();
 
       /* Show office hours? */
-      Rec_WriteFormShowOfficeHoursOneTch (ShowOfficeHours);
+      Rec_WriteFormShowOfficeHours (OneSev_ONE,ShowOfficeHours);
 
       /* Print view */
       Frm_BeginForm (ActPrnRecSevTch);
@@ -1306,7 +1307,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
       Mnu_ContextMenuBegin ();
 
 	 /* Show office hours? */
-	 Rec_WriteFormShowOfficeHoursSeveralTchs (ShowOfficeHours);
+	 Rec_WriteFormShowOfficeHours (OneSev_SEVERAL,ShowOfficeHours);
 
 	 /* Print view */
 	 Frm_BeginForm (ActPrnRecSevTch);
@@ -1449,28 +1450,29 @@ static unsigned Rec_GetParRecordsPerPage (void)
 /*********** Write a form to select whether show all office hours ************/
 /*****************************************************************************/
 
-static void Rec_WriteFormShowOfficeHoursOneTch (Lay_Show_t ShowOfficeHours)
+static void Rec_WriteFormShowOfficeHours (OneSev_OneOrSeveral_t OneOrMultiple,
+					  Lay_Show_t ShowOfficeHours)
   {
    extern const char *Txt_Show_tutoring_hours;
+   static struct
+     {
+      Act_Action_t Action;
+      void (*FuncPutPars) (__attribute__((unused)) void *Args);
+     } Actions[OneSev_NUM_ONE_SEVERAL] =
+     {
+      [OneSev_ONE    ] = {.Action = ActSeeRecOneTch,.FuncPutPars = Rec_PutParsShowOfficeHoursOneTch	},
+      [OneSev_SEVERAL] = {.Action = ActSeeRecSevTch,.FuncPutPars = Rec_PutParsShowOfficeHoursSeveralTchs}
+     };
+   static HTM_Attributes_t Attributes[Lay_NUM_SHOW] =
+     {
+      [Lay_DONT_SHOW] = HTM_NO_ATTR,
+      [Lay_SHOW     ] = HTM_CHECKED
+     };
 
-   Lay_PutContextualCheckbox (ActSeeRecOneTch,
-                              Rec_PutParsShowOfficeHoursOneTch,NULL,
+   Lay_PutContextualCheckbox (Actions[OneOrMultiple].Action,
+                              Actions[OneOrMultiple].FuncPutPars,NULL,
                               "ShowOfficeHours",
-                              (ShowOfficeHours == Lay_SHOW ? HTM_CHECKED :
-                        				     HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
-                              Txt_Show_tutoring_hours,
-                              Txt_Show_tutoring_hours);
-  }
-
-static void Rec_WriteFormShowOfficeHoursSeveralTchs (Lay_Show_t ShowOfficeHours)
-  {
-   extern const char *Txt_Show_tutoring_hours;
-
-   Lay_PutContextualCheckbox (ActSeeRecSevTch,
-                              Rec_PutParsShowOfficeHoursSeveralTchs,NULL,
-                              "ShowOfficeHours",
-                              (ShowOfficeHours == Lay_SHOW ? HTM_CHECKED :
-                        				     HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
+                              Attributes[ShowOfficeHours] | HTM_SUBMIT_ON_CHANGE,
                               Txt_Show_tutoring_hours,
                               Txt_Show_tutoring_hours);
   }
@@ -1584,7 +1586,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
   {
    extern const char *Hlp_USERS_Students_course_record_card;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
-   const char *Rec_RecordHelp[Rec_COURSE_NUM_VIEW_TYPES] =
+   const char *RecordHelp[Rec_COURSE_NUM_VIEW_TYPES] =
      {
       [Rec_CRS_MY_RECORD_AS_STUDENT_FORM ] = Hlp_USERS_Students_course_record_card,
       [Rec_CRS_MY_RECORD_AS_STUDENT_CHECK] = Hlp_USERS_Students_course_record_card,
@@ -1592,6 +1594,11 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
       [Rec_CRS_LIST_SEVERAL_RECORDS      ] = Hlp_USERS_Students_course_record_card,
       [Rec_CRS_PRINT_ONE_RECORD          ] = NULL,
       [Rec_CRS_PRINT_SEVERAL_RECORDS     ] = NULL,
+     };
+   static const char *Class[Usr_NUM_CAN] =
+     {
+      [Usr_CAN_NOT] = "REC_DAT_SMALL",
+      [Usr_CAN    ] = "FORM_IN",
      };
    Usr_Can_t ICanEdit = Usr_CAN_NOT;
    unsigned NumField;
@@ -1658,7 +1665,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,NULL,NULL,
-                      Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
+                      RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
       HTM_TR_Begin (NULL);
@@ -1717,11 +1724,9 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 
 	    /* Name of the field */
 	    HTM_TR_Begin (NULL);
-
 	       HTM_TD_Begin ("class=\"REC_C1_BOT %s_%s RT %s\"",
-			     ICanEditThisField == Usr_CAN ? "FORM_IN" :
-							    "REC_DAT_SMALL",	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			     The_GetSuffix (),The_GetColorRows ());
+			     Class[ICanEditThisField],The_GetSuffix (),
+			     The_GetColorRows ());
 		  HTM_Txt (Gbl.Crs.Records.LstFields.Lst[NumField].Name);
 		  HTM_Colon ();
 		  if (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
@@ -2032,6 +2037,11 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    extern const char *Hlp_USERS_Guests;
    extern const char *Hlp_USERS_Students_shared_record_card;
    extern const char *Hlp_USERS_Teachers_shared_record_card;
+   static Vie_ViewType_t ViewTypes[Usr_NUM_CAN] =
+     {
+      [Usr_CAN_NOT] = Vie_VIEW,
+      [Usr_CAN    ] = Vie_EDIT,
+     };
    const char *Rec_RecordHelp[Rec_SHARED_NUM_VIEW_TYPES] =
      {
       [Rec_SHA_SIGN_UP_IN_CRS_FORM] = Hlp_USERS_SignUp,
@@ -2097,8 +2107,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	 ViewType = Vie_EDIT;
 	 break;
       case Rec_SHA_OTHER_EXISTING_USR_FORM:
-	 ViewType = Usr_ICanChangeOtherUsrData (UsrDat) == Usr_CAN ? Vie_EDIT :
-							             Vie_VIEW;
+	 ViewType = ViewTypes[Usr_ICanChangeOtherUsrData (UsrDat)];
 	 break;
       default:	// In other options, I can not edit user's data
 	 ViewType = Vie_VIEW;

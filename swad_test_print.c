@@ -605,6 +605,11 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
    extern const char *Txt_Score;
    extern const char *Txt_Question_removed;
    extern const char *Txt_Question_modified;
+   static HidVis_HiddenOrVisible_t HiddenOrVisible[Usr_NUM_CAN] =
+     {
+      [Usr_CAN_NOT] = HidVis_HIDDEN,
+      [Usr_CAN    ] = HidVis_VISIBLE,
+     };
    bool QuestionUneditedAfterExam = false;
    Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY];
 
@@ -668,8 +673,7 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 		 {
 		  /* Stem */
 		  Qst_WriteQstStem (Question->Stem,"Qst_TXT",
-				    ICanView[TstVis_VISIBLE_QST_ANS_TXT] ? HidVis_VISIBLE :
-									   HidVis_HIDDEN);
+				    HiddenOrVisible[ICanView[TstVis_VISIBLE_QST_ANS_TXT]]);
 
 		  /* Media */
 		  if (ICanView[TstVis_VISIBLE_QST_ANS_TXT] == Usr_CAN)
@@ -2243,7 +2247,8 @@ static void TstPrn_ShowPrintsSummaryRow (Usr_MeOrOther_t MeOrOther,
                     The_GetSuffix (),
                     The_GetColorRows ());
 	 if (ICanViewTotalScore == Usr_CAN)
-	    HTM_Double2Decimals (NumTotalQsts->All ? TotalScore / (double) NumTotalQsts->All :
+	    HTM_Double2Decimals (NumTotalQsts->All ? TotalScore /
+						     (double) NumTotalQsts->All :
 						     0.0);
       HTM_TD_End ();
 
@@ -2504,8 +2509,9 @@ static void TstRes_CheckIfICanSeePrintResult (const struct TstPrn_Print *Print,
       case Rol_STD:
 	 // Depends on whether the print is sent or not
 	 // if the print is not sent ==> I can not view results
-	 ICanView->Result = Print->Sent && Usr_ItsMe (UsrCod) == Usr_ME ? Usr_CAN :
-									  Usr_CAN_NOT;
+	 ICanView->Result = Print->Sent &&
+			    Usr_ItsMe (UsrCod) == Usr_ME ? Usr_CAN :
+							   Usr_CAN_NOT;
 	 switch (ICanView->Result)
 	   {
 	    case Usr_CAN:

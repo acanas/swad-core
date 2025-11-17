@@ -69,6 +69,11 @@ extern struct Globals Gbl;
 
 void Rol_SetMyRoles (void)
   {
+   static Usr_Can_t ICanBe[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Usr_CAN_NOT,
+      [Exi_EXISTS        ] = Usr_CAN,
+     };
    Usr_Can_t ICanBeAdm[Hie_NUM_LEVELS] =
      {
       [Hie_INS] = Usr_CAN_NOT,
@@ -107,20 +112,14 @@ void Rol_SetMyRoles (void)
    if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
      {
       /* Check if I am and administrator of current institution */
-      ICanBeAdm[Hie_INS] = Adm_DB_CheckIfUsrExistsAsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-							 Hie_INS) == Exi_EXISTS ? Usr_CAN :
-										  Usr_CAN_NOT;
+      ICanBeAdm[Hie_INS] = ICanBe[Adm_DB_CheckIfUsrExistsAsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,Hie_INS)];
       if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
 	{
 	 /* Check if I am and administrator of current center */
-	 ICanBeAdm[Hie_CTR] = Adm_DB_CheckIfUsrExistsAsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-							    Hie_CTR) == Exi_EXISTS ? Usr_CAN :
-										     Usr_CAN_NOT;
+	 ICanBeAdm[Hie_CTR] = ICanBe[Adm_DB_CheckIfUsrExistsAsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,Hie_CTR)];
 	 if (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
 	    /* Check if I am and administrator of current degree */
-	    ICanBeAdm[Hie_DEG] = Adm_DB_CheckIfUsrExistsAsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-							       Hie_DEG) == Exi_EXISTS ? Usr_CAN :
-											Usr_CAN_NOT;
+	    ICanBeAdm[Hie_DEG] = ICanBe[Adm_DB_CheckIfUsrExistsAsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,Hie_DEG)];
 	}
      }
 

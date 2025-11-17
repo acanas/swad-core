@@ -1802,6 +1802,11 @@ Qst_AnswerType_t Qst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr)
 void Qst_ShowFormEditOneQst (void)
   {
    extern const char *Txt_Question_removed;
+   static Frm_PutForm_t PutForm[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Frm_DONT_PUT_FORM,
+      [Exi_EXISTS        ] = Frm_PUT_FORM,
+     };
    struct Qst_Question Question;
    Frm_PutForm_t PutFormToEditQuestion;
 
@@ -1813,8 +1818,7 @@ void Qst_ShowFormEditOneQst (void)
       if (Question.QstCod <= 0)	// New question
 	 PutFormToEditQuestion = Frm_PUT_FORM;
       else
-	 PutFormToEditQuestion = Qst_GetQstDataByCod (&Question) == Exi_EXISTS ? Frm_PUT_FORM :
-										 Frm_DONT_PUT_FORM;
+	 PutFormToEditQuestion = PutForm[Qst_GetQstDataByCod (&Question)];
 
       /***** Put form to edit question *****/
       switch (PutFormToEditQuestion)
@@ -2277,8 +2281,8 @@ static void Qst_PutIntInputField (const struct Qst_Question *Question)
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_Txt (Txt_Integer_number); HTM_Colon (); HTM_NBSP ();
       HTM_INPUT_LONG ("AnsInt",(long) INT_MIN,(long) INT_MAX,Question->Answer.Integer,
-	              Question->Answer.Type == Qst_ANS_INT ? HTM_NO_ATTR :
-							     HTM_DISABLED | HTM_REQUIRED,
+	              (Question->Answer.Type == Qst_ANS_INT ? HTM_NO_ATTR :
+							      HTM_DISABLED) | HTM_REQUIRED,
 		      "class=\"Exa_ANSWER_INPUT_INT INPUT_%s\"",
 		      The_GetSuffix ());
    HTM_LABEL_End ();

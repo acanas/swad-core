@@ -55,7 +55,7 @@ void Rub_RubricDestructor (struct Rub_Rubric *Rubric);
 void Rub_SeeAllRubrics (void);
 void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics);
 Usr_Can_t Rub_CheckIfICanEditRubrics (void);
-Usr_Can_t Rub_CheckIfEditable (void);
+Usr_Can_t Rub_CheckIfICanEdit (void);
 void Rub_SeeOneRubric (void);
 void Rub_ShowOnlyOneRubric (struct Rub_Rubrics *Rubrics);
 void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,

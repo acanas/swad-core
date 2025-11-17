@@ -766,12 +766,24 @@ static void Svy_WriteStatus (struct Svy_Survey *Svy)
       [CloOpe_CLOSED] = &Txt_SURVEY_You_have_already_answered,
       [CloOpe_OPEN  ] = &Txt_SURVEY_You_have_not_answered,
      };
-   CloOpe_ClosedOrOpen_t ClosedOrOpenDependingOnMyRole = Svy->Status.IAmLoggedWithAValidRoleToAnswer ? CloOpe_OPEN :
-												       CloOpe_CLOSED;
-   CloOpe_ClosedOrOpen_t ClosedOrOpenDependingOnScope = Svy->Status.IBelongToScope == Usr_BELONG ? CloOpe_OPEN :
-												   CloOpe_CLOSED;
-   CloOpe_ClosedOrOpen_t ClosedOrOpenDependingOnAlreadyAnswered = Svy->Status.IHaveAnswered ? CloOpe_CLOSED :
-											      CloOpe_OPEN;
+   static CloOpe_ClosedOrOpen_t ClosedOrOpenOnRole[Err_NUM_SUCCESS_OR_ERROR] =
+     {
+      [Err_SUCCESS] = CloOpe_OPEN,
+      [Err_ERROR  ] = CloOpe_CLOSED,
+     };
+   static CloOpe_ClosedOrOpen_t ClosedOrOpenOnScope[Usr_NUM_BELONG] =
+     {
+      [Usr_DONT_BELONG] = CloOpe_CLOSED,
+      [Usr_BELONG     ] = CloOpe_OPEN,
+     };
+   static CloOpe_ClosedOrOpen_t ClosedOrOpenOnAnswered[Svy_NUM_I_HAVE_ANSWERED] =
+     {
+      [Svy_I_DONT_HAVE_ANSWERED] = CloOpe_OPEN,
+      [Svy_I_HAVE_ANSWERED     ] = CloOpe_CLOSED,
+     };
+   CloOpe_ClosedOrOpen_t ClosedOrOpenDependingOnMyRole   = ClosedOrOpenOnRole[Svy->Status.ValidRoleToAnswer];
+   CloOpe_ClosedOrOpen_t ClosedOrOpenDependingOnScope    = ClosedOrOpenOnScope[Svy->Status.IBelongToScope];
+   CloOpe_ClosedOrOpen_t ClosedOrOpenDependingOnAnswered = ClosedOrOpenOnAnswered[Svy->Status.IHaveAnswered];
 
    /***** Begin list with items of status *****/
    HTM_UL_Begin (NULL);
@@ -806,9 +818,9 @@ static void Svy_WriteStatus (struct Svy_Survey *Svy)
 
       /* Write whether survey has been already answered by me or not */
       HTM_LI_Begin ("class=\"%s_%s\"",
-		    CloOpe_Class[ClosedOrOpenDependingOnAlreadyAnswered][Svy->Status.Hidden],
+		    CloOpe_Class[ClosedOrOpenDependingOnAnswered][Svy->Status.Hidden],
 		    The_GetSuffix ());
-	 HTM_Txt (*ClosedOrOpenDependingOnAlreadyAnsweredTxt[ClosedOrOpenDependingOnAlreadyAnswered]);
+	 HTM_Txt (*ClosedOrOpenDependingOnAlreadyAnsweredTxt[ClosedOrOpenDependingOnAnswered]);
       HTM_LI_End ();
 
    /***** End list with items of status *****/
@@ -1152,7 +1164,8 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
 	 Svy->NumUsrs = Svy_DB_GetNumUsrsWhoHaveAnsweredSvy (Svy->SvyCod);
 
 	 /* Am I logged with a valid role to answer this survey? */
-	 Svy->Status.IAmLoggedWithAValidRoleToAnswer = (Svy->Roles & (1 << Gbl.Usrs.Me.Role.Logged));
+	 Svy->Status.ValidRoleToAnswer = (Svy->Roles & (1 << Gbl.Usrs.Me.Role.Logged)) ? Err_SUCCESS :
+											 Err_ERROR;
 
 	 /* Do I belong to valid groups to answer this survey? */
 	 switch (Svy->HieLvl)
@@ -1181,13 +1194,13 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
 	 Svy->Status.IHaveAnswered = Svy_DB_CheckIfIHaveAnsweredSvy (Svy->SvyCod);
 
 	 /* Can I answer survey? */
-	 Svy->Status.ICanAnswer =  Svy->NumQsts &&
-				   Svy->Status.Hidden == HidVis_VISIBLE &&
-				   Svy->Status.ClosedOrOpen == CloOpe_OPEN &&
-				   Svy->Status.IAmLoggedWithAValidRoleToAnswer &&
-				   Svy->Status.IBelongToScope == Usr_BELONG &&
-				  !Svy->Status.IHaveAnswered ? Usr_CAN :
-							       Usr_CAN_NOT;
+	 Svy->Status.ICanAnswer = Svy->NumQsts &&
+				  Svy->Status.Hidden == HidVis_VISIBLE &&
+				  Svy->Status.ClosedOrOpen == CloOpe_OPEN &&
+				  Svy->Status.ValidRoleToAnswer == Err_SUCCESS &&
+				  Svy->Status.IBelongToScope == Usr_BELONG &&
+				  Svy->Status.IHaveAnswered == Svy_I_DONT_HAVE_ANSWERED ? Usr_CAN :
+											  Usr_CAN_NOT;
 
 	 /* Can I view results of the survey?
 	    Can I edit survey? */
@@ -1203,10 +1216,10 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
 					       Svy->NumQsts &&
 					       Svy->Status.Hidden == HidVis_VISIBLE &&
 					       Svy->Status.ClosedOrOpen == CloOpe_OPEN &&
-					       Svy->Status.IAmLoggedWithAValidRoleToAnswer &&
+					       Svy->Status.ValidRoleToAnswer == Err_SUCCESS &&
 					       Svy->Status.IBelongToScope == Usr_BELONG &&
-					       Svy->Status.IHaveAnswered ? Usr_CAN :
-									   Usr_CAN_NOT;
+					       Svy->Status.IHaveAnswered == Svy_I_HAVE_ANSWERED ? Usr_CAN :
+												  Usr_CAN_NOT;
 	       Svy->Status.ICanViewComments = Usr_CAN_NOT;
 	       Svy->Status.ICanEdit         = Usr_CAN_NOT;
 	       break;
@@ -1303,9 +1316,9 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
 	 Svy->NumUsrs			= 0;
 	 Svy->Status.Hidden		= HidVis_VISIBLE;
 	 Svy->Status.ClosedOrOpen	= CloOpe_CLOSED;
-	 Svy->Status.IAmLoggedWithAValidRoleToAnswer = false;
+	 Svy->Status.ValidRoleToAnswer	= Err_ERROR;
 	 Svy->Status.IBelongToScope	= Usr_DONT_BELONG;
-	 Svy->Status.IHaveAnswered	= false;
+	 Svy->Status.IHaveAnswered	= Svy_I_DONT_HAVE_ANSWERED;
 	 Svy->Status.ICanAnswer		= Usr_CAN_NOT;
 	 Svy->Status.ICanViewResults	= Usr_CAN_NOT;
 	 Svy->Status.ICanViewComments	= Usr_CAN_NOT;
@@ -1644,13 +1657,13 @@ void Svy_ReqCreatOrEditSvy (void)
 	 Surveys.Svy.NumQsts = 0;
 	 Surveys.Svy.NumUsrs = 0;
 	 Surveys.Svy.Status.Hidden  = HidVis_VISIBLE;
-	 Surveys.Svy.Status.ClosedOrOpen	  = CloOpe_OPEN;
-	 Surveys.Svy.Status.IAmLoggedWithAValidRoleToAnswer = false;
-	 Surveys.Svy.Status.IBelongToScope   = Usr_DONT_BELONG;
-	 Surveys.Svy.Status.IHaveAnswered    = false;
-	 Surveys.Svy.Status.ICanAnswer	  = Usr_CAN_NOT;
-	 Surveys.Svy.Status.ICanViewResults  = Usr_CAN_NOT;
-	 Surveys.Svy.Status.ICanViewComments = Usr_CAN_NOT;
+	 Surveys.Svy.Status.ClosedOrOpen	= CloOpe_OPEN;
+	 Surveys.Svy.Status.ValidRoleToAnswer	= Err_ERROR;
+	 Surveys.Svy.Status.IBelongToScope	= Usr_DONT_BELONG;
+	 Surveys.Svy.Status.IHaveAnswered	= Svy_I_DONT_HAVE_ANSWERED;
+	 Surveys.Svy.Status.ICanAnswer		= Usr_CAN_NOT;
+	 Surveys.Svy.Status.ICanViewResults	= Usr_CAN_NOT;
+	 Surveys.Svy.Status.ICanViewComments	= Usr_CAN_NOT;
 	 Txt[0] = '\0';
 	 break;
      }
@@ -3157,13 +3170,17 @@ void Svy_ReceiveSurveyAnswers (void)
    Svy_GetSurveyDataByCod (&Surveys.Svy);
 
    /***** Check if I have no answered this survey formerly *****/
-   if (Surveys.Svy.Status.IHaveAnswered)
-      Ale_ShowAlert (Ale_WARNING,Txt_You_already_answered_this_survey_before);
-   else
+   switch (Surveys.Svy.Status.IHaveAnswered)
      {
-      /***** Receive and store user's answers *****/
-      Svy_ReceiveAndStoreUserAnswersToASurvey (Surveys.Svy.SvyCod);
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Thanks_for_answering_the_survey);
+      case Svy_I_HAVE_ANSWERED:
+	 Ale_ShowAlert (Ale_WARNING,Txt_You_already_answered_this_survey_before);
+	 break;
+      case Svy_I_DONT_HAVE_ANSWERED:
+      default:
+	 /***** Receive and store user's answers *****/
+	 Svy_ReceiveAndStoreUserAnswersToASurvey (Surveys.Svy.SvyCod);
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_Thanks_for_answering_the_survey);
+	 break;
      }
 
    /***** Show current survey *****/

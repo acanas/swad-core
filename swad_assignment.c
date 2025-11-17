@@ -49,6 +49,7 @@
 #include "swad_notification.h"
 #include "swad_notification_database.h"
 #include "swad_old_new.h"
+#include "swad_one_several.h"
 #include "swad_pagination.h"
 #include "swad_parameter_code.h"
 #include "swad_photo.h"
@@ -57,16 +58,6 @@
 #include "swad_rubric_type.h"
 #include "swad_setting.h"
 #include "swad_string.h"
-
-/*****************************************************************************/
-/******************************* Private types *******************************/
-/*****************************************************************************/
-
-typedef enum
-  {
-   Asg_ONE_ASSIGMENT,
-   Asg_MULTIPLE_ASSIGMENTS
-  } Asg_OneOrMultiple_t;
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -86,7 +77,7 @@ static struct Asg_Assignment Asg_Assignment;
 /*****************************************************************************/
 
 static void Asg_PutHead (struct Asg_Assignments *Assignments,
-                         Asg_OneOrMultiple_t OneOrMultiple,
+                         OneSev_OneOrSeveral_t OneOrMultiple,
                          Vie_ViewType_t ViewType);
 static Usr_Can_t Asg_CheckIfICanCreateAssignments (void);
 static void Asg_PutIconsListAssignments (void *Assignments);
@@ -94,7 +85,7 @@ static void Asg_PutIconToCreateNewAsg (void *Assignments);
 static void Asg_ParsMyAllGrps (void *Assignments);
 static void Asg_PutIconsOneAsg (void *Assignments);
 static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
-                                   Asg_OneOrMultiple_t OneOrMultiple,
+                                   OneSev_OneOrSeveral_t OneOrMultiple,
                                    Vie_ViewType_t ViewType);
 static void Asg_WriteAsgAuthor (struct Asg_Assignment *Asg);
 static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
@@ -225,7 +216,7 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
 	 HTM_TABLE_Begin ("TBL_SCROLL");
 
 	    /***** Table head *****/
-	    Asg_PutHead (Assignments,Asg_MULTIPLE_ASSIGMENTS,Vie_VIEW);
+	    Asg_PutHead (Assignments,OneSev_SEVERAL,Vie_VIEW);
 
 	    /***** Write all assignments *****/
 	    for (NumAsg  = Pagination.FirstItemVisible, The_ResetRowColor ();
@@ -234,7 +225,7 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
 	      {
 	       Assignments->Asg.AsgCod = Assignments->LstAsgCods[NumAsg - 1];
 	       Asg_GetAssignmentDataByCod (&Assignments->Asg);
-	       Asg_ShowAssignmentRow (Assignments,Asg_MULTIPLE_ASSIGMENTS,Vie_VIEW);
+	       Asg_ShowAssignmentRow (Assignments,OneSev_SEVERAL,Vie_VIEW);
 	      }
 
 	 /***** End table *****/
@@ -259,7 +250,7 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
 /*****************************************************************************/
 
 static void Asg_PutHead (struct Asg_Assignments *Assignments,
-                         Asg_OneOrMultiple_t OneOrMultiple,
+                         OneSev_OneOrSeveral_t OneOrMultiple,
                          Vie_ViewType_t ViewType)
   {
    extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
@@ -271,7 +262,7 @@ static void Asg_PutHead (struct Asg_Assignments *Assignments,
 
    HTM_TR_Begin (NULL);
 
-      if (OneOrMultiple == Asg_MULTIPLE_ASSIGMENTS)
+      if (OneOrMultiple == OneSev_SEVERAL)
          HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");	// Column for contextual icons
 
       for (Order  = (Dat_StartEndTime_t) 0;
@@ -449,10 +440,10 @@ void Asg_PrintOneAssignment (void)
    HTM_TABLE_BeginWideMarginPadding (2);
 
       /***** Table head *****/
-      Asg_PutHead (&Assignments,Asg_ONE_ASSIGMENT,Vie_PRINT);
+      Asg_PutHead (&Assignments,OneSev_ONE,Vie_PRINT);
 
       /***** Write assignment *****/
-      Asg_ShowAssignmentRow (&Assignments,Asg_ONE_ASSIGMENT,Vie_PRINT);
+      Asg_ShowAssignmentRow (&Assignments,OneSev_ONE,Vie_PRINT);
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -477,10 +468,10 @@ void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments)
       HTM_TABLE_Begin ("TBL_SCROLL");
 
 	 /***** Table head *****/
-	 Asg_PutHead (Assignments,Asg_ONE_ASSIGMENT,Vie_VIEW);
+	 Asg_PutHead (Assignments,OneSev_ONE,Vie_VIEW);
 
 	 /***** Write assignment *****/
-	 Asg_ShowAssignmentRow (Assignments,Asg_ONE_ASSIGMENT,Vie_VIEW);
+	 Asg_ShowAssignmentRow (Assignments,OneSev_ONE,Vie_VIEW);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -515,7 +506,7 @@ static void Asg_PutIconsOneAsg (void *Assignments)
 /*****************************************************************************/
 
 static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
-                                   Asg_OneOrMultiple_t OneOrMultiple,
+                                   OneSev_OneOrSeveral_t OneOrMultiple,
                                    Vie_ViewType_t ViewType)
   {
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
@@ -534,7 +525,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
    HTM_TR_Begin (NULL);
 
       /* Forms to remove/edit this assignment */
-      if (OneOrMultiple == Asg_MULTIPLE_ASSIGMENTS)
+      if (OneOrMultiple == OneSev_SEVERAL)
 	{
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
 	               The_GetColorRows ());
