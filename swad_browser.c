@@ -3886,7 +3886,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
    HidVis_HiddenOrVisible_t ThisHiddenOrVisible = HidVis_VISIBLE;
    HidVis_HiddenOrVisible_t ThisOrAncestorHiddenOrVisible = HidVis_VISIBLE;
    PriPub_PrivateOrPublic_t RowPublicOrPrivate;
-   bool IsRecent = false;
+   bool IsOld = true;
    struct Brw_FileMetadata FileMetadata;
    __attribute__((unused)) Exi_Exist_t FileExists;
    char FileBrowserId[32];
@@ -3956,16 +3956,16 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
    // If less than a week since last modify ==>
    // ==> indicate the file is recent by writting its name in green
    if (Dat_GetStartExecutionTimeUTC () < FileMetadata.Time + (7L * 24L * 60L * 60L))
-      IsRecent = true;
+      IsOld = false;
 
    snprintf (TxtStyle,sizeof (TxtStyle),"%s_%s",
              Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER ||
-             IsRecent ? ClassTxtNew[ThisOrAncestorHiddenOrVisible] :
-        		ClassTxtOld[ThisOrAncestorHiddenOrVisible],
+             IsOld ? ClassTxtOld[ThisOrAncestorHiddenOrVisible] :
+        	     ClassTxtNew[ThisOrAncestorHiddenOrVisible],
 	     The_GetSuffix ());
    InputStyle = Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER ||
-	        IsRecent ? ClassInputNew[ThisOrAncestorHiddenOrVisible] :
-			   ClassInputOld[ThisOrAncestorHiddenOrVisible];
+	        IsOld ? ClassInputOld[ThisOrAncestorHiddenOrVisible] :
+			ClassInputNew[ThisOrAncestorHiddenOrVisible];
 
    /***** Get data of assignment using the name of the folder *****/
    if (Level == 1 && (Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_ADM_ASG))	// Main folder of the assignment

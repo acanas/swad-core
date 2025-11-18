@@ -13679,6 +13679,24 @@ ALTER TABLE faq_questions CHANGE COLUMN QaACod ItmCod INT NOT NULL DEFAULT 0;
 ALTER TABLE crs_links CHANGE COLUMN LnkCod ItmCod INT NOT NULL DEFAULT 0;
 
 
+-------------------- swad-core24.70 -> swad-core25.20.2 (actualización 2025-11-18 -----------------------
+
+sudo cp icon/image-portrait.svg /var/www/html/swad/icon/
+
+ALTER TABLE exa_sessions ADD COLUMN NumCols TINYINT NOT NULL DEFAULT 0 AFTER ShowUsrResults;
+
+ALTER TABLE exa_prints DROP COLUMN Sent;
+
+ALTER TABLE exa_sessions ADD COLUMN ShowPhotos ENUM('N','Y') NOT NULL DEFAULT 'Y' AFTER NumCols;
+
+ALTER TABLE crs_user_settings DROP COLUMN ColsClassPhoto;
+
+ALTER TABLE not_notices ADD COLUMN Public ENUM('N','Y') NOT NULL DEFAULT 'Y' AFTER Content;
+ALTER TABLE not_deleted ADD COLUMN Public ENUM('N','Y') NOT NULL DEFAULT 'Y' AFTER Content;
+
+UPDATE exa_sessions SET Modality='online';
+
+
 
 
 
