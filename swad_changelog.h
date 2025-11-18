@@ -637,9 +637,6 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 #define JS_FILE			"swad24.75.js"
 /*
 	Version 25.20.3:  Nov 17, 2025  Fixed color issue in file browser. (350861 lines)
-					1 change necessary in database:
-UPDATE exa_sessions SET Modality='online';
-
 	Version 25.20.2:  Nov 17, 2025  Code refactoring related to booleans. (350849 lines)
 	Version 25.20.1:  Nov 17, 2025  Fix icon issue when playing matches. (350852 lines)
 	Version 25.20:    Nov 17, 2025  Code refactoring related to conditional assignments. (350851 lines)
@@ -837,6 +834,9 @@ ALTER TABLE exa_sessions ADD COLUMN NumCols TINYINT NOT NULL DEFAULT 0 AFTER Sho
 	Version 24.71:    Apr 03, 2025  New action to list users and prints in an exam session. (345008 lines)
 	Version 24.70.2:  Apr 03, 2025  New column for exam prints in listing of exam sessions. (345033 lines)
 	Version 24.70.1:  Apr 03, 2025  Changes in exam sessions. (344973 lines)
+					1 change necessary in database:
+UPDATE exa_sessions SET Modality='online';
+
 	Version 24.70:    Apr 02, 2025  Adding exam sessions in paper.
 					Fixed bug showing browser clipboard.
 					Fixed bug in browser, reported by Luis Javier Herrera Maldonado. (344928 lines)
