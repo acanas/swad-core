@@ -1319,7 +1319,7 @@ long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
                                  "FROM_UNIXTIME(%ld),"	// End time
 				 "'%s',"		// Title
 				 "'N',"			// ShowUsrResults: Don't show user results initially
-				 "%u,",			// Number of columns
+				 "%u,"			// Number of columns
 				 "'%c')",		// Number of columns
 				Session->ExaCod,
 				HidVis_Hidden_YN[Session->Hidden],
