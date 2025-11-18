@@ -76,8 +76,8 @@ static void Adm_EffectivelyRemAdm (struct Usr_Data *UsrDat,Hie_Level_t HieLvl);
 
 Usr_Can_t Adm_CheckIfICanAdminOtherUsrs (void)
   {
-   return Gbl.Usrs.Me.Role.Logged >= Rol_TCH ? Usr_CAN_NOT :
-					       Usr_CAN;
+   return Gbl.Usrs.Me.Role.Logged >= Rol_TCH ? Usr_CAN :
+					       Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
