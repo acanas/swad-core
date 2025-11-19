@@ -1508,22 +1508,24 @@ void Asg_ReceiveAssignment (void)
 	    switch (Assignments.Asg.SendWork)
 	      {
 	       case Asg_SEND_WORK:
-		  if (Str_ConvertFilFolLnkNameToValid (Assignments.Asg.Folder))	// If folder name is valid...
+		  switch (Str_ConvertFilFolLnkNameToValid (Assignments.Asg.Folder))
 		    {
-		     if (Asg_DB_CheckIfSimilarAssignmentExists ("Folder",
-								Assignments.Asg.Folder,
-								Assignments.Asg.AsgCod) == Exi_EXISTS)	// If folder of assignment was in database...
-		       {
+		     case Err_SUCCESS:	// Folder name is valid
+			if (Asg_DB_CheckIfSimilarAssignmentExists ("Folder",
+								   Assignments.Asg.Folder,
+								   Assignments.Asg.AsgCod) == Exi_EXISTS)	// If folder of assignment was in database...
+			  {
+			   SuccessOrError = Err_ERROR;
+			   Ale_CreateAlert (Ale_WARNING,NULL,
+					    Txt_Already_existed_an_assignment_with_the_folder_X,
+					    Assignments.Asg.Folder);
+			  }
+			break;
+		     case Err_ERROR:	// Folder name not valid
+		     default:
 			SuccessOrError = Err_ERROR;
-			Ale_CreateAlert (Ale_WARNING,NULL,
-					 Txt_Already_existed_an_assignment_with_the_folder_X,
-					 Assignments.Asg.Folder);
-		       }
-		    }
-		  else	// Folder name not valid
-		    {
-		     SuccessOrError = Err_ERROR;
-		     Ale_CreateAlert (Ale_WARNING,NULL,Txt_UPLOAD_FILE_Invalid_name);
+			Ale_CreateAlert (Ale_WARNING,NULL,Txt_UPLOAD_FILE_Invalid_name);
+			break;
 		    }
 		  break;
 	       case Asg_DONT_SEND_WORK:

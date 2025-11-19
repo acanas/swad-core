@@ -6600,7 +6600,7 @@ void Brw_CreateFolder (void)
       case Usr_CAN:
 	 switch (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
 	   {
-	    case Err_SUCCESS:
+	    case Err_SUCCESS:	// Folder name is valid
 	       /* In Gbl.FileBrowser.NewFilFolLnkName is the name of the new folder */
 	       snprintf (Path,sizeof (Path),"%s/%s",
 			 Gbl.FileBrowser.Path.AboveRootFolder,
@@ -6713,7 +6713,7 @@ void Brw_RenFolder (void)
       case Usr_CAN:
 	 switch (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
 	   {
-	    case Err_SUCCESS:
+	    case Err_SUCCESS:	// Folder name is valid
 	       if (strcmp (Gbl.FileBrowser.FilFolLnk.Name,
 			   Gbl.FileBrowser.NewFilFolLnkName))	// The name has changed
 		 {
@@ -6920,7 +6920,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Siz
 	    if (Brw_CheckIfUploadIsAllowed (MIMEType) == Err_SUCCESS)
 	       switch (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
 		 {
-		  case Err_SUCCESS:
+		  case Err_SUCCESS:	// Folder name is valid
 		     /* Gbl.FileBrowser.NewFilFolLnkName holds the name of the new file */
 		     snprintf (Path,sizeof (Path),"%s/%s",
 			       Gbl.FileBrowser.Path.AboveRootFolder,
@@ -7053,7 +7053,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Siz
 			   break;
 		       }
 		     break;
-		  case Err_ERROR:
+		  case Err_ERROR:	// Folder name not valid
 		  default:
 		     Ale_CreateAlert (Ale_WARNING,NULL,*InvalidName[UploadType]);
 		     break;
@@ -7141,7 +7141,7 @@ void Brw_CreateLink (void)
 	    /* Convert the last name in URL to a valid filename */
 	    switch (Str_ConvertFilFolLnkNameToValid (FileName))
 	      {
-	       case Err_SUCCESS:
+	       case Err_SUCCESS:	// Link name is valid
 		  /* The name of the file with the link will be the FileName.url */
 		  snprintf (Path,sizeof (Path),"%s/%s",
 			    Gbl.FileBrowser.Path.AboveRootFolder,

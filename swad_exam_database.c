@@ -1320,7 +1320,7 @@ long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
 				 "'%s',"		// Title
 				 "'N',"			// ShowUsrResults: Don't show user results initially
 				 "%u,"			// Number of columns
-				 "'%c')",		// Number of columns
+				 "'%c')",		// Show users' photos
 				Session->ExaCod,
 				HidVis_Hidden_YN[Session->Hidden],
 				Gbl.Usrs.Me.UsrDat.UsrCod,		// Session creator

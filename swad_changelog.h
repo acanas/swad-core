@@ -632,10 +632,11 @@ TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de t
 
 TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtube.com/shorts/fY6Oax_uJBc?si=G3UHqvSH3yEbxm1B
 */
-#define Log_PLATFORM_VERSION	"SWAD 25.20.5 (2025-11-18)"
+#define Log_PLATFORM_VERSION	"SWAD 25.20.6 (2025-11-19)"
 #define CSS_FILE		"swad25.20.1.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 25.20.6:  Nov 19, 2025  Fixed bug in assignment. (350866 lines)
 	Version 25.20.5:  Nov 18, 2025  Fixed bug in exam session. Reported by Luis Javier Herrera Maldonado. (350863 lines)
 	Version 25.20.4:  Nov 18, 2025  Fixed bug in user administration. (350862 lines)
 	Version 25.20.3:  Nov 18, 2025  Fixed color issue in file browser. (350861 lines)
@@ -686,7 +687,7 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 					Fixed bug in tests. (350105 lines)
 	Version 25.12:    Oct 11, 2025  Code refactoring in hierarchy. (350073 lines)
 	Version 25.11:    Oct 10, 2025  Code refactoring in hierarchy. (350073 lines)
-	Version 25.10.7:  Oct 08, 2025  Fixed issues related to booleans. (350069 lines)
+	Version 25.10.7:  Oct 09, 2025  Fixed issues related to booleans. (350069 lines)
 	Version 25.10.6:  Oct 09, 2025  Show types and function moved to module swad_layout. (350070 lines)
 	Version 25.10.5:  Oct 09, 2025  Code refactoring in calls for exams. (350137 lines)
 	Version 25.10.4:  Oct 09, 2025  Code refactoring related to conditional assignments.
