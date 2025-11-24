@@ -1894,19 +1894,19 @@ void Exa_DB_UpdatePrint (const struct ExaPrn_Print *Print)
   {
    /***** Update exam print in database *****/
    Str_SetDecimalPointToUS ();		// To print the floating point as a dot
-   DB_QueryUPDATE ("can not update exam print",
-		   "UPDATE exa_prints"
-	           " SET EndTime=NOW(),"
-	                "NumQstsNotBlank=%u,"
-	                "Score='%.15lg'"
-	           " WHERE PrnCod=%ld"
-	             " AND SesCod=%ld"
-	             " AND UsrCod=%ld",	// Extra checks
-		   Print->NumQsts.NotBlank,
-		   Print->Score,
-		   Print->PrnCod,
-		   Print->SesCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+      DB_QueryUPDATE ("can not update exam print",
+		      "UPDATE exa_prints"
+		      " SET EndTime=NOW(),"
+			   "NumQstsNotBlank=%u,"
+			   "Score='%.15lg'"
+		      " WHERE PrnCod=%ld"
+			" AND SesCod=%ld"
+			" AND UsrCod=%ld",	// Extra checks
+		      Print->NumQsts.NotBlank,
+		      Print->Score,
+		      Print->PrnCod,
+		      Print->SesCod,
+		      Print->UsrCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 

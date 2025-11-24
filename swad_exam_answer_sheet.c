@@ -285,6 +285,9 @@ static void ExaAnsShe_ListOrPrintSheets (Vie_ViewType_t ViewType,
 	    Box_BoxBegin (Title,ExaAnsShe_PutIcons[BlankOrSolved],&Exams,
 			  Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
 	    free (Title);
+
+	       /* Settings */
+	       ExaSes_ShowFormSettings (&Session);
 	}
 
       /***** Show table with exam answer sheets *****/
@@ -351,9 +354,6 @@ static void ExaAnsShe_ShowMultipleSheets (struct Exa_Exams *Exams,
   {
    struct Usr_Data UsrDat;
    unsigned NumUsr;
-
-   /***** Settings *****/
-   ExaSes_ShowFormSettings (Session);
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
