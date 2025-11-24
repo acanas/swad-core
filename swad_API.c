@@ -1830,7 +1830,8 @@ static void API_CopyListUsers (struct soap *soap,
 	   NumUsr++)
 	{
 	 /* Copy user's basic data from list */
-         Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
+         Usr_CopyBasicUsrDataFromList (&UsrDat,
+				       &Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
 
 	 /* Get list of user's IDs */
          ID_GetListIDsFromUsrCod (&UsrDat);

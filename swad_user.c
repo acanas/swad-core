@@ -4006,7 +4006,8 @@ static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
 	   NumUsr++, The_ChangeRowColor ())
 	{
 	 /* Copy user's basic data from list */
-	 Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
+	 Usr_CopyBasicUsrDataFromList (&UsrDat,
+				       &Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
 
 	 /* Get list of user's IDs */
 	 ID_GetListIDsFromUsrCod (&UsrDat);
@@ -4211,7 +4212,8 @@ static void Usr_ListMainDataGsts (Usr_PutCheckBox_t PutCheckBoxToSelectUsr,
 	   NumUsr++, The_ChangeRowColor ())
 	{
 	 /* Copy user's basic data from list */
-	 Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_GST].Lst[NumUsr]);
+	 Usr_CopyBasicUsrDataFromList (&UsrDat,
+				       &Gbl.Usrs.LstUsrs[Rol_GST].Lst[NumUsr]);
 
 	 /* Get list of user's IDs */
 	 ID_GetListIDsFromUsrCod (&UsrDat);
@@ -4259,7 +4261,8 @@ static void Usr_ListMainDataStds (Usr_PutCheckBox_t PutCheckBoxToSelectUsr,
 	   NumUsr++, The_ChangeRowColor ())
 	{
 	 /* Copy user's basic data from list */
-	 Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
+	 Usr_CopyBasicUsrDataFromList (&UsrDat,
+				       &Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
 
 	 /* Get list of user's IDs */
 	 ID_GetListIDsFromUsrCod (&UsrDat);
@@ -4332,7 +4335,8 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,
 	      NumUsr++, The_ChangeRowColor ())
 	   {
 	    /* Copy user's basic data from list */
-	    Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
+	    Usr_CopyBasicUsrDataFromList (&UsrDat,
+					  &Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
 
 	    /* Get list of user's IDs */
 	    ID_GetListIDsFromUsrCod (&UsrDat);
@@ -6307,7 +6311,8 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
 	      NumUsr++)
 	   {
 	    /* Copy user's basic data from list */
-	    Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
+	    Usr_CopyBasicUsrDataFromList (&UsrDat,
+					  &Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
 
 	    /* Get list of user's IDs */
 	    ID_GetListIDsFromUsrCod (&UsrDat);

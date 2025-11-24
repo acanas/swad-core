@@ -181,6 +181,7 @@ unsigned Exa_DB_GetAllUsrsWhoHaveMadeSession (MYSQL_RES **mysql_res,long SesCod)
 unsigned Exa_DB_GetNumPrintsInSes (long SesCod);
 unsigned Exa_DB_GetResults (MYSQL_RES **mysql_res,
 			    Usr_MeOrOther_t MeOrOther,
+			    const struct Usr_Data *UsrDat,
 			    long SesCod,	// <= 0 ==> any
 			    long ExaCod,	// <= 0 ==> any
 			    const char *ExamsSelectedCommas);

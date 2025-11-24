@@ -346,7 +346,8 @@ void UsrClp_ListUsrsInMyClipboard (Frm_PutForm_t PutForm,Lay_Show_t ShowWhenEmpt
 	      NumUsr++)
 	   {
 	    /* Copy user's basic data from list */
-	    Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_UNK].Lst[NumUsr]);
+	    Usr_CopyBasicUsrDataFromList (&UsrDat,
+					  &Gbl.Usrs.LstUsrs[Rol_UNK].Lst[NumUsr]);
 
 	    /* Begin container */
 	    HTM_DIV_Begin ("class=\"UsrClp_USR\"");

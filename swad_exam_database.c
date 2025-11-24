@@ -2403,11 +2403,11 @@ unsigned Exa_DB_GetNumPrintsInSes (long SesCod)
 
 unsigned Exa_DB_GetResults (MYSQL_RES **mysql_res,
 			    Usr_MeOrOther_t MeOrOther,
+			    const struct Usr_Data *UsrDat,
 			    long SesCod,	// <= 0 ==> any
 			    long ExaCod,	// <= 0 ==> any
 			    const char *ExamsSelectedCommas)
   {
-   extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    char *SesSubQuery;
    char *HidSesSubQuery;
    char *HidExaSubQuery;
@@ -2502,7 +2502,7 @@ unsigned Exa_DB_GetResults (MYSQL_RES **mysql_res,
 		      "%s"	// Hidden exams subquery
 		     " AND exa_exams.CrsCod=%ld"		// Extra check
 		" ORDER BY exa_sessions.Title",
-		   Usr_UsrDat[MeOrOther]->UsrCod,
+		   UsrDat->UsrCod,
 		   SesSubQuery,
 		   HidSesSubQuery,
 		   ExaSubQuery,

@@ -1618,7 +1618,8 @@ static void Att_ListEventStudents (struct Att_Events *Events)
 		    NumUsr++)
 		 {
 		  /* Copy user's basic data from list */
-		  Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
+		  Usr_CopyBasicUsrDataFromList (&UsrDat,
+						&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
 
 		  /* Get list of user's IDs */
 		  ID_GetListIDsFromUsrCod (&UsrDat);

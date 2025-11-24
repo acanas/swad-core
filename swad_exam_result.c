@@ -774,7 +774,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
    /***** Make database query *****/
    // Do not filter by groups, because a student who has changed groups
    // must be able to access exams taken in other groups
-   NumResults = Exa_DB_GetResults (&mysql_res,MeOrOther,
+   NumResults = Exa_DB_GetResults (&mysql_res,MeOrOther,Usr_UsrDat[MeOrOther],
 				   SesCod,ExaCod,ExamsSelectedCommas);
 
    /***** Show user's data *****/

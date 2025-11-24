@@ -570,7 +570,7 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
    /***** Make database query *****/
    // Do not filter by groups, because a student who has changed groups
    // must be able to access exams taken in other groups
-   NumResults = Exa_DB_GetResults (&mysql_res,Usr_OTHER,
+   NumResults = Exa_DB_GetResults (&mysql_res,Usr_OTHER,UsrDat,
 				   Exams->SesCod.Sel,-1L,NULL);
 
    /***** Begin table row *****/
