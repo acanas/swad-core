@@ -39,6 +39,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_exam.h"
+#include "swad_exam_answer_sheet.h"
 #include "swad_exam_database.h"
 #include "swad_exam_log.h"
 #include "swad_exam_print.h"
@@ -73,15 +74,6 @@ static void ExaQstShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 					  Vie_ViewType_t ViewType,
 					  unsigned NumUsrsInList,
 					  long *LstSelectedUsrCods);
-static void ExaQstShe_GetQstsAndShowSheet (struct Exa_Exams *Exams,
-					   const struct ExaSes_Session *Session,
-					   Vie_ViewType_t ViewType,
-					   struct Usr_Data *UsrDat);
-static void ExaQstShe_ShowSheet (struct Exa_Exams *Exams,
-				 const struct ExaSes_Session *Session,
-				 Vie_ViewType_t ViewType,
-				 struct Usr_Data *UsrDat,
-				 struct ExaPrn_Print *Print);
 static void ExaQstShe_ShowQuestions (const struct ExaSes_Session *Session,
 				     const struct ExaPrn_Print *Print);
 static void ExaQstShe_WriteQst (const struct ExaPrn_Print *Print,
@@ -156,7 +148,7 @@ static void ExaQstShe_ListOrPrintSheets (Vie_ViewType_t ViewType)
 	 ExaSes_ListUsersForSelection (&Exams,&Session);
      }
 
-   /***** Get list of selected users if not already got (necessary when *****/
+   /***** Get list of selected users *****/
    Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
 					  Usr_GET_LIST_ALL_USRS);
 
@@ -165,7 +157,7 @@ static void ExaQstShe_ListOrPrintSheets (Vie_ViewType_t ViewType)
 
    if (NumUsrsInList)
      {
-      /***** Get list of students selected to show their attendances *****/
+      /***** Get list of students selected *****/
       Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,NumUsrsInList,&LstSelectedUsrCods);
 
       /***** Get exam data and session *****/
@@ -187,7 +179,7 @@ static void ExaQstShe_ListOrPrintSheets (Vie_ViewType_t ViewType)
 	       ExaSes_ShowFormSettings (&Session);
 	}
 
-      /***** Show table with exam prints *****/
+      /***** Show table with exam sheets *****/
       ExaQstShe_ShowMultipleSheets (&Exams,&Session,ViewType,
 				    NumUsrsInList,LstSelectedUsrCods);
 
@@ -238,8 +230,10 @@ static void ExaQstShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 					  unsigned NumUsrsInList,
 					  long *LstSelectedUsrCods)
   {
+   extern const char *Hlp_ASSESSMENT_Exams_answer_exam;
    struct Usr_Data UsrDat;
    unsigned NumUsr;
+   struct ExaPrn_Print Print;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -249,76 +243,59 @@ static void ExaQstShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 	   NumUsr < NumUsrsInList;
 	   NumUsr++)
 	{
+	 /* Get student data from database */
 	 UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,		// Get from the database the data of the student
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 						      Usr_DONT_GET_PREFS,
 						      Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	   {
-	    /***** Show exam print *****/
-	    HTM_DIV_Begin (ViewType == Vie_PRINT &&
-			   NumUsr ? "style=\"break-before:page;\"" :
-				    NULL);
-	       ExaQstShe_GetQstsAndShowSheet (Exams,Session,ViewType,&UsrDat);
+	    /* Get if student has accepted enrolment in current course */
+	    UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+
+	    /* Create print or get existing print */
+	    ExaPrn_GetQstsPrint (Exams,Session,&UsrDat,&Print,ExaPrn_DO_NOT_UPDATE_DATES);
+
+	    /* Begin box */
+	    if (ViewType == Vie_VIEW)
+	       Box_BoxBegin (Session->Title,NULL,NULL,
+			     Hlp_ASSESSMENT_Exams_answer_exam,Box_NOT_CLOSABLE);
+
+	    /* Show exam answer sheet */
+	    HTM_DIV_Begin (NumUsr &&
+		           ViewType == Vie_PRINT ? "style=\"break-before:page;\"" :
+						   NULL);
+
+	       /* Institution, degree and course */
+	       Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
+
+	       /* Show student */
+	       ExaRes_ShowExamResultUser (Session,&UsrDat);
+
+	       /* Exam description */
+	       Exa_GetAndWriteDescription (Exams->Exam.ExaCod);
+
+	       /* Show table with answers */
+	       ExaAnsShe_ShowAnswers (Session,ExaAnsShe_BLANK,&Print);
+
 	    HTM_DIV_End ();
+
+	    /* Show exam question sheet */
+	    HTM_DIV_Begin (NULL);
+	       // if (Print->NumQsts.All)
+
+	       /* Show table with questions */
+	       ExaQstShe_ShowQuestions (Session,&Print);
+
+	    HTM_DIV_End ();
+
+	    /* End box */
+	    if (ViewType == Vie_VIEW)
+	       Box_BoxEnd ();
 	   }
 	}
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
-  }
-
-/*****************************************************************************/
-/*************** Get questions and show an exam question sheet ***************/
-/*****************************************************************************/
-
-static void ExaQstShe_GetQstsAndShowSheet (struct Exa_Exams *Exams,
-					   const struct ExaSes_Session *Session,
-					   Vie_ViewType_t ViewType,
-					   struct Usr_Data *UsrDat)
-  {
-   struct ExaPrn_Print Print;
-
-   /***** Create print or get existing print *****/
-   ExaPrn_GetQstsPrint (Exams,Session,UsrDat,&Print,ExaPrn_DO_NOT_UPDATE_DATES);
-
-   /***** Show exam question sheet *****/
-   ExaQstShe_ShowSheet (Exams,Session,ViewType,UsrDat,&Print);
-  }
-
-/*****************************************************************************/
-/************************** Show exam question sheet *************************/
-/*****************************************************************************/
-
-static void ExaQstShe_ShowSheet (struct Exa_Exams *Exams,
-				 const struct ExaSes_Session *Session,
-				 Vie_ViewType_t ViewType,
-				 struct Usr_Data *UsrDat,
-				 struct ExaPrn_Print *Print)
-  {
-   extern const char *Hlp_ASSESSMENT_Exams_answer_exam;
-
-   /***** Begin box *****/
-   if (ViewType == Vie_VIEW)
-      Box_BoxBegin (Session->Title,NULL,NULL,
-		    Hlp_ASSESSMENT_Exams_answer_exam,Box_NOT_CLOSABLE);
-
-   /***** Heading *****/
-   /* Institution, degree and course */
-   Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
-
-   /***** Show student *****/
-   ExaRes_ShowExamResultUser (Session,UsrDat);
-
-   /***** Exam description *****/
-   Exa_GetAndWriteDescription (Exams->Exam.ExaCod);
-
-   /***** Show table with questions *****/
-   if (Print->NumQsts.All)
-      ExaQstShe_ShowQuestions (Session,Print);
-
-   /***** End box *****/
-   if (ViewType == Vie_VIEW)
-      Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -328,6 +305,7 @@ static void ExaQstShe_ShowSheet (struct Exa_Exams *Exams,
 static void ExaQstShe_ShowQuestions (const struct ExaSes_Session *Session,
 				     const struct ExaPrn_Print *Print)
   {
+   extern const char *Txt_Questions;
    static struct ExaSet_Set CurrentSet =
      {
       .ExaCod = -1L,
@@ -339,7 +317,14 @@ static void ExaQstShe_ShowQuestions (const struct ExaSes_Session *Session,
    unsigned QstInd;
    struct Qst_Question Question;
 
-   CurrentSet.SetCod = -1L;	// Reset current set
+   /***** Reset current set *****/
+   CurrentSet.SetCod = -1L;
+
+   /***** Heading *****/
+   HTM_DIV_Begin ("class=\"Exa_COL_SPAN Exa_SET_TITLE_%s\"",The_GetSuffix ());
+      HTM_Txt (Txt_Questions);
+   HTM_DIV_End ();
+   HTM_BR ();
 
    /***** Write questions in columns *****/
    HTM_DIV_Begin ("class=\"Exa_COLS_%u\"",Session->NumCols);

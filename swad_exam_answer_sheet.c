@@ -67,17 +67,6 @@ static const char *ExaAnsShe_Class[Qst_NUM_WRONG_CORRECT] =
      };
 
 /*****************************************************************************/
-/******************************* Private types *******************************/
-/*****************************************************************************/
-
-#define ExaAnsShe_NUM_BLANK_OR_SOLVED 2
-typedef enum
-  {
-   ExaAnsShe_BLANK,
-   ExaAnsShe_SOLVED,
-  } ExaAnsShe_BlankOrSolved_t;
-
-/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -101,17 +90,14 @@ static void ExaAnsShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 static void ExaAnsShe_GetQstsAndShowSheet (struct Exa_Exams *Exams,
 					   const struct ExaSes_Session *Session,
 					   Vie_ViewType_t ViewType,
-					   ExaAnsShe_BlankOrSolved_t BlankOrSolved,
-					   struct Usr_Data *UsrDat);
+					   struct Usr_Data *UsrDat,
+					   ExaAnsShe_BlankOrSolved_t BlankOrSolved);
 static void ExaAnsShe_ShowSheet (struct Exa_Exams *Exams,
-			         const struct ExaSes_Session *Session,
-			         Vie_ViewType_t ViewType,
-			         ExaAnsShe_BlankOrSolved_t BlankOrSolved,
-			         struct Usr_Data *UsrDat,
-			         struct ExaPrn_Print *Print);
-static void ExaAnsShe_ShowAnswers (const struct ExaSes_Session *Session,
-				   ExaAnsShe_BlankOrSolved_t BlankOrSolved,
-				   const struct ExaPrn_Print *Print);
+				 const struct ExaSes_Session *Session,
+				 struct Usr_Data *UsrDat,
+				 struct ExaPrn_Print *Print,
+				 Vie_ViewType_t ViewType,
+				 ExaAnsShe_BlankOrSolved_t BlankOrSolved);
 static void ExaAnsShe_WriteQst (const struct ExaSes_Session *Session,
 				ExaAnsShe_BlankOrSolved_t BlankOrSolved,
 			        const struct ExaPrn_Print *Print,
@@ -363,17 +349,21 @@ static void ExaAnsShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 	   NumUsr < NumUsrsInList;
 	   NumUsr++)
 	{
+	 /* Get student data from database */
 	 UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,		// Get from the database the data of the student
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 						      Usr_DONT_GET_PREFS,
 						      Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	   {
-	    /***** Show exam print *****/
+	    /* Get if student has accepted enrolment in current course */
+	    UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+
+	    /* Show exam print */
 	    HTM_DIV_Begin (ViewType == Vie_PRINT &&
 			   NumUsr ? "style=\"break-before:page;\"" :
 				    NULL);
 	       ExaAnsShe_GetQstsAndShowSheet (Exams,Session,
-					      ViewType,BlankOrSolved,&UsrDat);
+					      ViewType,&UsrDat,BlankOrSolved);
 	    HTM_DIV_End ();
 	   }
 	}
@@ -389,17 +379,16 @@ static void ExaAnsShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 static void ExaAnsShe_GetQstsAndShowSheet (struct Exa_Exams *Exams,
 					   const struct ExaSes_Session *Session,
 					   Vie_ViewType_t ViewType,
-					   ExaAnsShe_BlankOrSolved_t BlankOrSolved,
-					   struct Usr_Data *UsrDat)
+					   struct Usr_Data *UsrDat,
+					   ExaAnsShe_BlankOrSolved_t BlankOrSolved)
   {
    struct ExaPrn_Print Print;
 
    /***** Create print or get existing print *****/
-   ExaPrn_GetQstsPrint (Exams,Session,UsrDat,&Print,
-			ExaPrn_DO_NOT_UPDATE_DATES);
+   ExaPrn_GetQstsPrint (Exams,Session,UsrDat,&Print,ExaPrn_DO_NOT_UPDATE_DATES);
 
    /***** Show exam answer sheet *****/
-   ExaAnsShe_ShowSheet (Exams,Session,ViewType,BlankOrSolved,UsrDat,&Print);
+   ExaAnsShe_ShowSheet (Exams,Session,UsrDat,&Print,ViewType,BlankOrSolved);
   }
 
 /*****************************************************************************/
@@ -407,11 +396,11 @@ static void ExaAnsShe_GetQstsAndShowSheet (struct Exa_Exams *Exams,
 /*****************************************************************************/
 
 static void ExaAnsShe_ShowSheet (struct Exa_Exams *Exams,
-			         const struct ExaSes_Session *Session,
-			         Vie_ViewType_t ViewType,
-			         ExaAnsShe_BlankOrSolved_t BlankOrSolved,
-			         struct Usr_Data *UsrDat,
-			         struct ExaPrn_Print *Print)
+				 const struct ExaSes_Session *Session,
+				 struct Usr_Data *UsrDat,
+				 struct ExaPrn_Print *Print,
+				 Vie_ViewType_t ViewType,
+				 ExaAnsShe_BlankOrSolved_t BlankOrSolved)
   {
    extern const char *Hlp_ASSESSMENT_Exams_answer_exam;
 
@@ -448,10 +437,11 @@ static void ExaAnsShe_ShowSheet (struct Exa_Exams *Exams,
 /************ Show the main part (table) of an exam answer sheet *************/
 /*****************************************************************************/
 
-static void ExaAnsShe_ShowAnswers (const struct ExaSes_Session *Session,
-				   ExaAnsShe_BlankOrSolved_t BlankOrSolved,
-				   const struct ExaPrn_Print *Print)
+void ExaAnsShe_ShowAnswers (const struct ExaSes_Session *Session,
+			    ExaAnsShe_BlankOrSolved_t BlankOrSolved,
+			    const struct ExaPrn_Print *Print)
   {
+   extern const char *Txt_Answers;
    static struct ExaSet_Set CurrentSet =
      {
       .ExaCod = -1L,
@@ -464,6 +454,12 @@ static void ExaAnsShe_ShowAnswers (const struct ExaSes_Session *Session,
    struct Qst_Question Question;
 
    CurrentSet.SetCod = -1L;	// Reset current set
+
+   /***** Heading *****/
+   HTM_DIV_Begin ("class=\"Exa_COL_SPAN Exa_SET_TITLE_%s\"",The_GetSuffix ());
+      HTM_Txt (Txt_Answers);
+   HTM_DIV_End ();
+   HTM_BR ();
 
    /***** Write questions in columns *****/
    HTM_DIV_Begin ("class=\"Exa_COLS_%u\"",Session->NumCols);

@@ -2772,13 +2772,17 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
 	      NumUsr < NumUsrsInList;
 	      NumUsr++)
 	   {
+	    /* Get student data from database */
 	    UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
-	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,		// Get from the database the data of the student
+	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							 Usr_DONT_GET_PREFS,
 							 Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	       if (Usr_CheckIfICanViewAtt (&UsrDat) == Usr_CAN)
 		 {
+	          /* Get if student has accepted enrolment in current course */
 		  UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+
+		  /* Write table row of a table with the student attendance */
 		  Att_WriteRowUsrSeveralAttEvents (Events,NumUsr,&UsrDat,ShowPhotos);
 		 }
 	   }
@@ -2860,7 +2864,7 @@ static void Att_WriteTableHeadSeveralAttEvents (struct Att_Events *Events,
   }
 
 /*****************************************************************************/
-/************** Write a row of a table with the data of a user ***************/
+/************ Write a row of a table with the attendance of a user ***********/
 /*****************************************************************************/
 
 static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
@@ -3012,13 +3016,17 @@ static void Att_ListStdsWithAttEventsDetails (struct Att_Events *Events,
 		 NumUsr < NumUsrsInList;
 		 NumUsr++)
 	      {
+	       /* Get student data from database */
 	       UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
-	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get from the database the data of the student
+	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							    Usr_DONT_GET_PREFS,
 							    Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 		  if (Usr_CheckIfICanViewAtt (&UsrDat) == Usr_CAN)
 		    {
+	             /* Get if student has accepted enrolment in current course */
 		     UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+
+		     /* Write list of attendance events for this student */
 		     Att_ListAttEventsForAStd (Events,NumUsr,&UsrDat);
 		    }
 	      }
