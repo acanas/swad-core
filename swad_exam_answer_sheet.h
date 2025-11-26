@@ -45,10 +45,8 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ExaAnsShe_ListBlankSheets (void);
-void ExaAnsShe_PrintBlankSheets (void);
-void ExaAnsShe_ListSolvedSheets (void);
-void ExaAnsShe_PrintSolvedSheets (void);
+void ExaAnsShe_ListSheets (void);
+void ExaAnsShe_PrintSheets (void);
 
 void ExaAnsShe_ShowAnswers (const struct ExaSes_Session *Session,
 			    ExaAnsShe_BlankOrSolved_t BlankOrSolved,

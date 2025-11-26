@@ -5688,8 +5688,7 @@ void Usr_PutListUsrsActions (const Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_
       [Usr_ACT_FOLLOW			] = &Txt_Follow,
       [Usr_ACT_UNFOLLOW			] = &Txt_Unfollow,
       [Usr_ACT_EXAMS_QST_SHEETS		] = &Txt_Actions[ActSeeExaQstShe],
-      [Usr_ACT_BLANK_EXAMS_ANS_SHEETS	] = &Txt_Actions[ActSeeBlkExaAnsShe],
-      [Usr_ACT_SOLVD_EXAMS_ANS_SHEETS	] = &Txt_Actions[ActSeeSolExaAnsShe],
+      [Usr_ACT_SOLVD_EXAMS_ANS_SHEETS	] = &Txt_Actions[ActSeeExaAnsShe],
      };
    Usr_ListUsrsAction_t Act;
    Usr_ListUsrsAction_t DefaultAction = Usr_ACT_UNKNOWN;
@@ -5906,21 +5905,11 @@ void Usr_DoActionOnUsrs1 (void)
 		     break;
 		 }
 	       break;
-	    case Usr_ACT_BLANK_EXAMS_ANS_SHEETS:
-	       switch (Gbl.Action.Act)
-		 {
-		  case Act_DoAct_ExaSes:
-		     Gbl.Action.Act = ActSeeBlkExaAnsShe;
-		     break;
-		  default:
-		     break;
-		 }
-	       break;
 	    case Usr_ACT_SOLVD_EXAMS_ANS_SHEETS:
 	       switch (Gbl.Action.Act)
 		 {
 		  case Act_DoAct_ExaSes:
-		     Gbl.Action.Act = ActSeeSolExaAnsShe;
+		     Gbl.Action.Act = ActSeeExaAnsShe;
 		     break;
 		  default:
 		     break;

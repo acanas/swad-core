@@ -112,7 +112,7 @@ typedef enum
    Usr_CLASS_PHOTO_PRN,		// Only print users
   } Usr_ClassPhotoType_t;
 
-#define Usr_LIST_USRS_NUM_OPTIONS 13
+#define Usr_LIST_USRS_NUM_OPTIONS 12
 typedef enum
   {
    Usr_ACT_UNKNOWN			= 0,
@@ -130,8 +130,7 @@ typedef enum
 
    // Exam sessions ------------------------
    Usr_ACT_EXAMS_QST_SHEETS		= 10,
-   Usr_ACT_BLANK_EXAMS_ANS_SHEETS	= 11,
-   Usr_ACT_SOLVD_EXAMS_ANS_SHEETS	= 12,
+   Usr_ACT_SOLVD_EXAMS_ANS_SHEETS	= 11,
 
   } Usr_ListUsrsAction_t;
 

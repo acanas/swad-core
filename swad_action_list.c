@@ -940,10 +940,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [Act_DoAct_ExaSes	] = {2184, 5,TabAss,Usr_DoActionOnUsrs1		,Usr_DoActionOnUsrs2		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [ActSeeExaQstShe	] = {2183, 5,TabAss,NULL			,ExaQstShe_ListSheets		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [ActPrnExaQstShe	] = {2182, 5,TabAss,NULL			,ExaQstShe_PrintSheets		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_NEW},
-   [ActSeeBlkExaAnsShe	] = {2185, 5,TabAss,NULL			,ExaAnsShe_ListBlankSheets	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
-   [ActPrnBlkExaAnsShe	] = {2186, 5,TabAss,NULL			,ExaAnsShe_PrintBlankSheets	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_NEW},
-   [ActSeeSolExaAnsShe	] = {2187, 5,TabAss,NULL			,ExaAnsShe_ListSolvedSheets	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
-   [ActPrnSolExaAnsShe	] = {2188, 5,TabAss,NULL			,ExaAnsShe_PrintSolvedSheets	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_NEW},
+   [ActSeeExaAnsShe	] = {2187, 5,TabAss,NULL			,ExaAnsShe_ListSheets		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
+   [ActPrnExaAnsShe	] = {2188, 5,TabAss,NULL			,ExaAnsShe_PrintSheets		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_NEW},
    [ActAnsExaAnsShe	] = {2189, 5,TabAss,NULL			,ExaAnsShe_ReceiveAnswer	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_AJA},
    [ActReqNewExaSes	] = {1852, 5,TabAss,NULL			,ExaSes_ReqCreatOrEditSes	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [ActReqChgExaSes	] = {1902, 5,TabAss,NULL			,ExaSes_ReqCreatOrEditSes	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
@@ -4222,9 +4220,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActPrnExaQstShe,	// #2182
 	ActSeeExaQstShe,	// #2183
 	Act_DoAct_ExaSes,	// #2184
-	ActSeeBlkExaAnsShe,	// #2185
-	ActPrnBlkExaAnsShe,	// #2186
-	ActSeeSolExaAnsShe,	// #2187
-	ActPrnSolExaAnsShe,	// #2188
+	ActUnk,			// #2185 (obsolete action)
+	ActUnk,			// #2186 (obsolete action)
+	ActSeeExaAnsShe,	// #2187
+	ActPrnExaAnsShe,	// #2188
 	ActAnsExaAnsShe,	// #2189
   };

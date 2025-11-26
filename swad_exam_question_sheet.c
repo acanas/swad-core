@@ -197,6 +197,9 @@ static void ExaQstShe_ListOrPrintSheets (Vie_ViewType_t ViewType)
    if (ViewType == Vie_VIEW)
       /***** Exam end *****/
       Exa_ShowOnlyOneExamEnd ();
+
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
   }
 
 /*****************************************************************************/

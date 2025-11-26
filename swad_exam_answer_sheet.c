@@ -76,15 +76,12 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void ExaAnsShe_ListOrPrintSheets (Vie_ViewType_t ViewType,
-					 ExaAnsShe_BlankOrSolved_t BlankOrSolved);
-static void ExaAnsShe_PutIconsPrintBlankExamAnsSheets (void *Exams);
+static void ExaAnsShe_ListOrPrintSheets (Vie_ViewType_t ViewType);
 static void ExaAnsShe_PutIconsPrintSolvedExamAnsSheets (void *Exams);
 static void ExaAnsShe_PutParsToPrintExamAnsSheets (void *Exams);
 static void ExaAnsShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 					  const struct ExaSes_Session *Session,
 					  Vie_ViewType_t ViewType,
-					  ExaAnsShe_BlankOrSolved_t BlankOrSolved,
 					  unsigned NumUsrsInList,
 					  long *LstSelectedUsrCods);
 static void ExaAnsShe_WriteQst (const struct ExaSes_Session *Session,
@@ -162,37 +159,20 @@ static void ExaAnsShe_WriteHead (ExaSes_Modality_t Modality);
 /****** Display/Print selected exam answer sheets from an exam session *******/
 /*****************************************************************************/
 
-void ExaAnsShe_ListBlankSheets (void)
+void ExaAnsShe_ListSheets (void)
   {
-   ExaAnsShe_ListOrPrintSheets (Vie_VIEW,ExaAnsShe_BLANK);
+   ExaAnsShe_ListOrPrintSheets (Vie_VIEW);
   }
 
-void ExaAnsShe_PrintBlankSheets (void)
+void ExaAnsShe_PrintSheets (void)
   {
-   ExaAnsShe_ListOrPrintSheets (Vie_PRINT,ExaAnsShe_BLANK);
+   ExaAnsShe_ListOrPrintSheets (Vie_PRINT);
   }
 
-void ExaAnsShe_ListSolvedSheets (void)
-  {
-   ExaAnsShe_ListOrPrintSheets (Vie_VIEW,ExaAnsShe_SOLVED);
-  }
-
-void ExaAnsShe_PrintSolvedSheets (void)
-  {
-   ExaAnsShe_ListOrPrintSheets (Vie_PRINT,ExaAnsShe_SOLVED);
-  }
-
-static void ExaAnsShe_ListOrPrintSheets (Vie_ViewType_t ViewType,
-					 ExaAnsShe_BlankOrSolved_t BlankOrSolved)
+static void ExaAnsShe_ListOrPrintSheets (Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_ASSESSMENT_Exams;	// TODO: Change to link to section of listing/printing selected exams in a session
    extern const char *Txt_List_of_exam_answer_sheets_for_session_X;
-   static void (*ExaAnsShe_PutIcons[ExaAnsShe_NUM_BLANK_OR_SOLVED]) (void *Exams) =
-     {
-      [ExaAnsShe_BLANK ] = ExaAnsShe_PutIconsPrintBlankExamAnsSheets,
-      [ExaAnsShe_SOLVED] = ExaAnsShe_PutIconsPrintSolvedExamAnsSheets
-     };
-
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;
    unsigned NumColsFromForm;
@@ -234,7 +214,7 @@ static void ExaAnsShe_ListOrPrintSheets (Vie_ViewType_t ViewType,
 	 ExaSes_ListUsersForSelection (&Exams,&Session);
      }
 
-   /***** Get list of selected users if not already got *****/
+   /***** Get list of selected users *****/
    Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
 					  Usr_GET_LIST_ALL_USRS);
 
@@ -243,7 +223,7 @@ static void ExaAnsShe_ListOrPrintSheets (Vie_ViewType_t ViewType,
 
    if (NumUsrsInList)
      {
-      /***** Get list of students selected to show their attendances *****/
+      /***** Get list of students selected *****/
       Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,NumUsrsInList,&LstSelectedUsrCods);
 
       /***** Get exam data and session *****/
@@ -257,7 +237,7 @@ static void ExaAnsShe_ListOrPrintSheets (Vie_ViewType_t ViewType,
 	    if (asprintf (&Title,Txt_List_of_exam_answer_sheets_for_session_X,
 			  Session.Title) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    Box_BoxBegin (Title,ExaAnsShe_PutIcons[BlankOrSolved],&Exams,
+	    Box_BoxBegin (Title,ExaAnsShe_PutIconsPrintSolvedExamAnsSheets,&Exams,
 			  Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
 	    free (Title);
 
@@ -266,7 +246,7 @@ static void ExaAnsShe_ListOrPrintSheets (Vie_ViewType_t ViewType,
 	}
 
       /***** Show table with exam answer sheets *****/
-      ExaAnsShe_ShowMultipleSheets (&Exams,&Session,ViewType,BlankOrSolved,
+      ExaAnsShe_ShowMultipleSheets (&Exams,&Session,ViewType,
 				    NumUsrsInList,LstSelectedUsrCods);
 
       /***** End box and section *****/
@@ -292,17 +272,10 @@ static void ExaAnsShe_ListOrPrintSheets (Vie_ViewType_t ViewType,
 /************* Put icon to print selected exam answer sheets *****************/
 /*****************************************************************************/
 
-static void ExaAnsShe_PutIconsPrintBlankExamAnsSheets (void *Exams)
-  {
-   if (Exams)
-      Ico_PutContextualIconToPrint (ActPrnBlkExaAnsShe,
-				    ExaAnsShe_PutParsToPrintExamAnsSheets,Exams);
-  }
-
 static void ExaAnsShe_PutIconsPrintSolvedExamAnsSheets (void *Exams)
   {
    if (Exams)
-      Ico_PutContextualIconToPrint (ActPrnSolExaAnsShe,
+      Ico_PutContextualIconToPrint (ActPrnExaAnsShe,
 				    ExaAnsShe_PutParsToPrintExamAnsSheets,Exams);
   }
 
@@ -323,7 +296,6 @@ static void ExaAnsShe_PutParsToPrintExamAnsSheets (void *Exams)
 static void ExaAnsShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 					  const struct ExaSes_Session *Session,
 					  Vie_ViewType_t ViewType,
-					  ExaAnsShe_BlankOrSolved_t BlankOrSolved,
 					  unsigned NumUsrsInList,
 					  long *LstSelectedUsrCods)
   {
@@ -376,7 +348,7 @@ static void ExaAnsShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 	    /* Show exam answer sheet */
 	    HTM_DIV_Begin ("id=\"examprint_%s\" class=\"Exa_QSTS\"",	// Used for AJAX based refresh
 			   Print.EnUsrCod);
-	       ExaAnsShe_ShowAnswers (Session,BlankOrSolved,&Print);
+	       ExaAnsShe_ShowAnswers (Session,ExaAnsShe_SOLVED,&Print);
 	    HTM_DIV_End ();						// Used for AJAX based refresh
 
 	    /* End box */

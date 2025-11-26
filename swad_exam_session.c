@@ -758,7 +758,6 @@ static void ExaSes_SetListUsrsAllowedActions (Usr_Can_t AllowedActions[Usr_LIST_
 
    /* Activate some options */
    AllowedActions[Usr_ACT_EXAMS_QST_SHEETS	] =
-   AllowedActions[Usr_ACT_BLANK_EXAMS_ANS_SHEETS] =
    AllowedActions[Usr_ACT_SOLVD_EXAMS_ANS_SHEETS] = Usr_CAN;
   }
 
