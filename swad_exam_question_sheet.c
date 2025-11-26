@@ -260,7 +260,7 @@ static void ExaQstShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 	       Box_BoxBegin (Session->Title,NULL,NULL,
 			     Hlp_ASSESSMENT_Exams_answer_exam,Box_NOT_CLOSABLE);
 
-	    /* Show exam answer sheet */
+	    /* Heading */
 	    HTM_DIV_Begin (NumUsr &&
 		           ViewType == Vie_PRINT ? "style=\"break-before:page;\"" :
 						   NULL);
@@ -274,18 +274,16 @@ static void ExaQstShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 	       /* Exam description */
 	       Exa_GetAndWriteDescription (Exams->Exam.ExaCod);
 
-	       /* Show table with answers */
-	       ExaAnsShe_ShowAnswers (Session,ExaAnsShe_BLANK,&Print);
+	    HTM_DIV_End ();
 
+	    /* Show exam answer sheet */
+	    HTM_DIV_Begin (NULL);
+	       ExaAnsShe_ShowAnswers (Session,ExaAnsShe_BLANK,&Print);
 	    HTM_DIV_End ();
 
 	    /* Show exam question sheet */
 	    HTM_DIV_Begin (NULL);
-	       // if (Print->NumQsts.All)
-
-	       /* Show table with questions */
 	       ExaQstShe_ShowQuestions (Session,&Print);
-
 	    HTM_DIV_End ();
 
 	    /* End box */
@@ -317,20 +315,16 @@ static void ExaQstShe_ShowQuestions (const struct ExaSes_Session *Session,
    unsigned QstInd;
    struct Qst_Question Question;
 
-   /***** Reset current set *****/
-   CurrentSet.SetCod = -1L;
-
    /***** Heading *****/
-   HTM_DIV_Begin ("class=\"Exa_COL_SPAN Exa_SET_TITLE_%s\"",The_GetSuffix ());
+   HTM_DIV_Begin ("class=\"Exa_COL_SPAN Exa_SHEET_TITLE_%s\"",The_GetSuffix ());
       HTM_Txt (Txt_Questions);
    HTM_DIV_End ();
-   HTM_BR ();
 
    /***** Write questions in columns *****/
    HTM_DIV_Begin ("class=\"Exa_COLS_%u\"",Session->NumCols);
 
       /***** Write one row for each question *****/
-      for (QstInd = 0;
+      for (QstInd = 0, CurrentSet.SetCod = -1L;
 	   QstInd < Print->NumQsts.All;
 	   QstInd++)
 	{

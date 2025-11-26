@@ -87,17 +87,6 @@ static void ExaAnsShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 					  ExaAnsShe_BlankOrSolved_t BlankOrSolved,
 					  unsigned NumUsrsInList,
 					  long *LstSelectedUsrCods);
-static void ExaAnsShe_GetQstsAndShowSheet (struct Exa_Exams *Exams,
-					   const struct ExaSes_Session *Session,
-					   Vie_ViewType_t ViewType,
-					   struct Usr_Data *UsrDat,
-					   ExaAnsShe_BlankOrSolved_t BlankOrSolved);
-static void ExaAnsShe_ShowSheet (struct Exa_Exams *Exams,
-				 const struct ExaSes_Session *Session,
-				 struct Usr_Data *UsrDat,
-				 struct ExaPrn_Print *Print,
-				 Vie_ViewType_t ViewType,
-				 ExaAnsShe_BlankOrSolved_t BlankOrSolved);
 static void ExaAnsShe_WriteQst (const struct ExaSes_Session *Session,
 				ExaAnsShe_BlankOrSolved_t BlankOrSolved,
 			        const struct ExaPrn_Print *Print,
@@ -338,8 +327,10 @@ static void ExaAnsShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 					  unsigned NumUsrsInList,
 					  long *LstSelectedUsrCods)
   {
+   extern const char *Hlp_ASSESSMENT_Exams_answer_exam;
    struct Usr_Data UsrDat;
    unsigned NumUsr;
+   struct ExaPrn_Print Print;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -358,79 +349,44 @@ static void ExaAnsShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 	    /* Get if student has accepted enrolment in current course */
 	    UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 
-	    /* Show exam print */
-	    HTM_DIV_Begin (ViewType == Vie_PRINT &&
-			   NumUsr ? "style=\"break-before:page;\"" :
-				    NULL);
-	       ExaAnsShe_GetQstsAndShowSheet (Exams,Session,
-					      ViewType,&UsrDat,BlankOrSolved);
+	    /* Create print or get existing print */
+	    ExaPrn_GetQstsPrint (Exams,Session,&UsrDat,&Print,ExaPrn_DO_NOT_UPDATE_DATES);
+
+	    /* Begin box */
+	    if (ViewType == Vie_VIEW)
+	       Box_BoxBegin (Session->Title,NULL,NULL,
+			     Hlp_ASSESSMENT_Exams_answer_exam,Box_NOT_CLOSABLE);
+
+	    /* Heading */
+	    HTM_DIV_Begin (NumUsr &&
+			   ViewType == Vie_PRINT ? "style=\"break-before:page;\"" :
+						   NULL);
+
+	       /* Institution, degree and course */
+	       Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
+
+	       /* Show student */
+	       ExaRes_ShowExamResultUser (Session,&UsrDat);
+
+	       /* Exam description */
+	       Exa_GetAndWriteDescription (Exams->Exam.ExaCod);
+
 	    HTM_DIV_End ();
+
+	    /* Show exam answer sheet */
+	    HTM_DIV_Begin ("id=\"examprint_%s\" class=\"Exa_QSTS\"",	// Used for AJAX based refresh
+			   Print.EnUsrCod);
+	       ExaAnsShe_ShowAnswers (Session,BlankOrSolved,&Print);
+	    HTM_DIV_End ();						// Used for AJAX based refresh
+
+	    /* End box */
+	    if (ViewType == Vie_VIEW)
+	       Box_BoxEnd ();
 	   }
 	}
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
-  }
-
-/*****************************************************************************/
-/**************** Get questions and show an exam answer sheet ****************/
-/*****************************************************************************/
-
-static void ExaAnsShe_GetQstsAndShowSheet (struct Exa_Exams *Exams,
-					   const struct ExaSes_Session *Session,
-					   Vie_ViewType_t ViewType,
-					   struct Usr_Data *UsrDat,
-					   ExaAnsShe_BlankOrSolved_t BlankOrSolved)
-  {
-   struct ExaPrn_Print Print;
-
-   /***** Create print or get existing print *****/
-   ExaPrn_GetQstsPrint (Exams,Session,UsrDat,&Print,ExaPrn_DO_NOT_UPDATE_DATES);
-
-   /***** Show exam answer sheet *****/
-   ExaAnsShe_ShowSheet (Exams,Session,UsrDat,&Print,ViewType,BlankOrSolved);
-  }
-
-/*****************************************************************************/
-/*************************** Show exam answer sheet **************************/
-/*****************************************************************************/
-
-static void ExaAnsShe_ShowSheet (struct Exa_Exams *Exams,
-				 const struct ExaSes_Session *Session,
-				 struct Usr_Data *UsrDat,
-				 struct ExaPrn_Print *Print,
-				 Vie_ViewType_t ViewType,
-				 ExaAnsShe_BlankOrSolved_t BlankOrSolved)
-  {
-   extern const char *Hlp_ASSESSMENT_Exams_answer_exam;
-
-   /***** Begin box *****/
-   if (ViewType == Vie_VIEW)
-      Box_BoxBegin (Session->Title,NULL,NULL,
-		    Hlp_ASSESSMENT_Exams_answer_exam,Box_NOT_CLOSABLE);
-
-   /***** Heading *****/
-   /* Institution, degree and course */
-   Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
-
-   /***** Show student *****/
-   ExaRes_ShowExamResultUser (Session,UsrDat);
-
-   /***** Exam description *****/
-   Exa_GetAndWriteDescription (Exams->Exam.ExaCod);
-
-   /***** Show table with answers *****/
-   if (Print->NumQsts.All)
-     {
-      HTM_DIV_Begin ("id=\"examprint_%s\" class=\"Exa_QSTS\"",	// Used for AJAX based refresh
-		     Print->EnUsrCod);
-	 ExaAnsShe_ShowAnswers (Session,BlankOrSolved,Print);
-      HTM_DIV_End ();						// Used for AJAX based refresh
-     }
-
-   /***** End box *****/
-   if (ViewType == Vie_VIEW)
-      Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -453,19 +409,16 @@ void ExaAnsShe_ShowAnswers (const struct ExaSes_Session *Session,
    unsigned QstInd;
    struct Qst_Question Question;
 
-   CurrentSet.SetCod = -1L;	// Reset current set
-
    /***** Heading *****/
-   HTM_DIV_Begin ("class=\"Exa_COL_SPAN Exa_SET_TITLE_%s\"",The_GetSuffix ());
+   HTM_DIV_Begin ("class=\"Exa_COL_SPAN Exa_SHEET_TITLE_%s\"",The_GetSuffix ());
       HTM_Txt (Txt_Answers);
    HTM_DIV_End ();
-   HTM_BR ();
 
    /***** Write questions in columns *****/
    HTM_DIV_Begin ("class=\"Exa_COLS_%u\"",Session->NumCols);
 
       /***** Write one row for each question *****/
-      for (QstInd = 0;
+      for (QstInd = 0, CurrentSet.SetCod = -1L;
 	   QstInd < Print->NumQsts.All;
 	   QstInd++)
 	{

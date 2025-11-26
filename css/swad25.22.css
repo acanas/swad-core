@@ -3791,13 +3791,21 @@ legend {font-size: 12pt; font-weight: bold;}
 	}
 
 /*********************************** Exams ***********************************/
+.Exa_SHEET_TITLE_WHITE,
+.Exa_SHEET_TITLE_GREY,
+.Exa_SHEET_TITLE_PURPLE,
+.Exa_SHEET_TITLE_BLUE,
+.Exa_SHEET_TITLE_YELLOW,
+.Exa_SHEET_TITLE_PINK	{padding: 8px 0; text-align: center; vertical-align: middle; color: black; font-size: 16pt; font-weight: bold;}
+.Exa_SHEET_TITLE_DARK	{padding: 8px 0; text-align: center; vertical-align: middle; color: white; font-size: 16pt; font-weight: bold;}
+
 .Exa_SET_TITLE_WHITE,
 .Exa_SET_TITLE_GREY,
 .Exa_SET_TITLE_PURPLE,
 .Exa_SET_TITLE_BLUE,
 .Exa_SET_TITLE_YELLOW,
-.Exa_SET_TITLE_PINK	{text-align: left; vertical-align: middle; color: black; font-size: 16pt;}
-.Exa_SET_TITLE_DARK	{text-align: left; vertical-align: middle; color: white; font-size: 16pt;}
+.Exa_SET_TITLE_PINK	{text-align: left; vertical-align: middle; color: black; font-size: 14pt; font-weight: bold;}
+.Exa_SET_TITLE_DARK	{text-align: left; vertical-align: middle; color: white; font-size: 14pt; font-weight: bold;}
 
 .Exa_SET_NUM_QSTS_WHITE,
 .Exa_SET_NUM_QSTS_GREY,
