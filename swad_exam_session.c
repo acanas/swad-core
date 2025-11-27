@@ -267,7 +267,7 @@ void ExaSes_ShowOneSession (void)
 void ExaSes_ListUsersForSelection (struct Exa_Exams *Exams,
 				   const struct ExaSes_Session *Session)
   {
-   extern const char *Hlp_ASSESSMENT_Exams;
+   extern const char *Hlp_ASSESSMENT_Exams_sheets;
    extern const char *Txt_Session_X;
    char *Title;
    unsigned NumUsr;
@@ -287,7 +287,7 @@ void ExaSes_ListUsersForSelection (struct Exa_Exams *Exams,
       if (asprintf (&Title,Txt_Session_X,Session->Title) < 0)
 	 Err_NotEnoughMemoryExit ();
       Box_BoxBegin (Title,NULL,NULL,
-		    Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
+		    Hlp_ASSESSMENT_Exams_sheets,Box_NOT_CLOSABLE);
       free (Title);
 
 	 /***** Form to select groups *****/

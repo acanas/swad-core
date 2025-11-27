@@ -1,7 +1,7 @@
-// swad_exam_answer_sheet.h: exams blank answer sheets and exams solved answer sheets
+// swad_exam_sheet_question.h: exams sheets (questions)
 
-#ifndef _SWAD_EXA_ANS_SHE
-#define _SWAD_EXA_ANS_SHE
+#ifndef _SWAD_EXA_SHE_QST
+#define _SWAD_EXA_SHE_QST
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -24,34 +24,17 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/********************************* Headers ***********************************/
+/********************************** Headers **********************************/
 /*****************************************************************************/
 
 #include "swad_exam_print.h"
-#include "swad_exam_type.h"
-
-/*****************************************************************************/
-/******************************* Public types ********************************/
-/*****************************************************************************/
-
-#define ExaAnsShe_NUM_BLANK_OR_SOLVED 2
-typedef enum
-  {
-   ExaAnsShe_BLANK,
-   ExaAnsShe_SOLVED,
-  } ExaAnsShe_BlankOrSolved_t;
+#include "swad_exam_session.h"
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ExaAnsShe_ListSheets (void);
-void ExaAnsShe_PrintSheets (void);
-
-void ExaAnsShe_ShowAnswers (const struct ExaSes_Session *Session,
-			    ExaAnsShe_BlankOrSolved_t BlankOrSolved,
-			    const struct ExaPrn_Print *Print);
-
-void ExaAnsShe_ReceiveAnswer (void);
+void ExaSheQst_ShowQuestions (const struct ExaSes_Session *Session,
+			      const struct ExaPrn_Print *Print);
 
 #endif

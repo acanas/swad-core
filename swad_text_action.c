@@ -15980,94 +15980,94 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeExaQstShe] =
 #if   L==1	// ca
-	"Mostrar fulls de preguntes d'examen"
+	"Mostrar fulls d'examen (plantilla de respostes + preguntes)"
 #elif L==2	// de
-	"Pr&uuml;fungsfragen anzeigen"
+	"Pr&uuml;fungsb&ouml;gen anzeigen (Antwortvorlage + Fragen)"
 #elif L==3	// en
-	"Display exams question sheets"
+	"Show exam sheets (answer template + questions)"
 #elif L==4	// es
-	"Mostrar hojas de preguntas de examen"
+	"Mostrar hojas de examen (plantilla de respuestas + preguntas)"
 #elif L==5	// fr
-	"Afficher les feuilles de questions d'examen"
+	"Afficher les feuilles d'examen (mod&agrave;le de r&eacute;ponses + questions)"
 #elif L==6	// gn
-	"Mostrar hojas de preguntas de ex&aacute;menes"	// Okoteve traducción
+	"Ohechauka kuatia examen rehegua (plantilla &ntilde;embohov&aacute;i + porandu)"
 #elif L==7	// it
-	"Visualizza i fogli delle domande d'esame"
+	"Mostra i fogli d'esame (modello di risposta + domande)"
 #elif L==8	// pl
-	"Wy&sacute;wietl arkusze pyta&ntilde; egzaminacyjnych"
+	"Poka&zdot; arkusze egzaminacyjne (szablon odpowiedzi + pytania)"
 #elif L==9	// pt
-	"Mostrar folhas de perguntas de exame"
+	"Visualizar fichas de exame (modelo de respostas + perguntas)"
 #elif L==10	// tr
-	"S&inodot;nav soru ka&gbreve;&inodot;tlar&inodot;n&inodot; g&ouml;r&uuml;nt&uuml;le"
+	"S&inodot;nav ka&gbreve;&inodot;tlar&inodot;n&inodot; g&ouml;ster (cevap &scedil;ablonu + sorular)"
 #endif
 	,
 	[ActPrnExaQstShe] =
 #if   L==1	// ca
-	"Imprimir fulls de preguntes d'examen"
+	"Imprimir fulls d'examen (plantilla de respostes + preguntes)"
 #elif L==2	// de
-	"Pr&uuml;fungsfragen drucken"
+	"Pr&uuml;fungsb&ouml;gen ausdrucken (Antwortvorlage + Fragen)"
 #elif L==3	// en
-	"Print exams question sheets"
+	"Print exam sheets (answer template + questions)"
 #elif L==4	// es
-	"Imprimir hojas de preguntas examen"
+	"Imprimir hojas de examen (plantilla de respuestas + preguntas)"
 #elif L==5	// fr
-	"Imprimer les feuilles de questions d'examen"
+	"Imprimer les feuilles d'examen (mod&agrave;le de r&eacute;ponses + questions)"
 #elif L==6	// gn
-	"Imprimir hojas de preguntas de ex&aacute;menes"	// Okoteve traducción
+	"Imprimi kuatia examen rehegua (plantilla &ntilde;embohov&aacute;i + porandu)"
 #elif L==7	// it
-	"Stampa i fogli delle domande d'esame"
+	"Stampa i fogli d'esame (modello di risposta + domande)"
 #elif L==8	// pl
-	"Drukuj arkusze pyta&nacute; egzaminacyjnych"
+	"Wydrukuj arkusze egzaminacyjne (szablon odpowiedzi + pytania)"
 #elif L==9	// pt
-	"Imprimir folhas de perguntas de exame"
+	"Imprimir fichas de exame (modelo de respostas + perguntas)"
 #elif L==10	// tr
-	"S&inodot;nav soru ka&gbreve;&inodot;tlar&inodot;n&inodot; yazd&inodot;r"
+	"S&inodot;nav ka&gbreve;&inodot;tlar&inodot;n&inodot; yazd&inodot;r&inodot;n (cevap &scedil;ablonu + sorular)"
 #endif
 	,
 	[ActSeeExaAnsShe] =
 #if   L==1	// ca
-	"Mostrar fulls de respostes d'examen"
+	"Mostrar fulls de solucions i respostes de l'estudiant"
 #elif L==2	// de
-	"Pr&uuml;fungsantwortb&ouml;gen anzeigen"
+	"L&ouml;sungs- und Antwortb&ouml;gen der Sch&uuml;ler vorzeigen"
 #elif L==3	// en
-	"Show exam answer sheets"
+	"Show solution and student answer sheets"
 #elif L==4	// es
-	"Mostrar hojas de respuestas de examen"
+	"Mostrar hojas de soluciones y respuestas del estudiante"
 #elif L==5	// fr
-	"Afficher les feuilles de r&eacute;ponses d'examen"
+	"Afficher les feuilles de solutions et les r&eacute;ponses des &eacute;tudiants"
 #elif L==6	// gn
-	"Ohechauka umi kuatia &ntilde;embohov&aacute;i examen rehegua"
+	"Ohechauka umi kuatia soluci&oacute;n rehegua ha temimbo eku&eacute;ra &ntilde;embohov&aacute;i"
 #elif L==7	// it
-	"Visualizza i fogli delle risposte d'esame"
+	"Visualizza i fogli delle soluzioni e le risposte degli studenti"
 #elif L==8	// pl
-	"Poka&zdot; arkusze odpowiedzi z egzaminu"
+	"Wy&sacute;wietl arkusze rozwi&aogon;za&nacute; i odpowiedzi uczni&oacute;w"
 #elif L==9	// pt
-	"Mostrar folhas de respostas de exame"
+	"Mostrar folhas de solu&ccedil;&otilde;es e respostas dos alunos"
 #elif L==10	// tr
-	"S&inodot;nav cevap ka&gbreve;&inodot;tlar&inodot;n&inodot; g&ouml;ster"
+	"&Ouml;&gbreve;renci &ccedil;&ouml;z&uuml;mlerini ve cevap ka&gbreve;&inodot;tlar&inodot;n&inodot; g&ouml;r&uuml;nt&uuml;le"
 #endif
 	,
 	[ActPrnExaAnsShe] =
 #if   L==1	// ca
-	"Imprimir fulls de respostes d'examen"
+	"Imprimir fulls de solucions i respostes de l'estudiant"
 #elif L==2	// de
-	"Pr&uuml;fungsantwortb&ouml;gen drucken"
+	"Drucken Sie L&ouml;sungs- und Antwortb&ouml;gen f&uuml;r Sch&uuml;ler aus"
 #elif L==3	// en
-	"Print exam answer sheets"
+	"Print solution and student answer sheets"
 #elif L==4	// es
-	"Imprimir hojas de respuestas de examen"
+	"Imprimir hojas de soluciones y respuestas del estudiante"
 #elif L==5	// fr
-	"Imprimer les feuilles de r&eacute;ponses d'examen"
+	"Imprimer les feuilles de solutions et les r&eacute;ponses des &eacute;tudiants"
 #elif L==6	// gn
-	"Imprimi umi kuatia &ntilde;embohov&aacute;i examen rehegua"
+	"Eimprimi umi kuatia soluci&oacute;n rehegua ha temimbo eku&eacute;ra &ntilde;embohov&aacute;i"
 #elif L==7	// it
-	"Stampa i fogli delle risposte d'esame"
+	"Stampa i fogli delle soluzioni e le risposte degli studenti"
 #elif L==8	// pl
-	"Wydrukuj arkusze odpowiedzi egzaminacyjnych"
+	"Wydrukuj arkusze rozwi&aogon;za&nacute; i odpowiedzi uczni&oacute;w"
 #elif L==9	// pt
-	"Imprimir folhas de respostas de exame"
+	"Imprimir folhas de solu&ccedil;&otilde;es e respostas dos alunos"
 #elif L==10	// tr
-	"S&inodot;nav cevap ka&gbreve;&inodot;tlar&inodot;n&inodot; yazd&inodot;r"
+	"&Ouml;&gbreve;renci &ccedil;&ouml;z&uuml;mlerini ve cevap ka&gbreve;&inodot;tlar&inodot;n&inodot; yazd&inodot;r&inodot;n"
 #endif
 	,
 	[ActAnsExaAnsShe] =

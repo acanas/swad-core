@@ -1,7 +1,7 @@
-// swad_exam_question_sheet.h: exams question sheets
+// swad_exam_sheet_answer.h: exams sheets (answers)
 
-#ifndef _SWAD_EXA_QST_SHE
-#define _SWAD_EXA_QST_SHE
+#ifndef _SWAD_EXA_SHE_ANS
+#define _SWAD_EXA_SHE_ANS
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -24,18 +24,19 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/********************************** Headers **********************************/
+/********************************* Headers ***********************************/
 /*****************************************************************************/
 
-/*****************************************************************************/
-/************************* Public types and constants ************************/
-/*****************************************************************************/
+#include "swad_exam_print.h"
+#include "swad_exam_session.h"
+#include "swad_exam_sheet.h"
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ExaQstShe_ListSheets (void);
-void ExaQstShe_PrintSheets (void);
+void ExaSheAns_ShowAnswers (const struct ExaSes_Session *Session,
+			    const struct ExaPrn_Print *Print,
+			    ExaShe_BlankOrSolved_t BlankOrSolved);
 
 #endif

@@ -69,9 +69,9 @@
 #include "swad_degree.h"
 #include "swad_degree_type.h"
 #include "swad_department.h"
-#include "swad_exam_answer_sheet.h"
 #include "swad_exam_log.h"
 #include "swad_exam_session.h"
+#include "swad_exam_sheet_answer.h"
 #include "swad_figure.h"
 #include "swad_follow.h"
 #include "swad_forum.h"
@@ -19830,50 +19830,27 @@ const char *Txt_Links_removed =
 	"Links removed";	// Çeviri lazim!
 #endif
 
-const char *Txt_List_of_exam_question_sheets_for_session_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_List_of_exam_sheets_for_session_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Llistat de fulls de preguntes d'examen a la sessi&oacute; &quot;%s&quot;";
+	"Llistat de fulls d'examen a la sessi&oacute; &quot;%s&quot;";
 #elif L==2	// de
-	"Liste der Pr&uuml;fungsfragen in Sitzung &quot;%s&quot;";
+	"Liste der Pr&uuml;fungsb&ouml;gen f&uuml;r Sitzung &quot;%s&quot;";
 #elif L==3	// en
-	"List of exam question sheets for session &quot;%s&quot;";
+	"List of exam sheets for session &quot;%s&quot;";
 #elif L==4	// es
-	"Listado de hojas de preguntas de examen en la sesi&oacute;n &quot;%s&quot;";
+	"Listado de hojas de examen en la sesi&oacute;n &quot;%s&quot;";
 #elif L==5	// fr
-	"Liste des feuilles de sujets d'examen de la session &quot;%s&quot;";
+	"Liste des feuilles d'examen de la session &quot;%s&quot;";
 #elif L==6	// gn
-	"Listado de hojas de preguntas de examen en la sesi&oacute;n &quot;%s&quot;";	// Okoteve traducción
+	"Listado de hojas de examen en la sesi&oacute;n &quot;%s&quot;";	// Okoteve traducción
 #elif L==7	// it
-	"Elenco dei fogli delle domande d'esame della sessione &quot;%s&quot;";
+	"Elenco dei fogli d'esame della sessione &quot;%s&quot;";
 #elif L==8	// pl
-	"Lista arkuszy egzaminacyjnych w sesji &quot;%s&quot;";
+	"Lista arkuszy egzaminacyjnych na sesj&eogon; &quot;%s&quot;";
 #elif L==9	// pt
-	"Lista de folhas de quest&otilde;es de exame na sess&atilde;o &quot;%s&quot;";
+	"Lista de folhas de exame na sess&atilde;o &quot;%s&quot;";
 #elif L==10	// tr
-	"&quot;%s&quot; oturumdaki s&inodot;nav sorular&inodot;n&inodot;n listesi";
-#endif
-
-const char *Txt_List_of_exam_answer_sheets_for_session_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Llistat de fulles de respostes d'examen a la sessi&oacute; &quot;%s&quot;";
-#elif L==2	// de
-	"Liste der Pr&uuml;fungsantwortb&ouml;gen in Sitzung &quot;%s&quot;";
-#elif L==3	// en
-	"List of exam answer sheets for session &quot;%s&quot;";
-#elif L==4	// es
-	"Listado de hojas de respuestas de examen en la sesi&oacute;n &quot;%s&quot;";
-#elif L==5	// fr
-	"Liste des feuilles de r&eacute;ponses d'examen de la session &quot;%s&quot;";
-#elif L==6	// gn
-	"Listado de hojas de respuestas de examen en la sesi&oacute;n &quot;%s&quot;";	// Okoteve traducción
-#elif L==7	// it
-	"Elenco dei fogli delle risposte dell'esame della sessione &quot;%s&quot;";
-#elif L==8	// pl
-	"Lista arkuszy odpowiedzi egzaminacyjnych w sesji &quot;%s&quot;";
-#elif L==9	// pt
-	"Lista de folhas de respostas dos exames da sess&atilde;o &quot;%s&quot;";
-#elif L==10	// tr
-	"&quot;%s&quot; oturumdaki s&inodot;nav cevap ka&gbreve;&inodot;tlar&inodot;n&inodot;n listesi";
+	"&quot;%s&quot; oturumu i&ccedil;in s&inodot;nav ka&gbreve;&inodot;tlar&inodot; listesi";
 #endif
 
 const char *Txt_Location =

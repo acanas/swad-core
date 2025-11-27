@@ -50,14 +50,14 @@
 #include "swad_degree_type.h"
 #include "swad_department.h"
 #include "swad_duplicate.h"
+#include "swad_enrolment.h"
 #include "swad_exam.h"
-#include "swad_exam_answer_sheet.h"
 #include "swad_exam_print.h"
 #include "swad_exam_resource.h"
 #include "swad_exam_result.h"
 #include "swad_exam_session.h"
 #include "swad_exam_set.h"
-#include "swad_enrolment.h"
+#include "swad_exam_sheet.h"
 #include "swad_FAQ.h"
 #include "swad_figure.h"
 #include "swad_follow.h"
@@ -938,11 +938,11 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActInvSetQst	] = {1910, 5,TabAss,NULL			,ExaSet_InvalidateQst		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActSeeOneExaSes	] = {2181, 5,TabAss,NULL			,ExaSes_ShowOneSession		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [Act_DoAct_ExaSes	] = {2184, 5,TabAss,Usr_DoActionOnUsrs1		,Usr_DoActionOnUsrs2		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
-   [ActSeeExaQstShe	] = {2183, 5,TabAss,NULL			,ExaQstShe_ListSheets		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
-   [ActPrnExaQstShe	] = {2182, 5,TabAss,NULL			,ExaQstShe_PrintSheets		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_NEW},
-   [ActSeeExaAnsShe	] = {2187, 5,TabAss,NULL			,ExaAnsShe_ListSheets		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
-   [ActPrnExaAnsShe	] = {2188, 5,TabAss,NULL			,ExaAnsShe_PrintSheets		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_NEW},
-   [ActAnsExaAnsShe	] = {2189, 5,TabAss,NULL			,ExaAnsShe_ReceiveAnswer	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_AJA},
+   [ActSeeExaQstShe	] = {2183, 5,TabAss,NULL			,ExaShe_ListBlankSheets		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
+   [ActPrnExaQstShe	] = {2182, 5,TabAss,NULL			,ExaShe_PrintBlankSheets	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_NEW},
+   [ActSeeExaAnsShe	] = {2187, 5,TabAss,NULL			,ExaShe_ListSolvedAnswerSheets	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
+   [ActPrnExaAnsShe	] = {2188, 5,TabAss,NULL			,ExaShe_PrintSolvedAnswerSheets	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_NEW},
+   [ActAnsExaAnsShe	] = {2189, 5,TabAss,NULL			,ExaShe_ReceiveAnswer	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_AJA},
    [ActReqNewExaSes	] = {1852, 5,TabAss,NULL			,ExaSes_ReqCreatOrEditSes	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [ActReqChgExaSes	] = {1902, 5,TabAss,NULL			,ExaSes_ReqCreatOrEditSes	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActNewExaSes	] = {1853, 5,TabAss,NULL			,ExaSes_ReceiveSession		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},

@@ -86,9 +86,6 @@ typedef enum
 
 void ExaPrn_ResetPrint (struct ExaPrn_Print *Print);
 
-void ExaQstShe_ListSheets (void);
-void ExaQstShe_PrintSheets (void);
-
 void ExaPrn_ShowPrintToStdToFill (void);
 
 void ExaPrn_GetQstsPrint (struct Exa_Exams *Exams,

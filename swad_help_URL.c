@@ -1840,6 +1840,29 @@ const char *Hlp_ASSESSMENT_Exams_sessions =
 	"ASSESSMENT.Exams.en#sessions";
 #endif
 
+const char *Hlp_ASSESSMENT_Exams_sheets =
+#if   L==1	// ca
+	"ASSESSMENT.Exams.es#hojas-de-examen";
+#elif L==2	// de
+	"ASSESSMENT.Exams.en#exam-sheets";
+#elif L==3	// en
+	"ASSESSMENT.Exams.en#exam-sheets";
+#elif L==4	// es
+	"ASSESSMENT.Exams.es#hojas-de-examen";
+#elif L==5	// fr
+	"ASSESSMENT.Exams.en#exam-sheets";
+#elif L==6	// gn
+	"ASSESSMENT.Exams.es#hojas-de-examen";
+#elif L==7	// it
+	"ASSESSMENT.Exams.en#exam-sheets";
+#elif L==8	// pl
+	"ASSESSMENT.Exams.en#exam-sheets";
+#elif L==9	// pt
+	"ASSESSMENT.Exams.en#exam-sheets";
+#elif L==10	// tr
+	"ASSESSMENT.Exams.en#exam-sheets";
+#endif
+
 const char *Hlp_ASSESSMENT_Exams_questions =
 #if   L==1	// ca
 	"ASSESSMENT.Exams.es#preguntas";

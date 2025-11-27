@@ -49,9 +49,10 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_action_list.o \
        swad_department.o swad_department_database.o swad_duplicate.o \
        swad_duplicate_database.o \
        swad_enrolment.o swad_enrolment_database.o swad_error.o swad_exam.o \
-       swad_exam_answer_sheet.o swad_exam_database.o swad_exam_log.o \
-       swad_exam_print.o swad_exam_question_sheet.o swad_exam_resource.o \
-       swad_exam_result.o swad_exam_session.o swad_exam_set.o swad_exist.o \
+       swad_exam_database.o swad_exam_log.o swad_exam_print.o \
+       swad_exam_resource.o swad_exam_result.o swad_exam_session.o \
+       swad_exam_set.o swad_exam_sheet.o swad_exam_sheet_answer.o \
+       swad_exam_sheet_question.o swad_exist.o \
        swad_FAQ.o swad_FAQ_database.o swad_figure.o swad_figure_cache.o \
        swad_figure_database.o swad_file.o swad_file_database.o \
        swad_file_extension.o swad_file_MIME.o swad_firewall.o \

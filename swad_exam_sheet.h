@@ -1,7 +1,7 @@
-// swad_exam_result.h: exams results
+// swad_exam_sheet.h: exams sheets
 
-#ifndef _SWAD_EXA_RES
-#define _SWAD_EXA_RES
+#ifndef _SWAD_EXA_SHE
+#define _SWAD_EXA_SHE
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -24,36 +24,33 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/********************************* Headers ***********************************/
+/********************************** Headers **********************************/
 /*****************************************************************************/
 
-#include "swad_exam_print.h"
-#include "swad_test_print.h"
+#include "swad_exam_session.h"
+#include "swad_view.h"
 
 /*****************************************************************************/
-/************************** Public types and constants ***********************/
+/************************* Public types and constants ************************/
 /*****************************************************************************/
 
-#define ExaRes_RESULTS_BOX_ID		"exares_box"
-#define ExaRes_RESULTS_TABLE_ID		"exares_table"
+#define ExaShe_NUM_BLANK_OR_SOLVED 2
+typedef enum
+  {
+   ExaShe_BLANK,
+   ExaShe_SOLVED,
+  } ExaShe_BlankOrSolved_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ExaRes_ShowMyResultsInCrs (void);
-void ExaRes_ShowMyResultsInExa (void);
-void ExaRes_ShowMyResultsInSes (void);
+void ExaShe_ListBlankSheets (void);
+void ExaShe_PrintBlankSheets (void);
 
-void ExaRes_SelUsrsToViewResults (void);
-void ExaRes_ShowAllResultsInCrs (void);
-void ExaRes_ShowAllResultsInExa (void);
-void ExaRes_ShowAllResultsInSes (void);
+void ExaShe_ListSolvedAnswerSheets (void);
+void ExaShe_PrintSolvedAnswerSheets (void);
 
-void ExaRes_ShowExaResultAfterFinish (void);
-void ExaRes_ShowOneExaResult (void);
-void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print);
-void ExaRes_ShowExamResultUser (const struct ExaSes_Session *Session,
-				struct Usr_Data *UsrDat);
+void ExaShe_ReceiveAnswer (void);
 
 #endif
