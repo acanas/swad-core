@@ -19830,27 +19830,27 @@ const char *Txt_Links_removed =
 	"Links removed";	// Çeviri lazim!
 #endif
 
-const char *Txt_List_of_exam_sheets_for_session_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_List_of_exam_sheets =
 #if   L==1	// ca
-	"Llistat de fulls d'examen a la sessi&oacute; &quot;%s&quot;";
+	"Llistat de fulls d'examen";
 #elif L==2	// de
-	"Liste der Pr&uuml;fungsb&ouml;gen f&uuml;r Sitzung &quot;%s&quot;";
+	"Liste der Pr&uuml;fungsb&ouml;gen";
 #elif L==3	// en
-	"List of exam sheets for session &quot;%s&quot;";
+	"List of exam sheets";
 #elif L==4	// es
-	"Listado de hojas de examen en la sesi&oacute;n &quot;%s&quot;";
+	"Listado de hojas de examen";
 #elif L==5	// fr
-	"Liste des feuilles d'examen de la session &quot;%s&quot;";
+	"Liste des feuilles d'examen";
 #elif L==6	// gn
-	"Listado de hojas de examen en la sesi&oacute;n &quot;%s&quot;";	// Okoteve traducción
+	"Lista umi kuatia ex&aacute;men rehegua";
 #elif L==7	// it
-	"Elenco dei fogli d'esame della sessione &quot;%s&quot;";
+	"Elenco dei fogli d'esame";
 #elif L==8	// pl
-	"Lista arkuszy egzaminacyjnych na sesj&eogon; &quot;%s&quot;";
+	"Lista arkuszy egzaminacyjnych";
 #elif L==9	// pt
-	"Lista de folhas de exame na sess&atilde;o &quot;%s&quot;";
+	"Lista de folhas de exame";
 #elif L==10	// tr
-	"&quot;%s&quot; oturumu i&ccedil;in s&inodot;nav ka&gbreve;&inodot;tlar&inodot; listesi";
+	"S&inodot;nav ka&gbreve;&inodot;tlar&inodot; listesi";
 #endif
 
 const char *Txt_Location =

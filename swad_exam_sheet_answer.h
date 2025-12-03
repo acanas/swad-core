@@ -37,6 +37,7 @@
 
 void ExaSheAns_ShowAnswers (const struct ExaSes_Session *Session,
 			    const struct ExaPrn_Print *Print,
-			    ExaShe_BlankOrSolved_t BlankOrSolved);
+			    ExaShe_BlankOrSolved_t BlankOrSolved,
+			    Vie_ViewType_t ViewType);
 
 #endif

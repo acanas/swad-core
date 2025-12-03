@@ -62,10 +62,10 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void ExaSheAns_WriteQst (const struct ExaSes_Session *Session,
-				ExaShe_BlankOrSolved_t BlankOrSolved,
 			        const struct ExaPrn_Print *Print,
-                                unsigned QstInd,
-                                struct Qst_Question *Question);
+				ExaShe_BlankOrSolved_t BlankOrSolved,
+				Vie_ViewType_t ViewType,
+                                unsigned QstInd,struct Qst_Question *Question);
 
 static void ExaSheAns_WriteBlankAnswers (struct Qst_Question *Question);
 static void ExaSheAns_WriteBlankIntAns (__attribute__((unused)) const struct Qst_Question *Question);
@@ -75,57 +75,57 @@ static void ExaSheAns_WriteBlankChoAns (const struct Qst_Question *Question);
 static void ExaSheAns_WriteBlankTxtAns (__attribute__((unused)) const struct Qst_Question *Question);
 
 static void ExaSheAns_WriteSolvedAnswers (const struct ExaSes_Session *Session,
-					  struct Qst_Question *Question,
 					  const struct ExaPrn_Print *Print,
-					  unsigned QstInd);
+					  Vie_ViewType_t ViewType,
+					  unsigned QstInd,
+					  struct Qst_Question *Question);
 
-static void ExaSheAns_WriteCorrectIntAns (struct Qst_Question *Question,
-					  __attribute__((unused)) const struct ExaPrn_Print *Print,
-					  __attribute__((unused)) unsigned QstInd);
-static void ExaSheAns_WriteCorrectFltAns (struct Qst_Question *Question,
-					  __attribute__((unused)) const struct ExaPrn_Print *Print,
-					  __attribute__((unused)) unsigned QstInd);
-static void ExaSheAns_WriteCorrectTF_Ans (struct Qst_Question *Question,
-					  __attribute__((unused)) const struct ExaPrn_Print *Print,
-					  __attribute__((unused)) unsigned QstInd);
-static void ExaSheAns_WriteCorrectChoAns (struct Qst_Question *Question,
-					  const struct ExaPrn_Print *Print,
-					  unsigned QstInd);
-static void ExaSheAns_WriteCorrectTxtAns (struct Qst_Question *Question,
-					  __attribute__((unused)) const struct ExaPrn_Print *Print,
-					  __attribute__((unused)) unsigned QstInd);
+static void ExaSheAns_WriteCorrectIntAns (__attribute__((unused)) const struct ExaPrn_Print *Print,
+					  __attribute__((unused)) unsigned QstInd,
+					  struct Qst_Question *Question);
+static void ExaSheAns_WriteCorrectFltAns (__attribute__((unused)) const struct ExaPrn_Print *Print,
+					  __attribute__((unused)) unsigned QstInd,
+					  struct Qst_Question *Question);
+static void ExaSheAns_WriteCorrectTF_Ans (__attribute__((unused)) const struct ExaPrn_Print *Print,
+					  __attribute__((unused)) unsigned QstInd,
+					  struct Qst_Question *Question);
+static void ExaSheAns_WriteCorrectChoAns (const struct ExaPrn_Print *Print,
+					  unsigned QstInd,struct Qst_Question *Question);
+static void ExaSheAns_WriteCorrectTxtAns (__attribute__((unused)) const struct ExaPrn_Print *Print,
+					  __attribute__((unused)) unsigned QstInd,
+					  struct Qst_Question *Question);
 
-static void ExaSheAns_WriteOnlineIntAns (struct Qst_Question *Question,
-					 const struct ExaPrn_Print *Print,
-					 unsigned QstInd);
-static void ExaSheAns_WriteOnlineFltAns (struct Qst_Question *Question,
-					 const struct ExaPrn_Print *Print,
-					 unsigned QstInd);
-static void ExaSheAns_WriteOnlineTF_Ans (struct Qst_Question *Question,
-					 const struct ExaPrn_Print *Print,
-					 unsigned QstInd);
-static void ExaSheAns_WriteOnlineChoAns (struct Qst_Question *Question,
-					 const struct ExaPrn_Print *Print,
-					 unsigned QstInd);
-static void ExaSheAns_WriteOnlineTxtAns (struct Qst_Question *Question,
-					 const struct ExaPrn_Print *Print,
-					 unsigned QstInd);
+static void ExaSheAns_WriteReadonlyIntAns (const struct ExaPrn_Print *Print,
+					   unsigned QstInd,
+					   struct Qst_Question *Question);
+static void ExaSheAns_WriteReadonlyFltAns (const struct ExaPrn_Print *Print,
+					   unsigned QstInd,
+					   struct Qst_Question *Question);
+static void ExaSheAns_WriteReadonlyTF_Ans (const struct ExaPrn_Print *Print,
+					   unsigned QstInd,
+					   struct Qst_Question *Question);
+static void ExaSheAns_WriteReadonlyChoAns (const struct ExaPrn_Print *Print,
+					   unsigned QstInd,
+					   struct Qst_Question *Question);
+static void ExaSheAns_WriteReadonlyTxtAns (const struct ExaPrn_Print *Print,
+					   unsigned QstInd,
+					   struct Qst_Question *Question);
 
-static void ExaSheAns_WritePaperIntAns (struct Qst_Question *Question,
-					const struct ExaPrn_Print *Print,
-					unsigned QstInd);
-static void ExaSheAns_WritePaperFltAns (struct Qst_Question *Question,
-					const struct ExaPrn_Print *Print,
-					unsigned QstInd);
-static void ExaSheAns_WritePaperTF_Ans (struct Qst_Question *Question,
-					const struct ExaPrn_Print *Print,
-					unsigned QstInd);
-static void ExaSheAns_WritePaperChoAns (struct Qst_Question *Question,
-					const struct ExaPrn_Print *Print,
-					unsigned QstInd);
-static void ExaSheAns_WritePaperTxtAns (struct Qst_Question *Question,
-					const struct ExaPrn_Print *Print,
-					unsigned QstInd);
+static void ExaSheAns_WriteEditableIntAns (const struct ExaPrn_Print *Print,
+					   unsigned QstInd,
+					   struct Qst_Question *Question);
+static void ExaSheAns_WriteEditableFltAns (const struct ExaPrn_Print *Print,
+					   unsigned QstInd,
+					   struct Qst_Question *Question);
+static void ExaSheAns_WriteEditableTF_Ans (const struct ExaPrn_Print *Print,
+					   unsigned QstInd,
+					   struct Qst_Question *Question);
+static void ExaSheAns_WriteEditableChoAns (const struct ExaPrn_Print *Print,
+					   unsigned QstInd,
+					   struct Qst_Question *Question);
+static void ExaSheAns_WriteEditableTxtAns (const struct ExaPrn_Print *Print,
+					   unsigned QstInd,
+					   struct Qst_Question *Question);
 static void ExaSheAns_WriteJSToUpdateSheet (const struct ExaPrn_Print *Print,
 	                                    unsigned QstInd,
 	                                    const char *Id,int NumOpt);
@@ -138,7 +138,8 @@ static void ExaSheAns_WriteHead (ExaSes_Modality_t Modality);
 
 void ExaSheAns_ShowAnswers (const struct ExaSes_Session *Session,
 			    const struct ExaPrn_Print *Print,
-			    ExaShe_BlankOrSolved_t BlankOrSolved)
+			    ExaShe_BlankOrSolved_t BlankOrSolved,
+			    Vie_ViewType_t ViewType)
   {
    extern const char *Txt_Answers;
    static struct ExaSet_Set CurrentSet =
@@ -185,7 +186,8 @@ void ExaSheAns_ShowAnswers (const struct ExaSes_Session *Session,
 	    ExaSet_GetQstDataFromDB (&Question);
 
 	    /* Write question answers */
-	    ExaSheAns_WriteQst (Session,BlankOrSolved,Print,QstInd,&Question);
+	    ExaSheAns_WriteQst (Session,Print,BlankOrSolved,ViewType,
+				QstInd,&Question);
 
 	 /* Destroy test question */
 	 Qst_QstDestructor (&Question);
@@ -200,10 +202,10 @@ void ExaSheAns_ShowAnswers (const struct ExaSes_Session *Session,
 /*****************************************************************************/
 
 static void ExaSheAns_WriteQst (const struct ExaSes_Session *Session,
-				ExaShe_BlankOrSolved_t BlankOrSolved,
 			        const struct ExaPrn_Print *Print,
-                                unsigned QstInd,
-                                struct Qst_Question *Question)
+				ExaShe_BlankOrSolved_t BlankOrSolved,
+				Vie_ViewType_t ViewType,
+                                unsigned QstInd,struct Qst_Question *Question)
   {
    /***** Begin row *****/
    HTM_DIV_Begin ("class=\"Exa_CONTAINER\"");
@@ -223,7 +225,8 @@ static void ExaSheAns_WriteQst (const struct ExaSes_Session *Session,
 	       break;
 	    case ExaShe_SOLVED:
 	       Frm_BeginFormNoAction ();	// Form that can not be submitted, to avoid enter key to send it
-		  ExaSheAns_WriteSolvedAnswers (Session,Question,Print,QstInd);
+		  ExaSheAns_WriteSolvedAnswers (Session,Print,ViewType,
+						QstInd,Question);
 	       Frm_EndForm ();
 	       break;
 	    default:
@@ -372,35 +375,44 @@ static void ExaSheAns_WriteBlankTxtAns (__attribute__((unused)) const struct Qst
 /*****************************************************************************/
 
 static void ExaSheAns_WriteSolvedAnswers (const struct ExaSes_Session *Session,
-					  struct Qst_Question *Question,
 					  const struct ExaPrn_Print *Print,
-					  unsigned QstInd)
+					  Vie_ViewType_t ViewType,
+					  unsigned QstInd,
+					  struct Qst_Question *Question)
   {
-   static void (*ExaSheAns_WriteSolvedAns[ExaSes_NUM_MODALITIES][Qst_NUM_ANS_TYPES]) (struct Qst_Question *Question,
-										      const struct ExaPrn_Print *Print,
-										      unsigned QstInd) =
-    {
-     [ExaSes_NONE  ][Qst_ANS_INT            ] = ExaSheAns_WriteCorrectIntAns,
-     [ExaSes_NONE  ][Qst_ANS_FLOAT          ] = ExaSheAns_WriteCorrectFltAns,
-     [ExaSes_NONE  ][Qst_ANS_TRUE_FALSE     ] = ExaSheAns_WriteCorrectTF_Ans,
-     [ExaSes_NONE  ][Qst_ANS_UNIQUE_CHOICE  ] = ExaSheAns_WriteCorrectChoAns,
-     [ExaSes_NONE  ][Qst_ANS_MULTIPLE_CHOICE] = ExaSheAns_WriteCorrectChoAns,
-     [ExaSes_NONE  ][Qst_ANS_TEXT           ] = ExaSheAns_WriteCorrectTxtAns,
-
-     [ExaSes_ONLINE][Qst_ANS_INT            ] = ExaSheAns_WriteOnlineIntAns,
-     [ExaSes_ONLINE][Qst_ANS_FLOAT          ] = ExaSheAns_WriteOnlineFltAns,
-     [ExaSes_ONLINE][Qst_ANS_TRUE_FALSE     ] = ExaSheAns_WriteOnlineTF_Ans,
-     [ExaSes_ONLINE][Qst_ANS_UNIQUE_CHOICE  ] = ExaSheAns_WriteOnlineChoAns,
-     [ExaSes_ONLINE][Qst_ANS_MULTIPLE_CHOICE] = ExaSheAns_WriteOnlineChoAns,
-     [ExaSes_ONLINE][Qst_ANS_TEXT           ] = ExaSheAns_WriteOnlineTxtAns,
-
-     [ExaSes_PAPER ][Qst_ANS_INT            ] = ExaSheAns_WritePaperIntAns,
-     [ExaSes_PAPER ][Qst_ANS_FLOAT          ] = ExaSheAns_WritePaperFltAns,
-     [ExaSes_PAPER ][Qst_ANS_TRUE_FALSE     ] = ExaSheAns_WritePaperTF_Ans,
-     [ExaSes_PAPER ][Qst_ANS_UNIQUE_CHOICE  ] = ExaSheAns_WritePaperChoAns,
-     [ExaSes_PAPER ][Qst_ANS_MULTIPLE_CHOICE] = ExaSheAns_WritePaperChoAns,
-     [ExaSes_PAPER ][Qst_ANS_TEXT           ] = ExaSheAns_WritePaperTxtAns,
-    };
+   static void (*ExaSheAns_WriteCorrectAns[Qst_NUM_ANS_TYPES]) (const struct ExaPrn_Print *Print,
+								unsigned QstInd,
+								struct Qst_Question *Question) =
+     {
+      [Qst_ANS_INT            ] = ExaSheAns_WriteCorrectIntAns,
+      [Qst_ANS_FLOAT          ] = ExaSheAns_WriteCorrectFltAns,
+      [Qst_ANS_TRUE_FALSE     ] = ExaSheAns_WriteCorrectTF_Ans,
+      [Qst_ANS_UNIQUE_CHOICE  ] = ExaSheAns_WriteCorrectChoAns,
+      [Qst_ANS_MULTIPLE_CHOICE] = ExaSheAns_WriteCorrectChoAns,
+      [Qst_ANS_TEXT           ] = ExaSheAns_WriteCorrectTxtAns,
+     };
+   static void (*ExaSheAns_WriteReadonlyAns[Qst_NUM_ANS_TYPES]) (const struct ExaPrn_Print *Print,
+								 unsigned QstInd,
+								 struct Qst_Question *Question) =
+     {
+      [Qst_ANS_INT            ] = ExaSheAns_WriteReadonlyIntAns,
+      [Qst_ANS_FLOAT          ] = ExaSheAns_WriteReadonlyFltAns,
+      [Qst_ANS_TRUE_FALSE     ] = ExaSheAns_WriteReadonlyTF_Ans,
+      [Qst_ANS_UNIQUE_CHOICE  ] = ExaSheAns_WriteReadonlyChoAns,
+      [Qst_ANS_MULTIPLE_CHOICE] = ExaSheAns_WriteReadonlyChoAns,
+      [Qst_ANS_TEXT           ] = ExaSheAns_WriteReadonlyTxtAns,
+     };
+   static void (*ExaSheAns_WriteEditableAns[Qst_NUM_ANS_TYPES]) (const struct ExaPrn_Print *Print,
+								 unsigned QstInd,
+								 struct Qst_Question *Question) =
+     {
+      [Qst_ANS_INT            ] = ExaSheAns_WriteEditableIntAns,
+      [Qst_ANS_FLOAT          ] = ExaSheAns_WriteEditableFltAns,
+      [Qst_ANS_TRUE_FALSE     ] = ExaSheAns_WriteEditableTF_Ans,
+      [Qst_ANS_UNIQUE_CHOICE  ] = ExaSheAns_WriteEditableChoAns,
+      [Qst_ANS_MULTIPLE_CHOICE] = ExaSheAns_WriteEditableChoAns,
+      [Qst_ANS_TEXT           ] = ExaSheAns_WriteEditableTxtAns,
+     };
 
    /***** Begin table *****/
    HTM_TABLE_Begin ("Exa_TBL");
@@ -408,13 +420,16 @@ static void ExaSheAns_WriteSolvedAnswers (const struct ExaSes_Session *Session,
       /***** Write the answer *****/
       HTM_TR_Begin (NULL);
 	 ExaSheAns_WriteHead (ExaSes_NONE);
-	 ExaSheAns_WriteSolvedAns[ExaSes_NONE][Question->Answer.Type] (Question,Print,QstInd);
+	 ExaSheAns_WriteCorrectAns[Question->Answer.Type] (Print,QstInd,Question);
       HTM_TR_End ();
 
       /***** Write the answer *****/
       HTM_TR_Begin (NULL);
 	 ExaSheAns_WriteHead (Session->Modality);
-	 ExaSheAns_WriteSolvedAns[Session->Modality][Question->Answer.Type] (Question,Print,QstInd);
+	 if (Session->Modality == ExaSes_PAPER && ViewType == Vie_VIEW)
+	    ExaSheAns_WriteEditableAns[Question->Answer.Type] (Print,QstInd,Question);
+	 else
+	    ExaSheAns_WriteReadonlyAns[Question->Answer.Type] (Print,QstInd,Question);
       HTM_TR_End ();
 
    HTM_TABLE_End ();
@@ -424,9 +439,9 @@ static void ExaSheAns_WriteSolvedAnswers (const struct ExaSes_Session *Session,
 /*************** Write integer answer in an exam answer sheet ****************/
 /*****************************************************************************/
 
-static void ExaSheAns_WriteCorrectIntAns (struct Qst_Question *Question,
-					  __attribute__((unused)) const struct ExaPrn_Print *Print,
-					  __attribute__((unused)) unsigned QstInd)
+static void ExaSheAns_WriteCorrectIntAns (__attribute__((unused)) const struct ExaPrn_Print *Print,
+					  __attribute__((unused)) unsigned QstInd,
+					  struct Qst_Question *Question)
   {
    /***** Check if number of rows is correct *****/
    Qst_CheckIfNumberOfAnswersIsOne (Question);
@@ -441,9 +456,9 @@ static void ExaSheAns_WriteCorrectIntAns (struct Qst_Question *Question,
 /**************** Write float answer in an exam answer sheet *****************/
 /*****************************************************************************/
 
-static void ExaSheAns_WriteCorrectFltAns (struct Qst_Question *Question,
-					  __attribute__((unused)) const struct ExaPrn_Print *Print,
-					  __attribute__((unused)) unsigned QstInd)
+static void ExaSheAns_WriteCorrectFltAns (__attribute__((unused)) const struct ExaPrn_Print *Print,
+					  __attribute__((unused)) unsigned QstInd,
+					  struct Qst_Question *Question)
   {
    /***** Check if number of rows is correct *****/
    if (Question->Answer.NumOptions != 2)
@@ -460,9 +475,9 @@ static void ExaSheAns_WriteCorrectFltAns (struct Qst_Question *Question,
 /************* Write false / true answer in an exam answer sheet *************/
 /*****************************************************************************/
 
-static void ExaSheAns_WriteCorrectTF_Ans (struct Qst_Question *Question,
-					  __attribute__((unused)) const struct ExaPrn_Print *Print,
-					  __attribute__((unused)) unsigned QstInd)
+static void ExaSheAns_WriteCorrectTF_Ans (__attribute__((unused)) const struct ExaPrn_Print *Print,
+					  __attribute__((unused)) unsigned QstInd,
+					  struct Qst_Question *Question)
   {
    /***** Check if number of rows is correct *****/
    Qst_CheckIfNumberOfAnswersIsOne (Question);
@@ -477,9 +492,9 @@ static void ExaSheAns_WriteCorrectTF_Ans (struct Qst_Question *Question,
 /****** Write single or multiple choice answer in an exam answer sheet *******/
 /*****************************************************************************/
 
-static void ExaSheAns_WriteCorrectChoAns (struct Qst_Question *Question,
-					  const struct ExaPrn_Print *Print,
-					  unsigned QstInd)
+static void ExaSheAns_WriteCorrectChoAns (const struct ExaPrn_Print *Print,
+					  unsigned QstInd,
+					  struct Qst_Question *Question)
   {
    static const char *Correct[Qst_NUM_WRONG_CORRECT] =
      {
@@ -513,9 +528,9 @@ static void ExaSheAns_WriteCorrectChoAns (struct Qst_Question *Question,
 /**************** Write text answer in an exam answer sheet ******************/
 /*****************************************************************************/
 
-static void ExaSheAns_WriteCorrectTxtAns (struct Qst_Question *Question,
-					  __attribute__((unused)) const struct ExaPrn_Print *Print,
-					  __attribute__((unused)) unsigned QstInd)
+static void ExaSheAns_WriteCorrectTxtAns (__attribute__((unused)) const struct ExaPrn_Print *Print,
+					  __attribute__((unused)) unsigned QstInd,
+					  struct Qst_Question *Question)
   {
    unsigned NumOpt;
 
@@ -541,9 +556,9 @@ static void ExaSheAns_WriteCorrectTxtAns (struct Qst_Question *Question,
 /*************** Write integer answer in an exam answer sheet ****************/
 /*****************************************************************************/
 
-static void ExaSheAns_WriteOnlineIntAns (struct Qst_Question *Question,
-					 const struct ExaPrn_Print *Print,
-					 unsigned QstInd)
+static void ExaSheAns_WriteReadonlyIntAns (const struct ExaPrn_Print *Print,
+					   unsigned QstInd,
+					   struct Qst_Question *Question)
   {
    long IntAnswerUsr;
 
@@ -570,7 +585,7 @@ static void ExaSheAns_WriteOnlineIntAns (struct Qst_Question *Question,
 	 HTM_TD_End ();
 	}
      }
-   else							// If student has omitted the answer
+   else						// If student has omitted the answer
       HTM_TD_Empty (1);
   }
 
@@ -578,9 +593,9 @@ static void ExaSheAns_WriteOnlineIntAns (struct Qst_Question *Question,
 /**************** Write float answer in an exam answer sheet *****************/
 /*****************************************************************************/
 
-static void ExaSheAns_WriteOnlineFltAns (struct Qst_Question *Question,
-					 const struct ExaPrn_Print *Print,
-					 unsigned QstInd)
+static void ExaSheAns_WriteReadonlyFltAns (const struct ExaPrn_Print *Print,
+					   unsigned QstInd,
+					   struct Qst_Question *Question)
   {
    double AnsUsr = 0.0;
    Err_SuccessOrError_t SuccessOrError;
@@ -605,7 +620,7 @@ static void ExaSheAns_WriteOnlineFltAns (struct Qst_Question *Question,
 	    HTM_Double (AnsUsr);
       HTM_TD_End ();
      }
-   else							// If student has omitted the answer
+   else						// If student has omitted the answer
       HTM_TD_Empty (1);
   }
 
@@ -613,9 +628,9 @@ static void ExaSheAns_WriteOnlineFltAns (struct Qst_Question *Question,
 /************* Write false / true answer in an exam answer sheet *************/
 /*****************************************************************************/
 
-static void ExaSheAns_WriteOnlineTF_Ans (struct Qst_Question *Question,
-					 const struct ExaPrn_Print *Print,
-					 unsigned QstInd)
+static void ExaSheAns_WriteReadonlyTF_Ans (const struct ExaPrn_Print *Print,
+					   unsigned QstInd,
+					   struct Qst_Question *Question)
   {
    char AnsTFStd;
 
@@ -638,9 +653,9 @@ static void ExaSheAns_WriteOnlineTF_Ans (struct Qst_Question *Question,
 /****** Write single or multiple choice answer in an exam answer sheet *******/
 /*****************************************************************************/
 
-static void ExaSheAns_WriteOnlineChoAns (struct Qst_Question *Question,
-					 const struct ExaPrn_Print *Print,
-					 unsigned QstInd)
+static void ExaSheAns_WriteReadonlyChoAns (const struct ExaPrn_Print *Print,
+					   unsigned QstInd,
+					   struct Qst_Question *Question)
   {
    struct
      {
@@ -692,9 +707,9 @@ static void ExaSheAns_WriteOnlineChoAns (struct Qst_Question *Question,
 /**************** Write text answer in an exam answer sheet ******************/
 /*****************************************************************************/
 
-static void ExaSheAns_WriteOnlineTxtAns (struct Qst_Question *Question,
-					 const struct ExaPrn_Print *Print,
-					 unsigned QstInd)
+static void ExaSheAns_WriteReadonlyTxtAns (const struct ExaPrn_Print *Print,
+					   unsigned QstInd,
+					   struct Qst_Question *Question)
   {
    static const char *Class[Qst_NUM_WRONG_CORRECT] =
      {
@@ -745,7 +760,7 @@ static void ExaSheAns_WriteOnlineTxtAns (struct Qst_Question *Question,
 	 HTM_Txt (Print->Qsts[QstInd].Answer.Str);
       HTM_TD_End ();
      }
-   else							// If student has omitted the answer
+   else						// If student has omitted the answer
       HTM_TD_Empty (1);
   }
 
@@ -753,9 +768,9 @@ static void ExaSheAns_WriteOnlineTxtAns (struct Qst_Question *Question,
 /*************** Write integer answer in an exam answer sheet ****************/
 /*****************************************************************************/
 
-static void ExaSheAns_WritePaperIntAns (struct Qst_Question *Question,
-					const struct ExaPrn_Print *Print,
-					unsigned QstInd)
+static void ExaSheAns_WriteEditableIntAns (const struct ExaPrn_Print *Print,
+					   unsigned QstInd,
+					   struct Qst_Question *Question)
   {
    long AnsUsr;
    Qst_WrongOrCorrect_t WrongOrCorrect = Qst_BLANK;
@@ -790,9 +805,9 @@ static void ExaSheAns_WritePaperIntAns (struct Qst_Question *Question,
 /**************** Write float answer in an exam answer sheet *****************/
 /*****************************************************************************/
 
-static void ExaSheAns_WritePaperFltAns (struct Qst_Question *Question,
-					const struct ExaPrn_Print *Print,
-					unsigned QstInd)
+static void ExaSheAns_WriteEditableFltAns (const struct ExaPrn_Print *Print,
+					   unsigned QstInd,
+					   struct Qst_Question *Question)
   {
    double AnsUsr;
    Err_SuccessOrError_t SuccessOrError;
@@ -832,9 +847,9 @@ static void ExaSheAns_WritePaperFltAns (struct Qst_Question *Question,
 /************* Write false / true answer in an exam answer sheet *************/
 /*****************************************************************************/
 
-static void ExaSheAns_WritePaperTF_Ans (struct Qst_Question *Question,
-					const struct ExaPrn_Print *Print,
-					unsigned QstInd)
+static void ExaSheAns_WriteEditableTF_Ans (const struct ExaPrn_Print *Print,
+					   unsigned QstInd,
+					   struct Qst_Question *Question)
   {
    extern const char *Txt_NBSP;
    extern const char *Txt_TF_QST[2];
@@ -878,9 +893,9 @@ static void ExaSheAns_WritePaperTF_Ans (struct Qst_Question *Question,
 /****** Write single or multiple choice answer in an exam answer sheet *******/
 /*****************************************************************************/
 
-static void ExaSheAns_WritePaperChoAns (struct Qst_Question *Question,
-					const struct ExaPrn_Print *Print,
-					unsigned QstInd)
+static void ExaSheAns_WriteEditableChoAns (const struct ExaPrn_Print *Print,
+					   unsigned QstInd,
+					   struct Qst_Question *Question)
   {
    static const char *InputType[Qst_NUM_ANS_TYPES] =
      {
@@ -922,9 +937,9 @@ static void ExaSheAns_WritePaperChoAns (struct Qst_Question *Question,
 /**************** Write text answer in an exam answer sheet ******************/
 /*****************************************************************************/
 
-static void ExaSheAns_WritePaperTxtAns (struct Qst_Question *Question,
-					const struct ExaPrn_Print *Print,
-					unsigned QstInd)
+static void ExaSheAns_WriteEditableTxtAns (const struct ExaPrn_Print *Print,
+					   unsigned QstInd,
+					   struct Qst_Question *Question)
   {
    unsigned NumOpt;
    char TextAnsUsr[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];

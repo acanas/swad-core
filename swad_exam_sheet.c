@@ -91,7 +91,6 @@ void ExaShe_ListSolvedAnswerSheets (void)
 
 void ExaShe_PrintSolvedAnswerSheets (void)
   {
-   // TODO: Print version should be read only, without forms
    ExaShe_ListOrPrintSheets (ExaShe_SOLVED,Vie_PRINT);
   }
 
@@ -103,7 +102,7 @@ static void ExaShe_ListOrPrintSheets (ExaShe_BlankOrSolved_t BlankOrSolved,
 				      Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_ASSESSMENT_Exams_sheets;
-   extern const char *Txt_List_of_exam_sheets_for_session_X;
+   extern const char *Txt_List_of_exam_sheets;
    void (*FunctionToDrawContextualIcons[ExaShe_NUM_BLANK_OR_SOLVED]) (void *Args) =
      {
       [ExaShe_BLANK ] = ExaShe_PutIconsPrintBlankSheets,
@@ -113,7 +112,6 @@ static void ExaShe_ListOrPrintSheets (ExaShe_BlankOrSolved_t BlankOrSolved,
    struct ExaSes_Session Session;
    unsigned NumColsFromForm;
    Pho_ShowPhotos_t ShowPhotosFromForm;
-   char *Title;
    unsigned NumUsrsInList;
    long *LstSelectedUsrCods;
 
@@ -169,12 +167,9 @@ static void ExaShe_ListOrPrintSheets (ExaShe_BlankOrSolved_t BlankOrSolved,
       /***** Begin section and box *****/
       if (ViewType == Vie_VIEW)
 	{
-	 if (asprintf (&Title,Txt_List_of_exam_sheets_for_session_X,
-		       Session.Title) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 Box_BoxBegin (Title,FunctionToDrawContextualIcons[BlankOrSolved],&Exams,
+	 Box_BoxBegin (Txt_List_of_exam_sheets,
+		       FunctionToDrawContextualIcons[BlankOrSolved],&Exams,
 		       Hlp_ASSESSMENT_Exams_sheets,Box_NOT_CLOSABLE);
-	 free (Title);
 
 	    /* Settings */
 	    ExaSes_ShowFormSettings (&Session);
@@ -300,7 +295,7 @@ static void ExaShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 	    /* Show exam answer sheet */
 	    HTM_DIV_Begin ("id=\"examprint_%s\" class=\"Exa_QSTS\"",	// Used for AJAX based refresh
 			   Print.EnUsrCod);
-	       ExaSheAns_ShowAnswers (Session,&Print,BlankOrSolved);
+	       ExaSheAns_ShowAnswers (Session,&Print,BlankOrSolved,ViewType);
 	    HTM_DIV_End ();						// Used for AJAX based refresh
 
 	    /* Show exam question sheet */
@@ -387,5 +382,5 @@ void ExaShe_ReceiveAnswer (void)
    Exa_DB_UpdatePrint (&Print);
 
    /***** Show table with questions to answer *****/
-   ExaSheAns_ShowAnswers (&Session,&Print,ExaShe_SOLVED);
+   ExaSheAns_ShowAnswers (&Session,&Print,ExaShe_SOLVED,Vie_VIEW);
   }
