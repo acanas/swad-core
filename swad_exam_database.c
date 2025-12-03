@@ -1894,6 +1894,8 @@ void Exa_DB_UpdatePrint (const struct ExaPrn_Print *Print)
   {
    /***** Update exam print in database *****/
    Str_SetDecimalPointToUS ();		// To print the floating point as a dot
+
+      /* Update end time, number of questions not blank, and score */
       DB_QueryUPDATE ("can not update exam print",
 		      "UPDATE exa_prints"
 		      " SET EndTime=NOW(),"
@@ -1907,6 +1909,19 @@ void Exa_DB_UpdatePrint (const struct ExaPrn_Print *Print)
 		      Print->PrnCod,
 		      Print->SesCod,
 		      Print->UsrCod);
+
+      /* Update start time on first update */
+      DB_QueryUPDATE ("can not update exam print",
+		      "UPDATE exa_prints"
+		      " SET StartTime=EndTime"
+		      " WHERE PrnCod=%ld"
+			" AND SesCod=%ld"
+			" AND UsrCod=%ld"	// Extra checks
+			" AND StartTime=FROM_UNIXTIME(0)",
+		      Print->PrnCod,
+		      Print->SesCod,
+		      Print->UsrCod);
+
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 
