@@ -499,10 +499,10 @@ static void ExaSes_ShowHeaderResults (void)
    extern const char *Txt_No_INDEX;
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
+   extern const char *Txt_Grade;
    extern const char *Txt_Questions;
    extern const char *Txt_Valid_answers;
    extern const char *Txt_Score;
-   extern const char *Txt_Grade;
    extern const char *Txt_total;
    extern const char *Txt_QUESTIONS_valid;
    extern const char *Txt_QUESTIONS_invalid;
@@ -518,11 +518,11 @@ static void ExaSes_ShowHeaderResults (void)
       HTM_TH_Span (Txt_User[Usr_SEX_UNKNOWN]		,HTM_HEAD_CENTER,3,2,"LINE_BOTTOM");
       HTM_TH_Span (Txt_START_END_TIME[Dat_STR_TIME]     ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (Txt_START_END_TIME[Dat_END_TIME]     ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
+      HTM_TH_Span (NULL                                 ,HTM_HEAD_CENTER,3,1,"LINE_BOTTOM");
+      HTM_TH_Span (Txt_Grade                            ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM LINE_LEFT");
       HTM_TH_Span (Txt_Questions                        ,HTM_HEAD_CENTER,1,3,"LINE_LEFT");
       HTM_TH_Span (Txt_Valid_answers                    ,HTM_HEAD_CENTER,1,5,"LINE_LEFT");
       HTM_TH_Span (Txt_Score                            ,HTM_HEAD_CENTER,1,2,"LINE_LEFT");
-      HTM_TH_Span (Txt_Grade                            ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM LINE_LEFT");
-      HTM_TH_Span (NULL                                 ,HTM_HEAD_CENTER,3,1,"LINE_BOTTOM LINE_LEFT");
    HTM_TR_End ();
 
    /***** Second row *****/
@@ -618,8 +618,7 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 	    Err_NotEnoughMemoryExit ();
 	 HTM_TD_Begin ("id=\"%s\" class=\"LT DAT_%s LINE_BOTTOM %s\"",
 		       Id,The_GetSuffix (),The_GetColorRows ());
-	    // If an exam print has been created by a teacher
-	    // but has not been answered yet online by the student ==>
+	    // If an exam print has been created but has not been filled yet
 	    // ==> the time is 0 ==> don't print anything
 	    if (Print.TimeUTC[StartEndTime])
 	       Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
@@ -632,6 +631,30 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 	 HTM_TD_End ();
 	 free (Id);
 	}
+
+      /* Link to show this result */
+      HTM_TD_Begin ("class=\"RT LINE_BOTTOM %s\"",The_GetColorRows ());
+	 if (NumResults)
+	   {
+	    Frm_BeginForm (ActSeeOneExaResOth);
+	       Exa_PutPars (Exams);
+	       Usr_PutParOtherUsrCodEncrypted (UsrDat->EnUsrCod);
+	       Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneExaResOth);
+	    Frm_EndForm ();
+	   }
+      HTM_TD_End ();
+
+      /* Write grade over maximum grade (taking into account only valid questions) */
+      HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM LINE_LEFT %s\"",
+		    The_GetSuffix (),The_GetColorRows ());
+	 if (NumResults)
+	   {
+	    Grade = TstPrn_ComputeGrade (Print.NumQsts.Valid.Total,
+					 Print.Score.Valid,
+					 Exams->Exam.MaxGrade);
+	    HTM_DoublePartOfDouble (Grade,Exams->Exam.MaxGrade);
+	   }
+      HTM_TD_End ();
 
       /* Write total number of questions */
       HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM LINE_LEFT %s\"",
@@ -706,30 +729,6 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 	    HTM_Double2Decimals (Print.NumQsts.Valid.Total ? Print.Score.Valid /
 							     (double) Print.NumQsts.Valid.Total :
 							     0.0);
-      HTM_TD_End ();
-
-      /* Write grade over maximum grade (taking into account only valid questions) */
-      HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM LINE_LEFT %s\"",
-		    The_GetSuffix (),The_GetColorRows ());
-	 if (NumResults)
-	   {
-	    Grade = TstPrn_ComputeGrade (Print.NumQsts.Valid.Total,
-					 Print.Score.Valid,
-					 Exams->Exam.MaxGrade);
-	    HTM_DoublePartOfDouble (Grade,Exams->Exam.MaxGrade);
-	   }
-      HTM_TD_End ();
-
-      /* Link to show this result */
-      HTM_TD_Begin ("class=\"RT LINE_BOTTOM LINE_LEFT %s\"",The_GetColorRows ());
-	 if (NumResults)
-	   {
-	    Frm_BeginForm (ActSeeOneExaResOth);
-	       Exa_PutPars (Exams);
-	       Usr_PutParOtherUsrCodEncrypted (UsrDat->EnUsrCod);
-	       Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneExaResOth);
-	    Frm_EndForm ();
-	   }
       HTM_TD_End ();
 
    /***** End last row *****/

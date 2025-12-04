@@ -1846,10 +1846,10 @@ static void TstPrn_ShowHeaderPrints (Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
+   extern const char *Txt_Grade;
    extern const char *Txt_Questions;
    extern const char *Txt_Answers;
    extern const char *Txt_Score;
-   extern const char *Txt_Grade;
    extern const char *Txt_ANSWERS_non_blank;
    extern const char *Txt_ANSWERS_blank;
    extern const char *Txt_total;
@@ -1862,11 +1862,11 @@ static void TstPrn_ShowHeaderPrints (Usr_MeOrOther_t MeOrOther)
 		  	       Usr_SEX_UNKNOWN         ],HTM_HEAD_CENTER,3,2,"LINE_BOTTOM");
       HTM_TH_Span (Txt_START_END_TIME[Dat_STR_TIME]     ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (Txt_START_END_TIME[Dat_END_TIME]     ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
+      HTM_TH_Span (NULL                                 ,HTM_HEAD_CENTER,3,1,"LINE_BOTTOM");
+      HTM_TH_Span (Txt_Grade                            ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM LINE_LEFT");
       HTM_TH_Span (Txt_Questions                        ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM LINE_LEFT");
       HTM_TH_Span (Txt_Answers                          ,HTM_HEAD_CENTER,1,2,"LINE_LEFT");
       HTM_TH_Span (Txt_Score                            ,HTM_HEAD_CENTER,1,2,"LINE_LEFT");
-      HTM_TH_Span (Txt_Grade                            ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM LINE_LEFT");
-      HTM_TH_Span (NULL                                 ,HTM_HEAD_CENTER,3,1,"LINE_BOTTOM LINE_LEFT");
    HTM_TR_End ();
 
    /***** Second row *****/
@@ -1967,6 +1967,26 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	       free (Id);
 	      }
 
+	    /* Link to show this test */
+	    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+	       switch (ICanView.Result)
+		 {
+		  case Usr_CAN:
+		     Frm_BeginForm (Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
+									  ActSeeOneTstResOth);
+			ParCod_PutPar (ParCod_Prn,Print.PrnCod);
+			Ico_PutIconLink ("tasks.svg",Ico_BLACK,
+					 Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
+									       ActSeeOneTstResOth);
+		     Frm_EndForm ();
+		     break;
+		  case Usr_CAN_NOT:
+		  default:
+		     Ico_PutIconNotVisible ();
+		     break;
+		 }
+	    HTM_TD_End ();
+
 	    /* Accumulate questions and score */
 	    if (ICanView.Score == Usr_CAN)
 	      {
@@ -1974,6 +1994,23 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	       NumTotalQsts.NotBlank += Print.NumQsts.NotBlank;
 	       TotalScore            += Print.Score;
 	      }
+
+	    /* Write grade */
+	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
+	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
+	                  The_GetColorRows ());
+	       switch (ICanView.Score)
+		 {
+		  case Usr_CAN:
+		     TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,
+						 Tst_SCORE_MAX);
+		     break;
+		  case Usr_CAN_NOT:
+		  default:
+		     Ico_PutIconNotVisible ();
+		     break;
+		 }
+	    HTM_TD_End ();
 
 	    /* Write number of questions */
 	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
@@ -2058,43 +2095,6 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 		 }
 	    HTM_TD_End ();
 
-	    /* Write grade */
-	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
-	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
-	                  The_GetColorRows ());
-	       switch (ICanView.Score)
-		 {
-		  case Usr_CAN:
-		     TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,
-						 Tst_SCORE_MAX);
-		     break;
-		  case Usr_CAN_NOT:
-		  default:
-		     Ico_PutIconNotVisible ();
-		     break;
-		 }
-	    HTM_TD_End ();
-
-	    /* Link to show this test */
-	    HTM_TD_Begin ("class=\"RT LINE_LEFT %s\"",The_GetColorRows ());
-	       switch (ICanView.Result)
-		 {
-		  case Usr_CAN:
-		     Frm_BeginForm (Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
-									  ActSeeOneTstResOth);
-			ParCod_PutPar (ParCod_Prn,Print.PrnCod);
-			Ico_PutIconLink ("tasks.svg",Ico_BLACK,
-					 Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
-									       ActSeeOneTstResOth);
-		     Frm_EndForm ();
-		     break;
-		  case Usr_CAN_NOT:
-		  default:
-		     Ico_PutIconNotVisible ();
-		     break;
-		 }
-	    HTM_TD_End ();
-
 	    HTM_TR_End ();
 
 	    if (Print.DenyOrAllowTchs == DenAll_ALLOW)
@@ -2113,9 +2113,16 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	               The_GetColorRows ());
 	 HTM_TD_End ();
 
+	 /* Column for link to show the result */
+	 HTM_TD_Begin ("class=\"LINE_BOTTOM %s\"",The_GetColorRows ());
+	 HTM_TD_End ();
+
+	 /* Column for grade */
+	 HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",The_GetColorRows ());
+	 HTM_TD_End ();
+
 	 /* Column for questions */
-	 HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",
-	               The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",The_GetColorRows ());
 	 HTM_TD_End ();
 
 	 /* Columns for answers */
@@ -2125,16 +2132,6 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 
 	 /* Columns for score */
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT %s\"",
-	               The_GetColorRows ());
-	 HTM_TD_End ();
-
-	 /* Column for grade */
-	 HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",
-	               The_GetColorRows ());
-	 HTM_TD_End ();
-
-	 /* Column for link to show the result */
-	 HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",
 	               The_GetColorRows ());
 	 HTM_TD_End ();
 
@@ -2204,66 +2201,58 @@ static void TstPrn_ShowPrintsSummaryRow (Usr_MeOrOther_t MeOrOther,
       /***** Row title *****/
       HTM_TD_Begin ("colspan=\"2\""
 	            " class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                    The_GetSuffix (),
-                    The_GetColorRows ());
-	 HTM_Txt (Txt_Visible_tests); HTM_Colon (); HTM_NBSP ();
+                    The_GetSuffix (),The_GetColorRows ());
+	 HTM_Txt (Txt_Visible_tests); HTM_Colon ();
+      HTM_TD_End ();
+
+      /***** Cell for links to show results *****/
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
+                    The_GetSuffix (),The_GetColorRows ());
 	 HTM_Unsigned (NumPrints);
+      HTM_TD_End ();
+
+      /***** Write grade over Tst_SCORE_MAX *****/
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
+                    The_GetSuffix (),The_GetColorRows ());
+	 if (ICanViewTotalScore == Usr_CAN)
+	    TstPrn_ComputeAndShowGrade (NumTotalQsts->All,TotalScore,Tst_SCORE_MAX);
       HTM_TD_End ();
 
       /***** Write total number of questions *****/
       HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                    The_GetSuffix (),
-                    The_GetColorRows ());
+                    The_GetSuffix (),The_GetColorRows ());
 	 if (NumPrints)
 	    HTM_Unsigned (NumTotalQsts->All);
       HTM_TD_End ();
 
       /***** Write total number of non-blank answers *****/
       HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                    The_GetSuffix (),
-                    The_GetColorRows ());
+                    The_GetSuffix (),The_GetColorRows ());
 	 if (NumPrints)
 	    HTM_Unsigned (NumTotalQsts->NotBlank);
       HTM_TD_End ();
 
       /***** Write total number of blank answers *****/
       HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                    The_GetSuffix (),
-                    The_GetColorRows ());
+                    The_GetSuffix (),The_GetColorRows ());
 	 if (NumPrints)
 	    HTM_Unsigned (NumTotalQsts->All - NumTotalQsts->NotBlank);
       HTM_TD_End ();
 
       /***** Write total score *****/
       HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                    The_GetSuffix (),
-                    The_GetColorRows ());
+                    The_GetSuffix (),The_GetColorRows ());
 	 if (ICanViewTotalScore == Usr_CAN)
 	    HTM_DoublePartOfUnsigned (TotalScore,NumTotalQsts->All);
       HTM_TD_End ();
 
       /***** Write average score per question *****/
       HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                    The_GetSuffix (),
-                    The_GetColorRows ());
+                    The_GetSuffix (),The_GetColorRows ());
 	 if (ICanViewTotalScore == Usr_CAN)
 	    HTM_Double2Decimals (NumTotalQsts->All ? TotalScore /
 						     (double) NumTotalQsts->All :
 						     0.0);
-      HTM_TD_End ();
-
-      /***** Write grade over Tst_SCORE_MAX *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                    The_GetSuffix (),
-                    The_GetColorRows ());
-	 if (ICanViewTotalScore == Usr_CAN)
-	    TstPrn_ComputeAndShowGrade (NumTotalQsts->All,TotalScore,Tst_SCORE_MAX);
-      HTM_TD_End ();
-
-      /***** Last cell *****/
-      HTM_TD_Begin ("class=\"DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                    The_GetSuffix (),
-                    The_GetColorRows ());
       HTM_TD_End ();
 
    /***** End row *****/
@@ -2327,7 +2316,7 @@ void TstPrn_ShowOnePrint (void)
 	 /* Get data of the user who made the test */
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 						      Usr_DONT_GET_PREFS,
-						      Usr_DONT_GET_ROLE_IN_CRS) == Exi_DOES_NOT_EXIST)
+						      Usr_GET_ROLE_IN_CRS) == Exi_DOES_NOT_EXIST)
 	    Err_WrongUserExit ();
 	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_CAN_NOT)
 	    Err_NoPermissionExit ();

@@ -56642,7 +56642,7 @@ const char *Txt_Visible_tests =
 #elif L==5	// fr
 	"Tests visibles";
 #elif L==6	// gn
-	"Test visibles";	// Okoteve traducción
+	"Umi prueba ojehech&aacute;va";
 #elif L==7	// it
 	"Test visibili";
 #elif L==8	// pl
@@ -56650,7 +56650,7 @@ const char *Txt_Visible_tests =
 #elif L==9	// pt
 	"Testes vis&iacute;veis";
 #elif L==10	// tr
-	"Visible tests";	// Çeviri lazim!
+	"G&ouml;r&uuml;n&uuml;r testler";
 #endif
 
 const char *Txt_Visible_survey =

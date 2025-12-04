@@ -646,12 +646,12 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 static void ExaRes_ShowHeaderResults (Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_User[Usr_NUM_SEXS];
-   extern const char *Txt_Session;
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
+   extern const char *Txt_Session;
+   extern const char *Txt_Grade;
    extern const char *Txt_Questions;
    extern const char *Txt_Valid_answers;
    extern const char *Txt_Score;
-   extern const char *Txt_Grade;
    extern const char *Txt_total;
    extern const char *Txt_QUESTIONS_valid;
    extern const char *Txt_QUESTIONS_invalid;
@@ -668,11 +668,11 @@ static void ExaRes_ShowHeaderResults (Usr_MeOrOther_t MeOrOther)
       HTM_TH_Span (Txt_START_END_TIME[Dat_STR_TIME]     ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (Txt_START_END_TIME[Dat_END_TIME]     ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (Txt_Session                          ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
+      HTM_TH_Span (NULL                                 ,HTM_HEAD_CENTER,3,1,"LINE_BOTTOM");
+      HTM_TH_Span (Txt_Grade                            ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM LINE_LEFT");
       HTM_TH_Span (Txt_Questions                        ,HTM_HEAD_CENTER,1,3,"LINE_LEFT");
       HTM_TH_Span (Txt_Valid_answers                    ,HTM_HEAD_CENTER,1,5,"LINE_LEFT");
       HTM_TH_Span (Txt_Score                            ,HTM_HEAD_CENTER,1,2,"LINE_LEFT");
-      HTM_TH_Span (Txt_Grade                            ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM LINE_LEFT");
-      HTM_TH_Span (NULL                                 ,HTM_HEAD_CENTER,3,1,"LINE_BOTTOM LINE_LEFT");
    HTM_TR_End ();
 
    /***** Second row *****/
@@ -820,13 +820,16 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 		  Err_NotEnoughMemoryExit ();
 	       HTM_TD_Begin ("id =\"%s\" class=\"LT DAT_%s %s\"",
 			     Id,The_GetSuffix (),The_GetColorRows ());
-		  Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
-						Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-						Dat_WRITE_TODAY |
-						Dat_WRITE_DATE_ON_SAME_DAY |
-						Dat_WRITE_HOUR |
-						Dat_WRITE_MINUTE |
-						Dat_WRITE_SECOND);
+		  // If an exam print has been created but has not been filled yet
+		  // ==> the time is 0 ==> don't print anything
+		  if (Print.TimeUTC[StartEndTime])
+		     Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
+						   Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+						   Dat_WRITE_TODAY |
+						   Dat_WRITE_DATE_ON_SAME_DAY |
+						   Dat_WRITE_HOUR |
+						   Dat_WRITE_MINUTE |
+						   Dat_WRITE_SECOND);
 	       HTM_TD_End ();
 	       free (Id);
 	      }
@@ -835,6 +838,36 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
 	                  The_GetSuffix (),The_GetColorRows ());
 	       HTM_Txt (Session.Title);
+	    HTM_TD_End ();
+
+	    /* Link to show this result */
+	    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+	       switch (ICanView.Result)
+		 {
+		  case Usr_CAN:
+		     Exams->Exam.ExaCod = Session.ExaCod;
+		     Exams->SesCod.Par  = Session.SesCod;
+		     switch (MeOrOther)
+		       {
+			case Usr_ME:
+			   Frm_BeginForm (ActSeeOneExaResMe);
+			      Exa_PutPars (Exams);
+			      Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneExaResMe);
+			   break;
+			case Usr_OTHER:
+			   Frm_BeginForm (ActSeeOneExaResOth);
+			      Exa_PutPars (Exams);
+			      Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+			      Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneExaResOth);
+			   break;
+		       }
+		     Frm_EndForm ();
+		     break;
+		  case Usr_CAN_NOT:
+		  default:
+		     Ico_PutIconNotVisible ();
+		     break;
+		 }
 	    HTM_TD_End ();
 
 	    /* Get and accumulate questions and score */
@@ -854,6 +887,25 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	       NumTotalQsts.Valid.Total          += Print.NumQsts.Valid.Total;
 	       TotalScore.Valid                  += Print.Score.Valid;
 	      }
+
+	    /* Write grade over maximum grade (taking into account only valid questions) */
+	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
+	                  The_GetSuffix (),The_GetColorRows ());
+	       switch (ICanView.Score)
+		 {
+		  case Usr_CAN:
+		     Grade = TstPrn_ComputeGrade (Print.NumQsts.Valid.Total,
+						  Print.Score.Valid,
+						  Exam.MaxGrade);
+		     HTM_DoublePartOfDouble (Grade,Exam.MaxGrade);
+		     TotalGrade += Grade;
+		     break;
+		  case Usr_CAN_NOT:
+		  default:
+		     Ico_PutIconNotVisible ();
+		     break;
+		 }
+	    HTM_TD_End ();
 
 	    /* Write total number of questions */
 	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
@@ -1008,55 +1060,6 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 		 }
 	    HTM_TD_End ();
 
-	    /* Write grade over maximum grade (taking into account only valid questions) */
-	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
-	                  The_GetSuffix (),The_GetColorRows ());
-	       switch (ICanView.Score)
-		 {
-		  case Usr_CAN:
-		     Grade = TstPrn_ComputeGrade (Print.NumQsts.Valid.Total,
-						  Print.Score.Valid,
-						  Exam.MaxGrade);
-		     HTM_DoublePartOfDouble (Grade,Exam.MaxGrade);
-		     TotalGrade += Grade;
-		     break;
-		  case Usr_CAN_NOT:
-		  default:
-		     Ico_PutIconNotVisible ();
-		     break;
-		 }
-	    HTM_TD_End ();
-
-	    /* Link to show this result */
-	    HTM_TD_Begin ("class=\"RT LINE_LEFT %s\"",The_GetColorRows ());
-	       switch (ICanView.Result)
-		 {
-		  case Usr_CAN:
-		     Exams->Exam.ExaCod = Session.ExaCod;
-		     Exams->SesCod.Par  = Session.SesCod;
-		     switch (MeOrOther)
-		       {
-			case Usr_ME:
-			   Frm_BeginForm (ActSeeOneExaResMe);
-			      Exa_PutPars (Exams);
-			      Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneExaResMe);
-			   break;
-			case Usr_OTHER:
-			   Frm_BeginForm (ActSeeOneExaResOth);
-			      Exa_PutPars (Exams);
-			      Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-			      Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneExaResOth);
-			   break;
-		       }
-		     Frm_EndForm ();
-		     break;
-		  case Usr_CAN_NOT:
-		  default:
-		     Ico_PutIconNotVisible ();
-		     break;
-		 }
-	    HTM_TD_End ();
-
 	    HTM_TR_End ();
 	   }
 
@@ -1071,6 +1074,14 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 		       The_GetColorRows ());
 	 HTM_TD_End ();
 
+	 /* Column for link to show the result */
+	 HTM_TD_Begin ("class=\"LINE_BOTTOM %s\"",The_GetColorRows ());
+	 HTM_TD_End ();
+
+	 /* Column for grade */
+	 HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",The_GetColorRows ());
+	 HTM_TD_End ();
+
 	 /* Columns for questions */
 	 HTM_TD_Begin ("colspan=\"3\" class=\"LINE_BOTTOM LINE_LEFT %s\"",
 		       The_GetColorRows ());
@@ -1083,16 +1094,6 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 
 	 /* Columns for score */
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT %s\"",
-		       The_GetColorRows ());
-	 HTM_TD_End ();
-
-	 /* Column for grade */
-	 HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",
-		       The_GetColorRows ());
-	 HTM_TD_End ();
-
-	 /* Column for link to show the result */
-	 HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",
 		       The_GetColorRows ());
 	 HTM_TD_End ();
 	}
@@ -1121,8 +1122,19 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
    /***** Row title *****/
    HTM_TD_Begin ("colspan=\"3\" class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
                  The_GetSuffix (),The_GetColorRows ());
-      HTM_Txt (Txt_Sessions); HTM_Colon (); HTM_NBSP ();
+      HTM_Txt (Txt_Sessions); HTM_Colon ();
+   HTM_TD_End ();
+
+   /***** Cell for links to show results *****/
+   HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
+		 The_GetSuffix (),The_GetColorRows ());
       HTM_Unsigned (NumResults);
+   HTM_TD_End ();
+
+   /***** Write total grade *****/
+   HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
+                 The_GetSuffix (),The_GetColorRows ());
+      HTM_Double2Decimals (TotalGrade);
    HTM_TD_End ();
 
    /***** Write total number of questions *****/
@@ -1184,18 +1196,6 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
       HTM_Double2Decimals (NumTotalQsts->Valid.Total ? TotalScore->Valid /
 						       (double) NumTotalQsts->Valid.Total :
 						       0.0);
-   HTM_TD_End ();
-
-
-   /***** Write total grade *****/
-   HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                 The_GetSuffix (),The_GetColorRows ());
-      HTM_Double2Decimals (TotalGrade);
-   HTM_TD_End ();
-
-   /***** Last cell *****/
-   HTM_TD_Begin ("class=\"LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-		 The_GetColorRows ());
    HTM_TD_End ();
   }
 
@@ -1572,14 +1572,17 @@ static void ExaRes_ShowExamResultTime (struct ExaPrn_Print *Print)
 	 if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 HTM_DIV_Begin ("id=\"%s\" class=\"Exa_HEAD_RIGHT DAT_%s\"",Id,The_GetSuffix ());
-	    Dat_WriteLocalDateHMSFromUTC (Id,Print->TimeUTC[StartEndTime],
-					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-					  Dat_WRITE_TODAY |
-					  Dat_WRITE_DATE_ON_SAME_DAY |
-					  Dat_WRITE_WEEK_DAY |
-					  Dat_WRITE_HOUR |
-					  Dat_WRITE_MINUTE |
-					  Dat_WRITE_SECOND);
+	    // If an exam print has been created but has not been filled yet
+	    // ==> the time is 0 ==> don't print anything
+	    if (Print->TimeUTC[StartEndTime])
+	       Dat_WriteLocalDateHMSFromUTC (Id,Print->TimeUTC[StartEndTime],
+					     Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+					     Dat_WRITE_TODAY |
+					     Dat_WRITE_DATE_ON_SAME_DAY |
+					     Dat_WRITE_WEEK_DAY |
+					     Dat_WRITE_HOUR |
+					     Dat_WRITE_MINUTE |
+					     Dat_WRITE_SECOND);
 	 HTM_DIV_End ();
 	 free (Id);
 

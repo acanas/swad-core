@@ -626,11 +626,11 @@ static void MchRes_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
       HTM_TH_Span (Txt_START_END_TIME[Dat_STR_TIME]               ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (Txt_START_END_TIME[Dat_END_TIME]               ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (Txt_Match                                      ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
+      HTM_TH_Span (NULL                                           ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
+      HTM_TH_Span (Txt_Grade                                      ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM LINE_LEFT");
       HTM_TH_Span (Txt_Questions                                  ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM LINE_LEFT");
       HTM_TH_Span (Txt_Answers                                    ,HTM_HEAD_CENTER,1,2,"LINE_LEFT");
       HTM_TH_Span (Txt_Score                                      ,HTM_HEAD_CENTER,1,2,"LINE_LEFT");
-      HTM_TH_Span (Txt_Grade                                      ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM LINE_LEFT");
-      HTM_TH_Span (NULL                                           ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM LINE_LEFT");
    HTM_TR_End ();
 
    /***** Second row *****/
@@ -778,6 +778,37 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	    HTM_Txt (Match.Title);
 	 HTM_TD_End ();
 
+	 /* Link to show this result */
+	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+	    switch (ICanView.Result)
+	      {
+	       case Usr_CAN:
+		  Games->Game.GamCod = Match.GamCod;
+		  Games->MchCod.Sel  =
+		  Games->MchCod.Par  = Match.MchCod;
+		  switch (MeOrOther)
+		    {
+		     case Usr_ME:
+			Frm_BeginForm (ActSeeOneMchResMe);
+			   Mch_PutParsEdit (Games);
+			   Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneMchResMe);
+			break;
+		     case Usr_OTHER:
+			Frm_BeginForm (ActSeeOneMchResOth);
+			   Mch_PutParsEdit (Games);
+			   Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+			   Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneMchResOth);
+			break;
+		    }
+		  Frm_EndForm ();
+		  break;
+	       case Usr_CAN_NOT:
+	       default:
+		  Ico_PutIconNotVisible ();
+		  break;
+	      }
+	 HTM_TD_End ();
+
 	 /* Accumulate questions and score */
 	 if (ICanView.Score == Usr_CAN)
 	   {
@@ -785,6 +816,24 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	    NumTotalQsts.NotBlank += Print.NumQsts.NotBlank;
 	    TotalScore            += Print.Score;
 	   }
+
+	 /* Write grade over maximum grade */
+	 HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
+	               The_GetSuffix (),The_GetColorRows ());
+	    switch (ICanView.Score)
+	      {
+	       case Usr_CAN:
+		  Grade = TstPrn_ComputeGrade (Print.NumQsts.All,Print.Score,
+					       Games->Game.MaxGrade);
+		  HTM_DoublePartOfDouble (Grade,Games->Game.MaxGrade);
+		  TotalGrade += Grade;
+		  break;
+	       case Usr_CAN_NOT:
+	       default:
+		  Ico_PutIconNotVisible ();
+		  break;
+	      }
+	 HTM_TD_End ();
 
 	 /* Write number of questions */
 	 HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
@@ -864,56 +913,6 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	      }
 	 HTM_TD_End ();
 
-	 /* Write grade over maximum grade */
-	 HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
-	               The_GetSuffix (),The_GetColorRows ());
-	    switch (ICanView.Score)
-	      {
-	       case Usr_CAN:
-		  Grade = TstPrn_ComputeGrade (Print.NumQsts.All,Print.Score,
-					       Games->Game.MaxGrade);
-		  HTM_DoublePartOfDouble (Grade,Games->Game.MaxGrade);
-		  TotalGrade += Grade;
-		  break;
-	       case Usr_CAN_NOT:
-	       default:
-		  Ico_PutIconNotVisible ();
-		  break;
-	      }
-	 HTM_TD_End ();
-
-	 /* Link to show this result */
-	 HTM_TD_Begin ("class=\"RT LINE_LEFT %s\"",
-	               The_GetColorRows ());
-	    switch (ICanView.Result)
-	      {
-	       case Usr_CAN:
-		  Games->Game.GamCod = Match.GamCod;
-		  Games->MchCod.Sel  =
-		  Games->MchCod.Par  = Match.MchCod;
-		  switch (MeOrOther)
-		    {
-		     case Usr_ME:
-			Frm_BeginForm (ActSeeOneMchResMe);
-			   Mch_PutParsEdit (Games);
-			   Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneMchResMe);
-			break;
-		     case Usr_OTHER:
-			Frm_BeginForm (ActSeeOneMchResOth);
-			   Mch_PutParsEdit (Games);
-			   Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-			   Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneMchResOth);
-			break;
-		    }
-		  Frm_EndForm ();
-		  break;
-	       case Usr_CAN_NOT:
-	       default:
-		  Ico_PutIconNotVisible ();
-		  break;
-	      }
-	 HTM_TD_End ();
-
 	 HTM_TR_End ();
 	}
 
@@ -930,9 +929,16 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
                     The_GetColorRows ());
       HTM_TD_End ();
 
+      /* Column for link to show the result */
+      HTM_TD_Begin ("class=\"LINE_BOTTOM %s\"",The_GetColorRows ());
+      HTM_TD_End ();
+
+      /* Column for grade */
+      HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",The_GetColorRows ());
+      HTM_TD_End ();
+
       /* Column for questions */
-      HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",
-                    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",The_GetColorRows ());
       HTM_TD_End ();
 
       /* Columns for answers */
@@ -942,16 +948,6 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 
       /* Columns for score */
       HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT %s\"",
-                    The_GetColorRows ());
-      HTM_TD_End ();
-
-      /* Column for grade */
-      HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",
-                    The_GetColorRows ());
-      HTM_TD_End ();
-
-      /* Column for link to show the result */
-      HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",
                     The_GetColorRows ());
       HTM_TD_End ();
 
@@ -981,8 +977,19 @@ static void MchRes_ShowMchResultsSummaryRow (unsigned NumResults,
       /***** Row title *****/
       HTM_TD_Begin ("colspan=\"3\" class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
                     The_GetSuffix (),The_GetColorRows ());
-	 HTM_Txt (Txt_Matches); HTM_Colon (); HTM_NBSP ();
+	 HTM_Txt (Txt_Matches); HTM_Colon ();
+      HTM_TD_End ();
+
+      /***** Cell for links to show results *****/
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
+                    The_GetSuffix (),The_GetColorRows ());
 	 HTM_Unsigned (NumResults);
+      HTM_TD_End ();
+
+      /***** Write total grade *****/
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
+                    The_GetSuffix (),The_GetColorRows ());
+	 HTM_Double2Decimals (TotalGrade);
       HTM_TD_End ();
 
       /***** Write total number of questions *****/
@@ -1018,17 +1025,6 @@ static void MchRes_ShowMchResultsSummaryRow (unsigned NumResults,
 	 HTM_Double2Decimals (NumTotalQsts->All ? TotalScore /
 						  (double) NumTotalQsts->All :
 						  0.0);
-      HTM_TD_End ();
-
-      /***** Write total grade *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
-	 HTM_Double2Decimals (TotalGrade);
-      HTM_TD_End ();
-
-      /***** Last cell *****/
-      HTM_TD_Begin ("class=\"DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
       HTM_TD_End ();
 
    /***** End row *****/
