@@ -804,7 +804,7 @@ static void ExaPrn_WriteFltAnsToFill (const struct ExaPrn_Print *Print,
    /***** Write input field for the answer *****/
    snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
    HTM_TxtF ("<input type=\"number\" id=\"%s\" name=\"Ans\""
-	     " class=\"Exa_ANSWER_INPUT_FLOAT\" value=\"%s\"",
+	     " class=\"Exa_ANSWER_INPUT_FLOAT\" value=\"%s\" step=\"any\"",
 	     Id,Print->Qsts[QstInd].Answer.Str);
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_ElementEnd ();

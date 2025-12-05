@@ -365,7 +365,7 @@ static void ExaRes_ListAllResultsInSelectedExams (struct Exa_Exams *Exams)
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
+                                                   Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	   {
 	    /***** Show sessions results *****/
@@ -431,7 +431,7 @@ static void ExaRes_ListAllResultsInExa (struct Exa_Exams *Exams)
       if ((Gbl.Usrs.Other.UsrDat.UsrCod = DB_GetNextCode (mysql_res)) > 0)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
+	                                              Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	      {
 	       /***** Show sessions results *****/
@@ -669,7 +669,7 @@ static void ExaRes_ShowHeaderResults (Usr_MeOrOther_t MeOrOther)
       HTM_TH_Span (Txt_START_END_TIME[Dat_END_TIME]     ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (Txt_Session                          ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (NULL                                 ,HTM_HEAD_CENTER,3,1,"LINE_BOTTOM");
-      HTM_TH_Span (Txt_Grade                            ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM LINE_LEFT");
+      HTM_TH_Span (Txt_Grade                            ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (Txt_Questions                        ,HTM_HEAD_CENTER,1,3,"LINE_LEFT");
       HTM_TH_Span (Txt_Valid_answers                    ,HTM_HEAD_CENTER,1,5,"LINE_LEFT");
       HTM_TH_Span (Txt_Score                            ,HTM_HEAD_CENTER,1,2,"LINE_LEFT");
@@ -889,7 +889,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	      }
 
 	    /* Write grade over maximum grade (taking into account only valid questions) */
-	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
+	    HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
 	                  The_GetSuffix (),The_GetColorRows ());
 	       switch (ICanView.Score)
 		 {
@@ -1079,7 +1079,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	 HTM_TD_End ();
 
 	 /* Column for grade */
-	 HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"LINE_BOTTOM %s\"",The_GetColorRows ());
 	 HTM_TD_End ();
 
 	 /* Columns for questions */
@@ -1132,7 +1132,7 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
    HTM_TD_End ();
 
    /***** Write total grade *****/
-   HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
+   HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
                  The_GetSuffix (),The_GetColorRows ());
       HTM_Double2Decimals (TotalGrade);
    HTM_TD_End ();
@@ -1283,8 +1283,7 @@ void ExaRes_ShowOneExaResult (void)
    Print.SesCod = Session.SesCod;
    Print.UsrCod = UsrDat->UsrCod;
    ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
-   Str_Copy (Print.EnUsrCod,UsrDat->EnUsrCod,
-	     sizeof (Print.EnUsrCod) - 1);
+   Str_Copy (Print.EnUsrCod,UsrDat->EnUsrCod,sizeof (Print.EnUsrCod) - 1);
 
    /***** Get questions and user's answers of exam print from database *****/
    ExaPrn_GetPrintQuestionsFromDB (&Print);
@@ -1344,6 +1343,9 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
       if (Usr_CheckIfICanViewTstExaMchResult (UsrDat) == Usr_CAN_NOT)
 	 Err_NoPermissionExit ();
 
+      /* Get if user has accepted enrolment */
+      UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
+
       /* User */
       ExaRes_ShowExamResultUser (Session,UsrDat);
 
@@ -1384,9 +1386,9 @@ static void ExaRes_CheckIfICanViewResult (const struct Exa_Exam *Exam,
      {
       case Rol_STD:
 	 // Depends on visibility of exam, session and result (eye icons)
-	 ICanView->Result = Usr_ItsMe (UsrCod) == Usr_ME &&		// The result is mine
-			    Exam->Hidden == HidVis_VISIBLE &&		// The exam is visible
-			    Session->Hidden == HidVis_VISIBLE &&	// The session is visible
+	 ICanView->Result = Usr_ItsMe (UsrCod) == Usr_ME &&			// The result is mine
+			    Exam->Hidden == HidVis_VISIBLE &&			// The exam is visible
+			    Session->Hidden == HidVis_VISIBLE &&		// The session is visible
 			    Session->Show_UsrResults == Lay_SHOW ? Usr_CAN :	// The results of the session are visible to users
 							           Usr_CAN_NOT;
 	 // Whether I belong or not to groups of session is not checked here...
@@ -1406,9 +1408,6 @@ static void ExaRes_CheckIfICanViewResult (const struct Exa_Exam *Exam,
 	 break;
       case Rol_NET:
       case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
       case Rol_SYS_ADM:
 	 ICanView->Result =
 	 ICanView->Score  = Usr_CAN;

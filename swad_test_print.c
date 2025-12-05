@@ -349,9 +349,11 @@ static void TstPrn_WriteIntAnsToFill (const struct Qst_PrintedQuestion *PrintedQ
 
    /***** Write input field for the answer *****/
    snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
-   HTM_INPUT_TEXT (StrAns,11,PrintedQuestion->Answer.Str,
-                   HTM_NO_ATTR,
-		   "size=\"11\" class=\"INPUT_%s\"",The_GetSuffix ());
+   HTM_TxtF ("<input type=\"number\" name=\"%s\""
+	     " class=\"Exa_ANSWER_INPUT_FLOAT INPUT_%s\""
+	     " value=\"%s\"",
+	     StrAns,The_GetSuffix (),PrintedQuestion->Answer.Str);
+   HTM_ElementEnd ();
   }
 
 /*****************************************************************************/
@@ -367,7 +369,8 @@ static void TstPrn_WriteFltAnsToFill (const struct Qst_PrintedQuestion *PrintedQ
    /***** Write input field for the answer *****/
    snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
    HTM_TxtF ("<input type=\"number\" name=\"%s\""
-	     " class=\"Exa_ANSWER_INPUT_FLOAT INPUT_%s\" value=\"%s\"",
+	     " class=\"Exa_ANSWER_INPUT_FLOAT INPUT_%s\""
+	     " value=\"%s\" step=\"any\"",
 	     StrAns,The_GetSuffix (),PrintedQuestion->Answer.Str);
    HTM_ElementEnd ();
   }
@@ -1825,7 +1828,7 @@ static void TstPrn_ShowUsrsPrints (__attribute__((unused)) void *Args)
 	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 						      Usr_DONT_GET_PREFS,
-						      Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
+						      Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	      {
 	       /***** Show tests *****/
@@ -1863,7 +1866,7 @@ static void TstPrn_ShowHeaderPrints (Usr_MeOrOther_t MeOrOther)
       HTM_TH_Span (Txt_START_END_TIME[Dat_STR_TIME]     ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (Txt_START_END_TIME[Dat_END_TIME]     ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (NULL                                 ,HTM_HEAD_CENTER,3,1,"LINE_BOTTOM");
-      HTM_TH_Span (Txt_Grade                            ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM LINE_LEFT");
+      HTM_TH_Span (Txt_Grade                            ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (Txt_Questions                        ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM LINE_LEFT");
       HTM_TH_Span (Txt_Answers                          ,HTM_HEAD_CENTER,1,2,"LINE_LEFT");
       HTM_TH_Span (Txt_Score                            ,HTM_HEAD_CENTER,1,2,"LINE_LEFT");
@@ -1996,7 +1999,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	      }
 
 	    /* Write grade */
-	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
+	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
 	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
 	                  The_GetColorRows ());
 	       switch (ICanView.Score)
@@ -2118,7 +2121,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	 HTM_TD_End ();
 
 	 /* Column for grade */
-	 HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"LINE_BOTTOM %s\"",The_GetColorRows ());
 	 HTM_TD_End ();
 
 	 /* Column for questions */
@@ -2212,7 +2215,7 @@ static void TstPrn_ShowPrintsSummaryRow (Usr_MeOrOther_t MeOrOther,
       HTM_TD_End ();
 
       /***** Write grade over Tst_SCORE_MAX *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
                     The_GetSuffix (),The_GetColorRows ());
 	 if (ICanViewTotalScore == Usr_CAN)
 	    TstPrn_ComputeAndShowGrade (NumTotalQsts->All,TotalScore,Tst_SCORE_MAX);
@@ -2320,6 +2323,9 @@ void TstPrn_ShowOnePrint (void)
 	    Err_WrongUserExit ();
 	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_CAN_NOT)
 	    Err_NoPermissionExit ();
+
+	 /* Get if user has accepted enrolment */
+	 Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
 	 /* User */
 	 HTM_TR_Begin (NULL);

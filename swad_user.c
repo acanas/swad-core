@@ -1082,28 +1082,25 @@ Usr_Can_t Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat)
    if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
       return Usr_CAN_NOT;
 
-   /***** 4. Fast check: Am I a system admin? *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      return Usr_CAN;
-
-   /***** 5. Fast check: Do I belong to the current course? *****/
+   /***** 4. Fast check: Do I belong to the current course? *****/
    if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_DONT_BELONG)
       return Usr_CAN_NOT;
 
-   /***** 6. Fast check: It's me? *****/
+   /***** 5. Fast check: It's me? *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
       return Usr_CAN;
 
-   /***** 7. Fast check: Does he/she belong to the current course? *****/
+   /***** 6. Fast check: Does he/she belong to the current course? *****/
    if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat) == Usr_DONT_BELONG)
       return Usr_CAN_NOT;
 
-   /***** 8. Fast / slow check depending on roles *****/
+   /***** 7. Fast / slow check depending on roles *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
 	 return ICanViewIfShare[Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat)];
       case Rol_TCH:
+      case Rol_SYS_ADM:
 	 return Usr_CAN;
       default:
 	 return Usr_CAN_NOT;

@@ -627,7 +627,7 @@ static void MchRes_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
       HTM_TH_Span (Txt_START_END_TIME[Dat_END_TIME]               ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (Txt_Match                                      ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (NULL                                           ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
-      HTM_TH_Span (Txt_Grade                                      ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM LINE_LEFT");
+      HTM_TH_Span (Txt_Grade                                      ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (Txt_Questions                                  ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM LINE_LEFT");
       HTM_TH_Span (Txt_Answers                                    ,HTM_HEAD_CENTER,1,2,"LINE_LEFT");
       HTM_TH_Span (Txt_Score                                      ,HTM_HEAD_CENTER,1,2,"LINE_LEFT");
@@ -818,8 +818,8 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	   }
 
 	 /* Write grade over maximum grade */
-	 HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
-	               The_GetSuffix (),The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
+		       The_GetSuffix (),The_GetColorRows ());
 	    switch (ICanView.Score)
 	      {
 	       case Usr_CAN:
@@ -934,7 +934,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
       HTM_TD_End ();
 
       /* Column for grade */
-      HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LINE_BOTTOM %s\"",The_GetColorRows ());
       HTM_TD_End ();
 
       /* Column for questions */
@@ -987,7 +987,7 @@ static void MchRes_ShowMchResultsSummaryRow (unsigned NumResults,
       HTM_TD_End ();
 
       /***** Write total grade *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
                     The_GetSuffix (),The_GetColorRows ());
 	 HTM_Double2Decimals (TotalGrade);
       HTM_TD_End ();
