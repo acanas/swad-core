@@ -2178,18 +2178,37 @@ a:hover img.CENTER_PHOTO_SHOW
 .ICO_YELLOW_DARK	{filter: invert(61%) sepia(96%) saturate(366%) hue-rotate(352deg) brightness(103%) contrast(101%);}	/* #ffb42e */
 
 /********************************** Frame ************************************/
-.FRAME
-	{
-	display: inline-block;
-	box-sizing: border-box;
-	margin: 2px 4px 8px 4px;
-	padding: 10px;
-	border-radius: 2px;
-	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 2px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12);
-	vertical-align: top;
-	text-align: center;
-	overflow: hidden;
+@media only screen and (max-width: 480px)
+	{	/* For mobile-phones */
+	.FRAME
+		{
+		display: inline-block;
+		box-sizing: border-box;
+		margin: 2px 0px 8px 0px;
+		padding: 4px;
+		/* border-radius: 2px; */
+		/* box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 2px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12); */
+		vertical-align: top;
+		text-align: center;
+		overflow: hidden;
+		}
 	}
+@media only screen and (min-width: 480px)
+	{	/* For desktop */
+	.FRAME
+		{
+		display: inline-block;
+		box-sizing: border-box;
+		margin: 2px 4px 8px 4px;
+		padding: 10px;
+		border-radius: 2px;
+		box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 2px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12);
+		vertical-align: top;
+		text-align: center;
+		overflow: hidden;
+		}
+	}
+
 .FRAME_WHITE,
 .FRAME_GREY,
 .FRAME_PURPLE,
@@ -3367,6 +3386,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 .CLASSPHOTO_HEAD_RIGHT
 	{
 	display: table-cell;
+	width: 60px;
 	padding: 8px;
 	text-align: right;
 	vertical-align: top;
@@ -4700,17 +4720,15 @@ legend {font-size: 12pt; font-weight: bold;}
 
 @media only screen and (max-width: 590px)
 	{	/* For mobile-phones (maximum width visible on Moto G4 vertical) */
-	.Tml_WIDTH		{width: 276px;}	/* 556-280 */
-	.Tml_RIGHT_WIDTH	{width: 220px;}	/* 500-280 */
-	.Tml_RIGHT_AUTHOR_WIDTH	{width: 60px;}	/* 340-280 */
-	.Tml_COM_WIDTH		{width: 180px;}	/* 460-280 */
-	.Tml_COM_AUTHOR_WIDTH	{width: 20px;}	/* 300-280 */
-	.Tml_MED_INPUT_WIDTH	{width: 120px;}	/* 400-280 */
-	.TmlNot_FOOT_WIDTH	{width: 220px;}	/* 500-280 */
-	.Tml_COMM_FOOT_WIDTH	{width: 180px;}	/* 460-280 */
-	.Tml_FAV_NOT_WIDTH	{width: 100px;}	/* (480-280)/2 */
-	.Tml_SHA_NOT_WIDTH	{width: 100px;}	/* (480-280)/2 */
-	.Tml_FAV_COM_WIDTH	{width: 160px;}	/* 440-280 */
+	.Tml_WIDTH		{width: 296px;}	/* 576-280 */
+	.Tml_RIGHT_WIDTH	{width: 240px;}	/* 520-280 */
+	.Tml_RIGHT_AUTHOR_WIDTH	{width: 80px;}	/* 360-280 */
+	.Tml_COM_WIDTH		{width: 200px;}	/* 460-280 */
+	.Tml_COM_AUTHOR_WIDTH	{width: 40px;}	/* 320-280 */
+	.Tml_MED_INPUT_WIDTH	{width: 140px;}	/* 420-280 */
+	.Tml_FAV_NOT_WIDTH	{width: 110px;}	/* (500-280)/2 */
+	.Tml_SHA_NOT_WIDTH	{width: 110px;}	/* (500-280)/2 */
+	.Tml_FAV_COM_WIDTH	{width: 180px;}	/* 460-280 */
 	}
 @media only screen and (min-width: 590px)
 	{	/* For tablets and desktop (maximum width visible on Moto G4 horizontal) */
