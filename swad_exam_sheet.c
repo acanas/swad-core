@@ -63,8 +63,7 @@ static void ExaShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 				       const struct ExaSes_Session *Session,
 				       ExaShe_BlankOrSolved_t BlankOrSolved,
 				       Vie_ViewType_t ViewType,
-				       unsigned NumUsrsInList,
-				       long *LstSelectedUsrCods);
+				       const struct Usr_ListCods *ListCods);
 
 /*****************************************************************************/
 /***** Display/Print selected exam question sheets from an exam session ******/
@@ -112,8 +111,7 @@ static void ExaShe_ListOrPrintSheets (ExaShe_BlankOrSolved_t BlankOrSolved,
    struct ExaSes_Session Session;
    unsigned NumColsFromForm;
    Pho_ShowPhotos_t ShowPhotosFromForm;
-   unsigned NumUsrsInList;
-   long *LstSelectedUsrCods;
+   struct Usr_ListCods ListCods;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -153,12 +151,12 @@ static void ExaShe_ListOrPrintSheets (ExaShe_BlankOrSolved_t BlankOrSolved,
 					  Usr_GET_LIST_ALL_USRS);
 
    /***** Count number of valid users in list of encrypted user codes *****/
-   NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
+   ListCods.NumUsrs = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
 
-   if (NumUsrsInList)
+   if (ListCods.NumUsrs)
      {
       /***** Get list of students selected *****/
-      Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,NumUsrsInList,&LstSelectedUsrCods);
+      Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,&ListCods);
 
       /***** Get exam data and session *****/
       Exa_GetExamDataByCod (&Exams.Exam);
@@ -177,14 +175,14 @@ static void ExaShe_ListOrPrintSheets (ExaShe_BlankOrSolved_t BlankOrSolved,
 
       /***** Show table with exam sheets *****/
       ExaShe_ShowMultipleSheets (&Exams,&Session,BlankOrSolved,ViewType,
-				 NumUsrsInList,LstSelectedUsrCods);
+				 &ListCods);
 
       /***** End box and section *****/
       if (ViewType == Vie_VIEW)
 	 Box_BoxEnd ();
 
       /***** Free list of user codes *****/
-      Usr_FreeListSelectedUsrCods (LstSelectedUsrCods);
+      Usr_FreeListSelectedUsrCods (&ListCods);
      }
 
    if (ViewType == Vie_VIEW)
@@ -245,8 +243,7 @@ static void ExaShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 				       const struct ExaSes_Session *Session,
 				       ExaShe_BlankOrSolved_t BlankOrSolved,
 				       Vie_ViewType_t ViewType,
-				       unsigned NumUsrsInList,
-				       long *LstSelectedUsrCods)
+				       const struct Usr_ListCods *ListCods)
   {
    struct Usr_Data UsrDat;
    unsigned NumUsr;
@@ -257,11 +254,11 @@ static void ExaShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 
       /***** List the exam prints (one for each user) *****/
       for (NumUsr = 0;
-	   NumUsr < NumUsrsInList;
+	   NumUsr < ListCods->NumUsrs;
 	   NumUsr++)
 	{
 	 /* Get student data from database */
-	 UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
+	 UsrDat.UsrCod = ListCods->Lst[NumUsr];
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 						      Usr_DONT_GET_PREFS,
 						      Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)

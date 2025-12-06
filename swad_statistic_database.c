@@ -53,8 +53,7 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
                          const struct Sta_Stats *Stats,
                          const char *LogTable,
                          const char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1],
-                         unsigned NumUsrsInList,
-			 const long *LstSelectedUsrCods)
+                         const struct Usr_ListCods *ListCods)
   {
    char SubQueryCountType[256];
    char SubQueryRole[256];
@@ -413,12 +412,12 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
                   LogTable,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 	 Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 
-	 if (NumUsrsInList)
+	 if (ListCods->NumUsrs)
 	   {
 	    LengthQuery = strlen (Query);
 
 	    for (NumUsr = 0;
-		 NumUsr < NumUsrsInList;
+		 NumUsr < ListCods->NumUsrs;
 		 NumUsr++)
 	      {
 	       LengthQuery += 25 + 10 + 1;
@@ -427,7 +426,7 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
 	       sprintf (SubQuery,
 			NumUsr ? " OR %s.UsrCod=%ld" :
 				 " AND (%s.UsrCod=%ld",
-			LogTable,LstSelectedUsrCods[NumUsr]);
+			LogTable,ListCods->Lst[NumUsr]);
 	       Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 	      }
 	    Str_Concat (Query,")",Sta_DB_MAX_BYTES_QUERY);
@@ -551,17 +550,10 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
          Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 	 break;
      }
-   /***** Write query for debug *****/
-   /*
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      Ale_ShowAlert (Ale_INFO,Query);
-   */
 
    /***** Make the query *****/
    NumHits = (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get clicks",
-		   "%s",
-		   Query);
+   DB_QuerySELECT (mysql_res,"can not get clicks","%s",Query);
 
    /* Free memory for the query */
    free (Query);

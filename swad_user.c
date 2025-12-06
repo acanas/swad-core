@@ -3576,16 +3576,15 @@ void Usr_FreeListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUs
 /*****************************************************************************/
 
 void Usr_GetListSelectedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs,
-				 unsigned NumUsrsInList,
-				 long **LstSelectedUsrCods)
+				 struct Usr_ListCods *ListCods)
   {
    unsigned NumUsr;
    const char *Ptr;
    struct Usr_Data UsrDat;
 
    /***** Create list of user codes *****/
-   if ((*LstSelectedUsrCods = calloc ((size_t) NumUsrsInList,
-                                      sizeof (**LstSelectedUsrCods))) == NULL)
+   if ((ListCods->Lst = calloc ((size_t) ListCods->NumUsrs,
+                                sizeof (*ListCods->Lst))) == NULL)
       Err_NotEnoughMemoryExit ();
 
    /***** Initialize structure with user's data *****/
@@ -3593,23 +3592,27 @@ void Usr_GetListSelectedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs,
 
    /***** Loop over the list getting users' codes *****/
    for (NumUsr = 0, Ptr = SelectedUsrs->List[Rol_UNK];
-	NumUsr < NumUsrsInList && *Ptr;
+	NumUsr < ListCods->NumUsrs && *Ptr;
 	NumUsr++)
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
                                        Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
-      (*LstSelectedUsrCods)[NumUsr] = UsrDat.UsrCod;
+      ListCods->Lst[NumUsr] = UsrDat.UsrCod;
      }
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
   }
 
-void Usr_FreeListSelectedUsrCods (long *LstSelectedUsrCods)
+void Usr_FreeListSelectedUsrCods (struct Usr_ListCods *ListCods)
   {
-   if (LstSelectedUsrCods)
-      free (LstSelectedUsrCods);
+   if (ListCods->NumUsrs && ListCods->Lst)
+     {
+      free (ListCods->Lst);
+      ListCods->Lst = NULL;
+      ListCods->NumUsrs = 0;
+     }
   }
 
 /*****************************************************************************/
@@ -3617,8 +3620,7 @@ void Usr_FreeListSelectedUsrCods (long *LstSelectedUsrCods)
 /******** from list of users' codes                                    *******/
 /*****************************************************************************/
 
-void Usr_CreateSubqueryUsrCods (long *LstSelectedUsrCods,
-				unsigned NumUsrsInList,
+void Usr_CreateSubqueryUsrCods (const struct Usr_ListCods *ListCods,
 				char **UsrsSubQuery)
   {
    char SubQueryOneUsr[1 + Cns_MAX_DIGITS_LONG + 1];
@@ -3626,24 +3628,24 @@ void Usr_CreateSubqueryUsrCods (long *LstSelectedUsrCods,
    size_t MaxLength;
 
    /***** Allocate space for subquery *****/
-   MaxLength = (size_t) NumUsrsInList * (size_t) (1 + Cns_MAX_DIGITS_LONG);
+   MaxLength = (size_t) ListCods->NumUsrs * (size_t) (1 + Cns_MAX_DIGITS_LONG);
    if ((*UsrsSubQuery = malloc (MaxLength + 1)) == NULL)
       Err_NotEnoughMemoryExit ();
    (*UsrsSubQuery)[0] = '\0';
 
    /***** Build subquery *****/
    for (NumUsr = 0;
-	NumUsr < NumUsrsInList;
+	NumUsr < ListCods->NumUsrs;
 	NumUsr++)
       if (NumUsr)
 	{
 	 snprintf (SubQueryOneUsr,sizeof (SubQueryOneUsr),",%ld",
-		   LstSelectedUsrCods[NumUsr]);
+		   ListCods->Lst[NumUsr]);
 	 Str_Concat (*UsrsSubQuery,SubQueryOneUsr,MaxLength);
 	}
       else
 	 snprintf (*UsrsSubQuery,sizeof (SubQueryOneUsr),"%ld",
-		   LstSelectedUsrCods[NumUsr]);
+		   ListCods->Lst[NumUsr]);
   }
 
 void Usr_FreeSubqueryUsrCods (char *SubQueryUsrs)

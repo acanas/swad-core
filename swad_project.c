@@ -3426,8 +3426,11 @@ static Usr_Can_t Prj_CheckIfICanEditProject (const struct Prj_Project *Prj)
 static void Prj_GetListProjects (struct Prj_Projects *Projects)
   {
    MYSQL_RES *mysql_res = NULL;	// Initialized to avoid freeing when not assigned
-   unsigned NumUsrsInList = 0;
-   long *LstSelectedUsrCods = NULL;
+   struct Usr_ListCods ListCods =
+     {
+      .Lst = NULL,
+      .NumUsrs = 0
+     };
    char *UsrsSubQuery = NULL;
    unsigned NumPrjsFromDB;
    unsigned NumPrjsAfterFilter = 0;
@@ -3449,32 +3452,30 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
       if (Projects->Filter.Who == Usr_WHO_SELECTED)
 	{
 	 /* Count number of valid users in list of encrypted user codes */
-	 NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
+	 ListCods.NumUsrs = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
 
-	 if (NumUsrsInList)
+	 if (ListCods.NumUsrs)
 	   {
 	    /* Get list of users selected to show their projects */
-	    Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,NumUsrsInList,&LstSelectedUsrCods);
+	    Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,&ListCods);
 
 	    /* Create subquery string */
-	    Usr_CreateSubqueryUsrCods (LstSelectedUsrCods,NumUsrsInList,
-				       &UsrsSubQuery);
+	    Usr_CreateSubqueryUsrCods (&ListCods,&UsrsSubQuery);
 	   }
 	}
 
       /***** Query database *****/
-      NumPrjsFromDB = Prj_DB_GetListProjects (&mysql_res,Projects,
-                                              UsrsSubQuery);
+      NumPrjsFromDB = Prj_DB_GetListProjects (&mysql_res,Projects,UsrsSubQuery);
 
       /****** Free users selected *****/
       if (Projects->Filter.Who == Usr_WHO_SELECTED)
-	 if (NumUsrsInList)
+	 if (ListCods.NumUsrs)
            {
 	    /* Free memory for subquery string */
 	    Usr_FreeSubqueryUsrCods (UsrsSubQuery);
 
 	    /* Free list of user codes */
-	    Usr_FreeListSelectedUsrCods (LstSelectedUsrCods);
+	    Usr_FreeListSelectedUsrCods (&ListCods);
 	   }
 
       if (NumPrjsFromDB) // Projects found...

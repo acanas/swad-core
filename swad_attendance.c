@@ -134,8 +134,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 static void Att_PutLinkEvent (struct Att_Event *Event,
 			      const char *Title,const char *Txt);
 static unsigned Att_GetNumUsrsFromAListWhoAreInEvent (long AttCod,
-						      long *LstSelectedUsrCods,
-						      unsigned NumUsrsInList);
+						      const struct Usr_ListCods *ListCods);
 static Att_AbsentOrPresent_t Att_CheckIfUsrIsPresentInEvent (long AttCod,long UsrCod);
 static Att_AbsentOrPresent_t Att_CheckIfUsrIsPresentInEventAndGetComments (long AttCod,long UsrCod,
 									   char CommentStd[Cns_MAX_BYTES_TEXT + 1],
@@ -160,8 +159,7 @@ static void Att_PutIconToViewAttEvents (__attribute__((unused)) void *Args);
 static void Att_PutIconToEditAttEvents (__attribute__((unused)) void *Args);
 static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
                                          Att_TypeOfView_t TypeOfView,
-	                                 unsigned NumUsrsInList,
-                                         long *LstSelectedUsrCods);
+	                                 const struct Usr_ListCods *ListCods);
 static void Att_WriteTableHeadSeveralAttEvents (struct Att_Events *Events,
 						Pho_ShowPhotos_t ShowPhotos);
 static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
@@ -169,8 +167,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
                                              Pho_ShowPhotos_t ShowPhotos);
 static void Att_PutCheckOrCross (Att_AbsentOrPresent_t Present);
 static void Att_ListStdsWithAttEventsDetails (struct Att_Events *Events,
-                                              unsigned NumUsrsInList,
-                                              long *LstSelectedUsrCods);
+                                              const struct Usr_ListCods *ListCods);
 static void Att_ListAttEventsForAStd (struct Att_Events *Events,
                                       unsigned NumUsr,struct Usr_Data *UsrDat);
 
@@ -2073,17 +2070,15 @@ void Att_RegisterStudentsInEvent (void)
 /*****************************************************************************/
 
 static unsigned Att_GetNumUsrsFromAListWhoAreInEvent (long AttCod,
-						      long *LstSelectedUsrCods,
-						      unsigned NumUsrsInList)
+						      const struct Usr_ListCods *ListCods)
   {
    char *SubQueryUsrs;
    unsigned NumUsrsInAttEvent;
 
-   if (NumUsrsInList)
+   if (ListCods->NumUsrs)
      {
       /***** Create subquery string *****/
-      Usr_CreateSubqueryUsrCods (LstSelectedUsrCods,NumUsrsInList,
-				 &SubQueryUsrs);
+      Usr_CreateSubqueryUsrCods (ListCods,&SubQueryUsrs);
 
       /***** Get number of users from list in attendance event from database ****/
       NumUsrsInAttEvent = Att_DB_GetNumStdsFromListWhoAreInEvent (AttCod,SubQueryUsrs);
@@ -2215,11 +2210,16 @@ static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
    extern const char *Txt_Attendance;
    struct Att_Events Events;
    unsigned NumAttEvent;
+   struct Usr_ListCods ListCods;
 
    switch (TypeOfView)
      {
       case Att_VIEW_ONLY_ME:
       case Att_PRNT_ONLY_ME:
+	 /***** Initialize list of user codes *****/
+	 ListCods.Lst = &Gbl.Usrs.Me.UsrDat.UsrCod;
+	 ListCods.NumUsrs = 1;
+
 	 /***** Reset attendance events *****/
 	 Att_ResetEvents (&Events);
 
@@ -2239,7 +2239,7 @@ static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 	    /* Get number of students in this event */
 	    Events.Lst[NumAttEvent].NumStdsFromList =
 	    Att_GetNumUsrsFromAListWhoAreInEvent (Events.Lst[NumAttEvent].AttCod,
-						  &Gbl.Usrs.Me.UsrDat.UsrCod,1);
+						  &ListCods);
 
 	 /***** Get list of attendance events selected *****/
 	 Att_GetListSelectedAttCods (&Events);
@@ -2263,11 +2263,11 @@ static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 	 Att_ListEventsToSelect (&Events,TypeOfView);
 
 	 /***** Show table with attendances for every student in list *****/
-	 Att_ListUsrsAttendanceTable (&Events,TypeOfView,1,&Gbl.Usrs.Me.UsrDat.UsrCod);
+	 Att_ListUsrsAttendanceTable (&Events,TypeOfView,&ListCods);
 
 	 /***** Show details or put button to show details *****/
 	 if (Events.ShowDetails == Lay_SHOW)
-	    Att_ListStdsWithAttEventsDetails (&Events,1,&Gbl.Usrs.Me.UsrDat.UsrCod);
+	    Att_ListStdsWithAttEventsDetails (&Events,&ListCods);
 
 	 /***** End box *****/
 	 Box_BoxEnd ();
@@ -2313,8 +2313,7 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
    extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *Txt_Attendance_list;
    struct Att_Events Events;
-   unsigned NumUsrsInList;
-   long *LstSelectedUsrCods;
+   struct Usr_ListCods ListCods;
    unsigned NumAttEvent;
 
    switch (*((Att_TypeOfView_t *) TypeOfView))
@@ -2332,12 +2331,12 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
 	 Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
 	 /***** Count number of valid users in list of encrypted user codes *****/
-	 NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
+	 ListCods.NumUsrs = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
 
-	 if (NumUsrsInList)
+	 if (ListCods.NumUsrs)
 	   {
 	    /***** Get list of students selected to show their attendances *****/
-	    Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,NumUsrsInList,&LstSelectedUsrCods);
+	    Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,&ListCods);
 
 	    /***** Get list of attendance events *****/
 	    Att_GetListEvents (&Events,Att_OLDEST_FIRST);
@@ -2349,7 +2348,7 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
 	       /* Get number of students in this event */
 	       Events.Lst[NumAttEvent].NumStdsFromList =
 	       Att_GetNumUsrsFromAListWhoAreInEvent (Events.Lst[NumAttEvent].AttCod,
-						     LstSelectedUsrCods,NumUsrsInList);
+						     &ListCods);
 
 	    /***** Get list of attendance events selected *****/
 	    Att_GetListSelectedAttCods (&Events);
@@ -2375,11 +2374,11 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
 
 	    /***** Show table with attendances for every student in list *****/
 	    Att_ListUsrsAttendanceTable (&Events,*((Att_TypeOfView_t *) TypeOfView),
-	                                 NumUsrsInList,LstSelectedUsrCods);
+	                                 &ListCods);
 
 	    /***** Show details or put button to show details *****/
 	    if (Events.ShowDetails == Lay_SHOW)
-	       Att_ListStdsWithAttEventsDetails (&Events,NumUsrsInList,LstSelectedUsrCods);
+	       Att_ListStdsWithAttEventsDetails (&Events,&ListCods);
 
 	    /***** End box *****/
 	    Box_BoxEnd ();
@@ -2391,7 +2390,7 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
 	    Att_FreeListEvents (&Events);
 
 	    /***** Free list of user codes *****/
-	    Usr_FreeListSelectedUsrCods (LstSelectedUsrCods);
+	    Usr_FreeListSelectedUsrCods (&ListCods);
 	   }
 
 	 /***** Free list of groups selected *****/
@@ -2738,8 +2737,7 @@ static void Att_PutIconToEditAttEvents (__attribute__((unused)) void *Args)
 
 static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
                                          Att_TypeOfView_t TypeOfView,
-	                                 unsigned NumUsrsInList,
-                                         long *LstSelectedUsrCods)
+	                                 const struct Usr_ListCods *ListCods)
   {
    extern const char *Txt_Number_of_users;
    struct Usr_Data UsrDat;
@@ -2769,11 +2767,11 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
 
 	 /***** List the users *****/
 	 for (NumUsr = 0;
-	      NumUsr < NumUsrsInList;
+	      NumUsr < ListCods->NumUsrs;
 	      NumUsr++)
 	   {
 	    /* Get student data from database */
-	    UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
+	    UsrDat.UsrCod = ListCods->Lst[NumUsr];
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							 Usr_DONT_GET_PREFS,
 							 Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
@@ -2788,7 +2786,7 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
 	   }
 
 	 /***** Last row with the total of users present in each event *****/
-	 if (NumUsrsInList > 1)
+	 if (ListCods->NumUsrs > 1)
 	   {
 	    HTM_TR_Begin (NULL);
 
@@ -2992,8 +2990,7 @@ static void Att_PutCheckOrCross (Att_AbsentOrPresent_t Present)
 /*****************************************************************************/
 
 static void Att_ListStdsWithAttEventsDetails (struct Att_Events *Events,
-                                              unsigned NumUsrsInList,
-                                              long *LstSelectedUsrCods)
+                                              const struct Usr_ListCods *ListCods)
   {
    extern const char *Txt_Details;
    struct Usr_Data UsrDat;
@@ -3013,11 +3010,11 @@ static void Att_ListStdsWithAttEventsDetails (struct Att_Events *Events,
 
 	    /***** List students with attendance details *****/
 	    for (NumUsr = 0;
-		 NumUsr < NumUsrsInList;
+		 NumUsr < ListCods->NumUsrs;
 		 NumUsr++)
 	      {
 	       /* Get student data from database */
-	       UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
+	       UsrDat.UsrCod = ListCods->Lst[NumUsr];
 	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							    Usr_DONT_GET_PREFS,
 							    Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)

@@ -306,6 +306,12 @@ struct Usr_ListUsrs
    unsigned NumUsrs;		// Number of users in the list
   };
 
+struct Usr_ListCods
+  {
+   long *Lst;			// List of codes of users
+   unsigned NumUsrs;		// Number of users in the list
+  };
+
 typedef enum
   {
    Usr_DONT_USE_LIST_SELECTED_USERS,

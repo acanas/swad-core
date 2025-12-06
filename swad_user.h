@@ -150,13 +150,11 @@ unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUs
 void Usr_FreeListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs);
 
 void Usr_GetListSelectedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs,
-				 unsigned NumUsrsInList,
-				 long **LstSelectedUsrCods);
-void Usr_FreeListSelectedUsrCods (long *LstSelectedUsrCods);
+				 struct Usr_ListCods *ListCods);
+void Usr_FreeListSelectedUsrCods (struct Usr_ListCods *ListCods);
 
-void Usr_CreateSubqueryUsrCods (long *LstSelectedUsrCods,
-				unsigned NumUsrsInList,
-				char **SubQueryUsrs);
+void Usr_CreateSubqueryUsrCods (const struct Usr_ListCods *ListCods,
+				char **UsrsSubQuery);
 void Usr_FreeSubqueryUsrCods (char *SubQueryUsrs);
 
 void Usr_FreeListOtherRecipients (void);

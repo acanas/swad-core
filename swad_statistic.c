@@ -783,8 +783,11 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1];
    unsigned NumDays;
    Usr_Can_t ICanQueryWholeRange;
-   unsigned NumUsrsInList = 0;
-   long *LstSelectedUsrCods = NULL;
+   struct Usr_ListCods ListCods =
+     {
+      .Lst = NULL,
+      .NumUsrs = 0
+     };
 
    /***** Reset stats context *****/
    Sta_ResetStats (&Stats);
@@ -866,7 +869,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 					        Usr_GET_LIST_ALL_USRS);
 
 	 /***** Count number of valid users in list of encrypted user codes *****/
-	 NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
+	 ListCods.NumUsrs = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
 
 	 /***** Show the form again *****/
 	 Sta_PutFormCrsHits (&Stats);
@@ -875,9 +878,9 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 HTM_SECTION_Begin (Sta_STAT_RESULTS_SECTION_ID);
 
 	 /***** Check users' selection *****/
-	 if (NumUsrsInList)
+	 if (ListCods.NumUsrs)
 	    /* Get list of user codes from encrypted user codes */
-	    Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,NumUsrsInList,&LstSelectedUsrCods);
+	    Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,&ListCods);
 	 else	// There are no users selected
 	   {
 	    /* Write warning message, clean and abort */
@@ -950,7 +953,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 
    /***** Make the query *****/
    if ((NumHits = Sta_DB_GetHits (&mysql_res,HieLvl,&Stats,LogTable,BrowserTimeZone,
-                                  NumUsrsInList,LstSelectedUsrCods)))
+                                  &ListCods)))
      {
       /***** Put the table with the clicks *****/
       Box_BoxBegin (Stats.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? Txt_List_of_detailed_clicks :
@@ -1040,8 +1043,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    /***** Free memory used by list of selected users' codes *****/
    if (Stats.GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES)
      {
-      if (NumUsrsInList)
-         Usr_FreeListSelectedUsrCods (LstSelectedUsrCods);
+      Usr_FreeListSelectedUsrCods (&ListCods);
       Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
      }
 
