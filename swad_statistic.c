@@ -110,8 +110,7 @@ static void Sta_WriteSelectorScope (void);
 static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats);
 static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse);
 static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
-                                          unsigned NumHits,
-                                          MYSQL_RES *mysql_res);
+                                          unsigned NumHits,MYSQL_RES *mysql_res);
 static void Sta_WriteLogComments (long LogCod);
 static void Sta_ShowNumHitsPerUsr (const struct Sta_Stats *Stats,
                                    unsigned NumHits,MYSQL_RES *mysql_res);
@@ -758,6 +757,38 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    extern const char *Txt_List_of_detailed_clicks;
    extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_Time_zone_used_in_the_calculation_of_these_statistics;
+   static void (*ShowHits[Sta_NUM_CLICKS_GROUPED_BY]) (const struct Sta_Stats *Stats,
+						       unsigned NumHits,MYSQL_RES *mysql_res) =
+     {
+      [Sta_CLICKS_CRS_DETAILED_LIST	] = Sta_ShowDetailedAccessesList,
+
+      [Sta_CLICKS_CRS_PER_USR		] = Sta_ShowNumHitsPerUsr,
+      [Sta_CLICKS_CRS_PER_DAY		] = Sta_ShowNumHitsPerDay,
+      [Sta_CLICKS_CRS_PER_DAY_AND_HOUR	] = Sta_ShowDistrAccessesPerDayAndHour,
+      [Sta_CLICKS_CRS_PER_WEEK		] = Sta_ShowNumHitsPerWeek,
+      [Sta_CLICKS_CRS_PER_MONTH		] = Sta_ShowNumHitsPerMonth,
+      [Sta_CLICKS_CRS_PER_YEAR		] = Sta_ShowNumHitsPerYear,
+      [Sta_CLICKS_CRS_PER_HOUR		] = Sta_ShowNumHitsPerHour,
+      [Sta_CLICKS_CRS_PER_MINUTE	] = Sta_ShowNumHitsPerMinute,
+      [Sta_CLICKS_CRS_PER_ACTION	] = Sta_ShowNumHitsPerAction,
+
+      [Sta_CLICKS_GBL_PER_DAY		] = Sta_ShowNumHitsPerDay,
+      [Sta_CLICKS_GBL_PER_DAY_AND_HOUR	] = Sta_ShowDistrAccessesPerDayAndHour,
+      [Sta_CLICKS_GBL_PER_WEEK		] = Sta_ShowNumHitsPerWeek,
+      [Sta_CLICKS_GBL_PER_MONTH		] = Sta_ShowNumHitsPerMonth,
+      [Sta_CLICKS_GBL_PER_YEAR		] = Sta_ShowNumHitsPerYear,
+      [Sta_CLICKS_GBL_PER_HOUR		] = Sta_ShowNumHitsPerHour,
+      [Sta_CLICKS_GBL_PER_MINUTE	] = Sta_ShowNumHitsPerMinute,
+      [Sta_CLICKS_GBL_PER_ACTION	] = Sta_ShowNumHitsPerAction,
+      [Sta_CLICKS_GBL_PER_PLUGIN	] = Sta_ShowNumHitsPerPlugin,
+      [Sta_CLICKS_GBL_PER_API_FUNCTION	] = Sta_ShowNumHitsPerWSFunction,
+      [Sta_CLICKS_GBL_PER_BANNER	] = Sta_ShowNumHitsPerBanner,
+      [Sta_CLICKS_GBL_PER_COUNTRY	] = Sta_ShowNumHitsPerCountry,
+      [Sta_CLICKS_GBL_PER_INSTITUTION	] = Sta_ShowNumHitsPerInstitution,
+      [Sta_CLICKS_GBL_PER_CENTER	] = Sta_ShowNumHitsPerCenter,
+      [Sta_CLICKS_GBL_PER_DEGREE	] = Sta_ShowNumHitsPerDegree,
+      [Sta_CLICKS_GBL_PER_COURSE	] = Sta_ShowNumHitsPerCourse,
+     };
    struct Sta_Stats Stats;
    unsigned AllowedLvls;
    MYSQL_RES *mysql_res;
@@ -926,12 +957,12 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 			                                             Stats.HieLvl == Hie_CRS)) ||
 			  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :
 								   Usr_CAN_NOT;
-   if (ICanQueryWholeRange == Usr_CAN_NOT &&
-       NumDays > Cfg_DAYS_IN_RECENT_LOG)
+   if (ICanQueryWholeRange == Usr_CAN_NOT && NumDays > Cfg_DAYS_IN_RECENT_LOG)
      {
       /* ...write warning message and show the form again */
       Ale_ShowAlert (Ale_WARNING,Txt_The_date_range_must_be_less_than_or_equal_to_X_days,
 	             Cfg_DAYS_IN_RECENT_LOG);
+      HTM_SECTION_End ();
       return;
      }
 
@@ -942,81 +973,11 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       /***** Put the table with the clicks *****/
       Box_BoxBegin (Stats.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? Txt_List_of_detailed_clicks :
 									    Txt_STAT_COUNT_TYPE[Stats.CountType],
-		    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
-
+		    NULL,NULL,NULL,Box_NOT_CLOSABLE);
 	 HTM_TABLE_BeginWidePadding (Sta_CellPadding[Stats.ClicksGroupedBy]);
-	    switch (Stats.ClicksGroupedBy)
-	      {
-	       case Sta_CLICKS_CRS_DETAILED_LIST:
-		  Sta_ShowDetailedAccessesList (&Stats,NumHits,mysql_res);
-		  break;
-	       case Sta_CLICKS_CRS_PER_USR:
-		  Sta_ShowNumHitsPerUsr (&Stats,NumHits,mysql_res);
-		  break;
-	       case Sta_CLICKS_CRS_PER_DAY:
-	       case Sta_CLICKS_GBL_PER_DAY:
-		  Sta_ShowNumHitsPerDay (&Stats,NumHits,mysql_res);
-		  break;
-	       case Sta_CLICKS_CRS_PER_DAY_AND_HOUR:
-	       case Sta_CLICKS_GBL_PER_DAY_AND_HOUR:
-		  Sta_ShowDistrAccessesPerDayAndHour (&Stats,NumHits,mysql_res);
-		  break;
-	       case Sta_CLICKS_CRS_PER_WEEK:
-	       case Sta_CLICKS_GBL_PER_WEEK:
-		  Sta_ShowNumHitsPerWeek (&Stats,NumHits,mysql_res);
-		  break;
-	       case Sta_CLICKS_CRS_PER_MONTH:
-	       case Sta_CLICKS_GBL_PER_MONTH:
-		  Sta_ShowNumHitsPerMonth (&Stats,NumHits,mysql_res);
-		  break;
-	       case Sta_CLICKS_CRS_PER_YEAR:
-	       case Sta_CLICKS_GBL_PER_YEAR:
-		  Sta_ShowNumHitsPerYear (&Stats,NumHits,mysql_res);
-		  break;
-	       case Sta_CLICKS_CRS_PER_HOUR:
-	       case Sta_CLICKS_GBL_PER_HOUR:
-		  Sta_ShowNumHitsPerHour (&Stats,NumHits,mysql_res);
-		  break;
-	       case Sta_CLICKS_CRS_PER_MINUTE:
-	       case Sta_CLICKS_GBL_PER_MINUTE:
-		  Sta_ShowNumHitsPerMinute (&Stats,NumHits,mysql_res);
-		  break;
-	       case Sta_CLICKS_CRS_PER_ACTION:
-	       case Sta_CLICKS_GBL_PER_ACTION:
-		  Sta_ShowNumHitsPerAction (&Stats,NumHits,mysql_res);
-		  break;
-	       case Sta_CLICKS_GBL_PER_PLUGIN:
-		  Sta_ShowNumHitsPerPlugin (&Stats,NumHits,mysql_res);
-		  break;
-	       case Sta_CLICKS_GBL_PER_API_FUNCTION:
-		  Sta_ShowNumHitsPerWSFunction (&Stats,NumHits,mysql_res);
-		  break;
-	       case Sta_CLICKS_GBL_PER_BANNER:
-		  Sta_ShowNumHitsPerBanner (&Stats,NumHits,mysql_res);
-		  break;
-	       case Sta_CLICKS_GBL_PER_COUNTRY:
-		  Sta_ShowNumHitsPerCountry (&Stats,NumHits,mysql_res);
-		  break;
-	       case Sta_CLICKS_GBL_PER_INSTITUTION:
-		  Sta_ShowNumHitsPerInstitution (&Stats,NumHits,mysql_res);
-		  break;
-	       case Sta_CLICKS_GBL_PER_CENTER:
-		  Sta_ShowNumHitsPerCenter (&Stats,NumHits,mysql_res);
-		  break;
-	       case Sta_CLICKS_GBL_PER_DEGREE:
-		  Sta_ShowNumHitsPerDegree (&Stats,NumHits,mysql_res);
-		  break;
-	       case Sta_CLICKS_GBL_PER_COURSE:
-		  Sta_ShowNumHitsPerCourse (&Stats,NumHits,mysql_res);
-		  break;
-	      }
-
+	    ShowHits[Stats.ClicksGroupedBy] (&Stats,NumHits,mysql_res);
 	 HTM_TABLE_End ();
-
-      /* End box and section */
       Box_BoxEnd ();
-      HTM_SECTION_End ();
      }
    else	// No hits retrieved
       Ale_ShowAlert (Ale_INFO,Txt_There_are_no_accesses_with_the_selected_search_criteria);
@@ -1030,6 +991,9 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       Usr_FreeListSelectedUsrCods (&ListCods);
       Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
      }
+
+   /***** End results section *****/
+   HTM_SECTION_End ();
 
    /***** Write time zone used in the calculation of these statistics *****/
    switch (Stats.ClicksGroupedBy)
@@ -1063,8 +1027,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 /*****************************************************************************/
 
 static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
-                                          unsigned NumHits,
-                                          MYSQL_RES *mysql_res)
+                                          unsigned NumHits,MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Show_previous_X_clicks;
    extern const char *Txt_PAGES_Previous;
