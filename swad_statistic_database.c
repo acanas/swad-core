@@ -49,7 +49,6 @@ extern struct Globals Gbl;
 #define Sta_DB_MAX_BYTES_QUERY (1024 + (10 + ID_MAX_BYTES_USR_ID) * 5000 - 1)
 
 unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
-			 Hie_Level_t HieLvl,
                          const struct Sta_Stats *Stats,
                          const char *LogTable,
                          const char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1],
@@ -278,7 +277,7 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
      {
       case Sta_SHOW_GLOBAL_ACCESSES:
 	 /* Scope */
-	 switch (HieLvl)
+	 switch (Stats->HieLvl)
 	   {
 	    case Hie_UNK:
 	    case Hie_SYS:

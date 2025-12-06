@@ -137,6 +137,7 @@ typedef enum
 struct Sta_Stats
   {
    Sta_GlobalOrCourseAccesses_t GlobalOrCourse;
+   Hie_Level_t HieLvl;
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
    Sta_Role_t Role;
    Sta_CountType_t CountType;
