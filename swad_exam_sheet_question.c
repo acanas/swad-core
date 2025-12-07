@@ -182,12 +182,12 @@ static void ExaSheQst_WriteTF_Ans (__attribute__((unused)) const struct ExaPrn_P
 	                           __attribute__((unused)) unsigned QstInd,
                                    __attribute__((unused)) struct Qst_Question *Question)
   {
-   extern const char *Txt_TF_QST[2];
+   extern const char *Txt_TF_QST[Qst_NUM_OPTIONS_TF];
 
    /***** Write selector for the answer *****/
-   HTM_Txt (Txt_TF_QST[0]);
+   HTM_Txt (Txt_TF_QST[Qst_OPTION_TRUE]);
    HTM_Slash ();
-   HTM_Txt (Txt_TF_QST[1]);
+   HTM_Txt (Txt_TF_QST[Qst_OPTION_FALSE]);
   }
 
 /*****************************************************************************/

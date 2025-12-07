@@ -301,8 +301,8 @@ static void ExaSheAns_WriteBlankFltAns (__attribute__((unused)) const struct Qst
 
 static void ExaSheAns_WriteBlankTF_Ans (__attribute__((unused)) const struct Qst_Question *Question)
   {
-   extern const char *Txt_TF_QST[2];
-   unsigned NumOpt;
+   extern const char *Txt_TF_QST[Qst_NUM_OPTIONS_TF];
+   Qst_OptionTF_t Opt;
 
    /***** Begin table *****/
    HTM_TABLE_Begin ("Exa_TBL");
@@ -310,12 +310,13 @@ static void ExaSheAns_WriteBlankTF_Ans (__attribute__((unused)) const struct Qst
       /***** Write the student answer *****/
       HTM_TR_Begin (NULL);
 
-	 for (NumOpt = 0;
-	      NumOpt < 2;
-	      NumOpt++)
+	 for (Opt  = Qst_OPTION_TRUE;
+	      Opt <= Qst_OPTION_FALSE;
+	      Opt++)
 	   {
-	    HTM_TD_Begin ("class=\"Exa_ANSWER_TF Qst_ANS_0_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_TF_QST[NumOpt]);
+	    HTM_TD_Begin ("class=\"Exa_ANSWER_TF Qst_ANS_0_%s\"",
+		          The_GetSuffix ());
+	       HTM_Txt (Txt_TF_QST[Opt]);
 	    HTM_TD_End ();
 	   }
 
@@ -851,8 +852,7 @@ static void ExaSheAns_WriteEditableTF_Ans (const struct ExaPrn_Print *Print,
 					   unsigned QstInd,
 					   struct Qst_Question *Question)
   {
-   extern const char *Txt_NBSP;
-   extern const char *Txt_TF_QST[2];
+   extern const char *Txt_TF_QST[Qst_NUM_OPTIONS_TF];
    char AnsUsr;
    Qst_WrongOrCorrect_t WrongOrCorrect;
    char Id[3 + 1 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1 + Cns_MAX_DIGITS_UINT + 1];	// "Ans_encryptedusercode_xx...x"
@@ -877,13 +877,13 @@ static void ExaSheAns_WriteEditableTF_Ans (const struct ExaPrn_Print *Print,
       HTM_ElementEnd ();
 	 HTM_OPTION (HTM_Type_STRING,"" ,AnsUsr == '\0' ? HTM_SELECTED :
 							  HTM_NO_ATTR,
-		     Txt_NBSP);
+		     Txt_TF_QST[Qst_OPTION_EMPTY]);
 	 HTM_OPTION (HTM_Type_STRING,"T",AnsUsr == 'T'  ? HTM_SELECTED :
 							  HTM_NO_ATTR,
-		     Txt_TF_QST[0]);
+		     Txt_TF_QST[Qst_OPTION_TRUE]);
 	 HTM_OPTION (HTM_Type_STRING,"F",AnsUsr == 'F'  ? HTM_SELECTED :
 							  HTM_NO_ATTR,
-		     Txt_TF_QST[1]);
+		     Txt_TF_QST[Qst_OPTION_FALSE]);
       HTM_Txt ("</select>");
 
    HTM_TD_End ();

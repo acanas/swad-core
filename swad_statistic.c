@@ -116,8 +116,8 @@ static void Sta_ShowNumHitsPerUsr (const struct Sta_Stats *Stats,
                                    unsigned NumHits,MYSQL_RES *mysql_res);
 static void Sta_ShowNumHitsPerDay (const struct Sta_Stats *Stats,
                                    unsigned NumHits,MYSQL_RES *mysql_res);
-static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
-                                                unsigned NumHits,MYSQL_RES *mysql_res);
+static void Sta_ShowNumHitsPerDayAndHour (const struct Sta_Stats *Stats,
+                                          unsigned NumHits,MYSQL_RES *mysql_res);
 static Sta_ColorType_t Sta_GetStatColorType (void);
 static void Sta_DrawBarColors (Sta_ColorType_t ColorType,double HitsMax);
 static void Sta_DrawAccessesPerHourForADay (Sta_ColorType_t ColorType,double HitsNum[24],double HitsMax);
@@ -130,7 +130,7 @@ static void Sta_ShowNumHitsPerMonth (const struct Sta_Stats *Stats,
 static void Sta_ShowNumHitsPerYear (const struct Sta_Stats *Stats,
                                     unsigned NumHits,MYSQL_RES *mysql_res);
 static void Sta_ShowNumHitsPerHour (__attribute__((unused)) const struct Sta_Stats *Stats,
-				      unsigned NumHits,MYSQL_RES *mysql_res);
+				    unsigned NumHits,MYSQL_RES *mysql_res);
 static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned ColumnWidth);
 static void Sta_ShowNumHitsPerMinute (__attribute__((unused)) const struct Sta_Stats *Stats,
 				      unsigned NumHits,MYSQL_RES *mysql_res);
@@ -140,8 +140,8 @@ static void Sta_ShowNumHitsPerAction (const struct Sta_Stats *Stats,
                                       unsigned NumHits,MYSQL_RES *mysql_res);
 static void Sta_ShowNumHitsPerPlugin (const struct Sta_Stats *Stats,
                                       unsigned NumHits,MYSQL_RES *mysql_res);
-static void Sta_ShowNumHitsPerWSFunction (const struct Sta_Stats *Stats,
-                                          unsigned NumHits,MYSQL_RES *mysql_res);
+static void Sta_ShowNumHitsPerAPIFunction (const struct Sta_Stats *Stats,
+                                           unsigned NumHits,MYSQL_RES *mysql_res);
 static void Sta_ShowNumHitsPerBanner (const struct Sta_Stats *Stats,
                                       unsigned NumHits,MYSQL_RES *mysql_res);
 static void Sta_ShowNumHitsPerCountry (const struct Sta_Stats *Stats,
@@ -764,7 +764,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 
       [Sta_CLICKS_CRS_PER_USR		] = Sta_ShowNumHitsPerUsr,
       [Sta_CLICKS_CRS_PER_DAY		] = Sta_ShowNumHitsPerDay,
-      [Sta_CLICKS_CRS_PER_DAY_AND_HOUR	] = Sta_ShowDistrAccessesPerDayAndHour,
+      [Sta_CLICKS_CRS_PER_DAY_AND_HOUR	] = Sta_ShowNumHitsPerDayAndHour,
       [Sta_CLICKS_CRS_PER_WEEK		] = Sta_ShowNumHitsPerWeek,
       [Sta_CLICKS_CRS_PER_MONTH		] = Sta_ShowNumHitsPerMonth,
       [Sta_CLICKS_CRS_PER_YEAR		] = Sta_ShowNumHitsPerYear,
@@ -773,7 +773,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       [Sta_CLICKS_CRS_PER_ACTION	] = Sta_ShowNumHitsPerAction,
 
       [Sta_CLICKS_GBL_PER_DAY		] = Sta_ShowNumHitsPerDay,
-      [Sta_CLICKS_GBL_PER_DAY_AND_HOUR	] = Sta_ShowDistrAccessesPerDayAndHour,
+      [Sta_CLICKS_GBL_PER_DAY_AND_HOUR	] = Sta_ShowNumHitsPerDayAndHour,
       [Sta_CLICKS_GBL_PER_WEEK		] = Sta_ShowNumHitsPerWeek,
       [Sta_CLICKS_GBL_PER_MONTH		] = Sta_ShowNumHitsPerMonth,
       [Sta_CLICKS_GBL_PER_YEAR		] = Sta_ShowNumHitsPerYear,
@@ -781,7 +781,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       [Sta_CLICKS_GBL_PER_MINUTE	] = Sta_ShowNumHitsPerMinute,
       [Sta_CLICKS_GBL_PER_ACTION	] = Sta_ShowNumHitsPerAction,
       [Sta_CLICKS_GBL_PER_PLUGIN	] = Sta_ShowNumHitsPerPlugin,
-      [Sta_CLICKS_GBL_PER_API_FUNCTION	] = Sta_ShowNumHitsPerWSFunction,
+      [Sta_CLICKS_GBL_PER_API_FUNCTION	] = Sta_ShowNumHitsPerAPIFunction,
       [Sta_CLICKS_GBL_PER_BANNER	] = Sta_ShowNumHitsPerBanner,
       [Sta_CLICKS_GBL_PER_COUNTRY	] = Sta_ShowNumHitsPerCountry,
       [Sta_CLICKS_GBL_PER_INSTITUTION	] = Sta_ShowNumHitsPerInstitution,
@@ -966,21 +966,23 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       return;
      }
 
-   /***** Make the query *****/
-   if ((NumHits = Sta_DB_GetHits (&mysql_res,&Stats,LogTable,BrowserTimeZone,
-                                  &ListCods)))
-     {
-      /***** Put the table with the clicks *****/
-      Box_BoxBegin (Stats.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? Txt_List_of_detailed_clicks :
-									    Txt_STAT_COUNT_TYPE[Stats.CountType],
-		    NULL,NULL,NULL,Box_NOT_CLOSABLE);
+   /***** Show hits *****/
+   Box_BoxBegin (Stats.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? Txt_List_of_detailed_clicks :
+									 Txt_STAT_COUNT_TYPE[Stats.CountType],
+		 NULL,NULL,NULL,Box_NOT_CLOSABLE);
+
+      /***** Make the query *****/
+      if ((NumHits = Sta_DB_GetHits (&mysql_res,&Stats,LogTable,BrowserTimeZone,
+				     &ListCods)))
+	{
 	 HTM_TABLE_BeginWidePadding (Sta_CellPadding[Stats.ClicksGroupedBy]);
 	    ShowHits[Stats.ClicksGroupedBy] (&Stats,NumHits,mysql_res);
 	 HTM_TABLE_End ();
-      Box_BoxEnd ();
-     }
-   else	// No hits retrieved
-      Ale_ShowAlert (Ale_INFO,Txt_There_are_no_accesses_with_the_selected_search_criteria);
+	}
+      else	// No hits retrieved
+	 Ale_ShowAlert (Ale_INFO,Txt_There_are_no_accesses_with_the_selected_search_criteria);
+
+   Box_BoxEnd ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1167,13 +1169,13 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (Txt_No_INDEX     ,HTM_HEAD_RIGHT );
-      HTM_TH (Txt_User_ID      ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Name         ,HTM_HEAD_LEFT  );
-      HTM_TH (Txt_Role         ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Date         ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Action       ,HTM_HEAD_LEFT  );
-      HTM_TH (Txt_LOG_More_info,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_No_INDEX	,HTM_HEAD_RIGHT );
+      HTM_TH (Txt_User_ID	,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Name		,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Role		,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Date		,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Action	,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_LOG_More_info	,HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
    /***** Write rows back *****/
@@ -1312,12 +1314,13 @@ static void Sta_ShowNumHitsPerUsr (const struct Sta_Stats *Stats,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH      (Txt_No_INDEX                  ,HTM_HEAD_RIGHT );
-      HTM_TH      (Txt_Photo                     ,HTM_HEAD_CENTER);
-      HTM_TH      (Txt_ID                        ,HTM_HEAD_LEFT  );
-      HTM_TH      (Txt_Name                      ,HTM_HEAD_LEFT  );
-      HTM_TH      (Txt_Role                      ,HTM_HEAD_CENTER);
-      HTM_TH_Span (Txt_STAT_COUNT_TYPE[Stats->CountType],HTM_HEAD_LEFT  ,1,2,NULL);
+      HTM_TH      (Txt_No_INDEX	,HTM_HEAD_RIGHT );
+      HTM_TH      (Txt_Photo	,HTM_HEAD_CENTER);
+      HTM_TH      (Txt_ID	,HTM_HEAD_LEFT  );
+      HTM_TH      (Txt_Name	,HTM_HEAD_LEFT  );
+      HTM_TH      (Txt_Role	,HTM_HEAD_CENTER);
+      HTM_TH_Span (Txt_STAT_COUNT_TYPE[Stats->CountType]
+                                ,HTM_HEAD_LEFT,1,2,NULL);
    HTM_TR_End ();
 
    /***** Write rows *****/
@@ -1428,9 +1431,9 @@ static void Sta_ShowNumHitsPerDay (const struct Sta_Stats *Stats,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (Txt_Date				   ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Day				   ,HTM_HEAD_LEFT  );
-      HTM_TH (Txt_STAT_COUNT_TYPE[Stats->CountType],HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Date					,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Day					,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_STAT_COUNT_TYPE[Stats->CountType]	,HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per day *****/
@@ -1549,8 +1552,8 @@ static void Sta_ShowNumHitsPerDay (const struct Sta_Stats *Stats,
 #define GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH 25
 #define GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH (GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH * 24)
 
-static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
-                                                unsigned NumHits,MYSQL_RES *mysql_res)
+static void Sta_ShowNumHitsPerDayAndHour (const struct Sta_Stats *Stats,
+                                          unsigned NumHits,MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Color_of_the_graphic;
    extern const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES];
@@ -1633,9 +1636,10 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH_Span (Txt_Date                             ,HTM_HEAD_CENTER,3, 1,NULL);
-      HTM_TH_Span (Txt_Day                              ,HTM_HEAD_LEFT  ,3, 1,NULL);
-      HTM_TH_Span (Txt_STAT_COUNT_TYPE[Stats->CountType],HTM_HEAD_LEFT  ,1,24,NULL);
+      HTM_TH_Span (Txt_Date	,HTM_HEAD_CENTER,3, 1,NULL);
+      HTM_TH_Span (Txt_Day	,HTM_HEAD_LEFT  ,3, 1,NULL);
+      HTM_TH_Span (Txt_STAT_COUNT_TYPE[Stats->CountType]
+				,HTM_HEAD_LEFT  ,1,24,NULL);
    HTM_TR_End ();
 
    HTM_TR_Begin (NULL);
@@ -2322,7 +2326,7 @@ static void Sta_ShowNumHitsPerYear (const struct Sta_Stats *Stats,
 #define DIGIT_WIDTH 6
 
 static void Sta_ShowNumHitsPerHour (__attribute__((unused)) const struct Sta_Stats *Stats,
-				      unsigned NumHits,MYSQL_RES *mysql_res)
+				    unsigned NumHits,MYSQL_RES *mysql_res)
   {
    unsigned NumHit;
    struct Sta_Hits Hits;
@@ -2775,8 +2779,8 @@ static void Sta_ShowNumHitsPerPlugin (const struct Sta_Stats *Stats,
 /******** Show number of clicks distributed by web service function **********/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerWSFunction (const struct Sta_Stats *Stats,
-                                          unsigned NumHits,MYSQL_RES *mysql_res)
+static void Sta_ShowNumHitsPerAPIFunction (const struct Sta_Stats *Stats,
+                                           unsigned NumHits,MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Function;
    extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
@@ -2978,9 +2982,7 @@ static void Sta_WriteCountry (long HieCod)
       else			// Hit with no country selected
         {
 	 /***** No country selected *****/
-	 HTM_NBSP ();
-	 HTM_Hyphen ();
-	 HTM_NBSP ();
+	 HTM_NBSP (); HTM_Hyphen (); HTM_NBSP ();
         }
 
    /***** End cell *****/
@@ -3005,9 +3007,9 @@ static void Sta_ShowNumHitsPerInstitution (const struct Sta_Stats *Stats,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (Txt_No_INDEX                  ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_INS]    ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_STAT_COUNT_TYPE[Stats->CountType],HTM_HEAD_LEFT  );
+      HTM_TH (Txt_No_INDEX				,HTM_HEAD_CENTER);
+      HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_INS]		,HTM_HEAD_CENTER);
+      HTM_TH (Txt_STAT_COUNT_TYPE[Stats->CountType]	,HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
    /***** Compute maximum number of hits per institution *****/
@@ -3073,9 +3075,7 @@ static void Sta_WriteInstit (long HieCod)
      {
       /***** No institution selected *****/
       HTM_TD_Begin ("class=\"LM LOG_%s\"",The_GetSuffix ());
-	 HTM_NBSP ();
-	 HTM_Hyphen ();
-	 HTM_NBSP ();
+	 HTM_NBSP (); HTM_Hyphen (); HTM_NBSP ();
      }
 
    /***** End cell *****/
@@ -3168,9 +3168,7 @@ static void Sta_WriteCenter (long HieCod)
      {
       /***** No center selected *****/
       HTM_TD_Begin ("class=\"LM LOG_%s\"",The_GetSuffix ());
-	 HTM_NBSP ();
-	 HTM_Hyphen ();
-	 HTM_NBSP ();
+	 HTM_NBSP (); HTM_Hyphen (); HTM_NBSP ();
      }
 
    /***** End cell *****/
@@ -3263,9 +3261,7 @@ static void Sta_WriteDegree (long HieCod)
      {
       /***** No degree selected *****/
       HTM_TD_Begin ("class=\"LM LOG_%s\"",The_GetSuffix ());
-	 HTM_NBSP ();
-	 HTM_Hyphen ();
-	 HTM_NBSP ();
+	 HTM_NBSP (); HTM_Hyphen (); HTM_NBSP ();
      }
 
    /***** End cell *****/

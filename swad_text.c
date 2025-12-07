@@ -54589,50 +54589,54 @@ const char *Txt_TST_STR_VISIBILITY[TstVis_NUM_ITEMS_VISIBILITY] =
 #endif
 	};
 
-const char *Txt_TF_QST[2] =
+const char *Txt_TF_QST[Qst_NUM_OPTIONS_TF] =
 	{
-#if   L==1	// ca	// True
-	"V"
+	 [Qst_OPTION_EMPTY] = "&nbsp;"
+	,
+	 [Qst_OPTION_TRUE ] =
+#if   L==1	// ca
+	"V"	// Veritable
 #elif L==2	// de
-	"R"
+	"W"	// Wahr
 #elif L==3	// en
-	"T"
+	"T"	// True
 #elif L==4	// es
-	"V"
+	"V"	// Verdadero
 #elif L==5	// fr
-	"V"
+	"V"	// Vrai
 #elif L==6	// gn
-	"V"	// Okoteve traducción
+	"A"	// A&ntilde;ete
 #elif L==7	// it
-	"V"
+	"V"	// Vero
 #elif L==8	// pl
-	"P"
+	"P"	// Prawda
 #elif L==9	// pt
-	"V"
+	"V"	// Verdadeiro
 #elif L==10	// tr
-	"T"	// Çeviri lazim!
+	"D"	// Do&gbreve;ru
 #endif
 	,
-#if   L==1	// ca	// False
-	"F"
+	 [Qst_OPTION_FALSE] =
+#if   L==1	// ca
+	"F"	// Fals
 #elif L==2	// de
-	"F"
+	"F"	// Falsch
 #elif L==3	// en
-	"F"
+	"F"	// False
 #elif L==4	// es
-	"F"
+	"F"	// Falso
 #elif L==5	// fr
-	"F"
+	"F"	// Faux
 #elif L==6	// gn
-	"F"	// Okoteve traducción
+	"J"	// Japu
 #elif L==7	// it
-	"F"
+	"F"	// Falso
 #elif L==8	// pl
-	"F"
+	"F"	// Fa&lstrok;sz
 #elif L==9	// pt
-	"F"
+	"F"	// Falso
 #elif L==10	// tr
-	"F"	// Çeviri lazim!
+	"Y"	// Yanl&inodot;&sogon;
 #endif
 	};
 

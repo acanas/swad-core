@@ -383,8 +383,14 @@ static void TstPrn_WriteTF_AnsToFill (const struct Qst_PrintedQuestion *PrintedQ
                                       unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question)
   {
-   extern const char *Txt_NBSP;
-   extern const char *Txt_TF_QST[2];
+   extern const char *Txt_TF_QST[Qst_NUM_OPTIONS_TF];
+   static const char *Str[Qst_NUM_OPTIONS_TF] =
+     {
+      [Qst_OPTION_EMPTY] = "" ,
+      [Qst_OPTION_TRUE ] = "T",
+      [Qst_OPTION_FALSE] = "F",
+     };
+   Qst_OptionTF_t Opt;
 
    /***** Write selector for the answer *****/
    /* Initially user has not answered the question ==> initially all answers will be blank.
@@ -393,18 +399,13 @@ static void TstPrn_WriteTF_AnsToFill (const struct Qst_PrintedQuestion *PrintedQ
    HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 		     "name=\"Ans%010u\" class=\"INPUT_%s\"",
 		     QstInd,The_GetSuffix ());
-      HTM_OPTION (HTM_Type_STRING,"" ,
-                  PrintedQuestion->Answer.Str[0] == '\0' ? HTM_SELECTED :
-	                				   HTM_NO_ATTR,
-                  Txt_NBSP);
-      HTM_OPTION (HTM_Type_STRING,"T",
-                  PrintedQuestion->Answer.Str[0] == 'T' ? HTM_SELECTED :
-	                				  HTM_NO_ATTR,
-                  Txt_TF_QST[0]);
-      HTM_OPTION (HTM_Type_STRING,"F",
-                  PrintedQuestion->Answer.Str[0] == 'F' ? HTM_SELECTED :
-	                				  HTM_NO_ATTR,
-                  Txt_TF_QST[1]);
+      for (Opt  = (Qst_OptionTF_t) 0;
+	   Opt <= (Qst_OptionTF_t) (Qst_NUM_OPTIONS_TF - 1);
+	   Opt++)
+	 HTM_OPTION (HTM_Type_STRING,Str[Opt],
+		     PrintedQuestion->Answer.Str[0] == Str[Opt][0] ? HTM_SELECTED :
+								     HTM_NO_ATTR,
+		     Txt_TF_QST[Opt]);
    HTM_SELECT_End ();
   }
 

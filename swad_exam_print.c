@@ -818,8 +818,7 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
 	                              unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question)
   {
-   extern const char *Txt_NBSP;
-   extern const char *Txt_TF_QST[2];
+   extern const char *Txt_TF_QST[Qst_NUM_OPTIONS_TF];
    char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write selector for the answer *****/
@@ -830,18 +829,18 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
    HTM_TxtF ("<select id=\"%s\" name=\"Ans\"",Id);
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_ElementEnd ();
-      HTM_OPTION (HTM_Type_STRING,"" ,
+      HTM_OPTION (HTM_Type_STRING,"",
                   Print->Qsts[QstInd].Answer.Str[0] == '\0' ? HTM_SELECTED :
                 					      HTM_NO_ATTR,
-                  Txt_NBSP);
+                  Txt_TF_QST[Qst_OPTION_EMPTY]);
       HTM_OPTION (HTM_Type_STRING,"T",
                   Print->Qsts[QstInd].Answer.Str[0] == 'T'  ? HTM_SELECTED :
                 					      HTM_NO_ATTR,
-                  Txt_TF_QST[0]);
+                  Txt_TF_QST[Qst_OPTION_TRUE]);
       HTM_OPTION (HTM_Type_STRING,"F",
                   Print->Qsts[QstInd].Answer.Str[0] == 'F'  ? HTM_SELECTED :
                 					      HTM_NO_ATTR,
-                  Txt_TF_QST[1]);
+                  Txt_TF_QST[Qst_OPTION_FALSE]);
    HTM_Txt ("</select>");
   }
 

@@ -122,7 +122,7 @@ static void Qst_PutIntInputField (const struct Qst_Question *Question);
 static void Qst_PutFloatInputField (const struct Qst_Question *Question,
 				    unsigned Index);
 static void Qst_PutTFInputField (const struct Qst_Question *Question,
-				 unsigned Index);
+				 Qst_OptionTF_t Opt);
 
 static Qst_Shuffle_t Qst_GetParShuffle (void);
 
@@ -1685,15 +1685,15 @@ void Qst_GetCorrectTxtAnswerFromDB (struct Qst_Question *Question)
 
 void Qst_WriteAnsTF (char AnsTF)
   {
-   extern const char *Txt_TF_QST[2];
+   extern const char *Txt_TF_QST[Qst_NUM_OPTIONS_TF];
 
    switch (AnsTF)
      {
       case 'T':		// true
-         HTM_Txt (Txt_TF_QST[0]);
+         HTM_Txt (Txt_TF_QST[Qst_OPTION_TRUE]);
          break;
       case 'F':		// false
-         HTM_Txt (Txt_TF_QST[1]);
+         HTM_Txt (Txt_TF_QST[Qst_OPTION_FALSE]);
          break;
       default:		// no answer
          HTM_NBSP ();
@@ -2106,8 +2106,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	 HTM_TR_Begin (NULL);
 	    HTM_TD_Empty (1);
 	    HTM_TD_Begin ("class=\"LT\"");
-	       Qst_PutTFInputField (Question,0);
-	       Qst_PutTFInputField (Question,1);
+	       Qst_PutTFInputField (Question,Qst_OPTION_TRUE);
+	       Qst_PutTFInputField (Question,Qst_OPTION_FALSE);
 	    HTM_TD_End ();
 	 HTM_TR_End ();
 
@@ -2317,24 +2317,25 @@ static void Qst_PutFloatInputField (const struct Qst_Question *Question,
 /*****************************************************************************/
 
 static void Qst_PutTFInputField (const struct Qst_Question *Question,
-				 unsigned Index)
+				 Qst_OptionTF_t Opt)
   {
-   extern const char *Txt_TF_QST[2];
-   static const char Values[2] =
+   extern const char *Txt_TF_QST[Qst_NUM_OPTIONS_TF];
+   static const char Values[Qst_NUM_OPTIONS_TF] =
      {
+      ' ',
       'T',
       'F'
      };
 
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_INPUT_RADIO ("AnsTF",
-		       (Question->Answer.TF == Values[Index] ? HTM_CHECKED :
-							       HTM_NO_ATTR) |
+		       (Question->Answer.TF == Values[Opt] ? HTM_CHECKED :
+							     HTM_NO_ATTR) |
 		       HTM_REQUIRED |
 		       (Question->Answer.Type == Qst_ANS_TRUE_FALSE ? HTM_NO_ATTR :
 								      HTM_DISABLED),
-		       "value=\"%c\"",Values[Index]);
-      HTM_Txt (Txt_TF_QST[Index]);
+		       "value=\"%c\"",Values[Opt]);
+      HTM_Txt (Txt_TF_QST[Opt]);
    HTM_LABEL_End ();
   }
 
