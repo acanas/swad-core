@@ -818,7 +818,6 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
 	                              unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question)
   {
-   extern const char *Txt_TF_QST[Qst_NUM_OPTIONS_TF];
    char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write selector for the answer *****/
@@ -829,18 +828,7 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
    HTM_TxtF ("<select id=\"%s\" name=\"Ans\"",Id);
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_ElementEnd ();
-      HTM_OPTION (HTM_Type_STRING,"",
-                  Print->Qsts[QstInd].Answer.Str[0] == '\0' ? HTM_SELECTED :
-                					      HTM_NO_ATTR,
-                  Txt_TF_QST[Qst_OPTION_EMPTY]);
-      HTM_OPTION (HTM_Type_STRING,"T",
-                  Print->Qsts[QstInd].Answer.Str[0] == 'T'  ? HTM_SELECTED :
-                					      HTM_NO_ATTR,
-                  Txt_TF_QST[Qst_OPTION_TRUE]);
-      HTM_OPTION (HTM_Type_STRING,"F",
-                  Print->Qsts[QstInd].Answer.Str[0] == 'F'  ? HTM_SELECTED :
-                					      HTM_NO_ATTR,
-                  Txt_TF_QST[Qst_OPTION_FALSE]);
+      Qst_WriteTFOptionsToFill (Qst_GetOptionTFFromChar (Print->Qsts[QstInd].Answer.Str[0]));
    HTM_Txt ("</select>");
   }
 
@@ -1065,7 +1053,7 @@ void ExaPrn_ReceiveAnswer (void)
 void ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print,unsigned QstInd)
   {
    Par_GetParText ("Ans",Print->Qsts[QstInd].Answer.Str,
-		   Qst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
+		   Qst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> "", "T", "F"; if choice ==> "0", "2",... */
   }
 
 /*****************************************************************************/
@@ -1106,13 +1094,12 @@ void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Print,
       Exa_DB_GetAnswersFromQstInPrint (Print->PrnCod,
 				       Print->Qsts[QstInd].QstCod,
                                        CurrentStrAnswersInDB);
-      if (!strcmp (Print->Qsts[QstInd].Answer.Str,
-		   CurrentStrAnswersInDB))
+      if (!strcmp (Print->Qsts[QstInd].Answer.Str,CurrentStrAnswersInDB))
 	{
 	 /* The answer just clicked by user
 	    is the same as the last one checked and stored in database */
 	 Print->Qsts[QstInd].Answer.Str[0] = '\0';	// Uncheck option
-	 Print->Qsts[QstInd].Answer.Score  = 0;	// Clear question score
+	 Print->Qsts[QstInd].Answer.Score  = 0;		// Clear question score
 	}
      }
 
@@ -1266,7 +1253,7 @@ static void ExaPrn_GetCorrectTF_AnswerFromDB (struct Qst_Question *Question)
 
    /***** Get answer *****/
    row = mysql_fetch_row (mysql_res);
-   Question->Answer.TF = row[0][0];
+   Question->Answer.OptionTF = Qst_GetOptionTFFromChar (row[0][0]);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

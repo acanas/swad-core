@@ -215,13 +215,14 @@ void Qst_DB_CreateFltAnswer (const struct Qst_Question *Question)
 
 void Qst_DB_CreateTF_Answer (const struct Qst_Question *Question)
   {
+   extern const char *Qst_TFValues[Qst_NUM_OPTIONS_TF];
+
    DB_QueryINSERT ("can not create answer",
 		   "INSERT INTO tst_answers"
 		   " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
 		   " VALUES"
-		   " (%ld,0,'%c','',-1,'Y')",
-		   Question->QstCod,
-		   Question->Answer.TF);
+		   " (%ld,0,'%s','',-1,'Y')",
+		   Question->QstCod,Qst_TFValues[Question->Answer.OptionTF]);
   }
 
 /*****************************************************************************/

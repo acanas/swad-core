@@ -985,7 +985,7 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
 	       break;
 	    case Qst_ANS_TRUE_FALSE:
 	       Qst_CheckIfNumberOfAnswersIsOne (Question);
-	       Question->Answer.TF = row[1][0];
+	       Question->Answer.OptionTF = Qst_GetOptionTFFromChar (row[1][0]);
 	       break;
 	    case Qst_ANS_UNIQUE_CHOICE:
 	    case Qst_ANS_MULTIPLE_CHOICE:

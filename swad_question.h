@@ -92,7 +92,7 @@ struct Qst_Question
       Qst_AnswerType_t Type;
       unsigned NumOptions;
       Qst_Shuffle_t Shuffle;
-      char TF;
+      Qst_OptionTF_t OptionTF;
       struct
 	{
 	 Qst_WrongOrCorrect_t Correct;
@@ -196,7 +196,9 @@ void Qst_GetCorrectTxtAnswerFromDB (struct Qst_Question *Question);
 
 //-----------------------------------------------------------------------------
 
-void Qst_WriteAnsTF (char AnsTF);
+Qst_OptionTF_t Qst_GetOptionTFFromChar (char TF);
+void Qst_WriteTFOptionsToFill (Qst_OptionTF_t OptTFStd);
+void Qst_WriteAnsTF (Qst_OptionTF_t OptionTF);
 
 void Qst_WriteParQstCod (unsigned NumQst,long QstCod);
 

@@ -383,15 +383,6 @@ static void TstPrn_WriteTF_AnsToFill (const struct Qst_PrintedQuestion *PrintedQ
                                       unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question)
   {
-   extern const char *Txt_TF_QST[Qst_NUM_OPTIONS_TF];
-   static const char *Str[Qst_NUM_OPTIONS_TF] =
-     {
-      [Qst_OPTION_EMPTY] = "" ,
-      [Qst_OPTION_TRUE ] = "T",
-      [Qst_OPTION_FALSE] = "F",
-     };
-   Qst_OptionTF_t Opt;
-
    /***** Write selector for the answer *****/
    /* Initially user has not answered the question ==> initially all answers will be blank.
       If the user does not confirm the submission of their exam ==>
@@ -399,13 +390,7 @@ static void TstPrn_WriteTF_AnsToFill (const struct Qst_PrintedQuestion *PrintedQ
    HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 		     "name=\"Ans%010u\" class=\"INPUT_%s\"",
 		     QstInd,The_GetSuffix ());
-      for (Opt  = (Qst_OptionTF_t) 0;
-	   Opt <= (Qst_OptionTF_t) (Qst_NUM_OPTIONS_TF - 1);
-	   Opt++)
-	 HTM_OPTION (HTM_Type_STRING,Str[Opt],
-		     PrintedQuestion->Answer.Str[0] == Str[Opt][0] ? HTM_SELECTED :
-								     HTM_NO_ATTR,
-		     Txt_TF_QST[Opt]);
+      Qst_WriteTFOptionsToFill (Qst_GetOptionTFFromChar (PrintedQuestion->Answer.Str[0]));
    HTM_SELECT_End ();
   }
 
@@ -912,7 +897,7 @@ void TstPrn_ComputeTF_AnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 
    if (PrintedQuestion->Answer.Str[0])	// If user has selected T or F
      {
-      if (PrintedQuestion->Answer.Str[0] == Question->Answer.TF)
+      if (Qst_GetOptionTFFromChar (PrintedQuestion->Answer.Str[0]) == Question->Answer.OptionTF)
 	{
  	 PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
          PrintedQuestion->Answer.Score = 1.0;	// Correct
@@ -1353,13 +1338,13 @@ static void TstPrn_WriteTF_AnsPrint (struct Usr_Data *UsrDat,
 				     __attribute__((unused)) const char *ClassTxt,
 				     __attribute__((unused)) const char *ClassFeedback)
   {
-   char AnsTFStd;
+   Qst_OptionTF_t OptTFStd;
 
    /***** Check if number of rows is correct *****/
    Qst_CheckIfNumberOfAnswersIsOne (Question);
 
    /***** Get answer true or false *****/
-   AnsTFStd = PrintedQuestion->Answer.Str[0];
+   OptTFStd = Qst_GetOptionTFFromChar (PrintedQuestion->Answer.Str[0]);
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -1374,11 +1359,11 @@ static void TstPrn_WriteTF_AnsPrint (struct Usr_Data *UsrDat,
 	 /***** Write the user answer *****/
 	 HTM_TD_Begin ("class=\"CM %s_%s\"",
 		       ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_CAN ?
-			  (AnsTFStd == Question->Answer.TF ? "Qst_ANS_OK" :	// Correct
-							     "Qst_ANS_BAD") :	// Wrong
-							     "Qst_ANS_0",	// Blank answer
+			  (OptTFStd == Question->Answer.OptionTF ? "Qst_ANS_OK" :	// Correct
+								   "Qst_ANS_BAD") :	// Wrong
+								   "Qst_ANS_0",		// Blank answer
 		       The_GetSuffix ());
-	    Qst_WriteAnsTF (AnsTFStd);
+	    Qst_WriteAnsTF (OptTFStd);
 	 HTM_TD_End ();
 
 	 /***** Write the correct answer *****/
@@ -1386,7 +1371,7 @@ static void TstPrn_WriteTF_AnsPrint (struct Usr_Data *UsrDat,
 	    switch (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
 	      {
 	       case Usr_CAN:
-		  Qst_WriteAnsTF (Question->Answer.TF);
+		  Qst_WriteAnsTF (Question->Answer.OptionTF);
 		  break;
 	       case Usr_CAN_NOT:
 	       default:

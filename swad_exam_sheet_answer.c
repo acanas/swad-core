@@ -301,8 +301,7 @@ static void ExaSheAns_WriteBlankFltAns (__attribute__((unused)) const struct Qst
 
 static void ExaSheAns_WriteBlankTF_Ans (__attribute__((unused)) const struct Qst_Question *Question)
   {
-   extern const char *Txt_TF_QST[Qst_NUM_OPTIONS_TF];
-   Qst_OptionTF_t Opt;
+   Qst_OptionTF_t OptTF;
 
    /***** Begin table *****/
    HTM_TABLE_Begin ("Exa_TBL");
@@ -310,13 +309,12 @@ static void ExaSheAns_WriteBlankTF_Ans (__attribute__((unused)) const struct Qst
       /***** Write the student answer *****/
       HTM_TR_Begin (NULL);
 
-	 for (Opt  = Qst_OPTION_TRUE;
-	      Opt <= Qst_OPTION_FALSE;
-	      Opt++)
+	 for (OptTF  = Qst_OPTION_TRUE;
+	      OptTF <= Qst_OPTION_FALSE;
+	      OptTF++)
 	   {
-	    HTM_TD_Begin ("class=\"Exa_ANSWER_TF Qst_ANS_0_%s\"",
-		          The_GetSuffix ());
-	       HTM_Txt (Txt_TF_QST[Opt]);
+	    HTM_TD_Begin ("class=\"Exa_ANSWER_TF Qst_ANS_0_%s\"",The_GetSuffix ());
+	       Qst_WriteAnsTF (OptTF);
 	    HTM_TD_End ();
 	   }
 
@@ -485,7 +483,7 @@ static void ExaSheAns_WriteCorrectTF_Ans (__attribute__((unused)) const struct E
 
    /***** Write the correct answer *****/
    HTM_TD_Begin ("class=\"Exa_ANSWER_TF Qst_ANS_0_%s\"",The_GetSuffix ());
-      Qst_WriteAnsTF (Question->Answer.TF);
+      Qst_WriteAnsTF (Question->Answer.OptionTF);
    HTM_TD_End ();
   }
 
@@ -633,20 +631,20 @@ static void ExaSheAns_WriteReadonlyTF_Ans (const struct ExaPrn_Print *Print,
 					   unsigned QstInd,
 					   struct Qst_Question *Question)
   {
-   char AnsTFStd;
+   Qst_OptionTF_t OptTFStd;
 
    /***** Check if number of rows is correct *****/
    Qst_CheckIfNumberOfAnswersIsOne (Question);
 
    /***** Get answer true or false *****/
-   AnsTFStd = Print->Qsts[QstInd].Answer.Str[0];
+   OptTFStd = Qst_GetOptionTFFromChar (Print->Qsts[QstInd].Answer.Str[0]);
 
    /***** Write online answer *****/
    HTM_TD_Begin ("class=\"Exa_ANSWER_TF %s_%s\"",
-		 AnsTFStd == Question->Answer.TF ? "Qst_ANS_OK" :	// Correct
-						   "Qst_ANS_BAD",	// Blank answer
+		 OptTFStd == Question->Answer.OptionTF ? "Qst_ANS_OK" :	// Correct
+							 "Qst_ANS_BAD",	// Blank answer
 		 The_GetSuffix ());
-      Qst_WriteAnsTF (AnsTFStd);
+      Qst_WriteAnsTF (OptTFStd);
    HTM_TD_End ();
   }
 
@@ -852,19 +850,26 @@ static void ExaSheAns_WriteEditableTF_Ans (const struct ExaPrn_Print *Print,
 					   unsigned QstInd,
 					   struct Qst_Question *Question)
   {
-   extern const char *Txt_TF_QST[Qst_NUM_OPTIONS_TF];
-   char AnsUsr;
+   Qst_OptionTF_t OptTFStd = Qst_GetOptionTFFromChar (Print->Qsts[QstInd].Answer.Str[0]);
    Qst_WrongOrCorrect_t WrongOrCorrect;
    char Id[3 + 1 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1 + Cns_MAX_DIGITS_UINT + 1];	// "Ans_encryptedusercode_xx...x"
 
    /***** Check if number of rows is correct *****/
    Qst_CheckIfNumberOfAnswersIsOne (Question);
 
-   /***** Get answer true or false *****/
-   AnsUsr = Print->Qsts[QstInd].Answer.Str[0];
-   WrongOrCorrect = AnsUsr == '\0' ? Qst_BLANK :
-				     (AnsUsr == Question->Answer.TF ? Qst_CORRECT :
-							              Qst_WRONG);
+   /***** Check if student answer is blank, wrong or correct *****/
+   switch (OptTFStd)
+     {
+      case Qst_OPTION_TRUE:
+      case Qst_OPTION_FALSE:
+	 WrongOrCorrect = OptTFStd == Question->Answer.OptionTF ? Qst_CORRECT :
+							          Qst_WRONG;
+	 break;
+      case Qst_OPTION_EMPTY:
+      default:
+	 WrongOrCorrect = Qst_BLANK;
+	 break;
+     }
 
    /***** Write paper answer *****/
    HTM_TD_Begin ("class=\"Exa_ANSWER_TF\"");
@@ -875,15 +880,7 @@ static void ExaSheAns_WriteEditableTF_Ans (const struct ExaPrn_Print *Print,
 		Id,ExaSheAns_Class[WrongOrCorrect],The_GetSuffix ());
       ExaSheAns_WriteJSToUpdateSheet (Print,QstInd,Id,-1);
       HTM_ElementEnd ();
-	 HTM_OPTION (HTM_Type_STRING,"" ,AnsUsr == '\0' ? HTM_SELECTED :
-							  HTM_NO_ATTR,
-		     Txt_TF_QST[Qst_OPTION_EMPTY]);
-	 HTM_OPTION (HTM_Type_STRING,"T",AnsUsr == 'T'  ? HTM_SELECTED :
-							  HTM_NO_ATTR,
-		     Txt_TF_QST[Qst_OPTION_TRUE]);
-	 HTM_OPTION (HTM_Type_STRING,"F",AnsUsr == 'F'  ? HTM_SELECTED :
-							  HTM_NO_ATTR,
-		     Txt_TF_QST[Qst_OPTION_FALSE]);
+         Qst_WriteTFOptionsToFill (OptTFStd);
       HTM_Txt ("</select>");
 
    HTM_TD_End ();

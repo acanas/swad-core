@@ -333,8 +333,9 @@ static void QstImp_WriteAnswersOfAQstXML (const struct Qst_Question *Question,
                   Question->Answer.FloatingPoint[1],Txt_NEW_LINE);
          break;
       case Qst_ANS_TRUE_FALSE:
-         fprintf (FileXML,"%s",Question->Answer.TF == 'T' ? "true" :
-							    "false");
+         fprintf (FileXML,"%s",
+                  Question->Answer.OptionTF == Qst_OPTION_TRUE ? "true" :
+								 "false");
          break;
       case Qst_ANS_UNIQUE_CHOICE:
       case Qst_ANS_MULTIPLE_CHOICE:
@@ -755,20 +756,20 @@ static void QstImp_GetAnswerFromXML (struct XMLElement *AnswerElem,
          break;
       case Qst_ANS_TRUE_FALSE:
 	 // Comparisons must be case insensitive, because users can edit XML
-         if (!AnswerElem->Content)
-            Question->Answer.TF = ' ';
-         else if (!strcasecmp (AnswerElem->Content,"true")  ||
-                  !strcasecmp (AnswerElem->Content,"T")     ||
-                  !strcasecmp (AnswerElem->Content,"yes")   ||
-                  !strcasecmp (AnswerElem->Content,"Y"))
-            Question->Answer.TF = 'T';
-         else if (!strcasecmp (AnswerElem->Content,"false") ||
-                  !strcasecmp (AnswerElem->Content,"F")     ||
-                  !strcasecmp (AnswerElem->Content,"no")    ||
-                  !strcasecmp (AnswerElem->Content,"N"))
-            Question->Answer.TF = 'F';
-         else
-            Question->Answer.TF = ' ';
+         Question->Answer.OptionTF = Qst_OPTION_EMPTY;
+         if (AnswerElem->Content)
+           {
+            if (!strcasecmp (AnswerElem->Content,"true")  ||
+                !strcasecmp (AnswerElem->Content,"T")     ||
+                !strcasecmp (AnswerElem->Content,"yes")   ||
+                !strcasecmp (AnswerElem->Content,"Y"))
+               Question->Answer.OptionTF = Qst_OPTION_TRUE;
+	    else if (!strcasecmp (AnswerElem->Content,"false") ||
+		     !strcasecmp (AnswerElem->Content,"F")     ||
+		     !strcasecmp (AnswerElem->Content,"no")    ||
+		     !strcasecmp (AnswerElem->Content,"N"))
+	       Question->Answer.OptionTF = Qst_OPTION_FALSE;
+           }
          break;
       case Qst_ANS_UNIQUE_CHOICE:
       case Qst_ANS_MULTIPLE_CHOICE:
@@ -1022,7 +1023,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 	    case Qst_ANS_TRUE_FALSE:
 	       HTM_SPAN_Begin ("class=\"%s\"",ClassStem);
 		  HTM_OpenParenthesis ();
-		     Qst_WriteAnsTF (Question->Answer.TF);
+		     Qst_WriteAnsTF (Question->Answer.OptionTF);
 		  HTM_CloseParenthesis ();
 	       HTM_SPAN_End ();
 	       break;

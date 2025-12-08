@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
+#include <ctype.h>		// For toupper
 #include <float.h>		// For DBL_MAX
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
@@ -74,6 +75,14 @@ const char *Qst_OrderByShuffle[Qst_NUM_SHUFFLE] =
   {
    [Qst_DONT_SHUFFLE] = "AnsInd",
    [Qst_SHUFFLE     ] = "RAND()",	// Use RAND() because is really random; RAND(NOW()) repeats order
+  };
+
+/* True/False internal values for forms and database */
+const char *Qst_TFValues[Qst_NUM_OPTIONS_TF] =
+  {
+   [Qst_OPTION_EMPTY] = "" ,
+   [Qst_OPTION_TRUE ] = "T",
+   [Qst_OPTION_FALSE] = "F",
   };
 
 /* Correct in database fields */
@@ -1477,7 +1486,7 @@ static void Qst_WriteTF_Ans (struct Qst_Question *Question,
    /***** Write answer *****/
    HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
       HTM_OpenParenthesis ();
-	 Qst_WriteAnsTF (Question->Answer.TF);
+	 Qst_WriteAnsTF (Question->Answer.OptionTF);
       HTM_CloseParenthesis ();
    HTM_SPAN_End ();
   }
@@ -1613,7 +1622,7 @@ void Qst_GetCorrectTF_AnswerFromDB (struct Qst_Question *Question)
 
    /***** Get answer *****/
    row = mysql_fetch_row (mysql_res);
-   Question->Answer.TF = row[0][0];
+   Question->Answer.OptionTF = Qst_GetOptionTFFromChar (row[0][0]);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1680,25 +1689,55 @@ void Qst_GetCorrectTxtAnswerFromDB (struct Qst_Question *Question)
   }
 
 /*****************************************************************************/
-/************** Write false / true answer when seeing a test *****************/
+/******************** Get true / false option from char **********************/
 /*****************************************************************************/
 
-void Qst_WriteAnsTF (char AnsTF)
+Qst_OptionTF_t Qst_GetOptionTFFromChar (char TF)
   {
-   extern const char *Txt_TF_QST[Qst_NUM_OPTIONS_TF];
+   int UpperTF;
+   Qst_OptionTF_t OptTF;
 
-   switch (AnsTF)
+   if (TF != '\0')
      {
-      case 'T':		// true
-         HTM_Txt (Txt_TF_QST[Qst_OPTION_TRUE]);
-         break;
-      case 'F':		// false
-         HTM_Txt (Txt_TF_QST[Qst_OPTION_FALSE]);
-         break;
-      default:		// no answer
-         HTM_NBSP ();
-         break;
+      UpperTF = toupper ((int) TF);
+      for (OptTF  = Qst_OPTION_TRUE;
+	   OptTF <= Qst_OPTION_FALSE;
+	   OptTF++)
+	 if (UpperTF == (int) Qst_TFValues[OptTF][0])
+	    return OptTF;
      }
+
+   return Qst_OPTION_EMPTY;
+  }
+
+/*****************************************************************************/
+/********* Write true / false options to be filled in a form select **********/
+/*****************************************************************************/
+
+void Qst_WriteTFOptionsToFill (Qst_OptionTF_t OptTFStd)
+  {
+   extern const char *Txt_TF_QST[Qst_NUM_OPTIONS_TF];	// Value displayed on screen
+   Qst_OptionTF_t OptTF;
+
+   /***** Write selector for the answer *****/
+   for (OptTF  = (Qst_OptionTF_t) 0;
+	OptTF <= (Qst_OptionTF_t) (Qst_NUM_OPTIONS_TF - 1);
+	OptTF++)
+      HTM_OPTION (HTM_Type_STRING,Qst_TFValues[OptTF],
+		  OptTFStd == OptTF ? HTM_SELECTED :
+				      HTM_NO_ATTR,
+		  Txt_TF_QST[OptTF]);
+  }
+
+/*****************************************************************************/
+/************** Write true / false answer when seeing a test *****************/
+/*****************************************************************************/
+
+void Qst_WriteAnsTF (Qst_OptionTF_t OptionTF)
+  {
+   extern const char *Txt_TF_QST[Qst_NUM_OPTIONS_TF];	// Value displayed on screen
+
+   HTM_Txt (Txt_TF_QST[OptionTF]);
   }
 
 /*****************************************************************************/
@@ -2317,25 +2356,19 @@ static void Qst_PutFloatInputField (const struct Qst_Question *Question,
 /*****************************************************************************/
 
 static void Qst_PutTFInputField (const struct Qst_Question *Question,
-				 Qst_OptionTF_t Opt)
+				 Qst_OptionTF_t OptTF)
   {
-   extern const char *Txt_TF_QST[Qst_NUM_OPTIONS_TF];
-   static const char Values[Qst_NUM_OPTIONS_TF] =
-     {
-      ' ',
-      'T',
-      'F'
-     };
+   extern const char *Txt_TF_QST[Qst_NUM_OPTIONS_TF];	// Value displayed on screen
 
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_INPUT_RADIO ("AnsTF",
-		       (Question->Answer.TF == Values[Opt] ? HTM_CHECKED :
+		       (Question->Answer.OptionTF == OptTF ? HTM_CHECKED :
 							     HTM_NO_ATTR) |
 		       HTM_REQUIRED |
 		       (Question->Answer.Type == Qst_ANS_TRUE_FALSE ? HTM_NO_ATTR :
 								      HTM_DISABLED),
-		       "value=\"%c\"",Values[Opt]);
-      HTM_Txt (Txt_TF_QST[Opt]);
+		       "value=\"%s\"",Qst_TFValues[OptTF]);
+      Qst_WriteAnsTF (OptTF);
    HTM_LABEL_End ();
   }
 
@@ -2366,7 +2399,7 @@ void Qst_QstConstructor (struct Qst_Question *Question)
    Question->Answer.Type       = Qst_ANS_UNIQUE_CHOICE;
    Question->Answer.NumOptions = 0;
    Question->Answer.Shuffle    = Qst_DONT_SHUFFLE;
-   Question->Answer.TF         = ' ';
+   Question->Answer.OptionTF   = Qst_OPTION_EMPTY;
 
    /* Initialize image attached to stem */
    Med_MediaConstructor (&Question->Media);
@@ -2608,7 +2641,7 @@ Exi_Exist_t Qst_GetQstDataByCod (struct Qst_Question *Question)
 	       break;
 	    case Qst_ANS_TRUE_FALSE:
 	       Qst_CheckIfNumberOfAnswersIsOne (Question);
-	       Question->Answer.TF = row[1][0];
+	       Question->Answer.OptionTF = Qst_GetOptionTFFromChar (row[1][0]);
 	       break;
 	    case Qst_ANS_UNIQUE_CHOICE:
 	    case Qst_ANS_MULTIPLE_CHOICE:
@@ -2856,7 +2889,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
 	 break;
       case Qst_ANS_TRUE_FALSE:
 	 Par_GetParText ("AnsTF",TF,1);
-	 Question->Answer.TF = TF[0];
+	 Question->Answer.OptionTF = Qst_GetOptionTFFromChar (TF[0]);
 	 break;
       case Qst_ANS_UNIQUE_CHOICE:
       case Qst_ANS_MULTIPLE_CHOICE:
@@ -3048,8 +3081,7 @@ Err_SuccessOrError_t Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst
          break;
       case Qst_ANS_TRUE_FALSE:
 	 /* Answer should be 'T' or 'F' */
-         if (Question->Answer.TF != 'T' &&
-             Question->Answer.TF != 'F')
+         if (Question->Answer.OptionTF == Qst_OPTION_EMPTY)
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_a_T_F_answer);
             return Err_ERROR;
@@ -3209,9 +3241,9 @@ Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question)
                break;
             case Qst_ANS_TRUE_FALSE:
                row = mysql_fetch_row (mysql_res_ans);
-               IdenticalQuestionExists = Str_ConvertToUpperLetter (row[0][0]) ==
-        				 Question->Answer.TF ? Exi_EXISTS :
-							       Exi_DOES_NOT_EXIST;
+               IdenticalQuestionExists = Qst_GetOptionTFFromChar (row[0][0]) ==
+        				 Question->Answer.OptionTF ? Exi_EXISTS :
+							             Exi_DOES_NOT_EXIST;
                break;
             case Qst_ANS_UNIQUE_CHOICE:
             case Qst_ANS_MULTIPLE_CHOICE:

@@ -54591,7 +54591,7 @@ const char *Txt_TST_STR_VISIBILITY[TstVis_NUM_ITEMS_VISIBILITY] =
 
 const char *Txt_TF_QST[Qst_NUM_OPTIONS_TF] =
 	{
-	 [Qst_OPTION_EMPTY] = "&nbsp;"
+	 [Qst_OPTION_EMPTY] = ""
 	,
 	 [Qst_OPTION_TRUE ] =
 #if   L==1	// ca
