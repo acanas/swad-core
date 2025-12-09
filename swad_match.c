@@ -2854,7 +2854,7 @@ static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
    NumRespondersQst = Mch_DB_GetNumUsrsWhoAnsweredQst (Match->MchCod,Match->Status.QstInd);
 
    /***** Change format of answers text *****/
-   Qst_ChangeFormatAnswersText (Question);
+   Qst_ChangeFormatOptionsText (Question);
 
    /***** Get indexes for this question in match *****/
    Mch_GetIndexes (Match->MchCod,Match->Status.QstInd,Indexes);

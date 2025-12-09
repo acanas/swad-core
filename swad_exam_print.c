@@ -851,7 +851,7 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
    char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Change format of answers text *****/
-   Qst_ChangeFormatAnswersText (Question);
+   Qst_ChangeFormatOptionsText (Question);
 
    /***** Get indexes for this question from string *****/
    TstPrn_GetIndexesFromStr (Print->Qsts[QstInd].StrIndexes,Indexes);
@@ -1310,7 +1310,7 @@ static void ExaPrn_GetCorrectTxtAnswerFromDB (struct Qst_Question *Question)
      }
 
    /***** Change format of answers text *****/
-   Qst_ChangeFormatAnswersText (Question);
+   Qst_ChangeFormatOptionsText (Question);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

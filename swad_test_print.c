@@ -409,7 +409,7 @@ static void TstPrn_WriteChoAnsToFill (const struct Qst_PrintedQuestion *PrintedQ
    char Id[3 + Cns_MAX_DIGITS_UINT + 1 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x_yy...y"
 
    /***** Change format of answers text *****/
-   Qst_ChangeFormatAnswersText (Question);
+   Qst_ChangeFormatOptionsText (Question);
 
    /***** Get indexes for this question from string *****/
    TstPrn_GetIndexesFromStr (PrintedQuestion->StrIndexes,Indexes);
@@ -892,22 +892,21 @@ void TstPrn_ComputeFltAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 void TstPrn_ComputeTF_AnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 			        const struct Qst_Question *Question)
   {
-   PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_BLANK;
-   PrintedQuestion->Answer.Score = 0.0;
-
-   if (PrintedQuestion->Answer.Str[0])	// If user has selected T or F
+   static double Scores[] =
      {
-      if (Qst_GetOptionTFFromChar (PrintedQuestion->Answer.Str[0]) == Question->Answer.OptionTF)
-	{
- 	 PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
-         PrintedQuestion->Answer.Score = 1.0;	// Correct
-	}
-      else
-	{
- 	 PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_NEGATIVE;
-         PrintedQuestion->Answer.Score = -1.0;	// Wrong
-	}
-     }
+      [TstPrn_ANSWER_IS_CORRECT       ] =  1.0,
+      [TstPrn_ANSWER_IS_WRONG_NEGATIVE] = -1.0,
+      [TstPrn_ANSWER_IS_WRONG_ZERO    ] =  0.0,	// Not used
+      [TstPrn_ANSWER_IS_WRONG_POSITIVE] =  0.0,	// Not used
+      [TstPrn_ANSWER_IS_BLANK         ] =  0.0,
+     };
+
+   PrintedQuestion->Answer.IsCorrect = PrintedQuestion->Answer.Str[0] ?	// If user has selected T or F
+				          (Qst_GetOptionTFFromChar (PrintedQuestion->Answer.Str[0]) == Question->Answer.OptionTF ?
+				             TstPrn_ANSWER_IS_CORRECT :
+				             TstPrn_ANSWER_IS_WRONG_NEGATIVE) :
+					  TstPrn_ANSWER_IS_BLANK;
+   PrintedQuestion->Answer.Score = Scores[PrintedQuestion->Answer.IsCorrect];
   }
 
 void TstPrn_ComputeChoAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
@@ -1418,11 +1417,11 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
    const struct Answer *Ans;
 
    /***** Change format of answers text *****/
-   Qst_ChangeFormatAnswersText (Question);
+   Qst_ChangeFormatOptionsText (Question);
 
    /***** Change format of answers feedback *****/
    if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT] == Usr_CAN)
-      Qst_ChangeFormatAnswersFeedback (Question);
+      Qst_ChangeFormatOptionsFeedback (Question);
 
    /***** Get indexes for this question from string *****/
    TstPrn_GetIndexesFromStr (PrintedQuestion->StrIndexes,Indexes);
@@ -1561,11 +1560,11 @@ static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
    Qst_WrongOrCorrect_t WrongOrCorrect;
 
    /***** Change format of answers text *****/
-   Qst_ChangeFormatAnswersText (Question);
+   Qst_ChangeFormatOptionsText (Question);
 
    /***** Change format of answers feedback *****/
    if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT] == Usr_CAN)
-      Qst_ChangeFormatAnswersFeedback (Question);
+      Qst_ChangeFormatOptionsFeedback (Question);
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);

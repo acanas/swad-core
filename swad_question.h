@@ -204,8 +204,8 @@ void Qst_WriteParQstCod (unsigned NumQst,long QstCod);
 
 void Qst_CheckIfNumberOfAnswersIsOne (const struct Qst_Question *Question);
 
-void Qst_ChangeFormatAnswersText (struct Qst_Question *Question);
-void Qst_ChangeFormatAnswersFeedback (struct Qst_Question *Question);
+void Qst_ChangeFormatOptionsText (struct Qst_Question *Question);
+void Qst_ChangeFormatOptionsFeedback (struct Qst_Question *Question);
 
 Qst_AnswerType_t Qst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeDB);
 Qst_AnswerType_t Qst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);

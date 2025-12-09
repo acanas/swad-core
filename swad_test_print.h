@@ -97,8 +97,8 @@ void TstPrn_ComputeTxtAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
 
 //-----------------------------------------------------------------------------
 
-void Qst_ChangeFormatAnswersText (struct Qst_Question *Question);
-void Qst_ChangeFormatAnswersFeedback (struct Qst_Question *Question);
+void Qst_ChangeFormatOptionsText (struct Qst_Question *Question);
+void Qst_ChangeFormatOptionsFeedback (struct Qst_Question *Question);
 
 void TstPrn_GetIndexesFromStr (const char StrIndexesOneQst[Qst_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
 			       unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION]);

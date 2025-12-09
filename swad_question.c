@@ -26,7 +26,6 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
-#include <ctype.h>		// For toupper
 #include <float.h>		// For DBL_MAX
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
@@ -1503,10 +1502,10 @@ static void Qst_WriteChoAns (struct Qst_Question *Question,
    unsigned NumOpt;
 
    /***** Change format of answers text *****/
-   Qst_ChangeFormatAnswersText (Question);
+   Qst_ChangeFormatOptionsText (Question);
 
    /***** Change format of answers feedback *****/
-   Qst_ChangeFormatAnswersFeedback (Question);
+   Qst_ChangeFormatOptionsFeedback (Question);
 
    HTM_TABLE_BeginPadding (2);
       for (NumOpt = 0;
@@ -1682,7 +1681,7 @@ void Qst_GetCorrectTxtAnswerFromDB (struct Qst_Question *Question)
      }
 
    /***** Change format of answers text *****/
-   Qst_ChangeFormatAnswersText (Question);
+   Qst_ChangeFormatOptionsText (Question);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1694,18 +1693,14 @@ void Qst_GetCorrectTxtAnswerFromDB (struct Qst_Question *Question)
 
 Qst_OptionTF_t Qst_GetOptionTFFromChar (char TF)
   {
-   int UpperTF;
    Qst_OptionTF_t OptTF;
 
-   if (TF != '\0')
-     {
-      UpperTF = toupper ((int) TF);
+   if (TF)
       for (OptTF  = Qst_OPTION_TRUE;
 	   OptTF <= Qst_OPTION_FALSE;
 	   OptTF++)
-	 if (UpperTF == (int) Qst_TFValues[OptTF][0])
+	 if (TF == Qst_TFValues[OptTF][0])
 	    return OptTF;
-     }
 
    return Qst_OPTION_EMPTY;
   }
@@ -1763,14 +1758,14 @@ void Qst_CheckIfNumberOfAnswersIsOne (const struct Qst_Question *Question)
   }
 
 /*****************************************************************************/
-/***************** Change format of answers text / feedback ******************/
+/**************** Change format of options text / feedback *******************/
 /*****************************************************************************/
 
-void Qst_ChangeFormatAnswersText (struct Qst_Question *Question)
+void Qst_ChangeFormatOptionsText (struct Qst_Question *Question)
   {
    unsigned NumOpt;
 
-   /***** Change format of answers text *****/
+   /***** Change format of options text *****/
    for (NumOpt = 0;
 	NumOpt < Question->Answer.NumOptions;
 	NumOpt++)
@@ -1782,11 +1777,11 @@ void Qst_ChangeFormatAnswersText (struct Qst_Question *Question)
 			   Str_DONT_REMOVE_SPACES);
   }
 
-void Qst_ChangeFormatAnswersFeedback (struct Qst_Question *Question)
+void Qst_ChangeFormatOptionsFeedback (struct Qst_Question *Question)
   {
    unsigned NumOpt;
 
-   /***** Change format of answers text and feedback *****/
+   /***** Change format of options feedback *****/
    for (NumOpt = 0;
 	NumOpt < Question->Answer.NumOptions;
 	NumOpt++)

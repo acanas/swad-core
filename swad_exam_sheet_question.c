@@ -49,15 +49,15 @@ extern struct Globals Gbl;
 static void ExaSheQst_WriteQst (const struct ExaPrn_Print *Print,
 				unsigned QstInd,
 				struct Qst_Question *Question);
-static void ExaSheQst_WriteAnswers (const struct ExaPrn_Print *Print,
+static void ExaSheQst_WriteOptions (const struct ExaPrn_Print *Print,
 				    unsigned QstInd,
 				    struct Qst_Question *Question);
-static void ExaSheQst_WriteTF_Ans (__attribute__((unused)) const struct ExaPrn_Print *Print,
-	                           __attribute__((unused)) unsigned QstInd,
-                                   __attribute__((unused)) struct Qst_Question *Question);
-static void ExaSheQst_WriteChoAns (const struct ExaPrn_Print *Print,
-                                   unsigned QstInd,
-                                   struct Qst_Question *Question);
+static void ExaSheQst_WriteOptionsTF_Ans (__attribute__((unused)) const struct ExaPrn_Print *Print,
+					  __attribute__((unused)) unsigned QstInd,
+					  __attribute__((unused)) struct Qst_Question *Question);
+static void ExaSheQst_WriteOptionsChoAns (const struct ExaPrn_Print *Print,
+					  unsigned QstInd,
+					  struct Qst_Question *Question);
 
 /*****************************************************************************/
 /*********** Show the main part (table) of an exam question sheet ************/
@@ -142,7 +142,7 @@ static void ExaSheQst_WriteQst (const struct ExaPrn_Print *Print,
       HTM_DIV_Begin ("class=\"Exa_RIGHT\"");
 	 Qst_WriteQstStem (Question->Stem,"Qst_TXT",HidVis_VISIBLE);
 	 Med_ShowMedia (&Question->Media,"Tst_MED_SHOW_CONT","Tst_MED_SHOW");
-	 ExaSheQst_WriteAnswers (Print,QstInd,Question);
+	 ExaSheQst_WriteOptions (Print,QstInd,Question);
       HTM_DIV_End ();
 
    /***** End row *****/
@@ -150,39 +150,38 @@ static void ExaSheQst_WriteQst (const struct ExaPrn_Print *Print,
   }
 
 /*****************************************************************************/
-/*********** Write answers of a question in an exam question sheet ***********/
+/*********** Write options of a question in an exam question sheet ***********/
 /*****************************************************************************/
 
-static void ExaSheQst_WriteAnswers (const struct ExaPrn_Print *Print,
+static void ExaSheQst_WriteOptions (const struct ExaPrn_Print *Print,
 				    unsigned QstInd,
 				    struct Qst_Question *Question)
   {
-   void (*ExaSheQst_WriteAns[Qst_NUM_ANS_TYPES]) (const struct ExaPrn_Print *Print,
-                                                  unsigned QstInd,
-                                                  struct Qst_Question *Question) =
+   void (*ExaSheQst_WriteOptionsAns[Qst_NUM_ANS_TYPES]) (const struct ExaPrn_Print *Print,
+							 unsigned QstInd,
+							 struct Qst_Question *Question) =
     {
      [Qst_ANS_INT            ] = NULL,
      [Qst_ANS_FLOAT          ] = NULL,
-     [Qst_ANS_TRUE_FALSE     ] = ExaSheQst_WriteTF_Ans,
-     [Qst_ANS_UNIQUE_CHOICE  ] = ExaSheQst_WriteChoAns,
-     [Qst_ANS_MULTIPLE_CHOICE] = ExaSheQst_WriteChoAns,
+     [Qst_ANS_TRUE_FALSE     ] = ExaSheQst_WriteOptionsTF_Ans,
+     [Qst_ANS_UNIQUE_CHOICE  ] = ExaSheQst_WriteOptionsChoAns,
+     [Qst_ANS_MULTIPLE_CHOICE] = ExaSheQst_WriteOptionsChoAns,
      [Qst_ANS_TEXT           ] = NULL,
     };
 
    /***** Write answers *****/
-   if (ExaSheQst_WriteAns[Question->Answer.Type])
-      ExaSheQst_WriteAns[Question->Answer.Type] (Print,QstInd,Question);
+   if (ExaSheQst_WriteOptionsAns[Question->Answer.Type])
+      ExaSheQst_WriteOptionsAns[Question->Answer.Type] (Print,QstInd,Question);
   }
 
 /*****************************************************************************/
 /*********** Write false / true answer in an exam question sheet *************/
 /*****************************************************************************/
 
-static void ExaSheQst_WriteTF_Ans (__attribute__((unused)) const struct ExaPrn_Print *Print,
-	                           __attribute__((unused)) unsigned QstInd,
-                                   __attribute__((unused)) struct Qst_Question *Question)
+static void ExaSheQst_WriteOptionsTF_Ans (__attribute__((unused)) const struct ExaPrn_Print *Print,
+					  __attribute__((unused)) unsigned QstInd,
+					  __attribute__((unused)) struct Qst_Question *Question)
   {
-   /***** Write selector for the answer *****/
    Qst_WriteAnsTF (Qst_OPTION_TRUE);
    HTM_Slash ();
    Qst_WriteAnsTF (Qst_OPTION_FALSE);
@@ -192,15 +191,15 @@ static void ExaSheQst_WriteTF_Ans (__attribute__((unused)) const struct ExaPrn_P
 /***** Write single or multiple choice answer in an exam question sheet ******/
 /*****************************************************************************/
 
-static void ExaSheQst_WriteChoAns (const struct ExaPrn_Print *Print,
-                                   unsigned QstInd,
-                                   struct Qst_Question *Question)
+static void ExaSheQst_WriteOptionsChoAns (const struct ExaPrn_Print *Print,
+					  unsigned QstInd,
+					  struct Qst_Question *Question)
   {
    unsigned NumOpt;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
 
    /***** Change format of answers text *****/
-   Qst_ChangeFormatAnswersText (Question);
+   Qst_ChangeFormatOptionsText (Question);
 
    /***** Get indexes for this question from string *****/
    TstPrn_GetIndexesFromStr (Print->Qsts[QstInd].StrIndexes,Indexes);
