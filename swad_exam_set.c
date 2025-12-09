@@ -829,7 +829,7 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 	   QstInd < NumQsts;
 	   QstInd++, The_ChangeRowColor ())
 	{
-	 /***** Create test question *****/
+	 /***** Create question *****/
 	 Qst_QstConstructor (&Question);
 
 	    /***** Get question data *****/
@@ -876,7 +876,7 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 	    /***** Free anchor string *****/
 	    Frm_FreeAnchorStr (&Anchor);
 
-	 /***** Destroy test question *****/
+	 /***** Destroy question *****/
 	 Qst_QstDestructor (&Question);
 	}
 
@@ -1188,7 +1188,7 @@ static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long Q
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   /***** Create test question *****/
+   /***** Create question *****/
    Qst_QstConstructor (&Question);
    Question.QstCod = QstCod;
 
@@ -1243,7 +1243,7 @@ static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long Q
 	    break;
 	}
 
-   /***** Destroy test question *****/
+   /***** Destroy question *****/
    Qst_QstDestructor (&Question);
   }
 

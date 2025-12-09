@@ -99,12 +99,7 @@ void ExaPrn_GetPrintDataBySesCodAndUsrCod (struct ExaPrn_Print *Print);
 void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print);
 
 void ExaPrn_ReceiveAnswer (void);
-void ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print,unsigned QstInd);
 unsigned ExaPrn_GetParQstInd (void);
-void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Print,
-                                                 unsigned QstInd);
-
-void ExaPrn_ComputeAnswerScore (struct Qst_PrintedQuestion *PrintedQuestion,
-				struct Qst_Question *Question);
+void ExaPrn_UpdateAnswerAndPrint (struct ExaPrn_Print *Print,unsigned QstInd);
 
 #endif

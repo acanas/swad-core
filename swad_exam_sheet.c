@@ -363,20 +363,8 @@ void ExaShe_ReceiveAnswer (void)
    /***** Get question index from form *****/
    QstInd = ExaPrn_GetParQstInd ();
 
-   /***** Get questions and current user's answers of exam print from database *****/
-   ExaPrn_GetPrintQuestionsFromDB (&Print);
-
-   /***** Get answer to the specified question from form *****/
-   ExaPrn_GetAnswerFromForm (&Print,QstInd);
-
-   /***** Update answer in database *****/
-   /* Compute question score and store in database */
-   ExaPrn_ComputeScoreAndStoreQuestionOfPrint (&Print,QstInd);
-
-   /* Update exam print in database */
-   Print.NumQsts.NotBlank = Exa_DB_GetNumQstsNotBlankInPrint (Print.PrnCod);
-   Print.Score.All = Exa_DB_ComputeTotalScoreOfPrint (Print.PrnCod);
-   Exa_DB_UpdatePrint (&Print);
+   /***** Update answer and print in database *****/
+   ExaPrn_UpdateAnswerAndPrint (&Print,QstInd);
 
    /***** Show table with questions to answer *****/
    ExaSheAns_ShowAnswers (&Session,&Print,ExaShe_SOLVED,Vie_VIEW);

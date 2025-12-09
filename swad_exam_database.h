@@ -102,7 +102,6 @@ void Exa_DB_AddAnsToQstInSet (long QstCod,unsigned AnsInd,
                               long MedCod,Qst_WrongOrCorrect_t WrongOrCorrect);
 unsigned Exa_DB_GetQstAnswersFromSet (MYSQL_RES **mysql_res,long QstCod,
 				      Qst_Shuffle_t Shuffle);
-unsigned Exa_DB_GetQstAnswersTextFromSet (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetQstAnswersCorrFromSet (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetMediaFromAllAnsOfQst (MYSQL_RES **mysql_res,long QstCod,long SetCod);
 unsigned Exa_DB_GetAllMediaFromAnsOfAllQstsFromExam (MYSQL_RES **mysql_res,long ExaCod);

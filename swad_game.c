@@ -1741,7 +1741,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	   NumQst < NumQsts;
 	   NumQst++, The_ChangeRowColor ())
 	{
-	 /***** Create test question *****/
+	 /***** Create question *****/
 	 Qst_QstConstructor (&Question);
 
 	    /***** Get question data *****/
@@ -1817,7 +1817,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	    /***** Free anchor string *****/
 	    Frm_FreeAnchorStr (&Anchor);
 
-	 /***** Destroy test question *****/
+	 /***** Destroy question *****/
 	 Qst_QstDestructor (&Question);
 	}
 

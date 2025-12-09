@@ -113,17 +113,6 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 				       unsigned Visibility);
 
 //-----------------------------------------------------------------------------
-static void TstPrn_GetCorrectAndComputeIntAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-				                    struct Qst_Question *Question);
-static void TstPrn_GetCorrectAndComputeFltAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-				                    struct Qst_Question *Question);
-static void TstPrn_GetCorrectAndComputeTF_AnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-				                    struct Qst_Question *Question);
-static void TstPrn_GetCorrectAndComputeChoAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-				                    struct Qst_Question *Question);
-static void TstPrn_GetCorrectAndComputeTxtAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-				                    struct Qst_Question *Question);
-//-----------------------------------------------------------------------------
 static void TstPrn_WriteIntAnsPrint (struct Usr_Data *UsrDat,
                                      const struct Qst_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
@@ -232,7 +221,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
 		 QstInd < Print->NumQsts.All;
 		 QstInd++, The_ChangeRowColor ())
 	      {
-	       /* Create test question */
+	       /* Create question */
 	       Qst_QstConstructor (&Question);
 	       Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
 
@@ -244,7 +233,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
 		  TstPrn_WriteQstAndAnsToFill (&Print->PrintedQuestions[QstInd],
 					       QstInd,&Question);
 
-	       /* Destroy test question */
+	       /* Destroy question */
 	       Qst_QstDestructor (&Question);
 	      }
 
@@ -412,10 +401,10 @@ static void TstPrn_WriteChoAnsToFill (const struct Qst_PrintedQuestion *PrintedQ
    Qst_ChangeFormatOptionsText (Question);
 
    /***** Get indexes for this question from string *****/
-   TstPrn_GetIndexesFromStr (PrintedQuestion->StrIndexes,Indexes);
+   Qst_GetIndexesFromStr (PrintedQuestion->StrIndexes,Indexes);
 
    /***** Get the user's answers for this question from string *****/
-   TstPrn_GetAnswersFromStr (PrintedQuestion->Answer.Str,UsrAnswers);
+   Qst_GetAnswersFromStr (PrintedQuestion->Answer.Str,UsrAnswers);
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -545,7 +534,7 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
 	   QstInd < Print->NumQsts.All;
 	   QstInd++, The_ChangeRowColor ())
 	{
-	 /***** Create test question *****/
+	 /***** Create question *****/
 	 Qst_QstConstructor (&Question);
 	 Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
 
@@ -559,20 +548,20 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
 				       &Question,QuestionExists,
 				       TstCfg_GetConfigVisibility ());
 
-	    /***** Store test question in database *****/
-	    Tst_DB_StoreOneQstOfPrint (Print,QstInd);
-
-	    /***** Compute total score *****/
-	    Print->Score += Print->PrintedQuestions[QstInd].Answer.Score;
-	    if (Print->PrintedQuestions[QstInd].Answer.Str[0])	// User's answer is not blank
-	       Print->NumQsts.NotBlank++;
-
-	    /***** Update the number of accesses and the score of this question *****/
-	    if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
-	       Qst_DB_UpdateQstScore (Print,QstInd);
-
-	 /***** Destroy test question *****/
+	 /***** Destroy question *****/
 	 Qst_QstDestructor (&Question);
+
+	 /***** Store test question in database *****/
+	 Tst_DB_StoreOneQstOfPrint (Print,QstInd);
+
+	 /***** Compute total score *****/
+	 Print->Score += Print->PrintedQuestions[QstInd].Answer.Score;
+	 if (Print->PrintedQuestions[QstInd].Answer.Str[0])	// User's answer is not blank
+	    Print->NumQsts.NotBlank++;
+
+	 /***** Update the number of accesses and the score of this question *****/
+	 if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
+	    Qst_DB_UpdateQstScore (Print,QstInd);
 	}
 
    /***** End table *****/
@@ -670,7 +659,7 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 				    "Tst_MED_SHOW_CONT","Tst_MED_SHOW");
 
 		  /* Answers */
-		  TstPrn_ComputeAnswerScore (&PrintedQuestions[QstInd],Question);
+		  Qst_ComputeAnswerScore ("tst_answers",&PrintedQuestions[QstInd],Question);
 		  TstPrn_WriteAnswersExam (UsrDat,&PrintedQuestions[QstInd],Question,
 					   ICanView,"Qst_TXT","Qst_TXT_LIGHT");
 
@@ -750,11 +739,15 @@ void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print)
 	QstInd < Print->NumQsts.All;
 	QstInd++)
      {
-      /* Compute question score */
+      /* Create question */
       Qst_QstConstructor (&Question);
       Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
       Question.Answer.Type = Qst_DB_GetQstAnswerType (Question.QstCod);
-	 TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[QstInd],&Question);
+
+	 /* Compute question score */
+	 Qst_ComputeAnswerScore ("tst_answers",&Print->PrintedQuestions[QstInd],&Question);
+
+      /* Destroy question */
       Qst_QstDestructor (&Question);
 
       /* Store test question in database */
@@ -771,389 +764,6 @@ void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print)
 	  Gbl.Usrs.Me.Role.Logged == Rol_STD)	// I am a student
 	 Qst_DB_UpdateQstScore (Print,QstInd);
      }
-  }
-
-/*****************************************************************************/
-/******************* Get correct answer and compute score ********************/
-/*****************************************************************************/
-
-void TstPrn_ComputeAnswerScore (struct Qst_PrintedQuestion *PrintedQuestion,
-				struct Qst_Question *Question)
-  {
-   void (*TstPrn_GetCorrectAndComputeAnsScore[Qst_NUM_ANS_TYPES]) (struct Qst_PrintedQuestion *PrintedQuestion,
-				                                   struct Qst_Question *Question) =
-    {
-     [Qst_ANS_INT            ] = TstPrn_GetCorrectAndComputeIntAnsScore,
-     [Qst_ANS_FLOAT          ] = TstPrn_GetCorrectAndComputeFltAnsScore,
-     [Qst_ANS_TRUE_FALSE     ] = TstPrn_GetCorrectAndComputeTF_AnsScore,
-     [Qst_ANS_UNIQUE_CHOICE  ] = TstPrn_GetCorrectAndComputeChoAnsScore,
-     [Qst_ANS_MULTIPLE_CHOICE] = TstPrn_GetCorrectAndComputeChoAnsScore,
-     [Qst_ANS_TEXT           ] = TstPrn_GetCorrectAndComputeTxtAnsScore,
-    };
-
-   /***** Get correct answer and compute answer score depending on type *****/
-   TstPrn_GetCorrectAndComputeAnsScore[Question->Answer.Type] (PrintedQuestion,Question);
-  }
-
-/*****************************************************************************/
-/******* Get correct answer and compute score for each type of answer ********/
-/*****************************************************************************/
-
-static void TstPrn_GetCorrectAndComputeIntAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-				                    struct Qst_Question *Question)
-  {
-   /***** Get the numerical value of the correct answer,
-          and compute score *****/
-   Qst_GetCorrectIntAnswerFromDB (Question);
-   TstPrn_ComputeIntAnsScore (PrintedQuestion,Question);
-  }
-
-static void TstPrn_GetCorrectAndComputeFltAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-				                    struct Qst_Question *Question)
-  {
-   /***** Get the numerical value of the minimum and maximum correct answers,
-          and compute score *****/
-   Qst_GetCorrectFltAnswerFromDB (Question);
-   TstPrn_ComputeFltAnsScore (PrintedQuestion,Question);
-  }
-
-static void TstPrn_GetCorrectAndComputeTF_AnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-				                    struct Qst_Question *Question)
-  {
-   /***** Get answer true or false,
-          and compute score *****/
-   Qst_GetCorrectTF_AnswerFromDB (Question);
-   TstPrn_ComputeTF_AnsScore (PrintedQuestion,Question);
-  }
-
-static void TstPrn_GetCorrectAndComputeChoAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-				                    struct Qst_Question *Question)
-  {
-   /***** Get correct options of test question from database,
-          and compute score *****/
-   Qst_GetCorrectChoAnswerFromDB (Question);
-   TstPrn_ComputeChoAnsScore (PrintedQuestion,Question);
-  }
-
-static void TstPrn_GetCorrectAndComputeTxtAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-				                    struct Qst_Question *Question)
-  {
-   /***** Get correct text answers for this question from database,
-          and compute score *****/
-   Qst_GetCorrectTxtAnswerFromDB (Question);
-   TstPrn_ComputeTxtAnsScore (PrintedQuestion,Question);
-  }
-
-/*****************************************************************************/
-/************** Compute answer score for each type of answer *****************/
-/*****************************************************************************/
-
-void TstPrn_ComputeIntAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-		                const struct Qst_Question *Question)
-  {
-   long AnswerUsr;
-
-   PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_BLANK;
-   PrintedQuestion->Answer.Score = 0.0;	// Default score for blank or wrong answer
-
-   if (PrintedQuestion->Answer.Str[0])	// If user has answered the answer
-     {
-      PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
-      if (sscanf (PrintedQuestion->Answer.Str,"%ld",&AnswerUsr) == 1)
-	 if (AnswerUsr == Question->Answer.Integer)	// Correct answer
-	   {
-	    PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
-	    PrintedQuestion->Answer.Score = 1.0;
-	   }
-     }
-  }
-
-void TstPrn_ComputeFltAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-				const struct Qst_Question *Question)
-  {
-   double AnsUsr;
-
-   PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_BLANK;
-   PrintedQuestion->Answer.Score = 0.0;	// Default score for blank or wrong answer
-
-   if (PrintedQuestion->Answer.Str[0])	// If user has answered the answer
-     {
-      PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
-      if (Str_GetDoubleFromStr (PrintedQuestion->Answer.Str,&AnsUsr) == Err_SUCCESS)
-	 if (AnsUsr >= Question->Answer.FloatingPoint[0] &&
-	     AnsUsr <= Question->Answer.FloatingPoint[1])
-	   {
-	    PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
-	    PrintedQuestion->Answer.Score = 1.0; // Correct (inside the interval)
-	   }
-     }
-  }
-
-void TstPrn_ComputeTF_AnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-			        const struct Qst_Question *Question)
-  {
-   static double Scores[] =
-     {
-      [TstPrn_ANSWER_IS_CORRECT       ] =  1.0,
-      [TstPrn_ANSWER_IS_WRONG_NEGATIVE] = -1.0,
-      [TstPrn_ANSWER_IS_WRONG_ZERO    ] =  0.0,	// Not used
-      [TstPrn_ANSWER_IS_WRONG_POSITIVE] =  0.0,	// Not used
-      [TstPrn_ANSWER_IS_BLANK         ] =  0.0,
-     };
-
-   PrintedQuestion->Answer.IsCorrect = PrintedQuestion->Answer.Str[0] ?	// If user has selected T or F
-				          (Qst_GetOptionTFFromChar (PrintedQuestion->Answer.Str[0]) == Question->Answer.OptionTF ?
-				             TstPrn_ANSWER_IS_CORRECT :
-				             TstPrn_ANSWER_IS_WRONG_NEGATIVE) :
-					  TstPrn_ANSWER_IS_BLANK;
-   PrintedQuestion->Answer.Score = Scores[PrintedQuestion->Answer.IsCorrect];
-  }
-
-void TstPrn_ComputeChoAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-	                        const struct Qst_Question *Question)
-  {
-   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
-   unsigned NumOpt;
-   Qst_WrongOrCorrect_t OptionWrongOrCorrect;
-   unsigned NumOptTotInQst = 0;
-   unsigned NumOptCorrInQst = 0;
-   unsigned NumAnsGood = 0;
-   unsigned NumAnsBad = 0;
-
-   PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_BLANK;
-   PrintedQuestion->Answer.Score = 0.0;
-
-   /***** Get indexes for this question from string *****/
-   TstPrn_GetIndexesFromStr (PrintedQuestion->StrIndexes,Indexes);
-
-   /***** Get the user's answers for this question from string *****/
-   TstPrn_GetAnswersFromStr (PrintedQuestion->Answer.Str,UsrAnswers);
-
-   /***** Compute the total score of this question *****/
-   for (NumOpt = 0;
-	NumOpt < Question->Answer.NumOptions;
-	NumOpt++)
-     {
-      OptionWrongOrCorrect = Question->Answer.Options[Indexes[NumOpt]].Correct;
-      NumOptTotInQst++;
-      if (OptionWrongOrCorrect == Qst_CORRECT)
-         NumOptCorrInQst++;
-      if (UsrAnswers[Indexes[NumOpt]] == HTM_CHECKED)	// This answer has been selected by the user
-         switch (OptionWrongOrCorrect)
-           {
-            case Qst_CORRECT:
-               NumAnsGood++;
-               break;
-            case Qst_WRONG:
-            default:
-               NumAnsBad++;
-               break;
-           }
-     }
-
-   /* The answer is not blank? */
-   if (NumAnsGood || NumAnsBad)	// If user has answered the answer
-     {
-      /* Compute the score */
-      if (Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE)
-        {
-         if (NumOptTotInQst >= 2)	// It should be 2 options at least
-           {
-            if (NumAnsGood == 1 && NumAnsBad == 0)
-              {
-               PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
-               PrintedQuestion->Answer.Score = 1;
-              }
-            else if (NumAnsGood == 0 && NumAnsBad == 1)
-              {
-               PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_NEGATIVE;
-               PrintedQuestion->Answer.Score = -1.0 / (double) (NumOptTotInQst - 1);
-              }
-            // other case should be impossible
-           }
-         // other case should be impossible
-        }
-      else	// AnswerType == Tst_ANS_MULTIPLE_CHOICE
-        {
-         if (NumOptCorrInQst)	// There are correct options in the question
-           {
-            if (NumAnsGood == NumOptCorrInQst && NumAnsBad == 0)
-              {
-	       PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
-	       PrintedQuestion->Answer.Score = 1.0;
-              }
-            else
-              {
-	       if (NumOptCorrInQst < NumOptTotInQst)	// If there are correct options and wrong options (typical case)
-		 {
-		  PrintedQuestion->Answer.Score = (double) NumAnsGood / (double) NumOptCorrInQst -
-						  (double) NumAnsBad  / (double) (NumOptTotInQst - NumOptCorrInQst);
-		  if (PrintedQuestion->Answer.Score > 0.000001)
-		     PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_POSITIVE;
-		  else if (PrintedQuestion->Answer.Score < -0.000001)
-		     PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_NEGATIVE;
-		  else	// Score is 0
-		     PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
-		 }
-	       else					// If all options are correct (extrange case)
-		 {
-		  if (NumAnsGood == 0)
-		    {
-		     PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
-		     PrintedQuestion->Answer.Score = 0.0;
-		    }
-		  else
-		    {
-		     PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_POSITIVE;
-		     PrintedQuestion->Answer.Score = (double) NumAnsGood /
-							     (double) NumOptCorrInQst;
-		    }
-		 }
-              }
-           }
-         // other case should be impossible
-        }
-     }
-  }
-
-void TstPrn_ComputeTxtAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-				const struct Qst_Question *Question)
-  {
-   unsigned NumOpt;
-   char TextAnsUsr[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
-   char TextAnsOK[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
-
-   PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_BLANK;
-   PrintedQuestion->Answer.Score = 0.0;	// Default score for blank or wrong answer
-
-   if (PrintedQuestion->Answer.Str[0])	// If user has answered the answer
-     {
-      /* Filter the user answer */
-      Str_Copy (TextAnsUsr,PrintedQuestion->Answer.Str,
-		sizeof (TextAnsUsr) - 1);
-
-      /* In order to compare student answer to stored answer,
-	 the text answers are stored avoiding two or more consecurive spaces */
-      Str_ReplaceSeveralSpacesForOne (TextAnsUsr);
-      Str_ConvertToComparable (TextAnsUsr);
-
-      PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
-      for (NumOpt = 0;
-	   NumOpt < Question->Answer.NumOptions;
-	   NumOpt++)
-        {
-         /* Filter this correct answer */
-         Str_Copy (TextAnsOK,Question->Answer.Options[NumOpt].Text,
-                   sizeof (TextAnsOK) - 1);
-         Str_ConvertToComparable (TextAnsOK);
-
-         /* Check is user answer is correct */
-         if (!strcoll (TextAnsUsr,TextAnsOK))
-           {
-            PrintedQuestion->Answer.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
-	    PrintedQuestion->Answer.Score = 1.0;	// Correct answer
-	    break;
-           }
-        }
-     }
-  }
-
-/*****************************************************************************/
-/********** Get vector of unsigned indexes from string with indexes **********/
-/*****************************************************************************/
-
-void TstPrn_GetIndexesFromStr (const char StrIndexesOneQst[Qst_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
-			       unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION])
-  {
-   unsigned NumOpt;
-   const char *Ptr;
-   char StrOneIndex[Cns_MAX_DIGITS_UINT + 1];
-
-   /***** Get indexes from string *****/
-   for (NumOpt = 0, Ptr = StrIndexesOneQst;
-	NumOpt < Qst_MAX_OPTIONS_PER_QUESTION && *Ptr;
-	NumOpt++)
-     {
-      Par_GetNextStrUntilComma (&Ptr,StrOneIndex,Cns_MAX_DIGITS_UINT);
-
-      if (sscanf (StrOneIndex,"%u",&(Indexes[NumOpt])) != 1)
-	 Err_WrongAnswerIndexExit ();
-
-      if (Indexes[NumOpt] >= Qst_MAX_OPTIONS_PER_QUESTION)
-	 Err_WrongAnswerIndexExit ();
-     }
-
-   /***** Initialize remaining to 0 *****/
-   for (;
-	NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
-	NumOpt++)
-      Indexes[NumOpt] = 0;
-  }
-
-/*****************************************************************************/
-/************ Get vector of bool answers from string with answers ************/
-/*****************************************************************************/
-
-void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1],
-			       HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION])
-  {
-   unsigned NumOpt;
-   const char *Ptr;
-   char StrOneAnswer[Cns_MAX_DIGITS_UINT + 1];
-   unsigned AnsUsr;
-
-   /***** Initialize all answers to unchecked *****/
-   for (NumOpt = 0;
-	NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
-	NumOpt++)
-      UsrAnswers[NumOpt] = HTM_NO_ATTR;
-
-   /***** Set selected answers to checked *****/
-   for (NumOpt = 0, Ptr = StrAnswersOneQst;
-	NumOpt < Qst_MAX_OPTIONS_PER_QUESTION && *Ptr;
-	NumOpt++)
-     {
-      Par_GetNextStrUntilComma (&Ptr,StrOneAnswer,Cns_MAX_DIGITS_UINT);
-
-      if (sscanf (StrOneAnswer,"%u",&AnsUsr) != 1)
-	 Err_WrongAnswerExit ();
-
-      if (AnsUsr >= Qst_MAX_OPTIONS_PER_QUESTION)
-	 Err_WrongAnswerExit ();
-
-      UsrAnswers[AnsUsr] = HTM_CHECKED;
-     }
-  }
-
-/*****************************************************************************/
-/************ Compute and show total grade out of maximum grade **************/
-/*****************************************************************************/
-
-void TstPrn_ComputeAndShowGrade (unsigned NumQsts,double Score,double MaxGrade)
-  {
-   HTM_DoublePartOfDouble (TstPrn_ComputeGrade (NumQsts,Score,MaxGrade),MaxGrade);
-  }
-
-/*****************************************************************************/
-/**************** Compute total grade out of maximum grade *******************/
-/*****************************************************************************/
-
-double TstPrn_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade)
-  {
-   double MaxScore;
-   double Grade;
-
-   /***** Compute grade *****/
-   if (NumQsts)
-     {
-      MaxScore = (double) NumQsts;
-      Grade = Score * MaxGrade / MaxScore;
-     }
-   else
-      Grade = 0.0;
-
-   return Grade;
   }
 
 /*****************************************************************************/
@@ -1424,10 +1034,10 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
       Qst_ChangeFormatOptionsFeedback (Question);
 
    /***** Get indexes for this question from string *****/
-   TstPrn_GetIndexesFromStr (PrintedQuestion->StrIndexes,Indexes);
+   Qst_GetIndexesFromStr (PrintedQuestion->StrIndexes,Indexes);
 
    /***** Get the user's answers for this question from string *****/
-   TstPrn_GetAnswersFromStr (PrintedQuestion->Answer.Str,UsrAnswers);
+   Qst_GetAnswersFromStr (PrintedQuestion->Answer.Str,UsrAnswers);
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -1990,7 +1600,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
-		     TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,
+		     Qst_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,
 						 Tst_SCORE_MAX);
 		     break;
 		  case Usr_CAN_NOT:
@@ -2203,7 +1813,7 @@ static void TstPrn_ShowPrintsSummaryRow (Usr_MeOrOther_t MeOrOther,
       HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
                     The_GetSuffix (),The_GetColorRows ());
 	 if (ICanViewTotalScore == Usr_CAN)
-	    TstPrn_ComputeAndShowGrade (NumTotalQsts->All,TotalScore,Tst_SCORE_MAX);
+	    Qst_ComputeAndShowGrade (NumTotalQsts->All,TotalScore,Tst_SCORE_MAX);
       HTM_TD_End ();
 
       /***** Write total number of questions *****/
@@ -2435,7 +2045,7 @@ void TstPrn_ShowOnePrint (void)
 		 {
 		  case Usr_CAN:
 		     HTM_STRONG_Begin ();
-			TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,
+			Qst_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,
 						    Tst_SCORE_MAX);
 		     HTM_STRONG_End ();
 		     break;
@@ -2564,7 +2174,7 @@ void TstPrn_ShowPrintAnswers (struct Usr_Data *UsrDat,
 	QstInd < NumQsts;
 	QstInd++, The_ChangeRowColor ())
      {
-      /***** Create test question *****/
+      /***** Create question *****/
       Qst_QstConstructor (&Question);
       Question.QstCod = PrintedQuestions[QstInd].QstCod;
 
@@ -2578,7 +2188,7 @@ void TstPrn_ShowPrintAnswers (struct Usr_Data *UsrDat,
 				    &Question,QuestionExists,
 				    Visibility);
 
-      /***** Destroy test question *****/
+      /***** Destroy question *****/
       Qst_QstDestructor (&Question);
      }
   }

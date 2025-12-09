@@ -1331,17 +1331,18 @@ unsigned Qst_DB_GetAnswersData (MYSQL_RES **mysql_res,long QstCod,
 /***************** Get answers of a question from database *******************/
 /*****************************************************************************/
 
-unsigned Qst_DB_GetTextOfAnswers (MYSQL_RES **mysql_res,long QstCod)
+unsigned Qst_DB_GetTextOfAnswers (MYSQL_RES **mysql_res,
+				  const char *Table,long QstCod)
   {
    unsigned NumOptions;
 
    if (!(NumOptions = (unsigned)
          DB_QuerySELECT (mysql_res,"can not get answers of a question",
 			 "SELECT Answer"		// row[0]
-			  " FROM tst_answers"
+			  " FROM %s"
 			 " WHERE QstCod=%ld"
 		      " ORDER BY AnsInd",
-			 QstCod)))
+			 Table,QstCod)))
       Err_WrongAnswerExit ();
 
    return NumOptions;
@@ -1351,15 +1352,16 @@ unsigned Qst_DB_GetTextOfAnswers (MYSQL_RES **mysql_res,long QstCod)
 /*************** Get answers correctness for a question **********************/
 /*****************************************************************************/
 
-unsigned Qst_DB_GetQstAnswersCorr (MYSQL_RES **mysql_res,long QstCod)
+unsigned Qst_DB_GetQstAnswersCorr (MYSQL_RES **mysql_res,
+				   const char *Table,long QstCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get correctness of answers of a question",
 		   "SELECT Correct"		// row[0]
-		    " FROM tst_answers"
+		    " FROM %s"
 		   " WHERE QstCod=%ld"
 		" ORDER BY AnsInd",
-		   QstCod);
+		   Table,QstCod);
   }
 
 /*****************************************************************************/

@@ -823,7 +823,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	    switch (ICanView.Score)
 	      {
 	       case Usr_CAN:
-		  Grade = TstPrn_ComputeGrade (Print.NumQsts.All,Print.Score,
+		  Grade = Qst_ComputeGrade (Print.NumQsts.All,Print.Score,
 					       Games->Game.MaxGrade);
 		  HTM_DoublePartOfDouble (Grade,Games->Game.MaxGrade);
 		  TotalGrade += Grade;
@@ -1230,7 +1230,7 @@ void MchRes_ShowOneMchResult (void)
 		 {
 		  case Usr_CAN:
 		     HTM_STRONG_Begin ();
-			TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,
+			Qst_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,
 						    Games.Game.MaxGrade);
 		     HTM_STRONG_End ();
 		     break;

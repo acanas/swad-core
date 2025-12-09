@@ -391,7 +391,7 @@ void Tst_AssessTest (void)
 	       HTM_Double2Decimals (Print.Score); HTM_BR ();
 
 	       HTM_Txt (Txt_Grade); HTM_Colon (); HTM_NBSP ();
-	       TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Tst_SCORE_MAX);
+	       Qst_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Tst_SCORE_MAX);
 	    HTM_DIV_End ();
 	   }
 
@@ -602,7 +602,7 @@ static void Tst_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQuesti
    Err_SuccessOrError_t ErrorInIndex;
    char StrInd[1 + Cns_MAX_DIGITS_UINT + 1];
 
-   /***** Create test question *****/
+   /***** Create question *****/
    Qst_QstConstructor (&Question);
    Question.QstCod = PrintedQuestion->QstCod;
 
@@ -647,7 +647,7 @@ static void Tst_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQuesti
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
 
-   /***** Destroy test question *****/
+   /***** Destroy question *****/
    Qst_QstDestructor (&Question);
   }
 

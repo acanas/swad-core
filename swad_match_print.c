@@ -95,18 +95,18 @@ static void MchPrn_ComputeScore (struct MchPrn_Print *Print)
 	NumQst < Print->NumQsts.All;
 	NumQst++)
      {
-      /***** Create test question *****/
+      /***** Create question *****/
       Qst_QstConstructor (&Question);
       Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
       Question.Answer.Type = Qst_ANS_UNIQUE_CHOICE;
 
 	 /***** Compute score for this answer ******/
-	 TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
+	 Qst_ComputeAnswerScore ("tst_answers",&Print->PrintedQuestions[NumQst],&Question);
 
 	 /***** Update total score *****/
 	 Print->Score += Print->PrintedQuestions[NumQst].Answer.Score;
 
-      /***** Destroy test question *****/
+      /***** Destroy question *****/
       Qst_QstDestructor (&Question);
      }
   }

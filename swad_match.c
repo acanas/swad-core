@@ -1435,7 +1435,7 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
 	NumQst < NumQsts;
 	NumQst++)
      {
-      /***** Create test question *****/
+      /***** Create question *****/
       Qst_QstConstructor (&Question);
 
 	 /***** Get question data *****/
@@ -1465,7 +1465,7 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
 	 /***** Reorder answer *****/
 	 Mch_ReorderAnswer (MchCod,QstInd,&Question);
 
-      /***** Destroy test question *****/
+      /***** Destroy question *****/
       Qst_QstDestructor (&Question);
      }
 
@@ -1533,7 +1533,7 @@ void Mch_GetIndexes (long MchCod,unsigned QstInd,
       Err_WrongAnswerIndexExit ();
 
    /***** Get indexes from string *****/
-   TstPrn_GetIndexesFromStr (StrIndexesOneQst,Indexes);
+   Qst_GetIndexesFromStr (StrIndexesOneQst,Indexes);
   }
 
 /*****************************************************************************/
@@ -2758,7 +2758,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
 	 break;
      }
 
-   /***** Create test question *****/
+   /***** Create question *****/
    Qst_QstConstructor (&Question);
    Question.QstCod = Match->Status.QstCod;
 
@@ -2815,7 +2815,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
 	    break;
 	}
 
-   /***** Destroy test question *****/
+   /***** Destroy question *****/
    Qst_QstDestructor (&Question);
   }
 

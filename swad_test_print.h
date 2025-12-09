@@ -79,34 +79,8 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print);
 void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print);
 
 void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print);
-void TstPrn_ComputeAnswerScore (struct Qst_PrintedQuestion *PrintedQuestion,
-				struct Qst_Question *Question);
 
 //-----------------------------------------------------------------------------
-
-void TstPrn_ComputeIntAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-		                const struct Qst_Question *Question);
-void TstPrn_ComputeFltAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-				const struct Qst_Question *Question);
-void TstPrn_ComputeTF_AnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-			        const struct Qst_Question *Question);
-void TstPrn_ComputeChoAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-	                        const struct Qst_Question *Question);
-void TstPrn_ComputeTxtAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-				const struct Qst_Question *Question);
-
-//-----------------------------------------------------------------------------
-
-void Qst_ChangeFormatOptionsText (struct Qst_Question *Question);
-void Qst_ChangeFormatOptionsFeedback (struct Qst_Question *Question);
-
-void TstPrn_GetIndexesFromStr (const char StrIndexesOneQst[Qst_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
-			       unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION]);
-void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1],
-			       HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION]);
-
-void TstPrn_ComputeAndShowGrade (unsigned NumQsts,double Score,double MaxGrade);
-double TstPrn_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade);
 
 void TstPrn_WriteAnswersExam (struct Usr_Data *UsrDat,
                               const struct Qst_PrintedQuestion *PrintedQuestion,

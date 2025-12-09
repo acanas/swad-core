@@ -649,7 +649,7 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 		    The_GetSuffix (),The_GetColorRows ());
 	 if (NumResults)
 	   {
-	    Grade = TstPrn_ComputeGrade (Print.NumQsts.Valid.Total,
+	    Grade = Qst_ComputeGrade (Print.NumQsts.Valid.Total,
 					 Print.Score.Valid,
 					 Exams->Exam.MaxGrade);
 	    HTM_DoublePartOfDouble (Grade,Exams->Exam.MaxGrade);

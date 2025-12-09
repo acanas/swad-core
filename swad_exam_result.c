@@ -894,7 +894,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
-		     Grade = TstPrn_ComputeGrade (Print.NumQsts.Valid.Total,
+		     Grade = Qst_ComputeGrade (Print.NumQsts.Valid.Total,
 						  Print.Score.Valid,
 						  Exam.MaxGrade);
 		     HTM_DoublePartOfDouble (Grade,Exam.MaxGrade);
@@ -1444,52 +1444,56 @@ void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
 	QstInd < Print->NumQsts.All;
 	QstInd++)
      {
-      /***** Copy question code *****/
+      /***** Create question *****/
+      Qst_QstConstructor (&Question);
       Question.QstCod = Print->Qsts[QstInd].QstCod;
 
-      /***** Get validity and answer type from database *****/
-      QuestionExists = Exa_DB_GetValidityAndAnswerType (&mysql_res,
-							Question.QstCod);
-      if (QuestionExists == Exi_EXISTS)
-	{
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get whether the question is invalid (row[0]) */
-	 Question.Validity = ExaSet_GetInvalidFromYN (row[0][0]);
-
-	 /* Get the type of answer (row[1]) */
-	 Question.Answer.Type = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
-	}
-
-      /* Free structure that stores the query result */
-      DB_FreeMySQLResult (&mysql_res);
-
-      /***** Compute answer score *****/
-      if (QuestionExists == Exi_EXISTS)
-	 if (Question.Validity == ExaSet_VALID_QUESTION)
+	 /***** Get validity and answer type from database *****/
+	 QuestionExists = Exa_DB_GetValidityAndAnswerType (&mysql_res,
+							   Question.QstCod);
+	 if (QuestionExists == Exi_EXISTS)
 	   {
-	    ExaPrn_ComputeAnswerScore (&Print->Qsts[QstInd],&Question);
-	    switch (Print->Qsts[QstInd].Answer.IsCorrect)
-	      {
-	       case TstPrn_ANSWER_IS_CORRECT:
-	          Print->NumQsts.Valid.Correct++;
-		  break;
-	       case TstPrn_ANSWER_IS_WRONG_NEGATIVE:
-	          Print->NumQsts.Valid.Wrong.Negative++;
-		  break;
-	       case TstPrn_ANSWER_IS_WRONG_ZERO:
-	          Print->NumQsts.Valid.Wrong.Zero++;
-		  break;
-	       case TstPrn_ANSWER_IS_WRONG_POSITIVE:
-	          Print->NumQsts.Valid.Wrong.Positive++;
-		  break;
-	       case TstPrn_ANSWER_IS_BLANK:
-	          Print->NumQsts.Valid.Blank++;
-		  break;
-	      }
-	    Print->NumQsts.Valid.Total++;
-	    Print->Score.Valid += Print->Qsts[QstInd].Answer.Score;
+	    row = mysql_fetch_row (mysql_res);
+
+	    /* Get whether the question is invalid (row[0]) */
+	    Question.Validity = ExaSet_GetInvalidFromYN (row[0][0]);
+
+	    /* Get the type of answer (row[1]) */
+	    Question.Answer.Type = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 	   }
+
+	 /* Free structure that stores the query result */
+	 DB_FreeMySQLResult (&mysql_res);
+
+	 /***** Compute answer score *****/
+	 if (QuestionExists == Exi_EXISTS)
+	    if (Question.Validity == ExaSet_VALID_QUESTION)
+	      {
+	       Qst_ComputeAnswerScore ("exa_set_answers",&Print->Qsts[QstInd],&Question);
+	       switch (Print->Qsts[QstInd].Answer.IsCorrect)
+		 {
+		  case TstPrn_ANSWER_IS_CORRECT:
+		     Print->NumQsts.Valid.Correct++;
+		     break;
+		  case TstPrn_ANSWER_IS_WRONG_NEGATIVE:
+		     Print->NumQsts.Valid.Wrong.Negative++;
+		     break;
+		  case TstPrn_ANSWER_IS_WRONG_ZERO:
+		     Print->NumQsts.Valid.Wrong.Zero++;
+		     break;
+		  case TstPrn_ANSWER_IS_WRONG_POSITIVE:
+		     Print->NumQsts.Valid.Wrong.Positive++;
+		     break;
+		  case TstPrn_ANSWER_IS_BLANK:
+		     Print->NumQsts.Valid.Blank++;
+		     break;
+		 }
+	       Print->NumQsts.Valid.Total++;
+	       Print->Score.Valid += Print->Qsts[QstInd].Answer.Score;
+	      }
+
+      /***** Destroy question *****/
+      Qst_QstDestructor (&Question);
      }
   }
 
@@ -1774,7 +1778,7 @@ static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
 	       /* Grade counting all questions */
 	       if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
 		  HTM_STRONG_Begin ();
-	       TstPrn_ComputeAndShowGrade (Print->NumQsts.All,Print->Score.All,Exam->MaxGrade);
+	       Qst_ComputeAndShowGrade (Print->NumQsts.All,Print->Score.All,Exam->MaxGrade);
 	       if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
 		  HTM_STRONG_End ();
 
@@ -1784,7 +1788,7 @@ static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
 		  HTM_Semicolon (); HTM_SP ();
 		  HTM_Txt (Txt_valid_grade); HTM_Colon (); HTM_NBSP ();
 		  HTM_STRONG_Begin ();
-		     TstPrn_ComputeAndShowGrade (Print->NumQsts.Valid.Total,
+		     Qst_ComputeAndShowGrade (Print->NumQsts.Valid.Total,
 						 Print->Score.Valid,
 						 Exam->MaxGrade);
 		  HTM_STRONG_End ();
@@ -1820,7 +1824,7 @@ static void ExaRes_ShowQstsAndAnss (const struct ExaSes_Session *Session,
 	   QstInd < Print->NumQsts.All;
 	   QstInd++, The_ChangeRowColor ())
 	{
-	 /***** Create test question *****/
+	 /***** Create question *****/
 	 Qst_QstConstructor (&Question);
 	 Question.QstCod = Print->Qsts[QstInd].QstCod;
 
@@ -1830,7 +1834,7 @@ static void ExaRes_ShowQstsAndAnss (const struct ExaSes_Session *Session,
 	    /***** Write questions and answers *****/
 	    ExaRes_WriteQstAndAns (UsrDat,Print,QstInd,&Question,Visibility);
 
-	 /***** Destroy test question *****/
+	 /***** Destroy question *****/
 	 Qst_QstDestructor (&Question);
 	}
 
@@ -1921,7 +1925,7 @@ static void ExaRes_WriteQstAndAns (struct Usr_Data *UsrDat,
 	    Med_ShowMedia (&Question->Media,"Tst_MED_SHOW_CONT","Tst_MED_SHOW");
 
 	 /* Answers */
-	 ExaPrn_ComputeAnswerScore (&Print->Qsts[QstInd],Question);
+	 Qst_ComputeAnswerScore ("exa_set_answers",&Print->Qsts[QstInd],Question);
 	 TstPrn_WriteAnswersExam (UsrDat,&Print->Qsts[QstInd],Question,
 				  ICanView,
 				  ClassTxt[Question->Validity],

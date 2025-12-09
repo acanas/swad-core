@@ -103,7 +103,7 @@ void ExaSheQst_ShowQuestions (const struct ExaSes_Session *Session,
 	    HTM_DIV_End ();
 	   }
 
-	 /* Create test question */
+	 /* Create question */
 	 Qst_QstConstructor (&Question);
 	 Question.QstCod = Print->Qsts[QstInd].QstCod;
 
@@ -113,7 +113,7 @@ void ExaSheQst_ShowQuestions (const struct ExaSes_Session *Session,
 	    /* Write question */
 	    ExaSheQst_WriteQst (Print,QstInd,&Question);
 
-	 /* Destroy test question */
+	 /* Destroy question */
 	 Qst_QstDestructor (&Question);
 	}
 
@@ -202,7 +202,7 @@ static void ExaSheQst_WriteOptionsChoAns (const struct ExaPrn_Print *Print,
    Qst_ChangeFormatOptionsText (Question);
 
    /***** Get indexes for this question from string *****/
-   TstPrn_GetIndexesFromStr (Print->Qsts[QstInd].StrIndexes,Indexes);
+   Qst_GetIndexesFromStr (Print->Qsts[QstInd].StrIndexes,Indexes);
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);

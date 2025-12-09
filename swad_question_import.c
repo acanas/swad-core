@@ -190,7 +190,7 @@ void QstImp_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
 	NumQst < NumQsts;
 	NumQst++)
      {
-      /* Create test question */
+      /* Create question */
       Qst_QstConstructor (&Question);
 
 	 /* Get question code (row[0]) */
@@ -200,7 +200,7 @@ void QstImp_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
 
 	 QstImp_ExportQuestion (&Question,FileXML);
 
-      /* Destroy test question */
+      /* Destroy question */
       Qst_QstDestructor (&Question);
      }
 
@@ -532,7 +532,7 @@ static void QstImp_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 	      {
 	       if (!strcmp (QuestionElem->TagName,"question"))
 		 {
-		  /***** Create test question *****/
+		  /***** Create question *****/
 		  Qst_QstConstructor (&Question);
 
 		     /* Get answer type (in mandatory attribute "type") */
@@ -659,7 +659,7 @@ static void QstImp_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		           break;
 		       }
 
-		  /***** Destroy test question *****/
+		  /***** Destroy question *****/
 		  Qst_QstDestructor (&Question);
 		 }
 	      }

@@ -1168,20 +1168,6 @@ unsigned Exa_DB_GetQstAnswersFromSet (MYSQL_RES **mysql_res,long QstCod,
   }
 
 /*****************************************************************************/
-/************** Get answers text for a question in an exam set ***************/
-/*****************************************************************************/
-
-unsigned Exa_DB_GetQstAnswersTextFromSet (MYSQL_RES **mysql_res,long QstCod)
-  {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get text of answers of a question",
-		   "SELECT Answer"		// row[0]
-		    " FROM exa_set_answers"
-		   " WHERE QstCod=%ld",
-		   QstCod);
-  }
-
-/*****************************************************************************/
 /********** Get answers correctness for a question in an exam set ************/
 /*****************************************************************************/
 

@@ -188,14 +188,6 @@ void Qst_ListOneQstToEdit (struct Qst_Questions *Questions);
 
 //-----------------------------------------------------------------------------
 
-void Qst_GetCorrectIntAnswerFromDB (struct Qst_Question *Question);
-void Qst_GetCorrectFltAnswerFromDB (struct Qst_Question *Question);
-void Qst_GetCorrectTF_AnswerFromDB (struct Qst_Question *Question);
-void Qst_GetCorrectChoAnswerFromDB (struct Qst_Question *Question);
-void Qst_GetCorrectTxtAnswerFromDB (struct Qst_Question *Question);
-
-//-----------------------------------------------------------------------------
-
 Qst_OptionTF_t Qst_GetOptionTFFromChar (char TF);
 void Qst_WriteTFOptionsToFill (Qst_OptionTF_t OptTFStd);
 void Qst_WriteAnsTF (Qst_OptionTF_t OptionTF);
@@ -267,5 +259,30 @@ unsigned Qst_GetNumQuestions (Hie_Level_t HieLvl,Qst_AnswerType_t AnsType,
                               struct Qst_Stats *Stats);
 
 void Qst_GetTestStats (Hie_Level_t HieLvl,Qst_AnswerType_t AnsType,struct Qst_Stats *Stats);
+
+//-----------------------------------------------------------------------------
+
+void Qst_GetIndexesFromStr (const char StrIndexesOneQst[Qst_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
+			    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION]);
+void Qst_GetAnswersFromStr (const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1],
+			    HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION]);
+
+void Qst_ComputeAnswerScore (const char *Table,
+			     struct Qst_PrintedQuestion *PrintedQuestion,
+			     struct Qst_Question *Question);
+
+void Qst_ComputeIntAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
+			     const struct Qst_Question *Question);
+void Qst_ComputeFltAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
+			     const struct Qst_Question *Question);
+void Qst_ComputeTF_AnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
+			     const struct Qst_Question *Question);
+void Qst_ComputeChoAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
+			     const struct Qst_Question *Question);
+void Qst_ComputeTxtAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
+			     const struct Qst_Question *Question);
+
+void Qst_ComputeAndShowGrade (unsigned NumQsts,double Score,double MaxGrade);
+double Qst_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade);
 
 #endif
