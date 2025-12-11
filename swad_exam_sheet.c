@@ -274,19 +274,11 @@ static void ExaShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 	       Box_BoxBegin (Session->Title,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
 	    /* Heading */
-	    HTM_DIV_Begin (NumUsr &&
-		           ViewType == Vie_PRINT ? "style=\"break-before:page;\"" :
-						   NULL);
-
-	       /* Institution, degree and course */
-	       Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
-
-	       /* Show student */
-	       ExaRes_ShowExamResultUser (Session,&UsrDat);
-
-	       /* Exam description */
-	       Exa_GetAndWriteDescription (Exams->Exam.ExaCod);
-
+	    // HTM_DIV_Begin (NumUsr && ViewType == Vie_PRINT ? "class=\"PAGE_EVEN\"" :
+	    // 						     NULL);
+	    HTM_DIV_Begin (NumUsr && ViewType == Vie_PRINT ? "class=\"PAGE_EVEN\"" :
+							     NULL);
+	       Exa_Header (Exams->Exam.ExaCod,&UsrDat,Session->ShowPhotos);
 	    HTM_DIV_End ();
 
 	    /* Show exam answer sheet */
@@ -298,7 +290,7 @@ static void ExaShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 	    /* Show exam question sheet */
 	    if (BlankOrSolved == ExaShe_BLANK)
 	      {
-	       HTM_DIV_Begin (NULL);
+	       HTM_DIV_Begin (" class=\"Exa_QSTS\"");
 		  ExaSheQst_ShowQuestions (Session,&Print);
 	       HTM_DIV_End ();
 	      }

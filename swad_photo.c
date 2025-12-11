@@ -1094,7 +1094,7 @@ Pho_ShowPhotos_t Pho_ShowingUsrPhotoIsAllowed (struct Usr_Data *UsrDat,
 // Returns Exi_DOES_NOT_EXIST if photo does not exist
 // Returns Exi_EXISTS if link is created successfully
 
-Exi_Exist_t Pho_BuildLinkToPhoto (struct Usr_Data *UsrDat,
+Exi_Exist_t Pho_BuildLinkToPhoto (const struct Usr_Data *UsrDat,
 				  char PhotoURL[WWW_MAX_BYTES_WWW + 1])
   {
    char PathPublPhoto[PATH_MAX + 1];

@@ -49,7 +49,6 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
-#include "swad_ID.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
 #include "swad_photo.h"
@@ -125,14 +124,14 @@ static void ExaRes_CheckIfICanViewResult (const struct Exa_Exam *Exam,
                                           long UsrCod,
                                           struct ExaRes_ICanView *ICanView);
 
-static void ExaRes_ShowExamResultTime (struct ExaPrn_Print *Print);
-static void ExaRes_ShowExamResultNumQsts (struct ExaPrn_Print *Print,
+static void ExaRes_ShowTime (struct ExaPrn_Print *Print);
+static void ExaRes_ShowNumQsts (struct ExaPrn_Print *Print,
                                           const struct ExaRes_ICanView *ICanView);
-static void ExaRes_ShowExamResultNumAnss (struct ExaPrn_Print *Print,
+static void ExaRes_ShowNumAnss (struct ExaPrn_Print *Print,
                                           const struct ExaRes_ICanView *ICanView);
-static void ExaRes_ShowExamResultScore (struct ExaPrn_Print *Print,
+static void ExaRes_ShowScore (struct ExaPrn_Print *Print,
                                         const struct ExaRes_ICanView *ICanView);
-static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
+static void ExaRes_ShowGrade (const struct Exa_Exam *Exam,
 	                                struct ExaPrn_Print *Print,
                                         const struct ExaRes_ICanView *ICanView);
 static void ExaRes_ShowQstsAndAnss (const struct ExaSes_Session *Session,
@@ -1331,9 +1330,6 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
    Box_BoxBegin (Session->Title,NULL,NULL,
 		 Hlp_ASSESSMENT_Exams_results,Box_NOT_CLOSABLE);
 
-      /***** Header *****/
-      Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
-
       /***** Check user data *****/
       /* Get data of the user who answered the exam print */
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,
@@ -1346,23 +1342,19 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
       /* Get if user has accepted enrolment */
       UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
 
-      /* User */
-      ExaRes_ShowExamResultUser (Session,UsrDat);
+      /***** Heading *****/
+      Exa_Header (Exam->ExaCod,UsrDat,Session->ShowPhotos);
 
       /* Start/end time (for user in this exam print) */
-      ExaRes_ShowExamResultTime (Print);
+      ExaRes_ShowTime (Print);
 
-      /* Number of questions */
-      ExaRes_ShowExamResultNumQsts (Print,ICanView);
+      /* Number of questions and answers */
+      ExaRes_ShowNumQsts (Print,ICanView);
+      ExaRes_ShowNumAnss (Print,ICanView);
 
-      /* Number of answers */
-      ExaRes_ShowExamResultNumAnss (Print,ICanView);
-
-      /* Score */
-      ExaRes_ShowExamResultScore (Print,ICanView);
-
-      /* Grade */
-      ExaRes_ShowExamResultGrade (Exam,Print,ICanView);
+      /* Score and grade */
+      ExaRes_ShowScore (Print,ICanView);
+      ExaRes_ShowGrade (Exam,Print,ICanView);
 
       /* Answers and solutions */
       if (ICanView->Result == Usr_CAN)
@@ -1498,62 +1490,10 @@ void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
   }
 
 /*****************************************************************************/
-/************************ Show user row in exam result ***********************/
-/*****************************************************************************/
-
-void ExaRes_ShowExamResultUser (const struct ExaSes_Session *Session,
-				struct Usr_Data *UsrDat)
-  {
-   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
-     {
-      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
-      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
-      [PhoSha_SHAPE_OVAL     ] = "PHOTOO45x60",
-      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
-     };
-
-   /***** Begin container *****/
-   HTM_DIV_Begin ("class=\"Exa_HEAD_CONT\"");
-
-      /***** Label *****/
-      HTM_DIV_Begin ("class=\"Exa_HEAD_LEFT DAT_STRONG_%s\"",The_GetSuffix ());
-	 HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs][UsrDat->Sex]);
-	 HTM_Colon ();
-      HTM_DIV_End ();
-
-      /***** User's data and photo *****/
-      HTM_DIV_Begin ("class=\"Exa_HEAD_RIGHT DAT_%s\"",The_GetSuffix ());
-	 ID_WriteUsrIDs (UsrDat,NULL);
-	 HTM_NBSP ();
-	 HTM_Txt (UsrDat->Surname1);
-	 if (UsrDat->Surname2[0])
-	   {
-	    HTM_SP ();
-	    HTM_Txt (UsrDat->Surname2);
-	   }
-	 if (UsrDat->FrstName[0])
-	   {
-	    HTM_Comma (); HTM_SP ();
-	    HTM_Txt (UsrDat->FrstName);
-	   }
-	 if (Session->ShowPhotos == Pho_PHOTOS_SHOW)
-	   {
-	    HTM_BR ();
-	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-				       ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
-	   }
-      HTM_DIV_End ();
-
-   /***** End container *****/
-   HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
 /********************* Show start/end time in exam print *********************/
 /*****************************************************************************/
 
-static void ExaRes_ShowExamResultTime (struct ExaPrn_Print *Print)
+static void ExaRes_ShowTime (struct ExaPrn_Print *Print)
   {
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    Dat_StartEndTime_t StartEndTime;
@@ -1598,7 +1538,7 @@ static void ExaRes_ShowExamResultTime (struct ExaPrn_Print *Print)
 /******************* Show number of questions in exam print ******************/
 /*****************************************************************************/
 
-static void ExaRes_ShowExamResultNumQsts (struct ExaPrn_Print *Print,
+static void ExaRes_ShowNumQsts (struct ExaPrn_Print *Print,
                                           const struct ExaRes_ICanView *ICanView)
   {
    extern const char *Txt_Questions;
@@ -1656,7 +1596,7 @@ static void ExaRes_ShowExamResultNumQsts (struct ExaPrn_Print *Print,
 /******************** Show number of answers in exam print *******************/
 /*****************************************************************************/
 
-static void ExaRes_ShowExamResultNumAnss (struct ExaPrn_Print *Print,
+static void ExaRes_ShowNumAnss (struct ExaPrn_Print *Print,
                                           const struct ExaRes_ICanView *ICanView)
   {
    extern const char *Txt_Valid_answers;
@@ -1703,7 +1643,7 @@ static void ExaRes_ShowExamResultNumAnss (struct ExaPrn_Print *Print,
 /************************** Show score in exam print *************************/
 /*****************************************************************************/
 
-static void ExaRes_ShowExamResultScore (struct ExaPrn_Print *Print,
+static void ExaRes_ShowScore (struct ExaPrn_Print *Print,
                                         const struct ExaRes_ICanView *ICanView)
   {
    extern const char *Txt_Score;
@@ -1755,7 +1695,7 @@ static void ExaRes_ShowExamResultScore (struct ExaPrn_Print *Print,
 /************************** Show grade in exam print *************************/
 /*****************************************************************************/
 
-static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
+static void ExaRes_ShowGrade (const struct Exa_Exam *Exam,
 	                                struct ExaPrn_Print *Print,
                                         const struct ExaRes_ICanView *ICanView)
   {

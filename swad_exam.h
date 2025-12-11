@@ -71,7 +71,7 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,OldNew_OldNew_t OldNewExam);
 
 void Exa_ReceiveExam (void);
 
-void Exa_GetAndWriteDescription (long ExaCod);
+void Exa_Header (long ExaCod,struct Usr_Data *UsrDat,Pho_ShowPhotos_t ShowPhoto);
 
 //-------------------------------- Figures ------------------------------------
 void Exa_GetAndShowExamsStats (Hie_Level_t HieLvl);

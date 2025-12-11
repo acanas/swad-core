@@ -51,6 +51,7 @@
 #include "swad_hidden_visible.h"
 #include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
+#include "swad_ID.h"
 #include "swad_layout.h"
 #include "swad_match.h"
 #include "swad_match_result.h"
@@ -149,6 +150,9 @@ static Err_SuccessOrError_t Exa_CheckExamFieldsReceivedFromForm (const struct Ex
 
 static void Exa_CreateExam (struct Exa_Exam *Exam,const char *Txt);
 static void Exa_UpdateExam (struct Exa_Exam *Exam,const char *Txt);
+
+static void Exa_GetAndWriteDescription (long ExaCod);
+static void Exa_ShowStudent (struct Usr_Data *UsrDat,Pho_ShowPhotos_t ShowPhoto);
 
 /*****************************************************************************/
 /******************************* Reset exams *********************************/
@@ -1563,10 +1567,26 @@ static void Exa_UpdateExam (struct Exa_Exam *Exam,const char *Txt)
   }
 
 /*****************************************************************************/
+/******************************** Exam header ********************************/
+/*****************************************************************************/
+
+void Exa_Header (long ExaCod,struct Usr_Data *UsrDat,Pho_ShowPhotos_t ShowPhoto)
+  {
+   /***** Institution, degree and course *****/
+   Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
+
+   /***** Show student *****/
+   Exa_ShowStudent (UsrDat,ShowPhoto);
+
+   /***** Exam description *****/
+   Exa_GetAndWriteDescription (ExaCod);
+  }
+
+/*****************************************************************************/
 /*********************** Get and write exam description **********************/
 /*****************************************************************************/
 
-void Exa_GetAndWriteDescription (long ExaCod)
+static void Exa_GetAndWriteDescription (long ExaCod)
   {
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
@@ -1579,6 +1599,57 @@ void Exa_GetAndWriteDescription (long ExaCod)
    /***** Write description *****/
    HTM_DIV_Begin ("class=\"Exa_DESC DAT_SMALL_%s\"",The_GetSuffix ());
       HTM_Txt (Txt);
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/************************** Show student row in exam *************************/
+/*****************************************************************************/
+
+static void Exa_ShowStudent (struct Usr_Data *UsrDat,Pho_ShowPhotos_t ShowPhoto)
+  {
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
+     {
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO45x60",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
+     };
+
+   /***** Begin container *****/
+   HTM_DIV_Begin ("class=\"Exa_HEAD_CONT\"");
+
+      /***** Label *****/
+      HTM_DIV_Begin ("class=\"Exa_HEAD_LEFT DAT_STRONG_%s\"",The_GetSuffix ());
+	 HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs][UsrDat->Sex]);
+	 HTM_Colon ();
+      HTM_DIV_End ();
+
+      /***** User's data and photo *****/
+      HTM_DIV_Begin ("class=\"Exa_HEAD_RIGHT DAT_%s\"",The_GetSuffix ());
+	 ID_WriteUsrIDs (UsrDat,NULL);
+	 HTM_NBSP ();
+	 HTM_Txt (UsrDat->Surname1);
+	 if (UsrDat->Surname2[0])
+	   {
+	    HTM_SP ();
+	    HTM_Txt (UsrDat->Surname2);
+	   }
+	 if (UsrDat->FrstName[0])
+	   {
+	    HTM_Comma (); HTM_SP ();
+	    HTM_Txt (UsrDat->FrstName);
+	   }
+	 if (ShowPhoto == Pho_PHOTOS_SHOW)
+	   {
+	    HTM_BR ();
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
+				       ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
+	   }
+      HTM_DIV_End ();
+
+   /***** End container *****/
    HTM_DIV_End ();
   }
 

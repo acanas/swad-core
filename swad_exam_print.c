@@ -609,14 +609,7 @@ static void ExaPrn_ShowPrintToFill (struct Exa_Exams *Exams,
 		 Hlp_ASSESSMENT_Exams_answer_exam,Box_NOT_CLOSABLE);
 
       /***** Heading *****/
-      /* Institution, degree and course */
-      Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
-
-      /***** Show user and time *****/
-      ExaRes_ShowExamResultUser (Session,&Gbl.Usrs.Me.UsrDat);
-
-      /***** Exam description *****/
-      Exa_GetAndWriteDescription (Exams->Exam.ExaCod);
+      Exa_Header (Exams->Exam.ExaCod,&Gbl.Usrs.Me.UsrDat,Session->ShowPhotos);
 
       /***** Show table with questions to answer *****/
       if (Print->NumQsts.All)

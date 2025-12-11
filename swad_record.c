@@ -918,7 +918,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 	    if (Gbl.Action.Act == ActPrnRecSevGst &&
 		NumUsr &&
 		(NumUsr % RecsPerPag) == 0)
-	       HTM_DIV_Begin ("class=\"REC_USR\" style=\"page-break-before:always;\"");
+	       HTM_DIV_Begin ("class=\"REC_USR\" style=\"break-before:page;\"");
 	    else
 	       HTM_DIV_Begin ("class=\"REC_USR\"");
 
@@ -1121,7 +1121,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 	       if (Gbl.Action.Act == ActPrnRecSevStd &&
 		   NumUsr &&
 		   (NumUsr % RecsPerPag) == 0)
-		  HTM_DIV_Begin ("class=\"REC_USR\" style=\"page-break-before:always;\"");
+		  HTM_DIV_Begin ("class=\"REC_USR\" style=\"break-before:page;\"");
 	       else
 		  HTM_DIV_Begin ("class=\"REC_USR\"");
 
@@ -1348,7 +1348,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 	       if (Gbl.Action.Act == ActPrnRecSevTch &&
 		   NumUsr &&
 		   (NumUsr % RecsPerPag) == 0)
-		  HTM_DIV_Begin ("class=\"REC_USR\" style=\"page-break-before:always;\"");
+		  HTM_DIV_Begin ("class=\"REC_USR\" style=\"break-before:page;\"");
 	       else
 		  HTM_DIV_Begin ("class=\"REC_USR\"");
 

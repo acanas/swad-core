@@ -643,7 +643,13 @@ a:hover						/* Default ==> underlined */
 
 /******************************** Search *************************************/
 .WHAT_TO_SEARCH	{width: 186px;}
-	
+
+/****************************** Printing *************************************/
+@media print
+	{
+	.PAGE_EVEN {break-before: right;}
+	}
+
 /***************************** Notifications *********************************/
 #msg	/* Notifications, used for AJAX based refresh */
 	{
@@ -659,14 +665,14 @@ a:hover						/* Default ==> underlined */
 	#msg
 		{
 		display: none;
-    	}
+    		}
 	}
 @media only screen and (min-width: 1024px) and (max-width: 1280px)
 	{	/* For tablets */
 	#notif_all
 		{
 		display: none;
-    	}
+    		}
 	}
 .NOTIF_WHITE	{color: #707070; font-size: 12pt; white-space: nowrap;}
 .NOTIF_GREY		{color: #e0e0e0; font-size: 12pt; white-space: nowrap;}
