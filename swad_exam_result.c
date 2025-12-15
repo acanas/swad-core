@@ -648,9 +648,9 @@ static void ExaRes_ShowHeaderResults (Usr_MeOrOther_t MeOrOther)
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Session;
    extern const char *Txt_Grade;
+   extern const char *Txt_Score;
    extern const char *Txt_Questions;
    extern const char *Txt_Valid_answers;
-   extern const char *Txt_Score;
    extern const char *Txt_total;
    extern const char *Txt_QUESTIONS_valid;
    extern const char *Txt_QUESTIONS_invalid;
@@ -669,34 +669,34 @@ static void ExaRes_ShowHeaderResults (Usr_MeOrOther_t MeOrOther)
       HTM_TH_Span (Txt_Session                          ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (NULL                                 ,HTM_HEAD_CENTER,3,1,"LINE_BOTTOM");
       HTM_TH_Span (Txt_Grade                            ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM");
+      HTM_TH_Span (Txt_Score                            ,HTM_HEAD_CENTER,1,2,"LINE_LEFT");
       HTM_TH_Span (Txt_Questions                        ,HTM_HEAD_CENTER,1,3,"LINE_LEFT");
       HTM_TH_Span (Txt_Valid_answers                    ,HTM_HEAD_CENTER,1,5,"LINE_LEFT");
-      HTM_TH_Span (Txt_Score                            ,HTM_HEAD_CENTER,1,2,"LINE_LEFT");
    HTM_TR_End ();
 
    /***** Second row *****/
    HTM_TR_Begin (NULL);
+      HTM_TH_Span (Txt_total                            ,HTM_HEAD_RIGHT ,1,1,"LINE_LEFT");
+      HTM_TH_Span (Txt_average                          ,HTM_HEAD_RIGHT ,1,1,NULL);
       HTM_TH_Span (Txt_total                            ,HTM_HEAD_RIGHT ,2,1,"LINE_BOTTOM LINE_LEFT");
       HTM_TH_Span (Txt_QUESTIONS_valid                  ,HTM_HEAD_RIGHT ,2,1,"LINE_BOTTOM");
       HTM_TH_Span (Txt_QUESTIONS_invalid                ,HTM_HEAD_RIGHT ,2,1,"LINE_BOTTOM");
       HTM_TH_Span (Txt_ANSWERS_correct                  ,HTM_HEAD_RIGHT ,1,1,"LINE_LEFT");
       HTM_TH_Span (Txt_ANSWERS_wrong                    ,HTM_HEAD_CENTER,1,3,NULL);
       HTM_TH_Span (Txt_ANSWERS_blank                    ,HTM_HEAD_RIGHT ,1,1,NULL);
-      HTM_TH_Span (Txt_total                            ,HTM_HEAD_RIGHT ,1,1,"LINE_LEFT");
-      HTM_TH_Span (Txt_average                          ,HTM_HEAD_RIGHT ,1,1,NULL);
    HTM_TR_End ();
 
    /***** Third row *****/
    HTM_TR_Begin (NULL);
+      HTM_TH_Span ("<em>&Sigma;p<sub>i</sub></em>"      ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM LINE_LEFT");
+      HTM_TH_Span ("-1&le;"
+	           "<em style=\"text-decoration:overline;\">p</em>"
+	           "&le;1"                              ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM");
       HTM_TH_Span ("{<em>p<sub>i</sub></em>=1}"         ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM LINE_LEFT");
       HTM_TH_Span ("{-1&le;<em>p<sub>i</sub></em>&lt;0}",HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM");
       HTM_TH_Span ("{<em>p<sub>i</sub></em>=0}"         ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM");
       HTM_TH_Span ("{0&lt;<em>p<sub>i</sub></em>&lt;1}" ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM");
       HTM_TH_Span ("{<em>p<sub>i</sub></em>=0}"         ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM");
-      HTM_TH_Span ("<em>&Sigma;p<sub>i</sub></em>"      ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM LINE_LEFT");
-      HTM_TH_Span ("-1&le;"
-	           "<em style=\"text-decoration:overline;\">p</em>"
-	           "&le;1"                              ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM");
    HTM_TR_End ();
   }
 
@@ -906,6 +906,39 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 		 }
 	    HTM_TD_End ();
 
+	    /* Write score valid (taking into account only valid questions) */
+	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
+	                  The_GetSuffix (),The_GetColorRows ());
+	       switch (ICanView.Score)
+		 {
+		  case Usr_CAN:
+		     HTM_DoublePartOfUnsigned (Print.Score.Valid,
+					       Print.NumQsts.Valid.Total);
+		     break;
+		  case Usr_CAN_NOT:
+		  default:
+		     Ico_PutIconNotVisible ();
+		     break;
+		 }
+	    HTM_TD_End ();
+
+	    /* Write average score per question (taking into account only valid questions) */
+	    HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
+	                  The_GetSuffix (),The_GetColorRows ());
+	       switch (ICanView.Score)
+		 {
+		  case Usr_CAN:
+		     HTM_Double2Decimals (Print.NumQsts.Valid.Total ? Print.Score.Valid /
+								      (double) Print.NumQsts.Valid.Total :
+								      0.0);
+		     break;
+		  case Usr_CAN_NOT:
+		  default:
+		     Ico_PutIconNotVisible ();
+		     break;
+		 }
+	    HTM_TD_End ();
+
 	    /* Write total number of questions */
 	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
 	                  The_GetSuffix (),The_GetColorRows ());
@@ -1026,45 +1059,12 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 		 }
 	    HTM_TD_End ();
 
-	    /* Write score valid (taking into account only valid questions) */
-	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
-	                  The_GetSuffix (),The_GetColorRows ());
-	       switch (ICanView.Score)
-		 {
-		  case Usr_CAN:
-		     HTM_DoublePartOfUnsigned (Print.Score.Valid,
-					       Print.NumQsts.Valid.Total);
-		     break;
-		  case Usr_CAN_NOT:
-		  default:
-		     Ico_PutIconNotVisible ();
-		     break;
-		 }
-	    HTM_TD_End ();
-
-	    /* Write average score per question (taking into account only valid questions) */
-	    HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	                  The_GetSuffix (),The_GetColorRows ());
-	       switch (ICanView.Score)
-		 {
-		  case Usr_CAN:
-		     HTM_Double2Decimals (Print.NumQsts.Valid.Total ? Print.Score.Valid /
-								      (double) Print.NumQsts.Valid.Total :
-								      0.0);
-		     break;
-		  case Usr_CAN_NOT:
-		  default:
-		     Ico_PutIconNotVisible ();
-		     break;
-		 }
-	    HTM_TD_End ();
-
 	    HTM_TR_End ();
 	   }
 
 	 /***** Write totals for this user *****/
-	 HTM_TR_Begin (NULL);
-	 ExaRes_ShowResultsSummaryRow (NumResults,&NumTotalQsts,&TotalScore,TotalGrade);
+	 ExaRes_ShowResultsSummaryRow (NumResults,&NumTotalQsts,
+				       &TotalScore,TotalGrade);
 	}
       else
 	{
@@ -1081,6 +1081,11 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	 HTM_TD_Begin ("class=\"LINE_BOTTOM %s\"",The_GetColorRows ());
 	 HTM_TD_End ();
 
+	 /* Columns for score */
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT %s\"",
+		       The_GetColorRows ());
+	 HTM_TD_End ();
+
 	 /* Columns for questions */
 	 HTM_TD_Begin ("colspan=\"3\" class=\"LINE_BOTTOM LINE_LEFT %s\"",
 		       The_GetColorRows ());
@@ -1091,14 +1096,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 		       The_GetColorRows ());
 	 HTM_TD_End ();
 
-	 /* Columns for score */
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT %s\"",
-		       The_GetColorRows ());
-	 HTM_TD_End ();
+	 HTM_TR_End ();
 	}
-
-   /***** End last row *****/
-   HTM_TR_End ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1118,84 +1117,90 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
    extern const char *Txt_Sessions;
    unsigned NumTotalQstsInvalid;
 
-   /***** Row title *****/
-   HTM_TD_Begin ("colspan=\"3\" class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                 The_GetSuffix (),The_GetColorRows ());
-      HTM_Txt (Txt_Sessions); HTM_Colon ();
-   HTM_TD_End ();
+   /***** Begin row *****/
+   HTM_TR_Begin (NULL);
 
-   /***** Cell for links to show results *****/
-   HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-		 The_GetSuffix (),The_GetColorRows ());
-      HTM_Unsigned (NumResults);
-   HTM_TD_End ();
+      /***** Row title *****/
+      HTM_TD_Begin ("colspan=\"3\" class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
+		    The_GetSuffix (),The_GetColorRows ());
+	 HTM_Txt (Txt_Sessions); HTM_Colon ();
+      HTM_TD_End ();
 
-   /***** Write total grade *****/
-   HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                 The_GetSuffix (),The_GetColorRows ());
-      HTM_Double2Decimals (TotalGrade);
-   HTM_TD_End ();
+      /***** Cell for links to show results *****/
+      HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
+		    The_GetSuffix (),The_GetColorRows ());
+	 HTM_Unsigned (NumResults);
+      HTM_TD_End ();
 
-   /***** Write total number of questions *****/
-   HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                 The_GetSuffix (),The_GetColorRows ());
-      HTM_Unsigned (NumTotalQsts->All);
-   HTM_TD_End ();
+      /***** Write total grade *****/
+      HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
+		    The_GetSuffix (),The_GetColorRows ());
+	 HTM_Double2Decimals (TotalGrade);
+      HTM_TD_End ();
 
-   /***** Write total number of valid questions *****/
-   HTM_TD_Begin ("class=\"RT DAT_GREEN_%s LINE_TOP LINE_BOTTOM %s\"",
-                 The_GetSuffix (),The_GetColorRows ());
-      HTM_UnsignedLight0 (NumTotalQsts->Valid.Total);
-   HTM_TD_End ();
+      /***** Write total valid score *****/
+      HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
+		    The_GetSuffix (),The_GetColorRows ());
+	 HTM_DoublePartOfUnsigned (TotalScore->Valid,NumTotalQsts->Valid.Total);
+      HTM_TD_End ();
 
-   /***** Write total number of invalid questions *****/
-   HTM_TD_Begin ("class=\"RT DAT_RED_%s LINE_TOP LINE_BOTTOM %s\"",
-                 The_GetSuffix (),The_GetColorRows ());
-      NumTotalQstsInvalid = NumTotalQsts->All - NumTotalQsts->Valid.Total;
-      HTM_UnsignedLight0 (NumTotalQstsInvalid);
-   HTM_TD_End ();
+      /***** Write average valid score per valid question *****/
+      HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
+		    The_GetSuffix (),The_GetColorRows ());
+	 HTM_Double2Decimals (NumTotalQsts->Valid.Total ? TotalScore->Valid /
+							  (double) NumTotalQsts->Valid.Total :
+							  0.0);
+      HTM_TD_End ();
 
-   /***** Write number of correct questions *****/
-   HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                 The_GetSuffix (),The_GetColorRows ());
-      HTM_UnsignedLight0 (NumTotalQsts->Valid.Correct);
-   HTM_TD_End ();
+      /***** Write total number of questions *****/
+      HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
+		    The_GetSuffix (),The_GetColorRows ());
+	 HTM_Unsigned (NumTotalQsts->All);
+      HTM_TD_End ();
 
-   /***** Write number of wrong questions *****/
-   HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                 The_GetSuffix (),The_GetColorRows ());
-      HTM_UnsignedLight0 (NumTotalQsts->Valid.Wrong.Negative);
-   HTM_TD_End ();
+      /***** Write total number of valid questions *****/
+      HTM_TD_Begin ("class=\"RT DAT_GREEN_%s LINE_TOP LINE_BOTTOM %s\"",
+		    The_GetSuffix (),The_GetColorRows ());
+	 HTM_UnsignedLight0 (NumTotalQsts->Valid.Total);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                 The_GetSuffix (),The_GetColorRows ());
-      HTM_UnsignedLight0 (NumTotalQsts->Valid.Wrong.Zero);
-   HTM_TD_End ();
+      /***** Write total number of invalid questions *****/
+      HTM_TD_Begin ("class=\"RT DAT_RED_%s LINE_TOP LINE_BOTTOM %s\"",
+		    The_GetSuffix (),The_GetColorRows ());
+	 NumTotalQstsInvalid = NumTotalQsts->All - NumTotalQsts->Valid.Total;
+	 HTM_UnsignedLight0 (NumTotalQstsInvalid);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                 The_GetSuffix (),The_GetColorRows ());
-      HTM_UnsignedLight0 (NumTotalQsts->Valid.Wrong.Positive);
-   HTM_TD_End ();
+      /***** Write number of correct questions *****/
+      HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
+		    The_GetSuffix (),The_GetColorRows ());
+	 HTM_UnsignedLight0 (NumTotalQsts->Valid.Correct);
+      HTM_TD_End ();
 
-   /***** Write number of blank questions *****/
-   HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                 The_GetSuffix (),The_GetColorRows ());
-      HTM_UnsignedLight0 (NumTotalQsts->Valid.Blank);
-   HTM_TD_End ();
+      /***** Write number of wrong questions *****/
+      HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
+		    The_GetSuffix (),The_GetColorRows ());
+	 HTM_UnsignedLight0 (NumTotalQsts->Valid.Wrong.Negative);
+      HTM_TD_End ();
 
-   /***** Write total valid score *****/
-   HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                 The_GetSuffix (),The_GetColorRows ());
-      HTM_DoublePartOfUnsigned (TotalScore->Valid,NumTotalQsts->Valid.Total);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
+		    The_GetSuffix (),The_GetColorRows ());
+	 HTM_UnsignedLight0 (NumTotalQsts->Valid.Wrong.Zero);
+      HTM_TD_End ();
 
-   /***** Write average valid score per valid question *****/
-   HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                 The_GetSuffix (),The_GetColorRows ());
-      HTM_Double2Decimals (NumTotalQsts->Valid.Total ? TotalScore->Valid /
-						       (double) NumTotalQsts->Valid.Total :
-						       0.0);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
+		    The_GetSuffix (),The_GetColorRows ());
+	 HTM_UnsignedLight0 (NumTotalQsts->Valid.Wrong.Positive);
+      HTM_TD_End ();
+
+      /***** Write number of blank questions *****/
+      HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
+		    The_GetSuffix (),The_GetColorRows ());
+	 HTM_UnsignedLight0 (NumTotalQsts->Valid.Blank);
+      HTM_TD_End ();
+
+   /***** End row *****/
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/

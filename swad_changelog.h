@@ -632,10 +632,22 @@ TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de t
 
 TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtube.com/shorts/fY6Oax_uJBc?si=G3UHqvSH3yEbxm1B
 */
-#define Log_PLATFORM_VERSION	"SWAD 25.30.1 (2025-12-11)"
+#define Log_PLATFORM_VERSION	"SWAD 25.31 (2025-12-15)"
 #define CSS_FILE		"swad25.30.1.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 25.31:    Dec 15, 2025	Changes in social networks.
+					Fixed issue in test/exam results. (350395 lines)
+					4 changes necessary in database:
+ALTER TABLE usr_webs CHANGE COLUMN Web Web ENUM('www','500px','bluesky','delicious','deviantart','diaspora','edmodo','facebook','flickr','foursquare','github','gnusocial','googleplus','googlescholar','identica','instagram','linkedin','orcid','paperli','pinterest','researchgate','researcherid','scoopit','slideshare','stackoverflow','storify','tumblr','twitch','twitter','wikipedia','youtube','x') NOT NULL;
+UPDATE usr_webs SET Web='x' WHERE Web='twitter';
+DELETE FROM usr_webs WHERE Web='googleplus';
+ALTER TABLE usr_webs CHANGE COLUMN Web Web ENUM('www','500px','bluesky','delicious','deviantart','diaspora','edmodo','facebook','flickr','foursquare','github','gnusocial','googlescholar','identica','instagram','linkedin','orcid','paperli','pinterest','researchgate','researcherid','scoopit','slideshare','stackoverflow','storify','tumblr','twitch','wikipedia','youtube','x') NOT NULL;
+
+					Copy the following icons to icon public directory:
+sudo cp icon/bluesky-brands.svg /var/www/html/swad/icon/
+sudo cp icon/x-twitter-brands.svg /var/www/html/swad/icon/
+
 	Version 25.30.1:  Dec 11, 2025  Changes in exam layout. (350381 lines)
 	Version 25.30:    Dec 09, 2025  Code refactoring in tests, exams and matches. (350378 lines)
 	Version 25.29.1:  Dec 09, 2025  Code refactoring in exams. (350590 lines)

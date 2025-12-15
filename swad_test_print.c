@@ -1462,27 +1462,27 @@ static void TstPrn_ShowHeaderPrints (Usr_MeOrOther_t MeOrOther)
       HTM_TH_Span (Txt_START_END_TIME[Dat_END_TIME]     ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
       HTM_TH_Span (NULL                                 ,HTM_HEAD_CENTER,3,1,"LINE_BOTTOM");
       HTM_TH_Span (Txt_Grade                            ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM");
+      HTM_TH_Span (Txt_Score                            ,HTM_HEAD_CENTER,1,2,"LINE_LEFT");
       HTM_TH_Span (Txt_Questions                        ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM LINE_LEFT");
       HTM_TH_Span (Txt_Answers                          ,HTM_HEAD_CENTER,1,2,"LINE_LEFT");
-      HTM_TH_Span (Txt_Score                            ,HTM_HEAD_CENTER,1,2,"LINE_LEFT");
    HTM_TR_End ();
 
    /***** Second row *****/
    HTM_TR_Begin (NULL);
-      HTM_TH_Span (Txt_ANSWERS_non_blank                ,HTM_HEAD_RIGHT ,1,1,"LINE_LEFT");
-      HTM_TH      (Txt_ANSWERS_blank                    ,HTM_HEAD_RIGHT );
       HTM_TH_Span (Txt_total                            ,HTM_HEAD_RIGHT ,1,1,"LINE_LEFT");
       HTM_TH      (Txt_average                          ,HTM_HEAD_RIGHT );
+      HTM_TH_Span (Txt_ANSWERS_non_blank                ,HTM_HEAD_RIGHT ,1,1,"LINE_LEFT");
+      HTM_TH      (Txt_ANSWERS_blank                    ,HTM_HEAD_RIGHT );
    HTM_TR_End ();
 
    /***** Third row *****/
    HTM_TR_Begin (NULL);
-      HTM_TH_Span ("{-1&le;<em>p<sub>i</sub></em>&le;1}",HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM LINE_LEFT");
-      HTM_TH_Span ("{<em>p<sub>i</sub></em>=0}"         ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM");
       HTM_TH_Span ("<em>&Sigma;p<sub>i</sub></em>"      ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM LINE_LEFT");
       HTM_TH_Span ("-1&le;"
 	           "<em style=\"text-decoration:overline;\">p</em>"
 	           "&le;1"                              ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM");
+      HTM_TH_Span ("{-1&le;<em>p<sub>i</sub></em>&le;1}",HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM LINE_LEFT");
+      HTM_TH_Span ("{<em>p<sub>i</sub></em>=0}"         ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM");
    HTM_TR_End ();
   }
 
@@ -1610,6 +1610,40 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 		 }
 	    HTM_TD_End ();
 
+	    /* Write score */
+	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
+	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
+	                  The_GetColorRows ());
+	       switch (ICanView.Score)
+		 {
+		  case Usr_CAN:
+		     HTM_DoublePartOfUnsigned (Print.Score,Print.NumQsts.All);
+		     break;
+		  case Usr_CAN_NOT:
+		  default:
+		     Ico_PutIconNotVisible ();
+		     break;
+		 }
+	    HTM_TD_End ();
+
+	    /* Write average score per question */
+	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
+	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
+	                  The_GetColorRows ());
+	       switch (ICanView.Score)
+		 {
+		  case Usr_CAN:
+		     HTM_Double2Decimals (Print.NumQsts.All ? Print.Score /
+							      (double) Print.NumQsts.All :
+							      0.0);
+		     break;
+		  case Usr_CAN_NOT:
+		  default:
+		     Ico_PutIconNotVisible ();
+		     break;
+		 }
+	    HTM_TD_End ();
+
 	    /* Write number of questions */
 	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
 	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
@@ -1659,40 +1693,6 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 		 }
 	    HTM_TD_End ();
 
-	    /* Write score */
-	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
-	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
-	                  The_GetColorRows ());
-	       switch (ICanView.Score)
-		 {
-		  case Usr_CAN:
-		     HTM_DoublePartOfUnsigned (Print.Score,Print.NumQsts.All);
-		     break;
-		  case Usr_CAN_NOT:
-		  default:
-		     Ico_PutIconNotVisible ();
-		     break;
-		 }
-	    HTM_TD_End ();
-
-	    /* Write average score per question */
-	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
-	                  The_GetColorRows ());
-	       switch (ICanView.Score)
-		 {
-		  case Usr_CAN:
-		     HTM_Double2Decimals (Print.NumQsts.All ? Print.Score /
-							      (double) Print.NumQsts.All :
-							      0.0);
-		     break;
-		  case Usr_CAN_NOT:
-		  default:
-		     Ico_PutIconNotVisible ();
-		     break;
-		 }
-	    HTM_TD_End ();
-
 	    HTM_TR_End ();
 
 	    if (Print.DenyOrAllowTchs == DenAll_ALLOW)
@@ -1701,8 +1701,8 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 
 	 /***** Write totals for this user *****/
 	 TstPrn_ShowPrintsSummaryRow (Usr_ItsMe (UsrDat->UsrCod),
-	                              NumPrintsVisibleByTchs,
-				      &NumTotalQsts,TotalScore);
+	                              NumPrintsVisibleByTchs,&NumTotalQsts,
+	                              TotalScore);
 	}
       else
 	{
@@ -1719,6 +1719,11 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	 HTM_TD_Begin ("class=\"LINE_BOTTOM %s\"",The_GetColorRows ());
 	 HTM_TD_End ();
 
+	 /* Columns for score */
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT %s\"",
+	               The_GetColorRows ());
+	 HTM_TD_End ();
+
 	 /* Column for questions */
 	 HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",The_GetColorRows ());
 	 HTM_TD_End ();
@@ -1728,13 +1733,8 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	               The_GetColorRows ());
 	 HTM_TD_End ();
 
-	 /* Columns for score */
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT %s\"",
-	               The_GetColorRows ());
-	 HTM_TD_End ();
-
-      HTM_TR_End ();
-     }
+	 HTM_TR_End ();
+	}
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1816,6 +1816,22 @@ static void TstPrn_ShowPrintsSummaryRow (Usr_MeOrOther_t MeOrOther,
 	    Qst_ComputeAndShowGrade (NumTotalQsts->All,TotalScore,Tst_SCORE_MAX);
       HTM_TD_End ();
 
+      /***** Write total score *****/
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
+                    The_GetSuffix (),The_GetColorRows ());
+	 if (ICanViewTotalScore == Usr_CAN)
+	    HTM_DoublePartOfUnsigned (TotalScore,NumTotalQsts->All);
+      HTM_TD_End ();
+
+      /***** Write average score per question *****/
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
+                    The_GetSuffix (),The_GetColorRows ());
+	 if (ICanViewTotalScore == Usr_CAN)
+	    HTM_Double2Decimals (NumTotalQsts->All ? TotalScore /
+						     (double) NumTotalQsts->All :
+						     0.0);
+      HTM_TD_End ();
+
       /***** Write total number of questions *****/
       HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
                     The_GetSuffix (),The_GetColorRows ());
@@ -1835,22 +1851,6 @@ static void TstPrn_ShowPrintsSummaryRow (Usr_MeOrOther_t MeOrOther,
                     The_GetSuffix (),The_GetColorRows ());
 	 if (NumPrints)
 	    HTM_Unsigned (NumTotalQsts->All - NumTotalQsts->NotBlank);
-      HTM_TD_End ();
-
-      /***** Write total score *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
-	 if (ICanViewTotalScore == Usr_CAN)
-	    HTM_DoublePartOfUnsigned (TotalScore,NumTotalQsts->All);
-      HTM_TD_End ();
-
-      /***** Write average score per question *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
-	 if (ICanViewTotalScore == Usr_CAN)
-	    HTM_Double2Decimals (NumTotalQsts->All ? TotalScore /
-						     (double) NumTotalQsts->All :
-						     0.0);
       HTM_TD_End ();
 
    /***** End row *****/

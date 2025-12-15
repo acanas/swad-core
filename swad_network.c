@@ -60,6 +60,7 @@ static const char *Net_WebsAndSocialNetworksIcons[Net_NUM_WEBS_AND_SOCIAL_NETWOR
   {
    [Net_WWW           ] = "globe-americas.svg",
    [Net_500PX         ] = "500px-brands.svg",
+   [Net_BLUESKY       ] = "bluesky-brands.svg",
    [Net_DELICIOUS     ] = "delicious-brands.svg",
    [Net_DEVIANTART    ] = "deviantart-brands.svg",
    [Net_DIASPORA      ] = "diaspora-brands.svg",
@@ -69,7 +70,6 @@ static const char *Net_WebsAndSocialNetworksIcons[Net_NUM_WEBS_AND_SOCIAL_NETWOR
    [Net_FOURSQUARE    ] = "foursquare-brands.svg",
    [Net_GITHUB        ] = "github-brands.svg",
    [Net_GNU_SOCIAL    ] = "gnusocial64x64.png",
-   [Net_GOOGLE_PLUS   ] = "google-plus-brands.svg",
    [Net_GOOGLE_SCHOLAR] = "googlescholar.svg",
    [Net_IDENTICA      ] = "identica64x64.png",
    [Net_INSTAGRAM     ] = "instagram-brands.svg",
@@ -85,15 +85,16 @@ static const char *Net_WebsAndSocialNetworksIcons[Net_NUM_WEBS_AND_SOCIAL_NETWOR
    [Net_STORIFY       ] = "storify64x64.png",
    [Net_TUMBLR        ] = "tumblr-brands.svg",
    [Net_TWITCH        ] = "twitch-brands.svg",
-   [Net_TWITTER       ] = "twitter-brands.svg",
    [Net_WIKIPEDIA     ] = "wikipedia-w-brands.svg",
    [Net_YOUTUBE       ] = "youtube-brands.svg",
+   [Net_X             ] = "x-twitter-brands.svg",
   };
 
 static const char *Net_WebsAndSocialNetworksTitle[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
   {
    [Net_WWW           ] = "WWW",
    [Net_500PX         ] = "500px",
+   [Net_BLUESKY       ] = "Bluesky",
    [Net_DELICIOUS     ] = "Delicious",
    [Net_DEVIANTART    ] = "DeviantArt",
    [Net_DIASPORA      ] = "Diaspora",
@@ -103,7 +104,6 @@ static const char *Net_WebsAndSocialNetworksTitle[Net_NUM_WEBS_AND_SOCIAL_NETWOR
    [Net_FOURSQUARE    ] = "Foursquare",
    [Net_GITHUB        ] = "GitHub",
    [Net_GNU_SOCIAL    ] = "GNU Social",
-   [Net_GOOGLE_PLUS   ] = "Google+",
    [Net_GOOGLE_SCHOLAR] = "Google Scholar",
    [Net_IDENTICA      ] = "identi.ca",
    [Net_INSTAGRAM     ] = "Instagram",
@@ -119,9 +119,9 @@ static const char *Net_WebsAndSocialNetworksTitle[Net_NUM_WEBS_AND_SOCIAL_NETWOR
    [Net_STORIFY       ] = "Storify",
    [Net_TUMBLR        ] = "Tumblr",
    [Net_TWITCH        ] = "Twitch",
-   [Net_TWITTER       ] = "Twitter",
    [Net_WIKIPEDIA     ] = "Wikipedia",
    [Net_YOUTUBE       ] = "YouTube",
+   [Net_X             ] = "X",
   };
 
 #define Net_MY_WEBS_ID	"my_webs_section"

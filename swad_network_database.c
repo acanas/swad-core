@@ -45,6 +45,7 @@ const char *Net_DB_WebsAndSocialNetworks[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
   {
    [Net_WWW           ] = "www",
    [Net_500PX         ] = "500px",
+   [Net_BLUESKY       ] = "bluesky",
    [Net_DELICIOUS     ] = "delicious",
    [Net_DEVIANTART    ] = "deviantart",
    [Net_DIASPORA      ] = "diaspora",
@@ -54,7 +55,6 @@ const char *Net_DB_WebsAndSocialNetworks[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
    [Net_FOURSQUARE    ] = "foursquare",
    [Net_GITHUB        ] = "github",
    [Net_GNU_SOCIAL    ] = "gnusocial",
-   [Net_GOOGLE_PLUS   ] = "googleplus",
    [Net_GOOGLE_SCHOLAR] = "googlescholar",
    [Net_IDENTICA      ] = "identica",
    [Net_INSTAGRAM     ] = "instagram",
@@ -70,9 +70,9 @@ const char *Net_DB_WebsAndSocialNetworks[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
    [Net_STORIFY       ] = "storify",
    [Net_TUMBLR        ] = "tumblr",
    [Net_TWITCH        ] = "twitch",
-   [Net_TWITTER       ] = "twitter",
    [Net_WIKIPEDIA     ] = "wikipedia",
    [Net_YOUTUBE       ] = "youtube",
+   [Net_X             ] = "x",
   };
 
 /*****************************************************************************/

@@ -37,6 +37,7 @@ typedef enum
   {
    Net_WWW,		// Personal web page
    Net_500PX,
+   Net_BLUESKY,
    Net_DELICIOUS,
    Net_DEVIANTART,
    Net_DIASPORA,
@@ -46,7 +47,6 @@ typedef enum
    Net_FOURSQUARE,
    Net_GITHUB,
    Net_GNU_SOCIAL,
-   Net_GOOGLE_PLUS,
    Net_GOOGLE_SCHOLAR,
    Net_IDENTICA,
    Net_INSTAGRAM,
@@ -62,9 +62,9 @@ typedef enum
    Net_STORIFY,
    Net_TUMBLR,
    Net_TWITCH,
-   Net_TWITTER,
    Net_WIKIPEDIA,
    Net_YOUTUBE,
+   Net_X,
   } Net_WebsAndSocialNetworks_t;
 
 /*****************************************************************************/
