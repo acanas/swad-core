@@ -141,7 +141,7 @@ static void ExaRes_ShowQstsAndAnss (const struct ExaSes_Session *Session,
 static void ExaRes_WriteQstAndAns (struct Usr_Data *UsrDat,
 				   struct ExaPrn_Print *Print,
 				   unsigned QstInd,
-				   struct Qst_Question *Question,
+				   struct Qst_Question *Qst,
 				   unsigned Visibility);
 
 /*****************************************************************************/
@@ -1425,8 +1425,8 @@ void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned QstInd;
-   struct Qst_Question Question;
-   Exi_Exist_t QuestionExists;
+   struct Qst_Question Qst;
+   Exi_Exist_t QstExists;
 
    /***** Initialize score valid *****/
    Print->NumQsts.Valid.Correct        =
@@ -1442,32 +1442,32 @@ void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
 	QstInd++)
      {
       /***** Create question *****/
-      Qst_QstConstructor (&Question);
-      Question.QstCod = Print->Qsts[QstInd].QstCod;
+      Qst_QstConstructor (&Qst);
+      Qst.QstCod = Print->PrintedQsts[QstInd].QstCod;
 
 	 /***** Get validity and answer type from database *****/
-	 QuestionExists = Exa_DB_GetValidityAndAnswerType (&mysql_res,
-							   Question.QstCod);
-	 if (QuestionExists == Exi_EXISTS)
+	 QstExists = Exa_DB_GetValidityAndAnswerType (&mysql_res,
+							   Qst.QstCod);
+	 if (QstExists == Exi_EXISTS)
 	   {
 	    row = mysql_fetch_row (mysql_res);
 
 	    /* Get whether the question is invalid (row[0]) */
-	    Question.Validity = ExaSet_GetInvalidFromYN (row[0][0]);
+	    Qst.Validity = ExaSet_GetInvalidFromYN (row[0][0]);
 
 	    /* Get the type of answer (row[1]) */
-	    Question.Answer.Type = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+	    Qst.Answer.Type = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 	   }
 
 	 /* Free structure that stores the query result */
 	 DB_FreeMySQLResult (&mysql_res);
 
 	 /***** Compute answer score *****/
-	 if (QuestionExists == Exi_EXISTS)
-	    if (Question.Validity == ExaSet_VALID_QUESTION)
+	 if (QstExists == Exi_EXISTS)
+	    if (Qst.Validity == ExaSet_VALID_QUESTION)
 	      {
-	       Qst_ComputeAnswerScore ("exa_set_answers",&Print->Qsts[QstInd],&Question);
-	       switch (Print->Qsts[QstInd].Answer.IsCorrect)
+	       Qst_ComputeAnswerScore ("exa_set_answers",&Print->PrintedQsts[QstInd],&Qst);
+	       switch (Print->PrintedQsts[QstInd].Answer.IsCorrect)
 		 {
 		  case TstPrn_ANSWER_IS_CORRECT:
 		     Print->NumQsts.Valid.Correct++;
@@ -1486,11 +1486,11 @@ void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
 		     break;
 		 }
 	       Print->NumQsts.Valid.Total++;
-	       Print->Score.Valid += Print->Qsts[QstInd].Answer.Score;
+	       Print->Score.Valid += Print->PrintedQsts[QstInd].Answer.Score;
 	      }
 
       /***** Destroy question *****/
-      Qst_QstDestructor (&Question);
+      Qst_QstDestructor (&Qst);
      }
   }
 
@@ -1760,7 +1760,7 @@ static void ExaRes_ShowQstsAndAnss (const struct ExaSes_Session *Session,
 			            unsigned Visibility)
   {
    unsigned QstInd;
-   struct Qst_Question Question;
+   struct Qst_Question Qst;
 
    /***** Write questions in columns *****/
    HTM_DIV_Begin ("class=\"Exa_COLS_%u\"",Session->NumCols);
@@ -1770,17 +1770,17 @@ static void ExaRes_ShowQstsAndAnss (const struct ExaSes_Session *Session,
 	   QstInd++, The_ChangeRowColor ())
 	{
 	 /***** Create question *****/
-	 Qst_QstConstructor (&Question);
-	 Question.QstCod = Print->Qsts[QstInd].QstCod;
+	 Qst_QstConstructor (&Qst);
+	 Qst.QstCod = Print->PrintedQsts[QstInd].QstCod;
 
 	    /***** Get question data *****/
-	    ExaSet_GetQstDataFromDB (&Question);
+	    ExaSet_GetQstDataFromDB (&Qst);
 
 	    /***** Write questions and answers *****/
-	    ExaRes_WriteQstAndAns (UsrDat,Print,QstInd,&Question,Visibility);
+	    ExaRes_WriteQstAndAns (UsrDat,Print,QstInd,&Qst,Visibility);
 
 	 /***** Destroy question *****/
-	 Qst_QstDestructor (&Question);
+	 Qst_QstDestructor (&Qst);
 	}
 
    /***** End list of questions *****/
@@ -1794,7 +1794,7 @@ static void ExaRes_ShowQstsAndAnss (const struct ExaSes_Session *Session,
 static void ExaRes_WriteQstAndAns (struct Usr_Data *UsrDat,
 				   struct ExaPrn_Print *Print,
 				   unsigned QstInd,
-				   struct Qst_Question *Question,
+				   struct Qst_Question *Qst,
 				   unsigned Visibility)
   {
    extern const char *Txt_Score;
@@ -1854,27 +1854,27 @@ static void ExaRes_WriteQstAndAns (struct Usr_Data *UsrDat,
 
       /***** Number of question and answer type *****/
       HTM_DIV_Begin ("class=\"Exa_LEFT\"");
-	 Lay_WriteIndex (QstInd + 1,ClassNumQst[Question->Validity]);
-	 Qst_WriteAnswerType (Question->Answer.Type,Question->Validity);
+	 Lay_WriteIndex (QstInd + 1,ClassNumQst[Qst->Validity]);
+	 Qst_WriteAnswerType (Qst->Answer.Type,Qst->Validity);
       HTM_DIV_End ();
 
       /***** Stem, media and answers *****/
       HTM_DIV_Begin ("class=\"Exa_RIGHT\"");
 
 	 /* Stem */
-	 Qst_WriteQstStem (Question->Stem,ClassTxt[Question->Validity],
+	 Qst_WriteQstStem (Qst->Stem,ClassTxt[Qst->Validity],
 			   HiddenOrVisible[ICanView[TstVis_VISIBLE_QST_ANS_TXT]]);
 
 	 /* Media */
 	 if (ICanView[TstVis_VISIBLE_QST_ANS_TXT] == Usr_CAN)
-	    Med_ShowMedia (&Question->Media,"Tst_MED_SHOW_CONT","Tst_MED_SHOW");
+	    Med_ShowMedia (&Qst->Media,"Tst_MED_SHOW_CONT","Tst_MED_SHOW");
 
 	 /* Answers */
-	 Qst_ComputeAnswerScore ("exa_set_answers",&Print->Qsts[QstInd],Question);
-	 TstPrn_WriteAnswersExam (UsrDat,&Print->Qsts[QstInd],Question,
+	 Qst_ComputeAnswerScore ("exa_set_answers",&Print->PrintedQsts[QstInd],Qst);
+	 TstPrn_WriteAnswersExam (UsrDat,&Print->PrintedQsts[QstInd],Qst,
 				  ICanView,
-				  ClassTxt[Question->Validity],
-				  ClassFeedback[Question->Validity]);
+				  ClassTxt[Qst->Validity],
+				  ClassFeedback[Qst->Validity]);
 
 	 /* Write score retrieved from database */
 	 if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE] == Usr_CAN)
@@ -1882,13 +1882,13 @@ static void ExaRes_WriteQstAndAns (struct Usr_Data *UsrDat,
 	    HTM_DIV_Begin ("class=\"LM DAT_SMALL_%s\"",The_GetSuffix ());
 	       HTM_Txt (Txt_Score); HTM_Colon (); HTM_NBSP ();
 	       HTM_SPAN_Begin ("class=\"%s_%s\"",
-			       Print->Qsts[QstInd].Answer.Str[0] ?
-			       (Print->Qsts[QstInd].Answer.Score > 0 ? "Qst_ANS_OK" :	// Correct
+			       Print->PrintedQsts[QstInd].Answer.Str[0] ?
+			       (Print->PrintedQsts[QstInd].Answer.Score > 0 ? "Qst_ANS_OK" :	// Correct
 								       "Qst_ANS_BAD") :	// Wrong
 								       "Qst_ANS_0",	// Blank answer
 			       The_GetSuffix ());
-		  HTM_Double2Decimals (Print->Qsts[QstInd].Answer.Score);
-		  if (Question->Validity == ExaSet_INVALID_QUESTION)
+		  HTM_Double2Decimals (Print->PrintedQsts[QstInd].Answer.Score);
+		  if (Qst->Validity == ExaSet_INVALID_QUESTION)
 		    {
 		     HTM_SP ();
 		     HTM_ParTxtPar (Txt_Invalid_question);
@@ -1899,8 +1899,8 @@ static void ExaRes_WriteQstAndAns (struct Usr_Data *UsrDat,
 
 	 /* Question feedback */
 	 if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT] == Usr_CAN)
-	    Qst_WriteQstFeedback (Question->Feedback,
-	                          ClassFeedback[Question->Validity]);
+	    Qst_WriteQstFeedback (Qst->Feedback,
+	                          ClassFeedback[Qst->Validity]);
 
       HTM_DIV_End ();
 

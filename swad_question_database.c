@@ -65,7 +65,7 @@ extern struct Globals Gbl;
 /*********** Insert or update question in the table of questions *************/
 /*****************************************************************************/
 
-long Qst_DB_CreateQst (const struct Qst_Question *Question)
+long Qst_DB_CreateQst (const struct Qst_Question *Qst)
   {
    extern const char Qst_Shuffle_YN[Qst_NUM_SHUFFLE];
 
@@ -92,19 +92,19 @@ long Qst_DB_CreateQst (const struct Qst_Question *Question)
 					     "0,"	// NumHits
 					     "0)",	// Score
 				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-				Qst_DB_StrAnswerTypes[Question->Answer.Type],
-				Qst_Shuffle_YN[Question->Answer.Shuffle],
-				Question->Stem,
-				Question->Feedback ? Question->Feedback :
+				Qst_DB_StrAnswerTypes[Qst->Answer.Type],
+				Qst_Shuffle_YN[Qst->Answer.Shuffle],
+				Qst->Stem,
+				Qst->Feedback ? Qst->Feedback :
 						     "",
-				Question->Media.MedCod);
+				Qst->Media.MedCod);
   }
 
 /*****************************************************************************/
 /************ Update existing question in the table of questions *************/
 /*****************************************************************************/
 
-void Qst_DB_UpdateQst (const struct Qst_Question *Question)
+void Qst_DB_UpdateQst (const struct Qst_Question *Qst)
   {
    extern const char Qst_Shuffle_YN[Qst_NUM_SHUFFLE];
 
@@ -118,13 +118,13 @@ void Qst_DB_UpdateQst (const struct Qst_Question *Question)
 			  "MedCod=%ld"
 		   " WHERE QstCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
-		   Qst_DB_StrAnswerTypes[Question->Answer.Type],
-		   Qst_Shuffle_YN[Question->Answer.Shuffle],
-		   Question->Stem,
-		   Question->Feedback ? Question->Feedback :
+		   Qst_DB_StrAnswerTypes[Qst->Answer.Type],
+		   Qst_Shuffle_YN[Qst->Answer.Shuffle],
+		   Qst->Stem,
+		   Qst->Feedback ? Qst->Feedback :
 					"",
-		   Question->Media.MedCod,
-		   Question->QstCod,
+		   Qst->Media.MedCod,
+		   Qst->QstCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
@@ -135,21 +135,21 @@ void Qst_DB_UpdateQst (const struct Qst_Question *Question)
 void Qst_DB_UpdateQstScore (const struct TstPrn_Print *Print,unsigned QstInd)
   {
    Str_SetDecimalPointToUS ();		// To print the floating point as a dot
-      if (Print->PrintedQuestions[QstInd].Answer.Str[0] != '\0')		// User's answer is not blank
+      if (Print->PrintedQsts[QstInd].Answer.Str[0] != '\0')		// User's answer is not blank
 	 DB_QueryUPDATE ("can not update the score of a question",
 			 "UPDATE tst_questions"
 			   " SET NumHits=NumHits+1,"
 				"NumHitsNotBlank=NumHitsNotBlank+1,"
 				"Score=Score+(%.15lg)"
 			 " WHERE QstCod=%ld",
-			 Print->PrintedQuestions[QstInd].Answer.Score,
-			 Print->PrintedQuestions[QstInd].QstCod);
+			 Print->PrintedQsts[QstInd].Answer.Score,
+			 Print->PrintedQsts[QstInd].QstCod);
       else					// User's answer is blank
 	 DB_QueryUPDATE ("can not update the score of a question",
 			 "UPDATE tst_questions"
 			   " SET NumHits=NumHits+1"
 			 " WHERE QstCod=%ld",
-			 Print->PrintedQuestions[QstInd].QstCod);
+			 Print->PrintedQsts[QstInd].QstCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 
@@ -175,22 +175,22 @@ void Qst_DB_UpdateQstShuffle (long QstCod,Qst_Shuffle_t Shuffle)
 /*************************** Create integer answer ***************************/
 /*****************************************************************************/
 
-void Qst_DB_CreateIntAnswer (const struct Qst_Question *Question)
+void Qst_DB_CreateIntAnswer (const struct Qst_Question *Qst)
   {
    DB_QueryINSERT ("can not create answer",
 		   "INSERT INTO tst_answers"
 		   " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
 		   " VALUES"
 		   " (%ld,0,%ld,'',-1,'Y')",
-		   Question->QstCod,
-		   Question->Answer.Integer);
+		   Qst->QstCod,
+		   Qst->Answer.Integer);
   }
 
 /*****************************************************************************/
 /**************************** Create float answer ****************************/
 /*****************************************************************************/
 
-void Qst_DB_CreateFltAnswer (const struct Qst_Question *Question)
+void Qst_DB_CreateFltAnswer (const struct Qst_Question *Qst)
   {
    unsigned i;
 
@@ -203,9 +203,9 @@ void Qst_DB_CreateFltAnswer (const struct Qst_Question *Question)
 		      " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
 		      " VALUES"
 		      " (%ld,%u,'%.15lg','',-1,'Y')",
-		      Question->QstCod,
+		      Qst->QstCod,
 		      i,
-		      Question->Answer.FloatingPoint[i]);
+		      Qst->Answer.FloatingPoint[i]);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 
@@ -213,7 +213,7 @@ void Qst_DB_CreateFltAnswer (const struct Qst_Question *Question)
 /***************************** Create T/F answer *****************************/
 /*****************************************************************************/
 
-void Qst_DB_CreateTF_Answer (const struct Qst_Question *Question)
+void Qst_DB_CreateTF_Answer (const struct Qst_Question *Qst)
   {
    extern const char *Qst_TFValues[Qst_NUM_OPTIONS_TF];
 
@@ -222,39 +222,39 @@ void Qst_DB_CreateTF_Answer (const struct Qst_Question *Question)
 		   " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
 		   " VALUES"
 		   " (%ld,0,'%s','',-1,'Y')",
-		   Question->QstCod,Qst_TFValues[Question->Answer.OptionTF]);
+		   Qst->QstCod,Qst_TFValues[Qst->Answer.OptionTF]);
   }
 
 /*****************************************************************************/
 /***************************** Create T/F answer *****************************/
 /*****************************************************************************/
 
-void Qst_DB_CreateChoAnswer (struct Qst_Question *Question)
+void Qst_DB_CreateChoAnswer (struct Qst_Question *Qst)
   {
    extern const char Qst_Correct_YN[Qst_NUM_WRONG_CORRECT];
    unsigned NumOpt;
 
    for (NumOpt = 0;
-	NumOpt < Question->Answer.NumOptions;
+	NumOpt < Qst->Answer.NumOptions;
 	NumOpt++)
-      if (Question->Answer.Options[NumOpt].Text[0] ||			// Text
-	  Question->Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)	// or media
+      if (Qst->Answer.Options[NumOpt].Text[0] ||			// Text
+	  Qst->Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)	// or media
 	{
 	 DB_QueryINSERT ("can not create answer",
 			 "INSERT INTO tst_answers"
 			 " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
 			 " VALUES"
 			 " (%ld,%u,'%s','%s',%ld,'%c')",
-			 Question->QstCod,NumOpt,
-			 Question->Answer.Options[NumOpt].Text,
-			 Question->Answer.Options[NumOpt].Feedback ? Question->Answer.Options[NumOpt].Feedback :
+			 Qst->QstCod,NumOpt,
+			 Qst->Answer.Options[NumOpt].Text,
+			 Qst->Answer.Options[NumOpt].Feedback ? Qst->Answer.Options[NumOpt].Feedback :
 								     "",
-			 Question->Answer.Options[NumOpt].Media.MedCod,
-			 Qst_Correct_YN[Question->Answer.Options[NumOpt].Correct]);
+			 Qst->Answer.Options[NumOpt].Media.MedCod,
+			 Qst_Correct_YN[Qst->Answer.Options[NumOpt].Correct]);
 
 	 /* Update image status */
-	 if (Question->Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)
-	    Question->Answer.Options[NumOpt].Media.Status = Med_STORED_IN_DB;
+	 if (Qst->Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)
+	    Qst->Answer.Options[NumOpt].Media.Status = Med_STORED_IN_DB;
 	}
   }
 
@@ -262,8 +262,7 @@ void Qst_DB_CreateChoAnswer (struct Qst_Question *Question)
 /***************** Get several test questions from database ******************/
 /*****************************************************************************/
 
-unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
-                         const struct Qst_Questions *Questions)
+unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,const struct Qst_Questions *Qsts)
   {
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
    extern const char *Txt_No_questions_found_matching_your_search_criteria;
@@ -286,7 +285,7 @@ unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
    /* Begin query */
    Str_Copy (Query,"SELECT tst_questions.QstCod"	// row[0]
 		    " FROM tst_questions",Qst_MAX_BYTES_QUERY_QUESTIONS);
-   if (!Questions->Tags.All)
+   if (!Qsts->Tags.All)
       Str_Concat (Query,",tst_question_tags",Qst_MAX_BYTES_QUERY_QUESTIONS);
 
    Str_Concat (Query," WHERE tst_questions.CrsCod=",
@@ -307,16 +306,16 @@ unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
    Str_Concat (Query,"')",Qst_MAX_BYTES_QUERY_QUESTIONS);
 
    /* Add the tags selected */
-   if (!Questions->Tags.All)
+   if (!Qsts->Tags.All)
      {
       Str_Concat (Query," AND tst_questions.QstCod=tst_question_tags.QstCod",
                   Qst_MAX_BYTES_QUERY_QUESTIONS);
       for (NumSelTag = 0, LengthQuery = strlen (Query);
-	   NumSelTag < Questions->Tags.NumSelected;
+	   NumSelTag < Qsts->Tags.NumSelected;
 	   NumSelTag++)
         {
 	 snprintf (LongStr,sizeof (LongStr),"%ld",
-	           Questions->Tags.ListSelectedTagCods[NumSelTag]);
+	           Qsts->Tags.ListSelectedTagCods[NumSelTag]);
          LengthQuery += 35 + strlen (LongStr) + 1;
          if (LengthQuery > Qst_MAX_BYTES_QUERY_QUESTIONS - 256)
             Err_QuerySizeExceededExit ();
@@ -329,9 +328,9 @@ unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
      }
 
    /* Add the types of answer selected */
-   if (!Questions->AnswerTypes.All)
+   if (!Qsts->AnswerTypes.All)
      {
-      for (Ptr = Questions->AnswerTypes.List, NumItemInList = 0, LengthQuery = strlen (Query);
+      for (Ptr = Qsts->AnswerTypes.List, NumItemInList = 0, LengthQuery = strlen (Query);
            *Ptr;
            NumItemInList++)
         {
@@ -353,7 +352,7 @@ unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
    /* End the query */
    Str_Concat (Query," GROUP BY tst_questions.QstCod",Qst_MAX_BYTES_QUERY_QUESTIONS);
 
-   switch (Questions->SelectedOrder)
+   switch (Qsts->SelectedOrder)
      {
       case Qst_ORDER_STEM:
          Str_Concat (Query," ORDER BY tst_questions.Stem",
@@ -398,7 +397,7 @@ unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
 /*****************************************************************************/
 
 unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
-                                        const struct Qst_Questions *Questions)
+                                        const struct Qst_Questions *Qsts)
   {
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
    char *Query = NULL;
@@ -438,23 +437,23 @@ unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
 	     Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
    /* Add selected tags */
-   if (Questions->Tags.PreselectedTagCod > 0)	// Only one preselected tag
+   if (Qsts->Tags.PreselectedTagCod > 0)	// Only one preselected tag
      {
       Str_Concat (Query," AND tst_question_tags.TagCod=",
 	          Qst_MAX_BYTES_QUERY_QUESTIONS);
       snprintf (LongStr,sizeof (LongStr),"%ld",
-	        Questions->Tags.PreselectedTagCod);
+	        Qsts->Tags.PreselectedTagCod);
       Str_Concat (Query,LongStr,Qst_MAX_BYTES_QUERY_QUESTIONS);
      }
-   else if (!Questions->Tags.All)	// User has selected some tags, but not all
+   else if (!Qsts->Tags.All)	// User has selected some tags, but not all
      {
       LengthQuery = strlen (Query);
       for (NumSelTag = 0;
-	   NumSelTag < Questions->Tags.NumSelected;
+	   NumSelTag < Qsts->Tags.NumSelected;
 	   NumSelTag++)
         {
 	 snprintf (LongStr,sizeof (LongStr),"%ld",
-	           Questions->Tags.ListSelectedTagCods[NumSelTag]);
+	           Qsts->Tags.ListSelectedTagCods[NumSelTag]);
          LengthQuery += 35 + strlen (LongStr) + 1;
          if (LengthQuery > Qst_MAX_BYTES_QUERY_QUESTIONS - 128)
             Err_QuerySizeExceededExit ();
@@ -467,9 +466,9 @@ unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
      }
 
    /* Add answer types selected */
-   if (!Questions->AnswerTypes.All)
+   if (!Qsts->AnswerTypes.All)
      {
-      for (Ptr = Questions->AnswerTypes.List, NumItemInList = 0, LengthQuery = strlen (Query);
+      for (Ptr = Qsts->AnswerTypes.List, NumItemInList = 0, LengthQuery = strlen (Query);
            *Ptr;
            NumItemInList++)
         {
@@ -489,7 +488,7 @@ unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
 
    /* End query */
    Str_Concat (Query," ORDER BY RAND() LIMIT ",Qst_MAX_BYTES_QUERY_QUESTIONS);
-   snprintf (StrNumQsts,sizeof (StrNumQsts),"%u",Questions->NumQsts);
+   snprintf (StrNumQsts,sizeof (StrNumQsts),"%u",Qsts->NumQsts);
    Str_Concat (Query,StrNumQsts,Qst_MAX_BYTES_QUERY_QUESTIONS);
 /*
    if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
@@ -1272,7 +1271,7 @@ long Qst_DB_GetQstMedCod (long HieCod,long QstCod)
 /*****************************************************************************/
 
 unsigned Qst_DB_GetQstCodsFromTypeAnsStem (MYSQL_RES **mysql_res,
-                                           const struct Qst_Question *Question)
+                                           const struct Qst_Question *Qst)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not check if a question exists",
@@ -1282,8 +1281,8 @@ unsigned Qst_DB_GetQstCodsFromTypeAnsStem (MYSQL_RES **mysql_res,
 		     " AND AnsType='%s'"
 		     " AND Stem='%s'",
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Qst_DB_StrAnswerTypes[Question->Answer.Type],
-		   Question->Stem);
+		   Qst_DB_StrAnswerTypes[Qst->Answer.Type],
+		   Qst->Stem);
   }
 
 /*****************************************************************************/
@@ -1369,7 +1368,7 @@ unsigned Qst_DB_GetQstAnswersCorr (MYSQL_RES **mysql_res,
 /*****************************************************************************/
 
 unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
-                                           const struct Qst_Question *Question)
+                                           const struct Qst_Question *Qst)
   {
    extern const char *Qst_OrderByShuffle[Qst_NUM_SHUFFLE];
 
@@ -1379,8 +1378,8 @@ unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
 		    " FROM tst_answers"
 		   " WHERE QstCod=%ld"
 		" ORDER BY %s",
-		   Question->QstCod,
-		   Qst_OrderByShuffle[Question->Answer.Shuffle]);
+		   Qst->QstCod,
+		   Qst_OrderByShuffle[Qst->Answer.Shuffle]);
   }
 
 /*****************************************************************************/

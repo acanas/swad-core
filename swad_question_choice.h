@@ -1,7 +1,7 @@
-// swad_exam_sheet_answer.h: exams sheets (answers)
+// swad_question_choice.h: test/exam/game choice questions
 
-#ifndef _SWAD_EXA_SHE_ANS
-#define _SWAD_EXA_SHE_ANS
+#ifndef _SWAD_QST_CHO
+#define _SWAD_QST_CHO
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -28,16 +28,26 @@
 /*****************************************************************************/
 
 #include "swad_exam_print.h"
-#include "swad_exam_session.h"
-#include "swad_exam_sheet.h"
+#include "swad_question.h"
+
+/*****************************************************************************/
+/***************************** Public constants ******************************/
+/*****************************************************************************/
+
+/*****************************************************************************/
+/******************************* Public types ********************************/
+/*****************************************************************************/
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ExaSheAns_ShowAnswers (const struct ExaSes_Session *Session,
-			    const struct ExaPrn_Print *Print,
-			    ExaShe_BlankOrSolved_t BlankOrSolved,
-			    Vie_ViewType_t ViewType);
+void QstCho_WriteBlnkAns (const struct Qst_Question *Qst);
+void QstCho_WriteCorrAns (const struct ExaPrn_Print *Print,
+			  unsigned QstInd,struct Qst_Question *Qst);
+void QstCho_WriteReadAns (const struct ExaPrn_Print *Print,
+			  unsigned QstInd,struct Qst_Question *Qst);
+void QstCho_WriteEditAns (const struct ExaPrn_Print *Print,
+			  unsigned QstInd,struct Qst_Question *Qst);
 
 #endif

@@ -52,7 +52,7 @@ void ExaSet_ResetSet (struct ExaSet_Set *Set);
 void ExaSet_GetSetDataFromRow (MYSQL_RES *mysql_res,struct ExaSet_Set *Set);
 
 Qst_AnswerType_t ExaSet_GetAnswerType (long QstCod);
-void ExaSet_GetQstDataFromDB (struct Qst_Question *Question);
+void ExaSet_GetQstDataFromDB (struct Qst_Question *Qst);
 ExaSet_Validity_t ExaSet_GetInvalidFromYN (char Ch);
 
 void ExaSet_AddQstsToSet (void);

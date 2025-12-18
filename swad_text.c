@@ -71,7 +71,6 @@
 #include "swad_department.h"
 #include "swad_exam_log.h"
 #include "swad_exam_session.h"
-#include "swad_exam_sheet_answer.h"
 #include "swad_figure.h"
 #include "swad_follow.h"
 #include "swad_forum.h"

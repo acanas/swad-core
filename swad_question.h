@@ -74,9 +74,9 @@ typedef enum
 #define Qst_NUM_WRONG_CORRECT 3
 typedef enum
   {
-   Qst_BLANK   = 0,
-   Qst_WRONG   = 1,
-   Qst_CORRECT = 2,
+   Qst_BLANK,
+   Qst_WRONG,
+   Qst_CORRECT,
   } Qst_WrongOrCorrect_t;
 
 struct Qst_Question
@@ -115,7 +115,7 @@ struct Qst_Questions
    struct Qst_AnswerTypes AnswerTypes;	// Selected answer types
    Qst_QuestionsOrder_t SelectedOrder;	// Order for listing questions
    unsigned NumQsts;			// Number of questions
-   struct Qst_Question Question;	// Selected / editing question
+   struct Qst_Question Qst;		// Selected / editing question
   };
 
 struct Qst_Stats
@@ -131,28 +131,35 @@ struct Qst_Stats
    double AvgScorePerQuestion;
   };
 
+struct Qst_AnswerDisplay
+  {
+   const char *ClassTch;
+   const char *ClassStd;
+   const char *Symbol;
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Qst_Constructor (struct Qst_Questions *Questions);
-void Qst_Destructor (struct Qst_Questions *Questions);
+void Qst_Constructor (struct Qst_Questions *Qsts);
+void Qst_Destructor (struct Qst_Questions *Qsts);
 
 void Qst_ReqEditQsts (void);
-void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions);
+void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Qsts);
 void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes);
 void Qst_RequestSelectQstsForExamSet (struct Exa_Exams *Exams);
 void Qst_RequestSelectQstsForGame (struct Gam_Games *Games);
 void Qst_ShowFormRequestSelectQstsForExamSet (struct Exa_Exams *Exams,
-                                              struct Qst_Questions *Questions);
+                                              struct Qst_Questions *Qsts);
 void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
-                                           struct Qst_Questions *Questions);
+                                           struct Qst_Questions *Qsts);
 
 void Qst_PutIconsRequestBankQsts (__attribute__((unused)) void *Args);
-void Qst_PutIconsEditBankQsts (void *Questions);
+void Qst_PutIconsEditBankQsts (void *Qsts);
 
-void Qst_ListQuestionForEdition (struct Qst_Question *Question,
-                                 unsigned QstInd,Exi_Exist_t QuestionExists,
+void Qst_ListQuestionForEdition (struct Qst_Question *Qst,
+                                 unsigned QstInd,Exi_Exist_t QstExists,
                                  const char *Anchor);
 void Qst_WriteAnswerType (Qst_AnswerType_t AnswerType,ExaSet_Validity_t Validity);
 void Qst_WriteQstStem (const char *Stem,const char *ClassStem,
@@ -163,10 +170,10 @@ void Qst_ListQuestionsToEdit (void);
 void Qst_ListQuestionsToSelectForExamSet (struct Exa_Exams *Exams);
 void Qst_ListQuestionsToSelectForGame (struct Gam_Games *Games);
 
-void Qst_ListOneOrMoreQstsForEdition (struct Qst_Questions *Questions,
+void Qst_ListOneOrMoreQstsForEdition (struct Qst_Questions *Qsts,
                                       MYSQL_RES *mysql_res);
-void Qst_WriteHeadingRowQuestionsForEdition (struct Qst_Questions *Questions);
-void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd);
+void Qst_WriteHeadingRowQuestionsForEdition (struct Qst_Questions *Qsts);
+void Qst_WriteQuestionListing (struct Qst_Questions *Qsts,unsigned QstInd);
 
 void Qst_ListOneOrMoreQstsForSelectionForExamSet (struct Exa_Exams *Exams,
 						  unsigned NumQsts,
@@ -175,16 +182,15 @@ void Qst_ListOneOrMoreQstsForSelectionForGame (struct Gam_Games *Games,
 					       unsigned NumQsts,
                                                MYSQL_RES *mysql_res);
 void Qst_PutCheckboxToSelectAllQuestions (void);
-void Qst_WriteQuestionRowForSelection (unsigned QstInd,
-                                       struct Qst_Question *Question);
+void Qst_WriteQuestionRowForSelection (unsigned QstInd,struct Qst_Question *Qst);
 
-void Qst_PutParsEditQst (void *Questions);
+void Qst_PutParsEditQst (void *Qsts);
 
-void Qst_WriteAnswers (struct Qst_Question *Question,
+void Qst_WriteAnswers (struct Qst_Question *Qst,
                        const char *ClassTxt,
                        const char *ClassFeedback);
 
-void Qst_ListOneQstToEdit (struct Qst_Questions *Questions);
+void Qst_ListOneQstToEdit (struct Qst_Questions *Qsts);
 
 //-----------------------------------------------------------------------------
 
@@ -194,40 +200,41 @@ void Qst_WriteAnsTF (Qst_OptionTF_t OptionTF);
 
 void Qst_WriteParQstCod (unsigned NumQst,long QstCod);
 
-void Qst_CheckIfNumberOfAnswersIsOne (const struct Qst_Question *Question);
+void Qst_CheckIfNumberOfAnswersIsOne (const struct Qst_Question *Qst);
 
-void Qst_ChangeFormatOptionsText (struct Qst_Question *Question);
-void Qst_ChangeFormatOptionsFeedback (struct Qst_Question *Question);
+void Qst_ChangeFormatOptionsText (struct Qst_Question *Qst);
+void Qst_ChangeFormatOptionsFeedback (struct Qst_Question *Qst);
 
 Qst_AnswerType_t Qst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeDB);
 Qst_AnswerType_t Qst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
 
 void Qst_ShowFormEditOneQst (void);
-void Qst_PutFormEditOneQst (struct Qst_Question *Question);
+void Qst_PutFormEditOneQst (struct Qst_Question *Qst);
 
-void Qst_QstConstructor (struct Qst_Question *Question);
-void Qst_QstDestructor (struct Qst_Question *Question);
+void Qst_QstConstructor (struct Qst_Question *Qst);
+void Qst_QstDestructor (struct Qst_Question *Qst);
 
-Err_SuccessOrError_t Qst_AllocateTextChoiceAnswer (struct Qst_Question *Question,unsigned NumOpt);
-void Qst_FreeTextChoiceAnswers (struct Qst_Question *Question);
-void Qst_FreeTextChoiceAnswer (struct Qst_Question *Question,unsigned NumOpt);
+Err_SuccessOrError_t Qst_AllocateTextChoiceAnswer (struct Qst_Question *Qst,
+						   unsigned NumOpt);
+void Qst_FreeTextChoiceAnswers (struct Qst_Question *Qst);
+void Qst_FreeTextChoiceAnswer (struct Qst_Question *Qst,unsigned NumOpt);
 
-void Qst_ResetMediaOfQuestion (struct Qst_Question *Question);
-void Qst_FreeMediaOfQuestion (struct Qst_Question *Question);
+void Qst_ResetMediaOfQuestion (struct Qst_Question *Qst);
+void Qst_FreeMediaOfQuestion (struct Qst_Question *Qst);
 
-Exi_Exist_t Qst_GetQstDataByCod (struct Qst_Question *Question);
+Exi_Exist_t Qst_GetQstDataByCod (struct Qst_Question *Qst);
 Qst_Shuffle_t Qst_GetShuffleFromYN (char Ch);
 Qst_WrongOrCorrect_t Qst_GetCorrectFromYN (char Ch);
 long Qst_GetMedCodFromDB (long HieCod,long QstCod,int NumOpt);
 void Qst_GetMediaFromDB (long HieCod,long QstCod,int NumOpt,
                          struct Med_Media *Media);
 void Qst_ReceiveQst (void);
-void Qst_GetQstFromForm (struct Qst_Question *Question);
-Err_SuccessOrError_t Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Question);
+void Qst_GetQstFromForm (struct Qst_Question *Qst);
+Err_SuccessOrError_t Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Qst);
 
-Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question);
+Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Qst);
 
-void Qst_MoveMediaToDefinitiveDirectories (struct Qst_Question *Question);
+void Qst_MoveMediaToDefinitiveDirectories (struct Qst_Question *Qst);
 
 long Qst_GetIntAnsFromStr (char *Str);
 
@@ -243,9 +250,9 @@ void Qst_ChangeShuffleQst (void);
 
 void Qst_PutParQstCod (void *QstCod);
 
-void Qst_InsertOrUpdateQstTagsAnsIntoDB (struct Qst_Question *Question);
-void Qst_InsertOrUpdateQstIntoDB (struct Qst_Question *Question);
-void Qst_InsertAnswersIntoDB (struct Qst_Question *Question);
+void Qst_InsertOrUpdateQstTagsAnsIntoDB (struct Qst_Question *Qst);
+void Qst_InsertOrUpdateQstIntoDB (struct Qst_Question *Qst);
+void Qst_InsertAnswersIntoDB (struct Qst_Question *Qst);
 
 unsigned Qst_CountNumAnswerTypesInList (const struct Qst_AnswerTypes *AnswerTypes);
 
@@ -268,19 +275,19 @@ void Qst_GetAnswersFromStr (const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS_ON
 			    HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION]);
 
 void Qst_ComputeAnswerScore (const char *Table,
-			     struct Qst_PrintedQuestion *PrintedQuestion,
-			     struct Qst_Question *Question);
+			     struct Qst_PrintedQuestion *PrintedQst,
+			     struct Qst_Question *Qst);
 
-void Qst_ComputeIntAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-			     const struct Qst_Question *Question);
-void Qst_ComputeFltAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-			     const struct Qst_Question *Question);
-void Qst_ComputeTF_AnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-			     const struct Qst_Question *Question);
-void Qst_ComputeChoAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-			     const struct Qst_Question *Question);
-void Qst_ComputeTxtAnsScore (struct Qst_PrintedQuestion *PrintedQuestion,
-			     const struct Qst_Question *Question);
+void Qst_ComputeIntAnsScore (struct Qst_PrintedQuestion *PrintedQst,
+			     const struct Qst_Question *Qst);
+void Qst_ComputeFltAnsScore (struct Qst_PrintedQuestion *PrintedQst,
+			     const struct Qst_Question *Qst);
+void Qst_ComputeTF_AnsScore (struct Qst_PrintedQuestion *PrintedQst,
+			     const struct Qst_Question *Qst);
+void Qst_ComputeChoAnsScore (struct Qst_PrintedQuestion *PrintedQst,
+			     const struct Qst_Question *Qst);
+void Qst_ComputeTxtAnsScore (struct Qst_PrintedQuestion *PrintedQst,
+			     const struct Qst_Question *Qst);
 
 void Qst_ComputeAndShowGrade (unsigned NumQsts,double Score,double MaxGrade);
 double Qst_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade);

@@ -1711,7 +1711,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
    extern const char *Txt_Movement_not_allowed;
    unsigned NumQst;
    MYSQL_ROW row;
-   struct Qst_Question Question;
+   struct Qst_Question Qst;
    unsigned QstInd;
    unsigned MaxQstInd;
    char StrQstInd[Cns_MAX_DIGITS_UINT + 1];
@@ -1742,7 +1742,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	   NumQst++, The_ChangeRowColor ())
 	{
 	 /***** Create question *****/
-	 Qst_QstConstructor (&Question);
+	 Qst_QstConstructor (&Qst);
 
 	    /***** Get question data *****/
 	    row = mysql_fetch_row (mysql_res);
@@ -1751,7 +1751,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	    row[1] QstInd
 	    */
 	    /* Get question code (row[0]) */
-	    Question.QstCod = Str_ConvertStrCodToLongCod (row[0]);
+	    Qst.QstCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	    /* Get question index (row[1]) */
 	    QstInd = Str_ConvertStrToUnsigned (row[1]);
@@ -1761,7 +1761,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	    Games->QstInd = QstInd;
 
 	    /***** Build anchor string *****/
-	    Frm_SetAnchorStr (Question.QstCod,&Anchor);
+	    Frm_SetAnchorStr (Qst.QstCod,&Anchor);
 
 	    /***** Begin row *****/
 	    HTM_TR_Begin (NULL);
@@ -1803,13 +1803,13 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 		  /* Put icon to edit the question */
 		  if (ICanEditQuestions == Usr_CAN)
 		     Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
-						  Qst_PutParQstCod,&Question.QstCod);
+						  Qst_PutParQstCod,&Qst.QstCod);
 
 	       HTM_TD_End ();
 
 	       /***** Question *****/
-	       QuestionExists = Qst_GetQstDataByCod (&Question);
-	       Qst_ListQuestionForEdition (&Question,QstInd,QuestionExists,Anchor);
+	       QuestionExists = Qst_GetQstDataByCod (&Qst);
+	       Qst_ListQuestionForEdition (&Qst,QstInd,QuestionExists,Anchor);
 
 	    /***** End row *****/
 	    HTM_TR_End ();
@@ -1818,7 +1818,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	    Frm_FreeAnchorStr (&Anchor);
 
 	 /***** Destroy question *****/
-	 Qst_QstDestructor (&Question);
+	 Qst_QstDestructor (&Qst);
 	}
 
    /***** End table *****/

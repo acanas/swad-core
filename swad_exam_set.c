@@ -96,7 +96,7 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 						     unsigned NumQsts,
                                                      MYSQL_RES *mysql_res,
 						     Usr_Can_t ICanEditQuestions);
-static void ExaSet_ListQuestionForEdition (struct Qst_Question *Question,
+static void ExaSet_ListQuestionForEdition (struct Qst_Question *Qst,
                                            unsigned QstInd,const char *Anchor);
 
 static void ExaSet_AllocateListSelectedQuestions (struct Exa_Exams *Exams);
@@ -799,7 +799,7 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Question;
    unsigned QstInd;
-   struct Qst_Question Question;
+   struct Qst_Question Qst;
    char *Anchor;
    static struct
      {
@@ -830,12 +830,12 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 	   QstInd++, The_ChangeRowColor ())
 	{
 	 /***** Create question *****/
-	 Qst_QstConstructor (&Question);
+	 Qst_QstConstructor (&Qst);
 
 	    /***** Get question data *****/
 	    /* Get question code */
-	    Exams->QstCod = Question.QstCod = DB_GetNextCode (mysql_res);
-	    ExaSet_GetQstDataFromDB (&Question);
+	    Exams->QstCod = Qst.QstCod = DB_GetNextCode (mysql_res);
+	    ExaSet_GetQstDataFromDB (&Qst);
 
 	    /***** Build anchor string *****/
 	    Frm_SetAnchorStr (Exams->QstCod,&Anchor);
@@ -860,15 +860,15 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 		    }
 
 		  /* Put icon to validate/invalidate the question */
-		  Lay_PutContextualLinkOnlyIcon (ValInv[Question.Validity].NextAction,Anchor,
+		  Lay_PutContextualLinkOnlyIcon (ValInv[Qst.Validity].NextAction,Anchor,
 						 ExaSet_PutParsOneQst,Exams,
-						 ValInv[Question.Validity].Icon,
-						 ValInv[Question.Validity].Color);
+						 ValInv[Qst.Validity].Icon,
+						 ValInv[Qst.Validity].Color);
 
 	       HTM_TD_End ();
 
 	       /***** List question *****/
-	       ExaSet_ListQuestionForEdition (&Question,QstInd + 1,Anchor);
+	       ExaSet_ListQuestionForEdition (&Qst,QstInd + 1,Anchor);
 
 	    /***** End row *****/
 	    HTM_TR_End ();
@@ -877,7 +877,7 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 	    Frm_FreeAnchorStr (&Anchor);
 
 	 /***** Destroy question *****/
-	 Qst_QstDestructor (&Question);
+	 Qst_QstDestructor (&Qst);
 	}
 
    /***** End table *****/
@@ -912,7 +912,7 @@ Qst_AnswerType_t ExaSet_GetAnswerType (long QstCod)
 /*************** Get data of a question in a set from database ***************/
 /*****************************************************************************/
 
-void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
+void ExaSet_GetQstDataFromDB (struct Qst_Question *Qst)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -920,7 +920,7 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
    unsigned NumOpt;
 
    /***** Get question data from database *****/
-   QuestionExists = Exa_DB_GetQstDataByCod (&mysql_res,Question->QstCod);
+   QuestionExists = Exa_DB_GetQstDataByCod (&mysql_res,Qst->QstCod);
 
    if (QuestionExists == Exi_EXISTS)
      {
@@ -935,28 +935,28 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
       */
 
       /* Get whether the question is invalid (row[0]) */
-      Question->Validity = ExaSet_GetInvalidFromYN (row[0][0]);
+      Qst->Validity = ExaSet_GetInvalidFromYN (row[0][0]);
 
       /* Get the type of answer (row[1]) */
-      Question->Answer.Type = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+      Qst->Answer.Type = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 
       /* Get shuffle (row[2]) */
-      Question->Answer.Shuffle = Qst_GetShuffleFromYN (row[2][0]);
+      Qst->Answer.Shuffle = Qst_GetShuffleFromYN (row[2][0]);
 
       /* Get the stem (row[3]) and feedback (row[4]) */
-      Str_Copy (Question->Stem    ,row[3],Cns_MAX_BYTES_TEXT);
-      Str_Copy (Question->Feedback,row[4],Cns_MAX_BYTES_TEXT);
+      Str_Copy (Qst->Stem    ,row[3],Cns_MAX_BYTES_TEXT);
+      Str_Copy (Qst->Feedback,row[4],Cns_MAX_BYTES_TEXT);
 
       /* Get media (row[5]) */
-      Question->Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
-      Med_GetMediaDataByCod (&Question->Media);
+      Qst->Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
+      Med_GetMediaDataByCod (&Qst->Media);
 
       /* Free structure that stores the query result */
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Get the answers from the database *****/
-      Question->Answer.NumOptions = Exa_DB_GetQstAnswersFromSet (&mysql_res,
-			                                         Question->QstCod,
+      Qst->Answer.NumOptions = Exa_DB_GetQstAnswersFromSet (&mysql_res,
+			                                         Qst->QstCod,
 			                                         Qst_DONT_SHUFFLE);
       /*
       row[0] AnsInd
@@ -966,51 +966,51 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
       row[4] Correct
       */
       for (NumOpt = 0;
-	   NumOpt < Question->Answer.NumOptions;
+	   NumOpt < Qst->Answer.NumOptions;
 	   NumOpt++)
 	{
 	 row = mysql_fetch_row (mysql_res);
-	 switch (Question->Answer.Type)
+	 switch (Qst->Answer.Type)
 	   {
 	    case Qst_ANS_INT:
-	       Qst_CheckIfNumberOfAnswersIsOne (Question);
-	       Question->Answer.Integer = Qst_GetIntAnsFromStr (row[1]);
+	       Qst_CheckIfNumberOfAnswersIsOne (Qst);
+	       Qst->Answer.Integer = Qst_GetIntAnsFromStr (row[1]);
 	       break;
 	    case Qst_ANS_FLOAT:
-	       if (Question->Answer.NumOptions != 2)
+	       if (Qst->Answer.NumOptions != 2)
 		  Err_WrongAnswerExit ();
 	       if (Str_GetDoubleFromStr (row[1],
-					 &Question->Answer.FloatingPoint[NumOpt]) == Err_ERROR)
+					 &Qst->Answer.FloatingPoint[NumOpt]) == Err_ERROR)
 		  Err_WrongAnswerExit ();
 	       break;
 	    case Qst_ANS_TRUE_FALSE:
-	       Qst_CheckIfNumberOfAnswersIsOne (Question);
-	       Question->Answer.OptionTF = Qst_GetOptionTFFromChar (row[1][0]);
+	       Qst_CheckIfNumberOfAnswersIsOne (Qst);
+	       Qst->Answer.OptionTF = Qst_GetOptionTFFromChar (row[1][0]);
 	       break;
 	    case Qst_ANS_UNIQUE_CHOICE:
 	    case Qst_ANS_MULTIPLE_CHOICE:
 	    case Qst_ANS_TEXT:
 	       /* Check number of options */
-	       if (Question->Answer.NumOptions > Qst_MAX_OPTIONS_PER_QUESTION)
+	       if (Qst->Answer.NumOptions > Qst_MAX_OPTIONS_PER_QUESTION)
 		  Err_WrongAnswerExit ();
 
 	       /*  Allocate space for text and feedback */
-	       if (Qst_AllocateTextChoiceAnswer (Question,NumOpt) == Err_ERROR)
+	       if (Qst_AllocateTextChoiceAnswer (Qst,NumOpt) == Err_ERROR)
 		  /* Abort on error */
 		  Ale_ShowAlertsAndExit ();
 
 	       /* Get text (row[1]) and feedback (row[2]) */
-	       Str_Copy (Question->Answer.Options[NumOpt].Text    ,row[1],
+	       Str_Copy (Qst->Answer.Options[NumOpt].Text    ,row[1],
 			 Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-	       Str_Copy (Question->Answer.Options[NumOpt].Feedback,row[2],
+	       Str_Copy (Qst->Answer.Options[NumOpt].Feedback,row[2],
 			 Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 	       /* Get media (row[3]) */
-	       Question->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
-	       Med_GetMediaDataByCod (&Question->Answer.Options[NumOpt].Media);
+	       Qst->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
+	       Med_GetMediaDataByCod (&Qst->Answer.Options[NumOpt].Media);
 
 	       /* Get if this option is correct (row[4]) */
-	       Question->Answer.Options[NumOpt].Correct = Qst_GetCorrectFromYN (row[4][0]);
+	       Qst->Answer.Options[NumOpt].Correct = Qst_GetCorrectFromYN (row[4][0]);
 	       break;
 	    default:
 	       break;
@@ -1040,7 +1040,7 @@ ExaSet_Validity_t ExaSet_GetInvalidFromYN (char Ch)
 /********************* List question in set for edition **********************/
 /*****************************************************************************/
 
-static void ExaSet_ListQuestionForEdition (struct Qst_Question *Question,
+static void ExaSet_ListQuestionForEdition (struct Qst_Question *Qst,
                                            unsigned QstInd,const char *Anchor)
   {
    static const char *ClassNumQst[ExaSet_NUM_VALIDITIES] =
@@ -1061,8 +1061,8 @@ static void ExaSet_ListQuestionForEdition (struct Qst_Question *Question,
 
    /***** Number of question and answer type (row[1]) *****/
    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
-      Lay_WriteIndex (QstInd,ClassNumQst[Question->Validity]);
-      Qst_WriteAnswerType (Question->Answer.Type,Question->Validity);
+      Lay_WriteIndex (QstInd,ClassNumQst[Qst->Validity]);
+      Qst_WriteAnswerType (Qst->Answer.Type,Qst->Validity);
    HTM_TD_End ();
 
    /***** Write stem (row[3]) and media *****/
@@ -1070,21 +1070,21 @@ static void ExaSet_ListQuestionForEdition (struct Qst_Question *Question,
       HTM_ARTICLE_Begin (Anchor);
 
 	 /* Write stem */
-	 Qst_WriteQstStem (Question->Stem,ClassTxt[Question->Validity],
+	 Qst_WriteQstStem (Qst->Stem,ClassTxt[Qst->Validity],
 			   HidVis_VISIBLE);
 
 	 /* Show media */
-	 Med_ShowMedia (&Question->Media,
+	 Med_ShowMedia (&Qst->Media,
 			"Tst_MED_EDIT_LIST_CONT","Tst_MED_EDIT_LIST");
 
 	 /* Show feedback */
-	 Qst_WriteQstFeedback (Question->Feedback,
-	                       ClassFeedback[Question->Validity]);
+	 Qst_WriteQstFeedback (Qst->Feedback,
+	                       ClassFeedback[Qst->Validity]);
 
 	 /* Show answers */
-	 Qst_WriteAnswers (Question,
-			   ClassTxt[Question->Validity],
-			   ClassFeedback[Question->Validity]);
+	 Qst_WriteAnswers (Qst,
+			   ClassTxt[Qst->Validity],
+			   ClassFeedback[Qst->Validity]);
 
       HTM_ARTICLE_End ();
    HTM_TD_End ();
@@ -1181,7 +1181,7 @@ static void ExaSet_FreeListsSelectedQuestions (struct Exa_Exams *Exams)
 static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long QstCod)
   {
    extern const char *Txt_Question_removed;
-   struct Qst_Question Question;
+   struct Qst_Question Qst;
    long CloneMedCod;
    long QstCodInSet;
    unsigned NumOpt;
@@ -1189,21 +1189,21 @@ static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long Q
    MYSQL_ROW row;
 
    /***** Create question *****/
-   Qst_QstConstructor (&Question);
-   Question.QstCod = QstCod;
+   Qst_QstConstructor (&Qst);
+   Qst.QstCod = QstCod;
 
       /***** Get data of question from database *****/
-      switch (Qst_GetQstDataByCod (&Question))
+      switch (Qst_GetQstDataByCod (&Qst))
 	{
 	 case Exi_EXISTS:
 	    /***** Clone media *****/
-	    CloneMedCod = Med_CloneMedia (&Question.Media);
+	    CloneMedCod = Med_CloneMedia (&Qst.Media);
 
 	    /***** Add question to set *****/
-	    QstCodInSet = Exa_DB_AddQuestionToSet (Set->SetCod,&Question,CloneMedCod);
+	    QstCodInSet = Exa_DB_AddQuestionToSet (Set->SetCod,&Qst,CloneMedCod);
 
 	    /***** Get the answers from the database *****/
-	    Question.Answer.NumOptions = Qst_DB_GetAnswersData (&mysql_res,Question.QstCod,
+	    Qst.Answer.NumOptions = Qst_DB_GetAnswersData (&mysql_res,Qst.QstCod,
 								Qst_DONT_SHUFFLE);
 	    /*
 	    row[0] AnsInd
@@ -1213,17 +1213,17 @@ static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long Q
 	    row[4] Correct
 	    */
 	    for (NumOpt = 0;
-		 NumOpt < Question.Answer.NumOptions;
+		 NumOpt < Qst.Answer.NumOptions;
 		 NumOpt++)
 	      {
 	       row = mysql_fetch_row (mysql_res);
 
 	       /* Get media (row[3]) */
-	       Question.Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
-	       Med_GetMediaDataByCod (&Question.Answer.Options[NumOpt].Media);
+	       Qst.Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
+	       Med_GetMediaDataByCod (&Qst.Answer.Options[NumOpt].Media);
 
 	       /* Clone media */
-	       CloneMedCod = Med_CloneMedia (&Question.Answer.Options[NumOpt].Media);
+	       CloneMedCod = Med_CloneMedia (&Qst.Answer.Options[NumOpt].Media);
 
 	       /* Copy answer option to exam set */
 	       Exa_DB_AddAnsToQstInSet (QstCodInSet,	// Question code in set
@@ -1244,7 +1244,7 @@ static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long Q
 	}
 
    /***** Destroy question *****/
-   Qst_QstDestructor (&Question);
+   Qst_QstDestructor (&Qst);
   }
 
 /*****************************************************************************/

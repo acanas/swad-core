@@ -1,7 +1,7 @@
-// swad_exam_sheet_question.h: exams sheets (questions)
+// swad_question_tf.h: test/exam/game true/false questions
 
-#ifndef _SWAD_EXA_SHE_QST
-#define _SWAD_EXA_SHE_QST
+#ifndef _SWAD_QST_TF
+#define _SWAD_QST_TF
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -24,17 +24,31 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/********************************** Headers **********************************/
+/********************************* Headers ***********************************/
 /*****************************************************************************/
 
 #include "swad_exam_print.h"
-#include "swad_exam_session.h"
+#include "swad_question.h"
+
+/*****************************************************************************/
+/***************************** Public constants ******************************/
+/*****************************************************************************/
+
+/*****************************************************************************/
+/******************************* Public types ********************************/
+/*****************************************************************************/
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ExaSheQst_ShowQuestions (const struct ExaSes_Session *Session,
-			      const struct ExaPrn_Print *Print);
+void QstTF__WriteBlnkAns (__attribute__((unused)) const struct Qst_Question *Qst);
+void QstTF__WriteCorrAns (__attribute__((unused)) const struct ExaPrn_Print *Print,
+			  __attribute__((unused)) unsigned QstInd,
+			  struct Qst_Question *Qst);
+void QstTF__WriteReadAns (const struct ExaPrn_Print *Print,
+			  unsigned QstInd,struct Qst_Question *Qst);
+void QstTF__WriteEditAns (const struct ExaPrn_Print *Print,
+			  unsigned QstInd,struct Qst_Question *Qst);
 
 #endif

@@ -1,7 +1,7 @@
-// swad_match_print.h: matches prints in games using remote control
+// swad_question_int.h: test/exam/game integer questions
 
-#ifndef _SWAD_MCH_PRN
-#define _SWAD_MCH_PRN
+#ifndef _SWAD_QST_INT
+#define _SWAD_QST_INT
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,36 +27,28 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_test_print.h"
+#include "swad_exam_print.h"
+#include "swad_question.h"
 
 /*****************************************************************************/
-/************************** Public types and constants ***********************/
+/***************************** Public constants ******************************/
 /*****************************************************************************/
 
-struct MchPrn_NumQuestions
-  {
-   unsigned All;	// Total number of questions
-   unsigned NotBlank;	// Answered questions
-  };
-
-struct MchPrn_Print
-  {
-   long MchCod;		// Match code
-   long UsrCod;		// User who answered the match
-   time_t TimeUTC[Dat_NUM_START_END_TIME];
-   struct MchPrn_NumQuestions NumQsts;	// Number of questions
-   double Score;	// Total score of the match for this user
-   struct Qst_PrintedQuestion PrintedQsts[TstCfg_MAX_QUESTIONS_PER_TEST];
-  };
+/*****************************************************************************/
+/******************************* Public types ********************************/
+/*****************************************************************************/
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void MchPrn_ResetPrint (struct MchPrn_Print *Print);
-
-void MchPrn_ComputeScoreAndUpdateMyMatchPrintInDB (long MchCod);
-
-void MchPrn_GetMatchPrintDataByMchCodAndUsrCod (struct MchPrn_Print *Print);
+void QstInt_WriteBlnkAns (__attribute__((unused)) const struct Qst_Question *Qst);
+void QstInt_WriteCorrAns (__attribute__((unused)) const struct ExaPrn_Print *Print,
+			  __attribute__((unused)) unsigned QstInd,
+			  struct Qst_Question *Qst);
+void QstInt_WriteReadAns (const struct ExaPrn_Print *Print,
+			  unsigned QstInd,struct Qst_Question *Qst);
+void QstInt_WriteEditAns (const struct ExaPrn_Print *Print,
+			  unsigned QstInd,struct Qst_Question *Qst);
 
 #endif

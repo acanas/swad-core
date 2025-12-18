@@ -29,14 +29,18 @@
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
+#include <string.h>		// For strcoll
 
 #include "swad_box.h"
 #include "swad_exam_database.h"
 #include "swad_exam_result.h"
 #include "swad_exam_session.h"
 #include "swad_exam_sheet.h"
-#include "swad_exam_sheet_answer.h"
-#include "swad_exam_sheet_question.h"
+#include "swad_question_choice.h"
+#include "swad_question_float.h"
+#include "swad_question_int.h"
+#include "swad_question_text.h"
+#include "swad_question_tf.h"
 #include "swad_global.h"
 #include "swad_group.h"
 
@@ -64,6 +68,40 @@ static void ExaShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 				       ExaShe_BlankOrSolved_t BlankOrSolved,
 				       Vie_ViewType_t ViewType,
 				       const struct Usr_ListCods *ListCods);
+
+//------------------------------- Questions -----------------------------------
+
+static void ExaShe_ShowQuestions (const struct ExaSes_Session *Session,
+				  const struct ExaPrn_Print *Print);
+static void ExaShe_WriteQst (const struct ExaPrn_Print *Print,
+			     unsigned QstInd,struct Qst_Question *Qst);
+static void ExaShe_WriteOptions (const struct ExaPrn_Print *Print,
+				 unsigned QstInd,struct Qst_Question *Qst);
+static void ExaShe_WriteOptionsTF_Ans (__attribute__((unused)) const struct ExaPrn_Print *Print,
+				       __attribute__((unused)) unsigned QstInd,
+				       __attribute__((unused)) struct Qst_Question *Qst);
+static void ExaShe_WriteOptionsChoAns (const struct ExaPrn_Print *Print,
+				       unsigned QstInd,struct Qst_Question *Qst);
+
+//-------------------------------- Answers ------------------------------------
+
+static void ExaShe_ShowAnswers (const struct ExaSes_Session *Session,
+			        const struct ExaPrn_Print *Print,
+			        ExaShe_BlankOrSolved_t BlankOrSolved,
+			        Vie_ViewType_t ViewType);
+static void ExaShe_WriteQstAnswers (const struct ExaSes_Session *Session,
+				    const struct ExaPrn_Print *Print,
+				    ExaShe_BlankOrSolved_t BlankOrSolved,
+				    Vie_ViewType_t ViewType,
+				    unsigned QstInd,struct Qst_Question *Qst);
+
+static void ExaShe_WriteBlankAnswers (struct Qst_Question *Qst);
+static void ExaShe_WriteSolvedAnswers (const struct ExaSes_Session *Session,
+				       const struct ExaPrn_Print *Print,
+				       Vie_ViewType_t ViewType,
+				       unsigned QstInd,struct Qst_Question *Qst);
+
+static void ExaShe_WriteHead (ExaSes_Modality_t Modality);
 
 /*****************************************************************************/
 /***** Display/Print selected exam question sheets from an exam session ******/
@@ -284,14 +322,14 @@ static void ExaShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 	    /* Show exam answer sheet */
 	    HTM_DIV_Begin ("id=\"examprint_%s\" class=\"Exa_QSTS\"",	// Used for AJAX based refresh
 			   Print.EnUsrCod);
-	       ExaSheAns_ShowAnswers (Session,&Print,BlankOrSolved,ViewType);
+	       ExaShe_ShowAnswers (Session,&Print,BlankOrSolved,ViewType);
 	    HTM_DIV_End ();						// Used for AJAX based refresh
 
 	    /* Show exam question sheet */
 	    if (BlankOrSolved == ExaShe_BLANK)
 	      {
 	       HTM_DIV_Begin (" class=\"Exa_QSTS\"");
-		  ExaSheQst_ShowQuestions (Session,&Print);
+		  ExaShe_ShowQuestions (Session,&Print);
 	       HTM_DIV_End ();
 	      }
 
@@ -303,6 +341,182 @@ static void ExaShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
+  }
+
+/*****************************************************************************/
+/*********** Show the main part (table) of an exam question sheet ************/
+/*****************************************************************************/
+
+static void ExaShe_ShowQuestions (const struct ExaSes_Session *Session,
+				  const struct ExaPrn_Print *Print)
+  {
+   extern const char *Txt_Questions;
+   static struct ExaSet_Set CurrentSet =
+     {
+      .ExaCod = -1L,
+      .SetCod = -1L,
+      .SetInd = 0,
+      .NumQstsToPrint = 0,
+      .Title[0] = '\0'
+     };
+   unsigned QstInd;
+   struct Qst_Question Qst;
+
+   /***** Heading *****/
+   HTM_DIV_Begin ("class=\"Exa_COL_SPAN Exa_SHEET_TITLE_%s\"",The_GetSuffix ());
+      HTM_Txt (Txt_Questions);
+   HTM_DIV_End ();
+
+   /***** Write questions in columns *****/
+   HTM_DIV_Begin ("class=\"Exa_COLS_%u\"",Session->NumCols);
+
+      /***** Write one row for each question *****/
+      for (QstInd = 0, CurrentSet.SetCod = -1L;
+	   QstInd < Print->NumQsts.All;
+	   QstInd++)
+	{
+	 if (Print->PrintedQsts[QstInd].SetCod != CurrentSet.SetCod)
+	   {
+	    /* Get data of this set */
+	    CurrentSet.SetCod = Print->PrintedQsts[QstInd].SetCod;
+	    ExaSet_GetSetDataByCod (&CurrentSet);
+
+	    /* Title for this set */
+	    HTM_DIV_Begin ("class=\"Exa_COL_SPAN %s\"",The_GetColorRows ());
+	       ExaSet_WriteSetTitle (&CurrentSet);
+	    HTM_DIV_End ();
+	   }
+
+	 /* Create question */
+	 Qst_QstConstructor (&Qst);
+	 Qst.QstCod = Print->PrintedQsts[QstInd].QstCod;
+
+	    /* Get question from database */
+	    ExaSet_GetQstDataFromDB (&Qst);
+
+	    /* Write question */
+	    ExaShe_WriteQst (Print,QstInd,&Qst);
+
+	 /* Destroy question */
+	 Qst_QstDestructor (&Qst);
+	}
+
+   /***** End list of questions *****/
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/********** Write a row of an exam answer sheet, with one question ***********/
+/*****************************************************************************/
+
+static void ExaShe_WriteQst (const struct ExaPrn_Print *Print,
+			     unsigned QstInd,struct Qst_Question *Qst)
+  {
+   /***** Begin row *****/
+   HTM_DIV_Begin ("class=\"Exa_CONTAINER\"");
+
+      /***** Number of question and answer type *****/
+      HTM_DIV_Begin ("class=\"Exa_LEFT\"");
+	 Lay_WriteIndex (QstInd + 1,"BIG_INDEX");
+	 Qst_WriteAnswerType (Qst->Answer.Type,Qst->Validity);
+      HTM_DIV_End ();
+
+      /***** Stem, media and answers *****/
+      HTM_DIV_Begin ("class=\"Exa_RIGHT\"");
+	 Qst_WriteQstStem (Qst->Stem,"Qst_TXT",HidVis_VISIBLE);
+	 Med_ShowMedia (&Qst->Media,"Tst_MED_SHOW_CONT","Tst_MED_SHOW");
+	 ExaShe_WriteOptions (Print,QstInd,Qst);
+      HTM_DIV_End ();
+
+   /***** End row *****/
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/*********** Write options of a question in an exam question sheet ***********/
+/*****************************************************************************/
+
+static void ExaShe_WriteOptions (const struct ExaPrn_Print *Print,
+				 unsigned QstInd,struct Qst_Question *Qst)
+  {
+   void (*ExaSheQst_WriteOptionsAns[Qst_NUM_ANS_TYPES]) (const struct ExaPrn_Print *Print,
+							 unsigned QstInd,
+							 struct Qst_Question *Qst) =
+    {
+     [Qst_ANS_INT            ] = NULL,
+     [Qst_ANS_FLOAT          ] = NULL,
+     [Qst_ANS_TRUE_FALSE     ] = ExaShe_WriteOptionsTF_Ans,
+     [Qst_ANS_UNIQUE_CHOICE  ] = ExaShe_WriteOptionsChoAns,
+     [Qst_ANS_MULTIPLE_CHOICE] = ExaShe_WriteOptionsChoAns,
+     [Qst_ANS_TEXT           ] = NULL,
+    };
+
+   /***** Write answers *****/
+   if (ExaSheQst_WriteOptionsAns[Qst->Answer.Type])
+      ExaSheQst_WriteOptionsAns[Qst->Answer.Type] (Print,QstInd,Qst);
+  }
+
+/*****************************************************************************/
+/*********** Write false / true answer in an exam question sheet *************/
+/*****************************************************************************/
+
+static void ExaShe_WriteOptionsTF_Ans (__attribute__((unused)) const struct ExaPrn_Print *Print,
+				       __attribute__((unused)) unsigned QstInd,
+				       __attribute__((unused)) struct Qst_Question *Qst)
+  {
+   Qst_WriteAnsTF (Qst_OPTION_TRUE);
+   HTM_Slash ();
+   Qst_WriteAnsTF (Qst_OPTION_FALSE);
+  }
+
+/*****************************************************************************/
+/***** Write single or multiple choice answer in an exam question sheet ******/
+/*****************************************************************************/
+
+static void ExaShe_WriteOptionsChoAns (const struct ExaPrn_Print *Print,
+				       unsigned QstInd,struct Qst_Question *Qst)
+  {
+   unsigned NumOpt;
+   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
+
+   /***** Change format of answers text *****/
+   Qst_ChangeFormatOptionsText (Qst);
+
+   /***** Get indexes for this question from string *****/
+   Qst_GetIndexesFromStr (Print->PrintedQsts[QstInd].StrIndexes,Indexes);
+
+   /***** Begin table *****/
+   HTM_TABLE_BeginPadding (2);
+
+      for (NumOpt = 0;
+	   NumOpt < Qst->Answer.NumOptions;
+	   NumOpt++)
+	{
+	 /***** Indexes are 0 1 2 3... if no shuffle
+		or 3 1 0 2... (example) if shuffle *****/
+	 HTM_TR_Begin (NULL);
+
+	    /***** Write letter of this option *****/
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_LABEL_Begin ("class=\"Qst_TXT_%s\"",The_GetSuffix ());
+		  HTM_Option (NumOpt); HTM_CloseParenthesis (); HTM_NBSP ();
+	       HTM_LABEL_End ();
+	    HTM_TD_End ();
+
+	    /***** Write the option text *****/
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_LABEL_Begin ("class=\"Qst_TXT_%s\"",The_GetSuffix ());
+		  HTM_Txt (Qst->Answer.Options[Indexes[NumOpt]].Text);
+	       HTM_LABEL_End ();
+	       Med_ShowMedia (&Qst->Answer.Options[Indexes[NumOpt]].Media,
+			      "Tst_MED_SHOW_CONT","Tst_MED_SHOW");
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+
+   /***** End table *****/
+   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -359,5 +573,254 @@ void ExaShe_ReceiveAnswer (void)
    ExaPrn_UpdateAnswerAndPrint (&Print,QstInd);
 
    /***** Show table with questions to answer *****/
-   ExaSheAns_ShowAnswers (&Session,&Print,ExaShe_SOLVED,Vie_VIEW);
+   ExaShe_ShowAnswers (&Session,&Print,ExaShe_SOLVED,Vie_VIEW);
+  }
+
+/*****************************************************************************/
+/************ Show the main part (table) of an exam answer sheet *************/
+/*****************************************************************************/
+
+static void ExaShe_ShowAnswers (const struct ExaSes_Session *Session,
+			        const struct ExaPrn_Print *Print,
+			        ExaShe_BlankOrSolved_t BlankOrSolved,
+			        Vie_ViewType_t ViewType)
+  {
+   extern const char *Txt_Answers;
+   static struct ExaSet_Set CurrentSet =
+     {
+      .ExaCod = -1L,
+      .SetCod = -1L,
+      .SetInd = 0,
+      .NumQstsToPrint = 0,
+      .Title[0] = '\0'
+     };
+   unsigned QstInd;
+   struct Qst_Question Qst;
+
+   /***** Heading *****/
+   HTM_DIV_Begin ("class=\"Exa_COL_SPAN Exa_SHEET_TITLE_%s\"",The_GetSuffix ());
+      HTM_Txt (Txt_Answers);
+   HTM_DIV_End ();
+
+   /***** Write questions in columns *****/
+   HTM_DIV_Begin ("class=\"Exa_COLS_%u\"",Session->NumCols);
+
+      /***** Write one row for each question *****/
+      for (QstInd = 0, CurrentSet.SetCod = -1L;
+	   QstInd < Print->NumQsts.All;
+	   QstInd++)
+	{
+	 if (Print->PrintedQsts[QstInd].SetCod != CurrentSet.SetCod)
+	   {
+	    /* Get data of this set */
+	    CurrentSet.SetCod = Print->PrintedQsts[QstInd].SetCod;
+	    ExaSet_GetSetDataByCod (&CurrentSet);
+
+	    /* Title for this set */
+	    HTM_DIV_Begin ("class=\"Exa_COL_SPAN %s\"",The_GetColorRows ());
+	       ExaSet_WriteSetTitle (&CurrentSet);
+	    HTM_DIV_End ();
+	   }
+
+	 /* Create question */
+	 Qst_QstConstructor (&Qst);
+	 Qst.QstCod = Print->PrintedQsts[QstInd].QstCod;
+
+	    /* Get question from database */
+	    ExaSet_GetQstDataFromDB (&Qst);
+
+	    /* Write question answers */
+	    ExaShe_WriteQstAnswers (Session,Print,BlankOrSolved,ViewType,
+			            QstInd,&Qst);
+
+	 /* Destroy question */
+	 Qst_QstDestructor (&Qst);
+	}
+
+   /***** End list of questions *****/
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/*** Write a row of an exam answer sheet, with the answer to one question ****/
+/*****************************************************************************/
+
+static void ExaShe_WriteQstAnswers (const struct ExaSes_Session *Session,
+				    const struct ExaPrn_Print *Print,
+				    ExaShe_BlankOrSolved_t BlankOrSolved,
+				    Vie_ViewType_t ViewType,
+				    unsigned QstInd,struct Qst_Question *Qst)
+  {
+   /***** Begin row *****/
+   HTM_DIV_Begin ("class=\"Exa_CONTAINER\"");
+
+      /***** Number of question and answer type *****/
+      HTM_DIV_Begin ("class=\"Exa_LEFT\"");
+	 Lay_WriteIndex (QstInd + 1,"BIG_INDEX");
+	 Qst_WriteAnswerType (Qst->Answer.Type,Qst->Validity);
+      HTM_DIV_End ();
+
+      /***** Answers *****/
+      HTM_DIV_Begin ("class=\"Exa_RIGHT\"");
+	 switch (BlankOrSolved)
+	   {
+	    case ExaShe_BLANK:
+	       ExaShe_WriteBlankAnswers (Qst);
+	       break;
+	    case ExaShe_SOLVED:
+	       Frm_BeginFormNoAction ();	// Form that can not be submitted, to avoid enter key to send it
+		  ExaShe_WriteSolvedAnswers (Session,Print,ViewType,
+					     QstInd,Qst);
+	       Frm_EndForm ();
+	       break;
+	    default:
+	       break;
+	   }
+      HTM_DIV_End ();
+
+   /***** End row *****/
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/************ Write answers of a question in an exam answer sheet ************/
+/*****************************************************************************/
+
+static void ExaShe_WriteBlankAnswers (struct Qst_Question *Qst)
+  {
+   static void (*ExaSheAns_WriteBlankAns[Qst_NUM_ANS_TYPES]) (const struct Qst_Question *Qst) =
+    {
+     [Qst_ANS_INT            ] = QstInt_WriteBlnkAns,
+     [Qst_ANS_FLOAT          ] = QstFlt_WriteBlnkAns,
+     [Qst_ANS_TRUE_FALSE     ] = QstTF__WriteBlnkAns,
+     [Qst_ANS_UNIQUE_CHOICE  ] = QstCho_WriteBlnkAns,
+     [Qst_ANS_MULTIPLE_CHOICE] = QstCho_WriteBlnkAns,
+     [Qst_ANS_TEXT           ] = QstTxt_WriteBlnkAns,
+    };
+
+   /***** Begin table *****/
+   HTM_TABLE_Begin ("Exa_TBL");
+
+      HTM_TR_Begin (NULL);
+         ExaSheAns_WriteBlankAns[Qst->Answer.Type] (Qst);
+      HTM_TR_End ();
+
+   /***** End table *****/
+   HTM_TABLE_End ();
+  }
+
+/*****************************************************************************/
+/************ Write answers of a question in an exam answer sheet ************/
+/*****************************************************************************/
+
+static void ExaShe_WriteSolvedAnswers (const struct ExaSes_Session *Session,
+				       const struct ExaPrn_Print *Print,
+				       Vie_ViewType_t ViewType,
+				       unsigned QstInd,struct Qst_Question *Qst)
+  {
+   #define ExaSheAns_NUM_LAYOUTS 3
+   enum
+     {
+      CORRECT,
+      READONLY,
+      EDITABLE,
+     } Layout = Session->Modality == ExaSes_PAPER && ViewType == Vie_VIEW ? EDITABLE :
+									    READONLY;
+   static void (*ExaSheAns_WriteAns[Qst_NUM_ANS_TYPES][ExaSheAns_NUM_LAYOUTS]) (const struct ExaPrn_Print *Print,
+									        unsigned QstInd,
+									        struct Qst_Question *Qst) =
+     {
+      [Qst_ANS_INT            ][CORRECT ] = QstInt_WriteCorrAns,
+      [Qst_ANS_INT            ][READONLY] = QstInt_WriteReadAns,
+      [Qst_ANS_INT            ][EDITABLE] = QstInt_WriteEditAns,
+
+      [Qst_ANS_FLOAT          ][CORRECT ] = QstFlt_WriteCorrAns,
+      [Qst_ANS_FLOAT          ][READONLY] = QstFlt_WriteReadAns,
+      [Qst_ANS_FLOAT          ][EDITABLE] = QstFlt_WriteEditAns,
+
+      [Qst_ANS_TRUE_FALSE     ][CORRECT ] = QstTF__WriteCorrAns,
+      [Qst_ANS_TRUE_FALSE     ][READONLY] = QstTF__WriteReadAns,
+      [Qst_ANS_TRUE_FALSE     ][EDITABLE] = QstTF__WriteEditAns,
+
+      [Qst_ANS_UNIQUE_CHOICE  ][CORRECT ] = QstCho_WriteCorrAns,
+      [Qst_ANS_UNIQUE_CHOICE  ][READONLY] = QstCho_WriteReadAns,
+      [Qst_ANS_UNIQUE_CHOICE  ][EDITABLE] = QstCho_WriteEditAns,
+
+      [Qst_ANS_MULTIPLE_CHOICE][CORRECT ] = QstCho_WriteCorrAns,
+      [Qst_ANS_MULTIPLE_CHOICE][READONLY] = QstCho_WriteReadAns,
+      [Qst_ANS_MULTIPLE_CHOICE][EDITABLE] = QstCho_WriteEditAns,
+
+      [Qst_ANS_TEXT           ][CORRECT ] = QstTxt_WriteCorrAns,
+      [Qst_ANS_TEXT           ][READONLY] = QstTxt_WriteReadAns,
+      [Qst_ANS_TEXT           ][EDITABLE] = QstTxt_WriteEditAns,
+     };
+
+   /***** Begin table *****/
+   HTM_TABLE_Begin ("Exa_TBL");
+
+      /***** Write the correct answer *****/
+      HTM_TR_Begin (NULL);
+	 ExaShe_WriteHead (ExaSes_NONE);
+	 ExaSheAns_WriteAns[Qst->Answer.Type][CORRECT] (Print,QstInd,Qst);
+      HTM_TR_End ();
+
+      /***** Write the editable/readonly answer *****/
+      HTM_TR_Begin (NULL);
+	 ExaShe_WriteHead (Session->Modality);
+	 ExaSheAns_WriteAns[Qst->Answer.Type][Layout] (Print,QstInd,Qst);
+      HTM_TR_End ();
+
+   /***** End table *****/
+   HTM_TABLE_End ();
+  }
+
+/*****************************************************************************/
+/********************** Receive answer to an exam sheet **********************/
+/*****************************************************************************/
+
+void ExaShe_WriteJSToUpdateSheet (const struct ExaPrn_Print *Print,
+	                          unsigned QstInd,
+	                          const char *Id,int NumOpt)
+  {
+   char *Pars;
+
+   if (asprintf (&Pars,"act=%ld&ses=%s&SesCod=%ld&OtherUsrCod=%s&QstInd=%u",
+		 Act_GetActCod (ActAnsExaAnsShe),Gbl.Session.Id,
+		 Print->SesCod,Print->EnUsrCod,QstInd) < 0)
+      Err_NotEnoughMemoryExit ();
+
+   if (NumOpt < 0)
+      HTM_TxtF (" onchange=\"updateExamPrint('examprint_%s','%s','Ans','%s',%u);",
+		Print->EnUsrCod,Id,Pars,(unsigned) Gbl.Prefs.Language);
+   else	// NumOpt >= 0
+      HTM_TxtF (" onclick=\"updateExamPrint('examprint_%s','%s_%d','Ans','%s',%u);",
+		Print->EnUsrCod,Id,NumOpt,Pars,(unsigned) Gbl.Prefs.Language);
+   HTM_Txt (" return false;\"");	// return false is necessary to not submit form
+
+   free (Pars);
+  }
+
+/*****************************************************************************/
+/************************* Write head for the answer *************************/
+/*****************************************************************************/
+
+static void ExaShe_WriteHead (ExaSes_Modality_t Modality)
+  {
+   extern const char *Txt_EXAM_ANSWER_TYPES[ExaSes_NUM_MODALITIES];
+   static struct
+     {
+      const char *Icon;
+      Ico_Color_t Color;
+     } AnswerTypeIcons[ExaSes_NUM_MODALITIES] =
+     {
+      [ExaSes_NONE  ] = {.Icon = "check.svg"		,.Color = Ico_GREEN},
+      [ExaSes_ONLINE] = {.Icon = "display.svg"		,.Color = Ico_BLACK},
+      [ExaSes_PAPER ] = {.Icon = "file-signature.svg"	,.Color = Ico_BLACK},
+     };
+
+   HTM_TD_Begin ("class=\"LM DAT_SMALL_%s\"",The_GetSuffix ());
+      Ico_PutIconOff (AnswerTypeIcons[Modality].Icon,
+		      AnswerTypeIcons[Modality].Color,
+		      Txt_EXAM_ANSWER_TYPES[Modality]);
+   HTM_TD_End ();
   }

@@ -54,7 +54,7 @@ struct TstPrn_Print
 					// "Sent" means that user has clicked "Send" button after finishing
    DenAll_DenyOrAllow_t DenyOrAllowTchs;// Are teachers allowed to see this test result?
    double Score;			// Total score of the test print
-   struct Qst_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST];
+   struct Qst_PrintedQuestion PrintedQsts[TstCfg_MAX_QUESTIONS_PER_TEST];
   };
 
 #define Tst_NUM_REQUEST_OR_CONFIRM 2
@@ -83,8 +83,8 @@ void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print);
 //-----------------------------------------------------------------------------
 
 void TstPrn_WriteAnswersExam (struct Usr_Data *UsrDat,
-                              const struct Qst_PrintedQuestion *PrintedQuestion,
-			      struct Qst_Question *Question,
+                              const struct Qst_PrintedQuestion *PrintedQst,
+			      struct Qst_Question *Qst,
 			      Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 			      const char *ClassTxt,
 			      const char *ClassFeedback);
@@ -97,7 +97,7 @@ void TstPrn_GetUsrsAndShowPrints (void);
 void TstPrn_ShowOnePrint (void);
 void TstPrn_ShowPrintAnswers (struct Usr_Data *UsrDat,
 			      unsigned NumQsts,
-			      struct Qst_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST],
+			      struct Qst_PrintedQuestion PrintedQsts[TstCfg_MAX_QUESTIONS_PER_TEST],
 			      time_t TimeUTC[Dat_NUM_START_END_TIME],
 			      unsigned Visibility);
 void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print);

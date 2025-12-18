@@ -78,7 +78,7 @@ void Exa_DB_RemoveAllSetsFromExam (long ExaCod);
 void Exa_DB_RemoveAllSetsFromCrs (long HieCod);
 
 //------------------------------ Set questions --------------------------------
-long Exa_DB_AddQuestionToSet (long SetCod,const struct Qst_Question *Question,long MedCod);
+long Exa_DB_AddQuestionToSet (long SetCod,const struct Qst_Question *Qst,long MedCod);
 void Exa_DB_ChangeValidityQst (long QstCod,long SetCod,long ExaCod,long HieCod,
                                ExaSet_Validity_t Validity);
 unsigned Exa_DB_GetNumQstsInSet (long SetCod);
@@ -100,8 +100,8 @@ void Exa_DB_RemoveAllSetQuestionsFromCrs (long HieCod);
 void Exa_DB_AddAnsToQstInSet (long QstCod,unsigned AnsInd,
                               const char *Answer,const char *Feedback,
                               long MedCod,Qst_WrongOrCorrect_t WrongOrCorrect);
-unsigned Exa_DB_GetQstAnswersFromSet (MYSQL_RES **mysql_res,long QstCod,
-				      Qst_Shuffle_t Shuffle);
+unsigned Exa_DB_GetQstAnswersFromSet (MYSQL_RES **mysql_res,
+				      long QstCod,Qst_Shuffle_t Shuffle);
 unsigned Exa_DB_GetQstAnswersCorrFromSet (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetMediaFromAllAnsOfQst (MYSQL_RES **mysql_res,long QstCod,long SetCod);
 unsigned Exa_DB_GetAllMediaFromAnsOfAllQstsFromExam (MYSQL_RES **mysql_res,long ExaCod);

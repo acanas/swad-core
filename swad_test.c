@@ -75,14 +75,14 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions);
+static void Tst_ShowFormRequestTest (struct Qst_Questions *Qsts);
 static void Tst_ShowFormNumQsts (void);
 
 static Err_SuccessOrError_t Tst_CheckIfNextTstAllowed (void);
 
-static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
-                                              struct TstPrn_Print *Print);
-static void Tst_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQuestion,
+static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Qsts,
+                                        struct TstPrn_Print *Print);
+static void Tst_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQst,
 				       Qst_Shuffle_t Shuffle);
 
 static unsigned Tst_GetParNumTst (void);
@@ -94,26 +94,26 @@ static unsigned Tst_GetParNumQsts (void);
 
 void Tst_ReqTest (void)
   {
-   struct Qst_Questions Questions;
+   struct Qst_Questions Qsts;
 
    /***** Create questions *****/
-   Qst_Constructor (&Questions);
+   Qst_Constructor (&Qsts);
 
       /***** Get if one tag is preselected *****/
-      Questions.Tags.PreselectedTagCod = ParCod_GetPar (ParCod_Tag);
+      Qsts.Tags.PreselectedTagCod = ParCod_GetPar (ParCod_Tag);
 
       /***** Show form to generate a self-assessment test *****/
-      Tst_ShowFormRequestTest (&Questions);
+      Tst_ShowFormRequestTest (&Qsts);
 
    /***** Destroy questions *****/
-   Qst_Destructor (&Questions);
+   Qst_Destructor (&Qsts);
   }
 
 /*****************************************************************************/
 /*************** Show form to generate a self-assessment test ****************/
 /*****************************************************************************/
 
-static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
+static void Tst_ShowFormRequestTest (struct Qst_Questions *Qsts)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Test;
@@ -125,36 +125,36 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
    TstCfg_GetConfig ();
 
    /***** Get tag title *****/
-   if (Questions->Tags.PreselectedTagCod > 0)
-      Tag_DB_GetTagTitle (Questions->Tags.PreselectedTagCod,TagTxt,Tag_MAX_BYTES_TAG);
+   if (Qsts->Tags.PreselectedTagCod > 0)
+      Tag_DB_GetTagTitle (Qsts->Tags.PreselectedTagCod,TagTxt,Tag_MAX_BYTES_TAG);
    else
       Str_Copy (TagTxt,Txt_Test,sizeof (TagTxt) - 1);
 
    /***** Begin box *****/
-   Box_BoxBegin (TagTxt,Tst_PutIconsTests,Questions,
+   Box_BoxBegin (TagTxt,Tst_PutIconsTests,Qsts,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
       /***** Get tags *****/
-      if ((Questions->Tags.Num = Tag_DB_GetEnabledTagsFromCrs (&mysql_res,
-                                                               Questions->Tags.PreselectedTagCod,
+      if ((Qsts->Tags.Num = Tag_DB_GetEnabledTagsFromCrs (&mysql_res,
+                                                               Qsts->Tags.PreselectedTagCod,
                                                                Gbl.Hierarchy.Node[Hie_CRS].HieCod)))
 	{
 	 /***** Check if minimum date-time of next access to test is older than now *****/
 	 if (Tst_CheckIfNextTstAllowed () == Err_SUCCESS)
 	   {
 	    Frm_BeginForm (ActSeeTst);
-	       if (Questions->Tags.PreselectedTagCod > 0)	// Only one preselected tag
+	       if (Qsts->Tags.PreselectedTagCod > 0)	// Only one preselected tag
 						// User can not select between several tags
-		  ParCod_PutPar (ParCod_Tag,Questions->Tags.PreselectedTagCod);
+		  ParCod_PutPar (ParCod_Tag,Qsts->Tags.PreselectedTagCod);
 
 	       HTM_TABLE_BeginCenterPadding (2);
 
 		  /***** Selection of tags *****/
-		  Tag_ShowFormSelTags (&Questions->Tags,mysql_res,
+		  Tag_ShowFormSelTags (&Qsts->Tags,mysql_res,
 				       Tag_SHOW_ONLY_VISIBLE_TAGS);
 
 		  /***** Selection of types of answers *****/
-		  Qst_ShowFormAnswerTypes (&Questions->AnswerTypes);
+		  Qst_ShowFormAnswerTypes (&Qsts->AnswerTypes);
 
 		  /***** Number of questions to generate ****/
 		  Tst_ShowFormNumQsts ();
@@ -214,24 +214,24 @@ static void Tst_ShowFormNumQsts (void)
 void Tst_ShowNewTest (void)
   {
    extern const char *Txt_No_questions_found_matching_your_search_criteria;
-   struct Qst_Questions Questions;
+   struct Qst_Questions Qsts;
    struct TstPrn_Print Print;
    unsigned NumPrintsGeneratedByMe;
 
    /***** Create test *****/
-   Qst_Constructor (&Questions);
+   Qst_Constructor (&Qsts);
 
       /***** Read test configuration from database *****/
       TstCfg_GetConfig ();
 
       if (Tst_CheckIfNextTstAllowed () == Err_SUCCESS)
 	 /***** Check that all parameters used to generate a test are valid *****/
-	 switch (Tst_GetParsTst (&Questions,Tst_SHOW_TEST_TO_ANSWER))	// Get parameters from form
+	 switch (Tst_GetParsTst (&Qsts,Tst_SHOW_TEST_TO_ANSWER))	// Get parameters from form
 	   {
 	    case Err_SUCCESS:
 	       /***** Get questions *****/
 	       TstPrn_ResetPrint (&Print);
-	       Tst_GetQuestionsForNewTest (&Questions,&Print);
+	       Tst_GetQuestionsForNewTest (&Qsts,&Print);
 	       if (Print.NumQsts.All)
 		 {
 		  /***** Increase number of exams generated (answered or not) by me *****/
@@ -247,22 +247,22 @@ void Tst_ShowNewTest (void)
 
 		  /***** Update date-time of my next allowed access to test *****/
 		  if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
-		     Tst_DB_UpdateLastAccTst (Questions.NumQsts);
+		     Tst_DB_UpdateLastAccTst (Qsts.NumQsts);
 		 }
 	       else	// No questions found
 		 {
 		  Ale_ShowAlert (Ale_INFO,Txt_No_questions_found_matching_your_search_criteria);
-		  Tst_ShowFormRequestTest (&Questions);	// Show the form again
+		  Tst_ShowFormRequestTest (&Qsts);	// Show the form again
 		 }
 	       break;
 	    case Err_ERROR:
 	    default:
-	       Tst_ShowFormRequestTest (&Questions);		// Show the form again
+	       Tst_ShowFormRequestTest (&Qsts);		// Show the form again
 	       break;
 	   }
 
    /***** Destroy test *****/
-   Qst_Destructor (&Questions);
+   Qst_Destructor (&Qsts);
   }
 
 /*****************************************************************************/
@@ -514,7 +514,7 @@ void Tst_PutIconsTests (void *Questions)
 
 #define Qst_MAX_BYTES_QUERY_QUESTIONS (16 * 1024 - 1)
 
-static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
+static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Qsts,
                                         struct TstPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
@@ -524,13 +524,13 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
    unsigned QstInd;
 
    /***** Trivial check: number of questions *****/
-   if (Questions->NumQsts == 0 ||
-       Questions->NumQsts > TstCfg_MAX_QUESTIONS_PER_TEST)
+   if (Qsts->NumQsts == 0 ||
+       Qsts->NumQsts > TstCfg_MAX_QUESTIONS_PER_TEST)
       Err_ShowErrorAndExit ("Wrong number of questions.");
 
    /***** Get questions and answers from database *****/
    Print->NumQsts.All =
-   Questions->NumQsts = Qst_DB_GetQstsForNewTestPrint (&mysql_res,Questions);
+   Qsts->NumQsts = Qst_DB_GetQstsForNewTestPrint (&mysql_res,Qsts);
 
    for (QstInd = 0;
 	QstInd < Print->NumQsts.All;
@@ -545,7 +545,7 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
       */
 
       /* Get question code (row[0]) */
-      if ((Print->PrintedQuestions[QstInd].QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+      if ((Print->PrintedQsts[QstInd].QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
 	 Err_ShowErrorAndExit ("Wrong code of question.");
 
       /* Get answer type (row[1]) */
@@ -561,13 +561,13 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
 	 case Qst_ANS_FLOAT:
 	 case Qst_ANS_TRUE_FALSE:
 	 case Qst_ANS_TEXT:
-	    Print->PrintedQuestions[QstInd].StrIndexes[0] = '\0';
+	    Print->PrintedQsts[QstInd].StrIndexes[0] = '\0';
 	    break;
 	 case Qst_ANS_UNIQUE_CHOICE:
 	 case Qst_ANS_MULTIPLE_CHOICE:
             /* If answer type is unique or multiple option,
                generate indexes of answers depending on shuffle */
-	    Tst_GenerateChoiceIndexes (&Print->PrintedQuestions[QstInd],Shuffle);
+	    Tst_GenerateChoiceIndexes (&Print->PrintedQsts[QstInd],Shuffle);
 	    break;
 	 default:
 	    break;
@@ -579,7 +579,7 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
          · If the user does not confirm the submission of their exam ==>
          ==> the exam may be half filled ==>
          ==> the answers displayed will be those selected by the user. */
-      Print->PrintedQuestions[QstInd].Answer.Str[0] = '\0';
+      Print->PrintedQsts[QstInd].Answer.Str[0] = '\0';
      }
 
    /***** Get if test print will be visible by teachers *****/
@@ -591,10 +591,10 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
 /*************** Generate choice indexes depending on shuffle ****************/
 /*****************************************************************************/
 
-static void Tst_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQuestion,
+static void Tst_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQst,
 				       Qst_Shuffle_t Shuffle)
   {
-   struct Qst_Question Question;
+   struct Qst_Question Qst;
    unsigned NumOpt;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -603,12 +603,12 @@ static void Tst_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQuesti
    char StrInd[1 + Cns_MAX_DIGITS_UINT + 1];
 
    /***** Create question *****/
-   Qst_QstConstructor (&Question);
-   Question.QstCod = PrintedQuestion->QstCod;
+   Qst_QstConstructor (&Qst);
+   Qst.QstCod = PrintedQst->QstCod;
 
       /***** Get answers of question from database *****/
-      Question.Answer.NumOptions = Qst_DB_GetAnswersData (&mysql_res,Question.QstCod,
-							  Shuffle);
+      Qst.Answer.NumOptions = Qst_DB_GetAnswersData (&mysql_res,
+						     Qst.QstCod,Shuffle);
       /*
       row[0] AnsInd
       row[1] Answer
@@ -618,7 +618,7 @@ static void Tst_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQuesti
       */
 
       for (NumOpt = 0;
-	   NumOpt < Question.Answer.NumOptions;
+	   NumOpt < Qst.Answer.NumOptions;
 	   NumOpt++)
 	{
 	 /***** Get next answer *****/
@@ -640,23 +640,23 @@ static void Tst_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQuesti
 
 	 snprintf (StrInd,sizeof (StrInd),NumOpt ? ",%u" :
 						   "%u",Index);
-	 Str_Concat (PrintedQuestion->StrIndexes,StrInd,
-		     sizeof (PrintedQuestion->StrIndexes) - 1);
+	 Str_Concat (PrintedQst->StrIndexes,StrInd,
+		     sizeof (PrintedQst->StrIndexes) - 1);
 	}
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
 
    /***** Destroy question *****/
-   Qst_QstDestructor (&Question);
+   Qst_QstDestructor (&Qst);
   }
 
 /*****************************************************************************/
 /************ Get parameters for the selection of test questions *************/
 /*****************************************************************************/
 
-Err_SuccessOrError_t Tst_GetParsTst (struct Qst_Questions *Questions,
-				     Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions)
+Err_SuccessOrError_t Tst_GetParsTst (struct Qst_Questions *Qsts,
+				     Tst_ActionToDoWithQuestions_t ActionToDo)
   {
    extern const char *Txt_You_must_select_one_ore_more_tags;
    extern const char *Txt_You_must_select_one_ore_more_types_of_answer;
@@ -668,9 +668,9 @@ Err_SuccessOrError_t Tst_GetParsTst (struct Qst_Questions *Questions,
 
    /***** Tags *****/
    /* Get preselected tag */
-   if ((Questions->Tags.PreselectedTagCod = ParCod_GetPar (ParCod_Tag)) <= 0)	// No preselected tag
+   if ((Qsts->Tags.PreselectedTagCod = ParCod_GetPar (ParCod_Tag)) <= 0)	// No preselected tag
       /* Get parameter that indicates whether all tags are selected */
-      if (!(Questions->Tags.All = Par_GetParBool ("AllTags")))
+      if (!(Qsts->Tags.All = Par_GetParBool ("AllTags")))
         {
 	 /* Allocate memory for tags */
 	 if ((ListSelectedTxt = malloc (Tag_MAX_BYTES_TAGS_LIST + 1)) == NULL)
@@ -680,10 +680,10 @@ Err_SuccessOrError_t Tst_GetParsTst (struct Qst_Questions *Questions,
 	 Par_GetParMultiToText ("ChkTag",ListSelectedTxt,Tag_MAX_BYTES_TAGS_LIST);
 
 	 /* Check number of selected tags */
-	 if ((Questions->Tags.NumSelected = Par_CountNumCodesInList (ListSelectedTxt)))
+	 if ((Qsts->Tags.NumSelected = Par_CountNumCodesInList (ListSelectedTxt)))
 	    /* Create list of selected tag codes */
-	    Par_CreateListOfCodes (ListSelectedTxt,Questions->Tags.NumSelected,
-				   &(Questions->Tags.ListSelectedTagCods));
+	    Par_CreateListOfCodes (ListSelectedTxt,Qsts->Tags.NumSelected,
+				   &(Qsts->Tags.ListSelectedTagCods));
 	 else	// If no tags selected, write alert
 	   {
 	    Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_tags);
@@ -694,20 +694,20 @@ Err_SuccessOrError_t Tst_GetParsTst (struct Qst_Questions *Questions,
         }
 
    /***** Types of answer *****/
-   switch (ActionToDoWithQuestions)
+   switch (ActionToDo)
      {
       case Tst_SHOW_TEST_TO_ANSWER:
       case Tst_EDIT_QUESTIONS:
       case Tst_SELECT_QUESTIONS_FOR_EXAM:
 	 /* Get parameter that indicates if all types of answer are selected */
-	 Questions->AnswerTypes.All = Par_GetParBool ("AllAnsTypes");
+	 Qsts->AnswerTypes.All = Par_GetParBool ("AllAnsTypes");
 
 	 /* Get types of answer */
-	 Par_GetParMultiToText ("AnswerType",Questions->AnswerTypes.List,
+	 Par_GetParMultiToText ("AnswerType",Qsts->AnswerTypes.List,
 				Qst_MAX_BYTES_LIST_ANSWER_TYPES);
 
 	 /* Check number of types of answer */
-	 if (Qst_CountNumAnswerTypesInList (&Questions->AnswerTypes) == 0)	// If no types of answer selected...
+	 if (Qst_CountNumAnswerTypesInList (&Qsts->AnswerTypes) == 0)	// If no types of answer selected...
 	   {									// ...write warning alert
 	    Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_types_of_answer);
 	    SuccessOrError = Err_ERROR;
@@ -715,8 +715,8 @@ Err_SuccessOrError_t Tst_GetParsTst (struct Qst_Questions *Questions,
 	 break;
       case Tst_SELECT_QUESTIONS_FOR_GAME:
 	 /* The unique allowed type of answer in a game is unique choice */
-	 Questions->AnswerTypes.All = false;
-	 snprintf (Questions->AnswerTypes.List,sizeof (Questions->AnswerTypes.List),"%u",
+	 Qsts->AnswerTypes.All = false;
+	 snprintf (Qsts->AnswerTypes.List,sizeof (Qsts->AnswerTypes.List),"%u",
 		   (unsigned) Qst_ANS_UNIQUE_CHOICE);
 	 break;
       default:
@@ -724,12 +724,12 @@ Err_SuccessOrError_t Tst_GetParsTst (struct Qst_Questions *Questions,
      }
 
    /***** Get other parameters, depending on action *****/
-   switch (ActionToDoWithQuestions)
+   switch (ActionToDo)
      {
       case Tst_SHOW_TEST_TO_ANSWER:
-	 Questions->NumQsts = Tst_GetParNumQsts ();
-	 if (Questions->NumQsts < TstCfg_GetConfigMin () ||
-	     Questions->NumQsts > TstCfg_GetConfigMax ())
+	 Qsts->NumQsts = Tst_GetParNumQsts ();
+	 if (Qsts->NumQsts < TstCfg_GetConfigMin () ||
+	     Qsts->NumQsts > TstCfg_GetConfigMax ())
 	   {
 	    Ale_ShowAlert (Ale_WARNING,Txt_The_number_of_questions_must_be_in_the_interval_X,
 		           TstCfg_GetConfigMin (),TstCfg_GetConfigMax ());
@@ -743,11 +743,11 @@ Err_SuccessOrError_t Tst_GetParsTst (struct Qst_Questions *Questions,
 	 /* Get ordering criteria */
 	 Par_GetParMultiToText ("Order",UnsignedStr,Cns_MAX_DIGITS_UINT);
 	 if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-	    Questions->SelectedOrder = (Qst_QuestionsOrder_t)
+	    Qsts->SelectedOrder = (Qst_QuestionsOrder_t)
 				       (UnsignedNum < Qst_NUM_TYPES_ORDER_QST ? UnsignedNum :
 										0);
 	 else
-	    Questions->SelectedOrder = (Qst_QuestionsOrder_t) 0;
+	    Qsts->SelectedOrder = (Qst_QuestionsOrder_t) 0;
 	 break;
       case Tst_SELECT_QUESTIONS_FOR_EXAM:
       case Tst_SELECT_QUESTIONS_FOR_GAME:
@@ -755,7 +755,7 @@ Err_SuccessOrError_t Tst_GetParsTst (struct Qst_Questions *Questions,
 	 Dat_GetIniEndDatesFromForm ();
 
 	 /* Order question by stem */
-	 Questions->SelectedOrder = Qst_ORDER_STEM;
+	 Qsts->SelectedOrder = Qst_ORDER_STEM;
 	 break;
       default:
 	 break;

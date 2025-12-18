@@ -856,7 +856,7 @@ void Exa_DB_RemoveAllSetsFromCrs (long HieCod)
 /******************* Insert question in table of questions *******************/
 /*****************************************************************************/
 
-long Exa_DB_AddQuestionToSet (long SetCod,const struct Qst_Question *Question,long MedCod)
+long Exa_DB_AddQuestionToSet (long SetCod,const struct Qst_Question *Qst,long MedCod)
   {
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
    extern const char Qst_Shuffle_YN[Qst_NUM_SHUFFLE];
@@ -870,11 +870,11 @@ long Exa_DB_AddQuestionToSet (long SetCod,const struct Qst_Question *Question,lo
 				" (%ld,'%c','%s','%c',"
 				 "'%s','%s',%ld)",
 				SetCod,
-				Exa_DB_InvalidQuestionYN[Question->Validity],
-				Qst_DB_StrAnswerTypes[Question->Answer.Type],
-				Qst_Shuffle_YN[Question->Answer.Shuffle],
-				Question->Stem,
-				Question->Feedback,
+				Exa_DB_InvalidQuestionYN[Qst->Validity],
+				Qst_DB_StrAnswerTypes[Qst->Answer.Type],
+				Qst_Shuffle_YN[Qst->Answer.Shuffle],
+				Qst->Stem,
+				Qst->Feedback,
 				MedCod);
   }
 
@@ -1141,8 +1141,8 @@ void Exa_DB_AddAnsToQstInSet (long QstCod,unsigned AnsInd,
 /*************** Get answers of a test question from database ****************/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetQstAnswersFromSet (MYSQL_RES **mysql_res,long QstCod,
-				      Qst_Shuffle_t Shuffle)
+unsigned Exa_DB_GetQstAnswersFromSet (MYSQL_RES **mysql_res,
+				      long QstCod,Qst_Shuffle_t Shuffle)
   {
    extern const char *Qst_OrderByShuffle[Qst_NUM_SHUFFLE];
    unsigned NumOptions;
@@ -2045,12 +2045,12 @@ void Exa_DB_StoreOneQstOfPrint (const struct ExaPrn_Print *Print,
 		    " VALUES"
 		    " (%ld,%ld,%u,%ld,'%.15lg','%s','%s')",
 		    Print->PrnCod,
-		    Print->Qsts[QstInd].QstCod,
+		    Print->PrintedQsts[QstInd].QstCod,
 		    QstInd,	// 0, 1, 2, 3...
-		    Print->Qsts[QstInd].SetCod,
-		    Print->Qsts[QstInd].Answer.Score,
-		    Print->Qsts[QstInd].StrIndexes,
-		    Print->Qsts[QstInd].Answer.Str);
+		    Print->PrintedQsts[QstInd].SetCod,
+		    Print->PrintedQsts[QstInd].Answer.Score,
+		    Print->PrintedQsts[QstInd].StrIndexes,
+		    Print->PrintedQsts[QstInd].Answer.Str);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 

@@ -51,8 +51,7 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_action_list.o \
        swad_enrolment.o swad_enrolment_database.o swad_error.o swad_exam.o \
        swad_exam_database.o swad_exam_log.o swad_exam_print.o \
        swad_exam_resource.o swad_exam_result.o swad_exam_session.o \
-       swad_exam_set.o swad_exam_sheet.o swad_exam_sheet_answer.o \
-       swad_exam_sheet_question.o swad_exist.o \
+       swad_exam_set.o swad_exam_sheet.o swad_exist.o \
        swad_FAQ.o swad_FAQ_database.o swad_figure.o swad_figure_cache.o \
        swad_figure_database.o swad_file.o swad_file_database.o \
        swad_file_extension.o swad_file_MIME.o swad_firewall.o \
@@ -85,8 +84,9 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_action_list.o \
        swad_profile_database.o swad_program.o swad_program_resource.o \
        swad_project.o swad_project_config.o swad_project_database.o \
        swad_project_resource.o \
-       swad_question.o swad_question_database.o swad_question_import.o \
-       swad_QR.o \
+       swad_question.o swad_question_choice.o swad_question_database.o \
+       swad_question_float.o swad_question_import.o swad_question_int.o \
+       swad_question_text.o swad_question_tf.o swad_QR.o \
        swad_record.o swad_record_database.o swad_report.o \
        swad_report_database.o swad_resource.o swad_resource_database.o \
        swad_role.o swad_role_database.o swad_room.o swad_room_database.o \

@@ -1257,7 +1257,7 @@ void MchRes_ShowOneMchResult (void)
 	 /***** Write answers and solutions *****/
 	 TstPrn_ShowPrintAnswers (UsrDat,
 				  Print.NumQsts.All,
-				  Print.PrintedQuestions,
+				  Print.PrintedQsts,
 				  Print.TimeUTC,
 				  Games.Game.Visibility);
 

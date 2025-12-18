@@ -33,21 +33,20 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-long Qst_DB_CreateQst (const struct Qst_Question *Question);
-void Qst_DB_UpdateQst (const struct Qst_Question *Question);
+long Qst_DB_CreateQst (const struct Qst_Question *Qst);
+void Qst_DB_UpdateQst (const struct Qst_Question *Qst);
 void Qst_DB_UpdateQstScore (const struct TstPrn_Print *Print,unsigned QstInd);
 void Qst_DB_UpdateQstShuffle (long QstCod,Qst_Shuffle_t Shuffle);
 //-----------------------------------------------------------------------------
-void Qst_DB_CreateIntAnswer (struct Qst_Question *Question);
-void Qst_DB_CreateFltAnswer (struct Qst_Question *Question);
-void Qst_DB_CreateTF_Answer (struct Qst_Question *Question);
-void Qst_DB_CreateChoAnswer (struct Qst_Question *Question);
+void Qst_DB_CreateIntAnswer (struct Qst_Question *Qst);
+void Qst_DB_CreateFltAnswer (struct Qst_Question *Qst);
+void Qst_DB_CreateTF_Answer (struct Qst_Question *Qst);
+void Qst_DB_CreateChoAnswer (struct Qst_Question *Qst);
 //-----------------------------------------------------------------------------
 
-unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
-                         const struct Qst_Questions *Questions);
+unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,const struct Qst_Questions *Qsts);
 unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
-                                        const struct Qst_Questions *Questions);
+                                        const struct Qst_Questions *Qsts);
 unsigned Qst_DB_GetTrivialQst (MYSQL_RES **mysql_res,
                                char DegreesStr[API_MAX_BYTES_DEGREES_STR + 1],
                                float lowerScore,float upperScore);
@@ -67,7 +66,7 @@ Exi_Exist_t Qst_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod);
 Qst_AnswerType_t Qst_DB_GetQstAnswerType (long QstCod);
 long Qst_DB_GetQstMedCod (long HieCod,long QstCod);
 unsigned Qst_DB_GetQstCodsFromTypeAnsStem (MYSQL_RES **mysql_res,
-                                           const struct Qst_Question *Question);
+                                           const struct Qst_Question *Qst);
 
 unsigned Qst_DB_GetNumAnswersQst (long QstCod);
 unsigned Qst_DB_GetAnswersData (MYSQL_RES **mysql_res,long QstCod,
@@ -77,7 +76,7 @@ unsigned Qst_DB_GetTextOfAnswers (MYSQL_RES **mysql_res,
 unsigned Qst_DB_GetQstAnswersCorr (MYSQL_RES **mysql_res,
 				   const char *Table,long QstCod);
 unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
-                                           const struct Qst_Question *Question);
+                                           const struct Qst_Question *Qst);
 unsigned Qst_DB_GetMedCodsFromStemsOfQstsInCrs (MYSQL_RES **mysql_res,long HieCod);
 unsigned Qst_DB_GetMedCodsFromAnssOfQstsInCrs (MYSQL_RES **mysql_res,long HieCod);
 unsigned Qst_DB_GetMedCodFromStemOfQst (MYSQL_RES **mysql_res,long HieCod,long QstCod);

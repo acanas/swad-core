@@ -27,6 +27,7 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_exam_print.h"
 #include "swad_exam_session.h"
 #include "swad_view.h"
 
@@ -52,5 +53,8 @@ void ExaShe_ListSolvedAnswerSheets (void);
 void ExaShe_PrintSolvedAnswerSheets (void);
 
 void ExaShe_ReceiveAnswer (void);
+void ExaShe_WriteJSToUpdateSheet (const struct ExaPrn_Print *Print,
+	                          unsigned QstInd,
+	                          const char *Id,int NumOpt);
 
 #endif

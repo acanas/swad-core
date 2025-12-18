@@ -89,25 +89,25 @@ void MchPrn_ComputeScoreAndUpdateMyMatchPrintInDB (long MchCod)
 static void MchPrn_ComputeScore (struct MchPrn_Print *Print)
   {
    unsigned NumQst;
-   struct Qst_Question Question;
+   struct Qst_Question Qst;
 
    for (NumQst = 0, Print->Score = 0.0;
 	NumQst < Print->NumQsts.All;
 	NumQst++)
      {
       /***** Create question *****/
-      Qst_QstConstructor (&Question);
-      Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
-      Question.Answer.Type = Qst_ANS_UNIQUE_CHOICE;
+      Qst_QstConstructor (&Qst);
+      Qst.QstCod = Print->PrintedQsts[NumQst].QstCod;
+      Qst.Answer.Type = Qst_ANS_UNIQUE_CHOICE;
 
 	 /***** Compute score for this answer ******/
-	 Qst_ComputeAnswerScore ("tst_answers",&Print->PrintedQuestions[NumQst],&Question);
+	 Qst_ComputeAnswerScore ("tst_answers",&Print->PrintedQsts[NumQst],&Qst);
 
 	 /***** Update total score *****/
-	 Print->Score += Print->PrintedQuestions[NumQst].Answer.Score;
+	 Print->Score += Print->PrintedQsts[NumQst].Answer.Score;
 
       /***** Destroy question *****/
-      Qst_QstDestructor (&Question);
+      Qst_QstDestructor (&Qst);
      }
   }
 

@@ -33,7 +33,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void QstImp_PutIconToExportQuestions (struct Qst_Questions *Questions);
+void QstImp_PutIconToExportQuestions (struct Qst_Questions *Qsts);
 bool QstImp_GetCreateXMLParFromForm (void);
 void QstImp_PutIconToImportQuestions (void);
 void QstImp_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res);
