@@ -42,6 +42,12 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void QstCho_WritePrntAns (const struct Qst_PrintedQuestion *PrintedQst,
+			  struct Qst_Question *Qst,
+			  Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+			  const char *ClassTxt,
+			  const char *ClassFeedback);
+
 void QstCho_WriteBlnkAns (const struct Qst_Question *Qst);
 void QstCho_WriteCorrAns (const struct ExaPrn_Print *Print,
 			  unsigned QstInd,struct Qst_Question *Qst);

@@ -43,6 +43,149 @@
 /*****************************************************************************/
 
 /*****************************************************************************/
+/********** Write single or multiple choice answer in a test print ***********/
+/*****************************************************************************/
+
+void QstCho_WritePrntAns (const struct Qst_PrintedQuestion *PrintedQst,
+			  struct Qst_Question *Qst,
+			  Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+			  const char *ClassTxt,
+			  const char *ClassFeedback)
+  {
+   extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
+   extern const char *Txt_TST_Answer_given_by_the_user;
+   extern const char *Txt_TST_Answer_given_by_the_teachers;
+   struct Answer
+     {
+      char *Class;
+      char *Str;
+     };
+   static struct Qst_AnswerDisplay AnsNotVisible =
+     {
+      .ClassTch = "Qst_ANS_0",
+      .ClassStd = "Qst_ANS_0",
+      .Symbol   = "&bull;"
+     };
+   unsigned NumOpt;
+   Qst_WrongOrCorrect_t WrongOrCorrect;
+   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
+   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   const struct Qst_AnswerDisplay *Ans;
+
+   /***** Change format of answers text *****/
+   Qst_ChangeFormatOptionsText (Qst);
+
+   /***** Change format of answers feedback *****/
+   if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT] == Usr_CAN)
+      Qst_ChangeFormatOptionsFeedback (Qst);
+
+   /***** Get indexes for this question from string *****/
+   Qst_GetIndexesFromStr (PrintedQst->StrIndexes,Indexes);
+
+   /***** Get the user's answers for this question from string *****/
+   Qst_GetAnswersFromStr (PrintedQst->Answer.Str,UsrAnswers);
+
+   /***** Write answers (one row per answer) *****/
+   for (NumOpt = 0;
+	NumOpt < Qst->Answer.NumOptions;
+	NumOpt++)
+     {
+      WrongOrCorrect = Qst->Answer.Options[Indexes[NumOpt]].Correct;
+
+      HTM_TR_Begin (NULL);
+
+	 /* Draw icon depending on user's answer */
+	 if (UsrAnswers[Indexes[NumOpt]] == HTM_CHECKED)	// This answer has been selected by the user
+	   {
+	    switch (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
+	      {
+	       case Usr_CAN:
+		  Ans = &Qst_AnswerDisplay[WrongOrCorrect];
+		  break;
+	       case Usr_CAN_NOT:
+	       default:
+		  Ans = &AnsNotVisible;
+		  break;
+	      }
+	    HTM_TD_Begin ("class=\"CT %s_%s\" title=\"%s\"",
+			  Ans->ClassStd,The_GetSuffix (),
+			  Txt_TST_Answer_given_by_the_user);
+	       HTM_Txt (Ans->Symbol);
+	    HTM_TD_End ();
+	   }
+	 else	// This answer has NOT been selected by the user
+	    HTM_TD_Empty (1);
+
+	 /* Draw icon that indicates whether the answer is correct */
+	 switch (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
+	   {
+	    case Usr_CAN:
+	       switch (WrongOrCorrect)
+		 {
+		  case Qst_CORRECT:
+		     HTM_TD_Begin ("class=\"CT %s_%s\" title=\"%s\"",
+				   Qst_AnswerDisplay[Qst_BLANK].ClassTch,
+				   The_GetSuffix (),
+				   Txt_TST_Answer_given_by_the_teachers);
+			HTM_Txt ("&bull;");
+		     HTM_TD_End ();
+		     break;
+		  case Qst_WRONG:
+		  default:
+		     HTM_TD_Empty (1);
+		     break;
+		 }
+	       break;
+	    case Usr_CAN_NOT:
+	    default:
+	       HTM_TD_Begin ("class=\"CT %s_%s\"",
+			     Qst_AnswerDisplay[Qst_BLANK].ClassTch,
+			     The_GetSuffix ());
+		  Ico_PutIconNotVisible ();
+	       HTM_TD_End ();
+	       break;
+	   }
+
+	 /* Answer letter (a, b, c,...) */
+	 HTM_TD_Begin ("class=\"LT %s_%s\"",ClassTxt,The_GetSuffix ());
+	    HTM_Option (NumOpt); HTM_CloseParenthesis (); HTM_NBSP ();
+	 HTM_TD_End ();
+
+	 /* Answer text and feedback */
+	 HTM_TD_Begin ("class=\"LT\"");
+
+	    HTM_DIV_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
+	       switch (ICanView[TstVis_VISIBLE_QST_ANS_TXT])
+		 {
+		  case Usr_CAN:
+		     HTM_Txt (Qst->Answer.Options[Indexes[NumOpt]].Text);
+		     Med_ShowMedia (&Qst->Answer.Options[Indexes[NumOpt]].Media,
+				    "Tst_MED_SHOW_CONT","Tst_MED_SHOW");
+		     break;
+		  case Usr_CAN_NOT:
+		  default:
+		     Ico_PutIconNotVisible ();
+		     break;
+		 }
+	    HTM_DIV_End ();
+
+	    if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_CAN)
+	       if (Qst->Answer.Options[Indexes[NumOpt]].Feedback)
+		  if (Qst->Answer.Options[Indexes[NumOpt]].Feedback[0])
+		    {
+		     HTM_DIV_Begin ("class=\"%s_%s\"",
+				    ClassFeedback,The_GetSuffix ());
+			HTM_Txt (Qst->Answer.Options[Indexes[NumOpt]].Feedback);
+		     HTM_DIV_End ();
+		    }
+
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
+     }
+  }
+
+/*****************************************************************************/
 /******* Write unique / multiple choice answer in an exam answer sheet *******/
 /*****************************************************************************/
 

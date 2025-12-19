@@ -1871,10 +1871,11 @@ static void ExaRes_WriteQstAndAns (struct Usr_Data *UsrDat,
 
 	 /* Answers */
 	 Qst_ComputeAnswerScore ("exa_set_answers",&Print->PrintedQsts[QstInd],Qst);
-	 TstPrn_WriteAnswersExam (UsrDat,&Print->PrintedQsts[QstInd],Qst,
+	 TstPrn_WriteAnswersExam (&Print->PrintedQsts[QstInd],Qst,
 				  ICanView,
 				  ClassTxt[Qst->Validity],
-				  ClassFeedback[Qst->Validity]);
+				  ClassFeedback[Qst->Validity],
+				  UsrDat);
 
 	 /* Write score retrieved from database */
 	 if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE] == Usr_CAN)

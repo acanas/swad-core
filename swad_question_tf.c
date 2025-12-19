@@ -43,6 +43,55 @@
 /*****************************************************************************/
 
 /*****************************************************************************/
+/***************** Write false / true answer in a test print *****************/
+/*****************************************************************************/
+
+void QstTF__WritePrntAns (const struct Qst_PrintedQuestion *PrintedQst,
+			  struct Qst_Question *Qst,
+			  Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+			  __attribute__((unused)) const char *ClassTxt,
+			  __attribute__((unused)) const char *ClassFeedback)
+  {
+   extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
+   Qst_OptionTF_t OptTFStd;
+
+   /***** Check if number of rows is correct *****/
+   Qst_CheckIfNumberOfAnswersIsOne (Qst);
+
+   /***** Get answer true or false *****/
+   OptTFStd = Qst_GetOptionTFFromChar (PrintedQst->Answer.Str[0]);
+
+   HTM_TR_Begin (NULL);
+
+      /***** Write the user answer *****/
+      HTM_TD_Begin ("class=\"CM %s_%s\"",
+		    ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_CAN ?
+		       (OptTFStd == Qst->Answer.OptionTF ? "Qst_ANS_OK" :		// Correct
+							   "Qst_ANS_BAD") :	// Wrong
+							   "Qst_ANS_0",		// Blank answer
+		    The_GetSuffix ());
+	 Qst_WriteAnsTF (OptTFStd);
+      HTM_TD_End ();
+
+      /***** Write the correct answer *****/
+      HTM_TD_Begin ("class=\"CM %s_%s\"",
+		    Qst_AnswerDisplay[Qst_BLANK].ClassTch,The_GetSuffix ());
+	 switch (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
+	   {
+	    case Usr_CAN:
+	       Qst_WriteAnsTF (Qst->Answer.OptionTF);
+	       break;
+	    case Usr_CAN_NOT:
+	    default:
+	       Ico_PutIconNotVisible ();
+	       break;
+	   }
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
 /************* Write true / false answer in an exam answer sheet *************/
 /*****************************************************************************/
 

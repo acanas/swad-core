@@ -45,6 +45,70 @@
 /*****************************************************************************/
 
 /*****************************************************************************/
+/******************* Write integer answer in a test print ********************/
+/*****************************************************************************/
+
+void QstInt_WritePrntAns (const struct Qst_PrintedQuestion *PrintedQst,
+			  struct Qst_Question *Qst,
+			  Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+			  __attribute__((unused)) const char *ClassTxt,
+			  __attribute__((unused)) const char *ClassFeedback)
+  {
+   extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
+   Qst_WrongOrCorrect_t WrongOrCorrect;
+   long AnsUsr;
+
+   /***** Check if number of rows is correct *****/
+   Qst_CheckIfNumberOfAnswersIsOne (Qst);
+
+   HTM_TR_Begin (NULL);
+
+      /***** Write the user answer *****/
+      if (PrintedQst->Answer.Str[0])		// If user has answered the question
+	{
+	 WrongOrCorrect = Qst_BLANK;
+	 if (sscanf (PrintedQst->Answer.Str,"%ld",&AnsUsr) == 1)
+	    if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_CAN)
+	       WrongOrCorrect = AnsUsr == Qst->Answer.Integer ? Qst_CORRECT :
+								Qst_WRONG;
+	 HTM_TD_Begin ("class=\"CM %s_%s\"",
+		       Qst_AnswerDisplay[WrongOrCorrect].ClassStd,
+		       The_GetSuffix ());
+	    switch (WrongOrCorrect)
+	      {
+	       case Qst_WRONG:
+	       case Qst_CORRECT:
+		  HTM_Long (AnsUsr);
+		  break;
+	       case Qst_BLANK:
+	       default:
+		  HTM_Question ();
+		  break;
+	      }
+	 HTM_TD_End ();
+	}
+      else							// If user has omitted the answer
+	 HTM_TD_Empty (1);
+
+      /***** Write the correct answer *****/
+      HTM_TD_Begin ("class=\"CM %s_%s\"",
+		    Qst_AnswerDisplay[Qst_BLANK].ClassTch,The_GetSuffix ());
+	 switch (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
+	   {
+	    case Usr_CAN:
+	       HTM_Long (Qst->Answer.Integer);
+	       break;
+	    case Usr_CAN_NOT:
+	    default:
+	       Ico_PutIconNotVisible ();
+	       break;
+	   }
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
 /*************** Write integer answer in an exam answer sheet ****************/
 /*****************************************************************************/
 

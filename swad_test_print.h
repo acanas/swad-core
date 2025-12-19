@@ -82,12 +82,13 @@ void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print);
 
 //-----------------------------------------------------------------------------
 
-void TstPrn_WriteAnswersExam (struct Usr_Data *UsrDat,
-                              const struct Qst_PrintedQuestion *PrintedQst,
+void TstPrn_WriteAnswersExam (const struct Qst_PrintedQuestion *PrintedQst,
 			      struct Qst_Question *Qst,
 			      Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 			      const char *ClassTxt,
-			      const char *ClassFeedback);
+			      const char *ClassFeedback,
+			      struct Usr_Data *UsrDat);
+void TstPrn_WriteHeadUserCorrect (const struct Usr_Data *UsrDat);
 
 void TstPrn_SelUsrsToViewUsrsPrints (void);
 void TstPrn_SelDatesToSeeMyPrints (void);

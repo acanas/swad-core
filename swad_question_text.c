@@ -45,6 +45,130 @@
 /*****************************************************************************/
 
 /*****************************************************************************/
+/************** Write text answer when assessing a test print ****************/
+/*****************************************************************************/
+
+void QstTxt_WritePrntAns (const struct Qst_PrintedQuestion *PrintedQst,
+			  struct Qst_Question *Qst,
+			  Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+			  __attribute__((unused)) const char *ClassTxt,
+			  __attribute__((unused)) const char *ClassFeedback)
+  {
+   extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
+   unsigned NumOpt;
+   char TextAnsUsr[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
+   char TextAnsOK[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
+   Qst_WrongOrCorrect_t WrongOrCorrect;
+
+   /***** Change format of answers text *****/
+   Qst_ChangeFormatOptionsText (Qst);
+
+   /***** Change format of answers feedback *****/
+   if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT] == Usr_CAN)
+      Qst_ChangeFormatOptionsFeedback (Qst);
+
+   HTM_TR_Begin (NULL);
+
+      /***** Write the user answer *****/
+      if (PrintedQst->Answer.Str[0])	// If user has answered the question
+	{
+	 /* Filter the user answer */
+	 Str_Copy (TextAnsUsr,PrintedQst->Answer.Str,sizeof (TextAnsUsr) - 1);
+
+	 /* In order to compare student answer to stored answer,
+	    the text answers are stored avoiding two or more consecurive spaces */
+	 Str_ReplaceSeveralSpacesForOne (TextAnsUsr);
+
+	 Str_ConvertToComparable (TextAnsUsr);
+
+	 if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_CAN)
+	    for (NumOpt = 0, WrongOrCorrect = Qst_WRONG;
+		 NumOpt < Qst->Answer.NumOptions;
+		 NumOpt++)
+	      {
+	       /* Filter this correct answer */
+	       Str_Copy (TextAnsOK,Qst->Answer.Options[NumOpt].Text,
+			 sizeof (TextAnsOK) - 1);
+	       Str_ConvertToComparable (TextAnsOK);
+
+	       /* Check is user answer is correct */
+	       if (!strcoll (TextAnsUsr,TextAnsOK))
+		 {
+		  WrongOrCorrect = Qst_CORRECT;
+		  break;
+		 }
+	      }
+	 else
+	    WrongOrCorrect = Qst_BLANK;
+
+	 HTM_TD_Begin ("class=\"CT %s_%s\"",
+		       Qst_AnswerDisplay[WrongOrCorrect].ClassStd,
+		       The_GetSuffix ());
+	    HTM_Txt (PrintedQst->Answer.Str);
+	 HTM_TD_End ();
+	}
+      else						// If user has omitted the answer
+	 HTM_TD_Empty (1);
+
+      /***** Write the correct answers *****/
+      switch (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
+	{
+	 case Usr_CAN:
+	    HTM_TD_Begin ("class=\"CT\"");
+	       HTM_TABLE_BeginPadding (2);
+
+		  for (NumOpt = 0;
+		       NumOpt < Qst->Answer.NumOptions;
+		       NumOpt++)
+		    {
+		     HTM_TR_Begin (NULL);
+
+			/* Answer letter (a, b, c,...) */
+			HTM_TD_Begin ("class=\"LT %s_%s\"",
+				      Qst_AnswerDisplay[Qst_BLANK].ClassTch,
+				      The_GetSuffix ());
+			   HTM_Option (NumOpt); HTM_CloseParenthesis (); HTM_NBSP ();
+			HTM_TD_End ();
+
+			/* Answer text and feedback */
+			HTM_TD_Begin ("class=\"LT\"");
+
+			   HTM_DIV_Begin ("class=\"%s_%s\"",
+					  Qst_AnswerDisplay[Qst_BLANK].ClassTch,
+					  The_GetSuffix ());
+			      HTM_Txt (Qst->Answer.Options[NumOpt].Text);
+			   HTM_DIV_End ();
+
+			   if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT] == Usr_CAN)
+			      if (Qst->Answer.Options[NumOpt].Feedback)
+				 if (Qst->Answer.Options[NumOpt].Feedback[0])
+				   {
+				    HTM_DIV_Begin ("class=\"Qst_TXT_LIGHT\"");
+				       HTM_Txt (Qst->Answer.Options[NumOpt].Feedback);
+				    HTM_DIV_End ();
+				   }
+
+			HTM_TD_End ();
+
+		     HTM_TR_End ();
+		    }
+
+	       HTM_TABLE_End ();
+	    HTM_TD_End ();
+	    break;
+	 case Usr_CAN_NOT:
+	 default:
+	    HTM_TD_Begin ("class=\"CT %s_%s\"",
+			  Qst_AnswerDisplay[Qst_BLANK].ClassTch,The_GetSuffix ());
+	       Ico_PutIconNotVisible ();
+	    HTM_TD_End ();
+	    break;
+	}
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
 /**************** Write text answer in an exam answer sheet ******************/
 /*****************************************************************************/
 

@@ -43,6 +43,66 @@
 /*****************************************************************************/
 
 /*****************************************************************************/
+/******************** Write float answer in an test print ********************/
+/*****************************************************************************/
+
+void QstFlt_WritePrntAns (const struct Qst_PrintedQuestion *PrintedQst,
+			  struct Qst_Question *Qst,
+			  Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+			  __attribute__((unused)) const char *ClassTxt,
+			  __attribute__((unused)) const char *ClassFeedback)
+  {
+   extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
+   double AnsUsr;
+   Err_SuccessOrError_t SuccessOrError;
+
+   /***** Check if number of rows is correct *****/
+   if (Qst->Answer.NumOptions != 2)
+      Err_WrongAnswerExit ();
+
+   HTM_TR_Begin (NULL);
+
+      /***** Write the user answer *****/
+      if (PrintedQst->Answer.Str[0])	// If user has answered the question
+	{
+	 SuccessOrError = Str_GetDoubleFromStr (PrintedQst->Answer.Str,&AnsUsr);
+
+	 // A bad formatted floating point answer will interpreted as 0.0
+	 HTM_TD_Begin ("class=\"CM %s_%s\"",
+		       ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_CAN &&
+		       SuccessOrError == Err_SUCCESS ?
+			  (AnsUsr >= Qst->Answer.FloatingPoint[0] &&
+			   AnsUsr <= Qst->Answer.FloatingPoint[1] ? "Qst_ANS_OK" :	// Correct
+								    "Qst_ANS_BAD") :	// Wrong
+								    "Qst_ANS_0",	// Blank answer
+		       The_GetSuffix ());
+	    if (SuccessOrError == Err_SUCCESS)
+	       HTM_Double (AnsUsr);
+	 HTM_TD_End ();
+	}
+      else					// If user has omitted the answer
+	 HTM_TD_Empty (1);
+
+      /***** Write the correct answer *****/
+      HTM_TD_Begin ("class=\"CM %s_%s\"",
+		    Qst_AnswerDisplay[Qst_BLANK].ClassTch,The_GetSuffix ());
+	 switch (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
+	   {
+	    case Usr_CAN:
+	       HTM_DoubleRange (Qst->Answer.FloatingPoint[0],
+				Qst->Answer.FloatingPoint[1]);
+	       break;
+	    case Usr_CAN_NOT:
+	    default:
+	       Ico_PutIconNotVisible ();
+	       break;
+	   }
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
 /**************** Write float answer in an exam answer sheet *****************/
 /*****************************************************************************/
 
