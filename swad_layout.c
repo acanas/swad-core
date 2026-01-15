@@ -1670,16 +1670,16 @@ void Lay_HelpPlainEditor (void)
    extern const char *Txt_TEXT_plain;
 
    Lay_HelpTextEditor (Txt_TEXT_plain,
-                       "\\(LaTeX\\)",
+                       "$LaTeX$&nbsp;\\(LaTeX\\)",
                        "$$LaTeX$$&nbsp;\\[LaTeX\\]");
   }
 
 void Lay_HelpRichEditor (void)
   {
-   Lay_HelpTextEditor ("<a href=\"http://johnmacfarlane.net/pandoc/README.html#pandocs-markdown\""
-	               " target=\"_blank\">Markdown+Pandoc</a>",
-                       "$LaTeX$",
-                       "$$LaTeX$$");
+   Lay_HelpTextEditor ("<a href=\"https://pandoc.org/MANUAL.html#pandocs-markdown\""
+	               " target=\"_blank\">Pandoc's Markdown</a>",
+	               "$LaTeX$&nbsp;\\(LaTeX\\)",
+	               "$$LaTeX$$&nbsp;\\[LaTeX\\]");
   }
 
 static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const char *Equation)

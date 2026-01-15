@@ -47,25 +47,28 @@ extern struct Globals Gbl;
 
 long Gam_DB_CreateGame (const struct Gam_Game *Game,const char *Txt)
   {
-   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
+   long GamCod;
 
-   return
+   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
+   GamCod =
    DB_QueryINSERTandReturnCode ("can not create new game",
 				"INSERT INTO gam_games"
-				" (CrsCod,Hidden,UsrCod,MaxGrade,Visibility,"
-				  "Title,Txt)"
+				" (CrsCod,Hidden,UsrCod,MaxGrade,"
+				  "Visibility,Title,Txt)"
 				" VALUES"
-				" (%ld,'N',%ld,%.15lg,%u,"
-				  "'%s','%s')",
+				" (%ld,'N',%ld,%.15lg,"
+				  "%u,'%s','%s')",
 				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Game->MaxGrade,
 				Game->Visibility,
 				Game->Title,
 				Txt);
-
    Str_SetDecimalPointToLocal ();	// Return to local system
+
+   return GamCod;
   }
+
 /*****************************************************************************/
 /*************************** Update an existing game *************************/
 /*****************************************************************************/

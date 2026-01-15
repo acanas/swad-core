@@ -44,7 +44,7 @@
 		</p>
 
 		<a href="http://creativecommons.org/licenses/by-sa/3.0/deed.es_ES" title="License of text on this page" class="COPYRIGHT"><img src="/img/cc-by-sa.png" style="width:88px; height=31px; vertical-align:middle;" alt="CC BY-SA" /></a>
-		<a href="https://openswad.org/en?usr=@acanas" target="_blank">Antonio Ca&ntilde;as Vargas</a>, 1999-2020
+		<a href="https://openswad.org/en?usr=@acanas" target="_blank">Antonio Ca&ntilde;as Vargas</a>, 1999-2026
 	</td>
 	</tr>
 
@@ -191,8 +191,8 @@
 	</p>
 
 	<p>
-	In the rest of this installation guide we give instructions for CentOS 6.5 and Ubuntu 18.04 LTS,
-	assuming that the user is root for some commands in CentOS 6.5 and a sudoer user in Ubuntu 18.04 LTS.
+	In the rest of this installation guide we give instructions for CentOS 6.5 and Ubuntu 24.04 LTS,
+	assuming that the user is root for some commands in CentOS 6.5 and a sudoer user in Ubuntu 24.04 LTS.
 	</p>
 
 	</li>
@@ -242,7 +242,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -261,7 +261,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -279,7 +279,7 @@
  	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -297,7 +297,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -317,7 +317,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -349,7 +349,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -376,7 +376,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -396,7 +396,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -423,7 +423,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -437,16 +437,16 @@
 	</li>
 
 	<li>
-	To install version 3.3.0 of <a href="http://opencv.org/">OpenCV</a>
-	(later versions do not work with our programs),
-	download the code from <a href="https://github.com/opencv/opencv/archive/3.3.0.zip">https://github.com/opencv/opencv/archive/3.3.0.zip</a>.
+	It's necessary to install version 3.3.0 of <a href="http://opencv.org/">OpenCV</a>
+	(later versions do not work with our programs like <code>fotomaton</code>).
+	First of all, download the code from <a href="https://github.com/opencv/opencv/archive/3.3.0.zip">https://github.com/opencv/opencv/archive/3.3.0.zip</a>.
 	We recommend to follow the steps of the installation guide, available in:<br />
 		<a href="http://docs.opencv.org/doc/tutorials/introduction/linux_install/linux_install.html">http://docs.opencv.org/doc/tutorials/introduction/linux_install/linux_install.html</a>.
 	As an example, we followed these steps:<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -462,15 +462,45 @@
  		<code>cd ~</code>
 	</td>
 	<td width="50%" valign="top">
+		<a href="http://opencv.org/">OpenCV</a> 3.3.0 does not compile on Ubuntu 24.04
+		because recent compilers give errors impossible to solve.
+		So, it's necessary to install older versions:<br />
+		<code>sudo apt update</code><br />
+		<code>sudo apt install gcc-9 g++-9</code><br />
+		<code>gcc-9 --version</code> (check)<br />
+		<code>g++-9 --version</code> (check)<br />
+		Once installed older compilers, we followed these steps:<br />
  		<code>cd ~</code><br />
  		<code>wget https://github.com/opencv/opencv/archive/3.3.0.zip</code><br />
  		<code>unzip 3.3.0.zip</code><br />
 		<code>cd opencv-3.3.0</code><br />
-		<code>mkdir release</code><br />
-		<code>cd release</code><br />
-		<code>cmake ..</code><br />
-		<code>make</code> (compiling OpenCV usually takes several minutes)<br />
+		<code>mkdir build</code><br />
+		<code>cd build</code><br />
+		<code>cmake -D CMAKE_BUILD_TYPE=Release  \<br />
+			    &nbsp;-D CMAKE_INSTALL_PREFIX=/usr/local/opencv-3.3.0 \<br />
+			    &nbsp;-D CMAKE_C_COMPILER=gcc-9 \<br />
+			    &nbsp;-D CMAKE_CXX_COMPILER=g++-9 \<br />
+			    &nbsp;-D CMAKE_CXX_STANDARD=11 \<br />
+			    &nbsp;-D BUILD_opencv_core=ON \<br />
+			    &nbsp;-D BUILD_opencv_imgproc=ON \<br />
+			    &nbsp;-D BUILD_opencv_imgcodecs=ON \<br />
+			    &nbsp;-D BUILD_opencv_highgui=ON \<br />
+			    &nbsp;-D BUILD_opencv_apps=OFF \<br />
+			    &nbsp;-D BUILD_TESTS=OFF \<br />
+			    &nbsp;-D BUILD_PERF_TESTS=OFF \<br />
+			    &nbsp;-D BUILD_EXAMPLES=OFF \<br />
+			    &nbsp;-D WITH_IPP=OFF \<br />
+			    &nbsp;-D WITH_TBB=OFF \<br />
+			    &nbsp;-D WITH_OPENCL=OFF \<br />
+			    &nbsp;-D WITH_OPENGL=OFF \<br />
+			    &nbsp;-D WITH_FFMPEG=OFF \<br />
+			    &nbsp;..</code><br />
+		<code>make -j2</code> (compiling OpenCV usually takes several minutes,
+				       and warnings appear,
+				       even with older versions of the compilers)<br />
 		<code>sudo make install</code><br />
+		<code>sudo ldconfig</code><br />
+		<code>ls /usr/local/opencv-3.3.0/lib</code> (check)<br />
  		<code>cd ~</code>
 	</td>
 	</tr>
@@ -492,7 +522,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -557,7 +587,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -583,7 +613,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -629,7 +659,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -648,7 +678,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -667,7 +697,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -795,7 +825,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -815,7 +845,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -987,7 +1017,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1020,7 +1050,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1044,7 +1074,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1062,7 +1092,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1081,7 +1111,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1155,7 +1185,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1227,14 +1257,26 @@
 	</p>
 
 	<p>
-	If we have not set a password for the MySQL user <code>root</code> in the installation process,
-	we must do it now:<br />
-		<code>mysql&gt; SET PASSWORD FOR 'root'@'localhost'=PASSWORD('mypass');</code>
-		(instead of <code>mypass</code> we should a personal password)<br />
-	and enter again in <code>mysql</code> command with the MySQL root user:<br />
-		<code>mysql&gt; quit</code><br />
-		<code>mysql -u root -p mysql</code><br />
- 	</p>
+	If you have not set a password for the MySQL user <code>root</code> in the installation process,
+	you must do it now:
+		<ul>
+			<li>In older installations:<br />
+			<code>mysql&gt; SET PASSWORD FOR 'root'@'localhost'=PASSWORD('mypass');</code>
+			(instead of <code>mypass</code> we should a personal password)<br />
+			and enter again in <code>mysql</code> command with the MySQL root user:<br />
+			<code>mysql&gt; quit</code><br />
+			<code>mysql -u root -p mysql</code></li>
+			
+			<li>In MySQL 8 you need to specify the password hashing method:<br />
+			<code>mysql&gt; ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'mypass';</code>
+			(instead of <code>mypass</code> we should a personal password)<br />
+			and enter again in <code>mysql</code> command with the MySQL root user:<br />
+			<code>mysql&gt; FLUSH PRIVILEGES;</code>
+			(to make effective the change without restarting the database server)<br />
+			<code>mysql&gt; quit</code><br />
+			<code>mysql -u root -p mysql</code></li>
+		</ul>
+	</p>
 
 	<p>
 	Create a new database called <code>swad</code>:<br />
@@ -1277,28 +1319,26 @@
 	Inside the directory <code>/home/&lt;user_directory&gt;/swad/swad-core/sql</code>
 	it should also exist other SQL files:
 		<ul>
-			<li><code>actions.sql</code></li>
-			<li><code>countries.sql</code></li>
-			<li><code>institutions.sql</code></li>
-			<li><code>centres.sql</code> (optional)</li>
+			<li><code>cty_countrs.sql</code></li>
+			<li><code>ins_instits.sql</code></li>
+			<li><code>ctr_centers.sql</code> (optional)</li>
 			<li><code>deg_types.sql</code> (optional)</li>
-			<li><code>degrees.sql</code> (optional)</li>
-			<li><code>departments.sql</code> (optional)</li>
-			<li><code>mail_domains.sql</code> (optional)</li>
-			<li><code>places.sql</code> (optional)</li>
+			<li><code>deg_degrees.sql</code> (optional)</li>
+			<li><code>dpt_departments.sql</code> (optional)</li>
+			<li><code>ntf_mail_domains.sql</code> (optional)</li>
+			<li><code>plc_places.sql</code> (optional)</li>
 		</ul>
-	that were created respectively from <a href="http://swad.ugr.es/">http://swad.ugr.es/</a>
+	that were created respectively from <a href="https://openswad.org/">https://openswad.org/</a>
 	with the commands:
 		<ul>
-			<li><code>mysqldump -l -h localhost -u swad -p swad actions > actions.sql</code></li>
-			<li><code>mysqldump -l -h localhost -u swad -p swad countries > countries.sql</code></li>
-			<li><code>mysqldump -l -h localhost -u swad -p swad institutions > institutions.sql</code></li>
-			<li><code>mysqldump -l -h localhost -u swad -p swad centres > centres.sql</code> (optional)</li>
+			<li><code>mysqldump -l -h localhost -u swad -p swad cty_countrs > cty_countrs.sql</code></li>
+			<li><code>mysqldump -l -h localhost -u swad -p swad ins_instits > ins_instits.sql</code></li>
+			<li><code>mysqldump -l -h localhost -u swad -p swad ctr_centers > ctr_centers.sql</code> (optional)</li>
 			<li><code>mysqldump -l -h localhost -u swad -p swad deg_types > deg_types.sql</code> (optional)</li>
-			<li><code>mysqldump -l -h localhost -u swad -p swad degrees > degrees.sql</code> (optional)</li>
-			<li><code>mysqldump -l -h localhost -u swad -p swad departments > departments.sql</code> (optional)</li>
-			<li><code>mysqldump -l -h localhost -u swad -p swad mail_domains > mail_domains.sql</code> (optional)</li>
-			<li><code>mysqldump -l -h localhost -u swad -p swad places > places.sql</code> (optional)</li>
+			<li><code>mysqldump -l -h localhost -u swad -p swad deg_degrees > deg_degrees.sql</code> (optional)</li>
+			<li><code>mysqldump -l -h localhost -u swad -p swad dpt_departments > dpt_departments.sql</code> (optional)</li>
+			<li><code>mysqldump -l -h localhost -u swad -p swad ntf_mail_domains > ntf_mail_domains.sql</code> (optional)</li>
+			<li><code>mysqldump -l -h localhost -u swad -p swad plc_places > plc_places.sql</code> (optional)</li>
 		</ul>
 	</p>
 	
@@ -1306,32 +1346,28 @@
 	Move to this directory and create the contents of the respective tables
 	in database::<br />
 		<code>cd /home/&lt;user_directory&gt;/swad/swad-core/sql</code><br />
-		<code>mysql -u swad -p swad &lt; actions.sql</code><br />
-		<code>mysql -u swad -p swad &lt; countries.sql</code><br />
-		<code>mysql -u swad -p swad &lt; institutions.sql</code><br />
-		<code>mysql -u swad -p swad &lt; centres.sql</code> (optional)<br />
+		<code>mysql -u swad -p swad &lt; cty_countrs.sql</code><br />
+		<code>mysql -u swad -p swad &lt; ins_instits.sql</code><br />
+		<code>mysql -u swad -p swad &lt; ctr_centers.sql</code> (optional)<br />
 		<code>mysql -u swad -p swad &lt; deg_types.sql</code> (optional)<br />
-		<code>mysql -u swad -p swad &lt; degrees.sql</code> (optional)<br />
-		<code>mysql -u swad -p swad &lt; departments.sql</code> (optional)<br />
-		<code>mysql -u swad -p swad &lt; mail_domains.sql</code> (optional)<br />
-		<code>mysql -u swad -p swad &lt; places.sql</code> (optional)
+		<code>mysql -u swad -p swad &lt; deg_degrees.sql</code> (optional)<br />
+		<code>mysql -u swad -p swad &lt; dpt_departments.sql</code> (optional)<br />
+		<code>mysql -u swad -p swad &lt; ntf_mail_domains.sql</code> (optional)<br />
+		<code>mysql -u swad -p swad &lt; plc_places.sql</code> (optional)<br />
+		<code>mysql -u swad -p swad</code><br />
+		<code>mysql&gt; UPDATE ins_instits SET Status=0,RequesterUsrCod=-1;</code><br />
+		<code>mysql&gt; UPDATE ctr_centers SET Status=0,RequesterUsrCod=-1;</code><br />
+		<code>mysql&gt; UPDATE deg_degrees SET Status=0,RequesterUsrCod=-1;</code><br />
+		<code>mysql&gt; quit</code>
 	</p>
 
 	<p>
-	Create a superuser:<br />
+	It's necessary to create a superuser.
+	To do so, enter in the new installation of swad and create a first user in PROFILE &gt; Account.
+	Then fill user's data in PROFILE &gt; Record.
+	Then, insert this first user in table of admins:<br />
 		<code>mysql -u swad -p swad</code><br />
-		<code>mysql&gt; SET @MyID:='my_id';</code><br />
-			Instead of <code>my_id</code> we should use our ID number (DNI / c&eacute;dula / passport...).<br />
-		<code>mysql&gt; SET @EncryptedUsrCod:='base64url_string_43_chars';</code><br />
-			Instead of <code>base64url_string_43_chars</code>
-			we will use a random 43 characters string where every character
-			can be one of the following 64 ones (they can be repeated):<br />
-  			'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',<br />
-			'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',<br />
-			'0','1','2','3','4','5','6','7','8','9','-','_'<br />
-		<code>mysql&gt; INSERT INTO usr_data (EncryptedUsrCod,Birthday,Comments) VALUES(@EncryptedUsrCod,NOW(),'');</code><br />	
-		<code>mysql&gt; INSERT INTO usr_IDs (UsrCod,UsrID,CreatTime,Confirmed) VALUES(LAST_INSERT_ID(),@MyID,NOW(),'Y');</code><br />
-		<code>mysql&gt; INSERT INTO admin (UsrCod,Scope,Cod) VALUES (LAST_INSERT_ID(),'Sys','0');</code><br />
+		<code>mysql&gt; INSERT INTO usr_admins SELECT MAX(UsrCod),'Sys',0 FROM usr_data;</code><br />
 		<code>mysql&gt; quit</code>
  	</p>
 
@@ -1354,7 +1390,7 @@
 			<table width="100%">
 			<tr>
 			<th>CentOS 6.5</th>
-			<th>Ubuntu 18.04</th>
+			<th>Ubuntu 24.04</th>
 			</tr>
 			<tr>
 			<td width="50%" valign="top">
@@ -1372,7 +1408,7 @@
 			<table width="100%">
 			<tr>
 			<th>CentOS 6.5</th>
-			<th>Ubuntu 18.04</th>
+			<th>Ubuntu 24.04</th>
 			</tr>
 			<tr>
 			<td width="50%" valign="top">
@@ -1388,7 +1424,7 @@
 			<table width="100%">
 			<tr>
 			<th>CentOS 6.5</th>
-			<th>Ubuntu 18.04</th>
+			<th>Ubuntu 24.04</th>
 			</tr>
 			<tr>
 			<td width="50%" valign="top">
@@ -1413,7 +1449,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1425,14 +1461,35 @@
 	</tr>
 	</table>
 	</p>
-	
+
+	<p>
+	If you have populated database with institutions, centers and degrees,
+	you can copy icons for most of those nodes of hierarchy:<br />
+		<code>sudo cp /home/&lt;user_directory&gt;/swad/swad-core/html/swad/ins.zip /var/www/html/swad</code><br />
+		<code>sudo cp /home/&lt;user_directory&gt;/swad/swad-core/html/swad/ctr.zip /var/www/html/swad</code><br />
+		<code>sudo cp /home/&lt;user_directory&gt;/swad/swad-core/html/swad/deg.zip /var/www/html/swad</code><br />
+		<code>cd /var/www/html/swad</code><br />
+		<code>sudo unzip ctr.zip</code><br />
+		<code>sudo unzip ins.zip</code><br />
+		<code>sudo unzip deg.zip</code><br />
+		<code>sudo chown -R www-data:www-data ins</code><br />
+		<code>sudo chown -R www-data:www-data ctr</code><br />
+		<code>sudo chown -R www-data:www-data deg</code><br />
+	that were created respectively from <a href="https://openswad.org/">https://openswad.org/</a>
+	with the commands:<br />
+		<code>cd /var/www/html/swad</code><br />
+		<code>zip -r ins.zip ins</code><br />
+		<code>zip -r ctr.zip ctr</code><br />
+		<code>zip -r deg.zip deg</code>
+	</p>
+
 	<p>
 	Create the public directory <code>crs</code>, that will store the public content
 	of the courses, inside the SWAD public directory:
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1451,7 +1508,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1470,7 +1527,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1488,7 +1545,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1516,7 +1573,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1542,7 +1599,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1597,7 +1654,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1620,7 +1677,7 @@
 	<p>
 	After installation, we must populate the Time Zone Tables
 	in our mysql database by following the instructions in
-	<a href="http://dev.mysql.com/doc/refman/5.1/en/time-zone-support.html">http://dev.mysql.com/doc/refman/5.1/en/time-zone-support.html</a>:<br />
+	<a href="https://dev.mysql.com/doc/refman/8.4/en/time-zone-support.html">https://dev.mysql.com/doc/refman/8.4/en/time-zone-support.html</a>:<br />
 	<code>mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -p mysql</code>
 	</p>
 
@@ -1639,7 +1696,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1666,7 +1723,7 @@
 	<h2><a name="mathjax">Installing MathJax</a></h2>
 
 	<p>
-	<a href="http://docs.mathjax.org/">MathJax</a> is a Javascript library required to display math.
+	<a href="https://docs.mathjax.org/en/latest/">MathJax</a> is a Javascript library required to display math.
 	In SWAD, it is used in combination with Markdown and Pandoc.
 	To install it, follow the instructions in
 	<a href="http://docs.mathjax.org/en/latest/web/start.html">http://docs.mathjax.org/en/latest/web/start.html</a>.
@@ -1679,7 +1736,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1692,7 +1749,9 @@
 			<code>ls -lZ /var/www/html/swad/</code>
 	</td>
 	<td width="50%" valign="top">
-		<code>sudo cp -a <em>our-downloaded-copy-of-mathjax/package/es5</em> /var/www/html/swad/mathjax</code><br />
+		<code>sudo apt install npm</code><br />
+		<code>npm install mathjax@4</code><br />
+		<code>sudo mv node_modules/mathjax /var/www/html/swad/mathjax</code><br />
 		<code>sudo chown -R www-data:www-data /var/www/html/swad/mathjax</code>
 	</td>
 	</tr>
@@ -1706,7 +1765,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1737,7 +1796,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1755,7 +1814,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1773,7 +1832,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1791,7 +1850,7 @@
  	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1804,11 +1863,10 @@
 	</p>
 
 	<p>
-	We need to install the <a href="http://www.cs.fsu.edu/~engelen/soap.html">gSOAP</a> <em>toolkit</em>,
+	We need to install the <a href="https://www.genivia.com/dev.html">gSOAP</a> <em>toolkit</em>,
 	that can be downloaded from:<br />
-	<a href="http://www.cs.fsu.edu/~engelen/soap.html">http://www.cs.fsu.edu/~engelen/soap.html</a><br />
-	<a href="https://www.genivia.com/products.html#gsoap">http://sourceforge.net/projects/gsoap2/files/</a><br />
-	(Tested with the version 2.8.98,
+	<a href="https://sourceforge.net/projects/gsoap2/">https://sourceforge.net/projects/gsoap2/</a><br />
+	(Tested with the version 2.8.139,
 	probably more recent versions also work.)
 	</p>
 
@@ -1836,7 +1894,7 @@
  	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1885,7 +1943,7 @@
  	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1940,7 +1998,7 @@
  	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1960,7 +2018,7 @@
  	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2034,7 +2092,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
  	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2055,7 +2113,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
  	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2075,7 +2133,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
  	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2105,7 +2163,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2126,8 +2184,24 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
 
 	<p>
 	Before compiling a program that uses <a href="http://opencv.org/">OpenCV</a>, we must do this:<br />
+	
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 24.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
 		<code>PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:${PKG_CONFIG_PATH}</code><br />
 		<code>export PKG_CONFIG_PATH</code><br />
+	</td>
+	<td width="50%" valign="top">
+		<code>export PKG_CONFIG_PATH=/usr/local/opencv-3.3.0/lib/pkgconfig</code><br />
+		<code>pkg-config --modversion opencv</code> (should write <code>3.3.0</code>)<br />
+	</td>
+	</tr>
+	</table>
+
 	</p>
 
 	<p>
@@ -2139,6 +2213,8 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
 	<p>
 	We can compile this program in the local directory:<br />
 		<code>cd /home/&lt;user_directory&gt;/swad/swad-core/fotomaton</code><br />
+		In Ubuntu 24.04, we changed CXX, CC and CXXFLAGS in <code>Makefile</code>
+		to use g++-9 and to avoid warnings due to legacy code (<code>-Wno-class-memaccess</code>).<br />
 		<code>make</code><br />
 	As result, it should have been created an executable file <code>fotomaton</code>.
 	</p>
@@ -2150,8 +2226,13 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
 		<code>pkg-config --libs opencv</code><br />
 	Create a file called <code>opencv.conf</code> in <code>/etc/ld.so.conf.d/</code>
 	that holds the path to the OpenCV libraries (by default <code>/usr/local/lib</code>),
-	and then run <code>ldconfig</code> as <code>root</code>:<br />
-		<code>ldconfig</code><br />
+	and then run <code>ldconfig</code> as <code>root</code>:
+		<ul>
+			<li><code>cd /etc/ld.so.conf.d/</code></li>
+			<li>Create a file <code>opencv.conf</code>, and write the path to the OpenCV libraries into it
+			(for example, in Ubuntu 24.04: <code>/usr/local/opencv-3.3.0/lib</code>)</li>
+			<li><code>sudo ldconfig</code></li>
+		</ul>
     	Or either, add the location of the OpenCV libraries
     	to <code>LD_LIBRARY_PATH</code>.
 	</p>
@@ -2162,7 +2243,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2194,7 +2275,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2230,27 +2311,25 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
 	<p>
 	The source code of the programs <code>foto_mediana</code> and <code>foto_promedio</code>,
 	that calculate respectively the median and the average (pixel by pixel) of several photos,
-	is available in the GitHub forge:
-	<a href="https://github.com/dcalandria/foto_promedio">https://github.com/dcalandria/foto_promedio</a>
+	is available in the directory <code>foto_promedio</code>
+	inside <code>/home/&lt;user_directory&gt;/swad/swad-core/</code>.
+	</p>
+
+	<p>
+	Also available in the GitHub forge:
+	<a href="https://github.com/dcalandria/foto_promedio">https://github.com/dcalandria/foto_promedio</a><br />
+	Download the programs from repository using the following command:<br />
+		<code>git clone git://github.com/dcalandria/foto_promedio.git</code><br />
+	This will create the directory <code>foto-promedio</code>
 	</p>
 	
 	<p>
 	We can compile these two programs in the local directory:<br />
-		<code>cd /home/&lt;user_directory&gt;/swad</code><br />
-	</p>
-
-	<p>
-	Download the programs from repository using the following command:<br />
-		<code>git clone git://github.com/dcalandria/foto_promedio.git</code><br />
-	This will create the directory <code>foto-promedio</code>
-	inside <code>/home/&lt;user_directory&gt;/swad</code>.
+		<code>cd /home/&lt;user_directory&gt;/swad/swad-core/foto_promedio</code><br />
 	</p>
 	
 	<p>
-	Go to directory <code>foto_promedio</code>:<br />
-		<code>cd /home/&lt;user_directory&gt;/swad</code><br />
-		<code>cd foto_promedio</code><br />
-	And compile:<br />
+	To compile:<br />
 		<code>make</code><br />
 	As result it should have been created the executable files
 	<code>foto_mediana</code> and <code>foto_promedio</code>.
@@ -2262,12 +2341,12 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
-		<code>cp -a /home/&lt;user_directory&gt;/swad/foto_promedio/foto_mediana /var/www/cgi-bin/swad/</code><br />
-		<code>cp -a /home/&lt;user_directory&gt;/swad/foto_promedio/foto_promedio /var/www/cgi-bin/swad/</code><br />
+		<code>cp -a /home/&lt;user_directory&gt;/swad/swad-core/foto_promedio/foto_mediana /var/www/cgi-bin/swad/</code><br />
+		<code>cp -a /home/&lt;user_directory&gt;/swad/swad-core/foto_promedio/foto_promedio /var/www/cgi-bin/swad/</code><br />
 		Sometimes in CentOS <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> is activated,
 		and it could be necessary to change the permissions of the files
 		<code>foto_mediana</code> and <code>foto_promedio</code>:<br />
@@ -2277,8 +2356,8 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
 		<code>ls -lZ /var/www/cgi-bin/swad/</code>
 	</td>
 	<td width="50%" valign="top">
-		<code>sudo cp -a /home/&lt;user_directory&gt;/swad/foto_promedio/foto_mediana /usr/lib/cgi-bin/swad/</code><br />
-		<code>sudo cp -a /home/&lt;user_directory&gt;/swad/foto_promedio/foto_promedio /usr/lib/cgi-bin/swad/</code>
+		<code>sudo cp -a /home/&lt;user_directory&gt;/swad/swad-core/foto_promedio/foto_mediana /usr/lib/cgi-bin/swad/</code><br />
+		<code>sudo cp -a /home/&lt;user_directory&gt;/swad/swad-core/foto_promedio/foto_promedio /usr/lib/cgi-bin/swad/</code>
 	</td>
 	</tr>
 	</table>
@@ -2322,7 +2401,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2348,7 +2427,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2381,7 +2460,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2403,7 +2482,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2427,7 +2506,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2462,7 +2541,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2503,7 +2582,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 18.04</th>
+	<th>Ubuntu 24.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">

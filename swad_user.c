@@ -1344,7 +1344,7 @@ void Usr_WelcomeUsr (void)
    extern unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *Txt_NEW_YEAR_GREETING;
    extern const char *Txt_Happy_birthday_X;
-   extern const char *Txt_Please_check_your_email_address;
+   extern const char *Txt_Please_confirm_your_email_address;
    extern const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
    char URLIconSet[PATH_MAX + 1];
    unsigned CurrentDay   = Dat_GetCurrentDay ();
@@ -1390,8 +1390,8 @@ void Usr_WelcomeUsr (void)
 		Gbl.Usrs.Me.UsrDat.EmailConfirmed == Mai_NOT_CONFIRMED)	// Email needs to be confirmed
 	       Ale_ShowAlertAndButton (ActFrmMyAcc,NULL,NULL,
 	                               NULL,NULL,
-				       Btn_CHECK,
-				       Ale_WARNING,Txt_Please_check_your_email_address);
+	                               Btn_CONFIRM,
+				       Ale_WARNING,Txt_Please_confirm_your_email_address);
            }
 
          /***** Show the global announcements I have not seen *****/

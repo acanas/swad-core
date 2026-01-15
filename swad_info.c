@@ -1878,7 +1878,10 @@ static Exi_Exist_t Inf_CheckAndShowRichTxt (Inf_Type_t InfoType)
 	 MathJaxURL[0] = '\0';
 #endif
 	 */
-	 /* MathJax 3.0.1 */
+	 /* MathJax 3.0.1
+	 // https://pandoc.org/MANUAL.html#math-rendering-in-html
+	 // https://docs.mathjax.org/en/latest/input/tex/
+	 //
 #ifdef Cfg_MATHJAX_LOCAL
 	 // Use the local copy of MathJax
 	 snprintf (MathJaxURL,sizeof (MathJaxURL),"=%s/mathjax/tex-chtml.js",
@@ -1899,6 +1902,32 @@ static Exi_Exist_t Inf_CheckAndShowRichTxt (Inf_Type_t InfoType)
 		   PathFileMD,
 		   MathJaxURL,
 		   PathFileHTML);
+	 */
+	 /* MathJax 4.1.0 */
+	 // https://pandoc.org/MANUAL.html#math-rendering-in-html
+	 // https://docs.mathjax.org/en/latest/input/tex/
+	 //
+#ifdef Cfg_MATHJAX_LOCAL
+	 // Use the local copy of MathJax
+	 snprintf (MathJaxURL,sizeof (MathJaxURL),"=%s/mathjax/tex-chtml.js",
+		   Cfg_URL_SWAD_PUBLIC);
+#else
+	 // Use the MathJax Content Delivery Network (CDN)
+	 MathJaxURL[0] = '\0';
+#endif
+	 // --ascii uses only ascii characters in output
+	 //         (uses numerical entities instead of UTF-8)
+	 //         is mandatory in order to convert (with iconv) the UTF-8 output of pandoc to WINDOWS-1252
+	 snprintf (Command,sizeof (Command),
+		   "iconv -f WINDOWS-1252 -t UTF-8 %s"
+		   " | "
+		   "pandoc --ascii --mathjax%s -f markdown+tex_math_dollars+tex_math_single_backslash -t html5"
+		   " | "
+		   "iconv -f UTF-8 -t WINDOWS-1252 -o %s",
+		   PathFileMD,
+		   MathJaxURL,
+		   PathFileHTML);
+
 	 ReturnCode = system (Command);
 	 if (ReturnCode == -1)
 	    Err_ShowErrorAndExit ("Error when running command to convert from Markdown to HTML.");

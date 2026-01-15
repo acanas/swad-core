@@ -325,17 +325,19 @@ static void QstImp_WriteAnswersOfAQstXML (const struct Qst_Question *Qst,
          fprintf (FileXML,"%ld",Qst->Answer.Integer);
          break;
       case Qst_ANS_FLOAT:
+	 Str_SetDecimalPointToUS ();	// To write the decimal point as a dot
          fprintf (FileXML,"%s"
                           "<lower>%.15lg</lower>%s"
                           "<upper>%.15lg</upper>%s",
                   Txt_NEW_LINE,
                   Qst->Answer.FloatingPoint[0],Txt_NEW_LINE,
                   Qst->Answer.FloatingPoint[1],Txt_NEW_LINE);
+	 Str_SetDecimalPointToLocal ();	// Return to local system
          break;
       case Qst_ANS_TRUE_FALSE:
          fprintf (FileXML,"%s",
                   Qst->Answer.OptionTF == Qst_OPTION_TRUE ? "true" :
-								 "false");
+							    "false");
          break;
       case Qst_ANS_UNIQUE_CHOICE:
       case Qst_ANS_MULTIPLE_CHOICE:
@@ -731,9 +733,9 @@ static void QstImp_GetAnswerFromXML (struct XMLElement *AnswerElem,
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
-         for (LowerUpperElem = AnswerElem->FirstChild;
+         for (LowerUpperElem  = AnswerElem->FirstChild;
               LowerUpperElem != NULL;
-              LowerUpperElem = LowerUpperElem->NextBrother)
+              LowerUpperElem  = LowerUpperElem->NextBrother)
             if (!strcmp (LowerUpperElem->TagName,"lower"))
               {
                if (LowerUpperElem->Content)
@@ -742,9 +744,9 @@ static void QstImp_GetAnswerFromXML (struct XMLElement *AnswerElem,
                             Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
                break;	// Only first element "lower"
               }
-         for (LowerUpperElem = AnswerElem->FirstChild;
+         for (LowerUpperElem  = AnswerElem->FirstChild;
               LowerUpperElem != NULL;
-              LowerUpperElem = LowerUpperElem->NextBrother)
+              LowerUpperElem  = LowerUpperElem->NextBrother)
             if (!strcmp (LowerUpperElem->TagName,"upper"))
               {
                if (LowerUpperElem->Content)

@@ -30310,7 +30310,7 @@ const char *Txt_Players =	// Match players
 #elif L==10	// tr
 	"Players";	// Çeviri lazim!
 #endif
-
+/*
 const char *Txt_Please_check_your_email_address =
 #if   L==1	// ca
 	"Si us plau, comproveu la seva adre&ccedil;a de correu.";
@@ -30333,7 +30333,7 @@ const char *Txt_Please_check_your_email_address =
 #elif L==10	// tr
 	"L&uuml;tfen e-posta adresinizi kontrol edin.";
 #endif
-
+*/
 const char *Txt_Please_confirm_your_email_address =
 #if   L==1	// ca
 	"Si us plau, confirmeu la seva adre&ccedil;a de correu.";

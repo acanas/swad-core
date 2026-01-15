@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
+#include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions

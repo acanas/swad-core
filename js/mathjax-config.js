@@ -16,8 +16,15 @@ MathJax = {
 	      },
 		/* end of bug fix */
   tex: {
-    /* inlineMath: [['$', '$'], ['\\(', '\\)']] // Uncomment to use $...$ for inline math */
-    inlineMath: [['\\(', '\\)']]
+    inlineMath: [                    // start/end delimiter pairs for in-line math
+      ['$', '$'],                    // uncomment to use $...$ for inline math, problem: users must write \$ for dollar symbol
+      ['\\(', '\\)']
+    ],
+    displayMath: [                   // start/end delimiter pairs for display math
+      ['$$', '$$'],
+      ['\\[', '\\]']
+    ],
+    processEscapes: true,            // use \$ to produce a literal dollar sign
   },
   svg: {
     fontCache: 'global'

@@ -42,6 +42,7 @@ extern struct Globals Gbl;
 
 void MFU_DB_UpdateScoreForCurrentAction (long ActCod,double Score)
   {
+   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
    DB_QueryREPLACE ("can not update most frequently used actions",
 		    "REPLACE INTO act_frequent"
 		    " (UsrCod,ActCod,Score,LastClick)"
@@ -50,6 +51,7 @@ void MFU_DB_UpdateScoreForCurrentAction (long ActCod,double Score)
 	            Gbl.Usrs.Me.UsrDat.UsrCod,
 	            ActCod,
 	            Score);
+   Str_SetDecimalPointToLocal ();	// Return to local system
   }
 
 /*****************************************************************************/
@@ -58,6 +60,7 @@ void MFU_DB_UpdateScoreForCurrentAction (long ActCod,double Score)
 
 void MFU_DB_UpdateScoreForOtherActions (long ActCod)
   {
+   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
    DB_QueryUPDATE ("can not update most frequently used actions",
 		   "UPDATE act_frequent"
 		     " SET Score=GREATEST(Score*'%.15lg','%.15lg')"
@@ -67,6 +70,7 @@ void MFU_DB_UpdateScoreForOtherActions (long ActCod)
                    MFU_MIN_SCORE,
                    Gbl.Usrs.Me.UsrDat.UsrCod,
                    ActCod);
+   Str_SetDecimalPointToLocal ();	// Return to local system
   }
 
 /*****************************************************************************/

@@ -557,9 +557,8 @@ Exi_Exist_t Tml_DB_GetPostDataByCod (long PstCod,MYSQL_RES **mysql_res)
 
    /***** Get data of post from database *****/
    return
-   DB_QuerySELECTunique (mysql_res,"can not get the content"
-				   " of a post",
-			 "SELECT Txt,"	// row[0]
+   DB_QuerySELECTunique (mysql_res,"can not get the content of a post",
+			 "SELECT Txt,"		// row[0]
 				"MedCod"	// row[1]
 			  " FROM tml_posts"
 			 " WHERE PstCod=%ld",

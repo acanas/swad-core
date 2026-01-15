@@ -3103,7 +3103,7 @@ Err_SuccessOrError_t Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst
            }
 
          /* Lower limit should be <= upper limit */
-         for (SuccessOrError = Err_SUCCESS, NumOpt = 0;
+         for (SuccessOrError  = Err_SUCCESS, NumOpt = 0;
               SuccessOrError == Err_SUCCESS && NumOpt < 2;
               NumOpt++)
             SuccessOrError = Str_GetDoubleFromStr (Qst->Answer.Options[NumOpt].Text,

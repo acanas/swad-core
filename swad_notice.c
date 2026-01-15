@@ -410,7 +410,6 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    extern const char *Txt_Notices;
    extern const char *Txt_No_notices;
    MYSQL_RES *mysql_res;
-   // char StrWidth[Cns_MAX_DIGITS_UINT + 2 + 1];
    struct Not_Notice Notice;
    unsigned NumNot;
    unsigned NumNotices = 0;	// Initialized to avoid warning

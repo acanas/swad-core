@@ -23,10 +23,16 @@
 BIN=../bin
 SRC=.
 
-CXX = g++
-CC=g++
+#CXX = g++
+#CC=g++
+CXX = g++-9
+CC=g++-9
 CFLAGS=-Wall -O3 $(shell pkg-config --cflags opencv)
-CXXFLAGS = -Wall -O3 $(shell pkg-config --cflags opencv)
+#CXXFLAGS = -Wall -O3 $(shell pkg-config --cflags opencv)
+CXXFLAGS = -Wall -O3 \
+  $(shell pkg-config --cflags opencv) \
+  -I/usr/local/opencv-3.3.0/include \
+  -Wno-class-memaccess
 LDFLAGS =$(shell pkg-config --libs opencv)
 TARGETS= fotomaton
 

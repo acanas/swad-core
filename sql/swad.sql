@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS act_frequent (
 	ActCod INT NOT NULL,
 	Score FLOAT NOT NULL,
 	LastClick DATETIME NOT NULL,
-	UNIQUE INDEX(UsrCod,ActCod));
+	UNIQUE INDEX(UsrCod,ActCod)
+	) ENGINE=MyISAM;
 --
 -- Table agendas: stores users' agendas
 --
@@ -16,13 +17,15 @@ CREATE TABLE IF NOT EXISTS agd_agendas (
 	AgdCod INT NOT NULL AUTO_INCREMENT,
 	UsrCod INT NOT NULL,
 	Public ENUM('N','Y') NOT NULL DEFAULT 'N',
+	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
 	StartTime DATETIME NOT NULL,
 	EndTime DATETIME NOT NULL,
 	Event VARCHAR(2047) NOT NULL,
 	Location VARCHAR(2047) NOT NULL,
 	Txt TEXT NOT NULL,
 	UNIQUE INDEX(AgdCod),
-	INDEX(UsrCod,Public));
+	INDEX(UsrCod,Public,Hidden)
+	) ENGINE=MyISAM;
 --
 -- Table ann_announcements: stores global announcements
 --
@@ -33,14 +36,16 @@ CREATE TABLE IF NOT EXISTS ann_announcements (
 	Subject TEXT NOT NULL,
 	Content TEXT NOT NULL,
 	UNIQUE INDEX(AnnCod),
-	INDEX(Status));
+	INDEX(Status)
+	) ENGINE=MyISAM;
 --
 -- Table ann_seen: stores users who have seen global announcements
 --
 CREATE TABLE IF NOT EXISTS ann_seen (
 	AnnCod INT NOT NULL,
 	UsrCod INT NOT NULL,
-	UNIQUE INDEX(AnnCod,UsrCod));
+	UNIQUE INDEX(AnnCod,UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table api_keys: stores the keys used in the API / web service
 --
@@ -52,7 +57,8 @@ CREATE TABLE IF NOT EXISTS api_keys (
 	UNIQUE INDEX(WSKey),
 	INDEX(UsrCod),
 	INDEX(PlgCod),
-	INDEX(LastTime));
+	INDEX(LastTime)
+	) ENGINE=MyISAM;
 --
 -- Table asg_assignments: stores the assignments proposed by the teachers to their students
 --
@@ -68,21 +74,25 @@ CREATE TABLE IF NOT EXISTS asg_assignments (
 	Folder VARBINARY(255) NOT NULL,
 	Txt TEXT NOT NULL,
 	UNIQUE INDEX(AsgCod),
-	INDEX(CrsCod,Hidden));
+	INDEX(CrsCod,Hidden)
+	) ENGINE=MyISAM;
 --
 -- Table asg_groups: stores the groups associated to assigments
 --
+
 CREATE TABLE IF NOT EXISTS asg_groups (
 	AsgCod INT NOT NULL,
 	GrpCod INT NOT NULL,
-	UNIQUE INDEX(AsgCod,GrpCod));
+	UNIQUE INDEX(AsgCod,GrpCod)
+	) ENGINE=MyISAM;
 --
 -- Table asg_rubrics: stores the rubrics associated to assigments
 --
 CREATE TABLE IF NOT EXISTS asg_rubrics (
 	AsgCod INT NOT NULL,
 	RubCod INT NOT NULL,
-	UNIQUE INDEX(AsgCod));
+	UNIQUE INDEX(AsgCod)
+	) ENGINE=MyISAM;
 --
 -- Table att_events: stores events used to control attendance
 --
@@ -97,14 +107,16 @@ CREATE TABLE IF NOT EXISTS att_events (
 	Title VARCHAR(2047) NOT NULL,
 	Txt TEXT NOT NULL,
 	UNIQUE INDEX(AttCod),
-	INDEX(CrsCod,Hidden));
+	INDEX(CrsCod,Hidden)
+	) ENGINE=MyISAM;
 --
 -- Table att_groups: stores groups associated to control attendance
 --
 CREATE TABLE IF NOT EXISTS att_groups (
 	AttCod INT NOT NULL,
 	GrpCod INT NOT NULL,
-	UNIQUE INDEX(AttCod,GrpCod));
+	UNIQUE INDEX(AttCod,GrpCod)
+	) ENGINE=MyISAM;
 --
 -- Table att_users: stores users who have attended to events
 --
@@ -115,7 +127,8 @@ CREATE TABLE IF NOT EXISTS att_users (
 	CommentStd TEXT NOT NULL,
 	CommentTch TEXT NOT NULL,
 	UNIQUE INDEX(AttCod,UsrCod),
-	INDEX(UsrCod));
+	INDEX(UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table ban_banners: stores advertising banners
 --
@@ -127,7 +140,8 @@ CREATE TABLE IF NOT EXISTS ban_banners (
 	Img VARCHAR(255) NOT NULL,
 	WWW VARCHAR(255) NOT NULL,
 	UNIQUE INDEX(BanCod),
-	INDEX(Hidden));
+	INDEX(Hidden)
+	) ENGINE=MyISAM;
 --
 -- Table bld_buildings: buildings in a center
 --
@@ -138,15 +152,17 @@ CREATE TABLE IF NOT EXISTS bld_buildings (
 	FullName VARCHAR(2047) NOT NULL,
 	Location VARCHAR(2047) NOT NULL,
 	UNIQUE INDEX(BldCod),
-	INDEX(CtrCod));
+	INDEX(CtrCod)
+	) ENGINE=MyISAM;
 --
 -- Table brw_caches: stores the media private paths linked from public directories in current session 
 --
 CREATE TABLE IF NOT EXISTS brw_caches (
 	SessionId CHAR(43) NOT NULL,
-	PrivPath TEXT COLLATE latin1_bin NOT NULL,
-	TmpPubDir TEXT COLLATE latin1_bin NOT NULL,
-	INDEX(SessionId));
+	PrivPath VARCHAR(4096) COLLATE latin1_bin NOT NULL,
+	TmpPubDir VARCHAR(4096) COLLATE latin1_bin NOT NULL,
+	UNIQUE INDEX(SessionId)
+	) ENGINE=MyISAM;
 --
 -- Table brw_clipboards: clipboard (paths used to copy-paste folders and files)
 --
@@ -160,7 +176,8 @@ CREATE TABLE IF NOT EXISTS brw_clipboards (
 	CopyTime TIMESTAMP,
 	UNIQUE INDEX(UsrCod),
 	INDEX(FileBrowser,Cod),
-	INDEX(WorksUsrCod));
+	INDEX(WorksUsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table brw_expanded: stores the expanded folders for each user
 --
@@ -173,7 +190,8 @@ CREATE TABLE IF NOT EXISTS brw_expanded (
 	ClickTime DATETIME NOT NULL,
 	INDEX(UsrCod,FileBrowser,Cod),
 	INDEX(FileBrowser,Cod),
-	INDEX(WorksUsrCod));
+	INDEX(WorksUsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table brw_files: stores metadata about each file
 --
@@ -191,7 +209,8 @@ CREATE TABLE IF NOT EXISTS brw_files (
 	UNIQUE INDEX(FilCod),
 	INDEX(FileBrowser,Cod,ZoneUsrCod),
 	INDEX(ZoneUsrCod),
-	INDEX(PublisherUsrCod));
+	INDEX(PublisherUsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table brw_last: stores the last click of every user in each file browser zone
 --
@@ -200,7 +219,8 @@ CREATE TABLE IF NOT EXISTS brw_last (
 	FileBrowser TINYINT NOT NULL,
 	Cod INT NOT NULL DEFAULT -1,
 	LastClick DATETIME NOT NULL,
-	UNIQUE INDEX(UsrCod,FileBrowser,Cod));
+	UNIQUE INDEX(UsrCod,FileBrowser,Cod)
+	) ENGINE=MyISAM;
 --
 -- Table brw_sizes: stores the sizes of the file zones
 --
@@ -213,7 +233,8 @@ CREATE TABLE IF NOT EXISTS brw_sizes (
 	NumFiles INT NOT NULL,
 	TotalSize BIGINT NOT NULL,
 	UNIQUE INDEX(FileBrowser,Cod,ZoneUsrCod),
-	INDEX(ZoneUsrCod));
+	INDEX(ZoneUsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table brw_views: stores the number of times each user has seen each file
 --
@@ -221,7 +242,9 @@ CREATE TABLE IF NOT EXISTS brw_views (
 	FilCod INT NOT NULL,
 	UsrCod INT NOT NULL,
 	NumViews INT NOT NULL DEFAULT 0,
-	UNIQUE INDEX(FilCod,UsrCod),INDEX(UsrCod));
+	UNIQUE INDEX(FilCod,UsrCod),
+	INDEX(UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table cfe_exams: stores the calls for exams
 --
@@ -245,14 +268,16 @@ CREATE TABLE IF NOT EXISTS cfe_exams (
 	OtherInfo TEXT NOT NULL,
 	UNIQUE INDEX(ExaCod),
 	INDEX(CrsCod,Status),
-	INDEX(Status));
+	INDEX(Status)
+	) ENGINE=MyISAM;
 --
 -- Table cht_rooms: stores number of users in each chat room (this table is not used now)
 --
 CREATE TABLE IF NOT EXISTS cht_rooms (
 	RoomCode VARCHAR(16) NOT NULL,
 	NumUsrs INT NOT NULL,
-	UNIQUE INDEX(RoomCode));
+	UNIQUE INDEX(RoomCode)
+	) ENGINE=MyISAM;
 --
 -- Table crs_bibliography: stores the course bibliography
 --
@@ -269,7 +294,8 @@ CREATE TABLE IF NOT EXISTS crs_bibliography (
 	Id VARCHAR(2047) NOT NULL,
 	URL VARCHAR(255) NOT NULL,
 	UNIQUE INDEX(ItmCod),
-	UNIQUE INDEX(NodCod,ItmInd));
+	UNIQUE INDEX(NodCod,ItmInd)
+	) ENGINE=MyISAM;
 --
 -- Table crs_courses: stores the courses/subjects
 --
@@ -285,7 +311,8 @@ CREATE TABLE IF NOT EXISTS crs_courses (
 	NumIndicators INT NOT NULL DEFAULT -1,
 	UNIQUE INDEX(CrsCod),
 	INDEX(DegCod,Year),
-	INDEX(Status));
+	INDEX(Status)
+	) ENGINE=MyISAM;
 --
 -- Table crs_info_read: stores the users who have read the information with mandatory reading
 --
@@ -293,7 +320,8 @@ CREATE TABLE IF NOT EXISTS crs_info_read (
 	UsrCod INT NOT NULL,
 	CrsCod INT NOT NULL,
 	InfoType ENUM('intro','description','theory','practices','bibliography','FAQ','links','assessment') NOT NULL,
-	UNIQUE INDEX(UsrCod,CrsCod,InfoType));
+	UNIQUE INDEX(UsrCod,CrsCod,InfoType)
+	) ENGINE=MyISAM;
 --
 -- Table crs_info_src: stores the sources of information in courses
 --
@@ -302,7 +330,8 @@ CREATE TABLE IF NOT EXISTS crs_info_src (
 	InfoType ENUM('intro','description','theory','practices','bibliography','FAQ','links','assessment') NOT NULL,
 	InfoSrc ENUM('none','editor','plain_text','rich_text','page','URL') NOT NULL,
 	MustBeRead ENUM('N','Y') NOT NULL DEFAULT 'N',
-	UNIQUE INDEX(CrsCod,InfoType));
+	UNIQUE INDEX(CrsCod,InfoType)
+	) ENGINE=MyISAM;
 --
 -- Table crs_info_txt: stores the text content of information in courses
 --
@@ -311,7 +340,8 @@ CREATE TABLE IF NOT EXISTS crs_info_txt (
 	InfoType ENUM('intro','description','theory','practices','bibliography','FAQ','links','assessment') NOT NULL,
 	InfoTxtHTML LONGTEXT NOT NULL,
 	InfoTxtMD LONGTEXT NOT NULL,
-	UNIQUE INDEX(CrsCod,InfoType));
+	UNIQUE INDEX(CrsCod,InfoType)
+	) ENGINE=MyISAM;
 --
 -- Table crs_last: stores last access to courses from students or teachers
 --
@@ -319,7 +349,8 @@ CREATE TABLE IF NOT EXISTS crs_last (
 	CrsCod INT NOT NULL,
 	LastTime DATETIME NOT NULL,
 	UNIQUE INDEX(CrsCod),
-	INDEX(LastTime));
+	INDEX(LastTime)
+	) ENGINE=MyISAM;
 --
 -- Table crs_links: stores course links
 --
@@ -332,7 +363,8 @@ CREATE TABLE IF NOT EXISTS crs_links (
 	Description VARCHAR(2047) NOT NULL,
 	WWW VARCHAR(255) NOT NULL,
 	UNIQUE INDEX(ItmCod),
-	UNIQUE INDEX(NodCod,ItmInd));
+	UNIQUE INDEX(NodCod,ItmInd)
+	) ENGINE=MyISAM;
 --
 -- Table crs_record_fields: stores the fields in the course records
 --
@@ -343,7 +375,8 @@ CREATE TABLE IF NOT EXISTS crs_record_fields (
 	NumLines INT NOT NULL,
 	Visibility TINYINT NOT NULL,
 	UNIQUE INDEX(FieldCod),
-	INDEX(CrsCod));
+	INDEX(CrsCod)
+	) ENGINE=MyISAM;
 --
 -- Table crs_records: stores the contents of course records
 --
@@ -351,7 +384,8 @@ CREATE TABLE IF NOT EXISTS crs_records (
 	FieldCod INT NOT NULL,
 	UsrCod INT NOT NULL,
 	Txt TEXT NOT NULL,
-	UNIQUE INDEX(FieldCod,UsrCod));
+	UNIQUE INDEX(FieldCod,UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table crs_requests: stores requests for enrollment in courses
 --
@@ -363,7 +397,24 @@ CREATE TABLE IF NOT EXISTS crs_requests (
 	RequestTime DATETIME NOT NULL,
 	UNIQUE INDEX(ReqCod),
 	UNIQUE INDEX(CrsCod,UsrCod),
-	INDEX(UsrCod));
+	INDEX(UsrCod)
+	) ENGINE=MyISAM;
+--
+-- Table crs_user_settings: stores last settings (preferences) of users in courses
+--
+CREATE TABLE IF NOT EXISTS crs_user_settings (
+	UsrCod INT NOT NULL,
+	CrsCod INT NOT NULL,
+	LastDowGrpCod INT NOT NULL DEFAULT -1,
+	LastComGrpCod INT NOT NULL DEFAULT -1,
+	LastAssGrpCod INT NOT NULL DEFAULT -1,
+	NumAccTst INT NOT NULL DEFAULT 0,
+	LastAccTst DATETIME NOT NULL,
+	NumQstsLastTst INT NOT NULL DEFAULT 0,
+	UsrListType ENUM('classphoto','list') NOT NULL DEFAULT 'classphoto',
+	ListWithPhotos ENUM('N','Y') NOT NULL DEFAULT 'Y',
+	UNIQUE INDEX(UsrCod,CrsCod)
+	) ENGINE=MyISAM;
 --
 -- Table crs_users: stores who users belong to what courses
 --
@@ -379,30 +430,15 @@ CREATE TABLE IF NOT EXISTS crs_users (
 	UNIQUE INDEX(Role,CrsCod,UsrCod),
 	UNIQUE INDEX(Role,UsrCod,CrsCod),
 	INDEX(CrsCod,Role),
-	INDEX(UsrCod,Role));
---
--- Table crs_user_settings: stores last settings (preferences) of users in courses
---
-CREATE TABLE IF NOT EXISTS crs_user_settings (
-	UsrCod INT NOT NULL,
-	CrsCod INT NOT NULL,
-	LastDowGrpCod INT NOT NULL DEFAULT -1,
-	LastComGrpCod INT NOT NULL DEFAULT -1,
-	LastAssGrpCod INT NOT NULL DEFAULT -1,
-	NumAccTst INT NOT NULL DEFAULT 0,
-	LastAccTst DATETIME NOT NULL,
-	NumQstsLastTst INT NOT NULL DEFAULT 0,
-	UsrListType ENUM('classphoto','list') NOT NULL DEFAULT 'classphoto',
-	ColsClassPhoto TINYINT NOT NULL,
-	ListWithPhotos ENUM('N','Y') NOT NULL DEFAULT 'Y',
-	UNIQUE INDEX(UsrCod,CrsCod));
+	INDEX(UsrCod,Role)
+	) ENGINE=MyISAM;
 --
 -- Table ctr_centers: centers (faculties, schools...)
 --
 CREATE TABLE IF NOT EXISTS ctr_centers (
 	CtrCod INT NOT NULL AUTO_INCREMENT,
 	InsCod INT NOT NULL,
-	PlcCod INT NOT NULL DEFAULT -1,
+	PlcCod INT NOT NULL,
 	Status TINYINT NOT NULL DEFAULT 0,
 	RequesterUsrCod INT NOT NULL DEFAULT -1,
 	Latitude DOUBLE PRECISION NOT NULL DEFAULT 0,
@@ -415,7 +451,8 @@ CREATE TABLE IF NOT EXISTS ctr_centers (
 	UNIQUE INDEX(CtrCod),
 	INDEX(InsCod),
 	INDEX(PlcCod),
-	INDEX(Status));
+	INDEX(Status)
+	) ENGINE=MyISAM;
 --
 -- Table cty_countrs: stores the countries
 --
@@ -454,14 +491,16 @@ CREATE TABLE IF NOT EXISTS cty_countrs (
 	INDEX(Name_it),
 	INDEX(Name_pl),
 	INDEX(Name_pt),
-	INDEX(Name_tr));
+	INDEX(Name_tr)
+	) ENGINE=MyISAM;
 --
 -- Table dbg_debug: used for debugging purposes
 --
 CREATE TABLE IF NOT EXISTS dbg_debug (
 	DebugTime DATETIME NOT NULL,
 	Txt TEXT NOT NULL,
-	INDEX(DebugTime));
+	INDEX(DebugTime)
+	) ENGINE=MyISAM;
 --
 -- Table deg_degrees: stores the degrees
 --
@@ -477,14 +516,16 @@ CREATE TABLE IF NOT EXISTS deg_degrees (
 	UNIQUE INDEX(DegCod),
 	INDEX(CtrCod),
 	INDEX(DegTypCod),
-	INDEX(Status));
+	INDEX(Status)
+	) ENGINE=MyISAM;
 --
 -- Table deg_types: stores the types of degree
 --
 CREATE TABLE IF NOT EXISTS deg_types (
 	DegTypCod INT NOT NULL AUTO_INCREMENT,
 	DegTypName VARCHAR(511) NOT NULL,
-	UNIQUE INDEX(DegTypCod));
+	UNIQUE INDEX(DegTypCod)
+	) ENGINE=MyISAM;
 --
 -- Table dpt_departments: stores the departments
 --
@@ -495,7 +536,8 @@ CREATE TABLE IF NOT EXISTS dpt_departments (
 	FullName VARCHAR(2047) NOT NULL,
 	WWW VARCHAR(255) NOT NULL,
 	UNIQUE INDEX(DptCod),
-	INDEX(InsCod));
+	INDEX(InsCod)
+	) ENGINE=MyISAM;
 --
 -- Table exa_exams: stores the exams
 --
@@ -509,14 +551,16 @@ CREATE TABLE IF NOT EXISTS exa_exams (
 	Title VARCHAR(2047) NOT NULL,
 	Txt TEXT NOT NULL,
 	UNIQUE INDEX(ExaCod),
-	INDEX(CrsCod));
+	INDEX(CrsCod)
+	) ENGINE=MyISAM;
 --
 -- Table exa_groups: stores the groups associated to each session in an exam
 --
 CREATE TABLE IF NOT EXISTS exa_groups (
 	SesCod INT NOT NULL,
 	GrpCod INT NOT NULL,
-	UNIQUE INDEX(SesCod,GrpCod));
+	UNIQUE INDEX(SesCod,GrpCod)
+	) ENGINE=MyISAM;
 --
 -- Table exa_log: stores the access log to exam prints
 --
@@ -530,7 +574,8 @@ CREATE TABLE IF NOT EXISTS exa_log (
 	IP CHAR(15) NOT NULL,
 	UNIQUE INDEX(LogCod),
 	UNIQUE INDEX(PrnCod,LogCod),
-	INDEX(ClickTime));
+	INDEX(ClickTime)
+	) ENGINE=MyISAM;
 --
 -- Table exa_log_sessions: stores the session id fields for access log to exam prints
 --
@@ -539,7 +584,8 @@ CREATE TABLE IF NOT EXISTS exa_log_sessions (
 	PrnCod INT NOT NULL,
 	SessionId CHAR(43) NOT NULL,
 	UNIQUE INDEX(LogCod),
-	UNIQUE INDEX(PrnCod,LogCod));
+	UNIQUE INDEX(PrnCod,LogCod)
+	) ENGINE=MyISAM;
 --
 -- Table exa_log_user_agents: stores the user agent fields for access log to exam prints
 --
@@ -548,7 +594,8 @@ CREATE TABLE IF NOT EXISTS exa_log_user_agents (
 	PrnCod INT NOT NULL,
 	UserAgent TEXT NOT NULL,
 	UNIQUE INDEX(LogCod),
-	UNIQUE INDEX(PrnCod,LogCod));
+	UNIQUE INDEX(PrnCod,LogCod)
+	) ENGINE=MyISAM;
 --
 -- Table exa_print_questions: stores the questions and answers in exam prints made by users
 --
@@ -560,7 +607,8 @@ CREATE TABLE IF NOT EXISTS exa_print_questions (
 	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
 	Indexes TEXT NOT NULL,
 	Answers TEXT NOT NULL,
-	UNIQUE INDEX(PrnCod,QstCod));
+	UNIQUE INDEX(PrnCod,QstCod)
+	) ENGINE=MyISAM;
 --
 -- Table exa_prints: stores the exam prints of every exam session
 --
@@ -572,10 +620,10 @@ CREATE TABLE IF NOT EXISTS exa_prints (
 	EndTime DATETIME NOT NULL,
 	NumQsts INT NOT NULL DEFAULT 0,
 	NumQstsNotBlank INT NOT NULL DEFAULT 0,
-	Sent ENUM('N','Y') NOT NULL DEFAULT 'N',
 	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
 	UNIQUE INDEX(PrnCod),
-	UNIQUE INDEX(SesCod,UsrCod));
+	UNIQUE INDEX(SesCod,UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table exa_sessions: stores the exam sessions
 --
@@ -584,11 +632,16 @@ CREATE TABLE IF NOT EXISTS exa_sessions (
 	ExaCod INT NOT NULL,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
 	UsrCod INT NOT NULL,
+	Modality ENUM('none','online','paper') NOT NULL DEFAULT 'none',
 	StartTime DATETIME NOT NULL,
 	EndTime DATETIME NOT NULL,
 	Title VARCHAR(2047) NOT NULL,
+	ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N',
+	NumCols TINYINT NOT NULL DEFAULT 0,
+	ShowPhotos ENUM('N','Y') NOT NULL DEFAULT 'Y',
 	UNIQUE INDEX(SesCod),
-	INDEX(ExaCod));
+	INDEX(ExaCod)
+	) ENGINE=MyISAM;
 --
 -- Table exa_set_answers: stores the answers of questions in exam sets
 --
@@ -600,13 +653,15 @@ CREATE TABLE IF NOT EXISTS exa_set_answers (
 	MedCod INT NOT NULL DEFAULT -1,
 	Correct ENUM('N','Y') NOT NULL,
 	UNIQUE INDEX(QstCod,AnsInd),
-	INDEX(MedCod));
+	INDEX(MedCod)
+	) ENGINE=MyISAM;
 --
 -- Table exa_set_questions: stores the questions in exam sets
 --
 CREATE TABLE IF NOT EXISTS exa_set_questions (
 	QstCod INT NOT NULL AUTO_INCREMENT,
 	SetCod INT NOT NULL,
+	Invalid ENUM('N','Y') NOT NULL DEFAULT 'N',
 	AnsType ENUM ('int','float','true_false','unique_choice','multiple_choice','text') NOT NULL,
 	Shuffle ENUM('N','Y') NOT NULL,
 	Stem TEXT NOT NULL,
@@ -614,7 +669,8 @@ CREATE TABLE IF NOT EXISTS exa_set_questions (
 	MedCod INT NOT NULL DEFAULT -1,
 	UNIQUE INDEX(QstCod),
 	UNIQUE INDEX(SetCod,QstCod),
-	INDEX(MedCod));
+	INDEX(MedCod)
+	) ENGINE=MyISAM;
 --
 -- Table exa_sets: stores the question sets in the exams
 --
@@ -625,7 +681,8 @@ CREATE TABLE IF NOT EXISTS exa_sets (
 	NumQstsToPrint INT NOT NULL DEFAULT 0,
 	Title VARCHAR(2047) NOT NULL,
 	UNIQUE INDEX(SetCod),
-	UNIQUE INDEX(ExaCod,SetInd));
+	UNIQUE INDEX(ExaCod,SetInd)
+	) ENGINE=MyISAM;
 --
 -- Table faq_questions: stores questions & answers in course FAQ
 --
@@ -637,7 +694,8 @@ CREATE TABLE IF NOT EXISTS faq_questions (
 	Question VARCHAR(2047) NOT NULL,
 	Answer TEXT NOT NULL,
 	UNIQUE INDEX(ItmCod),
-	UNIQUE INDEX(NodCod,ItmInd));
+	UNIQUE INDEX(NodCod,ItmInd)
+	) ENGINE=MyISAM;
 --
 -- Table fig_figures: stores cached figures for quick retrieval of figures (i.e. number of students in the platform)
 --
@@ -645,10 +703,11 @@ CREATE TABLE IF NOT EXISTS fig_figures (
 	Figure INT NOT NULL,
 	Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',
 	Cod INT NOT NULL DEFAULT -1,
-	ValueInt INT NOT NULL DEFAULT 0,
-	ValueDouble DOUBLE PRECISION NOT NULL DEFAULT 0.0,
+	ValueInt INT NOT NULL,
+	ValueDouble DOUBLE PRECISION NOT NULL,
 	LastUpdate TIMESTAMP,
-	UNIQUE INDEX(Figure,Scope,Cod));
+	UNIQUE INDEX(Figure,Scope,Cod)
+	) ENGINE=MyISAM;
 --
 -- Table fir_banned: stores the banned IPs in order to mitigate denial of service attacks
 --
@@ -658,7 +717,8 @@ CREATE TABLE IF NOT EXISTS fir_banned (
 	UnbanTime DATETIME NOT NULL,
 	INDEX(IP,UnbanTime),
 	INDEX(BanTime),
-	INDEX(UnbanTime));
+	INDEX(UnbanTime)
+	) ENGINE=MyISAM;
 --
 -- Table fir_log: stores the most recent IPs in order to mitigate denial of service attacks
 --
@@ -668,7 +728,8 @@ CREATE TABLE IF NOT EXISTS fir_log (
 	UsrCod INT NOT NULL DEFAULT -1,
 	INDEX(ClickTime),
 	INDEX(IP),
-	INDEX(UsrCod));
+	INDEX(UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table for_clipboards: stores the clipboards used to move threads from one forum to another
 --
@@ -677,7 +738,8 @@ CREATE TABLE IF NOT EXISTS for_clipboards (
 	UsrCod INT NOT NULL,
 	TimeInsert TIMESTAMP NOT NULL,
 	UNIQUE INDEX(ThrCod),
-	UNIQUE INDEX(UsrCod));
+	UNIQUE INDEX(UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table for_disabled: stores the forum posts that have been disabled
 --
@@ -685,11 +747,12 @@ CREATE TABLE IF NOT EXISTS for_disabled (
 	PstCod INT NOT NULL,
 	UsrCod INT NOT NULL,
 	DisableTime DATETIME NOT NULL,
-	UNIQUE INDEX(PstCod));
+	UNIQUE INDEX(PstCod)
+	) ENGINE=MyISAM;
 --
 -- Table for_posts: stores the forum posts
 --
-CREATE TABLE IF NOT EXISTS ffor_posts(
+CREATE TABLE IF NOT EXISTS for_posts (
 	PstCod INT NOT NULL AUTO_INCREMENT,
 	ThrCod INT NOT NULL,
 	UsrCod INT NOT NULL,
@@ -704,7 +767,8 @@ CREATE TABLE IF NOT EXISTS ffor_posts(
 	INDEX(UsrCod),
 	INDEX(CreatTime),
 	INDEX(ModifTime),
-	INDEX(MedCod));
+	INDEX(MedCod)
+	) ENGINE=MyISAM;
 --
 -- Table for_read: stores the threads read by each user
 --
@@ -712,7 +776,8 @@ CREATE TABLE IF NOT EXISTS for_read (
 	ThrCod INT NOT NULL,
 	UsrCod INT NOT NULL,
 	ReadTime DATETIME NOT NULL,
-	UNIQUE INDEX(ThrCod,UsrCod));
+	UNIQUE INDEX(ThrCod,UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table for_threads: stores the forum threads
 --
@@ -726,7 +791,8 @@ CREATE TABLE IF NOT EXISTS for_threads (
 	INDEX(ForumType),
 	INDEX(HieCod),
 	UNIQUE INDEX(FirstPstCod),
-	UNIQUE INDEX(LastPstCod));
+	UNIQUE INDEX(LastPstCod)
+	) ENGINE=MyISAM;
 --
 -- Table gam_games: stores the games
 --
@@ -740,7 +806,8 @@ CREATE TABLE IF NOT EXISTS gam_games (
 	Title VARCHAR(2047) NOT NULL,
 	Txt TEXT NOT NULL,
 	UNIQUE INDEX(GamCod),
-	INDEX(CrsCod));
+	INDEX(CrsCod)
+	) ENGINE=MyISAM;
 --
 -- Table gam_questions: stores the questions in the games
 --
@@ -749,7 +816,8 @@ CREATE TABLE IF NOT EXISTS gam_questions (
 	QstInd INT NOT NULL,
 	QstCod INT NOT NULL,
 	UNIQUE INDEX(GamCod,QstInd),
-	UNIQUE INDEX(GamCod,QstCod));
+	UNIQUE INDEX(GamCod,QstCod)
+	) ENGINE=MyISAM;
 --
 -- Table grp_groups: stores the groups in courses
 --
@@ -757,13 +825,14 @@ CREATE TABLE IF NOT EXISTS grp_groups (
 	GrpCod INT NOT NULL AUTO_INCREMENT,
 	GrpTypCod INT NOT NULL,
 	GrpName VARCHAR(2047) NOT NULL,
-	RooCod INT NOT NULL DEFAULT -1,
 	MaxStudents INT NOT NULL,
+	RooCod INT NOT NULL DEFAULT -1,
 	Open ENUM('N','Y') NOT NULL DEFAULT 'N',
 	FileZones ENUM('N','Y') NOT NULL DEFAULT 'N',
 	UNIQUE INDEX(GrpCod),
 	INDEX(GrpTypCod),
-	INDEX(RooCod));
+	INDEX(RooCod)
+	) ENGINE=MyISAM;
 --
 -- Table grp_types: stores the types of groups in courses
 --
@@ -776,7 +845,8 @@ CREATE TABLE IF NOT EXISTS grp_types (
 	MustBeOpened ENUM('N','Y') NOT NULL DEFAULT 'N',
 	OpenTime DATETIME NOT NULL,
 	UNIQUE INDEX(GrpTypCod),
-	INDEX(CrsCod));
+	INDEX(CrsCod)
+	) ENGINE=MyISAM;
 --
 -- Table grp_users: stores the users beloging to each group
 --
@@ -785,7 +855,8 @@ CREATE TABLE IF NOT EXISTS grp_users (
 	UsrCod INT NOT NULL,
 	UNIQUE INDEX(GrpCod,UsrCod),
 	INDEX(GrpCod),
-	INDEX(UsrCod));
+	INDEX(UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table hld_holidays: stores the holidays in each institution
 --
@@ -797,13 +868,14 @@ CREATE TABLE IF NOT EXISTS hld_holidays (
 	StartDate DATE NOT NULL,
 	EndDate DATE NOT NULL,
 	Name VARCHAR(2047) NOT NULL,
-	UNIQUE INDEX(HldCod),
+	UNIQUE INDEX (HldCod),
 	INDEX(InsCod),
-	INDEX(PlcCod));
+	INDEX(PlcCod)
+	) ENGINE=MyISAM;
 --
 -- Table institutions: stores the institutions (for example, universities)
 --
-CREATE TABLE IF NOT EXISTS institutions (
+CREATE TABLE IF NOT EXISTS ins_instits (
 	InsCod INT NOT NULL AUTO_INCREMENT,
 	CtyCod INT NOT NULL,
 	Status TINYINT NOT NULL DEFAULT 0,
@@ -813,7 +885,8 @@ CREATE TABLE IF NOT EXISTS institutions (
 	WWW VARCHAR(255) NOT NULL,
 	UNIQUE INDEX(InsCod),
 	INDEX(CtyCod),
-	INDEX(Status));
+	INDEX(Status)
+	) ENGINE=MyISAM;
 --
 -- Table lnk_links: stores the global institutional links shown on right part of page
 --
@@ -822,7 +895,8 @@ CREATE TABLE IF NOT EXISTS lnk_links (
 	ShortName VARCHAR(511) NOT NULL,
 	FullName VARCHAR(2047) NOT NULL,
 	WWW VARCHAR(255) NOT NULL,
-	UNIQUE INDEX(LnkCod));
+	UNIQUE INDEX(LnkCod)
+	) ENGINE=MyISAM;
 --
 -- Table log: stores the log of all clicks
 --
@@ -850,8 +924,7 @@ CREATE TABLE IF NOT EXISTS log (
 	INDEX(UsrCod),
 	INDEX(ClickTime,Role)
 	) ENGINE=InnoDB
-	PARTITION BY RANGE (YEAR(ClickTime))
-	(
+	PARTITION BY RANGE (YEAR(ClickTime)) (
 	PARTITION p2004 VALUES LESS THAN (2005),
 	PARTITION p2005 VALUES LESS THAN (2006),
 	PARTITION p2006 VALUES LESS THAN (2007),
@@ -898,8 +971,7 @@ CREATE TABLE IF NOT EXISTS log (
 	PARTITION p2047 VALUES LESS THAN (2048),
 	PARTITION p2048 VALUES LESS THAN (2049),
 	PARTITION p2049 VALUES LESS THAN (2050),
-	PARTITION p2050 VALUES LESS THAN MAXVALUE
-	);
+	PARTITION p2050 VALUES LESS THAN MAXVALUE);
 --
 -- Table log_api: stores the log of calls to API (web service) from plugins
 --
@@ -909,21 +981,25 @@ CREATE TABLE IF NOT EXISTS log_api (
 	FunCod INT NOT NULL,
 	UNIQUE INDEX(LogCod),
 	INDEX(PlgCod),
-	INDEX(FunCod));
+	INDEX(FunCod)
+	) ENGINE=MyISAM;
 --
 -- Table log_banners: stores the log of clicked banners
 --
 CREATE TABLE IF NOT EXISTS log_banners (
 	LogCod INT NOT NULL,
 	BanCod INT NOT NULL,
-	UNIQUE INDEX(LogCod),INDEX(BanCod));
+	UNIQUE INDEX(LogCod),
+	INDEX(BanCod)
+	) ENGINE=MyISAM;
 --
 -- Table log_comments: stores the comments about errors associated to the log
 --
 CREATE TABLE IF NOT EXISTS log_comments (
 	LogCod INT NOT NULL,
 	Comments TEXT NOT NULL,
-	UNIQUE INDEX(LogCod));
+	UNIQUE INDEX(LogCod)
+	) ENGINE=MyISAM;
 --
 -- Table log_recent: stores the log of the most recent clicks, used to speed up queries related to log
 --
@@ -949,14 +1025,16 @@ CREATE TABLE IF NOT EXISTS log_recent (
 	INDEX(DegCod),
 	INDEX(CrsCod),
 	INDEX(UsrCod),
-	INDEX(ClickTime,Role));
+	INDEX(ClickTime,Role)
+	) ENGINE=MyISAM;
 --
 -- Table log_search: stores the log of search strings
 --
 CREATE TABLE IF NOT EXISTS log_search (
 	LogCod INT NOT NULL,
 	SearchStr VARCHAR(2047) NOT NULL,
-	UNIQUE INDEX(LogCod));
+	UNIQUE INDEX(LogCod)
+	) ENGINE=MyISAM;
 --
 -- Table mch_answers: stores the users' answers to the matches
 --
@@ -966,7 +1044,16 @@ CREATE TABLE IF NOT EXISTS mch_answers (
 	QstInd INT NOT NULL,
 	NumOpt TINYINT NOT NULL,
 	AnsInd TINYINT NOT NULL,
-	UNIQUE INDEX(MchCod,UsrCod,QstInd));
+	UNIQUE INDEX(MchCod,UsrCod,QstInd)
+	) ENGINE=MyISAM;
+--
+-- Table mch_groups: stores the groups associated to each match in a game
+--
+CREATE TABLE IF NOT EXISTS mch_groups (
+	MchCod INT NOT NULL,
+	GrpCod INT NOT NULL,
+	UNIQUE INDEX(MchCod,GrpCod)
+	) ENGINE=MyISAM;
 --
 -- Table mch_indexes: stores the order of answers in a match
 --
@@ -974,7 +1061,8 @@ CREATE TABLE IF NOT EXISTS mch_indexes (
 	MchCod INT NOT NULL,
 	QstInd INT NOT NULL,
 	Indexes TEXT NOT NULL,
-	UNIQUE INDEX(MchCod,QstInd));
+	UNIQUE INDEX(MchCod,QstInd)
+	) ENGINE=MyISAM;
 --
 -- Table mch_matches: stores the matches (games instances) already played
 --
@@ -993,7 +1081,8 @@ CREATE TABLE IF NOT EXISTS mch_matches (
 	ShowQstResults ENUM('N','Y') NOT NULL DEFAULT 'N',
 	ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N',
 	UNIQUE INDEX(MchCod),
-	INDEX(GamCod));
+	INDEX(GamCod)
+	) ENGINE=MyISAM;
 --
 -- Table mch_players: stores the current match players
 --
@@ -1001,14 +1090,16 @@ CREATE TABLE IF NOT EXISTS mch_players (
 	MchCod INT NOT NULL,
 	UsrCod INT NOT NULL,
 	TS TIMESTAMP,
-	UNIQUE INDEX(MchCod,UsrCod));
+	UNIQUE INDEX(MchCod,UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table mch_playing: stores the current matches being played
 --
 CREATE TABLE IF NOT EXISTS mch_playing (
 	MchCod INT NOT NULL,
 	TS TIMESTAMP,
-	UNIQUE INDEX(MchCod));
+	UNIQUE INDEX(MchCod)
+	) ENGINE=MyISAM;
 --
 -- Table mch_results: stores match results
 --
@@ -1020,7 +1111,8 @@ CREATE TABLE IF NOT EXISTS mch_results (
 	NumQsts INT NOT NULL DEFAULT 0,
 	NumQstsNotBlank INT NOT NULL DEFAULT 0,
 	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
-	UNIQUE INDEX(MchCod,UsrCod));
+	UNIQUE INDEX(MchCod,UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table mch_times: stores the elapsed time in every question in every match played
 --
@@ -1028,7 +1120,8 @@ CREATE TABLE IF NOT EXISTS mch_times (
 	MchCod INT NOT NULL,
 	QstInd INT NOT NULL,
 	ElapsedTime TIME NOT NULL DEFAULT 0,
-	UNIQUE INDEX(MchCod,QstInd));
+	UNIQUE INDEX(MchCod,QstInd)
+	) ENGINE=MyISAM;
 --
 -- Table med_media: stores information about media (images, videos, YouTube)
 --
@@ -1039,22 +1132,25 @@ CREATE TABLE IF NOT EXISTS med_media (
 	URL VARCHAR(255) NOT NULL DEFAULT '',
 	Title VARCHAR(2047) NOT NULL DEFAULT '',
 	UNIQUE INDEX(MedCod),
-	INDEX(Type));
+	INDEX(Type)
+	) ENGINE=MyISAM;
 --
 -- Table mrk_marks: stores information about files of marks
 --
 CREATE TABLE IF NOT EXISTS mrk_marks (
-	FilCod INT NOT NULL AUTO_INCREMENT,
+	FilCod INT NOT NULL,
 	Header INT NOT NULL,
 	Footer INT NOT NULL,
-	UNIQUE INDEX(FilCod));
+	UNIQUE INDEX(FilCod)
+	) ENGINE=MyISAM;
 --
 -- Table msg_banned: stores the users whose messages are banned (FromUsrCod is a recipien banned from ToUsrCod)
 --
 CREATE TABLE IF NOT EXISTS msg_banned (
 	FromUsrCod INT NOT NULL,
 	ToUsrCod INT NOT NULL,
-	UNIQUE INDEX(FromUsrCod,ToUsrCod));
+	UNIQUE INDEX(FromUsrCod,ToUsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table msg_content: stores the content of the sent messages
 --
@@ -1065,7 +1161,8 @@ CREATE TABLE IF NOT EXISTS msg_content (
 	MedCod INT NOT NULL DEFAULT -1,
 	UNIQUE INDEX(MsgCod),
 	FULLTEXT(Subject,Content),
-	INDEX(MedCod)) ENGINE = MYISAM;
+	INDEX(MedCod)
+	) ENGINE=MYISAM;
 --
 -- Table msg_content_deleted: stores the content of the sent messages that have been deleted
 --
@@ -1076,7 +1173,8 @@ CREATE TABLE IF NOT EXISTS msg_content_deleted (
 	MedCod INT NOT NULL DEFAULT -1,
 	UNIQUE INDEX(MsgCod),
 	FULLTEXT(Subject,Content),
-	INDEX(MedCod)) ENGINE = MYISAM;
+	INDEX(MedCod)
+	) ENGINE=MYISAM;
 --
 -- Table msg_rcv: stores the received messages
 --
@@ -1087,9 +1185,10 @@ CREATE TABLE IF NOT EXISTS msg_rcv (
 	Open ENUM('N','Y') NOT NULL DEFAULT 'N',
 	Replied ENUM('N','Y') NOT NULL DEFAULT 'N',
 	Expanded ENUM('N','Y') NOT NULL DEFAULT 'N',
-	UNIQUE INDEX(UsrCod,MsgCod),
+	UNIQUE INDEX (UsrCod,MsgCod),
 	INDEX(MsgCod),
-	INDEX(Notified));
+	INDEX(Notified)
+	) ENGINE=MyISAM;
 --
 -- Table msg_rcv_deleted: stores the received messages that have been deleted
 --
@@ -1101,7 +1200,8 @@ CREATE TABLE IF NOT EXISTS msg_rcv_deleted (
 	Replied ENUM('N','Y') NOT NULL DEFAULT 'N',
 	UNIQUE INDEX(UsrCod,MsgCod),
 	INDEX(MsgCod),
-	INDEX(Notified));
+	INDEX(Notified)
+	) ENGINE=MyISAM;
 --
 -- Table msg_snt: stores the sent messages
 --
@@ -1113,7 +1213,8 @@ CREATE TABLE IF NOT EXISTS msg_snt (
 	CreatTime DATETIME NOT NULL,
 	UNIQUE INDEX(MsgCod),
 	INDEX(CrsCod),
-	INDEX(UsrCod));
+	INDEX(UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table msg_snt_deleted: stores the sent messages that have been deleted
 --
@@ -1124,7 +1225,8 @@ CREATE TABLE IF NOT EXISTS msg_snt_deleted (
 	CreatTime DATETIME NOT NULL,
 	UNIQUE INDEX(MsgCod),
 	INDEX(CrsCod),
-	INDEX(UsrCod));
+	INDEX(UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table not_deleted: stores the yellow notes (post-it) that have been deleted
 --
@@ -1134,11 +1236,13 @@ CREATE TABLE IF NOT EXISTS not_deleted (
 	UsrCod INT NOT NULL,
 	CreatTime DATETIME NOT NULL,
 	Content TEXT NOT NULL,
+	Public ENUM('N','Y') NOT NULL DEFAULT 'Y',
 	NumNotif INT NOT NULL DEFAULT 0,
 	UNIQUE INDEX(NotCod),
 	INDEX(CrsCod),
 	INDEX(UsrCod),
-	INDEX(CreatTime));
+	INDEX(CreatTime)
+	) ENGINE=MyISAM;
 --
 -- Table not_notices: stores the yellow notes (post-it)
 --
@@ -1148,13 +1252,15 @@ CREATE TABLE IF NOT EXISTS not_notices (
 	UsrCod INT NOT NULL,
 	CreatTime DATETIME NOT NULL,
 	Content TEXT NOT NULL,
+	Public ENUM('N','Y') NOT NULL DEFAULT 'Y',
 	Status TINYINT NOT NULL DEFAULT 0,
 	NumNotif INT NOT NULL DEFAULT 0,
 	UNIQUE INDEX(NotCod),
 	INDEX(CrsCod,Status),
 	INDEX(UsrCod),
 	INDEX(CreatTime),
-	INDEX(Status));
+	INDEX(Status)
+	) ENGINE=MyISAM;
 --
 -- Table ntf_mail_domains: stores e-mail domains to which sending of notifications is allowed
 --
@@ -1163,7 +1269,8 @@ CREATE TABLE IF NOT EXISTS ntf_mail_domains (
 	Domain VARCHAR(255) NOT NULL,
 	Info VARCHAR(2047) NOT NULL,
 	UNIQUE INDEX(MaiCod),
-	UNIQUE INDEX(Domain));
+	UNIQUE INDEX(Domain)
+	) ENGINE=MyISAM;
 --
 -- Table ntf_notifications: stores the notifications of events
 --
@@ -1182,14 +1289,9 @@ CREATE TABLE IF NOT EXISTS ntf_notifications (
 	UNIQUE INDEX(NtfCod),
 	INDEX(NotifyEvent),
 	INDEX(ToUsrCod),
-	INDEX(TimeNotif));
---
--- Table pho_clicks_without_photo: stores the number of clicks that remains to each user before being required to submit his/her photo
---
-CREATE TABLE IF NOT EXISTS pho_clicks_without_photo (
-	UsrCod INT NOT NULL,
-	NumClicks INT NOT NULL,
-	UNIQUE INDEX(UsrCod));
+	INDEX(CrsCod),
+	INDEX(TimeNotif)
+	) ENGINE=MyISAM;
 --
 -- Table plc_places: stores the places associated to each institution, used in holidays
 --
@@ -1199,7 +1301,8 @@ CREATE TABLE IF NOT EXISTS plc_places (
 	ShortName VARCHAR(511) NOT NULL,
 	FullName VARCHAR(2047) NOT NULL,
 	UNIQUE INDEX(PlcCod),
-	INDEX(InsCod));
+	INDEX(InsCod)
+	) ENGINE=MyISAM;
 --
 -- Table plg_plugins: stores the plugins
 --
@@ -1211,7 +1314,8 @@ CREATE TABLE IF NOT EXISTS plg_plugins (
 	AppKey VARCHAR(31) NOT NULL,
 	URL VARCHAR(255) NOT NULL,
 	IP CHAR(15) NOT NULL,
-	UNIQUE INDEX(PlgCod));
+	UNIQUE INDEX(PlgCod)
+	) ENGINE=MyISAM;
 --
 -- Table prg_resources: stores the resources of the course program
 --
@@ -1223,14 +1327,16 @@ CREATE TABLE IF NOT EXISTS prg_resources (
 	Type ENUM('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','tch','att','for','svy') NOT NULL DEFAULT 'non',
 	Title VARCHAR(2047) NOT NULL,
 	UNIQUE INDEX(ItmCod),
-	UNIQUE INDEX(NodCod,ItmInd));
+	UNIQUE INDEX(NodCod,ItmInd)
+	) ENGINE=MyISAM;
 --
 -- Table prj_config: stores the configuration of projects for each course
 --
 CREATE TABLE IF NOT EXISTS prj_config (
 	CrsCod INT NOT NULL DEFAULT -1,
 	NETCanCreate ENUM('N','Y') NOT NULL DEFAULT 'Y',
-	UNIQUE INDEX(CrsCod));
+	UNIQUE INDEX(CrsCod)
+	) ENGINE=MyISAM;
 --
 -- Table prj_projects: stores the projects proposed by the teachers to their students
 --
@@ -1258,7 +1364,8 @@ CREATE TABLE IF NOT EXISTS prj_projects (
 	INDEX(CrsCod,CreatTime),
 	INDEX(CrsCod,ModifTime),
 	INDEX(CrsCod,DptCod),
-	INDEX(CrsCod,ReviewStatus));
+	INDEX(CrsCod,ReviewStatus)
+	) ENGINE=MyISAM;
 --
 -- Table prj_rubrics: stores the rubrics for each project
 --
@@ -1266,7 +1373,8 @@ CREATE TABLE IF NOT EXISTS prj_rubrics (
 	CrsCod INT NOT NULL,
 	Type ENUM('tut','evl','gbl') NOT NULL,
 	RubCod INT NOT NULL,
-	UNIQUE INDEX(CrsCod,Type,RubCod));
+	UNIQUE INDEX(CrsCod,Type,RubCod)
+	) ENGINE=MyISAM;
 --
 -- Table prj_users: stores the users inside projects
 --
@@ -1274,7 +1382,8 @@ CREATE TABLE IF NOT EXISTS prj_users (
 	PrjCod INT NOT NULL,
 	RoleInProject TINYINT NOT NULL DEFAULT 0,
 	UsrCod INT NOT NULL,
-	UNIQUE INDEX(PrjCod,RoleInProject,UsrCod));
+	UNIQUE INDEX(PrjCod,RoleInProject,UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table roo_check_in: stores the history of locations of users
 --
@@ -1285,15 +1394,17 @@ CREATE TABLE IF NOT EXISTS roo_check_in (
 	CheckInTime DATETIME NOT NULL,
 	UNIQUE INDEX(ChkCod),
 	INDEX(UsrCod,CheckInTime),
-	INDEX(CheckInTime));
+	INDEX(CheckInTime)
+	) ENGINE=MyISAM;
 --
 -- Table roo_macs: stores the associations between rooms and MAC addresses
 --
 CREATE TABLE IF NOT EXISTS roo_macs (
-	RooCod INT NOT NULL AUTO_INCREMENT,
+	RooCod INT NOT NULL,
 	MAC BIGINT NOT NULL,
 	UNIQUE INDEX(RooCod,MAC),
-	UNIQUE INDEX(MAC,RooCod));
+	UNIQUE INDEX(MAC,RooCod)
+	) ENGINE=MyISAM;
 --
 -- Table roo_rooms: stores the rooms associated to each center
 --
@@ -1307,19 +1418,21 @@ CREATE TABLE IF NOT EXISTS roo_rooms (
 	FullName VARCHAR(2047) NOT NULL,
 	Capacity INT NOT NULL,
 	UNIQUE INDEX(RooCod),
-	INDEX(CtrCod,BldCod,Floor));
+	INDEX(CtrCod,BldCod,Floor)
+	) ENGINE=MyISAM;
 --
 -- Table rsc_clipboards: stores the clipboards for resources to be linked in program and rubrics
 --
 CREATE TABLE IF NOT EXISTS rsc_clipboards (
 	UsrCod INT NOT NULL,
 	CrsCod INT NOT NULL,
-	Type ENUM('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non',
+	Type ENUM('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','tch','att','for','svy') NOT NULL DEFAULT 'non',
 	Cod INT NOT NULL DEFAULT -1,
 	CopyTime TIMESTAMP,
 	UNIQUE INDEX(UsrCod,CrsCod,Type,Cod),
 	INDEX(CrsCod,Type,Cod),
-	INDEX(CopyTime));
+	INDEX(CopyTime)
+	) ENGINE=MyISAM;
 --
 -- Table rub_criteria: stores the criteria associated to each rubric
 --
@@ -1327,14 +1440,15 @@ CREATE TABLE IF NOT EXISTS rub_criteria (
 	CriCod INT NOT NULL AUTO_INCREMENT,
 	RubCod INT NOT NULL,
 	CriInd INT NOT NULL,
-	Type ENUM('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non',
+	Type ENUM('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','tch','att','for','svy') NOT NULL DEFAULT 'non',
 	Cod INT NOT NULL DEFAULT -1,
 	MinVal DOUBLE PRECISION NOT NULL DEFAULT 0,
 	MaxVal DOUBLE PRECISION NOT NULL DEFAULT 1,
 	Weight DOUBLE PRECISION NOT NULL DEFAULT 1,
 	Title VARCHAR(2047) NOT NULL,
 	UNIQUE INDEX(CriCod),
-	UNIQUE INDEX(RubCod,CriInd));
+	UNIQUE INDEX(RubCod,CriInd)
+	) ENGINE=MyISAM;
 --
 -- Table rub_criteria: stores the assessment rubrics
 --
@@ -1345,18 +1459,20 @@ CREATE TABLE IF NOT EXISTS rub_rubrics (
 	Title VARCHAR(2047) NOT NULL,
 	Txt TEXT NOT NULL,
 	UNIQUE INDEX(RubCod),
-	INDEX(CrsCod));
+	INDEX(CrsCod)
+	) ENGINE=MyISAM;
 --
 -- Table rub_scores: stores the rubric criteria scores for each project
 --
 CREATE TABLE IF NOT EXISTS rub_scores (
-	Type ENUM('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non',
+	Type ENUM('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','tch','att','for','svy') NOT NULL DEFAULT 'non',
 	Cod INT NOT NULL,
 	UsrCod INT NOT NULL DEFAULT -1,
 	CriCod INT NOT NULL,
 	EvlCod INT NOT NULL DEFAULT -1,
 	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
-	UNIQUE INDEX(Type,Cod,UsrCod,CriCod));
+	UNIQUE INDEX(Type,Cod,UsrCod,CriCod)
+	) ENGINE=MyISAM;
 --
 -- Table ses_params: stores some hidden parameters passed from a page to another using database instead of forms
 --
@@ -1364,7 +1480,8 @@ CREATE TABLE IF NOT EXISTS ses_params (
 	SessionId CHAR(43) NOT NULL,
 	ParamName VARCHAR(255) NOT NULL,
 	ParamValue LONGTEXT NOT NULL,
-	INDEX(SessionId));
+	INDEX(SessionId)
+	) ENGINE=MyISAM;
 --
 -- Table ses_sessions: stores the information of open sessions
 --
@@ -1388,7 +1505,8 @@ CREATE TABLE IF NOT EXISTS ses_sessions (
 	SearchStr VARCHAR(2047) NOT NULL DEFAULT '',
 	SideCols TINYINT NOT NULL DEFAULT 3,
 	UNIQUE INDEX(SessionId),
-	INDEX(UsrCod));
+	INDEX(UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table set_ip_settings: stores user's settings (preferences) for each IP address
 --
@@ -1403,20 +1521,21 @@ CREATE TABLE IF NOT EXISTS set_ip_settings (
 	Menu TINYINT NOT NULL DEFAULT 0,
 	SideCols TINYINT NOT NULL,
 	PhotoShape TINYINT NOT NULL DEFAULT 0,
-	PRIMARY KEY(IP),
-	INDEX(UsrCod),
-	INDEX(LastChange));
+	PRIMARY KEY (IP),INDEX(UsrCod),
+	INDEX(LastChange)
+	) ENGINE=MyISAM;
 --
 -- Table sta_degrees: stores statistics about degrees
 --
 CREATE TABLE IF NOT EXISTS sta_degrees (
 	DegCod INT NOT NULL DEFAULT -1,
-	Sex ENUM('unknown','female','male','all') NOT NULL DEFAULT 'all',
+	Sex ENUM ('unknown','female','male','all') NOT NULL DEFAULT 'all',
 	NumStds INT NOT NULL,
 	NumStdsWithPhoto INT NOT NULL,
 	TimeAvgPhoto DATETIME NOT NULL,
 	TimeToComputeAvgPhoto INT NOT NULL DEFAULT -1,
-	UNIQUE INDEX(DegCod,Sex));
+	UNIQUE INDEX(DegCod,Sex)
+	) ENGINE=MyISAM;
 --
 -- Table sta_notifications: stores statistics about notifications: number of notified events and number of e-mails sent
 --
@@ -1426,7 +1545,8 @@ CREATE TABLE IF NOT EXISTS sta_notifications (
 	NotifyEvent TINYINT NOT NULL,
 	NumEvents INT NOT NULL,
 	NumMails INT NOT NULL,
-	UNIQUE INDEX(DegCod,CrsCod,NotifyEvent));
+	UNIQUE INDEX(DegCod,CrsCod,NotifyEvent)
+	) ENGINE=MyISAM;
 --
 -- Table svy_answers: stores the answers to the surveys
 --
@@ -1435,7 +1555,8 @@ CREATE TABLE IF NOT EXISTS svy_answers (
 	AnsInd TINYINT NOT NULL,
 	NumUsrs INT NOT NULL DEFAULT 0,
 	Answer TEXT NOT NULL,
-	UNIQUE INDEX(QstCod,AnsInd));
+	UNIQUE INDEX(QstCod,AnsInd)
+	) ENGINE=MyISAM;
 	--
 -- Table svy_comments: stores the comments to the surveys
 --
@@ -1444,14 +1565,16 @@ CREATE TABLE IF NOT EXISTS svy_comments (
 	QstCod INT NOT NULL,
 	Comments TEXT NOT NULL,
 	UNIQUE INDEX(ComCod),
-	INDEX(QstCod,ComCod));
+	INDEX(QstCod,ComCod)
+	) ENGINE=MyISAM;
 --
 -- Table svy_groups: stores the groups associated to each survey
 --
 CREATE TABLE IF NOT EXISTS svy_groups (
 	SvyCod INT NOT NULL,
 	GrpCod INT NOT NULL,
-	UNIQUE INDEX(SvyCod,GrpCod));
+	UNIQUE INDEX(SvyCod,GrpCod)
+	) ENGINE=MyISAM;
 --
 -- Table svy_questions: stores the questions in the surveys
 --
@@ -1459,11 +1582,12 @@ CREATE TABLE IF NOT EXISTS svy_questions (
 	QstCod INT NOT NULL AUTO_INCREMENT,
 	SvyCod INT NOT NULL,
 	QstInd INT NOT NULL DEFAULT 0,
-	AnsType ENUM('unique_choice','multiple_choice') NOT NULL,
+	AnsType ENUM ('unique_choice','multiple_choice') NOT NULL,
 	CommentsAllowed ENUM('N','Y') NOT NULL DEFAULT 'N',
 	Stem TEXT NOT NULL,
 	UNIQUE INDEX(QstCod),
-	INDEX(SvyCod));
+	INDEX(SvyCod)
+	) ENGINE=MyISAM;
 --
 -- Table svy_surveys: stores the surveys
 --
@@ -1480,37 +1604,16 @@ CREATE TABLE IF NOT EXISTS svy_surveys (
 	Title VARCHAR(2047) NOT NULL,
 	Txt TEXT NOT NULL,
 	UNIQUE INDEX(SvyCod),
-	INDEX(Scope,Cod));
+	INDEX(Scope,Cod)
+	) ENGINE=MyISAM;
 --
 -- Table svy_users: stores the users who have answer the surveys
 --
 CREATE TABLE IF NOT EXISTS svy_users (
 	SvyCod INT NOT NULL,
 	UsrCod INT NOT NULL,
-	UNIQUE INDEX(SvyCod,UsrCod));
---
--- Table tmt_courses: stores the timetables of the courses
---
-CREATE TABLE IF NOT EXISTS tmt_courses (
-	CrsCod INT NOT NULL DEFAULT -1,
-	GrpCod INT NOT NULL DEFAULT -1,
-	Weekday TINYINT NOT NULL,
-	StartTime TIME NOT NULL,
-	Duration TIME NOT NULL,
-	ClassType ENUM('free','lecture','practical') NOT NULL,
-	Info VARCHAR(2047) NOT NULL DEFAULT '',
-	INDEX(CrsCod,GrpCod));
---
--- Table tmt_tutoring: stores the timetables of tutoring hours of the teachers
---
-CREATE TABLE IF NOT EXISTS tmt_tutoring (
-	UsrCod INT NOT NULL,
-	Weekday TINYINT NOT NULL,
-	StartTime TIME NOT NULL,
-	Duration TIME NOT NULL,
-	Info VARCHAR(2047) NOT NULL DEFAULT '',
-	INDEX(UsrCod));
-
+	UNIQUE INDEX(SvyCod,UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table tml_comments: stores the content of comments to timeline notes
 --
@@ -1520,7 +1623,8 @@ CREATE TABLE IF NOT EXISTS tml_comments (
 	MedCod INT NOT NULL DEFAULT -1,
 	UNIQUE INDEX(PubCod),
 	FULLTEXT(Txt),
-	INDEX(MedCod)) ENGINE = MYISAM;
+	INDEX(MedCod)
+	) ENGINE=MYISAM;
 --
 -- Table tml_comments_fav: stores users who marked timeline comments as favourite
 --
@@ -1531,7 +1635,8 @@ CREATE TABLE IF NOT EXISTS tml_comments_fav (
 	TimeFav DATETIME NOT NULL,
 	UNIQUE INDEX(FavCod),
 	UNIQUE INDEX(PubCod,UsrCod),
-	INDEX(UsrCod));
+	INDEX(UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table tml_notes: stores timeline notes
 --
@@ -1542,11 +1647,11 @@ CREATE TABLE IF NOT EXISTS tml_notes (
 	UsrCod INT NOT NULL,
 	HieCod INT NOT NULL DEFAULT -1,
 	Unavailable ENUM('N','Y') NOT NULL DEFAULT 'N',
-	TimeNote DATETIME NOT NULL,
-	UNIQUE INDEX(NotCod),
+	TimeNote DATETIME NOT NULL,UNIQUE INDEX(NotCod),
 	INDEX(NoteType,Cod),
 	INDEX(UsrCod),
-	INDEX(TimeNote));
+	INDEX(TimeNote)
+	) ENGINE=MyISAM;
 --
 -- Table tml_notes_fav: stores users who marked timeline notes as favourite
 --
@@ -1557,7 +1662,8 @@ CREATE TABLE IF NOT EXISTS tml_notes_fav (
 	TimeFav DATETIME NOT NULL,
 	UNIQUE INDEX(FavCod),
 	UNIQUE INDEX(NotCod,UsrCod),
-	INDEX(UsrCod));
+	INDEX(UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table tml_posts: stores timeline posts (public comments written by users)
 --
@@ -1566,8 +1672,9 @@ CREATE TABLE IF NOT EXISTS tml_posts (
 	Txt LONGTEXT NOT NULL,
 	MedCod INT NOT NULL DEFAULT -1,
 	UNIQUE INDEX(PstCod),
-	FULLTEXT(Content),
-	INDEX(MedCod)) ENGINE = MYISAM;
+	FULLTEXT(Txt),
+	INDEX(MedCod)
+	) ENGINE=MYISAM;
 --
 -- Table tml_pubs: stores timeline publications (original notes, sharede notes or comments)
 --
@@ -1581,14 +1688,40 @@ CREATE TABLE IF NOT EXISTS tml_pubs (
 	INDEX(NotCod,PublisherCod,PubType),
 	INDEX(PublisherCod),
 	INDEX(PubType),
-	INDEX(TimePublish));
+	INDEX(TimePublish)
+	) ENGINE=MyISAM;
 --
 -- Table tml_timelines: stores notes published in timeline for every active session
 --
 CREATE TABLE IF NOT EXISTS tml_timelines (
 	SessionId CHAR(43) NOT NULL,
 	NotCod BIGINT NOT NULL,
-	UNIQUE INDEX(SessionId,NotCod));
+	UNIQUE INDEX(SessionId,NotCod)
+	) ENGINE=MyISAM;
+--
+-- Table tmt_courses: stores the timetables of the courses
+--
+CREATE TABLE IF NOT EXISTS tmt_courses (
+	CrsCod INT NOT NULL DEFAULT -1,
+	GrpCod INT NOT NULL DEFAULT -1,
+	Weekday TINYINT NOT NULL,
+	StartTime TIME NOT NULL,
+	Duration TIME NOT NULL,
+	ClassType ENUM('free','lecture','practical') NOT NULL,
+	Info VARCHAR(2047) NOT NULL DEFAULT '',
+	INDEX(CrsCod,GrpCod)
+	) ENGINE=MyISAM;
+--
+-- Table tmt_tutoring: stores the timetables of tutoring hours of the teachers
+--
+CREATE TABLE IF NOT EXISTS tmt_tutoring (
+	UsrCod INT NOT NULL,
+	Weekday TINYINT NOT NULL,
+	StartTime TIME NOT NULL,
+	Duration TIME NOT NULL,
+	Info VARCHAR(2047) NOT NULL DEFAULT '',
+	INDEX(UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table tre_expanded: stores the nodes of the course trees currently expanded for each user
 --
@@ -1598,7 +1731,8 @@ CREATE TABLE IF NOT EXISTS tre_expanded (
 	ClickTime DATETIME NOT NULL,
 	UNIQUE INDEX(UsrCod,NodCod),
 	INDEX(NodCod),
-	INDEX(ClickTime));
+	INDEX(ClickTime)
+	) ENGINE=MyISAM;
 --
 -- Table tre_nodes: stores the nodes of the course trees
 --
@@ -1609,13 +1743,13 @@ CREATE TABLE IF NOT EXISTS tre_nodes (
 	NodInd INT NOT NULL DEFAULT 0,
 	Level INT NOT NULL DEFAULT 1,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
-	UsrCod INT NOT NULL,
-	StartTime DATETIME NOT NULL,
+	UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,
 	EndTime DATETIME NOT NULL,
 	Title VARCHAR(2047) NOT NULL,
 	Txt TEXT NOT NULL,
 	UNIQUE INDEX(NodCod),
-	UNIQUE INDEX(CrsCod,Type,NodInd));
+	UNIQUE INDEX(CrsCod,Type,NodInd)
+	) ENGINE=MyISAM;
 --
 -- Table tst_answers: stores the answers to the questions in tests
 --
@@ -1627,7 +1761,8 @@ CREATE TABLE IF NOT EXISTS tst_answers (
 	MedCod INT NOT NULL DEFAULT -1,
 	Correct ENUM('N','Y') NOT NULL,
 	INDEX(QstCod),
-	INDEX(MedCod));
+	INDEX(MedCod)
+	) ENGINE=MyISAM;
 --
 -- Table tst_config: stores the configuration of tests for each course
 --
@@ -1639,7 +1774,8 @@ CREATE TABLE IF NOT EXISTS tst_config (
 	Max INT NOT NULL,
 	MinTimeNxtTstPerQst INT NOT NULL DEFAULT 0,
 	Visibility INT NOT NULL DEFAULT 0x1f,
-	UNIQUE INDEX(CrsCod));
+	UNIQUE INDEX(CrsCod)
+	) ENGINE=MyISAM;
 --
 -- Table tst_exam_questions: stores the questions and answers in test prints made by users
 --
@@ -1650,7 +1786,8 @@ CREATE TABLE IF NOT EXISTS tst_exam_questions (
 	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
 	Indexes TEXT NOT NULL,
 	Answers TEXT NOT NULL,
-	UNIQUE INDEX(ExaCod,QstCod));
+	UNIQUE INDEX(ExaCod,QstCod)
+	) ENGINE=MyISAM;
 --
 -- Table tst_exams: stores the test exams made by users
 --
@@ -1666,7 +1803,8 @@ CREATE TABLE IF NOT EXISTS tst_exams (
 	AllowTeachers ENUM('N','Y') NOT NULL DEFAULT 'N',
 	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
 	UNIQUE INDEX(ExaCod),
-	INDEX(CrsCod,UsrCod));
+	INDEX(CrsCod,UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table tst_question_tags: stores the tags associated to each test question
 --
@@ -1674,7 +1812,8 @@ CREATE TABLE IF NOT EXISTS tst_question_tags (
 	QstCod INT NOT NULL,
 	TagCod INT NOT NULL,
 	TagInd TINYINT NOT NULL,
-	UNIQUE INDEX(QstCod,TagCod));
+	UNIQUE INDEX(QstCod,TagCod)
+	) ENGINE=MyISAM;
 --
 -- Table tst_questions: stores the test questions
 --
@@ -1692,7 +1831,8 @@ CREATE TABLE IF NOT EXISTS tst_questions (
 	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
 	UNIQUE INDEX(QstCod),
 	INDEX(CrsCod,EditTime),
-	INDEX(MedCod));
+	INDEX(MedCod)
+	) ENGINE=MyISAM;
 --
 -- Table tst_tags: stores the tags of test questions
 --
@@ -1703,7 +1843,8 @@ CREATE TABLE IF NOT EXISTS tst_tags (
 	TagTxt VARCHAR(2047) NOT NULL,
 	TagHidden ENUM('N','Y') NOT NULL,
 	UNIQUE INDEX(TagCod),
-	INDEX(CrsCod,ChangeTime));
+	INDEX(CrsCod,ChangeTime)
+	) ENGINE=MyISAM;
 --
 -- Table usr_admins: stores users who manage degrees, centres, institutions and system
 --
@@ -1712,13 +1853,15 @@ CREATE TABLE IF NOT EXISTS usr_admins (
 	Scope ENUM('Sys','Ins','Ctr','Deg') NOT NULL,
 	Cod INT NOT NULL,
 	UNIQUE INDEX(UsrCod,Scope,Cod),
-	INDEX(Scope,Cod));
+	INDEX (Scope,Cod)
+	) ENGINE=MyISAM;
 --
 -- Table usr_banned: stores users banned for ranking
 --
 CREATE TABLE IF NOT EXISTS usr_banned (
 	UsrCod INT NOT NULL,
-	UNIQUE INDEX(UsrCod));
+	UNIQUE INDEX(UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table usr_birthdays_today: stores birthdays already congratulated today
 --
@@ -1726,16 +1869,16 @@ CREATE TABLE IF NOT EXISTS usr_birthdays_today (
 	UsrCod INT NOT NULL,
 	Today DATE NOT NULL,
 	UNIQUE INDEX(UsrCod),
-	INDEX(Today));
-	
+	INDEX(Today)
+	) ENGINE=MyISAM;
 --
 -- Table usr_clicks_without_photo: number of clicks before uploading user's photo
 --
 CREATE TABLE IF NOT EXISTS usr_clicks_without_photo (
 	UsrCod INT NOT NULL,
 	NumClicks INT NOT NULL,
-	UNIQUE INDEX(UsrCod));
-
+	UNIQUE INDEX(UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table usr_clipboards: clipboards to store copied users
 --
@@ -1744,8 +1887,8 @@ CREATE TABLE IF NOT EXISTS usr_clipboards (
 	OthUsrCod INT NOT NULL,
 	CopyTime TIMESTAMP,
 	UNIQUE INDEX(UsrCod,OthUsrCod),
-	INDEX(CopyTime));
-
+	INDEX(CopyTime)
+	) ENGINE=MyISAM;
 --
 -- Table usr_connected: users currently connected to the platform
 --
@@ -1756,7 +1899,8 @@ CREATE TABLE IF NOT EXISTS usr_connected (
 	LastTime DATETIME NOT NULL,
 	UNIQUE INDEX(UsrCod),
 	INDEX(RoleInLastCrs),
-	INDEX(LastCrsCod));
+	INDEX(LastCrsCod)
+	) ENGINE=MyISAM;
 --
 -- Table usr_data: stores users' data
 --
@@ -1789,8 +1933,7 @@ CREATE TABLE IF NOT EXISTS usr_data (
 	FamilyAddress VARCHAR(2047) NOT NULL DEFAULT '',
 	FamilyPhone CHAR(16) NOT NULL DEFAULT '',
 	OriginPlace VARCHAR(2047) NOT NULL DEFAULT '',
-	Birthday DATE,
-	Comments TEXT NOT NULL,
+	Birthday DATE,Comments TEXT NOT NULL,
 	Menu TINYINT NOT NULL DEFAULT 0,
 	SideCols TINYINT NOT NULL DEFAULT 3,
 	PhotoShape TINYINT NOT NULL DEFAULT 0,
@@ -1815,7 +1958,8 @@ CREATE TABLE IF NOT EXISTS usr_data (
 	INDEX(Menu),
 	INDEX(SideCols),
 	INDEX(PhotoShape),
-	INDEX(ThirdPartyCookies));
+	INDEX(ThirdPartyCookies)
+	) ENGINE=MyISAM;
 --
 -- Table usr_duplicated: stores informs of users possibly duplicated
 --
@@ -1824,7 +1968,8 @@ CREATE TABLE IF NOT EXISTS usr_duplicated (
 	InformerCod INT NOT NULL,
 	InformTime DATETIME NOT NULL,
 	UNIQUE INDEX(UsrCod,InformerCod),
-	INDEX(UsrCod));
+	INDEX(UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table usr_emails: stores the users' e-mails
 --
@@ -1834,7 +1979,8 @@ CREATE TABLE IF NOT EXISTS usr_emails (
 	CreatTime DATETIME NOT NULL,
 	Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N',
 	UNIQUE INDEX(UsrCod,E_mail),
-	UNIQUE INDEX(E_mail));
+	UNIQUE INDEX(E_mail)
+	) ENGINE=MyISAM;
 --
 -- Table usr_figures: stores some figures (numbers) related to users to show in public profile
 --
@@ -1848,7 +1994,8 @@ CREATE TABLE IF NOT EXISTS usr_figures (
 	NumMsgSnt INT NOT NULL DEFAULT -1,
 	PRIMARY KEY(UsrCod),
 	INDEX(FirstClickTime),
-	INDEX(NumClicks));
+	INDEX(NumClicks)
+	) ENGINE=MyISAM;
 --
 -- Table usr_follow: stores followers and followed
 --
@@ -1858,7 +2005,8 @@ CREATE TABLE IF NOT EXISTS usr_follow (
 	FollowTime DATETIME NOT NULL,
 	UNIQUE INDEX (FollowerCod,FollowedCod),
 	UNIQUE INDEX (FollowedCod,FollowerCod),
-	INDEX (FollowTime));
+	INDEX (FollowTime)
+	) ENGINE=MyISAM;
 --
 -- Table usr_ids: stores the users' IDs
 --
@@ -1868,7 +2016,8 @@ CREATE TABLE IF NOT EXISTS usr_ids (
 	CreatTime DATETIME NOT NULL,
 	Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N',
 	UNIQUE INDEX(UsrCod,UsrID),
-	INDEX(UsrID));
+	INDEX(UsrID)
+	) ENGINE=MyISAM;
 --
 -- Table usr_last: stores some variable data related to users
 --
@@ -1883,7 +2032,8 @@ CREATE TABLE IF NOT EXISTS usr_last (
 	LastAccNotif DATETIME NOT NULL,
 	TimelineUsrs TINYINT NOT NULL DEFAULT 0,
 	UNIQUE INDEX(UsrCod),
-	INDEX(LastTime));
+	INDEX(LastTime)
+	) ENGINE=MyISAM;
 --
 -- Table usr_nicknames: stores users' nicknames
 --
@@ -1892,7 +2042,8 @@ CREATE TABLE IF NOT EXISTS usr_nicknames (
 	Nickname CHAR(16) COLLATE latin1_spanish_ci NOT NULL,
 	CreatTime DATETIME NOT NULL,
 	UNIQUE INDEX(UsrCod,Nickname),
-	UNIQUE INDEX(Nickname));
+	UNIQUE INDEX(Nickname)
+	) ENGINE=MyISAM;
 --
 -- Table usr_pending_emails: stores the emails pending of confirmation
 --
@@ -1902,7 +2053,8 @@ CREATE TABLE IF NOT EXISTS usr_pending_emails (
 	MailKey CHAR(43) COLLATE latin1_bin NOT NULL,
 	DateAndTime DATETIME NOT NULL,
 	INDEX(UsrCod),
-	UNIQUE INDEX(MailKey));
+	UNIQUE INDEX(MailKey)
+	) ENGINE=MyISAM;
 --
 -- Table usr_pending_passwd: stores the passwords pending of activation, sent by e-mail when a user who have forgotten his/her password request a new one
 --
@@ -1910,7 +2062,8 @@ CREATE TABLE IF NOT EXISTS usr_pending_passwd (
 	UsrCod INT NOT NULL,
 	PendingPassword CHAR(86) COLLATE latin1_bin NOT NULL,
 	DateAndTime DATETIME NOT NULL,
-	PRIMARY KEY(UsrCod));
+	PRIMARY KEY (UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table usr_reports: stores users' usage reports
 --
@@ -1923,27 +2076,14 @@ CREATE TABLE IF NOT EXISTS usr_reports (
 	Filename VARCHAR(255) NOT NULL,
 	Permalink VARCHAR(255) NOT NULL,
 	UNIQUE INDEX(RepCod),
-	INDEX(UsrCod));
+	INDEX(UsrCod)
+	) ENGINE=MyISAM;
 --
 -- Table usr_webs: stores users' web and social networks
 --
 CREATE TABLE IF NOT EXISTS usr_webs (
 	UsrCod INT NOT NULL,
-	Web ENUM(
-		'www',
-		'500px',
-		'delicious','deviantart','diaspora',
-		'edmodo',
-		'facebook','flickr','foursquare',
-		'github','gnusocial','googleplus','googlescholar',
-		'identica','instagram',
-		'linkedin',
-		'orcid',
-		'paperli','pinterest',
-		'researchgate','researcherid',
-		'scoopit','slideshare','stackoverflow','storify',
-		'tumblr','twitter',
-		'wikipedia',
-		'youtube') NOT NULL,
+	Web ENUM('www','500px','bluesky''edmodo','facebook','flickr','foursquare','github','gnusocial','googlescholar','identica','instagram','linkedin','orcid','paperli','pinterest','researchgate','researcherid','scoopit','slideshare','stackoverflow','storify','tumblr','twitch','twitter','wikipedia','youtube','x') NOT NULL,
 	URL VARCHAR(255) NOT NULL,
-	UNIQUE INDEX(UsrCod,Web));
+	UNIQUE INDEX(UsrCod,Web)
+	) ENGINE=MyISAM;

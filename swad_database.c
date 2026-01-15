@@ -118,7 +118,8 @@ mysql> DESCRIBE act_frequent;
 			"ActCod INT NOT NULL,"
 			"Score FLOAT NOT NULL,"
 			"LastClick DATETIME NOT NULL,"
-		   "UNIQUE INDEX(UsrCod,ActCod))");
+		   "UNIQUE INDEX(UsrCod,ActCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table agd_agendas *****/
 /*
@@ -136,7 +137,7 @@ mysql> DESCRIBE agd_agendas;
 | Location  | varchar(2047) | NO   |     | NULL    |                |
 | Txt       | text          | NO   |     | NULL    |                |
 +-----------+---------------+------+-----+---------+----------------+
-9 rows in set (0,00 sec)
+9 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS agd_agendas ("
 			"AgdCod INT NOT NULL AUTO_INCREMENT,"
@@ -149,7 +150,8 @@ mysql> DESCRIBE agd_agendas;
 			"Location VARCHAR(2047) NOT NULL,"	// Agd_MAX_BYTES_LOCATION
 			"Txt TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(AgdCod),"
-		   "INDEX(UsrCod,Public,Hidden))");
+		   "INDEX(UsrCod,Public,Hidden)"
+		   ") ENGINE=MyISAM");
 
    /***** Table ann_announcements *****/
 /*
@@ -172,7 +174,8 @@ mysql> DESCRIBE ann_announcements;
 			"Subject TEXT NOT NULL,"	// Cns_MAX_BYTES_SUBJECT
 			"Content TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(AnnCod),"
-		   "INDEX(Status))");
+		   "INDEX(Status)"
+		   ") ENGINE=MyISAM");
 
    /***** Table ann_seen *****/
 /*
@@ -188,7 +191,8 @@ mysql> DESCRIBE ann_seen;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS ann_seen ("
 			"AnnCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
-		   "UNIQUE INDEX(AnnCod,UsrCod))");
+		   "UNIQUE INDEX(AnnCod,UsrCod)"
+		   ") ENGINE=MyISAM");
 
 /***** Table api_keys *****/
 /*
@@ -198,7 +202,7 @@ mysql> DESCRIBE api_keys;
 +----------+----------+------+-----+---------+-------+
 | WSKey    | char(43) | NO   | PRI | NULL    |       |
 | UsrCod   | int(11)  | NO   | MUL | NULL    |       |
-| PlgCod   | int(11)  | NO   |     | NULL    |       |
+| PlgCod   | int(11)  | NO   | MUL | NULL    |       |
 | LastTime | datetime | NO   | MUL | NULL    |       |
 +----------+----------+------+-----+---------+-------+
 4 rows in set (0.00 sec)
@@ -211,7 +215,8 @@ mysql> DESCRIBE api_keys;
 		   "UNIQUE INDEX(WSKey),"
 		   "INDEX(UsrCod),"
 		   "INDEX(PlgCod),"
-		   "INDEX(LastTime))");
+		   "INDEX(LastTime)"
+		   ") ENGINE=MyISAM");
 
    /***** Table asg_assignments *****/
 /*
@@ -230,7 +235,7 @@ mysql> DESCRIBE asg_assignments;
 | Folder    | varbinary(255) | NO   |     | NULL    |                |
 | Txt       | text           | NO   |     | NULL    |                |
 +-----------+----------------+------+-----+---------+----------------+
-10 rows in set (0,00 sec)
+10 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS asg_assignments ("
 			"AsgCod INT NOT NULL AUTO_INCREMENT,"
@@ -244,7 +249,8 @@ mysql> DESCRIBE asg_assignments;
 			"Folder VARBINARY(255) NOT NULL,"	// Brw_MAX_BYTES_FOLDER
 			"Txt TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(AsgCod),"
-		   "INDEX(CrsCod,Hidden))");
+		   "INDEX(CrsCod,Hidden)"
+		   ") ENGINE=MyISAM");
 
    /***** Table asg_groups *****/
 /*
@@ -260,23 +266,25 @@ mysql> DESCRIBE asg_groups;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS asg_groups ("
 			"AsgCod INT NOT NULL,"
 			"GrpCod INT NOT NULL,"
-		   "UNIQUE INDEX(AsgCod,GrpCod))");
+		   "UNIQUE INDEX(AsgCod,GrpCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table asg_rubrics *****/
 /*
 mysql> DESCRIBE asg_rubrics;
-+--------+------+------+-----+---------+-------+
-| Field  | Type | Null | Key | Default | Extra |
-+--------+------+------+-----+---------+-------+
-| AsgCod | int  | NO   | PRI | NULL    |       |
-| RubCod | int  | NO   |     | NULL    |       |
-+--------+------+------+-----+---------+-------+
-2 rows in set (0,00 sec)
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| AsgCod | int(11) | NO   | PRI | NULL    |       |
+| RubCod | int(11) | NO   |     | NULL    |       |
++--------+---------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS asg_rubrics ("
 			"AsgCod INT NOT NULL,"
 			"RubCod INT NOT NULL,"
-		   "UNIQUE INDEX(AsgCod))");
+		   "UNIQUE INDEX(AsgCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table att_events *****/
 /*
@@ -294,7 +302,7 @@ mysql> DESCRIBE att_events;
 | Title             | varchar(2047) | NO   |     | NULL    |                |
 | Txt               | text          | NO   |     | NULL    |                |
 +-------------------+---------------+------+-----+---------+----------------+
-9 rows in set (0,00 sec)
+9 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS att_events ("
 			"AttCod INT NOT NULL AUTO_INCREMENT,"
@@ -307,7 +315,8 @@ mysql> DESCRIBE att_events;
 			"Title VARCHAR(2047) NOT NULL,"	// Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE
 			"Txt TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(AttCod),"
-		   "INDEX(CrsCod,Hidden))");
+		   "INDEX(CrsCod,Hidden)"
+		   ") ENGINE=MyISAM");
 
    /***** Table att_groups *****/
 /*
@@ -323,7 +332,8 @@ mysql> DESCRIBE att_groups;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS att_groups ("
 			"AttCod INT NOT NULL,"
 			"GrpCod INT NOT NULL,"
-		   "UNIQUE INDEX(AttCod,GrpCod))");
+		   "UNIQUE INDEX(AttCod,GrpCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table att_users *****/
 /*
@@ -346,7 +356,8 @@ mysql> DESCRIBE att_users;
 			"CommentStd TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 			"CommentTch TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(AttCod,UsrCod),"
-		   "INDEX(UsrCod))");
+		   "INDEX(UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table ban_banners *****/
 /*
@@ -361,7 +372,7 @@ mysql> DESCRIBE ban_banners;
 | Img       | varchar(255)  | NO   |     | NULL    |                |
 | WWW       | varchar(255)  | NO   |     | NULL    |                |
 +-----------+---------------+------+-----+---------+----------------+
-6 rows in set (0,00 sec)
+6 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS ban_banners ("
 			"BanCod INT NOT NULL AUTO_INCREMENT,"
@@ -371,7 +382,8 @@ mysql> DESCRIBE ban_banners;
 			"Img VARCHAR(255) NOT NULL,"		// Ban_MAX_BYTES_IMAGE
 			"WWW VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
 		   "UNIQUE INDEX(BanCod),"
-		   "INDEX(Hidden))");
+		   "INDEX(Hidden)"
+		   ") ENGINE=MyISAM");
 
    /***** Table bld_buildings *****/
 /*
@@ -394,7 +406,8 @@ mysql> DESCRIBE bld_buildings;
 			"FullName VARCHAR(2047) NOT NULL,"	// Nam_MAX_BYTES_FULL_NAME
 			"Location VARCHAR(2047) NOT NULL,"	// Bld_MAX_BYTES_LOCATION
 		   "UNIQUE INDEX(BldCod),"
-		   "INDEX(CtrCod))");
+		   "INDEX(CtrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table brw_caches *****/
 /*
@@ -406,13 +419,14 @@ mysql> DESCRIBE brw_caches;
 | PrivPath  | text     | NO   |     | NULL    |       |
 | TmpPubDir | text     | NO   |     | NULL    |       |
 +-----------+----------+------+-----+---------+-------+
-3 rows in set (0.01 sec)
+3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS brw_caches ("
 			"SessionId CHAR(43) NOT NULL,"				// Cns_BYTES_SESSION_ID
 			"PrivPath VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
 			"TmpPubDir VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
-		   "UNIQUE INDEX(SessionId))");
+		   "UNIQUE INDEX(SessionId)"
+		   ") ENGINE=MyISAM");
 
    /***** Table brw_clipboards *****/
 /*
@@ -440,7 +454,8 @@ mysql> DESCRIBE brw_clipboards;
 			"CopyTime TIMESTAMP,"
 		   "UNIQUE INDEX(UsrCod),"
 		   "INDEX(FileBrowser,Cod),"
-		   "INDEX(WorksUsrCod))");
+		   "INDEX(WorksUsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table brw_expanded *****/
 /*
@@ -466,7 +481,8 @@ mysql> DESCRIBE brw_expanded;
 			"ClickTime DATETIME NOT NULL,"
 		   "INDEX(UsrCod,FileBrowser,Cod),"
 		   "INDEX(FileBrowser,Cod),"
-		   "INDEX(WorksUsrCod))");
+		   "INDEX(WorksUsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table brw_files *****/
 /*
@@ -501,7 +517,8 @@ mysql> DESCRIBE brw_files;
 		   "UNIQUE INDEX(FilCod),"
 		   "INDEX(FileBrowser,Cod,ZoneUsrCod),"
 		   "INDEX(ZoneUsrCod),"
-		   "INDEX(PublisherUsrCod))");
+		   "INDEX(PublisherUsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table brw_last *****/
 /*
@@ -514,14 +531,15 @@ mysql> DESCRIBE brw_last;
 | Cod         | int(11)    | NO   | PRI | -1      |       |
 | LastClick   | datetime   | NO   |     | NULL    |       |
 +-------------+------------+------+-----+---------+-------+
-4 rows in set (0.01 sec)
+4 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS brw_last ("
 			"UsrCod INT NOT NULL,"
 			"FileBrowser TINYINT NOT NULL,"
 			"Cod INT NOT NULL DEFAULT -1,"
-		   "LastClick DATETIME NOT NULL,"
-		   "UNIQUE INDEX(UsrCod,FileBrowser,Cod))");
+			"LastClick DATETIME NOT NULL,"
+		   "UNIQUE INDEX(UsrCod,FileBrowser,Cod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table brw_sizes *****/
 /*
@@ -548,7 +566,8 @@ mysql> DESCRIBE brw_sizes;
 			"NumFiles INT NOT NULL,"
 			"TotalSize BIGINT NOT NULL,"
 		   "UNIQUE INDEX(FileBrowser,Cod,ZoneUsrCod),"
-		   "INDEX(ZoneUsrCod))");
+		   "INDEX(ZoneUsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table brw_views *****/
 /*
@@ -567,7 +586,8 @@ mysql> DESCRIBE brw_views;
 			"UsrCod INT NOT NULL,"
 			"NumViews INT NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(FilCod,UsrCod),"
-		   "INDEX(UsrCod))");
+		   "INDEX(UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table cfe_exams *****/
 /*
@@ -593,7 +613,7 @@ mysql> DESCRIBE cfe_exams;
 | MatAllowed  | text          | NO   |     | NULL    |                |
 | OtherInfo   | text          | NO   |     | NULL    |                |
 +-------------+---------------+------+-----+---------+----------------+
-17 rows in set (0,00 sec)
+17 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS cfe_exams ("
 			"ExaCod INT NOT NULL AUTO_INCREMENT,"
@@ -615,7 +635,8 @@ mysql> DESCRIBE cfe_exams;
 			"OtherInfo TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(ExaCod),"
 		   "INDEX(CrsCod,Status),"
-		   "INDEX(Status))");
+		   "INDEX(Status)"
+		   ") ENGINE=MyISAM");
 
    /***** Table cht_rooms *****/
 /*
@@ -626,12 +647,13 @@ mysql> DESCRIBE cht_rooms;
 | RoomCode | varchar(16) | NO   | PRI | NULL    |       |
 | NumUsrs  | int(11)     | NO   |     | NULL    |       |
 +----------+-------------+------+-----+---------+-------+
-2 rows in set (0,00 sec)
+2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS cht_rooms ("
 			"RoomCode VARCHAR(16) NOT NULL,"	// Cht_MAX_BYTES_ROOM_CODE
 			"NumUsrs INT NOT NULL,"
-		   "UNIQUE INDEX(RoomCode))");
+		   "UNIQUE INDEX(RoomCode)"
+		   ") ENGINE=MyISAM");
 
    /***** Table crs_bibliography *****/
 /*
@@ -639,9 +661,9 @@ mysql> DESCRIBE crs_bibliography;
 +-----------+---------------+------+-----+---------+----------------+
 | Field     | Type          | Null | Key | Default | Extra          |
 +-----------+---------------+------+-----+---------+----------------+
-| ItmCod    | int           | NO   | PRI | NULL    | auto_increment |
-| NodCod    | int           | NO   | MUL | -1      |                |
-| ItmInd    | int           | NO   |     | 0       |                |
+| ItmCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
+| NodCod    | int(11)       | NO   | MUL | -1      |                |
+| ItmInd    | int(11)       | NO   |     | 0       |                |
 | Hidden    | enum('N','Y') | NO   |     | N       |                |
 | Authors   | varchar(2047) | NO   |     | NULL    |                |
 | Title     | varchar(2047) | NO   |     | NULL    |                |
@@ -651,7 +673,7 @@ mysql> DESCRIBE crs_bibliography;
 | Id        | varchar(2047) | NO   |     | NULL    |                |
 | URL       | varchar(255)  | NO   |     | NULL    |                |
 +-----------+---------------+------+-----+---------+----------------+
-11 rows in set (0,00 sec)
+11 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_bibliography ("
 			"ItmCod INT NOT NULL AUTO_INCREMENT,"
@@ -666,7 +688,8 @@ mysql> DESCRIBE crs_bibliography;
 			"Id VARCHAR(2047) NOT NULL,"		// Bib_MAX_BYTES_TITLE
 			"URL VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
 		   "UNIQUE INDEX(ItmCod),"
-		   "UNIQUE INDEX(NodCod,ItmInd))");
+		   "UNIQUE INDEX(NodCod,ItmInd)"
+		   ") ENGINE=MyISAM");
 
    /***** Table crs_courses *****/
 /*
@@ -698,7 +721,8 @@ mysql> DESCRIBE crs_courses;
 			"NumIndicators INT NOT NULL DEFAULT -1,"
 		   "UNIQUE INDEX(CrsCod),"
 		   "INDEX(DegCod,Year),"
-		   "INDEX(Status))");
+		   "INDEX(Status)"
+		   ") ENGINE=MyISAM");
 
    /***** Table crs_info_read *****/
 /*
@@ -724,7 +748,8 @@ mysql> DESCRIBE crs_info_read;
 			"'FAQ',"
 			"'links',"
 			"'assessment') NOT NULL,"
-		   "UNIQUE INDEX(UsrCod,CrsCod,InfoType))");
+		   "UNIQUE INDEX(UsrCod,CrsCod,InfoType)"
+		   ") ENGINE=MyISAM");
 
    /***** Table crs_info_src *****/
 /*
@@ -752,7 +777,8 @@ mysql> DESCRIBE crs_info_src;
 			"'assessment') NOT NULL,"
 			"InfoSrc ENUM('none','editor','plain_text','rich_text','page','URL') NOT NULL,"
 			"MustBeRead ENUM('N','Y') NOT NULL DEFAULT 'N',"
-		   "UNIQUE INDEX(CrsCod,InfoType))");
+		   "UNIQUE INDEX(CrsCod,InfoType)"
+		   ") ENGINE=MyISAM");
 
    /***** Table crs_info_txt *****/
 /*
@@ -765,7 +791,7 @@ mysql> DESCRIBE crs_info_txt;
 | InfoTxtHTML | longtext                                                                                   | NO   |     | NULL    |       |
 | InfoTxtMD   | longtext                                                                                   | NO   |     | NULL    |       |
 +-------------+--------------------------------------------------------------------------------------------+------+-----+---------+-------+
-4 rows in set (0.01 sec)
+4 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_info_txt ("
 			"CrsCod INT NOT NULL DEFAULT -1,"
@@ -780,7 +806,8 @@ mysql> DESCRIBE crs_info_txt;
 			"'assessment') NOT NULL,"
 			"InfoTxtHTML LONGTEXT NOT NULL,"
 			"InfoTxtMD LONGTEXT NOT NULL,"
-		   "UNIQUE INDEX(CrsCod,InfoType))");
+		   "UNIQUE INDEX(CrsCod,InfoType)"
+		   ") ENGINE=MyISAM");
 
       /***** Table crs_last *****/
 /*
@@ -797,7 +824,8 @@ mysql> DESCRIBE crs_last;
 			"CrsCod INT NOT NULL,"
 			"LastTime DATETIME NOT NULL,"
 		   "UNIQUE INDEX(CrsCod),"
-		   "INDEX(LastTime))");
+		   "INDEX(LastTime)"
+		   ") ENGINE=MyISAM");
 
    /***** Table crs_links *****/
 /*
@@ -805,15 +833,15 @@ mysql> DESCRIBE crs_links;
 +-------------+---------------+------+-----+---------+----------------+
 | Field       | Type          | Null | Key | Default | Extra          |
 +-------------+---------------+------+-----+---------+----------------+
-| ItmCod      | int           | NO   | PRI | NULL    | auto_increment |
-| NodCod      | int           | NO   | MUL | -1      |                |
-| ItmInd      | int           | NO   |     | 0       |                |
+| ItmCod      | int(11)       | NO   | PRI | NULL    | auto_increment |
+| NodCod      | int(11)       | NO   | MUL | -1      |                |
+| ItmInd      | int(11)       | NO   |     | 0       |                |
 | Hidden      | enum('N','Y') | NO   |     | N       |                |
 | Title       | varchar(2047) | NO   |     | NULL    |                |
 | Description | varchar(2047) | NO   |     | NULL    |                |
 | WWW         | varchar(255)  | NO   |     | NULL    |                |
 +-------------+---------------+------+-----+---------+----------------+
-7 rows in set (0,00 sec)
+7 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_links ("
 			"ItmCod INT NOT NULL AUTO_INCREMENT,"
@@ -824,7 +852,8 @@ mysql> DESCRIBE crs_links;
 			"Description VARCHAR(2047) NOT NULL,"	// Lnk_MAX_BYTES_TITLE
 			"WWW VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
 		   "UNIQUE INDEX(ItmCod),"
-		   "UNIQUE INDEX(NodCod,ItmInd))");
+		   "UNIQUE INDEX(NodCod,ItmInd)"
+		   ") ENGINE=MyISAM");
 
    /***** Table crs_record_fields *****/
 /*
@@ -838,7 +867,7 @@ mysql> DESCRIBE crs_record_fields;
 | NumLines   | int(11)       | NO   |     | NULL    |                |
 | Visibility | tinyint(4)    | NO   |     | NULL    |                |
 +------------+---------------+------+-----+---------+----------------+
-5 rows in set (0,00 sec)
+5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_record_fields ("
 			"FieldCod INT NOT NULL AUTO_INCREMENT,"
@@ -847,7 +876,8 @@ mysql> DESCRIBE crs_record_fields;
 			"NumLines INT NOT NULL,"
 			"Visibility TINYINT NOT NULL,"
 		   "UNIQUE INDEX(FieldCod),"
-		   "INDEX(CrsCod))");
+		   "INDEX(CrsCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table crs_records *****/
 /*
@@ -855,8 +885,8 @@ mysql> DESCRIBE crs_records;
 +----------+---------+------+-----+---------+-------+
 | Field    | Type    | Null | Key | Default | Extra |
 +----------+---------+------+-----+---------+-------+
-| UsrCod   | int(11) | NO   | PRI | NULL    |       |
 | FieldCod | int(11) | NO   | PRI | NULL    |       |
+| UsrCod   | int(11) | NO   | PRI | NULL    |       |
 | Txt      | text    | NO   |     | NULL    |       |
 +----------+---------+------+-----+---------+-------+
 3 rows in set (0.00 sec)
@@ -865,7 +895,8 @@ mysql> DESCRIBE crs_records;
 			"FieldCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
 			"Txt TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
-		   "UNIQUE INDEX(FieldCod,UsrCod))");
+		   "UNIQUE INDEX(FieldCod,UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table crs_requests *****/
 /*
@@ -879,7 +910,7 @@ mysql> DESCRIBE crs_requests;
 | Role        | tinyint(4) | NO   |     | 0       |                |
 | RequestTime | datetime   | NO   |     | NULL    |                |
 +-------------+------------+------+-----+---------+----------------+
-5 rows in set (0.01 sec)
+5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_requests ("
 			"ReqCod INT NOT NULL AUTO_INCREMENT,"
@@ -889,7 +920,8 @@ mysql> DESCRIBE crs_requests;
 			"RequestTime DATETIME NOT NULL,"
 		   "UNIQUE INDEX(ReqCod),"
 		   "UNIQUE INDEX(CrsCod,UsrCod),"
-		   "INDEX(UsrCod))");
+		   "INDEX(UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table crs_user_settings *****/
 /*
@@ -897,18 +929,18 @@ mysql> DESCRIBE crs_user_settings;
 +----------------+---------------------------+------+-----+------------+-------+
 | Field          | Type                      | Null | Key | Default    | Extra |
 +----------------+---------------------------+------+-----+------------+-------+
-| UsrCod         | int                       | NO   | PRI | NULL       |       |
-| CrsCod         | int                       | NO   | PRI | NULL       |       |
-| LastDowGrpCod  | int                       | NO   |     | -1         |       |
-| LastComGrpCod  | int                       | NO   |     | -1         |       |
-| LastAssGrpCod  | int                       | NO   |     | -1         |       |
-| NumAccTst      | int                       | NO   |     | 0          |       |
+| UsrCod         | int(11)                   | NO   | PRI | NULL       |       |
+| CrsCod         | int(11)                   | NO   | PRI | NULL       |       |
+| LastDowGrpCod  | int(11)                   | NO   |     | -1         |       |
+| LastComGrpCod  | int(11)                   | NO   |     | -1         |       |
+| LastAssGrpCod  | int(11)                   | NO   |     | -1         |       |
+| NumAccTst      | int(11)                   | NO   |     | 0          |       |
 | LastAccTst     | datetime                  | NO   |     | NULL       |       |
-| NumQstsLastTst | int                       | NO   |     | 0          |       |
+| NumQstsLastTst | int(11)                   | NO   |     | 0          |       |
 | UsrListType    | enum('classphoto','list') | NO   |     | classphoto |       |
 | ListWithPhotos | enum('N','Y')             | NO   |     | Y          |       |
 +----------------+---------------------------+------+-----+------------+-------+
-10 rows in set (0,01 sec)
+10 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_user_settings ("
 			"UsrCod INT NOT NULL,"
@@ -921,7 +953,8 @@ mysql> DESCRIBE crs_user_settings;
 			"NumQstsLastTst INT NOT NULL DEFAULT 0,"
 			"UsrListType ENUM('classphoto','list') NOT NULL DEFAULT 'classphoto',"
 			"ListWithPhotos ENUM('N','Y') NOT NULL DEFAULT 'Y',"
-		   "UNIQUE INDEX(UsrCod,CrsCod))");
+		   "UNIQUE INDEX(UsrCod,CrsCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table crs_users *****/
 /*
@@ -948,7 +981,8 @@ mysql> DESCRIBE crs_users;
 		   "UNIQUE INDEX(Role,CrsCod,UsrCod),"
 		   "UNIQUE INDEX(Role,UsrCod,CrsCod),"
 		   "INDEX(CrsCod,Role),"
-		   "INDEX(UsrCod,Role))");
+		   "INDEX(UsrCod,Role)"
+		   ") ENGINE=MyISAM");
 
    /***** Table ctr_centers *****/
 /*
@@ -987,7 +1021,8 @@ mysql> DESCRIBE ctr_centers;
 		   "UNIQUE INDEX(CtrCod),"
 		   "INDEX(InsCod),"
 		   "INDEX(PlcCod),"
-		   "INDEX(Status))");
+		   "INDEX(Status)"
+		   ") ENGINE=MyISAM");
 
    /***** Table cty_countrs *****/
 /*
@@ -995,7 +1030,7 @@ mysql> DESCRIBE cty_countrs;
 +----------------+--------------+------+-----+---------+-------+
 | Field          | Type         | Null | Key | Default | Extra |
 +----------------+--------------+------+-----+---------+-------+
-| CtyCod         | int          | NO   | PRI | NULL    |       |
+| CtyCod         | int(11)      | NO   | PRI | NULL    |       |
 | Alpha2         | char(2)      | NO   | UNI | NULL    |       |
 | MapAttribution | text         | NO   |     | NULL    |       |
 | Name_ca        | varchar(767) | NO   | MUL | NULL    |       |
@@ -1019,7 +1054,7 @@ mysql> DESCRIBE cty_countrs;
 | WWW_pt         | varchar(255) | NO   |     | NULL    |       |
 | WWW_tr         | varchar(255) | NO   |     | NULL    |       |
 +----------------+--------------+------+-----+---------+-------+
-23 rows in set (0,00 sec)
+23 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS cty_countrs ("
 			"CtyCod INT NOT NULL,"
@@ -1055,7 +1090,8 @@ mysql> DESCRIBE cty_countrs;
 		   "INDEX(Name_it),"
 		   "INDEX(Name_pl),"
 		   "INDEX(Name_pt),"
-		   "INDEX(Name_tr))");	// ISO 3166-1 country codes
+		   "INDEX(Name_tr)"
+		   ") ENGINE=MyISAM");	// ISO 3166-1 country codes
 
    /***** Table dbg_debug *****/
 /*
@@ -1066,12 +1102,13 @@ mysql> DESCRIBE dbg_debug;
 | DebugTime | datetime | NO   | MUL | NULL    |       |
 | Txt       | text     | NO   |     | NULL    |       |
 +-----------+----------+------+-----+---------+-------+
-2 rows in set (0,01 sec)
+2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS dbg_debug ("
 			"DebugTime DATETIME NOT NULL,"
 			"Txt TEXT NOT NULL,"
-		   "INDEX(DebugTime))");
+		   "INDEX(DebugTime)"
+		   ") ENGINE=MyISAM");
 
    /***** Table deg_degrees *****/
 /*
@@ -1088,7 +1125,7 @@ mysql> DESCRIBE deg_degrees;
 | FullName        | varchar(2047) | NO   |     | NULL    |                |
 | WWW             | varchar(255)  | NO   |     | NULL    |                |
 +-----------------+---------------+------+-----+---------+----------------+
-8 rows in set (0,00 sec)
+8 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS deg_degrees ("
 			"DegCod INT NOT NULL AUTO_INCREMENT,"
@@ -1102,7 +1139,8 @@ mysql> DESCRIBE deg_degrees;
 		   "UNIQUE INDEX(DegCod),"
 		   "INDEX(CtrCod),"
 		   "INDEX(DegTypCod),"
-		   "INDEX(Status))");
+		   "INDEX(Status)"
+		   ") ENGINE=MyISAM");
 
    /***** Table deg_types *****/
 /*
@@ -1113,12 +1151,13 @@ mysql> DESCRIBE deg_types;
 | DegTypCod  | int(11)      | NO   | PRI | NULL    | auto_increment |
 | DegTypName | varchar(511) | NO   |     | NULL    |                |
 +------------+--------------+------+-----+---------+----------------+
-2 rows in set (0,00 sec)
+2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS deg_types ("
 			"DegTypCod INT NOT NULL AUTO_INCREMENT,"
 			"DegTypName VARCHAR(511) NOT NULL,"	// Deg_MAX_BYTES_DEGREE_TYPE_NAME
-		   "UNIQUE INDEX(DegTypCod))");
+		   "UNIQUE INDEX(DegTypCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table dpt_departments *****/
 /*
@@ -1132,7 +1171,7 @@ mysql> DESCRIBE dpt_departments;
 | FullName  | varchar(2047) | NO   |     | NULL    |                |
 | WWW       | varchar(255)  | NO   |     | NULL    |                |
 +-----------+---------------+------+-----+---------+----------------+
-5 rows in set (0,00 sec)
+5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS dpt_departments ("
 			"DptCod INT NOT NULL AUTO_INCREMENT,"
@@ -1141,7 +1180,8 @@ mysql> DESCRIBE dpt_departments;
 			"FullName VARCHAR(2047) NOT NULL,"	// Nam_MAX_BYTES_FULL_NAME
 			"WWW VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
 		   "UNIQUE INDEX(DptCod),"
-		   "INDEX(InsCod))");
+		   "INDEX(InsCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table exa_exams *****/
 /*
@@ -1170,7 +1210,8 @@ mysql> DESCRIBE exa_exams;
 			"Title VARCHAR(2047) NOT NULL,"	// Exa_MAX_BYTES_TITLE
 			"Txt TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(ExaCod),"
-		   "INDEX(CrsCod))");
+		   "INDEX(CrsCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table exa_groups *****/
 /*
@@ -1186,7 +1227,8 @@ mysql> DESCRIBE exa_groups;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_groups ("
 			"SesCod INT NOT NULL,"
 			"GrpCod INT NOT NULL,"
-		   "UNIQUE INDEX(SesCod,GrpCod))");
+		   "UNIQUE INDEX(SesCod,GrpCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table exa_log *****/
 /*
@@ -1215,7 +1257,8 @@ mysql> DESCRIBE exa_log;
 			"IP CHAR(15) NOT NULL,"		// Cns_MAX_BYTES_IP
 		   "UNIQUE INDEX(LogCod),"
 		   "UNIQUE INDEX(PrnCod,LogCod),"
-		   "INDEX(ClickTime))");
+		   "INDEX(ClickTime)"
+		   ") ENGINE=MyISAM");
 
    /***** Table exa_log_sessions *****/
 /*
@@ -1235,7 +1278,8 @@ mysql> DESCRIBE exa_log_sessions;
 			"PrnCod INT NOT NULL,"
 			"SessionId CHAR(43) NOT NULL,"	// Cns_BYTES_SESSION_ID
 		   "UNIQUE INDEX(LogCod),"
-		   "UNIQUE INDEX(PrnCod,LogCod))");
+		   "UNIQUE INDEX(PrnCod,LogCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table exa_log_user_agents *****/
 /*
@@ -1255,7 +1299,8 @@ mysql> DESCRIBE exa_log_user_agents;
 			"PrnCod INT NOT NULL,"
 			"UserAgent TEXT NOT NULL,"
 		   "UNIQUE INDEX(LogCod),"
-		   "UNIQUE INDEX(PrnCod,LogCod))");
+		   "UNIQUE INDEX(PrnCod,LogCod)"
+		   ") ENGINE=MyISAM");
 
 /***** Table exa_print_questions *****/
 /*
@@ -1271,7 +1316,7 @@ mysql> DESCRIBE exa_print_questions;
 | Indexes | text    | NO   |     | NULL    |       |
 | Answers | text    | NO   |     | NULL    |       |
 +---------+---------+------+-----+---------+-------+
-7 rows in set (0.01 sec)
+7 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_print_questions ("
 			"PrnCod INT NOT NULL,"
@@ -1281,7 +1326,8 @@ mysql> DESCRIBE exa_print_questions;
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
 			"Indexes TEXT NOT NULL,"	// Tst_MAX_BYTES_INDEXES_ONE_QST
 			"Answers TEXT NOT NULL,"	// Tst_MAX_BYTES_ANSWERS_ONE_QST
-		   "UNIQUE INDEX(PrnCod,QstCod))");
+		   "UNIQUE INDEX(PrnCod,QstCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table exa_prints *****/
 /*
@@ -1289,16 +1335,16 @@ mysql> DESCRIBE exa_prints;
 +-----------------+----------+------+-----+---------+----------------+
 | Field           | Type     | Null | Key | Default | Extra          |
 +-----------------+----------+------+-----+---------+----------------+
-| PrnCod          | int      | NO   | PRI | NULL    | auto_increment |
-| SesCod          | int      | NO   | MUL | NULL    |                |
-| UsrCod          | int      | NO   |     | NULL    |                |
+| PrnCod          | int(11)  | NO   | PRI | NULL    | auto_increment |
+| SesCod          | int(11)  | NO   | MUL | NULL    |                |
+| UsrCod          | int(11)  | NO   |     | NULL    |                |
 | StartTime       | datetime | NO   |     | NULL    |                |
 | EndTime         | datetime | NO   |     | NULL    |                |
-| NumQsts         | int      | NO   |     | 0       |                |
-| NumQstsNotBlank | int      | NO   |     | 0       |                |
+| NumQsts         | int(11)  | NO   |     | 0       |                |
+| NumQstsNotBlank | int(11)  | NO   |     | 0       |                |
 | Score           | double   | NO   |     | 0       |                |
 +-----------------+----------+------+-----+---------+----------------+
-8 rows in set (0,00 sec)
+8 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_prints ("
 			"PrnCod INT NOT NULL AUTO_INCREMENT,"
@@ -1310,7 +1356,8 @@ mysql> DESCRIBE exa_prints;
 			"NumQstsNotBlank INT NOT NULL DEFAULT 0,"
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(PrnCod),"
-		   "UNIQUE INDEX(SesCod,UsrCod))");
+		   "UNIQUE INDEX(SesCod,UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table exa_sessions *****/
 /*
@@ -1318,19 +1365,19 @@ mysql> DESCRIBE exa_sessions;
 +----------------+-------------------------------+------+-----+---------+----------------+
 | Field          | Type                          | Null | Key | Default | Extra          |
 +----------------+-------------------------------+------+-----+---------+----------------+
-| SesCod         | int                           | NO   | PRI | NULL    | auto_increment |
-| ExaCod         | int                           | NO   | MUL | NULL    |                |
+| SesCod         | int(11)                       | NO   | PRI | NULL    | auto_increment |
+| ExaCod         | int(11)                       | NO   | MUL | NULL    |                |
 | Hidden         | enum('N','Y')                 | NO   |     | N       |                |
-| UsrCod         | int                           | NO   |     | NULL    |                |
+| UsrCod         | int(11)                       | NO   |     | NULL    |                |
 | Modality       | enum('none','online','paper') | NO   |     | none    |                |
 | StartTime      | datetime                      | NO   |     | NULL    |                |
 | EndTime        | datetime                      | NO   |     | NULL    |                |
 | Title          | varchar(2047)                 | NO   |     | NULL    |                |
 | ShowUsrResults | enum('N','Y')                 | NO   |     | N       |                |
-| NumCols        | tinyint                       | NO   |     | 0       |                |
+| NumCols        | tinyint(4)                    | NO   |     | 0       |                |
 | ShowPhotos     | enum('N','Y')                 | NO   |     | Y       |                |
 +----------------+-------------------------------+------+-----+---------+----------------+
-11 rows in set (0,00 sec)
+11 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_sessions ("
 			"SesCod INT NOT NULL AUTO_INCREMENT,"
@@ -1345,7 +1392,8 @@ mysql> DESCRIBE exa_sessions;
 			"NumCols TINYINT NOT NULL DEFAULT 0,"	// 0 means not set ==> use default
 			"ShowPhotos ENUM('N','Y') NOT NULL DEFAULT 'Y',"
 		   "UNIQUE INDEX(SesCod),"
-		   "INDEX(ExaCod))");
+		   "INDEX(ExaCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table exa_set_answers *****/
 /*
@@ -1370,7 +1418,8 @@ mysql> DESCRIBE exa_set_answers;
 			"MedCod INT NOT NULL DEFAULT -1,"
 			"Correct ENUM('N','Y') NOT NULL,"
 		   "UNIQUE INDEX(QstCod,AnsInd),"
-		   "INDEX(MedCod))");
+		   "INDEX(MedCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table exa_set_questions *****/
 /*
@@ -1400,7 +1449,8 @@ mysql> DESCRIBE exa_set_questions;
 			"MedCod INT NOT NULL DEFAULT -1,"
 		   "UNIQUE INDEX(QstCod),"
 		   "UNIQUE INDEX(SetCod,QstCod),"
-		   "INDEX(MedCod))");
+		   "INDEX(MedCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table exa_sets *****/
 /*
@@ -1409,7 +1459,7 @@ mysql> DESCRIBE exa_sets;
 | Field          | Type          | Null | Key | Default | Extra          |
 +----------------+---------------+------+-----+---------+----------------+
 | SetCod         | int(11)       | NO   | PRI | NULL    | auto_increment |
-| ExaCod         | int(11)       | NO   |     | NULL    |                |
+| ExaCod         | int(11)       | NO   | MUL | NULL    |                |
 | SetInd         | int(11)       | NO   |     | NULL    |                |
 | NumQstsToPrint | int(11)       | NO   |     | 0       |                |
 | Title          | varchar(2047) | NO   |     | NULL    |                |
@@ -1423,7 +1473,8 @@ mysql> DESCRIBE exa_sets;
 			"NumQstsToPrint INT NOT NULL DEFAULT 0,"
 			"Title VARCHAR(2047) NOT NULL,"	// ExaSet_MAX_BYTES_TITLE
 		   "UNIQUE INDEX(SetCod),"
-		   "UNIQUE INDEX(ExaCod,SetInd))");
+		   "UNIQUE INDEX(ExaCod,SetInd)"
+		   ") ENGINE=MyISAM");
 
    /***** Table faq_questions *****/
 /*
@@ -1431,14 +1482,14 @@ mysql> DESCRIBE faq_questions;
 +----------+---------------+------+-----+---------+----------------+
 | Field    | Type          | Null | Key | Default | Extra          |
 +----------+---------------+------+-----+---------+----------------+
-| ItmCod   | int           | NO   | PRI | NULL    | auto_increment |
-| NodCod   | int           | NO   | MUL | -1      |                |
-| ItmInd   | int           | NO   |     | 0       |                |
+| ItmCod   | int(11)       | NO   | PRI | NULL    | auto_increment |
+| NodCod   | int(11)       | NO   | MUL | -1      |                |
+| ItmInd   | int(11)       | NO   |     | 0       |                |
 | Hidden   | enum('N','Y') | NO   |     | N       |                |
 | Question | varchar(2047) | NO   |     | NULL    |                |
 | Answer   | text          | NO   |     | NULL    |                |
 +----------+---------------+------+-----+---------+----------------+
-6 rows in set (0,00 sec)
+6 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS faq_questions ("
 			"ItmCod INT NOT NULL AUTO_INCREMENT,"
@@ -1448,22 +1499,23 @@ mysql> DESCRIBE faq_questions;
 			"Question VARCHAR(2047) NOT NULL,"	// FAQ_MAX_BYTES_QUESTION
 			"Answer TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(ItmCod),"
-		   "UNIQUE INDEX(NodCod,ItmInd))");
+		   "UNIQUE INDEX(NodCod,ItmInd)"
+		   ") ENGINE=MyISAM");
 
    /***** Table fig_figures *****/
    /*
 mysql> DESCRIBE fig_figures;
-+-------------+-------------------------------------------+------+-----+-------------------+-----------------------------------------------+
-| Field       | Type                                      | Null | Key | Default           | Extra                                         |
-+-------------+-------------------------------------------+------+-----+-------------------+-----------------------------------------------+
-| Figure      | int                                       | NO   | PRI | NULL              |                                               |
-| Scope       | enum('Sys','Cty','Ins','Ctr','Deg','Crs') | NO   | PRI | Sys               |                                               |
-| Cod         | int                                       | NO   | PRI | -1                |                                               |
-| ValueInt    | int                                       | NO   |     | 0                 |                                               |
-| ValueDouble | double                                    | NO   |     | 0                 |                                               |
-| LastUpdate  | timestamp                                 | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
-+-------------+-------------------------------------------+------+-----+-------------------+-----------------------------------------------+
-6 rows in set (0.01 sec)
++-------------+-------------------------------------------+------+-----+-------------------+-----------------------------+
+| Field       | Type                                      | Null | Key | Default           | Extra                       |
++-------------+-------------------------------------------+------+-----+-------------------+-----------------------------+
+| Figure      | int(11)                                   | NO   | PRI | NULL              |                             |
+| Scope       | enum('Sys','Cty','Ins','Ctr','Deg','Crs') | NO   | PRI | Sys               |                             |
+| Cod         | int(11)                                   | NO   | PRI | -1                |                             |
+| ValueInt    | int(11)                                   | NO   |     | 0                 |                             |
+| ValueDouble | double                                    | NO   |     | 0                 |                             |
+| LastUpdate  | timestamp                                 | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++-------------+-------------------------------------------+------+-----+-------------------+-----------------------------+
+6 rows in set (0.00 sec)
    */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS fig_figures ("
 			"Figure INT NOT NULL,"
@@ -1472,7 +1524,8 @@ mysql> DESCRIBE fig_figures;
 			"ValueInt INT NOT NULL,"
 			"ValueDouble DOUBLE PRECISION NOT NULL,"
 			"LastUpdate TIMESTAMP,"
-		   "UNIQUE INDEX(Figure,Scope,Cod))");
+		   "UNIQUE INDEX(Figure,Scope,Cod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table fir_banned *****/
 /*
@@ -1492,7 +1545,8 @@ mysql> DESCRIBE fir_banned;
 			"UnbanTime DATETIME NOT NULL,"
 		   "INDEX(IP,UnbanTime),"
 		   "INDEX(BanTime),"
-		   "INDEX(UnbanTime));");
+		   "INDEX(UnbanTime)"
+		   ") ENGINE=MyISAM");
 
    /***** Table fir_log *****/
 /*
@@ -1502,9 +1556,9 @@ mysql> DESCRIBE fir_log;
 +-----------+----------+------+-----+---------+-------+
 | ClickTime | datetime | NO   | MUL | NULL    |       |
 | IP        | char(15) | NO   | MUL | NULL    |       |
-| UsrCod    | int      | NO   | MUL | -1      |       |
+| UsrCod    | int(11)  | NO   | MUL | -1      |       |
 +-----------+----------+------+-----+---------+-------+
-3 rows in set (0,00 sec)
+3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS fir_log ("
 			"ClickTime DATETIME NOT NULL,"
@@ -1512,18 +1566,19 @@ mysql> DESCRIBE fir_log;
 			"UsrCod INT NOT NULL DEFAULT -1,"
 		   "INDEX(ClickTime),"
 		   "INDEX(IP),"
-		   "INDEX(UsrCod))");
+		   "INDEX(UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table for_clipboards *****/
 /*
 mysql> DESCRIBE for_clipboards;
-+------------+-----------+------+-----+-------------------+-------+
-| Field      | Type      | Null | Key | Default           | Extra |
-+------------+-----------+------+-----+-------------------+-------+
-| ThrCod     | int(11)   | NO   | PRI | NULL              |       |
-| UsrCod     | int(11)   | NO   | UNI | NULL              |       |
-| TimeInsert | timestamp | NO   |     | CURRENT_TIMESTAMP |       |
-+------------+-----------+------+-----+-------------------+-------+
++------------+-----------+------+-----+-------------------+-----------------------------+
+| Field      | Type      | Null | Key | Default           | Extra                       |
++------------+-----------+------+-----+-------------------+-----------------------------+
+| ThrCod     | int(11)   | NO   | PRI | NULL              |                             |
+| UsrCod     | int(11)   | NO   | UNI | NULL              |                             |
+| TimeInsert | timestamp | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++------------+-----------+------+-----+-------------------+-----------------------------+
 3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS for_clipboards ("
@@ -1531,7 +1586,8 @@ mysql> DESCRIBE for_clipboards;
 			"UsrCod INT NOT NULL,"
 			"TimeInsert TIMESTAMP NOT NULL,"
 		   "UNIQUE INDEX(ThrCod),"
-		   "UNIQUE INDEX(UsrCod))");
+		   "UNIQUE INDEX(UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table for_disabled *****/
 /*
@@ -1549,7 +1605,8 @@ mysql> DESCRIBE for_disabled;
 			"PstCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
 			"DisableTime DATETIME NOT NULL,"
-		   "UNIQUE INDEX(PstCod))");
+		   "UNIQUE INDEX(PstCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table for_posts *****/
 /*
@@ -1584,39 +1641,41 @@ mysql> DESCRIBE for_posts;
 		   "INDEX(UsrCod),"
 		   "INDEX(CreatTime),"
 		   "INDEX(ModifTime),"
-		   "INDEX(MedCod))");
+		   "INDEX(MedCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table for_read *****/
 /*
 mysql> DESCRIBE for_read;
-+----------+----------+------+-----+---------------------+-------+
-| Field    | Type     | Null | Key | Default             | Extra |
-+----------+----------+------+-----+---------------------+-------+
-| ThrCod   | int(11)  | NO   | PRI | 0                   |       |
-| UsrCod   | int(11)  | NO   | PRI | NULL                |       |
-| ReadTime | datetime | NO   |     | 0000-00-00 00:00:00 |       |
-+----------+----------+------+-----+---------------------+-------+
++----------+----------+------+-----+---------+-------+
+| Field    | Type     | Null | Key | Default | Extra |
++----------+----------+------+-----+---------+-------+
+| ThrCod   | int(11)  | NO   | PRI | NULL    |       |
+| UsrCod   | int(11)  | NO   | PRI | NULL    |       |
+| ReadTime | datetime | NO   |     | NULL    |       |
++----------+----------+------+-----+---------+-------+
 3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS for_read ("
 			"ThrCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
 			"ReadTime DATETIME NOT NULL,"
-		   "UNIQUE INDEX(ThrCod,UsrCod))");
+		   "UNIQUE INDEX(ThrCod,UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table for_threads *****/
 /*
 mysql> DESCRIBE for_threads;
-+-------------+---------+------+-----+---------+----------------+
-| Field       | Type    | Null | Key | Default | Extra          |
-+-------------+---------+------+-----+---------+----------------+
-| ThrCod      | int     | NO   | PRI | NULL    | auto_increment |
-| ForumType   | tinyint | NO   | MUL | NULL    |                |
-| HieCod      | int     | NO   | MUL | -1      |                |
-| FirstPstCod | int     | NO   | UNI | NULL    |                |
-| LastPstCod  | int     | NO   | UNI | NULL    |                |
-+-------------+---------+------+-----+---------+----------------+
-5 rows in set (0,00 sec)
++-------------+------------+------+-----+---------+----------------+
+| Field       | Type       | Null | Key | Default | Extra          |
++-------------+------------+------+-----+---------+----------------+
+| ThrCod      | int(11)    | NO   | PRI | NULL    | auto_increment |
+| ForumType   | tinyint(4) | NO   | MUL | NULL    |                |
+| HieCod      | int(11)    | NO   | MUL | -1      |                |
+| FirstPstCod | int(11)    | NO   | UNI | NULL    |                |
+| LastPstCod  | int(11)    | NO   | UNI | NULL    |                |
++-------------+------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS for_threads ("
 			"ThrCod INT NOT NULL AUTO_INCREMENT,"
@@ -1628,7 +1687,8 @@ mysql> DESCRIBE for_threads;
 		   "INDEX(ForumType),"
 		   "INDEX(HieCod),"
 		   "UNIQUE INDEX(FirstPstCod),"
-		   "UNIQUE INDEX(LastPstCod))");
+		   "UNIQUE INDEX(LastPstCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table gam_games *****/
 /*
@@ -1657,7 +1717,8 @@ mysql> DESCRIBE gam_games;
 			"Title VARCHAR(2047) NOT NULL,"	// Gam_MAX_BYTES_TITLE
 			"Txt TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(GamCod),"
-		   "INDEX(CrsCod))");
+		   "INDEX(CrsCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table gam_questions *****/
 /*
@@ -1676,7 +1737,8 @@ mysql> DESCRIBE gam_questions;
 			"QstInd INT NOT NULL,"
 			"QstCod INT NOT NULL,"
 		   "UNIQUE INDEX(GamCod,QstInd),"
-		   "UNIQUE INDEX(GamCod,QstCod))");
+		   "UNIQUE INDEX(GamCod,QstCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table grp_groups *****/
 /*
@@ -1704,7 +1766,8 @@ mysql> DESCRIBE grp_groups;
 			"FileZones ENUM('N','Y') NOT NULL DEFAULT 'N',"
 		   "UNIQUE INDEX(GrpCod),"
 		   "INDEX(GrpTypCod),"
-		   "INDEX(RooCod))");
+		   "INDEX(RooCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table grp_types *****/
 /*
@@ -1731,7 +1794,8 @@ mysql> DESCRIBE grp_types;
 			"MustBeOpened ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"OpenTime DATETIME NOT NULL,"
 		   "UNIQUE INDEX(GrpTypCod),"
-		   "INDEX(CrsCod))");
+		   "INDEX(CrsCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table grp_users *****/
 /*
@@ -1749,7 +1813,8 @@ mysql> DESCRIBE grp_users;
 			"UsrCod INT NOT NULL,"
 		   "UNIQUE INDEX(GrpCod,UsrCod),"
 		   "INDEX(GrpCod),"
-		   "INDEX(UsrCod))");
+		   "INDEX(UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table hld_holidays *****/
 /*
@@ -1777,7 +1842,8 @@ mysql> DESCRIBE hld_holidays;
 			"Name VARCHAR(2047) NOT NULL,"	// Hld_MAX_BYTES_HOLIDAY_NAME
 		   "UNIQUE INDEX (HldCod),"
 		   "INDEX(InsCod),"
-		   "INDEX(PlcCod))");
+		   "INDEX(PlcCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table ins_instits *****/
 /*
@@ -1805,7 +1871,8 @@ mysql> DESCRIBE ins_instits;
 			"WWW VARCHAR(255) NOT NULL,"					// WWW_MAX_BYTES_WWW
 		   "UNIQUE INDEX(InsCod),"
 		   "INDEX(CtyCod),"
-		   "INDEX(Status))");
+		   "INDEX(Status)"
+		   ") ENGINE=MyISAM");
 
    /***** Table lnk_links *****/
 /*
@@ -1825,7 +1892,8 @@ mysql> DESCRIBE lnk_links;
 			"ShortName VARCHAR(511) NOT NULL,"	// Nam_MAX_BYTES_SHRT_NAME
 			"FullName VARCHAR(2047) NOT NULL,"	// Nam_MAX_BYTES_FULL_NAME
 			"WWW VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
-		   "UNIQUE INDEX(LnkCod))");
+		   "UNIQUE INDEX(LnkCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table log *****/
 /*
@@ -1944,7 +2012,8 @@ mysql> DESCRIBE log_api;
 			"FunCod INT NOT NULL,"
 		   "UNIQUE INDEX(LogCod),"
 		   "INDEX(PlgCod),"
-		   "INDEX(FunCod))");
+		   "INDEX(FunCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table log_banners *****/
 /*
@@ -1962,7 +2031,8 @@ mysql> DESCRIBE log_banners;
 			"LogCod INT NOT NULL,"
 			"BanCod INT NOT NULL,"
 		   "UNIQUE INDEX(LogCod),"
-		   "INDEX(BanCod))");
+		   "INDEX(BanCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table log_comments *****/
 /*
@@ -1979,7 +2049,8 @@ mysql> DESCRIBE log_comments;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS log_comments ("
 			"LogCod INT NOT NULL,"
 			"Comments TEXT NOT NULL,"
-		   "UNIQUE INDEX(LogCod))");
+		   "UNIQUE INDEX(LogCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table log_recent *****/
 /*
@@ -2026,7 +2097,8 @@ mysql> DESCRIBE log_recent;
 		   "INDEX(DegCod),"
 		   "INDEX(CrsCod),"
 		   "INDEX(UsrCod),"
-		   "INDEX(ClickTime,Role))");
+		   "INDEX(ClickTime,Role)"
+		   ") ENGINE=MyISAM");
 
    /***** Table log_search *****/
 /*
@@ -2042,7 +2114,8 @@ mysql> DESCRIBE log_search;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS log_search ("
 			"LogCod INT NOT NULL,"
 			"SearchStr VARCHAR(2047) NOT NULL,"	// Sch_MAX_BYTES_STRING_TO_FIND
-		   "UNIQUE INDEX(LogCod))");
+		   "UNIQUE INDEX(LogCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table mch_answers *****/
 /*
@@ -2064,7 +2137,8 @@ mysql> DESCRIBE mch_answers;
 			"QstInd INT NOT NULL,"
 			"NumOpt TINYINT NOT NULL,"	// Number of button on screen (Always ordered: 0,1,2,3)
 			"AnsInd TINYINT NOT NULL,"	// Answer index (Can be shuffled: 0,3,1,2)
-		   "UNIQUE INDEX(MchCod,UsrCod,QstInd))");
+		   "UNIQUE INDEX(MchCod,UsrCod,QstInd)"
+		   ") ENGINE=MyISAM");
 
    /***** Table mch_groups *****/
 /*
@@ -2080,7 +2154,8 @@ mysql> DESCRIBE mch_groups;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_groups ("
 			"MchCod INT NOT NULL,"
 			"GrpCod INT NOT NULL,"
-		   "UNIQUE INDEX(MchCod,GrpCod))");
+		   "UNIQUE INDEX(MchCod,GrpCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table mch_indexes *****/
 /*
@@ -2098,7 +2173,8 @@ mysql> DESCRIBE mch_indexes;
 			"MchCod INT NOT NULL,"
 			"QstInd INT NOT NULL,"
 			"Indexes TEXT NOT NULL,"	// Tst_MAX_BYTES_INDEXES_ONE_QST
-		   "UNIQUE INDEX(MchCod,QstInd))");
+		   "UNIQUE INDEX(MchCod,QstInd)"
+		   ") ENGINE=MyISAM");
 
    /***** Table mch_matches *****/
 /*
@@ -2137,7 +2213,8 @@ mysql> DESCRIBE mch_matches;
 			"ShowQstResults ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N',"
 		   "UNIQUE INDEX(MchCod),"
-		   "INDEX(GamCod))");
+		   "INDEX(GamCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table mch_players *****/
 /*
@@ -2155,7 +2232,8 @@ mysql> DESCRIBE mch_players;
 			"MchCod INT NOT NULL,"
 	                "UsrCod INT NOT NULL,"
 		        "TS TIMESTAMP,"
-		   "UNIQUE INDEX(MchCod,UsrCod))");
+		   "UNIQUE INDEX(MchCod,UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table mch_playing *****/
 /*
@@ -2171,7 +2249,8 @@ mysql> DESCRIBE mch_playing;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_playing ("
 			"MchCod INT NOT NULL,"
 		        "TS TIMESTAMP,"
-		   "UNIQUE INDEX(MchCod))");
+		   "UNIQUE INDEX(MchCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table mch_results *****/
 /*
@@ -2197,7 +2276,8 @@ mysql> DESCRIBE mch_results;
 			"NumQsts INT NOT NULL DEFAULT 0,"
 			"NumQstsNotBlank INT NOT NULL DEFAULT 0,"
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
-		   "UNIQUE INDEX(MchCod,UsrCod))");
+		   "UNIQUE INDEX(MchCod,UsrCod)"
+		   ") ENGINE=MyISAM");
 
       /***** Table mch_times *****/
 /*
@@ -2215,7 +2295,8 @@ mysql> DESCRIBE mch_times;
 			"MchCod INT NOT NULL,"
 			"QstInd INT NOT NULL,"
 			"ElapsedTime TIME NOT NULL DEFAULT 0,"
-		   "UNIQUE INDEX(MchCod,QstInd))");
+		   "UNIQUE INDEX(MchCod,QstInd)"
+		   ") ENGINE=MyISAM");
 
    /***** Table med_media *****/
 /*
@@ -2246,7 +2327,8 @@ mysql> DESCRIBE med_media;
 			"URL VARCHAR(255) NOT NULL DEFAULT '',"		// WWW_MAX_BYTES_WWW
 			"Title VARCHAR(2047) NOT NULL DEFAULT '',"	// Med_MAX_BYTES_TITLE
 		   "UNIQUE INDEX(MedCod),"
-		   "INDEX(Type))");
+		   "INDEX(Type)"
+		   ") ENGINE=MyISAM");
 
    /***** Table mrk_marks *****/
 /*
@@ -2264,7 +2346,8 @@ mysql> DESCRIBE mrk_marks;
 			"FilCod INT NOT NULL,"
 			"Header INT NOT NULL,"
 			"Footer INT NOT NULL,"
-		   "UNIQUE INDEX(FilCod))");
+		   "UNIQUE INDEX(FilCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table msg_banned *****/
 /*
@@ -2280,7 +2363,8 @@ mysql> DESCRIBE msg_banned;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS msg_banned ("
 			"FromUsrCod INT NOT NULL,"
 			"ToUsrCod INT NOT NULL,"
-		   "UNIQUE INDEX(FromUsrCod,ToUsrCod))");
+		   "UNIQUE INDEX(FromUsrCod,ToUsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table msg_content *****/
 /*
@@ -2302,7 +2386,8 @@ mysql> DESCRIBE msg_content;
 			"MedCod INT NOT NULL DEFAULT -1,"
 		   "UNIQUE INDEX(MsgCod),"
 		   "FULLTEXT(Subject,Content),"
-		   "INDEX(MedCod)) ENGINE = MYISAM");
+		   "INDEX(MedCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table msg_content_deleted *****/
    /* TODO: Messages in msg_content_deleted older than a certain time
@@ -2326,7 +2411,8 @@ mysql> DESCRIBE msg_content_deleted;
 			"MedCod INT NOT NULL DEFAULT -1,"
 		   "UNIQUE INDEX(MsgCod),"
 		   "FULLTEXT(Subject,Content),"
-		   "INDEX(MedCod)) ENGINE = MYISAM");
+		   "INDEX(MedCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table msg_rcv *****/
 /*
@@ -2352,7 +2438,8 @@ mysql> DESCRIBE msg_rcv;
 			"Expanded ENUM('N','Y') NOT NULL DEFAULT 'N',"
 		   "UNIQUE INDEX (UsrCod,MsgCod),"
 		   "INDEX(MsgCod),"
-		   "INDEX(Notified))");
+		   "INDEX(Notified)"
+		   ") ENGINE=MyISAM");
 
    /***** Table msg_rcv_deleted *****/
 /*
@@ -2376,7 +2463,8 @@ mysql> DESCRIBE msg_rcv_deleted;
 			"Replied ENUM('N','Y') NOT NULL DEFAULT 'N',"
 		   "UNIQUE INDEX(UsrCod,MsgCod),"
 		   "INDEX(MsgCod),"
-		   "INDEX(Notified))");
+		   "INDEX(Notified)"
+		   ") ENGINE=MyISAM");
 
    /***** Table msg_snt *****/
 /*
@@ -2400,7 +2488,8 @@ mysql> DESCRIBE msg_snt;
 			"CreatTime DATETIME NOT NULL,"
 		   "UNIQUE INDEX(MsgCod),"
 		   "INDEX(CrsCod),"
-		   "INDEX(UsrCod))");
+		   "INDEX(UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table msg_snt_deleted *****/
 /*
@@ -2422,7 +2511,8 @@ mysql> DESCRIBE msg_snt_deleted;
 			"CreatTime DATETIME NOT NULL,"
 		   "UNIQUE INDEX(MsgCod),"
 		   "INDEX(CrsCod),"
-		   "INDEX(UsrCod))");
+		   "INDEX(UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table not_deleted *****/
 /*
@@ -2451,7 +2541,8 @@ mysql> DESCRIBE not_deleted;
 		   "UNIQUE INDEX(NotCod),"
 		   "INDEX(CrsCod),"
 		   "INDEX(UsrCod),"
-		   "INDEX(CreatTime))");
+		   "INDEX(CreatTime)"
+		   ") ENGINE=MyISAM");
 
    /***** Table not_notices *****/
 /*
@@ -2485,7 +2576,8 @@ mysql> DESCRIBE not_notices;
 		   "INDEX(CrsCod,Status),"
 		   "INDEX(UsrCod),"
 		   "INDEX(CreatTime),"
-		   "INDEX(Status))");
+		   "INDEX(Status)"
+		   ") ENGINE=MyISAM");
 
    /***** Table ntf_mail_domains *****/
 /*
@@ -2504,7 +2596,8 @@ mysql> DESCRIBE ntf_mail_domains;
 			"Domain VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_EMAIL_ADDRESS
 			"Info VARCHAR(2047) NOT NULL,"	// Mai_MAX_BYTES_MAIL_INFO
 		   "UNIQUE INDEX(MaiCod),"
-		   "UNIQUE INDEX(Domain))");
+		   "UNIQUE INDEX(Domain)"
+		   ") ENGINE=MyISAM");
 
    /***** Table ntf_notifications *****/
 /*
@@ -2543,7 +2636,8 @@ mysql> DESCRIBE ntf_notifications;
 		   "INDEX(NotifyEvent),"
 		   "INDEX(ToUsrCod),"
 		   "INDEX(CrsCod),"
-		   "INDEX(TimeNotif))");
+		   "INDEX(TimeNotif)"
+		   ") ENGINE=MyISAM");
 
    /***** Table plc_places *****/
 /*
@@ -2564,7 +2658,8 @@ mysql> DESCRIBE plc_places;
 			"ShortName VARCHAR(511) NOT NULL,"	// Nam_MAX_BYTES_SHRT_NAME
 			"FullName VARCHAR(2047) NOT NULL,"	// Nam_MAX_BYTES_FULL_NAME
 		   "UNIQUE INDEX(PlcCod),"
-		   "INDEX(InsCod))");
+		   "INDEX(InsCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table plg_plugins *****/
 /*
@@ -2590,7 +2685,8 @@ mysql> DESCRIBE plg_plugins;
 			"AppKey VARCHAR(31) NOT NULL,"		// Plg_MAX_BYTES_PLUGIN_APP_KEY
 			"URL VARCHAR(255) NOT NULL,"		// WWW_MAX_BYTES_WWW
 			"IP CHAR(15) NOT NULL,"			// Cns_MAX_BYTES_IP
-		   "UNIQUE INDEX(PlgCod))");
+		   "UNIQUE INDEX(PlgCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table prg_resources *****/
 /*
@@ -2619,7 +2715,8 @@ mysql> DESCRIBE prg_resources;
 				  "'att','for','svy') NOT NULL DEFAULT 'non',"
 			"Title VARCHAR(2047) NOT NULL,"		// Rsc_MAX_BYTES_RESOURCE_TITLE
 		   "UNIQUE INDEX(ItmCod),"
-		   "UNIQUE INDEX(NodCod,ItmInd))");
+		   "UNIQUE INDEX(NodCod,ItmInd)"
+		   ") ENGINE=MyISAM");
 
    /***** Table prj_config *****/
 /*
@@ -2635,7 +2732,8 @@ mysql> DESCRIBE prj_config;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS prj_config ("
 			"CrsCod INT NOT NULL DEFAULT -1,"
 			"NETCanCreate ENUM('N','Y') NOT NULL DEFAULT 'Y',"
-		   "UNIQUE INDEX(CrsCod))");
+		   "UNIQUE INDEX(CrsCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table prj_projects *****/
 /*
@@ -2688,7 +2786,8 @@ mysql> DESCRIBE prj_projects;
 		   "INDEX(CrsCod,CreatTime),"
 		   "INDEX(CrsCod,ModifTime),"
 		   "INDEX(CrsCod,DptCod),"
-		   "INDEX(CrsCod,ReviewStatus))");
+		   "INDEX(CrsCod,ReviewStatus)"
+		   ") ENGINE=MyISAM");
 
    /***** Table prj_rubrics *****/
 /*
@@ -2706,7 +2805,8 @@ mysql> DESCRIBE prj_rubrics;
 			"CrsCod INT NOT NULL,"
 			"Type ENUM('tut','evl','gbl') NOT NULL,"
 			"RubCod INT NOT NULL,"
-		   "UNIQUE INDEX(CrsCod,Type,RubCod))");
+		   "UNIQUE INDEX(CrsCod,Type,RubCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table prj_users *****/
 /*
@@ -2724,7 +2824,8 @@ mysql> DESCRIBE prj_users;
 			"PrjCod INT NOT NULL,"
 			"RoleInProject TINYINT NOT NULL DEFAULT 0,"
 			"UsrCod INT NOT NULL,"
-			"UNIQUE INDEX(PrjCod,RoleInProject,UsrCod))");
+			"UNIQUE INDEX(PrjCod,RoleInProject,UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table roo_check_in *****/
 /*
@@ -2746,7 +2847,8 @@ mysql> DESCRIBE roo_check_in;
 			"CheckInTime DATETIME NOT NULL,"
 		   "UNIQUE INDEX(ChkCod),"
 		   "INDEX(UsrCod,CheckInTime),"
-		   "INDEX(CheckInTime))");
+		   "INDEX(CheckInTime)"
+		   ") ENGINE=MyISAM");
 
    /***** Table roo_macs *****/
 /*
@@ -2763,7 +2865,8 @@ mysql> DESCRIBE roo_macs;
 			"RooCod INT NOT NULL,"
 			"MAC BIGINT NOT NULL,"	// 12 digits hexadecimal number
 		   "UNIQUE INDEX(RooCod,MAC),"
-		   "UNIQUE INDEX(MAC,RooCod))");
+		   "UNIQUE INDEX(MAC,RooCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table roo_rooms *****/
 /*
@@ -2817,7 +2920,8 @@ mysql> DESCRIBE roo_rooms;
 			"FullName VARCHAR(2047) NOT NULL,"	// Nam_MAX_BYTES_FULL_NAME
 			"Capacity INT NOT NULL,"
 		   "UNIQUE INDEX(RooCod),"
-		   "INDEX(CtrCod,BldCod,Floor))");
+		   "INDEX(CtrCod,BldCod,Floor)"
+		   ") ENGINE=MyISAM");
 
    /***** Table rsc_clipboards *****/
 /*
@@ -2844,7 +2948,8 @@ mysql> DESCRIBE rsc_clipboards;
 			"CopyTime TIMESTAMP,"
 		   "UNIQUE INDEX(UsrCod,CrsCod,Type,Cod),"
 		   "INDEX(CrsCod,Type,Cod),"
-		   "INDEX(CopyTime))");
+		   "INDEX(CopyTime)"
+		   ") ENGINE=MyISAM");
 
    /***** Table rub_criteria *****/
 /*
@@ -2878,7 +2983,8 @@ mysql> DESCRIBE rub_criteria;
 			"Weight DOUBLE PRECISION NOT NULL DEFAULT 1,"
 			"Title VARCHAR(2047) NOT NULL,"
 		   "UNIQUE INDEX(CriCod),"
-		   "UNIQUE INDEX(RubCod,CriInd))");
+		   "UNIQUE INDEX(RubCod,CriInd)"
+		   ") ENGINE=MyISAM");
 
    /***** Table rub_rubrics *****/
 /*
@@ -2901,7 +3007,8 @@ mysql> DESCRIBE rub_rubrics;
 			"Title VARCHAR(2047) NOT NULL,"	// Rub_MAX_BYTES_TITLE
 			"Txt TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(RubCod),"
-		   "INDEX(CrsCod))");
+		   "INDEX(CrsCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table rub_scores *****/
 /*
@@ -2928,7 +3035,8 @@ mysql> DESCRIBE rub_scores;
 			"CriCod INT NOT NULL,"
 			"EvlCod INT NOT NULL DEFAULT -1,"
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
-		   "UNIQUE INDEX(Type,Cod,UsrCod,CriCod))");
+		   "UNIQUE INDEX(Type,Cod,UsrCod,CriCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table ses_params *****/
 /*
@@ -2946,7 +3054,8 @@ mysql> DESCRIBE ses_params;
 			"SessionId CHAR(43) NOT NULL,"	// Cns_BYTES_SESSION_ID
 			"ParamName VARCHAR(255) NOT NULL,"
 			"ParamValue LONGTEXT NOT NULL,"
-		   "INDEX(SessionId))");
+		   "INDEX(SessionId)"
+		   ") ENGINE=MyISAM");
 
    /***** Table ses_sessions *****/
 /*
@@ -2995,7 +3104,8 @@ mysql> DESCRIBE ses_sessions;
 			"SearchStr VARCHAR(2047) NOT NULL DEFAULT '',"		// Sch_MAX_BYTES_STRING_TO_FIND
 			"SideCols TINYINT NOT NULL DEFAULT 3,"
 		   "UNIQUE INDEX(SessionId),"
-		   "INDEX(UsrCod))");
+		   "INDEX(UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table set_ip_settings *****/
 /*
@@ -3029,7 +3139,8 @@ mysql> DESCRIBE set_ip_settings;
 			"PhotoShape TINYINT NOT NULL DEFAULT 0,"
 		   "PRIMARY KEY (IP),"
 		   "INDEX(UsrCod),"
-		   "INDEX(LastChange))");
+		   "INDEX(LastChange)"
+		   ") ENGINE=MyISAM");
 
    /***** Table sta_degrees *****/
 /*
@@ -3053,7 +3164,8 @@ mysql> DESCRIBE sta_degrees;
 			"NumStdsWithPhoto INT NOT NULL,"
 			"TimeAvgPhoto DATETIME NOT NULL,"
 			"TimeToComputeAvgPhoto INT NOT NULL DEFAULT -1,"
-		   "UNIQUE INDEX(DegCod,Sex))");
+		   "UNIQUE INDEX(DegCod,Sex)"
+		   ") ENGINE=MyISAM");
 
    /***** Table sta_notifications *****/
 /*
@@ -3075,7 +3187,8 @@ mysql> DESCRIBE sta_notifications;
 			"NotifyEvent TINYINT NOT NULL,"
 			"NumEvents INT NOT NULL,"
 			"NumMails INT NOT NULL,"
-		   "UNIQUE INDEX(DegCod,CrsCod,NotifyEvent))");
+		   "UNIQUE INDEX(DegCod,CrsCod,NotifyEvent)"
+		   ") ENGINE=MyISAM");
 
    /***** Table svy_answers *****/
 /*
@@ -3095,7 +3208,8 @@ mysql> DESCRIBE svy_answers;
 			"AnsInd TINYINT NOT NULL,"
 			"NumUsrs INT NOT NULL DEFAULT 0,"
 			"Answer TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
-		   "UNIQUE INDEX(QstCod,AnsInd))");
+		   "UNIQUE INDEX(QstCod,AnsInd)"
+		   ") ENGINE=MyISAM");
 
    /***** Table svy_comments *****/
 /*
@@ -3114,7 +3228,8 @@ mysql> DESCRIBE svy_comments;
 			"QstCod INT NOT NULL,"
 			"Comments TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(ComCod),"
-		   "INDEX(QstCod,ComCod))");
+		   "INDEX(QstCod,ComCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table svy_groups *****/
 /*
@@ -3130,7 +3245,8 @@ mysql> DESCRIBE svy_groups;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS svy_groups ("
 			"SvyCod INT NOT NULL,"
 			"GrpCod INT NOT NULL,"
-		   "UNIQUE INDEX(SvyCod,GrpCod))");
+		   "UNIQUE INDEX(SvyCod,GrpCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table svy_questions *****/
 /*
@@ -3155,7 +3271,8 @@ mysql> DESCRIBE svy_questions;
 			"CommentsAllowed ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Stem TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(QstCod),"
-		   "INDEX(SvyCod))");
+		   "INDEX(SvyCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table svy_surveys *****/
 /*
@@ -3192,7 +3309,8 @@ mysql> DESCRIBE svy_surveys;
 			"Title VARCHAR(2047) NOT NULL,"	// Svy_MAX_BYTES_SURVEY_TITLE
 			"Txt TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(SvyCod),"
-		   "INDEX(Scope,Cod))");
+		   "INDEX(Scope,Cod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table svy_users *****/
 /*
@@ -3208,7 +3326,8 @@ mysql> DESCRIBE svy_users;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS svy_users ("
 			"SvyCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
-		   "UNIQUE INDEX(SvyCod,UsrCod))");
+		   "UNIQUE INDEX(SvyCod,UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table tml_comments *****/
 /*
@@ -3228,7 +3347,8 @@ mysql> DESCRIBE tml_comments;
 			"MedCod INT NOT NULL DEFAULT -1,"
 		   "UNIQUE INDEX(PubCod),"
 		   "FULLTEXT(Txt),"
-		   "INDEX(MedCod)) ENGINE = MYISAM");
+		   "INDEX(MedCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table tml_comments_fav *****/
 /*
@@ -3250,7 +3370,8 @@ mysql> DESCRIBE tml_comments_fav;
 			"TimeFav DATETIME NOT NULL,"	// Not used. For future use
 		   "UNIQUE INDEX(FavCod),"
 		   "UNIQUE INDEX(PubCod,UsrCod),"
-		   "INDEX(UsrCod))");
+		   "INDEX(UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table tml_notes *****/
 /*
@@ -3279,7 +3400,8 @@ mysql> DESCRIBE tml_notes;
 		   "UNIQUE INDEX(NotCod),"
 		   "INDEX(NoteType,Cod),"
 		   "INDEX(UsrCod),"
-		   "INDEX(TimeNote))");
+		   "INDEX(TimeNote)"
+		   ") ENGINE=MyISAM");
 
    /***** Table tml_notes_fav *****/
 /*
@@ -3301,7 +3423,8 @@ mysql> DESCRIBE tml_notes_fav;
 			"TimeFav DATETIME NOT NULL,"	// Not used. For future use
 		   "UNIQUE INDEX(FavCod),"
 		   "UNIQUE INDEX(NotCod,UsrCod),"
-		   "INDEX(UsrCod))");
+		   "INDEX(UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table tml_posts *****/
 /*
@@ -3316,12 +3439,13 @@ mysql> DESCRIBE tml_posts;
 3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tml_posts ("
-			"PubCod INT NOT NULL AUTO_INCREMENT,"
+			"PstCod INT NOT NULL AUTO_INCREMENT,"
 			"Txt LONGTEXT NOT NULL,"
 			"MedCod INT NOT NULL DEFAULT -1,"
-		   "UNIQUE INDEX(PubCod),"
+		   "UNIQUE INDEX(PstCod),"
 		   "FULLTEXT(Txt),"
-		   "INDEX(MedCod)) ENGINE = MYISAM");
+		   "INDEX(MedCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table tml_pubs *****/
 /*
@@ -3347,7 +3471,8 @@ mysql> DESCRIBE tml_pubs;
 		   "INDEX(NotCod,PublisherCod,PubType),"
 		   "INDEX(PublisherCod),"
 		   "INDEX(PubType),"
-		   "INDEX(TimePublish))");
+		   "INDEX(TimePublish)"
+		   ") ENGINE=MyISAM");
 
    /***** Table tml_timelines *****/
 /*
@@ -3363,7 +3488,8 @@ mysql> DESCRIBE tml_timelines;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tml_timelines ("
 			"SessionId CHAR(43) NOT NULL,"	// Cns_BYTES_SESSION_ID
 			"NotCod BIGINT NOT NULL,"
-		   "UNIQUE INDEX(SessionId,NotCod))");
+		   "UNIQUE INDEX(SessionId,NotCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table tmt_courses *****/
 /*
@@ -3389,7 +3515,8 @@ mysql> DESCRIBE tmt_courses;
 			"Duration TIME NOT NULL,"
 			"ClassType ENUM('free','lecture','practical') NOT NULL,"
 			"Info VARCHAR(2047) NOT NULL DEFAULT '',"	// Tmt_MAX_BYTES_INFO
-		   "INDEX(CrsCod,GrpCod))");
+		   "INDEX(CrsCod,GrpCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table tmt_tutoring *****/
 /*
@@ -3411,7 +3538,8 @@ mysql> DESCRIBE tmt_tutoring;
 			"StartTime TIME NOT NULL,"
 			"Duration TIME NOT NULL,"
 			"Info VARCHAR(2047) NOT NULL DEFAULT '',"	// Tmt_MAX_BYTES_INFO
-		   "INDEX(UsrCod))");
+		   "INDEX(UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table tre_expanded *****/
 /*
@@ -3431,7 +3559,8 @@ mysql> DESCRIBE tre_expanded;
 			"ClickTime DATETIME NOT NULL,"
 		   "UNIQUE INDEX(UsrCod,NodCod),"
 		   "INDEX(NodCod),"
-		   "INDEX(ClickTime))");
+		   "INDEX(ClickTime)"
+		   ") ENGINE=MyISAM");
 
    /***** Table tre_nodes *****/
 /*
@@ -3466,7 +3595,8 @@ mysql> DESCRIBE tre_nodes;
 			"Title VARCHAR(2047) NOT NULL,"		// Tre_MAX_BYTES_NODE_TITLE
 			"Txt TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(NodCod),"
-		   "UNIQUE INDEX(CrsCod,Type,NodInd))");
+		   "UNIQUE INDEX(CrsCod,Type,NodInd)"
+		   ") ENGINE=MyISAM");
 
    /***** Table tst_answers *****/
 /*
@@ -3491,7 +3621,8 @@ mysql> DESCRIBE tst_answers;
 			"MedCod INT NOT NULL DEFAULT -1,"
 			"Correct ENUM('N','Y') NOT NULL,"
 		   "INDEX(QstCod),"
-		   "INDEX(MedCod))");
+		   "INDEX(MedCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table tst_config *****/
 /*
@@ -3517,7 +3648,8 @@ mysql> DESCRIBE tst_config;
 			"Max INT NOT NULL,"
 			"MinTimeNxtTstPerQst INT NOT NULL DEFAULT 0,"
 			"Visibility INT NOT NULL DEFAULT 0x1f,"
-		   "UNIQUE INDEX(CrsCod))");
+		   "UNIQUE INDEX(CrsCod)"
+		   ") ENGINE=MyISAM");
 
 /***** Table tst_exam_questions *****/
 /*
@@ -3541,7 +3673,8 @@ mysql> DESCRIBE tst_exam_questions;
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
 			"Indexes TEXT NOT NULL,"	// Tst_MAX_BYTES_INDEXES_ONE_QST
 			"Answers TEXT NOT NULL,"	// Tst_MAX_BYTES_ANSWERS_ONE_QST
-		   "UNIQUE INDEX(ExaCod,QstCod))");
+		   "UNIQUE INDEX(ExaCod,QstCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table tst_exams *****/	// TODO: rename as tst_prints
 /*
@@ -3574,7 +3707,8 @@ mysql> DESCRIBE tst_exams;
 			"AllowTeachers ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(ExaCod),"			// TODO: rename as PrnCod
-		   "INDEX(CrsCod,UsrCod))");
+		   "INDEX(CrsCod,UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table tst_question_tags *****/
 /*
@@ -3592,7 +3726,8 @@ mysql> DESCRIBE tst_question_tags;
 			"QstCod INT NOT NULL,"
 			"TagCod INT NOT NULL,"
 			"TagInd TINYINT NOT NULL,"
-		   "UNIQUE INDEX(QstCod,TagCod))");
+		   "UNIQUE INDEX(QstCod,TagCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table tst_questions *****/
 /*
@@ -3628,7 +3763,8 @@ mysql> DESCRIBE tst_questions;
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(QstCod),"
 		   "INDEX(CrsCod,EditTime),"
-		   "INDEX(MedCod))");
+		   "INDEX(MedCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table tst_tags *****/
 /*
@@ -3652,7 +3788,8 @@ mysql> DESCRIBE tst_tags;
 			"TagTxt VARCHAR(2047) NOT NULL,"	// Tag_MAX_BYTES_TAG
 			"TagHidden ENUM('N','Y') NOT NULL,"
 		   "UNIQUE INDEX(TagCod),"
-		   "INDEX(CrsCod,ChangeTime))");
+		   "INDEX(CrsCod,ChangeTime)"
+		   ") ENGINE=MyISAM");
 
 /***** Table usr_admins *****/
 /*
@@ -3671,7 +3808,8 @@ mysql> DESCRIBE usr_admins;
 			"Scope ENUM('Sys','Ins','Ctr','Deg') NOT NULL,"
 			"Cod INT NOT NULL,"
 		   "UNIQUE INDEX(UsrCod,Scope,Cod),"
-		   "INDEX (Scope,Cod))");
+		   "INDEX (Scope,Cod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table usr_banned *****/
 /*
@@ -3686,7 +3824,8 @@ mysql> DESCRIBE usr_banned;
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_banned ("
 			"UsrCod INT NOT NULL,"
-		   "UNIQUE INDEX(UsrCod))");
+		   "UNIQUE INDEX(UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table usr_birthdays_today *****/
    // Stores birthdays already congratulated today
@@ -3704,7 +3843,8 @@ mysql> DESCRIBE usr_birthdays_today;
 			"UsrCod INT NOT NULL,"
 			"Today DATE NOT NULL,"
 		   "UNIQUE INDEX(UsrCod),"
-		   "INDEX(Today))");
+		   "INDEX(Today)"
+		   ") ENGINE=MyISAM");
 
    /***** Table usr_clicks_without_photo *****/
 /*
@@ -3720,7 +3860,8 @@ mysql> DESCRIBE usr_clicks_without_photo;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_clicks_without_photo ("
 			"UsrCod INT NOT NULL,"
 			"NumClicks INT NOT NULL,"
-		   "UNIQUE INDEX(UsrCod))");
+		   "UNIQUE INDEX(UsrCod)"
+		   ") ENGINE=MyISAM");
 
 
    /***** Table usr_clipboards *****/
@@ -3740,7 +3881,8 @@ mysql> DESCRIBE usr_clipboards;
 			"OthUsrCod INT NOT NULL,"
 			"CopyTime TIMESTAMP,"
 		   "UNIQUE INDEX(UsrCod,OthUsrCod),"
-		   "INDEX(CopyTime))");
+		   "INDEX(CopyTime)"
+		   ") ENGINE=MyISAM");
 
    /***** Table usr_connected *****/
 /*
@@ -3762,7 +3904,8 @@ mysql> DESCRIBE usr_connected;
 			"LastTime DATETIME NOT NULL,"
 		   "UNIQUE INDEX(UsrCod),"
 		   "INDEX(RoleInLastCrs),"
-		   "INDEX(LastCrsCod))");
+		   "INDEX(LastCrsCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table usr_data *****/
 /*
@@ -3864,7 +4007,8 @@ mysql> DESCRIBE usr_data;
 		   "INDEX(Menu),"
 		   "INDEX(SideCols),"
 		   "INDEX(PhotoShape),"
-		   "INDEX(ThirdPartyCookies))");
+		   "INDEX(ThirdPartyCookies)"
+		   ") ENGINE=MyISAM");
 
    /***** Table usr_duplicated *****/
 /*
@@ -3883,7 +4027,8 @@ mysql> DESCRIBE usr_duplicated;
 			"InformerCod INT NOT NULL,"
 			"InformTime DATETIME NOT NULL,"
 		   "UNIQUE INDEX(UsrCod,InformerCod),"
-		   "INDEX(UsrCod))");
+		   "INDEX(UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table usr_emails *****/
    /*
@@ -3904,7 +4049,8 @@ mysql> DESCRIBE usr_emails;
 			"CreatTime DATETIME NOT NULL,"
 			"Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N',"
 		   "UNIQUE INDEX(UsrCod,E_mail),"
-		   "UNIQUE INDEX(E_mail))");
+		   "UNIQUE INDEX(E_mail)"
+		   ") ENGINE=MyISAM");
 
    /***** Table usr_figures *****/
    /*
@@ -3932,7 +4078,8 @@ mysql> DESCRIBE usr_figures;
 			"NumMsgSnt INT NOT NULL DEFAULT -1,"	// TODO: Rename to NumMessagesSent
 		   "PRIMARY KEY(UsrCod),"
 		   "INDEX(FirstClickTime),"
-		   "INDEX(NumClicks))");
+		   "INDEX(NumClicks)"
+		   ") ENGINE=MyISAM");
 
    /***** Table usr_follow *****/
    /*
@@ -3952,7 +4099,8 @@ mysql> DESCRIBE usr_follow;
 			"FollowTime DATETIME NOT NULL,"
 		   "UNIQUE INDEX (FollowerCod,FollowedCod),"
 		   "UNIQUE INDEX (FollowedCod,FollowerCod),"
-		   "INDEX (FollowTime))");
+		   "INDEX (FollowTime)"
+		   ") ENGINE=MyISAM");
 
 /***** Table usr_ids *****/
 /*
@@ -3973,7 +4121,8 @@ mysql> DESCRIBE usr_ids;
 			"CreatTime DATETIME NOT NULL,"
 			"Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N',"
 		   "UNIQUE INDEX(UsrCod,UsrID),"
-		   "INDEX(UsrID))");
+		   "INDEX(UsrID)"
+		   ") ENGINE=MyISAM");
 
    /***** Table usr_last *****/
 /*
@@ -4004,7 +4153,8 @@ mysql> DESCRIBE usr_last;
 			"LastAccNotif DATETIME NOT NULL,"
 			"TimelineUsrs TINYINT NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(UsrCod),"
-		   "INDEX(LastTime))");
+		   "INDEX(LastTime)"
+		   ") ENGINE=MyISAM");
 
 /***** Table usr_nicknames *****/
 /*
@@ -4023,7 +4173,8 @@ mysql> DESCRIBE usr_nicknames;
 			"Nickname CHAR(16) COLLATE latin1_spanish_ci NOT NULL,"	// Nck_MAX_BYTES_NICK_WITHOUT_ARROBA
 			"CreatTime DATETIME NOT NULL,"
 		   "UNIQUE INDEX(UsrCod,Nickname),"
-		   "UNIQUE INDEX(Nickname))");
+		   "UNIQUE INDEX(Nickname)"
+		   ") ENGINE=MyISAM");
 
    /***** Table usr_pending_emails *****/
 /*
@@ -4044,7 +4195,8 @@ mysql> DESCRIBE usr_pending_emails;
 			"MailKey CHAR(43) COLLATE latin1_bin NOT NULL,"			// Mai_LENGTH_EMAIL_CONFIRM_KEY
 			"DateAndTime DATETIME NOT NULL,"
 		   "INDEX(UsrCod),"
-		   "UNIQUE INDEX(MailKey))");
+		   "UNIQUE INDEX(MailKey)"
+		   ") ENGINE=MyISAM");
 
    /***** Table usr_pending_passwd *****/
 /*
@@ -4062,7 +4214,8 @@ mysql> DESCRIBE usr_pending_passwd;
 			"UsrCod INT NOT NULL,"
 			"PendingPassword CHAR(86) COLLATE latin1_bin NOT NULL,"	// Pwd_BYTES_ENCRYPTED_PASSWORD
 			"DateAndTime DATETIME NOT NULL,"
-		   "PRIMARY KEY (UsrCod))");
+		   "PRIMARY KEY (UsrCod)"
+		   ") ENGINE=MyISAM");
 
    /***** Table usr_reports *****/
 /*
@@ -4089,7 +4242,8 @@ mysql> DESCRIBE usr_reports;
 			"Filename VARCHAR(255) NOT NULL,"	// Report filename, NAME_MAX
 			"Permalink VARCHAR(255) NOT NULL,"	// Full URL (permalink), WWW_MAX_BYTES_WWW
 		   "UNIQUE INDEX(RepCod),"
-		   "INDEX(UsrCod))");
+		   "INDEX(UsrCod)"
+		   ") ENGINE=MyISAM");
 
 /***** Table usr_webs *****/
 /*
@@ -4123,7 +4277,8 @@ mysql> DESCRIBE usr_webs;
 			"'youtube',"
 			"'x') NOT NULL,"
 			"URL VARCHAR(255) NOT NULL,"	// WWW_MAX_BYTES_WWW
-		   "UNIQUE INDEX(UsrCod,Web))");
+		   "UNIQUE INDEX(UsrCod,Web)"
+		   ") ENGINE=MyISAM");
 
    /***** Show success message *****/
    HTM_OL_End ();
