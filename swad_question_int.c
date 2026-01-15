@@ -48,11 +48,26 @@
 /******************* Write integer answer in a test print ********************/
 /*****************************************************************************/
 
-void QstInt_WritePrntAns (const struct Qst_PrintedQuestion *PrintedQst,
-			  struct Qst_Question *Qst,
-			  Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
-			  __attribute__((unused)) const char *ClassTxt,
-			  __attribute__((unused)) const char *ClassFeedback)
+void QstInt_WriteTstFillAns (const struct Qst_PrintedQuestion *PrintedQst,
+			     unsigned QstInd,
+			     __attribute__((unused)) struct Qst_Question *Qst)
+  {
+   char StrAns[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
+
+   /***** Write input field for the answer *****/
+   snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
+   HTM_TxtF ("<input type=\"number\" name=\"%s\""
+	     " class=\"Exa_ANSWER_INPUT_FLOAT INPUT_%s\""
+	     " value=\"%s\"",
+	     StrAns,The_GetSuffix (),PrintedQst->Answer.Str);
+   HTM_ElementEnd ();
+  }
+
+void QstInt_WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
+			     struct Qst_Question *Qst,
+			     Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+			     __attribute__((unused)) const char *ClassTxt,
+			     __attribute__((unused)) const char *ClassFeedback)
   {
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
    Qst_WrongOrCorrect_t WrongOrCorrect;
@@ -112,7 +127,7 @@ void QstInt_WritePrntAns (const struct Qst_PrintedQuestion *PrintedQst,
 /*************** Write integer answer in an exam answer sheet ****************/
 /*****************************************************************************/
 
-void QstInt_WriteBlnkAns (__attribute__((unused)) const struct Qst_Question *Qst)
+void QstInt_WriteExaBlnkAns (__attribute__((unused)) const struct Qst_Question *Qst)
   {
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
 
@@ -122,9 +137,9 @@ void QstInt_WriteBlnkAns (__attribute__((unused)) const struct Qst_Question *Qst
    HTM_TD_End ();
   }
 
-void QstInt_WriteCorrAns (__attribute__((unused)) const struct ExaPrn_Print *Print,
-			  __attribute__((unused)) unsigned QstInd,
-			  struct Qst_Question *Qst)
+void QstInt_WriteExaCorrAns (__attribute__((unused)) const struct ExaPrn_Print *Print,
+			     __attribute__((unused)) unsigned QstInd,
+			     struct Qst_Question *Qst)
   {
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
 
@@ -138,8 +153,8 @@ void QstInt_WriteCorrAns (__attribute__((unused)) const struct ExaPrn_Print *Pri
    HTM_TD_End ();
   }
 
-void QstInt_WriteReadAns (const struct ExaPrn_Print *Print,
-			  unsigned QstInd,struct Qst_Question *Qst)
+void QstInt_WriteExaReadAns (const struct ExaPrn_Print *Print,
+			     unsigned QstInd,struct Qst_Question *Qst)
   {
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
    Qst_WrongOrCorrect_t WrongOrCorrect;
@@ -175,8 +190,8 @@ void QstInt_WriteReadAns (const struct ExaPrn_Print *Print,
       HTM_TD_Empty (1);
   }
 
-void QstInt_WriteEditAns (const struct ExaPrn_Print *Print,
-			  unsigned QstInd,struct Qst_Question *Qst)
+void QstInt_WriteExaEditAns (const struct ExaPrn_Print *Print,
+			     unsigned QstInd,struct Qst_Question *Qst)
   {
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
    Qst_WrongOrCorrect_t WrongOrCorrect;

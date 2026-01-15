@@ -537,12 +537,19 @@ dentro siempre de lo que haya guardado en la tabla de ubicaciones limitada a 12/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-// Size of photos:
-// find -iname '*.jpg' -exec du -cb {} + | grep total$ | cut -f1 | paste -sd+ - | bc
-// find -iname '*original.jpg' -exec du -cb {} + | grep total$ | cut -f1 | paste -sd+ - | bc
-// Number of lines (includes comments but not blank lines) has been got with the following command:
-// nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
-/* Printing:
+/*
+Size of photos:
+find -iname '*.jpg' -exec du -cb {} + | grep total$ | cut -f1 | paste -sd+ - | bc
+find -iname '*original.jpg' -exec du -cb {} + | grep total$ | cut -f1 | paste -sd+ - | bc
+
+Number of lines (includes comments but not blank lines) has been got with the following command:
+nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
+
+GitHub:
+git commit -a -m "comments"
+git push https://github.com/acanas/swad-core.git master
+
+Printing:
 En local:
 enscript -1 --file-align=2 --highlight --line-numbers -o - * > swad17.26.7_bn_1_columna.ps
 enscript -1 --color --file-align=2 --highlight --line-numbers -o - * > swad17.26.7_color_1_columna.ps
@@ -632,10 +639,11 @@ TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de t
 
 TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtube.com/shorts/fY6Oax_uJBc?si=G3UHqvSH3yEbxm1B
 */
-#define Log_PLATFORM_VERSION	"SWAD 25.35 (2026-01-15)"
+#define Log_PLATFORM_VERSION	"SWAD 25.35.1 (2026-01-16)"
 #define CSS_FILE		"swad25.30.1.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 25.35.1:  Jan 16, 2026	Code refactoring in questions. (350908 lines)
 	Version 25.35:    Jan 15, 2026	Changes to install swad in Ubuntu 24.04. (350916 lines)
 	Version 25.34:    Dec 19, 2025	Code refactoring in questions. (350582 lines)
 	Version 25.33:    Dec 18, 2025	Code refactoring in questions. (350606 lines)

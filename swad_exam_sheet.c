@@ -690,12 +690,12 @@ static void ExaShe_WriteBlankAnswers (struct Qst_Question *Qst)
   {
    static void (*ExaSheAns_WriteBlankAns[Qst_NUM_ANS_TYPES]) (const struct Qst_Question *Qst) =
     {
-     [Qst_ANS_INT            ] = QstInt_WriteBlnkAns,
-     [Qst_ANS_FLOAT          ] = QstFlt_WriteBlnkAns,
-     [Qst_ANS_TRUE_FALSE     ] = QstTF__WriteBlnkAns,
-     [Qst_ANS_UNIQUE_CHOICE  ] = QstCho_WriteBlnkAns,
-     [Qst_ANS_MULTIPLE_CHOICE] = QstCho_WriteBlnkAns,
-     [Qst_ANS_TEXT           ] = QstTxt_WriteBlnkAns,
+     [Qst_ANS_INT            ] = QstInt_WriteExaBlnkAns,
+     [Qst_ANS_FLOAT          ] = QstFlt_WriteExaBlnkAns,
+     [Qst_ANS_TRUE_FALSE     ] = QstTF__WriteExaBlnkAns,
+     [Qst_ANS_UNIQUE_CHOICE  ] = QstCho_WriteExaBlnkAns,
+     [Qst_ANS_MULTIPLE_CHOICE] = QstCho_WriteExaBlnkAns,
+     [Qst_ANS_TEXT           ] = QstTxt_WriteExaBlnkAns,
     };
 
    /***** Begin table *****/
@@ -730,29 +730,29 @@ static void ExaShe_WriteSolvedAnswers (const struct ExaSes_Session *Session,
 									        unsigned QstInd,
 									        struct Qst_Question *Qst) =
      {
-      [Qst_ANS_INT            ][CORRECT ] = QstInt_WriteCorrAns,
-      [Qst_ANS_INT            ][READONLY] = QstInt_WriteReadAns,
-      [Qst_ANS_INT            ][EDITABLE] = QstInt_WriteEditAns,
+      [Qst_ANS_INT            ][CORRECT ] = QstInt_WriteExaCorrAns,
+      [Qst_ANS_INT            ][READONLY] = QstInt_WriteExaReadAns,
+      [Qst_ANS_INT            ][EDITABLE] = QstInt_WriteExaEditAns,
 
-      [Qst_ANS_FLOAT          ][CORRECT ] = QstFlt_WriteCorrAns,
-      [Qst_ANS_FLOAT          ][READONLY] = QstFlt_WriteReadAns,
-      [Qst_ANS_FLOAT          ][EDITABLE] = QstFlt_WriteEditAns,
+      [Qst_ANS_FLOAT          ][CORRECT ] = QstFlt_WriteExaCorrAns,
+      [Qst_ANS_FLOAT          ][READONLY] = QstFlt_WriteExaReadAns,
+      [Qst_ANS_FLOAT          ][EDITABLE] = QstFlt_WriteExaEditAns,
 
-      [Qst_ANS_TRUE_FALSE     ][CORRECT ] = QstTF__WriteCorrAns,
-      [Qst_ANS_TRUE_FALSE     ][READONLY] = QstTF__WriteReadAns,
-      [Qst_ANS_TRUE_FALSE     ][EDITABLE] = QstTF__WriteEditAns,
+      [Qst_ANS_TRUE_FALSE     ][CORRECT ] = QstTF__WriteExaCorrAns,
+      [Qst_ANS_TRUE_FALSE     ][READONLY] = QstTF__WriteExaReadAns,
+      [Qst_ANS_TRUE_FALSE     ][EDITABLE] = QstTF__WriteExaEditAns,
 
-      [Qst_ANS_UNIQUE_CHOICE  ][CORRECT ] = QstCho_WriteCorrAns,
-      [Qst_ANS_UNIQUE_CHOICE  ][READONLY] = QstCho_WriteReadAns,
-      [Qst_ANS_UNIQUE_CHOICE  ][EDITABLE] = QstCho_WriteEditAns,
+      [Qst_ANS_UNIQUE_CHOICE  ][CORRECT ] = QstCho_WriteExaCorrAns,
+      [Qst_ANS_UNIQUE_CHOICE  ][READONLY] = QstCho_WriteExaReadAns,
+      [Qst_ANS_UNIQUE_CHOICE  ][EDITABLE] = QstCho_WriteExaEditAns,
 
-      [Qst_ANS_MULTIPLE_CHOICE][CORRECT ] = QstCho_WriteCorrAns,
-      [Qst_ANS_MULTIPLE_CHOICE][READONLY] = QstCho_WriteReadAns,
-      [Qst_ANS_MULTIPLE_CHOICE][EDITABLE] = QstCho_WriteEditAns,
+      [Qst_ANS_MULTIPLE_CHOICE][CORRECT ] = QstCho_WriteExaCorrAns,
+      [Qst_ANS_MULTIPLE_CHOICE][READONLY] = QstCho_WriteExaReadAns,
+      [Qst_ANS_MULTIPLE_CHOICE][EDITABLE] = QstCho_WriteExaEditAns,
 
-      [Qst_ANS_TEXT           ][CORRECT ] = QstTxt_WriteCorrAns,
-      [Qst_ANS_TEXT           ][READONLY] = QstTxt_WriteReadAns,
-      [Qst_ANS_TEXT           ][EDITABLE] = QstTxt_WriteEditAns,
+      [Qst_ANS_TEXT           ][CORRECT ] = QstTxt_WriteExaCorrAns,
+      [Qst_ANS_TEXT           ][READONLY] = QstTxt_WriteExaReadAns,
+      [Qst_ANS_TEXT           ][EDITABLE] = QstTxt_WriteExaEditAns,
      };
 
    /***** Begin table *****/

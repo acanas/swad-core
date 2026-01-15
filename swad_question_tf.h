@@ -42,19 +42,22 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void QstTF__WritePrntAns (const struct Qst_PrintedQuestion *PrintedQst,
-			  struct Qst_Question *Qst,
-			  Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
-			  __attribute__((unused)) const char *ClassTxt,
-			  __attribute__((unused)) const char *ClassFeedback);
+void QstTF__WriteTstFillAns (const struct Qst_PrintedQuestion *PrintedQst,
+			     unsigned QstInd,
+			     __attribute__((unused)) struct Qst_Question *Qst);
+void QstTF__WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
+			     struct Qst_Question *Qst,
+			     Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+			     __attribute__((unused)) const char *ClassTxt,
+			     __attribute__((unused)) const char *ClassFeedback);
 
-void QstTF__WriteBlnkAns (__attribute__((unused)) const struct Qst_Question *Qst);
-void QstTF__WriteCorrAns (__attribute__((unused)) const struct ExaPrn_Print *Print,
-			  __attribute__((unused)) unsigned QstInd,
-			  struct Qst_Question *Qst);
-void QstTF__WriteReadAns (const struct ExaPrn_Print *Print,
-			  unsigned QstInd,struct Qst_Question *Qst);
-void QstTF__WriteEditAns (const struct ExaPrn_Print *Print,
-			  unsigned QstInd,struct Qst_Question *Qst);
+void QstTF__WriteExaBlnkAns (__attribute__((unused)) const struct Qst_Question *Qst);
+void QstTF__WriteExaCorrAns (__attribute__((unused)) const struct ExaPrn_Print *Print,
+			     __attribute__((unused)) unsigned QstInd,
+			     struct Qst_Question *Qst);
+void QstTF__WriteExaReadAns (const struct ExaPrn_Print *Print,
+			     unsigned QstInd,struct Qst_Question *Qst);
+void QstTF__WriteExaEditAns (const struct ExaPrn_Print *Print,
+			     unsigned QstInd,struct Qst_Question *Qst);
 
 #endif

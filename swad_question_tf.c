@@ -46,11 +46,26 @@
 /***************** Write false / true answer in a test print *****************/
 /*****************************************************************************/
 
-void QstTF__WritePrntAns (const struct Qst_PrintedQuestion *PrintedQst,
-			  struct Qst_Question *Qst,
-			  Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
-			  __attribute__((unused)) const char *ClassTxt,
-			  __attribute__((unused)) const char *ClassFeedback)
+void QstTF__WriteTstFillAns (const struct Qst_PrintedQuestion *PrintedQst,
+			     unsigned QstInd,
+			     __attribute__((unused)) struct Qst_Question *Qst)
+  {
+   /***** Write selector for the answer *****/
+   /* Initially user has not answered the question ==> initially all answers will be blank.
+      If the user does not confirm the submission of their exam ==>
+      ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
+   HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
+		     "name=\"Ans%010u\" class=\"INPUT_%s\"",
+		     QstInd,The_GetSuffix ());
+      Qst_WriteTFOptionsToFill (Qst_GetOptionTFFromChar (PrintedQst->Answer.Str[0]));
+   HTM_SELECT_End ();
+  }
+
+void QstTF__WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
+			     struct Qst_Question *Qst,
+			     Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+			     __attribute__((unused)) const char *ClassTxt,
+			     __attribute__((unused)) const char *ClassFeedback)
   {
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
    Qst_OptionTF_t OptTFStd;
@@ -95,7 +110,7 @@ void QstTF__WritePrntAns (const struct Qst_PrintedQuestion *PrintedQst,
 /************* Write true / false answer in an exam answer sheet *************/
 /*****************************************************************************/
 
-void QstTF__WriteBlnkAns (__attribute__((unused)) const struct Qst_Question *Qst)
+void QstTF__WriteExaBlnkAns (__attribute__((unused)) const struct Qst_Question *Qst)
   {
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
    Qst_OptionTF_t OptTF;
@@ -111,9 +126,9 @@ void QstTF__WriteBlnkAns (__attribute__((unused)) const struct Qst_Question *Qst
      }
   }
 
-void QstTF__WriteCorrAns (__attribute__((unused)) const struct ExaPrn_Print *Print,
-			  __attribute__((unused)) unsigned QstInd,
-			  struct Qst_Question *Qst)
+void QstTF__WriteExaCorrAns (__attribute__((unused)) const struct ExaPrn_Print *Print,
+			     __attribute__((unused)) unsigned QstInd,
+			     struct Qst_Question *Qst)
   {
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
 
@@ -127,8 +142,8 @@ void QstTF__WriteCorrAns (__attribute__((unused)) const struct ExaPrn_Print *Pri
    HTM_TD_End ();
   }
 
-void QstTF__WriteReadAns (const struct ExaPrn_Print *Print,
-			  unsigned QstInd,struct Qst_Question *Qst)
+void QstTF__WriteExaReadAns (const struct ExaPrn_Print *Print,
+			     unsigned QstInd,struct Qst_Question *Qst)
   {
    Qst_OptionTF_t OptTFStd;
 
@@ -147,8 +162,8 @@ void QstTF__WriteReadAns (const struct ExaPrn_Print *Print,
    HTM_TD_End ();
   }
 
-void QstTF__WriteEditAns (const struct ExaPrn_Print *Print,
-			  unsigned QstInd,struct Qst_Question *Qst)
+void QstTF__WriteExaEditAns (const struct ExaPrn_Print *Print,
+			     unsigned QstInd,struct Qst_Question *Qst)
   {
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
    Qst_OptionTF_t OptTFStd = Qst_GetOptionTFFromChar (Print->PrintedQsts[QstInd].Answer.Str[0]);

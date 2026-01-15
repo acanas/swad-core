@@ -46,11 +46,95 @@
 /********** Write single or multiple choice answer in a test print ***********/
 /*****************************************************************************/
 
-void QstCho_WritePrntAns (const struct Qst_PrintedQuestion *PrintedQst,
-			  struct Qst_Question *Qst,
-			  Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
-			  const char *ClassTxt,
-			  const char *ClassFeedback)
+void QstCho_WriteTstFillAns (const struct Qst_PrintedQuestion *PrintedQst,
+                             unsigned QstInd,struct Qst_Question *Qst)
+  {
+   unsigned NumOpt;
+   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
+   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   char StrAns[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
+   char Id[3 + Cns_MAX_DIGITS_UINT + 1 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x_yy...y"
+
+   /***** Change format of answers text *****/
+   Qst_ChangeFormatOptionsText (Qst);
+
+   /***** Get indexes for this question from string *****/
+   Qst_GetIndexesFromStr (PrintedQst->StrIndexes,Indexes);
+
+   /***** Get the user's answers for this question from string *****/
+   Qst_GetAnswersFromStr (PrintedQst->Answer.Str,UsrAnswers);
+
+   /***** Begin table *****/
+   HTM_TABLE_BeginPadding (2);
+
+      for (NumOpt = 0;
+	   NumOpt < Qst->Answer.NumOptions;
+	   NumOpt++)
+	{
+	 /***** Indexes are 0 1 2 3... if no shuffle
+		or 3 1 0 2... (example) if shuffle *****/
+	 HTM_TR_Begin (NULL);
+
+	    /***** Write selectors and letter of this option *****/
+	    /* Initially user has not answered the question ==> initially all answers will be blank.
+	       If the user does not confirm the submission of their exam ==>
+	       ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
+	    HTM_TD_Begin ("class=\"LT\"");
+
+	       snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
+	       snprintf (Id,sizeof (Id),"%s_%u",StrAns,NumOpt);
+	       switch (Qst->Answer.Type)
+	         {
+	          case Qst_ANS_UNIQUE_CHOICE:
+		     HTM_INPUT_RADIO (StrAns,
+				      UsrAnswers[Indexes[NumOpt]],
+				      "id=\"%s\" value=\"%u\""
+				      " onclick=\"selectUnselectRadio(this,false,this.form.Ans%010u,%u);\"",
+				      Id,Indexes[NumOpt],
+				      QstInd,Qst->Answer.NumOptions);
+	             break;
+	          case Qst_ANS_MULTIPLE_CHOICE:
+		     HTM_INPUT_CHECKBOX (StrAns,
+					 UsrAnswers[Indexes[NumOpt]],
+					 "id=\"%s\" value=\"%u\"",
+					 Id,Indexes[NumOpt]);
+	             break;
+	          default:
+	             Err_WrongAnswerTypeExit ();
+	             break;
+	         }
+
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"Qst_TXT_%s\"",
+	                        QstInd,NumOpt,The_GetSuffix ());
+		  HTM_Option (NumOpt); HTM_CloseParenthesis (); HTM_NBSP ();
+	       HTM_LABEL_End ();
+	    HTM_TD_End ();
+
+	    /***** Write the option text *****/
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"Qst_TXT_%s\"",
+	                        QstInd,NumOpt,The_GetSuffix ());
+		  HTM_Txt (Qst->Answer.Options[Indexes[NumOpt]].Text);
+	       HTM_LABEL_End ();
+	       Med_ShowMedia (&Qst->Answer.Options[Indexes[NumOpt]].Media,
+			      "Tst_MED_SHOW_CONT","Tst_MED_SHOW");
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+
+   /***** End table *****/
+   HTM_TABLE_End ();
+  }
+
+void QstCho_WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
+			     struct Qst_Question *Qst,
+			     Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+			     const char *ClassTxt,
+			     const char *ClassFeedback)
   {
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
    extern const char *Txt_TST_Answer_given_by_the_user;
@@ -189,7 +273,7 @@ void QstCho_WritePrntAns (const struct Qst_PrintedQuestion *PrintedQst,
 /******* Write unique / multiple choice answer in an exam answer sheet *******/
 /*****************************************************************************/
 
-void QstCho_WriteBlnkAns (const struct Qst_Question *Qst)
+void QstCho_WriteExaBlnkAns (const struct Qst_Question *Qst)
   {
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
    unsigned NumOpt;
@@ -207,8 +291,8 @@ void QstCho_WriteBlnkAns (const struct Qst_Question *Qst)
      }
   }
 
-void QstCho_WriteCorrAns (const struct ExaPrn_Print *Print,
-			  unsigned QstInd,struct Qst_Question *Qst)
+void QstCho_WriteExaCorrAns (const struct ExaPrn_Print *Print,
+			     unsigned QstInd,struct Qst_Question *Qst)
   {
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
@@ -231,8 +315,8 @@ void QstCho_WriteCorrAns (const struct ExaPrn_Print *Print,
      }
   }
 
-void QstCho_WriteReadAns (const struct ExaPrn_Print *Print,
-			  unsigned QstInd,struct Qst_Question *Qst)
+void QstCho_WriteExaReadAns (const struct ExaPrn_Print *Print,
+			     unsigned QstInd,struct Qst_Question *Qst)
   {
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
    unsigned NumOpt;
@@ -270,8 +354,8 @@ void QstCho_WriteReadAns (const struct ExaPrn_Print *Print,
      }
   }
 
-void QstCho_WriteEditAns (const struct ExaPrn_Print *Print,
-			  unsigned QstInd,struct Qst_Question *Qst)
+void QstCho_WriteExaEditAns (const struct ExaPrn_Print *Print,
+			     unsigned QstInd,struct Qst_Question *Qst)
   {
    static const char *InputType[Qst_NUM_ANS_TYPES] =
      {

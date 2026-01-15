@@ -42,18 +42,20 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void QstCho_WritePrntAns (const struct Qst_PrintedQuestion *PrintedQst,
-			  struct Qst_Question *Qst,
-			  Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
-			  const char *ClassTxt,
-			  const char *ClassFeedback);
+void QstCho_WriteTstFillAns (const struct Qst_PrintedQuestion *PrintedQst,
+                             unsigned QstInd,struct Qst_Question *Qst);
+void QstCho_WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
+			     struct Qst_Question *Qst,
+			     Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+			     const char *ClassTxt,
+			     const char *ClassFeedback);
 
-void QstCho_WriteBlnkAns (const struct Qst_Question *Qst);
-void QstCho_WriteCorrAns (const struct ExaPrn_Print *Print,
-			  unsigned QstInd,struct Qst_Question *Qst);
-void QstCho_WriteReadAns (const struct ExaPrn_Print *Print,
-			  unsigned QstInd,struct Qst_Question *Qst);
-void QstCho_WriteEditAns (const struct ExaPrn_Print *Print,
-			  unsigned QstInd,struct Qst_Question *Qst);
+void QstCho_WriteExaBlnkAns (const struct Qst_Question *Qst);
+void QstCho_WriteExaCorrAns (const struct ExaPrn_Print *Print,
+			     unsigned QstInd,struct Qst_Question *Qst);
+void QstCho_WriteExaReadAns (const struct ExaPrn_Print *Print,
+			     unsigned QstInd,struct Qst_Question *Qst);
+void QstCho_WriteExaEditAns (const struct ExaPrn_Print *Print,
+			     unsigned QstInd,struct Qst_Question *Qst);
 
 #endif

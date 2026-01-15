@@ -88,21 +88,6 @@ static void TstPrn_WriteAnswersToFill (const struct Qst_PrintedQuestion *Printed
                                        unsigned QstInd,struct Qst_Question *Qst);
 
 //-----------------------------------------------------------------------------
-static void TstPrn_WriteIntAnsToFill (const struct Qst_PrintedQuestion *PrintedQst,
-                                      unsigned QstInd,
-                                      __attribute__((unused)) struct Qst_Question *Qst);
-static void TstPrn_WriteFltAnsToFill (const struct Qst_PrintedQuestion *PrintedQst,
-                                      unsigned QstInd,
-                                      __attribute__((unused)) struct Qst_Question *Qst);
-static void TstPrn_WriteTF_AnsToFill (const struct Qst_PrintedQuestion *PrintedQst,
-                                      unsigned QstInd,
-                                      __attribute__((unused)) struct Qst_Question *Qst);
-static void TstPrn_WriteChoAnsToFill (const struct Qst_PrintedQuestion *PrintedQst,
-                                      unsigned QstInd,struct Qst_Question *Qst);
-static void TstPrn_WriteTxtAnsToFill (const struct Qst_PrintedQuestion *PrintedQst,
-                                      unsigned QstInd,
-                                      __attribute__((unused)) struct Qst_Question *Qst);
-//-----------------------------------------------------------------------------
 
 static void TstPrn_PutCheckBoxAllowTeachers (DenAll_DenyOrAllow_t DenyOrAllowTeachers);
 
@@ -281,179 +266,16 @@ static void TstPrn_WriteAnswersToFill (const struct Qst_PrintedQuestion *Printed
 						   unsigned QstInd,
 						   struct Qst_Question *Qst) =
     {
-     [Qst_ANS_INT            ] = TstPrn_WriteIntAnsToFill,
-     [Qst_ANS_FLOAT          ] = TstPrn_WriteFltAnsToFill,
-     [Qst_ANS_TRUE_FALSE     ] = TstPrn_WriteTF_AnsToFill,
-     [Qst_ANS_UNIQUE_CHOICE  ] = TstPrn_WriteChoAnsToFill,
-     [Qst_ANS_MULTIPLE_CHOICE] = TstPrn_WriteChoAnsToFill,
-     [Qst_ANS_TEXT           ] = TstPrn_WriteTxtAnsToFill,
+     [Qst_ANS_INT            ] = QstInt_WriteTstFillAns,
+     [Qst_ANS_FLOAT          ] = QstFlt_WriteTstFillAns,
+     [Qst_ANS_TRUE_FALSE     ] = QstTF__WriteTstFillAns,
+     [Qst_ANS_UNIQUE_CHOICE  ] = QstCho_WriteTstFillAns,
+     [Qst_ANS_MULTIPLE_CHOICE] = QstCho_WriteTstFillAns,
+     [Qst_ANS_TEXT           ] = QstTxt_WriteTstFillAns,
     };
 
    /***** Write answers *****/
    TstPrn_WriteAnsBank[Qst->Answer.Type] (PrintedQst,QstInd,Qst);
-  }
-
-/*****************************************************************************/
-/****************** Write integer answer when seeing a test ******************/
-/*****************************************************************************/
-
-static void TstPrn_WriteIntAnsToFill (const struct Qst_PrintedQuestion *PrintedQst,
-                                      unsigned QstInd,
-                                      __attribute__((unused)) struct Qst_Question *Qst)
-  {
-   char StrAns[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
-
-   /***** Write input field for the answer *****/
-   snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
-   HTM_TxtF ("<input type=\"number\" name=\"%s\""
-	     " class=\"Exa_ANSWER_INPUT_FLOAT INPUT_%s\""
-	     " value=\"%s\"",
-	     StrAns,The_GetSuffix (),PrintedQst->Answer.Str);
-   HTM_ElementEnd ();
-  }
-
-/*****************************************************************************/
-/****************** Write float answer when seeing a test ********************/
-/*****************************************************************************/
-
-static void TstPrn_WriteFltAnsToFill (const struct Qst_PrintedQuestion *PrintedQst,
-                                      unsigned QstInd,
-                                      __attribute__((unused)) struct Qst_Question *Qst)
-  {
-   char StrAns[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
-
-   /***** Write input field for the answer *****/
-   snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
-   HTM_TxtF ("<input type=\"number\" name=\"%s\""
-	     " class=\"Exa_ANSWER_INPUT_FLOAT INPUT_%s\""
-	     " value=\"%s\" step=\"any\"",
-	     StrAns,The_GetSuffix (),PrintedQst->Answer.Str);
-   HTM_ElementEnd ();
-  }
-
-/*****************************************************************************/
-/************** Write false / true answer when seeing a test ****************/
-/*****************************************************************************/
-
-static void TstPrn_WriteTF_AnsToFill (const struct Qst_PrintedQuestion *PrintedQst,
-                                      unsigned QstInd,
-                                      __attribute__((unused)) struct Qst_Question *Qst)
-  {
-   /***** Write selector for the answer *****/
-   /* Initially user has not answered the question ==> initially all answers will be blank.
-      If the user does not confirm the submission of their exam ==>
-      ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-   HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
-		     "name=\"Ans%010u\" class=\"INPUT_%s\"",
-		     QstInd,The_GetSuffix ());
-      Qst_WriteTFOptionsToFill (Qst_GetOptionTFFromChar (PrintedQst->Answer.Str[0]));
-   HTM_SELECT_End ();
-  }
-
-/*****************************************************************************/
-/******** Write single or multiple choice answer when seeing a test **********/
-/*****************************************************************************/
-
-static void TstPrn_WriteChoAnsToFill (const struct Qst_PrintedQuestion *PrintedQst,
-                                      unsigned QstInd,struct Qst_Question *Qst)
-  {
-   unsigned NumOpt;
-   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
-   char StrAns[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
-   char Id[3 + Cns_MAX_DIGITS_UINT + 1 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x_yy...y"
-
-   /***** Change format of answers text *****/
-   Qst_ChangeFormatOptionsText (Qst);
-
-   /***** Get indexes for this question from string *****/
-   Qst_GetIndexesFromStr (PrintedQst->StrIndexes,Indexes);
-
-   /***** Get the user's answers for this question from string *****/
-   Qst_GetAnswersFromStr (PrintedQst->Answer.Str,UsrAnswers);
-
-   /***** Begin table *****/
-   HTM_TABLE_BeginPadding (2);
-
-      for (NumOpt = 0;
-	   NumOpt < Qst->Answer.NumOptions;
-	   NumOpt++)
-	{
-	 /***** Indexes are 0 1 2 3... if no shuffle
-		or 3 1 0 2... (example) if shuffle *****/
-	 HTM_TR_Begin (NULL);
-
-	    /***** Write selectors and letter of this option *****/
-	    /* Initially user has not answered the question ==> initially all answers will be blank.
-	       If the user does not confirm the submission of their exam ==>
-	       ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-	    HTM_TD_Begin ("class=\"LT\"");
-
-	       snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
-	       snprintf (Id,sizeof (Id),"%s_%u",StrAns,NumOpt);
-	       switch (Qst->Answer.Type)
-	         {
-	          case Qst_ANS_UNIQUE_CHOICE:
-		     HTM_INPUT_RADIO (StrAns,
-				      UsrAnswers[Indexes[NumOpt]],
-				      "id=\"%s\" value=\"%u\""
-				      " onclick=\"selectUnselectRadio(this,false,this.form.Ans%010u,%u);\"",
-				      Id,Indexes[NumOpt],
-				      QstInd,Qst->Answer.NumOptions);
-	             break;
-	          case Qst_ANS_MULTIPLE_CHOICE:
-		     HTM_INPUT_CHECKBOX (StrAns,
-					 UsrAnswers[Indexes[NumOpt]],
-					 "id=\"%s\" value=\"%u\"",
-					 Id,Indexes[NumOpt]);
-	             break;
-	          default:
-	             Err_WrongAnswerTypeExit ();
-	             break;
-	         }
-
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"Qst_TXT_%s\"",
-	                        QstInd,NumOpt,The_GetSuffix ());
-		  HTM_Option (NumOpt); HTM_CloseParenthesis (); HTM_NBSP ();
-	       HTM_LABEL_End ();
-	    HTM_TD_End ();
-
-	    /***** Write the option text *****/
-	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"Qst_TXT_%s\"",
-	                        QstInd,NumOpt,The_GetSuffix ());
-		  HTM_Txt (Qst->Answer.Options[Indexes[NumOpt]].Text);
-	       HTM_LABEL_End ();
-	       Med_ShowMedia (&Qst->Answer.Options[Indexes[NumOpt]].Media,
-			      "Tst_MED_SHOW_CONT","Tst_MED_SHOW");
-	    HTM_TD_End ();
-
-	 HTM_TR_End ();
-	}
-
-   /***** End table *****/
-   HTM_TABLE_End ();
-  }
-
-/*****************************************************************************/
-/******************** Write text answer when seeing a test *******************/
-/*****************************************************************************/
-
-static void TstPrn_WriteTxtAnsToFill (const struct Qst_PrintedQuestion *PrintedQst,
-                                      unsigned QstInd,
-                                      __attribute__((unused)) struct Qst_Question *Qst)
-  {
-   char StrAns[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
-
-   /***** Write input field for the answer *****/
-   snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
-   HTM_INPUT_TEXT (StrAns,Qst_MAX_CHARS_ANSWERS_ONE_QST,
-		   PrintedQst->Answer.Str,
-                   HTM_NO_ATTR,
-		   "size=\"40\" class=\"INPUT_%s\"",The_GetSuffix ());
   }
 
 /*****************************************************************************/
@@ -750,12 +572,12 @@ void TstPrn_WriteAnswersExam (const struct Qst_PrintedQuestion *PrintedQst,
 						   const char *ClassTxt,
 						   const char *ClassFeedback) =
     {
-     [Qst_ANS_INT            ] = QstInt_WritePrntAns,
-     [Qst_ANS_FLOAT          ] = QstFlt_WritePrntAns,
-     [Qst_ANS_TRUE_FALSE     ] = QstTF__WritePrntAns,
-     [Qst_ANS_UNIQUE_CHOICE  ] = QstCho_WritePrntAns,
-     [Qst_ANS_MULTIPLE_CHOICE] = QstCho_WritePrntAns,
-     [Qst_ANS_TEXT           ] = QstTxt_WritePrntAns,
+     [Qst_ANS_INT            ] = QstInt_WriteTstPrntAns,
+     [Qst_ANS_FLOAT          ] = QstFlt_WriteTstPrntAns,
+     [Qst_ANS_TRUE_FALSE     ] = QstTF__WriteTstPrntAns,
+     [Qst_ANS_UNIQUE_CHOICE  ] = QstCho_WriteTstPrntAns,
+     [Qst_ANS_MULTIPLE_CHOICE] = QstCho_WriteTstPrntAns,
+     [Qst_ANS_TEXT           ] = QstTxt_WriteTstPrntAns,
     };
 
    /***** Begin table *****/
