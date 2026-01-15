@@ -273,6 +273,76 @@ void QstCho_WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
 /******* Write unique / multiple choice answer in an exam answer sheet *******/
 /*****************************************************************************/
 
+void QstCho_WriteExaFillAns (const struct ExaPrn_Print *Print,
+			     unsigned QstInd,struct Qst_Question *Qst)
+  {
+   static const char *InputType[Qst_NUM_ANS_TYPES] =
+     {
+      [Qst_ANS_UNIQUE_CHOICE  ] = "radio",
+      [Qst_ANS_MULTIPLE_CHOICE] = "checkbox",
+     };
+   unsigned NumOpt;
+   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
+   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
+
+   /***** Change format of answers text *****/
+   Qst_ChangeFormatOptionsText (Qst);
+
+   /***** Get indexes for this question from string *****/
+   Qst_GetIndexesFromStr (Print->PrintedQsts[QstInd].StrIndexes,Indexes);
+
+   /***** Get the user's answers for this question from string *****/
+   Qst_GetAnswersFromStr (Print->PrintedQsts[QstInd].Answer.Str,
+			     UsrAnswers);
+
+   /***** Begin table *****/
+   HTM_TABLE_BeginPadding (2);
+
+      for (NumOpt = 0;
+	   NumOpt < Qst->Answer.NumOptions;
+	   NumOpt++)
+	{
+	 /***** Indexes are 0 1 2 3... if no shuffle
+		or 3 1 0 2... (example) if shuffle *****/
+	 HTM_TR_Begin (NULL);
+
+	    /***** Write selectors and letter of this option *****/
+	    HTM_TD_Begin ("class=\"LT\"");
+	       snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
+	       HTM_TxtF ("<input type=\"%s\" id=\"%s_%u\" name=\"Ans\" value=\"%u\"",
+			 InputType[Qst->Answer.Type],
+			 Id,NumOpt,Indexes[NumOpt]);
+	       if ((UsrAnswers[Indexes[NumOpt]] & HTM_CHECKED))
+		  HTM_Txt (" checked");
+	       ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,(int) NumOpt);
+	       HTM_ElementEnd ();
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_LABEL_Begin ("for=\"%s_%u\" class=\"Qst_TXT_%s\"",
+	                        Id,NumOpt,The_GetSuffix ());
+		  HTM_Option (NumOpt); HTM_CloseParenthesis (); HTM_NBSP ();
+	       HTM_LABEL_End ();
+	    HTM_TD_End ();
+
+	    /***** Write the option text *****/
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_LABEL_Begin ("for=\"%s_%u\" class=\"Qst_TXT_%s\"",
+	                        Id,NumOpt,The_GetSuffix ());
+		  HTM_Txt (Qst->Answer.Options[Indexes[NumOpt]].Text);
+	       HTM_LABEL_End ();
+	       Med_ShowMedia (&Qst->Answer.Options[Indexes[NumOpt]].Media,
+			      "Tst_MED_SHOW_CONT","Tst_MED_SHOW");
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+
+   /***** End table *****/
+   HTM_TABLE_End ();
+  }
+
 void QstCho_WriteExaBlnkAns (const struct Qst_Question *Qst)
   {
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];

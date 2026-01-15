@@ -51,6 +51,9 @@ void QstFlt_WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
 			     __attribute__((unused)) const char *ClassTxt,
 			     __attribute__((unused)) const char *ClassFeedback);
 
+void QstFlt_WriteExaFillAns (const struct ExaPrn_Print *Print,
+			     unsigned QstInd,
+			     __attribute__((unused)) struct Qst_Question *Qst);
 void QstFlt_WriteExaBlnkAns (__attribute__((unused)) const struct Qst_Question *Qst);
 void QstFlt_WriteExaCorrAns (__attribute__((unused)) const struct ExaPrn_Print *Print,
 			     __attribute__((unused)) unsigned QstInd,

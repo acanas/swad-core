@@ -110,6 +110,24 @@ void QstTF__WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
 /************* Write true / false answer in an exam answer sheet *************/
 /*****************************************************************************/
 
+void QstTF__WriteExaFillAns (const struct ExaPrn_Print *Print,
+			     unsigned QstInd,
+			     __attribute__((unused)) struct Qst_Question *Qst)
+  {
+   char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
+
+   /***** Write selector for the answer *****/
+   /* Initially user has not answered the question ==> initially all answers will be blank.
+      If the user does not confirm the submission of their exam ==>
+      ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
+   snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
+   HTM_TxtF ("<select id=\"%s\" name=\"Ans\"",Id);
+   ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
+   HTM_ElementEnd ();
+      Qst_WriteTFOptionsToFill (Qst_GetOptionTFFromChar (Print->PrintedQsts[QstInd].Answer.Str[0]));
+   HTM_Txt ("</select>");
+  }
+
 void QstTF__WriteExaBlnkAns (__attribute__((unused)) const struct Qst_Question *Qst)
   {
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];

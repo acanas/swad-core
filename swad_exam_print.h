@@ -98,6 +98,10 @@ void ExaPrn_GetPrintDataBySesCodAndUsrCod (struct ExaPrn_Print *Print);
 
 void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print);
 
+void ExaPrn_WriteJSToUpdateExamPrint (const struct ExaPrn_Print *Print,
+				      unsigned QstInd,
+				      const char *Id,int NumOpt);
+
 void ExaPrn_ReceiveAnswer (void);
 unsigned ExaPrn_GetParQstInd (void);
 void ExaPrn_UpdateAnswerAndPrint (struct ExaPrn_Print *Print,unsigned QstInd);

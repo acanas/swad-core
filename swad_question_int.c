@@ -127,6 +127,21 @@ void QstInt_WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
 /*************** Write integer answer in an exam answer sheet ****************/
 /*****************************************************************************/
 
+void QstInt_WriteExaFillAns (const struct ExaPrn_Print *Print,
+			     unsigned QstInd,
+			     __attribute__((unused)) struct Qst_Question *Qst)
+  {
+   char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
+
+   /***** Write input field for the answer *****/
+   snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
+   HTM_TxtF ("<input type=\"number\" id=\"%s\" name=\"Ans\""
+	     " class=\"Exa_ANSWER_INPUT_INT\" value=\"%s\"",
+	     Id,Print->PrintedQsts[QstInd].Answer.Str);
+   ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
+   HTM_ElementEnd ();
+  }
+
 void QstInt_WriteExaBlnkAns (__attribute__((unused)) const struct Qst_Question *Qst)
   {
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];

@@ -48,10 +48,6 @@
 /************** Write text answer when assessing a test print ****************/
 /*****************************************************************************/
 
-/*****************************************************************************/
-/******************** Write text answer when seeing a test *******************/
-/*****************************************************************************/
-
 void QstTxt_WriteTstFillAns (const struct Qst_PrintedQuestion *PrintedQst,
 			     unsigned QstInd,
 			     __attribute__((unused)) struct Qst_Question *Qst)
@@ -189,6 +185,22 @@ void QstTxt_WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
 /*****************************************************************************/
 /**************** Write text answer in an exam answer sheet ******************/
 /*****************************************************************************/
+
+void QstTxt_WriteExaFillAns (const struct ExaPrn_Print *Print,
+			     unsigned QstInd,
+			     __attribute__((unused)) struct Qst_Question *Qst)
+  {
+   char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
+
+   /***** Write input field for the answer *****/
+   snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
+   HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"Ans\""
+	     " size=\"40\" maxlength=\"%u\" value=\"%s\"",
+	     Id,Qst_MAX_CHARS_ANSWERS_ONE_QST,
+	     Print->PrintedQsts[QstInd].Answer.Str);
+   ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
+   HTM_ElementEnd ();
+  }
 
 void QstTxt_WriteExaBlnkAns (__attribute__((unused)) const struct Qst_Question *Qst)
   {

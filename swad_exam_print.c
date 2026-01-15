@@ -53,7 +53,12 @@
 #include "swad_parameter_code.h"
 #include "swad_photo.h"
 #include "swad_question.h"
+#include "swad_question_choice.h"
 #include "swad_question_database.h"
+#include "swad_question_float.h"
+#include "swad_question_int.h"
+#include "swad_question_text.h"
+#include "swad_question_tf.h"
 #include "swad_view.h"
 
 /*****************************************************************************/
@@ -98,28 +103,6 @@ static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
                                        struct Qst_Question *Qst);
 
 //-----------------------------------------------------------------------------
-
-static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
-				      unsigned QstInd,
-                                      __attribute__((unused)) struct Qst_Question *Qst);
-static void ExaPrn_WriteFltAnsToFill (const struct ExaPrn_Print *Print,
-				      unsigned QstInd,
-                                      __attribute__((unused)) struct Qst_Question *Qst);
-
-static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
-	                              unsigned QstInd,
-                                      __attribute__((unused)) struct Qst_Question *Qst);
-static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
-                                      unsigned QstInd,struct Qst_Question *Qst);
-static void ExaPrn_WriteTxtAnsToFill (const struct ExaPrn_Print *Print,
-	                              unsigned QstInd,
-                                      __attribute__((unused)) struct Qst_Question *Qst);
-
-//-----------------------------------------------------------------------------
-
-static void ExaPrn_WriteJSToUpdateExamPrint (const struct ExaPrn_Print *Print,
-	                                     unsigned QstInd,
-	                                     const char *Id,int NumOpt);
 
 static void ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print,unsigned QstInd);
 static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Print,
@@ -738,12 +721,12 @@ static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
                                                      unsigned QstInd,
                                                      struct Qst_Question *Qst) =
     {
-     [Qst_ANS_INT            ] = ExaPrn_WriteIntAnsToFill,
-     [Qst_ANS_FLOAT          ] = ExaPrn_WriteFltAnsToFill,
-     [Qst_ANS_TRUE_FALSE     ] = ExaPrn_WriteTF_AnsToFill,
-     [Qst_ANS_UNIQUE_CHOICE  ] = ExaPrn_WriteChoAnsToFill,
-     [Qst_ANS_MULTIPLE_CHOICE] = ExaPrn_WriteChoAnsToFill,
-     [Qst_ANS_TEXT           ] = ExaPrn_WriteTxtAnsToFill,
+     [Qst_ANS_INT            ] = QstInt_WriteExaFillAns,
+     [Qst_ANS_FLOAT          ] = QstFlt_WriteExaFillAns,
+     [Qst_ANS_TRUE_FALSE     ] = QstTF__WriteExaFillAns,
+     [Qst_ANS_UNIQUE_CHOICE  ] = QstCho_WriteExaFillAns,
+     [Qst_ANS_MULTIPLE_CHOICE] = QstCho_WriteExaFillAns,
+     [Qst_ANS_TEXT           ] = QstTxt_WriteExaFillAns,
     };
 
    /***** Write answers *****/
@@ -751,166 +734,12 @@ static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
   }
 
 /*****************************************************************************/
-/******************** Write integer answer to be filled **********************/
-/*****************************************************************************/
-
-static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
-				      unsigned QstInd,
-                                      __attribute__((unused)) struct Qst_Question *Qst)
-  {
-   char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
-
-   /***** Write input field for the answer *****/
-   snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
-   HTM_TxtF ("<input type=\"number\" id=\"%s\" name=\"Ans\""
-	     " class=\"Exa_ANSWER_INPUT_INT\" value=\"%s\"",
-	     Id,Print->PrintedQsts[QstInd].Answer.Str);
-   ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
-   HTM_ElementEnd ();
-  }
-
-/*****************************************************************************/
-/****************** Write float answer when seeing a test ********************/
-/*****************************************************************************/
-
-static void ExaPrn_WriteFltAnsToFill (const struct ExaPrn_Print *Print,
-				      unsigned QstInd,
-                                      __attribute__((unused)) struct Qst_Question *Qst)
-  {
-   char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
-
-   /***** Write input field for the answer *****/
-   snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
-   HTM_TxtF ("<input type=\"number\" id=\"%s\" name=\"Ans\""
-	     " class=\"Exa_ANSWER_INPUT_FLOAT\" value=\"%s\" step=\"any\"",
-	     Id,Print->PrintedQsts[QstInd].Answer.Str);
-   ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
-   HTM_ElementEnd ();
-  }
-
-/*****************************************************************************/
-/************** Write false / true answer when seeing a test ****************/
-/*****************************************************************************/
-
-static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
-	                              unsigned QstInd,
-                                      __attribute__((unused)) struct Qst_Question *Qst)
-  {
-   char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
-
-   /***** Write selector for the answer *****/
-   /* Initially user has not answered the question ==> initially all answers will be blank.
-      If the user does not confirm the submission of their exam ==>
-      ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-   snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
-   HTM_TxtF ("<select id=\"%s\" name=\"Ans\"",Id);
-   ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
-   HTM_ElementEnd ();
-      Qst_WriteTFOptionsToFill (Qst_GetOptionTFFromChar (Print->PrintedQsts[QstInd].Answer.Str[0]));
-   HTM_Txt ("</select>");
-  }
-
-/*****************************************************************************/
-/***** Write single or multiple choice answer when seeing an exam print ******/
-/*****************************************************************************/
-
-static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
-                                      unsigned QstInd,struct Qst_Question *Qst)
-  {
-   static const char *InputType[Qst_NUM_ANS_TYPES] =
-     {
-      [Qst_ANS_UNIQUE_CHOICE  ] = "radio",
-      [Qst_ANS_MULTIPLE_CHOICE] = "checkbox",
-     };
-   unsigned NumOpt;
-   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
-   char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
-
-   /***** Change format of answers text *****/
-   Qst_ChangeFormatOptionsText (Qst);
-
-   /***** Get indexes for this question from string *****/
-   Qst_GetIndexesFromStr (Print->PrintedQsts[QstInd].StrIndexes,Indexes);
-
-   /***** Get the user's answers for this question from string *****/
-   Qst_GetAnswersFromStr (Print->PrintedQsts[QstInd].Answer.Str,
-			     UsrAnswers);
-
-   /***** Begin table *****/
-   HTM_TABLE_BeginPadding (2);
-
-      for (NumOpt = 0;
-	   NumOpt < Qst->Answer.NumOptions;
-	   NumOpt++)
-	{
-	 /***** Indexes are 0 1 2 3... if no shuffle
-		or 3 1 0 2... (example) if shuffle *****/
-	 HTM_TR_Begin (NULL);
-
-	    /***** Write selectors and letter of this option *****/
-	    HTM_TD_Begin ("class=\"LT\"");
-	       snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
-	       HTM_TxtF ("<input type=\"%s\" id=\"%s_%u\" name=\"Ans\" value=\"%u\"",
-			 InputType[Qst->Answer.Type],
-			 Id,NumOpt,Indexes[NumOpt]);
-	       if ((UsrAnswers[Indexes[NumOpt]] & HTM_CHECKED))
-		  HTM_Txt (" checked");
-	       ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,(int) NumOpt);
-	       HTM_ElementEnd ();
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_LABEL_Begin ("for=\"%s_%u\" class=\"Qst_TXT_%s\"",
-	                        Id,NumOpt,The_GetSuffix ());
-		  HTM_Option (NumOpt); HTM_CloseParenthesis (); HTM_NBSP ();
-	       HTM_LABEL_End ();
-	    HTM_TD_End ();
-
-	    /***** Write the option text *****/
-	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_LABEL_Begin ("for=\"%s_%u\" class=\"Qst_TXT_%s\"",
-	                        Id,NumOpt,The_GetSuffix ());
-		  HTM_Txt (Qst->Answer.Options[Indexes[NumOpt]].Text);
-	       HTM_LABEL_End ();
-	       Med_ShowMedia (&Qst->Answer.Options[Indexes[NumOpt]].Media,
-			      "Tst_MED_SHOW_CONT","Tst_MED_SHOW");
-	    HTM_TD_End ();
-
-	 HTM_TR_End ();
-	}
-
-   /***** End table *****/
-   HTM_TABLE_End ();
-  }
-
-/*****************************************************************************/
-/******************** Write text answer when seeing a test *******************/
-/*****************************************************************************/
-
-static void ExaPrn_WriteTxtAnsToFill (const struct ExaPrn_Print *Print,
-	                              unsigned QstInd,
-                                      __attribute__((unused)) struct Qst_Question *Qst)
-  {
-   char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
-
-   /***** Write input field for the answer *****/
-   snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
-   HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"Ans\""
-	     " size=\"40\" maxlength=\"%u\" value=\"%s\"",
-	     Id,Qst_MAX_CHARS_ANSWERS_ONE_QST,
-	     Print->PrintedQsts[QstInd].Answer.Str);
-   ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
-   HTM_ElementEnd ();
-  }
-
-/*****************************************************************************/
 /********************** Receive answer to an exam print **********************/
 /*****************************************************************************/
 
-static void ExaPrn_WriteJSToUpdateExamPrint (const struct ExaPrn_Print *Print,
-	                                     unsigned QstInd,
-	                                     const char *Id,int NumOpt)
+void ExaPrn_WriteJSToUpdateExamPrint (const struct ExaPrn_Print *Print,
+				      unsigned QstInd,
+				      const char *Id,int NumOpt)
   {
    char *Pars;
 
