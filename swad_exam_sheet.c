@@ -77,11 +77,6 @@ static void ExaShe_WriteQst (const struct ExaPrn_Print *Print,
 			     unsigned QstInd,struct Qst_Question *Qst);
 static void ExaShe_WriteOptions (const struct ExaPrn_Print *Print,
 				 unsigned QstInd,struct Qst_Question *Qst);
-static void ExaShe_WriteOptionsTF_Ans (__attribute__((unused)) const struct ExaPrn_Print *Print,
-				       __attribute__((unused)) unsigned QstInd,
-				       __attribute__((unused)) struct Qst_Question *Qst);
-static void ExaShe_WriteOptionsChoAns (const struct ExaPrn_Print *Print,
-				       unsigned QstInd,struct Qst_Question *Qst);
 
 //-------------------------------- Answers ------------------------------------
 
@@ -312,8 +307,6 @@ static void ExaShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 	       Box_BoxBegin (Session->Title,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
 	    /* Heading */
-	    // HTM_DIV_Begin (NumUsr && ViewType == Vie_PRINT ? "class=\"PAGE_EVEN\"" :
-	    // 						     NULL);
 	    HTM_DIV_Begin (NumUsr && ViewType == Vie_PRINT ? "class=\"PAGE_EVEN\"" :
 							     NULL);
 	       Exa_Header (Exams->Exam.ExaCod,&UsrDat,Session->ShowPhotos);
@@ -445,78 +438,15 @@ static void ExaShe_WriteOptions (const struct ExaPrn_Print *Print,
     {
      [Qst_ANS_INT            ] = NULL,
      [Qst_ANS_FLOAT          ] = NULL,
-     [Qst_ANS_TRUE_FALSE     ] = ExaShe_WriteOptionsTF_Ans,
-     [Qst_ANS_UNIQUE_CHOICE  ] = ExaShe_WriteOptionsChoAns,
-     [Qst_ANS_MULTIPLE_CHOICE] = ExaShe_WriteOptionsChoAns,
+     [Qst_ANS_TRUE_FALSE     ] = QstTF__WriteExaBlnkQstOptions,
+     [Qst_ANS_UNIQUE_CHOICE  ] = QstCho_WriteExaBlnkQstOptions,
+     [Qst_ANS_MULTIPLE_CHOICE] = QstCho_WriteExaBlnkQstOptions,
      [Qst_ANS_TEXT           ] = NULL,
     };
 
    /***** Write answers *****/
    if (ExaSheQst_WriteOptionsAns[Qst->Answer.Type])
       ExaSheQst_WriteOptionsAns[Qst->Answer.Type] (Print,QstInd,Qst);
-  }
-
-/*****************************************************************************/
-/*********** Write false / true answer in an exam question sheet *************/
-/*****************************************************************************/
-
-static void ExaShe_WriteOptionsTF_Ans (__attribute__((unused)) const struct ExaPrn_Print *Print,
-				       __attribute__((unused)) unsigned QstInd,
-				       __attribute__((unused)) struct Qst_Question *Qst)
-  {
-   Qst_WriteAnsTF (Qst_OPTION_TRUE);
-   HTM_Slash ();
-   Qst_WriteAnsTF (Qst_OPTION_FALSE);
-  }
-
-/*****************************************************************************/
-/***** Write single or multiple choice answer in an exam question sheet ******/
-/*****************************************************************************/
-
-static void ExaShe_WriteOptionsChoAns (const struct ExaPrn_Print *Print,
-				       unsigned QstInd,struct Qst_Question *Qst)
-  {
-   unsigned NumOpt;
-   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-
-   /***** Change format of answers text *****/
-   Qst_ChangeFormatOptionsText (Qst);
-
-   /***** Get indexes for this question from string *****/
-   Qst_GetIndexesFromStr (Print->PrintedQsts[QstInd].StrIndexes,Indexes);
-
-   /***** Begin table *****/
-   HTM_TABLE_BeginPadding (2);
-
-      for (NumOpt = 0;
-	   NumOpt < Qst->Answer.NumOptions;
-	   NumOpt++)
-	{
-	 /***** Indexes are 0 1 2 3... if no shuffle
-		or 3 1 0 2... (example) if shuffle *****/
-	 HTM_TR_Begin (NULL);
-
-	    /***** Write letter of this option *****/
-	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_LABEL_Begin ("class=\"Qst_TXT_%s\"",The_GetSuffix ());
-		  HTM_Option (NumOpt); HTM_CloseParenthesis (); HTM_NBSP ();
-	       HTM_LABEL_End ();
-	    HTM_TD_End ();
-
-	    /***** Write the option text *****/
-	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_LABEL_Begin ("class=\"Qst_TXT_%s\"",The_GetSuffix ());
-		  HTM_Txt (Qst->Answer.Options[Indexes[NumOpt]].Text);
-	       HTM_LABEL_End ();
-	       Med_ShowMedia (&Qst->Answer.Options[Indexes[NumOpt]].Media,
-			      "Tst_MED_SHOW_CONT","Tst_MED_SHOW");
-	    HTM_TD_End ();
-
-	 HTM_TR_End ();
-	}
-
-   /***** End table *****/
-   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/

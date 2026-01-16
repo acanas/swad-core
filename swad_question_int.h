@@ -42,6 +42,8 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+//--------------------------------- Tests -------------------------------------
+
 void QstInt_WriteTstFillAns (const struct Qst_PrintedQuestion *PrintedQst,
 			     unsigned QstInd,
 			     __attribute__((unused)) struct Qst_Question *Qst);
@@ -50,6 +52,8 @@ void QstInt_WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
 			     Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 			     __attribute__((unused)) const char *ClassTxt,
 			     __attribute__((unused)) const char *ClassFeedback);
+
+//--------------------------------- Exams -------------------------------------
 
 void QstInt_WriteExaFillAns (const struct ExaPrn_Print *Print,
 			     unsigned QstInd,

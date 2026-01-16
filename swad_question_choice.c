@@ -270,6 +270,56 @@ void QstCho_WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
   }
 
 /*****************************************************************************/
+/****** Write unique / multiple choice answer in an exam question sheet ******/
+/*****************************************************************************/
+
+void QstCho_WriteExaBlnkQstOptions (const struct ExaPrn_Print *Print,
+				    unsigned QstInd,struct Qst_Question *Qst)
+  {
+   unsigned NumOpt;
+   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
+
+   /***** Change format of answers text *****/
+   Qst_ChangeFormatOptionsText (Qst);
+
+   /***** Get indexes for this question from string *****/
+   Qst_GetIndexesFromStr (Print->PrintedQsts[QstInd].StrIndexes,Indexes);
+
+   /***** Begin table *****/
+   HTM_TABLE_BeginPadding (2);
+
+      for (NumOpt = 0;
+	   NumOpt < Qst->Answer.NumOptions;
+	   NumOpt++)
+	{
+	 /***** Indexes are 0 1 2 3... if no shuffle
+		or 3 1 0 2... (example) if shuffle *****/
+	 HTM_TR_Begin (NULL);
+
+	    /***** Write letter of this option *****/
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_LABEL_Begin ("class=\"Qst_TXT_%s\"",The_GetSuffix ());
+		  HTM_Option (NumOpt); HTM_CloseParenthesis (); HTM_NBSP ();
+	       HTM_LABEL_End ();
+	    HTM_TD_End ();
+
+	    /***** Write the option text *****/
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_LABEL_Begin ("class=\"Qst_TXT_%s\"",The_GetSuffix ());
+		  HTM_Txt (Qst->Answer.Options[Indexes[NumOpt]].Text);
+	       HTM_LABEL_End ();
+	       Med_ShowMedia (&Qst->Answer.Options[Indexes[NumOpt]].Media,
+			      "Tst_MED_SHOW_CONT","Tst_MED_SHOW");
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+
+   /***** End table *****/
+   HTM_TABLE_End ();
+  }
+
+/*****************************************************************************/
 /******* Write unique / multiple choice answer in an exam answer sheet *******/
 /*****************************************************************************/
 

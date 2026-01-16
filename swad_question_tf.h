@@ -42,6 +42,8 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+//--------------------------------- Tests -------------------------------------
+
 void QstTF__WriteTstFillAns (const struct Qst_PrintedQuestion *PrintedQst,
 			     unsigned QstInd,
 			     __attribute__((unused)) struct Qst_Question *Qst);
@@ -51,6 +53,11 @@ void QstTF__WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
 			     __attribute__((unused)) const char *ClassTxt,
 			     __attribute__((unused)) const char *ClassFeedback);
 
+//--------------------------------- Exams -------------------------------------
+
+void QstTF__WriteExaBlnkQstOptions (__attribute__((unused)) const struct ExaPrn_Print *Print,
+				    __attribute__((unused)) unsigned QstInd,
+				    __attribute__((unused)) struct Qst_Question *Qst);
 void QstTF__WriteExaFillAns (const struct ExaPrn_Print *Print,
 			     unsigned QstInd,
 			     __attribute__((unused)) struct Qst_Question *Qst);

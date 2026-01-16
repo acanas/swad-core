@@ -107,6 +107,19 @@ void QstTF__WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
   }
 
 /*****************************************************************************/
+/*********** Write false / true answer in an exam question sheet *************/
+/*****************************************************************************/
+
+void QstTF__WriteExaBlnkQstOptions (__attribute__((unused)) const struct ExaPrn_Print *Print,
+				    __attribute__((unused)) unsigned QstInd,
+				    __attribute__((unused)) struct Qst_Question *Qst)
+  {
+   Qst_WriteAnsTF (Qst_OPTION_TRUE);
+   HTM_Slash ();
+   Qst_WriteAnsTF (Qst_OPTION_FALSE);
+  }
+
+/*****************************************************************************/
 /************* Write true / false answer in an exam answer sheet *************/
 /*****************************************************************************/
 

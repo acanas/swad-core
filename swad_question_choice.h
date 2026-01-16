@@ -42,6 +42,8 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+//--------------------------------- Tests -------------------------------------
+
 void QstCho_WriteTstFillAns (const struct Qst_PrintedQuestion *PrintedQst,
                              unsigned QstInd,struct Qst_Question *Qst);
 void QstCho_WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
@@ -50,6 +52,10 @@ void QstCho_WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
 			     const char *ClassTxt,
 			     const char *ClassFeedback);
 
+//--------------------------------- Exams -------------------------------------
+
+void QstCho_WriteExaBlnkQstOptions (const struct ExaPrn_Print *Print,
+				    unsigned QstInd,struct Qst_Question *Qst);
 void QstCho_WriteExaFillAns (const struct ExaPrn_Print *Print,
 			     unsigned QstInd,struct Qst_Question *Qst);
 void QstCho_WriteExaBlnkAns (const struct Qst_Question *Qst);
