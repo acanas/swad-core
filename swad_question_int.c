@@ -29,7 +29,9 @@
 
 #include "swad_constant.h"
 #include "swad_cryptography.h"
+#include "swad_database.h"
 #include "swad_exam_sheet.h"
+#include "swad_question_database.h"
 #include "swad_question_int.h"
 
 /*****************************************************************************/
@@ -43,6 +45,66 @@
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+static void QstInt_GetCorrectAnswerFromDB (const char *Table,
+					   struct Qst_Question *Qst);
+static void QstInt_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
+				    const struct Qst_Question *Qst);
+
+/*****************************************************************************/
+/******* Get correct answer and compute score for each type of answer ********/
+/*****************************************************************************/
+
+void QstInt_GetCorrectAndComputeAnsScore (const char *Table,
+					  struct Qst_PrintedQuestion *PrintedQst,
+					  struct Qst_Question *Qst)
+  {
+   /***** Get the numerical value of the correct answer, and compute score *****/
+   QstInt_GetCorrectAnswerFromDB (Table,Qst);
+   QstInt_ComputeAnsScore (PrintedQst,Qst);
+  }
+
+static void QstInt_GetCorrectAnswerFromDB (const char *Table,
+					   struct Qst_Question *Qst)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Query database *****/
+   Qst->Answer.NumOptions = Qst_DB_GetTextOfAnswers (&mysql_res,
+						     Table,Qst->QstCod);
+
+   /***** Check if number of rows is correct *****/
+   Qst_CheckIfNumberOfAnswersIsOne (Qst);
+
+   /***** Get correct answer *****/
+   row = mysql_fetch_row (mysql_res);
+   if (sscanf (row[0],"%ld",&Qst->Answer.Integer) != 1)
+      Err_WrongAnswerExit ();
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+static void QstInt_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
+				    const struct Qst_Question *Qst)
+  {
+   long AnsUsr;
+
+   PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_BLANK;
+   PrintedQst->Answer.Score = 0.0;	// Default score for blank or wrong answer
+
+   if (PrintedQst->Answer.Str[0])	// If user has answered the answer
+     {
+      PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
+      if (sscanf (PrintedQst->Answer.Str,"%ld",&AnsUsr) == 1)
+	 if (AnsUsr == Qst->Answer.Integer)	// Correct answer
+	   {
+	    PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
+	    PrintedQst->Answer.Score = 1.0;
+	   }
+     }
+  }
 
 /*****************************************************************************/
 /**************************** Write integer answer ***************************/

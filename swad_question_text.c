@@ -29,7 +29,9 @@
 
 #include "swad_constant.h"
 #include "swad_cryptography.h"
+#include "swad_database.h"
 #include "swad_exam_sheet.h"
+#include "swad_question_database.h"
 #include "swad_question_text.h"
 
 /*****************************************************************************/
@@ -43,6 +45,104 @@
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+static void QstTxt_GetCorrectAnswerFromDB (const char *Table,
+					   struct Qst_Question *Qst);
+static void QstTxt_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
+				    const struct Qst_Question *Qst);
+
+/*****************************************************************************/
+/******* Get correct answer and compute score for each type of answer ********/
+/*****************************************************************************/
+
+void QstTxt_GetCorrectAndComputeAnsScore (const char *Table,
+					  struct Qst_PrintedQuestion *PrintedQst,
+				          struct Qst_Question *Qst)
+  {
+   /***** Get correct text answers for this question from database,
+          and compute score *****/
+   QstTxt_GetCorrectAnswerFromDB (Table,Qst);
+   QstTxt_ComputeAnsScore (PrintedQst,Qst);
+  }
+
+static void QstTxt_GetCorrectAnswerFromDB (const char *Table,
+					   struct Qst_Question *Qst)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumOpt;
+
+   /***** Query database *****/
+   Qst->Answer.NumOptions = Qst_DB_GetTextOfAnswers (&mysql_res,
+							  Table,Qst->QstCod);
+
+   /***** Get text and correctness of answers for this question
+          from database (one row per answer) *****/
+   for (NumOpt = 0;
+	NumOpt < Qst->Answer.NumOptions;
+	NumOpt++)
+     {
+      /***** Get next answer *****/
+      row = mysql_fetch_row (mysql_res);
+
+      /***** Allocate memory for text in this choice answer *****/
+      if (Qst_AllocateTextChoiceAnswer (Qst,NumOpt) == Err_ERROR)
+	 /* Abort on error */
+	 Ale_ShowAlertsAndExit ();
+
+      /***** Copy answer text (row[0]) ******/
+      Str_Copy (Qst->Answer.Options[NumOpt].Text,row[0],
+                Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+     }
+
+   /***** Change format of answers text *****/
+   Qst_ChangeFormatOptionsText (Qst);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+static void QstTxt_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
+				    const struct Qst_Question *Qst)
+  {
+   unsigned NumOpt;
+   char TextAnsUsr[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
+   char TextAnsOK[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
+
+   PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_BLANK;
+   PrintedQst->Answer.Score = 0.0;	// Default score for blank or wrong answer
+
+   if (PrintedQst->Answer.Str[0])	// If user has answered the answer
+     {
+      /* Filter the user answer */
+      Str_Copy (TextAnsUsr,PrintedQst->Answer.Str,
+		sizeof (TextAnsUsr) - 1);
+
+      /* In order to compare student answer to stored answer,
+	 the text answers are stored avoiding two or more consecurive spaces */
+      Str_ReplaceSeveralSpacesForOne (TextAnsUsr);
+      Str_ConvertToComparable (TextAnsUsr);
+
+      PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
+      for (NumOpt = 0;
+	   NumOpt < Qst->Answer.NumOptions;
+	   NumOpt++)
+        {
+         /* Filter this correct answer */
+         Str_Copy (TextAnsOK,Qst->Answer.Options[NumOpt].Text,
+                   sizeof (TextAnsOK) - 1);
+         Str_ConvertToComparable (TextAnsOK);
+
+         /* Check is user answer is correct */
+         if (!strcoll (TextAnsUsr,TextAnsOK))
+           {
+            PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
+	    PrintedQst->Answer.Score = 1.0;	// Correct answer
+	    break;
+           }
+        }
+     }
+  }
 
 /*****************************************************************************/
 /***************************** Write text answer *****************************/

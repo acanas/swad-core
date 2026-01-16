@@ -42,6 +42,10 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void QstFlt_GetCorrectAndComputeAnsScore (const char *Table,
+					  struct Qst_PrintedQuestion *PrintedQst,
+				          struct Qst_Question *Qst);
+
 void QstFlt_WriteCorrAns (struct Qst_Question *Qst,
 			  const char *ClassTxt,
 			  __attribute__((unused)) const char *ClassFeedback);

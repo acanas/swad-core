@@ -275,17 +275,6 @@ void Qst_ComputeAnswerScore (const char *Table,
 			     struct Qst_PrintedQuestion *PrintedQst,
 			     struct Qst_Question *Qst);
 
-void Qst_ComputeIntAnsScore (struct Qst_PrintedQuestion *PrintedQst,
-			     const struct Qst_Question *Qst);
-void Qst_ComputeFltAnsScore (struct Qst_PrintedQuestion *PrintedQst,
-			     const struct Qst_Question *Qst);
-void Qst_ComputeTF_AnsScore (struct Qst_PrintedQuestion *PrintedQst,
-			     const struct Qst_Question *Qst);
-void Qst_ComputeChoAnsScore (struct Qst_PrintedQuestion *PrintedQst,
-			     const struct Qst_Question *Qst);
-void Qst_ComputeTxtAnsScore (struct Qst_PrintedQuestion *PrintedQst,
-			     const struct Qst_Question *Qst);
-
 void Qst_ComputeAndShowGrade (unsigned NumQsts,double Score,double MaxGrade);
 double Qst_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade);
 

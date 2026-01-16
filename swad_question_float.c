@@ -27,7 +27,9 @@
 
 #include "swad_constant.h"
 #include "swad_cryptography.h"
+#include "swad_database.h"
 #include "swad_exam_sheet.h"
+#include "swad_question_database.h"
 #include "swad_question_float.h"
 
 /*****************************************************************************/
@@ -41,6 +43,85 @@
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+static void QstFlt_GetCorrectAnswerFromDB (const char *Table,
+					   struct Qst_Question *Qst);
+static void QstFlt_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
+				    const struct Qst_Question *Qst);
+
+/*****************************************************************************/
+/******* Get correct answer and compute score for each type of answer ********/
+/*****************************************************************************/
+
+void QstFlt_GetCorrectAndComputeAnsScore (const char *Table,
+					  struct Qst_PrintedQuestion *PrintedQst,
+				          struct Qst_Question *Qst)
+  {
+   /***** Get the numerical value of the minimum and maximum correct answers,
+          and compute score *****/
+   QstFlt_GetCorrectAnswerFromDB (Table,Qst);
+   QstFlt_ComputeAnsScore (PrintedQst,Qst);
+  }
+
+static void QstFlt_GetCorrectAnswerFromDB (const char *Table,
+					   struct Qst_Question *Qst)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumOpt;
+   Err_SuccessOrError_t SuccessOrError;
+   double Tmp;
+
+   /***** Query database *****/
+   Qst->Answer.NumOptions = Qst_DB_GetTextOfAnswers (&mysql_res,
+						     Table,Qst->QstCod);
+
+   /***** Check if number of rows is correct *****/
+   if (Qst->Answer.NumOptions != 2)
+      Err_WrongAnswerExit ();
+
+   /***** Get float range *****/
+   for (SuccessOrError = Err_SUCCESS, NumOpt = 0;
+	SuccessOrError == Err_SUCCESS && NumOpt < 2;
+	NumOpt++)
+     {
+      row = mysql_fetch_row (mysql_res);
+      SuccessOrError = Str_GetDoubleFromStr (row[0],&Qst->Answer.FloatingPoint[NumOpt]);
+     }
+   if (SuccessOrError == Err_SUCCESS)
+      if (Qst->Answer.FloatingPoint[0] >
+	  Qst->Answer.FloatingPoint[1]) 	// The maximum and the minimum are swapped
+       {
+	 /* Swap maximum and minimum */
+	 Tmp = Qst->Answer.FloatingPoint[0];
+	 Qst->Answer.FloatingPoint[0] = Qst->Answer.FloatingPoint[1];
+	 Qst->Answer.FloatingPoint[1] = Tmp;
+	}
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+static void QstFlt_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
+				    const struct Qst_Question *Qst)
+  {
+   double AnsUsr;
+
+   PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_BLANK;
+   PrintedQst->Answer.Score = 0.0;	// Default score for blank or wrong answer
+
+   if (PrintedQst->Answer.Str[0])	// If user has answered the answer
+     {
+      PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
+      if (Str_GetDoubleFromStr (PrintedQst->Answer.Str,&AnsUsr) == Err_SUCCESS)
+	 if (AnsUsr >= Qst->Answer.FloatingPoint[0] &&
+	     AnsUsr <= Qst->Answer.FloatingPoint[1])
+	   {
+	    PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
+	    PrintedQst->Answer.Score = 1.0; // Correct (inside the interval)
+	   }
+     }
+  }
 
 /*****************************************************************************/
 /***************************** Write float answer ****************************/

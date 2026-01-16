@@ -27,7 +27,9 @@
 
 #include "swad_constant.h"
 #include "swad_cryptography.h"
+#include "swad_database.h"
 #include "swad_exam_sheet.h"
+#include "swad_question_database.h"
 #include "swad_question_tf.h"
 
 /*****************************************************************************/
@@ -41,6 +43,65 @@
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+static void QstTF__GetCorrectAnswerFromDB (const char *Table,
+					   struct Qst_Question *Qst);
+static void QstTF__ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
+				    const struct Qst_Question *Qst);
+
+/*****************************************************************************/
+/******* Get correct answer and compute score for each type of answer ********/
+/*****************************************************************************/
+
+void QstTF__GetCorrectAndComputeAnsScore (const char *Table,
+					  struct Qst_PrintedQuestion *PrintedQst,
+				          struct Qst_Question *Qst)
+  {
+   /***** Get answer true or false, and compute score *****/
+   QstTF__GetCorrectAnswerFromDB (Table,Qst);
+   QstTF__ComputeAnsScore (PrintedQst,Qst);
+  }
+
+static void QstTF__GetCorrectAnswerFromDB (const char *Table,
+					   struct Qst_Question *Qst)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Query database *****/
+   Qst->Answer.NumOptions = Qst_DB_GetTextOfAnswers (&mysql_res,
+						     Table,Qst->QstCod);
+
+   /***** Check if number of rows is correct *****/
+   Qst_CheckIfNumberOfAnswersIsOne (Qst);
+
+   /***** Get answer *****/
+   row = mysql_fetch_row (mysql_res);
+   Qst->Answer.OptionTF = Qst_GetOptionTFFromChar (row[0][0]);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+static void QstTF__ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
+				    const struct Qst_Question *Qst)
+  {
+   static double Scores[] =
+     {
+      [TstPrn_ANSWER_IS_CORRECT       ] =  1.0,
+      [TstPrn_ANSWER_IS_WRONG_NEGATIVE] = -1.0,
+      [TstPrn_ANSWER_IS_WRONG_ZERO    ] =  0.0,	// Not used
+      [TstPrn_ANSWER_IS_WRONG_POSITIVE] =  0.0,	// Not used
+      [TstPrn_ANSWER_IS_BLANK         ] =  0.0,
+     };
+
+   PrintedQst->Answer.IsCorrect = PrintedQst->Answer.Str[0] ?	// If user has selected T or F
+				  (Qst_GetOptionTFFromChar (PrintedQst->Answer.Str[0]) == Qst->Answer.OptionTF ?
+				     TstPrn_ANSWER_IS_CORRECT :
+				     TstPrn_ANSWER_IS_WRONG_NEGATIVE) :
+				  TstPrn_ANSWER_IS_BLANK;
+   PrintedQst->Answer.Score = Scores[PrintedQst->Answer.IsCorrect];
+  }
 
 /*****************************************************************************/
 /************************* Write false / true answer *************************/

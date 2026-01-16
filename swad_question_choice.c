@@ -27,8 +27,10 @@
 
 #include "swad_constant.h"
 #include "swad_cryptography.h"
+#include "swad_database.h"
 #include "swad_exam_sheet.h"
 #include "swad_question_choice.h"
+#include "swad_question_database.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -41,6 +43,160 @@
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+static void QstCho_GetCorrectAnswerFromDB (const char *Table,
+					   struct Qst_Question *Qst);
+static void QstCho_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
+				    const struct Qst_Question *Qst);
+
+/*****************************************************************************/
+/******* Get correct answer and compute score for each type of answer ********/
+/*****************************************************************************/
+
+void QstCho_GetCorrectAndComputeAnsScore (const char *Table,
+					  struct Qst_PrintedQuestion *PrintedQst,
+				          struct Qst_Question *Qst)
+  {
+   /***** Get correct options of test question from database,
+          and compute score *****/
+   QstCho_GetCorrectAnswerFromDB (Table,Qst);
+   QstCho_ComputeAnsScore (PrintedQst,Qst);
+  }
+
+static void QstCho_GetCorrectAnswerFromDB (const char *Table,
+					   struct Qst_Question *Qst)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumOpt;
+
+   /***** Query database *****/
+   Qst->Answer.NumOptions = Qst_DB_GetQstAnswersCorr (&mysql_res,
+						      Table,Qst->QstCod);
+
+   /***** Get options *****/
+   for (NumOpt = 0;
+	NumOpt < Qst->Answer.NumOptions;
+	NumOpt++)
+     {
+      /* Get next answer */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Assign correctness (row[0]) of this answer (this option) */
+      Qst->Answer.Options[NumOpt].Correct = Qst_GetCorrectFromYN (row[0][0]);
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+static void QstCho_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
+				    const struct Qst_Question *Qst)
+  {
+   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
+   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   unsigned NumOpt;
+   Qst_WrongOrCorrect_t OptionWrongOrCorrect;
+   unsigned NumOptTotInQst = 0;
+   unsigned NumOptCorrInQst = 0;
+   unsigned NumAnsGood = 0;
+   unsigned NumAnsBad = 0;
+
+   PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_BLANK;
+   PrintedQst->Answer.Score = 0.0;
+
+   /***** Get indexes for this question from string *****/
+   Qst_GetIndexesFromStr (PrintedQst->StrIndexes,Indexes);
+
+   /***** Get the user's answers for this question from string *****/
+   Qst_GetAnswersFromStr (PrintedQst->Answer.Str,UsrAnswers);
+
+   /***** Compute the total score of this question *****/
+   for (NumOpt = 0;
+	NumOpt < Qst->Answer.NumOptions;
+	NumOpt++)
+     {
+      OptionWrongOrCorrect = Qst->Answer.Options[Indexes[NumOpt]].Correct;
+      NumOptTotInQst++;
+      if (OptionWrongOrCorrect == Qst_CORRECT)
+         NumOptCorrInQst++;
+      if (UsrAnswers[Indexes[NumOpt]] == HTM_CHECKED)	// This answer has been selected by the user
+         switch (OptionWrongOrCorrect)
+           {
+            case Qst_CORRECT:
+               NumAnsGood++;
+               break;
+            case Qst_WRONG:
+            default:
+               NumAnsBad++;
+               break;
+           }
+     }
+
+   /* The answer is not blank? */
+   if (NumAnsGood || NumAnsBad)	// If user has answered the answer
+     {
+      /* Compute the score */
+      if (Qst->Answer.Type == Qst_ANS_UNIQUE_CHOICE)
+        {
+         if (NumOptTotInQst >= 2)	// It should be 2 options at least
+           {
+            if (NumAnsGood == 1 && NumAnsBad == 0)
+              {
+               PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
+               PrintedQst->Answer.Score = 1;
+              }
+            else if (NumAnsGood == 0 && NumAnsBad == 1)
+              {
+               PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_NEGATIVE;
+               PrintedQst->Answer.Score = -1.0 / (double) (NumOptTotInQst - 1);
+              }
+            // other case should be impossible
+           }
+         // other case should be impossible
+        }
+      else	// AnswerType == Tst_ANS_MULTIPLE_CHOICE
+        {
+         if (NumOptCorrInQst)	// There are correct options in the question
+           {
+            if (NumAnsGood == NumOptCorrInQst && NumAnsBad == 0)
+              {
+	       PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
+	       PrintedQst->Answer.Score = 1.0;
+              }
+            else
+              {
+	       if (NumOptCorrInQst < NumOptTotInQst)	// If there are correct options and wrong options (typical case)
+		 {
+		  PrintedQst->Answer.Score = (double) NumAnsGood / (double) NumOptCorrInQst -
+						  (double) NumAnsBad  / (double) (NumOptTotInQst - NumOptCorrInQst);
+		  if (PrintedQst->Answer.Score > 0.000001)
+		     PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_POSITIVE;
+		  else if (PrintedQst->Answer.Score < -0.000001)
+		     PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_NEGATIVE;
+		  else	// Score is 0
+		     PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
+		 }
+	       else					// If all options are correct (extrange case)
+		 {
+		  if (NumAnsGood == 0)
+		    {
+		     PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
+		     PrintedQst->Answer.Score = 0.0;
+		    }
+		  else
+		    {
+		     PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_POSITIVE;
+		     PrintedQst->Answer.Score = (double) NumAnsGood /
+							     (double) NumOptCorrInQst;
+		    }
+		 }
+              }
+           }
+         // other case should be impossible
+        }
+     }
+  }
 
 /*****************************************************************************/
 /******************* Write unique / multiple choice answer *******************/
