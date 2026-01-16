@@ -45,6 +45,21 @@
 /*****************************************************************************/
 
 /*****************************************************************************/
+/**************************** Write integer answer ***************************/
+/*****************************************************************************/
+
+void QstInt_WriteCorrAns (struct Qst_Question *Qst,
+			  const char *ClassTxt,
+			  __attribute__((unused)) const char *ClassFeedback)
+  {
+   HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
+      HTM_OpenParenthesis ();
+         HTM_Long (Qst->Answer.Integer);
+      HTM_CloseParenthesis ();
+   HTM_SPAN_End ();
+  }
+
+/*****************************************************************************/
 /******************* Write integer answer in a test print ********************/
 /*****************************************************************************/
 

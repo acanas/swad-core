@@ -153,6 +153,9 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 						  unsigned NumQsts,
                                                   MYSQL_RES *mysql_res,
 						  Usr_Can_t ICanEditQuestions);
+static void Gam_ListQuestionForEdition (struct Qst_Question *Qst,
+				        unsigned QstInd,Exi_Exist_t QstExists,
+				        const char *Anchor);
 
 static void Gam_PutIconToAddNewQuestions (void *Games);
 
@@ -1809,7 +1812,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 
 	       /***** Question *****/
 	       QuestionExists = Qst_GetQstDataByCod (&Qst);
-	       Qst_ListQuestionForEdition (&Qst,QstInd,QuestionExists,Anchor);
+	       Gam_ListQuestionForEdition (&Qst,QstInd,QuestionExists,Anchor);
 
 	    /***** End row *****/
 	    HTM_TR_End ();
@@ -1823,6 +1826,65 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 
    /***** End table *****/
    HTM_TABLE_End ();
+  }
+
+/*****************************************************************************/
+/********************* List game question for edition ************************/
+/*****************************************************************************/
+
+static void Gam_ListQuestionForEdition (struct Qst_Question *Qst,
+				        unsigned QstInd,Exi_Exist_t QstExists,
+				        const char *Anchor)
+  {
+   extern const char *Txt_Question_removed;
+
+   /***** Number of question and answer type (row[1]) *****/
+   HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+      Lay_WriteIndex (QstInd,"BIG_INDEX");
+      if (QstExists == Exi_EXISTS)
+	 Qst_WriteAnswerType (Qst->Answer.Type,Qst->Validity);
+   HTM_TD_End ();
+
+   /***** Write question code *****/
+   HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s CT\"",
+                 The_GetSuffix (),The_GetColorRows ());
+      HTM_Long (Qst->QstCod);
+      HTM_NBSP ();
+   HTM_TD_End ();
+
+   /***** Write the question tags *****/
+   HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+      if (QstExists == Exi_EXISTS)
+	 Tag_GetAndWriteTagsQst (Qst->QstCod);
+   HTM_TD_End ();
+
+   /***** Write stem (row[3]) and media *****/
+   HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+      HTM_ARTICLE_Begin (Anchor);
+	 switch (QstExists)
+	   {
+	    case Exi_EXISTS:
+	       /* Write stem */
+	       Qst_WriteQstStem (Qst->Stem,"Qst_TXT",HidVis_VISIBLE);
+
+	       /* Show media */
+	       Med_ShowMedia (&Qst->Media,
+			      "Tst_MED_EDIT_LIST_CONT","Tst_MED_EDIT_LIST");
+
+	       /* Show feedback */
+	       Qst_WriteQstFeedback (Qst->Feedback,"Qst_TXT_LIGHT");
+
+	       /* Show answers */
+	       Qst_WriteAnswers (Qst,"Qst_TXT","Qst_TXT_LIGHT");
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       HTM_SPAN_Begin ("class=\"DAT_LIGHT_%s\"",The_GetSuffix ());
+		  HTM_Txt (Txt_Question_removed);
+	       HTM_SPAN_End ();
+	   }
+      HTM_ARTICLE_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/

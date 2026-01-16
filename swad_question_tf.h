@@ -42,6 +42,10 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void QstTF__WriteCorrAns (struct Qst_Question *Qst,
+			  const char *ClassTxt,
+			  __attribute__((unused)) const char *ClassFeedback);
+
 //--------------------------------- Tests -------------------------------------
 
 void QstTF__WriteTstFillAns (const struct Qst_PrintedQuestion *PrintedQst,

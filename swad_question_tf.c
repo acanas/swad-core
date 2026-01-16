@@ -43,6 +43,21 @@
 /*****************************************************************************/
 
 /*****************************************************************************/
+/************************* Write false / true answer *************************/
+/*****************************************************************************/
+
+void QstTF__WriteCorrAns (struct Qst_Question *Qst,
+			  const char *ClassTxt,
+			  __attribute__((unused)) const char *ClassFeedback)
+  {
+   HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
+      HTM_OpenParenthesis ();
+	 Qst_WriteAnsTF (Qst->Answer.OptionTF);
+      HTM_CloseParenthesis ();
+   HTM_SPAN_End ();
+  }
+
+/*****************************************************************************/
 /***************** Write false / true answer in a test print *****************/
 /*****************************************************************************/
 

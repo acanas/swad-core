@@ -136,19 +136,6 @@ extern struct Globals Gbl;
 static void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
 				       HTM_Attributes_t Attributes);
 
-static void Qst_WriteIntAns (struct Qst_Question *Qst,
-                             const char *ClassTxt,
-                             __attribute__((unused)) const char *ClassFeedback);
-static void Qst_WriteFltAns (struct Qst_Question *Qst,
-                             const char *ClassTxt,
-                             __attribute__((unused)) const char *ClassFeedback);
-static void Qst_WriteTF_Ans (struct Qst_Question *Qst,
-                             const char *ClassTxt,
-                             __attribute__((unused)) const char *ClassFeedback);
-static void Qst_WriteChoAns (struct Qst_Question *Qst,
-                             const char *ClassTxt,
-                             const char *ClassFeedback);
-
 static void Qst_PutIntInputField (const struct Qst_Question *Qst);
 static void Qst_PutFloatInputField (const struct Qst_Question *Qst,
 				    unsigned Index);
@@ -564,65 +551,6 @@ void Qst_PutIconsEditBankQsts (void *Questions)
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_TESTS);
-  }
-
-/*****************************************************************************/
-/********************* List game question for edition ************************/
-/*****************************************************************************/
-
-void Qst_ListQuestionForEdition (struct Qst_Question *Qst,
-                                 unsigned QstInd,Exi_Exist_t QstExists,
-                                 const char *Anchor)
-  {
-   extern const char *Txt_Question_removed;
-
-   /***** Number of question and answer type (row[1]) *****/
-   HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
-      Lay_WriteIndex (QstInd,"BIG_INDEX");
-      if (QstExists == Exi_EXISTS)
-	 Qst_WriteAnswerType (Qst->Answer.Type,Qst->Validity);
-   HTM_TD_End ();
-
-   /***** Write question code *****/
-   HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s CT\"",
-                 The_GetSuffix (),The_GetColorRows ());
-      HTM_Long (Qst->QstCod);
-      HTM_NBSP ();
-   HTM_TD_End ();
-
-   /***** Write the question tags *****/
-   HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-      if (QstExists == Exi_EXISTS)
-	 Tag_GetAndWriteTagsQst (Qst->QstCod);
-   HTM_TD_End ();
-
-   /***** Write stem (row[3]) and media *****/
-   HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-      HTM_ARTICLE_Begin (Anchor);
-	 switch (QstExists)
-	   {
-	    case Exi_EXISTS:
-	       /* Write stem */
-	       Qst_WriteQstStem (Qst->Stem,"Qst_TXT",HidVis_VISIBLE);
-
-	       /* Show media */
-	       Med_ShowMedia (&Qst->Media,
-			      "Tst_MED_EDIT_LIST_CONT","Tst_MED_EDIT_LIST");
-
-	       /* Show feedback */
-	       Qst_WriteQstFeedback (Qst->Feedback,"Qst_TXT_LIGHT");
-
-	       /* Show answers */
-	       Qst_WriteAnswers (Qst,"Qst_TXT","Qst_TXT_LIGHT");
-	       break;
-	    case Exi_DOES_NOT_EXIST:
-	    default:
-	       HTM_SPAN_Begin ("class=\"DAT_LIGHT_%s\"",The_GetSuffix ());
-		  HTM_Txt (Txt_Question_removed);
-	       HTM_SPAN_End ();
-	   }
-      HTM_ARTICLE_End ();
-   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -1451,12 +1379,12 @@ void Qst_WriteAnswers (struct Qst_Question *Qst,
                                             const char *ClassTxt,
                                             const char *ClassFeedback) =
     {
-     [Qst_ANS_INT            ] = Qst_WriteIntAns,
-     [Qst_ANS_FLOAT          ] = Qst_WriteFltAns,
-     [Qst_ANS_TRUE_FALSE     ] = Qst_WriteTF_Ans,
-     [Qst_ANS_UNIQUE_CHOICE  ] = Qst_WriteChoAns,
-     [Qst_ANS_MULTIPLE_CHOICE] = Qst_WriteChoAns,
-     [Qst_ANS_TEXT           ] = Qst_WriteChoAns,
+     [Qst_ANS_INT            ] = QstInt_WriteCorrAns,
+     [Qst_ANS_FLOAT          ] = QstFlt_WriteCorrAns,
+     [Qst_ANS_TRUE_FALSE     ] = QstTF__WriteCorrAns,
+     [Qst_ANS_UNIQUE_CHOICE  ] = QstCho_WriteCorrAns,
+     [Qst_ANS_MULTIPLE_CHOICE] = QstCho_WriteCorrAns,
+     [Qst_ANS_TEXT           ] = QstTxt_WriteCorrAns,
     };
 
    /***** Write answers *****/
@@ -1487,110 +1415,6 @@ void Qst_ListOneQstToEdit (struct Qst_Questions *Qsts)
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
-  }
-
-/*****************************************************************************/
-/****************** Write integer answer when editing a test *****************/
-/*****************************************************************************/
-
-static void Qst_WriteIntAns (struct Qst_Question *Qst,
-                             const char *ClassTxt,
-                             __attribute__((unused)) const char *ClassFeedback)
-  {
-   HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
-      HTM_OpenParenthesis ();
-         HTM_Long (Qst->Answer.Integer);
-      HTM_CloseParenthesis ();
-   HTM_SPAN_End ();
-  }
-
-/*****************************************************************************/
-/****************** Write float answer when editing a test *******************/
-/*****************************************************************************/
-
-static void Qst_WriteFltAns (struct Qst_Question *Qst,
-                             const char *ClassTxt,
-                             __attribute__((unused)) const char *ClassFeedback)
-  {
-   HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
-      HTM_OpenParenthesis ();
-         HTM_DoubleRange (Qst->Answer.FloatingPoint[0],
-                          Qst->Answer.FloatingPoint[1]);
-      HTM_CloseParenthesis ();
-   HTM_SPAN_End ();
-  }
-
-/*****************************************************************************/
-/*********** Write false / true answer when listing test questions ***********/
-/*****************************************************************************/
-
-static void Qst_WriteTF_Ans (struct Qst_Question *Qst,
-                             const char *ClassTxt,
-                             __attribute__((unused)) const char *ClassFeedback)
-  {
-   /***** Write answer *****/
-   HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
-      HTM_OpenParenthesis ();
-	 Qst_WriteAnsTF (Qst->Answer.OptionTF);
-      HTM_CloseParenthesis ();
-   HTM_SPAN_End ();
-  }
-
-/*****************************************************************************/
-/**** Write single or multiple choice answer when listing test questions *****/
-/*****************************************************************************/
-
-static void Qst_WriteChoAns (struct Qst_Question *Qst,
-                             const char *ClassTxt,
-                             const char *ClassFeedback)
-  {
-   extern const char *Txt_TST_Answer_given_by_the_teachers;
-   unsigned NumOpt;
-
-   /***** Change format of answers text *****/
-   Qst_ChangeFormatOptionsText (Qst);
-
-   /***** Change format of answers feedback *****/
-   Qst_ChangeFormatOptionsFeedback (Qst);
-
-   HTM_TABLE_BeginPadding (2);
-      for (NumOpt = 0;
-	   NumOpt < Qst->Answer.NumOptions;
-	   NumOpt++)
-	{
-	 HTM_TR_Begin (NULL);
-
-	    /* Put an icon that indicates whether the answer is correct or wrong */
-	    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
-	       if (Qst->Answer.Options[NumOpt].Correct == Qst_CORRECT)
-		  Ico_PutIcon ("check.svg",Ico_BLACK,
-		               Txt_TST_Answer_given_by_the_teachers,"CONTEXT_ICO16x16");
-	    HTM_TD_End ();
-
-	    /* Write the number of option */
-	    HTM_TD_Begin ("class=\"LT %s_%s\"",ClassTxt,The_GetSuffix ());
-	       HTM_Option (NumOpt); HTM_CloseParenthesis (); HTM_NBSP ();
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"LT\"");
-
-	       /* Write the text of the answer and the media */
-	       HTM_DIV_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
-		  HTM_Txt (Qst->Answer.Options[NumOpt].Text);
-		  Med_ShowMedia (&Qst->Answer.Options[NumOpt].Media,
-				 "Tst_MED_EDIT_LIST_CONT","Tst_MED_EDIT_LIST");
-	       HTM_DIV_End ();
-
-	       /* Write the text of the feedback */
-	       HTM_DIV_Begin ("class=\"%s_%s\"",ClassFeedback,The_GetSuffix ());
-		  HTM_Txt (Qst->Answer.Options[NumOpt].Feedback);
-	       HTM_DIV_End ();
-
-	    HTM_TD_End ();
-
-	 HTM_TR_End ();
-	}
-   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/

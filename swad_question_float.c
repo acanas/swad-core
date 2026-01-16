@@ -43,6 +43,22 @@
 /*****************************************************************************/
 
 /*****************************************************************************/
+/***************************** Write float answer ****************************/
+/*****************************************************************************/
+
+void QstFlt_WriteCorrAns (struct Qst_Question *Qst,
+			  const char *ClassTxt,
+			  __attribute__((unused)) const char *ClassFeedback)
+  {
+   HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
+      HTM_OpenParenthesis ();
+         HTM_DoubleRange (Qst->Answer.FloatingPoint[0],
+                          Qst->Answer.FloatingPoint[1]);
+      HTM_CloseParenthesis ();
+   HTM_SPAN_End ();
+  }
+
+/*****************************************************************************/
 /******************** Write float answer in an test print ********************/
 /*****************************************************************************/
 

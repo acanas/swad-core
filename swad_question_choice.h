@@ -42,6 +42,9 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void QstCho_WriteCorrAns (struct Qst_Question *Qst,
+			  const char *ClassTxt,
+			  const char *ClassFeedback);
 //--------------------------------- Tests -------------------------------------
 
 void QstCho_WriteTstFillAns (const struct Qst_PrintedQuestion *PrintedQst,

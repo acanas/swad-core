@@ -158,9 +158,6 @@ void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
 void Qst_PutIconsRequestBankQsts (__attribute__((unused)) void *Args);
 void Qst_PutIconsEditBankQsts (void *Qsts);
 
-void Qst_ListQuestionForEdition (struct Qst_Question *Qst,
-                                 unsigned QstInd,Exi_Exist_t QstExists,
-                                 const char *Anchor);
 void Qst_WriteAnswerType (Qst_AnswerType_t AnswerType,ExaSet_Validity_t Validity);
 void Qst_WriteQstStem (const char *Stem,const char *ClassStem,
 		       HidVis_HiddenOrVisible_t HiddenOrVisible);

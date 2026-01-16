@@ -43,7 +43,64 @@
 /*****************************************************************************/
 
 /*****************************************************************************/
-/********** Write single or multiple choice answer in a test print ***********/
+/******************* Write unique / multiple choice answer *******************/
+/*****************************************************************************/
+
+void QstCho_WriteCorrAns (struct Qst_Question *Qst,
+			  const char *ClassTxt,
+			  const char *ClassFeedback)
+  {
+   extern const char *Txt_TST_Answer_given_by_the_teachers;
+   unsigned NumOpt;
+
+   /***** Change format of answers text *****/
+   Qst_ChangeFormatOptionsText (Qst);
+
+   /***** Change format of answers feedback *****/
+   Qst_ChangeFormatOptionsFeedback (Qst);
+
+   HTM_TABLE_BeginPadding (2);
+      for (NumOpt = 0;
+	   NumOpt < Qst->Answer.NumOptions;
+	   NumOpt++)
+	{
+	 HTM_TR_Begin (NULL);
+
+	    /* Put an icon that indicates whether the answer is correct or wrong */
+	    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
+	       if (Qst->Answer.Options[NumOpt].Correct == Qst_CORRECT)
+		  Ico_PutIcon ("check.svg",Ico_BLACK,
+		               Txt_TST_Answer_given_by_the_teachers,"CONTEXT_ICO16x16");
+	    HTM_TD_End ();
+
+	    /* Write the number of option */
+	    HTM_TD_Begin ("class=\"LT %s_%s\"",ClassTxt,The_GetSuffix ());
+	       HTM_Option (NumOpt); HTM_CloseParenthesis (); HTM_NBSP ();
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LT\"");
+
+	       /* Write the text of the answer and the media */
+	       HTM_DIV_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
+		  HTM_Txt (Qst->Answer.Options[NumOpt].Text);
+		  Med_ShowMedia (&Qst->Answer.Options[NumOpt].Media,
+				 "Tst_MED_EDIT_LIST_CONT","Tst_MED_EDIT_LIST");
+	       HTM_DIV_End ();
+
+	       /* Write the text of the feedback */
+	       HTM_DIV_Begin ("class=\"%s_%s\"",ClassFeedback,The_GetSuffix ());
+		  HTM_Txt (Qst->Answer.Options[NumOpt].Feedback);
+	       HTM_DIV_End ();
+
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+   HTM_TABLE_End ();
+  }
+
+/*****************************************************************************/
+/*********** Write unique / multiple choice answer in a test print ***********/
 /*****************************************************************************/
 
 void QstCho_WriteTstFillAns (const struct Qst_PrintedQuestion *PrintedQst,
