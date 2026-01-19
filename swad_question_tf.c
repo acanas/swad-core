@@ -117,7 +117,7 @@ Err_SuccessOrError_t QstTF__CheckIfOptsAreCorrect (struct Qst_Question *Qst)
 /*****************************************************************************/
 
 Exi_Exist_t QstTF__IdenticalAnswersExist (MYSQL_RES *mysql_res,
-					  __attribute__((unused)) unsigned NumOptsExistingQstInDB,
+					  __attribute__((unused)) unsigned NumOptsQstInDB,
 					  const struct Qst_Question *Qst)
   {
    MYSQL_ROW row;

@@ -193,18 +193,18 @@ Err_SuccessOrError_t QstCho_CheckIfOptsAreCorrect (struct Qst_Question *Qst)
 /*****************************************************************************/
 
 Exi_Exist_t QstCho_IdenticalAnswersExist (MYSQL_RES *mysql_res,
-					  unsigned NumOptsExistingQstInDB,
+					  unsigned NumOptsQstInDB,
 					  const struct Qst_Question *Qst)
   {
    MYSQL_ROW row;
    Exi_Exist_t IdenticalAnswersExist;
    unsigned NumOpt;
 
-   if (NumOptsExistingQstInDB == Qst->Answer.NumOpts)
+   if (NumOptsQstInDB == Qst->Answer.NumOpts)
      {
       for (IdenticalAnswersExist  = Exi_EXISTS, NumOpt = 0;
 	   IdenticalAnswersExist == Exi_EXISTS &&
-	   NumOpt < NumOptsExistingQstInDB;
+	   NumOpt < NumOptsQstInDB;
 	   NumOpt++)
 	{
 	 row = mysql_fetch_row (mysql_res);

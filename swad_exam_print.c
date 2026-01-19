@@ -459,11 +459,9 @@ static void ExaPrn_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQst
    Qst.QstCod = PrintedQst->QstCod;
 
       /***** Get answers of question from database *****/
-      Qst.Answer.NumOpts = Exa_DB_GetQstIndexesFromSet (&mysql_res,
+      Qst.Answer.NumOpts = Qst_DB_GetQstIndexesFromQst (&mysql_res,"exa_set_answers",
 							Qst.QstCod,Shuffle);
-      /*
-      row[0] AnsInd
-      */
+
       /***** Reset string of indexes *****/
       PrintedQst->StrIndexes[0] = '\0';
 
@@ -473,7 +471,9 @@ static void ExaPrn_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQst
 	{
 	 /***** Get next answer *****/
 	 row = mysql_fetch_row (mysql_res);
-
+	 /*
+	 row[0] AnsInd
+	 */
 	 /***** Assign index (row[0]).
 		Index is 0,1,2,3... if no shuffle
 		or 1,3,0,2... (example) if shuffle *****/

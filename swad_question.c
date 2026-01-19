@@ -2490,7 +2490,7 @@ Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Qst)
   {
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
    Exi_Exist_t (*Qst_IdenticalAnswersExist[Qst_NUM_ANS_TYPES]) (MYSQL_RES *mysql_res,
-								unsigned NumOptsExistingQstInDB,
+								unsigned NumOptsQstInDB,
 								const struct Qst_Question *Qst) =
     {
      [Qst_ANS_INT            ] = QstInt_IdenticalAnswersExist,
@@ -2505,12 +2505,11 @@ Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Qst)
    Exi_Exist_t IdenticalQuestionExists = Exi_DOES_NOT_EXIST;
    unsigned NumQst;
    unsigned NumQstsWithThisStem;
-   unsigned NumOptsExistingQstInDB;
+   unsigned NumOptsQstInDB;
 
    /***** Check if there are existing questions in database
           with the same stem that the one of this question *****/
    if ((NumQstsWithThisStem = Qst_DB_GetQstCodsFromTypeAnsStem (&mysql_res_qst,Qst)))
-     {
       /***** Check if the answer exists in any of the questions with the same stem *****/
       /* For each question with the same stem */
       for (NumQst = 0;
@@ -2523,16 +2522,15 @@ Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Qst)
             Err_WrongQuestionExit ();
 
          /* Get answers from this question */
-         NumOptsExistingQstInDB = Qst_DB_GetTextOfAnswers (&mysql_res_ans,
+         NumOptsQstInDB = Qst_DB_GetTextOfAnswers (&mysql_res_ans,
 							   "tst_answers",Qst->QstCod);
 	 IdenticalQuestionExists = Qst_IdenticalAnswersExist[Qst->Answer.Type] (mysql_res_ans,
-									        NumOptsExistingQstInDB,
+									        NumOptsQstInDB,
 										Qst);
 
          /* Free structure that stores the query result for answers */
          DB_FreeMySQLResult (&mysql_res_ans);
         }
-     }
    else	// Stem does not exist
       IdenticalQuestionExists = Exi_DOES_NOT_EXIST;
 

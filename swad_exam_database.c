@@ -1138,7 +1138,7 @@ void Exa_DB_AddAnsToQstInSet (long QstCod,unsigned AnsInd,
   }
 
 /*****************************************************************************/
-/*************** Get answers of a test question from database ****************/
+/*************** Get indexes of a test question from database ****************/
 /*****************************************************************************/
 
 unsigned Exa_DB_GetQstIndexesFromSet (MYSQL_RES **mysql_res,
@@ -1147,9 +1147,9 @@ unsigned Exa_DB_GetQstIndexesFromSet (MYSQL_RES **mysql_res,
    extern const char *Qst_OrderByShuffle[Qst_NUM_SHUFFLE];
    unsigned NumOpts;
 
-   /***** Get answers of a question from database *****/
+   /***** Get indexes of a question from database *****/
    NumOpts = (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get answers of a question",
+   DB_QuerySELECT (mysql_res,"can not get indexes of a question",
 		   "SELECT AnsInd"	// row[0]
 		    " FROM exa_set_answers"
 		   " WHERE QstCod=%ld"

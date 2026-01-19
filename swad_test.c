@@ -607,15 +607,8 @@ static void Tst_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQst,
    Qst.QstCod = PrintedQst->QstCod;
 
       /***** Get answers of question from database *****/
-      Qst.Answer.NumOpts = Qst_DB_GetAnswersData (&mysql_res,"tst_answers",
-						  Qst.QstCod,Shuffle);
-      /*
-      row[0] AnsInd
-      row[1] Answer
-      row[2] Feedback
-      row[3] MedCod
-      row[4] Correct
-      */
+      Qst.Answer.NumOpts = Qst_DB_GetQstIndexesFromQst (&mysql_res,"tst_answers",
+							Qst.QstCod,Shuffle);
 
       for (NumOpt = 0;
 	   NumOpt < Qst.Answer.NumOpts;
@@ -623,7 +616,9 @@ static void Tst_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQst,
 	{
 	 /***** Get next answer *****/
 	 row = mysql_fetch_row (mysql_res);
-
+	 /*
+	 row[0] AnsInd
+	 */
 	 /***** Assign index (row[0]).
 		Index is 0,1,2,3... if no shuffle
 		or 1,3,0,2... (example) if shuffle *****/

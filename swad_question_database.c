@@ -1328,6 +1328,31 @@ unsigned Qst_DB_GetAnswersData (MYSQL_RES **mysql_res,const char *Table,
   }
 
 /*****************************************************************************/
+/****************** Get indexes of a question from database ******************/
+/*****************************************************************************/
+
+unsigned Qst_DB_GetQstIndexesFromQst (MYSQL_RES **mysql_res,const char *Table,
+				      long QstCod,Qst_Shuffle_t Shuffle)
+  {
+   extern const char *Qst_OrderByShuffle[Qst_NUM_SHUFFLE];
+   unsigned NumOpts;
+
+   /***** Get indexes of a question from database *****/
+   NumOpts = (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get answers of a question",
+		   "SELECT AnsInd"	// row[0]
+		    " FROM %s"
+		   " WHERE QstCod=%ld"
+		" ORDER BY %s",
+		   Table,QstCod,
+		   Qst_OrderByShuffle[Shuffle]);
+   if (!NumOpts)
+      Err_WrongAnswerExit ();
+
+   return NumOpts;
+  }
+
+/*****************************************************************************/
 /***************** Get answers of a question from database *******************/
 /*****************************************************************************/
 
