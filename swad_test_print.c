@@ -54,6 +54,7 @@
 #include "swad_question_text.h"
 #include "swad_question_tf.h"
 #include "swad_question_type.h"
+#include "swad_tag.h"
 #include "swad_test.h"
 #include "swad_test_database.h"
 #include "swad_test_print.h"

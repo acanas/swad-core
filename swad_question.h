@@ -34,7 +34,7 @@
 #include "swad_question_type.h"
 #include "swad_media.h"
 #include "swad_string.h"
-#include "swad_tag.h"
+#include "swad_tag_type.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -54,97 +54,6 @@
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
-
-struct Qst_AnswerTypes
-  {
-   bool All;
-   char List[Qst_MAX_BYTES_LIST_ANSWER_TYPES + 1];
-  };
-
-#define Qst_NUM_TYPES_ORDER_QST	5
-typedef enum
-  {
-   Qst_ORDER_STEM                    = 0,
-   Qst_ORDER_NUM_HITS                = 1,
-   Qst_ORDER_AVERAGE_SCORE           = 2,
-   Qst_ORDER_NUM_HITS_NOT_BLANK      = 3,
-   Qst_ORDER_AVERAGE_SCORE_NOT_BLANK = 4,
-  } Qst_QuestionsOrder_t;
-#define Qst_DEFAULT_ORDER Qst_ORDER_STEM
-
-#define Qst_NUM_SHUFFLE 2
-typedef enum
-  {
-   Qst_DONT_SHUFFLE = 0,
-   Qst_SHUFFLE      = 1,
-  } Qst_Shuffle_t;
-
-#define Qst_NUM_WRONG_CORRECT 3
-typedef enum
-  {
-   Qst_BLANK,
-   Qst_WRONG,
-   Qst_CORRECT,
-  } Qst_WrongOrCorrect_t;
-
-struct Qst_Question
-  {
-   long QstCod;
-   struct Tag_Tags Tags;
-   time_t EditTime;
-   char *Stem;
-   char *Feedback;
-   struct Med_Media Media;
-   struct
-     {
-      Qst_AnswerType_t Type;
-      unsigned NumOpts;	// Number of options
-      Qst_Shuffle_t Shuffle;
-      QstTF__OptionTF_t OptionTF;
-      struct
-	{
-	 Qst_WrongOrCorrect_t Correct;
-	 char *Text;
-	 char *Feedback;
-	 struct Med_Media Media;
-	} Options[Qst_MAX_OPTS_PER_QST];
-      long Integer;
-      double FloatingPoint[2];
-     } Answer;
-   unsigned long NumHits;
-   unsigned long NumHitsNotBlank;
-   double Score;
-   ExaSet_Validity_t Validity;	// If a question in an exam has been marked as invalid
-  };
-
-struct Qst_Questions
-  {
-   struct Tag_Tags Tags;		// Selected tags
-   struct Qst_AnswerTypes AnswerTypes;	// Selected answer types
-   Qst_QuestionsOrder_t SelectedOrder;	// Order for listing questions
-   unsigned NumQsts;			// Number of questions
-   struct Qst_Question Qst;		// Selected / editing question
-  };
-
-struct Qst_Stats
-  {
-   unsigned NumCoursesWithQuestions;
-   unsigned NumCoursesWithPluggableQuestions;
-   unsigned NumQsts;
-   double AvgQstsPerCourse;
-   unsigned long NumHits;
-   double AvgHitsPerCourse;
-   double AvgHitsPerQuestion;
-   double TotalScore;
-   double AvgScorePerQuestion;
-  };
-
-struct Qst_AnswerDisplay
-  {
-   const char *ClassTch;
-   const char *ClassStd;
-   const char *Symbol;
-  };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

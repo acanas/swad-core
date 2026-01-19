@@ -1,7 +1,7 @@
-// swad_tag.h: tags for questions
+// swad_tag_type.h: tags for questions
 
-#ifndef _SWAD_TAG
-#define _SWAD_TAG
+#ifndef _SWAD_TAG_TYP
+#define _SWAD_TAG_TYP
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,35 +27,37 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <mysql/mysql.h>	// To access MySQL databases
-
-#include "swad_question_type.h"
-#include "swad_string.h"
-#include "swad_tag_type.h"
+#include "swad_constant.h"
 
 /*****************************************************************************/
-/***************************** Public prototypes *****************************/
+/***************************** Public constants ******************************/
 /*****************************************************************************/
 
-void Tag_ResetTags (struct Tag_Tags *Tags);
-void Tag_FreeTagsList (struct Tag_Tags *Tags);
+#define Tag_MAX_TAGS_PER_QUESTION	5
 
-void Tag_PutIconToEditTags (void);
+#define Tag_MAX_CHARS_TAG		(128 - 1)	// 127
+#define Tag_MAX_BYTES_TAG		((Tag_MAX_CHARS_TAG + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-void Tag_EnableTag (void);
-void Tag_DisableTag (void);
-void Tag_RenameTag (void);
+#define Tag_MAX_BYTES_TAGS_LIST		(16 * 1024)
 
-void Tag_InsertTagsIntoDB (long QstCod,const struct Tag_Tags *Tags);
+/*****************************************************************************/
+/******************************* Public types ********************************/
+/*****************************************************************************/
 
-void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,MYSQL_RES *mysql_res,
-                          Tag_ShowAllOrVisibleTags_t ShowAllOrVisibleTags);
-void Tag_ShowFormEditTags (void);
-void Tag_PutPars (void *TagCod);
+struct Tag_Tags
+  {
+   long PreselectedTagCod;	// If > 0 ==> only one tag is preselected, students can not select
+   unsigned Num;
+   unsigned NumSelected;
+   bool All;
+   long *ListSelectedTagCods;
+   char Txt[Tag_MAX_TAGS_PER_QUESTION][Tag_MAX_BYTES_TAG + 1];
+  };
 
-void Tag_GetAndWriteTagsQst (long QstCod);
-void Tag_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res);
-
-void Tag_GetQstTagsByCod (struct Qst_Question *Qst);
+typedef enum
+  {
+   Tag_SHOW_ALL_TAGS,
+   Tag_SHOW_ONLY_VISIBLE_TAGS,
+  } Tag_ShowAllOrVisibleTags_t;
 
 #endif

@@ -536,3 +536,29 @@ void Tag_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res)
    else
       HTM_Txt (Txt_no_tags);
   }
+
+/*****************************************************************************/
+/******************* Get question options using its code *********************/
+/*****************************************************************************/
+
+void Tag_GetQstTagsByCod (struct Qst_Question *Qst)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumTags;
+   unsigned NumTag;
+
+   /***** Get the tags from the database *****/
+   NumTags = Tag_DB_GetTagsQst (&mysql_res,Qst->QstCod);
+   for (NumTag = 0;
+	NumTag < NumTags;
+	NumTag++)
+     {
+      row = mysql_fetch_row (mysql_res);
+      Str_Copy (Qst->Tags.Txt[NumTag],row[0],
+		sizeof (Qst->Tags.Txt[NumTag]) - 1);
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+  }

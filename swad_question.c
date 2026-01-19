@@ -124,8 +124,6 @@ extern struct Globals Gbl;
 static void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
 				       HTM_Attributes_t Attributes);
 
-static void Qst_GetQstTagsByCod (struct Qst_Question *Qst);
-
 /*****************************************************************************/
 /***************************** Test constructor ******************************/
 /*****************************************************************************/
@@ -206,8 +204,7 @@ void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Qsts)
 	    HTM_TABLE_BeginCenterPadding (2);
 
 	       /***** Selection of tags *****/
-	       Tag_ShowFormSelTags (&Qsts->Tags,mysql_res,
-				    Tag_SHOW_ALL_TAGS);
+	       Tag_ShowFormSelTags (&Qsts->Tags,mysql_res,Tag_SHOW_ALL_TAGS);
 
 	       /***** Selection of types of answers *****/
 	       Qst_ShowFormAnswerTypes (&Qsts->AnswerTypes);
@@ -320,8 +317,8 @@ void Qst_RequestSelectQstsForExamSet (struct Exa_Exams *Exams)
    /***** Create test *****/
    Qst_Constructor (&Qsts);
 
-   /***** Show form to select test for exam *****/
-   Qst_ShowFormRequestSelectQstsForExamSet (Exams,&Qsts);	// No tags selected
+      /***** Show form to select test for exam *****/
+      Qst_ShowFormRequestSelectQstsForExamSet (Exams,&Qsts);	// No tags selected
 
    /***** Destroy test *****/
    Qst_Destructor (&Qsts);
@@ -338,8 +335,8 @@ void Qst_RequestSelectQstsForGame (struct Gam_Games *Games)
    /***** Create test *****/
    Qst_Constructor (&Qsts);
 
-   /***** Show form to select test for game *****/
-   Qst_ShowFormRequestSelectQstsForGame (Games,&Qsts);	// No tags selected
+      /***** Show form to select test for game *****/
+      Qst_ShowFormRequestSelectQstsForGame (Games,&Qsts);	// No tags selected
 
    /***** Destroy test *****/
    Qst_Destructor (&Qsts);
@@ -375,8 +372,7 @@ void Qst_ShowFormRequestSelectQstsForExamSet (struct Exa_Exams *Exams,
 	    HTM_TABLE_BeginPadding (2);
 
 	       /***** Selection of tags *****/
-	       Tag_ShowFormSelTags (&Qsts->Tags,mysql_res,
-				    Tag_SHOW_ALL_TAGS);
+	       Tag_ShowFormSelTags (&Qsts->Tags,mysql_res,Tag_SHOW_ALL_TAGS);
 
 	       /***** Selection of types of answers *****/
 	       Qst_ShowFormAnswerTypes (&Qsts->AnswerTypes);
@@ -432,8 +428,7 @@ void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
 	    HTM_TABLE_BeginPadding (2);
 
 	       /***** Selection of tags *****/
-	       Tag_ShowFormSelTags (&Qsts->Tags,mysql_res,
-				    Tag_SHOW_ALL_TAGS);
+	       Tag_ShowFormSelTags (&Qsts->Tags,mysql_res,Tag_SHOW_ALL_TAGS);
 
 	       /***** Starting and ending dates in the search *****/
 	       Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
@@ -1569,7 +1564,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Qst)
    char *Title;
    char *FuncOnChange;
    OldNew_OldNew_t OldNewQst = Qst->QstCod > 0 ? OldNew_OLD :
-						      OldNew_NEW;
+						 OldNew_NEW;
    HTM_Attributes_t Checked;
    HTM_Attributes_t RadioDisabled;
    HTM_Attributes_t CheckboxDisabled;
@@ -1741,7 +1736,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Qst)
 		  HTM_LABEL_Begin (NULL);
 		     HTM_INPUT_RADIO ("AnswerType",
 				      AnsType == Qst->Answer.Type ? HTM_CHECKED :
-								         HTM_NO_ATTR,
+								    HTM_NO_ATTR,
 				      "value=\"%u\""
 				      " onclick=\"enableDisableAns(this.form);\"",
 				      (unsigned) AnsType);
@@ -1793,7 +1788,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Qst)
 				      AttributesShuffleChecked[Qst->Answer.Shuffle] |
 	        		      (Qst->Answer.Type != Qst_ANS_UNIQUE_CHOICE &&
 			               Qst->Answer.Type != Qst_ANS_MULTIPLE_CHOICE ? HTM_DISABLED :
-										          HTM_NO_ATTR),
+										     HTM_NO_ATTR),
 				      "value=\"Y\"");
 		  HTM_Txt (Txt_Shuffle);
 	       HTM_LABEL_End ();
@@ -1807,13 +1802,13 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Qst)
 	       HTM_TABLE_BeginWidePadding (2);	// Table with choice answers
 
 	       RadioDisabled = Qst->Answer.Type == Qst_ANS_UNIQUE_CHOICE ? HTM_NO_ATTR :
-										HTM_DISABLED;
+									   HTM_DISABLED;
 	       CheckboxDisabled = Qst->Answer.Type == Qst_ANS_MULTIPLE_CHOICE ? HTM_NO_ATTR :
-									             HTM_DISABLED;
+									        HTM_DISABLED;
 	       ChoiceDisabled = Qst->Answer.Type != Qst_ANS_UNIQUE_CHOICE &&
 			        Qst->Answer.Type != Qst_ANS_MULTIPLE_CHOICE &&
 			        Qst->Answer.Type != Qst_ANS_TEXT ? HTM_DISABLED :
-								        HTM_NO_ATTR;
+								   HTM_NO_ATTR;
 	       for (NumOpt = 0, The_ResetRowColor ();
 		    NumOpt < Qst_MAX_OPTS_PER_QST;
 		    NumOpt++, The_ChangeRowColor ())
@@ -2163,7 +2158,7 @@ Exi_Exist_t Qst_GetQstDataByCod (struct Qst_Question *Qst)
       Str_SetDecimalPointToLocal ();	// Return to local system
 
       /***** Get the tags from the database *****/
-      Qst_GetQstTagsByCod (Qst);
+      Tag_GetQstTagsByCod (Qst);
 
       /***** Get the answers from the database *****/
       Qst->Answer.NumOpts = Qst_DB_GetAnswersData (&mysql_res_ans,"tst_answers",
@@ -2176,32 +2171,6 @@ Exi_Exist_t Qst_GetQstDataByCod (struct Qst_Question *Qst)
    DB_FreeMySQLResult (&mysql_res_qst);
 
    return QuestionExists;
-  }
-
-/*****************************************************************************/
-/******************* Get question options using its code *********************/
-/*****************************************************************************/
-
-static void Qst_GetQstTagsByCod (struct Qst_Question *Qst)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumTags;
-   unsigned NumTag;
-
-   /***** Get the tags from the database *****/
-   NumTags = Tag_DB_GetTagsQst (&mysql_res,Qst->QstCod);
-   for (NumTag = 0;
-	   NumTag < NumTags;
-	   NumTag++)
-	{
-	 row = mysql_fetch_row (mysql_res);
-	 Str_Copy (Qst->Tags.Txt[NumTag],row[0],
-	           sizeof (Qst->Tags.Txt[NumTag]) - 1);
-	}
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -2366,14 +2335,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Qst)
     };
    unsigned NumTag;
    unsigned NumTagRead;
-   // unsigned NumOpt;
-   // char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    char TagStr[6 + Cns_MAX_DIGITS_UINT + 1];
-   // char AnsStr[6 + Cns_MAX_DIGITS_UINT + 1];
-   // char FbStr[5 + Cns_MAX_DIGITS_UINT + 1];
-   // char StrMultiAns[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
-   // const char *Ptr;
-   // unsigned NumCorrectAns;
 
    /***** Get question code *****/
    Qst->QstCod = ParCod_GetPar (ParCod_Qst);
@@ -2523,7 +2485,7 @@ Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Qst)
 
          /* Get answers from this question */
          NumOptsQstInDB = Qst_DB_GetTextOfAnswers (&mysql_res_ans,
-							   "tst_answers",Qst->QstCod);
+						   "tst_answers",Qst->QstCod);
 	 IdenticalQuestionExists = Qst_IdenticalAnswersExist[Qst->Answer.Type] (mysql_res_ans,
 									        NumOptsQstInDB,
 										Qst);
@@ -2567,7 +2529,8 @@ void Qst_MoveMediaToDefinitiveDirectories (struct Qst_Question *Qst)
 	    CurrentMedCodInDB = Qst_GetMedCodFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 						     Qst->QstCod,
 						     (int) NumOpt);	// Get current media code associated to this option
-	    Med_RemoveKeepOrStoreMedia (CurrentMedCodInDB,&Qst->Answer.Options[NumOpt].Media);
+	    Med_RemoveKeepOrStoreMedia (CurrentMedCodInDB,
+				        &Qst->Answer.Options[NumOpt].Media);
 	   }
 	 break;
       default:
@@ -2798,10 +2761,12 @@ void Qst_ChangeShuffleQst (void)
    /***** Get the question code *****/
    Qsts.Qst.QstCod = ParCod_GetAndCheckPar (ParCod_Qst);
 
-   /***** Get a parameter that indicates whether it's necessary to continue listing the rest of questions ******/
+   /***** Get a parameter that indicates whether it's necessary
+          to continue listing the rest of questions ******/
    EditingOnlyThisQst = Par_GetParBool ("OnlyThisQst");
 
-   /***** Get a parameter that indicates whether it's possible to shuffle the answers of this question ******/
+   /***** Get a parameter that indicates whether it's possible
+          to shuffle the answers of this question ******/
    Shuffle = Qst_GetParShuffle ();
 
    /***** Update the question changing the current shuffle *****/
@@ -2967,7 +2932,8 @@ void Qst_RemoveMediaFromAllAnsOfQst (long HieCod,long QstCod)
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
 
-   /***** Get media codes associated to answers of test questions from database *****/
+   /***** Get media codes associated
+          to answers of test questions from database *****/
    NumMedia = Qst_DB_GetMedCodsFromAnssOfQst (&mysql_res,HieCod,QstCod);
 
    /***** Go over result removing media *****/
@@ -2986,7 +2952,8 @@ void Qst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long HieCod)
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
 
-   /***** Get media codes associated to stems of test questions from database *****/
+   /***** Get media codes associated
+          to stems of test questions from database *****/
    NumMedia = Qst_DB_GetMedCodsFromStemsOfQstsInCrs (&mysql_res,HieCod);
 
    /***** Go over result removing media files *****/
@@ -3005,7 +2972,8 @@ void Qst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long HieCod)
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
 
-   /***** Get names of media files associated to answers of test questions from database *****/
+   /***** Get names of media files associated
+          to answers of test questions from database *****/
    NumMedia = Qst_DB_GetMedCodsFromAnssOfQstsInCrs (&mysql_res,HieCod);
 
    /***** Go over result removing media files *****/
