@@ -44,6 +44,9 @@
 
 void QstCho_GetAnsFromForm (struct Qst_Question *Qst);
 Err_SuccessOrError_t QstCho_CheckIfOptsAreCorrect (struct Qst_Question *Qst);
+Exi_Exist_t QstCho_IdenticalAnswersExist (MYSQL_RES *mysql_res,
+					  unsigned NumOptsExistingQstInDB,
+					  const struct Qst_Question *Qst);
 
 void QstCho_GetQstOptionsFromRow (MYSQL_ROW row,struct Qst_Question *Qst,
 				  unsigned NumOpt);

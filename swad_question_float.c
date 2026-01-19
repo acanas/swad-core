@@ -151,6 +151,41 @@ Err_SuccessOrError_t QstFlt_CheckIfOptsAreCorrect (struct Qst_Question *Qst)
   }
 
 /*****************************************************************************/
+/*********** Check if identical answer already exists in database ************/
+/*****************************************************************************/
+
+Exi_Exist_t QstFlt_IdenticalAnswersExist (MYSQL_RES *mysql_res,
+					  __attribute__((unused)) unsigned NumOptsExistingQstInDB,
+					  const struct Qst_Question *Qst)
+  {
+   MYSQL_ROW row;
+   Exi_Exist_t IdenticalAnswersExist;
+   unsigned NumOpt;
+   double DoubleNum;
+
+   for (IdenticalAnswersExist  = Exi_EXISTS, NumOpt = 0;
+	IdenticalAnswersExist == Exi_EXISTS && NumOpt < 2;
+	NumOpt++)
+     {
+      row = mysql_fetch_row (mysql_res);
+      switch (Str_GetDoubleFromStr (row[0],&DoubleNum))
+	{
+	 case Err_SUCCESS:
+	    IdenticalAnswersExist = DoubleNum ==
+				    Qst->Answer.FloatingPoint[NumOpt] ? Exi_EXISTS :
+									Exi_DOES_NOT_EXIST;
+	    break;
+	 case Err_ERROR:
+	 default:
+	    IdenticalAnswersExist = Exi_DOES_NOT_EXIST;
+	    break;
+	}
+     }
+
+   return IdenticalAnswersExist;
+  }
+
+/*****************************************************************************/
 /*********************** Get question options from row ***********************/
 /*****************************************************************************/
 

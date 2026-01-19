@@ -238,8 +238,6 @@ Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Qst);
 
 void Qst_MoveMediaToDefinitiveDirectories (struct Qst_Question *Qst);
 
-long Qst_GetIntAnsFromStr (char *Str);
-
 void Qst_ReqRemSelectedQsts (void);
 void Qst_RemoveSelectedQsts (void);
 void Qst_PutIconToRemoveOneQst (void *QstCod);

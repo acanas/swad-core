@@ -60,6 +60,8 @@ static void QstTF__ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
 
 static void QstTF__WriteTFOptionsToFill (QstTF__OptionTF_t OptTFStd);
 
+static QstTF__OptionTF_t QstTF__GetOptionTFFromChar (char TF);
+
 /*****************************************************************************/
 /*********************** Put input field for T/F answer **********************/
 /*****************************************************************************/
@@ -108,6 +110,25 @@ Err_SuccessOrError_t QstTF__CheckIfOptsAreCorrect (struct Qst_Question *Qst)
    Qst->Answer.NumOpts = 1;
 
    return Err_SUCCESS;	// Question format without errors
+  }
+
+/*****************************************************************************/
+/*********** Check if identical answer already exists in database ************/
+/*****************************************************************************/
+
+Exi_Exist_t QstTF__IdenticalAnswersExist (MYSQL_RES *mysql_res,
+					  __attribute__((unused)) unsigned NumOptsExistingQstInDB,
+					  const struct Qst_Question *Qst)
+  {
+   MYSQL_ROW row;
+   Exi_Exist_t IdenticalAnswersExist;
+
+   row = mysql_fetch_row (mysql_res);
+   IdenticalAnswersExist = QstTF__GetOptionTFFromChar (row[0][0]) ==
+			   Qst->Answer.OptionTF ? Exi_EXISTS :
+						  Exi_DOES_NOT_EXIST;
+
+   return IdenticalAnswersExist;
   }
 
 /*****************************************************************************/
@@ -380,24 +401,6 @@ void QstTF__WriteExaEditAns (const struct ExaPrn_Print *Print,
   }
 
 /*****************************************************************************/
-/******************** Get true / false option from char **********************/
-/*****************************************************************************/
-
-QstTF__OptionTF_t QstTF__GetOptionTFFromChar (char TF)
-  {
-   QstTF__OptionTF_t OptTF;
-
-   if (TF)
-      for (OptTF  = QstTF__OPTION_TRUE;
-	   OptTF <= QstTF__OPTION_FALSE;
-	   OptTF++)
-	 if (TF == QstTF__Values[OptTF][0])
-	    return OptTF;
-
-   return QstTF__OPTION_EMPTY;
-  }
-
-/*****************************************************************************/
 /********* Write true / false options to be filled in a form select **********/
 /*****************************************************************************/
 
@@ -425,4 +428,22 @@ void QstTF__WriteAnsTF (QstTF__OptionTF_t OptionTF)
    extern const char *Txt_TF_QST[QstTF__NUM_OPTIONS];	// Value displayed on screen
 
    HTM_Txt (Txt_TF_QST[OptionTF]);
+  }
+
+/*****************************************************************************/
+/******************** Get true / false option from char **********************/
+/*****************************************************************************/
+
+static QstTF__OptionTF_t QstTF__GetOptionTFFromChar (char TF)
+  {
+   QstTF__OptionTF_t OptTF;
+
+   if (TF)
+      for (OptTF  = QstTF__OPTION_TRUE;
+	   OptTF <= QstTF__OPTION_FALSE;
+	   OptTF++)
+	 if (TF == QstTF__Values[OptTF][0])
+	    return OptTF;
+
+   return QstTF__OPTION_EMPTY;
   }

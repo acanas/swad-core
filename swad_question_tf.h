@@ -45,6 +45,9 @@
 void QstTF__PutInputField (const struct Qst_Question *Qst,QstTF__OptionTF_t OptTF);
 void QstTF__GetAnsFromForm (struct Qst_Question *Qst);
 Err_SuccessOrError_t QstTF__CheckIfOptsAreCorrect (struct Qst_Question *Qst);
+Exi_Exist_t QstTF__IdenticalAnswersExist (MYSQL_RES *mysql_res,
+					  __attribute__((unused)) unsigned NumOptsExistingQstInDB,
+					  const struct Qst_Question *Qst);
 
 void QstTF__GetQstOptionsFromRow (MYSQL_ROW row,struct Qst_Question *Qst,
 				  __attribute__((unused)) unsigned NumOpt);
@@ -87,7 +90,6 @@ void QstTF__WriteExaEditAns (const struct ExaPrn_Print *Print,
 
 //--------------------------------- Other -------------------------------------
 
-QstTF__OptionTF_t QstTF__GetOptionTFFromChar (char TF);
 void QstTF__WriteAnsTF (QstTF__OptionTF_t OptionTF);
 
 #endif

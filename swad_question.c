@@ -2489,16 +2489,23 @@ Err_SuccessOrError_t Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst
 Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Qst)
   {
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
+   Exi_Exist_t (*Qst_IdenticalAnswersExist[Qst_NUM_ANS_TYPES]) (MYSQL_RES *mysql_res,
+								unsigned NumOptsExistingQstInDB,
+								const struct Qst_Question *Qst) =
+    {
+     [Qst_ANS_INT            ] = QstInt_IdenticalAnswersExist,
+     [Qst_ANS_FLOAT          ] = QstFlt_IdenticalAnswersExist,
+     [Qst_ANS_TRUE_FALSE     ] = QstTF__IdenticalAnswersExist,
+     [Qst_ANS_UNIQUE_CHOICE  ] = QstCho_IdenticalAnswersExist,
+     [Qst_ANS_MULTIPLE_CHOICE] = QstCho_IdenticalAnswersExist,
+     [Qst_ANS_TEXT           ] = QstCho_IdenticalAnswersExist,
+    };
    MYSQL_RES *mysql_res_qst;
    MYSQL_RES *mysql_res_ans;
-   MYSQL_ROW row;
    Exi_Exist_t IdenticalQuestionExists = Exi_DOES_NOT_EXIST;
-   Exi_Exist_t IdenticalAnswersExist;
    unsigned NumQst;
    unsigned NumQstsWithThisStem;
-   unsigned NumOpt;
    unsigned NumOptsExistingQstInDB;
-   double DoubleNum;
 
    /***** Check if there are existing questions in database
           with the same stem that the one of this question *****/
@@ -2517,66 +2524,10 @@ Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Qst)
 
          /* Get answers from this question */
          NumOptsExistingQstInDB = Qst_DB_GetTextOfAnswers (&mysql_res_ans,
-							  "tst_answers",Qst->QstCod);
-
-         switch (Qst->Answer.Type)
-           {
-            case Qst_ANS_INT:
-               row = mysql_fetch_row (mysql_res_ans);
-               IdenticalQuestionExists = Qst_GetIntAnsFromStr (row[0]) ==
-        				 Qst->Answer.Integer ? Exi_EXISTS :
-        						       Exi_DOES_NOT_EXIST;
-               break;
-            case Qst_ANS_FLOAT:
-               for (IdenticalAnswersExist = Exi_EXISTS, NumOpt = 0;
-                    IdenticalAnswersExist == Exi_EXISTS && NumOpt < 2;
-                    NumOpt++)
-                 {
-                  row = mysql_fetch_row (mysql_res_ans);
-		  switch (Str_GetDoubleFromStr (row[0],&DoubleNum))
-		    {
-		     case Err_SUCCESS:
-			IdenticalAnswersExist = DoubleNum ==
-						Qst->Answer.FloatingPoint[NumOpt] ? Exi_EXISTS :
-										    Exi_DOES_NOT_EXIST;
-			break;
-		     case Err_ERROR:
-		     default:
-			IdenticalAnswersExist = Exi_DOES_NOT_EXIST;
-			break;
-		    }
-                 }
-               IdenticalQuestionExists = IdenticalAnswersExist;
-               break;
-            case Qst_ANS_TRUE_FALSE:
-               row = mysql_fetch_row (mysql_res_ans);
-               IdenticalQuestionExists = QstTF__GetOptionTFFromChar (row[0][0]) ==
-        				 Qst->Answer.OptionTF ? Exi_EXISTS :
-							        Exi_DOES_NOT_EXIST;
-               break;
-            case Qst_ANS_UNIQUE_CHOICE:
-            case Qst_ANS_MULTIPLE_CHOICE:
-            case Qst_ANS_TEXT:
-               if (NumOptsExistingQstInDB == Qst->Answer.NumOpts)
-                 {
-                  for (IdenticalAnswersExist = Exi_EXISTS, NumOpt = 0;
-                       IdenticalAnswersExist == Exi_EXISTS &&
-                       NumOpt < NumOptsExistingQstInDB;
-                       NumOpt++)
-                    {
-                     row = mysql_fetch_row (mysql_res_ans);
-
-                     if (strcasecmp (row[0],Qst->Answer.Options[NumOpt].Text))
-                        IdenticalAnswersExist = Exi_DOES_NOT_EXIST;
-                    }
-                 }
-               else	// Different number of answers (options)
-                  IdenticalAnswersExist = Exi_DOES_NOT_EXIST;
-               IdenticalQuestionExists = IdenticalAnswersExist;
-               break;
-            default:
-               break;
-           }
+							   "tst_answers",Qst->QstCod);
+	 IdenticalQuestionExists = Qst_IdenticalAnswersExist[Qst->Answer.Type] (mysql_res_ans,
+									        NumOptsExistingQstInDB,
+										Qst);
 
          /* Free structure that stores the query result for answers */
          DB_FreeMySQLResult (&mysql_res_ans);
@@ -2624,27 +2575,6 @@ void Qst_MoveMediaToDefinitiveDirectories (struct Qst_Question *Qst)
       default:
 	 break;
      }
-  }
-
-/*****************************************************************************/
-/******************** Get a integer number from a string *********************/
-/*****************************************************************************/
-
-long Qst_GetIntAnsFromStr (char *Str)
-  {
-   long LongNum;
-
-   if (Str == NULL)
-      return 0.0;
-
-   /***** The string is "scanned" as long *****/
-   if (sscanf (Str,"%ld",&LongNum) != 1)	// If the string does not hold a valid integer number...
-     {
-      LongNum = 0L;	// ...the number is reset to 0
-      Str[0] = '\0';	// ...and the string is reset to ""
-     }
-
-   return LongNum;
   }
 
 /*****************************************************************************/

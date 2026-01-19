@@ -44,6 +44,9 @@
 
 void QstFlt_PutInputField (const struct Qst_Question *Qst,unsigned Index);
 void QstFlt_GetAnsFromForm (struct Qst_Question *Qst);
+Exi_Exist_t QstFlt_IdenticalAnswersExist (MYSQL_RES *mysql_res,
+					  __attribute__((unused)) unsigned NumOptsExistingQstInDB,
+					  const struct Qst_Question *Qst);
 
 void QstFlt_GetQstOptionsFromRow (MYSQL_ROW row,struct Qst_Question *Qst,
 				  unsigned NumOpt);

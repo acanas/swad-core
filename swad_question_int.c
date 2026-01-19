@@ -52,6 +52,8 @@ static void QstInt_GetCorrectAnswerFromDB (const char *Table,
 static void QstInt_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
 				    const struct Qst_Question *Qst);
 
+static long QstInt_GetAnsFromStr (char *Str);
+
 /*****************************************************************************/
 /********************* Put input field for integer answer ********************/
 /*****************************************************************************/
@@ -105,10 +107,29 @@ Err_SuccessOrError_t QstInt_CheckIfOptsAreCorrect (struct Qst_Question *Qst)
       return Err_ERROR;
      }
 
-   Qst->Answer.Integer = Qst_GetIntAnsFromStr (Qst->Answer.Options[0].Text);
+   Qst->Answer.Integer = QstInt_GetAnsFromStr (Qst->Answer.Options[0].Text);
    Qst->Answer.NumOpts = 1;
 
    return Err_SUCCESS;	// Question format without errors
+  }
+
+/*****************************************************************************/
+/*********** Check if identical answer already exists in database ************/
+/*****************************************************************************/
+
+Exi_Exist_t QstInt_IdenticalAnswersExist (MYSQL_RES *mysql_res,
+					  __attribute__((unused)) unsigned NumOptsExistingQstInDB,
+					  const struct Qst_Question *Qst)
+  {
+   MYSQL_ROW row;
+   Exi_Exist_t IdenticalAnswersExist;
+
+   row = mysql_fetch_row (mysql_res);
+   IdenticalAnswersExist = QstInt_GetAnsFromStr (row[0]) ==
+			   Qst->Answer.Integer ? Exi_EXISTS :
+						 Exi_DOES_NOT_EXIST;
+
+   return IdenticalAnswersExist;
   }
 
 /*****************************************************************************/
@@ -119,7 +140,7 @@ void QstInt_GetQstOptionsFromRow (MYSQL_ROW row,struct Qst_Question *Qst,
 				  __attribute__((unused)) unsigned NumOpt)
   {
    Qst_CheckIfNumberOfAnswersIsOne (Qst);
-   Qst->Answer.Integer = Qst_GetIntAnsFromStr (row[1]);
+   Qst->Answer.Integer = QstInt_GetAnsFromStr (row[1]);
   }
 
 /*****************************************************************************/
@@ -384,4 +405,25 @@ void QstInt_WriteExaEditAns (const struct ExaPrn_Print *Print,
       HTM_ElementEnd ();
 
    HTM_TD_End ();
+  }
+
+/*****************************************************************************/
+/******************** Get a integer number from a string *********************/
+/*****************************************************************************/
+
+static long QstInt_GetAnsFromStr (char *Str)
+  {
+   long LongNum;
+
+   if (Str == NULL)
+      return 0.0;
+
+   /***** The string is "scanned" as long *****/
+   if (sscanf (Str,"%ld",&LongNum) != 1)	// If the string does not hold a valid integer number...
+     {
+      LongNum = 0L;	// ...the number is reset to 0
+      Str[0] = '\0';	// ...and the string is reset to ""
+     }
+
+   return LongNum;
   }

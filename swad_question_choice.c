@@ -25,6 +25,8 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#include <string.h>		// For string functions
+
 #include "swad_constant.h"
 #include "swad_cryptography.h"
 #include "swad_database.h"
@@ -184,6 +186,37 @@ Err_SuccessOrError_t QstCho_CheckIfOptsAreCorrect (struct Qst_Question *Qst)
      }
 
    return Err_SUCCESS;	// Question format without errors
+  }
+
+/*****************************************************************************/
+/*********** Check if identical answer already exists in database ************/
+/*****************************************************************************/
+
+Exi_Exist_t QstCho_IdenticalAnswersExist (MYSQL_RES *mysql_res,
+					  unsigned NumOptsExistingQstInDB,
+					  const struct Qst_Question *Qst)
+  {
+   MYSQL_ROW row;
+   Exi_Exist_t IdenticalAnswersExist;
+   unsigned NumOpt;
+
+   if (NumOptsExistingQstInDB == Qst->Answer.NumOpts)
+     {
+      for (IdenticalAnswersExist  = Exi_EXISTS, NumOpt = 0;
+	   IdenticalAnswersExist == Exi_EXISTS &&
+	   NumOpt < NumOptsExistingQstInDB;
+	   NumOpt++)
+	{
+	 row = mysql_fetch_row (mysql_res);
+
+	 if (strcasecmp (row[0],Qst->Answer.Options[NumOpt].Text))
+	    IdenticalAnswersExist = Exi_DOES_NOT_EXIST;
+	}
+     }
+   else	// Different number of answers (options)
+      IdenticalAnswersExist = Exi_DOES_NOT_EXIST;
+
+   return IdenticalAnswersExist;
   }
 
 /*****************************************************************************/
