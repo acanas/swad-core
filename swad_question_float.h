@@ -47,6 +47,7 @@ void QstFlt_GetAnsFromForm (struct Qst_Question *Qst);
 
 void QstFlt_GetQstOptionsFromRow (MYSQL_ROW row,struct Qst_Question *Qst,
 				  unsigned NumOpt);
+Err_SuccessOrError_t QstFlt_CheckIfOptsAreCorrect (struct Qst_Question *Qst);
 
 void QstFlt_GetCorrectAndComputeAnsScore (const char *Table,
 					  struct Qst_PrintedQuestion *PrintedQst,

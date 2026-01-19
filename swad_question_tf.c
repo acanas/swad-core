@@ -91,6 +91,26 @@ void QstTF__GetAnsFromForm (struct Qst_Question *Qst)
   }
 
 /*****************************************************************************/
+/******************* Check if question options are correct *******************/
+/*****************************************************************************/
+
+Err_SuccessOrError_t QstTF__CheckIfOptsAreCorrect (struct Qst_Question *Qst)
+  {
+   extern const char *Txt_You_must_select_a_T_F_answer;
+
+   /***** Answer should be 'T' or 'F' *****/
+   if (Qst->Answer.OptionTF == QstTF__OPTION_EMPTY)
+     {
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_a_T_F_answer);
+      return Err_ERROR;
+     }
+
+   Qst->Answer.NumOpts = 1;
+
+   return Err_SUCCESS;	// Question format without errors
+  }
+
+/*****************************************************************************/
 /*********************** Get question options from row ***********************/
 /*****************************************************************************/
 

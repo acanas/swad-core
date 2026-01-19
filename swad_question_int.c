@@ -86,6 +86,32 @@ void QstInt_GetAnsFromForm (struct Qst_Question *Qst)
   }
 
 /*****************************************************************************/
+/******************* Check if question options are correct *******************/
+/*****************************************************************************/
+
+Err_SuccessOrError_t QstInt_CheckIfOptsAreCorrect (struct Qst_Question *Qst)
+  {
+   extern const char *Txt_You_must_enter_an_integer_value_as_the_correct_answer;
+
+   /* First option should be filled */
+   if (!Qst->Answer.Options[0].Text)
+     {
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_an_integer_value_as_the_correct_answer);
+      return Err_ERROR;
+     }
+   if (!Qst->Answer.Options[0].Text[0])
+     {
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_an_integer_value_as_the_correct_answer);
+      return Err_ERROR;
+     }
+
+   Qst->Answer.Integer = Qst_GetIntAnsFromStr (Qst->Answer.Options[0].Text);
+   Qst->Answer.NumOpts = 1;
+
+   return Err_SUCCESS;	// Question format without errors
+  }
+
+/*****************************************************************************/
 /*********************** Get question options from row ***********************/
 /*****************************************************************************/
 

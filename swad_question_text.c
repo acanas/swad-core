@@ -92,6 +92,53 @@ void QstTxt_GetAnsFromForm (struct Qst_Question *Qst)
   }
 
 /*****************************************************************************/
+/******************* Check if question options are correct *******************/
+/*****************************************************************************/
+
+Err_SuccessOrError_t QstTxt_CheckIfOptsAreCorrect (struct Qst_Question *Qst)
+  {
+   extern const char *Txt_You_must_type_at_least_the_first_answer;
+   extern const char *Txt_You_can_not_leave_empty_intermediate_answers;
+   unsigned NumOpt;
+   bool ThereIsEndOfAnswers;
+
+   /***** First option should be filled *****/
+   if (!Qst->Answer.Options[0].Text)	// If the first answer is empty
+     {
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_answer);
+      return Err_ERROR;
+     }
+   if (!Qst->Answer.Options[0].Text[0])	// If the first answer is empty
+     {
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_answer);
+      return Err_ERROR;
+     }
+
+   /***** No option should be empty before a non-empty option *****/
+   for (NumOpt = 0, ThereIsEndOfAnswers = false;
+	NumOpt < Qst_MAX_OPTS_PER_QST;
+	NumOpt++)
+      if (Qst->Answer.Options[NumOpt].Text)
+	{
+	 if (Qst->Answer.Options[NumOpt].Text[0])
+	   {
+	    if (ThereIsEndOfAnswers)
+	      {
+	       Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_empty_intermediate_answers);
+	       return Err_ERROR;
+	      }
+	    Qst->Answer.NumOpts++;
+	   }
+	 else
+	    ThereIsEndOfAnswers = true;
+	}
+      else
+	 ThereIsEndOfAnswers = true;
+
+   return Err_SUCCESS;	// Question format without errors
+  }
+
+/*****************************************************************************/
 /******* Get correct answer and compute score for each type of answer ********/
 /*****************************************************************************/
 

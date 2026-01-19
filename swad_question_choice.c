@@ -129,6 +129,64 @@ void QstCho_GetAnsFromForm (struct Qst_Question *Qst)
   }
 
 /*****************************************************************************/
+/******************* Check if question options are correct *******************/
+/*****************************************************************************/
+
+Err_SuccessOrError_t QstCho_CheckIfOptsAreCorrect (struct Qst_Question *Qst)
+  {
+   extern const char *Txt_You_can_not_leave_empty_intermediate_answers;
+   extern const char *Txt_You_must_type_at_least_the_first_two_answers;
+   extern const char *Txt_You_must_mark_an_answer_as_correct;
+   unsigned NumOpt;
+   unsigned NumLastOpt;
+   bool ThereIsEndOfAnswers;
+
+   /***** No option should be empty before a non-empty option *****/
+   for (NumOpt = 0, NumLastOpt = 0, ThereIsEndOfAnswers = false;
+	NumOpt < Qst_MAX_OPTS_PER_QST;
+	NumOpt++)
+      if (Qst->Answer.Options[NumOpt].Text)
+	{
+	 if (Qst->Answer.Options[NumOpt].Text[0] ||			// Text
+	     Qst->Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)	// or media
+	   {
+	    if (ThereIsEndOfAnswers)
+	      {
+	       Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_empty_intermediate_answers);
+	       return Err_ERROR;
+	      }
+	    NumLastOpt = NumOpt;
+	    Qst->Answer.NumOpts++;
+	   }
+	 else
+	    ThereIsEndOfAnswers = true;
+	}
+      else
+	 ThereIsEndOfAnswers = true;
+
+   /***** The two first options must be filled *****/
+   if (NumLastOpt < 1)
+     {
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
+      return Err_ERROR;
+     }
+
+   /***** It's mandatory to mark at least one option as correct *****/
+   for (NumOpt  = 0;
+	NumOpt <= NumLastOpt;
+	NumOpt++)
+      if (Qst->Answer.Options[NumOpt].Correct == Qst_CORRECT)
+	 break;
+   if (NumOpt > NumLastOpt)
+     {
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_mark_an_answer_as_correct);
+      return Err_ERROR;
+     }
+
+   return Err_SUCCESS;	// Question format without errors
+  }
+
+/*****************************************************************************/
 /*********************** Get question options from row ***********************/
 /*****************************************************************************/
 

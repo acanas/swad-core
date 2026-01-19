@@ -2451,18 +2451,15 @@ Err_SuccessOrError_t Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst
   {
    extern const char *Txt_You_must_type_at_least_one_tag_for_the_question;
    extern const char *Txt_You_must_type_the_question_stem;
-   extern const char *Txt_You_must_select_a_T_F_answer;
-   extern const char *Txt_You_can_not_leave_empty_intermediate_answers;
-   extern const char *Txt_You_must_type_at_least_the_first_two_answers;
-   extern const char *Txt_You_must_mark_an_answer_as_correct;
-   extern const char *Txt_You_must_type_at_least_the_first_answer;
-   extern const char *Txt_You_must_enter_an_integer_value_as_the_correct_answer;
-   extern const char *Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer;
-   extern const char *Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to_the_upper_limit;
-   unsigned NumOpt;
-   unsigned NumLastOpt;
-   Err_SuccessOrError_t SuccessOrError;
-   bool ThereIsEndOfAnswers;
+   Err_SuccessOrError_t (*Qst_CheckIfOptsAreCorrect[Qst_NUM_ANS_TYPES]) (struct Qst_Question *Qst) =
+    {
+     [Qst_ANS_INT            ] = QstInt_CheckIfOptsAreCorrect,
+     [Qst_ANS_FLOAT          ] = QstFlt_CheckIfOptsAreCorrect,
+     [Qst_ANS_TRUE_FALSE     ] = QstTF__CheckIfOptsAreCorrect,
+     [Qst_ANS_UNIQUE_CHOICE  ] = QstCho_CheckIfOptsAreCorrect,
+     [Qst_ANS_MULTIPLE_CHOICE] = QstCho_CheckIfOptsAreCorrect,
+     [Qst_ANS_TEXT           ] = QstTxt_CheckIfOptsAreCorrect,
+    };
 
    /***** This function also counts the number of options. Initialize this number to 0. *****/
    Qst->Answer.NumOpts = 0;
@@ -2481,158 +2478,9 @@ Err_SuccessOrError_t Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst
       return Err_ERROR;
      }
 
-   /***** Check answer *****/
-   switch (Qst->Answer.Type)
-     {
-      case Qst_ANS_INT:
-	 /* First option should be filled */
-         if (!Qst->Answer.Options[0].Text)
-           {
-            Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_an_integer_value_as_the_correct_answer);
-            return Err_ERROR;
-           }
-         if (!Qst->Answer.Options[0].Text[0])
-           {
-            Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_an_integer_value_as_the_correct_answer);
-            return Err_ERROR;
-           }
-
-         Qst->Answer.Integer = Qst_GetIntAnsFromStr (Qst->Answer.Options[0].Text);
-         Qst->Answer.NumOpts = 1;
-         break;
-      case Qst_ANS_FLOAT:
-	 /* First two options should be filled */
-         if (!Qst->Answer.Options[0].Text ||
-             !Qst->Answer.Options[1].Text)
-           {
-            Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer);
-            return Err_ERROR;
-           }
-         if (!Qst->Answer.Options[0].Text[0] ||
-             !Qst->Answer.Options[1].Text[0])
-           {
-            Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer);
-            return Err_ERROR;
-           }
-
-         /* Lower limit should be <= upper limit */
-         for (SuccessOrError  = Err_SUCCESS, NumOpt = 0;
-              SuccessOrError == Err_SUCCESS && NumOpt < 2;
-              NumOpt++)
-            SuccessOrError = Str_GetDoubleFromStr (Qst->Answer.Options[NumOpt].Text,
-        					   &Qst->Answer.FloatingPoint[NumOpt]);
-	 switch (SuccessOrError)
-	   {
-	    case Err_SUCCESS:
-	       if (Qst->Answer.FloatingPoint[0] >
-		   Qst->Answer.FloatingPoint[1])
-		 {
-		  Ale_ShowAlert (Ale_WARNING,Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to_the_upper_limit);
-		  return Err_ERROR;
-		 }
-	       break;
-	    case Err_ERROR:
-	    default:
-	       Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer);
-	       return Err_ERROR;
-	   }
-
-         Qst->Answer.NumOpts = 2;
-         break;
-      case Qst_ANS_TRUE_FALSE:
-	 /* Answer should be 'T' or 'F' */
-         if (Qst->Answer.OptionTF == QstTF__OPTION_EMPTY)
-           {
-            Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_a_T_F_answer);
-            return Err_ERROR;
-           }
-
-         Qst->Answer.NumOpts = 1;
-         break;
-      case Qst_ANS_UNIQUE_CHOICE:
-      case Qst_ANS_MULTIPLE_CHOICE:
-	 /* No option should be empty before a non-empty option */
-         for (NumOpt = 0, NumLastOpt = 0, ThereIsEndOfAnswers = false;
-              NumOpt < Qst_MAX_OPTS_PER_QST;
-              NumOpt++)
-            if (Qst->Answer.Options[NumOpt].Text)
-              {
-               if (Qst->Answer.Options[NumOpt].Text[0] ||				// Text
-        	   Qst->Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)	// or media
-                 {
-                  if (ThereIsEndOfAnswers)
-                    {
-                     Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_empty_intermediate_answers);
-                     return Err_ERROR;
-                    }
-                  NumLastOpt = NumOpt;
-                  Qst->Answer.NumOpts++;
-                 }
-               else
-                  ThereIsEndOfAnswers = true;
-              }
-            else
-               ThereIsEndOfAnswers = true;
-
-         /* The two first options must be filled */
-         if (NumLastOpt < 1)
-           {
-            Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
-            return Err_ERROR;
-           }
-
-         /* Its mandatory to mark at least one option as correct */
-         for (NumOpt  = 0;
-              NumOpt <= NumLastOpt;
-              NumOpt++)
-            if (Qst->Answer.Options[NumOpt].Correct == Qst_CORRECT)
-               break;
-         if (NumOpt > NumLastOpt)
-           {
-            Ale_ShowAlert (Ale_WARNING,Txt_You_must_mark_an_answer_as_correct);
-            return Err_ERROR;
-           }
-         break;
-      case Qst_ANS_TEXT:
-	 /* First option should be filled */
-         if (!Qst->Answer.Options[0].Text)		// If the first answer is empty
-           {
-            Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_answer);
-            return Err_ERROR;
-           }
-         if (!Qst->Answer.Options[0].Text[0])	// If the first answer is empty
-           {
-            Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_answer);
-            return Err_ERROR;
-           }
-
-	 /* No option should be empty before a non-empty option */
-         for (NumOpt = 0, ThereIsEndOfAnswers = false;
-              NumOpt < Qst_MAX_OPTS_PER_QST;
-              NumOpt++)
-            if (Qst->Answer.Options[NumOpt].Text)
-              {
-               if (Qst->Answer.Options[NumOpt].Text[0])
-                 {
-                  if (ThereIsEndOfAnswers)
-                    {
-                     Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_empty_intermediate_answers);
-                     return Err_ERROR;
-                    }
-                  Qst->Answer.NumOpts++;
-                 }
-               else
-                  ThereIsEndOfAnswers = true;
-              }
-            else
-               ThereIsEndOfAnswers = true;
-         break;
-      default:
-         break;
-     }
-
-    return Err_SUCCESS;	// Question format without errors
-   }
+   /***** Check options *****/
+   return Qst_CheckIfOptsAreCorrect[Qst->Answer.Type] (Qst);
+  }
 
 /*****************************************************************************/
 /*********** Check if a test question already exists in database *************/

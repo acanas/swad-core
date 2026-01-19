@@ -43,6 +43,7 @@
 /*****************************************************************************/
 
 void QstTxt_GetAnsFromForm (struct Qst_Question *Qst);
+Err_SuccessOrError_t QstTxt_CheckIfOptsAreCorrect (struct Qst_Question *Qst);
 
 void QstTxt_GetCorrectAndComputeAnsScore (const char *Table,
 					  struct Qst_PrintedQuestion *PrintedQst,

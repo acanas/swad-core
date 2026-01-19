@@ -99,6 +99,58 @@ void QstFlt_GetAnsFromForm (struct Qst_Question *Qst)
   }
 
 /*****************************************************************************/
+/******************* Check if question options are correct *******************/
+/*****************************************************************************/
+
+Err_SuccessOrError_t QstFlt_CheckIfOptsAreCorrect (struct Qst_Question *Qst)
+  {
+   extern const char *Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer;
+   extern const char *Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to_the_upper_limit;
+   unsigned NumOpt;
+   Err_SuccessOrError_t SuccessOrError;
+
+   /* First two options should be filled */
+   if (!Qst->Answer.Options[0].Text ||
+       !Qst->Answer.Options[1].Text)
+     {
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer);
+      return Err_ERROR;
+     }
+   if (!Qst->Answer.Options[0].Text[0] ||
+       !Qst->Answer.Options[1].Text[0])
+     {
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer);
+      return Err_ERROR;
+     }
+
+   /* Lower limit should be <= upper limit */
+   for (SuccessOrError  = Err_SUCCESS, NumOpt = 0;
+	SuccessOrError == Err_SUCCESS && NumOpt < 2;
+	NumOpt++)
+      SuccessOrError = Str_GetDoubleFromStr (Qst->Answer.Options[NumOpt].Text,
+					     &Qst->Answer.FloatingPoint[NumOpt]);
+   switch (SuccessOrError)
+     {
+      case Err_SUCCESS:
+	 if (Qst->Answer.FloatingPoint[0] >
+	     Qst->Answer.FloatingPoint[1])
+	   {
+	    Ale_ShowAlert (Ale_WARNING,Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to_the_upper_limit);
+	    return Err_ERROR;
+	   }
+	 break;
+      case Err_ERROR:
+      default:
+	 Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer);
+	 return Err_ERROR;
+     }
+
+   Qst->Answer.NumOpts = 2;
+
+   return Err_SUCCESS;	// Question format without errors
+  }
+
+/*****************************************************************************/
 /*********************** Get question options from row ***********************/
 /*****************************************************************************/
 
