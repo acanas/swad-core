@@ -45,6 +45,9 @@
 void QstTF__PutInputField (const struct Qst_Question *Qst,QstTF__OptionTF_t OptTF);
 void QstTF__GetAnsFromForm (struct Qst_Question *Qst);
 
+void QstTF__GetQstOptionsFromRow (MYSQL_ROW row,struct Qst_Question *Qst,
+				  __attribute__((unused)) unsigned NumOpt);
+
 void QstTF__GetCorrectAndComputeAnsScore (const char *Table,
 					  struct Qst_PrintedQuestion *PrintedQst,
 				          struct Qst_Question *Qst);

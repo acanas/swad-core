@@ -99,6 +99,20 @@ void QstFlt_GetAnsFromForm (struct Qst_Question *Qst)
   }
 
 /*****************************************************************************/
+/*********************** Get question options from row ***********************/
+/*****************************************************************************/
+
+void QstFlt_GetQstOptionsFromRow (MYSQL_ROW row,struct Qst_Question *Qst,
+				  unsigned NumOpt)
+  {
+   if (Qst->Answer.NumOpts != 2)
+      Err_WrongAnswerExit ();
+   if (Str_GetDoubleFromStr (row[1],
+			     &Qst->Answer.FloatingPoint[NumOpt]) == Err_ERROR)
+      Err_WrongAnswerExit ();
+  }
+
+/*****************************************************************************/
 /******* Get correct answer and compute score for each type of answer ********/
 /*****************************************************************************/
 

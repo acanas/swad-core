@@ -129,6 +129,36 @@ void QstCho_GetAnsFromForm (struct Qst_Question *Qst)
   }
 
 /*****************************************************************************/
+/*********************** Get question options from row ***********************/
+/*****************************************************************************/
+
+void QstCho_GetQstOptionsFromRow (MYSQL_ROW row,struct Qst_Question *Qst,
+				  unsigned NumOpt)
+  {
+   /***** Check number of options *****/
+   if (Qst->Answer.NumOpts > Qst_MAX_OPTS_PER_QST)
+      Err_WrongAnswerExit ();
+
+   /***** Allocate space for text and feedback *****/
+   if (Qst_AllocateTextChoiceAnswer (Qst,NumOpt) == Err_ERROR)
+      /* Abort on error */
+      Ale_ShowAlertsAndExit ();
+
+   /* Get text (row[1]) and feedback (row[2])*/
+   Str_Copy (Qst->Answer.Options[NumOpt].Text    ,row[1],
+	     Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+   Str_Copy (Qst->Answer.Options[NumOpt].Feedback,row[2],
+	     Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+
+   /***** Get media (row[3]) *****/
+   Qst->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
+   Med_GetMediaDataByCod (&Qst->Answer.Options[NumOpt].Media);
+
+   /***** Get if this option is correct (row[4]) *****/
+   Qst->Answer.Options[NumOpt].Correct = Qst_GetCorrectFromYN (row[4][0]);
+  }
+
+/*****************************************************************************/
 /******* Get correct answer and compute score for each type of answer ********/
 /*****************************************************************************/
 

@@ -104,6 +104,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_account.h"
 #include "swad_API.h"
 #include "swad_API_database.h"
+#include "swad_attendance.h"
 #include "swad_attendance_database.h"
 #include "swad_autolink.h"
 #include "swad_browser.h"

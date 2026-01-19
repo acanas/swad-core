@@ -2210,67 +2210,34 @@ static void Qst_GetQstTagsByCod (struct Qst_Question *Qst)
 
 void Qst_GetQstOptionsByCod (MYSQL_RES **mysql_res,struct Qst_Question *Qst)
   {
+   void (*Qst_GetQstOptionsFromRow[Qst_NUM_ANS_TYPES]) (MYSQL_ROW row,
+							struct Qst_Question *Qst,
+						        unsigned NumOpt) =
+    {
+     [Qst_ANS_INT            ] = QstInt_GetQstOptionsFromRow,
+     [Qst_ANS_FLOAT          ] = QstFlt_GetQstOptionsFromRow,
+     [Qst_ANS_TRUE_FALSE     ] = QstTF__GetQstOptionsFromRow,
+     [Qst_ANS_UNIQUE_CHOICE  ] = QstCho_GetQstOptionsFromRow,
+     [Qst_ANS_MULTIPLE_CHOICE] = QstCho_GetQstOptionsFromRow,
+     [Qst_ANS_TEXT           ] = QstCho_GetQstOptionsFromRow,
+    };
    MYSQL_ROW row;
    unsigned NumOpt;
 
    /***** Get the answers from the database *****/
-   /*
-   row[0] AnsInd
-   row[1] Answer
-   row[2] Feedback
-   row[3] MedCod
-   row[4] Correct
-   */
    for (NumOpt = 0;
 	NumOpt < Qst->Answer.NumOpts;
 	NumOpt++)
      {
       row = mysql_fetch_row (*mysql_res);
-      switch (Qst->Answer.Type)
-	{
-	 case Qst_ANS_INT:
-	    Qst_CheckIfNumberOfAnswersIsOne (Qst);
-	    Qst->Answer.Integer = Qst_GetIntAnsFromStr (row[1]);
-	    break;
-	 case Qst_ANS_FLOAT:
-	    if (Qst->Answer.NumOpts != 2)
-	       Err_WrongAnswerExit ();
-	    if (Str_GetDoubleFromStr (row[1],
-				      &Qst->Answer.FloatingPoint[NumOpt]) == Err_ERROR)
-	       Err_WrongAnswerExit ();
-	    break;
-	 case Qst_ANS_TRUE_FALSE:
-	    Qst_CheckIfNumberOfAnswersIsOne (Qst);
-	    Qst->Answer.OptionTF = QstTF__GetOptionTFFromChar (row[1][0]);
-	    break;
-	 case Qst_ANS_UNIQUE_CHOICE:
-	 case Qst_ANS_MULTIPLE_CHOICE:
-	 case Qst_ANS_TEXT:
-	    /* Check number of options */
-	    if (Qst->Answer.NumOpts > Qst_MAX_OPTS_PER_QST)
-	       Err_WrongAnswerExit ();
-
-	    /*  Allocate space for text and feedback */
-	    if (Qst_AllocateTextChoiceAnswer (Qst,NumOpt) == Err_ERROR)
-	       /* Abort on error */
-	       Ale_ShowAlertsAndExit ();
-
-	    /* Get text (row[1]) and feedback (row[2])*/
-	    Str_Copy (Qst->Answer.Options[NumOpt].Text    ,row[1],
-		      Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-	    Str_Copy (Qst->Answer.Options[NumOpt].Feedback,row[2],
-		      Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-
-	    /* Get media (row[3]) */
-	    Qst->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
-	    Med_GetMediaDataByCod (&Qst->Answer.Options[NumOpt].Media);
-
-	    /* Get if this option is correct (row[4]) */
-	    Qst->Answer.Options[NumOpt].Correct = Qst_GetCorrectFromYN (row[4][0]);
-	    break;
-	 default:
-	    break;
-	}
+      /*
+      row[0] AnsInd
+      row[1] Answer
+      row[2] Feedback
+      row[3] MedCod
+      row[4] Correct
+      */
+      Qst_GetQstOptionsFromRow[Qst->Answer.Type] (row,Qst,NumOpt);
      }
   }
 
@@ -2710,7 +2677,7 @@ Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Qst)
                row = mysql_fetch_row (mysql_res_ans);
                IdenticalQuestionExists = Qst_GetIntAnsFromStr (row[0]) ==
         				 Qst->Answer.Integer ? Exi_EXISTS :
-        							    Exi_DOES_NOT_EXIST;
+        						       Exi_DOES_NOT_EXIST;
                break;
             case Qst_ANS_FLOAT:
                for (IdenticalAnswersExist = Exi_EXISTS, NumOpt = 0;
@@ -2723,7 +2690,7 @@ Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Qst)
 		     case Err_SUCCESS:
 			IdenticalAnswersExist = DoubleNum ==
 						Qst->Answer.FloatingPoint[NumOpt] ? Exi_EXISTS :
-											 Exi_DOES_NOT_EXIST;
+										    Exi_DOES_NOT_EXIST;
 			break;
 		     case Err_ERROR:
 		     default:
@@ -2737,7 +2704,7 @@ Exi_Exist_t Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Qst)
                row = mysql_fetch_row (mysql_res_ans);
                IdenticalQuestionExists = QstTF__GetOptionTFFromChar (row[0][0]) ==
         				 Qst->Answer.OptionTF ? Exi_EXISTS :
-							             Exi_DOES_NOT_EXIST;
+							        Exi_DOES_NOT_EXIST;
                break;
             case Qst_ANS_UNIQUE_CHOICE:
             case Qst_ANS_MULTIPLE_CHOICE:

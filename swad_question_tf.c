@@ -91,6 +91,17 @@ void QstTF__GetAnsFromForm (struct Qst_Question *Qst)
   }
 
 /*****************************************************************************/
+/*********************** Get question options from row ***********************/
+/*****************************************************************************/
+
+void QstTF__GetQstOptionsFromRow (MYSQL_ROW row,struct Qst_Question *Qst,
+				  __attribute__((unused)) unsigned NumOpt)
+  {
+   Qst_CheckIfNumberOfAnswersIsOne (Qst);
+   Qst->Answer.OptionTF = QstTF__GetOptionTFFromChar (row[1][0]);
+  }
+
+/*****************************************************************************/
 /******* Get correct answer and compute score for each type of answer ********/
 /*****************************************************************************/
 
