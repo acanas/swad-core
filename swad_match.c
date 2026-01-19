@@ -1523,7 +1523,7 @@ static void Mch_ReorderAnswer (long MchCod,
 /*****************************************************************************/
 
 void Mch_GetIndexes (long MchCod,unsigned QstInd,
-		     unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION])
+		     unsigned Indexes[Qst_MAX_OPTS_PER_QST])
   {
    char StrIndexesOneQst[Qst_MAX_BYTES_INDEXES_ONE_QST + 1];
 
@@ -2848,7 +2848,7 @@ static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
    bool RowIsOpen = false;
    unsigned NumRespondersQst;
    unsigned NumRespondersAns;
-   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
+   unsigned Indexes[Qst_MAX_OPTS_PER_QST];	// Indexes of all answers of this question
 
    /***** Get number of users who have answered this question from database *****/
    NumRespondersQst = Mch_DB_GetNumUsrsWhoAnsweredQst (Match->MchCod,Match->Status.QstInd);
@@ -2864,7 +2864,7 @@ static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
 
       /***** Show options distributed in columns *****/
       for (NumOpt = 0;
-	   NumOpt < Qst->Answer.NumOptions;
+	   NumOpt < Qst->Answer.NumOpts;
 	   NumOpt++)
 	{
 	 /***** Begin row? *****/
@@ -2935,17 +2935,17 @@ static void Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 					   const struct Mch_UsrAnswer *UsrAnswer,
 					   Mch_Update_t Update)
   {
-   unsigned NumOptions;
+   unsigned NumOpts;
    unsigned NumOpt;
 
    /***** Get number of options in this question *****/
-   NumOptions = Qst_DB_GetNumAnswersQst (Match->Status.QstCod);
+   NumOpts = Qst_DB_GetNumAnswersQst (Match->Status.QstCod);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (8);
 
       for (NumOpt = 0;
-	   NumOpt < NumOptions;
+	   NumOpt < NumOpts;
 	   NumOpt++)
 	{
 	 /***** Begin row *****/
@@ -3567,7 +3567,7 @@ void Mch_ReceiveQuestionAnswer (void)
 void Mch_StoreQuestionAnswer (const struct Mch_Match *Match,unsigned QstInd,
                               struct Mch_UsrAnswer *UsrAnswer)
   {
-   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];
+   unsigned Indexes[Qst_MAX_OPTS_PER_QST];
    struct Mch_UsrAnswer PreviousUsrAnswer;
 
    /***** Check that teacher's screen is showing answers

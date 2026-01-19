@@ -459,20 +459,16 @@ static void ExaPrn_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQst
    Qst.QstCod = PrintedQst->QstCod;
 
       /***** Get answers of question from database *****/
-      Qst.Answer.NumOptions = Exa_DB_GetQstAnswersFromSet (&mysql_res,
-							   Qst.QstCod,Shuffle);
+      Qst.Answer.NumOpts = Exa_DB_GetQstIndexesFromSet (&mysql_res,
+							Qst.QstCod,Shuffle);
       /*
       row[0] AnsInd
-      row[1] Answer
-      row[2] Feedback
-      row[3] MedCod
-      row[4] Correct
       */
       /***** Reset string of indexes *****/
       PrintedQst->StrIndexes[0] = '\0';
 
       for (NumOpt = 0;
-	   NumOpt < Qst.Answer.NumOptions;
+	   NumOpt < Qst.Answer.NumOpts;
 	   NumOpt++)
 	{
 	 /***** Get next answer *****/
@@ -484,7 +480,7 @@ static void ExaPrn_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQst
 	 ErrorInIndex = Err_SUCCESS;
 	 if (sscanf (row[0],"%u",&Index) == 1)
 	   {
-	    if (Index >= Qst_MAX_OPTIONS_PER_QUESTION)
+	    if (Index >= Qst_MAX_OPTS_PER_QST)
 	       ErrorInIndex = Err_ERROR;
 	   }
 	 else

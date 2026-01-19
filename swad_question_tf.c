@@ -29,12 +29,21 @@
 #include "swad_cryptography.h"
 #include "swad_database.h"
 #include "swad_exam_sheet.h"
+#include "swad_parameter.h"
 #include "swad_question_database.h"
 #include "swad_question_tf.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
+
+/* True/False internal values for forms and database */
+const char *QstTF__Values[QstTF__NUM_OPTIONS] =
+  {
+   [QstTF__OPTION_EMPTY] = "" ,
+   [QstTF__OPTION_TRUE ] = "T",
+   [QstTF__OPTION_FALSE] = "F",
+  };
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -48,6 +57,38 @@ static void QstTF__GetCorrectAnswerFromDB (const char *Table,
 					   struct Qst_Question *Qst);
 static void QstTF__ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
 				    const struct Qst_Question *Qst);
+
+static void QstTF__WriteTFOptionsToFill (QstTF__OptionTF_t OptTFStd);
+
+/*****************************************************************************/
+/*********************** Put input field for T/F answer **********************/
+/*****************************************************************************/
+
+void QstTF__PutInputField (const struct Qst_Question *Qst,QstTF__OptionTF_t OptTF)
+  {
+   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+      HTM_INPUT_RADIO ("AnsTF",
+		       (Qst->Answer.OptionTF == OptTF ? HTM_CHECKED :
+							HTM_NO_ATTR) |
+		       HTM_REQUIRED |
+		       (Qst->Answer.Type == Qst_ANS_TRUE_FALSE ? HTM_NO_ATTR :
+								 HTM_DISABLED),
+		       "value=\"%s\"",QstTF__Values[OptTF]);
+      QstTF__WriteAnsTF (OptTF);
+   HTM_LABEL_End ();
+  }
+
+/*****************************************************************************/
+/**************************** Get answer from form ***************************/
+/*****************************************************************************/
+
+void QstTF__GetAnsFromForm (struct Qst_Question *Qst)
+  {
+   char TF[1 + 1];	// (T)rue or (F)alse
+
+   Par_GetParText ("AnsTF",TF,1);
+   Qst->Answer.OptionTF = QstTF__GetOptionTFFromChar (TF[0]);
+  }
 
 /*****************************************************************************/
 /******* Get correct answer and compute score for each type of answer ********/
@@ -69,15 +110,14 @@ static void QstTF__GetCorrectAnswerFromDB (const char *Table,
    MYSQL_ROW row;
 
    /***** Query database *****/
-   Qst->Answer.NumOptions = Qst_DB_GetTextOfAnswers (&mysql_res,
-						     Table,Qst->QstCod);
+   Qst->Answer.NumOpts = Qst_DB_GetTextOfAnswers (&mysql_res,Table,Qst->QstCod);
 
    /***** Check if number of rows is correct *****/
    Qst_CheckIfNumberOfAnswersIsOne (Qst);
 
    /***** Get answer *****/
    row = mysql_fetch_row (mysql_res);
-   Qst->Answer.OptionTF = Qst_GetOptionTFFromChar (row[0][0]);
+   Qst->Answer.OptionTF = QstTF__GetOptionTFFromChar (row[0][0]);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -88,18 +128,18 @@ static void QstTF__ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
   {
    static double Scores[] =
      {
-      [TstPrn_ANSWER_IS_CORRECT       ] =  1.0,
-      [TstPrn_ANSWER_IS_WRONG_NEGATIVE] = -1.0,
-      [TstPrn_ANSWER_IS_WRONG_ZERO    ] =  0.0,	// Not used
-      [TstPrn_ANSWER_IS_WRONG_POSITIVE] =  0.0,	// Not used
-      [TstPrn_ANSWER_IS_BLANK         ] =  0.0,
+      [Qst_ANSWER_IS_CORRECT       ] =  1.0,
+      [Qst_ANSWER_IS_WRONG_NEGATIVE] = -1.0,
+      [Qst_ANSWER_IS_WRONG_ZERO    ] =  0.0,	// Not used
+      [Qst_ANSWER_IS_WRONG_POSITIVE] =  0.0,	// Not used
+      [Qst_ANSWER_IS_BLANK         ] =  0.0,
      };
 
    PrintedQst->Answer.IsCorrect = PrintedQst->Answer.Str[0] ?	// If user has selected T or F
-				  (Qst_GetOptionTFFromChar (PrintedQst->Answer.Str[0]) == Qst->Answer.OptionTF ?
-				     TstPrn_ANSWER_IS_CORRECT :
-				     TstPrn_ANSWER_IS_WRONG_NEGATIVE) :
-				  TstPrn_ANSWER_IS_BLANK;
+				  (QstTF__GetOptionTFFromChar (PrintedQst->Answer.Str[0]) == Qst->Answer.OptionTF ?
+				     Qst_ANSWER_IS_CORRECT :
+				     Qst_ANSWER_IS_WRONG_NEGATIVE) :
+				  Qst_ANSWER_IS_BLANK;
    PrintedQst->Answer.Score = Scores[PrintedQst->Answer.IsCorrect];
   }
 
@@ -113,7 +153,7 @@ void QstTF__WriteCorrAns (struct Qst_Question *Qst,
   {
    HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
       HTM_OpenParenthesis ();
-	 Qst_WriteAnsTF (Qst->Answer.OptionTF);
+	 QstTF__WriteAnsTF (Qst->Answer.OptionTF);
       HTM_CloseParenthesis ();
    HTM_SPAN_End ();
   }
@@ -133,7 +173,7 @@ void QstTF__WriteTstFillAns (const struct Qst_PrintedQuestion *PrintedQst,
    HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 		     "name=\"Ans%010u\" class=\"INPUT_%s\"",
 		     QstInd,The_GetSuffix ());
-      Qst_WriteTFOptionsToFill (Qst_GetOptionTFFromChar (PrintedQst->Answer.Str[0]));
+      QstTF__WriteTFOptionsToFill (QstTF__GetOptionTFFromChar (PrintedQst->Answer.Str[0]));
    HTM_SELECT_End ();
   }
 
@@ -144,13 +184,13 @@ void QstTF__WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
 			     __attribute__((unused)) const char *ClassFeedback)
   {
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
-   Qst_OptionTF_t OptTFStd;
+   QstTF__OptionTF_t OptTFStd;
 
    /***** Check if number of rows is correct *****/
    Qst_CheckIfNumberOfAnswersIsOne (Qst);
 
    /***** Get answer true or false *****/
-   OptTFStd = Qst_GetOptionTFFromChar (PrintedQst->Answer.Str[0]);
+   OptTFStd = QstTF__GetOptionTFFromChar (PrintedQst->Answer.Str[0]);
 
    HTM_TR_Begin (NULL);
 
@@ -161,7 +201,7 @@ void QstTF__WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
 							   "Qst_ANS_BAD") :	// Wrong
 							   "Qst_ANS_0",		// Blank answer
 		    The_GetSuffix ());
-	 Qst_WriteAnsTF (OptTFStd);
+	 QstTF__WriteAnsTF (OptTFStd);
       HTM_TD_End ();
 
       /***** Write the correct answer *****/
@@ -170,7 +210,7 @@ void QstTF__WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
 	 switch (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
 	   {
 	    case Usr_CAN:
-	       Qst_WriteAnsTF (Qst->Answer.OptionTF);
+	       QstTF__WriteAnsTF (Qst->Answer.OptionTF);
 	       break;
 	    case Usr_CAN_NOT:
 	    default:
@@ -190,9 +230,9 @@ void QstTF__WriteExaBlnkQstOptions (__attribute__((unused)) const struct ExaPrn_
 				    __attribute__((unused)) unsigned QstInd,
 				    __attribute__((unused)) struct Qst_Question *Qst)
   {
-   Qst_WriteAnsTF (Qst_OPTION_TRUE);
+   QstTF__WriteAnsTF (QstTF__OPTION_TRUE);
    HTM_Slash ();
-   Qst_WriteAnsTF (Qst_OPTION_FALSE);
+   QstTF__WriteAnsTF (QstTF__OPTION_FALSE);
   }
 
 /*****************************************************************************/
@@ -213,22 +253,22 @@ void QstTF__WriteExaFillAns (const struct ExaPrn_Print *Print,
    HTM_TxtF ("<select id=\"%s\" name=\"Ans\"",Id);
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_ElementEnd ();
-      Qst_WriteTFOptionsToFill (Qst_GetOptionTFFromChar (Print->PrintedQsts[QstInd].Answer.Str[0]));
+      QstTF__WriteTFOptionsToFill (QstTF__GetOptionTFFromChar (Print->PrintedQsts[QstInd].Answer.Str[0]));
    HTM_Txt ("</select>");
   }
 
 void QstTF__WriteExaBlnkAns (__attribute__((unused)) const struct Qst_Question *Qst)
   {
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
-   Qst_OptionTF_t OptTF;
+   QstTF__OptionTF_t OptTF;
 
-   for (OptTF  = Qst_OPTION_TRUE;
-	OptTF <= Qst_OPTION_FALSE;
+   for (OptTF  = QstTF__OPTION_TRUE;
+	OptTF <= QstTF__OPTION_FALSE;
 	OptTF++)
      {
       HTM_TD_Begin ("class=\"Exa_ANSWER_TF %s_%s\"",
 		    Qst_AnswerDisplay[Qst_BLANK].ClassStd,The_GetSuffix ());
-	 Qst_WriteAnsTF (OptTF);
+	 QstTF__WriteAnsTF (OptTF);
       HTM_TD_End ();
      }
   }
@@ -245,27 +285,27 @@ void QstTF__WriteExaCorrAns (__attribute__((unused)) const struct ExaPrn_Print *
    /***** Write the correct answer *****/
    HTM_TD_Begin ("class=\"Exa_ANSWER_TF %s_%s\"",
 		 Qst_AnswerDisplay[Qst_BLANK].ClassTch,The_GetSuffix ());
-      Qst_WriteAnsTF (Qst->Answer.OptionTF);
+      QstTF__WriteAnsTF (Qst->Answer.OptionTF);
    HTM_TD_End ();
   }
 
 void QstTF__WriteExaReadAns (const struct ExaPrn_Print *Print,
 			     unsigned QstInd,struct Qst_Question *Qst)
   {
-   Qst_OptionTF_t OptTFStd;
+   QstTF__OptionTF_t OptTFStd;
 
    /***** Check if number of rows is correct *****/
    Qst_CheckIfNumberOfAnswersIsOne (Qst);
 
    /***** Get answer true or false *****/
-   OptTFStd = Qst_GetOptionTFFromChar (Print->PrintedQsts[QstInd].Answer.Str[0]);
+   OptTFStd = QstTF__GetOptionTFFromChar (Print->PrintedQsts[QstInd].Answer.Str[0]);
 
    /***** Write online answer *****/
    HTM_TD_Begin ("class=\"Exa_ANSWER_TF %s_%s\"",
 		 OptTFStd == Qst->Answer.OptionTF ? "Qst_ANS_OK" :	// Correct
 						    "Qst_ANS_BAD",	// Blank answer
 		 The_GetSuffix ());
-      Qst_WriteAnsTF (OptTFStd);
+      QstTF__WriteAnsTF (OptTFStd);
    HTM_TD_End ();
   }
 
@@ -273,7 +313,7 @@ void QstTF__WriteExaEditAns (const struct ExaPrn_Print *Print,
 			     unsigned QstInd,struct Qst_Question *Qst)
   {
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
-   Qst_OptionTF_t OptTFStd = Qst_GetOptionTFFromChar (Print->PrintedQsts[QstInd].Answer.Str[0]);
+   QstTF__OptionTF_t OptTFStd = QstTF__GetOptionTFFromChar (Print->PrintedQsts[QstInd].Answer.Str[0]);
    Qst_WrongOrCorrect_t WrongOrCorrect;
    char Id[3 + 1 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1 + Cns_MAX_DIGITS_UINT + 1];	// "Ans_encryptedusercode_xx...x"
 
@@ -283,12 +323,12 @@ void QstTF__WriteExaEditAns (const struct ExaPrn_Print *Print,
    /***** Check if student answer is blank, wrong or correct *****/
    switch (OptTFStd)
      {
-      case Qst_OPTION_TRUE:
-      case Qst_OPTION_FALSE:
+      case QstTF__OPTION_TRUE:
+      case QstTF__OPTION_FALSE:
 	 WrongOrCorrect = OptTFStd == Qst->Answer.OptionTF ? Qst_CORRECT :
 							     Qst_WRONG;
 	 break;
-      case Qst_OPTION_EMPTY:
+      case QstTF__OPTION_EMPTY:
       default:
 	 WrongOrCorrect = Qst_BLANK;
 	 break;
@@ -302,8 +342,56 @@ void QstTF__WriteExaEditAns (const struct ExaPrn_Print *Print,
 		Id,Qst_AnswerDisplay[WrongOrCorrect].ClassStd,The_GetSuffix ());
       ExaShe_WriteJSToUpdateSheet (Print,QstInd,Id,-1);
       HTM_ElementEnd ();
-         Qst_WriteTFOptionsToFill (OptTFStd);
+         QstTF__WriteTFOptionsToFill (OptTFStd);
       HTM_Txt ("</select>");
 
    HTM_TD_End ();
+  }
+
+/*****************************************************************************/
+/******************** Get true / false option from char **********************/
+/*****************************************************************************/
+
+QstTF__OptionTF_t QstTF__GetOptionTFFromChar (char TF)
+  {
+   QstTF__OptionTF_t OptTF;
+
+   if (TF)
+      for (OptTF  = QstTF__OPTION_TRUE;
+	   OptTF <= QstTF__OPTION_FALSE;
+	   OptTF++)
+	 if (TF == QstTF__Values[OptTF][0])
+	    return OptTF;
+
+   return QstTF__OPTION_EMPTY;
+  }
+
+/*****************************************************************************/
+/********* Write true / false options to be filled in a form select **********/
+/*****************************************************************************/
+
+static void QstTF__WriteTFOptionsToFill (QstTF__OptionTF_t OptTFStd)
+  {
+   extern const char *Txt_TF_QST[QstTF__NUM_OPTIONS];	// Value displayed on screen
+   QstTF__OptionTF_t OptTF;
+
+   /***** Write selector for the answer *****/
+   for (OptTF  = (QstTF__OptionTF_t) 0;
+	OptTF <= (QstTF__OptionTF_t) (QstTF__NUM_OPTIONS - 1);
+	OptTF++)
+      HTM_OPTION (HTM_Type_STRING,QstTF__Values[OptTF],
+		  OptTFStd == OptTF ? HTM_SELECTED :
+				      HTM_NO_ATTR,
+		  Txt_TF_QST[OptTF]);
+  }
+
+/*****************************************************************************/
+/************** Write true / false answer when seeing a test *****************/
+/*****************************************************************************/
+
+void QstTF__WriteAnsTF (QstTF__OptionTF_t OptionTF)
+  {
+   extern const char *Txt_TF_QST[QstTF__NUM_OPTIONS];	// Value displayed on screen
+
+   HTM_Txt (Txt_TF_QST[OptionTF]);
   }

@@ -25,10 +25,13 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#include <float.h>		// For DBL_MAX
+
 #include "swad_constant.h"
 #include "swad_cryptography.h"
 #include "swad_database.h"
 #include "swad_exam_sheet.h"
+#include "swad_parameter.h"
 #include "swad_question_database.h"
 #include "swad_question_float.h"
 
@@ -48,6 +51,52 @@ static void QstFlt_GetCorrectAnswerFromDB (const char *Table,
 					   struct Qst_Question *Qst);
 static void QstFlt_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
 				    const struct Qst_Question *Qst);
+
+/*****************************************************************************/
+/********************* Put input field for floating answer *******************/
+/*****************************************************************************/
+
+void QstFlt_PutInputField (const struct Qst_Question *Qst,unsigned Index)
+  {
+   extern const char *Txt_Real_number_between_A_and_B[2];
+   static const char *Fields[2] =
+     {
+      "AnsFloatMin",
+      "AnsFloatMax"
+     };
+
+   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+      HTM_Txt (Txt_Real_number_between_A_and_B[Index]); HTM_NBSP ();
+      HTM_INPUT_FLOAT (Fields[Index],-DBL_MAX,DBL_MAX,
+		       0,Qst->Answer.FloatingPoint[Index],
+		       (Qst->Answer.Type == Qst_ANS_FLOAT ? HTM_NO_ATTR :
+							    HTM_DISABLED) |
+		       HTM_REQUIRED,
+		       "class=\"Exa_ANSWER_INPUT_FLOAT INPUT_%s\"",
+		       The_GetSuffix ());
+   HTM_LABEL_End ();
+  }
+
+/*****************************************************************************/
+/**************************** Get answer from form ***************************/
+/*****************************************************************************/
+
+void QstFlt_GetAnsFromForm (struct Qst_Question *Qst)
+  {
+   if (Qst_AllocateTextChoiceAnswer (Qst,0) == Err_ERROR)
+      /* Abort on error */
+      Ale_ShowAlertsAndExit ();
+
+   Par_GetParText ("AnsFloatMin",Qst->Answer.Options[0].Text,
+		   Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+
+   if (Qst_AllocateTextChoiceAnswer (Qst,1) == Err_ERROR)
+      /* Abort on error */
+      Ale_ShowAlertsAndExit ();
+
+   Par_GetParText ("AnsFloatMax",Qst->Answer.Options[1].Text,
+		   Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+  }
 
 /*****************************************************************************/
 /******* Get correct answer and compute score for each type of answer ********/
@@ -73,11 +122,10 @@ static void QstFlt_GetCorrectAnswerFromDB (const char *Table,
    double Tmp;
 
    /***** Query database *****/
-   Qst->Answer.NumOptions = Qst_DB_GetTextOfAnswers (&mysql_res,
-						     Table,Qst->QstCod);
+   Qst->Answer.NumOpts = Qst_DB_GetTextOfAnswers (&mysql_res,Table,Qst->QstCod);
 
    /***** Check if number of rows is correct *****/
-   if (Qst->Answer.NumOptions != 2)
+   if (Qst->Answer.NumOpts != 2)
       Err_WrongAnswerExit ();
 
    /***** Get float range *****/
@@ -107,17 +155,17 @@ static void QstFlt_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
   {
    double AnsUsr;
 
-   PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_BLANK;
+   PrintedQst->Answer.IsCorrect = Qst_ANSWER_IS_BLANK;
    PrintedQst->Answer.Score = 0.0;	// Default score for blank or wrong answer
 
    if (PrintedQst->Answer.Str[0])	// If user has answered the answer
      {
-      PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
+      PrintedQst->Answer.IsCorrect = Qst_ANSWER_IS_WRONG_ZERO;
       if (Str_GetDoubleFromStr (PrintedQst->Answer.Str,&AnsUsr) == Err_SUCCESS)
 	 if (AnsUsr >= Qst->Answer.FloatingPoint[0] &&
 	     AnsUsr <= Qst->Answer.FloatingPoint[1])
 	   {
-	    PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
+	    PrintedQst->Answer.IsCorrect = Qst_ANSWER_IS_CORRECT;
 	    PrintedQst->Answer.Score = 1.0; // Correct (inside the interval)
 	   }
      }
@@ -169,7 +217,7 @@ void QstFlt_WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
    Err_SuccessOrError_t SuccessOrError;
 
    /***** Check if number of rows is correct *****/
-   if (Qst->Answer.NumOptions != 2)
+   if (Qst->Answer.NumOpts != 2)
       Err_WrongAnswerExit ();
 
    HTM_TR_Begin (NULL);
@@ -250,7 +298,7 @@ void QstFlt_WriteExaCorrAns (__attribute__((unused)) const struct ExaPrn_Print *
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
 
    /***** Check if number of rows is correct *****/
-   if (Qst->Answer.NumOptions != 2)
+   if (Qst->Answer.NumOpts != 2)
       Err_WrongAnswerExit ();
 
    /***** Write the correct answer *****/
@@ -268,7 +316,7 @@ void QstFlt_WriteExaReadAns (const struct ExaPrn_Print *Print,
    Err_SuccessOrError_t SuccessOrError;
 
    /***** Check if number of rows is correct *****/
-   if (Qst->Answer.NumOptions != 2)
+   if (Qst->Answer.NumOpts != 2)
       Err_WrongAnswerExit ();
 
    /***** Write online answer *****/
@@ -301,7 +349,7 @@ void QstFlt_WriteExaEditAns (const struct ExaPrn_Print *Print,
    char Id[3 + 1 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1 + Cns_MAX_DIGITS_UINT + 1];	// "Ans_encryptedusercode_xx...x"
 
    /***** Check if number of rows is correct *****/
-   if (Qst->Answer.NumOptions != 2)
+   if (Qst->Answer.NumOpts != 2)
       Err_WrongAnswerExit ();
 
    /***** Check if student answer is blank, wrong or correct *****/

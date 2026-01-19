@@ -31,6 +31,7 @@
 #include "swad_cryptography.h"
 #include "swad_database.h"
 #include "swad_exam_sheet.h"
+#include "swad_parameter.h"
 #include "swad_question_database.h"
 #include "swad_question_text.h"
 
@@ -50,6 +51,45 @@ static void QstTxt_GetCorrectAnswerFromDB (const char *Table,
 					   struct Qst_Question *Qst);
 static void QstTxt_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
 				    const struct Qst_Question *Qst);
+
+/*****************************************************************************/
+/**************************** Get answer from form ***************************/
+/*****************************************************************************/
+
+void QstTxt_GetAnsFromForm (struct Qst_Question *Qst)
+  {
+   unsigned NumOpt;
+   char AnsStr[6 + Cns_MAX_DIGITS_UINT + 1];
+   char FbStr[5 + Cns_MAX_DIGITS_UINT + 1];
+
+   /* Get the texts of the answers */
+   for (NumOpt = 0;
+        NumOpt < Qst_MAX_OPTS_PER_QST;
+        NumOpt++)
+     {
+      if (Qst_AllocateTextChoiceAnswer (Qst,NumOpt) == Err_ERROR)
+	 /* Abort on error */
+	 Ale_ShowAlertsAndExit ();
+
+      /* Get answer */
+      snprintf (AnsStr,sizeof (AnsStr),"AnsStr%u",NumOpt);
+      Par_GetParHTML (AnsStr,Qst->Answer.Options[NumOpt].Text,
+		      Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+      if (Qst->Answer.Type == Qst_ANS_TEXT)
+	 /* In order to compare student answer to stored answer,
+	    the text answers are stored avoiding two or more consecurive spaces */
+         Str_ReplaceSeveralSpacesForOne (Qst->Answer.Options[NumOpt].Text);
+
+      /* Get feedback */
+      snprintf (FbStr,sizeof (FbStr),"FbStr%u",NumOpt);
+      Par_GetParHTML (FbStr,Qst->Answer.Options[NumOpt].Feedback,
+		      Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+
+      /* Set all options to be correct */
+      if (Qst->Answer.Options[NumOpt].Text[0])
+	 Qst->Answer.Options[NumOpt].Correct = Qst_CORRECT;	// All the answers are correct
+     }
+  }
 
 /*****************************************************************************/
 /******* Get correct answer and compute score for each type of answer ********/
@@ -73,13 +113,12 @@ static void QstTxt_GetCorrectAnswerFromDB (const char *Table,
    unsigned NumOpt;
 
    /***** Query database *****/
-   Qst->Answer.NumOptions = Qst_DB_GetTextOfAnswers (&mysql_res,
-							  Table,Qst->QstCod);
+   Qst->Answer.NumOpts = Qst_DB_GetTextOfAnswers (&mysql_res,Table,Qst->QstCod);
 
    /***** Get text and correctness of answers for this question
           from database (one row per answer) *****/
    for (NumOpt = 0;
-	NumOpt < Qst->Answer.NumOptions;
+	NumOpt < Qst->Answer.NumOpts;
 	NumOpt++)
      {
       /***** Get next answer *****/
@@ -109,7 +148,7 @@ static void QstTxt_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
    char TextAnsUsr[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
    char TextAnsOK[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
 
-   PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_BLANK;
+   PrintedQst->Answer.IsCorrect = Qst_ANSWER_IS_BLANK;
    PrintedQst->Answer.Score = 0.0;	// Default score for blank or wrong answer
 
    if (PrintedQst->Answer.Str[0])	// If user has answered the answer
@@ -123,9 +162,9 @@ static void QstTxt_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
       Str_ReplaceSeveralSpacesForOne (TextAnsUsr);
       Str_ConvertToComparable (TextAnsUsr);
 
-      PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
+      PrintedQst->Answer.IsCorrect = Qst_ANSWER_IS_WRONG_ZERO;
       for (NumOpt = 0;
-	   NumOpt < Qst->Answer.NumOptions;
+	   NumOpt < Qst->Answer.NumOpts;
 	   NumOpt++)
         {
          /* Filter this correct answer */
@@ -136,7 +175,7 @@ static void QstTxt_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
          /* Check is user answer is correct */
          if (!strcoll (TextAnsUsr,TextAnsOK))
            {
-            PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
+            PrintedQst->Answer.IsCorrect = Qst_ANSWER_IS_CORRECT;
 	    PrintedQst->Answer.Score = 1.0;	// Correct answer
 	    break;
            }
@@ -163,7 +202,7 @@ void QstTxt_WriteCorrAns (struct Qst_Question *Qst,
 
    HTM_TABLE_BeginPadding (2);
       for (NumOpt = 0;
-	   NumOpt < Qst->Answer.NumOptions;
+	   NumOpt < Qst->Answer.NumOpts;
 	   NumOpt++)
 	{
 	 HTM_TR_Begin (NULL);
@@ -248,7 +287,7 @@ void QstTxt_WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
 
 	 if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_CAN)
 	    for (NumOpt = 0, WrongOrCorrect = Qst_WRONG;
-		 NumOpt < Qst->Answer.NumOptions;
+		 NumOpt < Qst->Answer.NumOpts;
 		 NumOpt++)
 	      {
 	       /* Filter this correct answer */
@@ -283,7 +322,7 @@ void QstTxt_WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
 	       HTM_TABLE_BeginPadding (2);
 
 		  for (NumOpt = 0;
-		       NumOpt < Qst->Answer.NumOptions;
+		       NumOpt < Qst->Answer.NumOpts;
 		       NumOpt++)
 		    {
 		     HTM_TR_Begin (NULL);
@@ -377,7 +416,7 @@ void QstTxt_WriteExaCorrAns (__attribute__((unused)) const struct ExaPrn_Print *
    HTM_TD_Begin ("class=\"Exa_ANSWER_TEXT %s_%s\"",
 		 Qst_AnswerDisplay[Qst_BLANK].ClassTch,The_GetSuffix ());
       for (NumOpt = 0;
-	   NumOpt < Qst->Answer.NumOptions;
+	   NumOpt < Qst->Answer.NumOpts;
 	   NumOpt++)
 	{
 	 if (NumOpt)
@@ -412,7 +451,7 @@ void QstTxt_WriteExaReadAns (const struct ExaPrn_Print *Print,
       Str_ConvertToComparable (TextAnsUsr);
 
       for (NumOpt = 0, WrongOrCorrect = Qst_WRONG;
-	   NumOpt < Qst->Answer.NumOptions;
+	   NumOpt < Qst->Answer.NumOpts;
 	   NumOpt++)
 	{
 	 /* Filter this correct answer */
@@ -461,7 +500,7 @@ void QstTxt_WriteExaEditAns (const struct ExaPrn_Print *Print,
       Qst_ChangeFormatOptionsText (Qst);
 
       for (NumOpt = 0, WrongOrCorrect = Qst_WRONG;
-	   NumOpt < Qst->Answer.NumOptions;
+	   NumOpt < Qst->Answer.NumOpts;
 	   NumOpt++)
 	{
 	 /* Filter this correct answer */

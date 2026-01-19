@@ -215,14 +215,14 @@ void Qst_DB_CreateFltAnswer (const struct Qst_Question *Qst)
 
 void Qst_DB_CreateTF_Answer (const struct Qst_Question *Qst)
   {
-   extern const char *Qst_TFValues[Qst_NUM_OPTIONS_TF];
+   extern const char *QstTF__Values[QstTF__NUM_OPTIONS];
 
    DB_QueryINSERT ("can not create answer",
 		   "INSERT INTO tst_answers"
 		   " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
 		   " VALUES"
 		   " (%ld,0,'%s','',-1,'Y')",
-		   Qst->QstCod,Qst_TFValues[Qst->Answer.OptionTF]);
+		   Qst->QstCod,QstTF__Values[Qst->Answer.OptionTF]);
   }
 
 /*****************************************************************************/
@@ -235,7 +235,7 @@ void Qst_DB_CreateChoAnswer (struct Qst_Question *Qst)
    unsigned NumOpt;
 
    for (NumOpt = 0;
-	NumOpt < Qst->Answer.NumOptions;
+	NumOpt < Qst->Answer.NumOpts;
 	NumOpt++)
       if (Qst->Answer.Options[NumOpt].Text[0] ||			// Text
 	  Qst->Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)	// or media
@@ -1303,27 +1303,28 @@ unsigned Qst_DB_GetNumAnswersQst (long QstCod)
 /***************** Get answers of a question from database *******************/
 /*****************************************************************************/
 
-unsigned Qst_DB_GetAnswersData (MYSQL_RES **mysql_res,long QstCod,
-			        Qst_Shuffle_t Shuffle)
+unsigned Qst_DB_GetAnswersData (MYSQL_RES **mysql_res,const char *Table,
+				long QstCod,Qst_Shuffle_t Shuffle)
   {
    extern const char *Qst_OrderByShuffle[Qst_NUM_SHUFFLE];
-   unsigned NumOptions;
+   unsigned NumOpts;
 
-   if (!(NumOptions = (unsigned)
-	 DB_QuerySELECT (mysql_res,"can not get answers of a question",
-			 "SELECT AnsInd,"	// row[0]
-				"Answer,"	// row[1]
-				"Feedback,"	// row[2]
-				"MedCod,"	// row[3]
-				"Correct"	// row[4]
-			  " FROM tst_answers"
-			 " WHERE QstCod=%ld"
-		      " ORDER BY %s",
-			 QstCod,
-			 Qst_OrderByShuffle[Shuffle])))
+   NumOpts = (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get answers of a question",
+		   "SELECT AnsInd,"	// row[0]
+			  "Answer,"	// row[1]
+			  "Feedback,"	// row[2]
+			  "MedCod,"	// row[3]
+			  "Correct"	// row[4]
+		    " FROM %s"
+		   " WHERE QstCod=%ld"
+		" ORDER BY %s",
+		   Table,QstCod,
+		   Qst_OrderByShuffle[Shuffle]);
+   if (!NumOpts)
       Err_WrongAnswerExit ();
 
-   return NumOptions;
+   return NumOpts;
   }
 
 /*****************************************************************************/
@@ -1333,18 +1334,19 @@ unsigned Qst_DB_GetAnswersData (MYSQL_RES **mysql_res,long QstCod,
 unsigned Qst_DB_GetTextOfAnswers (MYSQL_RES **mysql_res,
 				  const char *Table,long QstCod)
   {
-   unsigned NumOptions;
+   unsigned NumOpts;
 
-   if (!(NumOptions = (unsigned)
-         DB_QuerySELECT (mysql_res,"can not get answers of a question",
-			 "SELECT Answer"		// row[0]
-			  " FROM %s"
-			 " WHERE QstCod=%ld"
-		      " ORDER BY AnsInd",
-			 Table,QstCod)))
+   NumOpts = (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get answers of a question",
+		   "SELECT Answer"		// row[0]
+		    " FROM %s"
+		   " WHERE QstCod=%ld"
+		" ORDER BY AnsInd",
+		   Table,QstCod);
+   if (!NumOpts)
       Err_WrongAnswerExit ();
 
-   return NumOptions;
+   return NumOpts;
   }
 
 /*****************************************************************************/

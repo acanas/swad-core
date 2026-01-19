@@ -47,32 +47,30 @@ typedef enum
    Qst_ANS_UNKNOWN         = 6,	// Unknown/all/any type of answer
   } Qst_AnswerType_t;
 
-#define Qst_NUM_OPTIONS_TF 3
+#define QstTF__NUM_OPTIONS 3
 typedef enum
   {
-   Qst_OPTION_EMPTY,
-   Qst_OPTION_TRUE,
-   Qst_OPTION_FALSE,
-  } Qst_OptionTF_t;
+   QstTF__OPTION_EMPTY,
+   QstTF__OPTION_TRUE,
+   QstTF__OPTION_FALSE,
+  } QstTF__OptionTF_t;
 
 #define Qst_MAX_BYTES_ANSWER_TYPE	32
 
-#define Qst_MAX_BYTES_FLOAT_ANSWER	30	// Maximum length of the strings that store an floating point answer
+#define Qst_MAX_OPTS_PER_QST	10
 
-#define Qst_MAX_OPTIONS_PER_QUESTION	10
-
-#define Qst_MAX_BYTES_INDEXES_ONE_QST	(Qst_MAX_OPTIONS_PER_QUESTION * (3 + 1))
+#define Qst_MAX_BYTES_INDEXES_ONE_QST	(Qst_MAX_OPTS_PER_QST * (3 + 1))
 
 #define Qst_MAX_CHARS_ANSWERS_ONE_QST	(128 - 1)	// 127
 #define Qst_MAX_BYTES_ANSWERS_ONE_QST	((Qst_MAX_CHARS_ANSWERS_ONE_QST + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 typedef enum
   {
-   TstPrn_ANSWER_IS_CORRECT,
-   TstPrn_ANSWER_IS_WRONG_NEGATIVE,
-   TstPrn_ANSWER_IS_WRONG_ZERO,
-   TstPrn_ANSWER_IS_WRONG_POSITIVE,
-   TstPrn_ANSWER_IS_BLANK,
+   Qst_ANSWER_IS_CORRECT,
+   Qst_ANSWER_IS_WRONG_NEGATIVE,
+   Qst_ANSWER_IS_WRONG_ZERO,
+   Qst_ANSWER_IS_WRONG_POSITIVE,
+   Qst_ANSWER_IS_BLANK,
   } Qst_Correct_t;
 
 struct Qst_Answer

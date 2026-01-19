@@ -607,8 +607,8 @@ static void Tst_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQst,
    Qst.QstCod = PrintedQst->QstCod;
 
       /***** Get answers of question from database *****/
-      Qst.Answer.NumOptions = Qst_DB_GetAnswersData (&mysql_res,
-						     Qst.QstCod,Shuffle);
+      Qst.Answer.NumOpts = Qst_DB_GetAnswersData (&mysql_res,"tst_answers",
+						  Qst.QstCod,Shuffle);
       /*
       row[0] AnsInd
       row[1] Answer
@@ -618,7 +618,7 @@ static void Tst_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQst,
       */
 
       for (NumOpt = 0;
-	   NumOpt < Qst.Answer.NumOptions;
+	   NumOpt < Qst.Answer.NumOpts;
 	   NumOpt++)
 	{
 	 /***** Get next answer *****/
@@ -630,7 +630,7 @@ static void Tst_GenerateChoiceIndexes (struct Qst_PrintedQuestion *PrintedQst,
 	 ErrorInIndex = Err_SUCCESS;
 	 if (sscanf (row[0],"%u",&Index) == 1)
 	   {
-	    if (Index >= Qst_MAX_OPTIONS_PER_QUESTION)
+	    if (Index >= Qst_MAX_OPTS_PER_QST)
 	       ErrorInIndex = Err_ERROR;
 	   }
 	 else

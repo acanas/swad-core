@@ -43,6 +43,14 @@
 #define Qst_MAX_CHARS_ANSWER_OR_FEEDBACK	(1024 - 1)	// 1023
 #define Qst_MAX_BYTES_ANSWER_OR_FEEDBACK	((Qst_MAX_CHARS_ANSWER_OR_FEEDBACK + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 16383
 
+// Test images will be saved with:
+// - maximum width of Tst_IMAGE_SAVED_MAX_HEIGHT
+// - maximum height of Tst_IMAGE_SAVED_MAX_HEIGHT
+// - maintaining the original aspect ratio (aspect ratio recommended: 3:2)
+#define Qst_IMAGE_SAVED_MAX_WIDTH	768
+#define Qst_IMAGE_SAVED_MAX_HEIGHT	768
+#define Qst_IMAGE_SAVED_QUALITY		 90	// 1 to 100
+
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
@@ -90,16 +98,16 @@ struct Qst_Question
    struct
      {
       Qst_AnswerType_t Type;
-      unsigned NumOptions;
+      unsigned NumOpts;	// Number of options
       Qst_Shuffle_t Shuffle;
-      Qst_OptionTF_t OptionTF;
+      QstTF__OptionTF_t OptionTF;
       struct
 	{
 	 Qst_WrongOrCorrect_t Correct;
 	 char *Text;
 	 char *Feedback;
 	 struct Med_Media Media;
-	} Options[Qst_MAX_OPTIONS_PER_QUESTION];
+	} Options[Qst_MAX_OPTS_PER_QST];
       long Integer;
       double FloatingPoint[2];
      } Answer;
@@ -184,16 +192,11 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,struct Qst_Question *Qst)
 void Qst_PutParsEditQst (void *Qsts);
 
 void Qst_WriteAnswers (struct Qst_Question *Qst,
-                       const char *ClassTxt,
-                       const char *ClassFeedback);
+                       const char *ClassTxt,const char *ClassFeedback);
 
 void Qst_ListOneQstToEdit (struct Qst_Questions *Qsts);
 
 //-----------------------------------------------------------------------------
-
-Qst_OptionTF_t Qst_GetOptionTFFromChar (char TF);
-void Qst_WriteTFOptionsToFill (Qst_OptionTF_t OptTFStd);
-void Qst_WriteAnsTF (Qst_OptionTF_t OptionTF);
 
 void Qst_WriteParQstCod (unsigned NumQst,long QstCod);
 
@@ -220,7 +223,9 @@ void Qst_ResetMediaOfQuestion (struct Qst_Question *Qst);
 void Qst_FreeMediaOfQuestion (struct Qst_Question *Qst);
 
 Exi_Exist_t Qst_GetQstDataByCod (struct Qst_Question *Qst);
+void Qst_GetQstOptionsByCod (MYSQL_RES **mysql_res,struct Qst_Question *Qst);
 Qst_Shuffle_t Qst_GetShuffleFromYN (char Ch);
+Qst_Shuffle_t Qst_GetParShuffle (void);
 Qst_WrongOrCorrect_t Qst_GetCorrectFromYN (char Ch);
 long Qst_GetMedCodFromDB (long HieCod,long QstCod,int NumOpt);
 void Qst_GetMediaFromDB (long HieCod,long QstCod,int NumOpt,
@@ -267,9 +272,9 @@ void Qst_GetTestStats (Hie_Level_t HieLvl,Qst_AnswerType_t AnsType,struct Qst_St
 //-----------------------------------------------------------------------------
 
 void Qst_GetIndexesFromStr (const char StrIndexesOneQst[Qst_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
-			    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION]);
+			    unsigned Indexes[Qst_MAX_OPTS_PER_QST]);
 void Qst_GetAnswersFromStr (const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1],
-			    HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION]);
+			    HTM_Attributes_t UsrAnswers[Qst_MAX_OPTS_PER_QST]);
 
 void Qst_ComputeAnswerScore (const char *Table,
 			     struct Qst_PrintedQuestion *PrintedQst,

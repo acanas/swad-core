@@ -914,17 +914,17 @@ Qst_AnswerType_t ExaSet_GetAnswerType (long QstCod)
 
 void ExaSet_GetQstDataFromDB (struct Qst_Question *Qst)
   {
-   MYSQL_RES *mysql_res;
+   MYSQL_RES *mysql_res_qst;
+   MYSQL_RES *mysql_res_ans;
    MYSQL_ROW row;
    Exi_Exist_t QuestionExists;
-   unsigned NumOpt;
 
    /***** Get question data from database *****/
-   QuestionExists = Exa_DB_GetQstDataByCod (&mysql_res,Qst->QstCod);
+   QuestionExists = Exa_DB_GetQstDataByCod (&mysql_res_qst,Qst->QstCod);
 
    if (QuestionExists == Exi_EXISTS)
      {
-      row = mysql_fetch_row (mysql_res);
+      row = mysql_fetch_row (mysql_res_qst);
       /*
       row[0]: Invalid
       row[1]: AnsType
@@ -951,75 +951,15 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Qst)
       Qst->Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
       Med_GetMediaDataByCod (&Qst->Media);
 
-      /* Free structure that stores the query result */
-      DB_FreeMySQLResult (&mysql_res);
-
       /***** Get the answers from the database *****/
-      Qst->Answer.NumOptions = Exa_DB_GetQstAnswersFromSet (&mysql_res,
-			                                         Qst->QstCod,
-			                                         Qst_DONT_SHUFFLE);
-      /*
-      row[0] AnsInd
-      row[1] Answer
-      row[2] Feedback
-      row[3] MedCod
-      row[4] Correct
-      */
-      for (NumOpt = 0;
-	   NumOpt < Qst->Answer.NumOptions;
-	   NumOpt++)
-	{
-	 row = mysql_fetch_row (mysql_res);
-	 switch (Qst->Answer.Type)
-	   {
-	    case Qst_ANS_INT:
-	       Qst_CheckIfNumberOfAnswersIsOne (Qst);
-	       Qst->Answer.Integer = Qst_GetIntAnsFromStr (row[1]);
-	       break;
-	    case Qst_ANS_FLOAT:
-	       if (Qst->Answer.NumOptions != 2)
-		  Err_WrongAnswerExit ();
-	       if (Str_GetDoubleFromStr (row[1],
-					 &Qst->Answer.FloatingPoint[NumOpt]) == Err_ERROR)
-		  Err_WrongAnswerExit ();
-	       break;
-	    case Qst_ANS_TRUE_FALSE:
-	       Qst_CheckIfNumberOfAnswersIsOne (Qst);
-	       Qst->Answer.OptionTF = Qst_GetOptionTFFromChar (row[1][0]);
-	       break;
-	    case Qst_ANS_UNIQUE_CHOICE:
-	    case Qst_ANS_MULTIPLE_CHOICE:
-	    case Qst_ANS_TEXT:
-	       /* Check number of options */
-	       if (Qst->Answer.NumOptions > Qst_MAX_OPTIONS_PER_QUESTION)
-		  Err_WrongAnswerExit ();
-
-	       /*  Allocate space for text and feedback */
-	       if (Qst_AllocateTextChoiceAnswer (Qst,NumOpt) == Err_ERROR)
-		  /* Abort on error */
-		  Ale_ShowAlertsAndExit ();
-
-	       /* Get text (row[1]) and feedback (row[2]) */
-	       Str_Copy (Qst->Answer.Options[NumOpt].Text    ,row[1],
-			 Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-	       Str_Copy (Qst->Answer.Options[NumOpt].Feedback,row[2],
-			 Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-
-	       /* Get media (row[3]) */
-	       Qst->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
-	       Med_GetMediaDataByCod (&Qst->Answer.Options[NumOpt].Media);
-
-	       /* Get if this option is correct (row[4]) */
-	       Qst->Answer.Options[NumOpt].Correct = Qst_GetCorrectFromYN (row[4][0]);
-	       break;
-	    default:
-	       break;
-	   }
-	}
+      Qst->Answer.NumOpts = Qst_DB_GetAnswersData (&mysql_res_ans,"exa_set_answers",
+      						   Qst->QstCod,Qst_DONT_SHUFFLE);
+      Qst_GetQstOptionsByCod (&mysql_res_ans,Qst);
+      DB_FreeMySQLResult (&mysql_res_ans);
      }
 
    /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   DB_FreeMySQLResult (&mysql_res_qst);
 
    if (QuestionExists == Exi_DOES_NOT_EXIST)
       Err_WrongQuestionExit ();
@@ -1203,8 +1143,8 @@ static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long Q
 	    QstCodInSet = Exa_DB_AddQuestionToSet (Set->SetCod,&Qst,CloneMedCod);
 
 	    /***** Get the answers from the database *****/
-	    Qst.Answer.NumOptions = Qst_DB_GetAnswersData (&mysql_res,Qst.QstCod,
-								Qst_DONT_SHUFFLE);
+	    Qst.Answer.NumOpts = Qst_DB_GetAnswersData (&mysql_res,"tst_answers",
+							Qst.QstCod,Qst_DONT_SHUFFLE);
 	    /*
 	    row[0] AnsInd
 	    row[1] Answer
@@ -1213,7 +1153,7 @@ static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long Q
 	    row[4] Correct
 	    */
 	    for (NumOpt = 0;
-		 NumOpt < Qst.Answer.NumOptions;
+		 NumOpt < Qst.Answer.NumOpts;
 		 NumOpt++)
 	      {
 	       row = mysql_fetch_row (mysql_res);

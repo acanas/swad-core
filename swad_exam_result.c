@@ -1469,19 +1469,19 @@ void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
 	       Qst_ComputeAnswerScore ("exa_set_answers",&Print->PrintedQsts[QstInd],&Qst);
 	       switch (Print->PrintedQsts[QstInd].Answer.IsCorrect)
 		 {
-		  case TstPrn_ANSWER_IS_CORRECT:
+		  case Qst_ANSWER_IS_CORRECT:
 		     Print->NumQsts.Valid.Correct++;
 		     break;
-		  case TstPrn_ANSWER_IS_WRONG_NEGATIVE:
+		  case Qst_ANSWER_IS_WRONG_NEGATIVE:
 		     Print->NumQsts.Valid.Wrong.Negative++;
 		     break;
-		  case TstPrn_ANSWER_IS_WRONG_ZERO:
+		  case Qst_ANSWER_IS_WRONG_ZERO:
 		     Print->NumQsts.Valid.Wrong.Zero++;
 		     break;
-		  case TstPrn_ANSWER_IS_WRONG_POSITIVE:
+		  case Qst_ANSWER_IS_WRONG_POSITIVE:
 		     Print->NumQsts.Valid.Wrong.Positive++;
 		     break;
-		  case TstPrn_ANSWER_IS_BLANK:
+		  case Qst_ANSWER_IS_BLANK:
 		     Print->NumQsts.Valid.Blank++;
 		     break;
 		 }

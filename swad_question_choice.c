@@ -29,6 +29,8 @@
 #include "swad_cryptography.h"
 #include "swad_database.h"
 #include "swad_exam_sheet.h"
+#include "swad_global.h"
+#include "swad_parameter.h"
 #include "swad_question_choice.h"
 #include "swad_question_database.h"
 
@@ -40,6 +42,8 @@
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
+extern struct Globals Gbl;
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -48,6 +52,81 @@ static void QstCho_GetCorrectAnswerFromDB (const char *Table,
 					   struct Qst_Question *Qst);
 static void QstCho_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
 				    const struct Qst_Question *Qst);
+
+/*****************************************************************************/
+/**************************** Get answer from form ***************************/
+/*****************************************************************************/
+
+void QstCho_GetAnsFromForm (struct Qst_Question *Qst)
+  {
+   unsigned NumOpt;
+   char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
+   char AnsStr[6 + Cns_MAX_DIGITS_UINT + 1];
+   char FbStr[5 + Cns_MAX_DIGITS_UINT + 1];
+   char StrMultiAns[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
+   const char *Ptr;
+   unsigned NumCorrectAns;
+
+   /***** Get shuffle *****/
+   Qst->Answer.Shuffle = Qst_GetParShuffle ();
+
+   /***** Get the texts of the answers *****/
+   for (NumOpt = 0;
+        NumOpt < Qst_MAX_OPTS_PER_QST;
+        NumOpt++)
+     {
+      if (Qst_AllocateTextChoiceAnswer (Qst,NumOpt) == Err_ERROR)
+	 /* Abort on error */
+	 Ale_ShowAlertsAndExit ();
+
+      /* Get answer */
+      snprintf (AnsStr,sizeof (AnsStr),"AnsStr%u",NumOpt);
+      Par_GetParHTML (AnsStr,Qst->Answer.Options[NumOpt].Text,
+			Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+
+      /* Get feedback */
+      snprintf (FbStr,sizeof (FbStr),"FbStr%u",NumOpt);
+      Par_GetParHTML (FbStr,Qst->Answer.Options[NumOpt].Feedback,
+		      Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+
+      /* Get media associated to the answer (action, file and title) */
+      Qst->Answer.Options[NumOpt].Media.Width   = Qst_IMAGE_SAVED_MAX_WIDTH;
+      Qst->Answer.Options[NumOpt].Media.Height  = Qst_IMAGE_SAVED_MAX_HEIGHT;
+      Qst->Answer.Options[NumOpt].Media.Quality = Qst_IMAGE_SAVED_QUALITY;
+      Med_GetMediaFromForm (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Qst->QstCod,
+			    (int) NumOpt,	// >= 0 ==> the image associated to an answer
+			    &Qst->Answer.Options[NumOpt].Media,
+			    Qst_GetMediaFromDB,
+			    NULL);
+      Ale_ShowAlerts (NULL);
+     }
+
+   /***** Get the numbers of correct answers *****/
+   if (Qst->Answer.Type == Qst_ANS_UNIQUE_CHOICE)
+     {
+      NumCorrectAns = (unsigned) Par_GetParUnsignedLong ("AnsUni",
+							 0,
+							 Qst_MAX_OPTS_PER_QST - 1,
+							 0);
+      Qst->Answer.Options[NumCorrectAns].Correct = Qst_CORRECT;
+     }
+   else	// Qst->Answer.Type == Qst_ANS_MULTIPLE_CHOICE
+     {
+      Par_GetParMultiToText ("AnsMulti",StrMultiAns,Qst_MAX_BYTES_ANSWERS_ONE_QST);
+      for (Ptr = StrMultiAns;
+	   *Ptr;
+	  )
+        {
+	 Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,
+					  Cns_MAX_DIGITS_UINT);
+	 if (sscanf (UnsignedStr,"%u",&NumCorrectAns) != 1)
+	    Err_WrongAnswerExit ();
+         if (NumCorrectAns >= Qst_MAX_OPTS_PER_QST)
+	    Err_WrongAnswerExit ();
+         Qst->Answer.Options[NumCorrectAns].Correct = Qst_CORRECT;
+        }
+     }
+  }
 
 /*****************************************************************************/
 /******* Get correct answer and compute score for each type of answer ********/
@@ -71,12 +150,11 @@ static void QstCho_GetCorrectAnswerFromDB (const char *Table,
    unsigned NumOpt;
 
    /***** Query database *****/
-   Qst->Answer.NumOptions = Qst_DB_GetQstAnswersCorr (&mysql_res,
-						      Table,Qst->QstCod);
+   Qst->Answer.NumOpts = Qst_DB_GetQstAnswersCorr (&mysql_res,Table,Qst->QstCod);
 
    /***** Get options *****/
    for (NumOpt = 0;
-	NumOpt < Qst->Answer.NumOptions;
+	NumOpt < Qst->Answer.NumOpts;
 	NumOpt++)
      {
       /* Get next answer */
@@ -93,8 +171,8 @@ static void QstCho_GetCorrectAnswerFromDB (const char *Table,
 static void QstCho_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
 				    const struct Qst_Question *Qst)
   {
-   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   unsigned Indexes[Qst_MAX_OPTS_PER_QST];	// Indexes of all answers of this question
+   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTS_PER_QST];
    unsigned NumOpt;
    Qst_WrongOrCorrect_t OptionWrongOrCorrect;
    unsigned NumOptTotInQst = 0;
@@ -102,7 +180,7 @@ static void QstCho_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
    unsigned NumAnsGood = 0;
    unsigned NumAnsBad = 0;
 
-   PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_BLANK;
+   PrintedQst->Answer.IsCorrect = Qst_ANSWER_IS_BLANK;
    PrintedQst->Answer.Score = 0.0;
 
    /***** Get indexes for this question from string *****/
@@ -113,7 +191,7 @@ static void QstCho_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
 
    /***** Compute the total score of this question *****/
    for (NumOpt = 0;
-	NumOpt < Qst->Answer.NumOptions;
+	NumOpt < Qst->Answer.NumOpts;
 	NumOpt++)
      {
       OptionWrongOrCorrect = Qst->Answer.Options[Indexes[NumOpt]].Correct;
@@ -143,12 +221,12 @@ static void QstCho_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
            {
             if (NumAnsGood == 1 && NumAnsBad == 0)
               {
-               PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
+               PrintedQst->Answer.IsCorrect = Qst_ANSWER_IS_CORRECT;
                PrintedQst->Answer.Score = 1;
               }
             else if (NumAnsGood == 0 && NumAnsBad == 1)
               {
-               PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_NEGATIVE;
+               PrintedQst->Answer.IsCorrect = Qst_ANSWER_IS_WRONG_NEGATIVE;
                PrintedQst->Answer.Score = -1.0 / (double) (NumOptTotInQst - 1);
               }
             // other case should be impossible
@@ -161,7 +239,7 @@ static void QstCho_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
            {
             if (NumAnsGood == NumOptCorrInQst && NumAnsBad == 0)
               {
-	       PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
+	       PrintedQst->Answer.IsCorrect = Qst_ANSWER_IS_CORRECT;
 	       PrintedQst->Answer.Score = 1.0;
               }
             else
@@ -169,26 +247,26 @@ static void QstCho_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
 	       if (NumOptCorrInQst < NumOptTotInQst)	// If there are correct options and wrong options (typical case)
 		 {
 		  PrintedQst->Answer.Score = (double) NumAnsGood / (double) NumOptCorrInQst -
-						  (double) NumAnsBad  / (double) (NumOptTotInQst - NumOptCorrInQst);
+					     (double) NumAnsBad  / (double) (NumOptTotInQst - NumOptCorrInQst);
 		  if (PrintedQst->Answer.Score > 0.000001)
-		     PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_POSITIVE;
+		     PrintedQst->Answer.IsCorrect = Qst_ANSWER_IS_WRONG_POSITIVE;
 		  else if (PrintedQst->Answer.Score < -0.000001)
-		     PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_NEGATIVE;
+		     PrintedQst->Answer.IsCorrect = Qst_ANSWER_IS_WRONG_NEGATIVE;
 		  else	// Score is 0
-		     PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
+		     PrintedQst->Answer.IsCorrect = Qst_ANSWER_IS_WRONG_ZERO;
 		 }
 	       else					// If all options are correct (extrange case)
 		 {
 		  if (NumAnsGood == 0)
 		    {
-		     PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
+		     PrintedQst->Answer.IsCorrect = Qst_ANSWER_IS_WRONG_ZERO;
 		     PrintedQst->Answer.Score = 0.0;
 		    }
 		  else
 		    {
-		     PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_POSITIVE;
+		     PrintedQst->Answer.IsCorrect = Qst_ANSWER_IS_WRONG_POSITIVE;
 		     PrintedQst->Answer.Score = (double) NumAnsGood /
-							     (double) NumOptCorrInQst;
+						(double) NumOptCorrInQst;
 		    }
 		 }
               }
@@ -217,7 +295,7 @@ void QstCho_WriteCorrAns (struct Qst_Question *Qst,
 
    HTM_TABLE_BeginPadding (2);
       for (NumOpt = 0;
-	   NumOpt < Qst->Answer.NumOptions;
+	   NumOpt < Qst->Answer.NumOpts;
 	   NumOpt++)
 	{
 	 HTM_TR_Begin (NULL);
@@ -263,8 +341,8 @@ void QstCho_WriteTstFillAns (const struct Qst_PrintedQuestion *PrintedQst,
                              unsigned QstInd,struct Qst_Question *Qst)
   {
    unsigned NumOpt;
-   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   unsigned Indexes[Qst_MAX_OPTS_PER_QST];	// Indexes of all answers of this question
+   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTS_PER_QST];
    char StrAns[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
    char Id[3 + Cns_MAX_DIGITS_UINT + 1 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x_yy...y"
 
@@ -281,7 +359,7 @@ void QstCho_WriteTstFillAns (const struct Qst_PrintedQuestion *PrintedQst,
    HTM_TABLE_BeginPadding (2);
 
       for (NumOpt = 0;
-	   NumOpt < Qst->Answer.NumOptions;
+	   NumOpt < Qst->Answer.NumOpts;
 	   NumOpt++)
 	{
 	 /***** Indexes are 0 1 2 3... if no shuffle
@@ -304,7 +382,7 @@ void QstCho_WriteTstFillAns (const struct Qst_PrintedQuestion *PrintedQst,
 				      "id=\"%s\" value=\"%u\""
 				      " onclick=\"selectUnselectRadio(this,false,this.form.Ans%010u,%u);\"",
 				      Id,Indexes[NumOpt],
-				      QstInd,Qst->Answer.NumOptions);
+				      QstInd,Qst->Answer.NumOpts);
 	             break;
 	          case Qst_ANS_MULTIPLE_CHOICE:
 		     HTM_INPUT_CHECKBOX (StrAns,
@@ -365,8 +443,8 @@ void QstCho_WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
      };
    unsigned NumOpt;
    Qst_WrongOrCorrect_t WrongOrCorrect;
-   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   unsigned Indexes[Qst_MAX_OPTS_PER_QST];	// Indexes of all answers of this question
+   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTS_PER_QST];
    const struct Qst_AnswerDisplay *Ans;
 
    /***** Change format of answers text *****/
@@ -384,7 +462,7 @@ void QstCho_WriteTstPrntAns (const struct Qst_PrintedQuestion *PrintedQst,
 
    /***** Write answers (one row per answer) *****/
    for (NumOpt = 0;
-	NumOpt < Qst->Answer.NumOptions;
+	NumOpt < Qst->Answer.NumOpts;
 	NumOpt++)
      {
       WrongOrCorrect = Qst->Answer.Options[Indexes[NumOpt]].Correct;
@@ -490,7 +568,7 @@ void QstCho_WriteExaBlnkQstOptions (const struct ExaPrn_Print *Print,
 				    unsigned QstInd,struct Qst_Question *Qst)
   {
    unsigned NumOpt;
-   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
+   unsigned Indexes[Qst_MAX_OPTS_PER_QST];	// Indexes of all answers of this question
 
    /***** Change format of answers text *****/
    Qst_ChangeFormatOptionsText (Qst);
@@ -502,7 +580,7 @@ void QstCho_WriteExaBlnkQstOptions (const struct ExaPrn_Print *Print,
    HTM_TABLE_BeginPadding (2);
 
       for (NumOpt = 0;
-	   NumOpt < Qst->Answer.NumOptions;
+	   NumOpt < Qst->Answer.NumOpts;
 	   NumOpt++)
 	{
 	 /***** Indexes are 0 1 2 3... if no shuffle
@@ -545,8 +623,8 @@ void QstCho_WriteExaFillAns (const struct ExaPrn_Print *Print,
       [Qst_ANS_MULTIPLE_CHOICE] = "checkbox",
      };
    unsigned NumOpt;
-   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   unsigned Indexes[Qst_MAX_OPTS_PER_QST];	// Indexes of all answers of this question
+   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTS_PER_QST];
    char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Change format of answers text *****/
@@ -563,7 +641,7 @@ void QstCho_WriteExaFillAns (const struct ExaPrn_Print *Print,
    HTM_TABLE_BeginPadding (2);
 
       for (NumOpt = 0;
-	   NumOpt < Qst->Answer.NumOptions;
+	   NumOpt < Qst->Answer.NumOpts;
 	   NumOpt++)
 	{
 	 /***** Indexes are 0 1 2 3... if no shuffle
@@ -613,7 +691,7 @@ void QstCho_WriteExaBlnkAns (const struct Qst_Question *Qst)
 
    /***** Write blank answers (one column per answer) *****/
    for (NumOpt = 0;
-	NumOpt < Qst->Answer.NumOptions;
+	NumOpt < Qst->Answer.NumOpts;
 	NumOpt++)
      {
       /* Write option letter */
@@ -628,7 +706,7 @@ void QstCho_WriteExaCorrAns (const struct ExaPrn_Print *Print,
 			     unsigned QstInd,struct Qst_Question *Qst)
   {
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
-   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
+   unsigned Indexes[Qst_MAX_OPTS_PER_QST];	// Indexes of all answers of this question
    unsigned NumOpt;
 
    /***** Get indexes for this question from string *****/
@@ -636,7 +714,7 @@ void QstCho_WriteExaCorrAns (const struct ExaPrn_Print *Print,
 
    /***** Write correct answers (one column per answer) *****/
    for (NumOpt = 0;
-	NumOpt < Qst->Answer.NumOptions;
+	NumOpt < Qst->Answer.NumOpts;
 	NumOpt++)
      {
       /* Write option letter */
@@ -654,8 +732,8 @@ void QstCho_WriteExaReadAns (const struct ExaPrn_Print *Print,
    extern struct Qst_AnswerDisplay Qst_AnswerDisplay[Qst_NUM_WRONG_CORRECT];
    unsigned NumOpt;
    Qst_WrongOrCorrect_t WrongOrCorrect;
-   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   unsigned Indexes[Qst_MAX_OPTS_PER_QST];	// Indexes of all answers of this question
+   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTS_PER_QST];
 
    /***** Get indexes for this question from string *****/
    Qst_GetIndexesFromStr (Print->PrintedQsts[QstInd].StrIndexes,Indexes);
@@ -665,7 +743,7 @@ void QstCho_WriteExaReadAns (const struct ExaPrn_Print *Print,
 
    /***** Write online answers (one column per answer) *****/
    for (NumOpt = 0;
-	NumOpt < Qst->Answer.NumOptions;
+	NumOpt < Qst->Answer.NumOpts;
 	NumOpt++)
      {
       WrongOrCorrect = Qst->Answer.Options[Indexes[NumOpt]].Correct;
@@ -697,8 +775,8 @@ void QstCho_WriteExaEditAns (const struct ExaPrn_Print *Print,
      };
    unsigned NumOpt;
    char Id[3 + 1 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1 + Cns_MAX_DIGITS_UINT + 1];	// "Ans_encryptedusercode_xx...x"
-   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   unsigned Indexes[Qst_MAX_OPTS_PER_QST];	// Indexes of all answers of this question
+   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTS_PER_QST];
 
    /***** Get indexes for this question from string *****/
    Qst_GetIndexesFromStr (Print->PrintedQsts[QstInd].StrIndexes,Indexes);
@@ -708,7 +786,7 @@ void QstCho_WriteExaEditAns (const struct ExaPrn_Print *Print,
 
    /***** Write input field for the answer *****/
    for (NumOpt = 0;
-	NumOpt < Qst->Answer.NumOptions;
+	NumOpt < Qst->Answer.NumOpts;
 	NumOpt++)
      {
       HTM_TD_Begin ("class=\"Exa_ANSWER_CHOICE\"");

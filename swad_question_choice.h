@@ -42,6 +42,8 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void QstCho_GetAnsFromForm (struct Qst_Question *Qst);
+
 void QstCho_GetCorrectAndComputeAnsScore (const char *Table,
 					  struct Qst_PrintedQuestion *PrintedQst,
 				          struct Qst_Question *Qst);

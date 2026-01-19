@@ -42,6 +42,9 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void QstFlt_PutInputField (const struct Qst_Question *Qst,unsigned Index);
+void QstFlt_GetAnsFromForm (struct Qst_Question *Qst);
+
 void QstFlt_GetCorrectAndComputeAnsScore (const char *Table,
 					  struct Qst_PrintedQuestion *PrintedQst,
 				          struct Qst_Question *Qst);

@@ -42,6 +42,9 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void QstTF__PutInputField (const struct Qst_Question *Qst,QstTF__OptionTF_t OptTF);
+void QstTF__GetAnsFromForm (struct Qst_Question *Qst);
+
 void QstTF__GetCorrectAndComputeAnsScore (const char *Table,
 					  struct Qst_PrintedQuestion *PrintedQst,
 				          struct Qst_Question *Qst);
@@ -77,5 +80,10 @@ void QstTF__WriteExaReadAns (const struct ExaPrn_Print *Print,
 			     unsigned QstInd,struct Qst_Question *Qst);
 void QstTF__WriteExaEditAns (const struct ExaPrn_Print *Print,
 			     unsigned QstInd,struct Qst_Question *Qst);
+
+//--------------------------------- Other -------------------------------------
+
+QstTF__OptionTF_t QstTF__GetOptionTFFromChar (char TF);
+void QstTF__WriteAnsTF (QstTF__OptionTF_t OptionTF);
 
 #endif

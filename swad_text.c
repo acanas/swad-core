@@ -54588,11 +54588,11 @@ const char *Txt_TST_STR_VISIBILITY[TstVis_NUM_ITEMS_VISIBILITY] =
 #endif
 	};
 
-const char *Txt_TF_QST[Qst_NUM_OPTIONS_TF] =
+const char *Txt_TF_QST[QstTF__NUM_OPTIONS] =
 	{
-	 [Qst_OPTION_EMPTY] = ""
+	 [QstTF__OPTION_EMPTY] = ""
 	,
-	 [Qst_OPTION_TRUE ] =
+	 [QstTF__OPTION_TRUE ] =
 #if   L==1	// ca
 	"V"	// Veritable
 #elif L==2	// de
@@ -54615,7 +54615,7 @@ const char *Txt_TF_QST[Qst_NUM_OPTIONS_TF] =
 	"D"	// Do&gbreve;ru
 #endif
 	,
-	 [Qst_OPTION_FALSE] =
+	 [QstTF__OPTION_FALSE] =
 #if   L==1	// ca
 	"F"	// Fals
 #elif L==2	// de

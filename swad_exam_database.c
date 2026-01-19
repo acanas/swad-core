@@ -1141,30 +1141,26 @@ void Exa_DB_AddAnsToQstInSet (long QstCod,unsigned AnsInd,
 /*************** Get answers of a test question from database ****************/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetQstAnswersFromSet (MYSQL_RES **mysql_res,
+unsigned Exa_DB_GetQstIndexesFromSet (MYSQL_RES **mysql_res,
 				      long QstCod,Qst_Shuffle_t Shuffle)
   {
    extern const char *Qst_OrderByShuffle[Qst_NUM_SHUFFLE];
-   unsigned NumOptions;
+   unsigned NumOpts;
 
    /***** Get answers of a question from database *****/
-   NumOptions = (unsigned)
+   NumOpts = (unsigned)
    DB_QuerySELECT (mysql_res,"can not get answers of a question",
-		   "SELECT AnsInd,"	// row[0]
-			  "Answer,"	// row[1]
-			  "Feedback,"	// row[2]
-			  "MedCod,"	// row[3]
-			  "Correct"	// row[4]
+		   "SELECT AnsInd"	// row[0]
 		    " FROM exa_set_answers"
 		   " WHERE QstCod=%ld"
 		" ORDER BY %s",
 		   QstCod,
 		   Qst_OrderByShuffle[Shuffle]);
 
-   if (!NumOptions)
+   if (!NumOpts)
       Err_WrongAnswerExit ();
 
-   return NumOptions;
+   return NumOpts;
   }
 
 /*****************************************************************************/

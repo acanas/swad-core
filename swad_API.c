@@ -4052,7 +4052,8 @@ int swad__getTrivialQuestion (struct soap *soap,
    if (QstCod > 0)
      {
       /***** Get answer from database *****/
-      NumAnss = Qst_DB_GetAnswersData (&mysql_res,QstCod,Qst_DONT_SHUFFLE);
+      NumAnss = Qst_DB_GetAnswersData (&mysql_res,"tst_answers",
+				       QstCod,Qst_DONT_SHUFFLE);
 
       getTrivialQuestionOut->answersArray.__size = (int) NumAnss;
 

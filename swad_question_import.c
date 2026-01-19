@@ -39,6 +39,7 @@
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
+#include "swad_question_tf.h"
 #include "swad_tag_database.h"
 #include "swad_test.h"
 #include "swad_xml.h"
@@ -336,7 +337,7 @@ static void QstImp_WriteAnswersOfAQstXML (const struct Qst_Question *Qst,
          break;
       case Qst_ANS_TRUE_FALSE:
          fprintf (FileXML,"%s",
-                  Qst->Answer.OptionTF == Qst_OPTION_TRUE ? "true" :
+                  Qst->Answer.OptionTF == QstTF__OPTION_TRUE ? "true" :
 							    "false");
          break;
       case Qst_ANS_UNIQUE_CHOICE:
@@ -344,7 +345,7 @@ static void QstImp_WriteAnswersOfAQstXML (const struct Qst_Question *Qst,
       case Qst_ANS_TEXT:
          fprintf (FileXML,"%s",Txt_NEW_LINE);
          for (NumOpt = 0;
-              NumOpt < Qst->Answer.NumOptions;
+              NumOpt < Qst->Answer.NumOpts;
               NumOpt++)
            {
             /* Begin answer */
@@ -758,19 +759,19 @@ static void QstImp_GetAnswerFromXML (struct XMLElement *AnswerElem,
          break;
       case Qst_ANS_TRUE_FALSE:
 	 // Comparisons must be case insensitive, because users can edit XML
-         Qst->Answer.OptionTF = Qst_OPTION_EMPTY;
+         Qst->Answer.OptionTF = QstTF__OPTION_EMPTY;
          if (AnswerElem->Content)
            {
             if (!strcasecmp (AnswerElem->Content,"true")  ||
                 !strcasecmp (AnswerElem->Content,"T")     ||
                 !strcasecmp (AnswerElem->Content,"yes")   ||
                 !strcasecmp (AnswerElem->Content,"Y"))
-               Qst->Answer.OptionTF = Qst_OPTION_TRUE;
+               Qst->Answer.OptionTF = QstTF__OPTION_TRUE;
 	    else if (!strcasecmp (AnswerElem->Content,"false") ||
 		     !strcasecmp (AnswerElem->Content,"F")     ||
 		     !strcasecmp (AnswerElem->Content,"no")    ||
 		     !strcasecmp (AnswerElem->Content,"N"))
-	       Qst->Answer.OptionTF = Qst_OPTION_FALSE;
+	       Qst->Answer.OptionTF = QstTF__OPTION_FALSE;
            }
          break;
       case Qst_ANS_UNIQUE_CHOICE:
@@ -778,7 +779,7 @@ static void QstImp_GetAnswerFromXML (struct XMLElement *AnswerElem,
       case Qst_ANS_TEXT:
          /* Get options */
          for (OptionElem = AnswerElem->FirstChild, NumOpt = 0;
-              OptionElem != NULL && NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
+              OptionElem != NULL && NumOpt < Qst_MAX_OPTS_PER_QST;
               OptionElem = OptionElem->NextBrother, NumOpt++)
             if (!strcmp (OptionElem->TagName,"option"))
               {
@@ -1025,7 +1026,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 	    case Qst_ANS_TRUE_FALSE:
 	       HTM_SPAN_Begin ("class=\"%s\"",ClassStem);
 		  HTM_OpenParenthesis ();
-		     Qst_WriteAnsTF (Qst->Answer.OptionTF);
+		     QstTF__WriteAnsTF (Qst->Answer.OptionTF);
 		  HTM_CloseParenthesis ();
 	       HTM_SPAN_End ();
 	       break;
@@ -1034,7 +1035,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 	    case Qst_ANS_TEXT:
 	       HTM_TABLE_Begin (NULL);
 		  for (NumOpt = 0;
-		       NumOpt < Qst->Answer.NumOptions;
+		       NumOpt < Qst->Answer.NumOpts;
 		       NumOpt++)
 		    {
 		     /* Convert the answer, that is in HTML, to rigorous HTML */

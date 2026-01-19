@@ -31,6 +31,7 @@
 #include "swad_cryptography.h"
 #include "swad_database.h"
 #include "swad_exam_sheet.h"
+#include "swad_parameter.h"
 #include "swad_question_database.h"
 #include "swad_question_int.h"
 
@@ -52,6 +53,39 @@ static void QstInt_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
 				    const struct Qst_Question *Qst);
 
 /*****************************************************************************/
+/********************* Put input field for integer answer ********************/
+/*****************************************************************************/
+
+void QstInt_PutInputField (const struct Qst_Question *Qst)
+  {
+   extern const char *Txt_Integer_number;
+
+   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+      HTM_Txt (Txt_Integer_number); HTM_Colon (); HTM_NBSP ();
+      HTM_INPUT_LONG ("AnsInt",(long) INT_MIN,(long) INT_MAX,Qst->Answer.Integer,
+	              (Qst->Answer.Type == Qst_ANS_INT ? HTM_NO_ATTR :
+							 HTM_DISABLED) |
+		      HTM_REQUIRED,
+		      "class=\"Exa_ANSWER_INPUT_INT INPUT_%s\"",
+		      The_GetSuffix ());
+   HTM_LABEL_End ();
+  }
+
+/*****************************************************************************/
+/**************************** Get answer from form ***************************/
+/*****************************************************************************/
+
+void QstInt_GetAnsFromForm (struct Qst_Question *Qst)
+  {
+   if (Qst_AllocateTextChoiceAnswer (Qst,0) == Err_ERROR)
+      /* Abort on error */
+      Ale_ShowAlertsAndExit ();
+
+   Par_GetParText ("AnsInt",Qst->Answer.Options[0].Text,
+		   Cns_MAX_DIGITS_LONG);
+  }
+
+/*****************************************************************************/
 /******* Get correct answer and compute score for each type of answer ********/
 /*****************************************************************************/
 
@@ -71,8 +105,7 @@ static void QstInt_GetCorrectAnswerFromDB (const char *Table,
    MYSQL_ROW row;
 
    /***** Query database *****/
-   Qst->Answer.NumOptions = Qst_DB_GetTextOfAnswers (&mysql_res,
-						     Table,Qst->QstCod);
+   Qst->Answer.NumOpts = Qst_DB_GetTextOfAnswers (&mysql_res,Table,Qst->QstCod);
 
    /***** Check if number of rows is correct *****/
    Qst_CheckIfNumberOfAnswersIsOne (Qst);
@@ -91,16 +124,16 @@ static void QstInt_ComputeAnsScore (struct Qst_PrintedQuestion *PrintedQst,
   {
    long AnsUsr;
 
-   PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_BLANK;
+   PrintedQst->Answer.IsCorrect = Qst_ANSWER_IS_BLANK;
    PrintedQst->Answer.Score = 0.0;	// Default score for blank or wrong answer
 
    if (PrintedQst->Answer.Str[0])	// If user has answered the answer
      {
-      PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
+      PrintedQst->Answer.IsCorrect = Qst_ANSWER_IS_WRONG_ZERO;
       if (sscanf (PrintedQst->Answer.Str,"%ld",&AnsUsr) == 1)
 	 if (AnsUsr == Qst->Answer.Integer)	// Correct answer
 	   {
-	    PrintedQst->Answer.IsCorrect = TstPrn_ANSWER_IS_CORRECT;
+	    PrintedQst->Answer.IsCorrect = Qst_ANSWER_IS_CORRECT;
 	    PrintedQst->Answer.Score = 1.0;
 	   }
      }
