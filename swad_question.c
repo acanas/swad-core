@@ -168,8 +168,8 @@ void Qst_ReqEditQsts (void)
    /***** Create test *****/
    Qst_Constructor (&Qsts);
 
-   /***** Show form to generate a self-assessment test *****/
-   Qst_ShowFormRequestEditQsts (&Qsts);
+      /***** Show form to generate a self-assessment test *****/
+      Qst_ShowFormRequestEditQsts (&Qsts);
 
    /***** Destroy test *****/
    Qst_Destructor (&Qsts);
@@ -687,7 +687,7 @@ void Qst_ListQuestionsToEdit (void)
 		 {
 		  Mnu_ContextMenuBegin ();
 		     QstImp_CreateXML (Qsts.NumQsts,mysql_res);	// Create XML file with exported questions...
-								      // ...and put a link to download it
+								// ...and put a link to download it
 		  Mnu_ContextMenuEnd ();
 		 }
 
@@ -918,8 +918,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Qsts,unsigned QstInd)
 	 /* Number of question and answer type */
 	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 	    Lay_WriteIndex (QstInd + 1,"BIG_INDEX");
-	    Qst_WriteAnswerType (Qsts->Qst.Answer.Type,
-				 Qsts->Qst.Validity);
+	    Qst_WriteAnswerType (Qsts->Qst.Answer.Type,Qsts->Qst.Validity);
 	 HTM_TD_End ();
 
 	 /* Question code */
@@ -2026,15 +2025,13 @@ Err_SuccessOrError_t Qst_AllocateTextChoiceAnswer (struct Qst_Question *Qst,
    if ((Qst->Answer.Options[NumOpt].Text =
 	malloc (Qst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
-      Ale_CreateAlert (Ale_ERROR,NULL,
-		       "Not enough memory to store answer.");
+      Ale_CreateAlert (Ale_ERROR,NULL,"Not enough memory to store answer.");
       return Err_ERROR;
      }
    if ((Qst->Answer.Options[NumOpt].Feedback =
 	malloc (Qst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
-      Ale_CreateAlert (Ale_ERROR,NULL,
-		       "Not enough memory to store feedback.");
+      Ale_CreateAlert (Ale_ERROR,NULL,"Not enough memory to store feedback.");
       return Err_ERROR;
      }
 
@@ -3047,12 +3044,16 @@ void Qst_GetTestStats (Hie_Level_t HieLvl,Qst_AnswerType_t AnsType,struct Qst_St
       if ((Stats->NumCoursesWithQuestions = Qst_DB_GetNumCrssWithQsts (HieLvl,AnsType)))
         {
          Stats->NumCoursesWithPluggableQuestions = Qst_DB_GetNumCrssWithPluggableQsts (HieLvl,AnsType);
-         Stats->AvgQstsPerCourse = (double) Stats->NumQsts / (double) Stats->NumCoursesWithQuestions;
-         Stats->AvgHitsPerCourse = (double) Stats->NumHits / (double) Stats->NumCoursesWithQuestions;
+         Stats->AvgQstsPerCourse = (double) Stats->NumQsts /
+				   (double) Stats->NumCoursesWithQuestions;
+         Stats->AvgHitsPerCourse = (double) Stats->NumHits /
+				   (double) Stats->NumCoursesWithQuestions;
         }
-      Stats->AvgHitsPerQuestion = (double) Stats->NumHits / (double) Stats->NumQsts;
+      Stats->AvgHitsPerQuestion = (double) Stats->NumHits /
+				  (double) Stats->NumQsts;
       if (Stats->NumHits)
-         Stats->AvgScorePerQuestion = Stats->TotalScore / (double) Stats->NumHits;
+         Stats->AvgScorePerQuestion = Stats->TotalScore /
+				      (double) Stats->NumHits;
      }
   }
 
