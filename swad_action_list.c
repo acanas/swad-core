@@ -1703,8 +1703,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRecAttMe		] = {1076, 4,TabUsr,NULL			,Att_RegisterMeAsStdInEvent	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
 
    // Sign up
-   [ActReqSignUp	] = {1054, 5,TabUsr,NULL			,Enr_ReqSignUpInCrs		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x006,    0}},Act_NORM,Act_1ST},
-   [ActSignUp		] = {1056, 5,TabUsr,NULL			,Enr_SignUpInCrs		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x006,    0}},Act_NORM,Act_1ST},
+   [ActReqSignUp	] = {1054, 5,TabUsr,NULL			,Enr_ReqSignUpInCrs		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x206,    0}},Act_NORM,Act_1ST},
+   [ActSignUp		] = {1056, 5,TabUsr,NULL			,Enr_SignUpInCrs		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x206,    0}},Act_NORM,Act_1ST},
 
    // Requests
    [ActSeeSignUpReq	] = {1057, 6,TabUsr,NULL			,Enr_ShowEnrolmentRequests	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3E0}},Act_NORM,Act_1ST},

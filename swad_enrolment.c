@@ -2123,12 +2123,19 @@ void Enr_ReqSignUpInCrs (void)
       Ale_ShowAlert (Ale_WARNING,Txt_You_were_already_enroled_as_X_in_the_course_Y,
                      Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs][Gbl.Usrs.Me.UsrDat.Sex],
                      Gbl.Hierarchy.Node[Hie_CRS].FullName);
-   else if (Gbl.Usrs.Me.Role.Logged == Rol_GST ||
-	    Gbl.Usrs.Me.Role.Logged == Rol_USR)
-      /***** Show form to modify only the user's role or the user's data *****/
-      Rec_ShowFormSignUpInCrsWithMySharedRecord ();
    else
-      Err_ShowErrorAndExit ("You must be logged to sign up in a course.");        // This never should happen
+      switch (Gbl.Usrs.Me.Role.Logged)
+        {
+         case Rol_GST:
+         case Rol_USR:
+         case Rol_SYS_ADM:
+	    /***** Show form to modify only the user's role or the user's data *****/
+	    Rec_ShowFormSignUpInCrsWithMySharedRecord ();
+            break;
+         default:
+            Err_WrongRoleExit ();	// This never should happen
+            break;
+        }
   }
 
 /*****************************************************************************/
