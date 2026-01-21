@@ -1921,7 +1921,8 @@ static Exi_Exist_t Inf_CheckAndShowRichTxt (Inf_Type_t InfoType)
 	 snprintf (Command,sizeof (Command),
 		   "iconv -f WINDOWS-1252 -t UTF-8 %s"
 		   " | "
-		   "pandoc --ascii --mathjax%s -f markdown+tex_math_dollars+tex_math_single_backslash -t html5"
+		   // "pandoc --ascii --mathjax%s -f markdown+tex_math_dollars+tex_math_single_backslash -t html5"
+		   "pandoc --ascii --mathjax%s -f markdown+tex_math_single_backslash -t html5"
 		   " | "
 		   "iconv -f UTF-8 -t WINDOWS-1252 -o %s",
 		   PathFileMD,

@@ -17,7 +17,7 @@ MathJax = {
 		/* end of bug fix */
   tex: {
     inlineMath: [                    // start/end delimiter pairs for in-line math
-      ['$', '$'],                    // uncomment to use $...$ for inline math, problem: users must write \$ for dollar symbol
+      // ['$', '$'],                 // uncomment to use $...$ for inline math, problem: users must write \$ for dollar symbol
       ['\\(', '\\)']
     ],
     displayMath: [                   // start/end delimiter pairs for display math

@@ -639,11 +639,25 @@ TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de t
 
 TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtube.com/shorts/fY6Oax_uJBc?si=G3UHqvSH3yEbxm1B
 */
-#define Log_PLATFORM_VERSION	"SWAD 25.36.7 (2026-01-20)"
+#define Log_PLATFORM_VERSION	"SWAD 25.36.8 (2026-01-21)"
 #define CSS_FILE		"swad25.30.1.css"
 #define JS_FILE			"swad24.75.js"
 /*
-	Version 25.36.7:  Jan 20, 2026	Fixed bug in course enrolment. (351145 lines)
+	Version 25.36.8:  Jan 20, 2026	We backtrack: $...$ is not allowed for online mathematics because it is used a lot in programming languages. (351158 lines)
+					Copy the following icons to swad public directory:
+sudo cp js/mathjax-config.js /var/www/html/swad
+
+	Version 25.36.7:  Jan 20, 2026	Fixed bug in course enrolment. (351154 lines)
+					Copy the following icons to swad public directory:
+sudo cp js/mathjax-config.js /var/www/html/swad
+					Download and install mathjax-4.1.0 to swad public directory:
+wget https://registry.npmjs.org/mathjax/-/mathjax-4.1.0.tgz
+sudo cp mathjax-4.1.0.tgz /var/www/html/swad
+cd /var/www/html/swad
+mv mathjax mathjax-3.1.4
+tar xvf mathjax-4.1.0.tgz
+mv package mathjax
+
 	Version 25.36.6:  Jan 20, 2026	Code refactoring in questions. (351137 lines)
 	Version 25.36.5:  Jan 19, 2026	Code refactoring in questions. (351135 lines)
 	Version 25.36.4:  Jan 19, 2026	Code refactoring in questions. (351132 lines)
