@@ -873,9 +873,11 @@ static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages)
 	      {
 	       case Exi_EXISTS:
 		  /***** Check if recipient has banned me *****/
-		  if (Msg_DB_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDstData.UsrCod))
+		  if (Msg_DB_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,
+						 UsrDstData.UsrCod))
 		     /***** Show an alert indicating that the message has not been sent successfully *****/
-		     Ale_ShowAlert (Ale_WARNING,Txt_message_not_sent_to_X,UsrDstData.FullName);
+		     Ale_ShowAlert (Ale_WARNING,Txt_message_not_sent_to_X,
+				    UsrDstData.FullName);
 		  else
 		    {
 		     /***** Create message *****/

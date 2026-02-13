@@ -515,6 +515,13 @@ void Err_WrongThreadExit (void)
    Err_ShowErrorAndExit ("Wrong thread.");
   }
 
+void Err_WrongPost (void)
+  {
+   extern const char *Txt_The_post_no_longer_exists;
+
+   Ale_ShowAlert (Ale_WARNING,Txt_The_post_no_longer_exists);
+  }
+
 void Err_WrongPostExit (void)
   {
    Err_ShowErrorAndExit ("Wrong post.");

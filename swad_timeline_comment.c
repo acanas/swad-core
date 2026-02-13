@@ -685,7 +685,8 @@ static void TmlCom_WriteButtons (const struct Tml_Timeline *Timeline,
 
       /***** Foot column 2: icon to remove this comment *****/
       HTM_DIV_Begin ("class=\"Tml_REM\"");
-	 if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)	// I am the author
+	 if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME ||	// I am the author
+	     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// I am logged as system admin
 	    TmlCom_PutFormToRemoveComm (Timeline,Com->PubCod);
       HTM_DIV_End ();
 
@@ -766,7 +767,6 @@ void TmlCom_ReceiveCommGbl (void)
 
 static long TmlCom_ReceiveComm (void)
   {
-   extern const char *Txt_The_post_no_longer_exists;
    struct TmlPst_Content Content;
    struct TmlNot_Note Not;
    struct TmlPub_Publication Pub;
@@ -785,7 +785,7 @@ static long TmlCom_ReceiveComm (void)
    /***** Trivial check: note code *****/
    if (Not.NotCod <= 0)
      {
-      Ale_ShowAlert (Ale_WARNING,Txt_The_post_no_longer_exists);
+      Err_WrongPost ();
       return -1L;
      }
 
@@ -988,7 +988,6 @@ void TmlCom_RemoveComGbl (void)
 
 static void TmlCom_RemoveComm (void)
   {
-   extern const char *Txt_The_post_no_longer_exists;
    extern const char *Txt_Comment_removed;
    struct TmlCom_Comment Com;
 
@@ -999,19 +998,10 @@ static void TmlCom_RemoveComm (void)
    Com.PubCod = ParCod_GetAndCheckPar (ParCod_Pub);
    TmlCom_GetCommDataByCod (&Com);
 
-   /***** Trivial check 1: publication code *****/
-   if (Com.PubCod <= 0)
+   /***** Check if I can remove this comment *****/
+   if (TmlUsr_CheckIfICanRemove (Com.PubCod,Com.UsrCod) == Usr_CAN_NOT)
      {
       Med_MediaDestructor (&Com.Content.Media);
-      Ale_ShowAlert (Ale_WARNING,Txt_The_post_no_longer_exists);
-      return;
-     }
-
-   /***** Trivial check 2: only if I am the author of this comment? *****/
-   if (Usr_ItsMe (Com.UsrCod) == Usr_OTHER)
-     {
-      Med_MediaDestructor (&Com.Content.Media);
-      Err_NoPermission ();
       return;
      }
 

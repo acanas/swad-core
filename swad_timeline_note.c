@@ -860,7 +860,8 @@ static void TmlNot_WriteFavShaRem (const struct Tml_Timeline *Timeline,
 
       /***** Foot column 3: icon to remove this note *****/
       HTM_DIV_Begin ("class=\"Tml_REM\"");
-	 if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)	// I am the author
+	 if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME ||	// I am the author
+	     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// I am logged as system admin
 	    TmlNot_PutFormToRemoveNote (Timeline,Not->NotCod);
       HTM_DIV_End ();
 
@@ -1024,7 +1025,7 @@ static void TmlNot_ReqRemNote (struct Tml_Timeline *Timeline)
    Not.NotCod = ParCod_GetAndCheckPar (ParCod_Not);
    TmlNot_GetNoteDataByCod (&Not);
 
-   /***** Do some checks *****/
+   /***** Check if I can remove this note *****/
    if (TmlUsr_CheckIfICanRemove (Not.NotCod,Not.UsrCod) == Usr_CAN_NOT)
       return;
 
@@ -1032,17 +1033,17 @@ static void TmlNot_ReqRemNote (struct Tml_Timeline *Timeline)
    /* Begin alert */
    TmlFrm_BeginAlertRemove (Txt_Do_you_really_want_to_remove_the_following_post);
 
-   /* Show note */
-   Box_BoxBegin (NULL,NULL,NULL,NULL,Box_NOT_CLOSABLE);
-      HTM_UL_Begin ("class=\"Tml_LIST\"");
-	 HTM_LI_Begin ("class=\"Tml_WIDTH\"");
-	    TmlNot_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-						Tml_TOP_MESSAGE_NONE,
-						-1L);
-	 HTM_LI_End ();
-      HTM_UL_End ();
-   Box_BoxEnd ();
-   HTM_BR ();
+      /* Show note */
+      Box_BoxBegin (NULL,NULL,NULL,NULL,Box_NOT_CLOSABLE);
+	 HTM_UL_Begin ("class=\"Tml_LIST\"");
+	    HTM_LI_Begin ("class=\"Tml_WIDTH\"");
+	       TmlNot_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
+						   Tml_TOP_MESSAGE_NONE,
+						   -1L);
+	    HTM_LI_End ();
+	 HTM_UL_End ();
+      Box_BoxEnd ();
+      HTM_BR ();
 
    /* End alert */
    Timeline->NotCod = Not.NotCod;	// Note to be removed
@@ -1113,7 +1114,6 @@ void TmlNot_RemoveNoteGbl (void)
 
 static void TmlNot_RemoveNote (void)
   {
-   extern const char *Txt_The_post_no_longer_exists;
    extern const char *Txt_TIMELINE_Post_removed;
    struct TmlNot_Note Not;
 
@@ -1121,19 +1121,9 @@ static void TmlNot_RemoveNote (void)
    Not.NotCod = ParCod_GetAndCheckPar (ParCod_Not);
    TmlNot_GetNoteDataByCod (&Not);
 
-   /***** Trivial check 1: note code should be > 0 *****/
-   if (Not.NotCod <= 0)
-     {
-      Ale_ShowAlert (Ale_WARNING,Txt_The_post_no_longer_exists);
+   /***** Check if I can remove this note *****/
+   if (TmlUsr_CheckIfICanRemove (Not.NotCod,Not.UsrCod) == Usr_CAN_NOT)
       return;
-     }
-
-   /***** Trivial check 2: Am I the author of this note? *****/
-   if (Usr_ItsMe (Not.UsrCod) == Usr_OTHER)
-     {
-      Err_NoPermission ();
-      return;
-     }
 
    /***** Delete note from database *****/
    TmlNot_RemoveNoteMediaAndDBEntries (&Not);

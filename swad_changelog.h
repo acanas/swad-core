@@ -639,10 +639,12 @@ TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de t
 
 TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtube.com/shorts/fY6Oax_uJBc?si=G3UHqvSH3yEbxm1B
 */
-#define Log_PLATFORM_VERSION	"SWAD 25.36.8 (2026-01-21)"
-#define CSS_FILE		"swad25.30.1.css"
+#define Log_PLATFORM_VERSION	"SWAD 25.37 (2026-02-13)"
+#define CSS_FILE		"swad25.36.9.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 25.37:    Feb 13, 2026	System admins can remove timeline posts and comments. (351157 lines)
+	Version 25.36.9:  Feb 10, 2026	Changes in exam layout. (351161 lines)
 	Version 25.36.8:  Jan 20, 2026	We backtrack: $...$ is not allowed for online mathematics because it is used a lot in programming languages. (351158 lines)
 					Copy the following icons to swad public directory:
 sudo cp js/mathjax-config.js /var/www/html/swad

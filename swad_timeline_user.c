@@ -380,12 +380,10 @@ static void TmlUsr_PutDisabledIconFavSha (TmlUsr_FavSha_t FavSha,
 
 Usr_Can_t TmlUsr_CheckIfICanFavSha (long Cod,long UsrCod)
   {
-   extern const char *Txt_The_post_no_longer_exists;
-
    /***** Trivial check 1: note/comment code should be > 0 *****/
    if (Cod <= 0)
      {
-      Ale_ShowAlert (Ale_WARNING,Txt_The_post_no_longer_exists);
+      Err_WrongPost ();
       return Usr_CAN_NOT;
      }
 
@@ -406,18 +404,26 @@ Usr_Can_t TmlUsr_CheckIfICanFavSha (long Cod,long UsrCod)
 
 Usr_Can_t TmlUsr_CheckIfICanRemove (long Cod,long UsrCod)
   {
-   extern const char *Txt_The_post_no_longer_exists;
-
    /***** Trivial check 1: note/comment code should be > 0 *****/
    if (Cod <= 0)
      {
-      Ale_ShowAlert (Ale_WARNING,Txt_The_post_no_longer_exists);
+      Err_WrongPost ();
       return Usr_CAN_NOT;
      }
 
-   /***** Trivial check 2: I must be logged
-			   I can only remove my own notes/comments *****/
-   if (!Gbl.Usrs.Me.Logged || Usr_ItsMe (UsrCod) == Usr_OTHER)
+   /***** Trivial check 2: I must be logged *****/
+   if (!Gbl.Usrs.Me.Logged)
+     {
+      Err_NoPermission ();
+      return Usr_CAN_NOT;
+     }
+
+   /***** Trivial check 3: If I am logged as system admin, I can remove *****/
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      return Usr_CAN;
+
+   /***** Trivial check 4: I can only remove my own notes/comments *****/
+   if (Usr_ItsMe (UsrCod) == Usr_OTHER)
      {
       Err_NoPermission ();
       return Usr_CAN_NOT;

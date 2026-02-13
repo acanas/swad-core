@@ -2862,32 +2862,32 @@ table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 .DAT_SMALL_PURPLE,
 .DAT_SMALL_BLUE,
 .DAT_SMALL_YELLOW,
-.DAT_SMALL_PINK			{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #404040; font-size: 12pt;}
-.DAT_SMALL_DARK			{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #d0d0d0; font-size: 12pt;}
+.DAT_SMALL_PINK			{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #404040; font-size: 10pt;}
+.DAT_SMALL_DARK			{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #d0d0d0; font-size: 10pt;}
 
 .DAT_SMALL_STRONG_WHITE,
 .DAT_SMALL_STRONG_GREY,
 .DAT_SMALL_STRONG_PURPLE,
 .DAT_SMALL_STRONG_BLUE,
 .DAT_SMALL_STRONG_YELLOW,
-.DAT_SMALL_STRONG_PINK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: black;   font-size: 12pt;}
-.DAT_SMALL_STRONG_DARK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: white;   font-size: 12pt;}
+.DAT_SMALL_STRONG_PINK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: black;   font-size: 10pt;}
+.DAT_SMALL_STRONG_DARK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: white;   font-size: 10pt;}
 
 .DAT_SMALL_NOBR_WHITE,
 .DAT_SMALL_NOBR_GREY,
 .DAT_SMALL_NOBR_PURPLE,
 .DAT_SMALL_NOBR_BLUE,
 .DAT_SMALL_NOBR_YELLOW,
-.DAT_SMALL_NOBR_PINK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #404040; font-size: 12pt; white-space: nowrap;}
-.DAT_SMALL_NOBR_DARK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #d0d0d0; font-size: 12pt; white-space: nowrap;}
+.DAT_SMALL_NOBR_PINK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #404040; font-size: 10pt; white-space: nowrap;}
+.DAT_SMALL_NOBR_DARK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #d0d0d0; font-size: 10pt; white-space: nowrap;}
 
 .DAT_SMALL_NOBR_STRONG_WHITE,
 .DAT_SMALL_NOBR_STRONG_GREY,
 .DAT_SMALL_NOBR_STRONG_PURPLE,
 .DAT_SMALL_NOBR_STRONG_BLUE,
 .DAT_SMALL_NOBR_STRONG_YELLOW,
-.DAT_SMALL_NOBR_STRONG_PINK	{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: black;   font-size: 12pt; white-space: nowrap;}
-.DAT_SMALL_NOBR_STRONG_DARK	{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: white;   font-size: 12pt; white-space: nowrap;}
+.DAT_SMALL_NOBR_STRONG_PINK	{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: black;   font-size: 10pt; white-space: nowrap;}
+.DAT_SMALL_NOBR_STRONG_DARK	{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: white;   font-size: 10pt; white-space: nowrap;}
 
 .DAT_GREEN_WHITE,
 .DAT_GREEN_GREY,
@@ -3688,16 +3688,16 @@ legend {font-size: 12pt; font-weight: bold;}
 .Qst_TYPE_VALID_PURPLE,
 .Qst_TYPE_VALID_BLUE,
 .Qst_TYPE_VALID_YELLOW,
-.Qst_TYPE_VALID_PINK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #404040; font-size: 10pt;}
-.Qst_TYPE_VALID_DARK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #d0d0d0; font-size: 10pt;}
+.Qst_TYPE_VALID_PINK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #404040; font-size: 8pt;}
+.Qst_TYPE_VALID_DARK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #d0d0d0; font-size: 8pt;}
 
 .Qst_TYPE_INVALID_WHITE,
 .Qst_TYPE_INVALID_GREY,
 .Qst_TYPE_INVALID_PURPLE,
 .Qst_TYPE_INVALID_BLUE,
 .Qst_TYPE_INVALID_YELLOW,
-.Qst_TYPE_INVALID_PINK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #660000; font-size: 10pt;}
-.Qst_TYPE_INVALID_DARK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #ff8080; font-size: 10pt;}
+.Qst_TYPE_INVALID_PINK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #660000; font-size: 8pt;}
+.Qst_TYPE_INVALID_DARK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #ff8080; font-size: 8pt;}
 
 .Qst_TXT_WHITE,
 .Qst_TXT_GREY,
@@ -3863,24 +3863,27 @@ legend {font-size: 12pt; font-weight: bold;}
 
 .Exa_DESC, .Exa_QSTS
 	{
-	margin: 1%;
+	box-sizing: border-box;
+	margin: 10px;
 	text-align: left;
 	}
 
 .Exa_TBL
 	{
+	box-sizing: border-box;
 	border-collapse: collapse;
 	}
 .Exa_TBL td
 	{
+	box-sizing: border-box;
 	border: 1px solid black;
 	padding: 1px;
 	}
 
-.Exa_COLS_1 {column-count: 1; column-gap: 20px; column-rule-style: none;}
-.Exa_COLS_2 {column-count: 2; column-gap: 20px; column-rule-style: none;}
-.Exa_COLS_3 {column-count: 3; column-gap: 20px; column-rule-style: none;}
-.Exa_COLS_4 {column-count: 4; column-gap: 20px; column-rule-style: none;}
+.Exa_COLS_1 {column-count: 1; column-gap: 10px; column-rule-style: none;}
+.Exa_COLS_2 {column-count: 2; column-gap: 10px; column-rule-style: none;}
+.Exa_COLS_3 {column-count: 3; column-gap: 10px; column-rule-style: none;}
+.Exa_COLS_4 {column-count: 4; column-gap: 10px; column-rule-style: none;}
 
 .Exa_COL_SPAN
 	{
@@ -3889,25 +3892,29 @@ legend {font-size: 12pt; font-weight: bold;}
 
 .Exa_CONTAINER
 	{
+	box-sizing: border-box;
 	display: table;
-	padding: 8px 0;
+	padding: 4px;
+	margin: 0 10px;
 	text-align: left;
 	}
 .Exa_LEFT
 	{
+	box-sizing: border-box;
 	display: table-cell;
 	padding-right: 10px;
 	text-align: right;
 	vertical-align: top;
-	width: 100px;
+	width: 50px;
 	}
 .Exa_RIGHT
 	{
+	box-sizing: border-box;
 	display: table-cell;
 	padding-left: 10px;
 	text-align: left;
 	vertical-align: middle;
-	min-width: 325px;
+	min-width: 250px;	/* Too big ==> overflow when printing / PDF */
 	}
 
 .Exa_ANSWER_INT

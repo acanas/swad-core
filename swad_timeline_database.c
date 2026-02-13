@@ -527,10 +527,8 @@ void Tml_DB_RemoveNote (long NotCod)
   {
    DB_QueryDELETE ("can not remove a note",
 		   "DELETE FROM tml_notes"
-	           " WHERE NotCod=%ld"
-	             " AND UsrCod=%ld",		// Extra check: author
-		   NotCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+	           " WHERE NotCod=%ld",
+		   NotCod);
   }
 
 /*****************************************************************************/
@@ -791,10 +789,8 @@ void Tml_DB_RemoveCommPub (long PubCod)
    DB_QueryDELETE ("can not remove comment",
 		   "DELETE FROM tml_pubs"
 	           " WHERE PubCod=%ld"
-	             " AND PublisherCod=%ld"	// Extra check: author
 	             " AND PubType=%u",		// Extra check: it's a comment
 		   PubCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) TmlPub_COMMENT_TO_NOTE);
   }
 
@@ -1333,9 +1329,7 @@ void Tml_DB_RemoveSharedPub (long NotCod)
    DB_QueryDELETE ("can not remove a publication",
 		   "DELETE FROM tml_pubs"
 		   " WHERE NotCod=%ld"
-		     " AND PublisherCod=%ld"
 		     " AND PubType=%u",	// Extra check: shared note
 		   NotCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) TmlPub_SHARED_NOTE);
   }
