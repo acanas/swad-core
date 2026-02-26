@@ -141,6 +141,8 @@ void ID_GetListIDsFromUsrCod (struct Usr_Data *UsrDat)
 
 void ID_ReallocateListIDs (struct Usr_Data *UsrDat,unsigned NumIDs)
   {
+   unsigned NumID;
+
    /***** Free list of IDs if used *****/
    ID_FreeListIDs (UsrDat);
 
@@ -150,6 +152,14 @@ void ID_ReallocateListIDs (struct Usr_Data *UsrDat,unsigned NumIDs)
    /***** Allocate space for the list *****/
    if ((UsrDat->IDs.List = malloc (NumIDs * sizeof (*UsrDat->IDs.List))) == NULL)
       Err_NotEnoughMemoryExit ();
+
+   for (NumID = 0;
+	NumID < NumIDs;
+	NumID++)
+     {
+      UsrDat->IDs.List[NumID].Confirmed = ID_NOT_CONFIRMED;
+      UsrDat->IDs.List[NumID].ID[0] = '\0';
+     }
   }
 
 /*****************************************************************************/
@@ -323,7 +333,6 @@ void ID_WriteUsrIDs (const struct Usr_Data *UsrDat,const char *Anchor)
 				Frm_CheckIfInside () == Frm_OUTSIDE_FORM &&			// Not inside another form
 				Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST ? Usr_CAN :	// Only in main browser tab
 										Usr_CAN_NOT;
-
    for (NumID = 0;
 	NumID < UsrDat->IDs.Num;
 	NumID++)
