@@ -1983,7 +1983,6 @@ typedef enum
 	ActChgMyDpt,
 	ActChgMyOff,
 	ActChgMyOffPho,
-	ActReqEdiMyNet,
 	ActChgMyNet,
 
    // Settings ----------------------------------------------------------------

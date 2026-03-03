@@ -263,8 +263,8 @@ void Dpt_EditDepartments (void)
    /***** Department constructor *****/
    Dpt_EditingDepartmentConstructor ();
 
-   /***** Edit departments *****/
-   Dpt_EditDepartmentsInternal ();
+      /***** Edit departments *****/
+      Dpt_EditDepartmentsInternal ();
 
    /***** Department destructor *****/
    Dpt_EditingDepartmentDestructor ();
@@ -492,7 +492,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 						    HTM_NO_ATTR,
 				 "%s",Txt_Another_institution);
 		     for (NumIns = 0;
-			  NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
+			  NumIns < Gbl.Hierarchy.List[Hie_INS].Num;
 			  NumIns++)
 		       {
 			Ins = &Gbl.Hierarchy.List[Hie_INS].Lst[NumIns];

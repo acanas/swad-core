@@ -4178,9 +4178,6 @@ void Rec_UpdateMyInstitution (void)
 
    /***** Update institution, center and department *****/
    Acc_DB_UpdateMyInstitutionCenterDepartment ();
-
-   /***** Show form again *****/
-   Rec_ShowMySharedRecordAndMore ();
   }
 
 /*****************************************************************************/
@@ -4213,9 +4210,6 @@ void Rec_UpdateMyCenter (void)
 
    /***** Update institution, center and department *****/
    Acc_DB_UpdateMyInstitutionCenterDepartment ();
-
-   /***** Show form again *****/
-   Rec_ShowMySharedRecordAndMore ();
   }
 
 /*****************************************************************************/
@@ -4244,9 +4238,6 @@ void Rec_UpdateMyDepartment (void)
    /***** Update institution, center and department *****/
    Gbl.Usrs.Me.UsrDat.Tch.DptCod = Dpt.DptCod;
    Acc_DB_UpdateMyInstitutionCenterDepartment ();
-
-   /***** Show form again *****/
-   Rec_ShowMySharedRecordAndMore ();
   }
 
 /*****************************************************************************/
@@ -4260,9 +4251,6 @@ void Rec_UpdateMyOffice (void)
 
    /***** Update office *****/
    Usr_DB_UpdateMyOffice ();
-
-   /***** Show form again *****/
-   Rec_ShowMySharedRecordAndMore ();
   }
 
 /*****************************************************************************/
@@ -4276,7 +4264,4 @@ void Rec_UpdateMyOfficePhone (void)
 
    /***** Update office phone *****/
    Usr_DB_UpdateMyOfficePhone ();
-
-   /***** Show form again *****/
-   Rec_ShowMySharedRecordAndMore ();
   }

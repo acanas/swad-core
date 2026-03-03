@@ -135,8 +135,6 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
 
 static void Net_PutIconsWebsSocialNetworks (__attribute__((unused)) void *Args);
 
-static void Net_GetMyWebsAndSocialNetsFromForm (void);
-
 /*****************************************************************************/
 /************************** Show webs / social networks **********************/
 /*****************************************************************************/
@@ -276,23 +274,10 @@ static void Net_PutIconsWebsSocialNetworks (__attribute__((unused)) void *Args)
   }
 
 /*****************************************************************************/
-/**************** Update and show data from identified user ******************/
-/*****************************************************************************/
-
-void Net_UpdateMyWebsAndSocialNets (void)
-  {
-   /***** Get my web and social networks from form *****/
-   Net_GetMyWebsAndSocialNetsFromForm ();
-
-   /***** Show form again *****/
-   Rec_ShowMySharedRecordAndMore ();
-  }
-
-/*****************************************************************************/
 /********* Get data fields about web and social networks from form ***********/
 /*****************************************************************************/
 
-static void Net_GetMyWebsAndSocialNetsFromForm (void)
+void Net_UpdateMyWebs (void)
   {
    Net_WebsAndSocialNetworks_t NumURL;
    char ParName[3 + 10 + 1];

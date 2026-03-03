@@ -38541,29 +38541,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change my office phone"			// Çeviri lazim!
 #endif
 	,
-	[ActReqEdiMyNet] =
-#if   L==1	// ca
-	"Request edition of my social networks"			// Necessita traducció
-#elif L==2	// de
-	"Request edition of my social networks"			// Need Übersetzung
-#elif L==3	// en
-	"Request edition of my social networks"
-#elif L==4	// es
-	"Solicitar edici&oacute;n de mis redes sociales"
-#elif L==5	// fr
-	"Request edition of my social networks"			// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar edici&oacute;n de mis redes sociales"	// Okoteve traducción
-#elif L==7	// it
-	"Request edition of my social networks"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Request edition of my social networks"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request edition of my social networks"			// Precisa de tradução
-#elif L==10	// tr
-	"Request edition of my social networks"			// Çeviri lazim!
-#endif
-	,
 	[ActChgMyNet] =
 #if   L==1	// ca
 	"Change my web and social networks"	// Necessita traducció
