@@ -320,13 +320,9 @@ static void MFU_PutIconAndText (Act_Action_t Action,
 
    snprintf (URLIconSet,sizeof (URLIconSet),"%s/%s",
 	     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
-   if (Color[Gbl.Prefs.IconSet] == Ico_UNCHANGED)
-      HTM_IMG (URLIconSet,Act_GetIconFromAction (Action),MenuStr,
-	       NULL);
-   else
-      HTM_IMG (URLIconSet,Act_GetIconFromAction (Action),MenuStr,
-	       "class=\"ICO_%s_%s\"",
-	       Ico_GetPreffix (Color[Gbl.Prefs.IconSet]),The_GetSuffix ());
+   HTM_IMG (URLIconSet,Act_GetIconFromAction (Action),MenuStr,
+	    "class=\"ICO_%s_%s\"",
+	    Ico_GetPreffix (Color[Gbl.Prefs.IconSet]),The_GetSuffix ());
    HTM_NBSP ();
    HTM_Txt (MenuStr);
   }

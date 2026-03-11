@@ -1619,7 +1619,7 @@ static void Att_ListEventStudents (struct Att_Events *Events)
 						&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
 
 		  /* Get list of user's IDs */
-		  ID_GetListIDsFromUsrCod (&UsrDat);
+		  ID__GetListIDsFromUsrCod (&UsrDat);
 
 		  Att_WriteRowUsrToCallTheRoll (NumUsr + 1,&UsrDat,&Events->Event,
 						ShowPhotos);
@@ -1776,7 +1776,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
 		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
 		    The_GetColorRows ());
-	 ID_WriteUsrIDs (UsrDat,NULL);
+	 ID__WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
 
       /***** Write student's name *****/
@@ -2904,7 +2904,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
 		    The_GetColorRows ());
-	 ID_WriteUsrIDs (UsrDat,NULL);
+	 ID__WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
 
       /***** Write user's name *****/
@@ -3100,7 +3100,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 	       /***** Write user's ID ******/
 	       HTM_TD_Begin ("class=\"LM %s_%s\"",
 			     Usr_ClassData[UsrDat->Accepted],The_GetSuffix ());
-		  ID_WriteUsrIDs (UsrDat,NULL);
+		  ID__WriteUsrIDs (UsrDat,NULL);
 	       HTM_TD_End ();
 
 	       /***** Write student's name *****/

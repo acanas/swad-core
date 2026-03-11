@@ -178,8 +178,7 @@ struct Mnu_Menu Mnu_Menu[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 		[ 2] = {ActSeeMyTT		,"clock"		},
 		[ 3] = {ActSeeMyAgd		,"calendar"		},
 		[ 4] = {ActFrmMyAcc		,"at"			},
-		[ 5] = {ActReqEdiRecSha		,"address-card"		},
-		[ 6] = {ActReqEdiSet		,"cog"			},
+		[ 5] = {ActReqEdiSet		,"cog"			},
 	       },
   };
 
@@ -241,10 +240,10 @@ Act_Action_t Mnu_GetFirstActionAvailableInCurrentTab (void)
 void Mnu_WriteMenuThisTab (void)
   {
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
-   static const char *ClassIcoMenu[Ico_NUM_ICON_SETS] =
+   static Ico_Color_t Color[Ico_NUM_ICON_SETS] =
      {
-      [Ico_ICON_SET_AWESOME] = "MENU_ICO",
-      [Ico_ICON_SET_NUVOLA ] = NULL,
+      [Ico_ICON_SET_AWESOME] = Ico_BLACK,
+      [Ico_ICON_SET_NUVOLA ] = Ico_UNCHANGED,
      };
    unsigned NumOptInMenu;
    Act_Action_t Action;
@@ -279,17 +278,12 @@ void Mnu_WriteMenuThisTab (void)
 
 			/***** Icon and text *****/
 			HTM_DIV_Begin ("class=\"MENU_ICO_TXT\"");
-			   if (ClassIcoMenu[Gbl.Prefs.IconSet])
-			      HTM_DIV_Begin ("class=\"MENU_ICO %s_%s\""
-					     " style=\"background-image:url('%s/%s/%s');\"",
-					     ClassIcoMenu[Gbl.Prefs.IconSet],The_GetSuffix (),
-					     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet],
-					     Ico_GetIcon (Mnu_GetIconFromNumOptInMenu (NumOptInMenu)));
-			   else
-			      HTM_DIV_Begin ("class=\"MENU_ICO\""
-					     " style=\"background-image:url('%s/%s/%s');\"",
-					     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet],
-					     Ico_GetIcon (Mnu_GetIconFromNumOptInMenu (NumOptInMenu)));
+			   HTM_DIV_Begin ("class=\"MENU_ICO ICO_%s_%s\""
+					  " style=\"background-image:url('%s/%s/%s');\"",
+					  Ico_GetPreffix (Color[Gbl.Prefs.IconSet]),The_GetSuffix (),
+					  Cfg_URL_ICON_SETS_PUBLIC,
+					  Ico_IconSetId[Gbl.Prefs.IconSet],
+					  Ico_GetIcon (Mnu_GetIconFromNumOptInMenu (NumOptInMenu)));
 			   HTM_DIV_End ();
 			   HTM_DIV_Begin ("class=\"MENU_TXT MENU_TXT_%s\"",
 			                  The_GetSuffix ());

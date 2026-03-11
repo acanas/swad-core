@@ -575,7 +575,7 @@ static Exi_Exist_t API_GetSomeUsrDataFromUsrCod (struct Usr_Data *UsrDat,
       SuccessOrError = Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[4]);
 
       /***** Get list of user's IDs *****/
-      ID_GetListIDsFromUsrCod (UsrDat);
+      ID__GetListIDsFromUsrCod (UsrDat);
 
       /***** Get user's nickname *****/
       Nck_DB_GetNicknameFromUsrCod (UsrDat->UsrCod,UsrDat->Nickname);
@@ -754,7 +754,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
    /***** Allocate space for strings *****/
    loginByUserPasswordKeyOut->wsKey         = soap_malloc (soap,API_BYTES_KEY                      + 1);
    loginByUserPasswordKeyOut->userNickname  = soap_malloc (soap,Nck_MAX_BYTES_NICK_WITHOUT_ARROBA  + 1);
-   loginByUserPasswordKeyOut->userID        = soap_malloc (soap,ID_MAX_BYTES_USR_ID                + 1);
+   loginByUserPasswordKeyOut->userID        = soap_malloc (soap,ID__MAX_BYTES_USR_ID                + 1);
    loginByUserPasswordKeyOut->userFirstname = soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
    loginByUserPasswordKeyOut->userSurname1  = soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
    loginByUserPasswordKeyOut->userSurname2  = soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
@@ -803,7 +803,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
 	       // Users' IDs are always stored internally in capitals and without leading zeros
 	       Str_RemoveLeadingZeros (UsrIDNickOrEmail);
 	       Str_ConvertToUpperText (UsrIDNickOrEmail);
-	       switch (ID_CheckIfUsrIDIsValid (UsrIDNickOrEmail))
+	       switch (ID__CheckIfUsrIDIsValid (UsrIDNickOrEmail))
 		 {
 		  case Err_SUCCESS:
 		     /* User has typed a valid user's ID (existing or not) */
@@ -842,7 +842,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
 	 if (Gbl.Usrs.Me.UsrDat.IDs.Num)
 	    Str_Copy (loginByUserPasswordKeyOut->userID,
 		      Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,	// TODO: What user's ID?
-		      ID_MAX_BYTES_USR_ID);
+		      ID__MAX_BYTES_USR_ID);
 
 	 Str_Copy (loginByUserPasswordKeyOut->userSurname1,
 		   Gbl.Usrs.Me.UsrDat.Surname1,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
@@ -906,7 +906,7 @@ int swad__loginBySessionKey (struct soap *soap,
    /***** Allocate space for strings *****/
    loginBySessionKeyOut->wsKey         = soap_malloc (soap,API_BYTES_KEY                   + 1);
    loginBySessionKeyOut->userNickname  = soap_malloc (soap,Nck_MAX_BYTES_NICK_WITHOUT_ARROBA  + 1);
-   loginBySessionKeyOut->userID        = soap_malloc (soap,ID_MAX_BYTES_USR_ID                + 1);
+   loginBySessionKeyOut->userID        = soap_malloc (soap,ID__MAX_BYTES_USR_ID                + 1);
    loginBySessionKeyOut->userFirstname = soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
    loginBySessionKeyOut->userSurname1  = soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
    loginBySessionKeyOut->userSurname2  = soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
@@ -997,7 +997,7 @@ int swad__loginBySessionKey (struct soap *soap,
 	 if (Gbl.Usrs.Me.UsrDat.IDs.Num)
 	    Str_Copy (loginBySessionKeyOut->userID,
 		      Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,	// TODO: What user's ID?
-		      ID_MAX_BYTES_USR_ID);
+		      ID__MAX_BYTES_USR_ID);
 
 	 Str_Copy (loginBySessionKeyOut->userSurname1,
 		   Gbl.Usrs.Me.UsrDat.Surname1,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
@@ -1122,7 +1122,7 @@ int swad__getNewPassword (struct soap *soap,
 	       // Users' IDs are always stored internally in capitals and without leading zeros
 	       Str_RemoveLeadingZeros (UsrIDNickOrEmail);
 	       Str_ConvertToUpperText (UsrIDNickOrEmail);
-	       switch (ID_CheckIfUsrIDIsValid (UsrIDNickOrEmail))
+	       switch (ID__CheckIfUsrIDIsValid (UsrIDNickOrEmail))
 		 {
 		  case Err_SUCCESS:
 		     /* User has typed a valid user's ID (existing or not) */
@@ -1835,8 +1835,8 @@ static void API_CopyListUsers (struct soap *soap,
 				       &Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
 
 	 /* Get list of user's IDs */
-         ID_GetListIDsFromUsrCod (&UsrDat);
-         ICanSeeUsrID = ID_ICanSeeOtherUsrIDs (&UsrDat);
+         ID__GetListIDsFromUsrCod (&UsrDat);
+         ICanSeeUsrID = ID__ICanSeeOtherUsrIDs (&UsrDat);
 
 	 /* Get nickname */
          Nck_DB_GetNicknameFromUsrCod (UsrDat.UsrCod,UsrDat.Nickname);

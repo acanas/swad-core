@@ -1105,9 +1105,9 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
      {
       case Err_SUCCESS:
 	 /***** Get list of users' IDs *****/
-	 if ((ListUsrsIDs = malloc (ID_MAX_BYTES_LIST_USRS_IDS + 1)) == NULL)
+	 if ((ListUsrsIDs = malloc (ID__MAX_BYTES_LIST_USRS_IDS + 1)) == NULL)
 	    Err_NotEnoughMemoryExit ();
-	 Par_GetParText ("UsrsIDs",ListUsrsIDs,ID_MAX_BYTES_LIST_USRS_IDS);
+	 Par_GetParText ("UsrsIDs",ListUsrsIDs,ID__MAX_BYTES_LIST_USRS_IDS);
 
 	 /***** Get list of selected users if not already got *****/
 	 Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
@@ -1258,14 +1258,14 @@ static void Enr_UpdateLstUsrsToBeRemovedUsingTextarea (Rol_Role_t Role,
 	       default:
 		  // Users' IDs are always stored internally in capitals and without leading zeros
 		  Str_RemoveLeadingZeros (UsrDat->UsrIDNickOrEmail);
-		  if (ID_CheckIfUsrIDSeemsAValidID (UsrDat->UsrIDNickOrEmail) == Err_SUCCESS)
+		  if (ID__CheckIfUsrIDSeemsAValidID (UsrDat->UsrIDNickOrEmail) == Err_SUCCESS)
 		    {
 		     /***** Find users for this user's ID *****/
-		     ID_ReallocateListIDs (UsrDat,1);	// Only one user's ID
+		     ID__ReallocateListIDs (UsrDat,1);	// Only one user's ID
 		     Str_Copy (UsrDat->IDs.List[0].ID,UsrDat->UsrIDNickOrEmail,
 			       sizeof (UsrDat->IDs.List[0].ID) - 1);
 		     Str_ConvertToUpperText (UsrDat->IDs.List[0].ID);
-		     ID_GetListUsrCodsFromUsrID (UsrDat,NULL,&ListUsrCods,ID_ANY);
+		     ID__GetListUsrCodsFromUsrID (UsrDat,NULL,&ListUsrCods,ID__ANY);
 		    }
 		  break;
 	      }
@@ -1442,16 +1442,16 @@ static void Enr_EnrolUsrsFoundInTextarea (Rol_Role_t Role,
 	       default:
 		  // Users' IDs are always stored internally in capitals and without leading zeros
 		  Str_RemoveLeadingZeros (UsrDat->UsrIDNickOrEmail);
-		  if (ID_CheckIfUsrIDSeemsAValidID (UsrDat->UsrIDNickOrEmail) == Err_SUCCESS)
+		  if (ID__CheckIfUsrIDSeemsAValidID (UsrDat->UsrIDNickOrEmail) == Err_SUCCESS)
 		    {
 		     ItLooksLikeAUsrID = true;
 
 		     /* Find users for this user's ID */
-		     ID_ReallocateListIDs (UsrDat,1);	// Only one user's ID
+		     ID__ReallocateListIDs (UsrDat,1);	// Only one user's ID
 		     Str_Copy (UsrDat->IDs.List[0].ID,UsrDat->UsrIDNickOrEmail,
 			       sizeof (UsrDat->IDs.List[0].ID) - 1);
 		     Str_ConvertToUpperText (UsrDat->IDs.List[0].ID);
-		     ID_GetListUsrCodsFromUsrID (UsrDat,NULL,&ListUsrCods,ID_ANY);
+		     ID__GetListUsrCodsFromUsrID (UsrDat,NULL,&ListUsrCods,ID__ANY);
 		    }
 		  break;
 	      }
@@ -1970,7 +1970,7 @@ static void Enr_EnrolUsr (struct Usr_Data *UsrDat,Rol_Role_t Role,
       Usr_ResetUsrDataExceptUsrCodAndIDs (UsrDat);	// It's necessary, because the same struct UsrDat was used for former user
 
       /* User does not exist in database; list of IDs is initialized */
-      UsrDat->IDs.List[0].Confirmed = ID_CONFIRMED;	// If he/she is a new user ==> his/her ID will be stored as confirmed in database
+      UsrDat->IDs.List[0].Confirmed = ID__CONFIRMED;	// If he/she is a new user ==> his/her ID will be stored as confirmed in database
       Acc_CreateNewUsr (UsrDat,Usr_OTHER);
      }
 
@@ -2919,7 +2919,7 @@ static void Enr_AskIfEnrRemUsr (struct Usr_ListUsrCods *ListUsrCods,Rol_Role_t R
       /***** If UsrCod is not present in parameters from form,
 	     use user's ID to identify the user to be enroled *****/
       if (Gbl.Usrs.Other.UsrDat.IDs.List)
-         UsrIDValid = ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);	// Check the first element of the list
+         UsrIDValid = ID__CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);	// Check the first element of the list
       else
 	 UsrIDValid = Err_ERROR;
 
@@ -3145,9 +3145,9 @@ void Enr_CreateNewUsr1 (void)
      };
 
    /***** Get user's ID from form *****/
-   ID_GetParOtherUsrIDPlain ();	// User's ID was already modified and passed as a hidden parameter
+   ID__GetParOtherUsrIDPlain ();	// User's ID was already modified and passed as a hidden parameter
 
-   switch (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID))
+   switch (ID__CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID))
      {
       case Err_SUCCESS:	// User's ID valid
 	 Gbl.Usrs.Other.UsrDat.UsrCod = -1L;
@@ -3159,7 +3159,7 @@ void Enr_CreateNewUsr1 (void)
 	 Rec_GetUsrNameFromRecordForm (&Gbl.Usrs.Other.UsrDat);
 
 	 /***** Create user *****/
-	 Gbl.Usrs.Other.UsrDat.IDs.List[0].Confirmed = ID_CONFIRMED;	// User's ID will be stored as confirmed
+	 Gbl.Usrs.Other.UsrDat.IDs.List[0].Confirmed = ID__CONFIRMED;	// User's ID will be stored as confirmed
 	 Acc_CreateNewUsr (&Gbl.Usrs.Other.UsrDat,Usr_OTHER);
 
 	 /***** Enrol user in current course in database *****/

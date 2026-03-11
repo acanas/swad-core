@@ -341,7 +341,7 @@ void ExaSes_ListUsersForSelection (struct Exa_Exams *Exams,
 			Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
 
 			/* Get list of user's IDs */
-			ID_GetListIDsFromUsrCod (&UsrDat);
+			ID__GetListIDsFromUsrCod (&UsrDat);
 
 			/* Write a row for this user */
 			ExaSes_WriteRowUsrInSession (Exams,NumUsr + 1,&UsrDat);

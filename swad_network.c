@@ -104,7 +104,7 @@ static const char *Net_WebsAndSocialNetworksTitle[Net_NUM_WEBS_AND_SOCIAL_NETWOR
    [Net_FOURSQUARE    ] = "Foursquare",
    [Net_GITHUB        ] = "GitHub",
    [Net_GNU_SOCIAL    ] = "GNU Social",
-   [Net_GOOGLE_SCHOLAR] = "Google Scholar",
+   [Net_GOOGLE_SCHOLAR] = "Google&nbsp;Scholar",
    [Net_IDENTICA      ] = "identi.ca",
    [Net_INSTAGRAM     ] = "Instagram",
    [Net_LINKEDIN      ] = "LinkedIn",
@@ -209,7 +209,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	    Frm_BeginFormAnchor (ActChgMyNet,Net_MY_WEBS_ID);
 
 	       /***** Begin table *****/
-	       HTM_TABLE_BeginCenterPadding (2);
+	       HTM_TABLE_Begin ("REC");
 
 		  /***** List webs and social networks *****/
 		  for (NumURL  = (Net_WebsAndSocialNetworks_t) 0;
@@ -229,7 +229,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 			      Ico_PutIcon (Net_WebsAndSocialNetworksIcons[NumURL],Ico_BLACK,
 					   Net_WebsAndSocialNetworksTitle[NumURL],
 					   "CONTEXT_OPT CONTEXT_ICO16x16");
-			      HTM_NBSP ();
+			      // HTM_NBSP ();
 			      HTM_Txt (Net_WebsAndSocialNetworksTitle[NumURL]);
 			      HTM_Colon ();
 			   HTM_LABEL_End ();
@@ -277,7 +277,7 @@ static void Net_PutIconsWebsSocialNetworks (__attribute__((unused)) void *Args)
 /********* Get data fields about web and social networks from form ***********/
 /*****************************************************************************/
 
-void Net_UpdateMyWebs (void)
+void Net_ChangeMyWebs (void)
   {
    Net_WebsAndSocialNetworks_t NumURL;
    char ParName[3 + 10 + 1];

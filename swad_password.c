@@ -361,10 +361,10 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 	    default:
 	       // Users' IDs are always stored internally in capitals and without leading zeros
 	       Str_RemoveLeadingZeros (Gbl.Usrs.Me.UsrIdLogin);
-	       if (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Me.UsrIdLogin) == Err_SUCCESS)
+	       if (ID__CheckIfUsrIDIsValid (Gbl.Usrs.Me.UsrIdLogin) == Err_SUCCESS)
 		 {
 		  /***** Allocate space for the list *****/
-		  ID_ReallocateListIDs (&Gbl.Usrs.Me.UsrDat,1);
+		  ID__ReallocateListIDs (&Gbl.Usrs.Me.UsrDat,1);
 
 		  // User has typed a user's ID
 		  Str_Copy (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,Gbl.Usrs.Me.UsrIdLogin,
@@ -372,11 +372,11 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 		  Str_ConvertToUpperText (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID);
 
 		  /* Get users' codes for this ID */
-		  if (!ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,NULL,
-						   &ListUsrCods,ID_ONLY_CONFIRMED))	// Only confirmed IDs
+		  if (!ID__GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,NULL,
+						   &ListUsrCods,ID__ONLY_CONFIRMED))	// Only confirmed IDs
 		     // If no users found with confirmed IDs, try to get all users (confirmed or not)
-		     ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,NULL,
-						 &ListUsrCods,ID_ANY);	// All users (confirmed or not)
+		     ID__GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,NULL,
+						 &ListUsrCods,ID__ANY);	// All users (confirmed or not)
 		 }
 	       break;
 	   }
@@ -541,7 +541,7 @@ Err_SuccessOrError_t Pwd_SlowCheckIfPasswordIsGood (const char PlainPassword[Pwd
 static Exi_Exist_t Pwd_CheckIfPasswdExistsAsUsrIDorName (const char *PlainPassword)
   {
    /***** Check if password is found in user's ID *****/
-   if (ID_DB_FindStrInUsrsIDs (PlainPassword) == Exi_EXISTS)
+   if (ID__DB_FindStrInUsrsIDs (PlainPassword) == Exi_EXISTS)
       return Exi_EXISTS;	// Found
 
    /***** Check if password is found in first name or surnames of anybody *****/
@@ -641,7 +641,7 @@ void Pwd_ShowFormChgMyPwd (void)
 	      }
 
 	    /***** Begin table *****/
-	    HTM_TABLE_BeginWidePadding (2);
+            HTM_TABLE_Begin ("REC");
 
 	    /***** Current password *****/
 	    if (MyPasswordInDBExists == Exi_EXISTS) // If I have a password in database...
@@ -649,14 +649,14 @@ void Pwd_ShowFormChgMyPwd (void)
 	       HTM_TR_Begin (NULL);
 
 		  /* Label */
-		  Frm_LabelColumn ("Frm_C1 RM","UsrPwd",Txt_Current_password);
+		  Frm_LabelColumn ("REC_C1_BOT RM","UsrPwd",Txt_Current_password);
 
 		  /* Data */
-		  HTM_TD_Begin ("class=\"Frm_C2 LM\"");
+		  HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 		     HTM_INPUT_PASSWORD ("UsrPwd",NULL,"off",
 					 HTM_REQUIRED,
 					 "id=\"UsrPwd\""
-					 " class=\"Frm_C2_INPUT INPUT_%s\"",
+					 " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 					 The_GetSuffix ());
 		  HTM_TD_End ();
 
@@ -725,13 +725,13 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("Frm_C1 RM","Paswd1",Txt_New_password);
+      Frm_LabelColumn ("REC_C1_BOT RM","Paswd1",Txt_New_password);
 
       /* Data */
-      HTM_TD_Begin ("class=\"Frm_C2 LM\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 	 HTM_INPUT_PASSWORD ("Paswd1",Txt_HELP_password,NULL,
 			     HTM_REQUIRED,
-			     "id=\"Paswd1\" class=\"Frm_C2_INPUT INPUT_%s\"",
+			     "id=\"Paswd1\" class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 			     The_GetSuffix ());
       HTM_TD_End ();
 
@@ -741,13 +741,13 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("Frm_C1 RM","Paswd2",Txt_Retype_new_password);
+      Frm_LabelColumn ("REC_C1_BOT RM","Paswd2",Txt_Retype_new_password);
 
       /* Data */
-      HTM_TD_Begin ("class=\"Frm_C2 LM\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 	 HTM_INPUT_PASSWORD ("Paswd2",Txt_HELP_password,NULL,
 			     HTM_REQUIRED,
-			     "id=\"Paswd2\" class=\"Frm_C2_INPUT INPUT_%s\"",
+			     "id=\"Paswd2\" class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 			     The_GetSuffix ());
       HTM_TD_End ();
 

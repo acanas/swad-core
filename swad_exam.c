@@ -1628,7 +1628,7 @@ static void Exa_ShowStudent (struct Usr_Data *UsrDat,Pho_ShowPhotos_t ShowPhoto)
 
       /***** User's data and photo *****/
       HTM_DIV_Begin ("class=\"Exa_HEAD_RIGHT DAT_%s\"",The_GetSuffix ());
-	 ID_WriteUsrIDs (UsrDat,NULL);
+	 ID__WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
 	 HTM_Txt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])

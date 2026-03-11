@@ -22626,30 +22626,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Hesab&inodot;"
 #endif
 	,
-	//  5: ActReqEdiRecSha
-#if   L==1	// ca
-	"Fitxa"
-#elif L==2	// de
-	"Profil"
-#elif L==3	// en
-	"Record"
-#elif L==4	// es
-	"Ficha"
-#elif L==5	// fr
-	"Carte"
-#elif L==6	// gn
-	"Ficha"	// Okoteve traducción
-#elif L==7	// it
-	"Scheda"
-#elif L==8	// pl
-	"Karta"
-#elif L==9	// pt
-	"Cart&atilde;o"
-#elif L==10	// tr
-	"Kart&inodot;"
-#endif
-	,
-	//  6: ActReqEdiSet
+	//  5: ActReqEdiSet
 #if   L==1	// ca
 	"Configuraci&oacute;"
 #elif L==2	// de
@@ -30382,64 +30359,25 @@ const char *Txt_Please_enter_your_ID =
 
 const char *Txt_Please_fill_in_your_ID =
 #if   L==1	// ca
-	"Si us plau, ompli el seu ID (DNI/c&egrave;dula)."
-	" &Eacute;s una dada opcional,"
-	" per&ograve; &eacute;s recomanable que l'ompli"
-        " perqu&egrave; facilita el proc&eacute;s d'inscripci&oacute;"
-        " dels usuaris en les assignatures.";
+	"Si us plau, ompli el seu ID (DNI/c&egrave;dula).";
 #elif L==2	// de
-	"Bitte geben Sie Ihre Ausweis-Nr. &auml;nder."
-	" Es ist eine optionale Daten,"
-	" aber es wird empfohlen, sie zu f&uuml;llen,"
-	" weil sie die Registrierung"
-	" der Benutzer in den Kursen erleichtert.";
+	"Bitte geben Sie Ihre Ausweis-Nr. &auml;nder.";
 #elif L==3	// en
-	"Please fill in your ID."
-	" It is an optional data,"
-	" but it is recommended that you fill it"
-	" because it facilitates the registration process"
-	" of users in the courses.";
+	"Please fill in your ID.";
 #elif L==4	// es
-	"Por favor, rellene su ID (DNI/c&eacute;dula)."
-	" Es un dato opcional,"
-	" pero es recomendable que lo rellene"
-	" porque facilita el proceso de inscripci&oacute;n"
-	" de los usuarios en las asignaturas.";
+	"Por favor, rellene su ID (DNI/c&eacute;dula).";
 #elif L==5	// fr
-	"S'il vous pla&iacute;t, indiquez votre ID."
-	" C'est une donn&eacute;e facultative,"
-	" mais il est recommand&eacute; que vous la remplissez"
-	" parce qu'il facilite le processus d'enregistrement"
-	" des utilisateurs dans les mati&egrave;res.";
+	"S'il vous pla&iacute;t, indiquez votre ID.";
 #elif L==6	// gn
-	"Por favor, rellene su ID (DNI/c&eacute;dula)."
-	" Es un dato opcional,"
-	" pero es recomendable que lo rellene"
-	" porque facilita el proceso de inscripci&oacute;n"
-	" de los usuarios en las asignaturas.";		// Okoteve traducción
+	"Emyenyh&etilde;kena nde ID (c&eacute;dula).";
 #elif L==7	// it
-	"Per favore, inserisci il tuo ID."
-	" Si tratta di un dato facoltativo,"
-	" ma si raccomanda che si riempie"
-	" perch&eacute; facilita il processo di registrazione"
-	" degli utenti ai corsi.";
+	"Per favore, inserisci il tuo ID.";
 #elif L==8	// pl
-	"Prosz&eogon;, wpisz swoje zmie&nacute; ID."
-	" Jest to opcja danych, ale zaleca si&eogon;,"
-	" aby wype&lstrok;ni&cacute; go, poniewa&zdot; u&lstrok;atwia proces rejestracji"
-	" u&zdot;ytkownik&oacute;w w kursach.";
+	"Prosz&eogon;, wpisz swoje zmie&nacute; ID.";
 #elif L==9	// pt
-	"Por favor, preencha seu n&ordm; de identifica&ccedil;&atilde;o"
-	" &Eacute; uma dada opcional,"
-	" mas &eacute; recomend&aacute;vel que voc&ecirc; preench&ecirc;-lo,"
-	" pois facilita o processo de registro"
-	" de usu&aacute;rios nas disciplinas.";
+	"Por favor, preencha seu n&ordm; de identifica&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"Please fill in your ID."
-	" It is an optional data,"
-	" but it is recommended that you fill it"
-	" because it facilitates the registration process"
-	" of users in the courses.";			// Çeviri lazim!
+	"L&uuml;tfen kimlik bilgilerinizi girin.";
 #endif
 
 const char *Txt_Please_fill_in_your_record_card_including_your_country_nationality =
@@ -59757,29 +59695,6 @@ const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_
 	" It's very important not to use only"
 	" numeric digits, or a name or surname,"
 	" or a known word.";				// Çeviri lazim!
-#endif
-
-const char *Txt_Your_personal_data_have_been_updated =
-#if   L==1	// ca
-	"Les vostres dades personals s'han actualitzat.";
-#elif L==2	// de
-	"Ihre pers&ouml;nlichen Daten wurden aktualisiert.";
-#elif L==3	// en
-	"Your personal data have been updated.";
-#elif L==4	// es
-	"Sus datos personales se han actualizado.";
-#elif L==5	// fr
-	"Vos donn&eacute;es personnelles ont &eacute;t&eacute; mises &agrave; jour.";
-#elif L==6	// gn
-	"Sus datos personales se han actualizado.";	// Okoteve traducción
-#elif L==7	// it
-	"I tuoi dati personali sono stati aggiornati.";
-#elif L==8	// pl
-	"Twoje dane osobowe zosta&lstrok;y zaktualizowane.";
-#elif L==9	// pt
-	"Seus dados pessoais foram atualizados.";
-#elif L==10	// tr
-	"Your personal data have been updated.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Your_settings_about_notifications_have_changed =

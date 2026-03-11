@@ -46,8 +46,8 @@ void Pho_RemoveMyPhoto2 (void);
 void Pho_ReqRemUsrPhoto (void);
 void Pho_RemoveUsrPhoto (void);
 
-void Pho_UpdateMyPhoto1 (void);
-void Pho_UpdateMyPhoto2 (void);
+void Pho_ChangeMyPhoto1 (void);
+void Pho_ChangeMyPhoto2 (void);
 void Pho_ChangeUsrPhoto1 (void);
 void Pho_ChangeUsrPhoto2 (void);
 

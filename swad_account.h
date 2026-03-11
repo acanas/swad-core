@@ -51,7 +51,6 @@ void Acc_CheckIfEmptyAccountExists (void);
 void Acc_ShowFormCreateMyAccount (void);
 
 void Acc_ShowFormGoToRequestNewAccount (void);
-void Acc_ShowFormChgMyAccount (void);
 void Acc_ShowFormChgOtherUsrAccount (void);
 void Acc_PutLinkToRemoveMyAccount (__attribute__((unused)) void *Args);
 Err_SuccessOrError_t Acc_CreateMyNewAccountAndLogIn (void);

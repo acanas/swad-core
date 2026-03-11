@@ -124,7 +124,7 @@ struct Globals
          unsigned NumAccWithoutPhoto;
          char PhotoURL[WWW_MAX_BYTES_WWW + 1];
          time_t TimeLastAccToThisFileBrowser;
-         bool ConfirmEmailJustSent;	// An email to confirm my email address has just been sent
+         Mai_Sent_t ConfirmEmailJustSent;	// An email to confirm my email address has just been sent
          struct
            {
             struct Hie_MyNode *Nodes;	// List of courses/degrees/centers/institutions/countries
@@ -135,7 +135,7 @@ struct Globals
 	 Set_ShowUsrsType_t ListType;	// My preference about user's list type
 	 unsigned NumFollowers;	// Number of users who follow me
 	 unsigned NumFollowing;	// Number of users I follow
-	} Me;		// The user logged
+	} Me;			// The user logged
       struct
 	{
 	 struct Usr_Data UsrDat;

@@ -38242,29 +38242,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See my QR code ready to print"			// Çeviri lazim!
 #endif
 	,
-	[ActReqEdiRecSha] =
-#if   L==1	// ca
-	"Request edition of the record with the personal data of the user"		// Necessita traducció
-#elif L==2	// de
-	"Request edition of the record with the personal data of the user"		// Need Übersetzung
-#elif L==3	// en
-	"Request edition of the record with the personal data of the user"
-#elif L==4	// es
-	"Solicitar edici&oacute;n de la ficha con los datos personales del usuario"
-#elif L==5	// fr
-	"Request edition of the record with the personal data of the user"		// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar edici&oacute;n de la ficha con los datos personales del usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Request edition of the record with the personal data of the user"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Request edition of the record with the personal data of the user"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request edition of the record with the personal data of the user"		// Precisa de tradução
-#elif L==10	// tr
-	"Request edition of the record with the personal data of the user"		// Çeviri lazim!
-#endif
-	,
 	[ActChgMyData] =
 #if   L==1	// ca
 	"Update my personal data"		// Necessita traducció

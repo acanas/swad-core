@@ -44,7 +44,7 @@ extern struct Globals Gbl;
 // Returns the number of users got
 
 unsigned Acc_DB_GetUsrsWithID (MYSQL_RES **mysql_res,
-                               const char ID[ID_MAX_BYTES_USR_ID + 1])
+                               const char ID[ID__MAX_BYTES_USR_ID + 1])
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get user's codes",

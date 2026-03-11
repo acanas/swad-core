@@ -639,10 +639,13 @@ TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de t
 
 TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtube.com/shorts/fY6Oax_uJBc?si=G3UHqvSH3yEbxm1B
 */
-#define Log_PLATFORM_VERSION	"SWAD 25.37.2 (2026-03-03)"
-#define CSS_FILE		"swad25.36.9.css"
+#define Log_PLATFORM_VERSION	"SWAD 25.39 (2026-03-11)"
+#define CSS_FILE		"swad25.39.1.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 25.39.1:  Mar 11, 2026	Changes in layout of profile account. (? lines)
+	Version 25.39:    Mar 09, 2026	Profile account and profile record card are fused in one option. (350967 lines)
+	Version 25.38:    Mar 09, 2026	Changes in profile account. (351022 lines)
 	Version 25.37.2:  Mar 03, 2026	Fixed bug in edition of departments.
 				        Code refactoring in edition of my institution, centre... (351122 lines)
 	Version 25.37.1:  Feb 26, 2026	Fixed bug in user's IDs. (351166 lines)

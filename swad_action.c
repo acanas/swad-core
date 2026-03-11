@@ -351,7 +351,7 @@ void Act_AdjustCurrentAction (void)
         (Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] < 0 ||
          Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)))
      {
-      Gbl.Action.Act = ActReqEdiRecSha;
+      Gbl.Action.Act = ActFrmMyAcc;
       Tab_SetCurrentTab ();
       return;
      }

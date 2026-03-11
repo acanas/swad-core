@@ -161,7 +161,7 @@ void Nck_PutFormToGetNewNickname (const char *NewNickWithoutArr)
 /*********************** Show form to change my nickname *********************/
 /*****************************************************************************/
 
-void Nck_ShowFormChangeMyNickname (void)
+void Nck_ShowFormChgMyNickname (void)
   {
    Nck_ShowFormChangeUsrNickname (Usr_ME);
   }
@@ -246,7 +246,7 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther)
 	    Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
 
 	 /***** Begin table *****/
-	 HTM_TABLE_BeginCenterPadding (2);
+         HTM_TABLE_Begin ("REC");
 
 	    /***** List nicknames *****/
 	    for (NumNick  = 1;
@@ -262,10 +262,10 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther)
 		  HTM_TR_Begin (NULL);
 
 		     /* Label */
-		     Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_Current_nickname);
+		     Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Current_nickname);
 
 		     /* Data */
-		     HTM_TD_Begin ("class=\"Frm_C2 LT DAT_STRONG_%s\"",
+		     HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
 				   The_GetSuffix ());
 		 }
 	       else	// NumNick >= 2
@@ -275,10 +275,10 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther)
 		     HTM_TR_Begin (NULL);
 
 			/* Label */
-			Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_Other_nicknames);
+			Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Other_nicknames);
 
 			/* Data */
-			HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",
+			HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",
 				      The_GetSuffix ());
 		    }
 
@@ -322,12 +322,12 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("Frm_C1 RT","NewNick",
+	       Frm_LabelColumn ("REC_C1_BOT RT","NewNick",
 				NumNicks ? Txt_New_nickname :	// A new nickname
 					   Txt_Nickname);	// The first nickname
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",The_GetSuffix ());
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",The_GetSuffix ());
 		  Frm_BeginFormAnchor (ActNck[MeOrOther].Change,Nck_NICKNAME_SECTION_ID);
 		     if (MeOrOther == Usr_OTHER)
 			Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
@@ -337,7 +337,7 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther)
 				     NickWithArr,
 				     HTM_NO_ATTR,
 				     "id=\"NewNick\""
-				     " class=\"Frm_C2_INPUT INPUT_%s\""
+				     " class=\"REC_C2_BOT_INPUT INPUT_%s\""
 				     " size=\"16\"",The_GetSuffix ());
 		     HTM_BR ();
 		     Btn_PutButtonInline (NumNicks ? Btn_CREATE :	// I already have a nickname
@@ -390,15 +390,11 @@ void Nck_RemoveMyNick (void)
 
       /***** Show message *****/
       Ale_CreateAlert (Ale_SUCCESS,Nck_NICKNAME_SECTION_ID,
-	               Txt_Nickname_X_removed,
-		       NickWithoutArr);
+	               Txt_Nickname_X_removed,NickWithoutArr);
      }
    else
       Ale_CreateAlert (Ale_WARNING,Nck_NICKNAME_SECTION_ID,
 	               Txt_You_can_not_delete_your_current_nickname);
-
-   /***** Show my account again *****/
-   Acc_ShowFormChgMyAccount ();
   }
 
 /*****************************************************************************/
@@ -451,11 +447,7 @@ void Nck_RemoveOtherUsrNick (void)
 
 void Nck_UpdateMyNick (void)
   {
-   /***** Update my nickname *****/
    Nck_ChangeUsrNick (&Gbl.Usrs.Me.UsrDat);
-
-   /***** Show my account again *****/
-   Acc_ShowFormChgMyAccount ();
   }
 
 /*****************************************************************************/

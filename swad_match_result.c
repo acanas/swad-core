@@ -1117,7 +1117,7 @@ void MchRes_ShowOneMchResult (void)
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	       ID_WriteUsrIDs (UsrDat,NULL);
+	       ID__WriteUsrIDs (UsrDat,NULL);
 	       HTM_SP ();
 	       HTM_Txt (UsrDat->Surname1);
 	       if (UsrDat->Surname2[0])

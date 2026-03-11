@@ -125,7 +125,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Me.NumAccWithoutPhoto = 0;
    Gbl.Usrs.Me.TimeLastAccToThisFileBrowser = LONG_MAX;	// Initialized to a big value, so by default files are not shown as recent or new
    Hie_ResetMyHierarchy ();
-   Gbl.Usrs.Me.ConfirmEmailJustSent = false;	// An email to confirm my email address has not just been sent
+   Gbl.Usrs.Me.ConfirmEmailJustSent = Mai_NOT_SENT;	// An email to confirm my email address has not just been sent
 
    Gbl.Usrs.Other.UsrDat.UsrCod = -1L;
    Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail[0] = '\0';

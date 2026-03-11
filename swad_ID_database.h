@@ -27,20 +27,20 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ID_DB_InsertANewUsrID (long UsrCod,
-		            const char ID[ID_MAX_BYTES_USR_ID + 1],
-		            ID_Confirmed_t Confirmed);
-void ID_DB_ConfirmUsrID (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1]);
+void ID__DB_InsertANewUsrID (long UsrCod,
+		             const char ID[ID__MAX_BYTES_USR_ID + 1],
+		             ID__Confirmed_t Confirmed);
+void ID__DB_ConfirmUsrID (long UsrCod,const char ID[ID__MAX_BYTES_USR_ID + 1]);
 
-unsigned ID_DB_GetIDsFromUsrCod (MYSQL_RES **mysql_res,long UsrCod);
-bool ID_DB_CheckIfConfirmed (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1]);
-Exi_Exist_t ID_DB_FindStrInUsrsIDs (const char *Str);
-unsigned ID_DB_GetUsrCodsFromUsrID (MYSQL_RES **mysql_res,
-                                    const struct Usr_Data *UsrDat,
-                                    const char *EncryptedPassword,
-                                    ID_OnlyConfirmed_t OnlyConfirmedIDs);
+unsigned ID__DB_GetIDsFromUsrCod (MYSQL_RES **mysql_res,long UsrCod);
+bool ID__DB_CheckIfConfirmed (long UsrCod,const char ID[ID__MAX_BYTES_USR_ID + 1]);
+Exi_Exist_t ID__DB_FindStrInUsrsIDs (const char *Str);
+unsigned ID__DB_GetUsrCodsFromUsrID (MYSQL_RES **mysql_res,
+                                     const struct Usr_Data *UsrDat,
+                                     const char *EncryptedPassword,
+                                     ID__OnlyConfirmed_t OnlyConfirmedIDs);
 
-void ID_DB_RemoveUsrID (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1]);
-void ID_DB_RemoveUsrIDs (long UsrCod);
+void ID__DB_RemoveUsrID (long UsrCod,const char ID[ID__MAX_BYTES_USR_ID + 1]);
+void ID__DB_RemoveUsrIDs (long UsrCod);
 
 #endif

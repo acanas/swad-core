@@ -3002,7 +3002,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat)
 	 Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 
 	 /***** Show user's ID *****/
-	 ID_WriteUsrIDs (UsrDat,NULL);
+	 ID__WriteUsrIDs (UsrDat,NULL);
 
 	 /***** Show user's name *****/
 	 HTM_BR ();

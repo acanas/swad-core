@@ -1037,7 +1037,7 @@ void Mai_PutFormToGetNewEmail (const char *NewEmail)
 /*********************** Show form to change my email ************************/
 /*****************************************************************************/
 
-void Mai_ShowFormChangeMyEmail (void)
+void Mai_ShowFormChgMyEmail (void)
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *Txt_Email;
@@ -1147,7 +1147,7 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther)
       if (Gbl.Usrs.Me.UsrDat.Email[0] == '\0')	// I must fill my email now
 	 Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address);
       else if (Gbl.Usrs.Me.UsrDat.EmailConfirmed == Mai_NOT_CONFIRMED &&	// Email not yet confirmed
-	       !Gbl.Usrs.Me.ConfirmEmailJustSent)				// Do not ask for email confirmation when confirmation email is just sent
+	       Gbl.Usrs.Me.ConfirmEmailJustSent == Mai_NOT_SENT)		// Do not ask for email confirmation when confirmation email is just sent
 	 Ale_ShowAlert (Ale_WARNING,Txt_Please_confirm_your_email_address);
      }
 
@@ -1155,7 +1155,7 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther)
    NumEmails = Mai_DB_GetMyEmails (&mysql_res,Usr_UsrDat[MeOrOther]->UsrCod);
 
    /***** Begin table *****/
-   HTM_TABLE_BeginCenterPadding (2);
+   HTM_TABLE_Begin ("REC");
 
       /***** List emails *****/
       for (NumEmail  = 1;
@@ -1172,19 +1172,19 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther)
 	       HTM_TR_Begin (NULL);
 
 		  /* Label */
-		  Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_Current_email);
+		  Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Current_email);
 
 		  /* Data */
-		  HTM_TD_Begin ("class=\"Frm_C2 LT DAT_STRONG_%s\"",The_GetSuffix ());
+		  HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",The_GetSuffix ());
 	       break;
 	    case 2:
 	       HTM_TR_Begin (NULL);
 
 		  /* Label */
-		  Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_Other_emails);
+		  Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Other_emails);
 
 		  /* Data */
-		  HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",The_GetSuffix ());
+		  HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",The_GetSuffix ());
 	       break;
 	    default:
 	       break;
@@ -1234,19 +1234,19 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther)
       HTM_TR_Begin (NULL);
 
 	 /* Label */
-	 Frm_LabelColumn ("Frm_C1 RT","NewEmail",
+	 Frm_LabelColumn ("REC_C1_BOT RT","NewEmail",
 			  NumEmails ? Txt_New_email :	// A new email
 				      Txt_Email);	// The first email
 
 	 /* Data */
-	 HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",The_GetSuffix ());
 	    Frm_BeginFormAnchor (ActMail[MeOrOther].Change,Mai_EMAIL_SECTION_ID);
 	       if (MeOrOther == Usr_OTHER)
 		  Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	       HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,Usr_UsrDat[MeOrOther]->Email,
 				HTM_NO_ATTR,
 				"id=\"NewEmail\""
-				" class=\"Frm_C2_INPUT INPUT_%s\" size=\"16\"",
+				" class=\"REC_C2_BOT_INPUT INPUT_%s\" size=\"16\"",
 				The_GetSuffix ());
 	       HTM_BR ();
 	       Btn_PutButtonInline (NumEmails ? Btn_CHANGE :		// User already has an email address
@@ -1291,11 +1291,7 @@ static Mai_Confirmed_t Mai_GetConfirmedFromYN (char Ch)
 
 void Mai_RemoveMyUsrEmail (void)
   {
-   /***** Remove user's email *****/
    Mai_RemoveEmail (&Gbl.Usrs.Me.UsrDat);
-
-   /***** Show my account again *****/
-   Acc_ShowFormChgMyAccount ();
   }
 
 /*****************************************************************************/
@@ -1369,11 +1365,7 @@ static void Mai_RemoveEmail (struct Usr_Data *UsrDat)
 
 void May_NewMyUsrEmail (void)
   {
-   /***** Remove user's email *****/
    Mai_ChangeUsrEmail (&Gbl.Usrs.Me.UsrDat,Usr_ME);
-
-   /***** Show my account again *****/
-   Acc_ShowFormChgMyAccount ();
   }
 
 /*****************************************************************************/
@@ -1554,7 +1546,7 @@ void Mai_SendMailMsgToConfirmEmail (void)
    switch (ReturnCode)
      {
       case 0: // Message sent successfully
-         Gbl.Usrs.Me.ConfirmEmailJustSent = true;
+         Gbl.Usrs.Me.ConfirmEmailJustSent = Mai_SENT;
 	 Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
 	                  Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address,
 	   	          Gbl.Usrs.Me.UsrDat.Email);

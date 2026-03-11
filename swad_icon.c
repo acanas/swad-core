@@ -114,7 +114,7 @@ const char *Ico_GetPreffix (Ico_Color_t Color)
   {
    static const char *Ico_CSS_Preffix[Ico_NUM_COLORS] =
      {
-      [Ico_UNCHANGED] = NULL,
+      [Ico_UNCHANGED] = "",
       [Ico_BLACK    ] = "BLACK",
       [Ico_BLUE     ] = "BLUE",
       [Ico_GREEN    ] = "GREEN",
@@ -169,6 +169,11 @@ void Ico_PutIconsToSelectIconSet (void)
   {
    extern const char *Hlp_PROFILE_Settings_icons;
    extern const char *Txt_Icons;
+   static Ico_Color_t Color[Ico_NUM_ICON_SETS] =
+     {
+      [Ico_ICON_SET_AWESOME] = Ico_BLACK,
+      [Ico_ICON_SET_NUVOLA ] = Ico_UNCHANGED,
+     };
    Ico_IconSet_t IconSet;
    char Icon[PATH_MAX + 1];
 
@@ -186,7 +191,7 @@ void Ico_PutIconsToSelectIconSet (void)
 		     snprintf (Icon,sizeof (Icon),"%s/%s/cog.svg",
 			       Cfg_ICON_FOLDER_SETS,
 			       Ico_IconSetId[IconSet]);
-		     Ico_PutSettingIconLink (Icon,Ico_UNCHANGED,Ico_IconSetNames[IconSet]);
+		     Ico_PutSettingIconLink (Icon,Color[IconSet],Ico_IconSetNames[IconSet]);
 		  Frm_EndForm ();
 	       Set_EndPref ();
 	      }
@@ -443,13 +448,9 @@ void Ico_PutDivIcon (const char *DivClass,
 
 void Ico_PutIconLink (const char *Icon,Ico_Color_t Color,Act_Action_t NextAction)
   {
-   if (Color == Ico_UNCHANGED)
-      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Act_GetActionText (NextAction),
-		       "class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16\"");
-   else
-      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Act_GetActionText (NextAction),
-		       "class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16 ICO_%s_%s\"",
-		       Ico_GetPreffix (Color),The_GetSuffix ());
+   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Act_GetActionText (NextAction),
+		    "class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16 ICO_%s_%s\"",
+		    Ico_GetPreffix (Color),The_GetSuffix ());
   }
 
 /*****************************************************************************/
@@ -481,13 +482,9 @@ void Ico_PutIconTextLink (const char *Icon,Ico_Color_t Color,const char *Text)
 
 void Ico_PutSettingIconLink (const char *Icon,Ico_Color_t Color,const char *Title)
   {
-   if (Color == Ico_UNCHANGED)
-      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,
-		       "class=\"ICO_HIGHLIGHT ICOx20\"");
-   else
-      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,
-		       "class=\"ICO_HIGHLIGHT ICOx20 ICO_%s_%s\"",
-		       Ico_GetPreffix (Color),The_GetSuffix ());
+   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,
+		    "class=\"ICO_HIGHLIGHT ICOx20 ICO_%s_%s\"",
+		    Ico_GetPreffix (Color),The_GetSuffix ());
   }
 
 /*****************************************************************************/
@@ -510,14 +507,9 @@ void Ico_PutIconOff (const char *Icon,Ico_Color_t Color,const char *Title)
 
 void Ico_PutIcon (const char *Icon,Ico_Color_t Color,const char *Title,const char *Class)
   {
-   if (Color == Ico_UNCHANGED)
-      HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Title,
-	       "class=\"%s\"",
-	       Class);
-   else
-      HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Title,
-	       "class=\"%s ICO_%s_%s\"",
-	       Class,Ico_GetPreffix (Color),The_GetSuffix ());
+   HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Title,
+	    "class=\"%s ICO_%s_%s\"",
+	    Class,Ico_GetPreffix (Color),The_GetSuffix ());
   }
 
 /*****************************************************************************/
@@ -619,13 +611,9 @@ void Ico_GetAndShowNumUsrsPerIconSet (Hie_Level_t HieLvl)
 	       if (asprintf (&URL,"%s/%s",
 			     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[IconSet]) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       if (Color[IconSet] == Ico_UNCHANGED)
-		  HTM_IMG (URL,"cog.svg",Ico_IconSetNames[IconSet],
-			   "class=\"ICO20x20\"");
-	       else
-		  HTM_IMG (URL,"cog.svg",Ico_IconSetNames[IconSet],
-			   "class=\"ICO20x20 ICO_%s_%s\"",
-			   Ico_GetPreffix (Color[IconSet]),The_GetSuffix ());
+	       HTM_IMG (URL,"cog.svg",Ico_IconSetNames[IconSet],
+			"class=\"ICO20x20 ICO_%s_%s\"",
+			Ico_GetPreffix (Color[IconSet]),The_GetSuffix ());
 	       free (URL);
 	    HTM_TD_End ();
 

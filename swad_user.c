@@ -497,7 +497,7 @@ void Usr_UsrDataDestructor (struct Usr_Data *UsrDat)
      }
 
    /***** Free memory allocated for list of IDs *****/
-   ID_FreeListIDs (UsrDat);
+   ID__FreeListIDs (UsrDat);
   }
 
 /*****************************************************************************/
@@ -509,7 +509,7 @@ void Usr_GetAllUsrDataFromUsrCod (struct Usr_Data *UsrDat,
                                   Usr_GetPrefs_t GetPrefs,
                                   Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs)
   {
-   ID_GetListIDsFromUsrCod (UsrDat);
+   ID__GetListIDsFromUsrCod (UsrDat);
    Usr_GetUsrDataFromUsrCod (UsrDat,GetPrefs,GetRoleInCurrentCrs);
   }
 
@@ -1584,11 +1584,11 @@ unsigned Usr_GetParOtherUsrIDNickOrEMailAndGetUsrCods (struct Usr_ListUsrCods *L
 	       default:
 		  // Users' IDs are always stored internally in capitals and without leading zeros
 		  Str_RemoveLeadingZeros (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
-		  switch (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail))
+		  switch (ID__CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail))
 		    {
 		     case Err_SUCCESS:
 			/* Allocate space for the list */
-			ID_ReallocateListIDs (&Gbl.Usrs.Other.UsrDat,1);
+			ID__ReallocateListIDs (&Gbl.Usrs.Other.UsrDat,1);
 
 			Str_Copy (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,
 				  Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,
@@ -1596,8 +1596,8 @@ unsigned Usr_GetParOtherUsrIDNickOrEMailAndGetUsrCods (struct Usr_ListUsrCods *L
 			Str_ConvertToUpperText (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
 
 			/* Check if user's ID exists in database */
-			ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Other.UsrDat,NULL,
-						    ListUsrCods,ID_ANY);
+			ID__GetListUsrCodsFromUsrID (&Gbl.Usrs.Other.UsrDat,NULL,
+						    ListUsrCods,ID__ANY);
 			break;
 		     case Err_ERROR:	// Not a valid user's nickname, email or ID
 		     default:
@@ -1659,7 +1659,7 @@ void Usr_GetParOtherUsrCodEncryptedAndGetListIDs (void)
   {
    Usr_GetParOtherUsrCodEncrypted (&Gbl.Usrs.Other.UsrDat);
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)	// If parameter exists...
-      ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+      ID__GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
    else       					// Parameter does not exist
      {
       Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail[0] = '\0';
@@ -1888,20 +1888,20 @@ static Err_SuccessOrError_t Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 	    default:
 	       // Users' IDs are always stored internally in capitals and without leading zeros
 	       Str_RemoveLeadingZeros (Gbl.Usrs.Me.UsrIdLogin);
-	       switch (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Me.UsrIdLogin))
+	       switch (ID__CheckIfUsrIDIsValid (Gbl.Usrs.Me.UsrIdLogin))
 		 {
 		  case Err_SUCCESS:
 		     /***** Allocate space for the list *****/
-		     ID_ReallocateListIDs (&Gbl.Usrs.Me.UsrDat,1);
+		     ID__ReallocateListIDs (&Gbl.Usrs.Me.UsrDat,1);
 
 		     Str_Copy (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,Gbl.Usrs.Me.UsrIdLogin,
 			       sizeof (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID) - 1);
 		     Str_ConvertToUpperText (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID);
 
 		     /* Check if user's ID exists in database, and get user's data */
-		     if (ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,
+		     if (ID__GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,
 						     Gbl.Usrs.Me.LoginEncryptedPassword,	// Check password
-						     &ListUsrCods,ID_ANY))
+						     &ListUsrCods,ID__ANY))
 		       {
 			if (ListUsrCods.NumUsrs == 1)
 			  {
@@ -1919,9 +1919,9 @@ static Err_SuccessOrError_t Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 			   return Err_ERROR;
 			  }
 		       }
-		     else if (ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,
+		     else if (ID__GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,
 							  NULL,				// Don't check password
-							  &ListUsrCods,ID_ANY))
+							  &ListUsrCods,ID__ANY))
 		       {
 			if (ListUsrCods.NumUsrs == 1)
 			  {
@@ -2316,7 +2316,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
       /****** Write user's IDs ******/
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),BgColor);
-	 ID_WriteUsrIDs (UsrDat,NULL);
+	 ID__WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
 
       /***** Write rest of main user's data *****/
@@ -2360,7 +2360,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,
       /****** Write user's ID ******/
       HTM_TD_Begin ("class=\"LM DAT_SMALL_%s %s\"",
                     The_GetSuffix (),The_GetColorRows ());
-	 ID_WriteUsrIDs (UsrDat,NULL);
+	 ID__WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
       HTM_TD_End ();
 
@@ -2455,7 +2455,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
 		    The_GetColorRows ());
-	 ID_WriteUsrIDs (UsrDat,NULL);
+	 ID__WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
       HTM_TD_End ();
 
@@ -2569,7 +2569,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 	            Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
 	            The_GetColorRows ());
-	 ID_WriteUsrIDs (UsrDat,NULL);
+	 ID__WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
       HTM_TD_End ();
 
@@ -2656,7 +2656,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat,
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
 		    The_GetColorRows ());
-	 ID_WriteUsrIDs (UsrDat,NULL);
+	 ID__WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
       HTM_TD_End ();
 
@@ -3361,18 +3361,18 @@ Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (Cns_Ver
 			// Users' IDs are always stored internally in capitals and without leading zeros
 			Str_RemoveLeadingZeros (UsrIDNickOrEmail);
 			Str_ConvertToUpperText (UsrIDNickOrEmail);
-			switch (ID_CheckIfUsrIDIsValid (UsrIDNickOrEmail))
+			switch (ID__CheckIfUsrIDIsValid (UsrIDNickOrEmail))
 			  {
 			   case Err_SUCCESS:	// It seems a user's ID
 			      /***** Allocate space for the list *****/
-			      ID_ReallocateListIDs (&UsrDat,1);
+			      ID__ReallocateListIDs (&UsrDat,1);
 
 			      Str_Copy (UsrDat.IDs.List[0].ID,UsrIDNickOrEmail,
 					sizeof (UsrDat.IDs.List[0].ID) - 1);
 
 			      /***** Check if a user exists having this user's ID *****/
-			      if (ID_GetListUsrCodsFromUsrID (&UsrDat,NULL,
-							      &ListUsrCods,ID_ANY))
+			      if (ID__GetListUsrCodsFromUsrID (&UsrDat,NULL,
+							      &ListUsrCods,ID__ANY))
 				{
 				 if (ListUsrCods.NumUsrs > 1)	// Two or more user share the same user's ID
 				   {// TODO: Consider forbid IDs here
@@ -4012,7 +4012,7 @@ static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
 				       &Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
 
 	 /* Get list of user's IDs */
-	 ID_GetListIDsFromUsrCod (&UsrDat);
+	 ID__GetListIDsFromUsrCod (&UsrDat);
 
 	 /* Show row for this user */
 	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,
@@ -4218,7 +4218,7 @@ static void Usr_ListMainDataGsts (Usr_PutCheckBox_t PutCheckBoxToSelectUsr,
 				       &Gbl.Usrs.LstUsrs[Rol_GST].Lst[NumUsr]);
 
 	 /* Get list of user's IDs */
-	 ID_GetListIDsFromUsrCod (&UsrDat);
+	 ID__GetListIDsFromUsrCod (&UsrDat);
 
 	 /* Show row for this guest */
 	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,
@@ -4267,7 +4267,7 @@ static void Usr_ListMainDataStds (Usr_PutCheckBox_t PutCheckBoxToSelectUsr,
 				       &Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
 
 	 /* Get list of user's IDs */
-	 ID_GetListIDsFromUsrCod (&UsrDat);
+	 ID__GetListIDsFromUsrCod (&UsrDat);
 
 	 /* Show row for this student */
 	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,
@@ -4341,7 +4341,7 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,
 					  &Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
 
 	    /* Get list of user's IDs */
-	    ID_GetListIDsFromUsrCod (&UsrDat);
+	    ID__GetListIDsFromUsrCod (&UsrDat);
 
 	    /* Show row for this teacher */
 	    Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,
@@ -4878,7 +4878,7 @@ unsigned Usr_ListUsrsFound (Hie_Level_t HieLvl,Rol_Role_t Role,
 	       Usr_CopyBasicUsrDataFromList (&UsrDat,UsrInList);
 
 	       /* Get list of user's IDs */
-	       ID_GetListIDsFromUsrCod (&UsrDat);
+	       ID__GetListIDsFromUsrCod (&UsrDat);
 
 	       /* Write data of this user */
 	       Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,
@@ -6306,7 +6306,7 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
 					  &Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
 
 	    /* Get list of user's IDs */
-	    ID_GetListIDsFromUsrCod (&UsrDat);
+	    ID__GetListIDsFromUsrCod (&UsrDat);
 
 	    /***** Begin user's cell *****/
 	    HTM_DIV_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s CB%s\"",
@@ -6602,7 +6602,7 @@ void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows)
      }
 
    /* User's ID */
-   ID_WriteUsrIDs (UsrDat,NULL);
+   ID__WriteUsrIDs (UsrDat,NULL);
 
    /* User's name */
    HTM_BR ();

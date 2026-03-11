@@ -150,14 +150,7 @@ void HTM_TABLE_BeginCenterPadding (unsigned CellPadding)
       HTM_TABLE_NestingLevel++;
      }
    else
-      HTM_TABLE_BeginCenter ();
-  }
-
-void HTM_TABLE_BeginCenter (void)
-  {
-   HTM_Txt ("<table class=\"FRAME_TBL_CENTER\">");
-
-   HTM_TABLE_NestingLevel++;
+      HTM_Txt ("<table class=\"FRAME_TBL_CENTER\">");
   }
 
 void HTM_TABLE_BeginWidePadding (unsigned CellPadding)

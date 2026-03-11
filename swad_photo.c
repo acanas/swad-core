@@ -882,7 +882,7 @@ static Exi_Exist_t Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
 /***************************** Update my photo *******************************/
 /*****************************************************************************/
 
-void Pho_UpdateMyPhoto1 (void)
+void Pho_ChangeMyPhoto1 (void)
   {
    Pho_ChangePhoto1 (&Gbl.Usrs.Me.UsrDat);
 
@@ -892,7 +892,7 @@ void Pho_UpdateMyPhoto1 (void)
 						     Gbl.Usrs.Me.PhotoURL);
   }
 
-void Pho_UpdateMyPhoto2 (void)
+void Pho_ChangeMyPhoto2 (void)
   {
    Pho_ChangePhoto2 ();
 

@@ -38,7 +38,7 @@
 /*****************************************************************************/
 
 unsigned Acc_DB_GetUsrsWithID (MYSQL_RES **mysql_res,
-                               const char ID[ID_MAX_BYTES_USR_ID + 1]);
+                               const char ID[ID__MAX_BYTES_USR_ID + 1]);
 
 Exi_Exist_t Acc_DB_CheckIfNicknameAlreadyExists (const char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1]);
 Exi_Exist_t Acc_DB_CheckIfEmailAlreadyExists (const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);

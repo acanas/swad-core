@@ -126,7 +126,7 @@ void Acc_ShowFormMyAccount (void)
    extern const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered;
 
    if (Gbl.Usrs.Me.Logged)
-      Acc_ShowFormChgMyAccount ();
+      Rec_ShowMySharedRecordAndMore ();
    else	// Not logged
      {
       /***** Contextual menu *****/
@@ -162,7 +162,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
       Frm_BeginForm (ActChkUsrAcc);
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_Txt (Txt_ID); HTM_Colon (); HTM_NBSP ();
-	    HTM_INPUT_TEXT ("ID",ID_MAX_CHARS_USR_ID,"",
+	    HTM_INPUT_TEXT ("ID",ID__MAX_CHARS_USR_ID,"",
 			    HTM_REQUIRED,
 			    "size=\"16\" placeholder=\"%s\" class=\"INPUT_%s\"",
 			    Txt_ID_identity_number,The_GetSuffix ());
@@ -191,7 +191,7 @@ void Acc_CheckIfEmptyAccountExists (void)
    extern const char *Txt_Check_another_ID;
    extern const char *Txt_Please_enter_your_ID;
    extern const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered;
-   char ID[ID_MAX_BYTES_USR_ID + 1];
+   char ID[ID__MAX_BYTES_USR_ID + 1];
    unsigned NumUsrs;
    unsigned NumUsr;
    struct Usr_Data UsrDat;
@@ -205,13 +205,13 @@ void Acc_CheckIfEmptyAccountExists (void)
    Mnu_ContextMenuEnd ();
 
    /***** Get new user's ID from form *****/
-   Par_GetParText ("ID",ID,ID_MAX_BYTES_USR_ID);
+   Par_GetParText ("ID",ID,ID__MAX_BYTES_USR_ID);
    // Users' IDs are always stored internally in capitals and without leading zeros
    Str_RemoveLeadingZeros (ID);
    Str_ConvertToUpperText (ID);
 
    /***** Check if there are users with this user's ID *****/
-   switch (ID_CheckIfUsrIDIsValid (ID))
+   switch (ID__CheckIfUsrIDIsValid (ID))
      {
       case Err_SUCCESS:
 	 if ((NumUsrs = Acc_DB_GetUsrsWithID (&mysql_res,ID)))
@@ -408,48 +408,6 @@ void Acc_ShowFormGoToRequestNewAccount (void)
   }
 
 /*****************************************************************************/
-/*********************** Show form to change my account **********************/
-/*****************************************************************************/
-
-void Acc_ShowFormChgMyAccount (void)
-  {
-   extern const char *Txt_Before_going_to_any_other_option_you_must_create_your_password;
-   extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
-   extern const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address;
-
-   /***** Get current user's nickname and email address
-          It's necessary because current nickname or email could be just updated *****/
-   Nck_DB_GetNicknameFromUsrCod (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.Nickname);
-   Mai_GetEmailFromUsrCod (&Gbl.Usrs.Me.UsrDat);
-
-   /***** Check password, nickname and email *****/
-   if (Gbl.Usrs.Me.UsrDat.Password[0] == '\0')	// I must create my passoword
-      Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_create_your_password);
-   if (Gbl.Usrs.Me.UsrDat.Nickname[0] == '\0')	// I must fill my nickname
-      Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
-   if (Gbl.Usrs.Me.UsrDat.Email[0] == '\0')	// I must fill my email
-      Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address);
-
-   /***** Begin container for this user *****/
-   HTM_DIV_Begin ("class=\"REC_USR\"");
-
-      /***** Show form to change my password and my nickname ****/
-      HTM_DIV_Begin ("class=\"REC_LEFT\"");
-	 Pwd_ShowFormChgMyPwd ();
-	 Nck_ShowFormChangeMyNickname ();
-      HTM_DIV_End ();
-
-      /***** Show form to change my email and my ID *****/
-      HTM_DIV_Begin ("class=\"REC_RIGHT\"");
-	 Mai_ShowFormChangeMyEmail ();
-	 ID_ShowFormChangeMyID ();
-      HTM_DIV_End ();
-
-   /***** Begin container for this user *****/
-   HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
 /***************** Show form to change another user's account ****************/
 /*****************************************************************************/
 
@@ -483,7 +441,7 @@ void Acc_ShowFormChgOtherUsrAccount (void)
 		  /***** Show form to change email and ID *****/
 		  HTM_DIV_Begin ("class=\"REC_RIGHT\"");
 		     Mai_ShowFormChangeOtherUsrEmail ();
-		     ID_ShowFormChangeOtherUsrID ();
+		     ID__ShowFormChangeOtherUsrID ();
 		  HTM_DIV_End ();
 
 	       /***** End container for this user *****/
@@ -685,7 +643,7 @@ void Acc_CreateNewUsr (struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOther)
 	NumID++)
      {
       Str_ConvertToUpperText (UsrDat->IDs.List[NumID].ID);
-      ID_DB_InsertANewUsrID (UsrDat->UsrCod,
+      ID__DB_InsertANewUsrID (UsrDat->UsrCod,
 		             UsrDat->IDs.List[NumID].ID,
 		             UsrDat->IDs.List[NumID].Confirmed);
      }
@@ -739,7 +697,7 @@ void Acc_AfterCreationNewAccount (void)
 	             Cfg_PLATFORM_SHORT_NAME);
 
       /***** Show form with account data *****/
-      Acc_ShowFormChgMyAccount ();
+      Rec_ShowMySharedRecordAndMore ();
      }
   }
 
@@ -852,7 +810,7 @@ void Acc_AskIfRemoveMyAccount (void)
    Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
 
    /***** Show forms to change my account *****/
-   Acc_ShowFormChgMyAccount ();
+   Rec_ShowMySharedRecordAndMore ();
   }
 
 static void Acc_AskIfRemoveOtherUsrAccount (void)
@@ -1030,7 +988,7 @@ void Acc_CompletelyEliminateAccount (struct Usr_Data *UsrDat,
    Mai_DB_RemoveUsrEmails (UsrDat->UsrCod);
 
    /***** Remove user's IDs *****/
-   ID_DB_RemoveUsrIDs (UsrDat->UsrCod);
+   ID__DB_RemoveUsrIDs (UsrDat->UsrCod);
 
    /***** Remove user's last data *****/
    Usr_DB_RemoveUsrLastData (UsrDat->UsrCod);
@@ -1082,13 +1040,13 @@ void Acc_PutIconToChangeUsrAccount (struct Usr_Data *UsrDat)
       case Usr_ME:
 	 Lay_PutContextualLinkOnlyIcon (ActFrmMyAcc,NULL,
 					NULL,NULL,
-					"at.svg",Ico_BLACK);
+					"pen.svg",Ico_BLACK);
          break;
       case Usr_OTHER:
 	 if (Usr_CheckIfICanEditOtherUsr (UsrDat) == Usr_CAN)
 	    Lay_PutContextualLinkOnlyIcon (NextAction[UsrDat->Roles.InCurrentCrs],NULL,
 					   Rec_PutParUsrCodEncrypted,NULL,
-					   "at.svg",Ico_BLACK);
+					   "pen.svg",Ico_BLACK);
 	 break;
      }
   }

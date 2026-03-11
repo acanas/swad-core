@@ -36,14 +36,14 @@
 /*************************** Create new user's ID ****************************/
 /*****************************************************************************/
 
-void ID_DB_InsertANewUsrID (long UsrCod,
-		            const char ID[ID_MAX_BYTES_USR_ID + 1],
-		            ID_Confirmed_t Confirmed)
+void ID__DB_InsertANewUsrID (long UsrCod,
+		             const char ID[ID__MAX_BYTES_USR_ID + 1],
+		             ID__Confirmed_t Confirmed)
   {
-   static char YN[ID_NUM_CONFIRMED] =
+   static char YN[ID__NUM_CONFIRMED] =
      {
-      [ID_NOT_CONFIRMED] = 'N',
-      [ID_CONFIRMED    ] = 'Y',
+      [ID__NOT_CONFIRMED] = 'N',
+      [ID__CONFIRMED    ] = 'Y',
      };
 
    DB_QueryINSERT ("can not create user's ID",
@@ -60,7 +60,7 @@ void ID_DB_InsertANewUsrID (long UsrCod,
 /*********************** Set a user's ID as confirmed ************************/
 /*****************************************************************************/
 
-void ID_DB_ConfirmUsrID (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1])
+void ID__DB_ConfirmUsrID (long UsrCod,const char ID[ID__MAX_BYTES_USR_ID + 1])
   {
    DB_QueryUPDATE ("can not confirm a user's ID",
 		   "UPDATE usr_ids"
@@ -76,7 +76,7 @@ void ID_DB_ConfirmUsrID (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1])
 /********************** Get list of IDs of a user ****************************/
 /*****************************************************************************/
 
-unsigned ID_DB_GetIDsFromUsrCod (MYSQL_RES **mysql_res,long UsrCod)
+unsigned ID__DB_GetIDsFromUsrCod (MYSQL_RES **mysql_res,long UsrCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get user's IDs",
@@ -93,7 +93,7 @@ unsigned ID_DB_GetIDsFromUsrCod (MYSQL_RES **mysql_res,long UsrCod)
 /************************ Check if an ID is confirmed ************************/
 /*****************************************************************************/
 
-bool ID_DB_CheckIfConfirmed (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1])
+bool ID__DB_CheckIfConfirmed (long UsrCod,const char ID[ID__MAX_BYTES_USR_ID + 1])
   {
    return
    DB_QueryEXISTS ("can not check if ID is confirmed",
@@ -111,7 +111,7 @@ bool ID_DB_CheckIfConfirmed (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1])
 /********************** Check if a string is a user's ID *********************/
 /*****************************************************************************/
 
-Exi_Exist_t ID_DB_FindStrInUsrsIDs (const char *Str)
+Exi_Exist_t ID__DB_FindStrInUsrsIDs (const char *Str)
   {
    return
    DB_QueryEXISTS ("can not check if a string matches any user's ID",
@@ -127,18 +127,18 @@ Exi_Exist_t ID_DB_FindStrInUsrsIDs (const char *Str)
 /*****************************************************************************/
 // Returns the number of users with any of these IDs
 
-unsigned ID_DB_GetUsrCodsFromUsrID (MYSQL_RES **mysql_res,
-                                    const struct Usr_Data *UsrDat,
-                                    const char *EncryptedPassword,	// If NULL or empty ==> do not check password
-                                    ID_OnlyConfirmed_t OnlyConfirmedIDs)
+unsigned ID__DB_GetUsrCodsFromUsrID (MYSQL_RES **mysql_res,
+                                     const struct Usr_Data *UsrDat,
+                                     const char *EncryptedPassword,	// If NULL or empty ==> do not check password
+                                     ID__OnlyConfirmed_t OnlyConfirmedIDs)
   {
-   static const char *SubqueryConfirmedIDs[ID_NUM_ONLY_CONFIRMED] =
+   static const char *SubqueryConfirmedIDs[ID__NUM_ONLY_CONFIRMED] =
      {
-      [ID_ANY           ] = "",
-      [ID_ONLY_CONFIRMED] = " AND usr_ids.Confirmed='Y'",
+      [ID__ANY           ] = "",
+      [ID__ONLY_CONFIRMED] = " AND usr_ids.Confirmed='Y'",
      };
    char *SubQueryAllUsrs = NULL;
-   char SubQueryOneUsr[1 + ID_MAX_BYTES_USR_ID + 1 + 1];
+   char SubQueryOneUsr[1 + ID__MAX_BYTES_USR_ID + 1 + 1];
    size_t MaxLength;
    unsigned NumID;
    unsigned NumUsrs;
@@ -149,7 +149,7 @@ unsigned ID_DB_GetUsrCodsFromUsrID (MYSQL_RES **mysql_res,
 	 CheckPassword = true;
 
    /***** Allocate memory for subquery string *****/
-   MaxLength = 512 + UsrDat->IDs.Num * (1 + ID_MAX_BYTES_USR_ID + 1) - 1;
+   MaxLength = 512 + UsrDat->IDs.Num * (1 + ID__MAX_BYTES_USR_ID + 1) - 1;
    if ((SubQueryAllUsrs = malloc (MaxLength + 1)) == NULL)
       Err_NotEnoughMemoryExit ();
    SubQueryAllUsrs[0] = '\0';
@@ -206,7 +206,7 @@ unsigned ID_DB_GetUsrCodsFromUsrID (MYSQL_RES **mysql_res,
 /**************** Remove one of my user's IDs from database ******************/
 /*****************************************************************************/
 
-void ID_DB_RemoveUsrID (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1])
+void ID__DB_RemoveUsrID (long UsrCod,const char ID[ID__MAX_BYTES_USR_ID + 1])
   {
    DB_QueryREPLACE ("can not remove a user's ID",
 		    "DELETE FROM usr_ids"
@@ -220,7 +220,7 @@ void ID_DB_RemoveUsrID (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1])
 /****************************** Remove user's IDs ****************************/
 /*****************************************************************************/
 
-void ID_DB_RemoveUsrIDs (long UsrCod)
+void ID__DB_RemoveUsrIDs (long UsrCod)
   {
    DB_QueryDELETE ("can not remove user's IDs",
 		   "DELETE FROM usr_ids"

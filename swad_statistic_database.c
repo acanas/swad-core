@@ -46,7 +46,7 @@ extern struct Globals Gbl;
 /******************** Compute and show access statistics ********************/
 /*****************************************************************************/
 
-#define Sta_DB_MAX_BYTES_QUERY (1024 + (10 + ID_MAX_BYTES_USR_ID) * 5000 - 1)
+#define Sta_DB_MAX_BYTES_QUERY (1024 + (10 + ID__MAX_BYTES_USR_ID) * 5000 - 1)
 
 unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
                          const struct Sta_Stats *Stats,

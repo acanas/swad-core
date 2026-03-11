@@ -534,7 +534,7 @@ static void Msg_ShowOneUniqueRecipient (void)
    /****** Write user's IDs ******/
    HTM_DIV_Begin ("class=\"MSG_TO_ONE_RCP %s_%s\"",
 		  Usr_ClassData[Gbl.Usrs.Other.UsrDat.Accepted],The_GetSuffix ());
-      ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
+      ID__WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
    HTM_DIV_End ();
 
    /***** Write user's name *****/

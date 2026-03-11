@@ -40,9 +40,15 @@
 
 typedef enum
   {
-   Mai_NOT_CONFIRMED	= 0,
-   Mai_CONFIRMED	= 1,
+   Mai_NOT_CONFIRMED,
+   Mai_CONFIRMED,
   } Mai_Confirmed_t;
+
+typedef enum
+  {
+   Mai_NOT_SENT,
+   Mai_SENT,
+  } Mai_Sent_t;
 
 #define Mai_NUM_ORDERS 3
 typedef enum

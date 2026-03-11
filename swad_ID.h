@@ -33,67 +33,67 @@
 /************************* Public types and constants ************************/
 /*****************************************************************************/
 
-#define ID_MIN_DIGITS_AUTOMATIC_DETECT_USR_ID	 6	// Used for detect automatically users' IDs inside a text
+#define ID__MIN_DIGITS_AUTOMATIC_DETECT_USR_ID	 6	// Used for detect automatically users' IDs inside a text
 
-#define ID_MIN_DIGITS_USR_ID			 1	// A user's ID must have at least these digits
+#define ID__MIN_DIGITS_USR_ID			 1	// A user's ID must have at least these digits
 
-#define ID_MIN_CHARS_USR_ID			 5	// This number MUST be >= 3
-#define ID_MIN_BYTES_USR_ID			ID_MIN_CHARS_USR_ID
+#define ID__MIN_CHARS_USR_ID			 5	// This number MUST be >= 3
+#define ID__MIN_BYTES_USR_ID			ID__MIN_CHARS_USR_ID
 
-#define ID_MAX_CHARS_USR_ID			16
-#define ID_MAX_BYTES_USR_ID			ID_MAX_CHARS_USR_ID
+#define ID__MAX_CHARS_USR_ID			16
+#define ID__MAX_BYTES_USR_ID			ID__MAX_CHARS_USR_ID
 
-#define ID_MAX_BYTES_LIST_USRS_IDS	(ID_MAX_BYTES_USR_ID * Cfg_MAX_USRS_IN_LIST * 10)
+#define ID__MAX_BYTES_LIST_USRS_IDS	(ID__MAX_BYTES_USR_ID * Cfg_MAX_USRS_IN_LIST * 10)
 
-#define ID_NUM_CONFIRMED 2
+#define ID__NUM_CONFIRMED 2
 typedef enum
   {
-   ID_NOT_CONFIRMED,
-   ID_CONFIRMED,
-  } ID_Confirmed_t;
+   ID__NOT_CONFIRMED,
+   ID__CONFIRMED,
+  } ID__Confirmed_t;
 
-#define ID_NUM_ONLY_CONFIRMED 2
+#define ID__NUM_ONLY_CONFIRMED 2
 typedef enum
   {
-   ID_ANY,
-   ID_ONLY_CONFIRMED,
-  } ID_OnlyConfirmed_t;
+   ID__ANY,
+   ID__ONLY_CONFIRMED,
+  } ID__OnlyConfirmed_t;
 
 struct ListIDs
   {
-   ID_Confirmed_t Confirmed;
-   char ID[ID_MAX_BYTES_USR_ID + 1];
+   ID__Confirmed_t Confirmed;
+   char ID[ID__MAX_BYTES_USR_ID + 1];
   };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ID_GetListIDsFromUsrCod (struct Usr_Data *UsrDat);
-void ID_ReallocateListIDs (struct Usr_Data *UsrDat,unsigned NumIDs);
-void ID_FreeListIDs (struct Usr_Data *UsrDat);
-unsigned ID_GetListUsrCodsFromUsrID (struct Usr_Data *UsrDat,
-                                     const char *EncryptedPassword,	// If NULL or empty ==> do not check password
-                                     struct Usr_ListUsrCods *ListUsrCods,
-                                     ID_OnlyConfirmed_t OnlyConfirmedIDs);
+void ID__GetListIDsFromUsrCod (struct Usr_Data *UsrDat);
+void ID__ReallocateListIDs (struct Usr_Data *UsrDat,unsigned NumIDs);
+void ID__FreeListIDs (struct Usr_Data *UsrDat);
+unsigned ID__GetListUsrCodsFromUsrID (struct Usr_Data *UsrDat,
+                                      const char *EncryptedPassword,	// If NULL or empty ==> do not check password
+                                      struct Usr_ListUsrCods *ListUsrCods,
+                                      ID__OnlyConfirmed_t OnlyConfirmedIDs);
 
-void ID_PutParOtherUsrIDPlain (void);
-void ID_GetParOtherUsrIDPlain (void);
+void ID__PutParOtherUsrIDPlain (void);
+void ID__GetParOtherUsrIDPlain (void);
 
-Err_SuccessOrError_t ID_CheckIfUsrIDIsValid (const char *UsrID);
-Err_SuccessOrError_t ID_CheckIfUsrIDSeemsAValidID (const char *UsrID);
+Err_SuccessOrError_t ID__CheckIfUsrIDIsValid (const char *UsrID);
+Err_SuccessOrError_t ID__CheckIfUsrIDSeemsAValidID (const char *UsrID);
 
-void ID_WriteUsrIDs (const struct Usr_Data *UsrDat,const char *Anchor);
-Usr_Can_t ID_ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat);
+void ID__WriteUsrIDs (const struct Usr_Data *UsrDat,const char *Anchor);
+Usr_Can_t ID__ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat);
 
-void ID_ShowFormChangeMyID (void);
-void ID_ShowFormChangeOtherUsrID (void);
+void ID__ShowFormChgMyID (void);
+void ID__ShowFormChangeOtherUsrID (void);
 
-void ID_RemoveMyUsrID (void);
-void ID_RemoveOtherUsrID (void);
-void ID_NewMyUsrID (void);
-void ID_ChangeOtherUsrID (void);
+void ID__RemoveMyUsrID (void);
+void ID__RemoveOtherUsrID (void);
+void ID__NewMyUsrID (void);
+void ID__ChangeOtherUsrID (void);
 
-void ID_ConfirmOtherUsrID (void);
+void ID__ConfirmOtherUsrID (void);
 
 #endif

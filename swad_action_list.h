@@ -1967,10 +1967,6 @@ typedef enum
 	ActReqRemMyAcc,
 	ActRemMyAcc,
 	ActPrnUsrQR,
-
-   // Record ------------------------------------------------------------------
-
-	ActReqEdiRecSha,
 	ActChgMyData,
 	ActReqMyPho,
 	ActDetMyPho,

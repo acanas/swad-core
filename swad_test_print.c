@@ -1255,7 +1255,7 @@ void TstPrn_ShowOnePrint (void)
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	       ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
+	       ID__WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
 	       HTM_SP ();
 	       HTM_Txt (Gbl.Usrs.Other.UsrDat.Surname1);
 	       if (Gbl.Usrs.Other.UsrDat.Surname2[0])

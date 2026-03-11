@@ -349,7 +349,7 @@ Err_SuccessOrError_t Mrk_CheckFileOfMarks (const char *Path,struct Mrk_Propertie
 
 static bool Mrk_CheckIfCellContainsOnlyIDs (const char *CellContent)
   {
-   char UsrIDFromTable[ID_MAX_BYTES_USR_ID + 1];
+   char UsrIDFromTable[ID__MAX_BYTES_USR_ID + 1];
    const char *Ptr = CellContent;
    Exi_Exist_t UsrIDFound = Exi_DOES_NOT_EXIST;
    bool StuffNotUsrIDFound = false;
@@ -359,13 +359,13 @@ static bool Mrk_CheckIfCellContainsOnlyIDs (const char *CellContent)
    while (*Ptr && !StuffNotUsrIDFound)
      {
       /* Find next string in text until space, comma or semicolon (leading and trailing spaces are removed) */
-      Str_GetNextStringUntilSeparator (&Ptr,UsrIDFromTable,ID_MAX_BYTES_USR_ID);
+      Str_GetNextStringUntilSeparator (&Ptr,UsrIDFromTable,ID__MAX_BYTES_USR_ID);
 
       // Users' IDs are always stored internally in capitals and without leading zeros
       Str_RemoveLeadingZeros (UsrIDFromTable);
       Str_ConvertToUpperText (UsrIDFromTable);
       if (UsrIDFromTable[0])	// Something found
-	 switch (ID_CheckIfUsrIDIsValid (UsrIDFromTable))
+	 switch (ID__CheckIfUsrIDIsValid (UsrIDFromTable))
 	   {
 	    case Err_SUCCESS:
 	       UsrIDFound = Exi_EXISTS;
@@ -395,7 +395,7 @@ static Err_SuccessOrError_t Mrk_GetUsrMarks (FILE *FileUsrMarks,
    unsigned Row;
    char CellContent[Mrk_MAX_BYTES_IN_CELL_CONTENT + 1];
    const char *Ptr;
-   char UsrIDFromTable[ID_MAX_BYTES_USR_ID + 1];
+   char UsrIDFromTable[ID__MAX_BYTES_USR_ID + 1];
    FILE *FileAllMarks;
    unsigned NumID;
    Exi_Exist_t UsrIDFound;
@@ -437,19 +437,19 @@ static Err_SuccessOrError_t Mrk_GetUsrMarks (FILE *FileUsrMarks,
 	    while (*Ptr && UsrIDFound == Exi_DOES_NOT_EXIST)
 	      {
 	       /* Find next string in text until separator (leading and trailing spaces are removed) */
-	       Str_GetNextStringUntilSeparator (&Ptr,UsrIDFromTable,ID_MAX_BYTES_USR_ID);
+	       Str_GetNextStringUntilSeparator (&Ptr,UsrIDFromTable,ID__MAX_BYTES_USR_ID);
 
 	       // Users' IDs are always stored internally in capitals and without leading zeros
 	       Str_RemoveLeadingZeros (UsrIDFromTable);
 	       Str_ConvertToUpperText (UsrIDFromTable);
 
-	       if (ID_CheckIfUsrIDIsValid (UsrIDFromTable) == Err_SUCCESS)
+	       if (ID__CheckIfUsrIDIsValid (UsrIDFromTable) == Err_SUCCESS)
 		  // A valid user's ID is found in the first column of table, and stored in UsrIDFromTable.
 		  // Compare UsrIDFromTable with all confirmed user's IDs in list
 		  for (NumID = 0;
 		       NumID < UsrDat->IDs.Num && UsrIDFound == Exi_DOES_NOT_EXIST;
 		       NumID++)
-		     if (UsrDat->IDs.List[NumID].Confirmed == ID_CONFIRMED)
+		     if (UsrDat->IDs.List[NumID].Confirmed == ID__CONFIRMED)
 			if (!strcasecmp (UsrDat->IDs.List[NumID].ID,UsrIDFromTable))
 			   UsrIDFound = Exi_EXISTS;
 	      }
@@ -493,18 +493,18 @@ static Err_SuccessOrError_t Mrk_GetUsrMarks (FILE *FileUsrMarks,
 	       while (*Ptr && UsrIDFound == Exi_DOES_NOT_EXIST)
 		 {
 		  /* Find next string in text until comma or semicolon (leading and trailing spaces are removed) */
-		  Str_GetNextStringUntilSeparator (&Ptr,UsrIDFromTable,ID_MAX_BYTES_USR_ID);
+		  Str_GetNextStringUntilSeparator (&Ptr,UsrIDFromTable,ID__MAX_BYTES_USR_ID);
 
 		  // Users' IDs are always stored internally in capitals and without leading zeros
 		  Str_RemoveLeadingZeros (UsrIDFromTable);
 		  Str_ConvertToUpperText (UsrIDFromTable);
-		  if (ID_CheckIfUsrIDIsValid (UsrIDFromTable) == Err_SUCCESS)
+		  if (ID__CheckIfUsrIDIsValid (UsrIDFromTable) == Err_SUCCESS)
 		     // A valid user's ID is found in the first column of table, and stored in UsrIDFromTable.
 		     // Compare UsrIDFromTable with all confirmed user's IDs in list
 		     for (NumID = 0;
 			  NumID < UsrDat->IDs.Num && UsrIDFound == Exi_DOES_NOT_EXIST;
 			  NumID++)
-			if (UsrDat->IDs.List[NumID].Confirmed == ID_CONFIRMED)
+			if (UsrDat->IDs.List[NumID].Confirmed == ID__CONFIRMED)
 			   if (!strcasecmp (UsrDat->IDs.List[NumID].ID,UsrIDFromTable))
 			      UsrIDFound = Exi_EXISTS;
 		 }
@@ -709,7 +709,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
    /***** Get user's ID from user's code *****/
    UsrDat.UsrCod = UsrCod;
-   ID_GetListIDsFromUsrCod (&UsrDat);
+   ID__GetListIDsFromUsrCod (&UsrDat);
 
    /***** Get marks data from database *****/
    if (Mrk_DB_GetMarksDataByCod (&mysql_res,MrkCod) == Exi_EXISTS)

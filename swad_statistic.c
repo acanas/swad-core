@@ -1208,7 +1208,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 
 	 /* Write the user's ID if user is a student */
 	 HTM_TD_Begin ("class=\"CT LOG_%s %s\"",The_GetSuffix (),The_GetColorRows ());
-	    ID_WriteUsrIDs (&UsrDat,NULL); HTM_NBSP ();
+	    ID__WriteUsrIDs (&UsrDat,NULL); HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write the first name and the surnames */
@@ -1352,7 +1352,7 @@ static void Sta_ShowNumHitsPerUsr (const struct Sta_Stats *Stats,
 	 /* Write the user's ID if user is a student in current course */
 	 HTM_TD_Begin ("class=\"LT LOG_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
-	    ID_WriteUsrIDs (&UsrDat,NULL); HTM_NBSP ();
+	    ID__WriteUsrIDs (&UsrDat,NULL); HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write the name and the surnames */

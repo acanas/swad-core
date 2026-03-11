@@ -53,6 +53,7 @@ textarea
 	{
 	font-size: 12pt;
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	resize: vertical;
 	}
 
 table
@@ -1262,7 +1263,6 @@ a:hover						/* Default ==> underlined */
 		white-space: nowrap;
 		overflow: hidden;
 		width: 26px;
-		margin: 0 auto;
 		padding: 2px 0;
 		}
 	}
@@ -1274,7 +1274,6 @@ a:hover						/* Default ==> underlined */
 		font-size: 12pt;
 		font-weight: bold;
 		line-height: 110%;
-		margin: 0 auto;
 		padding: 2px 0;
 		}
 	}
@@ -2135,6 +2134,14 @@ a:hover img.CENTER_PHOTO_SHOW
 	vertical-align: middle;
 	}
 /* Creating filter from RGB: https://codepen.io/sosuke/pen/Pjoqqp */
+.ICO__WHITE,
+.ICO__GREY,
+.ICO__PURPLE,
+.ICO__BLUE,
+.ICO__YELLOW,
+.ICO__PINK,
+.ICO__DARK		{}	/* Unchanged */
+
 .ICO_BLACK_WHITE,
 .ICO_BLACK_GREY,
 .ICO_BLACK_PURPLE,
@@ -2148,7 +2155,7 @@ a:hover img.CENTER_PHOTO_SHOW
 .ICO_BLUE_PURPLE,
 .ICO_BLUE_BLUE,
 .ICO_BLUE_YELLOW,
-.ICO_BLUE_PINK		{filter: invert(50%) sepia(27%) saturate(624%) hue-rotate(153deg) brightness(93%) contrast(97%);}		/* #4d88a1 */
+.ICO_BLUE_PINK		{filter: invert(50%) sepia(27%) saturate(624%) hue-rotate(153deg) brightness(93%) contrast(97%);}	/* #4d88a1 */
 .ICO_BLUE_DARK		{filter: invert(81%) sepia(15%) saturate(249%) hue-rotate(151deg) brightness(91%) contrast(95%);}	/* #afc4cc */
 
 .ICO_GREEN_WHITE,
@@ -3008,6 +3015,10 @@ table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 .USR_ID_NC_DARK		{color: #f98a8a}
 
 /******************************* Record card *********************************/
+
+table.REC	> tbody > tr > th {padding: 2px;}
+table.REC	> tbody > tr > td {padding: 2px;}
+
 @media only screen and (max-width: 480px)
 	{	/* For mobile-phones */
 	.REC_HEAD
@@ -3092,6 +3103,11 @@ table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 	}
 @media only screen and (min-width: 480px) and (max-width: 600px)
 	{	/* For mobile-phones */
+	.REC
+		{
+		box-sizing: border-box;
+		width: 430px;
+		}
 	.REC_HEAD
 		{
 		font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
@@ -3174,6 +3190,11 @@ table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 	}
 @media only screen and (min-width: 600px)
 	{	/* For desktop */
+	.REC
+		{
+		box-sizing: border-box;
+		width: 540px;
+		}
 	.REC_HEAD
 		{
 		font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
@@ -4873,7 +4894,7 @@ legend {font-size: 12pt; font-weight: bold;}
 	{
 	box-sizing: border-box;
 	margin: 0;
-	resize: none;
+	resize: vertical;
 	}
 .Tml_BOTTOM_LEFT	/* Container for button used to toggle new comment form */
 	{
