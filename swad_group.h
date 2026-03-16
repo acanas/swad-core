@@ -27,6 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_action_list.h"
 #include "swad_constant.h"
 #include "swad_info.h"
 #include "swad_room.h"
@@ -187,7 +188,8 @@ void Grp_ResetGroup (struct Group *Grp);
 void Grp_WriteNamesOfSelectedGrps (void);
 void Grp_ReqEditGroups (void);
 
-void Grp_ShowFormToSelectSeveralGroups (void (*FuncPars) (void *Args),void *Args,
+void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
+				        void (*FuncPars) (void *Args),void *Args,
 				        const char *OnSubmit);
 void Grp_PutParsCodGrps (void);
 void Grp_PutParsCodGrpsAssociated (Grp_Association_t Association,long Cod);

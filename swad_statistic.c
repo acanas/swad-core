@@ -258,7 +258,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
    free (Title);
 
       /***** Show form to select the groups *****/
-      Grp_ShowFormToSelectSeveralGroups (NULL,NULL,NULL);
+      Grp_ShowFormToSelectSeveralGroups (ActReqAccCrs,NULL,NULL,NULL);
 
       /***** Begin section with user list *****/
       HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);

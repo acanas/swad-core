@@ -29341,6 +29341,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Forms to the change a student's account"		// Çeviri lazim!
 #endif
 	,
+	[ActChgStdDat] =
+#if   L==1	// ca
+	"Change student data"		// Necessita traducció
+#elif L==2	// de
+	"Change student data"		// Need Übersetzung
+#elif L==3	// en
+	"Change student data"
+#elif L==4	// es
+	"Cambiar datos de estudiante"
+#elif L==5	// fr
+	"Change student data"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar datos de estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"Change student data"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change student data"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change student data"		// Precisa de tradução
+#elif L==10	// tr
+	"Change student data"		// Çeviri lazim!
+#endif
+	,
 	[ActRemNicStd] =
 #if   L==1	// ca
 	"Remove student's nickname"	// Necessita traducció
@@ -30537,27 +30560,96 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Confirm a teacher's ID"	// Çeviri lazim!
 #endif
 	,
+	[ActFrmAccNET] =
+#if   L==1	// ca
+	"Formularis per canviar compte de professor no editor"
+#elif L==2	// de
+	"Formulare zur &Auml;nderung eines Lehrer-Accounts (ohne Bearbeitungsrechte)"
+#elif L==3	// en
+	"Forms to change non-editing teacher account"
+#elif L==4	// es
+	"Formularios para cambiar cuenta de profesor no editor"
+#elif L==5	// fr
+	"Formulaires pour modifier un compte enseignant sans droits d'&eacute;dition"
+#elif L==6	// gn
+	"Umi formulario o&ntild;emoambue ha&gtilde;ua pete&itilde; mbo'eh&aacute;ra cuenta ndaha'&eacute;iva edici&oacute;n"
+#elif L==7	// it
+	"Moduli per modificare l'account insegnante senza permessi di modifica"
+#elif L==8	// pl
+	"Formularze do zmiany konta nauczyciela nieedytuj&aogon;cego"
+#elif L==9	// pt
+	"Formul&aacute;rios para alterar a conta do professor sem permiss&atilde;o de edi&ccedil;&atilde;o"
+#elif L==10	// tr
+	"D&uuml;zenleme yetkisi olmayan &ouml;&gbreve;retmen hesab&inodot;n&inodot; de&gbreve;i&scedil;tirmek i&ccedil;in formlar"
+#endif
+	,
+	[ActChgNETDat] =
+#if   L==1	// ca
+	"Change non-editing teacher data"		// Necessita traducció
+#elif L==2	// de
+	"Change non-editing teacher data"		// Need Übersetzung
+#elif L==3	// en
+	"Change non-editing teacher data"
+#elif L==4	// es
+	"Cambiar datos de profesor no editor"
+#elif L==5	// fr
+	"Change non-editing teacher data"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar datos de profesor no editor"	// Okoteve traducción
+#elif L==7	// it
+	"Change non-editing teacher data"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change non-editing teacher data"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change non-editing teacher data"		// Precisa de tradução
+#elif L==10	// tr
+	"Change non-editing teacher data"		// Çeviri lazim!
+#endif
+	,
 	[ActFrmAccTch] =
 #if   L==1	// ca
-	"Forms to the change a teacher's account"		// Necessita traducció
+	"Formularis per canviar compte de professor"
 #elif L==2	// de
-	"Forms to the change a teacher's account"		// Need Übersetzung
+	"Formulare zur &Auml;nderung des Lehrerkontos"
 #elif L==3	// en
-	"Forms to the change a teacher's account"
+	"Forms to change teacher account"
 #elif L==4	// es
-	"Formularios para cambiar la cuenta de profesor"
+	"Formularios para cambiar cuenta de profesor"
 #elif L==5	// fr
-	"Forms to the change a teacher's account"		// Besoin de traduction
+	"Formulaires pour modifier un compte enseignant"
 #elif L==6	// gn
-	"Formularios para cambiar la cuenta de profesor"	// Okoteve traducción
+	"Umi formulario omoambue hagu&atilde; mbo'eh&atilde;ra cuenta"
 #elif L==7	// it
-	"Forms to the change a teacher's account"		// Bisogno di traduzione
+	"Moduli per modificare l'account insegnante"
 #elif L==8	// pl
-	"Forms to the change a teacher's account"		// Potrzebujesz tlumaczenie
+	"Formularze do zmiany konta nauczyciela"
 #elif L==9	// pt
-	"Forms to the change a teacher's account"		// Precisa de tradução
+	"Formul&aacute;rios para alterar a conta do professor"
 #elif L==10	// tr
-	"Forms to the change a teacher's account"		// Çeviri lazim!
+	"&Ouml;&gbreve;retmen hesab&inodot; de&gbreve;i&scedil;ikli&gbreve;i formlar&inodot;"
+#endif
+	,
+	[ActChgTchDat] =
+#if   L==1	// ca
+	"Change teacher data"		// Necessita traducció
+#elif L==2	// de
+	"Change teacher data"		// Need Übersetzung
+#elif L==3	// en
+	"Change teacher data"
+#elif L==4	// es
+	"Cambiar datos de profesor"
+#elif L==5	// fr
+	"Change teacher data"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar datos de profesor"	// Okoteve traducción
+#elif L==7	// it
+	"Change teacher data"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change teacher data"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change teacher data"		// Precisa de tradução
+#elif L==10	// tr
+	"Change teacher data"		// Çeviri lazim!
 #endif
 	,
 	[ActRemNicTch] =
@@ -31846,6 +31938,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Forms to the change a user's account"		// Precisa de tradução
 #elif L==10	// tr
 	"Forms to the change a user's account"		// Çeviri lazim!
+#endif
+	,
+	[ActChgOthDat] =
+#if   L==1	// ca
+	"Change user data"		// Necessita traducció
+#elif L==2	// de
+	"Change user data"		// Need Übersetzung
+#elif L==3	// en
+	"Change user data"
+#elif L==4	// es
+	"Cambiar datos de usuario"
+#elif L==5	// fr
+	"Change user data"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar datos de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Change user data"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change user data"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change user data"		// Precisa de tradução
+#elif L==10	// tr
+	"Change user data"		// Çeviri lazim!
 #endif
 	,
 	[ActRemNicOth] =

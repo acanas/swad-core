@@ -134,8 +134,8 @@ void Enr_RemUsrFromCrs2 (void);
 void Enr_AcceptEnrolMeInCrs (void);
 void Enr_CreateNewUsr1 (void);
 void Enr_CreateNewUsr2 (void);
-void Enr_ModifyUsr1 (void);
-void Enr_ModifyUsr2 (void);
+void Enr_AdminUsr1 (void);
+void Enr_AdminUsr2 (void);
 
 void Enr_FlushCacheUsrBelongsToCurrentCrs (void);
 Usr_Belong_t Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat);

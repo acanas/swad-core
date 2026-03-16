@@ -4403,29 +4403,6 @@ const char *Hlp_PROFILE_Agenda_public_agenda =
 	"PROFILE.Agenda.en#public-agenda";
 #endif
 
-const char *Hlp_PROFILE_Record =
-#if   L==1	// ca
-	"PROFILE.Record.es";
-#elif L==2	// de
-	"PROFILE.Record.en";
-#elif L==3	// en
-	"PROFILE.Record.en";
-#elif L==4	// es
-	"PROFILE.Record.es";
-#elif L==5	// fr
-	"PROFILE.Record.en";
-#elif L==6	// gn
-	"PROFILE.Record.es";
-#elif L==7	// it
-	"PROFILE.Record.en";
-#elif L==8	// pl
-	"PROFILE.Record.en";
-#elif L==9	// pt
-	"PROFILE.Record.en";
-#elif L==10	// tr
-	"PROFILE.Record.en";
-#endif
-
 const char *Hlp_PROFILE_Institution =
 #if   L==1	// ca
 	"PROFILE.Institution.es";

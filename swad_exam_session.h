@@ -56,7 +56,8 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,Frm_PutForm_t PutFormSession);
 
 void ExaSes_ShowOneSession (void);
 
-void ExaSes_ListUsersForSelection (struct Exa_Exams *Exams,
+void ExaSes_ListUsersForSelection (Act_Action_t NextAction,
+				   struct Exa_Exams *Exams,
 				   const struct ExaSes_Session *Session);
 void ExaSes_ShowFormSettings (const struct ExaSes_Session *Session);
 unsigned ExaSes_GetParNumCols (unsigned DefaultCols);

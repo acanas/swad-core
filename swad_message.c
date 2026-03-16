@@ -312,7 +312,8 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
 	 if (GetUsrsInCrs)
 	   {
 	    /***** Form to select groups *****/
-	    Grp_ShowFormToSelectSeveralGroups (Msg_PutParsWriteMsg,Messages,
+	    Grp_ShowFormToSelectSeveralGroups (ActReqMsgUsr,
+					       Msg_PutParsWriteMsg,Messages,
 					       "CopyMessageToHiddenFields();");
 
 	    /***** Begin section with user list *****/

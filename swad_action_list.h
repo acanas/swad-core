@@ -1502,6 +1502,7 @@ typedef enum
 	ActUpdStd,
 	ActCnfID_Std,
 	ActFrmAccStd,
+	ActChgStdDat,
 	ActRemNicStd,
 	ActChgNicStd,
 	ActRemID_Std,
@@ -1557,7 +1558,10 @@ typedef enum
 	ActUpdNET,
 	ActUpdTch,
 	ActCnfID_Tch,
+	ActFrmAccNET,
+	ActChgNETDat,
 	ActFrmAccTch,
+	ActChgTchDat,
 	ActRemNicTch,
 	ActChgNicTch,
 	ActRemID_Tch,
@@ -1617,6 +1621,7 @@ typedef enum
 	ActUpdOth,
 	ActCnfID_Oth,
 	ActFrmAccOth,
+	ActChgOthDat,
 	ActRemNicOth,
 	ActChgNicOth,
 	ActRemID_Oth,
@@ -2005,7 +2010,7 @@ typedef enum
 
 #define ActLst_NUM_ACTIONS		((unsigned) ActChgNtfPrf + 1)
 
-#define ActLst_MAX_ACTION_COD		2189
+#define ActLst_MAX_ACTION_COD		2194
 
 #define ActLst_DEFAULT_ACTION_AFTER_LOGIN ActSeeGblTL
 

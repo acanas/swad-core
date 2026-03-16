@@ -425,26 +425,39 @@ void Acc_ShowFormChgOtherUsrAccount (void)
 	       Nck_DB_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.Nickname);
 	       Mai_GetEmailFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
-	       /***** Show user's record *****/
-	       Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
-					&Gbl.Usrs.Other.UsrDat,NULL);
-
-	       /***** Begin container for this user *****/
+	       /***** Begin container *****/
 	       HTM_DIV_Begin ("class=\"REC_USR\"");
 
-		  /***** Show form to change password and nickname *****/
+		  /***** Left part *****/
+		  /* Show forms to change:
+		     · password
+		     · nickname
+		     · email
+		     · ID
+		  */
 		  HTM_DIV_Begin ("class=\"REC_LEFT\"");
 		     Pwd_ShowFormChgOtherUsrPwd ();
 		     Nck_ShowFormChangeOtherUsrNickname ();
-		  HTM_DIV_End ();
-
-		  /***** Show form to change email and ID *****/
-		  HTM_DIV_Begin ("class=\"REC_RIGHT\"");
 		     Mai_ShowFormChangeOtherUsrEmail ();
 		     ID__ShowFormChangeOtherUsrID ();
 		  HTM_DIV_End ();
 
-	       /***** End container for this user *****/
+		  /***** Right part *****/
+		  /* Show forms to change:
+		     · shared record card,
+		     · institution, center and department
+		     · webs / social networks
+		  */
+		  HTM_DIV_Begin ("class=\"REC_RIGHT\"");
+		     // Rec_ShowSharedUsrRecord (Rec_SHA_ME_ACCOUNT_FORM,
+		     //			      &Gbl.Usrs.Me.UsrDat,NULL);
+		     Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_ACCOUNT_FORM,
+					      &Gbl.Usrs.Other.UsrDat,NULL);
+		     // Rec_ShowFormMyInsCtrDpt ();
+		     // Net_ShowFormMyWebsAndSocialNets ();
+		  HTM_DIV_End ();
+
+	       /***** End container *****/
 	       HTM_DIV_End ();
 	       break;
 	    case Usr_CAN_NOT:
@@ -1026,7 +1039,7 @@ void Acc_PutIconToChangeUsrAccount (struct Usr_Data *UsrDat)
       [Rol_GST	  ] = ActFrmAccOth,
       [Rol_USR	  ] = ActFrmAccOth,
       [Rol_STD	  ] = ActFrmAccStd,
-      [Rol_NET	  ] = ActFrmAccTch,
+      [Rol_NET	  ] = ActFrmAccNET,
       [Rol_TCH	  ] = ActFrmAccTch,
       [Rol_DEG_ADM] = ActFrmAccOth,
       [Rol_CTR_ADM] = ActFrmAccOth,

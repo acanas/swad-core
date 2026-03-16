@@ -1967,7 +1967,7 @@ void Rec_ShowFormOtherNewSharedRecord (struct Usr_Data *UsrDat,Rol_Role_t Defaul
       Instead it is initialized with the preferred role. */
    UsrDat->Roles.InCurrentCrs = Gbl.Hierarchy.HieLvl == Hie_CRS ? DefaultRole :	// Course selected
 	                                                          Rol_UNK;	// No course selected
-   Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_NEW_USR_FORM,UsrDat,NULL);
+   Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_NEW_FORM,UsrDat,NULL);
   }
 
 /*****************************************************************************/
@@ -1977,7 +1977,7 @@ void Rec_ShowFormOtherNewSharedRecord (struct Usr_Data *UsrDat,Rol_Role_t Defaul
 void Rec_ShowOtherSharedRecordEditable (void)
   {
    /***** User's record *****/
-   Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_EXISTING_USR_FORM,
+   Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_ADMIN_FORM,
                             &Gbl.Usrs.Other.UsrDat,NULL);
   }
 
@@ -1995,7 +1995,7 @@ void Rec_ShowSharedRecordUnmodifiable (struct Usr_Data *UsrDat)
 
    /***** Show user's record *****/
    HTM_DIV_Begin ("class=\"CM\"");
-      Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_USR_CHECK,UsrDat,NULL);
+      Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_CHECK,UsrDat,NULL);
    HTM_DIV_End ();
   }
 
@@ -2018,7 +2018,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Hlp_USERS_SignUp;
-   extern const char *Hlp_PROFILE_Record;
+   extern const char *Hlp_PROFILE_Account;
    extern const char *Hlp_START_Profiles_view_public_profile;
    extern const char *Hlp_USERS_Guests;
    extern const char *Hlp_USERS_Students_shared_record_card;
@@ -2031,7 +2031,8 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    const char *Rec_RecordHelp[Rec_SHARED_NUM_VIEW_TYPES] =
      {
       [Rec_SHA_SIGN_UP_IN_CRS_FORM] = Hlp_USERS_SignUp,
-      [Rec_SHA_MY_RECORD_FORM     ] = Hlp_PROFILE_Record,
+      [Rec_SHA_ME_ACCOUNT_FORM    ] = Hlp_PROFILE_Account,
+      [Rec_SHA_OTHER_ACCOUNT_FORM ] = Hlp_PROFILE_Account,
       [Rec_SHA_RECORD_PUBLIC      ] = Hlp_START_Profiles_view_public_profile,
      };
    const char *Rec_RecordListHelp[Rol_NUM_ROLES] =
@@ -2054,14 +2055,15 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    Lay_Show_t ShowTeacherRows;
    struct Hie_Node Ins;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
-   Act_Action_t NextAction;
+   Act_Action_t NextAction = ActUnk;
 
    /***** Initializations *****/
    MeOrOther = Usr_ItsMe (UsrDat->UsrCod);
    IAmLoggedAsTeacherOrSysAdm = (Gbl.Usrs.Me.Role.Logged == Rol_NET ||		// My current role is non-editing teacher
 	                         Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// My current role is teacher
                                  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);	// My current role is system admin
-   CountryForm = (TypeOfView == Rec_SHA_MY_RECORD_FORM);
+   CountryForm = TypeOfView == Rec_SHA_ME_ACCOUNT_FORM ||
+	         TypeOfView == Rec_SHA_OTHER_ACCOUNT_FORM;
    ShowData = MeOrOther == Usr_ME ||
 	      Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ||
 	      UsrDat->Accepted == Usr_HAS_ACCEPTED ? Lay_SHOW :
@@ -2073,7 +2075,8 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    TeacherInCurrentCrs = UsrDat->Roles.InCurrentCrs == Rol_NET ||
 	                 UsrDat->Roles.InCurrentCrs == Rol_TCH;
 
-   ShowAddressRows = TypeOfView == Rec_SHA_MY_RECORD_FORM  ||
+   ShowAddressRows = TypeOfView == Rec_SHA_ME_ACCOUNT_FORM  ||
+		     TypeOfView == Rec_SHA_OTHER_ACCOUNT_FORM ||
 		     ((TypeOfView == Rec_SHA_RECORD_LIST   ||
 		       TypeOfView == Rec_SHA_RECORD_PRINT) &&
 		      IAmLoggedAsTeacherOrSysAdm &&
@@ -2088,11 +2091,12 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    /* Data form = I can edit fields like surnames and name */
    switch (TypeOfView)
      {
-      case Rec_SHA_MY_RECORD_FORM:
-      case Rec_SHA_OTHER_NEW_USR_FORM:
+      case Rec_SHA_ME_ACCOUNT_FORM:
+      case Rec_SHA_OTHER_ACCOUNT_FORM:
+      case Rec_SHA_OTHER_NEW_FORM:
 	 ViewType = Vie_EDIT;
 	 break;
-      case Rec_SHA_OTHER_EXISTING_USR_FORM:
+      case Rec_SHA_OTHER_ADMIN_FORM:
 	 ViewType = ViewTypes[Usr_ICanChangeOtherUsrData (UsrDat)];
 	 break;
       default:	// In other options, I can not edit user's data
@@ -2114,7 +2118,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    Rec_Record.UsrDat = UsrDat;
    Rec_Record.TypeOfView = TypeOfView;
    Box_BoxBegin (NULL,
-		 TypeOfView == Rec_SHA_OTHER_NEW_USR_FORM ? NULL :	// New user ==> don't put icons
+		 TypeOfView == Rec_SHA_OTHER_NEW_FORM ? NULL :	// New user ==> don't put icons
 							    Rec_PutIconsCommands,NULL,
 		 Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE);
       HTM_TABLE_Begin ("REC");
@@ -2169,29 +2173,54 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 		     case Rec_SHA_SIGN_UP_IN_CRS_FORM:
 			Frm_BeginForm (ActSignUp);
 			break;
-		     case Rec_SHA_MY_RECORD_FORM:
+		     case Rec_SHA_ME_ACCOUNT_FORM:
 			Frm_BeginForm (ActChgMyData);
 			break;
-		     case Rec_SHA_OTHER_EXISTING_USR_FORM:
+		     case Rec_SHA_OTHER_ACCOUNT_FORM:
 			switch (Gbl.Action.Act)
 			  {
-			   case ActReqMdfStd:
-			      NextAction = ActUpdStd;
+			   case ActFrmAccStd:	case ActChgStdDat:
+			      NextAction = ActChgStdDat;
 			      break;
-			   case ActReqMdfNET:
-			      NextAction = ActUpdNET;
+			   case ActFrmAccNET:	case ActChgNETDat:
+			      NextAction = ActChgNETDat;
 			      break;
-			   case ActReqMdfTch:
-			      NextAction = ActUpdTch;
+			   case ActFrmAccTch:	case ActChgTchDat:
+			      NextAction = ActChgTchDat;
+			      break;
+			   case ActFrmAccOth:	case ActChgOthDat:
+			      NextAction = ActChgOthDat;
 			      break;
 			   default:
-			      NextAction = ActUpdOth;
+			      Err_WrongActionExit ();
 			      break;
 			  }
 			Frm_BeginForm (NextAction);
 			   Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
 			break;
-		     case Rec_SHA_OTHER_NEW_USR_FORM:
+		     case Rec_SHA_OTHER_ADMIN_FORM:
+			switch (Gbl.Action.Act)
+			  {
+			   case ActReqMdfStd:	case ActUpdStd:
+			      NextAction = ActUpdStd;
+			      break;
+			   case ActReqMdfNET:	case ActUpdNET:
+			      NextAction = ActUpdNET;
+			      break;
+			   case ActReqMdfTch:	case ActUpdTch:
+			      NextAction = ActUpdTch;
+			      break;
+			   case ActReqMdfOth:	case ActUpdOth:
+			      NextAction = ActUpdOth;
+			      break;
+			   default:
+			      Err_WrongActionExit ();
+			      break;
+			  }
+			Frm_BeginForm (NextAction);
+			   Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
+			break;
+		     case Rec_SHA_OTHER_NEW_FORM:
 			switch (Gbl.Action.Act)
 			  {
 			   case ActReqMdfStd:
@@ -2258,17 +2287,18 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 			Btn_PutButton (Btn_ENROL,NULL);
 			Frm_EndForm ();
 			break;
-		     case Rec_SHA_MY_RECORD_FORM:
+		     case Rec_SHA_ME_ACCOUNT_FORM:
+		     case Rec_SHA_OTHER_ACCOUNT_FORM:
 			Btn_PutButton (Btn_SAVE_CHANGES,NULL);
 			Frm_EndForm ();
 			break;
-		     case Rec_SHA_OTHER_NEW_USR_FORM:
+		     case Rec_SHA_OTHER_NEW_FORM:
 			if (Gbl.Crs.Grps.NumGrps) // This course has groups?
 			   Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
 			Btn_PutButton (Btn_ENROL,NULL);
 			Frm_EndForm ();
 			break;
-		     case Rec_SHA_OTHER_EXISTING_USR_FORM:
+		     case Rec_SHA_OTHER_ADMIN_FORM:
 			/***** Show list of groups to register/remove me/user *****/
 			if (Gbl.Crs.Grps.NumGrps) // This course has groups?
 			   switch (MeOrOther)
@@ -2759,10 +2789,11 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
    extern const char *Txt_Role;
    extern const char *Txt_Sex;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   bool RoleForm = (TypeOfView == Rec_SHA_SIGN_UP_IN_CRS_FORM ||
-                    TypeOfView == Rec_SHA_OTHER_EXISTING_USR_FORM ||
-                    TypeOfView == Rec_SHA_OTHER_NEW_USR_FORM);
-   bool SexForm = (TypeOfView == Rec_SHA_MY_RECORD_FORM);
+   bool RoleForm = TypeOfView == Rec_SHA_SIGN_UP_IN_CRS_FORM ||
+                   TypeOfView == Rec_SHA_OTHER_ADMIN_FORM ||
+                   TypeOfView == Rec_SHA_OTHER_NEW_FORM;
+   bool SexForm = TypeOfView == Rec_SHA_ME_ACCOUNT_FORM ||
+	          TypeOfView == Rec_SHA_OTHER_ACCOUNT_FORM;
    Rol_Role_t DefaultRoleInForm;
    Rol_Role_t Role;
    unsigned RoleUnsigned;
@@ -2809,7 +2840,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 		       }
 		  HTM_SELECT_End ();
 		  break;
-	       case Rec_SHA_OTHER_EXISTING_USR_FORM:		// The other user already exists in the platform
+	       case Rec_SHA_OTHER_ADMIN_FORM:		// The other user already exists in the platform
 		  if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
 		    {
 		     /***** Set default role *****/
@@ -2912,7 +2943,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 		     HTM_SELECT_End ();
 		    }
 		  break;
-	       case Rec_SHA_OTHER_NEW_USR_FORM:	// The user does not exist in platform
+	       case Rec_SHA_OTHER_NEW_FORM:	// The user does not exist in platform
 		  if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
 		    {
 		     if (Adm_CheckIfICanAdminOtherUsrs () == Usr_CAN)
@@ -3606,7 +3637,7 @@ static void Rec_WriteLinkToDataProtectionClause (void)
   }
 
 /*****************************************************************************/
-/**************** Update and show data from identified user ******************/
+/*************************** Modify my user's data ***************************/
 /*****************************************************************************/
 
 void Rec_ChangeMyRecord (void)
@@ -3617,6 +3648,30 @@ void Rec_ChangeMyRecord (void)
 
    /***** Update my data in database *****/
    Enr_UpdateUsrData (&Gbl.Usrs.Me.UsrDat);
+  }
+
+/*****************************************************************************/
+/************************* Modify other user's data **************************/
+/*****************************************************************************/
+
+void Rec_ChangeOthRecord (void)
+  {
+   /***** Get user from form *****/
+   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      case Exi_EXISTS:
+	 /***** Get user's data from record form *****/
+	 Rec_GetUsrNameFromRecordForm (&Gbl.Usrs.Other.UsrDat);
+	 Rec_GetUsrExtraDataFromRecordForm (&Gbl.Usrs.Other.UsrDat);
+
+	 /***** Update user's data in database *****/
+	 Enr_UpdateUsrData (&Gbl.Usrs.Other.UsrDat);
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+     }
   }
 
 /*****************************************************************************/
@@ -3712,17 +3767,21 @@ static void Rec_GetUsrExtraDataFromRecordForm (struct Usr_Data *UsrDat)
                                          (unsigned long) Usr_SEX_UNKNOWN);
 
    /***** Get country code *****/
-   UsrDat->HieCods[Hie_CTY] = ParCod_GetAndCheckParMin (ParCod_OthCty,0);	// 0 (another country) is allowed here
+   UsrDat->HieCods[Hie_CTY] = ParCod_GetAndCheckParMin (ParCod_OthCty,
+							0);	// 0 (another country) is allowed here
 
+   /***** Get boithday *****/
    Dat_GetDateFromForm ("BirthDay","BirthMonth","BirthYear",
                         &(UsrDat->Birthday.Day  ),
                         &(UsrDat->Birthday.Month),
                         &(UsrDat->Birthday.Year ));
    Dat_ConvDateToDateStr (&(UsrDat->Birthday),UsrDat->StrBirthday);
 
+   /***** Get phones *****/
    Par_GetParText ("Phone0",UsrDat->Phone[0],Usr_MAX_BYTES_PHONE);
    Par_GetParText ("Phone1",UsrDat->Phone[1],Usr_MAX_BYTES_PHONE);
 
+   /***** Get comments *****/
    Rec_GetUsrCommentsFromForm (UsrDat);
   }
 
@@ -3773,29 +3832,30 @@ void Rec_ShowMySharedRecordAndMore (void)
    HTM_DIV_Begin ("class=\"REC_USR\"");
 
       /***** Left part *****/
+      /* Show forms to change:
+         · my password
+         · my nickname
+         · my email
+         · my ID
+      */
       HTM_DIV_Begin ("class=\"REC_LEFT\"");
-
-	 /* Show forms to change my password, my nickname, my email and my ID */
 	 Pwd_ShowFormChgMyPwd ();
 	 Nck_ShowFormChgMyNickname ();
 	 Mai_ShowFormChgMyEmail ();
 	 ID__ShowFormChgMyID ();
-
       HTM_DIV_End ();
 
       /***** Right part *****/
+      /* Show forms to change:
+         · My shared record card,
+	 · My institution, center and department
+	 · My webs / social networks
+      */
       HTM_DIV_Begin ("class=\"REC_RIGHT\"");
-
-	 /* My shared record card */
-	 Rec_ShowSharedUsrRecord (Rec_SHA_MY_RECORD_FORM,
+	 Rec_ShowSharedUsrRecord (Rec_SHA_ME_ACCOUNT_FORM,
 				  &Gbl.Usrs.Me.UsrDat,NULL);
-
-	 /* My institution, center and department */
 	 Rec_ShowFormMyInsCtrDpt ();
-
-	 /* My webs / social networks */
 	 Net_ShowFormMyWebsAndSocialNets ();
-
       HTM_DIV_End ();
 
    /***** End container *****/

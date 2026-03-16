@@ -50,16 +50,17 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-#define Rec_SHARED_NUM_VIEW_TYPES 8
+#define Rec_SHARED_NUM_VIEW_TYPES 9
 typedef enum
   {
    Rec_SHA_SIGN_UP_IN_CRS_FORM,
 
-   Rec_SHA_MY_RECORD_FORM,
+   Rec_SHA_ME_ACCOUNT_FORM,
+   Rec_SHA_OTHER_ACCOUNT_FORM,
 
-   Rec_SHA_OTHER_EXISTING_USR_FORM,
-   Rec_SHA_OTHER_NEW_USR_FORM,
-   Rec_SHA_OTHER_USR_CHECK,
+   Rec_SHA_OTHER_ADMIN_FORM,
+   Rec_SHA_OTHER_NEW_FORM,
+   Rec_SHA_OTHER_CHECK,
 
    Rec_SHA_RECORD_LIST,
    Rec_SHA_RECORD_PRINT,
@@ -153,6 +154,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 void Rec_PutParUsrCodEncrypted (__attribute__((unused)) void *Args);
 
 void Rec_ChangeMyRecord (void);
+void Rec_ChangeOthRecord (void);
 Rol_Role_t Rec_GetRoleFromRecordForm (void);
 void Rec_GetUsrNameFromRecordForm (struct Usr_Data *UsrDat);
 

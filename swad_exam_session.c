@@ -254,7 +254,7 @@ void ExaSes_ShowOneSession (void)
    Exa_ShowOnlyOneExamBegin (&Exams,Frm_DONT_PUT_FORM);
 
       /***** List of users for selection *****/
-      ExaSes_ListUsersForSelection (&Exams,&Session);
+      ExaSes_ListUsersForSelection (ActSeeOneExaSes,&Exams,&Session);
 
    /***** Exam end *****/
    Exa_ShowOnlyOneExamEnd ();
@@ -264,7 +264,8 @@ void ExaSes_ShowOneSession (void)
 /**************** List users in an exam session for selection ****************/
 /*****************************************************************************/
 
-void ExaSes_ListUsersForSelection (struct Exa_Exams *Exams,
+void ExaSes_ListUsersForSelection (Act_Action_t NextAction,
+				   struct Exa_Exams *Exams,
 				   const struct ExaSes_Session *Session)
   {
    extern const char *Hlp_ASSESSMENT_Exams_sheets;
@@ -292,7 +293,7 @@ void ExaSes_ListUsersForSelection (struct Exa_Exams *Exams,
 
 	 /***** Form to select groups *****/
          Exams->SesCod.Par = Exams->SesCod.Sel;	// To be used as parameter
-	 Grp_ShowFormToSelectSeveralGroups (Exa_PutPars,Exams,NULL);
+	 Grp_ShowFormToSelectSeveralGroups (NextAction,Exa_PutPars,Exams,NULL);
 
 	 /***** Begin section with user list *****/
 	 HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);

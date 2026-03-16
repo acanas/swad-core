@@ -3805,7 +3805,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
       /***** Show form to select the groups *****/
-      Grp_ShowFormToSelectSeveralGroups (FuncPars,Args,NULL);
+      Grp_ShowFormToSelectSeveralGroups (NextAction,FuncPars,Args,NULL);
 
       /***** Begin section with user list *****/
       HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
@@ -5318,7 +5318,8 @@ void Usr_ListStudents (void)
 
       /***** Form to select groups *****/
       if (ListingPars.HieLvl == Hie_CRS)
-	 Grp_ShowFormToSelectSeveralGroups (Sco_PutParCurrentScope,
+	 Grp_ShowFormToSelectSeveralGroups (Gbl.Action.Act,
+					    Sco_PutParCurrentScope,
 					    &ListingPars.HieLvl,NULL);
 
       /***** Begin section with user list *****/
@@ -5491,8 +5492,9 @@ void Usr_ListTeachers (void)
 
       /***** Form to select groups *****/
       if (ListingPars.HieLvl == Hie_CRS)
-	 Grp_ShowFormToSelectSeveralGroups (Sco_PutParCurrentScope,&ListingPars.HieLvl,
-					    NULL);
+	 Grp_ShowFormToSelectSeveralGroups (Gbl.Action.Act,
+					    Sco_PutParCurrentScope,
+					    &ListingPars.HieLvl,NULL);
 
       /***** Begin section with user list *****/
       HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);

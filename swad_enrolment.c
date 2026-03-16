@@ -3232,7 +3232,7 @@ void Enr_CreateNewUsr2 (void)
   }
 
 /*****************************************************************************/
-/****** Modify other user's data and enrol her/him in course and groups ******/
+/******** Admin other user's, enrol her/him in course and groups, etc. *******/
 /*****************************************************************************/
 
 static void Enr_SetEnrRemAction (Enr_EnrRemOneUsrAction_t EnrRemAction)
@@ -3245,7 +3245,7 @@ static Enr_EnrRemOneUsrAction_t Enr_GetEnrRemAction (void)
    return Enr_EnrRemAction;
   }
 
-void Enr_ModifyUsr1 (void)
+void Enr_AdminUsr1 (void)
   {
    extern const char *Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -3403,7 +3403,7 @@ void Enr_ModifyUsr1 (void)
      }
   }
 
-void Enr_ModifyUsr2 (void)
+void Enr_AdminUsr2 (void)
   {
    if (Ale_GetTypeOfLastAlert () == Ale_WARNING)
      {

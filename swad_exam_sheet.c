@@ -54,7 +54,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void ExaShe_ListOrPrintSheets (ExaShe_BlankOrSolved_t BlankOrSolved,
+static void ExaShe_ListOrPrintSheets (Act_Action_t NextAction,
+				      ExaShe_BlankOrSolved_t BlankOrSolved,
 				      Vie_ViewType_t ViewType);
 
 static void ExaShe_PutIconsPrintBlankSheets (void *Exams);
@@ -104,12 +105,12 @@ static void ExaShe_WriteHead (ExaSes_Modality_t Modality);
 
 void ExaShe_ListBlankSheets (void)
   {
-   ExaShe_ListOrPrintSheets (ExaShe_BLANK,Vie_VIEW);
+   ExaShe_ListOrPrintSheets (ActSeeExaQstShe,ExaShe_BLANK,Vie_VIEW);
   }
 
 void ExaShe_PrintBlankSheets (void)
   {
-   ExaShe_ListOrPrintSheets (ExaShe_BLANK,Vie_PRINT);
+   ExaShe_ListOrPrintSheets (ActPrnExaQstShe,ExaShe_BLANK,Vie_PRINT);
   }
 
 /*****************************************************************************/
@@ -118,19 +119,20 @@ void ExaShe_PrintBlankSheets (void)
 
 void ExaShe_ListSolvedAnswerSheets (void)
   {
-   ExaShe_ListOrPrintSheets (ExaShe_SOLVED,Vie_VIEW);
+   ExaShe_ListOrPrintSheets (ActSeeExaAnsShe,ExaShe_SOLVED,Vie_VIEW);
   }
 
 void ExaShe_PrintSolvedAnswerSheets (void)
   {
-   ExaShe_ListOrPrintSheets (ExaShe_SOLVED,Vie_PRINT);
+   ExaShe_ListOrPrintSheets (ActPrnExaAnsShe,ExaShe_SOLVED,Vie_PRINT);
   }
 
 /*****************************************************************************/
 /********* Display/Print selected exam sheets from an exam session ***********/
 /*****************************************************************************/
 
-static void ExaShe_ListOrPrintSheets (ExaShe_BlankOrSolved_t BlankOrSolved,
+static void ExaShe_ListOrPrintSheets (Act_Action_t NextAction,
+				      ExaShe_BlankOrSolved_t BlankOrSolved,
 				      Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_ASSESSMENT_Exams_sheets;
@@ -176,7 +178,7 @@ static void ExaShe_ListOrPrintSheets (ExaShe_BlankOrSolved_t BlankOrSolved,
       Exa_ShowOnlyOneExamBegin (&Exams,Frm_DONT_PUT_FORM);
 
 	 /***** List of users for selection *****/
-	 ExaSes_ListUsersForSelection (&Exams,&Session);
+	 ExaSes_ListUsersForSelection (NextAction,&Exams,&Session);
      }
 
    /***** Get list of selected users *****/
