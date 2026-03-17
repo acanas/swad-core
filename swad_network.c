@@ -190,7 +190,7 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
 
 void Net_ShowFormMyWebsAndSocialNets (void)
   {
-   extern const char *Hlp_PROFILE_Webs;
+   extern const char *Hlp_PROFILE_Account_Webs;
    extern const char *Txt_Webs_social_networks;
    Net_WebsAndSocialNetworks_t NumURL;
    char URL[WWW_MAX_BYTES_WWW + 1];
@@ -203,7 +203,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
       HTM_DIV_Begin ("class=\"REC_CONT\"");
 	 Box_BoxBegin (Txt_Webs_social_networks,
 		       Net_PutIconsWebsSocialNetworks,NULL,
-		       Hlp_PROFILE_Webs,Box_NOT_CLOSABLE);
+		       Hlp_PROFILE_Account_Webs,Box_NOT_CLOSABLE);
 
 	    /***** Begin form *****/
 	    Frm_BeginFormAnchor (ActChgMyNet,Net_MY_WEBS_ID);

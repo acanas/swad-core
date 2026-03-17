@@ -4218,30 +4218,53 @@ const char *Hlp_PROFILE_Account =
 #elif L==10	// tr
 	"PROFILE.Account.en";
 #endif
-/*
-const char *Hlp_PROFILE_Account_email =
+
+const char *Hlp_PROFILE_Account_Institution =
 #if   L==1	// ca
-	"PROFILE.Account.es#correo";
+	"PROFILE.Account.es#instituci%C3%B3n";
 #elif L==2	// de
-	"PROFILE.Account.en#email";
+	"PROFILE.Account.en#institution";
 #elif L==3	// en
-	"PROFILE.Account.en#email";
+	"PROFILE.Account.en#institution";
 #elif L==4	// es
-	"PROFILE.Account.es#correo";
+	"PROFILE.Account.es#instituci%C3%B3n";
 #elif L==5	// fr
-	"PROFILE.Account.en#email";
+	"PROFILE.Account.en#institution";
 #elif L==6	// gn
-	"PROFILE.Account.es#correo";
+	"PROFILE.Account.es#instituci%C3%B3n";
 #elif L==7	// it
-	"PROFILE.Account.en#email";
+	"PROFILE.Account.en#institution";
 #elif L==8	// pl
-	"PROFILE.Account.en#email";
+	"PROFILE.Account.en#institution";
 #elif L==9	// pt
-	"PROFILE.Account.en#email";
+	"PROFILE.Account.en#institution";
 #elif L==10	// tr
-	"PROFILE.Account.en#email";
+	"PROFILE.Account.en#institution";
 #endif
-*/
+
+const char *Hlp_PROFILE_Account_Webs =
+#if   L==1	// ca
+	"PROFILE.Account.es#webs--redes-sociales";
+#elif L==2	// de
+	"PROFILE.Account.en#webs--social-networks";
+#elif L==3	// en
+	"PROFILE.Account.en#webs--social-networks";
+#elif L==4	// es
+	"PROFILE.Account.es#webs--redes-sociales";
+#elif L==5	// fr
+	"PROFILE.Account.en#webs--social-networks";
+#elif L==6	// gn
+	"PROFILE.Account.es#webs--redes-sociales";
+#elif L==7	// it
+	"PROFILE.Account.en#webs--social-networks";
+#elif L==8	// pl
+	"PROFILE.Account.en#webs--social-networks";
+#elif L==9	// pt
+	"PROFILE.Account.en#webs--social-networks";
+#elif L==10	// tr
+	"PROFILE.Account.en#webs--social-networks";
+#endif
+
 const char *Hlp_PROFILE_Session_role =
 #if   L==1	// ca
 	"PROFILE.Session.es#rol";
@@ -4401,52 +4424,6 @@ const char *Hlp_PROFILE_Agenda_public_agenda =
 	"PROFILE.Agenda.en#public-agenda";
 #elif L==10	// tr
 	"PROFILE.Agenda.en#public-agenda";
-#endif
-
-const char *Hlp_PROFILE_Institution =
-#if   L==1	// ca
-	"PROFILE.Institution.es";
-#elif L==2	// de
-	"PROFILE.Institution.en";
-#elif L==3	// en
-	"PROFILE.Institution.en";
-#elif L==4	// es
-	"PROFILE.Institution.es";
-#elif L==5	// fr
-	"PROFILE.Institution.en";
-#elif L==6	// gn
-	"PROFILE.Institution.es";
-#elif L==7	// it
-	"PROFILE.Institution.en";
-#elif L==8	// pl
-	"PROFILE.Institution.en";
-#elif L==9	// pt
-	"PROFILE.Institution.en";
-#elif L==10	// tr
-	"PROFILE.Institution.en";
-#endif
-
-const char *Hlp_PROFILE_Webs =
-#if   L==1	// ca
-	"PROFILE.Webs.es";
-#elif L==2	// de
-	"PROFILE.Webs.en";
-#elif L==3	// en
-	"PROFILE.Webs.en";
-#elif L==4	// es
-	"PROFILE.Webs.es";
-#elif L==5	// fr
-	"PROFILE.Webs.en";
-#elif L==6	// gn
-	"PROFILE.Webs.es";
-#elif L==7	// it
-	"PROFILE.Webs.en";
-#elif L==8	// pl
-	"PROFILE.Webs.en";
-#elif L==9	// pt
-	"PROFILE.Webs.en";
-#elif L==10	// tr
-	"PROFILE.Webs.en";
 #endif
 
 const char *Hlp_PROFILE_Photo =

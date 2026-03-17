@@ -3926,7 +3926,7 @@ static void Rec_ShowAlertsIfNotFilled (void)
 
 static void Rec_ShowFormMyInsCtrDpt (void)
   {
-   extern const char *Hlp_PROFILE_Institution;
+   extern const char *Hlp_PROFILE_Account_Institution;
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_Institution_center_and_department;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
@@ -3956,7 +3956,7 @@ static void Rec_ShowFormMyInsCtrDpt (void)
       Box_BoxBegin (IAmATeacher ? Txt_Institution_center_and_department :
 				  Txt_HIERARCHY_SINGUL_Abc[Hie_INS],
 		    NULL,NULL,
-		    Hlp_PROFILE_Institution,Box_NOT_CLOSABLE);
+		    Hlp_PROFILE_Account_Institution,Box_NOT_CLOSABLE);
 
 	 /***** Begin table *****/
 	 HTM_TABLE_Begin ("REC");
