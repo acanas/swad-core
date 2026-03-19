@@ -45,6 +45,6 @@ Exi_Exist_t Acc_DB_CheckIfEmailAlreadyExists (const char NewEmail[Cns_MAX_BYTES_
 
 long Acc_DB_CreateNewUsr (const struct Usr_Data *UsrDat);
 void Acc_DB_UpdateUsrData (const struct Usr_Data *UsrDat);
-void Acc_DB_UpdateMyInstitutionCenterDepartment (void);
+void Acc_DB_UpdateInsCtrDpt (const struct Usr_Data *UsrDat);
 
 #endif

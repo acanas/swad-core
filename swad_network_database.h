@@ -33,15 +33,15 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Net_DB_UpdateMyWeb (Net_WebsAndSocialNetworks_t NumURL,
-                         const char URL[WWW_MAX_BYTES_WWW + 1]);
+void Net_DB_UpdateWeb (long UsrCod,Net_WebsAndSocialNetworks_t NumURL,
+                       const char URL[WWW_MAX_BYTES_WWW + 1]);
 
 void Net_DB_GetURL (long UsrCod,Net_WebsAndSocialNetworks_t NumURL,
                     char URL[WWW_MAX_BYTES_WWW + 1]);
 unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res,
 					      Hie_Level_t HieLvl);
 
-void Net_DB_RemoveMyWeb (Net_WebsAndSocialNetworks_t NumURL);
+void Net_DB_RemoveWeb (long UsrCod,Net_WebsAndSocialNetworks_t NumURL);
 void Net_DB_RemoveUsrWebs (long UsrCod);
 
 #endif

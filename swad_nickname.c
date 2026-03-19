@@ -170,7 +170,7 @@ void Nck_ShowFormChgMyNickname (void)
 /*********************** Show form to change my nickname *********************/
 /*****************************************************************************/
 
-void Nck_ShowFormChangeOtherUsrNickname (void)
+void Nck_ShowFormChgOthNickname (void)
   {
    Nck_ShowFormChangeUsrNickname (Usr_OTHER);
   }
@@ -192,40 +192,23 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther)
      {
       Act_Action_t Remove;
       Act_Action_t Change;
-     } NextAction[Rol_NUM_ROLES] =
+     } ActNck[Rol_NUM_ROLES] =
      {
-      [Rol_UNK	  ] = {ActRemNicOth,ActChgNicOth},
-      [Rol_GST	  ] = {ActRemNicOth,ActChgNicOth},
-      [Rol_USR	  ] = {ActRemNicOth,ActChgNicOth},
-      [Rol_STD	  ] = {ActRemNicStd,ActChgNicStd},
-      [Rol_NET	  ] = {ActRemNicTch,ActChgNicTch},
-      [Rol_TCH	  ] = {ActRemNicTch,ActChgNicTch},
-      [Rol_DEG_ADM] = {ActRemNicOth,ActChgNicOth},
-      [Rol_CTR_ADM] = {ActRemNicOth,ActChgNicOth},
-      [Rol_INS_ADM] = {ActRemNicOth,ActChgNicOth},
-      [Rol_SYS_ADM] = {ActRemNicOth,ActChgNicOth},
+      [Usr_ME   ] = {.Remove = ActRemMyNck,
+	             .Change = ActChgMyNck},
+      [Usr_OTHER] = {.Remove = ActRemNicOth,
+	             .Change = ActChgNicOth}
+     };
+   static void (*FuncParsRemove[Usr_NUM_ME_OR_OTHER]) (void *ID) =
+     {
+      [Usr_ME   ] = Nck_PutParsRemoveMyNick,
+      [Usr_OTHER] = Nck_PutParsRemoveOtherNick
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumNicks;
    unsigned NumNick;
    char NickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
-   static void (*FuncParsRemove[Usr_NUM_ME_OR_OTHER]) (void *ID) =
-     {
-      [Usr_ME   ] = Nck_PutParsRemoveMyNick,
-      [Usr_OTHER] = Nck_PutParsRemoveOtherNick
-     };
-   struct
-     {
-      Act_Action_t Remove;
-      Act_Action_t Change;
-     } ActNck[Rol_NUM_ROLES] =
-     {
-      [Usr_ME   ] = {.Remove = ActRemMyNck,
-	             .Change = ActChgMyNck},
-      [Usr_OTHER] = {.Remove = NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs].Remove,
-	             .Change = NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs].Change}
-     };
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Nck_NICKNAME_SECTION_ID);
@@ -426,7 +409,7 @@ void Nck_RemoveOtherUsrNick (void)
 				NickWithoutArr);
 
 	       /***** Show user's account again *****/
-	       Acc_ShowFormChgOtherUsrAccount ();
+	       Acc_ShowFormsChgOthAccount ();
 	       break;
 	    case Usr_CAN_NOT:
 	    default:
@@ -467,7 +450,7 @@ void Nck_ChangeOtherUsrNick (void)
 	       Nck_ChangeUsrNick (&Gbl.Usrs.Other.UsrDat);
 
 	       /***** Show user's account again *****/
-	       Acc_ShowFormChgOtherUsrAccount ();
+	       Acc_ShowFormsChgOthAccount ();
 	       break;
 	    case Usr_CAN_NOT:
 	    default:

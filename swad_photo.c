@@ -35,6 +35,7 @@
 #include <sys/wait.h>		// For the macro WEXITSTATUS
 #include <unistd.h>		// For unlink
 
+#include "swad_account.h"
 #include "swad_action.h"
 #include "swad_action_list.h"
 #include "swad_alert.h"
@@ -222,6 +223,7 @@ void Pho_PutIconToChangeUsrPhoto (struct Usr_Data *UsrDat)
 					"image-portrait.svg",Ico_BLACK);
 	 break;
       case Usr_OTHER:
+      default:
 	 if (Pho_ICanChangeOtherUsrPhoto (UsrDat) == Usr_CAN)
 	    Lay_PutContextualLinkOnlyIcon (NextAction[UsrDat->Roles.InCurrentCrs],NULL,
 					   Rec_PutParUsrCodEncrypted,NULL,
@@ -281,7 +283,7 @@ void Pho_ReqMyPhoto (void)
    HTM_BR ();
 
    /***** Show my record and other data *****/
-   Rec_ShowMySharedRecordAndMore ();
+   Acc_ShowFormsChgMyAccount ();
   }
 
 /*****************************************************************************/
@@ -339,6 +341,7 @@ static void Pho_ReqPhoto (const struct Usr_Data *UsrDat)
 	    Frm_BeginForm (ActDetMyPho);
 	    break;
 	 case Usr_OTHER:
+	 default:
 	    Frm_BeginForm (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs]);
 	       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	    break;
@@ -389,6 +392,7 @@ void Pho_ReqPhotoUsr (void)
 	 Pho_ReqMyPhoto ();
 	 break;
       case Usr_OTHER:
+      default:
 	 /***** Form to send another user's photo *****/
 	 Pho_ReqOtherUsrPhoto ();
 	 break;
@@ -409,7 +413,7 @@ void Pho_RecMyPhotoDetFaces (void)
      }
 
    /***** Show my record and other data *****/
-   Rec_ShowMySharedRecordAndMore ();
+   Acc_ShowFormsChgMyAccount ();
   }
 
 /*****************************************************************************/
@@ -497,7 +501,7 @@ void Pho_ReqRemMyPhoto (void)
      }
 
    /***** Show my record and other data *****/
-   Rec_ShowMySharedRecordAndMore ();
+   Acc_ShowFormsChgMyAccount ();
   }
 
 /*****************************************************************************/
@@ -523,7 +527,7 @@ void Pho_RemoveMyPhoto2 (void)
    Ale_ShowAlerts (NULL);
 
    /***** Show my record and other data *****/
-   Rec_ShowMySharedRecordAndMore ();
+   Acc_ShowFormsChgMyAccount ();
   }
 
 /*****************************************************************************/
@@ -897,7 +901,7 @@ void Pho_ChangeMyPhoto2 (void)
    Pho_ChangePhoto2 ();
 
    /***** Show my record and other data *****/
-   Rec_ShowMySharedRecordAndMore ();
+   Acc_ShowFormsChgMyAccount ();
   }
 
 /*****************************************************************************/

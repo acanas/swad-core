@@ -38,8 +38,8 @@
 /*****************************************************************************/
 
 //------------------------------- User's data ---------------------------------
-void Usr_DB_UpdateMyOffice (void);
-void Usr_DB_UpdateMyOfficePhone (void);
+void Usr_DB_UpdateOffice (const struct Usr_Data *UsrDat);
+void Usr_DB_UpdateOfficePhone (const struct Usr_Data *UsrDat);
 
 Exi_Exist_t Usr_DB_ChkIfUsrCodExists (long UsrCod);
 void Usr_DB_GetEncryptedUsrCodFromUsrCod (long UsrCod,

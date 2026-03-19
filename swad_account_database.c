@@ -196,7 +196,7 @@ void Acc_DB_UpdateUsrData (const struct Usr_Data *UsrDat)
 /**************** Update institution, center and department ******************/
 /*****************************************************************************/
 
-void Acc_DB_UpdateMyInstitutionCenterDepartment (void)
+void Acc_DB_UpdateInsCtrDpt (const struct Usr_Data *UsrDat)
   {
    DB_QueryUPDATE ("can not update institution, center and department",
 		   "UPDATE usr_data"
@@ -205,9 +205,9 @@ void Acc_DB_UpdateMyInstitutionCenterDepartment (void)
 		          "CtrCod=%ld,"
 		          "DptCod=%ld"
 		   " WHERE UsrCod=%ld",
-	           Gbl.Usrs.Me.UsrDat.InsCtyCod,
-	           Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS],
-	           Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR],
-	           Gbl.Usrs.Me.UsrDat.Tch.DptCod,
-	           Gbl.Usrs.Me.UsrDat.UsrCod);
+	           UsrDat->InsCtyCod,
+	           UsrDat->HieCods[Hie_INS],
+	           UsrDat->HieCods[Hie_CTR],
+	           UsrDat->Tch.DptCod,
+	           UsrDat->UsrCod);
   }

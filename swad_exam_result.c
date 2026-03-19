@@ -854,6 +854,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 			      Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneExaResMe);
 			   break;
 			case Usr_OTHER:
+			default:
 			   Frm_BeginForm (ActSeeOneExaResOth);
 			      Exa_PutPars (Exams);
 			      Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
@@ -1278,6 +1279,7 @@ void ExaRes_ShowOneExaResult (void)
 	 UsrDat = &Gbl.Usrs.Me.UsrDat;
 	 break;
       case Usr_OTHER:
+      default:
 	 UsrDat = &Gbl.Usrs.Other.UsrDat;
          Usr_GetParOtherUsrCodEncrypted (UsrDat);
 	 break;

@@ -2447,7 +2447,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_STD] = ActReqMdfStd,
-      [Rol_NET] = ActReqMdfNET,
+      [Rol_NET] = ActReqMdfTch,
       [Rol_TCH] = ActReqMdfTch,
      };
 
@@ -2802,7 +2802,7 @@ static void Enr_ReqAnotherUsrIDToEnrolRemove (Rol_Role_t Role)
      {
       [Rol_GST] = ActReqMdfOth,
       [Rol_STD] = ActReqMdfStd,
-      [Rol_NET] = ActReqMdfNET,
+      [Rol_NET] = ActReqMdfTch,
       [Rol_TCH] = ActReqMdfTch,
      };
 
@@ -3140,7 +3140,7 @@ void Enr_CreateNewUsr1 (void)
      {
       [Rol_GST] = ActCreOth,
       [Rol_STD] = ActCreStd,
-      [Rol_NET] = ActCreNET,
+      [Rol_NET] = ActCreTch,
       [Rol_TCH] = ActCreTch,
      };
 
@@ -3254,7 +3254,7 @@ void Enr_AdminUsr1 (void)
      {
       [Rol_GST] = ActUpdOth,
       [Rol_STD] = ActUpdStd,
-      [Rol_NET] = ActUpdNET,
+      [Rol_NET] = ActUpdTch,
       [Rol_TCH] = ActUpdTch,
      };
    Usr_MeOrOther_t MeOrOther;
@@ -3485,7 +3485,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat)
    static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_STD] = ActRemStdCrs,
-      [Rol_NET] = ActRemNETCrs,
+      [Rol_NET] = ActRemTchCrs,
       [Rol_TCH] = ActRemTchCrs,
      };
    const char *Question[Usr_NUM_ME_OR_OTHER] =
@@ -3604,6 +3604,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
 	       Rol_SetMyRoles ();
 	       break;
 	    case Usr_OTHER:
+	    default:
 	       /* Now he/she does not belong to current course */
 	       UsrDat->Accepted           = Usr_HAS_NOT_ACCEPTED;
 	       UsrDat->Roles.InCurrentCrs = Rol_USR;

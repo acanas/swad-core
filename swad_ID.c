@@ -494,7 +494,7 @@ void ID__ShowFormChgMyID (void)
 /*********************** Show form to change my user's ID ********************/
 /*****************************************************************************/
 
-void ID__ShowFormChangeOtherUsrID (void)
+void ID__ShowFormChgOthID (void)
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *Txt_ID_identity_number;
@@ -530,31 +530,7 @@ static void ID__ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther)
    extern const char *Txt_Another_ID;
    extern const char *Txt_The_ID_is_used_in_order_to_facilitate_;
    extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
-   unsigned NumID;
-   char *Title;
    static struct
-     {
-      Act_Action_t Remove;
-      Act_Action_t Change;
-     } NextAction[Rol_NUM_ROLES] =
-     {
-      [Rol_UNK	  ] = {ActRemID_Oth,ActChgID_Oth},
-      [Rol_GST	  ] = {ActRemID_Oth,ActChgID_Oth},
-      [Rol_USR    ] = {ActRemID_Oth,ActChgID_Oth},
-      [Rol_STD	  ] = {ActRemID_Std,ActChgID_Std},
-      [Rol_NET	  ] = {ActRemID_Tch,ActChgID_Tch},
-      [Rol_TCH	  ] = {ActRemID_Tch,ActChgID_Tch},
-      [Rol_DEG_ADM] = {ActRemID_Oth,ActChgID_Oth},
-      [Rol_CTR_ADM] = {ActRemID_Oth,ActChgID_Oth},
-      [Rol_INS_ADM] = {ActRemID_Oth,ActChgID_Oth},
-      [Rol_SYS_ADM] = {ActRemID_Oth,ActChgID_Oth},
-     };
-   static void (*FuncParsRemove[Usr_NUM_ME_OR_OTHER]) (void *ID) =
-     {
-      [Usr_ME   ] = ID__PutParsRemoveMyID,
-      [Usr_OTHER] = ID__PutParsRemoveOtherID
-     };
-   struct
      {
       Act_Action_t Remove;
       Act_Action_t Change;
@@ -562,14 +538,21 @@ static void ID__ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther)
      {
       [Usr_ME   ] = {.Remove = ActRemMyID,
 	             .Change = ActChgMyID},
-      [Usr_OTHER] = {.Remove = NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs].Remove,
-	             .Change = NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs].Change}
+      [Usr_OTHER] = {.Remove = ActRemID_Oth,
+	             .Change = ActChgID_Oth}
+     };
+   static void (*FuncParsRemove[Usr_NUM_ME_OR_OTHER]) (void *ID) =
+     {
+      [Usr_ME   ] = ID__PutParsRemoveMyID,
+      [Usr_OTHER] = ID__PutParsRemoveOtherID
      };
     static const char **TitleFmt[ID__NUM_CONFIRMED] =
      {
       [ID__NOT_CONFIRMED] = &Txt_ID_X_not_confirmed,
       [ID__CONFIRMED    ] = &Txt_ID_X_confirmed,
      };
+   unsigned NumID;
+   char *Title;
 
    /***** Show possible alerts *****/
    Ale_ShowAlerts (ID__SECTION);
@@ -724,7 +707,7 @@ void ID__RemoveOtherUsrID (void)
 	       ID__GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
 	       /***** Show form again *****/
-	       Acc_ShowFormChgOtherUsrAccount ();
+	       Acc_ShowFormsChgOthAccount ();
 	       break;
 	    case Usr_CAN_NOT:
 	    default:
@@ -769,6 +752,7 @@ static void ID__RemoveUsrID (const struct Usr_Data *UsrDat,
 									       Usr_CAN;
 		  break;
 	       case Usr_OTHER:
+	       default:
 		  ICanRemove = Usr_CAN;
 		  break;
 	      }
@@ -831,7 +815,7 @@ void ID__ChangeOtherUsrID (void)
 	       ID__GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
 	       /***** Show form again *****/
-	       Acc_ShowFormChgOtherUsrAccount ();
+	       Acc_ShowFormsChgOthAccount ();
 	       break;
 	    case Usr_CAN_NOT:
 	    default:

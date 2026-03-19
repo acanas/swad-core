@@ -18460,29 +18460,6 @@ const char *Txt_Inline_math =
 	"Inline math";		// Çeviri lazim!
 #endif
 
-const char *Txt_Institution_center_and_department =
-#if   L==1	// ca
-	"Instituci&oacute;, center i departament";
-#elif L==2	// de
-	"Hochschule, Lehrinstitut und Abteilung";
-#elif L==3	// en
-	"Institution, center and department";
-#elif L==4	// es
-	"Instituci&oacute;n, centro y departamento";
-#elif L==5	// fr
-	"&Eacute;tablissement, center et d&eacute;partement";
-#elif L==6	// gn
-	"Mbo'ehao, mbo'ehao, peh&#7869;";
-#elif L==7	// it
-	"Istituzione, centro e dipartimento";
-#elif L==8	// pl
-	"Instytucji, centrum i wydzia&lstrok;";
-#elif L==9	// pt
-	"Institu&ccedil;&atilde;o, centro e departamento";
-#elif L==10	// tr
-	"Institution, center and department";	// Çeviri lazim!
-#endif
-
 const char *Txt_Institution_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Instituci&oacute; <strong>%s</strong> eliminada.";
@@ -18505,7 +18482,6 @@ const char *Txt_Institution_X_removed =	// Warning: it is very important to incl
 #elif L==10	// tr
 	"Institution <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
-
 
 const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT] =
 	{

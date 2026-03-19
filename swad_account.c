@@ -93,6 +93,8 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title);
 static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct Usr_Data *UsrDat);
 static void Acc_ShowFormRequestNewAccountWithPars (const char *NewNickWithoutArr,
                                                    const char *NewEmail);
+static void Acc_ShowAlertsIfNotFilled (void);
+static void Acc_WriteLinkToDataProtectionClause (void);
 static Err_SuccessOrError_t Acc_GetParsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],
 						   char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
 						   char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1]);
@@ -126,7 +128,7 @@ void Acc_ShowFormMyAccount (void)
    extern const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered;
 
    if (Gbl.Usrs.Me.Logged)
-      Rec_ShowMySharedRecordAndMore ();
+      Acc_ShowFormsChgMyAccount ();
    else	// Not logged
      {
       /***** Contextual menu *****/
@@ -408,10 +410,147 @@ void Acc_ShowFormGoToRequestNewAccount (void)
   }
 
 /*****************************************************************************/
-/***************** Show form to change another user's account ****************/
+/********************** Show forms to change my account **********************/
 /*****************************************************************************/
 
-void Acc_ShowFormChgOtherUsrAccount (void)
+void Acc_ShowFormsChgMyAccount (void)
+  {
+   extern const char *Txt_Before_going_to_any_other_option_you_must_create_your_password;
+   extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
+   extern const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address;
+
+   /***** Get current user's nickname and email address
+          It's necessary because current nickname or email could be just updated *****/
+   Nck_DB_GetNicknameFromUsrCod (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.Nickname);
+   Mai_GetEmailFromUsrCod (&Gbl.Usrs.Me.UsrDat);
+
+   /***** Get my roles if not yet got *****/
+   Rol_GetRolesInAllCrss (&Gbl.Usrs.Me.UsrDat);
+
+   /***** Check password, nickname and email *****/
+   if (Gbl.Usrs.Me.UsrDat.Password[0] == '\0')	// I must create my passoword
+      Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_create_your_password);
+   if (Gbl.Usrs.Me.UsrDat.Nickname[0] == '\0')	// I must fill my nickname
+      Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
+   if (Gbl.Usrs.Me.UsrDat.Email[0] == '\0')	// I must fill my email
+      Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address);
+
+   /***** If user has no name and surname, sex... *****/
+   Acc_ShowAlertsIfNotFilled ();
+
+   /***** Begin container *****/
+   HTM_DIV_Begin ("class=\"REC_USR\"");
+
+      /***** Left part *****/
+      /* Show forms to change:
+         · my password
+         · my nickname
+         · my email
+         · my ID
+      */
+      HTM_DIV_Begin ("class=\"REC_LEFT\"");
+	 Pwd_ShowFormChgMyPwd ();
+	 Nck_ShowFormChgMyNickname ();
+	 Mai_ShowFormChgMyEmail ();
+	 ID__ShowFormChgMyID ();
+      HTM_DIV_End ();
+
+      /***** Right part *****/
+      /* Show forms to change:
+         · My shared record card,
+	 · My institution, center and department
+	 · My webs / social networks
+      */
+      HTM_DIV_Begin ("class=\"REC_RIGHT\"");
+	 Rec_ShowSharedUsrRecord (Rec_SHA_ME_ACCOUNT_FORM,
+				  &Gbl.Usrs.Me.UsrDat,NULL);
+	 Rec_ShowFormInsCtrDpt (&Gbl.Usrs.Me.UsrDat);
+	 Net_ShowFormWebsAndSocialNets (&Gbl.Usrs.Me.UsrDat);
+      HTM_DIV_End ();
+
+   /***** End container *****/
+   HTM_DIV_End ();
+
+   /***** Data protection clause *****/
+   Acc_WriteLinkToDataProtectionClause ();
+  }
+
+/*****************************************************************************/
+/***************** Show alerts if some fields are not filled *****************/
+/*****************************************************************************/
+
+static void Acc_ShowAlertsIfNotFilled (void)
+  {
+   extern const char *Txt_Please_fill_in_your_record_card_including_your_name;
+   extern const char *Txt_Please_fill_in_your_record_card_including_your_sex;
+   extern const char *Txt_Please_fill_in_your_record_card_including_your_country_nationality;
+   extern const char *Txt_Please_select_the_country_of_your_institution;
+   extern const char *Txt_Please_select_your_institution;
+   extern const char *Txt_Please_select_your_center;
+   extern const char *Txt_Please_select_your_department;
+   bool IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |	// I am a non-editing teacher...
+							  (1 << Rol_TCH)));	// ...or a teacher in any course
+   bool RecordFilled = true;
+
+   /***** First check that all mandatory fields are filled *****/
+   if (!Gbl.Usrs.Me.UsrDat.FrstName[0] ||
+       !Gbl.Usrs.Me.UsrDat.Surname1[0])			// 1. No name
+     {
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_name);
+      RecordFilled = false;
+     }
+
+   if (Gbl.Usrs.Me.UsrDat.Sex == Usr_SEX_UNKNOWN)	// 2. No sex
+     {
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_sex);
+      RecordFilled = false;
+     }
+
+   if (Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTY] < 0)			// 3. No country
+     {
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_country_nationality);
+      RecordFilled = false;
+     }
+
+   /***** Only when all mandatory fields are filled,
+          check my institution country, country, center and department *****/
+   if (RecordFilled)
+     {
+      if (Gbl.Usrs.Me.UsrDat.InsCtyCod < 0)		// 4. No institution country
+	 Ale_ShowAlert (Ale_WARNING,Txt_Please_select_the_country_of_your_institution);
+      else if (Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] < 0)	// 5. No institution
+	 Ale_ShowAlert (Ale_WARNING,Txt_Please_select_your_institution);
+      else if (IAmATeacher)
+	{
+	 if (Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] < 0)	// 6. No center
+	    Ale_ShowAlert (Ale_WARNING,Txt_Please_select_your_center);
+	 else if (Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)	// 7. No deparment
+	    Ale_ShowAlert (Ale_WARNING,Txt_Please_select_your_department);
+	}
+     }
+  }
+
+/*****************************************************************************/
+/*********************** Write a link to netiquette rules ********************/
+/*****************************************************************************/
+
+static void Acc_WriteLinkToDataProtectionClause (void)
+  {
+   extern const char *Txt_DATA_PROTECTION_POLICY;
+
+   HTM_DIV_Begin ("class=\"CM\"");
+      HTM_A_Begin ("class=\"TIT\" href=\"%s/\" target=\"_blank\"",
+		   Cfg_URL_DATA_PROTECTION_PUBLIC);
+	 HTM_Txt (Txt_DATA_PROTECTION_POLICY);
+      HTM_A_End ();
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/**************** Show forms to change another user's account ****************/
+/*****************************************************************************/
+
+void Acc_GetUsrToChgAccount (void)
   {
    /***** Get user whose account must be changed *****/
    switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
@@ -420,57 +559,62 @@ void Acc_ShowFormChgOtherUsrAccount (void)
 	 switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	   {
 	    case Usr_CAN:
-	       /***** Get user's nickname and email address
-		      It's necessary because nickname or email could be just updated *****/
-	       Nck_DB_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.Nickname);
-	       Mai_GetEmailFromUsrCod (&Gbl.Usrs.Other.UsrDat);
-
-	       /***** Begin container *****/
-	       HTM_DIV_Begin ("class=\"REC_USR\"");
-
-		  /***** Left part *****/
-		  /* Show forms to change:
-		     · password
-		     · nickname
-		     · email
-		     · ID
-		  */
-		  HTM_DIV_Begin ("class=\"REC_LEFT\"");
-		     Pwd_ShowFormChgOtherUsrPwd ();
-		     Nck_ShowFormChangeOtherUsrNickname ();
-		     Mai_ShowFormChangeOtherUsrEmail ();
-		     ID__ShowFormChangeOtherUsrID ();
-		  HTM_DIV_End ();
-
-		  /***** Right part *****/
-		  /* Show forms to change:
-		     · shared record card,
-		     · institution, center and department
-		     · webs / social networks
-		  */
-		  HTM_DIV_Begin ("class=\"REC_RIGHT\"");
-		     // Rec_ShowSharedUsrRecord (Rec_SHA_ME_ACCOUNT_FORM,
-		     //			      &Gbl.Usrs.Me.UsrDat,NULL);
-		     Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_ACCOUNT_FORM,
-					      &Gbl.Usrs.Other.UsrDat,NULL);
-		     // Rec_ShowFormMyInsCtrDpt ();
-		     // Net_ShowFormMyWebsAndSocialNets ();
-		  HTM_DIV_End ();
-
-	       /***** End container *****/
-	       HTM_DIV_End ();
 	       break;
 	    case Usr_CAN_NOT:
 	    default:
-	       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	       Err_NoPermission ();
 	       break;
 	   }
 	 break;
       case Exi_DOES_NOT_EXIST:	// User not found
       default:
-	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 Err_WrongUserExit ();
 	 break;
      }
+  }
+
+/* This function should only be called when it has been verified
+   that the other user exists and we have permission to edit his/her data
+*/
+void Acc_ShowFormsChgOthAccount (void)
+  {
+   /***** Get user's nickname and email address
+	  It's necessary because nickname or email could be just updated *****/
+   Nck_DB_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.Nickname);
+   Mai_GetEmailFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+
+   /***** Begin container *****/
+   HTM_DIV_Begin ("class=\"REC_USR\"");
+
+      /***** Left part *****/
+      /* Show forms to change:
+	 · password
+	 · nickname
+	 · email
+	 · ID
+      */
+      HTM_DIV_Begin ("class=\"REC_LEFT\"");
+	 Pwd_ShowFormChgOthPwd ();
+	 Nck_ShowFormChgOthNickname ();
+	 Mai_ShowFormChgOthEmail ();
+	 ID__ShowFormChgOthID ();
+      HTM_DIV_End ();
+
+      /***** Right part *****/
+      /* Show forms to change:
+	 · shared record card,
+	 · institution, center and department
+	 · webs / social networks
+      */
+      HTM_DIV_Begin ("class=\"REC_RIGHT\"");
+	 Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_ACCOUNT_FORM,
+				  &Gbl.Usrs.Other.UsrDat,NULL);
+	 Rec_ShowFormInsCtrDpt (&Gbl.Usrs.Other.UsrDat);
+	 Net_ShowFormWebsAndSocialNets (&Gbl.Usrs.Other.UsrDat);
+      HTM_DIV_End ();
+
+   /***** End container *****/
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -710,7 +854,7 @@ void Acc_AfterCreationNewAccount (void)
 	             Cfg_PLATFORM_SHORT_NAME);
 
       /***** Show form with account data *****/
-      Rec_ShowMySharedRecordAndMore ();
+      Acc_ShowFormsChgMyAccount ();
      }
   }
 
@@ -778,6 +922,7 @@ Usr_Can_t Acc_CheckIfICanEliminateAccount (long UsrCod)
 	 return (Gbl.Usrs.Me.Role.Available & (1 << Rol_SYS_ADM)) == 0 ? Usr_CAN :
 									 Usr_CAN_NOT;
       case Usr_OTHER:
+      default:
 	 // Only a system admin can eliminate other's account
 	 return Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :
 							 Usr_CAN_NOT;
@@ -823,7 +968,7 @@ void Acc_AskIfRemoveMyAccount (void)
    Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
 
    /***** Show forms to change my account *****/
-   Rec_ShowMySharedRecordAndMore ();
+   Acc_ShowFormsChgMyAccount ();
   }
 
 static void Acc_AskIfRemoveOtherUsrAccount (void)
@@ -1033,31 +1178,16 @@ static void Acc_RemoveUsrBriefcase (struct Usr_Data *UsrDat)
 
 void Acc_PutIconToChangeUsrAccount (struct Usr_Data *UsrDat)
   {
-   static Act_Action_t NextAction[Rol_NUM_ROLES] =
-     {
-      [Rol_UNK	  ] = ActFrmAccOth,
-      [Rol_GST	  ] = ActFrmAccOth,
-      [Rol_USR	  ] = ActFrmAccOth,
-      [Rol_STD	  ] = ActFrmAccStd,
-      [Rol_NET	  ] = ActFrmAccNET,
-      [Rol_TCH	  ] = ActFrmAccTch,
-      [Rol_DEG_ADM] = ActFrmAccOth,
-      [Rol_CTR_ADM] = ActFrmAccOth,
-      [Rol_INS_ADM] = ActFrmAccOth,
-      [Rol_SYS_ADM] = ActFrmAccOth,
-     };
-
-   /***** Link for changing the account *****/
    switch (Usr_ItsMe (UsrDat->UsrCod))
      {
       case Usr_ME:
-	 Lay_PutContextualLinkOnlyIcon (ActFrmMyAcc,NULL,
-					NULL,NULL,
+	 Lay_PutContextualLinkOnlyIcon (ActFrmMyAcc,NULL,NULL,NULL,
 					"pen.svg",Ico_BLACK);
          break;
       case Usr_OTHER:
+      default:
 	 if (Usr_CheckIfICanEditOtherUsr (UsrDat) == Usr_CAN)
-	    Lay_PutContextualLinkOnlyIcon (NextAction[UsrDat->Roles.InCurrentCrs],NULL,
+	    Lay_PutContextualLinkOnlyIcon (ActFrmAccOth,NULL,
 					   Rec_PutParUsrCodEncrypted,NULL,
 					   "pen.svg",Ico_BLACK);
 	 break;

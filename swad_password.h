@@ -62,7 +62,7 @@ Err_SuccessOrError_t Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword
 void Pwd_ShowFormChgMyPwd (void);
 void Pwd_PutFormToGetNewPasswordOnce (void);
 void Pwd_PutFormToGetNewPasswordTwice (void);
-void Pwd_ShowFormChgOtherUsrPwd (void);
+void Pwd_ShowFormChgOthPwd (void);
 
 void Pwd_AskForConfirmationOnDangerousAction (void);
 Err_SuccessOrError_t Pwd_GetConfirmationOnDangerousAction (void);

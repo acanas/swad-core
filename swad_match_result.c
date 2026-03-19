@@ -794,6 +794,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 			   Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneMchResMe);
 			break;
 		     case Usr_OTHER:
+		     default:
 			Frm_BeginForm (ActSeeOneMchResOth);
 			   Mch_PutParsEdit (Games);
 			   Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);

@@ -73,7 +73,8 @@ typedef enum
 
 void Net_ShowWebsAndSocialNets (const struct Usr_Data *UsrDat);
 
-void Net_ShowFormMyWebsAndSocialNets (void);
+void Net_ShowFormWebsAndSocialNets (struct Usr_Data *UsrDat);
+void Net_ChangeOthWebs (void);
 void Net_ChangeMyWebs (void);
 void Net_ShowWebAndSocialNetworksStats (Hie_Level_t HieLvl);
 

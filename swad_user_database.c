@@ -40,35 +40,35 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/******************************* Update my office ****************************/
+/*************************** Update user's office ****************************/
 /*****************************************************************************/
 
-void Usr_DB_UpdateMyOffice (void)
+void Usr_DB_UpdateOffice (const struct Usr_Data *UsrDat)
   {
    DB_QueryUPDATE ("can not update office",
 		   "UPDATE usr_data"
 		     " SET Office='%s'"
 		   " WHERE UsrCod=%ld",
-		   Gbl.Usrs.Me.UsrDat.Tch.Office,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+		   UsrDat->Tch.Office,
+		   UsrDat->UsrCod);
   }
 
 /*****************************************************************************/
-/***************************** Update my office phone ************************/
+/************************ Update user's office phone *************************/
 /*****************************************************************************/
 
-void Usr_DB_UpdateMyOfficePhone (void)
+void Usr_DB_UpdateOfficePhone (const struct Usr_Data *UsrDat)
   {
    DB_QueryUPDATE ("can not update office phone",
 		   "UPDATE usr_data"
 		     " SET OfficePhone='%s'"
 		   " WHERE UsrCod=%ld",
-	           Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
-	           Gbl.Usrs.Me.UsrDat.UsrCod);
+	           UsrDat->Tch.OfficePhone,
+	           UsrDat->UsrCod);
   }
 
 /*****************************************************************************/
-/************** Check if a user exists with a given user's code **************/
+/************* Check if a user exists with a given user's code ***************/
 /*****************************************************************************/
 
 Exi_Exist_t Usr_DB_ChkIfUsrCodExists (long UsrCod)

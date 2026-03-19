@@ -758,22 +758,9 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
 /********** Show form to the change of password of another user **************/
 /*****************************************************************************/
 
-void Pwd_ShowFormChgOtherUsrPwd (void)
+void Pwd_ShowFormChgOthPwd (void)
   {
    extern const char *Txt_Password;
-   static Act_Action_t NextAction[Rol_NUM_ROLES] =
-     {
-      [Rol_UNK	  ] = ActChgPwdOth,
-      [Rol_GST	  ] = ActChgPwdOth,
-      [Rol_USR	  ] = ActChgPwdOth,
-      [Rol_STD	  ] = ActChgPwdStd,
-      [Rol_NET	  ] = ActChgPwdTch,
-      [Rol_TCH	  ] = ActChgPwdTch,
-      [Rol_DEG_ADM] = ActChgPwdOth,
-      [Rol_CTR_ADM] = ActChgPwdOth,
-      [Rol_INS_ADM] = ActChgPwdOth,
-      [Rol_SYS_ADM] = ActChgPwdOth,
-     };
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Pwd_PASSWORD_SECTION_ID);
@@ -786,7 +773,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 
 	 /***** Form to change password *****/
 	 /* Begin form */
-	 Frm_BeginFormAnchor (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],Pwd_PASSWORD_SECTION_ID);
+	 Frm_BeginFormAnchor (ActChgPwdOth,Pwd_PASSWORD_SECTION_ID);
 	    Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 
 	    /* New password */

@@ -27,6 +27,7 @@
 
 #include <string.h>
 
+#include "swad_account.h"
 #include "swad_action_list.h"
 #include "swad_box.h"
 #include "swad_database.h"
@@ -124,7 +125,7 @@ static const char *Net_WebsAndSocialNetworksTitle[Net_NUM_WEBS_AND_SOCIAL_NETWOR
    [Net_X             ] = "X",
   };
 
-#define Net_MY_WEBS_ID	"my_webs_section"
+#define Net_WEBS_SECTION_ID	"webs_section"
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -134,6 +135,8 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
                                      const char *Icon,const char *Title);
 
 static void Net_PutIconsWebsSocialNetworks (__attribute__((unused)) void *Args);
+
+static void Net_ChangeWebs (struct Usr_Data *UsrDat);
 
 /*****************************************************************************/
 /************************** Show webs / social networks **********************/
@@ -185,10 +188,10 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
   }
 
 /*****************************************************************************/
-/********************* Show form to edit my social networks ******************/
+/******************* Show form to edit user's social networks ****************/
 /*****************************************************************************/
 
-void Net_ShowFormMyWebsAndSocialNets (void)
+void Net_ShowFormWebsAndSocialNets (struct Usr_Data *UsrDat)
   {
    extern const char *Hlp_PROFILE_Account_Webs;
    extern const char *Txt_Webs_social_networks;
@@ -197,7 +200,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    char StrName[32];
 
    /***** Begin section *****/
-   HTM_SECTION_Begin (Net_MY_WEBS_ID);
+   HTM_SECTION_Begin (Net_WEBS_SECTION_ID);
 
       /***** Begin box *****/
       HTM_DIV_Begin ("class=\"REC_CONT\"");
@@ -206,51 +209,60 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 		       Hlp_PROFILE_Account_Webs,Box_NOT_CLOSABLE);
 
 	    /***** Begin form *****/
-	    Frm_BeginFormAnchor (ActChgMyNet,Net_MY_WEBS_ID);
+	    switch (Usr_ItsMe (UsrDat->UsrCod))
+	      {
+	       case Usr_ME:
+		  Frm_BeginFormAnchor (ActChgMyNet,Net_WEBS_SECTION_ID);
+		  break;
+	       case Usr_OTHER:
+	       default:
+		  Frm_BeginFormAnchor (ActChgOthNet,Net_WEBS_SECTION_ID);
+		     Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
+		  break;
+	      }
 
-	       /***** Begin table *****/
-	       HTM_TABLE_Begin ("REC");
+	    /***** Begin table *****/
+	    HTM_TABLE_Begin ("REC");
 
-		  /***** List webs and social networks *****/
-		  for (NumURL  = (Net_WebsAndSocialNetworks_t) 0;
-		       NumURL <= (Net_WebsAndSocialNetworks_t) (Net_NUM_WEBS_AND_SOCIAL_NETWORKS - 1);
-		       NumURL++)
-		    {
-		     /***** Get user's web / social network from database *****/
-		     Net_DB_GetURL (Gbl.Usrs.Me.UsrDat.UsrCod,NumURL,URL);
+	       /***** List webs and social networks *****/
+	       for (NumURL  = (Net_WebsAndSocialNetworks_t) 0;
+		    NumURL <= (Net_WebsAndSocialNetworks_t) (Net_NUM_WEBS_AND_SOCIAL_NETWORKS - 1);
+		    NumURL++)
+		 {
+		  /***** Get user's web / social network from database *****/
+		  Net_DB_GetURL (UsrDat->UsrCod,NumURL,URL);
 
-		     /***** Row for this web / social network *****/
-		     snprintf (StrName,sizeof (StrName),"URL%u",(unsigned) NumURL);
-		     HTM_TR_Begin (NULL);
+		  /***** Row for this web / social network *****/
+		  snprintf (StrName,sizeof (StrName),"URL%u",(unsigned) NumURL);
+		  HTM_TR_Begin (NULL);
 
-			HTM_TD_Begin ("class=\"REC_C1_BOT LM\"");
-			   HTM_LABEL_Begin ("for=\"%s\" class=\"FORM_IN_%s\"",
-					    StrName,The_GetSuffix ());
-			      Ico_PutIcon (Net_WebsAndSocialNetworksIcons[NumURL],Ico_BLACK,
-					   Net_WebsAndSocialNetworksTitle[NumURL],
-					   "CONTEXT_OPT CONTEXT_ICO16x16");
-			      // HTM_NBSP ();
-			      HTM_Txt (Net_WebsAndSocialNetworksTitle[NumURL]);
-			      HTM_Colon ();
-			   HTM_LABEL_End ();
-			HTM_TD_End ();
+		     HTM_TD_Begin ("class=\"REC_C1_BOT LM\"");
+			HTM_LABEL_Begin ("for=\"%s\" class=\"FORM_IN_%s\"",
+					 StrName,The_GetSuffix ());
+			   Ico_PutIcon (Net_WebsAndSocialNetworksIcons[NumURL],Ico_BLACK,
+					Net_WebsAndSocialNetworksTitle[NumURL],
+					"CONTEXT_OPT CONTEXT_ICO16x16");
+			   HTM_Txt (Net_WebsAndSocialNetworksTitle[NumURL]);
+			   HTM_Colon ();
+			HTM_LABEL_End ();
+		     HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-			   HTM_INPUT_URL (StrName,URL,
-					  HTM_NO_ATTR,
-					  "id=\"%s\""
-					  " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-					  StrName,The_GetSuffix ());
-			HTM_TD_End ();
+		     HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+			HTM_INPUT_URL (StrName,URL,
+				       HTM_NO_ATTR,
+				       "id=\"%s\""
+				       " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				       StrName,The_GetSuffix ());
+		     HTM_TD_End ();
 
-		     HTM_TR_End ();
-		    }
+		  HTM_TR_End ();
+		 }
 
-	       /***** End table *****/
-	       HTM_TABLE_End ();
+	    /***** End table *****/
+	    HTM_TABLE_End ();
 
-	       /***** Confirm button *****/
-	       Btn_PutButton (Btn_SAVE_CHANGES,NULL);
+	    /***** Confirm button *****/
+	    Btn_PutButton (Btn_SAVE_CHANGES,NULL);
 
 	    /***** End form *****/
 	    Frm_EndForm ();
@@ -277,7 +289,22 @@ static void Net_PutIconsWebsSocialNetworks (__attribute__((unused)) void *Args)
 /********* Get data fields about web and social networks from form ***********/
 /*****************************************************************************/
 
+void Net_ChangeOthWebs (void)
+  {
+   /***** Get user from form *****/
+   Acc_GetUsrToChgAccount ();
+
+   /***** Change webs *****/
+   Net_ChangeWebs (&Gbl.Usrs.Other.UsrDat);
+  }
+
 void Net_ChangeMyWebs (void)
+  {
+   /***** Change webs *****/
+   Net_ChangeWebs (&Gbl.Usrs.Me.UsrDat);
+  }
+
+static void Net_ChangeWebs (struct Usr_Data *UsrDat)
   {
    Net_WebsAndSocialNetworks_t NumURL;
    char ParName[3 + 10 + 1];
@@ -294,10 +321,10 @@ void Net_ChangeMyWebs (void)
 
       if (URL[0])
 	 /***** Insert or replace web / social network *****/
-	 Net_DB_UpdateMyWeb (NumURL,URL);
+	 Net_DB_UpdateWeb (UsrDat->UsrCod,NumURL,URL);
       else
 	 /***** Remove web / social network *****/
-	 Net_DB_RemoveMyWeb (NumURL);
+	 Net_DB_RemoveWeb (UsrDat->UsrCod,NumURL);
      }
   }
 

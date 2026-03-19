@@ -45,7 +45,7 @@ long Nck_GetUsrCodFromNickname (const char *NickWithArr);
 void Nck_PutFormToGetNewNickname (const char *NewNickWithoutArr);
 
 void Nck_ShowFormChgMyNickname (void);
-void Nck_ShowFormChangeOtherUsrNickname (void);
+void Nck_ShowFormChgOthNickname (void);
 
 void Nck_RemoveMyNick (void);
 void Nck_RemoveOtherUsrNick (void);

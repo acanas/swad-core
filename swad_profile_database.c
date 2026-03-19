@@ -52,6 +52,7 @@ void Prf_DB_CreateUsrFigures (long UsrCod,const struct Prf_UsrFigures *UsrFigure
 	 Str_Copy (SubQueryFirstClickTime,"NOW()",sizeof (SubQueryFirstClickTime) - 1);
 	 break;
       case Usr_OTHER:
+      default:
 	 snprintf (SubQueryFirstClickTime,sizeof (SubQueryFirstClickTime),
 		   "FROM_UNIXTIME(%ld)",
 		   (long) UsrFigures->FirstClickTimeUTC);	//   0 ==> unknown first click time or user never logged

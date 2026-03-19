@@ -88,7 +88,7 @@ extern struct Globals Gbl;
 
 #define Rec_SHOW_OFFICE_HOURS_DEFAULT	Lay_SHOW
 
-#define Rec_MY_INS_CTR_DPT_ID	"my_ins_ctr_dpt_section"
+#define Rec_INS_CTR_DPT_SECTION_ID	"ins_ctr_dpt_section"
 
 /*****************************************************************************/
 /************************* Private global variables **************************/
@@ -172,13 +172,15 @@ static void Rec_ShowDepartment (struct Usr_Data *UsrDat,Lay_Show_t ShowData);
 static void Rec_ShowOffice (struct Usr_Data *UsrDat,Lay_Show_t ShowData);
 static void Rec_ShowOfficePhone (struct Usr_Data *UsrDat,Lay_Show_t ShowData);
 
-static void Rec_WriteLinkToDataProtectionClause (void);
-
 static void Rec_GetUsrExtraDataFromRecordForm (struct Usr_Data *UsrDat);
 static void Rec_GetUsrCommentsFromForm (struct Usr_Data *UsrDat);
 
-static void Rec_ShowAlertsIfNotFilled (void);
-static void Rec_ShowFormMyInsCtrDpt (void);
+static void Rec_ChangeCtyOIns (struct Usr_Data *UsrDat);
+static void Rec_ChangeIns (struct Usr_Data *UsrDat);
+static void Rec_ChangeCtr (struct Usr_Data *UsrDat);
+static void Rec_ChangeDpt (struct Usr_Data *UsrDat);
+static void Rec_ChangeOffice (struct Usr_Data *UsrDat);
+static void Rec_ChangeOfficePhone (struct Usr_Data *UsrDat);
 
 /*****************************************************************************/
 /*************** Create, edit and remove fields of records *******************/
@@ -2042,6 +2044,19 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       [Rol_NET    ] = Hlp_USERS_Teachers_shared_record_card,
       [Rol_TCH    ] = Hlp_USERS_Teachers_shared_record_card,
      };
+   static Act_Action_t NextActionOtherAdmin[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = ActUpdOth,
+      [Rol_GST	  ] = ActUpdOth,
+      [Rol_USR	  ] = ActUpdOth,
+      [Rol_STD	  ] = ActUpdStd,
+      [Rol_NET	  ] = ActUpdTch,
+      [Rol_TCH	  ] = ActUpdTch,
+      [Rol_DEG_ADM] = ActUpdOth,
+      [Rol_CTR_ADM] = ActUpdOth,
+      [Rol_INS_ADM] = ActUpdOth,
+      [Rol_SYS_ADM] = ActUpdOth,
+     };
    Usr_MeOrOther_t MeOrOther;
    bool IAmLoggedAsTeacherOrSysAdm;
    bool CountryForm;
@@ -2177,47 +2192,11 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 			Frm_BeginForm (ActChgMyData);
 			break;
 		     case Rec_SHA_OTHER_ACCOUNT_FORM:
-			switch (Gbl.Action.Act)
-			  {
-			   case ActFrmAccStd:	case ActChgStdDat:
-			      NextAction = ActChgStdDat;
-			      break;
-			   case ActFrmAccNET:	case ActChgNETDat:
-			      NextAction = ActChgNETDat;
-			      break;
-			   case ActFrmAccTch:	case ActChgTchDat:
-			      NextAction = ActChgTchDat;
-			      break;
-			   case ActFrmAccOth:	case ActChgOthDat:
-			      NextAction = ActChgOthDat;
-			      break;
-			   default:
-			      Err_WrongActionExit ();
-			      break;
-			  }
-			Frm_BeginForm (NextAction);
+			Frm_BeginForm (ActChgOthDat);
 			   Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
 			break;
 		     case Rec_SHA_OTHER_ADMIN_FORM:
-			switch (Gbl.Action.Act)
-			  {
-			   case ActReqMdfStd:	case ActUpdStd:
-			      NextAction = ActUpdStd;
-			      break;
-			   case ActReqMdfNET:	case ActUpdNET:
-			      NextAction = ActUpdNET;
-			      break;
-			   case ActReqMdfTch:	case ActUpdTch:
-			      NextAction = ActUpdTch;
-			      break;
-			   case ActReqMdfOth:	case ActUpdOth:
-			      NextAction = ActUpdOth;
-			      break;
-			   default:
-			      Err_WrongActionExit ();
-			      break;
-			  }
-			Frm_BeginForm (NextAction);
+			Frm_BeginForm (NextActionOtherAdmin[UsrDat->Roles.InCurrentCrs]);
 			   Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
 			break;
 		     case Rec_SHA_OTHER_NEW_FORM:
@@ -2226,14 +2205,14 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 			   case ActReqMdfStd:
 			      NextAction = ActCreStd;
 			      break;
-			   case ActReqMdfNET:
-			      NextAction = ActCreNET;
-			      break;
 			   case ActReqMdfTch:
 			      NextAction = ActCreTch;
 			      break;
-			   default:
+			   case ActReqMdfOth:
 			      NextAction = ActCreOth;
+			      break;
+			   default:
+			      Err_WrongActionExit ();
 			      break;
 			  }
 			Frm_BeginForm (NextAction);
@@ -2309,6 +2288,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 				    Grp_ShowLstGrpsToChgMyGrps ();
 				 break;
 			      case Usr_OTHER:
+			      default:
 				 Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
 				 break;
 			     }
@@ -2346,7 +2326,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
       [Rol_GST	  ] = ActReqMdfOth,
       [Rol_USR	  ] = ActReqMdfOth,
       [Rol_STD	  ] = ActReqMdfStd,
-      [Rol_NET	  ] = ActReqMdfNET,
+      [Rol_NET	  ] = ActReqMdfTch,
       [Rol_TCH	  ] = ActReqMdfTch,
       [Rol_DEG_ADM] = ActReqMdfOth,
       [Rol_CTR_ADM] = ActReqMdfOth,
@@ -2868,9 +2848,6 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 				    case ActReqMdfStd:
 				       DefaultRoleInForm = Rol_STD;
 				       break;
-				    case ActReqMdfNET:
-				       DefaultRoleInForm = Rol_NET;
-				       break;
 				    case ActReqMdfTch:
 				       DefaultRoleInForm = Rol_TCH;
 				       break;
@@ -2953,9 +2930,6 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 			  {
 			   case ActReqMdfStd:
 			      DefaultRoleInForm = Rol_STD;
-			      break;
-			   case ActReqMdfNET:
-			      DefaultRoleInForm = Rol_NET;
 			      break;
 			   case ActReqMdfTch:
 			      DefaultRoleInForm = Rol_TCH;
@@ -3621,22 +3595,6 @@ static void Rec_ShowOfficePhone (struct Usr_Data *UsrDat,Lay_Show_t ShowData)
   }
 
 /*****************************************************************************/
-/*********************** Write a link to netiquette rules ********************/
-/*****************************************************************************/
-
-static void Rec_WriteLinkToDataProtectionClause (void)
-  {
-   extern const char *Txt_DATA_PROTECTION_POLICY;
-
-   HTM_DIV_Begin ("class=\"CM\"");
-      HTM_A_Begin ("class=\"TIT\" href=\"%s/\" target=\"_blank\"",
-		   Cfg_URL_DATA_PROTECTION_PUBLIC);
-	 HTM_Txt (Txt_DATA_PROTECTION_POLICY);
-      HTM_A_End ();
-   HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
 /*************************** Modify my user's data ***************************/
 /*****************************************************************************/
 
@@ -3657,21 +3615,14 @@ void Rec_ChangeMyRecord (void)
 void Rec_ChangeOthRecord (void)
   {
    /***** Get user from form *****/
-   switch (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-     {
-      case Exi_EXISTS:
-	 /***** Get user's data from record form *****/
-	 Rec_GetUsrNameFromRecordForm (&Gbl.Usrs.Other.UsrDat);
-	 Rec_GetUsrExtraDataFromRecordForm (&Gbl.Usrs.Other.UsrDat);
+   Acc_GetUsrToChgAccount ();
 
-	 /***** Update user's data in database *****/
-	 Enr_UpdateUsrData (&Gbl.Usrs.Other.UsrDat);
-	 break;
-      case Exi_DOES_NOT_EXIST:
-      default:
-	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
-	 break;
-     }
+   /***** Get user's data from record form *****/
+   Rec_GetUsrNameFromRecordForm (&Gbl.Usrs.Other.UsrDat);
+   Rec_GetUsrExtraDataFromRecordForm (&Gbl.Usrs.Other.UsrDat);
+
+   /***** Update user's data in database *****/
+   Enr_UpdateUsrData (&Gbl.Usrs.Other.UsrDat);
   }
 
 /*****************************************************************************/
@@ -3800,135 +3751,13 @@ static void Rec_GetUsrCommentsFromForm (struct Usr_Data *UsrDat)
   }
 
 /*****************************************************************************/
-/**** Show my shared record and a form to edit my institution, center... *****/
+/******** Show form to edit user's institution, center and department ********/
 /*****************************************************************************/
 
-void Rec_ShowMySharedRecordAndMore (void)
-  {
-   extern const char *Txt_Before_going_to_any_other_option_you_must_create_your_password;
-   extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
-   extern const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address;
-
-   /***** Get current user's nickname and email address
-          It's necessary because current nickname or email could be just updated *****/
-   Nck_DB_GetNicknameFromUsrCod (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.Nickname);
-   Mai_GetEmailFromUsrCod (&Gbl.Usrs.Me.UsrDat);
-
-   /***** Get my roles if not yet got *****/
-   Rol_GetRolesInAllCrss (&Gbl.Usrs.Me.UsrDat);
-
-   /***** Check password, nickname and email *****/
-   if (Gbl.Usrs.Me.UsrDat.Password[0] == '\0')	// I must create my passoword
-      Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_create_your_password);
-   if (Gbl.Usrs.Me.UsrDat.Nickname[0] == '\0')	// I must fill my nickname
-      Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
-   if (Gbl.Usrs.Me.UsrDat.Email[0] == '\0')	// I must fill my email
-      Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address);
-
-   /***** If user has no name and surname, sex... *****/
-   Rec_ShowAlertsIfNotFilled ();
-
-   /***** Begin container *****/
-   HTM_DIV_Begin ("class=\"REC_USR\"");
-
-      /***** Left part *****/
-      /* Show forms to change:
-         � my password
-         � my nickname
-         � my email
-         � my ID
-      */
-      HTM_DIV_Begin ("class=\"REC_LEFT\"");
-	 Pwd_ShowFormChgMyPwd ();
-	 Nck_ShowFormChgMyNickname ();
-	 Mai_ShowFormChgMyEmail ();
-	 ID__ShowFormChgMyID ();
-      HTM_DIV_End ();
-
-      /***** Right part *****/
-      /* Show forms to change:
-         � My shared record card,
-	 � My institution, center and department
-	 � My webs / social networks
-      */
-      HTM_DIV_Begin ("class=\"REC_RIGHT\"");
-	 Rec_ShowSharedUsrRecord (Rec_SHA_ME_ACCOUNT_FORM,
-				  &Gbl.Usrs.Me.UsrDat,NULL);
-	 Rec_ShowFormMyInsCtrDpt ();
-	 Net_ShowFormMyWebsAndSocialNets ();
-      HTM_DIV_End ();
-
-   /***** End container *****/
-   HTM_DIV_End ();
-
-   /***** Data protection clause *****/
-   Rec_WriteLinkToDataProtectionClause ();
-  }
-
-/*****************************************************************************/
-/***************** Show alerts if some fields are not filled *****************/
-/*****************************************************************************/
-
-static void Rec_ShowAlertsIfNotFilled (void)
-  {
-   extern const char *Txt_Please_fill_in_your_record_card_including_your_name;
-   extern const char *Txt_Please_fill_in_your_record_card_including_your_sex;
-   extern const char *Txt_Please_fill_in_your_record_card_including_your_country_nationality;
-   extern const char *Txt_Please_select_the_country_of_your_institution;
-   extern const char *Txt_Please_select_your_institution;
-   extern const char *Txt_Please_select_your_center;
-   extern const char *Txt_Please_select_your_department;
-   bool IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |	// I am a non-editing teacher...
-							  (1 << Rol_TCH)));	// ...or a teacher in any course
-   bool RecordFilled = true;
-
-   /***** First check that all mandatory fields are filled *****/
-   if (!Gbl.Usrs.Me.UsrDat.FrstName[0] ||
-       !Gbl.Usrs.Me.UsrDat.Surname1[0])			// 1. No name
-     {
-      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_name);
-      RecordFilled = false;
-     }
-
-   if (Gbl.Usrs.Me.UsrDat.Sex == Usr_SEX_UNKNOWN)	// 2. No sex
-     {
-      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_sex);
-      RecordFilled = false;
-     }
-
-   if (Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTY] < 0)			// 3. No country
-     {
-      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_country_nationality);
-      RecordFilled = false;
-     }
-
-   /***** Only when all mandatory fields are filled,
-          check my institution country, country, center and department *****/
-   if (RecordFilled)
-     {
-      if (Gbl.Usrs.Me.UsrDat.InsCtyCod < 0)		// 4. No institution country
-	 Ale_ShowAlert (Ale_WARNING,Txt_Please_select_the_country_of_your_institution);
-      else if (Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] < 0)	// 5. No institution
-	 Ale_ShowAlert (Ale_WARNING,Txt_Please_select_your_institution);
-      else if (IAmATeacher)
-	{
-	 if (Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] < 0)	// 6. No center
-	    Ale_ShowAlert (Ale_WARNING,Txt_Please_select_your_center);
-	 else if (Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)	// 7. No deparment
-	    Ale_ShowAlert (Ale_WARNING,Txt_Please_select_your_department);
-	}
-     }
-  }
-
-/*****************************************************************************/
-/********* Show form to edit my institution, center and department ***********/
-/*****************************************************************************/
-
-static void Rec_ShowFormMyInsCtrDpt (void)
+void Rec_ShowFormInsCtrDpt (struct Usr_Data *UsrDat)
   {
    extern const char *Hlp_PROFILE_Account_Institution;
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
-   extern const char *Txt_Institution_center_and_department;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Another_institution;
    extern const char *Txt_Another_center;
@@ -3943,19 +3772,18 @@ static void Rec_ShowFormMyInsCtrDpt (void)
    const struct Hie_Node *Ctr;
    char *Label;
    char *SelectClass;
-   bool IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |	// I am a non-editing teacher...
-							  (1 << Rol_TCH)));	// ...or a teacher in any course
+   Usr_MeOrOther_t MeOrOther = Usr_ItsMe (UsrDat->UsrCod);
+   bool IsATeacher = (UsrDat->Roles.InCrss & ((1 << Rol_NET) |	// User is a non-editing teacher...
+					      (1 << Rol_TCH)));	// ...or a teacher in any course
 
    /***** Get list of countries *****/
    Cty_GetBasicListOfCountries ();
 
    /***** Begin section *****/
-   HTM_SECTION_Begin (Rec_MY_INS_CTR_DPT_ID);
+   HTM_SECTION_Begin (Rec_INS_CTR_DPT_SECTION_ID);
 
       /***** Begin box and table *****/
-      Box_BoxBegin (IAmATeacher ? Txt_Institution_center_and_department :
-				  Txt_HIERARCHY_SINGUL_Abc[Hie_INS],
-		    NULL,NULL,
+      Box_BoxBegin (Txt_HIERARCHY_SINGUL_Abc[Hie_INS],NULL,NULL,
 		    Hlp_PROFILE_Account_Institution,Box_NOT_CLOSABLE);
 
 	 /***** Begin table *****/
@@ -3974,26 +3802,36 @@ static void Rec_ShowFormMyInsCtrDpt (void)
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 
 		  /* Begin form to select the country of my institution */
-		  Frm_BeginFormAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
-		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
-				       "id=\"InsCtyCod\" name=\"OthCtyCod\""
-				       " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-				       The_GetSuffix ());
-			HTM_OPTION (HTM_Type_STRING,"-1",
-				    (Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0 ? HTM_SELECTED :
-									 HTM_NO_ATTR) | HTM_DISABLED,
-				    NULL);
-			for (NumCty = 0;
-			     NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
-			     NumCty++)
-			  {
-			   Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
-			   HTM_OPTION (HTM_Type_LONG,&Cty->HieCod,
-				       Cty->HieCod == Gbl.Usrs.Me.UsrDat.InsCtyCod ? HTM_SELECTED :
-										     HTM_NO_ATTR,
-				       "%s",Cty->FullName);
-			  }
-		     HTM_SELECT_End ();
+	          switch (MeOrOther)
+		    {
+		     case Usr_ME:
+		        Frm_BeginFormAnchor (ActChgCtyMyIns,Rec_INS_CTR_DPT_SECTION_ID);
+			break;
+		     case Usr_OTHER:
+		     default:
+		        Frm_BeginFormAnchor (ActChgCtyOthIns,Rec_INS_CTR_DPT_SECTION_ID);
+			   Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
+			break;
+		    }
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+				    "id=\"InsCtyCod\" name=\"OthCtyCod\""
+				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				    The_GetSuffix ());
+		     HTM_OPTION (HTM_Type_STRING,"-1",
+				 (UsrDat->InsCtyCod <= 0 ? HTM_SELECTED :
+							   HTM_NO_ATTR) | HTM_DISABLED,
+				 NULL);
+		     for (NumCty = 0;
+			  NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
+			  NumCty++)
+		       {
+			Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
+			HTM_OPTION (HTM_Type_LONG,&Cty->HieCod,
+				    Cty->HieCod == UsrDat->InsCtyCod ? HTM_SELECTED :
+								       HTM_NO_ATTR,
+				    "%s",Cty->FullName);
+		       }
+		  HTM_SELECT_End ();
 		  Frm_EndForm ();
 
 	       HTM_TD_End ();
@@ -4014,40 +3852,50 @@ static void Rec_ShowFormMyInsCtrDpt (void)
 
 		  /* Get list of institutions in this country */
 		  Hie_FreeList (Hie_CTY);
-		  if (Gbl.Usrs.Me.UsrDat.InsCtyCod > 0)
-		     Ins_GetBasicListOfInstitutions (Gbl.Usrs.Me.UsrDat.InsCtyCod);
+		  if (UsrDat->InsCtyCod > 0)
+		     Ins_GetBasicListOfInstitutions (UsrDat->InsCtyCod);
 
 		  /* Begin form to select institution */
-		  Frm_BeginFormAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);
-		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
-				       "id=\"OthInsCod\" name=\"OthInsCod\""
-				       " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-				       The_GetSuffix ());
-			HTM_OPTION (HTM_Type_STRING,"-1",
-				    (Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] < 0 ? HTM_SELECTED :
-									       HTM_NO_ATTR) | HTM_DISABLED,
-				    NULL);
-			HTM_OPTION (HTM_Type_STRING,"0",
-				    Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] == 0 ? HTM_SELECTED :
-									       HTM_NO_ATTR,
-				    "%s",Txt_Another_institution);
-			for (NumIns = 0;
-			     NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
-			     NumIns++)
-			  {
-			   Ins = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
-			   HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
-				       Ins->HieCod == Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] ? HTM_SELECTED :
-											    HTM_NO_ATTR,
-				       "%s",Ins->FullName);
-			  }
-		     HTM_SELECT_End ();
+	          switch (MeOrOther)
+		    {
+		     case Usr_ME:
+		        Frm_BeginFormAnchor (ActChgMyIns,Rec_INS_CTR_DPT_SECTION_ID);
+			break;
+		     case Usr_OTHER:
+		     default:
+		        Frm_BeginFormAnchor (ActChgOthIns,Rec_INS_CTR_DPT_SECTION_ID);
+			   Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
+			break;
+		    }
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+				    "id=\"OthInsCod\" name=\"OthInsCod\""
+				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				    The_GetSuffix ());
+		     HTM_OPTION (HTM_Type_STRING,"-1",
+				 (UsrDat->HieCods[Hie_INS] < 0 ? HTM_SELECTED :
+								 HTM_NO_ATTR) | HTM_DISABLED,
+				 NULL);
+		     HTM_OPTION (HTM_Type_STRING,"0",
+				 UsrDat->HieCods[Hie_INS] == 0 ? HTM_SELECTED :
+								 HTM_NO_ATTR,
+				 "%s",Txt_Another_institution);
+		     for (NumIns = 0;
+			  NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
+			  NumIns++)
+		       {
+			Ins = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
+			HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
+				    Ins->HieCod == UsrDat->HieCods[Hie_INS] ? HTM_SELECTED :
+									      HTM_NO_ATTR,
+				    "%s",Ins->FullName);
+		       }
+		  HTM_SELECT_End ();
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
 
-	    if (IAmATeacher)
+	    if (IsATeacher)
 	      {
 	       /***** Center *****/
 	       HTM_TR_Begin (NULL);
@@ -4063,34 +3911,44 @@ static void Rec_ShowFormMyInsCtrDpt (void)
 
 		     /* Get list of centers in this institution */
 		     Hie_FreeList (Hie_INS);
-		     if (Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] > 0)
-			Ctr_GetBasicListOfCentersInIns (Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS]);
+		     if (UsrDat->HieCods[Hie_INS] > 0)
+			Ctr_GetBasicListOfCentersInIns (UsrDat->HieCods[Hie_INS]);
 
 		     /* Begin form to select center */
-		     Frm_BeginFormAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
-			HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
-					  "id=\"OthCtrCod\" name=\"OthCtrCod\""
-					  " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-					  The_GetSuffix ());
-			   HTM_OPTION (HTM_Type_STRING,"-1",
-				       (Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] < 0 ? HTM_SELECTED :
-										  HTM_NO_ATTR) | HTM_DISABLED,
-				       NULL);
-			   HTM_OPTION (HTM_Type_STRING,"0",
-				       Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] == 0 ? HTM_SELECTED :
-										  HTM_NO_ATTR,
-				       Txt_Another_center);
-			   for (NumCtr = 0;
-				NumCtr < Gbl.Hierarchy.List[Hie_INS].Num;
-				NumCtr++)
-			     {
-			      Ctr = &Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr];
-			      HTM_OPTION (HTM_Type_LONG,&Ctr->HieCod,
-					  Ctr->HieCod == Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] ? HTM_SELECTED :
-											       HTM_NO_ATTR,
-					  Ctr->FullName);
-			     }
-			HTM_SELECT_End ();
+		     switch (MeOrOther)
+		       {
+			case Usr_ME:
+			   Frm_BeginFormAnchor (ActChgMyCtr,Rec_INS_CTR_DPT_SECTION_ID);
+			   break;
+			case Usr_OTHER:
+			default:
+			   Frm_BeginFormAnchor (ActChgOthCtr,Rec_INS_CTR_DPT_SECTION_ID);
+			      Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
+			   break;
+		       }
+		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+				       "id=\"OthCtrCod\" name=\"OthCtrCod\""
+				       " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				       The_GetSuffix ());
+			HTM_OPTION (HTM_Type_STRING,"-1",
+				    (UsrDat->HieCods[Hie_CTR] < 0 ? HTM_SELECTED :
+								    HTM_NO_ATTR) | HTM_DISABLED,
+				    NULL);
+			HTM_OPTION (HTM_Type_STRING,"0",
+				    UsrDat->HieCods[Hie_CTR] == 0 ? HTM_SELECTED :
+								    HTM_NO_ATTR,
+				    Txt_Another_center);
+			for (NumCtr = 0;
+			     NumCtr < Gbl.Hierarchy.List[Hie_INS].Num;
+			     NumCtr++)
+			  {
+			   Ctr = &Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr];
+			   HTM_OPTION (HTM_Type_LONG,&Ctr->HieCod,
+				       Ctr->HieCod == UsrDat->HieCods[Hie_CTR] ? HTM_SELECTED :
+										 HTM_NO_ATTR,
+				       Ctr->FullName);
+			  }
+		     HTM_SELECT_End ();
 		     Frm_EndForm ();
 		  HTM_TD_End ();
 
@@ -4107,18 +3965,28 @@ static void Rec_ShowFormMyInsCtrDpt (void)
 
 		  /* Data */
 		  HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-		     Frm_BeginFormAnchor (ActChgMyDpt,Rec_MY_INS_CTR_DPT_ID);
-			if (asprintf (&SelectClass,"REC_C2_BOT_INPUT INPUT_%s",
-				      The_GetSuffix ()) < 0)
-			   Err_NotEnoughMemoryExit ();
-			Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS],	// Departments in my institution
-						     Gbl.Usrs.Me.UsrDat.Tch.DptCod,	// Selected department
-						     Par_CodeStr[ParCod_Dpt],		// Parameter name
-						     SelectClass,				// Selector class
-						     -1L,					// First option
-						     "",					// Text when no department selected
-						     HTM_SUBMIT_ON_CHANGE);
-			free (SelectClass);
+		     switch (MeOrOther)
+		       {
+			case Usr_ME:
+			   Frm_BeginFormAnchor (ActChgMyDpt,Rec_INS_CTR_DPT_SECTION_ID);
+			   break;
+			case Usr_OTHER:
+			default:
+			   Frm_BeginFormAnchor (ActChgOthDpt,Rec_INS_CTR_DPT_SECTION_ID);
+			      Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
+			   break;
+		       }
+		     if (asprintf (&SelectClass,"REC_C2_BOT_INPUT INPUT_%s",
+				   The_GetSuffix ()) < 0)
+			Err_NotEnoughMemoryExit ();
+		     Dpt_WriteSelectorDepartment (UsrDat->HieCods[Hie_INS],	// Departments in my institution
+						  UsrDat->Tch.DptCod,	// Selected department
+						  Par_CodeStr[ParCod_Dpt],	// Parameter name
+						  SelectClass,		// Selector class
+						  -1L,			// First option
+						  "",			// Text when no department selected
+						  HTM_SUBMIT_ON_CHANGE);
+		     free (SelectClass);
 		     Frm_EndForm ();
 		  HTM_TD_End ();
 
@@ -4132,12 +4000,22 @@ static void Rec_ShowFormMyInsCtrDpt (void)
 
 		  /* Data */
 		  HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-		     Frm_BeginFormAnchor (ActChgMyOff,Rec_MY_INS_CTR_DPT_ID);
-			HTM_INPUT_TEXT ("Office",Usr_MAX_CHARS_ADDRESS,Gbl.Usrs.Me.UsrDat.Tch.Office,
-					HTM_SUBMIT_ON_CHANGE,
-					"id=\"Office\""
-					" class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-					The_GetSuffix ());
+		     switch (MeOrOther)
+		       {
+			case Usr_ME:
+			   Frm_BeginFormAnchor (ActChgMyOff,Rec_INS_CTR_DPT_SECTION_ID);
+			   break;
+			case Usr_OTHER:
+			default:
+			   Frm_BeginFormAnchor (ActChgOthOff,Rec_INS_CTR_DPT_SECTION_ID);
+			      Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
+			   break;
+		       }
+		     HTM_INPUT_TEXT ("Office",Usr_MAX_CHARS_ADDRESS,UsrDat->Tch.Office,
+				     HTM_SUBMIT_ON_CHANGE,
+				     "id=\"Office\""
+				     " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				     The_GetSuffix ());
 		     Frm_EndForm ();
 		  HTM_TD_End ();
 
@@ -4151,12 +4029,22 @@ static void Rec_ShowFormMyInsCtrDpt (void)
 
 		  /* Data */
 		  HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-		     Frm_BeginFormAnchor (ActChgMyOffPho,Rec_MY_INS_CTR_DPT_ID);
-			HTM_INPUT_TEL ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
-				       HTM_SUBMIT_ON_CHANGE,
-				       "id=\"OfficePhone\""
-				       " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-				       The_GetSuffix ());
+		     switch (MeOrOther)
+		       {
+			case Usr_ME:
+			   Frm_BeginFormAnchor (ActChgMyOffPho,Rec_INS_CTR_DPT_SECTION_ID);
+			   break;
+			case Usr_OTHER:
+			default:
+			   Frm_BeginFormAnchor (ActChgOthOffPho,Rec_INS_CTR_DPT_SECTION_ID);
+			      Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
+			   break;
+		       }
+		     HTM_INPUT_TEL ("OfficePhone",UsrDat->Tch.OfficePhone,
+				    HTM_SUBMIT_ON_CHANGE,
+				    "id=\"OfficePhone\""
+				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				    The_GetSuffix ());
 		     Frm_EndForm ();
 		  HTM_TD_End ();
 
@@ -4176,42 +4064,72 @@ static void Rec_ShowFormMyInsCtrDpt (void)
   }
 
 /*****************************************************************************/
-/******** Receive form data to change the country of my institution **********/
+/******** Receive form data to change the country of an institution **********/
 /*****************************************************************************/
+
+void Rec_ChangeCtyOfOthIns (void)
+  {
+   /***** Get user from form *****/
+   Acc_GetUsrToChgAccount ();
+
+   /***** Change country of institution *****/
+   Rec_ChangeCtyOIns (&Gbl.Usrs.Other.UsrDat);
+  }
 
 void Rec_ChangeCtyOfMyIns (void)
   {
+   /***** Change country of institution *****/
+   Rec_ChangeCtyOIns (&Gbl.Usrs.Me.UsrDat);
+  }
+
+static void Rec_ChangeCtyOIns (struct Usr_Data *UsrDat)
+  {
    unsigned NumInss;
 
-   /***** Get country code of my institution *****/
-   Gbl.Usrs.Me.UsrDat.InsCtyCod = ParCod_GetAndCheckPar (ParCod_OthCty);
+   /***** Get country code of institution *****/
+   UsrDat->InsCtyCod = ParCod_GetAndCheckPar (ParCod_OthCty);
 
    /***** When country changes, the institution, center and department must be reset *****/
    NumInss = Hie_GetNumNodesInHieLvl (Hie_INS,	// Number of institutions...
 				      Hie_CTY,	// ...in country
-				      Gbl.Usrs.Me.UsrDat.InsCtyCod);
+				      UsrDat->InsCtyCod);
    if (NumInss)
      {
-      Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] = -1L;
-      Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] = -1L;
-      Gbl.Usrs.Me.UsrDat.Tch.DptCod = -1L;
+      UsrDat->HieCods[Hie_INS] = -1L;
+      UsrDat->HieCods[Hie_CTR] = -1L;
+      UsrDat->Tch.DptCod = -1L;
      }
    else	// Country has no institutions
      {
-      Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] = 0;	// Another institution
-      Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] = 0;	// Another center
-      Gbl.Usrs.Me.UsrDat.Tch.DptCod = 0;	// Another department
+      UsrDat->HieCods[Hie_INS] = 0;	// Another institution
+      UsrDat->HieCods[Hie_CTR] = 0;	// Another center
+      UsrDat->Tch.DptCod = 0;		// Another department
     }
 
    /***** Update institution, center and department *****/
-   Acc_DB_UpdateMyInstitutionCenterDepartment ();
+   Acc_DB_UpdateInsCtrDpt (UsrDat);
   }
 
 /*****************************************************************************/
-/**************** Receive form data to change my institution *****************/
+/****************** Receive form data to change institution ******************/
 /*****************************************************************************/
 
+void Rec_ChangeOthIns (void)
+  {
+   /***** Get user from form *****/
+   Acc_GetUsrToChgAccount ();
+
+   /***** Change institution *****/
+   Rec_ChangeIns (&Gbl.Usrs.Other.UsrDat);
+  }
+
 void Rec_ChangeMyIns (void)
+  {
+   /***** Change institution *****/
+   Rec_ChangeIns (&Gbl.Usrs.Me.UsrDat);
+  }
+
+static void Rec_ChangeIns (struct Usr_Data *UsrDat)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Ins;
@@ -4219,7 +4137,7 @@ void Rec_ChangeMyIns (void)
    unsigned NumCtrs;
    unsigned NumDpts;
 
-   /***** Get my institution *****/
+   /***** Get institution *****/
    /* Get institution code */
    Ins.HieCod = ParCod_GetAndCheckParMin (ParCod_OthIns,0);	// 0 (another institution) is allowed here
 
@@ -4227,38 +4145,53 @@ void Rec_ChangeMyIns (void)
    if (Ins.HieCod > 0)
      {
       SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
-      if (Gbl.Usrs.Me.UsrDat.InsCtyCod != Ins.PrtCod)
-	 Gbl.Usrs.Me.UsrDat.InsCtyCod = Ins.PrtCod;
+      if (UsrDat->InsCtyCod != Ins.PrtCod)
+	 UsrDat->InsCtyCod = Ins.PrtCod;
      }
 
    /* Set institution code */
-   Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] = Ins.HieCod;
+   UsrDat->HieCods[Hie_INS] = Ins.HieCod;
 
    /***** When institution changes, the center and department must be reset *****/
    NumCtrs = Hie_GetNumNodesInHieLvl (Hie_CTR,	// Number of centers...
 				      Hie_INS,	// ...in institution
-				      Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS]);
-   NumDpts = Dpt_GetNumDptsInIns (Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS]);
-   Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] = NumCtrs ? -1L :
-						    0;
-   Gbl.Usrs.Me.UsrDat.Tch.DptCod       = NumDpts ? -1L :
-						    0;
+				      UsrDat->HieCods[Hie_INS]);
+   NumDpts = Dpt_GetNumDptsInIns (UsrDat->HieCods[Hie_INS]);
+   UsrDat->HieCods[Hie_CTR] = NumCtrs ? -1L :
+					 0;
+   UsrDat->Tch.DptCod       = NumDpts ? -1L :
+					 0;
 
    /***** Update institution, center and department *****/
-   Acc_DB_UpdateMyInstitutionCenterDepartment ();
+   Acc_DB_UpdateInsCtrDpt (UsrDat);
   }
 
 /*****************************************************************************/
-/******************* Receive form data to change my center *******************/
+/********************* Receive form data to change center ********************/
 /*****************************************************************************/
 
+void Rec_ChangeOthCtr (void)
+  {
+   /***** Get user from form *****/
+   Acc_GetUsrToChgAccount ();
+
+   /***** Change center *****/
+   Rec_ChangeCtr (&Gbl.Usrs.Other.UsrDat);
+  }
+
 void Rec_ChangeMyCtr (void)
+  {
+   /***** Change center *****/
+   Rec_ChangeCtr (&Gbl.Usrs.Me.UsrDat);
+  }
+
+static void Rec_ChangeCtr (struct Usr_Data *UsrDat)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Ctr;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
-   /***** Get my center *****/
+   /***** Get center *****/
    /* Get center code */
    Ctr.HieCod = ParCod_GetAndCheckParMin (ParCod_OthCtr,0);	// 0 (another center) is allowed here
 
@@ -4266,29 +4199,44 @@ void Rec_ChangeMyCtr (void)
    if (Ctr.HieCod > 0)
      {
       SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
-      if (Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] != Ctr.PrtCod)
+      if (UsrDat->HieCods[Hie_INS] != Ctr.PrtCod)
 	{
-	 Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] = Ctr.PrtCod;
-	 Gbl.Usrs.Me.UsrDat.Tch.DptCod = -1L;
+	 UsrDat->HieCods[Hie_INS] = Ctr.PrtCod;
+	 UsrDat->Tch.DptCod = -1L;
 	}
      }
 
    /* Set center code */
-   Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] = Ctr.HieCod;
+   UsrDat->HieCods[Hie_CTR] = Ctr.HieCod;
 
    /***** Update institution, center and department *****/
-   Acc_DB_UpdateMyInstitutionCenterDepartment ();
+   Acc_DB_UpdateInsCtrDpt (UsrDat);
   }
 
 /*****************************************************************************/
-/***************** Receive form data to change my department *****************/
+/******************* Receive form data to change department ******************/
 /*****************************************************************************/
+
+void Rec_ChangeOthDpt (void)
+  {
+   /***** Get user from form *****/
+   Acc_GetUsrToChgAccount ();
+
+   /***** Change department *****/
+   Rec_ChangeDpt (&Gbl.Usrs.Other.UsrDat);
+  }
 
 void Rec_ChangeMyDpt (void)
   {
+   /***** Change department *****/
+   Rec_ChangeDpt (&Gbl.Usrs.Me.UsrDat);
+  }
+
+static void Rec_ChangeDpt (struct Usr_Data *UsrDat)
+  {
    struct Dpt_Department Dpt;
 
-   /***** Get my department *****/
+   /***** Get department *****/
    /* Get department code */
    Dpt.DptCod = ParCod_GetAndCheckParMin (ParCod_Dpt,0);	// 0 (another department) is allowed here
 
@@ -4296,40 +4244,70 @@ void Rec_ChangeMyDpt (void)
    if (Dpt.DptCod > 0)
      {
       Dpt_GetDepartmentDataByCod (&Dpt);
-      if (Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] != Dpt.HieCod)
+      if (UsrDat->HieCods[Hie_INS] != Dpt.HieCod)
 	{
-	 Gbl.Usrs.Me.UsrDat.HieCods[Hie_INS] = Dpt.HieCod;
-	 Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTR] = -1L;
+	 UsrDat->HieCods[Hie_INS] = Dpt.HieCod;
+	 UsrDat->HieCods[Hie_CTR] = -1L;
 	}
      }
 
    /***** Update institution, center and department *****/
-   Gbl.Usrs.Me.UsrDat.Tch.DptCod = Dpt.DptCod;
-   Acc_DB_UpdateMyInstitutionCenterDepartment ();
+   UsrDat->Tch.DptCod = Dpt.DptCod;
+   Acc_DB_UpdateInsCtrDpt (UsrDat);
   }
 
 /*****************************************************************************/
-/******************* Receive form data to change my office *******************/
+/******************** Receive form data to change office *********************/
 /*****************************************************************************/
+
+void Rec_ChangeOthOffice (void)
+  {
+   /***** Get user from form *****/
+   Acc_GetUsrToChgAccount ();
+
+   /***** Change office *****/
+   Rec_ChangeOffice (&Gbl.Usrs.Other.UsrDat);
+  }
 
 void Rec_ChangeMyOffice (void)
   {
-   /***** Get my office *****/
-   Par_GetParText ("Office",Gbl.Usrs.Me.UsrDat.Tch.Office,Usr_MAX_BYTES_ADDRESS);
+   /***** Change office *****/
+   Rec_ChangeOffice (&Gbl.Usrs.Me.UsrDat);
+  }
+
+static void Rec_ChangeOffice (struct Usr_Data *UsrDat)
+  {
+   /***** Get office *****/
+   Par_GetParText ("Office",UsrDat->Tch.Office,Usr_MAX_BYTES_ADDRESS);
 
    /***** Update office *****/
-   Usr_DB_UpdateMyOffice ();
+   Usr_DB_UpdateOffice (UsrDat);
   }
 
 /*****************************************************************************/
-/**************** Receive form data to change my office phone ****************/
+/****************** Receive form data to change office phone *****************/
 /*****************************************************************************/
+
+void Rec_ChangeOthOfficePhone (void)
+  {
+   /***** Get user from form *****/
+   Acc_GetUsrToChgAccount ();
+
+   /***** Change office phone *****/
+   Rec_ChangeOfficePhone (&Gbl.Usrs.Other.UsrDat);
+  }
 
 void Rec_ChangeMyOfficePhone (void)
   {
-   /***** Get my office *****/
-   Par_GetParText ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,Usr_MAX_BYTES_PHONE);
+   /***** Change office phone *****/
+   Rec_ChangeOfficePhone (&Gbl.Usrs.Me.UsrDat);
+  }
+
+static void Rec_ChangeOfficePhone (struct Usr_Data *UsrDat)
+  {
+   /***** Get office phone *****/
+   Par_GetParText ("OfficePhone",UsrDat->Tch.OfficePhone,Usr_MAX_BYTES_PHONE);
 
    /***** Update office phone *****/
-   Usr_DB_UpdateMyOfficePhone ();
+   Usr_DB_UpdateOfficePhone (UsrDat);
   }

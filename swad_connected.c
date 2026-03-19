@@ -649,6 +649,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role,unsigned NumU
          UsrDat = &Gbl.Usrs.Me.UsrDat;
 	 break;
       case Usr_OTHER:
+      default:
 	 /***** Initialize structure with user's data *****/
 	 OtherUsrDat.UsrCod = UsrCod;
 	 Usr_UsrDataConstructor (&OtherUsrDat);
@@ -705,6 +706,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role,unsigned NumU
       case Usr_ME:
 	 break;
       case Usr_OTHER:
+      default:
 	 /***** Free memory used for user's data *****/
          Usr_UsrDataDestructor (&OtherUsrDat);
          break;

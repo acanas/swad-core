@@ -83,15 +83,15 @@ const char *Net_DB_WebsAndSocialNetworks[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
 /******************* Insert or replace web / social network ******************/
 /*****************************************************************************/
 
-void Net_DB_UpdateMyWeb (Net_WebsAndSocialNetworks_t NumURL,
-                         const char URL[WWW_MAX_BYTES_WWW + 1])
+void Net_DB_UpdateWeb (long UsrCod,Net_WebsAndSocialNetworks_t NumURL,
+                       const char URL[WWW_MAX_BYTES_WWW + 1])
   {
    DB_QueryREPLACE ("can not update user's web / social network",
 		    "REPLACE INTO usr_webs"
 		    " (UsrCod,Web,URL)"
 		    " VALUES"
 		    " (%ld,'%s','%s')",
-		    Gbl.Usrs.Me.UsrDat.UsrCod,
+		    UsrCod,
 		    Net_DB_WebsAndSocialNetworks[NumURL],
 		    URL);
   }
@@ -234,13 +234,13 @@ unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res,
 /*********************** Remove my web / social network **********************/
 /*****************************************************************************/
 
-void Net_DB_RemoveMyWeb (Net_WebsAndSocialNetworks_t NumURL)
+void Net_DB_RemoveWeb (long UsrCod,Net_WebsAndSocialNetworks_t NumURL)
   {
    DB_QueryDELETE ("can not remove user's web / social network",
 		   "DELETE FROM usr_webs"
 		   " WHERE UsrCod=%ld"
 		     " AND Web='%s'",
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   UsrCod,
 		   Net_DB_WebsAndSocialNetworks[NumURL]);
   }
 

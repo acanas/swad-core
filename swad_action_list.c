@@ -1554,15 +1554,6 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActCreStd		] = {1445, 1,TabUsr,Enr_CreateNewUsr1		,Enr_CreateNewUsr2		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3E0}},Act_NORM,Act_1ST},
    [ActUpdStd		] = {1423, 1,TabUsr,Enr_AdminUsr1		,Enr_AdminUsr2			,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActCnfID_Std	] = {1569, 1,TabUsr,NULL			,ID__ConfirmOtherUsrID		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
-   [ActFrmAccStd	] = {1736, 1,TabUsr,NULL			,Acc_ShowFormChgOtherUsrAccount	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActChgStdDat	] = {2191, 1,TabUsr,Rec_ChangeOthRecord		,Acc_ShowFormChgOtherUsrAccount	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActRemNicStd	] = {1739, 1,TabUsr,NULL			,Nck_RemoveOtherUsrNick		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActChgNicStd	] = {1742, 1,TabUsr,NULL			,Nck_ChangeOtherUsrNick		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActRemID_Std	] = {1451, 1,TabUsr,NULL			,ID__RemoveOtherUsrID		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActChgID_Std	] = {1454, 1,TabUsr,NULL			,ID__ChangeOtherUsrID		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActChgPwdStd	] = {1468, 1,TabUsr,Pwd_UpdateOtherUsrPwd	,Acc_ShowFormChgOtherUsrAccount	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActRemMaiStd	] = {1479, 1,TabUsr,NULL			,Mai_RemoveOtherUsrEmail	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActChgMaiStd	] = {1482, 1,TabUsr,NULL			,Mai_ChangeOtherUsrEmail	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
    [ActRemStdCrs	] = {1462, 1,TabUsr,Enr_RemUsrFromCrs1		,Enr_RemUsrFromCrs2		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
    [ActReqRemAllStdCrs	] = {  88, 1,TabUsr,NULL			,Enr_AskRemAllStdsThisCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRemAllStdCrs	] = {  87, 1,TabUsr,NULL			,Enr_RemAllStdsThisCrs		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -1598,30 +1589,15 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActSeeRecSevTch	] = {  22, 2,TabUsr,NULL			,Rec_ListRecordsTchsShow	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
    [ActPrnRecSevTch	] = { 127, 2,TabUsr,NULL			,Rec_ListRecordsTchsPrint	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F8}},Act_NORM,Act_NEW},
    [ActReqID_MdfTch	] = {1416, 2,TabUsr,NULL			,Enr_ReqEnrRemTch		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
-   [ActReqMdfNET	] = {1644, 2,TabUsr,NULL			,Enr_AskIfEnrRemAnotherTch	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActReqMdfTch	] = {1420, 2,TabUsr,NULL			,Enr_AskIfEnrRemAnotherTch	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActReqTchPho	] = {1434, 2,TabUsr,NULL			,Pho_ReqPhotoUsr		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3E0}},Act_NORM,Act_1ST},
    [ActDetTchPho	] = {1437, 2,TabUsr,NULL			,Pho_RecOtherUsrPhotoDetFaces	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3E0}},Act_DATA,Act_1ST},
    [ActChgTchPho	] = {1440, 2,TabUsr,Pho_ChangeUsrPhoto1		,Pho_ChangeUsrPhoto2		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3E0}},Act_NORM,Act_1ST},
    [ActReqRemTchPho	] = {1576, 2,TabUsr,NULL			,Pho_ReqRemUsrPhoto		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3E0}},Act_NORM,Act_1ST},
    [ActRemTchPho	] = {1443, 2,TabUsr,NULL			,Pho_RemoveUsrPhoto		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3E0}},Act_NORM,Act_1ST},
-   [ActCreNET		] = {1645, 2,TabUsr,Enr_CreateNewUsr1		,Enr_CreateNewUsr2		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3E0}},Act_NORM,Act_1ST},
    [ActCreTch		] = {1446, 2,TabUsr,Enr_CreateNewUsr1		,Enr_CreateNewUsr2		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3E0}},Act_NORM,Act_1ST},
-   [ActUpdNET		] = {1646, 2,TabUsr,Enr_AdminUsr1		,Enr_AdminUsr2			,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActUpdTch		] = {1424, 2,TabUsr,Enr_AdminUsr1		,Enr_AdminUsr2			,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActCnfID_Tch	] = {1570, 2,TabUsr,NULL			,ID__ConfirmOtherUsrID		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActFrmAccNET	] = {2190, 2,TabUsr,NULL			,Acc_ShowFormChgOtherUsrAccount	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActChgNETDat	] = {2192, 2,TabUsr,Rec_ChangeOthRecord		,Acc_ShowFormChgOtherUsrAccount	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActFrmAccTch	] = {1737, 2,TabUsr,NULL			,Acc_ShowFormChgOtherUsrAccount	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActChgTchDat	] = {2193, 2,TabUsr,Rec_ChangeOthRecord		,Acc_ShowFormChgOtherUsrAccount	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActRemNicTch	] = {1740, 2,TabUsr,NULL			,Nck_RemoveOtherUsrNick		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActChgNicTch	] = {1743, 2,TabUsr,NULL			,Nck_ChangeOtherUsrNick		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActRemID_Tch	] = {1452, 2,TabUsr,NULL			,ID__RemoveOtherUsrID		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActChgID_Tch	] = {1455, 2,TabUsr,NULL			,ID__ChangeOtherUsrID		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActChgPwdTch	] = {1469, 2,TabUsr,Pwd_UpdateOtherUsrPwd	,Acc_ShowFormChgOtherUsrAccount	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActRemMaiTch	] = {1480, 2,TabUsr,NULL			,Mai_RemoveOtherUsrEmail	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActChgMaiTch	] = {1483, 2,TabUsr,NULL			,Mai_ChangeOtherUsrEmail	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActRemNETCrs	] = {1647, 2,TabUsr,Enr_RemUsrFromCrs1		,Enr_RemUsrFromCrs2		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
    [ActRemTchCrs	] = {1463, 2,TabUsr,Enr_RemUsrFromCrs1		,Enr_RemUsrFromCrs2		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3E0}},Act_NORM,Act_1ST},
    [ActReqAccEnrNET	] = {1639, 2,TabUsr,NULL			,Enr_ReqAcceptEnrolmentInCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x3D0}},Act_NORM,Act_1ST},
    [ActReqAccEnrTch	] = {1457, 2,TabUsr,NULL			,Enr_ReqAcceptEnrolmentInCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x3E0}},Act_NORM,Act_1ST},
@@ -1671,13 +1647,20 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActCreOth		] = {1444, 3,TabUsr,Enr_CreateNewUsr1		,Enr_CreateNewUsr2		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3E0}},Act_NORM,Act_1ST},
    [ActUpdOth		] = {1422, 3,TabUsr,Enr_AdminUsr1		,Enr_AdminUsr2			,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActCnfID_Oth	] = {1568, 3,TabUsr,NULL			,ID__ConfirmOtherUsrID		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActFrmAccOth	] = {1735, 3,TabUsr,NULL			,Acc_ShowFormChgOtherUsrAccount	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActChgOthDat	] = {2194, 3,TabUsr,Rec_ChangeOthRecord		,Acc_ShowFormChgOtherUsrAccount	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
+   [ActFrmAccOth	] = {1735, 3,TabUsr,Acc_GetUsrToChgAccount	,Acc_ShowFormsChgOthAccount	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
+   [ActChgOthDat	] = {2194, 3,TabUsr,Rec_ChangeOthRecord		,Acc_ShowFormsChgOthAccount	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
+   [ActChgCtyOthIns	] = {2209, 3,TabUsr,Rec_ChangeCtyOfOthIns	,Acc_ShowFormsChgOthAccount	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},
+   [ActChgOthIns	] = {2210, 3,TabUsr,Rec_ChangeOthIns		,Acc_ShowFormsChgOthAccount	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},
+   [ActChgOthCtr	] = {2211, 3,TabUsr,Rec_ChangeOthCtr		,Acc_ShowFormsChgOthAccount	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},
+   [ActChgOthDpt	] = {2212, 3,TabUsr,Rec_ChangeOthDpt		,Acc_ShowFormsChgOthAccount	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},
+   [ActChgOthOff	] = {2213, 3,TabUsr,Rec_ChangeOthOffice		,Acc_ShowFormsChgOthAccount	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},
+   [ActChgOthOffPho	] = {2214, 3,TabUsr,Rec_ChangeOthOfficePhone	,Acc_ShowFormsChgOthAccount	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},
+   [ActChgOthNet	] = {2215, 3,TabUsr,Net_ChangeOthWebs		,Acc_ShowFormsChgOthAccount	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},
    [ActRemNicOth	] = {1738, 3,TabUsr,NULL			,Nck_RemoveOtherUsrNick		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
    [ActChgNicOth	] = {1741, 3,TabUsr,NULL			,Nck_ChangeOtherUsrNick		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
    [ActRemID_Oth	] = {1450, 3,TabUsr,NULL			,ID__RemoveOtherUsrID		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
    [ActChgID_Oth	] = {1453, 3,TabUsr,NULL			,ID__ChangeOtherUsrID		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActChgPwdOth	] = {1467, 3,TabUsr,Pwd_UpdateOtherUsrPwd	,Acc_ShowFormChgOtherUsrAccount	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
+   [ActChgPwdOth	] = {1467, 3,TabUsr,Pwd_UpdateOtherUsrPwd	,Acc_ShowFormsChgOthAccount	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
    [ActRemMaiOth	] = {1478, 3,TabUsr,NULL			,Mai_RemoveOtherUsrEmail	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
    [ActChgMaiOth	] = {1481, 3,TabUsr,NULL			,Mai_ChangeOtherUsrEmail	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
    [ActRemUsrGbl	] = {  62, 3,TabUsr,NULL			,Acc_GetUsrCodAndRemUsrGbl	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
@@ -1987,30 +1970,30 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActChkUsrAcc	] = {1584, 4,TabPrf,NULL			,Acc_CheckIfEmptyAccountExists	,{{    0,    0},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
    [ActCreMyAcc		] = {1787, 4,TabPrf,NULL			,Acc_ShowFormCreateMyAccount	,{{    0,    0},{0x001,0x001},{0x001,0x001},{0x001,0x001},{0x001,0x001},{0x001,0x001},{0x001,0x001}},Act_NORM,Act_1ST},
    [ActCreUsrAcc	] = {1163, 4,TabPrf,NULL			,Acc_AfterCreationNewAccount	,{{    0,    0},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
-   [ActRemMyID		] = {1147, 4,TabPrf,ID__RemoveMyUsrID		,Rec_ShowMySharedRecordAndMore	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
-   [ActChgMyID		] = {1148, 4,TabPrf,ID__NewMyUsrID		,Rec_ShowMySharedRecordAndMore	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
-   [ActRemMyNck		] = {1089, 4,TabPrf,Nck_RemoveMyNick		,Rec_ShowMySharedRecordAndMore	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
-   [ActChgMyNck		] = {  37, 4,TabPrf,Nck_UpdateMyNick		,Rec_ShowMySharedRecordAndMore	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
-   [ActRemMyMai		] = {1090, 4,TabPrf,Mai_RemoveMyUsrEmail	,Rec_ShowMySharedRecordAndMore	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
-   [ActChgMyMai		] = {1088, 4,TabPrf,May_NewMyUsrEmail		,Rec_ShowMySharedRecordAndMore	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActRemMyID		] = {1147, 4,TabPrf,ID__RemoveMyUsrID		,Acc_ShowFormsChgMyAccount	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActChgMyID		] = {1148, 4,TabPrf,ID__NewMyUsrID		,Acc_ShowFormsChgMyAccount	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActRemMyNck		] = {1089, 4,TabPrf,Nck_RemoveMyNick		,Acc_ShowFormsChgMyAccount	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActChgMyNck		] = {  37, 4,TabPrf,Nck_UpdateMyNick		,Acc_ShowFormsChgMyAccount	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActRemMyMai		] = {1090, 4,TabPrf,Mai_RemoveMyUsrEmail	,Acc_ShowFormsChgMyAccount	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActChgMyMai		] = {1088, 4,TabPrf,May_NewMyUsrEmail		,Acc_ShowFormsChgMyAccount	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActCnfMai		] = {1091, 4,TabPrf,NULL			,Mai_ConfirmEmail		,{{    0,    0},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
-   [ActChgMyPwd		] = {  35, 4,TabPrf,Pwd_UpdateMyPwd		,Rec_ShowMySharedRecordAndMore	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActChgMyPwd		] = {  35, 4,TabPrf,Pwd_UpdateMyPwd		,Acc_ShowFormsChgMyAccount	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActReqRemMyAcc	] = {1430, 4,TabPrf,NULL			,Acc_AskIfRemoveMyAccount	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActRemMyAcc		] = {1431, 4,TabPrf,NULL			,Acc_RemoveMyAccount		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActPrnUsrQR		] = {1022, 4,TabPrf,NULL			,QR_PrintUsrQRCode		,{{    0,    0},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3F8}},Act_NORM,Act_NEW},
-   [ActChgMyData	] = { 298, 4,TabPrf,Rec_ChangeMyRecord		,Rec_ShowMySharedRecordAndMore	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActChgMyData	] = { 298, 4,TabPrf,Rec_ChangeMyRecord		,Acc_ShowFormsChgMyAccount	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActReqMyPho		] = {  30, 4,TabPrf,NULL			,Pho_ReqMyPhoto			,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActDetMyPho		] = { 693, 4,TabPrf,NULL			,Pho_RecMyPhotoDetFaces		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_DATA,Act_1ST},
    [ActUpdMyPho		] = { 694, 4,TabPrf,Pho_ChangeMyPhoto1		,Pho_ChangeMyPhoto2		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActReqRemMyPho	] = {1577, 4,TabPrf,NULL			,Pho_ReqRemMyPhoto		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActRemMyPho		] = { 428, 4,TabPrf,Pho_RemoveMyPhoto1		,Pho_RemoveMyPhoto2		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
-   [ActChgCtyMyIns	] = {1166, 4,TabPrf,Rec_ChangeCtyOfMyIns	,Rec_ShowMySharedRecordAndMore	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
-   [ActChgMyIns		] = {1167, 4,TabPrf,Rec_ChangeMyIns		,Rec_ShowMySharedRecordAndMore	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
-   [ActChgMyCtr		] = {1168, 4,TabPrf,Rec_ChangeMyCtr		,Rec_ShowMySharedRecordAndMore	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
-   [ActChgMyDpt		] = {1169, 4,TabPrf,Rec_ChangeMyDpt		,Rec_ShowMySharedRecordAndMore	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
-   [ActChgMyOff		] = {1170, 4,TabPrf,Rec_ChangeMyOffice		,Rec_ShowMySharedRecordAndMore	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
-   [ActChgMyOffPho	] = {1171, 4,TabPrf,Rec_ChangeMyOfficePhone	,Rec_ShowMySharedRecordAndMore	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
-   [ActChgMyNet		] = {1173, 4,TabPrf,Net_ChangeMyWebs		,Rec_ShowMySharedRecordAndMore	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActChgCtyMyIns	] = {1166, 4,TabPrf,Rec_ChangeCtyOfMyIns	,Acc_ShowFormsChgMyAccount	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActChgMyIns		] = {1167, 4,TabPrf,Rec_ChangeMyIns		,Acc_ShowFormsChgMyAccount	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActChgMyCtr		] = {1168, 4,TabPrf,Rec_ChangeMyCtr		,Acc_ShowFormsChgMyAccount	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActChgMyDpt		] = {1169, 4,TabPrf,Rec_ChangeMyDpt		,Acc_ShowFormsChgMyAccount	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActChgMyOff		] = {1170, 4,TabPrf,Rec_ChangeMyOffice		,Acc_ShowFormsChgMyAccount	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActChgMyOffPho	] = {1171, 4,TabPrf,Rec_ChangeMyOfficePhone	,Acc_ShowFormsChgMyAccount	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActChgMyNet		] = {1173, 4,TabPrf,Net_ChangeMyWebs		,Acc_ShowFormsChgMyAccount	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
 
    // Settings
    [ActReqEdiSet	] = { 673, 5,TabPrf,NULL			,Set_EditSettings		,{{    0,    0},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
@@ -3483,11 +3466,11 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActUnk,			// #1448 (obsolete action)
 	ActUnk,			// #1449 (obsolete action)
 	ActRemID_Oth,		// #1450
-	ActRemID_Std,		// #1451
-	ActRemID_Tch,		// #1452
+	ActUnk,			// #1451 (obsolete action)
+	ActUnk,			// #1452 (obsolete action)
 	ActChgID_Oth,		// #1453
-	ActChgID_Std,		// #1454
-	ActChgID_Tch,		// #1455
+	ActUnk,			// #1454 (obsolete action)
+	ActUnk,			// #1455 (obsolete action)
 	ActReqAccEnrStd,	// #1456
 	ActReqAccEnrTch,	// #1457
 	ActAccEnrStd,		// #1458
@@ -3500,8 +3483,8 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActUnk,			// #1465 (obsolete action)
 	ActUnk,			// #1466 (obsolete action)
 	ActChgPwdOth,		// #1467
-	ActChgPwdStd,		// #1468
-	ActChgPwdTch,		// #1469
+	ActUnk,			// #1468 (obsolete action)
+	ActUnk,			// #1469 (obsolete action)
 	ActHidAnn,		// #1470
 	ActUnhAnn,		// #1471
 	ActReqRemNot,		// #1472
@@ -3511,11 +3494,11 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActUnk,			// #1476 (obsolete action)
 	ActUnk,			// #1477 (obsolete action)
 	ActRemMaiOth,		// #1478
-	ActRemMaiStd,		// #1479
-	ActRemMaiTch,		// #1480
+	ActUnk,			// #1479 (obsolete action)
+	ActUnk,			// #1480 (obsolete action)
 	ActChgMaiOth,		// #1481
-	ActChgMaiStd,		// #1482
-	ActChgMaiTch,		// #1483
+	ActUnk,			// #1482 (obsolete action)
+	ActUnk,			// #1483 (obsolete action)
 	ActChg1stDay,		// #1484
 	ActUnk,			// #1485 (obsolete action)
 	ActChgCrsTT1stDay,	// #1486
@@ -3676,10 +3659,10 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRemMe_NET,		// #1641
 	ActReqEnrSevNET,	// #1642
 	ActRcvFrmEnrSevNET,	// #1643
-	ActReqMdfNET,		// #1644
-	ActCreNET,		// #1645
-	ActUpdNET,		// #1646
-	ActRemNETCrs,		// #1647
+	ActUnk,			// #1644 (obsolete action)
+	ActUnk,			// #1645 (obsolete action)
+	ActUnk,			// #1646 (obsolete action)
+	ActUnk,			// #1647 (obsolete action)
 	ActChgCtrPlcCfg,	// #1648
 	ActSeeAllGam,		// #1649
 	ActSeeOneGam,		// #1650
@@ -3768,14 +3751,14 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgDatAssPrj,	// #1733
 	ActDowAssPrj,		// #1734
 	ActFrmAccOth,		// #1735
-	ActFrmAccStd,		// #1736
-	ActFrmAccTch,		// #1737
+	ActUnk,			// #1736 (obsolete action)
+	ActUnk,			// #1737 (obsolete action)
 	ActRemNicOth,		// #1738
-	ActRemNicStd,		// #1739
-	ActRemNicTch,		// #1740
+	ActUnk,			// #1739 (obsolete action)
+	ActUnk,			// #1740 (obsolete action)
 	ActChgNicOth,		// #1741
-	ActChgNicStd,		// #1742
-	ActChgNicTch,		// #1743
+	ActUnk,			// #1742 (obsolete action)
+	ActUnk,			// #1743 (obsolete action)
 	ActSeeRoo,		// #1744
 	ActEdiRoo,		// #1745
 	ActNewRoo,		// #1746
@@ -4226,9 +4209,30 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActSeeExaAnsShe,	// #2187
 	ActPrnExaAnsShe,	// #2188
 	ActAnsExaAnsShe,	// #2189
-	ActFrmAccNET,		// #2190
-	ActChgStdDat,		// #2191
-	ActChgNETDat,		// #2192
-	ActChgTchDat,		// #2193
+	ActUnk,			// #2190 (obsolete action)
+	ActUnk,			// #2191 (obsolete action)
+	ActUnk,			// #2192 (obsolete action)
+	ActUnk,			// #2193 (obsolete action)
 	ActChgOthDat,		// #2194
+	ActUnk,			// #2195 (obsolete action)
+	ActUnk,			// #2196 (obsolete action)
+	ActUnk,			// #2197 (obsolete action)
+	ActUnk,			// #2198 (obsolete action)
+	ActUnk,			// #2199 (obsolete action)
+	ActUnk,			// #2200 (obsolete action)
+	ActUnk,			// #2201 (obsolete action)
+	ActUnk,			// #2202 (obsolete action)
+	ActUnk,			// #2203 (obsolete action)
+	ActUnk,			// #2204 (obsolete action)
+	ActUnk,			// #2205 (obsolete action)
+	ActUnk,			// #2206 (obsolete action)
+	ActUnk,			// #2207 (obsolete action)
+	ActUnk,			// #2208 (obsolete action)
+	ActChgCtyOthIns,	// #2209
+	ActChgOthIns,		// #2210
+	ActChgOthCtr,		// #2211
+	ActChgOthDpt,		// #2212
+	ActChgOthOff,		// #2213
+	ActChgOthOffPho,	// #2214
+	ActChgOthNet,		// #2215
   };

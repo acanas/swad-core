@@ -158,12 +158,18 @@ void Rec_ChangeOthRecord (void);
 Rol_Role_t Rec_GetRoleFromRecordForm (void);
 void Rec_GetUsrNameFromRecordForm (struct Usr_Data *UsrDat);
 
-void Rec_ShowMySharedRecordAndMore (void);
+void Rec_ShowFormInsCtrDpt (struct Usr_Data *UsrDat);
+void Rec_ChangeCtyOfOthIns (void);
 void Rec_ChangeCtyOfMyIns (void);
+void Rec_ChangeOthIns (void);
 void Rec_ChangeMyIns (void);
+void Rec_ChangeOthCtr (void);
 void Rec_ChangeMyCtr (void);
+void Rec_ChangeOthDpt (void);
 void Rec_ChangeMyDpt (void);
+void Rec_ChangeOthOffice (void);
 void Rec_ChangeMyOffice (void);
+void Rec_ChangeOthOfficePhone (void);
 void Rec_ChangeMyOfficePhone (void);
 
 #endif

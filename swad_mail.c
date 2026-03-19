@@ -1063,7 +1063,7 @@ void Mai_ShowFormChgMyEmail (void)
 /****************** Show form to change another user's email *****************/
 /*****************************************************************************/
 
-void Mai_ShowFormChangeOtherUsrEmail (void)
+void Mai_ShowFormChgOthEmail (void)
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *Txt_Email;
@@ -1102,18 +1102,12 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther)
      {
       Act_Action_t Remove;
       Act_Action_t Change;
-     } NextAction[Rol_NUM_ROLES] =
+     } ActMail[Rol_NUM_ROLES] =
      {
-      [Rol_UNK	  ] = {ActRemMaiOth,ActChgMaiOth},
-      [Rol_GST	  ] = {ActRemMaiOth,ActChgMaiOth},
-      [Rol_USR    ] = {ActRemMaiOth,ActChgMaiOth},
-      [Rol_STD	  ] = {ActRemMaiStd,ActChgMaiStd},
-      [Rol_NET	  ] = {ActRemMaiTch,ActChgMaiTch},
-      [Rol_TCH	  ] = {ActRemMaiTch,ActChgMaiTch},
-      [Rol_DEG_ADM] = {ActRemMaiOth,ActChgMaiOth},
-      [Rol_CTR_ADM] = {ActRemMaiOth,ActChgMaiOth},
-      [Rol_INS_ADM] = {ActRemMaiOth,ActChgMaiOth},
-      [Rol_SYS_ADM] = {ActRemMaiOth,ActChgMaiOth},
+      [Usr_ME   ] = {.Remove = ActRemMyMai,
+	             .Change = ActChgMyMai},
+      [Usr_OTHER] = {.Remove = ActRemMaiOth,
+	             .Change = ActChgMaiOth}
      };
    static void (*FuncParsRemove[Usr_NUM_ME_OR_OTHER]) (void *ID) =
      {
@@ -1126,17 +1120,6 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther)
    unsigned NumEmail;
    Mai_Confirmed_t Confirmed;
    char *Icon;
-   struct
-     {
-      Act_Action_t Remove;
-      Act_Action_t Change;
-     } ActMail[Rol_NUM_ROLES] =
-     {
-      [Usr_ME   ] = {.Remove = ActRemMyMai,
-	             .Change = ActChgMyMai},
-      [Usr_OTHER] = {.Remove = NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs].Remove,
-	             .Change = NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs].Change}
-     };
 
    /***** Show possible alerts *****/
    Ale_ShowAlerts (Mai_EMAIL_SECTION_ID);
@@ -1311,7 +1294,7 @@ void Mai_RemoveOtherUsrEmail (void)
 	       Mai_RemoveEmail (&Gbl.Usrs.Other.UsrDat);
 
 	       /***** Show form again *****/
-	       Acc_ShowFormChgOtherUsrAccount ();
+	       Acc_ShowFormsChgOthAccount ();
 	       break;
 	    case Usr_CAN_NOT:
 	    default:
@@ -1386,7 +1369,7 @@ void Mai_ChangeOtherUsrEmail (void)
 				   Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
 
 	       /***** Show form again *****/
-	       Acc_ShowFormChgOtherUsrAccount ();
+	       Acc_ShowFormsChgOthAccount ();
 	       break;
 	    case Usr_CAN_NOT:
 	    default:

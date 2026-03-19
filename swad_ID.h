@@ -87,7 +87,7 @@ void ID__WriteUsrIDs (const struct Usr_Data *UsrDat,const char *Anchor);
 Usr_Can_t ID__ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat);
 
 void ID__ShowFormChgMyID (void);
-void ID__ShowFormChangeOtherUsrID (void);
+void ID__ShowFormChgOthID (void);
 
 void ID__RemoveMyUsrID (void);
 void ID__RemoveOtherUsrID (void);

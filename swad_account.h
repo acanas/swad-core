@@ -51,7 +51,9 @@ void Acc_CheckIfEmptyAccountExists (void);
 void Acc_ShowFormCreateMyAccount (void);
 
 void Acc_ShowFormGoToRequestNewAccount (void);
-void Acc_ShowFormChgOtherUsrAccount (void);
+void Acc_ShowFormsChgMyAccount (void);
+void Acc_GetUsrToChgAccount (void);
+void Acc_ShowFormsChgOthAccount (void);
 void Acc_PutLinkToRemoveMyAccount (__attribute__((unused)) void *Args);
 Err_SuccessOrError_t Acc_CreateMyNewAccountAndLogIn (void);
 void Acc_CreateNewUsr (struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOther);
