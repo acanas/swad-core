@@ -445,7 +445,7 @@ void Enr_ReqAcceptEnrolmentInCrs (void)
       [Rol_GST    ] = {{ActUnk		,ActUnk		},Ntf_EVENT_UNKNOWN		},
       [Rol_USR    ] = {{ActUnk		,ActUnk		},Ntf_EVENT_UNKNOWN		},
       [Rol_STD    ] = {{ActAccEnrStd	,ActRemMe_Std	},Ntf_EVENT_ENROLMENT_STD	},
-      [Rol_NET    ] = {{ActAccEnrNET	,ActRemMe_NET	},Ntf_EVENT_ENROLMENT_NET	},
+      [Rol_NET    ] = {{ActAccEnrTch	,ActRemMe_Tch	},Ntf_EVENT_ENROLMENT_NET	},
       [Rol_TCH    ] = {{ActAccEnrTch	,ActRemMe_Tch	},Ntf_EVENT_ENROLMENT_TCH	},
       [Rol_DEG_ADM] = {{ActUnk		,ActUnk		},Ntf_EVENT_UNKNOWN		},
       [Rol_CTR_ADM] = {{ActUnk		,ActUnk		},Ntf_EVENT_UNKNOWN		},

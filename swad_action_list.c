@@ -1598,13 +1598,10 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActCreTch		] = {1446, 2,TabUsr,Enr_CreateNewUsr1		,Enr_CreateNewUsr2		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3E0}},Act_NORM,Act_1ST},
    [ActUpdTch		] = {1424, 2,TabUsr,Enr_AdminUsr1		,Enr_AdminUsr2			,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActCnfID_Tch	] = {1570, 2,TabUsr,NULL			,ID__ConfirmOtherUsrID		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActRemTchCrs	] = {1463, 2,TabUsr,Enr_RemUsrFromCrs1		,Enr_RemUsrFromCrs2		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3E0}},Act_NORM,Act_1ST},
-   [ActReqAccEnrNET	] = {1639, 2,TabUsr,NULL			,Enr_ReqAcceptEnrolmentInCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x3D0}},Act_NORM,Act_1ST},
-   [ActReqAccEnrTch	] = {1457, 2,TabUsr,NULL			,Enr_ReqAcceptEnrolmentInCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x3E0}},Act_NORM,Act_1ST},
-   [ActAccEnrNET	] = {1640, 2,TabUsr,NULL			,Enr_AcceptEnrolMeInCrs		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x3D0}},Act_NORM,Act_1ST},
+   [ActRemTchCrs	] = {1463, 2,TabUsr,Enr_RemUsrFromCrs1		,Enr_RemUsrFromCrs2		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
+   [ActReqAccEnrTch	] = {1457, 2,TabUsr,NULL			,Enr_ReqAcceptEnrolmentInCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x3F0}},Act_NORM,Act_1ST},
    [ActAccEnrTch	] = {1459, 2,TabUsr,NULL			,Enr_AcceptEnrolMeInCrs		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x3E0}},Act_NORM,Act_1ST},
-   [ActRemMe_NET	] = {1641, 2,TabUsr,NULL			,Enr_ReqRemMeFromCrs		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x3D0}},Act_NORM,Act_1ST},
-   [ActRemMe_Tch	] = {1461, 2,TabUsr,NULL			,Enr_ReqRemMeFromCrs		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x3E0}},Act_NORM,Act_1ST},
+   [ActRemMe_Tch	] = {1461, 2,TabUsr,NULL			,Enr_ReqRemMeFromCrs		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x3F0}},Act_NORM,Act_1ST},
    [ActReqFolSevTch	] = {1757, 2,TabUsr,NULL			,Fol_ReqFollowTchs		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x3F8}},Act_NORM,Act_1ST},
    [ActReqUnfSevTch	] = {1759, 2,TabUsr,NULL			,Fol_ReqUnfollowTchs		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x3F8}},Act_NORM,Act_1ST},
    [ActFolSevTch	] = {1761, 2,TabUsr,NULL			,Fol_FollowUsrs			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x3F8}},Act_NORM,Act_1ST},
@@ -3654,9 +3651,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActUnk,			// #1636 (obsolete action)
 	ActPrnOneAsg,		// #1637
 	ActChgDatFmt,		// #1638
-	ActReqAccEnrNET,	// #1639
-	ActAccEnrNET,		// #1640
-	ActRemMe_NET,		// #1641
+	ActUnk,			// #1639 (obsolete action)
+	ActUnk,			// #1640 (obsolete action)
+	ActUnk,			// #1641 (obsolete action)
 	ActReqEnrSevNET,	// #1642
 	ActRcvFrmEnrSevNET,	// #1643
 	ActUnk,			// #1644 (obsolete action)

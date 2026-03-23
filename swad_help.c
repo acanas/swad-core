@@ -84,7 +84,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
       [Rol_GST    ] = ActUnk,
       [Rol_USR    ] = ActUnk,
       [Rol_STD    ] = ActRemMe_Std,
-      [Rol_NET    ] = ActRemMe_NET,
+      [Rol_NET    ] = ActRemMe_Tch,
       [Rol_TCH    ] = ActRemMe_Tch,
       [Rol_DEG_ADM] = ActUnk,
       [Rol_CTR_ADM] = ActUnk,

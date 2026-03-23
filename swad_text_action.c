@@ -30307,29 +30307,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Remove teacher from a course"		// Çeviri lazim!
 #endif
 	,
-	[ActReqAccEnrNET] =
-#if   L==1	// ca
-	"See whether to accept or reject my enrolment as non-editing teacher"		// Necessita traducció
-#elif L==2	// de
-	"See whether to accept or reject my enrolment as non-editing teacher"		// Need Übersetzung
-#elif L==3	// en
-	"See whether to accept or reject my enrolment as non-editing teacher"
-#elif L==4	// es
-	"Ver si aceptar o rechazar mi inscripci&oacute;n como profesor no editor"
-#elif L==5	// fr
-	"See whether to accept or reject my enrolment as non-editing teacher"		// Besoin de traduction
-#elif L==6	// gn
-	"Ver si aceptar o rechazar mi inscripci&oacute;n como profesor no editor"	// Okoteve traducción
-#elif L==7	// it
-	"See whether to accept or reject my enrolment as non-editing teacher"		// Bisogno di traduzione
-#elif L==8	// pl
-	"See whether to accept or reject my enrolment as non-editing teacher"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See whether to accept or reject my enrolment as non-editing teacher"		// Precisa de tradução
-#elif L==10	// tr
-	"See whether to accept or reject my enrolment as non-editing teacher"		// Çeviri lazim!
-#endif
-	,
 	[ActReqAccEnrTch] =
 #if   L==1	// ca
 	"See whether to accept or reject my enrolment as teacher"	// Necessita traducció
@@ -30353,29 +30330,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See whether to accept or reject my enrolment as teacher"	// Çeviri lazim!
 #endif
 	,
-	[ActAccEnrNET] =
-#if   L==1	// ca
-	"Accept my enrolment as non-editing teacher"		// Necessita traducció
-#elif L==2	// de
-	"Accept my enrolment as non-editing teacher"		// Need Übersetzung
-#elif L==3	// en
-	"Accept my enrolment as non-editing teacher"
-#elif L==4	// es
-	"Aceptar mi inscripci&oacute;n como profesor no editor"
-#elif L==5	// fr
-	"Accept my enrolment as non-editing teacher"		// Besoin de traduction
-#elif L==6	// gn
-	"Aceptar mi inscripci&oacute;n como profesor no editor"	// Okoteve traducción
-#elif L==7	// it
-	"Accept my enrolment as non-editing teacher"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Accept my enrolment as non-editing teacher"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Accept my enrolment as non-editing teacher"		// Precisa de tradução
-#elif L==10	// tr
-	"Accept my enrolment as non-editing teacher"		// Çeviri lazim!
-#endif
-	,
 	[ActAccEnrTch] =
 #if   L==1	// ca
 	"Accept my enrolment as teacher"		// Necessita traducció
@@ -30397,29 +30351,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Accept my enrolment as teacher"		// Precisa de tradução
 #elif L==10	// tr
 	"Accept my enrolment as teacher"		// Çeviri lazim!
-#endif
-	,
-	[ActRemMe_NET] =
-#if   L==1	// ca
-	"Reject my enrolment as non-editing teacher"			// Necessita traducció
-#elif L==2	// de
-	"Reject my enrolment as non-editing teacher"			// Need Übersetzung
-#elif L==3	// en
-	"Reject my enrolment as non-editing teacher"
-#elif L==4	// es
-	"Rechazar mi inscripci&oacute;n como profesor no editor"
-#elif L==5	// fr
-	"Reject my enrolment as non-editing teacher"			// Besoin de traduction
-#elif L==6	// gn
-	"Rechazar mi inscripci&oacute;n como profesor no editor"	// Okoteve traducción
-#elif L==7	// it
-	"Reject my enrolment as non-editing teacher"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Reject my enrolment as non-editing teacher"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Reject my enrolment as non-editing teacher"			// Precisa de tradução
-#elif L==10	// tr
-	"Reject my enrolment as non-editing teacher"			// Çeviri lazim!
 #endif
 	,
 	[ActRemMe_Tch] =

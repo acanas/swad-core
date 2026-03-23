@@ -386,8 +386,6 @@ void Act_AdjustCurrentAction (void)
 	       Gbl.Action.Act = ActReqAccEnrStd;
 	       break;
 	    case Rol_NET:
-	       Gbl.Action.Act = ActReqAccEnrNET;
-	       break;
 	    case Rol_TCH:
 	       Gbl.Action.Act = ActReqAccEnrTch;
 	       break;

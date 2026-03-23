@@ -639,10 +639,11 @@ TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de t
 
 TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtube.com/shorts/fY6Oax_uJBc?si=G3UHqvSH3yEbxm1B
 */
-#define Log_PLATFORM_VERSION	"SWAD 25.41 (2026-03-18)"
+#define Log_PLATFORM_VERSION	"SWAD 25.41 (2026-03-23)"
 #define CSS_FILE		"swad25.39.1.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 25.41.1:  Mar 23, 2026	Some actions are combined into one. (350720 lines)
 	Version 25.41:    Mar 18, 2026	System admin can edit another user's institution, center, department... (350796 lines)
 	Version 25.40.1:  Mar 17, 2026	Changes in help links. (351149 lines)
 	Version 25.40:    Mar 16, 2026	Edition of another user's data.

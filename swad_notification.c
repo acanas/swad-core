@@ -149,7 +149,7 @@ static Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    [Ntf_EVENT_MARKS_FILE       ] = ActSeeAdmMrk,
    /* Users tab */
    [Ntf_EVENT_ENROLMENT_STD    ] = ActReqAccEnrStd,
-   [Ntf_EVENT_ENROLMENT_NET    ] = ActReqAccEnrNET,
+   [Ntf_EVENT_ENROLMENT_NET    ] = ActReqAccEnrTch,
    [Ntf_EVENT_ENROLMENT_TCH    ] = ActReqAccEnrTch,
    [Ntf_EVENT_ENROLMENT_REQUEST] = ActSeeSignUpReq,
    /* Messages tab */
