@@ -4529,7 +4529,7 @@ void Usr_ListAllDataStds (void)
      {
       if (HieLvl == Hie_CRS)
          /***** Get list of record fields in current course *****/
-         Rec_GetListRecordFieldsInCurrentCrs ();
+         Rec_GetListRecordFieldsCrs ();
 
       /***** Set number of columns *****/
       NumColsCommonRecord = Usr_NUM_ALL_FIELDS_DATA_STD;

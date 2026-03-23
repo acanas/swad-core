@@ -59344,29 +59344,6 @@ const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_
 	" or a known word.";				// Çeviri lazim!
 #endif
 
-const char *Txt_Your_settings_about_notifications_have_changed =
-#if   L==1	// ca
-	"La seva configuraci&oacute; de les notificacions ha canviat.";
-#elif L==2	// de
-	"Ihre Einstellungen zu Benachrichtigungen haben sich ge&auml;ndert.";
-#elif L==3	// en
-	"Your settings about notifications have changed.";
-#elif L==4	// es
-	"Sus ajustes sobre las notificaciones han cambiado.";
-#elif L==5	// fr
-	"Vos param&egrave;tres concernant les notifications ont chang&eacute;.";
-#elif L==6	// gn
-	"Sus ajustes sobre las notificaciones han cambiado.";	// Okoteve traducción
-#elif L==7	// it
-	"Le tue impostazioni sulle notifiche sono cambiate.";
-#elif L==8	// pl
-	"Twoje ustawienia dotycz&aogon;ce powiadomie&nacute; uleg&lstrok;y zmianie.";
-#elif L==9	// pt
-	"Suas configura&ccedil;&otilde;es sobre notifica&ccedil;&otilde;es foram alteradas.";
-#elif L==10	// tr
-	"Your settings about notifications have changed.";	// Çeviri lazim!
-#endif
-
 const char *Txt_Your_request_for_enrolment_as_X_in_the_course_Y_has_been_accepted_for_processing =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
 	"La seva petici&oacute; d'inscripci&oacute; com <strong>%s</strong>"

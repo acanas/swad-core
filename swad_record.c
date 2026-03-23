@@ -155,7 +155,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 static void Rec_ShowFormSex (struct Usr_Data *UsrDat,Usr_Sex_t Sex);
 static void Rec_ShowSurname1 (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType);
 static void Rec_ShowSurname2 (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType);
-static void Rec_ShowFirstName (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType);
+static void Rec_ShowFirstNam (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType);
 static void Rec_ShowCountry (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType);
 static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,Lay_Show_t ShowData,
 				 Vie_ViewType_t ViewType);
@@ -192,7 +192,7 @@ void Rec_ReqEditRecordFields (void)
    extern const char *Txt_Record_fields;
 
    /***** Get list of fields of records in current course *****/
-   Rec_GetListRecordFieldsInCurrentCrs ();
+   Rec_GetListRecordFieldsCrs ();
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Record_fields,NULL,NULL,
@@ -219,7 +219,7 @@ void Rec_ReqEditRecordFields (void)
 /****** Create a list with the fields of records from current course *********/
 /*****************************************************************************/
 
-void Rec_GetListRecordFieldsInCurrentCrs (void)
+void Rec_GetListRecordFieldsCrs (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -961,7 +961,7 @@ static void Rec_ShowRecordOneStdCrs (struct Usr_Data *UsrDat)
    UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
 
    /***** Get list of fields of records in current course *****/
-   Rec_GetListRecordFieldsInCurrentCrs ();
+   Rec_GetListRecordFieldsCrs ();
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
@@ -1061,7 +1061,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
       RecsPerPag = Rec_GetParRecordsPerPage ();
 
    /***** Get list of fields of records in current course *****/
-   Rec_GetListRecordFieldsInCurrentCrs ();
+   Rec_GetListRecordFieldsCrs ();
 
    if (ShaTypeOfView == Rec_SHA_RECORD_LIST)
      {
@@ -1107,8 +1107,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 	    HTM_SECTION_Begin (RecordSectionId);
 
 	       if (Gbl.Action.Act == ActPrnRecSevStd &&
-		   NumUsr &&
-		   (NumUsr % RecsPerPag) == 0)
+		   NumUsr && (NumUsr % RecsPerPag) == 0)
 		  HTM_DIV_Begin ("class=\"REC_USR\" style=\"break-before:page;\"");
 	       else
 		  HTM_DIV_Begin ("class=\"REC_USR\"");
@@ -1335,8 +1334,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 	    HTM_SECTION_Begin (RecordSectionId);
 
 	       if (Gbl.Action.Act == ActPrnRecSevTch &&
-		   NumUsr &&
-		   (NumUsr % RecsPerPag) == 0)
+		   NumUsr && (NumUsr % RecsPerPag) == 0)
 		  HTM_DIV_Begin ("class=\"REC_USR\" style=\"break-before:page;\"");
 	       else
 		  HTM_DIV_Begin ("class=\"REC_USR\"");
@@ -1407,8 +1405,7 @@ static void Rec_ShowSelectorRecsPerPag (unsigned RecsPerPag)
 
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_OpenParenthesis ();
-	 HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
-			   "name=\"RecsPerPag\"");
+	 HTM_SELECT_Begin (HTM_NO_ATTR,NULL,"name=\"RecsPerPag\"");
 	    for (i  = Rec_MIN_RECORDS_PER_PAGE;
 		 i <= Rec_MAX_RECORDS_PER_PAGE;
 		 i++)
@@ -1449,8 +1446,10 @@ static void Rec_WriteFormShowOfficeHours (OneSev_OneOrSeveral_t OneOrMultiple,
       void (*FuncPutPars) (__attribute__((unused)) void *Args);
      } Actions[OneSev_NUM_ONE_SEVERAL] =
      {
-      [OneSev_ONE    ] = {.Action = ActSeeRecOneTch,.FuncPutPars = Rec_PutParsShowOfficeHoursOneTch	},
-      [OneSev_SEVERAL] = {.Action = ActSeeRecSevTch,.FuncPutPars = Rec_PutParsShowOfficeHoursSeveralTchs}
+      [OneSev_ONE    ] = {.Action	= ActSeeRecOneTch,
+			  .FuncPutPars	= Rec_PutParsShowOfficeHoursOneTch},
+      [OneSev_SEVERAL] = {.Action	= ActSeeRecSevTch,
+			  .FuncPutPars	= Rec_PutParsShowOfficeHoursSeveralTchs}
      };
    static HTM_Attributes_t Attributes[Lay_NUM_SHOW] =
      {
@@ -1498,19 +1497,19 @@ static Lay_Show_t Rec_GetParShowOfficeHours (void)
 void Rec_UpdateAndShowMyCrsRecord (void)
   {
    /***** Get list of fields of records in current course *****/
-   Rec_GetListRecordFieldsInCurrentCrs ();
+   Rec_GetListRecordFieldsCrs ();
 
    /***** Allocate memory for the texts of the fields *****/
    Rec_AllocMemFieldsRecordsCrs ();
 
-   /***** Get data of the record from the form *****/
-   Rec_GetFieldsCrsRecordFromForm ();
+      /***** Get data of the record from the form *****/
+      Rec_GetFieldsCrsRecordFromForm ();
 
-   /***** Update the record *****/
-   Rec_UpdateCrsRecord (Gbl.Usrs.Me.UsrDat.UsrCod);
+      /***** Update the record *****/
+      Rec_UpdateCrsRecord (Gbl.Usrs.Me.UsrDat.UsrCod);
 
-   /***** Show updated record *****/
-   Rec_ShowRecordOneStdCrs (&Gbl.Usrs.Me.UsrDat);
+      /***** Show updated record *****/
+      Rec_ShowRecordOneStdCrs (&Gbl.Usrs.Me.UsrDat);
 
    /***** Free memory used for some fields *****/
    Rec_FreeMemFieldsRecordsCrs ();
@@ -1534,7 +1533,7 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
 							Usr_GET_ROLE_IN_CRS);
 
    /***** Get list of fields of records in current course *****/
-   Rec_GetListRecordFieldsInCurrentCrs ();
+   Rec_GetListRecordFieldsCrs ();
 
    /***** Allocate memory for the texts of the fields *****/
    Rec_AllocMemFieldsRecordsCrs ();
@@ -1808,7 +1807,8 @@ void Rec_GetFieldsCrsRecordFromForm (void)
          /* Get text from the form */
          snprintf (FieldParName,sizeof (FieldParName),"Field%ld",
 		   Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
-         Par_GetParHTML (FieldParName,Gbl.Crs.Records.LstFields.Lst[NumField].Text,Cns_MAX_BYTES_TEXT);
+         Par_GetParHTML (FieldParName,Gbl.Crs.Records.LstFields.Lst[NumField].Text,
+                         Cns_MAX_BYTES_TEXT);
         }
   }
 
@@ -1952,9 +1952,7 @@ void Rec_ShowOtherSharedRecordEditable (void)
 void Rec_ShowSharedRecordUnmodifiable (struct Usr_Data *UsrDat)
   {
    /***** Get password, user type and user's data from database *****/
-   Usr_GetAllUsrDataFromUsrCod (UsrDat,
-                                Usr_DONT_GET_PREFS,
-                                Usr_GET_ROLE_IN_CRS);
+   Usr_GetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS,Usr_GET_ROLE_IN_CRS);
    UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
 
    /***** Show user's record *****/
@@ -2096,7 +2094,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    Rec_Record.TypeOfView = TypeOfView;
    Box_BoxBegin (NULL,
 		 TypeOfView == Rec_SHA_OTHER_NEW_FORM ? NULL :	// New user ==> don't put icons
-							    Rec_PutIconsCommands,NULL,
+							Rec_PutIconsCommands,NULL,
 		 Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE);
       HTM_TABLE_Begin ("REC");
 
@@ -2194,7 +2192,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 			/***** Name *****/
 			Rec_ShowSurname1 (UsrDat,ViewType);
 			Rec_ShowSurname2 (UsrDat,ViewType);
-			Rec_ShowFirstName (UsrDat,ViewType);
+			Rec_ShowFirstNam (UsrDat,ViewType);
 
 			/***** Country *****/
 			if (CountryForm)
@@ -2569,8 +2567,7 @@ static void Rec_ShowInstitutionInHead (struct Hie_Node *Ins,
 static void Rec_ShowPhoto (struct Usr_Data *UsrDat)
   {
    HTM_TD_Begin ("rowspan=\"3\" class=\"REC_C3_TOP CT\"");
-      Pho_ShowUsrPhotoIfAllowed (UsrDat,
-                                 "PHOTO_REC",Pho_ZOOM);
+      Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO_REC",Pho_ZOOM);
    HTM_TD_End ();
   }
 
@@ -3102,7 +3099,7 @@ static void Rec_ShowSurname2 (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
 /************************** Show user's first name ***************************/
 /*****************************************************************************/
 
-static void Rec_ShowFirstName (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
+static void Rec_ShowFirstNam (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
   {
    extern const char *Txt_First_name;
    char *Label;

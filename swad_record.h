@@ -108,7 +108,7 @@ struct LstRecordFields
 /*****************************************************************************/
 
 void Rec_ReqEditRecordFields (void);
-void Rec_GetListRecordFieldsInCurrentCrs (void);
+void Rec_GetListRecordFieldsCrs (void);
 void Rec_ShowFormCreateRecordField (void);
 void Rec_ReceiveField (void);
 unsigned Rec_ConvertToNumLinesField (const char *StrNumLines);

@@ -461,8 +461,9 @@ static void Ntf_PutContextualLinks (Lay_Show_t ShowAllNotifications,
 static void Ntf_PutIconsNotif (__attribute__((unused)) void *Args)
   {
    /***** Edit notification settings *****/
-   if (Gbl.Action.Act != ActReqEdiSet)
-      Ico_PutContextualIconToConfigure (ActReqEdiSet,Ntf_NOTIFICATIONS_ID,
+   if (Gbl.Action.Act != ActReqEdiSet &&
+       Gbl.Action.Act != ActChgNtfPrf)
+      Ico_PutContextualIconToConfigure (ActReqEdiSet,Ntf_NOTIF_SECTION_ID,
 					NULL,NULL);
 
    /***** Put icon to show a figure *****/
@@ -1634,14 +1635,14 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    Ntf_NotifyEvent_t NotifyEvent;
 
    /***** Begin section with settings on privacy *****/
-   HTM_SECTION_Begin (Ntf_NOTIFICATIONS_ID);
+   HTM_SECTION_Begin (Ntf_NOTIF_SECTION_ID);
 
       /***** Begin box *****/
       Box_BoxBegin (Txt_Notifications,Ntf_PutIconsNotif,NULL,
 		    Hlp_PROFILE_Settings_notifications,Box_NOT_CLOSABLE);
 
 	 /***** Begin form *****/
-	 Frm_BeginForm (ActChgNtfPrf);
+	 Frm_BeginFormAnchor (ActChgNtfPrf,Ntf_NOTIF_SECTION_ID);
 
 	    /***** Warning if I can not receive email notifications *****/
 	    if (Mai_CheckIfUsrCanReceiveEmailNotif (&Gbl.Usrs.Me.UsrDat) == Usr_CAN_NOT)
@@ -1736,16 +1737,11 @@ static void Ntf_GetParsNotifyEvents (void)
 
 void Ntf_ChangeNotifyEvents (void)
   {
-   extern const char *Txt_Your_settings_about_notifications_have_changed;
-
    /***** Get param with whether notify me about events *****/
    Ntf_GetParsNotifyEvents ();
 
    /***** Store settings about notify events *****/
    Set_DB_UpdateMySettingsAboutNotifyEvents ();
-
-   /***** Show message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Your_settings_about_notifications_have_changed);
   }
 
 /*****************************************************************************/
