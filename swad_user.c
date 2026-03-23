@@ -3117,7 +3117,8 @@ static void Usr_PutParsConfirmIWantToSeeBigList (void *Args)
 /************ Create list of selected users with one given user **************/
 /*****************************************************************************/
 
-void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct Usr_SelectedUsrs *SelectedUsrs)
+void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct Usr_SelectedUsrs *SelectedUsrs,
+							const struct Usr_Data *UsrDat)
   {
    /***** Create list of user codes and put encrypted user code in it *****/
    if (!SelectedUsrs->List[Rol_UNK])
@@ -3125,7 +3126,7 @@ void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct Usr_SelectedUsrs 
       if ((SelectedUsrs->List[Rol_UNK] =
 	   malloc (Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1)) == NULL)
          Err_NotEnoughMemoryExit ();
-      Str_Copy (SelectedUsrs->List[Rol_UNK],Gbl.Usrs.Other.UsrDat.EnUsrCod,
+      Str_Copy (SelectedUsrs->List[Rol_UNK],UsrDat->EnUsrCod,
 		Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       SelectedUsrs->Status = Cac_VALID;
      }

@@ -115,7 +115,7 @@ static void Rec_GetFieldByCod (long FldCod,char Name[Rec_MAX_BYTES_NAME_FIELD + 
 
 static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView);
 
-static void Rec_ShowRecordOneStdCrs (void);
+static void Rec_ShowRecordOneStdCrs (struct Usr_Data *UsrDat);
 static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
                                  Rec_CourseRecordViewType_t CrsTypeOfView);
 
@@ -131,7 +131,6 @@ static void Rec_PutParsShowOfficeHoursSeveralTchs (__attribute__((unused)) void 
 static Lay_Show_t Rec_GetParShowOfficeHours (void);
 static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                                struct Usr_Data *UsrDat,const char *Anchor);
-static void Rec_ShowMyCrsRecordUpdated (void);
 static Usr_Can_t Rec_CheckIfICanEditField (Rec_VisibilityRecordFields_t Visibility);
 
 static void Rec_PutIconsCommands (__attribute__((unused)) void *Args);
@@ -737,7 +736,6 @@ void Rec_RenameField (void)
 void Rec_ChangeLinesField (void)
   {
    extern const char *Txt_The_number_of_editing_lines_in_the_record_field_X_has_not_changed;
-   extern const char *Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y;
    unsigned NewNumLines;
 
    /***** Get parameters of the form *****/
@@ -760,14 +758,8 @@ void Rec_ChangeLinesField (void)
       Ale_ShowAlert (Ale_INFO,Txt_The_number_of_editing_lines_in_the_record_field_X_has_not_changed,
                      Gbl.Crs.Records.Field.Name);
    else
-     {
       /***** Update of the table of fields changing the old number of lines by the new one *****/
       Rec_DB_UpdateFieldNumLines (Gbl.Crs.Records.Field.FieldCod,NewNumLines);
-
-      /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y,
-	             Gbl.Crs.Records.Field.Name,NewNumLines);
-     }
 
    /***** Show the form again *****/
    Gbl.Crs.Records.Field.NumLines = NewNumLines;
@@ -781,7 +773,6 @@ void Rec_ChangeLinesField (void)
 void Rec_ChangeVisibilityField (void)
   {
    extern const char *Txt_The_visibility_of_the_record_field_X_has_not_changed;
-   extern const char *Txt_RECORD_FIELD_VISIBILITY_MSG[Rec_NUM_TYPES_VISIBILITY];
    Rec_VisibilityRecordFields_t NewVisibility;
 
    /***** Get parameters of the form *****/
@@ -804,14 +795,8 @@ void Rec_ChangeVisibilityField (void)
       Ale_ShowAlert (Ale_INFO,Txt_The_visibility_of_the_record_field_X_has_not_changed,
                      Gbl.Crs.Records.Field.Name);
    else
-     {
       /***** Update the table of fields changing the old visibility by the new *****/
       Rec_DB_UpdateFieldVisibility (Gbl.Crs.Records.Field.FieldCod,NewVisibility);
-
-      /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_RECORD_FIELD_VISIBILITY_MSG[NewVisibility],
-	             Gbl.Crs.Records.Field.Name);
-     }
 
    /***** Show the form again *****/
    Gbl.Crs.Records.Field.Visibility = NewVisibility;
@@ -963,17 +948,17 @@ void Rec_GetUsrAndShowRecOneStdCrs (void)
                                                 Usr_DONT_GET_PREFS,
                                                 Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
       if (Usr_CheckIfICanViewRecordStd (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
-	 Rec_ShowRecordOneStdCrs ();
+	 Rec_ShowRecordOneStdCrs (&Gbl.Usrs.Other.UsrDat);
   }
 
 /*****************************************************************************/
 /******************** Draw record of one unique student **********************/
 /*****************************************************************************/
 
-static void Rec_ShowRecordOneStdCrs (void)
+static void Rec_ShowRecordOneStdCrs (struct Usr_Data *UsrDat)
   {
    /***** Get if student has accepted enrolment in current course *****/
-   Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+   UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
 
    /***** Get list of fields of records in current course *****/
    Rec_GetListRecordFieldsInCurrentCrs ();
@@ -987,7 +972,8 @@ static void Rec_ShowRecordOneStdCrs (void)
 
       /* Print view */
       Frm_BeginForm (ActPrnRecSevStd);
-	 Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
+	 Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected,
+							    UsrDat);
 	 Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	 Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 	 Rec_ShowLinkToPrintPreviewOfRecords ();
@@ -1003,8 +989,7 @@ static void Rec_ShowRecordOneStdCrs (void)
 
       /***** Shared record *****/
       HTM_DIV_Begin ("class=\"REC_LEFT\"");
-	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
-				  &Gbl.Usrs.Other.UsrDat,NULL);
+	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,UsrDat,NULL);
       HTM_DIV_End ();
 
       /***** Record of the student in the course *****/
@@ -1013,10 +998,10 @@ static void Rec_ShowRecordOneStdCrs (void)
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_STD:
-	       if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME)
+	       if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
 		 {
 		  HTM_DIV_Begin ("class=\"REC_RIGHT\"");
-		     Rec_ShowCrsRecord (Rec_CRS_MY_RECORD_AS_STUDENT_FORM,&Gbl.Usrs.Other.UsrDat,NULL);
+		     Rec_ShowCrsRecord (Rec_CRS_MY_RECORD_AS_STUDENT,UsrDat,NULL);
 		  HTM_DIV_End ();
 		 }
 	       break;
@@ -1024,7 +1009,7 @@ static void Rec_ShowRecordOneStdCrs (void)
 	    case Rol_TCH:
 	    case Rol_SYS_ADM:
 	       HTM_DIV_Begin ("class=\"REC_RIGHT\"");
-		  Rec_ShowCrsRecord (Rec_CRS_LIST_ONE_RECORD,&Gbl.Usrs.Other.UsrDat,NULL);
+		  Rec_ShowCrsRecord (Rec_CRS_LIST_ONE_RECORD,UsrDat,NULL);
 	       HTM_DIV_End ();
 	       break;
 	    default:
@@ -1229,7 +1214,8 @@ void Rec_ShowRecordOneTchCrs (void)
 
       /* Print view */
       Frm_BeginForm (ActPrnRecSevTch);
-	 Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
+	 Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected,
+							    &Gbl.Usrs.Other.UsrDat);
 	 Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	 Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 	 Par_PutParChar ("ParamOfficeHours",'Y');
@@ -1524,7 +1510,7 @@ void Rec_UpdateAndShowMyCrsRecord (void)
    Rec_UpdateCrsRecord (Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show updated record *****/
-   Rec_ShowMyCrsRecordUpdated ();
+   Rec_ShowRecordOneStdCrs (&Gbl.Usrs.Me.UsrDat);
 
    /***** Free memory used for some fields *****/
    Rec_FreeMemFieldsRecordsCrs ();
@@ -1536,7 +1522,6 @@ void Rec_UpdateAndShowMyCrsRecord (void)
 
 void Rec_UpdateAndShowOtherCrsRecord (void)
   {
-   extern const char *Txt_Student_record_card_in_this_course_has_been_updated;
    __attribute__((unused)) Exi_Exist_t UsrExists;
 
    /***** Get where we came from *****/
@@ -1559,8 +1544,6 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
 
    /***** Update the record *****/
    Rec_UpdateCrsRecord (Gbl.Usrs.Other.UsrDat.UsrCod);
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_Student_record_card_in_this_course_has_been_updated);
 
    /***** Show one or multiple records *****/
    switch (Gbl.Action.Original)
@@ -1571,7 +1554,7 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
 	 break;
       default:
 	 /* Show only the updated record of one student */
-	 Rec_ShowRecordOneStdCrs ();
+	 Rec_ShowRecordOneStdCrs (&Gbl.Usrs.Other.UsrDat);
 	 break;
      }
 
@@ -1591,12 +1574,11 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
    const char *RecordHelp[Rec_COURSE_NUM_VIEW_TYPES] =
      {
-      [Rec_CRS_MY_RECORD_AS_STUDENT_FORM ] = Hlp_USERS_Students_course_record_card,
-      [Rec_CRS_MY_RECORD_AS_STUDENT_CHECK] = Hlp_USERS_Students_course_record_card,
-      [Rec_CRS_LIST_ONE_RECORD           ] = Hlp_USERS_Students_course_record_card,
-      [Rec_CRS_LIST_SEVERAL_RECORDS      ] = Hlp_USERS_Students_course_record_card,
-      [Rec_CRS_PRINT_ONE_RECORD          ] = NULL,
-      [Rec_CRS_PRINT_SEVERAL_RECORDS     ] = NULL,
+      [Rec_CRS_MY_RECORD_AS_STUDENT	] = Hlp_USERS_Students_course_record_card,
+      [Rec_CRS_LIST_ONE_RECORD		] = Hlp_USERS_Students_course_record_card,
+      [Rec_CRS_LIST_SEVERAL_RECORDS	] = Hlp_USERS_Students_course_record_card,
+      [Rec_CRS_PRINT_ONE_RECORD		] = NULL,
+      [Rec_CRS_PRINT_SEVERAL_RECORDS	] = NULL,
      };
    static const char *Class[Usr_NUM_CAN] =
      {
@@ -1623,10 +1605,9 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	    case Rec_CRS_LIST_ONE_RECORD:
 	    case Rec_CRS_LIST_SEVERAL_RECORDS:
 	       // When listing records, I can see only my record as student
-	       TypeOfView = Rec_CRS_MY_RECORD_AS_STUDENT_FORM;
+	       TypeOfView = Rec_CRS_MY_RECORD_AS_STUDENT;
 	       break;
-	    case Rec_CRS_MY_RECORD_AS_STUDENT_FORM:
-	    case Rec_CRS_MY_RECORD_AS_STUDENT_CHECK:
+	    case Rec_CRS_MY_RECORD_AS_STUDENT:
 	    case Rec_CRS_PRINT_ONE_RECORD:
 	    case Rec_CRS_PRINT_SEVERAL_RECORDS:
 	       break;
@@ -1635,7 +1616,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	       break;
 	   }
 
-	 if (TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM)
+	 if (TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT)
 	    /* Check if I can edit any of the record fields */
 	    for (NumField = 0;
 		 NumField < Gbl.Crs.Records.LstFields.Num;
@@ -1699,8 +1680,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	   NumField < Gbl.Crs.Records.LstFields.Num;
 	   NumField++, The_ChangeRowColor ())
 	{
-	 ShowField = !(TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM ||
-		       TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_CHECK) ||
+	 ShowField = TypeOfView != Rec_CRS_MY_RECORD_AS_STUDENT ||
 		     Gbl.Crs.Records.LstFields.Lst[NumField].Visibility != Rec_HIDDEN_FIELD ? Lay_SHOW :
 											      Lay_DONT_SHOW;
 	 // If the field must be shown...
@@ -1710,7 +1690,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	    switch (Gbl.Usrs.Me.Role.Logged)
 	      {
 	       case Rol_STD:
-		  ICanEditThisField = TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM &&
+		  ICanEditThisField = TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT &&
 				      Gbl.Crs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD ? Usr_CAN :
 														 Usr_CAN_NOT;
 		  break;
@@ -1875,24 +1855,6 @@ void Rec_UpdateCrsRecord (long UsrCod)
 	       break;
 	   }
        }
-  }
-
-/*****************************************************************************/
-/*************** Show my record in the course already updated ****************/
-/*****************************************************************************/
-
-static void Rec_ShowMyCrsRecordUpdated (void)
-  {
-   extern const char *Txt_Your_record_card_in_this_course_has_been_updated;
-
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Your_record_card_in_this_course_has_been_updated);
-
-   /***** Shared record *****/
-   Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Me.UsrDat,NULL);
-
-   /***** Show updated user's record *****/
-   Rec_ShowCrsRecord (Rec_CRS_MY_RECORD_AS_STUDENT_CHECK,&Gbl.Usrs.Me.UsrDat,NULL);
   }
 
 /*****************************************************************************/

@@ -14812,49 +14812,6 @@ const char *Txt_from =
 	"itibaren";
 #endif
 
-const char *Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y =	// Warning: it is very important to include %s and %u (in this order) in the following sentences
-#if   L==1	// ca
-	"A partir d'ara"
-	" el nombre de l&iacute;nies d'edici&oacute; del camp <strong>%s</strong>"
-	" &eacute;s <strong>%u</strong>.";
-#elif L==2	// de
-	"Von nun an"
-	" ist die Anzahl der Bearbeitungszeilen des Feldes <strong>%s</strong>"
-	" gleich <strong>%u</strong>.";
-#elif L==3	// en
-	"From now on"
-	" the number of editing lines of the field <strong>%s</strong>"
-	" is <strong>%u</strong>.";
-#elif L==4	// es
-	"A partir de ahora"
-	" el n&ordm; de l&iacute;neas de edici&oacute;n del campo <strong>%s</strong>"
-	" es <strong>%u</strong>.";
-#elif L==5	// fr
-	"D&eacute;sormais"
-	" le nombre de lignes d'&eacute;dition du champ <strong>%s</strong>"
-	" est <strong>%u</strong>.";
-#elif L==6	// gn
-	"A partir de ahora"
-	" el n&ordm; de l&iacute;neas de edici&oacute;n del campo <strong>%s</strong>"
-	" es <strong>%u</strong>.";	// Okoteve traducción
-#elif L==7	// it
-	"A partire da ora"
-	" il numero di linee editate <strong>%s</strong>"
-	" &egrave; <strong>%u</strong>.";
-#elif L==8	// pl
-	"Od tej pory"
-	" liczba linii w polu edycji <strong>%s</strong>"
-	" jest <strong>%u</strong>.";
-#elif L==9	// pt
-	"A partir de agora"
-	" o n&uacute;mero de linhas de edi&ccedil;&atilde;o no campo <strong>%s</strong>"
-	" &eacute; <strong>%u</strong>.";
-#elif L==10	// tr
-	"From now on"
-	" the number of editing lines of the field <strong>%s</strong>"
-	" is <strong>%u</strong>.";	// Çeviri lazim!
-#endif
-
 const char *Txt_from_this_course =
 #if   L==1	// ca
 	"des d'aquesta assignatura";
@@ -29730,29 +29687,6 @@ const char *Txt_Photo =
 	"Photo";	// Çeviri lazim!
 #endif
 
-const char *Txt_Photo_has_been_updated =
-#if   L==1	// ca
-	"La fotografia s'ha actualitzat.";
-#elif L==2	// de
-	"Foto wurde aktualisiert.";
-#elif L==3	// en
-	"Photo has been updated.";
-#elif L==4	// es
-	"La fotograf&iacute;a se ha actualizado.";
-#elif L==5	// fr
-	"La photo a &eacute;t&eacute; mise &agrave; jour.";
-#elif L==6	// gn
-	"La fotograf&iacute;a se ha actualizado.";	// Okoteve traducción
-#elif L==7	// it
-	"La foto &egrave; stata aggiornata.";
-#elif L==8	// pl
-	"Zdjecie zostalo zaktualizowane.";
-#elif L==9	// pt
-	"A fotografia foi atualizada.";
-#elif L==10	// tr
-	"Photo has been updated.";			// Çeviri lazim!
-#endif
-
 const char *Txt_Photo_of_THE_USER_X_has_been_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"S'ha eliminat la foto de <strong>%s</strong>.";
@@ -33214,108 +33148,6 @@ const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY] =
 	"Vis&iacute;vel e edit&aacute;vel"
 #elif L==10	// tr
 	"Visible and editable"	// Çeviri lazim!
-#endif
-	};
-
-const char *Txt_RECORD_FIELD_VISIBILITY_MSG[Rec_NUM_TYPES_VISIBILITY] =	// Warning: it is very important to include %s in the following sentences
-	{
-	[Rec_HIDDEN_FIELD] =
-#if   L==1	// ca
-	"A partir de ahora los estudiantes"
-	" no podr&aacute;n ver el campo <strong>%s</strong> de las fichas."// Necessita traducció
-#elif L==2	// de
-	"Von nun an k&ouml;nnen die Studenten"
-	" nicht das Feld <strong>%s</strong> der Profile."
-#elif L==3	// en
-	"From now on students"
-	" can not see the field <strong>%s</strong> of the records."
-#elif L==4	// es
-	"A partir de ahora los estudiantes"
-	" no podr&aacute;n ver el campo <strong>%s</strong> de las fichas."
-#elif L==5	// fr
-	"A partir de maintenant, les &eacute;tudiants"
-	" ne peuvent pas voir le champ <strong>%s</strong> de les cartes."
-#elif L==6	// gn
-	"A partir de ahora los estudiantes"
-	" no podr&aacute;n ver el campo <strong>%s</strong> de las fichas."// Okoteve traducción
-#elif L==7	// it
-	"Da ora in poi gli studenti"
-	" non possono visualizzare il campo <strong>%s</strong> delle schede."
-#elif L==8	// pl
-	"Od teraz studenci"
-	" nie widac pola <strong>%s</strong> zapis&oacute;w."
-#elif L==9	// pt
-	"De agora em diante,"
-	" os estudantes n&atilde;o podem ver o campo <strong>%s</strong> dos cart&otilde;es."
-#elif L==10	// tr
-	"From now on students"
-	" can not see the field <strong>%s</strong> of the records."	// Çeviri lazim!
-#endif
-	,
-	[Rec_VISIBLE_FIELD] =
-#if   L==1	// ca
-	"A partir de ahora los estudiantes"
-	" podr&aacute;n ver pero no editar el campo <strong>%s</strong> de las fichas."// Necessita traducció
-#elif L==2	// de
-	"Von nun an k&ouml;nnen sich Studenten,"
-	" aber nicht bearbeiten das Feld <strong>%s</strong> der Profile."
-#elif L==3	// en
-	"From now on students"
-	" can view but not edit the field <strong>%s</strong> of the records."
-#elif L==4	// es
-	"A partir de ahora los estudiantes"
-	" podr&aacute;n ver pero no editar el campo <strong>%s</strong> de las fichas."
-#elif L==5	// fr
-	"A partir de maintenant, les &eacute;tudiants"
-	" peuvent consulter mais pas modifier le champ <strong>%s</strong> de les cartes."
-#elif L==6	// gn
-	"A partir de ahora los estudiantes"
-	" podr&aacute;n ver pero no editar el campo <strong>%s</strong> de las fichas."// Okoteve traducción
-#elif L==7	// it
-	"Da ora in poi gli studenti"
-	" possono visualizzare ma non modificare il campo <strong>%s</strong> delle schede."
-#elif L==8	// pl
-	"Od teraz studenci"
-	" moga przegladac, ale nie edytowa&cacute; pole <strong>%s</strong> zapis&oacute;w."
-#elif L==9	// pt
-	"De agora em diante,"
-	" os estudantes podem visualizar, mas n&atilde;o editar o campo <strong>%s</strong> dos cart&otilde;es."
-#elif L==10	// tr
-	"From now on students"
-	" can view but not edit the field <strong>%s</strong> of the records."		// Çeviri lazim!
-#endif
-	,
-	[Rec_EDITABLE_FIELD] =
-#if   L==1	// ca
-	"A partir de ahora los estudiantes"
-	" podr&aacute;n ver y editar el campo <strong>%s</strong> de las fichas."// Necessita traducció
-#elif L==2	// de
-	"Von nun an k&ouml;nnen die Studenten"
-	" anzuzeigen und zu bearbeiten das Feld <strong>%s</strong> der Profile."
-#elif L==3	// en
-	"From now on students"
-	" can view and edit the field <strong>%s</strong> of the records."
-#elif L==4	// es
-	"A partir de ahora los estudiantes"
-	" podr&aacute;n ver y editar el campo <strong>%s</strong> de las fichas."
-#elif L==5	// fr
-	"A partir de maintenant,"
-	" les &eacute;tudiants peuvent consulter et modifier le champ <strong>%s</strong> de les cartes."
-#elif L==6	// gn
-	"A partir de ahora los estudiantes"
-	" podr&aacute;n ver y editar el campo <strong>%s</strong> de las fichas."// Okoteve traducción
-#elif L==7	// it
-	"Da ora in poi"
-	" gli studenti possono visualizzare e modificare il campo <strong>%s</strong> delle schede."
-#elif L==8	// pl
-	"Od teraz studenci"
-	" moga ogladac i edytowa&cacute; pola <strong>%s</strong> zapis&oacute;w."
-#elif L==9	// pt
-	"De agora em diante,"
-	" os estudantes podem visualizar e editar o campo <strong>%s</strong> dos cart&otilde;es."
-#elif L==10	// tr
-	"From now on students"
-	" can view and edit the field <strong>%s</strong> of the records."	// Çeviri lazim!
 #endif
 	};
 
@@ -45067,29 +44899,6 @@ const char *Txt_students_ABBREVIATION =	// Abbreviation of "students"
 	"stud.";	// Çeviri lazim!
 #endif
 
-const char *Txt_Student_record_card_in_this_course_has_been_updated =
-#if   L==1	// ca
-	"La ficha del estudiante en la asignatura se ha actualizado.";	// Necessita traducció
-#elif L==2	// de
-	"Studentenkartei in diesem Kurs wurde aktualisiert.";
-#elif L==3	// en
-	"Student record card in this course has been updated.";
-#elif L==4	// es
-	"La ficha del estudiante en la asignatura se ha actualizado.";
-#elif L==5	// fr
-	"La fiche du &eacute;tudiant de cette mati&egrave;re a &eacute;t&eacute; mise &agrave; jour.";
-#elif L==6	// gn
-	"La ficha del estudiante en la asignatura se ha actualizado.";	// Okoteve traducción
-#elif L==7	// it
-	"La scheda dello/a studente/ssa in questo corso &egrave; stata aggiornata.";
-#elif L==8	// pl
-	"Karta ewidencyjna ucznia na tym kursie zosta&lstrok;a zaktualizowana.";
-#elif L==9	// pt
-	"O cart&atilde;o do estudante nesta disciplina foi atualizado.";
-#elif L==10	// tr
-	"Student record card in this course has been updated.";		// Çeviri lazim!
-#endif
-
 const char *Txt_Students_are_no_longer_obliged_to_read_this_information =
 #if   L==1	// ca
 	"Els estudiants ja no estan obligats a llegir aquesta informaci&oacute;.";
@@ -46794,29 +46603,6 @@ const char *Txt_The_center_X_has_been_renamed_as_Y =	// Warning: it is very impo
 	"O centro <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #elif L==10	// tr
 	"The center <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Çeviri lazim!
-#endif
-
-const char *Txt_The_configuration_of_the_projects_has_been_updated =
-#if   L==1	// ca
-	"La configuraci&oacute; dels projectes s'ha actualitzat.";
-#elif L==2	// de
-	"Die Konfiguration der Projekte wurde aktualisiert.";
-#elif L==3	// en
-	"The configuration of the projects has been updated.";
-#elif L==4	// es
-	"La configuraci&oacute;n de los proyectos se ha actualizado.";
-#elif L==5	// fr
-	"La configuration des projets a &eacute;t&eacute; mise &agrave; jour.";
-#elif L==6	// gn
-	"La configuraci&oacute;n de los proyectos se ha actualizado.";	// Okoteve traducción
-#elif L==7	// it
-	"La configurazione dei progetti &egrave; stata aggiornata.";
-#elif L==8	// pl
-	"Konfiguracja projekt&oacute;w zosta&lstrok;a zaktualizowana.";
-#elif L==9	// pt
-	"A configura&ccedil;&atilde;o dos projetos foi atualizada.";
-#elif L==10	// tr
-	"The configuration of the projects has been updated.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_contents_of_the_folder_are_too_big =
@@ -50349,29 +50135,6 @@ const char *Txt_The_test_X_has_already_been_assessed_previously =	// Warning: it
 	"The test %u has already been assessed previously.";	// Çeviri lazim!
 #endif
 
-const char *Txt_The_test_configuration_has_been_updated =
-#if   L==1	// ca
-	"La configuraci&oacute; dels test s'ha actualitzat.";
-#elif L==2	// de
-	"Die Testkonfiguration wurde aktualisiert.";
-#elif L==3	// en
-	"The test configuration has been updated.";
-#elif L==4	// es
-	"La configuraci&oacute;n de los test se ha actualizado.";
-#elif L==5	// fr
-	"La configuration des tests a &eacute;t&eacute; mise &agrave; jour.";
-#elif L==6	// gn
-	"La configuraci&oacute;n de los test se ha actualizado.";	// Okoteve traducción
-#elif L==7	// it
-	"La configurazione di test &egrave; stata aggiornata.";
-#elif L==8	// pl
-	"Konfiguracja testowa zosta&lstrok;a zaktualizowana.";
-#elif L==9	// pt
-	"A configura&ccedil;&atilde;o de teste foi atualizada.";
-#elif L==10	// tr
-	"The test configuration has been updated.";			// Çeviri lazim!
-#endif
-
 const char *Txt_The_thread_is_already_in_this_forum =
 #if   L==1	// ca
 	"La discussi&oacute; ja &eacute;s en aquest f&ograve;rum.";
@@ -50669,29 +50432,6 @@ const char *Txt_The_type_of_the_holiday_X_has_changed =	// Warning: it is very i
 	"O tipo do feriado <strong>%s</strong> mudou.";
 #elif L==10	// tr
 	"The type of the holiday <strong>%s</strong> has changed.";	// Çeviri lazim!
-#endif
-
-const char *Txt_The_URL_X_has_been_updated =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"L'URL <strong>%s</strong> s'ha actualitzat.";
-#elif L==2	// de
-	"Die URL <strong>%s</strong> wurde aktualisiert.";
-#elif L==3	// en
-	"The URL <strong>%s</strong> has been updated.";
-#elif L==4	// es
-	"El URL <strong>%s</strong> se ha actualizado.";
-#elif L==5	// fr
-	"L'URL <strong>%s</strong> a &eacute;t&eacute; mise &agrave; jour.";
-#elif L==6	// gn
-	"El URL <strong>%s</strong> se ha actualizado.";	// Okoteve traducción
-#elif L==7	// it
-	"L'URL <strong>%s</strong> &egrave; stata archiviata.";
-#elif L==8	// pl
-	"Zaktualizowano adres URL <strong>%s</strong>.";
-#elif L==9	// pt
-	"O URL <strong>%s</strong> foi atualizado.";
-#elif L==10	// tr
-	"The URL <strong>%s</strong> has been updated.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_user_does_not_exist =
@@ -59518,29 +59258,6 @@ const char *Txt_You_were_already_enroled_as_X_in_the_course_Y =	// Warning: it i
 	" in the course <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
-const char *Txt_Your_comment_has_been_updated =
-#if   L==1	// ca
-	"El seu comentari ha estat actualitzat.";
-#elif L==2	// de
-	"Ihr Kommentar wurde aktualisiert.";
-#elif L==3	// en
-	"Your comment has been updated.";
-#elif L==4	// es
-	"Su comentario ha sido actualizado.";
-#elif L==5	// fr
-	"Votre commentaire a &eacute;t&eacute; mis &agrave; jour.";
-#elif L==6	// gn
-	"Su comentario ha sido actualizado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il tuo commento &egrave; stato aggiornato.";
-#elif L==8	// pl
-	"Komentarz zosta&lstrok; zaktualizowany.";
-#elif L==9	// pt
-	"O seu coment&aacute;rio foi atualizado.";
-#elif L==10	// tr
-	"Your comment has been updated.";	// Çeviri lazim!
-#endif
-
 const char *Txt_Your_password_is_not_secure_enough =
 #if   L==1	// ca
 	"La vostra contrasenya no &eacute;s prou segura.";
@@ -59650,29 +59367,6 @@ const char *Txt_Your_settings_about_notifications_have_changed =
 	"Your settings about notifications have changed.";	// Çeviri lazim!
 #endif
 
-const char *Txt_Your_record_card_in_this_course_has_been_updated =
-#if   L==1	// ca
-	"La seva fitxa a l'assignatura s'ha actualitzat:";
-#elif L==2	// de
-	"Ihre Karteikarte in diesem Kurs wurde aktualisiert:";
-#elif L==3	// en
-	"Your record card in this course has been updated:";
-#elif L==4	// es
-	"Su ficha en la asignatura se ha actualizado:";
-#elif L==5	// fr
-	"Votre fiche dans ce cours a &eacute;t&eacute; mise &agrave; jour:";
-#elif L==6	// gn
-	"Su ficha en la asignatura se ha actualizado:";		// Okoteve traducción
-#elif L==7	// it
-	"La tua scheda in questo corso &egrave; stata aggiornata:";
-#elif L==8	// pl
-	"Twoja karta wynik&oacute;w na tym kursie zosta&lstrok;a zaktualizowana:";
-#elif L==9	// pt
-	"Seu cart&atilde;o nesta disciplina foi atualizado:";
-#elif L==10	// tr
-	"Your record card in this course has been updated:";	// Çeviri lazim!
-#endif
-
 const char *Txt_Your_request_for_enrolment_as_X_in_the_course_Y_has_been_accepted_for_processing =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
 	"La seva petici&oacute; d'inscripci&oacute; com <strong>%s</strong>"
@@ -59720,10 +59414,10 @@ const char *Txt_Your_request_for_enrolment_as_X_in_the_course_Y_has_been_accepte
 	" O pedido ser&aacute; analisado por um professor ou administrador."
 	" Voc&ecirc; ser&aacute; notificado quando o registro &eacute; aceito.";
 #elif L==10	// tr
-	"Your request for enrolment as <strong>%s</strong>"
-	" in the course <strong>%s</strong> has been accepted for processing."
-	" Your request will be reviewed by a teacher or administrator."
-	" You will be notified when registration is accepted.";						// Çeviri lazim!
+	"<strong>%s</strong> olarak <strong>%s</strong> dersine kay&inodot;t talebiniz"
+	" i&sogon;leme al&inodot;nmak &uuml;zere kabul edilmi&sogon;tir."
+	" Talebiniz bir &ouml;&gbreve;retmen veya y&ouml;netici taraf&inodot;ndan incelenecektir."
+	" Kayd&inodot;n&inodot;z kabul edildi&gbreve;inde size bildirimde bulunulacakt&inodot;r.";
 #endif
 
 const char *Txt_ZIP_file =
@@ -59746,5 +59440,5 @@ const char *Txt_ZIP_file =
 #elif L==9	// pt
 	"Arquivo ZIP";
 #elif L==10	// tr
-	"ZIP file";	// Çeviri lazim!
+	"ZIP dosyas&inodot;";
 #endif

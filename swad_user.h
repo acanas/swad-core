@@ -135,7 +135,8 @@ Lay_Show_t Usr_GetIfShowBigList (unsigned NumUsrs,
 				 void (*FuncPars) (void *Args),void *Args,
 				 const char *OnSubmit);
 
-void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct Usr_SelectedUsrs *SelectedUsrs);
+void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct Usr_SelectedUsrs *SelectedUsrs,
+							const struct Usr_Data *UsrDat);
 void Usr_PutParSelectedOtherUsrCod (void);
 void Usr_PutParSelectedUsrsCods (const struct Usr_SelectedUsrs *SelectedUsrs);
 void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs,

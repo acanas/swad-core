@@ -318,7 +318,6 @@ static void PrjCfg_ShowFormNETCanCreate (const struct PrjCfg_Config *Config)
 
 void PrjCfg_ChangeNETCanCreate (void)
   {
-   extern const char *Txt_The_configuration_of_the_projects_has_been_updated;
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
@@ -330,9 +329,6 @@ void PrjCfg_ChangeNETCanCreate (void)
    /***** Update database *****/
    Prj_DB_UpdateNETCanCreate (&Projects);
 
-   /***** Show confirmation message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_configuration_of_the_projects_has_been_updated);
-
    /***** Show again the form to configure projects *****/
    PrjCfg_ShowFormConfig ();
   }
@@ -343,7 +339,6 @@ void PrjCfg_ChangeNETCanCreate (void)
 
 void PrjCfg_ChangeRubricsOfType (void)
   {
-   extern const char *Txt_The_configuration_of_the_projects_has_been_updated;
    struct Rub_Rubrics Rubrics;
    PrjCfg_RubricType_t RubricType;
    struct PrgCfg_ListRubCods ListRubCods;
@@ -364,9 +359,6 @@ void PrjCfg_ChangeRubricsOfType (void)
 
    /***** Update database *****/
    Prj_DB_UpdateRubrics (RubricType,&ListRubCods);
-
-   /***** Show confirmation message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_configuration_of_the_projects_has_been_updated);
 
    /***** Show again the form to configure projects *****/
    PrjCfg_ShowFormConfig ();

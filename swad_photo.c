@@ -947,7 +947,6 @@ static const char *Pho_GetFileNamePhoto (void)
 
 static void Pho_ChangePhoto1 (struct Usr_Data *UsrDat)
   {
-   extern const char *Txt_Photo_has_been_updated;
    char FileNamePhoto[NAME_MAX + 1];	// File name (with no path and no .jpg)
 					// of the temporary file with the selected face
    char PathPhotoTmp[PATH_MAX + 1];	// Full name (including path and .jpg)
@@ -975,8 +974,6 @@ static void Pho_ChangePhoto1 (struct Usr_Data *UsrDat)
 
 	 /* Remove the user from the list of users without photo */
 	 Pho_DB_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
-
-	 Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Photo_has_been_updated);
 	 break;
       case Exi_DOES_NOT_EXIST:
       default:

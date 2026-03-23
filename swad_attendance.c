@@ -1883,7 +1883,6 @@ static void Att_PutLinkEvent (struct Att_Event *Event,
 
 void Att_RegisterMeAsStdInEvent (void)
   {
-   extern const char *Txt_Your_comment_has_been_updated;
    struct Att_Events Events;
    Att_AbsentOrPresent_t Present;
    char *ParName;
@@ -1916,9 +1915,6 @@ void Att_RegisterMeAsStdInEvent (void)
       else
 	 /***** Remove student *****/
 	 Att_DB_RemoveUsrFromEvent (Events.Event.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-
-      /***** Write final message *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Your_comment_has_been_updated);
      }
 
    /***** Show the attendance event again *****/

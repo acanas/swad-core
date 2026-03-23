@@ -2469,7 +2469,6 @@ void Inf_EditURLInfo (void)
 
 void Inf_ReceiveURLInfo (void)
   {
-   extern const char *Txt_The_URL_X_has_been_updated;
    struct Inf_Info Info;
    char URL[WWW_MAX_BYTES_WWW + 1];
    char PathFile[PATH_MAX + 1];
@@ -2483,8 +2482,7 @@ void Inf_ReceiveURLInfo (void)
    Par_GetParText ("InfoSrcURL",URL,WWW_MAX_BYTES_WWW);
 
    /***** Build path to file containing URL *****/
-   Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Info.Type,
-		     PathFile);
+   Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Info.Type,PathFile);
 
    /***** Open file with URL *****/
    if ((FileURL = fopen (PathFile,"wb")) != NULL)
@@ -2495,8 +2493,6 @@ void Inf_ReceiveURLInfo (void)
       /***** Close file *****/
       fclose (FileURL);
 
-      /***** Write message *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_URL_X_has_been_updated,URL);
       URLIsOK = Err_SUCCESS;
      }
    else

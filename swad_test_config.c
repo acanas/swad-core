@@ -364,8 +364,6 @@ static void TstCfg_GetConfigDataFromRow (MYSQL_RES *mysql_res)
 
 void TstCfg_ReceiveConfigTst (void)
   {
-   extern const char *Txt_The_test_configuration_has_been_updated;
-
    /***** Get whether test are visible via plugins or not *****/
    TstCfg_SetConfigPluggable (TstCfg_GetPluggableFromForm ());
 
@@ -405,9 +403,6 @@ void TstCfg_ReceiveConfigTst (void)
 
    /***** Update database *****/
    Tst_DB_SaveConfig ();
-
-   /***** Show confirmation message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_test_configuration_has_been_updated);
 
    /***** Show again the form to configure test *****/
    TstCfg_CheckAndShowFormConfig ();
