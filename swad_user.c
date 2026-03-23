@@ -1238,21 +1238,12 @@ void Usr_WriteFormLogout (void)
   }
 
 /*****************************************************************************/
-/********************* Message and form shown after log out ******************/
+/********************** Show form to log in after log out ********************/
 /*****************************************************************************/
 
 void Usr_Logout (void)
   {
-   // extern const char *Txt_The_session_has_been_closed;
-
-   /***** Confirmation message *****/
-   // Ale_ShowFixedAlert (Ale_INFO,Txt_The_session_has_been_closed);
-
-   /***** Form to log in *****/
    Usr_WriteFormLogin (ActLogIn,NULL);
-
-   /***** Advertisement about mobile app *****/
-   Lay_AdvertisementMobile ();
   }
 
 /*****************************************************************************/

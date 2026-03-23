@@ -17366,29 +17366,6 @@ const char *Txt_If_you_can_not_find_your_institution_your_center_your_degree_or_
 	" your degree or your courses, you can create them.";		// Çeviri lazim!
 #endif
 
-const char *Txt_If_you_have_an_Android_device_try_SWADroid =
-#if   L==1	// ca
-	"Si teniu un dispositiu Android, provi SWADroid";
-#elif L==2	// de
-	"Wenn Sie ein Android-Ger&auml;t haben, versuchen SWADroid";
-#elif L==3	// en
-	"If you have an Android device, try SWADroid";
-#elif L==4	// es
-	"Si tiene un dispositivo Android, pruebe SWADroid";
-#elif L==5	// fr
-	"Si vous avez un appareil Android, essayer SWADroid";
-#elif L==6	// gn
-	"Si tiene un dispositivo Android, pruebe SWADroid";	// Okoteve traducción
-#elif L==7	// it
-	"Se avete un dispositivo Android, provate SWADroid";
-#elif L==8	// pl
-	"Je&sacute;li masz telefon z systemem Android, spr&oacute;buj SWADroid";
-#elif L==9	// pt
-	"Se voc&ecirc; tiver um dispositivo Android, tente SWADroid";
-#elif L==10	// tr
-	"If you have an Android device, try SWADroid";		// Çeviri lazim!
-#endif
-
 const char *Txt_If_you_have_forgotten_your_password_ =
 #if   L==1	// ca
 	"Si vost&egrave; ha oblidat la seva contrasenya,"
@@ -44952,29 +44929,6 @@ const char *Txt_Status =
 	"Status";	// Çeviri lazim!
 #endif
 
-const char *Txt_Stay_connected_with_SWADroid =
-#if   L==1	// ca
-	"Seguiu connectat/da amb <strong>SWADroid</strong>.";
-#elif L==2	// de
-	"Bleiben Sie mit <strong>SWADroid</strong> in Verbindung.";
-#elif L==3	// en
-	"Stay connected with <strong>SWADroid</strong>.";
-#elif L==4	// es
-	"Siga conectado/a con <strong>SWADroid</strong>.";
-#elif L==5	// fr
-	"Restez connect&eacute; avec <strong>SWADroid</strong>.";
-#elif L==6	// gn
-	"Siga conectado/a con <strong>SWADroid</strong>.";	// Okoteve traducción
-#elif L==7	// it
-	"Resta in contatto con <strong>SWADroid</strong>.";
-#elif L==8	// pl
-	"Pozosta&nacute; w kontakcie z <strong>SWADroid</strong>.";
-#elif L==9	// pt
-	"Fique ligado/a com <strong>SWADroid</strong>.";
-#elif L==10	// tr
-	"Stay connected with <strong>SWADroid</strong>.";	// Çeviri lazim!
-#endif
-
 const char *Txt_Step_1_Provide_a_list_of_users =
 #if   L==1	// ca
 	"Pas 1: Proporcioneu una llista d'usuaris";
@@ -53952,48 +53906,48 @@ const char *Txt_TST_PLUGGABLE[TstCfg_NUM_OPTIONS_PLUGGABLE] =
 	"",
 	[TstCfg_PLUGGABLE_NO] =
 #if   L==1	// ca
-	"Banc de preguntes no descarregable/visible des d'altres aplicacions (SWADroid, iSWAD, TriSWADos)."
+	"Banc de preguntes no descarregable/visible des d'altres aplicacions."
 #elif L==2	// de
-	"Fragenbank nicht herunterladbar/sichtbar von anderen Anwendungen (SWADroid, iSWAD, TriSWADos)."
+	"Fragenbank nicht herunterladbar/sichtbar von anderen Anwendungen."
 #elif L==3	// en
-	"Question bank not downloadable/visible from other applications (SWADroid, iSWAD, TriSWADos)."
+	"Question bank not downloadable/visible from other applications."
 #elif L==4	// es
-	"Banco de preguntas no descargable/visible desde otras aplicaciones (SWADroid, iSWAD, TriSWADos)."
+	"Banco de preguntas no descargable/visible desde otras aplicaciones."
 #elif L==5	// fr
-	"Banque de questions non t&eacute;l&eacute;chargeable/visible depuis d'autres applications (SWADroid, iSWAD, TriSWADos)."
+	"Banque de questions non t&eacute;l&eacute;chargeable/visible depuis d'autres applications."
 #elif L==6	// gn
-	"Banco de preguntas no descargable/visible desde otras aplicaciones (SWADroid, iSWAD, TriSWADos)."// Okoteve traducción
+	"Banco de preguntas no descargable/visible desde otras aplicaciones."// Okoteve traducción
 #elif L==7	// it
-	"Banca di domande non scaricabile/visibile da altre applicazioni (SWADroid, iSWAD, TriSWADos)."
+	"Banca di domande non scaricabile/visibile da altre applicazioni."
 #elif L==8	// pl
-	"Bank pyta&nacute; nie do pobrania/widoczny z innych aplikacji (SWADroid, iSWAD, TriSWADos)."
+	"Bank pyta&nacute; nie do pobrania/widoczny z innych aplikacji."
 #elif L==9	// pt
-	"Banco de perguntas n&atilde;o dispon&iacute;vel para download/vis&iacute;vel de outros aplicativos (SWADroid, iSWAD, TriSWADos)."
+	"Banco de perguntas n&atilde;o dispon&iacute;vel para download/vis&iacute;vel de outros aplicativos."
 #elif L==10	// tr
-	"Question bank not downloadable/visible from other applications (SWADroid, iSWAD, TriSWADos)."	// Çeviri lazim!
+	"Question bank not downloadable/visible from other applications."	// Çeviri lazim!
 #endif
 	,
 	[TstCfg_PLUGGABLE_YES] =
 #if   L==1	// ca
-	"Banc de preguntes descarregable/visible des d'altres aplicacions (SWADroid, iSWAD, TriSWADos)."
+	"Banc de preguntes descarregable/visible des d'altres aplicacions."
 #elif L==2	// de
-	"Fragenbank herunterladbar/sichtbar von anderen Anwendungen (SWADroid, iSWAD, TriSWADos)."
+	"Fragenbank herunterladbar/sichtbar von anderen Anwendungen."
 #elif L==3	// en
-	"Question bank downloadable/visible from other applications (SWADroid, iSWAD, TriSWADos)."
+	"Question bank downloadable/visible from other applications."
 #elif L==4	// es
-	"Banco de preguntas descargable/visible desde otras aplicaciones (SWADroid, iSWAD, TriSWADos)."
+	"Banco de preguntas descargable/visible desde otras aplicaciones."
 #elif L==5	// fr
-	"Banque de questions t&eacute;l&eacute;chargeable/visible depuis d'autres applications (SWADroid, iSWAD, TriSWADos)."
+	"Banque de questions t&eacute;l&eacute;chargeable/visible depuis d'autres applications."
 #elif L==6	// gn
-	"Banco de preguntas descargable/visible desde otras aplicaciones (SWADroid, iSWAD, TriSWADos)."// Okoteve traducción
+	"Banco de preguntas descargable/visible desde otras aplicaciones."// Okoteve traducción
 #elif L==7	// it
-	"Banca di domande scaricabile/visibile da altre applicazioni (SWADroid, iSWAD, TriSWADos)."
+	"Banca di domande scaricabile/visibile da altre applicazioni."
 #elif L==8	// pl
-	"Bank pyta&nacute; do pobrania/widoczny z innych aplikacji (SWADroid, iSWAD, TriSWADos)."
+	"Bank pyta&nacute; do pobrania/widoczny z innych aplikacji."
 #elif L==9	// pt
-	"Banco de perguntas dispon&iacute;vel para download/vis&iacute;vel de outros aplicativos (SWADroid, iSWAD, TriSWADos)."
+	"Banco de perguntas dispon&iacute;vel para download/vis&iacute;vel de outros aplicativos."
 #elif L==10	// tr
-	"Question bank downloadable/visible from other applications (SWADroid, iSWAD, TriSWADos)."	// Çeviri lazim!
+	"Question bank downloadable/visible from other applications."	// Çeviri lazim!
 #endif
 	};
 

@@ -126,8 +126,6 @@ void Lay_RefreshLastClicks (void);
 
 void Lay_WriteHeaderClassPhoto (Hie_Level_t HieLvl,Vie_ViewType_t ViewType);
 
-void Lay_AdvertisementMobile (void);
-
 void Lay_IndentDependingOnLevel (unsigned Level,
 				 const Lay_Last_t *IsLastItemInLevel,
 				 Lay_HorizontalLineAtRight_t HorizontalLineAtRight);

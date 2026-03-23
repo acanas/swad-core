@@ -5671,10 +5671,6 @@ table.TBL_WIDE > tbody > tr > th {padding: 2px;}
 	width: 100%;
 	}
 
-/****************************** SWADroid banner ******************************/
-.SWADROID	{width: 150px; height: 325px; opacity: 0.6;}
-.SWADROID:hover	{opacity: 1;}
-
 /********************************* Page foot *********************************/
 @media only screen and (max-width: 800px)
 	{	/* For mobile-phones */
