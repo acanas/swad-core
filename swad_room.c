@@ -865,8 +865,6 @@ void Roo_RemoveRoom (void)
 
 void Roo_ChangeBuilding (void)
   {
-   extern const char *Txt_The_building_of_room_X_has_not_changed;
-   extern const char *Txt_The_building_of_room_X_is_now_Y;
    long NewBldCod;
 
    /***** Room constructor *****/
@@ -886,23 +884,13 @@ void Roo_ChangeBuilding (void)
           (this happens when return is pressed without changes) *****/
    if (NewBldCod < 0)
       NewBldCod = -1L;
-   if (NewBldCod == Roo_EditingRoom->BldCod)
-      /***** Message to show no changes made *****/
-      Ale_CreateAlert (Ale_INFO,NULL,
-	               Txt_The_building_of_room_X_has_not_changed,
-		       Roo_EditingRoom->FullName);
-   else
+   if (NewBldCod != Roo_EditingRoom->BldCod)
      {
       /***** Update the table of rooms changing the old building for the new one *****/
       Roo_DB_UpdateRoomBuilding (Roo_EditingRoom->RooCod,NewBldCod);
 
       /***** Get updated data of the room from database *****/
       Roo_GetRoomDataByCod (Roo_EditingRoom);
-
-      /***** Message to show the change made *****/
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-		       Txt_The_building_of_room_X_is_now_Y,
-		       Roo_EditingRoom->FullName,Roo_EditingRoom->BldShrtName);
      }
   }
 
@@ -912,8 +900,6 @@ void Roo_ChangeBuilding (void)
 
 void Roo_ChangeFloor (void)
   {
-   extern const char *Txt_The_floor_of_room_X_has_not_changed;
-   extern const char *Txt_The_floor_of_room_X_is_now_Y;
    int NewFloor;
 
    /***** Room constructor *****/
@@ -931,23 +917,13 @@ void Roo_ChangeFloor (void)
 
    /***** Check if the old floor equals the new one
           (this happens when return is pressed without changes) *****/
-   if (NewFloor == Roo_EditingRoom->Floor)
-      /***** Message to show no changes made *****/
-      Ale_CreateAlert (Ale_INFO,NULL,
-	               Txt_The_floor_of_room_X_has_not_changed,
-		       Roo_EditingRoom->FullName);
-   else
+   if (NewFloor != Roo_EditingRoom->Floor)
      {
       /***** Update the table of rooms changing the old floor for the new one *****/
       Roo_DB_UpdateRoomFloor (Roo_EditingRoom->RooCod,NewFloor);
 
       /***** Get updated data of the room from database *****/
       Roo_GetRoomDataByCod (Roo_EditingRoom);
-
-      /***** Message to show the change made *****/
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-		       Txt_The_floor_of_room_X_is_now_Y,
-		       Roo_EditingRoom->FullName,Roo_EditingRoom->Floor);
      }
   }
 
@@ -957,9 +933,6 @@ void Roo_ChangeFloor (void)
 
 void Roo_ChangeType (void)
   {
-   extern const char *Txt_The_type_of_room_X_has_not_changed;
-   extern const char *Txt_The_type_of_room_X_is_now_Y;
-   extern const char *Txt_ROOM_TYPES[Roo_NUM_TYPES];
    Roo_RoomType_t NewType;
 
    /***** Room constructor *****/
@@ -979,23 +952,13 @@ void Roo_ChangeType (void)
           (this happens when return is pressed without changes) *****/
    if ((unsigned) NewType >= Roo_NUM_TYPES)
       NewType = Roo_NO_TYPE;
-   if (NewType == Roo_EditingRoom->Type)
-      /***** Message to show no changes made *****/
-      Ale_CreateAlert (Ale_INFO,NULL,
-	               Txt_The_type_of_room_X_has_not_changed,
-		       Roo_EditingRoom->FullName);
-   else
+   if (NewType != Roo_EditingRoom->Type)
      {
       /***** Update the table of rooms changing the old type for the new one *****/
       Roo_DB_UpdateRoomType (Roo_EditingRoom->RooCod,NewType);
 
       /***** Get updated data of the room from database *****/
       Roo_GetRoomDataByCod (Roo_EditingRoom);
-
-      /***** Message to show the change made *****/
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-		       Txt_The_type_of_room_X_is_now_Y,
-		       Roo_EditingRoom->FullName,Txt_ROOM_TYPES[Roo_EditingRoom->Type]);
      }
   }
 
@@ -1034,8 +997,6 @@ static void Roo_RenameRoom (Nam_ShrtOrFullName_t ShrtOrFull)
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
-   extern const char *Txt_The_room_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_name_X_has_not_changed;
    char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = Roo_EditingRoom->ShrtName,
@@ -1073,16 +1034,8 @@ static void Roo_RenameRoom (Nam_ShrtOrFullName_t ShrtOrFull)
 	       /* Update the table changing old name by new name */
 	       Roo_DB_UpdateRoomName (Roo_EditingRoom->RooCod,
 				      Nam_Fields[ShrtOrFull],NewName);
-
-	       /* Write message to show the change made */
-	       Ale_CreateAlert (Ale_SUCCESS,NULL,
-				Txt_The_room_X_has_been_renamed_as_Y,
-				CurrentName[ShrtOrFull],NewName);
 	       break;
 	   }
-      else	// The same name
-         Ale_CreateAlert (Ale_INFO,NULL,Txt_The_name_X_has_not_changed,
-			  CurrentName[ShrtOrFull]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
@@ -1097,9 +1050,7 @@ static void Roo_RenameRoom (Nam_ShrtOrFullName_t ShrtOrFull)
 
 void Roo_ChangeCapacity (void)
   {
-   extern const char *Txt_The_capacity_of_room_X_has_not_changed;
    extern const char *Txt_The_room_X_does_not_have_a_limited_capacity_now;
-   extern const char *Txt_The_capacity_of_room_X_is_now_Y;
    unsigned NewCapacity;
 
    /***** Room constructor *****/
@@ -1112,21 +1063,16 @@ void Roo_ChangeCapacity (void)
    /* Get the seating capacity of the room */
    NewCapacity = (unsigned)
 	          Par_GetParUnsignedLong ("Capacity",
-                                            0,
-                                            Roo_MAX_CAPACITY,
-                                            Roo_UNLIMITED_CAPACITY);
+                                          0,
+                                          Roo_MAX_CAPACITY,
+                                          Roo_UNLIMITED_CAPACITY);
 
    /***** Get data of the room from database *****/
    Roo_GetRoomDataByCod (Roo_EditingRoom);
 
    /***** Check if the old capacity equals the new one
           (this happens when return is pressed without changes) *****/
-   if (NewCapacity == Roo_EditingRoom->Capacity)
-      /***** Message to show no changes made *****/
-      Ale_CreateAlert (Ale_INFO,NULL,
-	               Txt_The_capacity_of_room_X_has_not_changed,
-		       Roo_EditingRoom->FullName);
-   else
+   if (NewCapacity != Roo_EditingRoom->Capacity)
      {
       /***** Update the table of rooms changing the old capacity for the new one *****/
       Roo_DB_UpdateRoomCapacity (Roo_EditingRoom->RooCod,NewCapacity);
@@ -1137,10 +1083,6 @@ void Roo_ChangeCapacity (void)
          Ale_CreateAlert (Ale_SUCCESS,NULL,
                           Txt_The_room_X_does_not_have_a_limited_capacity_now,
                           Roo_EditingRoom->FullName);
-      else
-         Ale_CreateAlert (Ale_SUCCESS,NULL,
-                          Txt_The_capacity_of_room_X_is_now_Y,
-                          Roo_EditingRoom->FullName,NewCapacity);
      }
   }
 

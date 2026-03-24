@@ -771,8 +771,6 @@ static void DegTyp_RemoveDegTypeCompletely (long DegTypCod)
 void DegTyp_RenameDegTyp (void)
   {
    extern const char *Txt_The_type_of_degree_X_already_exists;
-   extern const char *Txt_The_type_of_degree_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_name_X_has_not_changed;
    char NewNameDegTyp[DegTyp_MAX_BYTES_DEGREE_TYPE_NAME + 1];
 
    /***** Degree type constructor *****/
@@ -807,16 +805,8 @@ void DegTyp_RenameDegTyp (void)
 	    default:
 	       /* Update the table changing old name by new name */
 	       Deg_DB_UpdateDegTypName (DegTyp_EditingDegTyp->DegTypCod,NewNameDegTyp);
-
-	       /* Write message to show the change made */
-	       Ale_CreateAlert (Ale_SUCCESS,NULL,
-				Txt_The_type_of_degree_X_has_been_renamed_as_Y,
-				DegTyp_EditingDegTyp->DegTypName,NewNameDegTyp);
 	       break;
 	   }
-      else	// The same name
-         Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_X_has_not_changed,NewNameDegTyp);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

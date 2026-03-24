@@ -200,7 +200,6 @@ void Mrk_ChangeNumRowsFooter (void)
 
 static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
   {
-   extern const char *Txt_The_number_of_rows_is_now_X;
    char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    unsigned NumRows;
 
@@ -210,14 +209,8 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
    /***** Get the number of rows of the header or footer of the table of marks *****/
    Par_GetParText (Mrk_HeadOrFootStr[HeaderOrFooter],UnsignedStr,Cns_MAX_DIGITS_UINT);
    if (sscanf (UnsignedStr,"%u",&NumRows) == 1)
-     {
       /***** Update properties of marks in the database *****/
       Mrk_DB_ChangeNumRowsHeaderOrFooter (HeaderOrFooter,NumRows);
-
-      /***** Write message of success *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_number_of_rows_is_now_X,
-                     NumRows);
-     }
    else
       Err_WrongNumberOfRowsExit ();
 

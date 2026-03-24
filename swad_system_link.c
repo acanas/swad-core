@@ -525,8 +525,6 @@ static void SysLnk_RenameLink (Nam_ShrtOrFullName_t ShrtOrFull)
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
-   extern const char *Txt_The_link_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_name_X_has_not_changed;
    char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = SysLnk_EditingLnk->ShrtName,
@@ -564,16 +562,8 @@ static void SysLnk_RenameLink (Nam_ShrtOrFullName_t ShrtOrFull)
 	       /* Update the table changing old name by new name */
 	       SysLnk_DB_UpdateLnkName (SysLnk_EditingLnk->LnkCod,
 				        Nam_Fields[ShrtOrFull],NewName);
-
-	       /* Write message to show the change made */
-	       Ale_CreateAlert (Ale_SUCCESS,NULL,
-				Txt_The_link_X_has_been_renamed_as_Y,
-				CurrentName[ShrtOrFull],NewName);
 	       break;
 	   }
-      else	// The same name
-         Ale_CreateAlert (Ale_INFO,NULL,Txt_The_name_X_has_not_changed,
-                          CurrentName[ShrtOrFull]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

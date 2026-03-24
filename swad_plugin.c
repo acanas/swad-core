@@ -504,8 +504,6 @@ void Plg_RemovePlugin (void)
 void Plg_RenamePlugin (void)
   {
    extern const char *Txt_The_plugin_X_already_exists;
-   extern const char *Txt_The_plugin_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_name_X_has_not_changed;
    char NewPlgName[Plg_MAX_BYTES_PLUGIN_NAME + 1];
    __attribute__((unused)) Exi_Exist_t PlgExists;
 
@@ -540,16 +538,8 @@ void Plg_RenamePlugin (void)
 	    default:
 	       /* Update the table changing old name by new name */
 	       Plg_DB_ChangeName (Plg_EditingPlg->PlgCod,NewPlgName);
-
-	       /* Write message to show the change made */
-	       Ale_CreateAlert (Ale_SUCCESS,NULL,
-				Txt_The_plugin_X_has_been_renamed_as_Y,
-				Plg_EditingPlg->Name,NewPlgName);
 	       break;
 	   }
-      else	// The same name
-         Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_X_has_not_changed,Plg_EditingPlg->Name);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

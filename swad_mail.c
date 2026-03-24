@@ -583,8 +583,6 @@ void Mai_RenameMailDomFull (void)
 static void Mai_RenameMailDomain (Nam_ShrtOrFullName_t ShrtOrFull)
   {
    extern const char *Txt_The_email_domain_X_already_exists;
-   extern const char *Txt_The_email_domain_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_email_domain_X_has_not_changed;
    static const char *ParName[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = "Domain",
@@ -635,17 +633,8 @@ static void Mai_RenameMailDomain (Nam_ShrtOrFullName_t ShrtOrFull)
 	    default:
 	       /* Update the table changing old name by new name */
 	       Mai_DB_UpdateMailDomainName (Mai_EditingMai->MaiCod,FldName[ShrtOrFull],NewName);
-
-	       /* Write message to show the change made */
-	       Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
-				Txt_The_email_domain_X_has_been_renamed_as_Y,
-				CurrentName[ShrtOrFull],NewName);
 	       break;
 	   }
-      else	// The same name
-	 Ale_CreateAlert (Ale_INFO,Mai_EMAIL_SECTION_ID,
-	                  Txt_The_email_domain_X_has_not_changed,
-                          CurrentName[ShrtOrFull]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

@@ -1274,7 +1274,6 @@ static void Agd_HideUnhideEvent (HidVis_HiddenOrVisible_t HiddenOrVisible)
 
 void Agd_MakeEventPrivate (void)
   {
-   extern const char *Txt_Event_X_is_now_private;
    struct Agd_Agenda Agenda;
    struct Agd_Event AgdEvent;
 
@@ -1294,10 +1293,6 @@ void Agd_MakeEventPrivate (void)
    /***** Make event private *****/
    Agd_DB_MakeEventPrivate (&AgdEvent);
 
-   /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_is_now_private,
-	          AgdEvent.Title);
-
    /***** Show events again *****/
    Agd_ShowMyAgenda (&Agenda);
   }
@@ -1308,7 +1303,6 @@ void Agd_MakeEventPrivate (void)
 
 void Agd_MakeEventPublic (void)
   {
-   extern const char *Txt_Event_X_is_now_visible_to_users_of_your_courses;
    struct Agd_Agenda Agenda;
    struct Agd_Event AgdEvent;
 
@@ -1327,10 +1321,6 @@ void Agd_MakeEventPublic (void)
 
    /***** Make event public *****/
    Agd_DB_MakeEventPublic (&AgdEvent);
-
-   /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_is_now_visible_to_users_of_your_courses,
-                  AgdEvent.Title);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda (&Agenda);

@@ -1303,7 +1303,6 @@ void Crs_ChangeInsCrsCod (void)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_institutional_code_of_the_course_X_has_changed_to_Y;
-   extern const char *Txt_The_institutional_code_of_the_course_X_has_not_changed;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    char NewInstitutionalCrsCod[Hie_MAX_BYTES_INSTITUTIONAL_COD + 1];
 
@@ -1331,10 +1330,6 @@ void Crs_ChangeInsCrsCod (void)
 		       Crs_EditingCrs->ShrtName,
 		       NewInstitutionalCrsCod);
      }
-   else	// The same institutional code
-      Ale_CreateAlert (Ale_INFO,NULL,
-		       Txt_The_institutional_code_of_the_course_X_has_not_changed,
-		       Crs_EditingCrs->ShrtName);
   }
 
 /*****************************************************************************/
@@ -1455,8 +1450,6 @@ void Crs_RenameCourse (struct Hie_Node *Crs,Nam_ShrtOrFullName_t ShrtOrFull)
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
-   extern const char *Txt_The_course_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_name_X_has_not_changed;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
      {
@@ -1494,18 +1487,10 @@ void Crs_RenameCourse (struct Hie_Node *Crs,Nam_ShrtOrFullName_t ShrtOrFull)
 	       Crs_DB_UpdateCrsName (Crs->HieCod,
 				     Nam_Fields[ShrtOrFull],NewName);
 
-	       /* Create alert to show the change made */
-	       Ale_CreateAlert (Ale_SUCCESS,NULL,
-				Txt_The_course_X_has_been_renamed_as_Y,
-				CurrentName[ShrtOrFull],NewName);
-
 	       /* Change current course name in order to display it properly */
 	       Str_Copy (CurrentName[ShrtOrFull],NewName,Nam_MaxBytes[ShrtOrFull]);
 	       break;
 	   }
-      else	// The same name
-	 Ale_CreateAlert (Ale_INFO,NULL,
-			  Txt_The_name_X_has_not_changed,CurrentName[ShrtOrFull]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

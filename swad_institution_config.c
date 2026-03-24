@@ -493,7 +493,6 @@ void InsCfg_RemoveLogo (void)
 void InsCfg_ChangeInsCty (void)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
-   extern const char *Txt_The_country_of_the_institution_X_has_changed_to_Y;
    struct Hie_Node NewCty;
    long HieCods[Hie_NUM_LEVELS];
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
@@ -526,11 +525,6 @@ void InsCfg_ChangeInsCty (void)
 
 	 /***** Initialize again current course, degree, center... *****/
 	 Hie_InitHierarchy ();
-
-	 /***** Write message to show the change made *****/
-         Ale_CreateAlert (Ale_SUCCESS,NULL,
-                          Txt_The_country_of_the_institution_X_has_changed_to_Y,
-		          Names[Nam_FULL_NAME],NewCty.FullName);
 	}
      }
   }
@@ -541,13 +535,11 @@ void InsCfg_ChangeInsCty (void)
 
 void InsCfg_RenameInsShort (void)
   {
-   /***** Rename institution *****/
    Ins_RenameInstitution (&Gbl.Hierarchy.Node[Hie_INS],Nam_SHRT_NAME);
   }
 
 void InsCfg_RenameInsFull (void)
   {
-   /***** Rename institution *****/
    Ins_RenameInstitution (&Gbl.Hierarchy.Node[Hie_INS],Nam_FULL_NAME);
   }
 

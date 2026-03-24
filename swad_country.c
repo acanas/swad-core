@@ -1188,9 +1188,7 @@ void Cty_RenameCountry (void)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_country_X_already_exists;
-   extern const char *Txt_The_country_X_has_been_renamed_as_Y;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   extern const char *Txt_The_name_X_has_not_changed;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    char OldCtyName[Cty_MAX_BYTES_NAME + 1];
    char NewCtyName[Cty_MAX_BYTES_NAME + 1];
@@ -1233,16 +1231,8 @@ void Cty_RenameCountry (void)
 	       snprintf (FldName,sizeof (FldName),"Name_%s",
 			 Lan_STR_LANG_ID[Language]);
 	       Cty_UpdateCtyName (Cty_EditingCty->HieCod,FldName,NewCtyName);
-
-	       /* Write message to show the change made */
-	       Ale_CreateAlert (Ale_SUCCESS,NULL,
-				Txt_The_country_X_has_been_renamed_as_Y,
-				OldCtyName,NewCtyName);
 	       break;
 	   }
-      else	// The same name
-	 Ale_CreateAlert (Ale_INFO,NULL,
-			  Txt_The_name_X_has_not_changed,OldCtyName);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

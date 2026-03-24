@@ -134,8 +134,6 @@ void Tag_DisableTag (void)
 
 void Tag_RenameTag (void)
   {
-   extern const char *Txt_The_tag_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_tag_X_has_not_changed;
    char OldTagTxt[Tag_MAX_BYTES_TAG + 1];
    char NewTagTxt[Tag_MAX_BYTES_TAG + 1];
    long ExistingTagCodNewTxt;
@@ -150,12 +148,7 @@ void Tag_RenameTag (void)
    if (NewTagTxt[0])	// New tag not empty
      {
       /***** Check if the old tag is equal to the new one *****/
-      if (!strcmp (OldTagTxt,NewTagTxt))	// The old and the new tag
-						// are exactly the same (case sensitively).
-						// This happens when user press INTRO
-						// without changing anything in the form.
-         Ale_ShowAlert (Ale_INFO,Txt_The_tag_X_has_not_changed,NewTagTxt);
-      else					// The old and the new tag
+      if (strcmp (OldTagTxt,NewTagTxt))		// The old and the new tag
 						// are not exactly the same (case sensitively).
 	{
 	 /***** Check if renaming is complex or easy *****/
@@ -201,10 +194,6 @@ void Tag_RenameTag (void)
 	 else			// Renaming is easy
 	    /***** Simple update replacing each instance of the old tag by the new tag *****/
 	    Tag_DB_SimplexRenameTag (OldTagTxt,NewTagTxt);
-
-	 /***** Write message to show the change made *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_tag_X_has_been_renamed_as_Y,
-		        OldTagTxt,NewTagTxt);
 	}
      }
    else			// New tag empty

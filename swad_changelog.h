@@ -639,10 +639,11 @@ TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de t
 
 TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtube.com/shorts/fY6Oax_uJBc?si=G3UHqvSH3yEbxm1B
 */
-#define Log_PLATFORM_VERSION	"SWAD 25.42.1 (2026-03-23)"
+#define Log_PLATFORM_VERSION	"SWAD 25.43 (2026-03-24)"
 #define CSS_FILE		"swad25.39.1.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 25.43:    Mar 24, 2026	Some feedback alerts removed. (348678 lines)
 	Version 25.42.1:  Mar 23, 2026	Changes in notification settings. (350253 lines)
 	Version 25.42:    Mar 23, 2026	Changes in records. Some feedback alerts removed. (350279 lines)
 	Version 25.41.2:  Mar 23, 2026	SWADroid advertising temporarily removed until the app download issue is resolved. (350622 lines)

@@ -679,8 +679,6 @@ void Rec_RemoveField (void)
 void Rec_RenameField (void)
   {
    extern const char *Txt_The_record_field_X_already_exists;
-   extern const char *Txt_The_record_field_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_name_X_has_not_changed;
    char NewFieldName[Rec_MAX_BYTES_NAME_FIELD + 1];
 
    /***** Get parameters of the form *****/
@@ -708,17 +706,9 @@ void Rec_RenameField (void)
             Ale_ShowAlert (Ale_ERROR,Txt_The_record_field_X_already_exists,
                            NewFieldName);
          else
-           {
             /* Update the table of fields changing then old name by the new one */
             Rec_DB_UpdateFieldName (Gbl.Crs.Records.Field.FieldCod,NewFieldName);
-
-            /***** Write message to show the change made *****/
-            Ale_ShowAlert (Ale_SUCCESS,Txt_The_record_field_X_has_been_renamed_as_Y,
-                           Gbl.Crs.Records.Field.Name,NewFieldName);
-           }
         }
-      else	// The same name
-         Ale_ShowAlert (Ale_INFO,Txt_The_name_X_has_not_changed,NewFieldName);
      }
    else
       Ale_ShowAlertYouCanNotLeaveFieldEmpty ();
@@ -735,7 +725,6 @@ void Rec_RenameField (void)
 
 void Rec_ChangeLinesField (void)
   {
-   extern const char *Txt_The_number_of_editing_lines_in_the_record_field_X_has_not_changed;
    unsigned NewNumLines;
 
    /***** Get parameters of the form *****/
@@ -754,10 +743,7 @@ void Rec_ChangeLinesField (void)
 
    /***** Check if the old number of rows matches the new one
           (this happens when return is pressed without changes) *****/
-   if (Gbl.Crs.Records.Field.NumLines == NewNumLines)
-      Ale_ShowAlert (Ale_INFO,Txt_The_number_of_editing_lines_in_the_record_field_X_has_not_changed,
-                     Gbl.Crs.Records.Field.Name);
-   else
+   if (Gbl.Crs.Records.Field.NumLines != NewNumLines)
       /***** Update of the table of fields changing the old number of lines by the new one *****/
       Rec_DB_UpdateFieldNumLines (Gbl.Crs.Records.Field.FieldCod,NewNumLines);
 
@@ -772,7 +758,6 @@ void Rec_ChangeLinesField (void)
 
 void Rec_ChangeVisibilityField (void)
   {
-   extern const char *Txt_The_visibility_of_the_record_field_X_has_not_changed;
    Rec_VisibilityRecordFields_t NewVisibility;
 
    /***** Get parameters of the form *****/
@@ -791,10 +776,7 @@ void Rec_ChangeVisibilityField (void)
 
    /***** Check if the old visibility matches the new one
           (this happens when return is pressed without changes) *****/
-   if (Gbl.Crs.Records.Field.Visibility == NewVisibility)
-      Ale_ShowAlert (Ale_INFO,Txt_The_visibility_of_the_record_field_X_has_not_changed,
-                     Gbl.Crs.Records.Field.Name);
-   else
+   if (Gbl.Crs.Records.Field.Visibility != NewVisibility)
       /***** Update the table of fields changing the old visibility by the new *****/
       Rec_DB_UpdateFieldVisibility (Gbl.Crs.Records.Field.FieldCod,NewVisibility);
 

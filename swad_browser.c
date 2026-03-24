@@ -6695,8 +6695,6 @@ void Brw_CreateFolder (void)
 
 void Brw_RenFolder (void)
   {
-   extern const char *Txt_The_folder_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_name_X_has_not_changed;
    extern const char *Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y;
    extern const char *Txt_You_can_not_rename_this_folder;
    extern const char *Txt_UPLOAD_FILE_Invalid_name;
@@ -6780,19 +6778,9 @@ void Brw_RenFolder (void)
 							   Gbl.Usrs.Other.UsrDat.UsrCod,
 							   OldPathInTree,
 							   NewPathInTree);
-
-		     /* Write message of confirmation */
-		     Ale_ShowAlert (Ale_SUCCESS,Txt_The_folder_X_has_been_renamed_as_Y,
-				    Gbl.FileBrowser.FilFolLnk.Name,
-				    Gbl.FileBrowser.NewFilFolLnkName);
 		    }
 
 		 }
-	       else	// Names are equal.
-		      // This may happens if we have press...
-		      // ...INTRO without changing the name
-		  Ale_ShowAlert (Ale_INFO,Txt_The_name_X_has_not_changed,
-				 Gbl.FileBrowser.FilFolLnk.Name);
 	       break;
 	    case Err_ERROR:	// Folder name not valid
 	    default:

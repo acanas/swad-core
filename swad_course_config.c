@@ -554,7 +554,6 @@ void CrsCfg_ChangeCrsYear (void)
 void CrsCfg_ChangeInsCrsCod (void)
   {
    extern const char *Txt_The_institutional_code_of_the_course_X_has_changed_to_Y;
-   extern const char *Txt_The_institutional_code_of_the_course_X_has_not_changed;
    char NewInstitutionalCrsCod[Hie_MAX_BYTES_INSTITUTIONAL_COD + 1];
 
    /***** Get institutional code from form *****/
@@ -570,10 +569,6 @@ void CrsCfg_ChangeInsCrsCod (void)
 	               Gbl.Hierarchy.Node[Hie_CRS].ShrtName,
 		       NewInstitutionalCrsCod);
      }
-   else	// The same institutional code
-      Ale_CreateAlert (Ale_INFO,NULL,
-	               Txt_The_institutional_code_of_the_course_X_has_not_changed,
-	               Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
   }
 
 /*****************************************************************************/

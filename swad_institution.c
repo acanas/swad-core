@@ -1156,8 +1156,6 @@ void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFull
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
-   extern const char *Txt_The_institution_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_name_X_has_not_changed;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
      {
@@ -1193,18 +1191,10 @@ void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFull
 	       Ins_UpdateInsNameDB (Ins->HieCod,
 				    Nam_Fields[ShrtOrFull],NewName);
 
-	       /* Create message to show the change made */
-	       Ale_CreateAlert (Ale_SUCCESS,NULL,
-				Txt_The_institution_X_has_been_renamed_as_Y,
-				CurrentName[ShrtOrFull],NewName);
-
 	       /* Change current institution name in order to display it properly */
 	       Str_Copy (CurrentName[ShrtOrFull],NewName,Nam_MaxBytes[ShrtOrFull]);
 	       break;
 	   }
-      else	// The same name
-         Ale_CreateAlert (Ale_INFO,NULL,Txt_The_name_X_has_not_changed,
-                          CurrentName[ShrtOrFull]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
