@@ -480,7 +480,6 @@ void RubCri_ChangeWeight (void)
 
 static void RubCri_CreateCriterion (struct RubCri_Criterion *Criterion)
   {
-   extern const char *Txt_Created_new_criterion_X;
    unsigned MaxCriInd;
 
    /***** Get maximum criterion index *****/
@@ -489,10 +488,6 @@ static void RubCri_CreateCriterion (struct RubCri_Criterion *Criterion)
    /***** Create a new criterion *****/
    Criterion->CriInd = MaxCriInd + 1;
    Criterion->CriCod = Rub_DB_CreateCriterion (Criterion);
-
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_criterion_X,
-                  Criterion->Title);
   }
 
 /*****************************************************************************/

@@ -1143,8 +1143,7 @@ void Asg_RemoveAssignment (void)
    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_ASSIGNMENT,Assignments.Asg.AsgCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Assignment_X_removed,
-                  Assignments.Asg.Title);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Assignment_X_removed,Assignments.Asg.Title);
 
    /***** Show all assignments again *****/
    Asg_ShowAllAssignments (&Assignments);
@@ -1424,8 +1423,6 @@ void Asg_ReceiveAssignment (void)
   {
    extern const char *Txt_Already_existed_an_assignment_with_the_title_X;
    extern const char *Txt_Already_existed_an_assignment_with_the_folder_X;
-   extern const char *Txt_Created_new_assignment_X;
-   extern const char *Txt_The_assignment_has_been_modified;
    extern const char *Txt_UPLOAD_FILE_Invalid_name;
    extern const char *Txt_You_can_not_disable_file_uploading_once_folders_have_been_created;
    struct Asg_Assignments Assignments;
@@ -1571,21 +1568,11 @@ void Asg_ReceiveAssignment (void)
 		     SuccessOrError = Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (OldAsg.Folder,
 										    Assignments.Asg.Folder);
 	       if (SuccessOrError == Err_SUCCESS)
-		 {
 		  Asg_UpdateAssignment (&Assignments.Asg,Description);
-
-		  /***** Write success message *****/
-		  Ale_ShowAlert (Ale_SUCCESS,
-				 Txt_The_assignment_has_been_modified);
-		 }
 	       break;
 	    case OldNew_NEW:
 	    default:
 	       Asg_CreateAssignment (&Assignments.Asg,Description);	// Add new assignment to database
-
-	       /***** Write success message *****/
-	       Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_assignment_X,
-			      Assignments.Asg.Title);
 	       break;
 	   }
 

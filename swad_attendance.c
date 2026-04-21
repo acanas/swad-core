@@ -891,8 +891,7 @@ void Att_GetAndRemEvent (void)
    Att_RemoveEventFromDB (Event.AttCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_removed,
-	          Event.Title);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_removed,Event.Title);
 
    /***** Show attendance events again *****/
    Att_ShowEvents ();
@@ -1121,8 +1120,6 @@ void Att_ReqCreatOrEditEvent (void)
 void Att_ReceiveEvent (void)
   {
    extern const char *Txt_Already_existed_an_event_with_the_title_X;
-   extern const char *Txt_Created_new_event_X;
-   extern const char *Txt_The_event_has_been_modified;
    struct Att_Event OldAtt;
    struct Att_Event ReceivedAtt;
    OldNew_OldNew_t OldNewEvent;
@@ -1190,18 +1187,11 @@ void Att_ReceiveEvent (void)
 	   {
 	    case OldNew_OLD:
 	       Att_UpdateEvent (&ReceivedAtt,Description);
-
-	       /***** Write success message *****/
-	       Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
 	       break;
 	    case OldNew_NEW:
 	    default:
 	       ReceivedAtt.Hidden = HidVis_VISIBLE;	// New attendance events are visible by default
 	       Att_CreateEvent (&ReceivedAtt,Description);		// Add new attendance event to database
-
-	       /***** Write success message *****/
-	       Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_event_X,
-			      ReceivedAtt.Title);
 	       break;
 	   }
 

@@ -1058,14 +1058,16 @@ void Acc_CompletelyEliminateAccount (struct Usr_Data *UsrDat,
    Enr_DB_RemUsrFromAllCrss (UsrDat->UsrCod);
 
    if (Verbose == Cns_VERBOSE)
-      Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_from_all_his_her_courses,
+      Ale_ShowAlert (Ale_SUCCESS,
+		     Txt_THE_USER_X_has_been_removed_from_all_his_her_courses,
                      UsrDat->FullName);
 
    /***** Remove user as administrator of any degree/center/institution *****/
    Adm_DB_RemUsrAsAdmin (UsrDat->UsrCod);
 
    if (Verbose == Cns_VERBOSE)
-      Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_administrator,
+      Ale_ShowAlert (Ale_SUCCESS,
+		     Txt_THE_USER_X_has_been_removed_as_administrator,
                      UsrDat->FullName);
 
    /***** Remove user's clipboard in forums *****/

@@ -1463,8 +1463,7 @@ void Svy_RemoveSurvey (void)
    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_SURVEY,Surveys.Svy.SvyCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Survey_X_removed,
-                  Surveys.Svy.Title);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Survey_X_removed,Surveys.Svy.Title);
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&Surveys);
@@ -1994,17 +1993,12 @@ void Svy_ReceiveSurvey (void)
 
 static void Svy_CreateSurvey (struct Svy_Survey *Svy,const char *Txt)
   {
-   extern const char *Txt_Created_new_survey_X;
-
    /***** Create a new survey *****/
    Svy->SvyCod = Svy_DB_CreateSurvey (Svy,Txt);
 
    /***** Create groups *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       Svy_CreateGrps (Svy->SvyCod);
-
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_survey_X,Svy->Title);
   }
 
 /*****************************************************************************/
@@ -2013,8 +2007,6 @@ static void Svy_CreateSurvey (struct Svy_Survey *Svy,const char *Txt)
 
 static void Svy_UpdateSurvey (struct Svy_Survey *Svy,const char *Txt)
   {
-   extern const char *Txt_The_survey_has_been_modified;
-
    /***** Update the data of the survey *****/
    Svy_DB_UpdateSurvey (Svy,Txt);
 
@@ -2025,9 +2017,6 @@ static void Svy_UpdateSurvey (struct Svy_Survey *Svy,const char *Txt)
    /* Create new groups */
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       Svy_CreateGrps (Svy->SvyCod);
-
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_survey_has_been_modified);
   }
 
 /*****************************************************************************/
@@ -2443,7 +2432,6 @@ void Svy_ReceiveQst (void)
   {
    extern const char *Txt_You_must_type_the_question_stem;
    extern const char *Txt_You_can_not_leave_empty_intermediate_answers;
-   extern const char *Txt_The_survey_has_been_modified;
    struct Svy_Surveys Surveys;
    struct Svy_Question SvyQst;
    char Stem[Cns_MAX_BYTES_TEXT + 1];
@@ -2550,9 +2538,6 @@ void Svy_ReceiveQst (void)
 					  SvyQst.AnsChoice[NumAns].Text);
 		  break;
 	      }
-
-	 /***** List the questions of this survey, including the new one just inserted into the database *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_survey_has_been_modified);
 	 break;
       case Err_ERROR:
       default:

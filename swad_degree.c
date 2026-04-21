@@ -1024,7 +1024,6 @@ void Deg_ReceiveNewDeg (void)
 
 static void Deg_ReceiveRequestOrCreateDeg (Hie_Status_t Status)
   {
-   extern const char *Txt_Created_new_degree_X;
    char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Get parameters from form *****/
@@ -1053,11 +1052,7 @@ static void Deg_ReceiveRequestOrCreateDeg (Hie_Status_t Status)
 				    -1L,
 				    Deg_EditingDeg->PrtCod,
 				    0) == Exi_DOES_NOT_EXIST)	// Unused
-	   {
 	    Deg_DB_CreateDegree (Deg_EditingDeg,Status);
-	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_degree_X,
-			     Names[Nam_FULL_NAME]);
-	   }
 	}
       else	// If there is not a degree logo or web
          Ale_CreateAlertYouMustSpecifyTheWebAddress ();
@@ -1099,8 +1094,7 @@ void Deg_RemoveDeg (void)
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
-		       Txt_Degree_X_removed,
-                       Deg_EditingDeg->FullName);
+		       Txt_Degree_X_removed,Deg_EditingDeg->FullName);
 
       Deg_EditingDeg->HieCod = -1L;	// To not showing button to go to degree
      }
@@ -1324,7 +1318,6 @@ void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFull)
 void Deg_ChangeDegTyp (void)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
-   extern const char *Txt_The_type_of_degree_of_the_degree_X_has_changed;
    long NewDegTypCod;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
@@ -1344,12 +1337,6 @@ void Deg_ChangeDegTyp (void)
    /***** Update the table of degrees changing old type by new type *****/
    Deg_DB_UpdateDegTyp (Deg_EditingDeg->HieCod,NewDegTypCod);
    Deg_EditingDeg->Specific.TypCod = NewDegTypCod;
-
-   /***** Create alert to show the change made
-          and put button to go to degree changed *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_The_type_of_degree_of_the_degree_X_has_changed,
-	            Deg_EditingDeg->FullName);
   }
 
 /*****************************************************************************/
@@ -1359,7 +1346,6 @@ void Deg_ChangeDegTyp (void)
 void Deg_ChangeDegWWW (void)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
-   extern const char *Txt_The_new_web_address_is_X;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
@@ -1382,12 +1368,6 @@ void Deg_ChangeDegWWW (void)
       /***** Update the table changing old WWW by new WWW *****/
       Deg_DB_UpdateDegWWW (Deg_EditingDeg->HieCod,NewWWW);
       Str_Copy (Deg_EditingDeg->WWW,NewWWW,sizeof (Deg_EditingDeg->WWW) - 1);
-
-      /***** Write alert to show the change made
-	     and put button to go to degree changed *****/
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_The_new_web_address_is_X,
-		       NewWWW);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
@@ -1400,7 +1380,6 @@ void Deg_ChangeDegWWW (void)
 void Deg_ChangeDegStatus (void)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
-   extern const char *Txt_The_status_of_the_degree_X_has_changed;
    Hie_Status_t Status;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
@@ -1420,12 +1399,6 @@ void Deg_ChangeDegStatus (void)
    /***** Update status *****/
    Deg_DB_UpdateDegStatus (Deg_EditingDeg->HieCod,Status);
    Deg_EditingDeg->Status = Status;
-
-   /***** Write alert to show the change made
-	  and put button to go to degree changed *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_The_status_of_the_degree_X_has_changed,
-                    Deg_EditingDeg->ShrtName);
   }
 
 /*****************************************************************************/

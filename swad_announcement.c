@@ -380,7 +380,6 @@ static void Ann_PutSubjectMessage (const char *Field,const char *Label,
 
 void Ann_ReceiveAnnouncement (void)
   {
-   extern const char *Txt_Announcement_created;
    unsigned Roles;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char Content[Cns_MAX_BYTES_TEXT + 1];
@@ -398,9 +397,6 @@ void Ann_ReceiveAnnouncement (void)
 
    /***** Create a new announcement in database *****/
    Ann_DB_CreateAnnouncement (Roles,Subject,Content);
-
-   /***** Write message of success *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Announcement_created);
 
    /***** Refresh list of announcements *****/
    Ann_ShowAllAnnouncements ();

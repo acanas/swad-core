@@ -855,8 +855,7 @@ void Roo_RemoveRoom (void)
 
    /***** Create message to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_Room_X_removed,
-	            Roo_EditingRoom->FullName);
+		    Txt_Room_X_removed,Roo_EditingRoom->FullName);
   }
 
 /*****************************************************************************/
@@ -1220,7 +1219,6 @@ static void Roo_PutHeadRooms (void)
 
 void Roo_ReceiveNewRoom (void)
   {
-   extern const char *Txt_Created_new_room_X;
    char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Room constructor *****/
@@ -1256,11 +1254,7 @@ void Roo_ReceiveNewRoom (void)
 				 -1L,
 				 Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 				 0) == Exi_DOES_NOT_EXIST)	// Unused
-        {
          Roo_CreateRoom (Roo_EditingRoom);
-	 Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_room_X,
-			  Names[Nam_FULL_NAME]);
-        }
      }
    else	// If there is not a room name
       Ale_CreateAlertYouMustSpecifyShrtNameAndFullName ();

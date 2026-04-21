@@ -511,7 +511,6 @@ void CrsCfg_RenameCourseFull (void)
 void CrsCfg_ChangeCrsYear (void)
   {
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
-   extern const char *Txt_The_year_of_the_course_X_has_changed;
    extern const char *Txt_The_year_X_is_not_allowed;
    char YearStr[2 + 1];
    unsigned NewYear;
@@ -531,15 +530,8 @@ void CrsCfg_ChangeCrsYear (void)
 				 -1L,
 				 Gbl.Hierarchy.Node[Hie_CRS].PrtCod,
 				 NewYear) == Exi_DOES_NOT_EXIST)
-	{
 	 /***** Update year in table of courses *****/
          Crs_UpdateCrsYear (&Gbl.Hierarchy.Node[Hie_CRS],NewYear);
-
-	 /***** Create alert to show the change made *****/
-	 Ale_CreateAlert (Ale_SUCCESS,NULL,
-			  Txt_The_year_of_the_course_X_has_changed,
-		          Names[Nam_FULL_NAME]);
-	}
      }
    else	// Year not valid
       Ale_CreateAlert (Ale_WARNING,NULL,
@@ -553,7 +545,6 @@ void CrsCfg_ChangeCrsYear (void)
 
 void CrsCfg_ChangeInsCrsCod (void)
   {
-   extern const char *Txt_The_institutional_code_of_the_course_X_has_changed_to_Y;
    char NewInstitutionalCrsCod[Hie_MAX_BYTES_INSTITUTIONAL_COD + 1];
 
    /***** Get institutional code from form *****/
@@ -561,14 +552,7 @@ void CrsCfg_ChangeInsCrsCod (void)
 
    /***** Change the institutional course code *****/
    if (strcmp (NewInstitutionalCrsCod,Gbl.Hierarchy.Node[Hie_CRS].InstitutionalCod))
-     {
       Crs_UpdateInstitutionalCrsCod (&Gbl.Hierarchy.Node[Hie_CRS],NewInstitutionalCrsCod);
-
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_The_institutional_code_of_the_course_X_has_changed_to_Y,
-	               Gbl.Hierarchy.Node[Hie_CRS].ShrtName,
-		       NewInstitutionalCrsCod);
-     }
   }
 
 /*****************************************************************************/

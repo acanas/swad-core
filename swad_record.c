@@ -536,14 +536,7 @@ bool Rec_CheckIfRecordFieldIsRepeated (const char *FldName)
 
 void Rec_CreateRecordField (void)
   {
-   extern const char *Txt_Created_new_record_field_X;
-
-   /***** Create the new field *****/
    Rec_DB_CreateField (Gbl.Hierarchy.Node[Hie_CRS].HieCod,&Gbl.Crs.Records.Field);
-
-   /***** Write message of success *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_record_field_X,
-                  Gbl.Crs.Records.Field.Name);
   }
 
 /*****************************************************************************/

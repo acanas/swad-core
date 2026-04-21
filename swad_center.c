@@ -982,8 +982,8 @@ void Ctr_RemoveCenter (void)
       Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_CTR);
 
       /***** Write message to show the change made *****/
-      Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Center_X_removed,
-	               Ctr_EditingCtr->FullName);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+		       Txt_Center_X_removed,Ctr_EditingCtr->FullName);
 
       Ctr_EditingCtr->HieCod = -1L;	// To not showing button to go to center
      }
@@ -996,7 +996,6 @@ void Ctr_RemoveCenter (void)
 void Ctr_ChangeCtrPlc (void)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
-   extern const char *Txt_The_place_of_the_center_has_changed;
    long NewPlcCod;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
@@ -1015,10 +1014,6 @@ void Ctr_ChangeCtrPlc (void)
    /***** Update place in table of centers *****/
    Ctr_DB_UpdateCtrPlc (Ctr_EditingCtr->HieCod,NewPlcCod);
    Ctr_EditingCtr->Specific.PlcCod = NewPlcCod;
-
-   /***** Create alert to show the change made
-	  and put button to go to center changed *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_The_place_of_the_center_has_changed);
   }
 
 /*****************************************************************************/
@@ -1106,7 +1101,6 @@ void Ctr_RenameCenter (struct Hie_Node *Ctr,Nam_ShrtOrFullName_t ShrtOrFull)
 void Ctr_ChangeCtrWWW (void)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
-   extern const char *Txt_The_new_web_address_is_X;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
@@ -1128,12 +1122,6 @@ void Ctr_ChangeCtrWWW (void)
       /***** Update database changing old WWW by new WWW *****/
       Ctr_DB_UpdateCtrWWW (Ctr_EditingCtr->HieCod,NewWWW);
       Str_Copy (Ctr_EditingCtr->WWW,NewWWW,sizeof (Ctr_EditingCtr->WWW) - 1);
-
-      /***** Write message to show the change made
-	     and put button to go to center changed *****/
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_The_new_web_address_is_X,
-		       NewWWW);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
@@ -1146,7 +1134,6 @@ void Ctr_ChangeCtrWWW (void)
 void Ctr_ChangeCtrStatus (void)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
-   extern const char *Txt_The_status_of_the_center_X_has_changed;
    Hie_Status_t Status;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
@@ -1166,12 +1153,6 @@ void Ctr_ChangeCtrStatus (void)
    /***** Update status *****/
    Ctr_DB_UpdateCtrStatus (Ctr_EditingCtr->HieCod,Status);
    Ctr_EditingCtr->Status = Status;
-
-   /***** Write message to show the change made
-	  and put button to go to center changed *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_The_status_of_the_center_X_has_changed,
-	            Ctr_EditingCtr->ShrtName);
   }
 
 /*****************************************************************************/
@@ -1429,7 +1410,6 @@ void Ctr_ReceiveNewCtr (void)
 
 static void Ctr_ReceiveRequestOrCreateCtr (Hie_Status_t Status)
   {
-   extern const char *Txt_Created_new_center_X;
    char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Get parameters from form *****/
@@ -1458,11 +1438,7 @@ static void Ctr_ReceiveRequestOrCreateCtr (Hie_Status_t Status)
 				    -1L,
 				    Gbl.Hierarchy.Node[Hie_INS].HieCod,
 				    0) == Exi_DOES_NOT_EXIST)	// Unused
-           {
             Ctr_EditingCtr->HieCod = Ctr_DB_CreateCenter (Ctr_EditingCtr,Status);
-	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_center_X,
-			     Names[Nam_FULL_NAME]);
-           }
         }
       else	// If there is not a web
          Ale_CreateAlertYouMustSpecifyTheWebAddress ();

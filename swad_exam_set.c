@@ -402,7 +402,6 @@ void ExaSet_ChangeNumQstsToExam (void)
 
 static void ExaSet_CreateSet (struct ExaSet_Set *Set)
   {
-   extern const char *Txt_Created_new_set_of_questions_X;
    unsigned MaxSetInd;
 
    /***** Get maximum set index *****/
@@ -411,10 +410,6 @@ static void ExaSet_CreateSet (struct ExaSet_Set *Set)
    /***** Create a new exam *****/
    Set->SetInd = MaxSetInd + 1;
    Set->SetCod = Exa_DB_CreateSet (Set);
-
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_set_of_questions_X,
-                  Set->Title);
   }
 
 /*****************************************************************************/

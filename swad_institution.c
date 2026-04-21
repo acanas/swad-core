@@ -1115,8 +1115,7 @@ void Ins_RemoveInstitution (void)
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_Institution_X_removed,
-                       Ins_EditingIns->FullName);
+	               Txt_Institution_X_removed,Ins_EditingIns->FullName);
 
       Ins_EditingIns->HieCod = -1L;	// To not showing button to go to institution
      }
@@ -1220,7 +1219,6 @@ static void Ins_UpdateInsNameDB (long HieCod,const char *FldName,const char *New
 void Ins_ChangeInsWWW (void)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
-   extern const char *Txt_The_new_web_address_is_X;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
@@ -1243,12 +1241,6 @@ void Ins_ChangeInsWWW (void)
       /***** Update database changing old WWW by new WWW *****/
       Ins_DB_UpdateInsWWW (Ins_EditingIns->HieCod,NewWWW);
       Str_Copy (Ins_EditingIns->WWW,NewWWW,sizeof (Ins_EditingIns->WWW) - 1);
-
-      /***** Write message to show the change made
-	     and put button to go to institution changed *****/
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-		       Txt_The_new_web_address_is_X,
-		       NewWWW);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
@@ -1261,7 +1253,6 @@ void Ins_ChangeInsWWW (void)
 void Ins_ChangeInsStatus (void)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
-   extern const char *Txt_The_status_of_the_institution_X_has_changed;
    Hie_Status_t Status;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
@@ -1281,12 +1272,6 @@ void Ins_ChangeInsStatus (void)
    /***** Update status *****/
    Ins_DB_UpdateInsStatus (Ins_EditingIns->HieCod,Status);
    Ins_EditingIns->Status = Status;
-
-   /***** Create message to show the change made
-	  and put button to go to institution changed *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-		    Txt_The_status_of_the_institution_X_has_changed,
-		    Ins_EditingIns->ShrtName);
   }
 
 /*****************************************************************************/
@@ -1463,7 +1448,6 @@ void Ins_ReceiveNewIns (void)
 
 static void Ins_ReceiveRequestOrCreateIns (Hie_Status_t Status)
   {
-   extern const char *Txt_Created_new_institution_X;
    char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Get parameters from form *****/
@@ -1489,11 +1473,7 @@ static void Ins_ReceiveRequestOrCreateIns (Hie_Status_t Status)
 				    -1L,
 				    Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 				    0) == Exi_DOES_NOT_EXIST)	// Unused
-           {
             Ins_EditingIns->HieCod = Ins_DB_CreateInstitution (Ins_EditingIns,Status);
-	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_institution_X,
-			     Names[Nam_FULL_NAME]);
-           }
         }
       else	// If there is not a web
          Ale_CreateAlertYouMustSpecifyTheWebAddress ();

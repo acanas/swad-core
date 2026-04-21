@@ -979,13 +979,7 @@ static Err_SuccessOrError_t Rub_CheckRubricFieldsReceivedFromForm (const struct 
 
 static void Rub_CreateRubric (struct Rub_Rubric *Rubric)
   {
-   extern const char *Txt_Created_new_rubric_X;
-
-   /***** Create a new rubric *****/
    Rubric->RubCod = Rub_DB_CreateRubric (Rubric);
-
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_rubric_X,Rubric->Title);
   }
 
 /*****************************************************************************/
@@ -994,13 +988,7 @@ static void Rub_CreateRubric (struct Rub_Rubric *Rubric)
 
 static void Rub_UpdateRubric (struct Rub_Rubric *Rubric)
   {
-   extern const char *Txt_The_rubric_has_been_modified;
-
-   /***** Update the data of the rubric *****/
    Rub_DB_UpdateRubric (Rubric);
-
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_rubric_has_been_modified);
   }
 
 /*****************************************************************************/

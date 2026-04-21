@@ -546,8 +546,7 @@ void Mai_RemoveMailDom (void)
 
    /***** Write message to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_Email_domain_X_removed,
-                    Mai_EditingMai->Domain);
+	            Txt_Email_domain_X_removed,Mai_EditingMai->Domain);
   }
 
 /*****************************************************************************/
@@ -732,7 +731,6 @@ static void Mai_PutHeadMailDomains (void)
 void Mai_ReceiveNewMailDom (void)
   {
    extern const char *Txt_The_email_domain_X_already_exists;
-   extern const char *Txt_Created_new_email_domain_X;
 
    /***** Mail domain constructor *****/
    Mai_EditingMailDomainConstructor ();
@@ -759,11 +757,7 @@ void Mai_ReceiveNewMailDom (void)
                           Txt_The_email_domain_X_already_exists,
                           Mai_EditingMai->Info);
       else	// Add new mail to database
-        {
          Mai_DB_CreateMailDomain (Mai_EditingMai);
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_email_domain_X,
-			Mai_EditingMai->Domain);
-        }
      }
    else	// If there is not a mail name
       Ale_CreateAlertYouMustSpecifyShrtNameAndFullName ();
@@ -1318,8 +1312,7 @@ static void Mai_RemoveEmail (struct Usr_Data *UsrDat)
 
 	 /***** Create alert *****/
 	 Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
-			  Txt_Email_X_removed,
-			  Email);
+			  Txt_Email_X_removed,Email);
 
 	 /***** Update list of emails *****/
 	 Mai_GetEmailFromUsrCod (UsrDat);

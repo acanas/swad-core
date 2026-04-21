@@ -1549,13 +1549,7 @@ static Err_SuccessOrError_t Gam_CheckGameFieldsReceivedFromForm (const struct Ga
 
 static void Gam_CreateGame (struct Gam_Game *Game,const char *Txt)
   {
-   extern const char *Txt_Created_new_game_X;
-
-   /***** Create a new game *****/
    Game->GamCod = Gam_DB_CreateGame (Game,Txt);
-
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_game_X,Game->Title);
   }
 
 /*****************************************************************************/
@@ -1564,13 +1558,7 @@ static void Gam_CreateGame (struct Gam_Game *Game,const char *Txt)
 
 static void Gam_UpdateGame (struct Gam_Game *Game,const char *Txt)
   {
-   extern const char *Txt_The_game_has_been_modified;
-
-   /***** Update the data of the game *****/
    Gam_DB_UpdateGame (Game,Txt);
-
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_game_has_been_modified);
   }
 
 /*****************************************************************************/

@@ -3156,7 +3156,8 @@ void For_RemovePost (void)
 
    if (ThreadDeleted)
       /***** Show the remaining threads *****/
-      For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_SUCCESS,Txt_FORUM_Post_and_thread_removed);
+      For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_SUCCESS,
+						 Txt_FORUM_Post_and_thread_removed);
    else
      {
       /***** Show threads again *****/

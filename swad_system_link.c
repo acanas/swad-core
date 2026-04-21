@@ -578,7 +578,6 @@ static void SysLnk_RenameLink (Nam_ShrtOrFullName_t ShrtOrFull)
 
 void SysLnk_ChangeLinkWWW (void)
   {
-   extern const char *Txt_The_new_web_address_is_X;
    char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
    /***** Link constructor *****/
@@ -596,15 +595,8 @@ void SysLnk_ChangeLinkWWW (void)
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
-     {
       /***** Update the table changing old WWW by new WWW *****/
       SysLnk_DB_UpdateLnkWWW (SysLnk_EditingLnk->LnkCod,NewWWW);
-
-      /***** Message to show the change made *****/
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_The_new_web_address_is_X,
-                       NewWWW);
-     }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
@@ -697,7 +689,6 @@ static void SysLnk_PutHeadLinks (void)
 void SysLnk_ReceiveNewLink (void)
   {
    extern const char *Txt_You_must_specify_the_web_address;
-   extern const char *Txt_Created_new_link_X;
    char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Link constructor *****/
@@ -726,11 +717,7 @@ void SysLnk_ReceiveNewLink (void)
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 			     Txt_You_must_specify_the_web_address);
 	 else	// Add new link to database
-	   {
 	    SysLnk_DB_CreateLink (SysLnk_EditingLnk);
-	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_link_X,
-			     Names[Nam_FULL_NAME]);
-	   }
 	}
      }
    else	// If there is not a link name

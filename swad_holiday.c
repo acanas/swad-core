@@ -657,9 +657,7 @@ void Hld_RemoveHoliday (void)
    Hld_DB_RemoveHoliday (Hld_EditingHld->HldCod);
 
    /***** Write message to show the change made *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_Holiday_X_removed,
-	            Hld_EditingHld->Name);
+   Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Holiday_X_removed,Hld_EditingHld->Name);
   }
 
 /*****************************************************************************/
@@ -668,7 +666,6 @@ void Hld_RemoveHoliday (void)
 
 void Hld_ChangeHolidayPlace (void)
   {
-   extern const char *Txt_The_place_of_the_holiday_X_has_changed_to_Y;
    struct Plc_Place NewPlace;
 
    /***** Holiday constructor *****/
@@ -691,11 +688,6 @@ void Hld_ChangeHolidayPlace (void)
    Hld_EditingHld->PlcCod = NewPlace.PlcCod;
    Str_Copy (Hld_EditingHld->PlaceFullName,NewPlace.FullName,
              sizeof (Hld_EditingHld->PlaceFullName) - 1);
-
-   /***** Write message to show the change made *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_The_place_of_the_holiday_X_has_changed_to_Y,
-                    Hld_EditingHld->Name,NewPlace.FullName);
   }
 
 /*****************************************************************************/
@@ -704,8 +696,6 @@ void Hld_ChangeHolidayPlace (void)
 
 void Hld_ChangeHolidayType (void)
   {
-   extern const char *Txt_The_type_of_the_holiday_X_has_changed;
-
    /***** Holiday constructor *****/
    Hld_EditingHolidayConstructor ();
 
@@ -721,11 +711,6 @@ void Hld_ChangeHolidayType (void)
    /***** Update holiday/no school period in database *****/
    Dat_AssignDate (&Hld_EditingHld->EndDate,&Hld_EditingHld->StartDate);
    Hld_DB_ChangeType (Hld_EditingHld->HldCod,Hld_EditingHld->HldTyp);
-
-   /***** Write message to show the change made *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_The_type_of_the_holiday_X_has_changed,
-                    Hld_EditingHld->Name);
   }
 
 /*****************************************************************************/
@@ -752,11 +737,9 @@ void Hld_ChangeEndDate (void)
 
 static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
   {
-   extern const char *Txt_The_date_of_the_holiday_X_has_changed_to_Y;
    struct Dat_Date NewDate;
    struct Dat_Date *PtrDate = NULL;			// Initialized to avoid warning
    const char *StrStartOrEndDate = NULL;	// Initialized to avoid warning
-   char StrDate[Cns_MAX_BYTES_DATE + 1];
 
    /***** Holiday constructor *****/
    Hld_EditingHolidayConstructor ();
@@ -803,12 +786,6 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
    /***** Update the date in database *****/
    Hld_DB_ChangeDate (Hld_EditingHld->HldCod,StrStartOrEndDate,&NewDate);
    Dat_AssignDate (PtrDate,&NewDate);
-
-   /***** Write message to show the change made *****/
-   Dat_ConvDateToDateStr (&NewDate,StrDate);
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_The_date_of_the_holiday_X_has_changed_to_Y,
-                    Hld_EditingHld->Name,StrDate);
   }
 
 /*****************************************************************************/
@@ -999,7 +976,6 @@ static void Hld_PutHeadHolidays (void)
 
 void Hld_ReceiveNewHoliday (void)
   {
-   extern const char *Txt_Created_new_holiday_X;
    extern const char *Txt_You_must_specify_the_name;
 
    /***** Holiday constructor *****/
@@ -1047,19 +1023,9 @@ void Hld_ReceiveNewHoliday (void)
 
    /***** Create the new holiday or set warning message *****/
    if (Hld_EditingHld->Name[0])	// If there's a holiday name
-     {
-      /* Create the new holiday */
       Hld_DB_CreateHoliday (Hld_EditingHld);
-
-      /* Success message */
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_Created_new_holiday_X,
-		       Hld_EditingHld->Name);
-     }
-   else	// If there is not a holiday name
-      /* Error message */
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_must_specify_the_name);
+   else				// If there is not a holiday name
+      Ale_CreateAlert (Ale_WARNING,NULL,Txt_You_must_specify_the_name);
   }
 
 /*****************************************************************************/

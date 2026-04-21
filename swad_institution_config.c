@@ -549,7 +549,6 @@ void InsCfg_RenameInsFull (void)
 
 void InsCfg_ChangeInsWWW (void)
   {
-   extern const char *Txt_The_new_web_address_is_X;
    char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
    /***** Get parameters from form *****/
@@ -563,10 +562,6 @@ void InsCfg_ChangeInsWWW (void)
       Ins_DB_UpdateInsWWW (Gbl.Hierarchy.Node[Hie_INS].HieCod,NewWWW);
       Str_Copy (Gbl.Hierarchy.Node[Hie_INS].WWW,NewWWW,
 	        sizeof (Gbl.Hierarchy.Node[Hie_INS].WWW) - 1);
-
-      /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,
-		     NewWWW);
      }
    else
       Ale_ShowAlertYouCanNotLeaveFieldEmpty ();

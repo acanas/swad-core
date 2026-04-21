@@ -1515,8 +1515,8 @@ static void Enr_ShowMessageRemoved (unsigned NumUsrsRemoved,
    switch (NumUsrsRemoved)
      {
       case 0:
-	 Ale_ShowAlert (Ale_INFO,WhatToDo->EliminateUsrs ? Txt_No_user_has_been_eliminated :
-							   Txt_No_user_has_been_removed);
+	 Ale_ShowAlert (Ale_INFO   ,WhatToDo->EliminateUsrs ? Txt_No_user_has_been_eliminated :
+							      Txt_No_user_has_been_removed);
 	 break;
       case 1:
 	 Ale_ShowAlert (Ale_SUCCESS,WhatToDo->EliminateUsrs ? Txt_One_user_has_been_eliminated :
@@ -2068,7 +2068,8 @@ void Enr_RemAllStdsThisCrs (void)
    if (Pwd_GetConfirmationOnDangerousAction () == Err_SUCCESS)
      {
       if ((NumStdsInCrs = Enr_RemAllStdsInCrs (&Gbl.Hierarchy.Node[Hie_CRS])))
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_X_students_who_belonged_to_the_course_Y_have_been_removed_from_it,
+	 Ale_ShowAlert (Ale_SUCCESS,
+		        Txt_The_X_students_who_belonged_to_the_course_Y_have_been_removed_from_it,
 		        NumStdsInCrs,Gbl.Hierarchy.Node[Hie_CRS].FullName);
       else	// NumStdsInCrs == 0
 	 /***** Show warning indicating no students found *****/

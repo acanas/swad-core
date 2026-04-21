@@ -922,7 +922,8 @@ static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages)
 					     NotifyByEmail = Ntf_DONT_NOTIFY_BY_EMAIL);
 
 		     /***** Show an alert indicating that the message has been sent successfully *****/
-		     Ale_ShowAlert (Ale_SUCCESS,*Msg[NotifyByEmail],UsrDstData.FullName);
+		     Ale_ShowAlert (Ale_SUCCESS,
+				    *Msg[NotifyByEmail],UsrDstData.FullName);
 
 		     /***** Increment number of recipients *****/
 		     Messages->Rcv.NumRecipients++;
@@ -2761,7 +2762,8 @@ void Msg_BanSenderWhenShowingMsgs (void)
                                     Gbl.Usrs.Me.UsrDat.UsrCod);		// To
 
    /***** Show alert with the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_From_this_time_you_will_not_receive_messages_from_X,
+   Ale_ShowAlert (Ale_SUCCESS,
+		  Txt_From_this_time_you_will_not_receive_messages_from_X,
                   Gbl.Usrs.Other.UsrDat.FullName);
 
    /**** Show received messages again */

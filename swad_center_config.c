@@ -1026,7 +1026,6 @@ void CtrCfg_ChangeCtrIns (void)
 
 void CtrCfg_ChangeCtrPlc (void)
   {
-   extern const char *Txt_The_place_of_the_center_has_changed;
    long NewPlcCod;
 
    /***** Get parameter with place code *****/
@@ -1035,9 +1034,6 @@ void CtrCfg_ChangeCtrPlc (void)
    /***** Update place in table of centers *****/
    Ctr_DB_UpdateCtrPlc (Gbl.Hierarchy.Node[Hie_CTR].HieCod,NewPlcCod);
    Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod = NewPlcCod;
-
-   /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_place_of_the_center_has_changed);
 
    /***** Show the form again *****/
    CtrCfg_ShowConfiguration ();
@@ -1126,7 +1122,6 @@ void CtrCfg_ChangeCtrAltitude (void)
 
 void CtrCfg_ChangeCtrWWW (void)
   {
-   extern const char *Txt_The_new_web_address_is_X;
    char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
    /***** Get parameters from form *****/
@@ -1140,10 +1135,6 @@ void CtrCfg_ChangeCtrWWW (void)
       Ctr_DB_UpdateCtrWWW (Gbl.Hierarchy.Node[Hie_CTR].HieCod,NewWWW);
       Str_Copy (Gbl.Hierarchy.Node[Hie_CTR].WWW,NewWWW,
 		sizeof (Gbl.Hierarchy.Node[Hie_CTR].WWW) - 1);
-
-      /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,
-		     NewWWW);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

@@ -208,7 +208,7 @@ Exi_Exist_t Ses_GetSessionData (void)
 void Ses_InsertParInDB (const char *ParName,const char *ParValue)
   {
    /***** Before of inserting the first session parameter passed to the next action,
-	  delete all the parameters coming from the previous action *****/
+	  delete all parameters coming from the previous action *****/
    Ses_DB_RemovePar ();
 
    /***** For a unique session-parameter,

@@ -5020,8 +5020,7 @@ void Brw_RemFile (void)
 					     Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	    /* Message of confirmation of removing */
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_FILE_X_removed,
-			   FileNameToShow);
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_FILE_X_removed,FileNameToShow);
 	   }
 	 else		// File / link not found
 	    Err_FileFolderNotFoundExit ();
@@ -8228,7 +8227,6 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 
 void Brw_ChgFileMetadata (void)
   {
-   extern const char *Txt_The_properties_of_file_X_have_been_saved;
    struct Brw_FileMetadata FileMetadata;
    PriPub_PrivateOrPublic_t PrivateOrPublicFileBeforeEdition;
    PriPub_PrivateOrPublic_t PrivateOrPublicFileAfterEdition;
@@ -8324,10 +8322,6 @@ void Brw_ChgFileMetadata (void)
 	    default:
 	       break;
 	   }
-
-      /***** Write success message *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_properties_of_file_X_have_been_saved,
-		     FileMetadata.FilFolLnk.Name);
      }
 
    /***** Show again the file browser *****/

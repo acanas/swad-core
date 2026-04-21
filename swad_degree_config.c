@@ -376,7 +376,6 @@ void DegCfg_RenameDegreeFull (void)
 
 void DegCfg_ChangeDegWWW (void)
   {
-   extern const char *Txt_The_new_web_address_is_X;
    char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
    /***** Get parameters from form *****/
@@ -390,10 +389,6 @@ void DegCfg_ChangeDegWWW (void)
       Deg_DB_UpdateDegWWW (Gbl.Hierarchy.Node[Hie_DEG].HieCod,NewWWW);
       Str_Copy (Gbl.Hierarchy.Node[Hie_DEG].WWW,NewWWW,
 	        sizeof (Gbl.Hierarchy.Node[Hie_DEG].WWW) - 1);
-
-      /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,
-		     NewWWW);
      }
    else
       Ale_ShowAlertYouCanNotLeaveFieldEmpty ();

@@ -489,8 +489,7 @@ void Bld_RemoveBuilding (void)
 
    /***** Create message to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_Building_X_removed,
-	            Bld_EditingBuilding->FullName);
+	            Txt_Building_X_removed,Bld_EditingBuilding->FullName);
   }
 
 /*****************************************************************************/
@@ -580,7 +579,6 @@ static void Bld_RenameBuilding (Nam_ShrtOrFullName_t ShrtOrFull)
 
 void Bld_ChangeBuildingLoc (void)
   {
-   extern const char *Txt_The_location_of_the_building_X_has_changed_to_Y;
    char NewLocation[Nam_MAX_BYTES_FULL_NAME + 1];
 
    /***** Building constructor *****/
@@ -605,11 +603,6 @@ void Bld_ChangeBuildingLoc (void)
 				  "Location",NewLocation);
       Str_Copy (Bld_EditingBuilding->Location,NewLocation,
 		sizeof (Bld_EditingBuilding->Location) - 1);
-
-      /* Write message to show the change made */
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_The_location_of_the_building_X_has_changed_to_Y,
-		       Bld_EditingBuilding->FullName,NewLocation);
      }
   }
 
@@ -700,7 +693,6 @@ static void Bld_PutHeadBuildings (void)
 
 void Bld_ReceiveNewBuilding (void)
   {
-   extern const char *Txt_Created_new_building_X;
    char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Building constructor *****/
@@ -724,11 +716,7 @@ void Bld_ReceiveNewBuilding (void)
 				 -1L,
 				 -1L,				// Unused
 				 0) == Exi_DOES_NOT_EXIST)	// Unused
-        {
          Bld_DB_CreateBuilding (Bld_EditingBuilding);
-	 Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_building_X,
-			  Names[Nam_FULL_NAME]);
-        }
      }
    else	// If there is not a building name
       Ale_CreateAlertYouMustSpecifyShrtNameAndFullName ();

@@ -1073,8 +1073,7 @@ void Mch_RemoveMatch (void)
    Mch_DB_RemoveMatchFromAllTables (Match.MchCod);
 
    /***** Write message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Match_X_removed,
-		  Match.Title);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Match_X_removed,Match.Title);
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,

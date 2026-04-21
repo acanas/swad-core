@@ -571,8 +571,7 @@ void Dpt_RemoveDepartment (void)
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_Department_X_removed,
-		       Dpt_EditingDpt->FullName);
+	               Txt_Department_X_removed,Dpt_EditingDpt->FullName);
      }
   }
 
@@ -582,7 +581,6 @@ void Dpt_RemoveDepartment (void)
 
 void Dpt_ChangeDepartIns (void)
   {
-   extern const char *Txt_The_institution_of_the_department_has_changed;
    long NewInsCod;
 
    /***** Department constructor *****/
@@ -600,10 +598,6 @@ void Dpt_ChangeDepartIns (void)
 
    /***** Update institution in table of departments *****/
    Dpt_DB_UpdateDptIns (Dpt_EditingDpt->DptCod,NewInsCod);
-
-   /***** Write message to show the change made *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_The_institution_of_the_department_has_changed);
   }
 
 /*****************************************************************************/
@@ -694,7 +688,6 @@ static void Dpt_RenameDepartment (Nam_ShrtOrFullName_t ShrtOrFull)
 
 void Dpt_ChangeDptWWW (void)
   {
-   extern const char *Txt_The_new_web_address_is_X;
    char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
    /***** Department constructor *****/
@@ -712,15 +705,8 @@ void Dpt_ChangeDptWWW (void)
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
-     {
       /* Update the table changing old WWW by new WWW */
       Dpt_DB_UpdateDptWWW (Dpt_EditingDpt->DptCod,NewWWW);
-
-      /***** Write message to show the change made *****/
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_The_new_web_address_is_X,
-                       NewWWW);
-     }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
@@ -845,7 +831,6 @@ static void Dpt_PutHeadDepartments (void)
 
 void Dpt_ReceiveNewDpt (void)
   {
-   extern const char *Txt_Created_new_department_X;
    char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Department constructor *****/
@@ -874,11 +859,7 @@ void Dpt_ReceiveNewDpt (void)
 				    -1L,
 				    -1L,			// Unused
 				    0) == Exi_DOES_NOT_EXIST)	// Unused
-           {
             Dpt_DB_CreateDepartment (Dpt_EditingDpt);
-	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_department_X,
-			     Names[Nam_FULL_NAME]);
-           }
         }
       else	// If there is not a web
          Ale_CreateAlertYouMustSpecifyTheWebAddress ();

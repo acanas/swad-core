@@ -405,8 +405,7 @@ void Nck_RemoveOtherUsrNick (void)
 
 	       /***** Show message *****/
 	       Ale_CreateAlert (Ale_SUCCESS,Nck_NICKNAME_SECTION_ID,
-				Txt_Nickname_X_removed,
-				NickWithoutArr);
+				Txt_Nickname_X_removed,NickWithoutArr);
 
 	       /***** Show user's account again *****/
 	       Acc_ShowFormsChgOthAccount ();

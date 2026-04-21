@@ -306,17 +306,9 @@ void Cfe_FreeMemCallForExam (struct Cfe_CallsForExams *CallsForExams)
 
 void Cfe_ReceiveCallForExam1 (void)
   {
-   extern const char *Txt_Created_new_call_for_exam;
-   extern const char *Txt_The_call_for_exam_has_been_successfully_updated;
-   static const char **Txt[OldNew_NUM_OLD_NEW] =
-     {
-      [OldNew_OLD] = &Txt_The_call_for_exam_has_been_successfully_updated,
-      [OldNew_NEW] = &Txt_Created_new_call_for_exam
-     };
    struct Cfe_CallsForExams *CallsForExams = Cfe_GetGlobalCallsForExams ();
    long ExaCod;
    OldNew_OldNew_t OldNewCFE;
-   char *Anchor = NULL;
 
    /***** Reset calls for exams context *****/
    Cfe_ResetCallsForExams (CallsForExams);
@@ -343,11 +335,6 @@ void Cfe_ReceiveCallForExam1 (void)
 
    /***** Free memory of the call for exam *****/
    Cfe_FreeMemCallForExam (CallsForExams);
-
-   /***** Create alert to show the change made *****/
-   Frm_SetAnchorStr (ExaCod,&Anchor);
-   Ale_CreateAlert (Ale_SUCCESS,Anchor,*Txt[OldNewCFE]);
-   Frm_FreeAnchorStr (&Anchor);
 
    /***** Set exam to be highlighted *****/
    CallsForExams->Highlight.ExaCod = ExaCod;

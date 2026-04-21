@@ -417,7 +417,8 @@ static void Adm_AskIfRemAdm (Usr_MeOrOther_t MeOrOther,Hie_Level_t HieLvl)
 
 	 /* End alert */
 	 Ale_ShowAlertAndButtonEnd (ActRemAdm[HieLvl],NULL,NULL,
-				    Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+				    Usr_PutParOtherUsrCodEncrypted,
+				    Gbl.Usrs.Other.UsrDat.EnUsrCod,
 				    Btn_REMOVE);
 	 break;
       case Exi_DOES_NOT_EXIST:

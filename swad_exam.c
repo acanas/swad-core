@@ -1061,8 +1061,7 @@ void Exa_RemoveExam (void)
    Exa_RemoveExamFromAllTables (Exams.Exam.ExaCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Exam_X_removed,
-                  Exams.Exam.Title);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Exam_X_removed,Exams.Exam.Title);
 
    /***** Show exams again *****/
    Exa_ListAllExams (&Exams);
@@ -1541,14 +1540,7 @@ static Err_SuccessOrError_t Exa_CheckExamFieldsReceivedFromForm (const struct Ex
 
 static void Exa_CreateExam (struct Exa_Exam *Exam,const char *Txt)
   {
-   extern const char *Txt_Created_new_exam_X;
-
-   /***** Create a new exam *****/
    Exam->ExaCod = Exa_DB_CreateExam (Exam,Txt);
-
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_exam_X,
-                  Exam->Title);
   }
 
 /*****************************************************************************/
@@ -1557,13 +1549,7 @@ static void Exa_CreateExam (struct Exa_Exam *Exam,const char *Txt)
 
 static void Exa_UpdateExam (struct Exa_Exam *Exam,const char *Txt)
   {
-   extern const char *Txt_The_exam_has_been_modified;
-
-   /***** Update the data of the exam *****/
    Exa_DB_UpdateExam (Exam,Txt);
-
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_exam_has_been_modified);
   }
 
 /*****************************************************************************/

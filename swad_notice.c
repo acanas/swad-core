@@ -241,7 +241,6 @@ static void Not_PutVisibility (void)
 
 void Not_ReceiveNotice (void)
   {
-   extern const char *Txt_Notice_created;
    long NotCod;
    unsigned NumUsrsToBeNotifiedByEMail;
    char Content[Cns_MAX_BYTES_TEXT + 1];
@@ -260,9 +259,6 @@ void Not_ReceiveNotice (void)
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
-
-   /***** Write message of success *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Notice_created);
 
    /***** Notify by email about the new notice *****/
    if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_NOTICE,NotCod)))
@@ -298,8 +294,7 @@ void Not_ListNoticesAfterRemoval (void)
 void Not_ListFullNotices (void)
   {
    /***** Show all notices *****/
-   Not_ShowNotices (Not_LIST_FULL_NOTICES,
-	            Not_GetHighlightNotCod ());	// Highlight notice
+   Not_ShowNotices (Not_LIST_FULL_NOTICES,Not_GetHighlightNotCod ());
   }
 
 /*****************************************************************************/

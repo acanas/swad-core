@@ -521,8 +521,7 @@ void Plc_RemovePlace (void)
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_Place_X_removed,
-                       Plc_EditingPlc->FullName);
+	               Txt_Place_X_removed,Plc_EditingPlc->FullName);
      }
   }
 
@@ -688,7 +687,6 @@ static void Plc_PutHeadPlaces (void)
 
 void Plc_ReceiveNewPlace (void)
   {
-   extern const char *Txt_Created_new_place_X;
    char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Place constructor *****/
@@ -709,11 +707,7 @@ void Plc_ReceiveNewPlace (void)
 				 -1L,
 				 Gbl.Hierarchy.Node[Hie_INS].HieCod,
 				 0) == Exi_DOES_NOT_EXIST)	// Unused
-        {
          Plc_DB_CreatePlace (Plc_EditingPlc);
-	 Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_place_X,
-			  Names[Nam_FULL_NAME]);
-        }
      }
    else	// If there is not a place name
       Ale_CreateAlertYouMustSpecifyShrtNameAndFullName ();

@@ -3301,7 +3301,8 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj)
 		  Prj_FlushCacheMyRolesInProject ();
 
 	       /***** Show success alert *****/
-	       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z,
+	       Ale_ShowAlert (Ale_SUCCESS,
+			      Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z,
 			      Gbl.Usrs.Other.UsrDat.FullName,
 			      Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex],
 			      Projects.Prj.Title);
@@ -3762,8 +3763,7 @@ void Prj_RemoveProject (void)
    Fil_RemoveTree (PathRelPrj);
 
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Project_X_removed,
-		  Projects.Prj.Title);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Project_X_removed,Projects.Prj.Title);
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Projects.Prj);
@@ -4192,8 +4192,6 @@ void Prj_FreeMemProject (struct Prj_Project *Prj)
 
 void Prj_ReceiveProject (void)
   {
-   extern const char *Txt_Created_new_project_X;
-   extern const char *Txt_The_project_has_been_modified;
    struct Prj_Projects Projects;
    OldNew_OldNew_t OldNewPrj;
    Usr_Can_t ICanEditProject;
@@ -4278,18 +4276,11 @@ void Prj_ReceiveProject (void)
 	    case OldNew_OLD:
 	       /* Update project */
 	       Prj_UpdateProject (&Projects.Prj);
-
-	       /* Write success message */
-	       Ale_ShowAlert (Ale_SUCCESS,Txt_The_project_has_been_modified);
 	       break;
 	    case OldNew_NEW:
 	    default:
 	       /* Create project (add new project to database) */
 	       Prj_CreateProject (&Projects.Prj);
-
-	       /* Write success message */
-	       Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_project_X,
-			      Projects.Prj.Title);
 	       break;
 	   }
 	 break;

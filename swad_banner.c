@@ -509,9 +509,7 @@ void Ban_RemoveBanner (void)
    Ban_DB_RemoveBanner (Ban->BanCod);
 
    /***** Write message to show the change made *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_Banner_X_removed,
-                    Ban->ShrtName);
+   Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Banner_X_removed,Ban->ShrtName);
   }
 
 /*****************************************************************************/
@@ -653,7 +651,6 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
 
 void Ban_ChangeBannerImg (void)
   {
-   extern const char *Txt_The_new_image_is_X;
    struct Ban_Banner *Ban = Ban_GetEditingBanner ();
    char NewImg[Ban_MAX_BYTES_IMAGE + 1];
 
@@ -672,15 +669,8 @@ void Ban_ChangeBannerImg (void)
 
    /***** Check if new image is empty *****/
    if (NewImg[0])
-     {
       /* Update the table changing old image by new image */
       Ban_DB_UpdateBanImg (Ban->BanCod,NewImg);
-
-      /* Write message to show the change made */
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_The_new_image_is_X,
-                       NewImg);
-     }
    else
       /* Write warning message */
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
@@ -695,7 +685,6 @@ void Ban_ChangeBannerImg (void)
 
 void Ban_ChangeBannerWWW (void)
   {
-   extern const char *Txt_The_new_web_address_is_X;
    struct Ban_Banner *Ban = Ban_GetEditingBanner ();
    char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
@@ -714,15 +703,8 @@ void Ban_ChangeBannerWWW (void)
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
-     {
       /* Update the table changing old WWW by new WWW */
       Ban_DB_UpdateBanWWW (Ban->BanCod,NewWWW);
-
-      /* Write message to show the change made */
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_The_new_web_address_is_X,
-                       NewWWW);
-     }
    else
       /* Write warning message */
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
@@ -843,7 +825,6 @@ void Ban_ReceiveNewBanner (void)
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_You_must_specify_the_image_of_the_new_banner;
    extern const char *Txt_You_must_specify_the_web_address;
-   extern const char *Txt_Created_new_banner_X;
    struct Ban_Banner *Ban = Ban_GetEditingBanner ();
    char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
@@ -874,11 +855,7 @@ void Ban_ReceiveNewBanner (void)
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 			     Txt_You_must_specify_the_web_address);
 	 else
-	   {
 	    Ban_DB_CreateBanner (Ban);
-	    Ale_CreateAlert (Ale_SUCCESS,Txt_Created_new_banner_X,
-			     Names[Nam_FULL_NAME]);
-	   }
         }
      }
    else	// If there is not a banner name

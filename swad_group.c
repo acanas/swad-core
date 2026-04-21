@@ -1208,7 +1208,8 @@ void Grp_EnrolUsrIntoGroups (struct Usr_Data *UsrDat,Rol_Role_t Role,
 			   and the group to which the user belongs is different from the selected ==>
 			   remove user from the group to which he/she belongs */
 			Grp_RemoveUsrFromGroup (UsrDat->UsrCod,LstGrpsBelong.GrpCods[NumGrpBelong]);
-			Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it_belonged,
+			Ale_ShowAlert (Ale_SUCCESS,
+				       Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it_belonged,
 				       UsrDat->FullName,GrpTyp->Name);
 		       }
                  }
@@ -3762,12 +3763,11 @@ void Grp_GetNamesGrpsUsrBelongsTo (long UsrCod,long GrpTypCod,char *GroupNames)
 void Grp_ReceiveNewGrpTyp (void)
   {
    extern const char *Txt_The_type_of_group_X_already_exists;
-   extern const char *Txt_Created_new_type_of_group_X;
    extern const char *Txt_You_must_specify_the_name;
    struct GroupType GrpTyp;
    struct Group Grp;
-   Ale_AlertType_t AlertType;
-   char AlertTxt[256 + Grp_MAX_BYTES_GROUP_TYPE_NAME];
+   Ale_AlertType_t AlertType = Ale_NONE;
+   char AlertTxt[256 + Grp_MAX_BYTES_GROUP_TYPE_NAME] = "";
 
    /***** Get parameters from form *****/
    /* Get the name of group type */
@@ -3797,9 +3797,6 @@ void Grp_ReceiveNewGrpTyp (void)
          default:
             /* Add new group type to database */
 	    Grp_DB_CreateGroupType (&GrpTyp);
-	    AlertType = Ale_SUCCESS;
-	    snprintf (AlertTxt,sizeof (AlertTxt),
-		      Txt_Created_new_type_of_group_X,GrpTyp.Name);
             break;
         }
    else	// If there is not a group type name
@@ -3835,12 +3832,11 @@ static Grp_MustBeOpened_t Grp_CheckIfOpenTimeInTheFuture (time_t OpenTimeUTC)
 void Grp_ReceiveNewGrp (void)
   {
    extern const char *Txt_The_group_X_already_exists;
-   extern const char *Txt_Created_new_group_X;
    extern const char *Txt_You_must_specify_the_name;
    struct GroupType GrpTyp;
    struct Group Grp;
-   Ale_AlertType_t AlertType;
-   char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
+   Ale_AlertType_t AlertType = Ale_NONE;
+   char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME] = "";
 
    /***** Get parameters from form *****/
    if ((GrpTyp.GrpTypCod = ParCod_GetPar (ParCod_GrpTyp)) > 0) // Group type valid
@@ -3875,11 +3871,6 @@ void Grp_ReceiveNewGrp (void)
 	    default:
 	       /* Add new group to database */
 	       Grp_DB_CreateGroup (GrpTyp.GrpTypCod,&Grp);
-
-	       /* Write success message */
-	       AlertType = Ale_SUCCESS;
-	       snprintf (AlertTxt,sizeof (AlertTxt),
-			 Txt_Created_new_group_X,Grp.Name);
 	       break;
 	   }
       else	// If there is not a group name
@@ -4209,13 +4200,12 @@ void Grp_DisableFileZonesGrp (void)
 void Grp_ChangeGroupType (void)
   {
    extern const char *Txt_The_group_X_already_exists;
-   extern const char *Txt_The_type_of_group_of_the_group_X_has_changed;
    long HieCod;	// Course code
    struct GroupType GrpTyp;
    struct Group Grp;
    long NewGrpTypCod;
-   Ale_AlertType_t AlertType;
-   char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
+   Ale_AlertType_t AlertType = Ale_NONE;
+   char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME] = "";
 
    /***** Get parameters from form *****/
    /* Get group code */
@@ -4242,11 +4232,6 @@ void Grp_ChangeGroupType (void)
 	 /* Update the table of groups changing old type by new type */
 	 GrpTyp.GrpTypCod = NewGrpTypCod;
 	 Grp_DB_ChangeGrpTypOfGrp (Grp.GrpCod,NewGrpTypCod);
-
-	 /* Create message to show the change made */
-	 AlertType = Ale_SUCCESS;
-	 snprintf (AlertTxt,sizeof (AlertTxt),
-		   Txt_The_type_of_group_of_the_group_X_has_changed,Grp.Name);
 	 break;
      }
 
@@ -4260,13 +4245,10 @@ void Grp_ChangeGroupType (void)
 
 void Grp_ChangeGroupRoom (void)
   {
-   extern const char *Txt_The_room_assigned_to_the_group_X_has_changed;
    long HieCod;	// Course code
    struct GroupType GrpTyp;
    struct Group Grp;
    long NewRooCod;
-   Ale_AlertType_t AlertType;
-   char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get parameters from form *****/
    /* Get group code */
@@ -4282,14 +4264,10 @@ void Grp_ChangeGroupRoom (void)
    /***** Update the table of groups changing old room by new room *****/
    Grp_DB_ChangeRoomOfGrp (Grp.GrpCod,NewRooCod);
 
-   /* Create message to show the change made */
-   AlertType = Ale_SUCCESS;
-   snprintf (AlertTxt,sizeof (AlertTxt),
-	     Txt_The_room_assigned_to_the_group_X_has_changed,Grp.Name);
 
    /***** Show the form again *****/
    Grp.Room.RooCod = NewRooCod;
-   Grp_ReqEditGroupsInternal (&GrpTyp,&Grp,Ale_NONE,NULL,AlertType,AlertTxt);
+   Grp_ReqEditGroupsInternal (&GrpTyp,&Grp,Ale_NONE,NULL,Ale_NONE,NULL);
   }
 
 /*****************************************************************************/
@@ -4369,7 +4347,6 @@ void Grp_ChangeMultiGrpTyp (void)
 
 void Grp_ChangeOpenTimeGrpTyp (void)
   {
-   extern const char *Txt_The_date_time_of_opening_of_groups_has_changed;
    struct GroupType GrpTyp;
    struct Group Grp;
 
@@ -4386,9 +4363,6 @@ void Grp_ChangeOpenTimeGrpTyp (void)
    /***** Update the table of types of group
           changing the old opening time of enrolment by the new *****/
    Grp_DB_ChangeOpeningTime (&GrpTyp);
-
-   /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_date_time_of_opening_of_groups_has_changed);
 
    /***** Show the form again *****/
    Grp_ResetGroup (&Grp);

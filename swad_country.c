@@ -1173,8 +1173,7 @@ void Cty_RemoveCountry (void)
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_Country_X_removed,
-	               Cty_EditingCty->FullName);
+		       Txt_Country_X_removed,Cty_EditingCty->FullName);
 
       Cty_EditingCty->HieCod = -1L;	// To not showing button to go to country
      }
@@ -1259,7 +1258,6 @@ void Cty_ChangeCtyWWW (void)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   extern const char *Txt_The_new_web_address_is_X;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    char NewWWW[WWW_MAX_BYTES_WWW + 1];
    Lan_Language_t Language;
@@ -1284,11 +1282,6 @@ void Cty_ChangeCtyWWW (void)
    snprintf (FldName,sizeof (FldName),"WWW_%s",
 	     Lan_STR_LANG_ID[Language]);
    Cty_DB_UpdateCtyField (Cty_EditingCty->HieCod,FldName,NewWWW);
-
-   /***** Write message to show the change made *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_The_new_web_address_is_X,
-	            NewWWW);
   }
 
 /*****************************************************************************/
@@ -1466,7 +1459,6 @@ void Cty_ReceiveNewCountry (void)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_The_country_X_already_exists;
    extern const char *Txt_You_must_specify_the_name;
-   extern const char *Txt_Created_new_country_X;
    char ParName[32];
    bool CreateCountry = true;
    Lan_Language_t Lan;
@@ -1564,14 +1556,9 @@ void Cty_ReceiveNewCountry (void)
      }
 
    if (CreateCountry)
-     {
       Cty_DB_CreateCountry (Cty_EditingCty,	// Add new country to database
 	   		    NameInSeveralLanguages,
 	   		    WWWInSeveralLanguages);
-
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_country_X,
-		     Cty_EditingCty->FullName);
-     }
   }
 
 /*****************************************************************************/

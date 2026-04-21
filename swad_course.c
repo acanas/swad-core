@@ -991,7 +991,6 @@ void Crs_ReceiveNewCrs (void)
 
 static void Crs_ReceiveRequestOrCreateCrs (Hie_Status_t Status)
   {
-   extern const char *Txt_Created_new_course_X;
    extern const char *Txt_The_year_X_is_not_allowed;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
@@ -1017,11 +1016,7 @@ static void Crs_ReceiveRequestOrCreateCrs (Hie_Status_t Status)
 				    -1L,
 				    Crs_EditingCrs->PrtCod,
 				    Crs_EditingCrs->Specific.Year) == Exi_DOES_NOT_EXIST)
-	   {
 	    Crs_DB_CreateCourse (Crs_EditingCrs,Status);
-	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_course_X,
-			     Names[Nam_FULL_NAME]);
-	   }
 	}
       else	// If there is not a course name
          Ale_CreateAlertYouMustSpecifyShrtNameAndFullName ();
@@ -1090,8 +1085,7 @@ void Crs_RemoveCourse (void)
       Crs_RemoveCourseCompletely (Crs_EditingCrs->HieCod);
 
       /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Course_X_removed,
-		     Crs_EditingCrs->FullName);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Course_X_removed,Crs_EditingCrs->FullName);
 
       Crs_EditingCrs->HieCod = -1L;	// To not showing button to go to course
      }
@@ -1302,7 +1296,6 @@ static void Crs_EmptyCourseCompletely (long HieCod)
 void Crs_ChangeInsCrsCod (void)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
-   extern const char *Txt_The_institutional_code_of_the_course_X_has_changed_to_Y;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    char NewInstitutionalCrsCod[Hie_MAX_BYTES_INSTITUTIONAL_COD + 1];
 
@@ -1323,13 +1316,7 @@ void Crs_ChangeInsCrsCod (void)
 
    /***** Change the institutional course code *****/
    if (strcmp (NewInstitutionalCrsCod,Crs_EditingCrs->InstitutionalCod))
-     {
       Crs_UpdateInstitutionalCrsCod (Crs_EditingCrs,NewInstitutionalCrsCod);
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-		       Txt_The_institutional_code_of_the_course_X_has_changed_to_Y,
-		       Crs_EditingCrs->ShrtName,
-		       NewInstitutionalCrsCod);
-     }
   }
 
 /*****************************************************************************/
@@ -1340,7 +1327,6 @@ void Crs_ChangeCrsYear (void)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
-   extern const char *Txt_The_year_of_the_course_X_has_changed;
    extern const char *Txt_The_year_X_is_not_allowed;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    char YearStr[2 + 1];
@@ -1373,19 +1359,11 @@ void Crs_ChangeCrsYear (void)
 				 -1L,
 				 Crs_EditingCrs->PrtCod,
 				 NewYear) == Exi_DOES_NOT_EXIST)
-	{
 	 /***** Update year in table of courses *****/
 	 Crs_UpdateCrsYear (Crs_EditingCrs,NewYear);
-
-	 /***** Create message to show the change made *****/
-	 Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_The_year_of_the_course_X_has_changed,
-			  Names[Nam_FULL_NAME]);
-	}
      }
    else	// Year not valid
-      Ale_CreateAlert (Ale_WARNING,NULL,
-		       Txt_The_year_X_is_not_allowed,
-		       NewYear);
+      Ale_CreateAlert (Ale_WARNING,NULL,Txt_The_year_X_is_not_allowed,NewYear);
   }
 
 /*****************************************************************************/
@@ -1503,7 +1481,6 @@ void Crs_RenameCourse (struct Hie_Node *Crs,Nam_ShrtOrFullName_t ShrtOrFull)
 void Crs_ChangeCrsStatus (void)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
-   extern const char *Txt_The_status_of_the_course_X_has_changed;
    Hie_Status_t Status;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
@@ -1523,11 +1500,6 @@ void Crs_ChangeCrsStatus (void)
    /***** Update status *****/
    Crs_DB_UpdateCrsStatus (Crs_EditingCrs->HieCod,Status);
    Crs_EditingCrs->Status = Status;
-
-   /***** Create alert to show the change made *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_The_status_of_the_course_X_has_changed,
-                    Crs_EditingCrs->ShrtName);
   }
 
 /*****************************************************************************/

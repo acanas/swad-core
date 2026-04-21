@@ -1892,8 +1892,6 @@ void ExaSes_ReqCreatOrEditSes (void)
 
 void ExaSes_ReceiveSession (void)
   {
-   extern const char *Txt_Created_new_session_X;
-   extern const char *Txt_The_session_has_been_modified;
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;
    OldNew_OldNew_t OldNewSession;
@@ -1969,12 +1967,10 @@ void ExaSes_ReceiveSession (void)
 	 if (Session.TimeUTC[Dat_END_TIME] >= Dat_GetStartExecutionTimeUTC ())	// End of time is in the future
 	    Session.Show_UsrResults = Lay_DONT_SHOW;	// Force results to be hidden
 	 ExaSes_UpdateSession (&Session);
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_session_has_been_modified);
 	 break;
       case OldNew_NEW:
       default:
 	 ExaSes_CreateSession (&Session);
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_session_X,Session.Title);
 	 break;
      }
 

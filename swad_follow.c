@@ -1005,7 +1005,7 @@ void Fol_FollowUsrs ()
 
    /***** Get list of selected users if not already got *****/
    Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
-					  Usr_DONT_GET_LIST_ALL_USRS);
+					  Usr_GET_LIST_ALL_USRS);
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -1056,7 +1056,7 @@ void Fol_UnfollowUsrs (void)
 
    /***** Get list of selected users if not already got *****/
    Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
-					  Usr_DONT_GET_LIST_ALL_USRS);
+					  Usr_GET_LIST_ALL_USRS);
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);

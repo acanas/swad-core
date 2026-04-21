@@ -492,9 +492,7 @@ void Plg_RemovePlugin (void)
    Plg_DB_RemovePlugin (Plg_EditingPlg->PlgCod);
 
    /***** Write message to show the change made *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_Plugin_X_removed,
-                    Plg_EditingPlg->Name);
+   Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Plugin_X_removed,Plg_EditingPlg->Name);
   }
 
 /*****************************************************************************/
@@ -554,7 +552,6 @@ void Plg_RenamePlugin (void)
 
 void Plg_ChangePlgDesc (void)
   {
-   extern const char *Txt_The_new_description_is_X;
    char NewDescription[Plg_MAX_BYTES_PLUGIN_DESCRIPTION + 1];
    __attribute__((unused)) Exi_Exist_t PlgExists;
 
@@ -573,15 +570,8 @@ void Plg_ChangePlgDesc (void)
 
    /***** Check if new description is empty *****/
    if (NewDescription[0])
-     {
       /* Update the table changing old description by new description */
       Plg_DB_ChangeDescription (Plg_EditingPlg->PlgCod,NewDescription);
-
-      /* Write message to show the change made */
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_The_new_description_is_X,
-                       NewDescription);
-     }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
@@ -596,7 +586,6 @@ void Plg_ChangePlgDesc (void)
 
 void Plg_ChangePlgLogo (void)
   {
-   extern const char *Txt_The_new_logo_is_X;
    char NewLogo[Plg_MAX_BYTES_PLUGIN_LOGO + 1];
    __attribute__((unused)) Exi_Exist_t PlgExists;
 
@@ -615,15 +604,8 @@ void Plg_ChangePlgLogo (void)
 
    /***** Check if new logo is empty *****/
    if (NewLogo[0])
-     {
       /* Update the table changing old logo by new logo */
       Plg_DB_ChangeLogo (Plg_EditingPlg->PlgCod,NewLogo);
-
-      /* Write message to show the change made */
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_The_new_logo_is_X,
-                       NewLogo);
-     }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
@@ -637,7 +619,6 @@ void Plg_ChangePlgLogo (void)
 
 void Plg_ChangePlgAppKey (void)
   {
-   extern const char *Txt_The_new_application_key_is_X;
    char NewAppKey[Plg_MAX_BYTES_PLUGIN_APP_KEY + 1];
    __attribute__((unused)) Exi_Exist_t PlgExists;
 
@@ -656,15 +637,8 @@ void Plg_ChangePlgAppKey (void)
 
    /***** Check if new logo is empty *****/
    if (NewAppKey[0])
-     {
       /* Update the table changing old application key by new application key */
       Plg_DB_ChangeAppKey (Plg_EditingPlg->PlgCod,NewAppKey);
-
-      /* Write message to show the change made */
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-		       Txt_The_new_application_key_is_X,
-                       NewAppKey);
-     }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
@@ -678,7 +652,6 @@ void Plg_ChangePlgAppKey (void)
 
 void Plg_ChangePlgURL (void)
   {
-   extern const char *Txt_The_new_URL_is_X;
    char NewURL[WWW_MAX_BYTES_WWW + 1];
    __attribute__((unused)) Exi_Exist_t PlgExists;
 
@@ -697,15 +670,8 @@ void Plg_ChangePlgURL (void)
 
    /***** Check if new URL is empty *****/
    if (NewURL[0])
-     {
       /* Update the table changing old WWW by new WWW */
       Plg_DB_ChangeURL (Plg_EditingPlg->PlgCod,NewURL);
-
-      /* Write message to show the change made */
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_The_new_URL_is_X,
-                       NewURL);
-     }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
@@ -719,7 +685,6 @@ void Plg_ChangePlgURL (void)
 
 void Plg_ChangePlgIP (void)
   {
-   extern const char *Txt_The_new_IP_address_is_X;
    char NewIP[Cns_MAX_BYTES_IP + 1];
    __attribute__((unused)) Exi_Exist_t PlgExists;
 
@@ -738,15 +703,8 @@ void Plg_ChangePlgIP (void)
 
    /***** Check if new IP is empty *****/
    if (NewIP[0])
-     {
       /* Update the table changing old IP by new IP */
       Plg_DB_ChangeIP (Plg_EditingPlg->PlgCod,NewIP);
-
-      /* Write message to show the change made */
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_The_new_IP_address_is_X,
-                       NewIP);
-     }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
@@ -882,7 +840,6 @@ static void Plg_PutHeadPlugins (void)
 void Plg_ReceiveNewPlg (void)
   {
    extern const char *Txt_The_plugin_X_already_exists;
-   extern const char *Txt_Created_new_plugin_X;
    extern const char *Txt_You_must_specify_the_logo_the_application_key_the_URL_and_the_IP_address_of_the_new_plugin;
    extern const char *Txt_You_must_specify_the_name;
 
@@ -915,8 +872,6 @@ void Plg_ReceiveNewPlg (void)
 	    default:
 	       /* Add new plugin to database */
 	       Plg_DB_CreatePlugin (Plg_EditingPlg);
-	       Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_plugin_X,
-				Plg_EditingPlg->Name);
 	       break;
 	   }
       else	// If there is not a logo, a URL or a IP

@@ -1222,8 +1222,7 @@ void Agd_RemoveEvent (void)
    Agd_DB_RemoveEvent (&AgdEvent);
 
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_removed,
-	          AgdEvent.Title);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_removed,AgdEvent.Title);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda (&Agenda);
@@ -1478,8 +1477,6 @@ void Agd_ReqCreatOrEditEvent (void)
 
 void Agd_ReceiveEvent (void)
   {
-   extern const char *Txt_Created_new_event_X;
-   extern const char *Txt_The_event_has_been_modified;
    struct Agd_Agenda Agenda;
    struct Agd_Event AgdEvent;
    OldNew_OldNew_t OldNewEvent;
@@ -1541,17 +1538,10 @@ void Agd_ReceiveEvent (void)
 	   {
 	    case OldNew_OLD:
 	       Agd_DB_UpdateEvent (&AgdEvent,EventTxt);
-
-	       /***** Write success message *****/
-	       Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
 	       break;
 	    case OldNew_NEW:
 	    default:
 	       AgdEvent.AgdCod = Agd_DB_CreateEvent (&AgdEvent,EventTxt);	// Add new event to database
-
-	       /***** Write success message *****/
-	       Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_event_X,
-			      AgdEvent.Title);
 	       break;
 	   }
 

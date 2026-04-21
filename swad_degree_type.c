@@ -628,7 +628,6 @@ void DegTyp_FreeListDegTypes (struct DegTyp_DegTypes *DegTypes)
 void DegTyp_ReceiveNewDegTyp (void)
   {
    extern const char *Txt_The_type_of_degree_X_already_exists;
-   extern const char *Txt_Created_new_type_of_degree_X;
    extern const char *Txt_You_must_specify_the_name;
 
    /***** Degree type constructor *****/
@@ -651,9 +650,6 @@ void DegTyp_ReceiveNewDegTyp (void)
          default:
             /* Add new degree type to database */
 	    Deg_DB_CreateDegreeType (DegTyp_EditingDegTyp->DegTypName);
-	    Ale_CreateAlert (Ale_SUCCESS,NULL,
-			     Txt_Created_new_type_of_degree_X,
-			     DegTyp_EditingDegTyp->DegTypName);
             break;
         }
    else	// If there is not a degree type name
@@ -690,8 +686,7 @@ void DegTyp_RemoveDegTyp (void)
       DegTyp_RemoveDegTypeCompletely (DegTyp_EditingDegTyp->DegTypCod);
 
       /***** Write message to show the change made *****/
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_Type_of_degree_X_removed,
+      Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Type_of_degree_X_removed,
                        DegTyp_EditingDegTyp->DegTypName);
      }
   }
