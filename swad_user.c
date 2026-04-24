@@ -5126,7 +5126,7 @@ void Usr_ListGuests (void)
 
    /***** Get scope *****/
    AllowedLvls = Sco_GetAllowedScopesForListingGuests ();
-   ListingPars.HieLvl = Sco_GetScope ("ScopeUsr",Hie_SYS,AllowedLvls);
+   ListingPars.HieLvl = Sco_GetScope ("ScopeUsr",Hie_CTR,AllowedLvls);
 
    /***** Get list of guests in current scope *****/
    Usr_GetGstsLst (ListingPars.HieLvl);

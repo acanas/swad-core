@@ -164,12 +164,8 @@ void Fig_PutIconToShowFigure (Fig_FigureType_t FigureType)
   {
    struct Fig_Figures Figures;
 
-   /***** Set default scope (used only if Scope is unknown) *****/
-   // Sco_AdjustScope (Scope,Allowed,Hie_CRS);
-
    /***** Put icon to show figure *****/
-   // Figures.Scope      = *Scope;
-   Figures.HieLvl      = Hie_CRS;
+   Figures.HieLvl     = Hie_CRS;
    Figures.FigureType = FigureType;
    Lay_PutContextualLinkOnlyIcon (ActSeeUseGbl,NULL,
                                   Fig_PutParsFigures,&Figures,

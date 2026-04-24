@@ -41,6 +41,13 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/***************************** Private prototypes ****************************/
+/*****************************************************************************/
+
+static void Sco_AdjustScope (Hie_Level_t *HieLvl,
+			     unsigned AllowedLvls,Hie_Level_t DefaultHieLvl);
+
+/*****************************************************************************/
 /** Put a selector to choice between ranges when getting users for listing ***/
 /*****************************************************************************/
 
@@ -137,20 +144,21 @@ Hie_Level_t Sco_GetScope (const char *ParName,
 /*********** Adjust scope avoiding impossible or forbidden scopes ************/
 /*****************************************************************************/
 
-void Sco_AdjustScope (Hie_Level_t *HieLvl,unsigned AllowedLvls,Hie_Level_t DefaultHieLvl)
+static void Sco_AdjustScope (Hie_Level_t *HieLvl,
+			     unsigned AllowedLvls,Hie_Level_t DefaultHieLvl)
   {
-   Hie_Level_t L;
+   Hie_Level_t Lvl;
 
    /***** Is scope is unknow, use default scope *****/
    if (*HieLvl == Hie_UNK)
       *HieLvl = DefaultHieLvl;
 
    /***** Avoid impossible scopes *****/
-   for (L  = Hie_CRS;
-	L >= Hie_CTY;
-	L--)
-      if (*HieLvl == L && Gbl.Hierarchy.Node[L].HieCod <= 0)
-	 *HieLvl = L - 1;	// Go up to parent level
+   for (Lvl  = Hie_CRS;
+	Lvl >= Hie_CTY;
+	Lvl--)
+      if (*HieLvl == Lvl && Gbl.Hierarchy.Node[Lvl].HieCod <= 0)
+	 *HieLvl = Lvl - 1;	// Go up to parent level
 
    /***** Avoid forbidden scopes *****/
    if ((AllowedLvls & (1 << *HieLvl)) == 0)
@@ -166,7 +174,10 @@ unsigned Sco_GetAllowedScopesForListingGuests (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_SYS_ADM:
-	 return 1 << Hie_SYS;
+	 return 1 << Hie_SYS |	// All guests
+	        1 << Hie_CTY |	// Guests whose institution belong to current country
+		1 << Hie_INS |	// Guests whose institution is the current one
+		1 << Hie_CTR;	// Guests whose center is the current one
       default:
       	 return 0;
      }

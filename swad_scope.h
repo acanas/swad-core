@@ -40,7 +40,6 @@ void Sco_PutParCurrentScope (void *HieLvl);
 void Sco_PutParScope (const char *ParName,Hie_Level_t HieLvl);
 Hie_Level_t Sco_GetScope (const char *ParName,
 			  Hie_Level_t DefaultHieLvl,unsigned AllowedLvls);
-void Sco_AdjustScope (Hie_Level_t *HieLvl,unsigned AllowedLvls,Hie_Level_t DefaultHieLvl);
 
 unsigned Sco_GetAllowedScopesForListingGuests (void);
 unsigned Sco_GetAllowedScopesForListingStudents (void);

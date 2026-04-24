@@ -639,10 +639,11 @@ TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de t
 
 TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtube.com/shorts/fY6Oax_uJBc?si=G3UHqvSH3yEbxm1B
 */
-#define Log_PLATFORM_VERSION	"SWAD 25.44.1 (2026-04-20)"
+#define Log_PLATFORM_VERSION	"SWAD 25.45 (2026-04-24)"
 #define CSS_FILE		"swad25.39.1.css"
 #define JS_FILE			"swad24.75.js"
 /*
+	Version 25.45:    Apr 24, 2026	More scopes allowed when listing guests. (346824 lines)
 	Version 25.44.1:  Apr 20, 2026	Fixed bug in follow/unfollow users. Reported by Eva Martínez Ortigosa. (346818 lines)
 	Version 25.44:    Mar 24, 2026	Some feedback alerts removed. (346817 lines)
 	Version 25.43:    Mar 24, 2026	Some feedback alerts removed. (348678 lines)
