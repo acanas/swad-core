@@ -318,8 +318,8 @@ static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal)
 
 void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void)
   {
-   if ((Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&			// Right column visible
-       Gbl.Hierarchy.HieLvl == Hie_CRS &&				// Course selected
+   if ((Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&		// Right column visible
+       Gbl.Hierarchy.HieLvl == Hie_CRS &&			// Course selected
        (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG ||	// I can view users
         Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
      {

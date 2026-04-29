@@ -1832,6 +1832,9 @@ void Usr_ChkUsrGetUsrDataAndAdjustAction (void)
       default:
 	 break;
      }
+   Tab_SetCurrentTab ();	// Adjust action and tab
+				// (required if action has changed or
+				// if current hierarchy node no longer exists)
   }
 
 /*****************************************************************************/

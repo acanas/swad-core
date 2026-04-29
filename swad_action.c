@@ -234,7 +234,6 @@ void Act_AdjustActionWhenNoUsrLogged (void)
       Gbl.Hierarchy.HieLvl = Hie_UNK;
 
    Gbl.Action.Act = Actions[Gbl.Hierarchy.HieLvl];
-   Tab_SetCurrentTab ();
   }
 
 /*****************************************************************************/
@@ -259,7 +258,6 @@ void Act_AdjustActionWhenClickOnMenu (void)
    Gbl.Action.Act = Action == ActUnk ? (Gbl.Usrs.Me.Logged ? ActSeeGblTL :	// Default action if logged
 							     ActFrmLogIn) :	// Default action if not logged
 				       Action;
-   Tab_SetCurrentTab ();
   }
 
 /*****************************************************************************/
