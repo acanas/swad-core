@@ -3785,7 +3785,7 @@ legend {font-size: 12pt; font-weight: bold;}
 .Tst_MED_SHOW_CONT
 	{
 	box-sizing: border-box;
-	width: 50%;
+	width: 100%;
 	margin: 10px 0;
 	}
 .Tst_MED_SHOW

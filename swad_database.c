@@ -425,7 +425,7 @@ mysql> DESCRIBE brw_caches;
 			"SessionId CHAR(43) NOT NULL,"				// Cns_BYTES_SESSION_ID
 			"PrivPath VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
 			"TmpPubDir VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
-		   "UNIQUE INDEX(SessionId)"
+		   "INDEX(SessionId)"
 		   ") ENGINE=MyISAM");
 
    /***** Table brw_clipboards *****/
