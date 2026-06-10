@@ -265,7 +265,7 @@ static void Usr_ShowAlertUsrDoesNotExistsOrWrongPassword (void);
 static void Usr_ShowAlertThereAreMoreThanOneUsr (void);
 
 static void Usr_SetMyPrefsAndRoles (void);
-
+static void Usr_PutLabelRole (void);
 static void Usr_PutLinkToLogOut (__attribute__((unused)) void *Args);
 
 static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,
@@ -2144,7 +2144,6 @@ void Usr_ShowFormsLogoutAndRole (void)
   {
    extern const char *Hlp_PROFILE_Session_role;
    extern const char *Txt_Session;
-   extern const char *Txt_Role;
    extern const char *Txt_You_are_now_LOGGED_IN_as_X;
    extern const char *Txt_logged[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -2152,7 +2151,7 @@ void Usr_ShowFormsLogoutAndRole (void)
    char *ClassSelect;
 
    /***** Write message with my new logged role *****/
-   if (Gbl.Usrs.Me.Role.HasChanged)
+   if (Gbl.Usrs.Me.Role.RoleChanged == Chg_CHANGED)
       Ale_ShowAlert (Ale_SUCCESS,Txt_You_are_now_LOGGED_IN_as_X,
 	             Txt_logged[Gbl.Usrs.Me.UsrDat.Sex],
 	             Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
@@ -2162,20 +2161,20 @@ void Usr_ShowFormsLogoutAndRole (void)
                  Hlp_PROFILE_Session_role,Box_NOT_CLOSABLE);
 
       /***** Put a form to change my role *****/
-      if (Rol_GetNumAvailableRoles () == 1)
+      if (Rol_GetNumAvailableRoles () == 1)	// Only one role ==> no form
 	{
 	 HTM_SPAN_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-	    HTM_Txt (Txt_Role); HTM_Colon (); HTM_NBSP ();
+	    Usr_PutLabelRole ();
 	 HTM_SPAN_End ();
 
 	 HTM_SPAN_Begin ("class=\"DAT_STRONG_%s BOLD\"",The_GetSuffix ());
 	    HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
 	 HTM_SPAN_End ();
 	}
-      else
+      else // More than one role ==> put a form to change my role
 	{
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_Txt (Txt_Role); HTM_Colon (); HTM_NBSP ();
+	    Usr_PutLabelRole ();
 	    if (asprintf (&ClassSelect,"INPUT_%s",The_GetSuffix ()) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Rol_PutFormToChangeMyRole (ClassSelect);
@@ -2185,6 +2184,13 @@ void Usr_ShowFormsLogoutAndRole (void)
 
    /***** End box *****/
    Box_BoxEnd ();
+  }
+
+static void Usr_PutLabelRole (void)
+  {
+   extern const char *Txt_Role;
+
+   HTM_Txt (Txt_Role); HTM_Colon (); HTM_NBSP ();
   }
 
 /*****************************************************************************/

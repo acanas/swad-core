@@ -493,7 +493,7 @@ void Rol_ChangeMyRole (void)
          /* New role is distinct to current role,
             so change my role... */
 	 Gbl.Usrs.Me.Role.Logged = NewRole;
-	 Gbl.Usrs.Me.Role.HasChanged = true;
+	 Gbl.Usrs.Me.Role.RoleChanged = Chg_CHANGED;
 
 	 /* ...update logged role in session... */
 	 Ses_DB_UpdateSession ();

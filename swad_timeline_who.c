@@ -103,11 +103,11 @@ void TmlWho_GetParWho (void)
    /***** Get which users I want to see *****/
    Who = Usr_GetParWho ();
 
-   /***** If parameter Who is not present, get it from database *****/
+   /***** If parameter is not present, get it from database *****/
    if (Who == Usr_WHO_UNKNOWN)
       Who = TmlWho_GetWhoFromDB ();
 
-   /***** If parameter Who is unknown, set it to default *****/
+   /***** If parameter is unknown, set it to default *****/
    if (Who == Usr_WHO_UNKNOWN)
       Who = TmlWho_DEFAULT_WHO;
 

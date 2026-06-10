@@ -242,7 +242,7 @@ void Lay_WriteStartOfPage (void)
 
    /* Style sheet for SWAD */
    HTM_TxtF ("<link rel=\"stylesheet\" href=\"%s/%s\" type=\"text/css\">\n",
-             Cfg_URL_SWAD_PUBLIC,CSS_FILE);
+             Cfg_URL_SWAD_PUBLIC,Chl_CSS_FILE);
 
    /* Style sheets for Font Awesome */
    HTM_TxtF ("<link rel=\"stylesheet\""
@@ -540,7 +540,7 @@ static void Lay_WriteScripts (void)
    unsigned NumExamAnnouncement;	// Number of exam announcement
 
    /***** General scripts for swad *****/
-   HTM_SCRIPT_Begin (Cfg_URL_SWAD_PUBLIC "/" JS_FILE,NULL);
+   HTM_SCRIPT_Begin (Cfg_URL_SWAD_PUBLIC "/" Chl_JS_FILE,NULL);
    HTM_SCRIPT_End ();
 
    /***** Script for MathJax *****/
@@ -1369,7 +1369,7 @@ void Lay_WriteAboutZone (void)
 
 	 /* About */
 	 HTM_A_Begin ("href=\"%s\" class=\"ABOUT\" target=\"_blank\"",Cfg_ABOUT_SWAD_URL);
-	    HTM_TxtF (Txt_About_X,Log_PLATFORM_VERSION);
+	    HTM_TxtF (Txt_About_X,Chl_PLATFORM_VERSION);
 	 HTM_A_End ();
 	 for (i = 0;
 	      i < 5;

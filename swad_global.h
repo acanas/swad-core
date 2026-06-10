@@ -36,6 +36,7 @@
 #include "swad_assignment.h"
 #include "swad_browser.h"
 #include "swad_cache.h"
+#include "swad_changed.h"
 #include "swad_connected.h"
 #include "swad_config.h"
 #include "swad_course.h"
@@ -112,7 +113,7 @@ struct Globals
 	    Rol_Role_t Logged;
 	    Rol_Role_t LoggedBeforeCloseSession;
 	    Rol_Role_t Max;
-	    bool HasChanged;	// Set when I have changed my role
+	    Chg_Changed_t RoleChanged;	// Set when I have changed my role
 	   } Role;
 	 char UsrIdLogin[Cns_MAX_BYTES_USR_LOGIN + 1];	// String to store the ID, nickname or email entered in the user's login
          char LoginPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];

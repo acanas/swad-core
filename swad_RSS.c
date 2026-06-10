@@ -116,7 +116,7 @@ void RSS_UpdateRSSFileForACrs (struct Hie_Node *Crs)
    fprintf (FileRSS,"</lastBuildDate>\n");
 
    fprintf (FileRSS,"<generator>%s</generator>\n",
-            Log_PLATFORM_VERSION);
+            Chl_PLATFORM_VERSION);
    fprintf (FileRSS,"<docs>http://www.rssboard.org/rss-specification</docs>\n");
 
    /***** Write notices as RSS items *****/

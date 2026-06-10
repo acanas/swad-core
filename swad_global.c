@@ -38,6 +38,7 @@
 #include "swad_API.h"
 #include "swad_calendar.h"
 #include "swad_call_for_exam.h"
+#include "swad_changed.h"
 #include "swad_config.h"
 #include "swad_constant.h"
 #include "swad_degree_type.h"
@@ -120,7 +121,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Me.Role.Logged                   =
    Gbl.Usrs.Me.Role.LoggedBeforeCloseSession =
    Gbl.Usrs.Me.Role.Max                      = Rol_UNK;
-   Gbl.Usrs.Me.Role.HasChanged = false;
+   Gbl.Usrs.Me.Role.RoleChanged = Chg_NOT_CHANGED;
    Gbl.Usrs.Me.MyPhotoExists = Exi_DOES_NOT_EXIST;
    Gbl.Usrs.Me.NumAccWithoutPhoto = 0;
    Gbl.Usrs.Me.TimeLastAccToThisFileBrowser = LONG_MAX;	// Initialized to a big value, so by default files are not shown as recent or new

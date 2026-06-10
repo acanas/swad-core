@@ -1,7 +1,7 @@
-// swad_exist.h: types and constants related to existence of something
+// swad_changed.h: types and constants related to something that has changed
 
-#ifndef _SWAD_EXI
-#define _SWAD_EXI
+#ifndef _SWAD_CHG
+#define _SWAD_CHG
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -28,7 +28,7 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Exi_NUM_EXIST 2
+#define Chg_NUM_EXIST 2
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -36,14 +36,8 @@
 
 typedef enum
   {
-   Exi_DOES_NOT_EXIST,
-   Exi_EXISTS
-  } Exi_Exist_t;
-
-/*****************************************************************************/
-/****************************** Public prototypes ****************************/
-/*****************************************************************************/
-
-Exi_Exist_t Exi_GetNotExistFromYN (char Ch);
+   Chg_NOT_CHANGED,
+   Chg_CHANGED
+  } Chg_Changed_t;
 
 #endif
