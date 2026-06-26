@@ -903,6 +903,8 @@ static void Lay_WriteScriptInit (void)
 
 static void Lay_WriteScriptParsAJAX (void)
   {
+   struct Tml_WhosePosts WhosePosts;
+
    /***** Begin script *****/
    HTM_SCRIPT_Begin (NULL,NULL);
 
@@ -943,12 +945,13 @@ static void Lay_WriteScriptParsAJAX (void)
 	    /* In all actions related to view or editing global timeline ==>
 	       put parameters used by AJAX */
 	    // Refresh parameters
+	    TmlWho_GetGlobalWhosePosts (&WhosePosts);	// Global variable set in a priori function
 	    HTM_TxtF ("const refreshParamNxtActNewPub = \"act=%ld\";\n"
 		      "const refreshParamNxtActOldPub = \"act=%ld\";\n"
 		      "const refreshParamWho = \"Who=%u\";\n",
 		      Act_GetActCod (ActRefNewPubGblTL),
 		      Act_GetActCod (ActRefOldPubGblTL),
-		      (unsigned) TmlWho_GetGlobalWho ());	// Global variable got in a priori function
+		      (unsigned) WhosePosts.Who);
 	    break;
 	 /* Parameters related with user timeline refreshing */
 	 case ActSeeOthPubPrf:

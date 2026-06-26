@@ -181,7 +181,7 @@ void Tml_InitTimelineGbl (struct Tml_Timeline *Timeline)
    TmlNtf_MarkMyNotifAsSeen ();
 
    /***** Get which users *****/
-   Timeline->Who = TmlWho_GetGlobalWho ();
+   TmlWho_GetGlobalWhosePosts (&Timeline->WhosePosts);
   }
 
 /*****************************************************************************/
@@ -190,13 +190,14 @@ void Tml_InitTimelineGbl (struct Tml_Timeline *Timeline)
 
 void Tml_ResetTimeline (struct Tml_Timeline *Timeline)
   {
-   Timeline->UsrOrGbl    = TmlUsr_TIMELINE_GBL;
-   Timeline->Who         = TmlWho_DEFAULT_WHO;
-   Timeline->WhatToGet   = Tml_GET_REC_PUBS;
-   Timeline->Pubs.Top    =
-   Timeline->Pubs.Bottom = NULL,
-   Timeline->NotCod      = -1L;
-   Timeline->PubCod      = -1L;
+   Timeline->UsrOrGbl		= TmlUsr_TIMELINE_GBL;
+   Timeline->WhosePosts.Who	= Usr_WHO_UNKNOWN;
+   Timeline->WhosePosts.WhoShouldBeStoredInDB = Tml_WHO_SHOULD_NOT_BE_STORED_IN_DB;
+   Timeline->WhatToGet		= Tml_GET_REC_PUBS;
+   Timeline->Pubs.Top		=
+   Timeline->Pubs.Bottom	= NULL,
+   Timeline->NotCod		= -1L;
+   Timeline->PubCod		= -1L;
   }
 
 /*****************************************************************************/
@@ -211,7 +212,9 @@ void Tml_ShowTimelineGbl (void)
    Tml_InitTimelineGbl (&Timeline);
 
    /***** Save which users in database *****/
-   TmlWho_SaveWhoInDB (&Timeline);
+   if (Gbl.Usrs.Me.Logged &&	// Save only if I am logged
+       Timeline.WhosePosts.WhoShouldBeStoredInDB == Tml_WHO_SHOULD_BE_STORED_IN_DB)
+      Tml_DB_UpdateWho (Timeline.WhosePosts.Who);
 
    /***** Show highlighted note and global timeline *****/
    Tml_ShowNoteAndTimelineGbl (&Timeline);
@@ -311,7 +314,7 @@ void Tml_RefreshNewTimelineGbl (void)
    Tml_ResetTimeline (&Timeline);
 
    /***** Get which users *****/
-   Timeline.Who = TmlWho_GetGlobalWho ();
+   TmlWho_GetGlobalWhosePosts (&Timeline.WhosePosts);
 
    /***** Get list of publications to show in timeline *****/
    Timeline.UsrOrGbl  = TmlUsr_TIMELINE_GBL;
@@ -337,7 +340,7 @@ void Tml_RefreshOldTimelineGbl (void)
    Tml_ResetTimeline (&Timeline);
 
    /***** Get which users *****/
-   Timeline.Who = TmlWho_GetGlobalWho ();
+   TmlWho_GetGlobalWhosePosts (&Timeline.WhosePosts);
 
    /***** Show old publications *****/
    Timeline.UsrOrGbl  = TmlUsr_TIMELINE_GBL;

@@ -1287,12 +1287,12 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncPars) (void))
 	 if (FuncPars)
 	    FuncPars ();
 
-	 /***** Begin box and table *****/
-	 Box_BoxTableBegin (Txt_Log_in,NULL,NULL,
-			    Hlp_PROFILE_LogIn,Box_NOT_CLOSABLE,2);
+	 /***** Begin box *****/
+	 Box_BoxBegin (Txt_Log_in,NULL,NULL,
+		       Hlp_PROFILE_LogIn,Box_NOT_CLOSABLE);
 
 	    /***** User's ID/nickname *****/
-	    HTM_DIV_Begin ("class=\"LM\"");
+	    HTM_DIV_Begin ("class=\"Frm_LOGIN\"");
 	       HTM_LABEL_Begin ("for=\"UsrId\"");
 		  Ico_PutIcon ("user.svg",Ico_BLACK,
 		               Txt_User[Usr_SEX_UNKNOWN],"CONTEXT_ICO16x16");
@@ -1305,7 +1305,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncPars) (void))
 	    HTM_DIV_End ();
 
 	    /***** User's password *****/
-	    HTM_DIV_Begin ("class=\"LM\"");
+	    HTM_DIV_Begin ("class=\"Frm_LOGIN\"");
 	       HTM_LABEL_Begin ("for=\"UsrPwd\"");
 		  Ico_PutIcon ("key.svg",Ico_BLACK,
 		               Txt_Password,"CONTEXT_ICO16x16");
@@ -1316,8 +1316,8 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncPars) (void))
 				   The_GetSuffix ());
 	    HTM_DIV_End ();
 
-	 /***** End table, send button and end box *****/
-	 Box_BoxTableWithButtonEnd (Btn_CONTINUE);
+	 /***** Send button and end box *****/
+	 Box_BoxWithButtonEnd (Btn_CONTINUE);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -1350,8 +1350,7 @@ void Usr_WelcomeUsr (void)
            {
 	    /***** New year greeting *****/
 	    if (CurrentDay == 1 && CurrentMonth == 1)
-	       Ale_ShowAlert (Ale_INFO,Txt_NEW_YEAR_GREETING,
-			      CurrentYear);
+	       Ale_ShowAlert (Ale_INFO,Txt_NEW_YEAR_GREETING,CurrentYear);
 
             /***** Birthday congratulation *****/
             if (Gbl.Usrs.Me.UsrDat.Birthday.Day   == CurrentDay &&

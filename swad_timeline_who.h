@@ -27,7 +27,8 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-#include "swad_user.h"
+#include "swad_timeline.h"
+#include "swad_user_type.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -43,8 +44,6 @@ void TmlWho_PutFormWho (struct Tml_Timeline *Timeline);
 
 void TmlWho_GetParWho (void);
 
-void TmlWho_SaveWhoInDB (struct Tml_Timeline *Timeline);
-
-Usr_Who_t TmlWho_GetGlobalWho (void);
+void TmlWho_GetGlobalWhosePosts (struct Tml_WhosePosts *WhosePosts);
 
 #endif

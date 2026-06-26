@@ -96,7 +96,7 @@ void TmlPub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
 
    /***** Create subqueries *****/
    /* Create subquery with potential publishers */
-   Tml_DB_CreateSubQueryPublishers (Timeline->UsrOrGbl,Timeline->Who,
+   Tml_DB_CreateSubQueryPublishers (Timeline->UsrOrGbl,Timeline->WhosePosts.Who,
                                     &SubQueries.Publishers.Table,
                                     SubQueries.Publishers.SubQuery);
 
@@ -187,7 +187,7 @@ void TmlPub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
 
    /* Drop temporary table with me and users I follow */
    if (Timeline->UsrOrGbl == TmlUsr_TIMELINE_GBL &&	// Show the global timeline
-       Timeline->Who == Usr_WHO_FOLLOWED)		// Show the timeline of the users I follow
+       Timeline->WhosePosts.Who == Usr_WHO_FOLLOWED)	// Show the timeline of the users I follow
       Fol_DB_DropTmpTableMeAndUsrsIFollow ();
   }
 

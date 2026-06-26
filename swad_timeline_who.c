@@ -37,6 +37,24 @@
 #include "swad_timeline_who.h"
 
 /*****************************************************************************/
+/**************************** Private constants ******************************/
+/*****************************************************************************/
+
+static unsigned TmlWho_Allowed[Rol_NUM_ROLES] =
+  {
+   [Rol_UNK	] = 0,
+   [Rol_GST	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED,
+   [Rol_USR	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED,
+   [Rol_STD	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED,
+   [Rol_NET	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED,
+   [Rol_TCH	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED,
+   [Rol_DEG_ADM	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED,
+   [Rol_CTR_ADM	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED,
+   [Rol_INS_ADM	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED,
+   [Rol_SYS_ADM	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED | 1 << Usr_WHO_ALL,
+  };
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -46,15 +64,15 @@ extern struct Globals Gbl;
 /************************* Private global variables **************************/
 /*****************************************************************************/
 
-Usr_Who_t Tml_GlobalWho;
+struct Tml_WhosePosts Tml_GlobalWhosePosts;
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static Usr_Who_t TmlWho_GetWhoFromDB (void);
+static void TmlWho_GetWhoFromDB (struct Tml_WhosePosts *WhosePosts);
 
-static void TmlWho_SetGlobalWho (Usr_Who_t Who);
+static void TmlWho_SetGlobalWhosePosts (struct Tml_WhosePosts *WhosePosts);
 
 static void TmlWho_ShowWarningYouDontFollowAnyUser (void);
 
@@ -65,9 +83,6 @@ static void TmlWho_ShowWarningYouDontFollowAnyUser (void);
 void TmlWho_PutFormWho (struct Tml_Timeline *Timeline)
   {
    Usr_Who_t Who;
-   unsigned Mask = 1 << Usr_WHO_ME       |
-	           1 << Usr_WHO_FOLLOWED |
-		   1 << Usr_WHO_ALL;
 
    /***** Setting selector for which users *****/
    Set_BeginSettingsHead ();
@@ -75,9 +90,9 @@ void TmlWho_PutFormWho (struct Tml_Timeline *Timeline)
 	 for (Who  = (Usr_Who_t) 0;
 	      Who <= (Usr_Who_t) (Usr_NUM_WHO - 1);
 	      Who++)
-	    if (Mask & (1 << Who))
+	    if (TmlWho_Allowed[Gbl.Usrs.Me.Role.Logged] & (1 << Who))
 	      {
-	       Set_BeginPref (Who == Timeline->Who);
+	       Set_BeginPref (Who == Timeline->WhosePosts.Who);
 		  Frm_BeginForm (ActSeeGblTL);
 		     Par_PutParUnsigned (NULL,"Who",(unsigned) Who);
 		     Usr_PutWhoIcon (Who);
@@ -88,7 +103,7 @@ void TmlWho_PutFormWho (struct Tml_Timeline *Timeline)
    Set_EndSettingsHead ();
 
    /***** Show warning if I do not follow anyone *****/
-   if (Timeline->Who == Usr_WHO_FOLLOWED)
+   if (Timeline->WhosePosts.Who == Usr_WHO_FOLLOWED)
       TmlWho_ShowWarningYouDontFollowAnyUser ();
   }
 
@@ -98,33 +113,44 @@ void TmlWho_PutFormWho (struct Tml_Timeline *Timeline)
 
 void TmlWho_GetParWho (void)
   {
-   Usr_Who_t Who;
+   struct Tml_WhosePosts WhosePosts;
 
    /***** Get which users I want to see *****/
-   Who = Usr_GetParWho ();
-
-   /***** If parameter is not present, get it from database *****/
-   if (Who == Usr_WHO_UNKNOWN)
-      Who = TmlWho_GetWhoFromDB ();
+   WhosePosts.Who = Usr_GetParWho ();
+   if (WhosePosts.Who == Usr_WHO_UNKNOWN)	// Parameter not present
+     {
+      /* If parameter is not present, get it from database */
+      TmlWho_GetWhoFromDB (&WhosePosts);
+      WhosePosts.WhoShouldBeStoredInDB = Tml_WHO_SHOULD_NOT_BE_STORED_IN_DB;
+     }
+   else
+     {
+      /* If parameter is present, check if allowed */
+      if ((TmlWho_Allowed[Gbl.Usrs.Me.Role.Logged] & (1 << WhosePosts.Who)) == 0)
+	 WhosePosts.Who = TmlWho_DEFAULT_WHO;
+      WhosePosts.WhoShouldBeStoredInDB = Tml_WHO_SHOULD_BE_STORED_IN_DB;
+     }
 
    /***** If parameter is unknown, set it to default *****/
-   if (Who == Usr_WHO_UNKNOWN)
-      Who = TmlWho_DEFAULT_WHO;
+   if (WhosePosts.Who == Usr_WHO_UNKNOWN)
+     {
+      WhosePosts.Who = TmlWho_DEFAULT_WHO;
+      WhosePosts.WhoShouldBeStoredInDB = Tml_WHO_SHOULD_BE_STORED_IN_DB;
+     }
 
    /***** Set global variable *****/
-   TmlWho_SetGlobalWho (Who);
+   TmlWho_SetGlobalWhosePosts (&WhosePosts);
   }
 
 /*****************************************************************************/
 /********* Get which users to view in global timeline from database **********/
 /*****************************************************************************/
 
-static Usr_Who_t TmlWho_GetWhoFromDB (void)
+static void TmlWho_GetWhoFromDB (struct Tml_WhosePosts *WhosePosts)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned UnsignedNum;
-   Usr_Who_t Who = Usr_WHO_UNKNOWN;
 
    /***** Get which users from database *****/
    if (Tml_DB_GetWho (&mysql_res) == 1)
@@ -135,56 +161,34 @@ static Usr_Who_t TmlWho_GetWhoFromDB (void)
       if (sscanf (row[0],"%u",&UnsignedNum) == 1)
          if (UnsignedNum < Usr_NUM_WHO)
            {
-            Who = (Usr_Who_t) UnsignedNum;
+            WhosePosts->Who = (Usr_Who_t) UnsignedNum;
 
-	    switch (Who)
+	    if ((TmlWho_Allowed[Gbl.Usrs.Me.Role.Logged] & (1 << WhosePosts->Who)) == 0)
 	      {
-	       case Usr_WHO_ME:	// Show my timeline
-	       case Usr_WHO_FOLLOWED:	// Show the timeline of the users I follow
-	       case Usr_WHO_ALL:	// Show the timeline of all users
-		  break;
-	       default:
-		  Who = TmlWho_DEFAULT_WHO;
-		  break;
+	       WhosePosts->Who = TmlWho_DEFAULT_WHO;
+	       WhosePosts->WhoShouldBeStoredInDB = Tml_WHO_SHOULD_BE_STORED_IN_DB;
 	      }
            }
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-
-   return Who;
-  }
-
-/*****************************************************************************/
-/******** Save which users to view in global timeline into database **********/
-/*****************************************************************************/
-
-void TmlWho_SaveWhoInDB (struct Tml_Timeline *Timeline)
-  {
-   if (Gbl.Usrs.Me.Logged)	// Save only if I am logged
-     {
-      if (Timeline->Who == Usr_WHO_UNKNOWN)
-	 Timeline->Who = TmlWho_DEFAULT_WHO;
-
-      /***** Update which users in database *****/
-      // Who is stored in usr_last for next time I log in
-      Tml_DB_UpdateWho (Timeline->Who);
-     }
   }
 
 /*****************************************************************************/
 /**** Set/get global variable with which users to view in global timeline ****/
 /*****************************************************************************/
 
-static void TmlWho_SetGlobalWho (Usr_Who_t Who)
+static void TmlWho_SetGlobalWhosePosts (struct Tml_WhosePosts *WhosePosts)
   {
-   Tml_GlobalWho = Who;
+   Tml_GlobalWhosePosts.Who = WhosePosts->Who;
+   Tml_GlobalWhosePosts.WhoShouldBeStoredInDB = WhosePosts->WhoShouldBeStoredInDB;
   }
 
-Usr_Who_t TmlWho_GetGlobalWho (void)
+void TmlWho_GetGlobalWhosePosts (struct Tml_WhosePosts *WhosePosts)
   {
-   return Tml_GlobalWho;
+   WhosePosts->Who = Tml_GlobalWhosePosts.Who;
+   WhosePosts->WhoShouldBeStoredInDB = Tml_GlobalWhosePosts.WhoShouldBeStoredInDB;
   }
 
 /*****************************************************************************/

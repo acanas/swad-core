@@ -6550,7 +6550,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    if (asprintf (&Label,"%s&nbsp;(%s):&nbsp;",Txt_Save_as,Txt_optional) < 0)
+	    if (asprintf (&Label,"%s&nbsp;(%s)",Txt_Save_as,Txt_optional) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Frm_LabelColumn ("RT","NewLinkName",Label);
 	    free (Label);

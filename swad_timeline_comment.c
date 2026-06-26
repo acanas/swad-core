@@ -935,7 +935,7 @@ static void TmlCom_PutParsRemoveComm (void *Timeline)
       if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)	// User's timeline
 	 Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       else					// Global timeline
-	 Usr_PutParWho (((struct Tml_Timeline *) Timeline)->Who);
+	 Usr_PutParWho (((struct Tml_Timeline *) Timeline)->WhosePosts.Who);
       ParCod_PutPar (ParCod_Pub,((struct Tml_Timeline *) Timeline)->PubCod);
      }
   }

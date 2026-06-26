@@ -2124,13 +2124,13 @@ a:hover img.CENTER_PHOTO_SHOW
 	{
 	width: 16px;
 	height: 16px;
-	margin-top: -2px;
+	margin: 0 2px;
 	vertical-align: middle;
 	}
 .CONTEXT_ICOx16
 	{
 	height: 16px;
-	margin-top: -2px;
+	margin: 0 2px;
 	vertical-align: middle;
 	}
 /* Creating filter from RGB: https://codepen.io/sosuke/pen/Pjoqqp */
@@ -3299,6 +3299,8 @@ table.REC	> tbody > tr > td {padding: 2px;}
 	}
 
 /**************************** Forms with 2 colums ****************************/
+.Frm_LOGIN {padding: 2px;}
+
 @media only screen and (max-width: 480px)
 	{	/* For mobile-phones */
 	.Frm_C1

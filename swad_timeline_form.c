@@ -169,7 +169,7 @@ void TmlFrm_BeginForm (const struct Tml_Timeline *Timeline,
      {
       /***** Begin form in global timeline *****/
       Frm_BeginForm (TmlFrm_ActionGbl[Action]);
-	 Usr_PutParWho (Timeline->Who);
+	 Usr_PutParWho (Timeline->WhosePosts.Who);
      }
   }
 

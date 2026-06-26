@@ -27,6 +27,7 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_changed.h"
 #include "swad_form.h"
 #include "swad_media.h"
 #include "swad_notification.h"
@@ -77,10 +78,22 @@ typedef enum
 			// at bottom of timeline
   } Tml_WhatToGet_t;
 
+typedef enum
+  {
+   Tml_WHO_SHOULD_NOT_BE_STORED_IN_DB,
+   Tml_WHO_SHOULD_BE_STORED_IN_DB,
+  } Tml_WhoShouldBeStoredInDB_t;
+
+struct Tml_WhosePosts
+  {
+   Usr_Who_t Who;
+   Tml_WhoShouldBeStoredInDB_t WhoShouldBeStoredInDB;
+  };
+
 struct Tml_Timeline
   {
    TmlUsr_UsrOrGbl_t UsrOrGbl;
-   Usr_Who_t Who;
+   struct Tml_WhosePosts WhosePosts;
    Tml_WhatToGet_t WhatToGet;
    struct
      {

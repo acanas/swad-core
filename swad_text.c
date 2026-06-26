@@ -112,7 +112,7 @@
 #define L 3	// English
 #endif
 
-unsigned Txt_Current_CGI_SWAD_Language = ((unsigned) L);
+unsigned Txt_Current_CGI_SWAD_Language = (unsigned) L;
 
 const char *Txt_NEW_LINE = "\r\n";	// End of line in a file. If we put only \n the file does not look good in some Windows text editors
 
