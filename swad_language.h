@@ -35,6 +35,8 @@
 
 #define Lan_NUM_LANGUAGES 10	// From 1 to 10. 0 is reserved to unknown language
 
+#define Lan_FORM_REDIR_ID "redir"
+
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
@@ -69,6 +71,11 @@ void Lan_UpdateMyLanguageToCurrentLanguage (void);
 
 Lan_Language_t Lan_GetParLanguage (void);
 Lan_Language_t Lan_GetLanguageFromStr (const char *Str);
+
+//----------------------- Redirection to my language --------------------------
+bool Lan_CheckIfRedirectToMyLanguage (void);
+void Lan_ShowFormToRedirectToMyLanguage (Act_Action_t NextAction,
+					 void (*FuncPars) (void));
 
 //-------------------------------- Figures ------------------------------------
 void Lan_GetAndShowNumUsrsPerLanguage (Hie_Level_t HieLvl);

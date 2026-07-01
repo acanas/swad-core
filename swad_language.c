@@ -153,17 +153,15 @@ void Lan_AskChangeLanguage (void)
    extern const char *Txt_Do_you_want_to_change_the_language_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
    Lan_Language_t CurrentLanguage = Gbl.Prefs.Language;
 
-   /***** Get param language *****/
-   Gbl.Prefs.Language = Lan_GetParLanguage ();	// Change temporarily language to set form action
-
    /***** Request confirmation *****/
+   Gbl.Prefs.Language = Lan_GetParLanguage ();	// Change temporarily language to set form action
    Ale_ShowAlertAndButton (ActChgLan,NULL,NULL,
                            Lan_PutParLanguage,&Gbl.Prefs.Language,
-                           Btn_CHANGE,
+                           Btn_CHANGE_LANGUAGE,
                            Ale_QUESTION,Gbl.Usrs.Me.Logged ? Txt_Do_you_want_to_change_your_language_to_LANGUAGE[Gbl.Prefs.Language] :
 	                                                     Txt_Do_you_want_to_change_the_language_to_LANGUAGE[Gbl.Prefs.Language]);
 
-   Gbl.Prefs.Language = CurrentLanguage;		// Restore current language
+   Gbl.Prefs.Language = CurrentLanguage;	// Restore current language
 
    /***** Display settings *****/
    Set_EditSettings ();
@@ -241,6 +239,52 @@ Lan_Language_t Lan_GetLanguageFromStr (const char *Str)
 	 return Lan;
 
    return Lan_LANGUAGE_UNKNOWN;
+  }
+
+/*****************************************************************************/
+/********** Check if the page needs to be redirected to my language **********/
+/*****************************************************************************/
+
+bool Lan_CheckIfRedirectToMyLanguage (void)
+  {
+   extern unsigned Txt_Current_CGI_SWAD_Language;
+
+   return Gbl.Usrs.Me.Logged &&							// I am logged
+	  Gbl.Usrs.Me.UsrDat.Prefs.Language != Txt_Current_CGI_SWAD_Language &&	// My language != current language
+	  (Gbl.Action.Original == ActLogIn ||		// Regular log in
+	   Gbl.Action.Original == ActLogInNew ||	// Log in when checking account
+	   Gbl.Action.Original == ActLogInUsrAgd);	// Log in to view another user's public agenda
+  }
+
+/*****************************************************************************/
+/***************** Show form to be redirected to my language *****************/
+/*****************************************************************************/
+
+void Lan_ShowFormToRedirectToMyLanguage (Act_Action_t NextAction,
+					 void (*FuncPars) (void))
+  {
+   extern const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
+   Lan_Language_t CurrentLanguage = Gbl.Prefs.Language;
+
+   /***** The current language is not my preferred language
+          ==> change automatically to my language *****/
+   Ale_ShowAlert (Ale_INFO,Txt_Switching_to_LANGUAGE[Gbl.Usrs.Me.UsrDat.Prefs.Language]);
+
+   /***** Form to redirect to my preferred language *****/
+   /* Begin form */
+   Gbl.Prefs.Language = Gbl.Usrs.Me.UsrDat.Prefs.Language;	// Change temporarily language to set form action
+   Frm_BeginFormId (NextAction,Lan_FORM_REDIR_ID);
+      if (FuncPars)
+	 FuncPars ();
+
+      /* Put button (only be displayed if JavaScript is disabled) */
+      HTM_NOSCRIPT_Begin ();
+         Btn_PutButton (Btn_CHANGE_LANGUAGE,NULL);
+      HTM_NOSCRIPT_End ();
+
+   /* End form */
+   Frm_EndForm ();
+   Gbl.Prefs.Language = CurrentLanguage;			// Restore current language
   }
 
 /*****************************************************************************/

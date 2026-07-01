@@ -37876,25 +37876,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActPrnUsrQR] =
 #if   L==1	// ca
-	"See my QR code ready to print"			// Necessita traducció
+	"See user QR code ready to print"			// Necessita traducció
 #elif L==2	// de
-	"See my QR code ready to print"			// Need Übersetzung
+	"See user QR code ready to print"			// Need Übersetzung
 #elif L==3	// en
-	"See my QR code ready to print"
+	"See user QR code ready to print"
 #elif L==4	// es
-	"Ver mi c&oacute;digo QR listo para imprimir"
+	"Ver c&oacute;digo QR de usuario listo para imprimir"
 #elif L==5	// fr
-	"See my QR code ready to print"			// Besoin de traduction
+	"See user QR code ready to print"			// Besoin de traduction
 #elif L==6	// gn
-	"Ver mi c&oacute;digo QR listo para imprimir"	// Okoteve traducción
+	"Ver c&oacute;digo QR de usuario listo para imprimir"	// Okoteve traducción
 #elif L==7	// it
-	"See my QR code ready to print"			// Bisogno di traduzione
+	"See user QR code ready to print"			// Bisogno di traduzione
 #elif L==8	// pl
-	"See my QR code ready to print"			// Potrzebujesz tlumaczenie
+	"See user QR code ready to print"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See my QR code ready to print"			// Precisa de tradução
+	"See user QR code ready to print"			// Precisa de tradução
 #elif L==10	// tr
-	"See my QR code ready to print"			// Çeviri lazim!
+	"See user QR code ready to print"			// Çeviri lazim!
 #endif
 	,
 	[ActChgMyData] =

@@ -89,7 +89,7 @@ void Pwd_GetParUsrPwdLogin (void)
   {
    /***** Get plain password from form *****/
    Par_GetParText ("UsrPwd",Gbl.Usrs.Me.LoginPlainPassword,
-                     Pwd_MAX_BYTES_PLAIN_PASSWORD);
+                   Pwd_MAX_BYTES_PLAIN_PASSWORD);
 
    /***** Encrypt password *****/
    Cry_EncryptSHA512Base64 (Gbl.Usrs.Me.LoginPlainPassword,Gbl.Usrs.Me.LoginEncryptedPassword);

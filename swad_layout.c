@@ -108,9 +108,6 @@ Lay_LayoutStatus_t Lay_LayoutStatus = Lay_NOTHING_WRITTEN;
 
 static void Lay_WritePageTitle (void);
 
-static void Lay_WriteRedirToMyLangOnLogIn (void);
-static void Lay_WriteRedirToMyLangOnViewUsrAgd (void);
-
 static void Lay_WriteScripts (void);
 static void Lay_WriteScriptMathJax (void);
 static void Lay_WriteScriptInit (void);
@@ -149,7 +146,6 @@ void Lay_WriteStartOfPage (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern struct The_Theme The_Themes[The_NUM_THEMES];
-   extern unsigned Txt_Current_CGI_SWAD_Language;
    static const char *LayoutMainZone[Mnu_NUM_MENUS] =
      {
       [Mnu_MENU_HORIZONTAL] = "main_horizontal",
@@ -290,17 +286,6 @@ void Lay_WriteStartOfPage (void)
 	 break;
       default:
 	 break;
-     }
-
-   /* Redirect to correct language */
-   if (Gbl.Usrs.Me.Logged &&							// I am logged
-       Gbl.Usrs.Me.UsrDat.Prefs.Language != Txt_Current_CGI_SWAD_Language)	// My language != current language
-     {
-      if (Gbl.Action.Original == ActLogIn ||	// Regular log in
-	  Gbl.Action.Original == ActLogInNew)	// Log in when checking account
-         Lay_WriteRedirToMyLangOnLogIn ();
-      else if (Gbl.Action.Original == ActLogInUsrAgd)	// Log in to view another user's public agenda
-         Lay_WriteRedirToMyLangOnViewUsrAgd ();
      }
 
    /* Write initial scripts depending on the action */
@@ -493,35 +478,6 @@ static void Lay_WritePageTitle (void)
         }
 
    HTM_TITLE_End ();
-  }
-
-/*****************************************************************************/
-/************* Write script and meta to redirect to my language **************/
-/*****************************************************************************/
-
-static void Lay_WriteRedirToMyLangOnLogIn (void)
-  {
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-
-   HTM_TxtF ("<meta http-equiv=\"refresh\""
-	     " content=\"0; url='%s/%s?act=%ld&amp;ses=%s'\">",
-	     Cfg_URL_SWAD_CGI,
-	     Lan_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language],
-	     Act_GetActCod (ActLogInLan),
-	     Gbl.Session.Id);
-  }
-
-static void Lay_WriteRedirToMyLangOnViewUsrAgd (void)
-  {
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-
-   HTM_TxtF ("<meta http-equiv=\"refresh\""
-	     " content=\"0; url='%s/%s?act=%ld&amp;ses=%s&amp;agd=@%s'\">",
-	     Cfg_URL_SWAD_CGI,
-	     Lan_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language],
-	     Act_GetActCod (ActLogInUsrAgdLan),
-	     Gbl.Session.Id,
-	     Gbl.Usrs.Other.UsrDat.Nickname);
   }
 
 /*****************************************************************************/
@@ -870,7 +826,7 @@ static void Lay_WriteScriptInit (void)
 	 HTM_TxtF ("\tconst delayMatch = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_TCH);
 
       /***** Function init () ******/
-      HTM_TxtF ("function init() {\n"
+      HTM_TxtF ("\tfunction init() {\n"
 	        "\tactionAJAX = \"%s\";\n",Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 
 	 if (Refresh.Connected)		// Refresh connected users via AJAX
@@ -891,6 +847,11 @@ static void Lay_WriteScriptInit (void)
 	    HTM_Txt ("\tsetTimeout('refreshMatchStd()',delayMatch);\n");
 	 else if (Refresh.MatchTch)	// Refresh match for a teacher via AJAX
 	    HTM_Txt ("\tsetTimeout('refreshMatchTch()',delayMatch);\n");
+
+	 /* Redirect to my language */
+	 if (Lan_CheckIfRedirectToMyLanguage ())
+            HTM_TxtF ("\tdocument.getElementById('%s').submit();\n",
+        	      Lan_FORM_REDIR_ID);
 
       HTM_Txt ("}\n");
 

@@ -64,6 +64,7 @@ static unsigned HTM_DT_NestingLevel       = 0;
 static unsigned HTM_DD_NestingLevel       = 0;
 static unsigned HTM_A_NestingLevel        = 0;
 static unsigned HTM_SCRIPT_NestingLevel   = 0;
+static unsigned HTM_NOSCRIPT_NestingLevel = 0;
 static unsigned HTM_FIELDSET_NestingLevel = 0;
 static unsigned HTM_LABEL_NestingLevel    = 0;
 static unsigned HTM_BUTTON_NestingLevel   = 0;
@@ -866,9 +867,26 @@ void HTM_SCRIPT_End (void)
    if (HTM_SCRIPT_NestingLevel == 0)	// No SCRIPT open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened SCRIPT.");
 
-   HTM_Txt ("</script>");
+   HTM_Txt ("</script>\n");
 
    HTM_SCRIPT_NestingLevel--;
+  }
+
+void HTM_NOSCRIPT_Begin (void)
+  {
+   HTM_Txt ("<noscript>");
+
+   HTM_NOSCRIPT_NestingLevel++;
+  }
+
+void HTM_NOSCRIPT_End (void)
+  {
+   if (HTM_SCRIPT_NestingLevel == 0)	// No NOSCRIPT open
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened NOSCRIPT.");
+
+   HTM_Txt ("</noscript>");
+
+   HTM_NOSCRIPT_NestingLevel--;
   }
 
 /*****************************************************************************/

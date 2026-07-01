@@ -1,9 +1,9 @@
-// swad_button.h: buttons to submit forms
+// swad_form_type.h: forms to go to actions
 
-#ifndef _SWAD_BTN
-#define _SWAD_BTN
+#ifndef _SWAD_FRM_TYP
+#define _SWAD_FRM_TYP
 /*
-    SWAD (Shared Workspace At a Distance in Spanish),
+    SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
     and used to support university teaching.
 
@@ -24,55 +24,47 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/********************************* Public types ******************************/
+/********************************** Headers **********************************/
 /*****************************************************************************/
 
-#define Btn_NUM_BUTTON_TYPES 36
+// #include <stdbool.h>		// For boolean type
+
+// #include "swad_action_list.h"
+// #include "swad_button.h"
+#include "swad_constant.h"
+// #include "swad_cryptography.h"
+// #include "swad_language.h"
+// #include "swad_parameter_code.h"
+
+/*****************************************************************************/
+/************************** Public constants and types ***********************/
+/*****************************************************************************/
+
+#define Frm_MAX_BYTES_ID (32 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 10)
+
+#define Frm_MAX_BYTES_PARAM_ACTION	256
+#define Frm_MAX_BYTES_PARAM_SESSION	(256 + Cns_BYTES_SESSION_ID)
+#define Frm_MAX_BYTES_PARAM_LOCATION	256
+#define Frm_MAX_BYTES_PARAMS_STR	(Frm_MAX_BYTES_PARAM_ACTION + Frm_MAX_BYTES_PARAM_SESSION + Frm_MAX_BYTES_PARAM_LOCATION)
+
+#define Frm_NUM_PUT_FORM 2
 typedef enum
   {
-   Btn_NO_BUTTON,
-   Btn_ADD_QUESTIONS,
-   Btn_ANSWER,
-   Btn_CHANGE,
-   Btn_CHANGE_LANGUAGE,
-   Btn_CHECK,
-   Btn_CONFIRM,
-   Btn_CONTINUE,
-   Btn_CREATE,
-   Btn_CREATE_ACCOUNT,
-   Btn_DONE,
-   Btn_EDIT,
-   Btn_ENROL,
-   Btn_ELIMINATE,
-   Btn_FOLLOW,
-   Btn_GO,
-   Btn_ITS_ME,
-   Btn_LOCK_EDITING,
-   Btn_NOT_DUPLICATED,
-   Btn_PASTE,
-   Btn_REJECT,
-   Btn_REMOVE,
-   Btn_RESET,
-   Btn_SAVE_CHANGES,
-   Btn_SEARCH,
-   Btn_SEND,
-   Btn_SHOW,
-   Btn_SHOW_MORE_DETAILS,
-   Btn_SHOW_QUESTIONS,
-   Btn_SIMILAR_USERS,
-   Btn_SKIP_THIS_STEP,
-   Btn_UNFOLLOW,
-   Btn_UNLOCK_EDITING,
-   Btn_UPLOAD,
-   Btn_USE_THIS,
-   Btn_VIEW_RESULTS,
-  } Btn_Button_t;
+   Frm_DONT_PUT_FORM,
+   Frm_PUT_FORM,
+  } Frm_PutForm_t;
 
-/*****************************************************************************/
-/****************************** Public prototypes ****************************/
-/*****************************************************************************/
+typedef enum
+  {
+   Frm_DONT_PUT_PAR_LOCATION_IF_NO_SESSION,
+   Frm_PUT_PAR_LOCATION_IF_NO_SESSION,
+  } Frm_PutParLocation_t;
 
-void Btn_PutButton (Btn_Button_t Button,const char *FormId);
-void Btn_PutButtonInline (Btn_Button_t Button);
+#define Frm_NUM_INSIDE 2
+typedef enum
+  {
+   Frm_OUTSIDE_FORM,
+   Frm_INSIDE_FORM,
+  } Frm_Inside_t;
 
 #endif

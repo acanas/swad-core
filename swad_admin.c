@@ -133,7 +133,8 @@ void Adm_ReqAddAdm (Hie_Level_t HieLvl)
 
 			/* End alert */
 			Ale_ShowAlertAndButtonEnd (Actions[HieLvl],NULL,NULL,
-						   Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+						   Usr_PutParOtherUsrCodEncrypted,
+						   Gbl.Usrs.Other.UsrDat.EnUsrCod,
 						   Btn_ENROL);
 			break;
 		    }

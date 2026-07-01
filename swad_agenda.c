@@ -459,7 +459,6 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
    extern const char *Hlp_PROFILE_Agenda_public_agenda;
    extern unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *Txt_Public_agenda_USER;
-   extern const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
    extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    struct Agd_Agenda Agenda;
    Usr_MeOrOther_t MeOrOther;
@@ -508,9 +507,9 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	       break;
 	   }
       else
-	 /* The current language is not my preferred language
-	    ==> change automatically to my language */
-         Ale_ShowAlert (Ale_INFO,Txt_Switching_to_LANGUAGE[Gbl.Usrs.Me.UsrDat.Prefs.Language]);
+	 /***** The current language is not my preferred language
+	        ==> change automatically to my language *****/
+	 Lan_ShowFormToRedirectToMyLanguage (ActLogInUsrAgdLan,Agd_PutParAgd);
      }
   }
 

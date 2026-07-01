@@ -29,7 +29,7 @@
 
 #include "swad_action_list.h"
 #include "swad_exist.h"
-#include "swad_form.h"
+#include "swad_form_type.h"
 #include "swad_parameter_code.h"
 #include "swad_string.h"
 

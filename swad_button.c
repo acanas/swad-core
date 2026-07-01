@@ -30,6 +30,12 @@
 #include "swad_HTML.h"
 
 /*****************************************************************************/
+/************** External global variables from others modules ****************/
+/*****************************************************************************/
+
+extern struct Globals Gbl;
+
+/*****************************************************************************/
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
@@ -77,6 +83,7 @@ static struct
    [Btn_ADD_QUESTIONS		] = {"BT_CREATE"	,&Txt_Add_questions	},
    [Btn_ANSWER			] = {"BT_CREATE"	,&Txt_Answer_VERB	},
    [Btn_CHANGE			] = {"BT_CREATE"	,&Txt_Change		},
+   [Btn_CHANGE_LANGUAGE		] = {"BT_CREATE"	,&Txt_Change		},
    [Btn_CHECK			] = {"BT_CONFIRM"	,&Txt_Check		},
    [Btn_CONFIRM			] = {"BT_CONFIRM"	,&Txt_Confirm		},
    [Btn_CONTINUE		] = {"BT_CONFIRM"	,&Txt_Continue		},
@@ -116,13 +123,16 @@ static struct
 
 void Btn_PutButton (Btn_Button_t Button,const char *FormId)
   {
+   extern const char *Txt_Switch_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
+
    if (Button != Btn_NO_BUTTON)
      {
       HTM_DIV_Begin ("class=\"CM\"");
 	 HTM_BUTTON_Submit_Begin (NULL,FormId,
 				  "class=\"BT_SUBMIT %s\"",
 				  But_Buttons[Button].Class);
-	    HTM_Txt (*But_Buttons[Button].Txt);
+	    HTM_Txt (Button == Btn_CHANGE_LANGUAGE ? Txt_Switch_to_LANGUAGE[Gbl.Usrs.Me.UsrDat.Prefs.Language] :
+						     *But_Buttons[Button].Txt);
 	 HTM_BUTTON_End ();
       HTM_DIV_End ();
      }

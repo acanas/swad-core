@@ -1336,7 +1336,6 @@ void Usr_WelcomeUsr (void)
    extern const char *Txt_NEW_YEAR_GREETING;
    extern const char *Txt_Happy_birthday_X;
    extern const char *Txt_Please_confirm_your_email_address;
-   extern const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
    char URLIconSet[PATH_MAX + 1];
    unsigned CurrentDay   = Dat_GetCurrentDay ();
    unsigned CurrentMonth = Dat_GetCurrentMonth ();
@@ -1372,7 +1371,8 @@ void Usr_WelcomeUsr (void)
 			   "class=\"ICO160x160\"");
 
 		  /* End alert */
-		  Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);
+		  Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
+					     NULL,NULL,Btn_NO_BUTTON);
                  }
 
 	    /***** Alert with button to check email address *****/
@@ -1388,9 +1388,9 @@ void Usr_WelcomeUsr (void)
          Ann_ShowMyAnnouncementsNotMarkedAsSeen ();
         }
       else
-	 /* The current language is not my preferred language
-	    ==> change automatically to my language */
-         Ale_ShowAlert (Ale_INFO,Txt_Switching_to_LANGUAGE[Gbl.Usrs.Me.UsrDat.Prefs.Language]);
+	 /***** The current language is not my preferred language
+	        ==> change automatically to my language *****/
+	 Lan_ShowFormToRedirectToMyLanguage (ActLogInLan,NULL);
      }
   }
 

@@ -167,7 +167,6 @@ const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[1 + Lan_NUM_LANG
 	[Lan_LANGUAGE_PT     ] = "Voc&ecirc; quer mudar suo idioma para portugu&ecirc;s?",
 	[Lan_LANGUAGE_TR     ] = "Dilinizi T&uuml;rk&ccedil;e olarak de&gbreve;i&scedil;tirmek ister misiniz?",
 	};
-/*
 const char *Txt_Switch_to_LANGUAGE[1 + Lan_NUM_LANGUAGES] =
 	{
 	[Lan_LANGUAGE_UNKNOWN] = "",
@@ -182,7 +181,6 @@ const char *Txt_Switch_to_LANGUAGE[1 + Lan_NUM_LANGUAGES] =
 	[Lan_LANGUAGE_PT     ] = "Mudar para portugu&ecirc;s",
 	[Lan_LANGUAGE_TR     ] = "T&uuml;rk&ccedil;e'ye ge&ccedil;",
 	};
-*/
 const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES] =
 	{
 	[Lan_LANGUAGE_UNKNOWN] = "",
@@ -15542,7 +15540,7 @@ const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS] =
 #elif L==4	// es
 	"Pa&iacute;s"
 #elif L==5	// fr
-	"Pays;"
+	"Pays"
 #elif L==6	// gn
 	"Tet&atilde;"
 #elif L==7	// it

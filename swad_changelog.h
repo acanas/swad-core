@@ -639,12 +639,13 @@ TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de t
 
 TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtube.com/shorts/fY6Oax_uJBc?si=G3UHqvSH3yEbxm1B
 */
-#define Chl_PLATFORM_VERSION	"SWAD 25.46 (2026-06-26)"
+#define Chl_PLATFORM_VERSION	"SWAD 25.47 (2026-07-01)"
 #define Chl_CSS_FILE		"swad25.46.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
+	Version 25.47:    Jul 01, 2026	Fixed security problem redirecting to another language. Reported by Joaquín González Luzón. (346984 lines)
 	Version 25.46:    Jun 26, 2026	Changes in timeline. Now users (except system admin) can not see the timeline of all.
-				        Changes in log in form. (346874 lines)
+				        Changes in log in form. (346899 lines)
 	Version 25.45.3:  Jun 10, 2026	New type changed / not changed. (346874 lines)
 	Version 25.45.2:  Apr 30, 2026	Multimedia width in questions changed from 50% to 100%. (346834 lines)
 	Version 25.45.1:  Apr 29, 2026	Adjust action and tab when hierarchy node no longer exists. (346833 lines)

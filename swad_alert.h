@@ -82,7 +82,8 @@ void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,const ch
                              Btn_Button_t Button,
 			     Ale_AlertType_t AlertType,const char *fmt,...);
 void Ale_ShowAlertAndButtonBegin (Ale_AlertType_t AlertType,const char *fmt,...);
-void Ale_ShowAlertAndButtonEnd (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
+void Ale_ShowAlertAndButtonEnd (Act_Action_t NextAction,
+				const char *Anchor,const char *OnSubmit,
                                 void (*FuncPars) (void *Args),void *Args,
                                 Btn_Button_t Button);
 

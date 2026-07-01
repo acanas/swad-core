@@ -268,7 +268,8 @@ static void Pho_PutIconToReqRemOtherUsrPhoto (__attribute__((unused)) void *Args
    /***** Link to request the removal of another user's photo *****/
    if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL) == Exi_EXISTS)
       Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,
-				     Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+				     Usr_PutParOtherUsrCodEncrypted,
+				     Gbl.Usrs.Other.UsrDat.EnUsrCod,
 				     "trash.svg",Ico_RED);
   }
 
@@ -588,8 +589,10 @@ void Pho_ReqRemUsrPhoto (void)
 				       ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM);
 
 		     /* End alert */
-		     Ale_ShowAlertAndButtonEnd (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,NULL,
-						Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+		     Ale_ShowAlertAndButtonEnd (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],
+						NULL,NULL,
+						Usr_PutParOtherUsrCodEncrypted,
+						Gbl.Usrs.Other.UsrDat.EnUsrCod,
 						Btn_REMOVE);
 		     break;
 		  case Exi_DOES_NOT_EXIST:

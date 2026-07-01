@@ -31,40 +31,10 @@
 
 #include "swad_action_list.h"
 #include "swad_button.h"
-#include "swad_constant.h"
+// #include "swad_constant.h"
 #include "swad_cryptography.h"
+#include "swad_language.h"
 #include "swad_parameter_code.h"
-
-/*****************************************************************************/
-/************************** Public constants and types ***********************/
-/*****************************************************************************/
-
-#define Frm_MAX_BYTES_ID (32 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 10)
-
-#define Frm_MAX_BYTES_PARAM_ACTION	256
-#define Frm_MAX_BYTES_PARAM_SESSION	(256 + Cns_BYTES_SESSION_ID)
-#define Frm_MAX_BYTES_PARAM_LOCATION	256
-#define Frm_MAX_BYTES_PARAMS_STR	(Frm_MAX_BYTES_PARAM_ACTION + Frm_MAX_BYTES_PARAM_SESSION + Frm_MAX_BYTES_PARAM_LOCATION)
-
-#define Frm_NUM_PUT_FORM 2
-typedef enum
-  {
-   Frm_DONT_PUT_FORM,
-   Frm_PUT_FORM,
-  } Frm_PutForm_t;
-
-typedef enum
-  {
-   Frm_DONT_PUT_PAR_LOCATION_IF_NO_SESSION,
-   Frm_PUT_PAR_LOCATION_IF_NO_SESSION,
-  } Frm_PutParLocation_t;
-
-#define Frm_NUM_INSIDE 2
-typedef enum
-  {
-   Frm_OUTSIDE_FORM,
-   Frm_INSIDE_FORM,
-  } Frm_Inside_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -76,9 +46,11 @@ void Frm_BeginFormGoTo (Act_Action_t NextAction);
 void Frm_BeginForm (Act_Action_t NextAction);
 void Frm_BeginFormAnchor (Act_Action_t NextAction,const char *Anchor);
 void Frm_BeginFormOnSubmit (Act_Action_t NextAction,const char *OnSubmit);
-void Frm_BeginFormAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit);
+void Frm_BeginFormAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,
+				  const char *OnSubmit);
 void Frm_BeginFormId (Act_Action_t NextAction,const char *Id);
 void Frm_BeginFormIdAnchor (Act_Action_t NextAction,const char *Id,const char *Anchor);
+
 void Frm_BeginFormNoAction (void);
 void Frm_SetParsForm (char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1],
 		      Act_Action_t NextAction,

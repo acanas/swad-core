@@ -41,6 +41,12 @@
 #include "swad_HTML.h"
 
 /*****************************************************************************/
+/************** External global variables from others modules ****************/
+/*****************************************************************************/
+
+extern struct Globals Gbl;
+
+/*****************************************************************************/
 /************************* Private global variables **************************/
 /*****************************************************************************/
 
@@ -484,7 +490,8 @@ static void Ale_ShowFixAlertAndButtonBegin (Ale_AlertType_t AlertType,const char
 /*************** Show the second part of an alert with a button **************/
 /*****************************************************************************/
 
-void Ale_ShowAlertAndButtonEnd (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
+void Ale_ShowAlertAndButtonEnd (Act_Action_t NextAction,
+				const char *Anchor,const char *OnSubmit,
                                 void (*FuncPars) (void *Args),void *Args,
                                 Btn_Button_t Button)
   {

@@ -448,7 +448,8 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
 
       /***** Begin form to update the students listed
 	     depending on the groups selected *****/
-      Frm_BeginFormAnchorOnSubmit (NextAction,Usr_USER_LIST_SECTION_ID,OnSubmit);
+      Frm_BeginFormAnchorOnSubmit (NextAction,
+				   Usr_USER_LIST_SECTION_ID,OnSubmit);
 	 Set_PutParsPrefsAboutUsrList ();
 	 if (FuncPars)
 	    FuncPars (Args);

@@ -2304,7 +2304,8 @@ void Enr_AskIfRejectSignUp (void)
 
 		  /* End alert */
 		  Ale_ShowAlertAndButtonEnd (ActRejSignUp,NULL,NULL,
-					     Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+					     Usr_PutParOtherUsrCodEncrypted,
+					     Gbl.Usrs.Other.UsrDat.EnUsrCod,
 					     Btn_REJECT);
 		 }
 	       else
