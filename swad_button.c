@@ -131,7 +131,7 @@ void Btn_PutButton (Btn_Button_t Button,const char *FormId)
 	 HTM_BUTTON_Submit_Begin (NULL,FormId,
 				  "class=\"BT_SUBMIT %s\"",
 				  But_Buttons[Button].Class);
-	    HTM_Txt (Button == Btn_CHANGE_LANGUAGE ? Txt_Switch_to_LANGUAGE[Gbl.Usrs.Me.UsrDat.Prefs.Language] :
+	    HTM_Txt (Button == Btn_CHANGE_LANGUAGE ? Txt_Switch_to_LANGUAGE[Gbl.Prefs.Language] :
 						     *But_Buttons[Button].Txt);
 	 HTM_BUTTON_End ();
       HTM_DIV_End ();
