@@ -3064,25 +3064,26 @@ mysql> DESCRIBE ses_sessions;
 | Field          | Type          | Null | Key | Default | Extra |
 +----------------+---------------+------+-----+---------+-------+
 | SessionId      | char(43)      | NO   | PRI | NULL    |       |
-| UsrCod         | int(11)       | NO   | MUL | NULL    |       |
+| UsrCod         | int           | NO   | MUL | NULL    |       |
 | Password       | char(86)      | NO   |     | NULL    |       |
-| Role           | tinyint(4)    | NO   |     | 0       |       |
-| CtyCod         | int(11)       | NO   |     | -1      |       |
-| InsCod         | int(11)       | NO   |     | -1      |       |
-| CtrCod         | int(11)       | NO   |     | -1      |       |
-| DegCod         | int(11)       | NO   |     | -1      |       |
-| CrsCod         | int(11)       | NO   |     | -1      |       |
+| Role           | tinyint       | NO   |     | 0       |       |
+| CtyCod         | int           | NO   |     | -1      |       |
+| InsCod         | int           | NO   |     | -1      |       |
+| CtrCod         | int           | NO   |     | -1      |       |
+| DegCod         | int           | NO   |     | -1      |       |
+| CrsCod         | int           | NO   |     | -1      |       |
 | LastTime       | datetime      | NO   |     | NULL    |       |
 | LastRefresh    | datetime      | NO   |     | NULL    |       |
-| FirstPubCod    | bigint(20)    | NO   |     | 0       |       |
-| LastPubCod     | bigint(20)    | NO   |     | 0       |       |
-| LastPageMsgRcv | int(11)       | NO   |     | 1       |       |
-| LastPageMsgSnt | int(11)       | NO   |     | 1       |       |
-| WhatToSearch   | tinyint(4)    | NO   |     | 0       |       |
+| TimelineUsrs   | tinyint       | NO   |     | 0       |       |
+| FirstPubCod    | bigint        | NO   |     | 0       |       |
+| LastPubCod     | bigint        | NO   |     | 0       |       |
+| LastPageMsgRcv | int           | NO   |     | 1       |       |
+| LastPageMsgSnt | int           | NO   |     | 1       |       |
+| WhatToSearch   | tinyint       | NO   |     | 0       |       |
 | SearchStr      | varchar(2047) | NO   |     |         |       |
-| SideCols       | tinyint(4)    | NO   |     | 3       |       |
+| SideCols       | tinyint       | NO   |     | 3       |       |
 +----------------+---------------+------+-----+---------+-------+
-18 rows in set (0,00 sec)
+19 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS ses_sessions ("
 			"SessionId CHAR(43) NOT NULL,"				// Cns_BYTES_SESSION_ID
@@ -3096,6 +3097,7 @@ mysql> DESCRIBE ses_sessions;
 			"CrsCod INT NOT NULL DEFAULT -1,"
 			"LastTime DATETIME NOT NULL,"
 			"LastRefresh DATETIME NOT NULL,"
+			"TimelineUsrs TINYINT NOT NULL DEFAULT 0,"
 			"FirstPubCod BIGINT NOT NULL DEFAULT 0,"
 			"LastPubCod BIGINT NOT NULL DEFAULT 0,"
 			"LastPageMsgRcv INT NOT NULL DEFAULT 1,"
@@ -4130,17 +4132,16 @@ mysql> DESCRIBE usr_last;
 +--------------+-------------------------------------------------+------+-----+---------+-------+
 | Field        | Type                                            | Null | Key | Default | Extra |
 +--------------+-------------------------------------------------+------+-----+---------+-------+
-| UsrCod       | int(11)                                         | NO   | PRI | NULL    |       |
-| WhatToSearch | tinyint(4)                                      | NO   |     | 0       |       |
+| UsrCod       | int                                             | NO   | PRI | NULL    |       |
+| WhatToSearch | tinyint                                         | NO   |     | 0       |       |
 | LastSco      | enum('Unk','Sys','Cty','Ins','Ctr','Deg','Crs') | NO   |     | Unk     |       |
-| LastCod      | int(11)                                         | NO   |     | -1      |       |
-| LastAct      | int(11)                                         | NO   |     | -1      |       |
-| LastRole     | tinyint(4)                                      | NO   |     | 0       |       |
+| LastCod      | int                                             | NO   |     | -1      |       |
+| LastAct      | int                                             | NO   |     | -1      |       |
+| LastRole     | tinyint                                         | NO   |     | 0       |       |
 | LastTime     | datetime                                        | NO   | MUL | NULL    |       |
 | LastAccNotif | datetime                                        | NO   |     | NULL    |       |
-| TimelineUsrs | tinyint(4)                                      | NO   |     | 0       |       |
 +--------------+-------------------------------------------------+------+-----+---------+-------+
-9 rows in set (0.01 sec)
+8 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_last ("
 			"UsrCod INT NOT NULL,"
@@ -4151,7 +4152,6 @@ mysql> DESCRIBE usr_last;
 	 		"LastRole TINYINT NOT NULL DEFAULT 0,"
 			"LastTime DATETIME NOT NULL,"
 			"LastAccNotif DATETIME NOT NULL,"
-			"TimelineUsrs TINYINT NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(UsrCod),"
 		   "INDEX(LastTime)"
 		   ") ENGINE=MyISAM");

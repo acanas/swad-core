@@ -639,10 +639,16 @@ TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de t
 
 TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtube.com/shorts/fY6Oax_uJBc?si=G3UHqvSH3yEbxm1B
 */
-#define Chl_PLATFORM_VERSION	"SWAD 25.47.1 (2026-07-06)"
+#define Chl_PLATFORM_VERSION	"SWAD 25.48 (2026-07-10)"
 #define Chl_CSS_FILE		"swad25.46.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
+	Version 25.48:    Jul 10, 2026	Changes in timeline. Which users to view is stored in the session rather than in the user's preferences. Now users can see the timeline of all. (346990 lines)
+					3 changes necessary in database:
+ALTER TABLE ses_sessions ADD COLUMN TimelineUsrs TINYINT NOT NULL DEFAULT 0 AFTER LastRefresh;
+UPDATE ses_sessions,usr_last SET ses_sessions.TimelineUsrs=usr_last.TimelineUsrs WHERE ses_sessions.UsrCod=usr_last.UsrCod;
+ALTER TABLE usr_last DROP COLUMN TimelineUsrs;
+
 	Version 25.47.1:  Jul 06, 2026	Fixed minor bug changing to another language. (346985 lines)
 	Version 25.47:    Jul 01, 2026	Fixed security problem redirecting to another language. Reported by Joaquín González Luzón. (346984 lines)
 	Version 25.46:    Jun 26, 2026	Changes in timeline. Now users (except system admin) can not see the timeline of all.

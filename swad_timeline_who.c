@@ -43,14 +43,14 @@
 static unsigned TmlWho_Allowed[Rol_NUM_ROLES] =
   {
    [Rol_UNK	] = 0,
-   [Rol_GST	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED,
-   [Rol_USR	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED,
-   [Rol_STD	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED,
-   [Rol_NET	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED,
-   [Rol_TCH	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED,
-   [Rol_DEG_ADM	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED,
-   [Rol_CTR_ADM	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED,
-   [Rol_INS_ADM	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED,
+   [Rol_GST	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED | 1 << Usr_WHO_ALL,
+   [Rol_USR	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED | 1 << Usr_WHO_ALL,
+   [Rol_STD	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED | 1 << Usr_WHO_ALL,
+   [Rol_NET	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED | 1 << Usr_WHO_ALL,
+   [Rol_TCH	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED | 1 << Usr_WHO_ALL,
+   [Rol_DEG_ADM	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED | 1 << Usr_WHO_ALL,
+   [Rol_CTR_ADM	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED | 1 << Usr_WHO_ALL,
+   [Rol_INS_ADM	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED | 1 << Usr_WHO_ALL,
    [Rol_SYS_ADM	] = 1 << Usr_WHO_ME | 1 << Usr_WHO_FOLLOWED | 1 << Usr_WHO_ALL,
   };
 

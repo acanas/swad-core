@@ -1500,6 +1500,7 @@ void Usr_DB_InsertMyLastData (void)
 		   (unsigned) Gbl.Usrs.Me.Role.Logged,
 		   (long) (time_t) 0);	// The user never accessed to notifications
   }
+
 /*****************************************************************************/
 /********* Update my last accessed course, tab and time in database **********/
 /*****************************************************************************/

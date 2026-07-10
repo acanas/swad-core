@@ -80,9 +80,9 @@ unsigned Tml_DB_GetWho (MYSQL_RES **mysql_res)
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get which timeline users",
 		   "SELECT TimelineUsrs"	// row[0]
-		    " FROM usr_last"
-		   " WHERE UsrCod=%ld",
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+		    " FROM ses_sessions"
+		   " WHERE SessionId='%s'",
+		   Gbl.Session.Id);
   }
 
 /*****************************************************************************/
@@ -92,11 +92,11 @@ unsigned Tml_DB_GetWho (MYSQL_RES **mysql_res)
 void Tml_DB_UpdateWho (Usr_Who_t Who)
   {
    DB_QueryUPDATE ("can not update which timeline users",
-		   "UPDATE usr_last"
+		   "UPDATE ses_sessions"
 		     " SET TimelineUsrs=%u"
-		   " WHERE UsrCod=%ld",
+		   " WHERE SessionId='%s'",
 		   (unsigned) Who,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Gbl.Session.Id);
   }
 
 /*****************************************************************************/
