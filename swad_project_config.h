@@ -60,11 +60,12 @@ struct PrgCfg_ListRubCods
 /*****************************************************************************/
 
 void PrjCfg_GetConfig (struct PrjCfg_Config *Config);
-
 Usr_Can_t PrjCfg_CheckIfICanConfig (void);
 void PrjCfg_ShowFormConfig (void);
-PrjCfg_RubricType_t PrjCfg_GetRubricFromString (const char *Str);
+
 void PrjCfg_ChangeNETCanCreate (void);
+
+PrjCfg_RubricType_t PrjCfg_GetRubricFromString (const char *Str);
 void PrjCfg_ChangeRubricsOfType (void);
 
 #endif

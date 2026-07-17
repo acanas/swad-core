@@ -1511,7 +1511,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActReqSelAllGrp	] = { 116, 0,TabUsr,NULL			,Grp_ShowLstGrpsToChgMyGrps	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActReqSelOneGrpTyp	] = {1995, 0,TabUsr,NULL			,Grp_ShowLstGrpsToChgMyGrps	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActChgGrp		] = { 118, 0,TabUsr,NULL			,Grp_ChangeMyGrpsAndShowChanges	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActReqEdiGrp	] = { 108, 0,TabUsr,NULL			,Grp_ReqEditGroups		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiGrp		] = { 108, 0,TabUsr,NULL			,Grp_ReqEditGroups		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActNewGrpTyp	] = { 174, 0,TabUsr,NULL			,Grp_ReceiveNewGrpTyp		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActReqRemGrpTyp	] = { 236, 0,TabUsr,NULL			,Grp_ReqRemGroupType		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRemGrpTyp	] = { 237, 0,TabUsr,NULL			,Grp_RemoveGroupType		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -2120,7 +2120,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActEdiOneTstQst,	// #105
 	ActChgMaxStdGrp,	// #106
 	ActReqRemGrp,		// #107
-	ActReqEdiGrp,		// #108
+	ActEdiGrp,		// #108
 	ActCfgFAQ,		// #109
 	ActRcvCfe,		// #110
 	ActPrnRecSevStd,	// #111

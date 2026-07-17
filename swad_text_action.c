@@ -28375,27 +28375,27 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change my groups"	// Çeviri lazim!
 #endif
 	,
-	[ActReqEdiGrp] =
+	[ActEdiGrp] =
 #if   L==1	// ca
-	"Request edition of groups"		// Necessita traducció
+	"Editar grups"
 #elif L==2	// de
-	"Request edition of groups"		// Need Übersetzung
+	"Gruppen bearbeiten"
 #elif L==3	// en
-	"Request edition of groups"
+	"Edit groups"
 #elif L==4	// es
-	"Solicitar edici&oacute;n de grupos"
+	"Editar grupos"
 #elif L==5	// fr
-	"Request edition of groups"		// Besoin de traduction
+	"Modifier les groupes"
 #elif L==6	// gn
-	"Solicitar edici&oacute;n de grupos"	// Okoteve traducción
+	"Omohenda atyku&eacute;ra"
 #elif L==7	// it
-	"Request edition of groups"		// Bisogno di traduzione
+	"Modifica gruppi"
 #elif L==8	// pl
-	"Request edition of groups"		// Potrzebujesz tlumaczenie
+	"Edytuj grupy"
 #elif L==9	// pt
-	"Request edition of groups"		// Precisa de tradução
+	"Editar grupos"
 #elif L==10	// tr
-	"Request edition of groups"		// Çeviri lazim!
+	"Gruplar&inodot; d&uuml;zenle"
 #endif
 	,
 	[ActNewGrpTyp] =

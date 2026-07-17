@@ -122,8 +122,12 @@ void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,
                                             CloOpe_ClosedOrOpen_t ClosedOrOpen);
 void Ico_PutContextualIconToShowResults (Act_Action_t NextAction,const char *Anchor,
                                          void (*FuncPars) (void *Args),void *Args);
+void Ico_PutContextualIconToViewAndSelectMyGroups (Act_Action_t NextAction,
+                                                   void (*FuncPars) (void *Args),void *Args);
 void Ico_PutContextualIconToShowAttendanceList (Act_Action_t NextAction,
                                                 void (*FuncPars) (void *Args),void *Args);
+void Ico_PutContextualIconToViewAttEvents (Act_Action_t NextAction,
+                                           void (*FuncPars) (void *Args),void *Args);
 void Ico_PutContextualIconToZIP (Act_Action_t NextAction,
                                  void (*FuncPars) (void *Args),void *Args);
 

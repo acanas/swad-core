@@ -52,7 +52,13 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+//-----------------------------------------------------------------------------
+
 static void PrjCfg_ShowFormNETCanCreate (const struct PrjCfg_Config *Config);
+static Usr_Can_t PrjCfg_GetIfNETCanCreateFromForm (void);
+
+//-----------------------------------------------------------------------------
+
 static void PrjCfg_ShowFormsRubrics (void);
 static void PrjCfg_ShowFormsRubricsOfType (const struct Rub_Rubrics *Rubrics,
                                            PrjCfg_RubricType_t RubricType);
@@ -61,7 +67,6 @@ static void PrjCfg_GetConfigDataFromRow (MYSQL_RES *mysql_res,
 				         struct PrjCfg_Config *Config);
 static void PrjCfg_GetListRubCods (const struct Rub_Rubrics *Rubrics,
                                    struct PrgCfg_ListRubCods *ListRubCods);
-static Usr_Can_t PrjCfg_GetIfNETCanCreateFromForm (void);
 
 /*****************************************************************************/
 /************** Get configuration of projects for current course *************/
@@ -129,6 +134,54 @@ void PrjCfg_ShowFormConfig (void)
 
    /***** End box *****/
    Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/****** Show form to edit if non-editing teachers create new projects ********/
+/*****************************************************************************/
+
+static void PrjCfg_ShowFormNETCanCreate (const struct PrjCfg_Config *Config)
+  {
+   extern const char *Txt_Non_editing_teachers_can_create_new_projects;
+
+   HTM_LABEL_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
+      HTM_INPUT_CHECKBOX ("NETCanCreate",
+			  (Config->NETCanCreate == Usr_CAN ? HTM_CHECKED :
+							     HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
+			  "id=\"NETCanCreate\" value=\"Y\"");
+      HTM_Txt (Txt_Non_editing_teachers_can_create_new_projects);
+   HTM_LABEL_End ();
+  }
+
+/*****************************************************************************/
+/********* Change whether non-editing teachers can create projects ***********/
+/*****************************************************************************/
+
+void PrjCfg_ChangeNETCanCreate (void)
+  {
+   struct Prj_Projects Projects;
+
+   /***** Reset projects *****/
+   Prj_ResetPrjsAndReadConfig (&Projects);
+
+   /***** Get non-editing teachers can create new projects or not *****/
+   Projects.Config.NETCanCreate = PrjCfg_GetIfNETCanCreateFromForm ();
+
+   /***** Update database *****/
+   Prj_DB_UpdateNETCanCreate (&Projects);
+
+   /***** Show again the form to configure projects *****/
+   PrjCfg_ShowFormConfig ();
+  }
+
+/*****************************************************************************/
+/****** Get if projects are creatable by non-editing teachers from form *******/
+/*****************************************************************************/
+
+static Usr_Can_t PrjCfg_GetIfNETCanCreateFromForm (void)
+  {
+   return Par_GetParBool ("NETCanCreate") ? Usr_CAN :
+					    Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -296,44 +349,6 @@ PrjCfg_RubricType_t PrjCfg_GetRubricFromString (const char *Str)
   }
 
 /*****************************************************************************/
-/****** Show form to edit if non-editing teachers create new projects ********/
-/*****************************************************************************/
-
-static void PrjCfg_ShowFormNETCanCreate (const struct PrjCfg_Config *Config)
-  {
-   extern const char *Txt_Non_editing_teachers_can_create_new_projects;
-
-   HTM_LABEL_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-      HTM_INPUT_CHECKBOX ("NETCanCreate",
-			  (Config->NETCanCreate == Usr_CAN ? HTM_CHECKED :
-							     HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
-			  "id=\"NETCanCreate\" value=\"Y\"");
-      HTM_Txt (Txt_Non_editing_teachers_can_create_new_projects);
-   HTM_LABEL_End ();
-  }
-
-/*****************************************************************************/
-/********* Change whether non-editing teachers can create projects ***********/
-/*****************************************************************************/
-
-void PrjCfg_ChangeNETCanCreate (void)
-  {
-   struct Prj_Projects Projects;
-
-   /***** Reset projects *****/
-   Prj_ResetPrjsAndReadConfig (&Projects);
-
-   /***** Get non-editing teachers can create new projects or not *****/
-   Projects.Config.NETCanCreate = PrjCfg_GetIfNETCanCreateFromForm ();
-
-   /***** Update database *****/
-   Prj_DB_UpdateNETCanCreate (&Projects);
-
-   /***** Show again the form to configure projects *****/
-   PrjCfg_ShowFormConfig ();
-  }
-
-/*****************************************************************************/
 /************************ Change rubrics of a type ***************************/
 /*****************************************************************************/
 
@@ -417,14 +432,4 @@ static void PrjCfg_GetListRubCods (const struct Rub_Rubrics *Rubrics,
       /***** Free memory used for the list of groups to show *****/
       free (ParLstRubCods);
      }
-  }
-
-/*****************************************************************************/
-/****** Get if projects are creatable by non-editing teachers from form *******/
-/*****************************************************************************/
-
-static Usr_Can_t PrjCfg_GetIfNETCanCreateFromForm (void)
-  {
-   return Par_GetParBool ("NETCanCreate") ? Usr_CAN :
-					    Usr_CAN_NOT;
   }

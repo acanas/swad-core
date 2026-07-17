@@ -1434,8 +1434,8 @@ void Prj_ShowOneProject (void)
    /***** Get project data,
           then show project and (if possible) its file browser *****/
    Prj_AllocMemProject (&Projects.Prj);
-   Prj_GetProjectDataByCod (&Projects.Prj);
-   Prj_ShowBoxWithOneProject (&Projects);
+      Prj_GetProjectDataByCod (&Projects.Prj);
+      Prj_ShowBoxWithOneProject (&Projects);
    Prj_FreeMemProject (&Projects.Prj);
 
    /***** Show projects again *****/
@@ -4740,8 +4740,6 @@ static Usr_Can_t Prj_CheckIfICanViewRubric (long PrjCod,PrjCfg_RubricType_t Whic
       case Rol_NET:
 	 switch (WhichRubric)
 	   {
-	    case PrjCfg_RUBRIC_ERR:
-	       return Usr_CAN_NOT;
 	    case PrjCfg_RUBRIC_TUT:
 	    case PrjCfg_RUBRIC_EVL:
 	       return (Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT |			// I am a tutor...
@@ -4750,6 +4748,9 @@ static Usr_Can_t Prj_CheckIfICanViewRubric (long PrjCod,PrjCfg_RubricType_t Whic
 	    case PrjCfg_RUBRIC_GBL:
 	       return Prj_GetMyRolesInProject (PrjCod) ? Usr_CAN :	// I am a member
 							 Usr_CAN_NOT;
+	    case PrjCfg_RUBRIC_ERR:
+	    default:
+	       return Usr_CAN_NOT;
 	   }
          return Usr_CAN_NOT;
       case Rol_TCH:	// Editing teachers in a course can view all rubrics
@@ -4768,15 +4769,15 @@ static Usr_Can_t Prj_CheckIfICanFillRubric (long PrjCod,PrjCfg_RubricType_t Whic
       case Rol_NET:
 	 switch (WhichRubric)
 	   {
-	    case PrjCfg_RUBRIC_ERR:
-	       return Usr_CAN_NOT;
 	    case PrjCfg_RUBRIC_TUT:
 	       return (Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT)) ? Usr_CAN :	// I am a tutor
 										 Usr_CAN_NOT;
 	    case PrjCfg_RUBRIC_EVL:
 	       return (Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_EVL)) ? Usr_CAN :	// Am I an evaluator
 										 Usr_CAN_NOT;
+	    case PrjCfg_RUBRIC_ERR:
 	    case PrjCfg_RUBRIC_GBL:
+	    default:
 	       return Usr_CAN_NOT;
 	   }
          return Usr_CAN_NOT;

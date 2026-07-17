@@ -117,7 +117,7 @@ static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod);
 
 static void Grp_ListGroupTypesForEdition (void);
 static void Grp_PutIconsEditingGroupTypes (__attribute__((unused)) void *Args);
-static void Grp_PutIconToViewGroups (void);
+static void Grp_PutIconToViewAndSelectMyGroups (void);
 static void Grp_WriteHeadingGroupTypes (void);
 
 static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms);
@@ -420,7 +420,8 @@ static void Grp_EditGroups (const struct GroupType *GrpTyp,
 
 static void Grp_PutIconsEditingGroups (__attribute__((unused)) void *Args)
   {
-   Grp_PutIconToViewGroups ();
+   /***** Icon to view and select my groups *****/
+   Grp_PutIconToViewAndSelectMyGroups ();
   }
 
 /*****************************************************************************/
@@ -1511,13 +1512,17 @@ static void Grp_ListGroupTypesForEdition (void)
 
 static void Grp_PutIconsEditingGroupTypes (__attribute__((unused)) void *Args)
   {
-   /***** Put icon to view groups *****/
-   Grp_PutIconToViewGroups ();
+   /***** Icon to view and select my groups *****/
+   Grp_PutIconToViewAndSelectMyGroups ();
   }
 
-static void Grp_PutIconToViewGroups (void)
+/*****************************************************************************/
+/****************** Put icon to view and select my groups ********************/
+/*****************************************************************************/
+
+static void Grp_PutIconToViewAndSelectMyGroups (void)
   {
-   Ico_PutContextualIconToView (ActReqSelAllGrp,NULL,NULL,NULL);
+   Ico_PutContextualIconToViewAndSelectMyGroups (ActReqSelAllGrp,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -2033,7 +2038,10 @@ static void Grp_PutIconsMyGroups (__attribute__((unused)) void *Args)
 
    /***** Icon to edit groups *****/
    if (ICanEdit == Usr_CAN)
-      Ico_PutContextualIconToEdit (ActReqEdiGrp,NULL,NULL,NULL);
+      Ico_PutContextualIconToEdit (ActEdiGrp,NULL,NULL,NULL);
+
+   /***** Icon to view and select my groups *****/
+   Grp_PutIconToViewAndSelectMyGroups ();
 
    /***** Link to get resource link *****/
    switch (Gbl.Action.Act)

@@ -56,25 +56,27 @@ void RubRsc_GetLinkToRubric (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
+
+   /***** Allocate memory for rubric *****/
    Rub_RubricConstructor (&Rubrics.Rubric);
 
-   /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,Rub_DONT_CHECK_RUB_COD);
+      /***** Get parameters *****/
+      Rub_GetPars (&Rubrics,Rub_DONT_CHECK_RUB_COD);
 
-   /***** Get rubric data *****/
-   if (Rubrics.Rubric.RubCod > 0)
-      Rub_GetRubricDataByCod (&Rubrics.Rubric);
+      /***** Get rubric data *****/
+      if (Rubrics.Rubric.RubCod > 0)
+	 Rub_GetRubricDataByCod (&Rubrics.Rubric);
 
-   /***** Copy link to rubric into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Rsc_RUBRIC,Rubrics.Rubric.RubCod);
+      /***** Copy link to rubric into resource clipboard *****/
+      Rsc_DB_CopyToClipboard (Rsc_RUBRIC,Rubrics.Rubric.RubCod);
 
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  Rubrics.Rubric.RubCod > 0 ? Rubrics.Rubric.Title :
-   					      Txt_Rubrics);
+      /***** Write success message *****/
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
+		     Rubrics.Rubric.RubCod > 0 ? Rubrics.Rubric.Title :
+						 Txt_Rubrics);
 
-   /***** Show rubrics again *****/
-   Rub_ListAllRubrics (&Rubrics);
+      /***** Show rubrics again *****/
+      Rub_ListAllRubrics (&Rubrics);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);

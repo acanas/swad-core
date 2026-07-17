@@ -249,29 +249,31 @@ void RubCri_ReceiveCriterion (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_RubricConstructor (&Rubrics.Rubric);
    RubCri_ResetCriterion (&Rubrics.Criterion);
 
-   /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,Rub_CHECK_RUB_COD);
-   Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
+   /***** Allocate memory for rubric *****/
+   Rub_RubricConstructor (&Rubrics.Rubric);
 
-   /***** Get rubric data from database *****/
-   Rub_GetRubricDataByCod (&Rubrics.Rubric);
+      /***** Get parameters *****/
+      Rub_GetPars (&Rubrics,Rub_CHECK_RUB_COD);
+      Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
 
-   /***** Check if rubric is editable *****/
-   if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
-      Err_NoPermissionExit ();
+      /***** Get rubric data from database *****/
+      Rub_GetRubricDataByCod (&Rubrics.Rubric);
 
-   /***** If I can edit rubrics ==> receive criterion from form *****/
-   RubCri_ReceiveCriterionFieldsFromForm (&Rubrics.Criterion);
+      /***** Check if rubric is editable *****/
+      if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
+	 Err_NoPermissionExit ();
 
-   if (RubCri_CheckCriterionTitleReceivedFromForm (&Rubrics.Criterion,
-						   Rubrics.Criterion.Title) == Err_SUCCESS)
-      RubCri_CreateCriterion (&Rubrics.Criterion);	// Add new criterion to database
+      /***** If I can edit rubrics ==> receive criterion from form *****/
+      RubCri_ReceiveCriterionFieldsFromForm (&Rubrics.Criterion);
 
-   /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
+      if (RubCri_CheckCriterionTitleReceivedFromForm (&Rubrics.Criterion,
+						      Rubrics.Criterion.Title) == Err_SUCCESS)
+	 RubCri_CreateCriterion (&Rubrics.Criterion);	// Add new criterion to database
+
+      /***** Show current rubric and its criteria *****/
+      Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -349,31 +351,33 @@ void RubCri_ChangeTitle (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_RubricConstructor (&Rubrics.Rubric);
    RubCri_ResetCriterion (&Rubrics.Criterion);
 
-   /***** Get and check parameters *****/
-   RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
+   /***** Allocate memory for rubric *****/
+   Rub_RubricConstructor (&Rubrics.Rubric);
 
-   /***** Check if rubric is editable *****/
-   if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
-     Err_NoPermissionExit ();
+      /***** Get and check parameters *****/
+      RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
-   /***** Receive new title from form *****/
-   Par_GetParText ("Title",NewTitle,RubCri_MAX_BYTES_TITLE);
+      /***** Check if rubric is editable *****/
+      if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
+	Err_NoPermissionExit ();
 
-   /***** Check if title should be changed *****/
-   if (RubCri_CheckCriterionTitleReceivedFromForm (&Rubrics.Criterion,
-						   NewTitle) == Err_SUCCESS)
-     {
-      /* Update title and database table */
-      Str_Copy (Rubrics.Criterion.Title,NewTitle,
-	        sizeof (Rubrics.Criterion.Title) - 1);
-      Rub_DB_UpdateCriterionTitle (&Rubrics.Criterion);
-     }
+      /***** Receive new title from form *****/
+      Par_GetParText ("Title",NewTitle,RubCri_MAX_BYTES_TITLE);
 
-   /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
+      /***** Check if title should be changed *****/
+      if (RubCri_CheckCriterionTitleReceivedFromForm (&Rubrics.Criterion,
+						      NewTitle) == Err_SUCCESS)
+	{
+	 /* Update title and database table */
+	 Str_Copy (Rubrics.Criterion.Title,NewTitle,
+		   sizeof (Rubrics.Criterion.Title) - 1);
+	 Rub_DB_UpdateCriterionTitle (&Rubrics.Criterion);
+	}
+
+      /***** Show current rubric and its criteria *****/
+      Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -400,33 +404,35 @@ static void RubCri_ChangeValueCriterion (RubCri_ValueRange_t ValueRange)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_RubricConstructor (&Rubrics.Rubric);
    RubCri_ResetCriterion (&Rubrics.Criterion);
 
-   /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,Rub_CHECK_RUB_COD);
-   Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
-   Rubrics.Criterion.CriCod = ParCod_GetAndCheckPar (ParCod_Cri);
+   /***** Allocate memory for rubric *****/
+   Rub_RubricConstructor (&Rubrics.Rubric);
 
-   /***** Get and check parameters *****/
-   RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
+      /***** Get parameters *****/
+      Rub_GetPars (&Rubrics,Rub_CHECK_RUB_COD);
+      Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
+      Rubrics.Criterion.CriCod = ParCod_GetAndCheckPar (ParCod_Cri);
 
-   /***** Check if rubric is editable *****/
-   if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
-      Err_NoPermissionExit ();
+      /***** Get and check parameters *****/
+      RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
-   /***** Receive new value from form *****/
-   Par_GetParText (RubCri_ParValues[ValueRange],ValueStr,sizeof (ValueStr) - 1);
-   if (Str_GetDoubleFromStr (ValueStr,
-			     &Rubrics.Criterion.Values[ValueRange]) == Err_ERROR)
-      Rubrics.Criterion.Values[ValueRange] = 0.0;
+      /***** Check if rubric is editable *****/
+      if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
+	 Err_NoPermissionExit ();
 
-   /***** Change value *****/
-   /* Update the table changing old value by new value */
-   Rub_DB_UpdateCriterionValue (&Rubrics.Criterion,ValueRange);
+      /***** Receive new value from form *****/
+      Par_GetParText (RubCri_ParValues[ValueRange],ValueStr,sizeof (ValueStr) - 1);
+      if (Str_GetDoubleFromStr (ValueStr,
+				&Rubrics.Criterion.Values[ValueRange]) == Err_ERROR)
+	 Rubrics.Criterion.Values[ValueRange] = 0.0;
 
-   /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
+      /***** Change value *****/
+      /* Update the table changing old value by new value */
+      Rub_DB_UpdateCriterionValue (&Rubrics.Criterion,ValueRange);
+
+      /***** Show current rubric and its criteria *****/
+      Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -443,32 +449,34 @@ void RubCri_ChangeWeight (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_RubricConstructor (&Rubrics.Rubric);
    RubCri_ResetCriterion (&Rubrics.Criterion);
 
-   /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,Rub_CHECK_RUB_COD);
-   Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
-   Rubrics.Criterion.CriCod = ParCod_GetAndCheckPar (ParCod_Cri);
+   /***** Allocate memory for rubric *****/
+   Rub_RubricConstructor (&Rubrics.Rubric);
 
-   /***** Get and check parameters *****/
-   RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
+      /***** Get parameters *****/
+      Rub_GetPars (&Rubrics,Rub_CHECK_RUB_COD);
+      Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
+      Rubrics.Criterion.CriCod = ParCod_GetAndCheckPar (ParCod_Cri);
 
-   /***** Check if rubric is editable *****/
-   if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
-      Err_NoPermissionExit ();
+      /***** Get and check parameters *****/
+      RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
-   /***** Receive new weight from form *****/
-   Par_GetParText ("Weight",WeightStr,sizeof (WeightStr) - 1);
-   if (Str_GetDoubleFromStr (WeightStr,&Rubrics.Criterion.Weight) == Err_ERROR)
-      Rubrics.Criterion.Weight = 0.0;
+      /***** Check if rubric is editable *****/
+      if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
+	 Err_NoPermissionExit ();
 
-   /***** Change value *****/
-   /* Update the table changing old weight by new weight */
-   Rub_DB_UpdateCriterionWeight (&Rubrics.Criterion);
+      /***** Receive new weight from form *****/
+      Par_GetParText ("Weight",WeightStr,sizeof (WeightStr) - 1);
+      if (Str_GetDoubleFromStr (WeightStr,&Rubrics.Criterion.Weight) == Err_ERROR)
+	 Rubrics.Criterion.Weight = 0.0;
 
-   /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
+      /***** Change value *****/
+      /* Update the table changing old weight by new weight */
+      Rub_DB_UpdateCriterionWeight (&Rubrics.Criterion);
+
+      /***** Show current rubric and its criteria *****/
+      Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -1308,24 +1316,26 @@ void RubCri_ReqRemCriterion (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_RubricConstructor (&Rubrics.Rubric);
    RubCri_ResetCriterion (&Rubrics.Criterion);
 
-   /***** Get and check parameters *****/
-   RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
+   /***** Allocate memory for rubric *****/
+   Rub_RubricConstructor (&Rubrics.Rubric);
 
-   /***** Check if rubric is editable *****/
-   if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
-      Err_NoPermissionExit ();
+      /***** Get and check parameters *****/
+      RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
-   /***** Show question and button to remove question *****/
-   Ale_ShowAlertRemove (ActRemRubCri,NULL,
-			RubCri_PutParsOneCriterion,&Rubrics,
-			Txt_Do_you_really_want_to_remove_the_criterion_X,
-			Rubrics.Criterion.Title);
+      /***** Check if rubric is editable *****/
+      if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
+	 Err_NoPermissionExit ();
 
-   /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
+      /***** Show question and button to remove question *****/
+      Ale_ShowAlertRemove (ActRemRubCri,NULL,
+			   RubCri_PutParsOneCriterion,&Rubrics,
+			   Txt_Do_you_really_want_to_remove_the_criterion_X,
+			   Rubrics.Criterion.Title);
+
+      /***** Show current rubric and its criteria *****/
+      Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -1342,31 +1352,34 @@ void RubCri_RemoveCriterion (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_RubricConstructor (&Rubrics.Rubric);
+    (&Rubrics.Rubric);
    RubCri_ResetCriterion (&Rubrics.Criterion);
 
-   /***** Get and check parameters *****/
-   RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
+   /***** Allocate memory for rubric *****/
+   Rub_RubricConstructor (&Rubrics.Rubric);
 
-   /***** Check if rubric is editable *****/
-   if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
-      Err_NoPermissionExit ();
+      /***** Get and check parameters *****/
+      RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
-   /***** Remove the criterion from all tables *****/
-   /* Remove questions associated to criterion */
-   // Exa_DB_RemoveAllSetQuestionsFromSet (Criterion.CriCod,Criterion.RubCod);
+      /***** Check if rubric is editable *****/
+      if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
+	 Err_NoPermissionExit ();
 
-   /* Remove the criterion itself */
-   Rub_DB_RemoveCriterionFromRubric (&Rubrics.Criterion);
+      /***** Remove the criterion from all tables *****/
+      /* Remove questions associated to criterion */
+      // Exa_DB_RemoveAllSetQuestionsFromSet (Criterion.CriCod,Criterion.RubCod);
 
-   /* Change indexes of criteria greater than this */
-   Rub_DB_UpdateCriteriaIndexesInRubricGreaterThan (&Rubrics.Criterion);
+      /* Remove the criterion itself */
+      Rub_DB_RemoveCriterionFromRubric (&Rubrics.Criterion);
 
-   /***** Write message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Criterion_removed);
+      /* Change indexes of criteria greater than this */
+      Rub_DB_UpdateCriteriaIndexesInRubricGreaterThan (&Rubrics.Criterion);
 
-   /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
+      /***** Write message *****/
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Criterion_removed);
+
+      /***** Show current rubric and its criteria *****/
+      Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -1385,35 +1398,37 @@ void RubCri_MoveUpCriterion (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_RubricConstructor (&Rubrics.Rubric);
    RubCri_ResetCriterion (&Rubrics.Criterion);
 
-   /***** Get and check parameters *****/
-   RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
+   /***** Allocate memory for rubric *****/
+   Rub_RubricConstructor (&Rubrics.Rubric);
 
-   /***** Check if rubric is editable *****/
-   if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
-      Err_NoPermissionExit ();
+      /***** Get and check parameters *****/
+      RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
-   /***** Get criterion index *****/
-   CriIndBottom = Rub_DB_GetCriIndFromCriCod (Rubrics.Rubric.RubCod,Rubrics.Criterion.CriCod);
+      /***** Check if rubric is editable *****/
+      if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
+	 Err_NoPermissionExit ();
 
-   /***** Move up criterion *****/
-   if (CriIndBottom > 1)
-     {
-      /* Indexes of criteria to be exchanged */
-      CriIndTop = Rub_DB_GetPrevCriterionIndexInRubric (Rubrics.Rubric.RubCod,CriIndBottom);
-      if (CriIndTop == 0)
-	 Err_ShowErrorAndExit ("Wrong criterion index.");
+      /***** Get criterion index *****/
+      CriIndBottom = Rub_DB_GetCriIndFromCriCod (Rubrics.Rubric.RubCod,Rubrics.Criterion.CriCod);
 
-      /* Exchange criteria */
-      RubCri_ExchangeCriteria (Rubrics.Rubric.RubCod,CriIndTop,CriIndBottom);
-     }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+      /***** Move up criterion *****/
+      if (CriIndBottom > 1)
+	{
+	 /* Indexes of criteria to be exchanged */
+	 CriIndTop = Rub_DB_GetPrevCriterionIndexInRubric (Rubrics.Rubric.RubCod,CriIndBottom);
+	 if (CriIndTop == 0)
+	    Err_ShowErrorAndExit ("Wrong criterion index.");
 
-   /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
+	 /* Exchange criteria */
+	 RubCri_ExchangeCriteria (Rubrics.Rubric.RubCod,CriIndTop,CriIndBottom);
+	}
+      else
+	 Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+
+      /***** Show current rubric and its criteria *****/
+      Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -1433,38 +1448,40 @@ void RubCri_MoveDownCriterion (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_RubricConstructor (&Rubrics.Rubric);
    RubCri_ResetCriterion (&Rubrics.Criterion);
 
-   /***** Get and check parameters *****/
-   RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
+   /***** Allocate memory for rubric *****/
+   Rub_RubricConstructor (&Rubrics.Rubric);
 
-   /***** Check if rubric is editable *****/
-   if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
-      Err_NoPermissionExit ();
+      /***** Get and check parameters *****/
+      RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
-   /***** Get criterion index *****/
-   CriIndTop = Rub_DB_GetCriIndFromCriCod (Rubrics.Rubric.RubCod,Rubrics.Criterion.CriCod);
+      /***** Check if rubric is editable *****/
+      if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
+	 Err_NoPermissionExit ();
 
-   /***** Get maximum criterion index *****/
-   MaxCriInd = Rub_DB_GetMaxCriterionIndexInRubric (Rubrics.Rubric.RubCod);
+      /***** Get criterion index *****/
+      CriIndTop = Rub_DB_GetCriIndFromCriCod (Rubrics.Rubric.RubCod,Rubrics.Criterion.CriCod);
 
-   /***** Move down criterion *****/
-   if (CriIndTop < MaxCriInd)
-     {
-      /* Indexes of criteria to be exchanged */
-      CriIndBottom = Rub_DB_GetNextCriterionIndexInRubric (Rubrics.Rubric.RubCod,CriIndTop);
-      if (CriIndBottom == 0)	// 0 means error reading from database
-	 Err_ShowErrorAndExit ("Wrong criterion index.");
+      /***** Get maximum criterion index *****/
+      MaxCriInd = Rub_DB_GetMaxCriterionIndexInRubric (Rubrics.Rubric.RubCod);
 
-      /* Exchange criteria */
-      RubCri_ExchangeCriteria (Rubrics.Rubric.RubCod,CriIndTop,CriIndBottom);
-     }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+      /***** Move down criterion *****/
+      if (CriIndTop < MaxCriInd)
+	{
+	 /* Indexes of criteria to be exchanged */
+	 CriIndBottom = Rub_DB_GetNextCriterionIndexInRubric (Rubrics.Rubric.RubCod,CriIndTop);
+	 if (CriIndBottom == 0)	// 0 means error reading from database
+	    Err_ShowErrorAndExit ("Wrong criterion index.");
 
-   /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
+	 /* Exchange criteria */
+	 RubCri_ExchangeCriteria (Rubrics.Rubric.RubCod,CriIndTop,CriIndBottom);
+	}
+      else
+	 Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+
+      /***** Show current rubric and its criteria *****/
+      Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -1546,28 +1563,30 @@ void RubCri_ChangeLink (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_RubricConstructor (&Rubrics.Rubric);
    RubCri_ResetCriterion (&Rubrics.Criterion);
 
-   /***** Get and check parameters *****/
-   RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
+   /***** Allocate memory for rubric *****/
+   Rub_RubricConstructor (&Rubrics.Rubric);
 
-   /***** Check if rubric is editable *****/
-   if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
-      Err_NoPermissionExit ();
+      /***** Get and check parameters *****/
+      RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
-   /***** Get link type and code *****/
-   if (Rsc_GetParLink (&Rubrics.Criterion.Link) == Err_SUCCESS)
-     {
-      /***** Update link to resource in criterion *****/
-      Rub_DB_UpdateCriterionLink (&Rubrics.Criterion);
+      /***** Check if rubric is editable *****/
+      if (Rub_CheckIfICanEdit () == Usr_CAN_NOT)
+	 Err_NoPermissionExit ();
 
-      /***** Remove link from clipboard *****/
-      Rsc_DB_RemoveLinkFromClipboard (&Rubrics.Criterion.Link);
-     }
+      /***** Get link type and code *****/
+      if (Rsc_GetParLink (&Rubrics.Criterion.Link) == Err_SUCCESS)
+	{
+	 /***** Update link to resource in criterion *****/
+	 Rub_DB_UpdateCriterionLink (&Rubrics.Criterion);
 
-   /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
+	 /***** Remove link from clipboard *****/
+	 Rsc_DB_RemoveLinkFromClipboard (&Rubrics.Criterion.Link);
+	}
+
+      /***** Show current rubric and its criteria *****/
+      Rub_PutFormsOneRubric (&Rubrics,OldNew_OLD);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);

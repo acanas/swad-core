@@ -1457,7 +1457,7 @@ typedef enum
 	ActReqSelAllGrp,
 	ActReqSelOneGrpTyp,
 	ActChgGrp,
-	ActReqEdiGrp,
+	ActEdiGrp,
 	ActNewGrpTyp,
 	ActReqRemGrpTyp,
 	ActRemGrpTyp,

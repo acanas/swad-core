@@ -189,13 +189,15 @@ void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics)
 		 NumRubric <= Pagination.LastItemVisible;
 		 NumRubric++)
 	      {
-	       /***** Get rubric data *****/
+	       /***** Allocate memory for rubric *****/
 	       Rub_RubricConstructor (&Rubrics->Rubric);
-	       Rubrics->Rubric.RubCod = Rubrics->Lst[NumRubric - 1];
-	       Rub_GetRubricDataByCod (&Rubrics->Rubric);
 
-	       /***** Show main data of this rubric *****/
-	       Rub_ShowRubricMainData (Rubrics,Lay_SHOWING_SEVERAL);
+		  /***** Get rubric data *****/
+		  Rubrics->Rubric.RubCod = Rubrics->Lst[NumRubric - 1];
+		  Rub_GetRubricDataByCod (&Rubrics->Rubric);
+
+		  /***** Show main data of this rubric *****/
+		  Rub_ShowRubricMainData (Rubrics,Lay_SHOWING_SEVERAL);
 
 	       /***** Free memory used for rubric *****/
 	       Rub_RubricDestructor (&Rubrics->Rubric);
@@ -308,16 +310,18 @@ void Rub_SeeOneRubric (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
+
+   /***** Allocate memory for rubric *****/
    Rub_RubricConstructor (&Rubrics.Rubric);
 
-   /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,Rub_CHECK_RUB_COD);
+      /***** Get parameters *****/
+      Rub_GetPars (&Rubrics,Rub_CHECK_RUB_COD);
 
-   /***** Get rubric data *****/
-   Rub_GetRubricDataByCod (&Rubrics.Rubric);
+      /***** Get rubric data *****/
+      Rub_GetRubricDataByCod (&Rubrics.Rubric);
 
-   /***** Show rubric *****/
-   Rub_ShowOnlyOneRubric (&Rubrics);
+      /***** Show rubric *****/
+      Rub_ShowOnlyOneRubric (&Rubrics);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -644,24 +648,26 @@ void Rub_AskRemRubric (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
+
+   /***** Allocate memory for rubric *****/
    Rub_RubricConstructor (&Rubrics.Rubric);
 
-   /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,Rub_CHECK_RUB_COD);
+      /***** Get parameters *****/
+      Rub_GetPars (&Rubrics,Rub_CHECK_RUB_COD);
 
-   /***** Get data of the rubric from database *****/
-   Rub_GetRubricDataByCod (&Rubrics.Rubric);
-   if (Rub_CheckIfICanEditRubrics () == Usr_CAN_NOT)
-      Err_NoPermissionExit ();
+      /***** Get data of the rubric from database *****/
+      Rub_GetRubricDataByCod (&Rubrics.Rubric);
+      if (Rub_CheckIfICanEditRubrics () == Usr_CAN_NOT)
+	 Err_NoPermissionExit ();
 
-   /***** Show criterion and button to remove rubric *****/
-   Ale_ShowAlertRemove (ActRemRub,NULL,
-                        Rub_PutPars,&Rubrics,
-			Txt_Do_you_really_want_to_remove_the_rubric_X,
-                        Rubrics.Rubric.Title);
+      /***** Show criterion and button to remove rubric *****/
+      Ale_ShowAlertRemove (ActRemRub,NULL,
+			   Rub_PutPars,&Rubrics,
+			   Txt_Do_you_really_want_to_remove_the_rubric_X,
+			   Rubrics.Rubric.Title);
 
-   /***** Show rubrics again *****/
-   Rub_ListAllRubrics (&Rubrics);
+      /***** Show rubrics again *****/
+      Rub_ListAllRubrics (&Rubrics);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -678,24 +684,26 @@ void Rub_RemoveRubric (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
+
+   /***** Allocate memory for rubric *****/
    Rub_RubricConstructor (&Rubrics.Rubric);
 
-   /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,Rub_CHECK_RUB_COD);
+      /***** Get parameters *****/
+      Rub_GetPars (&Rubrics,Rub_CHECK_RUB_COD);
 
-   /***** Get data of the rubric from database *****/
-   Rub_GetRubricDataByCod (&Rubrics.Rubric);
-   if (Rub_CheckIfICanEditRubrics () == Usr_CAN_NOT)
-      Err_NoPermissionExit ();
+      /***** Get data of the rubric from database *****/
+      Rub_GetRubricDataByCod (&Rubrics.Rubric);
+      if (Rub_CheckIfICanEditRubrics () == Usr_CAN_NOT)
+	 Err_NoPermissionExit ();
 
-   /***** Remove rubric from all tables *****/
-   Rub_RemoveRubricFromAllTables (Rubrics.Rubric.RubCod);
+      /***** Remove rubric from all tables *****/
+      Rub_RemoveRubricFromAllTables (Rubrics.Rubric.RubCod);
 
-   /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Rubric_X_removed,Rubrics.Rubric.Title);
+      /***** Write message to show the change made *****/
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Rubric_X_removed,Rubrics.Rubric.Title);
 
-   /***** Show rubrics again *****/
-   Rub_ListAllRubrics (&Rubrics);
+      /***** Show rubrics again *****/
+      Rub_ListAllRubrics (&Rubrics);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -742,21 +750,23 @@ void Rub_ReqCreatOrEditRubric (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_RubricConstructor (&Rubrics.Rubric);
    RubCri_ResetCriterion (&Rubrics.Criterion);
 
-   /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,Rub_DONT_CHECK_RUB_COD);
-   Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
-   OldNewRubric = Rubrics.Rubric.RubCod > 0 ? OldNew_OLD :
-					      OldNew_NEW;
+   /***** Allocate memory for rubric *****/
+   Rub_RubricConstructor (&Rubrics.Rubric);
 
-   /***** Get rubric data from database *****/
-   if (OldNewRubric == OldNew_OLD)
-      Rub_GetRubricDataByCod (&Rubrics.Rubric);
+      /***** Get parameters *****/
+      Rub_GetPars (&Rubrics,Rub_DONT_CHECK_RUB_COD);
+      Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
+      OldNewRubric = Rubrics.Rubric.RubCod > 0 ? OldNew_OLD :
+						 OldNew_NEW;
 
-   /***** Put form to create/edit a rubric and show criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,OldNewRubric);
+      /***** Get rubric data from database *****/
+      if (OldNewRubric == OldNew_OLD)
+	 Rub_GetRubricDataByCod (&Rubrics.Rubric);
+
+      /***** Put form to create/edit a rubric and show criteria *****/
+      Rub_PutFormsOneRubric (&Rubrics,OldNewRubric);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -897,42 +907,44 @@ void Rub_ReceiveRubric (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_RubricConstructor (&Rubrics.Rubric);
    RubCri_ResetCriterion (&Rubrics.Criterion);
 
-   /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,Rub_DONT_CHECK_RUB_COD);
-   Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
-   OldNewRubric = Rubrics.Rubric.RubCod > 0 ? OldNew_OLD :
-					      OldNew_NEW;
+   /***** Allocate memory for rubric *****/
+   Rub_RubricConstructor (&Rubrics.Rubric);
 
-   /***** Get all current rubric data from database *****/
-   // Some data, not received from form,
-   // are necessary to show rubric and criteria again
-   if (OldNewRubric == OldNew_OLD)
-      Rub_GetRubricDataByCod (&Rubrics.Rubric);
+      /***** Get parameters *****/
+      Rub_GetPars (&Rubrics,Rub_DONT_CHECK_RUB_COD);
+      Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
+      OldNewRubric = Rubrics.Rubric.RubCod > 0 ? OldNew_OLD :
+						 OldNew_NEW;
 
-   /***** Overwrite some rubric data with the data received from form *****/
-   Rub_ReceiveRubricFieldsFromForm (&Rubrics.Rubric);
-   if (Rub_CheckRubricFieldsReceivedFromForm (&Rubrics.Rubric) == Err_SUCCESS)
-      /***** Create a new rubric or update an existing one *****/
-      switch (OldNewRubric)
-	{
-	 case OldNew_OLD:
-	    Rub_UpdateRubric (&Rubrics.Rubric);	// Update rubric data in database
-	    break;
-	 case OldNew_NEW:
-	 default:
-	    Rub_CreateRubric (&Rubrics.Rubric);	// Add new rubric to database
-	    OldNewRubric = OldNew_OLD;
-	    break;
-	}
+      /***** Get all current rubric data from database *****/
+      // Some data, not received from form,
+      // are necessary to show rubric and criteria again
+      if (OldNewRubric == OldNew_OLD)
+	 Rub_GetRubricDataByCod (&Rubrics.Rubric);
 
-   /***** Show pending alerts */
-   Ale_ShowAlerts (NULL);
+      /***** Overwrite some rubric data with the data received from form *****/
+      Rub_ReceiveRubricFieldsFromForm (&Rubrics.Rubric);
+      if (Rub_CheckRubricFieldsReceivedFromForm (&Rubrics.Rubric) == Err_SUCCESS)
+	 /***** Create a new rubric or update an existing one *****/
+	 switch (OldNewRubric)
+	   {
+	    case OldNew_OLD:
+	       Rub_UpdateRubric (&Rubrics.Rubric);	// Update rubric data in database
+	       break;
+	    case OldNew_NEW:
+	    default:
+	       Rub_CreateRubric (&Rubrics.Rubric);	// Add new rubric to database
+	       OldNewRubric = OldNew_OLD;
+	       break;
+	   }
 
-   /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,OldNewRubric);
+      /***** Show pending alerts */
+      Ale_ShowAlerts (NULL);
+
+      /***** Show current rubric and its criteria *****/
+      Rub_PutFormsOneRubric (&Rubrics,OldNewRubric);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -1050,25 +1062,25 @@ static Err_SuccessOrError_t Rub_CheckIfRecursiveTree (long RubCod,struct Rub_Nod
       /***** Push rubric code in stack *****/
       Rub_PushRubCod (TOS,RubCod);
 
-      /***** For each criteria in this rubric... *****/
-      NumCriteria = Rub_DB_GetCriteria (&mysql_res,RubCod);
-      for (NumCriterion = 0;
-	   NumCriterion < NumCriteria;
-	   NumCriterion++)
-	{
-	 /* Get criterion data */
-	 RubCri_GetCriterionDataFromRow (mysql_res,&Criterion);
+	 /***** For each criteria in this rubric... *****/
+	 NumCriteria = Rub_DB_GetCriteria (&mysql_res,RubCod);
+	 for (NumCriterion = 0;
+	      NumCriterion < NumCriteria;
+	      NumCriterion++)
+	   {
+	    /* Get criterion data */
+	    RubCri_GetCriterionDataFromRow (mysql_res,&Criterion);
 
-	 if (Criterion.Link.Type == Rsc_RUBRIC)
-	    if (Rub_CheckIfRecursiveTree (Criterion.Link.Cod,TOS) == Err_ERROR)
-	      {
-	       RecursiveTree = Err_ERROR;
-	       break;
-	      }
-	}
+	    if (Criterion.Link.Type == Rsc_RUBRIC)
+	       if (Rub_CheckIfRecursiveTree (Criterion.Link.Cod,TOS) == Err_ERROR)
+		 {
+		  RecursiveTree = Err_ERROR;
+		  break;
+		 }
+	   }
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
 
       /***** Pop rubric code from stack *****/
       Rub_PopRubCod (TOS);
@@ -1120,13 +1132,9 @@ void Rub_PopRubCod (struct Rub_Node **TOS)
 
 Exi_Exist_t Rub_FindRubCodInStack (const struct Rub_Node *TOS,long RubCod)
   {
-   while (TOS)
-     {
+   for (; TOS; TOS = TOS->Prev)
       if (TOS->RubCod == RubCod)
 	 return Exi_EXISTS;
-
-      TOS = TOS->Prev;
-     }
 
    return Exi_DOES_NOT_EXIST;
   }
@@ -1148,34 +1156,36 @@ void Rub_ShowRubricsToFill (Rsc_Type_t RscType,long RscCod,Usr_Can_t ICanFill,
 	NumRub < NumRubrics;
 	NumRub++)
      {
-      /***** Get rubric data *****/
+      /***** Allocate memory for rubric *****/
       Rub_RubricConstructor (&Rubric);
-      Rubric.RubCod = DB_GetNextCode (mysql_res);
-      Rub_GetRubricDataByCod (&Rubric);
 
-      /***** Show rubric ready to fill them *****/
-      /* First row for rubric title */
-      HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("colspan=\"8\" class=\"LT ASG_TITLE_%s\"",The_GetSuffix ());
-	    HTM_Txt (Rubric.Title);
-	 HTM_TD_End ();
-      HTM_TR_End ();
+	 /***** Get rubric data *****/
+	 Rubric.RubCod = DB_GetNextCode (mysql_res);
+	 Rub_GetRubricDataByCod (&Rubric);
 
-      /* 2nd row for rubric text */
-      HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("colspan=\"8\" class=\"LT PAR DAT_%s\"",The_GetSuffix ());
-	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			      Rubric.Txt,Cns_MAX_BYTES_TEXT,
-			      Str_DONT_REMOVE_SPACES);
-	    ALn_InsertLinks (Rubric.Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-	    HTM_Txt (Rubric.Txt);
-	 HTM_TD_End ();
-      HTM_TR_End ();
+	 /***** Show rubric ready to fill it *****/
+	 /* First row for rubric title */
+	 HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("colspan=\"8\" class=\"LT ASG_TITLE_%s\"",The_GetSuffix ());
+	       HTM_Txt (Rubric.Title);
+	    HTM_TD_End ();
+	 HTM_TR_End ();
 
-      /* Write criteria of this rubric */
-      RubCri_ListCriteriaToFill (RscType,RscCod,ICanFill,
-	                         NextAction,FuncPars,Args,
-	                         Rubric.RubCod);
+	 /* 2nd row for rubric text */
+	 HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("colspan=\"8\" class=\"LT PAR DAT_%s\"",The_GetSuffix ());
+	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				 Rubric.Txt,Cns_MAX_BYTES_TEXT,
+				 Str_DONT_REMOVE_SPACES);
+	       ALn_InsertLinks (Rubric.Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+	       HTM_Txt (Rubric.Txt);
+	    HTM_TD_End ();
+	 HTM_TR_End ();
+
+	 /* Write criteria of this rubric */
+	 RubCri_ListCriteriaToFill (RscType,RscCod,ICanFill,
+				    NextAction,FuncPars,Args,
+				    Rubric.RubCod);
 
       /***** Free memory used for rubric *****/
       Rub_RubricDestructor (&Rubric);
