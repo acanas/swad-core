@@ -243,7 +243,7 @@ static void ZIP_CreateTmpDirForCompression (void)
    Str_Copy (ZIP_TmpDir,Cry_GetUniqueNameEncrypted (),sizeof (ZIP_TmpDir) - 1);
    snprintf (PathDirTmp,sizeof (PathDirTmp),"%s/%s",
 	     Cfg_PATH_ZIP_PRIVATE,ZIP_TmpDir);
-   if (mkdir (PathDirTmp,(mode_t) 0xFFF))
+   if (mkdir (PathDirTmp,(mode_t) 0777))
       Err_ShowErrorAndExit ("Can not create temporary folder for compression.");
   }
 
@@ -497,7 +497,7 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 		     FullSize += (unsigned long long) FileStatus.st_size;
 
 		     /***** Create clone of subdirectory *****/
-		     if (mkdir (PathFileClone,(mode_t) 0xFFF))
+		     if (mkdir (PathFileClone,(mode_t) 0777))
 			Err_ShowErrorAndExit ("Can not create temporary subfolder for compression.");
 
 		     /***** Clone subtree starting at this this directory *****/

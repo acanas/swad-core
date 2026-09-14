@@ -2156,7 +2156,7 @@ unsigned Str_ConvertStrToUnsigned (const char *UnsignedStr)
 
 size_t Str_GetLengthRootFileName (const char *FileName)
   {
-   char *PtrToDot = strrchr (FileName,(int) '.');
+   const char *PtrToDot = strrchr (FileName,(int) '.');
    size_t LengthFileName = strlen (FileName);
 
    if (PtrToDot)

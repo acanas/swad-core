@@ -88,6 +88,11 @@ void Rub_ShowRubricsToFill (Rsc_Type_t RscType,long RscCod,Usr_Can_t ICanFill,
                             void (*FuncPars) (void *Args),void *Args,
 			    unsigned NumRubrics,MYSQL_RES *mysql_res);
 
+//-------------------------- Listing users rubrics -----------------------------
+void Rub_ReqListUsrs (void);
+void Rub_ListUsrsRubrics (void);
+void Rub_PrintUsrsRubrics (void);
+
 //-------------------------------- Figures ------------------------------------
 void Rub_GetAndShowRubricsStats (Hie_Level_t HieLvl);
 

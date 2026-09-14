@@ -101,7 +101,7 @@
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"Antonio Cañas Vargas"			// Main responsible for the platform
 #define Cfg_PLATFORM_RESPONSIBLE_EMAIL		"webmaster@openswad.org"		// Main responsible for the platform
 #define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"mail.openswad.org"			// SMTP server for sending automatic emails
-#define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"465"					// SMTP port for sending automatic emails
+#define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"587"					// SMTP port for sending automatic emails
 #define Cfg_AUTOMATIC_EMAIL_FROM		"acanas@openswad.org"			// Email address from where automatic emails will be sent
 #define Cfg_DATABASE_HOST			"localhost"				// Database host
 #define Cfg_DEFAULT_LANGUAGE			Lan_LANGUAGE_EN				// Default language
@@ -124,11 +124,11 @@
 #define Cfg_URL_SWAD_SERVER			"https://swad.ugr.es/"			// With ending slash
 #define Cfg_URL_SWAD_CGI			"https://swad.ugr.es"			// Without ending slash
 #define Cfg_URL_SWAD_PUBLIC			"https://swad.ugr.es/swad"		// Without ending slash
-#define Cfg_PATH_CGI_BIN			"/var/www/cgi-bin"			// Directory for this CGI and other commands called by it
+#define Cfg_PATH_CGI_BIN			"/usr/lib/cgi-bin/swad"			// Directory for this CGI and other commands called by it
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"			// Main public directory for public SWAD pages, icons, etc.
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"				// Main private directory for SWAD private data
 
-#define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad-ugr160x80.png"				// Logo displayed in the top of the page
+#define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad-ugr160x80.png"			// Logo displayed in the top of the page
 #define Cfg_PLATFORM_LOGO_SMALL_CLASS		"ICO80x40"
 #define Cfg_PLATFORM_LOGO_BIG_FILENAME		"swad-ugr530x80.png"
 #define Cfg_PLATFORM_LOGO_BIG_CLASS		"ICO265x40"
@@ -168,7 +168,7 @@
 #define Cfg_PLATFORM_LOGO_BIG_FILENAME		"SWADberry212x40.png"
 #define Cfg_PLATFORM_LOGO_BIG_CLASS		"ICO212x40"
 
-#define Cfg_PLATFORM_RESPONSIBLE_NAME		"ATC - UGR"				// Main responsible for the platform
+#define Cfg_PLATFORM_RESPONSIBLE_NAME		"ICAR - UGR"				// Main responsible for the platform
 #define Cfg_PLATFORM_RESPONSIBLE_EMAIL		"swad@ugr.es"				// Main responsible for the platform
 #define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"smtp.ugr.es"				// SMTP server for sending automatic emails
 #define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"587"					// SMTP port for sending automatic emails

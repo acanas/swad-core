@@ -250,7 +250,7 @@ long Brw_DB_GetFilCodByPath (const char *Path,Brw_OnlyPublicFiles_t OnlyIfPublic
 
    return DB_QuerySELECTCode ("can not get file code",
 			      "SELECT FilCod"
-			       " FROM brw_files"
+			       " FROM brw_files FORCE INDEX (FileBrowser)"	// Very important to optimize by this composed index (FileBrowser,Cod,ZoneUsrCod)
 			      " WHERE FileBrowser=%u"
 			        " AND Cod=%ld"
 			        " AND ZoneUsrCod=%ld"
@@ -285,7 +285,7 @@ Exi_Exist_t Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,const char *Path
 				"Hidden,"		// row[7]
 				"Public,"		// row[8]
 				"License"		// row[9]
-			  " FROM brw_files"
+			  " FROM brw_files FORCE INDEX (FileBrowser)"	// Very important to optimize by this composed index (FileBrowser,Cod,ZoneUsrCod)
 			 " WHERE FileBrowser=%u"
 			   " AND Cod=%ld"
 			   " AND ZoneUsrCod=%ld"
@@ -349,12 +349,14 @@ long Brw_DB_GetPublisherOfSubtree (const char *Path)
 			             "PublisherUsrCod"
 			       " FROM brw_files"
 			      " WHERE FileBrowser=%u"
-			        " AND Cod=%ld"
+				" AND Cod=%ld"
+				" AND ZoneUsrCod=%ld"
 			        " AND (Path='%s'"
 				     " OR"
 				     " Path LIKE '%s/%%')",
 			      (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 			      Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
+			      Brw_GetZoneUsrCodForFileBrowser (),
 			      Path,
 			      Path);
   }
@@ -2307,7 +2309,7 @@ HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (M
 
    Exists = DB_QuerySELECTunique (mysql_res,"can not check if a file is hidden",
 				  "SELECT Hidden"	// row[0]
-				   " FROM brw_files"
+				   " FROM brw_files FORCE INDEX (FileBrowser)"	// Very important to optimize by this composed index (FileBrowser,Cod,ZoneUsrCod)
 				  " WHERE FileBrowser=%u"
 				    " AND Cod=%ld"
 				    " AND ZoneUsrCod=%ld"

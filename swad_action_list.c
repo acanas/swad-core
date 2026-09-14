@@ -1017,6 +1017,11 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    // Rubrics
    [ActSeeAllRub	] = {1951, 7,TabAss,NULL			,Rub_SeeAllRubrics		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x200}},Act_NORM,Act_1ST},
+   [ActReqLstUsrRub	] = {2216, 7,TabAss,NULL			,Rub_ReqListUsrs		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
+   [ActSeeLstMyRub	] = {2217, 7,TabAss,NULL			,Rub_SeeAllRubrics /* TODO */	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
+   [ActPrnLstMyRub	] = {2218, 7,TabAss,NULL			,Rub_SeeAllRubrics /* TODO */	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_NEW},
+   [ActSeeLstUsrRub	] = {2219, 7,TabAss,NULL			,Rub_ListUsrsRubrics		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
+   [ActPrnLstUsrRub	] = {2220, 7,TabAss,NULL			,Rub_PrintUsrsRubrics		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_NEW},
    [ActSeeOneRub	] = {1952, 7,TabAss,NULL			,Rub_SeeOneRubric		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActFrmNewRub	] = {1953, 7,TabAss,NULL			,Rub_ReqCreatOrEditRubric	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiOneRub	] = {1954, 7,TabAss,NULL			,Rub_ReqCreatOrEditRubric	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -1669,11 +1674,11 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    // Attendance
    [ActSeeAllAtt	] = { 861, 4,TabUsr,NULL			,Att_ShowEvents			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActReqLstUsrAtt	] = {1073, 4,TabUsr,NULL			,Att_ReqListUsrsAttendanceCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
-   [ActSeeLstMyAtt	] = {1473, 4,TabUsr,NULL			,Att_ListMyAttendanceCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
-   [ActPrnLstMyAtt	] = {1474, 4,TabUsr,NULL			,Att_PrintMyAttendanceCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_NEW},
-   [ActSeeLstUsrAtt	] = {1074, 4,TabUsr,NULL			,Att_ListUsrsAttendanceCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
-   [ActPrnLstUsrAtt	] = {1075, 4,TabUsr,NULL			,Att_PrintUsrsAttendanceCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_NEW},
+   [ActReqLstUsrAtt	] = {1073, 4,TabUsr,NULL			,Att_ReqListUsrsAttendance	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
+   [ActSeeLstMyAtt	] = {1473, 4,TabUsr,NULL			,Att_ListMyAttendance		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
+   [ActPrnLstMyAtt	] = {1474, 4,TabUsr,NULL			,Att_PrintMyAttendance		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_NEW},
+   [ActSeeLstUsrAtt	] = {1074, 4,TabUsr,NULL			,Att_ListUsrsAttendance		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
+   [ActPrnLstUsrAtt	] = {1075, 4,TabUsr,NULL			,Att_PrintUsrsAttendance	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_NEW},
    [ActFrmNewAtt	] = {1063, 4,TabUsr,NULL			,Att_ReqCreatOrEditEvent	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiOneAtt	] = {1064, 4,TabUsr,NULL			,Att_ReqCreatOrEditEvent	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActNewAtt		] = {1065, 4,TabUsr,NULL			,Att_ReceiveEvent		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -4232,4 +4237,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgOthOff,		// #2213
 	ActChgOthOffPho,	// #2214
 	ActChgOthNet,		// #2215
+	ActReqLstUsrRub,	// #2216
+	ActSeeLstMyRub,		// #2217
+	ActPrnLstMyRub,		// #2218
+	ActSeeLstUsrRub,	// #2219
+	ActPrnLstUsrRub,	// #2220
   };

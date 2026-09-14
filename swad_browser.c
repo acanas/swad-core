@@ -3643,7 +3643,7 @@ void Brw_CreateDirDownloadTmp (void)
    /* 3. Create the right directory inside the left one */
    snprintf (PathUniqueDirR,sizeof (PathUniqueDirR),"%s/%s",
              PathUniqueDirL,Gbl.FileBrowser.TmpPubDir.R);
-   if (mkdir (PathUniqueDirR,(mode_t) 0xFFF))
+   if (mkdir (PathUniqueDirR,(mode_t) 0777))
       Err_ShowErrorAndExit ("Can not create a temporary folder for download.");
 
    /* 4. Increase number of directory for next call */
@@ -6226,7 +6226,7 @@ static Err_SuccessOrError_t Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *
 		       {
 			case Err_SUCCESS:	// Quota not exceded
 			   /* Create directory */
-			   if (mkdir (PathDstWithFile,(mode_t) 0xFFF))
+			   if (mkdir (PathDstWithFile,(mode_t) 0777))
 			      Err_ShowErrorAndExit ("Can not create folder.");
 
 			   /* Add entry to the table of files/folders */
@@ -6611,7 +6611,7 @@ void Brw_CreateFolder (void)
 	       Str_Concat (Path,Gbl.FileBrowser.NewFilFolLnkName,sizeof (Path) - 1);
 
 	       /* Create the new directory */
-	       if (mkdir (Path,(mode_t) 0xFFF) == 0)
+	       if (mkdir (Path,(mode_t) 0777) == 0)
 		 {
 		  /* Check if quota has been exceeded */
 		  BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);

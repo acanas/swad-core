@@ -121,10 +121,10 @@ void Att_RegisterStudentsInEvent (void);
 
 Att_AbsentOrPresent_t Att_GetPresentFromYN (char Ch);
 
-void Att_ReqListUsrsAttendanceCrs (void);
-void Att_ListMyAttendanceCrs (void);
-void Att_PrintMyAttendanceCrs (void);
-void Att_ListUsrsAttendanceCrs (void);
-void Att_PrintUsrsAttendanceCrs (void);
+void Att_ReqListUsrsAttendance (void);
+void Att_ListMyAttendance (void);
+void Att_PrintMyAttendance (void);
+void Att_ListUsrsAttendance (void);
+void Att_PrintUsrsAttendance (void);
 
 #endif

@@ -75,19 +75,6 @@ static unsigned Att_ColSpan[Pho_NUM_PHOTOS] =
   };
 
 /*****************************************************************************/
-/******************************** Private types ******************************/
-/*****************************************************************************/
-
-#define Att_TYPES_OF_VIEW 4
-typedef enum
-  {
-   Att_VIEW_ONLY_ME,	// View only me
-   Att_VIEW_SEL_USR,	// View selected users
-   Att_PRNT_ONLY_ME,	// Print only me
-   Att_PRNT_SEL_USR,	// Print selected users
-  } Att_TypeOfView_t;
-
-/*****************************************************************************/
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
@@ -141,9 +128,9 @@ static Att_AbsentOrPresent_t Att_CheckIfUsrIsPresentInEventAndGetComments (long 
 									   char CommentTch[Cns_MAX_BYTES_TEXT + 1]);
 
 static void Att_ReqListOrPrintUsrsAttendanceCrs (__attribute__((unused)) void *Args);
-static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView);
-static void Att_GetUsrsAndListOrPrintAttendanceCrs (Att_TypeOfView_t TypeOfView);
-static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView);
+static void Att_ListOrPrintMyAttendanceCrs (Vie_UsrsViewType_t UsrsViewType);
+static void Att_GetUsrsAndListOrPrintAttendanceCrs (Vie_UsrsViewType_t UsrsViewType);
+static void Att_ListOrPrintUsrsAttendanceCrs (void *UsrsViewType);
 
 static void Att_GetListSelectedAttCods (struct Att_Events *Events);
 
@@ -154,11 +141,11 @@ static void Att_PutParsToPrintStdsList (void *Events);
 
 static void Att_PutButtonToShowDetails (const struct Att_Events *Events);
 static void Att_ListEventsToSelect (struct Att_Events *Events,
-                                    Att_TypeOfView_t TypeOfView);
+                                    Vie_UsrsViewType_t UsrsViewType);
 static void Att_PutIconToViewAttEvents (__attribute__((unused)) void *Args);
 static void Att_PutIconToEditAttEvents (__attribute__((unused)) void *Args);
 static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
-                                         Att_TypeOfView_t TypeOfView,
+                                         Vie_UsrsViewType_t UsrsViewType,
 	                                 const struct Usr_ListCods *ListCods);
 static void Att_WriteTableHeadSeveralAttEvents (struct Att_Events *Events,
 						Pho_ShowPhotos_t ShowPhotos);
@@ -343,24 +330,10 @@ static void Att_ParsMyAllGrps (void *Events)
 
 static void Att_PutIconsInListOfEvents (void *Events)
   {
-   static Usr_Can_t ICanEdit[Rol_NUM_ROLES] =
-     {
-      [Rol_UNK    ] = Usr_CAN_NOT,
-      [Rol_GST    ] = Usr_CAN_NOT,
-      [Rol_USR    ] = Usr_CAN_NOT,
-      [Rol_STD    ] = Usr_CAN_NOT,
-      [Rol_NET    ] = Usr_CAN_NOT,
-      [Rol_TCH    ] = Usr_CAN,
-      [Rol_DEG_ADM] = Usr_CAN_NOT,
-      [Rol_CTR_ADM] = Usr_CAN_NOT,
-      [Rol_INS_ADM] = Usr_CAN_NOT,
-      [Rol_SYS_ADM] = Usr_CAN,
-     };
-
    if (Events)
      {
       /***** Put icon to create a new attendance event *****/
-      if (ICanEdit[Gbl.Usrs.Me.Role.Logged] == Usr_CAN)
+      if (Att_CheckIfICanEditEvents () == Usr_CAN)
 	 Att_PutIconToCreateNewEvent ((struct Att_Events *) Events);
 
       /***** Put icon to show attendance list *****/
@@ -368,14 +341,14 @@ static void Att_PutIconsInListOfEvents (void *Events)
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_STD:
-	       Ico_PutContextualIconToShowAttendanceList (ActSeeLstMyAtt,
-	                                                  NULL,NULL);
+	       Ico_PutContextualIconToShowCheckList (ActSeeLstMyAtt,
+	                                             NULL,NULL);
 	       break;
 	    case Rol_NET:
 	    case Rol_TCH:
 	    case Rol_SYS_ADM:
-	       Ico_PutContextualIconToShowAttendanceList (ActReqLstUsrAtt,
-							  Att_PutParsToListUsrsAttendance,Events);
+	       Ico_PutContextualIconToShowCheckList (ActReqLstUsrAtt,
+						     Att_PutParsToListUsrsAttendance,Events);
 	       break;
 	    default:
 	       break;
@@ -419,7 +392,7 @@ static void Att_PutParsToCreateNewEvent (void *Events)
   }
 
 /*****************************************************************************/
-/***************** Put parameters to list users attendance *******************/
+/*************** Put parameters to list students attendance ******************/
 /*****************************************************************************/
 
 static void Att_PutParsToListUsrsAttendance (void *Events)
@@ -428,11 +401,11 @@ static void Att_PutParsToListUsrsAttendance (void *Events)
 
    if (Events)
      {
-      Par_PutParOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
+      // Par_PutParOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
       MyAllGrps = Grp_GetParMyAllGrps ();
       Grp_PutParMyAllGrps (&MyAllGrps);
-      Pag_PutParPagNum (Pag_ATT_EVENTS,
-			((struct Att_Events *) Events)->CurrentPage);
+      // Pag_PutParPagNum (Pag_ATT_EVENTS,
+      //	           ((struct Att_Events *) Events)->CurrentPage);
      }
   }
 
@@ -645,7 +618,15 @@ Usr_Can_t Att_CheckIfICanEditEvents (void)
   {
    static Usr_Can_t ICanEditAttEvents[Rol_NUM_ROLES] =
      {
+      [Rol_UNK    ] = Usr_CAN_NOT,
+      [Rol_GST    ] = Usr_CAN_NOT,
+      [Rol_USR    ] = Usr_CAN_NOT,
+      [Rol_STD    ] = Usr_CAN_NOT,
+      [Rol_NET    ] = Usr_CAN_NOT,
       [Rol_TCH    ] = Usr_CAN,
+      [Rol_DEG_ADM] = Usr_CAN_NOT,
+      [Rol_CTR_ADM] = Usr_CAN_NOT,
+      [Rol_INS_ADM] = Usr_CAN_NOT,
       [Rol_SYS_ADM] = Usr_CAN,
      };
 
@@ -2148,7 +2129,7 @@ Att_AbsentOrPresent_t Att_GetPresentFromYN (char Ch)
 /********** Request listing attendance of users to several events ************/
 /*****************************************************************************/
 
-void Att_ReqListUsrsAttendanceCrs (void)
+void Att_ReqListUsrsAttendance (void)
   {
    Att_ReqListOrPrintUsrsAttendanceCrs (NULL);
   }
@@ -2182,17 +2163,17 @@ static void Att_ReqListOrPrintUsrsAttendanceCrs (__attribute__((unused)) void *A
 /********** List my attendance (I am a student) to several events ************/
 /*****************************************************************************/
 
-void Att_ListMyAttendanceCrs (void)
+void Att_ListMyAttendance (void)
   {
-   Att_ListOrPrintMyAttendanceCrs (Att_VIEW_ONLY_ME);
+   Att_ListOrPrintMyAttendanceCrs (Vie_VIEW_ONLY_ME);
   }
 
-void Att_PrintMyAttendanceCrs (void)
+void Att_PrintMyAttendance (void)
   {
-   Att_ListOrPrintMyAttendanceCrs (Att_PRNT_ONLY_ME);
+   Att_ListOrPrintMyAttendanceCrs (Vie_PRNT_ONLY_ME);
   }
 
-static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
+static void Att_ListOrPrintMyAttendanceCrs (Vie_UsrsViewType_t UsrsViewType)
   {
    extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *Txt_Attendance;
@@ -2200,10 +2181,10 @@ static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
    unsigned NumAttEvent;
    struct Usr_ListCods ListCods;
 
-   switch (TypeOfView)
+   switch (UsrsViewType)
      {
-      case Att_VIEW_ONLY_ME:
-      case Att_PRNT_ONLY_ME:
+      case Vie_VIEW_ONLY_ME:
+      case Vie_PRNT_ONLY_ME:
 	 /***** Initialize list of user codes *****/
 	 ListCods.Lst = &Gbl.Usrs.Me.UsrDat.UsrCod;
 	 ListCods.NumUsrs = 1;
@@ -2233,13 +2214,13 @@ static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 	 Att_GetListSelectedAttCods (&Events);
 
 	 /***** Begin box *****/
-	 switch (TypeOfView)
+	 switch (UsrsViewType)
 	   {
-	    case Att_VIEW_ONLY_ME:
+	    case Vie_VIEW_ONLY_ME:
 	       Box_BoxBegin (Txt_Attendance,Att_PutIconsMyAttList,&Events,
 			     Hlp_USERS_Attendance_attendance_list,Box_NOT_CLOSABLE);
 	       break;
-	    case Att_PRNT_ONLY_ME:
+	    case Vie_PRNT_ONLY_ME:
 	       Box_BoxBegin (Txt_Attendance,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 	       break;
 	    default:
@@ -2248,10 +2229,10 @@ static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 	   }
 
 	 /***** List events to select *****/
-	 Att_ListEventsToSelect (&Events,TypeOfView);
+	 Att_ListEventsToSelect (&Events,UsrsViewType);
 
 	 /***** Show table with attendances for every student in list *****/
-	 Att_ListUsrsAttendanceTable (&Events,TypeOfView,&ListCods);
+	 Att_ListUsrsAttendanceTable (&Events,UsrsViewType,&ListCods);
 
 	 /***** Show details or put button to show details *****/
 	 if (Events.ShowDetails == Lay_SHOW)
@@ -2279,24 +2260,24 @@ static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 /*************** List attendance of users to several events ******************/
 /*****************************************************************************/
 
-void Att_ListUsrsAttendanceCrs (void)
+void Att_ListUsrsAttendance (void)
   {
-   Att_GetUsrsAndListOrPrintAttendanceCrs (Att_VIEW_SEL_USR);
+   Att_GetUsrsAndListOrPrintAttendanceCrs (Vie_VIEW_SEL_USR);
   }
 
-void Att_PrintUsrsAttendanceCrs (void)
+void Att_PrintUsrsAttendance (void)
   {
-   Att_GetUsrsAndListOrPrintAttendanceCrs (Att_PRNT_SEL_USR);
+   Att_GetUsrsAndListOrPrintAttendanceCrs (Vie_PRNT_SEL_USR);
   }
 
-static void Att_GetUsrsAndListOrPrintAttendanceCrs (Att_TypeOfView_t TypeOfView)
+static void Att_GetUsrsAndListOrPrintAttendanceCrs (Vie_UsrsViewType_t UsrsViewType)
   {
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
-				  Att_ListOrPrintUsrsAttendanceCrs,&TypeOfView,
+				  Att_ListOrPrintUsrsAttendanceCrs,&UsrsViewType,
                                   Att_ReqListOrPrintUsrsAttendanceCrs,NULL);
   }
 
-static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
+static void Att_ListOrPrintUsrsAttendanceCrs (void *UsrsViewType)
   {
    extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *Txt_Attendance_list;
@@ -2304,10 +2285,10 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
    struct Usr_ListCods ListCods;
    unsigned NumAttEvent;
 
-   switch (*((Att_TypeOfView_t *) TypeOfView))
+   switch (*((Vie_UsrsViewType_t *) UsrsViewType))
      {
-      case Att_VIEW_SEL_USR:
-      case Att_PRNT_SEL_USR:
+      case Vie_VIEW_SEL_USR:
+      case Vie_PRNT_SEL_USR:
 	 /***** Reset attendance events *****/
 	 Att_ResetEvents (&Events);
 
@@ -2342,14 +2323,14 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
 	    Att_GetListSelectedAttCods (&Events);
 
 	    /***** Begin box *****/
-	    switch (*((Att_TypeOfView_t *) TypeOfView))
+	    switch (*((Vie_UsrsViewType_t *) UsrsViewType))
 	      {
-	       case Att_VIEW_SEL_USR:
+	       case Vie_VIEW_SEL_USR:
 		  Box_BoxBegin (Txt_Attendance_list,
 				Att_PutIconsStdsAttList,&Events,
 				Hlp_USERS_Attendance_attendance_list,Box_NOT_CLOSABLE);
 		  break;
-	       case Att_PRNT_SEL_USR:
+	       case Vie_PRNT_SEL_USR:
 		  Box_BoxBegin (Txt_Attendance_list,NULL,NULL,
 				NULL,Box_NOT_CLOSABLE);
 		  break;
@@ -2358,10 +2339,10 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
 	      }
 
 	    /***** List events to select *****/
-	    Att_ListEventsToSelect (&Events,*((Att_TypeOfView_t *) TypeOfView));
+	    Att_ListEventsToSelect (&Events,*((Vie_UsrsViewType_t *) UsrsViewType));
 
 	    /***** Show table with attendances for every student in list *****/
-	    Att_ListUsrsAttendanceTable (&Events,*((Att_TypeOfView_t *) TypeOfView),
+	    Att_ListUsrsAttendanceTable (&Events,*((Vie_UsrsViewType_t *) UsrsViewType),
 	                                 &ListCods);
 
 	    /***** Show details or put button to show details *****/
@@ -2586,27 +2567,27 @@ static void Att_PutButtonToShowDetails (const struct Att_Events *Events)
 /*****************************************************************************/
 
 static void Att_ListEventsToSelect (struct Att_Events *Events,
-                                    Att_TypeOfView_t TypeOfView)
+                                    Vie_UsrsViewType_t UsrsViewType)
   {
    extern const char *Txt_Events;
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Update_attendance;
-   static void (*FunctionToDrawContextualIcons[Att_TYPES_OF_VIEW]) (void *Args) =
+   static void (*FunctionToDrawContextualIcons[Vie_NUM_USRS_VIEW_TYPES]) (void *Args) =
      {
-      [Att_VIEW_ONLY_ME] = Att_PutIconToViewAttEvents,
-      [Att_VIEW_SEL_USR] = Att_PutIconToEditAttEvents,
-      [Att_PRNT_ONLY_ME] = NULL,
-      [Att_PRNT_SEL_USR] = NULL,
+      [Vie_VIEW_ONLY_ME] = Att_PutIconToViewAttEvents,
+      [Vie_VIEW_SEL_USR] = Att_PutIconToEditAttEvents,
+      [Vie_PRNT_ONLY_ME] = NULL,
+      [Vie_PRNT_SEL_USR] = NULL,
      };
    unsigned UniqueId;
    char *Id;
    unsigned NumAttEvent;
-   Frm_PutForm_t PutForm = (TypeOfView == Att_VIEW_ONLY_ME ||
-			    TypeOfView == Att_VIEW_SEL_USR);
+   Frm_PutForm_t PutForm = (UsrsViewType == Vie_VIEW_ONLY_ME ||
+			    UsrsViewType == Vie_VIEW_SEL_USR);
 
    /***** Begin box *****/
-   Box_BoxBegin (Txt_Events,FunctionToDrawContextualIcons[TypeOfView],NULL,
+   Box_BoxBegin (Txt_Events,FunctionToDrawContextualIcons[UsrsViewType],NULL,
 		 NULL,Box_NOT_CLOSABLE);
 
       /***** Begin form to update the attendance
@@ -2724,7 +2705,7 @@ static void Att_PutIconToEditAttEvents (__attribute__((unused)) void *Args)
 /*****************************************************************************/
 
 static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
-                                         Att_TypeOfView_t TypeOfView,
+                                         Vie_UsrsViewType_t UsrsViewType,
 	                                 const struct Usr_ListCods *ListCods)
   {
    extern const char *Txt_Number_of_users;
@@ -2733,8 +2714,8 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
    unsigned NumAttEvent;
    unsigned Total;
    Pho_ShowPhotos_t ShowPhotos;
-   Lay_Show_t PutButtonShowDetails = (TypeOfView == Att_VIEW_ONLY_ME ||
-				      TypeOfView == Att_VIEW_SEL_USR) &&
+   Lay_Show_t PutButtonShowDetails = (UsrsViewType == Vie_VIEW_ONLY_ME ||
+				      UsrsViewType == Vie_VIEW_SEL_USR) &&
 				     Events->ShowDetails == Lay_DONT_SHOW ? Lay_SHOW :
 									    Lay_DONT_SHOW;
 

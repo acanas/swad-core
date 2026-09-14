@@ -11909,25 +11909,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActChgTreNodPrg] =
 #if   L==1	// ca
-	"Canviar &iacute;tem"
+	"Editar &iacute;tem"
 #elif L==2	// de
-	"Programmpunkt &auml;ndern"
+	"Programmpunkt bearbeiten"
 #elif L==3	// en
-	"Change tree node"
+	"Edit tree node"
 #elif L==4	// es
-	"Cambiar &iacute;tem"
+	"Editar &iacute;tem"
 #elif L==5	// fr
-	"Changer &eacute;l&eacute;ment de programme"
+	"Modifier &eacute;l&eacute;ment de programme"
 #elif L==6	// gn
-	"Emoambue elemento programa"
+	"Editar elemento programa"
 #elif L==7	// it
-	"Cambiare articolo del programma"
+	"Modificare articolo del programma"
 #elif L==8	// pl
-	"Zmie&nacute; pozycj&eogon; programu"
+	"Edytuj pozycj&eogon; programu"
 #elif L==9	// pt
-	"Alterar item do programa"
+	"Editar item do programa"
 #elif L==10	// tr
-	"Program &ouml;&gbreve;esini de&gbreve;i&scedil;tir"
+	"&Ouml;&gbreve;eyi d&uacute;zenle"
 #endif
 	,
 	[ActNewTreNodPrg] =
@@ -17701,6 +17701,121 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See rubrics"		// Precisa de tradução
 #elif L==10	// tr
 	"See rubrics"		// Çeviri lazim!
+#endif
+	,
+	[ActReqLstUsrRub] =
+#if   L==1	// ca
+	"Llistat d'assist&egrave;ncia d'estudiants" // !!!! TRADUCIR LAS CINCO ACCIONES SIGUIENTES
+#elif L==2	// de
+	"Anwesenheitsliste der Sch&uuml;ler"
+#elif L==3	// en
+	"Student rubrics list"
+#elif L==4	// es
+	"Listado de r&uacute;bricas de estudiantes"
+#elif L==5	// fr
+	"Liste de pr&eacute;sence des &eacute;tudiants"
+#elif L==6	// gn
+	"Temimbo'eku&eacute;ra lista de asistencia"
+#elif L==7	// it
+	"Elenco degli studenti presenti"
+#elif L==8	// pl
+	"Lista obecno&sacute;ci uczni&oacute;w"
+#elif L==9	// pt
+	"Lista de presen&ccedil;as dos alunos"
+#elif L==10	// tr
+	"&Ouml;&gbreve;renci devam listesi"
+#endif
+	,
+	[ActSeeLstMyRub] =
+#if   L==1	// ca
+	"List my attendance as student to several events"	// Necessita traducció
+#elif L==2	// de
+	"List my attendance as student to several events"	// Need Übersetzung
+#elif L==3	// en
+	"List my attendance as student to several events"
+#elif L==4	// es
+	"Listar mis r&uacute;bricas como estudiante a varios eventos"
+#elif L==5	// fr
+	"List my attendance as student to several events"	// Besoin de traduction
+#elif L==6	// gn
+	"Listar mi asistencia como estudiante a varios eventos"	// Okoteve traducción
+#elif L==7	// it
+	"List my attendance as student to several events"	// Bisogno di traduzione
+#elif L==8	// pl
+	"List my attendance as student to several events"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"List my attendance as student to several events"	// Precisa de tradução
+#elif L==10	// tr
+	"List my attendance as student to several events"	// Çeviri lazim!
+#endif
+	,
+	[ActPrnLstMyRub] =
+#if   L==1	// ca
+	"Print my attendance as student to several events"		// Necessita traducció
+#elif L==2	// de
+	"Print my attendance as student to several events"		// Need Übersetzung
+#elif L==3	// en
+	"Print my attendance as student to several events"
+#elif L==4	// es
+	"Imprimir mis r&uacute;bricas como estudiante a varios eventos"
+#elif L==5	// fr
+	"Print my attendance as student to several events"		// Besoin de traduction
+#elif L==6	// gn
+	"Imprimir mi asistencia como estudiante a varios eventos"	// Okoteve traducción
+#elif L==7	// it
+	"Print my attendance as student to several events"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Print my attendance as student to several events"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Print my attendance as student to several events"		// Precisa de tradução
+#elif L==10	// tr
+	"Print my attendance as student to several events"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeLstUsrRub] =
+#if   L==1	// ca
+	"Veure assist&egrave;ncia"
+#elif L==2	// de
+	"Anzeigen Anwesenheit"
+#elif L==3	// en
+	"View attendance"
+#elif L==4	// es
+	"Ver r&uacute;bricas de estudiantes"
+#elif L==5	// fr
+	"Voir pr&eacute;sence"
+#elif L==6	// gn
+	"Ohecha asistencia"
+#elif L==7	// it
+	"Vedi presenza"
+#elif L==8	// pl
+	"Zobacz obecno&sacute;&cacute;"
+#elif L==9	// pt
+	"Ver presen&ccedil;a"
+#elif L==10	// tr
+	"Kat&inodot;l&inodot;m&inodot; g&ouml;r&uuml;nt&uuml;le"
+#endif
+	,
+	[ActPrnLstUsrRub] =
+#if   L==1	// ca
+	"Print attendance"	// Necessita traducció
+#elif L==2	// de
+	"Print attendance"	// Need Übersetzung
+#elif L==3	// en
+	"Print attendance"
+#elif L==4	// es
+	"Imprimir r&uacute;bricas de estudiantes"
+#elif L==5	// fr
+	"Print attendance"	// Besoin de traduction
+#elif L==6	// gn
+	"Imprimir r&uacute;bricas de estudiantes"	// Okoteve traducción
+#elif L==7	// it
+	"Print attendance"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Print attendance"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Print attendance"	// Precisa de tradução
+#elif L==10	// tr
+	"Print attendance"	// Çeviri lazim!
 #endif
 	,
 	[ActSeeOneRub] =
@@ -28308,25 +28423,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActReqSelAllGrp] =
 #if   L==1	// ca
-	"Request selection of groups"		// Necessita traducció
+	"Seleccionar els meus grups"
 #elif L==2	// de
-	"Request selection of groups"		// Need Übersetzung
+	"W&auml;hlen Sie meine Gruppen aus"
 #elif L==3	// en
-	"Request selection of groups"
+	"Select my groups"
 #elif L==4	// es
-	"Solicitar selecci&oacute;n de grupos"
+	"Seleccionar mis grupos"
 #elif L==5	// fr
-	"Request selection of groups"		// Besoin de traduction
+	"S&eacute;lectionner mes groupes"
 #elif L==6	// gn
-	"Solicitar selecci&oacute;n de grupos"	// Okoteve traducción
+	"Eiporavo che atyku&eacute;ra"
 #elif L==7	// it
-	"Request selection of groups"		// Bisogno di traduzione
+	"Selezionare i miei gruppi"
 #elif L==8	// pl
-	"Request selection of groups"		// Potrzebujesz tlumaczenie
+	"Wybierz moje grupy"
 #elif L==9	// pt
-	"Request selection of groups"		// Precisa de tradução
+	"Selecionar os meus grupos"
 #elif L==10	// tr
-	"Request selection of groups"		// Çeviri lazim!
+	"Gruplar&inodot;m&inodot; se&ccedil;"
 #endif
 	,
 	[ActReqSelOneGrpTyp] =
@@ -31827,25 +31942,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActReqLstUsrAtt] =
 #if   L==1	// ca
-	"Request listing of attendance of several students to several events"		// Necessita traducció
+	"Llistat d'assist&egrave;ncia d'estudiants"
 #elif L==2	// de
-	"Request listing of attendance of several students to several events"		// Need Übersetzung
+	"Anwesenheitsliste der Sch&uuml;ler"
 #elif L==3	// en
-	"Request listing of attendance of several students to several events"
+	"Student attendance list"
 #elif L==4	// es
-	"Solicitar el listado de asistencia de varios estudiantes a varios eventos"
+	"Listado de asistencia de estudiantes"
 #elif L==5	// fr
-	"Request listing of attendance of several students to several events"		// Besoin de traduction
+	"Liste de pr&eacute;sence des &eacute;tudiants"
 #elif L==6	// gn
-	"Solicitar el listado de asistencia de varios estudiantes a varios eventos"	// Okoteve traducción
+	"Temimbo'eku&eacute;ra lista de asistencia"
 #elif L==7	// it
-	"Request listing of attendance of several students to several events"		// Bisogno di traduzione
+	"Elenco degli studenti presenti"
 #elif L==8	// pl
-	"Request listing of attendance of several students to several events"		// Potrzebujesz tlumaczenie
+	"Lista obecno&sacute;ci uczni&oacute;w"
 #elif L==9	// pt
-	"Request listing of attendance of several students to several events"		// Precisa de tradução
+	"Lista de presen&ccedil;as dos alunos"
 #elif L==10	// tr
-	"Request listing of attendance of several students to several events"		// Çeviri lazim!
+	"&Ouml;&gbreve;renci devam listesi"
 #endif
 	,
 	[ActSeeLstMyAtt] =

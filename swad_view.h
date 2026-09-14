@@ -42,4 +42,13 @@ typedef enum
    Vie_PRINT	= 3,
   } Vie_ViewType_t;
 
+#define Vie_NUM_USRS_VIEW_TYPES 4
+typedef enum
+  {
+   Vie_VIEW_ONLY_ME,	// View only me
+   Vie_VIEW_SEL_USR,	// View selected users
+   Vie_PRNT_ONLY_ME,	// Print only me
+   Vie_PRNT_SEL_USR,	// Print selected users
+  } Vie_UsrsViewType_t;
+
 #endif

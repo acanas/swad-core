@@ -2713,6 +2713,7 @@ mysql> DESCRIBE prg_resources;
 				  "'lnk','ass','tmt','asg','prj','cfe','tst',"
 				  "'exa','gam','rub','doc','mrk','grp','tch',"
 				  "'att','for','svy') NOT NULL DEFAULT 'non',"
+			"Cod INT NOT NULL DEFAULT -1,"
 			"Title VARCHAR(2047) NOT NULL,"		// Rsc_MAX_BYTES_RESOURCE_TITLE
 		   "UNIQUE INDEX(ItmCod),"
 		   "UNIQUE INDEX(NodCod,ItmInd)"

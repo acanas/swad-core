@@ -1726,7 +1726,7 @@ static void Tre_ShowFormToChangeNode (struct Tre_Node *Node)
       Tre_ShowFormNode (Node,SetHMS,Txt);
 
    /***** End form to change *****/
-   Frm_EndFormTable (Btn_CONFIRM);
+   Frm_EndFormTable (Btn_SAVE_CHANGES);
   }
 
 /*****************************************************************************/

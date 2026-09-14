@@ -816,7 +816,7 @@ Exi_Exist_t Deg_DB_GetUsrMainDeg (MYSQL_RES **mysql_res,long UsrCod)
 				 " AND crs_users.CrsCod=crs_courses.CrsCod"
 			    " GROUP BY crs_courses.DegCod"
 			    " ORDER BY N DESC"	// Ordered by number of courses in which user is enroled
-			       " LIMIT 1)"		// We need only the main degree
+			       " LIMIT 1)"	// We need only the main degree
 			      " AS main_degree"
 
 		       " WHERE deg_degrees.DegCod=main_degree.DegCod",

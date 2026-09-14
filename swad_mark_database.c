@@ -124,7 +124,7 @@ Exi_Exist_t Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res)
 				   " in header and footer",
 			 "SELECT mrk_marks.%s,"	// row[0]
 				"mrk_marks.%s"	// row[1]
-			  " FROM brw_files,"
+			  " FROM brw_files FORCE INDEX (FileBrowser),"	// Very important to optimize by this composed index (FileBrowser,Cod,ZoneUsrCod)
 				"mrk_marks"
 			 " WHERE brw_files.FileBrowser=%u"
 			   " AND brw_files.Cod=%ld"

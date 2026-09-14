@@ -62,6 +62,7 @@ extern struct Globals Gbl;
 static void Rub_PutIconsListRubrics (void *Rubrics);
 static void Rub_PutIconToCreateNewRubric (struct Rub_Rubrics *Rubrics);
 static void Rub_PutParsToCreateNewRubric (void *Rubrics);
+static void Rub_PutParsToListUsrsRubrics (void *Rubrics);
 
 static void Rub_PutIconsViewingOneRubric (void *Rubrics);
 static void Rub_PutIconsEditingOneRubric (void *Rubrics);
@@ -79,6 +80,13 @@ static void Rub_CreateRubric (struct Rub_Rubric *Rubric);
 static void Rub_UpdateRubric (struct Rub_Rubric *Rubric);
 
 static Err_SuccessOrError_t Rub_CheckIfRecursiveTree (long RubCod,struct Rub_Node **TOS);
+
+//-------------------------- Listing users rubrics -----------------------------
+static void Rub_ReqListOrPrintUsrsRubricsCrs (__attribute__((unused)) void *Args);
+static void Rub_GetUsrsAndListOrPrintRubricsCrs (Vie_UsrsViewType_t UsrsViewType);
+static void Rub_ListOrPrintUsrsRubricsCrs (void *UsrsViewType);
+static void Rub_PutIconsUsrsRubrics (__attribute__((unused)) void *Args);
+static void Rub_PutParsToPrintUsrsRubrics (__attribute__((unused)) void *Args);
 
 /*****************************************************************************/
 /*************************** Reset rubrics context ***************************/
@@ -228,7 +236,15 @@ Usr_Can_t Rub_CheckIfICanEditRubrics (void)
   {
    static Usr_Can_t ICanEditRubrics[Rol_NUM_ROLES] =
      {
+      [Rol_UNK    ] = Usr_CAN_NOT,
+      [Rol_GST    ] = Usr_CAN_NOT,
+      [Rol_USR    ] = Usr_CAN_NOT,
+      [Rol_STD    ] = Usr_CAN_NOT,
+      [Rol_NET    ] = Usr_CAN_NOT,
       [Rol_TCH    ] = Usr_CAN,
+      [Rol_DEG_ADM] = Usr_CAN_NOT,
+      [Rol_CTR_ADM] = Usr_CAN_NOT,
+      [Rol_INS_ADM] = Usr_CAN_NOT,
       [Rol_SYS_ADM] = Usr_CAN,
      };
 
@@ -272,6 +288,24 @@ static void Rub_PutIconsListRubrics (void *Rubrics)
 	 Rsc_PutIconToViewClipboard ();
 	}
 
+      /***** Put icon to show students list *****/
+      if (((struct Rub_Rubrics *) Rubrics)->Num)
+	 switch (Gbl.Usrs.Me.Role.Logged)
+	   {
+	    case Rol_STD:
+	       Ico_PutContextualIconToShowCheckList (ActSeeLstMyRub,
+	                                             NULL,NULL);
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	    case Rol_SYS_ADM:
+	       Ico_PutContextualIconToShowCheckList (ActReqLstUsrRub,
+						     Rub_PutParsToListUsrsRubrics,Rubrics);
+	       break;
+	    default:
+	       break;
+	   }
+
       /***** Put icon to get resource link *****/
       Ico_PutContextualIconToGetLink (ActReqLnkRub,NULL,Rub_PutPars,Rubrics);
 
@@ -298,6 +332,21 @@ static void Rub_PutParsToCreateNewRubric (void *Rubrics)
   {
    if (Rubrics)
       Pag_PutParPagNum (Pag_RUBRICS,((struct Rub_Rubrics *) Rubrics)->CurrentPage);
+  }
+
+/*****************************************************************************/
+/***************** Put parameters to list students rubrics *******************/
+/*****************************************************************************/
+
+static void Rub_PutParsToListUsrsRubrics (void *Rubrics)
+  {
+   Grp_MyAllGrps_t MyAllGrps;
+
+   if (Rubrics)
+     {
+      MyAllGrps = Grp_GetParMyAllGrps ();
+      Grp_PutParMyAllGrps (&MyAllGrps);
+     }
   }
 
 /*****************************************************************************/
@@ -1190,6 +1239,172 @@ void Rub_ShowRubricsToFill (Rsc_Type_t RscType,long RscCod,Usr_Can_t ICanFill,
       /***** Free memory used for rubric *****/
       Rub_RubricDestructor (&Rubric);
      }
+  }
+
+/*****************************************************************************/
+/********************* Request listing rubrics of users **********************/
+/*****************************************************************************/
+
+void Rub_ReqListUsrs (void)
+  {
+   Rub_ReqListOrPrintUsrsRubricsCrs (NULL);
+  }
+
+static void Rub_ReqListOrPrintUsrsRubricsCrs (__attribute__((unused)) void *Args)
+  {
+   extern const char *Hlp_USERS_Attendance_attendance_list;
+   extern const char *Txt_Users;
+   struct Rub_Rubrics Rubrics;
+
+   /***** Reset rubrics context *****/
+   Rub_ResetRubrics (&Rubrics);
+
+   /***** Get list of attendance events *****/
+   // Att_GetListEvents (&Events,Att_OLDEST_FIRST);
+
+   /***** List users to select some of them *****/
+   Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
+				     ActSeeLstUsrRub,
+				     NULL,NULL,
+				     Txt_Users,
+				     Hlp_USERS_Attendance_attendance_list,
+				     Btn_CONTINUE,
+				     Frm_DONT_PUT_FORM);	// Do not put form with date range
+
+   /***** Free list of attendance events *****/
+   // Att_FreeListEvents (&Events);
+  }
+
+/*****************************************************************************/
+/*************** List attendance of users to several events ******************/
+/*****************************************************************************/
+
+void Rub_ListUsrsRubrics (void)
+  {
+   Rub_GetUsrsAndListOrPrintRubricsCrs (Vie_VIEW_SEL_USR);
+  }
+
+void Rub_PrintUsrsRubrics (void)
+  {
+   Rub_GetUsrsAndListOrPrintRubricsCrs (Vie_PRNT_SEL_USR);
+  }
+
+static void Rub_GetUsrsAndListOrPrintRubricsCrs (Vie_UsrsViewType_t UsrsViewType)
+  {
+   Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
+				  Rub_ListOrPrintUsrsRubricsCrs,&UsrsViewType,
+                                  Rub_ReqListOrPrintUsrsRubricsCrs,NULL);
+  }
+
+static void Rub_ListOrPrintUsrsRubricsCrs (void *UsrsViewType)
+  {
+   extern const char *Hlp_ASSESSMENT_Rubrics;
+   extern const char *Txt_Users;
+   // struct Att_Events Events;
+   struct Usr_ListCods ListCods;
+   // unsigned NumAttEvent;
+
+   switch (*((Vie_UsrsViewType_t *) UsrsViewType))
+     {
+      case Vie_VIEW_SEL_USR:
+      case Vie_PRNT_SEL_USR:
+	 /***** Reset attendance events *****/
+	 // Att_ResetEvents (&Events);
+
+	 /***** Get parameters *****/
+	 /* Get boolean parameter that indicates if details must be shown */
+	 // Events.ShowDetails = Lay_GetParShow ("ShowDetails");
+
+	 /* Get list of groups selected */
+	 Grp_GetParCodsSeveralGrpsToShowUsrs ();
+
+	 /***** Count number of valid users in list of encrypted user codes *****/
+	 ListCods.NumUsrs = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
+
+	 if (ListCods.NumUsrs)
+	   {
+	    /***** Get list of students selected to show their attendances *****/
+	    Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,&ListCods);
+
+	    /***** Get list of attendance events *****/
+	    // Att_GetListEvents (&Events,Att_OLDEST_FIRST);
+
+	    /***** Get number of students in each event *****/
+	    // for (NumAttEvent = 0;
+	    //	 NumAttEvent < Events.Num;
+	    //	 NumAttEvent++)
+	    //   /* Get number of students in this event */
+	    //   Events.Lst[NumAttEvent].NumStdsFromList =
+	    //   Att_GetNumUsrsFromAListWhoAreInEvent (Events.Lst[NumAttEvent].AttCod,
+	    //					     &ListCods);
+
+	    /***** Get list of attendance events selected *****/
+	    // Att_GetListSelectedAttCods (&Events);
+
+	    /***** Begin box *****/
+	    switch (*((Vie_UsrsViewType_t *) UsrsViewType))
+	      {
+	       case Vie_VIEW_SEL_USR:
+		  Box_BoxBegin (Txt_Users,
+				Rub_PutIconsUsrsRubrics,NULL,
+				Hlp_ASSESSMENT_Rubrics,Box_NOT_CLOSABLE);
+		  break;
+	       case Vie_PRNT_SEL_USR:
+		  Box_BoxBegin (Txt_Users,NULL,NULL,
+				NULL,Box_NOT_CLOSABLE);
+		  break;
+	       default:
+		  Err_WrongTypeExit ();
+	      }
+
+	    /***** List events to select *****/
+	    // Att_ListEventsToSelect (&Events,*((Vie_UsrsViewType_t *) UsrsViewType));
+
+	    /***** Show table with attendances for every student in list *****/
+	    // Att_ListUsrsAttendanceTable (&Events,*((Vie_UsrsViewType_t *) UsrsViewType),
+	    //                              &ListCods);
+
+	    /***** Show details or put button to show details *****/
+	    // if (Events.ShowDetails == Lay_SHOW)
+	    //   Att_ListStdsWithAttEventsDetails (&Events,&ListCods);
+
+	    /***** End box *****/
+	    Box_BoxEnd ();
+
+	    /***** Free memory for list of attendance events selected *****/
+	    // free (Events.StrAttCodsSelected);
+
+	    /***** Free list of attendance events *****/
+	    // Att_FreeListEvents (&Events);
+
+	    /***** Free list of user codes *****/
+	    Usr_FreeListSelectedUsrCods (&ListCods);
+	   }
+
+	 /***** Free list of groups selected *****/
+	 Grp_FreeListCodSelectedGrps ();
+	 break;
+      default:
+	 Err_WrongTypeExit ();
+	 break;
+     }
+  }
+
+/*****************************************************************************/
+/******************** Put icon to print rubrics of users *********************/
+/*****************************************************************************/
+
+static void Rub_PutIconsUsrsRubrics (__attribute__((unused)) void *Args)
+  {
+   /***** Put icon to print users rubrics *****/
+   Ico_PutContextualIconToPrint (ActPrnLstUsrRub,
+				 Rub_PutParsToPrintUsrsRubrics,NULL);
+  }
+
+static void Rub_PutParsToPrintUsrsRubrics (__attribute__((unused)) void *Args)
+  {
+   Grp_PutParsCodGrps ();
+   Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
   }
 
 /*****************************************************************************/

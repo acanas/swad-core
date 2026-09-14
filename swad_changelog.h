@@ -639,10 +639,13 @@ TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de t
 
 TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtube.com/shorts/fY6Oax_uJBc?si=G3UHqvSH3yEbxm1B
 */
-#define Chl_PLATFORM_VERSION	"SWAD 25.48.1 (2026-07-17)"
+#define Chl_PLATFORM_VERSION	"SWAD 26.0 (2026-09-14)"
 #define Chl_CSS_FILE		"swad25.46.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
+	Version 26.0:     Sep 14, 2026	Changes in program edition. (347359 lines)
+	Version 25.49:    Sep 08, 2026	Changes in rubrics.
+					Optimization on database slow query related to file metadata. (347357 lines)
 	Version 25.48.1:  Jul 17, 2026	Code refactoring in rubrics.
 					Changes in groups and attendance.(347032 lines)
 	Version 25.48:    Jul 10, 2026	Changes in timeline. Which users to view is stored in the session rather than in the user's preferences. Now users can see the timeline of all. (346990 lines)

@@ -37,30 +37,38 @@ from smtplib import SMTPException
 
 # Read arguments
 if len(sys.argv) < 8:
-	#print "Error: swad_smtp smtp_server smtp_port email_from email_password email_to email_subject email_content_filename"
+	#	Error, use: swad_smtp smtp_server smtp_port email_from email_password email_to email_subject email_content_filename
 	sys.exit(2)
 
 smtp_server = sys.argv[1]
-smtp_port = sys.argv[2]
+smtp_port = int (sys.argv[2])
 email_from = sys.argv[3]
 email_password = sys.argv[4]
 email_to = [sys.argv[5]]
-email_subject = sys.argv[6]
+if sys.version_info[0] >= 3:
+	email_subject = sys.argv[6].encode('utf-8', 'surrogateescape').decode('iso-8859-1')	# En Python 3
+else:
+	email_subject = sys.argv[6]								# En Python 2
 email_content_filename = sys.argv[7]
 
 # Read content from file
 if not os.path.exists(email_content_filename):
-	#print "Error: file "+ email_content_filename + " does not exist"
 	sys.exit(3)
-email_content_file = open (email_content_filename,'r')
-email_txt = email_content_file.read()
-email_content_file.close
+if sys.version_info[0] >= 3:
+	email_content_file = open (email_content_filename,'rb')		# En Python 3
+	email_txt = email_content_file.read().decode('iso-8859-1')	# En Python 3
+else:
+	email_content_file = open (email_content_filename,'r')		# En Python 2
+	email_txt = email_content_file.read()				# En Python 2
+email_content_file.close()
 
 # Compose message
 email_date = formatdate()
 msg = ("From: %s\r\nTo: %s\r\nContent-type: text/plain; charset=iso-8859-1\r\nSubject: %s\r\nDate: %s\r\n\r\n"
        % (email_from, ", ".join(email_to),email_subject,email_date))
 msg = msg + email_txt
+if sys.version_info[0] >= 3:
+	msg = msg.encode('iso-8859-1')					# En Python 3
 
 try:
 	# Create SMTP object
@@ -83,5 +91,4 @@ try:
 	smtpObj.quit()
 	
 except SMTPException:
-	#print "Error: unable to send email"
 	sys.exit(1)

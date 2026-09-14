@@ -1352,7 +1352,7 @@ void RubCri_RemoveCriterion (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-    (&Rubrics.Rubric);
+   Rub_RubricConstructor (&Rubrics.Rubric);
    RubCri_ResetCriterion (&Rubrics.Criterion);
 
    /***** Allocate memory for rubric *****/

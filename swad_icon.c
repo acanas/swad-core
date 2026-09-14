@@ -423,8 +423,8 @@ void Ico_PutContextualIconToViewAndSelectMyGroups (Act_Action_t NextAction,
 				  "sitemap.svg",Ico_BLACK);
   }
 
-void Ico_PutContextualIconToShowAttendanceList (Act_Action_t NextAction,
-                                                void (*FuncPars) (void *Args),void *Args)
+void Ico_PutContextualIconToShowCheckList (Act_Action_t NextAction,
+                                           void (*FuncPars) (void *Args),void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncPars,Args,
 				  "tasks.svg",Ico_BLACK);

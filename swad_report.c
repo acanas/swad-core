@@ -369,7 +369,7 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
    snprintf (PathUniqueDirR,sizeof (PathUniqueDirR),"%s/%s",
              PathUniqueDirL,
              &UniqueNameEncrypted[2]);
-   if (mkdir (PathUniqueDirR,(mode_t) 0xFFF))
+   if (mkdir (PathUniqueDirR,(mode_t) 0777))
       Err_ShowErrorAndExit ("Can not create directory for report.");
 
    /***** Path of the public file with the report */

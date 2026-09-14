@@ -1756,6 +1756,10 @@ static void Mai_EditingMailDomainDestructor (void)
 /*****************************************************************************/
 // Return 0 on success
 // Return != 0 on error
+#include <errno.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 int Mai_SendMailMsg (const char FileNameMail[PATH_MAX + 1],
                      const char *Subject,
@@ -1778,6 +1782,7 @@ int Mai_SendMailMsg (const char FileNameMail[PATH_MAX + 1],
              ToEmail,
              Cfg_PLATFORM_SHORT_NAME,Subject,
              FileNameMail);
+
    ReturnCode = system (Command);
    if (ReturnCode == -1)	// The value returned is -1 on error
       Err_ShowErrorAndExit ("Error when running script to send email.");
