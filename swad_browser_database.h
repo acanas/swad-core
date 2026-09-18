@@ -39,8 +39,8 @@
 /*****************************************************************************/
 
 //---------------------------------- Files ------------------------------------
-long Brw_DB_AddPath (long PublisherUsrCod,Brw_FileType_t FileType,
-                     const char *FullPathInTree,
+long Brw_DB_AddPath (long PublisherUsrCod,
+		     Brw_FileType_t FileType,const char *FullPathInTree,
                      PriPub_PrivateOrPublic_t PrivateOrPublic,Brw_License_t License);
 void Brw_DB_RenameOneFolder (const char OldPath[PATH_MAX + 1],
                              const char NewPath[PATH_MAX + 1]);
@@ -118,8 +118,8 @@ void Brw_DB_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
                                            const char *OldPath,const char *NewPath);
 
 //------------------------------- Cliboards -----------------------------------
-void Brw_DB_AddPathToClipboards (void);
-void Brw_DB_UpdatePathInClipboard (void);
+void Brw_DB_AddPathToClipboards (const struct Brw_FilFolLnk *FilFolLnk);
+void Brw_DB_UpdatePathInClipboard (const struct Brw_FilFolLnk *FilFolLnk);
 unsigned Brw_DB_GetMyClipboard (MYSQL_RES **mysql_res);
 void Brw_DB_RemoveExpiredClipboards (void);
 void Brw_DB_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,

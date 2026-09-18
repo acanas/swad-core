@@ -494,7 +494,7 @@ void Fil_RemoveTree (const char *Path)
 		  free (FileList);
 		 }
 	       else
-		  Err_ShowErrorAndExit ("Error while scanning directory.");
+		  Err_ShowErrorAndExit ("Error while scanning directory 7.");
 
 	       /***** Remove the directory, now empty *****/
 	       if (rmdir (Path))
@@ -563,7 +563,7 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,
 		  rmdir (Path);
 	   }
 	 else
-	    Err_ShowErrorAndExit ("Error while scanning directory.");
+	    Err_ShowErrorAndExit ("Error while scanning directory 8.");
 	}
       else					// Not a directory
 	 if (FileStatus.st_mtime < Dat_GetStartExecutionTimeUTC () - TimeToRemove)

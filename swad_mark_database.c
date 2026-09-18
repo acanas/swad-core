@@ -68,7 +68,8 @@ void Mrk_DB_AddMarks (long FilCod,const struct Mrk_Properties *Marks)
 /***** Change the number of rows of header or footer of a file of marks ******/
 /*****************************************************************************/
 
-void Mrk_DB_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter,unsigned NumRows)
+void Mrk_DB_ChangeNumRowsHeaderOrFooter (const char *Path,
+					 Brw_HeadOrFoot_t HeaderOrFooter,unsigned NumRows)
   {
    extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
 
@@ -83,7 +84,7 @@ void Mrk_DB_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter,unsigne
 		   Mrk_DB_HeadOrFootStr[HeaderOrFooter],NumRows,
 		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		   Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
-		   Gbl.FileBrowser.FilFolLnk.Full);
+		   Path);
   }
 
 /*****************************************************************************/
@@ -111,7 +112,8 @@ Exi_Exist_t Mrk_DB_GetMarksDataByCod (MYSQL_RES **mysql_res,long MrkCod)
 /******** Get number of rows of header and of footer of a file of marks ******/
 /*****************************************************************************/
 
-Exi_Exist_t Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res)
+Exi_Exist_t Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res,
+					      const char *Path)
   {
    extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
 
@@ -136,5 +138,5 @@ Exi_Exist_t Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res)
 			 Mrk_DB_HeadOrFootStr[Brw_FOOTER],
 			 (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 			 Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
-			 Gbl.FileBrowser.FilFolLnk.Full);
+			 Path);
   }

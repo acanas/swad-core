@@ -177,7 +177,7 @@ void Gbl_InitializeGlobals (void)
    /* File browser */
    Gbl.FileBrowser.Id = 0;
    Gbl.FileBrowser.Type = Brw_UNKNOWN;
-   Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_UNKNOWN;
+   Gbl.FileBrowser.SelectedFilFolLnk.Type = Brw_IS_UNKNOWN;
 
    Gbl.WebService.Function = API_unknown;
 

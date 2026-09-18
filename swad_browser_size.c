@@ -371,7 +371,7 @@ static void BrwSiz_CalcSizeOfDirRecursive (struct BrwSiz_BrowserSize *Size,
       free (FileList);
      }
    else
-      Err_ShowErrorAndExit ("Error while scanning directory.");
+      Err_ShowErrorAndExit ("Error while scanning directory 6.");
   }
 
 /*****************************************************************************/

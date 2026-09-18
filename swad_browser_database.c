@@ -162,8 +162,8 @@ static Brw_FileBrowser_t Brw_DB_FileBrowserForDB_expanded_folders[Brw_NUM_TYPES_
 /**************** Add a path of file/folder to the database ******************/
 /*****************************************************************************/
 
-long Brw_DB_AddPath (long PublisherUsrCod,Brw_FileType_t FileType,
-                     const char *FullPathInTree,
+long Brw_DB_AddPath (long PublisherUsrCod,
+		     Brw_FileType_t FileType,const char *FullPathInTree,
                      PriPub_PrivateOrPublic_t PrivateOrPublic,Brw_License_t License)
   {
    extern const char PriPub_Public_YN[PriPub_NUM_PRIVATE_PUBLIC];
@@ -2683,7 +2683,7 @@ void Brw_DB_RemoveExpiredExpandedFolders (void)
 /***************************** Add path to clipboards ************************/
 /*****************************************************************************/
 
-void Brw_DB_AddPathToClipboards (void)
+void Brw_DB_AddPathToClipboards (const struct Brw_FilFolLnk *FilFolLnk)
   {
    DB_QueryINSERT ("can not add source of copy to clipboard",
 		   "INSERT INTO brw_clipboards"
@@ -2694,15 +2694,15 @@ void Brw_DB_AddPathToClipboards (void)
 	           (unsigned) Gbl.FileBrowser.Type,
 	           Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
 	           Brw_GetZoneUsrCodForFileBrowser (),
-	           (unsigned) Gbl.FileBrowser.FilFolLnk.Type,
-	           Gbl.FileBrowser.FilFolLnk.Full);
+	           (unsigned) FilFolLnk->Type,
+	           FilFolLnk->Full);
   }
 
 /*****************************************************************************/
 /************************** Update path in my clipboard **********************/
 /*****************************************************************************/
 
-void Brw_DB_UpdatePathInClipboard (void)
+void Brw_DB_UpdatePathInClipboard (const struct Brw_FilFolLnk *FilFolLnk)
   {
    DB_QueryUPDATE ("can not update source of copy in clipboard",
 		   "UPDATE brw_clipboards"
@@ -2715,8 +2715,8 @@ void Brw_DB_UpdatePathInClipboard (void)
 	           (unsigned) Gbl.FileBrowser.Type,
 	           Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
 	           Brw_GetZoneUsrCodForFileBrowser (),
-	           (unsigned) Gbl.FileBrowser.FilFolLnk.Type,
-	           Gbl.FileBrowser.FilFolLnk.Full,
+	           (unsigned) FilFolLnk->Type,
+	           FilFolLnk->Full,
 	           Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 

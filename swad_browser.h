@@ -156,8 +156,8 @@ struct Brw_FileMetadata
    long ZoneUsrCod;
    long PublisherUsrCod;
    struct Brw_FilFolLnk FilFolLnk;
-   HidVis_HiddenOrVisible_t Hidden;
-   PriPub_PrivateOrPublic_t Public;
+   HidVis_HiddenOrVisible_t HiddenOrVisible;
+   PriPub_PrivateOrPublic_t PrivateOrPublic;
    Brw_License_t License;
    off_t Size;
    time_t Time;
@@ -242,11 +242,10 @@ void Brw_CreateLink (void);
 
 void Brw_SetDocumentAsVisible (void);
 void Brw_SetDocumentAsHidden (void);
-HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHidden (Brw_FileType_t FileType,
-                                                          const char *Path);
+HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHidden (const struct Brw_FilFolLnk *FilFolLnk);
 void Brw_ShowFileMetadata (void);
 
-void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char *URL);
+void Brw_GetLinkToDownloadFile (const struct Brw_FilFolLnk *FilFolLnk,char *URL);
 void Brw_DownloadFile (void);
 void Brw_ChgFileMetadata (void);
 void Brw_GetFileMetadataByPath (struct Brw_FileMetadata *FileMetadata);
@@ -266,7 +265,7 @@ long Brw_GetZoneUsrCodForFileBrowser (void);
 
 void Brw_DB_RemoveExpiredExpandedFolders (void);
 
-void Brw_SetFullPathInTree (void);
+void Brw_SetFullPathInTree (struct Brw_FilFolLnk *FilFolLnk);
 
 void Brw_PutIconFile (const char *FileName,
 		      const char *Class,Frm_PutForm_t PutFormToGo);
