@@ -273,7 +273,11 @@ long Brw_DB_GetFilCodByPath (const char *Path,Brw_OnlyPublicFiles_t OnlyIfPublic
 
 Exi_Exist_t Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,const char *Path)
   {
-   return
+   extern long Brw_DB_GetFileMetadataByPath_nsec;
+   Exi_Exist_t Exists;
+
+   Tim_StartPartialTiming ();
+   Exists =
    DB_QuerySELECTunique (mysql_res,"can not get file metadata",
 			 "SELECT FilCod,"		// row[0]
 				"FileBrowser,"		// row[1]
@@ -296,6 +300,8 @@ Exi_Exist_t Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,const char *Path
 			 Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
 			 Brw_GetZoneUsrCodForFileBrowser (),
 			 Path);
+   Brw_DB_GetFileMetadataByPath_nsec += Tim_StopPartialTiming ();
+   return Exists;
   }
 
 /*****************************************************************************/

@@ -48,6 +48,7 @@ void BrwRsc_GetLinkToDocFil (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FileMetadata.FilFolLnk);
 
    /***** Get file code *****/
    FileMetadata.FilCod = ParCod_GetPar (ParCod_Fil);
@@ -76,6 +77,7 @@ void BrwRsc_GetLinkToMrkFil (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FileMetadata.FilFolLnk);
 
    /***** Get file code *****/
    FileMetadata.FilCod = ParCod_GetPar (ParCod_Fil);

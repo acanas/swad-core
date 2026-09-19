@@ -490,18 +490,18 @@ mysql> DESCRIBE brw_files;
 +-----------------+---------------+------+-----+---------+----------------+
 | Field           | Type          | Null | Key | Default | Extra          |
 +-----------------+---------------+------+-----+---------+----------------+
-| FilCod          | int(11)       | NO   | PRI | NULL    | auto_increment |
-| FileBrowser     | tinyint(4)    | NO   | MUL | NULL    |                |
-| Cod             | int(11)       | NO   |     | -1      |                |
-| ZoneUsrCod      | int(11)       | NO   | MUL | -1      |                |
-| PublisherUsrCod | int(11)       | NO   | MUL | NULL    |                |
-| FileType        | tinyint(4)    | NO   |     | 0       |                |
-| Path            | text          | NO   |     | NULL    |                |
+| FilCod          | int           | NO   | PRI | NULL    | auto_increment |
+| FileBrowser     | tinyint       | NO   | MUL | NULL    |                |
+| Cod             | int           | NO   |     | -1      |                |
+| ZoneUsrCod      | int           | NO   | MUL | -1      |                |
+| PublisherUsrCod | int           | NO   | MUL | NULL    |                |
+| FileType        | tinyint       | NO   |     | 0       |                |
+| Path            | varchar(4096) | NO   |     | NULL    |                |
 | Hidden          | enum('N','Y') | NO   |     | N       |                |
 | Public          | enum('N','Y') | NO   |     | N       |                |
-| License         | tinyint(4)    | NO   |     | 0       |                |
+| License         | tinyint       | NO   |     | 0       |                |
 +-----------------+---------------+------+-----+---------+----------------+
-10 rows in set (0.00 sec)
+10 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS brw_files ("
 			"FilCod INT NOT NULL AUTO_INCREMENT,"
@@ -510,12 +510,12 @@ mysql> DESCRIBE brw_files;
 			"ZoneUsrCod INT NOT NULL DEFAULT -1,"
 			"PublisherUsrCod INT NOT NULL,"
 			"FileType TINYINT NOT NULL DEFAULT 0,"
-			"Path TEXT COLLATE latin1_bin NOT NULL,"	// PATH_MAX
+			"Path VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Public ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"License TINYINT NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(FilCod),"
-		   "INDEX(FileBrowser,Cod,ZoneUsrCod),"
+		   "INDEX(FileBrowser,Cod,ZoneUsrCod,Path(256),FilCod),"
 		   "INDEX(ZoneUsrCod),"
 		   "INDEX(PublisherUsrCod)"
 		   ") ENGINE=MyISAM");

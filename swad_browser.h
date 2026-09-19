@@ -200,6 +200,13 @@ struct Brw_FileMetadata
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+//--------------------------------- Timing ------------------------------------
+void Tim_StartPartialTiming (void);
+long Tim_StopPartialTiming (void);
+void Tim_StartGlobalTiming (void);
+long Tim_StopGlobalTiming (void);
+
+//--------------------------------- Browser -----------------------------------
 void Brw_SetGrpCod (long GrpCod);
 long Brw_GetGrpCod (void);
 
@@ -277,6 +284,7 @@ void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
 void Brw_PutImplicitParsFileBrowser (void *FilFolLnk);
 void Brw_PutParsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
                              Brw_FileType_t FileType,long FilCod);
+void Brw_GetParsFilFolLnk (struct Brw_FilFolLnk *FilFolLnk);
 
 void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod);
 void Brw_RemoveGrpZones (long HieCod,long GrpCod);

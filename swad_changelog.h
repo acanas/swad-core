@@ -639,10 +639,16 @@ TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de t
 
 TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtube.com/shorts/fY6Oax_uJBc?si=G3UHqvSH3yEbxm1B
 */
-#define Chl_PLATFORM_VERSION	"SWAD 26.1 (2026-09-17)"
+#define Chl_PLATFORM_VERSION	"SWAD 26.2 (2026-09-19)"
 #define Chl_CSS_FILE		"swad25.46.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
+	Version 26.2:     Sep 19, 2026	Code refactoring in file browser. (347337 lines)
+					3 changes necessary in database:
+ALTER TABLE brw_files CHANGE COLUMN Path Path VARCHAR(4096) COLLATE latin1_bin NOT NULL;
+ALTER TABLE brw_files DROP INDEX FileBrowser;
+ALTER TABLE brw_files ADD INDEX(FileBrowser,Cod,ZoneUsrCod,Path(256),FilCod);
+
 	Version 26.1:     Sep 17, 2026	Code refactoring in file browser. (347474 lines)
 	Version 26.0:     Sep 14, 2026	Changes in program edition. (347359 lines)
 	Version 25.49:    Sep 08, 2026	Changes in rubrics.

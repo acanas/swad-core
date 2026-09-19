@@ -175,7 +175,6 @@ struct Globals
 	 char RootFolder[PATH_MAX + 1];
 	} Path;
       char NewFilFolLnkName[NAME_MAX + 1];
-      struct Brw_FilFolLnk SelectedFilFolLnk;
       unsigned Lvl;
       struct
         {

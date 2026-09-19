@@ -317,11 +317,14 @@ static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat)
 
 void ZIP_CompressFileTree (void)
   {
+   struct Brw_FilFolLnk FilFolLnk;
+
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FilFolLnk);
 
    /***** Compress folder into ZIP *****/
-   ZIP_CompressFolderIntoZIP (&Gbl.FileBrowser.SelectedFilFolLnk);
+   ZIP_CompressFolderIntoZIP (&FilFolLnk);
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();

@@ -202,18 +202,19 @@ void Mrk_ChangeNumRowsFooter (void)
 
 static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
   {
+   struct Brw_FilFolLnk FilFolLnk;
    char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    unsigned NumRows;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FilFolLnk);
 
    /***** Get the number of rows of the header or footer of the table of marks *****/
    Par_GetParText (Mrk_HeadOrFootStr[HeaderOrFooter],UnsignedStr,Cns_MAX_DIGITS_UINT);
    if (sscanf (UnsignedStr,"%u",&NumRows) == 1)
       /***** Update properties of marks in the database *****/
-      Mrk_DB_ChangeNumRowsHeaderOrFooter (Gbl.FileBrowser.SelectedFilFolLnk.Full,
-					  HeaderOrFooter,NumRows);
+      Mrk_DB_ChangeNumRowsHeaderOrFooter (FilFolLnk.Full,HeaderOrFooter,NumRows);
    else
       Err_WrongNumberOfRowsExit ();
 
@@ -561,6 +562,7 @@ static Err_SuccessOrError_t Mrk_GetUsrMarks (FILE *FileUsrMarks,
 
 void Mrk_ShowMyMarks (void)
   {
+   struct Brw_FilFolLnk FilFolLnk;
    struct Mrk_Properties Marks;
    char FileNameUsrMarks[PATH_MAX + 1];
    FILE *FileUsrMarks;
@@ -572,14 +574,15 @@ void Mrk_ShowMyMarks (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FilFolLnk);
 
    /***** Get the path of the file of marks *****/
    snprintf (PathPrivate,sizeof (PathPrivate),"%s/%s",
              Gbl.FileBrowser.Path.AboveRootFolder,
-             Gbl.FileBrowser.SelectedFilFolLnk.Full);
+             FilFolLnk.Full);
 
    /***** Get number of rows of header or footer *****/
-   Mrk_GetNumRowsHeaderAndFooter (&Marks,Gbl.FileBrowser.SelectedFilFolLnk.Full);
+   Mrk_GetNumRowsHeaderAndFooter (&Marks,FilFolLnk.Full);
 
    /***** Set the student whose marks will be shown *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_STD)	// If I am logged as student...

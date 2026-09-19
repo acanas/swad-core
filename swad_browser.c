@@ -1104,7 +1104,6 @@ static long Brw_GrpCod = -1L;
 
 static long Brw_GetGrpSettings (void);
 
-static void Brw_GetParsPathInTreeAndFileName (struct Brw_FilFolLnk *FilFolLnk);
 static void Brw_SetPathFileBrowser (void);
 static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod);
 
@@ -1218,7 +1217,8 @@ static void Brw_PutFormToPasteAFileOrFolder (struct Brw_FilFolLnk *FilFolLnk,
 					     const char *FileNameToShow);
 static void Brw_PutFormToCreateALink (struct Brw_FilFolLnk *FilFolLnk,
 				      const char *FileNameToShow);
-static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
+static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FilFolLnk *FilFolLnk,
+						  struct BrwSiz_BrowserSize *Size,
 						  Brw_UploadType_t UploadType);
 static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (const char *FileType);
 
@@ -1291,6 +1291,7 @@ struct timespec global_start;
 struct timespec global_end;
 static long scandir_nsec = 0L;
 static long GetFileMetadataByPath_nsec = 0L;
+long Brw_DB_GetFileMetadataByPath_nsec = 0L;
 static long GetFileTypeSizeAndDate_nsec = 0L;
 static long GetIfContractedOrExpandedFolder_nsec = 0L;
 static long CheckIfFileOrFolderIsHidden_nsec = 0L;
@@ -1299,13 +1300,13 @@ static long WriteFileOrFolderPublisher_nsec = 0L;
 static long CheckIfAnyHigherLevelIsHidden_nsec = 0L;
 static long ShowFileBrowser_nsec = 0L;
 
-static void Brw_StartPartialTiming (void)
+void Tim_StartPartialTiming (void)
   {
    if (clock_gettime (CLOCK_REALTIME,&partial_start))
       Err_ShowErrorAndExit ("Error in clock_gettime");
   }
 
-static long Brw_StopPartialTiming (void)
+long Tim_StopPartialTiming (void)
   {
    if (clock_gettime (CLOCK_REALTIME,&partial_end))
       Err_ShowErrorAndExit ("Error in clock_gettime");
@@ -1313,13 +1314,13 @@ static long Brw_StopPartialTiming (void)
                   partial_end.tv_nsec - partial_start.tv_nsec;
   }
 
-static void Brw_StartGlobalTiming (void)
+void Tim_StartGlobalTiming (void)
   {
    if (clock_gettime (CLOCK_REALTIME,&global_start))
       Err_ShowErrorAndExit ("Error in clock_gettime");
   }
 
-static long Brw_StopGlobalTiming (void)
+long Tim_StopGlobalTiming (void)
   {
    if (clock_gettime (CLOCK_REALTIME,&global_end))
       Err_ShowErrorAndExit ("Error in clock_gettime");
@@ -1359,8 +1360,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActSeeAdmDocIns:	// Access to a documents zone from menu
       case ActChgToSeeDocIns:	// Access to see a documents zone
       case ActSeeDocIns:
-      case ActExpSeeDocIns:
-      case ActConSeeDocIns:
+      case ActExpSeeDocIns:	case ActConSeeDocIns:
       case ActZIPSeeDocIns:
       case ActReqDatSeeDocIns:
       case ActDowSeeDocIns:
@@ -1368,48 +1368,31 @@ void Brw_GetParAndInitFileBrowser (void)
          break;
       case ActChgToAdmDocIns:	// Access to admin a documents zone
       case ActAdmDocIns:
-      case ActReqRemFilDocIns:
-      case ActRemFilDocIns:
-      case ActRemFolDocIns:
-      case ActCopDocIns:
-      case ActPasDocIns:
-      case ActRemTreDocIns:
-      case ActFrmCreDocIns:
-      case ActCreFolDocIns:
-      case ActCreLnkDocIns:
+      case ActReqRemFilDocIns:	case ActRemFilDocIns:
+      case ActRemFolDocIns:	case ActRemTreDocIns:
+      case ActCopDocIns:	case ActPasDocIns:
+      case ActFrmCreDocIns:	case ActCreFolDocIns:	case ActCreLnkDocIns:
       case ActRenFolDocIns:
-      case ActRcvFilDocInsDZ:
-      case ActRcvFilDocInsCla:
-      case ActExpAdmDocIns:
-      case ActConAdmDocIns:
+      case ActRcvFilDocInsDZ:	case ActRcvFilDocInsCla:
+      case ActExpAdmDocIns:	case ActConAdmDocIns:
       case ActZIPAdmDocIns:
-      case ActUnhDocIns:
-      case ActHidDocIns:
-      case ActReqDatAdmDocIns:
-      case ActChgDatAdmDocIns:
+      case ActUnhDocIns:	case ActHidDocIns:
+      case ActReqDatAdmDocIns:	case ActChgDatAdmDocIns:
       case ActDowAdmDocIns:
 	 Gbl.FileBrowser.Type = Brw_ADMI_DOC_INS;
          break;
 
       /***** Shared files of institution *****/
       case ActAdmShaIns:
-      case ActReqRemFilShaIns:
-      case ActRemFilShaIns:
-      case ActRemFolShaIns:
-      case ActCopShaIns:
-      case ActPasShaIns:
-      case ActRemTreShaIns:
-      case ActFrmCreShaIns:
-      case ActCreFolShaIns:
-      case ActCreLnkShaIns:
+      case ActReqRemFilShaIns:	case ActRemFilShaIns:
+      case ActRemFolShaIns:	case ActRemTreShaIns:
+      case ActCopShaIns:	case ActPasShaIns:
+      case ActFrmCreShaIns:	case ActCreFolShaIns:	case ActCreLnkShaIns:
       case ActRenFolShaIns:
-      case ActRcvFilShaInsDZ:
-      case ActRcvFilShaInsCla:
-      case ActExpShaIns:
-      case ActConShaIns:
+      case ActRcvFilShaInsDZ:	case ActRcvFilShaInsCla:
+      case ActExpShaIns:	case ActConShaIns:
       case ActZIPShaIns:
-      case ActReqDatShaIns:
-      case ActChgDatShaIns:
+      case ActReqDatShaIns:	case ActChgDatShaIns:
       case ActDowShaIns:
          Gbl.FileBrowser.Type = Brw_ADMI_SHR_INS;
          break;
@@ -1418,8 +1401,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActSeeAdmDocCtr:	// Access to a documents zone from menu
       case ActChgToSeeDocCtr:	// Access to see a documents zone
       case ActSeeDocCtr:
-      case ActExpSeeDocCtr:
-      case ActConSeeDocCtr:
+      case ActExpSeeDocCtr:	case ActConSeeDocCtr:
       case ActZIPSeeDocCtr:
       case ActReqDatSeeDocCtr:
       case ActDowSeeDocCtr:
@@ -1427,48 +1409,31 @@ void Brw_GetParAndInitFileBrowser (void)
          break;
       case ActChgToAdmDocCtr:	// Access to admin a documents zone
       case ActAdmDocCtr:
-      case ActReqRemFilDocCtr:
-      case ActRemFilDocCtr:
-      case ActRemFolDocCtr:
-      case ActCopDocCtr:
-      case ActPasDocCtr:
-      case ActRemTreDocCtr:
-      case ActFrmCreDocCtr:
-      case ActCreFolDocCtr:
-      case ActCreLnkDocCtr:
+      case ActReqRemFilDocCtr:	case ActRemFilDocCtr:
+      case ActRemFolDocCtr:	case ActRemTreDocCtr:
+      case ActCopDocCtr:	case ActPasDocCtr:
+      case ActFrmCreDocCtr:	case ActCreFolDocCtr:	case ActCreLnkDocCtr:
       case ActRenFolDocCtr:
-      case ActRcvFilDocCtrDZ:
-      case ActRcvFilDocCtrCla:
-      case ActExpAdmDocCtr:
-      case ActConAdmDocCtr:
+      case ActRcvFilDocCtrDZ:	case ActRcvFilDocCtrCla:
+      case ActExpAdmDocCtr:	case ActConAdmDocCtr:
       case ActZIPAdmDocCtr:
-      case ActUnhDocCtr:
-      case ActHidDocCtr:
-      case ActReqDatAdmDocCtr:
-      case ActChgDatAdmDocCtr:
+      case ActUnhDocCtr:	case ActHidDocCtr:
+      case ActReqDatAdmDocCtr:	case ActChgDatAdmDocCtr:
       case ActDowAdmDocCtr:
 	 Gbl.FileBrowser.Type = Brw_ADMI_DOC_CTR;
          break;
 
       /***** Shared files of center *****/
       case ActAdmShaCtr:
-      case ActReqRemFilShaCtr:
-      case ActRemFilShaCtr:
-      case ActRemFolShaCtr:
-      case ActCopShaCtr:
-      case ActPasShaCtr:
-      case ActRemTreShaCtr:
-      case ActFrmCreShaCtr:
-      case ActCreFolShaCtr:
-      case ActCreLnkShaCtr:
+      case ActReqRemFilShaCtr:	case ActRemFilShaCtr:
+      case ActRemFolShaCtr:	case ActRemTreShaCtr:
+      case ActCopShaCtr:	case ActPasShaCtr:
+      case ActFrmCreShaCtr:	case ActCreFolShaCtr:	case ActCreLnkShaCtr:
       case ActRenFolShaCtr:
-      case ActRcvFilShaCtrDZ:
-      case ActRcvFilShaCtrCla:
-      case ActExpShaCtr:
-      case ActConShaCtr:
+      case ActRcvFilShaCtrDZ:	case ActRcvFilShaCtrCla:
+      case ActExpShaCtr:	case ActConShaCtr:
       case ActZIPShaCtr:
-      case ActReqDatShaCtr:
-      case ActChgDatShaCtr:
+      case ActReqDatShaCtr:	case ActChgDatShaCtr:
       case ActDowShaCtr:
          Gbl.FileBrowser.Type = Brw_ADMI_SHR_CTR;
          break;
@@ -1477,8 +1442,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActSeeAdmDocDeg:	// Access to a documents zone from menu
       case ActChgToSeeDocDeg:	// Access to see a documents zone
       case ActSeeDocDeg:
-      case ActExpSeeDocDeg:
-      case ActConSeeDocDeg:
+      case ActExpSeeDocDeg:	case ActConSeeDocDeg:
       case ActZIPSeeDocDeg:
       case ActReqDatSeeDocDeg:
       case ActDowSeeDocDeg:
@@ -1486,48 +1450,31 @@ void Brw_GetParAndInitFileBrowser (void)
          break;
       case ActChgToAdmDocDeg:	// Access to admin a documents zone
       case ActAdmDocDeg:
-      case ActReqRemFilDocDeg:
-      case ActRemFilDocDeg:
-      case ActRemFolDocDeg:
-      case ActCopDocDeg:
-      case ActPasDocDeg:
-      case ActRemTreDocDeg:
-      case ActFrmCreDocDeg:
-      case ActCreFolDocDeg:
-      case ActCreLnkDocDeg:
+      case ActReqRemFilDocDeg:	case ActRemFilDocDeg:
+      case ActRemFolDocDeg:	case ActRemTreDocDeg:
+      case ActCopDocDeg:	case ActPasDocDeg:
+      case ActFrmCreDocDeg:	case ActCreFolDocDeg:	case ActCreLnkDocDeg:
       case ActRenFolDocDeg:
-      case ActRcvFilDocDegDZ:
-      case ActRcvFilDocDegCla:
-      case ActExpAdmDocDeg:
-      case ActConAdmDocDeg:
+      case ActRcvFilDocDegDZ:	case ActRcvFilDocDegCla:
+      case ActExpAdmDocDeg:	case ActConAdmDocDeg:
       case ActZIPAdmDocDeg:
-      case ActUnhDocDeg:
-      case ActHidDocDeg:
-      case ActReqDatAdmDocDeg:
-      case ActChgDatAdmDocDeg:
+      case ActUnhDocDeg:	case ActHidDocDeg:
+      case ActReqDatAdmDocDeg:	case ActChgDatAdmDocDeg:
       case ActDowAdmDocDeg:
 	 Gbl.FileBrowser.Type = Brw_ADMI_DOC_DEG;
          break;
 
       /***** Shared files of degree *****/
       case ActAdmShaDeg:
-      case ActReqRemFilShaDeg:
-      case ActRemFilShaDeg:
-      case ActRemFolShaDeg:
-      case ActCopShaDeg:
-      case ActPasShaDeg:
-      case ActRemTreShaDeg:
-      case ActFrmCreShaDeg:
-      case ActCreFolShaDeg:
-      case ActCreLnkShaDeg:
+      case ActReqRemFilShaDeg:	case ActRemFilShaDeg:
+      case ActRemFolShaDeg:	case ActRemTreShaDeg:
+      case ActCopShaDeg:	case ActPasShaDeg:
+      case ActFrmCreShaDeg:	case ActCreFolShaDeg:	case ActCreLnkShaDeg:
       case ActRenFolShaDeg:
-      case ActRcvFilShaDegDZ:
-      case ActRcvFilShaDegCla:
-      case ActExpShaDeg:
-      case ActConShaDeg:
+      case ActRcvFilShaDegDZ:	case ActRcvFilShaDegCla:
+      case ActExpShaDeg:	case ActConShaDeg:
       case ActZIPShaDeg:
-      case ActReqDatShaDeg:
-      case ActChgDatShaDeg:
+      case ActReqDatShaDeg:	case ActChgDatShaDeg:
       case ActDowShaDeg:
          Gbl.FileBrowser.Type = Brw_ADMI_SHR_DEG;
          break;
@@ -1540,8 +1487,7 @@ void Brw_GetParAndInitFileBrowser (void)
                                              Brw_SHOW_DOC_CRS;
          break;
       case ActSeeDocCrs:
-      case ActExpSeeDocCrs:
-      case ActConSeeDocCrs:
+      case ActExpSeeDocCrs:	case ActConSeeDocCrs:
       case ActZIPSeeDocCrs:
       case ActReqDatSeeDocCrs:
       case ActReqLnkSeeDocCrs:
@@ -1549,8 +1495,7 @@ void Brw_GetParAndInitFileBrowser (void)
 	 Gbl.FileBrowser.Type = Brw_SHOW_DOC_CRS;
          break;
       case ActSeeDocGrp:
-      case ActExpSeeDocGrp:
-      case ActConSeeDocGrp:
+      case ActExpSeeDocGrp:	case ActConSeeDocGrp:
       case ActZIPSeeDocGrp:
       case ActReqDatSeeDocGrp:
       case ActDowSeeDocGrp:
@@ -1562,49 +1507,31 @@ void Brw_GetParAndInitFileBrowser (void)
                                              Brw_ADMI_DOC_CRS;
          break;
       case ActAdmDocCrs:
-      case ActReqRemFilDocCrs:
-      case ActRemFilDocCrs:
-      case ActRemFolDocCrs:
-      case ActCopDocCrs:
-      case ActPasDocCrs:
-      case ActRemTreDocCrs:
-      case ActFrmCreDocCrs:
-      case ActCreFolDocCrs:
-      case ActCreLnkDocCrs:
+      case ActReqRemFilDocCrs:	case ActRemFilDocCrs:
+      case ActRemFolDocCrs:	case ActRemTreDocCrs:
+      case ActCopDocCrs:	case ActPasDocCrs:
+      case ActFrmCreDocCrs:	case ActCreFolDocCrs:	case ActCreLnkDocCrs:
       case ActRenFolDocCrs:
-      case ActRcvFilDocCrsDZ:
-      case ActRcvFilDocCrsCla:
-      case ActExpAdmDocCrs:
-      case ActConAdmDocCrs:
+      case ActRcvFilDocCrsDZ:	case ActRcvFilDocCrsCla:
+      case ActExpAdmDocCrs:	case ActConAdmDocCrs:
       case ActZIPAdmDocCrs:
-      case ActUnhDocCrs:
-      case ActHidDocCrs:
-      case ActReqDatAdmDocCrs:
-      case ActChgDatAdmDocCrs:
+      case ActUnhDocCrs:	case ActHidDocCrs:
+      case ActReqDatAdmDocCrs:	case ActChgDatAdmDocCrs:
       case ActReqLnkAdmDocCrs:
       case ActDowAdmDocCrs:
 	 Gbl.FileBrowser.Type = Brw_ADMI_DOC_CRS;
          break;
       case ActAdmDocGrp:
-      case ActReqRemFilDocGrp:
-      case ActRemFilDocGrp:
-      case ActRemFolDocGrp:
-      case ActCopDocGrp:
-      case ActPasDocGrp:
-      case ActRemTreDocGrp:
-      case ActFrmCreDocGrp:
-      case ActCreFolDocGrp:
-      case ActCreLnkDocGrp:
+      case ActReqRemFilDocGrp:	case ActRemFilDocGrp:
+      case ActRemFolDocGrp:	case ActRemTreDocGrp:
+      case ActCopDocGrp:	case ActPasDocGrp:
+      case ActFrmCreDocGrp:	case ActCreFolDocGrp:	case ActCreLnkDocGrp:
       case ActRenFolDocGrp:
-      case ActRcvFilDocGrpDZ:
-      case ActRcvFilDocGrpCla:
-      case ActExpAdmDocGrp:
-      case ActConAdmDocGrp:
+      case ActRcvFilDocGrpDZ:	case ActRcvFilDocGrpCla:
+      case ActExpAdmDocGrp:	case ActConAdmDocGrp:
       case ActZIPAdmDocGrp:
-      case ActUnhDocGrp:
-      case ActHidDocGrp:
-      case ActReqDatAdmDocGrp:
-      case ActChgDatAdmDocGrp:
+      case ActUnhDocGrp:	case ActHidDocGrp:
+      case ActReqDatAdmDocGrp:	case ActChgDatAdmDocGrp:
       case ActDowAdmDocGrp:
 	 Gbl.FileBrowser.Type = Brw_ADMI_DOC_GRP;
          break;
@@ -1617,44 +1544,28 @@ void Brw_GetParAndInitFileBrowser (void)
                                              Brw_ADMI_TCH_CRS;
          break;
       case ActAdmTchCrs:
-      case ActReqRemFilTchCrs:
-      case ActRemFilTchCrs:
-      case ActRemFolTchCrs:
-      case ActCopTchCrs:
-      case ActPasTchCrs:
-      case ActRemTreTchCrs:
-      case ActFrmCreTchCrs:
-      case ActCreFolTchCrs:
-      case ActCreLnkTchCrs:
+      case ActReqRemFilTchCrs:	case ActRemFilTchCrs:
+      case ActRemFolTchCrs:	case ActRemTreTchCrs:
+      case ActCopTchCrs:	case ActPasTchCrs:
+      case ActFrmCreTchCrs:	case ActCreFolTchCrs:	case ActCreLnkTchCrs:
       case ActRenFolTchCrs:
-      case ActRcvFilTchCrsDZ:
-      case ActRcvFilTchCrsCla:
-      case ActExpTchCrs:
-      case ActConTchCrs:
+      case ActRcvFilTchCrsDZ:	case ActRcvFilTchCrsCla:
+      case ActExpTchCrs:	case ActConTchCrs:
       case ActZIPTchCrs:
-      case ActReqDatTchCrs:
-      case ActChgDatTchCrs:
+      case ActReqDatTchCrs:	case ActChgDatTchCrs:
       case ActDowTchCrs:
          Gbl.FileBrowser.Type = Brw_ADMI_TCH_CRS;
          break;
       case ActAdmTchGrp:
-      case ActReqRemFilTchGrp:
-      case ActRemFilTchGrp:
-      case ActRemFolTchGrp:
-      case ActCopTchGrp:
-      case ActPasTchGrp:
-      case ActRemTreTchGrp:
-      case ActFrmCreTchGrp:
-      case ActCreFolTchGrp:
-      case ActCreLnkTchGrp:
+      case ActReqRemFilTchGrp:	case ActRemFilTchGrp:
+      case ActRemFolTchGrp:	case ActRemTreTchGrp:
+      case ActCopTchGrp:	case ActPasTchGrp:
+      case ActFrmCreTchGrp:	case ActCreFolTchGrp:	case ActCreLnkTchGrp:
       case ActRenFolTchGrp:
-      case ActRcvFilTchGrpDZ:
-      case ActRcvFilTchGrpCla:
-      case ActExpTchGrp:
-      case ActConTchGrp:
+      case ActRcvFilTchGrpDZ:	case ActRcvFilTchGrpCla:
+      case ActExpTchGrp:	case ActConTchGrp:
       case ActZIPTchGrp:
-      case ActReqDatTchGrp:
-      case ActChgDatTchGrp:
+      case ActReqDatTchGrp:	case ActChgDatTchGrp:
       case ActDowTchGrp:
          Gbl.FileBrowser.Type = Brw_ADMI_TCH_GRP;
          break;
@@ -1667,134 +1578,86 @@ void Brw_GetParAndInitFileBrowser (void)
                                              Brw_ADMI_SHR_CRS;
          break;
       case ActAdmShaCrs:
-      case ActReqRemFilShaCrs:
-      case ActRemFilShaCrs:
-      case ActRemFolShaCrs:
-      case ActCopShaCrs:
-      case ActPasShaCrs:
-      case ActRemTreShaCrs:
-      case ActFrmCreShaCrs:
-      case ActCreFolShaCrs:
-      case ActCreLnkShaCrs:
+      case ActReqRemFilShaCrs:	case ActRemFilShaCrs:
+      case ActRemFolShaCrs:	case ActRemTreShaCrs:
+      case ActCopShaCrs:	case ActPasShaCrs:
+      case ActFrmCreShaCrs:	case ActCreFolShaCrs:	case ActCreLnkShaCrs:
       case ActRenFolShaCrs:
-      case ActRcvFilShaCrsDZ:
-      case ActRcvFilShaCrsCla:
-      case ActExpShaCrs:
-      case ActConShaCrs:
+      case ActRcvFilShaCrsDZ:	case ActRcvFilShaCrsCla:
+      case ActExpShaCrs:	case ActConShaCrs:
       case ActZIPShaCrs:
-      case ActReqDatShaCrs:
-      case ActChgDatShaCrs:
+      case ActReqDatShaCrs:	case ActChgDatShaCrs:
       case ActDowShaCrs:
          Gbl.FileBrowser.Type = Brw_ADMI_SHR_CRS;
          break;
       case ActAdmShaGrp:
-      case ActReqRemFilShaGrp:
-      case ActRemFilShaGrp:
-      case ActRemFolShaGrp:
-      case ActCopShaGrp:
-      case ActPasShaGrp:
-      case ActRemTreShaGrp:
-      case ActFrmCreShaGrp:
-      case ActCreFolShaGrp:
-      case ActCreLnkShaGrp:
+      case ActReqRemFilShaGrp:	case ActRemFilShaGrp:
+      case ActRemFolShaGrp:	case ActRemTreShaGrp:
+      case ActCopShaGrp:	case ActPasShaGrp:
+      case ActFrmCreShaGrp:	case ActCreFolShaGrp:	case ActCreLnkShaGrp:
       case ActRenFolShaGrp:
-      case ActRcvFilShaGrpDZ:
-      case ActRcvFilShaGrpCla:
-      case ActExpShaGrp:
-      case ActConShaGrp:
+      case ActRcvFilShaGrpDZ:	case ActRcvFilShaGrpCla:
+      case ActExpShaGrp:	case ActConShaGrp:
       case ActZIPShaGrp:
-      case ActReqDatShaGrp:
-      case ActChgDatShaGrp:
+      case ActReqDatShaGrp:	case ActChgDatShaGrp:
       case ActDowShaGrp:
          Gbl.FileBrowser.Type = Brw_ADMI_SHR_GRP;
          break;
 
       /***** My assignments *****/
-      case ActReqRemFilAsgUsr:
-      case ActRemFilAsgUsr:
-      case ActRemFolAsgUsr:
-      case ActCopAsgUsr:
-      case ActPasAsgUsr:
-      case ActRemTreAsgUsr:
-      case ActFrmCreAsgUsr:
-      case ActCreFolAsgUsr:
-      case ActCreLnkAsgUsr:
+      case ActReqRemFilAsgUsr:	case ActRemFilAsgUsr:
+      case ActRemFolAsgUsr:	case ActRemTreAsgUsr:
+      case ActCopAsgUsr:	case ActPasAsgUsr:
+      case ActFrmCreAsgUsr:	case ActCreFolAsgUsr:	case ActCreLnkAsgUsr:
       case ActRenFolAsgUsr:
-      case ActRcvFilAsgUsrDZ:
-      case ActRcvFilAsgUsrCla:
-      case ActExpAsgUsr:
-      case ActConAsgUsr:
+      case ActRcvFilAsgUsrDZ:	case ActRcvFilAsgUsrCla:
+      case ActExpAsgUsr:	case ActConAsgUsr:
       case ActZIPAsgUsr:
-      case ActReqDatAsgUsr:
-      case ActChgDatAsgUsr:
+      case ActReqDatAsgUsr:	case ActChgDatAsgUsr:
       case ActDowAsgUsr:
          Gbl.FileBrowser.Type = Brw_ADMI_ASG_USR;
          break;
 
       /***** Another users' assignments *****/
       case ActAdmAsgWrkCrs:
-      case ActReqRemFilAsgCrs:
-      case ActRemFilAsgCrs:
-      case ActRemFolAsgCrs:
-      case ActCopAsgCrs:
-      case ActPasAsgCrs:
-      case ActRemTreAsgCrs:
-      case ActFrmCreAsgCrs:
-      case ActCreFolAsgCrs:
-      case ActCreLnkAsgCrs:
+      case ActReqRemFilAsgCrs:	case ActRemFilAsgCrs:
+      case ActRemFolAsgCrs:	case ActRemTreAsgCrs:
+      case ActCopAsgCrs:	case ActPasAsgCrs:
+      case ActFrmCreAsgCrs:	case ActCreFolAsgCrs:	case ActCreLnkAsgCrs:
       case ActRenFolAsgCrs:
-      case ActRcvFilAsgCrsDZ:
-      case ActRcvFilAsgCrsCla:
-      case ActExpAsgCrs:
-      case ActConAsgCrs:
+      case ActRcvFilAsgCrsDZ:   case ActRcvFilAsgCrsCla:
+      case ActExpAsgCrs:	case ActConAsgCrs:
       case ActZIPAsgCrs:
-      case ActReqDatAsgCrs:
-      case ActChgDatAsgCrs:
+      case ActReqDatAsgCrs:	case ActChgDatAsgCrs:
       case ActDowAsgCrs:
          Gbl.FileBrowser.Type = Brw_ADMI_ASG_CRS;
          break;
 
       /***** My works *****/
       case ActAdmAsgWrkUsr:
-      case ActReqRemFilWrkUsr:
-      case ActRemFilWrkUsr:
-      case ActRemFolWrkUsr:
-      case ActCopWrkUsr:
-      case ActPasWrkUsr:
-      case ActRemTreWrkUsr:
-      case ActFrmCreWrkUsr:
-      case ActCreFolWrkUsr:
-      case ActCreLnkWrkUsr:
+      case ActReqRemFilWrkUsr:	case ActRemFilWrkUsr:
+      case ActRemFolWrkUsr:	case ActRemTreWrkUsr:
+      case ActCopWrkUsr:	case ActPasWrkUsr:
+      case ActFrmCreWrkUsr:	case ActCreFolWrkUsr:	case ActCreLnkWrkUsr:
       case ActRenFolWrkUsr:
-      case ActRcvFilWrkUsrDZ:
-      case ActRcvFilWrkUsrCla:
-      case ActExpWrkUsr:
-      case ActConWrkUsr:
+      case ActRcvFilWrkUsrDZ:	case ActRcvFilWrkUsrCla:
+      case ActExpWrkUsr:	case ActConWrkUsr:
       case ActZIPWrkUsr:
-      case ActReqDatWrkUsr:
-      case ActChgDatWrkUsr:
+      case ActReqDatWrkUsr:	case ActChgDatWrkUsr:
       case ActDowWrkUsr:
          Gbl.FileBrowser.Type = Brw_ADMI_WRK_USR;
          break;
 
       /***** Another users' works *****/
-      case ActReqRemFilWrkCrs:
-      case ActRemFilWrkCrs:
-      case ActRemFolWrkCrs:
-      case ActCopWrkCrs:
-      case ActPasWrkCrs:
-      case ActRemTreWrkCrs:
-      case ActFrmCreWrkCrs:
-      case ActCreFolWrkCrs:
-      case ActCreLnkWrkCrs:
+      case ActReqRemFilWrkCrs:	case ActRemFilWrkCrs:
+      case ActRemFolWrkCrs:	case ActRemTreWrkCrs:
+      case ActCopWrkCrs:	case ActPasWrkCrs:
+      case ActFrmCreWrkCrs:	case ActCreFolWrkCrs:	case ActCreLnkWrkCrs:
       case ActRenFolWrkCrs:
-      case ActRcvFilWrkCrsDZ:
-      case ActRcvFilWrkCrsCla:
-      case ActExpWrkCrs:
-      case ActConWrkCrs:
+      case ActRcvFilWrkCrsDZ:	case ActRcvFilWrkCrsCla:
+      case ActExpWrkCrs:	case ActConWrkCrs:
       case ActZIPWrkCrs:
-      case ActReqDatWrkCrs:
-      case ActChgDatWrkCrs:
+      case ActReqDatWrkCrs:	case ActChgDatWrkCrs:
       case ActDowWrkCrs:
          Gbl.FileBrowser.Type = Brw_ADMI_WRK_CRS;
          break;
@@ -1802,46 +1665,30 @@ void Brw_GetParAndInitFileBrowser (void)
       /***** Documents in project *****/
       case ActSeeOnePrj:
       case ActAdmDocPrj:
-      case ActReqRemFilDocPrj:
-      case ActRemFilDocPrj:
-      case ActRemFolDocPrj:
-      case ActCopDocPrj:
-      case ActPasDocPrj:
-      case ActRemTreDocPrj:
-      case ActFrmCreDocPrj:
-      case ActCreFolDocPrj:
-      case ActCreLnkDocPrj:
+      case ActReqRemFilDocPrj:	case ActRemFilDocPrj:
+      case ActRemFolDocPrj:	case ActRemTreDocPrj:
+      case ActCopDocPrj:	case ActPasDocPrj:
+      case ActFrmCreDocPrj:	case ActCreFolDocPrj:	case ActCreLnkDocPrj:
       case ActRenFolDocPrj:
-      case ActRcvFilDocPrjDZ:
-      case ActRcvFilDocPrjCla:
-      case ActExpDocPrj:
-      case ActConDocPrj:
+      case ActRcvFilDocPrjDZ:	case ActRcvFilDocPrjCla:
+      case ActExpDocPrj:	case ActConDocPrj:
       case ActZIPDocPrj:
-      case ActReqDatDocPrj:
-      case ActChgDatDocPrj:
+      case ActReqDatDocPrj:	case ActChgDatDocPrj:
       case ActDowDocPrj:
          Gbl.FileBrowser.Type = Brw_ADMI_DOC_PRJ;
          break;
 
       /***** Assessment of project *****/
       case ActAdmAssPrj:
-      case ActReqRemFilAssPrj:
-      case ActRemFilAssPrj:
-      case ActRemFolAssPrj:
-      case ActCopAssPrj:
-      case ActPasAssPrj:
-      case ActRemTreAssPrj:
-      case ActFrmCreAssPrj:
-      case ActCreFolAssPrj:
-      case ActCreLnkAssPrj:
+      case ActReqRemFilAssPrj:	case ActRemFilAssPrj:
+      case ActRemFolAssPrj:	case ActRemTreAssPrj:
+      case ActCopAssPrj:	case ActPasAssPrj:
+      case ActFrmCreAssPrj:	case ActCreFolAssPrj:	case ActCreLnkAssPrj:
       case ActRenFolAssPrj:
-      case ActRcvFilAssPrjDZ:
-      case ActRcvFilAssPrjCla:
-      case ActExpAssPrj:
-      case ActConAssPrj:
+      case ActRcvFilAssPrjDZ:	case ActRcvFilAssPrjCla:
+      case ActExpAssPrj:	case ActConAssPrj:
       case ActZIPAssPrj:
-      case ActReqDatAssPrj:
-      case ActChgDatAssPrj:
+      case ActReqDatAssPrj:	case ActChgDatAssPrj:
       case ActDowAssPrj:
       case ActChgPrjSco:
          Gbl.FileBrowser.Type = Brw_ADMI_ASS_PRJ;
@@ -1873,16 +1720,14 @@ void Brw_GetParAndInitFileBrowser (void)
                                              Brw_SHOW_MRK_CRS;
          break;
       case ActSeeMrkCrs:
-      case ActExpSeeMrkCrs:
-      case ActConSeeMrkCrs:
+      case ActExpSeeMrkCrs:	case ActConSeeMrkCrs:
       case ActReqDatSeeMrkCrs:
       case ActReqLnkSeeMrkCrs:
       case ActSeeMyMrkCrs:
          Gbl.FileBrowser.Type = Brw_SHOW_MRK_CRS;
          break;
       case ActSeeMrkGrp:
-      case ActExpSeeMrkGrp:
-      case ActConSeeMrkGrp:
+      case ActExpSeeMrkGrp:	case ActConSeeMrkGrp:
       case ActReqDatSeeMrkGrp:
       case ActSeeMyMrkGrp:
          Gbl.FileBrowser.Type = Brw_SHOW_MRK_GRP;
@@ -1893,74 +1738,48 @@ void Brw_GetParAndInitFileBrowser (void)
                                              Brw_ADMI_MRK_CRS;
          break;
       case ActAdmMrkCrs:
-      case ActReqRemFilMrkCrs:
-      case ActRemFilMrkCrs:
-      case ActRemFolMrkCrs:
-      case ActCopMrkCrs:
-      case ActPasMrkCrs:
-      case ActRemTreMrkCrs:
-      case ActFrmCreMrkCrs:
-      case ActCreFolMrkCrs:
+      case ActReqRemFilMrkCrs:	case ActRemFilMrkCrs:
+      case ActRemFolMrkCrs:	case ActRemTreMrkCrs:
+      case ActCopMrkCrs:	case ActPasMrkCrs:
+      case ActFrmCreMrkCrs:	case ActCreFolMrkCrs:
       case ActRenFolMrkCrs:
-      case ActRcvFilMrkCrsDZ:
-      case ActRcvFilMrkCrsCla:
-      case ActExpAdmMrkCrs:
-      case ActConAdmMrkCrs:
+      case ActRcvFilMrkCrsDZ:	case ActRcvFilMrkCrsCla:
+      case ActExpAdmMrkCrs:	case ActConAdmMrkCrs:
       case ActZIPAdmMrkCrs:
-      case ActUnhMrkCrs:
-      case ActHidMrkCrs:
-      case ActReqDatAdmMrkCrs:
-      case ActChgDatAdmMrkCrs:
+      case ActUnhMrkCrs:	case ActHidMrkCrs:
+      case ActReqDatAdmMrkCrs:	case ActChgDatAdmMrkCrs:
       case ActReqLnkAdmMrkCrs:
       case ActDowAdmMrkCrs:
-      case ActChgNumRowHeaCrs:
-      case ActChgNumRowFooCrs:
+      case ActChgNumRowHeaCrs:	case ActChgNumRowFooCrs:
          Gbl.FileBrowser.Type = Brw_ADMI_MRK_CRS;
          break;
       case ActAdmMrkGrp:
-      case ActReqRemFilMrkGrp:
-      case ActRemFilMrkGrp:
-      case ActRemFolMrkGrp:
-      case ActCopMrkGrp:
-      case ActPasMrkGrp:
-      case ActRemTreMrkGrp:
-      case ActFrmCreMrkGrp:
-      case ActCreFolMrkGrp:
+      case ActReqRemFilMrkGrp:	case ActRemFilMrkGrp:
+      case ActRemFolMrkGrp:	case ActRemTreMrkGrp:
+      case ActCopMrkGrp:	case ActPasMrkGrp:
+      case ActFrmCreMrkGrp:	case ActCreFolMrkGrp:
       case ActRenFolMrkGrp:
-      case ActRcvFilMrkGrpDZ:
-      case ActRcvFilMrkGrpCla:
-      case ActExpAdmMrkGrp:
-      case ActConAdmMrkGrp:
+      case ActRcvFilMrkGrpDZ:	case ActRcvFilMrkGrpCla:
+      case ActExpAdmMrkGrp:	case ActConAdmMrkGrp:
       case ActZIPAdmMrkGrp:
-      case ActUnhMrkGrp:
-      case ActHidMrkGrp:
-      case ActReqDatAdmMrkGrp:
-      case ActChgDatAdmMrkGrp:
+      case ActUnhMrkGrp:	case ActHidMrkGrp:
+      case ActReqDatAdmMrkGrp:	case ActChgDatAdmMrkGrp:
       case ActDowAdmMrkGrp:
-      case ActChgNumRowHeaGrp:
-      case ActChgNumRowFooGrp:
+      case ActChgNumRowHeaGrp:	case ActChgNumRowFooGrp:
          Gbl.FileBrowser.Type = Brw_ADMI_MRK_GRP;
          break;
 
       /***** Briefcase *****/
       case ActAdmBrf:
-      case ActReqRemFilBrf:
-      case ActRemFilBrf:
-      case ActRemFolBrf:
-      case ActCopBrf:
-      case ActPasBrf:
-      case ActRemTreBrf:
-      case ActFrmCreBrf:
-      case ActCreFolBrf:
-      case ActCreLnkBrf:
+      case ActReqRemFilBrf:	case ActRemFilBrf:
+      case ActRemFolBrf:	case ActRemTreBrf:
+      case ActCopBrf:		case ActPasBrf:
+      case ActFrmCreBrf:	case ActCreFolBrf:	case ActCreLnkBrf:
       case ActRenFolBrf:
-      case ActRcvFilBrfDZ:
-      case ActRcvFilBrfCla:
-      case ActExpBrf:
-      case ActConBrf:
+      case ActRcvFilBrfDZ:	case ActRcvFilBrfCla:
+      case ActExpBrf:		case ActConBrf:
       case ActZIPBrf:
-      case ActReqDatBrf:
-      case ActChgDatBrf:
+      case ActReqDatBrf:	case ActChgDatBrf:
       case ActDowBrf:
       case ActReqRemOldBrf:	// Ask for removing old files in briefcase
       case ActRemOldBrf:	// Remove old files in briefcase
@@ -1972,7 +1791,7 @@ void Brw_GetParAndInitFileBrowser (void)
      }
 
    /***** Get the path in the file browser and the name of the file or folder *****/
-   Brw_GetParsPathInTreeAndFileName (&Gbl.FileBrowser.SelectedFilFolLnk);
+   // Brw_GetParsPathInTreeAndFileName (FilFolLnk);
 
    /***** Get other parameters *****/
    if ((Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_ADM_PRJ))
@@ -2208,7 +2027,7 @@ void Brw_PutParsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
 /************** Get parameters path and file in file browser *****************/
 /*****************************************************************************/
 
-static void Brw_GetParsPathInTreeAndFileName (struct Brw_FilFolLnk *FilFolLnk)
+void Brw_GetParsFilFolLnk (struct Brw_FilFolLnk *FilFolLnk)
   {
    const char *Ptr;
    Brw_FileType_t FileType;
@@ -3240,7 +3059,7 @@ static void Brw_ShowFileBrowser (void)
    char FileBrowserSectionId[32];
    struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
 
-   Brw_StartGlobalTiming ();
+   Tim_StartGlobalTiming ();
 
    /***** Every time user clicks in menu option to view
           his/her (temporary) briefcase ==> remove old files *****/
@@ -3294,13 +3113,14 @@ static void Brw_ShowFileBrowser (void)
 			 ConExp_EXPANDED,	// Tree not contracted
 			 Gbl.FileBrowser.Path.RootFolder,
 			 Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
-	 ShowFileBrowser_nsec = Brw_StopGlobalTiming ();
+	 ShowFileBrowser_nsec = Tim_StopGlobalTiming ();
       HTM_TABLE_End ();
 
       if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
         {
 	 Ale_ShowAlert (Ale_DEBUG,"scandir_nsec = %ld ms",scandir_nsec / 1000000);
 	 Ale_ShowAlert (Ale_DEBUG,"GetFileMetadataByPath_nsec = %ld ms",GetFileMetadataByPath_nsec / 1000000);
+	 Ale_ShowAlert (Ale_DEBUG,"Brw_DB_GetFileMetadataByPath_nsec = %ld ms",Brw_DB_GetFileMetadataByPath_nsec / 1000000);
 	 Ale_ShowAlert (Ale_DEBUG,"GetFileTypeSizeAndDate_nsec = %ld ms",GetFileTypeSizeAndDate_nsec / 1000000);
 	 Ale_ShowAlert (Ale_DEBUG,"GetIfContractedOrExpandedFolder_nsec = %ld ms",GetIfContractedOrExpandedFolder_nsec / 1000000);
 	 Ale_ShowAlert (Ale_DEBUG,"CheckIfFileOrFolderIsHidden_nsec = %ld ms",CheckIfFileOrFolderIsHidden_nsec / 1000000);
@@ -3839,10 +3659,10 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
    __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible;
 
    /***** Scan directory *****/
-   Brw_StartPartialTiming ();
+   Tim_StartPartialTiming ();
    if ((NumFiles = scandir (Path,&FileList,NULL,alphasort)) >= 0)	// No error
      {
-      scandir_nsec += Brw_StopPartialTiming ();
+      scandir_nsec += Tim_StopPartialTiming ();
 
       /***** List files *****/
       for (NumFile = 0, NumRow = 0;
@@ -3869,12 +3689,12 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 	    snprintf (RowId,sizeof (RowId),"%s_%u",ParentRowId,NumRow);
 
 	    /***** Get file metadata *****/
-	    Brw_StartPartialTiming ();
+	    Tim_StartPartialTiming ();
 	    Brw_GetFileMetadataByPath (&FileMetadata);
-	    GetFileMetadataByPath_nsec += Brw_StopPartialTiming ();
-	    Brw_StartPartialTiming ();
+	    GetFileMetadataByPath_nsec += Tim_StopPartialTiming ();
+	    Tim_StartPartialTiming ();
 	    FileExists = Brw_GetFileTypeSizeAndDate (&FileMetadata);
-	    GetFileTypeSizeAndDate_nsec += Brw_StopPartialTiming ();
+	    GetFileTypeSizeAndDate_nsec += Tim_StopPartialTiming ();
 
 	    /***** Get file or folder status *****/
             switch (FileMetadata.FilFolLnk.Type)
@@ -3890,16 +3710,16 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 		     default:
 			ContractedOrExpandedSubtree = ConExp_CONTRACTED;
 			/***** Check if this subdirectory has files or folders in it *****/
-			Brw_StartPartialTiming ();
+			Tim_StartPartialTiming ();
 			if ((NumFilesInSubdir = scandir (PathFileRel,&SubdirFileList,NULL,NULL)) >= 0)	// No error
 			  {
-			   scandir_nsec += Brw_StopPartialTiming ();
+			   scandir_nsec += Tim_StopPartialTiming ();
 			   if (NumFilesInSubdir > 2)
 			     {
 			      /***** Check if the tree starting at this subdirectory must be expanded *****/
-			      Brw_StartPartialTiming ();
+			      Tim_StartPartialTiming ();
 			      ContractedOrExpandedSubtree = Brw_DB_GetIfContractedOrExpandedFolder (FileMetadata.FilFolLnk.Full);
-			      GetIfContractedOrExpandedFolder_nsec += Brw_StopPartialTiming ();
+			      GetIfContractedOrExpandedFolder_nsec += Tim_StopPartialTiming ();
 			      IconSubtree = IconsSubtree[ContractedOrExpandedSubtree];
 			     }
 			   for (NumFileInSubdir = 0;
@@ -4003,9 +3823,9 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
 					    Brw_IS_ADM_DOC |
 					    Brw_IS_ADM_MRK)))
      {
-      Brw_StartPartialTiming ();
+      Tim_StartPartialTiming ();
       ThisHiddenOrVisible = Brw_CheckIfFileOrFolderIsHidden (&FileMetadata->FilFolLnk);
-      CheckIfFileOrFolderIsHidden_nsec += Brw_StopPartialTiming ();
+      CheckIfFileOrFolderIsHidden_nsec += Tim_StopPartialTiming ();
 
       if (ThisHiddenOrVisible == HidVis_HIDDEN &&
 	  (Brw_TypeOf[Gbl.FileBrowser.Type] & (Brw_IS_SEE_DOC |
@@ -4021,9 +3841,9 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
 	 switch (ThisHiddenOrVisible)
 	   {
 	    case HidVis_VISIBLE:	// this row is not marked as hidden
-               Brw_StartPartialTiming ();
+               Tim_StartPartialTiming ();
                ThisOrAncestorHiddenOrVisible = Brw_CheckIfAnyHigherLevelIsHidden (Level);
-               CheckIfAnyHigherLevelIsHidden_nsec += Brw_StopPartialTiming ();
+               CheckIfAnyHigherLevelIsHidden_nsec += Tim_StopPartialTiming ();
 	       break;
 	    case HidVis_HIDDEN:		// this row is marked as hidden
 	    default:
@@ -4045,10 +3865,10 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
 					    Brw_IS_ADM_DOC |
 					    Brw_IS_ADM_SHA)))
      {
-      Brw_StartPartialTiming ();
+      Tim_StartPartialTiming ();
       RowPublicOrPrivate = FileMetadata->FilFolLnk.Type == Brw_IS_FOLDER ? Brw_DB_GetIfFolderHasPublicFiles (FileMetadata->FilFolLnk.Full) :
 	                                                                   FileMetadata->PrivateOrPublic;
-      GetIfFolderHasPublicFiles_nsec += Brw_StopPartialTiming ();
+      GetIfFolderHasPublicFiles_nsec += Tim_StopPartialTiming ();
       if (Gbl.FileBrowser.OnlyPublicFiles &&
 	  RowPublicOrPrivate == PriPub_PRIVATE)
          return HidVis_HIDDEN;
@@ -4224,9 +4044,9 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
       case Brw_IS_FILE:
       case Brw_IS_LINK:
 	 /***** User who created the file or folder *****/
-	 Brw_StartPartialTiming ();
+	 Tim_StartPartialTiming ();
 	 Brw_WriteFileOrFolderPublisher (Level,FileMetadata->PublisherUsrCod);
-	 WriteFileOrFolderPublisher_nsec += Brw_StopPartialTiming ();
+	 WriteFileOrFolderPublisher_nsec += Tim_StopPartialTiming ();
 	 break;
       case Brw_IS_UNKNOWN:
       default:
@@ -5065,23 +4885,24 @@ void Brw_ReqRemFile (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X;
    extern const char *Txt_You_can_not_remove_this_file_or_link;
+   struct Brw_FilFolLnk FilFolLnk;
    char FileNameToShow[NAME_MAX + 1];
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FilFolLnk);
 
    /***** Button of confirmation of removing *****/
-   switch (Brw_CheckIfICanEditFileOrFolder (&Gbl.FileBrowser.SelectedFilFolLnk,
-					    Gbl.FileBrowser.Lvl))	// Can I remove this file?
+   switch (Brw_CheckIfICanEditFileOrFolder (&FilFolLnk,Gbl.FileBrowser.Lvl))	// Can I remove this file?
      {
       case Usr_CAN:
 	 /***** Show question and button to remove file/link *****/
-	 Brw_GetFileNameToShowDependingOnLevel (&Gbl.FileBrowser.SelectedFilFolLnk,
+	 Brw_GetFileNameToShowDependingOnLevel (&FilFolLnk,
 						Gbl.FileBrowser.Type,
 						Gbl.FileBrowser.Lvl,
 						FileNameToShow);
 	 Ale_ShowAlertRemove (Brw_ActRemoveFile[Gbl.FileBrowser.Type],NULL,
-			      Brw_PutImplicitParsFileBrowser,&Gbl.FileBrowser.SelectedFilFolLnk,
+			      Brw_PutImplicitParsFileBrowser,&FilFolLnk,
 			      Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X,
 			      FileNameToShow);
 	 break;
@@ -5103,20 +4924,20 @@ void Brw_RemFile (void)
   {
    extern const char *Txt_FILE_X_removed;
    extern const char *Txt_You_can_not_remove_this_file_or_link;
+   struct Brw_FilFolLnk FilFolLnk;
    char Path[PATH_MAX + 1 + PATH_MAX + 1];
    struct stat FileStatus;
    char FileNameToShow[NAME_MAX + 1];
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FilFolLnk);
 
-   switch (Brw_CheckIfICanEditFileOrFolder (&Gbl.FileBrowser.SelectedFilFolLnk,
-					    Gbl.FileBrowser.Lvl))	// Can I remove this file?
+   switch (Brw_CheckIfICanEditFileOrFolder (&FilFolLnk,Gbl.FileBrowser.Lvl))	// Can I remove this file?
      {
       case Usr_CAN:
 	 snprintf (Path,sizeof (Path),"%s/%s",
-		   Gbl.FileBrowser.Path.AboveRootFolder,
-		   Gbl.FileBrowser.SelectedFilFolLnk.Full);
+		   Gbl.FileBrowser.Path.AboveRootFolder,FilFolLnk.Full);
 
 	 /***** Check if is a file/link or a folder *****/
 	 if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
@@ -5124,14 +4945,12 @@ void Brw_RemFile (void)
 	 else if (S_ISREG (FileStatus.st_mode))		// It's a file or a link
 	   {
 	    /* Name of the file/link to be shown */
-	    Brw_GetFileNameToShow (Str_FileIs (Gbl.FileBrowser.SelectedFilFolLnk.Name,
-					       "url") ? Brw_IS_LINK :
-						        Brw_IS_FILE,
-				   Gbl.FileBrowser.SelectedFilFolLnk.Name,FileNameToShow);
+	    Brw_GetFileNameToShow (Str_FileIs (FilFolLnk.Name,"url") ? Brw_IS_LINK :
+								       Brw_IS_FILE,
+				   FilFolLnk.Name,FileNameToShow);
 
 	    /* Remove file/link from disk and database */
-	    Brw_RemoveFileFromDiskAndDB (Path,
-					 Gbl.FileBrowser.SelectedFilFolLnk.Full);
+	    Brw_RemoveFileFromDiskAndDB (Path,FilFolLnk.Full);
 
 	    /* Remove affected clipboards */
 	    Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
@@ -5162,29 +4981,28 @@ void Brw_RemFolder (void)
   {
    extern const char *Txt_Folder_X_removed;
    extern const char *Txt_You_can_not_remove_this_folder;
+   struct Brw_FilFolLnk FilFolLnk;
    char Path[PATH_MAX + 1 + PATH_MAX + 1];
    struct stat FileStatus;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FilFolLnk);
 
-   switch (Brw_CheckIfICanEditFileOrFolder (&Gbl.FileBrowser.SelectedFilFolLnk,
-					    Gbl.FileBrowser.Lvl))	// Can I remove this folder?
+   switch (Brw_CheckIfICanEditFileOrFolder (&FilFolLnk,Gbl.FileBrowser.Lvl))	// Can I remove this folder?
      {
       case Usr_CAN:
 	 snprintf (Path,sizeof (Path),"%s/%s",
-		   Gbl.FileBrowser.Path.AboveRootFolder,
-		   Gbl.FileBrowser.SelectedFilFolLnk.Full);
+		   Gbl.FileBrowser.Path.AboveRootFolder,FilFolLnk.Full);
 
 	 /***** Check if it's a file or a folder *****/
 	 if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
 	    Err_ShowErrorAndExit ("Can not get information about a file or folder.");
 	 else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
-	    if (Brw_RemoveFolderFromDiskAndDB (Path,
-					       Gbl.FileBrowser.SelectedFilFolLnk.Full))
+	    if (Brw_RemoveFolderFromDiskAndDB (Path,FilFolLnk.Full))
 	      {
 	       if (errno == ENOTEMPTY)	// The directory is not empty
-		  Brw_AskConfirmRemoveFolderNotEmpty (&Gbl.FileBrowser.SelectedFilFolLnk);
+		  Brw_AskConfirmRemoveFolderNotEmpty (&FilFolLnk);
 	       else			// The directory is empty
 		  Err_ShowErrorAndExit (Txt_You_can_not_remove_this_folder);
 	      }
@@ -5196,8 +5014,7 @@ void Brw_RemFolder (void)
 						Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	       /* Message of confirmation of successfull removing */
-	       Ale_ShowAlert (Ale_SUCCESS,Txt_Folder_X_removed,
-			      Gbl.FileBrowser.SelectedFilFolLnk.Name);
+	       Ale_ShowAlert (Ale_SUCCESS,Txt_Folder_X_removed,FilFolLnk.Name);
 	      }
 	 else		// Folder not found
 	    Err_FileFolderNotFoundExit ();
@@ -5234,17 +5051,17 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (struct Brw_FilFolLnk *FilFolLnk)
 void Brw_RemSubtree (void)
   {
    extern const char *Txt_Folder_X_and_all_its_contents_removed;
+   struct Brw_FilFolLnk FilFolLnk;
    char Path[PATH_MAX + 1 + PATH_MAX + 1];
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FilFolLnk);
 
-   if (Brw_CheckIfICanEditFileOrFolder (&Gbl.FileBrowser.SelectedFilFolLnk,
-					Gbl.FileBrowser.Lvl) == Usr_CAN)	// Can I remove this subtree?
+   if (Brw_CheckIfICanEditFileOrFolder (&FilFolLnk,Gbl.FileBrowser.Lvl) == Usr_CAN)	// Can I remove this subtree?
      {
       snprintf (Path,sizeof (Path),"%s/%s",
-	        Gbl.FileBrowser.Path.AboveRootFolder,
-	        Gbl.FileBrowser.SelectedFilFolLnk.Full);
+	        Gbl.FileBrowser.Path.AboveRootFolder,FilFolLnk.Full);
 
       /***** Remove the whole tree *****/
       Fil_RemoveTree (Path);
@@ -5252,8 +5069,8 @@ void Brw_RemSubtree (void)
       /* If a folder is removed,
          it is necessary to remove it from the database
          and all files or folders under that folder */
-      Brw_RemoveOneFileOrFolderFromDB (Gbl.FileBrowser.SelectedFilFolLnk.Full);
-      Brw_RemoveChildrenOfFolderFromDB (Gbl.FileBrowser.SelectedFilFolLnk.Full);
+      Brw_RemoveOneFileOrFolderFromDB (FilFolLnk.Full);
+      Brw_RemoveChildrenOfFolderFromDB (FilFolLnk.Full);
 
       /* Remove affected clipboards */
       Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
@@ -5261,11 +5078,11 @@ void Brw_RemSubtree (void)
 				       Gbl.Usrs.Other.UsrDat.UsrCod);
 
       /* Remove affected expanded folders */
-      Brw_DB_RemoveAffectedExpandedFolders (Gbl.FileBrowser.SelectedFilFolLnk.Full);
+      Brw_DB_RemoveAffectedExpandedFolders (FilFolLnk.Full);
 
       /***** Write message of confirmation *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_Folder_X_and_all_its_contents_removed,
-                     Gbl.FileBrowser.SelectedFilFolLnk.Name);
+                     FilFolLnk.Name);
      }
 
    /***** Show again file browser *****/
@@ -5279,11 +5096,14 @@ void Brw_RemSubtree (void)
 
 void Brw_ExpandFileTree (void)
   {
+   struct Brw_FilFolLnk FilFolLnk;
+
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FilFolLnk);
 
    /***** Add path to table of expanded folders *****/
-   Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.SelectedFilFolLnk.Full);
+   Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (FilFolLnk.Full);
   }
 
 /*****************************************************************************/
@@ -5293,11 +5113,14 @@ void Brw_ExpandFileTree (void)
 
 void Brw_ContractFileTree (void)
   {
+   struct Brw_FilFolLnk FilFolLnk;
+
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FilFolLnk);
 
    /***** Remove path where the user has clicked from table of expanded folders *****/
-   Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (Gbl.FileBrowser.SelectedFilFolLnk.Full);
+   Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (FilFolLnk.Full);
   }
 
 /*****************************************************************************/
@@ -5306,8 +5129,11 @@ void Brw_ContractFileTree (void)
 
 void Brw_Copy (void)
   {
+   struct Brw_FilFolLnk FilFolLnk;
+
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FilFolLnk);
 
    /***** Remove old clipboards (from all users) *****/
    Brw_DB_RemoveExpiredClipboards ();   // Someone must do this work. Let's do it whenever a user click in a copy button
@@ -5316,11 +5142,11 @@ void Brw_Copy (void)
    switch (Brw_GetMyClipboard ())
      {
       case Exi_EXISTS:
-	 Brw_DB_UpdatePathInClipboard (&Gbl.FileBrowser.SelectedFilFolLnk);
+	 Brw_DB_UpdatePathInClipboard (&FilFolLnk);
 	 break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Brw_DB_AddPathToClipboards (&Gbl.FileBrowser.SelectedFilFolLnk);
+	 Brw_DB_AddPathToClipboards (&FilFolLnk);
 	 break;
      }
 
@@ -5844,10 +5670,12 @@ static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (const char P
 void Brw_Paste (void)
   {
    extern const char *Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_;
+   struct Brw_FilFolLnk FilFolLnk;
    struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FilFolLnk);
 
    switch (Brw_GetMyClipboard ())
      {
@@ -5867,7 +5695,7 @@ void Brw_Paste (void)
 	   }
 
 	 /***** Copy files recursively *****/
-	 Brw_PasteClipboard (&Gbl.FileBrowser.SelectedFilFolLnk,Size);
+	 Brw_PasteClipboard (&FilFolLnk,Size);
 
 	 /***** Remove the affected clipboards *****/
 	 Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
@@ -6423,45 +6251,45 @@ static Err_SuccessOrError_t Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *
 void Brw_ShowFormFileBrowser (void)
   {
    extern const char *Txt_You_can_not_create_folders_files_or_links_here;
+   struct Brw_FilFolLnk FilFolLnk;
    char FileNameToShow[NAME_MAX + 1];
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FilFolLnk);
 
    /***** Check if creating a new folder or file is allowed *****/
-   switch (Brw_CheckIfICanCreateIntoFolder (&Gbl.FileBrowser.SelectedFilFolLnk,
-					    Gbl.FileBrowser.Lvl))
+   switch (Brw_CheckIfICanCreateIntoFolder (&FilFolLnk,Gbl.FileBrowser.Lvl))
      {
       case Usr_CAN:
 	 /***** Name of the folder to be shown ****/
-	 Brw_GetFileNameToShowDependingOnLevel (&Gbl.FileBrowser.SelectedFilFolLnk,
+	 Brw_GetFileNameToShowDependingOnLevel (&FilFolLnk,
 						Gbl.FileBrowser.Type,
 						Gbl.FileBrowser.Lvl,
 						FileNameToShow);
 
 	 /***** 1. Form to create a new folder *****/
-	 Brw_PutFormToCreateAFolder (&Gbl.FileBrowser.SelectedFilFolLnk,FileNameToShow);
+	 Brw_PutFormToCreateAFolder (&FilFolLnk,FileNameToShow);
 
 	 /***** 2. Form to send a file *****/
-	 Brw_PutFormToUploadFilesUsingDropzone (&Gbl.FileBrowser.SelectedFilFolLnk,FileNameToShow);
+	 Brw_PutFormToUploadFilesUsingDropzone (&FilFolLnk,FileNameToShow);
 
 	 /***** 3. Form to send a file *****/
-	 Brw_PutFormToUploadOneFileClassic (&Gbl.FileBrowser.SelectedFilFolLnk,FileNameToShow);
+	 Brw_PutFormToUploadOneFileClassic (&FilFolLnk,FileNameToShow);
 
 	 /***** 4. Form to paste the content of the clipboard *****/
 	 if (Brw_GetMyClipboard () == Exi_EXISTS)
 	   {
 	    /***** Check if we can paste in this folder *****/
 	    Gbl.FileBrowser.Clipboard.IsThisTree = Brw_CheckIfClipboardIsInThisTree ();
-	    if (Brw_CheckIfCanPasteIn (&Gbl.FileBrowser.SelectedFilFolLnk,
-				       Gbl.FileBrowser.Lvl) == Usr_CAN)
-	       Brw_PutFormToPasteAFileOrFolder (&Gbl.FileBrowser.SelectedFilFolLnk,FileNameToShow);
+	    if (Brw_CheckIfCanPasteIn (&FilFolLnk,Gbl.FileBrowser.Lvl) == Usr_CAN)
+	       Brw_PutFormToPasteAFileOrFolder (&FilFolLnk,FileNameToShow);
 	   }
 
 	 /***** 5. Form to create a link *****/
 	 if (Gbl.FileBrowser.Type != Brw_ADMI_MRK_CRS &&
 	     Gbl.FileBrowser.Type != Brw_ADMI_MRK_GRP)	// Do not create links in marks
-	    Brw_PutFormToCreateALink (&Gbl.FileBrowser.SelectedFilFolLnk,FileNameToShow);
+	    Brw_PutFormToCreateALink (&FilFolLnk,FileNameToShow);
 	 break;
       case Usr_CAN_NOT:
       default:
@@ -6714,6 +6542,7 @@ void Brw_CreateFolder (void)
    extern const char *Txt_UPLOAD_FILE_Invalid_name;
    extern const char *Txt_The_folder_X_has_been_created_inside_the_folder_Y;
    extern const char *Txt_You_can_not_create_folders_here;
+   struct Brw_FilFolLnk FilFolLnk;
    char Path[PATH_MAX + 1 + PATH_MAX + 1];
    char PathCompleteInTreeIncludingFolder[PATH_MAX + 1 + NAME_MAX + 1];
    char FileNameToShow[NAME_MAX + 1];
@@ -6721,10 +6550,10 @@ void Brw_CreateFolder (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FilFolLnk);
 
    /***** Check if creating a new folder is allowed *****/
-   switch (Brw_CheckIfICanCreateIntoFolder (&Gbl.FileBrowser.SelectedFilFolLnk,
-					    Gbl.FileBrowser.Lvl))
+   switch (Brw_CheckIfICanCreateIntoFolder (&FilFolLnk,Gbl.FileBrowser.Lvl))
      {
       case Usr_CAN:
 	 switch (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
@@ -6732,8 +6561,7 @@ void Brw_CreateFolder (void)
 	    case Err_SUCCESS:	// Folder name is valid
 	       /* In Gbl.FileBrowser.NewFilFolLnkName is the name of the new folder */
 	       snprintf (Path,sizeof (Path),"%s/%s",
-			 Gbl.FileBrowser.Path.AboveRootFolder,
-			 Gbl.FileBrowser.SelectedFilFolLnk.Full);
+			 Gbl.FileBrowser.Path.AboveRootFolder,FilFolLnk.Full);
 
 	       if (strlen (Path) + 1 + strlen (Gbl.FileBrowser.NewFilFolLnkName) > PATH_MAX)
 		  Err_ShowErrorAndExit ("Path is too long.");
@@ -6755,22 +6583,21 @@ void Brw_CreateFolder (void)
 							 Gbl.Usrs.Other.UsrDat.UsrCod);
 
 			/* Add path where new file is created to table of expanded folders */
-			Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.SelectedFilFolLnk.Full);
+			Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (FilFolLnk.Full);
 
 			/* Add entry to the table of files/folders */
 			snprintf (PathCompleteInTreeIncludingFolder,
 				  sizeof (PathCompleteInTreeIncludingFolder),
 				  "%s/%s",
-				  Gbl.FileBrowser.SelectedFilFolLnk.Full,
-				  Gbl.FileBrowser.NewFilFolLnkName);
+				  FilFolLnk.Full,Gbl.FileBrowser.NewFilFolLnkName);
 			Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,
 				        Brw_IS_FOLDER,
 					PathCompleteInTreeIncludingFolder,
 					PriPub_PRIVATE,Brw_LICENSE_DEFAULT);
 
 			/* The folder has been created sucessfully */
-			Gbl.FileBrowser.SelectedFilFolLnk.Type = Brw_IS_FOLDER;
-			Brw_GetFileNameToShowDependingOnLevel (&Gbl.FileBrowser.SelectedFilFolLnk,
+			FilFolLnk.Type = Brw_IS_FOLDER;
+			Brw_GetFileNameToShowDependingOnLevel (&FilFolLnk,
 							       Gbl.FileBrowser.Type,
 							       Gbl.FileBrowser.Lvl,
 							       FileNameToShow);
@@ -6828,6 +6655,7 @@ void Brw_RenFolder (void)
    extern const char *Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y;
    extern const char *Txt_You_can_not_rename_this_folder;
    extern const char *Txt_UPLOAD_FILE_Invalid_name;
+   struct Brw_FilFolLnk FilFolLnk;
    char OldPathInTree[PATH_MAX + 1 + NAME_MAX + 1];
    char NewPathInTree[PATH_MAX + 1 + NAME_MAX + 1];
    char OldPath[PATH_MAX + 1 + PATH_MAX + 1 + NAME_MAX + 1];
@@ -6835,32 +6663,30 @@ void Brw_RenFolder (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FilFolLnk);
 
-   switch (Brw_CheckIfICanEditFileOrFolder (&Gbl.FileBrowser.SelectedFilFolLnk,
-					    Gbl.FileBrowser.Lvl))	// Can I rename this folder?
+   switch (Brw_CheckIfICanEditFileOrFolder (&FilFolLnk,Gbl.FileBrowser.Lvl))	// Can I rename this folder?
      {
       case Usr_CAN:
 	 switch (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
 	   {
 	    case Err_SUCCESS:	// Folder name is valid
-	       if (strcmp (Gbl.FileBrowser.SelectedFilFolLnk.Name,
+	       if (strcmp (FilFolLnk.Name,
 			   Gbl.FileBrowser.NewFilFolLnkName))	// The name has changed
 		 {
 		  /* Gbl.FileBrowser.FilFolLnk.Name holds the new name of the folder */
 		  snprintf (OldPathInTree,sizeof (OldPathInTree),"%s/%s",
-			    Gbl.FileBrowser.SelectedFilFolLnk.Path,
-			    Gbl.FileBrowser.SelectedFilFolLnk.Name);
+			    FilFolLnk.Path,FilFolLnk.Name);
 		  snprintf (OldPath,sizeof (OldPath),"%s/%s",
 			    Gbl.FileBrowser.Path.AboveRootFolder,OldPathInTree);
 
 		  /* Gbl.FileBrowser.NewFilFolLnkName holds the new name of the folder */
 		  if (strlen (Gbl.FileBrowser.Path.AboveRootFolder) + 1 +
-		      strlen (Gbl.FileBrowser.SelectedFilFolLnk.Path) + 1 +
+		      strlen (FilFolLnk.Path) + 1 +
 		      strlen (Gbl.FileBrowser.NewFilFolLnkName) > PATH_MAX)
 		     Err_ShowErrorAndExit ("Path is too long.");
 		  snprintf (NewPathInTree,sizeof (NewPathInTree),"%s/%s",
-			    Gbl.FileBrowser.SelectedFilFolLnk.Path,
-			    Gbl.FileBrowser.NewFilFolLnkName);
+			    FilFolLnk.Path,Gbl.FileBrowser.NewFilFolLnkName);
 		  snprintf (NewPath,sizeof (NewPath),"%s/%s",
 			    Gbl.FileBrowser.Path.AboveRootFolder,NewPathInTree);
 
@@ -6877,7 +6703,7 @@ void Brw_RenFolder (void)
 			case ENOTDIR:
 			   Ale_ShowAlert (Ale_WARNING,
 					  Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y,
-					  Gbl.FileBrowser.SelectedFilFolLnk.Name,
+					  FilFolLnk.Name,
 					  Gbl.FileBrowser.NewFilFolLnkName);
 			   break;
 			case EACCES:
@@ -6935,11 +6761,12 @@ void Brw_RenFolder (void)
 
 void Brw_RcvFileDZ (void)
   {
+   struct Brw_FilFolLnk FilFolLnk;
    Err_SuccessOrError_t UploadSucessful;
    struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
 
    /***** Receive file *****/
-   UploadSucessful = Brw_RcvFileInFileBrw (Size,Brw_DROPZONE_UPLOAD);
+   UploadSucessful = Brw_RcvFileInFileBrw (&FilFolLnk,Size,Brw_DROPZONE_UPLOAD);
 
    /***** When a file is uploaded, the HTTP response
 	  is a code status and a message for Dropzone.js *****/
@@ -6970,11 +6797,12 @@ void Brw_RcvFileDZ (void)
 
 void Brw_RcvFileClassic (void)
   {
+   struct Brw_FilFolLnk FilFolLnk;
    struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
    __attribute__((unused)) Err_SuccessOrError_t UploadSucessful;
 
    /***** Receive file and show feedback message *****/
-   UploadSucessful = Brw_RcvFileInFileBrw (Size,Brw_CLASSIC_UPLOAD);
+   UploadSucessful = Brw_RcvFileInFileBrw (&FilFolLnk,Size,Brw_CLASSIC_UPLOAD);
 
    /***** Show possible alert *****/
    Ale_ShowAlerts (NULL);
@@ -6987,7 +6815,8 @@ void Brw_RcvFileClassic (void)
 /****************** Receive a new file in a file browser *********************/
 /*****************************************************************************/
 
-static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
+static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FilFolLnk *FilFolLnk,
+						  struct BrwSiz_BrowserSize *Size,
 						  Brw_UploadType_t UploadType)
   {
    extern const char *Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML;
@@ -7019,10 +6848,10 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Siz
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (FilFolLnk);
 
    /***** Check if creating a new file is allowed *****/
-   switch (Brw_CheckIfICanCreateIntoFolder (&Gbl.FileBrowser.SelectedFilFolLnk,
-					    Gbl.FileBrowser.Lvl))
+   switch (Brw_CheckIfICanCreateIntoFolder (FilFolLnk,Gbl.FileBrowser.Lvl))
      {
       case Usr_CAN:
 	 /***** First, we save in disk the file received *****/
@@ -7044,7 +6873,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Siz
 		     /* Gbl.FileBrowser.NewFilFolLnkName holds the name of the new file */
 		     snprintf (Path,sizeof (Path),"%s/%s",
 			       Gbl.FileBrowser.Path.AboveRootFolder,
-			       Gbl.FileBrowser.SelectedFilFolLnk.Full);
+			       FilFolLnk->Full);
 		     if (strlen (Path) + 1 +
 			 strlen (Gbl.FileBrowser.NewFilFolLnkName) +
 			 strlen (".tmp") > PATH_MAX)
@@ -7097,13 +6926,13 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Siz
 									   Gbl.Usrs.Other.UsrDat.UsrCod);
 
 					  /* Add path where new file is created to table of expanded folders */
-					  Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.SelectedFilFolLnk.Full);
+					  Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (FilFolLnk->Full);
 
 					  /* Add entry to the table of files/folders */
 					  snprintf (PathCompleteInTreeIncludingFile,
 						    sizeof (PathCompleteInTreeIncludingFile),
 						    "%s/%s",
-						    Gbl.FileBrowser.SelectedFilFolLnk.Full,
+						    FilFolLnk->Full,
 						    Gbl.FileBrowser.NewFilFolLnkName);
 					  FilCod = Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,
 								   Brw_IS_FILE,
@@ -7113,8 +6942,8 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Siz
 					  /* Show message of confirmation */
 					  if (UploadType == Brw_CLASSIC_UPLOAD)
 					    {
-					     Gbl.FileBrowser.SelectedFilFolLnk.Type = Brw_IS_FOLDER;
-					     Brw_GetFileNameToShowDependingOnLevel (&Gbl.FileBrowser.SelectedFilFolLnk,
+					     FilFolLnk->Type = Brw_IS_FOLDER;
+					     Brw_GetFileNameToShowDependingOnLevel (FilFolLnk,
 										    Gbl.FileBrowser.Type,
 										    Gbl.FileBrowser.Lvl,
 										    FileNameToShow);	// Folder name
@@ -7206,6 +7035,7 @@ void Brw_CreateLink (void)
    extern const char *Txt_The_link_X_has_been_placed_inside_the_folder_Y;
    extern const char *Txt_UPLOAD_FILE_Invalid_link;
    extern const char *Txt_You_can_not_create_links_here;
+   struct Brw_FilFolLnk FilFolLnk;
    char URL[PATH_MAX + 1];
    char URLWithoutEndingSlash[PATH_MAX + 1];
    size_t LengthURL;
@@ -7221,10 +7051,10 @@ void Brw_CreateLink (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FilFolLnk);
 
    /***** Check if creating a new link is allowed *****/
-   switch (Brw_CheckIfICanCreateIntoFolder (&Gbl.FileBrowser.SelectedFilFolLnk,
-					    Gbl.FileBrowser.Lvl))
+   switch (Brw_CheckIfICanCreateIntoFolder (&FilFolLnk,Gbl.FileBrowser.Lvl))
      {
       case Usr_CAN:
 	 /***** Create a new file to store URL ****/
@@ -7266,8 +7096,7 @@ void Brw_CreateLink (void)
 	       case Err_SUCCESS:	// Link name is valid
 		  /* The name of the file with the link will be the FileName.url */
 		  snprintf (Path,sizeof (Path),"%s/%s",
-			    Gbl.FileBrowser.Path.AboveRootFolder,
-			    Gbl.FileBrowser.SelectedFilFolLnk.Full);
+			    Gbl.FileBrowser.Path.AboveRootFolder,FilFolLnk.Full);
 		  if (strlen (Path) + 1 + strlen (FileName) + strlen (".url") > PATH_MAX)
 		     Err_ShowErrorAndExit ("Path is too long.");
 		  Str_Concat (Path,"/",sizeof (Path) - 1);
@@ -7304,20 +7133,20 @@ void Brw_CreateLink (void)
 								  Gbl.Usrs.Other.UsrDat.UsrCod);
 
 				 /* Add path where new file is created to table of expanded folders */
-				 Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.SelectedFilFolLnk.Full);
+				 Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (FilFolLnk.Full);
 
 				 /* Add entry to the table of files/folders */
 				 snprintf (PathCompleteInTreeIncludingFile,
 					   sizeof (PathCompleteInTreeIncludingFile),
 					   "%s/%s.url",
-					   Gbl.FileBrowser.SelectedFilFolLnk.Full,FileName);
+					   FilFolLnk.Full,FileName);
 				 FilCod = Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,
 							  Brw_IS_LINK,
 							  PathCompleteInTreeIncludingFile,
 							  PriPub_PRIVATE,Brw_LICENSE_DEFAULT);
 
 				 /* Show message of confirmation */
-				 Brw_GetFileNameToShowDependingOnLevel (&Gbl.FileBrowser.SelectedFilFolLnk,
+				 Brw_GetFileNameToShowDependingOnLevel (&FilFolLnk,
 									Gbl.FileBrowser.Type,
 									Gbl.FileBrowser.Lvl,
 									FileNameToShow);	// Folder name
@@ -7451,12 +7280,15 @@ static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (const char *MIMEType)
 
 void Brw_SetDocumentAsVisible (void)
   {
+   struct Brw_FilFolLnk FilFolLnk;
+
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FilFolLnk);
 
    /***** Change file to visible *****/
-   if (Brw_CheckIfFileOrFolderIsHidden (&Gbl.FileBrowser.SelectedFilFolLnk) == HidVis_HIDDEN)
-      Brw_DB_HideOrUnhideFileOrFolder (Gbl.FileBrowser.SelectedFilFolLnk.Full,HidVis_VISIBLE);
+   if (Brw_CheckIfFileOrFolderIsHidden (&FilFolLnk) == HidVis_HIDDEN)
+      Brw_DB_HideOrUnhideFileOrFolder (FilFolLnk.Full,HidVis_VISIBLE);
 
    /***** Remove the affected clipboards *****/
    Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
@@ -7473,13 +7305,16 @@ void Brw_SetDocumentAsVisible (void)
 
 void Brw_SetDocumentAsHidden (void)
   {
+   struct Brw_FilFolLnk FilFolLnk;
+
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FilFolLnk);
 
    /***** If the file or folder is not already set as hidden in database,
           set it as hidden *****/
-   if (Brw_CheckIfFileOrFolderIsHidden (&Gbl.FileBrowser.SelectedFilFolLnk) == HidVis_VISIBLE)
-      Brw_DB_HideOrUnhideFileOrFolder (Gbl.FileBrowser.SelectedFilFolLnk.Full,HidVis_HIDDEN);
+   if (Brw_CheckIfFileOrFolderIsHidden (&FilFolLnk) == HidVis_VISIBLE)
+      Brw_DB_HideOrUnhideFileOrFolder (FilFolLnk.Full,HidVis_HIDDEN);
 
    /***** Remove the affected clipboards *****/
    Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
@@ -7580,6 +7415,7 @@ void Brw_ShowFileMetadata (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FileMetadata.FilFolLnk);
 
    /***** Get file metadata *****/
    FileMetadata.FilCod = ParCod_GetAndCheckPar (ParCod_Fil);
@@ -8045,6 +7881,7 @@ void Brw_DownloadFile (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FileMetadata.FilFolLnk);
 
    /***** Get file metadata *****/
    Brw_GetFileMetadataByPath (&FileMetadata);
@@ -8358,6 +8195,7 @@ void Brw_ChgFileMetadata (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FileMetadata.FilFolLnk);
 
    /***** Get file metadata *****/
    FileMetadata.FilCod = ParCod_GetAndCheckPar (ParCod_Fil);
@@ -9740,10 +9578,12 @@ void Brw_AskRemoveOldFilesBriefcase (void)
    extern const char *Txt_Remove_old_files;
    extern const char *Txt_Remove_files_older_than_PART_1_OF_2;
    extern const char *Txt_Remove_files_older_than_PART_2_OF_2;
+   struct Brw_FilFolLnk FilFolLnk;
    unsigned Months;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FilFolLnk);
 
    /***** Begin form *****/
    Frm_BeginForm (ActRemOldBrf);
@@ -9791,11 +9631,13 @@ void Brw_RemoveOldFilesBriefcase (void)
    extern const char *Txt_Files_removed;
    extern const char *Txt_Links_removed;
    extern const char *Txt_Folders_removed;
+   struct Brw_FilFolLnk FilFolLnk;
    unsigned Months;
    struct Brw_NumObjects Removed;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
+   Brw_GetParsFilFolLnk (&FilFolLnk);
 
    if ((Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_ADM_CRS_ASG_WRK))
      {
