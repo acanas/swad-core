@@ -1792,9 +1792,6 @@ void Brw_GetParAndInitFileBrowser (void)
          break;
      }
 
-   /***** Get the path in the file browser and the name of the file or folder *****/
-   // Brw_GetParsPathInTreeAndFileName (FilFolLnk);
-
    /***** Get other parameters *****/
    if ((Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_ADM_PRJ))
       /* Get project code */
@@ -2090,7 +2087,10 @@ void Brw_GetParsFilFolLnk (struct Brw_FilFolLnk *FilFolLnk)
      }
 
    /***** Set full path *****/
+   Ale_ShowAlert (Ale_DEBUG,"Brw_GetParsFilFolLnk: FilFolLnk.Path = %s",FilFolLnk->Path);
+   Ale_ShowAlert (Ale_DEBUG,"Brw_GetParsFilFolLnk: FilFolLnk.Name = %s",FilFolLnk->Name);
    Brw_SetFullPathInTree (FilFolLnk);
+   Ale_ShowAlert (Ale_DEBUG,"Brw_GetParsFilFolLnk: FilFolLnk.Full = %s",FilFolLnk->Full);
   }
 
 /*****************************************************************************/
@@ -3061,6 +3061,7 @@ static void Brw_ShowFileBrowser (void)
    struct Brw_NumObjects Removed;
    char FileBrowserSectionId[32];
    struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
+   __attribute__((unused)) Exi_Exist_t FileExists;
 
    Tim_StartGlobalTiming ();
 
@@ -3111,6 +3112,14 @@ static void Brw_ShowFileBrowser (void)
 	 Str_Copy (FileMetadata.FilFolLnk.Name,".",
 		   sizeof (FileMetadata.FilFolLnk.Name) - 1);
 	 Brw_SetFullPathInTree (&FileMetadata.FilFolLnk);
+
+	 /***** Get file metadata *****/
+	 Tim_StartPartialTiming ();
+	 Brw_GetFileMetadataByPath (&FileMetadata);
+	 GetFileMetadataByPath_nsec += Tim_StopPartialTiming ();
+	 Tim_StartPartialTiming ();
+	 FileExists = Brw_GetFileTypeSizeAndDate (&FileMetadata);
+	 GetFileTypeSizeAndDate_nsec += Tim_StopPartialTiming ();
 
 	 if (Brw_WriteRowFileBrowser (0,"1",&FileMetadata,&UsrDat,
 				      ConExp_EXPANDED,	// Tree not contracted
@@ -3658,8 +3667,6 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
    char PathFileRel[PATH_MAX + 1];
    char PathFileInExplTree[PATH_MAX + 1];
    struct Brw_FileMetadata FileMetadata;
-   __attribute__((unused)) Exi_Exist_t FileExists;
-   // struct stat FileStatus;
    ConExp_ContractedOrExpanded_t ContractedOrExpandedSubtree;
    Brw_IconTree_t IconsSubtree[ConExp_NUM_CONTRACTED_EXPANDED] =
      {
@@ -3667,6 +3674,7 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
       [ConExp_EXPANDED  ] = Brw_ICON_TREE_CONTRACT,
      };
    Brw_IconTree_t IconSubtree = Brw_ICON_TREE_NOTHING;	// Initialized to avoid warning
+   __attribute__((unused)) Exi_Exist_t FileExists;
    __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible;
 
    /***** Scan directory *****/
@@ -3819,11 +3827,11 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
    HidVis_HiddenOrVisible_t ThisOrAncestorHiddenOrVisible = HidVis_VISIBLE;
    PriPub_PrivateOrPublic_t RowPublicOrPrivate;
    bool IsOld = true;
-   __attribute__((unused)) Exi_Exist_t FileExists;
    char FileBrowserId[32];
    char TxtStyle[64];
    const char *InputStyle;
    char Folder[Brw_MAX_BYTES_FOLDER + 1];
+   __attribute__((unused)) Exi_Exist_t FileExists;
 
    /***** Initializations *****/
    Gbl.FileBrowser.Clipboard.IsThisFile = false;
@@ -4092,14 +4100,14 @@ void Brw_SetFullPathInTree (struct Brw_FilFolLnk *FilFolLnk)
   {
    char FullPath[PATH_MAX + 1 + NAME_MAX + 1];
 
-   if (!FilFolLnk->Path[0])
-      FilFolLnk->Full[0] = '\0';
+   if (!FilFolLnk->Path[0])	// It's the root folder
+      Str_Copy (FilFolLnk->Full,FilFolLnk->Name,sizeof (FilFolLnk->Full) - 1);
    else if (strcmp (FilFolLnk->Name,"."))
      {
       snprintf (FullPath,sizeof (FullPath),"%s/%s",FilFolLnk->Path,FilFolLnk->Name);
       Str_Copy (FilFolLnk->Full,FullPath,sizeof (FilFolLnk->Full) - 1);
      }
-   else	// It's the root folder
+   else				// It's the root folder
       Str_Copy (FilFolLnk->Full,FilFolLnk->Path,sizeof (FilFolLnk->Full) - 1);
   }
 
@@ -6572,6 +6580,8 @@ void Brw_CreateFolder (void)
 	       Str_Concat (Path,"/",sizeof (Path) - 1);
 	       Str_Concat (Path,Gbl.FileBrowser.NewFilFolLnkName,sizeof (Path) - 1);
 
+	       Ale_ShowAlert (Ale_DEBUG,"Intento crear el directorio Path = %s",Path);
+
 	       /* Create the new directory */
 	       if (mkdir (Path,(mode_t) 0777) == 0)
 		 {
@@ -8321,12 +8331,12 @@ void Brw_GetFileMetadataByPath (struct Brw_FileMetadata *FileMetadata)
    switch (Brw_DB_GetFileMetadataByPath (&mysql_res,FileMetadata->FilFolLnk.Full))
      {
       case Exi_EXISTS:
-         Brw_ResetFileMetadata (FileMetadata);
+         Brw_ResetFileMetadata (FileMetadata);	// FileMetadata->FilFolLnk is not reset
 	 Brw_GetFileMetadataFromRow (mysql_res,FileMetadata);
 	 break;
       case Exi_DOES_NOT_EXIST:
       default:
-         Brw_ResetFileMetadata (FileMetadata);
+         Brw_ResetFileMetadata (FileMetadata);	// FileMetadata->FilFolLnk is not reset
 	 break;
      }
   }
@@ -8346,12 +8356,12 @@ void Brw_GetFileMetadataByCod (struct Brw_FileMetadata *FileMetadata)
    switch (Brw_DB_GetFileMetadataByCod (&mysql_res,FileMetadata->FilCod))
      {
       case Exi_EXISTS:
-	 Brw_ResetFileMetadata (FileMetadata);
+	 Brw_ResetFileMetadata (FileMetadata);	// FileMetadata->FilFolLnk is not reset
 	 Brw_GetFileMetadataFromRow (mysql_res,FileMetadata);
 	 break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Brw_ResetFileMetadata (FileMetadata);
+	 Brw_ResetFileMetadata (FileMetadata);	// FileMetadata->FilFolLnk is not reset
 	 break;
      }
 
@@ -8362,18 +8372,15 @@ void Brw_GetFileMetadataByCod (struct Brw_FileMetadata *FileMetadata)
 /*****************************************************************************/
 /*************************** Reset file metadata *****************************/
 /*****************************************************************************/
+// Resets all fields except FilCod and FilFolLnk
 
 static void Brw_ResetFileMetadata (struct Brw_FileMetadata *FileMetadata)
   {
-   FileMetadata->FilCod            = -1L;
+   FileMetadata->FilCod		   = -1L;	// Indicates that no entry exists in database
    FileMetadata->FileBrowser       = Brw_UNKNOWN;
    FileMetadata->Cod               = -1L;
    FileMetadata->ZoneUsrCod        = -1L;
    FileMetadata->PublisherUsrCod   = -1L;
-   FileMetadata->FilFolLnk.Type    = Brw_IS_UNKNOWN;
-   FileMetadata->FilFolLnk.Full[0] = '\0';
-   FileMetadata->FilFolLnk.Path[0] = '\0';
-   FileMetadata->FilFolLnk.Name[0] = '\0';
    FileMetadata->HiddenOrVisible   = HidVis_HIDDEN;
    FileMetadata->PrivateOrPublic   = PriPub_PRIVATE;
    FileMetadata->License           = Brw_LICENSE_DEFAULT;

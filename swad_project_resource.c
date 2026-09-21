@@ -43,7 +43,6 @@ void PrjRsc_GetLinkToProject (void)
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    extern const char *Txt_Projects;
    struct Prj_Projects Projects;
-   struct Brw_FilFolLnk FilFolLnk;
 
    /***** Reset projects *****/
    Prj_ResetPrjsAndReadConfig (&Projects);
