@@ -991,7 +991,8 @@ void Exa_GetExamDataByCod (struct Exa_Exam *Exam)
 
 void Exa_FreeListExams (struct Exa_Exams *Exams)
   {
-   if (Exams->LstReadStatus == Cac_VALID && Exams->Lst)
+   if (Exams->LstReadStatus == Cac_VALID &&
+       Exams->Lst)
      {
       /***** Free memory used by the list of exams *****/
       free (Exams->Lst);

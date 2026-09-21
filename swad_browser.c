@@ -1129,13 +1129,15 @@ static void Brw_PutParsFullTree (__attribute__((unused)) void *Args);
 static void Brw_GetAndUpdateDateLastAccFileBrowser (void);
 static long Brw_GetGrpLastAccZone (const char *FieldNameDB);
 
-static void Brw_ListDir (unsigned Level,const char *RowId,
+static void Brw_ListDir (unsigned Level,const char *ParentRowId,
                          ConExp_ContractedOrExpanded_t TreeContractedOrExpanded,
+			 struct Usr_Data *UsrDat,
                          const char Path[PATH_MAX + 1],
                          const char PathInTree[PATH_MAX + 1]);
 static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
 							 const char *RowId,
 							 struct Brw_FileMetadata *FileMetadata,
+							 struct Usr_Data *UsrDat,
 							 ConExp_ContractedOrExpanded_t TreeContractedOrExpanded,
 							 Brw_IconTree_t IconThisRow);
 static Usr_Can_t Brw_CheckIfCanPasteIn (struct Brw_FilFolLnk *FilFolLnk,unsigned Level);
@@ -1187,7 +1189,7 @@ static void Brw_GetFileNameToShow (Brw_FileType_t FileType,
                                    char FileNameToShow[NAME_MAX + 1]);
 static void Brw_WriteFileSizeAndDate (struct Brw_FileMetadata *FileMetadata,
 				      const char *TxtStyle);
-static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod);
+static void Brw_WriteFileOrFolderPublisher (struct Usr_Data *UsrDat,unsigned Level);
 static void Brw_AskConfirmRemoveFolderNotEmpty (struct Brw_FilFolLnk *FilFolLnk);
 
 static void Brw_WriteCurrentClipboard (void);
@@ -3055,6 +3057,7 @@ static void Brw_ShowFileBrowser (void)
       [Brw_ADMI_ASS_PRJ] = NULL,
      };
    struct Brw_FileMetadata FileMetadata;
+   struct Usr_Data UsrDat;
    struct Brw_NumObjects Removed;
    char FileBrowserSectionId[32];
    struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
@@ -3093,6 +3096,9 @@ static void Brw_ShowFileBrowser (void)
       /***** Subtitle *****/
       Brw_WriteSubtitleOfFileBrowser ();
 
+      /***** Initialize structure with publisher's data *****/
+      Usr_UsrDataConstructor (&UsrDat);
+
       /***** List recursively the directory *****/
       HTM_TABLE_Begin ("TBL_SCROLL");
 
@@ -3106,15 +3112,19 @@ static void Brw_ShowFileBrowser (void)
 		   sizeof (FileMetadata.FilFolLnk.Name) - 1);
 	 Brw_SetFullPathInTree (&FileMetadata.FilFolLnk);
 
-	 if (Brw_WriteRowFileBrowser (0,"1",&FileMetadata,
+	 if (Brw_WriteRowFileBrowser (0,"1",&FileMetadata,&UsrDat,
 				      ConExp_EXPANDED,	// Tree not contracted
 				      Brw_ICON_TREE_NOTHING) == HidVis_VISIBLE)
 	    Brw_ListDir (1,"1",
 			 ConExp_EXPANDED,	// Tree not contracted
+			 &UsrDat,
 			 Gbl.FileBrowser.Path.RootFolder,
 			 Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
 	 ShowFileBrowser_nsec = Tim_StopGlobalTiming ();
       HTM_TABLE_End ();
+
+      /***** Free memory used for publisher's data *****/
+      Usr_UsrDataDestructor (&UsrDat);
 
       if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
         {
@@ -3633,6 +3643,7 @@ long Brw_GetGrpLastAccZone (const char *FieldNameDB)
 
 static void Brw_ListDir (unsigned Level,const char *ParentRowId,
                          ConExp_ContractedOrExpanded_t TreeContractedOrExpanded,
+			 struct Usr_Data *UsrDat,
                          const char Path[PATH_MAX + 1],
                          const char PathInTree[PATH_MAX + 1])
   {
@@ -3734,7 +3745,7 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 		    }
 
 		  /***** Write a row for the subdirectory *****/
-		  if (Brw_WriteRowFileBrowser (Level,RowId,&FileMetadata,
+		  if (Brw_WriteRowFileBrowser (Level,RowId,&FileMetadata,UsrDat,
 					       TreeContractedOrExpanded,
 					       IconSubtree) == HidVis_VISIBLE)
 		     if (Level < BrwSiz_MAX_DIR_LEVELS)
@@ -3742,15 +3753,16 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 			Brw_ListDir (Level + 1,RowId,
 				     ContractedOrExpandedSubtree == ConExp_CONTRACTED ? ConExp_CONTRACTED :
 											TreeContractedOrExpanded,
+				     UsrDat,
 				     PathFileRel,PathFileInExplTree);
 	          break;
 	       case Brw_IS_FILE:
-		  HiddenOrVisible = Brw_WriteRowFileBrowser (Level,RowId,&FileMetadata,
+		  HiddenOrVisible = Brw_WriteRowFileBrowser (Level,RowId,&FileMetadata,UsrDat,
 							     TreeContractedOrExpanded,
 							     Brw_ICON_TREE_NOTHING);
 	          break;
 	       case Brw_IS_LINK:
-		  HiddenOrVisible = Brw_WriteRowFileBrowser (Level,RowId,&FileMetadata,
+		  HiddenOrVisible = Brw_WriteRowFileBrowser (Level,RowId,&FileMetadata,UsrDat,
 							     TreeContractedOrExpanded,
 							     Brw_ICON_TREE_NOTHING);
 	          break;
@@ -3778,6 +3790,7 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
 							 const char *RowId,
 							 struct Brw_FileMetadata *FileMetadata,
+							 struct Usr_Data *UsrDat,
 							 ConExp_ContractedOrExpanded_t TreeContractedOrExpanded,
 							 Brw_IconTree_t IconThisRow)
   {
@@ -4045,7 +4058,8 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (unsigned Level,
       case Brw_IS_LINK:
 	 /***** User who created the file or folder *****/
 	 Tim_StartPartialTiming ();
-	 Brw_WriteFileOrFolderPublisher (Level,FileMetadata->PublisherUsrCod);
+	 UsrDat->UsrCod = FileMetadata->PublisherUsrCod;
+	 Brw_WriteFileOrFolderPublisher (UsrDat,Level);
 	 WriteFileOrFolderPublisher_nsec += Tim_StopPartialTiming ();
 	 break;
       case Brw_IS_UNKNOWN:
@@ -4831,7 +4845,7 @@ static void Brw_WriteFileSizeAndDate (struct Brw_FileMetadata *FileMetadata,
 /************** Write the user who published the file or folder **************/
 /*****************************************************************************/
 
-static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod)
+static void Brw_WriteFileOrFolderPublisher (struct Usr_Data *UsrDat,unsigned Level)
   {
    extern const char *Txt_Unknown_or_without_photo;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -4842,26 +4856,20 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod)
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR15x20B",
      };
    Exi_Exist_t UsrExists = Exi_DOES_NOT_EXIST;
-   struct Usr_Data UsrDat;
 
-   if (Level && UsrCod > 0)
-     {
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
 
+   if (Level && UsrDat->UsrCod > 0)
       /***** Get data of file/folder publisher *****/
-      UsrDat.UsrCod = UsrCod;
-      UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+      UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,
 							   Usr_DONT_GET_PREFS,
 							   Usr_DONT_GET_ROLE_IN_CRS);
-     }
 
    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
       switch (UsrExists)
 	{
 	 case Exi_EXISTS:
 	    /***** Show photo *****/
-	    Pho_ShowUsrPhotoIfAllowed (&UsrDat,
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 				       ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 	    break;
 	 case Exi_DOES_NOT_EXIST:
@@ -4871,10 +4879,6 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod)
 	    break;
 	}
    HTM_TD_End ();
-
-   if (Level && UsrCod > 0)
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
   }
 
 /*****************************************************************************/
@@ -5862,7 +5866,7 @@ static void Brw_PasteClipboard (struct Brw_FilFolLnk *FilFolLnk,
 	       switch (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
   	         {
 		  case Err_SUCCESS:
-		     switch (Usr_DB_ChkIfUsrCodExists (Gbl.FileBrowser.Clipboard.WorksUsrCod))
+		     switch (Usr_ChkIfUsrCodExists (Gbl.FileBrowser.Clipboard.WorksUsrCod))
 		       {
 			case Exi_EXISTS:
 			   Usr_UsrDataConstructor (&UsrDat);

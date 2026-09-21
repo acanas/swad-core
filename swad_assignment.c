@@ -1026,7 +1026,8 @@ static void Asg_ResetAssignment (struct Asg_Assignment *Asg)
 
 static void Asg_FreeListAssignments (struct Asg_Assignments *Assignments)
   {
-   if (Assignments->LstReadStatus == Cac_VALID && Assignments->LstAsgCods)
+   if (Assignments->LstReadStatus == Cac_VALID &&
+       Assignments->LstAsgCods)
      {
       /***** Free memory used by the list of assignments *****/
       free (Assignments->LstAsgCods);

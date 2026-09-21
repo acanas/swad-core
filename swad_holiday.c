@@ -463,7 +463,8 @@ static Hld_HolidayType_t Hld_GetTypeOfHoliday (const char *UnsignedStr)
 
 void Hld_FreeListHolidays (struct Hld_Holidays *Holidays)
   {
-   if (Holidays->LstReadStatus == Cac_VALID && Holidays->Lst)
+   if (Holidays->LstReadStatus == Cac_VALID &&
+       Holidays->Lst)
      {
       /***** Free memory used by the list of courses in degree *****/
       free (Holidays->Lst);

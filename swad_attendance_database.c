@@ -663,7 +663,7 @@ void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,
          (leading and trailing spaces are removed) */
       Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
       if ((UsrDat.UsrCod = Str_ConvertStrCodToLongCod (LongStr)) > 0)
-	 if (Usr_DB_ChkIfUsrCodExists (UsrDat.UsrCod) == Exi_EXISTS)
+	 if (Usr_ChkIfUsrCodExists (UsrDat.UsrCod) == Exi_EXISTS)
 	    // The user must belong to course,
 	    // but it's not necessary he/she belongs to groups associated to the event
 	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)

@@ -1059,7 +1059,8 @@ void Gam_GetGameDataByCod (struct Gam_Game *Game)
 
 void Gam_FreeListGames (struct Gam_Games *Games)
   {
-   if (Games->LstReadStatus == Cac_VALID && Games->Lst)
+   if (Games->LstReadStatus == Cac_VALID &&
+       Games->Lst)
      {
       /***** Free memory used by the list of games *****/
       free (Games->Lst);

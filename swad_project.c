@@ -2900,7 +2900,7 @@ unsigned Prj_GetMyRolesInProject (long PrjCod)
 
    /***** 2. Fast check: Is my role in project already calculated *****/
    if (Gbl.Cache.MyRolesInProject.Status == Cac_VALID &&
-       PrjCod == Gbl.Cache.MyRolesInProject.PrjCod)
+       Gbl.Cache.MyRolesInProject.PrjCod == PrjCod)
       return Gbl.Cache.MyRolesInProject.RolesInProject;
 
    /***** 3. Slow check: Get my role in project from database.
@@ -3668,7 +3668,8 @@ static void Prj_ResetProject (struct Prj_Project *Prj)
 
 void Prj_FreeListProjects (struct Prj_Projects *Projects)
   {
-   if (Projects->LstReadStatus == Cac_VALID && Projects->LstPrjCods)
+   if (Projects->LstReadStatus == Cac_VALID &&
+       Projects->LstPrjCods)
      {
       /***** Free memory used by the list of projects *****/
       free (Projects->LstPrjCods);

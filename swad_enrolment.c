@@ -2961,7 +2961,7 @@ static void Enr_ShowFormToEditOtherUsr (void)
      };
 
    /***** If user exists... *****/
-   switch (Usr_DB_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
+   switch (Usr_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
       case Exi_EXISTS:
 	 /***** Show form to edit user *****/
@@ -3645,7 +3645,7 @@ Usr_Belong_t Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat)
 
    /***** 2. Fast check: If cached... *****/
    if (Gbl.Cache.UsrBelongsToCurrentCrs.Status == Cac_VALID &&
-       UsrDat->UsrCod == Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod)
+       Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod == UsrDat->UsrCod)
       return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
 
    /***** 3. Fast check: If we know role of user in the current course *****/
@@ -3694,7 +3694,7 @@ Usr_Accepted_t Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *Usr
 
    /***** 2. Fast check: If cached... *****/
    if (Gbl.Cache.UsrHasAcceptedInCurrentCrs.Status == Cac_VALID &&
-       UsrDat->UsrCod == Gbl.Cache.UsrHasAcceptedInCurrentCrs.UsrCod)
+       Gbl.Cache.UsrHasAcceptedInCurrentCrs.UsrCod == UsrDat->UsrCod)
       return Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted;
 
    /***** 3. Fast / slow check: Get if user belongs to current course
@@ -3732,7 +3732,7 @@ Usr_Share_t Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat)
 
    /***** 4. Fast check: Is already calculated if user shares any course with me? *****/
    if (Gbl.Cache.UsrSharesAnyOfMyCrs.Status == Cac_VALID &&
-       UsrDat->UsrCod == Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod)
+       Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod == UsrDat->UsrCod)
       return Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs;
 
    /***** 5. Fast check: Is course selected and we both belong to it? *****/

@@ -1150,7 +1150,8 @@ static void Agd_GetventDataByCod (struct Agd_Event *AgdEvent)
 
 static void Agd_FreeListEvents (struct Agd_Agenda *Agenda)
   {
-   if (Agenda->LstReadStatus == Cac_VALID && Agenda->LstAgdCods)
+   if (Agenda->LstReadStatus == Cac_VALID &&
+       Agenda->LstAgdCods)
      {
       /***** Free memory used by the list of events *****/
       free (Agenda->LstAgdCods);

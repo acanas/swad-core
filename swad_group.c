@@ -3569,13 +3569,13 @@ Usr_Belong_t Grp_GetIfIBelongToGrp (long GrpCod)
 
    /***** 2. Fast check: Is already calculated if I belong to group? *****/
    if (Gbl.Cache.IBelongToGrp.Status == Cac_VALID &&
-       GrpCod == Gbl.Cache.IBelongToGrp.GrpCod)
+       Gbl.Cache.IBelongToGrp.GrpCod == GrpCod)
       return Gbl.Cache.IBelongToGrp.IBelong;
 
    /***** 3. Slow check: Get if I belong to a group from database *****/
-   Gbl.Cache.IBelongToGrp.GrpCod = GrpCod;
+   Gbl.Cache.IBelongToGrp.GrpCod  = GrpCod;
    Gbl.Cache.IBelongToGrp.IBelong = Grp_DB_CheckIfIBelongToGrp (GrpCod);
-   Gbl.Cache.IBelongToGrp.Status = Cac_VALID;
+   Gbl.Cache.IBelongToGrp.Status  = Cac_VALID;
    return Gbl.Cache.IBelongToGrp.IBelong;
   }
 
@@ -3613,7 +3613,7 @@ Usr_Share_t Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *
    /***** 6. Fast check: Is already calculated if user shares
                          any group in the current course with me? *****/
    if (Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Status == Cac_VALID &&
-       UsrDat->UsrCod == Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod)
+       Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod == UsrDat->UsrCod)
       return Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares;
 
    /***** 7. Fast / slow check: Does he/she belong to the current course? *****/

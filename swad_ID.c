@@ -102,6 +102,11 @@ void ID__GetListIDsFromUsrCod (struct Usr_Data *UsrDat)
    unsigned NumIDs;
    unsigned NumID;
 
+   /***** Get only if not already got *****/
+   if (UsrDat->ListIDsCached.Status == Cac_VALID &&
+       UsrDat->ListIDsCached.UsrCod == UsrDat->UsrCod)
+      return;
+
    /***** Initialize list of IDs to an empty list *****/
    ID__FreeListIDs (UsrDat);
 
@@ -113,28 +118,32 @@ void ID__GetListIDsFromUsrCod (struct Usr_Data *UsrDat)
       if ((NumIDs = ID__DB_GetIDsFromUsrCod (&mysql_res,UsrDat->UsrCod)))
 	{
 	 /***** Allocate space for the list *****/
-         ID__ReallocateListIDs (UsrDat,NumIDs);
+	 ID__ReallocateListIDs (UsrDat,NumIDs);
 
-         /***** Get list of IDs *****/
+	 /***** Get list of IDs *****/
 	 for (NumID = 0;
 	      NumID < NumIDs;
 	      NumID++)
 	   {
-            row = mysql_fetch_row (mysql_res);
+	    row = mysql_fetch_row (mysql_res);
 
 	    /* Get ID from row[0] */
-            Str_Copy (UsrDat->IDs.List[NumID].ID,row[0],
-                      sizeof (UsrDat->IDs.List[NumID].ID) - 1);
+	    Str_Copy (UsrDat->IDs.List[NumID].ID,row[0],
+		      sizeof (UsrDat->IDs.List[NumID].ID) - 1);
 
-            /* Get if ID is confirmed from row[1] */
-            UsrDat->IDs.List[NumID].Confirmed = row[1][0] == 'Y' ? ID__CONFIRMED :
-        							   ID__NOT_CONFIRMED;
+	    /* Get if ID is confirmed from row[1] */
+	    UsrDat->IDs.List[NumID].Confirmed = row[1][0] == 'Y' ? ID__CONFIRMED :
+								   ID__NOT_CONFIRMED;
 	   }
-        }
+	}
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
+
+   /***** Update cache status *****/
+   UsrDat->ListIDsCached.UsrCod = UsrDat->UsrCod;
+   UsrDat->ListIDsCached.Status = Cac_VALID;
   }
 
 /*****************************************************************************/

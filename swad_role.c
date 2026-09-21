@@ -315,7 +315,7 @@ Rol_Role_t Rol_GetMyRoleInCrs (long HieCod)
 
    /***** 2. Fast check: is my role in current course already calculated? *****/
    if (Gbl.Cache.MyRoleInCurrentCrs.Status == Cac_VALID &&
-       HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod)
+       Gbl.Hierarchy.Node[Hie_CRS].HieCod  == HieCod)
       return Gbl.Cache.MyRoleInCurrentCrs.Role;
 
    /***** 3. Slow check: get my role from list of my courses *****/
@@ -349,8 +349,8 @@ Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long HieCod)
 
    /***** 2. Fast check: Is role in course already calculated? *****/
    if (Gbl.Cache.RoleUsrInCrs.Status == Cac_VALID &&
-       UsrCod == Gbl.Cache.RoleUsrInCrs.UsrCod &&
-       HieCod == Gbl.Cache.RoleUsrInCrs.HieCod)
+       Gbl.Cache.RoleUsrInCrs.UsrCod == UsrCod &&
+       Gbl.Cache.RoleUsrInCrs.HieCod == HieCod)
       return Gbl.Cache.RoleUsrInCrs.Role;
 
    /***** 3. Slow check: Get role of a user in a course from database.

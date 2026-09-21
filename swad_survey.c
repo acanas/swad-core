@@ -1336,7 +1336,8 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
 
 void Svy_FreeListSurveys (struct Svy_Surveys *Surveys)
   {
-   if (Surveys->LstReadStatus == Cac_VALID && Surveys->LstSvyCods)
+   if (Surveys->LstReadStatus == Cac_VALID &&
+       Surveys->LstSvyCods)
      {
       /***** Free memory used by the list of surveys *****/
       free (Surveys->LstSvyCods);

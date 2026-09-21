@@ -969,7 +969,7 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
    MYSQL_ROW row;
    struct Prf_UsrFigures UsrFigures;
 
-   if (Usr_DB_ChkIfUsrCodExists (UsrCod) == Exi_EXISTS)
+   if (Usr_ChkIfUsrCodExists (UsrCod) == Exi_EXISTS)
      {
       /***** Reset user's figures *****/
       Prf_ResetUsrFigures (&UsrFigures);
@@ -1009,7 +1009,7 @@ static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
   {
    struct Prf_UsrFigures UsrFigures;
 
-   if (Usr_DB_ChkIfUsrCodExists (UsrCod) == Exi_EXISTS)
+   if (Usr_ChkIfUsrCodExists (UsrCod) == Exi_EXISTS)
      {
       /***** Reset user's figures *****/
       Prf_ResetUsrFigures (&UsrFigures);
@@ -1039,7 +1039,7 @@ static void Prf_GetNumTimelinePubsAndStoreAsUsrFigure (long UsrCod)
   {
    struct Prf_UsrFigures UsrFigures;
 
-   if (Usr_DB_ChkIfUsrCodExists (UsrCod) == Exi_EXISTS)
+   if (Usr_ChkIfUsrCodExists (UsrCod) == Exi_EXISTS)
      {
       /***** Reset user's figures *****/
       Prf_ResetUsrFigures (&UsrFigures);
@@ -1069,7 +1069,7 @@ static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod)
   {
    struct Prf_UsrFigures UsrFigures;
 
-   if (Usr_DB_ChkIfUsrCodExists (UsrCod) == Exi_EXISTS)
+   if (Usr_ChkIfUsrCodExists (UsrCod) == Exi_EXISTS)
      {
       /***** Reset user's figures *****/
       Prf_ResetUsrFigures (&UsrFigures);
@@ -1099,7 +1099,7 @@ static void Prf_GetNumForumPostsAndStoreAsUsrFigure (long UsrCod)
   {
    struct Prf_UsrFigures UsrFigures;
 
-   if (Usr_DB_ChkIfUsrCodExists (UsrCod) == Exi_EXISTS)
+   if (Usr_ChkIfUsrCodExists (UsrCod) == Exi_EXISTS)
      {
       /***** Reset user's figures *****/
       Prf_ResetUsrFigures (&UsrFigures);
@@ -1129,7 +1129,7 @@ static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod)
   {
    struct Prf_UsrFigures UsrFigures;
 
-   if (Usr_DB_ChkIfUsrCodExists (UsrCod) == Exi_EXISTS)
+   if (Usr_ChkIfUsrCodExists (UsrCod) == Exi_EXISTS)
      {
       /***** Reset user's figures *****/
       Prf_ResetUsrFigures (&UsrFigures);

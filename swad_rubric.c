@@ -676,7 +676,8 @@ void Rub_GetRubricDataByCod (struct Rub_Rubric *Rubric)
 
 void Rub_FreeListRubrics (struct Rub_Rubrics *Rubrics)
   {
-   if (Rubrics->LstReadStatus == Cac_VALID && Rubrics->Lst)
+   if (Rubrics->LstReadStatus == Cac_VALID &&
+       Rubrics->Lst)
      {
       /***** Free memory used by the list of rubrics *****/
       free (Rubrics->Lst);

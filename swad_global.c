@@ -200,12 +200,13 @@ void Gbl_InitializeGlobals (void)
 	HieLvl <= Hie_CTR;
 	HieLvl++)
       Hie_FlushCacheNumUsrsWhoClaimToBelongTo (HieLvl);
-   Usr_FlushCacheUsrIsSuperuser ();
    for (HieLvl  = Hie_INS;
 	HieLvl <= Hie_CRS;
 	HieLvl++)
       Hie_FlushCacheUsrBelongsTo (HieLvl);
 
+   Usr_FlushCacheUsrIsSuperuser ();
+   Usr_FlushCacheUsrCodExists ();
    Enr_FlushCacheUsrBelongsToCurrentCrs ();
    Enr_FlushCacheUsrHasAcceptedInCurrentCrs ();
    Enr_FlushCacheUsrSharesAnyOfMyCrs ();

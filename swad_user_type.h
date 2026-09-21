@@ -208,6 +208,18 @@ typedef enum
 // Related with user's data
 struct Usr_Data
   {
+   struct
+     {
+      Cac_Status_t Status;
+      long UsrCod;
+     } ListIDsCached;
+   struct
+     {
+      Cac_Status_t Status;
+      long UsrCod;
+      Usr_GetPrefs_t GetPrf;
+      Usr_GetRoleInCurrentCrs_t GetRol;
+     } DataCached;
    long UsrCod;
    char EnUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
    char UsrIDNickOrEmail[Cns_MAX_BYTES_USR_LOGIN + 1];	// String to store the ID, nickname or email

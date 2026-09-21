@@ -1479,7 +1479,8 @@ static void Tre_GetNodeDataFromRow (MYSQL_RES **mysql_res,
 
 void Tre_FreeListNodes (void)
   {
-   if (Tre_Gbl.List.Status == Cac_VALID && Tre_Gbl.List.Nodes)
+   if (Tre_Gbl.List.Status == Cac_VALID &&
+       Tre_Gbl.List.Nodes)
      {
       /***** Free memory used by the list of tree nodes *****/
       free (Tre_Gbl.List.Nodes);

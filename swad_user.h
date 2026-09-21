@@ -107,6 +107,9 @@ void Usr_ChkUsrGetUsrDataAndAdjustAction (void);
 
 void Usr_ShowFormsLogoutAndRole (void);
 
+void Usr_FlushCacheUsrCodExists (void);
+Exi_Exist_t Usr_ChkIfUsrCodExists (long UsrCod);
+
 Exi_Exist_t Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct Usr_Data *UsrDat,
 						     Usr_GetPrefs_t GetPrefs,
 						     Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs);

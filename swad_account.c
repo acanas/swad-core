@@ -975,7 +975,7 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
   {
    extern const char *Txt_Do_you_really_want_to_completely_eliminate_the_following_user;
 
-   switch (Usr_DB_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
+   switch (Usr_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
       case Exi_EXISTS:
 	 /***** Show question and button to remove user account *****/

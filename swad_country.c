@@ -967,9 +967,9 @@ void Cty_GetCountryNameInLanguage (long HieCod,Lan_Language_t Language,
      }
 
    /***** 2. Fast check: If cached... *****/
-   if (Gbl.Cache.CountryName.Status == Cac_VALID &&
-       HieCod   == Gbl.Cache.CountryName.HieCod &&
-       Language == Gbl.Cache.CountryName.Language)
+   if (Gbl.Cache.CountryName.Status   == Cac_VALID &&
+       Gbl.Cache.CountryName.HieCod   == HieCod &&
+       Gbl.Cache.CountryName.Language == Language)
      {
       Str_Copy (CtyName,Gbl.Cache.CountryName.CtyName,Cty_MAX_BYTES_NAME);
       return;

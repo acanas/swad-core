@@ -1168,14 +1168,14 @@ Usr_Belong_t Hie_CheckIfUsrBelongsTo (Hie_Level_t HieLvl,long UsrCod,long HieCod
 
    /***** 2. Fast check: If cached... *****/
    if (Gbl.Cache.UsrBelongsTo[HieLvl].Status == Cac_VALID &&
-       UsrCod == Gbl.Cache.UsrBelongsTo[HieLvl].UsrCod &&
-       HieCod == Gbl.Cache.UsrBelongsTo[HieLvl].HieCod &&
+       Gbl.Cache.UsrBelongsTo[HieLvl].UsrCod == UsrCod &&
+       Gbl.Cache.UsrBelongsTo[HieLvl].HieCod == HieCod &&
        CountOnlyAcceptedCourses == Gbl.Cache.UsrBelongsTo[HieLvl].CountOnlyAcceptedCourses)
       return Gbl.Cache.UsrBelongsTo[HieLvl].Belongs;
 
    /***** 3. Slow check: Get if user belongs to hierarchy node from database *****/
-   Gbl.Cache.UsrBelongsTo[HieLvl].UsrCod = UsrCod;
-   Gbl.Cache.UsrBelongsTo[HieLvl].HieCod = HieCod;
+   Gbl.Cache.UsrBelongsTo[HieLvl].UsrCod  = UsrCod;
+   Gbl.Cache.UsrBelongsTo[HieLvl].HieCod  = HieCod;
    Gbl.Cache.UsrBelongsTo[HieLvl].CountOnlyAcceptedCourses = CountOnlyAcceptedCourses;
    Gbl.Cache.UsrBelongsTo[HieLvl].Belongs = FunctionToGetIfUsrBelongsToFromDB[HieLvl] (UsrCod,HieCod,
 										       CountOnlyAcceptedCourses);
@@ -1522,10 +1522,10 @@ unsigned Hie_GetNumUsrsWhoClaimToBelongTo (Hie_Level_t HieLvl,
 
    /***** 3. Fast check: If cached... *****/
    if (Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].Status == Cac_VALID &&
-       Node->HieCod == Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].HieCod)
+       Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].HieCod == Node->HieCod)
      {
       Node->NumUsrsWhoClaimToBelong.NumUsrs = Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].NumUsrs;
-      Node->NumUsrsWhoClaimToBelong.Status = Cac_VALID;
+      Node->NumUsrsWhoClaimToBelong.Status  = Cac_VALID;
       return Node->NumUsrsWhoClaimToBelong.NumUsrs;
      }
 
@@ -1533,9 +1533,9 @@ unsigned Hie_GetNumUsrsWhoClaimToBelongTo (Hie_Level_t HieLvl,
                    from database *****/
    Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].HieCod  = Node->HieCod;
    Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].NumUsrs =
-   Node->NumUsrsWhoClaimToBelong.NumUsrs = FunctionToGetNumUsrsWhoClaimToBelongToFromDB[HieLvl] (Node->HieCod);
-   Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].Status = Cac_VALID;
-   Node->NumUsrsWhoClaimToBelong.Status = Cac_VALID;
+   Node->NumUsrsWhoClaimToBelong.NumUsrs               = FunctionToGetNumUsrsWhoClaimToBelongToFromDB[HieLvl] (Node->HieCod);
+   Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].Status  = Cac_VALID;
+   Node->NumUsrsWhoClaimToBelong.Status                = Cac_VALID;
    FigCch_UpdateFigureIntoCache (Figure[HieLvl],HieLvl,Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].HieCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongTo[HieLvl].NumUsrs);
    return Node->NumUsrsWhoClaimToBelong.NumUsrs;

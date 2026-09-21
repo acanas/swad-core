@@ -771,7 +771,7 @@ void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
 
    /***** 2. Fast check: If cached... *****/
    if (Gbl.Cache.InstitutionShrtNameAndCty.Status == Cac_VALID &&
-       Ins->HieCod == Gbl.Cache.InstitutionShrtNameAndCty.HieCod)
+       Gbl.Cache.InstitutionShrtNameAndCty.HieCod == Ins->HieCod)
      {
       Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtNameAndCty.ShrtName,
 		sizeof (Ins->ShrtName) - 1);

@@ -885,7 +885,7 @@ unsigned Dpt_GetNumDptsInIns (long HieCod)
 
    /***** 2. Fast check: If cached... *****/
    if (Gbl.Cache.NumDptsInIns.Status == Cac_VALID &&
-       HieCod == Gbl.Cache.NumDptsInIns.HieCod)
+       Gbl.Cache.NumDptsInIns.HieCod == HieCod)
       return Gbl.Cache.NumDptsInIns.NumDpts;
 
    /***** 3. Slow: number of departments of an institution from database *****/

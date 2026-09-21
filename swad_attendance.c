@@ -809,7 +809,8 @@ void Att_GetEventDataFromRow (MYSQL_ROW row,struct Att_Event *Event)
 
 static void Att_FreeListEvents (struct Att_Events *Events)
   {
-   if (Events->LstReadStatus == Cac_VALID && Events->Lst)
+   if (Events->LstReadStatus == Cac_VALID &&
+       Events->Lst)
      {
       /***** Free memory used by the list of attendance events *****/
       free (Events->Lst);

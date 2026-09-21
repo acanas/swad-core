@@ -254,6 +254,9 @@ static void (*Usr_FuncParsBigList) (void *Args);	// Used to pass pointer to func
 /*****************************************************************************/
 
 static void Usr_GetMyLastData (void);
+
+static void Usr_FlushCacheUsrDat (struct Usr_Data *UsrDat);
+
 static void Usr_GetUsrCommentsFromString (char *Str,struct Usr_Data *UsrDat);
 static Usr_Sex_t Usr_GetSexFromStr (const char *Str);
 
@@ -401,6 +404,9 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
 
 void Usr_UsrDataConstructor (struct Usr_Data *UsrDat)
   {
+   /***** Flush user data cache *****/
+   Usr_FlushCacheUsrDat (UsrDat);
+
    /***** Allocate memory for the comments *****/
    if ((UsrDat->Comments = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Err_NotEnoughMemoryExit ();
@@ -409,6 +415,16 @@ void Usr_UsrDataConstructor (struct Usr_Data *UsrDat)
    Usr_ResetUsrDataExceptUsrCodAndIDs (UsrDat);
    UsrDat->IDs.Num = 0;
    UsrDat->IDs.List = NULL;
+  }
+
+/*****************************************************************************/
+/************************** Flush user data cache ****************************/
+/*****************************************************************************/
+
+static void Usr_FlushCacheUsrDat (struct Usr_Data *UsrDat)
+  {
+   UsrDat->ListIDsCached.Status = Cac_INVALID;
+   UsrDat->DataCached.Status	= Cac_INVALID;
   }
 
 /*****************************************************************************/
@@ -489,6 +505,9 @@ void Usr_ResetMyLastData (void)
 
 void Usr_UsrDataDestructor (struct Usr_Data *UsrDat)
   {
+   /***** Flush user data cache *****/
+   Usr_FlushCacheUsrDat (UsrDat);
+
    /***** Free memory allocated for comments *****/
    if (UsrDat->Comments)
      {
@@ -569,15 +588,22 @@ void Usr_GetUsrCodFromEncryptedUsrCod (struct Usr_Data *UsrDat)
 // UsrDat->UsrCod must contain an existing user's code
 
 void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
-                               Usr_GetPrefs_t GetPrefs,
-                               Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs)
+                               Usr_GetPrefs_t GetPrf,
+                               Usr_GetRoleInCurrentCrs_t GetRol)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
+   /***** Get only if not already got *****/
+   if (UsrDat->DataCached.Status == Cac_VALID &&
+       UsrDat->DataCached.UsrCod == UsrDat->UsrCod &&
+       UsrDat->DataCached.GetPrf == GetPrf &&
+       UsrDat->DataCached.GetRol == GetRol)
+      return;
+
    /***** Get user's data from database *****/
-   switch (Usr_DB_GetUsrDataFromUsrCod (&mysql_res,UsrDat->UsrCod,GetPrefs))
+   switch (Usr_DB_GetUsrDataFromUsrCod (&mysql_res,UsrDat->UsrCod,GetPrf))
      {
       case Exi_EXISTS:
 	 /***** Read user's data *****/
@@ -589,7 +615,7 @@ void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
 	 Str_Copy (UsrDat->Password,row[1],sizeof (UsrDat->Password) - 1);
 
 	 /* Get roles */
-	 switch (GetRoleInCurrentCrs)
+	 switch (GetRol)
 	   {
 	    case Usr_DONT_GET_ROLE_IN_CRS:
 	       UsrDat->Roles.InCurrentCrs = Rol_UNK;
@@ -660,7 +686,7 @@ void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
 	    UsrDat->NtfEvents.SendEmail = 0;
 
 	 /***** Get user's settings *****/
-	 if (GetPrefs == Usr_GET_PREFS)
+	 if (GetPrf == Usr_GET_PREFS)
 	   {
 	    /* Get language (row[23]),
 		   first day of week (row[24]),
@@ -671,7 +697,7 @@ void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
 		   if user wants to show side columns (row[29]),
 		   user settings on user photo shape (row[30]),
 		   and if user accepts third party cookies (row[31]) */
-	    UsrDat->Prefs.Language	      = Lan_GetLanguageFromStr (row[23]);
+	    UsrDat->Prefs.Language	 = Lan_GetLanguageFromStr (row[23]);
 	    UsrDat->Prefs.FirstDayOfWeek = Cal_GetFirstDayOfWeekFromStr (row[24]);
 	    UsrDat->Prefs.DateFormat     = Dat_GetDateFormatFromStr (row[25]);
 	    UsrDat->Prefs.Theme          = The_GetThemeFromStr (row[26]);
@@ -694,6 +720,12 @@ void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
    /***** Get nickname and email *****/
    Nck_DB_GetNicknameFromUsrCod (UsrDat->UsrCod,UsrDat->Nickname);
    Mai_GetEmailFromUsrCod (UsrDat);
+
+   /***** Update cache status *****/
+   UsrDat->DataCached.UsrCod = UsrDat->UsrCod;
+   UsrDat->DataCached.GetPrf = GetPrf;
+   UsrDat->DataCached.GetRol = GetRol;
+   UsrDat->DataCached.Status = Cac_VALID;
   }
 
 /*****************************************************************************/
@@ -2204,6 +2236,33 @@ static void Usr_PutLinkToLogOut (__attribute__((unused)) void *Args)
   }
 
 /*****************************************************************************/
+/************* Check if a user exists with a given user's code ***************/
+/*****************************************************************************/
+
+void Usr_FlushCacheUsrCodExists (void)
+  {
+   Gbl.Cache.UsrCodExists.Status = Cac_INVALID;
+  }
+
+Exi_Exist_t Usr_ChkIfUsrCodExists (long UsrCod)
+  {
+   /***** Trivial check: user's code should be > 0 *****/
+   if (UsrCod <= 0)	// Wrong user's code
+      return Exi_DOES_NOT_EXIST;
+
+   /***** 2. Fast check: Is existence already calculated? *****/
+   if (Gbl.Cache.UsrCodExists.Status == Cac_VALID &&
+       Gbl.Cache.UsrCodExists.UsrCod == UsrCod)
+      return Gbl.Cache.UsrCodExists.Exists;
+
+   /***** 3. Slow check: Get if user exists from database *****/
+   Gbl.Cache.UsrCodExists.UsrCod = UsrCod;
+   Gbl.Cache.UsrCodExists.Exists = Usr_DB_ChkIfUsrCodExists (UsrCod);
+   Gbl.Cache.UsrCodExists.Status = Cac_VALID;
+   return Gbl.Cache.UsrCodExists.Exists;
+  }
+
+/*****************************************************************************/
 /******* Check a user's code and get all user's data from user's code ********/
 /*****************************************************************************/
 // Input: UsrDat->UsrCod must hold a valid user code
@@ -2215,7 +2274,7 @@ Exi_Exist_t Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct Usr_Data *UsrDat,
 						     Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs)
   {
    /***** Check if a user exists having this user's code *****/
-   if (Usr_DB_ChkIfUsrCodExists (UsrDat->UsrCod) == Exi_EXISTS)
+   if (Usr_ChkIfUsrCodExists (UsrDat->UsrCod))
      {
       /* Get user's data */
       Usr_GetAllUsrDataFromUsrCod (UsrDat,GetPrefs,GetRoleInCurrentCrs);

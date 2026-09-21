@@ -248,6 +248,12 @@ struct Globals
       struct
 	{
 	 long UsrCod;
+	 Exi_Exist_t Exists;
+	 Cac_Status_t Status;
+	} UsrCodExists;
+      struct
+	{
+	 long UsrCod;
 	 long HieCod;
 	 Hie_DB_CountOnlyAcceptedCrss_t CountOnlyAcceptedCourses;
 	 Usr_Belong_t Belongs;

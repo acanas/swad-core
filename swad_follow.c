@@ -272,7 +272,7 @@ void Fol_GetNumFollow (long UsrCod,
 
    /***** 2. Fast check: Is number of following already calculated? *****/
    if (Gbl.Cache.Follow.Status == Cac_VALID &&
-       UsrCod == Gbl.Cache.Follow.UsrCod)
+       Gbl.Cache.Follow.UsrCod == UsrCod)
      {
       *NumFollowing = Gbl.Cache.Follow.NumFollowing;
       *NumFollowers = Gbl.Cache.Follow.NumFollowers;
