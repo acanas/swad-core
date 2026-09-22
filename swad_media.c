@@ -1546,7 +1546,8 @@ static void Med_ShowJPG (const struct Med_Media *Media,
 	    Brw_CreateTmpPublicLinkToPrivateFile (FullPathJPGPriv,FileNameJPG);
 
 	    snprintf (TmpPubDir,sizeof (TmpPubDir),"%s/%s",
-		      Gbl.FileBrowser.TmpPubDir.L,Gbl.FileBrowser.TmpPubDir.R);
+		      Gbl.FileBrowser.TmpPubDir.Left,
+		      Gbl.FileBrowser.TmpPubDir.Right);
 	    Fil_AddPublicDirToCache (FullPathJPGPriv,TmpPubDir);
 	   }
 
@@ -1609,7 +1610,8 @@ static void Med_ShowGIF (const struct Med_Media *Media,
 	    Brw_CreateTmpPublicLinkToPrivateFile (FullPathPNGPriv,FileNamePNG);
 
 	    snprintf (TmpPubDir,sizeof (TmpPubDir),"%s/%s",
-		      Gbl.FileBrowser.TmpPubDir.L,Gbl.FileBrowser.TmpPubDir.R);
+		      Gbl.FileBrowser.TmpPubDir.Left,
+		      Gbl.FileBrowser.TmpPubDir.Right);
 	    Fil_AddPublicDirToCache (FullPathGIFPriv,TmpPubDir);
 	   }
 
@@ -1695,7 +1697,8 @@ static void Med_ShowVideo (const struct Med_Media *Media,
 	    Brw_CreateTmpPublicLinkToPrivateFile (FullPathVideoPriv,FileNameVideo);
 
 	    snprintf (TmpPubDir,sizeof (TmpPubDir),"%s/%s",
-		      Gbl.FileBrowser.TmpPubDir.L,Gbl.FileBrowser.TmpPubDir.R);
+		      Gbl.FileBrowser.TmpPubDir.Left,
+		      Gbl.FileBrowser.TmpPubDir.Right);
 	    Fil_AddPublicDirToCache (FullPathVideoPriv,TmpPubDir);
 	   }
 

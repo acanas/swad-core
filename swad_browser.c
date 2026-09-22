@@ -1104,23 +1104,24 @@ static long Brw_GrpCod = -1L;
 
 static long Brw_GetGrpSettings (void);
 
-static void Brw_SetPathFileBrowser (void);
-static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod);
+static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser);
+static void Brw_CreateFoldersAssignmentsIfNotExist (const struct Brw_FileBrowser *FileBrowser,
+						    long ZoneUsrCod);
 
 static void Brw_AskEditWorksCrsInternal (__attribute__((unused)) void *Args);
-static void Brw_ShowFileBrowsersAsgWrkCrs (void);
-static void Brw_ShowFileBrowsersAsgWrkUsr (void);
+static void Brw_ShowFileBrowsersAsgWrkCrs (struct Brw_FileBrowser *FileBrowser);
+static void Brw_ShowFileBrowsersAsgWrkUsr (struct Brw_FileBrowser *FileBrowser);
 
-static void Brw_FormToChangeCrsGrpZone (void);
+static void Brw_FormToChangeCrsGrpZone (struct Brw_FileBrowser *FileBrowser);
 static Usr_Can_t Brw_CheckIfICanAccessToGrpFilezone (long GrpCod);
 static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat);
 static void Brw_ShowFileBrowserOrWorksInternal (__attribute__((unused)) void *Args);
-static void Brw_ShowFileBrowser (void);
+static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser);
 static void Brw_PutIconsFileBrowser (__attribute__((unused)) void *Args);
 static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args);
-static void Brw_WriteTopBeforeShowingFileBrowser (void);
+static void Brw_WriteTopBeforeShowingFileBrowser (const struct Brw_FileBrowser *FileBrowser);
 static void Brw_UpdateLastAccess (void);
-static void Brw_WriteSubtitleOfFileBrowser (void);
+static void Brw_WriteSubtitleOfFileBrowser (struct Brw_FileBrowser *FileBrowser);
 static void Brw_InitHiddenLevels (void);
 
 static void Brw_PutCheckboxFullTree (void);
@@ -1348,7 +1349,7 @@ long Brw_GetGrpCod (void)
 /***************** Get parameters related to file browser ********************/
 /*****************************************************************************/
 
-void Brw_GetParAndInitFileBrowser (void)
+void Brw_GetParAndInitFileBrowser (struct Brw_FileBrowser *FileBrowser)
   {
    long GrpCod;
 
@@ -1366,7 +1367,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActZIPSeeDocIns:
       case ActReqDatSeeDocIns:
       case ActDowSeeDocIns:
-	 Gbl.FileBrowser.Type = Brw_SHOW_DOC_INS;
+	 FileBrowser->Type = Brw_SHOW_DOC_INS;
          break;
       case ActChgToAdmDocIns:	// Access to admin a documents zone
       case ActAdmDocIns:
@@ -1381,7 +1382,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActUnhDocIns:	case ActHidDocIns:
       case ActReqDatAdmDocIns:	case ActChgDatAdmDocIns:
       case ActDowAdmDocIns:
-	 Gbl.FileBrowser.Type = Brw_ADMI_DOC_INS;
+	 FileBrowser->Type = Brw_ADMI_DOC_INS;
          break;
 
       /***** Shared files of institution *****/
@@ -1396,7 +1397,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActZIPShaIns:
       case ActReqDatShaIns:	case ActChgDatShaIns:
       case ActDowShaIns:
-         Gbl.FileBrowser.Type = Brw_ADMI_SHR_INS;
+         FileBrowser->Type = Brw_ADMI_SHR_INS;
          break;
 
       /***** Documents of center *****/
@@ -1407,7 +1408,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActZIPSeeDocCtr:
       case ActReqDatSeeDocCtr:
       case ActDowSeeDocCtr:
-	 Gbl.FileBrowser.Type = Brw_SHOW_DOC_CTR;
+	 FileBrowser->Type = Brw_SHOW_DOC_CTR;
          break;
       case ActChgToAdmDocCtr:	// Access to admin a documents zone
       case ActAdmDocCtr:
@@ -1422,7 +1423,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActUnhDocCtr:	case ActHidDocCtr:
       case ActReqDatAdmDocCtr:	case ActChgDatAdmDocCtr:
       case ActDowAdmDocCtr:
-	 Gbl.FileBrowser.Type = Brw_ADMI_DOC_CTR;
+	 FileBrowser->Type = Brw_ADMI_DOC_CTR;
          break;
 
       /***** Shared files of center *****/
@@ -1437,7 +1438,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActZIPShaCtr:
       case ActReqDatShaCtr:	case ActChgDatShaCtr:
       case ActDowShaCtr:
-         Gbl.FileBrowser.Type = Brw_ADMI_SHR_CTR;
+         FileBrowser->Type = Brw_ADMI_SHR_CTR;
          break;
 
       /***** Documents of degree *****/
@@ -1448,7 +1449,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActZIPSeeDocDeg:
       case ActReqDatSeeDocDeg:
       case ActDowSeeDocDeg:
-	 Gbl.FileBrowser.Type = Brw_SHOW_DOC_DEG;
+	 FileBrowser->Type = Brw_SHOW_DOC_DEG;
          break;
       case ActChgToAdmDocDeg:	// Access to admin a documents zone
       case ActAdmDocDeg:
@@ -1463,7 +1464,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActUnhDocDeg:	case ActHidDocDeg:
       case ActReqDatAdmDocDeg:	case ActChgDatAdmDocDeg:
       case ActDowAdmDocDeg:
-	 Gbl.FileBrowser.Type = Brw_ADMI_DOC_DEG;
+	 FileBrowser->Type = Brw_ADMI_DOC_DEG;
          break;
 
       /***** Shared files of degree *****/
@@ -1478,15 +1479,15 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActZIPShaDeg:
       case ActReqDatShaDeg:	case ActChgDatShaDeg:
       case ActDowShaDeg:
-         Gbl.FileBrowser.Type = Brw_ADMI_SHR_DEG;
+         FileBrowser->Type = Brw_ADMI_SHR_DEG;
          break;
 
       /***** Documents of course/group *****/
       case ActSeeAdmDocCrsGrp:	// Access to a documents zone from menu
       case ActChgToSeeDocCrs:	// Access to see a documents zone
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = GrpCod > 0 ? Brw_SHOW_DOC_GRP :
-                                             Brw_SHOW_DOC_CRS;
+         FileBrowser->Type = GrpCod > 0 ? Brw_SHOW_DOC_GRP :
+                                          Brw_SHOW_DOC_CRS;
          break;
       case ActSeeDocCrs:
       case ActExpSeeDocCrs:	case ActConSeeDocCrs:
@@ -1494,19 +1495,19 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActReqDatSeeDocCrs:
       case ActReqLnkSeeDocCrs:
       case ActDowSeeDocCrs:
-	 Gbl.FileBrowser.Type = Brw_SHOW_DOC_CRS;
+	 FileBrowser->Type = Brw_SHOW_DOC_CRS;
          break;
       case ActSeeDocGrp:
       case ActExpSeeDocGrp:	case ActConSeeDocGrp:
       case ActZIPSeeDocGrp:
       case ActReqDatSeeDocGrp:
       case ActDowSeeDocGrp:
-	 Gbl.FileBrowser.Type = Brw_SHOW_DOC_GRP;
+	 FileBrowser->Type = Brw_SHOW_DOC_GRP;
          break;
       case ActChgToAdmDocCrs:	// Access to admin a documents zone
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = GrpCod > 0 ? Brw_ADMI_DOC_GRP :
-                                             Brw_ADMI_DOC_CRS;
+         FileBrowser->Type = GrpCod > 0 ? Brw_ADMI_DOC_GRP :
+                                          Brw_ADMI_DOC_CRS;
          break;
       case ActAdmDocCrs:
       case ActReqRemFilDocCrs:	case ActRemFilDocCrs:
@@ -1521,7 +1522,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActReqDatAdmDocCrs:	case ActChgDatAdmDocCrs:
       case ActReqLnkAdmDocCrs:
       case ActDowAdmDocCrs:
-	 Gbl.FileBrowser.Type = Brw_ADMI_DOC_CRS;
+	 FileBrowser->Type = Brw_ADMI_DOC_CRS;
          break;
       case ActAdmDocGrp:
       case ActReqRemFilDocGrp:	case ActRemFilDocGrp:
@@ -1535,15 +1536,15 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActUnhDocGrp:	case ActHidDocGrp:
       case ActReqDatAdmDocGrp:	case ActChgDatAdmDocGrp:
       case ActDowAdmDocGrp:
-	 Gbl.FileBrowser.Type = Brw_ADMI_DOC_GRP;
+	 FileBrowser->Type = Brw_ADMI_DOC_GRP;
          break;
 
       /***** Teachers' private files of course/group *****/
       case ActAdmTchCrsGrp:
       case ActChgToAdmTch:	// Access to a teachers zone from menu
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = GrpCod > 0 ? Brw_ADMI_TCH_GRP :
-                                             Brw_ADMI_TCH_CRS;
+         FileBrowser->Type = GrpCod > 0 ? Brw_ADMI_TCH_GRP :
+                                          Brw_ADMI_TCH_CRS;
          break;
       case ActAdmTchCrs:
       case ActReqRemFilTchCrs:	case ActRemFilTchCrs:
@@ -1556,7 +1557,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActZIPTchCrs:
       case ActReqDatTchCrs:	case ActChgDatTchCrs:
       case ActDowTchCrs:
-         Gbl.FileBrowser.Type = Brw_ADMI_TCH_CRS;
+         FileBrowser->Type = Brw_ADMI_TCH_CRS;
          break;
       case ActAdmTchGrp:
       case ActReqRemFilTchGrp:	case ActRemFilTchGrp:
@@ -1569,15 +1570,15 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActZIPTchGrp:
       case ActReqDatTchGrp:	case ActChgDatTchGrp:
       case ActDowTchGrp:
-         Gbl.FileBrowser.Type = Brw_ADMI_TCH_GRP;
+         FileBrowser->Type = Brw_ADMI_TCH_GRP;
          break;
 
       /***** Shared files of course/group *****/
       case ActAdmShaCrsGrp:
       case ActChgToAdmSha:	// Access to a shared zone from menu
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = GrpCod > 0 ? Brw_ADMI_SHR_GRP :
-                                             Brw_ADMI_SHR_CRS;
+         FileBrowser->Type = GrpCod > 0 ? Brw_ADMI_SHR_GRP :
+                                          Brw_ADMI_SHR_CRS;
          break;
       case ActAdmShaCrs:
       case ActReqRemFilShaCrs:	case ActRemFilShaCrs:
@@ -1590,7 +1591,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActZIPShaCrs:
       case ActReqDatShaCrs:	case ActChgDatShaCrs:
       case ActDowShaCrs:
-         Gbl.FileBrowser.Type = Brw_ADMI_SHR_CRS;
+         FileBrowser->Type = Brw_ADMI_SHR_CRS;
          break;
       case ActAdmShaGrp:
       case ActReqRemFilShaGrp:	case ActRemFilShaGrp:
@@ -1603,7 +1604,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActZIPShaGrp:
       case ActReqDatShaGrp:	case ActChgDatShaGrp:
       case ActDowShaGrp:
-         Gbl.FileBrowser.Type = Brw_ADMI_SHR_GRP;
+         FileBrowser->Type = Brw_ADMI_SHR_GRP;
          break;
 
       /***** My assignments *****/
@@ -1617,7 +1618,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActZIPAsgUsr:
       case ActReqDatAsgUsr:	case ActChgDatAsgUsr:
       case ActDowAsgUsr:
-         Gbl.FileBrowser.Type = Brw_ADMI_ASG_USR;
+         FileBrowser->Type = Brw_ADMI_ASG_USR;
          break;
 
       /***** Another users' assignments *****/
@@ -1632,7 +1633,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActZIPAsgCrs:
       case ActReqDatAsgCrs:	case ActChgDatAsgCrs:
       case ActDowAsgCrs:
-         Gbl.FileBrowser.Type = Brw_ADMI_ASG_CRS;
+         FileBrowser->Type = Brw_ADMI_ASG_CRS;
          break;
 
       /***** My works *****/
@@ -1647,7 +1648,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActZIPWrkUsr:
       case ActReqDatWrkUsr:	case ActChgDatWrkUsr:
       case ActDowWrkUsr:
-         Gbl.FileBrowser.Type = Brw_ADMI_WRK_USR;
+         FileBrowser->Type = Brw_ADMI_WRK_USR;
          break;
 
       /***** Another users' works *****/
@@ -1661,7 +1662,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActZIPWrkCrs:
       case ActReqDatWrkCrs:	case ActChgDatWrkCrs:
       case ActDowWrkCrs:
-         Gbl.FileBrowser.Type = Brw_ADMI_WRK_CRS;
+         FileBrowser->Type = Brw_ADMI_WRK_CRS;
          break;
 
       /***** Documents in project *****/
@@ -1677,7 +1678,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActZIPDocPrj:
       case ActReqDatDocPrj:	case ActChgDatDocPrj:
       case ActDowDocPrj:
-         Gbl.FileBrowser.Type = Brw_ADMI_DOC_PRJ;
+         FileBrowser->Type = Brw_ADMI_DOC_PRJ;
          break;
 
       /***** Assessment of project *****/
@@ -1693,7 +1694,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActReqDatAssPrj:	case ActChgDatAssPrj:
       case ActDowAssPrj:
       case ActChgPrjSco:
-         Gbl.FileBrowser.Type = Brw_ADMI_ASS_PRJ;
+         FileBrowser->Type = Brw_ADMI_ASS_PRJ;
          break;
 
       /***** Marks *****/
@@ -1703,13 +1704,13 @@ void Brw_GetParAndInitFileBrowser (void)
 	   {
 	    case Rol_STD:
 	    case Rol_NET:
-	       Gbl.FileBrowser.Type = GrpCod > 0 ? Brw_SHOW_MRK_GRP :
-						   Brw_SHOW_MRK_CRS;
+	       FileBrowser->Type = GrpCod > 0 ? Brw_SHOW_MRK_GRP :
+						Brw_SHOW_MRK_CRS;
 	       break;
 	    case Rol_TCH:
 	    case Rol_SYS_ADM:
-	       Gbl.FileBrowser.Type = GrpCod > 0 ? Brw_ADMI_MRK_GRP :
-						   Brw_ADMI_MRK_CRS;
+	       FileBrowser->Type = GrpCod > 0 ? Brw_ADMI_MRK_GRP :
+						Brw_ADMI_MRK_CRS;
 	       break;
 	    default:
 	       Err_WrongRoleExit ();
@@ -1718,26 +1719,26 @@ void Brw_GetParAndInitFileBrowser (void)
          break;
       case ActChgToSeeMrk:	// Access to see a marks zone
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = GrpCod > 0 ? Brw_SHOW_MRK_GRP :
-                                             Brw_SHOW_MRK_CRS;
+         FileBrowser->Type = GrpCod > 0 ? Brw_SHOW_MRK_GRP :
+                                          Brw_SHOW_MRK_CRS;
          break;
       case ActSeeMrkCrs:
       case ActExpSeeMrkCrs:	case ActConSeeMrkCrs:
       case ActReqDatSeeMrkCrs:
       case ActReqLnkSeeMrkCrs:
       case ActSeeMyMrkCrs:
-         Gbl.FileBrowser.Type = Brw_SHOW_MRK_CRS;
+         FileBrowser->Type = Brw_SHOW_MRK_CRS;
          break;
       case ActSeeMrkGrp:
       case ActExpSeeMrkGrp:	case ActConSeeMrkGrp:
       case ActReqDatSeeMrkGrp:
       case ActSeeMyMrkGrp:
-         Gbl.FileBrowser.Type = Brw_SHOW_MRK_GRP;
+         FileBrowser->Type = Brw_SHOW_MRK_GRP;
          break;
       case ActChgToAdmMrk:	// Access to admin a marks zone
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = GrpCod > 0 ? Brw_ADMI_MRK_GRP :
-                                             Brw_ADMI_MRK_CRS;
+         FileBrowser->Type = GrpCod > 0 ? Brw_ADMI_MRK_GRP :
+                                          Brw_ADMI_MRK_CRS;
          break;
       case ActAdmMrkCrs:
       case ActReqRemFilMrkCrs:	case ActRemFilMrkCrs:
@@ -1753,7 +1754,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActReqLnkAdmMrkCrs:
       case ActDowAdmMrkCrs:
       case ActChgNumRowHeaCrs:	case ActChgNumRowFooCrs:
-         Gbl.FileBrowser.Type = Brw_ADMI_MRK_CRS;
+         FileBrowser->Type = Brw_ADMI_MRK_CRS;
          break;
       case ActAdmMrkGrp:
       case ActReqRemFilMrkGrp:	case ActRemFilMrkGrp:
@@ -1768,7 +1769,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActReqDatAdmMrkGrp:	case ActChgDatAdmMrkGrp:
       case ActDowAdmMrkGrp:
       case ActChgNumRowHeaGrp:	case ActChgNumRowFooGrp:
-         Gbl.FileBrowser.Type = Brw_ADMI_MRK_GRP;
+         FileBrowser->Type = Brw_ADMI_MRK_GRP;
          break;
 
       /***** Briefcase *****/
@@ -1785,7 +1786,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActDowBrf:
       case ActReqRemOldBrf:	// Ask for removing old files in briefcase
       case ActRemOldBrf:	// Remove old files in briefcase
-         Gbl.FileBrowser.Type = Brw_ADMI_BRF_USR;
+         FileBrowser->Type = Brw_ADMI_BRF_USR;
          break;
       default:
          Err_WrongFileBrowserExit ();
@@ -1793,10 +1794,10 @@ void Brw_GetParAndInitFileBrowser (void)
      }
 
    /***** Get other parameters *****/
-   if ((Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_ADM_PRJ))
+   if ((Brw_TypeOf[FileBrowser->Type] & Brw_IS_ADM_PRJ))
       /* Get project code */
       Prj_SetPrjCod (ParCod_GetPar (ParCod_Prj));
-   else if ((Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_ADM_CRS_ASG_WRK))
+   else if ((Brw_TypeOf[FileBrowser->Type] & Brw_IS_ADM_CRS_ASG_WRK))
      {
       /* Get lists of the selected users if not already got */
       Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
@@ -1840,7 +1841,7 @@ void Brw_GetParAndInitFileBrowser (void)
 
       case ActCreFolBrf:	case ActRenFolBrf:
 	 /* Get the name of the new folder */
-	 Par_GetParText ("NewFolderName",Gbl.FileBrowser.NewFilFolLnkName,NAME_MAX);
+	 Par_GetParText ("NewFolderName",FileBrowser->NewFilFolLnkName,NAME_MAX);
 	 break;
       case ActCreLnkDocIns:
       case ActCreLnkShaIns:
@@ -1858,7 +1859,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActCreLnkDocPrj:
       case ActCreLnkBrf:
 	 /* Get the name of the new link */
-	 Par_GetParText ("NewLinkName",Gbl.FileBrowser.NewFilFolLnkName,NAME_MAX);
+	 Par_GetParText ("NewLinkName",FileBrowser->NewFilFolLnkName,NAME_MAX);
 	 break;
       default:
 	 break;
@@ -1867,39 +1868,39 @@ void Brw_GetParAndInitFileBrowser (void)
    /***** Get whether to show full tree *****/
    // If I belong to the current course or I am superuser, or file browser is briefcase ==> get whether show full tree from form
    // Else ==> show full tree (only public files)
-   Gbl.FileBrowser.OnlyPublicFiles = false;
+   FileBrowser->OnlyPublicFiles = false;
    if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
-      switch (Gbl.FileBrowser.Type)
+      switch (FileBrowser->Type)
 	{
 	 case Brw_SHOW_DOC_INS:
 	 case Brw_ADMI_DOC_INS:
 	 case Brw_ADMI_SHR_INS:
-	    Gbl.FileBrowser.OnlyPublicFiles =
+	    FileBrowser->OnlyPublicFiles =
 	    (Gbl.Usrs.Me.IBelongToCurrent[Hie_INS] == Usr_DONT_BELONG);
 	    break;
 	 case Brw_SHOW_DOC_CTR:
 	 case Brw_ADMI_DOC_CTR:
 	 case Brw_ADMI_SHR_CTR:
-	    Gbl.FileBrowser.OnlyPublicFiles =
+	    FileBrowser->OnlyPublicFiles =
 	    (Gbl.Usrs.Me.IBelongToCurrent[Hie_CTR] == Usr_DONT_BELONG);
 	    break;
 	 case Brw_SHOW_DOC_DEG:
 	 case Brw_ADMI_DOC_DEG:
 	 case Brw_ADMI_SHR_DEG:
-	    Gbl.FileBrowser.OnlyPublicFiles =
+	    FileBrowser->OnlyPublicFiles =
 	    (Gbl.Usrs.Me.IBelongToCurrent[Hie_DEG] == Usr_DONT_BELONG);
 	    break;
 	 case Brw_SHOW_DOC_CRS:
 	 case Brw_ADMI_DOC_CRS:
 	 case Brw_ADMI_SHR_CRS:
-	    Gbl.FileBrowser.OnlyPublicFiles =
+	    FileBrowser->OnlyPublicFiles =
 	    (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_DONT_BELONG);
 	    break;
 	 default:
 	    break;
 	}
-   Gbl.FileBrowser.ShowFullTree = Gbl.FileBrowser.OnlyPublicFiles ? Lay_SHOW :
-								    Lay_GetParShow ("FullTree");
+   FileBrowser->ShowFullTree = FileBrowser->OnlyPublicFiles ? Lay_SHOW :
+							      Lay_GetParShow ("FullTree");
 
    /***** Initialize file browser *****/
    Brw_SetGrpCod (GrpCod);
@@ -1989,22 +1990,24 @@ static long Brw_GetGrpSettings (void)
 void Brw_PutImplicitParsFileBrowser (void *FilFolLnk)
   {
    if (FilFolLnk)
-      Brw_PutParsFileBrowser (((struct Brw_FilFolLnk *) FilFolLnk)->Path,
+      Brw_PutParsFileBrowser (&Gbl.FileBrowser,
+			      ((struct Brw_FilFolLnk *) FilFolLnk)->Path,
 			      ((struct Brw_FilFolLnk *) FilFolLnk)->Name,
 			      ((struct Brw_FilFolLnk *) FilFolLnk)->Type,
 			      -1L);	// Not used
   }
 
-void Brw_PutParsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
+void Brw_PutParsFileBrowser (struct Brw_FileBrowser *FileBrowser,
+			     const char *PathInTree,const char *FilFolLnkName,
                              Brw_FileType_t FileType,long FilCod)
   {
-   if ((Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_GRP_BRW))		// This file browser needs specify a group
+   if ((Brw_TypeOf[FileBrowser->Type] & Brw_IS_GRP_BRW))		// This file browser needs specify a group
       /***** Group code *****/
       ParCod_PutPar (ParCod_Grp,Brw_GetGrpCod ());
-   else if ((Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_ADM_PRJ))	// This file browser needs specify a project
+   else if ((Brw_TypeOf[FileBrowser->Type] & Brw_IS_ADM_PRJ))	// This file browser needs specify a project
       /***** Project code *****/
       ParCod_PutPar (ParCod_Prj,Prj_GetPrjCod ());
-   else if ((Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_ADM_CRS_ASG_WRK))
+   else if ((Brw_TypeOf[FileBrowser->Type] & Brw_IS_ADM_CRS_ASG_WRK))
      {
       /***** Users selected *****/
       Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
@@ -2012,7 +2015,7 @@ void Brw_PutParsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
      }
 
    /***** If full tree selected? *****/
-   Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.ShowFullTree);
+   Brw_PutParFullTreeIfSelected (&FileBrowser->ShowFullTree);
 
    /***** Path and file *****/
    if (PathInTree)
@@ -2026,7 +2029,8 @@ void Brw_PutParsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
 /************** Get parameters path and file in file browser *****************/
 /*****************************************************************************/
 
-void Brw_GetParsFilFolLnk (struct Brw_FilFolLnk *FilFolLnk)
+void Brw_GetParsFilFolLnk (struct Brw_FileBrowser *FileBrowser,
+			   struct Brw_FilFolLnk *FilFolLnk)
   {
    const char *Ptr;
    Brw_FileType_t FileType;
@@ -2066,31 +2070,28 @@ void Brw_GetParsFilFolLnk (struct Brw_FilFolLnk *FilFolLnk)
 
    /***** Set level of this file or folder inside file browser *****/
    if (!strcmp (FilFolLnk->Name,"."))
-      Gbl.FileBrowser.Lvl = 0;
+      FileBrowser->Lvl = 0;
    else
      {
       // Level == number-of-slashes-in-path-except-file-or-folder + 1
-      Gbl.FileBrowser.Lvl = 1;
+      FileBrowser->Lvl = 1;
       for (Ptr = FilFolLnk->Path;
 	   *Ptr;
 	   Ptr++)
          if (*Ptr == '/')
-            Gbl.FileBrowser.Lvl++;
+            FileBrowser->Lvl++;
      }
 
    /***** Get data of assignment *****/
-   if (Gbl.FileBrowser.Lvl &&
-       (Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_ADM_ASG))
+   if (FileBrowser->Lvl &&
+       (Brw_TypeOf[FileBrowser->Type] & Brw_IS_ADM_ASG))
      {
-      Asg_SetFolder (FilFolLnk,Gbl.FileBrowser.Lvl,Folder);
+      Asg_SetFolder (FilFolLnk,FileBrowser->Lvl,Folder);
       Asg_GetAssignmentDataByFolder (Folder);
      }
 
    /***** Set full path *****/
-   Ale_ShowAlert (Ale_DEBUG,"Brw_GetParsFilFolLnk: FilFolLnk.Path = %s",FilFolLnk->Path);
-   Ale_ShowAlert (Ale_DEBUG,"Brw_GetParsFilFolLnk: FilFolLnk.Name = %s",FilFolLnk->Name);
    Brw_SetFullPathInTree (FilFolLnk);
-   Ale_ShowAlert (Ale_DEBUG,"Brw_GetParsFilFolLnk: FilFolLnk.Full = %s",FilFolLnk->Full);
   }
 
 /*****************************************************************************/
@@ -2103,7 +2104,7 @@ void Brw_InitializeFileBrowser (void)
    struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
 
    /***** Construct the relative path to the folder of file browser *****/
-   Brw_SetPathFileBrowser ();
+   Brw_SetPathFileBrowser (&Gbl.FileBrowser);
 
    /***** Other initializations *****/
    BrwSiz_ResetFileBrowserSize (Size);
@@ -2113,18 +2114,18 @@ void Brw_InitializeFileBrowser (void)
 /********* Construct the paths to the top folders of file browser ************/
 /*****************************************************************************/
 
-static void Brw_SetPathFileBrowser (void)
+static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
   {
    long PrjCod;
    char Path[PATH_MAX * 2 + 128];
 
    /***** Reset paths. An empty path means that
           we don't have to create that directory *****/
-   Gbl.FileBrowser.Path.AboveRootFolder[0] = '\0';
-   Gbl.FileBrowser.Path.RootFolder[0] = '\0';
+   FileBrowser->Path.AboveRootFolder[0] = '\0';
+   FileBrowser->Path.RootFolder[0] = '\0';
 
    /***** Set paths depending on file browser *****/
-   switch (Gbl.FileBrowser.Type)
+   switch (FileBrowser->Type)
      {
       case Brw_SHOW_DOC_INS:
       case Brw_ADMI_DOC_INS:
@@ -2140,8 +2141,8 @@ static void Brw_SetPathFileBrowser (void)
 	 Fil_CreateDirIfNotExists (Path);
 
 	 /* Create path to the current institution */
-	 snprintf (Gbl.FileBrowser.Path.AboveRootFolder,
-	           sizeof (Gbl.FileBrowser.Path.AboveRootFolder),
+	 snprintf (FileBrowser->Path.AboveRootFolder,
+	           sizeof (FileBrowser->Path.AboveRootFolder),
 	           "%s/%02u/%u",
 		   Cfg_PATH_INS_PRIVATE,
 		   (unsigned) (Gbl.Hierarchy.Node[Hie_INS].HieCod % 100),
@@ -2161,8 +2162,8 @@ static void Brw_SetPathFileBrowser (void)
 	 Fil_CreateDirIfNotExists (Path);
 
 	 /* Create path to the current center */
-	 snprintf (Gbl.FileBrowser.Path.AboveRootFolder,
-	           sizeof (Gbl.FileBrowser.Path.AboveRootFolder),
+	 snprintf (FileBrowser->Path.AboveRootFolder,
+	           sizeof (FileBrowser->Path.AboveRootFolder),
 	           "%s/%02u/%u",
 		   Cfg_PATH_CTR_PRIVATE,
 		   (unsigned) (Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
@@ -2182,8 +2183,8 @@ static void Brw_SetPathFileBrowser (void)
 	 Fil_CreateDirIfNotExists (Path);
 
          /* Create path to the current degree */
-	 snprintf (Gbl.FileBrowser.Path.AboveRootFolder,
-	           sizeof (Gbl.FileBrowser.Path.AboveRootFolder),
+	 snprintf (FileBrowser->Path.AboveRootFolder,
+	           sizeof (FileBrowser->Path.AboveRootFolder),
 	           "%s/%02u/%u",
 		   Cfg_PATH_DEG_PRIVATE,
 		   (unsigned) (Gbl.Hierarchy.Node[Hie_DEG].HieCod % 100),
@@ -2196,8 +2197,8 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_SHOW_MRK_CRS:
       case Brw_ADMI_MRK_CRS:
          /* Create path to the current course */
-         Str_Copy (Gbl.FileBrowser.Path.AboveRootFolder,Gbl.Crs.Path.AbsPriv,
-                   sizeof (Gbl.FileBrowser.Path.AboveRootFolder) - 1);
+         Str_Copy (FileBrowser->Path.AboveRootFolder,Gbl.Crs.Path.AbsPriv,
+                   sizeof (FileBrowser->Path.AboveRootFolder) - 1);
 	 break;
       case Brw_SHOW_DOC_GRP:
       case Brw_ADMI_DOC_GRP:
@@ -2213,8 +2214,8 @@ static void Brw_SetPathFileBrowser (void)
          /* Create path to this group */
          snprintf (Path,sizeof (Path),"%s/%s/%ld",
                    Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_GRP,Brw_GetGrpCod ());
-         Str_Copy (Gbl.FileBrowser.Path.AboveRootFolder,Path,
-                   sizeof (Gbl.FileBrowser.Path.AboveRootFolder) - 1);
+         Str_Copy (FileBrowser->Path.AboveRootFolder,Path,
+                   sizeof (FileBrowser->Path.AboveRootFolder) - 1);
 	 break;
       case Brw_ADMI_ASG_USR:
       case Brw_ADMI_WRK_USR:
@@ -2235,8 +2236,8 @@ static void Brw_SetPathFileBrowser (void)
                    Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
                    (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
                    Gbl.Usrs.Me.UsrDat.UsrCod);
-         Str_Copy (Gbl.FileBrowser.Path.AboveRootFolder,Path,
-                   sizeof (Gbl.FileBrowser.Path.AboveRootFolder) - 1);
+         Str_Copy (FileBrowser->Path.AboveRootFolder,Path,
+                   sizeof (FileBrowser->Path.AboveRootFolder) - 1);
          break;
       case Brw_ADMI_ASG_CRS:
       case Brw_ADMI_WRK_CRS:
@@ -2259,8 +2260,8 @@ static void Brw_SetPathFileBrowser (void)
         	      Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
                       (unsigned) (Gbl.Usrs.Other.UsrDat.UsrCod % 100),
         	      Gbl.Usrs.Other.UsrDat.UsrCod);
-            Str_Copy (Gbl.FileBrowser.Path.AboveRootFolder,Path,
-                      sizeof (Gbl.FileBrowser.Path.AboveRootFolder) - 1);
+            Str_Copy (FileBrowser->Path.AboveRootFolder,Path,
+                      sizeof (FileBrowser->Path.AboveRootFolder) - 1);
            }
          break;
       case Brw_ADMI_DOC_PRJ:
@@ -2284,34 +2285,34 @@ static void Brw_SetPathFileBrowser (void)
                    Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_PRJ,
                    (unsigned) (PrjCod % 100),
                    PrjCod);
-         Str_Copy (Gbl.FileBrowser.Path.AboveRootFolder,Path,
-                   sizeof (Gbl.FileBrowser.Path.AboveRootFolder) - 1);
+         Str_Copy (FileBrowser->Path.AboveRootFolder,Path,
+                   sizeof (FileBrowser->Path.AboveRootFolder) - 1);
 	 break;
       case Brw_ADMI_BRF_USR:
-         Str_Copy (Gbl.FileBrowser.Path.AboveRootFolder,Gbl.Usrs.Me.PathDir,
-                   sizeof (Gbl.FileBrowser.Path.AboveRootFolder) - 1);
+         Str_Copy (FileBrowser->Path.AboveRootFolder,Gbl.Usrs.Me.PathDir,
+                   sizeof (FileBrowser->Path.AboveRootFolder) - 1);
 	 break;
       default:
 	 return;
      }
 
    /***** Create directories that not exist *****/
-   if (Gbl.FileBrowser.Path.AboveRootFolder[0])
+   if (FileBrowser->Path.AboveRootFolder[0])
      {
-      Fil_CreateDirIfNotExists (Gbl.FileBrowser.Path.AboveRootFolder);
+      Fil_CreateDirIfNotExists (FileBrowser->Path.AboveRootFolder);
       snprintf (Path,sizeof (Path),"%s/%s",
-                Gbl.FileBrowser.Path.AboveRootFolder,
-                Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
-      Str_Copy (Gbl.FileBrowser.Path.RootFolder,Path,
-                sizeof (Gbl.FileBrowser.Path.RootFolder) - 1);
-      Fil_CreateDirIfNotExists (Gbl.FileBrowser.Path.RootFolder);
+                FileBrowser->Path.AboveRootFolder,
+                Brw_RootFolderInternalNames[FileBrowser->Type]);
+      Str_Copy (FileBrowser->Path.RootFolder,Path,
+                sizeof (FileBrowser->Path.RootFolder) - 1);
+      Fil_CreateDirIfNotExists (FileBrowser->Path.RootFolder);
 
       /***** If file browser is for assignments,
              create folders of assignments if not exist *****/
-      if (Gbl.FileBrowser.Type == Brw_ADMI_ASG_USR)
-	 Brw_CreateFoldersAssignmentsIfNotExist (Gbl.Usrs.Me.UsrDat.UsrCod);
-      else if (Gbl.FileBrowser.Type == Brw_ADMI_ASG_CRS)
-	 Brw_CreateFoldersAssignmentsIfNotExist (Gbl.Usrs.Other.UsrDat.UsrCod);
+      if (FileBrowser->Type == Brw_ADMI_ASG_USR)
+	 Brw_CreateFoldersAssignmentsIfNotExist (FileBrowser,Gbl.Usrs.Me.UsrDat.UsrCod);
+      else if (FileBrowser->Type == Brw_ADMI_ASG_CRS)
+	 Brw_CreateFoldersAssignmentsIfNotExist (FileBrowser,Gbl.Usrs.Other.UsrDat.UsrCod);
      }
   }
 
@@ -2365,7 +2366,8 @@ Exi_Exist_t Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName)
 // 2. ...and the folder name is not empty (the teacher has set that the user must send work(s) for that assignment)
 // 3. ...the assignment is not restricted to groups or (if restricted to groups), the owner of zone belong to any of the groups
 
-static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod)
+static void Brw_CreateFoldersAssignmentsIfNotExist (const struct Brw_FileBrowser *FileBrowser,
+						    long ZoneUsrCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2388,7 +2390,7 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod)
 	   {
 	    /* Create folder if not exists */
 	    snprintf (PathFolderAsg,sizeof (PathFolderAsg),"%s/%s",
-		      Gbl.FileBrowser.Path.RootFolder,row[0]);
+		      FileBrowser->Path.RootFolder,row[0]);
 	    Fil_CreateDirIfNotExists (PathFolderAsg);
 	   }
      }
@@ -2593,10 +2595,10 @@ static void Brw_AskEditWorksCrsInternal (__attribute__((unused)) void *Args)
 void Brw_ShowFileBrowserNormal (void)
   {
    /***** Write top before showing file browser *****/
-   Brw_WriteTopBeforeShowingFileBrowser ();
+   Brw_WriteTopBeforeShowingFileBrowser (&Gbl.FileBrowser);
 
    /****** Show the file browser *****/
-   Brw_ShowFileBrowser ();
+   Brw_ShowFileBrowser (&Gbl.FileBrowser);
 
    /***** Put legal notice *****/
    Brw_PutLegalNotice ();
@@ -2606,7 +2608,7 @@ void Brw_ShowFileBrowserNormal (void)
 /************* Show file browser with the documents of a project *************/
 /*****************************************************************************/
 
-void Brw_ShowFileBrowserProject (long PrjCod)
+void Brw_ShowFileBrowserProject (struct Brw_FileBrowser *FileBrowser,long PrjCod)
   {
    extern const char *Txt_Documents;
 
@@ -2614,22 +2616,22 @@ void Brw_ShowFileBrowserProject (long PrjCod)
    HTM_FIELDSET_Begin (NULL);
       HTM_LEGEND (Txt_Documents);
 
-      Brw_WriteTopBeforeShowingFileBrowser ();
+      Brw_WriteTopBeforeShowingFileBrowser (FileBrowser);
 
       if (Prj_CheckIfICanViewProjectDocuments (PrjCod) == Usr_CAN)
 	{
 	 /***** Show the tree with the project documents *****/
-	 Gbl.FileBrowser.Type = Brw_ADMI_DOC_PRJ;
+	 FileBrowser->Type = Brw_ADMI_DOC_PRJ;
 	 Brw_InitializeFileBrowser ();
-	 Brw_ShowFileBrowser ();
+	 Brw_ShowFileBrowser (FileBrowser);
 	}
 
       if (Prj_CheckIfICanViewProjectAssessment (PrjCod) == Usr_CAN)
 	{
 	 /***** Show the tree with the project assessment *****/
-	 Gbl.FileBrowser.Type = Brw_ADMI_ASS_PRJ;
+	 FileBrowser->Type = Brw_ADMI_ASS_PRJ;
 	 Brw_InitializeFileBrowser ();
-	 Brw_ShowFileBrowser ();
+	 Brw_ShowFileBrowser (FileBrowser);
 	}
 
       /***** Put legal notice *****/
@@ -2643,7 +2645,7 @@ void Brw_ShowFileBrowserProject (long PrjCod)
 /*** Show file browsers with works files of several users of current course **/
 /*****************************************************************************/
 
-static void Brw_ShowFileBrowsersAsgWrkCrs (void)
+static void Brw_ShowFileBrowsersAsgWrkCrs (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Hlp_FILES_Homework_for_teachers;
    extern const char *Txt_Assignments_and_other_works;
@@ -2651,10 +2653,10 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 
    /***** Create the zip file and put a link to download it *****/
    if (ZIP_GetCreateZIP () == ZIP_CREATE_ZIP)
-      ZIP_CreateZIPAsgWrk ();
+      ZIP_CreateZIPAsgWrk (FileBrowser);
 
    /***** Write top before showing file browser *****/
-   Brw_WriteTopBeforeShowingFileBrowser ();
+   Brw_WriteTopBeforeShowingFileBrowser (FileBrowser);
 
    /***** Begin box and table *****/
    Box_BoxBegin (Txt_Assignments_and_other_works,Brw_PutIconShowFigure,NULL,
@@ -2682,14 +2684,14 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	       HTM_DIV_Begin ("class=\"BROWSER_ASG_WRK\"");
 
 		  /* File browser with the assignments */
-		  Gbl.FileBrowser.Type = Brw_ADMI_ASG_CRS;
+		  FileBrowser->Type = Brw_ADMI_ASG_CRS;
 		  Brw_InitializeFileBrowser ();
-		  Brw_ShowFileBrowser ();
+		  Brw_ShowFileBrowser (FileBrowser);
 
 		  /* File browser with the works */
-		  Gbl.FileBrowser.Type = Brw_ADMI_WRK_CRS;
+		  FileBrowser->Type = Brw_ADMI_WRK_CRS;
 		  Brw_InitializeFileBrowser ();
-		  Brw_ShowFileBrowser ();
+		  Brw_ShowFileBrowser (FileBrowser);
 
 	       HTM_DIV_End ();
 
@@ -2709,20 +2711,20 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 /************ Show file browsers with works files of one user ****************/
 /*****************************************************************************/
 
-static void Brw_ShowFileBrowsersAsgWrkUsr (void)
+static void Brw_ShowFileBrowsersAsgWrkUsr (struct Brw_FileBrowser *FileBrowser)
   {
    /***** Write top before showing file browser *****/
-   Brw_WriteTopBeforeShowingFileBrowser ();
+   Brw_WriteTopBeforeShowingFileBrowser (FileBrowser);
 
    /***** Show the tree with the assignments *****/
-   Gbl.FileBrowser.Type = Brw_ADMI_ASG_USR;
+   FileBrowser->Type = Brw_ADMI_ASG_USR;
    Brw_InitializeFileBrowser ();
-   Brw_ShowFileBrowser ();
+   Brw_ShowFileBrowser (FileBrowser);
 
    /***** Show the tree with the works *****/
-   Gbl.FileBrowser.Type = Brw_ADMI_WRK_USR;
+   FileBrowser->Type = Brw_ADMI_WRK_USR;
    Brw_InitializeFileBrowser ();
-   Brw_ShowFileBrowser ();
+   Brw_ShowFileBrowser (FileBrowser);
 
    /***** Put legal notice *****/
    Brw_PutLegalNotice ();
@@ -2746,7 +2748,7 @@ void Brw_PutLegalNotice (void)
 /**************** Form to change file zone (course or group) *****************/
 /*****************************************************************************/
 
-static void Brw_FormToChangeCrsGrpZone (void)
+static void Brw_FormToChangeCrsGrpZone (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    long CurrentGrpCod;
@@ -2762,20 +2764,20 @@ static void Brw_FormToChangeCrsGrpZone (void)
       Grp_GetLstCodGrpsWithFileZonesIBelong (&LstMyGrps);
 
    /***** Begin form *****/
-   Frm_BeginForm (Brw_ActChgZone[Gbl.FileBrowser.Type]);
-      Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.ShowFullTree);
+   Frm_BeginForm (Brw_ActChgZone[FileBrowser->Type]);
+      Brw_PutParFullTreeIfSelected (&FileBrowser->ShowFullTree);
 
       /***** List start *****/
       HTM_UL_Begin ("class=\"LIST_LEFT\"");
 
 	 /***** Select the complete course, not a group *****/
 	 HTM_LI_Begin ("class=\"%s\"",
-	               (Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_CRS_BRW) ? "BROWSER_TITLE" :
-									     "BROWSER_TITLE_LIGHT");
+	               (Brw_TypeOf[FileBrowser->Type] & Brw_IS_CRS_BRW) ? "BROWSER_TITLE" :
+									  "BROWSER_TITLE_LIGHT");
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],
-			        ((Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_CRS_BRW) ? HTM_CHECKED :
-										       HTM_NO_ATTR) |
+			        ((Brw_TypeOf[FileBrowser->Type] & Brw_IS_CRS_BRW) ? HTM_CHECKED :
+										    HTM_NO_ATTR) |
 				HTM_SUBMIT_ON_CLICK,
 				"value=\"-1\"");
 	       HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].FullName);
@@ -2797,7 +2799,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 
 	       /* Select this group */
 	       HTM_LI_Begin ("class=\"%s\"",
-			     (Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_GRP_BRW) &&
+			     (Brw_TypeOf[FileBrowser->Type] & Brw_IS_GRP_BRW) &&
 			     Grp.GrpCod == CurrentGrpCod ? "BROWSER_TITLE" :
 							   "BROWSER_TITLE_LIGHT");
 		  HTM_IMG (Cfg_URL_ICON_PUBLIC,
@@ -2807,7 +2809,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 			   "class=\"ICO25x25\" style=\"margin-left:6px;\"");
 		  HTM_LABEL_Begin (NULL);
 		     HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],
-				      ((Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_GRP_BRW) &&
+				      ((Brw_TypeOf[FileBrowser->Type] & Brw_IS_GRP_BRW) &&
 				       Grp.GrpCod == CurrentGrpCod ? HTM_CHECKED :
 								     HTM_NO_ATTR) |
 				      HTM_SUBMIT_ON_CLICK,
@@ -2940,23 +2942,23 @@ void Brw_ShowFileBrowserOrWorks (void)
 static void Brw_ShowFileBrowserOrWorksInternal (__attribute__((unused)) void *Args)
   {
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
 
    /***** Show the file browser or works *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Brw_ShowAgainFileBrowserOrWorks (&Gbl.FileBrowser);
   }
 
 /*****************************************************************************/
 /******************* Show a file browser or users' works  ********************/
 /*****************************************************************************/
 
-void Brw_ShowAgainFileBrowserOrWorks (void)
+void Brw_ShowAgainFileBrowserOrWorks (struct Brw_FileBrowser *FileBrowser)
   {
-   if ((Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_ADM_USR_ASG_WRK))
-      Brw_ShowFileBrowsersAsgWrkUsr ();
-   else if ((Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_ADM_CRS_ASG_WRK))
-      Brw_ShowFileBrowsersAsgWrkCrs ();
-   else if ((Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_ADM_PRJ))
+   if ((Brw_TypeOf[FileBrowser->Type] & Brw_IS_ADM_USR_ASG_WRK))
+      Brw_ShowFileBrowsersAsgWrkUsr (FileBrowser);
+   else if ((Brw_TypeOf[FileBrowser->Type] & Brw_IS_ADM_CRS_ASG_WRK))
+      Brw_ShowFileBrowsersAsgWrkCrs (FileBrowser);
+   else if ((Brw_TypeOf[FileBrowser->Type] & Brw_IS_ADM_PRJ))
       Prj_ShowOneProject ();
    else
       Brw_ShowFileBrowserNormal ();
@@ -2966,7 +2968,7 @@ void Brw_ShowAgainFileBrowserOrWorks (void)
 /**************************** Show a file browser ****************************/
 /*****************************************************************************/
 
-static void Brw_ShowFileBrowser (void)
+static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Hlp_FILES_Documents;
    extern const char *Hlp_FILES_Shared;
@@ -3077,25 +3079,25 @@ static void Brw_ShowFileBrowser (void)
                                    &Removed);	// Not used here
 
    /***** Check if the maximum quota has been exceeded *****/
-   if (Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type) == Usr_CAN)
+   if (Brw_CheckIfFileBrowserIsEditable (FileBrowser->Type) == Usr_CAN)
       BrwSiz_SetAndCheckQuota (Size);
 
    /***** Check if the clipboard is in this tree *****/
-   Gbl.FileBrowser.Clipboard.IsThisTree = Brw_CheckIfClipboardIsInThisTree ();
+   FileBrowser->Clipboard.IsThisTree = Brw_CheckIfClipboardIsInThisTree ();
 
    /***** Begin box *****/
-   Gbl.FileBrowser.Id++;
+   FileBrowser->Id++;
    snprintf (FileBrowserSectionId,sizeof (FileBrowserSectionId),
-             "file_browser_%u",Gbl.FileBrowser.Id);
+             "file_browser_%u",FileBrowser->Id);
    HTM_SECTION_Begin (FileBrowserSectionId);
 
-      if (Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type])
-	 Box_BoxBegin (*Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
+      if (Brw_TitleOfFileBrowser[FileBrowser->Type])
+	 Box_BoxBegin (*Brw_TitleOfFileBrowser[FileBrowser->Type],
 		       Brw_PutIconsFileBrowser,NULL,
-		       *Brw_HelpOfFileBrowser[Gbl.FileBrowser.Type],Box_NOT_CLOSABLE);
+		       *Brw_HelpOfFileBrowser[FileBrowser->Type],Box_NOT_CLOSABLE);
 
       /***** Subtitle *****/
-      Brw_WriteSubtitleOfFileBrowser ();
+      Brw_WriteSubtitleOfFileBrowser (FileBrowser);
 
       /***** Initialize structure with publisher's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -3107,7 +3109,7 @@ static void Brw_ShowFileBrowser (void)
          Brw_ResetFileMetadata (&FileMetadata);
 	 FileMetadata.FilFolLnk.Type = Brw_IS_FOLDER;
 	 Str_Copy (FileMetadata.FilFolLnk.Path,
-		   Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],
+		   Brw_RootFolderInternalNames[FileBrowser->Type],
 		   sizeof (FileMetadata.FilFolLnk.Path) - 1);
 	 Str_Copy (FileMetadata.FilFolLnk.Name,".",
 		   sizeof (FileMetadata.FilFolLnk.Name) - 1);
@@ -3127,8 +3129,8 @@ static void Brw_ShowFileBrowser (void)
 	    Brw_ListDir (1,"1",
 			 ConExp_EXPANDED,	// Tree not contracted
 			 &UsrDat,
-			 Gbl.FileBrowser.Path.RootFolder,
-			 Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
+			 FileBrowser->Path.RootFolder,
+			 Brw_RootFolderInternalNames[FileBrowser->Type]);
 	 ShowFileBrowser_nsec = Tim_StopGlobalTiming ();
       HTM_TABLE_End ();
 
@@ -3152,13 +3154,13 @@ static void Brw_ShowFileBrowser (void)
       BrwSiz_ShowAndStoreSizeOfFileBrowser (Size);
 
       /***** End box *****/
-      if (Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type])
+      if (Brw_TitleOfFileBrowser[FileBrowser->Type])
          Box_BoxEnd ();
 
    HTM_SECTION_End ();
 
    /***** Help *****/
-   switch (Gbl.FileBrowser.Type)
+   switch (FileBrowser->Type)
      {
       case Brw_ADMI_MRK_CRS:
       case Brw_ADMI_MRK_GRP:
@@ -3273,7 +3275,7 @@ static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args)
 /********************** Write title of a file browser ************************/
 /*****************************************************************************/
 
-static void Brw_WriteTopBeforeShowingFileBrowser (void)
+static void Brw_WriteTopBeforeShowingFileBrowser (const struct Brw_FileBrowser *FileBrowser)
   {
    /***** Update last access to this file browser *****/
    Brw_UpdateLastAccess ();
@@ -3281,12 +3283,12 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
       Brw_PutCheckboxFullTree ();	// Checkbox to show the full tree
-      if ((Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_ADM_BRF))
+      if ((Brw_TypeOf[FileBrowser->Type] & Brw_IS_ADM_BRF))
 	{
 	 if (Gbl.Action.Act != ActReqRemOldBrf)
 	    Brw_PutLinkToAskRemOldFiles ();	// Remove old files
 	}
-      else if ((Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_ADM_CRS_ASG_WRK))
+      else if ((Brw_TypeOf[FileBrowser->Type] & Brw_IS_ADM_CRS_ASG_WRK))
 	{
 	 if (ZIP_GetCreateZIP () == ZIP_DONT_CREATE_ZIP)
 	    ZIP_PutLinkToCreateZIPAsgWrk ();	// Create a zip file with the...
@@ -3295,7 +3297,7 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
    Mnu_ContextMenuEnd ();
 
    /***** Initialize hidden levels *****/
-   switch (Gbl.FileBrowser.Type)
+   switch (FileBrowser->Type)
      {
       case Brw_SHOW_DOC_INS:
       case Brw_ADMI_DOC_INS:
@@ -3318,7 +3320,7 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
      }
 
    /***** If browser is editable, get and write current clipboard *****/
-   if (Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type) == Usr_CAN)
+   if (Brw_CheckIfFileBrowserIsEditable (FileBrowser->Type) == Usr_CAN)
       if (Brw_GetMyClipboard () == Exi_EXISTS)
 	 Brw_WriteCurrentClipboard ();
   }
@@ -3378,7 +3380,7 @@ static void Brw_UpdateLastAccess (void)
 /*********************** Write title of a file browser ***********************/
 /*****************************************************************************/
 
-static void Brw_WriteSubtitleOfFileBrowser (void)
+static void Brw_WriteSubtitleOfFileBrowser (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_center;
    extern const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_degree;
@@ -3433,7 +3435,7 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
      };
 
    /***** Form to change zone (course and group browsers) *****/
-   switch (Gbl.FileBrowser.Type)
+   switch (FileBrowser->Type)
      {
       case Brw_SHOW_DOC_CRS:
       case Brw_ADMI_DOC_CRS:
@@ -3447,17 +3449,17 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
       case Brw_ADMI_MRK_CRS:
       case Brw_SHOW_MRK_GRP:
       case Brw_ADMI_MRK_GRP:
-         Brw_FormToChangeCrsGrpZone ();
+         Brw_FormToChangeCrsGrpZone (FileBrowser);
 	 break;
       default:
          break;
      }
 
    /***** Write subtitle *****/
-   if (Brw_SubtitleOfFileBrowser[Gbl.FileBrowser.Type])
+   if (Brw_SubtitleOfFileBrowser[FileBrowser->Type])
      {
       HTM_DIV_Begin ("class=\"BROWSER_SUBTITLE\"");
-	 HTM_Txt (*Brw_SubtitleOfFileBrowser[Gbl.FileBrowser.Type]);
+	 HTM_Txt (*Brw_SubtitleOfFileBrowser[FileBrowser->Type]);
       HTM_DIV_End ();
      }
   }
@@ -3471,7 +3473,7 @@ static void Brw_InitHiddenLevels (void)
    unsigned Level;
 
    for (Level  = 0;
-	Level <= BrwSiz_MAX_DIR_LEVELS;
+	Level <= Brw_MAX_DIR_LEVELS;
 	Level++)
       Gbl.FileBrowser.HiddenLevels[Level] = HidVis_VISIBLE;
   }
@@ -3540,25 +3542,25 @@ void Brw_CreateDirDownloadTmp (void)
           is limited to 32K in Linux ==> create directories in two levels *****/
    /* 1. Build the name of the directory, splitted in two parts: */
    /* 1a: 2 leftmost chars */
-   Gbl.FileBrowser.TmpPubDir.L[0] = UniqueNameEncrypted[0];
-   Gbl.FileBrowser.TmpPubDir.L[1] = UniqueNameEncrypted[1];
-   Gbl.FileBrowser.TmpPubDir.L[2] = '\0';
+   Gbl.FileBrowser.TmpPubDir.Left[0] = UniqueNameEncrypted[0];
+   Gbl.FileBrowser.TmpPubDir.Left[1] = UniqueNameEncrypted[1];
+   Gbl.FileBrowser.TmpPubDir.Left[2] = '\0';
    /* 1b: rest of chars */
    if (NumDir)
-      snprintf (Gbl.FileBrowser.TmpPubDir.R,sizeof (Gbl.FileBrowser.TmpPubDir.R),
+      snprintf (Gbl.FileBrowser.TmpPubDir.Right,sizeof (Gbl.FileBrowser.TmpPubDir.Right),
 	        "%s_%u",&UniqueNameEncrypted[2],NumDir);
    else
-      Str_Copy (Gbl.FileBrowser.TmpPubDir.R,&UniqueNameEncrypted[2],
-                sizeof (Gbl.FileBrowser.TmpPubDir.R) - 1);
+      Str_Copy (Gbl.FileBrowser.TmpPubDir.Right,&UniqueNameEncrypted[2],
+                sizeof (Gbl.FileBrowser.TmpPubDir.Right) - 1);
 
    /* 2. Create the left directory */
    snprintf (PathUniqueDirL,sizeof (PathUniqueDirL),"%s/%s",
-             Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,Gbl.FileBrowser.TmpPubDir.L);
+             Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,Gbl.FileBrowser.TmpPubDir.Left);
    Fil_CreateDirIfNotExists (PathUniqueDirL);
 
    /* 3. Create the right directory inside the left one */
    snprintf (PathUniqueDirR,sizeof (PathUniqueDirR),"%s/%s",
-             PathUniqueDirL,Gbl.FileBrowser.TmpPubDir.R);
+             PathUniqueDirL,Gbl.FileBrowser.TmpPubDir.Right);
    if (mkdir (PathUniqueDirR,(mode_t) 0777))
       Err_ShowErrorAndExit ("Can not create a temporary folder for download.");
 
@@ -3756,7 +3758,7 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 		  if (Brw_WriteRowFileBrowser (Level,RowId,&FileMetadata,UsrDat,
 					       TreeContractedOrExpanded,
 					       IconSubtree) == HidVis_VISIBLE)
-		     if (Level < BrwSiz_MAX_DIR_LEVELS)
+		     if (Level < Brw_MAX_DIR_LEVELS)
 			/* List subtree starting at this this directory */
 			Brw_ListDir (Level + 1,RowId,
 				     ContractedOrExpandedSubtree == ConExp_CONTRACTED ? ConExp_CONTRACTED :
@@ -4572,7 +4574,8 @@ static void Brw_PutIconFileWithLinkToViewMetadata (const struct Brw_FileMetadata
 
       /***** Begin form *****/
       Frm_BeginForm (Brw_ActReqDatFile[Gbl.FileBrowser.Type]);
-	 Brw_PutParsFileBrowser (NULL,			// Not used
+	 Brw_PutParsFileBrowser (&Gbl.FileBrowser,
+			         NULL,			// Not used
 				 NULL,			// Not used
 				 Brw_IS_UNKNOWN,	// Not used
 				 FileMetadata->FilCod);
@@ -4799,8 +4802,8 @@ void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
    /***** Create, into temporary public directory, a symbolic link to file *****/
    snprintf (Link,sizeof (Link),"%s/%s/%s/%s",
              Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
-             Gbl.FileBrowser.TmpPubDir.L,
-             Gbl.FileBrowser.TmpPubDir.R,
+             Gbl.FileBrowser.TmpPubDir.Left,
+             Gbl.FileBrowser.TmpPubDir.Right,
 	     FileName);
    if (symlink (FullPathIncludingFile,Link))
       Err_ShowErrorAndExit ("Can not create temporary link.");
@@ -4901,8 +4904,8 @@ void Brw_ReqRemFile (void)
    char FileNameToShow[NAME_MAX + 1];
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
 
    /***** Button of confirmation of removing *****/
    switch (Brw_CheckIfICanEditFileOrFolder (&FilFolLnk,Gbl.FileBrowser.Lvl))	// Can I remove this file?
@@ -4925,7 +4928,7 @@ void Brw_ReqRemFile (void)
      }
 
    /***** Show again file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Brw_ShowAgainFileBrowserOrWorks (&Gbl.FileBrowser);
   }
 
 /*****************************************************************************/
@@ -4942,8 +4945,8 @@ void Brw_RemFile (void)
    char FileNameToShow[NAME_MAX + 1];
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
 
    switch (Brw_CheckIfICanEditFileOrFolder (&FilFolLnk,Gbl.FileBrowser.Lvl))	// Can I remove this file?
      {
@@ -4982,7 +4985,7 @@ void Brw_RemFile (void)
      }
 
    /***** Show again file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Brw_ShowAgainFileBrowserOrWorks (&Gbl.FileBrowser);
   }
 
 /*****************************************************************************/
@@ -4998,8 +5001,8 @@ void Brw_RemFolder (void)
    struct stat FileStatus;
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
 
    switch (Brw_CheckIfICanEditFileOrFolder (&FilFolLnk,Gbl.FileBrowser.Lvl))	// Can I remove this folder?
      {
@@ -5038,7 +5041,7 @@ void Brw_RemFolder (void)
      }
 
    /***** Show again file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Brw_ShowAgainFileBrowserOrWorks (&Gbl.FileBrowser);
   }
 
 /*****************************************************************************/
@@ -5067,8 +5070,8 @@ void Brw_RemSubtree (void)
    char Path[PATH_MAX + 1 + PATH_MAX + 1];
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
 
    if (Brw_CheckIfICanEditFileOrFolder (&FilFolLnk,Gbl.FileBrowser.Lvl) == Usr_CAN)	// Can I remove this subtree?
      {
@@ -5098,7 +5101,7 @@ void Brw_RemSubtree (void)
      }
 
    /***** Show again file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Brw_ShowAgainFileBrowserOrWorks (&Gbl.FileBrowser);
   }
 
 /*****************************************************************************/
@@ -5111,8 +5114,8 @@ void Brw_ExpandFileTree (void)
    struct Brw_FilFolLnk FilFolLnk;
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
 
    /***** Add path to table of expanded folders *****/
    Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (FilFolLnk.Full);
@@ -5128,8 +5131,8 @@ void Brw_ContractFileTree (void)
    struct Brw_FilFolLnk FilFolLnk;
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
 
    /***** Remove path where the user has clicked from table of expanded folders *****/
    Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (FilFolLnk.Full);
@@ -5144,8 +5147,8 @@ void Brw_Copy (void)
    struct Brw_FilFolLnk FilFolLnk;
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
 
    /***** Remove old clipboards (from all users) *****/
    Brw_DB_RemoveExpiredClipboards ();   // Someone must do this work. Let's do it whenever a user click in a copy button
@@ -5163,7 +5166,7 @@ void Brw_Copy (void)
      }
 
    /***** Show again file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Brw_ShowAgainFileBrowserOrWorks (&Gbl.FileBrowser);
   }
 
 /*****************************************************************************/
@@ -5686,8 +5689,8 @@ void Brw_Paste (void)
    struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
 
    switch (Brw_GetMyClipboard ())
      {
@@ -5722,7 +5725,7 @@ void Brw_Paste (void)
      }
 
    /***** Show again file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Brw_ShowAgainFileBrowserOrWorks (&Gbl.FileBrowser);
   }
 
 /*****************************************************************************/
@@ -6267,8 +6270,8 @@ void Brw_ShowFormFileBrowser (void)
    char FileNameToShow[NAME_MAX + 1];
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
 
    /***** Check if creating a new folder or file is allowed *****/
    switch (Brw_CheckIfICanCreateIntoFolder (&FilFolLnk,Gbl.FileBrowser.Lvl))
@@ -6308,7 +6311,7 @@ void Brw_ShowFormFileBrowser (void)
 	 Err_ShowErrorAndExit (Txt_You_can_not_create_folders_files_or_links_here);	// It's difficult, but not impossible that a user sees this message
 
 	 /***** Show again file browser *****/
-	 Brw_ShowAgainFileBrowserOrWorks ();
+	 Brw_ShowAgainFileBrowserOrWorks (&Gbl.FileBrowser);
 	 break;
      }
   }
@@ -6395,7 +6398,8 @@ static void Brw_PutFormToUploadFilesUsingDropzone (struct Brw_FilFolLnk *FilFolL
 
 	 /***** Put button to refresh file browser after upload *****/
 	 Frm_BeginForm (Brw_ActRefreshAfterUploadFiles[Gbl.FileBrowser.Type]);
-	    Brw_PutParsFileBrowser (NULL,		// Not used
+	    Brw_PutParsFileBrowser (&Gbl.FileBrowser,
+			            NULL,		// Not used
 				    NULL,		// Not used
 				    Brw_IS_UNKNOWN,	// Not used
 				    -1L);		// Not used
@@ -6561,8 +6565,8 @@ void Brw_CreateFolder (void)
    struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
 
    /***** Check if creating a new folder is allowed *****/
    switch (Brw_CheckIfICanCreateIntoFolder (&FilFolLnk,Gbl.FileBrowser.Lvl))
@@ -6579,8 +6583,6 @@ void Brw_CreateFolder (void)
 		  Err_ShowErrorAndExit ("Path is too long.");
 	       Str_Concat (Path,"/",sizeof (Path) - 1);
 	       Str_Concat (Path,Gbl.FileBrowser.NewFilFolLnkName,sizeof (Path) - 1);
-
-	       Ale_ShowAlert (Ale_DEBUG,"Intento crear el directorio Path = %s",Path);
 
 	       /* Create the new directory */
 	       if (mkdir (Path,(mode_t) 0777) == 0)
@@ -6657,7 +6659,7 @@ void Brw_CreateFolder (void)
      }
 
    /***** Show again the file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Brw_ShowAgainFileBrowserOrWorks (&Gbl.FileBrowser);
   }
 
 /*****************************************************************************/
@@ -6676,8 +6678,8 @@ void Brw_RenFolder (void)
    char NewPath[PATH_MAX + 1 + PATH_MAX + 1 + NAME_MAX + 1];
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
 
    switch (Brw_CheckIfICanEditFileOrFolder (&FilFolLnk,Gbl.FileBrowser.Lvl))	// Can I rename this folder?
      {
@@ -6766,7 +6768,7 @@ void Brw_RenFolder (void)
      }
 
    /***** Show again file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Brw_ShowAgainFileBrowserOrWorks (&Gbl.FileBrowser);
   }
 
 /*****************************************************************************/
@@ -6822,7 +6824,7 @@ void Brw_RcvFileClassic (void)
    Ale_ShowAlerts (NULL);
 
    /***** Show again file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Brw_ShowAgainFileBrowserOrWorks (&Gbl.FileBrowser);
   }
 
 /*****************************************************************************/
@@ -6861,8 +6863,8 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FilFolLnk *FilFolLn
    Err_SuccessOrError_t UploadSucessful = Err_ERROR;
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,FilFolLnk);
 
    /***** Check if creating a new file is allowed *****/
    switch (Brw_CheckIfICanCreateIntoFolder (FilFolLnk,Gbl.FileBrowser.Lvl))
@@ -7064,8 +7066,8 @@ void Brw_CreateLink (void)
    struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
 
    /***** Check if creating a new link is allowed *****/
    switch (Brw_CheckIfICanCreateIntoFolder (&FilFolLnk,Gbl.FileBrowser.Lvl))
@@ -7222,7 +7224,7 @@ void Brw_CreateLink (void)
      }
 
    /***** Show again the file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Brw_ShowAgainFileBrowserOrWorks (&Gbl.FileBrowser);
   }
 
 /*****************************************************************************/
@@ -7297,8 +7299,8 @@ void Brw_SetDocumentAsVisible (void)
    struct Brw_FilFolLnk FilFolLnk;
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
 
    /***** Change file to visible *****/
    if (Brw_CheckIfFileOrFolderIsHidden (&FilFolLnk) == HidVis_HIDDEN)
@@ -7322,8 +7324,8 @@ void Brw_SetDocumentAsHidden (void)
    struct Brw_FilFolLnk FilFolLnk;
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
 
    /***** If the file or folder is not already set as hidden in database,
           set it as hidden *****/
@@ -7428,8 +7430,8 @@ void Brw_ShowFileMetadata (void)
    unsigned LicenseUnsigned;
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FileMetadata.FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FileMetadata.FilFolLnk);
 
    /***** Get file metadata *****/
    FileMetadata.FilCod = ParCod_GetAndCheckPar (ParCod_Fil);
@@ -7537,7 +7539,8 @@ void Brw_ShowFileMetadata (void)
 		 }
 
 	       Frm_BeginForm (Brw_ActRecDatFile[Gbl.FileBrowser.Type]);
-		  Brw_PutParsFileBrowser (NULL,		// Not used
+		  Brw_PutParsFileBrowser (&Gbl.FileBrowser,
+					  NULL,		// Not used
 					  NULL,		// Not used
 					  Brw_IS_UNKNOWN,	// Not used
 					  FileMetadata.FilCod);
@@ -7814,7 +7817,7 @@ void Brw_ShowFileMetadata (void)
      }
 
    /***** Show again the file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Brw_ShowAgainFileBrowserOrWorks (&Gbl.FileBrowser);
   }
 
 /*****************************************************************************/
@@ -7830,7 +7833,8 @@ static void Brw_PutIconToGetLinkToFile (void *FileMetadata)
 static void Brw_PutParsToGetLinkToFile (void *FileMetadata)
   {
    if (FileMetadata)
-      Brw_PutParsFileBrowser (NULL,		// Not used
+      Brw_PutParsFileBrowser (&Gbl.FileBrowser,
+			      NULL,		// Not used
 			      NULL,		// Not used
 			      Brw_IS_UNKNOWN,	// Not used
 			      ((struct Brw_FileMetadata *) FileMetadata)->FilCod);
@@ -7874,8 +7878,8 @@ void Brw_GetLinkToDownloadFile (const struct Brw_FilFolLnk *FilFolLnk,char *URL)
       /***** Create URL pointing to symbolic link *****/
       snprintf (URLWithSpaces,sizeof (URLWithSpaces),"%s/%s/%s/%s",
 	        Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
-	        Gbl.FileBrowser.TmpPubDir.L,
-	        Gbl.FileBrowser.TmpPubDir.R,
+	        Gbl.FileBrowser.TmpPubDir.Left,
+	        Gbl.FileBrowser.TmpPubDir.Right,
 	        FilFolLnk->Name);
      }
 
@@ -7894,8 +7898,8 @@ void Brw_DownloadFile (void)
    Usr_Can_t ICanView = Usr_CAN_NOT;
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FileMetadata.FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FileMetadata.FilFolLnk);
 
    /***** Get file metadata *****/
    Brw_GetFileMetadataByPath (&FileMetadata);
@@ -8024,7 +8028,7 @@ void Brw_DownloadFile (void)
 	 Ale_ShowAlert (Ale_WARNING,Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
 
 	 /***** Show again the file browser *****/
-	 Brw_ShowAgainFileBrowserOrWorks ();
+	 Brw_ShowAgainFileBrowserOrWorks (&Gbl.FileBrowser);
 	 break;
      }
   }
@@ -8208,8 +8212,8 @@ void Brw_ChgFileMetadata (void)
    Brw_License_t License;
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FileMetadata.FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FileMetadata.FilFolLnk);
 
    /***** Get file metadata *****/
    FileMetadata.FilCod = ParCod_GetAndCheckPar (ParCod_Fil);
@@ -8301,7 +8305,7 @@ void Brw_ChgFileMetadata (void)
      }
 
    /***** Show again the file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Brw_ShowAgainFileBrowserOrWorks (&Gbl.FileBrowser);
   }
 
 /*****************************************************************************/
@@ -8859,7 +8863,7 @@ static Usr_Can_t Brw_CheckIfICanCreateIntoFolder (struct Brw_FilFolLnk *FilFolLn
       return Usr_CAN_NOT;
 
    /***** If maximum level is reached, I can not create/paste *****/
-   if (Level >= BrwSiz_MAX_DIR_LEVELS)
+   if (Level >= Brw_MAX_DIR_LEVELS)
       return Usr_CAN_NOT;
 
    /***** Have I permission to create/paste a new file or folder into the folder? *****/
@@ -9528,7 +9532,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	 if (FileMetadata.FilFolLnk.Type == Brw_IS_FOLDER)
 	    Brw_PutImplicitParsFileBrowser (&FileMetadata.FilFolLnk);
 	 else
-	    Brw_PutParsFileBrowser (NULL,		// Not used
+	    Brw_PutParsFileBrowser (&Gbl.FileBrowser,
+				    NULL,		// Not used
 				    NULL,		// Not used
 				    Brw_IS_UNKNOWN,	// Not used
 				    FileMetadata.FilCod);
@@ -9593,8 +9598,8 @@ void Brw_AskRemoveOldFilesBriefcase (void)
    unsigned Months;
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
 
    /***** Begin form *****/
    Frm_BeginForm (ActRemOldBrf);
@@ -9630,7 +9635,7 @@ void Brw_AskRemoveOldFilesBriefcase (void)
    Frm_EndForm ();
 
    /***** Show again the file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Brw_ShowAgainFileBrowserOrWorks (&Gbl.FileBrowser);
   }
 
 /*****************************************************************************/
@@ -9647,8 +9652,8 @@ void Brw_RemoveOldFilesBriefcase (void)
    struct Brw_NumObjects Removed;
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
 
    if ((Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_ADM_CRS_ASG_WRK))
      {

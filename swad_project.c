@@ -1472,7 +1472,7 @@ void Prj_ShowBoxWithOneProject (struct Prj_Projects *Projects)
 
       /***** Show project file browsers *****/
       if (Prj_CheckIfICanViewProjectFiles (Projects->Prj.PrjCod) == Usr_CAN)
-	 Brw_ShowFileBrowserProject (Projects->Prj.PrjCod);
+	 Brw_ShowFileBrowserProject (&Gbl.FileBrowser,Projects->Prj.PrjCod);
 
       /***** Show project rubrics *****/
       if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// TODO: Remove this rectriction when rubrics are finished
@@ -4837,8 +4837,8 @@ void Prj_ChangeCriterionScore (void)
 
    /***** Get parameters related to file browser
           and show again project including file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
    Prj_ShowOneProject ();
   }
 

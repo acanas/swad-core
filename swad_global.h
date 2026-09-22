@@ -163,36 +163,7 @@ struct Globals
 	} Records;
      } Crs;
 
-   struct
-     {
-      unsigned Id;		// Each file browser in the page has a unique identifier
-      Brw_FileBrowser_t Type;
-      Lay_Show_t ShowFullTree;	// Show full tree?
-      bool OnlyPublicFiles;	// Show only public files?
-      struct
-	{
-	 char AboveRootFolder[PATH_MAX + 1];
-	 char RootFolder[PATH_MAX + 1];
-	} Path;
-      char NewFilFolLnkName[NAME_MAX + 1];
-      unsigned Lvl;
-      struct
-        {
-         Brw_FileBrowser_t FileBrowser;	// Type of the file browser
-         long HieCod;			// Code of the institution/center/degree/course/group related to the file browser with the clipboard
-	 long WorksUsrCod;		// User code of the user related to the works file browser with the clipboard
-         unsigned Level;
-         struct Brw_FilFolLnk FilFolLnk;
-         bool IsThisTree;		// When showing a file browser, is it that corresponding to the clipboard?
-         bool IsThisFile;		// When showing a row of a file browser, are we in the path of the clipboard?
-        } Clipboard;
-      struct
-        {
-         char L[2 + 1];		// Left directory: 2 first chars
-         char R[NAME_MAX + 1];	// Right directory: rest of chars
-        } TmpPubDir;
-      HidVis_HiddenOrVisible_t HiddenLevels[1 + BrwSiz_MAX_DIR_LEVELS];
-     } FileBrowser;	// Struct used for a file browser
+   struct Brw_FileBrowser FileBrowser;	// Struct used for a file browser
 
    /* Cache */
    struct

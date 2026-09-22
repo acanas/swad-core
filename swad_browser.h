@@ -40,6 +40,31 @@
 /************************ Public types and constants *************************/
 /*****************************************************************************/
 
+#define Brw_MAX_DIR_LEVELS	10	// Maximum number of subdirectory levels in file browsers
+
+#define Brw_MAX_ROW_ID	((1 + Brw_MAX_DIR_LEVELS) * (10 + 1))
+
+#define Brw_MAX_BYTES_MIME_TYPE	(128 - 1)	// 127: maximum size in bytes of "image/jpeg", "text/html", etc.
+
+#define Brw_MAX_CHARS_LICENSE	(128 - 1)	// 127
+#define Brw_MAX_BYTES_LICENSE	((Brw_MAX_CHARS_LICENSE + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
+
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS			"doc"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES		"sha"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD			"descarga"		// TODO: It should be Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_TEACHERS			"tch"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED			"comun"			// TODO: It should be "sha"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS		"actividades"		// TODO: It should be "asg"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_WORKS			"trabajos"		// TODO: It should be "wrk"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_PROJECT_DOCUMENTS		"doc"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_PROJECT_ASSESSMENT	"ass"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS			"calificaciones"	// TODO: It should be "mrk"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_BRIEF			"maletin"		// TODO: It should be "brf"
+
+#define Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES	3		// 3 months
+#define Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES	6		// 6 months
+#define Brw_MAX_MONTHS_IN_BRIEFCASE		(1 * 12)	// 1 year
+
 #define Brw_MAX_CHARS_FOLDER	30		// 30
 #define Brw_MAX_BYTES_FOLDER	NAME_MAX	// 255
 
@@ -167,34 +192,36 @@ struct Brw_FileMetadata
    unsigned NumLoggedUsrs;
   };
 
-/*****************************************************************************/
-/****************************** Public constants *****************************/
-/*****************************************************************************/
-
-#define BrwSiz_MAX_DIR_LEVELS	10	// Maximum number of subdirectory levels in file browsers
-
-#define Brw_MAX_ROW_ID	((1 + BrwSiz_MAX_DIR_LEVELS) * (10 + 1))
-
-#define Brw_MAX_BYTES_MIME_TYPE	(128 - 1)	// 127: maximum size in bytes of "image/jpeg", "text/html", etc.
-
-#define Brw_MAX_CHARS_LICENSE	(128 - 1)	// 127
-#define Brw_MAX_BYTES_LICENSE	((Brw_MAX_CHARS_LICENSE + 1) * Cns_MAX_BYTES_PER_CHAR - 1)	// 2047
-
-#define Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS			"doc"
-#define Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES		"sha"
-#define Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD			"descarga"		// TODO: It should be Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS
-#define Brw_INTERNAL_NAME_ROOT_FOLDER_TEACHERS			"tch"
-#define Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED			"comun"			// TODO: It should be "sha"
-#define Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS		"actividades"		// TODO: It should be "asg"
-#define Brw_INTERNAL_NAME_ROOT_FOLDER_WORKS			"trabajos"		// TODO: It should be "wrk"
-#define Brw_INTERNAL_NAME_ROOT_FOLDER_PROJECT_DOCUMENTS		"doc"
-#define Brw_INTERNAL_NAME_ROOT_FOLDER_PROJECT_ASSESSMENT	"ass"
-#define Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS			"calificaciones"	// TODO: It should be "mrk"
-#define Brw_INTERNAL_NAME_ROOT_FOLDER_BRIEF			"maletin"		// TODO: It should be "brf"
-
-#define Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES	3		// 3 months
-#define Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES	6		// 6 months
-#define Brw_MAX_MONTHS_IN_BRIEFCASE		(1 * 12)	// 1 year
+struct Brw_FileBrowser
+  {
+   unsigned Id;		// Each file browser in the page has a unique identifier
+   Brw_FileBrowser_t Type;
+   Lay_Show_t ShowFullTree;	// Show full tree?
+   bool OnlyPublicFiles;	// Show only public files?
+   struct
+     {
+      char AboveRootFolder[PATH_MAX + 1];
+      char RootFolder[PATH_MAX + 1];
+     } Path;
+   char NewFilFolLnkName[NAME_MAX + 1];
+   unsigned Lvl;
+   struct
+     {
+      Brw_FileBrowser_t FileBrowser;	// Type of the file browser
+      long HieCod;			// Code of the institution/center/degree/course/group related to the file browser with the clipboard
+      long WorksUsrCod;		// User code of the user related to the works file browser with the clipboard
+      unsigned Level;
+      struct Brw_FilFolLnk FilFolLnk;
+      bool IsThisTree;		// When showing a file browser, is it that corresponding to the clipboard?
+      bool IsThisFile;		// When showing a row of a file browser, are we in the path of the clipboard?
+     } Clipboard;
+   struct
+     {
+      char Left[2 + 1];		// Left directory: 2 first chars
+      char Right[NAME_MAX + 1];	// Right directory: rest of chars
+     } TmpPubDir;
+   HidVis_HiddenOrVisible_t HiddenLevels[1 + Brw_MAX_DIR_LEVELS];
+  };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -210,7 +237,7 @@ long Tim_StopGlobalTiming (void);
 void Brw_SetGrpCod (long GrpCod);
 long Brw_GetGrpCod (void);
 
-void Brw_GetParAndInitFileBrowser (void);
+void Brw_GetParAndInitFileBrowser (struct Brw_FileBrowser *FileBrowser);
 void Brw_InitializeFileBrowser (void);
 Exi_Exist_t Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName);
 Err_SuccessOrError_t Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,
@@ -219,7 +246,7 @@ void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName);
 
 void Brw_GetSelectedUsrsAndShowWorks (void);
 void Brw_ShowFileBrowserOrWorks (void);
-void Brw_ShowAgainFileBrowserOrWorks (void);
+void Brw_ShowAgainFileBrowserOrWorks (struct Brw_FileBrowser *FileBrowser);
 
 void Brw_PutParFullTreeIfSelected (void *ShowFullTree);
 
@@ -228,7 +255,7 @@ void Brw_CreateDirDownloadTmp (void);
 void Brw_AskEditWorksCrs (void);
 
 void Brw_ShowFileBrowserNormal (void);
-void Brw_ShowFileBrowserProject (long PrjCod);
+void Brw_ShowFileBrowserProject (struct Brw_FileBrowser *FileBrowser,long PrjCod);
 
 void Brw_PutLegalNotice (void);
 
@@ -282,9 +309,11 @@ void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
                                            const char *FileName);
 
 void Brw_PutImplicitParsFileBrowser (void *FilFolLnk);
-void Brw_PutParsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
+void Brw_PutParsFileBrowser (struct Brw_FileBrowser *FileBrowser,
+			     const char *PathInTree,const char *FilFolLnkName,
                              Brw_FileType_t FileType,long FilCod);
-void Brw_GetParsFilFolLnk (struct Brw_FilFolLnk *FilFolLnk);
+void Brw_GetParsFilFolLnk (struct Brw_FileBrowser *FileBrowser,
+			   struct Brw_FilFolLnk *FilFolLnk);
 
 void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod);
 void Brw_RemoveGrpZones (long HieCod,long GrpCod);

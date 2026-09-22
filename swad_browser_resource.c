@@ -37,6 +37,12 @@
 #include "swad_resource_database.h"
 
 /*****************************************************************************/
+/************** External global variables from others modules ****************/
+/*****************************************************************************/
+
+extern struct Globals Gbl;
+
+/*****************************************************************************/
 /****************************** Get link to file *****************************/
 /*****************************************************************************/
 
@@ -47,8 +53,8 @@ void BrwRsc_GetLinkToDocFil (void)
    struct Brw_FileMetadata FileMetadata;
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FileMetadata.FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FileMetadata.FilFolLnk);
 
    /***** Get file code *****/
    FileMetadata.FilCod = ParCod_GetPar (ParCod_Fil);
@@ -76,8 +82,8 @@ void BrwRsc_GetLinkToMrkFil (void)
    struct Brw_FileMetadata FileMetadata;
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FileMetadata.FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FileMetadata.FilFolLnk);
 
    /***** Get file code *****/
    FileMetadata.FilCod = ParCod_GetPar (ParCod_Fil);

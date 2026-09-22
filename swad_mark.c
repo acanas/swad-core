@@ -207,8 +207,8 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
    unsigned NumRows;
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
 
    /***** Get the number of rows of the header or footer of the table of marks *****/
    Par_GetParText (Mrk_HeadOrFootStr[HeaderOrFooter],UnsignedStr,Cns_MAX_DIGITS_UINT);
@@ -573,8 +573,8 @@ void Mrk_ShowMyMarks (void)
    Exi_Exist_t UsrExists = Exi_EXISTS;
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-   Brw_GetParsFilFolLnk (&FilFolLnk);
+   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
 
    /***** Get the path of the file of marks *****/
    snprintf (PathPrivate,sizeof (PathPrivate),"%s/%s",

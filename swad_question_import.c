@@ -177,8 +177,8 @@ void QstImp_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
    /***** Create public XML file with the questions *****/
    snprintf (PathPubFile,sizeof (PathPubFile),"%s/%s/%s/test.xml",
              Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
-             Gbl.FileBrowser.TmpPubDir.L,
-             Gbl.FileBrowser.TmpPubDir.R);
+             Gbl.FileBrowser.TmpPubDir.Left,
+             Gbl.FileBrowser.TmpPubDir.Right);
    if ((FileXML = fopen (PathPubFile,"wb")) == NULL)
       Err_ShowErrorAndExit ("Can not open target file.");
 
@@ -218,8 +218,8 @@ void QstImp_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
    HTM_A_Begin ("href=\"%s/%s/%s/test.xml\" target=\"_blank\""
 	        " class=\"FORM_OUT_%s BOLD\"",
 	        Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
-	        Gbl.FileBrowser.TmpPubDir.L,
-	        Gbl.FileBrowser.TmpPubDir.R,
+	        Gbl.FileBrowser.TmpPubDir.Left,
+	        Gbl.FileBrowser.TmpPubDir.Right,
 	        The_GetSuffix ());
       Ico_PutIconTextLink ("file.svg",Ico_BLACK,Txt_XML_file);
    HTM_A_End ();
