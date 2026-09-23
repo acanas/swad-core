@@ -81,7 +81,7 @@ static void ZIP_PutLinkToCreateZIPAsgWrkPars (__attribute__((unused)) void *Args
 static void ZIP_CreateTmpDirForCompression (void);
 static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat);
 
-static void ZIP_CompressFolderIntoZIP (const struct Brw_FileBrowser *FileBrowser,
+static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser,
 				       const struct Brw_FilFolLnk *FilFolLnk);
 static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,const char *PathInTree);
 static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
@@ -128,7 +128,7 @@ inline ZIP_CreateZIP_t ZIP_GetCreateZIP (void)
 /*************** and put a link to download it                  **************/
 /*****************************************************************************/
 
-void ZIP_CreateZIPAsgWrk (const struct Brw_FileBrowser *FileBrowser)
+void ZIP_CreateZIPAsgWrk (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_works_ZIP_FILE_NAME;
    struct Usr_Data UsrDat;
@@ -177,7 +177,7 @@ void ZIP_CreateZIPAsgWrk (const struct Brw_FileBrowser *FileBrowser)
 
    /***** Create a temporary public directory
           used to download the zip file *****/
-   Brw_CreateDirDownloadTmp ();
+   Brw_CreateDirDownloadTmp (FileBrowser);
 
    /***** Relative path of the directory with the works to compress *****/
    snprintf (Path,sizeof (Path),"%s/%s",Cfg_PATH_ZIP_PRIVATE,ZIP_TmpDir);
@@ -318,14 +318,12 @@ static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat)
 
 void ZIP_CompressFileTree (void)
   {
-   struct Brw_FilFolLnk FilFolLnk;
-
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
-   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser);
 
    /***** Compress folder into ZIP *****/
-   ZIP_CompressFolderIntoZIP (&Gbl.FileBrowser,&FilFolLnk);
+   ZIP_CompressFolderIntoZIP (&Gbl.FileBrowser,&Gbl.FileBrowser.FileMetadata.FilFolLnk);
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks (&Gbl.FileBrowser);
@@ -336,7 +334,7 @@ void ZIP_CompressFileTree (void)
 /*************** and put a link to download it                  **************/
 /*****************************************************************************/
 
-static void ZIP_CompressFolderIntoZIP (const struct Brw_FileBrowser *FileBrowser,
+static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser,
 				       const struct Brw_FilFolLnk *FilFolLnk)
   {
    extern const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER];
@@ -362,7 +360,7 @@ static void ZIP_CompressFolderIntoZIP (const struct Brw_FileBrowser *FileBrowser
 
    /***** Create a temporary public directory
           used to download the zip file *****/
-   Brw_CreateDirDownloadTmp ();
+   Brw_CreateDirDownloadTmp (FileBrowser);
 
    /***** Create a copy of the directory to compress *****/
    snprintf (Path,sizeof (Path),"%s/%s",

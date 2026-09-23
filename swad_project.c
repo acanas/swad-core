@@ -4796,7 +4796,6 @@ static Usr_Can_t Prj_CheckIfICanFillRubric (long PrjCod,PrjCfg_RubricType_t Whic
 
 void Prj_ChangeCriterionScore (void)
   {
-   struct Brw_FilFolLnk FilFolLnk;
    struct Prj_Project Prj;
    long CriCod;
    double Score;
@@ -4838,7 +4837,7 @@ void Prj_ChangeCriterionScore (void)
    /***** Get parameters related to file browser
           and show again project including file browser *****/
    Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
-   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FilFolLnk);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser);
    Prj_ShowOneProject ();
   }
 

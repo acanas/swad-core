@@ -50,58 +50,56 @@ void BrwRsc_GetLinkToDocFil (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    extern const char *Txt_Documents;
-   struct Brw_FileMetadata FileMetadata;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
-   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FileMetadata.FilFolLnk);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser);
 
    /***** Get file code *****/
-   FileMetadata.FilCod = ParCod_GetPar (ParCod_Fil);
+   Gbl.FileBrowser.FileMetadata.FilCod = ParCod_GetPar (ParCod_Fil);
 
    /***** Get file metadata *****/
-   if (FileMetadata.FilCod > 0)
-      Brw_GetFileMetadataByCod (&FileMetadata);
+   if (Gbl.FileBrowser.FileMetadata.FilCod > 0)
+      Brw_GetFileMetadataByCod (&Gbl.FileBrowser.FileMetadata);
 
    /***** Copy link to file into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Rsc_DOCUMENT,FileMetadata.FilCod);
+   Rsc_DB_CopyToClipboard (Rsc_DOCUMENT,Gbl.FileBrowser.FileMetadata.FilCod);
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-                  FileMetadata.FilCod > 0 ? FileMetadata.FilFolLnk.Name :
-                			    Txt_Documents);
+                  Gbl.FileBrowser.FileMetadata.FilCod > 0 ? Gbl.FileBrowser.FileMetadata.FilFolLnk.Name :
+                					    Txt_Documents);
 
    /***** Show again the file browser *****/
-   Brw_ShowFileBrowserNormal ();
+   Brw_ShowFileBrowserNormal (&Gbl.FileBrowser);
   }
 
 void BrwRsc_GetLinkToMrkFil (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    extern const char *Txt_Marks_area;
-   struct Brw_FileMetadata FileMetadata;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
-   Brw_GetParsFilFolLnk (&Gbl.FileBrowser,&FileMetadata.FilFolLnk);
+   Brw_GetParsFilFolLnk (&Gbl.FileBrowser);
 
    /***** Get file code *****/
-   FileMetadata.FilCod = ParCod_GetPar (ParCod_Fil);
+   Gbl.FileBrowser.FileMetadata.FilCod = ParCod_GetPar (ParCod_Fil);
 
    /***** Get file metadata *****/
-   if (FileMetadata.FilCod > 0)
-      Brw_GetFileMetadataByCod (&FileMetadata);
+   if (Gbl.FileBrowser.FileMetadata.FilCod > 0)
+      Brw_GetFileMetadataByCod (&Gbl.FileBrowser.FileMetadata);
 
    /***** Copy link to file into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Rsc_MARKS,FileMetadata.FilCod);
+   Rsc_DB_CopyToClipboard (Rsc_MARKS,Gbl.FileBrowser.FileMetadata.FilCod);
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-                  FileMetadata.FilCod > 0 ? FileMetadata.FilFolLnk.Name :
-                			    Txt_Marks_area);
+                  Gbl.FileBrowser.FileMetadata.FilCod > 0 ? Gbl.FileBrowser.FileMetadata.FilFolLnk.Name :
+                					    Txt_Marks_area);
 
    /***** Show again the file browser *****/
-   Brw_ShowFileBrowserNormal ();
+   Brw_ShowFileBrowserNormal (&Gbl.FileBrowser);
   }
 
 /*****************************************************************************/

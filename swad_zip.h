@@ -42,7 +42,7 @@ void ZIP_PutLinkToCreateZIPAsgWrk (void);
 void ZIP_SetCreateZIPFromForm (void);
 ZIP_CreateZIP_t ZIP_GetCreateZIP (void);
 
-void ZIP_CreateZIPAsgWrk (const struct Brw_FileBrowser *FileBrowser);
+void ZIP_CreateZIPAsgWrk (struct Brw_FileBrowser *FileBrowser);
 
 void ZIP_CompressFileTree (void);
 

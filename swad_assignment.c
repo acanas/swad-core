@@ -705,7 +705,6 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
       [Usr_CAN_NOT] = {.Icon = "folder.svg"		,.Color = Ico_RED	},
       [Usr_CAN    ] = {.Icon = "folder-open.svg"	,.Color = Ico_GREEN	},
      };
-   struct Brw_FilFolLnk FilFolLnk;
    Act_Action_t NextAction;
    Usr_Can_t ICanSendFiles = Asg->Hidden == HidVis_VISIBLE &&		// It's visible (not hidden)
 			     Asg->ClosedOrOpen == CloOpe_OPEN &&	// It's open (inside dates)
@@ -741,12 +740,12 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
         }
       Frm_BeginForm (NextAction);
 
-	 Str_Copy (FilFolLnk.Path,Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-		   sizeof (FilFolLnk.Path) - 1);
-	 Str_Copy (FilFolLnk.Name,Asg->Folder,
-		   sizeof (FilFolLnk.Name) - 1);
-	 FilFolLnk.Type = Brw_IS_FOLDER;
-	 Brw_PutImplicitParsFileBrowser (&FilFolLnk);
+	 Str_Copy (Gbl.FileBrowser.FileMetadata.FilFolLnk.Path,Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+		   sizeof (Gbl.FileBrowser.FileMetadata.FilFolLnk.Path) - 1);
+	 Str_Copy (Gbl.FileBrowser.FileMetadata.FilFolLnk.Name,Asg->Folder,
+		   sizeof (Gbl.FileBrowser.FileMetadata.FilFolLnk.Name) - 1);
+	 Gbl.FileBrowser.FileMetadata.FilFolLnk.Type = Brw_IS_FOLDER;
+	 Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser);
 	 Ico_PutIconLink ("folder-open-yellow-plus.png",Ico_UNCHANGED,NextAction);
 
       Frm_EndForm ();

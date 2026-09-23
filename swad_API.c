@@ -4802,7 +4802,7 @@ int swad__getDirectoryTree (struct soap *soap,
    snprintf (Gbl.Crs.Path.AbsPriv,sizeof (Gbl.Crs.Path.AbsPriv),"%s/%ld",
              Cfg_PATH_CRS_PRIVATE,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
    Brw_SetGrpCod (GrpCod);
-   Brw_InitializeFileBrowser ();
+   Brw_InitializeFileBrowser (&Gbl.FileBrowser);
    Str_Copy (FilFolLnk.Path,Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],
 	     sizeof (FilFolLnk.Path) - 1);
    Str_Copy (FilFolLnk.Name,".",
@@ -5130,7 +5130,7 @@ int swad__getFile (struct soap *soap,
 
    /***** Set paths *****/
    Brw_SetGrpCod (GrpCod);
-   Brw_InitializeFileBrowser ();
+   Brw_InitializeFileBrowser (&Gbl.FileBrowser);
    Str_Copy (FileMetadata.FilFolLnk.Path,FileMetadata.FilFolLnk.Path,
 	     sizeof (FileMetadata.FilFolLnk.Path) - 1);
    Str_Copy (FileMetadata.FilFolLnk.Name,FileMetadata.FilFolLnk.Name,

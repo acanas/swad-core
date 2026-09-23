@@ -1542,7 +1542,7 @@ static void Med_ShowJPG (const struct Med_Media *Media,
 	   {
 	    /***** Create symbolic link from temporary public directory to private file
 		   in order to gain access to it for showing/downloading *****/
-	    Brw_CreateDirDownloadTmp ();
+	    Brw_CreateDirDownloadTmp (&Gbl.FileBrowser);
 	    Brw_CreateTmpPublicLinkToPrivateFile (FullPathJPGPriv,FileNameJPG);
 
 	    snprintf (TmpPubDir,sizeof (TmpPubDir),"%s/%s",
@@ -1605,7 +1605,7 @@ static void Med_ShowGIF (const struct Med_Media *Media,
 	   {
 	    /***** Create symbolic link from temporary public directory to private file
 		   in order to gain access to it for showing/downloading *****/
-	    Brw_CreateDirDownloadTmp ();
+	    Brw_CreateDirDownloadTmp (&Gbl.FileBrowser);
 	    Brw_CreateTmpPublicLinkToPrivateFile (FullPathGIFPriv,FileNameGIF);
 	    Brw_CreateTmpPublicLinkToPrivateFile (FullPathPNGPriv,FileNamePNG);
 
@@ -1693,7 +1693,7 @@ static void Med_ShowVideo (const struct Med_Media *Media,
 	   {
 	    /***** Create symbolic link from temporary public directory to private file
 		   in order to gain access to it for showing/downloading *****/
-	    Brw_CreateDirDownloadTmp ();
+	    Brw_CreateDirDownloadTmp (&Gbl.FileBrowser);
 	    Brw_CreateTmpPublicLinkToPrivateFile (FullPathVideoPriv,FileNameVideo);
 
 	    snprintf (TmpPubDir,sizeof (TmpPubDir),"%s/%s",

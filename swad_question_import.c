@@ -172,7 +172,7 @@ void QstImp_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
 
    /***** Create a temporary public directory
 	  used to download the XML file *****/
-   Brw_CreateDirDownloadTmp ();
+   Brw_CreateDirDownloadTmp (&Gbl.FileBrowser);
 
    /***** Create public XML file with the questions *****/
    snprintf (PathPubFile,sizeof (PathPubFile),"%s/%s/%s/test.xml",

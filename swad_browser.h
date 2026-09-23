@@ -205,6 +205,7 @@ struct Brw_FileBrowser
      } Path;
    char NewFilFolLnkName[NAME_MAX + 1];
    unsigned Lvl;
+   struct Brw_FileMetadata FileMetadata;
    struct
      {
       Brw_FileBrowser_t FileBrowser;	// Type of the file browser
@@ -238,7 +239,7 @@ void Brw_SetGrpCod (long GrpCod);
 long Brw_GetGrpCod (void);
 
 void Brw_GetParAndInitFileBrowser (struct Brw_FileBrowser *FileBrowser);
-void Brw_InitializeFileBrowser (void);
+void Brw_InitializeFileBrowser (struct Brw_FileBrowser *FileBrowser);
 Exi_Exist_t Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName);
 Err_SuccessOrError_t Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,
 								   const char *NewFolderName);
@@ -250,11 +251,11 @@ void Brw_ShowAgainFileBrowserOrWorks (struct Brw_FileBrowser *FileBrowser);
 
 void Brw_PutParFullTreeIfSelected (void *ShowFullTree);
 
-void Brw_CreateDirDownloadTmp (void);
+void Brw_CreateDirDownloadTmp (struct Brw_FileBrowser *FileBrowser);
 
 void Brw_AskEditWorksCrs (void);
 
-void Brw_ShowFileBrowserNormal (void);
+void Brw_ShowFileBrowserNormal (struct Brw_FileBrowser *FileBrowser);
 void Brw_ShowFileBrowserProject (struct Brw_FileBrowser *FileBrowser,long PrjCod);
 
 void Brw_PutLegalNotice (void);
@@ -308,12 +309,11 @@ void Brw_PutIconFile (const char *FileName,
 void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
                                            const char *FileName);
 
-void Brw_PutImplicitParsFileBrowser (void *FilFolLnk);
+void Brw_PutImplicitParsFileBrowser (void *FileBrowser);
 void Brw_PutParsFileBrowser (struct Brw_FileBrowser *FileBrowser,
 			     const char *PathInTree,const char *FilFolLnkName,
                              Brw_FileType_t FileType,long FilCod);
-void Brw_GetParsFilFolLnk (struct Brw_FileBrowser *FileBrowser,
-			   struct Brw_FilFolLnk *FilFolLnk);
+void Brw_GetParsFilFolLnk (struct Brw_FileBrowser *FileBrowser);
 
 void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod);
 void Brw_RemoveGrpZones (long HieCod,long GrpCod);
