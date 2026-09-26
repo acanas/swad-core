@@ -27,9 +27,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_browser.h"
+#include "swad_browser_type.h"
 #include "swad_date.h"
-#include "swad_notification.h"
+#include "swad_notification_type.h"
 #include "swad_user.h"
 
 /*****************************************************************************/

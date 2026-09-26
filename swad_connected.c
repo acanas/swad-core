@@ -43,6 +43,7 @@
 #include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_log.h"
+#include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_role.h"

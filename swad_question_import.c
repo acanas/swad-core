@@ -33,6 +33,7 @@
 #include "swad_action_list.h"
 #include "swad_alert.h"
 #include "swad_box.h"
+#include "swad_browser.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_form.h"
@@ -164,6 +165,7 @@ void QstImp_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
   {
    extern const char *Txt_NEW_LINE;
    extern const char *Txt_XML_file;
+   struct Brw_TmpPubDir TmpPubDir;
    char PathPubFile[PATH_MAX + 1];
    FILE *FileXML;
    unsigned NumQst;
@@ -172,13 +174,13 @@ void QstImp_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
 
    /***** Create a temporary public directory
 	  used to download the XML file *****/
-   Brw_CreateDirDownloadTmp (&Gbl.FileBrowser);
+   Brw_CreateDirDownloadTmp (&TmpPubDir);
 
    /***** Create public XML file with the questions *****/
    snprintf (PathPubFile,sizeof (PathPubFile),"%s/%s/%s/test.xml",
              Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
-             Gbl.FileBrowser.TmpPubDir.Left,
-             Gbl.FileBrowser.TmpPubDir.Right);
+             TmpPubDir.Left,
+             TmpPubDir.Right);
    if ((FileXML = fopen (PathPubFile,"wb")) == NULL)
       Err_ShowErrorAndExit ("Can not open target file.");
 
@@ -218,8 +220,8 @@ void QstImp_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
    HTM_A_Begin ("href=\"%s/%s/%s/test.xml\" target=\"_blank\""
 	        " class=\"FORM_OUT_%s BOLD\"",
 	        Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
-	        Gbl.FileBrowser.TmpPubDir.Left,
-	        Gbl.FileBrowser.TmpPubDir.Right,
+	        TmpPubDir.Left,
+	        TmpPubDir.Right,
 	        The_GetSuffix ());
       Ico_PutIconTextLink ("file.svg",Ico_BLACK,Txt_XML_file);
    HTM_A_End ();

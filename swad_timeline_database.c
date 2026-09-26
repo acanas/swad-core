@@ -181,7 +181,7 @@ void Tml_DB_MarkNoteAsUnavailable (TmlNot_Type_t NoteType,long Cod)
 /*****************************************************************************/
 
 void Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (TmlNot_Type_t NoteType,
-                                                    Brw_FileBrowser_t FileBrowser,
+                                                    Brw_Zone_t Zone,
                                                     long Cod,const char *Path)
   {
    DB_QueryUPDATE ("can not mark notes as unavailable",
@@ -196,7 +196,7 @@ void Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (TmlNot_Type_t NoteType,
 			     " AND Path LIKE '%s/%%'"
 			     " AND Public='Y')",	// Only public files
 		   (unsigned) NoteType,
-		   (unsigned) FileBrowser,Cod,
+		   (unsigned) Zone,Cod,
 		   Path);
   }
 

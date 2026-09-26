@@ -299,9 +299,11 @@ static int API_GetTstQuestionTags (struct soap *soap,
 static void API_GetListGrpsInMatchFromDB (struct soap *soap,
 					  long MchCod,char **ListGroups);
 
-static void API_ListDir (FILE *XML,unsigned Level,const char *Path,const char *PathInTree);
-static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (FILE *XML,unsigned Level,
-							 struct Brw_FileMetadata *FileMetadata);
+static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
+			 FILE *XML,unsigned Level,
+                         const char *Path,const char *PathInTree);
+static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (struct Brw_FileBrowser *FileBrowser,
+							 FILE *XML,unsigned Level);
 static void API_IndentXMLLine (FILE *XML,unsigned Level);
 
 static void API_GetLocationData (struct soap *soap,
@@ -4702,11 +4704,11 @@ int swad__getDirectoryTree (struct soap *soap,
                             char *wsKey,int courseCode,int groupCode,int treeCode,	// input
                             struct swad__getDirectoryTreeOutput *getDirectoryTreeOut)	// output
   {
-   extern const char *Brw_RootFolderInternalNames[Brw_NUM_TYPES_FILE_BROWSER];
+   extern const char *Brw_RootFolderInternalNames[Brw_NUM_ZONES];
    int ReturnCode;
    char XMLFileName[PATH_MAX + 1];
    FILE *XML;
-   struct Brw_FilFolLnk FilFolLnk;
+   struct Brw_FileBrowser FileBrowser;
    unsigned long FileSize;
    unsigned long NumBytesRead;
    long GrpCod;
@@ -4770,26 +4772,26 @@ int swad__getDirectoryTree (struct soap *soap,
 	 switch (treeCode)
 	   {
 	    case 1:	// Documents
-	       Gbl.FileBrowser.Type = Brw_SHOW_DOC_GRP;
+	       FileBrowser.Zone = Brw_SHOW_DOC_GRP;
 	       break;
 	    case 2:	// Shared files
-	       Gbl.FileBrowser.Type = Brw_ADMI_SHR_GRP;
+	       FileBrowser.Zone = Brw_ADMI_SHR_GRP;
 	       break;
 	    case 3:	// Marks
-	       Gbl.FileBrowser.Type = Brw_SHOW_MRK_GRP;
+	       FileBrowser.Zone = Brw_SHOW_MRK_GRP;
 	       break;
 	   }
       else	// groupCode <= 0
 	 switch (treeCode)
 	   {
 	    case 1:	// Documents
-	       Gbl.FileBrowser.Type = Brw_SHOW_DOC_CRS;
+	       FileBrowser.Zone = Brw_SHOW_DOC_CRS;
 	       break;
 	    case 2:	// Shared files
-	       Gbl.FileBrowser.Type = Brw_ADMI_SHR_CRS;
+	       FileBrowser.Zone = Brw_ADMI_SHR_CRS;
 	       break;
 	    case 3:	// Marks
-	       Gbl.FileBrowser.Type = Brw_SHOW_MRK_CRS;
+	       FileBrowser.Zone = Brw_SHOW_MRK_CRS;
 	       break;
 	   }
      }
@@ -4802,12 +4804,12 @@ int swad__getDirectoryTree (struct soap *soap,
    snprintf (Gbl.Crs.Path.AbsPriv,sizeof (Gbl.Crs.Path.AbsPriv),"%s/%ld",
              Cfg_PATH_CRS_PRIVATE,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
    Brw_SetGrpCod (GrpCod);
-   Brw_InitializeFileBrowser (&Gbl.FileBrowser);
-   Str_Copy (FilFolLnk.Path,Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],
-	     sizeof (FilFolLnk.Path) - 1);
-   Str_Copy (FilFolLnk.Name,".",
-	     sizeof (FilFolLnk.Name) - 1);
-   Brw_SetFullPathInTree (&FilFolLnk);
+   Brw_InitializeFileBrowser (&FileBrowser);
+   Str_Copy (FileBrowser.FileMetadata.FilFolLnk.Path,Brw_RootFolderInternalNames[FileBrowser.Zone],
+	     sizeof (FileBrowser.FileMetadata.FilFolLnk.Path) - 1);
+   Str_Copy (FileBrowser.FileMetadata.FilFolLnk.Name,".",
+	     sizeof (FileBrowser.FileMetadata.FilFolLnk.Name) - 1);
+   Brw_SetFullPathInTree (&FileBrowser.FileMetadata.FilFolLnk);
 
    /* Check if exists the directory for HTML output. If not exists, create it */
    Fil_CreateDirIfNotExists (Cfg_PATH_OUT_PRIVATE);
@@ -4824,11 +4826,11 @@ int swad__getDirectoryTree (struct soap *soap,
 
    /* Get directory tree into XML file */
    XML_WriteStartFile (XML,"tree");
-   FilFolLnk.Type = Brw_IS_FOLDER;
-   if (Brw_CheckIfFileOrFolderIsHidden (&FilFolLnk) == HidVis_VISIBLE)
-      API_ListDir (XML,1,
-                   Gbl.FileBrowser.Path.RootFolder,
-                   Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
+   FileBrowser.FileMetadata.FilFolLnk.Type = Brw_IS_FOLDER;
+   if (Brw_CheckIfFileOrFolderIsHidden (&FileBrowser) == HidVis_VISIBLE)
+      API_ListDir (&FileBrowser,XML,1,
+                   FileBrowser.Path.RootFolder,
+                   Brw_RootFolderInternalNames[FileBrowser.Zone]);
    XML_WriteEndFile (XML,"tree");
 
    /* Compute file size */
@@ -4852,7 +4854,8 @@ int swad__getDirectoryTree (struct soap *soap,
 /************************ List a directory recursively ***********************/
 /*****************************************************************************/
 
-static void API_ListDir (FILE *XML,unsigned Level,
+static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
+			 FILE *XML,unsigned Level,
                          const char *Path,const char *PathInTree)
   {
    extern const char *Txt_NEW_LINE;
@@ -4861,7 +4864,6 @@ static void API_ListDir (FILE *XML,unsigned Level,
    int NumFiles;
    char PathFileRel[PATH_MAX + 1 + NAME_MAX + 1];
    char PathFileInExplTree[PATH_MAX + 1 + NAME_MAX + 1];
-   struct Brw_FileMetadata FileMetadata;
    struct stat FileStatus;
    __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible;
 
@@ -4881,24 +4883,24 @@ static void API_ListDir (FILE *XML,unsigned Level,
 	    snprintf (PathFileInExplTree,sizeof (PathFileInExplTree),"%s/%s",
 		      PathInTree,FileList[NumFile]->d_name);
 
-	    Str_Copy (FileMetadata.FilFolLnk.Path,PathInTree,
-	 	      sizeof (FileMetadata.FilFolLnk.Path) - 1);
-	    Str_Copy (FileMetadata.FilFolLnk.Name,FileList[NumFile]->d_name,
-	 	      sizeof (FileMetadata.FilFolLnk.Name) - 1);
+	    Str_Copy (FileBrowser->FileMetadata.FilFolLnk.Path,PathInTree,
+	 	      sizeof (FileBrowser->FileMetadata.FilFolLnk.Path) - 1);
+	    Str_Copy (FileBrowser->FileMetadata.FilFolLnk.Name,FileList[NumFile]->d_name,
+	 	      sizeof (FileBrowser->FileMetadata.FilFolLnk.Name) - 1);
 
 	    if (!lstat (PathFileRel,&FileStatus))	// On success ==> 0 is returned
 	      {
 	       /***** Construct the full path of the file or folder *****/
-	       Brw_SetFullPathInTree (&FileMetadata.FilFolLnk);
+	       Brw_SetFullPathInTree (&FileBrowser->FileMetadata.FilFolLnk);
 
 	       if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 		 {
 		  /***** Write a row for the subdirectory *****/
-		  FileMetadata.FilFolLnk.Type = Brw_IS_FOLDER;
-		  if (API_WriteRowFileBrowser (XML,Level,&FileMetadata) == HidVis_VISIBLE)
+		  FileBrowser->FileMetadata.FilFolLnk.Type = Brw_IS_FOLDER;
+		  if (API_WriteRowFileBrowser (FileBrowser,XML,Level) == HidVis_VISIBLE)
 		    {
 		     /* List subtree starting at this this directory */
-		     API_ListDir (XML,Level + 1,
+		     API_ListDir (FileBrowser,XML,Level + 1,
 		                  PathFileRel,PathFileInExplTree);
 
 		     /* Indent and end dir */
@@ -4908,9 +4910,9 @@ static void API_ListDir (FILE *XML,unsigned Level,
 		 }
 	       else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
 	         {
-		  FileMetadata.FilFolLnk.Type = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :
-											       Brw_IS_FILE;
-		  HiddenOrVisible = API_WriteRowFileBrowser (XML,Level,&FileMetadata);
+		  FileBrowser->FileMetadata.FilFolLnk.Type = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :
+													    Brw_IS_FILE;
+		  HiddenOrVisible = API_WriteRowFileBrowser (FileBrowser,XML,Level);
 	         }
 	      }
 	   }
@@ -4928,20 +4930,21 @@ static void API_ListDir (FILE *XML,unsigned Level,
 // If it is not the first row, it is shown or not depending on whether it is hidden or not
 // Return if the row is visible or hidden
 
-static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (FILE *XML,unsigned Level,
-							 struct Brw_FileMetadata *FileMetadata)
+static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (struct Brw_FileBrowser *FileBrowser,
+							 FILE *XML,unsigned Level)
   {
    extern const char *Txt_NEW_LINE;
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
+
    __attribute__((unused)) Exi_Exist_t FileExists;
    __attribute__((unused)) Exi_Exist_t UsrExists;
    __attribute__((unused)) Exi_Exist_t PhotoExists;
 
    /***** Is this row hidden or visible? *****/
-   if (Gbl.FileBrowser.Type == Brw_SHOW_DOC_CRS ||
-       Gbl.FileBrowser.Type == Brw_SHOW_DOC_GRP)
-      if (Brw_CheckIfFileOrFolderIsHidden (&FileMetadata->FilFolLnk) == HidVis_HIDDEN)
+   if (FileBrowser->Zone == Brw_SHOW_DOC_CRS ||
+       FileBrowser->Zone == Brw_SHOW_DOC_GRP)
+      if (Brw_CheckIfFileOrFolderIsHidden (FileBrowser) == HidVis_HIDDEN)
 	 return HidVis_HIDDEN;
 
    /***** XML row *****/
@@ -4949,22 +4952,23 @@ static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (FILE *XML,unsigned Leve
    API_IndentXMLLine (XML,Level);
 
    /* Write file or folder data */
-   if (FileMetadata->FilFolLnk.Type == Brw_IS_FOLDER)
-      fprintf (XML,"<dir name=\"%s\">%s",FileMetadata->FilFolLnk.Name,Txt_NEW_LINE);
+   if (FileBrowser->FileMetadata.FilFolLnk.Type == Brw_IS_FOLDER)
+      fprintf (XML,"<dir name=\"%s\">%s",
+	       FileBrowser->FileMetadata.FilFolLnk.Name,Txt_NEW_LINE);
    else	// File or link
      {
       /* Get file metadata */
-      Brw_GetFileMetadataByPath (FileMetadata);
-      FileExists = Brw_GetFileTypeSizeAndDate (FileMetadata);
+      Brw_GetFileMetadataByPath (FileBrowser);
+      FileExists = Brw_GetFileTypeSizeAndDate (FileBrowser);
 
-      if (FileMetadata->FilCod <= 0)	// No entry for this file in database table of files
+      if (FileBrowser->FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
 	 /* Add entry to the table of files/folders */
-	 FileMetadata->FilCod = Brw_DB_AddPath (-1L,
-						FileMetadata->FilFolLnk.Type,
-						FileMetadata->FilFolLnk.Full,
-	                                        PriPub_PRIVATE,Brw_LICENSE_DEFAULT);
+	 FileBrowser->FileMetadata.FilCod = Brw_DB_AddPath (FileBrowser,-1L,
+							    FileBrowser->FileMetadata.FilFolLnk.Type,
+							    FileBrowser->FileMetadata.FilFolLnk.Full,
+							    PriPub_PRIVATE,Brw_LICENSE_DEFAULT);
 
-      Gbl.Usrs.Other.UsrDat.UsrCod = FileMetadata->PublisherUsrCod;
+      Gbl.Usrs.Other.UsrDat.UsrCod = FileBrowser->FileMetadata.PublisherUsrCod;
       UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 							   Usr_DONT_GET_PREFS,
 							   Usr_DONT_GET_ROLE_IN_CRS);
@@ -4978,11 +4982,11 @@ static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (FILE *XML,unsigned Leve
 		   "<publisher>%s</publisher>"
 		   "<photo>%s</photo>"
 		   "</file>%s",
-	       FileMetadata->FilFolLnk.Name,
-	       FileMetadata->FilCod,
-	       (unsigned long) FileMetadata->Size,
-	       (unsigned long) FileMetadata->Time,
-	       Txt_LICENSES[FileMetadata->License],
+	       FileBrowser->FileMetadata.FilFolLnk.Name,
+	       FileBrowser->FileMetadata.FilCod,
+	       (unsigned long) FileBrowser->FileMetadata.Size,
+	       (unsigned long) FileBrowser->FileMetadata.Time,
+	       Txt_LICENSES[FileBrowser->FileMetadata.License],
 	       Gbl.Usrs.Other.UsrDat.FullName,
 	       PhotoURL,
 	       Txt_NEW_LINE);
@@ -5013,7 +5017,7 @@ int swad__getFile (struct soap *soap,
   {
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
    int ReturnCode;
-   struct Brw_FileMetadata FileMetadata;
+   struct Brw_FileBrowser FileBrowser;
    long HieCods[Hie_NUM_LEVELS];
    long GrpCod;
    char URL[WWW_MAX_BYTES_WWW + 1];
@@ -5050,14 +5054,14 @@ int swad__getFile (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get file metadata *****/
-   FileMetadata.FilCod = (long) fileCode;
-   if (FileMetadata.FilCod <= 0)
+   FileBrowser.FileMetadata.FilCod = (long) fileCode;
+   if (FileBrowser.FileMetadata.FilCod <= 0)
       return soap_sender_fault (soap,
 	                        "Bad file code",
 	                        "File code must be a integer greater than 0");
 
-   Brw_GetFileMetadataByCod (&FileMetadata);
-   if (FileMetadata.FilCod <= 0)
+   Brw_GetFileMetadataByCod (&FileBrowser.FileMetadata);
+   if (FileBrowser.FileMetadata.FilCod <= 0)
       return soap_sender_fault (soap,
 	                        "File does not exist, please refresh",
 	                        "The file requested does not exists");
@@ -5067,7 +5071,8 @@ int swad__getFile (struct soap *soap,
    HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod,
    HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod,
    HieCods[Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-   Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,
+   Brw_GetCrsGrpFromFileMetadata (FileBrowser.FileMetadata.Zone,
+				  FileBrowser.FileMetadata.Cod,
                                   HieCods,&GrpCod);
    Gbl.Hierarchy.Node[Hie_INS].HieCod = HieCods[Hie_INS];
    Gbl.Hierarchy.Node[Hie_CTR].HieCod = HieCods[Hie_CTR];
@@ -5106,8 +5111,8 @@ int swad__getFile (struct soap *soap,
 				     "Requester must belong to group");
 
    /***** Check if file is in a valid zone *****/
-   Gbl.FileBrowser.Type = FileMetadata.FileBrowser;
-   switch (Gbl.FileBrowser.Type)
+   FileBrowser.Zone = FileBrowser.FileMetadata.Zone;
+   switch (FileBrowser.Zone)
      {
       case Brw_ADMI_DOC_CRS:
       case Brw_ADMI_DOC_GRP:
@@ -5130,31 +5135,31 @@ int swad__getFile (struct soap *soap,
 
    /***** Set paths *****/
    Brw_SetGrpCod (GrpCod);
-   Brw_InitializeFileBrowser (&Gbl.FileBrowser);
-   Str_Copy (FileMetadata.FilFolLnk.Path,FileMetadata.FilFolLnk.Path,
-	     sizeof (FileMetadata.FilFolLnk.Path) - 1);
-   Str_Copy (FileMetadata.FilFolLnk.Name,FileMetadata.FilFolLnk.Name,
-	     sizeof (FileMetadata.FilFolLnk.Name) - 1);
-   Brw_SetFullPathInTree (&FileMetadata.FilFolLnk);
+   Brw_InitializeFileBrowser (&FileBrowser);
+   Str_Copy (FileBrowser.FileMetadata.FilFolLnk.Path,FileBrowser.FileMetadata.FilFolLnk.Path,
+	     sizeof (FileBrowser.FileMetadata.FilFolLnk.Path) - 1);
+   Str_Copy (FileBrowser.FileMetadata.FilFolLnk.Name,FileBrowser.FileMetadata.FilFolLnk.Name,
+	     sizeof (FileBrowser.FileMetadata.FilFolLnk.Name) - 1);
+   Brw_SetFullPathInTree (&FileBrowser.FileMetadata.FilFolLnk);
 
    /***** Get file size and date *****/
-   FileExists = Brw_GetFileTypeSizeAndDate (&FileMetadata);
+   FileExists = Brw_GetFileTypeSizeAndDate (&FileBrowser);
 
    /***** Update number of views *****/
-   Brw_GetAndUpdateFileViews (&FileMetadata);
+   Brw_GetAndUpdateFileViews (&FileBrowser.FileMetadata);
 
    /***** Create and get link to download the file *****/
-   Brw_GetLinkToDownloadFile (&FileMetadata.FilFolLnk,URL);
+   Brw_GetLinkToDownloadFile (&FileBrowser,URL);
 
    /***** Copy data into output structure *****/
-   Str_Copy (getFileOut->fileName,FileMetadata.FilFolLnk.Name,NAME_MAX);
+   Str_Copy (getFileOut->fileName,FileBrowser.FileMetadata.FilFolLnk.Name,NAME_MAX);
    Str_Copy (getFileOut->URL,URL,WWW_MAX_BYTES_WWW);
-   getFileOut->size = (int) FileMetadata.Size;
-   getFileOut->time = (int) FileMetadata.Time;
-   Str_Copy (getFileOut->license,Txt_LICENSES[FileMetadata.License],
+   getFileOut->size = (int) FileBrowser.FileMetadata.Size;
+   getFileOut->time = (int) FileBrowser.FileMetadata.Time;
+   Str_Copy (getFileOut->license,Txt_LICENSES[FileBrowser.FileMetadata.License],
              Brw_MAX_BYTES_LICENSE);
 
-   if ((Gbl.Usrs.Other.UsrDat.UsrCod = FileMetadata.PublisherUsrCod) > 0)
+   if ((Gbl.Usrs.Other.UsrDat.UsrCod = FileBrowser.FileMetadata.PublisherUsrCod) > 0)
       /* Get publisher's data */
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                    Usr_DONT_GET_PREFS,
@@ -5206,8 +5211,8 @@ int swad__getMarks (struct soap *soap,
 
    if (FileMetadata.FilFolLnk.Type != Brw_IS_FILE ||
        FileMetadata.HiddenOrVisible == HidVis_HIDDEN ||
-       (FileMetadata.FileBrowser != Brw_ADMI_MRK_CRS &&
-	FileMetadata.FileBrowser != Brw_ADMI_MRK_GRP))
+       (FileMetadata.Zone != Brw_ADMI_MRK_CRS &&
+	FileMetadata.Zone != Brw_ADMI_MRK_GRP))
       return soap_receiver_fault (soap,
 	                          "Bad file code",
 	                          "You can not get marks from this file");
@@ -5217,7 +5222,7 @@ int swad__getMarks (struct soap *soap,
    HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod,
    HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod,
    HieCods[Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-   Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,
+   Brw_GetCrsGrpFromFileMetadata (FileMetadata.Zone,FileMetadata.Cod,
                                   HieCods,&GrpCod);
    Gbl.Hierarchy.Node[Hie_INS].HieCod = HieCods[Hie_INS];
    Gbl.Hierarchy.Node[Hie_CTR].HieCod = HieCods[Hie_CTR];

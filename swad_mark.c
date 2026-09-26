@@ -35,6 +35,7 @@
 
 #include "swad_action_list.h"
 #include "swad_alert.h"
+#include "swad_browser.h"
 #include "swad_database.h"
 #include "swad_enrolment_database.h"
 #include "swad_error.h"
@@ -46,7 +47,7 @@
 #include "swad_ID.h"
 #include "swad_mark.h"
 #include "swad_mark_database.h"
-#include "swad_notification.h"
+#include "swad_notification_type.h"
 #include "swad_parameter.h"
 #include "swad_string.h"
 #include "swad_user.h"
@@ -74,7 +75,7 @@ static const char *Mrk_HeadOrFootStr[Brw_NUM_HEAD_FOOT] =	// Names of fields in 
 /*****************************************************************************/
 
 static void Mrk_GetNumRowsHeaderAndFooter (struct Mrk_Properties *Marks,
-					   const char *Path);
+					   const struct Brw_FileBrowser *FileBrowser);
 static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter);
 static bool Mrk_CheckIfCellContainsOnlyIDs (const char *CellContent);
 static Err_SuccessOrError_t Mrk_GetUsrMarks (FILE *FileUsrMarks,
@@ -101,7 +102,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (struct Brw_FileBrowser *FileBrowser)
       CurrentGrpCod = Brw_GetGrpCod ();
 
       /***** Get number of rows in header or footer *****/
-      Mrk_GetNumRowsHeaderAndFooter (&Marks,FileBrowser->FileMetadata.FilFolLnk.Full);
+      Mrk_GetNumRowsHeaderAndFooter (&Marks,FileBrowser);
 
       /***** Write the number of rows of header *****/
       HTM_TD_Begin ("class=\"RT FORM_IN_%s NOWRAP %s\"",
@@ -144,7 +145,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (struct Brw_FileBrowser *FileBrowser)
 /*****************************************************************************/
 
 static void Mrk_GetNumRowsHeaderAndFooter (struct Mrk_Properties *Marks,
-					   const char *Path)
+					   const struct Brw_FileBrowser *FileBrowser)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -153,7 +154,7 @@ static void Mrk_GetNumRowsHeaderAndFooter (struct Mrk_Properties *Marks,
    /* There should be a single file in database.
       If, due to an error, there is more than one file,
       get the number of rows of the more recent file. */
-   switch (Mrk_DB_GetNumRowsHeaderAndFooter (&mysql_res,Path))
+   switch (Mrk_DB_GetNumRowsHeaderAndFooter (&mysql_res,FileBrowser))
      {
       case Exi_EXISTS:
 	 /***** Get number of header and footer rows *****/
@@ -202,24 +203,24 @@ void Mrk_ChangeNumRowsFooter (void)
 
 static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
   {
+   struct Brw_FileBrowser FileBrowser;
    char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    unsigned NumRows;
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
-   Brw_GetParsFilFolLnk (&Gbl.FileBrowser);
+   Brw_GetParAndInitFileBrowser (&FileBrowser);
+   Brw_GetParsFilFolLnk (&FileBrowser);
 
    /***** Get the number of rows of the header or footer of the table of marks *****/
    Par_GetParText (Mrk_HeadOrFootStr[HeaderOrFooter],UnsignedStr,Cns_MAX_DIGITS_UINT);
    if (sscanf (UnsignedStr,"%u",&NumRows) == 1)
       /***** Update properties of marks in the database *****/
-      Mrk_DB_ChangeNumRowsHeaderOrFooter (Gbl.FileBrowser.FileMetadata.FilFolLnk.Full,
-					  HeaderOrFooter,NumRows);
+      Mrk_DB_ChangeNumRowsHeaderOrFooter (&FileBrowser,HeaderOrFooter,NumRows);
    else
       Err_WrongNumberOfRowsExit ();
 
    /***** Show again the file browser *****/
-   Brw_ShowFileBrowserNormal (&Gbl.FileBrowser);
+   Brw_ShowFileBrowserNormal (&FileBrowser);
   }
 
 /*****************************************************************************/
@@ -562,6 +563,7 @@ static Err_SuccessOrError_t Mrk_GetUsrMarks (FILE *FileUsrMarks,
 
 void Mrk_ShowMyMarks (void)
   {
+   struct Brw_FileBrowser FileBrowser;
    struct Mrk_Properties Marks;
    char FileNameUsrMarks[PATH_MAX + 1];
    FILE *FileUsrMarks;
@@ -572,16 +574,16 @@ void Mrk_ShowMyMarks (void)
    Exi_Exist_t UsrExists = Exi_EXISTS;
 
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
-   Brw_GetParsFilFolLnk (&Gbl.FileBrowser);
+   Brw_GetParAndInitFileBrowser (&FileBrowser);
+   Brw_GetParsFilFolLnk (&FileBrowser);
 
    /***** Get the path of the file of marks *****/
    snprintf (PathPrivate,sizeof (PathPrivate),"%s/%s",
-             Gbl.FileBrowser.Path.AboveRootFolder,
-             Gbl.FileBrowser.FileMetadata.FilFolLnk.Full);
+             FileBrowser.Path.AboveRootFolder,
+             FileBrowser.FileMetadata.FilFolLnk.Full);
 
    /***** Get number of rows of header or footer *****/
-   Mrk_GetNumRowsHeaderAndFooter (&Marks,Gbl.FileBrowser.FileMetadata.FilFolLnk.Full);
+   Mrk_GetNumRowsHeaderAndFooter (&Marks,&FileBrowser);
 
    /***** Set the student whose marks will be shown *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_STD)	// If I am logged as student...
@@ -683,7 +685,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    MYSQL_ROW row;
    struct Usr_Data UsrDat;
    unsigned UnsignedNum;
-   Brw_FileBrowser_t FileBrowser;
+   Brw_Zone_t Zone;
    long Cod;
    long HieCods[Hie_NUM_LEVELS];
    long GrpCod;
@@ -715,14 +717,14 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       row = mysql_fetch_row (mysql_res);
 
       /* Get file browser type in database (row[0]) */
-      FileBrowser = Brw_UNKNOWN;
+      Zone = Brw_UNKNOWN;
       if (sscanf (row[0],"%u",&UnsignedNum) == 1)
-	 if (UnsignedNum < Brw_NUM_TYPES_FILE_BROWSER)
-	    FileBrowser = (Brw_FileBrowser_t) UnsignedNum;
+	 if (UnsignedNum < Brw_NUM_ZONES)
+	    Zone = (Brw_Zone_t) UnsignedNum;
 
       /* Course/group code (row[1]) */
       Cod = Str_ConvertStrCodToLongCod (row[1]);
-      Brw_GetCrsGrpFromFileMetadata (FileBrowser,Cod,HieCods,&GrpCod);
+      Brw_GetCrsGrpFromFileMetadata (Zone,Cod,HieCods,&GrpCod);
 
       /* Path (row[2]) */
       Str_Copy (FullPathInTreeFromDBMarksTable,row[2],

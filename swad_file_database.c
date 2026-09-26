@@ -40,7 +40,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 void Fil_DB_AddPublicDirToCache (const char *FullPathPriv,
-                                 const char TmpPubDir[PATH_MAX + 1])
+                                 const char TmpPubDirFull[PATH_MAX + 1])
   {
    DB_QueryINSERT ("can not cache file",
 		   "INSERT INTO brw_caches"
@@ -49,7 +49,7 @@ void Fil_DB_AddPublicDirToCache (const char *FullPathPriv,
 		   " ('%s','%s','%s')",
 		   Gbl.Session.Id,
 		   FullPathPriv,
-		   TmpPubDir);
+		   TmpPubDirFull);
   }
 
 /*****************************************************************************/
@@ -57,9 +57,9 @@ void Fil_DB_AddPublicDirToCache (const char *FullPathPriv,
 /*****************************************************************************/
 
 void Fil_DB_GetPublicDirFromCache (const char *FullPathPriv,
-                                   char TmpPubDir[PATH_MAX + 1])
+                                   char TmpPubDirFull[PATH_MAX + 1])
   {
-   DB_QuerySELECTString (TmpPubDir,PATH_MAX,"can not get check if file is cached",
+   DB_QuerySELECTString (TmpPubDirFull,PATH_MAX,"can not get check if file is cached",
 			 "SELECT TmpPubDir"
 			  " FROM brw_caches"
 			 " WHERE SessionId='%s'"

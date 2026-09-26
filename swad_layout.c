@@ -36,6 +36,7 @@
 #include "swad_API.h"
 #include "swad_banner.h"
 #include "swad_box.h"
+#include "swad_browser_database.h"
 #include "swad_calendar.h"
 #include "swad_call_for_exam.h"
 #include "swad_changelog.h"
@@ -883,14 +884,16 @@ static void Lay_WriteScriptParsAJAX (void)
 		   Act_GetActCod (ActRefCon));
 
       /***** Parameters related with expanding/contracting folders in file browsers *****/
-      if (Gbl.FileBrowser.Type != Brw_UNKNOWN)
+      // TODO: Remove these lines
+      // if (Gbl.FileBrowser.Type != Brw_UNKNOWN)
 	 /* In all actions related to file browsers ==>
 	    put parameters used by AJAX */
 	 // Refresh parameters
+	 /*
 	 HTM_TxtF ("const refreshParamExpand = \"act=%ld\";\n"
 		   "const refreshParamContract = \"act=%ld\";\n",
-		   Act_GetActCod (Brw_GetActionExpand   ()),
-		   Act_GetActCod (Brw_GetActionContract ()));
+		   Act_GetActCod (Brw_GetActionExpand   (Gbl.FileBrowser.Zone)),
+		   Act_GetActCod (Brw_GetActionContract (Gbl.FileBrowser.Zone))); */
 
       /***** Parameters related with other actions *****/
       switch (Gbl.Action.Act)

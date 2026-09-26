@@ -37,6 +37,7 @@
 #include "swad_assignment_database.h"
 #include "swad_autolink.h"
 #include "swad_box.h"
+#include "swad_browser.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_figure.h"
@@ -705,6 +706,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
       [Usr_CAN_NOT] = {.Icon = "folder.svg"		,.Color = Ico_RED	},
       [Usr_CAN    ] = {.Icon = "folder-open.svg"	,.Color = Ico_GREEN	},
      };
+   struct Brw_FileBrowser FileBrowser;
    Act_Action_t NextAction;
    Usr_Can_t ICanSendFiles = Asg->Hidden == HidVis_VISIBLE &&		// It's visible (not hidden)
 			     Asg->ClosedOrOpen == CloOpe_OPEN &&	// It's open (inside dates)
@@ -716,17 +718,17 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
        ICanSendFiles == Usr_CAN)	// I can send files to this assignment folder
      {
       /* Form to create a new file or folder */
-      Gbl.FileBrowser.ShowFullTree = Lay_SHOW;	// By default, show all files
+      FileBrowser.ShowFullTree = Lay_SHOW;	// By default, show all files
       switch (Gbl.Usrs.Me.Role.Logged)
         {
 	 case Rol_STD:
-	    Gbl.FileBrowser.Type = Brw_ADMI_ASG_USR;	// User assignments
+	    FileBrowser.Zone = Brw_ADMI_ASG_USR;	// User assignments
 	    NextAction = ActFrmCreAsgUsr;
 	    break;
 	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
-	    Gbl.FileBrowser.Type = Brw_ADMI_ASG_CRS;	// Course assignments
+	    FileBrowser.Zone = Brw_ADMI_ASG_CRS;	// Course assignments
 	    Str_Copy (Gbl.Usrs.Other.UsrDat.EnUsrCod,Gbl.Usrs.Me.UsrDat.EnUsrCod,
 		      sizeof (Gbl.Usrs.Other.UsrDat.EnUsrCod) - 1);
 	    Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected,
@@ -740,12 +742,12 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
         }
       Frm_BeginForm (NextAction);
 
-	 Str_Copy (Gbl.FileBrowser.FileMetadata.FilFolLnk.Path,Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-		   sizeof (Gbl.FileBrowser.FileMetadata.FilFolLnk.Path) - 1);
-	 Str_Copy (Gbl.FileBrowser.FileMetadata.FilFolLnk.Name,Asg->Folder,
-		   sizeof (Gbl.FileBrowser.FileMetadata.FilFolLnk.Name) - 1);
-	 Gbl.FileBrowser.FileMetadata.FilFolLnk.Type = Brw_IS_FOLDER;
-	 Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser);
+	 Str_Copy (FileBrowser.FileMetadata.FilFolLnk.Path,Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+		   sizeof (FileBrowser.FileMetadata.FilFolLnk.Path) - 1);
+	 Str_Copy (FileBrowser.FileMetadata.FilFolLnk.Name,Asg->Folder,
+		   sizeof (FileBrowser.FileMetadata.FilFolLnk.Name) - 1);
+	 FileBrowser.FileMetadata.FilFolLnk.Type = Brw_IS_FOLDER;
+	 Brw_PutImplicitParsFileBrowser (&FileBrowser);
 	 Ico_PutIconLink ("folder-open-yellow-plus.png",Ico_UNCHANGED,NextAction);
 
       Frm_EndForm ();

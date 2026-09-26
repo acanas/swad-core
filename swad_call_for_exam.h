@@ -30,7 +30,7 @@
 #include "swad_constant.h"
 #include "swad_course.h"
 #include "swad_date.h"
-#include "swad_notification.h"
+#include "swad_notification_type.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/

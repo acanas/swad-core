@@ -145,7 +145,8 @@ static Err_SuccessOrError_t Med_MoveTmpFileToDefDir (struct Med_Media *Media,
 						     const char PathMedPriv[PATH_MAX + 1],
 						     const char *Extension);
 
-static void Med_ShowMediaFile (const struct Med_Media *Media,const char *ClassMedia);
+static void Med_ShowMediaFile (const struct Med_Media *Media,
+			       const char *ClassMedia);
 static void Med_ShowJPG (const struct Med_Media *Media,
 			 const char PathMedPriv[PATH_MAX + 1],
 			 const char *ClassMedia);
@@ -1442,7 +1443,8 @@ void Med_StoreMediaInDB (struct Med_Media *Media)
 void Med_ShowMedia (const struct Med_Media *Media,
                     const char *ClassContainer,const char *ClassMedia)
   {
-   static void (*Show[Med_NUM_TYPES]) (const struct Med_Media *Media,const char *ClassMedia) =
+   static void (*Show[Med_NUM_TYPES]) (const struct Med_Media *Media,
+				       const char *ClassMedia) =
      {
       [Med_JPG    ] = Med_ShowMediaFile,
       [Med_GIF    ] = Med_ShowMediaFile,
@@ -1474,7 +1476,8 @@ void Med_ShowMedia (const struct Med_Media *Media,
 /*********************** Show an embed YouTube video *************************/
 /*****************************************************************************/
 
-static void Med_ShowMediaFile (const struct Med_Media *Media,const char *ClassMedia)
+static void Med_ShowMediaFile (const struct Med_Media *Media,
+			       const char *ClassMedia)
   {
    static void (*Show[Med_NUM_TYPES]) (const struct Med_Media *Media,
 			               const char PathMedPriv[PATH_MAX + 1],
@@ -1522,8 +1525,9 @@ static void Med_ShowJPG (const struct Med_Media *Media,
 			 const char *ClassMedia)
   {
    extern const char *Txt_File_not_found;
+   struct Brw_TmpPubDir TmpPubDir;
    char FileNameJPG[NAME_MAX + 1];
-   char TmpPubDir[PATH_MAX + 1];
+   char TmpPubDirFull[PATH_MAX + 1];
    char *FullPathJPGPriv;
    char *URL;
 
@@ -1538,21 +1542,22 @@ static void Med_ShowJPG (const struct Med_Media *Media,
      {
       case Exi_EXISTS:
 	 /***** Get cached public link to private file *****/
-	 if (Fil_GetPublicDirFromCache (FullPathJPGPriv,TmpPubDir) == Exi_DOES_NOT_EXIST)
+	 if (Fil_GetPublicDirFromCache (FullPathJPGPriv,TmpPubDirFull) == Exi_DOES_NOT_EXIST)
 	   {
 	    /***** Create symbolic link from temporary public directory to private file
 		   in order to gain access to it for showing/downloading *****/
-	    Brw_CreateDirDownloadTmp (&Gbl.FileBrowser);
-	    Brw_CreateTmpPublicLinkToPrivateFile (FullPathJPGPriv,FileNameJPG);
+	    Brw_CreateDirDownloadTmp (&TmpPubDir);
+	    Brw_CreateTmpPublicLinkToPrivateFile (&TmpPubDir,
+						  FullPathJPGPriv,FileNameJPG);
 
-	    snprintf (TmpPubDir,sizeof (TmpPubDir),"%s/%s",
-		      Gbl.FileBrowser.TmpPubDir.Left,
-		      Gbl.FileBrowser.TmpPubDir.Right);
-	    Fil_AddPublicDirToCache (FullPathJPGPriv,TmpPubDir);
+	    snprintf (TmpPubDirFull,sizeof (TmpPubDirFull),"%s/%s",
+		      TmpPubDir.Left,
+		      TmpPubDir.Right);
+	    Fil_AddPublicDirToCache (FullPathJPGPriv,TmpPubDirFull);
 	   }
 
 	 /***** Show media *****/
-	 if (asprintf (&URL,"%s/%s",Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDir) < 0)
+	 if (asprintf (&URL,"%s/%s",Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDirFull) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 HTM_IMG (URL,FileNameJPG,Media->Title,
 		  "class=\"%s\" loading=\"lazy\"",ClassMedia);	// Lazy load of the media
@@ -1576,9 +1581,10 @@ static void Med_ShowGIF (const struct Med_Media *Media,
 			 const char *ClassMedia)
   {
    extern const char *Txt_File_not_found;
+   struct Brw_TmpPubDir TmpPubDir;
    char FileNameGIF[NAME_MAX + 1];
    char FileNamePNG[NAME_MAX + 1];
-   char TmpPubDir[PATH_MAX + 1];
+   char TmpPubDirFull[PATH_MAX + 1];
    char *FullPathGIFPriv;
    char *FullPathPNGPriv;
    char *URL;
@@ -1601,22 +1607,24 @@ static void Med_ShowGIF (const struct Med_Media *Media,
      {
       case Exi_EXISTS:
 	 /***** Get cached public link to private file *****/
-	 if (Fil_GetPublicDirFromCache (FullPathGIFPriv,TmpPubDir) == Exi_DOES_NOT_EXIST)
+	 if (Fil_GetPublicDirFromCache (FullPathGIFPriv,TmpPubDirFull) == Exi_DOES_NOT_EXIST)
 	   {
 	    /***** Create symbolic link from temporary public directory to private file
 		   in order to gain access to it for showing/downloading *****/
-	    Brw_CreateDirDownloadTmp (&Gbl.FileBrowser);
-	    Brw_CreateTmpPublicLinkToPrivateFile (FullPathGIFPriv,FileNameGIF);
-	    Brw_CreateTmpPublicLinkToPrivateFile (FullPathPNGPriv,FileNamePNG);
+	    Brw_CreateDirDownloadTmp (&TmpPubDir);
+	    Brw_CreateTmpPublicLinkToPrivateFile (&TmpPubDir,
+						  FullPathGIFPriv,FileNameGIF);
+	    Brw_CreateTmpPublicLinkToPrivateFile (&TmpPubDir,
+						  FullPathPNGPriv,FileNamePNG);
 
-	    snprintf (TmpPubDir,sizeof (TmpPubDir),"%s/%s",
-		      Gbl.FileBrowser.TmpPubDir.Left,
-		      Gbl.FileBrowser.TmpPubDir.Right);
-	    Fil_AddPublicDirToCache (FullPathGIFPriv,TmpPubDir);
+	    snprintf (TmpPubDirFull,sizeof (TmpPubDirFull),"%s/%s",
+		      TmpPubDir.Left,
+		      TmpPubDir.Right);
+	    Fil_AddPublicDirToCache (FullPathGIFPriv,TmpPubDirFull);
 	   }
 
 	 /***** Create URLs pointing to symbolic links *****/
-	 if (asprintf (&URL,"%s/%s",Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDir) < 0)
+	 if (asprintf (&URL,"%s/%s",Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDirFull) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 if (asprintf (&URL_GIF,"%s/%s",URL,FileNameGIF) < 0)
 	    Err_NotEnoughMemoryExit ();
@@ -1673,8 +1681,9 @@ static void Med_ShowVideo (const struct Med_Media *Media,
 			   const char *ClassMedia)
   {
    extern const char *Txt_File_not_found;
+   struct Brw_TmpPubDir TmpPubDir;
    char FileNameVideo[NAME_MAX + 1];
-   char TmpPubDir[PATH_MAX + 1];
+   char TmpPubDirFull[PATH_MAX + 1];
    char *FullPathVideoPriv;
    char *URL;
 
@@ -1689,21 +1698,22 @@ static void Med_ShowVideo (const struct Med_Media *Media,
      {
       case Exi_EXISTS:
 	 /***** Get cached public link to private file *****/
-	 if (Fil_GetPublicDirFromCache (FullPathVideoPriv,TmpPubDir) == Exi_DOES_NOT_EXIST)
+	 if (Fil_GetPublicDirFromCache (FullPathVideoPriv,TmpPubDirFull) == Exi_DOES_NOT_EXIST)
 	   {
 	    /***** Create symbolic link from temporary public directory to private file
 		   in order to gain access to it for showing/downloading *****/
-	    Brw_CreateDirDownloadTmp (&Gbl.FileBrowser);
-	    Brw_CreateTmpPublicLinkToPrivateFile (FullPathVideoPriv,FileNameVideo);
+	    Brw_CreateDirDownloadTmp (&TmpPubDir);
+	    Brw_CreateTmpPublicLinkToPrivateFile (&TmpPubDir,
+						  FullPathVideoPriv,FileNameVideo);
 
-	    snprintf (TmpPubDir,sizeof (TmpPubDir),"%s/%s",
-		      Gbl.FileBrowser.TmpPubDir.Left,
-		      Gbl.FileBrowser.TmpPubDir.Right);
-	    Fil_AddPublicDirToCache (FullPathVideoPriv,TmpPubDir);
+	    snprintf (TmpPubDirFull,sizeof (TmpPubDirFull),"%s/%s",
+		      TmpPubDir.Left,
+		      TmpPubDir.Right);
+	    Fil_AddPublicDirToCache (FullPathVideoPriv,TmpPubDirFull);
 	   }
 
 	 /***** Create URL pointing to symbolic link *****/
-	 if (asprintf (&URL,"%s/%s",Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDir) < 0)
+	 if (asprintf (&URL,"%s/%s",Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDirFull) < 0)
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Show media *****/

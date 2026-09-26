@@ -31,6 +31,7 @@
 #include <sys/stat.h>		// For lstat
 
 #include "swad_alert.h"
+#include "swad_browser.h"
 #include "swad_browser_database.h"
 #include "swad_browser_size.h"
 #include "swad_database.h"
@@ -143,7 +144,7 @@ struct BrwSiz_BrowserSize Brw_Size;
 /*****************************************************************************/
 
 static void BrwSiz_CalcSizeOfDirRecursive (struct BrwSiz_BrowserSize *Size,
-                                           unsigned Level,char *Path);
+                                           unsigned Level,const char *Path);
 
 /*****************************************************************************/
 /********************* Get pointer to browser size struct ********************/
@@ -158,13 +159,14 @@ struct BrwSiz_BrowserSize *BrwSiz_GetSize (void)
 /*** Initialize maximum quota of current file browser and check if exceded ***/
 /*****************************************************************************/
 
-void BrwSiz_SetAndCheckQuota (struct BrwSiz_BrowserSize *Size)
+void BrwSiz_SetAndCheckQuota (const struct Brw_FileBrowser *FileBrowser,
+			      struct BrwSiz_BrowserSize *Size)
   {
    extern const char *Txt_Quota_exceeded;
 
    /***** Check the quota *****/
-   BrwSiz_SetMaxQuota (Size);
-   BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
+   BrwSiz_SetMaxQuota (FileBrowser->Zone,Size);
+   BrwSiz_CalcSizeOfDir (Size,FileBrowser->Path.RootFolder);
    if (BrwSiz_CheckQuota (Size) == Err_ERROR)
       Ale_ShowAlert (Ale_WARNING,Txt_Quota_exceeded);
   }
@@ -173,9 +175,9 @@ void BrwSiz_SetAndCheckQuota (struct BrwSiz_BrowserSize *Size)
 /************ Initialize maximum quota of current file browser ***************/
 /*****************************************************************************/
 
-void BrwSiz_SetMaxQuota (struct BrwSiz_BrowserSize *Size)
+void BrwSiz_SetMaxQuota (Brw_Zone_t Zone,struct BrwSiz_BrowserSize *Size)
   {
-   switch (Gbl.FileBrowser.Type)
+   switch (Zone)
      {
       case Brw_SHOW_DOC_INS:
       case Brw_ADMI_DOC_INS:
@@ -315,7 +317,7 @@ void BrwSiz_ResetFileBrowserSize (struct BrwSiz_BrowserSize *Size)
 /********************** Compute the size of a directory **********************/
 /*****************************************************************************/
 
-void BrwSiz_CalcSizeOfDir (struct BrwSiz_BrowserSize *Size,char *Path)
+void BrwSiz_CalcSizeOfDir (struct BrwSiz_BrowserSize *Size,const char *Path)
   {
    BrwSiz_ResetFileBrowserSize (Size);
    BrwSiz_CalcSizeOfDirRecursive (Size,1,Path);
@@ -326,7 +328,7 @@ void BrwSiz_CalcSizeOfDir (struct BrwSiz_BrowserSize *Size,char *Path)
 /*****************************************************************************/
 
 static void BrwSiz_CalcSizeOfDirRecursive (struct BrwSiz_BrowserSize *Size,
-                                           unsigned Level,char *Path)
+                                           unsigned Level,const char *Path)
   {
    struct dirent **FileList;
    int NumFile;
@@ -378,7 +380,7 @@ static void BrwSiz_CalcSizeOfDirRecursive (struct BrwSiz_BrowserSize *Size,
 /**************** Get the size of a file zone from database ******************/
 /*****************************************************************************/
 
-void BrwSiz_GetSizeOfFileZone (Hie_Level_t HieLvl,Brw_FileBrowser_t FileBrowser,
+void BrwSiz_GetSizeOfFileZone (Hie_Level_t HieLvl,Brw_Zone_t Zone,
                                struct BrwSiz_SizeOfFileZone *SizeOfFileZone)
   {
    MYSQL_RES *mysql_res;
@@ -386,7 +388,7 @@ void BrwSiz_GetSizeOfFileZone (Hie_Level_t HieLvl,Brw_FileBrowser_t FileBrowser,
 
    /***** Get the size of a file browser *****/
    /* Query database */
-   Brw_DB_GetSizeOfFileBrowser (&mysql_res,HieLvl,FileBrowser);
+   Brw_DB_GetSizeOfFileBrowser (&mysql_res,HieLvl,Zone);
 
    /* Get row */
    row = mysql_fetch_row (mysql_res);
@@ -442,7 +444,8 @@ void BrwSiz_GetSizeOfFileZone (Hie_Level_t HieLvl,Brw_FileBrowser_t FileBrowser,
 /************************* Show size of a file browser ***********************/
 /*****************************************************************************/
 
-void BrwSiz_ShowAndStoreSizeOfFileBrowser (const struct BrwSiz_BrowserSize *Size)
+void BrwSiz_ShowAndStoreSizeOfFileBrowser (Brw_Zone_t Zone,
+					   const struct BrwSiz_BrowserSize *Size)
   {
    extern const char *Txt_level;
    extern const char *Txt_levels;
@@ -455,7 +458,7 @@ void BrwSiz_ShowAndStoreSizeOfFileBrowser (const struct BrwSiz_BrowserSize *Size
 
    HTM_DIV_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
 
-      if (Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type) == Usr_CAN)
+      if (Brw_CheckIfFileBrowserIsEditable (Zone) == Usr_CAN)
 	{
 	 Fil_WriteFileSizeFull ((double) Size->TotalSiz,FileSizeStr);
 	 HTM_UnsignedTxt (Size->NumLevls,Txt_level ,Txt_levels ); HTM_Semicolon (); HTM_SP ();
@@ -475,7 +478,7 @@ void BrwSiz_ShowAndStoreSizeOfFileBrowser (const struct BrwSiz_BrowserSize *Size
 	    HTM_CloseParenthesis ();
 	   }
 
-	 Brw_DB_StoreSizeOfFileBrowser (Size);
+	 Brw_DB_StoreSizeOfFileBrowser (Zone,Size);
 	}
 
    HTM_DIV_End ();

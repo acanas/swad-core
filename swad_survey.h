@@ -30,7 +30,7 @@
 #include "swad_date.h"
 #include "swad_deny_allow.h"
 #include "swad_hierarchy_type.h"
-#include "swad_notification.h"
+#include "swad_notification_type.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/

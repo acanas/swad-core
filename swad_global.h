@@ -34,7 +34,6 @@
 
 #include "swad_API.h"
 #include "swad_assignment.h"
-#include "swad_browser.h"
 #include "swad_cache.h"
 #include "swad_changed.h"
 #include "swad_connected.h"
@@ -162,8 +161,6 @@ struct Globals
 	 struct LstRecordFields LstFields;
 	} Records;
      } Crs;
-
-   struct Brw_FileBrowser FileBrowser;	// Struct used for a file browser
 
    /* Cache */
    struct

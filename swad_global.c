@@ -174,10 +174,6 @@ void Gbl_InitializeGlobals (void)
    /* User nickname */
    Gbl.Usrs.Me.UsrDat.Nickname[0] = '\0';
 
-   /* File browser */
-   Gbl.FileBrowser.Id = 0;
-   Gbl.FileBrowser.Type = Brw_UNKNOWN;
-
    Gbl.WebService.Function = API_unknown;
 
    /* Flush caches */

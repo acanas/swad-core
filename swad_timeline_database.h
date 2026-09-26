@@ -27,7 +27,7 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-#include "swad_browser.h"
+#include "swad_browser_type.h"
 #include "swad_database.h"
 #include "swad_timeline_comment.h"
 #include "swad_timeline_favourite.h"
@@ -50,7 +50,7 @@ long Tml_DB_CreateNewNote (TmlNot_Type_t NoteType,long Cod,
                            long PublisherCod,long HieCod);
 void Tml_DB_MarkNoteAsUnavailable (TmlNot_Type_t NoteType,long Cod);
 void Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (TmlNot_Type_t NoteType,
-                                                    Brw_FileBrowser_t FileBrowser,
+                                                    Brw_Zone_t Zone,
                                                     long Cod,const char *Path);
 
 unsigned Tml_DB_GetNumNotesAndUsrsByType (MYSQL_RES **mysql_res,

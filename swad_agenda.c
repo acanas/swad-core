@@ -46,7 +46,7 @@
 #include "swad_group.h"
 #include "swad_hidden_visible.h"
 #include "swad_HTML.h"
-#include "swad_notification.h"
+#include "swad_notification_type.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"

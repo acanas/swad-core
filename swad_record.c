@@ -40,6 +40,7 @@
 #include "swad_alert.h"
 #include "swad_agenda.h"
 #include "swad_box.h"
+#include "swad_browser.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_department.h"
@@ -2467,10 +2468,11 @@ static void Rec_PutParsStdResults (__attribute__((unused)) void *Args)
 
 static void Rec_PutParsWorks (__attribute__((unused)) void *Args)
   {
+   Lay_Show_t ShowFullTree = Lay_SHOW;
+
    Rec_PutParsStudent (NULL);
    Par_PutParChar ("FullTree",'Y');	// By default, show all files
-   Gbl.FileBrowser.ShowFullTree = Lay_SHOW;
-   Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.ShowFullTree);
+   Brw_PutParFullTreeIfSelected (&ShowFullTree);
   }
 
 static void Rec_PutParsStudent (__attribute__((unused)) void *Args)

@@ -28,7 +28,7 @@
 /*****************************************************************************/
 
 #include "swad_course.h"
-#include "swad_notification.h"
+#include "swad_notification_type.h"
 #include "swad_user.h"
 
 /*****************************************************************************/

@@ -68,10 +68,10 @@ void Mrk_DB_AddMarks (long FilCod,const struct Mrk_Properties *Marks)
 /***** Change the number of rows of header or footer of a file of marks ******/
 /*****************************************************************************/
 
-void Mrk_DB_ChangeNumRowsHeaderOrFooter (const char *Path,
+void Mrk_DB_ChangeNumRowsHeaderOrFooter (const struct Brw_FileBrowser *FileBrowser,
 					 Brw_HeadOrFoot_t HeaderOrFooter,unsigned NumRows)
   {
-   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
 
    DB_QueryUPDATE ("can not update properties of marks",
 		   "UPDATE mrk_marks,"
@@ -82,9 +82,9 @@ void Mrk_DB_ChangeNumRowsHeaderOrFooter (const char *Path,
 		     " AND brw_files.Path='%s'"
 		     " AND brw_files.FilCod=mrk_marks.FilCod",
 		   Mrk_DB_HeadOrFootStr[HeaderOrFooter],NumRows,
-		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-		   Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
-		   Path);
+		   (unsigned) Brw_DB_ZoneForDB_files[FileBrowser->Zone],
+		   Brw_GetCodForFileBrowser (FileBrowser->Zone),
+		   FileBrowser->FileMetadata.FilFolLnk.Full);
   }
 
 /*****************************************************************************/
@@ -113,9 +113,9 @@ Exi_Exist_t Mrk_DB_GetMarksDataByCod (MYSQL_RES **mysql_res,long MrkCod)
 /*****************************************************************************/
 
 Exi_Exist_t Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res,
-					      const char *Path)
+					      const struct Brw_FileBrowser *FileBrowser)
   {
-   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
 
    /***** Get number of rows of header and footer from database *****/
    /* There should be a single file in database.
@@ -136,7 +136,7 @@ Exi_Exist_t Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res,
 			 " LIMIT 1",	// On duplicate entries, get the more recent
 			 Mrk_DB_HeadOrFootStr[Brw_HEADER],
 			 Mrk_DB_HeadOrFootStr[Brw_FOOTER],
-			 (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-			 Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
-			 Path);
+			 (unsigned) Brw_DB_ZoneForDB_files[FileBrowser->Zone],
+			 Brw_GetCodForFileBrowser (FileBrowser->Zone),
+			 FileBrowser->FileMetadata.FilFolLnk.Full);
   }

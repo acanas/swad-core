@@ -59,7 +59,7 @@
 #include "swad_action.h"
 #include "swad_agenda.h"
 #include "swad_assignment.h"
-#include "swad_browser.h"
+#include "swad_browser_type.h"
 #include "swad_building.h"
 #include "swad_center.h"
 #include "swad_config.h"
@@ -82,7 +82,7 @@
 #include "swad_language.h"
 #include "swad_mail.h"
 #include "swad_menu.h"
-#include "swad_notification.h"
+#include "swad_notification_type.h"
 #include "swad_photo.h"
 #include "swad_place.h"
 #include "swad_privacy.h"
@@ -39143,7 +39143,7 @@ const char *Txt_Rooms_with_users =
 	"Rooms with users";	// Çeviri lazim!
 #endif
 
-const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
+const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_ZONES] =
 	{
 	[Brw_UNKNOWN] =
 	"",
@@ -42314,7 +42314,7 @@ const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES] =
 #endif
 	};
 
-const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nbsp; instead of space
+const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_ZONES] =	// Use &nbsp; instead of space
 	{
 	[0] =
 #if   L==1	// ca

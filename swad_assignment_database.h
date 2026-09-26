@@ -30,7 +30,7 @@
 #include <mysql/mysql.h>	// To access MySQL databases
 
 #include "swad_assignment.h"
-#include "swad_browser.h"
+#include "swad_browser_type.h"
 #include "swad_exist.h"
 #include "swad_group.h"
 

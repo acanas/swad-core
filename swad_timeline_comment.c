@@ -36,6 +36,7 @@
 #include "swad_error.h"
 #include "swad_forum.h"
 #include "swad_global.h"
+#include "swad_notification.h"
 #include "swad_notification_database.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"

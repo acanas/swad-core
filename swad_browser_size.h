@@ -27,7 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_browser.h"
+#include "swad_browser_type.h"
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -61,17 +61,19 @@ struct BrwSiz_BrowserSize
 
 struct BrwSiz_BrowserSize *BrwSiz_GetSize (void);
 
-void BrwSiz_SetAndCheckQuota (struct BrwSiz_BrowserSize *Size);
-void BrwSiz_SetMaxQuota (struct BrwSiz_BrowserSize *Size);
+void BrwSiz_SetAndCheckQuota (const struct Brw_FileBrowser *FileBrowser,
+			      struct BrwSiz_BrowserSize *Size);
+void BrwSiz_SetMaxQuota (Brw_Zone_t Zone,struct BrwSiz_BrowserSize *Size);
 
 Err_SuccessOrError_t BrwSiz_CheckQuota (const struct BrwSiz_BrowserSize *Size);
 
 void BrwSiz_ResetFileBrowserSize (struct BrwSiz_BrowserSize *Size);
-void BrwSiz_CalcSizeOfDir (struct BrwSiz_BrowserSize *Size,char *Path);
+void BrwSiz_CalcSizeOfDir (struct BrwSiz_BrowserSize *Size,const char *Path);
 
-void BrwSiz_GetSizeOfFileZone (Hie_Level_t HieLvl,Brw_FileBrowser_t FileBrowser,
+void BrwSiz_GetSizeOfFileZone (Hie_Level_t HieLvl,Brw_Zone_t Zone,
                                struct BrwSiz_SizeOfFileZone *SizeOfFileZone);
 
-void BrwSiz_ShowAndStoreSizeOfFileBrowser (const struct BrwSiz_BrowserSize *Size);
+void BrwSiz_ShowAndStoreSizeOfFileBrowser (Brw_Zone_t Zone,
+					   const struct BrwSiz_BrowserSize *Size);
 
 #endif

@@ -30,7 +30,7 @@
 #include "swad_alert.h"
 #include "swad_date.h"
 #include "swad_language.h"
-#include "swad_notification.h"
+#include "swad_notification_type.h"
 
 /*****************************************************************************/
 /************************ Public constants and types *************************/

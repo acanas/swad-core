@@ -839,7 +839,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
             Brw_GetFileMetadataByCod (&FileMetadata);
 	 if (FileMetadata.FilCod > 0)
 	   {
-	    Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,
+	    Brw_GetCrsGrpFromFileMetadata (FileMetadata.Zone,FileMetadata.Cod,
 					   HieCods,&GrpCod);
 	    switch (NotifyEvent)
 	      {
@@ -1067,10 +1067,10 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 /*********** Mark possible notifications of one file as removed **************/
 /*****************************************************************************/
 
-void Ntf_MarkNotifOneFileAsRemoved (const char *Path)
+void Ntf_MarkNotifOneFileAsRemoved (Brw_Zone_t Zone,const char *Path)
   {
-   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-   static Ntf_NotifyEvent_t NotifyEvent[Brw_NUM_TYPES_FILE_BROWSER] =
+   extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
+   static Ntf_NotifyEvent_t NotifyEvent[Brw_NUM_ZONES] =
      {
       [Brw_ADMI_DOC_CRS] = Ntf_EVENT_DOCUMENT_FILE,
       [Brw_ADMI_DOC_GRP] = Ntf_EVENT_DOCUMENT_FILE,
@@ -1081,16 +1081,16 @@ void Ntf_MarkNotifOneFileAsRemoved (const char *Path)
       [Brw_ADMI_MRK_CRS] = Ntf_EVENT_MARKS_FILE,
       [Brw_ADMI_MRK_GRP] = Ntf_EVENT_MARKS_FILE,
      };
-   Brw_FileBrowser_t FileBrowser = Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type];
+   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_files[Zone];
    long FilCod;
 
-   if (NotifyEvent[FileBrowser])
+   if (NotifyEvent[ZoneForDB])
      {
       /***** Get file code *****/
-      FilCod = Brw_DB_GetFilCodByPath (Path,Brw_ANY_FILE);	// Any file, public or not
+      FilCod = Brw_DB_GetFilCodByPath (Zone,Path,Brw_ANY_FILE);	// Any file, public or not
       if (FilCod > 0)
 	 /***** Set notification as removed *****/
-	 Ntf_DB_MarkNotifAsRemoved (NotifyEvent[FileBrowser],FilCod);
+	 Ntf_DB_MarkNotifAsRemoved (NotifyEvent[ZoneForDB],FilCod);
      }
   }
 
@@ -1098,10 +1098,10 @@ void Ntf_MarkNotifOneFileAsRemoved (const char *Path)
 /*** Mark possible notifications involving children of a folder as removed ***/
 /*****************************************************************************/
 
-void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
+void Ntf_MarkNotifChildrenOfFolderAsRemoved (const struct Brw_FileBrowser *FileBrowser)
   {
-   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-   static Ntf_NotifyEvent_t NotifyEvent[Brw_NUM_TYPES_FILE_BROWSER] =
+   extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
+   static Ntf_NotifyEvent_t NotifyEvent[Brw_NUM_ZONES] =
      {
       [Brw_ADMI_DOC_CRS] = Ntf_EVENT_DOCUMENT_FILE,
       [Brw_ADMI_DOC_GRP] = Ntf_EVENT_DOCUMENT_FILE,
@@ -1112,13 +1112,13 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
       [Brw_ADMI_MRK_CRS] = Ntf_EVENT_MARKS_FILE,
       [Brw_ADMI_MRK_GRP] = Ntf_EVENT_MARKS_FILE,
      };
-   Brw_FileBrowser_t FileBrowser = Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type];
+   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_files[FileBrowser->Zone];
 
-   if (NotifyEvent[FileBrowser])
+   if (NotifyEvent[ZoneForDB])
       /***** Set notification as removed *****/
-      Ntf_DB_MarkNotifChildrenOfFolderAsRemoved (NotifyEvent[FileBrowser],FileBrowser,
-						 Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
-						 Path);
+      Ntf_DB_MarkNotifChildrenOfFolderAsRemoved (NotifyEvent[ZoneForDB],ZoneForDB,
+						 Brw_GetCodForFileBrowser (FileBrowser->Zone),
+						 FileBrowser->FileMetadata.FilFolLnk.Full);
   }
 
 /*****************************************************************************/
@@ -1129,7 +1129,6 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
 
 unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
   {
-   extern unsigned Brw_TypeOf[Brw_NUM_TYPES_FILE_BROWSER];
    static unsigned (*GetUsrsForum[For_NUM_TYPES_FORUM]) (MYSQL_RES **mysql_res,long CrsGrpCod) =
      {
       [For_FORUM_COURSE_USRS] = Enr_DB_GetUsrsFromCrsExceptMe,
@@ -1140,6 +1139,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
    unsigned NumUsr;
    struct Usr_Data UsrDat;
    struct For_Forum ForumSelected;
+   long GrpCod;
    long HieCods[Hie_NUM_LEVELS];
    unsigned NumUsrsToBeNotifiedByEMail = 0;
    unsigned NotifyEventMask = (1 << NotifyEvent);
@@ -1152,12 +1152,14 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_DOCUMENT_FILE:
       case Ntf_EVENT_SHARED_FILE:
       case Ntf_EVENT_MARKS_FILE:
-	 NumUsrs = (Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_GRP_BRW) ? Grp_DB_GetUsrsFromGrpExceptMe (&mysql_res,Brw_GetGrpCod ()) :
-									 Enr_DB_GetUsrsFromCrsExceptMe (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+         GrpCod = Brw_GetGrpCod ();
+	 NumUsrs = GrpCod > 0 ? Grp_DB_GetUsrsFromGrpExceptMe (&mysql_res,GrpCod) :
+				Enr_DB_GetUsrsFromCrsExceptMe (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 	 break;
       case Ntf_EVENT_TEACHERS_FILE:
-	 NumUsrs = (Brw_TypeOf[Gbl.FileBrowser.Type] & Brw_IS_GRP_BRW) ? Grp_DB_GetTchsFromGrpExceptMe (&mysql_res,Brw_GetGrpCod ()) :
-									 Enr_DB_GetTchsFromCrsExceptMe (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+         GrpCod = Brw_GetGrpCod ();
+	 NumUsrs = GrpCod > 0 ? Grp_DB_GetTchsFromGrpExceptMe (&mysql_res,GrpCod) :
+				Enr_DB_GetTchsFromCrsExceptMe (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 	 break;
       case Ntf_EVENT_ASSIGNMENT:
          NumUsrs = Asg_DB_GetUsrsFromAssignmentExceptMe (&mysql_res,Cod);

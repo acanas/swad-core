@@ -43,6 +43,7 @@
 #include "swad_agenda.h"
 #include "swad_announcement.h"
 #include "swad_box.h"
+#include "swad_browser.h"
 #include "swad_calendar.h"
 #include "swad_center_database.h"
 #include "swad_config.h"
@@ -76,7 +77,7 @@
 #include "swad_message.h"
 #include "swad_nickname.h"
 #include "swad_nickname_database.h"
-#include "swad_notification.h"
+#include "swad_notification_type.h"
 #include "swad_parameter.h"
 #include "swad_password.h"
 #include "swad_photo.h"
@@ -3842,6 +3843,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
       [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
      };
    Pho_ShowPhotos_t ShowPhotos;
+   Lay_Show_t ShowFullTree;
    unsigned NumUsrs;
 
    /***** Begin box *****/
@@ -3892,8 +3894,8 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 		  Grp_PutParsCodGrps ();
 		  if (Gbl.Action.Act == ActAdmAsgWrkCrs)
 		    {
-		     Gbl.FileBrowser.ShowFullTree = Lay_SHOW;	// By default, show all files
-		     Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.ShowFullTree);
+		     ShowFullTree = Lay_SHOW;	// By default, show all files
+		     Brw_PutParFullTreeIfSelected (&ShowFullTree);
 		    }
 		  if (FuncPars)
 		     FuncPars (Args);

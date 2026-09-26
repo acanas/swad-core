@@ -76,14 +76,14 @@ static char ZIP_TmpDir[NAME_MAX + 1];
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void ZIP_PutLinkToCreateZIPAsgWrkPars (__attribute__((unused)) void *Args);
+static void ZIP_PutLinkToCreateZIPAsgWrkPars (void *FileBrowser);
 
 static void ZIP_CreateTmpDirForCompression (void);
 static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat);
 
-static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser,
-				       const struct Brw_FilFolLnk *FilFolLnk);
-static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,const char *PathInTree);
+static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser);
+static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
+				        const char *Path,const char *PathClone,const char *PathInTree);
 static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
                                        off_t FileSize,unsigned long long UncompressedSize);
 
@@ -91,20 +91,20 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 /*********** Put link to create ZIP file of assignments and works ************/
 /*****************************************************************************/
 
-void ZIP_PutLinkToCreateZIPAsgWrk (void)
+void ZIP_PutLinkToCreateZIPAsgWrk (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_Create_ZIP_file;
 
    Lay_PutContextualLinkIconText (ActAdmAsgWrkCrs,NULL,
-				  ZIP_PutLinkToCreateZIPAsgWrkPars,NULL,
+				  ZIP_PutLinkToCreateZIPAsgWrkPars,FileBrowser,
 				  "download.svg",Ico_BLACK,
 				  Txt_Create_ZIP_file,NULL);
   }
 
-static void ZIP_PutLinkToCreateZIPAsgWrkPars (__attribute__((unused)) void *Args)
+static void ZIP_PutLinkToCreateZIPAsgWrkPars (void *FileBrowser)
   {
    Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
-   Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.ShowFullTree);
+   Brw_PutParFullTreeIfSelected (&(((struct Brw_FileBrowser *) FileBrowser)->ShowFullTree));
    Par_PutParChar ("CreateZIP",'Y');
   }
 
@@ -128,9 +128,10 @@ inline ZIP_CreateZIP_t ZIP_GetCreateZIP (void)
 /*************** and put a link to download it                  **************/
 /*****************************************************************************/
 
-void ZIP_CreateZIPAsgWrk (struct Brw_FileBrowser *FileBrowser)
+void ZIP_CreateZIPAsgWrk (void)
   {
    extern const char *Txt_works_ZIP_FILE_NAME;
+   struct Brw_TmpPubDir TmpPubDir;
    struct Usr_Data UsrDat;
    const char *Ptr;
    char StrZip[128 + PATH_MAX];
@@ -177,7 +178,7 @@ void ZIP_CreateZIPAsgWrk (struct Brw_FileBrowser *FileBrowser)
 
    /***** Create a temporary public directory
           used to download the zip file *****/
-   Brw_CreateDirDownloadTmp (FileBrowser);
+   Brw_CreateDirDownloadTmp (&TmpPubDir);
 
    /***** Relative path of the directory with the works to compress *****/
    snprintf (Path,sizeof (Path),"%s/%s",Cfg_PATH_ZIP_PRIVATE,ZIP_TmpDir);
@@ -191,8 +192,8 @@ void ZIP_CreateZIPAsgWrk (struct Brw_FileBrowser *FileBrowser)
    snprintf (FileNameZIP,sizeof (FileNameZIP),"%s.zip",Txt_works_ZIP_FILE_NAME);
    snprintf (PathFileZIP,sizeof (PathFileZIP),"%s/%s/%s/%s",
 	     Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
-             FileBrowser->TmpPubDir.Left,
-             FileBrowser->TmpPubDir.Right,
+             TmpPubDir.Left,
+             TmpPubDir.Right,
              FileNameZIP);
    snprintf (StrZip,sizeof (StrZip),"nice -n 19 zip -q -r '%s' *",
              PathFileZIP);
@@ -213,8 +214,8 @@ void ZIP_CreateZIPAsgWrk (struct Brw_FileBrowser *FileBrowser)
 	 /***** Create URL pointing to ZIP file *****/
 	 snprintf (URLWithSpaces,sizeof (URLWithSpaces),"%s/%s/%s/%s",
 		   Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
-		   FileBrowser->TmpPubDir.Left,
-		   FileBrowser->TmpPubDir.Right,
+		   TmpPubDir.Left,
+		   TmpPubDir.Right,
 		   FileNameZIP);
 	 Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
 
@@ -318,15 +319,17 @@ static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat)
 
 void ZIP_CompressFileTree (void)
   {
+   struct Brw_FileBrowser FileBrowser;
+
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
-   Brw_GetParsFilFolLnk (&Gbl.FileBrowser);
+   Brw_GetParAndInitFileBrowser (&FileBrowser);
+   Brw_GetParsFilFolLnk (&FileBrowser);
 
    /***** Compress folder into ZIP *****/
-   ZIP_CompressFolderIntoZIP (&Gbl.FileBrowser,&Gbl.FileBrowser.FileMetadata.FilFolLnk);
+   ZIP_CompressFolderIntoZIP (&FileBrowser);
 
    /***** Show again file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks (&Gbl.FileBrowser);
+   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
 /*****************************************************************************/
@@ -334,12 +337,12 @@ void ZIP_CompressFileTree (void)
 /*************** and put a link to download it                  **************/
 /*****************************************************************************/
 
-static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser,
-				       const struct Brw_FilFolLnk *FilFolLnk)
+static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser)
   {
-   extern const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER];
+   extern const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_ZONES];
    extern const char *Txt_The_folder_is_empty;
    extern const char *Txt_The_contents_of_the_folder_are_too_big;
+   struct Brw_TmpPubDir TmpPubDir;
    unsigned long long UncompressedSize;
    char StrZip[128 + PATH_MAX];
    char Path[PATH_MAX + 1 +
@@ -360,15 +363,16 @@ static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser,
 
    /***** Create a temporary public directory
           used to download the zip file *****/
-   Brw_CreateDirDownloadTmp (FileBrowser);
+   Brw_CreateDirDownloadTmp (&TmpPubDir);
 
    /***** Create a copy of the directory to compress *****/
    snprintf (Path,sizeof (Path),"%s/%s",
-	     FileBrowser->Path.AboveRootFolder,FilFolLnk->Full);
+	     FileBrowser->Path.AboveRootFolder,
+	     FileBrowser->FileMetadata.FilFolLnk.Full);
    snprintf (PathCompression,sizeof (PathCompression),"%s/%s",
 	     Cfg_PATH_ZIP_PRIVATE,ZIP_TmpDir);	// Example: /var/www/swad/zip/<temporary_dir>
 
-   UncompressedSize = ZIP_CloneDir (Path,PathCompression,FilFolLnk->Full);
+   UncompressedSize = ZIP_CloneDir (FileBrowser,Path,PathCompression,FileBrowser->FileMetadata.FilFolLnk.Full);
 
    if (UncompressedSize == 0)					// Nothing to compress
       Ale_ShowAlert (Ale_WARNING,Txt_The_folder_is_empty);
@@ -383,13 +387,13 @@ static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser,
 
       /***** Create public zip file with the assignment and works *****/
       if (asprintf (&FileNameZIP,"%s.zip",
-	            strcmp (FilFolLnk->Name,".") ? FilFolLnk->Name :
-					           Txt_ROOT_FOLDER_EXTERNAL_NAMES[FileBrowser->Type]) < 0)
+	            strcmp (FileBrowser->FileMetadata.FilFolLnk.Name,".") ? FileBrowser->FileMetadata.FilFolLnk.Name :
+									    Txt_ROOT_FOLDER_EXTERNAL_NAMES[FileBrowser->Zone]) < 0)
          Err_NotEnoughMemoryExit ();
       snprintf (PathFileZIP,sizeof (PathFileZIP),"%s/%s/%s/%s",
 	        Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
-	        FileBrowser->TmpPubDir.Left,
-	        FileBrowser->TmpPubDir.Right,
+	        TmpPubDir.Left,
+	        TmpPubDir.Right,
 	        FileNameZIP);
       snprintf (StrZip,sizeof (StrZip),"nice -n 19 zip -q -5 -r '%s' *",
 	        PathFileZIP);
@@ -412,8 +416,8 @@ static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser,
 	 /* Create URL pointing to ZIP file */
 	 snprintf (URLWithSpaces,sizeof (URLWithSpaces),"%s/%s/%s/%s",
 		   Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
-		   FileBrowser->TmpPubDir.Left,
-		   FileBrowser->TmpPubDir.Right,
+		   TmpPubDir.Left,
+		   TmpPubDir.Right,
 		   FileNameZIP);
 	 Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
 
@@ -447,15 +451,15 @@ static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser,
  */
 // Return: full size of directory contents
 
-static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,const char *PathInTree)
+static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
+				        const char *Path,const char *PathClone,const char *PathInTree)
   {
-   extern unsigned Brw_TypeOf[Brw_NUM_TYPES_FILE_BROWSER];
+   extern unsigned Brw_TypeOf[Brw_NUM_ZONES];
    struct dirent **FileList;
    int NumFile;
    int NumFiles;
    char PathFile[PATH_MAX + 1];
    char PathFileClone[PATH_MAX + 1];
-   struct Brw_FilFolLnk FilFolLnk;
    struct stat FileStatus;
    HidVis_HiddenOrVisible_t HiddenOrVisible;
    unsigned long long FullSize = 0;
@@ -470,31 +474,31 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 	 if (strcmp (FileList[NumFile]->d_name,".") &&
 	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
-	    Str_Copy (FilFolLnk.Path,PathInTree,
-		      sizeof (FilFolLnk.Path) - 1);
-	    Str_Copy (FilFolLnk.Name,FileList[NumFile]->d_name,
-		      sizeof (FilFolLnk.Name) - 1);
-            Brw_SetFullPathInTree (&FilFolLnk);
+	    Str_Copy (FileBrowser->FileMetadata.FilFolLnk.Path,PathInTree,
+		      sizeof (FileBrowser->FileMetadata.FilFolLnk.Path) - 1);
+	    Str_Copy (FileBrowser->FileMetadata.FilFolLnk.Name,FileList[NumFile]->d_name,
+		      sizeof (FileBrowser->FileMetadata.FilFolLnk.Name) - 1);
+            Brw_SetFullPathInTree (&FileBrowser->FileMetadata.FilFolLnk);
 	    snprintf (PathFile,sizeof (PathFile),"%s/%s",
-		      Path,FilFolLnk.Name);
+		      Path,FileBrowser->FileMetadata.FilFolLnk.Name);
 	    snprintf (PathFileClone,sizeof (PathFileClone),"%s/%s",
-		      PathClone,FilFolLnk.Name);
+		      PathClone,FileBrowser->FileMetadata.FilFolLnk.Name);
 
-	    FilFolLnk.Type = Brw_IS_UNKNOWN;
+	    FileBrowser->FileMetadata.FilFolLnk.Type = Brw_IS_UNKNOWN;
 	    if (lstat (PathFile,&FileStatus))	// On success ==> 0 is returned
 	       Err_ShowErrorAndExit ("Can not get information about a file or folder.");
 	    else if (S_ISDIR (FileStatus.st_mode))	// It's a directory
-	       FilFolLnk.Type = Brw_IS_FOLDER;
+	       FileBrowser->FileMetadata.FilFolLnk.Type = Brw_IS_FOLDER;
 	    else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
-	       FilFolLnk.Type = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :	// It's a link (URL inside a .url file)
-									       Brw_IS_FILE;	// It's a file
+	       FileBrowser->FileMetadata.FilFolLnk.Type = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :	// It's a link (URL inside a .url file)
+													 Brw_IS_FILE;	// It's a file
 
-	    HiddenOrVisible = (Brw_TypeOf[Gbl.FileBrowser.Type] & (Brw_IS_SEE_DOC |
-								   Brw_IS_SEE_MRK)) ? Brw_CheckIfFileOrFolderIsHidden (&FilFolLnk) :
-										      HidVis_VISIBLE;
+	    HiddenOrVisible = (Brw_TypeOf[FileBrowser->Zone] & (Brw_IS_SEE_DOC |
+								Brw_IS_SEE_MRK)) ? Brw_CheckIfFileOrFolderIsHidden (FileBrowser) :
+										   HidVis_VISIBLE;
 
 	    if (HiddenOrVisible == HidVis_VISIBLE)	// If file/folder is visible
-	       switch (FilFolLnk.Type)
+	       switch (FileBrowser->FileMetadata.FilFolLnk.Type)
 	         {
 		  case Brw_IS_FOLDER:
 		     FullSize += (unsigned long long) FileStatus.st_size;
@@ -504,7 +508,8 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 			Err_ShowErrorAndExit ("Can not create temporary subfolder for compression.");
 
 		     /***** Clone subtree starting at this this directory *****/
-		     FullSize += ZIP_CloneDir (PathFile,PathFileClone,FilFolLnk.Full);
+		     FullSize += ZIP_CloneDir (FileBrowser,PathFile,PathFileClone,
+					       FileBrowser->FileMetadata.FilFolLnk.Full);
 		     break;
 		  case Brw_IS_FILE:
 		  case Brw_IS_LINK:
@@ -515,7 +520,8 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 			Err_ShowErrorAndExit ("Can not create temporary link for compression.");
 
 		     /***** Update number of my views of this file *****/
-		     Brw_UpdateMyFileViews (Brw_DB_GetFilCodByPath (FilFolLnk.Full,
+		     Brw_UpdateMyFileViews (Brw_DB_GetFilCodByPath (FileBrowser->Zone,
+								    FileBrowser->FileMetadata.FilFolLnk.Full,
 								    Brw_ANY_FILE));	// Any file, public or not
 		     break;
 		  default:

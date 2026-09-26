@@ -30,7 +30,7 @@
 #include "swad_changed.h"
 #include "swad_form.h"
 #include "swad_media.h"
-#include "swad_notification.h"
+#include "swad_notification_type.h"
 #include "swad_user.h"
 #include "swad_timeline_user.h"
 

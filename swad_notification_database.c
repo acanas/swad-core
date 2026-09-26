@@ -296,7 +296,7 @@ void Ntf_DB_MarkNotifFilesInGroupAsRemoved (long GrpCod)
 /*****************************************************************************/
 
 void Ntf_DB_MarkNotifChildrenOfFolderAsRemoved (Ntf_NotifyEvent_t NotifyEvent,
-                                                Brw_FileBrowser_t FileBrowser,
+                                                Brw_Zone_t Zone,
                                                 long Cod,const char *Path)
   {
    DB_QueryUPDATE ("can not set notification(s) as removed",
@@ -311,7 +311,7 @@ void Ntf_DB_MarkNotifChildrenOfFolderAsRemoved (Ntf_NotifyEvent_t NotifyEvent,
 			     " AND Path LIKE '%s/%%')",
 		   (unsigned) Ntf_STATUS_BIT_REMOVED,
 		   (unsigned) NotifyEvent,
-		   (unsigned) FileBrowser,
+		   (unsigned) Zone,
 		   Cod,
 		   Path);
   }

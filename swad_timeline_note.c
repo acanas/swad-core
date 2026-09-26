@@ -33,6 +33,7 @@
 #include "swad_action_list.h"
 #include "swad_alert.h"
 #include "swad_box.h"
+#include "swad_browser.h"
 #include "swad_browser_database.h"
 #include "swad_call_for_exam.h"
 #include "swad_course.h"
@@ -41,6 +42,7 @@
 #include "swad_global.h"
 #include "swad_hierarchy.h"
 #include "swad_notice.h"
+#include "swad_notification.h"
 #include "swad_notification_database.h"
 #include "swad_parameter_code.h"
 #include "swad_photo.h"
@@ -60,7 +62,7 @@ extern struct Globals Gbl;
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
-static TmlNot_Type_t TmlNot_NoteType[Brw_NUM_TYPES_FILE_BROWSER] =
+static TmlNot_Type_t TmlNot_NoteType[Brw_NUM_ZONES] =
   {
    [Brw_ADMI_DOC_INS] = TmlNot_INS_DOC_PUB_FILE,
    [Brw_ADMI_SHR_INS] = TmlNot_INS_SHA_PUB_FILE,
@@ -941,33 +943,34 @@ void TmlNot_StoreAndPublishNoteInternal (TmlNot_Type_t NoteType,long Cod,
 /****************** Mark notes of one file as unavailable ********************/
 /*****************************************************************************/
 
-void TmlNot_MarkNoteOneFileAsUnavailable (const char *Path)
+void TmlNot_MarkNoteOneFileAsUnavailable (const struct Brw_FileBrowser *FileBrowser,
+					  const char *Path)
   {
-   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-   Brw_FileBrowser_t FileBrowser = Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type];
+   extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
+   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_files[FileBrowser->Zone];
    long FilCod;
 
-   if (TmlNot_NoteType[FileBrowser])
+   if (TmlNot_NoteType[ZoneForDB])
       /***** Get file code *****/
-      if ((FilCod = Brw_DB_GetFilCodByPath (Path,
+      if ((FilCod = Brw_DB_GetFilCodByPath (FileBrowser->Zone,Path,
                                             Brw_ONLY_PUBLIC_FILES)) > 0)	// Only public files
 	 /***** Mark possible note as unavailable *****/
-	 Tml_DB_MarkNoteAsUnavailable (TmlNot_NoteType[FileBrowser],FilCod);
+	 Tml_DB_MarkNoteAsUnavailable (TmlNot_NoteType[ZoneForDB],FilCod);
   }
 
 /*****************************************************************************/
 /***** Mark possible notes involving children of a folder as unavailable *****/
 /*****************************************************************************/
 
-void TmlNot_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
+void TmlNot_MarkNotesChildrenOfFolderAsUnavailable (const struct Brw_FileBrowser *FileBrowser)
   {
-   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-   Brw_FileBrowser_t FileBrowser = Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type];
+   extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
+   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_files[FileBrowser->Zone];
 
-   if (TmlNot_NoteType[FileBrowser])
-      Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (TmlNot_NoteType[FileBrowser],FileBrowser,
-						     Brw_GetCodForFileBrowser (Gbl.FileBrowser.Type),
-						     Path);
+   if (TmlNot_NoteType[ZoneForDB])
+      Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (TmlNot_NoteType[ZoneForDB],ZoneForDB,
+						     Brw_GetCodForFileBrowser (FileBrowser->Zone),
+						     FileBrowser->FileMetadata.FilFolLnk.Full);
   }
 
 /*****************************************************************************/

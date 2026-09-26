@@ -73,7 +73,7 @@ typedef enum
   } Fig_FigureType_t;
 #define Fig_FIGURE_TYPE_DEF Fig_USERS
 
-#define Fig_NUM_STAT_CRS_FILE_ZONES 12
+#define Fig_NUM_STAT_CRS_ZONES 12
 
 struct Fig_Figures
   {

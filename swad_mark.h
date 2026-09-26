@@ -29,7 +29,7 @@
 
 #include <stdbool.h>		// For boolean type
 
-#include "swad_browser.h"
+#include "swad_browser_type.h"
 
 /*****************************************************************************/
 /******************************* Public types ********************************/

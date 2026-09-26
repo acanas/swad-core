@@ -27,8 +27,8 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-#include "swad_browser.h"
-#include "swad_notification.h"
+#include "swad_browser_type.h"
+#include "swad_notification_type.h"
 
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
@@ -49,7 +49,7 @@ void Ntf_DB_MarkNotifInCrsAsRemoved (long ToUsrCod,long HieCod);
 void Ntf_DB_MarkNotifAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod);
 void Ntf_DB_MarkNotifFilesInGroupAsRemoved (long GrpCod);
 void Ntf_DB_MarkNotifChildrenOfFolderAsRemoved (Ntf_NotifyEvent_t NotifyEvent,
-                                                Brw_FileBrowser_t FileBrowser,
+                                                Brw_Zone_t Zone,
                                                 long Cod,const char *Path);
 void Ntf_DB_UpdateNumNotifSent (const struct Hie_Node Hie[Hie_NUM_LEVELS],
                                 Ntf_NotifyEvent_t NotifyEvent,

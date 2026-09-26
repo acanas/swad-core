@@ -133,7 +133,7 @@ mysql> SHOW TABLES LIKE 'tml_%';
 #include "swad_figure.h"
 #include "swad_global.h"
 #include "swad_message.h"
-#include "swad_notification.h"
+#include "swad_notification_type.h"
 #include "swad_parameter_code.h"
 #include "swad_photo.h"
 #include "swad_profile.h"

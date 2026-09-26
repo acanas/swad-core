@@ -35,6 +35,7 @@
 #include "swad_action_list.h"
 #include "swad_autolink.h"
 #include "swad_box.h"
+#include "swad_browser.h"
 #include "swad_browser_database.h"
 #include "swad_database.h"
 #include "swad_department.h"
@@ -46,7 +47,7 @@
 #include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
-#include "swad_notification.h"
+#include "swad_notification_type.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
@@ -1472,7 +1473,7 @@ void Prj_ShowBoxWithOneProject (struct Prj_Projects *Projects)
 
       /***** Show project file browsers *****/
       if (Prj_CheckIfICanViewProjectFiles (Projects->Prj.PrjCod) == Usr_CAN)
-	 Brw_ShowFileBrowserProject (&Gbl.FileBrowser,Projects->Prj.PrjCod);
+	 Brw_ShowFileBrowserProject (Projects->Prj.PrjCod);
 
       /***** Show project rubrics *****/
       if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// TODO: Remove this rectriction when rubrics are finished
@@ -4834,10 +4835,7 @@ void Prj_ChangeCriterionScore (void)
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
 
-   /***** Get parameters related to file browser
-          and show again project including file browser *****/
-   Brw_GetParAndInitFileBrowser (&Gbl.FileBrowser);
-   Brw_GetParsFilFolLnk (&Gbl.FileBrowser);
+   /***** Show again project including file browser *****/
    Prj_ShowOneProject ();
   }
 

@@ -29,7 +29,7 @@
 
 #include "swad_contracted_expanded.h"
 #include "swad_course.h"
-#include "swad_notification.h"
+#include "swad_notification_type.h"
 #include "swad_statistic.h"
 
 /*****************************************************************************/

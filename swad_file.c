@@ -664,7 +664,7 @@ void Fil_WriteFileSizeFull (double SizeInBytes,
 /*****************************************************************************/
 
 void Fil_AddPublicDirToCache (const char *FullPathPriv,
-                              const char TmpPubDir[PATH_MAX + 1])
+                              const char TmpPubDirFull[PATH_MAX + 1])
   {
    /***** Trivial check: if no current session, don't do anything *****/
    if (Gbl.Session.Status != Ses_OPEN)
@@ -674,7 +674,7 @@ void Fil_AddPublicDirToCache (const char *FullPathPriv,
    Fil_DB_RemovePublicDirFromCache (FullPathPriv);
 
    /***** Insert new entry *****/
-   Fil_DB_AddPublicDirToCache (FullPathPriv,TmpPubDir);
+   Fil_DB_AddPublicDirToCache (FullPathPriv,TmpPubDirFull);
   }
 
 /*****************************************************************************/
@@ -682,29 +682,29 @@ void Fil_AddPublicDirToCache (const char *FullPathPriv,
 /*****************************************************************************/
 
 Exi_Exist_t Fil_GetPublicDirFromCache (const char *FullPathPriv,
-				       char TmpPubDir[PATH_MAX + 1])
+				       char TmpPubDirFull[PATH_MAX + 1])
   {
    Exi_Exist_t TmpPubDirExists;
-   char FullPathTmpPubDir[PATH_MAX + 1];
+   char FullPathTmpPubDirFull[PATH_MAX + 1];
 
    /***** Reset temporary directory *****/
-   TmpPubDir[0] = '\0';
+   TmpPubDirFull[0] = '\0';
 
    /***** Trivial check: if no current session, don't do anything *****/
    if (Gbl.Session.Status != Ses_OPEN)
       return Exi_DOES_NOT_EXIST;
 
    /***** Get temporary directory from cache *****/
-   Fil_DB_GetPublicDirFromCache (FullPathPriv,TmpPubDir);
+   Fil_DB_GetPublicDirFromCache (FullPathPriv,TmpPubDirFull);
 
    /***** Check if temporary public directory exists *****/
-   if ((TmpPubDir[0] != '\0'))	// Cached
+   if ((TmpPubDirFull[0] != '\0'))	// Cached
      {
       /* If not exists (it could be deleted if its lifetime has expired)
 	 ==> remove from cache */
-      snprintf (FullPathTmpPubDir,sizeof (FullPathTmpPubDir),"%s/%s",
-		Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,TmpPubDir);
-      TmpPubDirExists = Fil_CheckIfPathExists (FullPathTmpPubDir);
+      snprintf (FullPathTmpPubDirFull,sizeof (FullPathTmpPubDirFull),"%s/%s",
+		Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,TmpPubDirFull);
+      TmpPubDirExists = Fil_CheckIfPathExists (FullPathTmpPubDirFull);
       if (TmpPubDirExists == Exi_DOES_NOT_EXIST)
 	 Fil_DB_RemovePublicDirFromCache (FullPathPriv);
       return TmpPubDirExists;

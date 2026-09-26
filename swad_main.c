@@ -43,7 +43,7 @@
 #include "swad_hierarchy.h"
 #include "swad_hierarchy_type.h"
 #include "swad_MFU.h"
-#include "swad_notification.h"
+#include "swad_notification_type.h"
 #include "swad_parameter.h"
 #include "swad_session.h"
 #include "swad_session_database.h"
