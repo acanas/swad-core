@@ -154,9 +154,7 @@ static Brw_Zone_t Brw_DB_ZoneForDB_expanded_folders[Brw_NUM_ZONES] =
 /**************** Add a path of file/folder to the database ******************/
 /*****************************************************************************/
 
-long Brw_DB_AddPath (const struct Brw_FileBrowser *FileBrowser,long PublisherUsrCod,
-		     Brw_FileType_t FileType,const char *FullPathInTree,
-                     PriPub_PrivateOrPublic_t PrivateOrPublic,Brw_License_t License)
+long Brw_DB_AddPath (const struct Brw_FileMetadata *FileMetadata)
   {
    extern const char PriPub_Public_YN[PriPub_NUM_PRIVATE_PUBLIC];
 
@@ -169,14 +167,14 @@ long Brw_DB_AddPath (const struct Brw_FileBrowser *FileBrowser,long PublisherUsr
 				" VALUES"
 				" (%u,%ld,%ld,%ld,"
 				  "%u,'%s','N','%c',%u)",
-				(unsigned) Brw_DB_ZoneForDB_files[FileBrowser->Zone],
-				Brw_GetCodForFileBrowser (FileBrowser->Zone),
-				Brw_GetZoneUsrCodForFileBrowser (FileBrowser->Zone),
-				PublisherUsrCod,
-				(unsigned) FileType,
-				FullPathInTree,
-				PriPub_Public_YN[PrivateOrPublic],
-				(unsigned) License);
+				(unsigned) Brw_DB_ZoneForDB_files[FileMetadata->Zone],
+				Brw_GetCodForFileBrowser (FileMetadata->Zone),
+				Brw_GetZoneUsrCodForFileBrowser (FileMetadata->Zone),
+				FileMetadata->PublisherUsrCod,
+				(unsigned) FileMetadata->FilFolLnk.Type,
+				FileMetadata->FilFolLnk.Full,
+				PriPub_Public_YN[FileMetadata->PrivateOrPublic],
+				(unsigned) FileMetadata->License);
   }
 
 /*****************************************************************************/
@@ -267,7 +265,8 @@ long Brw_DB_GetFilCodByPath (Brw_Zone_t Zone,
 // does not get size, time, numviews...
 
 Exi_Exist_t Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,
-					  const struct Brw_FileBrowser *FileBrowser)
+					  Brw_Zone_t Zone,
+					  const char FullPath[PATH_MAX + 1])
   {
    extern long Brw_DB_GetFileMetadataByPath_nsec;
    Exi_Exist_t Exists;
@@ -292,10 +291,10 @@ Exi_Exist_t Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,
 			   " AND Path='%s'"
 		      " ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
 			 " LIMIT 1",		// Select the most recent entry.
-			 (unsigned) Brw_DB_ZoneForDB_files[FileBrowser->Zone],
-			 Brw_GetCodForFileBrowser (FileBrowser->Zone),
-			 Brw_GetZoneUsrCodForFileBrowser (FileBrowser->Zone),
-			 FileBrowser->FileMetadata.FilFolLnk.Full);
+			 (unsigned) Brw_DB_ZoneForDB_files[Zone],
+			 Brw_GetCodForFileBrowser (Zone),
+			 Brw_GetZoneUsrCodForFileBrowser (Zone),
+			 FullPath);
    Brw_DB_GetFileMetadataByPath_nsec += Tim_StopPartialTiming ();
    return Exists;
   }
@@ -342,7 +341,8 @@ void Brw_DB_GetPathByCod (long FilCod,char *Title,size_t TitleSize)
 /************************ Get the publisher of a subtree *********************/
 /*****************************************************************************/
 
-long Brw_DB_GetPublisherOfSubtree (const struct Brw_FileBrowser *FileBrowser)
+long Brw_DB_GetPublisherOfSubtree (Brw_Zone_t Zone,
+				   const char FullPath[PATH_MAX + 1])
   {
    /***** Get all common files that are equal to full path (including filename)
 	  or that are under that full path from database *****/
@@ -356,11 +356,11 @@ long Brw_DB_GetPublisherOfSubtree (const struct Brw_FileBrowser *FileBrowser)
 			        " AND (Path='%s'"
 				     " OR"
 				     " Path LIKE '%s/%%')",
-			      (unsigned) Brw_DB_ZoneForDB_files[FileBrowser->Zone],
-			      Brw_GetCodForFileBrowser (FileBrowser->Zone),
-			      Brw_GetZoneUsrCodForFileBrowser (FileBrowser->Zone),
-			      FileBrowser->FileMetadata.FilFolLnk.Full,
-			      FileBrowser->FileMetadata.FilFolLnk.Full);
+			      (unsigned) Brw_DB_ZoneForDB_files[Zone],
+			      Brw_GetCodForFileBrowser (Zone),
+			      Brw_GetZoneUsrCodForFileBrowser (Zone),
+			      FullPath,
+			      FullPath);
   }
 
 /*****************************************************************************/
@@ -2302,7 +2302,8 @@ void Brw_DB_HideOrUnhideFileOrFolder (const struct Brw_FileBrowser *FileBrowser,
 /*****************************************************************************/
 
 HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (MYSQL_RES **mysql_res,
-									       const struct Brw_FileBrowser *FileBrowser)
+									       Brw_Zone_t Zone,
+									       const char FullPath[PATH_MAX + 1])
   {
    static HidVis_HiddenOrVisible_t Hidden[Exi_NUM_EXIST] =
      {
@@ -2320,10 +2321,10 @@ HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (M
 				    " AND Path='%s'"
 			       " ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
 				  " LIMIT 1",		// Select the most recent entry.
-				  (unsigned) Brw_DB_ZoneForDB_files[FileBrowser->Zone],
-				  Brw_GetCodForFileBrowser (FileBrowser->Zone),
-				  Brw_GetZoneUsrCodForFileBrowser (FileBrowser->Zone),
-				  FileBrowser->FileMetadata.FilFolLnk.Full);
+				  (unsigned) Brw_DB_ZoneForDB_files[Zone],
+				  Brw_GetCodForFileBrowser (Zone),
+				  Brw_GetZoneUsrCodForFileBrowser (Zone),
+				  FullPath);
    return Hidden[Exists];
   }
 
@@ -2832,7 +2833,7 @@ void Brw_DB_RemoveAffectedClipboards (Brw_Zone_t Zone,
 /*****************************************************************************/
 
 void Brw_DB_StoreSizeOfFileBrowser (Brw_Zone_t Zone,
-				    const struct BrwSiz_BrowserSize *Size)
+				    const struct Brw_Size *Size)
   {
    DB_QueryREPLACE ("can not store the size of a file zone",
 		    "REPLACE INTO brw_sizes"

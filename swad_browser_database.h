@@ -39,9 +39,7 @@
 /*****************************************************************************/
 
 //---------------------------------- Files ------------------------------------
-long Brw_DB_AddPath (const struct Brw_FileBrowser *FileBrowser,long PublisherUsrCod,
-		     Brw_FileType_t FileType,const char *FullPathInTree,
-                     PriPub_PrivateOrPublic_t PrivateOrPublic,Brw_License_t License);
+long Brw_DB_AddPath (const struct Brw_FileMetadata *FileMetadata);
 void Brw_DB_RenameOneFolder (Brw_Zone_t Zone,
 			     const char OldPath[PATH_MAX + 1],
                              const char NewPath[PATH_MAX + 1]);
@@ -51,10 +49,12 @@ void Brw_DB_RenameChildrenFilesOrFolders (Brw_Zone_t Zone,
 long Brw_DB_GetFilCodByPath (Brw_Zone_t Zone,
 			     const char *Path,Brw_OnlyPublicFiles_t OnlyIfPublic);
 Exi_Exist_t Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,
-					  const struct Brw_FileBrowser *FileBrowser);
+					  Brw_Zone_t Zone,
+					  const char FullPath[PATH_MAX + 1]);
 Exi_Exist_t Brw_DB_GetFileMetadataByCod (MYSQL_RES **mysql_res,long FilCod);
 void Brw_DB_GetPathByCod (long FilCod,char *Title,size_t TitleSize);
-long Brw_DB_GetPublisherOfSubtree (const struct Brw_FileBrowser *FileBrowser);
+long Brw_DB_GetPublisherOfSubtree (Brw_Zone_t Zone,
+				   const char FullPath[PATH_MAX + 1]);
 unsigned Brw_DB_GetNumFilesUsr (long UsrCod);
 unsigned Brw_DB_GetNumFilesInDocumZonesOfCrs (long HieCod);
 unsigned Brw_DB_GetNumFilesInShareZonesOfCrs (long HieCod);
@@ -110,7 +110,8 @@ unsigned Brw_DB_GetNumFileViewsUsr (long UsrCod);
 void Brw_DB_HideOrUnhideFileOrFolder (const struct Brw_FileBrowser *FileBrowser,
 				      HidVis_HiddenOrVisible_t HiddenOrVisible);
 HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (MYSQL_RES **mysql_res,
-									       const struct Brw_FileBrowser *FileBrowser);
+									       Brw_Zone_t Zone,
+									       const char FullPath[PATH_MAX + 1]);
 HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (const struct Brw_FileMetadata *FileMetadata);
 
 //---------------------------- Expanded folders -------------------------------
@@ -137,7 +138,7 @@ void Brw_DB_RemoveAffectedClipboards (Brw_Zone_t Zone,
 
 //-------------------------- Size of file zones -------------------------------
 void Brw_DB_StoreSizeOfFileBrowser (Brw_Zone_t Zone,
-				    const struct BrwSiz_BrowserSize *Size);
+				    const struct Brw_Size *Size);
 void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 				  Hie_Level_t HieLvl,Brw_Zone_t Zone);
 

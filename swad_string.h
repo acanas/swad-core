@@ -116,9 +116,9 @@ long Str_ConvertStrCodToLongCod (const char *Str);
 unsigned Str_ConvertStrToUnsigned (const char *UnsignedStr);
 
 size_t Str_GetLengthRootFileName (const char *FileName);
-void Str_SplitFullPathIntoPathAndFileName (const char FullPath[PATH_MAX + 1],
-                                           char PathWithoutFileName[PATH_MAX + 1],
-                                           char FileName[NAME_MAX + 1]);
+void Str_SplitFullPathIntoPathAndName (const char FullPath[PATH_MAX + 1],
+                                       char PathWithoutFileName[PATH_MAX + 1],
+                                       char FileName[NAME_MAX + 1]);
 bool Str_FileIs (const char *FileName,const char *Extension);
 bool Str_FileIsHTML (const char *FileName);
 bool Str_Path1BeginsByPath2 (const char *Path1,const char *Path2);

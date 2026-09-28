@@ -134,40 +134,24 @@ static unsigned long long BrwSiz_MAX_QUOTA_BRIEF[Rol_NUM_ROLES] =	// MaxRole is 
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/************************* Private global variables **************************/
-/*****************************************************************************/
-
-struct BrwSiz_BrowserSize Brw_Size;
-
-/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void BrwSiz_CalcSizeOfDirRecursive (struct BrwSiz_BrowserSize *Size,
+static void BrwSiz_CalcSizeOfDirRecursive (struct Brw_Size *Size,
                                            unsigned Level,const char *Path);
-
-/*****************************************************************************/
-/********************* Get pointer to browser size struct ********************/
-/*****************************************************************************/
-
-struct BrwSiz_BrowserSize *BrwSiz_GetSize (void)
-  {
-   return &Brw_Size;
-  }
 
 /*****************************************************************************/
 /*** Initialize maximum quota of current file browser and check if exceded ***/
 /*****************************************************************************/
 
-void BrwSiz_SetAndCheckQuota (const struct Brw_FileBrowser *FileBrowser,
-			      struct BrwSiz_BrowserSize *Size)
+void BrwSiz_SetAndCheckQuota (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_Quota_exceeded;
 
    /***** Check the quota *****/
-   BrwSiz_SetMaxQuota (FileBrowser->Zone,Size);
-   BrwSiz_CalcSizeOfDir (Size,FileBrowser->Path.RootFolder);
-   if (BrwSiz_CheckQuota (Size) == Err_ERROR)
+   BrwSiz_SetMaxQuota (FileBrowser->Zone,&FileBrowser->Size);
+   BrwSiz_CalcSizeOfDir (&FileBrowser->Size,FileBrowser->Path.RootFolder);
+   if (BrwSiz_CheckQuota (&FileBrowser->Size) == Err_ERROR)
       Ale_ShowAlert (Ale_WARNING,Txt_Quota_exceeded);
   }
 
@@ -175,7 +159,7 @@ void BrwSiz_SetAndCheckQuota (const struct Brw_FileBrowser *FileBrowser,
 /************ Initialize maximum quota of current file browser ***************/
 /*****************************************************************************/
 
-void BrwSiz_SetMaxQuota (Brw_Zone_t Zone,struct BrwSiz_BrowserSize *Size)
+void BrwSiz_SetMaxQuota (Brw_Zone_t Zone,struct Brw_Size *Size)
   {
    switch (Zone)
      {
@@ -292,7 +276,7 @@ void BrwSiz_SetMaxQuota (Brw_Zone_t Zone,struct BrwSiz_BrowserSize *Size)
 /********************** Check if quota has been exceeded *********************/
 /*****************************************************************************/
 
-Err_SuccessOrError_t BrwSiz_CheckQuota (const struct BrwSiz_BrowserSize *Size)
+Err_SuccessOrError_t BrwSiz_CheckQuota (const struct Brw_Size *Size)
   {
    return Size->NumLevls > Brw_MAX_DIR_LEVELS ||
           Size->NumFolds > Size->MaxFolds ||
@@ -305,7 +289,7 @@ Err_SuccessOrError_t BrwSiz_CheckQuota (const struct BrwSiz_BrowserSize *Size)
 /********************* Reset the size of a file browser **********************/
 /*****************************************************************************/
 
-void BrwSiz_ResetFileBrowserSize (struct BrwSiz_BrowserSize *Size)
+void BrwSiz_ResetFileBrowserSize (struct Brw_Size *Size)
   {
    Size->NumLevls = 0;
    Size->NumFolds =
@@ -317,7 +301,7 @@ void BrwSiz_ResetFileBrowserSize (struct BrwSiz_BrowserSize *Size)
 /********************** Compute the size of a directory **********************/
 /*****************************************************************************/
 
-void BrwSiz_CalcSizeOfDir (struct BrwSiz_BrowserSize *Size,const char *Path)
+void BrwSiz_CalcSizeOfDir (struct Brw_Size *Size,const char *Path)
   {
    BrwSiz_ResetFileBrowserSize (Size);
    BrwSiz_CalcSizeOfDirRecursive (Size,1,Path);
@@ -327,7 +311,7 @@ void BrwSiz_CalcSizeOfDir (struct BrwSiz_BrowserSize *Size,const char *Path)
 /**************** Compute the size of a directory recursively ****************/
 /*****************************************************************************/
 
-static void BrwSiz_CalcSizeOfDirRecursive (struct BrwSiz_BrowserSize *Size,
+static void BrwSiz_CalcSizeOfDirRecursive (struct Brw_Size *Size,
                                            unsigned Level,const char *Path)
   {
    struct dirent **FileList;
@@ -445,7 +429,7 @@ void BrwSiz_GetSizeOfFileZone (Hie_Level_t HieLvl,Brw_Zone_t Zone,
 /*****************************************************************************/
 
 void BrwSiz_ShowAndStoreSizeOfFileBrowser (Brw_Zone_t Zone,
-					   const struct BrwSiz_BrowserSize *Size)
+					   const struct Brw_Size *Size)
   {
    extern const char *Txt_level;
    extern const char *Txt_levels;

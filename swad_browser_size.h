@@ -44,36 +44,22 @@ struct BrwSiz_SizeOfFileZone
    unsigned long long int Size;	// Total size in bytes
   };
 
-struct BrwSiz_BrowserSize
-  {
-   unsigned long MaxFiles;
-   unsigned long MaxFolds;
-   unsigned long long int MaxQuota;
-   unsigned NumLevls;
-   unsigned long NumFolds;
-   unsigned long NumFiles;
-   unsigned long long int TotalSiz;
-  };
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-struct BrwSiz_BrowserSize *BrwSiz_GetSize (void);
+void BrwSiz_SetAndCheckQuota (struct Brw_FileBrowser *FileBrowser);
+void BrwSiz_SetMaxQuota (Brw_Zone_t Zone,struct Brw_Size *Size);
 
-void BrwSiz_SetAndCheckQuota (const struct Brw_FileBrowser *FileBrowser,
-			      struct BrwSiz_BrowserSize *Size);
-void BrwSiz_SetMaxQuota (Brw_Zone_t Zone,struct BrwSiz_BrowserSize *Size);
+Err_SuccessOrError_t BrwSiz_CheckQuota (const struct Brw_Size *Size);
 
-Err_SuccessOrError_t BrwSiz_CheckQuota (const struct BrwSiz_BrowserSize *Size);
-
-void BrwSiz_ResetFileBrowserSize (struct BrwSiz_BrowserSize *Size);
-void BrwSiz_CalcSizeOfDir (struct BrwSiz_BrowserSize *Size,const char *Path);
+void BrwSiz_ResetFileBrowserSize (struct Brw_Size *Size);
+void BrwSiz_CalcSizeOfDir (struct Brw_Size *Size,const char *Path);
 
 void BrwSiz_GetSizeOfFileZone (Hie_Level_t HieLvl,Brw_Zone_t Zone,
                                struct BrwSiz_SizeOfFileZone *SizeOfFileZone);
 
 void BrwSiz_ShowAndStoreSizeOfFileBrowser (Brw_Zone_t Zone,
-					   const struct BrwSiz_BrowserSize *Size);
+					   const struct Brw_Size *Size);
 
 #endif

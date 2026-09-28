@@ -4936,7 +4936,6 @@ static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (struct Brw_FileBrowser 
    extern const char *Txt_NEW_LINE;
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
-
    __attribute__((unused)) Exi_Exist_t FileExists;
    __attribute__((unused)) Exi_Exist_t UsrExists;
    __attribute__((unused)) Exi_Exist_t PhotoExists;
@@ -4962,11 +4961,13 @@ static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (struct Brw_FileBrowser 
       FileExists = Brw_GetFileTypeSizeAndDate (FileBrowser);
 
       if (FileBrowser->FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
+        {
 	 /* Add entry to the table of files/folders */
-	 FileBrowser->FileMetadata.FilCod = Brw_DB_AddPath (FileBrowser,-1L,
-							    FileBrowser->FileMetadata.FilFolLnk.Type,
-							    FileBrowser->FileMetadata.FilFolLnk.Full,
-							    PriPub_PRIVATE,Brw_LICENSE_DEFAULT);
+	 FileBrowser->FileMetadata.PublisherUsrCod = -1L;
+	 FileBrowser->FileMetadata.PrivateOrPublic = PriPub_PRIVATE;
+	 FileBrowser->FileMetadata.License = Brw_LICENSE_DEFAULT;
+	 FileBrowser->FileMetadata.FilCod = Brw_DB_AddPath (&FileBrowser->FileMetadata);
+	}
 
       Gbl.Usrs.Other.UsrDat.UsrCod = FileBrowser->FileMetadata.PublisherUsrCod;
       UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,

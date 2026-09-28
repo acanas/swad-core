@@ -119,9 +119,9 @@ void BrwRsc_GetFileTitle (long FilCod,char *Title,size_t TitleSize)
    Brw_DB_GetPathByCod (FileMetadata.FilCod,
                         FileMetadata.FilFolLnk.Full,
                         sizeof (FileMetadata.FilFolLnk.Full) - 1);
-   Str_SplitFullPathIntoPathAndFileName (FileMetadata.FilFolLnk.Full,
-					 FileMetadata.FilFolLnk.Path,
-					 FileMetadata.FilFolLnk.Name);
+   Str_SplitFullPathIntoPathAndName (FileMetadata.FilFolLnk.Full,
+				     FileMetadata.FilFolLnk.Path,
+				     FileMetadata.FilFolLnk.Name);
 
    /***** Remove .url if it's a link *****/
    if (Str_FileIs (FileMetadata.FilFolLnk.Name,"url"))

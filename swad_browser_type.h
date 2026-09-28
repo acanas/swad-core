@@ -197,6 +197,17 @@ struct Brw_TmpPubDir
       char Right[NAME_MAX + 1];	// Right directory: rest of chars
      };
 
+struct Brw_Size
+  {
+   unsigned long MaxFiles;
+   unsigned long MaxFolds;
+   unsigned long long int MaxQuota;
+   unsigned NumLevls;
+   unsigned long NumFolds;
+   unsigned long NumFiles;
+   unsigned long long int TotalSiz;
+  };
+
 struct Brw_FileBrowser
   {
    unsigned Id;		// Each file browser in the page has a unique identifier
@@ -222,6 +233,7 @@ struct Brw_FileBrowser
       bool IsThisFile;		// When showing a row of a file browser, are we in the path of the clipboard?
      } Clipboard;
    HidVis_HiddenOrVisible_t HiddenLevels[1 + Brw_MAX_DIR_LEVELS];
+   struct Brw_Size Size;
   };
 
 #endif

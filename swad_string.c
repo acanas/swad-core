@@ -2113,7 +2113,7 @@ void Str_CopyStrChangingSpaces (const char *StringWithSpaces,char *StringWithout
    *PtrDst = '\0';
 
    if (Length > MaxLength)
-      Err_ShowErrorAndExit ("Path is too long.");
+      Err_PathTooLongExit ();
   }
 
 /*****************************************************************************/
@@ -2170,9 +2170,9 @@ size_t Str_GetLengthRootFileName (const char *FileName)
 /*****************************************************************************/
 // Split a full path in path (without ending '/' ) and a file name
 
-void Str_SplitFullPathIntoPathAndFileName (const char FullPath[PATH_MAX + 1],
-                                           char PathWithoutFileName[PATH_MAX + 1],
-                                           char FileName[NAME_MAX + 1])
+void Str_SplitFullPathIntoPathAndName (const char FullPath[PATH_MAX + 1],
+                                       char PathWithoutFileName[PATH_MAX + 1],
+                                       char FileName[NAME_MAX + 1])
   {
    const char *PtrFileName;
    size_t LengthUntilFileName;

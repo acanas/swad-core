@@ -454,7 +454,7 @@ static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser)
 static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
 				        const char *Path,const char *PathClone,const char *PathInTree)
   {
-   extern unsigned Brw_TypeOf[Brw_NUM_ZONES];
+   extern unsigned Brw_ZoneType[Brw_NUM_ZONES];
    struct dirent **FileList;
    int NumFile;
    int NumFiles;
@@ -493,9 +493,9 @@ static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
 	       FileBrowser->FileMetadata.FilFolLnk.Type = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :	// It's a link (URL inside a .url file)
 													 Brw_IS_FILE;	// It's a file
 
-	    HiddenOrVisible = (Brw_TypeOf[FileBrowser->Zone] & (Brw_IS_SEE_DOC |
-								Brw_IS_SEE_MRK)) ? Brw_CheckIfFileOrFolderIsHidden (FileBrowser) :
-										   HidVis_VISIBLE;
+	    HiddenOrVisible = (Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_SEE_DOC |
+								  Brw_IS_SEE_MRK)) ? Brw_CheckIfFileOrFolderIsHidden (FileBrowser) :
+										     HidVis_VISIBLE;
 
 	    if (HiddenOrVisible == HidVis_VISIBLE)	// If file/folder is visible
 	       switch (FileBrowser->FileMetadata.FilFolLnk.Type)
