@@ -638,11 +638,14 @@ TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la ho
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 
 TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtube.com/shorts/fY6Oax_uJBc?si=G3UHqvSH3yEbxm1B
+
+TODO: José Luis Bernier Villamor: Que al hacer exámenes sólo pueda haber una sesión abierta por usuario.
 */
-#define Chl_PLATFORM_VERSION	"SWAD 26.5 (2026-09-28)"
+#define Chl_PLATFORM_VERSION	"SWAD 26.6 (2026-09-30)"
 #define Chl_CSS_FILE		"swad25.46.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
+	Version 26.6:     Sep 30, 2026	Code refactoring in file browser. (347582 lines)
 	Version 26.5:     Sep 28, 2026	Code refactoring in file browser. (347673 lines)
 	Version 26.4:     Sep 26, 2026	Code refactoring in file browser. (347626 lines)
 	Version 26.3.3:   Sep 23, 2026	Code refactoring in file browser. (347430 lines)

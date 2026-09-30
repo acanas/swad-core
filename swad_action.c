@@ -144,6 +144,18 @@ Act_BrowserTab_t Act_GetBrowserTab (Act_Action_t Action)
   }
 
 /*****************************************************************************/
+/****************** Extra parameters associated to an action *****************/
+/*****************************************************************************/
+
+Act_GetParams_t Act_GetParams (Act_Action_t Action)
+  {
+   if ((unsigned) Action >= ActLst_NUM_ACTIONS)
+      return Act_UNK;
+
+   return ActLst_Actions[Action].GetParams;
+  }
+
+/*****************************************************************************/
 /********* Get pointer to function a priori associated to an action **********/
 /*****************************************************************************/
 

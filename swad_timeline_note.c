@@ -943,16 +943,15 @@ void TmlNot_StoreAndPublishNoteInternal (TmlNot_Type_t NoteType,long Cod,
 /****************** Mark notes of one file as unavailable ********************/
 /*****************************************************************************/
 
-void TmlNot_MarkNoteOneFileAsUnavailable (const struct Brw_FileBrowser *FileBrowser,
-					  const char *Path)
+void TmlNot_MarkNoteOneFileAsUnavailable (Brw_Zone_t Zone,const char *Path)
   {
    extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
-   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_files[FileBrowser->Zone];
+   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_files[Zone];
    long FilCod;
 
    if (TmlNot_NoteType[ZoneForDB])
       /***** Get file code *****/
-      if ((FilCod = Brw_DB_GetFilCodByPath (FileBrowser->Zone,Path,
+      if ((FilCod = Brw_DB_GetFilCodByPath (Zone,Path,
                                             Brw_ONLY_PUBLIC_FILES)) > 0)	// Only public files
 	 /***** Mark possible note as unavailable *****/
 	 Tml_DB_MarkNoteAsUnavailable (TmlNot_NoteType[ZoneForDB],FilCod);

@@ -103,8 +103,7 @@ void TmlNot_GetNoteSummary (const struct TmlNot_Note *Not,
 void TmlNot_StoreAndPublishNote (TmlNot_Type_t NoteType,long Cod);
 void TmlNot_StoreAndPublishNoteInternal (TmlNot_Type_t NoteType,long Cod,
                                          struct TmlPub_Publication *Pub);
-void TmlNot_MarkNoteOneFileAsUnavailable (const struct Brw_FileBrowser *FileBrowser,
-					  const char *Path);
+void TmlNot_MarkNoteOneFileAsUnavailable (Brw_Zone_t Zone,const char *Path);
 void TmlNot_MarkNotesChildrenOfFolderAsUnavailable (const struct Brw_FileBrowser *FileBrowser);
 
 void TmlNot_ReqRemNoteUsr (void);

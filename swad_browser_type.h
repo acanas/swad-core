@@ -219,7 +219,7 @@ struct Brw_FileBrowser
       char AboveRootFolder[PATH_MAX + 1];
       char RootFolder[PATH_MAX + 1];
      } Path;
-   char NewFilFolLnkName[NAME_MAX + 1];
+   char NewName[NAME_MAX + 1];	// New name when creating a folder, creating a link, or renaming a folder
    unsigned Lvl;
    struct Brw_FileMetadata FileMetadata;
    struct

@@ -1103,6 +1103,10 @@ static long Brw_GrpCod = -1L;
 /*****************************************************************************/
 
 static long Brw_GetGrpSettings (void);
+static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod);
+static void Brw_GetNewFolderLinkName (char NewName[NAME_MAX + 1]);
+static bool Brw_GetOnlyPublicFiles (Brw_Zone_t Zone);
+static void Brw_GetParsFilFolLnk (struct Brw_FileBrowser *FileBrowser);
 
 static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser);
 static void Brw_CreateFoldersAssignmentsIfNotExist (const struct Brw_FileBrowser *FileBrowser,
@@ -1246,7 +1250,7 @@ static void Brw_GetFileMetadataFromRow (MYSQL_RES *mysql_res,
 static void Brw_GetFileViewsFromLoggedUsrs (struct Brw_FileMetadata *FileMetadata);
 static unsigned Brw_GetFileViewsFromMe (long FilCod);
 
-static void Brw_RemoveOneFileOrFolderFromDB (const struct Brw_FileBrowser *FileBrowser,
+static void Brw_RemoveOneFileOrFolderFromDB (Brw_Zone_t Zone,
 					     const char Path[PATH_MAX + 1]);
 static void Brw_RemoveChildrenOfFolderFromDB (const struct Brw_FileBrowser *FileBrowser);
 
@@ -1273,17 +1277,16 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row);
 static void Brw_PutLinkToAskRemOldFiles (struct Brw_FileBrowser *FileBrowser);
 static void Brw_RemoveOldFilesInBrowser (const struct Brw_FileBrowser *FileBrowser,
 					 unsigned Months,struct Brw_NumObjects *Removed);
-static void Brw_ScanDirRemovingOldFiles (const struct Brw_FileBrowser *FileBrowser,
-					 unsigned Level,
+static void Brw_ScanDirRemovingOldFiles (Brw_Zone_t Zone,unsigned Level,
                                          const char Path[PATH_MAX + 1],
                                          const char PathInTree[PATH_MAX + 1],
                                          time_t TimeRemoveFilesOlder,
                                          struct Brw_NumObjects *Removed);
 
-static void Brw_RemoveFileFromDiskAndDB (const struct Brw_FileBrowser *FileBrowser,
+static void Brw_RemoveFileFromDiskAndDB (Brw_Zone_t Zone,
 					 const char Path[PATH_MAX + 1],
                                          const char FullPathInTree[PATH_MAX + 1]);
-static int Brw_RemoveFolderFromDiskAndDB (const struct Brw_FileBrowser *FileBrowser,
+static int Brw_RemoveFolderFromDiskAndDB (Brw_Zone_t Zone,
 					  const char Path[PATH_MAX + 1],
                                           const char FullPathInTree[PATH_MAX + 1]);
 
@@ -1370,443 +1373,10 @@ void Brw_GetParAndInitFileBrowser (struct Brw_FileBrowser *FileBrowser)
 
    /***** If a group is selected, get its data *****/
    GrpCod = Brw_GetGrpSettings ();
+   Brw_SetGrpCod (GrpCod);
 
-   /***** Get type of file browser *****/
-   switch (Gbl.Action.Act)
-     {
-      /***** Documents of institution *****/
-      case ActSeeAdmDocIns:	// Access to a documents zone from menu
-      case ActChgToSeeDocIns:	// Access to see a documents zone
-      case ActSeeDocIns:
-      case ActExpSeeDocIns:	case ActConSeeDocIns:
-      case ActZIPSeeDocIns:
-      case ActReqDatSeeDocIns:
-      case ActDowSeeDocIns:
-	 FileBrowser->Zone = Brw_SHOW_DOC_INS;
-         break;
-      case ActChgToAdmDocIns:	// Access to admin a documents zone
-      case ActAdmDocIns:
-      case ActReqRemFilDocIns:	case ActRemFilDocIns:
-      case ActRemFolDocIns:	case ActRemTreDocIns:
-      case ActCopDocIns:	case ActPasDocIns:
-      case ActFrmCreDocIns:	case ActCreFolDocIns:	case ActCreLnkDocIns:
-      case ActRenFolDocIns:
-      case ActRcvFilDocInsDZ:	case ActRcvFilDocInsCla:
-      case ActExpAdmDocIns:	case ActConAdmDocIns:
-      case ActZIPAdmDocIns:
-      case ActUnhDocIns:	case ActHidDocIns:
-      case ActReqDatAdmDocIns:	case ActChgDatAdmDocIns:
-      case ActDowAdmDocIns:
-	 FileBrowser->Zone = Brw_ADMI_DOC_INS;
-         break;
-
-      /***** Shared files of institution *****/
-      case ActAdmShaIns:
-      case ActReqRemFilShaIns:	case ActRemFilShaIns:
-      case ActRemFolShaIns:	case ActRemTreShaIns:
-      case ActCopShaIns:	case ActPasShaIns:
-      case ActFrmCreShaIns:	case ActCreFolShaIns:	case ActCreLnkShaIns:
-      case ActRenFolShaIns:
-      case ActRcvFilShaInsDZ:	case ActRcvFilShaInsCla:
-      case ActExpShaIns:	case ActConShaIns:
-      case ActZIPShaIns:
-      case ActReqDatShaIns:	case ActChgDatShaIns:
-      case ActDowShaIns:
-         FileBrowser->Zone = Brw_ADMI_SHR_INS;
-         break;
-
-      /***** Documents of center *****/
-      case ActSeeAdmDocCtr:	// Access to a documents zone from menu
-      case ActChgToSeeDocCtr:	// Access to see a documents zone
-      case ActSeeDocCtr:
-      case ActExpSeeDocCtr:	case ActConSeeDocCtr:
-      case ActZIPSeeDocCtr:
-      case ActReqDatSeeDocCtr:
-      case ActDowSeeDocCtr:
-	 FileBrowser->Zone = Brw_SHOW_DOC_CTR;
-         break;
-      case ActChgToAdmDocCtr:	// Access to admin a documents zone
-      case ActAdmDocCtr:
-      case ActReqRemFilDocCtr:	case ActRemFilDocCtr:
-      case ActRemFolDocCtr:	case ActRemTreDocCtr:
-      case ActCopDocCtr:	case ActPasDocCtr:
-      case ActFrmCreDocCtr:	case ActCreFolDocCtr:	case ActCreLnkDocCtr:
-      case ActRenFolDocCtr:
-      case ActRcvFilDocCtrDZ:	case ActRcvFilDocCtrCla:
-      case ActExpAdmDocCtr:	case ActConAdmDocCtr:
-      case ActZIPAdmDocCtr:
-      case ActUnhDocCtr:	case ActHidDocCtr:
-      case ActReqDatAdmDocCtr:	case ActChgDatAdmDocCtr:
-      case ActDowAdmDocCtr:
-	 FileBrowser->Zone = Brw_ADMI_DOC_CTR;
-         break;
-
-      /***** Shared files of center *****/
-      case ActAdmShaCtr:
-      case ActReqRemFilShaCtr:	case ActRemFilShaCtr:
-      case ActRemFolShaCtr:	case ActRemTreShaCtr:
-      case ActCopShaCtr:	case ActPasShaCtr:
-      case ActFrmCreShaCtr:	case ActCreFolShaCtr:	case ActCreLnkShaCtr:
-      case ActRenFolShaCtr:
-      case ActRcvFilShaCtrDZ:	case ActRcvFilShaCtrCla:
-      case ActExpShaCtr:	case ActConShaCtr:
-      case ActZIPShaCtr:
-      case ActReqDatShaCtr:	case ActChgDatShaCtr:
-      case ActDowShaCtr:
-         FileBrowser->Zone = Brw_ADMI_SHR_CTR;
-         break;
-
-      /***** Documents of degree *****/
-      case ActSeeAdmDocDeg:	// Access to a documents zone from menu
-      case ActChgToSeeDocDeg:	// Access to see a documents zone
-      case ActSeeDocDeg:
-      case ActExpSeeDocDeg:	case ActConSeeDocDeg:
-      case ActZIPSeeDocDeg:
-      case ActReqDatSeeDocDeg:
-      case ActDowSeeDocDeg:
-	 FileBrowser->Zone = Brw_SHOW_DOC_DEG;
-         break;
-      case ActChgToAdmDocDeg:	// Access to admin a documents zone
-      case ActAdmDocDeg:
-      case ActReqRemFilDocDeg:	case ActRemFilDocDeg:
-      case ActRemFolDocDeg:	case ActRemTreDocDeg:
-      case ActCopDocDeg:	case ActPasDocDeg:
-      case ActFrmCreDocDeg:	case ActCreFolDocDeg:	case ActCreLnkDocDeg:
-      case ActRenFolDocDeg:
-      case ActRcvFilDocDegDZ:	case ActRcvFilDocDegCla:
-      case ActExpAdmDocDeg:	case ActConAdmDocDeg:
-      case ActZIPAdmDocDeg:
-      case ActUnhDocDeg:	case ActHidDocDeg:
-      case ActReqDatAdmDocDeg:	case ActChgDatAdmDocDeg:
-      case ActDowAdmDocDeg:
-	 FileBrowser->Zone = Brw_ADMI_DOC_DEG;
-         break;
-
-      /***** Shared files of degree *****/
-      case ActAdmShaDeg:
-      case ActReqRemFilShaDeg:	case ActRemFilShaDeg:
-      case ActRemFolShaDeg:	case ActRemTreShaDeg:
-      case ActCopShaDeg:	case ActPasShaDeg:
-      case ActFrmCreShaDeg:	case ActCreFolShaDeg:	case ActCreLnkShaDeg:
-      case ActRenFolShaDeg:
-      case ActRcvFilShaDegDZ:	case ActRcvFilShaDegCla:
-      case ActExpShaDeg:	case ActConShaDeg:
-      case ActZIPShaDeg:
-      case ActReqDatShaDeg:	case ActChgDatShaDeg:
-      case ActDowShaDeg:
-         FileBrowser->Zone = Brw_ADMI_SHR_DEG;
-         break;
-
-      /***** Documents of course/group *****/
-      case ActSeeAdmDocCrsGrp:	// Access to a documents zone from menu
-      case ActChgToSeeDocCrs:	// Access to see a documents zone
-         /* Set file browser type acording to last group accessed */
-         FileBrowser->Zone = GrpCod > 0 ? Brw_SHOW_DOC_GRP :
-                                          Brw_SHOW_DOC_CRS;
-         break;
-      case ActSeeDocCrs:
-      case ActExpSeeDocCrs:	case ActConSeeDocCrs:
-      case ActZIPSeeDocCrs:
-      case ActReqDatSeeDocCrs:
-      case ActReqLnkSeeDocCrs:
-      case ActDowSeeDocCrs:
-	 FileBrowser->Zone = Brw_SHOW_DOC_CRS;
-         break;
-      case ActSeeDocGrp:
-      case ActExpSeeDocGrp:	case ActConSeeDocGrp:
-      case ActZIPSeeDocGrp:
-      case ActReqDatSeeDocGrp:
-      case ActDowSeeDocGrp:
-	 FileBrowser->Zone = Brw_SHOW_DOC_GRP;
-         break;
-      case ActChgToAdmDocCrs:	// Access to admin a documents zone
-         /* Set file browser type acording to last group accessed */
-         FileBrowser->Zone = GrpCod > 0 ? Brw_ADMI_DOC_GRP :
-                                          Brw_ADMI_DOC_CRS;
-         break;
-      case ActAdmDocCrs:
-      case ActReqRemFilDocCrs:	case ActRemFilDocCrs:
-      case ActRemFolDocCrs:	case ActRemTreDocCrs:
-      case ActCopDocCrs:	case ActPasDocCrs:
-      case ActFrmCreDocCrs:	case ActCreFolDocCrs:	case ActCreLnkDocCrs:
-      case ActRenFolDocCrs:
-      case ActRcvFilDocCrsDZ:	case ActRcvFilDocCrsCla:
-      case ActExpAdmDocCrs:	case ActConAdmDocCrs:
-      case ActZIPAdmDocCrs:
-      case ActUnhDocCrs:	case ActHidDocCrs:
-      case ActReqDatAdmDocCrs:	case ActChgDatAdmDocCrs:
-      case ActReqLnkAdmDocCrs:
-      case ActDowAdmDocCrs:
-	 FileBrowser->Zone = Brw_ADMI_DOC_CRS;
-         break;
-      case ActAdmDocGrp:
-      case ActReqRemFilDocGrp:	case ActRemFilDocGrp:
-      case ActRemFolDocGrp:	case ActRemTreDocGrp:
-      case ActCopDocGrp:	case ActPasDocGrp:
-      case ActFrmCreDocGrp:	case ActCreFolDocGrp:	case ActCreLnkDocGrp:
-      case ActRenFolDocGrp:
-      case ActRcvFilDocGrpDZ:	case ActRcvFilDocGrpCla:
-      case ActExpAdmDocGrp:	case ActConAdmDocGrp:
-      case ActZIPAdmDocGrp:
-      case ActUnhDocGrp:	case ActHidDocGrp:
-      case ActReqDatAdmDocGrp:	case ActChgDatAdmDocGrp:
-      case ActDowAdmDocGrp:
-	 FileBrowser->Zone = Brw_ADMI_DOC_GRP;
-         break;
-
-      /***** Teachers' private files of course/group *****/
-      case ActAdmTchCrsGrp:
-      case ActChgToAdmTch:	// Access to a teachers zone from menu
-         /* Set file browser type acording to last group accessed */
-         FileBrowser->Zone = GrpCod > 0 ? Brw_ADMI_TCH_GRP :
-                                          Brw_ADMI_TCH_CRS;
-         break;
-      case ActAdmTchCrs:
-      case ActReqRemFilTchCrs:	case ActRemFilTchCrs:
-      case ActRemFolTchCrs:	case ActRemTreTchCrs:
-      case ActCopTchCrs:	case ActPasTchCrs:
-      case ActFrmCreTchCrs:	case ActCreFolTchCrs:	case ActCreLnkTchCrs:
-      case ActRenFolTchCrs:
-      case ActRcvFilTchCrsDZ:	case ActRcvFilTchCrsCla:
-      case ActExpTchCrs:	case ActConTchCrs:
-      case ActZIPTchCrs:
-      case ActReqDatTchCrs:	case ActChgDatTchCrs:
-      case ActDowTchCrs:
-         FileBrowser->Zone = Brw_ADMI_TCH_CRS;
-         break;
-      case ActAdmTchGrp:
-      case ActReqRemFilTchGrp:	case ActRemFilTchGrp:
-      case ActRemFolTchGrp:	case ActRemTreTchGrp:
-      case ActCopTchGrp:	case ActPasTchGrp:
-      case ActFrmCreTchGrp:	case ActCreFolTchGrp:	case ActCreLnkTchGrp:
-      case ActRenFolTchGrp:
-      case ActRcvFilTchGrpDZ:	case ActRcvFilTchGrpCla:
-      case ActExpTchGrp:	case ActConTchGrp:
-      case ActZIPTchGrp:
-      case ActReqDatTchGrp:	case ActChgDatTchGrp:
-      case ActDowTchGrp:
-         FileBrowser->Zone = Brw_ADMI_TCH_GRP;
-         break;
-
-      /***** Shared files of course/group *****/
-      case ActAdmShaCrsGrp:
-      case ActChgToAdmSha:	// Access to a shared zone from menu
-         /* Set file browser type acording to last group accessed */
-         FileBrowser->Zone = GrpCod > 0 ? Brw_ADMI_SHR_GRP :
-                                          Brw_ADMI_SHR_CRS;
-         break;
-      case ActAdmShaCrs:
-      case ActReqRemFilShaCrs:	case ActRemFilShaCrs:
-      case ActRemFolShaCrs:	case ActRemTreShaCrs:
-      case ActCopShaCrs:	case ActPasShaCrs:
-      case ActFrmCreShaCrs:	case ActCreFolShaCrs:	case ActCreLnkShaCrs:
-      case ActRenFolShaCrs:
-      case ActRcvFilShaCrsDZ:	case ActRcvFilShaCrsCla:
-      case ActExpShaCrs:	case ActConShaCrs:
-      case ActZIPShaCrs:
-      case ActReqDatShaCrs:	case ActChgDatShaCrs:
-      case ActDowShaCrs:
-         FileBrowser->Zone = Brw_ADMI_SHR_CRS;
-         break;
-      case ActAdmShaGrp:
-      case ActReqRemFilShaGrp:	case ActRemFilShaGrp:
-      case ActRemFolShaGrp:	case ActRemTreShaGrp:
-      case ActCopShaGrp:	case ActPasShaGrp:
-      case ActFrmCreShaGrp:	case ActCreFolShaGrp:	case ActCreLnkShaGrp:
-      case ActRenFolShaGrp:
-      case ActRcvFilShaGrpDZ:	case ActRcvFilShaGrpCla:
-      case ActExpShaGrp:	case ActConShaGrp:
-      case ActZIPShaGrp:
-      case ActReqDatShaGrp:	case ActChgDatShaGrp:
-      case ActDowShaGrp:
-         FileBrowser->Zone = Brw_ADMI_SHR_GRP;
-         break;
-
-      /***** My assignments *****/
-      case ActReqRemFilAsgUsr:	case ActRemFilAsgUsr:
-      case ActRemFolAsgUsr:	case ActRemTreAsgUsr:
-      case ActCopAsgUsr:	case ActPasAsgUsr:
-      case ActFrmCreAsgUsr:	case ActCreFolAsgUsr:	case ActCreLnkAsgUsr:
-      case ActRenFolAsgUsr:
-      case ActRcvFilAsgUsrDZ:	case ActRcvFilAsgUsrCla:
-      case ActExpAsgUsr:	case ActConAsgUsr:
-      case ActZIPAsgUsr:
-      case ActReqDatAsgUsr:	case ActChgDatAsgUsr:
-      case ActDowAsgUsr:
-         FileBrowser->Zone = Brw_ADMI_ASG_USR;
-         break;
-
-      /***** Another users' assignments *****/
-      case ActAdmAsgWrkCrs:
-      case ActReqRemFilAsgCrs:	case ActRemFilAsgCrs:
-      case ActRemFolAsgCrs:	case ActRemTreAsgCrs:
-      case ActCopAsgCrs:	case ActPasAsgCrs:
-      case ActFrmCreAsgCrs:	case ActCreFolAsgCrs:	case ActCreLnkAsgCrs:
-      case ActRenFolAsgCrs:
-      case ActRcvFilAsgCrsDZ:   case ActRcvFilAsgCrsCla:
-      case ActExpAsgCrs:	case ActConAsgCrs:
-      case ActZIPAsgCrs:
-      case ActReqDatAsgCrs:	case ActChgDatAsgCrs:
-      case ActDowAsgCrs:
-         FileBrowser->Zone = Brw_ADMI_ASG_CRS;
-         break;
-
-      /***** My works *****/
-      case ActAdmAsgWrkUsr:
-      case ActReqRemFilWrkUsr:	case ActRemFilWrkUsr:
-      case ActRemFolWrkUsr:	case ActRemTreWrkUsr:
-      case ActCopWrkUsr:	case ActPasWrkUsr:
-      case ActFrmCreWrkUsr:	case ActCreFolWrkUsr:	case ActCreLnkWrkUsr:
-      case ActRenFolWrkUsr:
-      case ActRcvFilWrkUsrDZ:	case ActRcvFilWrkUsrCla:
-      case ActExpWrkUsr:	case ActConWrkUsr:
-      case ActZIPWrkUsr:
-      case ActReqDatWrkUsr:	case ActChgDatWrkUsr:
-      case ActDowWrkUsr:
-         FileBrowser->Zone = Brw_ADMI_WRK_USR;
-         break;
-
-      /***** Another users' works *****/
-      case ActReqRemFilWrkCrs:	case ActRemFilWrkCrs:
-      case ActRemFolWrkCrs:	case ActRemTreWrkCrs:
-      case ActCopWrkCrs:	case ActPasWrkCrs:
-      case ActFrmCreWrkCrs:	case ActCreFolWrkCrs:	case ActCreLnkWrkCrs:
-      case ActRenFolWrkCrs:
-      case ActRcvFilWrkCrsDZ:	case ActRcvFilWrkCrsCla:
-      case ActExpWrkCrs:	case ActConWrkCrs:
-      case ActZIPWrkCrs:
-      case ActReqDatWrkCrs:	case ActChgDatWrkCrs:
-      case ActDowWrkCrs:
-         FileBrowser->Zone = Brw_ADMI_WRK_CRS;
-         break;
-
-      /***** Documents in project *****/
-      case ActSeeOnePrj:
-      case ActAdmDocPrj:
-      case ActReqRemFilDocPrj:	case ActRemFilDocPrj:
-      case ActRemFolDocPrj:	case ActRemTreDocPrj:
-      case ActCopDocPrj:	case ActPasDocPrj:
-      case ActFrmCreDocPrj:	case ActCreFolDocPrj:	case ActCreLnkDocPrj:
-      case ActRenFolDocPrj:
-      case ActRcvFilDocPrjDZ:	case ActRcvFilDocPrjCla:
-      case ActExpDocPrj:	case ActConDocPrj:
-      case ActZIPDocPrj:
-      case ActReqDatDocPrj:	case ActChgDatDocPrj:
-      case ActDowDocPrj:
-         FileBrowser->Zone = Brw_ADMI_DOC_PRJ;
-         break;
-
-      /***** Assessment of project *****/
-      case ActAdmAssPrj:
-      case ActReqRemFilAssPrj:	case ActRemFilAssPrj:
-      case ActRemFolAssPrj:	case ActRemTreAssPrj:
-      case ActCopAssPrj:	case ActPasAssPrj:
-      case ActFrmCreAssPrj:	case ActCreFolAssPrj:	case ActCreLnkAssPrj:
-      case ActRenFolAssPrj:
-      case ActRcvFilAssPrjDZ:	case ActRcvFilAssPrjCla:
-      case ActExpAssPrj:	case ActConAssPrj:
-      case ActZIPAssPrj:
-      case ActReqDatAssPrj:	case ActChgDatAssPrj:
-      case ActDowAssPrj:
-      case ActChgPrjSco:
-         FileBrowser->Zone = Brw_ADMI_ASS_PRJ;
-         break;
-
-      /***** Marks *****/
-      case ActSeeAdmMrk:	// Access to a marks zone from menu
-         /* Set file browser type acording to last group accessed */
-	 switch (Gbl.Usrs.Me.Role.Logged)
-	   {
-	    case Rol_STD:
-	    case Rol_NET:
-	       FileBrowser->Zone = GrpCod > 0 ? Brw_SHOW_MRK_GRP :
-						Brw_SHOW_MRK_CRS;
-	       break;
-	    case Rol_TCH:
-	    case Rol_SYS_ADM:
-	       FileBrowser->Zone = GrpCod > 0 ? Brw_ADMI_MRK_GRP :
-						Brw_ADMI_MRK_CRS;
-	       break;
-	    default:
-	       Err_WrongRoleExit ();
-	       break;
-	   }
-         break;
-      case ActChgToSeeMrk:	// Access to see a marks zone
-         /* Set file browser type acording to last group accessed */
-         FileBrowser->Zone = GrpCod > 0 ? Brw_SHOW_MRK_GRP :
-                                          Brw_SHOW_MRK_CRS;
-         break;
-      case ActSeeMrkCrs:
-      case ActExpSeeMrkCrs:	case ActConSeeMrkCrs:
-      case ActReqDatSeeMrkCrs:
-      case ActReqLnkSeeMrkCrs:
-      case ActSeeMyMrkCrs:
-         FileBrowser->Zone = Brw_SHOW_MRK_CRS;
-         break;
-      case ActSeeMrkGrp:
-      case ActExpSeeMrkGrp:	case ActConSeeMrkGrp:
-      case ActReqDatSeeMrkGrp:
-      case ActSeeMyMrkGrp:
-         FileBrowser->Zone = Brw_SHOW_MRK_GRP;
-         break;
-      case ActChgToAdmMrk:	// Access to admin a marks zone
-         /* Set file browser type acording to last group accessed */
-         FileBrowser->Zone = GrpCod > 0 ? Brw_ADMI_MRK_GRP :
-                                          Brw_ADMI_MRK_CRS;
-         break;
-      case ActAdmMrkCrs:
-      case ActReqRemFilMrkCrs:	case ActRemFilMrkCrs:
-      case ActRemFolMrkCrs:	case ActRemTreMrkCrs:
-      case ActCopMrkCrs:	case ActPasMrkCrs:
-      case ActFrmCreMrkCrs:	case ActCreFolMrkCrs:
-      case ActRenFolMrkCrs:
-      case ActRcvFilMrkCrsDZ:	case ActRcvFilMrkCrsCla:
-      case ActExpAdmMrkCrs:	case ActConAdmMrkCrs:
-      case ActZIPAdmMrkCrs:
-      case ActUnhMrkCrs:	case ActHidMrkCrs:
-      case ActReqDatAdmMrkCrs:	case ActChgDatAdmMrkCrs:
-      case ActReqLnkAdmMrkCrs:
-      case ActDowAdmMrkCrs:
-      case ActChgNumRowHeaCrs:	case ActChgNumRowFooCrs:
-         FileBrowser->Zone = Brw_ADMI_MRK_CRS;
-         break;
-      case ActAdmMrkGrp:
-      case ActReqRemFilMrkGrp:	case ActRemFilMrkGrp:
-      case ActRemFolMrkGrp:	case ActRemTreMrkGrp:
-      case ActCopMrkGrp:	case ActPasMrkGrp:
-      case ActFrmCreMrkGrp:	case ActCreFolMrkGrp:
-      case ActRenFolMrkGrp:
-      case ActRcvFilMrkGrpDZ:	case ActRcvFilMrkGrpCla:
-      case ActExpAdmMrkGrp:	case ActConAdmMrkGrp:
-      case ActZIPAdmMrkGrp:
-      case ActUnhMrkGrp:	case ActHidMrkGrp:
-      case ActReqDatAdmMrkGrp:	case ActChgDatAdmMrkGrp:
-      case ActDowAdmMrkGrp:
-      case ActChgNumRowHeaGrp:	case ActChgNumRowFooGrp:
-         FileBrowser->Zone = Brw_ADMI_MRK_GRP;
-         break;
-
-      /***** Briefcase *****/
-      case ActAdmBrf:
-      case ActReqRemFilBrf:	case ActRemFilBrf:
-      case ActRemFolBrf:	case ActRemTreBrf:
-      case ActCopBrf:		case ActPasBrf:
-      case ActFrmCreBrf:	case ActCreFolBrf:	case ActCreLnkBrf:
-      case ActRenFolBrf:
-      case ActRcvFilBrfDZ:	case ActRcvFilBrfCla:
-      case ActExpBrf:		case ActConBrf:
-      case ActZIPBrf:
-      case ActReqDatBrf:	case ActChgDatBrf:
-      case ActDowBrf:
-      case ActReqRemOldBrf:	// Ask for removing old files in briefcase
-      case ActRemOldBrf:	// Remove old files in briefcase
-         FileBrowser->Zone = Brw_ADMI_BRF_USR;
-         break;
-      default:
-         Err_WrongFileBrowserExit ();
-         break;
-     }
+   /***** Set file browser zone depending on action *****/
+   FileBrowser->Zone = Brw_GetZoneDependingOnAction (GrpCod);
 
    /***** Get other parameters *****/
    if (     (Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_PRJ))
@@ -1823,102 +1393,18 @@ void Brw_GetParAndInitFileBrowser (struct Brw_FileBrowser *FileBrowser)
       ZIP_SetCreateZIPFromForm ();
      }
 
-   switch (Gbl.Action.Act)
-     {
-      case ActCreFolDocIns:	case ActRenFolDocIns:
-      case ActCreFolShaIns:	case ActRenFolShaIns:
+   /* Get whether to show only public files */
+   FileBrowser->OnlyPublicFiles = Brw_GetOnlyPublicFiles (FileBrowser->Zone);
 
-      case ActCreFolDocCtr:	case ActRenFolDocCtr:
-      case ActCreFolShaCtr:	case ActRenFolShaCtr:
-
-      case ActCreFolDocDeg:	case ActRenFolDocDeg:
-      case ActCreFolShaDeg:	case ActRenFolShaDeg:
-
-      case ActCreFolDocCrs:	case ActRenFolDocCrs:
-      case ActCreFolDocGrp:	case ActRenFolDocGrp:
-
-      case ActCreFolTchCrs:	case ActRenFolTchCrs:
-      case ActCreFolTchGrp:	case ActRenFolTchGrp:
-
-      case ActCreFolShaCrs:	case ActRenFolShaCrs:
-      case ActCreFolShaGrp:	case ActRenFolShaGrp:
-
-      case ActCreFolMrkCrs:	case ActRenFolMrkCrs:
-      case ActCreFolMrkGrp:	case ActRenFolMrkGrp:
-
-      case ActCreFolAsgCrs:	case ActRenFolAsgCrs:
-      case ActCreFolWrkCrs:	case ActRenFolWrkCrs:
-      case ActCreFolAsgUsr:	case ActRenFolAsgUsr:
-      case ActCreFolWrkUsr:	case ActRenFolWrkUsr:
-
-      case ActCreFolDocPrj:	case ActRenFolDocPrj:
-      case ActCreFolAssPrj:	case ActRenFolAssPrj:
-
-      case ActCreFolBrf:	case ActRenFolBrf:
-	 /* Get the name of the new folder */
-	 Par_GetParText ("NewFolderName",FileBrowser->NewFilFolLnkName,NAME_MAX);
-	 break;
-      case ActCreLnkDocIns:
-      case ActCreLnkShaIns:
-      case ActCreLnkDocCtr:
-      case ActCreLnkShaCtr:
-      case ActCreLnkDocDeg:
-      case ActCreLnkShaDeg:
-      case ActCreLnkDocCrs:      case ActCreLnkDocGrp:
-      case ActCreLnkTchCrs:      case ActCreLnkTchGrp:
-      case ActCreLnkShaCrs:      case ActCreLnkShaGrp:
-      case ActCreLnkAsgCrs:
-      case ActCreLnkWrkCrs:
-      case ActCreLnkAsgUsr:
-      case ActCreLnkWrkUsr:
-      case ActCreLnkDocPrj:
-      case ActCreLnkBrf:
-	 /* Get the name of the new link */
-	 Par_GetParText ("NewLinkName",FileBrowser->NewFilFolLnkName,NAME_MAX);
-	 break;
-      default:
-	 break;
-     }
-
-   /***** Get whether to show full tree *****/
-   // If I belong to the current course or I am superuser, or file browser is briefcase ==> get whether show full tree from form
-   // Else ==> show full tree (only public files)
-   FileBrowser->OnlyPublicFiles = false;
-   if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
-      switch (FileBrowser->Zone)
-	{
-	 case Brw_SHOW_DOC_INS:
-	 case Brw_ADMI_DOC_INS:
-	 case Brw_ADMI_SHR_INS:
-	    FileBrowser->OnlyPublicFiles =
-	    (Gbl.Usrs.Me.IBelongToCurrent[Hie_INS] == Usr_DONT_BELONG);
-	    break;
-	 case Brw_SHOW_DOC_CTR:
-	 case Brw_ADMI_DOC_CTR:
-	 case Brw_ADMI_SHR_CTR:
-	    FileBrowser->OnlyPublicFiles =
-	    (Gbl.Usrs.Me.IBelongToCurrent[Hie_CTR] == Usr_DONT_BELONG);
-	    break;
-	 case Brw_SHOW_DOC_DEG:
-	 case Brw_ADMI_DOC_DEG:
-	 case Brw_ADMI_SHR_DEG:
-	    FileBrowser->OnlyPublicFiles =
-	    (Gbl.Usrs.Me.IBelongToCurrent[Hie_DEG] == Usr_DONT_BELONG);
-	    break;
-	 case Brw_SHOW_DOC_CRS:
-	 case Brw_ADMI_DOC_CRS:
-	 case Brw_ADMI_SHR_CRS:
-	    FileBrowser->OnlyPublicFiles =
-	    (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_DONT_BELONG);
-	    break;
-	 default:
-	    break;
-	}
-   FileBrowser->ShowFullTree = FileBrowser->OnlyPublicFiles ? Lay_SHOW :
+   /* Get whether to show full tree */
+   FileBrowser->ShowFullTree = FileBrowser->OnlyPublicFiles ? Lay_SHOW :	// If I can see only public files, show full tree
 							      Lay_GetParShow ("FullTree");
 
+   /* Get file / folder / link */
+   if ((Act_GetParams (Gbl.Action.Act) & Act_GET_BRW_FILFOLLNK))
+      Brw_GetParsFilFolLnk (FileBrowser);
+
    /***** Initialize file browser *****/
-   Brw_SetGrpCod (GrpCod);
    Brw_InitializeFileBrowser (FileBrowser);
   }
 
@@ -1931,11 +1417,11 @@ static long Brw_GetGrpSettings (void)
   {
    long GrpCod;
 
-   /***** Try to get parameter with group code *****/
+   /***** 1. Try to get parameter with group code *****/
    GrpCod = ParCod_GetPar (ParCod_Grp);
 
-   if (GrpCod <= 0)
-      /***** Try to get group code from database *****/
+   /***** 2. Try to get group code from database *****/
+   if (GrpCod <= 0)	// No group parameter found
       switch (Gbl.Action.Act)
 	{
 	 case ActSeeAdmDocCrsGrp:	// Access to a documents zone from menu
@@ -1999,6 +1485,449 @@ static long Brw_GetGrpSettings (void)
   }
 
 /*****************************************************************************/
+/***************** Get file browser zone depending on action *****************/
+/*****************************************************************************/
+
+static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
+  {
+   switch (Gbl.Action.Act)
+     {
+      /***** Documents of institution *****/
+      case ActSeeAdmDocIns:	// Access to a documents zone from menu
+      case ActChgToSeeDocIns:	// Access to see a documents zone
+      case ActSeeDocIns:
+      case ActExpSeeDocIns:	case ActConSeeDocIns:
+      case ActZIPSeeDocIns:
+      case ActReqDatSeeDocIns:
+      case ActDowSeeDocIns:
+	 return Brw_SHOW_DOC_INS;
+      case ActChgToAdmDocIns:	// Access to admin a documents zone
+      case ActAdmDocIns:
+      case ActReqRemFilDocIns:	case ActRemFilDocIns:
+      case ActRemFolDocIns:	case ActRemTreDocIns:
+      case ActCopDocIns:	case ActPasDocIns:
+      case ActFrmCreDocIns:	case ActCreFolDocIns:	case ActCreLnkDocIns:
+      case ActRenFolDocIns:
+      case ActRcvFilDocInsDZ:	case ActRcvFilDocInsCla:
+      case ActExpAdmDocIns:	case ActConAdmDocIns:
+      case ActZIPAdmDocIns:
+      case ActUnhDocIns:	case ActHidDocIns:
+      case ActReqDatAdmDocIns:	case ActChgDatAdmDocIns:
+      case ActDowAdmDocIns:
+	 return Brw_ADMI_DOC_INS;
+
+      /***** Shared files of institution *****/
+      case ActAdmShaIns:
+      case ActReqRemFilShaIns:	case ActRemFilShaIns:
+      case ActRemFolShaIns:	case ActRemTreShaIns:
+      case ActCopShaIns:	case ActPasShaIns:
+      case ActFrmCreShaIns:	case ActCreFolShaIns:	case ActCreLnkShaIns:
+      case ActRenFolShaIns:
+      case ActRcvFilShaInsDZ:	case ActRcvFilShaInsCla:
+      case ActExpShaIns:	case ActConShaIns:
+      case ActZIPShaIns:
+      case ActReqDatShaIns:	case ActChgDatShaIns:
+      case ActDowShaIns:
+         return Brw_ADMI_SHR_INS;
+
+      /***** Documents of center *****/
+      case ActSeeAdmDocCtr:	// Access to a documents zone from menu
+      case ActChgToSeeDocCtr:	// Access to see a documents zone
+      case ActSeeDocCtr:
+      case ActExpSeeDocCtr:	case ActConSeeDocCtr:
+      case ActZIPSeeDocCtr:
+      case ActReqDatSeeDocCtr:
+      case ActDowSeeDocCtr:
+	 return Brw_SHOW_DOC_CTR;
+      case ActChgToAdmDocCtr:	// Access to admin a documents zone
+      case ActAdmDocCtr:
+      case ActReqRemFilDocCtr:	case ActRemFilDocCtr:
+      case ActRemFolDocCtr:	case ActRemTreDocCtr:
+      case ActCopDocCtr:	case ActPasDocCtr:
+      case ActFrmCreDocCtr:	case ActCreFolDocCtr:	case ActCreLnkDocCtr:
+      case ActRenFolDocCtr:
+      case ActRcvFilDocCtrDZ:	case ActRcvFilDocCtrCla:
+      case ActExpAdmDocCtr:	case ActConAdmDocCtr:
+      case ActZIPAdmDocCtr:
+      case ActUnhDocCtr:	case ActHidDocCtr:
+      case ActReqDatAdmDocCtr:	case ActChgDatAdmDocCtr:
+      case ActDowAdmDocCtr:
+	 return Brw_ADMI_DOC_CTR;
+
+      /***** Shared files of center *****/
+      case ActAdmShaCtr:
+      case ActReqRemFilShaCtr:	case ActRemFilShaCtr:
+      case ActRemFolShaCtr:	case ActRemTreShaCtr:
+      case ActCopShaCtr:	case ActPasShaCtr:
+      case ActFrmCreShaCtr:	case ActCreFolShaCtr:	case ActCreLnkShaCtr:
+      case ActRenFolShaCtr:
+      case ActRcvFilShaCtrDZ:	case ActRcvFilShaCtrCla:
+      case ActExpShaCtr:	case ActConShaCtr:
+      case ActZIPShaCtr:
+      case ActReqDatShaCtr:	case ActChgDatShaCtr:
+      case ActDowShaCtr:
+         return Brw_ADMI_SHR_CTR;
+
+      /***** Documents of degree *****/
+      case ActSeeAdmDocDeg:	// Access to a documents zone from menu
+      case ActChgToSeeDocDeg:	// Access to see a documents zone
+      case ActSeeDocDeg:
+      case ActExpSeeDocDeg:	case ActConSeeDocDeg:
+      case ActZIPSeeDocDeg:
+      case ActReqDatSeeDocDeg:
+      case ActDowSeeDocDeg:
+	 return Brw_SHOW_DOC_DEG;
+      case ActChgToAdmDocDeg:	// Access to admin a documents zone
+      case ActAdmDocDeg:
+      case ActReqRemFilDocDeg:	case ActRemFilDocDeg:
+      case ActRemFolDocDeg:	case ActRemTreDocDeg:
+      case ActCopDocDeg:	case ActPasDocDeg:
+      case ActFrmCreDocDeg:	case ActCreFolDocDeg:	case ActCreLnkDocDeg:
+      case ActRenFolDocDeg:
+      case ActRcvFilDocDegDZ:	case ActRcvFilDocDegCla:
+      case ActExpAdmDocDeg:	case ActConAdmDocDeg:
+      case ActZIPAdmDocDeg:
+      case ActUnhDocDeg:	case ActHidDocDeg:
+      case ActReqDatAdmDocDeg:	case ActChgDatAdmDocDeg:
+      case ActDowAdmDocDeg:
+	 return Brw_ADMI_DOC_DEG;
+
+      /***** Shared files of degree *****/
+      case ActAdmShaDeg:
+      case ActReqRemFilShaDeg:	case ActRemFilShaDeg:
+      case ActRemFolShaDeg:	case ActRemTreShaDeg:
+      case ActCopShaDeg:	case ActPasShaDeg:
+      case ActFrmCreShaDeg:	case ActCreFolShaDeg:	case ActCreLnkShaDeg:
+      case ActRenFolShaDeg:
+      case ActRcvFilShaDegDZ:	case ActRcvFilShaDegCla:
+      case ActExpShaDeg:	case ActConShaDeg:
+      case ActZIPShaDeg:
+      case ActReqDatShaDeg:	case ActChgDatShaDeg:
+      case ActDowShaDeg:
+         return Brw_ADMI_SHR_DEG;
+
+      /***** Documents of course/group *****/
+      case ActSeeAdmDocCrsGrp:	// Access to a documents zone from menu
+      case ActChgToSeeDocCrs:	// Access to see a documents zone
+         /* Set file browser type acording to last group accessed */
+         return GrpCod > 0 ? Brw_SHOW_DOC_GRP :
+                             Brw_SHOW_DOC_CRS;
+      case ActSeeDocCrs:
+      case ActExpSeeDocCrs:	case ActConSeeDocCrs:
+      case ActZIPSeeDocCrs:
+      case ActReqDatSeeDocCrs:
+      case ActReqLnkSeeDocCrs:
+      case ActDowSeeDocCrs:
+	 return Brw_SHOW_DOC_CRS;
+      case ActSeeDocGrp:
+      case ActExpSeeDocGrp:	case ActConSeeDocGrp:
+      case ActZIPSeeDocGrp:
+      case ActReqDatSeeDocGrp:
+      case ActDowSeeDocGrp:
+	 return Brw_SHOW_DOC_GRP;
+      case ActChgToAdmDocCrs:	// Access to admin a documents zone
+         /* Set file browser type acording to last group accessed */
+         return GrpCod > 0 ? Brw_ADMI_DOC_GRP :
+                             Brw_ADMI_DOC_CRS;
+      case ActAdmDocCrs:
+      case ActReqRemFilDocCrs:	case ActRemFilDocCrs:
+      case ActRemFolDocCrs:	case ActRemTreDocCrs:
+      case ActCopDocCrs:	case ActPasDocCrs:
+      case ActFrmCreDocCrs:	case ActCreFolDocCrs:	case ActCreLnkDocCrs:
+      case ActRenFolDocCrs:
+      case ActRcvFilDocCrsDZ:	case ActRcvFilDocCrsCla:
+      case ActExpAdmDocCrs:	case ActConAdmDocCrs:
+      case ActZIPAdmDocCrs:
+      case ActUnhDocCrs:	case ActHidDocCrs:
+      case ActReqDatAdmDocCrs:	case ActChgDatAdmDocCrs:
+      case ActReqLnkAdmDocCrs:
+      case ActDowAdmDocCrs:
+	 return Brw_ADMI_DOC_CRS;
+      case ActAdmDocGrp:
+      case ActReqRemFilDocGrp:	case ActRemFilDocGrp:
+      case ActRemFolDocGrp:	case ActRemTreDocGrp:
+      case ActCopDocGrp:	case ActPasDocGrp:
+      case ActFrmCreDocGrp:	case ActCreFolDocGrp:	case ActCreLnkDocGrp:
+      case ActRenFolDocGrp:
+      case ActRcvFilDocGrpDZ:	case ActRcvFilDocGrpCla:
+      case ActExpAdmDocGrp:	case ActConAdmDocGrp:
+      case ActZIPAdmDocGrp:
+      case ActUnhDocGrp:	case ActHidDocGrp:
+      case ActReqDatAdmDocGrp:	case ActChgDatAdmDocGrp:
+      case ActDowAdmDocGrp:
+	 return Brw_ADMI_DOC_GRP;
+
+      /***** Teachers' private files of course/group *****/
+      case ActAdmTchCrsGrp:
+      case ActChgToAdmTch:	// Access to a teachers zone from menu
+         /* Set file browser type acording to last group accessed */
+         return GrpCod > 0 ? Brw_ADMI_TCH_GRP :
+                             Brw_ADMI_TCH_CRS;
+      case ActAdmTchCrs:
+      case ActReqRemFilTchCrs:	case ActRemFilTchCrs:
+      case ActRemFolTchCrs:	case ActRemTreTchCrs:
+      case ActCopTchCrs:	case ActPasTchCrs:
+      case ActFrmCreTchCrs:	case ActCreFolTchCrs:	case ActCreLnkTchCrs:
+      case ActRenFolTchCrs:
+      case ActRcvFilTchCrsDZ:	case ActRcvFilTchCrsCla:
+      case ActExpTchCrs:	case ActConTchCrs:
+      case ActZIPTchCrs:
+      case ActReqDatTchCrs:	case ActChgDatTchCrs:
+      case ActDowTchCrs:
+         return Brw_ADMI_TCH_CRS;
+      case ActAdmTchGrp:
+      case ActReqRemFilTchGrp:	case ActRemFilTchGrp:
+      case ActRemFolTchGrp:	case ActRemTreTchGrp:
+      case ActCopTchGrp:	case ActPasTchGrp:
+      case ActFrmCreTchGrp:	case ActCreFolTchGrp:	case ActCreLnkTchGrp:
+      case ActRenFolTchGrp:
+      case ActRcvFilTchGrpDZ:	case ActRcvFilTchGrpCla:
+      case ActExpTchGrp:	case ActConTchGrp:
+      case ActZIPTchGrp:
+      case ActReqDatTchGrp:	case ActChgDatTchGrp:
+      case ActDowTchGrp:
+         return Brw_ADMI_TCH_GRP;
+
+      /***** Shared files of course/group *****/
+      case ActAdmShaCrsGrp:
+      case ActChgToAdmSha:	// Access to a shared zone from menu
+         /* Set file browser type acording to last group accessed */
+         return GrpCod > 0 ? Brw_ADMI_SHR_GRP :
+                             Brw_ADMI_SHR_CRS;
+      case ActAdmShaCrs:
+      case ActReqRemFilShaCrs:	case ActRemFilShaCrs:
+      case ActRemFolShaCrs:	case ActRemTreShaCrs:
+      case ActCopShaCrs:	case ActPasShaCrs:
+      case ActFrmCreShaCrs:	case ActCreFolShaCrs:	case ActCreLnkShaCrs:
+      case ActRenFolShaCrs:
+      case ActRcvFilShaCrsDZ:	case ActRcvFilShaCrsCla:
+      case ActExpShaCrs:	case ActConShaCrs:
+      case ActZIPShaCrs:
+      case ActReqDatShaCrs:	case ActChgDatShaCrs:
+      case ActDowShaCrs:
+         return Brw_ADMI_SHR_CRS;
+      case ActAdmShaGrp:
+      case ActReqRemFilShaGrp:	case ActRemFilShaGrp:
+      case ActRemFolShaGrp:	case ActRemTreShaGrp:
+      case ActCopShaGrp:	case ActPasShaGrp:
+      case ActFrmCreShaGrp:	case ActCreFolShaGrp:	case ActCreLnkShaGrp:
+      case ActRenFolShaGrp:
+      case ActRcvFilShaGrpDZ:	case ActRcvFilShaGrpCla:
+      case ActExpShaGrp:	case ActConShaGrp:
+      case ActZIPShaGrp:
+      case ActReqDatShaGrp:	case ActChgDatShaGrp:
+      case ActDowShaGrp:
+         return Brw_ADMI_SHR_GRP;
+
+      /***** My assignments *****/
+      case ActReqRemFilAsgUsr:	case ActRemFilAsgUsr:
+      case ActRemFolAsgUsr:	case ActRemTreAsgUsr:
+      case ActCopAsgUsr:	case ActPasAsgUsr:
+      case ActFrmCreAsgUsr:	case ActCreFolAsgUsr:	case ActCreLnkAsgUsr:
+      case ActRenFolAsgUsr:
+      case ActRcvFilAsgUsrDZ:	case ActRcvFilAsgUsrCla:
+      case ActExpAsgUsr:	case ActConAsgUsr:
+      case ActZIPAsgUsr:
+      case ActReqDatAsgUsr:	case ActChgDatAsgUsr:
+      case ActDowAsgUsr:
+         return Brw_ADMI_ASG_USR;
+
+      /***** Another users' assignments *****/
+      case ActAdmAsgWrkCrs:
+      case ActReqRemFilAsgCrs:	case ActRemFilAsgCrs:
+      case ActRemFolAsgCrs:	case ActRemTreAsgCrs:
+      case ActCopAsgCrs:	case ActPasAsgCrs:
+      case ActFrmCreAsgCrs:	case ActCreFolAsgCrs:	case ActCreLnkAsgCrs:
+      case ActRenFolAsgCrs:
+      case ActRcvFilAsgCrsDZ:   case ActRcvFilAsgCrsCla:
+      case ActExpAsgCrs:	case ActConAsgCrs:
+      case ActZIPAsgCrs:
+      case ActReqDatAsgCrs:	case ActChgDatAsgCrs:
+      case ActDowAsgCrs:
+         return Brw_ADMI_ASG_CRS;
+
+      /***** My works *****/
+      case ActAdmAsgWrkUsr:
+      case ActReqRemFilWrkUsr:	case ActRemFilWrkUsr:
+      case ActRemFolWrkUsr:	case ActRemTreWrkUsr:
+      case ActCopWrkUsr:	case ActPasWrkUsr:
+      case ActFrmCreWrkUsr:	case ActCreFolWrkUsr:	case ActCreLnkWrkUsr:
+      case ActRenFolWrkUsr:
+      case ActRcvFilWrkUsrDZ:	case ActRcvFilWrkUsrCla:
+      case ActExpWrkUsr:	case ActConWrkUsr:
+      case ActZIPWrkUsr:
+      case ActReqDatWrkUsr:	case ActChgDatWrkUsr:
+      case ActDowWrkUsr:
+         return Brw_ADMI_WRK_USR;
+
+      /***** Another users' works *****/
+      case ActReqRemFilWrkCrs:	case ActRemFilWrkCrs:
+      case ActRemFolWrkCrs:	case ActRemTreWrkCrs:
+      case ActCopWrkCrs:	case ActPasWrkCrs:
+      case ActFrmCreWrkCrs:	case ActCreFolWrkCrs:	case ActCreLnkWrkCrs:
+      case ActRenFolWrkCrs:
+      case ActRcvFilWrkCrsDZ:	case ActRcvFilWrkCrsCla:
+      case ActExpWrkCrs:	case ActConWrkCrs:
+      case ActZIPWrkCrs:
+      case ActReqDatWrkCrs:	case ActChgDatWrkCrs:
+      case ActDowWrkCrs:
+         return Brw_ADMI_WRK_CRS;
+
+      /***** Documents in project *****/
+      case ActSeeOnePrj:
+      case ActAdmDocPrj:
+      case ActReqRemFilDocPrj:	case ActRemFilDocPrj:
+      case ActRemFolDocPrj:	case ActRemTreDocPrj:
+      case ActCopDocPrj:	case ActPasDocPrj:
+      case ActFrmCreDocPrj:	case ActCreFolDocPrj:	case ActCreLnkDocPrj:
+      case ActRenFolDocPrj:
+      case ActRcvFilDocPrjDZ:	case ActRcvFilDocPrjCla:
+      case ActExpDocPrj:	case ActConDocPrj:
+      case ActZIPDocPrj:
+      case ActReqDatDocPrj:	case ActChgDatDocPrj:
+      case ActDowDocPrj:
+         return Brw_ADMI_DOC_PRJ;
+
+      /***** Assessment of project *****/
+      case ActAdmAssPrj:
+      case ActReqRemFilAssPrj:	case ActRemFilAssPrj:
+      case ActRemFolAssPrj:	case ActRemTreAssPrj:
+      case ActCopAssPrj:	case ActPasAssPrj:
+      case ActFrmCreAssPrj:	case ActCreFolAssPrj:	case ActCreLnkAssPrj:
+      case ActRenFolAssPrj:
+      case ActRcvFilAssPrjDZ:	case ActRcvFilAssPrjCla:
+      case ActExpAssPrj:	case ActConAssPrj:
+      case ActZIPAssPrj:
+      case ActReqDatAssPrj:	case ActChgDatAssPrj:
+      case ActDowAssPrj:
+      case ActChgPrjSco:
+         return Brw_ADMI_ASS_PRJ;
+
+      /***** Marks *****/
+      case ActSeeAdmMrk:	// Access to a marks zone from menu
+         /* Set file browser type acording to last group accessed */
+	 switch (Gbl.Usrs.Me.Role.Logged)
+	   {
+	    case Rol_STD:
+	    case Rol_NET:
+	       return GrpCod > 0 ? Brw_SHOW_MRK_GRP :
+				   Brw_SHOW_MRK_CRS;
+	    case Rol_TCH:
+	    case Rol_SYS_ADM:
+	       return GrpCod > 0 ? Brw_ADMI_MRK_GRP :
+				   Brw_ADMI_MRK_CRS;
+	    default:
+	       Err_WrongRoleExit ();
+	       break;
+	   }
+	 return Brw_UNKNOWN;	// Not reached
+      case ActChgToSeeMrk:	// Access to see a marks zone
+         /* Set file browser type acording to last group accessed */
+         return GrpCod > 0 ? Brw_SHOW_MRK_GRP :
+                             Brw_SHOW_MRK_CRS;
+      case ActSeeMrkCrs:
+      case ActExpSeeMrkCrs:	case ActConSeeMrkCrs:
+      case ActReqDatSeeMrkCrs:
+      case ActReqLnkSeeMrkCrs:
+      case ActSeeMyMrkCrs:
+         return Brw_SHOW_MRK_CRS;
+      case ActSeeMrkGrp:
+      case ActExpSeeMrkGrp:	case ActConSeeMrkGrp:
+      case ActReqDatSeeMrkGrp:
+      case ActSeeMyMrkGrp:
+         return Brw_SHOW_MRK_GRP;
+      case ActChgToAdmMrk:	// Access to admin a marks zone
+         /* Set file browser type acording to last group accessed */
+         return GrpCod > 0 ? Brw_ADMI_MRK_GRP :
+                             Brw_ADMI_MRK_CRS;
+      case ActAdmMrkCrs:
+      case ActReqRemFilMrkCrs:	case ActRemFilMrkCrs:
+      case ActRemFolMrkCrs:	case ActRemTreMrkCrs:
+      case ActCopMrkCrs:	case ActPasMrkCrs:
+      case ActFrmCreMrkCrs:	case ActCreFolMrkCrs:
+      case ActRenFolMrkCrs:
+      case ActRcvFilMrkCrsDZ:	case ActRcvFilMrkCrsCla:
+      case ActExpAdmMrkCrs:	case ActConAdmMrkCrs:
+      case ActZIPAdmMrkCrs:
+      case ActUnhMrkCrs:	case ActHidMrkCrs:
+      case ActReqDatAdmMrkCrs:	case ActChgDatAdmMrkCrs:
+      case ActReqLnkAdmMrkCrs:
+      case ActDowAdmMrkCrs:
+      case ActChgNumRowHeaCrs:	case ActChgNumRowFooCrs:
+         return Brw_ADMI_MRK_CRS;
+      case ActAdmMrkGrp:
+      case ActReqRemFilMrkGrp:	case ActRemFilMrkGrp:
+      case ActRemFolMrkGrp:	case ActRemTreMrkGrp:
+      case ActCopMrkGrp:	case ActPasMrkGrp:
+      case ActFrmCreMrkGrp:	case ActCreFolMrkGrp:
+      case ActRenFolMrkGrp:
+      case ActRcvFilMrkGrpDZ:	case ActRcvFilMrkGrpCla:
+      case ActExpAdmMrkGrp:	case ActConAdmMrkGrp:
+      case ActZIPAdmMrkGrp:
+      case ActUnhMrkGrp:	case ActHidMrkGrp:
+      case ActReqDatAdmMrkGrp:	case ActChgDatAdmMrkGrp:
+      case ActDowAdmMrkGrp:
+      case ActChgNumRowHeaGrp:	case ActChgNumRowFooGrp:
+         return Brw_ADMI_MRK_GRP;
+
+      /***** Briefcase *****/
+      case ActAdmBrf:
+      case ActReqRemFilBrf:	case ActRemFilBrf:
+      case ActRemFolBrf:	case ActRemTreBrf:
+      case ActCopBrf:		case ActPasBrf:
+      case ActFrmCreBrf:	case ActCreFolBrf:	case ActCreLnkBrf:
+      case ActRenFolBrf:
+      case ActRcvFilBrfDZ:	case ActRcvFilBrfCla:
+      case ActExpBrf:		case ActConBrf:
+      case ActZIPBrf:
+      case ActReqDatBrf:	case ActChgDatBrf:
+      case ActDowBrf:
+      case ActReqRemOldBrf:	// Ask for removing old files in briefcase
+      case ActRemOldBrf:	// Remove old files in briefcase
+         return Brw_ADMI_BRF_USR;
+      default:
+         Err_WrongFileBrowserExit ();
+	 return Brw_UNKNOWN;	// Not reached
+     }
+  }
+
+/*****************************************************************************/
+/******************* Get the name of the new folder / link *******************/
+/*****************************************************************************/
+
+static void Brw_GetNewFolderLinkName (char NewName[NAME_MAX + 1])
+  {
+   Par_GetParText ("NewName",NewName,NAME_MAX);
+  }
+
+/*****************************************************************************/
+/******************* Get the name of the new folder / link *******************/
+/*****************************************************************************/
+
+static bool Brw_GetOnlyPublicFiles (Brw_Zone_t Zone)
+  {
+   /***** System admin can see all files, public or not *****/
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      return false;
+
+   /***** If I belong to the current institution/center/degree/course,
+          I can see all files, public or not *****/
+   switch (Zone)
+     {
+      case Brw_SHOW_DOC_INS: case Brw_ADMI_DOC_INS: case Brw_ADMI_SHR_INS:
+	 return Gbl.Usrs.Me.IBelongToCurrent[Hie_INS] == Usr_DONT_BELONG;
+      case Brw_SHOW_DOC_CTR: case Brw_ADMI_DOC_CTR: case Brw_ADMI_SHR_CTR:
+	 return Gbl.Usrs.Me.IBelongToCurrent[Hie_CTR] == Usr_DONT_BELONG;
+      case Brw_SHOW_DOC_DEG: case Brw_ADMI_DOC_DEG: case Brw_ADMI_SHR_DEG:
+	 return Gbl.Usrs.Me.IBelongToCurrent[Hie_DEG] == Usr_DONT_BELONG;
+      case Brw_SHOW_DOC_CRS: case Brw_ADMI_DOC_CRS: case Brw_ADMI_SHR_CRS:
+	 return Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_DONT_BELONG;
+      default:
+	 return false;
+     }
+   }
+
+/*****************************************************************************/
 /**************** Write parameters related with file browser *****************/
 /*****************************************************************************/
 
@@ -2044,7 +1973,7 @@ void Brw_PutParsFileBrowser (struct Brw_FileBrowser *FileBrowser,
 /************** Get parameters path and file in file browser *****************/
 /*****************************************************************************/
 
-void Brw_GetParsFilFolLnk (struct Brw_FileBrowser *FileBrowser)
+static void Brw_GetParsFilFolLnk (struct Brw_FileBrowser *FileBrowser)
   {
    const char *Ptr;
    Brw_FileType_t FileType;
@@ -2628,7 +2557,6 @@ void Brw_ShowFileBrowserProject (long PrjCod)
    /***** Get parameters related to file browser
           and show again project including file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
 
    /***** Begin fieldset *****/
    HTM_FIELDSET_Begin (NULL);
@@ -4722,7 +4650,7 @@ static void Brw_WriteFileName (struct Brw_FileBrowser *FileBrowser,
 		     /***** Form to rename folder *****/
 		     Frm_BeginForm (Brw_ActRenameFolder[FileBrowser->Zone]);
 			Brw_PutImplicitParsFileBrowser (FileBrowser);
-			HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,
+			HTM_INPUT_TEXT ("NewName",Brw_MAX_CHARS_FOLDER,
 				        FileBrowser->FileMetadata.FilFolLnk.Name,
 					HTM_SUBMIT_ON_CHANGE,
 					"class=\"LST_EDIT %s_%s %s\"",
@@ -4933,7 +4861,6 @@ void Brw_ReqRemFile (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
 
    /***** Button of confirmation of removing *****/
    switch (Brw_CheckIfICanEditFileOrFolder (FileBrowser.Zone,
@@ -4977,7 +4904,6 @@ void Brw_RemFile (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
 
    switch (Brw_CheckIfICanEditFileOrFolder (FileBrowser.Zone,
 					    FileBrowser.FileMetadata.FilFolLnk.Full,
@@ -5001,8 +4927,7 @@ void Brw_RemFile (void)
 				   FileNameToShow);
 
 	    /* Remove file/link from disk and database */
-	    Brw_RemoveFileFromDiskAndDB (&FileBrowser,
-					 Path,
+	    Brw_RemoveFileFromDiskAndDB (FileBrowser.Zone,Path,
 					 FileBrowser.FileMetadata.FilFolLnk.Full);
 
 	    /* Remove affected clipboards */
@@ -5040,7 +4965,6 @@ void Brw_RemFolder (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
 
    switch (Brw_CheckIfICanEditFileOrFolder (FileBrowser.Zone,
 					    FileBrowser.FileMetadata.FilFolLnk.Full,
@@ -5056,7 +4980,7 @@ void Brw_RemFolder (void)
 	 if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
 	    Err_ShowErrorAndExit ("Can not get information about a file or folder.");
 	 else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
-	    if (Brw_RemoveFolderFromDiskAndDB (&FileBrowser,Path,
+	    if (Brw_RemoveFolderFromDiskAndDB (FileBrowser.Zone,Path,
 					       FileBrowser.FileMetadata.FilFolLnk.Full))
 	      {
 	       if (errno == ENOTEMPTY)	// The directory is not empty
@@ -5115,7 +5039,6 @@ void Brw_RemSubtree (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
 
    if (Brw_CheckIfICanEditFileOrFolder (FileBrowser.Zone,
 					FileBrowser.FileMetadata.FilFolLnk.Full,
@@ -5132,7 +5055,7 @@ void Brw_RemSubtree (void)
       /* If a folder is removed,
          it is necessary to remove it from the database
          and all files or folders under that folder */
-      Brw_RemoveOneFileOrFolderFromDB (&FileBrowser,
+      Brw_RemoveOneFileOrFolderFromDB (FileBrowser.Zone,
 				       FileBrowser.FileMetadata.FilFolLnk.Full);
       Brw_RemoveChildrenOfFolderFromDB (&FileBrowser);
 
@@ -5165,7 +5088,6 @@ void Brw_ExpandFileTree (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
 
    /***** Add path to table of expanded folders *****/
    Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (FileBrowser.Zone,
@@ -5183,7 +5105,6 @@ void Brw_ContractFileTree (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
 
    /***** Remove path where the user has clicked from table of expanded folders *****/
    Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (&FileBrowser);
@@ -5199,7 +5120,6 @@ void Brw_Copy (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
 
    /***** Remove old clipboards (from all users) *****/
    Brw_DB_RemoveExpiredClipboards ();   // Someone must do this work. Let's do it whenever a user click in a copy button
@@ -5723,7 +5643,6 @@ void Brw_Paste (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
 
    switch (Brw_GetMyClipboard (&FileBrowser))
      {
@@ -6313,7 +6232,6 @@ void Brw_ShowFormFileBrowser (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
 
    /***** Check if creating a new folder or file is allowed *****/
    switch (Brw_CheckIfICanCreateIntoFolder (&FileBrowser,FileBrowser.Lvl))
@@ -6383,7 +6301,7 @@ static void Brw_PutFormToCreateAFolder (struct Brw_FileBrowser *FileBrowser,
 	 /* Folder */
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_Txt (Txt_Folder); HTM_Colon (); HTM_NBSP ();
-	    HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,"",
+	    HTM_INPUT_TEXT ("NewName",Brw_MAX_CHARS_FOLDER,"",
 			    HTM_REQUIRED,
 			    "size=\"30\" class=\"INPUT_%s\"",The_GetSuffix ());
 	 HTM_LABEL_End ();
@@ -6567,14 +6485,14 @@ static void Brw_PutFormToCreateALink (struct Brw_FileBrowser *FileBrowser,
 	    /* Label */
 	    if (asprintf (&Label,"%s&nbsp;(%s)",Txt_Save_as,Txt_optional) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    Frm_LabelColumn ("RT","NewLinkName",Label);
+	    Frm_LabelColumn ("RT","NewName",Label);
 	    free (Label);
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_INPUT_TEXT ("NewLinkName",Brw_MAX_CHARS_FOLDER,"",
+	       HTM_INPUT_TEXT ("NewName",Brw_MAX_CHARS_FOLDER,"",
 			       HTM_NO_ATTR,
-			       "id=\"NewLinkName\" size=\"30\""
+			       "id=\"NewName\" size=\"30\""
 			       " class=\"INPUT_%s\"",The_GetSuffix ());
 	    HTM_TD_End ();
 
@@ -6606,13 +6524,13 @@ void Brw_CreateFolder (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
+   Brw_GetNewFolderLinkName (FileBrowser.NewName);
 
    /***** Check if creating a new folder is allowed *****/
    switch (Brw_CheckIfICanCreateIntoFolder (&FileBrowser,FileBrowser.Lvl))
      {
       case Usr_CAN:
-	 switch (Str_ConvertFilFolLnkNameToValid (FileBrowser.NewFilFolLnkName))
+	 switch (Str_ConvertFilFolLnkNameToValid (FileBrowser.NewName))
 	   {
 	    case Err_SUCCESS:	// Folder name is valid
 	       /* In FileBrowser.NewFilFolLnkName is the name of the new folder */
@@ -6623,10 +6541,10 @@ void Brw_CreateFolder (void)
 			 FileBrowser.Path.AboveRootFolder,
 			 FileBrowser.FileMetadata.FilFolLnk.Full);
 
-	       if (strlen (Path) + 1 + strlen (FileBrowser.NewFilFolLnkName) > PATH_MAX)
+	       if (strlen (Path) + 1 + strlen (FileBrowser.NewName) > PATH_MAX)
 		  Err_PathTooLongExit ();
 	       Str_Concat (Path,"/",sizeof (Path) - 1);
-	       Str_Concat (Path,FileBrowser.NewFilFolLnkName,sizeof (Path) - 1);
+	       Str_Concat (Path,FileBrowser.NewName,sizeof (Path) - 1);
 
 	       /* Create the new directory */
 	       if (mkdir (Path,(mode_t) 0777) == 0)
@@ -6648,11 +6566,11 @@ void Brw_CreateFolder (void)
 
 			/* Add entry to the table of files/folders */
 			if (strlen (FileBrowser.FileMetadata.FilFolLnk.Full) + 1 +
-			    strlen (FileBrowser.NewFilFolLnkName) > PATH_MAX)
+			    strlen (FileBrowser.NewName) > PATH_MAX)
 			   Err_PathTooLongExit ();
 			Str_Concat (FileBrowser.FileMetadata.FilFolLnk.Full,"/",
 				    sizeof (FileBrowser.FileMetadata.FilFolLnk.Full) - 1);
-			Str_Concat (FileBrowser.FileMetadata.FilFolLnk.Full,FileBrowser.NewFilFolLnkName,
+			Str_Concat (FileBrowser.FileMetadata.FilFolLnk.Full,FileBrowser.NewName,
 				    sizeof (FileBrowser.FileMetadata.FilFolLnk.Full) - 1);
 			FileBrowser.FileMetadata.Zone = FileBrowser.Zone;
 			FileBrowser.FileMetadata.FilFolLnk.Type = Brw_IS_FOLDER;
@@ -6667,13 +6585,13 @@ void Brw_CreateFolder (void)
 							       FileBrowser.Lvl,
 							       FileNameToShow);
 			Ale_ShowAlert (Ale_SUCCESS,Txt_The_folder_X_has_been_created_inside_the_folder_Y,
-				       FileBrowser.NewFilFolLnkName,FileNameToShow);
+				       FileBrowser.NewName,FileNameToShow);
 			break;
 		     case Err_ERROR:	// Quota excedeed
 		     default:
 			Fil_RemoveTree (Path);
 			Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quota,
-				       FileBrowser.NewFilFolLnkName);
+				       FileBrowser.NewName);
 			break;
 		    }
 		 }
@@ -6683,7 +6601,7 @@ void Brw_CreateFolder (void)
 		    {
 		     case EEXIST:
 			Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_folder_X_because_there_is_already_a_folder_or_a_file_with_that_name,
-				       FileBrowser.NewFilFolLnkName);
+				       FileBrowser.NewName);
 			break;
 		     case EACCES:
 			Err_ShowErrorAndExit ("Write forbidden.");
@@ -6728,7 +6646,7 @@ void Brw_RenFolder (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
+   Brw_GetNewFolderLinkName (FileBrowser.NewName);
 
    switch (Brw_CheckIfICanEditFileOrFolder (FileBrowser.Zone,
 					    FileBrowser.FileMetadata.FilFolLnk.Full,
@@ -6736,11 +6654,11 @@ void Brw_RenFolder (void)
 					    FileBrowser.Lvl))	// Can I rename this folder?
      {
       case Usr_CAN:
-	 switch (Str_ConvertFilFolLnkNameToValid (FileBrowser.NewFilFolLnkName))
+	 switch (Str_ConvertFilFolLnkNameToValid (FileBrowser.NewName))
 	   {
 	    case Err_SUCCESS:	// Folder name is valid
 	       if (strcmp (FileBrowser.FileMetadata.FilFolLnk.Name,
-			   FileBrowser.NewFilFolLnkName))	// The name has changed
+			   FileBrowser.NewName))	// The name has changed
 		 {
 		  /* Gbl.FileBrowser.FilFolLnk.Name holds the new name of the folder */
 		  snprintf (OldPathInTree,sizeof (OldPathInTree),"%s/%s",
@@ -6752,11 +6670,11 @@ void Brw_RenFolder (void)
 		  /* Gbl.FileBrowser.NewFilFolLnkName holds the new name of the folder */
 		  if (strlen (FileBrowser.Path.AboveRootFolder) + 1 +
 		      strlen (FileBrowser.FileMetadata.FilFolLnk.Path) + 1 +
-		      strlen (FileBrowser.NewFilFolLnkName) > PATH_MAX)
+		      strlen (FileBrowser.NewName) > PATH_MAX)
 		     Err_PathTooLongExit ();
 		  snprintf (NewPathInTree,sizeof (NewPathInTree),"%s/%s",
 			    FileBrowser.FileMetadata.FilFolLnk.Path,
-			    FileBrowser.NewFilFolLnkName);
+			    FileBrowser.NewName);
 		  snprintf (NewPath,sizeof (NewPath),"%s/%s",
 			    FileBrowser.Path.AboveRootFolder,NewPathInTree);
 
@@ -6774,7 +6692,7 @@ void Brw_RenFolder (void)
 			   Ale_ShowAlert (Ale_WARNING,
 					  Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y,
 					  FileBrowser.FileMetadata.FilFolLnk.Name,
-					  FileBrowser.NewFilFolLnkName);
+					  FileBrowser.NewName);
 			   break;
 			case EACCES:
 			   Err_ShowErrorAndExit ("Write forbidden.");
@@ -6838,7 +6756,6 @@ void Brw_RcvFileDZ (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
 
    /***** Receive file *****/
    UploadSucessful = Brw_RcvFileInFileBrw (&FileBrowser,Brw_DROPZONE_UPLOAD);
@@ -6877,7 +6794,6 @@ void Brw_RcvFileClassic (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
 
    /***** Receive file and show feedback message *****/
    UploadSucessful = Brw_RcvFileInFileBrw (&FileBrowser,Brw_CLASSIC_UPLOAD);
@@ -6934,12 +6850,12 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 	 // Spaces at start or end are allowed
 	 Str_SplitFullPathIntoPathAndName (SrcFileName,
 					   PathUntilFileName,
-					   FileBrowser->NewFilFolLnkName);
-	 if (FileBrowser->NewFilFolLnkName[0])
+					   FileBrowser->NewName);
+	 if (FileBrowser->NewName[0])
 	   {
 	    /***** Check if uploading this kind of file is allowed *****/
 	    if (Brw_CheckIfUploadIsAllowed (FileBrowser,MIMEType) == Err_SUCCESS)
-	       switch (Str_ConvertFilFolLnkNameToValid (FileBrowser->NewFilFolLnkName))
+	       switch (Str_ConvertFilFolLnkNameToValid (FileBrowser->NewName))
 		 {
 		  case Err_SUCCESS:	// Folder name is valid
 		     /* FileBrowser->NewFilFolLnkName holds the name of the new file */
@@ -6951,11 +6867,11 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 			       FileBrowser->FileMetadata.FilFolLnk.Full);
 
 		     if (strlen (Path) + 1 +
-			 strlen (FileBrowser->NewFilFolLnkName) +
+			 strlen (FileBrowser->NewName) +
 			 strlen (".tmp") > PATH_MAX)
 			Err_PathTooLongExit ();
 		     Str_Concat (Path,"/",sizeof (Path) - 1);
-		     Str_Concat (Path,FileBrowser->NewFilFolLnkName,sizeof (Path) - 1);
+		     Str_Concat (Path,FileBrowser->NewName,sizeof (Path) - 1);
 
 		     /* Check if the destination file exists */
 		     switch (Fil_CheckIfPathExists (Path))
@@ -6963,7 +6879,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 			case Exi_EXISTS:
 			   Ale_CreateAlert (Ale_WARNING,NULL,
 					    Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML,
-					    FileBrowser->NewFilFolLnkName);
+					    FileBrowser->NewName);
 			   break;
 			case Exi_DOES_NOT_EXIST:
 			default:
@@ -6986,7 +6902,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 				    Fil_RemoveTree (PathTmp);
 				    Ale_CreateAlert (Ale_WARNING,NULL,
 						     Txt_UPLOAD_FILE_could_not_create_file_NO_HTML,
-						     FileBrowser->NewFilFolLnkName);
+						     FileBrowser->NewName);
 				   }
 				 else			// Success
 				   {
@@ -7007,11 +6923,11 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 
 					  /* Add entry to the table of files/folders */
 					  if (strlen (FileBrowser->FileMetadata.FilFolLnk.Full) + 1 +
-					      strlen (FileBrowser->NewFilFolLnkName) > PATH_MAX)
+					      strlen (FileBrowser->NewName) > PATH_MAX)
 					     Err_PathTooLongExit ();
 					  Str_Concat (FileBrowser->FileMetadata.FilFolLnk.Full,"/",
 						      sizeof (FileBrowser->FileMetadata.FilFolLnk.Full) - 1);
-					  Str_Concat (FileBrowser->FileMetadata.FilFolLnk.Full,FileBrowser->NewFilFolLnkName,
+					  Str_Concat (FileBrowser->FileMetadata.FilFolLnk.Full,FileBrowser->NewName,
 						      sizeof (FileBrowser->FileMetadata.FilFolLnk.Full) - 1);
 					  FileBrowser->FileMetadata.Zone = FileBrowser->Zone;
 					  FileBrowser->FileMetadata.FilFolLnk.Type = Brw_IS_FILE;
@@ -7030,7 +6946,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 										    FileNameToShow);	// Folder name
 					     Ale_CreateAlert (Ale_SUCCESS,NULL,
 							      Txt_The_file_X_has_been_placed_inside_the_folder_Y,
-							      FileBrowser->NewFilFolLnkName,
+							      FileBrowser->NewName,
 							      FileNameToShow);
 					    }
 					  UploadSucessful = Err_SUCCESS;
@@ -7071,7 +6987,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 					  Fil_RemoveTree (Path);
 					  Ale_CreateAlert (Ale_WARNING,NULL,
 							   Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML,
-							   FileBrowser->NewFilFolLnkName);
+							   FileBrowser->NewName);
 					  break;
 				      }
 				   }
@@ -7130,7 +7046,7 @@ void Brw_CreateLink (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
+   Brw_GetNewFolderLinkName (FileBrowser.NewName);
 
    /***** Check if creating a new link is allowed *****/
    switch (Brw_CheckIfICanCreateIntoFolder (&FileBrowser,FileBrowser.Lvl))
@@ -7140,14 +7056,14 @@ void Brw_CreateLink (void)
 	 Par_GetParText ("NewLinkURL",URL,PATH_MAX);
 	 if ((LengthURL = strlen (URL)))
 	   {
-	    if (FileBrowser.NewFilFolLnkName[0])
+	    if (FileBrowser.NewName[0])
 	       /*
 	       FileBrowser.NewFilFolLnkName holds the name given by me in the form
 	       Example:
 	       Name given by me: intel-architectures.pdf
 	       File in swad: intel-architectures.pdf.url
 	       */
-	       Str_Copy (URLWithoutEndingSlash,FileBrowser.NewFilFolLnkName,
+	       Str_Copy (URLWithoutEndingSlash,FileBrowser.NewName,
 			 sizeof (URLWithoutEndingSlash) - 1);
 	    else
 	       /*
@@ -7173,16 +7089,16 @@ void Brw_CreateLink (void)
 	    switch (Str_ConvertFilFolLnkNameToValid (FileName))
 	      {
 	       case Err_SUCCESS:	// Link name is valid
-		  Str_Copy (FileBrowser.NewFilFolLnkName,FileName,
-			    sizeof (FileBrowser.NewFilFolLnkName) - 1);
+		  Str_Copy (FileBrowser.NewName,FileName,
+			    sizeof (FileBrowser.NewName) - 1);
 
 		  /* FileBrowser->NewFilFolLnkName holds the name of the new file */
 		  if (strlen (FileBrowser.FileMetadata.FilFolLnk.Full) + 1 +
-		      strlen (FileBrowser.NewFilFolLnkName) + 4 > PATH_MAX)
+		      strlen (FileBrowser.NewName) + 4 > PATH_MAX)
 		     Err_PathTooLongExit ();
 		  Str_Concat (FileBrowser.FileMetadata.FilFolLnk.Full,"/",
 			      sizeof (FileBrowser.FileMetadata.FilFolLnk.Full) - 1);
-		  Str_Concat (FileBrowser.FileMetadata.FilFolLnk.Full,FileBrowser.NewFilFolLnkName,
+		  Str_Concat (FileBrowser.FileMetadata.FilFolLnk.Full,FileBrowser.NewName,
 			      sizeof (FileBrowser.FileMetadata.FilFolLnk.Full) - 1);
 		  Str_Concat (FileBrowser.FileMetadata.FilFolLnk.Full,".url",
 			      sizeof (FileBrowser.FileMetadata.FilFolLnk.Full) - 1);
@@ -7320,11 +7236,11 @@ static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (const struct Brw_FileBro
       case Brw_ADMI_MRK_CRS:
       case Brw_ADMI_MRK_GRP:
 	 /* Check file extension */
-	 if (!Str_FileIsHTML (FileBrowser->NewFilFolLnkName))
+	 if (!Str_FileIsHTML (FileBrowser->NewName))
 	   {
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 		             Txt_UPLOAD_FILE_X_not_HTML_NO_HTML,
-		             FileBrowser->NewFilFolLnkName);
+		             FileBrowser->NewName);
 	    return Err_ERROR;
 	   }
 
@@ -7337,17 +7253,17 @@ static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (const struct Brw_FileBro
 		       {	// MIME type forbidden
 			Ale_CreateAlert (Ale_WARNING,NULL,
 		                         Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML,
-				         FileBrowser->NewFilFolLnkName,MIMEType);
+				         FileBrowser->NewName,MIMEType);
 			return Err_ERROR;
 		       }
 	 break;
       default:
 	 /* Check file extension */
-	 if (Ext_CheckIfFileExtensionIsAllowed (FileBrowser->NewFilFolLnkName) == Err_ERROR)
+	 if (Ext_CheckIfFileExtensionIsAllowed (FileBrowser->NewName) == Err_ERROR)
 	   {
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 			     Txt_UPLOAD_FILE_X_extension_not_allowed_NO_HTML,
-		             FileBrowser->NewFilFolLnkName);
+		             FileBrowser->NewName);
 	    return Err_ERROR;
 	   }
 
@@ -7356,7 +7272,7 @@ static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (const struct Brw_FileBro
 	   {
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 			     Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML,
-		             FileBrowser->NewFilFolLnkName,MIMEType);
+		             FileBrowser->NewName,MIMEType);
 	    return Err_ERROR;
 	   }
 	 break;
@@ -7375,7 +7291,6 @@ void Brw_SetDocumentAsVisible (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
 
    /***** Change file to visible *****/
    if (Brw_CheckIfFileOrFolderIsHidden (&FileBrowser) == HidVis_HIDDEN)
@@ -7400,7 +7315,6 @@ void Brw_SetDocumentAsHidden (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
 
    /***** If the file or folder is not already set as hidden in database,
           set it as hidden *****/
@@ -7510,7 +7424,6 @@ void Brw_ShowFileMetadata (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
 
    /***** Get file metadata *****/
    FileBrowser.FileMetadata.FilCod = ParCod_GetAndCheckPar (ParCod_Fil);
@@ -7985,7 +7898,6 @@ void Brw_DownloadFile (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
 
    /***** Get file metadata *****/
    Brw_GetFileMetadataByPath (&FileBrowser);
@@ -8130,38 +8042,24 @@ static Usr_Can_t Brw_CheckIfICanEditFileMetadata (struct Brw_FileBrowser *FileBr
   {
    long ZoneUsrCod;
 
-   switch (Gbl.Action.Act)	// Only in actions where edition is allowed
+   switch (FileBrowser->Zone)
      {
-      case ActReqDatAdmDocIns:		case ActChgDatAdmDocIns:
-      case ActReqDatShaIns:		case ActChgDatShaIns:
-
-      case ActReqDatAdmDocCtr:		case ActChgDatAdmDocCtr:
-      case ActReqDatShaCtr:		case ActChgDatShaCtr:
-
-      case ActReqDatAdmDocDeg:		case ActChgDatAdmDocDeg:
-      case ActReqDatShaDeg:		case ActChgDatShaDeg:
-
-      case ActReqDatAdmDocCrs:		case ActChgDatAdmDocCrs:
-      case ActReqDatAdmDocGrp:		case ActChgDatAdmDocGrp:
-
-      case ActReqDatTchCrs:		case ActChgDatTchCrs:
-      case ActReqDatTchGrp:		case ActChgDatTchGrp:
-
-      case ActReqDatShaCrs:		case ActChgDatShaCrs:
-      case ActReqDatShaGrp:		case ActChgDatShaGrp:
-
-      case ActReqDatAsgUsr:		case ActChgDatAsgUsr:
-      case ActReqDatAsgCrs:		case ActChgDatAsgCrs:
-
-      case ActReqDatWrkCrs:		case ActChgDatWrkCrs:
-      case ActReqDatWrkUsr:		case ActChgDatWrkUsr:
-
-      case ActReqDatBrf:		case ActChgDatBrf:
+      case Brw_ADMI_DOC_INS:	case Brw_ADMI_SHR_INS:
+      case Brw_ADMI_DOC_CTR:	case Brw_ADMI_SHR_CTR:
+      case Brw_ADMI_DOC_DEG:	case Brw_ADMI_SHR_DEG:
+      case Brw_ADMI_DOC_CRS:	case Brw_ADMI_SHR_CRS:
+      case Brw_ADMI_DOC_GRP:	case Brw_ADMI_SHR_GRP:
+      case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
+      case Brw_ADMI_ASG_USR:	case Brw_ADMI_ASG_CRS:
+      case Brw_ADMI_WRK_USR:	case Brw_ADMI_WRK_CRS:
+      case Brw_ADMI_DOC_PRJ:	case Brw_ADMI_ASS_PRJ:
+      case Brw_ADMI_BRF_USR:
 	 if (Gbl.Usrs.Me.Logged)							// I am logged
 	   {
-	    if (FileBrowser->FileMetadata.PublisherUsrCod > 0)					// The file has publisher
+	    if (FileBrowser->FileMetadata.PublisherUsrCod > 0)				// The file has publisher
 	      {
-	       if (FileBrowser->FileMetadata.PublisherUsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// I am the publisher
+	       if (FileBrowser->FileMetadata.PublisherUsrCod ==
+		   Gbl.Usrs.Me.UsrDat.UsrCod)						// I am the publisher
 		  return Usr_CAN;
 	      }
 	    else									// The file has no publisher
@@ -8302,7 +8200,6 @@ void Brw_ChgFileMetadata (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
 
    /***** Get file metadata *****/
    FileBrowser.FileMetadata.FilCod = ParCod_GetAndCheckPar (ParCod_Fil);
@@ -8864,18 +8761,18 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_Zone_t Zone,long Cod,
 /**************** Remove a file or folder from the database ******************/
 /*****************************************************************************/
 
-static void Brw_RemoveOneFileOrFolderFromDB (const struct Brw_FileBrowser *FileBrowser,
+static void Brw_RemoveOneFileOrFolderFromDB (Brw_Zone_t Zone,
 					     const char Path[PATH_MAX + 1])
   {
    /***** Set possible notifications as removed.
           Set possible social note as unavailable.
           Important: do this before removing from files *****/
-   Ntf_MarkNotifOneFileAsRemoved (FileBrowser->Zone,Path);
-   TmlNot_MarkNoteOneFileAsUnavailable (FileBrowser,Path);
+   Ntf_MarkNotifOneFileAsRemoved (Zone,Path);
+   TmlNot_MarkNoteOneFileAsUnavailable (Zone,Path);
 
    /***** Remove from database the entries that store
           the marks properties, file views and file data *****/
-   Brw_DB_RemoveOneFileOrFolder (FileBrowser->Zone,Path);
+   Brw_DB_RemoveOneFileOrFolder (Zone,Path);
   }
 
 /*****************************************************************************/
@@ -9726,7 +9623,6 @@ void Brw_AskRemoveOldFilesBriefcase (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
 
    /***** Begin form *****/
    Frm_BeginForm (ActRemOldBrf);
@@ -9780,7 +9676,6 @@ void Brw_RemoveOldFilesBriefcase (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);
 
    if ((Brw_ZoneType[FileBrowser.Zone] & Brw_IS_ADM_CRS_ASG_WRK))
      {
@@ -9825,7 +9720,8 @@ static void Brw_RemoveOldFilesInBrowser (const struct Brw_FileBrowser *FileBrows
    Removed->NumFiles =
    Removed->NumLinks =
    Removed->NumFolds = 0;
-   Brw_ScanDirRemovingOldFiles (FileBrowser,1,FileBrowser->Path.RootFolder,
+   Brw_ScanDirRemovingOldFiles (FileBrowser->Zone,1,
+				FileBrowser->Path.RootFolder,
                                 Brw_RootFolderInternalNames[FileBrowser->Zone],
                                 TimeRemoveFilesOlder,Removed);
 
@@ -9842,8 +9738,7 @@ static void Brw_RemoveOldFilesInBrowser (const struct Brw_FileBrowser *FileBrows
 /************* Scan a directory recursively removing old files ***************/
 /*****************************************************************************/
 
-static void Brw_ScanDirRemovingOldFiles (const struct Brw_FileBrowser *FileBrowser,
-					 unsigned Level,
+static void Brw_ScanDirRemovingOldFiles (Brw_Zone_t Zone,unsigned Level,
                                          const char Path[PATH_MAX + 1],
                                          const char PathInTree[PATH_MAX + 1],
                                          time_t TimeRemoveFilesOlder,
@@ -9884,16 +9779,14 @@ static void Brw_ScanDirRemovingOldFiles (const struct Brw_FileBrowser *FileBrows
 	       Err_ShowErrorAndExit ("Can not get information about a file or folder.");
 	    else if (S_ISDIR (FileStatus.st_mode))				// It's a folder
 	       /* Scan subtree starting at this this directory recursively */
-	       Brw_ScanDirRemovingOldFiles (FileBrowser,Level + 1,PathFileRel,
+	       Brw_ScanDirRemovingOldFiles (Zone,Level + 1,PathFileRel,
 					    PathFileInExplTree,
 					    TimeRemoveFilesOlder,Removed);
 	    else if (S_ISREG (FileStatus.st_mode) &&			// It's a regular file
 		     FileStatus.st_mtime < TimeRemoveFilesOlder) 	// ..and it's old
 	      {
 	       /* Remove file/link from disk and database */
-		Brw_RemoveFileFromDiskAndDB (FileBrowser,
-					     PathFileRel,
-					     PathFileInExplTree);
+		Brw_RemoveFileFromDiskAndDB (Zone,PathFileRel,PathFileInExplTree);
 
 	       /* Update number of files/links removed */
 	       if (Str_FileIs (PathFileRel,"url"))
@@ -9929,7 +9822,7 @@ static void Brw_ScanDirRemovingOldFiles (const struct Brw_FileBrowser *FileBrows
 	     FolderStatus.st_mtime < TimeRemoveFilesOlder)	//  ..and it was old before deletion
 	   {
 	    /* Remove folder from disk and database */
-	    if (Brw_RemoveFolderFromDiskAndDB (FileBrowser,Path,PathInTree))
+	    if (Brw_RemoveFolderFromDiskAndDB (Zone,Path,PathInTree))
 	       Err_ShowErrorAndExit ("Can not remove folder.");
 
 	    /* Update number of files/links removed */
@@ -9945,7 +9838,7 @@ static void Brw_ScanDirRemovingOldFiles (const struct Brw_FileBrowser *FileBrows
 /******************* Remove file/link from disk and database *****************/
 /*****************************************************************************/
 
-static void Brw_RemoveFileFromDiskAndDB (const struct Brw_FileBrowser *FileBrowser,
+static void Brw_RemoveFileFromDiskAndDB (Brw_Zone_t Zone,
 					 const char Path[PATH_MAX + 1],
                                          const char FullPathInTree[PATH_MAX + 1])
   {
@@ -9955,7 +9848,7 @@ static void Brw_RemoveFileFromDiskAndDB (const struct Brw_FileBrowser *FileBrows
 
    /***** If a file is removed,
           it is necessary to remove it from the database *****/
-   Brw_RemoveOneFileOrFolderFromDB (FileBrowser,FullPathInTree);
+   Brw_RemoveOneFileOrFolderFromDB (Zone,FullPathInTree);
   }
 
 /*****************************************************************************/
@@ -9963,7 +9856,7 @@ static void Brw_RemoveFileFromDiskAndDB (const struct Brw_FileBrowser *FileBrows
 /*****************************************************************************/
 // Return the returned value of rmdir
 
-static int Brw_RemoveFolderFromDiskAndDB (const struct Brw_FileBrowser *FileBrowser,
+static int Brw_RemoveFolderFromDiskAndDB (Brw_Zone_t Zone,
 					  const char Path[PATH_MAX + 1],
                                           const char FullPathInTree[PATH_MAX + 1])
   {
@@ -9976,10 +9869,10 @@ static int Brw_RemoveFolderFromDiskAndDB (const struct Brw_FileBrowser *FileBrow
      {
       /***** If a folder is removed,
 	     it is necessary to remove it from the database *****/
-      Brw_RemoveOneFileOrFolderFromDB (FileBrowser,FullPathInTree);
+      Brw_RemoveOneFileOrFolderFromDB (Zone,FullPathInTree);
 
       /***** Remove affected expanded folders *****/
-      Brw_DB_RemoveAffectedExpandedFolders (FileBrowser->Zone,FullPathInTree);
+      Brw_DB_RemoveAffectedExpandedFolders (Zone,FullPathInTree);
      }
 
    return Result;

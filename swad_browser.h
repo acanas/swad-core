@@ -118,7 +118,6 @@ void Brw_PutImplicitParsFileBrowser (void *Zone);
 void Brw_PutParsFileBrowser (struct Brw_FileBrowser *FileBrowser,
 			     const char *Path,const char *Name,
                              Brw_FileType_t FileType,long FilCod);
-void Brw_GetParsFilFolLnk (struct Brw_FileBrowser *FileBrowser);
 
 void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod);
 void Brw_RemoveGrpZones (long HieCod,long GrpCod);
