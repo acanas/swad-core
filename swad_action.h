@@ -66,9 +66,6 @@ typedef enum
    Act_SVC,	// Web service. Send output to client using SOAP.
   } Act_BrowserTab_t;
 
-typedef unsigned Act_GetParams_t;
-#define Act_GET_BRW_FILFOLLNK (1 << 0)
-
 struct Act_Actions
   {
    long ActCod;	// Unique, time-persistent numerical code for the action
@@ -79,7 +76,6 @@ struct Act_Actions
    unsigned Permission[Hie_NUM_LEVELS][Usr_NUM_BELONG];
    Act_Content_t ContentType;
    Act_BrowserTab_t BrowserTab;
-   Act_GetParams_t GetParams;
   };
 
 struct Act_ActionFunc
@@ -101,7 +97,6 @@ Act_Action_t Act_GetSuperAction (Act_Action_t Action);
 Usr_Can_t Act_CheckIfICanExecuteAction (Act_Action_t Action);
 Act_Content_t Act_GetContentType (Act_Action_t Action);
 Act_BrowserTab_t Act_GetBrowserTab (Act_Action_t Action);
-Act_GetParams_t Act_GetParams (Act_Action_t Action);
 void (*Act_GetFunctionPriori (Act_Action_t Action)) (void);
 void (*Act_GetFunctionPosteriori (Act_Action_t Action)) (void);
 

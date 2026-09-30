@@ -1401,8 +1401,51 @@ void Brw_GetParAndInitFileBrowser (struct Brw_FileBrowser *FileBrowser)
 							      Lay_GetParShow ("FullTree");
 
    /* Get file / folder / link */
-   if ((Act_GetParams (Gbl.Action.Act) & Act_GET_BRW_FILFOLLNK))
-      Brw_GetParsFilFolLnk (FileBrowser);
+   switch (Gbl.Action.Act)
+     {
+      // Actions related to file browser
+      // that not require selected file / folder / link
+      case ActAdmDocPrj:	case ActAdmAssPrj:
+
+      case ActSeeAdmDocIns:
+      case ActChgToSeeDocIns:	case ActSeeDocIns:
+      case ActChgToAdmDocIns:	case ActAdmDocIns:
+      case ActAdmShaIns:
+
+      case ActSeeAdmDocCtr:
+      case ActChgToSeeDocCtr:	case ActSeeDocCtr:
+      case ActChgToAdmDocCtr:	case ActAdmDocCtr:
+      case ActAdmShaCtr:
+
+      case ActSeeAdmDocDeg:
+      case ActChgToSeeDocDeg:	case ActSeeDocDeg:
+      case ActChgToAdmDocDeg:	case ActAdmDocDeg:
+      case ActAdmShaDeg:
+
+      case ActSeeAdmDocCrsGrp:
+      case ActChgToSeeDocCrs:	case ActSeeDocCrs:	case ActSeeDocGrp:
+      case ActChgToAdmDocCrs:	case ActAdmDocCrs:	case ActAdmDocGrp:
+
+      case ActAdmTchCrsGrp:
+      case ActChgToAdmTch:	case ActAdmTchCrs:	case ActAdmTchGrp:
+
+      case ActAdmShaCrsGrp:
+      case ActChgToAdmSha:	case ActAdmShaCrs:	case ActAdmShaGrp:
+
+				case ActAdmAsgWrkUsr:
+      case ActReqAsgWrkCrs:	case ActAdmAsgWrkCrs:
+
+      case ActSeeAdmMrk:
+      case ActChgToSeeMrk:	case ActSeeMrkCrs:	case ActSeeMrkGrp:
+      case ActChgToAdmMrk:	case ActAdmMrkCrs:	case ActAdmMrkGrp:
+
+      case ActAdmBrf:		case ActReqRemOldBrf:	case ActRemOldBrf:
+	 break;
+      default:	// The rest of actions in file browser
+		// require selected file / folder / link
+         Brw_GetParsFilFolLnk (FileBrowser);
+         break;
+     }
 
    /***** Initialize file browser *****/
    Brw_InitializeFileBrowser (FileBrowser);
