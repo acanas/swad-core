@@ -2499,11 +2499,12 @@ ConExp_ContractedOrExpanded_t Brw_DB_GetIfContractedOrExpandedFolder (Brw_Zone_t
 /********************** Remove path from expanded folders ********************/
 /*****************************************************************************/
 
-void Brw_DB_RemoveFolderFromExpandedFolders (const struct Brw_FileBrowser *FileBrowser)
+void Brw_DB_RemoveFolderFromExpandedFolders (Brw_Zone_t Zone,
+					     const char Path[PATH_MAX + 1])
   {
-   long Cod = Brw_GetCodForFileBrowser (FileBrowser->Zone);
-   long WorksUsrCod = Brw_GetZoneUsrCodForFileBrowser (FileBrowser->Zone);
-   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_expanded_folders[FileBrowser->Zone];
+   long Cod = Brw_GetCodForFileBrowser (Zone);
+   long WorksUsrCod = Brw_GetZoneUsrCodForFileBrowser (Zone);
+   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_expanded_folders[Zone];
 
    if (Cod > 0)
      {
@@ -2519,7 +2520,7 @@ void Brw_DB_RemoveFolderFromExpandedFolders (const struct Brw_FileBrowser *FileB
 		         (unsigned) ZoneForDB,
 		         Cod,
 		         WorksUsrCod,
-		         FileBrowser->FileMetadata.FilFolLnk.Full);
+		         Path);
       else
 	 DB_QueryDELETE ("can not contract the content of a folder",
 		         "DELETE FROM brw_expanded"
@@ -2530,7 +2531,7 @@ void Brw_DB_RemoveFolderFromExpandedFolders (const struct Brw_FileBrowser *FileB
 		         Gbl.Usrs.Me.UsrDat.UsrCod,
 		         (unsigned) ZoneForDB,
 		         Cod,
-		         FileBrowser->FileMetadata.FilFolLnk.Full);
+		         Path);
      }
    else	// Briefcase
       DB_QueryDELETE ("can not contract the content of a folder",
@@ -2540,7 +2541,7 @@ void Brw_DB_RemoveFolderFromExpandedFolders (const struct Brw_FileBrowser *FileB
 		        " AND Path='%s/'",
 	              Gbl.Usrs.Me.UsrDat.UsrCod,
 	              (unsigned) ZoneForDB,
-	              FileBrowser->FileMetadata.FilFolLnk.Full);
+	              Path);
   }
 
 /*****************************************************************************/

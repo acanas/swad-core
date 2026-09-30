@@ -4957,7 +4957,8 @@ static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (struct Brw_FileBrowser 
    else	// File or link
      {
       /* Get file metadata */
-      Brw_GetFileMetadataByPath (FileBrowser);
+      Brw_GetFileMetadataByPath (&FileBrowser->FileMetadata,
+				  FileBrowser->Zone);
       FileExists = Brw_GetFileTypeSizeAndDate (FileBrowser);
 
       if (FileBrowser->FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
@@ -4965,8 +4966,8 @@ static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (struct Brw_FileBrowser 
 	 /* Add entry to the table of files/folders */
 	 FileBrowser->FileMetadata.PublisherUsrCod = -1L;
 	 FileBrowser->FileMetadata.PrivateOrPublic = PriPub_PRIVATE;
-	 FileBrowser->FileMetadata.License = Brw_LICENSE_DEFAULT;
-	 FileBrowser->FileMetadata.FilCod = Brw_DB_AddPath (&FileBrowser->FileMetadata);
+	 FileBrowser->FileMetadata.License         = Brw_LICENSE_DEFAULT;
+	 FileBrowser->FileMetadata.FilCod          = Brw_DB_AddPath (&FileBrowser->FileMetadata);
 	}
 
       Gbl.Usrs.Other.UsrDat.UsrCod = FileBrowser->FileMetadata.PublisherUsrCod;

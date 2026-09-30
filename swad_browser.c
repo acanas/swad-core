@@ -1109,14 +1109,14 @@ static bool Brw_GetOnlyPublicFiles (Brw_Zone_t Zone);
 static void Brw_GetParsFilFolLnk (struct Brw_FileBrowser *FileBrowser);
 
 static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser);
-static void Brw_CreateFoldersAssignmentsIfNotExist (const struct Brw_FileBrowser *FileBrowser,
+static void Brw_CreateFoldersAssignmentsIfNotExist (const char PathRootFolder[PATH_MAX + 1],
 						    long ZoneUsrCod);
 
 static void Brw_AskEditWorksCrsInternal (__attribute__((unused)) void *Args);
 static void Brw_ShowFileBrowsersAsgWrkCrs (struct Brw_FileBrowser *FileBrowser);
 static void Brw_ShowFileBrowsersAsgWrkUsr (struct Brw_FileBrowser *FileBrowser);
 
-static void Brw_FormToChangeCrsGrpZone (struct Brw_FileBrowser *FileBrowser);
+static void Brw_FormToChangeCrsGrpZone (Brw_Zone_t Zone,Lay_Show_t ShowFullTree);
 static Usr_Can_t Brw_CheckIfICanAccessToGrpFilezone (long GrpCod);
 static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat);
 static void Brw_ShowFileBrowserOrWorksInternal (void *FileBrowser);
@@ -1125,7 +1125,7 @@ static void Brw_PutIconsFileBrowser (void *FileBrowser);
 static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args);
 static void Brw_WriteTopBeforeShowingFileBrowser (struct Brw_FileBrowser *FileBrowser);
 static void Brw_UpdateLastAccess (Brw_Zone_t Zone);
-static void Brw_WriteSubtitleOfFileBrowser (struct Brw_FileBrowser *FileBrowser);
+static void Brw_WriteSubtitleOfFileBrowser (Brw_Zone_t Zone,Lay_Show_t ShowFullTree);
 static void Brw_InitHiddenLevels (struct Brw_FileBrowser *FileBrowser);
 
 static void Brw_PutCheckboxFullTree (struct Brw_FileBrowser *FileBrowser);
@@ -1199,14 +1199,15 @@ static void Brw_WriteFileSizeAndDate (const struct Brw_FileMetadata *FileMetadat
 static void Brw_WriteFileOrFolderPublisher (struct Usr_Data *UsrDat,unsigned Level);
 static void Brw_AskConfirmRemoveFolderNotEmpty (struct Brw_FileBrowser *FileBrowser);
 
-static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser);
+static void Brw_WriteCurrentClipboard (const struct Brw_Clipboard *Clipboard);
 
 static Exi_Exist_t Brw_GetMyClipboard (struct Brw_FileBrowser *FileBrowser);
 static bool Brw_CheckIfClipboardIsInThisTree (const struct Brw_FileBrowser *FileBrowser);
 
 static void Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Brw_Zone_t Zone,
 								     const char Path[PATH_MAX + 1]);
-static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (const struct Brw_FileBrowser *FileBrowser);
+static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (Brw_Zone_t Zone,
+								    const char Path[PATH_MAX + 1]);
 
 static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 			        struct Brw_FilFolLnk *FilFolLnk);
@@ -1274,7 +1275,7 @@ static Usr_Can_t Brw_CheckIfICanModifyPrjAssFileOrFolder (Brw_Zone_t Zone,
 
 static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row);
 
-static void Brw_PutLinkToAskRemOldFiles (struct Brw_FileBrowser *FileBrowser);
+static void Brw_PutLinkToAskRemOldFiles (Lay_Show_t ShowFullTree);
 static void Brw_RemoveOldFilesInBrowser (const struct Brw_FileBrowser *FileBrowser,
 					 unsigned Months,struct Brw_NumObjects *Removed);
 static void Brw_ScanDirRemovingOldFiles (Brw_Zone_t Zone,unsigned Level,
@@ -2069,8 +2070,7 @@ static void Brw_GetParsFilFolLnk (struct Brw_FileBrowser *FileBrowser)
      }
 
    /***** Get data of assignment *****/
-   if (FileBrowser->Lvl &&
-       (Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_ASG))
+   if (FileBrowser->Lvl && (Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_ASG))
      {
       Asg_SetFolder (&FileBrowser->FileMetadata.FilFolLnk,FileBrowser->Lvl,Folder);
       Asg_GetAssignmentDataByFolder (Folder);
@@ -2294,9 +2294,11 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
       /***** If file browser is for assignments,
              create folders of assignments if not exist *****/
       if (FileBrowser->Zone == Brw_ADMI_ASG_USR)
-	 Brw_CreateFoldersAssignmentsIfNotExist (FileBrowser,Gbl.Usrs.Me.UsrDat.UsrCod);
+	 Brw_CreateFoldersAssignmentsIfNotExist (FileBrowser->Path.RootFolder,
+						 Gbl.Usrs.Me.UsrDat.UsrCod);
       else if (FileBrowser->Zone == Brw_ADMI_ASG_CRS)
-	 Brw_CreateFoldersAssignmentsIfNotExist (FileBrowser,Gbl.Usrs.Other.UsrDat.UsrCod);
+	 Brw_CreateFoldersAssignmentsIfNotExist (FileBrowser->Path.RootFolder,
+						 Gbl.Usrs.Other.UsrDat.UsrCod);
      }
   }
 
@@ -2350,7 +2352,7 @@ Exi_Exist_t Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName)
 // 2. ...and the folder name is not empty (the teacher has set that the user must send work(s) for that assignment)
 // 3. ...the assignment is not restricted to groups or (if restricted to groups), the owner of zone belong to any of the groups
 
-static void Brw_CreateFoldersAssignmentsIfNotExist (const struct Brw_FileBrowser *FileBrowser,
+static void Brw_CreateFoldersAssignmentsIfNotExist (const char PathRootFolder[PATH_MAX + 1],
 						    long ZoneUsrCod)
   {
    MYSQL_RES *mysql_res;
@@ -2374,7 +2376,7 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (const struct Brw_FileBrowser
 	   {
 	    /* Create folder if not exists */
 	    snprintf (PathFolderAsg,sizeof (PathFolderAsg),"%s/%s",
-		      FileBrowser->Path.RootFolder,row[0]);
+		      PathRootFolder,row[0]);
 	    Fil_CreateDirIfNotExists (PathFolderAsg);
 	   }
      }
@@ -2737,9 +2739,10 @@ void Brw_PutLegalNotice (void)
 /**************** Form to change file zone (course or group) *****************/
 /*****************************************************************************/
 
-static void Brw_FormToChangeCrsGrpZone (struct Brw_FileBrowser *FileBrowser)
+static void Brw_FormToChangeCrsGrpZone (Brw_Zone_t Zone,Lay_Show_t ShowFullTree)
   {
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
+   Lay_Show_t ParShowFullTree = ShowFullTree;
    long CurrentGrpCod;
    struct ListCodGrps LstMyGrps;
    unsigned NumGrp;
@@ -2753,20 +2756,20 @@ static void Brw_FormToChangeCrsGrpZone (struct Brw_FileBrowser *FileBrowser)
       Grp_GetLstCodGrpsWithFileZonesIBelong (&LstMyGrps);
 
    /***** Begin form *****/
-   Frm_BeginForm (Brw_ActChgZone[FileBrowser->Zone]);
-      Brw_PutParFullTreeIfSelected (&FileBrowser->ShowFullTree);
+   Frm_BeginForm (Brw_ActChgZone[Zone]);
+      Brw_PutParFullTreeIfSelected (&ParShowFullTree);
 
       /***** List start *****/
       HTM_UL_Begin ("class=\"LIST_LEFT\"");
 
 	 /***** Select the complete course, not a group *****/
 	 HTM_LI_Begin ("class=\"%s\"",
-	               (Brw_ZoneType[FileBrowser->Zone] & Brw_IS_CRS_BRW) ? "BROWSER_TITLE" :
-									    "BROWSER_TITLE_LIGHT");
+	               (Brw_ZoneType[Zone] & Brw_IS_CRS_BRW) ? "BROWSER_TITLE" :
+							       "BROWSER_TITLE_LIGHT");
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],
-			        ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_CRS_BRW) ? HTM_CHECKED :
-										      HTM_NO_ATTR) |
+			        ((Brw_ZoneType[Zone] & Brw_IS_CRS_BRW) ? HTM_CHECKED :
+									 HTM_NO_ATTR) |
 				HTM_SUBMIT_ON_CLICK,
 				"value=\"-1\"");
 	       HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].FullName);
@@ -2788,7 +2791,7 @@ static void Brw_FormToChangeCrsGrpZone (struct Brw_FileBrowser *FileBrowser)
 
 	       /* Select this group */
 	       HTM_LI_Begin ("class=\"%s\"",
-			     (Brw_ZoneType[FileBrowser->Zone] & Brw_IS_GRP_BRW) &&
+			     (Brw_ZoneType[Zone] & Brw_IS_GRP_BRW) &&
 			     Grp.GrpCod == CurrentGrpCod ? "BROWSER_TITLE" :
 							   "BROWSER_TITLE_LIGHT");
 		  HTM_IMG (Cfg_URL_ICON_PUBLIC,
@@ -2798,7 +2801,7 @@ static void Brw_FormToChangeCrsGrpZone (struct Brw_FileBrowser *FileBrowser)
 			   "class=\"ICO25x25\" style=\"margin-left:6px;\"");
 		  HTM_LABEL_Begin (NULL);
 		     HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],
-				      ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_GRP_BRW) &&
+				      ((Brw_ZoneType[Zone] & Brw_IS_GRP_BRW) &&
 				       Grp.GrpCod == CurrentGrpCod ? HTM_CHECKED :
 								     HTM_NO_ATTR) |
 				      HTM_SUBMIT_ON_CLICK,
@@ -3089,7 +3092,8 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
 		       *Brw_HelpOfFileBrowser[FileBrowser->Zone],Box_NOT_CLOSABLE);
 
       /***** Subtitle *****/
-      Brw_WriteSubtitleOfFileBrowser (FileBrowser);
+      Brw_WriteSubtitleOfFileBrowser (FileBrowser->Zone,
+				      FileBrowser->ShowFullTree);
 
       /***** Initialize structure with publisher's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -3109,7 +3113,8 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
 
 	 /***** Get file metadata *****/
 	 Tim_StartPartialTiming ();
-	 Brw_GetFileMetadataByPath (FileBrowser);
+	 Brw_GetFileMetadataByPath (&FileBrowser->FileMetadata,
+				     FileBrowser->Zone);
 	 GetFileMetadataByPath_nsec += Tim_StopPartialTiming ();
 	 Tim_StartPartialTiming ();
 	 FileExists = Brw_GetFileTypeSizeAndDate (FileBrowser);
@@ -3278,7 +3283,7 @@ static void Brw_WriteTopBeforeShowingFileBrowser (struct Brw_FileBrowser *FileBr
       if (     (Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_BRF))
 	{
 	 if (Gbl.Action.Act != ActReqRemOldBrf)
-	    Brw_PutLinkToAskRemOldFiles (FileBrowser);	// Remove old files
+	    Brw_PutLinkToAskRemOldFiles (FileBrowser->ShowFullTree);	// Remove old files
 	}
       else if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_CRS_ASG_WRK))
 	{
@@ -3314,7 +3319,7 @@ static void Brw_WriteTopBeforeShowingFileBrowser (struct Brw_FileBrowser *FileBr
    /***** If browser is editable, get and write current clipboard *****/
    if (Brw_CheckIfFileBrowserIsEditable (FileBrowser->Zone) == Usr_CAN)
       if (Brw_GetMyClipboard (FileBrowser) == Exi_EXISTS)
-	 Brw_WriteCurrentClipboard (FileBrowser);
+	 Brw_WriteCurrentClipboard (&FileBrowser->Clipboard);
   }
 
 /*****************************************************************************/
@@ -3372,7 +3377,7 @@ static void Brw_UpdateLastAccess (Brw_Zone_t Zone)
 /*********************** Write title of a file browser ***********************/
 /*****************************************************************************/
 
-static void Brw_WriteSubtitleOfFileBrowser (struct Brw_FileBrowser *FileBrowser)
+static void Brw_WriteSubtitleOfFileBrowser (Brw_Zone_t Zone,Lay_Show_t ShowFullTree)
   {
    extern const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_center;
    extern const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_degree;
@@ -3427,7 +3432,7 @@ static void Brw_WriteSubtitleOfFileBrowser (struct Brw_FileBrowser *FileBrowser)
      };
 
    /***** Form to change zone (course and group browsers) *****/
-   switch (FileBrowser->Zone)
+   switch (Zone)
      {
       case Brw_SHOW_DOC_CRS:
       case Brw_ADMI_DOC_CRS:
@@ -3441,17 +3446,17 @@ static void Brw_WriteSubtitleOfFileBrowser (struct Brw_FileBrowser *FileBrowser)
       case Brw_ADMI_MRK_CRS:
       case Brw_SHOW_MRK_GRP:
       case Brw_ADMI_MRK_GRP:
-         Brw_FormToChangeCrsGrpZone (FileBrowser);
+         Brw_FormToChangeCrsGrpZone (Zone,ShowFullTree);
 	 break;
       default:
          break;
      }
 
    /***** Write subtitle *****/
-   if (Brw_SubtitleOfFileBrowser[FileBrowser->Zone])
+   if (Brw_SubtitleOfFileBrowser[Zone])
      {
       HTM_DIV_Begin ("class=\"BROWSER_SUBTITLE\"");
-	 HTM_Txt (*Brw_SubtitleOfFileBrowser[FileBrowser->Zone]);
+	 HTM_Txt (*Brw_SubtitleOfFileBrowser[Zone]);
       HTM_DIV_End ();
      }
   }
@@ -3703,7 +3708,8 @@ static void Brw_ListDir (struct Brw_FileBrowser *FileBrowser,
 
 	    /***** Get file metadata *****/
 	    Tim_StartPartialTiming ();
-	    Brw_GetFileMetadataByPath (FileBrowser);
+	    Brw_GetFileMetadataByPath (&FileBrowser->FileMetadata,
+					FileBrowser->Zone);
 	    GetFileMetadataByPath_nsec += Tim_StopPartialTiming ();
 	    Tim_StartPartialTiming ();
 	    FileExists = Brw_GetFileTypeSizeAndDate (FileBrowser);
@@ -3875,8 +3881,8 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
       /* Add entry to the table of files/folders */
       FileBrowser->FileMetadata.PublisherUsrCod = -1L;
       FileBrowser->FileMetadata.PrivateOrPublic = PriPub_PRIVATE;
-      FileBrowser->FileMetadata.License = Brw_LICENSE_DEFAULT;
-      FileBrowser->FileMetadata.FilCod = Brw_DB_AddPath (&FileBrowser->FileMetadata);
+      FileBrowser->FileMetadata.License         = Brw_LICENSE_DEFAULT;
+      FileBrowser->FileMetadata.FilCod          = Brw_DB_AddPath (&FileBrowser->FileMetadata);
      }
 
    /***** Is this row public or private? *****/
@@ -5150,7 +5156,8 @@ void Brw_ContractFileTree (void)
    Brw_GetParAndInitFileBrowser (&FileBrowser);
 
    /***** Remove path where the user has clicked from table of expanded folders *****/
-   Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (&FileBrowser);
+   Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (FileBrowser.Zone,
+							   FileBrowser.FileMetadata.FilFolLnk.Full);
   }
 
 /*****************************************************************************/
@@ -5187,7 +5194,7 @@ void Brw_Copy (void)
 /********* Write a title with the content of the current clipboard ***********/
 /*****************************************************************************/
 
-static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser)
+static void Brw_WriteCurrentClipboard (const struct Brw_Clipboard *Clipboard)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_Copy_source;
@@ -5231,10 +5238,10 @@ static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser
       [Brw_IS_LINK   ] = &Txt_link,
      };
 
-   switch (FileBrowser->Clipboard.Zone)
+   switch (Clipboard->Zone)
      {
       case Brw_ADMI_DOC_INS:
-	 Hie[Hie_INS].HieCod = FileBrowser->Clipboard.HieCod;
+	 Hie[Hie_INS].HieCod = Clipboard->HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
@@ -5242,7 +5249,7 @@ static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser
                    Txt_HIERARCHY_SINGUL_abc[Hie_INS],Hie[Hie_INS].ShrtName);
          break;
       case Brw_ADMI_SHR_INS:
-	 Hie[Hie_INS].HieCod = FileBrowser->Clipboard.HieCod;
+	 Hie[Hie_INS].HieCod = Clipboard->HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
@@ -5250,7 +5257,7 @@ static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser
                    Txt_HIERARCHY_SINGUL_abc[Hie_INS],Hie[Hie_INS].ShrtName);
          break;
       case Brw_ADMI_DOC_CTR:
-	 Hie[Hie_CTR].HieCod = FileBrowser->Clipboard.HieCod;
+	 Hie[Hie_CTR].HieCod = Clipboard->HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Hie[Hie_CTR]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
@@ -5258,7 +5265,7 @@ static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser
                    Txt_HIERARCHY_SINGUL_abc[Hie_CTR],Hie[Hie_CTR].ShrtName);
          break;
       case Brw_ADMI_SHR_CTR:
-	 Hie[Hie_CTR].HieCod = FileBrowser->Clipboard.HieCod;
+	 Hie[Hie_CTR].HieCod = Clipboard->HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Hie[Hie_CTR]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
@@ -5266,7 +5273,7 @@ static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser
                    Txt_HIERARCHY_SINGUL_abc[Hie_CTR],Hie[Hie_CTR].ShrtName);
          break;
       case Brw_ADMI_DOC_DEG:
-	 Hie[Hie_DEG].HieCod = FileBrowser->Clipboard.HieCod;
+	 Hie[Hie_DEG].HieCod = Clipboard->HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
@@ -5274,7 +5281,7 @@ static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser
                    Txt_HIERARCHY_SINGUL_abc[Hie_DEG],Hie[Hie_DEG].ShrtName);
          break;
       case Brw_ADMI_SHR_DEG:
-	 Hie[Hie_DEG].HieCod = FileBrowser->Clipboard.HieCod;
+	 Hie[Hie_DEG].HieCod = Clipboard->HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
@@ -5282,7 +5289,7 @@ static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser
                    Txt_HIERARCHY_SINGUL_abc[Hie_DEG],Hie[Hie_DEG].ShrtName);
          break;
       case Brw_ADMI_DOC_CRS:
-	 Hie[Hie_CRS].HieCod = FileBrowser->Clipboard.HieCod;
+	 Hie[Hie_CRS].HieCod = Clipboard->HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
@@ -5290,7 +5297,7 @@ static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser
                    Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName);
          break;
       case Brw_ADMI_DOC_GRP:
-         Grp.GrpCod = FileBrowser->Clipboard.HieCod;
+         Grp.GrpCod = Clipboard->HieCod;
          Grp_GetGroupDataByCod (&HieCod,&GrpTyp.GrpTypCod,&Grp);
          Grp_GetGroupTypeDataByCod (&GrpTyp);
          Hie[Hie_CRS].HieCod = HieCod;
@@ -5302,7 +5309,7 @@ static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser
                    Txt_group,GrpTyp.Name,Grp.Name);
          break;
       case Brw_ADMI_TCH_CRS:
-	 Hie[Hie_CRS].HieCod = FileBrowser->Clipboard.HieCod;
+	 Hie[Hie_CRS].HieCod = Clipboard->HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
@@ -5310,7 +5317,7 @@ static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser
                    Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName);
          break;
       case Brw_ADMI_TCH_GRP:
-         Grp.GrpCod = FileBrowser->Clipboard.HieCod;
+         Grp.GrpCod = Clipboard->HieCod;
          Grp_GetGroupDataByCod (&HieCod,&GrpTyp.GrpTypCod,&Grp);
 	 Grp_GetGroupTypeDataByCod (&GrpTyp);
          Hie[Hie_CRS].HieCod = HieCod;
@@ -5322,7 +5329,7 @@ static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser
                    Txt_group,GrpTyp.Name,Grp.Name);
          break;
       case Brw_ADMI_SHR_CRS:
-	 Hie[Hie_CRS].HieCod = FileBrowser->Clipboard.HieCod;
+	 Hie[Hie_CRS].HieCod = Clipboard->HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
@@ -5330,7 +5337,7 @@ static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser
                    Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName);
          break;
       case Brw_ADMI_SHR_GRP:
-         Grp.GrpCod = FileBrowser->Clipboard.HieCod;
+         Grp.GrpCod = Clipboard->HieCod;
          Grp_GetGroupDataByCod (&HieCod,&GrpTyp.GrpTypCod,&Grp);
 	 Grp_GetGroupTypeDataByCod (&GrpTyp);
          Hie[Hie_CRS].HieCod = HieCod;
@@ -5342,7 +5349,7 @@ static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser
                    Txt_group,GrpTyp.Name,Grp.Name);
          break;
       case Brw_ADMI_ASG_USR:
-	 Hie[Hie_CRS].HieCod = FileBrowser->Clipboard.HieCod;
+	 Hie[Hie_CRS].HieCod = Clipboard->HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
@@ -5351,7 +5358,7 @@ static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser
                    Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
          break;
       case Brw_ADMI_WRK_USR:
-	 Hie[Hie_CRS].HieCod = FileBrowser->Clipboard.HieCod;
+	 Hie[Hie_CRS].HieCod = Clipboard->HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
@@ -5360,10 +5367,10 @@ static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser
                    Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
          break;
       case Brw_ADMI_ASG_CRS:
-	 Hie[Hie_CRS].HieCod = FileBrowser->Clipboard.HieCod;
+	 Hie[Hie_CRS].HieCod = Clipboard->HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          Usr_UsrDataConstructor (&UsrDat);
-         UsrDat.UsrCod = FileBrowser->Clipboard.WorksUsrCod;
+         UsrDat.UsrCod = Clipboard->WorksUsrCod;
          Usr_GetAllUsrDataFromUsrCod (&UsrDat,
                                       Usr_DONT_GET_PREFS,
                                       Usr_DONT_GET_ROLE_IN_CRS);
@@ -5375,10 +5382,10 @@ static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser
          Usr_UsrDataDestructor (&UsrDat);
          break;
       case Brw_ADMI_WRK_CRS:
-	 Hie[Hie_CRS].HieCod = FileBrowser->Clipboard.HieCod;
+	 Hie[Hie_CRS].HieCod = Clipboard->HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          Usr_UsrDataConstructor (&UsrDat);
-         UsrDat.UsrCod = FileBrowser->Clipboard.WorksUsrCod;
+         UsrDat.UsrCod = Clipboard->WorksUsrCod;
          Usr_GetAllUsrDataFromUsrCod (&UsrDat,
                                       Usr_DONT_GET_PREFS,
                                       Usr_DONT_GET_ROLE_IN_CRS);
@@ -5392,20 +5399,20 @@ static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser
       case Brw_ADMI_DOC_PRJ:
       case Brw_ADMI_ASS_PRJ:
 	 Prj_AllocMemProject (&Prj);
-         Prj.PrjCod = FileBrowser->Clipboard.HieCod;
+         Prj.PrjCod = Clipboard->HieCod;
          Prj_GetProjectDataByCod (&Prj);
          Hie[Hie_CRS].HieCod = Prj.HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
-                   FileBrowser->Clipboard.Zone == Brw_ADMI_DOC_PRJ ? Txt_project_documents :
-                                                                            Txt_project_assessment,
+                   Clipboard->Zone == Brw_ADMI_DOC_PRJ ? Txt_project_documents :
+                                                         Txt_project_assessment,
                    Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName,
                    Txt_project,Prj.Title);
          Prj_FreeMemProject (&Prj);
          break;
       case Brw_ADMI_MRK_CRS:
-	 Hie[Hie_CRS].HieCod = FileBrowser->Clipboard.HieCod;
+	 Hie[Hie_CRS].HieCod = Clipboard->HieCod;
 	 SuccessOrError = Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
@@ -5413,7 +5420,7 @@ static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser
                    Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName);
          break;
       case Brw_ADMI_MRK_GRP:
-         Grp.GrpCod = FileBrowser->Clipboard.HieCod;
+         Grp.GrpCod = Clipboard->HieCod;
          Grp_GetGroupDataByCod (&HieCod,&GrpTyp.GrpTypCod,&Grp);
 	 Grp_GetGroupTypeDataByCod (&GrpTyp);
          Hie[Hie_CRS].HieCod = HieCod;
@@ -5434,17 +5441,17 @@ static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser
          break;
      }
 
-   if (FileBrowser->Clipboard.Level)		// Is the root folder?
+   if (Clipboard->Level)		// Is the root folder?
      {
       // Not the root folder
-      Brw_GetFileNameToShowDependingOnLevel (&FileBrowser->Clipboard.FilFolLnk,
-                                             FileBrowser->Clipboard.Zone,
-                                             FileBrowser->Clipboard.Level,
+      Brw_GetFileNameToShowDependingOnLevel (&Clipboard->FilFolLnk,
+                                             Clipboard->Zone,
+                                             Clipboard->Level,
                                              FileNameToShow);
 
       Ale_ShowAlert (Ale_CLIPBOARD,"%s: %s, %s <strong>%s</strong>.",
                      Txt_Copy_source,TxtClipboardZone,
-                     *TxtFileType[FileBrowser->Clipboard.FilFolLnk.Type],
+                     *TxtFileType[Clipboard->FilFolLnk.Type],
                      FileNameToShow);
      }
    else
@@ -5666,13 +5673,14 @@ static void Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Brw_Zone_t 
 /******* and update click time of the other folders in the expl. tree ********/
 /*****************************************************************************/
 
-static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (const struct Brw_FileBrowser *FileBrowser)
+static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (Brw_Zone_t Zone,
+								    const char Path[PATH_MAX + 1])
   {
    /***** Remove Path from expanded folders table *****/
-   Brw_DB_RemoveFolderFromExpandedFolders (FileBrowser);
+   Brw_DB_RemoveFolderFromExpandedFolders (Zone,Path);
 
    /***** Update paths of the current file browser in table of expanded folders *****/
-   Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders (FileBrowser->Zone);
+   Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders (Zone);
   }
 
 /*****************************************************************************/
@@ -6150,10 +6158,10 @@ static Err_SuccessOrError_t Brw_PasteTreeIntoFolder (struct Brw_FileBrowser *Fil
 			      Fil_FastCopyOfFiles (PathOrg,PathDst);
 
 			      /***** Add entry to the table of files/folders *****/
-			      FileMetadata.Zone = FileBrowser->Zone;
+			      FileMetadata.Zone            = FileBrowser->Zone;
 			      FileMetadata.PublisherUsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 			      FileMetadata.PrivateOrPublic = PriPub_PRIVATE;
-			      FileMetadata.License = Brw_LICENSE_DEFAULT;
+			      FileMetadata.License         = Brw_LICENSE_DEFAULT;
 			      FilCod = Brw_DB_AddPath (&FileMetadata);
 			      if (*FirstFilCod <= 0)
 				 *FirstFilCod = FilCod;
@@ -6201,7 +6209,7 @@ static Err_SuccessOrError_t Brw_PasteTreeIntoFolder (struct Brw_FileBrowser *Fil
 			   /* Add entry to the table of files/folders */
 			   FileMetadata.PublisherUsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 			   FileMetadata.PrivateOrPublic = PriPub_PRIVATE;
-			   FileMetadata.License = Brw_LICENSE_DEFAULT;
+			   FileMetadata.License         = Brw_LICENSE_DEFAULT;
 			   Brw_DB_AddPath (&FileMetadata);
 			   break;
 			case Err_ERROR:		// Quota exceeded
@@ -6615,11 +6623,11 @@ void Brw_CreateFolder (void)
 				    sizeof (FileBrowser.FileMetadata.FilFolLnk.Full) - 1);
 			Str_Concat (FileBrowser.FileMetadata.FilFolLnk.Full,FileBrowser.NewName,
 				    sizeof (FileBrowser.FileMetadata.FilFolLnk.Full) - 1);
-			FileBrowser.FileMetadata.Zone = FileBrowser.Zone;
-			FileBrowser.FileMetadata.FilFolLnk.Type = Brw_IS_FOLDER;
+			FileBrowser.FileMetadata.Zone            = FileBrowser.Zone;
+			FileBrowser.FileMetadata.FilFolLnk.Type  = Brw_IS_FOLDER;
 			FileBrowser.FileMetadata.PublisherUsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 			FileBrowser.FileMetadata.PrivateOrPublic = PriPub_PRIVATE;
-			FileBrowser.FileMetadata.License = Brw_LICENSE_DEFAULT;
+			FileBrowser.FileMetadata.License         = Brw_LICENSE_DEFAULT;
 			Brw_DB_AddPath (&FileBrowser.FileMetadata);
 
 			/* The folder has been created sucessfully */
@@ -6972,11 +6980,11 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 						      sizeof (FileBrowser->FileMetadata.FilFolLnk.Full) - 1);
 					  Str_Concat (FileBrowser->FileMetadata.FilFolLnk.Full,FileBrowser->NewName,
 						      sizeof (FileBrowser->FileMetadata.FilFolLnk.Full) - 1);
-					  FileBrowser->FileMetadata.Zone = FileBrowser->Zone;
-					  FileBrowser->FileMetadata.FilFolLnk.Type = Brw_IS_FILE;
+					  FileBrowser->FileMetadata.Zone            = FileBrowser->Zone;
+					  FileBrowser->FileMetadata.FilFolLnk.Type  = Brw_IS_FILE;
 					  FileBrowser->FileMetadata.PublisherUsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 					  FileBrowser->FileMetadata.PrivateOrPublic = PriPub_PRIVATE;
-					  FileBrowser->FileMetadata.License = Brw_LICENSE_DEFAULT;
+					  FileBrowser->FileMetadata.License         = Brw_LICENSE_DEFAULT;
 					  FilCod = Brw_DB_AddPath (&FileBrowser->FileMetadata);
 
 					  /* Show message of confirmation */
@@ -7187,11 +7195,11 @@ void Brw_CreateLink (void)
 											  FileBrowser.FileMetadata.FilFolLnk.Full);
 
 				 /* Add entry to the table of files/folders */
-				 FileBrowser.FileMetadata.Zone = FileBrowser.Zone;
-				 FileBrowser.FileMetadata.FilFolLnk.Type = Brw_IS_LINK;
+				 FileBrowser.FileMetadata.Zone            = FileBrowser.Zone;
+				 FileBrowser.FileMetadata.FilFolLnk.Type  = Brw_IS_LINK;
 				 FileBrowser.FileMetadata.PublisherUsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 				 FileBrowser.FileMetadata.PrivateOrPublic = PriPub_PRIVATE;
-				 FileBrowser.FileMetadata.License = Brw_LICENSE_DEFAULT;
+				 FileBrowser.FileMetadata.License         = Brw_LICENSE_DEFAULT;
 				 FilCod = Brw_DB_AddPath (&FileBrowser.FileMetadata);
 
 				 /* Show message of confirmation */
@@ -7390,10 +7398,10 @@ HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHidden (struct Brw_FileBrowser
 								 FileBrowser->FileMetadata.FilFolLnk.Full))
      {
       case HidVis_VISIBLE:
-         FileBrowser->FileMetadata.Zone = FileBrowser->Zone;
+         FileBrowser->FileMetadata.Zone            = FileBrowser->Zone;
          FileBrowser->FileMetadata.PublisherUsrCod = -1L;
 	 FileBrowser->FileMetadata.PrivateOrPublic = PriPub_PRIVATE;
-	 FileBrowser->FileMetadata.License = Brw_LICENSE_DEFAULT;
+	 FileBrowser->FileMetadata.License         = Brw_LICENSE_DEFAULT;
 	 Brw_DB_AddPath (&FileBrowser->FileMetadata);
 	 Hidden = HidVis_VISIBLE;
 	 break;
@@ -7478,7 +7486,7 @@ void Brw_ShowFileMetadata (void)
 	 /* Add entry to the table of files/folders */
          FileBrowser.FileMetadata.PublisherUsrCod = -1L;
 	 FileBrowser.FileMetadata.PrivateOrPublic = PriPub_PRIVATE;
-	 FileBrowser.FileMetadata.License = Brw_LICENSE_DEFAULT;
+	 FileBrowser.FileMetadata.License         = Brw_LICENSE_DEFAULT;
 	 FileBrowser.FileMetadata.FilCod = Brw_DB_AddPath (&FileBrowser.FileMetadata);
         }
 
@@ -7943,7 +7951,8 @@ void Brw_DownloadFile (void)
    Brw_GetParAndInitFileBrowser (&FileBrowser);
 
    /***** Get file metadata *****/
-   Brw_GetFileMetadataByPath (&FileBrowser);
+   Brw_GetFileMetadataByPath (&FileBrowser.FileMetadata,
+			       FileBrowser.Zone);
    if (Brw_GetFileTypeSizeAndDate (&FileBrowser) == Exi_EXISTS)
      {
       if (FileBrowser.FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
@@ -7951,8 +7960,8 @@ void Brw_DownloadFile (void)
 	 /* Add entry to the table of files/folders */
          FileBrowser.FileMetadata.PublisherUsrCod = -1L;
 	 FileBrowser.FileMetadata.PrivateOrPublic = PriPub_PRIVATE;
-	 FileBrowser.FileMetadata.License = Brw_LICENSE_DEFAULT;
-	 FileBrowser.FileMetadata.FilCod = Brw_DB_AddPath (&FileBrowser.FileMetadata);
+	 FileBrowser.FileMetadata.License         = Brw_LICENSE_DEFAULT;
+	 FileBrowser.FileMetadata.FilCod          = Brw_DB_AddPath (&FileBrowser.FileMetadata);
         }
 
       /***** Check if I can view this file.
@@ -8364,21 +8373,21 @@ static Brw_License_t Brw_GetParLicense (void)
 // This function only gets metadata stored in table files,
 // does not get size, time, numviews...
 
-void Brw_GetFileMetadataByPath (struct Brw_FileBrowser *FileBrowser)
+void Brw_GetFileMetadataByPath (struct Brw_FileMetadata *FileMetadata,Brw_Zone_t Zone)
   {
    MYSQL_RES *mysql_res;
 
    /***** Get metadata of a file from database *****/
-   switch (Brw_DB_GetFileMetadataByPath (&mysql_res,FileBrowser->Zone,
-					 FileBrowser->FileMetadata.FilFolLnk.Full))
+   switch (Brw_DB_GetFileMetadataByPath (&mysql_res,
+					 Zone,FileMetadata->FilFolLnk.Full))
      {
       case Exi_EXISTS:
-         Brw_ResetFileMetadata (&FileBrowser->FileMetadata);	// FileMetadata->FilFolLnk is not reset
-	 Brw_GetFileMetadataFromRow (mysql_res,&FileBrowser->FileMetadata);
+         Brw_ResetFileMetadata (FileMetadata);	// FileMetadata->FilFolLnk is not reset
+	 Brw_GetFileMetadataFromRow (mysql_res,FileMetadata);
 	 break;
       case Exi_DOES_NOT_EXIST:
       default:
-         Brw_ResetFileMetadata (&FileBrowser->FileMetadata);	// FileMetadata->FilFolLnk is not reset
+         Brw_ResetFileMetadata (FileMetadata);	// FileMetadata->FilFolLnk is not reset
 	 break;
      }
   }
@@ -9413,19 +9422,16 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    if (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileBrowser.FileMetadata) == HidVis_HIDDEN)
       return;
 
-   /***** Get institution code (row[2]) *****/
+   /***** Get institution (row[2], row[3]),
+              center code (row[4], row[5]),
+              degree code (row[6], row[7]),
+              course code (row[8], row[9]) *****/
    Hie[Hie_INS].HieCod = Str_ConvertStrCodToLongCod (row[2]);
    Str_Copy (Hie[Hie_INS].ShrtName,row[3],sizeof (Hie[Hie_INS].ShrtName) - 1);
-
-   /***** Get center code (row[4]) *****/
    Hie[Hie_CTR].HieCod = Str_ConvertStrCodToLongCod (row[4]);
    Str_Copy (Hie[Hie_CTR].ShrtName,row[5],sizeof (Hie[Hie_CTR].ShrtName) - 1);
-
-   /***** Get degree code (row[6]) *****/
    Hie[Hie_DEG].HieCod = Str_ConvertStrCodToLongCod (row[6]);
    Str_Copy (Hie[Hie_DEG].ShrtName,row[7],sizeof (Hie[Hie_DEG].ShrtName) - 1);
-
-   /***** Get course code (row[8]) *****/
    Hie[Hie_CRS].HieCod = Str_ConvertStrCodToLongCod (row[8]);
    Str_Copy (Hie[Hie_CRS].ShrtName,row[9],sizeof (Hie[Hie_CRS].ShrtName) - 1);
 
@@ -9642,12 +9648,13 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 /***************** Write a form (link) to remove old files *******************/
 /*****************************************************************************/
 
-static void Brw_PutLinkToAskRemOldFiles (struct Brw_FileBrowser *FileBrowser)
+static void Brw_PutLinkToAskRemOldFiles (Lay_Show_t ShowFullTree)
   {
    extern const char *Txt_Remove_old_files;
+   Lay_Show_t ParShowFullTree = ShowFullTree;
 
    Lay_PutContextualLinkIconText (ActReqRemOldBrf,NULL,
-				  Brw_PutParFullTreeIfSelected,&FileBrowser->ShowFullTree,
+				  Brw_PutParFullTreeIfSelected,&ParShowFullTree,
 				  "trash.svg",Ico_RED,
 				  Txt_Remove_old_files,NULL);
   }

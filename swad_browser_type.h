@@ -197,6 +197,17 @@ struct Brw_TmpPubDir
       char Right[NAME_MAX + 1];	// Right directory: rest of chars
      };
 
+struct Brw_Clipboard
+  {
+   Brw_Zone_t Zone;		// Type of the file browser
+   long HieCod;		// Code of the institution/center/degree/course/group related to the file browser with the clipboard
+   long WorksUsrCod;		// User code of the user related to the works file browser with the clipboard
+   unsigned Level;
+   struct Brw_FilFolLnk FilFolLnk;
+   bool IsThisTree;		// When showing a file browser, is it that corresponding to the clipboard?
+   bool IsThisFile;		// When showing a row of a file browser, are we in the path of the clipboard?
+  };
+
 struct Brw_Size
   {
    unsigned long MaxFiles;
@@ -222,16 +233,7 @@ struct Brw_FileBrowser
    char NewName[NAME_MAX + 1];	// New name when creating a folder, creating a link, or renaming a folder
    unsigned Lvl;
    struct Brw_FileMetadata FileMetadata;
-   struct
-     {
-      Brw_Zone_t Zone;		// Type of the file browser
-      long HieCod;		// Code of the institution/center/degree/course/group related to the file browser with the clipboard
-      long WorksUsrCod;		// User code of the user related to the works file browser with the clipboard
-      unsigned Level;
-      struct Brw_FilFolLnk FilFolLnk;
-      bool IsThisTree;		// When showing a file browser, is it that corresponding to the clipboard?
-      bool IsThisFile;		// When showing a row of a file browser, are we in the path of the clipboard?
-     } Clipboard;
+   struct Brw_Clipboard Clipboard;
    HidVis_HiddenOrVisible_t HiddenLevels[1 + Brw_MAX_DIR_LEVELS];
    struct Brw_Size Size;
   };

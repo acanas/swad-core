@@ -120,7 +120,8 @@ void Brw_DB_InsertFolderInExpandedFolders (Brw_Zone_t Zone,
 void Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders (Brw_Zone_t Zone);
 ConExp_ContractedOrExpanded_t Brw_DB_GetIfContractedOrExpandedFolder (Brw_Zone_t Zone,
 								      const char Path[PATH_MAX + 1]);
-void Brw_DB_RemoveFolderFromExpandedFolders (const struct Brw_FileBrowser *FileBrowser);
+void Brw_DB_RemoveFolderFromExpandedFolders (Brw_Zone_t Zone,
+					     const char Path[PATH_MAX + 1]);
 void Brw_DB_RemoveAffectedExpandedFolders (Brw_Zone_t Zone,
 					   const char Path[PATH_MAX + 1]);
 void Brw_DB_RenameAffectedExpandedFolders (Brw_Zone_t Zone,

@@ -90,7 +90,7 @@ void Brw_ShowFileMetadata (void);
 void Brw_GetLinkToDownloadFile (struct Brw_FileBrowser *FileBrowser,char *URL);
 void Brw_DownloadFile (void);
 void Brw_ChgFileMetadata (void);
-void Brw_GetFileMetadataByPath (struct Brw_FileBrowser *FileBrowser);
+void Brw_GetFileMetadataByPath (struct Brw_FileMetadata *FileMetadata,Brw_Zone_t Zone);
 void Brw_GetFileMetadataByCod (struct Brw_FileMetadata *FileMetadata);
 Exi_Exist_t Brw_GetFileTypeSizeAndDate (struct Brw_FileBrowser *FileBrowser);
 void Brw_GetAndUpdateFileViews (struct Brw_FileMetadata *FileMetadata);
