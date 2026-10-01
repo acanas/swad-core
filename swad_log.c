@@ -211,14 +211,14 @@ void Log_GetAndShowLastClicks (void)
 
       /* Heading row */
       HTM_TR_Begin (NULL);
-	 HTM_TH_Span (Txt_Click				,HTM_HEAD_RIGHT,1,1,"LC_CLK");	// Click
-	 HTM_TH_Span (Txt_ELAPSED_TIME			,HTM_HEAD_RIGHT,1,1,"LC_TIM");	// Elapsed time
-	 HTM_TH_Span (Txt_Role				,HTM_HEAD_LEFT ,1,1,"LC_ROL");	// Role
+	 HTM_TH_Span (Txt_Click				 ,HTM_HEAD_RIGHT,1,1,"LC_CLK");	// Click
+	 HTM_TH_Span (Txt_ELAPSED_TIME			 ,HTM_HEAD_RIGHT,1,1,"LC_TIM");	// Elapsed time
+	 HTM_TH_Span (Txt_Role				 ,HTM_HEAD_LEFT ,1,1,"LC_ROL");	// Role
 	 for (HieLvl  = Hie_CTY;
 	      HieLvl <= Hie_DEG;
 	      HieLvl++)
 	    HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[HieLvl],HTM_HEAD_LEFT ,1,1,"LC_HIE");	// Country, Institution, Center, Degree
-	 HTM_TH_Span (Txt_Action			,HTM_HEAD_LEFT ,1,1,"LC_ACT");	// Action
+	 HTM_TH_Span (Txt_Action			 ,HTM_HEAD_LEFT ,1,1,"LC_ACT");	// Action
       HTM_TR_End ();
 
       for (NumClick = 0;

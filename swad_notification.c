@@ -588,7 +588,7 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
      }
    else
      {
-      if (Status & Ntf_STATUS_BIT_READ)	// I have already seen the source of the notification
+      if (Status & Ntf_STATUS_BIT_READ)		// I have already seen the source of the notification
 	{
 	 Class.Txt    = "MSG_TIT";
 	 Class.Link   = "LT BT_LINK MSG_TIT";
@@ -646,7 +646,7 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	       break;
 	    case Frm_DONT_PUT_FORM:
 	    default:
-	       HTM_SPAN_Begin ("class=\"Ntf_TYPE %s\"",Class.Txt);
+	       HTM_SPAN_Begin ("class=\"Ntf_TYPE %s_%s\"",Class.Txt,The_GetSuffix ());
 		  HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
 	       HTM_SPAN_End ();
 	       break;

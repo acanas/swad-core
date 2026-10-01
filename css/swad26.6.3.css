@@ -2962,40 +2962,40 @@ table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 .DAT_SMALL_LIGHT_PURPLE,
 .DAT_SMALL_LIGHT_BLUE,
 .DAT_SMALL_LIGHT_YELLOW,
-.DAT_SMALL_LIGHT_PINK	{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #a0a0a0; font-size: 12pt;}
-.DAT_SMALL_LIGHT_DARK	{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #a0a0a0; font-size: 12pt;}
+.DAT_SMALL_LIGHT_PINK	{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #a0a0a0; font-size: 10pt;}
+.DAT_SMALL_LIGHT_DARK	{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #a0a0a0; font-size: 10pt;}
 
 .DAT_SMALL_BLUE_WHITE,
 .DAT_SMALL_BLUE_GREY,
 .DAT_SMALL_BLUE_PURPLE,
 .DAT_SMALL_BLUE_BLUE,
 .DAT_SMALL_BLUE_YELLOW,
-.DAT_SMALL_BLUE_PINK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #0080ff; font-size: 12pt;}
-.DAT_SMALL_BLUE_DARK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #0080ff; font-size: 12pt;}
+.DAT_SMALL_BLUE_PINK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #0080ff; font-size: 10pt;}
+.DAT_SMALL_BLUE_DARK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #0080ff; font-size: 10pt;}
 
 .DAT_SMALL_GREEN_WHITE,
 .DAT_SMALL_GREEN_GREY,
 .DAT_SMALL_GREEN_PURPLE,
 .DAT_SMALL_GREEN_BLUE,
 .DAT_SMALL_GREEN_YELLOW,
-.DAT_SMALL_GREEN_PINK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #246600; font-size: 12pt;}
-.DAT_SMALL_GREEN_DARK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #80c040; font-size: 12pt;}
+.DAT_SMALL_GREEN_PINK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #246600; font-size: 10pt;}
+.DAT_SMALL_GREEN_DARK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #80c040; font-size: 10pt;}
 
 .DAT_SMALL_RED_WHITE,
 .DAT_SMALL_RED_GREY,
 .DAT_SMALL_RED_PURPLE,
 .DAT_SMALL_RED_BLUE,
 .DAT_SMALL_RED_YELLOW,
-.DAT_SMALL_RED_PINK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #660000; font-size: 12pt;}
-.DAT_SMALL_RED_DARK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #ff8080; font-size: 12pt;}
+.DAT_SMALL_RED_PINK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #660000; font-size: 10pt;}
+.DAT_SMALL_RED_DARK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #ff8080; font-size: 10pt;}
 
 .DAT_SMALL_YELLOW_WHITE,
 .DAT_SMALL_YELLOW_GREY,
 .DAT_SMALL_YELLOW_PURPLE,
 .DAT_SMALL_YELLOW_BLUE,
 .DAT_SMALL_YELLOW_YELLOW,
-.DAT_SMALL_YELLOW_PINK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #C0C000; font-size: 12pt;}
-.DAT_SMALL_YELLOW_DARK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #C0C000; font-size: 12pt;}
+.DAT_SMALL_YELLOW_PINK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #C0C000; font-size: 10pt;}
+.DAT_SMALL_YELLOW_DARK		{font-family: "Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color: #C0C000; font-size: 10pt;}
 
 /******************************** User's IDs *********************************/
 .USR_ID_C_WHITE,

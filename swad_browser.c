@@ -1187,10 +1187,11 @@ static void Brw_PutButtonToDownloadZIPOfAFolder (struct Brw_FileBrowser *FileBro
 static void Brw_WriteFileName (struct Brw_FileBrowser *FileBrowser,
 			       unsigned Level,
 			       const char *TxtStyle,const char *InputStyle);
-static void Brw_GetFileNameToShowDependingOnLevel (const struct Brw_FilFolLnk *FilFolLnk,
-                                                   Brw_Zone_t Zone,
+static void Brw_GetFileNameToShowDependingOnLevel (Brw_FileType_t FileType,
+						   const char FileName[NAME_MAX + 1],
+						   Brw_Zone_t Zone,
                                                    unsigned Level,
-                                                   char *FileNameToShow);
+                                                   char FileNameToShow[NAME_MAX + 1]);
 static void Brw_GetFileNameToShow (Brw_FileType_t FileType,
                                    const char FileName[NAME_MAX + 1],
                                    char FileNameToShow[NAME_MAX + 1]);
@@ -1209,8 +1210,7 @@ static void Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Brw_Zone_t 
 static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (Brw_Zone_t Zone,
 								    const char Path[PATH_MAX + 1]);
 
-static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
-			        struct Brw_FilFolLnk *FilFolLnk);
+static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser);
 static unsigned Brw_NumLevelsInPath (const char Path[PATH_MAX + 1]);
 static Err_SuccessOrError_t Brw_PasteTreeIntoFolder (struct Brw_FileBrowser *FileBrowser,
 						     unsigned LevelOrg,
@@ -4675,7 +4675,8 @@ static void Brw_WriteFileName (struct Brw_FileBrowser *FileBrowser,
    const struct Asg_Assignment *Asg;
 
    /***** Get the name of the file to show *****/
-   Brw_GetFileNameToShowDependingOnLevel (&FileBrowser->FileMetadata.FilFolLnk,
+   Brw_GetFileNameToShowDependingOnLevel (FileBrowser->FileMetadata.FilFolLnk.Type,
+					  FileBrowser->FileMetadata.FilFolLnk.Name,
 					  FileBrowser->Zone,
                                           Level,
                                           FileNameToShow);
@@ -4769,15 +4770,16 @@ static void Brw_WriteFileName (struct Brw_FileBrowser *FileBrowser,
 /*********************** Which filename must be shown? ***********************/
 /*****************************************************************************/
 
-static void Brw_GetFileNameToShowDependingOnLevel (const struct Brw_FilFolLnk *FilFolLnk,
-                                                   Brw_Zone_t Zone,
+static void Brw_GetFileNameToShowDependingOnLevel (Brw_FileType_t FileType,
+						   const char FileName[NAME_MAX + 1],
+						   Brw_Zone_t Zone,
                                                    unsigned Level,
-                                                   char *FileNameToShow)
+                                                   char FileNameToShow[NAME_MAX + 1])
   {
    extern const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_ZONES];
 
-   Brw_GetFileNameToShow (FilFolLnk->Type,
-                          Level ? FilFolLnk->Name :
+   Brw_GetFileNameToShow (FileType,
+                          Level ? FileName :
 				  Txt_ROOT_FOLDER_EXTERNAL_NAMES[Zone],
 			  FileNameToShow);
   }
@@ -4919,7 +4921,8 @@ void Brw_ReqRemFile (void)
      {
       case Usr_CAN:
 	 /***** Show question and button to remove file/link *****/
-	 Brw_GetFileNameToShowDependingOnLevel (&FileBrowser.FileMetadata.FilFolLnk,
+	 Brw_GetFileNameToShowDependingOnLevel (FileBrowser.FileMetadata.FilFolLnk.Type,
+					        FileBrowser.FileMetadata.FilFolLnk.Name,
 						FileBrowser.Zone,
 						FileBrowser.Lvl,
 						FileNameToShow);
@@ -5444,7 +5447,8 @@ static void Brw_WriteCurrentClipboard (const struct Brw_Clipboard *Clipboard)
    if (Clipboard->Level)		// Is the root folder?
      {
       // Not the root folder
-      Brw_GetFileNameToShowDependingOnLevel (&Clipboard->FilFolLnk,
+      Brw_GetFileNameToShowDependingOnLevel (Clipboard->FilFolLnk.Type,
+					     Clipboard->FilFolLnk.Name,
                                              Clipboard->Zone,
                                              Clipboard->Level,
                                              FileNameToShow);
@@ -5713,7 +5717,7 @@ void Brw_Paste (void)
 	   }
 
 	 /***** Copy files recursively *****/
-	 Brw_PasteClipboard (&FileBrowser,&FileBrowser.FileMetadata.FilFolLnk);
+	 Brw_PasteClipboard (&FileBrowser);
 
 	 /***** Remove the affected clipboards *****/
 	 Brw_DB_RemoveAffectedClipboards (FileBrowser.Zone,
@@ -5743,17 +5747,16 @@ void Brw_Paste (void)
 //	Possible student in works:	FileBrowser->Clipboard.WorksUsrCod
 //	Path (file or folder):		FileBrowser->Clipboard.FilFolLnk.Full
 // Destination:
-//	Type of file browser:		FileBrowser->Type
+//	File browser zone:		FileBrowser->Zone
 //	Possible institution:		Gbl.Hierarchy.Node[Hie_INS].InsCod
 //	Possible center:		Gbl.Hierarchy.Node[Hie_CTR].CtrCod
 //	Possible degree:		Gbl.Hierarchy.Node[Hie_DEG].DegCod
 //	Possible course:		Gbl.Hierarchy.Node[Hie_CRS].CrsCod
 //	Possible student in works:	Gbl.Usrs.Other.UsrDat.UsrCod
-//	Path (should be a folder):	FilFolLnk->Full
+//	Path (should be a folder):	FileBrowser->FileMetadata.FilFolLnk.Full
 // Returns the number of files pasted
 
-static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
-			        struct Brw_FilFolLnk *FilFolLnk)
+static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_copy_has_been_successful;
@@ -5768,8 +5771,9 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
    long PrjCod;
    char PathOrg[PATH_MAX + NAME_MAX + PATH_MAX + 128];
    struct Brw_NumObjects Pasted;
-   long FirstFilCod = -1L;	// First file code of the first file or link pasted. Important: initialize here to -1L
-   struct Brw_FileMetadata FileMetadata;
+   struct Brw_FileMetadata FirstFileMetadata;
+
+   FirstFileMetadata.FilCod = -1L;	// First file code of the first file or link pasted. Important: initialize here to -1L
 
    Pasted.NumFiles =
    Pasted.NumLinks =
@@ -5960,9 +5964,9 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 	 if (Brw_PasteTreeIntoFolder (FileBrowser,
 				      FileBrowser->Clipboard.Level,
 				      PathOrg,
-				      FilFolLnk->Full,
+				      FileBrowser->FileMetadata.FilFolLnk.Full,
 				      &Pasted,
-				      &FirstFilCod) == Err_SUCCESS)
+				      &FirstFileMetadata.FilCod) == Err_SUCCESS)
 	   {
 	    /***** Write message of success *****/
 	    Ale_ShowAlert (Ale_SUCCESS,"%s<br>"
@@ -5978,28 +5982,27 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 	    if (Pasted.NumFiles ||
 		Pasted.NumLinks)
 	      {
-	       FileMetadata.FilCod = FirstFilCod;
-	       Brw_GetFileMetadataByCod (&FileMetadata);
+	       Brw_GetFileMetadataByCod (&FirstFileMetadata);
 
-	       /* Notify only is destination folder is visible */
-	       if (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE)
+	       /* Notify only if destination folder is visible */
+	       if (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FirstFileMetadata) == HidVis_VISIBLE)
 		  switch (FileBrowser->Zone)
 		    {
-		     case Brw_ADMI_DOC_CRS:
-		     case Brw_ADMI_DOC_GRP:
-			Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FirstFilCod);
+		     case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
+			Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,
+							FirstFileMetadata.FilCod);
 			break;
-		     case Brw_ADMI_TCH_CRS:
-		     case Brw_ADMI_TCH_GRP:
-			Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FirstFilCod);
+		     case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
+			Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,
+							FirstFileMetadata.FilCod);
 			break;
-		     case Brw_ADMI_SHR_CRS:
-		     case Brw_ADMI_SHR_GRP:
-			Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FirstFilCod);
+		     case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
+			Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,
+							FirstFileMetadata.FilCod);
 			break;
-		     case Brw_ADMI_MRK_CRS:
-		     case Brw_ADMI_MRK_GRP:
-			Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FirstFilCod);
+		     case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
+			Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,
+							FirstFileMetadata.FilCod);
 			break;
 		     default:
 			break;
@@ -6009,7 +6012,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 
 	 /***** Add path where new tree is pasted to table of expanded folders *****/
 	 Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (FileBrowser->Zone,
-								  FilFolLnk->Full);
+								  FileBrowser->FileMetadata.FilFolLnk.Full);
 	 break;
       case Usr_CAN_NOT:
       default:
@@ -6054,7 +6057,7 @@ static Err_SuccessOrError_t Brw_PasteTreeIntoFolder (struct Brw_FileBrowser *Fil
    char FileNameOrg[NAME_MAX + 1];
    char FileNameToShow[NAME_MAX + 1];
    char PathInFolderOrg[PATH_MAX + 1];
-   struct Brw_FileMetadata FileMetadata;
+   struct Brw_FileMetadata FileDstMetadata;
    char PathDst[PATH_MAX + 1 + PATH_MAX + 1];
    struct stat FileStatus;
    struct dirent **FileList;
@@ -6071,54 +6074,55 @@ static Err_SuccessOrError_t Brw_PasteTreeIntoFolder (struct Brw_FileBrowser *Fil
 	                             PathUntilFileNameOrg,
 	                             FileNameOrg);
 
-   /***** Is it a file or a folder? *****/
-   FileMetadata.FilFolLnk.Type = Brw_IS_UNKNOWN;
+   /***** The type of the destination file will be the same as the type of the origin file *****/
+   FileDstMetadata.FilFolLnk.Type = Brw_IS_UNKNOWN;
    if (lstat (PathOrg,&FileStatus))		// On success ==> 0 is returned
       Err_ShowErrorAndExit ("Can not get information about a file or folder.");
    else if (S_ISDIR (FileStatus.st_mode))	// It's a directory
-      FileMetadata.FilFolLnk.Type = Brw_IS_FOLDER;
+      FileDstMetadata.FilFolLnk.Type = Brw_IS_FOLDER;
    else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
-      FileMetadata.FilFolLnk.Type = Str_FileIs (FileNameOrg,"url") ? Brw_IS_LINK :	// It's a link (URL inside a .url file)
-	         						     Brw_IS_FILE;	// It's a file
+      FileDstMetadata.FilFolLnk.Type = Str_FileIs (FileNameOrg,"url") ? Brw_IS_LINK :	// It's a link (URL inside a .url file)
+	         						        Brw_IS_FILE;	// It's a file
 
    /***** Name of the file/folder/link to be shown ****/
-   Brw_GetFileNameToShow (FileMetadata.FilFolLnk.Type,FileNameOrg,FileNameToShow);
+   Brw_GetFileNameToShow (FileDstMetadata.FilFolLnk.Type,FileNameOrg,FileNameToShow);
 
    /***** Construct the name of the destination file or folder *****/
    if (LevelOrg == 0)	// Origin of copy is the root folder,
 			// for example "sha"
 			// ==> do not copy the root folder itself into destination
-      Str_Copy (FileMetadata.FilFolLnk.Full,PathDstInTree,
-                sizeof (FileMetadata.FilFolLnk.Full) - 1);
+      Str_Copy (FileDstMetadata.FilFolLnk.Full,PathDstInTree,
+                sizeof (FileDstMetadata.FilFolLnk.Full) - 1);
 
    else			// Origin of copy is a file or folder inside the root folder
 			// for example "sha/folder1/file1"
      {
       if (strlen (PathDstInTree) + 1 + strlen (FileNameOrg) > PATH_MAX)
 	 Err_PathTooLongExit ();
-      snprintf (FileMetadata.FilFolLnk.Full,sizeof (FileMetadata.FilFolLnk.Full),"%s/%s",
-	        PathDstInTree,FileNameOrg);
+      snprintf (FileDstMetadata.FilFolLnk.Full,
+	        sizeof (FileDstMetadata.FilFolLnk.Full),
+	        "%s/%s",PathDstInTree,FileNameOrg);
      }
 
    /***** Construct the relative path of the destination file or folder *****/
    if (strlen (FileBrowser->Path.AboveRootFolder) + 1 +
-       strlen (FileMetadata.FilFolLnk.Full) > PATH_MAX)
+       strlen (FileDstMetadata.FilFolLnk.Full) > PATH_MAX)
       Err_PathTooLongExit ();
    snprintf (PathDst,sizeof (PathDst),"%s/%s",
-	     FileBrowser->Path.AboveRootFolder,
-	     FileMetadata.FilFolLnk.Full);
+	     FileBrowser->Path.AboveRootFolder,FileDstMetadata.FilFolLnk.Full);
 
    /***** Update and check number of levels *****/
-   // The number of levels is counted starting on the root folder raíz, not included.
+   // The number of levels is counted starting on the root folder, not included.
    // Example:	If PathDstInTreeWithFile is "root-folder/1/2/3/4/FileNameOrg", then NumLevls=5
-   if ((NumLevls = Brw_NumLevelsInPath (FileMetadata.FilFolLnk.Full)) > FileBrowser->Size.NumLevls)
+   if ((NumLevls = Brw_NumLevelsInPath (FileDstMetadata.FilFolLnk.Full)) >
+       FileBrowser->Size.NumLevls)
       FileBrowser->Size.NumLevls = NumLevls;
 
    switch (BrwSiz_CheckQuota (&FileBrowser->Size))
      {
       case Err_SUCCESS:	// Quota not exceeded
 	 /***** Copy file or folder *****/
-	 switch (FileMetadata.FilFolLnk.Type)
+	 switch (FileDstMetadata.FilFolLnk.Type)
 	   {
 	    case Brw_IS_FILE:
 	    case Brw_IS_LINK:	// It's a regular file
@@ -6158,11 +6162,11 @@ static Err_SuccessOrError_t Brw_PasteTreeIntoFolder (struct Brw_FileBrowser *Fil
 			      Fil_FastCopyOfFiles (PathOrg,PathDst);
 
 			      /***** Add entry to the table of files/folders *****/
-			      FileMetadata.Zone            = FileBrowser->Zone;
-			      FileMetadata.PublisherUsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-			      FileMetadata.PrivateOrPublic = PriPub_PRIVATE;
-			      FileMetadata.License         = Brw_LICENSE_DEFAULT;
-			      FilCod = Brw_DB_AddPath (&FileMetadata);
+			      FileDstMetadata.Zone            = FileBrowser->Zone;
+			      FileDstMetadata.PublisherUsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+			      FileDstMetadata.PrivateOrPublic = PriPub_PRIVATE;
+			      FileDstMetadata.License         = Brw_LICENSE_DEFAULT;
+			      FilCod = Brw_DB_AddPath (&FileDstMetadata);
 			      if (*FirstFilCod <= 0)
 				 *FirstFilCod = FilCod;
 
@@ -6170,7 +6174,7 @@ static Err_SuccessOrError_t Brw_PasteTreeIntoFolder (struct Brw_FileBrowser *Fil
 			      if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_MRK))
 				 Mrk_DB_AddMarks (FilCod,&Marks);
 
-			      if (FileMetadata.FilFolLnk.Type == Brw_IS_FILE)
+			      if (FileDstMetadata.FilFolLnk.Type == Brw_IS_FILE)
 				 (Pasted->NumFiles)++;
 			      else // FileType == Brw_IS_LINK
 				 (Pasted->NumLinks)++;
@@ -6207,10 +6211,10 @@ static Err_SuccessOrError_t Brw_PasteTreeIntoFolder (struct Brw_FileBrowser *Fil
 			      Err_ShowErrorAndExit ("Can not create folder.");
 
 			   /* Add entry to the table of files/folders */
-			   FileMetadata.PublisherUsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-			   FileMetadata.PrivateOrPublic = PriPub_PRIVATE;
-			   FileMetadata.License         = Brw_LICENSE_DEFAULT;
-			   Brw_DB_AddPath (&FileMetadata);
+			   FileDstMetadata.PublisherUsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+			   FileDstMetadata.PrivateOrPublic = PriPub_PRIVATE;
+			   FileDstMetadata.License         = Brw_LICENSE_DEFAULT;
+			   Brw_DB_AddPath (&FileDstMetadata);
 			   break;
 			case Err_ERROR:		// Quota exceeded
 			default:
@@ -6237,7 +6241,7 @@ static Err_SuccessOrError_t Brw_PasteTreeIntoFolder (struct Brw_FileBrowser *Fil
 			if (Brw_PasteTreeIntoFolder (FileBrowser,
 						     LevelOrg + 1,
 						     PathInFolderOrg,
-						     FileMetadata.FilFolLnk.Full,
+						     FileDstMetadata.FilFolLnk.Full,
 						     Pasted,
 						     FirstFilCod) == Err_ERROR)
 			   CopyIsGoingSuccessful = Err_ERROR;
@@ -6289,7 +6293,8 @@ void Brw_ShowFormFileBrowser (void)
      {
       case Usr_CAN:
 	 /***** Name of the folder to be shown ****/
-	 Brw_GetFileNameToShowDependingOnLevel (&FileBrowser.FileMetadata.FilFolLnk,
+	 Brw_GetFileNameToShowDependingOnLevel (FileBrowser.FileMetadata.FilFolLnk.Type,
+						FileBrowser.FileMetadata.FilFolLnk.Name,
 						FileBrowser.Zone,
 						FileBrowser.Lvl,
 						FileNameToShow);
@@ -6631,7 +6636,8 @@ void Brw_CreateFolder (void)
 			Brw_DB_AddPath (&FileBrowser.FileMetadata);
 
 			/* The folder has been created sucessfully */
-			Brw_GetFileNameToShowDependingOnLevel (&FileBrowser.FileMetadata.FilFolLnk,
+			Brw_GetFileNameToShowDependingOnLevel (FileBrowser.FileMetadata.FilFolLnk.Type,
+							       FileBrowser.FileMetadata.FilFolLnk.Name,
 							       FileBrowser.FileMetadata.Zone,
 							       FileBrowser.Lvl,
 							       FileNameToShow);
@@ -6883,8 +6889,6 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
    char PathTmp[PATH_MAX + 1 + PATH_MAX + 4 + 1];
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    Err_SuccessOrError_t FileIsValid = Err_SUCCESS;
-   long FilCod = -1L;	// Code of new file in database
-   struct Brw_FileMetadata FileMetadata;
    struct Mrk_Properties Marks;
    char FileNameToShow[NAME_MAX + 1];
    Err_SuccessOrError_t UploadSucessful = Err_ERROR;
@@ -6909,7 +6913,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 	       switch (Str_ConvertFilFolLnkNameToValid (FileBrowser->NewName))
 		 {
 		  case Err_SUCCESS:	// Folder name is valid
-		     /* FileBrowser->NewFilFolLnkName holds the name of the new file */
+		     /* FileBrowser->NewName holds the name of the new file */
 		     if (strlen (FileBrowser->Path.AboveRootFolder) + 1 +
 			 strlen (FileBrowser->FileMetadata.FilFolLnk.Full) > PATH_MAX)
 			Err_PathTooLongExit ();
@@ -6985,13 +6989,17 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 					  FileBrowser->FileMetadata.PublisherUsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 					  FileBrowser->FileMetadata.PrivateOrPublic = PriPub_PRIVATE;
 					  FileBrowser->FileMetadata.License         = Brw_LICENSE_DEFAULT;
-					  FilCod = Brw_DB_AddPath (&FileBrowser->FileMetadata);
+					  FileBrowser->FileMetadata.FilCod          = Brw_DB_AddPath (&FileBrowser->FileMetadata);
+
+					  /* Add a new entry of marks into database */
+					  if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_MRK))
+					     Mrk_DB_AddMarks (FileBrowser->FileMetadata.FilCod,&Marks);
 
 					  /* Show message of confirmation */
 					  if (UploadType == Brw_CLASSIC_UPLOAD)
 					    {
-					     FileBrowser->FileMetadata.FilFolLnk.Type = Brw_IS_FOLDER;
-					     Brw_GetFileNameToShowDependingOnLevel (&FileBrowser->FileMetadata.FilFolLnk,
+					     Brw_GetFileNameToShowDependingOnLevel (Brw_IS_FOLDER,
+										    FileBrowser->FileMetadata.FilFolLnk.Name,
 										    FileBrowser->Zone,
 										    FileBrowser->Lvl,
 										    FileNameToShow);	// Folder name
@@ -7002,32 +7010,29 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 					    }
 					  UploadSucessful = Err_SUCCESS;
 
-					  FileMetadata.FilCod = FilCod;
-					  Brw_GetFileMetadataByCod (&FileMetadata);
-
-					  /* Add a new entry of marks into database */
-					  if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_MRK))
-					     Mrk_DB_AddMarks (FileMetadata.FilCod,&Marks);
-
 					  /* Notify new file */
-					  if (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileMetadata) == HidVis_VISIBLE)
+					  if (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileBrowser->FileMetadata) == HidVis_VISIBLE)
 					     switch (FileBrowser->Zone)
 					       {
 						case Brw_ADMI_DOC_CRS:
 						case Brw_ADMI_DOC_GRP:
-						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FilCod);
+						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,
+										   FileBrowser->FileMetadata.FilCod);
 						   break;
 						case Brw_ADMI_TCH_CRS:
 						case Brw_ADMI_TCH_GRP:
-						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FilCod);
+						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,
+										   FileBrowser->FileMetadata.FilCod);
 						   break;
 						case Brw_ADMI_SHR_CRS:
 						case Brw_ADMI_SHR_GRP:
-						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FilCod);
+						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,
+										   FileBrowser->FileMetadata.FilCod);
 						   break;
 						case Brw_ADMI_MRK_CRS:
 						case Brw_ADMI_MRK_GRP:
-						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FilCod);
+						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,
+										   FileBrowser->FileMetadata.FilCod);
 						   break;
 						default:
 						   break;
@@ -7091,8 +7096,6 @@ void Brw_CreateLink (void)
    char FileName[NAME_MAX + 1];
    char Path[PATH_MAX + 1 + PATH_MAX + 1];
    FILE *FileURL;
-   // char PathCompleteInTreeIncludingFile[PATH_MAX + 1 + NAME_MAX + 4 + 1];
-   long FilCod = -1L;	// Code of new file in database
    char FileNameToShow[NAME_MAX + 1];
 
    /***** Get parameters related to file browser *****/
@@ -7200,18 +7203,16 @@ void Brw_CreateLink (void)
 				 FileBrowser.FileMetadata.PublisherUsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 				 FileBrowser.FileMetadata.PrivateOrPublic = PriPub_PRIVATE;
 				 FileBrowser.FileMetadata.License         = Brw_LICENSE_DEFAULT;
-				 FilCod = Brw_DB_AddPath (&FileBrowser.FileMetadata);
+				 FileBrowser.FileMetadata.FilCod          = Brw_DB_AddPath (&FileBrowser.FileMetadata);
 
 				 /* Show message of confirmation */
-				 Brw_GetFileNameToShowDependingOnLevel (&FileBrowser.FileMetadata.FilFolLnk,
+				 Brw_GetFileNameToShowDependingOnLevel (Brw_IS_FOLDER,
+									FileBrowser.FileMetadata.FilFolLnk.Name,
 									FileBrowser.Zone,
 									FileBrowser.Lvl,
 									FileNameToShow);	// Folder name
 				 Ale_ShowAlert (Ale_SUCCESS,Txt_The_link_X_has_been_placed_inside_the_folder_Y,
 						FileName,FileNameToShow);
-
-				 FileBrowser.FileMetadata.FilCod = FilCod;
-				 Brw_GetFileMetadataByCod (&FileBrowser.FileMetadata);
 
 				 /* Notify new file */
 				 if (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (&FileBrowser.FileMetadata) == HidVis_VISIBLE)
@@ -7219,19 +7220,23 @@ void Brw_CreateLink (void)
 				      {
 				       case Brw_ADMI_DOC_CRS:
 				       case Brw_ADMI_DOC_GRP:
-					  Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FilCod);
+					  Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,
+									  FileBrowser.FileMetadata.FilCod);
 					  break;
 				       case Brw_ADMI_TCH_CRS:
 				       case Brw_ADMI_TCH_GRP:
-					  Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FilCod);
+					  Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,
+									  FileBrowser.FileMetadata.FilCod);
 					  break;
 				       case Brw_ADMI_SHR_CRS:
 				       case Brw_ADMI_SHR_GRP:
-					  Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FilCod);
+					  Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,
+									  FileBrowser.FileMetadata.FilCod);
 					  break;
 				       case Brw_ADMI_MRK_CRS:
 				       case Brw_ADMI_MRK_GRP:
-					  Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FilCod);
+					  Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,
+									  FileBrowser.FileMetadata.FilCod);
 					  break;
 				       default:
 					  break;
