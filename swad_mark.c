@@ -209,6 +209,7 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
+   Brw_GetParsFilFolLnk (&FileBrowser);	// Get file / folder / link
 
    /***** Get the number of rows of the header or footer of the table of marks *****/
    Par_GetParText (Mrk_HeadOrFootStr[HeaderOrFooter],UnsignedStr,Cns_MAX_DIGITS_UINT);
@@ -574,6 +575,7 @@ void Mrk_ShowMyMarks (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
+   Brw_GetParsFilFolLnk (&FileBrowser);	// Get file / folder / link
 
    /***** Get the path of the file of marks *****/
    snprintf (PathPrivate,sizeof (PathPrivate),"%s/%s",

@@ -323,6 +323,7 @@ void ZIP_CompressFileTree (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
+   Brw_GetParsFilFolLnk (&FileBrowser);	// Get file / folder / link
 
    /***** Compress folder into ZIP *****/
    ZIP_CompressFolderIntoZIP (&FileBrowser);
