@@ -83,7 +83,9 @@ static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat);
 
 static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser);
 static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
-				        const char *Path,const char *PathClone,const char *PathInTree);
+				        const char Path[PATH_MAX + 1],
+				        const char PathClone[PATH_MAX + 1],
+				        const char PathInTree[PATH_MAX + 1]);
 static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
                                        off_t FileSize,unsigned long long UncompressedSize);
 
@@ -323,7 +325,7 @@ void ZIP_CompressFileTree (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParsFilFolLnk (&FileBrowser);	// Get file / folder / link
+   Brw_GetParFilCod (&FileBrowser);	// Get file / folder / link
 
    /***** Compress folder into ZIP *****/
    ZIP_CompressFolderIntoZIP (&FileBrowser);
@@ -345,11 +347,8 @@ static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser)
    struct Brw_TmpPubDir TmpPubDir;
    unsigned long long UncompressedSize;
    char StrZip[128 + PATH_MAX];
-   char Path[PATH_MAX + 1 +
-             PATH_MAX + 1];
-   char PathCompression[PATH_MAX + 1 +
-                        NAME_MAX + 1 +
-                        NAME_MAX + 1];
+   char Path[PATH_MAX + 1];
+   char PathCompression[PATH_MAX + 1];
    int Result;
    char *FileNameZIP;
    char PathFileZIP[PATH_MAX + 1];
@@ -366,13 +365,21 @@ static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser)
    Brw_CreateDirDownloadTmp (&TmpPubDir);
 
    /***** Create a copy of the directory to compress *****/
+   if (strlen (FileBrowser->Path.AboveRootFolder) + 1 +
+       strlen (FileBrowser->FileMetadata.FilFolLnk.Full) > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (Path,sizeof (Path),"%s/%s",
 	     FileBrowser->Path.AboveRootFolder,
 	     FileBrowser->FileMetadata.FilFolLnk.Full);
+   if (strlen (Cfg_PATH_ZIP_PRIVATE) + 1 + strlen (ZIP_TmpDir) > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathCompression,sizeof (PathCompression),"%s/%s",
 	     Cfg_PATH_ZIP_PRIVATE,ZIP_TmpDir);	// Example: /var/www/swad/zip/<temporary_dir>
 
-   UncompressedSize = ZIP_CloneDir (FileBrowser,Path,PathCompression,FileBrowser->FileMetadata.FilFolLnk.Full);
+   UncompressedSize = ZIP_CloneDir (FileBrowser,
+				    Path,
+				    PathCompression,
+				    FileBrowser->FileMetadata.FilFolLnk.Full);
 
    if (UncompressedSize == 0)					// Nothing to compress
       Ale_ShowAlert (Ale_WARNING,Txt_The_folder_is_empty);
@@ -429,6 +436,9 @@ static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser)
      }
 
    /***** Remove the directory of compression *****/
+   // There is no need to worry about deletion if the compression is aborted.
+   // The temporary directory used for the compression
+   // will eventually be deleted by another swad process.
    Fil_RemoveTree (PathCompression);
   }
 
@@ -452,12 +462,15 @@ static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser)
 // Return: full size of directory contents
 
 static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
-				        const char *Path,const char *PathClone,const char *PathInTree)
+				        const char Path[PATH_MAX + 1],
+				        const char PathClone[PATH_MAX + 1],
+				        const char PathInTree[PATH_MAX + 1])
   {
    extern unsigned Brw_ZoneType[Brw_NUM_ZONES];
    struct dirent **FileList;
    int NumFile;
    int NumFiles;
+   struct Brw_FileMetadata FileMetadata;
    char PathFile[PATH_MAX + 1];
    char PathFileClone[PATH_MAX + 1];
    struct stat FileStatus;
@@ -465,6 +478,7 @@ static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
    unsigned long long FullSize = 0;
 
    /***** Scan directory *****/
+   FileMetadata.Zone = FileBrowser->Zone;
    if ((NumFiles = scandir (Path,&FileList,NULL,alphasort)) >= 0)	// No error
      {
       /***** List files *****/
@@ -474,31 +488,35 @@ static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
 	 if (strcmp (FileList[NumFile]->d_name,".") &&
 	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
-	    Str_Copy (FileBrowser->FileMetadata.FilFolLnk.Path,PathInTree,
-		      sizeof (FileBrowser->FileMetadata.FilFolLnk.Path) - 1);
-	    Str_Copy (FileBrowser->FileMetadata.FilFolLnk.Name,FileList[NumFile]->d_name,
-		      sizeof (FileBrowser->FileMetadata.FilFolLnk.Name) - 1);
-            Brw_SetFullPathInTree (&FileBrowser->FileMetadata.FilFolLnk);
+	    Str_Copy (FileMetadata.FilFolLnk.Path,PathInTree,
+		      sizeof (FileMetadata.FilFolLnk.Path) - 1);
+	    Str_Copy (FileMetadata.FilFolLnk.Name,FileList[NumFile]->d_name,
+	              sizeof (FileMetadata.FilFolLnk.Name) - 1);
+            Brw_SetFullPathInTree (&FileMetadata.FilFolLnk);
+	    if (strlen (Path) + 1 + strlen (FileMetadata.FilFolLnk.Name) > PATH_MAX)
+	       Err_PathTooLongExit ();
+	    if (strlen (PathClone) + 1 + strlen (FileMetadata.FilFolLnk.Name) > PATH_MAX)
+	       Err_PathTooLongExit ();
 	    snprintf (PathFile,sizeof (PathFile),"%s/%s",
-		      Path,FileBrowser->FileMetadata.FilFolLnk.Name);
+		      Path,FileMetadata.FilFolLnk.Name);
 	    snprintf (PathFileClone,sizeof (PathFileClone),"%s/%s",
-		      PathClone,FileBrowser->FileMetadata.FilFolLnk.Name);
+		      PathClone,FileMetadata.FilFolLnk.Name);
 
-	    FileBrowser->FileMetadata.FilFolLnk.Type = Brw_IS_UNKNOWN;
+	    FileMetadata.FilFolLnk.Type = Brw_IS_UNKNOWN;
 	    if (lstat (PathFile,&FileStatus))	// On success ==> 0 is returned
 	       Err_ShowErrorAndExit ("Can not get information about a file or folder.");
 	    else if (S_ISDIR (FileStatus.st_mode))	// It's a directory
-	       FileBrowser->FileMetadata.FilFolLnk.Type = Brw_IS_FOLDER;
+	       FileMetadata.FilFolLnk.Type = Brw_IS_FOLDER;
 	    else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
-	       FileBrowser->FileMetadata.FilFolLnk.Type = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :	// It's a link (URL inside a .url file)
-													 Brw_IS_FILE;	// It's a file
-
+	       FileMetadata.FilFolLnk.Type = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :	// It's a link (URL inside a .url file)
+											    Brw_IS_FILE;	// It's a file
 	    HiddenOrVisible = (Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_SEE_DOC |
-								  Brw_IS_SEE_MRK)) ? Brw_CheckIfFileOrFolderIsHidden (FileBrowser) :
+								  Brw_IS_SEE_MRK)) ? Brw_CheckIfFileOrFolderIsHidden (FileBrowser->Zone,
+														      &FileMetadata) :
 										     HidVis_VISIBLE;
 
 	    if (HiddenOrVisible == HidVis_VISIBLE)	// If file/folder is visible
-	       switch (FileBrowser->FileMetadata.FilFolLnk.Type)
+	       switch (FileMetadata.FilFolLnk.Type)
 	         {
 		  case Brw_IS_FOLDER:
 		     FullSize += (unsigned long long) FileStatus.st_size;
@@ -508,8 +526,10 @@ static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
 			Err_ShowErrorAndExit ("Can not create temporary subfolder for compression.");
 
 		     /***** Clone subtree starting at this this directory *****/
-		     FullSize += ZIP_CloneDir (FileBrowser,PathFile,PathFileClone,
-					       FileBrowser->FileMetadata.FilFolLnk.Full);
+		     FullSize += ZIP_CloneDir (FileBrowser,
+					       PathFile,
+					       PathFileClone,
+					       FileMetadata.FilFolLnk.Full);
 		     break;
 		  case Brw_IS_FILE:
 		  case Brw_IS_LINK:
@@ -521,7 +541,7 @@ static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
 
 		     /***** Update number of my views of this file *****/
 		     Brw_UpdateMyFileViews (Brw_DB_GetFilCodByPath (FileBrowser->Zone,
-								    FileBrowser->FileMetadata.FilFolLnk.Full,
+								    FileMetadata.FilFolLnk.Full,
 								    Brw_ANY_FILE));	// Any file, public or not
 		     break;
 		  default:

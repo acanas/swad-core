@@ -84,7 +84,8 @@ void Brw_CreateLink (void);
 
 void Brw_SetDocumentAsVisible (void);
 void Brw_SetDocumentAsHidden (void);
-HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHidden (struct Brw_FileBrowser *FileBrowser);
+HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHidden (Brw_Zone_t Zone,
+							  struct Brw_FileMetadata *FileMetadata);
 void Brw_ShowFileMetadata (void);
 
 void Brw_GetLinkToDownloadFile (struct Brw_FileBrowser *FileBrowser,char *URL);
@@ -115,10 +116,8 @@ void Brw_CreateTmpPublicLinkToPrivateFile (const struct Brw_TmpPubDir *TmpPubDir
                                            const char *FileName);
 
 void Brw_PutImplicitParsFileBrowser (void *Zone);
-void Brw_PutParsFileBrowser (struct Brw_FileBrowser *FileBrowser,
-			     const char *Path,const char *Name,
-                             Brw_FileType_t FileType,long FilCod);
-void Brw_GetParsFilFolLnk (struct Brw_FileBrowser *FileBrowser);
+void Brw_PutParsFileBrowser (struct Brw_FileBrowser *FileBrowser,long FilCod);
+void Brw_GetParFilCod (struct Brw_FileBrowser *FileBrowser);
 
 void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod);
 void Brw_RemoveGrpZones (long HieCod,long GrpCod);

@@ -4827,7 +4827,8 @@ int swad__getDirectoryTree (struct soap *soap,
    /* Get directory tree into XML file */
    XML_WriteStartFile (XML,"tree");
    FileBrowser.FileMetadata.FilFolLnk.Type = Brw_IS_FOLDER;
-   if (Brw_CheckIfFileOrFolderIsHidden (&FileBrowser) == HidVis_VISIBLE)
+   if (Brw_CheckIfFileOrFolderIsHidden (FileBrowser.Zone,
+					&FileBrowser.FileMetadata) == HidVis_VISIBLE)
       API_ListDir (&FileBrowser,XML,1,
                    FileBrowser.Path.RootFolder,
                    Brw_RootFolderInternalNames[FileBrowser.Zone]);
@@ -4943,7 +4944,8 @@ static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (struct Brw_FileBrowser 
    /***** Is this row hidden or visible? *****/
    if (FileBrowser->Zone == Brw_SHOW_DOC_CRS ||
        FileBrowser->Zone == Brw_SHOW_DOC_GRP)
-      if (Brw_CheckIfFileOrFolderIsHidden (FileBrowser) == HidVis_HIDDEN)
+      if (Brw_CheckIfFileOrFolderIsHidden (FileBrowser->Zone,
+					   &FileBrowser->FileMetadata) == HidVis_HIDDEN)
 	 return HidVis_HIDDEN;
 
    /***** XML row *****/
