@@ -39,7 +39,7 @@ extern struct Globals Gbl;
 /********* Add public directory used to link private path to cache ***********/
 /*****************************************************************************/
 
-void Fil_DB_AddPublicDirToCache (const char *FullPathPriv,
+void Fil_DB_AddPublicDirToCache (const char FullPathPriv[PATH_MAX + 1],
                                  const char TmpPubDirFull[PATH_MAX + 1])
   {
    DB_QueryINSERT ("can not cache file",
@@ -56,7 +56,7 @@ void Fil_DB_AddPublicDirToCache (const char *FullPathPriv,
 /******** Get public directory used to link private path from cache **********/
 /*****************************************************************************/
 
-void Fil_DB_GetPublicDirFromCache (const char *FullPathPriv,
+void Fil_DB_GetPublicDirFromCache (const char FullPathPriv[PATH_MAX + 1],
                                    char TmpPubDirFull[PATH_MAX + 1])
   {
    DB_QuerySELECTString (TmpPubDirFull,PATH_MAX,"can not get check if file is cached",
@@ -72,7 +72,7 @@ void Fil_DB_GetPublicDirFromCache (const char *FullPathPriv,
 /******** Remove public directory used to link private path to cache *********/
 /*****************************************************************************/
 
-void Fil_DB_RemovePublicDirFromCache (const char *FullPathPriv)
+void Fil_DB_RemovePublicDirFromCache (const char FullPathPriv[PATH_MAX + 1])
   {
    DB_QueryDELETE ("can not remove cached file",
 		   "DELETE FROM brw_caches"

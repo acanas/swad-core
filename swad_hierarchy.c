@@ -674,6 +674,10 @@ void Hie_InitHierarchy (void)
    if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
      {
       /***** Paths of course directories *****/
+      if (strlen (Cfg_PATH_CRS_PRIVATE) + 1 + Cns_MAX_DIGITS_ULONG > PATH_MAX ||
+          strlen (Cfg_PATH_CRS_PUBLIC ) + 1 + Cns_MAX_DIGITS_ULONG > PATH_MAX ||
+          strlen (Cfg_URL_CRS_PUBLIC  ) + 1 + Cns_MAX_DIGITS_ULONG > PATH_MAX)
+	 Err_PathTooLongExit ();
       snprintf (Gbl.Crs.Path.AbsPriv,sizeof (Gbl.Crs.Path.AbsPriv),"%s/%lu",
 	        Cfg_PATH_CRS_PRIVATE,
 	        (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod);

@@ -148,8 +148,15 @@ const char *Ico_GetIcon (const char *IconWithoutExtension)
         NumExt < Ico_NUM_ICON_EXTENSIONS;
         NumExt++)
      {
+      if (strlen (IconWithoutExtension) + 1 +
+          strlen (Ico_IconExtensions[NumExt]) > NAME_MAX)
+	 Err_PathTooLongExit ();
       snprintf (IconWithExtension,sizeof (IconWithExtension),"%s.%s",
 		IconWithoutExtension,Ico_IconExtensions[NumExt]);
+      if (strlen (Cfg_PATH_ICON_SETS_PUBLIC) + 1 +
+          strlen (Ico_IconSetId[Gbl.Prefs.IconSet]) + 1 +
+          strlen (IconWithExtension) > PATH_MAX)
+	 Err_PathTooLongExit ();
       snprintf (PathIcon,sizeof (PathIcon),"%s/%s/%s",
 		Cfg_PATH_ICON_SETS_PUBLIC,
 		Ico_IconSetId[Gbl.Prefs.IconSet],

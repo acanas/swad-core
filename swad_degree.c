@@ -1213,10 +1213,14 @@ void Deg_RemoveDegreeCompletely (long HieCod)
    Brw_DB_RemoveDegFiles (HieCods[Hie_DEG]);
 
    /***** Remove directories of the degree *****/
-   snprintf (PathDeg,sizeof (PathDeg),"%s/%02u/%u",
+   if (strlen (Cfg_PATH_DEG_PUBLIC) + 1 +
+       2 + 1 +
+       Cns_MAX_DIGITS_ULONG > PATH_MAX)
+      Err_PathTooLongExit ();
+   snprintf (PathDeg,sizeof (PathDeg),"%s/%02u/%lu",
 	     Cfg_PATH_DEG_PUBLIC,
 	     (unsigned) ((unsigned long) HieCods[Hie_DEG] % 100),
-	     (unsigned) HieCods[Hie_DEG]);
+	     (unsigned long) HieCods[Hie_DEG]);
    Fil_RemoveTree (PathDeg);
 
    /***** Remove administrators of this degree *****/

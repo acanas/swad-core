@@ -3663,6 +3663,7 @@ static void Brw_ListDir (struct Brw_FileBrowser *FileBrowser,
    int NumFileInSubdir;
    int NumFilesInSubdir;
    unsigned NumRow;
+   size_t Length;
    char RowId[Brw_MAX_ROW_ID + 1];
    char PathFileRel[PATH_MAX + 1];
    char PathFileInExplTree[PATH_MAX + 1];
@@ -3691,8 +3692,13 @@ static void Brw_ListDir (struct Brw_FileBrowser *FileBrowser,
 	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
 	    /***** Construct the full path of the file or folder *****/
-	    snprintf (PathFileRel       ,sizeof (PathFileRel       ),"%s/%s",
-		      Path      ,FileList[NumFile]->d_name);
+	    Length = strlen (FileList[NumFile]->d_name);
+	    if (strlen (Path) + 1 + Length > PATH_MAX)
+	       Err_PathTooLongExit ();
+	    if (strlen (PathInTree) + 1 + Length > PATH_MAX)
+	       Err_PathTooLongExit ();
+	    snprintf (PathFileRel,sizeof (PathFileRel),"%s/%s",
+		      Path,FileList[NumFile]->d_name);
 	    snprintf (PathFileInExplTree,sizeof (PathFileInExplTree),"%s/%s",
 		      PathInTree,FileList[NumFile]->d_name);
 	    Str_Copy (FileBrowser->FileMetadata.FilFolLnk.Path,PathInTree,
@@ -6016,12 +6022,12 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser)
 			 strlen (FileBrowser->Clipboard.FilFolLnk.Full) > PATH_MAX)
 			Err_PathTooLongExit ();
 		     snprintf (PathOrg,sizeof (PathOrg),"%s/%lu/%s/%02u/%lu/%s",
-			      Cfg_PATH_CRS_PRIVATE,
-			      (unsigned long) Hie[Hie_CRS].HieCod,
-			      Cfg_FOLDER_PRJ,
-			      (unsigned) ((unsigned long) PrjCod % 100),
-			      (unsigned long) PrjCod,
-			      FileBrowser->Clipboard.FilFolLnk.Full);
+			       Cfg_PATH_CRS_PRIVATE,
+			       (unsigned long) Hie[Hie_CRS].HieCod,
+			       Cfg_FOLDER_PRJ,
+			       (unsigned) ((unsigned long) PrjCod % 100),
+			       (unsigned long) PrjCod,
+			       FileBrowser->Clipboard.FilFolLnk.Full);
 		     break;
 		  case Err_ERROR:
 		  default:
@@ -6146,6 +6152,7 @@ static Err_SuccessOrError_t Brw_PasteTreeIntoFolder (struct Brw_FileBrowser *Fil
    struct stat FileStatus;
    struct dirent **FileList;
    struct Mrk_Properties Marks;
+   size_t Length;
    int NumFile;
    int NumFiles;
    unsigned NumLevls;
@@ -6311,6 +6318,7 @@ static Err_SuccessOrError_t Brw_PasteTreeIntoFolder (struct Brw_FileBrowser *Fil
 		    }
 
 		  /***** Copy each of the files and folders from the origin to the destination *****/
+		  Length = strlen (PathOrg);
 		  for (NumFile = 0;
 		       NumFile < NumFiles;
 		       NumFile++)
@@ -6319,6 +6327,8 @@ static Err_SuccessOrError_t Brw_PasteTreeIntoFolder (struct Brw_FileBrowser *Fil
 			 strcmp (FileList[NumFile]->d_name,".") &&
 			 strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 		       {
+		        if (Length + 1 + strlen (FileList[NumFile]->d_name) > PATH_MAX)
+			   Err_PathTooLongExit ();
 			snprintf (PathInFolderOrg,sizeof (PathInFolderOrg),"%s/%s",
 				  PathOrg,FileList[NumFile]->d_name);
 			/* Recursive call to this function */
@@ -9296,6 +9306,11 @@ void Brw_RemoveGrpZones (long HieCod,long GrpCod)
    Brw_DB_RemoveGrpFiles (GrpCod);
 
    /***** Remove group zones *****/
+   if (strlen (Cfg_PATH_CRS_PRIVATE) + 1 +
+       Cns_MAX_DIGITS_ULONG + 1 +
+       strlen (Cfg_FOLDER_GRP) + 1 +
+       Cns_MAX_DIGITS_ULONG > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathGrpFileZones,sizeof (PathGrpFileZones),"%s/%lu/%s/%lu",
              Cfg_PATH_CRS_PRIVATE,
              (unsigned long) HieCod,
@@ -9316,9 +9331,16 @@ void Brw_RemoveUsrWorksInCrs (struct Usr_Data *UsrDat,struct Hie_Node *Crs)
    Brw_DB_RemoveWrkFiles (Crs->HieCod,UsrDat->UsrCod);
 
    /***** Remove the folder for this user inside the course *****/
+   if (strlen (Cfg_PATH_CRS_PRIVATE) + 1 +
+       Cns_MAX_DIGITS_ULONG + 1 +
+       strlen (Cfg_FOLDER_USR) + 1 +
+       2 + 1 +
+       Cns_MAX_DIGITS_ULONG > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathUsrInCrs,sizeof (PathUsrInCrs),"%s/%lu/%s/%02u/%lu",
              Cfg_PATH_CRS_PRIVATE,
-             (unsigned long) Crs->HieCod,Cfg_FOLDER_USR,
+             (unsigned long) Crs->HieCod,
+             Cfg_FOLDER_USR,
              (unsigned) ((unsigned long) UsrDat->UsrCod % 100),
              (unsigned long) UsrDat->UsrCod);
    Fil_RemoveTree (PathUsrInCrs);
@@ -9917,6 +9939,7 @@ static void Brw_ScanDirRemovingOldFiles (Brw_Zone_t Zone,unsigned Level,
    struct dirent **FileList;
    int NumFile;
    int NumFiles;
+   size_t Length;
    char PathFileRel[PATH_MAX + 1];
    char PathFileInExplTree[PATH_MAX + 1];
    struct stat FolderStatus;
@@ -9939,6 +9962,11 @@ static void Brw_ScanDirRemovingOldFiles (Brw_Zone_t Zone,unsigned Level,
 	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
 	    /***** Construct the full path of the file or folder *****/
+	    Length = strlen (FileList[NumFile]->d_name);
+	    if (strlen (Path) + 1 + Length > PATH_MAX)
+	       Err_PathTooLongExit ();
+	    if (strlen (PathInTree) + 1 + Length > PATH_MAX)
+	       Err_PathTooLongExit ();
 	    snprintf (PathFileRel,sizeof (PathFileRel),"%s/%s",
 		      Path,FileList[NumFile]->d_name);
 	    snprintf (PathFileInExplTree,sizeof (PathFileInExplTree),"%s/%s",

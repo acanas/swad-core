@@ -93,9 +93,9 @@ void Fil_WriteFileSizeFull (double SizeInBytes,
 
 //------------------------------- File caches ---------------------------------
 
-void Fil_AddPublicDirToCache (const char *FullPathPriv,
+void Fil_AddPublicDirToCache (const char FullPathPriv[PATH_MAX + 1],
                               const char TmpPubDirFull[PATH_MAX + 1]);
-Exi_Exist_t Fil_GetPublicDirFromCache (const char *FullPathPriv,
+Exi_Exist_t Fil_GetPublicDirFromCache (const char FullPathPriv[PATH_MAX + 1],
 				       char TmpPubDirFull[PATH_MAX + 1]);
 
 #endif

@@ -954,6 +954,10 @@ static Exi_Exist_t Inf_CheckAndShowPage (Inf_Type_t InfoType)
 
 void Inf_BuildPathPage (long HieCod,Inf_Type_t InfoType,char PathDir[PATH_MAX + 1])
   {
+   if (strlen (Cfg_PATH_CRS_PUBLIC) + 1 +
+       Cns_MAX_DIGITS_ULONG + 1 +
+       strlen (Inf_FileNamesForInfoType[InfoType]) > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathDir,PATH_MAX + 1,"%s/%lu/%s",
              Cfg_PATH_CRS_PUBLIC,
              (unsigned long) HieCod,

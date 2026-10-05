@@ -114,6 +114,14 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 	       Folder = Cfg_FOLDER_DEG;
 	       if (HieLvl >= Hie_CRS)
 		  HieCods[Hie_DEG] = Crs_DB_GetDegCodOfCourseByCod (HieCods[Hie_CRS]);
+
+	       if (strlen (Cfg_PATH_DEG_PUBLIC) + 1 +
+		   2 + 1 +
+		   Cns_MAX_DIGITS_ULONG + 1 +
+		   strlen ("logo") + 1 +
+		   Cns_MAX_DIGITS_ULONG + 1 +
+		   strlen ("png") > PATH_MAX)
+		  Err_PathTooLongExit ();
 	       snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%lu/logo/%lu.png",
 			 Cfg_PATH_DEG_PUBLIC,
 			 (unsigned) ((unsigned long) HieCods[Hie_DEG] % 100),
@@ -131,6 +139,14 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 		  HieCods[Hie_CTR] = Deg_DB_GetCtrCodOfDegreeByCod (HieCods[Hie_DEG]);
 	       else
 		  HieCods[Hie_CTR] = HieCod;
+
+	       if (strlen (Cfg_PATH_CTR_PUBLIC) + 1 +
+		   2 + 1 +
+		   Cns_MAX_DIGITS_ULONG + 1 +
+		   strlen ("logo") + 1 +
+		   Cns_MAX_DIGITS_ULONG + 1 +
+		   strlen ("png") > PATH_MAX)
+		  Err_PathTooLongExit ();
 	       snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%lu/logo/%lu.png",
 			 Cfg_PATH_CTR_PUBLIC,
 			 (unsigned) ((unsigned long) HieCods[Hie_CTR] % 100),
@@ -146,6 +162,14 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 	       Folder = Cfg_FOLDER_INS;
 	       if (HieLvl >= Hie_CTR)
 		  HieCods[Hie_INS] = Ctr_DB_GetInsCodOfCenterByCod (HieCods[Hie_CTR]);
+
+	       if (strlen (Cfg_PATH_INS_PUBLIC) + 1 +
+		   2 + 1 +
+		   Cns_MAX_DIGITS_ULONG + 1 +
+		   strlen ("logo") + 1 +
+		   Cns_MAX_DIGITS_ULONG + 1 +
+		   strlen ("png") > PATH_MAX)
+		  Err_PathTooLongExit ();
 	       snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%lu/logo/%lu.png",
 			 Cfg_PATH_INS_PUBLIC,
 			 (unsigned) ((unsigned long) HieCods[Hie_INS] % 100),
@@ -233,6 +257,14 @@ void Lgo_RequestLogo (Hie_Level_t HieLvl)
    char PathLogo[PATH_MAX + 1];
 
    /***** Check if logo exists *****/
+   if (strlen (Cfg_PATH_INS_PUBLIC) + 1 +
+       strlen (Lgo_Folder[HieLvl]) + 1 +
+       2 + 1 +
+       Cns_MAX_DIGITS_ULONG + 1 +
+       strlen ("logo") + 1 +
+       Cns_MAX_DIGITS_ULONG + 1 +
+       strlen ("png") > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathLogo,sizeof (PathLogo),"%s/%s/%02u/%lu/logo/%lu.png",
 	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl],
 	     (unsigned) ((unsigned long) HieCod % 100),
@@ -309,6 +341,12 @@ void Lgo_ReceiveLogo (Hie_Level_t HieLvl)
    Err_SuccessOrError_t SuccessOrError;
 
    /***** Creates directories if not exist *****/
+   if (strlen (Cfg_PATH_SWAD_PUBLIC) + 1 +
+       strlen (Lgo_Folder[HieLvl]) + 1 +
+       2 + 1 +
+       Cns_MAX_DIGITS_ULONG + 1 +
+       strlen ("logo") > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (Path,sizeof (Path),"%s/%s",
 	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl]);
    Fil_CreateDirIfNotExists (Path);
@@ -329,7 +367,7 @@ void Lgo_ReceiveLogo (Hie_Level_t HieLvl)
 
    /***** Copy in disk the file received *****/
    Par = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
-                                     FileNameLogoSrc,MIMEType);
+                                   FileNameLogoSrc,MIMEType);
 
    /* Check if the file type is image/jpeg or image/pjpeg or application/octet-stream */
    SuccessOrError = Err_SUCCESS;
@@ -343,6 +381,14 @@ void Lgo_ReceiveLogo (Hie_Level_t HieLvl)
      {
       case Err_SUCCESS:
 	 /* End the reception of logo in a temporary file */
+	 if (strlen (Cfg_PATH_SWAD_PUBLIC) + 1 +
+	     strlen (Lgo_Folder[HieLvl]) + 1 +
+	     2 + 1 +
+	     Cns_MAX_DIGITS_ULONG + 1 +
+	     strlen ("logo") + 1 +
+	     Cns_MAX_DIGITS_ULONG + 1 +
+	     strlen ("png") > PATH_MAX)
+	    Err_PathTooLongExit ();
 	 snprintf (FileNameLogo,sizeof (FileNameLogo),"%s/%s/%02u/%lu/logo/%lu.png",
 		   Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl],
 		   (unsigned) ((unsigned long) HieCod % 100),
@@ -368,6 +414,14 @@ void Lgo_RemoveLogo (Hie_Level_t HieLvl)
    char FileNameLogo[PATH_MAX + 1];	// Full name (including path and .png) of the destination file
 
    /***** Remove logo *****/
+   if (strlen (Cfg_PATH_SWAD_PUBLIC) + 1 +
+       strlen (Lgo_Folder[HieLvl]) + 1 +
+       2 + 1 +
+       Cns_MAX_DIGITS_ULONG + 1 +
+       strlen ("logo") + 1 +
+       Cns_MAX_DIGITS_ULONG > PATH_MAX)
+      Err_PathTooLongExit ();
+
    snprintf (FileNameLogo,sizeof (FileNameLogo),"%s/%s/%02u/%lu/logo/%lu.png",
 	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl],
 	     (unsigned) ((unsigned long) HieCod % 100),

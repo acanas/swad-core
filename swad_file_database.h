@@ -34,11 +34,11 @@
 /*****************************************************************************/
 
 //------------------------------- File caches ---------------------------------
-void Fil_DB_AddPublicDirToCache (const char *FullPathPriv,
+void Fil_DB_AddPublicDirToCache (const char FullPathPriv[PATH_MAX + 1],
                                  const char TmpPubDirFull[PATH_MAX + 1]);
-void Fil_DB_GetPublicDirFromCache (const char *FullPathPriv,
+void Fil_DB_GetPublicDirFromCache (const char FullPathPriv[PATH_MAX + 1],
                                    char TmpPubDirFull[PATH_MAX + 1]);
-void Fil_DB_RemovePublicDirFromCache (const char *FullPathPriv);
+void Fil_DB_RemovePublicDirFromCache (const char FullPathPriv[PATH_MAX + 1]);
 void Fil_DB_RemovePublicDirsCache (void);
 void Fil_DB_RemovePublicDirsFromExpiredSessions (void);
 

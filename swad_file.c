@@ -103,8 +103,13 @@ void Fil_CreateFileForHTMLOutput (void)
    Fil_CreateDirIfNotExists (Cfg_PATH_OUT_PRIVATE);
 
    /***** Create a unique name for the file *****/
+   if (strlen (Cfg_PATH_OUT_PRIVATE) + 1 +
+       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1 +
+       strlen ("html") > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (Fil_HTMLOutput.FileName,sizeof (Fil_HTMLOutput.FileName),
-             "%s/%s.html",Cfg_PATH_OUT_PRIVATE,Cry_GetUniqueNameEncrypted ());
+             "%s/%s.html",
+             Cfg_PATH_OUT_PRIVATE,Cry_GetUniqueNameEncrypted ());
 
    /***** Open file for writing and reading *****/
    if ((Fil_Out = fopen (Fil_HTMLOutput.FileName,"w+t")) == NULL)
@@ -449,7 +454,9 @@ void Fil_RemoveTree (const char *Path)
   {
    struct stat FileStatus;
    struct dirent **FileList;
-   int NumFile,NumFiles;
+   size_t Length;
+   int NumFile;
+   int NumFiles;
    char PathFileRel[PATH_MAX + 1];
    Err_SuccessOrError_t SuccessOrError;
    char ErrorMsg[128 + PATH_MAX];
@@ -470,6 +477,7 @@ void Fil_RemoveTree (const char *Path)
 	       if ((NumFiles = scandir (Path,&FileList,NULL,NULL)) >= 0)
 		 {
 		  /* Remove recursively all directories and files */
+		  Length = strlen (Path);
 		  for (NumFile = 0;
 		       NumFile < NumFiles;
 		       NumFile++)
@@ -477,6 +485,9 @@ void Fil_RemoveTree (const char *Path)
 		     if (strcmp (FileList[NumFile]->d_name,".") &&
 			 strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 		       {
+		        if (Length + 1 +
+		            strlen (FileList[NumFile]->d_name) > PATH_MAX)
+		           Err_PathTooLongExit ();
 			snprintf (PathFileRel,sizeof (PathFileRel),"%s/%s",
 				  Path,FileList[NumFile]->d_name);
 			Fil_RemoveTree (PathFileRel);
@@ -516,6 +527,7 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,
                             Fil_RemoveDirectory_t RemoveDirectory)
   {
    struct dirent **FileList;
+   size_t Length;
    int NumFile;
    int NumFiles;
    char Path2[PATH_MAX + 1];
@@ -534,6 +546,7 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,
 	 if ((NumFiles = scandir (Path,&FileList,NULL,NULL)) >= 0)	// No error
 	   {
 	    /* Loop over files */
+	    Length = strlen (Path);
 	    for (NumFile = 0;
 		 NumFile < NumFiles;
 		 NumFile++)
@@ -541,6 +554,9 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,
 	       if (strcmp (FileList[NumFile]->d_name,".") &&
 		   strcmp (FileList[NumFile]->d_name,".."))		// Skip directories "." and ".."
 		 {
+		  if (Length + 1 +
+		      strlen (FileList[NumFile]->d_name) > PATH_MAX)
+		     Err_PathTooLongExit ();
 		  snprintf (Path2,sizeof (Path2),"%s/%s",
 			    Path,FileList[NumFile]->d_name);
 		  Fil_RemoveOldTmpFiles (Path2,TimeToRemove,Fil_REMOVE_DIRECTORY);	// Recursive call
@@ -655,7 +671,7 @@ void Fil_WriteFileSizeFull (double SizeInBytes,
 /********* Add public directory used to link private path to cache ***********/
 /*****************************************************************************/
 
-void Fil_AddPublicDirToCache (const char *FullPathPriv,
+void Fil_AddPublicDirToCache (const char FullPathPriv[PATH_MAX + 1],
                               const char TmpPubDirFull[PATH_MAX + 1])
   {
    /***** Trivial check: if no current session, don't do anything *****/
@@ -673,7 +689,7 @@ void Fil_AddPublicDirToCache (const char *FullPathPriv,
 /******** Get public directory used to link private path from cache **********/
 /*****************************************************************************/
 
-Exi_Exist_t Fil_GetPublicDirFromCache (const char *FullPathPriv,
+Exi_Exist_t Fil_GetPublicDirFromCache (const char FullPathPriv[PATH_MAX + 1],
 				       char TmpPubDirFull[PATH_MAX + 1])
   {
    Exi_Exist_t TmpPubDirExists;
@@ -694,8 +710,12 @@ Exi_Exist_t Fil_GetPublicDirFromCache (const char *FullPathPriv,
      {
       /* If not exists (it could be deleted if its lifetime has expired)
 	 ==> remove from cache */
+      if (strlen (Cfg_PATH_FILE_BROWSER_TMP_PUBLIC) + 1 +
+	  strlen (TmpPubDirFull) > PATH_MAX)
+	 Err_PathTooLongExit ();
       snprintf (FullPathTmpPubDirFull,sizeof (FullPathTmpPubDirFull),"%s/%s",
-		Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,TmpPubDirFull);
+		Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
+		TmpPubDirFull);
       TmpPubDirExists = Fil_CheckIfPathExists (FullPathTmpPubDirFull);
       if (TmpPubDirExists == Exi_DOES_NOT_EXIST)
 	 Fil_DB_RemovePublicDirFromCache (FullPathPriv);

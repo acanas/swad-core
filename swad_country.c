@@ -520,6 +520,10 @@ Exi_Exist_t Cty_CheckIfCountryPhotoExists (const struct Hie_Node *Cty)
   {
    char PathMap[PATH_MAX + 1];
 
+   if (strlen (Cfg_PATH_ICON_COUNTRIES_PUBLIC) + 1 +
+       (strlen (Cty->ShrtName) + 1) * 2 +
+       strlen ("jpg") > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathMap,sizeof (PathMap),"%s/%s/%s.png",
 	     Cfg_PATH_ICON_COUNTRIES_PUBLIC,
 	     Cty->ShrtName,
