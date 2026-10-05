@@ -875,13 +875,17 @@ static Exi_Exist_t Inf_CheckPage (Inf_Type_t InfoType)
 		      InfoType,PathRelDirHTML);
 
    /***** Open file with web page *****/
-   /* 1. Check if index.html exists */
+   /* 1. Check length */
+   if (strlen (PathRelDirHTML) + 1 + strlen ("index.html") > PATH_MAX)
+      Err_PathTooLongExit ();
+
+   /* 2. Check if index.html exists */
    snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
 	     PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML) == Exi_EXISTS)	// TODO: Check if not empty?
       return Exi_EXISTS;
 
-   /* 2. If index.html does not exist, try index.htm */
+   /* 3. If index.html does not exist, try index.htm */
    snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.htm",
 	     PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML) == Exi_EXISTS)	// TODO: Check if not empty?
@@ -909,7 +913,11 @@ static Exi_Exist_t Inf_CheckAndShowPage (Inf_Type_t InfoType)
 		      PathRelDirHTML);
 
    /***** Open file with web page *****/
-   /* 1. Check if index.html exists */
+   /* 1. Check length */
+   if (strlen (PathRelDirHTML) + 1 + strlen ("index.html") > PATH_MAX)
+      Err_PathTooLongExit ();
+
+   /* 2. Check if index.html exists */
    snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
 	     PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML) == Exi_EXISTS)	// TODO: Check if not empty?
@@ -923,7 +931,7 @@ static Exi_Exist_t Inf_CheckAndShowPage (Inf_Type_t InfoType)
       return Exi_EXISTS;
      }
 
-   /* 2. If index.html does not exist, try index.htm */
+   /* 3. If index.html does not exist, try index.htm */
    snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.htm",
 	     PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML) == Exi_EXISTS)	// TODO: Check if not empty?
@@ -2264,7 +2272,7 @@ void Inf_ReceivePagInfo (void)
    char SourceFileName[PATH_MAX + 1];
    char PathRelDirHTML[PATH_MAX + 1];
    char PathRelFileHTML[PATH_MAX + 1 + 10 + 1];
-   char PathRelFileZIP[PATH_MAX + 1 + NAME_MAX + 1];
+   char PathRelFileZIP[PATH_MAX + 1];
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    char StrUnzip[128 + PATH_MAX + 1 + NAME_MAX + 1 + PATH_MAX + 1];
    Err_SuccessOrError_t SuccessOrError;
@@ -2301,6 +2309,9 @@ void Inf_ReceivePagInfo (void)
 	   {
 	    Fil_RemoveTree (PathRelDirHTML);
 	    Fil_CreateDirIfNotExists (PathRelDirHTML);
+
+	    if (strlen (PathRelDirHTML) + 1 + strlen ("index.html") > PATH_MAX)
+	       Err_PathTooLongExit ();
 	    snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
 		      PathRelDirHTML);
 	    switch (Fil_EndReceptionOfFile (PathRelFileHTML,Par))
@@ -2320,6 +2331,11 @@ void Inf_ReceivePagInfo (void)
 	   {
 	    Fil_RemoveTree (PathRelDirHTML);
 	    Fil_CreateDirIfNotExists (PathRelDirHTML);
+
+	    if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
+	        strlen (Inf_FileNamesForInfoType[InfoType]) + 1 +
+	        strlen ("zip") > PATH_MAX)
+	       Err_PathTooLongExit ();
 	    snprintf (PathRelFileZIP,sizeof (PathRelFileZIP),"%s/%s.zip",
 		      Gbl.Crs.Path.AbsPriv,
 		      Inf_FileNamesForInfoType[InfoType]);

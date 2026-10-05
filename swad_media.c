@@ -1938,10 +1938,18 @@ long Med_CloneMedia (const struct Med_Media *MediaSrc)
 	 Fil_CreateDirIfNotExists (MediaPriv[Med_DST].Path);
 
 	 /* Build paths to private files */
+	 if (strlen (MediaPriv[Med_SRC].Path) + 1 +
+	     strlen (MediaDst.Name) + 1 +
+	     strlen (Med_Extensions[MediaSrc->Type]) > PATH_MAX)
+	    Err_PathTooLongExit ();
 	 snprintf (MediaPriv[Med_SRC].FullPath,
 	           sizeof (MediaPriv[Med_SRC].FullPath),"%s/%s.%s",
 		   MediaPriv[Med_SRC].Path,
 		   MediaSrc->Name,Med_Extensions[MediaSrc->Type]);
+	 if (strlen (MediaPriv[Med_DST].Path) + 1 +
+	     strlen (MediaDst.Name) + 1 +
+	     strlen (Med_Extensions[MediaSrc->Type]) > PATH_MAX)
+	    Err_PathTooLongExit ();
 	 snprintf (MediaPriv[Med_DST].FullPath,
 	           sizeof (MediaPriv[Med_DST].FullPath),"%s/%s.%s",
 		   MediaPriv[Med_DST].Path,

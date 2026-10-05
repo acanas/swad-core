@@ -28,6 +28,7 @@
 #define _GNU_SOURCE 		// For asprintf
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
+#include <string.h>		// For string functions
 #include <sys/stat.h>		// For mkdir
 #include <sys/types.h>		// For mkdir
 
@@ -347,12 +348,9 @@ static void Rep_GetCurrentDateTimeUTC (struct Rep_Report *Report)
 static void Rep_CreateNewReportFile (struct Rep_Report *Report)
   {
    char PathUniqueDirL[PATH_MAX + 1];
-   char PathUniqueDirR[PATH_MAX + 1 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
-   char PathFileReport[PATH_MAX + 1 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1 + NAME_MAX + 1];
+   char PathUniqueDirR[PATH_MAX + 1];
+   char PathFileReport[PATH_MAX + 1];
    const char *UniqueNameEncrypted = Cry_GetUniqueNameEncrypted ();
-   char Permalink[128 +
-		  Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +
-		  NAME_MAX];
 
    /***** Path for reports *****/
    Fil_CreateDirIfNotExists (Cfg_PATH_REP_PUBLIC);
@@ -366,6 +364,8 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
    Fil_CreateDirIfNotExists (PathUniqueDirL);
 
    /* 2. Create a directory using the rightmost 41 chars of a unique name */
+   if (strlen (PathUniqueDirL) + 1 + 2 > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathUniqueDirR,sizeof (PathUniqueDirR),"%s/%s",
              PathUniqueDirL,
              &UniqueNameEncrypted[2]);
@@ -373,22 +373,36 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
       Err_ShowErrorAndExit ("Can not create directory for report.");
 
    /***** Path of the public file with the report */
+   if (strlen (Rep_FILENAME_ROOT) + 1 +
+       6 + 1 +
+       6 + 1 +
+       strlen ("html") > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (Report->FilenameReport,sizeof (Report->FilenameReport),
 	     "%s_%06u_%06u.html",
-             Rep_FILENAME_ROOT,Report->CurrentTimeUTC.Date,Report->CurrentTimeUTC.Time);
+             Rep_FILENAME_ROOT,
+             Report->CurrentTimeUTC.Date,
+             Report->CurrentTimeUTC.Time);
+   if (strlen (PathUniqueDirR) + 1 +
+       strlen (Report->FilenameReport) > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathFileReport,sizeof (PathFileReport),"%s/%s",
              PathUniqueDirR,Report->FilenameReport);
    if ((Rep_File = fopen (PathFileReport,"wb")) == NULL)
       Err_ShowErrorAndExit ("Can not create report file.");
 
    /***** Permalink *****/
-   snprintf (Permalink,sizeof (Permalink),"%s/%c%c/%s/%s",
+   if (strlen (Cfg_URL_REP_PUBLIC) + 1 +
+       2 + 1 +
+       strlen (&UniqueNameEncrypted[2]) + 1 +
+       strlen (Report->FilenameReport) > WWW_MAX_BYTES_WWW)
+      Err_PathTooLongExit ();
+   snprintf (Report->Permalink,sizeof (Report->Permalink),"%s/%c%c/%s/%s",
              Cfg_URL_REP_PUBLIC,
              UniqueNameEncrypted[0],
              UniqueNameEncrypted[1],
              &UniqueNameEncrypted[2],
              Report->FilenameReport);
-   Str_Copy (Report->Permalink,Permalink,sizeof (Report->Permalink) - 1);
   }
 
 /*****************************************************************************/

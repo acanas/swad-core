@@ -53,7 +53,7 @@ static void RSS_WriteCallsForExams (FILE *FileRSS,struct Hie_Node *Crs);
 void RSS_UpdateRSSFileForACrs (struct Hie_Node *Crs)
   {
    char PathRelPublRSSDir[PATH_MAX + 1];
-   char PathRelPublRSSFile[PATH_MAX + 1 + NAME_MAX + 1];
+   char PathRelPublRSSFile[PATH_MAX + 1];
    FILE *FileRSS;
    char RSSLink[WWW_MAX_BYTES_WWW + 1];
    struct tm *tm;
@@ -67,6 +67,9 @@ void RSS_UpdateRSSFileForACrs (struct Hie_Node *Crs)
    Fil_CreateDirIfNotExists (PathRelPublRSSDir);
 
    /***** Create RSS file *****/
+   if (strlen (PathRelPublRSSDir) + 1 +
+       strlen (Cfg_RSS_FILE) > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathRelPublRSSFile,sizeof (PathRelPublRSSFile),"%s/%s",
 	     PathRelPublRSSDir,Cfg_RSS_FILE);
    if ((FileRSS = fopen (PathRelPublRSSFile,"wb")) == NULL)

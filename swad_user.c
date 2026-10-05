@@ -6426,25 +6426,26 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
 void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1])
   {
    char PathAboveUsr[PATH_MAX + 1];
-   char PathUsrTmp[PATH_MAX + 1 + Cns_MAX_DIGITS_LONG + 1];
 
    /***** Path for users *****/
    Fil_CreateDirIfNotExists (Cfg_PATH_USR_PRIVATE);
 
    /***** Path above user's ID *****/
+   if (strlen (Cfg_PATH_USR_PRIVATE) + 1 +
+       2 > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathAboveUsr,sizeof (PathAboveUsr),"%s/%02u",
 	     Cfg_PATH_USR_PRIVATE,
 	     (unsigned) ((unsigned long) UsrCod % 100));
    Fil_CreateDirIfNotExists (PathAboveUsr);
 
    /***** Path for user *****/
-   snprintf (PathUsrTmp,sizeof (PathUsrTmp),"%s/%lu",
+   if (strlen (PathAboveUsr) + 1 +
+       Cns_MAX_DIGITS_ULONG > PATH_MAX)
+      Err_PathTooLongExit ();
+   snprintf (PathUsr,PATH_MAX + 1,"%s/%lu",
 	     PathAboveUsr,
 	     (unsigned long) UsrCod);
-   if (strlen (PathUsrTmp) <= PATH_MAX)
-      Str_Copy (PathUsr,PathUsrTmp,PATH_MAX);
-   else
-      Err_PathTooLongExit ();
   }
 
 /*****************************************************************************/
