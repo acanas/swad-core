@@ -26,7 +26,7 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
-#include <linux/limits.h>	// For PATH_MAX
+// #include <linux/limits.h>	// For PATH_MAX
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
@@ -919,7 +919,7 @@ void Asg_GetAssignmentDataByCod (struct Asg_Assignment *Asg)
 /*************** Get assignment data using its folder name *******************/
 /*****************************************************************************/
 
-void Asg_GetAssignmentDataByFolder (const char Folder[Brw_MAX_BYTES_FOLDER + 1])
+void Asg_GetAssignmentDataByFolder (const char Folder[NAME_MAX + 1])
   {
    MYSQL_RES *mysql_res;
    struct Asg_Assignment Asg;
@@ -1474,7 +1474,7 @@ void Asg_ReceiveAssignment (void)
    Par_GetParText ("Title",Assignments.Asg.Title,Asg_MAX_BYTES_ASSIGNMENT_TITLE);
 
    /* Get folder name where to send works of the assignment */
-   Par_GetParText ("Folder",Assignments.Asg.Folder,Brw_MAX_BYTES_FOLDER);
+   Par_GetParText ("Folder",Assignments.Asg.Folder,NAME_MAX);
    Assignments.Asg.SendWork = Assignments.Asg.Folder[0] ? Asg_SEND_WORK :
 							  Asg_DONT_SEND_WORK;
 
@@ -1845,14 +1845,14 @@ Usr_Can_t Asg_CheckIfICanCreateIntoAssigment (void)
 /*****************************************************************************/
 
 void Asg_SetFolder (const struct Brw_FilFolLnk *FilFolLnk,unsigned Level,
-		    char Folder[Brw_MAX_BYTES_FOLDER + 1])
+		    char Folder[NAME_MAX + 1])
   {
    const char *Ptr;
    unsigned i;
 
    if (Level == 1)
       // We are in this case: assignments/assignment-folder
-      Str_Copy (Folder,FilFolLnk->Name,Brw_MAX_BYTES_FOLDER);
+      Str_Copy (Folder,FilFolLnk->Name,NAME_MAX);
    else
      {
       // We are in this case: assignments/assignment-folder/rest-of-path
@@ -1862,7 +1862,7 @@ void Asg_SetFolder (const struct Brw_FilFolLnk *FilFolLnk,unsigned Level,
       if (*Ptr == '/')
 	 Ptr++;	// Skip '/'
       for (i = 0;
-	   i < Brw_MAX_BYTES_FOLDER && *Ptr && *Ptr != '/';
+	   i < NAME_MAX && *Ptr && *Ptr != '/';
 	   i++, Ptr++)
 	 Folder[i] = *Ptr;	// Copy assignment folder
       Folder[i] = '\0';

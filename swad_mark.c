@@ -747,12 +747,16 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 if (UsrDat.IDs.Num)
 	   {
 	    if (GrpCod > 0)
-	       snprintf (PathMarks,sizeof (PathMarks),"%s/%ld/grp/%ld/%s",
-			 Cfg_PATH_CRS_PRIVATE,HieCods[Hie_CRS],GrpCod,
+	       snprintf (PathMarks,sizeof (PathMarks),"%s/%lu/%s/%lu/%s",
+			 Cfg_PATH_CRS_PRIVATE,
+			 (unsigned long) HieCods[Hie_CRS],
+			 Cfg_FOLDER_GRP,
+			 (unsigned long) GrpCod,
 			 FullPathInTreeFromDBMarksTable);
 	    else
-	       snprintf (PathMarks,sizeof (PathMarks),"%s/%ld/%s",
-			 Cfg_PATH_CRS_PRIVATE,HieCods[Hie_CRS],
+	       snprintf (PathMarks,sizeof (PathMarks),"%s/%lu/%s",
+			 Cfg_PATH_CRS_PRIVATE,
+			 (unsigned long) HieCods[Hie_CRS],
 			 FullPathInTreeFromDBMarksTable);
 
 	    /***** Create temporal file to store my marks (in HTML) *****/

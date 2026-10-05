@@ -65,7 +65,7 @@
 #define Brw_MAX_MONTHS_IN_BRIEFCASE		(1 * 12)	// 1 year
 
 #define Brw_MAX_CHARS_FOLDER	30		// 30
-#define Brw_MAX_BYTES_FOLDER	NAME_MAX	// 255
+// #define Brw_MAX_BYTES_FOLDER	NAME_MAX	// 255
 
 #define Brw_NUM_ZONES 29
 // The following types are stored in several database tables as numeric fields,

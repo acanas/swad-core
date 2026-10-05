@@ -60,8 +60,10 @@ void RSS_UpdateRSSFileForACrs (struct Hie_Node *Crs)
    time_t t = Dat_GetStartExecutionTimeUTC ();
 
    /***** Create RSS directory if not exists *****/
-   snprintf (PathRelPublRSSDir,sizeof (PathRelPublRSSDir),"%s/%ld/%s",
-	     Cfg_PATH_CRS_PUBLIC,Crs->HieCod,Cfg_RSS_FOLDER);
+   snprintf (PathRelPublRSSDir,sizeof (PathRelPublRSSDir),"%s/%lu/%s",
+	     Cfg_PATH_CRS_PUBLIC,
+	     (unsigned long) Crs->HieCod,
+	     Cfg_RSS_FOLDER);
    Fil_CreateDirIfNotExists (PathRelPublRSSDir);
 
    /***** Create RSS file *****/
@@ -304,6 +306,8 @@ static void RSS_WriteCallsForExams (FILE *FileRSS,struct Hie_Node *Crs)
 
 void RSS_BuildRSSLink (char RSSLink[WWW_MAX_BYTES_WWW + 1],long HieCod)
   {
-   snprintf (RSSLink,WWW_MAX_BYTES_WWW + 1,"%s/%ld/%s/%s",
-             Cfg_URL_CRS_PUBLIC,HieCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
+   snprintf (RSSLink,WWW_MAX_BYTES_WWW + 1,"%s/%lu/%s/%s",
+             Cfg_URL_CRS_PUBLIC,
+             (unsigned long) HieCod,
+             Cfg_RSS_FOLDER,Cfg_RSS_FILE);
   }

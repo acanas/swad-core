@@ -47,10 +47,10 @@ long Brw_GetGrpCod (void);
 
 void Brw_GetParAndInitFileBrowser (struct Brw_FileBrowser *FileBrowser);
 void Brw_InitializeFileBrowser (struct Brw_FileBrowser *FileBrowser);
-Exi_Exist_t Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName);
-Err_SuccessOrError_t Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,
-								   const char *NewFolderName);
-void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName);
+Exi_Exist_t Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char FolderName[NAME_MAX + 1]);
+Err_SuccessOrError_t Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char OldFolderName[NAME_MAX + 1],
+								   const char NewFolderName[NAME_MAX + 1]);
+void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char FolderName[NAME_MAX + 1]);
 
 void Brw_GetSelectedUsrsAndShowWorks (void);
 void Brw_ShowFileBrowserOrWorks (void);

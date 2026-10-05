@@ -468,9 +468,11 @@ static void Not_PutLinkToRSSFile (void)
    char RSSLink[WWW_MAX_BYTES_WWW + 1];
 
    /***** Create RSS file if not exists *****/
-   snprintf (PathRelRSSFile,sizeof (PathRelRSSFile),"%s/%ld/%s/%s",
+   snprintf (PathRelRSSFile,sizeof (PathRelRSSFile),"%s/%lu/%s/%s",
 	     Cfg_PATH_CRS_PUBLIC,
-	     Gbl.Hierarchy.Node[Hie_CRS].HieCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
+	     (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+	     Cfg_RSS_FOLDER,
+	     Cfg_RSS_FILE);
    if (Fil_CheckIfPathExists (PathRelRSSFile) == Exi_DOES_NOT_EXIST)
       RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
 

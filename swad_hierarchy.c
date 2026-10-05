@@ -674,12 +674,15 @@ void Hie_InitHierarchy (void)
    if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
      {
       /***** Paths of course directories *****/
-      snprintf (Gbl.Crs.Path.AbsPriv,sizeof (Gbl.Crs.Path.AbsPriv),"%s/%ld",
-	        Cfg_PATH_CRS_PRIVATE,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
-      snprintf (Gbl.Crs.Path.RelPubl,sizeof (Gbl.Crs.Path.RelPubl),"%s/%ld",
-	        Cfg_PATH_CRS_PUBLIC ,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
-      snprintf (Gbl.Crs.Path.URLPubl,sizeof (Gbl.Crs.Path.URLPubl),"%s/%ld",
-	        Cfg_URL_CRS_PUBLIC  ,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+      snprintf (Gbl.Crs.Path.AbsPriv,sizeof (Gbl.Crs.Path.AbsPriv),"%s/%lu",
+	        Cfg_PATH_CRS_PRIVATE,
+	        (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+      snprintf (Gbl.Crs.Path.RelPubl,sizeof (Gbl.Crs.Path.RelPubl),"%s/%lu",
+	        Cfg_PATH_CRS_PUBLIC,
+	        (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+      snprintf (Gbl.Crs.Path.URLPubl,sizeof (Gbl.Crs.Path.URLPubl),"%s/%lu",
+	        Cfg_URL_CRS_PUBLIC,
+	        (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
       /***** If any of the course directories does not exist, create it *****/
       if (Fil_CheckIfPathExists (Gbl.Crs.Path.AbsPriv) == Exi_DOES_NOT_EXIST)

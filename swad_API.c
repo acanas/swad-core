@@ -301,7 +301,8 @@ static void API_GetListGrpsInMatchFromDB (struct soap *soap,
 
 static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
 			 FILE *XML,unsigned Level,
-                         const char *Path,const char *PathInTree);
+                         const char Path[PATH_MAX + 1],
+                         const char *PathInTree);
 static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (struct Brw_FileBrowser *FileBrowser,
 							 FILE *XML,unsigned Level);
 static void API_IndentXMLLine (FILE *XML,unsigned Level);
@@ -1543,7 +1544,7 @@ static int API_WritePageIntoHTMLBuffer (struct soap *soap,
                                         char **HTMLBuffer)
   {
    char PathRelDirHTML[PATH_MAX + 1];
-   char PathRelFileHTML[PATH_MAX + 1 + 10 + 1];
+   char PathRelFileHTML[PATH_MAX + 1];
    FILE *FileHTML;
    Exi_Exist_t FileExists;
    size_t Length;
@@ -1556,6 +1557,8 @@ static int API_WritePageIntoHTMLBuffer (struct soap *soap,
 
    /***** Open file with web page *****/
    /* 1. Check if index.html exists */
+   if (strlen (PathRelDirHTML) + 1 + strlen ("index.html") > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
 	     PathRelDirHTML);
    FileExists = Fil_CheckIfPathExists (PathRelFileHTML);	// TODO: Check if not empty?
@@ -4801,8 +4804,9 @@ int swad__getDirectoryTree (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /* Initialize path to private directory */
-   snprintf (Gbl.Crs.Path.AbsPriv,sizeof (Gbl.Crs.Path.AbsPriv),"%s/%ld",
-             Cfg_PATH_CRS_PRIVATE,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+   snprintf (Gbl.Crs.Path.AbsPriv,sizeof (Gbl.Crs.Path.AbsPriv),"%s/%lu",
+             Cfg_PATH_CRS_PRIVATE,
+             (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod);
    Brw_SetGrpCod (GrpCod);
    Brw_InitializeFileBrowser (&FileBrowser);
    Str_Copy (FileBrowser.FileMetadata.FilFolLnk.Path,Brw_RootFolderInternalNames[FileBrowser.Zone],
@@ -4857,14 +4861,16 @@ int swad__getDirectoryTree (struct soap *soap,
 
 static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
 			 FILE *XML,unsigned Level,
-                         const char *Path,const char *PathInTree)
+                         const char Path[PATH_MAX + 1],
+                         const char *PathInTree)
   {
    extern const char *Txt_NEW_LINE;
    struct dirent **FileList;
    int NumFile;
    int NumFiles;
-   char PathFileRel[PATH_MAX + 1 + NAME_MAX + 1];
-   char PathFileInExplTree[PATH_MAX + 1 + NAME_MAX + 1];
+   size_t Length;
+   char PathFileRel[PATH_MAX + 1];
+   char PathFileInExplTree[PATH_MAX + 1];
    struct stat FileStatus;
    __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible;
 
@@ -4879,8 +4885,13 @@ static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
 	 if (strcmp (FileList[NumFile]->d_name,".") &&
 	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
-	    snprintf (PathFileRel,sizeof (PathFileRel),"%s/%s",
-		      Path,FileList[NumFile]->d_name);
+	    Length = strlen (FileList[NumFile]->d_name);
+	    if (strlen (Path      ) + 1 + Length > PATH_MAX ||
+	        strlen (PathInTree) + 1 + Length > PATH_MAX)
+	       Err_PathTooLongExit ();
+
+	    snprintf (PathFileRel       ,sizeof (PathFileRel)       ,"%s/%s",
+		      Path      ,FileList[NumFile]->d_name);
 	    snprintf (PathFileInExplTree,sizeof (PathFileInExplTree),"%s/%s",
 		      PathInTree,FileList[NumFile]->d_name);
 

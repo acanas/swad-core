@@ -1955,7 +1955,7 @@ void Brw_PutParsFileBrowser (struct Brw_FileBrowser *FileBrowser,long FilCod)
 void Brw_GetParFilCod (struct Brw_FileBrowser *FileBrowser)
   {
    const char *Ptr;
-   char Folder[Brw_MAX_BYTES_FOLDER + 1];
+   char Folder[NAME_MAX + 1];
 
    /***** Get file code *****/
    FileBrowser->FileMetadata.FilCod = ParCod_GetPar (ParCod_Fil);
@@ -2007,7 +2007,7 @@ void Brw_InitializeFileBrowser (struct Brw_FileBrowser *FileBrowser)
 static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
   {
    long PrjCod;
-   char Path[PATH_MAX * 2 + 128];
+   char Path[PATH_MAX + 1];
 
    /***** Reset paths. An empty path means that
           we don't have to create that directory *****/
@@ -2027,7 +2027,7 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
 	    institution-code mod 100 */
 	 snprintf (Path,sizeof (Path),"%s/%02u",
 		   Cfg_PATH_INS_PRIVATE,
-		   (unsigned) (Gbl.Hierarchy.Node[Hie_INS].HieCod % 100));
+		   (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_INS].HieCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
 	 /* Create path to the current institution */
@@ -2035,8 +2035,8 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
 	           sizeof (FileBrowser->Path.AboveRootFolder),
 	           "%s/%02u/%u",
 		   Cfg_PATH_INS_PRIVATE,
-		   (unsigned) (Gbl.Hierarchy.Node[Hie_INS].HieCod % 100),
-		   (unsigned)  Gbl.Hierarchy.Node[Hie_INS].HieCod);
+		   (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_INS].HieCod % 100),
+		   (unsigned) Gbl.Hierarchy.Node[Hie_INS].HieCod);
          break;
       case Brw_SHOW_DOC_CTR:
       case Brw_ADMI_DOC_CTR:
@@ -2048,7 +2048,7 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
 	    center-code mod 100 */
 	 snprintf (Path,sizeof (Path),"%s/%02u",
 		   Cfg_PATH_CTR_PRIVATE,
-		   (unsigned) (Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100));
+		   (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
 	 /* Create path to the current center */
@@ -2056,8 +2056,8 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
 	           sizeof (FileBrowser->Path.AboveRootFolder),
 	           "%s/%02u/%u",
 		   Cfg_PATH_CTR_PRIVATE,
-		   (unsigned) (Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
-		   (unsigned)  Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+		   (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
+		   (unsigned) Gbl.Hierarchy.Node[Hie_CTR].HieCod);
 	 break;
       case Brw_SHOW_DOC_DEG:
       case Brw_ADMI_DOC_DEG:
@@ -2069,7 +2069,7 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
 	    degree-code mod 100 */
 	 snprintf (Path,sizeof (Path),"%s/%02u",
 		   Cfg_PATH_DEG_PRIVATE,
-		   (unsigned) (Gbl.Hierarchy.Node[Hie_DEG].HieCod % 100));
+		   (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_DEG].HieCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
          /* Create path to the current degree */
@@ -2077,8 +2077,8 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
 	           sizeof (FileBrowser->Path.AboveRootFolder),
 	           "%s/%02u/%u",
 		   Cfg_PATH_DEG_PRIVATE,
-		   (unsigned) (Gbl.Hierarchy.Node[Hie_DEG].HieCod % 100),
-		   (unsigned)  Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+		   (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_DEG].HieCod % 100),
+		   (unsigned) Gbl.Hierarchy.Node[Hie_DEG].HieCod);
 	 break;
       case Brw_SHOW_DOC_CRS:
       case Brw_ADMI_DOC_CRS:
@@ -2102,8 +2102,9 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
          Fil_CreateDirIfNotExists (Path);
 
          /* Create path to this group */
-         snprintf (Path,sizeof (Path),"%s/%s/%ld",
-                   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_GRP,Brw_GetGrpCod ());
+         snprintf (Path,sizeof (Path),"%s/%s/%lu",
+                   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_GRP,
+                   (unsigned long) Brw_GetGrpCod ());
          Str_Copy (FileBrowser->Path.AboveRootFolder,Path,
                    sizeof (FileBrowser->Path.AboveRootFolder) - 1);
 	 break;
@@ -2118,14 +2119,14 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
 	    my-user-code mod 100 */
          snprintf (Path,sizeof (Path),"%s/%s/%02u",
                    Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
-                   (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100));
+                   (unsigned) ((unsigned long) Gbl.Usrs.Me.UsrDat.UsrCod % 100));
          Fil_CreateDirIfNotExists (Path);
 
          /* Create path to me */
-         snprintf (Path,sizeof (Path),"%s/%s/%02u/%ld",
+         snprintf (Path,sizeof (Path),"%s/%s/%02u/%lu",
                    Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
-                   (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
-                   Gbl.Usrs.Me.UsrDat.UsrCod);
+                   (unsigned) ((unsigned long) Gbl.Usrs.Me.UsrDat.UsrCod % 100),
+                   (unsigned long) Gbl.Usrs.Me.UsrDat.UsrCod);
          Str_Copy (FileBrowser->Path.AboveRootFolder,Path,
                    sizeof (FileBrowser->Path.AboveRootFolder) - 1);
          break;
@@ -2142,14 +2143,14 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
 	       user-code mod 100 */
 	    snprintf (Path,sizeof (Path),"%s/%s/%02u",
 		      Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
-		      (unsigned) (Gbl.Usrs.Other.UsrDat.UsrCod % 100));
+		      (unsigned) ((unsigned long) Gbl.Usrs.Other.UsrDat.UsrCod % 100));
 	    Fil_CreateDirIfNotExists (Path);
 
             /* Create path to user */
-            snprintf (Path,sizeof (Path),"%s/%s/%02u/%ld",
+            snprintf (Path,sizeof (Path),"%s/%s/%02u/%lu",
         	      Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
-                      (unsigned) (Gbl.Usrs.Other.UsrDat.UsrCod % 100),
-        	      Gbl.Usrs.Other.UsrDat.UsrCod);
+                      (unsigned) ((unsigned long) Gbl.Usrs.Other.UsrDat.UsrCod % 100),
+        	      (unsigned long) Gbl.Usrs.Other.UsrDat.UsrCod);
             Str_Copy (FileBrowser->Path.AboveRootFolder,Path,
                       sizeof (FileBrowser->Path.AboveRootFolder) - 1);
            }
@@ -2159,6 +2160,9 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
 	 PrjCod = Prj_GetPrjCod ();
 
 	 /* Create a directory for projects inside the current course */
+	 if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
+	     strlen (Cfg_FOLDER_PRJ) > PATH_MAX)
+	    Err_PathTooLongExit ();
          snprintf (Path,sizeof (Path),"%s/%s",
                    Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_PRJ);
          Fil_CreateDirIfNotExists (Path);
@@ -2167,14 +2171,14 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
 	    project-code mod 100 */
 	 snprintf (Path,sizeof (Path),"%s/%s/%02u",
 		   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_PRJ,
-                   (unsigned) (PrjCod % 100));
+                   (unsigned) ((unsigned long) PrjCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
          /* Create path to the current project */
-         snprintf (Path,sizeof (Path),"%s/%s/%02u/%ld",
+         snprintf (Path,sizeof (Path),"%s/%s/%02u/%lu",
                    Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_PRJ,
-                   (unsigned) (PrjCod % 100),
-                   PrjCod);
+                   (unsigned) ((unsigned long) PrjCod % 100),
+                   (unsigned long) PrjCod);
          Str_Copy (FileBrowser->Path.AboveRootFolder,Path,
                    sizeof (FileBrowser->Path.AboveRootFolder) - 1);
 	 break;
@@ -2190,6 +2194,9 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
    if (FileBrowser->Path.AboveRootFolder[0])
      {
       Fil_CreateDirIfNotExists (FileBrowser->Path.AboveRootFolder);
+      if (strlen (FileBrowser->Path.AboveRootFolder) + 1 +
+          strlen (Brw_RootFolderInternalNames[FileBrowser->Zone]) > PATH_MAX)
+	 Err_PathTooLongExit ();
       snprintf (Path,sizeof (Path),"%s/%s",
                 FileBrowser->Path.AboveRootFolder,
                 Brw_RootFolderInternalNames[FileBrowser->Zone]);
@@ -2213,13 +2220,13 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
 /*****************************************************************************/
 // Folders are in level 1, just under root folder
 
-Exi_Exist_t Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName)
+Exi_Exist_t Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char FolderName[NAME_MAX + 1])
   {
    MYSQL_RES *mysql_res;
    unsigned NumUsrs;
    unsigned NumUsr;
    long UsrCod;
-   char PathFolder[PATH_MAX * 2 + 128];
+   char PathFolder[PATH_MAX + 1];
    Exi_Exist_t FolderExists = Exi_DOES_NOT_EXIST;
 
    /***** Get all users belonging to current course *****/
@@ -2234,10 +2241,17 @@ Exi_Exist_t Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName)
       UsrCod = DB_GetNextCode (mysql_res);
 
       /* Check if folder exists */
-      snprintf (PathFolder,sizeof (PathFolder),"%s/usr/%02u/%ld/%s/%s",
-                Gbl.Crs.Path.AbsPriv,
-                (unsigned) (UsrCod % 100),
-                UsrCod,	// User's code
+      if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
+          strlen (Cfg_FOLDER_USR) + 1 +
+          2 + 1 +
+          Cns_MAX_DIGITS_ULONG + 1 +
+          strlen (Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS) + 1 +
+          strlen (FolderName) > PATH_MAX)
+	 Err_PathTooLongExit ();
+      snprintf (PathFolder,sizeof (PathFolder),"%s/%s/%02u/%lu/%s/%s",
+                Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
+                (unsigned) ((unsigned long) UsrCod % 100),
+                (unsigned long) UsrCod,	// User's code
                 Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
                 FolderName);
       FolderExists = Fil_CheckIfPathExists (PathFolder);
@@ -2265,7 +2279,7 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (const char PathRootFolder[PA
    MYSQL_ROW row;
    unsigned NumFolders;
    unsigned NumFolder;
-   char PathFolderAsg[PATH_MAX + 1 + PATH_MAX + 1];
+   char PathFolderAsg[PATH_MAX + 1];
 
    /***** Get assignment folders from database *****/
    NumFolders = Brw_DB_GetFoldersAssignments (&mysql_res,ZoneUsrCod);
@@ -2281,6 +2295,8 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (const char PathRootFolder[PA
 	 if (row[0])	// Not necessary, because folder name is checked in query to be not empty
 	   {
 	    /* Create folder if not exists */
+	    if (strlen (PathFolderAsg) + 1 + strlen (row[0]) > PATH_MAX)
+	       Err_PathTooLongExit ();
 	    snprintf (PathFolderAsg,sizeof (PathFolderAsg),"%s/%s",
 		      PathRootFolder,row[0]);
 	    Fil_CreateDirIfNotExists (PathFolderAsg);
@@ -2296,8 +2312,8 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (const char PathRootFolder[PA
 /*****************************************************************************/
 // Folders are in level 1, just under root folder
 
-Err_SuccessOrError_t Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,
-								   const char *NewFolderName)
+Err_SuccessOrError_t Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char OldFolderName[NAME_MAX + 1],
+								   const char NewFolderName[NAME_MAX + 1])
   {
    extern const char *Txt_Can_not_rename_a_folder_of_assignment;
    extern const char *Txt_Users;
@@ -2307,10 +2323,11 @@ Err_SuccessOrError_t Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *O
    unsigned NumUsrs;
    unsigned NumUsr;
    long UsrCod;
+   size_t Length;
    char OldPath[PATH_MAX + 1];
    char NewPath[PATH_MAX + 1];
-   char PathOldFolder[PATH_MAX * 2 + 128];
-   char PathNewFolder[PATH_MAX * 2 + 128];
+   char PathOldFolder[PATH_MAX + 1];
+   char PathNewFolder[PATH_MAX + 1];
    Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
    unsigned NumUsrsError = 0;
    unsigned NumUsrsSuccess = 0;
@@ -2318,98 +2335,112 @@ Err_SuccessOrError_t Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *O
    /***** Get all users belonging to current course *****/
    NumUsrs = Enr_DB_GetUsrsFromCurrentCrs (&mysql_res);
 
-   /***** Check if there exist folders with the new name *****/
-   for (NumUsr = 0;
-	NumUsr < NumUsrs && SuccessOrError == Err_SUCCESS;
-	NumUsr++)
+   if (NumUsrs)
      {
-      /* Get next user */
-      UsrCod = DB_GetNextCode (mysql_res);
+      /***** Check maximum lengths of paths *****/
+      Length = strlen (Gbl.Crs.Path.AbsPriv) + 1 +
+	       strlen (Cfg_FOLDER_USR) + 1 +
+	       2 + 1 +
+	       Cns_MAX_DIGITS_ULONG + 1 +
+	       strlen (Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS) + 1;
+      if (Length + strlen (OldFolderName) > PATH_MAX ||
+          Length + strlen (NewFolderName) > PATH_MAX)
+	 Err_PathTooLongExit ();
 
-      /* Rename folder if exists */
-      snprintf (PathOldFolder,sizeof (PathOldFolder),"%s/usr/%02u/%ld/%s/%s",
-                Gbl.Crs.Path.AbsPriv,
-                (unsigned) (UsrCod % 100),
-                UsrCod,	// User's code
-                Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-                OldFolderName);
-      snprintf (PathNewFolder,sizeof (PathNewFolder),"%s/usr/%02u/%ld/%s/%s",
-                Gbl.Crs.Path.AbsPriv,
-                (unsigned) (UsrCod % 100),
-                UsrCod,	// User's code
-                Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-                NewFolderName);
-      if (Fil_CheckIfPathExists (PathOldFolder) == Exi_EXISTS &&
-          Fil_CheckIfPathExists (PathNewFolder) == Exi_EXISTS)
-         SuccessOrError = Err_ERROR;
-     }
+      /***** Check if there exist folders with the new name *****/
+      for (NumUsr = 0;
+	   NumUsr < NumUsrs && SuccessOrError == Err_SUCCESS;
+	   NumUsr++)
+	{
+	 /* Get next user */
+	 UsrCod = DB_GetNextCode (mysql_res);
 
-   /***** Rename folder for each user *****/
-   switch (SuccessOrError)
-     {
-      case Err_SUCCESS:
-	 mysql_data_seek (mysql_res,0);
-	 for (NumUsr = 0;
-	      NumUsr < NumUsrs;
-	      NumUsr++)
-	   {
-	    /* Get next user */
-	    UsrCod = DB_GetNextCode (mysql_res);
+	 /* Rename folder if exists */
+	 snprintf (PathOldFolder,sizeof (PathOldFolder),"%s/%s/%02u/%lu/%s/%s",
+		   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
+		   (unsigned) ((unsigned long) UsrCod % 100),
+		   (unsigned long) UsrCod,	// User's code
+		   Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+		   OldFolderName);
+	 snprintf (PathNewFolder,sizeof (PathNewFolder),"%s/%s/%02u/%lu/%s/%s",
+		   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
+		   (unsigned) ((unsigned long) UsrCod % 100),
+		   (unsigned long) UsrCod,	// User's code
+		   Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+		   NewFolderName);
+	 if (Fil_CheckIfPathExists (PathOldFolder) == Exi_EXISTS &&
+	     Fil_CheckIfPathExists (PathNewFolder) == Exi_EXISTS)
+	    SuccessOrError = Err_ERROR;
+	}
 
-	    /* Rename folder if exists */
-	    snprintf (PathOldFolder,sizeof (PathOldFolder),"%s/usr/%02u/%ld/%s/%s",
-		      Gbl.Crs.Path.AbsPriv,
-		      (unsigned) (UsrCod % 100),
-		      UsrCod,	// User's code
-		      Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-		      OldFolderName);
-	    if (Fil_CheckIfPathExists (PathOldFolder) == Exi_EXISTS)
+      /***** Rename folder for each user *****/
+      switch (SuccessOrError)
+	{
+	 case Err_SUCCESS:
+	    mysql_data_seek (mysql_res,0);
+	    for (NumUsr = 0;
+		 NumUsr < NumUsrs;
+		 NumUsr++)
 	      {
-	       snprintf (PathNewFolder,sizeof (PathNewFolder),"%s/usr/%02u/%ld/%s/%s",
-			 Gbl.Crs.Path.AbsPriv,
-			 (unsigned) (UsrCod % 100),
-			 UsrCod,	// User's code
+	       /* Get next user */
+	       UsrCod = DB_GetNextCode (mysql_res);
+
+	       /* Rename folder if exists */
+	       snprintf (PathOldFolder,sizeof (PathOldFolder),"%s/%s/%02u/%lu/%s/%s",
+			 Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
+			 (unsigned) ((unsigned long) UsrCod % 100),
+			 (unsigned long) UsrCod,	// User's code
 			 Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-			 NewFolderName);
-	       if (rename (PathOldFolder,PathNewFolder))	// Fail
+			 OldFolderName);
+	       if (Fil_CheckIfPathExists (PathOldFolder) == Exi_EXISTS)
 		 {
-		  Ale_ShowAlert (Ale_ERROR,Txt_Can_not_rename_a_folder_of_assignment);
-		  NumUsrsError++;
-		 }
-	       else					// Success
-		 {
-		  /* Remove affected clipboards */
-		  Brw_DB_RemoveAffectedClipboards (Brw_ADMI_ASG_USR,UsrCod,-1L);
-		  Brw_DB_RemoveAffectedClipboards (Brw_ADMI_ASG_CRS,-1L,UsrCod);
+		  snprintf (PathNewFolder,sizeof (PathNewFolder),"%s/%s/%02u/%lu/%s/%s",
+			    Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
+			    (unsigned) ((unsigned long) UsrCod % 100),
+			    (unsigned long) UsrCod,	// User's code
+			    Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+			    NewFolderName);
+		  if (rename (PathOldFolder,PathNewFolder))	// Fail
+		    {
+		     Ale_ShowAlert (Ale_ERROR,Txt_Can_not_rename_a_folder_of_assignment);
+		     NumUsrsError++;
+		    }
+		  else						// Success
+		    {
+		     /* Remove affected clipboards */
+		     Brw_DB_RemoveAffectedClipboards (Brw_ADMI_ASG_USR,UsrCod,-1L);
+		     Brw_DB_RemoveAffectedClipboards (Brw_ADMI_ASG_CRS,-1L,UsrCod);
 
-		  /* Rename affected expanded folders */
-		  snprintf (OldPath,sizeof (OldPath),"%s/%s",
-			    Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,OldFolderName);
-		  snprintf (NewPath,sizeof (NewPath),"%s/%s",
-			    Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,NewFolderName);
-		  Brw_DB_RenameAffectedExpandedFolders (Brw_ADMI_ASG_USR,UsrCod,-1L,
-							OldPath,NewPath);
-		  Brw_DB_RenameAffectedExpandedFolders (Brw_ADMI_ASG_CRS,-1L,UsrCod,
-							OldPath,NewPath);
+		     /* Rename affected expanded folders */
+		     snprintf (OldPath,sizeof (OldPath),"%s/%s",
+			       Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,OldFolderName);
+		     snprintf (NewPath,sizeof (NewPath),"%s/%s",
+			       Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,NewFolderName);
+		     Brw_DB_RenameAffectedExpandedFolders (Brw_ADMI_ASG_USR,UsrCod,-1L,
+							   OldPath,NewPath);
+		     Brw_DB_RenameAffectedExpandedFolders (Brw_ADMI_ASG_CRS,-1L,UsrCod,
+							   OldPath,NewPath);
 
-		  NumUsrsSuccess++;
+		     NumUsrsSuccess++;
+		    }
 		 }
 	      }
-	   }
 
-	 /***** Summary message *****/
-	 Ale_ShowAlert (Ale_INFO,"%s: %u<br>"
-				 "%s: %u<br>"
-				 "%s: %u.",
-			Txt_Users,NumUsrs,
-			Txt_Folders_renamed,NumUsrsSuccess,
-			Txt_Folders_not_renamed,NumUsrsError);
-	 break;
-      case Err_ERROR:
-      default:
-	 /***** Warning message *****/
-	 Ale_ShowAlert (Ale_WARNING,Txt_Can_not_rename_a_folder_of_assignment);
-	 break;
+	    /***** Summary message *****/
+	    Ale_ShowAlert (Ale_INFO,"%s: %u<br>"
+				    "%s: %u<br>"
+				    "%s: %u.",
+			   Txt_Users,NumUsrs,
+			   Txt_Folders_renamed,NumUsrsSuccess,
+			   Txt_Folders_not_renamed,NumUsrsError);
+	    break;
+	 case Err_ERROR:
+	 default:
+	    /***** Warning message *****/
+	    Ale_ShowAlert (Ale_WARNING,Txt_Can_not_rename_a_folder_of_assignment);
+	    break;
+	}
+
      }
 
    /***** Free structure that stores the query result *****/
@@ -2423,33 +2454,45 @@ Err_SuccessOrError_t Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *O
 /*****************************************************************************/
 // Folders are in level 1, just under root folder
 
-void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName)
+void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char FolderName[NAME_MAX + 1])
   {
    MYSQL_RES *mysql_res;
    unsigned NumUsrs;
    unsigned NumUsr;
    long UsrCod;
-   char PathFolder[PATH_MAX * 2 + 128];
+   char PathFolder[PATH_MAX + 1];
 
    /***** Get all users belonging to current course *****/
    NumUsrs = Enr_DB_GetUsrsFromCurrentCrs (&mysql_res);
 
-   /***** Remove folders *****/
-   for (NumUsr = 0;
-	NumUsr < NumUsrs;
-	NumUsr++)
+   if (NumUsrs)
      {
-      /* Get next user */
-      UsrCod = DB_GetNextCode (mysql_res);
+      /***** Check maximum length of path *****/
+      if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
+	  strlen (Cfg_FOLDER_USR) + 1 +
+	  2 + 1 +
+	  Cns_MAX_DIGITS_ULONG + 1 +
+	  strlen (Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS) + 1 +
+	  strlen (FolderName) > PATH_MAX)
+	 Err_PathTooLongExit ();
 
-      /* Remove tree if exists */
-      snprintf (PathFolder,sizeof (PathFolder),"%s/usr/%02u/%ld/%s/%s",
-                Gbl.Crs.Path.AbsPriv,
-                (unsigned) (UsrCod % 100),
-                UsrCod,	// User's code
-                Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-                FolderName);
-      Fil_RemoveTree (PathFolder);
+      /***** Remove folders *****/
+      for (NumUsr = 0;
+	   NumUsr < NumUsrs;
+	   NumUsr++)
+	{
+	 /* Get next user */
+	 UsrCod = DB_GetNextCode (mysql_res);
+
+	 /* Remove tree if exists */
+	 snprintf (PathFolder,sizeof (PathFolder),"%s/%s/%02u/%lu/%s/%s",
+		   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
+		   (unsigned) ((unsigned long) UsrCod % 100),
+		   (unsigned long) UsrCod,	// User's code
+		   Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+		   FolderName);
+	 Fil_RemoveTree (PathFolder);
+	}
      }
 
    /***** Free structure that stores the query result *****/
@@ -3432,7 +3475,7 @@ void Brw_CreateDirDownloadTmp (struct Brw_TmpPubDir *TmpPubDir)
    static unsigned NumDir = 0;	// When this function is called several times in the same execution of the program, each time a new directory is created
 				// This happens when the trees of assignments and works of several users are being listed
    char PathUniqueDirL[PATH_MAX + 1];
-   char PathUniqueDirR[PATH_MAX + 1 + NAME_MAX + 1];
+   char PathUniqueDirR[PATH_MAX + 1];
    const char *UniqueNameEncrypted = Cry_GetUniqueNameEncrypted ();
 
    /* Example: /var/www/html/swad/tmp/SS/ujCNWsy4ZOdmgMKYBe0sKPAJu6szaZOQlIlJs_QIY */
@@ -3457,11 +3500,17 @@ void Brw_CreateDirDownloadTmp (struct Brw_TmpPubDir *TmpPubDir)
                 sizeof (TmpPubDir->Right) - 1);
 
    /* 2. Create the left directory */
+   if (strlen (Cfg_PATH_FILE_BROWSER_TMP_PUBLIC) + 1 +
+       strlen (TmpPubDir->Left) > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathUniqueDirL,sizeof (PathUniqueDirL),"%s/%s",
              Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,TmpPubDir->Left);
    Fil_CreateDirIfNotExists (PathUniqueDirL);
 
    /* 3. Create the right directory inside the left one */
+   if (strlen (PathUniqueDirL) + 1 +
+       strlen (TmpPubDir->Right) > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathUniqueDirR,sizeof (PathUniqueDirR),"%s/%s",
              PathUniqueDirL,TmpPubDir->Right);
    if (mkdir (PathUniqueDirR,(mode_t) 0777))
@@ -3739,7 +3788,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
    char FileBrowserId[32];
    char TxtStyle[64];
    const char *InputStyle;
-   char Folder[Brw_MAX_BYTES_FOLDER + 1];
+   char Folder[NAME_MAX + 1];
    __attribute__((unused)) Exi_Exist_t FileExists;
 
    /***** Initializations *****/
@@ -4032,7 +4081,7 @@ void Brw_SetFullPathInTree (struct Brw_FilFolLnk *FilFolLnk)
 static Usr_Can_t Brw_CheckIfCanPasteIn (const struct Brw_FileBrowser *FileBrowser,
 				        unsigned Level)
   {
-   char PathDstWithFile[PATH_MAX + 1 + NAME_MAX + 1];
+   char PathDstWithFile[PATH_MAX + 1];
 
    /***** If not in a folder... *****/
    if (FileBrowser->FileMetadata.FilFolLnk.Type != Brw_IS_FOLDER)
@@ -4056,6 +4105,9 @@ static Usr_Can_t Brw_CheckIfCanPasteIn (const struct Brw_FileBrowser *FileBrowse
 						// we can paste or not depending on the subtree
      {
       /***** Construct the name of the file or folder destination *****/
+      if (strlen (FileBrowser->FileMetadata.FilFolLnk.Full) + 1 +
+	  strlen (FileBrowser->Clipboard.FilFolLnk.Name) > PATH_MAX)
+	 Err_PathTooLongExit ();
       snprintf (PathDstWithFile,sizeof (PathDstWithFile),"%s/%s",
 	        FileBrowser->FileMetadata.FilFolLnk.Full,
 	        FileBrowser->Clipboard.FilFolLnk.Name);
@@ -4855,7 +4907,7 @@ void Brw_RemFile (void)
    extern const char *Txt_FILE_X_removed;
    extern const char *Txt_You_can_not_remove_this_file_or_link;
    struct Brw_FileBrowser FileBrowser;
-   char Path[PATH_MAX + 1 + PATH_MAX + 1];
+   char Path[PATH_MAX + 1];
    struct stat FileStatus;
    char FileNameToShow[NAME_MAX + 1];
 
@@ -4869,6 +4921,10 @@ void Brw_RemFile (void)
 					    FileBrowser.Lvl))	// Can I remove this file?
      {
       case Usr_CAN:
+         /***** Build full file path *****/
+	 if (strlen (FileBrowser.Path.AboveRootFolder) + 1 +
+	     strlen (FileBrowser.FileMetadata.FilFolLnk.Full) > PATH_MAX)
+	    Err_PathTooLongExit ();
 	 snprintf (Path,sizeof (Path),"%s/%s",
 		   FileBrowser.Path.AboveRootFolder,
 		   FileBrowser.FileMetadata.FilFolLnk.Full);
@@ -4918,7 +4974,7 @@ void Brw_RemFolder (void)
    extern const char *Txt_Folder_X_removed;
    extern const char *Txt_You_can_not_remove_this_folder;
    struct Brw_FileBrowser FileBrowser;
-   char Path[PATH_MAX + 1 + PATH_MAX + 1];
+   char Path[PATH_MAX + 1 ];
    struct stat FileStatus;
 
    /***** Get parameters related to file browser *****/
@@ -4931,6 +4987,10 @@ void Brw_RemFolder (void)
 					    FileBrowser.Lvl))	// Can I remove this folder?
      {
       case Usr_CAN:
+         /***** Build full file path *****/
+	 if (strlen (FileBrowser.Path.AboveRootFolder) + 1 +
+	     strlen (FileBrowser.FileMetadata.FilFolLnk.Full) > PATH_MAX)
+	    Err_PathTooLongExit ();
 	 snprintf (Path,sizeof (Path),"%s/%s",
 		   FileBrowser.Path.AboveRootFolder,
 		   FileBrowser.FileMetadata.FilFolLnk.Full);
@@ -4994,7 +5054,7 @@ void Brw_RemSubtree (void)
   {
    extern const char *Txt_Folder_X_and_all_its_contents_removed;
    struct Brw_FileBrowser FileBrowser;
-   char Path[PATH_MAX + 1 + PATH_MAX + 1];
+   char Path[PATH_MAX + 1];
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
@@ -5005,6 +5065,10 @@ void Brw_RemSubtree (void)
 					FileBrowser.FileMetadata.FilFolLnk.Type,
 					FileBrowser.Lvl) == Usr_CAN)	// Can I remove this subtree?
      {
+      /***** Build full file path *****/
+      if (strlen (FileBrowser.Path.AboveRootFolder) + 1 +
+	  strlen (FileBrowser.FileMetadata.FilFolLnk.Full) > PATH_MAX)
+	 Err_PathTooLongExit ();
       snprintf (Path,sizeof (Path),"%s/%s",
 	        FileBrowser.Path.AboveRootFolder,
 	        FileBrowser.FileMetadata.FilFolLnk.Full);
@@ -5681,7 +5745,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser)
    struct Group Grp;
    struct Usr_Data UsrDat;
    long PrjCod;
-   char PathOrg[PATH_MAX + NAME_MAX + PATH_MAX + 128];
+   char PathOrg[PATH_MAX + 1];
    struct Brw_NumObjects Pasted;
    struct Brw_FileMetadata FirstFileMetadata;
 
@@ -5704,10 +5768,15 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser)
 	       switch (Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]))
 	         {
 		  case Err_SUCCESS:
-		     snprintf (PathOrg,sizeof (PathOrg),"%s/%02u/%u/%s",
+		     if (strlen (Cfg_PATH_INS_PRIVATE) + 1 +
+			 2 + 1 +
+			 Cns_MAX_DIGITS_ULONG + 1 +
+			 strlen (FileBrowser->Clipboard.FilFolLnk.Full) > PATH_MAX)
+			Err_PathTooLongExit ();
+		     snprintf (PathOrg,sizeof (PathOrg),"%s/%02u/%lu/%s",
 			       Cfg_PATH_INS_PRIVATE,
-			       (unsigned) (Hie[Hie_INS].HieCod % 100),
-			       (unsigned) Hie[Hie_INS].HieCod,
+			       (unsigned) ((unsigned long) Hie[Hie_INS].HieCod % 100),
+			       (unsigned long) Hie[Hie_INS].HieCod,
 			       FileBrowser->Clipboard.FilFolLnk.Full);
 		     break;
 		  case Err_ERROR:
@@ -5722,10 +5791,15 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser)
 	       switch (Hie_GetDataByCod[Hie_CTR] (&Hie[Hie_CTR]))
   	         {
 		  case Err_SUCCESS:
-		     snprintf (PathOrg,sizeof (PathOrg),"%s/%02u/%u/%s",
+		     if (strlen (Cfg_PATH_CTR_PRIVATE) + 1 +
+			 2 + 1 +
+			 Cns_MAX_DIGITS_ULONG + 1 +
+			 strlen (FileBrowser->Clipboard.FilFolLnk.Full) > PATH_MAX)
+			Err_PathTooLongExit ();
+		     snprintf (PathOrg,sizeof (PathOrg),"%s/%02u/%lu/%s",
 			       Cfg_PATH_CTR_PRIVATE,
-			       (unsigned) (Hie[Hie_CTR].HieCod % 100),
-			       (unsigned) Hie[Hie_CTR].HieCod,
+			       (unsigned) ((unsigned long) Hie[Hie_CTR].HieCod % 100),
+			       (unsigned long) Hie[Hie_CTR].HieCod,
 			       FileBrowser->Clipboard.FilFolLnk.Full);
 		     break;
 		  case Err_ERROR:
@@ -5740,10 +5814,15 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser)
 	       switch (Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]))
   	         {
 		  case Err_SUCCESS:
-		     snprintf (PathOrg,sizeof (PathOrg),"%s/%02u/%u/%s",
+		     if (strlen (Cfg_PATH_DEG_PRIVATE) + 1 +
+			 2 + 1 +
+			 Cns_MAX_DIGITS_ULONG + 1 +
+			 strlen (FileBrowser->Clipboard.FilFolLnk.Full) > PATH_MAX)
+			Err_PathTooLongExit ();
+		     snprintf (PathOrg,sizeof (PathOrg),"%s/%02u/%lu/%s",
 			       Cfg_PATH_DEG_PRIVATE,
-			       (unsigned) (Hie[Hie_DEG].HieCod % 100),
-			       (unsigned) Hie[Hie_DEG].HieCod,
+			       (unsigned) ((unsigned long) Hie[Hie_DEG].HieCod % 100),
+			       (unsigned long) Hie[Hie_DEG].HieCod,
 			       FileBrowser->Clipboard.FilFolLnk.Full);
 		     break;
 		  case Err_ERROR:
@@ -5760,8 +5839,13 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser)
 	       switch (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
   	         {
 		  case Err_SUCCESS:
-		     snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s",
-			       Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,
+		     if (strlen (Cfg_PATH_CRS_PRIVATE) + 1 +
+			 Cns_MAX_DIGITS_ULONG + 1 +
+			 strlen (FileBrowser->Clipboard.FilFolLnk.Full) > PATH_MAX)
+			Err_PathTooLongExit ();
+		     snprintf (PathOrg,sizeof (PathOrg),"%s/%lu/%s",
+			       Cfg_PATH_CRS_PRIVATE,
+			       (unsigned long) Hie[Hie_CRS].HieCod,
 			       FileBrowser->Clipboard.FilFolLnk.Full);
 		     break;
 		  case Err_ERROR:
@@ -5779,9 +5863,17 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser)
 	       switch (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
   	         {
 		  case Err_SUCCESS:
-		     snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%ld/%s",
-			       Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_GRP,
-			       Grp.GrpCod,
+		     if (strlen (Cfg_PATH_CRS_PRIVATE) + 1 +
+			 Cns_MAX_DIGITS_ULONG + 1 +
+			 strlen (Cfg_FOLDER_GRP) + 1 +
+			 Cns_MAX_DIGITS_ULONG + 1 +
+			 strlen (FileBrowser->Clipboard.FilFolLnk.Full) > PATH_MAX)
+			Err_PathTooLongExit ();
+		     snprintf (PathOrg,sizeof (PathOrg),"%s/%lu/%s/%lu/%s",
+			       Cfg_PATH_CRS_PRIVATE,
+			       (unsigned long) Hie[Hie_CRS].HieCod,
+			       Cfg_FOLDER_GRP,
+			       (unsigned long) Grp.GrpCod,
 			       FileBrowser->Clipboard.FilFolLnk.Full);
 		     break;
 		  case Err_ERROR:
@@ -5804,10 +5896,19 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser)
 			      Usr_GetAllUsrDataFromUsrCod (&UsrDat,
 							   Usr_DONT_GET_PREFS,
 							   Usr_DONT_GET_ROLE_IN_CRS);	// Check that user exists
-			      snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%02u/%ld/%s",
-					Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_USR,
-					(unsigned) (FileBrowser->Clipboard.WorksUsrCod % 100),
-					FileBrowser->Clipboard.WorksUsrCod,
+			      if (strlen (Cfg_PATH_CRS_PRIVATE) + 1 +
+				  Cns_MAX_DIGITS_ULONG + 1 +
+				  strlen (Cfg_FOLDER_USR) + 1 +
+				  2 + 1 +
+				  Cns_MAX_DIGITS_ULONG + 1 +
+				  strlen (FileBrowser->Clipboard.FilFolLnk.Full) > PATH_MAX)
+				 Err_PathTooLongExit ();
+			      snprintf (PathOrg,sizeof (PathOrg),"%s/%lu/%s/%02u/%lu/%s",
+					Cfg_PATH_CRS_PRIVATE,
+					(unsigned long) Hie[Hie_CRS].HieCod,
+					Cfg_FOLDER_USR,
+					(unsigned) ((unsigned long) FileBrowser->Clipboard.WorksUsrCod % 100),
+					(unsigned long) FileBrowser->Clipboard.WorksUsrCod,
 					FileBrowser->Clipboard.FilFolLnk.Full);
 			   Usr_UsrDataDestructor (&UsrDat);
 			   break;
@@ -5829,10 +5930,19 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser)
 	       switch (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
   	         {
 		  case Err_SUCCESS:
-		     snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%02u/%ld/%s",
-			       Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_USR,
-			       (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
-			       Gbl.Usrs.Me.UsrDat.UsrCod,
+		     if (strlen (Cfg_PATH_CRS_PRIVATE) + 1 +
+			 Cns_MAX_DIGITS_ULONG + 1 +
+			 strlen (Cfg_FOLDER_USR) + 1 +
+			 2 + 1 +
+			 Cns_MAX_DIGITS_ULONG + 1 +
+			 strlen (FileBrowser->Clipboard.FilFolLnk.Full) > PATH_MAX)
+			Err_PathTooLongExit ();
+		     snprintf (PathOrg,sizeof (PathOrg),"%s/%lu/%s/%02u/%lu/%s",
+			       Cfg_PATH_CRS_PRIVATE,
+			       (unsigned long) Hie[Hie_CRS].HieCod,
+			       Cfg_FOLDER_USR,
+			       (unsigned) ((unsigned long) Gbl.Usrs.Me.UsrDat.UsrCod % 100),
+			       (unsigned long) Gbl.Usrs.Me.UsrDat.UsrCod,
 			       FileBrowser->Clipboard.FilFolLnk.Full);
 		     break;
 		  case Err_ERROR:
@@ -5848,10 +5958,19 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser)
 	       switch (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
   	         {
 		  case Err_SUCCESS:
-		     snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%02u/%ld/%s",
-			      Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_PRJ,
-			      (unsigned) (PrjCod % 100),
-			      PrjCod,
+		     if (strlen (Cfg_PATH_CRS_PRIVATE) + 1 +
+			 Cns_MAX_DIGITS_ULONG + 1 +
+			 strlen (Cfg_FOLDER_PRJ) + 1 +
+			 2 + 1 +
+			 Cns_MAX_DIGITS_ULONG + 1 +
+			 strlen (FileBrowser->Clipboard.FilFolLnk.Full) > PATH_MAX)
+			Err_PathTooLongExit ();
+		     snprintf (PathOrg,sizeof (PathOrg),"%s/%lu/%s/%02u/%lu/%s",
+			      Cfg_PATH_CRS_PRIVATE,
+			      (unsigned long) Hie[Hie_CRS].HieCod,
+			      Cfg_FOLDER_PRJ,
+			      (unsigned) ((unsigned long) PrjCod % 100),
+			      (unsigned long) PrjCod,
 			      FileBrowser->Clipboard.FilFolLnk.Full);
 		     break;
 		  case Err_ERROR:
@@ -5861,6 +5980,9 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser)
 	         }
 	       break;
 	    case Brw_ADMI_BRF_USR:
+	       if (strlen (Gbl.Usrs.Me.PathDir) + 1 +
+		   strlen (FileBrowser->Clipboard.FilFolLnk.Full) > PATH_MAX)
+		  Err_PathTooLongExit ();
 	       snprintf (PathOrg,sizeof (PathOrg),"%s/%s",
 			 Gbl.Usrs.Me.PathDir,
 			 FileBrowser->Clipboard.FilFolLnk.Full);
@@ -5970,7 +6092,7 @@ static Err_SuccessOrError_t Brw_PasteTreeIntoFolder (struct Brw_FileBrowser *Fil
    char FileNameToShow[NAME_MAX + 1];
    char PathInFolderOrg[PATH_MAX + 1];
    struct Brw_FileMetadata FileDstMetadata;
-   char PathDst[PATH_MAX + 1 + PATH_MAX + 1];
+   char PathDst[PATH_MAX + 1];
    struct stat FileStatus;
    struct dirent **FileList;
    struct Mrk_Properties Marks;
@@ -6485,7 +6607,7 @@ void Brw_CreateFolder (void)
    extern const char *Txt_The_folder_X_has_been_created_inside_the_folder_Y;
    extern const char *Txt_You_can_not_create_folders_here;
    struct Brw_FileBrowser FileBrowser;
-   char Path[PATH_MAX + 1 + PATH_MAX + 1];
+   char Path[PATH_MAX + 1];
    char FileNameToShow[NAME_MAX + 1];
 
    /***** Get parameters related to file browser *****/
@@ -6607,10 +6729,10 @@ void Brw_RenFolder (void)
    extern const char *Txt_You_can_not_rename_this_folder;
    extern const char *Txt_UPLOAD_FILE_Invalid_name;
    struct Brw_FileBrowser FileBrowser;
-   char OldPathInTree[PATH_MAX + 1 + NAME_MAX + 1];
-   char NewPathInTree[PATH_MAX + 1 + NAME_MAX + 1];
-   char OldPath[PATH_MAX + 1 + PATH_MAX + 1 + NAME_MAX + 1];
-   char NewPath[PATH_MAX + 1 + PATH_MAX + 1 + NAME_MAX + 1];
+   char OldPathInTree[PATH_MAX + 1];
+   char NewPathInTree[PATH_MAX + 1];
+   char OldPath[PATH_MAX + 1];
+   char NewPath[PATH_MAX + 1];
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
@@ -6630,22 +6752,32 @@ void Brw_RenFolder (void)
 			   FileBrowser.NewName))	// The name has changed
 		 {
 		  /* Gbl.FileBrowser.FilFolLnk.Name holds the new name of the folder */
+		  if (strlen (FileBrowser.FileMetadata.FilFolLnk.Path) + 1 +
+		      strlen (FileBrowser.FileMetadata.FilFolLnk.Name) > PATH_MAX)
+		     Err_PathTooLongExit ();
 		  snprintf (OldPathInTree,sizeof (OldPathInTree),"%s/%s",
 			    FileBrowser.FileMetadata.FilFolLnk.Path,
 			    FileBrowser.FileMetadata.FilFolLnk.Name);
+		  if (strlen (FileBrowser.Path.AboveRootFolder) + 1 +
+		      strlen (OldPathInTree) > PATH_MAX)
+		     Err_PathTooLongExit ();
 		  snprintf (OldPath,sizeof (OldPath),"%s/%s",
-			    FileBrowser.Path.AboveRootFolder,OldPathInTree);
+			    FileBrowser.Path.AboveRootFolder,
+			    OldPathInTree);
 
 		  /* Gbl.FileBrowser.NewFilFolLnkName holds the new name of the folder */
-		  if (strlen (FileBrowser.Path.AboveRootFolder) + 1 +
-		      strlen (FileBrowser.FileMetadata.FilFolLnk.Path) + 1 +
+		  if (strlen (FileBrowser.FileMetadata.FilFolLnk.Path) + 1 +
 		      strlen (FileBrowser.NewName) > PATH_MAX)
 		     Err_PathTooLongExit ();
 		  snprintf (NewPathInTree,sizeof (NewPathInTree),"%s/%s",
 			    FileBrowser.FileMetadata.FilFolLnk.Path,
 			    FileBrowser.NewName);
+		  if (strlen (FileBrowser.Path.AboveRootFolder) + 1 +
+		      strlen (NewPathInTree) > PATH_MAX)
+		     Err_PathTooLongExit ();
 		  snprintf (NewPath,sizeof (NewPath),"%s/%s",
-			    FileBrowser.Path.AboveRootFolder,NewPathInTree);
+			    FileBrowser.Path.AboveRootFolder,
+			    NewPathInTree);
 
 		  /* We should check here that a folder with the same name does not exist.
 		     but we leave this work to the system */
@@ -6799,8 +6931,8 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
    struct Par_Param *Par;
    char SrcFileName[PATH_MAX + 1];
    char PathUntilFileName[PATH_MAX + 1];
-   char Path[PATH_MAX + 1 + PATH_MAX + 1];
-   char PathTmp[PATH_MAX + 1 + PATH_MAX + 4 + 1];
+   char Path[PATH_MAX + 1];
+   char PathTmp[PATH_MAX + 1];
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    Err_SuccessOrError_t FileIsValid = Err_SUCCESS;
    struct Mrk_Properties Marks;
@@ -6836,8 +6968,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 			       FileBrowser->FileMetadata.FilFolLnk.Full);
 
 		     if (strlen (Path) + 1 +
-			 strlen (FileBrowser->NewName) +
-			 strlen (".tmp") > PATH_MAX)
+			 strlen (FileBrowser->NewName) > PATH_MAX)
 			Err_PathTooLongExit ();
 		     Str_Concat (Path,"/",sizeof (Path) - 1);
 		     Str_Concat (Path,FileBrowser->NewName,sizeof (Path) - 1);
@@ -6853,6 +6984,9 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 			case Exi_DOES_NOT_EXIST:
 			default:
 			   /* End receiving the file */
+			   if (strlen (Path) + 1 +
+			       strlen ("tmp") > PATH_MAX)
+			      Err_PathTooLongExit ();
 			   snprintf (PathTmp,sizeof (PathTmp),"%s.tmp",Path);
 			   FileIsValid = Fil_EndReceptionOfFile (PathTmp,Par);
 
@@ -7008,7 +7142,7 @@ void Brw_CreateLink (void)
    size_t LengthURL;
    char URLUntilLastFilename[PATH_MAX + 1];
    char FileName[NAME_MAX + 1];
-   char Path[PATH_MAX + 1 + PATH_MAX + 1];
+   char Path[PATH_MAX + 1];
    FILE *FileURL;
    char FileNameToShow[NAME_MAX + 1];
 
@@ -7814,11 +7948,15 @@ static void Brw_PutParsToGetLinkToFile (void *FileBrowser)
 void Brw_GetLinkToDownloadFile (struct Brw_FileBrowser *FileBrowser,char *URL)
   {
    struct Brw_TmpPubDir TmpPubDir;
-   char FullPathIncludingFile[PATH_MAX + 1 + PATH_MAX + 1 + NAME_MAX + 1];
+   char FullPathIncludingFile[PATH_MAX + 1];
    FILE *FileURL;
    char URLWithSpaces[PATH_MAX + 1];
 
    /***** Construct absolute path to file in the private directory *****/
+   if (strlen (FileBrowser->Path.AboveRootFolder) + 1 +
+       strlen (FileBrowser->FileMetadata.FilFolLnk.Path) + 1 +
+       strlen (FileBrowser->FileMetadata.FilFolLnk.Name) > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (FullPathIncludingFile,sizeof (FullPathIncludingFile),"%s/%s/%s",
 	     FileBrowser->Path.AboveRootFolder,
 	     FileBrowser->FileMetadata.FilFolLnk.Path,
@@ -7846,6 +7984,11 @@ void Brw_GetLinkToDownloadFile (struct Brw_FileBrowser *FileBrowser,char *URL)
 					    FileBrowser->FileMetadata.FilFolLnk.Name);
 
       /***** Create URL pointing to symbolic link *****/
+      if (strlen (Cfg_URL_FILE_BROWSER_TMP_PUBLIC) + 1 +
+	  strlen (TmpPubDir.Left) + 1 +
+	  strlen (TmpPubDir.Right) + 1 +
+	  strlen (FileBrowser->FileMetadata.FilFolLnk.Name) > PATH_MAX)
+	 Err_PathTooLongExit ();
       snprintf (URLWithSpaces,sizeof (URLWithSpaces),"%s/%s/%s/%s",
 	        Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
 	        TmpPubDir.Left,
@@ -8381,7 +8524,7 @@ static void Brw_GetFileMetadataFromRow (MYSQL_RES *mysql_res,
    /***** Get file code (row[0]) *****/
    FileMetadata->FilCod = Str_ConvertStrCodToLongCod (row[0]);
 
-   /***** Get file browser type in database (row[1]) *****/
+   /***** Get file browser zone in database (row[1]) *****/
    FileMetadata->Zone = Brw_UNKNOWN;
    if (sscanf (row[1],"%u",&UnsignedNum) == 1)
       if (UnsignedNum < Brw_NUM_ZONES)
@@ -8463,9 +8606,12 @@ static void Brw_GetFileMetadataFromRow (MYSQL_RES *mysql_res,
 
 Exi_Exist_t Brw_GetFileTypeSizeAndDate (struct Brw_FileBrowser *FileBrowser)
   {
-   char Path[PATH_MAX + 1 + PATH_MAX + 1];
+   char Path[PATH_MAX + 1];
    struct stat FileStatus;
 
+   if (strlen (FileBrowser->Path.AboveRootFolder) + 1 +
+       strlen (FileBrowser->FileMetadata.FilFolLnk.Full) > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (Path,sizeof (Path),"%s/%s",
 	     FileBrowser->Path.AboveRootFolder,
 	     FileBrowser->FileMetadata.FilFolLnk.Full);
@@ -9100,8 +9246,11 @@ void Brw_RemoveGrpZones (long HieCod,long GrpCod)
    Brw_DB_RemoveGrpFiles (GrpCod);
 
    /***** Remove group zones *****/
-   snprintf (PathGrpFileZones,sizeof (PathGrpFileZones),"%s/%ld/grp/%ld",
-             Cfg_PATH_CRS_PRIVATE,HieCod,GrpCod);
+   snprintf (PathGrpFileZones,sizeof (PathGrpFileZones),"%s/%lu/%s/%lu",
+             Cfg_PATH_CRS_PRIVATE,
+             (unsigned long) HieCod,
+             Cfg_FOLDER_GRP,
+             (unsigned long) GrpCod);
    Fil_RemoveTree (PathGrpFileZones);
   }
 
@@ -9117,9 +9266,11 @@ void Brw_RemoveUsrWorksInCrs (struct Usr_Data *UsrDat,struct Hie_Node *Crs)
    Brw_DB_RemoveWrkFiles (Crs->HieCod,UsrDat->UsrCod);
 
    /***** Remove the folder for this user inside the course *****/
-   snprintf (PathUsrInCrs,sizeof (PathUsrInCrs),"%s/%ld/usr/%02u/%ld",
-             Cfg_PATH_CRS_PRIVATE,Crs->HieCod,
-             (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
+   snprintf (PathUsrInCrs,sizeof (PathUsrInCrs),"%s/%lu/%s/%02u/%lu",
+             Cfg_PATH_CRS_PRIVATE,
+             (unsigned long) Crs->HieCod,Cfg_FOLDER_USR,
+             (unsigned) ((unsigned long) UsrDat->UsrCod % 100),
+             (unsigned long) UsrDat->UsrCod);
    Fil_RemoveTree (PathUsrInCrs);
    // If this was the last user in his/her subfolder ==> the subfolder will be empty
   }

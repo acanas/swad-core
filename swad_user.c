@@ -6433,11 +6433,14 @@ void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1])
 
    /***** Path above user's ID *****/
    snprintf (PathAboveUsr,sizeof (PathAboveUsr),"%s/%02u",
-	     Cfg_PATH_USR_PRIVATE,(unsigned) (UsrCod % 100));
+	     Cfg_PATH_USR_PRIVATE,
+	     (unsigned) ((unsigned long) UsrCod % 100));
    Fil_CreateDirIfNotExists (PathAboveUsr);
 
    /***** Path for user *****/
-   snprintf (PathUsrTmp,sizeof (PathUsrTmp),"%s/%ld",PathAboveUsr,UsrCod);
+   snprintf (PathUsrTmp,sizeof (PathUsrTmp),"%s/%lu",
+	     PathAboveUsr,
+	     (unsigned long) UsrCod);
    if (strlen (PathUsrTmp) <= PATH_MAX)
       Str_Copy (PathUsr,PathUsrTmp,PATH_MAX);
    else

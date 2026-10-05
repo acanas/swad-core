@@ -861,7 +861,9 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 							    The_GetColorRows ();
 
 	    /***** Build anchor string *****/
-	    if (asprintf (&Anchor,"evt_%ld_%ld",Exams->Exam.ExaCod,Session.SesCod) < 0)
+	    if (asprintf (&Anchor,"evt_%lu_%lu",
+	                  (unsigned long) Exams->Exam.ExaCod,
+	                  (unsigned long) Session.SesCod) < 0)
 	       Err_NotEnoughMemoryExit ();
 
 	    /***** First row for this session ****/

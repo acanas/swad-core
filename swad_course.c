@@ -1280,11 +1280,13 @@ static void Crs_EmptyCourseCompletely (long HieCod)
       Enr_DB_RemAllUsrsFromCrs (HieCod);
 
       /***** Remove directories of the course *****/
-      snprintf (PathRelCrs,sizeof (PathRelCrs),"%s/%ld",
-	        Cfg_PATH_CRS_PRIVATE,HieCod);
+      snprintf (PathRelCrs,sizeof (PathRelCrs),"%s/%lu",
+	        Cfg_PATH_CRS_PRIVATE,
+	        (unsigned long) HieCod);
       Fil_RemoveTree (PathRelCrs);
-      snprintf (PathRelCrs,sizeof (PathRelCrs),"%s/%ld",
-	        Cfg_PATH_CRS_PUBLIC,HieCod);
+      snprintf (PathRelCrs,sizeof (PathRelCrs),"%s/%lu",
+	        Cfg_PATH_CRS_PUBLIC,
+	        (unsigned long) HieCod);
       Fil_RemoveTree (PathRelCrs);
      }
   }

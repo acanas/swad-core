@@ -966,8 +966,8 @@ void Ctr_RemoveCenter (void)
       /***** Remove directories of the center *****/
       snprintf (PathCtr,sizeof (PathCtr),"%s/%02u/%u",
 	        Cfg_PATH_CTR_PUBLIC,
-	        (unsigned) (Ctr_EditingCtr->HieCod % 100),
-	        (unsigned)  Ctr_EditingCtr->HieCod);
+	        (unsigned) ((unsigned long) Ctr_EditingCtr->HieCod % 100),
+	        (unsigned) Ctr_EditingCtr->HieCod);
       Fil_RemoveTree (PathCtr);
 
       /***** Remove administrators of this center *****/

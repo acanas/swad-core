@@ -114,11 +114,11 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 	       Folder = Cfg_FOLDER_DEG;
 	       if (HieLvl >= Hie_CRS)
 		  HieCods[Hie_DEG] = Crs_DB_GetDegCodOfCourseByCod (HieCods[Hie_CRS]);
-	       snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
+	       snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%lu/logo/%lu.png",
 			 Cfg_PATH_DEG_PUBLIC,
-			 (unsigned) (HieCods[Hie_DEG] % 100),
-			 (unsigned)  HieCods[Hie_DEG],
-			 (unsigned)  HieCods[Hie_DEG]);
+			 (unsigned) ((unsigned long) HieCods[Hie_DEG] % 100),
+			 (unsigned long) HieCods[Hie_DEG],
+			 (unsigned long) HieCods[Hie_DEG]);
 	       if ((LogoExists = Fil_CheckIfPathExists (PathLogo)) == Exi_EXISTS)
 		  HieCod = HieCods[Hie_DEG];
 	      }
@@ -131,11 +131,11 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 		  HieCods[Hie_CTR] = Deg_DB_GetCtrCodOfDegreeByCod (HieCods[Hie_DEG]);
 	       else
 		  HieCods[Hie_CTR] = HieCod;
-	       snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
+	       snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%lu/logo/%lu.png",
 			 Cfg_PATH_CTR_PUBLIC,
-			 (unsigned) (HieCods[Hie_CTR] % 100),
-			 (unsigned)  HieCods[Hie_CTR],
-			 (unsigned)  HieCods[Hie_CTR]);
+			 (unsigned) ((unsigned long) HieCods[Hie_CTR] % 100),
+			 (unsigned long) HieCods[Hie_CTR],
+			 (unsigned long) HieCods[Hie_CTR]);
 	       if ((LogoExists = Fil_CheckIfPathExists (PathLogo)) == Exi_EXISTS)
 		  HieCod = HieCods[Hie_CTR];
 	      }
@@ -146,11 +146,11 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 	       Folder = Cfg_FOLDER_INS;
 	       if (HieLvl >= Hie_CTR)
 		  HieCods[Hie_INS] = Ctr_DB_GetInsCodOfCenterByCod (HieCods[Hie_CTR]);
-	       snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
+	       snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%lu/logo/%lu.png",
 			 Cfg_PATH_INS_PUBLIC,
-			 (unsigned) (HieCods[Hie_INS] % 100),
-			 (unsigned)  HieCods[Hie_INS],
-			 (unsigned)  HieCods[Hie_INS]);
+			 (unsigned) ((unsigned long) HieCods[Hie_INS] % 100),
+			 (unsigned long) HieCods[Hie_INS],
+			 (unsigned long) HieCods[Hie_INS]);
 	       if ((LogoExists = Fil_CheckIfPathExists (PathLogo)) == Exi_EXISTS)
 		  HieCod = HieCods[Hie_INS];
 	      }
@@ -159,10 +159,10 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 	    switch (LogoExists)
 	      {
 	       case Exi_EXISTS:
-		  if (asprintf (&URL,"%s/%s/%02u/%u/logo",
+		  if (asprintf (&URL,"%s/%s/%02u/%lu/logo",
 				Cfg_URL_SWAD_PUBLIC,Folder,
-				(unsigned) (HieCod % 100),
-				(unsigned) HieCod) < 0)
+				(unsigned) ((unsigned long) HieCod % 100),
+				(unsigned long) HieCod) < 0)
 		     Err_NotEnoughMemoryExit ();
 		  if (asprintf (&Icon,"%u.png",(unsigned) HieCod) < 0)
 		     Err_NotEnoughMemoryExit ();
@@ -233,11 +233,11 @@ void Lgo_RequestLogo (Hie_Level_t HieLvl)
    char PathLogo[PATH_MAX + 1];
 
    /***** Check if logo exists *****/
-   snprintf (PathLogo,sizeof (PathLogo),"%s/%s/%02u/%u/logo/%u.png",
+   snprintf (PathLogo,sizeof (PathLogo),"%s/%s/%02u/%lu/logo/%lu.png",
 	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl],
-	     (unsigned) (HieCod % 100),
-	     (unsigned)  HieCod,
-	     (unsigned)  HieCod);
+	     (unsigned) ((unsigned long) HieCod % 100),
+	     (unsigned long) HieCod,
+	     (unsigned long) HieCod);
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Logo,
@@ -314,17 +314,17 @@ void Lgo_ReceiveLogo (Hie_Level_t HieLvl)
    Fil_CreateDirIfNotExists (Path);
    snprintf (Path,sizeof (Path),"%s/%s/%02u",
 	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl],
-	     (unsigned) (HieCod % 100));
+	     (unsigned) ((unsigned long) HieCod % 100));
    Fil_CreateDirIfNotExists (Path);
-   snprintf (Path,sizeof (Path),"%s/%s/%02u/%u",
+   snprintf (Path,sizeof (Path),"%s/%s/%02u/%lu",
 	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl],
-	     (unsigned) (HieCod % 100),
-	     (unsigned)  HieCod);
+	     (unsigned) ((unsigned long) HieCod % 100),
+	     (unsigned long) HieCod);
    Fil_CreateDirIfNotExists (Path);
-   snprintf (Path,sizeof (Path),"%s/%s/%02u/%u/logo",
+   snprintf (Path,sizeof (Path),"%s/%s/%02u/%lu/logo",
 	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl],
-	     (unsigned) (HieCod % 100),
-	     (unsigned)  HieCod);
+	     (unsigned) ((unsigned long) HieCod % 100),
+	     (unsigned long) HieCod);
    Fil_CreateDirIfNotExists (Path);
 
    /***** Copy in disk the file received *****/
@@ -343,11 +343,11 @@ void Lgo_ReceiveLogo (Hie_Level_t HieLvl)
      {
       case Err_SUCCESS:
 	 /* End the reception of logo in a temporary file */
-	 snprintf (FileNameLogo,sizeof (FileNameLogo),"%s/%s/%02u/%u/logo/%u.png",
+	 snprintf (FileNameLogo,sizeof (FileNameLogo),"%s/%s/%02u/%lu/logo/%lu.png",
 		   Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl],
-		   (unsigned) (HieCod % 100),
-		   (unsigned)  HieCod,
-		   (unsigned)  HieCod);
+		   (unsigned) ((unsigned long) HieCod % 100),
+		   (unsigned long) HieCod,
+		   (unsigned long) HieCod);
 	 if (Fil_EndReceptionOfFile (FileNameLogo,Par) == Err_ERROR)
 	    Ale_ShowAlert (Ale_ERROR,"Error copying file.");
          break;
@@ -368,10 +368,10 @@ void Lgo_RemoveLogo (Hie_Level_t HieLvl)
    char FileNameLogo[PATH_MAX + 1];	// Full name (including path and .png) of the destination file
 
    /***** Remove logo *****/
-   snprintf (FileNameLogo,sizeof (FileNameLogo),"%s/%s/%02u/%u/logo/%u.png",
+   snprintf (FileNameLogo,sizeof (FileNameLogo),"%s/%s/%02u/%lu/logo/%lu.png",
 	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl],
-	     (unsigned) (HieCod % 100),
-	     (unsigned)  HieCod,
-	     (unsigned)  HieCod);
+	     (unsigned) ((unsigned long) HieCod % 100),
+	     (unsigned long) HieCod,
+	     (unsigned long) HieCod);
    Fil_RemoveTree (FileNameLogo);
   }

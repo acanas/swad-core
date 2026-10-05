@@ -914,8 +914,9 @@ static Exi_Exist_t Inf_CheckAndShowPage (Inf_Type_t InfoType)
 	     PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML) == Exi_EXISTS)	// TODO: Check if not empty?
      {
-      snprintf (URL,sizeof (URL),"%s/%ld/%s/index.html",
-	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+      snprintf (URL,sizeof (URL),"%s/%lu/%s/index.html",
+	        Cfg_URL_CRS_PUBLIC,
+	        (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 	        Inf_FileNamesForInfoType[InfoType]);
       Inf_ShowPage (URL);
 
@@ -927,8 +928,9 @@ static Exi_Exist_t Inf_CheckAndShowPage (Inf_Type_t InfoType)
 	     PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML) == Exi_EXISTS)	// TODO: Check if not empty?
      {
-      snprintf (URL,sizeof (URL),"%s/%ld/%s/index.htm",
-	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+      snprintf (URL,sizeof (URL),"%s/%lu/%s/index.htm",
+	        Cfg_URL_CRS_PUBLIC,
+	        (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 	        Inf_FileNamesForInfoType[InfoType]);
       Inf_ShowPage (URL);
 
@@ -944,8 +946,10 @@ static Exi_Exist_t Inf_CheckAndShowPage (Inf_Type_t InfoType)
 
 void Inf_BuildPathPage (long HieCod,Inf_Type_t InfoType,char PathDir[PATH_MAX + 1])
   {
-   snprintf (PathDir,PATH_MAX + 1,"%s/%ld/%s",
-             Cfg_PATH_CRS_PUBLIC,HieCod,Inf_FileNamesForInfoType[InfoType]);
+   snprintf (PathDir,PATH_MAX + 1,"%s/%lu/%s",
+             Cfg_PATH_CRS_PUBLIC,
+             (unsigned long) HieCod,
+             Inf_FileNamesForInfoType[InfoType]);
   }
 
 /*****************************************************************************/
@@ -1016,8 +1020,10 @@ static Exi_Exist_t Inf_CheckAndShowURL (Inf_Type_t InfoType)
 static void Inf_BuildPathURL (long HieCod,Inf_Type_t InfoType,
                               char PathFile[PATH_MAX + 1])
   {
-   snprintf (PathFile,PATH_MAX + 1,"%s/%ld/%s.url",
-	     Cfg_PATH_CRS_PRIVATE,HieCod,Inf_FileNamesForInfoType[InfoType]);
+   snprintf (PathFile,PATH_MAX + 1,"%s/%lu/%s.url",
+	     Cfg_PATH_CRS_PRIVATE,
+	     (unsigned long) HieCod,
+	     Inf_FileNamesForInfoType[InfoType]);
   }
 
 /*****************************************************************************/

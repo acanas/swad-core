@@ -160,7 +160,7 @@ Exi_Exist_t Asg_DB_GetAssignmentDataByCod (MYSQL_RES **mysql_res,long AsgCod)
 /*****************************************************************************/
 
 Exi_Exist_t Asg_DB_GetAssignmentDataByFolder (MYSQL_RES **mysql_res,
-                                              const char Folder[Brw_MAX_BYTES_FOLDER + 1])
+                                              const char Folder[NAME_MAX + 1])
   {
    return
    DB_QuerySELECTunique (mysql_res,"can not get assignment data",

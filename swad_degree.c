@@ -1215,8 +1215,8 @@ void Deg_RemoveDegreeCompletely (long HieCod)
    /***** Remove directories of the degree *****/
    snprintf (PathDeg,sizeof (PathDeg),"%s/%02u/%u",
 	     Cfg_PATH_DEG_PUBLIC,
-	     (unsigned) (HieCods[Hie_DEG] % 100),
-	     (unsigned)  HieCods[Hie_DEG]);
+	     (unsigned) ((unsigned long) HieCods[Hie_DEG] % 100),
+	     (unsigned) HieCods[Hie_DEG]);
    Fil_RemoveTree (PathDeg);
 
    /***** Remove administrators of this degree *****/

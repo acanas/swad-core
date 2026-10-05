@@ -55,7 +55,7 @@ struct Asg_Assignment
    CloOpe_ClosedOrOpen_t ClosedOrOpen;
    char Title[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1];
    Asg_SendWork_t SendWork;
-   char Folder[Brw_MAX_BYTES_FOLDER + 1];
+   char Folder[NAME_MAX + 1];
    long RubCod;
    Usr_Can_t ICanDo;	// I can do this assignment
 			// (it is associated to no groups
@@ -96,7 +96,7 @@ Dat_StartEndTime_t Asg_GetParAsgOrder (void);
 
 void Asg_ReqCreatOrEditAsg (void);
 void Asg_GetAssignmentDataByCod (struct Asg_Assignment *Asg);
-void Asg_GetAssignmentDataByFolder (const char Folder[Brw_MAX_BYTES_FOLDER + 1]);
+void Asg_GetAssignmentDataByFolder (const char Folder[NAME_MAX + 1]);
 
 void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                              char **ContentStr,
@@ -112,7 +112,7 @@ void Asg_RemoveCrsAssignments (long HieCod);
 void Asg_WriteDatesAssignment (void);
 Usr_Can_t Asg_CheckIfICanCreateIntoAssigment (void);
 void Asg_SetFolder (const struct Brw_FilFolLnk *FilFolLnk,unsigned Level,
-		    char Folder[Brw_MAX_BYTES_FOLDER + 1]);
+		    char Folder[NAME_MAX + 1]);
 
 unsigned Asg_GetNumAssignments (Hie_Level_t HieLvl,unsigned *NumNotif);
 

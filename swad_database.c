@@ -246,7 +246,7 @@ mysql> DESCRIBE asg_assignments;
 			"StartTime DATETIME NOT NULL,"
 			"EndTime DATETIME NOT NULL,"
 			"Title VARCHAR(2047) NOT NULL,"		// Asg_MAX_BYTES_ASSIGNMENT_TITLE
-			"Folder VARBINARY(255) NOT NULL,"	// Brw_MAX_BYTES_FOLDER
+			"Folder VARBINARY(255) NOT NULL,"	// NAME_MAX
 			"Txt TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(AsgCod),"
 		   "INDEX(CrsCod,Hidden)"

@@ -834,11 +834,9 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_TEACHERS_FILE:
       case Ntf_EVENT_SHARED_FILE:
       case Ntf_EVENT_MARKS_FILE:
-	 FileMetadata.FilCod = Cod;
-         if (FileMetadata.FilCod > 0)
-            Brw_GetFileMetadataByCod (&FileMetadata);
-	 if (FileMetadata.FilCod > 0)
+	 if ((FileMetadata.FilCod = Cod) > 0)
 	   {
+            Brw_GetFileMetadataByCod (&FileMetadata);
 	    Brw_GetCrsGrpFromFileMetadata (FileMetadata.Zone,FileMetadata.Cod,
 					   HieCods,&GrpCod);
 	    switch (NotifyEvent)

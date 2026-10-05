@@ -235,9 +235,9 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
       /***** Check photo *****/
       snprintf (PathPhoto,sizeof (PathPhoto),"%s/%02u/%u/%u.jpg",
 		Cfg_PATH_CTR_PUBLIC,
-		(unsigned) (Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
-		(unsigned)  Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-		(unsigned)  Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+		(unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
+		(unsigned) Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+		(unsigned) Gbl.Hierarchy.Node[Hie_CTR].HieCod);
       PhotoExists = Fil_CheckIfPathExists (PathPhoto);
 
       if (MapExists   == Exi_EXISTS ||
@@ -443,7 +443,7 @@ static void CtrCfg_Photo (Vie_ViewType_t ViewType,
 		      Gbl.Hierarchy.Node[Hie_CTR].WWW);
       if (asprintf (&URL,"%s/%02u/%u",
 		    Cfg_URL_CTR_PUBLIC,
-		    (unsigned) (Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
+		    (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
 		    (unsigned) Gbl.Hierarchy.Node[Hie_CTR].HieCod) < 0)
 	 Err_NotEnoughMemoryExit ();
       if (asprintf (&Icon,"%u.jpg",
@@ -909,20 +909,21 @@ void CtrCfg_ReceivePhoto (void)
    /***** Creates public directories if not exist *****/
    Fil_CreateDirIfNotExists (Cfg_PATH_CTR_PUBLIC);
    snprintf (Path,sizeof (Path),"%s/%02u",
-	     Cfg_PATH_CTR_PUBLIC,(unsigned) (Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100));
+	     Cfg_PATH_CTR_PUBLIC,
+	     (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100));
    Fil_CreateDirIfNotExists (Path);
    snprintf (Path,sizeof (Path),"%s/%02u/%u",
 	     Cfg_PATH_CTR_PUBLIC,
-	     (unsigned) (Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
-	     (unsigned)  Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+	     (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
+	     (unsigned) Gbl.Hierarchy.Node[Hie_CTR].HieCod);
    Fil_CreateDirIfNotExists (Path);
 
    /***** Convert temporary file to public JPEG file *****/
    snprintf (PathFileImg,sizeof (PathFileImg),"%s/%02u/%u/%u.jpg",
 	     Cfg_PATH_CTR_PUBLIC,
-	     (unsigned) (Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
-	     (unsigned)  Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-	     (unsigned)  Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+	     (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
+	     (unsigned) Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+	     (unsigned) Gbl.Hierarchy.Node[Hie_CTR].HieCod);
 
    /* Call to program that makes the conversion */
    snprintf (Command,sizeof (Command),

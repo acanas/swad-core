@@ -1095,8 +1095,8 @@ void Ins_RemoveInstitution (void)
       /***** Remove directories of the institution *****/
       snprintf (PathIns,sizeof (PathIns),"%s/%02u/%u",
 	        Cfg_PATH_INS_PUBLIC,
-	        (unsigned) (Ins_EditingIns->HieCod % 100),
-	        (unsigned)  Ins_EditingIns->HieCod);
+	        (unsigned) ((unsigned long) Ins_EditingIns->HieCod % 100),
+	        (unsigned) Ins_EditingIns->HieCod);
       Fil_RemoveTree (PathIns);
 
       /***** Remove administrators of this institution *****/

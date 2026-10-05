@@ -434,16 +434,8 @@ void Fil_CreateDirIfNotExists (const char *Path)
    if (Fil_CheckIfPathExists (Path) == Exi_DOES_NOT_EXIST)
       if (mkdir (Path,(mode_t) 0777))
         {
-	 // snprintf (ErrorMsg,sizeof (ErrorMsg),
-	 //           "Can not create folder <strong>%s</strong>.",Path);
-
-	 snprintf (ErrorMsg, sizeof(ErrorMsg),
-		   "UID=%d EUID=%d GID=%d EGID=%d<br>"
-		   "Can not create folder <strong>%s</strong>.<br>"
-		   "errno=%d (%s)",
-		   getuid(), geteuid(), getgid(), getegid(),
-		   Path, errno, strerror(errno));
-
+	 snprintf (ErrorMsg,sizeof (ErrorMsg),
+	           "Can not create folder <strong>%s</strong>.",Path);
 	 Err_ShowErrorAndExit (ErrorMsg);
         }
   }
