@@ -122,8 +122,6 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-int Tre_WriteTreeIntoHTMLBuffer (Inf_Type_t InfoType);
-
 unsigned Tre_ShowTree (Inf_Type_t InfoType);
 void Tre_EditTree (Inf_Type_t InfoType);
 void Tre_ShowAllNodes (Tre_ListingType_t ListingType,

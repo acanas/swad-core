@@ -138,7 +138,8 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void BrwSiz_CalcSizeOfDirRecursive (struct Brw_Size *Size,
-                                           unsigned Level,const char *Path);
+                                           unsigned Level,
+                                           const char Path[PATH_MAX + 1]);
 
 /*****************************************************************************/
 /*** Initialize maximum quota of current file browser and check if exceded ***/
@@ -312,7 +313,8 @@ void BrwSiz_CalcSizeOfDir (struct Brw_Size *Size,const char *Path)
 /*****************************************************************************/
 
 static void BrwSiz_CalcSizeOfDirRecursive (struct Brw_Size *Size,
-                                           unsigned Level,const char *Path)
+                                           unsigned Level,
+                                           const char Path[PATH_MAX + 1])
   {
    struct dirent **FileList;
    int NumFile;
@@ -336,6 +338,9 @@ static void BrwSiz_CalcSizeOfDirRecursive (struct Brw_Size *Size,
 	       Size->NumLevls++;
 
 	    /* Update counters depending on whether it's a directory or a regular file */
+	    if (strlen (Path) + 1 +
+	        strlen (FileList[NumFile]->d_name) > PATH_MAX)
+	       Err_PathTooLongExit ();
 	    snprintf (PathFileRel,sizeof (PathFileRel),"%s/%s",
 		      Path,FileList[NumFile]->d_name);
 	    if (lstat (PathFileRel,&FileStatus))	// On success ==> 0 is returned

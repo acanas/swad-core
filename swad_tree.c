@@ -189,44 +189,6 @@ static void Tre_InsertNode (const struct Tre_Node *ParentNode,
 /*****************************************************************************/
 /**************************** List all tree nodes ****************************/
 /*****************************************************************************/
-
-int Tre_WriteTreeIntoHTMLBuffer (Inf_Type_t InfoType)
-  {
-   char FileNameHTMLTmp[PATH_MAX + 1];
-   FILE *FileHTMLTmp;
-
-   /***** Get list of tree nodes *****/
-   Tre_GetListNodes (InfoType);
-   if (Tre_GetNumNodes ())
-     {
-      /***** Create a unique name for the file *****/
-      snprintf (FileNameHTMLTmp,sizeof (FileNameHTMLTmp),"%s/%s_tree.html",
-	        Cfg_PATH_OUT_PRIVATE,Cry_GetUniqueNameEncrypted ());
-
-      /***** Create a new temporary file for writing and reading *****/
-      if ((FileHTMLTmp = fopen (FileNameHTMLTmp,"w+b")) == NULL)
-	{
-	 Tre_FreeListNodes ();
-         return -1;
-	}
-
-      /***** Write syllabus in HTML into a temporary file *****/
-      Tre_WriteTreeIntoHTMLTmpFile (InfoType,FileHTMLTmp);
-
-      /***** Close and remove temporary file *****/
-      fclose (FileHTMLTmp);
-      // unlink (FileNameHTMLTmp);
-     }
-
-   /***** Free list of tree nodes *****/
-   Tre_FreeListNodes ();
-
-   return 0;
-  }
-
-/*****************************************************************************/
-/**************************** List all tree nodes ****************************/
-/*****************************************************************************/
 // Return number of nodes in tree
 
 unsigned Tre_ShowTree (Inf_Type_t InfoType)

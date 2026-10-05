@@ -2025,18 +2025,23 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
 
 	 /* Create a directory for all institutions which codes end in
 	    institution-code mod 100 */
+	 if (strlen (Cfg_PATH_INS_PRIVATE) + 1 + 2 > PATH_MAX)
+	    Err_PathTooLongExit ();
 	 snprintf (Path,sizeof (Path),"%s/%02u",
 		   Cfg_PATH_INS_PRIVATE,
 		   (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_INS].HieCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
 	 /* Create path to the current institution */
+	 if (strlen (Cfg_PATH_INS_PRIVATE) + 1 + 2 + 1 +
+	     Cns_MAX_DIGITS_ULONG > PATH_MAX)
+	    Err_PathTooLongExit ();
 	 snprintf (FileBrowser->Path.AboveRootFolder,
 	           sizeof (FileBrowser->Path.AboveRootFolder),
-	           "%s/%02u/%u",
+	           "%s/%02u/%lu",
 		   Cfg_PATH_INS_PRIVATE,
 		   (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_INS].HieCod % 100),
-		   (unsigned) Gbl.Hierarchy.Node[Hie_INS].HieCod);
+		   (unsigned long) Gbl.Hierarchy.Node[Hie_INS].HieCod);
          break;
       case Brw_SHOW_DOC_CTR:
       case Brw_ADMI_DOC_CTR:
@@ -2046,18 +2051,23 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
 
 	 /* Create a directory for all centers which codes end in
 	    center-code mod 100 */
+	 if (strlen (Cfg_PATH_CTR_PRIVATE) + 1 + 2 > PATH_MAX)
+	    Err_PathTooLongExit ();
 	 snprintf (Path,sizeof (Path),"%s/%02u",
 		   Cfg_PATH_CTR_PRIVATE,
 		   (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
 	 /* Create path to the current center */
+	 if (strlen (Cfg_PATH_CTR_PRIVATE) + 1 + 2 + 1 +
+	     Cns_MAX_DIGITS_ULONG > PATH_MAX)
+	    Err_PathTooLongExit ();
 	 snprintf (FileBrowser->Path.AboveRootFolder,
 	           sizeof (FileBrowser->Path.AboveRootFolder),
-	           "%s/%02u/%u",
+	           "%s/%02u/%lu",
 		   Cfg_PATH_CTR_PRIVATE,
 		   (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
-		   (unsigned) Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+		   (unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod);
 	 break;
       case Brw_SHOW_DOC_DEG:
       case Brw_ADMI_DOC_DEG:
@@ -2067,18 +2077,23 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
 
 	 /* Create a directory for all degrees which codes end in
 	    degree-code mod 100 */
+	 if (strlen (Cfg_PATH_DEG_PRIVATE) + 1 + 2 > PATH_MAX)
+	    Err_PathTooLongExit ();
 	 snprintf (Path,sizeof (Path),"%s/%02u",
 		   Cfg_PATH_DEG_PRIVATE,
 		   (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_DEG].HieCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
          /* Create path to the current degree */
+	 if (strlen (Cfg_PATH_DEG_PRIVATE) + 1 + 2 + 1 +
+	     Cns_MAX_DIGITS_ULONG > PATH_MAX)
+	    Err_PathTooLongExit ();
 	 snprintf (FileBrowser->Path.AboveRootFolder,
 	           sizeof (FileBrowser->Path.AboveRootFolder),
-	           "%s/%02u/%u",
+	           "%s/%02u/%lu",
 		   Cfg_PATH_DEG_PRIVATE,
 		   (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_DEG].HieCod % 100),
-		   (unsigned) Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+		   (unsigned long) Gbl.Hierarchy.Node[Hie_DEG].HieCod);
 	 break;
       case Brw_SHOW_DOC_CRS:
       case Brw_ADMI_DOC_CRS:
@@ -2097,62 +2112,86 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
       case Brw_SHOW_MRK_GRP:
       case Brw_ADMI_MRK_GRP:
 	 /* Create a directory for groups inside the current course */
+	 if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
+	     strlen (Cfg_FOLDER_GRP) > PATH_MAX)
+	    Err_PathTooLongExit ();
          snprintf (Path,sizeof (Path),"%s/%s",
                    Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_GRP);
          Fil_CreateDirIfNotExists (Path);
 
          /* Create path to this group */
-         snprintf (Path,sizeof (Path),"%s/%s/%lu",
+	 if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
+	     strlen (Cfg_FOLDER_GRP) + 1 +
+	     Cns_MAX_DIGITS_ULONG > PATH_MAX)
+	    Err_PathTooLongExit ();
+         snprintf (FileBrowser->Path.AboveRootFolder,
+		   sizeof (FileBrowser->Path.AboveRootFolder),"%s/%s/%lu",
                    Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_GRP,
                    (unsigned long) Brw_GetGrpCod ());
-         Str_Copy (FileBrowser->Path.AboveRootFolder,Path,
-                   sizeof (FileBrowser->Path.AboveRootFolder) - 1);
 	 break;
       case Brw_ADMI_ASG_USR:
       case Brw_ADMI_WRK_USR:
 	 /* Create a directory for me inside the current course */
+	 if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
+	     strlen (Cfg_FOLDER_USR) > PATH_MAX)
+	    Err_PathTooLongExit ();
          snprintf (Path,sizeof (Path),"%s/%s",
                    Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR);
          Fil_CreateDirIfNotExists (Path);
 
 	 /* Create a directory for all users whose codes end in
 	    my-user-code mod 100 */
+	 if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
+	     strlen (Cfg_FOLDER_USR) + 1 + 2 > PATH_MAX)
+	    Err_PathTooLongExit ();
          snprintf (Path,sizeof (Path),"%s/%s/%02u",
                    Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
                    (unsigned) ((unsigned long) Gbl.Usrs.Me.UsrDat.UsrCod % 100));
          Fil_CreateDirIfNotExists (Path);
 
          /* Create path to me */
-         snprintf (Path,sizeof (Path),"%s/%s/%02u/%lu",
+	 if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
+	     strlen (Cfg_FOLDER_USR) + 1 + 2 +
+	     Cns_MAX_DIGITS_ULONG > PATH_MAX)
+	    Err_PathTooLongExit ();
+         snprintf (FileBrowser->Path.AboveRootFolder,
+		   sizeof (FileBrowser->Path.AboveRootFolder),"%s/%s/%02u/%lu",
                    Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
                    (unsigned) ((unsigned long) Gbl.Usrs.Me.UsrDat.UsrCod % 100),
                    (unsigned long) Gbl.Usrs.Me.UsrDat.UsrCod);
-         Str_Copy (FileBrowser->Path.AboveRootFolder,Path,
-                   sizeof (FileBrowser->Path.AboveRootFolder) - 1);
          break;
       case Brw_ADMI_ASG_CRS:
       case Brw_ADMI_WRK_CRS:
          if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
            {
 	    /* Create a directory for this user inside the current course */
+	    if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
+	        strlen (Cfg_FOLDER_USR) > PATH_MAX)
+	       Err_PathTooLongExit ();
             snprintf (Path,sizeof (Path),"%s/%s",
         	      Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR);
             Fil_CreateDirIfNotExists (Path);
 
 	    /* Create a directory for all users whose codes end in
 	       user-code mod 100 */
+	    if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
+		strlen (Cfg_FOLDER_USR) + 1 + 2 > PATH_MAX)
+	       Err_PathTooLongExit ();
 	    snprintf (Path,sizeof (Path),"%s/%s/%02u",
 		      Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
 		      (unsigned) ((unsigned long) Gbl.Usrs.Other.UsrDat.UsrCod % 100));
 	    Fil_CreateDirIfNotExists (Path);
 
             /* Create path to user */
-            snprintf (Path,sizeof (Path),"%s/%s/%02u/%lu",
+	    if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
+		strlen (Cfg_FOLDER_USR) + 1 + 2 +
+		Cns_MAX_DIGITS_ULONG > PATH_MAX)
+	       Err_PathTooLongExit ();
+            snprintf (FileBrowser->Path.AboveRootFolder,
+        	      sizeof (FileBrowser->Path.AboveRootFolder),"%s/%s/%02u/%lu",
         	      Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
                       (unsigned) ((unsigned long) Gbl.Usrs.Other.UsrDat.UsrCod % 100),
         	      (unsigned long) Gbl.Usrs.Other.UsrDat.UsrCod);
-            Str_Copy (FileBrowser->Path.AboveRootFolder,Path,
-                      sizeof (FileBrowser->Path.AboveRootFolder) - 1);
            }
          break;
       case Brw_ADMI_DOC_PRJ:
@@ -2169,18 +2208,24 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
 
 	 /* Create a directory for all projects which codes end in
 	    project-code mod 100 */
+	 if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
+	     strlen (Cfg_FOLDER_PRJ) + 1 + 2 > PATH_MAX)
+	    Err_PathTooLongExit ();
 	 snprintf (Path,sizeof (Path),"%s/%s/%02u",
 		   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_PRJ,
                    (unsigned) ((unsigned long) PrjCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
          /* Create path to the current project */
-         snprintf (Path,sizeof (Path),"%s/%s/%02u/%lu",
+	 if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
+	     strlen (Cfg_FOLDER_PRJ) + 1 + 2 +
+	     Cns_MAX_DIGITS_ULONG > PATH_MAX)
+	    Err_PathTooLongExit ();
+         snprintf (FileBrowser->Path.AboveRootFolder,
+		   sizeof (FileBrowser->Path.AboveRootFolder),"%s/%s/%02u/%lu",
                    Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_PRJ,
                    (unsigned) ((unsigned long) PrjCod % 100),
                    (unsigned long) PrjCod);
-         Str_Copy (FileBrowser->Path.AboveRootFolder,Path,
-                   sizeof (FileBrowser->Path.AboveRootFolder) - 1);
 	 break;
       case Brw_ADMI_BRF_USR:
          Str_Copy (FileBrowser->Path.AboveRootFolder,Gbl.Usrs.Me.PathDir,
@@ -3650,7 +3695,6 @@ static void Brw_ListDir (struct Brw_FileBrowser *FileBrowser,
 		      Path      ,FileList[NumFile]->d_name);
 	    snprintf (PathFileInExplTree,sizeof (PathFileInExplTree),"%s/%s",
 		      PathInTree,FileList[NumFile]->d_name);
-
 	    Str_Copy (FileBrowser->FileMetadata.FilFolLnk.Path,PathInTree,
 		      sizeof (FileBrowser->FileMetadata.FilFolLnk.Path) - 1);
 	    Str_Copy (FileBrowser->FileMetadata.FilFolLnk.Name,FileList[NumFile]->d_name,
@@ -4064,7 +4108,8 @@ void Brw_SetFullPathInTree (struct Brw_FilFolLnk *FilFolLnk)
       Str_Copy (FilFolLnk->Full,FilFolLnk->Name,sizeof (FilFolLnk->Full) - 1);
    else if (strcmp (FilFolLnk->Name,"."))
      {
-      if (strlen (FilFolLnk->Path) + 1 + strlen (FilFolLnk->Name) > PATH_MAX)
+      if (strlen (FilFolLnk->Path) + 1 +
+          strlen (FilFolLnk->Name) > PATH_MAX)
 	 Err_PathTooLongExit ();
       snprintf (FilFolLnk->Full,sizeof (FilFolLnk->Full),"%s/%s",
 		FilFolLnk->Path,FilFolLnk->Name);
@@ -4757,12 +4802,17 @@ static void Brw_GetFileNameToShow (Brw_FileType_t FileType,
 /*****************************************************************************/
 
 void Brw_CreateTmpPublicLinkToPrivateFile (const struct Brw_TmpPubDir *TmpPubDir,
-					   const char *FullPathIncludingFile,
-                                           const char *FileName)
+					   const char FullPathIncludingFile[PATH_MAX + 1],
+                                           const char FileName[NAME_MAX + 1])
   {
    char Link[PATH_MAX + 1];
 
    /***** Create, into temporary public directory, a symbolic link to file *****/
+   if (strlen (Cfg_PATH_FILE_BROWSER_TMP_PUBLIC) + 1 +
+       strlen (TmpPubDir->Left) + 1 +
+       strlen (TmpPubDir->Right) + 1 +
+       strlen (FileName) > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (Link,sizeof (Link),"%s/%s/%s/%s",
              Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
              TmpPubDir->Left,

@@ -1528,14 +1528,18 @@ static void Med_ShowJPG (const struct Med_Media *Media,
    struct Brw_TmpPubDir TmpPubDir;
    char FileNameJPG[NAME_MAX + 1];
    char TmpPubDirFull[PATH_MAX + 1];
-   char *FullPathJPGPriv;
+   char FullPathJPGPriv[PATH_MAX + 1];
    char *URL;
 
    /***** Build private path to JPG *****/
+   if (strlen (Media->Name) + 1 + strlen (Med_Extensions[Med_JPG]) > NAME_MAX)
+      Err_PathTooLongExit ();
    snprintf (FileNameJPG,sizeof (FileNameJPG),"%s.%s",
 	     Media->Name,Med_Extensions[Med_JPG]);
-   if (asprintf (&FullPathJPGPriv,"%s/%s",PathMedPriv,FileNameJPG) < 0)
-      Err_NotEnoughMemoryExit ();
+   if (strlen (PathMedPriv) + 1 + strlen (FileNameJPG) > PATH_MAX)
+      Err_PathTooLongExit ();
+   snprintf (FullPathJPGPriv,sizeof (FullPathJPGPriv),"%s/%s",
+	     PathMedPriv,FileNameJPG);
 
    /***** Check if private media file exists *****/
    switch (Fil_CheckIfPathExists (FullPathJPGPriv))
@@ -1568,8 +1572,6 @@ static void Med_ShowJPG (const struct Med_Media *Media,
 	 HTM_Txt (Txt_File_not_found);
 	 break;
      }
-
-   free (FullPathJPGPriv);
   }
 
 /*****************************************************************************/
@@ -1585,22 +1587,30 @@ static void Med_ShowGIF (const struct Med_Media *Media,
    char FileNameGIF[NAME_MAX + 1];
    char FileNamePNG[NAME_MAX + 1];
    char TmpPubDirFull[PATH_MAX + 1];
-   char *FullPathGIFPriv;
-   char *FullPathPNGPriv;
+   char FullPathGIFPriv[PATH_MAX + 1];
+   char FullPathPNGPriv[PATH_MAX + 1];
    char *URL;
    char *URL_GIF;
    char *URL_PNG;
 
    /***** Build private path to animated GIF image *****/
+   if (strlen (Media->Name) + 1 + strlen (Med_Extensions[Med_GIF]) > NAME_MAX)
+      Err_PathTooLongExit ();
    snprintf (FileNameGIF,sizeof (FileNameGIF),"%s.%s",
 	     Media->Name,Med_Extensions[Med_GIF]);
-   if (asprintf (&FullPathGIFPriv,"%s/%s",PathMedPriv,FileNameGIF) < 0)	// The animated GIF image
-      Err_NotEnoughMemoryExit ();
+   if (strlen (PathMedPriv) + 1 + strlen (FileNameGIF) > PATH_MAX)
+      Err_PathTooLongExit ();
+   snprintf (FullPathGIFPriv,sizeof (FullPathGIFPriv),"%s/%s",
+	     PathMedPriv,FileNameGIF);	// The animated GIF image
 
    /***** Build private path to static PNG image *****/
+   if (strlen (Media->Name) + 1 + strlen ("png") > NAME_MAX)
+      Err_PathTooLongExit ();
    snprintf (FileNamePNG,sizeof (FileNamePNG),"%s.png",Media->Name);
-   if (asprintf (&FullPathPNGPriv,"%s/%s",PathMedPriv,FileNamePNG) < 0)
-      Err_NotEnoughMemoryExit ();
+   if (strlen (PathMedPriv) + 1 + strlen (FileNamePNG) > PATH_MAX)
+      Err_PathTooLongExit ();
+   snprintf (FullPathPNGPriv,sizeof (FullPathPNGPriv),"%s/%s",
+	     PathMedPriv,FileNamePNG);
 
    /***** Check if private media file exists *****/
    switch (Fil_CheckIfPathExists (FullPathGIFPriv))		// The animated GIF image
@@ -1667,9 +1677,6 @@ static void Med_ShowGIF (const struct Med_Media *Media,
 	 HTM_Txt (Txt_File_not_found);
 	 break;
      }
-
-   free (FullPathPNGPriv);
-   free (FullPathGIFPriv);
   }
 
 /*****************************************************************************/
@@ -1684,14 +1691,18 @@ static void Med_ShowVideo (const struct Med_Media *Media,
    struct Brw_TmpPubDir TmpPubDir;
    char FileNameVideo[NAME_MAX + 1];
    char TmpPubDirFull[PATH_MAX + 1];
-   char *FullPathVideoPriv;
+   char FullPathVideoPriv[PATH_MAX + 1];
    char *URL;
 
    /***** Build private path to video *****/
+   if (strlen (Media->Name) + 1 + strlen (Med_Extensions[Media->Type]) > NAME_MAX)
+      Err_PathTooLongExit ();
    snprintf (FileNameVideo,sizeof (FileNameVideo),"%s.%s",
 	     Media->Name,Med_Extensions[Media->Type]);
-   if (asprintf (&FullPathVideoPriv,"%s/%s",PathMedPriv,FileNameVideo) < 0)
-      Err_NotEnoughMemoryExit ();
+   if (strlen (PathMedPriv) + 1 + strlen (FileNameVideo) > PATH_MAX)
+      Err_PathTooLongExit ();
+   snprintf (FullPathVideoPriv,sizeof (FullPathVideoPriv),"%s/%s",
+	     PathMedPriv,FileNameVideo);
 
    /***** Check if private media file exists *****/
    switch (Fil_CheckIfPathExists (FullPathVideoPriv))
@@ -1734,8 +1745,6 @@ static void Med_ShowVideo (const struct Med_Media *Media,
 	 HTM_Txt (Txt_File_not_found);
 	 break;
      }
-
-   free (FullPathVideoPriv);
   }
 
 /*****************************************************************************/

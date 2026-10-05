@@ -112,8 +112,8 @@ void Brw_PutIconFile (const char *FileName,
 
 //-----------------------------------------------------------------------------
 void Brw_CreateTmpPublicLinkToPrivateFile (const struct Brw_TmpPubDir *TmpPubDir,
-					   const char *FullPathIncludingFile,
-                                           const char *FileName);
+					   const char FullPathIncludingFile[PATH_MAX + 1],
+                                           const char FileName[NAME_MAX + 1]);
 
 void Brw_PutImplicitParsFileBrowser (void *Zone);
 void Brw_PutParsFileBrowser (struct Brw_FileBrowser *FileBrowser,long FilCod);

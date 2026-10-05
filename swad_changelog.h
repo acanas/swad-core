@@ -650,6 +650,7 @@ TODO: José Luis Bernier Villamor: Que al hacer exámenes sólo pueda haber una ses
 	        FileBrowser.Path.AboveRootFolder,
 	        FileBrowser.FileMetadata.FilFolLnk.Full);
 
+	Version 26.9.2:   Oct 05, 2026	Code refactoring in paths. (347833 lines)
 	Version 26.9.1:   Oct 05, 2026	Code refactoring in paths. (347833 lines)
 	Version 26.9:     Oct 05, 2026	Code refactoring in file browser. (347780 lines)
 	Version 26.8:     Oct 03, 2026	Code refactoring in file browser. (347580 lines)
