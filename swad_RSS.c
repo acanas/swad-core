@@ -60,18 +60,15 @@ void RSS_UpdateRSSFileForACrs (struct Hie_Node *Crs)
    time_t t = Dat_GetStartExecutionTimeUTC ();
 
    /***** Create RSS directory if not exists *****/
-   snprintf (PathRelPublRSSDir,sizeof (PathRelPublRSSDir),"%s/%lu/%s",
-	     Cfg_PATH_CRS_PUBLIC,
-	     (unsigned long) Crs->HieCod,
-	     Cfg_RSS_FOLDER);
+   Fil_BuildPath (PathRelPublRSSDir,"%s/%lu/%s",
+		  Cfg_PATH_CRS_PUBLIC,
+		  (unsigned long) Crs->HieCod,
+		  Cfg_RSS_FOLDER);
    Fil_CreateDirIfNotExists (PathRelPublRSSDir);
 
    /***** Create RSS file *****/
-   if (strlen (PathRelPublRSSDir) + 1 +
-       strlen (Cfg_RSS_FILE) > PATH_MAX)
-      Err_PathTooLongExit ();
-   snprintf (PathRelPublRSSFile,sizeof (PathRelPublRSSFile),"%s/%s",
-	     PathRelPublRSSDir,Cfg_RSS_FILE);
+   Fil_BuildPath (PathRelPublRSSFile,"%s/%s",
+	          PathRelPublRSSDir,Cfg_RSS_FILE);
    if ((FileRSS = fopen (PathRelPublRSSFile,"wb")) == NULL)
       Err_ShowErrorAndExit ("Can not create RSS file.");
 
@@ -309,8 +306,8 @@ static void RSS_WriteCallsForExams (FILE *FileRSS,struct Hie_Node *Crs)
 
 void RSS_BuildRSSLink (char RSSLink[WWW_MAX_BYTES_WWW + 1],long HieCod)
   {
-   snprintf (RSSLink,WWW_MAX_BYTES_WWW + 1,"%s/%lu/%s/%s",
-             Cfg_URL_CRS_PUBLIC,
-             (unsigned long) HieCod,
-             Cfg_RSS_FOLDER,Cfg_RSS_FILE);
+   WWW_BuildURL (RSSLink,"%s/%lu/%s/%s",
+		 Cfg_URL_CRS_PUBLIC,
+		 (unsigned long) HieCod,
+		 Cfg_RSS_FOLDER,Cfg_RSS_FILE);
   }

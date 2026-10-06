@@ -665,10 +665,10 @@ static Exi_Exist_t Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
    extern const char *Txt_Faces_detected;
    char PathPhotosPriv[PATH_MAX + 1];
    struct Par_Param *Par;
-   char FileNamePhotoSrc[PATH_MAX + 1];
-   char FileNamePhotoTmp[PATH_MAX + 1];	// Full name (including path and .jpg) of the destination temporary file
-   char FileNamePhotoMap[PATH_MAX + 1];	// Full name (including path) of the temporary file with the original image with faces
-   char FileNameTxtMap[PATH_MAX + 1];	// Full name (including path) of the temporary file with the text neccesary to make the image map
+   char PathPhotoSrc[PATH_MAX + 1];
+   char PathPhotoTmp[PATH_MAX + 1];	// Full name (including path and .jpg) of the destination temporary file
+   char PathPhotoMap[PATH_MAX + 1];	// Full name (including path) of the temporary file with the original image with faces
+   char PathTxtMap[PATH_MAX + 1];	// Full name (including path) of the temporary file with the text neccesary to make the image map
    const char *UniqueNameEncrypted = Cry_GetUniqueNameEncrypted ();
    char PathRelPhoto[PATH_MAX + 1];
    FILE *FileTxtMap = NULL;		// Temporary file with the text neccesary to make the image map. Initialized to avoid warning
@@ -711,11 +711,9 @@ static Exi_Exist_t Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
 
    /***** Creates directories if not exist *****/
    Fil_CreateDirIfNotExists (Cfg_PATH_PHOTO_PRIVATE);
-   if (strlen (Cfg_PATH_PHOTO_PRIVATE) + 1 + 2 > PATH_MAX)
-      Err_PathTooLongExit ();
-   snprintf (PathPhotosPriv,sizeof (PathPhotosPriv),"%s/%02u",
-	     Cfg_PATH_PHOTO_PRIVATE,
-	     (unsigned) ((unsigned long) UsrDat->UsrCod % 100));
+   Fil_BuildPath (PathPhotosPriv,"%s/%02u",
+		  Cfg_PATH_PHOTO_PRIVATE,
+		  (unsigned) ((unsigned long) UsrDat->UsrCod % 100));
    Fil_CreateDirIfNotExists (PathPhotosPriv);
 
    /***** Create directories if not exists
@@ -728,7 +726,7 @@ static Exi_Exist_t Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
 
    /***** First of all, copy in disk the file received *****/
    Par = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
-                                     FileNamePhotoSrc,MIMEType);
+                                     PathPhotoSrc,MIMEType);
 
    /* Check if the file type is image/jpeg or image/pjpeg or application/octet-stream */
    SuccessOrError = Err_SUCCESS;
@@ -745,13 +743,9 @@ static Exi_Exist_t Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
      }
 
    /* End the reception of photo in a temporary file */
-   if (strlen (Cfg_PATH_PHOTO_TMP_PUBLIC) + 1 +
-       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1 +
-       strlen ("jpg") > PATH_MAX)
-      Err_PathTooLongExit ();
-   snprintf (FileNamePhotoTmp,sizeof (FileNamePhotoTmp),"%s/%s.jpg",
-             Cfg_PATH_PHOTO_TMP_PUBLIC,UniqueNameEncrypted);
-   if (Fil_EndReceptionOfFile (FileNamePhotoTmp,Par) == Err_ERROR)
+   Fil_BuildPath (PathPhotoTmp,"%s/%s.jpg",
+                  Cfg_PATH_PHOTO_TMP_PUBLIC,UniqueNameEncrypted);
+   if (Fil_EndReceptionOfFile (PathPhotoTmp,Par) == Err_ERROR)
      {
       Ale_ShowAlert (Ale_ERROR,"Error copying file.");
       return Exi_DOES_NOT_EXIST;
@@ -759,20 +753,14 @@ static Exi_Exist_t Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
 
    /* Copy the original photo received to private directory.
       The purpose of this copy is only to have a backup used for researching better methods to detect faces in images */
-   if (strlen (Cfg_PATH_PHOTO_PRIVATE) + 1 +
-       2 + 1 +
-       Cns_MAX_DIGITS_ULONG +
-       strlen ("_original.jpg") > PATH_MAX)
-      Err_PathTooLongExit ();
-   snprintf (PathRelPhoto,sizeof (PathRelPhoto),"%s/%02u/%lu_original.jpg",
-             Cfg_PATH_PHOTO_PRIVATE,
-             (unsigned) ((unsigned long) UsrDat->UsrCod % 100),
-             (unsigned long) UsrDat->UsrCod);
-   Fil_FastCopyOfFiles (FileNamePhotoTmp,PathRelPhoto);
+   Fil_BuildPath (PathRelPhoto,"%s/%02u/%lu_original.jpg",
+		  Cfg_PATH_PHOTO_PRIVATE,
+		  (unsigned) ((unsigned long) UsrDat->UsrCod % 100),
+		  (unsigned long) UsrDat->UsrCod);
+   Fil_FastCopyOfFiles (PathPhotoTmp,PathRelPhoto);
 
    /***** Call to program that makes photo processing / face detection *****/
-   snprintf (Command,sizeof (Command),Cfg_COMMAND_FACE_DETECTION,
-	     FileNamePhotoTmp);
+   snprintf (Command,sizeof (Command),Cfg_COMMAND_FACE_DETECTION,PathPhotoTmp);
    ReturnCode = system (Command);
    if (ReturnCode == -1)
       Err_ShowErrorAndExit ("Error when running command to process photo and detect faces.");
@@ -784,13 +772,9 @@ static Exi_Exist_t Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
      {
       case 0:        // Faces detected
          /***** Open text file with text for image map *****/
-	 if (strlen (Cfg_PATH_PHOTO_TMP_PUBLIC) + 1 +
-	     Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +
-	     strlen ("_map.txt") > PATH_MAX)
-	    Err_PathTooLongExit ();
-         snprintf (FileNameTxtMap,sizeof (FileNameTxtMap),"%s/%s_map.txt",
-                   Cfg_PATH_PHOTO_TMP_PUBLIC,UniqueNameEncrypted);
-         if ((FileTxtMap = fopen (FileNameTxtMap,"rb")) == NULL)
+         Fil_BuildPath (PathTxtMap,"%s/%s_map.txt",
+                        Cfg_PATH_PHOTO_TMP_PUBLIC,UniqueNameEncrypted);
+         if ((FileTxtMap = fopen (PathTxtMap,"rb")) == NULL)
             Err_ShowErrorAndExit ("Can not read text file with coordinates of detected faces.");
 
          /***** Read file with coordinates for image map and compute the number of faces *****/
@@ -885,12 +869,8 @@ static Exi_Exist_t Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
    HTM_Txt ("</map>\n");
 
    /***** Show map photo *****/
-   if (strlen (Cfg_PATH_PHOTO_TMP_PUBLIC) + 1 +
-       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +
-       strlen ("_map.jpg") > PATH_MAX)
-      Err_PathTooLongExit ();
-   snprintf (FileNamePhotoMap,sizeof (FileNamePhotoMap),"%s/%s_map.jpg",
-             Cfg_PATH_PHOTO_TMP_PUBLIC,UniqueNameEncrypted);
+   Fil_BuildPath (PathPhotoMap,"%s/%s_map.jpg",
+                  Cfg_PATH_PHOTO_TMP_PUBLIC,UniqueNameEncrypted);
    HTM_DIV_Begin ("class=\"TIT CM\"");
       if (asprintf (&Icon,"%s_map.jpg",UniqueNameEncrypted) < 0)
 	 Err_NotEnoughMemoryExit ();
@@ -982,25 +962,16 @@ static void Pho_ChangePhoto1 (struct Usr_Data *UsrDat)
    Pho_SetFileNamePhoto (FileNamePhoto);
 
    /***** Convert the temporary photo resulting of the processing to the current photo of the user *****/
-   if (strlen (Cfg_PATH_PHOTO_TMP_PUBLIC) + 1 +
-       strlen (FileNamePhoto) +
-       strlen ("_paso3.jpg") > PATH_MAX)
-      Err_PathTooLongExit ();
-   snprintf (PathPhotoTmp,sizeof (PathPhotoTmp),"%s/%s_paso3.jpg",
-             Cfg_PATH_PHOTO_TMP_PUBLIC,FileNamePhoto);
+   Fil_BuildPath (PathPhotoTmp,"%s/%s_paso3.jpg",
+                  Cfg_PATH_PHOTO_TMP_PUBLIC,FileNamePhoto);
    switch (Fil_CheckIfPathExists (PathPhotoTmp))        // The file with the selected photo exists
      {
       case Exi_EXISTS:
 	 /* Copy the temporary file of the third (last) step resulting of the processing to the directory of private photos */
-	 if (strlen (Cfg_PATH_PHOTO_PRIVATE) + 1 +
-	     2 + 1 +
-	     Cns_MAX_DIGITS_ULONG + 1 +
-	     strlen ("jpg") > PATH_MAX)
-	    Err_PathTooLongExit ();
-	 snprintf (PathRelPhoto,sizeof (PathRelPhoto),"%s/%02u/%lu.jpg",
-		   Cfg_PATH_PHOTO_PRIVATE,
-		   (unsigned) ((unsigned long) UsrDat->UsrCod % 100),
-		   (unsigned long) UsrDat->UsrCod);
+	 Fil_BuildPath (PathRelPhoto,"%s/%02u/%lu.jpg",
+		        Cfg_PATH_PHOTO_PRIVATE,
+		        (unsigned) ((unsigned long) UsrDat->UsrCod % 100),
+		        (unsigned long) UsrDat->UsrCod);
 	 Fil_FastCopyOfFiles (PathPhotoTmp,PathRelPhoto);
 
 	 /* Update public photo name in database */
@@ -1138,23 +1109,14 @@ Exi_Exist_t Pho_BuildLinkToPhoto (const struct Usr_Data *UsrDat,
    if (UsrDat->Photo[0])
      {
       /***** Make path to public photo *****/
-      if (strlen (Cfg_PATH_PHOTO_PUBLIC) + 1 +
-	  strlen (UsrDat->Photo) + 1 +
-	  strlen ("jpg") > PATH_MAX)
-	 Err_PathTooLongExit ();
-      snprintf (PathPublPhoto,sizeof (PathPublPhoto),"%s/%s.jpg",
-                Cfg_PATH_PHOTO_PUBLIC,UsrDat->Photo);
+      Fil_BuildPath (PathPublPhoto,"%s/%s.jpg",
+                     Cfg_PATH_PHOTO_PUBLIC,UsrDat->Photo);
 
       /***** Make path to private photo from public directory *****/
-      if (strlen (Cfg_PATH_PHOTO_PRIVATE) + 1 +
-	  2 + 1 +
-	  Cns_MAX_DIGITS_ULONG + 1 +
-	  strlen ("jpg") > PATH_MAX)
-	 Err_PathTooLongExit ();
-      snprintf (PathPrivPhoto,sizeof (PathPrivPhoto),"%s/%02u/%lu.jpg",
-                Cfg_PATH_PHOTO_PRIVATE,
-                (unsigned) ((unsigned long) UsrDat->UsrCod % 100),
-                (unsigned long) UsrDat->UsrCod);
+      Fil_BuildPath (PathPrivPhoto,"%s/%02u/%lu.jpg",
+		     Cfg_PATH_PHOTO_PRIVATE,
+		     (unsigned) ((unsigned long) UsrDat->UsrCod % 100),
+		     (unsigned long) UsrDat->UsrCod);
 
       /***** Create a symbolic link to the private photo, if not exists *****/
       if (Fil_CheckIfPathExists (PathPublPhoto) == Exi_DOES_NOT_EXIST)
@@ -1163,8 +1125,7 @@ Exi_Exist_t Pho_BuildLinkToPhoto (const struct Usr_Data *UsrDat,
                                  " to access to user's private photo");
 
       /***** Create the public URL of the photo *****/
-      snprintf (PhotoURL,WWW_MAX_BYTES_WWW + 1,"%s/%s.jpg",
-                Cfg_URL_PHOTO_PUBLIC,UsrDat->Photo);
+      WWW_BuildURL (PhotoURL,"%s/%s.jpg",Cfg_URL_PHOTO_PUBLIC,UsrDat->Photo);
 
       return Exi_EXISTS;
      }
@@ -1183,15 +1144,10 @@ static Exi_Exist_t Pho_CheckIfPrivPhotoExists (long UsrCod,
 					       char PathPrivRelPhoto[PATH_MAX + 1])
   {
    /***** Make path to private photo *****/
-   if (strlen (Cfg_PATH_PHOTO_PRIVATE) + 1 +
-       2 + 1 +
-       Cns_MAX_DIGITS_ULONG + 1 +
-       strlen ("jpg") > PATH_MAX)
-      Err_PathTooLongExit ();
-   snprintf (PathPrivRelPhoto,PATH_MAX + 1,"%s/%02u/%lu.jpg",
-             Cfg_PATH_PHOTO_PRIVATE,
-             (unsigned) ((unsigned long) UsrCod % 100),
-             (unsigned long) UsrCod);
+   Fil_BuildPath (PathPrivRelPhoto,"%s/%02u/%lu.jpg",
+		  Cfg_PATH_PHOTO_PRIVATE,
+		  (unsigned) ((unsigned long) UsrCod % 100),
+		  (unsigned long) UsrCod);
 
    return Fil_CheckIfPathExists (PathPrivRelPhoto);
   }
@@ -1462,41 +1418,26 @@ Err_SuccessOrError_t Pho_RemovePhoto (struct Usr_Data *UsrDat)
       Pho_DB_ClearPhotoName (UsrDat->UsrCod);
 
       /***** Remove public link *****/
-      if (strlen (Cfg_PATH_PHOTO_PUBLIC) + 1 +
-	  strlen (UsrDat->Photo) + 1 +
-	  strlen ("jpg") > PATH_MAX)
-	 Err_PathTooLongExit ();
-      snprintf (PathPublPhoto,sizeof (PathPublPhoto),"%s/%s.jpg",
-                Cfg_PATH_PHOTO_PUBLIC,UsrDat->Photo);
+      Fil_BuildPath (PathPublPhoto,"%s/%s.jpg",
+                     Cfg_PATH_PHOTO_PUBLIC,UsrDat->Photo);
       if (Fil_CheckIfPathExists (PathPublPhoto) == Exi_EXISTS)		// Public link exists
          if (unlink (PathPublPhoto))					// Remove public link
             NumErrors++;
 
       /***** Remove photo *****/
-      if (strlen (Cfg_PATH_PHOTO_PRIVATE) + 1 +
-	  2 + 1 +
-	  Cns_MAX_DIGITS_ULONG + 1 +
-	  strlen ("jpg") > PATH_MAX)
-	 Err_PathTooLongExit ();
-      snprintf (PathPrivRelPhoto,sizeof (PathPrivRelPhoto),"%s/%02u/%lu.jpg",
-                Cfg_PATH_PHOTO_PRIVATE,
-                (unsigned) ((unsigned long) UsrDat->UsrCod % 100),
-                (unsigned long) UsrDat->UsrCod);
+      Fil_BuildPath (PathPrivRelPhoto,"%s/%02u/%lu.jpg",
+		     Cfg_PATH_PHOTO_PRIVATE,
+		     (unsigned) ((unsigned long) UsrDat->UsrCod % 100),
+		     (unsigned long) UsrDat->UsrCod);
       if (Fil_CheckIfPathExists (PathPrivRelPhoto) == Exi_EXISTS)	// Photo exists
          if (unlink (PathPrivRelPhoto))                        		// Remove photo
             NumErrors++;
 
       /***** Remove original photo *****/
-      if (strlen (Cfg_PATH_PHOTO_PRIVATE) + 1 +
-	  2 + 1 +
-	  Cns_MAX_DIGITS_ULONG +
-	  strlen ("_original.jpg") > PATH_MAX)
-	 Err_PathTooLongExit ();
-      snprintf (PathPrivRelPhoto,sizeof (PathPrivRelPhoto),
-                "%s/%02u/%lu_original.jpg",
-                Cfg_PATH_PHOTO_PRIVATE,
-                (unsigned) ((unsigned long) UsrDat->UsrCod % 100),
-                (unsigned long) UsrDat->UsrCod);
+      Fil_BuildPath (PathPrivRelPhoto,"%s/%02u/%lu_original.jpg",
+		     Cfg_PATH_PHOTO_PRIVATE,
+		     (unsigned) ((unsigned long) UsrDat->UsrCod % 100),
+		     (unsigned long) UsrDat->UsrCod);
       if (Fil_CheckIfPathExists (PathPrivRelPhoto) == Exi_EXISTS)	// Original photo exists
          if (unlink (PathPrivRelPhoto))					// Remove original photo
             NumErrors++;
@@ -1530,12 +1471,8 @@ void Pho_UpdatePhotoName (struct Usr_Data *UsrDat)
    Pho_DB_UpdatePhotoName (UsrDat->UsrCod,UniqueNameEncrypted);
 
    /***** Remove the old symbolic link to photo *****/
-   if (strlen (Cfg_PATH_PHOTO_PUBLIC) + 1 +
-       strlen (UsrDat->Photo) + 1 +
-       strlen ("jpg") > PATH_MAX)
-      Err_PathTooLongExit ();
-   snprintf (PathPublPhoto,sizeof (PathPublPhoto),"%s/%s.jpg",
-             Cfg_PATH_PHOTO_PUBLIC,UsrDat->Photo);
+   Fil_BuildPath (PathPublPhoto,"%s/%s.jpg",
+                  Cfg_PATH_PHOTO_PUBLIC,UsrDat->Photo);
    unlink (PathPublPhoto);                // Remove public link
 
    /***** Update photo name in user's data *****/
@@ -1654,12 +1591,8 @@ void Pho_CalcPhotoDegree (void)
 	TypeOfAverage < Pho_NUM_AVERAGE_PHOTO_TYPES;
 	TypeOfAverage++)
      {
-      if (strlen (Cfg_PATH_PHOTO_PUBLIC) + 1 +
-	  strlen (Pho_StrAvgPhotoDirs[TypeOfAverage]) > PATH_MAX)
-	 Err_PathTooLongExit ();
-      snprintf (DirAvgPhotosRelPath[TypeOfAverage],
-	        sizeof (DirAvgPhotosRelPath[TypeOfAverage]),"%s/%s",
-                Cfg_PATH_PHOTO_PUBLIC,Pho_StrAvgPhotoDirs[TypeOfAverage]);
+      Fil_BuildPath (DirAvgPhotosRelPath[TypeOfAverage],"%s/%s",
+                     Cfg_PATH_PHOTO_PUBLIC,Pho_StrAvgPhotoDirs[TypeOfAverage]);
       Fil_CreateDirIfNotExists (DirAvgPhotosRelPath[TypeOfAverage]);
      }
 
@@ -2645,24 +2578,18 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
 
    if (ShowDegPhoto == Lay_SHOW)
      {
-      if (strlen (Cfg_PATH_PHOTO_PUBLIC) + 1 +
-          strlen (Pho_StrAvgPhotoDirs[DegPhotos->TypeOfAverage]) + 1 +
-	  Cns_MAX_DIGITS_ULONG + 1 +
-	  strlen (Usr_StringsSexDB[Sex]) + 1 +
-	  strlen ("jpg") > PATH_MAX)
-	 Err_PathTooLongExit ();
-      snprintf (PathRelAvgPhoto,sizeof (PathRelAvgPhoto),"%s/%s/%lu_%s.jpg",
-	        Cfg_PATH_PHOTO_PUBLIC,
-	        Pho_StrAvgPhotoDirs[DegPhotos->TypeOfAverage],
-	        (unsigned long) Deg->HieCod,
-	        Usr_StringsSexDB[Sex]);
+      Fil_BuildPath (PathRelAvgPhoto,"%s/%s/%lu_%s.jpg",
+		     Cfg_PATH_PHOTO_PUBLIC,
+		     Pho_StrAvgPhotoDirs[DegPhotos->TypeOfAverage],
+		     (unsigned long) Deg->HieCod,
+		     Usr_StringsSexDB[Sex]);
       if (Fil_CheckIfPathExists (PathRelAvgPhoto) == Exi_EXISTS)
 	{
-	 snprintf (PhotoURL,sizeof (PhotoURL),"%s/%s/%lu_%s.jpg",
-		   Cfg_URL_PHOTO_PUBLIC,
-		   Pho_StrAvgPhotoDirs[DegPhotos->TypeOfAverage],
-		   (unsigned long) Deg->HieCod,
-		   Usr_StringsSexDB[Sex]);
+	 WWW_BuildURL (PhotoURL,"%s/%s/%lu_%s.jpg",
+		       Cfg_URL_PHOTO_PUBLIC,
+		       Pho_StrAvgPhotoDirs[DegPhotos->TypeOfAverage],
+		       (unsigned long) Deg->HieCod,
+		       Usr_StringsSexDB[Sex]);
          if (SeeOrPrint == Pho_DEGREES_SEE)
            {
             /***** Hidden div to pass user's name to Javascript *****/

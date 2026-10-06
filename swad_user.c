@@ -1369,7 +1369,7 @@ void Usr_WelcomeUsr (void)
    extern const char *Txt_NEW_YEAR_GREETING;
    extern const char *Txt_Happy_birthday_X;
    extern const char *Txt_Please_confirm_your_email_address;
-   char URLIconSet[PATH_MAX + 1];
+   char URLIconSet[WWW_MAX_BYTES_WWW + 1];
    unsigned CurrentDay   = Dat_GetCurrentDay ();
    unsigned CurrentMonth = Dat_GetCurrentMonth ();
    unsigned CurrentYear  = Dat_GetCurrentYear ();
@@ -1398,8 +1398,8 @@ void Usr_WelcomeUsr (void)
 			                       Gbl.Usrs.Me.UsrDat.FrstName);
 
 		  /* Show cake icon */
-		  snprintf (URLIconSet,sizeof (URLIconSet),"%s/%s",
-			    Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
+		  WWW_BuildURL (URLIconSet,"%s/%s",
+			        Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
 		  HTM_IMG (URLIconSet,"birthday-cake.svg",NULL,
 			   "class=\"ICO160x160\"");
 
@@ -6431,21 +6431,13 @@ void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1])
    Fil_CreateDirIfNotExists (Cfg_PATH_USR_PRIVATE);
 
    /***** Path above user's ID *****/
-   if (strlen (Cfg_PATH_USR_PRIVATE) + 1 +
-       2 > PATH_MAX)
-      Err_PathTooLongExit ();
-   snprintf (PathAboveUsr,sizeof (PathAboveUsr),"%s/%02u",
-	     Cfg_PATH_USR_PRIVATE,
-	     (unsigned) ((unsigned long) UsrCod % 100));
+   Fil_BuildPath (PathAboveUsr,"%s/%02u",
+		  Cfg_PATH_USR_PRIVATE,
+		  (unsigned) ((unsigned long) UsrCod % 100));
    Fil_CreateDirIfNotExists (PathAboveUsr);
 
    /***** Path for user *****/
-   if (strlen (PathAboveUsr) + 1 +
-       Cns_MAX_DIGITS_ULONG > PATH_MAX)
-      Err_PathTooLongExit ();
-   snprintf (PathUsr,PATH_MAX + 1,"%s/%lu",
-	     PathAboveUsr,
-	     (unsigned long) UsrCod);
+   Fil_BuildPath (PathUsr,"%s/%lu",PathAboveUsr,(unsigned long) UsrCod);
   }
 
 /*****************************************************************************/

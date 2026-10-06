@@ -55,7 +55,7 @@ void Tab_DrawTabs (void)
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    Tab_Tab_t NumTab;
    const char *TabTxt;
-   char URLIconSet[PATH_MAX + 1];
+   char URLIconSet[WWW_MAX_BYTES_WWW + 1];
    static const char *ClassIcoTab[Ico_NUM_ICON_SETS] =
      {
       [Ico_ICON_SET_AWESOME] = "TAB_ICO",
@@ -97,8 +97,9 @@ void Tab_DrawTabs (void)
 		  Frm_BeginForm (ActMnu);
 		     Par_PutParUnsigned (NULL,"NxtTab",(unsigned) NumTab);
 		     HTM_BUTTON_Submit_Begin (TabTxt,NULL,"class=\"BT_LINK\"");
-			snprintf (URLIconSet,sizeof (URLIconSet),"%s/%s",
-				  Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
+			WWW_BuildURL (URLIconSet,"%s/%s",
+				      Cfg_URL_ICON_SETS_PUBLIC,
+				      Ico_IconSetId[Gbl.Prefs.IconSet]);
 		        if (ClassIcoTab[Gbl.Prefs.IconSet])
 			   HTM_IMG (URLIconSet,Tab_GetIcon (NumTab),TabTxt,
 				    "class=\"TAB_ICO %s_%s\"",

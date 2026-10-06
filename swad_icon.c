@@ -148,19 +148,12 @@ const char *Ico_GetIcon (const char *IconWithoutExtension)
         NumExt < Ico_NUM_ICON_EXTENSIONS;
         NumExt++)
      {
-      if (strlen (IconWithoutExtension) + 1 +
-          strlen (Ico_IconExtensions[NumExt]) > NAME_MAX)
-	 Err_PathTooLongExit ();
-      snprintf (IconWithExtension,sizeof (IconWithExtension),"%s.%s",
-		IconWithoutExtension,Ico_IconExtensions[NumExt]);
-      if (strlen (Cfg_PATH_ICON_SETS_PUBLIC) + 1 +
-          strlen (Ico_IconSetId[Gbl.Prefs.IconSet]) + 1 +
-          strlen (IconWithExtension) > PATH_MAX)
-	 Err_PathTooLongExit ();
-      snprintf (PathIcon,sizeof (PathIcon),"%s/%s/%s",
-		Cfg_PATH_ICON_SETS_PUBLIC,
-		Ico_IconSetId[Gbl.Prefs.IconSet],
-		IconWithExtension);
+      Fil_BuildName (IconWithExtension,"%s.%s",
+		     IconWithoutExtension,Ico_IconExtensions[NumExt]);
+      Fil_BuildPath (PathIcon,"%s/%s/%s",
+		     Cfg_PATH_ICON_SETS_PUBLIC,
+		     Ico_IconSetId[Gbl.Prefs.IconSet],
+		     IconWithExtension);
       if (Fil_CheckIfPathExists (PathIcon) == Exi_EXISTS)
 	 return IconWithExtension;
      }
@@ -195,9 +188,9 @@ void Ico_PutIconsToSelectIconSet (void)
 	       Set_BeginPref (IconSet == Gbl.Prefs.IconSet);
 		  Frm_BeginForm (ActChgIco);
 		     Par_PutParString (NULL,"IconSet",Ico_IconSetId[IconSet]);
-		     snprintf (Icon,sizeof (Icon),"%s/%s/cog.svg",
-			       Cfg_ICON_FOLDER_SETS,
-			       Ico_IconSetId[IconSet]);
+		     Fil_BuildPath (Icon,"%s/%s/cog.svg",
+			            Cfg_ICON_FOLDER_SETS,
+			            Ico_IconSetId[IconSet]);
 		     Ico_PutSettingIconLink (Icon,Color[IconSet],Ico_IconSetNames[IconSet]);
 		  Frm_EndForm ();
 	       Set_EndPref ();

@@ -107,7 +107,7 @@ void Plg_ListPlugins (void)
    extern const char *Txt_Plugin;
    unsigned NumPlg;
    struct Plg_Plugin *Plg;
-   char URL[WWW_MAX_BYTES_WWW + Cns_BYTES_SESSION_ID + 1];
+   char URL[WWW_MAX_BYTES_WWW + 1];
    char *Icon;
    struct Plg_Plugins Plugins;
 
@@ -140,7 +140,7 @@ void Plg_ListPlugins (void)
 	{
 	 Plg = &Plugins.Lst[NumPlg];
 
-	 snprintf (URL,sizeof (URL),"%s%s",Plg->URL,Gbl.Session.Id);
+	 WWW_BuildURL (URL,"%s%s",Plg->URL,Gbl.Session.Id);
 
 	 /* Plugin logo */
 	 // TODO: Change plugin icons to 32x32

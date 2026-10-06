@@ -641,7 +641,7 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 TODO: José Luis Bernier Villamor: Que al hacer exámenes sólo pueda haber una sesión abierta por usuario.
 */
-#define Chl_PLATFORM_VERSION	"SWAD 26.9.5 (2026-10-06)"
+#define Chl_PLATFORM_VERSION	"SWAD 26.10 (2026-10-07)"
 #define Chl_CSS_FILE		"swad26.6.3.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
@@ -649,8 +649,9 @@ TODO: José Luis Bernier Villamor: Que al hacer exámenes sólo pueda haber una ses
       snprintf (Path,sizeof (Path),"%s/%s",
 	        FileBrowser.Path.AboveRootFolder,
 	        FileBrowser.FileMetadata.FilFolLnk.Full);
-   TODO: Repasar snprintf comprobando snprintf desde swad_browser.c
+   TODO: Repasar asprintf comprobando archivos, cambiando por Fil_BuildPath
 
+	Version 26.10:    Oct 07, 2026	Code refactoring in paths. (347655 lines)
 	Version 26.9.5:   Oct 06, 2026	Code refactoring in paths. (348193 lines)
 	Version 26.9.4:   Oct 06, 2026	Code refactoring in paths. (348179 lines)
 	Version 26.9.3:   Oct 05, 2026	Code refactoring in paths. (348031 lines)

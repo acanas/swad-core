@@ -875,19 +875,13 @@ static Exi_Exist_t Inf_CheckPage (Inf_Type_t InfoType)
 		      InfoType,PathRelDirHTML);
 
    /***** Open file with web page *****/
-   /* 1. Check length */
-   if (strlen (PathRelDirHTML) + 1 + strlen ("index.html") > PATH_MAX)
-      Err_PathTooLongExit ();
-
-   /* 2. Check if index.html exists */
-   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
-	     PathRelDirHTML);
+   /* 1. Check if index.html exists */
+   Fil_BuildPath (PathRelFileHTML,"%s/index.html",PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML) == Exi_EXISTS)	// TODO: Check if not empty?
       return Exi_EXISTS;
 
-   /* 3. If index.html does not exist, try index.htm */
-   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.htm",
-	     PathRelDirHTML);
+   /* 2. If index.html does not exist, try index.htm */
+   Fil_BuildPath (PathRelFileHTML,"%s/index.htm",PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML) == Exi_EXISTS)	// TODO: Check if not empty?
       return Exi_EXISTS;
 
@@ -903,7 +897,7 @@ static Exi_Exist_t Inf_CheckAndShowPage (Inf_Type_t InfoType)
   {
    char PathRelDirHTML[PATH_MAX + 1];
    char PathRelFileHTML[PATH_MAX + 1 + 10 + 1];
-   char URL[PATH_MAX + 1];
+   char URL[WWW_MAX_BYTES_WWW + 1];
 
    // TODO !!!!!!!!!!!! If the page is hosted in server ==> it should be created a temporary public directory
    //                                                       and host the page in a private directory !!!!!!!!!!!!!!!!!
@@ -913,33 +907,27 @@ static Exi_Exist_t Inf_CheckAndShowPage (Inf_Type_t InfoType)
 		      PathRelDirHTML);
 
    /***** Open file with web page *****/
-   /* 1. Check length */
-   if (strlen (PathRelDirHTML) + 1 + strlen ("index.html") > PATH_MAX)
-      Err_PathTooLongExit ();
-
-   /* 2. Check if index.html exists */
-   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
-	     PathRelDirHTML);
+   /* 1. Check if index.html exists */
+   Fil_BuildPath (PathRelFileHTML,"%s/index.html",PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML) == Exi_EXISTS)	// TODO: Check if not empty?
      {
-      snprintf (URL,sizeof (URL),"%s/%lu/%s/index.html",
-	        Cfg_URL_CRS_PUBLIC,
-	        (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-	        Inf_FileNamesForInfoType[InfoType]);
+      WWW_BuildURL (URL,"%s/%lu/%s/index.html",
+	            Cfg_URL_CRS_PUBLIC,
+	            (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+	            Inf_FileNamesForInfoType[InfoType]);
       Inf_ShowPage (URL);
 
       return Exi_EXISTS;
      }
 
-   /* 3. If index.html does not exist, try index.htm */
-   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.htm",
-	     PathRelDirHTML);
+   /* 2. If index.html does not exist, try index.htm */
+   Fil_BuildPath (PathRelFileHTML,"%s/index.htm",PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML) == Exi_EXISTS)	// TODO: Check if not empty?
      {
-      snprintf (URL,sizeof (URL),"%s/%lu/%s/index.htm",
-	        Cfg_URL_CRS_PUBLIC,
-	        (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-	        Inf_FileNamesForInfoType[InfoType]);
+      WWW_BuildURL (URL,"%s/%lu/%s/index.htm",
+	            Cfg_URL_CRS_PUBLIC,
+	            (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+	            Inf_FileNamesForInfoType[InfoType]);
       Inf_ShowPage (URL);
 
       return Exi_EXISTS;
@@ -954,14 +942,10 @@ static Exi_Exist_t Inf_CheckAndShowPage (Inf_Type_t InfoType)
 
 void Inf_BuildPathPage (long HieCod,Inf_Type_t InfoType,char PathDir[PATH_MAX + 1])
   {
-   if (strlen (Cfg_PATH_CRS_PUBLIC) + 1 +
-       Cns_MAX_DIGITS_ULONG + 1 +
-       strlen (Inf_FileNamesForInfoType[InfoType]) > PATH_MAX)
-      Err_PathTooLongExit ();
-   snprintf (PathDir,PATH_MAX + 1,"%s/%lu/%s",
-             Cfg_PATH_CRS_PUBLIC,
-             (unsigned long) HieCod,
-             Inf_FileNamesForInfoType[InfoType]);
+   Fil_BuildPath (PathDir,"%s/%lu/%s",
+		  Cfg_PATH_CRS_PUBLIC,
+		  (unsigned long) HieCod,
+		  Inf_FileNamesForInfoType[InfoType]);
   }
 
 /*****************************************************************************/
@@ -1032,10 +1016,10 @@ static Exi_Exist_t Inf_CheckAndShowURL (Inf_Type_t InfoType)
 static void Inf_BuildPathURL (long HieCod,Inf_Type_t InfoType,
                               char PathFile[PATH_MAX + 1])
   {
-   snprintf (PathFile,PATH_MAX + 1,"%s/%lu/%s.url",
-	     Cfg_PATH_CRS_PRIVATE,
-	     (unsigned long) HieCod,
-	     Inf_FileNamesForInfoType[InfoType]);
+   Fil_BuildPath (PathFile,"%s/%lu/%s.url",
+		  Cfg_PATH_CRS_PRIVATE,
+		  (unsigned long) HieCod,
+		  Inf_FileNamesForInfoType[InfoType]);
   }
 
 /*****************************************************************************/
@@ -1869,10 +1853,10 @@ static Exi_Exist_t Inf_CheckAndShowRichTxt (Inf_Type_t InfoType)
 	 // TODO: change to another directory?
 	 /* Create a unique name for the .md file */
 	 UniqueNameEncrypted = Cry_GetUniqueNameEncrypted ();
-	 snprintf (PathFileMD,sizeof (PathFileMD),"%s/%s.md",
-		   Cfg_PATH_OUT_PRIVATE,UniqueNameEncrypted);
-	 snprintf (PathFileHTML,sizeof (PathFileHTML),"%s/%s.md.html",	// Do not use only .html because that is the output temporary file
-		   Cfg_PATH_OUT_PRIVATE,UniqueNameEncrypted);
+	 Fil_BuildPath (PathFileMD,"%s/%s.md",
+		        Cfg_PATH_OUT_PRIVATE,UniqueNameEncrypted);
+	 Fil_BuildPath (PathFileHTML,"%s/%s.md.html",	// Do not use only .html because that is the output temporary file
+		        Cfg_PATH_OUT_PRIVATE,UniqueNameEncrypted);
 
 	 /* Open Markdown file for writing */
 	 if ((FileMD = fopen (PathFileMD,"wb")) == NULL)
@@ -2314,10 +2298,7 @@ void Inf_ReceivePagInfo (void)
 	    Fil_RemoveTree (PathRelDirHTML);
 	    Fil_CreateDirIfNotExists (PathRelDirHTML);
 
-	    if (strlen (PathRelDirHTML) + 1 + strlen ("index.html") > PATH_MAX)
-	       Err_PathTooLongExit ();
-	    snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
-		      PathRelDirHTML);
+	    Fil_BuildPath (PathRelFileHTML,"%s/index.html",PathRelDirHTML);
 	    switch (Fil_EndReceptionOfFile (PathRelFileHTML,Par))
 	      {
 	       case Err_SUCCESS:
@@ -2336,13 +2317,9 @@ void Inf_ReceivePagInfo (void)
 	    Fil_RemoveTree (PathRelDirHTML);
 	    Fil_CreateDirIfNotExists (PathRelDirHTML);
 
-	    if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
-	        strlen (Inf_FileNamesForInfoType[InfoType]) + 1 +
-	        strlen ("zip") > PATH_MAX)
-	       Err_PathTooLongExit ();
-	    snprintf (PathRelFileZIP,sizeof (PathRelFileZIP),"%s/%s.zip",
-		      Gbl.Crs.Path.AbsPriv,
-		      Inf_FileNamesForInfoType[InfoType]);
+	    Fil_BuildPath (PathRelFileZIP,"%s/%s.zip",
+			   Gbl.Crs.Path.AbsPriv,
+			   Inf_FileNamesForInfoType[InfoType]);
 
 	    switch (Fil_EndReceptionOfFile (PathRelFileZIP,Par))
 	      {
@@ -2356,8 +2333,8 @@ void Inf_ReceivePagInfo (void)
 		  if (system (StrUnzip) == 0)
 		    {
 		     /* Check if uploaded file is index.html or index.htm */
-		     snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
-			       "%s/index.html",PathRelDirHTML);
+		     Fil_BuildPath (PathRelFileHTML,"%s/index.html",
+				    PathRelDirHTML);
 		     switch (Fil_CheckIfPathExists (PathRelFileHTML))
 		       {
 			case Exi_EXISTS:
@@ -2368,8 +2345,8 @@ void Inf_ReceivePagInfo (void)
 			   break;
 			case Exi_DOES_NOT_EXIST:
 			default:
-			   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
-				     "%s/index.htm",PathRelDirHTML);
+			   Fil_BuildPath (PathRelFileHTML,"%s/index.htm",
+					  PathRelDirHTML);
 			   switch (Fil_CheckIfPathExists (PathRelFileHTML))
 			     {
 			      case Exi_EXISTS:

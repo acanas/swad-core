@@ -144,7 +144,7 @@ void ZIP_CreateZIPAsgWrk (void)
    char FileNameZIP[NAME_MAX + 1];
    char PathFileZIP[PATH_MAX + 1];
    struct stat FileStatus;
-   char URLWithSpaces[PATH_MAX + 1];
+   char URLWithSpaces[WWW_MAX_BYTES_WWW + 1];
    char URL[PATH_MAX + 1];
 
    /***** Create zip file
@@ -183,7 +183,7 @@ void ZIP_CreateZIPAsgWrk (void)
    Brw_CreateDirDownloadTmp (&TmpPubDir);
 
    /***** Relative path of the directory with the works to compress *****/
-   snprintf (Path,sizeof (Path),"%s/%s",Cfg_PATH_ZIP_PRIVATE,ZIP_TmpDir);
+   Fil_BuildPath (Path,"%s/%s",Cfg_PATH_ZIP_PRIVATE,ZIP_TmpDir);
 
    /***** Change to directory of the assignments and works
           in order to start the path in the zip file from there *****/
@@ -191,12 +191,12 @@ void ZIP_CreateZIPAsgWrk (void)
       Err_ShowErrorAndExit ("Can not change to temporary folder for compression.");
 
    /***** Create public zip file with the assignment and works *****/
-   snprintf (FileNameZIP,sizeof (FileNameZIP),"%s.zip",Txt_works_ZIP_FILE_NAME);
-   snprintf (PathFileZIP,sizeof (PathFileZIP),"%s/%s/%s/%s",
-	     Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
-             TmpPubDir.Left,
-             TmpPubDir.Right,
-             FileNameZIP);
+   Fil_BuildName (FileNameZIP,"%s.zip",Txt_works_ZIP_FILE_NAME);
+   Fil_BuildPath (PathFileZIP,"%s/%s/%s/%s",
+		  Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
+		  TmpPubDir.Left,
+		  TmpPubDir.Right,
+		  FileNameZIP);
    snprintf (StrZip,sizeof (StrZip),"nice -n 19 zip -q -r '%s' *",
              PathFileZIP);
    Result = system (StrZip);
@@ -214,12 +214,12 @@ void ZIP_CreateZIPAsgWrk (void)
       else
 	{
 	 /***** Create URL pointing to ZIP file *****/
-	 snprintf (URLWithSpaces,sizeof (URLWithSpaces),"%s/%s/%s/%s",
-		   Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
-		   TmpPubDir.Left,
-		   TmpPubDir.Right,
-		   FileNameZIP);
-	 Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
+	 WWW_BuildURL (URLWithSpaces,"%s/%s/%s/%s",
+		       Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
+		       TmpPubDir.Left,
+		       TmpPubDir.Right,
+		       FileNameZIP);
+	 Str_CopyStrChangingSpaces (URLWithSpaces,URL,WWW_MAX_BYTES_WWW);	// In HTML, URL must have no spaces
 
 	 /****** Link to download file *****/
 	 ZIP_ShowLinkToDownloadZIP (FileNameZIP,URL,FileStatus.st_size,0);
@@ -245,8 +245,7 @@ static void ZIP_CreateTmpDirForCompression (void)
 
    /***** Create a new temporary directory *****/
    Str_Copy (ZIP_TmpDir,Cry_GetUniqueNameEncrypted (),sizeof (ZIP_TmpDir) - 1);
-   snprintf (PathDirTmp,sizeof (PathDirTmp),"%s/%s",
-	     Cfg_PATH_ZIP_PRIVATE,ZIP_TmpDir);
+   Fil_BuildPath (PathDirTmp,"%s/%s",Cfg_PATH_ZIP_PRIVATE,ZIP_TmpDir);
    if (mkdir (PathDirTmp,(mode_t) 0777))
       Err_ShowErrorAndExit ("Can not create temporary folder for compression.");
   }
@@ -259,9 +258,9 @@ static void ZIP_CreateTmpDirForCompression (void)
 static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat)
   {
    char FullNameAndUsrID[NAME_MAX + 1];
-   char PathFolderUsrInsideCrs[128 + PATH_MAX + NAME_MAX];
+   char PathFolderUsrInsideCrs[PATH_MAX + 1];
    char LinkTmpUsr[PATH_MAX + 1];
-   char Link[PATH_MAX + 1 + Cns_MAX_DIGITS_UINT + 1];
+   char Link[PATH_MAX + 1];
    unsigned NumTry;
    Err_SuccessOrError_t ErrorOrSuccess;
 
@@ -290,13 +289,12 @@ static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat)
    Str_ConvertToValidFileName (FullNameAndUsrID);
 
    /* Create path to folder and link */
-   snprintf (PathFolderUsrInsideCrs,sizeof (PathFolderUsrInsideCrs),
-	     "%s/%s/%02u/%lu",
-	     Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
-	     (unsigned) ((unsigned long) UsrDat->UsrCod % 100),
-	     (unsigned long) UsrDat->UsrCod);
-   snprintf (LinkTmpUsr,sizeof (LinkTmpUsr),"%s/%s/%s",
-	     Cfg_PATH_ZIP_PRIVATE,ZIP_TmpDir,FullNameAndUsrID);
+   Fil_BuildPath (PathFolderUsrInsideCrs,"%s/%s/%02u/%lu",
+		  Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
+		  (unsigned) ((unsigned long) UsrDat->UsrCod % 100),
+		  (unsigned long) UsrDat->UsrCod);
+   Fil_BuildPath (LinkTmpUsr,"%s/%s/%s",
+	          Cfg_PATH_ZIP_PRIVATE,ZIP_TmpDir,FullNameAndUsrID);
 
    /* Try to create a link named LinkTmpUsr to PathFolderUsrInsideCrs */
    if (symlink (PathFolderUsrInsideCrs,LinkTmpUsr))
@@ -307,7 +305,7 @@ static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat)
 	{
 	 // Link exists ==> a former user share the same name and ID
 	 // (probably a unique user has created two or more accounts)
-	 snprintf (Link,sizeof (Link),"%s-%u",LinkTmpUsr,NumTry);
+	 Fil_BuildPath (Link,"%s-%u",LinkTmpUsr,NumTry);
 	 if (symlink (PathFolderUsrInsideCrs,Link) == 0)
 	    ErrorOrSuccess = Err_SUCCESS;
 	}
@@ -355,7 +353,7 @@ static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser)
    char *FileNameZIP;
    char PathFileZIP[PATH_MAX + 1];
    struct stat FileStatus;
-   char URLWithSpaces[PATH_MAX + 1];
+   char URLWithSpaces[WWW_MAX_BYTES_WWW + 1];
    char URL[PATH_MAX + 1];
 
    /***** Create temporary private directory
@@ -367,16 +365,11 @@ static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser)
    Brw_CreateDirDownloadTmp (&TmpPubDir);
 
    /***** Create a copy of the directory to compress *****/
-   if (strlen (FileBrowser->Path.AboveRootFolder) + 1 +
-       strlen (FileBrowser->FileMetadata.FilFolLnk.Full) > PATH_MAX)
-      Err_PathTooLongExit ();
-   snprintf (Path,sizeof (Path),"%s/%s",
-	     FileBrowser->Path.AboveRootFolder,
-	     FileBrowser->FileMetadata.FilFolLnk.Full);
-   if (strlen (Cfg_PATH_ZIP_PRIVATE) + 1 + strlen (ZIP_TmpDir) > PATH_MAX)
-      Err_PathTooLongExit ();
-   snprintf (PathCompression,sizeof (PathCompression),"%s/%s",
-	     Cfg_PATH_ZIP_PRIVATE,ZIP_TmpDir);	// Example: /var/www/swad/zip/<temporary_dir>
+   Fil_BuildPath (Path,"%s/%s",
+		  FileBrowser->Path.AboveRootFolder,
+		  FileBrowser->FileMetadata.FilFolLnk.Full);
+   Fil_BuildPath (PathCompression,"%s/%s",
+	          Cfg_PATH_ZIP_PRIVATE,ZIP_TmpDir);	// Example: /var/www/swad/zip/<temporary_dir>
 
    UncompressedSize = ZIP_CloneDir (FileBrowser,
 				    Path,
@@ -399,11 +392,11 @@ static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser)
 	            strcmp (FileBrowser->FileMetadata.FilFolLnk.Name,".") ? FileBrowser->FileMetadata.FilFolLnk.Name :
 									    Txt_ROOT_FOLDER_EXTERNAL_NAMES[FileBrowser->Zone]) < 0)
          Err_NotEnoughMemoryExit ();
-      snprintf (PathFileZIP,sizeof (PathFileZIP),"%s/%s/%s/%s",
-	        Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
-	        TmpPubDir.Left,
-	        TmpPubDir.Right,
-	        FileNameZIP);
+      Fil_BuildPath (PathFileZIP,"%s/%s/%s/%s",
+		     Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
+		     TmpPubDir.Left,
+		     TmpPubDir.Right,
+		     FileNameZIP);
       snprintf (StrZip,sizeof (StrZip),"nice -n 19 zip -q -5 -r '%s' *",
 	        PathFileZIP);
       Result = system (StrZip);
@@ -423,12 +416,12 @@ static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser)
       else
 	{
 	 /* Create URL pointing to ZIP file */
-	 snprintf (URLWithSpaces,sizeof (URLWithSpaces),"%s/%s/%s/%s",
-		   Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
-		   TmpPubDir.Left,
-		   TmpPubDir.Right,
-		   FileNameZIP);
-	 Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
+	 WWW_BuildURL (URLWithSpaces,"%s/%s/%s/%s",
+		       Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
+		       TmpPubDir.Left,
+		       TmpPubDir.Right,
+		       FileNameZIP);
+	 Str_CopyStrChangingSpaces (URLWithSpaces,URL,WWW_MAX_BYTES_WWW);	// In HTML, URL must have no spaces
 
 	 /** Link to download file */
 	 ZIP_ShowLinkToDownloadZIP (FileNameZIP,URL,FileStatus.st_size,UncompressedSize);
@@ -495,14 +488,10 @@ static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
 	    Str_Copy (FileMetadata.FilFolLnk.Name,FileList[NumFile]->d_name,
 	              sizeof (FileMetadata.FilFolLnk.Name) - 1);
             Brw_SetFullPathInTree (&FileMetadata.FilFolLnk);
-	    if (strlen (Path) + 1 + strlen (FileMetadata.FilFolLnk.Name) > PATH_MAX)
-	       Err_PathTooLongExit ();
-	    if (strlen (PathClone) + 1 + strlen (FileMetadata.FilFolLnk.Name) > PATH_MAX)
-	       Err_PathTooLongExit ();
-	    snprintf (PathFile,sizeof (PathFile),"%s/%s",
-		      Path,FileMetadata.FilFolLnk.Name);
-	    snprintf (PathFileClone,sizeof (PathFileClone),"%s/%s",
-		      PathClone,FileMetadata.FilFolLnk.Name);
+	    Fil_BuildPath (PathFile,"%s/%s",
+		           Path,FileMetadata.FilFolLnk.Name);
+	    Fil_BuildPath (PathFileClone,"%s/%s",
+		           PathClone,FileMetadata.FilFolLnk.Name);
 
 	    FileMetadata.FilFolLnk.Type = Brw_IS_UNKNOWN;
 	    if (lstat (PathFile,&FileStatus))	// On success ==> 0 is returned

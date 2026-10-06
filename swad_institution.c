@@ -1093,14 +1093,10 @@ void Ins_RemoveInstitution (void)
       Brw_DB_RemoveInsFiles (Ins_EditingIns->HieCod);
 
       /***** Remove directories of the institution *****/
-      if (strlen (Cfg_PATH_INS_PUBLIC) + 1 +
-	  2 + 1 +
-	  Cns_MAX_DIGITS_ULONG > PATH_MAX)
-	 Err_PathTooLongExit ();
-      snprintf (PathIns,sizeof (PathIns),"%s/%02u/%lu",
-	        Cfg_PATH_INS_PUBLIC,
-	        (unsigned) ((unsigned long) Ins_EditingIns->HieCod % 100),
-	        (unsigned long) Ins_EditingIns->HieCod);
+      Fil_BuildPath (PathIns,"%s/%02u/%lu",
+		     Cfg_PATH_INS_PUBLIC,
+		     (unsigned) ((unsigned long) Ins_EditingIns->HieCod % 100),
+		     (unsigned long) Ins_EditingIns->HieCod);
       Fil_RemoveTree (PathIns);
 
       /***** Remove administrators of this institution *****/

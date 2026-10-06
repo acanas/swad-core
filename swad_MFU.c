@@ -318,8 +318,8 @@ static void MFU_PutIconAndText (Act_Action_t Action,
      };
    char URLIconSet[WWW_MAX_BYTES_WWW + 1];
 
-   snprintf (URLIconSet,sizeof (URLIconSet),"%s/%s",
-	     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
+   WWW_BuildURL (URLIconSet,"%s/%s",
+	         Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
    HTM_IMG (URLIconSet,Act_GetIconFromAction (Action),MenuStr,
 	    "class=\"ICO_%s_%s\"",
 	    Ico_GetPreffix (Color[Gbl.Prefs.IconSet]),The_GetSuffix ());

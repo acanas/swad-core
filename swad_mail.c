@@ -1466,14 +1466,14 @@ void Mai_SendMailMsgToConfirmEmail (void)
    extern const char *Txt_Confirmation_of_your_email_NO_HTML;
    extern const char *Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address;
    extern const char *Txt_There_was_a_problem_sending_an_email_automatically;
-   char FileNameMail[PATH_MAX + 1];
+   char PathMail[PATH_MAX + 1];
    FILE *FileMail;
    Lan_Language_t ToUsrLanguage;
    const char *UniqueNameEncrypted = Cry_GetUniqueNameEncrypted ();
    int ReturnCode;
 
    /***** Create temporary file for mail content *****/
-   Mai_CreateFileNameMail (FileNameMail,&FileMail);
+   Mai_CreateFileNameMail (PathMail,&FileMail);
 
    /***** If I have no language, set language to current language *****/
    ToUsrLanguage = Gbl.Usrs.Me.UsrDat.Prefs.Language;
@@ -1500,12 +1500,12 @@ void Mai_SendMailMsgToConfirmEmail (void)
    fclose (FileMail);
 
    /***** Call the script to send an email *****/
-   ReturnCode = Mai_SendMailMsg (FileNameMail,
+   ReturnCode = Mai_SendMailMsg (PathMail,
                                  Txt_Confirmation_of_your_email_NO_HTML,
                                  Gbl.Usrs.Me.UsrDat.Email);
 
    /***** Remove temporary file *****/
-   unlink (FileNameMail);
+   unlink (PathMail);
 
    /***** Write message depending on return code *****/
    switch (ReturnCode)
@@ -1618,15 +1618,11 @@ void Mai_ConfirmEmail (void)
 /****************** Create temporary file for mail content *******************/
 /*****************************************************************************/
 
-void Mai_CreateFileNameMail (char FileNameMail[PATH_MAX + 1],FILE **FileMail)
+void Mai_CreateFileNameMail (char PathMail[PATH_MAX + 1],FILE **FileMail)
   {
-   if (strlen (Cfg_PATH_OUT_PRIVATE) + 1 +
-       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +
-       strlen ("_mail.txt") > PATH_MAX)
-      Err_PathTooLongExit ();
-   snprintf (FileNameMail,PATH_MAX + 1,"%s/%s_mail.txt",
-             Cfg_PATH_OUT_PRIVATE,Cry_GetUniqueNameEncrypted ());
-   if ((*FileMail = fopen (FileNameMail,"wb")) == NULL)
+   Fil_BuildPath (PathMail,"%s/%s_mail.txt",
+                  Cfg_PATH_OUT_PRIVATE,Cry_GetUniqueNameEncrypted ());
+   if ((*FileMail = fopen (PathMail,"wb")) == NULL)
       Err_ShowErrorAndExit ("Can not open file to send email.");
   }
 

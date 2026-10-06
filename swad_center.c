@@ -964,14 +964,10 @@ void Ctr_RemoveCenter (void)
       Roo_DB_RemoveAllRoomsInCtr (Ctr_EditingCtr->HieCod);
 
       /***** Remove directories of the center *****/
-      if (strlen (Cfg_PATH_CTR_PUBLIC) + 1 +
-          2 + 1 +
-          Cns_MAX_DIGITS_ULONG > PATH_MAX)
-	 Err_PathTooLongExit ();
-      snprintf (PathCtr,sizeof (PathCtr),"%s/%02u/%lu",
-	        Cfg_PATH_CTR_PUBLIC,
-	        (unsigned) ((unsigned long) Ctr_EditingCtr->HieCod % 100),
-	        (unsigned long) Ctr_EditingCtr->HieCod);
+      Fil_BuildPath (PathCtr,"%s/%02u/%lu",
+		     Cfg_PATH_CTR_PUBLIC,
+		     (unsigned) ((unsigned long) Ctr_EditingCtr->HieCod % 100),
+		     (unsigned long) Ctr_EditingCtr->HieCod);
       Fil_RemoveTree (PathCtr);
 
       /***** Remove administrators of this center *****/

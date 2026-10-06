@@ -4625,8 +4625,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the multiple parameter code of group of this type *****/
-      snprintf (Par,sizeof (Par),"GrpCod%ld",
-                GrpTyp->GrpTypCod);
+      snprintf (Par,sizeof (Par),"GrpCod%ld",GrpTyp->GrpTypCod);
       Par_GetParMultiToText (Par,LstStrCodGrps[NumGrpTyp],
                              ((Cns_MAX_DIGITS_LONG + 1) * GrpTyp->NumGrps) - 1);
       if (LstStrCodGrps[NumGrpTyp][0])

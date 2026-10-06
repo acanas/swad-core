@@ -233,17 +233,11 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
       MapExists = Map_CheckIfCoordsExist (&Coord);
 
       /***** Check photo *****/
-      if (strlen (Cfg_PATH_CTR_PUBLIC) + 1 +
-          2 + 1 +
-          Cns_MAX_DIGITS_ULONG + 1 +
-          Cns_MAX_DIGITS_ULONG + 1 +
-          strlen ("jpg") > PATH_MAX)
-	 Err_PathTooLongExit ();
-      snprintf (PathPhoto,sizeof (PathPhoto),"%s/%02u/%lu/%lu.jpg",
-		Cfg_PATH_CTR_PUBLIC,
-		(unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
-		(unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-		(unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+      Fil_BuildPath (PathPhoto,"%s/%02u/%lu/%lu.jpg",
+		     Cfg_PATH_CTR_PUBLIC,
+		     (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
+		     (unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+		     (unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod);
       PhotoExists = Fil_CheckIfPathExists (PathPhoto);
 
       if (MapExists   == Exi_EXISTS ||
@@ -904,14 +898,10 @@ void CtrCfg_ReceivePhoto (void)
      }
 
    /* End the reception of image in a temporary file */
-   if (strlen (Cfg_PATH_MEDIA_TMP_PRIVATE) + 1 +
-       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1 +
-       strlen (PtrExtension) > PATH_MAX)
-      Err_PathTooLongExit ();
-   snprintf (PathFileImgTmp,sizeof (PathFileImgTmp),"%s/%s.%s",
-             Cfg_PATH_MEDIA_TMP_PRIVATE,
-             Cry_GetUniqueNameEncrypted (),
-             PtrExtension);
+   Fil_BuildPath (PathFileImgTmp,"%s/%s.%s",
+		  Cfg_PATH_MEDIA_TMP_PRIVATE,
+		  Cry_GetUniqueNameEncrypted (),
+		  PtrExtension);
    if (Fil_EndReceptionOfFile (PathFileImgTmp,Par) == Err_ERROR)
      {
       Ale_ShowAlert (Ale_WARNING,"Error copying file.");
@@ -920,33 +910,22 @@ void CtrCfg_ReceivePhoto (void)
 
    /***** Creates public directories if not exist *****/
    Fil_CreateDirIfNotExists (Cfg_PATH_CTR_PUBLIC);
-   if (strlen (Cfg_PATH_CTR_PUBLIC) + 1 +
-       2 + 1 > PATH_MAX)
-      Err_PathTooLongExit ();
-   snprintf (Path,sizeof (Path),"%s/%02u",
-	     Cfg_PATH_CTR_PUBLIC,
-	     (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100));
+   Fil_BuildPath (Path,"%s/%02u",
+		  Cfg_PATH_CTR_PUBLIC,
+		  (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100));
    Fil_CreateDirIfNotExists (Path);
-   if (strlen (Cfg_PATH_CTR_PUBLIC) + 1 +
-       2 + 1 +
-       Cns_MAX_DIGITS_ULONG > PATH_MAX)
-   snprintf (Path,sizeof (Path),"%s/%02u/%lu",
-	     Cfg_PATH_CTR_PUBLIC,
-	     (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
-	     (unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+   Fil_BuildPath (Path,"%s/%02u/%lu",
+		  Cfg_PATH_CTR_PUBLIC,
+		  (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
+		  (unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod);
    Fil_CreateDirIfNotExists (Path);
 
    /***** Convert temporary file to public JPEG file *****/
-   if (strlen (Cfg_PATH_CTR_PUBLIC) + 1 +
-       2 + 1 +
-       Cns_MAX_DIGITS_ULONG + 1 +
-       Cns_MAX_DIGITS_ULONG + 1 +
-       strlen ("jpg") > PATH_MAX)
-   snprintf (PathFileImg,sizeof (PathFileImg),"%s/%02u/%lu/%lu.jpg",
-	     Cfg_PATH_CTR_PUBLIC,
-	     (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
-	     (unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-	     (unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+   Fil_BuildPath (PathFileImg,"%s/%02u/%lu/%lu.jpg",
+		  Cfg_PATH_CTR_PUBLIC,
+		  (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
+		  (unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+		  (unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod);
 
    /* Call to program that makes the conversion */
    snprintf (Command,sizeof (Command),

@@ -135,9 +135,9 @@ char *Prf_GetURLPublicProfile (char URL[WWW_MAX_BYTES_WWW + 1],
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
    /***** Build URL using nickname *****/
-   snprintf (URL,WWW_MAX_BYTES_WWW + 1,"%s/%s?usr=@%s",
-	     Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	     NickWithoutArr);
+   WWW_BuildURL (URL,"%s/%s?usr=@%s",
+		 Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language],
+		 NickWithoutArr);
 
    return URL;
   }

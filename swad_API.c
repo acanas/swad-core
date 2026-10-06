@@ -1460,7 +1460,7 @@ static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
-   char FileNameHTMLTmp[PATH_MAX + 1];
+   char PathHTMLTmp[PATH_MAX + 1];
    FILE *FileHTMLTmp;
    size_t Length;
 
@@ -1474,11 +1474,11 @@ static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
    if (TxtHTML[0])
      {
       /***** Create a unique name for the file *****/
-      snprintf (FileNameHTMLTmp,sizeof (FileNameHTMLTmp),"%s/%s_info.html",
-	        Cfg_PATH_OUT_PRIVATE,Cry_GetUniqueNameEncrypted ());
+      Fil_BuildPath (PathHTMLTmp,"%s/%s_info.html",
+	             Cfg_PATH_OUT_PRIVATE,Cry_GetUniqueNameEncrypted ());
 
       /***** Create a new temporary file for writing and reading *****/
-      if ((FileHTMLTmp = fopen (FileNameHTMLTmp,"w+b")) == NULL)
+      if ((FileHTMLTmp = fopen (PathHTMLTmp,"w+b")) == NULL)
          return soap_receiver_fault (soap,
                                      "Plain text can not be copied into buffer",
                                      "Can not create temporary file");
@@ -1509,7 +1509,7 @@ static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
       if ((*HTMLBuffer = malloc (Length + 1)) == NULL)
 	{
 	 fclose (FileHTMLTmp);
-	 unlink (FileNameHTMLTmp);
+	 unlink (PathHTMLTmp);
          return soap_receiver_fault (soap,
                                      "Plain text can not be copied into buffer",
                                      "Not enough memory for buffer");
@@ -1520,7 +1520,7 @@ static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
       if (fread (*HTMLBuffer,sizeof (char),Length,FileHTMLTmp) != Length)
 	{
 	 fclose (FileHTMLTmp);
-	 unlink (FileNameHTMLTmp);
+	 unlink (PathHTMLTmp);
          return soap_receiver_fault (soap,
                                      "Plain text can not be copied into buffer",
                                      "Error reading file into buffer");
@@ -1529,7 +1529,7 @@ static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
 
       /***** Close and remove temporary file *****/
       fclose (FileHTMLTmp);
-      unlink (FileNameHTMLTmp);
+      unlink (PathHTMLTmp);
      }
 
    return SOAP_OK;

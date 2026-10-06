@@ -1375,7 +1375,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
    long Cod;
    struct For_Forum ForumSelected;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
-   char FileNameMail[PATH_MAX + 1];
+   char PathMail[PATH_MAX + 1];
    FILE *FileMail;
    int ReturnCode;
 
@@ -1394,7 +1394,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
 	    ToUsrLanguage = Cfg_DEFAULT_LANGUAGE;
 
 	 /***** Create temporary file for mail content *****/
-	 Mai_CreateFileNameMail (FileNameMail,&FileMail);
+	 Mai_CreateFileNameMail (PathMail,&FileMail);
 
 	 /***** Welcome note *****/
 	 Mai_WriteWelcomeNoteEMail (FileMail,ToUsrDat,ToUsrLanguage);
@@ -1520,12 +1520,12 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
 	 fclose (FileMail);
 
 	 /***** Call the command to send an email *****/
-         ReturnCode = Mai_SendMailMsg (FileNameMail,
+         ReturnCode = Mai_SendMailMsg (PathMail,
                                        Txt_Notifications_NO_HTML[ToUsrLanguage],
                                        ToUsrDat->Email);
 
 	 /***** Remove temporary file *****/
-	 unlink (FileNameMail);
+	 unlink (PathMail);
 
 	 /***** Update number of notifications, number of mails and statistics *****/
 	 if (ReturnCode == 0)	// Message sent successfully
