@@ -800,6 +800,11 @@ static void Med_GetAndProcessFileFromForm (const char *ParFile,
    /***** End the reception of original not processed media
           (it may be very big) into a temporary file *****/
    Media->Status = Med_STATUS_NONE;
+   if (strlen (Cfg_PATH_MEDIA_TMP_PRIVATE) + 1 +
+       strlen (Media->Name) + 1 +
+       strlen ("_original") + 1 +
+       strlen (PtrExtension) > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathFileOrg,sizeof (PathFileOrg),"%s/%s_original.%s",
 	     Cfg_PATH_MEDIA_TMP_PRIVATE,Media->Name,PtrExtension);
 
@@ -835,6 +840,10 @@ static Err_SuccessOrError_t Med_DetectIfAnimated (struct Med_Media *Media,
    int NumFrames = 0;
 
    /***** Build path to temporary text file *****/
+   if (strlen (Cfg_PATH_MEDIA_TMP_PRIVATE) + 1 +
+       strlen (Media->Name) + 1 +
+       strlen ("txt") > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathFileTxtTmp,sizeof (PathFileTxtTmp),"%s/%s.txt",
              Cfg_PATH_MEDIA_TMP_PRIVATE,Media->Name);
 
@@ -874,6 +883,10 @@ static void Med_ProcessJPG (struct Med_Media *Media,
 
    /***** Convert original media to temporary JPG processed file
 	  by calling to program that makes the conversion *****/
+   if (strlen (Cfg_PATH_MEDIA_TMP_PRIVATE) + 1 +
+       strlen (Media->Name) + 1 +
+       strlen (Med_Extensions[Med_JPG]) > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathFileJPGTmp,sizeof (PathFileJPGTmp),"%s/%s.%s",
 	     Cfg_PATH_MEDIA_TMP_PRIVATE,Media->Name,Med_Extensions[Med_JPG]);
    if (Med_ResizeImage (Media,PathFileOrg,PathFileJPGTmp) == 0)	// On success ==> 0 is returned
@@ -912,12 +925,20 @@ static void Med_ProcessGIF (struct Med_Media *Media,
 	 /* File size correct */
 	 /***** Get first frame of orifinal GIF file
 		and save it on temporary PNG file */
+	 if (strlen (Cfg_PATH_MEDIA_TMP_PRIVATE) + 1 +
+	     strlen (Media->Name) + 1 +
+	     strlen ("png") > PATH_MAX)
+	    Err_PathTooLongExit ();
 	 snprintf (PathFilePNGTmp,sizeof (PathFilePNGTmp),"%s/%s.png",
 		   Cfg_PATH_MEDIA_TMP_PRIVATE,Media->Name);
 	 if (Med_GetFirstFrame (PathFileOrg,PathFilePNGTmp) == 0)	// On success ==> 0 is returned
 	   {
 	    /* Success */
 	    /***** Move original GIF file to temporary GIF file *****/
+	    if (strlen (Cfg_PATH_MEDIA_TMP_PRIVATE) + 1 +
+		strlen (Media->Name) + 1 +
+		strlen (Med_Extensions[Med_GIF]) > PATH_MAX)
+	       Err_PathTooLongExit ();
 	    snprintf (PathFileGIFTmp,sizeof (PathFileGIFTmp),"%s/%s.%s",
 		      Cfg_PATH_MEDIA_TMP_PRIVATE,
 		      Media->Name,Med_Extensions[Med_GIF]);
@@ -977,6 +998,10 @@ static void Med_ProcessVideo (struct Med_Media *Media,
 	{
 	 /* File size correct */
 	 /***** Move original video file to temporary MP4 file *****/
+	 if (strlen (Cfg_PATH_MEDIA_TMP_PRIVATE) + 1 +
+	     strlen (Media->Name) + 1 +
+	     strlen (Med_Extensions[Media->Type]) > PATH_MAX)
+	    Err_PathTooLongExit ();
 	 snprintf (PathFileTmp,sizeof (PathFileTmp),"%s/%s.%s",
 		   Cfg_PATH_MEDIA_TMP_PRIVATE,
 		   Media->Name,Med_Extensions[Media->Type]);
@@ -1343,6 +1368,8 @@ void Med_MoveMediaToDefinitiveDir (struct Med_Media *Media)
          case Med_WEBM:
          case Med_OGG:
 	    /***** Create private subdirectory for media if it does not exist *****/
+	    if (strlen (Cfg_PATH_MEDIA_PRIVATE) + 1 + 2 > PATH_MAX)
+	       Err_PathTooLongExit ();
 	    snprintf (PathMedPriv,sizeof (PathMedPriv),"%s/%c%c",
 		      Cfg_PATH_MEDIA_PRIVATE,
 		      Media->Name[0],
@@ -1408,10 +1435,18 @@ static Err_SuccessOrError_t Med_MoveTmpFileToDefDir (struct Med_Media *Media,
    char PathFile[PATH_MAX + 1];		// Full name of definitive processed file
 
    /***** Temporary processed media file *****/
+   if (strlen (Cfg_PATH_MEDIA_TMP_PRIVATE) + 1 +
+       strlen (Media->Name) + 1 +
+       strlen (Extension) > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathFileTmp,sizeof (PathFileTmp),"%s/%s.%s",
 	     Cfg_PATH_MEDIA_TMP_PRIVATE,Media->Name,Extension);
 
    /***** Definitive processed media file *****/
+   if (strlen (PathMedPriv) + 1 +
+       strlen (Media->Name) + 1 +
+       strlen (Extension) > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathFile,sizeof (PathFile),"%s/%s.%s",
 	     PathMedPriv,Media->Name,Extension);
 
@@ -1501,6 +1536,8 @@ static void Med_ShowMediaFile (const struct Med_Media *Media,
          HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Media->URL);
 
    /***** Build path to private directory with the media *****/
+   if (strlen (Cfg_PATH_MEDIA_PRIVATE) + 1 + 2 > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathMedPriv,sizeof (PathMedPriv),"%s/%c%c",
 	     Cfg_PATH_MEDIA_PRIVATE,
 	     Media->Name[0],
@@ -1554,6 +1591,9 @@ static void Med_ShowJPG (const struct Med_Media *Media,
 	    Brw_CreateTmpPublicLinkToPrivateFile (&TmpPubDir,
 						  FullPathJPGPriv,FileNameJPG);
 
+	    if (strlen (TmpPubDir.Left) + 1 +
+	        strlen (TmpPubDir.Right) > PATH_MAX)
+	       Err_PathTooLongExit ();
 	    snprintf (TmpPubDirFull,sizeof (TmpPubDirFull),"%s/%s",
 		      TmpPubDir.Left,
 		      TmpPubDir.Right);
@@ -1627,6 +1667,9 @@ static void Med_ShowGIF (const struct Med_Media *Media,
 	    Brw_CreateTmpPublicLinkToPrivateFile (&TmpPubDir,
 						  FullPathPNGPriv,FileNamePNG);
 
+	    if (strlen (TmpPubDir.Left) + 1 +
+	        strlen (TmpPubDir.Right) > PATH_MAX)
+	       Err_PathTooLongExit ();
 	    snprintf (TmpPubDirFull,sizeof (TmpPubDirFull),"%s/%s",
 		      TmpPubDir.Left,
 		      TmpPubDir.Right);
@@ -1717,6 +1760,9 @@ static void Med_ShowVideo (const struct Med_Media *Media,
 	    Brw_CreateTmpPublicLinkToPrivateFile (&TmpPubDir,
 						  FullPathVideoPriv,FileNameVideo);
 
+	    if (strlen (TmpPubDir.Left) + 1 +
+	        strlen (TmpPubDir.Right) > PATH_MAX)
+	       Err_PathTooLongExit ();
 	    snprintf (TmpPubDirFull,sizeof (TmpPubDirFull),"%s/%s",
 		      TmpPubDir.Left,
 		      TmpPubDir.Right);
@@ -1938,6 +1984,8 @@ long Med_CloneMedia (const struct Med_Media *MediaSrc)
 	 Fil_CreateDirIfNotExists (Cfg_PATH_MEDIA_PRIVATE);
 
 	 /* Build paths to private directories */
+	 if (strlen (Cfg_PATH_MEDIA_PRIVATE) + 1 + 2 > PATH_MAX)
+	    Err_PathTooLongExit ();
 	 snprintf (MediaPriv[Med_SRC].Path,sizeof (MediaPriv[Med_SRC].Path),
 		   "%s/%c%c",
 		   Cfg_PATH_MEDIA_PRIVATE,MediaSrc->Name[0],MediaSrc->Name[1]);
@@ -1971,9 +2019,17 @@ long Med_CloneMedia (const struct Med_Media *MediaSrc)
 	 if (MediaSrc->Type == Med_GIF)
 	   {
 	    /* Build private paths to PNG */
+	    if (strlen (MediaPriv[Med_SRC].Path) + 1 +
+	        strlen (MediaSrc->Name) + 1 +
+	        strlen ("png") > PATH_MAX)
+	       Err_PathTooLongExit ();
 	    snprintf (MediaPriv[Med_SRC].FullPath,
 	              sizeof (MediaPriv[Med_SRC].FullPath),"%s/%s.png",
 		      MediaPriv[Med_SRC].Path,MediaSrc->Name);
+	    if (strlen (MediaPriv[Med_DST].Path) + 1 +
+	        strlen (MediaDst.Name) + 1 +
+	        strlen ("png") > PATH_MAX)
+	       Err_PathTooLongExit ();
 	    snprintf (MediaPriv[Med_DST].FullPath,
 	              sizeof (MediaPriv[Med_DST].FullPath),"%s/%s.png",
 		      MediaPriv[Med_DST].Path,MediaDst.Name);
@@ -2044,6 +2100,8 @@ void Med_RemoveMedia (long MedCod)
 	 if (Media.Name[0])
 	   {
 	    /***** Build path to private directory with the media *****/
+	    if (strlen (Cfg_PATH_MEDIA_PRIVATE) + 1 + 2 > PATH_MAX)
+	       Err_PathTooLongExit ();
 	    snprintf (PathPriv,sizeof (PathPriv),"%s/%c%c",
 		      Cfg_PATH_MEDIA_PRIVATE,
 		      Media.Name[0],

@@ -316,7 +316,7 @@ static void MFU_PutIconAndText (Act_Action_t Action,
       [Ico_ICON_SET_AWESOME] = Ico_BLACK,
       [Ico_ICON_SET_NUVOLA ] = Ico_UNCHANGED,
      };
-   char URLIconSet[PATH_MAX + 1];
+   char URLIconSet[WWW_MAX_BYTES_WWW + 1];
 
    snprintf (URLIconSet,sizeof (URLIconSet),"%s/%s",
 	     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);

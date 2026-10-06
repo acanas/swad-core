@@ -468,6 +468,11 @@ static void Not_PutLinkToRSSFile (void)
    char RSSLink[WWW_MAX_BYTES_WWW + 1];
 
    /***** Create RSS file if not exists *****/
+   if (strlen (Cfg_PATH_CRS_PUBLIC) + 1 +
+       Cns_MAX_DIGITS_ULONG + 1 +
+       strlen (Cfg_RSS_FOLDER) + 1 +
+       strlen (Cfg_RSS_FILE) > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathRelRSSFile,sizeof (PathRelRSSFile),"%s/%lu/%s/%s",
 	     Cfg_PATH_CRS_PUBLIC,
 	     (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod,

@@ -1620,6 +1620,10 @@ void Mai_ConfirmEmail (void)
 
 void Mai_CreateFileNameMail (char FileNameMail[PATH_MAX + 1],FILE **FileMail)
   {
+   if (strlen (Cfg_PATH_OUT_PRIVATE) + 1 +
+       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +
+       strlen ("_mail.txt") > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (FileNameMail,PATH_MAX + 1,"%s/%s_mail.txt",
              Cfg_PATH_OUT_PRIVATE,Cry_GetUniqueNameEncrypted ());
    if ((*FileMail = fopen (FileNameMail,"wb")) == NULL)

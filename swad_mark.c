@@ -578,6 +578,9 @@ void Mrk_ShowMyMarks (void)
    Brw_GetParFilCod (&FileBrowser);	// Get file / folder / link
 
    /***** Get the path of the file of marks *****/
+   if (strlen (FileBrowser.Path.AboveRootFolder) + 1 +
+       strlen (FileBrowser.FileMetadata.FilFolLnk.Full) > PATH_MAX)
+      Err_PathTooLongExit ();
    snprintf (PathPrivate,sizeof (PathPrivate),"%s/%s",
              FileBrowser.Path.AboveRootFolder,
              FileBrowser.FileMetadata.FilFolLnk.Full);
@@ -629,6 +632,10 @@ void Mrk_ShowMyMarks (void)
 	 Fil_CreateDirIfNotExists (Cfg_PATH_MARK_PRIVATE);
 
 	 /* Create a new temporary file *****/
+	 if (strlen (Cfg_PATH_MARK_PRIVATE) + 1 +
+	     Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1 +
+	     strlen ("html") > PATH_MAX)
+	    Err_PathTooLongExit ();
 	 snprintf (FileNameUsrMarks,sizeof (FileNameUsrMarks),"%s/%s.html",
 		   Cfg_PATH_MARK_PRIVATE,Cry_GetUniqueNameEncrypted ());
 	 if ((FileUsrMarks = fopen (FileNameUsrMarks,"wb")) == NULL)
@@ -778,6 +785,10 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	    Fil_CreateDirIfNotExists (Cfg_PATH_MARK_PRIVATE);
 
 	    /* Create a new temporary file *****/
+	    if (strlen (Cfg_PATH_MARK_PRIVATE) + 1 +
+		Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1 +
+		strlen ("html") > PATH_MAX)
+	       Err_PathTooLongExit ();
 	    snprintf (FileNameUsrMarks,sizeof (FileNameUsrMarks),"%s/%s.html",
 		      Cfg_PATH_MARK_PRIVATE,Cry_GetUniqueNameEncrypted ());
 	    if ((FileUsrMarks = fopen (FileNameUsrMarks,"wb")))
